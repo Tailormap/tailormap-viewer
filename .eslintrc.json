@@ -10,20 +10,19 @@
       ],
       "plugins": [
         "rxjs",
-        "ngrx"
+        "import"
       ],
       "extends": [
         "plugin:@angular-eslint/ng-cli-compat",
         "plugin:@angular-eslint/ng-cli-compat--formatting-add-on",
-        "plugin:@angular-eslint/template/process-inline-templates",
-        "plugin:ngrx/recommended"
+        "plugin:@angular-eslint/template/process-inline-templates"
       ],
       "rules": {
         "@angular-eslint/component-selector": [
           "error",
           {
             "type": "element",
-            "prefix": "tailormap",
+            "prefix": "tm",
             "style": "kebab-case"
           }
         ],
@@ -31,7 +30,7 @@
           "error",
           {
             "type": "attribute",
-            "prefix": "tailormap",
+            "prefix": "tm",
             "style": "camelCase"
           }
         ],
@@ -93,9 +92,6 @@
           }
         ],
         "space-before-function-paren": "off",
-        "ngrx/use-consistent-global-store-name": "off",
-        "ngrx/no-typed-global-store": "off",
-        "ngrx/avoid-mapping-selectors": "off",
         "@typescript-eslint/space-before-function-paren": "off",
         "max-len": [
           "error",
@@ -130,8 +126,7 @@
       "rules": {
         "no-unused-vars": "off",
         "@typescript-eslint/no-unused-vars": "off",
-        "rxjs/finnish": "off",
-        "prefer-arrow/prefer-arrow-functions": "off"
+        "rxjs/finnish": "off"
       }
     },
     {

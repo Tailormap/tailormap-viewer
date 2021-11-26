@@ -1,4 +1,4 @@
-var path = require('path')
+const path = require('path');
 
 module.exports = {
   "extends": path.resolve(__dirname, "../../.eslintrc.json"),
@@ -12,7 +12,7 @@ module.exports = {
       ],
       "parserOptions": {
         "project": [
-          "tsconfig.lib.json",
+          "tsconfig.app.json",
           "tsconfig.spec.json"
         ],
         "createDefaultProgram": true,

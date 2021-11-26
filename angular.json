@@ -114,7 +114,7 @@
       "projectType": "library",
       "root": "projects/core",
       "sourceRoot": "projects/core/src",
-      "prefix": "lib",
+      "prefix": "tm",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
@@ -154,7 +154,7 @@
       "projectType": "library",
       "root": "projects/api",
       "sourceRoot": "projects/api/src",
-      "prefix": "lib",
+      "prefix": "tm",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
@@ -194,7 +194,7 @@
       "projectType": "library",
       "root": "projects/shared",
       "sourceRoot": "projects/shared/src",
-      "prefix": "lib",
+      "prefix": "tm",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
