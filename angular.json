@@ -229,6 +229,21 @@
           }
         }
       }
+    },
+    "test-all": {
+      "root": "./",
+      "projectType": "library",
+      "architect": {
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "./test.ts",
+            "polyfills": "./polyfills.ts",
+            "tsConfig": "./tsconfig.spec.json",
+            "karmaConfig": "./karma.conf.js"
+          }
+        }
+      }
     }
   },
   "defaultProject": "app"
