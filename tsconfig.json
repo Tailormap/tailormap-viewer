@@ -3,6 +3,20 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
+    "paths": {
+      "api": [
+        "dist/api/api",
+        "dist/api"
+      ],
+      "core": [
+        "dist/core/core",
+        "dist/core"
+      ],
+      "shared": [
+        "dist/shared/shared",
+        "dist/shared"
+      ]
+    },
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
