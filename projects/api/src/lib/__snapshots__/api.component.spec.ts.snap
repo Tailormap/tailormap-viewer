@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ApiComponent should create 1`] = `
+<div
+  id="root0"
+>
+  <p>
+     api works! 
+    <span
+      class="message"
+    >
+      there
+    </span>
+    <button>
+      Update the message
+    </button>
+  </p>
+</div>
+`;

@@ -90,23 +90,6 @@
               "projects/app/**/*.html"
             ]
           }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/app/src/test.ts",
-            "polyfills": "projects/app/src/polyfills.ts",
-            "tsConfig": "projects/app/tsconfig.spec.json",
-            "karmaConfig": "projects/app/karma.conf.js",
-            "assets": [
-              "projects/app/src/favicon.ico",
-              "projects/app/src/assets"
-            ],
-            "styles": [
-              "projects/app/src/styles.css"
-            ],
-            "scripts": []
-          }
         }
       }
     },
@@ -138,14 +121,6 @@
               "projects/core/**/*.ts",
               "projects/core/**/*.html"
             ]
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/core/src/test.ts",
-            "tsConfig": "projects/core/tsconfig.spec.json",
-            "karmaConfig": "projects/core/karma.conf.js"
           }
         }
       }
@@ -179,14 +154,6 @@
               "projects/api/**/*.html"
             ]
           }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/api/src/test.ts",
-            "tsConfig": "projects/api/tsconfig.spec.json",
-            "karmaConfig": "projects/api/karma.conf.js"
-          }
         }
       }
     },
@@ -218,29 +185,6 @@
               "projects/shared/**/*.ts",
               "projects/shared/**/*.html"
             ]
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/shared/src/test.ts",
-            "tsConfig": "projects/shared/tsconfig.spec.json",
-            "karmaConfig": "projects/shared/karma.conf.js"
-          }
-        }
-      }
-    },
-    "test-all": {
-      "root": "./",
-      "projectType": "library",
-      "architect": {
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "./test.ts",
-            "polyfills": "./polyfills.ts",
-            "tsConfig": "./tsconfig.spec.json",
-            "karmaConfig": "./karma.conf.js"
           }
         }
       }
