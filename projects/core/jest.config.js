@@ -1,7 +1,5 @@
-require('jest-preset-angular/ngcc-jest-processor');
+const baseConfig = require('../../jest.base.config');
 
 module.exports = {
-  preset: 'jest-preset-angular',
-  setupFilesAfterEnv: ['<rootDir>/../../setup-jest.ts'],
-  "testRegex": "((\\.|/*.)(spec))\\.ts?$"
+  ...baseConfig,
 };

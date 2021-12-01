@@ -1,20 +1,27 @@
 import { Component, OnInit } from '@angular/core';
+import { SharedService } from './shared.service';
+import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'lib-shared',
+  selector: 'tm-shared',
   template: `
-    <p>
-      shared works!
-    </p>
+    <button mat-flat-button>Test</button>
+    <span>{{message$ | async}}</span>
   `,
   styles: [
-  ]
+  ],
 })
 export class SharedComponent implements OnInit {
 
-  constructor() { }
+  public message$: Observable<string>;
 
-  ngOnInit(): void {
+  constructor(
+    private sharedService: SharedService,
+  ) {
+    this.message$ = this.sharedService.getMessage$();
+  }
+
+  public ngOnInit(): void {
   }
 
 }

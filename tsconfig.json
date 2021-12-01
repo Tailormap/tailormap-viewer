@@ -4,17 +4,14 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "api": [
-        "dist/api/api",
-        "dist/api"
+      "@tailormap-viewer/api": [
+        "projects/api/src"
       ],
-      "core": [
-        "dist/core/core",
-        "dist/core"
+      "@tailormap-viewer/core": [
+        "projects/core/src"
       ],
-      "shared": [
-        "dist/shared/shared",
-        "dist/shared"
+      "@tailormap-viewer/shared": [
+        "projects/shared/src"
       ]
     },
     "outDir": "./dist/out-tsc",
@@ -25,7 +22,9 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
-    "declaration": false,
+    "declaration": true,
+    "declarationMap": false,
+    "inlineSources": true,
     "downlevelIteration": true,
     "experimentalDecorators": true,
     "moduleResolution": "node",

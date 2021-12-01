@@ -14,6 +14,28 @@ exports[`ApiComponent should create 1`] = `
     <button>
       Update the message
     </button>
+    <tm-shared>
+      <button
+        class="mat-focus-indicator mat-flat-button mat-button-base _mat-animation-noopable"
+        mat-flat-button=""
+      >
+        <span
+          class="mat-button-wrapper"
+        >
+          Test
+        </span>
+        <span
+          class="mat-ripple mat-button-ripple"
+          matripple=""
+        />
+        <span
+          class="mat-button-focus-overlay"
+        />
+      </button>
+      <span>
+        Test2
+      </span>
+    </tm-shared>
   </p>
 </div>
 `;

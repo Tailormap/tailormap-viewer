@@ -1,0 +1,23 @@
+/* To learn more about this file see: https://angular.io/config/tsconfig. */
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "@tailormap-viewer/api": [
+        "dist/api/api",
+        "dist/api",
+        "projects/api/src"
+      ],
+      "@tailormap-viewer/core": [
+        "dist/core/core",
+        "dist/core",
+        "projects/core/src"
+      ],
+      "@tailormap-viewer/shared": [
+        "dist/shared/shared",
+        "dist/shared",
+        "projects/shared/src"
+      ]
+    },
+  }
+}

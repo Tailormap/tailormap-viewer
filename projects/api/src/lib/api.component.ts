@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
       api works!
       <span class="message">{{ hello }}</span>
       <button (click)="updateMessage()">Update the message</button>
+      <tm-shared (click)="updateMessage()"></tm-shared>
     </p>
   `,
   styles: [

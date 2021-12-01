@@ -4,5 +4,5 @@ module.exports = {
     '<rootDir>/projects/app',
     '<rootDir>/projects/core',
     '<rootDir>/projects/shared',
-  ],
+  ]
 };

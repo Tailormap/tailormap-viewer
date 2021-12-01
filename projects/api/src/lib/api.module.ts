@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
 import { ApiComponent } from './api.component';
-
-
+import { SharedModule } from '@tailormap-viewer/shared';
 
 @NgModule({
   declarations: [
-    ApiComponent
+    ApiComponent,
   ],
   imports: [
+    SharedModule,
   ],
   exports: [
-    ApiComponent
-  ]
+    ApiComponent,
+  ],
 })
 export class ApiModule { }

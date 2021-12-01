@@ -21,18 +21,19 @@
             "index": "projects/app/src/index.html",
             "main": "projects/app/src/main.ts",
             "polyfills": "projects/app/src/polyfills.ts",
-            "tsConfig": "projects/app/tsconfig.app.json",
             "assets": [
               "projects/app/src/favicon.ico",
               "projects/app/src/assets"
             ],
             "styles": [
+              "projects/app/src/custom-theme.scss",
               "projects/app/src/styles.css"
             ],
             "scripts": []
           },
           "configurations": {
             "production": {
+              "tsConfig": "projects/app/tsconfig.prod.json",
               "budgets": [
                 {
                   "type": "initial",
@@ -54,6 +55,7 @@
               "outputHashing": "all"
             },
             "development": {
+              "tsConfig": "projects/app/tsconfig.app.json",
               "buildOptimizer": false,
               "optimization": false,
               "vendorChunk": true,
