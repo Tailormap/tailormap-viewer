@@ -1,0 +1,15 @@
+export enum AttributeType {
+    DATE = 'date',
+    TIMESTAMP = 'timestamp',
+    STRING = 'string',
+    DOUBLE = 'double',
+    NUMBER = 'number',
+    BOOLEAN = 'boolean',
+    LINESTRING = 'linestring',
+    MULTILINESTRING = 'multilinestring',
+    POINT = 'point',
+    MULTIPOINT = 'multipoint',
+    POLYGON = 'polygon',
+    MULTIPOLYGON = 'multipolygon',
+    GEOMETRY = 'geometry',
+}
