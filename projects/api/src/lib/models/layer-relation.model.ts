@@ -1,6 +1,6 @@
 import { RelationType } from './relation-type.enum';
 
-export interface LayerRelation {
+export interface LayerRelationModel {
     featureType: number;
     foreignFeatureType: number;
     type: RelationType;

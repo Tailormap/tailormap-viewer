@@ -1,4 +1,4 @@
-export interface RedirectResponse {
+export interface RedirectResponseModel {
     code: number;
     url: string;
 }

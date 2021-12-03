@@ -1,4 +1,4 @@
-export interface ErrorResponse {
+export interface ErrorResponseModel {
     code: number;
     message: string;
 }

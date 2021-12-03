@@ -1,6 +1,6 @@
 import { AttributeType } from './attribute-type.enum';
 
-export interface Attribute {
+export interface AttributeModel {
     id: number;
     featureType: number;
     name: string;

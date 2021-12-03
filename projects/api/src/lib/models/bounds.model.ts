@@ -1,6 +1,6 @@
 import { CoordinateReferenceSystem } from './coordinate-reference-system.enum';
 
-export interface Bounds {
+export interface BoundsModel {
     miny: number;
     minx: number;
     maxy: number;

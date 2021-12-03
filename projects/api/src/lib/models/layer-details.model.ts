@@ -1,8 +1,8 @@
 import { GeometryType } from './geometry-type.enum';
-import { LayerRelation } from './layer-relation.model';
-import { Attribute } from './attribute.model';
+import { LayerRelationModel } from './layer-relation.model';
+import { AttributeModel } from './attribute.model';
 
-export interface LayerDetails {
+export interface LayerDetailsModel {
     id: number;
     featuretypeName: string;
     serviceId: number;
@@ -11,6 +11,6 @@ export interface LayerDetails {
     geometryType: GeometryType;
     editable: boolean;
     metadata: string | null;
-    relations: LayerRelation[];
-    attributes: Attribute[];
+    relations: LayerRelationModel[];
+    attributes: AttributeModel[];
 }

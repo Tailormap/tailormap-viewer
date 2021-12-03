@@ -1,6 +1,6 @@
 import { Language } from './language.enum';
 
-export interface AppResponse {
+export interface AppResponseModel {
     id: number;
     api_version: string;
     name: string;

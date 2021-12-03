@@ -1,4 +1,4 @@
-export interface ComponentBaseConfig {
+export interface ComponentBaseConfigModel {
     label: string;
     title: string;
     tooltip: string;

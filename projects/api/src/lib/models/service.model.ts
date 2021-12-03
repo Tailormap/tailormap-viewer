@@ -1,7 +1,7 @@
 import { ServiceProtocol } from './service-protocol.enum';
 import { TilingProtocol } from './tiling-protocol.enum';
 
-export interface Service {
+export interface ServiceModel {
     id: number;
     name: string;
     url: string;

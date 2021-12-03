@@ -1,6 +1,6 @@
-import { ComponentBaseConfig } from './component-base-config.model';
+import { ComponentBaseConfigModel } from './component-base-config.model';
 
-export interface Component {
+export interface ComponentModel {
     type: string;
-    config: ComponentBaseConfig;
+    config: ComponentBaseConfigModel;
 }
