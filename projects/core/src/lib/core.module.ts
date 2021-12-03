@@ -5,12 +5,12 @@ import { CoreComponent } from './core.component';
 
 @NgModule({
   declarations: [
-    CoreComponent
+    CoreComponent,
   ],
   imports: [
   ],
   exports: [
-    CoreComponent
-  ]
+    CoreComponent,
+  ],
 })
 export class CoreModule { }

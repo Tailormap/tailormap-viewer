@@ -8,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
       <span class="message">{{ hello }}</span>
       <button (click)="updateMessage()">Update the message</button>
       <tm-shared (click)="updateMessage()"></tm-shared>
+      <a routerLink="/test">Ga naar /test</a>
     </p>
   `,
   styles: [

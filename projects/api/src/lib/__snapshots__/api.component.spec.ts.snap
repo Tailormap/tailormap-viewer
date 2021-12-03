@@ -36,6 +36,11 @@ exports[`ApiComponent should create 1`] = `
         Test2
       </span>
     </tm-shared>
+    <a
+      routerlink="/test"
+    >
+      Ga naar /test
+    </a>
   </p>
 </div>
 `;
