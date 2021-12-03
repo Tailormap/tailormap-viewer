@@ -20,7 +20,14 @@ Run `npm run test` to execute the unit tests via [Jest](https://jestjs.io).
 
 ## Running as Docker container
 
-docker build -f Dockerfile -t tailormap:prod .
-docker run -it -p 8080:80 --rm tailormap:prod
+**Build**
 
-This build, tests and runs the application on port 8080 locally
+This command runs the unit tests and build the application
+
+`docker build -f Dockerfile -t tailormap:prod .`
+
+**Run**
+
+This command runs the application on port 8080 locally
+
+`docker run -it -p 8080:80 --rm tailormap:prod`
