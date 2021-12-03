@@ -20,3 +20,8 @@ updates:
     target-branch: main
     labels:
       - infrastucture
+    ignore:
+      # stay on Node 16
+      - dependency-name: "node"
+        versions:
+          - "17.x"
