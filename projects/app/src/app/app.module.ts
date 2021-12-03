@@ -8,8 +8,6 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { EffectsModule } from '@ngrx/effects';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { SharedModule } from '@tailormap-viewer/shared';
-import { ApiModule } from '@tailormap-viewer/api';
 
 @NgModule({
   declarations: [
@@ -22,8 +20,6 @@ import { ApiModule } from '@tailormap-viewer/api';
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
     EffectsModule.forRoot([]),
     BrowserAnimationsModule,
-    SharedModule,
-    ApiModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
