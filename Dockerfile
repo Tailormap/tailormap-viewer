@@ -28,5 +28,7 @@ COPY ./config/nginx.conf /etc/nginx/nginx.conf
 # expose port 80
 EXPOSE 80
 
+HEALTHCHECK --interval=30s --timeout=3s --retries=2 CMD wget --spider --header 'Accept: text/html' http://localhost/ || exit 1
+
 # run nginx
 CMD ["nginx", "-g", "daemon off;"]
