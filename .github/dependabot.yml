@@ -21,7 +21,6 @@ updates:
     labels:
       - infrastucture
     ignore:
-      # stay on Node 16
-      - dependency-name: "node"
+      - dependency-name: node
         versions:
-          - "17.x"
+          - ">= 17"
