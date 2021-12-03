@@ -1,0 +1,43 @@
+name: Docker Image
+
+on:
+  - push
+  - workflow_dispatch
+
+jobs:
+  build:
+    name: Build and deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      # TODO add some logic to determine version/tag name
+      - name: Determine version
+        run: |
+          echo "VERSION_TAG=latest" >> $GITHUB_ENV
+
+      - name: Build and Tag
+        run: |
+          docker build . -f Dockerfile --tag 'ghcr.io/b3partners/tailormap-viewer:"${{ env.VERSION_TAG }}"'
+
+      - name: Start container
+        run: |
+          docker run --rm --name tailormap-viewer -h tailormap-viewer -d -p '8080:80' 'ghcr.io/b3partners/tailormap-viewer:"${{ env.VERSION_TAG }}"'
+
+      - name: Test container
+        run: |
+          docker logs tailormap-viewer
+          echo "Container running? "
+          docker inspect -f='{{json .State.Running}}' tailormap-viewer
+          echo "Container health: "
+          docker inspect -f='{{json .State.Health}}' tailormap-viewer
+          curl -Is http://localhost:8080/ | head -n 1
+
+      - name: Log in and Push to registry
+        # only when on main branch
+        if: ${{ github.ref == 'refs/heads/main' }}
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ secrets.GITHUB_ACTOR }} --password-stdin
+          docker push 'ghcr.io/b3partners/tailormap-viewer:"${{ env.VERSION_TAG }}"'
+
