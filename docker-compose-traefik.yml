@@ -7,7 +7,6 @@
 services:
   web:
     labels:
-      traefik.http.routers.nexus.service: web
       traefik.http.routers.tailormap-snapshot.rule: "Host(`snapshot.tailormap.nl`)"
       traefik.http.routers.tailormap-snapshot.tls: "true"
       traefik.http.routers.tailormap-snapshot.tls.certresolver: "letsencrypt"
