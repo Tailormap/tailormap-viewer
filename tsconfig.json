@@ -2,6 +2,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
     "baseUrl": "./",
     "paths": {
       "@tailormap-viewer/api": [
@@ -12,6 +13,9 @@
       ],
       "@tailormap-viewer/shared": [
         "projects/shared/src"
+      ],
+      "@tailormap-viewer/map": [
+        "projects/map/src"
       ]
     },
     "outDir": "./dist/out-tsc",
