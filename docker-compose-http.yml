@@ -1,0 +1,9 @@
+
+# Run locally for testing HTTP without a SSL proxy:
+
+# docker-compose -f docker-compose.yml -f docker-compose-http.yml up --remove-orphan
+
+services:
+  web:
+    ports:
+      - "80:80"

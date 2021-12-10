@@ -1,0 +1,48 @@
+version: "3.9"
+
+# First run a PostgreSQL tailormap database in the tailormap-db network:
+
+# docker network create tailormap-db
+# docker run -d --name tailormap-db --network tailormap-db -e POSTGRES_PASSWORD=password postgres:alpine
+# echo "create user tailormap with password 'tailormap'; create database tailormap owner tailormap;" | docker exec -i tailormap-db psql -U postgres
+# Download 'postgresql-schema-export.sql' and 'initialize_database.sql' from a viewer-config-persistence JAR release from https://repo.b3p.nl/nexus/
+# (echo 'set session authorization tailormap;'; cat postgresql-schema-export.sql)| docker exec -i tailormap-db psql -U postgres tailormap
+# (echo 'set session authorization tailormap;'; cat initialize_database.sql)| docker exec -i tailormap-db psql -U postgres tailormap
+
+# Then run the web, api and admin containers:
+
+# docker-compose up --remove-orphan --build
+
+# This compose file does not expose port 80, see docker-compose-http.yml to test using HTTP only.
+
+services:
+  web:
+    image: ghcr.io/b3partners/tailormap-viewer:snapshot
+    depends_on:
+      - api
+      - admin
+    networks:
+      - tailormap-snapshot
+
+  api:
+    image: ghcr.io/b3partners/tailormap-api:snapshot
+    environment:
+      DB_HOST: tailormap-db
+    networks:
+      - tailormap-snapshot
+      - tailormap-db
+
+  admin:
+    image: ghcr.io/b3partners/tailormap-admin:snapshot
+    environment:
+      CATALINA_OPTS: -DPG_HOST=tailormap-db -DPG_PORT=5432 -DPG_DATABASE=tailormap -DDB_NAME=tailormap -DDB_USER=tailormap -DDB_PASSWORD=tailormap
+    ports:
+      - "8080:8080"
+    networks:
+      - tailormap-snapshot
+      - tailormap-db
+
+networks:
+  tailormap-snapshot:
+  tailormap-db:
+    external: true

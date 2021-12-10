@@ -1,0 +1,15 @@
+
+# When you have a Traefik running with "--providers=docker" parameter and a certificate resolver called "letsencrypt" in the network for
+# this stack.
+
+# docker-compose -f docker-compose.yml -f docker-compose-traefik.yml up --remove-orphan -d
+
+services:
+  web:
+    labels:
+      traefik.http.routers.nexus.service: web
+      traefik.http.routers.tailormap-snapshot.rule: "Host(`snapshot.tailormap.nl`)"
+      traefik.http.routers.tailormap-snapshot.tls: "true"
+      traefik.http.routers.tailormap-snapshot.tls.certresolver: "letsencrypt"
+      traefik.http.services.tailormap-snapshot.loadbalancer.server.port: 80
+
