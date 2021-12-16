@@ -1,6 +1,8 @@
 import { Injectable, NgZone } from '@angular/core';
 import { OpenLayersMap } from '../openlayers-map/openlayers-map';
-import { ExtentHelper } from '../helpers/extent.helper';
+import { Observable } from 'rxjs';
+import { LayerManagerModel } from '../models/layer-manager.model';
+import { MapViewerOptionsModel } from '../models/map-viewer-options.model';
 
 @Injectable({
   providedIn: 'root',
@@ -12,19 +14,19 @@ export class MapService {
   constructor(
     private ngZone: NgZone,
   ) {
-    this.map = new OpenLayersMap({
-      projection: 'EPSG:28992',
-      maxExtent: ExtentHelper.getRdExtent(),
-      initialExtent: [5000, 304000, 284000, 625000],
-    }, this.ngZone);
+    this.map = new OpenLayersMap(this.ngZone);
+  }
+
+  public setProjection(options: MapViewerOptionsModel) {
+    this.map.setProjection(options);
   }
 
   public render(el: HTMLElement) {
     this.map.render(el);
   }
 
-  public getLayerManager() {
-    return this.map.getLayerManager();
+  public getLayerManager(): Observable<LayerManagerModel> {
+    return this.map.getLayerManager$();
   }
 
 }

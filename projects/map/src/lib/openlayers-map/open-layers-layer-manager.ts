@@ -3,7 +3,6 @@ import VectorSource from 'ol/source/Vector';
 import BaseLayer from 'ol/layer/Base';
 import LayerGroup from 'ol/layer/Group';
 import VectorImageLayer from 'ol/layer/VectorImage';
-import { NgZone } from '@angular/core';
 import { ImageWMS, XYZ } from 'ol/source';
 import WMTS from 'ol/source/WMTS';
 import { LayerManagerModel } from '../models/layer-manager.model';
@@ -28,13 +27,18 @@ export class OpenLayersLayerManager implements LayerManagerModel {
   private baseLayerGroup = new LayerGroup();
   private drawingLayerGroup = new LayerGroup();
 
-  private olLayerHelper: OlLayerHelper;
-
-  constructor(private map: OlMap, ngZone: NgZone) {
+  constructor(private map: OlMap) {
     this.map.addLayer(this.backgroundLayerGroup);
     this.map.addLayer(this.baseLayerGroup);
     this.map.addLayer(this.drawingLayerGroup);
-    this.olLayerHelper = new OlLayerHelper(ngZone);
+  }
+
+  public destroy() {
+    this.layers = new Map();
+    this.sources = new Map();
+    this.map.removeLayer(this.backgroundLayerGroup);
+    this.map.removeLayer(this.baseLayerGroup);
+    this.map.removeLayer(this.drawingLayerGroup);
   }
 
   public setBackgroundLayer(layer: LayerModel) {
@@ -202,7 +206,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     if (LayerTypesHelper.isVectorLayer(layer)) {
       return this.createVectorLayer(layer);
     }
-    const olLayer = this.olLayerHelper.createLayer(layer, this.map.getView().getProjection(), service);
+    const olLayer = OlLayerHelper.createLayer(layer, this.map.getView().getProjection(), service);
     if (!olLayer) {
       return null;
     }
@@ -212,10 +216,10 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     return olLayer;
   }
 
-  private createVectorLayer(layer: LayerModel): VectorImageLayer<VectorSource<Geometry>> {
+  private createVectorLayer(layer: LayerModel): VectorImageLayer<VectorSource<Geometry>> | null {
     const source = new VectorSource({ wrapX: true });
     this.sources.set(layer.id, source);
-    return this.olLayerHelper.createVectorLayer(layer, source);
+    return OlLayerHelper.createVectorLayer(layer, source);
   }
 
 }

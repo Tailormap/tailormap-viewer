@@ -11,112 +11,133 @@ import { ProjectionsHelper } from '../helpers/projections.helper';
 import { OpenlayersExtent } from '../models/extent.type';
 import { OpenLayersLayerManager } from './open-layers-layer-manager';
 import { LayerManagerModel } from '../models/layer-manager.model';
+import { concatMap, filter, map, Observable, Subject, take } from 'rxjs';
 import { Size } from 'ol/size';
 
 export class OpenLayersMap implements MapViewerModel {
 
-  private projection: Projection | undefined;
-  private resolutions: number[] | undefined;
-  private initialExtent: OpenlayersExtent | undefined;
-  private map: OlMap | undefined;
-  private layerManager: OpenLayersLayerManager | undefined;
-  private resizeObserver: ResizeObserver | undefined;
-  private mapPadding: [number, number, number, number] | undefined;
+  private map: Subject<OlMap> = new Subject<OlMap>();
+  private layerManager: Subject<OpenLayersLayerManager> = new Subject<OpenLayersLayerManager>();
+
+  private previousMap: OlMap | null = null;
+  private previousLayerManager: OpenLayersLayerManager | null = null;
+
+  private readonly resizeObserver: ResizeObserver;
 
   constructor(
-    private options: MapViewerOptionsModel,
     private ngZone: NgZone,
   ) {
-    ngZone.runOutsideAngular(this.init.bind(this));
+    this.resizeObserver = new ResizeObserver(() => this.updateMapSize());
   }
 
-  public init() {
-    this.projection = new Projection({
-      code: this.options.projection,
-      extent: this.options.maxExtent,
+  public setProjection(options: MapViewerOptionsModel) {
+    if (this.previousMap && this.previousMap.getView().getProjection().getCode() === options.projection) {
+      // Do not re-create the map if the projection is the same as previous
+      this.previousMap.getView().getProjection().setExtent(options.maxExtent);
+      return;
+    }
+
+    ProjectionsHelper.initProjection(options.projection, options.projectionDefinition);
+    const projection = new Projection({
+      code: options.projection,
+      extent: options.maxExtent,
     });
-    this.resolutions = ProjectionsHelper.getResolutions(this.options.projection, this.options.maxExtent);
-    this.initialExtent = this.options.initialExtent;
-    this.map = new OlMap({
+    const resolutions = ProjectionsHelper.getResolutions(options.projection, options.maxExtent);
+
+    const olMap = new OlMap({
       controls: [],
       interactions: defaultInteractions({altShiftDragRotate: false, pinchRotate: false}),
       view: new View({
-        projection: this.projection,
-        resolutions: this.resolutions,
+        projection,
+        resolutions,
       }),
     });
-    this.resizeObserver = new ResizeObserver(() => this.updateMapSize());
-    return this.map;
+
+    if (this.previousLayerManager) {
+      this.previousLayerManager.destroy();
+    }
+
+    if (this.previousMap) {
+      this.previousMap.dispose();
+    }
+
+    const layerManager = new OpenLayersLayerManager(olMap);
+    this.previousLayerManager = layerManager;
+    this.previousMap = olMap;
+
+    this.map.next(olMap);
+    this.layerManager.next(layerManager);
   }
 
   public render(container: HTMLElement) {
     this.ngZone.runOutsideAngular(this._render.bind(this, container));
   }
 
-  public getLayerManager(): LayerManagerModel {
-    if (!this.layerManager) {
-      this.layerManager = new OpenLayersLayerManager(this.getMap(), this.ngZone);
-    }
-    return this.layerManager;
+  public getLayerManager$(): Observable<LayerManagerModel> {
+    return this.layerManager.asObservable();
   }
 
-  public getVisibleExtent(): OpenlayersExtent {
-    return this.getMap().getView().calculateExtent(this.getSizeIncludingPadding());
-  }
-
-  private getSizeIncludingPadding(extraPaddingPercentage: number = 1.1): Size {
-    const mapSize = this.getMap().getSize();
-    if (!mapSize) {
-      return [0, 0];
-    }
-    const mapPadding = (this.mapPadding || [0, 0, 0, 0]).map(p => p * extraPaddingPercentage);
-    return [
-      mapSize[0] - mapPadding[1] - mapPadding[3],
-      mapSize[1] - mapPadding[0] - mapPadding[2],
-    ];
-  }
-
-  private _render(container: HTMLElement) {
-    this.getMap().setTarget(container);
-    this.getMap().render();
-    if (this.initialExtent) {
-      this.getMap().getView().fit(this.initialExtent);
-    }
-    window.setTimeout(() => this.updateMapSize(), 0);
-    if (this.resizeObserver) {
-      this.resizeObserver.observe(container);
-    }
-  }
-
-  public setMapPadding(mapPadding: [number, number, number, number]) {
-    this.mapPadding = mapPadding;
+  public getVisibleExtent$(): Observable<OpenlayersExtent> {
+    return this.getSize$().pipe(
+      concatMap(size => this.getMap$().pipe(
+        map(olMap => olMap.getView().calculateExtent(size)),
+      )),
+    );
   }
 
   public setZoomLevel(zoom: number) {
-    this.getMap().getView().setZoom(zoom);
-  }
-
-  public getZoomLevel(): number {
-    return this.getMap().getView().getZoom() || 0;
+    this.executeMapAction(olMap => olMap.getView().setZoom(zoom));
   }
 
   public zoomIn() {
-    this.getMap().getView().setZoom(this.getZoomLevel() + 1);
+    this.executeMapAction(olMap => {
+      olMap.getView().setZoom((olMap.getView().getZoom() || 0) + 1);
+    });
   }
 
   public zoomOut() {
-    this.getMap().getView().setZoom(this.getZoomLevel() - 1);
+    this.executeMapAction(olMap => {
+      olMap.getView().setZoom((olMap.getView().getZoom() || 0) - 1);
+    });
   }
 
-  private getMap() {
-    if (!this.map) {
-      return this.init();
-    }
-    return this.map;
+  private getMap$() {
+    return this.map.asObservable();
+  }
+
+  private getSize$(): Observable<Size> {
+    return this.getMap$().pipe(map(olMap => {
+      const size = olMap.getSize();
+      if (!size) {
+        return [ 0, 0 ];
+      }
+      return size;
+    }));
+  }
+
+
+  private _render(container: HTMLElement) {
+    this.executeMapAction(olMap => {
+      olMap.setTarget(container);
+      olMap.render();
+      window.setTimeout(() => this.updateMapSize(), 0);
+      if (this.resizeObserver) {
+        this.resizeObserver.observe(container);
+      }
+    });
   }
 
   private updateMapSize() {
-    this.getMap().updateSize();
+    this.executeMapAction(olMap => olMap.updateSize());
+  }
+
+  private executeMapAction(fn: (olMap: OlMap) => void) {
+    this.getMap$()
+      .pipe(
+        filter(olMap => !!olMap),
+        take(1),
+      )
+      .subscribe(olMap => fn(olMap));
   }
 
 }
