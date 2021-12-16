@@ -25,14 +25,14 @@ jobs:
         run: |
           docker run --rm --name tailormap-viewer -h tailormap-viewer -d -p '8080:80' 'ghcr.io/b3partners/tailormap-viewer:${{ env.VERSION_TAG }}'
 
-#      - name: Test container
-#        run: |
-#          docker logs tailormap-viewer
-#          echo "Container running? "
-#          docker inspect -f='{{json .State.Running}}' tailormap-viewer
-#          echo "Container health: "
-#          docker inspect -f='{{json .State.Health}}' tailormap-viewer
-#          curl -Is http://localhost:8080/ | head -n 1
+      - name: Test container
+        run: |
+          docker logs tailormap-viewer
+          echo "Container running? "
+          docker inspect -f='{{json .State.Running}}' tailormap-viewer
+          echo "Container health: "
+          docker inspect -f='{{json .State.Health}}' tailormap-viewer
+          curl -Is http://localhost:8080/ | head -n 1
 
       - name: Log in and Push to registry
         # only publish when on main branch
