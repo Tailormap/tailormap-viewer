@@ -7,7 +7,7 @@ on:
 jobs:
   build:
     name: Build and deploy
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
 
     steps:
       - uses: actions/checkout@v2
@@ -49,5 +49,4 @@ jobs:
           ssh_key: ${{ secrets.DOCKER_HOST_SNAPSHOT_SSH_KEY }}
           use_context: true
       - run: |
-          docker-compose -f docker-compose.yml pull
-          docker-compose -f docker-compose.yml -f docker-compose-traefik.yml up -d
+          docker-compose -f docker-compose.yml --profile proxied pull && docker-compose -f docker-compose.yml -f docker-compose-cd.yml --profile proxied up -d
