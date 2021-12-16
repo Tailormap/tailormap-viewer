@@ -7,6 +7,7 @@ on:
 jobs:
   build:
     name: Build and deploy
+    # Do not use ubuntu-latest because of Docker compose version, see https://github.com/docker/compose/issues/7686
     runs-on: ubuntu-18.04
 
     steps:
