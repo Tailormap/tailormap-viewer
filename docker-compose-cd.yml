@@ -33,7 +33,7 @@ services:
 
   admin:
     environment:
-      CATALINA_OPTS: -DPG_HOST=tailormap-db -DPG_PORT=5432 -DPG_DATABASE=tailormap -DDB_NAME=tailormap -DDB_USER=tailormap -DDB_PASSWORD=${TAILORMAP_DB_PASSWORD:-tailormap}
+      CATALINA_OPTS: -DPG_HOST=tailormap-db -DPG_PORT=5432 -DPG_DATABASE=tailormap -DDB_NAME=tailormap -DDB_USER=tailormap -DDB_PASSWORD=${TAILORMAP_DB_PASSWORD:-tailormap} -DURL_SCHEME=https
     networks:
       - tailormap-snapshot
       - tailormap-db
