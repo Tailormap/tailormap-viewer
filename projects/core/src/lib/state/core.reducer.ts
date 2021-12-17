@@ -10,7 +10,7 @@ const onLoadApplication = (state: CoreState): CoreState => ({
 
 const onApplicationLoadSuccess = (
   state: CoreState,
-  payload: ReturnType<typeof CoreActions.applicationLoadSuccess>,
+  payload: ReturnType<typeof CoreActions.loadApplicationSuccess>,
 ): CoreState => ({
   ...state,
   loadStatus: LoadingStateEnum.LOADED,
@@ -30,7 +30,7 @@ const onApplicationLoadSuccess = (
 
 const onApplicationLoadFailed = (
   state: CoreState,
-  payload: ReturnType<typeof CoreActions.applicationLoadFailed>,
+  payload: ReturnType<typeof CoreActions.loadApplicationFailed>,
 ): CoreState => ({
   ...state,
   loadStatus: LoadingStateEnum.FAILED,
@@ -40,7 +40,7 @@ const onApplicationLoadFailed = (
 const coreReducerImpl = createReducer<CoreState>(
   initialCoreState,
   on(CoreActions.loadApplication, onLoadApplication),
-  on(CoreActions.applicationLoadSuccess, onApplicationLoadSuccess),
-  on(CoreActions.applicationLoadFailed, onApplicationLoadFailed),
+  on(CoreActions.loadApplicationSuccess, onApplicationLoadSuccess),
+  on(CoreActions.loadApplicationFailed, onApplicationLoadFailed),
 );
 export const coreReducer = (state: CoreState | undefined, action: Action) => coreReducerImpl(state, action);

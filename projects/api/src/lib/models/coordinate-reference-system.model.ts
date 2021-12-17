@@ -1,7 +1,7 @@
 import { BoundsModel } from './bounds.model';
 
-export interface CoordinateReferenceSystem {
+export interface CoordinateReferenceSystemModel {
   code: string;
   definition: string;
-  area: BoundsModel;
+  area?: BoundsModel;
 }

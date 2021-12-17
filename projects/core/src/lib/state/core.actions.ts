@@ -4,7 +4,7 @@ import { AppLayerModel, AppResponseModel, ComponentModel, MapResponseModel } fro
 const prefix = '[Core]';
 
 export const loadApplication = createAction(`${prefix} Load Application`);
-export const applicationLoadSuccess = createAction(
+export const loadApplicationSuccess = createAction(
   `${prefix} Application Load Success`,
   props<{
     application: AppResponseModel;
@@ -13,7 +13,7 @@ export const applicationLoadSuccess = createAction(
     components: ComponentModel[];
   }>(),
 );
-export const applicationLoadFailed = createAction(
+export const loadApplicationFailed = createAction(
   `${prefix} Application Load Failed`,
   props<{ error?: string }>(),
 );

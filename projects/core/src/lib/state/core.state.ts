@@ -1,5 +1,5 @@
 import {
-  AppLayerModel, BoundsModel, ComponentModel, CoordinateReferenceSystem, Language, LoadingStateEnum, ServiceModel,
+  AppLayerModel, BoundsModel, ComponentModel, CoordinateReferenceSystemModel, Language, LoadingStateEnum, ServiceModel,
 } from '@tailormap-viewer/api';
 
 export interface CoreState {
@@ -15,7 +15,7 @@ export interface CoreState {
   maxExtent?: BoundsModel;
   services: ServiceModel[];
   baseLayers: AppLayerModel[];
-  crs?: CoordinateReferenceSystem;
+  crs?: CoordinateReferenceSystemModel;
   components: ComponentModel[];
   layers: AppLayerModel[];
 }

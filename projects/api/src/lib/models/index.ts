@@ -5,7 +5,7 @@ export * from './attribute.model';
 export * from './bounds.model';
 export * from './component-base-config.model';
 export * from './component.model';
-export * from './coordinate-reference-system.enum';
+export * from './coordinate-reference-system.model';
 export * from './error-response.model';
 export * from './geometry-type.enum';
 export * from './language.enum';

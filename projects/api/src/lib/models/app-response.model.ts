@@ -2,7 +2,7 @@ import { Language } from './language.enum';
 
 export interface AppResponseModel {
     id: number;
-    api_version: string;
+    apiVersion: string;
     name: string;
     title: string;
     lang: Language;
