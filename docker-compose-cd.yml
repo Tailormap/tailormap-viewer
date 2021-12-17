@@ -38,7 +38,7 @@ services:
 
   db:
     environment:
-      # This service is not used. Set to empty so container will exit. Note that if the volume "tailormap-viewer_config-db" exists, it will
+      # This service is not used. Password is set to empty so container will exit. Note that if the volume "tailormap-viewer_config-db" exists, it will
       # be used to startup the container but the api and admin services will not connect to it.
       POSTGRES_PASSWORD:
 
