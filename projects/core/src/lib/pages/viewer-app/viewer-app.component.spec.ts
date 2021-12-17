@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/angular';
-import { HomeComponent } from './home.component';
+import { ViewerAppComponent } from './viewer-app.component';
 
 describe('HomeComponent', () => {
 
   test('should render', async () => {
-    const { container } = await render(HomeComponent);
+    const { container } = await render(ViewerAppComponent);
     expect(container.querySelector('.map-container')).not.toBeNull();
   });
 

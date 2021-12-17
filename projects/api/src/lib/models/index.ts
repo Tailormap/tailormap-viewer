@@ -11,6 +11,7 @@ export * from './geometry-type.enum';
 export * from './language.enum';
 export * from './layer-details.model';
 export * from './layer-relation.model';
+export * from './loading-state.enum';
 export * from './map-response.model';
 export * from './redirect-response.model';
 export * from './relation-type.enum';

@@ -1,28 +1,26 @@
 /* eslint-disable rxjs/finnish */
-
 import { default as OlMap } from 'ol/Map';
 import Projection from 'ol/proj/Projection';
 import View  from 'ol/View';
 import { NgZone } from '@angular/core';
 import { defaults as defaultInteractions } from 'ol/interaction';
-import { MapViewerModel } from '../models/map-viewer.model';
-import { MapViewerOptionsModel } from '../models/map-viewer-options.model';
+import { LayerManagerModel, MapViewerModel, MapViewerOptionsModel } from '../models';
 import { ProjectionsHelper } from '../helpers/projections.helper';
 import { OpenlayersExtent } from '../models/extent.type';
 import { OpenLayersLayerManager } from './open-layers-layer-manager';
-import { LayerManagerModel } from '../models/layer-manager.model';
-import { concatMap, filter, map, Observable, Subject, take } from 'rxjs';
+import { BehaviorSubject, concatMap, filter, map, Observable, take } from 'rxjs';
 import { Size } from 'ol/size';
 
 export class OpenLayersMap implements MapViewerModel {
 
-  private map: Subject<OlMap> = new Subject<OlMap>();
-  private layerManager: Subject<OpenLayersLayerManager> = new Subject<OpenLayersLayerManager>();
+  private map: BehaviorSubject<OlMap | null> = new BehaviorSubject<OlMap | null>(null);
+  private layerManager: BehaviorSubject<LayerManagerModel | null> = new BehaviorSubject<LayerManagerModel | null>(null);
 
   private previousMap: OlMap | null = null;
   private previousLayerManager: OpenLayersLayerManager | null = null;
 
   private readonly resizeObserver: ResizeObserver;
+  private initialExtent: OpenlayersExtent = [];
 
   constructor(
     private ngZone: NgZone,
@@ -30,28 +28,37 @@ export class OpenLayersMap implements MapViewerModel {
     this.resizeObserver = new ResizeObserver(() => this.updateMapSize());
   }
 
-  public setProjection(options: MapViewerOptionsModel) {
+  public initMap(options: MapViewerOptionsModel) {
     if (this.previousMap && this.previousMap.getView().getProjection().getCode() === options.projection) {
       // Do not re-create the map if the projection is the same as previous
       this.previousMap.getView().getProjection().setExtent(options.maxExtent);
       return;
     }
 
-    ProjectionsHelper.initProjection(options.projection, options.projectionDefinition);
+    ProjectionsHelper.initProjection(options.projection, options.projectionDefinition, options.projectionAliases);
     const projection = new Projection({
       code: options.projection,
       extent: options.maxExtent,
     });
     const resolutions = ProjectionsHelper.getResolutions(options.projection, options.maxExtent);
 
+    const view = new View({
+      projection,
+      resolutions,
+    });
+
     const olMap = new OlMap({
       controls: [],
-      interactions: defaultInteractions({altShiftDragRotate: false, pinchRotate: false}),
-      view: new View({
-        projection,
-        resolutions,
+      interactions: defaultInteractions({
+        altShiftDragRotate: false,
+        pinchRotate: false,
       }),
+      view,
     });
+
+    this.initialExtent = options.initialExtent && options.initialExtent.length > 0
+      ? options.initialExtent
+      : options.maxExtent;
 
     if (this.previousLayerManager) {
       this.previousLayerManager.destroy();
@@ -62,11 +69,14 @@ export class OpenLayersMap implements MapViewerModel {
     }
 
     const layerManager = new OpenLayersLayerManager(olMap);
+    layerManager.init();
     this.previousLayerManager = layerManager;
     this.previousMap = olMap;
 
     this.map.next(olMap);
     this.layerManager.next(layerManager);
+
+    (window as any).myOlMap = olMap;
   }
 
   public render(container: HTMLElement) {
@@ -74,7 +84,8 @@ export class OpenLayersMap implements MapViewerModel {
   }
 
   public getLayerManager$(): Observable<LayerManagerModel> {
-    return this.layerManager.asObservable();
+    const isLayerManager = (item: LayerManagerModel | null): item is LayerManagerModel => item !== null;
+    return this.layerManager.asObservable().pipe(filter(isLayerManager));
   }
 
   public getVisibleExtent$(): Observable<OpenlayersExtent> {
@@ -101,8 +112,19 @@ export class OpenLayersMap implements MapViewerModel {
     });
   }
 
-  private getMap$() {
-    return this.map.asObservable();
+  public getMap$(): Observable<OlMap> {
+    const isNotNullMap = (item: OlMap | null): item is OlMap => item !== null;
+    return this.map.asObservable().pipe(filter(isNotNullMap));
+  }
+
+  public executeMapAction(fn: (olMap: OlMap) => void) {
+    this.getMap$()
+      .pipe(take(1))
+      .subscribe(olMap => fn(olMap));
+  }
+
+  public getProjection$(): Observable<Projection> {
+    return this.getMap$().pipe(map(olMap => olMap.getView().getProjection()));
   }
 
   private getSize$(): Observable<Size> {
@@ -120,24 +142,18 @@ export class OpenLayersMap implements MapViewerModel {
     this.executeMapAction(olMap => {
       olMap.setTarget(container);
       olMap.render();
-      window.setTimeout(() => this.updateMapSize(), 0);
-      if (this.resizeObserver) {
-        this.resizeObserver.observe(container);
+      if (this.initialExtent && this.initialExtent.length > 0) {
+        olMap.getView().fit(this.initialExtent);
       }
+      window.setTimeout(() => this.updateMapSize(), 0);
+      this.resizeObserver.observe(container);
     });
   }
 
   private updateMapSize() {
-    this.executeMapAction(olMap => olMap.updateSize());
-  }
-
-  private executeMapAction(fn: (olMap: OlMap) => void) {
-    this.getMap$()
-      .pipe(
-        filter(olMap => !!olMap),
-        take(1),
-      )
-      .subscribe(olMap => fn(olMap));
+    this.executeMapAction(olMap => {
+      olMap.updateSize();
+    });
   }
 
 }

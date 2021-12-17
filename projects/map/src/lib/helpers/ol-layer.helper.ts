@@ -71,7 +71,7 @@ export class OlLayerHelper {
     };
   }
 
-  public static createLayer(layer: LayerModel, projection: Projection, service?: Service): BaseLayer | null {
+  public static createLayer(layer: LayerModel, projection: Projection, service?: Service): ImageLayer<ImageWMS> | TileLayer<XYZ> | TileLayer<WMTS> | null {
     if (LayerTypesHelper.isTmsLayer(layer)) {
       return OlLayerHelper.createTMSLayer(layer, projection);
     }
@@ -90,7 +90,7 @@ export class OlLayerHelper {
   /**
    * service is optional but can be passed to set the WMTSLayerModel properties from the WMTS Capabilities
    */
-  public static createWMTSLayer(layer: WMTSLayerModel, service?: WMTSService): BaseLayer {
+  public static createWMTSLayer(layer: WMTSLayerModel, service?: WMTSService): TileLayer<WMTS> {
     if (service) {
       layer = {
         ...layer,
@@ -121,7 +121,7 @@ export class OlLayerHelper {
     });
   }
 
-  public static createTMSLayer(layer: TMSLayerModel, projection: Projection): BaseLayer {
+  public static createTMSLayer(layer: TMSLayerModel, projection: Projection): TileLayer<XYZ> {
     return new TileLayer({
       visible: layer.visible,
       source: new XYZ({
@@ -137,7 +137,7 @@ export class OlLayerHelper {
     return new VectorImageLayer({ source, visible: layer.visible, style: stylingFn });
   }
 
-  public static createWMSLayer(layer: WMSLayerModel): BaseLayer {
+  public static createWMSLayer(layer: WMSLayerModel): ImageLayer<ImageWMS> {
     const source = new ImageWMS({
       url: OgcHelper.filterOgcUrlParameters(layer.url),
       params: {

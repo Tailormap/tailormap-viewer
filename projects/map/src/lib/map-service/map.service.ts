@@ -1,8 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
 import { OpenLayersMap } from '../openlayers-map/openlayers-map';
 import { Observable } from 'rxjs';
-import { LayerManagerModel } from '../models/layer-manager.model';
-import { MapViewerOptionsModel } from '../models/map-viewer-options.model';
+import { LayerManagerModel, MapViewerOptionsModel } from '../models';
 
 @Injectable({
   providedIn: 'root',
@@ -17,15 +16,15 @@ export class MapService {
     this.map = new OpenLayersMap(this.ngZone);
   }
 
-  public setProjection(options: MapViewerOptionsModel) {
-    this.map.setProjection(options);
+  public initMap(options: MapViewerOptionsModel) {
+    this.map.initMap(options);
   }
 
   public render(el: HTMLElement) {
     this.map.render(el);
   }
 
-  public getLayerManager(): Observable<LayerManagerModel> {
+  public getLayerManager$(): Observable<LayerManagerModel> {
     return this.map.getLayerManager$();
   }
 

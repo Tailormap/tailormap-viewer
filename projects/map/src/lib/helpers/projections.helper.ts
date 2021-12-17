@@ -8,11 +8,15 @@ export class ProjectionsHelper {
   public static initProjection(
     projection: string,
     definition: string,
+    projectionAliases?: string[],
   ) {
     if (proj4.defs(projection)) {
       return;
     }
     proj4.defs(projection, definition);
+    (projectionAliases || []).forEach(alias => {
+      proj4.defs(alias, proj4.defs(projection));
+    });
     register(proj4);
   }
 

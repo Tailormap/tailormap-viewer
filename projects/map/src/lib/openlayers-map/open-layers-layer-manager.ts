@@ -5,7 +5,7 @@ import LayerGroup from 'ol/layer/Group';
 import VectorImageLayer from 'ol/layer/VectorImage';
 import { ImageWMS, XYZ } from 'ol/source';
 import WMTS from 'ol/source/WMTS';
-import { LayerManagerModel } from '../models/layer-manager.model';
+import { LayerManagerModel, LayerTypes, Service } from '../models';
 import { OlLayerHelper } from '../helpers/ol-layer.helper';
 import { LayerModel } from '../models/layer.model';
 import {
@@ -14,7 +14,6 @@ import {
   isOpenLayersVectorLayer,
   isOpenLayersWMSLayer, isPossibleRealtimeLayer,
 } from '../helpers/ol-layer-types.helper';
-import { Service } from '../models/service.model';
 import { LayerTypesHelper } from '../helpers/layer-types.helper';
 import { Geometry } from 'ol/geom';
 
@@ -27,18 +26,20 @@ export class OpenLayersLayerManager implements LayerManagerModel {
   private baseLayerGroup = new LayerGroup();
   private drawingLayerGroup = new LayerGroup();
 
-  constructor(private map: OlMap) {
-    this.map.addLayer(this.backgroundLayerGroup);
-    this.map.addLayer(this.baseLayerGroup);
-    this.map.addLayer(this.drawingLayerGroup);
+  constructor(private olMap: OlMap) {}
+
+  public init() {
+    this.olMap.addLayer(this.backgroundLayerGroup);
+    this.olMap.addLayer(this.baseLayerGroup);
+    this.olMap.addLayer(this.drawingLayerGroup);
   }
 
   public destroy() {
     this.layers = new Map();
     this.sources = new Map();
-    this.map.removeLayer(this.backgroundLayerGroup);
-    this.map.removeLayer(this.baseLayerGroup);
-    this.map.removeLayer(this.drawingLayerGroup);
+    this.olMap.removeLayer(this.backgroundLayerGroup);
+    this.olMap.removeLayer(this.baseLayerGroup);
+    this.olMap.removeLayer(this.drawingLayerGroup);
   }
 
   public setBackgroundLayer(layer: LayerModel) {
@@ -58,10 +59,10 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     this.backgroundLayerGroup.getLayers().push(olLayer);
   }
 
-  public addLayer(layer: LayerModel, service?: Service) {
+  public addLayer(layer: LayerModel, service?: Service): LayerTypes {
     const olLayer = this.createLayer(layer, service);
     if (olLayer === null) {
-      return;
+      return null;
     }
     const zIndex = this.getMaxZIndex();
     olLayer.setZIndex(zIndex);
@@ -202,11 +203,11 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     }
   }
 
-  private createLayer(layer: LayerModel, service?: Service): BaseLayer | null {
+  private createLayer(layer: LayerModel, service?: Service): LayerTypes {
     if (LayerTypesHelper.isVectorLayer(layer)) {
       return this.createVectorLayer(layer);
     }
-    const olLayer = OlLayerHelper.createLayer(layer, this.map.getView().getProjection(), service);
+    const olLayer = OlLayerHelper.createLayer(layer, this.olMap.getView().getProjection(), service);
     if (!olLayer) {
       return null;
     }
