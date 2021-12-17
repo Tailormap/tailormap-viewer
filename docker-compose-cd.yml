@@ -1,11 +1,13 @@
 
 # Docker compose stack for continuous deployment:
 # - External db is used so it can be shared between deployments
-# - The web-proxied service is put the "tailormap-snapshot" so a proxy like Traefik can reverse proxy it for SSL termination
+# - The web-proxied service is put the "tailormap-snapshot" network so a proxy like Traefik can reverse proxy it for SSL termination
 
 # Requires a PostgreSQL container named "tailormap-db" in an external network "tailormap-db".
 
 # docker-compose -f docker-compose.yml -f docker-compose-cd.yml --profile [http/proxied] up -d
+
+version: '3.9'
 
 services:
   web:
@@ -13,21 +15,21 @@ services:
       - tailormap-snapshot
 
   web-proxied:
-    networks:
-      - tailormap-snapshot
     labels:
       traefik.http.routers.tailormap-snapshot.rule: "Host(`${HOSTNAME:-snapshot.tailormap.nl}`)"
       traefik.http.routers.tailormap-snapshot.tls: "true"
       traefik.http.routers.tailormap-snapshot.tls.certresolver: "letsencrypt"
       traefik.http.services.tailormap-snapshot.loadbalancer.server.port: 80
-
-  api:
     networks:
       - tailormap-snapshot
-      - tailormap-db
+
+  api:
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://tailormap-db/tailormap
       DB_PASSWORD: ${TAILORMAP_DB_PASSWORD:-tailormap}
+    networks:
+      - tailormap-snapshot
+      - tailormap-db
 
   admin:
     environment:
@@ -39,7 +41,7 @@ services:
   db:
     environment:
       # This service is not used. Password is set to empty so container will exit. Note that if the volume "tailormap-viewer_config-db" exists, it will
-      # be used to startup the container but the api and admin services will not connect to it.
+      # be used to start up the container but the api and admin services will not connect to it.
       POSTGRES_PASSWORD:
 
 networks:
