@@ -37,7 +37,7 @@ jobs:
 
       - name: Log in and Push to registry
         # only publish when on main branch
-        #if: ${{ github.ref == 'refs/heads/main' }}
+        if: ${{ github.ref == 'refs/heads/main' }}
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
           docker push 'ghcr.io/b3partners/tailormap-viewer:${{ env.VERSION_TAG }}'
@@ -50,7 +50,7 @@ jobs:
           ssh_key: ${{ secrets.DOCKER_HOST_SNAPSHOT_SSH_KEY }}
           use_context: true
       - name: Update deployment using Docker Compose
-        #if: ${{ github.ref == 'refs/heads/main' }}
+        if: ${{ github.ref == 'refs/heads/main' }}
         run: |
           docker-compose -f docker-compose.yml -f docker-compose-cd.yml --profile proxied pull
           docker-compose -f docker-compose.yml -f docker-compose-cd.yml --profile proxied up -d
