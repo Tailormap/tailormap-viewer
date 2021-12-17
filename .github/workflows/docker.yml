@@ -7,7 +7,8 @@ on:
 jobs:
   build:
     name: Build and deploy
-    runs-on: ubuntu-latest
+    # Do not use ubuntu-latest because of Docker compose version, see https://github.com/docker/compose/issues/7686
+    runs-on: ubuntu-18.04
 
     steps:
       - uses: actions/checkout@v2
@@ -40,3 +41,16 @@ jobs:
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
           docker push 'ghcr.io/b3partners/tailormap-viewer:${{ env.VERSION_TAG }}'
+
+      - uses: arwynfr/actions-docker-context@v2
+        with:
+          docker_host: ${{ secrets.DOCKER_HOST_SNAPSHOT }}
+          context_name: 'dev-server'
+          ssh_cert: ${{ secrets.DOCKER_HOST_SNAPSHOT_SSH_CERT }}
+          ssh_key: ${{ secrets.DOCKER_HOST_SNAPSHOT_SSH_KEY }}
+          use_context: true
+      - name: Update deployment using Docker Compose
+        if: ${{ github.ref == 'refs/heads/main' }}
+        run: |
+          docker-compose -f docker-compose.yml -f docker-compose-cd.yml --profile proxied pull
+          docker-compose -f docker-compose.yml -f docker-compose-cd.yml --profile proxied up -d

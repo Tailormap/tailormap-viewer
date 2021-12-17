@@ -1,0 +1,71 @@
+version: '3.9'
+
+# Run a complete Tailormap stack:
+# docker-compose --profile http up -d
+
+# Go to http://localhost/ for the viewer and http://localhost/tailormap-admin/ for administration. The default account is admin/flamingo.
+# During the first startup you might see some exceptions connecting to the database while this is being initialized, these are harmless as
+# it will be retried later.
+
+# To stop:
+# docker-compose down
+
+# To remove the volume with the configuration database:
+# docker volume rm tailormap-viewer_config-db
+
+# Requires a Docker compose version supporting version 3.9 of the compose specification (profiles). Do not use 1.25 included in some Ubuntu
+# repositories. Download version 1.28.5 (later version like 1.29.2 may give OpenSSL conflict if server uses Ubuntu 20.04 LTS included Docker
+# packages).
+
+services:
+  web:
+    image: ghcr.io/b3partners/tailormap-viewer:snapshot
+    depends_on:
+      - api
+      - admin
+    profiles:
+      - http
+    ports:
+      - "80:80"
+
+  # The same as web, but without port 80 exposed -- when using a reverse proxy. Already has Traefik labels.
+  web-proxied:
+    image: ghcr.io/b3partners/tailormap-viewer:snapshot
+    depends_on:
+      - api
+      - admin
+    profiles:
+      - proxied
+    labels:
+      traefik.http.routers.tailormap-snapshot.rule: "Host(`${HOSTNAME:-snapshot.tailormap.nl}`)"
+      traefik.http.routers.tailormap-snapshot.tls: "true"
+      traefik.http.routers.tailormap-snapshot.tls.certresolver: "letsencrypt"
+      traefik.http.services.tailormap-snapshot.loadbalancer.server.port: 80
+
+  api:
+    image: ghcr.io/b3partners/tailormap-api:snapshot
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db/tailormap
+      DB_PASSWORD: ${TAILORMAP_DB_PASSWORD:-tailormap}
+
+  admin:
+    image: ghcr.io/b3partners/tailormap-admin:snapshot
+    environment:
+      CATALINA_OPTS: -DPG_HOST=db -DPG_PORT=5432 -DPG_DATABASE=tailormap -DDB_NAME=tailormap -DDB_USER=tailormap -DDB_PASSWORD=${TAILORMAP_DB_PASSWORD:-tailormap}
+
+  db:
+    build:
+      context: ./config/db
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      TAILORMAP_PASSWORD: ${TAILORMAP_DB_PASSWORD:-tailormap}
+    volumes:
+      - config-db:/var/lib/postgresql/data
+    healthcheck:
+      interval: 1m
+      timeout: 5s
+      retries: 5
+      test: su postgres -c pg_isready
+
+volumes:
+  config-db:
