@@ -1,5 +1,5 @@
 import { initialCoreState } from './core.state';
-import { loadApplication, loadApplicationSuccess } from './core.actions';
+import { loadApplication, loadApplicationFailed, loadApplicationSuccess } from './core.actions';
 import { getAppLayerModel, getAppResponseData, getMapResponseData, LoadingStateEnum } from '@tailormap-viewer/api';
 import { coreReducer } from './core.reducer';
 
@@ -24,6 +24,17 @@ describe('CoreReducer', () => {
     expect(initialState.loadStatus).toEqual(LoadingStateEnum.INITIAL);
     const updatedState = coreReducer(initialState, action);
     expect(updatedState.loadStatus).toEqual(LoadingStateEnum.LOADED);
+  });
+
+  test('load application failed action', () => {
+    const initialState = { ...initialCoreState };
+    const action = loadApplicationFailed({
+      error: 'Something went really wrong',
+    });
+    expect(initialState.loadStatus).toEqual(LoadingStateEnum.INITIAL);
+    const updatedState = coreReducer(initialState, action);
+    expect(updatedState.loadStatus).toEqual(LoadingStateEnum.FAILED);
+    expect(updatedState.error).toEqual('Something went really wrong');
   });
 
 });
