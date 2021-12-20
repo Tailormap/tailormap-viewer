@@ -6,7 +6,7 @@ export interface CoreState {
   loadStatus: LoadingStateEnum;
   error?: string;
   id?: number;
-  api_version?: string;
+  apiVersion?: string;
   name?: string;
   title?: string;
   lang?: Language;

@@ -1,11 +1,14 @@
 import { render, screen } from '@testing-library/angular';
 import { ViewerAppComponent } from './viewer-app.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
-describe('HomeComponent', () => {
+describe('ViewerAppComponent', () => {
 
   test('should render', async () => {
-    const { container } = await render(ViewerAppComponent);
-    expect(container.querySelector('.map-container')).not.toBeNull();
+    const { container } = await render(ViewerAppComponent, {
+      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
+    });
+    expect(container.querySelector('tm-map')).not.toBeNull();
   });
 
 });

@@ -15,6 +15,7 @@ const onApplicationLoadSuccess = (
   ...state,
   loadStatus: LoadingStateEnum.LOADED,
   id: payload.application.id,
+  apiVersion: payload.application.apiVersion,
   name: payload.application.name,
   title: payload.application.title,
   lang: payload.application.lang,

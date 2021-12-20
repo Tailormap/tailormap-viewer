@@ -10,7 +10,7 @@ describe('CoreReducer', () => {
     const action = loadApplication();
     expect(initialState.loadStatus).toEqual(LoadingStateEnum.INITIAL);
     const updatedState = coreReducer(initialState, action);
-    expect(initialState.loadStatus).toEqual(LoadingStateEnum.LOADING);
+    expect(updatedState.loadStatus).toEqual(LoadingStateEnum.LOADING);
   });
 
   test('load application success action', () => {
@@ -23,7 +23,7 @@ describe('CoreReducer', () => {
     });
     expect(initialState.loadStatus).toEqual(LoadingStateEnum.INITIAL);
     const updatedState = coreReducer(initialState, action);
-    expect(initialState.loadStatus).toEqual(LoadingStateEnum.LOADED);
+    expect(updatedState.loadStatus).toEqual(LoadingStateEnum.LOADED);
   });
 
 });

@@ -1,17 +1,22 @@
 import { MapComponent } from './map.component';
-import { render, screen } from '@testing-library/angular';
-
-const mockedMapService = {
-  render: (el: HTMLElement) => {
-    el.innerHTML = 'rendering map here';
-  },
-};
+import { render } from '@testing-library/angular';
+import { MapService } from '@tailormap-viewer/map';
+import mock = jest.mock;
+import { createMock } from '@testing-library/angular/jest-utils';
 
 describe('MapComponent', () => {
 
   test('should create the app', async () => {
-    const { container } = await render(MapComponent);
-    expect(container.querySelector('.ol-viewport')).not.toBeNull();
+    const mockRender = jest.fn();
+    await render(MapComponent, {
+      componentProviders: [
+        {
+          provide: MapService,
+          useValue: { render: mockRender },
+        },
+      ],
+    });
+    expect(mockRender).toHaveBeenCalled();
   });
 
 });
