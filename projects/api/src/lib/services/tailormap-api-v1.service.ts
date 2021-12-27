@@ -47,8 +47,8 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
   public getDescribeLayer$(params: {
     applicationId: number;
     layerId: number;
-  }): Observable<LayerDetailsModel[]> {
-    return this.httpClient.get<LayerDetailsModel[]>(
+  }): Observable<LayerDetailsModel> {
+    return this.httpClient.get<LayerDetailsModel>(
       `${TailormapApiV1Service.BASE_URL}/describelayer/${params.applicationId}/${params.layerId}`,
     );
   }

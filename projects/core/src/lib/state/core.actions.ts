@@ -3,7 +3,10 @@ import { AppLayerModel, AppResponseModel, ComponentModel, MapResponseModel } fro
 
 const prefix = '[Core]';
 
-export const loadApplication = createAction(`${prefix} Load Application`);
+export const loadApplication = createAction(
+  `${prefix} Load Application`,
+  props<{ id?: number; name?: string; version?: string }>(),
+);
 export const loadApplicationSuccess = createAction(
   `${prefix} Application Load Success`,
   props<{
