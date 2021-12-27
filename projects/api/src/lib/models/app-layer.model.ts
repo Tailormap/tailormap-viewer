@@ -1,4 +1,4 @@
-import { CoordinateReferenceSystem } from './coordinate-reference-system.enum';
+import { CoordinateReferenceSystemModel } from './coordinate-reference-system.model';
 
 export interface AppLayerModel {
     id: number;
@@ -6,6 +6,6 @@ export interface AppLayerModel {
     displayName: string;
     serviceId: number;
     visible: boolean;
-    crs: CoordinateReferenceSystem;
+    crs: CoordinateReferenceSystemModel;
     isBaseLayer: boolean;
 }

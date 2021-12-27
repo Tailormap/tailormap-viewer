@@ -8,6 +8,6 @@ export interface ServiceModel {
     useProxy: boolean;
     styleLibraries: object;
     protocol: ServiceProtocol;
-    tilingProtocol: TilingProtocol;
-    matrixSet: object;
+    tilingProtocol?: TilingProtocol;
+    matrixSet?: object;
 }

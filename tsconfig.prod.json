@@ -17,6 +17,11 @@
         "dist/shared/shared",
         "dist/shared",
         "projects/shared/src"
+      ],
+      "@tailormap-viewer/map": [
+        "dist/map/map",
+        "dist/map",
+        "projects/map/src"
       ]
     },
   }
