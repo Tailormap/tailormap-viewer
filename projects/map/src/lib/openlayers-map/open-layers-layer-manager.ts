@@ -59,6 +59,22 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     this.backgroundLayerGroup.getLayers().push(olLayer);
   }
 
+  public setLayers(layers: Array<{ layer: LayerModel; service?: Service }>) {
+    const layerIds = new Set(layers.map(layer => layer.layer.id));
+    const removableLayers: string[] = [];
+    this.layers.forEach((layer, id) => {
+      if (!layerIds.has(id)) {
+        removableLayers.push(id);
+      }
+    });
+    removableLayers.forEach(id => this.removeLayer(id));
+    layers
+      .filter(layer => !this.layers.has(layer.layer.id))
+      .forEach(layer => {
+        this.addLayer(layer.layer, layer.service);
+      });
+  }
+
   public addLayer(layer: LayerModel, service?: Service): LayerTypes {
     const olLayer = this.createLayer(layer, service);
     if (olLayer === null) {

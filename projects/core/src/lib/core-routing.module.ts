@@ -1,9 +1,22 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { ViewerAppComponent } from './pages/viewer-app/viewer-app.component';
+import { RouterModule, Routes, UrlMatcher, UrlSegment } from '@angular/router';
+import { ViewerAppComponent } from './pages';
+
+const matchById: UrlMatcher = (urls: UrlSegment[]) => {
+  if (urls.length > 1 && urls[0].path === 'app' && /\d+/.test(urls[1].path)) {
+    return {
+      consumed: urls,
+      posParams: { id: urls[1] },
+    };
+  }
+  return null;
+};
 
 const routes: Routes = [
-  { path: '', component: ViewerAppComponent },
+  { path: 'app/:name/:version', component: ViewerAppComponent },
+  { matcher: matchById, component: ViewerAppComponent },
+  { path: 'app/:name', component: ViewerAppComponent },
+  { path: 'app', component: ViewerAppComponent },
 ];
 
 @NgModule({
