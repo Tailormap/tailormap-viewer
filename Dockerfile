@@ -1,5 +1,7 @@
 FROM node:16.13.1 AS builder
 
+ARG BASE_HREF=/
+
 # set working directory
 WORKDIR /app
 
@@ -15,15 +17,17 @@ COPY . /app
 RUN npm run test
 
 # generate build
-RUN npm run build --output-path=dist
+RUN npm run build -- --base-href=${BASE_HREF}
 
 # base image
 FROM nginx:1.21.4-alpine
 
+ARG NGINX_CONF=nginx.conf
+
 # copy artifact build from the 'build environment'
 COPY --from=builder /app/dist/app /usr/share/nginx/html
 
-COPY ./config/nginx.conf /etc/nginx/nginx.conf
+COPY ./config/${NGINX_CONF} /etc/nginx/nginx.conf
 
 # expose port 80
 EXPOSE 80
