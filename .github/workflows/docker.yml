@@ -35,13 +35,24 @@ jobs:
           docker inspect -f='{{json .State.Health}}' tailormap-viewer
           curl -Is http://localhost:8080/ | head -n 1
 
-      - name: Log in and Push to registry
+      - name: Log in to GitHub container registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      - name: Push snapshot image to registry
         # only publish when on main branch
         if: ${{ github.ref == 'refs/heads/main' }}
+        run: docker push 'ghcr.io/b3partners/tailormap-viewer:${{ env.VERSION_TAG }}'
+      - name: Debug
         run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-          docker push 'ghcr.io/b3partners/tailormap-viewer:${{ env.VERSION_TAG }}'
-
+          echo Event payload JSON:
+          cat ${GITHUB_EVENT_PATH}
+          echo PR number: ${{github.event.number}}
+          export
+      - name: Push PR image to registry
+        if: ${{ startsWith(github.ref, 'refs/pull/') }}
+        run: |
+          export PR_NAME=pr-${{github.event.number}}
+          echo docker tag 'ghcr.io/b3partners/tailormap-viewer:${{ env.VERSION_TAG }}' 'ghcr.io/b3partners/tailormap-viewer:${PR_NAME}'
+          echo docker push 'ghcr.io/b3partners/tailormap-viewer:${PR_NAME}'
       - uses: arwynfr/actions-docker-context@v2
         with:
           docker_host: ${{ secrets.DOCKER_HOST_SNAPSHOT }}
