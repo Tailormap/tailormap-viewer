@@ -71,3 +71,10 @@ jobs:
           export BASE_HREF=${{ env.BASE_HREF }}
           docker-compose -f docker-compose-pr.yml --project-name tailormap-snapshot-${NAME} pull
           docker-compose -f docker-compose-pr.yml --project-name tailormap-snapshot-${NAME} up -d
+      - name: Create deployment
+        if: success()
+        uses: chrnorm/deployment-action@releases/v1
+        with:
+          token: "${{ github.token }}"
+          target_url: "https://${{ secrets.DEPLOY_HOST_SNAPSHOT }}${{ env.BASE_HREF}}"
+          environment: ${{ env.VERSION_TAG }}
