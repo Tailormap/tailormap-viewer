@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { LayerTypesEnum, MapService, WMSLayerModel } from '@tailormap-viewer/map';
+import { LayerModel, LayerTypesEnum, MapService, Service, WMSLayerModel } from '@tailormap-viewer/map';
 import { selectBaseLayers, selectLayers, selectMapOptions } from '../state/core.selectors';
 import { concatMap, filter, forkJoin, of, Subject, take, takeUntil } from 'rxjs';
 import { AppLayerModel, ServiceModel, ServiceProtocol } from '@tailormap-viewer/api';
@@ -22,6 +22,9 @@ export class ApplicationMapService implements OnDestroy {
         filter(mapOptions => !!mapOptions),
       )
       .subscribe(mapOptions => {
+        if (mapOptions === null) {
+          return;
+        }
         this.mapService.initMap(mapOptions);
       });
 
@@ -35,7 +38,7 @@ export class ApplicationMapService implements OnDestroy {
           return;
         }
         // @TODO: support more than 1 baseLayer
-        layerManager.setBackgroundLayer(baseLayers[0]);
+        layerManager.setBackgroundLayer(baseLayers[0].layer);
       });
 
     this.store$.select(selectLayers)
@@ -51,7 +54,7 @@ export class ApplicationMapService implements OnDestroy {
   private getLayersAndLayerManager$(serviceLayers: Array<{ layer: AppLayerModel; service?: ServiceModel }>) {
     const layers = serviceLayers
       .map(layer => ApplicationMapService.convertAppLayerToMapLayer(layer.layer, layer.service))
-      .filter(layer => !!layer);
+      .filter((layer): layer is { layer: LayerModel; service?: Service } => Boolean(layer));
     return forkJoin([
       of(layers),
       this.mapService.getLayerManager$().pipe(take(1)),
@@ -59,18 +62,18 @@ export class ApplicationMapService implements OnDestroy {
   }
 
   public ngOnDestroy() {
-    this.destroyed.next();
+    this.destroyed.next(null);
     this.destroyed.complete();
   }
 
-  private static convertAppLayerToMapLayer(appLayer: AppLayerModel, service?: ServiceModel) {
+  private static convertAppLayerToMapLayer(appLayer: AppLayerModel, service?: ServiceModel): { layer: LayerModel; service?: Service } | null {
     if (!service) {
       return null;
     }
     // For now, support WMS only
     if (service.protocol === ServiceProtocol.WMS) {
       const layer: WMSLayerModel = {
-        id: appLayer.id,
+        id: `${appLayer.id}`,
         layers: appLayer.displayName,
         name: appLayer.displayName,
         layerType: LayerTypesEnum.WMS,
@@ -78,7 +81,7 @@ export class ApplicationMapService implements OnDestroy {
         url: service.url,
         crossOrigin: 'anonymous',
       };
-      return layer;
+      return { layer };
     }
     return null;
   }
