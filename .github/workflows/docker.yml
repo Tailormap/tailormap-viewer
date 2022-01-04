@@ -4,24 +4,40 @@ on:
   - push
   - workflow_dispatch
 
+
 jobs:
   build:
     name: Build and deploy
     # Do not use ubuntu-latest because of Docker compose version, see https://github.com/docker/compose/issues/7686
     runs-on: ubuntu-18.04
-
+    env:
+      VERSION_TAG: snapshot
+      BASE_HREF: /
+      NGINX_CONF: nginx.conf
     steps:
       - uses: actions/checkout@v2
 
-      # TODO add some logic to determine version/tag name
-      - name: Determine version
-        run: |
-          echo "VERSION_TAG=snapshot" >> $GITHUB_ENV
 
+      - name: GitHub Slug Action
+        uses: rlespinasse/github-slug-action@4.0.0
+      - name: Find Current Pull Request
+        uses: jwalton/gh-find-current-pr@v1.2.1
+        id: find-pr
+      # TODO add some logic to determine version/tag name for releases
+      - name: Set variables for PR
+        # When running on a PR, build and tag the Docker image for a deployment with a base-href and Nginx configuration for deployment of
+        # the web container only on a sub-path, using the /api URL from the main branch deployment.
+        if: success() && steps.find-pr.outputs.number
+        env:
+          PR: ${{ steps.find-pr.outputs.number }}
+        run: |
+          echo "VERSION_TAG=pr-${PR}" >> $GITHUB_ENV
+          echo "BASE_HREF=/pr-${PR}-${GITHUB_REF_SLUG_URL}/" >> $GITHUB_ENV
+          echo "NGINX_CONF=nginx-no-proxy.conf" >> $GITHUB_ENV
       - name: Build and Tag
         run: |
-          docker build . -f Dockerfile --tag 'ghcr.io/b3partners/tailormap-viewer:${{ env.VERSION_TAG }}'
-
+          echo Version tag: ${{ env.VERSION_TAG }}, base href: ${{ env.BASE_HREF }}, Nginx conf: ${{ env.NGINX_CONF }}
+          docker build . -f Dockerfile --tag 'ghcr.io/b3partners/tailormap-viewer:${{ env.VERSION_TAG }}' --build-arg BASE_HREF=${{ env.BASE_HREF }} --build-arg NGINX_CONF=${{ env.NGINX_CONF }}
       - name: Start container
         run: |
           docker run --rm --name tailormap-viewer -h tailormap-viewer -d -p '8080:80' 'ghcr.io/b3partners/tailormap-viewer:${{ env.VERSION_TAG }}'
