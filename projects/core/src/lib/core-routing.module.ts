@@ -17,6 +17,7 @@ const routes: Routes = [
   { matcher: matchById, component: ViewerAppComponent },
   { path: 'app/:name', component: ViewerAppComponent },
   { path: 'app', component: ViewerAppComponent },
+  { path: '', component: ViewerAppComponent },
 ];
 
 @NgModule({
