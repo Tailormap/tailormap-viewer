@@ -1,0 +1,37 @@
+
+  
+name: "Cleanup and Maintainance"
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "19 27 * * 1"
+
+jobs:
+  dockercleanup:
+    runs-on: ubuntu-latest
+    name: "Pruning Untagged Images"
+    steps:
+      - name: "Older than 1 week"
+        # https://github.com/marketplace/actions/ghcr-pruning
+        uses: vlaurin/action-ghcr-prune@v0.3.0
+        with:
+          token: ${{ secrets.GHCR_CLEANUP_PAT }}
+          organization: B3Partners
+          container: tailormap-viewer
+          dry-run: false
+          older-than: 7
+          keep-last: 1
+          untagged: true
+      # maybe also clean up anything older than 14?.. days...
+
+  stale:
+    runs-on: ubuntu-latest
+    name: Close Stale PRs
+    permissions:
+      pull-requests: write
+    steps:
+      - uses: actions/stale@v4
+        with:
+          days-before-stale: 60
+          days-before-close: 10
