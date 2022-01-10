@@ -18,7 +18,7 @@ RUN npm run test
 RUN npm run build --output-path=dist
 
 # base image
-FROM nginx:1.21.4-alpine
+FROM nginx:1.21.5-alpine
 
 # copy artifact build from the 'build environment'
 COPY --from=builder /app/dist/app /usr/share/nginx/html
