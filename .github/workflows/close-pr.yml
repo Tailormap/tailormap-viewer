@@ -10,6 +10,7 @@ jobs:
     # Do not use ubuntu-latest because of Docker compose version, see https://github.com/docker/compose/issues/7686
     runs-on: ubuntu-18.04
     steps:
+      - uses: actions/checkout@v2
       - name: Set variables for PR
         env:
           PR: ${{ github.event.pull_request.number }}
