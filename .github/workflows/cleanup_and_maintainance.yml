@@ -5,7 +5,7 @@ name: "Cleanup and Maintainance"
 on:
   workflow_dispatch:
   schedule:
-    - cron: "19 27 * * 1"
+    - cron: "19 17 * * 1"
 
 jobs:
   dockercleanup:
