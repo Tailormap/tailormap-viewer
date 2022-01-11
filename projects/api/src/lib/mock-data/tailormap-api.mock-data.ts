@@ -1,5 +1,6 @@
 import {
-  AppLayerModel, AppResponseModel, BoundsModel, CoordinateReferenceSystemModel, Language, MapResponseModel, ServiceModel, ServiceProtocol,
+  AppLayerModel, AppResponseModel, BoundsModel, ComponentModel, CoordinateReferenceSystemModel, GeometryType, Language, LayerDetailsModel,
+  MapResponseModel, ServiceModel, ServiceProtocol,
 } from '@tailormap-viewer/api';
 
 export const getBoundsModel = (overrides?: Partial<BoundsModel>): BoundsModel => ({
@@ -27,6 +28,7 @@ export const getAppLayerModel = (overrides?: Partial<AppLayerModel>): AppLayerMo
   visible: true,
   crs: getCrsModel(overrides?.crs),
   isBaseLayer: false,
+  displayName: 'Test',
   ...overrides,
 });
 
@@ -37,6 +39,30 @@ export const getServiceModel = (overrides?: Partial<ServiceModel>): ServiceModel
   useProxy: false,
   styleLibraries: {},
   protocol: ServiceProtocol.WMS,
+  ...overrides,
+});
+
+export const getLayerDetailsModel = (overrides?: Partial<LayerDetailsModel>): LayerDetailsModel => ({
+  id: 1,
+  attributes: [],
+  serviceId: 1,
+  editable: true,
+  featuretypeName: 'table',
+  metadata: null,
+  geometryAttribute: 'geom',
+  geometryAttributeIndex: 5,
+  geometryType: GeometryType.GEOMETRY,
+  relations: [],
+  ...overrides,
+});
+
+export const getComponentModel = (overrides?: Partial<ComponentModel>): ComponentModel => ({
+  config: {
+    label: 'label',
+    title: 'title',
+    tooltip: 'tooltip',
+  },
+  type: 'test',
   ...overrides,
 });
 
