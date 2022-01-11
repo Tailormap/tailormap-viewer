@@ -30,13 +30,10 @@ jobs:
         run: |
           export NAME=${{ env.VERSION_TAG }}
           docker-compose -f docker-compose-pr.yml --project-name tailormap-snapshot-${NAME} down --remove-orphan
-      - name: Remove deployment from GitHub
-        uses: chrnorm/deployment-action@releases/v1
-        with:
+      - name: Remove GitHub deployment and environment
+        uses: strumwolf/delete-deployment-environment@v2.0.1
           token: "${{ github.token }}"
-          target_url: "https://${{ secrets.DEPLOY_HOST_SNAPSHOT }}${{ env.BASE_HREF}}"
           environment: ${{ env.VERSION_TAG }}
-          initial_status: inactive
       - name: Remove Docker image from registry
         run: |
           echo TODO use bots-house/ghcr-delete-image-action
