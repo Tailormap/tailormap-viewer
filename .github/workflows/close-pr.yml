@@ -1,0 +1,44 @@
+name: PR closed
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  cleanup:
+    name: Remove Docker compose deployment
+    # Do not use ubuntu-latest because of Docker compose version, see https://github.com/docker/compose/issues/7686
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set variables for PR
+        env:
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          echo "VERSION_TAG=pr-${PR}" >> $GITHUB_ENV
+          echo "BASE_HREF=/pull-request/${PR}/${GITHUB_REF_SLUG_URL}/" >> $GITHUB_ENV
+      - name: Log in to GitHub container registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      - uses: arwynfr/actions-docker-context@v2
+        with:
+          docker_host: ${{ secrets.DOCKER_HOST_SNAPSHOT }}
+          context_name: 'dev-server'
+          ssh_cert: ${{ secrets.DOCKER_HOST_SNAPSHOT_SSH_CERT }}
+          ssh_key: ${{ secrets.DOCKER_HOST_SNAPSHOT_SSH_KEY }}
+          use_context: true
+      - name: Remove pull request deployment using Docker Compose
+        run: |
+          export NAME=${{ env.VERSION_TAG }}
+          docker-compose -f docker-compose-pr.yml --project-name tailormap-snapshot-${NAME} down --remove-orphan
+      - name: Remove GitHub deployment and environment
+        uses: strumwolf/delete-deployment-environment@v2.0.1
+        with:
+          token: "${{ github.token }}"
+          environment: ${{ env.VERSION_TAG }}
+      - name: Remove Docker image from registry
+        run: |
+          echo TODO use bots-house/ghcr-delete-image-action
+      - name: Remove Docker image from development host
+        run: |
+          docker image rm 'ghcr.io/b3partners/tailormap-viewer:${{ env.VERSION_TAG }}'
+
