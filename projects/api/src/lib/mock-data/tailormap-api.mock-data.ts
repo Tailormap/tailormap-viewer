@@ -23,7 +23,6 @@ export const getCrsModel = (overrides?: Partial<CoordinateReferenceSystemModel>)
 export const getAppLayerModel = (overrides?: Partial<AppLayerModel>): AppLayerModel => ({
   id: 1,
   url: 'https://test.nl',
-  displayName: 'test',
   serviceId: 1,
   visible: true,
   crs: getCrsModel(overrides?.crs),
