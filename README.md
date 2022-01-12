@@ -37,3 +37,21 @@ This command runs the unit tests and build the application
 This command runs the application on port 8080 locally
 
 `docker run -it -p 8080:80 --rm tailormap:prod`
+
+## Running a full Tailormap stack using Docker Compose
+
+`docker-compose --profile http up -d`
+
+Go to http://localhost/ for the viewer and http://localhost/tailormap-admin/ for administration. The default account is admin/flamingo.
+During the first startup you might see some exceptions connecting to the database while this is being initialized, these are harmless as
+it will be retried later.
+
+To stop:
+`docker-compose down`
+
+To remove the volume with the configuration database:
+`docker volume rm tailormap-viewer_config-db`
+
+Requires a Docker compose version supporting version 3.9 of the compose specification (profiles). Do not use 1.25 included in some Ubuntu
+repositories. Download version 1.28.5 (later version like 1.29.2 may give OpenSSL conflict if server uses Ubuntu 20.04 LTS included Docker
+packages).
