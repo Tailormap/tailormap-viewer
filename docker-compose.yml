@@ -51,7 +51,7 @@ services:
   admin:
     image: ghcr.io/b3partners/tailormap-admin:snapshot
     environment:
-      CATALINA_OPTS: -DPG_HOST=db -DPG_PORT=5432 -DPG_DATABASE=tailormap -DDB_NAME=tailormap -DDB_USER=tailormap -DDB_PASSWORD=${TAILORMAP_DB_PASSWORD:-tailormap}
+      CATALINA_OPTS: -DPG_HOST=db -DPG_PORT=5432 -DPG_DATABASE=tailormap -DDB_NAME=tailormap -DDB_USER=tailormap -DDB_PASSWORD=${TAILORMAP_DB_PASSWORD:-tailormap} -DURL_SCHEME=http
 
   db:
     build:
