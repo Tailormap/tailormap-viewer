@@ -4,24 +4,51 @@ on:
   - push
   - workflow_dispatch
 
+
 jobs:
   build:
     name: Build and deploy
     # Do not use ubuntu-latest because of Docker compose version, see https://github.com/docker/compose/issues/7686
     runs-on: ubuntu-18.04
-
+    env:
+      VERSION_TAG: snapshot
+      BASE_HREF: /
+      NGINX_CONF: nginx.conf
     steps:
       - uses: actions/checkout@v2
-
-      # TODO add some logic to determine version/tag name
-      - name: Determine version
+      - name: GitHub Slug Action
+        uses: rlespinasse/github-slug-action@4.0.0
+      - name: Find Current Pull Request
+        uses: jwalton/gh-find-current-pr@v1.2.1
+        id: find-pr
+      # TODO add some logic to determine version/tag name for releases
+      - name: Set variables for PR
+        # When running on a PR, build and tag the Docker image for a deployment with a base-href and Nginx configuration for deployment of
+        # the web container only on a sub-path, using the /api URL from the main branch deployment.
+        if: ${{ success() && steps.find-pr.outputs.number }}
+        env:
+          PR: ${{ steps.find-pr.outputs.number }}
         run: |
-          echo "VERSION_TAG=snapshot" >> $GITHUB_ENV
-
+          echo "VERSION_TAG=pr-${PR}" >> $GITHUB_ENV
+          echo "BASE_HREF=/pull-request/${PR}/${GITHUB_REF_SLUG_URL}/" >> $GITHUB_ENV
+          echo "NGINX_CONF=nginx-no-proxy.conf" >> $GITHUB_ENV
+      - name: Get Pull Request
+        if: github.event_name == 'pull_request'
+        uses: jwalton/gh-find-current-pr@v1.2.1
+        id: find-pr-event
+        with:
+          sha: ${{ github.event.pull_request.head.sha }}
+      - name: Set variables for PR event
+        if: ${{ steps.find-pr-event.outputs.number }}
+        env:
+          PR: ${{ steps.find-pr-event.outputs.number }}
+        run: |
+          echo "VERSION_TAG=pr-${PR}" >> $GITHUB_ENV
+          echo "BASE_HREF=/pull-request/${PR}/${GITHUB_REF_SLUG_URL}/" >> $GITHUB_ENV
+          echo "NGINX_CONF=nginx-no-proxy.conf" >> $GITHUB_ENV
       - name: Build and Tag
         run: |
-          docker build . -f Dockerfile --tag 'ghcr.io/b3partners/tailormap-viewer:${{ env.VERSION_TAG }}'
-
+          docker build . -f Dockerfile --tag 'ghcr.io/b3partners/tailormap-viewer:${{ env.VERSION_TAG }}' --build-arg BASE_HREF=${{ env.BASE_HREF }} --build-arg NGINX_CONF=${{ env.NGINX_CONF }}
       - name: Start container
         run: |
           docker run --rm --name tailormap-viewer -h tailormap-viewer -d -p '8080:80' 'ghcr.io/b3partners/tailormap-viewer:${{ env.VERSION_TAG }}'
@@ -35,13 +62,10 @@ jobs:
           docker inspect -f='{{json .State.Health}}' tailormap-viewer
           curl -Is http://localhost:8080/ | head -n 1
 
-      - name: Log in and Push to registry
-        # only publish when on main branch
-        if: ${{ github.ref == 'refs/heads/main' }}
-        run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-          docker push 'ghcr.io/b3partners/tailormap-viewer:${{ env.VERSION_TAG }}'
-
+      - name: Log in to GitHub container registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      - name: Push image to registry
+        run: docker push 'ghcr.io/b3partners/tailormap-viewer:${{ env.VERSION_TAG }}'
       - uses: arwynfr/actions-docker-context@v2
         with:
           docker_host: ${{ secrets.DOCKER_HOST_SNAPSHOT }}
@@ -49,8 +73,24 @@ jobs:
           ssh_cert: ${{ secrets.DOCKER_HOST_SNAPSHOT_SSH_CERT }}
           ssh_key: ${{ secrets.DOCKER_HOST_SNAPSHOT_SSH_KEY }}
           use_context: true
-      - name: Update deployment using Docker Compose
+      - name: Update main deployment using Docker Compose
         if: ${{ github.ref == 'refs/heads/main' }}
         run: |
           docker-compose -f docker-compose.yml -f docker-compose-cd.yml --profile proxied pull
           docker-compose -f docker-compose.yml -f docker-compose-cd.yml --profile proxied up -d
+      - name: Update pull request deployment using Docker Compose
+        if: ${{ steps.find-pr.outputs.number }}
+        run: |
+          export NAME=${{ env.VERSION_TAG }}
+          export BASE_HREF=${{ env.BASE_HREF }}
+          docker-compose -f docker-compose-pr.yml --project-name tailormap-snapshot-${NAME} pull
+          docker-compose -f docker-compose-pr.yml --project-name tailormap-snapshot-${NAME} up -d
+      - name: Create deployment
+        if: success()
+        uses: chrnorm/deployment-action@releases/v1
+        with:
+          token: "${{ github.token }}"
+          target_url: "https://${{ secrets.DEPLOY_HOST_SNAPSHOT }}${{ env.BASE_HREF}}"
+          environment: ${{ env.VERSION_TAG }}
+          initial_status: success
+

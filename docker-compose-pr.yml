@@ -1,0 +1,24 @@
+
+# Docker compose stack for continuous deployment of a PR:
+
+# export NAME=pr-XXX; export BASE_HREF=/pr-XXX/; docker-compose -f docker-compose-pr.yml --project-name tailormap-snapshot-${NAME} up -d
+
+version: '3.9'
+
+services:
+  web-proxied:
+    image: ghcr.io/b3partners/tailormap-viewer:${NAME}
+    labels:
+      - "traefik.http.routers.tailormap-snapshot-${NAME}.rule=Host(`${HOSTNAME:-snapshot.tailormap.nl}`) && PathPrefix(`${BASE_HREF}`)"
+      - traefik.http.routers.tailormap-snapshot-${NAME}.tls=true
+      - traefik.http.routers.tailormap-snapshot-${NAME}.tls.certresolver=letsencrypt
+      - traefik.http.routers.tailormap-snapshot-${NAME}.middlewares=tailormap-snapshot-${NAME}-stripprefix
+      - traefik.http.services.tailormap-snapshot-${NAME}.loadbalancer.server.port=80
+      - traefik.http.middlewares.tailormap-snapshot-${NAME}-stripprefix.stripprefix.prefixes=${BASE_HREF}
+    networks:
+      - tailormap-snapshot
+
+networks:
+  tailormap-snapshot:
+    external: true
+    name: tailormap-viewer_tailormap-snapshot
