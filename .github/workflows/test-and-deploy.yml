@@ -1,11 +1,44 @@
-name: Docker Image
+name: Test and deploy
 
 on:
-  - push
-  - workflow_dispatch
-
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, synchronize]
+  workflow_dispatch:
 
 jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          # Keep this in sync with Dockerfile version
+          node-version: 16.13.1
+      - uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            node-
+      - name: Install
+        run: npm install
+      - name: Test
+        run: npx jest --ci --collect-coverage --reporters=default --reporters=jest-junit
+      - name: Publish test results
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        if: always()
+        with:
+          files: junit.xml
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: coverage
+          flags: unittests
+
   build:
     name: Build and deploy
     # Do not use ubuntu-latest because of Docker compose version, see https://github.com/docker/compose/issues/7686
@@ -32,21 +65,7 @@ jobs:
           echo "VERSION_TAG=pr-${PR}" >> $GITHUB_ENV
           echo "BASE_HREF=/pull-request/${PR}/${GITHUB_REF_SLUG_URL}/" >> $GITHUB_ENV
           echo "NGINX_CONF=nginx-no-proxy.conf" >> $GITHUB_ENV
-      - name: Get Pull Request
-        if: github.event_name == 'pull_request'
-        uses: jwalton/gh-find-current-pr@v1.2.1
-        id: find-pr-event
-        with:
-          sha: ${{ github.event.pull_request.head.sha }}
-      - name: Set variables for PR event
-        if: ${{ steps.find-pr-event.outputs.number }}
-        env:
-          PR: ${{ steps.find-pr-event.outputs.number }}
-        run: |
-          echo "VERSION_TAG=pr-${PR}" >> $GITHUB_ENV
-          echo "BASE_HREF=/pull-request/${PR}/${GITHUB_REF_SLUG_URL}/" >> $GITHUB_ENV
-          echo "NGINX_CONF=nginx-no-proxy.conf" >> $GITHUB_ENV
-      - name: Build and Tag
+      - name: Build and tag docker image
         run: |
           docker build . -f Dockerfile --tag 'ghcr.io/b3partners/tailormap-viewer:${{ env.VERSION_TAG }}' --build-arg BASE_HREF=${{ env.BASE_HREF }} --build-arg NGINX_CONF=${{ env.NGINX_CONF }}
       - name: Log in to GitHub container registry
@@ -54,6 +73,7 @@ jobs:
       - name: Push image to registry
         run: docker push 'ghcr.io/b3partners/tailormap-viewer:${{ env.VERSION_TAG }}'
       - uses: arwynfr/actions-docker-context@v2
+        name: Set Docker context for deployment
         with:
           docker_host: ${{ secrets.DOCKER_HOST_SNAPSHOT }}
           context_name: 'dev-server'
@@ -72,7 +92,7 @@ jobs:
           export BASE_HREF=${{ env.BASE_HREF }}
           docker-compose -f docker-compose-pr.yml --project-name tailormap-snapshot-${NAME} pull --quiet
           docker-compose -f docker-compose-pr.yml --project-name tailormap-snapshot-${NAME} up -d
-      - name: Create deployment
+      - name: Create GitHub deployment
         if: success()
         uses: chrnorm/deployment-action@releases/v1
         with:
@@ -80,4 +100,3 @@ jobs:
           target_url: "https://${{ secrets.DEPLOY_HOST_SNAPSHOT }}${{ env.BASE_HREF}}"
           environment: ${{ env.VERSION_TAG }}
           initial_status: success
-

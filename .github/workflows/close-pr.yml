@@ -1,4 +1,4 @@
-name: PR closed
+name: Remove deployment
 
 on:
   pull_request:
