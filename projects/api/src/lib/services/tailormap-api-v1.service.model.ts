@@ -18,6 +18,6 @@ export interface TailormapApiV1ServiceModel {
   getDescribeLayer$(params: {
     applicationId: number;
     layerId: number;
-  }): Observable<LayerDetailsModel[]>;
+  }): Observable<LayerDetailsModel>;
 
 }

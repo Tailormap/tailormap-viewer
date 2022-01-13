@@ -2,6 +2,8 @@ import {
   AppLayerModel, BoundsModel, ComponentModel, CoordinateReferenceSystemModel, Language, LoadingStateEnum, ServiceModel,
 } from '@tailormap-viewer/api';
 
+export const coreStateKey = 'core';
+
 export interface CoreState {
   loadStatus: LoadingStateEnum;
   error?: string;

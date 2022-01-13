@@ -19,7 +19,16 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
     version?: string;
     id?: number;
   }): Observable<AppResponseModel> {
-    const queryParams = new HttpParams({ fromObject: params });
+    let queryParams = new HttpParams();
+    if (params.id) {
+      queryParams = queryParams.set('id', params.id);
+    }
+    if (params.name) {
+      queryParams = queryParams.set('name', params.name);
+    }
+    if (params.version) {
+      queryParams = queryParams.set('version', params.version);
+    }
     return this.httpClient.get<AppResponseModel>(
       `${TailormapApiV1Service.BASE_URL}/app`,
       { params: queryParams },
@@ -47,8 +56,8 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
   public getDescribeLayer$(params: {
     applicationId: number;
     layerId: number;
-  }): Observable<LayerDetailsModel[]> {
-    return this.httpClient.get<LayerDetailsModel[]>(
+  }): Observable<LayerDetailsModel> {
+    return this.httpClient.get<LayerDetailsModel>(
       `${TailormapApiV1Service.BASE_URL}/describelayer/${params.applicationId}/${params.layerId}`,
     );
   }

@@ -6,6 +6,11 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../../../app/src/environments/environment';
 import { EffectsModule } from '@ngrx/effects';
 import { coreReducer } from './state/core.reducer';
+import { coreStateKey } from './state/core.state';
+import { CoreEffects } from './state/core.effects';
+import { TAILORMAP_API_V1_SERVICE, TailormapApiV1Service } from '@tailormap-viewer/api';
+import { SharedImportsModule } from '@tailormap-viewer/shared';
+import { ApplicationMapService } from './services/application-map.service';
 
 
 @NgModule({
@@ -14,7 +19,7 @@ import { coreReducer } from './state/core.reducer';
   ],
   imports: [
     StoreModule.forRoot({
-      core: coreReducer,
+      [coreStateKey]: coreReducer,
     }, {
       runtimeChecks: {
         strictActionImmutability: true,
@@ -26,11 +31,20 @@ import { coreReducer } from './state/core.reducer';
       },
     }),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
-    EffectsModule.forRoot([]),
+    EffectsModule.forRoot([ CoreEffects ]),
     MapModule,
+    SharedImportsModule,
   ],
   exports: [
     ViewerAppComponent,
   ],
+  providers: [
+    { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1Service },
+  ],
 })
-export class CoreModule { }
+export class CoreModule {
+  constructor(
+    _applicationMapService: ApplicationMapService,
+  ) {
+  }
+}

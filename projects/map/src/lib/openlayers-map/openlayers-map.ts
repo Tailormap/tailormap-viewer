@@ -32,6 +32,9 @@ export class OpenLayersMap implements MapViewerModel {
     if (this.previousMap && this.previousMap.getView().getProjection().getCode() === options.projection) {
       // Do not re-create the map if the projection is the same as previous
       this.previousMap.getView().getProjection().setExtent(options.maxExtent);
+      if (options.initialExtent && options.initialExtent.length > 0) {
+        this.previousMap.getView().fit(options.initialExtent);
+      }
       return;
     }
 
@@ -75,8 +78,6 @@ export class OpenLayersMap implements MapViewerModel {
 
     this.map.next(olMap);
     this.layerManager.next(layerManager);
-
-    (window as any).myOlMap = olMap;
   }
 
   public render(container: HTMLElement) {

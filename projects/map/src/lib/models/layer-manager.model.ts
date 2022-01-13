@@ -1,6 +1,5 @@
 import { LayerModel } from './layer.model';
 import { Service } from './service.model';
-import { Observable } from 'rxjs';
 import VectorImageLayer from 'ol/layer/VectorImage';
 import VectorSource from 'ol/source/Vector';
 import { Geometry } from 'ol/geom';
@@ -12,6 +11,7 @@ export type LayerTypes = VectorImageLayer<VectorSource<Geometry>> | ImageLayer<I
 
 export interface LayerManagerModel {
   setBackgroundLayer(layer: LayerModel): void;
+  setLayers(layers: Array<{ layer: LayerModel; service?: Service }>): void;
   addLayer(layer: LayerModel, service?: Service): LayerTypes;
   addLayers(layers: LayerModel[], services?: Service[]): void;
   removeLayer(layerId: string): void;

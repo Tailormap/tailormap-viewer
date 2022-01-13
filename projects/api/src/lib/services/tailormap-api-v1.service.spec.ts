@@ -15,7 +15,7 @@ describe('TailormapApiV1Service', () => {
 
   test('queries API with app/version for getApplication$', () => {
     spectator.service.getApplication$({ version: 'v1', name: 'test' }).subscribe();
-    spectator.expectOne('/api/app?version=v1&name=test', HttpMethod.GET);
+    spectator.expectOne('/api/app?name=test&version=v1', HttpMethod.GET);
   });
 
   test('queries API with id for getApplication$', () => {

@@ -42,6 +42,7 @@
     "@angular-eslint/template-parser": "13.0.1",
     "@angular/cli": "~13.0.3",
     "@angular/compiler-cli": "~13.0.0",
+    "@angular/localize": "^13.0.2",
     "@ngneat/spectator": "^9.0.0",
     "@tailormap-viewer/schematics": "^0.0.12",
     "@testing-library/angular": "^11.0.2",
