@@ -76,14 +76,14 @@ jobs:
       - name: Update main deployment using Docker Compose
         if: ${{ github.ref == 'refs/heads/main' }}
         run: |
-          docker-compose -f docker-compose.yml -f docker-compose-cd.yml --profile proxied pull
+          docker-compose -f docker-compose.yml -f docker-compose-cd.yml --profile proxied pull --quiet
           docker-compose -f docker-compose.yml -f docker-compose-cd.yml --profile proxied up -d
       - name: Update pull request deployment using Docker Compose
         if: ${{ steps.find-pr.outputs.number }}
         run: |
           export NAME=${{ env.VERSION_TAG }}
           export BASE_HREF=${{ env.BASE_HREF }}
-          docker-compose -f docker-compose-pr.yml --project-name tailormap-snapshot-${NAME} pull
+          docker-compose -f docker-compose-pr.yml --project-name tailormap-snapshot-${NAME} pull --quiet
           docker-compose -f docker-compose-pr.yml --project-name tailormap-snapshot-${NAME} up -d
       - name: Create deployment
         if: success()
