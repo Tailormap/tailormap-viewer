@@ -36,9 +36,13 @@ jobs:
           token: "${{ github.token }}"
           environment: ${{ env.VERSION_TAG }}
       - name: Remove Docker image from registry
-        run: |
-          echo TODO use bots-house/ghcr-delete-image-action
+        uses: bots-house/ghcr-delete-image-action@v1.0.1
+        with:
+          token: "${{ secrets.GHCR_CLEANUP_PAT }}"
+          owner: ${{ github.repository_owner }}
+          name: ${{ github.event.repository.name }}
+          tag: "${{ env.VERSION_TAG }}"
       - name: Remove Docker image from development host
         run: |
-          docker image rm 'ghcr.io/b3partners/tailormap-viewer:${{ env.VERSION_TAG }}'
+          docker image rm 'ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:${{ env.VERSION_TAG }}'
 
