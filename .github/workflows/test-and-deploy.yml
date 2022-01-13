@@ -1,4 +1,4 @@
-name: Test, create image and deploy
+name: Test and deploy
 
 on:
   push:
@@ -8,6 +8,37 @@ on:
   workflow_dispatch:
 
 jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          # Keep this in sync with Dockerfile version
+          node-version: 16.13.1
+      - uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            node-
+      - name: Install
+        run: npm install
+      - name: Test
+        run: npx jest --ci --collect-coverage --reporters=default --reporters=jest-junit
+      - name: Publish test results
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        if: always()
+        with:
+          files: junit.xml
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: coverage
+          flags: unittests
+
   build:
     name: Build and deploy
     # Do not use ubuntu-latest because of Docker compose version, see https://github.com/docker/compose/issues/7686
