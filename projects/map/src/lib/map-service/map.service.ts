@@ -2,6 +2,7 @@ import { Injectable, NgZone } from '@angular/core';
 import { OpenLayersMap } from '../openlayers-map/openlayers-map';
 import { Observable } from 'rxjs';
 import { LayerManagerModel, MapViewerOptionsModel } from '../models';
+import { ToolManagerModel } from '../models/tool-manager.model';
 
 @Injectable({
   providedIn: 'root',
@@ -26,6 +27,10 @@ export class MapService {
 
   public getLayerManager$(): Observable<LayerManagerModel> {
     return this.map.getLayerManager$();
+  }
+
+  public getToolManager$(): Observable<ToolManagerModel> {
+    return this.map.getToolManager$();
   }
 
 }

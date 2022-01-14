@@ -10,14 +10,18 @@ import { OpenlayersExtent } from '../models/extent.type';
 import { OpenLayersLayerManager } from './open-layers-layer-manager';
 import { BehaviorSubject, concatMap, filter, map, Observable, take } from 'rxjs';
 import { Size } from 'ol/size';
+import { ToolManagerModel } from '../models/tool-manager.model';
+import { OpenLayersToolManager } from './open-layers-tool-manager';
 
 export class OpenLayersMap implements MapViewerModel {
 
   private map: BehaviorSubject<OlMap | null> = new BehaviorSubject<OlMap | null>(null);
   private layerManager: BehaviorSubject<LayerManagerModel | null> = new BehaviorSubject<LayerManagerModel | null>(null);
+  private toolManager: BehaviorSubject<ToolManagerModel | null> = new BehaviorSubject<ToolManagerModel | null>(null);
 
   private previousMap: OlMap | null = null;
   private previousLayerManager: OpenLayersLayerManager | null = null;
+  private previousToolManager: OpenLayersToolManager | null = null;
 
   private readonly resizeObserver: ResizeObserver;
   private initialExtent: OpenlayersExtent = [];
@@ -67,17 +71,24 @@ export class OpenLayersMap implements MapViewerModel {
       this.previousLayerManager.destroy();
     }
 
+    if (this.previousToolManager) {
+      this.previousToolManager.destroy();
+    }
+
     if (this.previousMap) {
       this.previousMap.dispose();
     }
 
     const layerManager = new OpenLayersLayerManager(olMap);
     layerManager.init();
+    const toolManager = new OpenLayersToolManager(olMap);
+    this.previousToolManager = toolManager;
     this.previousLayerManager = layerManager;
     this.previousMap = olMap;
 
     this.map.next(olMap);
     this.layerManager.next(layerManager);
+    this.toolManager.next(toolManager);
   }
 
   public render(container: HTMLElement) {
@@ -87,6 +98,11 @@ export class OpenLayersMap implements MapViewerModel {
   public getLayerManager$(): Observable<LayerManagerModel> {
     const isLayerManager = (item: LayerManagerModel | null): item is LayerManagerModel => item !== null;
     return this.layerManager.asObservable().pipe(filter(isLayerManager));
+  }
+
+  public getToolManager$(): Observable<ToolManagerModel> {
+    const isToolManager = (item: ToolManagerModel | null): item is ToolManagerModel => item !== null;
+    return this.toolManager.asObservable().pipe(filter(isToolManager));
   }
 
   public getVisibleExtent$(): Observable<OpenlayersExtent> {
