@@ -3,9 +3,11 @@ import { Service } from './service.model';
 import VectorImageLayer from 'ol/layer/VectorImage';
 import VectorSource from 'ol/source/Vector';
 import { Geometry } from 'ol/geom';
-import { Image as ImageLayer, Tile as TileLayer } from 'ol/layer';
-import { ImageWMS, XYZ } from 'ol/source';
+import ImageLayer from 'ol/layer/Image';
+import TileLayer from 'ol/layer/Tile';
+import ImageWMS from 'ol/source/ImageWMS';
 import WMTS from 'ol/source/WMTS';
+import XYZ from 'ol/source/XYZ';
 
 export type LayerTypes = VectorImageLayer<VectorSource<Geometry>> | ImageLayer<ImageWMS> | TileLayer<XYZ> | TileLayer<WMTS> | null;
 

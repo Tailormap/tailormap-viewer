@@ -3,8 +3,9 @@ import VectorSource from 'ol/source/Vector';
 import BaseLayer from 'ol/layer/Base';
 import LayerGroup from 'ol/layer/Group';
 import VectorImageLayer from 'ol/layer/VectorImage';
-import { ImageWMS, XYZ } from 'ol/source';
+import ImageWMS from 'ol/source/ImageWMS';
 import WMTS from 'ol/source/WMTS';
+import XYZ from 'ol/source/XYZ';
 import { LayerManagerModel, LayerTypes, Service } from '../models';
 import { OlLayerHelper } from '../helpers/ol-layer.helper';
 import { LayerModel } from '../models/layer.model';
@@ -15,7 +16,7 @@ import {
   isOpenLayersWMSLayer, isPossibleRealtimeLayer,
 } from '../helpers/ol-layer-types.helper';
 import { LayerTypesHelper } from '../helpers/layer-types.helper';
-import { Geometry } from 'ol/geom';
+import Geometry from 'ol/geom/Geometry';
 
 export class OpenLayersLayerManager implements LayerManagerModel {
 

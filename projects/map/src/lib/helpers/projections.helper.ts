@@ -1,4 +1,4 @@
-import * as olExtent from 'ol/extent';
+import { getWidth } from 'ol/extent';
 import { register } from 'ol/proj/proj4';
 import proj4 from 'proj4';
 import { OpenlayersExtent } from '../models/extent.type';
@@ -23,7 +23,7 @@ export class ProjectionsHelper {
   public static getResolutions(projection: string, extent: OpenlayersExtent): number[] {
     // @todo: check this check here
     const size: number = projection === 'EPSG:3857' ? 20 : 22;
-    const startResolution: number = olExtent.getWidth(extent) / 256;
+    const startResolution: number = getWidth(extent) / 256;
     const resolutions: number[] = new Array(size);
     for (let i = 0, ii = resolutions.length; i < ii; ++i) {
       resolutions[i] = startResolution / Math.pow(2, i);

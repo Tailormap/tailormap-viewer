@@ -1,5 +1,5 @@
 import { LayerTypesHelper } from './layer-types.helper';
-import { LayerTypesEnum } from '@tailormap-viewer/map';
+import { LayerTypesEnum } from '../models/layer-types.enum';
 
 const getLayer = (type: LayerTypesEnum) => ({ layerType: type, id: '1', visible: true, name: 'test' });
 
