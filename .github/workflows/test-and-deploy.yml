@@ -46,7 +46,7 @@ jobs:
       - name: Install
         run: npm install
       - name: Test
-        run: npx jest --ci --collect-coverage --reporters=default --reporters=jest-junit
+        run: npm run test:ci
       - name: Publish test results
         uses: EnricoMi/publish-unit-test-result-action@v1
         if: always()
