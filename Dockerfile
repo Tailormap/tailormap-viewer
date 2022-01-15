@@ -1,4 +1,4 @@
-FROM node:16.13.1 AS builder
+FROM node:16.13.2 AS builder
 
 ARG BASE_HREF=/
 
