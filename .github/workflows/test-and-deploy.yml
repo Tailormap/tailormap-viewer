@@ -16,7 +16,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           # Keep this in sync with Dockerfile version
-          node-version: 16.13.1
+          node-version: 16.13.2
       - uses: actions/cache@v2
         with:
           path: ~/.npm
