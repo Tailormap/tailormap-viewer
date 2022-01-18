@@ -1,5 +1,3 @@
-
-  
 name: "Cleanup and Maintainance"
 
 on:
@@ -21,9 +19,19 @@ jobs:
           container: tailormap-viewer
           dry-run: false
           older-than: 7
-          keep-last: 1
+          keep-last: 2
           untagged: true
-      # maybe also clean up anything older than 14?.. days...
+      - name: "Older than 4 weeks"
+        uses: vlaurin/action-ghcr-prune@v0.3.0
+        with:
+          token: ${{ secrets.GHCR_CLEANUP_PAT }}
+          organization: B3Partners
+          container: tailormap-viewer
+          dry-run: false
+          older-than: 28
+          keep-last: 0
+          untagged: true
+
 
   stale:
     runs-on: ubuntu-latest
@@ -35,3 +43,17 @@ jobs:
         with:
           days-before-stale: 60
           days-before-close: 10
+
+
+  workflows:
+    runs-on: ubuntu-latest
+    name: Cleanup old workflow runs
+    steps:
+      - name: Delete workflow runs
+        uses: Mattraks/delete-workflow-runs@v2
+        with:
+          token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          # same as "Artifact and log retention" in https://github.com/B3Partners/tailormap-viewer/settings/actions
+          retain_days: 90
+          keep_minimum_runs: 2
