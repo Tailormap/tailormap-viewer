@@ -63,7 +63,7 @@ jobs:
           PR: ${{ steps.find-pr.outputs.number }}
         run: |
           echo "VERSION_TAG=pr-${PR}" >> $GITHUB_ENV
-          echo "BASE_HREF=/pull-request/${PR}/${GITHUB_REF_SLUG_URL}/" >> $GITHUB_ENV
+          echo "BASE_HREF=/pull-request/${PR}/${GITHUB_REF_NAME_SLUG_URL}/" >> $GITHUB_ENV
           echo "NGINX_CONF=nginx-no-proxy.conf" >> $GITHUB_ENV
       - name: Build and tag docker image
         run: |
@@ -96,7 +96,7 @@ jobs:
         if: success()
         uses: chrnorm/deployment-action@releases/v1
         with:
-          token: "${{ github.token }}"
+          token: "${{ secrets.GITHUB_TOKEN }}"
           target_url: "https://${{ secrets.DEPLOY_HOST_SNAPSHOT }}${{ env.BASE_HREF}}"
           environment: ${{ env.VERSION_TAG }}
           initial_status: success
