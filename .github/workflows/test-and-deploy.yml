@@ -8,6 +8,26 @@ on:
   workflow_dispatch:
 
 jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          # Keep this in sync with Dockerfile version
+          node-version: 16.13.2
+      - uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install
+        run: npm install
+      - name: Lint
+        run: npm run lint
+
   test:
     name: Test
     runs-on: ubuntu-18.04
@@ -26,7 +46,7 @@ jobs:
       - name: Install
         run: npm install
       - name: Test
-        run: npx jest --ci --collect-coverage --reporters=default --reporters=jest-junit
+        run: npm run test:ci
       - name: Publish test results
         uses: EnricoMi/publish-unit-test-result-action@v1
         if: always()
