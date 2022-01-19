@@ -1,6 +1,6 @@
 import { MapComponent } from './map.component';
 import { render } from '@testing-library/angular';
-import { MapService } from '@tailormap-viewer/map';
+import { MapService } from '../map-service/map.service';
 
 describe('MapComponent', () => {
 

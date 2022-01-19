@@ -1,4 +1,4 @@
-import { UrlHelper } from '@tailormap-viewer/shared';
+import { UrlHelper } from './url.helper';
 
 describe('UrlHelper', () => {
 

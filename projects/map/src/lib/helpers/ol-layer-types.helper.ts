@@ -3,7 +3,7 @@ import VectorLayer from 'ol/layer/Vector';
 import ImageLayer from 'ol/layer/Image';
 import TileLayer from 'ol/layer/Tile';
 import VectorImageLayer from 'ol/layer/VectorImage';
-import { Geometry } from 'ol/geom';
+import Geometry from 'ol/geom/Geometry';
 import VectorSource from 'ol/source/Vector';
 import ImageSource from 'ol/source/Image';
 import TileSource from 'ol/source/Tile';

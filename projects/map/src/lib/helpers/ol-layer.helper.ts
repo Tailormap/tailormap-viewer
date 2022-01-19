@@ -1,7 +1,10 @@
 import BaseLayer from 'ol/layer/Base';
 import Projection from 'ol/proj/Projection';
-import { Image as ImageLayer, Tile as TileLayer } from 'ol/layer';
-import { ImageWMS, WMTS, XYZ } from 'ol/source';
+import ImageLayer from 'ol/layer/Image';
+import TileLayer from  'ol/layer/Tile';
+import ImageWMS from 'ol/source/ImageWMS';
+import WMTS from 'ol/source/WMTS';
+import XYZ from 'ol/source/XYZ';
 import VectorSource from 'ol/source/Vector';
 import { StyleFunction } from 'ol/style/Style';
 import { Options as WMTSOptions, optionsFromCapabilities } from 'ol/source/WMTS';
@@ -17,7 +20,7 @@ import { LayerTypesEnum } from '../models/layer-types.enum';
 import { Service } from '../models/service.model';
 import { WMTSLayerModel } from '../models/wmts-layer.model';
 import { ServiceTypesHelper } from './service-types.helper';
-import { Geometry } from 'ol/geom';
+import Geometry from 'ol/geom/Geometry';
 
 export interface LayerProperties {
   id: string;
