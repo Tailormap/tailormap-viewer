@@ -8,6 +8,8 @@ export * from './wmts-layer.model';
 export * from './layer-types.enum';
 export * from './map-viewer-options.model';
 export * from './service-layer.model';
+export * from './tool-manager.model';
 export * from './tms-layer.model';
 export * from './wms-layer.model';
 export * from './wmts-service.model';
+export * from './tools';
