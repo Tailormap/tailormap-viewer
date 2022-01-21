@@ -1,0 +1,1563 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 14.1
+-- Dumped by pg_dump version 14.1
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Data for Name: level_; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+SET SESSION AUTHORIZATION 'postgres';
+
+ALTER TABLE public.level_ DISABLE TRIGGER ALL;
+
+COPY public.level_ (id, background, info, name, url, parent) FROM stdin;
+1	f	\N	Applicatie	\N	\N
+2	t	\N	Achtergrond	\N	1
+3	f	\N	topografie	\N	2
+4	f	\N	Voorgrond	\N	1
+\.
+
+
+ALTER TABLE public.level_ ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: user_; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.user_ DISABLE TRIGGER ALL;
+
+COPY public.user_ (username, password) FROM stdin;
+admin	14c06474bec5e7def0304925d09f2b977af3146a
+\.
+
+
+ALTER TABLE public.user_ ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: application; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.application DISABLE TRIGGER ALL;
+
+COPY public.application (id, authenticated_required, authorizations_modified, lang, layout, max_crs, max_maxx, max_maxy, max_minx, max_miny, name, projection_code, start_crs, start_maxx, start_maxy, start_minx, start_miny, title, version, owner, root) FROM stdin;
+1	f	2022-01-20 16:05:12.968	nl_NL	{"header":{"layout":{"height":"","heightmeasure":"px","maxheight":"","useTabs":false,"bgcolor":"#FFFFFF"},"components":[]},"leftmargin_top":{"layout":{"width":"","widthmeasure":"px","maxwidth":"","useTabs":false,"enableCollapse":false,"defaultCollapsed":false,"enableFloating":false,"panelTitle":"","bgcolor":"#FFFFFF"},"components":[]},"leftmargin_bottom":{"layout":{"height":"","heightmeasure":"px","maxheight":"","useTabs":false,"bgcolor":"#FFFFFF"},"components":[]},"left_menu":{"layout":{"width":"","widthmeasure":"px","maxwidth":"","enableFloating":false,"floatingPosition":"tl","bgcolor":"#FFFFFF"},"components":[]},"top_menu":{"layout":{"height":"","heightmeasure":"px","maxheight":"","bgcolor":"#FFFFFF"},"components":[]},"content":{"layout":{},"components":[{"componentClass":"viewer.mapcomponents.OpenLayers5Map","name":"openLayers5Map1"}]},"content_bottom":{"layout":{"height":"","heightmeasure":"px","maxheight":"","bgcolor":"#FFFFFF"},"components":[]},"popupwindow":{"layout":{"height":"","heightmeasure":"px","maxheight":"","width":"","widthmeasure":"px","maxwidth":"","useTabs":false,"title":"","posx":"","posy":"","bgcolor":"#FFFFFF"},"components":[]},"rightmargin_top":{"layout":{"width":"","widthmeasure":"px","maxwidth":"","useTabs":false,"enableCollapse":false,"defaultCollapsed":false,"enableFloating":false,"panelTitle":"","bgcolor":"#FFFFFF"},"components":[]},"rightmargin_bottom":{"layout":{"height":"","heightmeasure":"px","maxheight":"","useTabs":false,"bgcolor":"#FFFFFF"},"components":[]},"footer":{"layout":{"height":"","heightmeasure":"px","maxheight":"","useTabs":false,"bgcolor":"#FFFFFF"},"components":[]}}	\N	\N	\N	\N	\N	default	EPSG:28992[+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.237,50.0087,465.658,-0.406857,0.350733,-1.87035,4.0812 +units=m +no_defs]	\N	\N	\N	\N	\N	\N	\N	\N	1
+\.
+
+
+ALTER TABLE public.application ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: application_details; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.application_details DISABLE TRIGGER ALL;
+
+COPY public.application_details (application, value, details_key) FROM stdin;
+1	#000000	steunkleur2
+1	/viewer/viewer-html/sprite.svg	iconSprite
+1	#FFFFFF	steunkleur1
+1	true	cachedSelectedContentDirty
+1	true	cachedExpandedSelectedContentDirty
+1	{"maxWidth":0,"maxHeight":0,"margin":0,"backgroundColor":"","backgroundImage":"","backgroundRepeat":"no-repeat","backgroundPosition":"","extraCss":"","singlePopup":false}	globalLayout
+\.
+
+
+ALTER TABLE public.application_details ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: category; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.category DISABLE TRIGGER ALL;
+
+COPY public.category (id, name, parent) FROM stdin;
+0	Categoriën	\N
+1	Achtergrond	0
+2	Voorgrond	0
+\.
+
+
+ALTER TABLE public.category ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: geo_service; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.geo_service DISABLE TRIGGER ALL;
+
+COPY public.geo_service (protocol, id, authorizations_modified, geofence_header, monitoring_enabled, monitoring_statusok, name, password, url, username, version, tiling_protocol, exception_type, override_url, skip_discoverwfs, category, top_layer) FROM stdin;
+wms	1	2022-01-20 15:57:42.749	\N	f	t	bestuurlijkegebieden	\N	https://service.pdok.nl/kadaster/bestuurlijkegebieden/wms/v1_0?language=dut&	\N	1.1.1	\N	Inimage	f	t	2	1
+tiled	3	2022-01-20 16:03:02.094	\N	f	t	Openbasiskaart	\N	https://www.openbasiskaart.nl/mapcache/wmts?	\N	\N	WMTS	\N	\N	\N	1	43
+tiled	2	2022-01-20 15:55:40.436	\N	f	t	nationaalgeoregister.nl	\N	https://geodata.nationaalgeoregister.nl/tiles/service/wmts?	\N	\N	WMTS	\N	\N	\N	1	5
+\.
+
+
+ALTER TABLE public.geo_service ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: application_layer; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.application_layer DISABLE TRIGGER ALL;
+
+COPY public.application_layer (id, layer_name, service) FROM stdin;
+1	osm	3
+\.
+
+
+ALTER TABLE public.application_layer ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: feature_source; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.feature_source DISABLE TRIGGER ALL;
+
+COPY public.feature_source (protocol, id, name, password, url, username, db_schema, linked_service) FROM stdin;
+wfs	1	bestuurlijkegebieden	\N	https://service.pdok.nl/kadaster/bestuurlijkegebieden/wfs/v1_0?request=GetCapabilities&service=WFS	\N	\N	\N
+\.
+
+
+ALTER TABLE public.feature_source ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: feature_type; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.feature_type DISABLE TRIGGER ALL;
+
+COPY public.feature_type (id, description, geometry_attribute, primary_key_attribute, type_name, writeable, feature_source) FROM stdin;
+1	Provincies	geom	\N	bestuurlijkegebieden:Provinciegebied	f	1
+2	Landsgrens	geom	\N	bestuurlijkegebieden:Landgebied	f	1
+3	Gemeenten	geom	\N	bestuurlijkegebieden:Gemeentegebied	f	1
+\.
+
+
+ALTER TABLE public.feature_type ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: configured_attribute; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.configured_attribute DISABLE TRIGGER ALL;
+
+COPY public.configured_attribute (id, allow_value_list_only, attribute_name, automatic_value, automatic_value_type, default_value, disable_user_edit, disallow_null_value, edit_alias, edit_height, edit_values, editable, filterable, label, selectable, value_list, value_list_label_name, value_list_value_name, visible, feature_type, value_list_feature_source, value_list_feature_type) FROM stdin;
+\.
+
+
+ALTER TABLE public.configured_attribute ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: application_layer_attributes; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.application_layer_attributes DISABLE TRIGGER ALL;
+
+COPY public.application_layer_attributes (application_layer, attribute_, list_index) FROM stdin;
+\.
+
+
+ALTER TABLE public.application_layer_attributes ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: application_layer_details; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.application_layer_details DISABLE TRIGGER ALL;
+
+COPY public.application_layer_details (application_layer, value, details_key) FROM stdin;
+\.
+
+
+ALTER TABLE public.application_layer_details ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: application_layer_readers; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.application_layer_readers DISABLE TRIGGER ALL;
+
+COPY public.application_layer_readers (application_layer, role_name) FROM stdin;
+\.
+
+
+ALTER TABLE public.application_layer_readers ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: application_layer_writers; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.application_layer_writers DISABLE TRIGGER ALL;
+
+COPY public.application_layer_writers (application_layer, role_name) FROM stdin;
+\.
+
+
+ALTER TABLE public.application_layer_writers ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: application_readers; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.application_readers DISABLE TRIGGER ALL;
+
+COPY public.application_readers (application, role_name) FROM stdin;
+\.
+
+
+ALTER TABLE public.application_readers ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: attribute_descriptor; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.attribute_descriptor DISABLE TRIGGER ALL;
+
+COPY public.attribute_descriptor (id, name_alias, name, type) FROM stdin;
+1	\N	geom	geometry
+2	\N	identificatie	string
+3	\N	naam	string
+4	\N	code	string
+5	\N	ligtInLandCode	string
+6	\N	ligtInLandNaam	string
+7	\N	geom	geometry
+8	\N	identificatie	string
+9	\N	naam	string
+10	\N	code	string
+11	\N	geom	geometry
+12	\N	identificatie	string
+13	\N	naam	string
+14	\N	code	string
+15	\N	ligtInProvincieCode	string
+16	\N	ligtInProvincieNaam	string
+\.
+
+
+ALTER TABLE public.attribute_descriptor ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: bookmark; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.bookmark DISABLE TRIGGER ALL;
+
+COPY public.bookmark (id, code, created_at, created_by, params, application) FROM stdin;
+\.
+
+
+ALTER TABLE public.bookmark ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: category_children; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.category_children DISABLE TRIGGER ALL;
+
+COPY public.category_children (category, child, list_index) FROM stdin;
+0	1	0
+0	2	1
+\.
+
+
+ALTER TABLE public.category_children ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: category_readers; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.category_readers DISABLE TRIGGER ALL;
+
+COPY public.category_readers (category, role_name) FROM stdin;
+\.
+
+
+ALTER TABLE public.category_readers ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: category_services; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.category_services DISABLE TRIGGER ALL;
+
+COPY public.category_services (category, service, list_index) FROM stdin;
+2	1	0
+1	2	0
+1	3	1
+\.
+
+
+ALTER TABLE public.category_services ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: category_writers; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.category_writers DISABLE TRIGGER ALL;
+
+COPY public.category_writers (category, role_name) FROM stdin;
+\.
+
+
+ALTER TABLE public.category_writers ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: configured_component; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.configured_component DISABLE TRIGGER ALL;
+
+COPY public.configured_component (id, class_name, config, name, application, mother_component) FROM stdin;
+1	viewer.mapcomponents.OpenLayers5Map	\N	openLayers5Map1	1	\N
+\.
+
+
+ALTER TABLE public.configured_component ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: configured_component_details; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.configured_component_details DISABLE TRIGGER ALL;
+
+COPY public.configured_component_details (configured_component, details, details_key) FROM stdin;
+\.
+
+
+ALTER TABLE public.configured_component_details ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: configured_component_readers; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.configured_component_readers DISABLE TRIGGER ALL;
+
+COPY public.configured_component_readers (configured_component, role_name) FROM stdin;
+\.
+
+
+ALTER TABLE public.configured_component_readers ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: document; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.document DISABLE TRIGGER ALL;
+
+COPY public.document (id, category, name, url) FROM stdin;
+\.
+
+
+ALTER TABLE public.document ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: feature_source_feature_types; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.feature_source_feature_types DISABLE TRIGGER ALL;
+
+COPY public.feature_source_feature_types (feature_source, feature_type, list_index) FROM stdin;
+1	1	0
+1	2	1
+1	3	2
+\.
+
+
+ALTER TABLE public.feature_source_feature_types ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: feature_type_attributes; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.feature_type_attributes DISABLE TRIGGER ALL;
+
+COPY public.feature_type_attributes (feature_type, attribute_descriptor, list_index) FROM stdin;
+1	1	0
+1	2	1
+1	3	2
+1	4	3
+1	5	4
+1	6	5
+2	7	0
+2	8	1
+2	9	2
+2	10	3
+3	11	0
+3	12	1
+3	13	2
+3	14	3
+3	15	4
+3	16	5
+\.
+
+
+ALTER TABLE public.feature_type_attributes ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: feature_type_relation; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.feature_type_relation DISABLE TRIGGER ALL;
+
+COPY public.feature_type_relation (id, type, feature_type, foreign_feature_type) FROM stdin;
+\.
+
+
+ALTER TABLE public.feature_type_relation ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: feature_type_relation_key; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.feature_type_relation_key DISABLE TRIGGER ALL;
+
+COPY public.feature_type_relation_key (id, left_side, relation, right_side) FROM stdin;
+\.
+
+
+ALTER TABLE public.feature_type_relation_key ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: file_upload; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.file_upload DISABLE TRIGGER ALL;
+
+COPY public.file_upload (id, created_at, created_by, fid, filename, location, mimetype, type_, sft) FROM stdin;
+\.
+
+
+ALTER TABLE public.file_upload ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: form; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.form DISABLE TRIGGER ALL;
+
+COPY public.form (id, feature_type_name, json, name, sft) FROM stdin;
+\.
+
+
+ALTER TABLE public.form ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: form_readers; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.form_readers DISABLE TRIGGER ALL;
+
+COPY public.form_readers (form, role_name) FROM stdin;
+\.
+
+
+ALTER TABLE public.form_readers ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: geo_service_details; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.geo_service_details DISABLE TRIGGER ALL;
+
+COPY public.geo_service_details (geoservice, value, details_key) FROM stdin;
+1	false	useProxy
+1	false	useIntersect
+2	false	useIntersect
+3	false	useIntersect
+2	false	useProxy
+\.
+
+
+ALTER TABLE public.geo_service_details ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: geo_service_keywords; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.geo_service_keywords DISABLE TRIGGER ALL;
+
+COPY public.geo_service_keywords (geo_service, keyword) FROM stdin;
+1	Globaal
+1	provinciegebied
+1	gebieden
+1	infoMapAccessService
+1	landgebied
+1	administratieve eenheden
+1	https://service.pdok.nl/kadaster/bestuurlijkegebieden/wms/v1_0?request=GetCapabilities&service=WMS
+1	administratieve gebieden
+1	Lokaal
+1	WMS
+1	Nationaal
+1	gemeentegebied
+1	rijksgrens
+\.
+
+
+ALTER TABLE public.geo_service_keywords ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: geo_service_readers; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.geo_service_readers DISABLE TRIGGER ALL;
+
+COPY public.geo_service_readers (geo_service, role_name) FROM stdin;
+\.
+
+
+ALTER TABLE public.geo_service_readers ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: style_library; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.style_library DISABLE TRIGGER ALL;
+
+COPY public.style_library (id, default_style, external_url, extra_legend_parameters, named_layer_user_styles_json, sld_body, title) FROM stdin;
+\.
+
+
+ALTER TABLE public.style_library ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: geo_service_style_libraries; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.geo_service_style_libraries DISABLE TRIGGER ALL;
+
+COPY public.geo_service_style_libraries (geo_service, style_library, list_index) FROM stdin;
+\.
+
+
+ALTER TABLE public.geo_service_style_libraries ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: group_; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.group_ DISABLE TRIGGER ALL;
+
+COPY public.group_ (name, description) FROM stdin;
+Admin	Groep met toegang tot beheerapplicatie viewer
+RegistryAdmin	Beheer van het gegevensregister
+UserAdmin	Beheer van gebruikers en groepen
+ApplicationAdmin	Beheer van applicaties
+ServiceAdmin	Beheerders van services: e-mail notificatie bij monitoring
+ExtendedUser	Interne medewerkers (via LDAP geauthenticeerd)
+\.
+
+
+ALTER TABLE public.group_ ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: tile_set; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.tile_set DISABLE TRIGGER ALL;
+
+COPY public.tile_set (name, height, width) FROM stdin;
+\.
+
+
+ALTER TABLE public.tile_set ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: layer; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.layer DISABLE TRIGGER ALL;
+
+COPY public.layer (id, filterable, legend_image_url, max_scale, min_scale, name, queryable, title, title_alias, userlayer, virtual, feature_type, parent, service, tileset) FROM stdin;
+1	f	\N	\N	\N	\N	t	bestuurlijkegebieden	\N	f	t	\N	\N	1	\N
+49	f	\N	\N	\N	osm-nb	f	openbasiskaart.nl: OpenStreetMap ondergrondkaart zonder gebouwen	\N	f	f	\N	43	3	\N
+50	f	\N	\N	\N	osm-nbr	f	openbasiskaart.nl: OpenStreetMap ondergrondkaart zonder gebouwen en wegen	\N	f	f	\N	43	3	\N
+51	f	\N	\N	\N	osm	f	openbasiskaart.nl: OpenStreetMap ondergrondkaart	\N	f	f	\N	43	3	\N
+5	f	\N	\N	\N	\N	f	\N	\N	f	t	\N	\N	2	\N
+6	f	\N	\N	\N	top10nlv2	f	top10nlv2	\N	f	f	\N	5	2	\N
+7	f	\N	\N	\N	natura2000	f	natura2000	\N	f	f	\N	5	2	\N
+8	f	\N	\N	\N	nok2011	f	nok2011	\N	f	f	\N	5	2	\N
+9	f	\N	\N	\N	aan	f	aan	\N	f	f	\N	5	2	\N
+10	f	\N	\N	\N	bag	f	bag	\N	f	f	\N	5	2	\N
+11	f	\N	\N	\N	top25raster	f	top25raster	\N	f	f	\N	5	2	\N
+12	f	\N	\N	\N	top50raster	f	top50raster	\N	f	f	\N	5	2	\N
+13	f	\N	\N	\N	top100raster	f	top100raster	\N	f	f	\N	5	2	\N
+14	f	\N	\N	\N	top250raster	f	top250raster	\N	f	f	\N	5	2	\N
+15	f	\N	\N	\N	top500raster	f	top500raster	\N	f	f	\N	5	2	\N
+16	f	\N	\N	\N	top1000raster	f	top1000raster	\N	f	f	\N	5	2	\N
+17	f	\N	\N	\N	brpgewaspercelen	f	brpgewaspercelen	\N	f	f	\N	5	2	\N
+18	f	\N	\N	\N	bgtstandaardv2	f	bgtstandaardv2	\N	f	f	\N	5	2	\N
+19	f	\N	\N	\N	bgtsymbolenv2	f	bgtsymbolenv2	\N	f	f	\N	5	2	\N
+20	f	\N	\N	\N	bgtplaninformatie	f	bgtplaninformatie	\N	f	f	\N	5	2	\N
+21	f	\N	\N	\N	bgtstandaard	f	bgtstandaard	\N	f	f	\N	5	2	\N
+22	f	\N	\N	\N	bgtachtergrond	f	bgtachtergrond	\N	f	f	\N	5	2	\N
+23	f	\N	\N	\N	bgtomtrekgericht	f	bgtomtrekgericht	\N	f	f	\N	5	2	\N
+24	f	\N	\N	\N	bgtpastel	f	bgtpastel	\N	f	f	\N	5	2	\N
+25	f	\N	\N	\N	ahn1_100m	f	ahn1_100m	\N	f	f	\N	5	2	\N
+26	f	\N	\N	\N	ahn1_25m	f	ahn1_25m	\N	f	f	\N	5	2	\N
+27	f	\N	\N	\N	ahn1_5m	f	ahn1_5m	\N	f	f	\N	5	2	\N
+28	f	\N	\N	\N	ahn2_5m	f	ahn2_5m	\N	f	f	\N	5	2	\N
+29	f	\N	\N	\N	ahn2_05m_non	f	ahn2_05m_non	\N	f	f	\N	5	2	\N
+30	f	\N	\N	\N	ahn2_05m_int	f	ahn2_05m_int	\N	f	f	\N	5	2	\N
+31	f	\N	\N	\N	ahn2_05m_ruw	f	ahn2_05m_ruw	\N	f	f	\N	5	2	\N
+32	f	\N	\N	\N	ahn3_5m_dsm	f	ahn3_5m_dsm	\N	f	f	\N	5	2	\N
+33	f	\N	\N	\N	ahn3_5m_dtm	f	ahn3_5m_dtm	\N	f	f	\N	5	2	\N
+34	f	\N	\N	\N	ahn3_05m_dsm	f	ahn3_05m_dsm	\N	f	f	\N	5	2	\N
+35	f	\N	\N	\N	ahn3_05m_dtm	f	ahn3_05m_dtm	\N	f	f	\N	5	2	\N
+36	f	\N	\N	\N	opentopo	f	opentopo	\N	f	f	\N	5	2	\N
+37	f	\N	\N	\N	opentopoachtergrondkaart	f	opentopoachtergrondkaart	\N	f	f	\N	5	2	\N
+38	f	\N	\N	\N	2016_ortho25	f	2016_ortho25	\N	f	f	\N	5	2	\N
+39	f	\N	\N	\N	2016_ortho25IR	f	2016_ortho25IR	\N	f	f	\N	5	2	\N
+40	f	\N	\N	\N	2017_ortho25	f	2017_ortho25	\N	f	f	\N	5	2	\N
+41	f	\N	\N	\N	2017_ortho25IR	f	2017_ortho25IR	\N	f	f	\N	5	2	\N
+42	f	\N	\N	\N	lufolabels	f	lufolabels	\N	f	f	\N	5	2	\N
+3	f	https://service.pdok.nl/kadaster/bestuurlijkegebieden/wms/v1_0?language=dut&version=1.1.1&service=WMS&request=GetLegendGraphic&layer=Provinciegebied&format=image/png&STYLE=Provinciegebied	\N	\N	Provinciegebied	t	Provinciegebied	\N	f	f	1	1	1	\N
+2	f	https://service.pdok.nl/kadaster/bestuurlijkegebieden/wms/v1_0?language=dut&version=1.1.1&service=WMS&request=GetLegendGraphic&layer=Gemeentegebied&format=image/png&STYLE=Gemeentegebied	\N	\N	Gemeentegebied	t	Gemeentegebied	\N	f	f	3	1	1	\N
+4	f	https://service.pdok.nl/kadaster/bestuurlijkegebieden/wms/v1_0?language=dut&version=1.1.1&service=WMS&request=GetLegendGraphic&layer=Landgebied&format=image/png&STYLE=Landgebied	\N	\N	Landgebied	t	Landgebied	\N	f	f	2	1	1	\N
+43	f	\N	\N	\N	\N	f	\N	\N	f	t	\N	\N	3	\N
+44	f	\N	\N	\N	osm-nb-hq	f	openbasiskaart.nl: OpenStreetMap ondergrondkaart zonder gebouwen (HQ tiles)	\N	f	f	\N	43	3	\N
+45	f	\N	\N	\N	osm-epsg3857	f	openbasiskaart.nl: OpenStreetMap ondergrondkaart (EPSG:3857)	\N	f	f	\N	43	3	\N
+46	f	\N	\N	\N	osm-g	f	openbasiskaart.nl: OpenStreetMap ondergrondkaart (Google Maps Compatible)	\N	f	f	\N	43	3	\N
+47	f	\N	\N	\N	osm-nbr-hq	f	openbasiskaart.nl: OpenStreetMap ondergrondkaart zonder gebouwen en wegen (HQ tiles)	\N	f	f	\N	43	3	\N
+48	f	\N	\N	\N	osm-hq	f	openbasiskaart.nl: OpenStreetMap ondergrondkaart (HQ tiles)	\N	f	f	\N	43	3	\N
+\.
+
+
+ALTER TABLE public.layer ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: layer_bounding_boxes; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.layer_bounding_boxes DISABLE TRIGGER ALL;
+
+COPY public.layer_bounding_boxes (layer, name, maxx, maxy, minx, miny, crs) FROM stdin;
+1	EPSG:25831	0	0	0	0	EPSG:25831
+1	EPSG:3857	0	0	0	0	EPSG:3857
+1	EPSG:25832	0	0	0	0	EPSG:25832
+1	EPSG:4326	0	0	0	0	EPSG:4326
+1	EPSG:4258	0	0	0	0	EPSG:4258
+1	EPSG:3035	0	0	0	0	EPSG:3035
+1	CRS:84	0	0	0	0	CRS:84
+1	EPSG:28992	7.31159	53.6657	3.2276	50.668	EPSG:28992
+1	EPSG:3034	0	0	0	0	EPSG:3034
+2	EPSG:25831	0	0	0	0	EPSG:25831
+2	EPSG:3857	0	0	0	0	EPSG:3857
+2	EPSG:25832	0	0	0	0	EPSG:25832
+2	EPSG:4326	0	0	0	0	EPSG:4326
+2	EPSG:4258	0	0	0	0	EPSG:4258
+2	EPSG:3035	0	0	0	0	EPSG:3035
+2	CRS:84	0	0	0	0	CRS:84
+2	EPSG:28992	7.31159	53.6657	3.2276	50.668	EPSG:28992
+2	EPSG:3034	0	0	0	0	EPSG:3034
+3	EPSG:25831	0	0	0	0	EPSG:25831
+3	EPSG:3857	0	0	0	0	EPSG:3857
+3	EPSG:25832	0	0	0	0	EPSG:25832
+3	EPSG:4326	0	0	0	0	EPSG:4326
+3	EPSG:4258	0	0	0	0	EPSG:4258
+3	EPSG:3035	0	0	0	0	EPSG:3035
+3	CRS:84	0	0	0	0	CRS:84
+3	EPSG:28992	7.31159	53.6657	3.2276	50.668	EPSG:28992
+3	EPSG:3034	0	0	0	0	EPSG:3034
+4	EPSG:25831	0	0	0	0	EPSG:25831
+4	EPSG:3857	0	0	0	0	EPSG:3857
+4	EPSG:25832	0	0	0	0	EPSG:25832
+4	EPSG:4326	0	0	0	0	EPSG:4326
+4	EPSG:4258	0	0	0	0	EPSG:4258
+4	EPSG:3035	0	0	0	0	EPSG:3035
+4	CRS:84	0	0	0	0	CRS:84
+4	EPSG:28992	7.31159	53.6657	3.2276	50.668	EPSG:28992
+4	EPSG:3034	0	0	0	0	EPSG:3034
+6	urn:ogc:def:crs:EPSG::28992	595401.920067406	903401.9243980894	-370406.0805926544	5328.857806465065	urn:ogc:def:crs:EPSG::28992
+7	urn:ogc:def:crs:EPSG::28992	595401.920067406	903401.9243980894	-370406.0805926544	5328.857806465065	urn:ogc:def:crs:EPSG::28992
+8	urn:ogc:def:crs:EPSG::28992	595401.920067406	903401.9243980894	-370406.0805926544	5328.857806465065	urn:ogc:def:crs:EPSG::28992
+9	urn:ogc:def:crs:EPSG::28992	595401.920067406	903401.9243980894	-370406.0805926544	5328.857806465065	urn:ogc:def:crs:EPSG::28992
+10	urn:ogc:def:crs:EPSG::28992	595401.920067406	903401.9243980894	-370406.0805926544	5328.857806465065	urn:ogc:def:crs:EPSG::28992
+11	urn:ogc:def:crs:EPSG::28992	680410.1742965747	925274.9564046436	-370406.08059261227	5166.053852368204	urn:ogc:def:crs:EPSG::28992
+12	urn:ogc:def:crs:EPSG::28992	680410.1742965747	925274.9564046436	-370406.08059261227	5166.053852368204	urn:ogc:def:crs:EPSG::28992
+13	urn:ogc:def:crs:EPSG::28992	680410.1742965747	925274.9564046436	-370406.08059261227	5166.053852368204	urn:ogc:def:crs:EPSG::28992
+14	urn:ogc:def:crs:EPSG::28992	680410.1742965747	925274.9564046436	-370406.08059261227	5166.053852368204	urn:ogc:def:crs:EPSG::28992
+15	urn:ogc:def:crs:EPSG::28992	680410.1742965747	925274.9564046436	-370406.08059261227	5166.053852368204	urn:ogc:def:crs:EPSG::28992
+16	urn:ogc:def:crs:EPSG::28992	680410.1742965747	925274.9564046436	-370406.08059261227	5166.053852368204	urn:ogc:def:crs:EPSG::28992
+17	urn:ogc:def:crs:EPSG::28992	595401.920067406	903401.9243980894	-370406.0805926544	5328.857806465065	urn:ogc:def:crs:EPSG::28992
+18	urn:ogc:def:crs:EPSG::28992	595401.920067406	903401.9243980894	-370406.0805926544	5328.857806465065	urn:ogc:def:crs:EPSG::28992
+19	urn:ogc:def:crs:EPSG::28992	595401.920067406	903401.9243980894	-370406.0805926544	5328.857806465065	urn:ogc:def:crs:EPSG::28992
+20	urn:ogc:def:crs:EPSG::28992	595401.920067406	903401.9243980894	-370406.0805926544	5328.857806465065	urn:ogc:def:crs:EPSG::28992
+21	urn:ogc:def:crs:EPSG::28992	595401.920067406	903401.9243980894	-370406.0805926544	5328.857806465065	urn:ogc:def:crs:EPSG::28992
+22	urn:ogc:def:crs:EPSG::28992	595401.920067406	903401.9243980894	-370406.0805926544	5328.857806465065	urn:ogc:def:crs:EPSG::28992
+23	urn:ogc:def:crs:EPSG::28992	595401.920067406	903401.9243980894	-370406.0805926544	5328.857806465065	urn:ogc:def:crs:EPSG::28992
+24	urn:ogc:def:crs:EPSG::28992	595401.920067406	903401.9243980894	-370406.0805926544	5328.857806465065	urn:ogc:def:crs:EPSG::28992
+25	urn:ogc:def:crs:EPSG::28992	595401.920067406	903401.9243980894	-370406.0805926544	5328.857806465065	urn:ogc:def:crs:EPSG::28992
+26	urn:ogc:def:crs:EPSG::28992	595401.920067406	903401.9243980894	-370406.0805926544	5328.857806465065	urn:ogc:def:crs:EPSG::28992
+27	urn:ogc:def:crs:EPSG::28992	595401.920067406	903401.9243980894	-370406.0805926544	5328.857806465065	urn:ogc:def:crs:EPSG::28992
+28	urn:ogc:def:crs:EPSG::28992	595401.920067406	903401.9243980894	-370406.0805926544	5328.857806465065	urn:ogc:def:crs:EPSG::28992
+29	urn:ogc:def:crs:EPSG::28992	595401.920067406	903401.9243980894	-370406.0805926544	5328.857806465065	urn:ogc:def:crs:EPSG::28992
+30	urn:ogc:def:crs:EPSG::28992	595401.920067406	903401.9243980894	-370406.0805926544	5328.857806465065	urn:ogc:def:crs:EPSG::28992
+31	urn:ogc:def:crs:EPSG::28992	595401.920067406	903401.9243980894	-370406.0805926544	5328.857806465065	urn:ogc:def:crs:EPSG::28992
+32	urn:ogc:def:crs:EPSG::28992	595401.920067406	903401.9243980894	-370406.0805926544	5328.857806465065	urn:ogc:def:crs:EPSG::28992
+33	urn:ogc:def:crs:EPSG::28992	595401.920067406	903401.9243980894	-370406.0805926544	5328.857806465065	urn:ogc:def:crs:EPSG::28992
+34	urn:ogc:def:crs:EPSG::28992	595401.920067406	903401.9243980894	-370406.0805926544	5328.857806465065	urn:ogc:def:crs:EPSG::28992
+35	urn:ogc:def:crs:EPSG::28992	595401.920067406	903401.9243980894	-370406.0805926544	5328.857806465065	urn:ogc:def:crs:EPSG::28992
+36	urn:ogc:def:crs:EPSG::28992	595401.920067406	903401.9243980894	-370406.0805926544	5328.857806465065	urn:ogc:def:crs:EPSG::28992
+37	urn:ogc:def:crs:EPSG::28992	595401.920067406	903401.9243980894	-370406.0805926544	5328.857806465065	urn:ogc:def:crs:EPSG::28992
+38	urn:ogc:def:crs:EPSG::28992	595401.920067406	903401.9243980894	-370406.0805926544	5328.857806465065	urn:ogc:def:crs:EPSG::28992
+39	urn:ogc:def:crs:EPSG::28992	595401.920067406	903401.9243980894	-370406.0805926544	5328.857806465065	urn:ogc:def:crs:EPSG::28992
+40	urn:ogc:def:crs:EPSG::28992	595401.920067406	903401.9243980894	-370406.0805926544	5328.857806465065	urn:ogc:def:crs:EPSG::28992
+41	urn:ogc:def:crs:EPSG::28992	595401.920067406	903401.9243980894	-370406.0805926544	5328.857806465065	urn:ogc:def:crs:EPSG::28992
+42	urn:ogc:def:crs:EPSG::28992	595401.920067406	903401.9243980894	-370406.0805926544	5328.857806465065	urn:ogc:def:crs:EPSG::28992
+\.
+
+
+ALTER TABLE public.layer_bounding_boxes ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: layer_children; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.layer_children DISABLE TRIGGER ALL;
+
+COPY public.layer_children (layer, child, list_index) FROM stdin;
+1	2	0
+1	3	1
+1	4	2
+5	6	0
+5	7	1
+5	8	2
+5	9	3
+5	10	4
+5	11	5
+5	12	6
+5	13	7
+5	14	8
+5	15	9
+5	16	10
+5	17	11
+5	18	12
+5	19	13
+5	20	14
+5	21	15
+5	22	16
+5	23	17
+5	24	18
+5	25	19
+5	26	20
+5	27	21
+5	28	22
+5	29	23
+5	30	24
+5	31	25
+5	32	26
+5	33	27
+5	34	28
+5	35	29
+5	36	30
+5	37	31
+5	38	32
+5	39	33
+5	40	34
+5	41	35
+5	42	36
+43	44	0
+43	45	1
+43	46	2
+43	47	3
+43	48	4
+43	49	5
+43	50	6
+43	51	7
+\.
+
+
+ALTER TABLE public.layer_children ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: layer_crs_list; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.layer_crs_list DISABLE TRIGGER ALL;
+
+COPY public.layer_crs_list (layer, crs) FROM stdin;
+1	EPSG:28992
+2	EPSG:28992
+3	EPSG:28992
+4	EPSG:28992
+\.
+
+
+ALTER TABLE public.layer_crs_list ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: layer_details; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.layer_details DISABLE TRIGGER ALL;
+
+COPY public.layer_details (layer, value, details_key) FROM stdin;
+2	https://www.nationaalgeoregister.nl/geonetwork/srv/dut/csw?service=CSW&version=2.0.2&request=GetRecordById&outputschema=http://www.isotc211.org/2005/gmd&elementsetname=full&id=208bc283-7c66-4ce7-8ad3-1cf3e8933fb5	metadata.url
+2	[{"name":"Gemeentegebied","legendURLs":["https://service.pdok.nl/kadaster/bestuurlijkegebieden/wms/v1_0?language=dut&version=1.1.1&service=WMS&request=GetLegendGraphic&layer=Gemeentegebied&format=image/png&STYLE=Gemeentegebied"],"title":"Gemeentegebied"}]	wms.styles
+3	https://www.nationaalgeoregister.nl/geonetwork/srv/dut/csw?service=CSW&version=2.0.2&request=GetRecordById&outputschema=http://www.isotc211.org/2005/gmd&elementsetname=full&id=208bc283-7c66-4ce7-8ad3-1cf3e8933fb5	metadata.url
+3	[{"name":"Provinciegebied","legendURLs":["https://service.pdok.nl/kadaster/bestuurlijkegebieden/wms/v1_0?language=dut&version=1.1.1&service=WMS&request=GetLegendGraphic&layer=Provinciegebied&format=image/png&STYLE=Provinciegebied"],"title":"Provinciegebied"}]	wms.styles
+4	https://www.nationaalgeoregister.nl/geonetwork/srv/dut/csw?service=CSW&version=2.0.2&request=GetRecordById&outputschema=http://www.isotc211.org/2005/gmd&elementsetname=full&id=208bc283-7c66-4ce7-8ad3-1cf3e8933fb5	metadata.url
+4	[{"name":"Landgebied","legendURLs":["https://service.pdok.nl/kadaster/bestuurlijkegebieden/wms/v1_0?language=dut&version=1.1.1&service=WMS&request=GetLegendGraphic&layer=Landgebied&format=image/png&STYLE=Landgebied"],"title":"Landgebied"}]	wms.styles
+6	[{"identifier":"","isDefault":"true"}]	wms.styles
+6	image/png	image_extension
+7	[{"identifier":"","isDefault":"true"}]	wms.styles
+7	image/png	image_extension
+8	[{"identifier":"","isDefault":"true"}]	wms.styles
+8	image/png	image_extension
+9	[{"identifier":"","isDefault":"true"}]	wms.styles
+9	image/png	image_extension
+10	[{"identifier":"","isDefault":"true"}]	wms.styles
+10	image/png	image_extension
+11	[{"identifier":"","isDefault":"true"}]	wms.styles
+11	image/png	image_extension
+12	[{"identifier":"","isDefault":"true"}]	wms.styles
+12	image/png	image_extension
+13	[{"identifier":"","isDefault":"true"}]	wms.styles
+13	image/png	image_extension
+14	[{"identifier":"","isDefault":"true"}]	wms.styles
+14	image/png	image_extension
+15	[{"identifier":"","isDefault":"true"}]	wms.styles
+15	image/png	image_extension
+16	[{"identifier":"","isDefault":"true"}]	wms.styles
+16	image/png	image_extension
+17	[{"identifier":"","isDefault":"true"}]	wms.styles
+17	image/png	image_extension
+18	[{"identifier":"","isDefault":"true"}]	wms.styles
+18	image/png8	image_extension
+19	[{"identifier":"","isDefault":"true"}]	wms.styles
+19	image/png8	image_extension
+20	[{"identifier":"","isDefault":"true"}]	wms.styles
+20	image/png8	image_extension
+21	[{"identifier":"","isDefault":"true"}]	wms.styles
+21	image/png8	image_extension
+22	[{"identifier":"","isDefault":"true"}]	wms.styles
+22	image/png8	image_extension
+23	[{"identifier":"","isDefault":"true"}]	wms.styles
+23	image/png8	image_extension
+24	[{"identifier":"","isDefault":"true"}]	wms.styles
+24	image/png8	image_extension
+25	[{"identifier":"","isDefault":"true"}]	wms.styles
+25	image/png	image_extension
+26	[{"identifier":"","isDefault":"true"}]	wms.styles
+26	image/png	image_extension
+27	[{"identifier":"","isDefault":"true"}]	wms.styles
+27	image/png	image_extension
+28	[{"identifier":"","isDefault":"true"}]	wms.styles
+28	image/png	image_extension
+29	[{"identifier":"","isDefault":"true"}]	wms.styles
+29	image/png	image_extension
+30	[{"identifier":"","isDefault":"true"}]	wms.styles
+30	image/png	image_extension
+31	[{"identifier":"","isDefault":"true"}]	wms.styles
+31	image/png	image_extension
+32	[{"identifier":"","isDefault":"true"}]	wms.styles
+32	image/png	image_extension
+33	[{"identifier":"","isDefault":"true"}]	wms.styles
+33	image/png	image_extension
+34	[{"identifier":"","isDefault":"true"}]	wms.styles
+34	image/png	image_extension
+35	[{"identifier":"","isDefault":"true"}]	wms.styles
+35	image/png	image_extension
+36	[{"identifier":"","isDefault":"true"}]	wms.styles
+36	image/jpeg	image_extension
+37	[{"identifier":"","isDefault":"true"}]	wms.styles
+37	image/jpeg	image_extension
+38	[{"identifier":"","isDefault":"true"}]	wms.styles
+38	image/jpeg	image_extension
+39	[{"identifier":"","isDefault":"true"}]	wms.styles
+39	image/jpeg	image_extension
+40	[{"identifier":"","isDefault":"true"}]	wms.styles
+40	image/jpeg	image_extension
+41	[{"identifier":"","isDefault":"true"}]	wms.styles
+41	image/jpeg	image_extension
+42	[{"identifier":"","isDefault":"true"}]	wms.styles
+42	image/png	image_extension
+44	[{"identifier":"default","isDefault":"true"}]	wms.styles
+44	image/png	image_extension
+45	[{"identifier":"default","isDefault":"true"}]	wms.styles
+45	image/png	image_extension
+46	[{"identifier":"default","isDefault":"true"}]	wms.styles
+46	image/png	image_extension
+47	[{"identifier":"default","isDefault":"true"}]	wms.styles
+47	image/png	image_extension
+48	[{"identifier":"default","isDefault":"true"}]	wms.styles
+48	image/png	image_extension
+49	[{"identifier":"default","isDefault":"true"}]	wms.styles
+49	image/png	image_extension
+50	[{"identifier":"default","isDefault":"true"}]	wms.styles
+50	image/png	image_extension
+51	[{"identifier":"default","isDefault":"true"}]	wms.styles
+51	image/png	image_extension
+\.
+
+
+ALTER TABLE public.layer_details ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: layer_keywords; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.layer_keywords DISABLE TRIGGER ALL;
+
+COPY public.layer_keywords (layer, keyword) FROM stdin;
+1	Globaal
+1	landgebied
+1	administratieve eenheden
+1	administratieve gebieden
+1	Lokaal
+1	provinciegebied
+1	gebieden
+1	Nationaal
+1	infoMapAccessService
+1	gemeentegebied
+1	rijksgrens
+2	Gemeentegebied
+2	gemeentegrens
+3	provinciegrens
+3	Provinciegebied
+4	Landgebied
+4	landsgrens
+\.
+
+
+ALTER TABLE public.layer_keywords ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: tile_matrix_set; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.tile_matrix_set DISABLE TRIGGER ALL;
+
+COPY public.tile_matrix_set (id, max_crs, max_maxx, max_maxy, max_minx, max_miny, crs, identifier, tile_service) FROM stdin;
+3	urn:ogc:def:crs:EPSG::25831	4046516.59261	8298457.58466	-2404683.40739	3997657.58466	urn:ogc:def:crs:EPSG::25831	EPSG:25831:RWS	2
+4	urn:ogc:def:crs:EPSG::3857	20037508.342594646	20037508.3428	-20037508.3428	-20037508.342594646	urn:ogc:def:crs:EPSG::3857	EPSG:3857	2
+1	urn:ogc:def:crs:EPSG::28992	595401.9199999999	903402	-285401.92	22598.160000000033	urn:ogc:def:crs:EPSG::28992	EPSG:28992	2
+2	urn:ogc:def:crs:EPSG::28992	595401.9199999999	903402	-285401.92	22598.160000000033	urn:ogc:def:crs:EPSG::28992	EPSG:28992:16	2
+5	urn:ogc:def:crs:EPSG:6.3:28992	595401.9199999999	903401.92	-285401.92	22598.080000000075	urn:ogc:def:crs:EPSG:6.3:28992	rd-hq	3
+6	urn:ogc:def:crs:EPSG:6.3:3857	20037508.342782557	20037508.342783	-20037508.3428	-20037508.342799556	urn:ogc:def:crs:EPSG:6.3:3857	epsg3857	3
+7	urn:ogc:def:crs:EPSG:6.3:900913	20037508.342789486	20037508.342789	-20037508.342789	-20037508.342789486	urn:ogc:def:crs:EPSG:6.3:900913	g	3
+8	urn:ogc:def:crs:EPSG:6.3:28992	595401.9199999999	903401.92	-285401.92	22598.080000000075	urn:ogc:def:crs:EPSG:6.3:28992	rd	3
+\.
+
+
+ALTER TABLE public.tile_matrix_set ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: layer_matrix_sets; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.layer_matrix_sets DISABLE TRIGGER ALL;
+
+COPY public.layer_matrix_sets (layer, matrix_set, list_index) FROM stdin;
+6	1	0
+7	1	0
+8	1	0
+9	1	0
+10	1	0
+11	1	0
+12	1	0
+13	1	0
+14	1	0
+15	1	0
+16	1	0
+17	1	0
+18	2	0
+19	2	0
+20	2	0
+21	2	0
+22	2	0
+23	2	0
+24	2	0
+25	1	0
+26	1	0
+27	1	0
+28	1	0
+29	1	0
+30	1	0
+31	1	0
+32	1	0
+33	1	0
+34	1	0
+35	1	0
+36	1	0
+37	1	0
+38	1	0
+39	1	0
+40	1	0
+41	1	0
+42	1	0
+44	5	0
+45	6	0
+46	7	0
+47	5	0
+48	5	0
+49	8	0
+50	8	0
+51	8	0
+\.
+
+
+ALTER TABLE public.layer_matrix_sets ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: layer_prevent_geom_editors; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.layer_prevent_geom_editors DISABLE TRIGGER ALL;
+
+COPY public.layer_prevent_geom_editors (layer, role_name) FROM stdin;
+\.
+
+
+ALTER TABLE public.layer_prevent_geom_editors ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: layer_readers; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.layer_readers DISABLE TRIGGER ALL;
+
+COPY public.layer_readers (layer, role_name) FROM stdin;
+\.
+
+
+ALTER TABLE public.layer_readers ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: layer_writers; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.layer_writers DISABLE TRIGGER ALL;
+
+COPY public.layer_writers (layer, role_name) FROM stdin;
+\.
+
+
+ALTER TABLE public.layer_writers ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: level_children; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.level_children DISABLE TRIGGER ALL;
+
+COPY public.level_children (level_, child, list_index) FROM stdin;
+1	2	0
+2	3	0
+1	4	1
+\.
+
+
+ALTER TABLE public.level_children ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: level_documents; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.level_documents DISABLE TRIGGER ALL;
+
+COPY public.level_documents (level_, document, list_index) FROM stdin;
+\.
+
+
+ALTER TABLE public.level_documents ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: level_layers; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.level_layers DISABLE TRIGGER ALL;
+
+COPY public.level_layers (level_, layer, list_index) FROM stdin;
+3	1	0
+\.
+
+
+ALTER TABLE public.level_layers ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: level_readers; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.level_readers DISABLE TRIGGER ALL;
+
+COPY public.level_readers (level_, role_name) FROM stdin;
+\.
+
+
+ALTER TABLE public.level_readers ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: metadata; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.metadata DISABLE TRIGGER ALL;
+
+COPY public.metadata (id, config_key, config_value) FROM stdin;
+1	database_version	46
+2	default_application	1
+\.
+
+
+ALTER TABLE public.metadata ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: resource_; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.resource_ DISABLE TRIGGER ALL;
+
+COPY public.resource_ (name, content_type, data_, modified, size_) FROM stdin;
+\.
+
+
+ALTER TABLE public.resource_ ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: solr_conf; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.solr_conf DISABLE TRIGGER ALL;
+
+COPY public.solr_conf (id, last_updated, name, simple_feature_type) FROM stdin;
+\.
+
+
+ALTER TABLE public.solr_conf ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: solr_conf_index_attributes; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.solr_conf_index_attributes DISABLE TRIGGER ALL;
+
+COPY public.solr_conf_index_attributes (solr_conf, attribute_) FROM stdin;
+\.
+
+
+ALTER TABLE public.solr_conf_index_attributes ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: solr_conf_result_attributes; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.solr_conf_result_attributes DISABLE TRIGGER ALL;
+
+COPY public.solr_conf_result_attributes (solr_conf, attribute_) FROM stdin;
+\.
+
+
+ALTER TABLE public.solr_conf_result_attributes ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: start_layer; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.start_layer DISABLE TRIGGER ALL;
+
+COPY public.start_layer (id, checked, removed, selected_index, application, application_layer) FROM stdin;
+1	f	f	\N	1	1
+\.
+
+
+ALTER TABLE public.start_layer ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: start_level; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.start_level DISABLE TRIGGER ALL;
+
+COPY public.start_level (id, removed, selected_index, application, level_) FROM stdin;
+1	f	\N	1	3
+\.
+
+
+ALTER TABLE public.start_level ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: tile_matrix; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.tile_matrix DISABLE TRIGGER ALL;
+
+COPY public.tile_matrix (id, description, identifier, matrix_height, matrix_width, scale_denominator, tile_height, tile_width, title, top_left_corner, matrix_set) FROM stdin;
+1		00	1	1	1.2288E7	256	256		-285401.92 903402.0	1
+2		01	2	2	6144000.0	256	256		-285401.92 903402.0	1
+3		02	4	4	3072000.0	256	256		-285401.92 903402.0	1
+4		03	8	8	1536000.0	256	256		-285401.92 903402.0	1
+5		04	16	16	768000.0	256	256		-285401.92 903402.0	1
+6		05	32	32	384000.0	256	256		-285401.92 903402.0	1
+7		06	64	64	192000.0	256	256		-285401.92 903402.0	1
+8		07	128	128	96000.0	256	256		-285401.92 903402.0	1
+9		08	256	256	48000.0	256	256		-285401.92 903402.0	1
+10		09	512	512	24000.0	256	256		-285401.92 903402.0	1
+11		10	1024	1024	12000.0	256	256		-285401.92 903402.0	1
+12		11	2048	2048	6000.0	256	256		-285401.92 903402.0	1
+13		12	4096	4096	3000.0	256	256		-285401.92 903402.0	1
+14		13	8192	8192	1500.0	256	256		-285401.92 903402.0	1
+15		14	16384	16384	750.0	256	256		-285401.92 903402.0	1
+16		00	1	1	1.2288E7	256	256		-285401.92 903402.0	2
+17		01	2	2	6144000.0	256	256		-285401.92 903402.0	2
+18		02	4	4	3072000.0	256	256		-285401.92 903402.0	2
+19		03	8	8	1536000.0	256	256		-285401.92 903402.0	2
+20		04	16	16	768000.0	256	256		-285401.92 903402.0	2
+21		05	32	32	384000.0	256	256		-285401.92 903402.0	2
+22		06	64	64	192000.0	256	256		-285401.92 903402.0	2
+23		07	128	128	96000.0	256	256		-285401.92 903402.0	2
+24		08	256	256	48000.0	256	256		-285401.92 903402.0	2
+25		09	512	512	24000.0	256	256		-285401.92 903402.0	2
+26		10	1024	1024	12000.0	256	256		-285401.92 903402.0	2
+27		11	2048	2048	6000.0	256	256		-285401.92 903402.0	2
+28		12	4096	4096	3000.0	256	256		-285401.92 903402.0	2
+29		13	8192	8192	1500.0	256	256		-285401.92 903402.0	2
+30		14	16384	16384	750.0	256	256		-285401.92 903402.0	2
+31		15	32768	32768	375.0	256	256		-285401.92 903402.0	2
+32		16	65536	65536	187.5	256	256		-285401.92 903402.0	2
+33		00	6	9	1.0E7	256	256		-2404683.40739 8298457.58466	3
+34		01	12	18	5000000.0	256	256		-2404683.40739 8298457.58466	3
+35		02	24	36	2500000.0	256	256		-2404683.40739 8298457.58466	3
+36		03	60	90	1000000.0	256	256		-2404683.40739 8298457.58466	3
+37		04	120	180	500000.0	256	256		-2404683.40739 8298457.58466	3
+38		05	240	360	250000.0	256	256		-2404683.40739 8298457.58466	3
+39		06	600	900	100000.0	256	256		-2404683.40739 8298457.58466	3
+40		07	800	1200	75000.0	256	256		-2404683.40739 8298457.58466	3
+41		08	1200	1800	50000.0	256	256		-2404683.40739 8298457.58466	3
+42		09	2400	3600	25000.0	256	256		-2404683.40739 8298457.58466	3
+43		10	6000	9000	10000.0	256	256		-2404683.40739 8298457.58466	3
+44		11	12000	18000	5000.0	256	256		-2404683.40739 8298457.58466	3
+45		00	1	1	559082264.029	256	256		-20037508.3428 20037508.3428	4
+46		01	2	2	279541132.014	256	256		-20037508.3428 20037508.3428	4
+47		02	4	4	139770566.007	256	256		-20037508.3428 20037508.3428	4
+48		03	8	8	69885283.0036	256	256		-20037508.3428 20037508.3428	4
+49		04	16	16	34942641.5018	256	256		-20037508.3428 20037508.3428	4
+50		05	32	32	17471320.7509	256	256		-20037508.3428 20037508.3428	4
+51		06	64	64	8735660.37545	256	256		-20037508.3428 20037508.3428	4
+52		07	128	128	4367830.18772	256	256		-20037508.3428 20037508.3428	4
+53		08	256	256	2183915.09386	256	256		-20037508.3428 20037508.3428	4
+54		09	512	512	1091957.54693	256	256		-20037508.3428 20037508.3428	4
+55		10	1024	1024	545978.773466	256	256		-20037508.3428 20037508.3428	4
+56		11	2048	2048	272989.386733	256	256		-20037508.3428 20037508.3428	4
+57		12	4096	4096	136494.693366	256	256		-20037508.3428 20037508.3428	4
+58		13	8192	8192	68247.3466832	256	256		-20037508.3428 20037508.3428	4
+59		14	16384	16384	34123.6733416	256	256		-20037508.3428 20037508.3428	4
+60		15	32768	32768	17061.8366708	256	256		-20037508.3428 20037508.3428	4
+61		16	65536	65536	8530.9183354	256	256		-20037508.3428 20037508.3428	4
+62		17	131072	131072	4265.4591677	256	256		-20037508.3428 20037508.3428	4
+63		18	262144	262144	2132.72958385	256	256		-20037508.3428 20037508.3428	4
+64		19	524288	524288	1066.36479192	256	256		-20037508.3428 20037508.3428	4
+65		0	1	1	6144000.00000000000000000000	512	512		-285401.920000 903401.920000	5
+66		1	2	2	3072000.00000000000000000000	512	512		-285401.920000 903401.920000	5
+67		2	4	4	1536000.00000000000000000000	512	512		-285401.920000 903401.920000	5
+68		3	8	8	768000.00000000000000000000	512	512		-285401.920000 903401.920000	5
+69		4	16	16	384000.00000000000000000000	512	512		-285401.920000 903401.920000	5
+70		5	32	32	192000.00000000000000000000	512	512		-285401.920000 903401.920000	5
+71		6	64	64	96000.00000000000000000000	512	512		-285401.920000 903401.920000	5
+72		7	128	128	48000.00000000000000000000	512	512		-285401.920000 903401.920000	5
+73		8	256	256	24000.00000000000000000000	512	512		-285401.920000 903401.920000	5
+74		9	512	512	12000.00000000000000000000	512	512		-285401.920000 903401.920000	5
+75		10	1024	1024	6000.00000000000000000000	512	512		-285401.920000 903401.920000	5
+76		11	2048	2048	3000.00000000000000000000	512	512		-285401.920000 903401.920000	5
+77		12	4096	4096	1500.00000000000000000000	512	512		-285401.920000 903401.920000	5
+78		13	8192	8192	750.00000000000000000000	512	512		-285401.920000 903401.920000	5
+79		14	16384	16384	375.00000000000000000000	512	512		-285401.920000 903401.920000	5
+80		15	32768	32768	187.50000000000000000000	512	512		-285401.920000 903401.920000	5
+81		0	2	2	279541132.01428574323654174805	256	256		-20037508.342800 20037508.342768	6
+82		1	4	4	139770566.00714287161827087402	256	256		-20037508.342800 20037508.342768	6
+83		2	8	8	69885283.00357143580913543701	256	256		-20037508.342800 20037508.342768	6
+84		3	16	16	34942641.50178571790456771851	256	256		-20037508.342800 20037508.342768	6
+85		4	32	32	17471320.75089285895228385925	256	256		-20037508.342800 20037508.342768	6
+86		5	64	64	8735660.37546428479254245758	256	256		-20037508.342800 20037508.342850	6
+87		6	128	128	4367830.18771428614854812622	256	256		-20037508.342800 20037508.342686	6
+88		7	256	256	2183915.09386071423068642616	256	256		-20037508.342800 20037508.342752	6
+89		8	512	512	1091957.54693214292638003826	256	256		-20037508.342800 20037508.342817	6
+90		9	1024	1024	545978.77346428576856851578	256	256		-20037508.342800 20037508.342686	6
+91		10	2048	2048	272989.38673285715049132705	256	256		-20037508.342800 20037508.342791	6
+92		11	4096	4096	136494.69336642857524566352	256	256		-20037508.342800 20037508.342791	6
+93		12	8192	8192	68247.34668321428762283176	256	256		-20037508.342800 20037508.342791	6
+94		13	16384	16384	34123.67334160714381141588	256	256		-20037508.342800 20037508.342791	6
+95		14	32768	32768	17061.83667078571306774393	256	256		-20037508.342800 20037508.342749	6
+96		15	65536	65536	8530.91833539285653387196	256	256		-20037508.342800 20037508.342749	6
+97		16	131072	131072	4265.45916771428528591059	256	256		-20037508.342800 20037508.342917	6
+98		17	262144	262144	2132.72958385000038106227	256	256		-20037508.342800 20037508.342783	6
+99		18	524288	524288	1066.36479192500019053114	256	256		-20037508.342800 20037508.342783	6
+100		0	1	1	559082264.02871787548065185547	256	256		-20037508.342789 20037508.342789	7
+101		1	2	2	279541132.01435887813568115234	256	256		-20037508.342789 20037508.342789	7
+102		2	4	4	139770566.00717940926551818848	256	256		-20037508.342789 20037508.342789	7
+103		3	8	8	69885283.00358971953392028809	256	256		-20037508.342789 20037508.342789	7
+104		4	16	16	34942641.50179485976696014404	256	256		-20037508.342789 20037508.342789	7
+105		5	32	32	17471320.75089742988348007202	256	256		-20037508.342789 20037508.342789	7
+106		6	64	64	8735660.37544871494174003601	256	256		-20037508.342789 20037508.342789	7
+107		7	128	128	4367830.18772435747087001801	256	256		-20037508.342789 20037508.342789	7
+108		8	256	256	2183915.09386217873543500900	256	256		-20037508.342789 20037508.342789	7
+109		9	512	512	1091957.54693108866922557354	256	256		-20037508.342789 20037508.342789	7
+110		10	1024	1024	545978.77346554468385875225	256	256		-20037508.342789 20037508.342789	7
+111		11	2048	2048	272989.38673277228372171521	256	256		-20037508.342789 20037508.342789	7
+112		12	4096	4096	136494.69336638617096468806	256	256		-20037508.342789 20037508.342789	7
+113		13	8192	8192	68247.34668319307093042880	256	256		-20037508.342789 20037508.342789	7
+114		14	16384	16384	34123.67334159654274117202	256	256		-20037508.342789 20037508.342789	7
+115		15	32768	32768	17061.83667079827137058601	256	256		-20037508.342789 20037508.342789	7
+116		16	65536	65536	8530.91833539913568529300	256	256		-20037508.342789 20037508.342789	7
+117		17	131072	131072	4265.45916769956784264650	256	256		-20037508.342789 20037508.342789	7
+118		18	262144	262144	2132.72958384978392132325	256	256		-20037508.342789 20037508.342789	7
+119		0	1	1	12288000.00000000000000000000	256	256		-285401.920000 903401.920000	8
+120		1	2	2	6144000.00000000000000000000	256	256		-285401.920000 903401.920000	8
+121		2	4	4	3072000.00000000000000000000	256	256		-285401.920000 903401.920000	8
+122		3	8	8	1536000.00000000000000000000	256	256		-285401.920000 903401.920000	8
+123		4	16	16	768000.00000000000000000000	256	256		-285401.920000 903401.920000	8
+124		5	32	32	384000.00000000000000000000	256	256		-285401.920000 903401.920000	8
+125		6	64	64	192000.00000000000000000000	256	256		-285401.920000 903401.920000	8
+126		7	128	128	96000.00000000000000000000	256	256		-285401.920000 903401.920000	8
+127		8	256	256	48000.00000000000000000000	256	256		-285401.920000 903401.920000	8
+128		9	512	512	24000.00000000000000000000	256	256		-285401.920000 903401.920000	8
+129		10	1024	1024	12000.00000000000000000000	256	256		-285401.920000 903401.920000	8
+130		11	2048	2048	6000.00000000000000000000	256	256		-285401.920000 903401.920000	8
+131		12	4096	4096	3000.00000000000000000000	256	256		-285401.920000 903401.920000	8
+132		13	8192	8192	1500.00000000000000000000	256	256		-285401.920000 903401.920000	8
+133		14	16384	16384	750.00000000000000000000	256	256		-285401.920000 903401.920000	8
+134		15	32768	32768	375.00000000000000000000	256	256		-285401.920000 903401.920000	8
+135		16	65536	65536	187.50000000000000000000	256	256		-285401.920000 903401.920000	8
+136		17	131072	131072	93.75000000000000000000	256	256		-285401.920000 903401.920000	8
+137		18	262144	262144	46.87500000000000000000	256	256		-285401.920000 903401.920000	8
+138		19	524288	524288	23.43750000000000000000	256	256		-285401.920000 903401.920000	8
+139		20	1048576	1048576	11.71875000000000000000	256	256		-285401.920000 903401.920000	8
+140		21	2097152	2097152	5.85937500000000000000	256	256		-285401.920000 903401.920000	8
+\.
+
+
+ALTER TABLE public.tile_matrix ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: tile_set_resolutions; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.tile_set_resolutions DISABLE TRIGGER ALL;
+
+COPY public.tile_set_resolutions (tile_set, resolution, list_index) FROM stdin;
+\.
+
+
+ALTER TABLE public.tile_set_resolutions ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: user_details; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.user_details DISABLE TRIGGER ALL;
+
+COPY public.user_details (username, details, details_key) FROM stdin;
+\.
+
+
+ALTER TABLE public.user_details ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: user_groups; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.user_groups DISABLE TRIGGER ALL;
+
+COPY public.user_groups (username, group_) FROM stdin;
+admin	Admin
+\.
+
+
+ALTER TABLE public.user_groups ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: user_ips; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.user_ips DISABLE TRIGGER ALL;
+
+COPY public.user_ips (user_, ipaddress) FROM stdin;
+\.
+
+
+ALTER TABLE public.user_ips ENABLE TRIGGER ALL;
+
+--
+-- Name: application_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.application_id_seq', 1, true);
+
+
+--
+-- Name: application_layer_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.application_layer_id_seq', 1, true);
+
+
+--
+-- Name: attribute_descriptor_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.attribute_descriptor_id_seq', 16, true);
+
+
+--
+-- Name: bookmark_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.bookmark_id_seq', 1, false);
+
+
+--
+-- Name: category_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.category_id_seq', 2, true);
+
+
+--
+-- Name: configured_attribute_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.configured_attribute_id_seq', 1, false);
+
+
+--
+-- Name: configured_component_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.configured_component_id_seq', 1, true);
+
+
+--
+-- Name: document_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.document_id_seq', 1, false);
+
+
+--
+-- Name: feature_source_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.feature_source_id_seq', 1, true);
+
+
+--
+-- Name: feature_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.feature_type_id_seq', 3, true);
+
+
+--
+-- Name: feature_type_relation_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.feature_type_relation_id_seq', 1, false);
+
+
+--
+-- Name: feature_type_relation_key_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.feature_type_relation_key_id_seq', 1, false);
+
+
+--
+-- Name: file_upload_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.file_upload_id_seq', 1, false);
+
+
+--
+-- Name: form_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.form_id_seq', 1, false);
+
+
+--
+-- Name: geo_service_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.geo_service_id_seq', 3, true);
+
+
+--
+-- Name: layer_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.layer_id_seq', 51, true);
+
+
+--
+-- Name: level__id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.level__id_seq', 4, true);
+
+
+--
+-- Name: metadata_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.metadata_id_seq', 2, true);
+
+
+--
+-- Name: solr_conf_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.solr_conf_id_seq', 1, false);
+
+
+--
+-- Name: start_layer_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.start_layer_id_seq', 1, true);
+
+
+--
+-- Name: start_level_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.start_level_id_seq', 1, true);
+
+
+--
+-- Name: style_library_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.style_library_id_seq', 1, false);
+
+
+--
+-- Name: tile_matrix_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.tile_matrix_id_seq', 140, true);
+
+
+--
+-- Name: tile_matrix_set_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.tile_matrix_set_id_seq', 8, true);
+
+
+--
+-- PostgreSQL database dump complete
+--
+

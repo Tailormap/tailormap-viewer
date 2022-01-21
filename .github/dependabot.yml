@@ -24,3 +24,14 @@ updates:
       - dependency-name: node
         versions:
           - ">= 17"
+
+  - package-ecosystem: docker
+    directory: "/config/db/"
+    schedule:
+      interval: weekly
+      day: saturday
+      time: "21:00"
+      timezone: Europe/Amsterdam
+    target-branch: main
+    labels:
+      - infrastucture

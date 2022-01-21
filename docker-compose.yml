@@ -44,6 +44,11 @@ services:
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
       TAILORMAP_PASSWORD: ${TAILORMAP_DB_PASSWORD:-tailormap}
+      TM_VERSION: ${TM_VERSION:-5.9.12}
+      # use
+      #   docker run --rm tomcat:9.0-jre11-temurin /usr/local/tomcat/bin/digest.sh -a PBKDF2WithHmacSHA512 -i 100000 -k 256 -s 16 -h org.apache.catalina.realm.SecretKeyCredentialHandler <PASSWORD>
+      # to create this password hash for the admin user
+      TAILORMAP_ADMIN_HASHED_PASSWORD: '${TAILORMAP_ADMIN_HASHED_PASSWORD:-720230f982b72beaeaa9aed0cb9bef22$100000$51a21a475cbf417e858ce64645f6b6bebcdfadc303c6ee477bdeb2eb352e29bb}'
     volumes:
       - config-db:/var/lib/postgresql/data
     healthcheck:

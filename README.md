@@ -30,13 +30,13 @@ Run `npm run test` to execute the unit tests via [Jest](https://jestjs.io).
 
 This command runs the unit tests and build the application
 
-`docker build -f Dockerfile -t tailormap:prod .`
+`docker build -f Dockerfile -t ghcr.io/b3partners/tailormap-viewer .`
 
 **Run**
 
 This command runs the application on port 8080 locally
 
-`docker run -it -p 8080:80 --rm tailormap:prod`
+`docker run -it -p 8080:80 --rm ghcr.io/b3partners/tailormap-viewer`
 
 ## Running a full Tailormap stack using Docker Compose
 
