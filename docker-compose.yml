@@ -51,6 +51,8 @@ services:
       TAILORMAP_ADMIN_HASHED_PASSWORD: '${TAILORMAP_ADMIN_HASHED_PASSWORD:-720230f982b72beaeaa9aed0cb9bef22$100000$51a21a475cbf417e858ce64645f6b6bebcdfadc303c6ee477bdeb2eb352e29bb}'
     volumes:
       - config-db:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
     healthcheck:
       interval: 1m
       timeout: 5s
