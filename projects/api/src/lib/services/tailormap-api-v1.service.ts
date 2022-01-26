@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { AppLayerModel, AppResponseModel, ComponentModel, LayerDetailsModel, MapResponseModel } from '../models';
 import { Observable } from 'rxjs';
 import { TailormapApiV1ServiceModel } from './tailormap-api-v1.service.model';
+import { FeaturesResponseModel } from '../models/features-response.model';
 
 @Injectable()
 export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
@@ -19,19 +20,9 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
     version?: string;
     id?: number;
   }): Observable<AppResponseModel> {
-    let queryParams = new HttpParams();
-    if (params.id) {
-      queryParams = queryParams.set('id', params.id);
-    }
-    if (params.name) {
-      queryParams = queryParams.set('name', params.name);
-    }
-    if (params.version) {
-      queryParams = queryParams.set('version', params.version);
-    }
     return this.httpClient.get<AppResponseModel>(
       `${TailormapApiV1Service.BASE_URL}/app`,
-      { params: queryParams },
+      { params: this.getQueryParams({ id: params.id, name: params.name, version: params.version }) },
     );
   }
 
@@ -60,6 +51,41 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
     return this.httpClient.get<LayerDetailsModel>(
       `${TailormapApiV1Service.BASE_URL}/describelayer/${params.applicationId}/${params.layerId}`,
     );
+  }
+
+  public getFeatures$(params: {
+    applicationId: number;
+    layerId: number;
+    x?: number;
+    y?: number;
+    distance?: number;
+    __fid?: string;
+    simplify?: boolean;
+    filter?: string;
+  }): Observable<FeaturesResponseModel> {
+    const queryParams = this.getQueryParams({
+      x: params.x,
+      y: params.y,
+      distance: params.distance,
+      __fid: params.__fid,
+      simplify: params.simplify,
+      filter: params.filter,
+    });
+    return this.httpClient.get<FeaturesResponseModel>(
+      `${TailormapApiV1Service.BASE_URL}/features/${params.applicationId}/${params.layerId}`,
+      { params: queryParams },
+    );
+  }
+
+  private getQueryParams(params: Record<string, string | number | boolean | undefined>): HttpParams {
+    let queryParams = new HttpParams();
+    Object.keys(params).forEach(key => {
+      const value = params[key];
+      if (typeof value !== 'undefined') {
+        queryParams = queryParams = queryParams.set(key, value);
+      }
+    });
+    return queryParams;
   }
 
 }
