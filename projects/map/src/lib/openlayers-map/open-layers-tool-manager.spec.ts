@@ -6,7 +6,7 @@ describe('OpenLayersToolManager', () => {
   test('creates a tool', () => {
     const onClick = jest.fn();
     const tool = { type: ToolTypeEnum.MapClick, onClick };
-    const manager = new OpenLayersToolManager({} as any);
+    const manager = new OpenLayersToolManager({} as any, this.ngZone);
     const toolId = manager.addTool(tool);
     expect(toolId).toMatch(/mapclick-\d+/);
   });
@@ -18,7 +18,7 @@ describe('OpenLayersToolManager', () => {
     const map = { on: onFn, un: unFn } as any;
     const onClick = jest.fn();
     const tool = { type: ToolTypeEnum.MapClick, onClick };
-    const manager = new OpenLayersToolManager(map);
+    const manager = new OpenLayersToolManager(map, this.ngZone);
     const toolId = manager.addTool(tool);
     expect(onFn).not.toHaveBeenCalled();
     expect(onClick).not.toHaveBeenCalled();
@@ -43,7 +43,7 @@ describe('OpenLayersToolManager', () => {
     const map = { on: onFn, un: unFn } as any;
     const onClick = jest.fn();
     const tool = { type: ToolTypeEnum.MapClick, onClick };
-    const manager = new OpenLayersToolManager(map);
+    const manager = new OpenLayersToolManager(map, this.ngZone);
     const toolId = manager.addTool(tool);
 
     manager.enableTool(toolId);

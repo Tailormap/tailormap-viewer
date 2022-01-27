@@ -1,7 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
 import { OpenLayersMap } from '../openlayers-map/openlayers-map';
-import { Observable } from 'rxjs';
-import { LayerManagerModel, MapViewerOptionsModel } from '../models';
+import { finalize, map, Observable, Subject, takeUntil, tap } from 'rxjs';
+import { LayerManagerModel, MapViewerOptionsModel, ToolModel } from '../models';
 import { ToolManagerModel } from '../models/tool-manager.model';
 
 @Injectable({
@@ -31,6 +31,27 @@ export class MapService {
 
   public getToolManager$(): Observable<ToolManagerModel> {
     return this.map.getToolManager$();
+  }
+
+  public createTool$(tool: ToolModel, enable?: boolean): Observable<[ ToolManagerModel, string ]> {
+    let toolManager: ToolManagerModel;
+    let toolId: string;
+    return this.getToolManager$()
+      .pipe(
+        tap(manager => toolManager = manager),
+        finalize(() => {
+          if (!!toolId && !!toolManager) {
+            toolManager.removeTool(toolId);
+          }
+        }),
+        map(manager => {
+          const id = manager.addTool(tool);
+          if (enable) {
+            manager.enableTool(id);
+          }
+          return [ manager, id ];
+        }),
+      );
   }
 
 }

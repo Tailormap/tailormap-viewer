@@ -4,6 +4,7 @@ import { ToolModel } from '../models/tools/tool.model';
 import { ToolTypeHelper } from '../helpers/tool-type.helper';
 import { OpenLayersTool } from './tools/open-layers-tool';
 import { OpenLayersMapClickTool } from './tools/open-layers-map-click-tool';
+import { NgZone } from "@angular/core";
 
 export class OpenLayersToolManager implements ToolManagerModel {
 
@@ -11,9 +12,7 @@ export class OpenLayersToolManager implements ToolManagerModel {
   private tools: Map<string, OpenLayersTool> = new Map();
   private previouslyActiveTools: string[] = [];
 
-  constructor(
-    private olMap: OlMap,
-  ) {}
+    constructor(private olMap: OlMap, private ngZone: NgZone) {}
 
   public destroy() {
     const toolIds = Array.from(this.tools.keys());
@@ -24,7 +23,7 @@ export class OpenLayersToolManager implements ToolManagerModel {
   public addTool(tool: ToolModel): string {
     const toolId = `${tool.type.toLowerCase()}-${++OpenLayersToolManager.toolIdCount}`;
     if (ToolTypeHelper.isMapClickTool(tool)) {
-      this.tools.set(toolId, new OpenLayersMapClickTool(this.olMap, tool));
+      this.tools.set(toolId, new OpenLayersMapClickTool(this.olMap, this.ngZone, tool));
     }
     return toolId;
   }

@@ -4,6 +4,7 @@ import { AppLayerModel, ServiceModel } from '@tailormap-viewer/api';
 
 const selectCoreState = createFeatureSelector<CoreState>(coreStateKey);
 
+export const selectApplicationId = createSelector(selectCoreState, state => state.id);
 export const selectMapOptions = createSelector(
   selectCoreState,
   (state: CoreState) => {
@@ -50,4 +51,8 @@ export const selectLayers = createSelector(
   selectCoreState,
   selectServices,
   (state, services: ServiceModel[]) => getLayersAndServices(state.layers, services),
+);
+export const selectVisibleLayers = createSelector(
+  selectLayers,
+  layers => layers.filter(l => l.layer.visible),
 );
