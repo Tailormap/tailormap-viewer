@@ -29,6 +29,7 @@ COPY public.level_ (id, background, info, name, url, parent) FROM stdin;
 2	t	\N	Achtergrond	\N	1
 3	f	\N	topografie	\N	2
 4	f	\N	Voorgrond	\N	1
+5	f	\N	gebieden	\N	4
 \.
 
 
@@ -41,7 +42,7 @@ ALTER TABLE public.level_ ENABLE TRIGGER ALL;
 ALTER TABLE public.user_ DISABLE TRIGGER ALL;
 
 COPY public.user_ (username, password) FROM stdin;
-admin	14c06474bec5e7def0304925d09f2b977af3146a
+admin	720230f982b72beaeaa9aed0cb9bef22$100000$51a21a475cbf417e858ce64645f6b6bebcdfadc303c6ee477bdeb2eb352e29bb
 \.
 
 
@@ -54,7 +55,7 @@ ALTER TABLE public.user_ ENABLE TRIGGER ALL;
 ALTER TABLE public.application DISABLE TRIGGER ALL;
 
 COPY public.application (id, authenticated_required, authorizations_modified, lang, layout, max_crs, max_maxx, max_maxy, max_minx, max_miny, name, projection_code, start_crs, start_maxx, start_maxy, start_minx, start_miny, title, version, owner, root) FROM stdin;
-1	f	2022-01-20 16:05:12.968	nl_NL	{"header":{"layout":{"height":"","heightmeasure":"px","maxheight":"","useTabs":false,"bgcolor":"#FFFFFF"},"components":[]},"leftmargin_top":{"layout":{"width":"","widthmeasure":"px","maxwidth":"","useTabs":false,"enableCollapse":false,"defaultCollapsed":false,"enableFloating":false,"panelTitle":"","bgcolor":"#FFFFFF"},"components":[]},"leftmargin_bottom":{"layout":{"height":"","heightmeasure":"px","maxheight":"","useTabs":false,"bgcolor":"#FFFFFF"},"components":[]},"left_menu":{"layout":{"width":"","widthmeasure":"px","maxwidth":"","enableFloating":false,"floatingPosition":"tl","bgcolor":"#FFFFFF"},"components":[]},"top_menu":{"layout":{"height":"","heightmeasure":"px","maxheight":"","bgcolor":"#FFFFFF"},"components":[]},"content":{"layout":{},"components":[{"componentClass":"viewer.mapcomponents.OpenLayers5Map","name":"openLayers5Map1"}]},"content_bottom":{"layout":{"height":"","heightmeasure":"px","maxheight":"","bgcolor":"#FFFFFF"},"components":[]},"popupwindow":{"layout":{"height":"","heightmeasure":"px","maxheight":"","width":"","widthmeasure":"px","maxwidth":"","useTabs":false,"title":"","posx":"","posy":"","bgcolor":"#FFFFFF"},"components":[]},"rightmargin_top":{"layout":{"width":"","widthmeasure":"px","maxwidth":"","useTabs":false,"enableCollapse":false,"defaultCollapsed":false,"enableFloating":false,"panelTitle":"","bgcolor":"#FFFFFF"},"components":[]},"rightmargin_bottom":{"layout":{"height":"","heightmeasure":"px","maxheight":"","useTabs":false,"bgcolor":"#FFFFFF"},"components":[]},"footer":{"layout":{"height":"","heightmeasure":"px","maxheight":"","useTabs":false,"bgcolor":"#FFFFFF"},"components":[]}}	\N	\N	\N	\N	\N	default	EPSG:28992[+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.237,50.0087,465.658,-0.406857,0.350733,-1.87035,4.0812 +units=m +no_defs]	\N	\N	\N	\N	\N	\N	\N	\N	1
+1	f	2022-01-25 12:09:53.931	nl_NL	{"header":{"layout":{"height":"","heightmeasure":"px","maxheight":"","useTabs":false,"bgcolor":"#FFFFFF"},"components":[]},"leftmargin_top":{"layout":{"width":"","widthmeasure":"px","maxwidth":"","useTabs":false,"enableCollapse":false,"defaultCollapsed":false,"enableFloating":false,"panelTitle":"","bgcolor":"#FFFFFF"},"components":[]},"leftmargin_bottom":{"layout":{"height":"","heightmeasure":"px","maxheight":"","useTabs":false,"bgcolor":"#FFFFFF"},"components":[]},"left_menu":{"layout":{"width":"","widthmeasure":"px","maxwidth":"","enableFloating":false,"floatingPosition":"tl","bgcolor":"#FFFFFF"},"components":[]},"top_menu":{"layout":{"height":"","heightmeasure":"px","maxheight":"","bgcolor":"#FFFFFF"},"components":[]},"content":{"layout":{},"components":[{"componentClass":"viewer.mapcomponents.OpenLayers5Map","name":"openLayers5Map1"}]},"content_bottom":{"layout":{"height":"","heightmeasure":"px","maxheight":"","bgcolor":"#FFFFFF"},"components":[]},"popupwindow":{"layout":{"height":"","heightmeasure":"px","maxheight":"","width":"","widthmeasure":"px","maxwidth":"","useTabs":false,"title":"","posx":"","posy":"","bgcolor":"#FFFFFF"},"components":[]},"rightmargin_top":{"layout":{"width":"","widthmeasure":"px","maxwidth":"","useTabs":false,"enableCollapse":false,"defaultCollapsed":false,"enableFloating":false,"panelTitle":"","bgcolor":"#FFFFFF"},"components":[]},"rightmargin_bottom":{"layout":{"height":"","heightmeasure":"px","maxheight":"","useTabs":false,"bgcolor":"#FFFFFF"},"components":[]},"footer":{"layout":{"height":"","heightmeasure":"px","maxheight":"","useTabs":false,"bgcolor":"#FFFFFF"},"components":[]}}	\N	\N	\N	\N	\N	default	EPSG:28992[+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.237,50.0087,465.658,-0.406857,0.350733,-1.87035,4.0812 +units=m +no_defs]	\N	\N	\N	\N	\N	\N	\N	\N	1
 \.
 
 
@@ -99,10 +100,10 @@ ALTER TABLE public.category ENABLE TRIGGER ALL;
 
 ALTER TABLE public.geo_service DISABLE TRIGGER ALL;
 
-COPY public.geo_service (protocol, id, authorizations_modified, geofence_header, monitoring_enabled, monitoring_statusok, name, password, url, username, version, tiling_protocol, exception_type, override_url, skip_discoverwfs, category, top_layer) FROM stdin;
-wms	1	2022-01-20 15:57:42.749	\N	f	t	bestuurlijkegebieden	\N	https://service.pdok.nl/kadaster/bestuurlijkegebieden/wms/v1_0?language=dut&	\N	1.1.1	\N	Inimage	f	t	2	1
-tiled	3	2022-01-20 16:03:02.094	\N	f	t	Openbasiskaart	\N	https://www.openbasiskaart.nl/mapcache/wmts?	\N	\N	WMTS	\N	\N	\N	1	43
-tiled	2	2022-01-20 15:55:40.436	\N	f	t	nationaalgeoregister.nl	\N	https://geodata.nationaalgeoregister.nl/tiles/service/wmts?	\N	\N	WMTS	\N	\N	\N	1	5
+COPY public.geo_service (protocol, id, authorizations_modified, geofence_header, monitoring_enabled, monitoring_statusok, name, password, url, username, version, exception_type, override_url, skip_discoverwfs, tiling_protocol, category, top_layer) FROM stdin;
+wms	1	2022-01-20 15:57:42.749	\N	f	t	bestuurlijkegebieden	\N	https://service.pdok.nl/kadaster/bestuurlijkegebieden/wms/v1_0?language=dut&	\N	1.1.1	Inimage	f	t	\N	2	1
+tiled	3	2022-01-20 16:03:02.094	\N	f	f	Openbasiskaart	\N	https://www.openbasiskaart.nl/mapcache/wmts?	\N	\N	\N	\N	\N	WMTS	1	43
+tiled	2	2022-01-20 15:55:40.436	\N	f	f	nationaalgeoregister.nl	\N	https://geodata.nationaalgeoregister.nl/tiles/service/wmts?	\N	\N	\N	\N	\N	WMTS	1	5
 \.
 
 
@@ -116,6 +117,7 @@ ALTER TABLE public.application_layer DISABLE TRIGGER ALL;
 
 COPY public.application_layer (id, layer_name, service) FROM stdin;
 1	osm	3
+2	Provinciegebied	1
 \.
 
 
@@ -156,6 +158,12 @@ ALTER TABLE public.feature_type ENABLE TRIGGER ALL;
 ALTER TABLE public.configured_attribute DISABLE TRIGGER ALL;
 
 COPY public.configured_attribute (id, allow_value_list_only, attribute_name, automatic_value, automatic_value_type, default_value, disable_user_edit, disallow_null_value, edit_alias, edit_height, edit_values, editable, filterable, label, selectable, value_list, value_list_label_name, value_list_value_name, visible, feature_type, value_list_feature_source, value_list_feature_type) FROM stdin;
+2	f	identificatie	f	\N		f	f	\N	\N	\N	f	f		f	\N	\N	\N	t	1	\N	\N
+3	f	naam	f	\N		f	f	\N	\N	\N	f	f		f	\N	\N	\N	t	1	\N	\N
+4	f	code	f	\N		f	f	\N	\N	\N	f	f		f	\N	\N	\N	t	1	\N	\N
+5	f	ligtInLandCode	f	\N		f	f	\N	\N	\N	f	f		f	\N	\N	\N	t	1	\N	\N
+6	f	ligtInLandNaam	f	\N		f	f	\N	\N	\N	f	f		f	\N	\N	\N	t	1	\N	\N
+1	f	geom	f	\N		f	f	\N	\N	\N	f	f		f	\N	\N	\N	t	1	\N	\N
 \.
 
 
@@ -168,6 +176,12 @@ ALTER TABLE public.configured_attribute ENABLE TRIGGER ALL;
 ALTER TABLE public.application_layer_attributes DISABLE TRIGGER ALL;
 
 COPY public.application_layer_attributes (application_layer, attribute_, list_index) FROM stdin;
+2	1	0
+2	2	1
+2	3	2
+2	4	3
+2	5	4
+2	6	5
 \.
 
 
@@ -180,6 +194,9 @@ ALTER TABLE public.application_layer_attributes ENABLE TRIGGER ALL;
 ALTER TABLE public.application_layer_details DISABLE TRIGGER ALL;
 
 COPY public.application_layer_details (application_layer, value, details_key) FROM stdin;
+2	[{"name":"Provinciegebied","checked":false,"title":"Provinciegebied","order":0}]	stylesOrder
+2	registry_default	style
+2	Provincie	summary.title
 \.
 
 
@@ -233,7 +250,6 @@ COPY public.attribute_descriptor (id, name_alias, name, type) FROM stdin;
 3	\N	naam	string
 4	\N	code	string
 5	\N	ligtInLandCode	string
-6	\N	ligtInLandNaam	string
 7	\N	geom	geometry
 8	\N	identificatie	string
 9	\N	naam	string
@@ -244,6 +260,7 @@ COPY public.attribute_descriptor (id, name_alias, name, type) FROM stdin;
 14	\N	code	string
 15	\N	ligtInProvincieCode	string
 16	\N	ligtInProvincieNaam	string
+6	ligt in	ligtInLandNaam	string
 \.
 
 
@@ -1058,6 +1075,7 @@ COPY public.level_children (level_, child, list_index) FROM stdin;
 1	2	0
 2	3	0
 1	4	1
+4	5	0
 \.
 
 
@@ -1083,6 +1101,7 @@ ALTER TABLE public.level_layers DISABLE TRIGGER ALL;
 
 COPY public.level_layers (level_, layer, list_index) FROM stdin;
 3	1	0
+5	2	0
 \.
 
 
@@ -1169,7 +1188,8 @@ ALTER TABLE public.solr_conf_result_attributes ENABLE TRIGGER ALL;
 ALTER TABLE public.start_layer DISABLE TRIGGER ALL;
 
 COPY public.start_layer (id, checked, removed, selected_index, application, application_layer) FROM stdin;
-1	f	f	\N	1	1
+2	f	f	\N	1	2
+1	t	f	\N	1	1
 \.
 
 
@@ -1182,7 +1202,11 @@ ALTER TABLE public.start_layer ENABLE TRIGGER ALL;
 ALTER TABLE public.start_level DISABLE TRIGGER ALL;
 
 COPY public.start_level (id, removed, selected_index, application, level_) FROM stdin;
-1	f	\N	1	3
+3	f	\N	1	2
+4	f	\N	1	4
+5	f	\N	1	1
+1	f	0	1	3
+2	f	1	1	5
 \.
 
 
@@ -1400,7 +1424,7 @@ SELECT pg_catalog.setval('public.application_id_seq', 1, true);
 -- Name: application_layer_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.application_layer_id_seq', 1, true);
+SELECT pg_catalog.setval('public.application_layer_id_seq', 2, true);
 
 
 --
@@ -1428,7 +1452,7 @@ SELECT pg_catalog.setval('public.category_id_seq', 2, true);
 -- Name: configured_attribute_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.configured_attribute_id_seq', 1, false);
+SELECT pg_catalog.setval('public.configured_attribute_id_seq', 6, true);
 
 
 --
@@ -1505,7 +1529,7 @@ SELECT pg_catalog.setval('public.layer_id_seq', 51, true);
 -- Name: level__id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.level__id_seq', 4, true);
+SELECT pg_catalog.setval('public.level__id_seq', 5, true);
 
 
 --
@@ -1526,14 +1550,14 @@ SELECT pg_catalog.setval('public.solr_conf_id_seq', 1, false);
 -- Name: start_layer_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.start_layer_id_seq', 1, true);
+SELECT pg_catalog.setval('public.start_layer_id_seq', 2, true);
 
 
 --
 -- Name: start_level_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.start_level_id_seq', 1, true);
+SELECT pg_catalog.setval('public.start_level_id_seq', 5, true);
 
 
 --
