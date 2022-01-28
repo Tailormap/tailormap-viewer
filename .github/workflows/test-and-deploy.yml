@@ -120,4 +120,4 @@ jobs:
           target_url: "https://${{ secrets.DEPLOY_HOST_SNAPSHOT }}${{ env.BASE_HREF}}"
           environment: ${{ env.VERSION_TAG }}
           initial_status: success
-          ref: "${{ env.GITHUB_REF }}"
+          ref: "${{ env.GITHUB_HEAD_REF }}"
