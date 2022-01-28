@@ -1,7 +1,7 @@
 FROM postgres:14.1-alpine3.15
 
 ARG TZ="Europe/Amsterdam"
-ARG TM_VERSION=5.9.12
+ARG TM_VERSION="5.9.13-SNAPSHOT"
 
 # get schema export from tailormap persistence
 RUN set -eux; \
