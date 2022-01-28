@@ -1,0 +1,14 @@
+<div [@inOutAnimation]="{ value: true, params: { translate: openFromRight ? '300px' : '-300px' }}" class="dialog mat-elevation-z4" *ngIf="open" [class.dialog--hidden]="hidden">
+
+  <button mat-icon-button class="close-button" (click)="close()">
+    x
+  </button>
+
+  <h1 *ngIf="!!title">{{title}}</h1>
+  <h3 class="sub-title" *ngIf="!!subtitle">{{subtitle}}</h3>
+
+  <div class="dialog-content">
+    <ng-content></ng-content>
+  </div>
+
+</div>

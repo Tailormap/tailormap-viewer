@@ -1,0 +1,30 @@
+tm-dialog ::ng-deep .dialog {
+  left: auto;
+  right: 30px;
+  top: 30px;
+  bottom: auto;
+  height: 400px;
+}
+
+.feature-info {
+  padding: 0 14px 14px 14px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  flex: 1;
+}
+
+.buttons {
+  display: flex;
+}
+
+.buttons button {
+  flex: 1;
+}
+
+.buttons button + button {
+  margin-left: 14px;
+}

@@ -24,6 +24,13 @@ export class FeatureInfoEffects {
       );
   });
 
+  public showDialogOnFeatureInfoSuccess$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(FeatureInfoActions.loadFeatureInfoSuccess),
+      map(() => FeatureInfoActions.showFeatureInfoDialog()),
+    );
+  });
+
   constructor(
     private actions$: Actions,
     private featureInfoService: FeatureInfoService,
