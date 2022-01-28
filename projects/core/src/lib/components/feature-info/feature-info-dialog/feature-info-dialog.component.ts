@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectFeatureInfo, selectFeatureInfoDialogVisible } from '../state/feature-info.selectors';
-import { map, Observable, of, Subject, takeUntil } from 'rxjs';
+import { Observable, of, Subject, takeUntil } from 'rxjs';
 import { hideFeatureInfoDialog } from '../state/feature-info.actions';
 import { FeatureInfoModel } from '../models/feature-info.model';
 import { ColumnMetadataModel, FeatureModel } from '@tailormap-viewer/api';
