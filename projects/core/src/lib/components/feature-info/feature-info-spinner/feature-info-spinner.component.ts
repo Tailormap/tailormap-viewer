@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { combineLatest, concatMap, map, Observable, of, switchMap } from 'rxjs';
+import { combineLatest, map, Observable, of, switchMap } from 'rxjs';
 import { selectLoadingFeatureInfo, selectMapCoordinates } from '../state/feature-info.selectors';
 import { MapService } from '@tailormap-viewer/map';
 
