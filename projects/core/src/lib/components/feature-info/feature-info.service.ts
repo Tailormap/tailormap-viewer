@@ -26,7 +26,7 @@ export class FeatureInfoService {
       .pipe(
         take(1),
         concatMap(([ layers, applicationId ]) => {
-          if (!applicationId) {
+          if (!applicationId || layers.length === 0) {
             return of([]);
           }
           const featureRequests$ = layers.map(layer => {
