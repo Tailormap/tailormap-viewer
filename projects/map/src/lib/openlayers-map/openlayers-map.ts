@@ -81,7 +81,7 @@ export class OpenLayersMap implements MapViewerModel {
 
     const layerManager = new OpenLayersLayerManager(olMap);
     layerManager.init();
-    const toolManager = new OpenLayersToolManager(olMap);
+    const toolManager = new OpenLayersToolManager(olMap, this.ngZone);
     this.previousToolManager = toolManager;
     this.previousLayerManager = layerManager;
     this.previousMap = olMap;

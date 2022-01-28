@@ -11,6 +11,7 @@ import { CoreEffects } from './state/core.effects';
 import { TAILORMAP_API_V1_SERVICE, TailormapApiV1Service } from '@tailormap-viewer/api';
 import { SharedImportsModule } from '@tailormap-viewer/shared';
 import { ApplicationMapService } from './services/application-map.service';
+import { ComponentsModule } from './components/components.module';
 
 
 @NgModule({
@@ -34,6 +35,7 @@ import { ApplicationMapService } from './services/application-map.service';
     EffectsModule.forRoot([ CoreEffects ]),
     MapModule,
     SharedImportsModule,
+    ComponentsModule,
   ],
   exports: [
     ViewerAppComponent,

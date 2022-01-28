@@ -1,6 +1,9 @@
 import { OpenLayersMapClickTool } from './open-layers-map-click-tool';
 import { ToolTypeEnum } from '../../models';
 
+const ngZoneRunFn = jest.fn((cb: () => void) => cb());
+const mockNgZone = { run: ngZoneRunFn } as any;
+
 describe('OpenLayersMapClickTool', () => {
 
   test('creates and enables map click tool', () => {
@@ -11,7 +14,7 @@ describe('OpenLayersMapClickTool', () => {
       un: unFn,
     } as any;
     const onClick = jest.fn();
-    const tool = new OpenLayersMapClickTool(map, { type: ToolTypeEnum.MapClick, onClick });
+    const tool = new OpenLayersMapClickTool(map, mockNgZone, { type: ToolTypeEnum.MapClick, onClick });
     tool.enable();
     expect(onFn).toHaveBeenCalled();
     expect(onFn.mock.calls[0][0]).toEqual('singleclick');
@@ -26,10 +29,11 @@ describe('OpenLayersMapClickTool', () => {
       un: jest.fn(),
     } as any;
     const onClick = jest.fn();
-    const tool = new OpenLayersMapClickTool(map, { type: ToolTypeEnum.MapClick, onClick });
+    const tool = new OpenLayersMapClickTool(map, mockNgZone, { type: ToolTypeEnum.MapClick, onClick });
     tool.enable();
     const olMapClick = onFn.mock.calls[0][1];
     olMapClick({ coordinate: [1,2], pixel: [2,3] });
+    expect(ngZoneRunFn).toHaveBeenCalled();
     expect(onClick).toHaveBeenCalledWith({
       mapCoordinates: [ 1, 2 ],
       mouseCoordinates: [ 2, 3 ],

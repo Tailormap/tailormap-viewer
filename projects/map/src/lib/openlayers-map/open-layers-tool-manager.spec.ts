@@ -1,12 +1,14 @@
 import { OpenLayersToolManager } from './open-layers-tool-manager';
 import { ToolTypeEnum } from '../models';
 
+const mockNgZone = { run: (cb: () => void) => cb() } as any;
+
 describe('OpenLayersToolManager', () => {
 
   test('creates a tool', () => {
     const onClick = jest.fn();
     const tool = { type: ToolTypeEnum.MapClick, onClick };
-    const manager = new OpenLayersToolManager({} as any);
+    const manager = new OpenLayersToolManager({} as any, mockNgZone);
     const toolId = manager.addTool(tool);
     expect(toolId).toMatch(/mapclick-\d+/);
   });
@@ -18,7 +20,7 @@ describe('OpenLayersToolManager', () => {
     const map = { on: onFn, un: unFn } as any;
     const onClick = jest.fn();
     const tool = { type: ToolTypeEnum.MapClick, onClick };
-    const manager = new OpenLayersToolManager(map);
+    const manager = new OpenLayersToolManager(map, mockNgZone);
     const toolId = manager.addTool(tool);
     expect(onFn).not.toHaveBeenCalled();
     expect(onClick).not.toHaveBeenCalled();
@@ -43,7 +45,7 @@ describe('OpenLayersToolManager', () => {
     const map = { on: onFn, un: unFn } as any;
     const onClick = jest.fn();
     const tool = { type: ToolTypeEnum.MapClick, onClick };
-    const manager = new OpenLayersToolManager(map);
+    const manager = new OpenLayersToolManager(map, mockNgZone);
     const toolId = manager.addTool(tool);
 
     manager.enableTool(toolId);
