@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {
   AppLayerModel, AppResponseModel, ComponentModel, GeometryType, Language, LayerDetailsModel, MapResponseModel, ServiceProtocol,
 } from '../models';
-import { Observable, of } from 'rxjs';
+import { delay, Observable, of } from 'rxjs';
 import { TailormapApiV1ServiceModel } from './tailormap-api-v1.service.model';
 import { FeaturesResponseModel } from '../models/features-response.model';
 import { FeatureAttributeTypeEnum } from '../models/feature-attribute-type.enum';
@@ -121,7 +121,7 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
         { key: 'year', alias: 'Bouwjaar', type: FeatureAttributeTypeEnum.INTEGER },
         { key: 'status', alias: 'Status', type: FeatureAttributeTypeEnum.STRING },
       ],
-    });
+    }).pipe(delay(3000));
   }
 
 }
