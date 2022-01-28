@@ -47,5 +47,5 @@ jobs:
           echo "REPOSITORY=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
       - name: Remove Docker image from development host
         run: |
-          docker image rm 'ghcr.io/${REPO}:${{ env.VERSION_TAG }}'
+          docker image rm 'ghcr.io/${REPOSITORY}:${{ env.VERSION_TAG }}'
 
