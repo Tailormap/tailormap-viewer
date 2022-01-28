@@ -43,4 +43,14 @@ describe('TailormapApiV1Service', () => {
     spectator.expectOne('/api/describelayer/1/1', HttpMethod.GET);
   });
 
+  test('queries API for getFeatures$', () => {
+    spectator.service.getFeatures$({ applicationId: 1, layerId: 1 }).subscribe();
+    spectator.expectOne('/api/features/1/1', HttpMethod.GET);
+  });
+
+  test('queries API for getFeatures$ - with params', () => {
+    spectator.service.getFeatures$({ applicationId: 1, layerId: 1, x: 1, y: 2, distance: 10 }).subscribe();
+    spectator.expectOne('/api/features/1/1?x=1&y=2&distance=10', HttpMethod.GET);
+  });
+
 });
