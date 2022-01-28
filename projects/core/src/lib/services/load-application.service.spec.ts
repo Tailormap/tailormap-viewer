@@ -1,22 +1,6 @@
-import {
-  AppLayerModel, AppResponseModel,
-  ComponentModel,
-  getAppLayerModel, getAppResponseData, getComponentModel, getLayerDetailsModel,
-  getMapResponseData, MapResponseModel, TailormapApiV1ServiceModel,
-} from '@tailormap-viewer/api';
-import { Observable, of } from 'rxjs';
+import { AppLayerModel, AppResponseModel, ComponentModel, getMockApiService, MapResponseModel } from '@tailormap-viewer/api';
+import { Observable } from 'rxjs';
 import { LoadApplicationService } from './load-application.service';
-
-const getApiService = (
-  overrides?: Partial<TailormapApiV1ServiceModel>,
-): TailormapApiV1ServiceModel => ({
-  getApplication$: (params: { name?: string; version?: string; id?: number }) => of(getAppResponseData(params)),
-  getMap$: () => of(getMapResponseData()),
-  getLayers$: () => of([getAppLayerModel({id: 1}), getAppLayerModel({id: 2})]),
-  getComponents$: () => of([getComponentModel()]),
-  getDescribeLayer$: () => of(getLayerDetailsModel()),
-  ...overrides,
-});
 
 const getErrorObservable = <T>() => {
   return new Observable<T>(observer => {
@@ -28,7 +12,7 @@ const getErrorObservable = <T>() => {
 describe('LoadApplicationService', () => {
 
   test('test working flow', done => {
-    const service = new LoadApplicationService(getApiService());
+    const service = new LoadApplicationService(getMockApiService());
     service.loadApplication$().subscribe(result => {
       expect(result.success).toEqual(true);
       expect(result.error).toBeUndefined();
@@ -40,7 +24,7 @@ describe('LoadApplicationService', () => {
   });
 
   test('test load application error', done => {
-    const service = new LoadApplicationService(getApiService({
+    const service = new LoadApplicationService(getMockApiService({
       getApplication$: () => getErrorObservable<AppResponseModel>(),
     }));
     service.loadApplication$().subscribe(result => {
@@ -52,7 +36,7 @@ describe('LoadApplicationService', () => {
   });
 
   test('test load map error', done => {
-    const service = new LoadApplicationService(getApiService({
+    const service = new LoadApplicationService(getMockApiService({
       getMap$: () => getErrorObservable<MapResponseModel>(),
     }));
     service.loadApplication$().subscribe(result => {
@@ -64,7 +48,7 @@ describe('LoadApplicationService', () => {
   });
 
   test('test load components error', done => {
-    const service = new LoadApplicationService(getApiService({
+    const service = new LoadApplicationService(getMockApiService({
       getComponents$: () => getErrorObservable<ComponentModel[]>(),
     }));
     service.loadApplication$().subscribe(result => {
@@ -76,7 +60,7 @@ describe('LoadApplicationService', () => {
   });
 
   test('test load layers error', done => {
-    const service = new LoadApplicationService(getApiService({
+    const service = new LoadApplicationService(getMockApiService({
       getLayers$: () => getErrorObservable<AppLayerModel[]>(),
     }));
     service.loadApplication$().subscribe(result => {

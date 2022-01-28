@@ -1,7 +1,12 @@
 import {
   AppLayerModel, AppResponseModel, BoundsModel, ComponentModel, CoordinateReferenceSystemModel, GeometryType, Language, LayerDetailsModel,
-  MapResponseModel, ServiceModel, ServiceProtocol,
+  MapResponseModel, ServiceModel, ServiceProtocol, TailormapApiV1ServiceModel,
 } from '@tailormap-viewer/api';
+import { FeatureModel } from '../models/feature.model';
+import { ColumnMetadataModel } from '../models/column-metadata.model';
+import { FeatureAttributeTypeEnum } from '../models/feature-attribute-type.enum';
+import { FeaturesResponseModel } from '../models/features-response.model';
+import { of } from 'rxjs';
 
 export const getBoundsModel = (overrides?: Partial<BoundsModel>): BoundsModel => ({
   miny: 646.36,
@@ -65,6 +70,28 @@ export const getComponentModel = (overrides?: Partial<ComponentModel>): Componen
   ...overrides,
 });
 
+export const getFeatureModel = (overrides?: Partial<FeatureModel>): FeatureModel => ({
+  __fid: '1',
+  attributes: {
+    prop1: 'test',
+    prop2: 'another test',
+  },
+  ...overrides,
+});
+
+export const getColumnMetadataModel = (overrides?: Partial<ColumnMetadataModel>): ColumnMetadataModel => ({
+  type: FeatureAttributeTypeEnum.STRING,
+  key: 'prop1',
+  alias: 'Property 1',
+  ...overrides,
+});
+
+export const getFeaturesResponseModel = (overrides?: Partial<FeaturesResponseModel>): FeaturesResponseModel => ({
+  features: ['1', '2', '3', '4', '5'].map(id => getFeatureModel({ __fid: id })),
+  columnMetadata: [ getColumnMetadataModel(), getColumnMetadataModel({ key: 'prop2', alias: 'Property 2' }) ],
+  ...overrides,
+});
+
 export const getAppResponseData = (overrides?: Partial<AppResponseModel>): AppResponseModel => ({
   id: 1,
   apiVersion: 'v1',
@@ -86,5 +113,17 @@ export const getMapResponseData = (overrides?: Partial<MapResponseModel>): MapRe
     getServiceModel(),
   ],
   maxExtent: overrides?.maxExtent === null ? null : getBoundsModel(overrides?.maxExtent),
+  ...overrides,
+});
+
+export const getMockApiService = (
+  overrides?: Partial<TailormapApiV1ServiceModel>,
+): TailormapApiV1ServiceModel => ({
+  getApplication$: (params: { name?: string; version?: string; id?: number }) => of(getAppResponseData(params)),
+  getMap$: () => of(getMapResponseData()),
+  getLayers$: () => of([getAppLayerModel({id: 1}), getAppLayerModel({id: 2})]),
+  getComponents$: () => of([getComponentModel()]),
+  getDescribeLayer$: () => of(getLayerDetailsModel()),
+  getFeatures$: () => of(getFeaturesResponseModel()),
   ...overrides,
 });
