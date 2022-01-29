@@ -1,10 +1,16 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { selectFeatureInfo, selectFeatureInfoDialogVisible } from '../state/feature-info.selectors';
+import { selectFeatureInfo, selectFeatureInfoDialogCollapsed, selectFeatureInfoDialogVisible } from '../state/feature-info.selectors';
 import { Observable, of, Subject, takeUntil } from 'rxjs';
-import { hideFeatureInfoDialog } from '../state/feature-info.actions';
+import { expandCollapseFeatureInfoDialog, hideFeatureInfoDialog } from '../state/feature-info.actions';
 import { FeatureInfoModel } from '../models/feature-info.model';
-import { ColumnMetadataModel, FeatureModel } from '@tailormap-viewer/api';
+import { AppLayerModel, ColumnMetadataModel, FeatureModel } from '@tailormap-viewer/api';
+
+export interface DialogFeatureInfoModel {
+  feature: FeatureModel;
+  columnMetadata: Map<string, ColumnMetadataModel>;
+  layer: AppLayerModel;
+}
 
 @Component({
   selector: 'tm-feature-info-dialog',
@@ -16,13 +22,10 @@ export class FeatureInfoDialogComponent implements OnInit, OnDestroy {
 
   private destroyed = new Subject();
   public dialogOpen$: Observable<boolean> = of(false);
+  public dialogCollapsed$: Observable<boolean> = of(false);
 
-  public featureInfo: FeatureInfoModel[] = [];
-  private currentSelected: [number, number] = [0, 0];
-
-  public currentFeatureInfo: FeatureInfoModel | null = null;
-  private currentFeature: FeatureModel | null = null;
-  private currentMetaData: Map<string, ColumnMetadataModel> = new Map();
+  public featureInfo: DialogFeatureInfoModel[] = [];
+  public currentSelected = 0;
 
   constructor(
     private store$: Store,
@@ -30,50 +33,47 @@ export class FeatureInfoDialogComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.dialogOpen$ = this.store$.select(selectFeatureInfoDialogVisible);
+    this.dialogCollapsed$ = this.store$.select(selectFeatureInfoDialogCollapsed);
     this.store$.select(selectFeatureInfo)
       .pipe(takeUntil(this.destroyed))
       .subscribe(featureInfo => {
-        this.featureInfo = featureInfo;
-        this.currentSelected = [0, 0];
-        this.setCurrentFeature();
+        this.featureInfo = [];
+        this.currentSelected = 0;
+        featureInfo.forEach(info => {
+          const columnMetadata = new Map((info.columnMetadata || []).map(c => [c.key, c]));
+          info.features.forEach(f => {
+            this.featureInfo.push({
+              feature: f,
+              columnMetadata,
+              layer: info.layer,
+            });
+          });
+        });
       });
   }
 
-  private setCurrentFeature() {
-    if (this.featureInfo.length > 0) {
-      this.currentFeatureInfo = this.featureInfo[this.currentSelected[0]];
-      this.currentFeature = this.currentFeatureInfo?.features[this.currentSelected[1]] || null;
-      this.currentMetaData = new Map((this.currentFeatureInfo.columnMetadata || []).map(c => [c.key, c]));
-    }
-  }
-
   public next() {
-    if (this.currentFeatureInfo?.features[this.currentSelected[1] + 1]) {
-      // next feature for current layer
-      this.currentSelected = [this.currentSelected[0], this.currentSelected[1] + 1];
-    } else if (this.featureInfo[this.currentSelected[0] + 1]) {
-      this.currentSelected = [this.currentSelected[0] + 1, 0];
-    } else {
-      this.currentSelected = [0, 0];
+    if (this.featureInfo[this.currentSelected + 1]) {
+      this.currentSelected++;
+      return;
     }
-    this.setCurrentFeature();
+    this.currentSelected = 0;
   }
 
   public back() {
-    if (this.currentSelected[1] > 0) {
-      // next feature for current layer
-      this.currentSelected = [this.currentSelected[0], this.currentSelected[1] - 1];
-    } else if (this.currentSelected[0] > 0) {
-      const nextIdx = this.currentSelected[0] - 1;
-      this.currentSelected = [nextIdx, this.featureInfo[nextIdx]?.features.length - 1 || 0];
-    } else {
-      this.currentSelected = [0, 0];
+    if (this.currentSelected > 0) {
+      this.currentSelected--;
+      return;
     }
-    this.setCurrentFeature();
+    this.currentSelected = this.featureInfo.length - 1;
   }
 
   public closeDialog() {
     this.store$.dispatch(hideFeatureInfoDialog());
+  }
+
+  public expandCollapseDialog() {
+    this.store$.dispatch(expandCollapseFeatureInfoDialog());
   }
 
   public ngOnDestroy() {
@@ -82,14 +82,14 @@ export class FeatureInfoDialogComponent implements OnInit, OnDestroy {
   }
 
   public getAttributes(): Record<string, string | boolean | number | null> {
-    if (!this.currentFeature) {
+    if (!this.featureInfo[this.currentSelected]) {
       return {};
     }
-    return this.currentFeature.attributes;
+    return this.featureInfo[this.currentSelected].feature.attributes;
   }
 
   public getAlias(prop: string): string {
-    return this.currentMetaData.get(prop)?.alias || prop;
+    return this.featureInfo[this.currentSelected].columnMetadata.get(prop)?.alias || prop;
   }
 
 }

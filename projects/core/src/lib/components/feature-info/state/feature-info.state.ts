@@ -6,6 +6,7 @@ export interface FeatureInfoState {
   mouseCoordinates?: [number, number];
   mapCoordinates?: [number, number];
   dialogVisible: boolean;
+  dialogCollapsed: boolean;
   loadingData: boolean;
   featureInfo: FeatureInfoModel[];
   loadingDataFailed: boolean;
@@ -14,6 +15,7 @@ export interface FeatureInfoState {
 
 export const initialFeatureInfoState: FeatureInfoState = {
   dialogVisible: false,
+  dialogCollapsed: false,
   loadingData: false,
   loadingDataFailed: false,
   featureInfo: [],

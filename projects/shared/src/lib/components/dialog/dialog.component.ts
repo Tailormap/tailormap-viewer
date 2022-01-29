@@ -24,22 +24,28 @@ import { style, transition, trigger, animate } from '@angular/animations';
 export class DialogComponent implements OnInit {
 
   @Input()
-  public open: boolean | null = null;
+  public open: boolean | null = false;
 
   @Input()
   public title = '';
 
   @Input()
-  public subtitle = '';
+  public hidden: boolean | null = false;
 
   @Input()
-  public hidden = false;
+  public openFromRight: boolean | null = false;
 
   @Input()
-  public openFromRight = false;
+  public allowCollapse: boolean | null = false;
+
+  @Input()
+  public collapsed: boolean | null = false;
 
   @Output()
-  public closeOverlay = new EventEmitter();
+  public closeDialog = new EventEmitter();
+
+  @Output()
+  public expandCollapseDialog = new EventEmitter();
 
   constructor() { }
 
@@ -47,7 +53,11 @@ export class DialogComponent implements OnInit {
   }
 
   public close() {
-    this.closeOverlay.emit();
+    this.closeDialog.emit();
+  }
+
+  public expandCollapse() {
+    this.expandCollapseDialog.emit();
   }
 
 }
