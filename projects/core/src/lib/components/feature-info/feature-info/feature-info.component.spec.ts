@@ -4,6 +4,7 @@ import { MapClickToolModel, MapService } from '@tailormap-viewer/map';
 import { Store } from '@ngrx/store';
 import { loadFeatureInfo } from '../state/feature-info.actions';
 import { of } from 'rxjs';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('FeatureInfoComponent', () => {
 
@@ -11,6 +12,7 @@ describe('FeatureInfoComponent', () => {
     const createTool = jest.fn(() => of('1'));
     const mockDispatch = jest.fn();
     await render(FeatureInfoComponent, {
+      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
       componentProviders: [
         {
           provide: MapService,

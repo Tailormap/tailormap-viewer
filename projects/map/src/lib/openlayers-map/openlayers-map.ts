@@ -8,20 +8,17 @@ import { LayerManagerModel, MapViewerModel, MapViewerOptionsModel } from '../mod
 import { ProjectionsHelper } from '../helpers/projections.helper';
 import { OpenlayersExtent } from '../models/extent.type';
 import { OpenLayersLayerManager } from './open-layers-layer-manager';
-import { BehaviorSubject, concatMap, filter, map, Observable, take } from 'rxjs';
+import { BehaviorSubject, concatMap, filter, map, merge, Observable, Subject, take, tap } from 'rxjs';
 import { Size } from 'ol/size';
 import { ToolManagerModel } from '../models/tool-manager.model';
 import { OpenLayersToolManager } from './open-layers-tool-manager';
+import { OpenLayersEventManager } from './open-layers-event-manager';
 
 export class OpenLayersMap implements MapViewerModel {
 
   private map: BehaviorSubject<OlMap | null> = new BehaviorSubject<OlMap | null>(null);
   private layerManager: BehaviorSubject<LayerManagerModel | null> = new BehaviorSubject<LayerManagerModel | null>(null);
   private toolManager: BehaviorSubject<ToolManagerModel | null> = new BehaviorSubject<ToolManagerModel | null>(null);
-
-  private previousMap: OlMap | null = null;
-  private previousLayerManager: OpenLayersLayerManager | null = null;
-  private previousToolManager: OpenLayersToolManager | null = null;
 
   private readonly resizeObserver: ResizeObserver;
   private initialExtent: OpenlayersExtent = [];
@@ -33,11 +30,11 @@ export class OpenLayersMap implements MapViewerModel {
   }
 
   public initMap(options: MapViewerOptionsModel) {
-    if (this.previousMap && this.previousMap.getView().getProjection().getCode() === options.projection) {
+    if (this.map.value && this.map.value.getView().getProjection().getCode() === options.projection) {
       // Do not re-create the map if the projection is the same as previous
-      this.previousMap.getView().getProjection().setExtent(options.maxExtent);
+      this.map.value.getView().getProjection().setExtent(options.maxExtent);
       if (options.initialExtent && options.initialExtent.length > 0) {
-        this.previousMap.getView().fit(options.initialExtent);
+        this.map.value.getView().fit(options.initialExtent);
       }
       return;
     }
@@ -67,24 +64,22 @@ export class OpenLayersMap implements MapViewerModel {
       ? options.initialExtent
       : options.maxExtent;
 
-    if (this.previousLayerManager) {
-      this.previousLayerManager.destroy();
+    if (this.toolManager.value) {
+      this.toolManager.value.destroy();
     }
 
-    if (this.previousToolManager) {
-      this.previousToolManager.destroy();
+    if (this.toolManager.value) {
+      this.toolManager.value.destroy();
     }
 
-    if (this.previousMap) {
-      this.previousMap.dispose();
+    if (this.map.value) {
+      this.map.value.dispose();
     }
 
     const layerManager = new OpenLayersLayerManager(olMap);
     layerManager.init();
     const toolManager = new OpenLayersToolManager(olMap, this.ngZone);
-    this.previousToolManager = toolManager;
-    this.previousLayerManager = layerManager;
-    this.previousMap = olMap;
+    OpenLayersEventManager.initEvents(olMap, this.ngZone);
 
     this.map.next(olMap);
     this.layerManager.next(layerManager);
@@ -142,6 +137,18 @@ export class OpenLayersMap implements MapViewerModel {
 
   public getProjection$(): Observable<Projection> {
     return this.getMap$().pipe(map(olMap => olMap.getView().getProjection()));
+  }
+
+  public getPixelForCoordinates$(coordinates: [number, number]): Observable<[number, number]> {
+    return merge(
+      this.getMap$(),
+      OpenLayersEventManager.onMapMove$().pipe(map(evt => evt.map)))
+        .pipe(
+          map(olMap => {
+            const px = olMap.getPixelFromCoordinate(coordinates);
+            return [px[0], px[1]];
+          }),
+        );
   }
 
   private getSize$(): Observable<Size> {

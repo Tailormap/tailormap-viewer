@@ -7,11 +7,13 @@ import { featureInfoStateKey } from './state/feature-info.state';
 import { featureInfoReducer } from './state/feature-info.reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { FeatureInfoEffects } from './state/feature-info.effects';
+import { FeatureInfoSpinnerComponent } from './feature-info-spinner/feature-info-spinner.component';
 
 
 @NgModule({
   declarations: [
     FeatureInfoComponent,
+    FeatureInfoSpinnerComponent,
   ],
   imports: [
     CommonModule,

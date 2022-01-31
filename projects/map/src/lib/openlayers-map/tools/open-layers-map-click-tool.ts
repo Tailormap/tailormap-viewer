@@ -1,41 +1,36 @@
 import { OpenLayersTool } from './open-layers-tool';
 import { MapClickToolModel } from '../../models';
-import { default as OlMap } from 'ol/Map';
-import { MapBrowserEvent } from 'ol';
-import { NgZone } from '@angular/core';
+import { Subject, takeUntil } from 'rxjs';
+import { OpenLayersEventManager } from '../open-layers-event-manager';
 
 export class OpenLayersMapClickTool implements OpenLayersTool {
 
-  private clickHandler = this.handleClick.bind(this);
+  private enabled = new Subject();
 
-  constructor(
-    private map: OlMap,
-    private ngZone: NgZone,
-    private toolConfig: MapClickToolModel,
-  ) {
-  }
+  constructor(private toolConfig: MapClickToolModel) {}
 
   public isActive = false;
 
   public destroy(): void {
-    this.map.un('singleclick', this.clickHandler);
+    this.disable();
   }
 
   public disable(): void {
-    this.map.un('singleclick', this.clickHandler);
+    this.enabled.next(null);
+    this.enabled.complete();
+    this.isActive = false;
   }
 
   public enable(): void {
-    this.map.on('singleclick', this.clickHandler);
-  }
-
-  private handleClick(evt: MapBrowserEvent<MouseEvent>) {
-    this.ngZone.run(() => {
-      this.toolConfig.onClick({
-        mapCoordinates: [evt.coordinate[0], evt.coordinate[1]],
-        mouseCoordinates: [evt.pixel[0], evt.pixel[1]],
+    OpenLayersEventManager.onMapClick$()
+      .pipe(takeUntil(this.enabled))
+      .subscribe(evt => {
+        this.toolConfig.onClick({
+          mapCoordinates: [evt.coordinate[0], evt.coordinate[1]],
+          mouseCoordinates: [evt.pixel[0], evt.pixel[1]],
+        });
       });
-    });
+    this.isActive = true;
   }
 
 }
