@@ -20,7 +20,7 @@ RUN npm run test
 RUN npm run build -- --base-href=${BASE_HREF}
 
 # base image
-FROM nginx:1.21.5-alpine
+FROM nginx:1.21.6-alpine
 
 ARG NGINX_CONF=nginx.conf
 
