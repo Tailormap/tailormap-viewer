@@ -78,7 +78,7 @@ export class ApplicationMapService implements OnDestroy {
         id: `${appLayer.id}`,
         layers: appLayer.displayName,
         name: appLayer.displayName,
-        layerType: LayerTypesEnum.WMS,
+        layerType: LayerTypesEnum.WMTS,
         visible: appLayer.visible,
         url: service.url,
         crossOrigin: 'anonymous',
