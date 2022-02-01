@@ -6,7 +6,7 @@ import VectorImageLayer from 'ol/layer/VectorImage';
 import ImageWMS from 'ol/source/ImageWMS';
 import WMTS from 'ol/source/WMTS';
 import XYZ from 'ol/source/XYZ';
-import { LayerManagerModel, LayerTypes, Service } from '../models';
+import { LayerManagerModel, LayerTypes } from '../models';
 import { OlLayerHelper } from '../helpers/ol-layer.helper';
 import { LayerModel } from '../models/layer.model';
 import {
@@ -60,8 +60,8 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     this.backgroundLayerGroup.getLayers().push(olLayer);
   }
 
-  public setLayers(layers: Array<{ layer: LayerModel; service?: Service }>) {
-    const layerIds = new Set(layers.map(layer => layer.layer.id));
+  public setLayers(layers: LayerModel[]) {
+    const layerIds = new Set(layers.map(layer => layer.id));
     const removableLayers: string[] = [];
     this.layers.forEach((layer, id) => {
       if (!layerIds.has(id)) {
@@ -70,14 +70,14 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     });
     removableLayers.forEach(id => this.removeLayer(id));
     layers
-      .filter(layer => !this.layers.has(layer.layer.id))
+      .filter(layer => !this.layers.has(layer.id))
       .forEach(layer => {
-        this.addLayer(layer.layer, layer.service);
+        this.addLayer(layer);
       });
   }
 
-  public addLayer(layer: LayerModel, service?: Service): LayerTypes {
-    const olLayer = this.createLayer(layer, service);
+  public addLayer(layer: LayerModel): LayerTypes {
+    const olLayer = this.createLayer(layer);
     if (olLayer === null) {
       return null;
     }
@@ -97,12 +97,8 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     layerIds.forEach(l => this.removeLayerAndSource(l));
   }
 
-  public addLayers(layers: LayerModel[], services: Service[]) {
-    let i = 0;
-    for (const layer of layers) {
-      this.addLayer(layer, services[i]);
-      i++;
-    }
+  public addLayers(layers: LayerModel[]) {
+    layers.forEach(layer => this.addLayer(layer));
   }
 
   public setLayerVisibility(layerId: string, visible: boolean) {
@@ -220,11 +216,11 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     }
   }
 
-  private createLayer(layer: LayerModel, service?: Service): LayerTypes {
+  private createLayer(layer: LayerModel): LayerTypes {
     if (LayerTypesHelper.isVectorLayer(layer)) {
       return this.createVectorLayer(layer);
     }
-    const olLayer = OlLayerHelper.createLayer(layer, this.olMap.getView().getProjection(), service);
+    const olLayer = OlLayerHelper.createLayer(layer, this.olMap.getView().getProjection());
     if (!olLayer) {
       return null;
     }

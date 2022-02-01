@@ -9,5 +9,5 @@ export interface ServiceModel {
     styleLibraries: object;
     protocol: ServiceProtocol;
     tilingProtocol?: TilingProtocol;
-    matrixSet?: object;
+    capabilities?: string;
 }
