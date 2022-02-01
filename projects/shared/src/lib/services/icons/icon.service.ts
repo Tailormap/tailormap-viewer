@@ -25,7 +25,9 @@ export class IconService {
   ) {}
 
   public getUrl() {
-    return `${this.baseHref}/${this.iconLocation}`;
+    const separator = this.baseHref[this.baseHref.length - 1] === '/' ? '' : '/';
+    const endSlash = this.iconLocation[this.iconLocation.length - 1] === '/' ? '' : '/';
+    return `${this.baseHref}${separator}${this.iconLocation}${endSlash}`;
   }
 
   public getUrlForIcon(icon: string, folder?: string) {
@@ -53,13 +55,6 @@ export class IconService {
         addIcon(`${value.folder}_${folderIcon}`, folderIcon, value.folder);
       });
     });
-  }
-
-  public registerIcon(matIconRegistry: MatIconRegistry, domSanitizer: DomSanitizer, icon: string, folder?: string) {
-    matIconRegistry.addSvgIcon(
-      `${folder ? folder + '_' : ''}${icon}`,
-      domSanitizer.bypassSecurityTrustResourceUrl(this.getUrlForIcon(icon, folder)),
-    );
   }
 
 }
