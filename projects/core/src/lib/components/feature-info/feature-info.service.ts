@@ -39,9 +39,9 @@ export class FeatureInfoService {
               simplify: true,
             }).pipe(
               map((featureInfoResult: FeaturesResponseModel): FeatureInfoModel => ({
-                features: featureInfoResult.features,
+                features: featureInfoResult.features || [],
                 layer: layer.layer,
-                columnMetadata: featureInfoResult.columnMetadata,
+                columnMetadata: featureInfoResult.columnMetadata || [],
               })),
             );
           });
