@@ -14,7 +14,11 @@ import { ApplicationMapService } from './services/application-map.service';
 import { ComponentsModule } from './components/components.module';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
+import { APP_BASE_HREF, PlatformLocation } from '@angular/common';
 
+const getBaseHref = (platformLocation: PlatformLocation): string => {
+  return platformLocation.getBaseHrefFromDOM();
+};
 
 @NgModule({
   declarations: [
@@ -44,7 +48,8 @@ import { DomSanitizer } from '@angular/platform-browser';
   ],
   providers: [
     { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1Service },
-    { provide: ICON_SERVICE_ICON_LOCATION, useValue: '/assets/imgs/' },
+    { provide: ICON_SERVICE_ICON_LOCATION, useValue: 'assets/imgs/' },
+    { provide: APP_BASE_HREF, useFactory: getBaseHref, deps: [PlatformLocation] },
   ],
 })
 export class CoreModule {

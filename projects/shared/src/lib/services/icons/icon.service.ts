@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ICON_SERVICE_ICON_LOCATION } from './icon-service.injection-token';
+import { APP_BASE_HREF } from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
@@ -19,11 +20,12 @@ export class IconService {
   ];
 
   constructor(
-    @Inject(ICON_SERVICE_ICON_LOCATION) private basePath: string,
+    @Inject(ICON_SERVICE_ICON_LOCATION) private iconLocation: string,
+    @Inject(APP_BASE_HREF) private baseHref: string,
   ) {}
 
   public getUrl() {
-    return `${this.basePath}`;
+    return `${this.baseHref}/${this.iconLocation}`;
   }
 
   public getUrlForIcon(icon: string, folder?: string) {
