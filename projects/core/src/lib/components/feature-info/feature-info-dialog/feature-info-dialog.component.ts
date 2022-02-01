@@ -67,6 +67,14 @@ export class FeatureInfoDialogComponent implements OnInit, OnDestroy {
     this.currentSelected = this.featureInfo.length - 1;
   }
 
+  public isFirstItem() {
+    return this.currentSelected === 0;
+  }
+
+  public isLastItem() {
+    return this.currentSelected === this.featureInfo.length - 1;
+  }
+
   public closeDialog() {
     this.store$.dispatch(hideFeatureInfoDialog());
   }

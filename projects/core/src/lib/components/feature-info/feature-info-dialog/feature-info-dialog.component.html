@@ -14,10 +14,10 @@
       </div>
     </div>
     <div class="buttons">
-      <button mat-flat-button i18n (click)="back()" color="accent">
+      <button mat-flat-button i18n (click)="back()" color="accent" [disabled]="isFirstItem()">
         Back
       </button>
-      <button mat-flat-button i18n (click)="next()" color="primary">
+      <button mat-flat-button i18n (click)="next()" color="primary" [disabled]="isLastItem()">
         Next
       </button>
     </div>
