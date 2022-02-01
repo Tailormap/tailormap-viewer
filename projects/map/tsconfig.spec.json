@@ -5,7 +5,9 @@
     "allowSyntheticDefaultImports": true,
     "outDir": "../../out-tsc/spec",
     "types": [
-      "jest"
+      "node",
+      "jest",
+      "@testing-library/jest-dom"
     ]
   },
   "include": [

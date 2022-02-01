@@ -1,7 +1,6 @@
 import * as FeatureInfoActions from './feature-info.actions';
 import { Action, createReducer, on } from '@ngrx/store';
 import { FeatureInfoState, initialFeatureInfoState } from './feature-info.state';
-import { expandCollapseFeatureInfoDialog } from './feature-info.actions';
 
 const onLoadFeatureInfo = (
   state: FeatureInfoState,

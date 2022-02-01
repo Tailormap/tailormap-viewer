@@ -3,7 +3,6 @@ import { Store } from '@ngrx/store';
 import { selectFeatureInfo, selectFeatureInfoDialogCollapsed, selectFeatureInfoDialogVisible } from '../state/feature-info.selectors';
 import { Observable, of, Subject, takeUntil } from 'rxjs';
 import { expandCollapseFeatureInfoDialog, hideFeatureInfoDialog } from '../state/feature-info.actions';
-import { FeatureInfoModel } from '../models/feature-info.model';
 import { AppLayerModel, ColumnMetadataModel, FeatureModel } from '@tailormap-viewer/api';
 
 export interface DialogFeatureInfoModel {
