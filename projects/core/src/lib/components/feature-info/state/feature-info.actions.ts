@@ -20,3 +20,4 @@ export const loadFeatureInfoFailed = createAction(
 
 export const showFeatureInfoDialog = createAction(`${featureInfoActionsPrefix} Show Feature Info Dialog`);
 export const hideFeatureInfoDialog = createAction(`${featureInfoActionsPrefix} Hide Feature Info Dialog`);
+export const expandCollapseFeatureInfoDialog = createAction(`${featureInfoActionsPrefix} Expand/Collapse Feature Info Dialog`);

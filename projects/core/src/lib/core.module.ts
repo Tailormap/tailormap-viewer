@@ -9,10 +9,16 @@ import { coreReducer } from './state/core.reducer';
 import { coreStateKey } from './state/core.state';
 import { CoreEffects } from './state/core.effects';
 import { TAILORMAP_API_V1_SERVICE, TailormapApiV1Service } from '@tailormap-viewer/api';
-import { SharedImportsModule } from '@tailormap-viewer/shared';
+import { ICON_SERVICE_ICON_LOCATION, IconService, SharedImportsModule } from '@tailormap-viewer/shared';
 import { ApplicationMapService } from './services/application-map.service';
 import { ComponentsModule } from './components/components.module';
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
+import { APP_BASE_HREF, PlatformLocation } from '@angular/common';
 
+const getBaseHref = (platformLocation: PlatformLocation): string => {
+  return platformLocation.getBaseHrefFromDOM();
+};
 
 @NgModule({
   declarations: [
@@ -42,11 +48,17 @@ import { ComponentsModule } from './components/components.module';
   ],
   providers: [
     { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1Service },
+    { provide: ICON_SERVICE_ICON_LOCATION, useValue: 'assets/imgs/' },
+    { provide: APP_BASE_HREF, useFactory: getBaseHref, deps: [PlatformLocation] },
   ],
 })
 export class CoreModule {
   constructor(
     _applicationMapService: ApplicationMapService,
+    matIconRegistry: MatIconRegistry,
+    domSanitizer: DomSanitizer,
+    iconService: IconService,
   ) {
+    iconService.loadIconsToIconRegistry(matIconRegistry, domSanitizer);
   }
 }

@@ -1,0 +1,56 @@
+tm-dialog ::ng-deep .dialog {
+  left: auto;
+  right: 30px;
+  top: 30px;
+  bottom: auto;
+  height: calc(50vh - 30px);
+}
+
+.feature-info {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  flex: 1;
+  overflow: auto;
+}
+
+.content h2 {
+  color: #6236FF;
+  padding: 14px 14px 0 14px;
+}
+
+.row {
+  font-size: 15px;
+  font-weight: normal;
+  line-height: 24px;
+  border-bottom: 1px solid #D8D8D8;
+  padding: 15px 14px;
+}
+
+.row:last-of-type {
+  border-bottom: 0 none;
+}
+
+.row strong {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 16px;
+}
+
+.buttons {
+  display: flex;
+  box-shadow: 0 -1px 4px 0 rgba(0, 0, 0, 0.09);
+  padding: 14px;
+}
+
+.buttons button {
+  flex: 1;
+}
+
+.buttons button + button {
+  margin-left: 14px;
+}

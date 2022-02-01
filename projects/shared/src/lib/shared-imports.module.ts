@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   imports: [
@@ -12,6 +13,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     FormsModule,
     HttpClientModule,
     MatButtonModule,
+    MatIconModule,
   ],
   exports: [
     CommonModule,
@@ -20,6 +22,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     HttpClientModule,
     MatButtonModule,
     MatProgressSpinnerModule,
+    MatIconModule,
   ],
 })
 export class SharedImportsModule { }

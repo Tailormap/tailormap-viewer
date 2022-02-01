@@ -1,5 +1,10 @@
 @import "inter-font.css";
 
+:root {
+  --dialog-width: 300px;
+  --dialog-z-index: 998;
+}
+
 html {
   box-sizing: border-box;
 }
@@ -17,4 +22,47 @@ body {
   margin: 0;
   padding: 0;
   border: 0;
+}
+
+.cdk-overlay-container {
+  z-index: calc(var(--overlay-panel-z-index) + 100) !important;
+}
+
+.tailormap-menu-panel.mat-menu-panel {
+  min-width: 170px;
+}
+
+.resize-active {
+  user-select: none;
+}
+
+[ng-version],
+.mat-dialog-container,
+.form-field textarea {
+  font-family: Inter, sans-serif;
+  font-weight: 400;
+  color: rgb(0, 10, 30);
+  font-size: 14px;
+}
+
+[ng-version] h1,
+[ng-version] h2 {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 24px;
+  margin: 0;
+}
+
+[ng-version] a {
+  color: #1a8fea;
+}
+
+[ng-version] a:hover {
+  color: #6236ff;
+}
+
+.mat-flat-button.mat-accent {
+  background-color: rgba(98, 54, 255, 0.4);
+  color: #6236ff;
 }

@@ -1,6 +1,6 @@
 import * as FeatureInfoActions from './feature-info.actions';
 import { featureInfoReducer } from './feature-info.reducer';
-import { initialFeatureInfoState } from './feature-info.state';
+import { FeatureInfoState, initialFeatureInfoState } from './feature-info.state';
 import { FeatureInfoModel } from '../models/feature-info.model';
 import { getAppLayerModel, getColumnMetadataModel, getFeatureModel } from '@tailormap-viewer/api';
 
@@ -51,6 +51,15 @@ describe('FeatureInfoReducer', () => {
     const action = FeatureInfoActions.hideFeatureInfoDialog();
     const updatedState = featureInfoReducer(state, action);
     expect(updatedState.dialogVisible).toEqual(false);
+  });
+
+  test('handles expandCollapseFeatureInfoDialog', () => {
+    const state: FeatureInfoState = {...initialFeatureInfoState, dialogCollapsed: false };
+    const action = FeatureInfoActions.expandCollapseFeatureInfoDialog();
+    const updatedState = featureInfoReducer(state, action);
+    expect(updatedState.dialogCollapsed).toEqual(true);
+    const updatedState2 = featureInfoReducer(updatedState, action);
+    expect(updatedState2.dialogCollapsed).toEqual(false);
   });
 
 });

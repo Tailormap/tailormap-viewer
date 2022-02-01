@@ -1,0 +1,22 @@
+<div *ngIf="open"
+     [@inOutAnimation]="{ value: true, params: { translate: openFromRight ? '300px' : '-300px' }}"
+     class="dialog mat-elevation-z4"
+     [class.dialog--hidden]="hidden"
+     [class.dialog--collapsed]="collapsed">
+
+  <div class="dialog-header">
+    <h1>{{title || ''}}</h1>
+    <button *ngIf="allowCollapse" mat-icon-button class="toggle-button" (click)="expandCollapse()">
+      <mat-icon *ngIf="!collapsed" svgIcon="contextual_chevron_top"></mat-icon>
+      <mat-icon *ngIf="collapsed" svgIcon="contextual_chevron_bottom"></mat-icon>
+    </button>
+    <button mat-icon-button class="close-button" (click)="close()">
+      <mat-icon svgIcon="contextual_close"></mat-icon>
+    </button>
+  </div>
+
+  <div class="dialog-content">
+    <ng-content></ng-content>
+  </div>
+
+</div>

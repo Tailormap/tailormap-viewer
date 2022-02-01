@@ -1,0 +1,64 @@
+.dialog {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: var(--dialog-width);
+  background-color: #fff;
+  z-index: var(--dialog-z-index);
+  display: flex;
+  flex-direction: column;
+  transform-origin: left;
+  transition: clip 600ms ease-out;
+}
+
+.dialog-header {
+  height: 64px;
+  flex-shrink: 0;
+  border-bottom: 1px solid #E1E1E1;
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding: 0 8px 0 16px;
+}
+
+.dialog-header h1 {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.dialog-header button {
+  background-color: #fff;
+}
+
+.dialog-header mat-icon {
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  font-size: 20px;
+}
+
+.close-button mat-icon:hover {
+  transform: rotate(180deg);
+}
+
+.dialog--hidden {
+  display: none;
+}
+
+.dialog--collapsed {
+  height: 64px !important;
+}
+
+.dialog--collapsed .dialog-content {
+  display: none;
+}
+
+.dialog-content {
+  flex: 1;
+  overflow: hidden;
+}
