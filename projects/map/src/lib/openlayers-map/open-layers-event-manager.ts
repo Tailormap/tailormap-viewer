@@ -23,7 +23,7 @@ export class OpenLayersEventManager {
 
   public static initEvents(olMap: OlMap, ngZone: NgZone) {
     OpenLayersEventManager.registerEvent(olMap, ngZone, 'moveend', OpenLayersEventManager.mapMoveEndEvent);
-    OpenLayersEventManager.registerEvent(olMap, ngZone, 'click', OpenLayersEventManager.mapClickEvent);
+    OpenLayersEventManager.registerEvent(olMap, ngZone, 'singleclick', OpenLayersEventManager.mapClickEvent);
   }
 
   private static registerEvent<EventType extends BaseEvent>(
