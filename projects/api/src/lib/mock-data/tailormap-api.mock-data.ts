@@ -1,12 +1,13 @@
 import {
   AppLayerModel, AppResponseModel, BoundsModel, ComponentModel, CoordinateReferenceSystemModel, GeometryType, Language, LayerDetailsModel,
-  MapResponseModel, ServiceModel, ServiceProtocol, TailormapApiV1ServiceModel,
-} from '@tailormap-viewer/api';
+  MapResponseModel, ServiceModel, ServiceProtocol,
+} from '../models';
 import { FeatureModel } from '../models/feature.model';
 import { ColumnMetadataModel } from '../models/column-metadata.model';
 import { FeatureAttributeTypeEnum } from '../models/feature-attribute-type.enum';
 import { FeaturesResponseModel } from '../models/features-response.model';
 import { of } from 'rxjs';
+import { TailormapApiV1ServiceModel } from '../services';
 
 export const getBoundsModel = (overrides?: Partial<BoundsModel>): BoundsModel => ({
   miny: 646.36,
