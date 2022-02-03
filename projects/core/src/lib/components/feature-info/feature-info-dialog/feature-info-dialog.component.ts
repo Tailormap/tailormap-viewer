@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectFeatureInfo, selectFeatureInfoDialogCollapsed, selectFeatureInfoDialogVisible } from '../state/feature-info.selectors';
 import { Observable, of, Subject, takeUntil } from 'rxjs';
@@ -28,6 +28,7 @@ export class FeatureInfoDialogComponent implements OnInit, OnDestroy {
 
   constructor(
     private store$: Store,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   public ngOnInit(): void {
@@ -48,6 +49,7 @@ export class FeatureInfoDialogComponent implements OnInit, OnDestroy {
             });
           });
         });
+        this.cdr.detectChanges();
       });
   }
 
