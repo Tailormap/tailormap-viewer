@@ -2,8 +2,6 @@ import { NgModule } from '@angular/core';
 import { ViewerAppComponent } from './pages';
 import { MapModule } from '@tailormap-viewer/map';
 import { StoreModule } from '@ngrx/store';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { environment } from '../../../app/src/environments/environment';
 import { EffectsModule } from '@ngrx/effects';
 import { coreReducer } from './state/core.reducer';
 import { coreStateKey } from './state/core.state';
@@ -37,7 +35,6 @@ const getBaseHref = (platformLocation: PlatformLocation): string => {
         strictActionTypeUniqueness: true,
       },
     }),
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
     EffectsModule.forRoot([ CoreEffects ]),
     MapModule,
     SharedImportsModule,
