@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build shared && ng build api && ng build map && ng build core && ng build app",
+    "build-app": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "jest --max-workers=1",
     "test:ci": "jest --ci --collect-coverage --reporters=default --reporters=jest-junit",

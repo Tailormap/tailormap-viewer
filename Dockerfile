@@ -17,7 +17,7 @@ COPY . /app
 RUN npm run test
 
 # generate build
-RUN npm run build -- --base-href=${BASE_HREF}
+RUN npm run build-app -- --base-href=${BASE_HREF}
 
 # base image
 FROM nginx:1.21.6-alpine
