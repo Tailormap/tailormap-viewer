@@ -12,7 +12,8 @@
     "test-update-snapshots": "jest --update-snapshot",
     "test-with-coverage": "jest --collect-coverage",
     "lint": "ng lint",
-    "lint-fix": "ng lint --fix"
+    "lint-fix": "ng lint --fix",
+    "release-new-package": "node bin/publish-new-release.js"
   },
   "private": true,
   "dependencies": {
