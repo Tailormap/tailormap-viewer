@@ -43,7 +43,7 @@ describe('OpenLayersEventManager', () => {
       expect(e).toEqual('test_click');
       done();
     });
-    const moveEndReg = onFn.mock.calls.find(c => c[0] === 'click');
+    const moveEndReg = onFn.mock.calls.find(c => c[0] === 'singleclick');
     moveEndReg[1]('test_click');
     expect(ngZoneRunFn).toHaveBeenCalled();
   });
