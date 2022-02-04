@@ -28,13 +28,13 @@
               "projects/app/src/favicon.ico",
               {
                 "glob": "**/*",
-                "input": "projects/core/src/assets",
+                "input": "projects/core/assets",
                 "output": "assets/core"
               }
             ],
             "styles": [
-              "projects/core/src/custom-theme.scss",
-              "projects/core/src/tailormap-styles.css"
+              "projects/core/assets/custom-theme.scss",
+              "projects/core/assets/tailormap-styles.css"
             ],
             "scripts": []
           },
