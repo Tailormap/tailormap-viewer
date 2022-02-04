@@ -6,7 +6,7 @@
     "@angular/core": "^13.0.0",
     "ol": "^6.9.0",
     "proj4": "^2.7.5",
-    "@tailormap-viewer/shared": "^0.0.1"
+    "@tailormap-viewer/shared": ">0.0.1 <1.0"
   },
   "dependencies": {
     "tslib": "^2.3.0"
