@@ -45,7 +45,7 @@ const getBaseHref = (platformLocation: PlatformLocation): string => {
   ],
   providers: [
     { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1Service },
-    { provide: ICON_SERVICE_ICON_LOCATION, useValue: 'assets/imgs/' },
+    { provide: ICON_SERVICE_ICON_LOCATION, useValue: 'assets/core/imgs/' },
     { provide: APP_BASE_HREF, useFactory: getBaseHref, deps: [PlatformLocation] },
   ],
 })

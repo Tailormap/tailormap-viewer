@@ -26,11 +26,15 @@
             "polyfills": "projects/app/src/polyfills.ts",
             "assets": [
               "projects/app/src/favicon.ico",
-              "projects/app/src/assets"
+              {
+                "glob": "**/*",
+                "input": "projects/core/src/assets",
+                "output": "assets/core"
+              }
             ],
             "styles": [
-              "projects/app/src/custom-theme.scss",
-              "projects/app/src/styles.css"
+              "projects/core/src/custom-theme.scss",
+              "projects/core/src/tailormap-styles.css"
             ],
             "scripts": []
           },
