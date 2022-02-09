@@ -10,7 +10,8 @@ RUN npm install
 
 COPY . /app
 
-RUN npm run test
+# Disabled for now because of runtime -- GitHub Actions job runs tests in parallel
+#RUN npm run test
 
 RUN npm run build-app -- --base-href=${BASE_HREF}
 
