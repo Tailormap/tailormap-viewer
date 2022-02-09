@@ -1,4 +1,5 @@
 import { FeatureInfoModel } from '../models/feature-info.model';
+import { LoadStatusEnum } from '@tailormap-viewer/shared';
 
 export const featureInfoStateKey = 'feature_info';
 
@@ -7,16 +8,14 @@ export interface FeatureInfoState {
   mapCoordinates?: [number, number];
   dialogVisible: boolean;
   dialogCollapsed: boolean;
-  loadingData: boolean;
+  loadStatus: LoadStatusEnum;
   featureInfo: FeatureInfoModel[];
-  loadingDataFailed: boolean;
   errorMessage?: string;
 }
 
 export const initialFeatureInfoState: FeatureInfoState = {
   dialogVisible: false,
   dialogCollapsed: false,
-  loadingData: false,
-  loadingDataFailed: false,
+  loadStatus: LoadStatusEnum.INITIAL,
   featureInfo: [],
 };

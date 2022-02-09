@@ -1,6 +1,7 @@
 import * as FeatureInfoActions from './feature-info.actions';
 import { Action, createReducer, on } from '@ngrx/store';
 import { FeatureInfoState, initialFeatureInfoState } from './feature-info.state';
+import { LoadStatusEnum } from '@tailormap-viewer/shared';
 
 const onLoadFeatureInfo = (
   state: FeatureInfoState,
@@ -9,7 +10,7 @@ const onLoadFeatureInfo = (
   ...state,
   mapCoordinates: payload.mapCoordinates,
   mouseCoordinates: payload.mouseCoordinates,
-  loadingData: true,
+  loadStatus: LoadStatusEnum.LOADING,
 });
 
 const onLoadFeatureInfoSuccess = (
@@ -18,8 +19,7 @@ const onLoadFeatureInfoSuccess = (
 ): FeatureInfoState => ({
   ...state,
   featureInfo: payload.featureInfo,
-  loadingData: false,
-  loadingDataFailed: false,
+  loadStatus: LoadStatusEnum.LOADED,
 });
 
 const onLoadFeatureInfoFailed = (
@@ -28,8 +28,7 @@ const onLoadFeatureInfoFailed = (
 ): FeatureInfoState => ({
   ...state,
   errorMessage: payload.errorMessage,
-  loadingData: false,
-  loadingDataFailed: true,
+  loadStatus: LoadStatusEnum.ERROR,
 });
 
 const onShowFeatureInfoDialog = (state: FeatureInfoState): FeatureInfoState => ({ ...state, dialogVisible: true });

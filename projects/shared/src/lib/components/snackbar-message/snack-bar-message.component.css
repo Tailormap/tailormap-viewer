@@ -1,0 +1,37 @@
+::ng-deep .cdk-overlay-container .mat-snack-bar-container.snack-bar-message-panel {
+  position: relative;
+  padding: 0;
+}
+
+.message-container {
+  display: flex;
+  align-items: center;
+}
+
+.message-container mat-spinner {
+  margin-left: 16px;
+}
+
+.message-container .message {
+  flex: 1;
+  padding: 16px;
+}
+
+.message-container .mat-spinner.mat-progress-spinner ::ng-deep circle {
+  stroke: white;
+}
+
+.duration-indicator {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  bottom: -4px;
+}
+
+button {
+  margin-right: 8px;
+}
+
+mat-icon ::ng-deep path {
+  fill: #fff;
+}

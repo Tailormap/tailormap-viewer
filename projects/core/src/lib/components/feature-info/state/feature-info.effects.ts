@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as FeatureInfoActions from './feature-info.actions';
-import { concatMap, map } from 'rxjs';
+import { concatMap, filter, map } from 'rxjs';
 import { FeatureInfoService } from '../feature-info.service';
+import { FeatureInfoHelper } from '../helpers/feature-info.helper';
 
 @Injectable()
 export class FeatureInfoEffects {
@@ -27,6 +28,7 @@ export class FeatureInfoEffects {
   public showDialogOnFeatureInfoSuccess$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(FeatureInfoActions.loadFeatureInfoSuccess),
+      filter(action => FeatureInfoHelper.getTotalFeatureInfoCount(action.featureInfo) !== 0),
       map(() => FeatureInfoActions.showFeatureInfoDialog()),
     );
   });

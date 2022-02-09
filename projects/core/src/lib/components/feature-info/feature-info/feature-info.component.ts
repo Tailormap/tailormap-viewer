@@ -3,6 +3,10 @@ import { MapClickToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/m
 import { Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { loadFeatureInfo } from '../state/feature-info.actions';
+import { selectFeatureInfoError$ } from '../state/feature-info.selectors';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { $localize } from '@angular/localize/init';
+import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 
 @Component({
   selector: 'tm-feature-info',
@@ -18,9 +22,13 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
     onClick: evt => this.handleMapClick(evt),
   };
 
+  private static DEFAULT_ERROR_MESSAGE = $localize `Something went wrong while getting feature info, please try again`;
+  private static DEFAULT_NO_FEATURES_FOUND_MESSAGE = $localize `No features found`;
+
   constructor(
     private mapService: MapService,
     private store$: Store,
+    private snackBar: MatSnackBar,
   ) { }
 
   public ngOnInit(): void {
@@ -36,6 +44,21 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
 
   private handleMapClick(evt: { mapCoordinates: [number, number]; mouseCoordinates: [number, number] }) {
     this.store$.dispatch(loadFeatureInfo({ mapCoordinates: evt.mapCoordinates, mouseCoordinates: evt.mouseCoordinates }));
+    this.store$.pipe(selectFeatureInfoError$)
+      .subscribe(error => {
+        if (!error || error.error === 'none') {
+          return;
+        }
+        const config: SnackBarMessageOptionsModel = {
+          message: error.error === 'error'
+            ? error.errorMessage || FeatureInfoComponent.DEFAULT_ERROR_MESSAGE
+            : FeatureInfoComponent.DEFAULT_NO_FEATURES_FOUND_MESSAGE,
+          duration: 5000,
+          showDuration: true,
+          showCloseButton: true,
+        };
+        SnackBarMessageComponent.open$(this.snackBar, config);
+      });
   }
 
 }
