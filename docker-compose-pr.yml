@@ -1,13 +1,25 @@
 
-# Docker compose stack for continuous deployment of a PR:
+# Docker compose stack for continuous deployment of a PR with only the web container with Angular frontend, running on a sub-path behind a
+# Traefik reverse proxy. Builds the Angular frontend with a different base href. The Angular frontend uses `/api/` (absolute URL) to the
+# backend, not a relative URL so the backend for the main branch continuous deployment is used.
 
-# export NAME=pr-XXX; export BASE_HREF=/pr-XXX/; docker-compose -f docker-compose-pr.yml --project-name tailormap-snapshot-${NAME} up -d
+# # Set variable for image tag
+# export NAME=pr-XXX
+# # Set variable to build Angular bundle with different base-href to run on a URL sub path
+# export BASE_HREF=/pr-XXX/
+# # Build image docker-compose.yml. The NAME environment variable is used for the image tag
+# docker-compose build web
+# # Use stand-alone configuration to run, does not extend docker-compose.yml
+# docker-compose -f docker-compose-pr.yml up -d
 
 version: '3.9'
 
 services:
   web-proxied:
     image: ghcr.io/b3partners/tailormap-viewer:${NAME}
+    environment:
+      - API_PROXY_ENABLED=false
+      - ADMIN_PROXY_ENABLED=false
     labels:
       - "traefik.http.routers.tailormap-snapshot-${NAME}.rule=Host(`${HOSTNAME:-snapshot.tailormap.nl}`) && PathPrefix(`${BASE_HREF}`)"
       - traefik.http.routers.tailormap-snapshot-${NAME}.tls=true
