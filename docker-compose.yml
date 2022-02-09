@@ -4,23 +4,39 @@ version: '3.9'
 
 services:
   web:
-    image: ghcr.io/b3partners/tailormap-viewer:snapshot
-    depends_on:
-      - api
-      - admin
+    image: ghcr.io/b3partners/tailormap-viewer:${VERSION_TAG:-snapshot}
+    build:
+      context: .
+      args:
+        - "BASE_HREF=${BASE_HREF:-/}"
     profiles:
       - http
     ports:
       - "80:80"
+    environment:
+      - "API_PROXY_ENABLED=${API_PROXY_ENABLED:-true}"
+      - "API_PROXY_URL=${API_PROXY_URL:-http://api:8080/api/}"
+      - "API_PROXY_HOST=${API_PROXY_HOST:-localhost}"
+      - "ADMIN_PROXY_ENABLED=${ADMIN_PROXY_ENABLED:-true}"
+      - "ADMIN_PROXY_URL=${ADMIN_PROXY_URL:-http://admin:8080/admin/}"
+      - "ADMIN_PROXY_HOST=${ADMIN_PROXY_HOST:-localhost}"
 
-  # The same as web, but without port 80 exposed -- when using a reverse proxy. Already has Traefik labels.
+  # The same as web, but without port 80 exposed and with labels for using with Traefik as a reverse proxy.
   web-proxied:
-    image: ghcr.io/b3partners/tailormap-viewer:snapshot
-    depends_on:
-      - api
-      - admin
+    image: ghcr.io/b3partners/tailormap-viewer:${VERSION_TAG:-snapshot}
+    build:
+      context: .
+      args:
+        - BASE_HREF=${BASE_HREF:-/}
     profiles:
       - proxied
+    environment:
+      - "API_PROXY_ENABLED=${API_PROXY_ENABLED:-true}"
+      - "API_PROXY_URL=${API_PROXY_URL:-http://api:8080/api/}"
+      - "API_PROXY_HOST=${API_PROXY_HOST:-localhost}"
+      - "ADMIN_PROXY_ENABLED=${ADMIN_PROXY_ENABLED:-true}"
+      - "ADMIN_PROXY_URL=${ADMIN_PROXY_URL:-http://admin:8080/admin/}"
+      - "ADMIN_PROXY_HOST=${ADMIN_PROXY_HOST:-localhost}"
     labels:
       traefik.http.routers.tailormap-snapshot.rule: "Host(`${HOSTNAME:-snapshot.tailormap.nl}`)"
       traefik.http.routers.tailormap-snapshot.tls: "true"
@@ -29,18 +45,25 @@ services:
 
   api:
     image: ghcr.io/b3partners/tailormap-api:snapshot
+    profiles:
+      - full
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db/tailormap
       DB_PASSWORD: ${TAILORMAP_DB_PASSWORD:-tailormap}
 
   admin:
     image: ghcr.io/b3partners/tailormap-admin:snapshot
+    profiles:
+      - full
     environment:
       CATALINA_OPTS: -DPG_HOST=db -DPG_PORT=5432 -DPG_DATABASE=tailormap -DDB_NAME=tailormap -DDB_USER=tailormap -DDB_PASSWORD=${TAILORMAP_DB_PASSWORD:-tailormap} -DURL_SCHEME=http
 
   db:
+    image: ghcr.io/b3partners/tailormap-config-db:snapshot
     build:
-      context: ./config/db
+      context: docker/db
+    profiles:
+      - full
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
       TAILORMAP_PASSWORD: ${TAILORMAP_DB_PASSWORD:-tailormap}
