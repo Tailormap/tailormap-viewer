@@ -1,0 +1,23 @@
+<div class="login-form" [formGroup]="loginForm">
+  <div class="login-form__header">
+    <div i18n>Login</div>
+    <mat-icon class="logo" svgIcon="logo"></mat-icon>
+  </div>
+  <div class="login-form__body">
+      <div class="form-field">
+        <label for="login_username" i18n>Username</label>
+        <input id="login_username" name="username" type="text" formControlName="username" />
+      </div>
+      <div class="form-field">
+        <label for="login_password" i18n>Password</label>
+        <input id="login_password" name="password" type="password" formControlName="password" />
+      </div>
+  </div>
+  <div class="buttons">
+    <button mat-flat-button
+            name="login"
+            color="primary"
+            [disabled]="loginForm.invalid"
+            (click)="login()">Login</button>
+  </div>
+</div>

@@ -1,0 +1,193 @@
+.form-field + .form-field {
+  margin-top: 16px;
+}
+
+.form-field label {
+  font-weight: 600;
+  padding-bottom: 4px;
+  line-height: 24px;
+  display: block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.form-field__columns label {
+  flex: 1 0;
+  padding-bottom: 0;
+}
+
+.form-field input,
+.form-field .form-button,
+.form-field mat-select,
+.form-field textarea {
+  height: 40px;
+  line-height: 38px;
+  width: 100%;
+  border: 1px solid var(--border-color);
+  border-radius: 3px;
+  font-size: 14px;
+  padding: 0 10px;
+  background-color: #fff;
+}
+
+.form-field textarea {
+  height: auto;
+  line-height: 1.5em;
+  padding: 10px;
+}
+
+.datepicker-input input {
+  padding-right: 44px;
+}
+
+.form-field mat-slider {
+  width: 100%;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.form-field .mat-slider-horizontal .mat-slider-wrapper {
+  left: 0;
+  right: 0;
+}
+
+.form-field .form-button {
+  padding: 5px;
+}
+
+.form-field input:hover,
+.form-field .form-button:hover,
+.form-field mat-select:hover,
+.form-field textarea:hover {
+  border-color: var(--primary-color);
+}
+
+.form-field input:focus,
+.form-field .form-button:focus,
+.form-field mat-select:focus,
+.form-field textarea:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 6px var(--primary-color-0_5);
+  outline: none;
+}
+
+.form-field input[disabled],
+.form-field .mat-select-disabled,
+.form-field textarea[disabled],
+.form-field input[disabled]:hover,
+.form-field .mat-select-disabled:hover,
+.form-field textarea[disabled]:hover,
+.form-field input[disabled]:focus,
+.form-field .mat-select-disabled:focus,
+.form-field textarea[disabled]:focus {
+  background-color: var(--disabled-color);
+  border-color: #fff;
+  box-shadow: none;
+}
+
+.form-field input.ng-touched.ng-invalid,
+.form-field .form-button.ng-touched.ng-invalid,
+.form-field mat-select.ng-touched.ng-invalid,
+.form-field textarea.ng-touched.ng-invalid {
+  border-color: var(--error-color);
+}
+
+.form-field input.ng-touched.ng-invalid:focus,
+.form-field .form-button.ng-touched.ng-invalid:focus,
+.form-field mat-select.ng-touched.ng-invalid:focus,
+.form-field textarea.ng-touched.ng-invalid:focus {
+  border-color: var(--error-color);
+  box-shadow: 0 0 6px var(--error-color-0_5);
+}
+
+.form-field mat-form-field {
+  margin-bottom: -1.25em;
+}
+
+.form-field mat-checkbox {
+  width: 40px;
+}
+
+.form-field .mat-form-field-underline {
+  display: none;
+}
+
+.form-field .mat-form-field-infix {
+  padding: 0;
+  border-top: 0 none;
+}
+
+.form-field .mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label,
+.form-field .mat-form-field-appearance-legacy.mat-form-field-can-float .mat-input-server:focus + .mat-form-field-label-wrapper .mat-form-field-label {
+  display: none;
+}
+
+.form-field .mat-form-field-empty.mat-form-field-label {
+  left: 12px;
+  top: 1.4em;
+  display: block;
+}
+
+.mat-autocomplete-panel .mat-option {
+  font-size: 14px;
+  line-height: 3em;
+  height: 3em;
+}
+
+.form-field .form-button .mat-button-wrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0 5px;
+  line-height: 28px;
+}
+
+.form-field .form-button .mat-button-wrapper span {
+  flex: 1;
+  text-align: left;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.datepicker-input {
+  position: relative;
+}
+
+.datepicker-input .mat-datepicker-toggle {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.form-field mat-icon {
+  color: var(--primary-color);
+}
+
+.form-field .form-button--active .mat-button-wrapper {
+  color: var(--primary-color);
+  font-weight: 600;
+  background-color: var(--primary-color-0_1);
+}
+
+.form-field__columns {
+  display: flex;
+  align-items: center;
+}
+
+.form-field + .form-field__columns,
+.form-field__columns + .form-field,
+.form-field__columns + .form-field__columns {
+  margin-top: 3px;
+}
+
+.form-field__slider,
+.form-field + .form-field__slider,
+.form-field__columns + .form-field__slider {
+  margin-top: -10px;
+}
+
+.form-field__columns > * {
+  flex-shrink: 0;
+}

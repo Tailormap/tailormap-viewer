@@ -13,6 +13,8 @@ import { ComponentsModule } from './components/components.module';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { APP_BASE_HREF, PlatformLocation } from '@angular/common';
+import { LoginComponent } from './pages/login/login.component';
+import { LoginFormComponent } from './pages/login/login-form/login-form.component';
 
 const getBaseHref = (platformLocation: PlatformLocation): string => {
   return platformLocation.getBaseHrefFromDOM();
@@ -21,6 +23,8 @@ const getBaseHref = (platformLocation: PlatformLocation): string => {
 @NgModule({
   declarations: [
     ViewerAppComponent,
+    LoginComponent,
+    LoginFormComponent,
   ],
   imports: [
     StoreModule.forRoot({
