@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as FeatureInfoActions from './feature-info.actions';
-import { concatMap, filter, map } from 'rxjs';
+import { filter, map, switchMap } from 'rxjs';
 import { FeatureInfoService } from '../feature-info.service';
 import { FeatureInfoHelper } from '../helpers/feature-info.helper';
 
@@ -11,7 +11,7 @@ export class FeatureInfoEffects {
   public loadFeatureInfo$ = createEffect(() => {
       return this.actions$.pipe(
           ofType(FeatureInfoActions.loadFeatureInfo),
-          concatMap(action => {
+          switchMap(action => {
             return this.featureInfoService.getFeatures$(action.mapCoordinates)
               .pipe(
                 map(result => {
