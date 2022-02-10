@@ -100,7 +100,7 @@ jobs:
       - name: Update main deployment using Docker Compose
         if: ${{ github.ref == 'refs/heads/main' }}
         run: |
-          docker-compose -f docker-compose.yml -f docker-compose-cd.yml pull --quiet
+          docker-compose -f docker-compose.yml -f docker-compose-cd.yml --profile proxied --profile full-external-db pull --quiet
           docker-compose -f docker-compose.yml -f docker-compose-cd.yml --profile proxied --profile full-external-db up -d
       - name: Update pull request deployment using Docker Compose
         if: ${{ steps.find-pr.outputs.number }}
