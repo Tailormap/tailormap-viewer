@@ -28,8 +28,13 @@ export class FeatureInfoEffects {
   public showDialogOnFeatureInfoSuccess$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(FeatureInfoActions.loadFeatureInfoSuccess),
-      filter(action => FeatureInfoHelper.getTotalFeatureInfoCount(action.featureInfo) !== 0),
-      map(() => FeatureInfoActions.showFeatureInfoDialog()),
+      map(action => {
+        const count = FeatureInfoHelper.getTotalFeatureInfoCount(action.featureInfo);
+        if (count === 0) {
+          return FeatureInfoActions.hideFeatureInfoDialog();
+        }
+        return FeatureInfoActions.showFeatureInfoDialog();
+      }),
     );
   });
 
