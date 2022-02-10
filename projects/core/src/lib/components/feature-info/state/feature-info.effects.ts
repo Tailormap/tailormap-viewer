@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as FeatureInfoActions from './feature-info.actions';
-import { filter, map, switchMap } from 'rxjs';
+import { map, switchMap } from 'rxjs';
 import { FeatureInfoService } from '../feature-info.service';
 import { FeatureInfoHelper } from '../helpers/feature-info.helper';
 
