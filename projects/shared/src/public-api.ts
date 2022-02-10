@@ -2,6 +2,7 @@
  * Public API Surface of shared
  */
 
+export * from './lib/enums';
 export * from './lib/helpers';
 export * from './lib/components';
 export * from './lib/services';

@@ -1,0 +1,20 @@
+<div class="message-container">
+  <mat-spinner *ngIf="data.showSpinner" color="primary" [diameter]="20" mode="indeterminate"></mat-spinner>
+  <div class="message">{{data.message}}</div>
+  <div *ngIf="data.showCloseButton">
+    <button *ngIf="!data.closeButtonText"
+            mat-icon-button
+            (click)="closeSnackBar()">
+      <mat-icon svgIcon="close"></mat-icon>
+    </button>
+    <button *ngIf="!!data.closeButtonText"
+            mat-flat-button
+            color="primary"
+            (click)="closeSnackBar()">
+      {{data.closeButtonText}}
+    </button>
+  </div>
+</div>
+<div class="duration-indicator" *ngIf="progress$">
+  <mat-progress-bar mode="determinate" [value]="progress$ | async" color="primary"></mat-progress-bar>
+</div>

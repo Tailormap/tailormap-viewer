@@ -7,11 +7,11 @@
   <div class="dialog-header">
     <h1>{{title || ''}}</h1>
     <button *ngIf="allowCollapse" mat-icon-button class="toggle-button" (click)="expandCollapse()">
-      <mat-icon *ngIf="!collapsed" svgIcon="contextual_chevron_top"></mat-icon>
-      <mat-icon *ngIf="collapsed" svgIcon="contextual_chevron_bottom"></mat-icon>
+      <mat-icon *ngIf="!collapsed" svgIcon="chevron_top"></mat-icon>
+      <mat-icon *ngIf="collapsed" svgIcon="chevron_bottom"></mat-icon>
     </button>
     <button mat-icon-button class="close-button" (click)="close()">
-      <mat-icon svgIcon="contextual_close"></mat-icon>
+      <mat-icon svgIcon="close"></mat-icon>
     </button>
   </div>
 

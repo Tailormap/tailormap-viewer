@@ -38,7 +38,8 @@ body {
 
 [ng-version],
 .mat-dialog-container,
-.form-field textarea {
+.form-field textarea,
+.cdk-overlay-container {
   font-family: Inter, sans-serif;
   font-weight: 400;
   color: rgb(0, 10, 30);
@@ -65,4 +66,11 @@ body {
 .mat-flat-button.mat-accent {
   background-color: rgba(98, 54, 255, 0.4);
   color: #6236ff;
+}
+
+.cdk-overlay-container .mat-snack-bar-container {
+  background-color: #0c0524;
+  color: #fff;
+  padding: 16px;
+  border-radius: 2px;
 }
