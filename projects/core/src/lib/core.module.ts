@@ -15,6 +15,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { APP_BASE_HREF, PlatformLocation } from '@angular/common';
 import { LoginComponent } from './pages/login/login.component';
 import { LoginFormComponent } from './pages/login/login-form/login-form.component';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { SecurityInterceptor } from './interceptors/security.interceptor';
 
 const getBaseHref = (platformLocation: PlatformLocation): string => {
   return platformLocation.getBaseHrefFromDOM();
@@ -48,6 +50,7 @@ const getBaseHref = (platformLocation: PlatformLocation): string => {
     ViewerAppComponent,
   ],
   providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: SecurityInterceptor, multi: true },
     { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1Service },
     { provide: ICON_SERVICE_ICON_LOCATION, useValue: 'assets/core/imgs/' },
     { provide: APP_BASE_HREF, useFactory: getBaseHref, deps: [PlatformLocation] },
