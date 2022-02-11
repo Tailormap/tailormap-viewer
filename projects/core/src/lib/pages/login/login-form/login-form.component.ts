@@ -1,6 +1,8 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { SecurityService } from '../../../services/security.service';
+import { BehaviorSubject, take } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'tm-login-form',
@@ -15,20 +17,38 @@ export class LoginFormComponent implements OnInit {
     password: ['', [Validators.required]],
   });
 
+  private loggingInSubject = new BehaviorSubject(false);
+  public loggingIn$ = this.loggingInSubject.asObservable();
+
+  private errorMessageSubject = new BehaviorSubject('');
+  public errorMessage$ = this.errorMessageSubject.asObservable();
+
   constructor(
     private formBuilder: FormBuilder,
     private securityService: SecurityService,
+    private router: Router,
   ) { }
 
   public ngOnInit(): void {
   }
 
-  public login() {
+  public async login() {
     const username = this.loginForm.get('username')?.value;
     const password = this.loginForm.get('password')?.value;
     if (!username || !password) {
       return;
     }
-    this.securityService.login$(username, password);
+    this.loggingInSubject.next(true);
+    this.securityService.login$(username, password)
+      .pipe(take(1))
+      .subscribe(success => {
+        this.loggingInSubject.next(false);
+        if (success) {
+          this.errorMessageSubject.next('');
+          this.router.navigateByUrl('/');
+        } else {
+          this.errorMessageSubject.next($localize `Login failed, please try again`);
+        }
+      });
   }
 }

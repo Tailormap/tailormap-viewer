@@ -4,20 +4,24 @@
     <mat-icon class="logo" svgIcon="logo"></mat-icon>
   </div>
   <div class="login-form__body">
-      <div class="form-field">
-        <label for="login_username" i18n>Username</label>
-        <input id="login_username" name="username" type="text" formControlName="username" />
-      </div>
-      <div class="form-field">
-        <label for="login_password" i18n>Password</label>
-        <input id="login_password" name="password" type="password" formControlName="password" />
-      </div>
+    <tm-error-message [message]="(errorMessage$ | async) ?? ''"></tm-error-message>
+    <div class="form-field">
+      <label for="login_username" i18n>Username</label>
+      <input id="login_username" name="username" type="text" formControlName="username"/>
+    </div>
+    <div class="form-field">
+      <label for="login_password" i18n>Password</label>
+      <input id="login_password" name="password" type="password" formControlName="password"/>
+    </div>
   </div>
   <div class="buttons">
     <button mat-flat-button
             name="login"
             color="primary"
-            [disabled]="loginForm.invalid"
-            (click)="login()">Login</button>
+            [disabled]="loginForm.invalid || (loggingIn$ | async)"
+            (click)="login()">
+      <ng-template #loginLabel>Login</ng-template>
+      <mat-spinner *ngIf="(loggingIn$ | async); else: loginLabel" diameter="20" color="primary" mode="indeterminate"></mat-spinner>
+    </button>
   </div>
 </div>
