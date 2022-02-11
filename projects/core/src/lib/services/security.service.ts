@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, Observable } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +20,10 @@ export class SecurityService {
     formData.append('password', password);
     return this.httpClient.post(SecurityService.LOGIN_URL, formData, {
       observe: 'response',
-    }).pipe(map(response => response.status === 200));
+    }).pipe(
+      map(response => response.status === 200),
+      catchError(() => of(false)),
+    );
   }
 
 }
