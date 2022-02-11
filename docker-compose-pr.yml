@@ -21,7 +21,7 @@ services:
       - API_PROXY_ENABLED=false
       - ADMIN_PROXY_ENABLED=false
     labels:
-      - "traefik.http.routers.tailormap-snapshot-${NAME}.rule=Host(`${HOSTNAME:-snapshot.tailormap.nl}`) && PathPrefix(`${BASE_HREF}`)"
+      - "traefik.http.routers.tailormap-snapshot-${NAME}.rule=Host(`${HOST:-snapshot.tailormap.nl}`) && PathPrefix(`${BASE_HREF}`)"
       - traefik.http.routers.tailormap-snapshot-${NAME}.tls=true
       - traefik.http.routers.tailormap-snapshot-${NAME}.tls.certresolver=letsencrypt
       - traefik.http.routers.tailormap-snapshot-${NAME}.middlewares=tailormap-snapshot-${NAME}-stripprefix

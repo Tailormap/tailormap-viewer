@@ -13,7 +13,7 @@ version: '3.9'
 services:
   web-proxied:
     labels:
-      traefik.http.routers.tailormap-snapshot.rule: "Host(`${HOSTNAME:-snapshot.tailormap.nl}`)"
+      traefik.http.routers.tailormap-snapshot.rule: "Host(`${HOST:-snapshot.tailormap.nl}`)"
       traefik.http.routers.tailormap-snapshot.tls: "true"
       traefik.http.routers.tailormap-snapshot.tls.certresolver: "letsencrypt"
       traefik.http.services.tailormap-snapshot.loadbalancer.server.port: 80

@@ -38,7 +38,7 @@ services:
       - "ADMIN_PROXY_URL=${ADMIN_PROXY_URL:-http://admin:8080/admin/}"
       - "ADMIN_PROXY_HOST=${ADMIN_PROXY_HOST:-localhost}"
     labels:
-      traefik.http.routers.tailormap-snapshot.rule: "Host(`${HOSTNAME:-snapshot.tailormap.nl}`)"
+      traefik.http.routers.tailormap-snapshot.rule: "Host(`${HOST:-snapshot.tailormap.nl}`)"
       traefik.http.routers.tailormap-snapshot.tls: "true"
       traefik.http.routers.tailormap-snapshot.tls.certresolver: "letsencrypt"
       traefik.http.services.tailormap-snapshot.loadbalancer.server.port: 80
