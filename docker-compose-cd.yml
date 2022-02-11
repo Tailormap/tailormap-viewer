@@ -12,6 +12,9 @@ version: '3.9'
 
 services:
   web-proxied:
+    environment:
+      - "API_PROXY_HOST=${API_PROXY_HOST:-snapshot.tailormap.nl}"
+      - "ADMIN_PROXY_HOST=${ADMIN_PROXY_HOST:-snapshot.tailormap.nl}"
     labels:
       traefik.http.routers.tailormap-snapshot.rule: "Host(`${HOST:-snapshot.tailormap.nl}`)"
       traefik.http.routers.tailormap-snapshot.tls: "true"
