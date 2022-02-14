@@ -42,7 +42,6 @@ ALTER TABLE public.level_ ENABLE TRIGGER ALL;
 ALTER TABLE public.user_ DISABLE TRIGGER ALL;
 
 COPY public.user_ (username, password) FROM stdin;
-admin	720230f982b72beaeaa9aed0cb9bef22$100000$51a21a475cbf417e858ce64645f6b6bebcdfadc303c6ee477bdeb2eb352e29bb
 \.
 
 
@@ -1395,7 +1394,6 @@ ALTER TABLE public.user_details ENABLE TRIGGER ALL;
 ALTER TABLE public.user_groups DISABLE TRIGGER ALL;
 
 COPY public.user_groups (username, group_) FROM stdin;
-admin	Admin
 \.
 
 
