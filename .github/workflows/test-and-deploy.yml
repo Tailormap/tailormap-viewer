@@ -84,11 +84,11 @@ jobs:
           echo "VERSION_TAG=pr-${PR}" >> $GITHUB_ENV
           echo "BASE_HREF=/pull-request/${PR}/${GITHUB_REF_NAME_SLUG_URL}/" >> $GITHUB_ENV
       - name: Build and tag docker image
-        run: docker-compose build web
+        run: docker-compose build web db
       - name: Log in to GitHub container registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-      - name: Push image to registry
-        run: docker-compose push web
+      - name: Push images to registry
+        run: docker-compose push web db
       - uses: arwynfr/actions-docker-context@v2
         name: Set Docker context for deployment
         with:
