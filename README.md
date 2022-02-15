@@ -46,19 +46,53 @@ Run the stack using:
 
 `docker-compose --profile http --profile full up -d`
 
-Go to http://localhost/ for the viewer and http://localhost/admin/ for administration. The default account is admin/flamingo.
-During the first startup you might see some exceptions connecting to the database while this is being initialized, these are harmless as
-it will be retried later.
+Go to http://localhost/ for the viewer and http://localhost/admin/ for administration. During the first startup you might see some
+exceptions connecting to the database while this is being initialized, these are harmless as it will be retried later, although you may need
+to restart the admin container using `docker-compose --profile http --profile restart admin`.
 
 The build configuration for the `db` container for the configuration database (with preloaded data) is also in this
 repository. The `api` and `admin` containers are the snapshot-tagged versions, which get updated in
 the registry automatically. If you want to update your running containers, execute:
 
- - `docker-compose pull` to pull new images for `api` and `admin`
- - `docker-compose build web` to build a new Angular frontend image
- - `docker-compose build db` to build a new configuration database image (see note below)
+- `docker-compose pull` to pull new images for `api` and `admin`
+- `docker-compose build web` to build a new Angular frontend image
+- `docker-compose build db` to build a new configuration database image (see note below)
 
 Run `docker-compose --profile http --profile full up -d` again to use the updated images.
+
+#### Default account
+
+When starting up for the first time, the `api` container creates a user account for user administration on startup with a randomly generated
+password. This password is printed to the logs of the `api` container. You can see the password with:
+
+`docker-compose --profile http --profile full logs api`
+
+Look for the output containing:
+
+```
+api_1          | INFO 1 --- [           main] n.b.t.a.s.StartupAdminAccountBean        :
+api_1          | ***
+api_1          | *** Use this account for administrating users:
+api_1          | ***
+api_1          | *** Username: admin
+api_1          | *** Password: 6814a911-455b-4d4c-af31-387f89015a2e
+api_1          | ***
+```
+
+Log in to the administration interface with this account to setup security. The default admin account can only change security settings, add
+it to the `Admin` group for full control (you need to login again for changes to take effect). Change the password or save the generated
+password somewhere.
+
+#### Resetting account password
+
+If you ever forget the admin password but do not want to re-initialize the database, reset the password with:
+
+```
+docker-compose --profile http --profile full exec --user postgres db \
+  psql tailormap -c "update user_ set password = '{noop}changeme' where username = 'admin'"
+```
+
+Remember to change this password using the administration interface. It will be hashed securely using bcrypt.
 
 **Stopping**
 
