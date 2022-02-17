@@ -7,11 +7,20 @@
     <tm-error-message [message]="(errorMessage$ | async) ?? ''"></tm-error-message>
     <div class="form-field">
       <label for="login_username" i18n>Username</label>
-      <input id="login_username" name="username" type="text" formControlName="username"/>
+      <input id="login_username"
+             [tmAutoFocus]="1"
+             name="username"
+             type="text"
+             formControlName="username"
+             (keyup.enter)="login()" />
     </div>
     <div class="form-field">
       <label for="login_password" i18n>Password</label>
-      <input id="login_password" name="password" type="password" formControlName="password"/>
+      <input id="login_password"
+             name="password"
+             type="password"
+             formControlName="password"
+             (keyup.enter)="login()" />
     </div>
   </div>
   <div class="buttons">
