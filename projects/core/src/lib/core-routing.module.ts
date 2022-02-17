@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes, UrlMatcher, UrlSegment } from '@angular/router';
-import { ViewerAppComponent } from './pages';
+import { LoginComponent, ViewerAppComponent } from './pages';
 
 const matchById: UrlMatcher = (urls: UrlSegment[]) => {
   if (urls.length > 1 && urls[0].path === 'app' && /\d+/.test(urls[1].path)) {
@@ -13,6 +13,7 @@ const matchById: UrlMatcher = (urls: UrlSegment[]) => {
 };
 
 const routes: Routes = [
+  { path: 'login', component: LoginComponent },
   { path: 'app/:name/:version', component: ViewerAppComponent },
   { matcher: matchById, component: ViewerAppComponent },
   { path: 'app/:name', component: ViewerAppComponent },

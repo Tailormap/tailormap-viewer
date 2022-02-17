@@ -1,8 +1,20 @@
 @import "inter-font.css";
+@import "tailormap-styles-form.css";
 
 :root {
   --dialog-width: 300px;
   --dialog-z-index: 998;
+  --overlay-panel-z-index: 1000;
+
+  --primary-color: #6236ff;
+  --error-color: #ff3636;
+  --disabled-color: rgb(241, 241, 241);
+  --border-color: #e1e1e1;
+
+  --primary-color-0_5: rgba(98, 54, 255, 0.5);
+  --primary-color-0_4: rgba(98, 54, 255, 0.4);
+  --primary-color-0_1: rgba(98, 54, 255, 0.1);
+  --error-color-0_5: rgba(255, 54, 54, 0.5);
 }
 
 html {
@@ -60,12 +72,12 @@ body {
 }
 
 [ng-version] a:hover {
-  color: #6236ff;
+  color: var(--primary-color);
 }
 
 .mat-flat-button.mat-accent {
-  background-color: rgba(98, 54, 255, 0.4);
-  color: #6236ff;
+  background-color: var(--primary-color-0_4);
+  color: var(--primary-color);
 }
 
 .cdk-overlay-container .mat-snack-bar-container {

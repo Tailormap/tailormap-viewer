@@ -1,0 +1,36 @@
+<div class="login-form" [formGroup]="loginForm">
+  <div class="login-form__header">
+    <div i18n>Login</div>
+    <mat-icon class="logo" svgIcon="logo"></mat-icon>
+  </div>
+  <div class="login-form__body">
+    <tm-error-message [message]="(errorMessage$ | async) ?? ''"></tm-error-message>
+    <div class="form-field">
+      <label for="login_username" i18n>Username</label>
+      <input id="login_username"
+             [tmAutoFocus]="1"
+             name="username"
+             type="text"
+             formControlName="username"
+             (keyup.enter)="login()" />
+    </div>
+    <div class="form-field">
+      <label for="login_password" i18n>Password</label>
+      <input id="login_password"
+             name="password"
+             type="password"
+             formControlName="password"
+             (keyup.enter)="login()" />
+    </div>
+  </div>
+  <div class="buttons">
+    <button mat-flat-button
+            name="login"
+            color="primary"
+            [disabled]="loginForm.invalid || (loggingIn$ | async)"
+            (click)="login()">
+      <ng-template #loginLabel>Login</ng-template>
+      <mat-spinner *ngIf="(loggingIn$ | async); else: loginLabel" diameter="20" color="primary" mode="indeterminate"></mat-spinner>
+    </button>
+  </div>
+</div>

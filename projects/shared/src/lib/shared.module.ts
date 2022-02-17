@@ -1,20 +1,20 @@
 import { NgModule } from '@angular/core';
 import { SharedImportsModule } from './shared-imports.module';
-import { DialogComponent } from './components/dialog';
-import { SnackBarMessageComponent } from './components/snackbar-message/snack-bar-message.component';
+import { SharedComponentsModule } from './components';
+import { AutoFocusDirective } from './directives';
 
 @NgModule({
-  declarations: [
-    DialogComponent,
-    SnackBarMessageComponent,
-  ],
   imports: [
     SharedImportsModule,
+    SharedComponentsModule,
+  ],
+  declarations: [
+    AutoFocusDirective,
   ],
   exports: [
-    DialogComponent,
     SharedImportsModule,
-    SnackBarMessageComponent,
+    SharedComponentsModule,
+    AutoFocusDirective,
   ],
 })
 export class SharedModule { }
