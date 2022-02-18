@@ -5,6 +5,7 @@ import { BehaviorSubject, forkJoin, of, switchMap, take } from 'rxjs';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectRouteBeforeLogin } from '../../../state/core.selectors';
+import { setRouteBeforeLogin } from '../../../state/core.actions';
 
 @Component({
   selector: 'tm-login-form',
@@ -55,6 +56,7 @@ export class LoginFormComponent implements OnInit {
         if (success) {
           this.errorMessageSubject.next('');
           this.router.navigateByUrl(beforeLoginUrl || '/');
+          this.store$.dispatch(setRouteBeforeLogin({ route: '' }));
         } else {
           this.errorMessageSubject.next($localize `Login failed, please try again`);
         }
