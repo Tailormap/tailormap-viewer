@@ -1,5 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { TailormapApiV1Service } from '@tailormap-viewer/api';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'tm-login',
@@ -9,11 +8,9 @@ import { TailormapApiV1Service } from '@tailormap-viewer/api';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private tailormapApiService: TailormapApiV1Service) { }
+  constructor() { }
 
   public ngOnInit(): void {
-    // When login is the start of navigation, we do not have the XSRF token yet. Make sure to do a request to get it first.
-    this.tailormapApiService.getVersion$().subscribe();
   }
 
 }
