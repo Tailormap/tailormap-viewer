@@ -25,32 +25,32 @@ describe('TailormapApiV1Service', () => {
 
   test('queries API for getMap$', () => {
     spectator.service.getMap$(1).subscribe();
-    spectator.expectOne('/api/1/map', HttpMethod.GET);
+    spectator.expectOne('/api/app/1/map', HttpMethod.GET);
   });
 
   test('queries API for getComponents$', () => {
     spectator.service.getComponents$(1).subscribe();
-    spectator.expectOne('/api/1/components', HttpMethod.GET);
+    spectator.expectOne('/api/app/1/components', HttpMethod.GET);
   });
 
   test('queries API for getLayers$', () => {
     spectator.service.getLayers$(1).subscribe();
-    spectator.expectOne('/api/1/layers', HttpMethod.GET);
+    spectator.expectOne('/api/app/1/layers', HttpMethod.GET);
   });
 
   test('queries API for getDescribeLayer$', () => {
     spectator.service.getDescribeLayer$({ applicationId: 1, layerId: 1 }).subscribe();
-    spectator.expectOne('/api/1/describelayer/1', HttpMethod.GET);
+    spectator.expectOne('/api/app/1/layer/1/describe', HttpMethod.GET);
   });
 
   test('queries API for getFeatures$', () => {
     spectator.service.getFeatures$({ applicationId: 1, layerId: 1 }).subscribe();
-    spectator.expectOne('/api/1/features/1', HttpMethod.GET);
+    spectator.expectOne('/api/app/1/layer/1/features', HttpMethod.GET);
   });
 
   test('queries API for getFeatures$ - with params', () => {
     spectator.service.getFeatures$({ applicationId: 1, layerId: 1, x: 1, y: 2, distance: 10 }).subscribe();
-    spectator.expectOne('/api/1/features/1?x=1&y=2&distance=10', HttpMethod.GET);
+    spectator.expectOne('/api/app/1/layer/1/features?x=1&y=2&distance=10', HttpMethod.GET);
   });
 
 });
