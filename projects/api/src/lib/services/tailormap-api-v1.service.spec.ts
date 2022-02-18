@@ -8,6 +8,11 @@ describe('TailormapApiV1Service', () => {
 
   beforeEach(() => spectator = createHttp());
 
+  test('queries API for getVersion$', () => {
+    spectator.service.getVersion$().subscribe();
+    spectator.expectOne('/api/version', HttpMethod.GET);
+  });
+
   test('queries API for getApplication$', () => {
     spectator.service.getApplication$({}).subscribe();
     spectator.expectOne('/api/app', HttpMethod.GET);

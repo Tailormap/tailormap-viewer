@@ -22,3 +22,4 @@ export * from './relation-type.enum';
 export * from './service-protocol.enum';
 export * from './service.model';
 export * from './tiling-protocol.enum';
+export * from './version-response.model';

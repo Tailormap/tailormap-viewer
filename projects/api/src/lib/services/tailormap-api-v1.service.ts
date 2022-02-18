@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { AppLayerModel, AppResponseModel, ComponentModel, LayerDetailsModel, MapResponseModel } from '../models';
+import {
+  AppLayerModel, AppResponseModel, ComponentModel, FeaturesResponseModel, LayerDetailsModel, MapResponseModel, VersionResponseModel,
+} from '../models';
 import { Observable } from 'rxjs';
 import { TailormapApiV1ServiceModel } from './tailormap-api-v1.service.model';
-import { FeaturesResponseModel } from '../models/features-response.model';
 
 @Injectable()
 export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
@@ -13,6 +14,12 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
   constructor(
     private httpClient: HttpClient,
   ) {
+  }
+
+  public getVersion$(): Observable<VersionResponseModel> {
+    return this.httpClient.get<VersionResponseModel>(
+      `${TailormapApiV1Service.BASE_URL}/version`,
+    );
   }
 
   public getApplication$(params: {
