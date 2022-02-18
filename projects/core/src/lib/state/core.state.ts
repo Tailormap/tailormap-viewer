@@ -6,6 +6,7 @@ export const coreStateKey = 'core';
 
 export interface CoreState {
   loadStatus: LoadingStateEnum;
+  routeBeforeLogin?: string;
   error?: string;
   id?: number;
   apiVersion?: string;

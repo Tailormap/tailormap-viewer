@@ -9,7 +9,7 @@ import { TailormapApiV1ServiceModel } from './tailormap-api-v1.service.model';
 @Injectable()
 export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
 
-  private static BASE_URL = '/api';
+  public static BASE_URL = '/api';
 
   constructor(
     private httpClient: HttpClient,
