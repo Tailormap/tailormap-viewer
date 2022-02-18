@@ -28,19 +28,19 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
 
   public getMap$(applicationId: number): Observable<MapResponseModel> {
     return this.httpClient.get<MapResponseModel>(
-      `${TailormapApiV1Service.BASE_URL}/map/${applicationId}`,
+      `${TailormapApiV1Service.BASE_URL}/app/${applicationId}/map`,
     );
   }
 
   public getComponents$(applicationId: number): Observable<ComponentModel[]> {
     return this.httpClient.get<ComponentModel[]>(
-      `${TailormapApiV1Service.BASE_URL}/components/${applicationId}`,
+      `${TailormapApiV1Service.BASE_URL}/app/${applicationId}/components`,
     );
   }
 
   public getLayers$(applicationId: number): Observable<AppLayerModel[]> {
     return this.httpClient.get<AppLayerModel[]>(
-      `${TailormapApiV1Service.BASE_URL}/layers/${applicationId}`,
+      `${TailormapApiV1Service.BASE_URL}/app/${applicationId}/layers`,
     );
   }
 
@@ -49,7 +49,7 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
     layerId: number;
   }): Observable<LayerDetailsModel> {
     return this.httpClient.get<LayerDetailsModel>(
-      `${TailormapApiV1Service.BASE_URL}/describelayer/${params.applicationId}/${params.layerId}`,
+      `${TailormapApiV1Service.BASE_URL}/app/${params.applicationId}/layer/${params.layerId}/describe`,
     );
   }
 
@@ -72,7 +72,7 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
       filter: params.filter,
     });
     return this.httpClient.get<FeaturesResponseModel>(
-      `${TailormapApiV1Service.BASE_URL}/features/${params.applicationId}/${params.layerId}`,
+      `${TailormapApiV1Service.BASE_URL}/app/${params.applicationId}/layer/${params.layerId}/features`,
       { params: queryParams },
     );
   }
