@@ -20,7 +20,6 @@ export class SecurityInterceptor implements HttpInterceptor {
     const authReq = req.clone({
       withCredentials: true,
     });
-    console.log(req.url);
     return next.handle(authReq)
       .pipe(
         catchError(error => {
