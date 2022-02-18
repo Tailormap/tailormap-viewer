@@ -120,6 +120,7 @@ export const getMapResponseData = (overrides?: Partial<MapResponseModel>): MapRe
 export const getMockApiService = (
   overrides?: Partial<TailormapApiV1ServiceModel>,
 ): TailormapApiV1ServiceModel => ({
+  getVersion$: () => of({ version: '0.1-SNAPSHOT', databaseversion: '47', apiVersion: 'v1' }),
   getApplication$: (params: { name?: string; version?: string; id?: number }) => of(getAppResponseData(params)),
   getMap$: () => of(getMapResponseData()),
   getLayers$: () => of([getAppLayerModel({id: 1}), getAppLayerModel({id: 2})]),

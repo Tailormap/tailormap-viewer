@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
   AppLayerModel, AppResponseModel, ComponentModel, GeometryType, Language, LayerDetailsModel, MapResponseModel, ServiceProtocol,
+  VersionResponseModel,
 } from '../models';
 import { delay, Observable, of } from 'rxjs';
 import { TailormapApiV1ServiceModel } from './tailormap-api-v1.service.model';
@@ -9,6 +10,14 @@ import { FeatureAttributeTypeEnum } from '../models/feature-attribute-type.enum'
 
 @Injectable()
 export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
+
+  public getVersion$(): Observable<VersionResponseModel> {
+    return of({
+      version: '0.1-SNAPSHOT',
+      databaseversion: '47',
+      apiVersion: 'v1',
+    });
+  }
 
   public getApplication$(_params: {
     name?: string;
