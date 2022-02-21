@@ -7,7 +7,7 @@ import { catchError, map, Observable, of, switchMap } from 'rxjs';
 })
 export class SecurityService {
 
-  private static LOGIN_URL = '/api/login';
+  public static LOGIN_URL = '/api/login';
 
   constructor(
     private httpClient: HttpClient,

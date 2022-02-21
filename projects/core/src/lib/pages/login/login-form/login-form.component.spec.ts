@@ -7,6 +7,9 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
 import { wait } from '@testing-library/user-event/dist/utils';
+import { provideMockStore } from '@ngrx/store/testing';
+import { selectRouteBeforeLogin } from '../../../state/core.selectors';
+import { AutoFocusDirective } from '@tailormap-viewer/shared';
 
 describe('LoginFormComponent', () => {
 
@@ -16,9 +19,15 @@ describe('LoginFormComponent', () => {
       imports: [
         ReactiveFormsModule,
       ],
+      declarations: [
+        AutoFocusDirective,
+      ],
       providers: [
         { provide: SecurityService, useValue: { login$: jest.fn() }},
         { provide: Router, useValue: { navigateByUrl: jest.fn() }},
+        provideMockStore({
+          selectors: [{ selector: selectRouteBeforeLogin, value: '' }],
+        }),
       ],
     });
     expect(screen.getByText('Username'));
@@ -34,9 +43,15 @@ describe('LoginFormComponent', () => {
       imports: [
         ReactiveFormsModule,
       ],
+      declarations: [
+        AutoFocusDirective,
+      ],
       providers: [
         { provide: SecurityService, useValue: { login$: loginFn }},
         { provide: Router, useValue: { navigateByUrl: redirectFn }},
+        provideMockStore({
+          selectors: [{ selector: selectRouteBeforeLogin, value: '' }],
+        }),
       ],
     });
     const nameControl = await screen.getByLabelText('Username');
@@ -47,6 +62,35 @@ describe('LoginFormComponent', () => {
     expect(loginFn).toHaveBeenCalledWith('my_username', 'p@ssw0rd');
     await wait(0);
     expect(redirectFn).toHaveBeenCalledWith('/');
+  });
+
+  test('redirects to login before URL', async () => {
+    const loginFn = jest.fn(() => of(true));
+    const redirectFn = jest.fn();
+    await render(LoginFormComponent, {
+      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
+      imports: [
+        ReactiveFormsModule,
+      ],
+      declarations: [
+        AutoFocusDirective,
+      ],
+      providers: [
+        { provide: SecurityService, useValue: { login$: loginFn }},
+        { provide: Router, useValue: { navigateByUrl: redirectFn }},
+        provideMockStore({
+          selectors: [{ selector: selectRouteBeforeLogin, value: '/app/some-app' }],
+        }),
+      ],
+    });
+    const nameControl = await screen.getByLabelText('Username');
+    const passwordControl = await screen.getByLabelText('Password');
+    userEvent.type(nameControl, 'my_username');
+    userEvent.type(passwordControl, 'p@ssw0rd');
+    userEvent.click(await screen.findByRole('button', { name: /login/i }));
+    expect(loginFn).toHaveBeenCalledWith('my_username', 'p@ssw0rd');
+    await wait(0);
+    expect(redirectFn).toHaveBeenCalledWith('/app/some-app');
   });
 
 });

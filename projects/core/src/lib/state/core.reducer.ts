@@ -38,10 +38,19 @@ const onApplicationLoadFailed = (
   error: payload.error,
 });
 
+const onSetRouteBeforeLogin = (
+  state: CoreState,
+  payload: ReturnType<typeof CoreActions.setRouteBeforeLogin>,
+): CoreState => ({
+  ...state,
+  routeBeforeLogin: payload.route || undefined,
+});
+
 const coreReducerImpl = createReducer<CoreState>(
   initialCoreState,
   on(CoreActions.loadApplication, onLoadApplication),
   on(CoreActions.loadApplicationSuccess, onApplicationLoadSuccess),
   on(CoreActions.loadApplicationFailed, onApplicationLoadFailed),
+  on(CoreActions.setRouteBeforeLogin, onSetRouteBeforeLogin),
 );
 export const coreReducer = (state: CoreState | undefined, action: Action) => coreReducerImpl(state, action);

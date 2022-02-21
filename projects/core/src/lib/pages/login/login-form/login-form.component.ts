@@ -1,8 +1,11 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { SecurityService } from '../../../services/security.service';
-import { BehaviorSubject, take } from 'rxjs';
+import { BehaviorSubject, forkJoin, of, switchMap, take } from 'rxjs';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { selectRouteBeforeLogin } from '../../../state/core.selectors';
+import { setRouteBeforeLogin } from '../../../state/core.actions';
 
 @Component({
   selector: 'tm-login-form',
@@ -27,6 +30,7 @@ export class LoginFormComponent implements OnInit {
     private formBuilder: FormBuilder,
     private securityService: SecurityService,
     private router: Router,
+    private store$: Store,
   ) { }
 
   public ngOnInit(): void {
@@ -40,12 +44,19 @@ export class LoginFormComponent implements OnInit {
     }
     this.loggingInSubject.next(true);
     this.securityService.login$(username, password)
-      .pipe(take(1))
-      .subscribe(success => {
+      .pipe(
+        take(1),
+        switchMap(success => {
+          const beforeLoginUrl$ = this.store$.select(selectRouteBeforeLogin).pipe(take(1));
+          return forkJoin([of(success), beforeLoginUrl$]);
+        }),
+      )
+      .subscribe(([ success, beforeLoginUrl ]) => {
         this.loggingInSubject.next(false);
         if (success) {
           this.errorMessageSubject.next('');
-          this.router.navigateByUrl('/');
+          this.router.navigateByUrl(beforeLoginUrl || '/');
+          this.store$.dispatch(setRouteBeforeLogin({ route: '' }));
         } else {
           this.errorMessageSubject.next($localize `Login failed, please try again`);
         }

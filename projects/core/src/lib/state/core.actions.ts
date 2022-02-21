@@ -20,3 +20,7 @@ export const loadApplicationFailed = createAction(
   `${prefix} Application Load Failed`,
   props<{ error?: string }>(),
 );
+export const setRouteBeforeLogin = createAction(
+  `${prefix} Set Route Before Login`,
+  props<{ route: string }>(),
+);
