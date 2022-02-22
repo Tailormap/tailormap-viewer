@@ -1,3 +1,4 @@
+# Note when updating this version also update the version in the workflow files
 FROM node:16.14.0 AS builder
 
 ARG BASE_HREF=/
