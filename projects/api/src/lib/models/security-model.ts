@@ -1,6 +1,8 @@
+interface SecurityUserModel {
+  username?: string;
+}
+
 export interface SecurityModel {
   loggedIn: boolean;
-  user?: {
-    username?: string;
-  }
+  user?: SecurityUserModel;
 }

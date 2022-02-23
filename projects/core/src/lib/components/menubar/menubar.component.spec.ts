@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/angular';
-import { Component } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { MenubarComponent } from './menubar.component';
 import { MenubarService } from './menubar.service';
 import { of } from 'rxjs';
@@ -30,6 +30,7 @@ describe('Menubarcomponent', () => {
         MenubarComponent,
         MenubarButtonComponent,
       ],
+      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
       imports: [
         SharedModule,
         NoopAnimationsModule,
