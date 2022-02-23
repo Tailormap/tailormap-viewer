@@ -29,15 +29,19 @@ export class SecurityService {
       },
     });
     return ensureXsrfToken$.pipe(
-      switchMap(() => this.httpClient.post(SecurityService.LOGIN_URL, body, { observe: 'response', responseType: 'text' })),
-      map(response => response.status === 200 && !((response.url || '').endsWith("?error"))),
+      switchMap(() => this.doRequest$(SecurityService.LOGIN_URL, body, /.*(?<!\?error)$/)),
+    );
+  }
+
+  public logout$(): Observable<boolean> {
+    return this.doRequest$(SecurityService.LOGOUT_URL, null, /.*login\?logout$/);
+  }
+
+  private doRequest$(url: string, body: null | HttpParams, urlShouldMatch: RegExp) {
+    return this.httpClient.post(url, body, { observe: 'response', responseType: 'text' }).pipe(
+      map(response => response.status === 200 && urlShouldMatch.test(response.url || '')),
       catchError(() => of(false)),
     );
   }
 
-  public logout$() {
-    return this.httpClient.post(SecurityService.LOGOUT_URL, null, { observe: 'response', responseType: 'text' }).pipe(
-      map(response => response.status === 200 && (response.url || '').endsWith("login?logout")),
-    );
-  }
 }

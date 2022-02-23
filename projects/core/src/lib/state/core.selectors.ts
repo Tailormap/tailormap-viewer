@@ -57,3 +57,4 @@ export const selectVisibleLayers = createSelector(
   selectLayers,
   layers => layers.filter(l => l.layer.visible),
 );
+export const selectUserDetails = createSelector(selectCoreState, state => state.security);

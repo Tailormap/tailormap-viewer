@@ -1,0 +1,27 @@
+button {
+  margin: 5px 15px;
+  border-radius: 4px;
+}
+
+button,
+mat-icon {
+  color: rgba(19, 9, 54, 0.4);
+}
+
+button + button {
+  margin-top: 0;
+}
+
+button:hover,
+mat-icon:hover {
+  color: #6236ff;
+}
+
+.active {
+  background-color: rgba(98, 54, 255, 0.1);
+}
+
+.active,
+.active mat-icon {
+  color: #6236ff;
+}

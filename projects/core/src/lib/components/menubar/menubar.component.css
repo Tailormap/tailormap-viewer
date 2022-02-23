@@ -1,0 +1,30 @@
+.menubar {
+  width: 70px;
+  height: 100%;
+  background-color: #f9f9f9;
+  border-right: 1px solid #dcdcdc;
+  position: relative;
+  z-index: calc(var(--overlay-panel-z-index) + 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.logo {
+  width: 40px;
+  height: 40px;
+  margin: 20px 15px;
+}
+
+.divider {
+  height: 1px;
+  background-color: #e1e1e1;
+}
+
+.menu-buttons {
+  padding: 10px 0;
+  flex: 1;
+}
+
+.profile-buttons {
+  padding: 10px 0;
+}

@@ -19,6 +19,7 @@ export * from './loading-state.enum';
 export * from './map-response.model';
 export * from './redirect-response.model';
 export * from './relation-type.enum';
+export * from './security-model';
 export * from './service-protocol.enum';
 export * from './service.model';
 export * from './tiling-protocol.enum';

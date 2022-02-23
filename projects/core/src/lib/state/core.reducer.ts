@@ -46,11 +46,24 @@ const onSetRouteBeforeLogin = (
   routeBeforeLogin: payload.route || undefined,
 });
 
+const onSetLoginDetails = (
+  state: CoreState,
+  payload: ReturnType<typeof CoreActions.setLoginDetails>,
+): CoreState => ({
+  ...state,
+  security: {
+    ...state.security,
+    loggedIn: payload.loggedIn,
+    user: payload.user,
+  },
+});
+
 const coreReducerImpl = createReducer<CoreState>(
   initialCoreState,
   on(CoreActions.loadApplication, onLoadApplication),
   on(CoreActions.loadApplicationSuccess, onApplicationLoadSuccess),
   on(CoreActions.loadApplicationFailed, onApplicationLoadFailed),
   on(CoreActions.setRouteBeforeLogin, onSetRouteBeforeLogin),
+  on(CoreActions.setLoginDetails, onSetLoginDetails),
 );
 export const coreReducer = (state: CoreState | undefined, action: Action) => coreReducerImpl(state, action);

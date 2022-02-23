@@ -24,3 +24,7 @@ export const setRouteBeforeLogin = createAction(
   `${prefix} Set Route Before Login`,
   props<{ route: string }>(),
 );
+export const setLoginDetails = createAction(
+  `${prefix} Set Login Details`,
+  props<{ loggedIn: boolean; user?: { username?: string } }>(),
+);
