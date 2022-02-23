@@ -8,6 +8,7 @@ import { catchError, map, Observable, of, switchMap } from 'rxjs';
 export class SecurityService {
 
   public static LOGIN_URL = '/api/login';
+  public static LOGOUT_URL = '/api/logout';
 
   constructor(
     private httpClient: HttpClient,
@@ -28,10 +29,15 @@ export class SecurityService {
       },
     });
     return ensureXsrfToken$.pipe(
-      switchMap(() => this.httpClient.post(SecurityService.LOGIN_URL, body, { observe: 'response'})),
-      map(response => response.status === 200),
+      switchMap(() => this.httpClient.post(SecurityService.LOGIN_URL, body, { observe: 'response', responseType: 'text' })),
+      map(response => response.status === 200 && !((response.url || '').endsWith("?error"))),
       catchError(() => of(false)),
     );
   }
 
+  public logout$() {
+    return this.httpClient.post(SecurityService.LOGOUT_URL, null, { observe: 'response', responseType: 'text' }).pipe(
+      map(response => response.status === 200 && (response.url || '').endsWith("login?logout")),
+    );
+  }
 }

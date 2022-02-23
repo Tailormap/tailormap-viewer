@@ -85,7 +85,7 @@
             }
           },
           "options": {
-            "proxyConfig": "proxy.config.json"
+            "proxyConfig": "proxy.config.js"
           },
           "defaultConfiguration": "development"
         },
