@@ -4,26 +4,26 @@ This project is an Angular frontend for Tailormap.
 
 ## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Run `npm run start` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
 ## Using a Tailormap backend
 
-When running a dev server, the tailormap-api is proxied on the `/api` path. See [proxy.config.json](proxy.config.json). You can change the URL to connect to a
+When running a dev server, the tailormap-api is proxied on the `/api` path. See [proxy.config.json](proxy.config.js). You can change the URL to connect to a
 different tailormap-api instance (you can also run one locally).
 
 ## Code scaffolding
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Run `npm run ng -- generate component components/[name] --project core|map` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
 To create a new service which uses the HttpClient to make API calls run
 
-`ng generate service [name] --http-service`
+`npm run ng -- generate service services/[name] --project core|map --http-service`
 
 This creates a service with a HttpClient injected and adjusted spec file to test HTTP calls
 
 ## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Run `npm run build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
 ## Running unit tests
 
