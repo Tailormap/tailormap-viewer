@@ -1,11 +1,10 @@
-import { Component, ChangeDetectionStrategy, OnDestroy, ViewChild } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectUserDetails } from '../../../state/core.selectors';
 import { Subject, takeUntil } from 'rxjs';
 import { SecurityModel } from '@tailormap-viewer/api';
 import { SecurityService } from '../../../services/security.service';
 import { setLoginDetails, setRouteBeforeLogin } from '../../../state/core.actions';
-import { MatMenu, MatMenuPanel } from '@angular/material/menu';
 import { Router } from '@angular/router';
 
 @Component({

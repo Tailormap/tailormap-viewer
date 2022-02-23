@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { MatMenuPanel, MatMenuTrigger } from '@angular/material/menu';
+import { MatMenuPanel } from '@angular/material/menu';
 
 @Component({
   selector: 'tm-menubar-button',
@@ -10,7 +10,7 @@ import { MatMenuPanel, MatMenuTrigger } from '@angular/material/menu';
 export class MenubarButtonComponent {
 
   @Input()
-  public icon: string = '';
+  public icon = '';
 
   @Input()
   public menuTrigger: MatMenuPanel | null = null;
