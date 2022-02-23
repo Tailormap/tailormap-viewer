@@ -1,0 +1,20 @@
+<ng-template #buttonWithMenuTrigger>
+  <button *ngIf="menuTrigger"
+          mat-icon-button
+          (click)="handleClick()"
+          [matMenuTriggerFor]="menuTrigger"
+          [matTooltip]="(tooltip$ | async) ?? ''"
+          [class.active]="(active$ | async) ?? false">
+    <mat-icon *ngIf="icon" [svgIcon]="icon"></mat-icon>
+    <ng-content></ng-content>
+  </button>
+</ng-template>
+<ng-container *ngIf="!menuTrigger; else: buttonWithMenuTrigger">
+  <button mat-icon-button
+          (click)="handleClick()"
+          [matTooltip]="(tooltip$ | async) ?? ''"
+          [class.active]="(active$ | async) ?? false">
+    <mat-icon *ngIf="icon" [svgIcon]="icon"></mat-icon>
+    <ng-content></ng-content>
+  </button>
+</ng-container>

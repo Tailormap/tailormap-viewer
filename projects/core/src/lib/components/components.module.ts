@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FeatureInfoModule } from './feature-info/feature-info.module';
 import { MapControlsComponent } from './map-controls/map-controls.component';
+import { MenubarModule } from './menubar';
 
 
 
@@ -12,9 +13,11 @@ import { MapControlsComponent } from './map-controls/map-controls.component';
   imports: [
     CommonModule,
     FeatureInfoModule,
+    MenubarModule,
   ],
   exports: [
     FeatureInfoModule,
+    MenubarModule,
     MapControlsComponent,
   ],
 })
