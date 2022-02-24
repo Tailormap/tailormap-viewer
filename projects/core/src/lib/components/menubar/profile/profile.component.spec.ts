@@ -3,12 +3,14 @@ import { ProfileComponent } from './profile.component';
 import { MenubarButtonComponent } from '../menubar-button/menubar-button.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { SharedImportsModule } from '@tailormap-viewer/shared';
-import { provideMockStore } from '@ngrx/store/testing';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { selectUserDetails } from '../../../state/core.selectors';
 import { Router } from '@angular/router';
 import { SecurityService } from '../../../services/security.service';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { of } from 'rxjs';
+import { TestBed } from '@angular/core/testing';
+import { Store } from '@ngrx/store';
 
 const getMockStore = (loggedIn: boolean) => {
   return provideMockStore({
@@ -49,7 +51,7 @@ describe('ProfileComponent', () => {
   test('should render when logged in', async () => {
     const navigateFn = jest.fn();
     const logoutFn = jest.fn(() => of(true));
-    await render(ProfileComponent, {
+    const { fixture } = await render(ProfileComponent, {
       declarations: [
         MenubarButtonComponent,
       ],
@@ -72,6 +74,11 @@ describe('ProfileComponent', () => {
     const menuItem = await screen.findByText(/Logout/);
     fireEvent.click(menuItem);
     expect(logoutFn).toHaveBeenCalled();
+    const store = (TestBed.inject(Store) as MockStore);
+    store.overrideSelector(selectUserDetails, { loggedIn: false });
+    store.refreshState();
+    fireEvent.click(button);
+    expect(await screen.findByText('Login')).toBeInTheDocument();
   });
 
 });

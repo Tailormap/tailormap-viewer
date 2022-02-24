@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectUserDetails } from '../../../state/core.selectors';
 import { Subject, takeUntil } from 'rxjs';
@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./profile.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProfileComponent implements OnDestroy {
+export class ProfileComponent implements OnInit, OnDestroy {
 
   public userDetails: SecurityModel | null = null;
   private destroyed = new Subject();
@@ -23,7 +23,9 @@ export class ProfileComponent implements OnDestroy {
     private securityService: SecurityService,
     private router: Router,
     private cdr: ChangeDetectorRef,
-  ) {
+  ) {}
+
+  public ngOnInit() {
     this.store$.select(selectUserDetails)
       .pipe(takeUntil(this.destroyed))
       .subscribe(userDetails => {
