@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectUserDetails } from '../../../state/core.selectors';
 import { Subject, takeUntil } from 'rxjs';
@@ -22,11 +22,13 @@ export class ProfileComponent implements OnDestroy {
     private store$: Store,
     private securityService: SecurityService,
     private router: Router,
+    private cdr: ChangeDetectorRef,
   ) {
     this.store$.select(selectUserDetails)
       .pipe(takeUntil(this.destroyed))
       .subscribe(userDetails => {
         this.userDetails = userDetails;
+        this.cdr.detectChanges();
       });
   }
 
