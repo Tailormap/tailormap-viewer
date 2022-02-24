@@ -1,14 +1,16 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { CoreState, coreStateKey } from './core.state';
+import { CoreState, coreStateKey, MapState } from './core.state';
 import { AppLayerModel, ServiceModel } from '@tailormap-viewer/api';
 
 const selectCoreState = createFeatureSelector<CoreState>(coreStateKey);
+const selectApplicationState = createSelector(selectCoreState, state => state.application);
+const selectMapState = createSelector(selectCoreState, state => state.map);
 
-export const selectApplicationId = createSelector(selectCoreState, state => state.id);
+export const selectApplicationId = createSelector(selectApplicationState, state => state.id);
 export const selectRouteBeforeLogin = createSelector(selectCoreState, state => state.routeBeforeLogin);
 export const selectMapOptions = createSelector(
-  selectCoreState,
-  (state: CoreState) => {
+  selectMapState,
+  (state: MapState) => {
     if (!state.crs) {
       return null;
     }
@@ -32,7 +34,7 @@ export const selectMapOptions = createSelector(
 );
 
 export const selectServices = createSelector(
-  selectCoreState,
+  selectMapState,
   state => state.services,
 );
 
@@ -44,12 +46,12 @@ const getLayersAndServices = (layers: AppLayerModel[], services: ServiceModel[])
 };
 
 export const selectBaseLayers = createSelector(
-  selectCoreState,
+  selectMapState,
   selectServices,
   (state, services: ServiceModel[]) => getLayersAndServices(state.baseLayers, services),
 );
 export const selectLayers = createSelector(
-  selectCoreState,
+  selectMapState,
   selectServices,
   (state, services: ServiceModel[]) => getLayersAndServices(state.layers, services),
 );
