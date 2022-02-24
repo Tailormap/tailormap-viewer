@@ -8,7 +8,7 @@ import { LayerManagerModel, MapViewerModel, MapViewerOptionsModel } from '../mod
 import { ProjectionsHelper } from '../helpers/projections.helper';
 import { OpenlayersExtent } from '../models/extent.type';
 import { OpenLayersLayerManager } from './open-layers-layer-manager';
-import { BehaviorSubject, concatMap, filter, map, merge, Observable, Subject, take, tap } from 'rxjs';
+import { BehaviorSubject, concatMap, filter, map, merge, Observable, take } from 'rxjs';
 import { Size } from 'ol/size';
 import { ToolManagerModel } from '../models/tool-manager.model';
 import { OpenLayersToolManager } from './open-layers-tool-manager';

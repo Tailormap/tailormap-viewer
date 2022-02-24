@@ -4,17 +4,16 @@ import {
 
 export const coreStateKey = 'core';
 
-export interface CoreState {
-  loadStatus: LoadingStateEnum;
-  routeBeforeLogin?: string;
-  security: SecurityModel;
-  error?: string;
+export interface ApplicationState {
   id?: number;
   apiVersion?: string;
   name?: string;
   title?: string;
   lang?: Language;
   styling?: object;
+}
+
+export interface MapState {
   initialExtent?: BoundsModel;
   maxExtent?: BoundsModel;
   services: ServiceModel[];
@@ -24,11 +23,23 @@ export interface CoreState {
   layers: AppLayerModel[];
 }
 
+export interface CoreState {
+  loadStatus: LoadingStateEnum;
+  error?: string;
+  routeBeforeLogin?: string;
+  security: SecurityModel;
+  application: ApplicationState;
+  map: MapState;
+}
+
 export const initialCoreState: CoreState = {
   loadStatus: LoadingStateEnum.INITIAL,
   security: { loggedIn: false },
-  services: [],
-  baseLayers: [],
-  components: [],
-  layers: [],
+  application: {},
+  map: {
+    services: [],
+    baseLayers: [],
+    components: [],
+    layers: [],
+  },
 };
