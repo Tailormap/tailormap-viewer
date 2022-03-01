@@ -54,7 +54,7 @@ The build configuration for the `db` container for the configuration database (w
 repository. The `api` and `admin` containers are the snapshot-tagged versions, which get updated in
 the registry automatically. If you want to update your running containers, execute:
 
-- `docker-compose pull` to pull new images for `api` and `admin`
+- `docker-compose --profile http --profile full pull` to pull new images
 - `docker-compose build web` to build a new Angular frontend image
 - `docker-compose build db` to build a new configuration database image (see note below)
 
