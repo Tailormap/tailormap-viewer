@@ -12,7 +12,7 @@ jobs:
     name: Lint
     runs-on: ubuntu-18.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-node@v2
         with:
           # Keep this in sync with Dockerfile version
@@ -32,7 +32,7 @@ jobs:
     name: Test
     runs-on: ubuntu-18.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-node@v2
         with:
           # Keep this in sync with Dockerfile version
@@ -67,7 +67,7 @@ jobs:
       VERSION_TAG: snapshot
       BASE_HREF: /
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: GitHub Slug Action
         uses: rlespinasse/github-slug-action@4.0.0
       - name: Find Current Pull Request
