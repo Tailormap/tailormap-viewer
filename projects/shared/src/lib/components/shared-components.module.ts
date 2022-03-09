@@ -3,12 +3,14 @@ import { DialogComponent } from './dialog';
 import { SnackBarMessageComponent } from './snackbar-message';
 import { SharedImportsModule } from '../shared-imports.module';
 import { ErrorMessageComponent } from './error-message/error-message.component';
+import { TreeComponent } from './tree';
 
 @NgModule({
   declarations: [
     DialogComponent,
     SnackBarMessageComponent,
     ErrorMessageComponent,
+    TreeComponent,
   ],
   imports: [
     SharedImportsModule,
@@ -17,6 +19,7 @@ import { ErrorMessageComponent } from './error-message/error-message.component';
     DialogComponent,
     SnackBarMessageComponent,
     ErrorMessageComponent,
+    TreeComponent,
   ],
 })
 export class SharedComponentsModule {

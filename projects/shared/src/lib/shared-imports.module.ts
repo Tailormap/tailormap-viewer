@@ -9,6 +9,9 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatTreeModule } from '@angular/material/tree';
 
 @NgModule({
   imports: [
@@ -22,6 +25,9 @@ import { MatMenuModule } from '@angular/material/menu';
     MatProgressBarModule,
     MatTooltipModule,
     MatMenuModule,
+    MatCheckboxModule,
+    MatRadioModule,
+    MatTreeModule,
   ],
   exports: [
     CommonModule,
@@ -35,6 +41,9 @@ import { MatMenuModule } from '@angular/material/menu';
     MatProgressBarModule,
     MatTooltipModule,
     MatMenuModule,
+    MatCheckboxModule,
+    MatRadioModule,
+    MatTreeModule,
   ],
 })
 export class SharedImportsModule { }
