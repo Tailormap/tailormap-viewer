@@ -29,7 +29,7 @@ export class TreeComponent implements OnDestroy {
   @ViewChild('treeElement', { static: false, read: ElementRef })
   private treeElement: ElementRef<HTMLDivElement> | undefined;
 
-  private selectedNodeId: string | undefined;
+  public selectedNodeId: string | undefined;
 
   public treeDragDropServiceEnabled = false;
 
@@ -113,9 +113,6 @@ export class TreeComponent implements OnDestroy {
       FlatTreeHelper.isExpandable(node) ? `${treeNodeBaseClass}--folder` : `${treeNodeBaseClass}--leaf`,
       `${treeNodeBaseClass}--level-${FlatTreeHelper.getLevel(node)}`,
     ];
-    if (node.id === this.selectedNodeId) {
-      cls.push(`${treeNodeBaseClass}--selected`);
-    }
     if (!node.checkbox) {
       cls.push(`${treeNodeBaseClass}--no-checkbox`);
     }

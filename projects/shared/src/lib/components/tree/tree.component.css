@@ -23,6 +23,11 @@ mat-checkbox {
   position: relative;
 }
 
+.tree-node--selected {
+  background-color: rgba(98, 54, 255, 0.1);
+  color: #6236ff;
+}
+
 .tree-node-wrapper {
   display: flex;
   align-items: center;
@@ -42,11 +47,6 @@ mat-checkbox {
 .tree-node-wrapper--no-checkbox > .mat-icon-button {
   margin-top: -6px;
   margin-right: 3px;
-}
-
-.tree-node-wrapper--selected {
-  background-color: rgba(98, 54, 255, 0.1);
-  color: #6236ff;
 }
 
 .tree-node-wrapper--level-0.tree-node-wrapper--leaf,

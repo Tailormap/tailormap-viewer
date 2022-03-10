@@ -10,6 +10,7 @@
     <mat-tree-node *matTreeNodeDef="let node"
                    matTreeNodeToggle
                    matTreeNodePadding
+                   [class.tree-node--selected]="selectedNodeId === node.id"
                    matTreeNodePaddingIndent="20"
                    (click)="setNodeSelected(node)">
       <div [className]="getNodeClassName(node)"
@@ -18,6 +19,7 @@
            (dragstart)="treeDragDropServiceEnabled ? handleDragStart($event, node) : null">
         <mat-checkbox *ngIf="node.checkbox && !useRadioInputs"
                       class="checklist-leaf-node"
+                      [aria-label]="'toggle ' + node.label"
                       [checked]="node.checked"
                       [disabled]="readOnlyMode"
                       (click)="$event.stopPropagation()"
@@ -26,6 +28,7 @@
                           class="checklist-leaf-node"
                           [disabled]="readOnlyMode"
                           [checked]="node.checked"
+                          [aria-label]="'toggle ' + node.label"
                           (change)="handleRadioChangeEvent($event)"
                           (click)="$event.stopPropagation()"
                           [value]="node"></mat-radio-button>
@@ -53,6 +56,7 @@
                       [indeterminate]="isIndeterminate(node)"
                       [checked]="isChecked(node)"
                       [disabled]="readOnlyMode"
+                      [aria-label]="'toggle ' + node.label"
                       (click)="$event.stopPropagation()"
                       (change)="toggleGroup(node)"></mat-checkbox>
         <ng-container *ngTemplateOutlet="treeNodeTemplate ? treeNodeTemplate : defaultTreeNodeTemplate; context: {$implicit: node}"></ng-container>

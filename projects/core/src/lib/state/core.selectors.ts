@@ -1,6 +1,7 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { CoreState, coreStateKey, MapState } from './core.state';
 import { AppLayerModel, ServiceModel } from '@tailormap-viewer/api';
+import { TreeModel } from '@tailormap-viewer/shared';
 
 const selectCoreState = createFeatureSelector<CoreState>(coreStateKey);
 const selectApplicationState = createSelector(selectCoreState, state => state.application);
@@ -37,6 +38,7 @@ export const selectServices = createSelector(
   selectMapState,
   state => state.services,
 );
+export const selectLayers = createSelector(selectMapState, state => state.layers);
 
 const getLayersAndServices = (layers: AppLayerModel[], services: ServiceModel[]) => {
   return layers.map(layer => ({
@@ -45,18 +47,46 @@ const getLayersAndServices = (layers: AppLayerModel[], services: ServiceModel[])
   }));
 };
 
-export const selectBaseLayers = createSelector(
+export const selectBaseLayersAndServices = createSelector(
   selectMapState,
   selectServices,
   (state, services: ServiceModel[]) => getLayersAndServices(state.baseLayers, services),
 );
-export const selectLayers = createSelector(
+export const selectLayersAndServices = createSelector(
   selectMapState,
   selectServices,
   (state, services: ServiceModel[]) => getLayersAndServices(state.layers, services),
 );
 export const selectVisibleLayers = createSelector(
-  selectLayers,
+  selectLayersAndServices,
   layers => layers.filter(l => l.layer.visible),
 );
 export const selectUserDetails = createSelector(selectCoreState, state => state.security);
+
+export const selectSelectedLayerId = createSelector(selectMapState, state => state.selectedLayer);
+export const selectSelectedLayer = createSelector(
+  selectSelectedLayerId,
+  selectLayers,
+  (selectedId, layers): AppLayerModel | null => {
+    if (typeof selectedId === 'undefined') {
+      return null;
+    }
+    return layers.find(l => l.id === selectedId) || null;
+  },
+);
+
+export const selectLayerTreeWithoutBackgroundLayers = createSelector(
+  selectLayers,
+  (layers): TreeModel[] => {
+    return layers.map(layer => {
+      const treeModel: TreeModel = {
+        id: `${layer.id}`,
+        label: layer.displayName,
+        type: 'layer',
+        metadata: layer,
+        checked: layer.visible,
+      };
+      return treeModel;
+    });
+  },
+);

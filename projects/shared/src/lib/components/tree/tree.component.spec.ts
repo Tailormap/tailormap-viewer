@@ -1,5 +1,5 @@
 import { TreeDragDropService } from './tree-drag-drop.service';
-import { SharedImportsModule } from '@tailormap-viewer/shared';
+import { getTreeModelMock, SharedImportsModule } from '@tailormap-viewer/shared';
 import { TreeService } from './tree.service';
 import { NgZone } from '@angular/core';
 import { render, screen } from '@testing-library/angular';
@@ -9,37 +9,25 @@ import { TreeModel } from './models';
 import userEvent from '@testing-library/user-event';
 
 const getTree = () => [
-  getTreeModel(),
-  getTreeModel({
+  getTreeModelMock(),
+  getTreeModelMock({
     id: '2',
     label: 'Item 2',
     children: [
-      getTreeModel({ id: '2_1', label: 'Item 2 - 1' }),
-      getTreeModel({
+      getTreeModelMock({ id: '2_1', label: 'Item 2 - 1' }),
+      getTreeModelMock({
         id: '2_2',
         label: 'Item 2 - 2',
         children: [
-          getTreeModel({ id: '2_2_1', label: 'Item 2 - 2 - 1' }),
-          getTreeModel({ id: '2_2_2', label: 'Item 2 - 2 - 2' }),
+          getTreeModelMock({ id: '2_2_1', label: 'Item 2 - 2 - 1' }),
+          getTreeModelMock({ id: '2_2_2', label: 'Item 2 - 2 - 2' }),
         ],
       }),
-      getTreeModel({ id: '2_2', label: 'Item 2 - 2' }),
+      getTreeModelMock({ id: '2_2', label: 'Item 2 - 2' }),
     ],
   }),
-  getTreeModel({ id: '3', label: 'Item 3' }),
+  getTreeModelMock({ id: '3', label: 'Item 3' }),
 ];
-
-const getTreeModel = (overrides?: Partial<TreeModel>): TreeModel => ({
-  id: '1',
-  label: 'Item 1',
-  type: 'test',
-  children: undefined,
-  metadata: undefined,
-  readOnlyItem: false,
-  checked: false,
-  expanded: false,
-  ...overrides,
-});
 
 describe('TreeComponent', () => {
 
