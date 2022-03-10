@@ -63,9 +63,9 @@ export const selectVisibleLayers = createSelector(
 );
 export const selectUserDetails = createSelector(selectCoreState, state => state.security);
 
-export const selectedLayerId = createSelector(selectMapState, state => state.selectedLayer);
-export const selectedLayer = createSelector(
-  selectedLayerId,
+export const selectSelectedLayerId = createSelector(selectMapState, state => state.selectedLayer);
+export const selectSelectedLayer = createSelector(
+  selectSelectedLayerId,
   selectLayers,
   (selectedId, layers): AppLayerModel | null => {
     if (typeof selectedId === 'undefined') {

@@ -1,22 +1,10 @@
 import { FlatTreeHelper } from './flat-tree.helper';
-import { TreeModel } from '../models';
+import { getTreeModelMock } from '../mock-data/tree-model.mock-data';
 
 describe('FlatTreeHelper', () => {
 
-  const getTreeModel = (overrides?: Partial<TreeModel>): TreeModel => ({
-    id: '1',
-    label: 'Item 1',
-    type: 'test',
-    children: undefined,
-    metadata: undefined,
-    readOnlyItem: false,
-    checked: false,
-    expanded: false,
-    ...overrides,
-  });
-
   test('transforms TreeModel to FlatTreeModel', () => {
-    expect(FlatTreeHelper.transformer(getTreeModel(), 1)).toEqual({
+    expect(FlatTreeHelper.transformer(getTreeModelMock(), 1)).toEqual({
       id: '1',
       label: 'Item 1',
       level: 1,
@@ -31,24 +19,24 @@ describe('FlatTreeHelper', () => {
   });
 
   test('checks if TreeModel has children', () => {
-    expect(FlatTreeHelper.hasChildren(getTreeModel())).toEqual(false);
-    expect(FlatTreeHelper.hasChildren(getTreeModel({ children: [ getTreeModel() ]}))).toEqual(true);
-    expect(FlatTreeHelper.hasChildren(getTreeModel({ children: [] }))).toEqual(true);
+    expect(FlatTreeHelper.hasChildren(getTreeModelMock())).toEqual(false);
+    expect(FlatTreeHelper.hasChildren(getTreeModelMock({ children: [ getTreeModelMock() ]}))).toEqual(true);
+    expect(FlatTreeHelper.hasChildren(getTreeModelMock({ children: [] }))).toEqual(true);
   });
 
   test('gets children', () => {
-    expect(FlatTreeHelper.getChildren(getTreeModel())).toBeUndefined();
-    expect(FlatTreeHelper.getChildren(getTreeModel({ children: [ getTreeModel() ]}))).toEqual([ getTreeModel() ]);
-    expect(FlatTreeHelper.getChildren(getTreeModel({ children: [] }))).toEqual([]);
+    expect(FlatTreeHelper.getChildren(getTreeModelMock())).toBeUndefined();
+    expect(FlatTreeHelper.getChildren(getTreeModelMock({ children: [ getTreeModelMock() ]}))).toEqual([ getTreeModelMock() ]);
+    expect(FlatTreeHelper.getChildren(getTreeModelMock({ children: [] }))).toEqual([]);
   });
 
   test('gets a parent node', () => {
     const nodes = [
-      FlatTreeHelper.transformer(getTreeModel(), 0),
-      FlatTreeHelper.transformer(getTreeModel({ id: '2' }), 0),
-      FlatTreeHelper.transformer(getTreeModel({ id: '2_1' }), 1),
-      FlatTreeHelper.transformer(getTreeModel({ id: '2_1_1' }), 2),
-      FlatTreeHelper.transformer(getTreeModel({ id: '2_1_1_1' }), 3),
+      FlatTreeHelper.transformer(getTreeModelMock(), 0),
+      FlatTreeHelper.transformer(getTreeModelMock({ id: '2' }), 0),
+      FlatTreeHelper.transformer(getTreeModelMock({ id: '2_1' }), 1),
+      FlatTreeHelper.transformer(getTreeModelMock({ id: '2_1_1' }), 2),
+      FlatTreeHelper.transformer(getTreeModelMock({ id: '2_1_1_1' }), 3),
     ];
     expect(FlatTreeHelper.getParentNode(nodes[0], nodes)).toEqual(null);
     expect(FlatTreeHelper.getParentNode(nodes[2], nodes)).toEqual(nodes[1]);

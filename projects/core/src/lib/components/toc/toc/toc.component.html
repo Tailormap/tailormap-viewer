@@ -4,6 +4,7 @@
 
 <tm-dialog [open]="visible$ | async"
            (closeDialog)="closeToc()"
-           title="Kaartlagen">
+           i18n-title
+           title="Available layers">
   <tm-tree class="toc-tree" [treeNodeTemplate]="treeNode" [expandOnGroupClick]="true"></tm-tree>
 </tm-dialog>

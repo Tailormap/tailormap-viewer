@@ -6,7 +6,7 @@ import { TocService } from '../services/toc.service';
 import { MenubarService } from '../../menubar';
 import { TocMenuButtonComponent } from '../toc-menu-button/toc-menu-button.component';
 import { Store } from '@ngrx/store';
-import { selectedLayerId, selectLayerTreeWithoutBackgroundLayers } from '../../../state/core.selectors';
+import { selectSelectedLayerId, selectLayerTreeWithoutBackgroundLayers } from '../../../state/core.selectors';
 import { setLayerVisibility, setSelectedLayerId } from '../../../state/core.actions';
 
 @Component({
@@ -33,7 +33,7 @@ export class TocComponent implements OnInit, OnDestroy {
       this.store$.select(selectLayerTreeWithoutBackgroundLayers),
     );
     this.treeService.setSelectedNode(
-      this.store$.select(selectedLayerId).pipe(map(id => typeof id !== 'undefined' ? `${id}` : '')),
+      this.store$.select(selectSelectedLayerId).pipe(map(id => typeof id !== 'undefined' ? `${id}` : '')),
     );
     this.treeService.checkStateChangedSource$
       .pipe(
