@@ -1,0 +1,9 @@
+<ng-template #treeNode let-node>
+  <tm-tree-node-layer [node]="node"></tm-tree-node-layer>
+</ng-template>
+
+<tm-dialog [open]="visible$ | async"
+           (closeDialog)="closeToc()"
+           title="Kaartlagen">
+  <tm-tree class="toc-tree" [treeNodeTemplate]="treeNode" [expandOnGroupClick]="true"></tm-tree>
+</tm-dialog>

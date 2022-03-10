@@ -1,0 +1,8 @@
+:host,
+.toc-tree {
+  height: 100%;
+}
+
+::ng-deep .tree-wrapper {
+  padding: 14px 14px 0 14px;
+}
