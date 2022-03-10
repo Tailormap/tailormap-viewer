@@ -32,3 +32,7 @@ export const setLayerVisibility = createAction(
   `${prefix} Set Layer Visibility`,
   props<{ visibility: Record<string, boolean> }>(),
 );
+export const setSelectedLayerId = createAction(
+  `${prefix} Set Selected Layer ID`,
+  props<{ layerId: string }>(),
+);

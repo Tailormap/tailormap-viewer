@@ -7,7 +7,7 @@ import { MenubarService } from '../../menubar';
 import { TocMenuButtonComponent } from '../toc-menu-button/toc-menu-button.component';
 import { Store } from '@ngrx/store';
 import { selectedLayerId, selectLayerTreeWithoutBackgroundLayers } from '../../../state/core.selectors';
-import { setLayerVisibility } from '../../../state/core.actions';
+import { setLayerVisibility, setSelectedLayerId } from '../../../state/core.actions';
 
 @Component({
   selector: 'tm-toc',
@@ -29,7 +29,9 @@ export class TocComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.visible$ = this.tocService.isVisible$();
-    this.treeService.setDataSource(this.store$.select(selectLayerTreeWithoutBackgroundLayers));
+    this.treeService.setDataSource(
+      this.store$.select(selectLayerTreeWithoutBackgroundLayers),
+    );
     this.treeService.setSelectedNode(
       this.store$.select(selectedLayerId).pipe(map(id => typeof id !== 'undefined' ? `${id}` : '')),
     );
@@ -46,9 +48,9 @@ export class TocComponent implements OnInit, OnDestroy {
     // this.treeService.nodeExpansionChangedSource$
     //   .pipe(takeUntil(this.destroyed))
     //   .subscribe(nodeId => this.applicationService.toggleLevelExpansion(nodeId));
-    // this.treeService.selectionStateChangedSource$
-    //   .pipe(takeUntil(this.destroyed))
-    //   .subscribe(layerId => this.applicationService.setSelectedLayerId(layerId));
+    this.treeService.selectionStateChangedSource$
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(layerId => this.store$.dispatch(setSelectedLayerId({ layerId })));
 
     this.menubarService.registerComponent(TocMenuButtonComponent);
   }
