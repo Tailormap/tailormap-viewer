@@ -3,7 +3,6 @@
   left: 0;
   top: 0;
   bottom: 0;
-  width: var(--dialog-width);
   background-color: #fff;
   z-index: var(--dialog-z-index);
   display: flex;

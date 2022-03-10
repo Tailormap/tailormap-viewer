@@ -1,6 +1,7 @@
 <div *ngIf="open"
-     [@inOutAnimation]="{ value: true, params: { translate: openFromRight ? '300px' : '-300px' }}"
+     [@inOutAnimation]="{ value: true, params: { translate: openFromRight ? width + 'px' : (-1 * width) + 'px' }}"
      class="dialog mat-elevation-z4"
+     [style.width]="width + 'px'"
      [class.dialog--hidden]="hidden"
      [class.dialog--collapsed]="collapsed">
 

@@ -11,3 +11,4 @@ export * from './tool-manager.model';
 export * from './tms-layer.model';
 export * from './wms-layer.model';
 export * from './tools';
+export * from './map-resolution.model';

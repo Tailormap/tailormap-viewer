@@ -1,9 +1,8 @@
 import { Injectable, NgZone } from '@angular/core';
 import { OpenLayersMap } from '../openlayers-map/openlayers-map';
 import { finalize, map, Observable, tap } from 'rxjs';
-import { LayerManagerModel, MapViewerOptionsModel, ToolModel } from '../models';
+import { LayerManagerModel, MapResolutionModel, MapViewerOptionsModel, ToolModel } from '../models';
 import { ToolManagerModel } from '../models/tool-manager.model';
-import { OpenLayersEventManager } from '../openlayers-map/open-layers-event-manager';
 
 @Injectable({
   providedIn: 'root',
@@ -57,6 +56,18 @@ export class MapService {
 
   public getPixelForCoordinates$(coordinates: [ number, number ]): Observable<[ number, number ]> {
     return this.map.getPixelForCoordinates$(coordinates);
+  }
+
+  public getResolution$(): Observable<MapResolutionModel> {
+    return this.map.getResolution$();
+  }
+
+  public zoomIn() {
+    this.map.zoomIn();
+  }
+
+  public zoomOut() {
+    this.map.zoomOut();
   }
 
 }

@@ -30,6 +30,17 @@
   overflow: hidden;
 }
 
+.map-controls-right {
+  position: absolute;
+  top: var(--body-margin);
+  right: var(--body-margin);
+  transition: transform ease-in-out 0.25s;
+}
+
+::ng-deep.body--has-dialog-right .map-controls-right {
+  transform: translateX(calc((var(--dialog-width-right) + var(--body-margin)) * -1));
+}
+
 .bottom {
   position: relative;
 }

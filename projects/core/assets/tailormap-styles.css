@@ -2,8 +2,10 @@
 @import "tailormap-styles-form.css";
 
 :root {
-  --dialog-width: 300px;
+  --dialog-width-left: 0;
+  --dialog-width-right: 0;
   --dialog-z-index: 998;
+  --body-margin: 16px;
   --overlay-panel-z-index: 1000;
 
   --primary-color: #6236ff;
