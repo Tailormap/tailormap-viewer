@@ -1,10 +1,11 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { LayerModel, LayerTypesEnum, MapService, OgcHelper, WMSLayerModel, WMTSLayerModel } from '@tailormap-viewer/map';
-import { selectBaseLayers, selectLayers, selectMapOptions } from '../state/core.selectors';
-import { concatMap, filter, forkJoin, map, Observable, of, Subject, take, takeUntil } from 'rxjs';
+import { selectMapOptions, selectVisibleLayers } from '../state/core.selectors';
+import { concatMap, distinctUntilChanged, filter, forkJoin, map, Observable, of, Subject, take, takeUntil } from 'rxjs';
 import { AppLayerModel, ServiceModel, ServiceProtocol } from '@tailormap-viewer/api';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { ArrayHelper } from '@tailormap-viewer/shared';
 
 @Injectable({
    providedIn: 'root',
@@ -23,6 +24,14 @@ export class ApplicationMapService implements OnDestroy {
       .pipe(
         takeUntil(this.destroyed),
         filter(mapOptions => !!mapOptions),
+        distinctUntilChanged((prev, curr) => {
+          if (prev === null || curr === null) {
+            return false;
+          }
+          return prev.projection === curr.projection &&
+            ArrayHelper.arrayEquals(prev.initialExtent, curr.initialExtent) &&
+            ArrayHelper.arrayEquals(prev.maxExtent, curr.maxExtent);
+        }),
       )
       .subscribe(mapOptions => {
         if (mapOptions === null) {
@@ -31,21 +40,21 @@ export class ApplicationMapService implements OnDestroy {
         this.mapService.initMap(mapOptions);
       });
 
-    this.store$.select(selectBaseLayers)
-      .pipe(
-        takeUntil(this.destroyed),
-        concatMap(baseLayers => this.getLayersAndLayerManager$(baseLayers)),
-      )
-      .subscribe(([ baseLayers, layerManager ]) => {
-        const validBaseLayers = baseLayers.filter(isValidLayer);
-        if (validBaseLayers.length === 0) {
-          return;
-        }
-        // @TODO: support more than 1 baseLayer
-        layerManager.setBackgroundLayer(validBaseLayers[0]);
-      });
+    // this.store$.select(selectBaseLayersAndServices)
+    //   .pipe(
+    //     takeUntil(this.destroyed),
+    //     concatMap(baseLayers => this.getLayersAndLayerManager$(baseLayers)),
+    //   )
+    //   .subscribe(([ baseLayers, layerManager ]) => {
+    //     const validBaseLayers = baseLayers.filter(isValidLayer);
+    //     if (validBaseLayers.length === 0) {
+    //       return;
+    //     }
+    //     // @TODO: support more than 1 baseLayer
+    //     layerManager.setBackgroundLayer(validBaseLayers[0]);
+    //   });
 
-    this.store$.select(selectLayers)
+    this.store$.select(selectVisibleLayers)
       .pipe(
         takeUntil(this.destroyed),
         concatMap(layers => this.getLayersAndLayerManager$(layers)),
@@ -57,10 +66,9 @@ export class ApplicationMapService implements OnDestroy {
 
   private getLayersAndLayerManager$(serviceLayers: Array<{ layer: AppLayerModel; service?: ServiceModel }>) {
     const layers$ = serviceLayers
-      .reverse() // until we have order add the layers in reverse order
       .map(layer => this.convertAppLayerToMapLayer$(layer.layer, layer.service));
     return forkJoin([
-      forkJoin(layers$),
+      layers$.length > 0 ? forkJoin(layers$) : of([]),
       this.mapService.getLayerManager$().pipe(take(1)),
     ]);
   }

@@ -74,6 +74,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
       .forEach(layer => {
         this.addLayer(layer);
       });
+    this.setLayerOrder(Array.from(layerIds));
   }
 
   public addLayer(layer: LayerModel): LayerTypes {
