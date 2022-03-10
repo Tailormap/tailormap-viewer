@@ -28,3 +28,7 @@ export const setLoginDetails = createAction(
   `${prefix} Set Login Details`,
   props<{ loggedIn: boolean; user?: { username?: string } }>(),
 );
+export const setLayerVisibility = createAction(
+  `${prefix} Set Layer Visibility`,
+  props<{ visibility: Record<string, boolean> }>(),
+);
