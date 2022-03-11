@@ -3,7 +3,6 @@ import { OpenLayersMap } from '../openlayers-map/openlayers-map';
 import { finalize, map, Observable, tap } from 'rxjs';
 import { LayerManagerModel, MapResolutionModel, MapViewerOptionsModel, ToolModel } from '../models';
 import { ToolManagerModel } from '../models/tool-manager.model';
-import Projection from 'ol/proj/Projection';
 
 @Injectable({
   providedIn: 'root',
