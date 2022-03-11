@@ -1,8 +1,7 @@
 :host,
 .map-controls-container {
-  position: absolute;
+  display: block;
   width: 0;
   height: 0;
   overflow: visible;
-  z-index: 997;
 }
