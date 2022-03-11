@@ -140,13 +140,16 @@ export class OpenLayersMap implements MapViewerModel {
     return this.getMap$().pipe(map(olMap => olMap.getView().getProjection()));
   }
 
-  public getPixelForCoordinates$(coordinates: [number, number]): Observable<[number, number]> {
+  public getPixelForCoordinates$(coordinates: [number, number]): Observable<[number, number] | null> {
     return merge(
       this.getMap$(),
       OpenLayersEventManager.onMapMove$().pipe(map(evt => evt.map)))
         .pipe(
           map(olMap => {
             const px = olMap.getPixelFromCoordinate(coordinates);
+            if (!px) {
+              return null;
+            }
             return [px[0], px[1]];
           }),
         );

@@ -54,7 +54,7 @@ export class MapService {
       );
   }
 
-  public getPixelForCoordinates$(coordinates: [ number, number ]): Observable<[ number, number ]> {
+  public getPixelForCoordinates$(coordinates: [ number, number ]): Observable<[ number, number ] | null> {
     return this.map.getPixelForCoordinates$(coordinates);
   }
 
