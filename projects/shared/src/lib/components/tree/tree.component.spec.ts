@@ -1,5 +1,4 @@
 import { TreeDragDropService } from './tree-drag-drop.service';
-import { getTreeModelMock, SharedImportsModule } from '@tailormap-viewer/shared';
 import { TreeService } from './tree.service';
 import { NgZone } from '@angular/core';
 import { render, screen } from '@testing-library/angular';
@@ -7,6 +6,8 @@ import { TreeComponent } from './tree.component';
 import { BehaviorSubject } from 'rxjs';
 import { TreeModel } from './models';
 import userEvent from '@testing-library/user-event';
+import { getTreeModelMock } from './mock-data/tree-model.mock-data';
+import { SharedImportsModule } from '../../shared-imports.module';
 
 const getTree = () => [
   getTreeModelMock(),

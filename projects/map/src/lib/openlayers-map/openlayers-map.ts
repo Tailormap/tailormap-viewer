@@ -4,7 +4,7 @@ import Projection from 'ol/proj/Projection';
 import View  from 'ol/View';
 import { NgZone } from '@angular/core';
 import { defaults as defaultInteractions } from 'ol/interaction';
-import { LayerManagerModel, MapViewerModel, MapViewerOptionsModel } from '../models';
+import { LayerManagerModel, MapResolutionModel, MapViewerModel, MapViewerOptionsModel } from '../models';
 import { ProjectionsHelper } from '../helpers/projections.helper';
 import { OpenlayersExtent } from '../models/extent.type';
 import { OpenLayersLayerManager } from './open-layers-layer-manager';
@@ -13,6 +13,7 @@ import { Size } from 'ol/size';
 import { ToolManagerModel } from '../models/tool-manager.model';
 import { OpenLayersToolManager } from './open-layers-tool-manager';
 import { OpenLayersEventManager } from './open-layers-event-manager';
+import { MapBrowserEvent } from 'ol';
 
 export class OpenLayersMap implements MapViewerModel {
 
@@ -149,6 +150,25 @@ export class OpenLayersMap implements MapViewerModel {
             return [px[0], px[1]];
           }),
         );
+  }
+
+  public getResolution$(): Observable<MapResolutionModel> {
+    return merge(
+      this.getMap$(),
+      OpenLayersEventManager.onMapMove$().pipe(map(evt => evt.map)))
+      .pipe(
+        map(olMap => {
+          const view = olMap.getView();
+          return {
+            zoomLevel: view.getZoom() || 0,
+            minZoomLevel: view.getMinZoom() || 0,
+            maxZoomLevel: view.getMaxZoom() || 0,
+            resolution: view.getResolution() || 0,
+            minResolution: view.getMinResolution() || 0,
+            maxResolution: view.getMaxResolution() || 0,
+          };
+        }),
+      );
   }
 
   private getSize$(): Observable<Size> {

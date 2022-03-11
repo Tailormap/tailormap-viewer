@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/angular';
 import { SnackBarMessageComponent } from './snack-bar-message.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { MAT_SNACK_BAR_DATA, MatSnackBarRef } from '@angular/material/snack-bar';
-import { SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
+import { SnackBarMessageOptionsModel } from './snack-bar-message-options.model';
 
 describe('SnackbarMessageComponent', () => {
 

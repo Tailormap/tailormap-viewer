@@ -1,0 +1,20 @@
+<div class="zoom-buttons"
+     *ngIf="resolution$ | async as resolution">
+  <button mat-flat-button
+          class="zoom-in"
+          i18n-aria-label
+          aria-label="Zoom in"
+          [disabled]="resolution.zoomLevel >= resolution.maxZoomLevel"
+          (click)="zoomIn()">
+    <mat-icon svgIcon="plus"></mat-icon>
+  </button>
+  <div class="divider"></div>
+  <button mat-flat-button
+          class="zoom-out"
+          i18n-aria-label
+          aria-label="Zoom out"
+          [disabled]="resolution.zoomLevel <= resolution.minZoomLevel"
+          (click)="zoomOut()">
+    <mat-icon svgIcon="minus"></mat-icon>
+  </button>
+</div>
