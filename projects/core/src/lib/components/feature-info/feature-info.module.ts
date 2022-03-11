@@ -9,6 +9,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { FeatureInfoEffects } from './state/feature-info.effects';
 import { FeatureInfoSpinnerComponent } from './feature-info-spinner/feature-info-spinner.component';
 import { FeatureInfoDialogComponent } from './feature-info-dialog/feature-info-dialog.component';
+import { FeatureInfoHighlightComponent } from './feature-info-highlight/feature-info-highlight.component';
 
 
 @NgModule({
@@ -16,6 +17,7 @@ import { FeatureInfoDialogComponent } from './feature-info-dialog/feature-info-d
     FeatureInfoComponent,
     FeatureInfoSpinnerComponent,
     FeatureInfoDialogComponent,
+    FeatureInfoHighlightComponent,
   ],
   imports: [
     CommonModule,
