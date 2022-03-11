@@ -26,4 +26,7 @@ export class ZoomButtonsComponent {
     this.mapService.zoomOut();
   }
 
+  public zoomToInitialExtent() {
+    this.mapService.zoomToInitialExtent();
+  }
 }
