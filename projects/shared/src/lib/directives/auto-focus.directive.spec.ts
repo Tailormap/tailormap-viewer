@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/angular';
-import { AutoFocusDirective } from '@tailormap-viewer/shared';
+import { AutoFocusDirective } from './auto-focus.directive';
 
 describe('AutoFocusDirective', () => {
 
