@@ -21,6 +21,7 @@ export interface MapState {
   crs?: CoordinateReferenceSystemModel;
   components: ComponentModel[];
   layers: AppLayerModel[];
+  selectedLayer?: number;
 }
 
 export interface CoreState {
