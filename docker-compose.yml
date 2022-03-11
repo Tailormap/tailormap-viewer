@@ -20,6 +20,10 @@ services:
       - "ADMIN_PROXY_ENABLED=${ADMIN_PROXY_ENABLED:-true}"
       - "ADMIN_PROXY_URL=${ADMIN_PROXY_URL:-http://admin:8080/admin/}"
       - "ADMIN_PROXY_HOST=${ADMIN_PROXY_HOST:-localhost}"
+    labels:
+      traefik.enable: false
+    restart: unless-stopped
+
 
   # The same as web, but without port 80 exposed and with labels for using with Traefik as a reverse proxy.
   web-proxied:
@@ -42,6 +46,9 @@ services:
       traefik.http.routers.tailormap-snapshot.tls: "true"
       traefik.http.routers.tailormap-snapshot.tls.certresolver: "letsencrypt"
       traefik.http.services.tailormap-snapshot.loadbalancer.server.port: 80
+      traefik.enable: true
+    restart: unless-stopped
+
 
   api:
     image: ghcr.io/b3partners/tailormap-api:snapshot
@@ -50,6 +57,10 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db/tailormap
       DB_PASSWORD: ${TAILORMAP_DB_PASSWORD:-tailormap}
+    labels:
+      traefik.enable: false
+    restart: unless-stopped
+
 
   admin:
     image: ghcr.io/b3partners/tailormap-admin:snapshot
@@ -57,6 +68,10 @@ services:
       - full
     environment:
       CATALINA_OPTS: -DPG_HOST=db -DPG_PORT=5432 -DPG_DATABASE=tailormap -DDB_NAME=tailormap -DDB_USER=tailormap -DDB_PASSWORD=${TAILORMAP_DB_PASSWORD:-tailormap} -DURL_SCHEME=http
+    labels:
+      traefik.enable: false
+    restart: unless-stopped
+
 
   db:
     image: ghcr.io/b3partners/tailormap-config-db:snapshot
@@ -64,6 +79,8 @@ services:
       context: docker/db
     profiles:
       - full
+    labels:
+      traefik.enable: false
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
       TAILORMAP_PASSWORD: ${TAILORMAP_DB_PASSWORD:-tailormap}
@@ -75,6 +92,8 @@ services:
       timeout: 5s
       retries: 5
       test: su postgres -c pg_isready
+    restart: unless-stopped
+
 
 volumes:
   config-db:

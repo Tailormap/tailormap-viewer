@@ -20,8 +20,11 @@ services:
       traefik.http.routers.tailormap-snapshot.tls: "true"
       traefik.http.routers.tailormap-snapshot.tls.certresolver: "letsencrypt"
       traefik.http.services.tailormap-snapshot.loadbalancer.server.port: 80
+      traefik.enable: true
     networks:
       - tailormap-snapshot
+    restart: unless-stopped
+
 
   api:
     environment:
@@ -32,6 +35,10 @@ services:
     networks:
       - tailormap-snapshot
       - tailormap-db
+    labels:
+      traefik.enable: false
+    restart: unless-stopped
+
 
   admin:
     environment:
@@ -41,6 +48,10 @@ services:
     networks:
       - tailormap-snapshot
       - tailormap-db
+    labels:
+      traefik.enable: false
+    restart: unless-stopped
+
 
 # The db container is not added to the full-external-db profile, so it won't run
 
