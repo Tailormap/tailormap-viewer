@@ -1,7 +1,7 @@
 import { AppLayerModel, ColumnMetadataModel, FeatureModel } from '@tailormap-viewer/api';
 
 export interface FeatureInfoModel {
-  features: FeatureModel[];
-  columnMetadata: ColumnMetadataModel[];
+  feature: FeatureModel;
+  columnMetadata: Map<string, ColumnMetadataModel>;
   layer: AppLayerModel;
 }

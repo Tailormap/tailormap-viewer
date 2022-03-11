@@ -1,7 +1,7 @@
 import * as FeatureInfoActions from './feature-info.actions';
 import { featureInfoReducer } from './feature-info.reducer';
 import { FeatureInfoState, initialFeatureInfoState } from './feature-info.state';
-import { FeatureInfoModel } from '../models/feature-info.model';
+import { FeatureInfoResponseModel } from '../models/feature-info-response.model';
 import { getAppLayerModel, getColumnMetadataModel, getFeatureModel } from '@tailormap-viewer/api';
 import { LoadStatusEnum } from '@tailormap-viewer/shared';
 
@@ -18,7 +18,7 @@ describe('FeatureInfoReducer', () => {
 
   test('handles LoadFeatureInfoSuccess', () => {
     const state = {...initialFeatureInfoState};
-    const featureInfo: FeatureInfoModel[] = [{
+    const featureInfo: FeatureInfoResponseModel[] = [{
       features: [ getFeatureModel() ],
       columnMetadata: [ getColumnMetadataModel() ],
       layer: getAppLayerModel(),

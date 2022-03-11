@@ -2,7 +2,7 @@ import { default as OlMap } from 'ol/Map';
 import VectorSource from 'ol/source/Vector';
 import BaseLayer from 'ol/layer/Base';
 import LayerGroup from 'ol/layer/Group';
-import VectorImageLayer from 'ol/layer/VectorImage';
+import VectorLayer from 'ol/layer/Vector';
 import ImageWMS from 'ol/source/ImageWMS';
 import WMTS from 'ol/source/WMTS';
 import XYZ from 'ol/source/XYZ';
@@ -11,9 +11,9 @@ import { OlLayerHelper } from '../helpers/ol-layer.helper';
 import { LayerModel } from '../models/layer.model';
 import {
   isOpenLayersTMSLayer,
-  isOpenLayersVectorImageLayer,
   isOpenLayersVectorLayer,
-  isOpenLayersWMSLayer, isPossibleRealtimeLayer,
+  isOpenLayersWMSLayer,
+  isPossibleRealtimeLayer,
 } from '../helpers/ol-layer-types.helper';
 import { LayerTypesHelper } from '../helpers/layer-types.helper';
 import Geometry from 'ol/geom/Geometry';
@@ -77,7 +77,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     this.setLayerOrder(Array.from(layerIds));
   }
 
-  public addLayer(layer: LayerModel): LayerTypes {
+  public addLayer<LayerType extends LayerTypes>(layer: LayerModel): LayerType | null {
     const olLayer = this.createLayer(layer);
     if (olLayer === null) {
       return null;
@@ -87,7 +87,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     OlLayerHelper.setLayerProps(layer, olLayer);
     this.layers.set(layer.id, olLayer);
     this.addLayerToMap(olLayer, layer);
-    return olLayer;
+    return olLayer as LayerType;
   }
 
   public removeLayer(id: string) {
@@ -171,7 +171,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
       this.baseLayerGroup.setLayers(layers);
       this.layers.set(layerModel.id, layer);
     }
-    if (isOpenLayersVectorLayer(layer) || isOpenLayersVectorImageLayer(layer)) {
+    if (isOpenLayersVectorLayer(layer) || isOpenLayersVectorLayer(layer)) {
       const layers = this.drawingLayerGroup.getLayers();
       layers.push(layer);
       this.drawingLayerGroup.setLayers(layers);
@@ -199,7 +199,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
       layers.remove(layer);
       this.baseLayerGroup.setLayers(layers);
     }
-    if (isOpenLayersVectorLayer(layer) || isOpenLayersVectorImageLayer(layer)) {
+    if (isOpenLayersVectorLayer(layer) || isOpenLayersVectorLayer(layer)) {
       const layers = this.drawingLayerGroup.getLayers();
       layers.remove(layer);
       this.drawingLayerGroup.setLayers(layers);
@@ -211,7 +211,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     if (isOpenLayersWMSLayer(layer) || isOpenLayersTMSLayer(layer)) {
       this.layers.delete(layerId);
     }
-    if (isOpenLayersVectorLayer(layer) || isOpenLayersVectorImageLayer(layer)) {
+    if (isOpenLayersVectorLayer(layer) || isOpenLayersVectorLayer(layer)) {
       this.layers.delete(layerId);
       this.sources.delete(layerId);
     }
@@ -231,7 +231,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     return olLayer;
   }
 
-  private createVectorLayer(layer: LayerModel): VectorImageLayer<VectorSource<Geometry>> | null {
+  private createVectorLayer(layer: LayerModel): VectorLayer<VectorSource<Geometry>> | null {
     const source = new VectorSource({ wrapX: true });
     this.sources.set(layer.id, source);
     return OlLayerHelper.createVectorLayer(layer, source);

@@ -9,7 +9,7 @@ import VectorSource from 'ol/source/Vector';
 import { StyleFunction } from 'ol/style/Style';
 import { optionsFromCapabilities } from 'ol/source/WMTS';
 import { TMSLayerModel } from '../models/tms-layer.model';
-import VectorImageLayer from 'ol/layer/VectorImage';
+import VectorLayer from 'ol/layer/Vector';
 import { LayerTypesHelper } from './layer-types.helper';
 import { OgcHelper } from './ogc.helper';
 import { LayerModel } from '../models/layer.model';
@@ -80,8 +80,8 @@ export class OlLayerHelper {
     });
   }
 
-  public static createVectorLayer(layer: LayerModel, source: VectorSource<Geometry>, stylingFn?: StyleFunction): VectorImageLayer<VectorSource<Geometry>> {
-    return new VectorImageLayer({ source, visible: layer.visible, style: stylingFn });
+  public static createVectorLayer(layer: LayerModel, source: VectorSource<Geometry>, stylingFn?: StyleFunction): VectorLayer<VectorSource<Geometry>> {
+    return new VectorLayer({ source, visible: layer.visible, style: stylingFn });
   }
 
   public static createWMSLayer(layer: WMSLayerModel): ImageLayer<ImageWMS> {

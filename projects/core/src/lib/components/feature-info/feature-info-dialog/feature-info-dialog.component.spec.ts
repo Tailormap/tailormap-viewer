@@ -5,12 +5,12 @@ import { featureInfoStateKey, initialFeatureInfoState } from '../state/feature-i
 import { SharedModule } from '@tailormap-viewer/shared';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { selectFeatureInfo, selectFeatureInfoDialogVisible } from '../state/feature-info.selectors';
-import { FeatureInfoModel } from '../models/feature-info.model';
+import { FeatureInfoResponseModel } from '../models/feature-info-response.model';
 import { getAppLayerModel, getColumnMetadataModel } from '@tailormap-viewer/api';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { TestBed } from '@angular/core/testing';
 
-const getFeatureInfo = (updated?: boolean): FeatureInfoModel[] => {
+const getFeatureInfo = (updated?: boolean): FeatureInfoResponseModel[] => {
   return [
     {
       features: ['1', '2', '3', '4', '5']

@@ -3,7 +3,7 @@ import { FeaturesResponseModel, TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceM
 import { Store } from '@ngrx/store';
 import { selectApplicationId, selectVisibleLayers } from '../../state/core.selectors';
 import { combineLatest, concatMap, forkJoin, map, Observable, of, take } from 'rxjs';
-import { FeatureInfoModel } from './models/feature-info.model';
+import { FeatureInfoResponseModel } from './models/feature-info-response.model';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +18,7 @@ export class FeatureInfoService {
   ) {
   }
 
-  public getFeatures$(coordinates: [ number, number ]): Observable<FeatureInfoModel[]> {
+  public getFeatures$(coordinates: [ number, number ]): Observable<FeatureInfoResponseModel[]> {
     return combineLatest([
       this.store$.select(selectVisibleLayers),
       this.store$.select(selectApplicationId),
@@ -30,18 +30,18 @@ export class FeatureInfoService {
             return of([]);
           }
           const featureRequests$ = layers.map(layer => {
+            const layerId = layer.layer.id;
             return this.apiService.getFeatures$({
-              layerId: layer.layer.id,
+              layerId,
               applicationId,
               x: coordinates[0],
               y: coordinates[1],
               distance: FeatureInfoService.DEFAULT_DISTANCE,
               simplify: true,
             }).pipe(
-              map((featureInfoResult: FeaturesResponseModel): FeatureInfoModel => ({
-                features: featureInfoResult.features || [],
-                layer: layer.layer,
-                columnMetadata: featureInfoResult.columnMetadata || [],
+              map((featureInfoResult: FeaturesResponseModel): FeatureInfoResponseModel => ({
+                features: (featureInfoResult.features || []).map(feature => ({ ...feature, layerId })),
+                columnMetadata: (featureInfoResult.columnMetadata || []).map(metadata => ({ ...metadata, layerId })),
               })),
             );
           });

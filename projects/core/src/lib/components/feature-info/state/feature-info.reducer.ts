@@ -2,6 +2,8 @@ import * as FeatureInfoActions from './feature-info.actions';
 import { Action, createReducer, on } from '@ngrx/store';
 import { FeatureInfoState, initialFeatureInfoState } from './feature-info.state';
 import { LoadStatusEnum } from '@tailormap-viewer/shared';
+import { FeatureInfoFeatureModel } from '../models/feature-info-feature.model';
+import { FeatureInfoColumnMetadataModel } from '../models/feature-info-column-metadata.model';
 
 const onLoadFeatureInfo = (
   state: FeatureInfoState,
@@ -18,7 +20,8 @@ const onLoadFeatureInfoSuccess = (
   payload: ReturnType<typeof FeatureInfoActions.loadFeatureInfoSuccess>,
 ): FeatureInfoState => ({
   ...state,
-  featureInfo: payload.featureInfo,
+  features: payload.featureInfo.reduce<FeatureInfoFeatureModel[]>((allFeatures, featureInfoModel) => allFeatures.concat(featureInfoModel.features), []),
+  columnMetadata: payload.featureInfo.reduce<FeatureInfoColumnMetadataModel[]>((allMetadata, featureInfoModel) => allMetadata.concat(featureInfoModel.columnMetadata), []),
   loadStatus: LoadStatusEnum.LOADED,
 });
 
@@ -39,6 +42,16 @@ const onExpandCollapseFeatureInfoDialog = (state: FeatureInfoState): FeatureInfo
   dialogCollapsed: !state.dialogCollapsed,
 });
 
+const onShowNextFeatureInfoFeature = (state: FeatureInfoState): FeatureInfoState => ({
+  ...state,
+  currentFeatureIndex: state.features.length === state.currentFeatureIndex - 1 ? 0 : state.currentFeatureIndex++,
+});
+
+const onShowPreviousFeatureInfoFeature = (state: FeatureInfoState): FeatureInfoState => ({
+  ...state,
+  currentFeatureIndex: state.currentFeatureIndex > 0 ? state.currentFeatureIndex-- : state.features.length - 1,
+});
+
 const featureInfoReducerImpl = createReducer<FeatureInfoState>(
   initialFeatureInfoState,
   on(FeatureInfoActions.loadFeatureInfo, onLoadFeatureInfo),
@@ -47,5 +60,7 @@ const featureInfoReducerImpl = createReducer<FeatureInfoState>(
   on(FeatureInfoActions.showFeatureInfoDialog, onShowFeatureInfoDialog),
   on(FeatureInfoActions.hideFeatureInfoDialog, onHideFeatureInfoDialog),
   on(FeatureInfoActions.expandCollapseFeatureInfoDialog, onExpandCollapseFeatureInfoDialog),
+  on(FeatureInfoActions.showNextFeatureInfoFeature, onShowNextFeatureInfoFeature),
+  on(FeatureInfoActions.showPreviousFeatureInfoFeature, onShowPreviousFeatureInfoFeature),
 );
 export const featureInfoReducer = (state: FeatureInfoState | undefined, action: Action) => featureInfoReducerImpl(state, action);

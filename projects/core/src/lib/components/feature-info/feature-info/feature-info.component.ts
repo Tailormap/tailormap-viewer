@@ -1,12 +1,16 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
-import { MapClickToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
+import { LayerTypesEnum, MapClickToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
 import { Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { loadFeatureInfo } from '../state/feature-info.actions';
-import { selectFeatureInfoError$ } from '../state/feature-info.selectors';
+import { selectCurrentlySelectedFeature, selectFeatureInfoError$ } from '../state/feature-info.selectors';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { $localize } from '@angular/localize/init';
 import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
+import { Stroke, Style } from 'ol/style';
+import { combineLatest } from 'rxjs';
+import { FeatureAttributeTypeEnum } from '@tailormap-viewer/api';
+import { WKT } from 'ol/format';
 
 @Component({
   selector: 'tm-feature-info',
@@ -22,6 +26,10 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
     onClick: evt => this.handleMapClick(evt),
   };
 
+  private vectorLayerStyle = new Style({
+    stroke: new Stroke({ color: '#6236ff', width: 2 }),
+  });
+
   private static DEFAULT_ERROR_MESSAGE = $localize `Something went wrong while getting feature info, please try again`;
   private static DEFAULT_NO_FEATURES_FOUND_MESSAGE = $localize `No features found`;
 
@@ -35,6 +43,33 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
     this.mapService.createTool$(this.toolConfig, true)
       .pipe(takeUntil(this.destroyed))
       .subscribe();
+    combineLatest([
+      this.mapService.createVectorLayer$({
+        id: 'feature-info-layer',
+        name: 'Feature info highlight layer',
+        layerType: LayerTypesEnum.Vector,
+        visible: false,
+      }),
+      this.store$.select(selectCurrentlySelectedFeature),
+    ])
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(([ vectorLayer, currentFeature ]) => {
+        if (!vectorLayer || !currentFeature) {
+          return;
+        }
+        const geomAttribute = Array.from(currentFeature.columnMetadata.values()).find(c => c.type === FeatureAttributeTypeEnum.GEOMETRY);
+        if (!geomAttribute) {
+          return;
+        }
+        const geom = currentFeature.feature.attributes[geomAttribute.key];
+        if (!geom) {
+          return;
+        }
+        vectorLayer.setStyle(this.vectorLayerStyle);
+        vectorLayer.getSource().getFeatures().forEach(feature => vectorLayer.getSource().removeFeature(feature));
+        vectorLayer.getSource().addFeature((new WKT()).readFeature(geom));
+        vectorLayer.setVisible(true);
+      });
   }
 
   public ngOnDestroy() {

@@ -1,8 +1,11 @@
 import { Injectable, NgZone } from '@angular/core';
 import { OpenLayersMap } from '../openlayers-map/openlayers-map';
 import { finalize, map, Observable, tap } from 'rxjs';
-import { LayerManagerModel, MapResolutionModel, MapViewerOptionsModel, ToolModel } from '../models';
+import { LayerManagerModel, MapResolutionModel, MapViewerOptionsModel, ToolModel, VectorLayerModel } from '../models';
 import { ToolManagerModel } from '../models/tool-manager.model';
+import VectorLayer from 'ol/layer/Vector';
+import Geometry from 'ol/geom/Geometry';
+import VectorSource from 'ol/source/Vector';
 
 @Injectable({
   providedIn: 'root',
@@ -50,6 +53,22 @@ export class MapService {
             manager.enableTool(id);
           }
           return [ manager, id ];
+        }),
+      );
+  }
+
+  public createVectorLayer$(layer: VectorLayerModel): Observable<VectorLayer<VectorSource<Geometry>> | null> {
+    let layerManager: LayerManagerModel;
+    return this.getLayerManager$()
+      .pipe(
+        tap(manager => layerManager = manager),
+        finalize(() => {
+          if (!!layerManager) {
+            layerManager.removeLayer(layer.id);
+          }
+        }),
+        map(manager => {
+          return manager.addLayer<VectorLayer<VectorSource<Geometry>>>(layer);
         }),
       );
   }
