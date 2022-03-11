@@ -18,7 +18,9 @@ export class SecurityInterceptor implements HttpInterceptor {
 
   public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const authReq = req.clone({
-      withCredentials: true,
+      withCredentials: req.url.startsWith(TailormapApiV1Service.BASE_URL)
+        ? true
+        : req.withCredentials,
     });
     return next.handle(authReq)
       .pipe(
