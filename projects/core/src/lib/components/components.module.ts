@@ -3,27 +3,23 @@ import { CommonModule } from '@angular/common';
 import { FeatureInfoModule } from './feature-info/feature-info.module';
 import { MapControlsComponent } from './map-controls/map-controls.component';
 import { MenubarModule } from './menubar';
-import { ZoomButtonsComponent } from './zoom-buttons/zoom-buttons.component';
-import { SharedImportsModule } from "@tailormap-viewer/shared";
-
-
+import { ZoomButtonsModule } from './zoom-buttons';
 
 @NgModule({
   declarations: [
     MapControlsComponent,
-    ZoomButtonsComponent,
   ],
-    imports: [
-        CommonModule,
-        FeatureInfoModule,
-        MenubarModule,
-        SharedImportsModule,
-    ],
+  imports: [
+    CommonModule,
+    FeatureInfoModule,
+    MenubarModule,
+    ZoomButtonsModule,
+  ],
   exports: [
     FeatureInfoModule,
     MenubarModule,
+    ZoomButtonsModule,
     MapControlsComponent,
-    ZoomButtonsComponent,
   ],
 })
 export class ComponentsModule {}

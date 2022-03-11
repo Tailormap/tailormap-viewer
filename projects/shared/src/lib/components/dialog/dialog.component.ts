@@ -42,7 +42,7 @@ export class DialogComponent implements OnInit, OnChanges {
   public collapsed: boolean | null = false;
 
   @Input()
-  public width: number = 300;
+  public width = 300;
 
   @Output()
   public closeDialog = new EventEmitter();
