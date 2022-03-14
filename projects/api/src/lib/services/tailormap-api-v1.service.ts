@@ -65,6 +65,7 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
     layerId: number;
     x?: number;
     y?: number;
+    crs?: string;
     distance?: number;
     __fid?: string;
     simplify?: boolean;
@@ -73,6 +74,7 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
     const queryParams = this.getQueryParams({
       x: params.x,
       y: params.y,
+      crs: params.crs,
       distance: params.distance,
       __fid: params.__fid,
       simplify: params.simplify,
