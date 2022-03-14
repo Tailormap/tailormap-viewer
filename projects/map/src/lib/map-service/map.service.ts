@@ -74,4 +74,8 @@ export class MapService {
     this.map.zoomOut();
   }
 
+  public zoomToInitialExtent() {
+    this.map.zoomToInitialExtent();
+  }
+
 }

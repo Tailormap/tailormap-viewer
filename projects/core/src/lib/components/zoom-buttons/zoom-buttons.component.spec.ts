@@ -11,23 +11,28 @@ describe('ZoomButtonsComponent', () => {
   test('renders and handles clicks', async () => {
     const zoomInFn = jest.fn();
     const zoomOutFn = jest.fn();
+    const zoomToInitialExtentFn = jest.fn();
     const mapService = {
       provide: MapService,
       useValue: {
         getResolution$: () => of({ zoomLevel: 1, minZoomLevel: 0, maxZoomLevel: 2 }),
         zoomIn: zoomInFn,
         zoomOut: zoomOutFn,
+        zoomToInitialExtent: zoomToInitialExtentFn,
       },
     };
     await render(ZoomButtonsComponent, { providers: [mapService], imports: [ MatIconTestingModule, SharedImportsModule ] });
     const zoomInBtn = await screen.getByLabelText('Zoom in');
     const zoomOutBtn = await screen.getByLabelText('Zoom out');
+    const zoomToInitialExtentBtn = await screen.getByLabelText('Zoom to initial extent');
     expect(zoomInBtn).toBeInTheDocument();
     expect(zoomOutBtn).toBeInTheDocument();
     userEvent.click(zoomInBtn);
     expect(zoomInFn).toHaveBeenCalled();
     userEvent.click(zoomOutBtn);
     expect(zoomOutFn).toHaveBeenCalled();
+    userEvent.click(zoomToInitialExtentBtn);
+    expect(zoomToInitialExtentFn).toHaveBeenCalled();
   });
 
   test('disables zoom in button on max zoom level reached', async () => {
