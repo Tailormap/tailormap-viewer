@@ -8,7 +8,12 @@ export class DynamicComponentsHelper {
     if (!injectedComponents || injectedComponents.length === 0) {
       return;
     }
-    injectedComponents.forEach(existingComponent => existingComponent.destroy());
+    injectedComponents.forEach(existingComponent => {
+      if (!existingComponent.destroy) {
+        return;
+      }
+      existingComponent.destroy();
+    });
   }
 
   public static createComponents(
@@ -22,8 +27,7 @@ export class DynamicComponentsHelper {
       container.clear();
     }
     components.forEach(component => {
-      const componentFactory = componentFactoryResolver.resolveComponentFactory(component);
-      const addedComponent = container.createComponent(componentFactory);
+      const addedComponent = container.createComponent(component);
       injectedComponents.push(addedComponent.instance);
     });
     return injectedComponents;
