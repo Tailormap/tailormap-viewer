@@ -125,6 +125,14 @@ export class OpenLayersMap implements MapViewerModel {
     });
   }
 
+  public zoomToInitialExtent() {
+    this.executeMapAction(olMap => {
+      if (this.initialExtent && this.initialExtent.length > 0) {
+        olMap.getView().fit(this.initialExtent);
+      }
+    });
+  }
+
   public getMap$(): Observable<OlMap> {
     const isNotNullMap = (item: OlMap | null): item is OlMap => item !== null;
     return this.map.asObservable().pipe(filter(isNotNullMap));

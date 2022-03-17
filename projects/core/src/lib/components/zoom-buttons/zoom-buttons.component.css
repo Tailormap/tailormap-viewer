@@ -7,6 +7,10 @@
   border-radius: 3px;
 }
 
+.zoom-buttons + .zoom-buttons {
+  margin-top: 9px;
+}
+
 .zoom-buttons button {
   background-color: #fff;
   border: 0 none;
@@ -20,6 +24,7 @@
 .zoom-buttons mat-icon {
   width: var(--size);
   height: var(--size);
+  margin: 8px;
 }
 
 .zoom-buttons .zoom-in {
@@ -30,6 +35,10 @@
 .zoom-buttons .zoom-out {
   border-bottom-left-radius: 3px;
   border-bottom-right-radius: 3px;
+}
+
+.zoom-buttons .zoom-initial-extent {
+  border-radius: 3px;
 }
 
 .zoom-buttons .divider {

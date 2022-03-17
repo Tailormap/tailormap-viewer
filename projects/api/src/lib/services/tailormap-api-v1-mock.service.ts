@@ -108,6 +108,7 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
     layerId: number;
     x?: number;
     y?: number;
+    crs?: string;
     distance?: number;
     __fid?: string;
     simplify?: boolean;

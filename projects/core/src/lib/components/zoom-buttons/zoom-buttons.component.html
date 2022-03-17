@@ -1,5 +1,14 @@
-<div class="zoom-buttons"
-     *ngIf="resolution$ | async as resolution">
+<ng-container *ngIf="resolution$ | async as resolution">
+<div class="zoom-buttons">
+  <button mat-flat-button
+          class="zoom-initial-extent"
+          i18n-aria-label
+          aria-label="Zoom to initial extent"
+          (click)="zoomToInitialExtent()">
+    <mat-icon svgIcon="zoom_max"></mat-icon>
+  </button>
+</div>
+<div class="zoom-buttons">
   <button mat-flat-button
           class="zoom-in"
           i18n-aria-label
@@ -18,3 +27,4 @@
     <mat-icon svgIcon="minus"></mat-icon>
   </button>
 </div>
+</ng-container>
