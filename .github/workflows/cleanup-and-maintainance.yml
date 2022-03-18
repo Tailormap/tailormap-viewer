@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: "Older than 1 week"
         # https://github.com/marketplace/actions/ghcr-pruning
-        uses: vlaurin/action-ghcr-prune@v0.3.0
+        uses: vlaurin/action-ghcr-prune@v0.4.0
         with:
           token: ${{ secrets.GHCR_CLEANUP_PAT }}
           organization: B3Partners
@@ -22,7 +22,7 @@ jobs:
           keep-last: 2
           untagged: true
       - name: "Older than 4 weeks"
-        uses: vlaurin/action-ghcr-prune@v0.3.0
+        uses: vlaurin/action-ghcr-prune@v0.4.0
         with:
           token: ${{ secrets.GHCR_CLEANUP_PAT }}
           organization: B3Partners
