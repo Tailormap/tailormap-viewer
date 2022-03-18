@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { AppLayerModel } from '@tailormap-viewer/api';
-import { TreeModel } from '../tree/models/tree.model';
+import { TreeModel } from '@tailormap-viewer/shared';
 
 @Component({
   selector: 'tm-tree-node-layer',
