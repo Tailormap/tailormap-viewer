@@ -4,7 +4,6 @@ import { SnackBarMessageComponent } from './snackbar-message';
 import { SharedImportsModule } from '../shared-imports.module';
 import { ErrorMessageComponent } from './error-message/error-message.component';
 import { TreeComponent } from './tree';
-import { TreeNodeLayerComponent } from './tree-node-layer';
 
 @NgModule({
   declarations: [
@@ -12,7 +11,6 @@ import { TreeNodeLayerComponent } from './tree-node-layer';
     SnackBarMessageComponent,
     ErrorMessageComponent,
     TreeComponent,
-    TreeNodeLayerComponent,
   ],
   imports: [
     SharedImportsModule,
@@ -22,7 +20,6 @@ import { TreeNodeLayerComponent } from './tree-node-layer';
     SnackBarMessageComponent,
     ErrorMessageComponent,
     TreeComponent,
-    TreeNodeLayerComponent,
   ],
 })
 export class SharedComponentsModule {
