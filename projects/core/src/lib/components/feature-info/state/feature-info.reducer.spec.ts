@@ -19,13 +19,15 @@ describe('FeatureInfoReducer', () => {
   test('handles LoadFeatureInfoSuccess', () => {
     const state = {...initialFeatureInfoState};
     const featureInfo: FeatureInfoResponseModel[] = [{
-      features: [ getFeatureModel() ],
-      columnMetadata: [ getColumnMetadataModel() ],
-      layer: getAppLayerModel(),
+      features: [ { ...getFeatureModel(), layerId: 1 } ],
+      columnMetadata: [ { ...getColumnMetadataModel(), layerId: 1 } ],
+      layerId: 1,
     }];
     const action = FeatureInfoActions.loadFeatureInfoSuccess({ featureInfo });
     const updatedState = featureInfoReducer(state, action);
-    expect(updatedState.featureInfo).toEqual(featureInfo);
+    expect(updatedState.features).toEqual(featureInfo[0].features);
+    expect(updatedState.columnMetadata).toEqual(featureInfo[0].columnMetadata);
+    expect(updatedState.currentFeatureIndex).toEqual(0);
     expect(updatedState.loadStatus).toEqual(LoadStatusEnum.LOADED);
   });
 
@@ -33,7 +35,8 @@ describe('FeatureInfoReducer', () => {
     const state = {...initialFeatureInfoState};
     const action = FeatureInfoActions.loadFeatureInfoFailed({ errorMessage: 'Loading data failed for some reason' });
     const updatedState = featureInfoReducer(state, action);
-    expect(updatedState.featureInfo).toEqual([]);
+    expect(updatedState.features).toEqual([]);
+    expect(updatedState.columnMetadata).toEqual([]);
     expect(updatedState.loadStatus).toEqual(LoadStatusEnum.ERROR);
     expect(updatedState.errorMessage).toEqual('Loading data failed for some reason');
   });

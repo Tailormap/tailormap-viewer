@@ -10,6 +10,7 @@ import userEvent from '@testing-library/user-event';
 import { TestBed } from '@angular/core/testing';
 import { setLayerVisibility, setSelectedLayerId } from '../../../state/core.actions';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
+import { SharedCoreComponentsModule } from '../../../shared/components/shared-core-components.module';
 
 const getMockStore = (selectedLayer: string = '') => {
   const tree = [
@@ -33,7 +34,7 @@ describe('TocComponent', () => {
   test('renders TOC with visible false', async () => {
     const registerComponentFn = jest.fn();
     await render(TocComponent, {
-      imports: [ SharedModule, MatIconTestingModule ],
+      imports: [ SharedModule, SharedCoreComponentsModule, MatIconTestingModule ],
       providers: [
         getMockStore(),
         getTocService(false),
@@ -47,7 +48,7 @@ describe('TocComponent', () => {
   test('renders TOC with visible true', async () => {
     const registerComponentFn = jest.fn();
     await render(TocComponent, {
-      imports: [ SharedModule, MatIconTestingModule ],
+      imports: [ SharedModule, SharedCoreComponentsModule, MatIconTestingModule ],
       providers: [
         getMockStore(),
         getTocService(true),
@@ -62,7 +63,7 @@ describe('TocComponent', () => {
   test('handles layer selection', async () => {
     const registerComponentFn = jest.fn();
     await render(TocComponent, {
-      imports: [ SharedModule, MatIconTestingModule ],
+      imports: [ SharedModule, SharedCoreComponentsModule, MatIconTestingModule ],
       providers: [
         getMockStore('1'),
         getTocService(true),
@@ -83,7 +84,7 @@ describe('TocComponent', () => {
   test('handles checking layer', async () => {
     const registerComponentFn = jest.fn();
     await render(TocComponent, {
-      imports: [ SharedModule, MatIconTestingModule ],
+      imports: [ SharedModule, SharedCoreComponentsModule, MatIconTestingModule ],
       providers: [
         getMockStore('1'),
         getTocService(true),
