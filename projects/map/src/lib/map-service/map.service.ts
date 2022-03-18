@@ -1,11 +1,17 @@
 import { Injectable, NgZone } from '@angular/core';
 import { OpenLayersMap } from '../openlayers-map/openlayers-map';
-import { finalize, map, Observable, tap } from 'rxjs';
-import { LayerManagerModel, MapResolutionModel, MapViewerOptionsModel, ToolModel, VectorLayerModel } from '../models';
+import { combineLatest, finalize, map, Observable, tap } from 'rxjs';
+import { LayerManagerModel, LayerTypesEnum, MapResolutionModel, MapViewerOptionsModel, ToolModel, VectorLayerModel, MapStyleModel } from '../models';
 import { ToolManagerModel } from '../models/tool-manager.model';
 import VectorLayer from 'ol/layer/Vector';
 import Geometry from 'ol/geom/Geometry';
 import VectorSource from 'ol/source/Vector';
+import WKT from 'ol/format/WKT';
+import Style from 'ol/style/Style';
+import { MapStyleHelper } from '../helpers/map-style.helper';
+import Feature from 'ol/Feature';
+import RenderFeature from 'ol/render/Feature';
+import { OlMapStyleType } from '../models/ol-map-style.type';
 
 @Injectable({
   providedIn: 'root',
@@ -57,7 +63,10 @@ export class MapService {
       );
   }
 
-  public createVectorLayer$(layer: VectorLayerModel): Observable<VectorLayer<VectorSource<Geometry>> | null> {
+  public createVectorLayer$(
+    layer: VectorLayerModel,
+    vectorLayerStyle?: MapStyleModel | OlMapStyleType,
+  ): Observable<VectorLayer<VectorSource<Geometry>> | null> {
     let layerManager: LayerManagerModel;
     return this.getLayerManager$()
       .pipe(
@@ -68,8 +77,34 @@ export class MapService {
           }
         }),
         map(manager => {
-          return manager.addLayer<VectorLayer<VectorSource<Geometry>>>(layer);
+          const vectorLayer = manager.addLayer<VectorLayer<VectorSource<Geometry>>>(layer);
+          if (vectorLayer) {
+            vectorLayer.setStyle(MapStyleHelper.getStyle(vectorLayerStyle));
+          }
+          return vectorLayer;
         }),
+      );
+  }
+
+  public highlightFeatures$(
+    layerId: string,
+    featureGeometry$: Observable<string | null>,
+    vectorLayerStyle?: MapStyleModel | OlMapStyleType,
+  ): Observable<VectorLayer<VectorSource<Geometry>> | null> {
+    const wktFormatter = new WKT();
+    return combineLatest([
+      this.createVectorLayer$({ id: layerId, name: `${layerId} layer`, layerType: LayerTypesEnum.Vector, visible: true }, vectorLayerStyle),
+      featureGeometry$,
+    ])
+      .pipe(
+        tap(([ vectorLayer, featureGeometry ]) => {
+          if (!vectorLayer || !featureGeometry) {
+            return;
+          }
+          vectorLayer.getSource().getFeatures().forEach(feature => vectorLayer.getSource().removeFeature(feature));
+          vectorLayer.getSource().addFeature(wktFormatter.readFeature(featureGeometry));
+        }),
+        map(([ vectorLayer ]) => vectorLayer),
       );
   }
 

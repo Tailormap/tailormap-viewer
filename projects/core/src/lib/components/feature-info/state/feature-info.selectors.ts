@@ -4,6 +4,7 @@ import { LoadStatusEnum } from '@tailormap-viewer/shared';
 import { filter, pipe, take } from 'rxjs';
 import { selectVisibleLayers } from '../../../state/core.selectors';
 import { FeatureInfoModel } from '../models/feature-info.model';
+import { FeatureInfoHelper } from '../helpers/feature-info.helper';
 
 const selectFeatureInfoState = createFeatureSelector<FeatureInfoState>(featureInfoStateKey);
 
@@ -49,6 +50,10 @@ export const selectCurrentlySelectedFeature = createSelector(
   selectFeatureInfoList,
   selectCurrentFeatureIndex,
   (features, idx) => features[idx],
+);
+export const selectCurrentlySelectedFeatureGeometry = createSelector(
+  selectCurrentlySelectedFeature,
+  feature => FeatureInfoHelper.getGeometryForFeatureInfoFeature(feature),
 );
 
 export const selectFeatureInfoError = createSelector(

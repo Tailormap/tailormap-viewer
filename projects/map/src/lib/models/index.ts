@@ -12,3 +12,5 @@ export * from './tms-layer.model';
 export * from './wms-layer.model';
 export * from './tools';
 export * from './map-resolution.model';
+export * from './map-style.model';
+export * from './ol-map-style.type';

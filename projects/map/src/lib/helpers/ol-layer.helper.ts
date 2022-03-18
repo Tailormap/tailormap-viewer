@@ -5,17 +5,13 @@ import TileLayer from  'ol/layer/Tile';
 import ImageWMS from 'ol/source/ImageWMS';
 import WMTS from 'ol/source/WMTS';
 import XYZ from 'ol/source/XYZ';
-import VectorSource from 'ol/source/Vector';
-import { StyleFunction } from 'ol/style/Style';
 import { optionsFromCapabilities } from 'ol/source/WMTS';
 import { TMSLayerModel } from '../models/tms-layer.model';
-import VectorLayer from 'ol/layer/Vector';
 import { LayerTypesHelper } from './layer-types.helper';
 import { OgcHelper } from './ogc.helper';
 import { LayerModel } from '../models/layer.model';
 import { WMSLayerModel } from '../models/wms-layer.model';
 import { WMTSLayerModel } from '../models/wmts-layer.model';
-import Geometry from 'ol/geom/Geometry';
 import { WMTSCapabilities } from 'ol/format';
 
 export interface LayerProperties {
@@ -78,10 +74,6 @@ export class OlLayerHelper {
         tilePixelRatio: layer.tilePixelRatio,
       }),
     });
-  }
-
-  public static createVectorLayer(layer: LayerModel, source: VectorSource<Geometry>, stylingFn?: StyleFunction): VectorLayer<VectorSource<Geometry>> {
-    return new VectorLayer({ source, visible: layer.visible, style: stylingFn });
   }
 
   public static createWMSLayer(layer: WMSLayerModel): ImageLayer<ImageWMS> {
