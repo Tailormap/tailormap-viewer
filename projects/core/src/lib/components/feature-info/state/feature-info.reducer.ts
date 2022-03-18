@@ -44,12 +44,12 @@ const onExpandCollapseFeatureInfoDialog = (state: FeatureInfoState): FeatureInfo
 
 const onShowNextFeatureInfoFeature = (state: FeatureInfoState): FeatureInfoState => ({
   ...state,
-  currentFeatureIndex: state.features.length === state.currentFeatureIndex - 1 ? 0 : state.currentFeatureIndex++,
+  currentFeatureIndex: state.features.length === state.currentFeatureIndex + 1 ? 0 : state.currentFeatureIndex + 1,
 });
 
 const onShowPreviousFeatureInfoFeature = (state: FeatureInfoState): FeatureInfoState => ({
   ...state,
-  currentFeatureIndex: state.currentFeatureIndex > 0 ? state.currentFeatureIndex-- : state.features.length - 1,
+  currentFeatureIndex: state.currentFeatureIndex > 0 ? state.currentFeatureIndex - 1 : state.features.length - 1,
 });
 
 const featureInfoReducerImpl = createReducer<FeatureInfoState>(
