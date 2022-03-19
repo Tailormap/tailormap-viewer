@@ -69,7 +69,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: GitHub Slug Action
-        uses: rlespinasse/github-slug-action@4.0.0
+        uses: rlespinasse/github-slug-action@4.0.1
       - name: Find Current Pull Request
         uses: jwalton/gh-find-current-pr@v1.2.1
         id: find-pr
