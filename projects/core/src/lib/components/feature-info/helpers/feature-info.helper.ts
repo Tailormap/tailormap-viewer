@@ -13,6 +13,9 @@ export class FeatureInfoHelper {
     if (!feature) {
       return null;
     }
+    if (feature.feature.geometry) {
+      return feature.feature.geometry;
+    }
     const geomAttribute = Array.from(feature.columnMetadata.values()).find(c => c.type === FeatureAttributeTypeEnum.GEOMETRY);
     if (!geomAttribute) {
       return null;
