@@ -3,7 +3,7 @@ import { MapClickToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/m
 import { Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { loadFeatureInfo } from '../state/feature-info.actions';
-import { selectFeatureInfoError$ } from '../state/feature-info.selectors';
+import { selectCurrentlySelectedFeatureGeometry, selectFeatureInfoError$ } from '../state/feature-info.selectors';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { $localize } from '@angular/localize/init';
 import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
@@ -33,6 +33,18 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.mapService.createTool$(this.toolConfig, true)
+      .pipe(takeUntil(this.destroyed))
+      .subscribe();
+    this.mapService.highlightFeatures$(
+      'feature-info-highlight-layer',
+      this.store$.select(selectCurrentlySelectedFeatureGeometry),
+      {
+        styleKey: 'feature-info-highlight-style',
+        strokeColor: '#6236ff',
+        strokeWidth: 5,
+        pointType: 'square',
+        pointFillColor: '#6236ff',
+      })
       .pipe(takeUntil(this.destroyed))
       .subscribe();
   }

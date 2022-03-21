@@ -5,19 +5,19 @@
            [collapsed]="dialogCollapsed$ | async"
            (expandCollapseDialog)="expandCollapseDialog()"
            i18n-title title="Object Information">
-  <div class="feature-info" *ngIf="featureInfo.length > 0">
+  <div class="feature-info" *ngIf="currentFeature$ | async as currentFeature">
     <div class="content">
-      <h2 *ngIf="featureInfo[currentSelected]">{{featureInfo[currentSelected].layer.displayName}}</h2>
-      <div *ngFor="let a of getAttributes() | keyvalue" class="row">
-        <strong>{{getAlias(a.key)}}</strong>
-        {{a.value}}
+      <h2>{{currentFeature.layer.displayName}}</h2>
+      <div *ngFor="let a of getAttributes(currentFeature) | keyvalue" class="row">
+        <strong>{{a.value.label}}</strong>
+        {{a.value.value}}
       </div>
     </div>
     <div class="buttons">
-      <button mat-flat-button i18n (click)="back()" color="accent" [disabled]="isFirstItem()">
+      <button mat-flat-button i18n (click)="back()" color="accent" [disabled]="currentSelected === 0">
         Back
       </button>
-      <button mat-flat-button i18n (click)="next()" color="primary" [disabled]="isLastItem()">
+      <button mat-flat-button i18n (click)="next()" color="primary" [disabled]="currentSelected === totalFeatures - 1">
         Next
       </button>
     </div>

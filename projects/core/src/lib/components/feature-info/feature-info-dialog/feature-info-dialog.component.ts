@@ -1,15 +1,14 @@
-import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { selectFeatureInfo, selectFeatureInfoDialogCollapsed, selectFeatureInfoDialogVisible } from '../state/feature-info.selectors';
+import {
+  selectCurrentlySelectedFeature, selectFeatureInfoCounts, selectFeatureInfoDialogCollapsed, selectFeatureInfoDialogVisible,
+} from '../state/feature-info.selectors';
 import { Observable, of, Subject, takeUntil } from 'rxjs';
-import { expandCollapseFeatureInfoDialog, hideFeatureInfoDialog } from '../state/feature-info.actions';
-import { AppLayerModel, ColumnMetadataModel, FeatureModel } from '@tailormap-viewer/api';
-
-export interface DialogFeatureInfoModel {
-  feature: FeatureModel;
-  columnMetadata: Map<string, ColumnMetadataModel>;
-  layer: AppLayerModel;
-}
+import {
+  expandCollapseFeatureInfoDialog, hideFeatureInfoDialog, showNextFeatureInfoFeature, showPreviousFeatureInfoFeature,
+} from '../state/feature-info.actions';
+import { FeatureInfoModel } from '../models/feature-info.model';
+import { FeatureAttributeTypeEnum } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-feature-info-dialog',
@@ -23,8 +22,9 @@ export class FeatureInfoDialogComponent implements OnInit, OnDestroy {
   public dialogOpen$: Observable<boolean> = of(false);
   public dialogCollapsed$: Observable<boolean> = of(false);
 
-  public featureInfo: DialogFeatureInfoModel[] = [];
   public currentSelected = 0;
+  public currentFeature$: Observable<FeatureInfoModel> | undefined;
+  public totalFeatures = 0;
 
   constructor(
     private store$: Store,
@@ -34,47 +34,22 @@ export class FeatureInfoDialogComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this.dialogOpen$ = this.store$.select(selectFeatureInfoDialogVisible);
     this.dialogCollapsed$ = this.store$.select(selectFeatureInfoDialogCollapsed);
-    this.store$.select(selectFeatureInfo)
+    this.currentFeature$ = this.store$.select(selectCurrentlySelectedFeature);
+    this.store$.select(selectFeatureInfoCounts)
       .pipe(takeUntil(this.destroyed))
-      .subscribe(featureInfo => {
-        this.featureInfo = [];
-        this.currentSelected = 0;
-        featureInfo.forEach(info => {
-          const columnMetadata = new Map((info.columnMetadata || []).map(c => [c.key, c]));
-          info.features.forEach(f => {
-            this.featureInfo.push({
-              feature: f,
-              columnMetadata,
-              layer: info.layer,
-            });
-          });
-        });
+      .subscribe(counts => {
+        this.currentSelected = counts.current;
+        this.totalFeatures = counts.total;
         this.cdr.detectChanges();
       });
   }
 
   public next() {
-    if (this.featureInfo[this.currentSelected + 1]) {
-      this.currentSelected++;
-      return;
-    }
-    this.currentSelected = 0;
+    this.store$.dispatch(showNextFeatureInfoFeature());
   }
 
   public back() {
-    if (this.currentSelected > 0) {
-      this.currentSelected--;
-      return;
-    }
-    this.currentSelected = this.featureInfo.length - 1;
-  }
-
-  public isFirstItem() {
-    return this.currentSelected === 0;
-  }
-
-  public isLastItem() {
-    return this.currentSelected === this.featureInfo.length - 1;
+    this.store$.dispatch(showPreviousFeatureInfoFeature());
   }
 
   public closeDialog() {
@@ -90,15 +65,16 @@ export class FeatureInfoDialogComponent implements OnInit, OnDestroy {
     this.destroyed.complete();
   }
 
-  public getAttributes(): Record<string, string | boolean | number | null> {
-    if (!this.featureInfo[this.currentSelected]) {
-      return {};
-    }
-    return this.featureInfo[this.currentSelected].feature.attributes;
+  public getAttributes(feature: FeatureInfoModel): ReadonlyMap<string, { label: string; value: string | number | boolean }> {
+    const attr = new Map();
+    Object.keys(feature.feature.attributes).forEach(key => {
+      const metadata = feature.columnMetadata.get(key);
+      if (metadata?.type === FeatureAttributeTypeEnum.GEOMETRY) {
+        return;
+      }
+      const label = metadata?.alias || key;
+      attr.set(key, { value: feature.feature.attributes[key], label });
+    });
+    return attr as ReadonlyMap<string, { label: string; value: string | number | boolean }>;
   }
-
-  public getAlias(prop: string): string {
-    return this.featureInfo[this.currentSelected].columnMetadata.get(prop)?.alias || prop;
-  }
-
 }

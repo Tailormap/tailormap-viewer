@@ -1,5 +1,5 @@
 import { LayerModel } from './layer.model';
-import VectorImageLayer from 'ol/layer/VectorImage';
+import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import { Geometry } from 'ol/geom';
 import ImageLayer from 'ol/layer/Image';
@@ -8,12 +8,12 @@ import ImageWMS from 'ol/source/ImageWMS';
 import WMTS from 'ol/source/WMTS';
 import XYZ from 'ol/source/XYZ';
 
-export type LayerTypes = VectorImageLayer<VectorSource<Geometry>> | ImageLayer<ImageWMS> | TileLayer<XYZ> | TileLayer<WMTS> | null;
+export type LayerTypes = VectorLayer<VectorSource<Geometry>> | ImageLayer<ImageWMS> | TileLayer<XYZ> | TileLayer<WMTS> | null;
 
 export interface LayerManagerModel {
   setBackgroundLayer(layer: LayerModel): void;
   setLayers(layers: LayerModel[]): void;
-  addLayer(layer: LayerModel): LayerTypes;
+  addLayer<LayerType extends LayerTypes>(layer: LayerModel): LayerType | null;
   addLayers(layers: LayerModel[]): void;
   removeLayer(layerId: string): void;
   removeLayers(layerIds: string[]): void;

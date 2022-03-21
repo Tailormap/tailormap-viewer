@@ -2,45 +2,40 @@ import { default as OlMap } from 'ol/Map';
 import VectorSource from 'ol/source/Vector';
 import BaseLayer from 'ol/layer/Base';
 import LayerGroup from 'ol/layer/Group';
-import VectorImageLayer from 'ol/layer/VectorImage';
+import VectorLayer from 'ol/layer/Vector';
 import ImageWMS from 'ol/source/ImageWMS';
 import WMTS from 'ol/source/WMTS';
 import XYZ from 'ol/source/XYZ';
 import { LayerManagerModel, LayerTypes } from '../models';
 import { OlLayerHelper } from '../helpers/ol-layer.helper';
 import { LayerModel } from '../models/layer.model';
-import {
-  isOpenLayersTMSLayer,
-  isOpenLayersVectorImageLayer,
-  isOpenLayersVectorLayer,
-  isOpenLayersWMSLayer, isPossibleRealtimeLayer,
-} from '../helpers/ol-layer-types.helper';
+import { isOpenLayersVectorLayer, isPossibleRealtimeLayer } from '../helpers/ol-layer-types.helper';
 import { LayerTypesHelper } from '../helpers/layer-types.helper';
 import Geometry from 'ol/geom/Geometry';
 
 export class OpenLayersLayerManager implements LayerManagerModel {
 
   private layers: Map<string, BaseLayer> = new Map<string, BaseLayer>();
-  private sources: Map<string, VectorSource<Geometry>> = new Map<string, VectorSource<Geometry>>();
+  private vectorLayers: Map<string, VectorLayer<VectorSource<Geometry>>> = new Map<string, VectorLayer<VectorSource<Geometry>>>();
 
   private backgroundLayerGroup = new LayerGroup();
   private baseLayerGroup = new LayerGroup();
-  private drawingLayerGroup = new LayerGroup();
+  private vectorLayerGroup = new LayerGroup();
 
   constructor(private olMap: OlMap) {}
 
   public init() {
     this.olMap.addLayer(this.backgroundLayerGroup);
     this.olMap.addLayer(this.baseLayerGroup);
-    this.olMap.addLayer(this.drawingLayerGroup);
+    this.olMap.addLayer(this.vectorLayerGroup);
   }
 
   public destroy() {
     this.layers = new Map();
-    this.sources = new Map();
+    this.vectorLayers = new Map();
     this.olMap.removeLayer(this.backgroundLayerGroup);
     this.olMap.removeLayer(this.baseLayerGroup);
-    this.olMap.removeLayer(this.drawingLayerGroup);
+    this.olMap.removeLayer(this.vectorLayerGroup);
   }
 
   public setBackgroundLayer(layer: LayerModel) {
@@ -69,25 +64,37 @@ export class OpenLayersLayerManager implements LayerManagerModel {
       }
     });
     removableLayers.forEach(id => this.removeLayer(id));
+    const layerOrder = Array.from(layerIds).reverse();
     layers
-      .filter(layer => !this.layers.has(layer.id))
       .forEach(layer => {
-        this.addLayer(layer);
+        const zIndex = layerOrder.indexOf(layer.id);
+        const existingLayer = this.layers.get(layer.id);
+        if (existingLayer) {
+          existingLayer.setZIndex(this.getZIndexForLayer(zIndex));
+          return;
+        }
+        this.addLayer(layer, zIndex);
       });
-    this.setLayerOrder(Array.from(layerIds));
   }
 
-  public addLayer(layer: LayerModel): LayerTypes {
+  public addLayer<LayerType extends LayerTypes>(layer: LayerModel, zIndex?: number): LayerType | null {
     const olLayer = this.createLayer(layer);
     if (olLayer === null) {
       return null;
     }
-    const zIndex = this.getMaxZIndex();
-    olLayer.setZIndex(zIndex);
     OlLayerHelper.setLayerProps(layer, olLayer);
-    this.layers.set(layer.id, olLayer);
-    this.addLayerToMap(olLayer, layer);
-    return olLayer;
+    this.addLayerToMap(olLayer);
+    olLayer.setZIndex(this.getZIndexForLayer(zIndex));
+    this.moveDrawingLayersToTop();
+    return olLayer as LayerType;
+  }
+
+  private getZIndexForLayer(zIndex?: number) {
+    if (typeof zIndex === 'undefined' || zIndex === -1) {
+      zIndex = this.getMaxZIndex();
+    }
+    zIndex += this.backgroundLayerGroup.getLayers().getLength();
+    return zIndex;
   }
 
   public removeLayer(id: string) {
@@ -117,7 +124,6 @@ export class OpenLayersLayerManager implements LayerManagerModel {
   }
 
   public setLayerOrder(layerIds: string[]) {
-    layerIds.reverse();
     let zIndex = 1;
     for (const layerId of layerIds) {
       const layer = this.findLayer(layerId);
@@ -125,6 +131,13 @@ export class OpenLayersLayerManager implements LayerManagerModel {
         layer.setZIndex(zIndex++);
       }
     }
+  }
+
+  private moveDrawingLayersToTop() {
+    let zIndex = this.backgroundLayerGroup.getLayers().getLength() + this.baseLayerGroup.getLayers().getLength();
+    this.vectorLayerGroup.getLayers().forEach(layer => {
+      layer.setZIndex(++zIndex);
+    });
   }
 
   public refreshLayer(layerId: string) {
@@ -147,74 +160,54 @@ export class OpenLayersLayerManager implements LayerManagerModel {
   }
 
   public findLayer(layerId: string): BaseLayer | null {
-    return this.layers.get(layerId) || null;
+    return this.layers.get(layerId) || this.vectorLayers.get(layerId) || null;
   }
 
   private getMaxZIndex() {
     let maxZIndex = 0;
-    this.backgroundLayerGroup.getLayers().forEach(layer => {
-      maxZIndex = Math.max(maxZIndex, layer.getZIndex() || 0);
-    });
     this.baseLayerGroup.getLayers().forEach(layer => {
-      maxZIndex = Math.max(maxZIndex, layer.getZIndex() || 0);
-    });
-    this.drawingLayerGroup.getLayers().forEach(layer => {
       maxZIndex = Math.max(maxZIndex, layer.getZIndex() || 0);
     });
     return maxZIndex;
   }
 
-  private addLayerToMap(layer: BaseLayer, layerModel: LayerModel) {
-    if (isOpenLayersWMSLayer(layer) || isOpenLayersTMSLayer(layer)) {
-      const layers = this.baseLayerGroup.getLayers();
-      layers.push(layer);
-      this.baseLayerGroup.setLayers(layers);
-      this.layers.set(layerModel.id, layer);
+  private addLayerToMap(layer: BaseLayer) {
+    if (isOpenLayersVectorLayer(layer)) {
+      const vectorLayers = this.vectorLayerGroup.getLayers();
+      vectorLayers.push(layer);
+      this.vectorLayerGroup.setLayers(vectorLayers);
+      return;
     }
-    if (isOpenLayersVectorLayer(layer) || isOpenLayersVectorImageLayer(layer)) {
-      const layers = this.drawingLayerGroup.getLayers();
-      layers.push(layer);
-      this.drawingLayerGroup.setLayers(layers);
-    }
+    const layers = this.baseLayerGroup.getLayers();
+    layers.push(layer);
+    this.baseLayerGroup.setLayers(layers);
   }
 
   private removeLayerAndSource(layerId: string) {
     const layer = this.findLayer(layerId);
-    const source = this.sources.get(layerId);
     if (!layer) {
       return;
     }
-    if (source) {
-      source.clear();
+    if (isOpenLayersVectorLayer(layer)) {
+      this.removeVectorLayer(layer, layerId);
+      return;
     }
-    this.removeLayerFromMap(layer, layerId);
-  }
-
-  private removeLayerFromMap(layer: BaseLayer, layerId?: string) {
-    if (layerId) {
-      this.removeLayerFromCache(layer, layerId);
-    }
-    if (isOpenLayersWMSLayer(layer) || isOpenLayersTMSLayer(layer)) {
-      const layers = this.baseLayerGroup.getLayers();
-      layers.remove(layer);
-      this.baseLayerGroup.setLayers(layers);
-    }
-    if (isOpenLayersVectorLayer(layer) || isOpenLayersVectorImageLayer(layer)) {
-      const layers = this.drawingLayerGroup.getLayers();
-      layers.remove(layer);
-      this.drawingLayerGroup.setLayers(layers);
-    }
-  }
-
-  private removeLayerFromCache(layer: BaseLayer, layerId: string) {
+    const layers = this.baseLayerGroup.getLayers();
+    layers.remove(layer);
+    this.baseLayerGroup.setLayers(layers);
     this.layers.delete(layerId);
-    if (isOpenLayersWMSLayer(layer) || isOpenLayersTMSLayer(layer)) {
-      this.layers.delete(layerId);
+  }
+
+  private removeVectorLayer(layer: VectorLayer<VectorSource<Geometry>>, layerId: string) {
+    const vectorLayer = this.vectorLayers.get(layerId);
+    if (vectorLayer) {
+      vectorLayer.getSource().clear();
     }
-    if (isOpenLayersVectorLayer(layer) || isOpenLayersVectorImageLayer(layer)) {
-      this.layers.delete(layerId);
-      this.sources.delete(layerId);
-    }
+    const vectorLayers = this.vectorLayerGroup.getLayers();
+    vectorLayers.remove(layer);
+    this.vectorLayerGroup.setLayers(vectorLayers);
+    this.vectorLayers.delete(layerId);
+    return;
   }
 
   private createLayer(layer: LayerModel): LayerTypes {
@@ -228,13 +221,15 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     if (typeof layer.transparency === 'number') {
       olLayer.setOpacity(layer.transparency / 100);
     }
+    this.layers.set(layer.id, olLayer);
     return olLayer;
   }
 
-  private createVectorLayer(layer: LayerModel): VectorImageLayer<VectorSource<Geometry>> | null {
+  private createVectorLayer(layer: LayerModel): VectorLayer<VectorSource<Geometry>> | null {
     const source = new VectorSource({ wrapX: true });
-    this.sources.set(layer.id, source);
-    return OlLayerHelper.createVectorLayer(layer, source);
+    const vectorLayer = new VectorLayer({ source, visible: layer.visible });
+    this.vectorLayers.set(layer.id, vectorLayer);
+    return vectorLayer;
   }
 
 }

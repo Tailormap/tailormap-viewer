@@ -1,5 +1,6 @@
-import { FeatureInfoModel } from '../models/feature-info.model';
 import { LoadStatusEnum } from '@tailormap-viewer/shared';
+import { FeatureInfoFeatureModel } from '../models/feature-info-feature.model';
+import { FeatureInfoColumnMetadataModel } from '../models/feature-info-column-metadata.model';
 
 export const featureInfoStateKey = 'feature_info';
 
@@ -9,7 +10,9 @@ export interface FeatureInfoState {
   dialogVisible: boolean;
   dialogCollapsed: boolean;
   loadStatus: LoadStatusEnum;
-  featureInfo: FeatureInfoModel[];
+  features: FeatureInfoFeatureModel[];
+  columnMetadata: FeatureInfoColumnMetadataModel[];
+  currentFeatureIndex: number;
   errorMessage?: string;
 }
 
@@ -17,5 +20,7 @@ export const initialFeatureInfoState: FeatureInfoState = {
   dialogVisible: false,
   dialogCollapsed: false,
   loadStatus: LoadStatusEnum.INITIAL,
-  featureInfo: [],
+  features: [],
+  columnMetadata: [],
+  currentFeatureIndex: 0,
 };

@@ -39,9 +39,9 @@ describe('FeatureInfoService', () => {
     spectator.service.getFeatures$([1, 2])
       .subscribe(featureInfo => {
         expect(featureInfo.length).toEqual(1);
-        expect(featureInfo[0].features).toEqual(response.features);
-        expect(featureInfo[0].layer).toEqual(appLayer);
-        expect(featureInfo[0].columnMetadata).toEqual(response.columnMetadata);
+        expect(featureInfo[0].features).toEqual(response.features.map(f => ({ ...f, layerId: appLayer.id })));
+        expect(featureInfo[0].layerId).toEqual(appLayer.id);
+        expect(featureInfo[0].columnMetadata).toEqual(response.columnMetadata.map(m => ({ ...m, layerId: appLayer.id })));
         done();
       });
   });
