@@ -61,8 +61,8 @@ ALTER TABLE public.user_ ENABLE TRIGGER ALL;
 ALTER TABLE public.application DISABLE TRIGGER ALL;
 
 COPY public.application (id, authenticated_required, authorizations_modified, lang, layout, max_crs, max_maxx, max_maxy, max_minx, max_miny, name, projection_code, start_crs, start_maxx, start_maxy, start_minx, start_miny, title, version, owner, root) FROM stdin;
-2	t	2022-02-18 20:32:21.086	nl_NL	{"header":{"layout":{"height":"","heightmeasure":"px","maxheight":"","useTabs":false,"bgcolor":"#FFFFFF"},"components":[]},"leftmargin_top":{"layout":{"width":"","widthmeasure":"px","maxwidth":"","useTabs":false,"enableCollapse":false,"defaultCollapsed":false,"enableFloating":false,"panelTitle":"","bgcolor":"#FFFFFF"},"components":[]},"leftmargin_bottom":{"layout":{"height":"","heightmeasure":"px","maxheight":"","useTabs":false,"bgcolor":"#FFFFFF"},"components":[]},"left_menu":{"layout":{"width":"","widthmeasure":"px","maxwidth":"","enableFloating":false,"floatingPosition":"tl","bgcolor":"#FFFFFF"},"components":[]},"top_menu":{"layout":{"height":"","heightmeasure":"px","maxheight":"","bgcolor":"#FFFFFF"},"components":[]},"content":{"layout":{},"components":[{"componentClass":"viewer.mapcomponents.OpenLayers5Map","name":"openLayers5Map1"}]},"content_bottom":{"layout":{"height":"","heightmeasure":"px","maxheight":"","bgcolor":"#FFFFFF"},"components":[]},"popupwindow":{"layout":{"height":"","heightmeasure":"px","maxheight":"","width":"","widthmeasure":"px","maxwidth":"","useTabs":false,"title":"","posx":"","posy":"","bgcolor":"#FFFFFF"},"components":[]},"rightmargin_top":{"layout":{"width":"","widthmeasure":"px","maxwidth":"","useTabs":false,"enableCollapse":false,"defaultCollapsed":false,"enableFloating":false,"panelTitle":"","bgcolor":"#FFFFFF"},"components":[]},"rightmargin_bottom":{"layout":{"height":"","heightmeasure":"px","maxheight":"","useTabs":false,"bgcolor":"#FFFFFF"},"components":[]},"footer":{"layout":{"height":"","heightmeasure":"px","maxheight":"","useTabs":false,"bgcolor":"#FFFFFF"},"components":[]}}	EPSG:28992	595401	903401	-285401	22598	secure	EPSG:28992[+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.237,50.0087,465.658,-0.406857,0.350733,-1.87035,4.0812 +units=m +no_defs]	EPSG:28992	149359	463194	123180	445478	\N	\N	\N	6
-1	f	2022-03-11 09:49:21.377	nl_NL	{"header":{"layout":{"height":"","heightmeasure":"px","maxheight":"","useTabs":false,"bgcolor":"#FFFFFF"},"components":[]},"leftmargin_top":{"layout":{"width":"","widthmeasure":"px","maxwidth":"","useTabs":false,"enableCollapse":false,"defaultCollapsed":false,"enableFloating":false,"panelTitle":"","bgcolor":"#FFFFFF"},"components":[]},"leftmargin_bottom":{"layout":{"height":"","heightmeasure":"px","maxheight":"","useTabs":false,"bgcolor":"#FFFFFF"},"components":[]},"left_menu":{"layout":{"width":"","widthmeasure":"px","maxwidth":"","enableFloating":false,"floatingPosition":"tl","bgcolor":"#FFFFFF"},"components":[]},"top_menu":{"layout":{"height":"","heightmeasure":"px","maxheight":"","bgcolor":"#FFFFFF"},"components":[]},"content":{"layout":{},"components":[{"componentClass":"viewer.mapcomponents.OpenLayers5Map","name":"openLayers5Map1"}]},"content_bottom":{"layout":{"height":"","heightmeasure":"px","maxheight":"","bgcolor":"#FFFFFF"},"components":[]},"popupwindow":{"layout":{"height":"","heightmeasure":"px","maxheight":"","width":"","widthmeasure":"px","maxwidth":"","useTabs":false,"title":"","posx":"","posy":"","bgcolor":"#FFFFFF"},"components":[]},"rightmargin_top":{"layout":{"width":"","widthmeasure":"px","maxwidth":"","useTabs":false,"enableCollapse":false,"defaultCollapsed":false,"enableFloating":false,"panelTitle":"","bgcolor":"#FFFFFF"},"components":[]},"rightmargin_bottom":{"layout":{"height":"","heightmeasure":"px","maxheight":"","useTabs":false,"bgcolor":"#FFFFFF"},"components":[]},"footer":{"layout":{"height":"","heightmeasure":"px","maxheight":"","useTabs":false,"bgcolor":"#FFFFFF"},"components":[]}}	EPSG:28992	595401	903401	-285401	22598	default	EPSG:28992[+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.237,50.0087,465.658,-0.406857,0.350733,-1.87035,4.0812 +units=m +no_defs]	EPSG:28992	149359	463194	123180	445478	\N	\N	\N	1
+2	t	2022-03-17 16:04:43.694	nl_NL	{"header":{"layout":{"height":"","heightmeasure":"px","maxheight":"","useTabs":false,"bgcolor":"#FFFFFF"},"components":[]},"leftmargin_top":{"layout":{"width":"","widthmeasure":"px","maxwidth":"","useTabs":false,"enableCollapse":false,"defaultCollapsed":false,"enableFloating":false,"panelTitle":"","bgcolor":"#FFFFFF"},"components":[]},"leftmargin_bottom":{"layout":{"height":"","heightmeasure":"px","maxheight":"","useTabs":false,"bgcolor":"#FFFFFF"},"components":[]},"left_menu":{"layout":{"width":"","widthmeasure":"px","maxwidth":"","enableFloating":false,"floatingPosition":"tl","bgcolor":"#FFFFFF"},"components":[]},"top_menu":{"layout":{"height":"","heightmeasure":"px","maxheight":"","bgcolor":"#FFFFFF"},"components":[]},"content":{"layout":{},"components":[{"componentClass":"viewer.mapcomponents.OpenLayers5Map","name":"openLayers5Map1"}]},"content_bottom":{"layout":{"height":"","heightmeasure":"px","maxheight":"","bgcolor":"#FFFFFF"},"components":[]},"popupwindow":{"layout":{"height":"","heightmeasure":"px","maxheight":"","width":"","widthmeasure":"px","maxwidth":"","useTabs":false,"title":"","posx":"","posy":"","bgcolor":"#FFFFFF"},"components":[]},"rightmargin_top":{"layout":{"width":"","widthmeasure":"px","maxwidth":"","useTabs":false,"enableCollapse":false,"defaultCollapsed":false,"enableFloating":false,"panelTitle":"","bgcolor":"#FFFFFF"},"components":[]},"rightmargin_bottom":{"layout":{"height":"","heightmeasure":"px","maxheight":"","useTabs":false,"bgcolor":"#FFFFFF"},"components":[]},"footer":{"layout":{"height":"","heightmeasure":"px","maxheight":"","useTabs":false,"bgcolor":"#FFFFFF"},"components":[]}}	EPSG:28992	595401	903401	-285401	22598	secure	EPSG:28992[+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.237,50.0087,465.658,-0.406857,0.350733,-1.87035,4.0812 +units=m +no_defs]	EPSG:28992	149359	463194	123180	445478	\N	\N	\N	6
+1	f	2022-03-18 12:03:36.323	nl_NL	{"header":{"layout":{"height":"","heightmeasure":"px","maxheight":"","useTabs":false,"bgcolor":"#FFFFFF"},"components":[]},"leftmargin_top":{"layout":{"width":"","widthmeasure":"px","maxwidth":"","useTabs":false,"enableCollapse":false,"defaultCollapsed":false,"enableFloating":false,"panelTitle":"","bgcolor":"#FFFFFF"},"components":[]},"leftmargin_bottom":{"layout":{"height":"","heightmeasure":"px","maxheight":"","useTabs":false,"bgcolor":"#FFFFFF"},"components":[]},"left_menu":{"layout":{"width":"","widthmeasure":"px","maxwidth":"","enableFloating":false,"floatingPosition":"tl","bgcolor":"#FFFFFF"},"components":[]},"top_menu":{"layout":{"height":"","heightmeasure":"px","maxheight":"","bgcolor":"#FFFFFF"},"components":[]},"content":{"layout":{},"components":[{"componentClass":"viewer.mapcomponents.OpenLayers5Map","name":"openLayers5Map1"}]},"content_bottom":{"layout":{"height":"","heightmeasure":"px","maxheight":"","bgcolor":"#FFFFFF"},"components":[]},"popupwindow":{"layout":{"height":"","heightmeasure":"px","maxheight":"","width":"","widthmeasure":"px","maxwidth":"","useTabs":false,"title":"","posx":"","posy":"","bgcolor":"#FFFFFF"},"components":[]},"rightmargin_top":{"layout":{"width":"","widthmeasure":"px","maxwidth":"","useTabs":false,"enableCollapse":false,"defaultCollapsed":false,"enableFloating":false,"panelTitle":"","bgcolor":"#FFFFFF"},"components":[]},"rightmargin_bottom":{"layout":{"height":"","heightmeasure":"px","maxheight":"","useTabs":false,"bgcolor":"#FFFFFF"},"components":[]},"footer":{"layout":{"height":"","heightmeasure":"px","maxheight":"","useTabs":false,"bgcolor":"#FFFFFF"},"components":[]}}	EPSG:28992	595401	903401	-285401	22598	default	EPSG:28992[+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.237,50.0087,465.658,-0.406857,0.350733,-1.87035,4.0812 +units=m +no_defs]	EPSG:28992	149359	463194	123180	445478	\N	\N	\N	1
 \.
 
 
@@ -78,8 +78,6 @@ COPY public.application_details (application, value, details_key) FROM stdin;
 1	#000000	steunkleur2
 1	/viewer/viewer-html/sprite.svg	iconSprite
 1	#FFFFFF	steunkleur1
-1	true	cachedSelectedContentDirty
-1	true	cachedExpandedSelectedContentDirty
 1	{"maxWidth":0,"maxHeight":0,"margin":0,"backgroundColor":"","backgroundImage":"","backgroundRepeat":"no-repeat","backgroundPosition":"","extraCss":"","singlePopup":false}	globalLayout
 2	#000000	steunkleur2
 2	/viewer/viewer-html/sprite.svg	iconSprite
@@ -87,6 +85,8 @@ COPY public.application_details (application, value, details_key) FROM stdin;
 2	true	cachedSelectedContentDirty
 2	true	cachedExpandedSelectedContentDirty
 2	{"maxWidth":0,"maxHeight":0,"margin":0,"backgroundColor":"","backgroundImage":"","backgroundRepeat":"no-repeat","backgroundPosition":"","extraCss":"","singlePopup":false}	globalLayout
+1	true	cachedSelectedContentDirty
+1	true	cachedExpandedSelectedContentDirty
 \.
 
 
@@ -102,7 +102,6 @@ COPY public.category (id, name, parent) FROM stdin;
 0	Categoriën	\N
 1	Achtergrond	0
 2	Voorgrond	0
-3	Provincie Limburg	0
 4	Tailormap Test GeoServer	0
 \.
 
@@ -118,8 +117,6 @@ ALTER TABLE public.geo_service DISABLE TRIGGER ALL;
 COPY public.geo_service (protocol, id, authorizations_modified, capabilities_doc, geofence_header, monitoring_enabled, monitoring_statusok, name, password, url, username, version, exception_type, override_url, skip_discoverwfs, tiling_protocol, category, top_layer) FROM stdin;
 tiled	3	2022-01-20 16:03:02.094	<?xml version="1.0" encoding="UTF-8"?><Capabilities xmlns="http://www.opengis.net/wmts/1.0" xmlns:gml="http://www.opengis.net/gml" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0.0" xsi:schemaLocation="http://www.opengis.net/wmts/1.0 http://schemas.opengis.net/wmts/1.0/wmtsGetCapabilities_response.xsd"><ows:ServiceIdentification><ows:Title>Openbasiskaart</ows:Title><ows:ServiceType>OGC WMTS</ows:ServiceType><ows:ServiceTypeVersion>1.0.0</ows:ServiceTypeVersion></ows:ServiceIdentification><ows:ServiceProvider><ows:ServiceContact><ows:ContactInfo/></ows:ServiceContact></ows:ServiceProvider><ows:OperationsMetadata><ows:Operation name="GetCapabilities"><ows:DCP><ows:HTTP><ows:Get xlink:href="https://www.openbasiskaart.nl/mapcache/wmts?"><ows:Constraint name="GetEncoding"><ows:AllowedValues><ows:Value>KVP</ows:Value></ows:AllowedValues></ows:Constraint></ows:Get></ows:HTTP></ows:DCP></ows:Operation><ows:Operation name="GetTile"><ows:DCP><ows:HTTP><ows:Get xlink:href="https://www.openbasiskaart.nl/mapcache/wmts?"><ows:Constraint name="GetEncoding"><ows:AllowedValues><ows:Value>KVP</ows:Value></ows:AllowedValues></ows:Constraint></ows:Get></ows:HTTP></ows:DCP></ows:Operation><ows:Operation name="GetFeatureInfo"><ows:DCP><ows:HTTP><ows:Get xlink:href="https://www.openbasiskaart.nl/mapcache/wmts?"><ows:Constraint name="GetEncoding"><ows:AllowedValues><ows:Value>KVP</ows:Value></ows:AllowedValues></ows:Constraint></ows:Get></ows:HTTP></ows:DCP></ows:Operation></ows:OperationsMetadata><Contents><Layer><ows:Title>openbasiskaart.nl: OpenStreetMap ondergrondkaart zonder gebouwen</ows:Title><ows:Abstract>Basiskaart op basis van OpenStreetMap data (map data copyright OpenStreetMap contributors, http://www.openstreetmap.org/copyright). Visuele stijl op basis van MapServer basemaps: http://github.com/opengeogroep/basemaps/tree/openbasiskaart-6-2. http://www.openbasiskaart.nl/ is powered by http://www.opengeogroep.nl/. Te gebruiken als fair-use "as-is", voor meer mogelijkheden neem contact op met info@opengeogroep.nl.</ows:Abstract><ows:Identifier>osm-nb</ows:Identifier><Style isDefault="true"><ows:Identifier>default</ows:Identifier></Style><Format>image/png</Format><TileMatrixSetLink><TileMatrixSet>rd</TileMatrixSet></TileMatrixSetLink><ResourceURL format="image/png" resourceType="tile" template="https://www.openbasiskaart.nl/mapcache/wmts/1.0.0/osm-nb/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/></Layer><Layer><ows:Title>openbasiskaart.nl: OpenStreetMap ondergrondkaart zonder gebouwen en wegen</ows:Title><ows:Abstract>Basiskaart op basis van OpenStreetMap data (map data copyright OpenStreetMap contributors, http://www.openstreetmap.org/copyright). Visuele stijl op basis van MapServer basemaps: http://github.com/opengeogroep/basemaps/tree/openbasiskaart-6-2. http://www.openbasiskaart.nl/ is powered by http://www.opengeogroep.nl/. Te gebruiken als fair-use "as-is", voor meer mogelijkheden neem contact op met info@opengeogroep.nl.</ows:Abstract><ows:Identifier>osm-nbr</ows:Identifier><Style isDefault="true"><ows:Identifier>default</ows:Identifier></Style><Format>image/png</Format><TileMatrixSetLink><TileMatrixSet>rd</TileMatrixSet></TileMatrixSetLink><ResourceURL format="image/png" resourceType="tile" template="https://www.openbasiskaart.nl/mapcache/wmts/1.0.0/osm-nbr/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/></Layer><Layer><ows:Title>openbasiskaart.nl: OpenStreetMap ondergrondkaart</ows:Title><ows:Abstract>Basiskaart op basis van OpenStreetMap data (map data copyright OpenStreetMap contributors, http://www.openstreetmap.org/copyright). Visuele stijl op basis van MapServer basemaps: http://github.com/opengeogroep/basemaps/tree/openbasiskaart-6-2. http://www.openbasiskaart.nl/ is powered by http://www.opengeogroep.nl/. Te gebruiken als fair-use "as-is", voor meer mogelijkheden neem contact op met info@opengeogroep.nl.</ows:Abstract><ows:Identifier>osm</ows:Identifier><Style isDefault="true"><ows:Identifier>default</ows:Identifier></Style><Format>image/png</Format><TileMatrixSetLink><TileMatrixSet>rd</TileMatrixSet></TileMatrixSetLink><ResourceURL format="image/png" resourceType="tile" template="https://www.openbasiskaart.nl/mapcache/wmts/1.0.0/osm/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/></Layer><Layer><ows:Title>openbasiskaart.nl: OpenStreetMap ondergrondkaart zonder gebouwen (HQ tiles)</ows:Title><ows:Abstract>Basiskaart op basis van OpenStreetMap data (map data copyright OpenStreetMap contributors, http://www.openstreetmap.org/copyright). Visuele stijl op basis van MapServer basemaps: http://github.com/opengeogroep/basemaps/tree/openbasiskaart-6-2. http://www.openbasiskaart.nl/ is powered by http://www.opengeogroep.nl/. Te gebruiken als fair-use "as-is", voor meer mogelijkheden neem contact op met info@opengeogroep.nl.</ows:Abstract><ows:Identifier>osm-nb-hq</ows:Identifier><Style isDefault="true"><ows:Identifier>default</ows:Identifier></Style><Format>image/png</Format><TileMatrixSetLink><TileMatrixSet>rd-hq</TileMatrixSet></TileMatrixSetLink><ResourceURL format="image/png" resourceType="tile" template="https://www.openbasiskaart.nl/mapcache/wmts/1.0.0/osm-nb-hq/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/></Layer><Layer><ows:Title>openbasiskaart.nl: OpenStreetMap ondergrondkaart (EPSG:3857)</ows:Title><ows:Abstract>Basiskaart op basis van OpenStreetMap data (map data copyright OpenStreetMap contributors, http://www.openstreetmap.org/copyright). Visuele stijl op basis van MapServer basemaps: http://github.com/opengeogroep/basemaps/tree/openbasiskaart-6-2. http://www.openbasiskaart.nl/ is powered by http://www.opengeogroep.nl/. Te gebruiken als fair-use "as-is", voor meer mogelijkheden neem contact op met info@opengeogroep.nl.</ows:Abstract><ows:Identifier>osm-epsg3857</ows:Identifier><Style isDefault="true"><ows:Identifier>default</ows:Identifier></Style><Format>image/png</Format><TileMatrixSetLink><TileMatrixSet>epsg3857</TileMatrixSet></TileMatrixSetLink><ResourceURL format="image/png" resourceType="tile" template="https://www.openbasiskaart.nl/mapcache/wmts/1.0.0/osm-epsg3857/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/></Layer><Layer><ows:Title>openbasiskaart.nl: OpenStreetMap ondergrondkaart (Google Maps Compatible)</ows:Title><ows:Abstract>Basiskaart op basis van OpenStreetMap data (map data copyright OpenStreetMap contributors, http://www.openstreetmap.org/copyright). Visuele stijl op basis van MapServer basemaps: http://github.com/opengeogroep/basemaps/tree/openbasiskaart-6-2. http://www.openbasiskaart.nl/ is powered by http://www.opengeogroep.nl/. Te gebruiken als fair-use "as-is", voor meer mogelijkheden neem contact op met info@opengeogroep.nl.</ows:Abstract><ows:Identifier>osm-g</ows:Identifier><Style isDefault="true"><ows:Identifier>default</ows:Identifier></Style><Format>image/png</Format><TileMatrixSetLink><TileMatrixSet>g</TileMatrixSet></TileMatrixSetLink><ResourceURL format="image/png" resourceType="tile" template="https://www.openbasiskaart.nl/mapcache/wmts/1.0.0/osm-g/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/></Layer><Layer><ows:Title>openbasiskaart.nl: OpenStreetMap ondergrondkaart zonder gebouwen en wegen (HQ tiles)</ows:Title><ows:Abstract>Basiskaart op basis van OpenStreetMap data (map data copyright OpenStreetMap contributors, http://www.openstreetmap.org/copyright). Visuele stijl op basis van MapServer basemaps: http://github.com/opengeogroep/basemaps/tree/openbasiskaart-6-2. http://www.openbasiskaart.nl/ is powered by http://www.opengeogroep.nl/. Te gebruiken als fair-use "as-is", voor meer mogelijkheden neem contact op met info@opengeogroep.nl.</ows:Abstract><ows:Identifier>osm-nbr-hq</ows:Identifier><Style isDefault="true"><ows:Identifier>default</ows:Identifier></Style><Format>image/png</Format><TileMatrixSetLink><TileMatrixSet>rd-hq</TileMatrixSet></TileMatrixSetLink><ResourceURL format="image/png" resourceType="tile" template="https://www.openbasiskaart.nl/mapcache/wmts/1.0.0/osm-nbr-hq/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/></Layer><Layer><ows:Title>openbasiskaart.nl: OpenStreetMap ondergrondkaart (HQ tiles)</ows:Title><ows:Abstract>Basiskaart op basis van OpenStreetMap data (map data copyright OpenStreetMap contributors, http://www.openstreetmap.org/copyright). Visuele stijl op basis van MapServer basemaps: http://github.com/opengeogroep/basemaps/tree/openbasiskaart-6-2. http://www.openbasiskaart.nl/ is powered by http://www.opengeogroep.nl/. Te gebruiken als fair-use "as-is", voor meer mogelijkheden neem contact op met info@opengeogroep.nl.</ows:Abstract><ows:Identifier>osm-hq</ows:Identifier><Style isDefault="true"><ows:Identifier>default</ows:Identifier></Style><Format>image/png</Format><TileMatrixSetLink><TileMatrixSet>rd-hq</TileMatrixSet></TileMatrixSetLink><ResourceURL format="image/png" resourceType="tile" template="https://www.openbasiskaart.nl/mapcache/wmts/1.0.0/osm-hq/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"/></Layer><TileMatrixSet><ows:Identifier>rd-hq</ows:Identifier><ows:BoundingBox crs="urn:ogc:def:crs:EPSG:6.3:28992"><ows:LowerCorner>-285401.920000 22598.080000</ows:LowerCorner><ows:UpperCorner>595401.920000 903401.920000</ows:UpperCorner></ows:BoundingBox><ows:SupportedCRS>urn:ogc:def:crs:EPSG:6.3:28992</ows:SupportedCRS><TileMatrix><ows:Identifier>0</ows:Identifier><ScaleDenominator>6144000.00000000000000000000</ScaleDenominator><TopLeftCorner>-285401.920000 903401.920000</TopLeftCorner><TileWidth>512</TileWidth><TileHeight>512</TileHeight><MatrixWidth>1</MatrixWidth><MatrixHeight>1</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>1</ows:Identifier><ScaleDenominator>3072000.00000000000000000000</ScaleDenominator><TopLeftCorner>-285401.920000 903401.920000</TopLeftCorner><TileWidth>512</TileWidth><TileHeight>512</TileHeight><MatrixWidth>2</MatrixWidth><MatrixHeight>2</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>2</ows:Identifier><ScaleDenominator>1536000.00000000000000000000</ScaleDenominator><TopLeftCorner>-285401.920000 903401.920000</TopLeftCorner><TileWidth>512</TileWidth><TileHeight>512</TileHeight><MatrixWidth>4</MatrixWidth><MatrixHeight>4</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>3</ows:Identifier><ScaleDenominator>768000.00000000000000000000</ScaleDenominator><TopLeftCorner>-285401.920000 903401.920000</TopLeftCorner><TileWidth>512</TileWidth><TileHeight>512</TileHeight><MatrixWidth>8</MatrixWidth><MatrixHeight>8</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>4</ows:Identifier><ScaleDenominator>384000.00000000000000000000</ScaleDenominator><TopLeftCorner>-285401.920000 903401.920000</TopLeftCorner><TileWidth>512</TileWidth><TileHeight>512</TileHeight><MatrixWidth>16</MatrixWidth><MatrixHeight>16</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>5</ows:Identifier><ScaleDenominator>192000.00000000000000000000</ScaleDenominator><TopLeftCorner>-285401.920000 903401.920000</TopLeftCorner><TileWidth>512</TileWidth><TileHeight>512</TileHeight><MatrixWidth>32</MatrixWidth><MatrixHeight>32</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>6</ows:Identifier><ScaleDenominator>96000.00000000000000000000</ScaleDenominator><TopLeftCorner>-285401.920000 903401.920000</TopLeftCorner><TileWidth>512</TileWidth><TileHeight>512</TileHeight><MatrixWidth>64</MatrixWidth><MatrixHeight>64</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>7</ows:Identifier><ScaleDenominator>48000.00000000000000000000</ScaleDenominator><TopLeftCorner>-285401.920000 903401.920000</TopLeftCorner><TileWidth>512</TileWidth><TileHeight>512</TileHeight><MatrixWidth>128</MatrixWidth><MatrixHeight>128</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>8</ows:Identifier><ScaleDenominator>24000.00000000000000000000</ScaleDenominator><TopLeftCorner>-285401.920000 903401.920000</TopLeftCorner><TileWidth>512</TileWidth><TileHeight>512</TileHeight><MatrixWidth>256</MatrixWidth><MatrixHeight>256</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>9</ows:Identifier><ScaleDenominator>12000.00000000000000000000</ScaleDenominator><TopLeftCorner>-285401.920000 903401.920000</TopLeftCorner><TileWidth>512</TileWidth><TileHeight>512</TileHeight><MatrixWidth>512</MatrixWidth><MatrixHeight>512</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>10</ows:Identifier><ScaleDenominator>6000.00000000000000000000</ScaleDenominator><TopLeftCorner>-285401.920000 903401.920000</TopLeftCorner><TileWidth>512</TileWidth><TileHeight>512</TileHeight><MatrixWidth>1024</MatrixWidth><MatrixHeight>1024</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>11</ows:Identifier><ScaleDenominator>3000.00000000000000000000</ScaleDenominator><TopLeftCorner>-285401.920000 903401.920000</TopLeftCorner><TileWidth>512</TileWidth><TileHeight>512</TileHeight><MatrixWidth>2048</MatrixWidth><MatrixHeight>2048</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>12</ows:Identifier><ScaleDenominator>1500.00000000000000000000</ScaleDenominator><TopLeftCorner>-285401.920000 903401.920000</TopLeftCorner><TileWidth>512</TileWidth><TileHeight>512</TileHeight><MatrixWidth>4096</MatrixWidth><MatrixHeight>4096</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>13</ows:Identifier><ScaleDenominator>750.00000000000000000000</ScaleDenominator><TopLeftCorner>-285401.920000 903401.920000</TopLeftCorner><TileWidth>512</TileWidth><TileHeight>512</TileHeight><MatrixWidth>8192</MatrixWidth><MatrixHeight>8192</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>14</ows:Identifier><ScaleDenominator>375.00000000000000000000</ScaleDenominator><TopLeftCorner>-285401.920000 903401.920000</TopLeftCorner><TileWidth>512</TileWidth><TileHeight>512</TileHeight><MatrixWidth>16384</MatrixWidth><MatrixHeight>16384</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>15</ows:Identifier><ScaleDenominator>187.50000000000000000000</ScaleDenominator><TopLeftCorner>-285401.920000 903401.920000</TopLeftCorner><TileWidth>512</TileWidth><TileHeight>512</TileHeight><MatrixWidth>32768</MatrixWidth><MatrixHeight>32768</MatrixHeight></TileMatrix></TileMatrixSet><TileMatrixSet><ows:Identifier>rd</ows:Identifier><ows:BoundingBox crs="urn:ogc:def:crs:EPSG:6.3:28992"><ows:LowerCorner>-285401.920000 22598.080000</ows:LowerCorner><ows:UpperCorner>595401.920000 903401.920000</ows:UpperCorner></ows:BoundingBox><ows:SupportedCRS>urn:ogc:def:crs:EPSG:6.3:28992</ows:SupportedCRS><TileMatrix><ows:Identifier>0</ows:Identifier><ScaleDenominator>12288000.00000000000000000000</ScaleDenominator><TopLeftCorner>-285401.920000 903401.920000</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>1</MatrixWidth><MatrixHeight>1</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>1</ows:Identifier><ScaleDenominator>6144000.00000000000000000000</ScaleDenominator><TopLeftCorner>-285401.920000 903401.920000</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>2</MatrixWidth><MatrixHeight>2</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>2</ows:Identifier><ScaleDenominator>3072000.00000000000000000000</ScaleDenominator><TopLeftCorner>-285401.920000 903401.920000</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>4</MatrixWidth><MatrixHeight>4</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>3</ows:Identifier><ScaleDenominator>1536000.00000000000000000000</ScaleDenominator><TopLeftCorner>-285401.920000 903401.920000</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>8</MatrixWidth><MatrixHeight>8</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>4</ows:Identifier><ScaleDenominator>768000.00000000000000000000</ScaleDenominator><TopLeftCorner>-285401.920000 903401.920000</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>16</MatrixWidth><MatrixHeight>16</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>5</ows:Identifier><ScaleDenominator>384000.00000000000000000000</ScaleDenominator><TopLeftCorner>-285401.920000 903401.920000</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>32</MatrixWidth><MatrixHeight>32</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>6</ows:Identifier><ScaleDenominator>192000.00000000000000000000</ScaleDenominator><TopLeftCorner>-285401.920000 903401.920000</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>64</MatrixWidth><MatrixHeight>64</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>7</ows:Identifier><ScaleDenominator>96000.00000000000000000000</ScaleDenominator><TopLeftCorner>-285401.920000 903401.920000</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>128</MatrixWidth><MatrixHeight>128</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>8</ows:Identifier><ScaleDenominator>48000.00000000000000000000</ScaleDenominator><TopLeftCorner>-285401.920000 903401.920000</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>256</MatrixWidth><MatrixHeight>256</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>9</ows:Identifier><ScaleDenominator>24000.00000000000000000000</ScaleDenominator><TopLeftCorner>-285401.920000 903401.920000</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>512</MatrixWidth><MatrixHeight>512</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>10</ows:Identifier><ScaleDenominator>12000.00000000000000000000</ScaleDenominator><TopLeftCorner>-285401.920000 903401.920000</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>1024</MatrixWidth><MatrixHeight>1024</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>11</ows:Identifier><ScaleDenominator>6000.00000000000000000000</ScaleDenominator><TopLeftCorner>-285401.920000 903401.920000</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>2048</MatrixWidth><MatrixHeight>2048</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>12</ows:Identifier><ScaleDenominator>3000.00000000000000000000</ScaleDenominator><TopLeftCorner>-285401.920000 903401.920000</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>4096</MatrixWidth><MatrixHeight>4096</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>13</ows:Identifier><ScaleDenominator>1500.00000000000000000000</ScaleDenominator><TopLeftCorner>-285401.920000 903401.920000</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>8192</MatrixWidth><MatrixHeight>8192</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>14</ows:Identifier><ScaleDenominator>750.00000000000000000000</ScaleDenominator><TopLeftCorner>-285401.920000 903401.920000</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>16384</MatrixWidth><MatrixHeight>16384</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>15</ows:Identifier><ScaleDenominator>375.00000000000000000000</ScaleDenominator><TopLeftCorner>-285401.920000 903401.920000</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>32768</MatrixWidth><MatrixHeight>32768</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>16</ows:Identifier><ScaleDenominator>187.50000000000000000000</ScaleDenominator><TopLeftCorner>-285401.920000 903401.920000</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>65536</MatrixWidth><MatrixHeight>65536</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>17</ows:Identifier><ScaleDenominator>93.75000000000000000000</ScaleDenominator><TopLeftCorner>-285401.920000 903401.920000</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>131072</MatrixWidth><MatrixHeight>131072</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>18</ows:Identifier><ScaleDenominator>46.87500000000000000000</ScaleDenominator><TopLeftCorner>-285401.920000 903401.920000</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>262144</MatrixWidth><MatrixHeight>262144</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>19</ows:Identifier><ScaleDenominator>23.43750000000000000000</ScaleDenominator><TopLeftCorner>-285401.920000 903401.920000</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>524288</MatrixWidth><MatrixHeight>524288</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>20</ows:Identifier><ScaleDenominator>11.71875000000000000000</ScaleDenominator><TopLeftCorner>-285401.920000 903401.920000</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>1048576</MatrixWidth><MatrixHeight>1048576</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>21</ows:Identifier><ScaleDenominator>5.85937500000000000000</ScaleDenominator><TopLeftCorner>-285401.920000 903401.920000</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>2097152</MatrixWidth><MatrixHeight>2097152</MatrixHeight></TileMatrix></TileMatrixSet><TileMatrixSet><ows:Identifier>epsg3857</ows:Identifier><ows:BoundingBox crs="urn:ogc:def:crs:EPSG:6.3:3857"><ows:LowerCorner>-20037508.342800 -20037508.342800</ows:LowerCorner><ows:UpperCorner>20037508.342800 20037508.342800</ows:UpperCorner></ows:BoundingBox><ows:SupportedCRS>urn:ogc:def:crs:EPSG:6.3:3857</ows:SupportedCRS><TileMatrix><ows:Identifier>0</ows:Identifier><ScaleDenominator>279541132.01428574323654174805</ScaleDenominator><TopLeftCorner>-20037508.342800 20037508.342768</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>2</MatrixWidth><MatrixHeight>2</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>1</ows:Identifier><ScaleDenominator>139770566.00714287161827087402</ScaleDenominator><TopLeftCorner>-20037508.342800 20037508.342768</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>4</MatrixWidth><MatrixHeight>4</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>2</ows:Identifier><ScaleDenominator>69885283.00357143580913543701</ScaleDenominator><TopLeftCorner>-20037508.342800 20037508.342768</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>8</MatrixWidth><MatrixHeight>8</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>3</ows:Identifier><ScaleDenominator>34942641.50178571790456771851</ScaleDenominator><TopLeftCorner>-20037508.342800 20037508.342768</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>16</MatrixWidth><MatrixHeight>16</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>4</ows:Identifier><ScaleDenominator>17471320.75089285895228385925</ScaleDenominator><TopLeftCorner>-20037508.342800 20037508.342768</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>32</MatrixWidth><MatrixHeight>32</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>5</ows:Identifier><ScaleDenominator>8735660.37546428479254245758</ScaleDenominator><TopLeftCorner>-20037508.342800 20037508.342850</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>64</MatrixWidth><MatrixHeight>64</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>6</ows:Identifier><ScaleDenominator>4367830.18771428614854812622</ScaleDenominator><TopLeftCorner>-20037508.342800 20037508.342686</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>128</MatrixWidth><MatrixHeight>128</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>7</ows:Identifier><ScaleDenominator>2183915.09386071423068642616</ScaleDenominator><TopLeftCorner>-20037508.342800 20037508.342752</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>256</MatrixWidth><MatrixHeight>256</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>8</ows:Identifier><ScaleDenominator>1091957.54693214292638003826</ScaleDenominator><TopLeftCorner>-20037508.342800 20037508.342817</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>512</MatrixWidth><MatrixHeight>512</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>9</ows:Identifier><ScaleDenominator>545978.77346428576856851578</ScaleDenominator><TopLeftCorner>-20037508.342800 20037508.342686</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>1024</MatrixWidth><MatrixHeight>1024</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>10</ows:Identifier><ScaleDenominator>272989.38673285715049132705</ScaleDenominator><TopLeftCorner>-20037508.342800 20037508.342791</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>2048</MatrixWidth><MatrixHeight>2048</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>11</ows:Identifier><ScaleDenominator>136494.69336642857524566352</ScaleDenominator><TopLeftCorner>-20037508.342800 20037508.342791</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>4096</MatrixWidth><MatrixHeight>4096</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>12</ows:Identifier><ScaleDenominator>68247.34668321428762283176</ScaleDenominator><TopLeftCorner>-20037508.342800 20037508.342791</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>8192</MatrixWidth><MatrixHeight>8192</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>13</ows:Identifier><ScaleDenominator>34123.67334160714381141588</ScaleDenominator><TopLeftCorner>-20037508.342800 20037508.342791</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>16384</MatrixWidth><MatrixHeight>16384</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>14</ows:Identifier><ScaleDenominator>17061.83667078571306774393</ScaleDenominator><TopLeftCorner>-20037508.342800 20037508.342749</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>32768</MatrixWidth><MatrixHeight>32768</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>15</ows:Identifier><ScaleDenominator>8530.91833539285653387196</ScaleDenominator><TopLeftCorner>-20037508.342800 20037508.342749</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>65536</MatrixWidth><MatrixHeight>65536</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>16</ows:Identifier><ScaleDenominator>4265.45916771428528591059</ScaleDenominator><TopLeftCorner>-20037508.342800 20037508.342917</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>131072</MatrixWidth><MatrixHeight>131072</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>17</ows:Identifier><ScaleDenominator>2132.72958385000038106227</ScaleDenominator><TopLeftCorner>-20037508.342800 20037508.342783</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>262144</MatrixWidth><MatrixHeight>262144</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>18</ows:Identifier><ScaleDenominator>1066.36479192500019053114</ScaleDenominator><TopLeftCorner>-20037508.342800 20037508.342783</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>524288</MatrixWidth><MatrixHeight>524288</MatrixHeight></TileMatrix></TileMatrixSet><TileMatrixSet><ows:Identifier>g</ows:Identifier><ows:BoundingBox crs="urn:ogc:def:crs:EPSG:6.3:900913"><ows:LowerCorner>-20037508.342789 -20037508.342789</ows:LowerCorner><ows:UpperCorner>20037508.342789 20037508.342789</ows:UpperCorner></ows:BoundingBox><ows:SupportedCRS>urn:ogc:def:crs:EPSG:6.3:900913</ows:SupportedCRS><WellKnownScaleSet>urn:ogc:def:wkss:OGC:1.0:GoogleMapsCompatible</WellKnownScaleSet><TileMatrix><ows:Identifier>0</ows:Identifier><ScaleDenominator>559082264.02871787548065185547</ScaleDenominator><TopLeftCorner>-20037508.342789 20037508.342789</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>1</MatrixWidth><MatrixHeight>1</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>1</ows:Identifier><ScaleDenominator>279541132.01435887813568115234</ScaleDenominator><TopLeftCorner>-20037508.342789 20037508.342789</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>2</MatrixWidth><MatrixHeight>2</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>2</ows:Identifier><ScaleDenominator>139770566.00717940926551818848</ScaleDenominator><TopLeftCorner>-20037508.342789 20037508.342789</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>4</MatrixWidth><MatrixHeight>4</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>3</ows:Identifier><ScaleDenominator>69885283.00358971953392028809</ScaleDenominator><TopLeftCorner>-20037508.342789 20037508.342789</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>8</MatrixWidth><MatrixHeight>8</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>4</ows:Identifier><ScaleDenominator>34942641.50179485976696014404</ScaleDenominator><TopLeftCorner>-20037508.342789 20037508.342789</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>16</MatrixWidth><MatrixHeight>16</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>5</ows:Identifier><ScaleDenominator>17471320.75089742988348007202</ScaleDenominator><TopLeftCorner>-20037508.342789 20037508.342789</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>32</MatrixWidth><MatrixHeight>32</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>6</ows:Identifier><ScaleDenominator>8735660.37544871494174003601</ScaleDenominator><TopLeftCorner>-20037508.342789 20037508.342789</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>64</MatrixWidth><MatrixHeight>64</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>7</ows:Identifier><ScaleDenominator>4367830.18772435747087001801</ScaleDenominator><TopLeftCorner>-20037508.342789 20037508.342789</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>128</MatrixWidth><MatrixHeight>128</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>8</ows:Identifier><ScaleDenominator>2183915.09386217873543500900</ScaleDenominator><TopLeftCorner>-20037508.342789 20037508.342789</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>256</MatrixWidth><MatrixHeight>256</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>9</ows:Identifier><ScaleDenominator>1091957.54693108866922557354</ScaleDenominator><TopLeftCorner>-20037508.342789 20037508.342789</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>512</MatrixWidth><MatrixHeight>512</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>10</ows:Identifier><ScaleDenominator>545978.77346554468385875225</ScaleDenominator><TopLeftCorner>-20037508.342789 20037508.342789</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>1024</MatrixWidth><MatrixHeight>1024</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>11</ows:Identifier><ScaleDenominator>272989.38673277228372171521</ScaleDenominator><TopLeftCorner>-20037508.342789 20037508.342789</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>2048</MatrixWidth><MatrixHeight>2048</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>12</ows:Identifier><ScaleDenominator>136494.69336638617096468806</ScaleDenominator><TopLeftCorner>-20037508.342789 20037508.342789</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>4096</MatrixWidth><MatrixHeight>4096</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>13</ows:Identifier><ScaleDenominator>68247.34668319307093042880</ScaleDenominator><TopLeftCorner>-20037508.342789 20037508.342789</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>8192</MatrixWidth><MatrixHeight>8192</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>14</ows:Identifier><ScaleDenominator>34123.67334159654274117202</ScaleDenominator><TopLeftCorner>-20037508.342789 20037508.342789</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>16384</MatrixWidth><MatrixHeight>16384</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>15</ows:Identifier><ScaleDenominator>17061.83667079827137058601</ScaleDenominator><TopLeftCorner>-20037508.342789 20037508.342789</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>32768</MatrixWidth><MatrixHeight>32768</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>16</ows:Identifier><ScaleDenominator>8530.91833539913568529300</ScaleDenominator><TopLeftCorner>-20037508.342789 20037508.342789</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>65536</MatrixWidth><MatrixHeight>65536</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>17</ows:Identifier><ScaleDenominator>4265.45916769956784264650</ScaleDenominator><TopLeftCorner>-20037508.342789 20037508.342789</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>131072</MatrixWidth><MatrixHeight>131072</MatrixHeight></TileMatrix><TileMatrix><ows:Identifier>18</ows:Identifier><ScaleDenominator>2132.72958384978392132325</ScaleDenominator><TopLeftCorner>-20037508.342789 20037508.342789</TopLeftCorner><TileWidth>256</TileWidth><TileHeight>256</TileHeight><MatrixWidth>262144</MatrixWidth><MatrixHeight>262144</MatrixHeight></TileMatrix></TileMatrixSet></Contents></Capabilities>	\N	f	f	Openbasiskaart	\N	https://www.openbasiskaart.nl/mapcache/wmts?	\N	\N	\N	\N	\N	WMTS	1	43
 tiled	2	2022-01-20 15:55:40.436	<?xml version="1.0" encoding="UTF-8"?><Capabilities xmlns="http://www.opengis.net/wmts/1.0" xmlns:gml="http://www.opengis.net/gml" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0.0" xsi:schemaLocation="http://www.opengis.net/wmts/1.0 http://schemas.opengis.net/wmts/1.0/wmtsGetCapabilities_response.xsd">\n\t<ows:ServiceIdentification>\n\t\t<ows:Title>Web Map Tile Service</ows:Title>\n\t\t<ows:ServiceType>OGC WMTS</ows:ServiceType>\n\t\t<ows:ServiceTypeVersion>1.0.0</ows:ServiceTypeVersion>\n\t</ows:ServiceIdentification>\n\t<ows:OperationsMetadata>\n\t\t<ows:Operation name="GetCapabilities">\n\t\t\t<ows:DCP>\n\t\t\t\t<ows:HTTP>\n\t\t\t\t\t<ows:Get xlink:href="https://geodata.nationaalgeoregister.nl/tiles/service/wmts?">\n\t\t\t\t\t\t<ows:Constraint name="GetEncoding">\n\t\t\t\t\t\t\t<ows:AllowedValues>\n\t\t\t\t\t\t\t\t<ows:Value>KVP</ows:Value>\n\t\t\t\t\t\t\t</ows:AllowedValues>\n\t\t\t\t\t\t</ows:Constraint>\n\t\t\t\t\t</ows:Get>\n\t\t\t\t</ows:HTTP>\n\t\t\t</ows:DCP>\n\t\t</ows:Operation>\n\t\t<ows:Operation name="GetTile">\n\t\t\t<ows:DCP>\n\t\t\t\t<ows:HTTP>\n\t\t\t\t\t<ows:Get xlink:href="https://geodata.nationaalgeoregister.nl/tiles/service/wmts?">\n\t\t\t\t\t\t<ows:Constraint name="GetEncoding">\n\t\t\t\t\t\t\t<ows:AllowedValues>\n\t\t\t\t\t\t\t\t<ows:Value>KVP</ows:Value>\n\t\t\t\t\t\t\t</ows:AllowedValues>\n\t\t\t\t\t\t</ows:Constraint>\n\t\t\t\t\t</ows:Get>\n\t\t\t\t</ows:HTTP>\n\t\t\t</ows:DCP>\n\t\t</ows:Operation>\n\t\t<ows:Operation name="GetFeatureInfo">\n\t\t\t<ows:DCP>\n\t\t\t\t<ows:HTTP>\n\t\t\t\t\t<ows:Get xlink:href="https://geodata.nationaalgeoregister.nl/tiles/service/wmts?">\n\t\t\t\t\t\t<ows:Constraint name="GetEncoding">\n\t\t\t\t\t\t\t<ows:AllowedValues>\n\t\t\t\t\t\t\t\t<ows:Value>KVP</ows:Value>\n\t\t\t\t\t\t\t</ows:AllowedValues>\n\t\t\t\t\t\t</ows:Constraint>\n\t\t\t\t\t</ows:Get>\n\t\t\t\t</ows:HTTP>\n\t\t\t</ows:DCP>\n\t\t</ows:Operation>\n\t</ows:OperationsMetadata>\n\t<Contents>\n\t\t<Layer>\n\t\t\t<ows:Title>top10nlv2</ows:Title>\n\t\t\t<ows:WGS84BoundingBox>\n\t\t\t\t<ows:LowerCorner>-1.65729160235431 48.0405018704265</ows:LowerCorner>\n\t\t\t\t<ows:UpperCorner>11.2902578747914 55.9136415748388</ows:UpperCorner>\n\t\t\t</ows:WGS84BoundingBox>\n\t\t\t<ows:Identifier>top10nlv2</ows:Identifier>\n\t\t\t<Style isDefault="true">\n\t\t\t\t<ows:Identifier/>\n\t\t\t</Style>\n\t\t\t<Format>image/png</Format>\n\t\t\t<TileMatrixSetLink>\n\t\t\t\t<TileMatrixSet>EPSG:28992</TileMatrixSet>\n\t\t\t</TileMatrixSetLink>\n\t\t</Layer>\n\t\t<Layer>\n\t\t\t<ows:Title>natura2000</ows:Title>\n\t\t\t<ows:WGS84BoundingBox>\n\t\t\t\t<ows:LowerCorner>-1.65729160235431 48.0405018704265</ows:LowerCorner>\n\t\t\t\t<ows:UpperCorner>11.2902578747914 55.9136415748388</ows:UpperCorner>\n\t\t\t</ows:WGS84BoundingBox>\n\t\t\t<ows:Identifier>natura2000</ows:Identifier>\n\t\t\t<Style isDefault="true">\n\t\t\t\t<ows:Identifier/>\n\t\t\t</Style>\n\t\t\t<Format>image/png</Format>\n\t\t\t<TileMatrixSetLink>\n\t\t\t\t<TileMatrixSet>EPSG:28992</TileMatrixSet>\n\t\t\t</TileMatrixSetLink>\n\t\t</Layer>\n\t\t<Layer>\n\t\t\t<ows:Title>nok2011</ows:Title>\n\t\t\t<ows:WGS84BoundingBox>\n\t\t\t\t<ows:LowerCorner>-1.65729160235431 48.0405018704265</ows:LowerCorner>\n\t\t\t\t<ows:UpperCorner>11.2902578747914 55.9136415748388</ows:UpperCorner>\n\t\t\t</ows:WGS84BoundingBox>\n\t\t\t<ows:Identifier>nok2011</ows:Identifier>\n\t\t\t<Style isDefault="true">\n\t\t\t\t<ows:Identifier/>\n\t\t\t</Style>\n\t\t\t<Format>image/png</Format>\n\t\t\t<TileMatrixSetLink>\n\t\t\t\t<TileMatrixSet>EPSG:28992</TileMatrixSet>\n\t\t\t</TileMatrixSetLink>\n\t\t</Layer>\n\t\t<Layer>\n\t\t\t<ows:Title>aan</ows:Title>\n\t\t\t<ows:WGS84BoundingBox>\n\t\t\t\t<ows:LowerCorner>-1.65729160235431 48.0405018704265</ows:LowerCorner>\n\t\t\t\t<ows:UpperCorner>11.2902578747914 55.9136415748388</ows:UpperCorner>\n\t\t\t</ows:WGS84BoundingBox>\n\t\t\t<ows:Identifier>aan</ows:Identifier>\n\t\t\t<Style isDefault="true">\n\t\t\t\t<ows:Identifier/>\n\t\t\t</Style>\n\t\t\t<Format>image/png</Format>\n\t\t\t<TileMatrixSetLink>\n\t\t\t\t<TileMatrixSet>EPSG:28992</TileMatrixSet>\n\t\t\t</TileMatrixSetLink>\n\t\t</Layer>\n\t\t<Layer>\n\t\t\t<ows:Title>bag</ows:Title>\n\t\t\t<ows:WGS84BoundingBox>\n\t\t\t\t<ows:LowerCorner>-1.65729160235431 48.0405018704265</ows:LowerCorner>\n\t\t\t\t<ows:UpperCorner>11.2902578747914 55.9136415748388</ows:UpperCorner>\n\t\t\t</ows:WGS84BoundingBox>\n\t\t\t<ows:Identifier>bag</ows:Identifier>\n\t\t\t<Style isDefault="true">\n\t\t\t\t<ows:Identifier/>\n\t\t\t</Style>\n\t\t\t<Format>image/png</Format>\n\t\t\t<Format>image/png8</Format>\n\t\t\t<TileMatrixSetLink>\n\t\t\t\t<TileMatrixSet>EPSG:28992</TileMatrixSet>\n\t\t\t</TileMatrixSetLink>\n\t\t</Layer>\n\t\t<Layer>\n\t\t\t<ows:Title>top25raster</ows:Title>\n\t\t\t<ows:WGS84BoundingBox>\n\t\t\t\t<ows:LowerCorner>-1.65729160235 48.0405018704</ows:LowerCorner>\n\t\t\t\t<ows:UpperCorner>12.4317272654 56.1105896442</ows:UpperCorner>\n\t\t\t</ows:WGS84BoundingBox>\n\t\t\t<ows:Identifier>top25raster</ows:Identifier>\n\t\t\t<Style isDefault="true">\n\t\t\t\t<ows:Identifier/>\n\t\t\t</Style>\n\t\t\t<Format>image/png</Format>\n\t\t\t<Format>image/png8</Format>\n\t\t\t<TileMatrixSetLink>\n\t\t\t\t<TileMatrixSet>EPSG:28992</TileMatrixSet>\n\t\t\t</TileMatrixSetLink>\n\t\t</Layer>\n\t\t<Layer>\n\t\t\t<ows:Title>top50raster</ows:Title>\n\t\t\t<ows:WGS84BoundingBox>\n\t\t\t\t<ows:LowerCorner>-1.65729160235 48.0405018704</ows:LowerCorner>\n\t\t\t\t<ows:UpperCorner>12.4317272654 56.1105896442</ows:UpperCorner>\n\t\t\t</ows:WGS84BoundingBox>\n\t\t\t<ows:Identifier>top50raster</ows:Identifier>\n\t\t\t<Style isDefault="true">\n\t\t\t\t<ows:Identifier/>\n\t\t\t</Style>\n\t\t\t<Format>image/png</Format>\n\t\t\t<Format>image/png8</Format>\n\t\t\t<TileMatrixSetLink>\n\t\t\t\t<TileMatrixSet>EPSG:28992</TileMatrixSet>\n\t\t\t</TileMatrixSetLink>\n\t\t</Layer>\n\t\t<Layer>\n\t\t\t<ows:Title>top100raster</ows:Title>\n\t\t\t<ows:WGS84BoundingBox>\n\t\t\t\t<ows:LowerCorner>-1.65729160235 48.0405018704</ows:LowerCorner>\n\t\t\t\t<ows:UpperCorner>12.4317272654 56.1105896442</ows:UpperCorner>\n\t\t\t</ows:WGS84BoundingBox>\n\t\t\t<ows:Identifier>top100raster</ows:Identifier>\n\t\t\t<Style isDefault="true">\n\t\t\t\t<ows:Identifier/>\n\t\t\t</Style>\n\t\t\t<Format>image/png</Format>\n\t\t\t<Format>image/png8</Format>\n\t\t\t<TileMatrixSetLink>\n\t\t\t\t<TileMatrixSet>EPSG:28992</TileMatrixSet>\n\t\t\t</TileMatrixSetLink>\n\t\t</Layer>\n\t\t<Layer>\n\t\t\t<ows:Title>top250raster</ows:Title>\n\t\t\t<ows:WGS84BoundingBox>\n\t\t\t\t<ows:LowerCorner>-1.65729160235 48.0405018704</ows:LowerCorner>\n\t\t\t\t<ows:UpperCorner>12.4317272654 56.1105896442</ows:UpperCorner>\n\t\t\t</ows:WGS84BoundingBox>\n\t\t\t<ows:Identifier>top250raster</ows:Identifier>\n\t\t\t<Style isDefault="true">\n\t\t\t\t<ows:Identifier/>\n\t\t\t</Style>\n\t\t\t<Format>image/png</Format>\n\t\t\t<Format>image/png8</Format>\n\t\t\t<TileMatrixSetLink>\n\t\t\t\t<TileMatrixSet>EPSG:28992</TileMatrixSet>\n\t\t\t</TileMatrixSetLink>\n\t\t</Layer>\n\t\t<Layer>\n\t\t\t<ows:Title>top500raster</ows:Title>\n\t\t\t<ows:WGS84BoundingBox>\n\t\t\t\t<ows:LowerCorner>-1.65729160235 48.0405018704</ows:LowerCorner>\n\t\t\t\t<ows:UpperCorner>12.4317272654 56.1105896442</ows:UpperCorner>\n\t\t\t</ows:WGS84BoundingBox>\n\t\t\t<ows:Identifier>top500raster</ows:Identifier>\n\t\t\t<Style isDefault="true">\n\t\t\t\t<ows:Identifier/>\n\t\t\t</Style>\n\t\t\t<Format>image/png</Format>\n\t\t\t<Format>image/png8</Format>\n\t\t\t<TileMatrixSetLink>\n\t\t\t\t<TileMatrixSet>EPSG:28992</TileMatrixSet>\n\t\t\t</TileMatrixSetLink>\n\t\t</Layer>\n\t\t<Layer>\n\t\t\t<ows:Title>top1000raster</ows:Title>\n\t\t\t<ows:WGS84BoundingBox>\n\t\t\t\t<ows:LowerCorner>-1.65729160235 48.0405018704</ows:LowerCorner>\n\t\t\t\t<ows:UpperCorner>12.4317272654 56.1105896442</ows:UpperCorner>\n\t\t\t</ows:WGS84BoundingBox>\n\t\t\t<ows:Identifier>top1000raster</ows:Identifier>\n\t\t\t<Style isDefault="true">\n\t\t\t\t<ows:Identifier/>\n\t\t\t</Style>\n\t\t\t<Format>image/png</Format>\n\t\t\t<TileMatrixSetLink>\n\t\t\t\t<TileMatrixSet>EPSG:28992</TileMatrixSet>\n\t\t\t</TileMatrixSetLink>\n\t\t</Layer>\n\t\t<Layer>\n\t\t\t<ows:Title>brpgewaspercelen</ows:Title>\n\t\t\t<ows:WGS84BoundingBox>\n\t\t\t\t<ows:LowerCorner>-1.65729160235431 48.0405018704265</ows:LowerCorner>\n\t\t\t\t<ows:UpperCorner>11.2902578747914 55.9136415748388</ows:UpperCorner>\n\t\t\t</ows:WGS84BoundingBox>\n\t\t\t<ows:Identifier>brpgewaspercelen</ows:Identifier>\n\t\t\t<Style isDefault="true">\n\t\t\t\t<ows:Identifier/>\n\t\t\t</Style>\n\t\t\t<Format>image/png</Format>\n\t\t\t<TileMatrixSetLink>\n\t\t\t\t<TileMatrixSet>EPSG:28992</TileMatrixSet>\n\t\t\t</TileMatrixSetLink>\n\t\t</Layer>\n\t\t<Layer>\n\t\t\t<ows:Title>bgtstandaardv2</ows:Title>\n\t\t\t<ows:WGS84BoundingBox>\n\t\t\t\t<ows:LowerCorner>-1.65729160235431 48.0405018704265</ows:LowerCorner>\n\t\t\t\t<ows:UpperCorner>11.2902578747914 55.9136415748388</ows:UpperCorner>\n\t\t\t</ows:WGS84BoundingBox>\n\t\t\t<ows:Identifier>bgtstandaardv2</ows:Identifier>\n\t\t\t<Style isDefault="true">\n\t\t\t\t<ows:Identifier/>\n\t\t\t</Style>\n\t\t\t<Format>image/png8</Format>\n\t\t\t<TileMatrixSetLink>\n\t\t\t\t<TileMatrixSet>EPSG:28992:16</TileMatrixSet>\n\t\t\t</TileMatrixSetLink>\n\t\t</Layer>\n\t\t<Layer>\n\t\t\t<ows:Title>bgtsymbolenv2</ows:Title>\n\t\t\t<ows:WGS84BoundingBox>\n\t\t\t\t<ows:LowerCorner>-1.65729160235431 48.0405018704265</ows:LowerCorner>\n\t\t\t\t<ows:UpperCorner>11.2902578747914 55.9136415748388</ows:UpperCorner>\n\t\t\t</ows:WGS84BoundingBox>\n\t\t\t<ows:Identifier>bgtsymbolenv2</ows:Identifier>\n\t\t\t<Style isDefault="true">\n\t\t\t\t<ows:Identifier/>\n\t\t\t</Style>\n\t\t\t<Format>image/png8</Format>\n\t\t\t<TileMatrixSetLink>\n\t\t\t\t<TileMatrixSet>EPSG:28992:16</TileMatrixSet>\n\t\t\t</TileMatrixSetLink>\n\t\t</Layer>\n\t\t<Layer>\n\t\t\t<ows:Title>bgtplaninformatie</ows:Title>\n\t\t\t<ows:WGS84BoundingBox>\n\t\t\t\t<ows:LowerCorner>-1.65729160235431 48.0405018704265</ows:LowerCorner>\n\t\t\t\t<ows:UpperCorner>11.2902578747914 55.9136415748388</ows:UpperCorner>\n\t\t\t</ows:WGS84BoundingBox>\n\t\t\t<ows:Identifier>bgtplaninformatie</ows:Identifier>\n\t\t\t<Style isDefault="true">\n\t\t\t\t<ows:Identifier/>\n\t\t\t</Style>\n\t\t\t<Format>image/png8</Format>\n\t\t\t<TileMatrixSetLink>\n\t\t\t\t<TileMatrixSet>EPSG:28992:16</TileMatrixSet>\n\t\t\t</TileMatrixSetLink>\n\t\t</Layer>\n\t\t<Layer>\n\t\t\t<ows:Title>bgtstandaard</ows:Title>\n\t\t\t<ows:WGS84BoundingBox>\n\t\t\t\t<ows:LowerCorner>-1.65729160235431 48.0405018704265</ows:LowerCorner>\n\t\t\t\t<ows:UpperCorner>11.2902578747914 55.9136415748388</ows:UpperCorner>\n\t\t\t</ows:WGS84BoundingBox>\n\t\t\t<ows:Identifier>bgtstandaard</ows:Identifier>\n\t\t\t<Style isDefault="true">\n\t\t\t\t<ows:Identifier/>\n\t\t\t</Style>\n\t\t\t<Format>image/png8</Format>\n\t\t\t<TileMatrixSetLink>\n\t\t\t\t<TileMatrixSet>EPSG:28992:16</TileMatrixSet>\n\t\t\t</TileMatrixSetLink>\n\t\t</Layer>\n\t\t<Layer>\n\t\t\t<ows:Title>bgtachtergrond</ows:Title>\n\t\t\t<ows:WGS84BoundingBox>\n\t\t\t\t<ows:LowerCorner>-1.65729160235431 48.0405018704265</ows:LowerCorner>\n\t\t\t\t<ows:UpperCorner>11.2902578747914 55.9136415748388</ows:UpperCorner>\n\t\t\t</ows:WGS84BoundingBox>\n\t\t\t<ows:Identifier>bgtachtergrond</ows:Identifier>\n\t\t\t<Style isDefault="true">\n\t\t\t\t<ows:Identifier/>\n\t\t\t</Style>\n\t\t\t<Format>image/png8</Format>\n\t\t\t<TileMatrixSetLink>\n\t\t\t\t<TileMatrixSet>EPSG:28992:16</TileMatrixSet>\n\t\t\t</TileMatrixSetLink>\n\t\t</Layer>\n\t\t<Layer>\n\t\t\t<ows:Title>bgtomtrekgericht</ows:Title>\n\t\t\t<ows:WGS84BoundingBox>\n\t\t\t\t<ows:LowerCorner>-1.65729160235431 48.0405018704265</ows:LowerCorner>\n\t\t\t\t<ows:UpperCorner>11.2902578747914 55.9136415748388</ows:UpperCorner>\n\t\t\t</ows:WGS84BoundingBox>\n\t\t\t<ows:Identifier>bgtomtrekgericht</ows:Identifier>\n\t\t\t<Style isDefault="true">\n\t\t\t\t<ows:Identifier/>\n\t\t\t</Style>\n\t\t\t<Format>image/png8</Format>\n\t\t\t<TileMatrixSetLink>\n\t\t\t\t<TileMatrixSet>EPSG:28992:16</TileMatrixSet>\n\t\t\t</TileMatrixSetLink>\n\t\t</Layer>\n\t\t<Layer>\n\t\t\t<ows:Title>bgtpastel</ows:Title>\n\t\t\t<ows:WGS84BoundingBox>\n\t\t\t\t<ows:LowerCorner>-1.65729160235431 48.0405018704265</ows:LowerCorner>\n\t\t\t\t<ows:UpperCorner>11.2902578747914 55.9136415748388</ows:UpperCorner>\n\t\t\t</ows:WGS84BoundingBox>\n\t\t\t<ows:Identifier>bgtpastel</ows:Identifier>\n\t\t\t<Style isDefault="true">\n\t\t\t\t<ows:Identifier/>\n\t\t\t</Style>\n\t\t\t<Format>image/png8</Format>\n\t\t\t<TileMatrixSetLink>\n\t\t\t\t<TileMatrixSet>EPSG:28992:16</TileMatrixSet>\n\t\t\t</TileMatrixSetLink>\n\t\t</Layer>\n\t\t<Layer>\n\t\t\t<ows:Title>ahn1_100m</ows:Title>\n\t\t\t<ows:WGS84BoundingBox>\n\t\t\t\t<ows:LowerCorner>-1.65729160235431 48.0405018704265</ows:LowerCorner>\n\t\t\t\t<ows:UpperCorner>11.2902578747914 55.9136415748388</ows:UpperCorner>\n\t\t\t</ows:WGS84BoundingBox>\n\t\t\t<ows:Identifier>ahn1_100m</ows:Identifier>\n\t\t\t<Style isDefault="true">\n\t\t\t\t<ows:Identifier/>\n\t\t\t</Style>\n\t\t\t<Format>image/png</Format>\n\t\t\t<Format>image/png8</Format>\n\t\t\t<TileMatrixSetLink>\n\t\t\t\t<TileMatrixSet>EPSG:28992</TileMatrixSet>\n\t\t\t</TileMatrixSetLink>\n\t\t</Layer>\n\t\t<Layer>\n\t\t\t<ows:Title>ahn1_25m</ows:Title>\n\t\t\t<ows:WGS84BoundingBox>\n\t\t\t\t<ows:LowerCorner>-1.65729160235431 48.0405018704265</ows:LowerCorner>\n\t\t\t\t<ows:UpperCorner>11.2902578747914 55.9136415748388</ows:UpperCorner>\n\t\t\t</ows:WGS84BoundingBox>\n\t\t\t<ows:Identifier>ahn1_25m</ows:Identifier>\n\t\t\t<Style isDefault="true">\n\t\t\t\t<ows:Identifier/>\n\t\t\t</Style>\n\t\t\t<Format>image/png</Format>\n\t\t\t<Format>image/png8</Format>\n\t\t\t<TileMatrixSetLink>\n\t\t\t\t<TileMatrixSet>EPSG:28992</TileMatrixSet>\n\t\t\t</TileMatrixSetLink>\n\t\t</Layer>\n\t\t<Layer>\n\t\t\t<ows:Title>ahn1_5m</ows:Title>\n\t\t\t<ows:WGS84BoundingBox>\n\t\t\t\t<ows:LowerCorner>-1.65729160235431 48.0405018704265</ows:LowerCorner>\n\t\t\t\t<ows:UpperCorner>11.2902578747914 55.9136415748388</ows:UpperCorner>\n\t\t\t</ows:WGS84BoundingBox>\n\t\t\t<ows:Identifier>ahn1_5m</ows:Identifier>\n\t\t\t<Style isDefault="true">\n\t\t\t\t<ows:Identifier/>\n\t\t\t</Style>\n\t\t\t<Format>image/png</Format>\n\t\t\t<Format>image/png8</Format>\n\t\t\t<TileMatrixSetLink>\n\t\t\t\t<TileMatrixSet>EPSG:28992</TileMatrixSet>\n\t\t\t</TileMatrixSetLink>\n\t\t</Layer>\n\t\t<Layer>\n\t\t\t<ows:Title>ahn2_5m</ows:Title>\n\t\t\t<ows:WGS84BoundingBox>\n\t\t\t\t<ows:LowerCorner>-1.65729160235431 48.0405018704265</ows:LowerCorner>\n\t\t\t\t<ows:UpperCorner>11.2902578747914 55.9136415748388</ows:UpperCorner>\n\t\t\t</ows:WGS84BoundingBox>\n\t\t\t<ows:Identifier>ahn2_5m</ows:Identifier>\n\t\t\t<Style isDefault="true">\n\t\t\t\t<ows:Identifier/>\n\t\t\t</Style>\n\t\t\t<Format>image/png</Format>\n\t\t\t<Format>image/png8</Format>\n\t\t\t<TileMatrixSetLink>\n\t\t\t\t<TileMatrixSet>EPSG:28992</TileMatrixSet>\n\t\t\t</TileMatrixSetLink>\n\t\t</Layer>\n\t\t<Layer>\n\t\t\t<ows:Title>ahn2_05m_non</ows:Title>\n\t\t\t<ows:WGS84BoundingBox>\n\t\t\t\t<ows:LowerCorner>-1.65729160235431 48.0405018704265</ows:LowerCorner>\n\t\t\t\t<ows:UpperCorner>11.2902578747914 55.9136415748388</ows:UpperCorner>\n\t\t\t</ows:WGS84BoundingBox>\n\t\t\t<ows:Identifier>ahn2_05m_non</ows:Identifier>\n\t\t\t<Style isDefault="true">\n\t\t\t\t<ows:Identifier/>\n\t\t\t</Style>\n\t\t\t<Format>image/png</Format>\n\t\t\t<Format>image/png8</Format>\n\t\t\t<TileMatrixSetLink>\n\t\t\t\t<TileMatrixSet>EPSG:28992</TileMatrixSet>\n\t\t\t</TileMatrixSetLink>\n\t\t</Layer>\n\t\t<Layer>\n\t\t\t<ows:Title>ahn2_05m_int</ows:Title>\n\t\t\t<ows:WGS84BoundingBox>\n\t\t\t\t<ows:LowerCorner>-1.65729160235431 48.0405018704265</ows:LowerCorner>\n\t\t\t\t<ows:UpperCorner>11.2902578747914 55.9136415748388</ows:UpperCorner>\n\t\t\t</ows:WGS84BoundingBox>\n\t\t\t<ows:Identifier>ahn2_05m_int</ows:Identifier>\n\t\t\t<Style isDefault="true">\n\t\t\t\t<ows:Identifier/>\n\t\t\t</Style>\n\t\t\t<Format>image/png</Format>\n\t\t\t<Format>image/png8</Format>\n\t\t\t<TileMatrixSetLink>\n\t\t\t\t<TileMatrixSet>EPSG:28992</TileMatrixSet>\n\t\t\t</TileMatrixSetLink>\n\t\t</Layer>\n\t\t<Layer>\n\t\t\t<ows:Title>ahn2_05m_ruw</ows:Title>\n\t\t\t<ows:WGS84BoundingBox>\n\t\t\t\t<ows:LowerCorner>-1.65729160235431 48.0405018704265</ows:LowerCorner>\n\t\t\t\t<ows:UpperCorner>11.2902578747914 55.9136415748388</ows:UpperCorner>\n\t\t\t</ows:WGS84BoundingBox>\n\t\t\t<ows:Identifier>ahn2_05m_ruw</ows:Identifier>\n\t\t\t<Style isDefault="true">\n\t\t\t\t<ows:Identifier/>\n\t\t\t</Style>\n\t\t\t<Format>image/png</Format>\n\t\t\t<Format>image/png8</Format>\n\t\t\t<TileMatrixSetLink>\n\t\t\t\t<TileMatrixSet>EPSG:28992</TileMatrixSet>\n\t\t\t</TileMatrixSetLink>\n\t\t</Layer>\n\t\t<Layer>\n\t\t\t<ows:Title>ahn3_5m_dsm</ows:Title>\n\t\t\t<ows:WGS84BoundingBox>\n\t\t\t\t<ows:LowerCorner>-1.65729160235431 48.0405018704265</ows:LowerCorner>\n\t\t\t\t<ows:UpperCorner>11.2902578747914 55.9136415748388</ows:UpperCorner>\n\t\t\t</ows:WGS84BoundingBox>\n\t\t\t<ows:Identifier>ahn3_5m_dsm</ows:Identifier>\n\t\t\t<Style isDefault="true">\n\t\t\t\t<ows:Identifier/>\n\t\t\t</Style>\n\t\t\t<Format>image/png</Format>\n\t\t\t<Format>image/png8</Format>\n\t\t\t<TileMatrixSetLink>\n\t\t\t\t<TileMatrixSet>EPSG:28992</TileMatrixSet>\n\t\t\t</TileMatrixSetLink>\n\t\t</Layer>\n\t\t<Layer>\n\t\t\t<ows:Title>ahn3_5m_dtm</ows:Title>\n\t\t\t<ows:WGS84BoundingBox>\n\t\t\t\t<ows:LowerCorner>-1.65729160235431 48.0405018704265</ows:LowerCorner>\n\t\t\t\t<ows:UpperCorner>11.2902578747914 55.9136415748388</ows:UpperCorner>\n\t\t\t</ows:WGS84BoundingBox>\n\t\t\t<ows:Identifier>ahn3_5m_dtm</ows:Identifier>\n\t\t\t<Style isDefault="true">\n\t\t\t\t<ows:Identifier/>\n\t\t\t</Style>\n\t\t\t<Format>image/png</Format>\n\t\t\t<Format>image/png8</Format>\n\t\t\t<TileMatrixSetLink>\n\t\t\t\t<TileMatrixSet>EPSG:28992</TileMatrixSet>\n\t\t\t</TileMatrixSetLink>\n\t\t</Layer>\n\t\t<Layer>\n\t\t\t<ows:Title>ahn3_05m_dsm</ows:Title>\n\t\t\t<ows:WGS84BoundingBox>\n\t\t\t\t<ows:LowerCorner>-1.65729160235431 48.0405018704265</ows:LowerCorner>\n\t\t\t\t<ows:UpperCorner>11.2902578747914 55.9136415748388</ows:UpperCorner>\n\t\t\t</ows:WGS84BoundingBox>\n\t\t\t<ows:Identifier>ahn3_05m_dsm</ows:Identifier>\n\t\t\t<Style isDefault="true">\n\t\t\t\t<ows:Identifier/>\n\t\t\t</Style>\n\t\t\t<Format>image/png</Format>\n\t\t\t<Format>image/png8</Format>\n\t\t\t<TileMatrixSetLink>\n\t\t\t\t<TileMatrixSet>EPSG:28992</TileMatrixSet>\n\t\t\t</TileMatrixSetLink>\n\t\t</Layer>\n\t\t<Layer>\n\t\t\t<ows:Title>ahn3_05m_dtm</ows:Title>\n\t\t\t<ows:WGS84BoundingBox>\n\t\t\t\t<ows:LowerCorner>-1.65729160235431 48.0405018704265</ows:LowerCorner>\n\t\t\t\t<ows:UpperCorner>11.2902578747914 55.9136415748388</ows:UpperCorner>\n\t\t\t</ows:WGS84BoundingBox>\n\t\t\t<ows:Identifier>ahn3_05m_dtm</ows:Identifier>\n\t\t\t<Style isDefault="true">\n\t\t\t\t<ows:Identifier/>\n\t\t\t</Style>\n\t\t\t<Format>image/png</Format>\n\t\t\t<Format>image/png8</Format>\n\t\t\t<TileMatrixSetLink>\n\t\t\t\t<TileMatrixSet>EPSG:28992</TileMatrixSet>\n\t\t\t</TileMatrixSetLink>\n\t\t</Layer>\n\t\t<Layer>\n\t\t\t<ows:Title>opentopo</ows:Title>\n\t\t\t<ows:WGS84BoundingBox>\n\t\t\t\t<ows:LowerCorner>-1.65729160235431 48.0405018704265</ows:LowerCorner>\n\t\t\t\t<ows:UpperCorner>11.2902578747914 55.9136415748388</ows:UpperCorner>\n\t\t\t</ows:WGS84BoundingBox>\n\t\t\t<ows:Identifier>opentopo</ows:Identifier>\n\t\t\t<Style isDefault="true">\n\t\t\t\t<ows:Identifier/>\n\t\t\t</Style>\n\t\t\t<Format>image/jpeg</Format>\n\t\t\t<Format>image/png</Format>\n\t\t\t<TileMatrixSetLink>\n\t\t\t\t<TileMatrixSet>EPSG:28992</TileMatrixSet>\n\t\t\t</TileMatrixSetLink>\n\t\t</Layer>\n\t\t<Layer>\n\t\t\t<ows:Title>opentopoachtergrondkaart</ows:Title>\n\t\t\t<ows:WGS84BoundingBox>\n\t\t\t\t<ows:LowerCorner>-1.65729160235431 48.0405018704265</ows:LowerCorner>\n\t\t\t\t<ows:UpperCorner>11.2902578747914 55.9136415748388</ows:UpperCorner>\n\t\t\t</ows:WGS84BoundingBox>\n\t\t\t<ows:Identifier>opentopoachtergrondkaart</ows:Identifier>\n\t\t\t<Style isDefault="true">\n\t\t\t\t<ows:Identifier/>\n\t\t\t</Style>\n\t\t\t<Format>image/jpeg</Format>\n\t\t\t<Format>image/png</Format>\n\t\t\t<TileMatrixSetLink>\n\t\t\t\t<TileMatrixSet>EPSG:28992</TileMatrixSet>\n\t\t\t</TileMatrixSetLink>\n\t\t</Layer>\n\t\t<Layer>\n\t\t\t<ows:Title>2016_ortho25</ows:Title>\n\t\t\t<ows:WGS84BoundingBox>\n\t\t\t\t<ows:LowerCorner>-1.65729160235431 48.0405018704265</ows:LowerCorner>\n\t\t\t\t<ows:UpperCorner>11.2902578747914 55.9136415748388</ows:UpperCorner>\n\t\t\t</ows:WGS84BoundingBox>\n\t\t\t<ows:Identifier>2016_ortho25</ows:Identifier>\n\t\t\t<Style isDefault="true">\n\t\t\t\t<ows:Identifier/>\n\t\t\t</Style>\n\t\t\t<Format>image/jpeg</Format>\n\t\t\t<TileMatrixSetLink>\n\t\t\t\t<TileMatrixSet>EPSG:28992</TileMatrixSet>\n\t\t\t</TileMatrixSetLink>\n\t\t</Layer>\n\t\t<Layer>\n\t\t\t<ows:Title>2016_ortho25IR</ows:Title>\n\t\t\t<ows:WGS84BoundingBox>\n\t\t\t\t<ows:LowerCorner>-1.65729160235431 48.0405018704265</ows:LowerCorner>\n\t\t\t\t<ows:UpperCorner>11.2902578747914 55.9136415748388</ows:UpperCorner>\n\t\t\t</ows:WGS84BoundingBox>\n\t\t\t<ows:Identifier>2016_ortho25IR</ows:Identifier>\n\t\t\t<Style isDefault="true">\n\t\t\t\t<ows:Identifier/>\n\t\t\t</Style>\n\t\t\t<Format>image/jpeg</Format>\n\t\t\t<TileMatrixSetLink>\n\t\t\t\t<TileMatrixSet>EPSG:28992</TileMatrixSet>\n\t\t\t</TileMatrixSetLink>\n\t\t</Layer>\n\t\t<Layer>\n\t\t\t<ows:Title>2017_ortho25</ows:Title>\n\t\t\t<ows:WGS84BoundingBox>\n\t\t\t\t<ows:LowerCorner>-1.65729160235431 48.0405018704265</ows:LowerCorner>\n\t\t\t\t<ows:UpperCorner>11.2902578747914 55.9136415748388</ows:UpperCorner>\n\t\t\t</ows:WGS84BoundingBox>\n\t\t\t<ows:Identifier>2017_ortho25</ows:Identifier>\n\t\t\t<Style isDefault="true">\n\t\t\t\t<ows:Identifier/>\n\t\t\t</Style>\n\t\t\t<Format>image/jpeg</Format>\n\t\t\t<TileMatrixSetLink>\n\t\t\t\t<TileMatrixSet>EPSG:28992</TileMatrixSet>\n\t\t\t</TileMatrixSetLink>\n\t\t</Layer>\n\t\t<Layer>\n\t\t\t<ows:Title>2017_ortho25IR</ows:Title>\n\t\t\t<ows:WGS84BoundingBox>\n\t\t\t\t<ows:LowerCorner>-1.65729160235431 48.0405018704265</ows:LowerCorner>\n\t\t\t\t<ows:UpperCorner>11.2902578747914 55.9136415748388</ows:UpperCorner>\n\t\t\t</ows:WGS84BoundingBox>\n\t\t\t<ows:Identifier>2017_ortho25IR</ows:Identifier>\n\t\t\t<Style isDefault="true">\n\t\t\t\t<ows:Identifier/>\n\t\t\t</Style>\n\t\t\t<Format>image/jpeg</Format>\n\t\t\t<TileMatrixSetLink>\n\t\t\t\t<TileMatrixSet>EPSG:28992</TileMatrixSet>\n\t\t\t</TileMatrixSetLink>\n\t\t</Layer>\t\t\n\t\t<Layer>\n\t\t\t<ows:Title>lufolabels</ows:Title>\n\t\t\t<ows:WGS84BoundingBox>\n\t\t\t\t<ows:LowerCorner>-1.65729160235431 48.0405018704265</ows:LowerCorner>\n\t\t\t\t<ows:UpperCorner>11.2902578747914 55.9136415748388</ows:UpperCorner>\n\t\t\t</ows:WGS84BoundingBox>\n\t\t\t<ows:Identifier>lufolabels</ows:Identifier>\n\t\t\t<Style isDefault="true">\n\t\t\t\t<ows:Identifier/>\n\t\t\t</Style>\n\t\t\t<Format>image/png</Format>\n\t\t\t<TileMatrixSetLink>\n\t\t\t\t<TileMatrixSet>EPSG:28992</TileMatrixSet>\n\t\t\t</TileMatrixSetLink>\n\t\t</Layer>\n\t\t<TileMatrixSet>\n\t\t\t<ows:Identifier>EPSG:25831:RWS</ows:Identifier>\n\t\t\t<ows:SupportedCRS>urn:ogc:def:crs:EPSG::25831</ows:SupportedCRS>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>00</ows:Identifier>\n\t\t\t\t<ScaleDenominator>1.0E7</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-2404683.40739 8298457.58466</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>9</MatrixWidth>\n\t\t\t\t<MatrixHeight>6</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>01</ows:Identifier>\n\t\t\t\t<ScaleDenominator>5000000.0</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-2404683.40739 8298457.58466</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>18</MatrixWidth>\n\t\t\t\t<MatrixHeight>12</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>02</ows:Identifier>\n\t\t\t\t<ScaleDenominator>2500000.0</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-2404683.40739 8298457.58466</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>36</MatrixWidth>\n\t\t\t\t<MatrixHeight>24</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>03</ows:Identifier>\n\t\t\t\t<ScaleDenominator>1000000.0</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-2404683.40739 8298457.58466</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>90</MatrixWidth>\n\t\t\t\t<MatrixHeight>60</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>04</ows:Identifier>\n\t\t\t\t<ScaleDenominator>500000.0</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-2404683.40739 8298457.58466</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>180</MatrixWidth>\n\t\t\t\t<MatrixHeight>120</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>05</ows:Identifier>\n\t\t\t\t<ScaleDenominator>250000.0</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-2404683.40739 8298457.58466</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>360</MatrixWidth>\n\t\t\t\t<MatrixHeight>240</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>06</ows:Identifier>\n\t\t\t\t<ScaleDenominator>100000.0</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-2404683.40739 8298457.58466</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>900</MatrixWidth>\n\t\t\t\t<MatrixHeight>600</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>07</ows:Identifier>\n\t\t\t\t<ScaleDenominator>75000.0</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-2404683.40739 8298457.58466</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>1200</MatrixWidth>\n\t\t\t\t<MatrixHeight>800</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>08</ows:Identifier>\n\t\t\t\t<ScaleDenominator>50000.0</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-2404683.40739 8298457.58466</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>1800</MatrixWidth>\n\t\t\t\t<MatrixHeight>1200</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>09</ows:Identifier>\n\t\t\t\t<ScaleDenominator>25000.0</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-2404683.40739 8298457.58466</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>3600</MatrixWidth>\n\t\t\t\t<MatrixHeight>2400</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>10</ows:Identifier>\n\t\t\t\t<ScaleDenominator>10000.0</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-2404683.40739 8298457.58466</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>9000</MatrixWidth>\n\t\t\t\t<MatrixHeight>6000</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>11</ows:Identifier>\n\t\t\t\t<ScaleDenominator>5000.0</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-2404683.40739 8298457.58466</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>18000</MatrixWidth>\n\t\t\t\t<MatrixHeight>12000</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t</TileMatrixSet>\n\t\t<TileMatrixSet>\n\t\t\t<ows:Identifier>EPSG:28992</ows:Identifier>\n\t\t\t<ows:SupportedCRS>urn:ogc:def:crs:EPSG::28992</ows:SupportedCRS>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>00</ows:Identifier>\n\t\t\t\t<ScaleDenominator>1.2288E7</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-285401.92 903402.0</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>1</MatrixWidth>\n\t\t\t\t<MatrixHeight>1</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>01</ows:Identifier>\n\t\t\t\t<ScaleDenominator>6144000.0</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-285401.92 903402.0</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>2</MatrixWidth>\n\t\t\t\t<MatrixHeight>2</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>02</ows:Identifier>\n\t\t\t\t<ScaleDenominator>3072000.0</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-285401.92 903402.0</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>4</MatrixWidth>\n\t\t\t\t<MatrixHeight>4</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>03</ows:Identifier>\n\t\t\t\t<ScaleDenominator>1536000.0</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-285401.92 903402.0</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>8</MatrixWidth>\n\t\t\t\t<MatrixHeight>8</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>04</ows:Identifier>\n\t\t\t\t<ScaleDenominator>768000.0</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-285401.92 903402.0</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>16</MatrixWidth>\n\t\t\t\t<MatrixHeight>16</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>05</ows:Identifier>\n\t\t\t\t<ScaleDenominator>384000.0</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-285401.92 903402.0</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>32</MatrixWidth>\n\t\t\t\t<MatrixHeight>32</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>06</ows:Identifier>\n\t\t\t\t<ScaleDenominator>192000.0</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-285401.92 903402.0</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>64</MatrixWidth>\n\t\t\t\t<MatrixHeight>64</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>07</ows:Identifier>\n\t\t\t\t<ScaleDenominator>96000.0</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-285401.92 903402.0</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>128</MatrixWidth>\n\t\t\t\t<MatrixHeight>128</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>08</ows:Identifier>\n\t\t\t\t<ScaleDenominator>48000.0</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-285401.92 903402.0</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>256</MatrixWidth>\n\t\t\t\t<MatrixHeight>256</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>09</ows:Identifier>\n\t\t\t\t<ScaleDenominator>24000.0</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-285401.92 903402.0</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>512</MatrixWidth>\n\t\t\t\t<MatrixHeight>512</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>10</ows:Identifier>\n\t\t\t\t<ScaleDenominator>12000.0</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-285401.92 903402.0</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>1024</MatrixWidth>\n\t\t\t\t<MatrixHeight>1024</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>11</ows:Identifier>\n\t\t\t\t<ScaleDenominator>6000.0</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-285401.92 903402.0</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>2048</MatrixWidth>\n\t\t\t\t<MatrixHeight>2048</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>12</ows:Identifier>\n\t\t\t\t<ScaleDenominator>3000.0</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-285401.92 903402.0</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>4096</MatrixWidth>\n\t\t\t\t<MatrixHeight>4096</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>13</ows:Identifier>\n\t\t\t\t<ScaleDenominator>1500.0</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-285401.92 903402.0</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>8192</MatrixWidth>\n\t\t\t\t<MatrixHeight>8192</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>14</ows:Identifier>\n\t\t\t\t<ScaleDenominator>750.0</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-285401.92 903402.0</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>16384</MatrixWidth>\n\t\t\t\t<MatrixHeight>16384</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t</TileMatrixSet>\n\t\t<TileMatrixSet>\n\t\t\t<ows:Identifier>EPSG:28992:16</ows:Identifier>\n\t\t\t<ows:SupportedCRS>urn:ogc:def:crs:EPSG::28992</ows:SupportedCRS>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>00</ows:Identifier>\n\t\t\t\t<ScaleDenominator>1.2288E7</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-285401.92 903402.0</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>1</MatrixWidth>\n\t\t\t\t<MatrixHeight>1</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>01</ows:Identifier>\n\t\t\t\t<ScaleDenominator>6144000.0</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-285401.92 903402.0</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>2</MatrixWidth>\n\t\t\t\t<MatrixHeight>2</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>02</ows:Identifier>\n\t\t\t\t<ScaleDenominator>3072000.0</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-285401.92 903402.0</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>4</MatrixWidth>\n\t\t\t\t<MatrixHeight>4</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>03</ows:Identifier>\n\t\t\t\t<ScaleDenominator>1536000.0</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-285401.92 903402.0</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>8</MatrixWidth>\n\t\t\t\t<MatrixHeight>8</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>04</ows:Identifier>\n\t\t\t\t<ScaleDenominator>768000.0</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-285401.92 903402.0</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>16</MatrixWidth>\n\t\t\t\t<MatrixHeight>16</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>05</ows:Identifier>\n\t\t\t\t<ScaleDenominator>384000.0</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-285401.92 903402.0</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>32</MatrixWidth>\n\t\t\t\t<MatrixHeight>32</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>06</ows:Identifier>\n\t\t\t\t<ScaleDenominator>192000.0</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-285401.92 903402.0</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>64</MatrixWidth>\n\t\t\t\t<MatrixHeight>64</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>07</ows:Identifier>\n\t\t\t\t<ScaleDenominator>96000.0</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-285401.92 903402.0</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>128</MatrixWidth>\n\t\t\t\t<MatrixHeight>128</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>08</ows:Identifier>\n\t\t\t\t<ScaleDenominator>48000.0</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-285401.92 903402.0</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>256</MatrixWidth>\n\t\t\t\t<MatrixHeight>256</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>09</ows:Identifier>\n\t\t\t\t<ScaleDenominator>24000.0</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-285401.92 903402.0</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>512</MatrixWidth>\n\t\t\t\t<MatrixHeight>512</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>10</ows:Identifier>\n\t\t\t\t<ScaleDenominator>12000.0</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-285401.92 903402.0</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>1024</MatrixWidth>\n\t\t\t\t<MatrixHeight>1024</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>11</ows:Identifier>\n\t\t\t\t<ScaleDenominator>6000.0</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-285401.92 903402.0</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>2048</MatrixWidth>\n\t\t\t\t<MatrixHeight>2048</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>12</ows:Identifier>\n\t\t\t\t<ScaleDenominator>3000.0</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-285401.92 903402.0</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>4096</MatrixWidth>\n\t\t\t\t<MatrixHeight>4096</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>13</ows:Identifier>\n\t\t\t\t<ScaleDenominator>1500.0</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-285401.92 903402.0</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>8192</MatrixWidth>\n\t\t\t\t<MatrixHeight>8192</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>14</ows:Identifier>\n\t\t\t\t<ScaleDenominator>750.0</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-285401.92 903402.0</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>16384</MatrixWidth>\n\t\t\t\t<MatrixHeight>16384</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>15</ows:Identifier>\n\t\t\t\t<ScaleDenominator>375.0</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-285401.92 903402.0</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>32768</MatrixWidth>\n\t\t\t\t<MatrixHeight>32768</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>16</ows:Identifier>\n\t\t\t\t<ScaleDenominator>187.5</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-285401.92 903402.0</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>65536</MatrixWidth>\n\t\t\t\t<MatrixHeight>65536</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t</TileMatrixSet>\n\t\t<TileMatrixSet>\n\t\t\t<ows:Identifier>EPSG:3857</ows:Identifier>\n\t\t\t<ows:SupportedCRS>urn:ogc:def:crs:EPSG::3857</ows:SupportedCRS>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>00</ows:Identifier>\n\t\t\t\t<ScaleDenominator>559082264.029</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-20037508.3428 20037508.3428</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>1</MatrixWidth>\n\t\t\t\t<MatrixHeight>1</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>01</ows:Identifier>\n\t\t\t\t<ScaleDenominator>279541132.014</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-20037508.3428 20037508.3428</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>2</MatrixWidth>\n\t\t\t\t<MatrixHeight>2</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>02</ows:Identifier>\n\t\t\t\t<ScaleDenominator>139770566.007</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-20037508.3428 20037508.3428</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>4</MatrixWidth>\n\t\t\t\t<MatrixHeight>4</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>03</ows:Identifier>\n\t\t\t\t<ScaleDenominator>69885283.0036</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-20037508.3428 20037508.3428</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>8</MatrixWidth>\n\t\t\t\t<MatrixHeight>8</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>04</ows:Identifier>\n\t\t\t\t<ScaleDenominator>34942641.5018</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-20037508.3428 20037508.3428</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>16</MatrixWidth>\n\t\t\t\t<MatrixHeight>16</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>05</ows:Identifier>\n\t\t\t\t<ScaleDenominator>17471320.7509</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-20037508.3428 20037508.3428</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>32</MatrixWidth>\n\t\t\t\t<MatrixHeight>32</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>06</ows:Identifier>\n\t\t\t\t<ScaleDenominator>8735660.37545</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-20037508.3428 20037508.3428</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>64</MatrixWidth>\n\t\t\t\t<MatrixHeight>64</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>07</ows:Identifier>\n\t\t\t\t<ScaleDenominator>4367830.18772</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-20037508.3428 20037508.3428</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>128</MatrixWidth>\n\t\t\t\t<MatrixHeight>128</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>08</ows:Identifier>\n\t\t\t\t<ScaleDenominator>2183915.09386</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-20037508.3428 20037508.3428</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>256</MatrixWidth>\n\t\t\t\t<MatrixHeight>256</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>09</ows:Identifier>\n\t\t\t\t<ScaleDenominator>1091957.54693</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-20037508.3428 20037508.3428</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>512</MatrixWidth>\n\t\t\t\t<MatrixHeight>512</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>10</ows:Identifier>\n\t\t\t\t<ScaleDenominator>545978.773466</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-20037508.3428 20037508.3428</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>1024</MatrixWidth>\n\t\t\t\t<MatrixHeight>1024</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>11</ows:Identifier>\n\t\t\t\t<ScaleDenominator>272989.386733</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-20037508.3428 20037508.3428</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>2048</MatrixWidth>\n\t\t\t\t<MatrixHeight>2048</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>12</ows:Identifier>\n\t\t\t\t<ScaleDenominator>136494.693366</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-20037508.3428 20037508.3428</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>4096</MatrixWidth>\n\t\t\t\t<MatrixHeight>4096</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>13</ows:Identifier>\n\t\t\t\t<ScaleDenominator>68247.3466832</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-20037508.3428 20037508.3428</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>8192</MatrixWidth>\n\t\t\t\t<MatrixHeight>8192</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>14</ows:Identifier>\n\t\t\t\t<ScaleDenominator>34123.6733416</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-20037508.3428 20037508.3428</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>16384</MatrixWidth>\n\t\t\t\t<MatrixHeight>16384</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>15</ows:Identifier>\n\t\t\t\t<ScaleDenominator>17061.8366708</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-20037508.3428 20037508.3428</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>32768</MatrixWidth>\n\t\t\t\t<MatrixHeight>32768</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>16</ows:Identifier>\n\t\t\t\t<ScaleDenominator>8530.9183354</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-20037508.3428 20037508.3428</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>65536</MatrixWidth>\n\t\t\t\t<MatrixHeight>65536</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>17</ows:Identifier>\n\t\t\t\t<ScaleDenominator>4265.4591677</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-20037508.3428 20037508.3428</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>131072</MatrixWidth>\n\t\t\t\t<MatrixHeight>131072</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>18</ows:Identifier>\n\t\t\t\t<ScaleDenominator>2132.72958385</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-20037508.3428 20037508.3428</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>262144</MatrixWidth>\n\t\t\t\t<MatrixHeight>262144</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t\t<TileMatrix>\n\t\t\t\t<ows:Identifier>19</ows:Identifier>\n\t\t\t\t<ScaleDenominator>1066.36479192</ScaleDenominator>\n\t\t\t\t<TopLeftCorner>-20037508.3428 20037508.3428</TopLeftCorner>\n\t\t\t\t<TileWidth>256</TileWidth>\n\t\t\t\t<TileHeight>256</TileHeight>\n\t\t\t\t<MatrixWidth>524288</MatrixWidth>\n\t\t\t\t<MatrixHeight>524288</MatrixHeight>\n\t\t\t</TileMatrix>\n\t\t</TileMatrixSet>\n\t</Contents>\t\n</Capabilities>	\N	f	f	nationaalgeoregister.nl	\N	https://geodata.nationaalgeoregister.nl/tiles/service/wmts?	\N	\N	\N	\N	\N	WMTS	1	5
-wms	5	2022-02-16 11:25:30.089	\N	\N	f	t	Natuur	\N	https://portal.prvlimburg.nl/geodata/NATUUR/wms?SERVICE=WMS&	\N	1.1.1	Inimage	f	f	\N	3	81
-wms	4	2022-02-15 11:07:14.121	\N	\N	f	t	Grenzen	\N	https://portal.prvlimburg.nl/geodata/GRENZEN/wms?SERVICE=WMS&	\N	1.1.1	Inimage	f	f	\N	0	80
 wms	1	2022-01-20 15:57:42.749	\N	\N	f	t	bestuurlijkegebieden	\N	https://service.pdok.nl/kadaster/bestuurlijkegebieden/wms/v1_0?language=dut&	\N	1.1.1	Inimage	f	t	\N	2	1
 wms	6	2022-03-11 09:32:17.134	\N	\N	f	t	Tailormap Test Data Geoserver	\N	https://snapshot.tailormap.nl/geoserver/wms?SERVICE=WMS&	\N	1.1.1	Inimage	f	f	\N	4	148
 \.
@@ -152,12 +149,12 @@ ALTER TABLE public.application_layer ENABLE TRIGGER ALL;
 ALTER TABLE public.feature_source DISABLE TRIGGER ALL;
 
 COPY public.feature_source (protocol, id, name, password, url, username, db_schema, linked_service) FROM stdin;
-wfs	1	bestuurlijkegebieden	\N	https://service.pdok.nl/kadaster/bestuurlijkegebieden/wfs/v1_0?request=GetCapabilities&service=WFS	\N	\N	\N
 jdbc	4	SQL Server geodata	980f1c8A-25933b2	{"database":"geodata;encrypt=false","port":"1433","dbtype":"sqlserver","host":"sqlserver"}	geodata	dbo	\N
 jdbc	2	PostGIS geodata	980f1c8A-25933b2	{"database":"geodata","port":"5432","dbtype":"postgis","host":"postgis"}	geodata	public	\N
 jdbc	3	Oracle geodata	980f1c8A-25933b2	{"database":"/XEPDB1","port":"1521","dbtype":"oracle","host":"oracle"}	geodata	GEODATA	\N
 jdbc	5	PostGIS geodata/osm	980f1c8A-25933b2	{"database":"geodata","port":"5432","dbtype":"postgis","host":"postgis"}	geodata	osm	\N
 wfs	6	GeoServer Web Feature Service	\N	https://snapshot.tailormap.nl/geoserver/wfs?	\N	\N	6
+wfs	1	Bestuurlijke Gebieden	\N	https://service.pdok.nl/kadaster/bestuurlijkegebieden/wfs/v1_0?request=GetCapabilities&service=WFS	\N	\N	\N
 \.
 
 
@@ -287,14 +284,7 @@ COPY public.configured_attribute (id, allow_value_list_only, attribute_name, aut
 4	f	code	f	\N		f	f	\N	\N	\N	f	f		f	\N	\N	\N	t	1	\N	\N
 5	f	ligtInLandCode	f	\N		f	f	\N	\N	\N	f	f		f	\N	\N	\N	t	1	\N	\N
 6	f	ligtInLandNaam	f	\N		f	f	\N	\N	\N	f	f		f	\N	\N	\N	t	1	\N	\N
-7	f	geom	f	\N	\N	f	f	\N	\N	\N	f	f	\N	f	\N	\N	\N	f	\N	\N	\N
-8	f	identificatie	f	\N	\N	f	f	\N	\N	\N	f	f	\N	f	\N	\N	\N	t	\N	\N	\N
-9	f	naam	f	\N	\N	f	f	\N	\N	\N	f	f	\N	f	\N	\N	\N	t	\N	\N	\N
-10	f	code	f	\N	\N	f	f	\N	\N	\N	f	f	\N	f	\N	\N	\N	t	\N	\N	\N
-11	f	ligtInProvincieCode	f	\N	\N	f	f	\N	\N	\N	f	f	\N	f	\N	\N	\N	t	\N	\N	\N
-12	f	ligtInProvincieNaam	f	\N	\N	f	f	\N	\N	\N	f	f	\N	f	\N	\N	\N	t	\N	\N	\N
 2	f	identificatie	f	\N		f	f	\N	\N	\N	f	f		f	\N	\N	\N	f	1	\N	\N
-1	f	geom	f	\N		f	f	\N	\N	\N	f	f		f	\N	\N	\N	f	1	\N	\N
 29	f	geom	f	\N		f	f			["geometry"]	f	f		f	static	\N	\N	f	5	\N	\N
 28	f	geom_kruinlijn	f	\N		f	f			["geometry"]	f	f		f	static	\N	\N	f	5	\N	\N
 27	f	begroeidterreindeeloptalud	f	\N		f	f				f	f		f	static	\N	\N	t	5	\N	\N
@@ -327,6 +317,13 @@ COPY public.configured_attribute (id, allow_value_list_only, attribute_name, aut
 42	f	CLASS	f	\N		f	f				f	f		f	static	\N	\N	t	60	\N	\N
 43	f	PLUS_TYPE	f	\N		f	f				f	f		f	static	\N	\N	t	60	\N	\N
 44	f	GEOM	f	\N		f	f			["geometry"]	f	f		f	static	\N	\N	f	60	\N	\N
+12	f	ligtInProvincieNaam	f	\N		f	f	\N	\N	\N	f	f		f	\N	\N	\N	t	3	\N	\N
+11	f	ligtInProvincieCode	f	\N		f	f	\N	\N	\N	f	f		f	\N	\N	\N	t	3	\N	\N
+10	f	code	f	\N		f	f	\N	\N	\N	f	f		f	\N	\N	\N	t	3	\N	\N
+9	f	naam	f	\N		f	f	\N	\N	\N	f	f		f	\N	\N	\N	t	3	\N	\N
+8	f	identificatie	f	\N		f	f	\N	\N	\N	f	f		f	\N	\N	\N	t	3	\N	\N
+7	f	geom	f	\N		f	f	\N	\N	\N	f	f		f	\N	\N	\N	f	3	\N	\N
+1	f	geom	f	\N		f	f	\N	\N	\N	f	f		f	\N	\N	\N	t	1	\N	\N
 \.
 
 
@@ -408,6 +405,9 @@ COPY public.application_layer_details (application_layer, value, details_key) FR
 7	registry_default	style
 7	waterdeel uit Oracle	summary.title
 6	begroeidterreindeel uit postgis	summary.title
+3	[{"name":"Gemeentegebied","checked":false,"title":"Gemeentegebied","order":0}]	stylesOrder
+3	registry_default	style
+3	gemeentegebied	summary.title
 \.
 
 
@@ -2224,8 +2224,7 @@ ALTER TABLE public.category_children DISABLE TRIGGER ALL;
 COPY public.category_children (category, child, list_index) FROM stdin;
 0	1	0
 0	2	1
-0	3	2
-0	4	3
+0	4	2
 \.
 
 
@@ -4260,11 +4259,6 @@ COPY public.geo_service_details (geoservice, value, details_key) FROM stdin;
 2	false	useIntersect
 3	false	useIntersect
 2	false	useProxy
-4	false	useProxy
-4	false	useIntersect
-4	Grenzen	originalName
-5	false	useProxy
-5	false	useIntersect
 6	false	useProxy
 6	false	useIntersect
 6	GeoServer Web Map Service	originalName
@@ -4293,10 +4287,6 @@ COPY public.geo_service_keywords (geo_service, keyword) FROM stdin;
 1	Nationaal
 1	gemeentegebied
 1	rijksgrens
-4	https://portal.prvlimburg.nl/geodata/GRENZEN/wms?SERVICE=WMS&
-4	WMS
-5	WMS
-5	https://portal.prvlimburg.nl/geodata/NATUUR/wms?SERVICE=WMS&
 6	WFS
 6	GEOSERVER
 6	WMS
@@ -4436,96 +4426,7 @@ COPY public.layer (id, filterable, legend_image_url, max_scale, min_scale, name,
 147	f	https://snapshot.tailormap.nl/geoserver/wms?request=GetLegendGraphic&version=1.1.1&format=image%2Fpng&width=20&height=20&layer=postgis%3Aosm_polygon&SERVICE=WMS	\N	\N	postgis:osm_polygon	t	osm_polygon	\N	f	f	96	148	6	\N
 148	f	\N	\N	\N	\N	f	GeoServer Web Map Service	\N	f	t	\N	\N	6	\N
 149	f	https://snapshot.tailormap.nl/geoserver/wms?request=GetLegendGraphic&version=1.1.1&format=image%2Fpng&width=20&height=20&layer=sqlserver%3Awegdeel&SERVICE=WMS	5000	0	sqlserver:wegdeel	t	wegdeel	\N	f	f	92	148	6	\N
-53	f	https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=PRJ_CRANENDONCK_WEERT&SERVICE=WMS	10000000	0	PRJ_CRANENDONCK_WEERT	t	Projecten Cranendonck-Weert	\N	f	f	\N	80	4	\N
-54	f	https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=ACN_P&SERVICE=WMS	50000	0	ACN_P	t	Adrescoördinaten	\N	f	f	\N	80	4	\N
-55	f	https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=CBS_POSTCODE6_2017_V&SERVICE=WMS	50000	0	CBS_POSTCODE6_2017_V	t	Postcodegebieden	\N	f	f	\N	80	4	\N
-56	f	https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GEB_CRANENDONCK_LABELS_P_A&SERVICE=WMS	80000	0	GEB_CRANENDONCK_LABELS_P_A	t	Labels thema A	\N	f	f	\N	80	4	\N
-57	f	https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GEB_CRANENDONCK_LABELS_P_B&SERVICE=WMS	80000	0	GEB_CRANENDONCK_LABELS_P_B	t	Labels thema B	\N	f	f	\N	80	4	\N
-58	f	https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GEB_CRANENDONCK_LABELS_P_C&SERVICE=WMS	80000	0	GEB_CRANENDONCK_LABELS_P_C	t	Labels thema C	\N	f	f	\N	80	4	\N
-59	f	https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GEB_CRANENDONCK_LABELS_P_D&SERVICE=WMS	80000	0	GEB_CRANENDONCK_LABELS_P_D	t	Labels thema D	\N	f	f	\N	80	4	\N
-60	f	https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GEB_CRANENDONCK_LABELS_P_E&SERVICE=WMS	80000	0	GEB_CRANENDONCK_LABELS_P_E	t	Labels thema E	\N	f	f	\N	80	4	\N
-61	f	https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GEB_CRANENDONCK_LABELS_P_F&SERVICE=WMS	80000	0	GEB_CRANENDONCK_LABELS_P_F	t	Labels thema F	\N	f	f	\N	80	4	\N
-80	f	\N	\N	\N	\N	f	Grenzen	\N	f	t	\N	\N	4	\N
-62	f	https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GEB_CRANENDONCK_PROJECTEN_V_1000000_80000&SERVICE=WMS	1000000	75000	GEB_CRANENDONCK_PROJECTEN_V_1000000_80000	t	Projecten Gebiedsontwikkeling SGDK	\N	f	f	\N	80	4	\N
-63	f	https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GEB_CRANENDONCK_PROJECTEN_V_thema_A&SERVICE=WMS	80000	0	GEB_CRANENDONCK_PROJECTEN_V_thema_A	t	Cranendonck projecten thema A	\N	f	f	\N	80	4	\N
-64	f	https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GEB_CRANENDONCK_PROJECTEN_V_thema_B&SERVICE=WMS	80000	0	GEB_CRANENDONCK_PROJECTEN_V_thema_B	t	Cranendonck projecten thema B	\N	f	f	\N	80	4	\N
-65	f	https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GEB_CRANENDONCK_PROJECTEN_V_thema_D&SERVICE=WMS	80000	0	GEB_CRANENDONCK_PROJECTEN_V_thema_D	t	Cranendonck projecten thema D	\N	f	f	\N	80	4	\N
-66	f	https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GEB_CRANENDONCK_PROJECTEN_V_thema_E&SERVICE=WMS	80000	0	GEB_CRANENDONCK_PROJECTEN_V_thema_E	t	Cranendonck projecten thema E	\N	f	f	\N	80	4	\N
-67	f	https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GEB_CRANENDONCK_PROJECTEN_V_thema_F&SERVICE=WMS	\N	\N	GEB_CRANENDONCK_PROJECTEN_V_thema_F	t	Cranendonck projecten thema F	\N	f	f	\N	80	4	\N
-68	f	https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GEB_CRANENDONCK_ROUTES_L&SERVICE=WMS	1000000	75000	GEB_CRANENDONCK_ROUTES_L	t	Routes Gebiedsontwikkeling SGDK	\N	f	f	\N	80	4	\N
-69	f	https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GEB_CRANENDONCK_ROUTES_L_thema_B&SERVICE=WMS	\N	\N	GEB_CRANENDONCK_ROUTES_L_thema_B	t	Cranendonck projecten thema B	\N	f	f	\N	80	4	\N
-70	f	https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GEB_CRANENDONCK_ROUTES_L_thema_C&SERVICE=WMS	80000	0	GEB_CRANENDONCK_ROUTES_L_thema_C	t	Cranendonck projecten thema C	\N	f	f	\N	80	4	\N
-71	f	https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GEB_CRANENDONCK_SYMBOLEN_P&SERVICE=WMS	1000000	75000	GEB_CRANENDONCK_SYMBOLEN_P	t	Symbolen Gebiedsontwikkeling Cranendonck-Weert	\N	f	f	\N	80	4	\N
-72	f	https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GEMEENTEGRENZEN_BRK_LIMB_V&SERVICE=WMS	\N	\N	GEMEENTEGRENZEN_BRK_LIMB_V	t	Gemeentegrenzen	\N	f	f	\N	80	4	\N
-73	f	https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GEMEENTEN_SGDK_V&SERVICE=WMS	10000000	0	GEMEENTEN_SGDK_V	t	Gemeenten Gebiedsontwikkeling SGDK	\N	f	f	\N	80	4	\N
-74	f	https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GRENSPAAL_P&SERVICE=WMS	10000000	0	GRENSPAAL_P	t	Grenspaal	\N	f	f	\N	80	4	\N
-75	f	https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=KAD_GEMGRENZEN_V&SERVICE=WMS	10000000	0	KAD_GEMGRENZEN_V	t	Kadastrale gemeente grenzen	\N	f	f	\N	80	4	\N
-76	f	https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=PIO_GEBIED_V&SERVICE=WMS	10000000	0	PIO_GEBIED_V	t	PIO gebied	\N	f	f	\N	80	4	\N
-77	f	https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=PROJECTGEB_LOB_VAN_GENNEP_V&SERVICE=WMS	10000000	0	PROJECTGEB_LOB_VAN_GENNEP_V	t	Projectgebied Lob van Gennep	\N	f	f	\N	80	4	\N
-78	f	https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=PROVINCIEGRENS_2002_V&SERVICE=WMS	10000000	0	PROVINCIEGRENS_2002_V	t	Provinciegrens (2002)	\N	f	f	\N	80	4	\N
-79	f	https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=PROVINCIEGRENS_BRK_LIMB_V&SERVICE=WMS	\N	\N	PROVINCIEGRENS_BRK_LIMB_V	t	Provinciegrens	\N	f	f	\N	80	4	\N
-81	f	\N	\N	\N	\N	f	Natuur	\N	f	t	\N	\N	5	\N
-82	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=AAN_20161018_V&SERVICE=WMS	1000000	0	AAN_20161018_V	t	Agrarisch Areaal (AAN) 2016	\N	f	f	\N	81	5	\N
-83	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=BERMEN_GEMEENTEN_V&SERVICE=WMS	1000000	0	BERMEN_GEMEENTEN_V	t	Bermen in eigendom van gemeenten	\N	f	f	\N	81	5	\N
-84	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=BGA_PL_030821_V_ambitie_streefbeheertype&SERVICE=WMS	\N	\N	BGA_PL_030821_V_ambitie_streefbeheertype	t	Beheergebied ambitie (streefbeheertype) 2022	\N	f	f	\N	81	5	\N
-85	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=BGA_PL_030821_V_ambtitie_gebiedscategorie&SERVICE=WMS	\N	\N	BGA_PL_030821_V_ambtitie_gebiedscategorie	t	Beheergebied ambitie (gebiedscategorie) 2022	\N	f	f	\N	81	5	\N
-86	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=BGT_GROEN_BINNEN_BUFFER_7M_V&SERVICE=WMS	1000000	0	BGT_GROEN_BINNEN_BUFFER_7M_V	t	Groene BGT-bestanden binnen een buffer van 7m van de wegen	\N	f	f	\N	81	5	\N
-87	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=BG_BGA_14122020_V&SERVICE=WMS	\N	\N	BG_BGA_14122020_V	t	Beheergebied 2021	\N	f	f	\N	81	5	\N
-88	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=BG_BGA_14122020_V_ambitie_gebiedscategorie&SERVICE=WMS	\N	\N	BG_BGA_14122020_V_ambitie_gebiedscategorie	t	Beheergebied ambitie (gebiedscategorie)	\N	f	f	\N	81	5	\N
-89	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=BG_BGA_14122020_V_ambitie_streefbeheertype&SERVICE=WMS	\N	\N	BG_BGA_14122020_V_ambitie_streefbeheertype	t	Beheergebied ambitie (streefbeheertype)	\N	f	f	\N	81	5	\N
-90	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=BG_PL_030821_V&SERVICE=WMS	\N	\N	BG_PL_030821_V	t	Beheergebied 2022	\N	f	f	\N	81	5	\N
-91	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=BLOEIENDE_VEGETATIEKARTER_V&SERVICE=WMS	1000000	0	BLOEIENDE_VEGETATIEKARTER_V	t	Bloeiende vegetatiekartering	\N	f	f	\N	81	5	\N
-92	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=BOOMBASIS_V&SERVICE=WMS	500000	0	BOOMBASIS_V	t	Boombasis	\N	f	f	\N	81	5	\N
-93	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=BROEDVOGELS_BINNEN_GOUD_P&SERVICE=WMS	10000000	0	BROEDVOGELS_BINNEN_GOUD_P	t	Broedvogels binnen goudgroene natuurzone 2015-2017	\N	f	f	\N	81	5	\N
-94	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=BROEDVOGELS_VLAKDEK_RONDE1_P&SERVICE=WMS	10000000	0	BROEDVOGELS_VLAKDEK_RONDE1_P	t	Broedvogels vlakdekkend 1e ronde 1990-1997	\N	f	f	\N	81	5	\N
-95	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=BROEDVOGELS_VLAKDEK_RONDE2_P&SERVICE=WMS	10000000	0	BROEDVOGELS_VLAKDEK_RONDE2_P	t	Broedvogels vlakdekkend 2e ronde 1998-2011	\N	f	f	\N	81	5	\N
-96	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=BROEDVOGELS_VLAKDEK_RONDE3_P&SERVICE=WMS	10000000	0	BROEDVOGELS_VLAKDEK_RONDE3_P	t	Broedvogels vlakdekkend 3e ronde 2012-2018	\N	f	f	\N	81	5	\N
-97	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=DEF_2021_WIJZIGINGSVERZK_V&SERVICE=WMS	\N	\N	DEF_2021_WIJZIGINGSVERZK_V	t	Wijzigingsverzoeken NBP 2021	\N	f	f	\N	81	5	\N
-98	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=DEF_2021_ZIENSWIJZEN_V&SERVICE=WMS	\N	\N	DEF_2021_ZIENSWIJZEN_V	t	Zienswijzen NBP 2021	\N	f	f	\N	81	5	\N
-99	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=DEF_2021_ZOEKGEBIED_AGRAR_V&SERVICE=WMS	\N	\N	DEF_2021_ZOEKGEBIED_AGRAR_V	t	Agrarische zoekgebieden/leefgebieden 2021	\N	f	f	\N	81	5	\N
-100	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=DEF_2021_ZOEKGEBIED_WATER_V&SERVICE=WMS	\N	\N	DEF_2021_ZOEKGEBIED_WATER_V	t	Zoekgebieden water 2021	\N	f	f	\N	81	5	\N
-101	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=DEF_2022_WIJZIGINGVZK_V&SERVICE=WMS	\N	\N	DEF_2022_WIJZIGINGVZK_V	t	Wijzigingsverzoeken NBP 2022	\N	f	f	\N	81	5	\N
-102	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=DEF_2022_ZIENSWIJZEN_V&SERVICE=WMS	\N	\N	DEF_2022_ZIENSWIJZEN_V	t	Zienswijzen NBP 2022	\N	f	f	\N	81	5	\N
-103	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=DEF_2022_ZOEKGEBIED_AGRAR_V&SERVICE=WMS	\N	\N	DEF_2022_ZOEKGEBIED_AGRAR_V	t	Agrarische zoekgebieden/leefgebieden 2022	\N	f	f	\N	81	5	\N
-104	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=DEF_2022_ZOEKGEBIED_WATER_V&SERVICE=WMS	\N	\N	DEF_2022_ZOEKGEBIED_WATER_V	t	Zoekgebieden water 2022	\N	f	f	\N	81	5	\N
-105	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=EHS_beleidsnota_nat_landsch_95_99&SERVICE=WMS	\N	\N	EHS_beleidsnota_nat_landsch_95_99	t	EHS Beleidsnota natuur en landschap 1995 1999	\N	f	f	\N	81	5	\N
-106	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=FUNCTIEVERANDERING_RVO_V&SERVICE=WMS	10000000	0	FUNCTIEVERANDERING_RVO_V	t	Functieverandering (RVo)	\N	f	f	\N	81	5	\N
-107	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GEBIEDBEHEER_V&SERVICE=WMS	10000000	0	GEBIEDBEHEER_V	t	VRN GebiedBeheer	\N	f	f	\N	81	5	\N
-108	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GEBIEDINRICHTING_V&SERVICE=WMS	10000000	0	GEBIEDINRICHTING_V	t	VRN GebiedInrichting	\N	f	f	\N	81	5	\N
-109	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GEBIEDVERWERVING_V&SERVICE=WMS	10000000	0	GEBIEDVERWERVING_V	t	VRN GebiedVerwerving	\N	f	f	\N	81	5	\N
-110	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=IVN_AFDELINGEN_P&SERVICE=WMS	10000000	0	IVN_AFDELINGEN_P	t	IVN afdelingen	\N	f	f	\N	81	5	\N
-111	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=KART2_91_2007_L&SERVICE=WMS	10000000	2000	KART2_91_2007_L	t	Tweede vegetatiekartering 1991 - 2007 (lijn)	\N	f	f	\N	81	5	\N
-112	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=KART2_91_2007_V&SERVICE=WMS	10000000	2000	KART2_91_2007_V	t	Tweede vegetatiekartering 1991 - 2007 (vlak)	\N	f	f	\N	81	5	\N
-113	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=NAALDBOS_ZONDER_BIJZ_WAARDE_V&SERVICE=WMS	\N	\N	NAALDBOS_ZONDER_BIJZ_WAARDE_V	t	Naaldbos zonder bijzondere waarde	\N	f	f	\N	81	5	\N
-114	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=NATURA2000_LIMB_V&SERVICE=WMS	\N	\N	NATURA2000_LIMB_V	t	Natura2000	\N	f	f	\N	81	5	\N
-115	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=NATUUR_HA_UITGESPLITST_V&SERVICE=WMS	10000000	0	NATUUR_HA_UITGESPLITST_V	t	Natuur uitgesplitst	\N	f	f	\N	81	5	\N
-116	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=NBG_AGRARISCH_NATUURBEHEER_V&SERVICE=WMS	10000000	0	NBG_AGRARISCH_NATUURBEHEER_V	t	NBG Agrarisch Natuurbeheer > 1 ha	\N	f	f	\N	81	5	\N
-117	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=NBG_BESTEM_TOPNATUUR_V&SERVICE=WMS	10000000	0	NBG_BESTEM_TOPNATUUR_V	t	NBG Bestemming en Top10NL	\N	f	f	\N	81	5	\N
-118	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=NBG_COMPENSATIE_V&SERVICE=WMS	10000000	0	NBG_COMPENSATIE_V	t	NBG Natuur realisatie en Compensatie	\N	f	f	\N	81	5	\N
-119	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=NBG_FUNCTIEVERANDERING_V&SERVICE=WMS	10000000	0	NBG_FUNCTIEVERANDERING_V	t	NBG Functieverandering	\N	f	f	\N	81	5	\N
-120	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=NBG_NATUURBEHEER_V&SERVICE=WMS	10000000	0	NBG_NATUURBEHEER_V	t	NBG Natuurbeheer	\N	f	f	\N	81	5	\N
-121	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=NBG_WATER_V&SERVICE=WMS	10000000	0	NBG_WATER_V	t	NBG Water	\N	f	f	\N	81	5	\N
-122	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=NIET_ONDERZ_GEB_BROEDVKART_V&SERVICE=WMS	10000000	0	NIET_ONDERZ_GEB_BROEDVKART_V	t	Niet onderzochte gebieden vlakdekkende broedvogelkartering	\N	f	f	\N	81	5	\N
-123	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=ONTWIKKELOPGAVE_V&SERVICE=WMS	10000000	0	ONTWIKKELOPGAVE_V	t	Ontwikkelopgave	\N	f	f	\N	81	5	\N
-124	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=PAS_EZ_LIJNMAATREGELEN_L&SERVICE=WMS	\N	\N	PAS_EZ_LIJNMAATREGELEN_L	t	PAS EZ lijnmaatregelen	\N	f	f	\N	81	5	\N
-125	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=PAS_EZ_ONDERZOEKMAATREGELEN_V&SERVICE=WMS	\N	\N	PAS_EZ_ONDERZOEKMAATREGELEN_V	t	PAS EZ onderzoeksmaatregelen	\N	f	f	\N	81	5	\N
-126	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=PAS_EZ_VLAKMAATREGELEN_V&SERVICE=WMS	\N	\N	PAS_EZ_VLAKMAATREGELEN_V	t	PAS EZ vlakmaatregelen	\N	f	f	\N	81	5	\N
-127	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=PAS_HABITATKAARTEN_V&SERVICE=WMS	10000000	0	PAS_HABITATKAARTEN_V	t	PAS habitatkaarten	\N	f	f	\N	81	5	\N
-128	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=PAS_HABITATKAARTEN_V_HABITATTYPEN&SERVICE=WMS	\N	\N	PAS_HABITATKAARTEN_V_HABITATTYPEN	t	PAS meerdere habitattypen aanwezig	\N	f	f	\N	81	5	\N
-129	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=PAS_LIJNMAATREGELEN_L&SERVICE=WMS	\N	\N	PAS_LIJNMAATREGELEN_L	t	PAS lijnmaatregelen	\N	f	f	\N	81	5	\N
-130	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=PAS_NATURA2000_LIMBURG_V&SERVICE=WMS	10000000	0	PAS_NATURA2000_LIMBURG_V	t	PAS Natura 2000 Limburg	\N	f	f	\N	81	5	\N
-131	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=PAS_PUNTMAATREGELEN_P&SERVICE=WMS	\N	\N	PAS_PUNTMAATREGELEN_P	t	PAS puntmaatregelen	\N	f	f	\N	81	5	\N
-132	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=PAS_VLAKMAATREGELEN_V&SERVICE=WMS	\N	\N	PAS_VLAKMAATREGELEN_V	t	PAS vlakmaatregelen	\N	f	f	\N	81	5	\N
-133	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=PLATTELANDSWEGEN_V&SERVICE=WMS	1000000	0	PLATTELANDSWEGEN_V	t	Plattelandswegen	\N	f	f	\N	81	5	\N
-134	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=PROVINCIAALNATUURNETWERK_V&SERVICE=WMS	10000000	0	PROVINCIAALNATUURNETWERK_V	t	VRN ProvinciaalNatuurnetwerk	\N	f	f	\N	81	5	\N
-135	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=REALISATIEOPGAVE_SCHATTING_V&SERVICE=WMS	10000000	0	REALISATIEOPGAVE_SCHATTING_V	t	Realisatieopgave schatting januari 2017	\N	f	f	\N	81	5	\N
-136	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=STAAT_STROOMV_BUITEN_GOUD_V&SERVICE=WMS	10000000	0	STAAT_STROOMV_BUITEN_GOUD_V	t	Stroomvoerend winterbed van de Staat buiten goud	\N	f	f	\N	81	5	\N
-137	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=STIKSTOFGEV_LEEFGEBIEDEN_V&SERVICE=WMS	\N	\N	STIKSTOFGEV_LEEFGEBIEDEN_V	t	Stikstofgevoelige leefgebieden	\N	f	f	\N	81	5	\N
-138	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=VERDWENEN_BLOEIENDE_BERMEN_V&SERVICE=WMS	1000000	0	VERDWENEN_BLOEIENDE_BERMEN_V	t	Verdwenen bloeiende bermen	\N	f	f	\N	81	5	\N
-139	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=VOORM_BLOEIENDE_VEGETATIE_V&SERVICE=WMS	1000000	0	VOORM_BLOEIENDE_VEGETATIE_V	t	Voormalige bloeiende vegetatie in bermen van gemeenten	\N	f	f	\N	81	5	\N
-140	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=VRN2018_GEBIEDINRICHTING_V&SERVICE=WMS	10000000	0	VRN2018_GEBIEDINRICHTING_V	t	Gebiedinrichting (VRN2018)	\N	f	f	\N	81	5	\N
-141	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=VRN2018_GEBIEDVERWERVING_V&SERVICE=WMS	10000000	0	VRN2018_GEBIEDVERWERVING_V	t	Gebiedverwerving (VRN2018)	\N	f	f	\N	81	5	\N
-142	f	https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=WERKGEBIEDEN_BOSWACHTERS_V&SERVICE=WMS	10000000	0	WERKGEBIEDEN_BOSWACHTERS_V	t	Werkgebieden boswachters	\N	f	f	\N	81	5	\N
+81	f	\N	\N	\N	\N	f	Natuur	\N	f	t	\N	\N	\N	\N
 \.
 
 
@@ -4611,94 +4512,6 @@ COPY public.layer_bounding_boxes (layer, name, maxx, maxy, minx, miny, crs) FROM
 40	urn:ogc:def:crs:EPSG::28992	595401.920067406	903401.9243980894	-370406.0805926544	5328.857806465065	urn:ogc:def:crs:EPSG::28992
 41	urn:ogc:def:crs:EPSG::28992	595401.920067406	903401.9243980894	-370406.0805926544	5328.857806465065	urn:ogc:def:crs:EPSG::28992
 42	urn:ogc:def:crs:EPSG::28992	595401.920067406	903401.9243980894	-370406.0805926544	5328.857806465065	urn:ogc:def:crs:EPSG::28992
-53	EPSG:28992	182112.93924103357	371308.1572110648	162096.46678525527	353463.9128846432	EPSG:28992
-54	EPSG:28992	213153	421153	168666	306922	EPSG:28992
-55	EPSG:28992	213448.379999999	421225.388	167494.512400001	306846.197999999	EPSG:28992
-56	EPSG:28992	176171.943100002	367789.076499999	162164.4967	354216.706900001	EPSG:28992
-57	EPSG:28992	176171.943100002	367789.076499999	162164.4967	354216.706900001	EPSG:28992
-58	EPSG:28992	176171.943100002	367789.076499999	162164.4967	354216.706900001	EPSG:28992
-59	EPSG:28992	176171.943100002	367789.076499999	162164.4967	354216.706900001	EPSG:28992
-60	EPSG:28992	176171.943100002	367789.076499999	162164.4967	354216.706900001	EPSG:28992
-61	EPSG:28992	176171.943100002	367789.076499999	162164.4967	354216.706900001	EPSG:28992
-62	EPSG:28992	182018.8422	371241.302000001	162121.217799999	353530.4463	EPSG:28992
-63	EPSG:28992	182018.8422	371241.302000001	162121.217799999	353530.4463	EPSG:28992
-64	EPSG:28992	182018.8422	371241.302000001	162121.217799999	353530.4463	EPSG:28992
-65	EPSG:28992	182018.8422	371241.302000001	162121.217799999	353530.4463	EPSG:28992
-66	EPSG:28992	182018.8422	371241.302000001	162121.217799999	353530.4463	EPSG:28992
-67	EPSG:28992	182018.8422	371241.302000001	162121.217799999	353530.4463	EPSG:28992
-68	EPSG:28992	174605.554900002	365180.954700001	170403.890099999	359556.660599999	EPSG:28992
-69	EPSG:28992	200486.592700001	385993.188000001	10665.7267999984	303297.693599999	EPSG:28992
-70	EPSG:28992	174605.554900002	365180.954700001	170403.890099999	359556.660599999	EPSG:28992
-71	EPSG:28992	175611.6446	368824.126800001	162164.4967	353924.9322	EPSG:28992
-72	EPSG:28992	213448.379999999	421225.388	167494.510000002	306846.197999999	EPSG:28992
-73	EPSG:28992	187785.394400001	373928.4016	158569.693100002	347909.053300001	EPSG:28992
-74	EPSG:28992	199728.91	359231.68	167103.309999999	306850.329999998	EPSG:28992
-75	EPSG:28992	213448.379999999	421225.388	167494.510000002	306846.197999999	EPSG:28992
-76	EPSG:28992	213424.800000001	421214.232999999	167507.7344	302313.2753	EPSG:28992
-77	EPSG:28992	200355.373	417816.6514	189466.728399999	411498.072099999	EPSG:28992
-78	EPSG:28992	213448.379999999	421214.232999999	167507.73	306838.824999999	EPSG:28992
-79	EPSG:28992	213448.379999999	421225.388	167494.510000002	306846.197999999	EPSG:28992
-82	EPSG:28992	213424.246100001	421091.908300001	167423.783	306851.698899999	EPSG:28992
-83	EPSG:28992	213436.0812	421208.215	170045.475400001	306847.1631	EPSG:28992
-84	EPSG:28992	123015933.0075	122994782.7975	167508.710999999	306954.364	EPSG:28992
-85	EPSG:28992	123015933.0075	122994782.7975	167508.710999999	306954.364	EPSG:28992
-86	EPSG:28992	213436.105999999	423721.688999999	168006.949299999	306845.23	EPSG:28992
-87	EPSG:28992	213442.265999999	421214.23	167508.710999999	306952.659499999	EPSG:28992
-88	EPSG:28992	213442.265999999	421214.23	167508.710999999	306952.659499999	EPSG:28992
-89	EPSG:28992	213442.265999999	421214.23	167508.710999999	306952.659499999	EPSG:28992
-90	EPSG:28992	213442.265999999	421214.23	1	1	EPSG:28992
-91	EPSG:28992	213442.265999999	421041.324024904	167828.759958799	306945.531	EPSG:28992
-92	EPSG:28992	213435.5	421215.228500001	1	1	EPSG:28992
-93	EPSG:28992	210337.960499998	356945.1393	175292.198199999	317953.575300001	EPSG:28992
-94	EPSG:28992	213384	421175	167746	306950	EPSG:28992
-95	EPSG:28992	213382	421192	168669	306950	EPSG:28992
-96	EPSG:28992	213382	421200.9965	168811.793099999	350751.221099999	EPSG:28992
-97	EPSG:28992	213021.0064	418308.599	167509.881099999	307176.151000001	EPSG:28992
-98	EPSG:28992	213081.249000002	418266.75	171418.247000001	313335.901999999	EPSG:28992
-99	EPSG:28992	213448.379999999	421180.2925	167507.73	306838.822000001	EPSG:28992
-100	EPSG:28992	284300.0254094796	636981.7698870846	634.5732789819012	306594.5543000576	EPSG:28992
-101	EPSG:28992	213416.610100001	421118.403499998	168413.734499998	306952.659499999	EPSG:28992
-102	EPSG:28992	207622.761999998	412221.046799999	183336.114999998	316917.589000002	EPSG:28992
-103	EPSG:28992	213448.379999999	421180.2925	167610.114500001	306846.201499999	EPSG:28992
-104	EPSG:28992	213424.7995	420187.726500001	169176.541499998	306911.226500001	EPSG:28992
-105	EPSG:28992	220449.05843875062	427119.274932688	143261.2955987506	303894.814844688	EPSG:28992
-106	EPSG:28992	212042.232999999	414360.5	173624.230999999	306958.813000001	EPSG:28992
-107	EPSG:28992	213442.265999999	421214.230999999	167523.443999998	306954.364	EPSG:28992
-108	EPSG:28992	213338.9615	420191.543499999	169432.328000002	306954.364	EPSG:28992
-109	EPSG:28992	213338.9615	420195.490499999	169432.320999999	306954.364	EPSG:28992
-110	EPSG:28992	209191	411790	176100	309144	EPSG:28992
-111	EPSG:28992	213413.041000001	421039.324000001	168671.375	306947.531	EPSG:28992
-112	EPSG:28992	213442.265999999	421213.531	167567.734000001	306999.842	EPSG:28992
-113	EPSG:28992	213311.781199999	421150.563999999	168339.710999999	307666.642999999	EPSG:28992
-114	EPSG:28992	213116.738899998	418189.031199999	167086.544599999	307155.141199999	EPSG:28992
-115	EPSG:28992	212980.625100002	417115.2071	169432.300099999	307145.563499998	EPSG:28992
-116	EPSG:28992	210684.737	417100.022799999	173552.872000001	307746.1241	EPSG:28992
-117	EPSG:28992	213448.379500002	421702.509	167694.669	306842.977899998	EPSG:28992
-118	EPSG:28992	212026.283	415325.153000001	173098.690000001	307087.087000001	EPSG:28992
-119	EPSG:28992	212327.141800001	414360.5	169918.296999998	307131.013900001	EPSG:28992
-120	EPSG:28992	212996.721999999	420214.460999999	169344	307021.7612	EPSG:28992
-121	EPSG:28992	213424.800000001	420631.748100001	168676.485800002	307087.553100001	EPSG:28992
-122	EPSG:28992	213072.074000001	421038.875	167507.729699999	307730.179000001	EPSG:28992
-123	EPSG:28992	213025.199999999	416788.8189	167509.880600002	307276.113200001	EPSG:28992
-124	EPSG:28992	195965.059	363466.614999998	180752.149999999	325773.789999999	EPSG:28992
-125	EPSG:28992	198824.884399999	412343.090599999	179514.736900002	310526.592999998	EPSG:28992
-126	EPSG:28992	199152.557999998	411672.843800001	180276.4531	314525.136300001	EPSG:28992
-127	EPSG:28992	213116.738899998	418189.031100001	1	1	EPSG:28992
-128	EPSG:28992	213116.738899998	418189.031100001	1	1	EPSG:28992
-129	EPSG:28992	210594.526999999	417245.002599999	171637.614	307235.5	EPSG:28992
-130	EPSG:28992	213116.738899998	418189.031199999	167086.544599999	307155.141199999	EPSG:28992
-131	EPSG:28992	198829.084399998	417237.447000001	183541.2029	327045.9681	EPSG:28992
-132	EPSG:28992	197548.307	418189.031100001	182665.440099999	309282.781	EPSG:28992
-133	EPSG:28992	213683.578000002	424703.579	168013.949000001	306696.011999998	EPSG:28992
-134	EPSG:28992	213442.265999999	421214.230999999	167508.710499998	306952.659499999	EPSG:28992
-135	EPSG:28992	213025.199999999	417421.050099999	167509.880600002	307145.563499998	EPSG:28992
-136	EPSG:28992	210105.531100001	419009.077799998	175521.647599999	307547.467999999	EPSG:28992
-137	EPSG:28992	212032.856600001	416816.609999999	169706.173099998	321946.125	EPSG:28992
-138	EPSG:28992	212951.690000001	420676.4639	170429.1734	307071.485800002	EPSG:28992
-139	EPSG:28992	213333.0242	420817.819499999	170417.7951	307067.543000001	EPSG:28992
-140	EPSG:28992	213338.9615	420191.543499999	169432.328000002	306954.364	EPSG:28992
-141	EPSG:28992	213338.9615	420195.490499999	169432.320999999	306954.364	EPSG:28992
-142	EPSG:28992	213448.375	421214.218699999	167507.7344	306838.8125	EPSG:28992
 144	EPSG:28992	132703	459995	130011	458031	EPSG:28992
 145	EPSG:28992	132703	459995	130011	458031	EPSG:28992
 146	EPSG:28992	132703	459995	130011	458031	EPSG:28992
@@ -4764,94 +4577,6 @@ COPY public.layer_children (layer, child, list_index) FROM stdin;
 43	49	5
 43	50	6
 43	51	7
-80	53	0
-80	54	1
-80	55	2
-80	56	3
-80	57	4
-80	58	5
-80	59	6
-80	60	7
-80	61	8
-80	62	9
-80	63	10
-80	64	11
-80	65	12
-80	66	13
-80	67	14
-80	68	15
-80	69	16
-80	70	17
-80	71	18
-80	72	19
-80	73	20
-80	74	21
-80	75	22
-80	76	23
-80	77	24
-80	78	25
-80	79	26
-81	82	0
-81	83	1
-81	84	2
-81	85	3
-81	86	4
-81	87	5
-81	88	6
-81	89	7
-81	90	8
-81	91	9
-81	92	10
-81	93	11
-81	94	12
-81	95	13
-81	96	14
-81	97	15
-81	98	16
-81	99	17
-81	100	18
-81	101	19
-81	102	20
-81	103	21
-81	104	22
-81	105	23
-81	106	24
-81	107	25
-81	108	26
-81	109	27
-81	110	28
-81	111	29
-81	112	30
-81	113	31
-81	114	32
-81	115	33
-81	116	34
-81	117	35
-81	118	36
-81	119	37
-81	120	38
-81	121	39
-81	122	40
-81	123	41
-81	124	42
-81	125	43
-81	126	44
-81	127	45
-81	128	46
-81	129	47
-81	130	48
-81	131	49
-81	132	50
-81	133	51
-81	134	52
-81	135	53
-81	136	54
-81	137	55
-81	138	56
-81	139	57
-81	140	58
-81	141	59
-81	142	60
 148	144	0
 148	145	1
 148	146	2
@@ -4873,96 +4598,6 @@ COPY public.layer_crs_list (layer, crs) FROM stdin;
 2	EPSG:28992
 3	EPSG:28992
 4	EPSG:28992
-53	EPSG:28992
-54	EPSG:28992
-55	EPSG:28992
-56	EPSG:28992
-57	EPSG:28992
-58	EPSG:28992
-59	EPSG:28992
-60	EPSG:28992
-61	EPSG:28992
-62	EPSG:28992
-63	EPSG:28992
-64	EPSG:28992
-65	EPSG:28992
-66	EPSG:28992
-67	EPSG:28992
-68	EPSG:28992
-69	EPSG:28992
-70	EPSG:28992
-71	EPSG:28992
-72	EPSG:28992
-73	EPSG:28992
-74	EPSG:28992
-75	EPSG:28992
-76	EPSG:28992
-77	EPSG:28992
-78	EPSG:28992
-79	EPSG:28992
-80	EPSG:28992
-81	EPSG:28992
-82	EPSG:28992
-83	EPSG:28992
-84	EPSG:28992
-85	EPSG:28992
-86	EPSG:28992
-87	EPSG:28992
-88	EPSG:28992
-89	EPSG:28992
-90	EPSG:28992
-91	EPSG:28992
-92	EPSG:28992
-93	EPSG:28992
-94	EPSG:28992
-95	EPSG:28992
-96	EPSG:28992
-97	EPSG:28992
-98	EPSG:28992
-99	EPSG:28992
-100	EPSG:28992
-101	EPSG:28992
-102	EPSG:28992
-103	EPSG:28992
-104	EPSG:28992
-105	EPSG:28992
-106	EPSG:28992
-107	EPSG:28992
-108	EPSG:28992
-109	EPSG:28992
-110	EPSG:28992
-111	EPSG:28992
-112	EPSG:28992
-113	EPSG:28992
-114	EPSG:28992
-115	EPSG:28992
-116	EPSG:28992
-117	EPSG:28992
-118	EPSG:28992
-119	EPSG:28992
-120	EPSG:28992
-121	EPSG:28992
-122	EPSG:28992
-123	EPSG:28992
-124	EPSG:28992
-125	EPSG:28992
-126	EPSG:28992
-127	EPSG:28992
-128	EPSG:28992
-129	EPSG:28992
-130	EPSG:28992
-131	EPSG:28992
-132	EPSG:28992
-133	EPSG:28992
-134	EPSG:28992
-135	EPSG:28992
-136	EPSG:28992
-137	EPSG:28992
-138	EPSG:28992
-139	EPSG:28992
-140	EPSG:28992
-141	EPSG:28992
-142	EPSG:28992
 144	EPSG:28992
 145	EPSG:28992
 146	EPSG:28992
@@ -5077,94 +4712,6 @@ COPY public.layer_details (layer, value, details_key) FROM stdin;
 50	image/png	image_extension
 51	[{"identifier":"default","isDefault":"true"}]	wms.styles
 51	image/png	image_extension
-53	[{"name":"default-style-PRJ_CRANENDONCK_WEERT","legendURLs":["https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=PRJ_CRANENDONCK_WEERT&SERVICE=WMS"],"abstract":"Default style for PRJ_CRANENDONCK_WEERT layer","title":"PRJ_CRANENDONCK_WEERT style"}]	wms.styles
-54	[{"name":"acn_p","legendURLs":["https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=ACN_P&SERVICE=WMS"],"title":"Adrescoordinaten"}]	wms.styles
-55	[{"name":"Postcodegebieden","legendURLs":["https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=CBS_POSTCODE6_2017_V&SERVICE=WMS"],"title":"Postcodegebieden"}]	wms.styles
-56	[{"name":"geb_cranendonck_labels_p_80000_0_A","legendURLs":["https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GEB_CRANENDONCK_LABELS_P_A&SERVICE=WMS"],"title":"geb_cranendonck_labels_p_80000_0_A"}]	wms.styles
-57	[{"name":"geb_cranendonck_labels_p_80000_0_B","legendURLs":["https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GEB_CRANENDONCK_LABELS_P_B&SERVICE=WMS"],"title":"geb_cranendonck_labels_p_80000_0_B"}]	wms.styles
-58	[{"name":"geb_cranendonck_labels_p_80000_0_C","legendURLs":["https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GEB_CRANENDONCK_LABELS_P_C&SERVICE=WMS"],"title":"geb_cranendonck_labels_p_80000_0_C"}]	wms.styles
-59	[{"name":"geb_cranendonck_labels_p_80000_0_D","legendURLs":["https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GEB_CRANENDONCK_LABELS_P_D&SERVICE=WMS"],"title":"geb_cranendonck_labels_p_80000_0_D"}]	wms.styles
-60	[{"name":"geb_cranendonck_labels_p_80000_0_E","legendURLs":["https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GEB_CRANENDONCK_LABELS_P_E&SERVICE=WMS"],"title":"geb_cranendonck_labels_p_80000_0_E"}]	wms.styles
-61	[{"name":"geb_cranendonck_labels_p_80000_0_F","legendURLs":["https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GEB_CRANENDONCK_LABELS_P_F&SERVICE=WMS"],"title":"geb_cranendonck_labels_p_80000_0_F"}]	wms.styles
-62	[{"name":"geb_cranendonck_projecten_v_1000000_80000","legendURLs":["https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GEB_CRANENDONCK_PROJECTEN_V_1000000_80000&SERVICE=WMS"],"title":"geb_cranendonck_projecten_v_1000000_80000"}]	wms.styles
-63	[{"name":"geb_cranendonck_projecten_v_80000_0_A","legendURLs":["https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GEB_CRANENDONCK_PROJECTEN_V_thema_A&SERVICE=WMS"],"title":"geb_cranendonck_projecten_v_80000_0_A"}]	wms.styles
-64	[{"name":"geb_cranendonck_projecten_v_80000_0_B","legendURLs":["https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GEB_CRANENDONCK_PROJECTEN_V_thema_B&SERVICE=WMS"],"title":"geb_cranendonck_projecten_v_80000_0_B"}]	wms.styles
-65	[{"name":"geb_cranendonck_projecten_v_80000_0_D","legendURLs":["https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GEB_CRANENDONCK_PROJECTEN_V_thema_D&SERVICE=WMS"],"title":"geb_cranendonck_projecten_v_80000_0_D"}]	wms.styles
-66	[{"name":"geb_cranendonck_projecten_v_80000_0_E","legendURLs":["https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GEB_CRANENDONCK_PROJECTEN_V_thema_E&SERVICE=WMS"],"title":"geb_cranendonck_projecten_v_80000_0_E"}]	wms.styles
-67	[{"name":"geb_cranendonck_projecten_v_80000_0_F","legendURLs":["https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GEB_CRANENDONCK_PROJECTEN_V_thema_F&SERVICE=WMS"],"title":"geb_cranendonck_projecten_v_80000_0_F"}]	wms.styles
-68	[{"name":"geb_cranendonck_routes_l_1000000_80000","legendURLs":["https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GEB_CRANENDONCK_ROUTES_L&SERVICE=WMS"],"title":"geb_cranendonck_routes_l_1000000_80000"}]	wms.styles
-69	[{"name":"geb_cranendonck_routes_l_80000_0_B","legendURLs":["https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GEB_CRANENDONCK_ROUTES_L_thema_B&SERVICE=WMS"],"title":"geb_cranendonck_routes_l_80000_0_B"}]	wms.styles
-70	[{"name":"geb_cranendonck_routes_l_80000_0_C","legendURLs":["https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GEB_CRANENDONCK_ROUTES_L_thema_C&SERVICE=WMS"],"title":"geb_cranendonck_routes_l_80000_0_C"}]	wms.styles
-71	[{"name":"geb_cranendonck_symbolen_p","legendURLs":["https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GEB_CRANENDONCK_SYMBOLEN_P&SERVICE=WMS"],"title":"geb_cranendonck_symbolen_p"}]	wms.styles
-72	[{"name":"gemeentegrenzen_brk_limb_v","legendURLs":["https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GEMEENTEGRENZEN_BRK_LIMB_V&SERVICE=WMS"],"title":"gemeentegrenzen_brk_limb_v"}]	wms.styles
-73	[{"name":"gemeenten_SGDK_v","legendURLs":["https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GEMEENTEN_SGDK_V&SERVICE=WMS"],"title":"gemeenten_SGDK_v"}]	wms.styles
-74	[{"name":"grenspaal_p","legendURLs":["https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GRENSPAAL_P&SERVICE=WMS"],"title":"grenspaal_p"}]	wms.styles
-75	[{"name":"kad_gemgrenzen_v","legendURLs":["https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=KAD_GEMGRENZEN_V&SERVICE=WMS"],"title":"kad_gemgrenzen_v"}]	wms.styles
-76	[{"name":"pio_gebied_v","legendURLs":["https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=PIO_GEBIED_V&SERVICE=WMS"],"title":"pio_gebied_v"}]	wms.styles
-77	[{"name":"projectgeb_lob_van_gennep_v","legendURLs":["https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=PROJECTGEB_LOB_VAN_GENNEP_V&SERVICE=WMS"],"title":"projectgeb_lob_van_gennep_v"}]	wms.styles
-78	[{"name":"provinciegrens_2002_v","legendURLs":["https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=PROVINCIEGRENS_2002_V&SERVICE=WMS"],"title":"provinciegrens_2002_v"}]	wms.styles
-79	[{"name":"provinciegrens_brk_limb_v","legendURLs":["https://portal.prvlimburg.nl/geodata/GRENZEN/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=PROVINCIEGRENS_BRK_LIMB_V&SERVICE=WMS"],"title":"provinciegrens_brk_limb_v"}]	wms.styles
-82	[{"name":"aan_20161018_v","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=AAN_20161018_V&SERVICE=WMS"],"title":"aan_20161018_v"}]	wms.styles
-83	[{"name":"bermen_gemeenten_v","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=BERMEN_GEMEENTEN_V&SERVICE=WMS"],"title":"bermen_gemeenten_v"}]	wms.styles
-84	[{"name":"beheergebied_ambitie_2022_v_streefbeheertype","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=BGA_PL_030821_V_ambitie_streefbeheertype&SERVICE=WMS"],"abstract":"A sample style that draws a polygon","title":"Beheergebied Ambitie 2022 (streefbeheertype)"}]	wms.styles
-85	[{"name":"beheergebied_ambitie_2022_v_gebiedscategorie","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=BGA_PL_030821_V_ambtitie_gebiedscategorie&SERVICE=WMS"],"abstract":"A sample style that draws a polygon","title":"Beheergebied Ambitie 2022 (gebiedscategorie)"}]	wms.styles
-86	[{"name":"bgt_groen_binnen_buffer_7m_v","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=BGT_GROEN_BINNEN_BUFFER_7M_V&SERVICE=WMS"],"title":"bgt_groen_binnen_buffer_7m_v"}]	wms.styles
-87	[{"name":"beheergebied_2021_v","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=BG_BGA_14122020_V&SERVICE=WMS"],"abstract":"A sample style that draws a polygon","title":"Beheergebied 2021"}]	wms.styles
-88	[{"name":"beheergebied_ambitie_2021_v_gebiedscategorie","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=BG_BGA_14122020_V_ambitie_gebiedscategorie&SERVICE=WMS"],"abstract":"A sample style that draws a polygon","title":"Beheergebied Ambitie 2021 (gebiedscategorie)"}]	wms.styles
-89	[{"name":"beheergebied_ambitie_2021_v_streefbeheertype","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=BG_BGA_14122020_V_ambitie_streefbeheertype&SERVICE=WMS"],"abstract":"A sample style that draws a polygon","title":"Beheergebied Ambitie 2021 (streefbeheertype)"}]	wms.styles
-90	[{"name":"beheergebied_2022_v","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=BG_PL_030821_V&SERVICE=WMS"],"abstract":"A sample style that draws a polygon","title":"Beheergebied 2022"}]	wms.styles
-91	[{"name":"bloeiende_vegetatiekarter_v","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=BLOEIENDE_VEGETATIEKARTER_V&SERVICE=WMS"],"title":"bloeiende_vegetatiekarter_v"}]	wms.styles
-92	[{"name":"boombasis_v","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=BOOMBASIS_V&SERVICE=WMS"],"title":"boombasis_v"}]	wms.styles
-93	[{"name":"broedvogels_binnen_goud_p","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=BROEDVOGELS_BINNEN_GOUD_P&SERVICE=WMS"],"title":"Broedvogels binnen goudgroene natuurzone (2015 t/m 2018)"}]	wms.styles
-94	[{"name":"broedvogels_vlakdek_ronde1_p","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=BROEDVOGELS_VLAKDEK_RONDE1_P&SERVICE=WMS"],"title":"Broedvogels vlakdekkend 1e ronde (1990 t/m 1997)"}]	wms.styles
-95	[{"name":"broedvogels_vlakdek_ronde2_p","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=BROEDVOGELS_VLAKDEK_RONDE2_P&SERVICE=WMS"],"title":"Broedvogels vlakdekkend 2e ronde (1998 t/m 2011)"}]	wms.styles
-96	[{"name":"broedvogels_vlakdek_ronde3_p","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=BROEDVOGELS_VLAKDEK_RONDE3_P&SERVICE=WMS"],"title":"Broedvogels vlakdekkend 3e ronde (2012 t/m 2018)"}]	wms.styles
-97	[{"name":"def_2021_wijzigingsverzoek_v","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=DEF_2021_WIJZIGINGSVERZK_V&SERVICE=WMS"],"abstract":"A sample style that draws a polygon","title":"Wijzigingsverzoeken 2021"}]	wms.styles
-98	[{"name":"def_2021_zienswijzen_v","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=DEF_2021_ZIENSWIJZEN_V&SERVICE=WMS"],"abstract":"A sample style that draws a polygon","title":"Zienswijzen natuurbeheerplan 2021"}]	wms.styles
-99	[{"name":"zoekgebied_agrar_v_2021","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=DEF_2021_ZOEKGEBIED_AGRAR_V&SERVICE=WMS"],"abstract":"A sample style that draws a polygon","title":"Agrarische zoekgebieden"}]	wms.styles
-100	[{"name":"zoekgebieden_water_v_2021","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=DEF_2021_ZOEKGEBIED_WATER_V&SERVICE=WMS"],"abstract":"A sample style that draws a polygon","title":"Zoekgebieden water"}]	wms.styles
-101	[{"name":"def_2022_wijzigingsvzk_v","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=DEF_2022_WIJZIGINGVZK_V&SERVICE=WMS"],"abstract":"A sample style that draws a polygon","title":"Wijzigingsverzoeken Natuurbeheerplan 2022"}]	wms.styles
-102	[{"name":"def_2022_zienswijzen_v","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=DEF_2022_ZIENSWIJZEN_V&SERVICE=WMS"],"abstract":"A sample style that draws a polygon","title":"Zienswijzen natuurbeheerplan 2022"}]	wms.styles
-103	[{"name":"zoekgebied_agrar_v_2022","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=DEF_2022_ZOEKGEBIED_AGRAR_V&SERVICE=WMS"],"abstract":"A sample style that draws a polygon","title":"Agrarische zoekgebieden"}]	wms.styles
-104	[{"name":"zoekgebieden_water_v_2022","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=DEF_2022_ZOEKGEBIED_WATER_V&SERVICE=WMS"],"abstract":"A sample style that draws a polygon","title":"Zoekgebieden water"}]	wms.styles
-105	[{"name":"raster","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=EHS_beleidsnota_nat_landsch_95_99&SERVICE=WMS"],"abstract":"A sample style for rasters","title":"A boring default style"}]	wms.styles
-106	[{"name":"functieverandering_RVo_v","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=FUNCTIEVERANDERING_RVO_V&SERVICE=WMS"],"title":"functieverandering_RVo_v"}]	wms.styles
-107	[{"name":"vrn_gebiedbeheer_v","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GEBIEDBEHEER_V&SERVICE=WMS"],"title":"vrn_gebiedbeheer_v"}]	wms.styles
-108	[{"name":"vrn_gebiedinrichting_v","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GEBIEDINRICHTING_V&SERVICE=WMS"],"title":"vrn_gebiedinrichting_v"}]	wms.styles
-109	[{"name":"vrn_gebiedverwerving_v","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=GEBIEDVERWERVING_V&SERVICE=WMS"],"title":"vrn_gebiedverwerving_v"}]	wms.styles
-110	[{"name":"ivn_afdelingen_p","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=IVN_AFDELINGEN_P&SERVICE=WMS"],"title":"ivn_afdelingen_p"}]	wms.styles
-111	[{"name":"kart2_91_2007_l","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=KART2_91_2007_L&SERVICE=WMS"],"title":"kart2_91_2007_l"}]	wms.styles
-112	[{"name":"kart2_91_2007_v","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=KART2_91_2007_V&SERVICE=WMS"],"title":"kart2_91_2007_v"}]	wms.styles
-113	[{"name":"naaldbos_zonder_bijz_waarde_v","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=NAALDBOS_ZONDER_BIJZ_WAARDE_V&SERVICE=WMS"],"title":"Naaldbos zonder bijzondere waarde"}]	wms.styles
-114	[{"name":"natura2000_limb_v","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=NATURA2000_LIMB_V&SERVICE=WMS"],"abstract":"A sample style that draws a polygon","title":"Natura2000-gebieden"},{"name":"natura2000_limb_v_waterplan","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=NATURA2000_LIMB_V&style=natura2000_limb_v_waterplan&SERVICE=WMS"],"title":"natura2000_limb_v_waterplan"}]	wms.styles
-115	[{"name":"natuur_ha_uitgesplitst_v","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=NATUUR_HA_UITGESPLITST_V&SERVICE=WMS"],"title":"natuur_ha_uitgesplitst_v"}]	wms.styles
-116	[{"name":"nbg_agrarisch_natuurbeheer_v","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=NBG_AGRARISCH_NATUURBEHEER_V&SERVICE=WMS"],"title":"nbg_agrarisch_natuurbeheer_v"}]	wms.styles
-117	[{"name":"nbg_bestem_topnatuur_v","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=NBG_BESTEM_TOPNATUUR_V&SERVICE=WMS"],"title":"nbg_bestem_topnatuur_v"}]	wms.styles
-118	[{"name":"nbg_compensatie_v","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=NBG_COMPENSATIE_V&SERVICE=WMS"],"title":"nbg_compensatie_v"}]	wms.styles
-119	[{"name":"nbg_functieverandering_v","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=NBG_FUNCTIEVERANDERING_V&SERVICE=WMS"],"title":"nbg_functieverandering_v"}]	wms.styles
-120	[{"name":"nbg_natuurbeheer_v","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=NBG_NATUURBEHEER_V&SERVICE=WMS"],"title":"nbg_natuurbeheer_v"}]	wms.styles
-121	[{"name":"nbg_water_v","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=NBG_WATER_V&SERVICE=WMS"],"title":"nbg_water_v"}]	wms.styles
-122	[{"name":"niet_onderz_geb_broedvkart_v","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=NIET_ONDERZ_GEB_BROEDVKART_V&SERVICE=WMS"],"title":"niet_onderz_geb_broedvkart_v"}]	wms.styles
-123	[{"name":"ontwikkelopgave","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=ONTWIKKELOPGAVE_V&SERVICE=WMS"],"title":"ontwikkelopgave"}]	wms.styles
-124	[{"name":"pas_ez_lijnmaatregelen_l","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=PAS_EZ_LIJNMAATREGELEN_L&SERVICE=WMS"],"title":"pas_ez_lijnmaatregelen_l"}]	wms.styles
-125	[{"name":"pas_ez_onderzoekmaatregelen_v","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=PAS_EZ_ONDERZOEKMAATREGELEN_V&SERVICE=WMS"],"title":"pas_ez_onderzoekmaatregelen_v"}]	wms.styles
-126	[{"name":"pas_ez_vlakmaatregelen_v","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=PAS_EZ_VLAKMAATREGELEN_V&SERVICE=WMS"],"title":"pas_ez_vlakmaatregelen_v"}]	wms.styles
-127	[{"name":"pas_habitatkaarten_v","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=PAS_HABITATKAARTEN_V&SERVICE=WMS"],"title":"pas_habitatkaarten_v"}]	wms.styles
-128	[{"name":"pas_habitatkaarten_v_meerdere_habitattypen","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=PAS_HABITATKAARTEN_V_HABITATTYPEN&SERVICE=WMS"],"title":"pas_habitatkaarten_v_meerdere_habitattypen"}]	wms.styles
-129	[{"name":"pas_lijnmaatregelen_l","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=PAS_LIJNMAATREGELEN_L&SERVICE=WMS"],"title":"pas_lijnmaatregelen_l"}]	wms.styles
-130	[{"name":"pas_natura2000_limburg_v","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=PAS_NATURA2000_LIMBURG_V&SERVICE=WMS"],"title":"pas_natura2000_limburg_v"}]	wms.styles
-131	[{"name":"pas_puntmaatregelen_p","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=PAS_PUNTMAATREGELEN_P&SERVICE=WMS"],"title":"pas_puntmaatregelen_p"}]	wms.styles
-132	[{"name":"pas_vlakmaatregelen_v","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=PAS_VLAKMAATREGELEN_V&SERVICE=WMS"],"title":"pas_vlakmaatregelen_v"}]	wms.styles
-133	[{"name":"plattelandswegen_v","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=PLATTELANDSWEGEN_V&SERVICE=WMS"],"title":"plattelandswegen_v"}]	wms.styles
-134	[{"name":"vrn_provinciaalnatuurnetwerk_v","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=PROVINCIAALNATUURNETWERK_V&SERVICE=WMS"],"title":"vrn_provinciaalnatuurnetwerk_v"}]	wms.styles
-135	[{"name":"realisatieopgave_schatting_v","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=REALISATIEOPGAVE_SCHATTING_V&SERVICE=WMS"],"title":"realisatieopgave_schatting_v"}]	wms.styles
-136	[{"name":"staat_stroomv_buiten_goud_v","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=STAAT_STROOMV_BUITEN_GOUD_V&SERVICE=WMS"],"title":"staat_stroomv_buiten_goud_v"}]	wms.styles
-137	[{"name":"stikstofgev_leefgebieden_v","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=STIKSTOFGEV_LEEFGEBIEDEN_V&SERVICE=WMS"],"abstract":"A sample style that draws a polygon","title":"Stikstofgevoelige leefgebieden"}]	wms.styles
-138	[{"name":"verdwenen_bloeiende_bermen_v","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=VERDWENEN_BLOEIENDE_BERMEN_V&SERVICE=WMS"],"title":"verdwenen_bloeiende_bermen_v"}]	wms.styles
-139	[{"name":"voorm_bloeiende_vegetatie_v","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=VOORM_BLOEIENDE_VEGETATIE_V&SERVICE=WMS"],"title":"voorm_bloeiende_vegetatie_v"}]	wms.styles
-140	[{"name":"VRN2018_gebiedinrichting_v","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=VRN2018_GEBIEDINRICHTING_V&SERVICE=WMS"],"title":"VRN2018_gebiedinrichting_v"}]	wms.styles
-141	[{"name":"VRN2018_gebiedverwerving_v","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=VRN2018_GEBIEDVERWERVING_V&SERVICE=WMS"],"title":"VRN2018_gebiedverwerving_v"}]	wms.styles
-142	[{"name":"werkgebieden_boswachters_v","legendURLs":["https://portal.prvlimburg.nl/geodata/NATUUR/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=WERKGEBIEDEN_BOSWACHTERS_V&SERVICE=WMS"],"title":"werkgebieden_boswachters_v"}]	wms.styles
 144	[{"name":"default-style-BGT","legendURLs":["https://snapshot.tailormap.nl/geoserver/wms?request=GetLegendGraphic&version=1.1.1&format=image%2Fpng&width=20&height=20&layer=BGT&SERVICE=WMS"],"abstract":"Default style for BGT layer","title":"BGT style"}]	wms.styles
 145	[{"name":"polygon","legendURLs":["https://snapshot.tailormap.nl/geoserver/wms?request=GetLegendGraphic&version=1.1.1&format=image%2Fpng&width=20&height=20&layer=oracle%3AWATERDEEL&SERVICE=WMS"],"abstract":"A sample style that draws a polygon","title":"Default Polygon"}]	wms.styles
 146	[{"name":"begroeidterreindeel","legendURLs":["https://snapshot.tailormap.nl/geoserver/wms?request=GetLegendGraphic&version=1.1.1&format=image%2Fpng&width=20&height=20&layer=postgis%3Abegroeidterreindeel&SERVICE=WMS"],"abstract":"Deze stylesheet bevat de regels voor de visualisatie van het objecttype Begroeid Terreindeel","title":"Visualisatie van de begroeide terreindelen"}]	wms.styles
@@ -5204,187 +4751,6 @@ COPY public.layer_keywords (layer, keyword) FROM stdin;
 3	Provinciegebied
 4	Landgebied
 4	landsgrens
-54	features
-54	adrescoordinaten
-54	ACN_P
-55	features
-55	CBS_POSTCODE6_2017_V
-56	features
-56	GEB_CRANENDONCK_LABELS_P
-57	features
-57	GEB_CRANENDONCK_LABELS_P
-58	features
-58	GEB_CRANENDONCK_LABELS_P
-59	features
-59	GEB_CRANENDONCK_LABELS_P
-60	features
-60	GEB_CRANENDONCK_LABELS_P
-61	features
-61	GEB_CRANENDONCK_LABELS_P
-62	features
-62	GEB_CRANENDONCK_PROJECTEN_V
-63	features
-63	GEB_CRANENDONCK_PROJECTEN_V
-64	features
-64	GEB_CRANENDONCK_PROJECTEN_V
-65	features
-65	GEB_CRANENDONCK_PROJECTEN_V
-66	features
-66	GEB_CRANENDONCK_PROJECTEN_V
-67	features
-67	GEB_CRANENDONCK_PROJECTEN_V
-68	features
-68	GEB_CRANENDONCK_ROUTES_L
-69	features
-69	GEB_CRANENDONCK_ROUTES_L
-70	features
-70	GEB_CRANENDONCK_ROUTES_L
-71	features
-71	GEB_CRANENDONCK_SYMBOLEN_P
-72	features
-72	GEMEENTEGRENZEN_BRK_LIMB_V
-73	features
-73	GEMEENTEN_SGDK_V
-74	GRENSPAAL_P
-74	features
-75	features
-75	kadastrale gemeente grenzen
-75	KAD_GEMGRENZEN_V
-76	features
-76	PIO_GEBIED_V
-77	features
-77	PROJECTGEB_LOB_VAN_GENNEP_V
-78	features
-78	PROVINCIEGRENS_2002_V
-79	features
-79	PROVINCIEGRENS_BRK_LIMB_V
-82	features
-82	AAN_20161018_V
-83	features
-83	BERMEN_GEMEENTEN_V
-84	features
-84	BGA_PL_030821_V
-85	features
-85	BGA_PL_030821_V
-86	BGT_GROEN_BINNEN_BUFFER_7M_V
-86	features
-87	features
-87	BG_BGA_14122020_V
-88	features
-88	BG_BGA_14122020_V
-89	features
-89	BG_BGA_14122020_V
-90	features
-90	BG_PL_030821_V
-91	features
-91	BLOEIENDE_VEGETATIEKARTER_V
-92	features
-92	boombasis
-92	BOOMBASIS_V
-93	features
-93	BROEDVOGELS_BINNEN_GOUD_P
-94	features
-94	BROEDVOGELS_VLAKDEK_RONDE1_P
-95	features
-95	BROEDVOGELS_VLAKDEK_RONDE2_P
-96	features
-96	BROEDVOGELS_VLAKDEK_RONDE3_P
-97	features
-97	DEF_2021_WIJZIGINGSVERZK_V
-98	features
-98	DEF_2021_ZIENSWIJZEN_V
-99	features
-99	DEF_2021_ZOEKGEBIED_AGRAR_V
-100	features
-100	DEF_2021_ZOEKGEBIED_WATER_V
-101	features
-101	DEF_2022_WIJZIGINGVZK_V
-102	features
-102	DEF_2022_ZIENSWIJZEN_V
-103	DEF_2022_ZOEKGEBIED_AGRAR_V
-103	features
-104	DEF_2022_ZOEKGEBIED_WATER_V
-104	features
-105	WCS
-105	WorldImage
-105	EHS_beleidsnota_nat_landsch_95_99
-106	features
-106	FUNCTIEVERANDERING_RVO_V
-107	features
-107	GEBIEDBEHEER_V
-108	features
-108	GEBIEDINRICHTING_V
-109	features
-109	GEBIEDVERWERVING_V
-110	features
-110	IVN_AFDELINGEN_P
-111	features
-111	KART2_91_2007_L
-111	vegetatiekartering
-112	features
-112	KART2_91_2007_V
-112	vegetatiekartering
-113	features
-113	NAALDBOS_ZONDER_BIJZ_WAARDE_V
-114	NATURA2000_LIMB_V
-114	features
-115	features
-115	NATUUR_HA_UITGESPLITST_V
-116	features
-116	NBG_AGRARISCH_NATUURBEHEER_V
-117	features
-117	NBG_BESTEM_TOPNATUUR_V
-118	features
-118	NBG_COMPENSATIE_V
-119	NBG_FUNCTIEVERANDERING_V
-119	features
-120	features
-120	NBG_NATUURBEHEER_V
-121	features
-121	NBG_WATER_V
-122	niet onderzochte gebieden vlakdekkende broedvogelkartering
-122	features
-122	NIET_ONDERZ_GEB_BROEDVKART_V
-123	features
-123	ONTWIKKELOPGAVE_V
-124	features
-124	PAS_EZ_LIJNMAATREGELEN_L
-125	features
-125	PAS_EZ_ONDERZOEKMAATREGELEN_V
-126	features
-126	PAS_EZ_VLAKMAATREGELEN_V
-127	PAS_HABITATKAARTEN_V
-127	features
-128	PAS_HABITATKAARTEN_V
-128	features
-129	features
-129	PAS_LIJNMAATREGELEN_L
-130	features
-130	PAS_NATURA2000_LIMBURG_V
-131	features
-131	PAS_PUNTMAATREGELEN_P
-132	features
-132	PAS_VLAKMAATREGELEN_V
-133	features
-133	PLATTELANDSWEGEN_V
-134	features
-134	PROVINCIAALNATUURNETWERK_V
-135	features
-135	REALISATIEOPGAVE_SCHATTING_V
-136	features
-136	STAAT_STROOMV_BUITEN_GOUD_V
-137	features
-137	STIKSTOFGEV_LEEFGEBIEDEN_V
-138	features
-138	VERDWENEN_BLOEIENDE_BERMEN_V
-139	features
-139	VOORM_BLOEIENDE_VEGETATIE_V
-140	features
-140	VRN2018_GEBIEDINRICHTING_V
-141	features
-141	VRN2018_GEBIEDVERWERVING_V
-142	features
-142	WERKGEBIEDEN_BOSWACHTERS_V
 144	basisregistratie
 144	topografie
 145	features
