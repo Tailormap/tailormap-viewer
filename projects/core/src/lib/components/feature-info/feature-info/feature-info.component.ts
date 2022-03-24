@@ -35,6 +35,7 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
     this.mapService.createTool$(this.toolConfig, true)
       .pipe(takeUntil(this.destroyed))
       .subscribe();
+
     this.mapService.highlightFeatures$(
       'feature-info-highlight-layer',
       this.store$.select(selectCurrentlySelectedFeatureGeometry),

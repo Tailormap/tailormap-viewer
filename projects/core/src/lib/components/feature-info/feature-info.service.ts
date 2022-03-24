@@ -40,7 +40,7 @@ export class FeatureInfoService {
               x: coordinates[0],
               y: coordinates[1],
               distance: FeatureInfoService.DEFAULT_DISTANCE,
-              simplify: true,
+              simplify: false,
             }).pipe(
               map((featureInfoResult: FeaturesResponseModel): FeatureInfoResponseModel => ({
                 features: (featureInfoResult.features || []).map(feature => ({ ...feature, layerId })),

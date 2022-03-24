@@ -77,4 +77,12 @@ export class FeatureInfoDialogComponent implements OnInit, OnDestroy {
     });
     return attr as ReadonlyMap<string, { label: string; value: string | number | boolean }>;
   }
+
+  public isBackDisabled() {
+    return this.totalFeatures <= 1 || this.currentSelected === 0;
+  }
+
+  public isNextDisabled() {
+    return this.totalFeatures <= 1 || this.currentSelected === this.totalFeatures - 1;
+  }
 }

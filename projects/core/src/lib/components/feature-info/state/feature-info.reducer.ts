@@ -23,6 +23,7 @@ const onLoadFeatureInfoSuccess = (
   features: payload.featureInfo.reduce<FeatureInfoFeatureModel[]>((allFeatures, featureInfoModel) => allFeatures.concat(featureInfoModel.features), []),
   columnMetadata: payload.featureInfo.reduce<FeatureInfoColumnMetadataModel[]>((allMetadata, featureInfoModel) => allMetadata.concat(featureInfoModel.columnMetadata), []),
   loadStatus: LoadStatusEnum.LOADED,
+  currentFeatureIndex: 0,
 });
 
 const onLoadFeatureInfoFailed = (
@@ -32,6 +33,7 @@ const onLoadFeatureInfoFailed = (
   ...state,
   errorMessage: payload.errorMessage,
   loadStatus: LoadStatusEnum.ERROR,
+  currentFeatureIndex: 0,
 });
 
 const onShowFeatureInfoDialog = (state: FeatureInfoState): FeatureInfoState => ({ ...state, dialogVisible: true });

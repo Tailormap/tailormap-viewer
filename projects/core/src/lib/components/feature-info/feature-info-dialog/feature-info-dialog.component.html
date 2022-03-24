@@ -14,10 +14,10 @@
       </div>
     </div>
     <div class="buttons">
-      <button mat-flat-button i18n (click)="back()" color="accent" [disabled]="currentSelected === 0">
+      <button mat-flat-button i18n (click)="back()" color="accent" [disabled]="isBackDisabled()">
         Back
       </button>
-      <button mat-flat-button i18n (click)="next()" color="primary" [disabled]="currentSelected === totalFeatures - 1">
+      <button mat-flat-button i18n (click)="next()" color="primary" [disabled]="isNextDisabled()">
         Next
       </button>
     </div>
