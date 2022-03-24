@@ -3,7 +3,7 @@ tm-dialog ::ng-deep .dialog {
   right: var(--body-margin);
   top: var(--body-margin);
   bottom: auto;
-  height: calc(50vh - var(var(--body-margin)));
+  height: calc(50vh - var(--body-margin));
 }
 
 .feature-info {
