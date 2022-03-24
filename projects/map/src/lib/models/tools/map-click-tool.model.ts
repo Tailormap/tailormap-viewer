@@ -1,5 +1,11 @@
 import { ToolModel } from './tool.model';
+import { Observable } from 'rxjs';
+
+export interface MapClickEvent {
+  mapCoordinates: [ number, number ];
+  mouseCoordinates: [ number, number ];
+}
 
 export interface MapClickToolModel extends ToolModel {
-  onClick(evt: { mapCoordinates: [ number, number ]; mouseCoordinates: [ number, number ] }): void;
+  mapClick$: Observable<MapClickEvent>;
 }

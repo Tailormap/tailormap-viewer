@@ -1,5 +1,6 @@
-import { ToolTypeEnum } from './tool-type.enum';
-
 export interface ToolModel {
-  type: ToolTypeEnum;
+  isActive: boolean;
+  enable(): void;
+  disable(): void;
+  destroy(): void;
 }

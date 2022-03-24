@@ -1,14 +1,15 @@
-import { OpenLayersTool } from './open-layers-tool';
-import { MapClickToolModel } from '../../models';
-import { Subject, takeUntil } from 'rxjs';
+import { MapClickToolConfigModel, MapClickToolModel, MapClickEvent } from '../../models';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { OpenLayersEventManager } from '../open-layers-event-manager';
 
-export class OpenLayersMapClickTool implements OpenLayersTool {
+export class OpenLayersMapClickTool implements MapClickToolModel {
 
   private enabled = new Subject();
 
-  constructor(private toolConfig: MapClickToolModel) {}
+  constructor(private toolConfig: MapClickToolConfigModel) {}
 
+  private mapClickSubject: Subject<MapClickEvent> = new Subject<MapClickEvent>();
+  public mapClick$: Observable<MapClickEvent> = this.mapClickSubject.asObservable();
   public isActive = false;
 
   public destroy(): void {
@@ -22,10 +23,11 @@ export class OpenLayersMapClickTool implements OpenLayersTool {
   }
 
   public enable(): void {
+    this.enabled = new Subject();
     OpenLayersEventManager.onMapClick$()
       .pipe(takeUntil(this.enabled))
       .subscribe(evt => {
-        this.toolConfig.onClick({
+        this.mapClickSubject.next({
           mapCoordinates: [evt.coordinate[0], evt.coordinate[1]],
           mouseCoordinates: [evt.pixel[0], evt.pixel[1]],
         });

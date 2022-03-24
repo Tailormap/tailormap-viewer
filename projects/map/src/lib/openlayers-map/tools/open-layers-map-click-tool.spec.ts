@@ -5,17 +5,19 @@ import { of } from 'rxjs';
 
 describe('OpenLayersMapClickTool', () => {
 
-  test('creates and enables map click tool', () => {
+  test('creates and enables map click tool', done => {
     // @ts-ignore
     OpenLayersEventManager.onMapClick$ = jest.fn(() => of({ coordinate: [1,2], pixel: [2,3] }));
-    const onClick = jest.fn();
-    const tool = new OpenLayersMapClickTool({ type: ToolTypeEnum.MapClick, onClick });
+    const tool = new OpenLayersMapClickTool({ type: ToolTypeEnum.MapClick });
+    tool.mapClick$.subscribe(clickEvt => {
+      expect(clickEvt).toEqual({
+        mapCoordinates: [1, 2],
+        mouseCoordinates: [2, 3],
+      });
+      done();
+    });
     tool.enable();
     expect(OpenLayersEventManager.onMapClick$).toHaveBeenCalled();
-    expect(onClick).toHaveBeenCalledWith({
-      mapCoordinates: [ 1, 2 ],
-      mouseCoordinates: [ 2, 3 ],
-    });
   });
 
 });

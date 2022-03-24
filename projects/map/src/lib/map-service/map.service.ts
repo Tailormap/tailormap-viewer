@@ -1,7 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
 import { OpenLayersMap } from '../openlayers-map/openlayers-map';
 import { combineLatest, finalize, map, Observable, tap } from 'rxjs';
-import { LayerManagerModel, LayerTypesEnum, MapResolutionModel, MapViewerOptionsModel, ToolModel, VectorLayerModel, MapStyleModel } from '../models';
+import { LayerManagerModel, LayerTypesEnum, MapResolutionModel, MapViewerOptionsModel, ToolConfigModel, VectorLayerModel, MapStyleModel } from '../models';
 import { ToolManagerModel } from '../models/tool-manager.model';
 import VectorLayer from 'ol/layer/Vector';
 import Geometry from 'ol/geom/Geometry';
@@ -42,7 +42,7 @@ export class MapService {
     return this.map.getToolManager$();
   }
 
-  public createTool$(tool: ToolModel, enable?: boolean): Observable<[ ToolManagerModel, string ]> {
+  public createTool$(tool: ToolConfigModel, enable?: boolean): Observable<[ ToolManagerModel, string ]> {
     let toolManager: ToolManagerModel;
     let toolId: string;
     return this.getToolManager$()

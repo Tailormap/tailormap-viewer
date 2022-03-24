@@ -1,6 +1,6 @@
 import { render } from '@testing-library/angular';
 import { FeatureInfoComponent } from './feature-info.component';
-import { MapClickToolModel, MapService } from '@tailormap-viewer/map';
+import { MapClickToolConfigModel, MapService } from '@tailormap-viewer/map';
 import { Store } from '@ngrx/store';
 import { loadFeatureInfo } from '../state/feature-info.actions';
 import { of } from 'rxjs';
@@ -14,7 +14,14 @@ jest.useFakeTimers();
 describe('FeatureInfoComponent', () => {
 
   test('should render', async () => {
-    const createTool = jest.fn(() => of('1'));
+    const mockGetTool = jest.fn(() => ({
+      mapClick$: of({
+        mapCoordinates: [ 1, 2 ],
+        mouseCoordinates: [ 2, 3 ],
+      }),
+    }));
+    const toolManager = { getTool: mockGetTool };
+    const createTool = jest.fn(() => of([toolManager, '1']));
     const mockDispatch = jest.fn();
     const mockSelect = jest.fn(() => of('POINT(1 2)'));
     const highlightFeaturesMock = jest.fn(() => of(null));
@@ -35,19 +42,26 @@ describe('FeatureInfoComponent', () => {
         },
       ],
     });
+
     expect(createTool).toHaveBeenCalled();
+    expect(mockGetTool).toHaveBeenCalled();
     const highlightArgs = Array.from(highlightFeaturesMock.mock.calls[0]);
     expect(highlightArgs.length).toEqual(3);
     expect(highlightArgs[0]).toEqual('feature-info-highlight-layer');
-    // Emulate map click
-    const toolConf = createTool.mock.calls[0] as unknown as MapClickToolModel[];
-    toolConf[0].onClick({ mouseCoordinates: [1,2], mapCoordinates: [2,3] });
-    expect(mockDispatch).toHaveBeenCalledWith(loadFeatureInfo({ mapCoordinates: [2,3], mouseCoordinates: [1,2] }));
+
+    expect(mockDispatch).toHaveBeenCalledWith(loadFeatureInfo({ mapCoordinates: [1,2], mouseCoordinates: [2,3] }));
     expect(mockSelect).toHaveBeenCalled();
   });
 
   test('renders error message', async () => {
-    const createTool = jest.fn(() => of('1'));
+    const mockGetTool = jest.fn(() => ({
+      mapClick$: of({
+        mapCoordinates: [ 1, 2 ],
+        mouseCoordinates: [ 2, 3 ],
+      }),
+    }));
+    const toolManager = { getTool: mockGetTool };
+    const createTool = jest.fn(() => of([toolManager, '1']));
     const mockDispatch = jest.fn();
     const mockSelect = jest.fn(() => of('POINT(1 2)'));
     const highlightFeaturesMock = jest.fn(() => of(null));
@@ -70,9 +84,6 @@ describe('FeatureInfoComponent', () => {
         },
       ],
     });
-    // Emulate map click
-    const toolConf = createTool.mock.calls[0] as unknown as MapClickToolModel[];
-    toolConf[0].onClick({ mouseCoordinates: [1,2], mapCoordinates: [2,3] });
     expect(mockOpen).toHaveBeenCalled();
     expect(mockOpen.mock.calls[0][1].message).toEqual('Test error');
   });
