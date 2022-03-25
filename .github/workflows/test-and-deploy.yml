@@ -97,8 +97,9 @@ jobs:
           ssh_cert: ${{ secrets.DOCKER_HOST_SNAPSHOT_SSH_CERT }}
           ssh_key: ${{ secrets.DOCKER_HOST_SNAPSHOT_SSH_KEY }}
           use_context: true
-      - name: Debug known hosts
-        run: cat $HOME/.ssh/known_hosts | base64
+      - name: Add known hosts
+        run: |
+          ssh-keyscan -H ${{ secrets.DOCKER_HOSTNAME }} > $HOME/.ssh/known_hosts
       - name: Update main deployment using Docker Compose
         if: ${{ github.ref == 'refs/heads/main' }}
         run: |
