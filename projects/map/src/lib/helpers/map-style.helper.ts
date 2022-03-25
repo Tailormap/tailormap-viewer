@@ -3,6 +3,7 @@ import Fill from 'ol/style/Fill';
 import Stroke from 'ol/style/Stroke';
 import RegularShape from 'ol/style/RegularShape';
 import { MapStyleModel, OlMapStyleType } from '../models';
+import CircleStyle from 'ol/style/Circle';
 
 export class MapStyleHelper {
 
@@ -39,12 +40,20 @@ export class MapStyleHelper {
       style.setFill(new Fill({ color: styleConfig.fillColor }));
     }
     if (styleConfig.pointType) {
-      const shape = MapStyleHelper.POINT_SHAPES[styleConfig.pointType];
-      style.setImage(new RegularShape({
-        fill: new Fill({ color: styleConfig.pointFillColor || MapStyleHelper.DEFAULT_COLOR }),
-        stroke: new Stroke({ color: styleConfig.pointStrokeColor || MapStyleHelper.DEFAULT_COLOR, width: 1 }),
-        ...shape,
-      }));
+      const pointFill = new Fill({ color: styleConfig.pointFillColor || MapStyleHelper.DEFAULT_COLOR });
+      const pointStroke = new Stroke({ color: styleConfig.pointStrokeColor || MapStyleHelper.DEFAULT_COLOR, width: 1 });
+      const shape = styleConfig.pointType === 'circle'
+        ? new CircleStyle({
+          radius: 5,
+          stroke: pointStroke,
+          fill: pointFill,
+        })
+        : new RegularShape({
+          stroke: pointStroke,
+          fill: pointFill,
+          ...MapStyleHelper.POINT_SHAPES[styleConfig.pointType],
+        });
+      style.setImage(shape);
     }
     return style;
   }

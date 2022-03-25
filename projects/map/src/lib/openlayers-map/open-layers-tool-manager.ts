@@ -3,6 +3,7 @@ import { ToolModel, ToolConfigModel, ToolManagerModel } from '../models';
 import { ToolTypeHelper } from '../helpers/tool-type.helper';
 import { OpenLayersMapClickTool } from './tools/open-layers-map-click-tool';
 import { NgZone } from '@angular/core';
+import { OpenLayersDrawingTool } from './tools/open-layers-drawing-tool';
 
 export class OpenLayersToolManager implements ToolManagerModel {
 
@@ -23,6 +24,9 @@ export class OpenLayersToolManager implements ToolManagerModel {
     if (ToolTypeHelper.isMapClickTool(tool)) {
       this.tools.set(toolId, new OpenLayersMapClickTool(tool));
     }
+    if (ToolTypeHelper.isDrawingTool(tool)) {
+      this.tools.set(toolId, new OpenLayersDrawingTool(tool, this.olMap, this.ngZone));
+    }
     return toolId;
   }
 
@@ -34,12 +38,17 @@ export class OpenLayersToolManager implements ToolManagerModel {
     return tool as T;
   }
 
-  public disableTool(toolId: string): void {
+  public disableTool(toolId: string): ToolManagerModel {
     this.tools.get(toolId)?.disable();
     this.enablePreviousTools();
+    return this;
   }
 
-  public enableTool(toolId: string, disableOtherTools?: boolean): void {
+  public enableTool(
+    toolId: string,
+    disableOtherTools?: boolean,
+    enableArgs?: any,
+  ): ToolManagerModel {
     if (disableOtherTools) {
       this.tools.forEach((tool, id) => {
         if (tool.isActive) {
@@ -48,13 +57,15 @@ export class OpenLayersToolManager implements ToolManagerModel {
         }
       });
     }
-    this.tools.get(toolId)?.enable();
+    this.tools.get(toolId)?.enable(enableArgs);
+    return this;
   }
 
-  public removeTool(toolId: string): void {
+  public removeTool(toolId: string): ToolManagerModel {
     this.tools.get(toolId)?.destroy();
     this.tools.delete(toolId);
     this.enablePreviousTools();
+    return this;
   }
 
   private enablePreviousTools() {

@@ -4,8 +4,8 @@ import { ToolModel } from './tools/tool.model';
 export interface ToolManagerModel {
   addTool(tool: ToolConfigModel): string;
   getTool<T extends ToolModel>(toolId: string): T | null;
-  enableTool(toolId: string, disableOtherTools?: boolean): void;
-  disableTool(toolId: string): void;
-  removeTool(toolId: string): void;
+  enableTool<T extends Record<string, unknown>>(toolId: string, disableOtherTools?: boolean, enableArgs?: T): ToolManagerModel;
+  disableTool(toolId: string): ToolManagerModel;
+  removeTool(toolId: string): ToolManagerModel;
   destroy(): void;
 }

@@ -34,18 +34,16 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
     this.mapService.createTool$(this.toolConfig, true)
       .pipe(
         takeUntil(this.destroyed),
-        concatMap(([manager, toolId]) => {
+        concatMap(([ manager, toolId ]) => {
           const clickTool = manager.getTool<MapClickToolModel>(toolId);
-          if (!clickTool) {
-            return of(null);
-          }
-          return clickTool.mapClick$;
+          return !clickTool ? of(null) : clickTool.mapClick$;
         }),
       )
       .subscribe(mapClick => {
-        if (mapClick) {
-          this.handleMapClick(mapClick);
+        if (!mapClick) {
+          return;
         }
+        this.handleMapClick(mapClick);
       });
 
     this.mapService.highlightFeatures$(

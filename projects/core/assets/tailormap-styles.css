@@ -1,5 +1,6 @@
 @import "inter-font.css";
 @import "tailormap-styles-form.css";
+@import "openlayers.css";
 
 :root {
   --dialog-width-left: 0;
