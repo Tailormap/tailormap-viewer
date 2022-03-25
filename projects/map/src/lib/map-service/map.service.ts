@@ -7,10 +7,7 @@ import VectorLayer from 'ol/layer/Vector';
 import Geometry from 'ol/geom/Geometry';
 import VectorSource from 'ol/source/Vector';
 import WKT from 'ol/format/WKT';
-import Style from 'ol/style/Style';
 import { MapStyleHelper } from '../helpers/map-style.helper';
-import Feature from 'ol/Feature';
-import RenderFeature from 'ol/render/Feature';
 import { OlMapStyleType } from '../models/ol-map-style.type';
 
 @Injectable({

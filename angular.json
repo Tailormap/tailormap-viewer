@@ -223,12 +223,13 @@
           },
           "defaultConfiguration": "production"
         },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "main": "projects/map/src/test.ts",
-            "tsConfig": "projects/map/tsconfig.spec.json",
-            "karmaConfig": "projects/map/karma.conf.js"
+            "lintFilePatterns": [
+              "projects/map/**/*.ts",
+              "projects/map/**/*.html"
+            ]
           }
         }
       }

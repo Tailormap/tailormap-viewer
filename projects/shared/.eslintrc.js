@@ -1,4 +1,5 @@
 const path = require('path');
+const { getInvalidImportsRule } = require("../../.eslint-custom-rules");
 
 module.exports = {
   "extends": path.resolve(__dirname, "../../.eslintrc.json"),
@@ -18,7 +19,9 @@ module.exports = {
         "createDefaultProgram": true,
         "tsconfigRootDir": __dirname
       },
-      "rules": {}
+      "rules": {
+        "no-restricted-imports": ["error", getInvalidImportsRule("@tailormap-viewer/shared")]
+      }
     },
     {
       "files": [
