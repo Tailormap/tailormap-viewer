@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/angular';
 import { MapControlsComponent } from './map-controls.component';
 import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { MapControlsService } from '@tailormap-viewer/core';
+import { MapControlsService } from './map-controls.service';
 import { of } from 'rxjs';
 
 @Component({

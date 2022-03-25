@@ -13,7 +13,6 @@ import { Size } from 'ol/size';
 import { ToolManagerModel } from '../models/tool-manager.model';
 import { OpenLayersToolManager } from './open-layers-tool-manager';
 import { OpenLayersEventManager } from './open-layers-event-manager';
-import { MapBrowserEvent } from 'ol';
 
 export class OpenLayersMap implements MapViewerModel {
 
