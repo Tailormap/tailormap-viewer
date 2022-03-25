@@ -100,6 +100,9 @@ jobs:
       - name: Add known hosts
         run: |
           ssh-keyscan -H ${{ secrets.DOCKER_HOSTNAME }} > $HOME/.ssh/known_hosts
+      - name: Check
+        run: |
+          docker-compose ps
       - name: Update main deployment using Docker Compose
         if: ${{ github.ref == 'refs/heads/main' }}
         run: |
