@@ -37,6 +37,7 @@ Requires a Docker compose version supporting version 3.9 of the compose specific
 repositories. Download version 1.28.5 (later version like 1.29.2 may give OpenSSL conflict if server uses Ubuntu 20.04 LTS included Docker
 packages).
 
+Note that you may need to set the environment variable `COMPOSE_DOCKER_CLI_BUILD` to `0` if you get an error like `ERRO[0000] Can't close tar writer: io: read/write on closed pipe`.
 
 ### Running a full Tailormap stack
 

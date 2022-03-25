@@ -2,6 +2,11 @@ version: '3.9'
 
 # See README.md for usage details
 
+networks:
+  tailormap-viewer:
+    name: tailormap-viewer
+
+
 services:
   web:
     image: ghcr.io/b3partners/tailormap-viewer:${VERSION_TAG:-snapshot}
@@ -13,6 +18,8 @@ services:
       - http
     ports:
       - "80:80"
+    networks:
+      - tailormap-viewer
     environment:
       - "API_PROXY_ENABLED=${API_PROXY_ENABLED:-true}"
       - "API_PROXY_URL=${API_PROXY_URL:-http://api:8080/api/}"
@@ -34,15 +41,16 @@ services:
         - BASE_HREF=${BASE_HREF:-/}
     profiles:
       - proxied
+    networks:
+      - tailormap-viewer
     environment:
       - "API_PROXY_ENABLED=${API_PROXY_ENABLED:-true}"
       - "API_PROXY_URL=${API_PROXY_URL:-http://api:8080/api/}"
-      - "API_PROXY_HOST=${API_PROXY_HOST:-localhost}"
       - "ADMIN_PROXY_ENABLED=${ADMIN_PROXY_ENABLED:-true}"
       - "ADMIN_PROXY_URL=${ADMIN_PROXY_URL:-http://admin:8080/admin/}"
-      - "ADMIN_PROXY_HOST=${ADMIN_PROXY_HOST:-localhost}"
+      - "HOST=${HOST:-localhost}"
     labels:
-      traefik.http.routers.tailormap-snapshot.rule: "Host(`${HOST:-snapshot.tailormap.nl}`)"
+      traefik.http.routers.tailormap-snapshot.rule: "Host(`${HOST:-localhost}`)"
       traefik.http.routers.tailormap-snapshot.tls: "true"
       traefik.http.routers.tailormap-snapshot.tls.certresolver: "letsencrypt"
       traefik.http.services.tailormap-snapshot.loadbalancer.server.port: 80
@@ -54,6 +62,8 @@ services:
     image: ghcr.io/b3partners/tailormap-api:snapshot
     profiles:
       - full
+    networks:
+      - tailormap-viewer
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db/tailormap
       DB_PASSWORD: ${TAILORMAP_DB_PASSWORD:-tailormap}
@@ -66,6 +76,8 @@ services:
     image: ghcr.io/b3partners/tailormap-admin:snapshot
     profiles:
       - full
+    networks:
+      - tailormap-viewer
     environment:
       CATALINA_OPTS: -DPG_HOST=db -DPG_PORT=5432 -DPG_DATABASE=tailormap -DDB_NAME=tailormap -DDB_USER=tailormap -DDB_PASSWORD=${TAILORMAP_DB_PASSWORD:-tailormap} -DURL_SCHEME=http
     labels:
@@ -79,6 +91,8 @@ services:
       context: docker/db
     profiles:
       - full
+    networks:
+      - tailormap-viewer
     labels:
       traefik.enable: false
     environment:
