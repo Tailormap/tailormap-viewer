@@ -49,11 +49,22 @@ export const selectFeatureInfoCounts = createSelector(
 export const selectCurrentlySelectedFeature = createSelector(
   selectFeatureInfoList,
   selectCurrentFeatureIndex,
-  (features, idx) => features[idx],
+  (features, idx) => {
+    if (idx === features.length) {
+      return features[features.length - 1];
+    }
+    return features[idx];
+  },
 );
 export const selectCurrentlySelectedFeatureGeometry = createSelector(
+  selectFeatureInfoDialogVisible,
   selectCurrentlySelectedFeature,
-  feature => FeatureInfoHelper.getGeometryForFeatureInfoFeature(feature),
+  (dialogVisible, feature) => {
+    if (!dialogVisible) {
+      return null;
+    }
+    return FeatureInfoHelper.getGeometryForFeatureInfoFeature(feature);
+  },
 );
 
 export const selectFeatureInfoError = createSelector(

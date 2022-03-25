@@ -90,6 +90,7 @@ export class MapService {
     layerId: string,
     featureGeometry$: Observable<string | null>,
     vectorLayerStyle?: MapStyleModel | OlMapStyleType,
+    highlightConfig?: { keepHighlightOnEmptyFeature?: boolean },
   ): Observable<VectorLayer<VectorSource<Geometry>> | null> {
     const wktFormatter = new WKT();
     return combineLatest([
@@ -98,11 +99,16 @@ export class MapService {
     ])
       .pipe(
         tap(([ vectorLayer, featureGeometry ]) => {
-          if (!vectorLayer || !featureGeometry) {
+          if (!vectorLayer) {
+            return;
+          }
+          if (!featureGeometry && (highlightConfig && highlightConfig.keepHighlightOnEmptyFeature)) {
             return;
           }
           vectorLayer.getSource().getFeatures().forEach(feature => vectorLayer.getSource().removeFeature(feature));
-          vectorLayer.getSource().addFeature(wktFormatter.readFeature(featureGeometry));
+          if (featureGeometry) {
+            vectorLayer.getSource().addFeature(wktFormatter.readFeature(featureGeometry));
+          }
         }),
         map(([ vectorLayer ]) => vectorLayer),
       );
