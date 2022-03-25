@@ -14,6 +14,12 @@
 
 version: '3.9'
 
+networks:
+  tailormap-viewer:
+    external: true
+    name: tailormap-viewer
+
+
 services:
   web-proxied:
     image: ghcr.io/b3partners/tailormap-viewer:${NAME}
@@ -21,7 +27,7 @@ services:
       - API_PROXY_ENABLED=false
       - ADMIN_PROXY_ENABLED=false
     labels:
-      - "traefik.http.routers.tailormap-snapshot-${NAME}.rule=Host(`${HOST:-snapshot.tailormap.nl}`) && PathPrefix(`${BASE_HREF}`)"
+      - "traefik.http.routers.tailormap-snapshot-${NAME}.rule=Host(`${HOST:-localhost}`) && PathPrefix(`${BASE_HREF}`)"
       - traefik.http.routers.tailormap-snapshot-${NAME}.tls=true
       - traefik.http.routers.tailormap-snapshot-${NAME}.tls.certresolver=letsencrypt
       - traefik.http.routers.tailormap-snapshot-${NAME}.middlewares=tailormap-snapshot-${NAME}-stripprefix
@@ -29,11 +35,5 @@ services:
       - traefik.http.middlewares.tailormap-snapshot-${NAME}-stripprefix.stripprefix.prefixes=${BASE_HREF}
       - traefik.enable=true
     networks:
-      - tailormap-snapshot
+      - tailormap-viewer
     restart: unless-stopped
-
-
-networks:
-  tailormap-snapshot:
-    external: true
-    name: tailormap-viewer_tailormap-snapshot

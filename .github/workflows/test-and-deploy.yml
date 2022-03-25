@@ -97,17 +97,19 @@ jobs:
           ssh_cert: ${{ secrets.DOCKER_HOST_SNAPSHOT_SSH_CERT }}
           ssh_key: ${{ secrets.DOCKER_HOST_SNAPSHOT_SSH_KEY }}
           use_context: true
+      - name: Debug known hosts
+        run: cat .ssh/known_hosts
       - name: Update main deployment using Docker Compose
         if: ${{ github.ref == 'refs/heads/main' }}
         run: |
-          docker-compose -f docker-compose.yml -f docker-compose-cd.yml --profile proxied --profile full-external-db pull --quiet
-          docker-compose -f docker-compose.yml -f docker-compose-cd.yml --profile proxied --profile full-external-db up -d
+          docker-compose -f docker-compose.yml --profile proxied --profile full pull --quiet
+          DB_PORTS=127.0.0.1:55432:5432 HOST=${{ secrets.DEPLOY_HOST_SNAPSHOT }} docker-compose -f docker-compose.yml --profile proxied --profile full up -d
       - name: Update pull request deployment using Docker Compose
         if: ${{ steps.find-pr.outputs.number }}
         run: |
           export NAME=${{ env.VERSION_TAG }}
           docker-compose -f docker-compose-pr.yml --project-name tailormap-snapshot-${NAME} pull --quiet
-          docker-compose -f docker-compose-pr.yml --project-name tailormap-snapshot-${NAME} up -d
+          HOST=${{ secrets.DEPLOY_HOST_SNAPSHOT }} docker-compose -f docker-compose-pr.yml --project-name tailormap-snapshot-${NAME} up -d
       - name: Create GitHub deployment
         if: success()
         uses: chrnorm/deployment-action@releases/v1
