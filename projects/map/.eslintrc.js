@@ -1,4 +1,5 @@
 const path = require('path');
+const { getInvalidImportsRule } = require("../../.eslint-custom-rules");
 
 module.exports = {
   "extends": path.resolve(__dirname, "../../.eslintrc.json"),
@@ -20,6 +21,7 @@ module.exports = {
       },
       "rules": {
         "rxjs/finnish": 0,
+        "no-restricted-imports": ["error", getInvalidImportsRule("@tailormap-viewer/map", true)]
       }
     },
     {
