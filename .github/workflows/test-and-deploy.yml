@@ -101,6 +101,8 @@ jobs:
         run: |
           ssh-keyscan -H ${{ secrets.DOCKER_HOSTNAME }} > $HOME/.ssh/known_hosts
       - name: Check
+        env:
+          COMPOSE_PARAMIKO_SSH: '1'
         run: |
           docker-compose ps
       - name: Update main deployment using Docker Compose
