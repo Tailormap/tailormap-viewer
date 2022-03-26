@@ -17,7 +17,7 @@ jobs:
         with:
           # Keep this in sync with Dockerfile version
           node-version: 16.14.2
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -37,7 +37,7 @@ jobs:
         with:
           # Keep this in sync with Dockerfile version
           node-version: 16.14.2
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
