@@ -32,7 +32,7 @@ jobs:
       - name: Remove GitHub deployment and environment
         uses: strumwolf/delete-deployment-environment@v2
         with:
-          token: "${{ github.token }}"
+          token: "${{ secrets.GHCR_CLEANUP_PAT }}"
           environment: ${{ env.VERSION_TAG }}
       - name: Remove image from registry
         uses: bots-house/ghcr-delete-image-action@v1.0.1
