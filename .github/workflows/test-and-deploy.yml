@@ -106,7 +106,7 @@ jobs:
         if: ${{ github.ref == 'refs/heads/main' }}
         run: |
           docker-compose -f docker-compose.yml --profile proxied --profile full pull --quiet
-          DB_PORTS=127.0.0.1:55432:5432 HOST=${{ secrets.DEPLOY_HOST_SNAPSHOT }} docker-compose -f docker-compose.yml -f docker-compose-db-ports.yml --profile proxied --profile full up -d
+          DB_PORT=127.0.0.1:55432:5432 HOST=${{ secrets.DEPLOY_HOST_SNAPSHOT }} docker-compose -f docker-compose.yml -f docker-compose-db-ports.yml --profile proxied --profile full up -d
       - name: Update pull request deployment using Docker Compose
         if: ${{ steps.find-pr.outputs.number }}
         run: |
