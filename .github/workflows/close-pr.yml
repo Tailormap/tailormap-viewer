@@ -25,6 +25,9 @@ jobs:
           ssh_cert: ${{ secrets.DOCKER_HOST_SNAPSHOT_SSH_CERT }}
           ssh_key: ${{ secrets.DOCKER_HOST_SNAPSHOT_SSH_KEY }}
           use_context: true
+      - name: Add known hosts
+        run: |
+          ssh-keyscan -H ${{ secrets.DOCKER_HOSTNAME }} > $HOME/.ssh/known_hosts
       - name: Remove pull request deployment and image
         run: |
           export NAME=${{ env.VERSION_TAG }}
