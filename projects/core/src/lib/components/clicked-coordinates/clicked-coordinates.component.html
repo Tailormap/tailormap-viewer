@@ -1,0 +1,10 @@
+<div class="clicked-coordinates">
+  <button mat-flat-button
+          class="clicked-coordinates-btn"
+          i18n-aria-label
+          aria-label="Coordinate picker"
+          [class.toggle-button--active]="toolActive"
+          (click)="toggle()">
+    <mat-icon svgIcon="tools_push_pin"></mat-icon>
+  </button>
+</div>

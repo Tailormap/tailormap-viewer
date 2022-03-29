@@ -6,7 +6,7 @@ import { MenubarModule } from './menubar';
 import { ZoomButtonsModule } from './zoom-buttons';
 import { TocModule } from './toc';
 import { MeasureModule } from './measure/measure.module';
-
+import { ClickedCoordinatesModule } from './clicked-coordinates';
 
 @NgModule({
   declarations: [
@@ -19,6 +19,7 @@ import { MeasureModule } from './measure/measure.module';
     ZoomButtonsModule,
     TocModule,
     MeasureModule,
+    ClickedCoordinatesModule,
   ],
   exports: [
     FeatureInfoModule,
@@ -27,6 +28,7 @@ import { MeasureModule } from './measure/measure.module';
     MapControlsComponent,
     TocModule,
     MeasureModule,
+    ClickedCoordinatesModule,
   ],
 })
 export class ComponentsModule {}

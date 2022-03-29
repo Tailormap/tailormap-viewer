@@ -18,7 +18,7 @@ export class IconService {
     'folder_filled', 'folder_outline', 'filter_filled', 'filter_outline', 'user', 'login', 'plus', 'minus',
     { folder: 'markers', icons: [ 'arrow', 'circle', 'cross', 'square', 'star', 'triangle', 'x' ] },
     { folder: 'components', icons: [ 'attributelist' ] },
-    { folder: 'tools', icons: [ 'cursor', 'measure_area', 'measure_length', 'position' ] },
+    { folder: 'tools', icons: [ 'cursor', 'measure_area', 'measure_length', 'position', 'push_pin' ] },
   ];
 
   constructor(

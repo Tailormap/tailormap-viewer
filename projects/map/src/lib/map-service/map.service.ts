@@ -160,6 +160,17 @@ export class MapService {
     return this.map.getProjection$().pipe(map(p => p.getCode()));
   }
 
+  /** Gets the UOM of the map as defined in the projection.
+   * Will return 'm' in case the map's projection has not defined UOM (such as EPSG:28992).
+   *
+   * @see ol.proj.Units
+   */
+  public getUnitsOfMeasure$(): Observable<string> {
+    return this.map.getProjection$().pipe( map(
+      p => (p.getUnits()) === undefined ? 'm' : p.getUnits()),
+    );
+  }
+
   public zoomIn() {
     this.map.zoomIn();
   }
