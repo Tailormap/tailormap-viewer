@@ -1,4 +1,4 @@
-import { map, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import { merge, Subject } from 'rxjs';
 import { DrawingToolConfigModel, DrawingType } from '../../models/tools/drawing-tool-config.model';
 import OlMap from 'ol/Map';
 import Draw, { DrawEvent } from 'ol/interaction/Draw';
@@ -29,8 +29,7 @@ export class OpenLayersDrawingTool implements DrawingToolModel {
   private drawEndSubject: Subject<DrawingToolEvent> = new Subject<DrawingToolEvent>();
   public drawEnd$ = this.drawEndSubject.asObservable();
 
-  private drawingSubject: Subject<DrawingToolEvent | null> = new Subject<DrawingToolEvent | null>();
-  public drawing$ = this.drawingSubject.asObservable();
+  public drawing$ = merge(this.drawStart$, this.drawChange$, this.drawEnd$);
 
   private static getDrawingType(type?: DrawingType) {
     if (type === 'line') {
@@ -49,17 +48,7 @@ export class OpenLayersDrawingTool implements DrawingToolModel {
     private toolConfig: DrawingToolConfigModel,
     private olMap: OlMap,
     private ngZone: NgZone,
-  ) {
-    this.drawStart$
-      .pipe(
-        takeUntil(this.destroyed),
-        tap(() => this.drawingSubject.next(null)),
-        switchMap(() => this.drawChange$),
-        tap(e => this.drawingSubject.next(e)),
-        switchMap(() => this.drawEnd$),
-      )
-      .subscribe(e => this.drawingSubject.next(e));
-  }
+  ) {}
 
   public isActive = false;
 

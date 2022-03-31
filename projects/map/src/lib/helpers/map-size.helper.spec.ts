@@ -1,4 +1,4 @@
-import { MapSizeHelper } from '@tailormap-viewer/map';
+import { MapSizeHelper } from './map-size.helper';
 
 describe('MapSizeHelper', () => {
 

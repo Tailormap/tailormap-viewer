@@ -1,4 +1,4 @@
-import { HtmlHelper } from '@tailormap-viewer/shared';
+import { HtmlHelper } from './html.helper';
 
 describe('HtmlHelper', () => {
 

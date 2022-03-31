@@ -51,8 +51,7 @@ export class MeasureComponent implements OnInit, OnDestroy {
           this.toolId = toolId;
           this.manager = manager;
         }),
-        map(([ manager, toolId ]) => manager.getTool<DrawingToolModel>(toolId)),
-        switchMap(tool => tool?.drawing$ || of(null)),
+        switchMap(([ manager, toolId ]) => manager.getTool<DrawingToolModel>(toolId)?.drawing$ || of(null)),
       )
       .subscribe(drawEvent => {
         if (!drawEvent || drawEvent.type === 'start') {
@@ -94,7 +93,11 @@ export class MeasureComponent implements OnInit, OnDestroy {
   }
 
   private updateTooltip(tooltip: MapTooltipModel | null, coordinates: number[], size?: number) {
-    tooltip?.show().setContent(this.formatSize(size)).move(coordinates);
+    const content = this.formatSize(size);
+    if (!content) {
+      return;
+    }
+    tooltip?.show().setContent(content).move(coordinates);
   }
 
   private formatSize(size?: number) {

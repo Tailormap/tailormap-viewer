@@ -1,6 +1,6 @@
 import { Injectable, NgZone } from '@angular/core';
 import { OpenLayersMap } from '../openlayers-map/openlayers-map';
-import { combineLatest, finalize, map, Observable, take, tap } from 'rxjs';
+import { combineLatest, finalize, map, Observable, tap } from 'rxjs';
 import { LayerManagerModel, LayerTypesEnum, MapResolutionModel, MapViewerOptionsModel, ToolConfigModel, VectorLayerModel, MapStyleModel } from '../models';
 import { ToolManagerModel } from '../models/tool-manager.model';
 import VectorLayer from 'ol/layer/Vector';
