@@ -23,8 +23,8 @@
 }
 
 .zoom-buttons mat-icon {
-  width: var(--size);
-  height: var(--size);
+  width: calc(var(--size) - 16px);
+  height: calc(var(--size) - 16px);
   margin: 8px;
 }
 

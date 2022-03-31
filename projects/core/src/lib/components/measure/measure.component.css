@@ -12,19 +12,12 @@
 }
 
 .measure-buttons button {
-  background-color: #fff;
   border: 0 none;
   width: var(--size);
   height: var(--size);
   padding: 0;
   cursor: pointer;
   min-width: 40px;
-}
-
-.measure-buttons .button-active {
-  color: var(--primary-color);
-  font-weight: 600;
-  background-color: var(--primary-color-background);
 }
 
 .measure-buttons mat-icon {
@@ -47,4 +40,10 @@
   width: 1px;
   height: var(--size);
   background-color: #DFDFDF;
+}
+
+.measure-buttons mat-icon {
+  width: calc(var(--size) - 16px);
+  height: calc(var(--size) - 16px);
+  margin: 8px;
 }

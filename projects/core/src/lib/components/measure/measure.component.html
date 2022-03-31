@@ -1,18 +1,18 @@
 <div class="measure-buttons">
   <button mat-flat-button
-          class="measure-length"
+          class="measure-length toggle-button"
           i18n-aria-label
           aria-label="Measure length"
-          [class.button-active]="toolActive === 'length'"
+          [class.toggle-button--active]="toolActive === 'length'"
           (click)="measure('length')">
-    LINE
+    <mat-icon svgIcon="tools_measure_length"></mat-icon>
   </button>
   <button mat-flat-button
-          class="measure-area"
+          class="measure-area toggle-button"
           i18n-aria-label
           aria-label="Measure area"
-          [class.button-active]="toolActive === 'area'"
+          [class.toggle-button--active]="toolActive === 'area'"
           (click)="measure('area')">
-    AREA
+    <mat-icon svgIcon="tools_measure_area"></mat-icon>
   </button>
 </div>
