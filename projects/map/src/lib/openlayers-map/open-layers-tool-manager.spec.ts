@@ -1,5 +1,5 @@
 import { OpenLayersToolManager } from './open-layers-tool-manager';
-import { ToolTypeEnum } from '../models';
+import { MapClickToolModel, ToolTypeEnum } from '../models';
 import { OpenLayersEventManager } from './open-layers-event-manager';
 import { of } from 'rxjs';
 
@@ -15,24 +15,22 @@ describe('OpenLayersToolManager', () => {
     expect(toolId).toMatch(/mapclick-\d+/);
   });
 
-  test('enables and disables a tool', () => {
+  test('enables and disables a tool', done => {
     // @ts-ignore
     OpenLayersEventManager.onMapClick$ = jest.fn(() => of({ coordinate: [1,2], pixel: [2,3] }));
-    const onClick = jest.fn();
-    const tool = { type: ToolTypeEnum.MapClick, onClick };
+    const tool = { type: ToolTypeEnum.MapClick };
     const manager = new OpenLayersToolManager({} as any, mockNgZone);
     const toolId = manager.addTool(tool);
     expect(OpenLayersEventManager.onMapClick$).not.toHaveBeenCalled();
-    expect(onClick).not.toHaveBeenCalled();
-
+    manager.getTool<MapClickToolModel>(toolId)?.mapClick$.subscribe(clickEvt => {
+      expect(clickEvt).toEqual({
+        mapCoordinates: [ 1, 2 ],
+        mouseCoordinates: [ 2, 3 ],
+      });
+      done();
+    });
     manager.enableTool(toolId);
     expect(OpenLayersEventManager.onMapClick$).toHaveBeenCalled();
-    expect(onClick).toHaveBeenCalledTimes(1);
-    expect(onClick).toHaveBeenCalledWith({
-      mapCoordinates: [ 1, 2 ],
-      mouseCoordinates: [ 2, 3 ],
-    });
-
     manager.disableTool(toolId);
   });
 
@@ -40,21 +38,13 @@ describe('OpenLayersToolManager', () => {
     const onMapClickFn = jest.fn(() => of({ coordinate: [1,2], pixel: [2,3] }));
     // @ts-ignore
     OpenLayersEventManager.onMapClick$ = onMapClickFn;
-    const onClick = jest.fn();
-    const tool = { type: ToolTypeEnum.MapClick, onClick };
+    const tool = { type: ToolTypeEnum.MapClick };
     const manager = new OpenLayersToolManager({} as any, mockNgZone);
     const toolId = manager.addTool(tool);
 
     manager.enableTool(toolId);
     expect(onMapClickFn).toHaveBeenCalled();
-    expect(onClick).toHaveBeenCalledTimes(1);
-    expect(onClick).toHaveBeenCalledWith({
-      mapCoordinates: [ 1, 2 ],
-      mouseCoordinates: [ 2, 3 ],
-    });
-
     manager.destroy();
-
     onMapClickFn.mockClear();
     manager.enableTool(toolId);
     expect(onMapClickFn).not.toHaveBeenCalled();

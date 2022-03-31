@@ -1,5 +1,6 @@
 @import "inter-font.css";
 @import "tailormap-styles-form.css";
+@import "openlayers.css";
 
 :root {
   --dialog-width-left: 0;
@@ -12,6 +13,7 @@
   --error-color: #ff3636;
   --disabled-color: rgb(241, 241, 241);
   --border-color: #e1e1e1;
+  --primary-color-background: #eae5fa;
 
   --primary-color-0_5: rgba(98, 54, 255, 0.5);
   --primary-color-0_4: rgba(98, 54, 255, 0.4);
@@ -80,6 +82,15 @@ body {
 .mat-flat-button.mat-accent {
   background-color: var(--primary-color-0_4);
   color: var(--primary-color);
+}
+
+.toggle-button {
+  background-color: #fff;
+}
+
+.toggle-button--active {
+  color: var(--primary-color);
+  background-color: var(--primary-color-background);
 }
 
 .cdk-overlay-container .mat-snack-bar-container {

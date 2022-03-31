@@ -14,3 +14,4 @@ export * from './tools';
 export * from './map-resolution.model';
 export * from './map-style.model';
 export * from './ol-map-style.type';
+export * from './map-tooltip.model';

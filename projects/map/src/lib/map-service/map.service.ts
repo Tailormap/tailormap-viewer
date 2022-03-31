@@ -1,7 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
 import { OpenLayersMap } from '../openlayers-map/openlayers-map';
 import { combineLatest, finalize, map, Observable, tap } from 'rxjs';
-import { LayerManagerModel, LayerTypesEnum, MapResolutionModel, MapViewerOptionsModel, ToolModel, VectorLayerModel, MapStyleModel } from '../models';
+import { LayerManagerModel, LayerTypesEnum, MapResolutionModel, MapViewerOptionsModel, ToolConfigModel, VectorLayerModel, MapStyleModel } from '../models';
 import { ToolManagerModel } from '../models/tool-manager.model';
 import VectorLayer from 'ol/layer/Vector';
 import Geometry from 'ol/geom/Geometry';
@@ -9,6 +9,9 @@ import VectorSource from 'ol/source/Vector';
 import WKT from 'ol/format/WKT';
 import { MapStyleHelper } from '../helpers/map-style.helper';
 import { OlMapStyleType } from '../models/ol-map-style.type';
+import { MapTooltipModel } from '../models/map-tooltip.model';
+import { OpenLayersMapTooltip } from '../openlayers-map/open-layers-map-tooltip';
+import Feature from 'ol/Feature';
 
 @Injectable({
   providedIn: 'root',
@@ -39,7 +42,7 @@ export class MapService {
     return this.map.getToolManager$();
   }
 
-  public createTool$(tool: ToolModel, enable?: boolean): Observable<[ ToolManagerModel, string ]> {
+  public createTool$(tool: ToolConfigModel, enable?: boolean): Observable<[ ToolManagerModel, string ]> {
     let toolManager: ToolManagerModel;
     let toolId: string;
     return this.getToolManager$()
@@ -85,7 +88,7 @@ export class MapService {
 
   public highlightFeatures$(
     layerId: string,
-    featureGeometry$: Observable<string | null>,
+    featureGeometry$: Observable<string | Geometry | Feature<Geometry> | null>,
     vectorLayerStyle?: MapStyleModel | OlMapStyleType,
     highlightConfig?: { keepHighlightOnEmptyFeature?: boolean },
   ): Observable<VectorLayer<VectorSource<Geometry>> | null> {
@@ -104,10 +107,42 @@ export class MapService {
           }
           vectorLayer.getSource().getFeatures().forEach(feature => vectorLayer.getSource().removeFeature(feature));
           if (featureGeometry) {
-            vectorLayer.getSource().addFeature(wktFormatter.readFeature(featureGeometry));
+            let feature: Feature<Geometry> | null = null;
+            if (typeof featureGeometry === 'string') {
+              feature = wktFormatter.readFeature(featureGeometry);
+            }
+            if (featureGeometry instanceof Feature) {
+              feature = featureGeometry;
+            }
+            if (featureGeometry instanceof Geometry) {
+              feature = new Feature<Geometry>({ geometry: featureGeometry });
+            }
+            if (!feature) {
+              return;
+            }
+            vectorLayer.getSource().addFeature(feature);
           }
         }),
         map(([ vectorLayer ]) => vectorLayer),
+      );
+  }
+
+  public createTooltip$(): Observable<MapTooltipModel> {
+    let tooltip: MapTooltipModel;
+    return this.map.getMap$()
+      .pipe(
+        finalize(() => {
+          if (!!tooltip) {
+            tooltip.destroy();
+          }
+        }),
+        map(olMap => {
+          if (tooltip) {
+            tooltip.destroy();
+          }
+          tooltip = new OpenLayersMapTooltip(olMap);
+          return tooltip;
+        }),
       );
   }
 

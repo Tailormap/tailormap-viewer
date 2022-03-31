@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
-import { MapClickToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
-import { Subject, takeUntil } from 'rxjs';
+import { MapClickToolModel, MapClickToolConfigModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
+import { concatMap, of, Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { loadFeatureInfo } from '../state/feature-info.actions';
 import { selectCurrentlySelectedFeatureGeometry, selectFeatureInfoError$ } from '../state/feature-info.selectors';
@@ -17,9 +17,8 @@ import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailorma
 export class FeatureInfoComponent implements OnInit, OnDestroy {
 
   private destroyed = new Subject();
-  private toolConfig: MapClickToolModel = {
+  private toolConfig: MapClickToolConfigModel = {
     type: ToolTypeEnum.MapClick,
-    onClick: evt => this.handleMapClick(evt),
   };
 
   private static DEFAULT_ERROR_MESSAGE = $localize `Something went wrong while getting feature info, please try again`;
@@ -33,8 +32,19 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.mapService.createTool$(this.toolConfig, true)
-      .pipe(takeUntil(this.destroyed))
-      .subscribe();
+      .pipe(
+        takeUntil(this.destroyed),
+        concatMap(([ manager, toolId ]) => {
+          const clickTool = manager.getTool<MapClickToolModel>(toolId);
+          return !clickTool ? of(null) : clickTool.mapClick$;
+        }),
+      )
+      .subscribe(mapClick => {
+        if (!mapClick) {
+          return;
+        }
+        this.handleMapClick(mapClick);
+      });
 
     this.mapService.highlightFeatures$(
       'feature-info-highlight-layer',

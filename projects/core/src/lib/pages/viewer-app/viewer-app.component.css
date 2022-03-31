@@ -41,6 +41,17 @@
   transform: translateX(calc((var(--dialog-width-right) + var(--body-margin)) * -1));
 }
 
+.map-controls-left {
+  position: absolute;
+  top: var(--body-margin);
+  left: var(--body-margin);
+  transition: transform ease-in-out 0.25s;
+}
+
+::ng-deep.body--has-dialog-left .map-controls-left {
+  transform: translateX(var(--dialog-width-left));
+}
+
 .bottom {
   position: relative;
 }

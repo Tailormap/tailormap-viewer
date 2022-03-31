@@ -5,6 +5,7 @@ import { MapControlsComponent } from './map-controls/map-controls.component';
 import { MenubarModule } from './menubar';
 import { ZoomButtonsModule } from './zoom-buttons';
 import { TocModule } from './toc';
+import { MeasureModule } from './measure/measure.module';
 
 
 @NgModule({
@@ -17,6 +18,7 @@ import { TocModule } from './toc';
     MenubarModule,
     ZoomButtonsModule,
     TocModule,
+    MeasureModule,
   ],
   exports: [
     FeatureInfoModule,
@@ -24,6 +26,7 @@ import { TocModule } from './toc';
     ZoomButtonsModule,
     MapControlsComponent,
     TocModule,
+    MeasureModule,
   ],
 })
 export class ComponentsModule {}
