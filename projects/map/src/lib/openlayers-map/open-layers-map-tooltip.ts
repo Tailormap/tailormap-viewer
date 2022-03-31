@@ -1,5 +1,5 @@
 import OlMap from 'ol/Map';
-import { Overlay } from 'ol';
+import Overlay from 'ol/Overlay';
 import { MapTooltipModel } from '../models/map-tooltip.model';
 
 export class OpenLayersMapTooltip implements MapTooltipModel {

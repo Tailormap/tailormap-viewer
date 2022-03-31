@@ -21,6 +21,12 @@
   min-width: 40px;
 }
 
+.measure-buttons .button-active {
+  color: var(--primary-color);
+  font-weight: 600;
+  background-color: var(--primary-color-background);
+}
+
 .measure-buttons mat-icon {
   width: var(--size);
   height: var(--size);
