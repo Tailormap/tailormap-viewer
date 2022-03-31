@@ -1,8 +1,10 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import {
-  DrawingEnableToolArguments, DrawingToolConfigModel, DrawingToolModel, MapService, MapTooltipModel, ToolManagerModel, ToolTypeEnum,
+  DrawingEnableToolArguments, DrawingToolConfigModel, DrawingToolModel, MapService, MapSizeHelper, MapTooltipModel, ToolManagerModel,
+  ToolTypeEnum,
 } from '@tailormap-viewer/map';
-import { BehaviorSubject, map, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import { map, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import { HtmlHelper } from '@tailormap-viewer/shared';
 
 @Component({
   selector: 'tm-measure',
@@ -13,110 +15,86 @@ import { BehaviorSubject, map, Subject, switchMap, takeUntil, tap } from 'rxjs';
 export class MeasureComponent implements OnInit, OnDestroy {
 
   private destroyed = new Subject();
-  private tooltipVisible: Subject<null> | null = null;
-  private toolActive: 'length' | 'area' | null = null;
-  private toolId: string | null = null;
+  public toolActive: 'length' | 'area' | null = null;
+  private toolId = '';
   private manager: ToolManagerModel | null = null;
+  private featureGeom = new Subject<string>();
+  private tooltip: MapTooltipModel | null = null;
 
   constructor(
     private mapService: MapService,
   ) { }
 
   public ngOnInit(): void {
+    this.mapService.createTooltip$()
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(tooltip => this.tooltip = tooltip);
+
+    this.mapService.highlightFeatures$('measurement-layer', this.featureGeom.asObservable(), {
+      styleKey: 'measurement-style',
+      strokeColor: '#6236ff',
+      strokeWidth: 3,
+    }).pipe(takeUntil(this.destroyed)).subscribe();
+
     const conf: DrawingToolConfigModel = {
       type: ToolTypeEnum.Draw,
       computeSize: true,
+      strokeColor: '#6236ff',
+      pointFillColor: 'transparent',
+      pointStrokeColor: '#6236ff',
+      drawingType: 'circle',
     };
     this.mapService.createTool$(conf)
-      .pipe(takeUntil(this.destroyed))
-      .subscribe(([ manager, toolId ]) => {
-        this.toolId = toolId;
-        this.manager = manager;
-    });
+      .pipe(
+        takeUntil(this.destroyed),
+        tap(([ manager, toolId ]) => {
+          this.toolId = toolId;
+          this.manager = manager;
+        }),
+        map(([ manager, toolId ]) => manager.getTool<DrawingToolModel>(toolId)),
+        switchMap(tool => tool?.drawing$ || of(null)),
+      )
+      .subscribe(drawEvent => {
+        if (!drawEvent || drawEvent.type === 'start') {
+          this.hideTooltipAndGeom();
+          return;
+        }
+        this.updateTooltip(this.tooltip, drawEvent.lastCoordinate, drawEvent.size);
+        if (drawEvent.type === 'end') {
+          this.tooltip?.freeze();
+          this.featureGeom.next(drawEvent.geometry);
+        }
+      });
   }
 
   public ngOnDestroy(): void {
-    if (this.tooltipVisible) {
-      this.tooltipVisible.next(null);
-      this.tooltipVisible.complete();
-    }
     this.destroyed.next(null);
     this.destroyed.complete();
   }
 
-  public measureLength() {
-    this.measure('length');
-  }
-
-  public measureArea() {
-    this.measure('area');
-  }
-
-  private measure(type: 'length' | 'area') {
-    if (!this.manager || !this.toolId) {
-      return;
-    }
+  public measure(type: 'length' | 'area') {
     if (this.toolActive) {
-      this.manager.disableTool(this.toolId);
+      this.manager?.disableTool(this.toolId);
+      this.hideTooltipAndGeom();
       if (this.toolActive === type) {
-        this.stopMeasure();
+        this.toolActive = null;
         return;
       }
     }
-    const tool = this.manager
-      .enableTool<DrawingEnableToolArguments>(this.toolId, true, {
-        type: type === 'area' ? 'area' : 'line',
-      })
-      .getTool<DrawingToolModel>(this.toolId);
-    if (!tool) {
-      return;
-    }
-
     this.toolActive = type;
-    this.tooltipVisible = new Subject();
-
-    const featureGeom = new BehaviorSubject<any>(null);
-    this.mapService.createTooltip$()
-      .pipe(
-        takeUntil(this.tooltipVisible),
-        switchMap(tooltip => {
-          return tool.drawStart$
-            .pipe(
-              tap(() => tooltip.hide()),
-              switchMap(() => tool.drawChange$),
-              tap(e => this.updateTooltip(tooltip, e.lastCoordinates, e.size)),
-              switchMap(() => tool.drawEnd$),
-              tap(e => {
-                this.updateTooltip(tooltip, e.lastCoordinates, e.size);
-                tooltip.freeze();
-              }),
-              map(e => e.geometry),
-            );
-        }),
-      )
-      .subscribe(feature => featureGeom.next(feature));
-
-    this.mapService.highlightFeatures$('measurement-layer', featureGeom.asObservable(), {
-      styleKey: 'measurement-style',
-      strokeColor: '#DD0000',
-      strokeWidth: 3,
-    }).pipe(takeUntil(this.tooltipVisible)).subscribe();
+    this.hideTooltipAndGeom();
+    this.manager?.enableTool<DrawingEnableToolArguments>(this.toolId, true, {
+      type: type === 'area' ? 'area' : 'line',
+    });
   }
 
-  private stopMeasure() {
-    if (this.tooltipVisible) {
-      this.tooltipVisible.next(null);
-      this.tooltipVisible.complete();
-      this.tooltipVisible = null;
-    }
-    this.toolActive = null;
-    return;
+  private hideTooltipAndGeom() {
+    this.featureGeom.next('');
+    this.tooltip?.hide();
   }
 
-  private updateTooltip(tooltip: MapTooltipModel, coordinates: number[], size?: number) {
-    tooltip
-      .setContent(this.formatSize(size))
-      .move(coordinates);
+  private updateTooltip(tooltip: MapTooltipModel | null, coordinates: number[], size?: number) {
+    tooltip?.show().setContent(this.formatSize(size)).move(coordinates);
   }
 
   private formatSize(size?: number) {
@@ -124,22 +102,16 @@ export class MeasureComponent implements OnInit, OnDestroy {
       return '';
     }
     if (this.toolActive === 'length') {
-      if (size > 100) {
-        return (Math.round(size / 1000 * 100) / 100) + ' ' + 'km';
-      } else {
-        return (Math.round(size * 100) / 100) + ' ' + 'm';
-      }
+      return MapSizeHelper.getFormattedLength(size);
     }
     if (this.toolActive === 'area') {
-      const el = document.createElement('div');
-      if (size > 10000) {
-        el.innerHTML = (Math.round(size / 1000000 * 100) / 100) +
-          ' ' + 'km<sup>2</sup>';
-      } else {
-        el.innerHTML = (Math.round(size * 100) / 100) +
-          ' ' + 'm<sup>2</sup>';
-      }
-      return el;
+      return HtmlHelper.createElement({
+        nodeName: 'div',
+        children: [
+          { nodeName: 'span', textContent: MapSizeHelper.getFormattedArea(size) },
+          { nodeName: 'sup', textContent: '2' },
+        ],
+      });
     }
     return '';
   }

@@ -1,4 +1,4 @@
-import { Subject } from 'rxjs';
+import { map, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { DrawingToolConfigModel, DrawingType } from '../../models/tools/drawing-tool-config.model';
 import OlMap from 'ol/Map';
 import Draw, { DrawEvent } from 'ol/interaction/Draw';
@@ -10,13 +10,13 @@ import { EventsKey } from 'ol/events';
 import { unByKey } from 'ol/Observable';
 import { Circle, LineString, Point, Polygon } from 'ol/geom';
 import { getArea, getLength } from 'ol/sphere';
-import Feature from 'ol/Feature';
 import Geometry from 'ol/geom/Geometry';
 import BaseEvent from 'ol/events/Event';
+import WKT from 'ol/format/WKT';
 
 export class OpenLayersDrawingTool implements DrawingToolModel {
 
-  private enabled = new Subject();
+  private destroyed = new Subject();
   private drawInteraction: Draw | null = null;
   private listeners: EventsKey[] = [];
 
@@ -28,6 +28,9 @@ export class OpenLayersDrawingTool implements DrawingToolModel {
 
   private drawEndSubject: Subject<DrawingToolEvent> = new Subject<DrawingToolEvent>();
   public drawEnd$ = this.drawEndSubject.asObservable();
+
+  private drawingSubject: Subject<DrawingToolEvent | null> = new Subject<DrawingToolEvent | null>();
+  public drawing$ = this.drawingSubject.asObservable();
 
   private static getDrawingType(type?: DrawingType) {
     if (type === 'line') {
@@ -46,17 +49,27 @@ export class OpenLayersDrawingTool implements DrawingToolModel {
     private toolConfig: DrawingToolConfigModel,
     private olMap: OlMap,
     private ngZone: NgZone,
-  ) {}
+  ) {
+    this.drawStart$
+      .pipe(
+        takeUntil(this.destroyed),
+        tap(() => this.drawingSubject.next(null)),
+        switchMap(() => this.drawChange$),
+        tap(e => this.drawingSubject.next(e)),
+        switchMap(() => this.drawEnd$),
+      )
+      .subscribe(e => this.drawingSubject.next(e));
+  }
 
   public isActive = false;
 
   public destroy(): void {
     this.disable();
+    this.destroyed.next(null);
+    this.destroyed.complete();
   }
 
   public disable(): void {
-    this.enabled.next(null);
-    this.enabled.complete();
     this.isActive = false;
     this.stopDrawing();
   }
@@ -71,7 +84,7 @@ export class OpenLayersDrawingTool implements DrawingToolModel {
     this.olMap.addInteraction(this.drawInteraction);
     this.listeners.push(this.drawInteraction.on('drawstart', (e: DrawEvent) => this.drawStarted(e)));
     this.listeners.push(this.drawInteraction.on('drawend', (e: DrawEvent) => {
-      this.ngZone.run(() => this.drawEndSubject.next(this.getEvent(e.feature.getGeometry())));
+      this.ngZone.run(() => this.drawEndSubject.next(this.getEvent(e.feature.getGeometry(), 'end')));
     }));
   }
 
@@ -98,20 +111,28 @@ export class OpenLayersDrawingTool implements DrawingToolModel {
   }
 
   private drawStarted(e: DrawEvent) {
-    this.ngZone.run(() => this.drawStartSubject.next(this.getEvent(e.feature.getGeometry())));
+    this.ngZone.run(() => this.drawStartSubject.next(this.getEvent(e.feature.getGeometry(), 'start')));
     this.listeners.push(e.feature.getGeometry().on('change', (changeEvt: BaseEvent) => {
-      this.ngZone.run(() => this.drawChangeSubject.next(this.getEvent(changeEvt.target as Geometry)));
+      this.ngZone.run(() => this.drawChangeSubject.next(this.getEvent(changeEvt.target as Geometry, 'change')));
     }));
   }
 
-  private getEvent(geometry: Geometry): DrawingToolEvent {
-    const lastCoordinates = geometry instanceof LineString || geometry instanceof Polygon || geometry instanceof Point || geometry instanceof Circle
-      ? geometry.getLastCoordinate()
+  private getEvent(geometry: Geometry, type: 'start' | 'change' | 'end'): DrawingToolEvent {
+    const coordinates = geometry instanceof LineString || geometry instanceof Polygon || geometry instanceof Point || geometry instanceof Circle
+      ? geometry.getFlatCoordinates()
+      : [];
+    const lastCoordinate = coordinates.length > 1
+      ? (
+        geometry instanceof Polygon
+          ? coordinates.slice(-4, -2) // for Polygons get the coordinate before the last since its circular so last = first
+          : coordinates.slice(-2)
+      )
       : [];
     return {
-      geometry,
-      lastCoordinates,
+      geometry: (new WKT()).writeGeometry(geometry),
+      lastCoordinate,
       size: this.getSize(geometry),
+      type,
     };
   }
 

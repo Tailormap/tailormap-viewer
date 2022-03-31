@@ -3,14 +3,16 @@
           class="measure-length"
           i18n-aria-label
           aria-label="Measure length"
-          (click)="measureLength()">
+          [class.button-active]="toolActive === 'length'"
+          (click)="measure('length')">
     LINE
   </button>
   <button mat-flat-button
           class="measure-area"
           i18n-aria-label
           aria-label="Measure area"
-          (click)="measureArea()">
+          [class.button-active]="toolActive === 'area'"
+          (click)="measure('area')">
     AREA
   </button>
 </div>

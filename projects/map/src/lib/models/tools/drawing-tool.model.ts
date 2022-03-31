@@ -1,12 +1,12 @@
 import { ToolModel } from './tool.model';
 import { DrawingType } from './drawing-tool-config.model';
 import { Observable } from 'rxjs';
-import Geometry from 'ol/geom/Geometry';
 
 export interface DrawingToolEvent {
-  geometry: Geometry;
-  lastCoordinates: number[];
+  geometry: string;
+  lastCoordinate: number[];
   size?: number;
+  type: 'start' | 'change' | 'end';
 }
 
 export interface DrawingEnableToolArguments extends Record<string, unknown> {
@@ -18,4 +18,5 @@ export interface DrawingToolModel extends ToolModel {
   drawStart$: Observable<DrawingToolEvent>;
   drawChange$: Observable<DrawingToolEvent>;
   drawEnd$: Observable<DrawingToolEvent>;
+  drawing$: Observable<DrawingToolEvent | null>;
 }
