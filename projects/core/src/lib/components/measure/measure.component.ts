@@ -3,7 +3,7 @@ import {
   DrawingEnableToolArguments, DrawingToolConfigModel, DrawingToolModel, MapService, MapSizeHelper, MapTooltipModel, ToolManagerModel,
   ToolTypeEnum,
 } from '@tailormap-viewer/map';
-import { map, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import { of, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { HtmlHelper } from '@tailormap-viewer/shared';
 
 @Component({
