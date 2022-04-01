@@ -45,6 +45,7 @@ export class OpenLayersDrawingTool implements DrawingToolModel {
   }
 
   constructor(
+    public id: string,
     private toolConfig: DrawingToolConfigModel,
     private olMap: OlMap,
     private ngZone: NgZone,

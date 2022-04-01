@@ -3,10 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FeatureInfoModule } from './feature-info/feature-info.module';
 import { MapControlsComponent } from './map-controls/map-controls.component';
 import { MenubarModule } from './menubar';
-import { ZoomButtonsModule } from './zoom-buttons';
 import { TocModule } from './toc';
-import { MeasureModule } from './measure/measure.module';
-import { ClickedCoordinatesModule } from './clicked-coordinates';
+import { ToolbarModule } from './toolbar';
 
 @NgModule({
   declarations: [
@@ -16,19 +14,15 @@ import { ClickedCoordinatesModule } from './clicked-coordinates';
     CommonModule,
     FeatureInfoModule,
     MenubarModule,
-    ZoomButtonsModule,
     TocModule,
-    MeasureModule,
-    ClickedCoordinatesModule,
+    ToolbarModule,
   ],
   exports: [
     FeatureInfoModule,
     MenubarModule,
-    ZoomButtonsModule,
     MapControlsComponent,
     TocModule,
-    MeasureModule,
-    ClickedCoordinatesModule,
+    ToolbarModule,
   ],
 })
 export class ComponentsModule {}

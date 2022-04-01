@@ -3,7 +3,7 @@
           class="clicked-coordinates-btn"
           i18n-aria-label
           aria-label="Coordinate picker"
-          [class.toggle-button--active]="toolActive"
+          [class.toggle-button--active]="toolActive$ | async"
           (click)="toggle()">
     <mat-icon svgIcon="tools_push_pin"></mat-icon>
   </button>

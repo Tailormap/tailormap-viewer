@@ -19,15 +19,15 @@ export class OpenLayersToolManager implements ToolManagerModel {
     toolIds.forEach(id => this.removeTool(id));
   }
 
-  public addTool(tool: ToolConfigModel): string {
+  public addTool<T extends ToolModel, C extends ToolConfigModel>(tool: C): T | null {
     const toolId = `${tool.type.toLowerCase()}-${++OpenLayersToolManager.toolIdCount}`;
     if (ToolTypeHelper.isMapClickTool(tool)) {
-      this.tools.set(toolId, new OpenLayersMapClickTool(tool));
+      this.tools.set(toolId, new OpenLayersMapClickTool(toolId, tool));
     }
     if (ToolTypeHelper.isDrawingTool(tool)) {
-      this.tools.set(toolId, new OpenLayersDrawingTool(tool, this.olMap, this.ngZone));
+      this.tools.set(toolId, new OpenLayersDrawingTool(toolId, tool, this.olMap, this.ngZone));
     }
-    return toolId;
+    return this.getTool<T>(toolId);
   }
 
   public getTool<T extends ToolModel>(toolId: string): T | null {

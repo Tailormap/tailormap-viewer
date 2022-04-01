@@ -1,10 +1,13 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import {
-  DrawingEnableToolArguments, DrawingToolConfigModel, DrawingToolModel, MapService, MapSizeHelper, MapTooltipModel, ToolManagerModel,
-  ToolTypeEnum,
+  DrawingEnableToolArguments, DrawingToolConfigModel, DrawingToolModel, MapService, MapSizeHelper, MapTooltipModel, ToolTypeEnum,
 } from '@tailormap-viewer/map';
-import { of, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import { filter, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { HtmlHelper } from '@tailormap-viewer/shared';
+import { Store } from '@ngrx/store';
+import { activateTool, deactivateTool, registerTool } from '../state/toolbar.actions';
+import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
+import { selectActiveTool } from '../state/toolbar.selectors';
 
 @Component({
   selector: 'tm-measure',
@@ -16,16 +19,27 @@ export class MeasureComponent implements OnInit, OnDestroy {
 
   private destroyed = new Subject();
   public toolActive: 'length' | 'area' | null = null;
-  private toolId = '';
-  private manager: ToolManagerModel | null = null;
   private featureGeom = new Subject<string>();
   private tooltip: MapTooltipModel | null = null;
 
   constructor(
+    private store$: Store,
     private mapService: MapService,
+    private cdr: ChangeDetectorRef,
   ) { }
 
   public ngOnInit(): void {
+    this.store$.select(selectActiveTool)
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(activeTool => {
+        if (activeTool === ToolbarComponentEnum.MEASURE) {
+          return;
+        }
+        this.hideTooltipAndGeom();
+        this.toolActive = null;
+        this.cdr.detectChanges();
+      });
+
     this.mapService.createTooltip$()
       .pipe(takeUntil(this.destroyed))
       .subscribe(tooltip => this.tooltip = tooltip);
@@ -36,22 +50,21 @@ export class MeasureComponent implements OnInit, OnDestroy {
       strokeWidth: 3,
     }).pipe(takeUntil(this.destroyed)).subscribe();
 
-    const conf: DrawingToolConfigModel = {
+    this.mapService.createTool$<DrawingToolModel, DrawingToolConfigModel>({
       type: ToolTypeEnum.Draw,
       computeSize: true,
       strokeColor: '#6236ff',
       pointFillColor: 'transparent',
       pointStrokeColor: '#6236ff',
       drawingType: 'circle',
-    };
-    this.mapService.createTool$(conf)
+    })
       .pipe(
         takeUntil(this.destroyed),
-        tap(([ manager, toolId ]) => {
-          this.toolId = toolId;
-          this.manager = manager;
+        filter(Boolean),
+        tap(tool => {
+          this.store$.dispatch(registerTool({ tool: { id: ToolbarComponentEnum.MEASURE, mapToolId: tool.id }}));
         }),
-        switchMap(([ manager, toolId ]) => manager.getTool<DrawingToolModel>(toolId)?.drawing$ || of(null)),
+        switchMap(tool => tool.drawing$),
       )
       .subscribe(drawEvent => {
         if (!drawEvent || drawEvent.type === 'start') {
@@ -72,19 +85,16 @@ export class MeasureComponent implements OnInit, OnDestroy {
   }
 
   public measure(type: 'length' | 'area') {
-    if (this.toolActive) {
-      this.manager?.disableTool(this.toolId);
+    if (this.toolActive === type) {
       this.hideTooltipAndGeom();
-      if (this.toolActive === type) {
-        this.toolActive = null;
-        return;
-      }
+      this.store$.dispatch(deactivateTool({ tool: ToolbarComponentEnum.MEASURE }));
+      return;
     }
     this.toolActive = type;
     this.hideTooltipAndGeom();
-    this.manager?.enableTool<DrawingEnableToolArguments>(this.toolId, true, {
+    this.store$.dispatch(activateTool({ tool: ToolbarComponentEnum.MEASURE, enableArguments: {
       type: type === 'area' ? 'area' : 'line',
-    });
+    }}));
   }
 
   private hideTooltipAndGeom() {

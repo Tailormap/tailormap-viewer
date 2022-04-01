@@ -1,9 +1,13 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
-import { concatMap, of, Subject, takeUntil, tap } from 'rxjs';
-import { MapClickToolConfigModel, MapClickToolModel, MapService, ToolManagerModel, ToolTypeEnum } from '@tailormap-viewer/map';
+import { concatMap, filter, Observable, Subject, takeUntil, tap } from 'rxjs';
+import { MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { $localize } from '@angular/localize/init';
+import { Store } from '@ngrx/store';
+import { isActiveToolbarTool } from '../state/toolbar.selectors';
+import { registerTool, toggleTool } from '../state/toolbar.actions';
+import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
 
 @Component({
   selector: 'tm-clicked-coordinates',
@@ -14,34 +18,30 @@ import { $localize } from '@angular/localize/init';
 export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
 
   private destroyed = new Subject();
-  private toolConfig: MapClickToolConfigModel = {
-    type: ToolTypeEnum.MapClick,
-  };
-  private toolId = '';
-  private manager: ToolManagerModel | null = null;
-  public toolActive: boolean;
+  public toolActive$: Observable<boolean>;
 
-  constructor(private mapService: MapService, private snackBar: MatSnackBar, private clipboard: Clipboard) {
-    this.toolActive = false;
+  constructor(
+    private store$: Store,
+    private mapService: MapService,
+    private snackBar: MatSnackBar,
+    private clipboard: Clipboard,
+  ) {
+    this.toolActive$ = this.store$.select(isActiveToolbarTool(ToolbarComponentEnum.SELECT_COORDINATES));
   }
 
   public ngOnInit(): void {
-    this.mapService.createTool$(this.toolConfig)
+    this.mapService.createTool$<MapClickToolModel, MapClickToolConfigModel>({
+      type: ToolTypeEnum.MapClick,
+    })
       .pipe(
         takeUntil(this.destroyed),
-        tap(([manager, toolId]) => {
-          this.toolId = toolId;
-          this.manager = manager;
+        filter(Boolean),
+        tap(clickTool => {
+          this.store$.dispatch(registerTool({ tool: { id: ToolbarComponentEnum.SELECT_COORDINATES, mapToolId: clickTool.id }}));
         }),
-        concatMap(([manager, toolId]) => {
-          const clickTool = manager.getTool<MapClickToolModel>(toolId);
-          return !clickTool ? of(null) : clickTool.mapClick$;
-        }),
+        concatMap(clickTool => clickTool.mapClick$),
       )
       .subscribe(mapClick => {
-        if ((!mapClick) || (!this.toolActive)) {
-          return;
-        }
         this.handleMapClick(mapClick);
       });
   }
@@ -52,13 +52,7 @@ export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
   }
 
   public toggle() {
-    if (this.toolActive) {
-      this.manager?.disableTool(this.toolId);
-      this.toolActive = false;
-    } else {
-      this.toolActive = true;
-      this.manager?.enableTool(this.toolId, true);
-    }
+    this.store$.dispatch(toggleTool({ tool: ToolbarComponentEnum.SELECT_COORDINATES }));
   }
 
   private handleMapClick(evt: { mapCoordinates: [number, number]; mouseCoordinates: [number, number] }) {
