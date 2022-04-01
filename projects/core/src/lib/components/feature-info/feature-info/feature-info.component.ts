@@ -30,7 +30,7 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
   ) { }
 
   public ngOnInit(): void {
-    this.mapService.createTool$<MapClickToolModel, MapClickToolConfigModel>({ type: ToolTypeEnum.MapClick }, true)
+    this.mapService.createTool$<MapClickToolModel, MapClickToolConfigModel>({ type: ToolTypeEnum.MapClick, autoEnable: true })
       .pipe(
         takeUntil(this.destroyed),
         filter(Boolean),

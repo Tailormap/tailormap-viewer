@@ -8,7 +8,7 @@ export class OpenLayersMapClickTool implements MapClickToolModel {
 
   constructor(
     public id: string,
-    private toolConfig: MapClickToolConfigModel,
+    private _toolConfig: MapClickToolConfigModel,
   ) {}
 
   private mapClickSubject: Subject<MapClickEvent> = new Subject<MapClickEvent>();

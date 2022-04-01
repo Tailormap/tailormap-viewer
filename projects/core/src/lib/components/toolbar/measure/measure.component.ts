@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import {
-  DrawingEnableToolArguments, DrawingToolConfigModel, DrawingToolModel, MapService, MapSizeHelper, MapTooltipModel, ToolTypeEnum,
+  DrawingToolConfigModel, DrawingToolModel, MapService, MapSizeHelper, MapTooltipModel, ToolTypeEnum,
 } from '@tailormap-viewer/map';
 import { filter, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { HtmlHelper } from '@tailormap-viewer/shared';

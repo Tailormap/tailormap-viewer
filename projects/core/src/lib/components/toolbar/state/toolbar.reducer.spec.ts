@@ -10,21 +10,21 @@ describe('ToolbarReducer', () => {
     const action = ToolbarActions.registerTool({ tool: { id: ToolbarComponentEnum.MEASURE, mapToolId: 'tool-123' } });
     expect(initialState.tools).toEqual([]);
     const updatedState = toolbarReducer(initialState, action);
-    expect(updatedState.tools).toEqual([{ id: ToolbarComponentEnum.MEASURE, toolId: 'tool-123' }]);
+    expect(updatedState.tools).toEqual([{ id: ToolbarComponentEnum.MEASURE, mapToolId: 'tool-123' }]);
   });
 
   test('re-register existing tool', () => {
     const initialState: ToolbarState = { ...initialToolbarState, tools: [{ id: ToolbarComponentEnum.MEASURE, mapToolId: 'tool-123' }] };
     const action = ToolbarActions.registerTool({ tool: { id: ToolbarComponentEnum.MEASURE, mapToolId: 'tool-456' } });
-    expect(initialState.tools).toEqual([{ id: ToolbarComponentEnum.MEASURE, toolId: 'tool-123' }]);
+    expect(initialState.tools).toEqual([{ id: ToolbarComponentEnum.MEASURE, mapToolId: 'tool-123' }]);
     const updatedState = toolbarReducer(initialState, action);
-    expect(updatedState.tools).toEqual([{ id: ToolbarComponentEnum.MEASURE, toolId: 'tool-456' }]);
+    expect(updatedState.tools).toEqual([{ id: ToolbarComponentEnum.MEASURE, mapToolId: 'tool-456' }]);
   });
 
   test('deregister existing tool', () => {
     const initialState: ToolbarState = { ...initialToolbarState, tools: [{ id: ToolbarComponentEnum.MEASURE, mapToolId: 'tool-123' }] };
     const action = ToolbarActions.deregisterTool({ tool: ToolbarComponentEnum.MEASURE });
-    expect(initialState.tools).toEqual([{ id: ToolbarComponentEnum.MEASURE, toolId: 'tool-123' }]);
+    expect(initialState.tools).toEqual([{ id: ToolbarComponentEnum.MEASURE, mapToolId: 'tool-123' }]);
     const updatedState = toolbarReducer(initialState, action);
     expect(updatedState.tools).toEqual([]);
   });
@@ -32,7 +32,7 @@ describe('ToolbarReducer', () => {
   test('activates tool', () => {
     const initialState: ToolbarState = { ...initialToolbarState };
     const action = ToolbarActions.activateTool({ tool: ToolbarComponentEnum.MEASURE });
-    expect(initialState.activeTool).toEqual('');
+    expect(initialState.activeTool).toEqual(null);
     const updatedState = toolbarReducer(initialState, action);
     expect(updatedState.activeTool).toEqual(ToolbarComponentEnum.MEASURE);
   });
@@ -42,7 +42,7 @@ describe('ToolbarReducer', () => {
     const action = ToolbarActions.deactivateTool({ tool: ToolbarComponentEnum.MEASURE });
     expect(initialState.activeTool).toEqual(ToolbarComponentEnum.MEASURE);
     const updatedState = toolbarReducer(initialState, action);
-    expect(updatedState.activeTool).toEqual('');
+    expect(updatedState.activeTool).toEqual(null);
   });
 
 });

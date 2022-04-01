@@ -44,7 +44,7 @@ export class MapService {
     return this.map.getToolManager$();
   }
 
-  public createTool$<T extends ToolModel, C extends ToolConfigModel>(tool: C, enable?: boolean): Observable<T | null> {
+  public createTool$<T extends ToolModel, C extends ToolConfigModel>(tool: C): Observable<T | null> {
     let toolManager: ToolManagerModel;
     let toolId: string;
     return this.getToolManager$()
@@ -55,13 +55,7 @@ export class MapService {
             toolManager.removeTool(toolId);
           }
         }),
-        map(manager => {
-          const createdTool = manager.addTool<T, C>(tool);
-          if (enable && createdTool) {
-            manager.enableTool(createdTool.id);
-          }
-          return createdTool;
-        }),
+        map(manager => manager.addTool<T, C>(tool)),
       );
   }
 
