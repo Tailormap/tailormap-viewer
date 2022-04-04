@@ -109,7 +109,9 @@ export class MapService {
           if (featureGeometry) {
             let feature: Feature<Geometry> | null = null;
             if (typeof featureGeometry === 'string') {
-              feature = wktFormatter.readFeature(featureGeometry);
+              try {
+                feature = wktFormatter.readFeature(featureGeometry);
+              } catch (e) {}
             }
             if (featureGeometry instanceof Feature) {
               feature = featureGeometry;
