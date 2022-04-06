@@ -3,7 +3,7 @@ import { TreeModel, FlatTreeModel } from '../models';
 
 export class FlatTreeHelper {
 
-  public static hasChildren = (node: TreeModel): boolean => !!node.children;
+  public static hasChildren = (node: TreeModel): boolean => !!node.children && node.children.length > 0;
   public static getChildren = (node: TreeModel): TreeModel[] | undefined => node.children;
   public static getLevel = (node: FlatTreeModel) => node.level;
   public static isExpandable = (node: FlatTreeModel) => node.expandable;

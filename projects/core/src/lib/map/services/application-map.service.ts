@@ -1,11 +1,11 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { LayerModel, LayerTypesEnum, MapService, OgcHelper, WMSLayerModel, WMTSLayerModel } from '@tailormap-viewer/map';
-import { selectMapOptions, selectVisibleLayers } from '../state/core.selectors';
 import { concatMap, distinctUntilChanged, filter, forkJoin, map, Observable, of, Subject, take, takeUntil } from 'rxjs';
 import { AppLayerModel, ServiceModel, ServiceProtocol } from '@tailormap-viewer/api';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { ArrayHelper } from '@tailormap-viewer/shared';
+import { selectMapOptions, selectOrderedVisibleLayers, selectVisibleLayers } from '../state/map.selectors';
 
 @Injectable({
    providedIn: 'root',
@@ -54,7 +54,7 @@ export class ApplicationMapService implements OnDestroy {
     //     layerManager.setBackgroundLayer(validBaseLayers[0]);
     //   });
 
-    this.store$.select(selectVisibleLayers)
+    this.store$.select(selectOrderedVisibleLayers)
       .pipe(
         takeUntil(this.destroyed),
         concatMap(layers => this.getLayersAndLayerManager$(layers)),
@@ -87,8 +87,8 @@ export class ApplicationMapService implements OnDestroy {
         .pipe(
           map((capabilities: string): WMTSLayerModel => ({
             id: `${appLayer.id}`,
-            layers: appLayer.displayName,
-            name: appLayer.displayName,
+            layers: appLayer.layerName,
+            name: appLayer.layerName,
             layerType: LayerTypesEnum.WMTS,
             visible: appLayer.visible,
             url: service.url,
@@ -100,8 +100,8 @@ export class ApplicationMapService implements OnDestroy {
     if (service.protocol === ServiceProtocol.WMS) {
       const layer: WMSLayerModel = {
         id: `${appLayer.id}`,
-        layers: appLayer.displayName,
-        name: appLayer.displayName,
+        layers: appLayer.layerName,
+        name: appLayer.layerName,
         layerType: LayerTypesEnum.WMS,
         visible: appLayer.visible,
         url: service.url,

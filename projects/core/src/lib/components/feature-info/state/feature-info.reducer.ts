@@ -1,7 +1,7 @@
 import * as FeatureInfoActions from './feature-info.actions';
 import { Action, createReducer, on } from '@ngrx/store';
 import { FeatureInfoState, initialFeatureInfoState } from './feature-info.state';
-import { LoadStatusEnum } from '@tailormap-viewer/shared';
+import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { FeatureInfoFeatureModel } from '../models/feature-info-feature.model';
 import { FeatureInfoColumnMetadataModel } from '../models/feature-info-column-metadata.model';
 
@@ -12,7 +12,7 @@ const onLoadFeatureInfo = (
   ...state,
   mapCoordinates: payload.mapCoordinates,
   mouseCoordinates: payload.mouseCoordinates,
-  loadStatus: LoadStatusEnum.LOADING,
+  loadStatus: LoadingStateEnum.LOADING,
 });
 
 const onLoadFeatureInfoSuccess = (
@@ -22,7 +22,7 @@ const onLoadFeatureInfoSuccess = (
   ...state,
   features: payload.featureInfo.reduce<FeatureInfoFeatureModel[]>((allFeatures, featureInfoModel) => allFeatures.concat(featureInfoModel.features), []),
   columnMetadata: payload.featureInfo.reduce<FeatureInfoColumnMetadataModel[]>((allMetadata, featureInfoModel) => allMetadata.concat(featureInfoModel.columnMetadata), []),
-  loadStatus: LoadStatusEnum.LOADED,
+  loadStatus: LoadingStateEnum.LOADED,
   currentFeatureIndex: 0,
 });
 
@@ -32,7 +32,7 @@ const onLoadFeatureInfoFailed = (
 ): FeatureInfoState => ({
   ...state,
   errorMessage: payload.errorMessage,
-  loadStatus: LoadStatusEnum.ERROR,
+  loadStatus: LoadingStateEnum.FAILED,
   currentFeatureIndex: 0,
 });
 

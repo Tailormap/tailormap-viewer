@@ -133,13 +133,21 @@ export class TreeComponent implements OnDestroy {
   }
 
   private toggleNode(node: FlatTreeModel, descendants?: FlatTreeModel[]) {
-    const stateChange: CheckStateChange = new Map<string, boolean>();
-    const checked = descendants ? !this.treeService.descendantsAllSelected(node) : !node.checked;
-    stateChange.set(node.id, checked);
+    const stateChange: FlatTreeModel[] = [];
+    const checked = descendants ? !this.treeService.descendantsAllSelected(node) : !this.treeService.isChecked(node);
+    stateChange.push({
+      ...node,
+      checked,
+    });
     if (descendants) {
-      descendants.forEach(d => stateChange.set(d.id, checked));
+      descendants.forEach(d => {
+        stateChange.push({
+          ...d,
+          checked,
+        });
+      });
     }
-    this.checkAllParentsSelection(node, stateChange);
+    // this.checkAllParentsSelection(node, stateChange);
     this.treeService.checkStateChanged(stateChange);
   }
 
@@ -154,9 +162,9 @@ export class TreeComponent implements OnDestroy {
   private checkRootNodeSelection(node: FlatTreeModel, stateChange: CheckStateChange): void {
     const descAllSelected = this.treeService.descendantsAllSelected(node);
     if (node.checked && !descAllSelected) {
-      stateChange.set(node.id, false);
+      stateChange.push({ ...node, checked: false });
     } else if (!node.checked && descAllSelected) {
-      stateChange.set(node.id, true);
+      stateChange.push({ ...node, checked: true });
     }
   }
 
@@ -196,13 +204,17 @@ export class TreeComponent implements OnDestroy {
   }
 
   private toggleRadioNode(node: FlatTreeModel) {
-    const checkChangeMap: CheckStateChange = new Map();
+    const checkChange: FlatTreeModel[] = [];
     if (this.checkedRadioNode) {
-      checkChangeMap.set(this.checkedRadioNode.id, false);
+      checkChange.push({ ...this.checkedRadioNode, checked: false });
     }
-    checkChangeMap.set(node.id, true);
-    this.treeService.checkStateChanged(checkChangeMap);
+    checkChange.push({ ...node, checked: true });
+    this.treeService.checkStateChanged(checkChange);
     this.checkedRadioNode = node;
+  }
+
+  public stopEvent($event: MouseEvent) {
+    $event.stopPropagation();
   }
 
 }

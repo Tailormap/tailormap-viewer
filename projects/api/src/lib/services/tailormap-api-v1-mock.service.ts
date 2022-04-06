@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {
-  AppLayerModel, AppResponseModel, ComponentModel, GeometryType, Language, LayerDetailsModel, MapResponseModel, ServiceProtocol,
+  AppResponseModel, ComponentModel, GeometryType, Language, LayerDetailsModel, MapResponseModel, ServiceProtocol,
   VersionResponseModel,
 } from '../models';
 import { delay, Observable, of } from 'rxjs';
@@ -35,12 +35,87 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
 
   public getMap$(_applicationId: number): Observable<MapResponseModel> {
     return of({
-      baseLayers: [],
+      appLayers: [{
+        id: 1,
+        visible: true,
+        serviceId: 1,
+        layerName: 'osm-nb-hq',
+        title: 'osm-nb-hq',
+        crs: {
+          code: 'EPSG:28992',
+          definition: '',
+        },
+        isBaseLayer: false,
+      },{
+        id: 2,
+        visible: true,
+        serviceId: 2,
+        layerName: 'gemeentegebied',
+        title: 'Gemeentegebied',
+        crs: {
+          code: 'EPSG:28992',
+          definition: '',
+        },
+        isBaseLayer: false,
+      },{
+        id: 3,
+        visible: true,
+        serviceId: 2,
+        layerName: 'Provinciegebied',
+        title: 'provinciegebied',
+        crs: {
+          code: 'EPSG:28992',
+          definition: '',
+        },
+        isBaseLayer: false,
+      }],
+      baseLayerTreeNodes: [],
+      layerTreeNodes: [{
+        id: 'root',
+        name: 'root',
+        childrenIds: ['level-2', 'level-1'],
+        root: true,
+      }, {
+        id: 'level-1',
+        name: 'Openstreetmap',
+        childrenIds: ['applayer-1'],
+        root: false,
+      }, {
+        id: 'level-2',
+        name: 'Bestuurlijke Gebieden',
+        childrenIds: ['applayer-2', 'applayer-3'],
+        root: false,
+      }, {
+        id: 'applayer-1',
+        appLayerId: 1,
+        name: 'osm-nb-hq',
+        childrenIds: [],
+        root: false,
+      }, {
+        id: 'applayer-2',
+        appLayerId: 2,
+        name: 'Gemeentegebied',
+        childrenIds: [],
+        root: false,
+      }, {
+        id: 'applayer-3',
+        appLayerId: 3,
+        name: 'Provinciegebied',
+        childrenIds: [],
+        root: false,
+      }],
       services: [{
         id: 1,
         name: 'Openbasiskaart',
         protocol: ServiceProtocol.WMS,
         url: 'https://www.openbasiskaart.nl/mapcache/?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetCapabilities',
+        styleLibraries: {},
+        useProxy: false,
+      },{
+        id: 2,
+        name: 'Bestuurlijke gebieden',
+        protocol: ServiceProtocol.WMS,
+        url: 'https://service.pdok.nl/kadaster/bestuurlijkegebieden/wms/v1_0?request=GetCapabilities&service=WMS',
         styleLibraries: {},
         useProxy: false,
       }],
@@ -68,21 +143,6 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
 
   public getComponents$(_applicationId: number): Observable<ComponentModel[]> {
     return of([]);
-  }
-
-  public getLayers$(_applicationId: number): Observable<AppLayerModel[]> {
-    return of([{
-      id: 1,
-      visible: true,
-      serviceId: 1,
-      url: 'https://www.openbasiskaart.nl/mapcache/?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetCapabilities',
-      displayName: 'osm-nb-hq',
-      crs: {
-        code: 'EPSG:28992',
-        definition: '',
-      },
-      isBaseLayer: false,
-    }]);
   }
 
   public getDescribeLayer$(_params: {

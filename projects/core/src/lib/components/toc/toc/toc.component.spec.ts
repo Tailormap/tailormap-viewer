@@ -1,16 +1,16 @@
 import { TocComponent } from './toc.component';
 import { render, screen } from '@testing-library/angular';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { selectSelectedLayerId, selectLayerTreeWithoutBackgroundLayers } from '../../../state/core.selectors';
 import { MenubarService } from '../../menubar';
 import { TocService } from '../services/toc.service';
 import { of } from 'rxjs';
 import { getTreeModelMock, SharedModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { TestBed } from '@angular/core/testing';
-import { setLayerVisibility, setSelectedLayerId } from '../../../state/core.actions';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { SharedCoreComponentsModule } from '../../../shared/components/shared-core-components.module';
+import { selectLayerTree, selectSelectedLayerId } from '../../../map/state/map.selectors';
+import { setLayerVisibility, setSelectedLayerId } from '../../../map/state/map.actions';
 
 const getMockStore = (selectedLayer: string = '') => {
   const tree = [
@@ -19,7 +19,7 @@ const getMockStore = (selectedLayer: string = '') => {
   ];
   return provideMockStore({
     selectors: [
-      { selector: selectLayerTreeWithoutBackgroundLayers, value: tree },
+      { selector: selectLayerTree, value: tree },
       { selector: selectSelectedLayerId, value: selectedLayer },
     ],
   });

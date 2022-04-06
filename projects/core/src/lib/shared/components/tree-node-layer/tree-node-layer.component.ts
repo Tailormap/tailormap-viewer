@@ -15,11 +15,7 @@ export class TreeNodeLayerComponent {
   constructor() { }
 
   public isLevel() {
-    if (!this.node) {
-      return false;
-    }
-    // @todo: implement levels for layers use from this.node.metadata
-    return false;
+    return this.node?.type === 'level';
   }
 
 }

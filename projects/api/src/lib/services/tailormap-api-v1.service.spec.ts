@@ -38,11 +38,6 @@ describe('TailormapApiV1Service', () => {
     spectator.expectOne('/api/app/1/components', HttpMethod.GET);
   });
 
-  test('queries API for getLayers$', () => {
-    spectator.service.getLayers$(1).subscribe();
-    spectator.expectOne('/api/app/1/layers', HttpMethod.GET);
-  });
-
   test('queries API for getDescribeLayer$', () => {
     spectator.service.getDescribeLayer$({ applicationId: 1, layerId: 1 }).subscribe();
     spectator.expectOne('/api/app/1/layer/1/describe', HttpMethod.GET);

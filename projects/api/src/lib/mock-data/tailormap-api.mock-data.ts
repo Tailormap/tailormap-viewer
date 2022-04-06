@@ -8,6 +8,7 @@ import { FeatureAttributeTypeEnum } from '../models/feature-attribute-type.enum'
 import { FeaturesResponseModel } from '../models/features-response.model';
 import { of } from 'rxjs';
 import { TailormapApiV1ServiceModel } from '../services';
+import { LayerTreeNodeModel } from '../models/layer-tree-node.model';
 
 export const getBoundsModel = (overrides?: Partial<BoundsModel>): BoundsModel => ({
   miny: 646.36,
@@ -26,14 +27,21 @@ export const getCrsModel = (overrides?: Partial<CoordinateReferenceSystemModel>)
   ...overrides,
 });
 
+export const getLayerTreeNode = (overrides?: Partial<LayerTreeNodeModel>): LayerTreeNodeModel => ({
+  id: 'root',
+  root: true,
+  name: 'Root',
+  childrenIds: [],
+  ...overrides,
+});
+
 export const getAppLayerModel = (overrides?: Partial<AppLayerModel>): AppLayerModel => ({
   id: 1,
-  url: 'https://test.nl',
   serviceId: 1,
   visible: true,
   crs: getCrsModel(overrides?.crs),
-  isBaseLayer: false,
-  displayName: 'Test',
+  title: 'Test',
+  layerName: 'test',
   ...overrides,
 });
 
@@ -104,10 +112,15 @@ export const getAppResponseData = (overrides?: Partial<AppResponseModel>): AppRe
 
 export const getMapResponseData = (overrides?: Partial<MapResponseModel>): MapResponseModel => ({
   crs: getCrsModel(overrides?.crs),
-  baseLayers: [
-    getAppLayerModel({ id: 1, isBaseLayer: true }),
-    getAppLayerModel({ id: 2, isBaseLayer: true }),
-    getAppLayerModel({ id: 3, isBaseLayer: true }),
+  layerTreeNodes: [
+    getLayerTreeNode({ childrenIds: ['layer-1'] }),
+    getLayerTreeNode({ id: 'layer-1', appLayerId: 1, name: 'TEST', root: false }),
+  ],
+  baseLayerTreeNodes: [],
+  appLayers: [
+    getAppLayerModel({ id: 1 }),
+    getAppLayerModel({ id: 2 }),
+    getAppLayerModel({ id: 3 }),
   ],
   initialExtent: overrides?.initialExtent === null ? null : getBoundsModel(overrides?.initialExtent),
   services: [
@@ -123,7 +136,6 @@ export const getMockApiService = (
   getVersion$: () => of({ version: '0.1-SNAPSHOT', databaseversion: '47', apiVersion: 'v1' }),
   getApplication$: (params: { name?: string; version?: string; id?: number }) => of(getAppResponseData(params)),
   getMap$: () => of(getMapResponseData()),
-  getLayers$: () => of([getAppLayerModel({id: 1}), getAppLayerModel({id: 2})]),
   getComponents$: () => of([getComponentModel()]),
   getDescribeLayer$: () => of(getLayerDetailsModel()),
   getFeatures$: () => of(getFeaturesResponseModel()),

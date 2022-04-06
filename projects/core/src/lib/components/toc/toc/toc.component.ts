@@ -6,8 +6,9 @@ import { TocService } from '../services/toc.service';
 import { MenubarService } from '../../menubar';
 import { TocMenuButtonComponent } from '../toc-menu-button/toc-menu-button.component';
 import { Store } from '@ngrx/store';
-import { selectSelectedLayerId, selectLayerTreeWithoutBackgroundLayers } from '../../../state/core.selectors';
-import { setLayerVisibility, setSelectedLayerId } from '../../../state/core.actions';
+import { setLayerVisibility, setSelectedLayerId } from '../../../map/state/map.actions';
+import { selectLayerTree, selectSelectedLayerId } from '../../../map/state/map.selectors';
+import { AppLayerModel } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-toc',
@@ -22,7 +23,7 @@ export class TocComponent implements OnInit, OnDestroy {
 
   constructor(
     private store$: Store,
-    private treeService: TreeService,
+    private treeService: TreeService<AppLayerModel>,
     private menubarService: MenubarService,
     private tocService: TocService,
   ) {}
@@ -30,7 +31,7 @@ export class TocComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this.visible$ = this.tocService.isVisible$();
     this.treeService.setDataSource(
-      this.store$.select(selectLayerTreeWithoutBackgroundLayers),
+      this.store$.select(selectLayerTree),
     );
     this.treeService.setSelectedNode(
       this.store$.select(selectSelectedLayerId).pipe(map(id => typeof id !== 'undefined' ? `${id}` : '')),
@@ -39,15 +40,19 @@ export class TocComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.destroyed),
         map(checkChange => {
-          const changedLayers: Record<string, boolean> = {};
-          checkChange.forEach((vis, id) => changedLayers[id] = vis);
+          const changedLayers: Record<number, boolean> = {};
+          checkChange.forEach(node => {
+            if (node.metadata) {
+              changedLayers[node.metadata.id] = !!node.checked;
+            }
+          });
           return changedLayers;
         }),
       )
       .subscribe(checkChanged => this.store$.dispatch(setLayerVisibility({ visibility: checkChanged })));
-    // this.treeService.nodeExpansionChangedSource$
-    //   .pipe(takeUntil(this.destroyed))
-    //   .subscribe(nodeId => this.applicationService.toggleLevelExpansion(nodeId));
+    this.treeService.nodeExpansionChangedSource$
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(nodeId => console.log(nodeId));
     this.treeService.selectionStateChangedSource$
       .pipe(takeUntil(this.destroyed))
       .subscribe(layerId => this.store$.dispatch(setSelectedLayerId({ layerId })));

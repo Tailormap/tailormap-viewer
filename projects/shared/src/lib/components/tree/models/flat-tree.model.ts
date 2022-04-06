@@ -1,12 +1,9 @@
-export interface FlatTreeModel<T = any> {
-  id: string;
-  label: string;
+import { BaseTreeModel } from './base-tree.model';
+
+export interface FlatTreeModel<T = any> extends BaseTreeModel<T> {
   level: number;
   expanded: boolean;
   expandable: boolean;
-  checked: boolean;
   checkbox: boolean;
-  type?: string;
-  metadata?: T;
-  readOnlyItem?: boolean;
+  checked: boolean;
 }

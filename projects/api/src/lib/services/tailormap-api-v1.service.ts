@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import {
-  AppLayerModel, AppResponseModel, ComponentModel, FeaturesResponseModel, LayerDetailsModel, MapResponseModel, VersionResponseModel,
+  AppResponseModel, ComponentModel, FeaturesResponseModel, LayerDetailsModel, MapResponseModel, VersionResponseModel,
 } from '../models';
 import { Observable } from 'rxjs';
 import { TailormapApiV1ServiceModel } from './tailormap-api-v1.service.model';
@@ -42,12 +42,6 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
   public getComponents$(applicationId: number): Observable<ComponentModel[]> {
     return this.httpClient.get<ComponentModel[]>(
       `${TailormapApiV1Service.BASE_URL}/app/${applicationId}/components`,
-    );
-  }
-
-  public getLayers$(applicationId: number): Observable<AppLayerModel[]> {
-    return this.httpClient.get<AppLayerModel[]>(
-      `${TailormapApiV1Service.BASE_URL}/app/${applicationId}/layers`,
     );
   }
 
