@@ -9,7 +9,7 @@ export const loadApplication = createAction(
 );
 export const loadApplicationSuccess = createAction(
   `${prefix} Application Load Success`,
-  props<{ application: AppResponseModel; components: ComponentModel[]; }>(),
+  props<{ application: AppResponseModel; components: ComponentModel[] }>(),
 );
 export const loadApplicationFailed = createAction(
   `${prefix} Application Load Failed`,

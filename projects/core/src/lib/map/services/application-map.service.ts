@@ -5,7 +5,7 @@ import { concatMap, distinctUntilChanged, filter, forkJoin, map, Observable, of,
 import { AppLayerModel, ServiceModel, ServiceProtocol } from '@tailormap-viewer/api';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { ArrayHelper } from '@tailormap-viewer/shared';
-import { selectMapOptions, selectOrderedVisibleLayers, selectVisibleLayers } from '../state/map.selectors';
+import { selectMapOptions, selectOrderedVisibleLayers } from '../state/map.selectors';
 
 @Injectable({
    providedIn: 'root',

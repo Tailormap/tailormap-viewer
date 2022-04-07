@@ -4,7 +4,7 @@ import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { filter, pipe, take } from 'rxjs';
 import { FeatureInfoModel } from '../models/feature-info.model';
 import { FeatureInfoHelper } from '../helpers/feature-info.helper';
-import { selectVisibleLayers } from "../../../map/state/map.selectors";
+import { selectVisibleLayers } from '../../../map/state/map.selectors';
 
 const selectFeatureInfoState = createFeatureSelector<FeatureInfoState>(featureInfoStateKey);
 

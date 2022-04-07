@@ -7,7 +7,7 @@ import { MatTreeFlatDataSource } from '@angular/material/tree';
 import { TreeModel, FlatTreeModel, NodePositionChangedEventModel } from './models';
 import { takeUntil } from 'rxjs/operators';
 import { BaseTreeModel } from './models/base-tree.model';
-import { ArrayHelper, RxjsHelper } from '../../helpers';
+import { ArrayHelper } from '../../helpers';
 
 @Injectable()
 export class TreeService<T = any> implements OnDestroy {
