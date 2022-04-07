@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
-import { concatMap, filter, Observable, Subject, takeUntil, tap } from 'rxjs';
+import { concatMap, filter, map, Observable, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Clipboard } from '@angular/cdk/clipboard';
@@ -17,8 +17,8 @@ import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
 })
 export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
 
-  private destroyed = new Subject();
   public toolActive$: Observable<boolean>;
+  private destroyed = new Subject();
 
   constructor(
     private store$: Store,
@@ -37,13 +37,46 @@ export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
         takeUntil(this.destroyed),
         filter(Boolean),
         tap(clickTool => {
-          this.store$.dispatch(registerTool({ tool: { id: ToolbarComponentEnum.SELECT_COORDINATES, mapToolId: clickTool.id }}));
+          this.store$.dispatch(registerTool({tool: {id: ToolbarComponentEnum.SELECT_COORDINATES, mapToolId: clickTool.id}}));
         }),
         concatMap(clickTool => clickTool.mapClick$),
-      )
-      .subscribe(mapClick => {
-        this.handleMapClick(mapClick);
-      });
+        switchMap(mapClick => {
+          this.snackBar.dismiss();
+          return this.mapService.getUnitsOfMeasure$()
+            .pipe(
+              map(
+                uom => {
+                  let decimals: number;
+                  switch (uom) {
+                    case 'm':
+                      decimals = 2;
+                      break;
+                    case 'ft':
+                    case 'us-ft':
+                      decimals = 3;
+                      break;
+                    case 'degrees':
+                    default:
+                      decimals = 4;
+                  }
+                  return `${mapClick.mapCoordinates[0].toFixed(decimals)}, ${mapClick.mapCoordinates[1].toFixed(decimals)}`;
+                },
+              ),
+            );
+        }),
+        concatMap(coordinates => {
+          const coordinatesMsg = $localize`Selected coordinates: ${coordinates}`;
+          return this.snackBar.open(coordinatesMsg, $localize`Copy`).onAction().pipe(
+            map(() => {
+              return this.clipboard.copy(coordinates) ? $localize`Success` : $localize`Failed to copy to clipboard`;
+            }),
+          );
+        }),
+      ).subscribe(
+      succesMsg => {
+        this.snackBar.open(succesMsg, '', {duration: 5000});
+      },
+    );
   }
 
   public ngOnDestroy() {
@@ -52,34 +85,6 @@ export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
   }
 
   public toggle() {
-    this.store$.dispatch(toggleTool({ tool: ToolbarComponentEnum.SELECT_COORDINATES }));
-  }
-
-  private handleMapClick(evt: { mapCoordinates: [number, number]; mouseCoordinates: [number, number] }) {
-    let decimals = 4;
-    this.mapService.getUnitsOfMeasure$().subscribe(uom => {
-      switch (uom) {
-        case 'm':
-          decimals = 2;
-          break;
-        case 'ft':
-        case 'us-ft':
-          decimals = 3;
-          break;
-        case 'degrees':
-        default:
-          decimals = 4;
-      }
-    });
-
-    const coordinatesMsg = $localize`Selected coordinates: ${evt.mapCoordinates[0].toFixed(decimals)}, ${evt.mapCoordinates[1].toFixed(decimals)}`;
-
-    this.snackBar.open(coordinatesMsg, $localize`Copy`).onAction().subscribe(() => {
-      if (this.clipboard.copy(coordinatesMsg)) {
-        this.snackBar.open($localize`Success`, '', {duration: 5000});
-      } else {
-        this.snackBar.open($localize`Failed to copy to clipboard`, '', {duration: 5000});
-      }
-    });
+    this.store$.dispatch(toggleTool({tool: ToolbarComponentEnum.SELECT_COORDINATES}));
   }
 }
