@@ -93,13 +93,19 @@ const onMoveLayerTreeNode = (state: MapState, payload: ReturnType<typeof MapActi
     ...state,
     layerTreeNodes: state.layerTreeNodes.map((node, idx) => {
       if (newParentIdx === idx) {
+        let pos = typeof payload.beforeNodeId !== 'undefined'
+          ? node.childrenIds.indexOf(payload.beforeNodeId)
+          : -1;
+        if (pos === -1) {
+          pos = node.childrenIds.length;
+        }
         return {
           ...node,
-          childrenIds: typeof payload.index !== 'undefined' ? [
-            ...node.childrenIds.slice(0, payload.index),
+          childrenIds: [
+            ...node.childrenIds.slice(0, pos),
             payload.nodeId,
-            ...node.childrenIds.slice(payload.index + 1),
-          ] : [ ...node.childrenIds, payload.nodeId ],
+            ...node.childrenIds.slice(pos),
+          ],
         };
       }
       if (currentParentIdx === idx) {

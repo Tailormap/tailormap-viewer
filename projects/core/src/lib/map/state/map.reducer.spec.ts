@@ -168,7 +168,7 @@ describe('MapReducer', () => {
         getLayerTreeNode({ id: 'layer-3', appLayerId: 4, name: 'TEST4', root: false }),
       ],
     };
-    const action = MapActions.moveLayerTreeNode({ nodeId: 'layer-3', parentId: 'level-1', index: 0 });
+    const action = MapActions.moveLayerTreeNode({ nodeId: 'layer-3', parentId: 'level-1', beforeNodeId: 'layer-1' });
     const updatedState = mapReducer(initialState, action);
     expect(updatedState.layerTreeNodes[1].childrenIds).toEqual(['layer-3', 'layer-1']);
     expect(updatedState.layerTreeNodes[3].childrenIds).toEqual(['layer-2']);

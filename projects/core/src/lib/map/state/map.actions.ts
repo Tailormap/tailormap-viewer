@@ -41,5 +41,5 @@ export const addLayerTreeNodes = createAction(
 );
 export const moveLayerTreeNode = createAction(
   `${mapActionsPrefix} Move Layer Tree Nodes`,
-  props<{ nodeId: string; parentId?: string; index?: number }>(),
+  props<{ nodeId: string; parentId?: string; beforeNodeId?: string }>(),
 );
