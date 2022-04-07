@@ -17,7 +17,6 @@ describe('LoadApplicationService', () => {
       expect(result.success).toEqual(true);
       expect(result.error).toBeUndefined();
       expect(result.result?.application.id).toEqual(1);
-      expect(result.result?.layers.length).toEqual(2);
       expect(result.result?.components.length).toEqual(1);
       done();
     });
@@ -35,18 +34,6 @@ describe('LoadApplicationService', () => {
     });
   });
 
-  test('test load map error', done => {
-    const service = new LoadApplicationService(getMockApiService({
-      getMap$: () => getErrorObservable<MapResponseModel>(),
-    }));
-    service.loadApplication$().subscribe(result => {
-      expect(result.success).toEqual(false);
-      expect(result.error).toEqual('Could not load map settings');
-      expect(result.result).toBeUndefined();
-      done();
-    });
-  });
-
   test('test load components error', done => {
     const service = new LoadApplicationService(getMockApiService({
       getComponents$: () => getErrorObservable<ComponentModel[]>(),
@@ -54,18 +41,6 @@ describe('LoadApplicationService', () => {
     service.loadApplication$().subscribe(result => {
       expect(result.success).toEqual(false);
       expect(result.error).toEqual('Could not load list of components');
-      expect(result.result).toBeUndefined();
-      done();
-    });
-  });
-
-  test('test load layers error', done => {
-    const service = new LoadApplicationService(getMockApiService({
-      getLayers$: () => getErrorObservable<AppLayerModel[]>(),
-    }));
-    service.loadApplication$().subscribe(result => {
-      expect(result.success).toEqual(false);
-      expect(result.error).toEqual('Could not load list of layers');
       expect(result.result).toBeUndefined();
       done();
     });

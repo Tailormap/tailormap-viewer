@@ -3,6 +3,8 @@ import { MeasureComponent } from './measure.component';
 import { MapService } from '@tailormap-viewer/map';
 import { of, Subject } from 'rxjs';
 import userEvent from '@testing-library/user-event';
+import { MatIconTestingModule } from '@angular/material/icon/testing';
+import { MatIconModule } from '@angular/material/icon';
 
 describe('MeasureComponent', () => {
 
@@ -13,6 +15,10 @@ describe('MeasureComponent', () => {
       createTool$: jest.fn(() => of([])),
     };
     await render(MeasureComponent, {
+      imports: [
+        MatIconModule,
+        MatIconTestingModule,
+      ],
       providers: [
         { provide: MapService, useValue: mapServiceMock },
       ],
@@ -47,6 +53,10 @@ describe('MeasureComponent', () => {
       createTool$: jest.fn(() => of([ mockManager, '' ])),
     };
     await render(MeasureComponent, {
+      imports: [
+        MatIconModule,
+        MatIconTestingModule,
+      ],
       providers: [
         { provide: MapService, useValue: mapServiceMock },
       ],

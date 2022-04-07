@@ -9,18 +9,31 @@ import userEvent from '@testing-library/user-event';
 import { TestBed } from '@angular/core/testing';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { SharedCoreComponentsModule } from '../../../shared/components/shared-core-components.module';
-import { selectLayerTree, selectSelectedLayerId } from '../../../map/state/map.selectors';
+import { selectLayerTree, selectSelectedLayerId, selectSelectedNode } from '../../../map/state/map.selectors';
 import { setLayerVisibility, setSelectedLayerId } from '../../../map/state/map.actions';
 
 const getMockStore = (selectedLayer: string = '') => {
   const tree = [
-    getTreeModelMock({ label: 'Disaster map' }),
-    getTreeModelMock({ id: '2', label: 'Some other map' }),
+    getTreeModelMock({
+      label: 'Disaster map',
+      metadata: {
+        id: 1,
+        layerName: 'Disaster map',
+      },
+    }),
+    getTreeModelMock({
+      id: '2',
+      label: 'Some other map',
+      metadata: {
+        id: 2,
+        layerName: 'Some other map',
+      },
+    }),
   ];
   return provideMockStore({
     selectors: [
       { selector: selectLayerTree, value: tree },
-      { selector: selectSelectedLayerId, value: selectedLayer },
+      { selector: selectSelectedNode, value: selectedLayer },
     ],
   });
 };
@@ -74,8 +87,8 @@ describe('TocComponent', () => {
     store.dispatch = jest.fn();
     expect((await screen.findByText('Disaster map')).closest('.mat-tree-node')).toHaveClass('tree-node--selected');
     userEvent.click(await screen.findByText('Some other map'));
-    expect(store.dispatch).toHaveBeenCalledWith({ type: setSelectedLayerId.type, layerId: '2' });
-    store.overrideSelector(selectSelectedLayerId, 2);
+    expect(store.dispatch).toHaveBeenCalledWith({ type: setSelectedLayerId.type, layerId: 2 });
+    store.overrideSelector(selectSelectedNode, '2');
     store.refreshState();
     expect((await screen.findByText('Disaster map')).closest('.mat-tree-node')).not.toHaveClass('tree-node--selected');
     expect((await screen.findByText('Some other map')).closest('.mat-tree-node')).toHaveClass('tree-node--selected');
@@ -93,7 +106,7 @@ describe('TocComponent', () => {
     });
     const store = TestBed.inject(MockStore);
     store.dispatch = jest.fn();
-    userEvent.click(await screen.findByLabelText('toggle Disaster map'));
+    userEvent.click(await screen.getByLabelText('toggle Disaster map'));
     expect(store.dispatch).toHaveBeenCalledWith({ type: setLayerVisibility.type, visibility: [{ id: 1, checked: true }] });
   });
 

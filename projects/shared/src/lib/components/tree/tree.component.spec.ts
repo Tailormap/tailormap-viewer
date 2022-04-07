@@ -1,6 +1,5 @@
 import { TreeDragDropService } from './tree-drag-drop.service';
 import { TreeService } from './tree.service';
-import { NgZone } from '@angular/core';
 import { render, screen } from '@testing-library/angular';
 import { TreeComponent } from './tree.component';
 import { BehaviorSubject } from 'rxjs';
@@ -8,6 +7,7 @@ import { BaseTreeModel, TreeModel } from './models';
 import userEvent from '@testing-library/user-event';
 import { getTreeModelMock } from './mock-data/tree-model.mock-data';
 import { SharedImportsModule } from '../../shared-imports.module';
+import { MatIconTestingModule } from '@angular/material/icon/testing';
 
 const getTree = () => [
   getTreeModelMock(),
@@ -43,6 +43,7 @@ describe('TreeComponent', () => {
       ],
       imports: [
         SharedImportsModule,
+        MatIconTestingModule,
       ],
     });
     expect(fixture.componentInstance).toBeTruthy();
