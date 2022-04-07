@@ -1,5 +1,5 @@
-import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { Injectable, OnDestroy } from '@angular/core';
+import { BehaviorSubject, filter, Observable, Subject } from 'rxjs';
 
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { FlatTreeHelper } from './helpers/flat-tree.helper';
@@ -7,8 +7,7 @@ import { MatTreeFlatDataSource } from '@angular/material/tree';
 import { TreeModel, FlatTreeModel, NodePositionChangedEventModel } from './models';
 import { takeUntil } from 'rxjs/operators';
 import { BaseTreeModel } from './models/base-tree.model';
-
-export type CheckStateChange<T = any> = BaseTreeModel<T>[];
+import { ArrayHelper, RxjsHelper } from '../../helpers';
 
 @Injectable()
 export class TreeService<T = any> implements OnDestroy {
@@ -16,18 +15,18 @@ export class TreeService<T = any> implements OnDestroy {
   private destroyed = new Subject();
 
   // Observable string sources
-  private treeDataSource = new BehaviorSubject<TreeModel[]>([]);
   private selectedNode = new BehaviorSubject<string>('');
   private readonlyMode = new BehaviorSubject<boolean>(false);
-  private checkStateChangedSource = new Subject<CheckStateChange<T>>();
-  private selectionStateChangedSource = new Subject<string>();
-  private nodeExpansionChangedSource = new Subject<string>();
+  private checkStateChangedSource = new Subject<BaseTreeModel<T>[]>();
+  private selectionStateChangedSource = new Subject<BaseTreeModel<T>>();
+  private nodeExpansionChangedSource = new Subject<BaseTreeModel<T>>();
   private nodePositionChangedSource = new Subject<NodePositionChangedEventModel>();
 
-  // Observable string streams
-  public treeDataSource$ = this.treeDataSource.asObservable();
+  // Streams used in the tree component
   public selectedNode$ = this.selectedNode.asObservable();
   public readonlyMode$ = this.readonlyMode.asObservable();
+
+  // Streams triggered by tree, to be used in 'consuming' components
   public checkStateChangedSource$ = this.checkStateChangedSource.asObservable();
   public selectionStateChangedSource$ = this.selectionStateChangedSource.asObservable();
   public nodeExpansionChangedSource$ = this.nodeExpansionChangedSource.asObservable();
@@ -39,9 +38,6 @@ export class TreeService<T = any> implements OnDestroy {
 
   private readonly treeControl: FlatTreeControl<FlatTreeModel>;
   private readonly dataSource: MatTreeFlatDataSource<TreeModel, FlatTreeModel>;
-
-  private skipNextUpdate = false;
-  private first = true;
 
   public constructor() {
     this.treeControl = new FlatTreeControl<FlatTreeModel>(FlatTreeHelper.getLevel, FlatTreeHelper.isExpandable);
@@ -74,14 +70,6 @@ export class TreeService<T = any> implements OnDestroy {
     return false;
   }
 
-  public isReadonlyNode(nodeId: string) {
-    const node = this.nodesMap.get(nodeId);
-    if (node) {
-      return node.readOnlyItem;
-    }
-    return false;
-  }
-
   public isExpanded(nodeId: string) {
     const node = this.nodesMap.get(nodeId);
     if (node) {
@@ -94,7 +82,6 @@ export class TreeService<T = any> implements OnDestroy {
     const node = this.nodesMap.get(nodeId);
     if (node) {
       this.treeControl.expand(node);
-      this.nodeExpanded(nodeId);
     }
     return false;
   }
@@ -114,16 +101,24 @@ export class TreeService<T = any> implements OnDestroy {
   // Service message commands
   public setDataSource(dataSource$: Observable<TreeModel[]>) {
     dataSource$
-      .pipe(takeUntil(this.destroyed))
+      .pipe(
+        takeUntil(this.destroyed),
+        filter(data => !!data),
+      )
       .subscribe(data => {
-        this.treeDataSource.next(data);
-        if (this.first && data) {
+        const flatTree = FlatTreeHelper.getTreeFlattener().flattenNodes(data);
+        if (this.dataChanged(flatTree)) {
           this.dataSource.data = data;
-          this.expandNodes(this.treeControl.dataNodes);
-          this.first = false;
         }
-        this.rebuildTreeForData(data);
+        this.updateCaches(flatTree);
+        this.expandNodes(flatTree);
       });
+  }
+
+  private dataChanged(newTreeNodes: FlatTreeModel[]) {
+    const currentNodeIds = this.treeControl.dataNodes.map(node => node.id).sort();
+    const newTreeNodeIds = newTreeNodes.map(node => node.id).sort();
+    return !ArrayHelper.arrayEquals(currentNodeIds, newTreeNodeIds);
   }
 
   public setSelectedNode(selectedNode$: Observable<string>) {
@@ -137,17 +132,18 @@ export class TreeService<T = any> implements OnDestroy {
   }
 
   public checkStateChanged(changedNodes: FlatTreeModel[]) {
-    this.updateCaches(changedNodes);
-    // this.skipNextUpdate = true;
+    changedNodes.forEach(node => this.checkedMap.set(node.id, node.checked));
+    this.updateLevelCheckedCache();
     this.checkStateChangedSource.next(changedNodes);
   }
 
-  public selectionStateChanged(nodeId: string) {
-    this.selectionStateChangedSource.next(nodeId);
+  public selectionStateChanged(node: FlatTreeModel) {
+    this.selectionStateChangedSource.next(node);
   }
 
-  public nodeExpanded(nodeId: string) {
-    this.nodeExpansionChangedSource.next(nodeId);
+  public toggleNodeExpanded(node: FlatTreeModel) {
+    this.treeControl.toggle(node);
+    this.nodeExpansionChangedSource.next(node);
   }
 
   public nodePositionChanged(evt: NodePositionChangedEventModel) {
@@ -159,37 +155,32 @@ export class TreeService<T = any> implements OnDestroy {
     this.destroyed.complete();
   }
 
-  private rebuildTreeForData(data: TreeModel[]) {
-    // this.dataSource.data = data;
-    // this.expandNodes(this.treeControl.dataNodes);
-    this.clearCaches();
-    this.updateCaches(FlatTreeHelper.getTreeFlattener().flattenNodes(data));
-  }
-
   private expandNodes(flatNodes: FlatTreeModel[]) {
-    if (!flatNodes || flatNodes.length === 0) { return; }
-    return flatNodes.forEach((node) => {
-      if (node.expandable && node.expanded) {
+    (flatNodes || []).forEach((flatNode) => {
+      const node = this.getNode(flatNode.id);
+      if (node && flatNode.expandable && flatNode.expanded) {
         this.treeControl.expand(node);
+      } else if(node && flatNode.expandable && !flatNode.expanded) {
+        this.treeControl.collapse(node);
       }
     });
   }
 
-  private clearCaches() {
+  private updateCaches(data: FlatTreeModel[]) {
     this.checkedMap.clear();
     this.indeterminateMap.clear();
     this.nodesMap.clear();
-  }
-
-  private updateCaches(checkChange?: FlatTreeModel[]) {
-    this.clearCaches();
     this.treeControl.dataNodes.forEach(node => {
       this.nodesMap.set(node.id, node);
       if (!FlatTreeHelper.isExpandable(node)) {
-        const updated = (checkChange || []).find(c => c.id === node.id);
-        this.checkedMap.set(node.id, !!(updated || node).checked);
+        const updated = (data || []).find(c => c.id === node.id);
+        this.checkedMap.set(node.id, (updated || node).checked);
       }
     });
+    this.updateLevelCheckedCache();
+  }
+
+  private updateLevelCheckedCache() {
     this.treeControl.dataNodes.forEach(node => {
       if (FlatTreeHelper.isExpandable(node)) {
         this.checkedMap.set(node.id, this.descendantsAllSelected(node));

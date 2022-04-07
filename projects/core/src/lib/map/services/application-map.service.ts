@@ -40,20 +40,6 @@ export class ApplicationMapService implements OnDestroy {
         this.mapService.initMap(mapOptions);
       });
 
-    // this.store$.select(selectBaseLayersAndServices)
-    //   .pipe(
-    //     takeUntil(this.destroyed),
-    //     concatMap(baseLayers => this.getLayersAndLayerManager$(baseLayers)),
-    //   )
-    //   .subscribe(([ baseLayers, layerManager ]) => {
-    //     const validBaseLayers = baseLayers.filter(isValidLayer);
-    //     if (validBaseLayers.length === 0) {
-    //       return;
-    //     }
-    //     // @TODO: support more than 1 baseLayer
-    //     layerManager.setBackgroundLayer(validBaseLayers[0]);
-    //   });
-
     this.store$.select(selectOrderedVisibleLayers)
       .pipe(
         takeUntil(this.destroyed),

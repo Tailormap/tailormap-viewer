@@ -14,7 +14,6 @@ describe('FlatTreeHelper', () => {
       checkbox: true,
       type: 'test',
       metadata: undefined,
-      readOnlyItem: false,
     });
   });
 

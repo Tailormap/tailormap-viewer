@@ -1,11 +1,10 @@
 import { Component, ElementRef, Input, NgZone, OnDestroy, Optional, TemplateRef, ViewChild } from '@angular/core';
-import { CheckStateChange, TreeService } from './tree.service';
+import { TreeService } from './tree.service';
 import { takeUntil } from 'rxjs/operators';
 import { FlatTreeHelper } from './helpers/flat-tree.helper';
 import { FlatTreeModel } from './models';
 import { Subject } from 'rxjs';
 import { DropZoneOptions, TreeDragDropService, treeNodeBaseClass } from './tree-drag-drop.service';
-import { MatRadioChange } from '@angular/material/radio';
 
 @Component({
   selector: 'tm-tree',
@@ -79,32 +78,33 @@ export class TreeComponent implements OnDestroy {
     return this.treeService.getTreeControl().isExpanded(node);
   }
 
-  public toggleNodeExpansion(node: FlatTreeModel) {
-    this.treeService.nodeExpanded(node.id);
-  }
-
-  public toggleGroup(node: FlatTreeModel): void {
+  public toggleGroupChecked(node: FlatTreeModel): void {
     if (this.readOnlyMode) {
       return;
     }
-    this.toggleNode(node, this.treeService.getTreeControl().getDescendants(node));
+    this.toggleNodeChecked(node, this.treeService.getTreeControl().getDescendants(node));
   }
 
-  public toggleLeaf(node: FlatTreeModel): void {
+  public toggleLeafChecked(node: FlatTreeModel): void {
     if (this.readOnlyMode) {
       return;
     }
-    this.toggleNode(node);
+    this.toggleNodeChecked(node);
   }
 
   public setNodeSelected(node: FlatTreeModel) {
-    this.treeService.selectionStateChanged(node.id);
+    this.treeService.selectionStateChanged(node);
     if (this.useRadioInputs && !FlatTreeHelper.isExpandable(node)) {
-      this.toggleRadioNode(node);
+      this.handleRadioChange(node);
     }
     if (this.expandOnGroupClick && FlatTreeHelper.isExpandable(node)) {
-      this.toggleNodeExpansion(node);
+      this.treeService.toggleNodeExpanded(node);
     }
+  }
+
+  public toggleNodeExpansion($event: MouseEvent, node: FlatTreeModel) {
+    $event.stopPropagation();
+    this.treeService.toggleNodeExpanded(node);
   }
 
   public getNodeClassName(node: FlatTreeModel) {
@@ -132,40 +132,14 @@ export class TreeComponent implements OnDestroy {
     this.destroyed.complete();
   }
 
-  private toggleNode(node: FlatTreeModel, descendants?: FlatTreeModel[]) {
+  private toggleNodeChecked(node: FlatTreeModel, descendants?: FlatTreeModel[]) {
     const stateChange: FlatTreeModel[] = [];
     const checked = descendants ? !this.treeService.descendantsAllSelected(node) : !this.treeService.isChecked(node);
-    stateChange.push({
-      ...node,
-      checked,
-    });
+    stateChange.push({ ...node, checked });
     if (descendants) {
-      descendants.forEach(d => {
-        stateChange.push({
-          ...d,
-          checked,
-        });
-      });
+      stateChange.push(...descendants.map(d => ({ ...d, checked })));
     }
-    // this.checkAllParentsSelection(node, stateChange);
     this.treeService.checkStateChanged(stateChange);
-  }
-
-  private checkAllParentsSelection(node: FlatTreeModel, stateChange: CheckStateChange): void {
-    let parent: FlatTreeModel | null = FlatTreeHelper.getParentNode(node, this.treeService.getDataNodes());
-    while (parent !== null) {
-      this.checkRootNodeSelection(parent, stateChange);
-      parent = FlatTreeHelper.getParentNode(parent, this.treeService.getDataNodes());
-    }
-  }
-
-  private checkRootNodeSelection(node: FlatTreeModel, stateChange: CheckStateChange): void {
-    const descAllSelected = this.treeService.descendantsAllSelected(node);
-    if (node.checked && !descAllSelected) {
-      stateChange.push({ ...node, checked: false });
-    } else if (!node.checked && descAllSelected) {
-      stateChange.push({ ...node, checked: true });
-    }
   }
 
   public handleDragStart(event: DragEvent, node: FlatTreeModel) {
@@ -199,11 +173,7 @@ export class TreeComponent implements OnDestroy {
     }
   }
 
-  public handleRadioChangeEvent($event: MatRadioChange) {
-    this.toggleRadioNode($event.value);
-  }
-
-  private toggleRadioNode(node: FlatTreeModel) {
+  public handleRadioChange(node: FlatTreeModel) {
     const checkChange: FlatTreeModel[] = [];
     if (this.checkedRadioNode) {
       checkChange.push({ ...this.checkedRadioNode, checked: false });
@@ -211,10 +181,6 @@ export class TreeComponent implements OnDestroy {
     checkChange.push({ ...node, checked: true });
     this.treeService.checkStateChanged(checkChange);
     this.checkedRadioNode = node;
-  }
-
-  public stopEvent($event: MouseEvent) {
-    $event.stopPropagation();
   }
 
 }

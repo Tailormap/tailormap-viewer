@@ -14,11 +14,12 @@ mat-checkbox {
 ::ng-deep .tree-wrapper {
   --scroll-pos: 0;
   --actions-pos: absolute;
+  --tree-node-size: 34px;
 }
 
 .mat-tree-node {
   overflow: visible;
-  height: 38px;
+  height: var(--tree-node-size);
   min-height: initial;
   position: relative;
 }
@@ -31,7 +32,7 @@ mat-checkbox {
 .tree-node-wrapper {
   display: flex;
   align-items: center;
-  height: 38px;
+  height: var(--tree-node-size);
   min-height: initial;
   flex: 1;
 }
@@ -51,7 +52,7 @@ mat-checkbox {
 
 .tree-node-wrapper--level-0.tree-node-wrapper--leaf,
 .tree-node-wrapper--leaf {
-  padding-left: 20px;
+  padding-left: 29px;
 }
 
 .tree-node-wrapper--level-0 {

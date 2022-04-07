@@ -125,3 +125,14 @@ export const selectLayerTree = createSelector(
     return tree.children || [];
   },
 );
+
+export const selectSelectedNode = createSelector(
+  selectSelectedLayerId,
+  selectLayerTreeNodes,
+  (selectedLayerId, treeNodes) => {
+    if (!selectedLayerId) {
+      return '';
+    }
+    const layerTreeNode = treeNodes.find(node => !!node.appLayerId && node.appLayerId === selectedLayerId);
+    return layerTreeNode ? layerTreeNode.id : '';
+  });

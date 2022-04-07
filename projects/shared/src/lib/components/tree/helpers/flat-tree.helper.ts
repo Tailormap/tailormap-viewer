@@ -28,7 +28,6 @@ export class FlatTreeHelper {
       checkbox: typeof node.checked !== 'undefined',
       type: node.type,
       metadata: node.metadata,
-      readOnlyItem: typeof node.readOnlyItem !== 'undefined' ? node.readOnlyItem : false,
     };
   }
 

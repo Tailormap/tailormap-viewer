@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { MapResponseModel } from '@tailormap-viewer/api';
+import { AppLayerModel, LayerTreeNodeModel, MapResponseModel, ServiceModel } from '@tailormap-viewer/api';
 
 const mapActionsPrefix = '[Map]';
 
@@ -17,9 +17,29 @@ export const loadMapFailed = createAction(
 );
 export const setLayerVisibility = createAction(
   `${mapActionsPrefix} Set Layer Visibility`,
-  props<{ visibility: Record<number, boolean> }>(),
+  props<{ visibility: Array<{ id: number; checked: boolean }> }>(),
+);
+export const toggleLevelExpansion = createAction(
+  `${mapActionsPrefix} Toggle Level Expansion`,
+  props<{ id: string }>(),
 );
 export const setSelectedLayerId = createAction(
   `${mapActionsPrefix} Set Selected Layer ID`,
-  props<{ layerId: string }>(),
+  props<{ layerId: number }>(),
+);
+export const addServices = createAction(
+  `${mapActionsPrefix} Add Services`,
+  props<{ services: ServiceModel[] }>(),
+);
+export const addAppLayers = createAction(
+  `${mapActionsPrefix} Add App Layers`,
+  props<{ appLayers: AppLayerModel[] }>(),
+);
+export const addLayerTreeNodes = createAction(
+  `${mapActionsPrefix} Add Layer Tree Nodes`,
+  props<{ layerTreeNodes: LayerTreeNodeModel[] }>(),
+);
+export const moveLayerTreeNode = createAction(
+  `${mapActionsPrefix} Move Layer Tree Nodes`,
+  props<{ nodeId: string; parentId?: string; index?: number }>(),
 );

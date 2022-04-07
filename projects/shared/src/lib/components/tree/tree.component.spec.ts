@@ -4,7 +4,7 @@ import { NgZone } from '@angular/core';
 import { render, screen } from '@testing-library/angular';
 import { TreeComponent } from './tree.component';
 import { BehaviorSubject } from 'rxjs';
-import { TreeModel } from './models';
+import { BaseTreeModel, TreeModel } from './models';
 import userEvent from '@testing-library/user-event';
 import { getTreeModelMock } from './mock-data/tree-model.mock-data';
 import { SharedImportsModule } from '../../shared-imports.module';
@@ -35,8 +35,7 @@ describe('TreeComponent', () => {
   test('renders tree', async () => {
     const ngZoneRunMock = jest.fn((cb: () => void) => cb());
     const ngZoneOutsideMock = jest.fn();
-    const ngZone = { run: ngZoneRunMock, runOutsideAngular: ngZoneOutsideMock } as unknown as NgZone;
-    const treeService = new TreeService(ngZone);
+    const treeService = new TreeService();
     const { fixture } = await render(TreeComponent, {
       providers: [
         { provide: TreeService, useValue: treeService },
@@ -52,18 +51,18 @@ describe('TreeComponent', () => {
     const tree = getTree();
     const treeData = new BehaviorSubject<TreeModel[]>(tree);
     // catch expand
-    const expandNodes = (n: TreeModel, nodeId: string): TreeModel => {
-      if (n.id === nodeId) {
+    const expandNodes = (n: TreeModel, node: BaseTreeModel): TreeModel => {
+      if (n.id === node.id) {
         return { ...n, expanded: !n.expanded };
       }
       if (typeof n.children !== 'undefined') {
-        return { ...n, children: n.children.map(c => expandNodes(c, nodeId) )};
+        return { ...n, children: n.children.map(c => expandNodes(c, node) )};
       }
       return n;
     };
     treeService.nodeExpansionChangedSource$
-      .subscribe(nodeId => {
-        treeData.next(treeData.value.map(n => expandNodes(n, nodeId)));
+      .subscribe(node => {
+        treeData.next(treeData.value.map(n => expandNodes(n, node)));
       });
     treeService.setDataSource(treeData.asObservable());
 

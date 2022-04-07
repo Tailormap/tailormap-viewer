@@ -5,5 +5,4 @@ export interface BaseTreeModel<T = any> {
   expanded?: boolean;
   type?: string;
   metadata?: T;
-  readOnlyItem?: boolean;
 }
