@@ -12,6 +12,7 @@ import { LayerModel } from '../models/layer.model';
 import { isOpenLayersVectorLayer, isPossibleRealtimeLayer } from '../helpers/ol-layer-types.helper';
 import { LayerTypesHelper } from '../helpers/layer-types.helper';
 import Geometry from 'ol/geom/Geometry';
+import { ArrayHelper } from '@tailormap-viewer/shared';
 
 export class OpenLayersLayerManager implements LayerManagerModel {
 
@@ -21,6 +22,9 @@ export class OpenLayersLayerManager implements LayerManagerModel {
   private backgroundLayerGroup = new LayerGroup();
   private baseLayerGroup = new LayerGroup();
   private vectorLayerGroup = new LayerGroup();
+
+  private prevBackgroundLayerIds: string[] = [];
+  private prevLayerIds: string[] = [];
 
   constructor(private olMap: OlMap) {}
 
@@ -39,44 +43,78 @@ export class OpenLayersLayerManager implements LayerManagerModel {
   }
 
   public setBackgroundLayers(layers: LayerModel[]) {
-    this.backgroundLayerGroup.getLayers().forEach(l => {
-      const layerId = l.getProperties()['id'];
-      if (this.layers.has(layerId)) {
-        this.layers.delete(layerId);
-      }
-    });
-    this.backgroundLayerGroup.getLayers().clear();
-    layers.forEach(layer => {
-      const olLayer = this.createLayer(layer);
-      if (olLayer === null) {
-        return;
-      }
-      OlLayerHelper.setLayerProps(layer, olLayer);
-      this.layers.set(layer.id, olLayer);
-      this.backgroundLayerGroup.getLayers().push(olLayer);
-    });
+    this.prevBackgroundLayerIds = this.updateLayers(
+      layers,
+      this.prevBackgroundLayerIds,
+      this.addBackgroundLayer.bind(this),
+      this.removeBackgroundLayer.bind(this),
+      this.getZIndexForBackgroundLayer.bind(this),
+    );
+  }
+
+  private addBackgroundLayer(layer: LayerModel, zIndex?: number) {
+    const olLayer = this.createLayer(layer);
+    if (olLayer === null) {
+      return;
+    }
+    OlLayerHelper.setLayerProps(layer, olLayer);
+    this.layers.set(layer.id, olLayer);
+    this.backgroundLayerGroup.getLayers().push(olLayer);
+    olLayer.setZIndex(this.getZIndexForBackgroundLayer(zIndex));
+  }
+
+  private removeBackgroundLayer(layerId: string) {
+    this.removeLayerAndSource(layerId, this.backgroundLayerGroup);
+  }
+
+  private getZIndexForBackgroundLayer(zIndex?: number) {
+    if (typeof zIndex === 'undefined' || zIndex === -1) {
+      zIndex = this.backgroundLayerGroup.getLayers().getLength();
+    }
+    return zIndex;
   }
 
   public setLayers(layers: LayerModel[]) {
-    const layerIds = new Set(layers.map(layer => layer.id));
+    this.prevLayerIds = this.updateLayers(
+      layers,
+      this.prevLayerIds,
+      this.addLayer.bind(this),
+      this.removeLayer.bind(this),
+      this.getZIndexForLayer.bind(this),
+    );
+  }
+
+  private updateLayers(
+    layers: LayerModel[],
+    prevLayers: string[],
+    addLayer: (layer: LayerModel, zIndex: number) => void,
+    removeLayer: (id: string) => void,
+    getZIndexForLayer: (zIndex?: number) => number,
+  ) {
+    const layerIds = layers.map(layer => layer.id);
+    if (ArrayHelper.arrayEquals(layerIds, prevLayers)) {
+      return prevLayers;
+    }
+    const layerIdSet = new Set(layerIds);
     const removableLayers: string[] = [];
     this.layers.forEach((layer, id) => {
-      if (!layerIds.has(id)) {
+      if (!layerIdSet.has(id)) {
         removableLayers.push(id);
       }
     });
-    removableLayers.forEach(id => this.removeLayer(id));
-    const layerOrder = Array.from(layerIds).reverse();
+    removableLayers.forEach(id => removeLayer(id));
+    const layerOrder = layerIds.reverse();
     layers
       .forEach(layer => {
         const zIndex = layerOrder.indexOf(layer.id);
         const existingLayer = this.layers.get(layer.id);
         if (existingLayer) {
-          existingLayer.setZIndex(this.getZIndexForLayer(zIndex));
+          existingLayer.setZIndex(getZIndexForLayer(zIndex));
           return;
         }
-        this.addLayer(layer, zIndex);
+        addLayer(layer, zIndex);
       });
+    return layerIds;
   }
 
   public addLayer<LayerType extends LayerTypes>(layer: LayerModel, zIndex?: number): LayerType | null {
@@ -185,7 +223,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     this.baseLayerGroup.setLayers(layers);
   }
 
-  private removeLayerAndSource(layerId: string) {
+  private removeLayerAndSource(layerId: string, layerGroup: LayerGroup = this.baseLayerGroup) {
     const layer = this.findLayer(layerId);
     if (!layer) {
       return;
@@ -194,9 +232,9 @@ export class OpenLayersLayerManager implements LayerManagerModel {
       this.removeVectorLayer(layer, layerId);
       return;
     }
-    const layers = this.baseLayerGroup.getLayers();
+    const layers = layerGroup.getLayers();
     layers.remove(layer);
-    this.baseLayerGroup.setLayers(layers);
+    layerGroup.setLayers(layers);
     this.layers.delete(layerId);
   }
 
