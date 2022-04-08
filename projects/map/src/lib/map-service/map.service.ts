@@ -1,7 +1,9 @@
 import { Injectable, NgZone } from '@angular/core';
 import { OpenLayersMap } from '../openlayers-map/openlayers-map';
 import { combineLatest, finalize, map, Observable, tap } from 'rxjs';
-import { LayerManagerModel, LayerTypesEnum, MapResolutionModel, MapViewerOptionsModel, ToolConfigModel, VectorLayerModel, MapStyleModel } from '../models';
+import {
+  LayerManagerModel, LayerTypesEnum, MapResolutionModel, MapViewerOptionsModel, ToolConfigModel, VectorLayerModel, MapStyleModel, ToolModel,
+} from '../models';
 import { ToolManagerModel } from '../models/tool-manager.model';
 import VectorLayer from 'ol/layer/Vector';
 import Geometry from 'ol/geom/Geometry';
@@ -42,7 +44,7 @@ export class MapService {
     return this.map.getToolManager$();
   }
 
-  public createTool$(tool: ToolConfigModel, enable?: boolean): Observable<[ ToolManagerModel, string ]> {
+  public createTool$<T extends ToolModel, C extends ToolConfigModel>(tool: C): Observable<T | null> {
     let toolManager: ToolManagerModel;
     let toolId: string;
     return this.getToolManager$()
@@ -53,13 +55,7 @@ export class MapService {
             toolManager.removeTool(toolId);
           }
         }),
-        map(manager => {
-          const id = manager.addTool(tool);
-          if (enable) {
-            manager.enableTool(id);
-          }
-          return [ manager, id ];
-        }),
+        map(manager => manager.addTool<T, C>(tool)),
       );
   }
 
@@ -158,6 +154,17 @@ export class MapService {
 
   public getProjectionCode$(): Observable<string> {
     return this.map.getProjection$().pipe(map(p => p.getCode()));
+  }
+
+  /** Gets the UOM of the map as defined in the projection.
+   * Will return 'm' in case the map's projection has not defined UOM (such as EPSG:28992).
+   *
+   * @see ol.proj.Units
+   */
+  public getUnitsOfMeasure$(): Observable<string> {
+    return this.map.getProjection$().pipe( map(
+      p => (p.getUnits()) === undefined ? 'm' : p.getUnits()),
+    );
   }
 
   public zoomIn() {

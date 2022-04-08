@@ -9,25 +9,37 @@ export class OpenLayersToolManager implements ToolManagerModel {
 
   private static toolIdCount = 0;
   private tools: Map<string, ToolModel> = new Map();
-  private previouslyActiveTools: string[] = [];
+
+  private autoEnabledTools = new Set<string>();
+  private alwaysEnabledTools = new Set<string>();
 
   constructor(private olMap: OlMap, private ngZone: NgZone) {}
 
   public destroy() {
     const toolIds = Array.from(this.tools.keys());
-    this.previouslyActiveTools = [];
+    this.autoEnabledTools = new Set();
+    this.alwaysEnabledTools = new Set();
     toolIds.forEach(id => this.removeTool(id));
   }
 
-  public addTool(tool: ToolConfigModel): string {
+  public addTool<T extends ToolModel, C extends ToolConfigModel>(tool: C): T | null {
     const toolId = `${tool.type.toLowerCase()}-${++OpenLayersToolManager.toolIdCount}`;
     if (ToolTypeHelper.isMapClickTool(tool)) {
-      this.tools.set(toolId, new OpenLayersMapClickTool(tool));
+      this.tools.set(toolId, new OpenLayersMapClickTool(toolId, tool));
     }
     if (ToolTypeHelper.isDrawingTool(tool)) {
-      this.tools.set(toolId, new OpenLayersDrawingTool(tool, this.olMap, this.ngZone));
+      this.tools.set(toolId, new OpenLayersDrawingTool(toolId, tool, this.olMap, this.ngZone));
     }
-    return toolId;
+    if (tool.alwaysEnabled) {
+      this.alwaysEnabledTools.add(toolId);
+    }
+    if (tool.autoEnable) {
+      this.autoEnabledTools.add(toolId);
+    }
+    if (tool.alwaysEnabled || tool.autoEnable) {
+      this.enableTool(toolId);
+    }
+    return this.getTool<T>(toolId);
   }
 
   public getTool<T extends ToolModel>(toolId: string): T | null {
@@ -40,7 +52,7 @@ export class OpenLayersToolManager implements ToolManagerModel {
 
   public disableTool(toolId: string): ToolManagerModel {
     this.tools.get(toolId)?.disable();
-    this.enablePreviousTools();
+    this.enableAutoEnabledTools();
     return this;
   }
 
@@ -50,9 +62,8 @@ export class OpenLayersToolManager implements ToolManagerModel {
     enableArgs?: any,
   ): ToolManagerModel {
     if (disableOtherTools) {
-      this.tools.forEach((tool, id) => {
-        if (tool.isActive) {
-          this.previouslyActiveTools.push(id);
+      this.tools.forEach((tool) => {
+        if (tool.isActive && !this.alwaysEnabledTools.has(tool.id)) {
           tool.disable();
         }
       });
@@ -64,16 +75,17 @@ export class OpenLayersToolManager implements ToolManagerModel {
   public removeTool(toolId: string): ToolManagerModel {
     this.tools.get(toolId)?.destroy();
     this.tools.delete(toolId);
-    this.enablePreviousTools();
+    this.autoEnabledTools.delete(toolId);
+    this.alwaysEnabledTools.delete(toolId);
+    this.enableAutoEnabledTools();
     return this;
   }
 
-  private enablePreviousTools() {
-    if (this.previouslyActiveTools.length === 0) {
+  private enableAutoEnabledTools() {
+    if (this.autoEnabledTools.size === 0) {
       return;
     }
-    this.previouslyActiveTools.forEach(tool => this.enableTool(tool));
-    this.previouslyActiveTools = [];
+    this.autoEnabledTools.forEach(tool => this.enableTool(tool));
   }
 
 }
