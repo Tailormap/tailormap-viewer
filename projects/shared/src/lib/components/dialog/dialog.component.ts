@@ -27,7 +27,7 @@ export class DialogComponent implements OnInit, OnChanges {
   public open: boolean | null = false;
 
   @Input()
-  public title = '';
+  public dialogTitle = '';
 
   @Input()
   public hidden: boolean | null = false;

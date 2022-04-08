@@ -4,7 +4,7 @@
 
 <tm-dialog [open]="visible$ | async"
            (closeDialog)="closeToc()"
-           i18n-title
-           title="Available layers">
+           i18n-dialogTitle
+           dialogTitle="Available layers">
   <tm-tree class="toc-tree" [treeNodeTemplate]="treeNode" [expandOnGroupClick]="true"></tm-tree>
 </tm-dialog>

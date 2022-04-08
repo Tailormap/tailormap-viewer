@@ -1,6 +1,6 @@
 export interface LayerTreeNodeModel {
   id: string;
-  appLayerId?: number;
+  appLayerId?: number | null;
   root: boolean;
   name: string;
   childrenIds: string[];

@@ -11,7 +11,7 @@ import XYZ from 'ol/source/XYZ';
 export type LayerTypes = VectorLayer<VectorSource<Geometry>> | ImageLayer<ImageWMS> | TileLayer<XYZ> | TileLayer<WMTS> | null;
 
 export interface LayerManagerModel {
-  setBackgroundLayer(layer: LayerModel): void;
+  setBackgroundLayers(layers: LayerModel[]): void;
   setLayers(layers: LayerModel[]): void;
   addLayer<LayerType extends LayerTypes>(layer: LayerModel): LayerType | null;
   addLayers(layers: LayerModel[]): void;

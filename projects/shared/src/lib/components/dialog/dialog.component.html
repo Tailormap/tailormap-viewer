@@ -6,7 +6,7 @@
      [class.dialog--collapsed]="collapsed">
 
   <div class="dialog-header">
-    <h1>{{title || ''}}</h1>
+    <h1>{{dialogTitle || ''}}</h1>
     <button *ngIf="allowCollapse" mat-icon-button class="toggle-button" (click)="expandCollapse()">
       <mat-icon *ngIf="!collapsed" svgIcon="chevron_top"></mat-icon>
       <mat-icon *ngIf="collapsed" svgIcon="chevron_bottom"></mat-icon>

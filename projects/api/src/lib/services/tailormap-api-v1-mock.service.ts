@@ -69,11 +69,10 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
         },
         isBaseLayer: false,
       }],
-      baseLayerTreeNodes: [],
-      layerTreeNodes: [{
-        id: 'root',
-        name: 'root',
-        childrenIds: ['level-2', 'level-1'],
+      baseLayerTreeNodes: [{
+        id: 'rootbg',
+        name: 'background',
+        childrenIds: ['level-1'],
         root: true,
       }, {
         id: 'level-1',
@@ -81,15 +80,22 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
         childrenIds: ['applayer-1'],
         root: false,
       }, {
-        id: 'level-2',
-        name: 'Bestuurlijke Gebieden',
-        childrenIds: ['applayer-2', 'applayer-3'],
-        root: false,
-      }, {
         id: 'applayer-1',
         appLayerId: 1,
         name: 'osm-nb-hq',
         childrenIds: [],
+        root: false,
+      }],
+      layerTreeNodes: [{
+        id: 'root',
+        name: 'root',
+        childrenIds: ['level-2'],
+        root: true,
+      }, {
+        id: 'level-2',
+        name: 'Bestuurlijke Gebieden',
+        childrenIds: ['applayer-2', 'applayer-3'],
+        appLayerId: null,
         root: false,
       }, {
         id: 'applayer-2',

@@ -21,7 +21,7 @@ export const setLayerVisibility = createAction(
 );
 export const toggleLevelExpansion = createAction(
   `${mapActionsPrefix} Toggle Level Expansion`,
-  props<{ id: string }>(),
+  props<{ id: string; isBaseLayerTree?: boolean }>(),
 );
 export const setSelectedLayerId = createAction(
   `${mapActionsPrefix} Set Selected Layer ID`,
@@ -37,9 +37,9 @@ export const addAppLayers = createAction(
 );
 export const addLayerTreeNodes = createAction(
   `${mapActionsPrefix} Add Layer Tree Nodes`,
-  props<{ layerTreeNodes: LayerTreeNodeModel[] }>(),
+  props<{ layerTreeNodes: LayerTreeNodeModel[]; isBaseLayerTree?: boolean }>(),
 );
 export const moveLayerTreeNode = createAction(
   `${mapActionsPrefix} Move Layer Tree Nodes`,
-  props<{ nodeId: string; parentId?: string; beforeNodeId?: string }>(),
+  props<{ nodeId: string; parentId?: string; beforeNodeId?: string; isBaseLayerTree?: boolean }>(),
 );

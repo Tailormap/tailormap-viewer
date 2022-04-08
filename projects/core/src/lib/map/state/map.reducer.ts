@@ -55,16 +55,17 @@ const onSetSelectedLayerId = (state: MapState, payload: ReturnType<typeof MapAct
 });
 
 const onToggleLevelExpansion = (state: MapState, payload: ReturnType<typeof MapActions.toggleLevelExpansion>): MapState => {
-  const idx = state.layerTreeNodes.findIndex(l => l.id === payload.id);
+  const tree: keyof MapState = payload.isBaseLayerTree ? 'baseLayerTreeNodes' : 'layerTreeNodes';
+  const idx = state[tree].findIndex(l => l.id === payload.id);
   if (idx === -1) {
     return state;
   }
   return {
     ...state,
-    layerTreeNodes: [
-      ...state.layerTreeNodes.slice(0, idx),
-      { ...state.layerTreeNodes[idx], expanded: !state.layerTreeNodes[idx].expanded },
-      ...state.layerTreeNodes.slice(idx + 1),
+    [tree]: [
+      ...state[tree].slice(0, idx),
+      { ...state[tree][idx], expanded: !state[tree][idx].expanded },
+      ...state[tree].slice(idx + 1),
     ],
   };
 };
@@ -79,19 +80,23 @@ const onAddAppLayers = (state: MapState, payload: ReturnType<typeof MapActions.a
   layers: [ ...state.layers, ...payload.appLayers ],
 });
 
-const onAddLayerTreeNodes = (state: MapState, payload: ReturnType<typeof MapActions.addLayerTreeNodes>): MapState => ({
-  ...state,
-  layerTreeNodes: [ ...state.layerTreeNodes, ...payload.layerTreeNodes.map(LayerTreeNodeHelper.getExtendedLayerTreeNode) ],
-});
-
-const onMoveLayerTreeNode = (state: MapState, payload: ReturnType<typeof MapActions.moveLayerTreeNode>): MapState => {
-  const newParentIdx = payload.parentId
-    ? state.layerTreeNodes.findIndex(n => n.id === payload.parentId)
-    : state.layerTreeNodes.findIndex(n => n.root);
-  const currentParentIdx = state.layerTreeNodes.findIndex(n => n.childrenIds.includes(payload.nodeId));
+const onAddLayerTreeNodes = (state: MapState, payload: ReturnType<typeof MapActions.addLayerTreeNodes>): MapState => {
+  const tree: keyof MapState = payload.isBaseLayerTree ? 'baseLayerTreeNodes' : 'layerTreeNodes';
   return {
     ...state,
-    layerTreeNodes: state.layerTreeNodes.map((node, idx) => {
+    [tree]: [...state[tree], ...payload.layerTreeNodes.map(LayerTreeNodeHelper.getExtendedLayerTreeNode)],
+  };
+};
+
+const onMoveLayerTreeNode = (state: MapState, payload: ReturnType<typeof MapActions.moveLayerTreeNode>): MapState => {
+  const tree: keyof MapState = payload.isBaseLayerTree ? 'baseLayerTreeNodes' : 'layerTreeNodes';
+  const newParentIdx = payload.parentId
+    ? state[tree].findIndex(n => n.id === payload.parentId)
+    : state[tree].findIndex(n => n.root);
+  const currentParentIdx = state[tree].findIndex(n => n.childrenIds.includes(payload.nodeId));
+  return {
+    ...state,
+    [tree]: state[tree].map((node, idx) => {
       if (newParentIdx === idx) {
         let pos = typeof payload.beforeNodeId !== 'undefined'
           ? node.childrenIds.indexOf(payload.beforeNodeId)
