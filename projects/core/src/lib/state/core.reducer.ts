@@ -1,7 +1,7 @@
 import * as CoreActions from './core.actions';
 import { Action, createReducer, on } from '@ngrx/store';
 import { CoreState, initialCoreState } from './core.state';
-import { LoadingStateEnum } from '@tailormap-viewer/api';
+import { LoadingStateEnum } from '@tailormap-viewer/shared';
 
 const onLoadApplication = (state: CoreState): CoreState => ({
   ...state,
@@ -22,15 +22,7 @@ const onApplicationLoadSuccess = (
     lang: payload.application.lang,
     styling: payload.application.styling,
   },
-  map: {
-    initialExtent: payload.map.initialExtent || undefined,
-    maxExtent: payload.map.maxExtent || undefined,
-    services: payload.map.services,
-    baseLayers: payload.map.baseLayers,
-    crs: payload.map.crs,
-    components: [ ...payload.components ],
-    layers: [ ...payload.layers ],
-  },
+  components: [ ...payload.components ],
 });
 
 const onApplicationLoadFailed = (
@@ -62,31 +54,6 @@ const onSetLoginDetails = (
   },
 });
 
-const onSetLayerVisibility = (state: CoreState, payload: ReturnType<typeof CoreActions.setLayerVisibility>): CoreState => ({
-  ...state,
-  map: {
-    ...state.map,
-    layers: state.map.layers.map(layer => {
-      const layerId = `${layer.id}`;
-      const visible = typeof payload.visibility[layerId] !== 'undefined'
-        ? payload.visibility[layerId]
-        : layer.visible;
-      return {
-        ...layer,
-        visible,
-      };
-    }),
-  },
-});
-
-const onSetSelectedLayerId = (state: CoreState, payload: ReturnType<typeof CoreActions.setSelectedLayerId>): CoreState => ({
-  ...state,
-  map: {
-    ...state.map,
-    selectedLayer: +(payload.layerId),
-  },
-});
-
 const coreReducerImpl = createReducer<CoreState>(
   initialCoreState,
   on(CoreActions.loadApplication, onLoadApplication),
@@ -94,7 +61,5 @@ const coreReducerImpl = createReducer<CoreState>(
   on(CoreActions.loadApplicationFailed, onApplicationLoadFailed),
   on(CoreActions.setRouteBeforeLogin, onSetRouteBeforeLogin),
   on(CoreActions.setLoginDetails, onSetLoginDetails),
-  on(CoreActions.setLayerVisibility, onSetLayerVisibility),
-  on(CoreActions.setSelectedLayerId, onSetSelectedLayerId),
 );
 export const coreReducer = (state: CoreState | undefined, action: Action) => coreReducerImpl(state, action);

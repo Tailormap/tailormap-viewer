@@ -20,16 +20,16 @@
         <mat-checkbox *ngIf="node.checkbox && !useRadioInputs"
                       class="checklist-leaf-node"
                       [aria-label]="'toggle ' + node.label"
-                      [checked]="node.checked"
+                      [checked]="isChecked(node)"
                       [disabled]="readOnlyMode"
                       (click)="$event.stopPropagation()"
-                      (change)="toggleLeaf(node)"></mat-checkbox>
+                      (change)="toggleLeafChecked(node)"></mat-checkbox>
         <mat-radio-button *ngIf="useRadioInputs"
                           class="checklist-leaf-node"
                           [disabled]="readOnlyMode"
-                          [checked]="node.checked"
+                          [checked]="isChecked(node)"
                           [aria-label]="'toggle ' + node.label"
-                          (change)="handleRadioChangeEvent($event)"
+                          (change)="handleRadioChange(node)"
                           (click)="$event.stopPropagation()"
                           [value]="node"></mat-radio-button>
         <ng-container class="tree-node-container" *ngTemplateOutlet="treeNodeTemplate ? treeNodeTemplate : defaultTreeNodeTemplate; context: {$implicit: node}"></ng-container>
@@ -46,19 +46,19 @@
            [attr.data-nodeid]="node.id"
            (dragstart)="treeDragDropServiceEnabled ? handleDragStart($event, node) : null">
         <button mat-icon-button
-                (click)="toggleNodeExpansion(node)"
+                (click)="toggleNodeExpansion($event, node)"
                 [attr.aria-label]="'toggle ' + node.label">
-          <mat-icon class="mat-icon-rtl-mirror">
-            {{isExpanded(node) ? 'expand_more' : 'chevron_right'}}
-          </mat-icon>
+          <mat-icon class="mat-icon-rtl-mirror"
+                    [svgIcon]="isExpanded(node) ? 'chevron_bottom' : 'chevron_right'"></mat-icon>
         </button>
         <mat-checkbox *ngIf="node.checkbox && !useRadioInputs"
-                      [indeterminate]="isIndeterminate(node)"
-                      [checked]="isChecked(node)"
                       [disabled]="readOnlyMode"
                       [aria-label]="'toggle ' + node.label"
                       (click)="$event.stopPropagation()"
-                      (change)="toggleGroup(node)"></mat-checkbox>
+                      (change)="toggleGroupChecked(node)"
+                      [checked]="isChecked(node)"
+                      [indeterminate]="isIndeterminate(node)"
+        ></mat-checkbox>
         <ng-container *ngTemplateOutlet="treeNodeTemplate ? treeNodeTemplate : defaultTreeNodeTemplate; context: {$implicit: node}"></ng-container>
       </div>
     </mat-tree-node>

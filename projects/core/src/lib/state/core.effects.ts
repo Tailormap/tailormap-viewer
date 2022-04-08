@@ -19,9 +19,7 @@ export class CoreEffects {
               }
               return CoreActions.loadApplicationSuccess({
                 application: response.result.application,
-                map: response.result.map,
                 components: response.result.components,
-                layers: response.result.layers,
               });
             }),
           );

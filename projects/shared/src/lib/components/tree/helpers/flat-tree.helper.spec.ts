@@ -14,14 +14,13 @@ describe('FlatTreeHelper', () => {
       checkbox: true,
       type: 'test',
       metadata: undefined,
-      readOnlyItem: false,
     });
   });
 
   test('checks if TreeModel has children', () => {
     expect(FlatTreeHelper.hasChildren(getTreeModelMock())).toEqual(false);
     expect(FlatTreeHelper.hasChildren(getTreeModelMock({ children: [ getTreeModelMock() ]}))).toEqual(true);
-    expect(FlatTreeHelper.hasChildren(getTreeModelMock({ children: [] }))).toEqual(true);
+    expect(FlatTreeHelper.hasChildren(getTreeModelMock({ children: [] }))).toEqual(false);
   });
 
   test('gets children', () => {

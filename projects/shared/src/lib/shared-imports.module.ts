@@ -14,21 +14,6 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatTreeModule } from '@angular/material/tree';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    FormsModule,
-    HttpClientModule,
-    MatButtonModule,
-    MatIconModule,
-    MatSnackBarModule,
-    MatProgressBarModule,
-    MatTooltipModule,
-    MatMenuModule,
-    MatCheckboxModule,
-    MatRadioModule,
-    MatTreeModule,
-  ],
   exports: [
     CommonModule,
     ReactiveFormsModule,

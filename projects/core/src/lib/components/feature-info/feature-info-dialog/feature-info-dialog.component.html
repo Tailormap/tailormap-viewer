@@ -4,10 +4,10 @@
            [allowCollapse]="true"
            [collapsed]="dialogCollapsed$ | async"
            (expandCollapseDialog)="expandCollapseDialog()"
-           i18n-title title="Object Information">
+           i18n-title dialogTitle="Object Information">
   <div class="feature-info" *ngIf="currentFeature$ | async as currentFeature">
     <div class="content">
-      <h2>{{currentFeature.layer.displayName}}</h2>
+      <h2>{{currentFeature.layer.title}}</h2>
       <div *ngFor="let a of getAttributes(currentFeature) | keyvalue" class="row">
         <strong>{{a.value.label}}</strong>
         {{a.value.value}}

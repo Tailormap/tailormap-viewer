@@ -6,7 +6,6 @@ export const getTreeModelMock = (overrides?: Partial<TreeModel>): TreeModel => (
   type: 'test',
   children: undefined,
   metadata: undefined,
-  readOnlyItem: false,
   checked: false,
   expanded: false,
   ...overrides,

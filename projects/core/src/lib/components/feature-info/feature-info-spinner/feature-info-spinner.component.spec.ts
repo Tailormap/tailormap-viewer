@@ -5,7 +5,7 @@ import { of } from 'rxjs';
 import { MapService } from '@tailormap-viewer/map';
 import { featureInfoStateKey } from '../state/feature-info.state';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { LoadStatusEnum } from '@tailormap-viewer/shared';
+import { LoadingStateEnum } from '@tailormap-viewer/shared';
 
 describe('FeatureInfoSpinnerComponent', () => {
 
@@ -13,7 +13,7 @@ describe('FeatureInfoSpinnerComponent', () => {
     const mapService = { getPixelForCoordinates$: jest.fn((coords: [number, number]) => of(coords)) };
     const { container } = await render(FeatureInfoSpinnerComponent, {
       providers: [
-        provideMockStore({initialState: { [featureInfoStateKey]: { loadStatus: LoadStatusEnum.INITIAL, mapCoordinates: undefined } }}),
+        provideMockStore({initialState: { [featureInfoStateKey]: { loadStatus: LoadingStateEnum.INITIAL, mapCoordinates: undefined } }}),
         { provide: MapService, useValue: mapService },
       ],
       schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
@@ -28,7 +28,7 @@ describe('FeatureInfoSpinnerComponent', () => {
     const mapService = { getPixelForCoordinates$: jest.fn((coords: [number, number]) => of(coords)) };
     const { container } = await render(FeatureInfoSpinnerComponent, {
       providers: [
-        provideMockStore({initialState: { [featureInfoStateKey]: { loadStatus: LoadStatusEnum.LOADING, mapCoordinates: [5, 5]} }}),
+        provideMockStore({initialState: { [featureInfoStateKey]: { loadStatus: LoadingStateEnum.LOADING, mapCoordinates: [5, 5]} }}),
         { provide: MapService, useValue: mapService },
       ],
       schemas: [ CUSTOM_ELEMENTS_SCHEMA ],

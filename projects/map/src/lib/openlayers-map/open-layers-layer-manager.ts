@@ -38,12 +38,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     this.olMap.removeLayer(this.vectorLayerGroup);
   }
 
-  public setBackgroundLayer(layer: LayerModel) {
-    const olLayer = this.createLayer(layer);
-    if (olLayer === null) {
-      return;
-    }
-    OlLayerHelper.setLayerProps(layer, olLayer);
+  public setBackgroundLayers(layers: LayerModel[]) {
     this.backgroundLayerGroup.getLayers().forEach(l => {
       const layerId = l.getProperties()['id'];
       if (this.layers.has(layerId)) {
@@ -51,8 +46,15 @@ export class OpenLayersLayerManager implements LayerManagerModel {
       }
     });
     this.backgroundLayerGroup.getLayers().clear();
-    this.layers.set(layer.id, olLayer);
-    this.backgroundLayerGroup.getLayers().push(olLayer);
+    layers.forEach(layer => {
+      const olLayer = this.createLayer(layer);
+      if (olLayer === null) {
+        return;
+      }
+      OlLayerHelper.setLayerProps(layer, olLayer);
+      this.layers.set(layer.id, olLayer);
+      this.backgroundLayerGroup.getLayers().push(olLayer);
+    });
   }
 
   public setLayers(layers: LayerModel[]) {

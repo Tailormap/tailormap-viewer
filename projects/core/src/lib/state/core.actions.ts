@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { AppLayerModel, AppResponseModel, ComponentModel, MapResponseModel } from '@tailormap-viewer/api';
+import { AppResponseModel, ComponentModel } from '@tailormap-viewer/api';
 
 const prefix = '[Core]';
 
@@ -9,12 +9,7 @@ export const loadApplication = createAction(
 );
 export const loadApplicationSuccess = createAction(
   `${prefix} Application Load Success`,
-  props<{
-    application: AppResponseModel;
-    map: MapResponseModel;
-    layers: AppLayerModel[];
-    components: ComponentModel[];
-  }>(),
+  props<{ application: AppResponseModel; components: ComponentModel[] }>(),
 );
 export const loadApplicationFailed = createAction(
   `${prefix} Application Load Failed`,
@@ -27,12 +22,4 @@ export const setRouteBeforeLogin = createAction(
 export const setLoginDetails = createAction(
   `${prefix} Set Login Details`,
   props<{ loggedIn: boolean; user?: { username?: string } }>(),
-);
-export const setLayerVisibility = createAction(
-  `${prefix} Set Layer Visibility`,
-  props<{ visibility: Record<string, boolean> }>(),
-);
-export const setSelectedLayerId = createAction(
-  `${prefix} Set Selected Layer ID`,
-  props<{ layerId: string }>(),
 );

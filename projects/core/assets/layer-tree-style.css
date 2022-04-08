@@ -1,14 +1,15 @@
 tm-tree ::ng-deep .tree-node-wrapper > .mat-icon-button {
-  order: 2;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
+tm-tree ::ng-deep .tree-node-wrapper > .mat-icon-button mat-icon {
+  width: 18px;
+  height: 18px;
+}
+
 tm-tree ::ng-deep .tree-node-wrapper--folder {
-  border: 1px solid #e1e1e1;
-  border-radius: 1px;
-  padding: 0 12px;
   font-weight: 600;
 }
 

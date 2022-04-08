@@ -3,7 +3,7 @@ import { featureInfoReducer } from './feature-info.reducer';
 import { FeatureInfoState, initialFeatureInfoState } from './feature-info.state';
 import { FeatureInfoResponseModel } from '../models/feature-info-response.model';
 import { getAppLayerModel, getColumnMetadataModel, getFeatureModel } from '@tailormap-viewer/api';
-import { LoadStatusEnum } from '@tailormap-viewer/shared';
+import { LoadingStateEnum } from '@tailormap-viewer/shared';
 
 describe('FeatureInfoReducer', () => {
 
@@ -13,7 +13,7 @@ describe('FeatureInfoReducer', () => {
     const updatedState = featureInfoReducer(state, action);
     expect(updatedState.mapCoordinates).toEqual([2,3]);
     expect(updatedState.mouseCoordinates).toEqual([1,2]);
-    expect(updatedState.loadStatus).toEqual(LoadStatusEnum.LOADING);
+    expect(updatedState.loadStatus).toEqual(LoadingStateEnum.LOADING);
   });
 
   test('handles LoadFeatureInfoSuccess', () => {
@@ -28,7 +28,7 @@ describe('FeatureInfoReducer', () => {
     expect(updatedState.features).toEqual(featureInfo[0].features);
     expect(updatedState.columnMetadata).toEqual(featureInfo[0].columnMetadata);
     expect(updatedState.currentFeatureIndex).toEqual(0);
-    expect(updatedState.loadStatus).toEqual(LoadStatusEnum.LOADED);
+    expect(updatedState.loadStatus).toEqual(LoadingStateEnum.LOADED);
   });
 
   test('handles LoadFeatureInfoFailed', () => {
@@ -37,7 +37,7 @@ describe('FeatureInfoReducer', () => {
     const updatedState = featureInfoReducer(state, action);
     expect(updatedState.features).toEqual([]);
     expect(updatedState.columnMetadata).toEqual([]);
-    expect(updatedState.loadStatus).toEqual(LoadStatusEnum.ERROR);
+    expect(updatedState.loadStatus).toEqual(LoadingStateEnum.FAILED);
     expect(updatedState.errorMessage).toEqual('Loading data failed for some reason');
   });
 

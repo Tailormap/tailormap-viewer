@@ -1,32 +1,32 @@
-import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { Injectable, OnDestroy } from '@angular/core';
+import { BehaviorSubject, filter, Observable, Subject } from 'rxjs';
 
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { FlatTreeHelper } from './helpers/flat-tree.helper';
 import { MatTreeFlatDataSource } from '@angular/material/tree';
 import { TreeModel, FlatTreeModel, NodePositionChangedEventModel } from './models';
 import { takeUntil } from 'rxjs/operators';
-
-export type CheckStateChange = Map<string, boolean>;
+import { BaseTreeModel } from './models/base-tree.model';
+import { ArrayHelper } from '../../helpers';
 
 @Injectable()
-export class TreeService implements OnDestroy {
+export class TreeService<T = any> implements OnDestroy {
 
   private destroyed = new Subject();
 
   // Observable string sources
-  private treeDataSource = new BehaviorSubject<TreeModel[]>([]);
   private selectedNode = new BehaviorSubject<string>('');
   private readonlyMode = new BehaviorSubject<boolean>(false);
-  private checkStateChangedSource = new Subject<CheckStateChange>();
-  private selectionStateChangedSource = new Subject<string>();
-  private nodeExpansionChangedSource = new Subject<string>();
+  private checkStateChangedSource = new Subject<BaseTreeModel<T>[]>();
+  private selectionStateChangedSource = new Subject<BaseTreeModel<T>>();
+  private nodeExpansionChangedSource = new Subject<BaseTreeModel<T>>();
   private nodePositionChangedSource = new Subject<NodePositionChangedEventModel>();
 
-  // Observable string streams
-  public treeDataSource$ = this.treeDataSource.asObservable();
+  // Streams used in the tree component
   public selectedNode$ = this.selectedNode.asObservable();
   public readonlyMode$ = this.readonlyMode.asObservable();
+
+  // Streams triggered by tree, to be used in 'consuming' components
   public checkStateChangedSource$ = this.checkStateChangedSource.asObservable();
   public selectionStateChangedSource$ = this.selectionStateChangedSource.asObservable();
   public nodeExpansionChangedSource$ = this.nodeExpansionChangedSource.asObservable();
@@ -39,7 +39,7 @@ export class TreeService implements OnDestroy {
   private readonly treeControl: FlatTreeControl<FlatTreeModel>;
   private readonly dataSource: MatTreeFlatDataSource<TreeModel, FlatTreeModel>;
 
-  public constructor(private ngZone: NgZone) {
+  public constructor() {
     this.treeControl = new FlatTreeControl<FlatTreeModel>(FlatTreeHelper.getLevel, FlatTreeHelper.isExpandable);
     this.dataSource = new MatTreeFlatDataSource(this.treeControl, FlatTreeHelper.getTreeFlattener());
     this.dataSource.data = [];
@@ -70,14 +70,6 @@ export class TreeService implements OnDestroy {
     return false;
   }
 
-  public isReadonlyNode(nodeId: string) {
-    const node = this.nodesMap.get(nodeId);
-    if (node) {
-      return node.readOnlyItem;
-    }
-    return false;
-  }
-
   public isExpanded(nodeId: string) {
     const node = this.nodesMap.get(nodeId);
     if (node) {
@@ -90,7 +82,6 @@ export class TreeService implements OnDestroy {
     const node = this.nodesMap.get(nodeId);
     if (node) {
       this.treeControl.expand(node);
-      this.nodeExpanded(nodeId);
     }
     return false;
   }
@@ -110,11 +101,24 @@ export class TreeService implements OnDestroy {
   // Service message commands
   public setDataSource(dataSource$: Observable<TreeModel[]>) {
     dataSource$
-      .pipe(takeUntil(this.destroyed))
+      .pipe(
+        takeUntil(this.destroyed),
+        filter(data => !!data),
+      )
       .subscribe(data => {
-        this.treeDataSource.next(data);
-        this.rebuildTreeForData(data);
+        const flatTree = FlatTreeHelper.getTreeFlattener().flattenNodes(data);
+        if (this.dataChanged(flatTree)) {
+          this.dataSource.data = data;
+        }
+        this.updateCaches(flatTree);
+        this.expandNodes(flatTree);
       });
+  }
+
+  private dataChanged(newTreeNodes: FlatTreeModel[]) {
+    const currentNodeIds = this.treeControl.dataNodes.map(node => node.id).sort();
+    const newTreeNodeIds = newTreeNodes.map(node => node.id).sort();
+    return !ArrayHelper.arrayEquals(currentNodeIds, newTreeNodeIds);
   }
 
   public setSelectedNode(selectedNode$: Observable<string>) {
@@ -127,23 +131,23 @@ export class TreeService implements OnDestroy {
     this.readonlyMode.next(readonlyMode);
   }
 
-  public checkStateChanged(stateChange: CheckStateChange) {
-    this.ngZone.run(() => {
-      this.checkStateChangedSource.next(stateChange);
-      this.updateCaches();
-    });
+  public checkStateChanged(changedNodes: FlatTreeModel[]) {
+    changedNodes.forEach(node => this.checkedMap.set(node.id, node.checked));
+    this.updateLevelCheckedCache();
+    this.checkStateChangedSource.next(changedNodes);
   }
 
-  public selectionStateChanged(nodeId: string) {
-    this.ngZone.run(() => this.selectionStateChangedSource.next(nodeId));
+  public selectionStateChanged(node: FlatTreeModel) {
+    this.selectionStateChangedSource.next(node);
   }
 
-  public nodeExpanded(nodeId: string) {
-    this.ngZone.run(() => this.nodeExpansionChangedSource.next(nodeId));
+  public toggleNodeExpanded(node: FlatTreeModel) {
+    this.treeControl.toggle(node);
+    this.nodeExpansionChangedSource.next(node);
   }
 
   public nodePositionChanged(evt: NodePositionChangedEventModel) {
-    this.ngZone.run(() => this.nodePositionChangedSource.next(evt));
+    this.nodePositionChangedSource.next(evt);
   }
 
   public ngOnDestroy(): void {
@@ -151,35 +155,33 @@ export class TreeService implements OnDestroy {
     this.destroyed.complete();
   }
 
-  public hasNodes(): boolean {
-    return this.treeDataSource.getValue().length !== 0;
-  }
-
-  private rebuildTreeForData(data: TreeModel[]) {
-    this.dataSource.data = data;
-    this.expandNodes(this.treeControl.dataNodes);
-    this.clearCaches();
-    this.updateCaches();
-  }
-
   private expandNodes(flatNodes: FlatTreeModel[]) {
-    if (!flatNodes || flatNodes.length === 0) { return; }
-    return flatNodes.forEach((node) => {
-      if (node.expandable && node.expanded) {
+    (flatNodes || []).forEach((flatNode) => {
+      const node = this.getNode(flatNode.id);
+      if (node && flatNode.expandable && flatNode.expanded) {
         this.treeControl.expand(node);
+      } else if(node && flatNode.expandable && !flatNode.expanded) {
+        this.treeControl.collapse(node);
       }
     });
   }
 
-  private clearCaches() {
+  private updateCaches(data: FlatTreeModel[]) {
     this.checkedMap.clear();
     this.indeterminateMap.clear();
     this.nodesMap.clear();
-  }
-
-  private updateCaches() {
     this.treeControl.dataNodes.forEach(node => {
       this.nodesMap.set(node.id, node);
+      if (!FlatTreeHelper.isExpandable(node)) {
+        const updated = (data || []).find(c => c.id === node.id);
+        this.checkedMap.set(node.id, (updated || node).checked);
+      }
+    });
+    this.updateLevelCheckedCache();
+  }
+
+  private updateLevelCheckedCache() {
+    this.treeControl.dataNodes.forEach(node => {
       if (FlatTreeHelper.isExpandable(node)) {
         this.checkedMap.set(node.id, this.descendantsAllSelected(node));
         this.indeterminateMap.set(node.id, this.descendantsPartiallySelected(node));
@@ -191,7 +193,7 @@ export class TreeService implements OnDestroy {
     if (FlatTreeHelper.isExpandable(node)) {
       return this.descendantsAllSelected(node);
     }
-    return node.checked;
+    return this.isChecked(node);
   }
 
   public descendantsAllSelected(node: FlatTreeModel): boolean {
@@ -209,11 +211,11 @@ export class TreeService implements OnDestroy {
   }
 
   public isIndeterminate(node: FlatTreeModel) {
-    return this.indeterminateMap.get(node.id);
+    return this.indeterminateMap.get(node.id) || false;
   }
 
   public isChecked(node: FlatTreeModel) {
-    return this.checkedMap.has(node.id);
+    return this.checkedMap.get(node.id) || false;
   }
 
   public getNode(nodeId: string): FlatTreeModel | undefined {

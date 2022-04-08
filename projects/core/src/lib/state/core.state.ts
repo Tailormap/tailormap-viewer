@@ -1,6 +1,5 @@
-import {
-  AppLayerModel, BoundsModel, ComponentModel, CoordinateReferenceSystemModel, Language, LoadingStateEnum, SecurityModel, ServiceModel,
-} from '@tailormap-viewer/api';
+import { ComponentModel, Language, SecurityModel } from '@tailormap-viewer/api';
+import { LoadingStateEnum } from '@tailormap-viewer/shared';
 
 export const coreStateKey = 'core';
 
@@ -13,34 +12,17 @@ export interface ApplicationState {
   styling?: object;
 }
 
-export interface MapState {
-  initialExtent?: BoundsModel;
-  maxExtent?: BoundsModel;
-  services: ServiceModel[];
-  baseLayers: AppLayerModel[];
-  crs?: CoordinateReferenceSystemModel;
-  components: ComponentModel[];
-  layers: AppLayerModel[];
-  selectedLayer?: number;
-}
-
 export interface CoreState {
   loadStatus: LoadingStateEnum;
   error?: string;
   routeBeforeLogin?: string;
   security: SecurityModel;
-  application: ApplicationState;
-  map: MapState;
+  application?: ApplicationState;
+  components: ComponentModel[];
 }
 
 export const initialCoreState: CoreState = {
   loadStatus: LoadingStateEnum.INITIAL,
   security: { loggedIn: false },
-  application: {},
-  map: {
-    services: [],
-    baseLayers: [],
-    components: [],
-    layers: [],
-  },
+  components: [],
 };

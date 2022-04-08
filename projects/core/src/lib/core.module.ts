@@ -8,7 +8,6 @@ import { coreStateKey } from './state/core.state';
 import { CoreEffects } from './state/core.effects';
 import { TAILORMAP_API_V1_SERVICE, TailormapApiV1Service } from '@tailormap-viewer/api';
 import { ICON_SERVICE_ICON_LOCATION, IconService, SharedModule } from '@tailormap-viewer/shared';
-import { ApplicationMapService } from './services/application-map.service';
 import { ComponentsModule } from './components/components.module';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -17,6 +16,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { LoginFormComponent } from './pages/login/login-form/login-form.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { SecurityInterceptor } from './interceptors/security.interceptor';
+import { ApplicationMapModule } from './map/application-map.module';
 
 const getBaseHref = (platformLocation: PlatformLocation): string => {
   return platformLocation.getBaseHrefFromDOM();
@@ -42,6 +42,7 @@ const getBaseHref = (platformLocation: PlatformLocation): string => {
       },
     }),
     EffectsModule.forRoot([ CoreEffects ]),
+    ApplicationMapModule,
     MapModule,
     SharedModule,
     ComponentsModule,
@@ -58,7 +59,6 @@ const getBaseHref = (platformLocation: PlatformLocation): string => {
 })
 export class CoreModule {
   constructor(
-    _applicationMapService: ApplicationMapService,
     matIconRegistry: MatIconRegistry,
     domSanitizer: DomSanitizer,
     iconService: IconService,

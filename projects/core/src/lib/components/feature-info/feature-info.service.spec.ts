@@ -4,7 +4,8 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { CoreState, initialCoreState } from '../../state/core.state';
 import { getAppLayerModel, getFeaturesResponseModel, getServiceModel, TAILORMAP_API_V1_SERVICE } from '@tailormap-viewer/api';
 import { of } from 'rxjs';
-import { selectApplicationId, selectVisibleLayers } from '../../state/core.selectors';
+import { selectApplicationId} from '../../state/core.selectors';
+import { selectVisibleLayers } from '../../map/state/map.selectors';
 
 describe('FeatureInfoService', () => {
 
@@ -59,7 +60,7 @@ describe('FeatureInfoService', () => {
 
   test('returns empty array when there are no application id', done => {
     store.overrideSelector(selectVisibleLayers, []);
-    store.overrideSelector(selectApplicationId, undefined);
+    store.overrideSelector(selectApplicationId, 0);
     expect(spectator.service).toBeTruthy();
     spectator.service.getFeatures$([1, 2])
       .subscribe(featureInfo => {

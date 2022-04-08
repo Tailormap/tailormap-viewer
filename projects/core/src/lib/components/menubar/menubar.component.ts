@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   Component, ComponentFactoryResolver, ComponentRef, OnDestroy, OnInit, ViewChild, ViewContainerRef,
 } from '@angular/core';
 import { delay, takeUntil } from 'rxjs/operators';
@@ -17,11 +18,12 @@ export class MenubarComponent implements OnInit, OnDestroy {
   private menuButtonsContainer: ViewContainerRef | null = null;
 
   private destroyed = new Subject();
-  private injectedComponents: ComponentRef<any>[] = [];
+  public injectedComponents: ComponentRef<any>[] = [];
 
   constructor(
     private menubarService: MenubarService,
     private componentFactoryResolver: ComponentFactoryResolver,
+    private cdr: ChangeDetectorRef,
   ) {
   }
 
@@ -41,6 +43,7 @@ export class MenubarComponent implements OnInit, OnDestroy {
           this.menuButtonsContainer,
           this.componentFactoryResolver,
         );
+        this.cdr.detectChanges();
       });
   }
 

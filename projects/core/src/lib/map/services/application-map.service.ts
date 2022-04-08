@@ -1,11 +1,11 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { LayerModel, LayerTypesEnum, MapService, OgcHelper, WMSLayerModel, WMTSLayerModel } from '@tailormap-viewer/map';
-import { selectMapOptions, selectVisibleLayers } from '../state/core.selectors';
 import { concatMap, distinctUntilChanged, filter, forkJoin, map, Observable, of, Subject, take, takeUntil } from 'rxjs';
 import { AppLayerModel, ServiceModel, ServiceProtocol } from '@tailormap-viewer/api';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { ArrayHelper } from '@tailormap-viewer/shared';
+import { selectMapOptions, selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayers } from '../state/map.selectors';
 
 @Injectable({
    providedIn: 'root',
@@ -40,21 +40,16 @@ export class ApplicationMapService implements OnDestroy {
         this.mapService.initMap(mapOptions);
       });
 
-    // this.store$.select(selectBaseLayersAndServices)
-    //   .pipe(
-    //     takeUntil(this.destroyed),
-    //     concatMap(baseLayers => this.getLayersAndLayerManager$(baseLayers)),
-    //   )
-    //   .subscribe(([ baseLayers, layerManager ]) => {
-    //     const validBaseLayers = baseLayers.filter(isValidLayer);
-    //     if (validBaseLayers.length === 0) {
-    //       return;
-    //     }
-    //     // @TODO: support more than 1 baseLayer
-    //     layerManager.setBackgroundLayer(validBaseLayers[0]);
-    //   });
+    this.store$.select(selectOrderedVisibleBackgroundLayers)
+      .pipe(
+        takeUntil(this.destroyed),
+        concatMap(layers => this.getLayersAndLayerManager$(layers)),
+      )
+      .subscribe(([ layers, layerManager ]) => {
+        layerManager.setBackgroundLayers(layers.filter(isValidLayer));
+      });
 
-    this.store$.select(selectVisibleLayers)
+    this.store$.select(selectOrderedVisibleLayers)
       .pipe(
         takeUntil(this.destroyed),
         concatMap(layers => this.getLayersAndLayerManager$(layers)),
@@ -87,8 +82,8 @@ export class ApplicationMapService implements OnDestroy {
         .pipe(
           map((capabilities: string): WMTSLayerModel => ({
             id: `${appLayer.id}`,
-            layers: appLayer.displayName,
-            name: appLayer.displayName,
+            layers: appLayer.layerName,
+            name: appLayer.layerName,
             layerType: LayerTypesEnum.WMTS,
             visible: appLayer.visible,
             url: service.url,
@@ -100,8 +95,8 @@ export class ApplicationMapService implements OnDestroy {
     if (service.protocol === ServiceProtocol.WMS) {
       const layer: WMSLayerModel = {
         id: `${appLayer.id}`,
-        layers: appLayer.displayName,
-        name: appLayer.displayName,
+        layers: appLayer.layerName,
+        name: appLayer.layerName,
         layerType: LayerTypesEnum.WMS,
         visible: appLayer.visible,
         url: service.url,
