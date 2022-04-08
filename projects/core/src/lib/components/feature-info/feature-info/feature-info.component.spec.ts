@@ -7,21 +7,18 @@ import { of } from 'rxjs';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackBarMessageComponent } from '@tailormap-viewer/shared';
-import { tick } from '@angular/core/testing';
 
 jest.useFakeTimers();
 
 describe('FeatureInfoComponent', () => {
 
   test('should render', async () => {
-    const mockGetTool = jest.fn(() => ({
+    const createTool = jest.fn(() => of({
       mapClick$: of({
         mapCoordinates: [ 1, 2 ],
         mouseCoordinates: [ 2, 3 ],
       }),
     }));
-    const toolManager = { getTool: mockGetTool };
-    const createTool = jest.fn(() => of([toolManager, '1']));
     const mockDispatch = jest.fn();
     const mockSelect = jest.fn(() => of('POINT(1 2)'));
     const highlightFeaturesMock = jest.fn(() => of(null));
@@ -44,7 +41,6 @@ describe('FeatureInfoComponent', () => {
     });
 
     expect(createTool).toHaveBeenCalled();
-    expect(mockGetTool).toHaveBeenCalled();
     const highlightArgs = Array.from(highlightFeaturesMock.mock.calls[0]);
     expect(highlightArgs.length).toEqual(3);
     expect(highlightArgs[0]).toEqual('feature-info-highlight-layer');
@@ -54,14 +50,12 @@ describe('FeatureInfoComponent', () => {
   });
 
   test('renders error message', async () => {
-    const mockGetTool = jest.fn(() => ({
+    const createTool = jest.fn(() => of({
       mapClick$: of({
         mapCoordinates: [ 1, 2 ],
         mouseCoordinates: [ 2, 3 ],
       }),
     }));
-    const toolManager = { getTool: mockGetTool };
-    const createTool = jest.fn(() => of([toolManager, '1']));
     const mockDispatch = jest.fn();
     const mockSelect = jest.fn(() => of('POINT(1 2)'));
     const highlightFeaturesMock = jest.fn(() => of(null));

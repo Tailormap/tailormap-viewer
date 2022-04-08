@@ -11,8 +11,8 @@ describe('OpenLayersToolManager', () => {
     const onClick = jest.fn();
     const tool = { type: ToolTypeEnum.MapClick, onClick };
     const manager = new OpenLayersToolManager({} as any, mockNgZone);
-    const toolId = manager.addTool(tool);
-    expect(toolId).toMatch(/mapclick-\d+/);
+    const mapTool = manager.addTool(tool);
+    expect(mapTool?.id).toMatch(/mapclick-\d+/);
   });
 
   test('enables and disables a tool', done => {
@@ -20,18 +20,18 @@ describe('OpenLayersToolManager', () => {
     OpenLayersEventManager.onMapClick$ = jest.fn(() => of({ coordinate: [1,2], pixel: [2,3] }));
     const tool = { type: ToolTypeEnum.MapClick };
     const manager = new OpenLayersToolManager({} as any, mockNgZone);
-    const toolId = manager.addTool(tool);
+    const mapTool = manager.addTool(tool);
     expect(OpenLayersEventManager.onMapClick$).not.toHaveBeenCalled();
-    manager.getTool<MapClickToolModel>(toolId)?.mapClick$.subscribe(clickEvt => {
+    manager.getTool<MapClickToolModel>(mapTool?.id || '')?.mapClick$.subscribe(clickEvt => {
       expect(clickEvt).toEqual({
         mapCoordinates: [ 1, 2 ],
         mouseCoordinates: [ 2, 3 ],
       });
       done();
     });
-    manager.enableTool(toolId);
+    manager.enableTool(mapTool?.id || '');
     expect(OpenLayersEventManager.onMapClick$).toHaveBeenCalled();
-    manager.disableTool(toolId);
+    manager.disableTool(mapTool?.id || '');
   });
 
   test('handles destroy', () => {
@@ -40,13 +40,13 @@ describe('OpenLayersToolManager', () => {
     OpenLayersEventManager.onMapClick$ = onMapClickFn;
     const tool = { type: ToolTypeEnum.MapClick };
     const manager = new OpenLayersToolManager({} as any, mockNgZone);
-    const toolId = manager.addTool(tool);
+    const mapTool = manager.addTool(tool);
 
-    manager.enableTool(toolId);
+    manager.enableTool(mapTool?.id || '');
     expect(onMapClickFn).toHaveBeenCalled();
     manager.destroy();
     onMapClickFn.mockClear();
-    manager.enableTool(toolId);
+    manager.enableTool(mapTool?.id || '');
     expect(onMapClickFn).not.toHaveBeenCalled();
   });
 

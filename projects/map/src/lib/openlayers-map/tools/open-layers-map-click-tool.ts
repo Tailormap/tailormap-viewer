@@ -6,7 +6,10 @@ export class OpenLayersMapClickTool implements MapClickToolModel {
 
   private enabled = new Subject();
 
-  constructor(private toolConfig: MapClickToolConfigModel) {}
+  constructor(
+    public id: string,
+    private _toolConfig: MapClickToolConfigModel,
+  ) {}
 
   private mapClickSubject: Subject<MapClickEvent> = new Subject<MapClickEvent>();
   public mapClick$: Observable<MapClickEvent> = this.mapClickSubject.asObservable();

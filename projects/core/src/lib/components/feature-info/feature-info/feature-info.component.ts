@@ -1,12 +1,14 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
-import { MapClickToolModel, MapClickToolConfigModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
-import { concatMap, of, Subject, takeUntil } from 'rxjs';
+import { MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
+import { concatMap, filter, of, Subject, takeUntil, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { loadFeatureInfo } from '../state/feature-info.actions';
 import { selectCurrentlySelectedFeatureGeometry, selectFeatureInfoError$ } from '../state/feature-info.selectors';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { $localize } from '@angular/localize/init';
 import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
+import { registerTool } from '../../toolbar/state/toolbar.actions';
+import { ToolbarComponentEnum } from '../../toolbar/models/toolbar-component.enum';
 
 @Component({
   selector: 'tm-feature-info',
@@ -17,9 +19,6 @@ import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailorma
 export class FeatureInfoComponent implements OnInit, OnDestroy {
 
   private destroyed = new Subject();
-  private toolConfig: MapClickToolConfigModel = {
-    type: ToolTypeEnum.MapClick,
-  };
 
   private static DEFAULT_ERROR_MESSAGE = $localize `Something went wrong while getting feature info, please try again`;
   private static DEFAULT_NO_FEATURES_FOUND_MESSAGE = $localize `No features found`;
@@ -31,18 +30,16 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
   ) { }
 
   public ngOnInit(): void {
-    this.mapService.createTool$(this.toolConfig, true)
+    this.mapService.createTool$<MapClickToolModel, MapClickToolConfigModel>({ type: ToolTypeEnum.MapClick, autoEnable: true })
       .pipe(
         takeUntil(this.destroyed),
-        concatMap(([ manager, toolId ]) => {
-          const clickTool = manager.getTool<MapClickToolModel>(toolId);
-          return !clickTool ? of(null) : clickTool.mapClick$;
+        filter(Boolean),
+        tap(tool => {
+          this.store$.dispatch(registerTool({ tool: { id: ToolbarComponentEnum.FEATURE_INFO, mapToolId: tool.id }}));
         }),
+        concatMap(tool => tool?.mapClick$ || of(null)),
       )
       .subscribe(mapClick => {
-        if (!mapClick) {
-          return;
-        }
         this.handleMapClick(mapClick);
       });
 

@@ -46,6 +46,7 @@
   top: var(--body-margin);
   left: var(--body-margin);
   transition: transform ease-in-out 0.25s;
+  display: flex;
 }
 
 ::ng-deep.body--has-dialog-left .map-controls-left {

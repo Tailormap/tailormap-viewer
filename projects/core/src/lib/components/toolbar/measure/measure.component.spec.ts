@@ -3,8 +3,14 @@ import { MeasureComponent } from './measure.component';
 import { MapService } from '@tailormap-viewer/map';
 import { of, Subject } from 'rxjs';
 import userEvent from '@testing-library/user-event';
+import { provideMockStore } from '@ngrx/store/testing';
+import { selectActiveTool } from '../state/toolbar.selectors';
+import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
+import { SharedModule } from '@tailormap-viewer/shared';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { MatIconModule } from '@angular/material/icon';
+import { Store } from '@ngrx/store';
+import { activateTool, deactivateTool, registerTool } from '../state/toolbar.actions';
 
 describe('MeasureComponent', () => {
 
@@ -16,11 +22,17 @@ describe('MeasureComponent', () => {
     };
     await render(MeasureComponent, {
       imports: [
-        MatIconModule,
+        SharedModule,
+        NoopAnimationsModule,
         MatIconTestingModule,
       ],
       providers: [
         { provide: MapService, useValue: mapServiceMock },
+        provideMockStore({
+          selectors: [
+            { selector: selectActiveTool, value: ToolbarComponentEnum.MEASURE },
+          ],
+        }),
       ],
     });
     expect(screen.getByLabelText('Measure length'));
@@ -32,7 +44,13 @@ describe('MeasureComponent', () => {
 
   test('enables tool, acts on drawing, disables tool', async () => {
     const drawingSubject = new Subject<any>();
+    const mockDispatch = jest.fn();
+    const mockStore = {
+      select: () => of('MEASURE'),
+      dispatch: mockDispatch,
+    };
     const mockTool = {
+      id: 'drawingTool',
       drawing$: drawingSubject.asObservable(),
     };
     const mockManager = {
@@ -50,20 +68,26 @@ describe('MeasureComponent', () => {
     const mapServiceMock = {
       createTooltip$: jest.fn(() => of(tooltipMock)),
       highlightFeatures$: jest.fn(() => of(null)),
-      createTool$: jest.fn(() => of([ mockManager, '' ])),
+      createTool$: jest.fn(() => of(mockTool)),
     };
     await render(MeasureComponent, {
       imports: [
-        MatIconModule,
+        SharedModule,
+        NoopAnimationsModule,
         MatIconTestingModule,
       ],
       providers: [
         { provide: MapService, useValue: mapServiceMock },
+        { provide: Store, useValue: mockStore },
       ],
     });
+    expect(mockDispatch).toHaveBeenCalledWith({ type: registerTool.type, tool: { id: ToolbarComponentEnum.MEASURE, mapToolId: 'drawingTool' } });
+    mockDispatch.mockClear();
+
     userEvent.click(await screen.getByLabelText('Measure length'));
     expect(tooltipMock.hide).toHaveBeenCalled();
-    expect(mockManager.enableTool).toHaveBeenCalled();
+    expect(mockDispatch).toHaveBeenCalledWith({ type: activateTool.type, tool: ToolbarComponentEnum.MEASURE, enableArguments: { type: 'line' } });
+    mockDispatch.mockClear();
 
     drawingSubject.next({ type: 'start' });
     expect(tooltipMock.hide).toHaveBeenCalled();
@@ -85,7 +109,7 @@ describe('MeasureComponent', () => {
     expect(tooltipMock.freeze).toHaveBeenCalled();
 
     userEvent.click(await screen.getByLabelText('Measure length'));
-    expect(mockManager.disableTool).toHaveBeenCalled();
+    expect(mockDispatch).toHaveBeenCalledWith({ type: deactivateTool.type, tool: ToolbarComponentEnum.MEASURE });
   });
 
 });
