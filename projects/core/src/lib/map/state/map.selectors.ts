@@ -46,14 +46,19 @@ const getLayersAndServices = (layers: AppLayerModel[], services: ServiceModel[])
 };
 
 export const selectLayersAndServices = createSelector(
-    selectMapState,
-    selectServices,
-    (state, services: ServiceModel[]) => getLayersAndServices(state.layers, services),
+  selectLayers,
+  selectServices,
+  (layers, services: ServiceModel[]) => getLayersAndServices(layers, services),
+);
+
+export const selectVisibleLayersAndServices = createSelector(
+    selectLayersAndServices,
+    layers => layers.filter(l => l.layer.visible),
 );
 
 export const selectVisibleLayers = createSelector(
-    selectLayersAndServices,
-    layers => layers.filter(l => l.layer.visible),
+  selectLayers,
+  layers => layers.filter(l => l.visible),
 );
 
 export const selectSelectedLayer = createSelector(
@@ -82,13 +87,23 @@ export const selectOrderedVisibleLayers = createSelector(
   selectOrderedLayerIds,
   (layers, orderedLayerIds) => {
     return layers
+      .filter(l => orderedLayerIds.includes(l.id))
+      .sort(l => orderedLayerIds.findIndex(id => l.id === id));
+  },
+);
+
+export const selectOrderedVisibleLayersAndServices = createSelector(
+  selectVisibleLayersAndServices,
+  selectOrderedLayerIds,
+  (layers, orderedLayerIds) => {
+    return layers
       .filter(l => orderedLayerIds.includes(l.layer.id))
       .sort(l => orderedLayerIds.findIndex(id => l.layer.id === id));
   },
 );
 
 export const selectOrderedVisibleBackgroundLayers = createSelector(
-  selectVisibleLayers,
+  selectVisibleLayersAndServices,
   selectOrderedBackgroundLayerIds,
   (layers, orderedLayerIds) => {
     return layers

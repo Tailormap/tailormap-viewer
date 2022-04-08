@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, HostBinding, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { style, transition, trigger, animate } from '@angular/animations';
+import { DialogService } from './dialog.service';
 
 @Component({
   selector: 'tm-dialog',
@@ -50,12 +51,19 @@ export class DialogComponent implements OnInit, OnChanges {
   @Output()
   public expandCollapseDialog = new EventEmitter();
 
-  constructor() { }
+  @HostBinding('class')
+  public get dialogAsClass() {
+    return this.dialogId;
+  }
+
+  public dialogId = '';
+
+  constructor(
+    private dialogService: DialogService,
+  ) { }
 
   public ngOnInit(): void {
-    if (this.openFromRight) {
-
-    }
+    this.dialogId = this.dialogService.registerDialog(this.getLeft(), this.getRight());
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
@@ -65,14 +73,20 @@ export class DialogComponent implements OnInit, OnChanges {
       changes['openFromRight']?.currentValue !== changes['openFromRight']?.previousValue ||
       changes['width']?.currentValue !== changes['width']?.previousValue
     ) {
-      const hidden = !this.open || this.hidden;
-      const left = hidden || this.openFromRight ? 0 : this.width;
-      const right = hidden || !this.openFromRight ? 0 : this.width;
-      document.body.style.setProperty('--dialog-width-left', `${left}px`);
-      document.body.style.setProperty('--dialog-width-right', `${right}px`);
-      document.body.classList.toggle('body--has-dialog-left', left > 0);
-      document.body.classList.toggle('body--has-dialog-right', right > 0);
+      this.dialogService.dialogChanged(this.dialogId, this.getLeft(), this.getRight());
     }
+  }
+
+  private getHidden() {
+    return !this.open || this.hidden;
+  }
+
+  private getLeft() {
+    return this.getHidden() || this.openFromRight ? 0 : this.width;
+  }
+
+  private getRight() {
+    return this.getHidden() || !this.openFromRight ? 0 : this.width;
   }
 
   public close() {

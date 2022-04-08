@@ -1,10 +1,14 @@
+:host {
+  --dialog-stack-index: -1;
+}
+
 .dialog {
   position: absolute;
   left: 0;
   top: 0;
   bottom: 0;
   background-color: #fff;
-  z-index: var(--dialog-z-index);
+  z-index: calc(var(--dialog-z-index) + var(--dialog-stack-index));
   display: flex;
   flex-direction: column;
   transform-origin: left;

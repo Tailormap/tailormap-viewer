@@ -2,7 +2,7 @@ import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
 import { FeatureInfoService } from './feature-info.service';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { CoreState, initialCoreState } from '../../state/core.state';
-import { getAppLayerModel, getFeaturesResponseModel, getServiceModel, TAILORMAP_API_V1_SERVICE } from '@tailormap-viewer/api';
+import { getAppLayerModel, getFeaturesResponseModel, TAILORMAP_API_V1_SERVICE } from '@tailormap-viewer/api';
 import { of } from 'rxjs';
 import { selectApplicationId} from '../../state/core.selectors';
 import { selectVisibleLayers } from '../../map/state/map.selectors';
@@ -10,7 +10,6 @@ import { selectVisibleLayers } from '../../map/state/map.selectors';
 describe('FeatureInfoService', () => {
 
   const appLayer = getAppLayerModel({ visible: true });
-  const service = getServiceModel();
   const initialState: CoreState = { ...initialCoreState };
   const response = getFeaturesResponseModel();
   const getFeatures$ = () => of(response);
@@ -31,10 +30,7 @@ describe('FeatureInfoService', () => {
   });
 
   test('should get features', done => {
-    store.overrideSelector(selectVisibleLayers, [{
-      layer: appLayer,
-      service,
-    }]);
+    store.overrideSelector(selectVisibleLayers, [appLayer]);
     store.overrideSelector(selectApplicationId, 1);
     expect(spectator.service).toBeTruthy();
     spectator.service.getFeatures$([1, 2])

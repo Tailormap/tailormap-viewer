@@ -34,7 +34,7 @@ export class FeatureInfoService {
             return of([]);
           }
           const featureRequests$ = layers.map(layer => {
-            const layerId = layer.layer.id;
+            const layerId = layer.id;
             return this.apiService.getFeatures$({
               layerId,
               applicationId,

@@ -25,7 +25,7 @@ export const selectFeatureInfoList = createSelector(
   (features, metadata, layers): FeatureInfoModel[] => {
     const featureInfoModels: FeatureInfoModel[] = [];
     features.forEach(feature => {
-      const layer = layers.find(l => l.layer.id === feature.layerId);
+      const layer = layers.find(l => l.id === feature.layerId);
       if (!layer) {
         return;
       }
@@ -33,7 +33,7 @@ export const selectFeatureInfoList = createSelector(
       featureInfoModels.push({
         feature,
         columnMetadata: new Map((columnMetadata || []).map(c => [c.key, c])),
-        layer: layer.layer,
+        layer,
       });
     });
     return featureInfoModels;

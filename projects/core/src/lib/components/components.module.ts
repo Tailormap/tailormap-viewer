@@ -5,6 +5,7 @@ import { MapControlsComponent } from './map-controls/map-controls.component';
 import { MenubarModule } from './menubar';
 import { TocModule } from './toc';
 import { ToolbarModule } from './toolbar';
+import { LegendModule } from './legend';
 
 @NgModule({
   declarations: [
@@ -12,10 +13,6 @@ import { ToolbarModule } from './toolbar';
   ],
   imports: [
     CommonModule,
-    FeatureInfoModule,
-    MenubarModule,
-    TocModule,
-    ToolbarModule,
   ],
   exports: [
     FeatureInfoModule,
@@ -23,6 +20,7 @@ import { ToolbarModule } from './toolbar';
     MapControlsComponent,
     TocModule,
     ToolbarModule,
+    LegendModule,
   ],
 })
 export class ComponentsModule {}

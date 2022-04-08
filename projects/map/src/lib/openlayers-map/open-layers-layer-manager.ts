@@ -9,7 +9,9 @@ import XYZ from 'ol/source/XYZ';
 import { LayerManagerModel, LayerTypes } from '../models';
 import { OlLayerHelper } from '../helpers/ol-layer.helper';
 import { LayerModel } from '../models/layer.model';
-import { isOpenLayersVectorLayer, isPossibleRealtimeLayer } from '../helpers/ol-layer-types.helper';
+import {
+  isOpenLayersVectorLayer, isOpenLayersWMSLayer, isOpenLayersWMTSLayer, isPossibleRealtimeLayer,
+} from '../helpers/ol-layer-types.helper';
 import { LayerTypesHelper } from '../helpers/layer-types.helper';
 import Geometry from 'ol/geom/Geometry';
 import { ArrayHelper } from '@tailormap-viewer/shared';
@@ -201,6 +203,22 @@ export class OpenLayersLayerManager implements LayerManagerModel {
 
   public findLayer(layerId: string): BaseLayer | null {
     return this.layers.get(layerId) || this.vectorLayers.get(layerId) || null;
+  }
+
+  public getLegendUrl(layerId: string): string {
+    const layer = this.findLayer(layerId);
+    console.log('Getting legend for ', layerId, layer);
+    if (!layer) {
+      return '';
+    }
+    if (isOpenLayersWMSLayer(layer)) {
+      console.log('Legend graphic for layer', layer.getSource().getLegendUrl());
+      return layer.getSource().getLegendUrl() || '';
+    }
+    if (isOpenLayersWMTSLayer(layer)) {
+      return '';
+    }
+    return '';
   }
 
   private getMaxZIndex() {
