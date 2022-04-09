@@ -11,7 +11,7 @@ jobs:
     name: "Pruning Untagged Images of ${{ matrix.containers }}"
     strategy:
         matrix:
-          containers: [ 'tailormap-viewer', 'tailormap-db' ]
+          containers: [ 'tailormap-viewer', 'tailormap-config-db' ]
     steps:
       - name: "Older than 1 week"
         # https://github.com/marketplace/actions/ghcr-pruning
