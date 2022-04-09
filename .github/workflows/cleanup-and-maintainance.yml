@@ -8,7 +8,10 @@ on:
 jobs:
   dockercleanup:
     runs-on: ubuntu-latest
-    name: "Pruning Untagged Images"
+    name: "Pruning Untagged Images of ${{ matrix.containers }}"
+    strategy:
+        matrix:
+          containers: [ 'tailormap-viewer', 'tailormap-db' ]
     steps:
       - name: "Older than 1 week"
         # https://github.com/marketplace/actions/ghcr-pruning
@@ -16,7 +19,7 @@ jobs:
         with:
           token: ${{ secrets.GHCR_CLEANUP_PAT }}
           organization: B3Partners
-          container: tailormap-viewer
+          container: ${{ matrix.containers }}
           dry-run: false
           older-than: 7
           keep-last: 2
@@ -26,7 +29,7 @@ jobs:
         with:
           token: ${{ secrets.GHCR_CLEANUP_PAT }}
           organization: B3Partners
-          container: tailormap-viewer
+          container: ${{ matrix.containers }}
           dry-run: false
           older-than: 28
           keep-last: 0
