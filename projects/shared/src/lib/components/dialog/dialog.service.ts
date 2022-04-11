@@ -50,6 +50,9 @@ export class DialogService {
     document.body.classList.toggle('body--has-dialog-left', maxDialogLeftWidth > 0);
     document.body.classList.toggle('body--has-dialog-right', maxDialogRightWidth > 0);
     this.visibleStack.forEach((id, idx) => {
+      if (!id) {
+        return;
+      }
       document.querySelector<HTMLDivElement>(`.${id}`)?.style.setProperty('--dialog-stack-index', `${idx}`);
     });
   }

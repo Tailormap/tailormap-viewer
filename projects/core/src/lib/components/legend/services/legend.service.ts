@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, forkJoin, map, Observable, of, switchMap } from 'rxjs';
+import { BehaviorSubject, map, Observable, switchMap } from 'rxjs';
 import { AppLayerModel } from '@tailormap-viewer/api';
-import { LayerManagerModel, MapService } from '@tailormap-viewer/map';
+import { MapService } from '@tailormap-viewer/map';
 
 @Injectable({
   providedIn: 'root',
@@ -30,7 +30,9 @@ export class LegendService {
           map(appLayers => {
             return appLayers.map(appLayer => ({
               appLayer,
-              url: appLayer.legendImageUrl ? appLayer.legendImageUrl : layerManager.getLegendUrl(`${appLayer.id}`),
+              url: !!appLayer.legendImageUrl
+                ? appLayer.legendImageUrl
+                : layerManager.getLegendUrl(`${appLayer.id}`),
             }));
           }),
         )),

@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 import { AppLayerModel } from '@tailormap-viewer/api';
 
 @Component({
@@ -7,7 +7,7 @@ import { AppLayerModel } from '@tailormap-viewer/api';
   styleUrls: ['./legend-layer.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LegendLayerComponent implements OnInit {
+export class LegendLayerComponent {
 
   @Input()
   public layer: AppLayerModel | null = null;
@@ -16,10 +16,5 @@ export class LegendLayerComponent implements OnInit {
   public url: string | null = null;
 
   public failedToLoadMessage = $localize `Failed to load legend for`;
-
-  constructor() {}
-
-  public ngOnInit(): void {
-  }
 
 }

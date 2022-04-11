@@ -10,7 +10,7 @@ import { LayerManagerModel, LayerTypes } from '../models';
 import { OlLayerHelper } from '../helpers/ol-layer.helper';
 import { LayerModel } from '../models/layer.model';
 import {
-  isOpenLayersVectorLayer, isOpenLayersWMSLayer, isOpenLayersWMTSLayer, isPossibleRealtimeLayer,
+  isOpenLayersVectorLayer, isOpenLayersWMSLayer, isPossibleRealtimeLayer,
 } from '../helpers/ol-layer-types.helper';
 import { LayerTypesHelper } from '../helpers/layer-types.helper';
 import Geometry from 'ol/geom/Geometry';
@@ -207,16 +207,15 @@ export class OpenLayersLayerManager implements LayerManagerModel {
 
   public getLegendUrl(layerId: string): string {
     const layer = this.findLayer(layerId);
-    console.log('Getting legend for ', layerId, layer);
     if (!layer) {
       return '';
     }
     if (isOpenLayersWMSLayer(layer)) {
-      console.log('Legend graphic for layer', layer.getSource().getLegendUrl());
-      return layer.getSource().getLegendUrl() || '';
-    }
-    if (isOpenLayersWMTSLayer(layer)) {
-      return '';
+      return layer.getSource().getLegendUrl(
+        undefined, {
+          SLD_VERSION: '1.1.0',
+        },
+      ) || '';
     }
     return '';
   }
