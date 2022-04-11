@@ -9,7 +9,9 @@ import XYZ from 'ol/source/XYZ';
 import { LayerManagerModel, LayerTypes } from '../models';
 import { OlLayerHelper } from '../helpers/ol-layer.helper';
 import { LayerModel } from '../models/layer.model';
-import { isOpenLayersVectorLayer, isPossibleRealtimeLayer } from '../helpers/ol-layer-types.helper';
+import {
+  isOpenLayersVectorLayer, isOpenLayersWMSLayer, isPossibleRealtimeLayer,
+} from '../helpers/ol-layer-types.helper';
 import { LayerTypesHelper } from '../helpers/layer-types.helper';
 import Geometry from 'ol/geom/Geometry';
 import { ArrayHelper } from '@tailormap-viewer/shared';
@@ -201,6 +203,21 @@ export class OpenLayersLayerManager implements LayerManagerModel {
 
   public findLayer(layerId: string): BaseLayer | null {
     return this.layers.get(layerId) || this.vectorLayers.get(layerId) || null;
+  }
+
+  public getLegendUrl(layerId: string): string {
+    const layer = this.findLayer(layerId);
+    if (!layer) {
+      return '';
+    }
+    if (isOpenLayersWMSLayer(layer)) {
+      return layer.getSource().getLegendUrl(
+        undefined, {
+          SLD_VERSION: '1.1.0',
+        },
+      ) || '';
+    }
+    return '';
   }
 
   private getMaxZIndex() {

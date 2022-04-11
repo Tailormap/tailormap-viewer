@@ -1,0 +1,12 @@
+tm-legend-layer {
+  display: block;
+  padding: 14px 14px 0 14px;
+}
+
+.legend-list {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  padding-bottom: 14px;
+}

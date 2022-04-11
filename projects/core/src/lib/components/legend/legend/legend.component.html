@@ -1,0 +1,10 @@
+<tm-dialog [open]="visible$ | async"
+           (closeDialog)="closeLegend()"
+           i18n-dialogTitle
+           dialogTitle="Legend">
+  <div class="legend-list">
+    <tm-legend-layer *ngFor="let layer of layers$ | async; trackBy: trackById"
+                     [layer]="layer.appLayer"
+                     [url]="layer.url"></tm-legend-layer>
+  </div>
+</tm-dialog>

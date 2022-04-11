@@ -14,10 +14,10 @@ export class IconService {
     'drag', 'resize', 'chevron_bottom', 'chevron_left', 'chevron_right', 'chevron_top',
     'close', 'minimize', 'drop_down', 'drop_top', 'search', 'copy_filled', 'copy_outline',
     'expand_close', 'expand_open', 'table_filled', 'selection_outline', 'selection_filled',
-    'trash_filled', 'table_outline', 'logo', 'layers_outline', 'layers_filled', 'zoom_max',
+    'trash_filled', 'table_outline', 'logo', 'layers_filled', 'zoom_max',
     'folder_filled', 'folder_outline', 'filter_filled', 'filter_outline', 'user', 'login', 'plus', 'minus',
     { folder: 'markers', icons: [ 'arrow', 'circle', 'cross', 'square', 'star', 'triangle', 'x' ] },
-    { folder: 'components', icons: [ 'attributelist' ] },
+    { folder: 'components', icons: [ 'attributelist', 'legend', 'table_of_contents' ] },
     { folder: 'tools', icons: [ 'cursor', 'measure_area', 'measure_length', 'position', 'push_pin' ] },
   ];
 

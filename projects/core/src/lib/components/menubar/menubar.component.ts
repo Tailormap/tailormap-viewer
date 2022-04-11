@@ -39,7 +39,7 @@ export class MenubarComponent implements OnInit, OnDestroy {
         }
         DynamicComponentsHelper.destroyComponents(this.injectedComponents);
         this.injectedComponents = DynamicComponentsHelper.createComponents(
-          components,
+          components.reverse(),
           this.menuButtonsContainer,
           this.componentFactoryResolver,
         );
