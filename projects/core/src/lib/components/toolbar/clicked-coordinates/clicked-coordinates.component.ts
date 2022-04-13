@@ -27,6 +27,12 @@ export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
     private clipboard: Clipboard,
   ) {
     this.toolActive$ = this.store$.select(isActiveToolbarTool(ToolbarComponentEnum.SELECT_COORDINATES));
+    this.toolActive$.pipe(
+      takeUntil(this.destroyed)).subscribe(isActive => {
+      if (!isActive) {
+        this.snackBar.dismiss();
+      }
+    });
   }
 
   public ngOnInit(): void {
