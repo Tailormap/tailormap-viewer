@@ -8,7 +8,6 @@
 }
 
 .clicked-coordinates button {
-  background-color: #fff;
   border: 0 none;
   width: var(--size);
   height: var(--size);
