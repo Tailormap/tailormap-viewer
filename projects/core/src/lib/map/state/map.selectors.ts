@@ -1,8 +1,9 @@
 import { MapSettingsModel, MapState, mapStateKey } from './map.state';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { AppLayerModel, ServiceModel } from '@tailormap-viewer/api';
+import { AppLayerModel, LayerTreeNodeModel, ServiceModel } from '@tailormap-viewer/api';
 import { TreeModel } from '@tailormap-viewer/shared';
 import { LayerTreeNodeHelper } from '../helpers/layer-tree-node.helper';
+import { ExtendedLayerTreeNodeModel } from '../models';
 
 const selectMapState = createFeatureSelector<MapState>(mapStateKey);
 
@@ -12,6 +13,7 @@ export const selectSelectedLayerId = createSelector(selectMapState, state => sta
 export const selectMapSettings = createSelector(selectMapState, state => state.mapSettings);
 export const selectLayerTreeNodes = createSelector(selectMapState, state => state.layerTreeNodes);
 export const selectBackgroundLayerTreeNodes = createSelector(selectMapState, state => state.baseLayerTreeNodes);
+export const selectSelectedBackgroundNodeId = createSelector(selectMapState, state => state.selectedBackgroundNode);
 
 export const selectMapOptions = createSelector(
   selectMapSettings,
@@ -119,9 +121,28 @@ export const selectLayerTree = createSelector(
 );
 
 export const selectBackgroundLayerTree = createSelector(
-  selectLayerTreeNodes,
+  selectBackgroundLayerTreeNodes,
   selectLayers,
   (layerTreeNodes, layers): TreeModel[] => LayerTreeNodeHelper.layerTreeNodeToTree(layerTreeNodes, layers),
+);
+
+export const selectBackgroundNodesList = createSelector(
+  selectBackgroundLayerTreeNodes,
+  (treeNodes: ExtendedLayerTreeNodeModel[]): LayerTreeNodeModel[] => {
+    const root = treeNodes.find(l => l.root);
+    if (!root) {
+      return [];
+    }
+    return (root.childrenIds || [])
+      .map(childId => LayerTreeNodeHelper.findLayerTreeNode(treeNodes, childId))
+      .filter((node: LayerTreeNodeModel | undefined): node is LayerTreeNodeModel => typeof node !== 'undefined');
+  },
+);
+
+export const selectInitiallySelectedBackgroundNodes = createSelector(
+  selectBackgroundLayerTreeNodes,
+  selectLayers,
+  (layerTreeNodes, layers): LayerTreeNodeModel[] => LayerTreeNodeHelper.getSelectedTreeNodes(layerTreeNodes, layers),
 );
 
 export const selectSelectedNode = createSelector(

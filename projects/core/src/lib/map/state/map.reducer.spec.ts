@@ -174,4 +174,106 @@ describe('MapReducer', () => {
     expect(updatedState.layerTreeNodes[3].childrenIds).toEqual(['layer-2']);
   });
 
+  test('handles MapActions.setSelectedBackgroundNodeId - make background layers visible', () => {
+    const layers = [
+      getAppLayerModel({ id: 1, visible: false }),
+      getAppLayerModel({ id: 2, visible: false }),
+      getAppLayerModel({ id: 3, visible: false }),
+      getAppLayerModel({ id: 4, visible: false }),
+      getAppLayerModel({ id: 5, visible: true }),
+    ];
+    const nodes = [
+      getLayerTreeNode({ root: true, childrenIds: ['lvl_1'] }),
+      getLayerTreeNode({ id: 'lvl_1', childrenIds: ['lvl_2', 'lyr_1', 'lyr_2']}),
+      getLayerTreeNode({ id: 'lyr_1', appLayerId: 1 }),
+      getLayerTreeNode({ id: 'lyr_2', appLayerId: 2 }),
+      getLayerTreeNode({ id: 'lvl_2', childrenIds: ['lyr_3']}),
+      getLayerTreeNode({ id: 'lyr_3', appLayerId: 3 }),
+    ];
+    const initialState: MapState = {
+      ...initialMapState,
+      baseLayerTreeNodes: nodes,
+      layers,
+    };
+    const action = MapActions.setSelectedBackgroundNodeId({ id: 'lvl_1' });
+    const updatedState = mapReducer(initialState, action);
+    expect(updatedState.layers[0].visible).toEqual(true);
+    expect(updatedState.layers[1].visible).toEqual(true);
+    expect(updatedState.layers[2].visible).toEqual(true);
+    expect(updatedState.layers[3].visible).toEqual(false); // unchanged
+    expect(updatedState.layers[4].visible).toEqual(true); // unchanged
+    expect(updatedState.selectedBackgroundNode).toEqual('lvl_1');
+  });
+
+  test('handles MapActions.setSelectedBackgroundNodeId - make background layers visible with multiple background layer groups', () => {
+    const layers = [
+      getAppLayerModel({ id: 1, visible: false }),
+      getAppLayerModel({ id: 2, visible: false }),
+      getAppLayerModel({ id: 3, visible: false }),
+      getAppLayerModel({ id: 4, visible: false }),
+      getAppLayerModel({ id: 5, visible: true }),
+    ];
+    const nodes = [
+      getLayerTreeNode({ root: true, childrenIds: ['lvl_1', 'lvl_2'] }),
+      getLayerTreeNode({ id: 'lvl_1', childrenIds: ['lyr_1', 'lyr_2']}),
+      getLayerTreeNode({ id: 'lyr_1', appLayerId: 1 }),
+      getLayerTreeNode({ id: 'lyr_2', appLayerId: 2 }),
+      getLayerTreeNode({ id: 'lvl_2', childrenIds: ['lyr_3']}),
+      getLayerTreeNode({ id: 'lyr_3', appLayerId: 3 }),
+    ];
+    const initialState: MapState = {
+      ...initialMapState,
+      baseLayerTreeNodes: nodes,
+      layers,
+    };
+    const action = MapActions.setSelectedBackgroundNodeId({ id: 'lvl_1' });
+    const updatedState = mapReducer(initialState, action);
+    expect(updatedState.layers[0].visible).toEqual(true);
+    expect(updatedState.layers[1].visible).toEqual(true);
+    expect(updatedState.layers[2].visible).toEqual(false);
+    expect(updatedState.layers[3].visible).toEqual(false); // unchanged
+    expect(updatedState.layers[4].visible).toEqual(true); // unchanged
+    expect(updatedState.selectedBackgroundNode).toEqual('lvl_1');
+
+    const action2 = MapActions.setSelectedBackgroundNodeId({ id: 'lvl_2' });
+    const updatedState2 = mapReducer(updatedState, action2);
+    expect(updatedState2.layers[0].visible).toEqual(false);
+    expect(updatedState2.layers[1].visible).toEqual(false);
+    expect(updatedState2.layers[2].visible).toEqual(true);
+    expect(updatedState2.layers[3].visible).toEqual(false); // unchanged
+    expect(updatedState2.layers[4].visible).toEqual(true); // unchanged
+    expect(updatedState2.selectedBackgroundNode).toEqual('lvl_2');
+  });
+
+  test('handles MapActions.setSelectedBackgroundNodeId - make background layers hidden', () => {
+    const layers = [
+      getAppLayerModel({ id: 1, visible: true }),
+      getAppLayerModel({ id: 2, visible: true }),
+      getAppLayerModel({ id: 3, visible: true }),
+      getAppLayerModel({ id: 4, visible: false }),
+      getAppLayerModel({ id: 5, visible: true }),
+    ];
+    const nodes = [
+      getLayerTreeNode({ root: true, childrenIds: ['lvl_1'] }),
+      getLayerTreeNode({ id: 'lvl_1', childrenIds: ['lvl_2', 'lyr_1', 'lyr_2']}),
+      getLayerTreeNode({ id: 'lyr_1', appLayerId: 1 }),
+      getLayerTreeNode({ id: 'lyr_2', appLayerId: 2 }),
+      getLayerTreeNode({ id: 'lvl_2', childrenIds: ['lyr_3']}),
+      getLayerTreeNode({ id: 'lyr_3', appLayerId: 3 }),
+    ];
+    const initialState: MapState = {
+      ...initialMapState,
+      baseLayerTreeNodes: nodes,
+      layers,
+    };
+    const action = MapActions.setSelectedBackgroundNodeId({ id: 'EMPTY' });
+    const updatedState = mapReducer(initialState, action);
+    expect(updatedState.layers[0].visible).toEqual(false);
+    expect(updatedState.layers[1].visible).toEqual(false);
+    expect(updatedState.layers[2].visible).toEqual(false);
+    expect(updatedState.layers[3].visible).toEqual(false); // unchanged
+    expect(updatedState.layers[4].visible).toEqual(true); // unchanged
+    expect(updatedState.selectedBackgroundNode).toEqual('EMPTY');
+  });
+
 });

@@ -43,3 +43,7 @@ export const moveLayerTreeNode = createAction(
   `${mapActionsPrefix} Move Layer Tree Nodes`,
   props<{ nodeId: string; parentId?: string; beforeNodeId?: string; isBaseLayerTree?: boolean }>(),
 );
+export const setSelectedBackgroundNodeId = createAction(
+  `${mapActionsPrefix} Set Selected Background Node ID`,
+  props<{ id: string }>(),
+);

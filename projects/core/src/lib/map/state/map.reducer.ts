@@ -124,6 +124,20 @@ const onMoveLayerTreeNode = (state: MapState, payload: ReturnType<typeof MapActi
   };
 };
 
+const onSetSelectedBackgroundNodeId = (state: MapState, payload: ReturnType<typeof MapActions.setSelectedBackgroundNodeId>): MapState => ({
+  ...state,
+  layers: state.layers.map(layer => {
+    const parent = LayerTreeNodeHelper.getTopParent(state.baseLayerTreeNodes, layer);
+    return {
+      ...layer,
+      visible: typeof parent === 'undefined'
+        ? layer.visible
+        : parent.id === payload.id,
+    };
+  }),
+  selectedBackgroundNode: payload.id,
+});
+
 const mapReducerImpl = createReducer<MapState>(
   initialMapState,
   on(MapActions.loadMap, onLoadMap),
@@ -136,5 +150,6 @@ const mapReducerImpl = createReducer<MapState>(
   on(MapActions.addAppLayers, onAddAppLayers),
   on(MapActions.addLayerTreeNodes, onAddLayerTreeNodes),
   on(MapActions.moveLayerTreeNode, onMoveLayerTreeNode),
+  on(MapActions.setSelectedBackgroundNodeId, onSetSelectedBackgroundNodeId),
 );
 export const mapReducer = (state: MapState | undefined, action: Action) => mapReducerImpl(state, action);

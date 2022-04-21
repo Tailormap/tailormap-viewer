@@ -1,0 +1,34 @@
+.mat-button-toggle,
+.mat-button-toggle-checked {
+  background-color: #fff;
+}
+
+mat-button-toggle-group {
+  border-radius: 3px;
+}
+
+::ng-deep .split-button-panel {
+  min-height: 54px;
+}
+
+.mat-menu-item {
+  height: 38px;
+  line-height: 38px;
+}
+
+mat-button-toggle ::ng-deep .mat-button-toggle-label-content {
+  line-height: 38px;
+}
+
+.drop-down-button ::ng-deep .mat-button-toggle-label-content {
+  padding: 0 8px;
+}
+
+.drop-down-button ::ng-deep .mat-button-toggle-label-content svg {
+  width: 20px;
+  height: 20px;
+}
+
+.mat-button-toggle + .mat-button-toggle {
+  border-left: 0 none;
+}
