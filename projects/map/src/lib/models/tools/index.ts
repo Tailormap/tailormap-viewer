@@ -5,3 +5,5 @@ export * from './tool.model';
 export * from './map-click-tool.model';
 export * from './drawing-tool.model';
 export * from './drawing-tool-config.model';
+export * from './mouse-position-tool.model';
+export * from './mouse-position-tool-config.model';

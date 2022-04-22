@@ -48,27 +48,8 @@ export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
         concatMap(clickTool => clickTool.mapClick$),
         switchMap(mapClick => {
           this.snackBar.dismiss();
-          return this.mapService.getUnitsOfMeasure$()
-            .pipe(
-              map(
-                uom => {
-                  let decimals: number;
-                  switch (uom) {
-                    case 'm':
-                      decimals = 2;
-                      break;
-                    case 'ft':
-                    case 'us-ft':
-                      decimals = 3;
-                      break;
-                    case 'degrees':
-                    default:
-                      decimals = 4;
-                  }
-                  return `${mapClick.mapCoordinates[0].toFixed(decimals)}, ${mapClick.mapCoordinates[1].toFixed(decimals)}`;
-                },
-              ),
-            );
+          return this.mapService.getRoundedCoordinates$(mapClick.mapCoordinates)
+            .pipe(map(coordinates => coordinates.join(', ')));
         }),
         concatMap(coordinates => {
           const coordinatesMsg = $localize`Selected coordinates: ${coordinates}`;

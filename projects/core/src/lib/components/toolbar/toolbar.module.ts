@@ -8,6 +8,7 @@ import { toolbarReducer } from './state/toolbar.reducer';
 import { ClickedCoordinatesModule } from './clicked-coordinates/clicked-coordinates.module';
 import { EffectsModule } from '@ngrx/effects';
 import { ToolbarEffects } from './state/toolbar.effects';
+import { MouseCoordinatesModule } from './mouse-coordinates/mouse-coordinates.module';
 
 @NgModule({
   declarations: [],
@@ -23,6 +24,7 @@ import { ToolbarEffects } from './state/toolbar.effects';
     ZoomButtonsModule,
     MeasureModule,
     ClickedCoordinatesModule,
+    MouseCoordinatesModule,
   ],
 })
 export class ToolbarModule { }

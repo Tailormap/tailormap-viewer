@@ -167,6 +167,14 @@ export class MapService {
     );
   }
 
+  public getRoundedCoordinates$(coordinates: [number, number]) {
+    return this.getUnitsOfMeasure$()
+      .pipe(
+        map(uom => uom === 'm' ? 2 : ((uom === 'ft' || uom === 'us-ft') ? 3 : 4)),
+        map(decimals => coordinates.map(coord => coord.toFixed(decimals))),
+      );
+  }
+
   public zoomIn() {
     this.map.zoomIn();
   }
