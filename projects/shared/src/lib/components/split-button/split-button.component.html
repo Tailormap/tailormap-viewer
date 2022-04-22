@@ -1,0 +1,14 @@
+<mat-button-toggle-group>
+  <mat-button-toggle (click)="cycleNextOption()">
+    {{getLabel()}}
+  </mat-button-toggle>
+  <mat-button-toggle class="drop-down-button" [matMenuTriggerFor]="dropdownMenu">
+    <mat-icon svgIcon="drop_down"></mat-icon>
+  </mat-button-toggle>
+</mat-button-toggle-group>
+
+<mat-menu #dropdownMenu="matMenu" class="split-button-panel">
+  <button mat-menu-item
+          *ngFor="let option of optionsList"
+          (click)="selectOption(option.id)">{{ option.label }}</button>
+</mat-menu>
