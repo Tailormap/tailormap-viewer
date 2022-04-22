@@ -56,6 +56,7 @@ export class MapService {
           }
         }),
         map(manager => manager.addTool<T, C>(tool)),
+        tap(createdTool => toolId = createdTool?.id || ''),
       );
   }
 
