@@ -46,6 +46,32 @@ export class LayerTreeNodeHelper {
     return (child?.appLayerId ? [child.appLayerId] : []).concat(...childIds);
   };
 
+  public static getSelectedTreeNodes(layerTreeNodes: LayerTreeNodeModel[], layers: AppLayerModel[]) {
+    const tree = LayerTreeNodeHelper.layerTreeNodeToTree(layerTreeNodes, layers);
+    const checkedNodes: Set<string> = new Set();
+    tree.forEach(node => {
+      let hasCheckedNodes = false;
+      const checkCheckedNodes = (child: TreeModel<AppLayerModel>) => {
+        hasCheckedNodes = (child.type === 'layer' && child.checked) || hasCheckedNodes;
+        (child.children || []).forEach(checkCheckedNodes);
+      };
+      (node.children || []).forEach(checkCheckedNodes);
+      if (hasCheckedNodes) {
+        checkedNodes.add(node.id);
+      }
+    });
+    return layerTreeNodes.filter(node => checkedNodes.has(node.id));
+  }
+
+  public static getTopParent(layerTreeNodes: ExtendedLayerTreeNodeModel[], layer: AppLayerModel): LayerTreeNodeModel | undefined {
+    const root = layerTreeNodes.find(l => l.root);
+    const isLayerNode = (n?: LayerTreeNodeModel) => n?.appLayerId === layer.id;
+    const findInChildren = (n?: LayerTreeNodeModel): LayerTreeNodeModel | undefined => (n?.childrenIds || [])
+      .map(id => LayerTreeNodeHelper.findLayerTreeNode(layerTreeNodes, id))
+      .find(child => isLayerNode(child) || findInChildren(child));
+    return findInChildren(root);
+  }
+
   public static layerTreeNodeToTree(layerTreeNodes: ExtendedLayerTreeNodeModel[], layers: AppLayerModel[]) {
     const root = layerTreeNodes.find(l => l.root);
     if (!root) {

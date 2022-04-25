@@ -3,3 +3,4 @@ export * from './dialog';
 export * from './tree';
 export * from './snackbar-message';
 export * from './error-message';
+export * from './split-button';

@@ -35,6 +35,8 @@
 }
 
 .map-controls-right {
+  display: flex;
+  align-items: flex-start;
   position: absolute;
   top: var(--body-margin);
   right: var(--body-margin);
@@ -46,12 +48,25 @@
   top: auto;
 }
 
+.map-controls-right tm-background-layer-toggle {
+  margin-right: 9px;
+}
+
+.map-controls-right tm-background-layer-toggle ::ng-deep mat-button-toggle-group {
+  box-shadow: 0 1px 0 0 rgba(0,0,0,0.05), 0 3px 4px 0 rgba(0,0,0,0.08);
+  height: 40px;
+}
+
 .map-controls-left {
   position: absolute;
   top: var(--body-margin);
   left: var(--body-margin);
   transition: transform ease-in-out 0.25s;
   display: flex;
+}
+
+.map-controls-left tm-clicked-coordinates {
+  margin-left: 9px;
 }
 
 .map-controls-left--on-bottom {

@@ -19,6 +19,7 @@ import { ArrayHelper } from '@tailormap-viewer/shared';
 export class OpenLayersLayerManager implements LayerManagerModel {
 
   private layers: Map<string, BaseLayer> = new Map<string, BaseLayer>();
+  private backgroundLayers: Map<string, BaseLayer> = new Map<string, BaseLayer>();
   private vectorLayers: Map<string, VectorLayer<VectorSource<Geometry>>> = new Map<string, VectorLayer<VectorSource<Geometry>>>();
 
   private backgroundLayerGroup = new LayerGroup();
@@ -38,6 +39,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
 
   public destroy() {
     this.layers = new Map();
+    this.backgroundLayers = new Map();
     this.vectorLayers = new Map();
     this.olMap.removeLayer(this.backgroundLayerGroup);
     this.olMap.removeLayer(this.baseLayerGroup);
@@ -47,6 +49,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
   public setBackgroundLayers(layers: LayerModel[]) {
     this.prevBackgroundLayerIds = this.updateLayers(
       layers,
+      this.backgroundLayers,
       this.prevBackgroundLayerIds,
       this.addBackgroundLayer.bind(this),
       this.removeBackgroundLayer.bind(this),
@@ -60,13 +63,13 @@ export class OpenLayersLayerManager implements LayerManagerModel {
       return;
     }
     OlLayerHelper.setLayerProps(layer, olLayer);
-    this.layers.set(layer.id, olLayer);
+    this.backgroundLayers.set(layer.id, olLayer);
     this.backgroundLayerGroup.getLayers().push(olLayer);
     olLayer.setZIndex(this.getZIndexForBackgroundLayer(zIndex));
   }
 
   private removeBackgroundLayer(layerId: string) {
-    this.removeLayerAndSource(layerId, this.backgroundLayerGroup);
+    this.removeLayerAndSource(layerId, this.backgroundLayerGroup, this.backgroundLayers);
   }
 
   private getZIndexForBackgroundLayer(zIndex?: number) {
@@ -79,6 +82,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
   public setLayers(layers: LayerModel[]) {
     this.prevLayerIds = this.updateLayers(
       layers,
+      this.layers,
       this.prevLayerIds,
       this.addLayer.bind(this),
       this.removeLayer.bind(this),
@@ -88,6 +92,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
 
   private updateLayers(
     layers: LayerModel[],
+    currentLayerMap: Map<string, BaseLayer>,
     prevLayers: string[],
     addLayer: (layer: LayerModel, zIndex: number) => void,
     removeLayer: (id: string) => void,
@@ -99,7 +104,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     }
     const layerIdSet = new Set(layerIds);
     const removableLayers: string[] = [];
-    this.layers.forEach((layer, id) => {
+    currentLayerMap.forEach((layer, id) => {
       if (!layerIdSet.has(id)) {
         removableLayers.push(id);
       }
@@ -109,7 +114,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     layers
       .forEach(layer => {
         const zIndex = layerOrder.indexOf(layer.id);
-        const existingLayer = this.layers.get(layer.id);
+        const existingLayer = currentLayerMap.get(layer.id);
         if (existingLayer) {
           existingLayer.setZIndex(getZIndexForLayer(zIndex));
           return;
@@ -128,6 +133,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     this.addLayerToMap(olLayer);
     olLayer.setZIndex(this.getZIndexForLayer(zIndex));
     this.moveDrawingLayersToTop();
+    this.layers.set(layer.id, olLayer);
     return olLayer as LayerType;
   }
 
@@ -140,11 +146,11 @@ export class OpenLayersLayerManager implements LayerManagerModel {
   }
 
   public removeLayer(id: string) {
-    this.removeLayerAndSource(id);
+    this.removeLayerAndSource(id, this.baseLayerGroup, this.layers);
   }
 
   public removeLayers(layerIds: string[]) {
-    layerIds.forEach(l => this.removeLayerAndSource(l));
+    layerIds.forEach(l => this.removeLayerAndSource(l, this.baseLayerGroup, this.layers));
   }
 
   public addLayers(layers: LayerModel[]) {
@@ -152,14 +158,14 @@ export class OpenLayersLayerManager implements LayerManagerModel {
   }
 
   public setLayerVisibility(layerId: string, visible: boolean) {
-    const layer = this.findLayer(layerId);
+    const layer = this.layers.get(layerId);
     if (layer) {
       layer.setVisible(visible);
     }
   }
 
   public setLayerOpacity(layerId: string, opacity: number) {
-    const layer = this.findLayer(layerId);
+    const layer = this.layers.get(layerId);
     if (layer) {
       layer.setOpacity(opacity / 100);
     }
@@ -168,7 +174,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
   public setLayerOrder(layerIds: string[]) {
     let zIndex = 1;
     for (const layerId of layerIds) {
-      const layer = this.findLayer(layerId);
+      const layer = this.layers.get(layerId);
       if (layer) {
         layer.setZIndex(zIndex++);
       }
@@ -201,12 +207,8 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     }
   }
 
-  public findLayer(layerId: string): BaseLayer | null {
-    return this.layers.get(layerId) || this.vectorLayers.get(layerId) || null;
-  }
-
   public getLegendUrl(layerId: string): string {
-    const layer = this.findLayer(layerId);
+    const layer = this.layers.get(layerId);
     if (!layer) {
       return '';
     }
@@ -240,8 +242,12 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     this.baseLayerGroup.setLayers(layers);
   }
 
-  private removeLayerAndSource(layerId: string, layerGroup: LayerGroup = this.baseLayerGroup) {
-    const layer = this.findLayer(layerId);
+  private removeLayerAndSource(
+    layerId: string,
+    layerGroup: LayerGroup,
+    layerMap: Map<string, BaseLayer>,
+  ) {
+    const layer = layerMap.get(layerId);
     if (!layer) {
       return;
     }
@@ -252,7 +258,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     const layers = layerGroup.getLayers();
     layers.remove(layer);
     layerGroup.setLayers(layers);
-    this.layers.delete(layerId);
+    layerMap.delete(layerId);
   }
 
   private removeVectorLayer(layer: VectorLayer<VectorSource<Geometry>>, layerId: string) {
@@ -278,7 +284,6 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     if (typeof layer.transparency === 'number') {
       olLayer.setOpacity(layer.transparency / 100);
     }
-    this.layers.set(layer.id, olLayer);
     return olLayer;
   }
 

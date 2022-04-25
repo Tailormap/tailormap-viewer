@@ -1,0 +1,4 @@
+<tm-split-button [options]="backgroundLayers$ | async"
+                 [emptyLabel]="initiallyCheckedLabels$ | async"
+                 [selectedOption]="selectedBackgroundNodeId$ | async"
+                 (optionSelected)="backgroundChanged($event)"></tm-split-button>
