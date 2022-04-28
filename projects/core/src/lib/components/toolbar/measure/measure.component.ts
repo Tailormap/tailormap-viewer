@@ -5,7 +5,7 @@ import {
 import { filter, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { HtmlHelper } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
-import { activateTool, deactivateTool, registerTool } from '../state/toolbar.actions';
+import { activateTool, deactivateTool, deregisterTool, registerTool } from '../state/toolbar.actions';
 import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
 import { selectActiveTool } from '../state/toolbar.selectors';
 
@@ -82,6 +82,7 @@ export class MeasureComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this.destroyed.next(null);
     this.destroyed.complete();
+    this.store$.dispatch(deregisterTool({ tool: ToolbarComponentEnum.MEASURE }));
   }
 
   public measure(type: 'length' | 'area') {

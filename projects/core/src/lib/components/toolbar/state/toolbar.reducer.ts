@@ -37,6 +37,7 @@ const onDeregisterTool = (
       ...state.tools.slice(0, idx),
       ...state.tools.slice(idx + 1),
     ],
+    activeTool: state.activeTool === payload.tool ? null : state.activeTool,
   };
 };
 

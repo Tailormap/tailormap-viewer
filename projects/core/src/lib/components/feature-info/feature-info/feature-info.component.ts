@@ -7,7 +7,7 @@ import { selectCurrentlySelectedFeatureGeometry, selectFeatureInfoError$ } from 
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { $localize } from '@angular/localize/init';
 import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
-import { registerTool } from '../../toolbar/state/toolbar.actions';
+import { deregisterTool, registerTool } from '../../toolbar/state/toolbar.actions';
 import { ToolbarComponentEnum } from '../../toolbar/models/toolbar-component.enum';
 
 @Component({
@@ -60,6 +60,7 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this.destroyed.next(null);
     this.destroyed.complete();
+    this.store$.dispatch(deregisterTool({ tool: ToolbarComponentEnum.FEATURE_INFO }));
   }
 
   private handleMapClick(evt: { mapCoordinates: [number, number]; mouseCoordinates: [number, number] }) {

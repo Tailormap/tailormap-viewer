@@ -6,7 +6,7 @@ import { Clipboard } from '@angular/cdk/clipboard';
 import { $localize } from '@angular/localize/init';
 import { Store } from '@ngrx/store';
 import { isActiveToolbarTool } from '../state/toolbar.selectors';
-import { registerTool, toggleTool } from '../state/toolbar.actions';
+import { deregisterTool, registerTool, toggleTool } from '../state/toolbar.actions';
 import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
 
 @Component({
@@ -69,6 +69,8 @@ export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this.destroyed.next(null);
     this.destroyed.complete();
+    this.snackBar.dismiss();
+    this.store$.dispatch(deregisterTool({ tool: ToolbarComponentEnum.SELECT_COORDINATES }));
   }
 
   public toggle() {
