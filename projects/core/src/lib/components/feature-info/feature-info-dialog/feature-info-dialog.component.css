@@ -1,15 +1,22 @@
-tm-dialog ::ng-deep .dialog {
+.feature-info-dialog ::ng-deep .dialog {
   left: auto;
   right: var(--body-margin);
   top: var(--body-margin);
   bottom: auto;
-  height: calc(50vh - var(--body-margin));
+  min-height: 40vh;
+  max-height: calc(100vh - var(--body-margin) - var(--body-margin));
+}
+
+.feature-info-dialog ::ng-deep .dialog-content {
+  display: flex;
+  flex-direction: column;
 }
 
 .feature-info {
-  height: 100%;
+  flex: 1;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .content {
