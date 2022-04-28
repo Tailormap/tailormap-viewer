@@ -1,3 +1,21 @@
 .mouse-coordinates {
   font-weight: bold;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  border-radius: 3px;
+  background-color: var(--primary-color-background-0_8);
+}
+
+.mouse-coordinates > div {
+  padding: 8px;
+  width: 100px;
+}
+
+.mouse-coordinates__left {
+  text-align: right;
+}
+
+.mouse-coordinates__right {
+  text-align: left;
 }

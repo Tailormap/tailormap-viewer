@@ -7,6 +7,7 @@ import { NgZone } from '@angular/core';
 export class OpenLayersMousePositionTool implements MousePositionToolModel {
 
   private enabled = new Subject();
+  private lastCoordinates: { mapCoordinates: [number, number]; mouseCoordinates: [number, number] } | null = null;
 
   constructor(
     public id: string,
@@ -22,8 +23,7 @@ export class OpenLayersMousePositionTool implements MousePositionToolModel {
     this.ngZone.run(() => {
       this.mouseMoveSubject.next({
         type: 'out',
-        mapCoordinates: [0, 0],
-        mouseCoordinates: [0, 0],
+        ...(this.lastCoordinates || { mapCoordinates: [0, 0], mouseCoordinates: [0, 0] }),
       });
     });
   };
@@ -46,6 +46,7 @@ export class OpenLayersMousePositionTool implements MousePositionToolModel {
     OpenLayersEventManager.onMouseMove$()
       .pipe(takeUntil(this.enabled))
       .subscribe(evt => {
+        this.lastCoordinates = { mapCoordinates: [evt.coordinate[0], evt.coordinate[1]], mouseCoordinates: [evt.pixel[0], evt.pixel[1]] };
         this.mouseMoveSubject.next({
           type: 'move',
           mapCoordinates: [evt.coordinate[0], evt.coordinate[1]],

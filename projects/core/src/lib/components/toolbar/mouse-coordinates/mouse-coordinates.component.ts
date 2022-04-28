@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { MapService, MousePositionToolConfigModel, MousePositionToolModel, ToolTypeEnum } from '@tailormap-viewer/map';
-import { concatMap, filter, map, Observable, of, Subject, switchMap, takeUntil } from 'rxjs';
+import { concatMap, filter, Observable, of, Subject, switchMap, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'tm-mouse-coordinates',
@@ -11,7 +11,8 @@ import { concatMap, filter, map, Observable, of, Subject, switchMap, takeUntil }
 export class MouseCoordinatesComponent implements OnInit, OnDestroy {
 
   private destroyed = new Subject();
-  public coordinates$: Observable<string> = of('');
+  public coordinates$: Observable<string[]> = of([]);
+  private overCoordinatesElement = false;
 
   constructor(
     private mapService: MapService,
@@ -27,18 +28,25 @@ export class MouseCoordinatesComponent implements OnInit, OnDestroy {
         filter(Boolean),
         concatMap(tool => tool.mouseMove$),
         switchMap(mouseMove => {
-          if (mouseMove.type === 'out') {
-            return of('');
+          if (mouseMove.type === 'out' && !this.overCoordinatesElement) {
+            return of([]);
           }
-          return this.mapService.getRoundedCoordinates$(mouseMove.mapCoordinates)
-            .pipe(map(coordinates => coordinates.join(' | ')));
+          return this.mapService.getRoundedCoordinates$(mouseMove.mapCoordinates);
         }),
       );
+  }
+
+  public estimateWidth(coordinate: string) {
+    return `${coordinate.length * 10}px`;
   }
 
   public ngOnDestroy() {
     this.destroyed.next(null);
     this.destroyed.complete();
+  }
+
+  public isOverCoordinates(isOverCoordinates: boolean) {
+    this.overCoordinatesElement = isOverCoordinates;
   }
 
 }

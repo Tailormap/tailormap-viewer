@@ -164,14 +164,22 @@ export class MapService {
    */
   public getUnitsOfMeasure$(): Observable<string> {
     return this.map.getProjection$().pipe( map(
-      p => (p.getUnits()) === undefined ? 'm' : p.getUnits()),
+      p => ((p.getUnits()) === undefined ? 'm' : p.getUnits()).toLowerCase()),
     );
   }
 
   public getRoundedCoordinates$(coordinates: [number, number]) {
     return this.getUnitsOfMeasure$()
       .pipe(
-        map(uom => uom === 'm' ? 2 : ((uom === 'ft' || uom === 'us-ft') ? 3 : 4)),
+        map(uom => {
+          switch (uom) {
+            case 'm': return 2;
+            case 'ft': return 3;
+            case 'us-ft': return 3;
+            case 'degrees': return 6;
+            default: return 4;
+          }
+        }),
         map(decimals => coordinates.map(coord => coord.toFixed(decimals))),
       );
   }
