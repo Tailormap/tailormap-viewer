@@ -8,7 +8,7 @@ describe('MouseCoordinatesComponent', () => {
   test('should render', async () => {
     const mapServiceMock = {
       createTool$: jest.fn(() => of({
-        mouseMove$: of({ type: 'move', mapCoordinates: [ 50, 50 ]}),
+        mouseMove$: of({ type: 'move', mapCoordinates: [ 50, 60 ]}),
       })),
       getRoundedCoordinates$: jest.fn(coords => of(coords)),
     };
@@ -17,7 +17,9 @@ describe('MouseCoordinatesComponent', () => {
         { provide: MapService, useValue: mapServiceMock },
       ],
     });
-    expect(await screen.getByText('50 | 50'));
+    expect(await screen.getByText('50'));
+    expect(await screen.getByText('|'));
+    expect(await screen.getByText('60'));
     expect(mapServiceMock.createTool$).toHaveBeenCalledTimes(1);
     expect(mapServiceMock.getRoundedCoordinates$).toHaveBeenCalledTimes(1);
   });

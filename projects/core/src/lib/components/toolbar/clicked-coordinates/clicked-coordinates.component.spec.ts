@@ -14,7 +14,7 @@ describe('ClickedCoordinatesComponent', () => {
     const createTool = jest.fn(() => of('1'));
     await render(ClickedCoordinatesComponent, {
       schemas: [CUSTOM_ELEMENTS_SCHEMA], providers: [{
-        provide: MatSnackBar, useValue: {},
+        provide: MatSnackBar, useValue: { dismiss: jest.fn() },
       }, {
         provide: MapService, useValue: {createTool$: createTool},
       }, provideMockStore({
