@@ -1,3 +1,9 @@
+.tm-scale-line {
+  border-radius: 3px;
+  background-color: var(--primary-color-background-0_8);
+  padding: 8px;
+}
+
 .tm-scale-line ::ng-deep .ol-scale-line {
   position: static;
   background-color: transparent;
