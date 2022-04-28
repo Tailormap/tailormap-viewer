@@ -100,3 +100,9 @@ body {
   padding: 16px;
   border-radius: 2px;
 }
+
+.cdk-overlay-container .mat-snack-bar-container .mat-simple-snackbar-action button {
+  color: #fff;
+  font-weight: bold;
+  text-decoration: underline;
+}
