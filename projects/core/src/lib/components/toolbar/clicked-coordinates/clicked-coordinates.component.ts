@@ -6,7 +6,7 @@ import { Clipboard } from '@angular/cdk/clipboard';
 import { $localize } from '@angular/localize/init';
 import { Store } from '@ngrx/store';
 import { isActiveToolbarTool } from '../state/toolbar.selectors';
-import { registerTool, toggleTool } from '../state/toolbar.actions';
+import { deregisterTool, registerTool, toggleTool } from '../state/toolbar.actions';
 import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
 
 @Component({
@@ -48,27 +48,8 @@ export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
         concatMap(clickTool => clickTool.mapClick$),
         switchMap(mapClick => {
           this.snackBar.dismiss();
-          return this.mapService.getUnitsOfMeasure$()
-            .pipe(
-              map(
-                uom => {
-                  let decimals: number;
-                  switch (uom) {
-                    case 'm':
-                      decimals = 2;
-                      break;
-                    case 'ft':
-                    case 'us-ft':
-                      decimals = 3;
-                      break;
-                    case 'degrees':
-                    default:
-                      decimals = 4;
-                  }
-                  return `${mapClick.mapCoordinates[0].toFixed(decimals)}, ${mapClick.mapCoordinates[1].toFixed(decimals)}`;
-                },
-              ),
-            );
+          return this.mapService.getRoundedCoordinates$(mapClick.mapCoordinates)
+            .pipe(map(coordinates => coordinates.join(', ')));
         }),
         concatMap(coordinates => {
           const coordinatesMsg = $localize`Selected coordinates: ${coordinates}`;
@@ -88,6 +69,8 @@ export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this.destroyed.next(null);
     this.destroyed.complete();
+    this.snackBar.dismiss();
+    this.store$.dispatch(deregisterTool({ tool: ToolbarComponentEnum.SELECT_COORDINATES }));
   }
 
   public toggle() {

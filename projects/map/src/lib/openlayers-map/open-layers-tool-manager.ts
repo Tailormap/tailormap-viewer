@@ -4,6 +4,7 @@ import { ToolTypeHelper } from '../helpers/tool-type.helper';
 import { OpenLayersMapClickTool } from './tools/open-layers-map-click-tool';
 import { NgZone } from '@angular/core';
 import { OpenLayersDrawingTool } from './tools/open-layers-drawing-tool';
+import { OpenLayersMousePositionTool } from './tools/open-layers-mouse-position-tool';
 
 export class OpenLayersToolManager implements ToolManagerModel {
 
@@ -29,6 +30,9 @@ export class OpenLayersToolManager implements ToolManagerModel {
     }
     if (ToolTypeHelper.isDrawingTool(tool)) {
       this.tools.set(toolId, new OpenLayersDrawingTool(toolId, tool, this.olMap, this.ngZone));
+    }
+    if (ToolTypeHelper.isMousePositionTool(tool)) {
+      this.tools.set(toolId, new OpenLayersMousePositionTool(toolId, tool, this.olMap, this.ngZone));
     }
     if (tool.alwaysEnabled) {
       this.alwaysEnabledTools.add(toolId);

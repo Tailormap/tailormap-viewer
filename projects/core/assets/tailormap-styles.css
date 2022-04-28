@@ -19,6 +19,7 @@
   --primary-color-0_4: rgba(98, 54, 255, 0.4);
   --primary-color-0_1: rgba(98, 54, 255, 0.1);
   --error-color-0_5: rgba(255, 54, 54, 0.5);
+  --primary-color-background-0_8: rgba(234, 229, 250, 0.8);
 }
 
 html {

@@ -30,6 +30,10 @@
   overflow: hidden;
 }
 
+.bottom {
+  position: relative;
+}
+
 .map-controls-right {
   display: flex;
   align-items: flex-start;
@@ -39,8 +43,9 @@
   transition: transform ease-in-out 0.25s;
 }
 
-::ng-deep.body--has-dialog-right .map-controls-right {
-  transform: translateX(calc((var(--dialog-width-right) + var(--body-margin)) * -1));
+.map-controls-right--on-bottom {
+  bottom: var(--body-margin);
+  top: auto;
 }
 
 .map-controls-right tm-background-layer-toggle {
@@ -60,14 +65,27 @@
   display: flex;
 }
 
-::ng-deep.body--has-dialog-left .map-controls-left {
-  transform: translateX(var(--dialog-width-left));
-}
-
 .map-controls-left tm-clicked-coordinates {
   margin-left: 9px;
 }
 
-.bottom {
-  position: relative;
+.map-controls-left--on-bottom {
+  bottom: var(--body-margin);
+  top: auto;
+}
+
+::ng-deep.body--has-dialog-left .map-controls-left {
+  transform: translateX(var(--dialog-width-left));
+}
+
+::ng-deep.body--has-dialog-left .map-controls-left--on-bottom {
+  transform: none;
+}
+
+::ng-deep.body--has-dialog-right .map-controls-right {
+  transform: translateX(calc((var(--dialog-width-right) + var(--body-margin)) * -1));
+}
+
+::ng-deep.body--has-dialog-right .map-controls-right--on-bottom {
+  transform: none;
 }
