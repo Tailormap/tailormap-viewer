@@ -5,6 +5,7 @@ import { OpenLayersMapClickTool } from './tools/open-layers-map-click-tool';
 import { NgZone } from '@angular/core';
 import { OpenLayersDrawingTool } from './tools/open-layers-drawing-tool';
 import { OpenLayersMousePositionTool } from './tools/open-layers-mouse-position-tool';
+import { OpenLayersScaleBarTool } from './tools/open-layers-scale-bar-tool';
 
 export class OpenLayersToolManager implements ToolManagerModel {
 
@@ -33,6 +34,9 @@ export class OpenLayersToolManager implements ToolManagerModel {
     }
     if (ToolTypeHelper.isMousePositionTool(tool)) {
       this.tools.set(toolId, new OpenLayersMousePositionTool(toolId, tool, this.olMap, this.ngZone));
+    }
+    if (ToolTypeHelper.isScaleBarTool(tool)) {
+      this.tools.set(toolId, new OpenLayersScaleBarTool(toolId, tool, this.olMap));
     }
     if (tool.alwaysEnabled) {
       this.alwaysEnabledTools.add(toolId);
