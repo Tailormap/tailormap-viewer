@@ -1,1 +1,4 @@
-<div class="tm-scale-line" #scaleLine></div>
+<div class="tm-scale"
+     [class.tm-scale--bar]="scaleType === 'bar'"
+     [class.tm-scale--line]="scaleType === 'line'"
+     #scaleTarget></div>

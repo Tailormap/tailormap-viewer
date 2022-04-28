@@ -1,15 +1,24 @@
-.tm-scale-line {
+.tm-scale {
+  position: relative;
+}
+
+.tm-scale--line {
   border-radius: 3px;
   background-color: var(--primary-color-background-0_8);
   padding: 8px;
 }
 
-.tm-scale-line ::ng-deep .ol-scale-line {
+.tm-scale--bar ::ng-deep .ol-scale-bar {
+  bottom: 4px;
+  left: 4px;
+}
+
+.tm-scale--line ::ng-deep .ol-scale-line {
   position: static;
   background-color: transparent;
 }
 
-.tm-scale-line ::ng-deep .ol-scale-line-inner {
+.tm-scale--line ::ng-deep .ol-scale-line-inner {
   color: var(--text-color);
   font-size: 12px;
   font-weight: 600;
