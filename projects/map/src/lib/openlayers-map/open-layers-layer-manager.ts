@@ -133,7 +133,9 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     this.addLayerToMap(olLayer);
     olLayer.setZIndex(this.getZIndexForLayer(zIndex));
     this.moveDrawingLayersToTop();
-    this.layers.set(layer.id, olLayer);
+    if (!LayerTypesHelper.isVectorLayer(layer)) {
+      this.layers.set(layer.id, olLayer);
+    }
     return olLayer as LayerType;
   }
 
