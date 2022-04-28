@@ -10,8 +10,10 @@ import { MapService, ScaleBarToolConfigModel, ScaleBarToolModel, ToolTypeEnum } 
 })
 export class ScaleBarComponent implements OnInit, OnDestroy {
 
-  @ViewChild('scaleLine', { static: true, read: ElementRef })
-  public scaleLine: ElementRef | undefined;
+  public scaleType: 'bar' | 'line' = 'bar';
+
+  @ViewChild('scaleTarget', { static: true, read: ElementRef })
+  public scaleTarget: ElementRef | undefined;
 
   private destroyed = new Subject();
 
@@ -22,6 +24,7 @@ export class ScaleBarComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this.mapService.createTool$<ScaleBarToolModel, ScaleBarToolConfigModel>({
       type: ToolTypeEnum.ScaleBar,
+      scaleType: this.scaleType,
       alwaysEnabled: true,
     })
       .pipe(
@@ -29,8 +32,8 @@ export class ScaleBarComponent implements OnInit, OnDestroy {
         filter(Boolean),
       )
       .subscribe(tool => {
-        if (this.scaleLine) {
-          tool.setTarget(this.scaleLine.nativeElement);
+        if (this.scaleTarget) {
+          tool.setTarget(this.scaleTarget.nativeElement);
         }
       });
   }

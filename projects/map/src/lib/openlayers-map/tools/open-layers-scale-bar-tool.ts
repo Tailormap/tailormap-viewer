@@ -10,7 +10,7 @@ export class OpenLayersScaleBarTool implements ScaleBarToolModel {
 
   constructor(
     public id: string,
-    private _toolConfig: ScaleBarToolConfigModel,
+    private toolConfig: ScaleBarToolConfigModel,
     private olMap: OlMap,
   ) {}
 
@@ -53,6 +53,7 @@ export class OpenLayersScaleBarTool implements ScaleBarToolModel {
 
   private createControl(clsName?: string, target?: HTMLElement) {
     return new ScaleLine({
+      bar: this.toolConfig.scaleType === 'bar',
       className: clsName || this.clsName,
       target: target || this.target,
     });

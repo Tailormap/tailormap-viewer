@@ -3,4 +3,5 @@ import { ToolTypeEnum } from './tool-type.enum';
 
 export interface ScaleBarToolConfigModel extends ToolConfigModel {
   type: ToolTypeEnum.ScaleBar;
+  scaleType: 'line' | 'bar';
 }
