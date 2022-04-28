@@ -7,3 +7,5 @@ export * from './drawing-tool.model';
 export * from './drawing-tool-config.model';
 export * from './mouse-position-tool.model';
 export * from './mouse-position-tool-config.model';
+export * from './scale-bar-tool.model';
+export * from './scale-bar-tool-config.model';

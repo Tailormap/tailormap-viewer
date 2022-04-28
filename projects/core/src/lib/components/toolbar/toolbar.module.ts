@@ -9,6 +9,7 @@ import { ClickedCoordinatesModule } from './clicked-coordinates/clicked-coordina
 import { EffectsModule } from '@ngrx/effects';
 import { ToolbarEffects } from './state/toolbar.effects';
 import { MouseCoordinatesModule } from './mouse-coordinates/mouse-coordinates.module';
+import { ScaleBarModule } from './scale-bar/scale-bar.module';
 
 @NgModule({
   declarations: [],
@@ -16,15 +17,13 @@ import { MouseCoordinatesModule } from './mouse-coordinates/mouse-coordinates.mo
     CommonModule,
     StoreModule.forFeature(toolbarStateKey, toolbarReducer),
     EffectsModule.forFeature([ToolbarEffects]),
-    ZoomButtonsModule,
-    MeasureModule,
-    ClickedCoordinatesModule,
   ],
   exports: [
     ZoomButtonsModule,
     MeasureModule,
     ClickedCoordinatesModule,
     MouseCoordinatesModule,
+    ScaleBarModule,
   ],
 })
 export class ToolbarModule { }

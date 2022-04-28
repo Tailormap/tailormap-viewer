@@ -1,0 +1,12 @@
+.tm-scale-line ::ng-deep .ol-scale-line {
+  position: static;
+  background-color: transparent;
+}
+
+.tm-scale-line ::ng-deep .ol-scale-line-inner {
+  color: var(--text-color);
+  font-size: 12px;
+  font-weight: 600;
+  border-color: var(--text-color);
+  border-width: 2px;
+}

@@ -1,4 +1,6 @@
-import { ToolTypeEnum, ToolConfigModel, MapClickToolConfigModel, DrawingToolConfigModel, MousePositionToolConfigModel } from '../models';
+import {
+  ToolTypeEnum, ToolConfigModel, MapClickToolConfigModel, DrawingToolConfigModel, MousePositionToolConfigModel, ScaleBarToolConfigModel,
+} from '../models';
 
 export class ToolTypeHelper {
 
@@ -12,6 +14,10 @@ export class ToolTypeHelper {
 
   public static isMousePositionTool(tool: ToolConfigModel): tool is MousePositionToolConfigModel {
     return tool.type === ToolTypeEnum.MousePosition;
+  }
+
+  public static isScaleBarTool(tool: ToolConfigModel): tool is ScaleBarToolConfigModel {
+    return tool.type === ToolTypeEnum.ScaleBar;
   }
 
 }
