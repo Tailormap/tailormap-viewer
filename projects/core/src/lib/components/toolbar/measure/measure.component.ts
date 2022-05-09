@@ -44,7 +44,7 @@ export class MeasureComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyed))
       .subscribe(tooltip => this.tooltip = tooltip);
 
-    this.mapService.highlightFeatures$('measurement-layer', this.featureGeom.asObservable(), {
+    this.mapService.renderFeatures$('measurement-layer', this.featureGeom.asObservable(), {
       styleKey: 'measurement-style',
       strokeColor: '#6236ff',
       strokeWidth: 3,

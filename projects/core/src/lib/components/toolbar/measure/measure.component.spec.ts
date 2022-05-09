@@ -17,7 +17,7 @@ describe('MeasureComponent', () => {
   test('should render', async () => {
     const mapServiceMock = {
       createTooltip$: jest.fn(() => of({})),
-      highlightFeatures$: jest.fn(() => of(null)),
+      renderFeatures$: jest.fn(() => of(null)),
       createTool$: jest.fn(() => of([])),
     };
     await render(MeasureComponent, {
@@ -38,7 +38,7 @@ describe('MeasureComponent', () => {
     expect(screen.getByLabelText('Measure length'));
     expect(screen.getByLabelText('Measure area'));
     expect(mapServiceMock.createTooltip$).toHaveBeenCalled();
-    expect(mapServiceMock.highlightFeatures$).toHaveBeenCalled();
+    expect(mapServiceMock.renderFeatures$).toHaveBeenCalled();
     expect(mapServiceMock.createTool$).toHaveBeenCalled();
   });
 
@@ -67,7 +67,7 @@ describe('MeasureComponent', () => {
     };
     const mapServiceMock = {
       createTooltip$: jest.fn(() => of(tooltipMock)),
-      highlightFeatures$: jest.fn(() => of(null)),
+      renderFeatures$: jest.fn(() => of(null)),
       createTool$: jest.fn(() => of(mockTool)),
     };
     await render(MeasureComponent, {

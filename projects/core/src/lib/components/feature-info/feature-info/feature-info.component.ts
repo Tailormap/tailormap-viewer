@@ -43,7 +43,7 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
         this.handleMapClick(mapClick);
       });
 
-    this.mapService.highlightFeatures$(
+    this.mapService.renderFeatures$(
       'feature-info-highlight-layer',
       this.store$.select(selectCurrentlySelectedFeatureGeometry),
       {

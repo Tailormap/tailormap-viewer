@@ -14,6 +14,9 @@ import { OlMapStyleType } from '../models/ol-map-style.type';
 import { MapTooltipModel } from '../models/map-tooltip.model';
 import { OpenLayersMapTooltip } from '../openlayers-map/open-layers-map-tooltip';
 import Feature from 'ol/Feature';
+import { FeatureModelType } from '../models/feature-model.type';
+import { FeatureHelper } from '../helpers/feature.helper';
+import { FeatureModel } from '@tailormap-viewer/api';
 
 @Injectable({
   providedIn: 'root',
@@ -62,7 +65,7 @@ export class MapService {
 
   public createVectorLayer$(
     layer: VectorLayerModel,
-    vectorLayerStyle?: MapStyleModel | OlMapStyleType,
+    vectorLayerStyle?: MapStyleModel | ((feature: FeatureModel) => MapStyleModel),
   ): Observable<VectorLayer<VectorSource<Geometry>> | null> {
     let layerManager: LayerManagerModel;
     return this.getLayerManager$()
@@ -83,44 +86,24 @@ export class MapService {
       );
   }
 
-  public highlightFeatures$(
+  public renderFeatures$(
     layerId: string,
-    featureGeometry$: Observable<string | Geometry | Feature<Geometry> | null>,
-    vectorLayerStyle?: MapStyleModel | OlMapStyleType,
-    highlightConfig?: { keepHighlightOnEmptyFeature?: boolean },
+    featureGeometry$: Observable<FeatureModelType | Array<FeatureModelType>>,
+    vectorLayerStyle?: MapStyleModel | ((feature: FeatureModel) => MapStyleModel),
   ): Observable<VectorLayer<VectorSource<Geometry>> | null> {
-    const wktFormatter = new WKT();
     return combineLatest([
       this.createVectorLayer$({ id: layerId, name: `${layerId} layer`, layerType: LayerTypesEnum.Vector, visible: true }, vectorLayerStyle),
       featureGeometry$,
     ])
       .pipe(
         tap(([ vectorLayer, featureGeometry ]) => {
-          if (!vectorLayer) {
-            return;
-          }
-          if (!featureGeometry && (highlightConfig && highlightConfig.keepHighlightOnEmptyFeature)) {
+          if (!vectorLayer || !featureGeometry) {
             return;
           }
           vectorLayer.getSource().getFeatures().forEach(feature => vectorLayer.getSource().removeFeature(feature));
-          if (featureGeometry) {
-            let feature: Feature<Geometry> | null = null;
-            if (typeof featureGeometry === 'string') {
-              try {
-                feature = wktFormatter.readFeature(featureGeometry);
-              } catch (e) {}
-            }
-            if (featureGeometry instanceof Feature) {
-              feature = featureGeometry;
-            }
-            if (featureGeometry instanceof Geometry) {
-              feature = new Feature<Geometry>({ geometry: featureGeometry });
-            }
-            if (!feature) {
-              return;
-            }
+          FeatureHelper.getFeatures(featureGeometry).forEach(feature => {
             vectorLayer.getSource().addFeature(feature);
-          }
+          });
         }),
         map(([ vectorLayer ]) => vectorLayer),
       );

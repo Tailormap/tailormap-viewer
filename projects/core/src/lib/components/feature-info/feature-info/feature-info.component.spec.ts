@@ -27,7 +27,7 @@ describe('FeatureInfoComponent', () => {
       componentProviders: [
         {
           provide: MapService,
-          useValue: { createTool$: createTool, highlightFeatures$: highlightFeaturesMock },
+          useValue: { createTool$: createTool, renderFeatures$: highlightFeaturesMock },
         },
         {
           provide: Store,
@@ -66,7 +66,7 @@ describe('FeatureInfoComponent', () => {
       componentProviders: [
         {
           provide: MapService,
-          useValue: { createTool$: createTool, highlightFeatures$: highlightFeaturesMock },
+          useValue: { createTool$: createTool, renderFeatures$: highlightFeaturesMock },
         },
         {
           provide: Store,
