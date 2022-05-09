@@ -1,28 +1,28 @@
 import { LegendMenuButtonComponent } from './legend-menu-button.component';
-import { fireEvent, render, screen } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
 import { of } from 'rxjs';
-import { LegendService } from '../services/legend.service';
-import { MenubarButtonComponent } from '../../menubar';
+import { MenubarButtonComponent, MenubarService } from '../../menubar';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
+import userEvent from '@testing-library/user-event';
 
-describe('TocMenuButtonComponent', () => {
+describe('LegendMenuButtonComponent', () => {
 
   test('renders', async () => {
     const toggleVisibleFn = jest.fn();
-    const tocService = {
-      toggleVisible: toggleVisibleFn,
-      isVisible$: () => of(false),
+    const menubarServiceMock = {
+      toggleActiveComponent: toggleVisibleFn,
+      isComponentVisible$: () => of(false),
     };
     await render(LegendMenuButtonComponent, {
       declarations: [ MenubarButtonComponent ],
       imports: [ SharedModule, MatIconTestingModule ],
       providers: [
-        { provide: LegendService, useValue: tocService },
+        { provide: MenubarService, useValue: menubarServiceMock },
       ],
     });
     expect(await screen.findByRole('button')).toBeInTheDocument();
-    fireEvent.click(await screen.findByRole('button'));
+    userEvent.click(await screen.findByRole('button'));
     expect(toggleVisibleFn).toHaveBeenCalled();
   });
 

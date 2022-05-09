@@ -2,14 +2,13 @@ import { TocComponent } from './toc.component';
 import { render, screen } from '@testing-library/angular';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { MenubarService } from '../../menubar';
-import { TocService } from '../services/toc.service';
 import { of } from 'rxjs';
 import { getTreeModelMock, SharedModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { TestBed } from '@angular/core/testing';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { SharedCoreComponentsModule } from '../../../shared/components/shared-core-components.module';
-import { selectLayerTree, selectSelectedLayerId, selectSelectedNode } from '../../../map/state/map.selectors';
+import { selectLayerTree, selectSelectedNode } from '../../../map/state/map.selectors';
 import { setLayerVisibility, setSelectedLayerId } from '../../../map/state/map.actions';
 
 const getMockStore = (selectedLayer: string = '') => {
@@ -38,8 +37,8 @@ const getMockStore = (selectedLayer: string = '') => {
   });
 };
 
-const getTocService = (visible: boolean) => {
-  return { provide: TocService, useValue: { isVisible$: () => of(visible) }};
+const getMenubarService = (visible: boolean, registerComponentFn: jest.Mock) => {
+  return { provide: MenubarService, useValue: { isComponentVisible$: () => of(visible), registerComponent: registerComponentFn }};
 };
 
 describe('TocComponent', () => {
@@ -50,11 +49,9 @@ describe('TocComponent', () => {
       imports: [ SharedModule, SharedCoreComponentsModule, MatIconTestingModule ],
       providers: [
         getMockStore(),
-        getTocService(false),
-        { provide: MenubarService, useValue: { registerComponent: registerComponentFn }},
+        getMenubarService(false, registerComponentFn),
       ],
     });
-    expect(await screen.queryByText('Available layers')).toBeNull();
     expect(registerComponentFn).toHaveBeenCalled();
   });
 
@@ -64,11 +61,9 @@ describe('TocComponent', () => {
       imports: [ SharedModule, SharedCoreComponentsModule, MatIconTestingModule ],
       providers: [
         getMockStore(),
-        getTocService(true),
-        { provide: MenubarService, useValue: { registerComponent: registerComponentFn }},
+        getMenubarService(true, registerComponentFn),
       ],
     });
-    expect(await screen.findByText('Available layers')).toBeInTheDocument();
     expect(await screen.findByText('Disaster map')).toBeInTheDocument();
     expect(await screen.findByText('Some other map')).toBeInTheDocument();
   });
@@ -79,8 +74,7 @@ describe('TocComponent', () => {
       imports: [ SharedModule, SharedCoreComponentsModule, MatIconTestingModule ],
       providers: [
         getMockStore('1'),
-        getTocService(true),
-        { provide: MenubarService, useValue: { registerComponent: registerComponentFn }},
+        getMenubarService(true, registerComponentFn),
       ],
     });
     const store = TestBed.inject(MockStore);
@@ -100,8 +94,7 @@ describe('TocComponent', () => {
       imports: [ SharedModule, SharedCoreComponentsModule, MatIconTestingModule ],
       providers: [
         getMockStore('1'),
-        getTocService(true),
-        { provide: MenubarService, useValue: { registerComponent: registerComponentFn }},
+        getMenubarService(true, registerComponentFn),
       ],
     });
     const store = TestBed.inject(MockStore);

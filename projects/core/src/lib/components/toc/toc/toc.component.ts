@@ -2,13 +2,13 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { filter, Observable, of, Subject, takeUntil } from 'rxjs';
 import { BaseTreeModel, TreeService } from '@tailormap-viewer/shared';
 import { map } from 'rxjs/operators';
-import { TocService } from '../services/toc.service';
 import { MenubarService } from '../../menubar';
 import { TocMenuButtonComponent } from '../toc-menu-button/toc-menu-button.component';
 import { Store } from '@ngrx/store';
 import { setLayerVisibility, setSelectedLayerId, toggleLevelExpansion } from '../../../map/state/map.actions';
 import { selectLayerTree, selectSelectedNode } from '../../../map/state/map.selectors';
 import { AppLayerModel } from '@tailormap-viewer/api';
+import { TOC_ID } from '../toc-identifier';
 
 interface AppLayerTreeModel extends BaseTreeModel {
   metadata: AppLayerModel;
@@ -30,11 +30,10 @@ export class TocComponent implements OnInit, OnDestroy {
     private store$: Store,
     private treeService: TreeService<AppLayerModel>,
     private menubarService: MenubarService,
-    private tocService: TocService,
   ) {}
 
   public ngOnInit(): void {
-    this.visible$ = this.tocService.isVisible$();
+    this.visible$ = this.menubarService.isComponentVisible$(TOC_ID);
     this.treeService.setDataSource(
       this.store$.select(selectLayerTree),
     );
@@ -63,10 +62,6 @@ export class TocComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this.destroyed.next(null);
     this.destroyed.complete();
-  }
-
-  public closeToc() {
-    this.tocService.toggleVisible();
   }
 
 }

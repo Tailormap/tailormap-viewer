@@ -2,9 +2,4 @@
   <tm-tree-node-layer [node]="node"></tm-tree-node-layer>
 </ng-template>
 
-<tm-dialog [open]="visible$ | async"
-           (closeDialog)="closeToc()"
-           i18n-dialogTitle
-           dialogTitle="Available layers">
-  <tm-tree class="toc-tree" [treeNodeTemplate]="treeNode" [expandOnGroupClick]="true"></tm-tree>
-</tm-dialog>
+<tm-tree *ngIf="visible$ | async" class="toc-tree" [treeNodeTemplate]="treeNode" [expandOnGroupClick]="true"></tm-tree>

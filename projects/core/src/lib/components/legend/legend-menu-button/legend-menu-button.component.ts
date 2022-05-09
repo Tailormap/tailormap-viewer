@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { LegendService } from '../services/legend.service';
 import { Observable, of } from 'rxjs';
+import { MenubarService } from '../../menubar';
+import { LEGEND_ID } from '../legend-identifier';
 
 @Component({
   selector: 'tm-legend-menu-button',
@@ -12,15 +13,15 @@ export class LegendMenuButtonComponent implements OnInit {
   public visible$: Observable<boolean> = of(false);
 
   constructor(
-    private legendService: LegendService,
+    private menubarService: MenubarService,
   ) { }
 
   public ngOnInit(): void {
-    this.visible$ = this.legendService.isVisible$();
+    this.visible$ = this.menubarService.isComponentVisible$(LEGEND_ID);
   }
 
   public toggleLegend() {
-    this.legendService.toggleVisible();
+    this.menubarService.toggleActiveComponent(LEGEND_ID, $localize `Legend`);
   }
 
 }
