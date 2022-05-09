@@ -6,6 +6,7 @@ import { LegendMenuButtonComponent } from '../legend-menu-button/legend-menu-but
 import { Store } from '@ngrx/store';
 import { selectOrderedVisibleLayers } from '../../../map/state/map.selectors';
 import { AppLayerModel } from '@tailormap-viewer/api';
+import { LEGEND_ID } from '../legend-identifier';
 
 @Component({
   selector: 'tm-legend',
@@ -24,7 +25,7 @@ export class LegendComponent {
     private legendService: LegendService,
     private menubarService: MenubarService,
   ) {
-    this.visible$ = this.legendService.isVisible$();
+    this.visible$ = this.menubarService.isComponentVisible$(LEGEND_ID);
     this.menubarService.registerComponent(LegendMenuButtonComponent);
     this.layers$ = this.visible$.pipe(
       switchMap(visible => {
@@ -33,10 +34,6 @@ export class LegendComponent {
           : this.legendService.getAppLayerAndUrl$(this.store$.select(selectOrderedVisibleLayers));
       }),
     );
-  }
-
-  public closeLegend() {
-    this.legendService.toggleVisible();
   }
 
 }

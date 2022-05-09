@@ -5,13 +5,13 @@ import { SharedCoreComponentsModule } from '../../../shared/components/shared-co
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MenubarService } from '../../menubar';
 import { of } from 'rxjs';
-import { LegendService } from '../services/legend.service';
 import { provideMockStore } from '@ngrx/store/testing';
 import { selectOrderedVisibleLayers } from '../../../map/state/map.selectors';
 import { getAppLayerModel } from '@tailormap-viewer/api';
 import { MapService } from '@tailormap-viewer/map';
 import { TestBed } from '@angular/core/testing';
 import { LegendLayerComponent } from '../legend-layer/legend-layer.component';
+import { LEGEND_ID } from '../legend-identifier';
 
 const getMapService = () => {
   return { provide: MapService, useValue: { getLayerManager$: () => of({ getLegendUrl: (layerId: string) => `layer-${layerId}-url-from-service` }) }};
@@ -40,7 +40,7 @@ describe('LegendComponent', () => {
       providers: [
         getMapService(),
         getMockStore(),
-        { provide: MenubarService, useValue: { registerComponent: registerComponentFn }},
+        { provide: MenubarService, useValue: { registerComponent: registerComponentFn, isComponentVisible$: () => of(false) }},
       ],
     });
     expect(await screen.queryByText('Legend')).toBeNull();
@@ -48,18 +48,15 @@ describe('LegendComponent', () => {
   });
 
   test('renders Legend with visible true', async () => {
-    const registerComponentFn = jest.fn();
     await render(LegendComponent, {
       declarations: [ LegendComponent, LegendLayerComponent ],
       imports: [ SharedModule, SharedCoreComponentsModule, MatIconTestingModule ],
       providers: [
         getMapService(),
         getMockStore(),
-        { provide: MenubarService, useValue: { registerComponent: registerComponentFn }},
       ],
     });
-    TestBed.inject(LegendService).toggleVisible();
-    expect(await screen.findByText('Legend')).toBeInTheDocument();
+    TestBed.inject(MenubarService).toggleActiveComponent(LEGEND_ID, 'Legend');
     expect(await screen.findByText('Layer 1')).toBeInTheDocument();
     expect(await screen.findByText('Layer 2')).toBeInTheDocument();
     expect(await screen.findByText('Layer 3')).toBeInTheDocument();
