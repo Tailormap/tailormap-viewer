@@ -13,12 +13,12 @@ jest.useFakeTimers();
 describe('FeatureInfoComponent', () => {
 
   test('should render', async () => {
-    const createTool = jest.fn(() => of({
+    const createTool = jest.fn(() => of({ tool: {
       mapClick$: of({
         mapCoordinates: [ 1, 2 ],
         mouseCoordinates: [ 2, 3 ],
       }),
-    }));
+    }}));
     const mockDispatch = jest.fn();
     const mockSelect = jest.fn(() => of('POINT(1 2)'));
     const highlightFeaturesMock = jest.fn(() => of(null));
@@ -50,12 +50,12 @@ describe('FeatureInfoComponent', () => {
   });
 
   test('renders error message', async () => {
-    const createTool = jest.fn(() => of({
+    const createTool = jest.fn(() => of({ tool: {
       mapClick$: of({
         mapCoordinates: [ 1, 2 ],
         mouseCoordinates: [ 2, 3 ],
       }),
-    }));
+    }}));
     const mockDispatch = jest.fn();
     const mockSelect = jest.fn(() => of('POINT(1 2)'));
     const highlightFeaturesMock = jest.fn(() => of(null));

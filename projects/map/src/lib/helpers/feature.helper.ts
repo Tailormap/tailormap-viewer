@@ -2,7 +2,12 @@ import { FeatureModelType } from '../models/feature-model.type';
 import Feature from 'ol/Feature';
 import Geometry from 'ol/geom/Geometry';
 import WKT from 'ol/format/WKT';
-import { FeatureModel } from '@tailormap-viewer/api';
+import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
+import { Circle } from 'ol/geom';
+import { fromCircle } from 'ol/geom/Polygon';
+import { MapSizeHelper } from '../helpers/map-size.helper';
+import OlMap from 'ol/Map';
+import { MapUnitEnum } from '../models/map-unit.enum';
 
 export class FeatureHelper {
 
@@ -30,10 +35,13 @@ export class FeatureHelper {
         }
       }
       if (FeatureHelper.isFeatureModel(feature)) {
+        const geometry = feature.attributes.isCircle && typeof feature.attributes.radius !== 'undefined' && typeof feature.attributes.center !== 'undefined'
+          ? new Circle(feature.attributes.center, feature.attributes.radius)
+          : FeatureHelper.wktFormatter.readGeometry(feature.geometry);
         return new Feature<Geometry>({
           __fid: feature.__fid,
           attributes: feature.attributes,
-          geometry: FeatureHelper.wktFormatter.readGeometry(feature.geometry),
+          geometry,
         });
       }
       if (feature instanceof Geometry) {
@@ -43,16 +51,26 @@ export class FeatureHelper {
     }).filter((f: Feature<Geometry> | null): f is Feature<Geometry> => f !== null);
   }
 
-  public static getFeatureModelForFeature(feature: Feature<Geometry>): FeatureModel | null {
+  public static getFeatureModelForFeature<T extends FeatureModelAttributes>(
+    feature: Feature<Geometry>,
+    map?: OlMap,
+  ): FeatureModel<T> | null {
     const geom = feature.getGeometry();
     if (geom && feature.get('__fid') && feature.get('attributes')) {
       return {
         __fid: feature.get('__fid'),
         attributes: feature.get('attributes'),
-        geometry: FeatureHelper.wktFormatter.writeGeometry(geom),
+        geometry: !map ? undefined : FeatureHelper.getWKT(geom, map),
       };
     }
     return null;
+  }
+
+  public static getWKT(geometry: Geometry, map: OlMap) {
+    const geom = geometry instanceof Circle ? fromCircle(geometry) : geometry;
+    const units = map.getView().getProjection().getUnits();
+    const decimals = MapSizeHelper.getCoordinatePrecision(units ? units.toLowerCase() : MapUnitEnum.m);
+    return FeatureHelper.wktFormatter.writeGeometry(geom, { decimals });
   }
 
 }

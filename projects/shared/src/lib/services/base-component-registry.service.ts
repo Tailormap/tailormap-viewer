@@ -16,6 +16,7 @@ export abstract class BaseComponentRegistryService {
     }
     this.registeredComponents.push(component);
     this.componentRegistry.next([ ...this.registeredComponents ]);
+    console.log(this.registeredComponents);
   }
 
   public getRegisteredComponents$(): Observable<Type<any>[]> {

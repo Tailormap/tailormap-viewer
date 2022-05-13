@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
-import { concatMap, filter, of, Subject, takeUntil, tap } from 'rxjs';
+import { concatMap, of, Subject, takeUntil, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { loadFeatureInfo } from '../state/feature-info.actions';
 import { selectCurrentlySelectedFeatureGeometry, selectFeatureInfoError$ } from '../state/feature-info.selectors';
@@ -33,11 +33,10 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
     this.mapService.createTool$<MapClickToolModel, MapClickToolConfigModel>({ type: ToolTypeEnum.MapClick, autoEnable: true })
       .pipe(
         takeUntil(this.destroyed),
-        filter(Boolean),
-        tap(tool => {
+        tap(({ tool }) => {
           this.store$.dispatch(registerTool({ tool: { id: ToolbarComponentEnum.FEATURE_INFO, mapToolId: tool.id }}));
         }),
-        concatMap(tool => tool?.mapClick$ || of(null)),
+        concatMap(({ tool }) => tool?.mapClick$ || of(null)),
       )
       .subscribe(mapClick => {
         this.handleMapClick(mapClick);

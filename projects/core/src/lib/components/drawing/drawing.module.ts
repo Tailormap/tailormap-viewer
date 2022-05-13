@@ -7,11 +7,13 @@ import { MenubarModule } from '../menubar';
 import { StoreModule } from '@ngrx/store';
 import { drawingStateKey } from './state/drawing.state';
 import { drawingReducer } from './state/drawing.reducer';
+import { CreateDrawingButtonComponent } from './create-drawing-button/create-drawing-button.component';
 
 @NgModule({
   declarations: [
     DrawingComponent,
     DrawingMenuButtonComponent,
+    CreateDrawingButtonComponent,
   ],
   imports: [
     CommonModule,

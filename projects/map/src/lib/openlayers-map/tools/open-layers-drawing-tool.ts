@@ -12,7 +12,8 @@ import { Circle, LineString, Point, Polygon } from 'ol/geom';
 import { getArea, getLength } from 'ol/sphere';
 import Geometry from 'ol/geom/Geometry';
 import BaseEvent from 'ol/events/Event';
-import WKT from 'ol/format/WKT';
+import { getCenter } from 'ol/extent';
+import { FeatureHelper } from '../../helpers/feature.helper';
 
 export class OpenLayersDrawingTool implements DrawingToolModel {
 
@@ -68,7 +69,7 @@ export class OpenLayersDrawingTool implements DrawingToolModel {
     this.listeners = [];
     this.isActive = true;
     this.drawInteraction = new Draw({
-      type: OpenLayersDrawingTool.getDrawingType(args.type || this.toolConfig.drawingType),
+      type: OpenLayersDrawingTool.getDrawingType(args.type || this.toolConfig.drawingType || 'point'),
       style: this.getMeasureDrawingStyle(),
     });
     this.olMap.addInteraction(this.drawInteraction);
@@ -91,12 +92,13 @@ export class OpenLayersDrawingTool implements DrawingToolModel {
 
   private getMeasureDrawingStyle() {
     return MapStyleHelper.getStyle({
-      styleKey: 'measure-style',
-      strokeColor: this.toolConfig.strokeColor || 'rgba(0, 0, 0, 0.3)',
+      styleKey: 'drawing-style',
+      strokeColor: 'rgba(0, 0, 0, 0.3)',
       strokeWidth: 2,
       pointType: 'circle',
-      pointStrokeColor: this.toolConfig.pointStrokeColor || 'rgba(0, 0, 0, 0.7)',
-      pointFillColor: this.toolConfig.pointFillColor || 'rgba(255, 255, 255, 0.5)',
+      pointStrokeColor: 'rgba(0, 0, 0, 0.7)',
+      pointFillColor: 'rgba(255, 255, 255, 0.5)',
+      ...(this.toolConfig.style || {}),
     });
   }
 
@@ -119,8 +121,10 @@ export class OpenLayersDrawingTool implements DrawingToolModel {
       )
       : [];
     return {
-      geometry: (new WKT()).writeGeometry(geometry),
+      geometry: FeatureHelper.getWKT(geometry, this.olMap),
       lastCoordinate,
+      centerCoordinate: getCenter(geometry.getExtent()),
+      radius: geometry instanceof Circle ? geometry.getRadius() : undefined,
       size: this.getSize(geometry),
       type,
     };

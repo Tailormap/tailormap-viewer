@@ -53,11 +53,6 @@ describe('MeasureComponent', () => {
       id: 'drawingTool',
       drawing$: drawingSubject.asObservable(),
     };
-    const mockManager = {
-      getTool: () => mockTool,
-      enableTool: jest.fn(),
-      disableTool: jest.fn(),
-    };
     const tooltipMock: any = {
       freeze: jest.fn(() => tooltipMock),
       hide: jest.fn(() => tooltipMock),
@@ -68,7 +63,7 @@ describe('MeasureComponent', () => {
     const mapServiceMock = {
       createTooltip$: jest.fn(() => of(tooltipMock)),
       renderFeatures$: jest.fn(() => of(null)),
-      createTool$: jest.fn(() => of(mockTool)),
+      createTool$: jest.fn(() => of({ tool: mockTool })),
     };
     await render(MeasureComponent, {
       imports: [

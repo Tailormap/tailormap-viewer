@@ -1,0 +1,17 @@
+.drawing-form {
+  padding: var(--body-margin);
+}
+
+.drawing-form ::ng-deep .icon-button-list {
+  display: flex;
+}
+
+.drawing-form ::ng-deep .icon-button-list .mat-stroked-button {
+  min-width: 32px;
+  padding: 0 8px;
+  border-radius: 3px;
+}
+
+.drawing-form ::ng-deep .icon-button-list .mat-stroked-button + .mat-stroked-button {
+  margin-left: 8px;
+}

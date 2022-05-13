@@ -6,4 +6,5 @@ export interface MapStyleModel {
   pointType?: 'square' | 'triangle' | 'star' | 'cross' | 'circle';
   pointFillColor?: string;
   pointStrokeColor?: string;
+  isSelected?: boolean;
 }

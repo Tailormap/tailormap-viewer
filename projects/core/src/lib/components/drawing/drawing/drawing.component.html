@@ -1,8 +1,3 @@
-<p class="label" i18n>Select shape</p>
-<div class="icon-button-list">
-  <button mat-icon-button (click)="drawPoint()"><mat-icon svgIcon="tools_draw_point"></mat-icon></button>
-  <button mat-icon-button (click)="drawLine()"><mat-icon svgIcon="tools_draw_line"></mat-icon></button>
-  <button mat-icon-button (click)="drawPolygon()"><mat-icon svgIcon="tools_draw_polygon"></mat-icon></button>
-  <button mat-icon-button (click)="drawCircle()"><mat-icon svgIcon="tools_draw_circle"></mat-icon></button>
-  <button mat-icon-button (click)="drawLabel()"><mat-icon svgIcon="tools_draw_label"></mat-icon></button>
+<div class="drawing-form" *ngIf="active$ | async">
+  <tm-create-drawing-button [drawingLayerId]="drawingLayerId"></tm-create-drawing-button>
 </div>

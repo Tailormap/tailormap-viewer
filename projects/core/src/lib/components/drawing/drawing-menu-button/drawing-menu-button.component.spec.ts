@@ -1,11 +1,29 @@
 import { render, screen } from '@testing-library/angular';
 import { DrawingMenuButtonComponent } from './drawing-menu-button.component';
+import { of } from 'rxjs';
+import { MenubarButtonComponent, MenubarService } from '../../menubar';
+import { MatIconTestingModule } from '@angular/material/icon/testing';
+import userEvent from '@testing-library/user-event';
+import { SharedImportsModule } from '@tailormap-viewer/shared';
 
 describe('DrawingMenuButtonComponent', () => {
 
   test('should render', async () => {
-    await render(DrawingMenuButtonComponent);
-    expect(screen.getByText('drawing-menu-button works!'));
+    const toggleVisibleFn = jest.fn();
+    const menubarService = {
+      toggleActiveComponent: toggleVisibleFn,
+      isComponentVisible$: () => of(false),
+    };
+    await render(DrawingMenuButtonComponent, {
+      declarations: [ MenubarButtonComponent ],
+      imports: [ SharedImportsModule, MatIconTestingModule ],
+      providers: [
+        { provide: MenubarService, useValue: menubarService },
+      ],
+    });
+    expect(await screen.findByRole('button')).toBeInTheDocument();
+    userEvent.click(await screen.findByRole('button'));
+    expect(toggleVisibleFn).toHaveBeenCalled();
   });
 
 });

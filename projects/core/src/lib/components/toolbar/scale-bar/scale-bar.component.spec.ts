@@ -12,7 +12,7 @@ describe('ScaleBarComponent', () => {
       }),
     };
     const mapServiceMock = {
-      createTool$: jest.fn(() => of(mockTool)),
+      createTool$: jest.fn(() => of({ tool: mockTool })),
     };
     await render(ScaleBarComponent, {
       providers: [

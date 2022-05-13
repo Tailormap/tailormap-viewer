@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
-import { concatMap, filter, map, Observable, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import { concatMap, map, Observable, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Clipboard } from '@angular/cdk/clipboard';
@@ -41,11 +41,10 @@ export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
     })
       .pipe(
         takeUntil(this.destroyed),
-        filter(Boolean),
-        tap(clickTool => {
-          this.store$.dispatch(registerTool({tool: {id: ToolbarComponentEnum.SELECT_COORDINATES, mapToolId: clickTool.id}}));
+        tap(({ tool }) => {
+          this.store$.dispatch(registerTool({tool: {id: ToolbarComponentEnum.SELECT_COORDINATES, mapToolId: tool.id}}));
         }),
-        concatMap(clickTool => clickTool.mapClick$),
+        concatMap(({ tool }) => tool.mapClick$),
         switchMap(mapClick => {
           this.snackBar.dismiss();
           return this.mapService.getRoundedCoordinates$(mapClick.mapCoordinates)

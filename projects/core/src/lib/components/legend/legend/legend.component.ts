@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { LegendService } from '../services/legend.service';
 import { Observable, of, switchMap } from 'rxjs';
 import { MenubarService } from '../../menubar';
@@ -14,7 +14,7 @@ import { LEGEND_ID } from '../legend-identifier';
   styleUrls: ['./legend.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LegendComponent {
+export class LegendComponent implements OnInit {
 
   public visible$: Observable<boolean>;
   public layers$: Observable<{ appLayer: AppLayerModel; url: string }[]>;
@@ -26,7 +26,6 @@ export class LegendComponent {
     private menubarService: MenubarService,
   ) {
     this.visible$ = this.menubarService.isComponentVisible$(LEGEND_ID);
-    this.menubarService.registerComponent(LegendMenuButtonComponent);
     this.layers$ = this.visible$.pipe(
       switchMap(visible => {
         return !visible
@@ -34,6 +33,10 @@ export class LegendComponent {
           : this.legendService.getAppLayerAndUrl$(this.store$.select(selectOrderedVisibleLayers));
       }),
     );
+  }
+
+  public ngOnInit() {
+    this.menubarService.registerComponent(LegendMenuButtonComponent);
   }
 
 }

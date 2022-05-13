@@ -8,15 +8,14 @@ import { ToolManagerModel } from '../models/tool-manager.model';
 import VectorLayer from 'ol/layer/Vector';
 import Geometry from 'ol/geom/Geometry';
 import VectorSource from 'ol/source/Vector';
-import WKT from 'ol/format/WKT';
 import { MapStyleHelper } from '../helpers/map-style.helper';
-import { OlMapStyleType } from '../models/ol-map-style.type';
 import { MapTooltipModel } from '../models/map-tooltip.model';
 import { OpenLayersMapTooltip } from '../openlayers-map/open-layers-map-tooltip';
-import Feature from 'ol/Feature';
 import { FeatureModelType } from '../models/feature-model.type';
 import { FeatureHelper } from '../helpers/feature.helper';
-import { FeatureModel } from '@tailormap-viewer/api';
+import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
+import { MapSizeHelper } from '../helpers/map-size.helper';
+import { MapUnitEnum } from '../models/map-unit.enum';
 
 @Injectable({
   providedIn: 'root',
@@ -47,7 +46,7 @@ export class MapService {
     return this.map.getToolManager$();
   }
 
-  public createTool$<T extends ToolModel, C extends ToolConfigModel>(tool: C): Observable<T | null> {
+  public createTool$<T extends ToolModel, C extends ToolConfigModel>(tool: C): Observable<{ tool: T; manager: ToolManagerModel }> {
     let toolManager: ToolManagerModel;
     let toolId: string;
     return this.getToolManager$()
@@ -58,14 +57,14 @@ export class MapService {
             toolManager.removeTool(toolId);
           }
         }),
-        map(manager => manager.addTool<T, C>(tool)),
-        tap(createdTool => toolId = createdTool?.id || ''),
+        map(manager => ({ tool: manager.addTool<T, C>(tool), manager })),
+        tap(({ tool: createdTool }) => toolId = createdTool?.id || ''),
       );
   }
 
-  public createVectorLayer$(
+  public createVectorLayer$<T extends FeatureModelAttributes = FeatureModelAttributes>(
     layer: VectorLayerModel,
-    vectorLayerStyle?: MapStyleModel | ((feature: FeatureModel) => MapStyleModel),
+    vectorLayerStyle?: MapStyleModel | ((feature: FeatureModel<T>) => MapStyleModel),
   ): Observable<VectorLayer<VectorSource<Geometry>> | null> {
     let layerManager: LayerManagerModel;
     return this.getLayerManager$()
@@ -86,10 +85,10 @@ export class MapService {
       );
   }
 
-  public renderFeatures$(
+  public renderFeatures$<T extends FeatureModelAttributes = FeatureModelAttributes>(
     layerId: string,
-    featureGeometry$: Observable<FeatureModelType | Array<FeatureModelType>>,
-    vectorLayerStyle?: MapStyleModel | ((feature: FeatureModel) => MapStyleModel),
+    featureGeometry$: Observable<FeatureModelType<T> | Array<FeatureModelType<T>>>,
+    vectorLayerStyle?: MapStyleModel | ((feature: FeatureModel<T>) => MapStyleModel),
   ): Observable<VectorLayer<VectorSource<Geometry>> | null> {
     return combineLatest([
       this.createVectorLayer$({ id: layerId, name: `${layerId} layer`, layerType: LayerTypesEnum.Vector, visible: true }, vectorLayerStyle),
@@ -97,10 +96,12 @@ export class MapService {
     ])
       .pipe(
         tap(([ vectorLayer, featureGeometry ]) => {
-          if (!vectorLayer || !featureGeometry) {
+          if (!vectorLayer) {
             return;
           }
-          vectorLayer.getSource().getFeatures().forEach(feature => vectorLayer.getSource().removeFeature(feature));
+          vectorLayer.getSource().getFeatures().forEach(feature => {
+            vectorLayer.getSource().removeFeature(feature);
+          });
           FeatureHelper.getFeatures(featureGeometry).forEach(feature => {
             vectorLayer.getSource().addFeature(feature);
           });
@@ -145,24 +146,16 @@ export class MapService {
    *
    * @see ol.proj.Units
    */
-  public getUnitsOfMeasure$(): Observable<string> {
+  public getUnitsOfMeasure$(): Observable<MapUnitEnum> {
     return this.map.getProjection$().pipe( map(
-      p => ((p.getUnits()) === undefined ? 'm' : p.getUnits()).toLowerCase()),
+      p => ((p.getUnits()) === undefined ? MapUnitEnum.m : p.getUnits()).toLowerCase()),
     );
   }
 
   public getRoundedCoordinates$(coordinates: [number, number]) {
     return this.getUnitsOfMeasure$()
       .pipe(
-        map(uom => {
-          switch (uom) {
-            case 'm': return 2;
-            case 'ft': return 3;
-            case 'us-ft': return 3;
-            case 'degrees': return 6;
-            default: return 4;
-          }
-        }),
+        map(MapSizeHelper.getCoordinatePrecision),
         map(decimals => coordinates.map(coord => coord.toFixed(decimals))),
       );
   }
