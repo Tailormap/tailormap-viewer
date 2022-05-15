@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { MapService, MousePositionToolConfigModel, MousePositionToolModel, ToolTypeEnum } from '@tailormap-viewer/map';
-import { concatMap, filter, Observable, of, Subject, switchMap, takeUntil } from 'rxjs';
+import { concatMap, Observable, of, Subject, switchMap, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'tm-mouse-coordinates',
@@ -25,8 +25,7 @@ export class MouseCoordinatesComponent implements OnInit, OnDestroy {
     })
       .pipe(
         takeUntil(this.destroyed),
-        filter(Boolean),
-        concatMap(tool => tool.mouseMove$),
+        concatMap(({ tool }) => tool.mouseMove$),
         switchMap(mouseMove => {
           if (mouseMove.type === 'out' && !this.overCoordinatesElement) {
             return of([]);

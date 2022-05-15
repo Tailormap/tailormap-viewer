@@ -7,6 +7,7 @@ import { TocModule } from './toc';
 import { ToolbarModule } from './toolbar';
 import { LegendModule } from './legend';
 import { BackgroundLayerToggleModule } from './background-layer-toggle';
+import { DrawingModule } from './drawing/drawing.module';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { BackgroundLayerToggleModule } from './background-layer-toggle';
     ToolbarModule,
     LegendModule,
     BackgroundLayerToggleModule,
+    DrawingModule,
   ],
 })
 export class ComponentsModule {}

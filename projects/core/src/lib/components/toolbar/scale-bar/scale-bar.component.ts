@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, ViewChild, ElementRef } from '@angular/core';
-import { filter, Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { MapService, ScaleBarToolConfigModel, ScaleBarToolModel, ToolTypeEnum } from '@tailormap-viewer/map';
 
 @Component({
@@ -27,11 +27,8 @@ export class ScaleBarComponent implements OnInit, OnDestroy {
       scaleType: this.scaleType,
       alwaysEnabled: true,
     })
-      .pipe(
-        takeUntil(this.destroyed),
-        filter(Boolean),
-      )
-      .subscribe(tool => {
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(({ tool }) => {
         if (this.scaleTarget) {
           tool.setTarget(this.scaleTarget.nativeElement);
         }

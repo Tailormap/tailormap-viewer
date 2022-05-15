@@ -3,4 +3,5 @@ export enum ToolTypeEnum {
   Draw = 'Draw',
   MousePosition = 'MousePosition',
   ScaleBar = 'ScaleBar',
+  Select = 'Select',
 }

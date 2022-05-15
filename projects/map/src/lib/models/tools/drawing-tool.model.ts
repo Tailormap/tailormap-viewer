@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 
 export interface DrawingToolEvent {
   geometry: string;
+  centerCoordinate: number[];
+  radius?: number;
   lastCoordinate: number[];
   size?: number;
   type: 'start' | 'change' | 'end';

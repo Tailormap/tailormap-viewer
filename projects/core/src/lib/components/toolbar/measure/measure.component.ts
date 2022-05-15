@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnIni
 import {
   DrawingToolConfigModel, DrawingToolModel, MapService, MapSizeHelper, MapTooltipModel, ToolTypeEnum,
 } from '@tailormap-viewer/map';
-import { filter, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import { Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { HtmlHelper } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
 import { activateTool, deactivateTool, deregisterTool, registerTool } from '../state/toolbar.actions';
@@ -44,7 +44,7 @@ export class MeasureComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyed))
       .subscribe(tooltip => this.tooltip = tooltip);
 
-    this.mapService.highlightFeatures$('measurement-layer', this.featureGeom.asObservable(), {
+    this.mapService.renderFeatures$('measurement-layer', this.featureGeom.asObservable(), {
       styleKey: 'measurement-style',
       strokeColor: '#6236ff',
       strokeWidth: 3,
@@ -53,18 +53,18 @@ export class MeasureComponent implements OnInit, OnDestroy {
     this.mapService.createTool$<DrawingToolModel, DrawingToolConfigModel>({
       type: ToolTypeEnum.Draw,
       computeSize: true,
-      strokeColor: '#6236ff',
-      pointFillColor: 'transparent',
-      pointStrokeColor: '#6236ff',
-      drawingType: 'circle',
+      style: {
+        strokeColor: '#6236ff',
+        pointFillColor: 'transparent',
+        pointStrokeColor: '#6236ff',
+      },
     })
       .pipe(
         takeUntil(this.destroyed),
-        filter(Boolean),
-        tap(tool => {
+        tap(({ tool }) => {
           this.store$.dispatch(registerTool({ tool: { id: ToolbarComponentEnum.MEASURE, mapToolId: tool.id }}));
         }),
-        switchMap(tool => tool.drawing$),
+        switchMap(({ tool }) => tool.drawing$),
       )
       .subscribe(drawEvent => {
         if (!drawEvent || drawEvent.type === 'start') {
