@@ -215,7 +215,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
       return '';
     }
     if (isOpenLayersWMSLayer(layer)) {
-      return layer.getSource().getLegendUrl(
+      return layer.getSource()?.getLegendUrl(
         undefined, {
           SLD_VERSION: '1.1.0',
         },
@@ -266,7 +266,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
   private removeVectorLayer(layer: VectorLayer<VectorSource<Geometry>>, layerId: string) {
     const vectorLayer = this.vectorLayers.get(layerId);
     if (vectorLayer) {
-      vectorLayer.getSource().clear();
+      vectorLayer.getSource()?.clear();
     }
     const vectorLayers = this.vectorLayerGroup.getLayers();
     vectorLayers.remove(layer);

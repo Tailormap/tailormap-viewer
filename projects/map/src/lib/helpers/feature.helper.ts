@@ -69,7 +69,7 @@ export class FeatureHelper {
   public static getWKT(geometry: Geometry, map: OlMap) {
     const geom = geometry instanceof Circle ? fromCircle(geometry) : geometry;
     const units = map.getView().getProjection().getUnits();
-    const decimals = MapSizeHelper.getCoordinatePrecision(units ? units.toLowerCase() : MapUnitEnum.m);
+    const decimals = MapSizeHelper.getCoordinatePrecision(units ? units.toLowerCase() as MapUnitEnum: MapUnitEnum.m);
     return FeatureHelper.wktFormatter.writeGeometry(geom, { decimals });
   }
 
