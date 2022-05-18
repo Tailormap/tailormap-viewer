@@ -99,11 +99,11 @@ export class MapService {
           if (!vectorLayer) {
             return;
           }
-          vectorLayer.getSource().getFeatures().forEach(feature => {
-            vectorLayer.getSource().removeFeature(feature);
+          vectorLayer.getSource()?.getFeatures().forEach(feature => {
+            vectorLayer.getSource()?.removeFeature(feature);
           });
           FeatureHelper.getFeatures(featureGeometry).forEach(feature => {
-            vectorLayer.getSource().addFeature(feature);
+            vectorLayer.getSource()?.addFeature(feature);
           });
         }),
         map(([ vectorLayer ]) => vectorLayer),
@@ -148,7 +148,8 @@ export class MapService {
    */
   public getUnitsOfMeasure$(): Observable<MapUnitEnum> {
     return this.map.getProjection$().pipe( map(
-      p => ((p.getUnits()) === undefined ? MapUnitEnum.m : p.getUnits()).toLowerCase()),
+      p => p.getUnits() === undefined ? MapUnitEnum.m : p.getUnits().toLowerCase() as MapUnitEnum,
+      ),
     );
   }
 

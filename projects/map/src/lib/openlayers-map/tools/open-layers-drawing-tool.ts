@@ -104,12 +104,18 @@ export class OpenLayersDrawingTool implements DrawingToolModel {
 
   private drawStarted(e: DrawEvent) {
     this.ngZone.run(() => this.drawStartSubject.next(this.getEvent(e.feature.getGeometry(), 'start')));
-    this.listeners.push(e.feature.getGeometry().on('change', (changeEvt: BaseEvent) => {
-      this.ngZone.run(() => this.drawChangeSubject.next(this.getEvent(changeEvt.target as Geometry, 'change')));
-    }));
+    const featureGeom = e.feature.getGeometry();
+    if (featureGeom !== undefined) {
+      this.listeners.push(featureGeom.on('change', (changeEvt: BaseEvent) => {
+        this.ngZone.run(() => this.drawChangeSubject.next(this.getEvent(changeEvt.target as Geometry, 'change')));
+      }));
+    }
   }
 
-  private getEvent(geometry: Geometry, type: 'start' | 'change' | 'end'): DrawingToolEvent {
+  private getEvent(geometry: Geometry | undefined, type: 'start' | 'change' | 'end'): DrawingToolEvent {
+    if (undefined === geometry){
+      return {centerCoordinate: [], lastCoordinate: [], type, geometry:''};
+    }
     const coordinates = geometry instanceof LineString || geometry instanceof Polygon || geometry instanceof Point || geometry instanceof Circle
       ? geometry.getFlatCoordinates()
       : [];
