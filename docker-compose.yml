@@ -98,7 +98,7 @@ services:
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
       TAILORMAP_PASSWORD: ${TAILORMAP_DB_PASSWORD:-tailormap}
-      TM_VERSION: ${TM_VERSION:-5.9.17}
+      TM_VERSION: ${TM_VERSION:-5.9.21}
     volumes:
       - config-db:/var/lib/postgresql/data
     healthcheck:
