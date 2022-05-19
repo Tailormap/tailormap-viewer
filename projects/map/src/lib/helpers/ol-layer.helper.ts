@@ -14,6 +14,7 @@ import { WMSLayerModel } from '../models/wms-layer.model';
 import { WMTSLayerModel } from '../models/wmts-layer.model';
 import { WMTSCapabilities } from 'ol/format';
 import WMTSTileGrid from 'ol/tilegrid/WMTS';
+import { TileWMS } from 'ol/source';
 
 export interface LayerProperties {
   id: string;
@@ -94,7 +95,7 @@ export class OlLayerHelper {
         origin: options.tileGrid.getOrigin(0),
         resolutions: options.tileGrid.getResolutions().map(value => value * 2),
         matrixIds: options.tileGrid.getMatrixIds(),
-        tileSize
+        tileSize,
       });
     }
 
@@ -117,8 +118,8 @@ export class OlLayerHelper {
     });
   }
 
-  public static createWMSLayer(layer: WMSLayerModel): ImageLayer<ImageWMS> {
-    const source = new ImageWMS({
+  public static createWMSLayer(layer: WMSLayerModel): TileLayer<TileWMS> {
+    const source = new TileWMS({
       url: OgcHelper.filterOgcUrlParameters(layer.url),
       params: {
         LAYERS: layer.layers,
@@ -127,8 +128,9 @@ export class OlLayerHelper {
         TRANSPARENT: 'TRUE',
       },
       crossOrigin: layer.crossOrigin,
+      serverType: 'geoserver',
     });
-    return new ImageLayer({
+    return new TileLayer({
       visible: layer.visible,
       source,
     });
