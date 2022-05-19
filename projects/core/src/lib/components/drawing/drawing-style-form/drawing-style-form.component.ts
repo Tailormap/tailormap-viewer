@@ -64,17 +64,19 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
   }
 
   public showLabelSettings(): boolean {
-    return this.type === DrawingFeatureTypeEnum.POINT || this.type === DrawingFeatureTypeEnum.LABEL;
+    return this.type === DrawingFeatureTypeEnum.POINT
+      || this.type === DrawingFeatureTypeEnum.LABEL;
   }
 
   public showLineSettings(): boolean {
-    return this.type !== DrawingFeatureTypeEnum.POINT
-      && this.type !== DrawingFeatureTypeEnum.LABEL;
+    return this.type === DrawingFeatureTypeEnum.LINE
+      || this.type === DrawingFeatureTypeEnum.CIRCLE
+      || this.type === DrawingFeatureTypeEnum.POLYGON;
   }
 
   public showPolygonSettings(): boolean {
-    return this.showLineSettings()
-      && this.type !== DrawingFeatureTypeEnum.LINE;
+    return this.type === DrawingFeatureTypeEnum.CIRCLE
+      || this.type === DrawingFeatureTypeEnum.POLYGON;
   }
 
   public formatThumb(value: number) {

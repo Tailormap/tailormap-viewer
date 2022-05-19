@@ -2,13 +2,20 @@ import * as DrawingActions from './drawing.actions';
 import { DrawingState, initialDrawingState } from './drawing.state';
 import { drawingReducer } from './drawing.reducer';
 import { DrawingFeatureTypeEnum } from '../models/drawing-feature-type.enum';
+import { DrawingFeatureModel } from '../models/drawing-feature.model';
+import { DrawingHelper } from '../helpers/drawing.helper';
+
+const feature: DrawingFeatureModel = {
+  __fid: '1',
+  geometry: 'GEOM',
+  attributes: { type: DrawingFeatureTypeEnum.POINT, style: DrawingHelper.getDefaultStyle() },
+};
 
 describe('DrawingReducer', () => {
 
   test('adds feature', () => {
     const initialState: DrawingState = { ...initialDrawingState };
-    const feature = { __fid: '1', geometry: 'GEOM', attributes: { type: DrawingFeatureTypeEnum.POINT } };
-    const action = DrawingActions.addFeature({ feature });
+    const action = DrawingActions.addFeature({ feature: { ...feature } });
     expect(initialState.features).toEqual([]);
     const updatedState = drawingReducer(initialState, action);
     expect(updatedState.features).toEqual([feature]);
@@ -16,8 +23,7 @@ describe('DrawingReducer', () => {
 
   test('adds and selects feature', () => {
     const initialState: DrawingState = { ...initialDrawingState };
-    const feature = { __fid: '1', geometry: 'GEOM', attributes: { type: DrawingFeatureTypeEnum.POINT } };
-    const action = DrawingActions.addFeature({ feature, selectFeature: true });
+    const action = DrawingActions.addFeature({ feature: { ...feature }, selectFeature: true });
     expect(initialState.features).toEqual([]);
     const updatedState = drawingReducer(initialState, action);
     expect(updatedState.features).toEqual([feature]);
@@ -25,9 +31,8 @@ describe('DrawingReducer', () => {
   });
 
   test('removes feature feature', () => {
-    const feature = { __fid: '1', geometry: 'GEOM', attributes: { type: DrawingFeatureTypeEnum.POINT } };
-    const initialState: DrawingState = { ...initialDrawingState, features: [feature] };
-    const action = DrawingActions.removeAllFeatures();
+    const initialState: DrawingState = { ...initialDrawingState, features: [{...feature}] };
+    const action = DrawingActions.removeAllDrawingFeatures();
     expect(initialState.features).toEqual([feature]);
     const updatedState = drawingReducer(initialState, action);
     expect(updatedState.features).toEqual([]);
