@@ -8,10 +8,7 @@ import { DRAWING_ID } from '../drawing/drawing-identifier';
 })
 export class MenubarService extends BaseComponentRegistryService {
 
-  private activeComponent$ = new BehaviorSubject<{ componentId: string; dialogTitle: string } | null>({
-    componentId: DRAWING_ID,
-    dialogTitle: 'Drawing',
-  });
+  private activeComponent$ = new BehaviorSubject<{ componentId: string; dialogTitle: string } | null>(null);
 
   public toggleActiveComponent(componentId: string, dialogTitle: string) {
     if (this.activeComponent$.value?.componentId === componentId) {
