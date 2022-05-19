@@ -53,11 +53,16 @@ export class OlLayerHelper {
     const capabilities = parser.read(layer.capabilities);
 
     const hiDpi = window.devicePixelRatio > 1;
+    let serviceHiDpi = false;
     let hiDpiLayer = layer.layers;
 
-    // XXX hardcoded for now
-    if (layer.url.includes(".openbasiskaart.nl") && layer.layers == "osm") {
+    // XXX hardcoded for now, in the future get this from the layer when configurable via admin interface
+    if (layer.url.includes("openbasiskaart.nl") && layer.layers == "osm") {
+      serviceHiDpi = true;
       hiDpiLayer = "osm-hq";
+    }
+    if (layer.url.includes("service.pdok.nl/hwh/luchtfotorgb")) {
+      serviceHiDpi = true;
     }
 
     const options = optionsFromCapabilities(capabilities, {
@@ -68,14 +73,14 @@ export class OlLayerHelper {
       return null;
     }
 
-
-
-    if (hiDpi) {
+    if (serviceHiDpi) {
       options.tilePixelRatio = hiDpi ? 2 : 1;
 
       // tilePixelRatio is for a service that advertises tile size x * y but actually sends tiles (2x) * (2y). However, a service like
-      // openbasiskaart has a layer with just higher DPI but actually advertis a correct tile size (although it is 512). To display a sharper
+      // openbasiskaart has a layer with just higher DPI but advertises a correct tile size (although it is 512). To display a sharper
       // image we need to adjust the resolutions of the WMTSTileGrid so OpenLayers uses a higher zoom level but scaled down for a sharper image.
+
+      // An aerophoto service has no DPI dependent rendering, just display tiles at half size for a sharper image.
 
       let tileSize = options.tileGrid.getTileSize(0);
       if (Array.isArray(tileSize)) {
@@ -91,7 +96,6 @@ export class OlLayerHelper {
         matrixIds: options.tileGrid.getMatrixIds(),
         tileSize
       });
-
     }
 
     const source = new WMTS(options);
