@@ -8,7 +8,7 @@ import { SharedImportsModule } from '../../../shared-imports.module';
 describe('OverlayComponent', () => {
   let spectator: Spectator<OverlayComponent>;
   const overlayRefMock = createSpyObject(OverlayRef, {
-    close() {},
+    close: () => {},
     afterClosed$: of(null),
   });
   const createComponent = createComponentFactory({

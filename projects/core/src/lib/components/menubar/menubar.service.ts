@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BaseComponentRegistryService } from '@tailormap-viewer/shared';
 import { BehaviorSubject, map } from 'rxjs';
-import { DRAWING_ID } from '../drawing/drawing-identifier';
 
 @Injectable({
   providedIn: 'root',
