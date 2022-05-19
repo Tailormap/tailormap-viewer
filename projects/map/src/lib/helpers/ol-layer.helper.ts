@@ -13,6 +13,7 @@ import { LayerModel } from '../models/layer.model';
 import { WMSLayerModel } from '../models/wms-layer.model';
 import { WMTSLayerModel } from '../models/wmts-layer.model';
 import { WMTSCapabilities } from 'ol/format';
+import WMTSTileGrid from 'ol/tilegrid/WMTS';
 
 export interface LayerProperties {
   id: string;
@@ -50,13 +51,49 @@ export class OlLayerHelper {
   public static createWMTSLayer(layer: WMTSLayerModel, projection: Projection): TileLayer<WMTS> | null {
     const parser = new WMTSCapabilities();
     const capabilities = parser.read(layer.capabilities);
+
+    const hiDpi = window.devicePixelRatio > 1;
+    let hiDpiLayer = layer.layers;
+
+    // XXX hardcoded for now
+    if (layer.url.includes(".openbasiskaart.nl") && layer.layers == "osm") {
+      hiDpiLayer = "osm-hq";
+    }
+
     const options = optionsFromCapabilities(capabilities, {
-      layer: layer.layers,
+      layer: hiDpi ? hiDpiLayer : layer.layers,
       matrixSet: projection.getCode(),
     });
     if (options === null) {
       return null;
     }
+
+
+
+    if (hiDpi) {
+      options.tilePixelRatio = hiDpi ? 2 : 1;
+
+      // tilePixelRatio is for a service that advertises tile size x * y but actually sends tiles (2x) * (2y). However, a service like
+      // openbasiskaart has a layer with just higher DPI but actually advertis a correct tile size (although it is 512). To display a sharper
+      // image we need to adjust the resolutions of the WMTSTileGrid so OpenLayers uses a higher zoom level but scaled down for a sharper image.
+
+      let tileSize = options.tileGrid.getTileSize(0);
+      if (Array.isArray(tileSize)) {
+        tileSize = (tileSize as number[]).map(value => value / 2);
+      } else {
+        tileSize = (tileSize as number) / 2;
+      }
+
+      options.tileGrid = new WMTSTileGrid({
+        extent: options.tileGrid.getExtent(),
+        origin: options.tileGrid.getOrigin(0),
+        resolutions: options.tileGrid.getResolutions().map(value => value * 2),
+        matrixIds: options.tileGrid.getMatrixIds(),
+        tileSize
+      });
+
+    }
+
     const source = new WMTS(options);
     return new TileLayer({
       visible: layer.visible,
