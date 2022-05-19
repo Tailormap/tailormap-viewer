@@ -58,11 +58,11 @@ export class OlLayerHelper {
     let hiDpiLayer = layer.layers;
 
     // XXX hardcoded for now, in the future get this from the layer when configurable via admin interface
-    if (layer.url.includes("openbasiskaart.nl") && layer.layers == "osm") {
+    if (layer.url.includes('openbasiskaart.nl') && layer.layers === 'osm') {
       serviceHiDpi = true;
-      hiDpiLayer = "osm-hq";
+      hiDpiLayer = 'osm-hq';
     }
-    if (layer.url.includes("service.pdok.nl/hwh/luchtfotorgb")) {
+    if (layer.url.includes('service.pdok.nl/hwh/luchtfotorgb')) {
       serviceHiDpi = true;
     }
 
