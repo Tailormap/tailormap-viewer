@@ -8,6 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SplitButtonComponent } from './split-button/split-button.component';
 import { ColorPickerComponent } from './color-picker/color-picker.component';
 import { IconPickerComponent } from './icon-picker/icon-picker.component';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { IconPickerComponent } from './icon-picker/icon-picker.component';
     SplitButtonComponent,
     ColorPickerComponent,
     IconPickerComponent,
+    ConfirmDialogComponent,
   ],
   imports: [
     SharedImportsModule,

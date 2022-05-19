@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { MapService } from '@tailormap-viewer/map';
-import { combineLatest, Observable, of, Subject, takeUntil } from 'rxjs';
+import { combineLatest, filter, Observable, of, Subject, take, takeUntil } from 'rxjs';
 import {
   selectDrawingFeaturesIncludingSelected, selectSelectedDrawingStyle, selectSelectedDrawingFeature, selectHasDrawingFeatures,
 } from '../state/drawing.selectors';
@@ -12,6 +12,7 @@ import { DrawingFeatureModel, DrawingFeatureModelAttributes, DrawingFeatureStyle
 import { DRAWING_ID } from '../drawing-identifier';
 import { removeAllDrawingFeatures, removeDrawingFeature, updateDrawingFeatureStyle } from '../state/drawing.actions';
 import { DrawingFeatureTypeEnum } from '../models/drawing-feature-type.enum';
+import { ConfirmDialogService } from '@tailormap-viewer/shared';
 
 @Component({
   selector: 'tm-drawing',
@@ -33,6 +34,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
     private store$: Store,
     private mapService: MapService,
     private menubarService: MenubarService,
+    private confirmService: ConfirmDialogService,
     private cdr: ChangeDetectorRef,
   ) { }
 
@@ -81,11 +83,28 @@ export class DrawingComponent implements OnInit, OnDestroy {
     if (!this.selectedFeature) {
       return;
     }
-    this.store$.dispatch(removeDrawingFeature({ fid: this.selectedFeature.__fid }));
+    const removeId = this.selectedFeature.__fid;
+    this.confirmService.confirm$(
+      $localize `Remove drawing object`,
+      $localize `Are you sure you want to remove this object?`,
+      true,
+    )
+      .pipe(take(1), filter(answer => answer))
+      .subscribe(() => {
+        this.store$.dispatch(removeDrawingFeature({ fid: removeId }));
+      });
   }
 
   public removeAllFeatures() {
-    this.store$.dispatch(removeAllDrawingFeatures());
+    this.confirmService.confirm$(
+      $localize `Remove complete drawing`,
+      $localize `Are you sure you want to remove the complete drawing? All objects will be removed and this cannot be undone.`,
+      true,
+    )
+      .pipe(take(1), filter(answer => answer))
+      .subscribe(() => {
+        this.store$.dispatch(removeAllDrawingFeatures());
+      });
   }
 
 }

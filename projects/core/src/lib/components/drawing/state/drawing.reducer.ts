@@ -1,7 +1,6 @@
 import * as DrawingActions from './drawing.actions';
 import { Action, createReducer, on } from '@ngrx/store';
 import { DrawingState, initialDrawingState } from './drawing.state';
-import { removeAllDrawingFeatures, removeDrawingFeature, setSelectedDrawingStyle, updateDrawingFeatureStyle } from './drawing.actions';
 
 const onAddFeature = (
   state: DrawingState,
