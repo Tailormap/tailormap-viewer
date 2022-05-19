@@ -1,0 +1,17 @@
+.settings-section {
+  padding-top: 16px;
+  margin-top: 16px;
+  border-top: 1px solid var(--border-color);
+}
+
+.settings-section label {
+  font-weight: normal;
+}
+
+.settings-section h2 {
+  margin-bottom: 6px;
+}
+
+.settings-section .icon-button-list {
+  margin-left: 6px;
+}

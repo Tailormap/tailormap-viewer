@@ -3,7 +3,7 @@ import {
   DrawingToolConfigModel, DrawingToolModel, DrawingType, MapService, SelectToolConfigModel, SelectToolModel, ToolTypeEnum,
 } from '@tailormap-viewer/map';
 import { Subject, switchMap, take, takeUntil, tap } from 'rxjs';
-import { addFeature, setSelectedFeature } from '../state/drawing.actions';
+import { addFeature, setSelectedDrawingStyle, setSelectedFeature } from '../state/drawing.actions';
 import { DrawingHelper } from '../helpers/drawing.helper';
 import { DrawingFeatureModelAttributes } from '../models/drawing-feature.model';
 import { Store } from '@ngrx/store';
@@ -52,13 +52,10 @@ export class CreateDrawingButtonComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.mapService.createTool$<SelectToolModel<DrawingFeatureModelAttributes>, SelectToolConfigModel>({
+    this.mapService.createTool$<SelectToolModel<DrawingFeatureModelAttributes>, SelectToolConfigModel<DrawingFeatureModelAttributes>>({
       type: ToolTypeEnum.Select,
       layers: [this.drawingLayerId],
-      style: {
-        strokeColor: '#6236ff',
-        strokeWidth: 2,
-      },
+      style: DrawingHelper.applyDrawingStyle,
     })
       .pipe(
         takeUntil(this.destroyed),
@@ -101,6 +98,7 @@ export class CreateDrawingButtonComponent implements OnInit, OnDestroy {
   }
 
   private toggleTool(type: DrawingType, drawingFeatureType: DrawingFeatureTypeEnum) {
+    this.store$.dispatch(setSelectedDrawingStyle({ drawingType: this.activeTool === drawingFeatureType ? null : drawingFeatureType }));
     this.mapService.getToolManager$().pipe(take(1)).subscribe(manager => {
       if (!this.tool || !this.selectTool) {
         return;

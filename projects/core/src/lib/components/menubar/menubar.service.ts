@@ -1,13 +1,17 @@
 import { Injectable } from '@angular/core';
 import { BaseComponentRegistryService } from '@tailormap-viewer/shared';
 import { BehaviorSubject, map } from 'rxjs';
+import { DRAWING_ID } from '../drawing/drawing-identifier';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MenubarService extends BaseComponentRegistryService {
 
-  private activeComponent$ = new BehaviorSubject<{ componentId: string; dialogTitle: string } | null>(null);
+  private activeComponent$ = new BehaviorSubject<{ componentId: string; dialogTitle: string } | null>({
+    componentId: DRAWING_ID,
+    dialogTitle: 'Drawing',
+  });
 
   public toggleActiveComponent(componentId: string, dialogTitle: string) {
     if (this.activeComponent$.value?.componentId === componentId) {

@@ -4,7 +4,7 @@ import { of } from 'rxjs';
 import { MapService } from '@tailormap-viewer/map';
 import { MenubarService } from '../../menubar';
 import { provideMockStore } from '@ngrx/store/testing';
-import { selectFeaturesIncludingSelected } from '../state/drawing.selectors';
+import { selectDrawingFeaturesIncludingSelected } from '../state/drawing.selectors';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('DrawingComponent', () => {
@@ -20,7 +20,7 @@ describe('DrawingComponent', () => {
     const { container } = await render(DrawingComponent, {
       schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
       providers: [
-        provideMockStore({ selectors: [{ selector: selectFeaturesIncludingSelected, value: [] }]}),
+        provideMockStore({ selectors: [{ selector: selectDrawingFeaturesIncludingSelected, value: [] }]}),
         { provide: MapService, useValue: mapServiceMock },
         { provide: MenubarService, useValue: menubarServiceMock },
       ],
@@ -42,7 +42,7 @@ describe('DrawingComponent', () => {
     const { container } = await render(DrawingComponent, {
       schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
       providers: [
-        provideMockStore({ selectors: [{ selector: selectFeaturesIncludingSelected, value: [] }]}),
+        provideMockStore({ selectors: [{ selector: selectDrawingFeaturesIncludingSelected, value: [] }]}),
         { provide: MapService, useValue: mapServiceMock },
         { provide: MenubarService, useValue: menubarServiceMock },
       ],

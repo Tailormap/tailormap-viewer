@@ -83,6 +83,9 @@ export class OpenLayersSelectTool<A extends FeatureModelAttributes = FeatureMode
   }
 
   private getSelectionStyle() {
+    if (typeof this.toolConfig.style === 'function') {
+      return MapStyleHelper.getStyle(this.toolConfig.style);
+    }
     return MapStyleHelper.getStyle({
       styleKey: 'select-style',
       strokeColor: 'rgba(0, 0, 0, 0.3)',

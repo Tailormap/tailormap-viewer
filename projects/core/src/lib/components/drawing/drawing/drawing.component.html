@@ -1,3 +1,22 @@
 <div class="drawing-form" *ngIf="active$ | async">
   <tm-create-drawing-button [drawingLayerId]="drawingLayerId"></tm-create-drawing-button>
+  <tm-drawing-style-form *ngIf="selectedDrawingStyle"
+                         [type]="selectedDrawingStyle"
+                         [style]="style"
+                         (styleUpdated)="featureStyleUpdates($event)"></tm-drawing-style-form>
+  <div class="remove-buttons" *ngIf="hasFeatures$ | async">
+    <button *ngIf="selectedFeature"
+            mat-stroked-button
+            (click)="removeSelectedFeature()"
+            color="warn"
+            i18n>
+      Remove selected shape
+    </button>
+    <button mat-stroked-button
+            (click)="removeAllFeatures()"
+            color="warn"
+            i18n>
+      Remove complete drawing
+    </button>
+  </div>
 </div>

@@ -4,17 +4,33 @@ import { DrawingFeatureModel } from '../models/drawing-feature.model';
 
 const selectDrawingState = createFeatureSelector<DrawingState>(drawingStateKey);
 
-export const selectFeatures = createSelector(selectDrawingState, state => state.features);
-export const selectSelectedFeature = createSelector(selectDrawingState, state => state.selectedFeature);
-export const selectFeaturesIncludingSelected = createSelector(selectFeatures, selectSelectedFeature, (features, selectedFeature): DrawingFeatureModel[] => {
-  return features.map(feature => {
-    return {
-      ...feature,
-      attributes: {
-        ...feature.attributes,
-        selected: feature.__fid === selectedFeature,
-      },
-    };
+export const selectDrawingFeatures = createSelector(selectDrawingState, state => state.features);
+export const selectSelectedDrawingFeatureId = createSelector(selectDrawingState, state => state.selectedFeature);
+export const selectSelectedDrawingStyle = createSelector(selectDrawingState, state => state.selectedDrawingStyle);
+
+export const selectHasDrawingFeatures = createSelector(
+  selectDrawingFeatures, features => features.length > 0,
+);
+
+export const selectSelectedDrawingFeature = createSelector(
+  selectDrawingFeatures,
+  selectSelectedDrawingFeatureId,
+  (features, selectedFeature): DrawingFeatureModel | null => {
+    return features.find(feature => feature.__fid === selectedFeature) || null;
   });
-});
+
+export const selectDrawingFeaturesIncludingSelected = createSelector(
+  selectDrawingFeatures,
+  selectSelectedDrawingFeatureId,
+  (features, selectedFeature): DrawingFeatureModel[] => {
+    return features.map(feature => {
+      return {
+        ...feature,
+        attributes: {
+          ...feature.attributes,
+          selected: feature.__fid === selectedFeature,
+        },
+      };
+    });
+  });
 
