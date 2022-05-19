@@ -1,8 +1,6 @@
 import BaseLayer from 'ol/layer/Base';
 import Projection from 'ol/proj/Projection';
-import ImageLayer from 'ol/layer/Image';
 import TileLayer from  'ol/layer/Tile';
-import ImageWMS from 'ol/source/ImageWMS';
 import WMTS from 'ol/source/WMTS';
 import XYZ from 'ol/source/XYZ';
 import { optionsFromCapabilities } from 'ol/source/WMTS';
@@ -33,7 +31,7 @@ export class OlLayerHelper {
     olLayer.setProperties(layerProps);
   }
 
-  public static createLayer(layer: LayerModel, projection: Projection): ImageLayer<ImageWMS> | TileLayer<XYZ> | TileLayer<WMTS> | null {
+  public static createLayer(layer: LayerModel, projection: Projection): TileLayer<TileWMS> | TileLayer<XYZ> | TileLayer<WMTS> | null {
     if (LayerTypesHelper.isTmsLayer(layer)) {
       return OlLayerHelper.createTMSLayer(layer, projection);
     }
