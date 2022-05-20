@@ -1,0 +1,182 @@
+<div class="styling-form">
+
+  <div class="point-settings settings-section" *ngIf="showPointSettings()">
+
+    <h2 class="section-label" i18n>
+      Symbol
+    </h2>
+
+    <div class="form-field form-field__columns">
+      <label i18n>Symbol</label>
+      <tm-icon-picker [icons]="getMarkers()"
+                      [selectedIcon]="getSelectedMarker()"
+                      iconColor="#6236ff"
+                      (iconChange)="changeMarker($event)"></tm-icon-picker>
+    </div>
+
+    <div class="form-field form-field__columns">
+      <label i18n>Fill color</label>
+      <tm-color-picker [color]="style.markerFillColor"
+                       (colorChange)="changeMarkerFill($event)"></tm-color-picker>
+    </div>
+
+    <div class="form-field form-field__columns">
+      <label>Line color</label>
+      <tm-color-picker [color]="style.markerStrokeColor"
+                       (colorChange)="changeMarkerStroke($event)"></tm-color-picker>
+    </div>
+
+    <div class="form-field form-field__columns">
+      <label i18n>Line thickness</label>
+      <span>{{style.markerStrokeWidth}}px</span>
+    </div>
+
+    <div class="form-field form-field__slider">
+      <mat-slider [max]="10"
+                  [min]="1"
+                  [step]="1"
+                  [thumbLabel]="true"
+                  [value]="style.markerStrokeWidth"
+                  (change)="changeMarkerStrokeWidth($event)"></mat-slider>
+    </div>
+
+    <div class="form-field form-field__columns">
+      <label i18n>Size</label>
+      <span>{{style.markerSize}}px</span>
+    </div>
+
+    <div class="form-field form-field__slider">
+      <mat-slider [max]="20"
+                  [min]="1"
+                  [step]="1"
+                  [thumbLabel]="true"
+                  [value]="style.markerSize"
+                  (change)="changeMarkerSize($event)"></mat-slider>
+    </div>
+
+    <div class="form-field form-field__columns">
+      <label i18n>Rotation</label>
+      <span>{{style.markerRotation}}&deg;</span>
+    </div>
+
+    <div class="form-field form-field__slider">
+      <mat-slider [max]="360"
+                  [min]="0"
+                  [step]="1"
+                  [thumbLabel]="true"
+                  [value]="style.markerRotation"
+                  (change)="changeMarkerRotation($event)"></mat-slider>
+    </div>
+
+  </div>
+
+  <div class="label-settings settings-section" *ngIf="showLabelSettings()">
+
+    <h2 class="section-label" i18n>
+      Label
+    </h2>
+
+    <div class="form-field">
+      <label i18n>Label</label>
+      <div class="form-field__columns">
+        <input matInput class="form-field" i18n-placeholder placeholder="Label" [formControl]="labelControl">
+        <div class="icon-button-list">
+        <button mat-stroked-button
+                matTooltip="Insert coordinates as label"
+                i18n-matTooltip
+                (click)="insertCoordinates()">
+          <mat-icon svgIcon="coordinates"></mat-icon>
+        </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-field form-field__columns">
+      <label i18n>Size</label>
+      <span>{{style.labelSize}}px</span>
+    </div>
+
+    <div class="form-field form-field__slider">
+      <mat-slider [max]="30"
+                  [min]="1"
+                  [step]="1"
+                  [thumbLabel]="true"
+                  [value]="style.labelSize"
+                  (change)="changeLabelSize($event)"></mat-slider>
+    </div>
+
+  </div>
+
+  <div class="line-settings settings-section" *ngIf="showLineSettings()">
+
+    <h2 class="section-label" i18n>
+      Line
+    </h2>
+
+    <div class="form-field form-field__columns">
+      <label i18n>Color</label>
+      <tm-color-picker [color]="style.strokeColor"
+                       (colorChange)="changeStrokeColor($event)"></tm-color-picker>
+    </div>
+
+    <div class="form-field form-field__columns">
+      <label i18n>Thickness</label>
+      <span>{{style.strokeWidth}}px</span>
+    </div>
+
+    <div class="form-field form-field__slider">
+      <mat-slider [max]="20"
+                  [min]="1"
+                  [step]="1"
+                  [thumbLabel]="true"
+                  [value]="style.strokeWidth"
+                  (change)="changeStrokeWidth($event)"></mat-slider>
+    </div>
+
+    <div class="form-field form-field__columns">
+      <label i18n>Transparency</label>
+      <span>{{style.strokeOpacity}}%</span>
+    </div>
+
+    <div class="form-field form-field__slider">
+      <mat-slider [max]="100"
+                  [min]="0"
+                  [step]="1"
+                  [thumbLabel]="true"
+                  [displayWith]="formatThumb"
+                  [value]="style.strokeOpacity"
+                  (change)="changeStrokeOpacity($event)"></mat-slider>
+    </div>
+
+  </div>
+
+  <div class="polygon-settings settings-section" *ngIf="showPolygonSettings()">
+
+    <h2 class="section-label" i18n>
+      Fill
+    </h2>
+
+    <div class="form-field form-field__columns">
+      <label i18n>Color</label>
+      <tm-color-picker [color]="style.fillColor"
+                       (colorChange)="changeFillColor($event)"></tm-color-picker>
+    </div>
+
+    <div class="form-field form-field__columns">
+      <label i18n>Transparency</label>
+      <span>{{style.fillOpacity}}%</span>
+    </div>
+
+    <div class="form-field form-field__slider">
+      <mat-slider [max]="100"
+                  [min]="0"
+                  [step]="1"
+                  [thumbLabel]="true"
+                  [displayWith]="formatThumb"
+                  [value]="style.fillOpacity"
+                  (change)="changeFillOpacity($event)"></mat-slider>
+    </div>
+
+  </div>
+
+</div>

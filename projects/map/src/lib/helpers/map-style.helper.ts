@@ -1,26 +1,23 @@
 import Style from 'ol/style/Style';
 import Fill from 'ol/style/Fill';
 import Stroke from 'ol/style/Stroke';
-import RegularShape from 'ol/style/RegularShape';
-import { MapStyleModel, OlMapStyleType } from '../models';
-import CircleStyle from 'ol/style/Circle';
+import Text from 'ol/style/Text';
+import { default as RegularShape, Options as RegularShapeOptions } from 'ol/style/RegularShape';
+import { MapStyleModel, MapStylePointType, OlMapStyleType } from '../models';
 import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
 import Feature from 'ol/Feature';
-import { Geometry, Polygon } from 'ol/geom';
+import { Geometry, Point, Polygon } from 'ol/geom';
 import { buffer as bufferExtent } from 'ol/extent';
 import RenderFeature from 'ol/render/Feature';
 import { FeatureHelper } from './feature.helper';
+import { ColorHelper } from '@tailormap-viewer/shared';
+import { Icon } from 'ol/style';
 
 export class MapStyleHelper {
 
   private static DEFAULT_COLOR = '#cc0000';
-
-  private static POINT_SHAPES = {
-    star: { points: 5, radius: 10, radius2: 4, angle: 0 },
-    cross: { points: 4, radius: 10, radius2: 0, angle: 0 },
-    square: { points: 4, radius: 10, angle: Math.PI / 4 },
-    triangle: { points: 3, radius: 10, rotation: Math.PI / 4, angle: 0 },
-  };
+  private static DEFAULT_SYMBOL_SIZE = 5;
+  private static DEFAULT_FONT_SIZE = 12;
 
   private static DEFAULT_STYLE = MapStyleHelper.mapStyleModelToOlStyle({
     styleKey: 'DEFAULT_STYLE',
@@ -49,36 +46,91 @@ export class MapStyleHelper {
   }
 
   private static mapStyleModelToOlStyle(styleConfig: MapStyleModel, feature?: Feature<Geometry>, resolution?: number) {
-    const style = new Style();
+    const baseStyle = new Style();
     if (styleConfig.strokeColor) {
-      style.setStroke(new Stroke({ color: styleConfig.strokeColor, width: styleConfig.strokeWidth || 1 }));
+      baseStyle.setStroke(new Stroke({
+        color: ColorHelper.getRgbStyleForColor(styleConfig.strokeColor, styleConfig.strokeOpacity),
+        width: styleConfig.strokeWidth || 1,
+      }));
     }
     if (styleConfig.fillColor) {
-      style.setFill(new Fill({ color: styleConfig.fillColor }));
+      baseStyle.setFill(new Fill({
+        color: ColorHelper.getRgbStyleForColor(styleConfig.fillColor, styleConfig.fillOpacity),
+      }));
     }
+    const styles: Style[] = [ baseStyle ];
     if (styleConfig.pointType) {
-      const pointFill = new Fill({ color: styleConfig.pointFillColor || MapStyleHelper.DEFAULT_COLOR });
-      const pointStroke = new Stroke({ color: styleConfig.pointStrokeColor || MapStyleHelper.DEFAULT_COLOR, width: 1 });
-      const shape = styleConfig.pointType === 'circle'
-        ? new CircleStyle({
-          radius: 5,
-          stroke: pointStroke,
-          fill: pointFill,
-        })
-        : new RegularShape({
-          stroke: pointStroke,
-          fill: pointFill,
-          ...MapStyleHelper.POINT_SHAPES[styleConfig.pointType],
-        });
-      style.setImage(shape);
+      styles.push(...MapStyleHelper.createShape(styleConfig.pointType, styleConfig));
+    }
+    if (styleConfig.label) {
+      const symbolSize = MapStyleHelper.getNumberValue(styleConfig.pointSize, MapStyleHelper.DEFAULT_SYMBOL_SIZE);
+      const geom = feature?.getGeometry();
+      const coordinatesLabel = geom instanceof Point ? geom.getCoordinates().join(' ') : '';
+      const label = styleConfig.label.replace(/\[COORDINATES\]/g, coordinatesLabel);
+      const labelSize = MapStyleHelper.getNumberValue(styleConfig.labelSize, MapStyleHelper.DEFAULT_SYMBOL_SIZE);
+      const scale = 1 + (labelSize / MapStyleHelper.DEFAULT_FONT_SIZE);
+      const offsetY = styleConfig.pointType === 'label'
+        ? 0
+        : 14 + (symbolSize - MapStyleHelper.DEFAULT_SYMBOL_SIZE) + (scale * 2);
+      styles.push(new Style({
+        text: new Text({
+          text: label,
+          offsetY,
+          scale,
+        }),
+      }));
     }
     if (styleConfig.isSelected && typeof feature !== 'undefined') {
+      const buffer = !!styleConfig.label ? 1.6 : 1.3;
+      styles.push(...MapStyleHelper.createOutlinedSelectionRectangle(feature, buffer * (resolution || 0)));
+    }
+    return styles;
+  }
+
+  private static createShape(type: MapStylePointType, styleConfig: MapStyleModel): Style[] {
+    if (type === 'label') {
+      return [];
+    }
+    const symbolSize = MapStyleHelper.getNumberValue(styleConfig.pointSize, MapStyleHelper.DEFAULT_SYMBOL_SIZE);
+    const fillColor = styleConfig.pointFillColor || MapStyleHelper.DEFAULT_COLOR;
+    const strokeColor = styleConfig.pointStrokeColor || MapStyleHelper.DEFAULT_COLOR;
+    const strokeWidth = MapStyleHelper.getNumberValue(styleConfig.pointStrokeWidth, 1);
+    if (type === 'cross' || type === 'arrow' || type === 'diamond') {
+      const svgStrokeWidth = 1 + (strokeWidth / 10);
+      const path = type === 'arrow'
+        ? 'M0 6.75v-3.5h5.297V0L10 5l-4.703 5V6.75H0Z'
+        : type === 'diamond'
+          ? 'm5 0 3.5 4.997L5 10 1.5 4.997 5 0Z'
+          : 'M7.026 3V.015h-4V3H.005v4h3.021v3.006h4V7h2.969V3H7.026Z';
+      const icon = [
+        `<svg width="10" height="10" viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg">`,
+        `<path d="${path}" fill="${fillColor}" stroke="${strokeColor}" stroke-width="${svgStrokeWidth}" />`,
+        '</svg>',
+      ].join('');
       return [
-        style,
-        ...MapStyleHelper.createOutlinedSelectionRectangle(feature, 1.3 * (resolution || 0)),
+        new Style({
+          image: new Icon({
+            src: 'data:image/svg+xml;base64,' + btoa(icon),
+            scale: (symbolSize + svgStrokeWidth) / 6,
+            rotation: MapStyleHelper.getRotationForDegrees(styleConfig.pointRotation),
+          }),
+        }),
       ];
     }
-    return style;
+    const POINT_SHAPES: Record<string, RegularShapeOptions> = {
+      circle: { points: Infinity, radius: symbolSize },
+      star: { points: 5, radius: symbolSize, radius2: symbolSize * .4, angle: 0 },
+      square: { points: 4, radius: symbolSize, angle: Math.PI / 4 },
+      triangle: { points: 3, radius: symbolSize, angle: 0 },
+      diamond: { points: 4, radius: symbolSize, angle: Math.PI / 2 },
+    };
+    const baseShape = new RegularShape({
+      fill: new Fill({ color:fillColor  }),
+      stroke: new Stroke({ color: strokeColor, width: strokeWidth }),
+      rotation: MapStyleHelper.getRotationForDegrees(styleConfig.pointRotation),
+      ...POINT_SHAPES[type],
+    });
+    return [ new Style({ image: baseShape }) ];
   }
 
   private static createOutlinedSelectionRectangle(feature: Feature<Geometry>, buffer: number, translate?: number[]): Style[] {
@@ -126,6 +178,20 @@ export class MapStyleHelper {
       lineDash: [ 4, 10 ],
       width: outer ? 5 : 2.5,
     });
+  }
+
+  private static getNumberValue(nr: number | undefined, defaultValue: number): number {
+    if (typeof nr === 'undefined') {
+      return defaultValue;
+    }
+    return nr;
+  }
+
+  private static getRotationForDegrees(degrees?: number): number {
+    if (!degrees) {
+      return degrees || 0;
+    }
+    return degrees / (180 / Math.PI);
   }
 
 }

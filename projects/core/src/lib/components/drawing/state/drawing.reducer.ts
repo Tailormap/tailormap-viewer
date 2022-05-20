@@ -11,13 +11,6 @@ const onAddFeature = (
   selectedFeature: payload.selectFeature ? payload.feature.__fid : state.selectedFeature,
 });
 
-const onRemoveAllFeatures = (
-  state: DrawingState,
-): DrawingState => ({
-  ...state,
-  features: [],
-});
-
 const onSetSelectedFeature = (
   state: DrawingState,
   payload: ReturnType<typeof DrawingActions.setSelectedFeature>,
@@ -26,10 +19,72 @@ const onSetSelectedFeature = (
   selectedFeature: payload.fid,
 });
 
+const onUpdateDrawingFeatureStyle = (
+  state: DrawingState,
+  payload: ReturnType<typeof DrawingActions.updateDrawingFeatureStyle>,
+): DrawingState => {
+  const idx = state.features.findIndex(f => f.__fid === payload.fid);
+  if (idx === -1) {
+    return state;
+  }
+  return {
+    ...state,
+    features: [
+      ...state.features.slice(0, idx),
+      {
+        ...state.features[idx],
+        attributes: {
+          ...state.features[idx].attributes,
+          style: {
+            ...state.features[idx].attributes.style,
+            ...payload.style,
+          },
+        },
+      },
+      ...state.features.slice(idx + 1),
+    ],
+  };
+};
+
+const onRemoveDrawingFeature = (
+  state: DrawingState,
+  payload: ReturnType<typeof DrawingActions.removeDrawingFeature>,
+): DrawingState => {
+  const idx = state.features.findIndex(f => f.__fid === payload.fid);
+  if (idx === -1) {
+    return state;
+  }
+  return {
+    ...state,
+    features: [
+      ...state.features.slice(0, idx),
+      ...state.features.slice(idx + 1),
+    ],
+  };
+};
+
+const onRemoveAllDrawingFeatures = (
+  state: DrawingState,
+): DrawingState => ({
+  ...state,
+  features: [],
+});
+
+const onSetSelectedDrawingStyle = (
+  state: DrawingState,
+  payload: ReturnType<typeof DrawingActions.setSelectedDrawingStyle>,
+): DrawingState => ({
+  ...state,
+  selectedDrawingStyle: payload.drawingType,
+});
+
 const drawingReducerImpl = createReducer<DrawingState>(
   initialDrawingState,
   on(DrawingActions.addFeature, onAddFeature),
-  on(DrawingActions.removeAllFeatures, onRemoveAllFeatures),
   on(DrawingActions.setSelectedFeature, onSetSelectedFeature),
+  on(DrawingActions.updateDrawingFeatureStyle, onUpdateDrawingFeatureStyle),
+  on(DrawingActions.removeDrawingFeature, onRemoveDrawingFeature),
+  on(DrawingActions.removeAllDrawingFeatures, onRemoveAllDrawingFeatures),
+  on(DrawingActions.setSelectedDrawingStyle, onSetSelectedDrawingStyle),
 );
 export const drawingReducer = (state: DrawingState | undefined, action: Action) => drawingReducerImpl(state, action);
