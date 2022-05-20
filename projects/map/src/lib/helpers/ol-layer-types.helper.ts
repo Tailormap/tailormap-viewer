@@ -7,13 +7,15 @@ import VectorSource from 'ol/source/Vector';
 import ImageWMS from 'ol/source/ImageWMS';
 import WMTS from 'ol/source/WMTS';
 import XYZ from 'ol/source/XYZ';
+import TileWMS from 'ol/source/TileWMS';
 
 export const isOpenLayersVectorLayer = (layer: BaseLayer): layer is VectorLayer<VectorSource<Geometry>> => {
   return layer instanceof VectorLayer;
 };
 
-export const isOpenLayersWMSLayer = (layer: BaseLayer): layer is ImageLayer<ImageWMS> => {
-  return layer instanceof ImageLayer;
+export const isOpenLayersWMSLayer = (layer: BaseLayer): layer is ImageLayer<ImageWMS> | TileLayer<TileWMS> => {
+  return layer instanceof ImageLayer && layer.getSource() instanceof ImageWMS
+    || layer instanceof TileLayer && layer.getSource() instanceof TileWMS;
 };
 
 export const isOpenLayersWMTSLayer = (layer: BaseLayer): layer is TileLayer<WMTS> => {
