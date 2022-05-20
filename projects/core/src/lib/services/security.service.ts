@@ -29,7 +29,7 @@ export class SecurityService {
       },
     });
     return ensureXsrfToken$.pipe(
-      switchMap(() => this.doRequest$(SecurityService.LOGIN_URL, body, /.*(?<!\?error)$/)),
+      switchMap(() => this.doRequest$(SecurityService.LOGIN_URL, body, /^(?!.*[?]error$).*$/)),
     );
   }
 
