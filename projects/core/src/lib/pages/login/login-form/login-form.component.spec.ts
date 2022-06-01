@@ -6,7 +6,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
-import { wait } from '@testing-library/user-event/dist/utils';
 import { provideMockStore } from '@ngrx/store/testing';
 import { selectRouteBeforeLogin } from '../../../state/core.selectors';
 import { AutoFocusDirective } from '@tailormap-viewer/shared';
@@ -56,11 +55,10 @@ describe('LoginFormComponent', () => {
     });
     const nameControl = await screen.getByLabelText('Username');
     const passwordControl = await screen.getByLabelText('Password');
-    userEvent.type(nameControl, 'my_username');
-    userEvent.type(passwordControl, 'p@ssw0rd');
-    userEvent.click(await screen.findByRole('button', { name: /login/i }));
+    await userEvent.type(nameControl, 'my_username');
+    await userEvent.type(passwordControl, 'p@ssw0rd');
+    await userEvent.click(await screen.findByRole('button', { name: /login/i }));
     expect(loginFn).toHaveBeenCalledWith('my_username', 'p@ssw0rd');
-    await wait(0);
     expect(redirectFn).toHaveBeenCalledWith('/');
   });
 
@@ -85,11 +83,10 @@ describe('LoginFormComponent', () => {
     });
     const nameControl = await screen.getByLabelText('Username');
     const passwordControl = await screen.getByLabelText('Password');
-    userEvent.type(nameControl, 'my_username');
-    userEvent.type(passwordControl, 'p@ssw0rd');
-    userEvent.click(await screen.findByRole('button', { name: /login/i }));
+    await userEvent.type(nameControl, 'my_username');
+    await userEvent.type(passwordControl, 'p@ssw0rd');
+    await userEvent.click(await screen.findByRole('button', { name: /login/i }));
     expect(loginFn).toHaveBeenCalledWith('my_username', 'p@ssw0rd');
-    await wait(0);
     expect(redirectFn).toHaveBeenCalledWith('/app/some-app');
   });
 

@@ -71,13 +71,13 @@ describe('TreeComponent', () => {
     expect(await screen.findByText('Item 2')).toBeInTheDocument();
     expect(await screen.queryByText('Item 2 - 1')).toBeNull();
 
-    userEvent.click(await screen.findByRole('button', { name: 'toggle Item 2' }));
+    await userEvent.click(await screen.findByRole('button', { name: 'toggle Item 2' }));
     expect(await screen.findByText('Item 1')).toBeInTheDocument();
     expect(await screen.findByText('Item 2')).toBeInTheDocument();
     expect(await screen.findByText('Item 2 - 1')).toBeInTheDocument();
     expect(await screen.queryByText('Item 2 - 2 - 1')).toBeNull();
 
-    userEvent.click(await screen.findByRole('button', { name: 'toggle Item 2 - 2' }));
+    await userEvent.click(await screen.findByRole('button', { name: 'toggle Item 2 - 2' }));
     expect(await screen.findByText('Item 1')).toBeInTheDocument();
     expect(await screen.findByText('Item 2')).toBeInTheDocument();
     expect(await screen.findByText('Item 2 - 1')).toBeInTheDocument();

@@ -15,7 +15,7 @@ describe('SplitButtonComponent', () => {
     });
     const buttons = screen.getAllByRole('button');
     expect(buttons.length).toEqual(2);
-    userEvent.click(buttons[1]);
+    await userEvent.click(buttons[1]);
     expect(await screen.getByText('Test 1'));
     expect(await screen.getByText('Test 2'));
   });
@@ -34,10 +34,10 @@ describe('SplitButtonComponent', () => {
     });
     const buttons = screen.getAllByRole('button');
     expect(await screen.getByText('Test 1'));
-    userEvent.click(buttons[0]);
+    await userEvent.click(buttons[0]);
     expect(optionSelectedMock).toHaveBeenCalledWith('2');
     expect(await screen.getByText('Test 2'));
-    userEvent.click(buttons[0]);
+    await userEvent.click(buttons[0]);
     expect(optionSelectedMock).toHaveBeenCalledWith('1');
     expect(await screen.getByText('Test 1'));
   });

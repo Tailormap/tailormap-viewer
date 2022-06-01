@@ -27,11 +27,11 @@ describe('ZoomButtonsComponent', () => {
     const zoomToInitialExtentBtn = await screen.getByLabelText('Zoom to initial extent');
     expect(zoomInBtn).toBeInTheDocument();
     expect(zoomOutBtn).toBeInTheDocument();
-    userEvent.click(zoomInBtn);
+    await userEvent.click(zoomInBtn);
     expect(zoomInFn).toHaveBeenCalled();
-    userEvent.click(zoomOutBtn);
+    await userEvent.click(zoomOutBtn);
     expect(zoomOutFn).toHaveBeenCalled();
-    userEvent.click(zoomToInitialExtentBtn);
+    await userEvent.click(zoomToInitialExtentBtn);
     expect(zoomToInitialExtentFn).toHaveBeenCalled();
   });
 

@@ -31,7 +31,7 @@ describe('MenubarPanelComponent', () => {
     });
     expect(screen.getByText('Available layers')).toBeInTheDocument();
     expect(screen.queryByRole('button')).toBeInTheDocument();
-    userEvent.click(screen.getByRole('button'));
+    await userEvent.click(screen.getByRole('button'));
     expect(menubarServiceMock.closePanel).toHaveBeenCalled();
   });
 
