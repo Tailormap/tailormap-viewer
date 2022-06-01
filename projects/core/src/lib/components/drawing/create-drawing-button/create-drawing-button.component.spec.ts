@@ -41,21 +41,21 @@ describe('CreateDrawingButtonComponent', () => {
 
     const buttons = await screen.getAllByRole('button');
     expect(buttons.length).toEqual(5);
-    userEvent.click(await screen.getByLabelText('Draw point'));
+    await userEvent.click(await screen.getByLabelText('Draw point'));
     expect(toolManagerMock.enableTool).toHaveBeenCalledWith('draw-1', true, { type: 'point' });
     expect(toolManagerMock.disableTool).toHaveBeenCalledWith('select-1', true);
 
     toolManagerMock.enableTool.mockClear();
     toolManagerMock.disableTool.mockClear();
 
-    userEvent.click(await screen.getByLabelText('Draw circle'));
+    await userEvent.click(await screen.getByLabelText('Draw circle'));
     expect(toolManagerMock.enableTool).toHaveBeenCalledWith('draw-1', true, { type: 'circle' });
     expect(toolManagerMock.disableTool).toHaveBeenCalledWith('select-1', true);
 
     toolManagerMock.enableTool.mockClear();
     toolManagerMock.disableTool.mockClear();
 
-    userEvent.click(await screen.getByLabelText('Draw circle'));
+    await userEvent.click(await screen.getByLabelText('Draw circle'));
     expect(toolManagerMock.enableTool).toHaveBeenCalledWith('select-1', true);
     expect(toolManagerMock.disableTool).toHaveBeenCalledWith('draw-1', true);
   });

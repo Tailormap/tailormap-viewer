@@ -22,7 +22,7 @@ describe('LegendMenuButtonComponent', () => {
       ],
     });
     expect(await screen.findByRole('button')).toBeInTheDocument();
-    userEvent.click(await screen.findByRole('button'));
+    await userEvent.click(await screen.findByRole('button'));
     expect(toggleVisibleFn).toHaveBeenCalled();
   });
 
