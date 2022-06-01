@@ -1,22 +1,25 @@
 import { OverlayService } from './overlay.service';
-import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
+import { TestBed } from '@angular/core/testing';
 import { Overlay } from '@angular/cdk/overlay';
 import { Injector } from '@angular/core';
 
 
 describe('OverlayService', () => {
-  let spectator: SpectatorService<OverlayService>;
-  const createService = createServiceFactory({
-    service: OverlayService,
-    providers: [
-      Overlay,
-      Injector,
-    ],
-  });
+  let service: OverlayService;
 
-  beforeEach(() => spectator = createService());
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        OverlayService,
+        Overlay,
+        Injector,
+      ],
+    });
+    service = TestBed.inject(OverlayService);
+  });
 
   it('should be created', () => {
-    expect(spectator).toBeTruthy();
+    expect(service).toBeTruthy();
   });
+
 });
