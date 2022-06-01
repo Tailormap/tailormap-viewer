@@ -5,5 +5,10 @@ module.exports = {
   moduleNameMapper: {
     "^@tailormap-viewer/(.*)$": "<rootDir>/../../projects/$1/src"
   },
+  globals: {
+    "ts-jest": {
+      isolatedModules: true
+    }
+  },
   transformIgnorePatterns: ['node_modules/(?!(.*\\.mjs$|ol|observable-fns|quick-lru))'],
 };
