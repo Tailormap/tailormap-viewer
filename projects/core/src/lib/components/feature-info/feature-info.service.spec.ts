@@ -1,4 +1,3 @@
-import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
 import { FeatureInfoService } from './feature-info.service';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { CoreState, initialCoreState } from '../../state/core.state';
@@ -6,6 +5,7 @@ import { getAppLayerModel, getFeaturesResponseModel, TAILORMAP_API_V1_SERVICE } 
 import { of } from 'rxjs';
 import { selectApplicationId} from '../../state/core.selectors';
 import { selectVisibleLayers } from '../../map/state/map.selectors';
+import { TestBed } from '@angular/core/testing';
 
 describe('FeatureInfoService', () => {
 
@@ -13,27 +13,27 @@ describe('FeatureInfoService', () => {
   const initialState: CoreState = { ...initialCoreState };
   const response = getFeaturesResponseModel();
   const getFeatures$ = () => of(response);
-  let spectator: SpectatorService<FeatureInfoService>;
-  let store: MockStore;
 
-  const createService = createServiceFactory({
-    service: FeatureInfoService,
-    providers: [
-      provideMockStore({initialState}),
-      { provide: TAILORMAP_API_V1_SERVICE, useValue: { getFeatures$ }},
-    ],
-  });
+  let store: MockStore;
+  let service: FeatureInfoService;
 
   beforeEach(() => {
-    spectator = createService();
-    store = spectator.inject(MockStore);
+    TestBed.configureTestingModule({
+      providers: [
+        FeatureInfoService,
+        provideMockStore({initialState}),
+        { provide: TAILORMAP_API_V1_SERVICE, useValue: { getFeatures$ }},
+      ],
+    });
+    service = TestBed.inject(FeatureInfoService);
+    store = TestBed.inject(MockStore);
   });
 
   test('should get features', done => {
     store.overrideSelector(selectVisibleLayers, [appLayer]);
     store.overrideSelector(selectApplicationId, 1);
-    expect(spectator.service).toBeTruthy();
-    spectator.service.getFeatures$([1, 2])
+    expect(service).toBeTruthy();
+    service.getFeatures$([1, 2])
       .subscribe(featureInfo => {
         expect(featureInfo.length).toEqual(1);
         expect(featureInfo[0].features).toEqual(response.features.map(f => ({ ...f, layerId: appLayer.id })));
@@ -46,8 +46,8 @@ describe('FeatureInfoService', () => {
   test('returns empty array when there are no visible layers', done => {
     store.overrideSelector(selectVisibleLayers, []);
     store.overrideSelector(selectApplicationId, 1);
-    expect(spectator.service).toBeTruthy();
-    spectator.service.getFeatures$([1, 2])
+    expect(service).toBeTruthy();
+    service.getFeatures$([1, 2])
       .subscribe(featureInfo => {
         expect(featureInfo.length).toEqual(0);
         done();
@@ -57,8 +57,8 @@ describe('FeatureInfoService', () => {
   test('returns empty array when there are no application id', done => {
     store.overrideSelector(selectVisibleLayers, []);
     store.overrideSelector(selectApplicationId, 0);
-    expect(spectator.service).toBeTruthy();
-    spectator.service.getFeatures$([1, 2])
+    expect(service).toBeTruthy();
+    service.getFeatures$([1, 2])
       .subscribe(featureInfo => {
         expect(featureInfo.length).toEqual(0);
         done();

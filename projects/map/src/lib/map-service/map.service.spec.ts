@@ -1,5 +1,5 @@
 import { MapService } from './map.service';
-import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
+import { NgZone } from '@angular/core';
 
 const initMapFn = jest.fn();
 const renderFn = jest.fn();
@@ -17,23 +17,22 @@ jest.mock('../openlayers-map/openlayers-map', () => {
   };
 });
 
+const ngZoneMock = {} as NgZone;
+
 describe('MapService', () => {
-  let spectator: SpectatorService<MapService>;
-  const createService = createServiceFactory(MapService);
 
-  beforeEach(() => spectator = createService());
-
-  it('should be created', () => {
-    expect(spectator.service).toBeTruthy();
+  test('should be created', () => {
+    expect(new MapService(ngZoneMock)).toBeTruthy();
   });
 
-  it('calls methods on map', () => {
-    spectator.service.initMap({ maxExtent: [], projectionDefinition: 'DEF', projection: 'PROJ' });
+  test('calls methods on map', () => {
+    const service = new MapService(ngZoneMock);
+    service.initMap({ maxExtent: [], projectionDefinition: 'DEF', projection: 'PROJ' });
     expect(initMapFn).toHaveBeenCalledWith({ maxExtent: [], projectionDefinition: 'DEF', projection: 'PROJ' });
     const el = document.createElement('div');
-    spectator.service.render(el);
+    service.render(el);
     expect(renderFn).toHaveBeenCalledWith(el);
-    expect(spectator.service.getLayerManager$()).toEqual(true);
+    expect(service.getLayerManager$()).toEqual(true);
   });
 
 });

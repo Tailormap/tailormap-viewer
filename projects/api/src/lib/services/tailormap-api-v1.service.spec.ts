@@ -1,56 +1,73 @@
-import { createHttpFactory, HttpMethod, SpectatorHttp } from '@ngneat/spectator/jest';
 import { TailormapApiV1Service } from './tailormap-api-v1.service';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
 
 describe('TailormapApiV1Service', () => {
 
-  let spectator: SpectatorHttp<TailormapApiV1Service>;
-  const createHttp = createHttpFactory(TailormapApiV1Service);
+  let service: TailormapApiV1Service;
+  let httpController: HttpTestingController;
 
-  beforeEach(() => spectator = createHttp());
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [ HttpClientTestingModule ],
+      providers: [ TailormapApiV1Service ],
+    });
+    service = TestBed.inject(TailormapApiV1Service);
+    httpController = TestBed.inject(HttpTestingController);
+  });
 
   test('queries API for getVersion$', () => {
-    spectator.service.getVersion$().subscribe();
-    spectator.expectOne('/api/version', HttpMethod.GET);
+    service.getVersion$().subscribe();
+    const req = httpController.expectOne({ url: '/api/version', method: 'GET' });
+    req.flush(null);
   });
 
   test('queries API for getApplication$', () => {
-    spectator.service.getApplication$({}).subscribe();
-    spectator.expectOne('/api/app', HttpMethod.GET);
+    service.getApplication$({}).subscribe();
+    const req = httpController.expectOne({ url: '/api/app', method: 'GET' });
+    req.flush(null);
   });
 
   test('queries API with app/version for getApplication$', () => {
-    spectator.service.getApplication$({ version: 'v1', name: 'test' }).subscribe();
-    spectator.expectOne('/api/app?name=test&version=v1', HttpMethod.GET);
+    service.getApplication$({ version: 'v1', name: 'test' }).subscribe();
+    const req = httpController.expectOne({ url: '/api/app?name=test&version=v1', method: 'GET' });
+    req.flush(null);
   });
 
   test('queries API with id for getApplication$', () => {
-    spectator.service.getApplication$({ id: 123 }).subscribe();
-    spectator.expectOne('/api/app?id=123', HttpMethod.GET);
+    service.getApplication$({ id: 123 }).subscribe();
+    const req = httpController.expectOne({ url: '/api/app?id=123', method: 'GET' });
+    req.flush(null);
   });
 
   test('queries API for getMap$', () => {
-    spectator.service.getMap$(1).subscribe();
-    spectator.expectOne('/api/app/1/map', HttpMethod.GET);
+    service.getMap$(1).subscribe();
+    const req = httpController.expectOne({ url: '/api/app/1/map', method: 'GET' });
+    req.flush(null);
   });
 
   test('queries API for getComponents$', () => {
-    spectator.service.getComponents$(1).subscribe();
-    spectator.expectOne('/api/app/1/components', HttpMethod.GET);
+    service.getComponents$(1).subscribe();
+    const req = httpController.expectOne({ url: '/api/app/1/components', method: 'GET' });
+    req.flush(null);
   });
 
   test('queries API for getDescribeLayer$', () => {
-    spectator.service.getDescribeLayer$({ applicationId: 1, layerId: 1 }).subscribe();
-    spectator.expectOne('/api/app/1/layer/1/describe', HttpMethod.GET);
+    service.getDescribeLayer$({ applicationId: 1, layerId: 1 }).subscribe();
+    const req = httpController.expectOne({ url: '/api/app/1/layer/1/describe', method: 'GET' });
+    req.flush(null);
   });
 
   test('queries API for getFeatures$', () => {
-    spectator.service.getFeatures$({ applicationId: 1, layerId: 1 }).subscribe();
-    spectator.expectOne('/api/app/1/layer/1/features', HttpMethod.GET);
+    service.getFeatures$({ applicationId: 1, layerId: 1 }).subscribe();
+    const req = httpController.expectOne({ url: '/api/app/1/layer/1/features', method: 'GET' });
+    req.flush(null);
   });
 
   test('queries API for getFeatures$ - with params', () => {
-    spectator.service.getFeatures$({ applicationId: 1, layerId: 1, x: 1, y: 2, distance: 10 }).subscribe();
-    spectator.expectOne('/api/app/1/layer/1/features?x=1&y=2&distance=10', HttpMethod.GET);
+    service.getFeatures$({ applicationId: 1, layerId: 1, x: 1, y: 2, distance: 10 }).subscribe();
+    const req = httpController.expectOne({ url: '/api/app/1/layer/1/features?x=1&y=2&distance=10', method: 'GET' });
+    req.flush(null);
   });
 
 });
