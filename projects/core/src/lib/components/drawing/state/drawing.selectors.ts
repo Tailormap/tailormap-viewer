@@ -23,11 +23,12 @@ export const selectDrawingFeaturesIncludingSelected = createSelector(
   selectDrawingFeatures,
   selectSelectedDrawingFeatureId,
   (features, selectedFeature): DrawingFeatureModel[] => {
-    return features.map(feature => {
+    return features.map((feature, idx) => {
       return {
         ...feature,
         attributes: {
           ...feature.attributes,
+          zIndex: idx + 1,
           selected: feature.__fid === selectedFeature,
         },
       };

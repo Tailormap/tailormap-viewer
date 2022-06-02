@@ -48,7 +48,10 @@ export class CreateDrawingButtonComponent implements OnInit, OnDestroy {
       )
       .subscribe(drawEvent => {
         if (drawEvent && drawEvent.type === 'end' && this.activeTool) {
-          this.store$.dispatch(addFeature({ feature: DrawingHelper.getFeature(this.activeTool, drawEvent), selectFeature: true }));
+          this.store$.dispatch(addFeature({
+            feature: DrawingHelper.getFeature(this.activeTool, drawEvent),
+            selectFeature: true,
+          }));
         }
       });
 

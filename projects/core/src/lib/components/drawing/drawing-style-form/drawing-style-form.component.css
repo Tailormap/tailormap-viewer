@@ -15,3 +15,10 @@
 .settings-section .icon-button-list {
   margin-left: 6px;
 }
+
+::ng-deep .select-line-style svg {
+  display: inline-block;
+  margin-bottom: -7px;
+  max-height: 23px;
+  stroke: var(--primary-color);
+}

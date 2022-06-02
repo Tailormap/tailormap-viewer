@@ -1,3 +1,10 @@
+<ng-template #strokeTypeImage let-strokeType>
+  <svg viewBox="0 0 100 10" xmlns="http://www.w3.org/2000/svg">
+    <line x1="10" y1="5" x2="90" y2="5" stroke-width="1" stroke-linecap="round"
+          [attr.stroke-dasharray]="getDashArray(strokeType)"></line>
+  </svg>
+</ng-template>
+
 <div class="styling-form">
 
   <div class="point-settings settings-section" *ngIf="showPointSettings()">
@@ -146,6 +153,30 @@
                   [displayWith]="formatThumb"
                   [value]="style.strokeOpacity"
                   (change)="changeStrokeOpacity($event)"></mat-slider>
+    </div>
+
+    <div class="form-field">
+      <label i18n>Stroke type</label>
+      <mat-select [formControl]="strokeTypeControl"
+                  panelClass="select-line-style"
+                  class="select-line-style">
+        <mat-select-trigger>
+          <ng-container *ngTemplateOutlet="strokeTypeImage; context: { $implicit: style.strokeType }"></ng-container>
+        </mat-select-trigger>
+        <mat-option *ngFor="let strokeTypeValue of strokeTypeValues" [value]="strokeTypeValue">
+          <ng-container *ngTemplateOutlet="strokeTypeImage; context: { $implicit: strokeTypeValue }"></ng-container>
+        </mat-option>
+      </mat-select>
+    </div>
+
+    <div class="form-field" *ngIf="showArrowSetting()">
+      <label i18n>Arrow</label>
+      <mat-select [formControl]="arrowTypeControl">
+        <mat-option *ngFor="let arrowTypeValue of arrowTypeValues"
+                    [value]="arrowTypeValue.value">
+          {{arrowTypeValue.label}}
+        </mat-option>
+      </mat-select>
     </div>
 
   </div>

@@ -1,7 +1,10 @@
 import { DrawingFeatureTypeEnum } from '../models/drawing-feature-type.enum';
-import { DrawingFeatureModel, DrawingFeatureModelAttributes, DrawingFeatureStyleModel, MakerType } from '../models/drawing-feature.model';
+import {
+  ArrowTypeEnum, DrawingFeatureModel, DrawingFeatureModelAttributes, DrawingFeatureStyleModel, MakerType, StrokeTypeEnum,
+} from '../models/drawing-feature.model';
 import { DrawingToolEvent, MapStyleModel } from '@tailormap-viewer/map';
 import { nanoid } from 'nanoid';
+import { $localize } from '@angular/localize/init';
 
 export class DrawingHelper {
 
@@ -35,6 +38,20 @@ export class DrawingHelper {
     ];
   }
 
+  public static arrowTypeValues = [
+    { value: ArrowTypeEnum.NONE, label: $localize `None` },
+    { value: ArrowTypeEnum.START, label: $localize `At the start` },
+    { value: ArrowTypeEnum.END, label: $localize `At the end` },
+    { value: ArrowTypeEnum.BOTH, label: $localize `On both sides` },
+    { value: ArrowTypeEnum.ALONG, label: $localize `On every segment` },
+  ];
+
+  public static strokeTypeValues = [
+    StrokeTypeEnum.SOLID,
+    StrokeTypeEnum.DASH,
+    StrokeTypeEnum.DOT,
+  ];
+
   public static getFeature(type: DrawingFeatureTypeEnum, drawingEvent: DrawingToolEvent): DrawingFeatureModel {
     const attributes: DrawingFeatureModelAttributes = {
       type,
@@ -67,6 +84,7 @@ export class DrawingHelper {
     const style = feature.attributes.style;
     return {
       styleKey: 'drawing-style',
+      zIndex: feature.attributes.zIndex || 0,
       pointType: feature.attributes.type === DrawingFeatureTypeEnum.LABEL ? 'label' : style.marker,
       pointSize: style.markerSize,
       pointFillColor: feature.attributes.type === DrawingFeatureTypeEnum.POINT
@@ -80,6 +98,8 @@ export class DrawingHelper {
       strokeColor: style.strokeColor,
       strokeWidth: style.strokeWidth,
       strokeOpacity: style.strokeOpacity,
+      strokeType: style.strokeType,
+      arrowType: style.arrowType,
       fillColor: style.fillColor,
       fillOpacity: style.fillOpacity,
       isSelected: feature.attributes.selected,

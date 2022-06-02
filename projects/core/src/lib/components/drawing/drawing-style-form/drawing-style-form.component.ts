@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { DrawingFeatureStyleModel } from '../models/drawing-feature.model';
+import { ArrowTypeEnum, DrawingFeatureStyleModel, StrokeTypeEnum } from '../models/drawing-feature.model';
 import { DrawingFeatureTypeEnum } from '../models/drawing-feature-type.enum';
 import { DrawingHelper } from '../helpers/drawing.helper';
 import { MatSliderChange } from '@angular/material/slider';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { Subject, takeUntil } from 'rxjs';
+import { StyleHelper } from '@tailormap-viewer/shared';
 
 @Component({
   selector: 'tm-drawing-style-form',
@@ -23,6 +24,12 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
     this.labelControl.patchValue(this.style.label || '', {
       emitEvent: false,
     });
+    this.strokeTypeControl.patchValue(this.style.strokeType || StrokeTypeEnum.SOLID, {
+      emitEvent: false,
+    });
+    this.arrowTypeControl.patchValue(this.style.arrowType || ArrowTypeEnum.NONE, {
+      emitEvent: false,
+    });
     this.cdr.detectChanges();
   }
 
@@ -37,8 +44,16 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
   public styleUpdated: EventEmitter<DrawingFeatureStyleModel> = new EventEmitter<DrawingFeatureStyleModel>();
 
   public labelControl = new FormControl('');
+  public strokeTypeControl = new FormControl('', [
+    Validators.required,
+  ]);
+  public arrowTypeControl = new FormControl('', [
+    Validators.required,
+  ]);
 
   private availableMarkers = DrawingHelper.getAvailableMarkers();
+  public strokeTypeValues = DrawingHelper.strokeTypeValues;
+  public arrowTypeValues = DrawingHelper.arrowTypeValues;
 
   private debounce: number | undefined;
   private updatedProps: Map<keyof DrawingFeatureStyleModel, string | number | null> = new Map();
@@ -52,6 +67,12 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
     this.labelControl.valueChanges
       .pipe(takeUntil(this.destroyed), debounceTime(250))
       .subscribe((val: string) => this.change('label', val));
+    this.strokeTypeControl.valueChanges
+      .pipe(takeUntil(this.destroyed), debounceTime(250))
+      .subscribe((val: StrokeTypeEnum) => this.change('strokeType', val));
+    this.arrowTypeControl.valueChanges
+      .pipe(takeUntil(this.destroyed), debounceTime(250))
+      .subscribe((val: ArrowTypeEnum) => this.change('arrowType', val));
   }
 
   public ngOnDestroy() {
@@ -77,6 +98,10 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
   public showPolygonSettings(): boolean {
     return this.type === DrawingFeatureTypeEnum.CIRCLE
       || this.type === DrawingFeatureTypeEnum.POLYGON;
+  }
+
+  public showArrowSetting(): boolean {
+    return this.type === DrawingFeatureTypeEnum.LINE;
   }
 
   public formatThumb(value: number) {
@@ -112,6 +137,10 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
 
   public changeStrokeOpacity($event: MatSliderChange) {
     this.change('strokeOpacity', $event.value);
+  }
+
+  public getDashArray(strokeType: StrokeTypeEnum) {
+    return StyleHelper.getDashArray(strokeType, 0).join(' ');
   }
 
   public changeStrokeWidth($event: MatSliderChange) {

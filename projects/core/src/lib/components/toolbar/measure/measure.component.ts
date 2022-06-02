@@ -46,6 +46,7 @@ export class MeasureComponent implements OnInit, OnDestroy {
 
     this.mapService.renderFeatures$('measurement-layer', this.featureGeom.asObservable(), {
       styleKey: 'measurement-style',
+      zIndex: 9999,
       strokeColor: '#6236ff',
       strokeWidth: 3,
     }).pipe(takeUntil(this.destroyed)).subscribe();
