@@ -108,7 +108,7 @@ export class MapStyleHelper {
       label = label.replace(/\[COORDINATES]/g, coordinatesLabel);
     }
     if (label.indexOf('[LENGTH]') !== -1 || label.indexOf('[AREA]') !== -1) {
-      label = label.replace(/\[LENGTH|AREA]/g, MapSizeHelper.getFormattedSize(geometry));
+      label = label.replace(/\[(LENGTH|AREA)\]/g, MapSizeHelper.getFormattedSize(geometry));
     }
     return label;
   }
