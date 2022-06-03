@@ -46,6 +46,7 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
       'feature-info-highlight-layer',
       this.store$.select(selectCurrentlySelectedFeatureGeometry),
       {
+        zIndex: 9999,
         styleKey: 'feature-info-highlight-style',
         strokeColor: '#6236ff',
         strokeWidth: 5,

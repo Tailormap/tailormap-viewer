@@ -8,12 +8,12 @@ import { DrawingEnableToolArguments, DrawingToolEvent, DrawingToolModel } from '
 import { NgZone } from '@angular/core';
 import { EventsKey } from 'ol/events';
 import { unByKey } from 'ol/Observable';
-import { Circle, LineString, Point, Polygon } from 'ol/geom';
-import { getArea, getLength } from 'ol/sphere';
 import Geometry from 'ol/geom/Geometry';
 import BaseEvent from 'ol/events/Event';
 import { getCenter } from 'ol/extent';
 import { FeatureHelper } from '../../helpers/feature.helper';
+import { GeometryTypeHelper } from '../../helpers/geometry-type.helper';
+import { MapSizeHelper } from '../../helpers/map-size.helper';
 
 export class OpenLayersDrawingTool implements DrawingToolModel {
 
@@ -93,6 +93,7 @@ export class OpenLayersDrawingTool implements DrawingToolModel {
   private getMeasureDrawingStyle() {
     return MapStyleHelper.getStyle({
       styleKey: 'drawing-style',
+      zIndex: 9999,
       strokeColor: 'rgba(0, 0, 0, 0.3)',
       strokeWidth: 2,
       pointType: 'circle',
@@ -116,12 +117,12 @@ export class OpenLayersDrawingTool implements DrawingToolModel {
     if (undefined === geometry){
       return {centerCoordinate: [], lastCoordinate: [], type, geometry:''};
     }
-    const coordinates = geometry instanceof LineString || geometry instanceof Polygon || geometry instanceof Point || geometry instanceof Circle
+    const coordinates = GeometryTypeHelper.isKnownGeometry(geometry)
       ? geometry.getFlatCoordinates()
       : [];
     const lastCoordinate = coordinates.length > 1
       ? (
-        geometry instanceof Polygon
+        GeometryTypeHelper.isPolygonGeometry(geometry)
           ? coordinates.slice(-4, -2) // for Polygons get the coordinate before the last since its circular so last = first
           : coordinates.slice(-2)
       )
@@ -130,20 +131,10 @@ export class OpenLayersDrawingTool implements DrawingToolModel {
       geometry: FeatureHelper.getWKT(geometry, this.olMap),
       lastCoordinate,
       centerCoordinate: getCenter(geometry.getExtent()),
-      radius: geometry instanceof Circle ? geometry.getRadius() : undefined,
-      size: this.getSize(geometry),
+      radius: GeometryTypeHelper.isCircleGeometry(geometry) ? geometry.getRadius() : undefined,
+      size: this.toolConfig.computeSize ? MapSizeHelper.getSize(geometry) : 0,
       type,
     };
-  }
-
-  private getSize(geometry?: Geometry) {
-    if (this.toolConfig.computeSize && geometry instanceof LineString) {
-      return getLength(geometry);
-    }
-    if (this.toolConfig.computeSize && geometry instanceof Polygon) {
-      return getArea(geometry);
-    }
-    return 0;
   }
 
 }

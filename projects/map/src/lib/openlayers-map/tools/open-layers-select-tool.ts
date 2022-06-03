@@ -88,6 +88,7 @@ export class OpenLayersSelectTool<A extends FeatureModelAttributes = FeatureMode
     }
     return MapStyleHelper.getStyle({
       styleKey: 'select-style',
+      zIndex: 9999,
       strokeColor: 'rgba(0, 0, 0, 0.3)',
       strokeWidth: 2,
       pointType: 'circle',

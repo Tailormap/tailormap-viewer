@@ -2,6 +2,7 @@ export type MapStylePointType = 'label' | 'square' | 'triangle' | 'star' | 'cros
 
 export interface MapStyleModel {
   styleKey: string;
+  zIndex: number;
   pointType?: MapStylePointType;
   pointFillColor?: string;
   pointStrokeColor?: string;
@@ -11,9 +12,12 @@ export interface MapStyleModel {
   strokeColor?: string;
   strokeWidth?: number;
   strokeOpacity?: number;
+  strokeType?: 'solid' | 'dash' | 'dot';
+  arrowType?: 'none' | 'start' | 'end' | 'both' | 'along';
   fillColor?: string;
   fillOpacity?: number;
   isSelected?: boolean;
   label?: string;
   labelSize?: number;
+  labelColor?: string;
 }

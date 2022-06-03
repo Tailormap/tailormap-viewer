@@ -7,20 +7,25 @@ import { MapStyleModel, MapStylePointType, OlMapStyleType } from '../models';
 import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
 import Feature from 'ol/Feature';
 import { Geometry, Point, Polygon } from 'ol/geom';
+import { forEach as forEachSegments } from 'ol/geom/flat/segments';
 import { buffer as bufferExtent } from 'ol/extent';
 import RenderFeature from 'ol/render/Feature';
 import { FeatureHelper } from './feature.helper';
-import { ColorHelper } from '@tailormap-viewer/shared';
+import { ColorHelper, StyleHelper } from '@tailormap-viewer/shared';
 import { Icon } from 'ol/style';
+import { GeometryTypeHelper } from './geometry-type.helper';
+import { MapSizeHelper } from '../helpers/map-size.helper';
 
 export class MapStyleHelper {
 
   private static DEFAULT_COLOR = '#cc0000';
   private static DEFAULT_SYMBOL_SIZE = 5;
   private static DEFAULT_FONT_SIZE = 12;
+  private static DEFAULT_LABEL_COLOR = '#000000';
 
   private static DEFAULT_STYLE = MapStyleHelper.mapStyleModelToOlStyle({
     styleKey: 'DEFAULT_STYLE',
+    zIndex: 0,
     strokeColor: MapStyleHelper.DEFAULT_COLOR,
     pointType: 'square',
     pointFillColor: MapStyleHelper.DEFAULT_COLOR,
@@ -48,10 +53,16 @@ export class MapStyleHelper {
   private static mapStyleModelToOlStyle(styleConfig: MapStyleModel, feature?: Feature<Geometry>, resolution?: number) {
     const baseStyle = new Style();
     if (styleConfig.strokeColor) {
-      baseStyle.setStroke(new Stroke({
+      const dash = StyleHelper.getDashArray(styleConfig.strokeType, styleConfig.strokeWidth);
+      const stroke = new Stroke({
         color: ColorHelper.getRgbStyleForColor(styleConfig.strokeColor, styleConfig.strokeOpacity),
         width: styleConfig.strokeWidth || 1,
-      }));
+      });
+      if (dash.length > 0) {
+        stroke.setLineDash(dash);
+        stroke.setLineCap(styleConfig.strokeType === 'dot' ? 'round' : 'square');
+      }
+      baseStyle.setStroke(stroke);
     }
     if (styleConfig.fillColor) {
       baseStyle.setFill(new Fill({
@@ -62,11 +73,11 @@ export class MapStyleHelper {
     if (styleConfig.pointType) {
       styles.push(...MapStyleHelper.createShape(styleConfig.pointType, styleConfig));
     }
+    styles.push(...MapStyleHelper.createArrowStyles(styleConfig, feature, baseStyle.getStroke()));
     if (styleConfig.label) {
       const symbolSize = MapStyleHelper.getNumberValue(styleConfig.pointSize, MapStyleHelper.DEFAULT_SYMBOL_SIZE);
       const geom = feature?.getGeometry();
-      const coordinatesLabel = geom instanceof Point ? geom.getCoordinates().join(' ') : '';
-      const label = styleConfig.label.replace(/\[COORDINATES\]/g, coordinatesLabel);
+      const label = MapStyleHelper.replaceSpecialValues(styleConfig.label, geom);
       const labelSize = MapStyleHelper.getNumberValue(styleConfig.labelSize, MapStyleHelper.DEFAULT_SYMBOL_SIZE);
       const scale = 1 + (labelSize / MapStyleHelper.DEFAULT_FONT_SIZE);
       const offsetY = styleConfig.pointType === 'label'
@@ -74,7 +85,11 @@ export class MapStyleHelper {
         : 14 + (symbolSize - MapStyleHelper.DEFAULT_SYMBOL_SIZE) + (scale * 2);
       styles.push(new Style({
         text: new Text({
+          placement: GeometryTypeHelper.isLineGeometry(geom) ? 'line' : '',
           text: label,
+          fill: new Fill({
+            color: styleConfig.labelColor || MapStyleHelper.DEFAULT_LABEL_COLOR,
+          }),
           offsetY,
           scale,
         }),
@@ -85,6 +100,17 @@ export class MapStyleHelper {
       styles.push(...MapStyleHelper.createOutlinedSelectionRectangle(feature, buffer * (resolution || 0)));
     }
     return styles;
+  }
+
+  private static replaceSpecialValues(label: string, geometry?: Geometry) {
+    if (label.indexOf('[COORDINATES]') !== -1) {
+      const coordinatesLabel = GeometryTypeHelper.isPointGeometry(geometry) ? geometry.getCoordinates().join(' ') : '';
+      label = label.replace(/\[COORDINATES]/g, coordinatesLabel);
+    }
+    if (label.indexOf('[LENGTH]') !== -1 || label.indexOf('[AREA]') !== -1) {
+      label = label.replace(/\[(LENGTH|AREA)\]/g, MapSizeHelper.getFormattedSize(geometry));
+    }
+    return label;
   }
 
   private static createShape(type: MapStylePointType, styleConfig: MapStyleModel): Style[] {
@@ -192,6 +218,96 @@ export class MapStyleHelper {
       return degrees || 0;
     }
     return degrees / (180 / Math.PI);
+  }
+
+  private static createArrowStyles(styleConfig: MapStyleModel, feature?: Feature<Geometry>, strokeStyle?: Stroke): Style[] {
+    if (!feature
+      || !strokeStyle
+      || !styleConfig.arrowType
+      || styleConfig.arrowType === 'none'
+    ) {
+      return [];
+    }
+    const geometry = feature.getGeometry();
+    if (!geometry || !GeometryTypeHelper.isLineGeometry(geometry)) {
+      return [];
+    }
+    const arrows = [];
+    const flatCoords = geometry.getFlatCoordinates();
+    let lastSegment: [ number[], number[] ] | [] = [];
+    forEachSegments(flatCoords, 0, flatCoords.length, geometry.getStride(), (start, end) => {
+      if (lastSegment.length === 0
+        && (styleConfig.arrowType === 'start' || styleConfig.arrowType === 'both')) {
+        arrows.push(MapStyleHelper.createArrow({
+          zIndex: styleConfig.zIndex,
+          arrowStart: end,
+          arrowEnd: start,
+          strokeStyle,
+          styleConfig,
+        }));
+      }
+      if (styleConfig.arrowType === 'along') {
+        const x = (start[0] + end[0]) / 2;
+        const y = (start[1] + end[1]) / 2;
+        arrows.push(MapStyleHelper.createArrow({
+          zIndex: styleConfig.zIndex,
+          arrowStart: start,
+          arrowEnd: end,
+          strokeStyle,
+          pointCoordinates: [ x, y ],
+          styleConfig,
+        }));
+      }
+      lastSegment = [[...start], [...end]];
+    });
+    if (lastSegment.length !== 0
+      && (
+        styleConfig.arrowType === 'end'
+        || styleConfig.arrowType === 'both'
+        || styleConfig.arrowType === 'along'
+      )) {
+      arrows.push(MapStyleHelper.createArrow({
+        zIndex: styleConfig.zIndex,
+        arrowStart: lastSegment[0],
+        arrowEnd: lastSegment[1],
+        strokeStyle,
+        styleConfig,
+      }));
+    }
+    return arrows;
+  }
+
+  private static createArrow(args: {
+    zIndex: number;
+    arrowStart: number[];
+    arrowEnd: number[];
+    strokeStyle: Stroke;
+    pointCoordinates?: number[];
+    styleConfig: MapStyleModel;
+  }): Style {
+    const dx = args.arrowEnd[0] - args.arrowStart[0];
+    const dy = args.arrowEnd[1] - args.arrowStart[1];
+    const arrowAngle  = Math.atan2(dy, dx);
+    // let outlineStroke;
+    // if (args.styleConfig.lineOutline) {
+    //   const outlineRgb = getRgbForColor(args.styleConfig.lineOutline);
+    //   outlineStroke = new Stroke({
+    //     color: `rgba(${outlineRgb.r}, ${outlineRgb.g}, ${outlineRgb.b}, ${args.styleConfig.strokeOpacity})`,
+    //     width: 1,
+    //   });
+    // }
+    return new Style({
+      geometry: new Point(args.pointCoordinates || args.arrowEnd),
+      image: new RegularShape({
+        fill: new Fill({ color: args.strokeStyle.getColor() }),
+        // stroke: outlineStroke,
+        points: 3,
+        radius: Math.max(1, args.strokeStyle.getWidth() || 1) + 5,
+        angle: Math.PI / 2,
+        rotation: -arrowAngle,
+      }),
+      zIndex: args.zIndex + 1,
+    });
   }
 
 }

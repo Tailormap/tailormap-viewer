@@ -36,7 +36,11 @@
               "projects/core/assets/custom-theme.scss",
               "projects/core/assets/tailormap-styles.css"
             ],
-            "scripts": []
+            "scripts": [],
+            "allowedCommonJsDependencies": [
+              "xml-utils",
+              "pbf"
+            ]
           },
           "configurations": {
             "production": {

@@ -1,3 +1,10 @@
+<ng-template #strokeTypeImage let-strokeType>
+  <svg viewBox="0 0 100 10" xmlns="http://www.w3.org/2000/svg">
+    <line x1="10" y1="5" x2="90" y2="5" stroke-width="1" stroke-linecap="round"
+          [attr.stroke-dasharray]="getDashArray(strokeType)"></line>
+  </svg>
+</ng-template>
+
 <div class="styling-form">
 
   <div class="point-settings settings-section" *ngIf="showPointSettings()">
@@ -81,12 +88,27 @@
       <div class="form-field__columns">
         <input matInput class="form-field" i18n-placeholder placeholder="Label" [formControl]="labelControl">
         <div class="icon-button-list">
-        <button mat-stroked-button
-                matTooltip="Insert coordinates as label"
-                i18n-matTooltip
-                (click)="insertCoordinates()">
-          <mat-icon svgIcon="coordinates"></mat-icon>
-        </button>
+          <button *ngIf="showInsertCoordinates()"
+                  mat-stroked-button
+                  matTooltip="Insert coordinates as label"
+                  i18n-matTooltip
+                  (click)="insertCoordinates()">
+            <mat-icon svgIcon="coordinates"></mat-icon>
+          </button>
+          <button *ngIf="showInsertLength()"
+                  mat-stroked-button
+                  matTooltip="Insert length as label"
+                  i18n-matTooltip
+                  (click)="insertLength()">
+            <mat-icon svgIcon="tools_measure_length_outline"></mat-icon>
+          </button>
+          <button *ngIf="showInsertArea()"
+                  mat-stroked-button
+                  matTooltip="Insert area as label"
+                  i18n-matTooltip
+                  (click)="insertArea()">
+            <mat-icon svgIcon="tools_measure_area_outline"></mat-icon>
+          </button>
         </div>
       </div>
     </div>
@@ -103,6 +125,12 @@
                   [thumbLabel]="true"
                   [value]="style.labelSize"
                   (change)="changeLabelSize($event)"></mat-slider>
+    </div>
+
+    <div class="form-field form-field__columns">
+      <label i18n>Color</label>
+      <tm-color-picker [color]="style.labelColor"
+                       (colorChange)="changeLabelColor($event)"></tm-color-picker>
     </div>
 
   </div>
@@ -146,6 +174,30 @@
                   [displayWith]="formatThumb"
                   [value]="style.strokeOpacity"
                   (change)="changeStrokeOpacity($event)"></mat-slider>
+    </div>
+
+    <div class="form-field">
+      <label i18n>Stroke type</label>
+      <mat-select [formControl]="strokeTypeControl"
+                  panelClass="select-line-style"
+                  class="select-line-style">
+        <mat-select-trigger>
+          <ng-container *ngTemplateOutlet="strokeTypeImage; context: { $implicit: style.strokeType }"></ng-container>
+        </mat-select-trigger>
+        <mat-option *ngFor="let strokeTypeValue of strokeTypeValues" [value]="strokeTypeValue">
+          <ng-container *ngTemplateOutlet="strokeTypeImage; context: { $implicit: strokeTypeValue }"></ng-container>
+        </mat-option>
+      </mat-select>
+    </div>
+
+    <div class="form-field" *ngIf="showArrowSetting()">
+      <label i18n>Arrow</label>
+      <mat-select [formControl]="arrowTypeControl">
+        <mat-option *ngFor="let arrowTypeValue of arrowTypeValues"
+                    [value]="arrowTypeValue.value">
+          {{arrowTypeValue.label}}
+        </mat-option>
+      </mat-select>
     </div>
 
   </div>

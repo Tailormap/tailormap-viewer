@@ -54,9 +54,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
     ])
       .pipe(takeUntil(this.destroyed))
       .subscribe(([ style, feature ]) => {
-        this.selectedDrawingStyle = feature
-          ? feature.attributes.type
-          : style;
+        this.selectedDrawingStyle = style || feature?.attributes.type || null;
         this.selectedFeature = feature;
         this.style = feature
           ? feature.attributes.style

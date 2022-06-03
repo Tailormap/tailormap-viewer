@@ -8,6 +8,7 @@ import { fromCircle } from 'ol/geom/Polygon';
 import { MapSizeHelper } from '../helpers/map-size.helper';
 import OlMap from 'ol/Map';
 import { MapUnitEnum } from '../models/map-unit.enum';
+import { GeometryTypeHelper } from './geometry-type.helper';
 
 export class FeatureHelper {
 
@@ -67,7 +68,7 @@ export class FeatureHelper {
   }
 
   public static getWKT(geometry: Geometry, map: OlMap) {
-    const geom = geometry instanceof Circle ? fromCircle(geometry) : geometry;
+    const geom = GeometryTypeHelper.isCircleGeometry(geometry) ? fromCircle(geometry) : geometry;
     const units = map.getView().getProjection().getUnits();
     const decimals = MapSizeHelper.getCoordinatePrecision(units ? units.toLowerCase() as MapUnitEnum: MapUnitEnum.m);
     return FeatureHelper.wktFormatter.writeGeometry(geom, { decimals });

@@ -1,6 +1,34 @@
 import { MapUnitEnum } from '../models/map-unit.enum';
+import Geometry from 'ol/geom/Geometry';
+import { GeometryTypeHelper } from './geometry-type.helper';
+import { getArea, getLength } from 'ol/sphere';
+import { fromCircle } from 'ol/geom/Polygon';
 
 export class MapSizeHelper {
+
+  public static getSize(geometry?: Geometry) {
+    if (GeometryTypeHelper.isLineGeometry(geometry)) {
+      return getLength(geometry);
+    }
+    if (GeometryTypeHelper.isPolygonGeometry(geometry)) {
+      return getArea(geometry);
+    }
+    if (GeometryTypeHelper.isCircleGeometry(geometry)) {
+      return getArea(fromCircle(geometry));
+    }
+    return 0;
+  }
+
+  public static getFormattedSize(geometry?: Geometry) {
+    const size = MapSizeHelper.getSize(geometry);
+    if (size && GeometryTypeHelper.isLineGeometry(geometry)) {
+      return MapSizeHelper.getFormattedLength(size);
+    }
+    if (size && GeometryTypeHelper.isPolygonGeometry(geometry) || GeometryTypeHelper.isCircleGeometry(geometry)) {
+      return MapSizeHelper.getFormattedArea(size);
+    }
+    return '';
+  }
 
   public static getFormattedLength(size?: number): string {
     if (!size) {
