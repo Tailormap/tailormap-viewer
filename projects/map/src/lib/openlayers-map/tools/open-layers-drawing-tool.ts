@@ -8,12 +8,12 @@ import { DrawingEnableToolArguments, DrawingToolEvent, DrawingToolModel } from '
 import { NgZone } from '@angular/core';
 import { EventsKey } from 'ol/events';
 import { unByKey } from 'ol/Observable';
-import { getArea, getLength } from 'ol/sphere';
 import Geometry from 'ol/geom/Geometry';
 import BaseEvent from 'ol/events/Event';
 import { getCenter } from 'ol/extent';
 import { FeatureHelper } from '../../helpers/feature.helper';
 import { GeometryTypeHelper } from '../../helpers/geometry-type.helper';
+import { MapSizeHelper } from '../../helpers/map-size.helper';
 
 export class OpenLayersDrawingTool implements DrawingToolModel {
 
@@ -132,19 +132,9 @@ export class OpenLayersDrawingTool implements DrawingToolModel {
       lastCoordinate,
       centerCoordinate: getCenter(geometry.getExtent()),
       radius: GeometryTypeHelper.isCircleGeometry(geometry) ? geometry.getRadius() : undefined,
-      size: this.getSize(geometry),
+      size: this.toolConfig.computeSize ? MapSizeHelper.getSize(geometry) : 0,
       type,
     };
-  }
-
-  private getSize(geometry?: Geometry) {
-    if (this.toolConfig.computeSize && GeometryTypeHelper.isLineGeometry(geometry)) {
-      return getLength(geometry);
-    }
-    if (this.toolConfig.computeSize && GeometryTypeHelper.isPolygonGeometry(geometry)) {
-      return getArea(geometry);
-    }
-    return 0;
   }
 
 }

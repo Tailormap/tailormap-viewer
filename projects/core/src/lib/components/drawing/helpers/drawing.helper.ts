@@ -22,6 +22,7 @@ export class DrawingHelper {
     strokeWidth: 3,
     label: '',
     labelSize: 12,
+    labelColor: '#000000',
   };
 
   private static updatedDefaultStyle: Partial<DrawingFeatureStyleModel> = {};
@@ -105,6 +106,7 @@ export class DrawingHelper {
       isSelected: feature.attributes.selected,
       label: style.label,
       labelSize: style.labelSize,
+      labelColor: style.labelColor,
     };
   }
 

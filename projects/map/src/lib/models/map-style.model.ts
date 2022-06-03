@@ -19,4 +19,5 @@ export interface MapStyleModel {
   isSelected?: boolean;
   label?: string;
   labelSize?: number;
+  labelColor?: string;
 }

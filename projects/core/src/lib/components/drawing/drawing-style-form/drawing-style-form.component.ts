@@ -86,7 +86,23 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
 
   public showLabelSettings(): boolean {
     return this.type === DrawingFeatureTypeEnum.POINT
-      || this.type === DrawingFeatureTypeEnum.LABEL;
+      || this.type === DrawingFeatureTypeEnum.LABEL
+      || this.type === DrawingFeatureTypeEnum.LINE
+      || this.type === DrawingFeatureTypeEnum.POLYGON
+      || this.type === DrawingFeatureTypeEnum.CIRCLE;
+  }
+
+  public showInsertCoordinates() {
+    return this.showPointSettings();
+  }
+
+  public showInsertLength() {
+    return this.type === DrawingFeatureTypeEnum.LINE;
+  }
+
+  public showInsertArea() {
+    return this.type === DrawingFeatureTypeEnum.POLYGON
+      || this.type === DrawingFeatureTypeEnum.CIRCLE;
   }
 
   public showLineSettings(): boolean {
@@ -156,14 +172,30 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
   }
 
   public insertCoordinates() {
+    this.insertText('[COORDINATES]');
+  }
+
+  public insertLength() {
+    this.insertText('[LENGTH]');
+  }
+
+  public insertArea() {
+    this.insertText('[AREA]');
+  }
+
+  private insertText(text: string) {
     const label = !!this.style.label
-      ? `${this.style.label} [COORDINATES]`
-      : '[COORDINATES]';
+      ? `${this.style.label} ${text}`
+      : text;
     this.change('label', label);
   }
 
   public changeLabelSize($event: MatSliderChange) {
     this.change('labelSize', $event.value);
+  }
+
+  public changeLabelColor($event: string) {
+    this.change('labelColor', $event);
   }
 
   public getMarkers() {

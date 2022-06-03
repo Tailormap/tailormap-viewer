@@ -14,12 +14,14 @@ import { FeatureHelper } from './feature.helper';
 import { ColorHelper, StyleHelper } from '@tailormap-viewer/shared';
 import { Icon } from 'ol/style';
 import { GeometryTypeHelper } from './geometry-type.helper';
+import { MapSizeHelper } from '../helpers/map-size.helper';
 
 export class MapStyleHelper {
 
   private static DEFAULT_COLOR = '#cc0000';
   private static DEFAULT_SYMBOL_SIZE = 5;
   private static DEFAULT_FONT_SIZE = 12;
+  private static DEFAULT_LABEL_COLOR = '#000000';
 
   private static DEFAULT_STYLE = MapStyleHelper.mapStyleModelToOlStyle({
     styleKey: 'DEFAULT_STYLE',
@@ -75,8 +77,7 @@ export class MapStyleHelper {
     if (styleConfig.label) {
       const symbolSize = MapStyleHelper.getNumberValue(styleConfig.pointSize, MapStyleHelper.DEFAULT_SYMBOL_SIZE);
       const geom = feature?.getGeometry();
-      const coordinatesLabel = GeometryTypeHelper.isPointGeometry(geom) ? geom.getCoordinates().join(' ') : '';
-      const label = styleConfig.label.replace(/\[COORDINATES\]/g, coordinatesLabel);
+      const label = MapStyleHelper.replaceSpecialValues(styleConfig.label, geom);
       const labelSize = MapStyleHelper.getNumberValue(styleConfig.labelSize, MapStyleHelper.DEFAULT_SYMBOL_SIZE);
       const scale = 1 + (labelSize / MapStyleHelper.DEFAULT_FONT_SIZE);
       const offsetY = styleConfig.pointType === 'label'
@@ -84,7 +85,11 @@ export class MapStyleHelper {
         : 14 + (symbolSize - MapStyleHelper.DEFAULT_SYMBOL_SIZE) + (scale * 2);
       styles.push(new Style({
         text: new Text({
+          placement: GeometryTypeHelper.isLineGeometry(geom) ? 'line' : '',
           text: label,
+          fill: new Fill({
+            color: styleConfig.labelColor || MapStyleHelper.DEFAULT_LABEL_COLOR,
+          }),
           offsetY,
           scale,
         }),
@@ -95,6 +100,17 @@ export class MapStyleHelper {
       styles.push(...MapStyleHelper.createOutlinedSelectionRectangle(feature, buffer * (resolution || 0)));
     }
     return styles;
+  }
+
+  private static replaceSpecialValues(label: string, geometry?: Geometry) {
+    if (label.indexOf('[COORDINATES]') !== -1) {
+      const coordinatesLabel = GeometryTypeHelper.isPointGeometry(geometry) ? geometry.getCoordinates().join(' ') : '';
+      label = label.replace(/\[COORDINATES]/g, coordinatesLabel);
+    }
+    if (label.indexOf('[LENGTH]') !== -1 || label.indexOf('[AREA]') !== -1) {
+      label = label.replace(/\[LENGTH|AREA]/g, MapSizeHelper.getFormattedSize(geometry));
+    }
+    return label;
   }
 
   private static createShape(type: MapStylePointType, styleConfig: MapStyleModel): Style[] {

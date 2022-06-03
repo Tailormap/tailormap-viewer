@@ -33,6 +33,7 @@ export interface DrawingFeatureStyleModel {
   arrowType?: ArrowTypeEnum;
   label?: string;
   labelSize?: number;
+  labelColor?: string;
 }
 
 export interface DrawingFeatureModelAttributes extends FeatureModelAttributes {

@@ -33,7 +33,7 @@ export class CreateDrawingButtonComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this.mapService.createTool$<DrawingToolModel, DrawingToolConfigModel>({
       type: ToolTypeEnum.Draw,
-      computeSize: true,
+      computeSize: false,
       style: {
         pointType: 'circle',
         strokeColor: '#6236ff',

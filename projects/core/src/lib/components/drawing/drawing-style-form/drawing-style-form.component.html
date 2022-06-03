@@ -88,12 +88,27 @@
       <div class="form-field__columns">
         <input matInput class="form-field" i18n-placeholder placeholder="Label" [formControl]="labelControl">
         <div class="icon-button-list">
-        <button mat-stroked-button
-                matTooltip="Insert coordinates as label"
-                i18n-matTooltip
-                (click)="insertCoordinates()">
-          <mat-icon svgIcon="coordinates"></mat-icon>
-        </button>
+          <button *ngIf="showInsertCoordinates()"
+                  mat-stroked-button
+                  matTooltip="Insert coordinates as label"
+                  i18n-matTooltip
+                  (click)="insertCoordinates()">
+            <mat-icon svgIcon="coordinates"></mat-icon>
+          </button>
+          <button *ngIf="showInsertLength()"
+                  mat-stroked-button
+                  matTooltip="Insert length as label"
+                  i18n-matTooltip
+                  (click)="insertLength()">
+            <mat-icon svgIcon="tools_measure_length_outline"></mat-icon>
+          </button>
+          <button *ngIf="showInsertArea()"
+                  mat-stroked-button
+                  matTooltip="Insert area as label"
+                  i18n-matTooltip
+                  (click)="insertArea()">
+            <mat-icon svgIcon="tools_measure_area_outline"></mat-icon>
+          </button>
         </div>
       </div>
     </div>
@@ -110,6 +125,12 @@
                   [thumbLabel]="true"
                   [value]="style.labelSize"
                   (change)="changeLabelSize($event)"></mat-slider>
+    </div>
+
+    <div class="form-field form-field__columns">
+      <label i18n>Color</label>
+      <tm-color-picker [color]="style.labelColor"
+                       (colorChange)="changeLabelColor($event)"></tm-color-picker>
     </div>
 
   </div>
