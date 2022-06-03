@@ -18,7 +18,13 @@ export class IconService {
     'folder_filled', 'folder_outline', 'filter_filled', 'filter_outline', 'user', 'login', 'plus', 'minus',
     { folder: 'markers', icons: [ 'arrow', 'circle', 'cross', 'square', 'star', 'triangle', 'diamond' ] },
     { folder: 'components', icons: [ 'attributelist', 'legend', 'table_of_contents', 'drawing' ] },
-    { folder: 'tools', icons: [ 'cursor', 'measure_area', 'measure_length', 'position', 'push_pin', 'draw_point', 'draw_line', 'draw_polygon', 'draw_circle', 'draw_label', 'measure_length_outline', 'measure_area_outline' ] },
+    {
+      folder: 'tools',
+      icons: [
+        'cursor', 'measure_area', 'measure_length', 'position', 'push_pin',
+        'draw_point', 'draw_line', 'draw_polygon', 'draw_circle', 'draw_label', 'measure_length_outline', 'measure_area_outline',
+      ],
+    },
   ];
 
   constructor(

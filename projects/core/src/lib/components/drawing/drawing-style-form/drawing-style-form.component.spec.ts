@@ -39,7 +39,7 @@ describe('DrawingStyleFormComponent', () => {
     expect(screen.queryByText('Symbol')).not.toBeInTheDocument();
     expect(screen.getByText('Line')).toBeInTheDocument();
     expect(screen.queryByText('Fill')).not.toBeInTheDocument();
-    expect(screen.queryByText('Label')).not.toBeInTheDocument();
+    expect(await screen.getAllByText('Label').length).toEqual(2);
   });
 
   test('should render polygon settings', async () => {
@@ -52,7 +52,7 @@ describe('DrawingStyleFormComponent', () => {
     expect(screen.queryByText('Symbol')).not.toBeInTheDocument();
     expect(screen.getByText('Line')).toBeInTheDocument();
     expect(screen.getByText('Fill')).toBeInTheDocument();
-    expect(screen.queryByText('Label')).not.toBeInTheDocument();
+    expect(await screen.getAllByText('Label').length).toEqual(2);
   });
 
 });
