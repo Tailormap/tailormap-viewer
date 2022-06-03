@@ -16,6 +16,7 @@ export interface MapStyleModel {
   arrowType?: 'none' | 'start' | 'end' | 'both' | 'along';
   fillColor?: string;
   fillOpacity?: number;
+  stripedFill?: boolean;
   isSelected?: boolean;
   label?: string;
   labelSize?: number;

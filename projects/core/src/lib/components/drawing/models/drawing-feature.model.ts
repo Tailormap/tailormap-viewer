@@ -26,6 +26,7 @@ export interface DrawingFeatureStyleModel {
   markerRotation?: number;
   fillOpacity?: number;
   fillColor?: string;
+  stripedFill?: boolean;
   strokeColor?: string;
   strokeOpacity?: number;
   strokeWidth?: number;
