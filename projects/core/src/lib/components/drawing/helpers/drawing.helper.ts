@@ -103,6 +103,7 @@ export class DrawingHelper {
       arrowType: style.arrowType,
       fillColor: style.fillColor,
       fillOpacity: style.fillOpacity,
+      stripedFill: style.stripedFill,
       isSelected: feature.attributes.selected,
       label: style.label,
       labelSize: style.labelSize,

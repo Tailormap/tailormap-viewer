@@ -7,6 +7,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { Subject, takeUntil } from 'rxjs';
 import { StyleHelper } from '@tailormap-viewer/shared';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 
 @Component({
   selector: 'tm-drawing-style-form',
@@ -56,7 +57,7 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
   public arrowTypeValues = DrawingHelper.arrowTypeValues;
 
   private debounce: number | undefined;
-  private updatedProps: Map<keyof DrawingFeatureStyleModel, string | number | null> = new Map();
+  private updatedProps: Map<keyof DrawingFeatureStyleModel, string | number | null | boolean> = new Map();
   private destroyed = new Subject();
 
   constructor(
@@ -171,6 +172,10 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
     this.change('fillOpacity', $event.value);
   }
 
+  public changeStripedFill($event: MatCheckboxChange) {
+    this.change('stripedFill', $event.checked);
+  }
+
   public insertCoordinates() {
     this.insertText('[COORDINATES]');
   }
@@ -217,7 +222,7 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  private change(key: keyof DrawingFeatureStyleModel, value: string | number | null) {
+  private change(key: keyof DrawingFeatureStyleModel, value: string | number | null | boolean) {
     this.updatedProps.set(key, value);
     if (this.debounce) {
       window.clearTimeout(this.debounce);
