@@ -24,6 +24,24 @@
           mat-stroked-button
           color="primary"
           (click)="drawPolygon()"><mat-icon svgIcon="tools_draw_polygon"></mat-icon></button>
+  <button [class.button--active]="activeTool === 'SQUARE'"
+          i18n-aria-label
+          aria-label="Draw square"
+          i18n-matTooltip
+          matTooltip="Draw square"
+          mat-stroked-button
+          color="primary"
+          (click)="drawSquare()"><mat-icon svgIcon="tools_draw_square"></mat-icon></button>
+  <button [class.button--active]="activeTool === 'RECTANGLE'"
+          i18n-aria-label
+          aria-label="Draw rectangle"
+          i18n-matTooltip
+          matTooltip="Draw rectangle"
+          mat-stroked-button
+          color="primary"
+          (click)="drawRectangle()"><mat-icon svgIcon="tools_draw_rectangle"></mat-icon></button>
+</div>
+<div class="icon-button-list">
   <button [class.button--active]="activeTool === 'CIRCLE'"
           i18n-aria-label
           aria-label="Draw circle"
@@ -32,6 +50,22 @@
           mat-stroked-button
           color="primary"
           (click)="drawCircle()"><mat-icon svgIcon="tools_draw_circle"></mat-icon></button>
+  <button [class.button--active]="activeTool === 'ELLIPSE'"
+          i18n-aria-label
+          aria-label="Draw ellipse"
+          i18n-matTooltip
+          matTooltip="Draw ellipse"
+          mat-stroked-button
+          color="primary"
+          (click)="drawEllipse()"><mat-icon svgIcon="tools_draw_ellipse"></mat-icon></button>
+  <button [class.button--active]="activeTool === 'STAR'"
+          i18n-aria-label
+          aria-label="Draw star"
+          i18n-matTooltip
+          matTooltip="Draw star"
+          mat-stroked-button
+          color="primary"
+          (click)="drawStar()"><mat-icon svgIcon="tools_draw_star"></mat-icon></button>
   <button [class.button--active]="activeTool === 'LABEL'"
           i18n-aria-label
           aria-label="Draw label"

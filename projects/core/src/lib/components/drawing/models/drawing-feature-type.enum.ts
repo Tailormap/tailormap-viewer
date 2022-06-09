@@ -4,4 +4,8 @@ export enum DrawingFeatureTypeEnum {
   POLYGON = 'POLYGON',
   CIRCLE = 'CIRCLE',
   LABEL = 'LABEL',
+  ELLIPSE = 'ELLIPSE',
+  RECTANGLE = 'RECTANGLE',
+  SQUARE = 'SQUARE',
+  STAR = 'STAR',
 }

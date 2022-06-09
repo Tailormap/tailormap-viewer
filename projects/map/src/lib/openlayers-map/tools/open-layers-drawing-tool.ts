@@ -1,7 +1,7 @@
 import { merge, Subject } from 'rxjs';
 import { DrawingToolConfigModel, DrawingType } from '../../models/tools/drawing-tool-config.model';
 import OlMap from 'ol/Map';
-import Draw, { DrawEvent } from 'ol/interaction/Draw';
+import Draw, { DrawEvent, GeometryFunction } from 'ol/interaction/Draw';
 import GeometryType from 'ol/geom/GeometryType';
 import { MapStyleHelper } from '../../helpers/map-style.helper';
 import { DrawingEnableToolArguments, DrawingToolEvent, DrawingToolModel } from '../../models/tools/drawing-tool.model';
@@ -14,6 +14,7 @@ import { getCenter } from 'ol/extent';
 import { FeatureHelper } from '../../helpers/feature.helper';
 import { GeometryTypeHelper } from '../../helpers/geometry-type.helper';
 import { MapSizeHelper } from '../../helpers/map-size.helper';
+import { DrawingHelper } from '../../helpers/drawing.helper';
 
 export class OpenLayersDrawingTool implements DrawingToolModel {
 
@@ -39,10 +40,26 @@ export class OpenLayersDrawingTool implements DrawingToolModel {
     if (type === 'area') {
       return GeometryType.POLYGON;
     }
-    if (type === 'circle') {
+    if (type === 'circle' || type === 'ellipse' || type === 'square' || type === 'rectangle' || type === 'star') {
       return GeometryType.CIRCLE;
     }
     return GeometryType.POINT;
+  }
+
+  private static getGeometryFunction(type?: DrawingType): GeometryFunction | undefined {
+    if (type === 'square') {
+      return DrawingHelper.squareGeometryFunction;
+    }
+    if (type === 'rectangle') {
+      return DrawingHelper.rectangleGeometryFunction;
+    }
+    if (type === 'star') {
+      return DrawingHelper.starGeometryFunction;
+    }
+    if (type === 'ellipse') {
+      return DrawingHelper.ellipseGeometryFunction;
+    }
+    return;
   }
 
   constructor(
@@ -68,9 +85,11 @@ export class OpenLayersDrawingTool implements DrawingToolModel {
   public enable(args: DrawingEnableToolArguments): void {
     this.listeners = [];
     this.isActive = true;
+    const drawingType = args.type || this.toolConfig.drawingType || 'point';
     this.drawInteraction = new Draw({
-      type: OpenLayersDrawingTool.getDrawingType(args.type || this.toolConfig.drawingType || 'point'),
+      type: OpenLayersDrawingTool.getDrawingType(drawingType),
       style: this.getMeasureDrawingStyle(),
+      geometryFunction: OpenLayersDrawingTool.getGeometryFunction(drawingType),
     });
     this.olMap.addInteraction(this.drawInteraction);
     this.listeners.push(this.drawInteraction.on('drawstart', (e: DrawEvent) => this.drawStarted(e)));

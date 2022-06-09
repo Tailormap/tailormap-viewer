@@ -100,6 +100,22 @@ export class CreateDrawingButtonComponent implements OnInit, OnDestroy {
     this.toggleTool('point', DrawingFeatureTypeEnum.LABEL);
   }
 
+  public drawSquare() {
+    this.toggleTool('square', DrawingFeatureTypeEnum.SQUARE);
+  }
+
+  public drawRectangle() {
+    this.toggleTool('rectangle', DrawingFeatureTypeEnum.RECTANGLE);
+  }
+
+  public drawEllipse() {
+    this.toggleTool('ellipse', DrawingFeatureTypeEnum.ELLIPSE);
+  }
+
+  public drawStar() {
+    this.toggleTool('star', DrawingFeatureTypeEnum.STAR);
+  }
+
   private toggleTool(type: DrawingType, drawingFeatureType: DrawingFeatureTypeEnum) {
     this.store$.dispatch(setSelectedDrawingStyle({ drawingType: this.activeTool === drawingFeatureType ? null : drawingFeatureType }));
     this.mapService.getToolManager$().pipe(take(1)).subscribe(manager => {

@@ -21,8 +21,8 @@ export class IconService {
     {
       folder: 'tools',
       icons: [
-        'cursor', 'measure_area', 'measure_length', 'position', 'push_pin',
-        'draw_point', 'draw_line', 'draw_polygon', 'draw_circle', 'draw_label', 'measure_length_outline', 'measure_area_outline',
+        'cursor', 'measure_area', 'measure_length', 'position', 'push_pin', 'measure_length_outline', 'measure_area_outline',
+        'draw_point', 'draw_line', 'draw_polygon', 'draw_circle', 'draw_label', 'draw_ellipse', 'draw_rectangle', 'draw_square', 'draw_star',
       ],
     },
   ];

@@ -86,11 +86,7 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
   }
 
   public showLabelSettings(): boolean {
-    return this.type === DrawingFeatureTypeEnum.POINT
-      || this.type === DrawingFeatureTypeEnum.LABEL
-      || this.type === DrawingFeatureTypeEnum.LINE
-      || this.type === DrawingFeatureTypeEnum.POLYGON
-      || this.type === DrawingFeatureTypeEnum.CIRCLE;
+    return true;
   }
 
   public showInsertCoordinates() {
@@ -102,19 +98,20 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
   }
 
   public showInsertArea() {
-    return this.type === DrawingFeatureTypeEnum.POLYGON
-      || this.type === DrawingFeatureTypeEnum.CIRCLE;
+    return this.showPolygonSettings();
   }
 
   public showLineSettings(): boolean {
-    return this.type === DrawingFeatureTypeEnum.LINE
-      || this.type === DrawingFeatureTypeEnum.CIRCLE
-      || this.type === DrawingFeatureTypeEnum.POLYGON;
+    return this.type === DrawingFeatureTypeEnum.LINE || this.showPolygonSettings();
   }
 
   public showPolygonSettings(): boolean {
     return this.type === DrawingFeatureTypeEnum.CIRCLE
-      || this.type === DrawingFeatureTypeEnum.POLYGON;
+      || this.type === DrawingFeatureTypeEnum.POLYGON
+      || this.type === DrawingFeatureTypeEnum.RECTANGLE
+      || this.type === DrawingFeatureTypeEnum.SQUARE
+      || this.type === DrawingFeatureTypeEnum.STAR
+      || this.type === DrawingFeatureTypeEnum.ELLIPSE;
   }
 
   public showArrowSetting(): boolean {
