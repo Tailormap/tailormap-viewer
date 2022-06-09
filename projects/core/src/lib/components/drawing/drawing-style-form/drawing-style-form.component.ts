@@ -86,7 +86,7 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
   }
 
   public showLabelSettings(): boolean {
-    return true;
+    return !!this.type;
   }
 
   public showInsertCoordinates() {
