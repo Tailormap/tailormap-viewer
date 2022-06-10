@@ -12,6 +12,10 @@
   display: flex;
 }
 
+.drawing-form ::ng-deep .icon-button-list + .icon-button-list {
+  margin-top: 8px;
+}
+
 .drawing-form ::ng-deep .icon-button-list .mat-stroked-button {
   min-width: 32px;
   padding: 0 8px;

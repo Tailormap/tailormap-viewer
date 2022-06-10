@@ -40,7 +40,7 @@ describe('CreateDrawingButtonComponent', () => {
     toolManagerMock.disableTool.mockClear();
 
     const buttons = await screen.getAllByRole('button');
-    expect(buttons.length).toEqual(5);
+    expect(buttons.length).toEqual(9);
     await userEvent.click(await screen.getByLabelText('Draw point'));
     expect(toolManagerMock.enableTool).toHaveBeenCalledWith('draw-1', true, { type: 'point' });
     expect(toolManagerMock.disableTool).toHaveBeenCalledWith('select-1', true);
