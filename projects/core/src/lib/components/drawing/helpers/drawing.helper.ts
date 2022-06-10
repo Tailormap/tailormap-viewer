@@ -1,6 +1,6 @@
 import { DrawingFeatureTypeEnum } from '../models/drawing-feature-type.enum';
 import {
-  ArrowTypeEnum, DrawingFeatureModel, DrawingFeatureModelAttributes, DrawingFeatureStyleModel, MakerType, StrokeTypeEnum,
+  ArrowTypeEnum, DrawingFeatureModel, DrawingFeatureModelAttributes, DrawingFeatureStyleModel, LabelStyleEnum, MakerType, StrokeTypeEnum,
 } from '../models/drawing-feature.model';
 import { DrawingToolEvent, MapStyleModel } from '@tailormap-viewer/map';
 import { nanoid } from 'nanoid';
@@ -108,6 +108,13 @@ export class DrawingHelper {
       label: style.label,
       labelSize: style.labelSize,
       labelColor: style.labelColor,
+      labelStyle: (style.labelStyle || []).map<'bold'|'italic'>(labelStyle => {
+        return labelStyle === LabelStyleEnum.ITALIC
+          ? 'italic'
+          : 'bold';
+      }),
+      labelRotation: style.labelRotation,
+      labelOutlineColor: style.labelOutlineColor,
     };
   }
 

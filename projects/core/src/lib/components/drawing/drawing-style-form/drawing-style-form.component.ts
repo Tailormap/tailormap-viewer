@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { ArrowTypeEnum, DrawingFeatureStyleModel, StrokeTypeEnum } from '../models/drawing-feature.model';
+import { ArrowTypeEnum, DrawingFeatureStyleModel, LabelStyleEnum, StrokeTypeEnum } from '../models/drawing-feature.model';
 import { DrawingFeatureTypeEnum } from '../models/drawing-feature-type.enum';
 import { DrawingHelper } from '../helpers/drawing.helper';
 import { MatSliderChange } from '@angular/material/slider';
@@ -55,9 +55,10 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
   private availableMarkers = DrawingHelper.getAvailableMarkers();
   public strokeTypeValues = DrawingHelper.strokeTypeValues;
   public arrowTypeValues = DrawingHelper.arrowTypeValues;
+  public labelStyleValues = { bold: LabelStyleEnum.BOLD, italic: LabelStyleEnum.ITALIC };
 
   private debounce: number | undefined;
-  private updatedProps: Map<keyof DrawingFeatureStyleModel, string | number | null | boolean> = new Map();
+  private updatedProps: Map<keyof DrawingFeatureStyleModel, string | number | null | boolean | LabelStyleEnum[]> = new Map();
   private destroyed = new Subject();
 
   constructor(
@@ -87,6 +88,10 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
 
   public showLabelSettings(): boolean {
     return !!this.type;
+  }
+
+  public isLabelType(): boolean {
+    return this.type === DrawingFeatureTypeEnum.LABEL;
   }
 
   public showInsertCoordinates() {
@@ -200,6 +205,28 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
     this.change('labelColor', $event);
   }
 
+  public changeLabelOutlineColor($event: string) {
+    this.change('labelOutlineColor', $event);
+  }
+
+  public toggleStyle(style: LabelStyleEnum) {
+    const labelStyle: LabelStyleEnum[] = this.style.labelStyle || [];
+    const idx = labelStyle.indexOf(style);
+    if (idx === -1) {
+      this.change('labelStyle', [ ...labelStyle, style ]);
+      return;
+    }
+    this.change('labelStyle', [ ...labelStyle.slice(0, idx), ...labelStyle.slice(idx + 1) ]);
+  }
+
+  public hasLabelStyle(style: LabelStyleEnum) {
+    return (this.style.labelStyle || []).indexOf(style) !== -1;
+  }
+
+  public changeLabelRotation($event: MatSliderChange) {
+    this.change('labelRotation', $event.value);
+  }
+
   public getMarkers() {
     return this.availableMarkers.map(m => m.icon);
   }
@@ -219,7 +246,7 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  private change(key: keyof DrawingFeatureStyleModel, value: string | number | null | boolean) {
+  private change(key: keyof DrawingFeatureStyleModel, value: string | number | null | boolean | LabelStyleEnum[]) {
     this.updatedProps.set(key, value);
     if (this.debounce) {
       window.clearTimeout(this.debounce);

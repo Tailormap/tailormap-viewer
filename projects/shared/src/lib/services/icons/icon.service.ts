@@ -25,6 +25,7 @@ export class IconService {
         'draw_point', 'draw_line', 'draw_polygon', 'draw_circle', 'draw_label', 'draw_ellipse', 'draw_rectangle', 'draw_square', 'draw_star',
       ],
     },
+    { folder: 'style', icons: [ 'bold', 'italic' ] },
   ];
 
   constructor(
