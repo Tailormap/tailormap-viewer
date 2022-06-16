@@ -1,4 +1,5 @@
 import { CoordinateReferenceSystemModel } from './coordinate-reference-system.model';
+import { LayerHiDpiMode } from './layer-hi-dpi-mode.enum';
 
 export interface AppLayerModel {
   id: number;
@@ -10,4 +11,6 @@ export interface AppLayerModel {
   minScale?: number;
   maxScale?: number;
   legendImageUrl?: string;
+  hiDpiMode?: LayerHiDpiMode;
+  hiDpiSubstituteLayer?: string;
 }
