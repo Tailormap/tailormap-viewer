@@ -1,0 +1,45 @@
+<div class="container" *ngIf="isVisible$ | async">
+  <tm-panel-resize (positionChanged)="sizeChanged($event)"></tm-panel-resize>
+
+  <div class="panel"
+       [ngStyle]="{ 'height.px': height }"
+       [class.panel--minimized]="minimized"
+       [class.panel--maximized]="maximized">
+
+    <mat-toolbar>
+      <span i18n>Attribute list</span>
+      <span class="spacer"></span>
+      <button mat-icon-button>
+        <mat-icon (click)="onMinimizeClick();" svgIcon="contextual_minimize"></mat-icon>
+      </button>
+      <button mat-icon-button class="maximize-btn">
+        <mat-icon (click)="onMaximizeClick();" svgIcon="contextual_chevron_top"></mat-icon>
+      </button>
+      <button mat-icon-button>
+        <mat-icon (click)="onCloseClick();" svgIcon="contextual_close"></mat-icon>
+      </button>
+    </mat-toolbar>
+
+    <span class="panel-content no-tabs" *ngIf="tabs.length === 0">
+      <ng-template #noLayersMsg>Geen geldige kaartlagen aanwezig.</ng-template>
+      <span *ngIf="hasLayersWithAttributes$ | async; else: noLayersMsg">
+        <mat-spinner color="primary" mode="indeterminate" diameter="20"></mat-spinner>
+      </span>
+    </span>
+
+    <mat-tab-group class="panel-content tab-group"
+                   *ngIf="tabs.length > 0"
+                   animationDuration="0ms"
+                   (selectedTabChange)="onSelectedTabChange($event);">
+      <mat-tab *ngFor="let tab of tabs; let index = index; trackBy: trackByTabId"
+               [label]="tab.label">
+        <ng-template mat-tab-label>
+          {{tab.label}}
+        </ng-template>
+        <ng-template matTabContent>
+          <tm-attribute-list-tab [id]="tab.id"></tm-attribute-list-tab>
+        </ng-template>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>

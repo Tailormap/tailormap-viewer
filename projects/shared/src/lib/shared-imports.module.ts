@@ -18,6 +18,9 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatTableModule } from '@angular/material/table';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 @NgModule({
   exports: [
@@ -41,6 +44,9 @@ import { MatSelectModule } from '@angular/material/select';
     MatSliderModule,
     MatDialogModule,
     MatSelectModule,
+    MatTabsModule,
+    MatTableModule,
+    MatToolbarModule,
   ],
 })
 export class SharedImportsModule { }
