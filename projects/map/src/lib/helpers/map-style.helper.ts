@@ -77,34 +77,71 @@ export class MapStyleHelper {
     }
     styles.push(...MapStyleHelper.createArrowStyles(styleConfig, feature, baseStyle.getStroke()));
     if (styleConfig.label) {
-      const symbolSize = MapStyleHelper.getNumberValue(styleConfig.pointSize, MapStyleHelper.DEFAULT_SYMBOL_SIZE);
-      const geom = feature?.getGeometry();
-      const label = MapStyleHelper.replaceSpecialValues(styleConfig.label, geom);
-      const labelSize = MapStyleHelper.getNumberValue(styleConfig.labelSize, MapStyleHelper.DEFAULT_SYMBOL_SIZE);
-      const scale = 1 + (labelSize / MapStyleHelper.DEFAULT_FONT_SIZE);
-      const offsetY = styleConfig.pointType === 'label'
-        ? 0
-        : 14 + (symbolSize - MapStyleHelper.DEFAULT_SYMBOL_SIZE) + (scale * 2);
-      styles.push(new Style({
-        text: new Text({
-          placement: GeometryTypeHelper.isLineGeometry(geom) ? 'line' : '',
-          text: label,
-          fill: new Fill({
-            color: styleConfig.labelColor || MapStyleHelper.DEFAULT_LABEL_COLOR,
-          }),
-          offsetY,
-          scale,
-        }),
-      }));
+      styles.push(...MapStyleHelper.createLabelStyle(styleConfig));
     }
-    if (styleConfig.isSelected && typeof feature !== 'undefined') {
-      const buffer = !!styleConfig.label ? 1.6 : 1.3;
-      styles.push(...MapStyleHelper.createOutlinedSelectionRectangle(feature, buffer * (resolution || 0)));
+    if (styleConfig.isSelected && (!styleConfig.pointType || (!!styleConfig.pointType && !styleConfig.label)) && typeof feature !== 'undefined') {
+      styles.push(...MapStyleHelper.createOutlinedSelectionRectangle(feature, 1.3 * (resolution || 0)));
     }
     return styles;
   }
 
-  private static replaceSpecialValues(label: string, geometry?: Geometry) {
+  private static createLabelStyle(styleConfig: MapStyleModel, feature?: Feature<Geometry>) {
+    const symbolSize = MapStyleHelper.getNumberValue(styleConfig.pointSize, MapStyleHelper.DEFAULT_SYMBOL_SIZE);
+    const geom = feature?.getGeometry();
+    const label = MapStyleHelper.replaceSpecialValues(styleConfig.label, geom);
+    const labelSize = MapStyleHelper.getNumberValue(styleConfig.labelSize, MapStyleHelper.DEFAULT_SYMBOL_SIZE);
+    const scale = 1 + (labelSize / MapStyleHelper.DEFAULT_FONT_SIZE);
+    const offsetY = styleConfig.pointType === 'label'
+      ? 0
+      : 14 + (symbolSize - MapStyleHelper.DEFAULT_SYMBOL_SIZE) + (scale * 2);
+
+    const italic = (styleConfig.labelStyle || []).includes('italic');
+    const bold = (styleConfig.labelStyle || []).includes('bold');
+    const font = [
+      italic ? 'italic' : undefined,
+      bold ? 'bold' : undefined,
+      '8px',
+      'Inter, sans-serif',
+    ].filter(Boolean).join(' ');
+
+    const showSelectionRectangle = styleConfig.isSelected && !!styleConfig.pointType;
+    const DEFAULT_SELECTION_PADDING = 10;
+    const paddingTop: number = styleConfig.pointType === 'label'
+      ? DEFAULT_SELECTION_PADDING
+      : (!!styleConfig.pointType ? offsetY + symbolSize + DEFAULT_SELECTION_PADDING : 0);
+
+    const baseLabelStyle = new Style({
+      zIndex: styleConfig.zIndex,
+      text: new Text({
+        placement: GeometryTypeHelper.isLineGeometry(geom) ? 'line' : '',
+        text: label,
+        font,
+        fill: new Fill({
+          color: styleConfig.labelColor || MapStyleHelper.DEFAULT_LABEL_COLOR,
+        }),
+        rotation: MapStyleHelper.getRotationForDegrees(styleConfig.labelRotation),
+        stroke: styleConfig.labelOutlineColor
+          ? new Stroke({ color: styleConfig.labelOutlineColor, width: 2 })
+          : undefined,
+        offsetY,
+        scale,
+        backgroundStroke: showSelectionRectangle ? MapStyleHelper.getSelectionStroke(false) : undefined,
+        padding: showSelectionRectangle
+          ? [ paddingTop, DEFAULT_SELECTION_PADDING, DEFAULT_SELECTION_PADDING, DEFAULT_SELECTION_PADDING ]
+          : undefined,
+      }),
+    });
+    if (showSelectionRectangle) {
+      const outerSelectionRectangle = baseLabelStyle.clone();
+      outerSelectionRectangle.setZIndex(styleConfig.zIndex - 1);
+      outerSelectionRectangle.getText().setBackgroundStroke(MapStyleHelper.getSelectionStroke(true));
+      return [ baseLabelStyle, outerSelectionRectangle ];
+    }
+    return [ baseLabelStyle ];
+  }
+
+  private static replaceSpecialValues(label?: string, geometry?: Geometry) {
+    label = label || '';
     if (label.indexOf('[COORDINATES]') !== -1) {
       const coordinatesLabel = GeometryTypeHelper.isPointGeometry(geometry) ? geometry.getCoordinates().join(' ') : '';
       label = label.replace(/\[COORDINATES]/g, coordinatesLabel);

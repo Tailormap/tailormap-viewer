@@ -86,7 +86,8 @@
     <div class="form-field">
       <label i18n>Label</label>
       <div class="form-field__columns">
-        <input matInput class="form-field" i18n-placeholder placeholder="Label" [formControl]="labelControl">
+        <input matInput *ngIf="!isLabelType()" i18n-placeholder placeholder="Label" [formControl]="labelControl">
+        <textarea matInput *ngIf="isLabelType()" i18n-placeholder placeholder="Label" [formControl]="labelControl"></textarea>
         <div class="icon-button-list">
           <button *ngIf="showInsertCoordinates()"
                   mat-stroked-button
@@ -113,6 +114,22 @@
       </div>
     </div>
 
+    <div class="form-field form-field__columns form-field__buttons">
+      <label i18n>Format</label>
+      <mat-button-toggle-group multiple="true">
+        <mat-button-toggle i18n
+                           (click)="toggleStyle(labelStyleValues.bold)"
+                           [checked]="hasLabelStyle(labelStyleValues.bold)">
+          <mat-icon svgIcon="style_bold"></mat-icon>
+        </mat-button-toggle>
+        <mat-button-toggle i18n
+                           (click)="toggleStyle(labelStyleValues.italic)"
+                           [checked]="hasLabelStyle(labelStyleValues.italic)">
+          <mat-icon svgIcon="style_italic"></mat-icon>
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+
     <div class="form-field form-field__columns">
       <label i18n>Size</label>
       <span>{{style.labelSize}}px</span>
@@ -131,6 +148,27 @@
       <label i18n>Color</label>
       <tm-color-picker [color]="style.labelColor"
                        (colorChange)="changeLabelColor($event)"></tm-color-picker>
+    </div>
+
+    <div class="form-field form-field__columns">
+      <label i18n>Halo</label>
+      <tm-color-picker [color]="style.labelOutlineColor"
+                       [allowEmptyColor]="true"
+                       (colorChange)="changeLabelOutlineColor($event)"></tm-color-picker>
+    </div>
+
+    <div class="form-field form-field__columns">
+      <label i18n>Rotation</label>
+      <span>{{style.labelRotation}}&deg;</span>
+    </div>
+
+    <div class="form-field form-field__slider">
+      <mat-slider [max]="360"
+                  [min]="0"
+                  [step]="1"
+                  [thumbLabel]="true"
+                  [value]="style.labelRotation"
+                  (change)="changeLabelRotation($event)"></mat-slider>
     </div>
 
   </div>

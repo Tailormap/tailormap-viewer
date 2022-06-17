@@ -17,6 +17,11 @@ export enum StrokeTypeEnum {
   DOT = 'dot',
 }
 
+export enum LabelStyleEnum {
+  ITALIC = 'ITALIC',
+  BOLD = 'BOLD',
+}
+
 export interface DrawingFeatureStyleModel {
   marker?: MakerType;
   markerSize?: number;
@@ -35,6 +40,9 @@ export interface DrawingFeatureStyleModel {
   label?: string;
   labelSize?: number;
   labelColor?: string;
+  labelStyle?: LabelStyleEnum[];
+  labelRotation?: number;
+  labelOutlineColor?: string;
 }
 
 export interface DrawingFeatureModelAttributes extends FeatureModelAttributes {

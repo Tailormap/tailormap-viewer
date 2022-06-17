@@ -31,10 +31,12 @@
   background-color: #fff;
 }
 
-.form-field textarea {
+.form-field textarea,
+.form-field textarea.mat-input-element {
   height: auto;
   line-height: 1.5em;
   padding: 10px;
+  resize: vertical;
 }
 
 .datepicker-input input {
@@ -167,6 +169,15 @@
   background-color: var(--primary-color-0_1);
 }
 
+.form-field .mat-button-toggle-button {
+  height: 36px;
+}
+
+.form-field .mat-button-toggle-button .mat-button-toggle-label-content {
+  padding: 0 8px;
+  line-height: 36px;
+}
+
 .form-field__columns {
   display: flex;
   align-items: center;
@@ -182,6 +193,10 @@
 .form-field__slider + .form-field__columns,
 .form-field__slider + .form-field {
   margin-top: 3px;
+}
+
+.form-field + .form-field__buttons {
+  margin: 10px 0;
 }
 
 .form-field__slider,

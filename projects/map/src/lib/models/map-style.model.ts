@@ -21,4 +21,7 @@ export interface MapStyleModel {
   label?: string;
   labelSize?: number;
   labelColor?: string;
+  labelStyle?: Array<'bold'|'italic'>;
+  labelRotation?: number;
+  labelOutlineColor?: string;
 }
