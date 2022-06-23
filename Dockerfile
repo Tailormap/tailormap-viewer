@@ -16,7 +16,7 @@ COPY . /app
 
 RUN npm run build-app -- --base-href=${BASE_HREF}
 
-FROM nginx:1.21.6-alpine
+FROM nginx:1.23.0-alpine
 
 COPY --from=builder /app/dist/app /usr/share/nginx/html
 
