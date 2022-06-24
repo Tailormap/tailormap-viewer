@@ -39,6 +39,7 @@ export const getAppLayerModel = (overrides?: Partial<AppLayerModel>): AppLayerMo
   id: 1,
   serviceId: 1,
   visible: true,
+  hasAttributes: false,
   crs: getCrsModel(overrides?.crs),
   title: 'Test',
   layerName: 'test',
