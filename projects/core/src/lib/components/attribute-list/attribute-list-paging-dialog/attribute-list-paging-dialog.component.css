@@ -1,0 +1,21 @@
+:host,
+.mat-elevation-z2 {
+  width: 100%;
+  height: 100%;
+  display: block;
+  box-sizing: border-box;
+}
+
+.mat-elevation-z2 {
+  background-color: #fff;
+  overflow: auto;
+  padding: 10px;
+}
+
+.form-field {
+  width: 130px;
+}
+
+input {
+  box-sizing: border-box;
+}

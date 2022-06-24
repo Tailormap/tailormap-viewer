@@ -64,6 +64,7 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
     __fid?: string;
     simplify?: boolean;
     filter?: string;
+    page?: number;
   }): Observable<FeaturesResponseModel> {
     const queryParams = this.getQueryParams({
       x: params.x,
@@ -73,6 +74,7 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
       __fid: params.__fid,
       simplify: params.simplify,
       filter: params.filter,
+      page: params.page,
     });
     return this.httpClient.get<FeaturesResponseModel>(
       `${TailormapApiV1Service.BASE_URL}/app/${params.applicationId}/layer/${params.layerId}/features`,

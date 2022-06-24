@@ -18,10 +18,6 @@
   max-height: 100vh;
 }
 
-.panel--maximized {
-  height: 100% !important;
-}
-
 .panel--minimized {
   height: auto !important;
 }

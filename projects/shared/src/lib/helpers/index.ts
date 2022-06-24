@@ -6,3 +6,4 @@ export * from './dynamic-components.helper';
 export * from './html.helper';
 export * from './style.helper';
 export * from './state.helper';
+export * from './types.helper';

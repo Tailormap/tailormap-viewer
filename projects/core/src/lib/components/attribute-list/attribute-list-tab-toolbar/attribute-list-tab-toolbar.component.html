@@ -1,0 +1,18 @@
+<mat-toolbar>
+
+  <div class="buttons">
+    <mat-spinner *ngIf="loadingData$ | async" color="primary" mode="indeterminate" diameter="20"></mat-spinner>
+  </div>
+
+  <div class="paging" *ngIf="data$ | async as data">
+    <mat-paginator [pageSize]="data.pageSize"
+                   [pageIndex]="data.pageIndex"
+                   [length]="data.totalCount || 0"
+                   [hidePageSize]="true"
+                   [showFirstLastButtons]="true"
+                   (click)="showJumpToPage($event)"
+                   (page)="onPageChange($event)">
+    </mat-paginator>
+  </div>
+
+</mat-toolbar>

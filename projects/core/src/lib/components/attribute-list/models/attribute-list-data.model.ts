@@ -8,7 +8,7 @@ export interface AttributeListDataModel {
   rows: AttributeListRowModel[];
   pageSize: number;
   pageIndex: number;
-  totalCount: number;
+  totalCount: number | null;
   sortedColumn?: string;
   sortDirection: 'ASC' | 'DESC';
 }

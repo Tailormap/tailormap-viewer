@@ -8,6 +8,7 @@ import { ToolbarModule } from './toolbar';
 import { LegendModule } from './legend';
 import { BackgroundLayerToggleModule } from './background-layer-toggle';
 import { DrawingModule } from './drawing/drawing.module';
+import { AttributeListModule } from './attribute-list/attribute-list.module';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { DrawingModule } from './drawing/drawing.module';
     LegendModule,
     BackgroundLayerToggleModule,
     DrawingModule,
+    AttributeListModule,
   ],
 })
 export class ComponentsModule {}

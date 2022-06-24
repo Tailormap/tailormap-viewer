@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { loadData } from '../state/attribute-list.actions';
+import { selectAttributeListTab } from '../state/attribute-list.selectors';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'tm-attribute-list-tab',
@@ -13,8 +15,8 @@ export class AttributeListTabComponent {
   @Input()
   public set id (id: string) {
     if (this._id !== id) {
-      this.id = id;
-      this.store$.dispatch(loadData({ tabId: id }));
+      this._id = id;
+      this.loadDataIfNeeded(id);
     }
   }
 
@@ -27,5 +29,16 @@ export class AttributeListTabComponent {
   constructor(
     private store$: Store,
   ) {}
+
+  private loadDataIfNeeded(id: string) {
+    this.store$.select(selectAttributeListTab(id))
+      .pipe(take(1))
+      .subscribe(tab => {
+        if (!tab || !tab.layerId || tab.initialDataLoaded) {
+          return;
+        }
+        this.store$.dispatch(loadData({ tabId: id }));
+      });
+  }
 
 }

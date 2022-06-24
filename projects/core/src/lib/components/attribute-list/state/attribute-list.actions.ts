@@ -46,12 +46,12 @@ export const setSelectedTab = createAction(
 
 export const updatePage = createAction(
   `${attributeListActionsPrefix} Update Page`,
-  props<{ tabId: string; dataId: string; page: number }>(),
+  props<{ dataId: string; page: number }>(),
 );
 
 export const updateSort = createAction(
   `${attributeListActionsPrefix} Update Sort`,
-  props<{ tabId: string; dataId: string; column: string; direction: 'asc' | 'desc' | '' }>(),
+  props<{ dataId: string; column: string; direction: 'asc' | 'desc' | '' }>(),
 );
 
 export const updateRowSelected = createAction(

@@ -81,6 +81,7 @@ const onLoadDataSuccess = (
         errorMessage: payload.data.errorMessage,
         totalCount: payload.data.totalCount,
         rows: payload.data.rows,
+        columns: data.columns.length > 0 ? data.columns : payload.data.columns,
       }),
     ),
   };
@@ -113,40 +114,52 @@ const onLoadDataFailed = (
 const onUpdatePage = (
   state: AttributeListState,
   payload: ReturnType<typeof AttributeListActions.updatePage>,
-): AttributeListState => ({
-  ...state,
-  tabs: AttributeListStateHelper.updateTab(
-    state.tabs,
-    payload.tabId,
-    (tab => ({ ...tab, loadingData: true })),
-  ),
-  data: AttributeListStateHelper.updateData(
-    state.data,
-    payload.dataId,
-    data => ({ ...data, pageIndex: payload.page }),
-  ),
-});
+): AttributeListState => {
+  const data = state.data.find(d => d.id === payload.dataId);
+  if (!data) {
+    return state;
+  }
+  return {
+    ...state,
+    tabs: AttributeListStateHelper.updateTab(
+      state.tabs,
+      data.tabId,
+      (tab => ({...tab, loadingData: true})),
+    ),
+    data: AttributeListStateHelper.updateData(
+      state.data,
+      payload.dataId,
+      d => ({...d, pageIndex: payload.page}),
+    ),
+  };
+};
 
 const onUpdateSort = (
   state: AttributeListState,
   payload: ReturnType<typeof AttributeListActions.updateSort>,
-): AttributeListState => ({
-  ...state,
-  tabs: AttributeListStateHelper.updateTab(
-    state.tabs,
-    payload.tabId,
-    (tab => ({ ...tab, loadingData: true })),
-  ),
-  data: AttributeListStateHelper.updateData(
-    state.data,
-    payload.dataId,
-    data => ({
-      ...data,
-      sortedColumn: payload.direction !== '' ? payload.column : '',
-      sortDirection: payload.direction === 'desc' ? 'DESC' : 'ASC',
-    }),
-  ),
-});
+): AttributeListState => {
+  const data = state.data.find(d => d.id === payload.dataId);
+  if (!data) {
+    return state;
+  }
+  return {
+    ...state,
+    tabs: AttributeListStateHelper.updateTab(
+      state.tabs,
+      data.tabId,
+      (tab => ({...tab, loadingData: true})),
+    ),
+    data: AttributeListStateHelper.updateData(
+      state.data,
+      payload.dataId,
+      d => ({
+        ...d,
+        sortedColumn: payload.direction !== '' ? payload.column : '',
+        sortDirection: payload.direction === 'desc' ? 'DESC' : 'ASC',
+      }),
+    ),
+  };
+};
 
 const onUpdateRowSelected = (
   state: AttributeListState,

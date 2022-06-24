@@ -1,8 +1,8 @@
-<div class="container" *ngIf="isVisible$ | async">
+<div class="container" role="tabpanel" *ngIf="isVisible$ | async">
   <tm-panel-resize (positionChanged)="sizeChanged($event)"></tm-panel-resize>
 
   <div class="panel"
-       [ngStyle]="{ 'height.px': height }"
+       [ngStyle]="{ 'height': getHeight() }"
        [class.panel--minimized]="minimized"
        [class.panel--maximized]="maximized">
 
@@ -10,18 +10,18 @@
       <span i18n>Attribute list</span>
       <span class="spacer"></span>
       <button mat-icon-button>
-        <mat-icon (click)="onMinimizeClick();" svgIcon="contextual_minimize"></mat-icon>
+        <mat-icon (click)="onMinimizeClick();" svgIcon="minimize"></mat-icon>
       </button>
       <button mat-icon-button class="maximize-btn">
-        <mat-icon (click)="onMaximizeClick();" svgIcon="contextual_chevron_top"></mat-icon>
+        <mat-icon (click)="onMaximizeClick();" svgIcon="chevron_top"></mat-icon>
       </button>
       <button mat-icon-button>
-        <mat-icon (click)="onCloseClick();" svgIcon="contextual_close"></mat-icon>
+        <mat-icon (click)="onCloseClick();" svgIcon="close"></mat-icon>
       </button>
     </mat-toolbar>
 
     <span class="panel-content no-tabs" *ngIf="tabs.length === 0">
-      <ng-template #noLayersMsg>Geen geldige kaartlagen aanwezig.</ng-template>
+      <ng-template #noLayersMsg><span i18n>No layers with administrative data found</span></ng-template>
       <span *ngIf="hasLayersWithAttributes$ | async; else: noLayersMsg">
         <mat-spinner color="primary" mode="indeterminate" diameter="20"></mat-spinner>
       </span>

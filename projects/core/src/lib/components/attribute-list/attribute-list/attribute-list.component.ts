@@ -25,7 +25,7 @@ export class AttributeListComponent implements OnInit {
   public tabs: AttributeListTabModel[] = [];
   private destroyed = new Subject();
 
-  public height = 0;
+  private height = 0;
   public minimized = false;
   public maximized = false;
   public selectedTab?: string;
@@ -92,6 +92,13 @@ export class AttributeListComponent implements OnInit {
     this.minimized = false;
     this.maximized = false;
     this.store$.dispatch(updateAttributeListHeight({ height: initialHeight - changedHeight }));
+  }
+
+  public getHeight() {
+    if (this.maximized) {
+      return '100vh';
+    }
+    return `${this.height}px`;
   }
 
 }

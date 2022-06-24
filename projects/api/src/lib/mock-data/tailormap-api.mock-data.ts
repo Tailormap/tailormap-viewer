@@ -98,6 +98,9 @@ export const getColumnMetadataModel = (overrides?: Partial<ColumnMetadataModel>)
 export const getFeaturesResponseModel = (overrides?: Partial<FeaturesResponseModel>): FeaturesResponseModel => ({
   features: ['1', '2', '3', '4', '5'].map(id => getFeatureModel({ __fid: id })),
   columnMetadata: [ getColumnMetadataModel(), getColumnMetadataModel({ key: 'prop2', alias: 'Property 2' }) ],
+  page: null,
+  pageSize: null,
+  total: 5,
   ...overrides,
 });
 

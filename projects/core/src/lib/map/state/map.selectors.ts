@@ -155,3 +155,12 @@ export const selectSelectedNode = createSelector(
     const layerTreeNode = treeNodes.find(node => !!node.appLayerId && node.appLayerId === selectedLayerId);
     return layerTreeNode ? layerTreeNode.id : '';
   });
+
+export const selectVisibleLayersWithAttributes = createSelector(
+  selectVisibleLayers,
+  selectOrderedVisibleBackgroundLayers,
+  (layers, backgroundLayers) => {
+    const backgroundLayerIds = new Set(backgroundLayers.map(l => l.layer.id));
+    return layers.filter(l => !backgroundLayerIds.has(l.id));
+  },
+);
