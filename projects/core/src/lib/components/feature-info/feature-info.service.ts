@@ -14,7 +14,11 @@ export class FeatureInfoService {
 
   private static LOAD_FEATURE_INFO_ERROR = $localize `Could not load feature info`;
 
-  private static DEFAULT_DISTANCE = 10;
+  /**
+   * default buffer distance for feature info requests in native CRS units, eg. m for EPSG:28992 or EPSG:3857.
+   * For EPSG:4326 0.00004 would be a good value.
+   */
+  private static DEFAULT_DISTANCE = 4;
 
   constructor(
     private store$: Store,
