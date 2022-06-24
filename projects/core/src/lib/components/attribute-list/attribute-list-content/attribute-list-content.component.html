@@ -1,9 +1,5 @@
 <div class="table-container">
 
-  <div *ngIf="(hasNoRows$ | async) && (loadingData$ | async)">
-    <mat-spinner diameter="20" mode="indeterminate" color="primary"></mat-spinner>
-  </div>
-
   <div *ngIf="(hasNoRows$ | async) && (notLoadingData$ | async)" i18n>
     No rows found
   </div>

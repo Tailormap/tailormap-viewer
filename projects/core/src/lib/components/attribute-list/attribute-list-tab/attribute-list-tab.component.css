@@ -5,7 +5,7 @@
   flex-flow: column nowrap;
 }
 
-.attribute-list-content {
+tm-attribute-list-content {
   display: block;
   flex: 1;
   overflow: hidden;

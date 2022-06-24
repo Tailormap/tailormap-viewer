@@ -23,7 +23,6 @@ export class AttributeListContentComponent implements OnInit {
 
   public rows$: Observable<AttributeListRowModel[]> = of([]);
   public columns$: Observable<AttributeListColumnModel[]> = of([]);
-  public loadingData$: Observable<boolean> = of(true);
   public notLoadingData$: Observable<boolean> = of(false);
   public sort$: Observable<{ column: string; direction: string } | null> = of(null);
   public hasRows$: Observable<boolean> = of(false);
@@ -40,8 +39,7 @@ export class AttributeListContentComponent implements OnInit {
     this.hasRows$ = this.store$.select(selectRowCountForSelectedTab).pipe(map(rowCount => rowCount > 0));
     this.hasNoRows$ = this.hasRows$.pipe(map(hasRows => !hasRows));
     this.columns$ = this.store$.select(selectColumnsForSelectedTab);
-    this.loadingData$ = this.store$.select(selectLoadingDataSelectedTab);
-    this.notLoadingData$ = this.loadingData$.pipe(map(loading => !loading));
+    this.notLoadingData$ = this.store$.select(selectLoadingDataSelectedTab).pipe(map(loading => !loading));
   }
 
   public onSelectRow(row: { id: string; selected: boolean }): void {

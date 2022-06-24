@@ -21,7 +21,8 @@ describe('AttributeListContent', () => {
         }),
       ],
     });
-    expect(await screen.findByRole('progressbar')).toBeInTheDocument();
+    // If we are still loading we show nothing, we only show no rows found when loading is done
+    expect(await screen.queryByText('No rows found')).not.toBeInTheDocument();
   });
 
   it('renders content, not loading, no rows', async () => {
