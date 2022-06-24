@@ -156,7 +156,7 @@ jdbc	2	PostGIS geodata	980f1c8A-25933b2	{"database":"geodata","port":"5432","dbt
 jdbc	3	Oracle geodata	980f1c8A-25933b2	{"database":"/XEPDB1","port":"1521","dbtype":"oracle","host":"oracle"}	geodata	GEODATA	\N
 jdbc	5	PostGIS geodata/osm	980f1c8A-25933b2	{"database":"geodata","port":"5432","dbtype":"postgis","host":"postgis"}	geodata	osm	\N
 wfs	6	GeoServer Web Feature Service	\N	https://snapshot.tailormap.nl/geoserver/wfs?	\N	\N	6
-wfs	1	Bestuurlijke Gebieden	\N	https://service.pdok.nl/kadaster/bestuurlijkegebieden/wfs/v1_0?request=GetCapabilities&service=WFS	\N	\N	\N
+wfs	1	Bestuurlijke Gebieden	\N	https://service.pdok.nl/kadaster/bestuurlijkegebieden/wfs/v1_0?request=GetCapabilities&service=WFS&version=2.0.0	\N	\N	\N
 \.
 
 

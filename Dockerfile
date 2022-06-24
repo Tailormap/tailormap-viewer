@@ -1,5 +1,5 @@
 # Note when updating this version also update the version in the workflow files
-FROM node:16.15.0 AS builder
+FROM node:16.15.1 AS builder
 
 ARG BASE_HREF=/
 
@@ -16,7 +16,7 @@ COPY . /app
 
 RUN npm run build-app -- --base-href=${BASE_HREF}
 
-FROM nginx:1.21.6-alpine
+FROM nginx:1.23.0-alpine
 
 COPY --from=builder /app/dist/app /usr/share/nginx/html
 

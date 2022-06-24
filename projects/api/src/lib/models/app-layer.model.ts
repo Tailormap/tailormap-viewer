@@ -6,6 +6,7 @@ export interface AppLayerModel {
   title: string;
   serviceId: number;
   visible: boolean;
+  hasAttributes: boolean;
   crs?: CoordinateReferenceSystemModel;
   minScale?: number;
   maxScale?: number;
