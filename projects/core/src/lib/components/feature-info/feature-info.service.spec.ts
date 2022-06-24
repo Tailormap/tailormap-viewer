@@ -4,12 +4,12 @@ import { CoreState, initialCoreState } from '../../state/core.state';
 import { getAppLayerModel, getFeaturesResponseModel, TAILORMAP_API_V1_SERVICE } from '@tailormap-viewer/api';
 import { of } from 'rxjs';
 import { selectApplicationId} from '../../state/core.selectors';
-import { selectVisibleLayers } from '../../map/state/map.selectors';
+import { selectIdentifyableLayers } from '../../map/state/map.selectors';
 import { TestBed } from '@angular/core/testing';
 
 describe('FeatureInfoService', () => {
 
-  const appLayer = getAppLayerModel({ visible: true });
+  const appLayer = getAppLayerModel({ visible: true, hasAttributes: true });
   const initialState: CoreState = { ...initialCoreState };
   const response = getFeaturesResponseModel();
   const getFeatures$ = () => of(response);
@@ -30,7 +30,7 @@ describe('FeatureInfoService', () => {
   });
 
   test('should get features', done => {
-    store.overrideSelector(selectVisibleLayers, [appLayer]);
+    store.overrideSelector(selectIdentifyableLayers, [appLayer]);
     store.overrideSelector(selectApplicationId, 1);
     expect(service).toBeTruthy();
     service.getFeatures$([1, 2])
@@ -44,18 +44,18 @@ describe('FeatureInfoService', () => {
   });
 
   test('returns empty array when there are no visible layers', done => {
-    store.overrideSelector(selectVisibleLayers, []);
+    store.overrideSelector(selectIdentifyableLayers, []);
     store.overrideSelector(selectApplicationId, 1);
     expect(service).toBeTruthy();
     service.getFeatures$([1, 2])
       .subscribe(featureInfo => {
-        expect(featureInfo.length).toEqual(0);
+        expect(featureInfo.length).toBe(0);
         done();
       });
   });
 
-  test('returns empty array when there are no application id', done => {
-    store.overrideSelector(selectVisibleLayers, []);
+  test('returns empty array when there is no application id', done => {
+    store.overrideSelector(selectIdentifyableLayers, []);
     store.overrideSelector(selectApplicationId, 0);
     expect(service).toBeTruthy();
     service.getFeatures$([1, 2])
