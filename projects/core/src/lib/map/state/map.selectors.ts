@@ -158,9 +158,7 @@ export const selectSelectedNode = createSelector(
 
 export const selectVisibleLayersWithAttributes = createSelector(
   selectVisibleLayers,
-  selectOrderedVisibleBackgroundLayers,
-  (layers, backgroundLayers) => {
-    const backgroundLayerIds = new Set(backgroundLayers.map(l => l.layer.id));
-    return layers.filter(l => !backgroundLayerIds.has(l.id));
+  (layers) => {
+    return layers.filter(l => l.hasAttributes);
   },
 );

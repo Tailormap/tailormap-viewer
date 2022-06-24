@@ -13,14 +13,14 @@ import { take } from 'rxjs';
 export class AttributeListTabComponent {
 
   @Input()
-  public set id (id: string) {
-    if (this._id !== id) {
+  public set id (id: string | undefined) {
+    if (id && this._id !== id) {
       this._id = id;
       this.loadDataIfNeeded(id);
     }
   }
 
-  public get id() {
+  public get id(): string {
     return this._id;
   }
 

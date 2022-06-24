@@ -113,3 +113,46 @@ export const getLoadedStoreWithRows = (overrides?: Partial<AttributeListState>) 
     ...overrides,
   });
 };
+
+export const getLoadedStoreWithMultipleTabs = (overrides?: Partial<AttributeListState>) => {
+  return getStore({
+    selectedTabId: '1',
+    tabs: [
+      createDummyAttributeListTab({ loadingData: false, initialDataLoaded: true }),
+      createDummyAttributeListTab({ id: '2', layerId: 2, selectedDataId: '2', label: 'Tab 2', loadingData: false, initialDataLoaded: true }),
+    ],
+    data: [
+      createDummyAttributeListData({
+        id: '1',
+        tabId: '1',
+        rows: createDummyRows(10),
+        columns: [{
+          id: 'attribute1', label: 'Attribute 1', visible: true, type: FeatureAttributeTypeEnum.STRING,
+        }, {
+          id: 'attribute2', label: 'Attribute 2', visible: true, type: FeatureAttributeTypeEnum.STRING,
+        }, {
+          id: 'attribute3', label: 'Attribute 3', visible: true, type: FeatureAttributeTypeEnum.STRING,
+        }],
+      }),
+      createDummyAttributeListData({
+        id: '2',
+        tabId: '2',
+        rows: createDummyRows(10, idx => ({
+          attributes: {
+            attribute1: (idx + 1) + ': The Netherlands',
+            attribute2: (idx + 1) + ': Utrecht',
+            attribute3: (idx + 1) + ': Zonnebaan',
+          },
+        })),
+        columns: [{
+          id: 'attribute1', label: 'Country', visible: true, type: FeatureAttributeTypeEnum.STRING,
+        }, {
+          id: 'attribute2', label: 'City', visible: true, type: FeatureAttributeTypeEnum.STRING,
+        }, {
+          id: 'attribute3', label: 'Street', visible: true, type: FeatureAttributeTypeEnum.STRING,
+        }],
+      }),
+    ],
+    ...overrides,
+  });
+};

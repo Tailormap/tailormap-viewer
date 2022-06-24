@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as AttributeListActions from './attribute-list.actions';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { concatMap, map, mergeMap } from 'rxjs';
+import { map, mergeMap } from 'rxjs';
 import { AttributeListDataService } from '../services/attribute-list-data.service';
 import { Store } from '@ngrx/store';
 
