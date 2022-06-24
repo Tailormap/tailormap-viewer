@@ -38,6 +38,7 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
       appLayers: [{
         id: 1,
         visible: true,
+        hasAttributes: false,
         serviceId: 1,
         layerName: 'osm-nb-hq',
         title: 'osm-nb-hq',
@@ -49,6 +50,7 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
       },{
         id: 2,
         visible: true,
+        hasAttributes: true,
         serviceId: 2,
         layerName: 'gemeentegebied',
         title: 'Gemeentegebied',
@@ -60,6 +62,7 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
       },{
         id: 3,
         visible: true,
+        hasAttributes: true,
         serviceId: 2,
         layerName: 'Provinciegebied',
         title: 'provinciegebied',
