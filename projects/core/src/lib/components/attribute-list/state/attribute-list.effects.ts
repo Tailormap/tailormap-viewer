@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import * as AttributeListActions from './attribute-list.actions';
-import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { map, mergeMap } from 'rxjs';
+import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects';
+import { filter, map, mergeMap, of } from 'rxjs';
 import { AttributeListDataService } from '../services/attribute-list-data.service';
 import { Store } from '@ngrx/store';
+import { selectAttributeListDataForId } from './attribute-list.selectors';
+import { TypesHelper } from '@tailormap-viewer/shared';
 
 @Injectable()
 export class AttributeListEffects {
@@ -11,20 +13,31 @@ export class AttributeListEffects {
   public loadDataForTab$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(AttributeListActions.loadData),
-      mergeMap(action => {
-        console.log('Lets load some data');
-        return this.attributeListDataService.loadDataForTab$(action.tabId).pipe(
-          map(result => {
-            console.log('The result is in', result);
-            if (!result.success) {
-              return AttributeListActions.loadDataFailed({ tabId: action.tabId, data: result });
-            }
-            return AttributeListActions.loadDataSuccess({ tabId: action.tabId, data: result });
-          }),
-        );
-      }),
+      filter(action => !!action.tabId),
+      mergeMap(action => this.loadDataForTabId$(action.tabId)),
     );
   });
+
+  public loadDataAfterPageChange$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(AttributeListActions.updatePage),
+      concatLatestFrom(action => this.store$.select(selectAttributeListDataForId(action.dataId))),
+      map(([ _action, data ]) => data),
+      filter(TypesHelper.isDefined),
+      mergeMap(data => this.loadDataForTabId$(data.tabId)),
+    );
+  });
+
+  private loadDataForTabId$(tabId: string) {
+    return this.attributeListDataService.loadDataForTab$(tabId).pipe(
+      map(result => {
+        if (!result.success) {
+          return AttributeListActions.loadDataFailed({ tabId, data: result });
+        }
+        return AttributeListActions.loadDataSuccess({ tabId, data: result });
+      }),
+    );
+  }
 
   constructor(
     private actions$: Actions,

@@ -4,6 +4,7 @@ import { AttributeListRowModel } from '../models/attribute-list-row.model';
 import { AttributeListDataModel } from '../models/attribute-list-data.model';
 import { AttributeListColumnModel } from '../models/attribute-list-column.model';
 import { AttributeListTabModel } from '../models/attribute-list-tab.model';
+import { AttributeListPagingDataType } from '../models/attribute-list-paging-data.type';
 
 const selectAttributeListState = createFeatureSelector<AttributeListState>(attributeListStateKey);
 
@@ -21,6 +22,11 @@ export const selectAttributeListTab = (tabId: string) => createSelector(
 export const selectAttributeListTabData = (tabId: string) => createSelector(
   selectAttributeListData,
   data => data.filter(t => t.tabId === tabId),
+);
+
+export const selectAttributeListDataForId = (dataId: string) => createSelector(
+  selectAttributeListData,
+  data => data.find(t => t.id === dataId),
 );
 
 export const selectSelectedTab = createSelector(
@@ -84,7 +90,7 @@ export const selectSortForSelectedTab = createSelector(
 
 export const selectPagingDataSelectedTab = createSelector(
   selectDataForSelectedTab,
-  (data: AttributeListDataModel | null): { id: string; totalCount: number | null; pageIndex: number; pageSize: number } => {
+  (data: AttributeListDataModel | null): AttributeListPagingDataType => {
     if (!data) {
       return { id: '', totalCount: 0, pageIndex: 0, pageSize: 0 };
     }

@@ -75,6 +75,9 @@
 }
 
 .tab-group {
-  flex: 1;
   overflow: hidden;
+}
+
+tm-attribute-list-tab {
+  flex: 1;
 }

@@ -3,14 +3,12 @@ import { AttributeListColumnModel } from '../models/attribute-list-column.model'
 import { Store } from '@ngrx/store';
 import { PopoverService, OverlayRef, PopoverPositionEnum } from '@tailormap-viewer/shared';
 import { Observable, of } from 'rxjs';
-import {
-  selectDataForSelectedTab, selectLoadingDataSelectedTab,
-} from '../state/attribute-list.selectors';
-import { AttributeListDataModel } from '../models/attribute-list-data.model';
+import { selectLoadingDataSelectedTab, selectPagingDataSelectedTab } from '../state/attribute-list.selectors';
 import { PageEvent } from '@angular/material/paginator';
 import { updatePage } from '../state/attribute-list.actions';
 import { AttributeListStateService } from '../services/attribute-list-state.service';
 import { AttributeListPagingDialogComponent } from '../attribute-list-paging-dialog/attribute-list-paging-dialog.component';
+import { AttributeListPagingDataType } from '../models/attribute-list-paging-data.type';
 
 @Component({
   selector: 'tm-attribute-list-tab-toolbar',
@@ -24,7 +22,7 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
 
   private pagingPopover: OverlayRef | null = null;
   public loadingData$: Observable<boolean> = of(false);
-  public data$: Observable<AttributeListDataModel | null> = of(null);
+  public pagingData$: Observable<AttributeListPagingDataType | null> = of(null);
 
   constructor(
     private store$: Store,
@@ -35,7 +33,7 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.loadingData$ = this.store$.select(selectLoadingDataSelectedTab);
-    this.data$ = this.store$.select(selectDataForSelectedTab);
+    this.pagingData$ = this.store$.select(selectPagingDataSelectedTab);
   }
 
   public ngOnDestroy() {
@@ -46,7 +44,7 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
 
   public onPageChange($event: PageEvent): void {
     this.attributeListStateService.executeActionForCurrentData(dataId => {
-      this.store$.dispatch(updatePage({dataId, page: $event.pageIndex}));
+      this.store$.dispatch(updatePage({ dataId, page: $event.pageIndex + 1 }));
     });
   }
 
