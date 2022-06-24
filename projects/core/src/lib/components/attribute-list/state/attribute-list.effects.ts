@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as AttributeListActions from './attribute-list.actions';
 import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects';
-import { filter, map, mergeMap, of } from 'rxjs';
+import { filter, map, mergeMap } from 'rxjs';
 import { AttributeListDataService } from '../services/attribute-list-data.service';
 import { Store } from '@ngrx/store';
 import { selectAttributeListDataForId } from './attribute-list.selectors';
