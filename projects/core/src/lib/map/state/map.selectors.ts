@@ -63,7 +63,7 @@ export const selectVisibleLayers = createSelector(
   layers => layers.filter(l => l.visible),
 );
 
-export const selectIdentifyableLayers = createSelector(
+export const selectVisibleLayersWithAttributes = createSelector(
   selectVisibleLayers,
   layers => layers.filter(l => l.hasAttributes),
 );
@@ -160,10 +160,3 @@ export const selectSelectedNode = createSelector(
     const layerTreeNode = treeNodes.find(node => !!node.appLayerId && node.appLayerId === selectedLayerId);
     return layerTreeNode ? layerTreeNode.id : '';
   });
-
-export const selectVisibleLayersWithAttributes = createSelector(
-  selectVisibleLayers,
-  (layers) => {
-    return layers.filter(l => l.hasAttributes);
-  },
-);

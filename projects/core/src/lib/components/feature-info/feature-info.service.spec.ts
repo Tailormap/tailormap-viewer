@@ -4,7 +4,7 @@ import { CoreState, initialCoreState } from '../../state/core.state';
 import { getAppLayerModel, getFeaturesResponseModel, TAILORMAP_API_V1_SERVICE } from '@tailormap-viewer/api';
 import { of } from 'rxjs';
 import { selectApplicationId} from '../../state/core.selectors';
-import { selectIdentifyableLayers } from '../../map/state/map.selectors';
+import { selectVisibleLayersWithAttributes } from '../../map/state/map.selectors';
 import { TestBed } from '@angular/core/testing';
 
 describe('FeatureInfoService', () => {
@@ -30,7 +30,7 @@ describe('FeatureInfoService', () => {
   });
 
   test('should get features', done => {
-    store.overrideSelector(selectIdentifyableLayers, [appLayer]);
+    store.overrideSelector(selectVisibleLayersWithAttributes, [appLayer]);
     store.overrideSelector(selectApplicationId, 1);
     expect(service).toBeTruthy();
     service.getFeatures$([1, 2])
@@ -44,7 +44,7 @@ describe('FeatureInfoService', () => {
   });
 
   test('returns empty array when there are no visible layers', done => {
-    store.overrideSelector(selectIdentifyableLayers, []);
+    store.overrideSelector(selectVisibleLayersWithAttributes, []);
     store.overrideSelector(selectApplicationId, 1);
     expect(service).toBeTruthy();
     service.getFeatures$([1, 2])
@@ -55,7 +55,7 @@ describe('FeatureInfoService', () => {
   });
 
   test('returns empty array when there is no application id', done => {
-    store.overrideSelector(selectIdentifyableLayers, []);
+    store.overrideSelector(selectVisibleLayersWithAttributes, []);
     store.overrideSelector(selectApplicationId, 0);
     expect(service).toBeTruthy();
     service.getFeatures$([1, 2])

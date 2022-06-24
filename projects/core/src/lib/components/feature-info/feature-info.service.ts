@@ -5,7 +5,7 @@ import { selectApplicationId} from '../../state/core.selectors';
 import { catchError, combineLatest, concatMap, forkJoin, map, Observable, of, take } from 'rxjs';
 import { FeatureInfoResponseModel } from './models/feature-info-response.model';
 import { $localize } from '@angular/localize/init';
-import { selectIdentifyableLayers } from '../../map/state/map.selectors';
+import { selectVisibleLayersWithAttributes } from '../../map/state/map.selectors';
 
 @Injectable({
   providedIn: 'root',
@@ -24,7 +24,7 @@ export class FeatureInfoService {
 
   public getFeatures$(coordinates: [ number, number ]): Observable<FeatureInfoResponseModel[]> {
     return combineLatest([
-      this.store$.select(selectIdentifyableLayers),
+      this.store$.select(selectVisibleLayersWithAttributes),
       this.store$.select(selectApplicationId),
     ])
       .pipe(
