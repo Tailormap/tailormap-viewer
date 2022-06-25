@@ -249,7 +249,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     layerGroup: LayerGroup,
     layerMap: Map<string, BaseLayer>,
   ) {
-    const layer = layerMap.get(layerId);
+    const layer = layerMap.get(layerId) || this.vectorLayers.get(layerId);
     if (!layer) {
       return;
     }
