@@ -9,6 +9,7 @@ import { SplitButtonComponent } from './split-button/split-button.component';
 import { ColorPickerComponent } from './color-picker/color-picker.component';
 import { IconPickerComponent } from './icon-picker/icon-picker.component';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import { PanelResizerComponent } from './panel-resizer';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
     ColorPickerComponent,
     IconPickerComponent,
     ConfirmDialogComponent,
+    PanelResizerComponent,
   ],
   imports: [
     SharedImportsModule,
@@ -33,6 +35,7 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
     SplitButtonComponent,
     ColorPickerComponent,
     IconPickerComponent,
+    PanelResizerComponent,
   ],
 })
 export class SharedComponentsModule {

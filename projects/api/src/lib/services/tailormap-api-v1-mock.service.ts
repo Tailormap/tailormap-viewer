@@ -182,6 +182,7 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
     __fid?: string;
     simplify?: boolean;
     filter?: string;
+    page?: number;
   }): Observable<FeaturesResponseModel> {
     return of({
       features: [
@@ -200,6 +201,9 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
         { key: 'year', alias: 'Bouwjaar', type: FeatureAttributeTypeEnum.INTEGER },
         { key: 'status', alias: 'Status', type: FeatureAttributeTypeEnum.STRING },
       ],
+      total: 8,
+      page: null,
+      pageSize: null,
     }).pipe(delay(3000));
   }
 

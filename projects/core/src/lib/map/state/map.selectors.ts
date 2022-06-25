@@ -63,7 +63,7 @@ export const selectVisibleLayers = createSelector(
   layers => layers.filter(l => l.visible),
 );
 
-export const selectIdentifyableLayers = createSelector(
+export const selectVisibleLayersWithAttributes = createSelector(
   selectVisibleLayers,
   layers => layers.filter(l => l.hasAttributes),
 );

@@ -30,6 +30,7 @@ export interface TailormapApiV1ServiceModel {
     __fid?: string;
     simplify?: boolean;
     filter?: string;
+    page?: number;
   }): Observable<FeaturesResponseModel>;
 
 }

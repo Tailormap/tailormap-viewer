@@ -1,0 +1,33 @@
+<mat-table [dataSource]="rows"
+           [trackBy]="trackByRowId"
+           multiTemplateDataRows>
+
+  <!-- Columns with data -->
+  <ng-container *ngFor="let col of columns; trackBy: trackByColumnId" matColumnDef="{{col.label || col.id}}">
+    <!-- Header -->
+    <mat-header-cell *matHeaderCellDef
+                     class="header-cell--with-resizer"
+                     [style.flexBasis]="getColumnWidth(col)">
+      <span [title]="col.label">{{col.label}}</span>
+      <tm-panel-resize class="resizer"
+                       (mousedown)="stopEvent($event)"
+                       (positionChanged)="columnWidthChanged($event, col)"
+                       orientation="horizontal"></tm-panel-resize>
+    </mat-header-cell>
+
+    <mat-cell *matCellDef="let currRow" [style.flexBasis]="getColumnWidth(col)">
+      <div class="cell-content"
+           [title]="currRow.attributes[col.id]">{{currRow.attributes[col.id]}}</div>
+    </mat-cell>
+
+  </ng-container>
+
+  <!-- Columns with related details data -->
+  <mat-header-row *matHeaderRowDef="columnNames; sticky: true;"></mat-header-row>
+
+  <mat-row *matRowDef="let row; let dataIndex = dataIndex; columns: columnNames;"
+           (click)="onRowClick($event, row);"
+           [class.even_row]="dataIndex % 2 === 1"
+           [class.selected_row]="row.selected"></mat-row>
+
+</mat-table>

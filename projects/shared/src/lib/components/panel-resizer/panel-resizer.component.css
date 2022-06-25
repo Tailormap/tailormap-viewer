@@ -1,0 +1,55 @@
+.resize-panel {
+  --translate-pos: 0;
+
+  width: 100%;
+  height: 20px;
+  position: absolute;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.resize-panel--horizontal {
+  width: 20px;
+  height: 100%;
+  top: 0;
+}
+
+.resize-handle {
+  width: 20px;
+  height: 20px;
+  cursor: ns-resize;
+}
+
+.resize-panel--horizontal .resize-handle {
+  cursor: ew-resize;
+  transform: rotate(90deg);
+}
+
+mat-icon {
+  display: block;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+}
+
+.resize-indicator {
+  position: absolute;
+  display: none;
+  background-color: #6236ff;
+  height: 5px;
+  width: 100%;
+  transform: translateY(var(--translate-pos));
+}
+
+.resize-panel--horizontal .resize-indicator {
+  width: 5px;
+  height: 100%;
+  transform: translateX(var(--translate-pos));
+}
+
+.resize-panel--resizing .resize-indicator {
+  display: block;
+}
