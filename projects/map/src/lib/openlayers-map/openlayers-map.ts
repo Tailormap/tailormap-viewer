@@ -13,6 +13,9 @@ import { Size } from 'ol/size';
 import { ToolManagerModel } from '../models/tool-manager.model';
 import { OpenLayersToolManager } from './open-layers-tool-manager';
 import { OpenLayersEventManager } from './open-layers-event-manager';
+import Feature from 'ol/Feature';
+import Geometry from 'ol/geom/Geometry';
+import { containsExtent, getCenter } from 'ol/extent';
 
 export class OpenLayersMap implements MapViewerModel {
 
@@ -128,6 +131,40 @@ export class OpenLayersMap implements MapViewerModel {
     this.executeMapAction(olMap => {
       if (this.initialExtent && this.initialExtent.length > 0) {
         olMap.getView().fit(this.initialExtent);
+      }
+    });
+  }
+
+  public zoomToFeature(olFeature: Feature<Geometry>) {
+    const geom = olFeature.getGeometry();
+    if (geom) {
+      const geomExtent = geom.getExtent();
+      this.getVisibleExtent$()
+        .pipe(take(1))
+        .subscribe(mapExtent => {
+          if (containsExtent(mapExtent, geomExtent)) {
+            return;
+          }
+          const center = getCenter(geomExtent);
+          this.zoomTo(center[0], center[1]);
+        });
+    }
+  }
+
+  public zoomTo(x: number, y: number, zoomLevel?: number, animationDuration = 1000, ignoreWhileAnimating = false) {
+    this.executeMapAction(olMap => {
+      if (olMap.getView().getAnimating() && ignoreWhileAnimating) {
+        return;
+      }
+      zoomLevel = !(zoomLevel) || zoomLevel < 0 ? olMap.getView().getZoom() : zoomLevel;
+      if (typeof zoomLevel === 'undefined') {
+        return;
+      }
+      if (animationDuration === 0) {
+        olMap.getView().setCenter([x, y]);
+        olMap.getView().setZoom(zoomLevel);
+      } else {
+        olMap.getView().animate({ duration: animationDuration, zoom: zoomLevel, center: [x, y] });
       }
     });
   }

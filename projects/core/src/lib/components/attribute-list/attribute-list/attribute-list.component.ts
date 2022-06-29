@@ -3,6 +3,7 @@ import { Store } from '@ngrx/store';
 import { AttributeListState } from '../state/attribute-list.state';
 import {
   selectAttributeListHeight, selectAttributeListSelectedTab, selectAttributeListTabs, selectAttributeListVisible,
+  selectCurrentlySelectedFeatureGeometry,
 } from '../state/attribute-list.selectors';
 import { map, Observable, Subject } from 'rxjs';
 import {  takeUntil } from 'rxjs/operators';
@@ -12,6 +13,8 @@ import { AttributeListTabModel } from '../models/attribute-list-tab.model';
 import { MenubarService } from '../../menubar';
 import { AttributeListMenuButtonComponent } from '../attribute-list-menu-button/attribute-list-menu-button.component';
 import { selectVisibleLayers } from '../../../map/state/map.selectors';
+import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.helper';
+import { MapService } from '@tailormap-viewer/map';
 
 @Component({
   selector: 'tm-attribute-list',
@@ -34,6 +37,7 @@ export class AttributeListComponent implements OnInit {
   constructor(
     private store$: Store<AttributeListState>,
     private menubarService: MenubarService,
+    private mapService: MapService,
   ) {
     this.isVisible$ = this.store$.select(selectAttributeListVisible);
     this.store$.select(selectAttributeListTabs)
@@ -53,6 +57,16 @@ export class AttributeListComponent implements OnInit {
 
   public ngOnInit() {
     this.menubarService.registerComponent(AttributeListMenuButtonComponent);
+
+    this.mapService.renderFeatures$(
+      'attribute-list-highlight-layer',
+      this.store$.select(selectCurrentlySelectedFeatureGeometry),
+      {
+        ...FeatureStylingHelper.DEFAULT_HIGHLIGHT_STYLE,
+        styleKey: 'attribute-list-highlight-style',
+      })
+      .pipe(takeUntil(this.destroyed))
+      .subscribe();
   }
 
   public onMaximizeClick(): void {
