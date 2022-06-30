@@ -95,7 +95,14 @@ export const selectOrderedVisibleLayers = createSelector(
   (layers, orderedLayerIds) => {
     return layers
       .filter(l => orderedLayerIds.includes(l.id))
-      .sort(l => orderedLayerIds.findIndex(id => l.id === id));
+      .sort((l1, l2) => {
+        const idx1 = orderedLayerIds.findIndex(id => l1.id === id);
+        const idx2 = orderedLayerIds.findIndex(id => l2.id === id);
+        if (idx1 === idx2) {
+          return 0;
+        }
+        return idx1 > idx2 ? 1 : -1;
+      });
   },
 );
 
