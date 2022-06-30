@@ -6,9 +6,13 @@
   <ng-container *ngFor="let col of columns; trackBy: trackByColumnId" matColumnDef="{{col.label || col.id}}">
     <!-- Header -->
     <mat-header-cell *matHeaderCellDef
-                     class="header-cell--with-resizer"
+                     class="header-cell--with-resizer header-cell--with-sort"
+                     (click)="onSortClick(col.id)"
                      [style.flexBasis]="getColumnWidth(col)">
       <span [title]="col.label">{{col.label}}</span>
+      <mat-icon class="sort"
+                [class.sort-active]="sort?.column === col.id"
+                [svgIcon]="sort?.direction === 'desc' ? 'drop_top' : 'drop_down'"></mat-icon>
       <tm-panel-resize class="resizer"
                        (mousedown)="stopEvent($event)"
                        (positionChanged)="columnWidthChanged($event, col)"

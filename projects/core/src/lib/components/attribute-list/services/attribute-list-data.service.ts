@@ -69,6 +69,7 @@ export class AttributeListDataService implements OnDestroy {
           layerId,
           applicationId,
           page: start,
+          // @todo: add sort params
         })),
       ).pipe(
       catchError(() => of(null)),
