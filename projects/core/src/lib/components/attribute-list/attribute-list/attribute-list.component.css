@@ -22,7 +22,8 @@
   height: auto !important;
 }
 
-.panel--minimized .panel-content {
+.panel--minimized .panel-content,
+.panel--minimized tm-attribute-list-tab {
   display: none;
 }
 
