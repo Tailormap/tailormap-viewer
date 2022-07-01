@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import {
-  AppResponseModel, ComponentModel, FeaturesResponseModel, LayerDetailsModel, MapResponseModel, VersionResponseModel,
+  AppResponseModel, ComponentModel, FeaturesResponseModel, LayerDetailsModel, MapResponseModel, Sortorder, VersionResponseModel,
 } from '../models';
 import { Observable } from 'rxjs';
 import { TailormapApiV1ServiceModel } from './tailormap-api-v1.service.model';
@@ -65,6 +65,8 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
     simplify?: boolean;
     filter?: string;
     page?: number;
+    sortBy?: string;
+    sortOrder?: Sortorder;
   }): Observable<FeaturesResponseModel> {
     const queryParams = this.getQueryParams({
       x: params.x,
@@ -75,6 +77,8 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
       simplify: params.simplify,
       filter: params.filter,
       page: params.page,
+      sortBy: params.sortBy,
+      sortOrder: params.sortOrder,
     });
     return this.httpClient.get<FeaturesResponseModel>(
       `${TailormapApiV1Service.BASE_URL}/app/${params.applicationId}/layer/${params.layerId}/features`,

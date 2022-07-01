@@ -77,7 +77,7 @@ export class MapStyleHelper {
     }
     styles.push(...MapStyleHelper.createArrowStyles(styleConfig, feature, baseStyle.getStroke()));
     if (styleConfig.label) {
-      styles.push(...MapStyleHelper.createLabelStyle(styleConfig));
+      styles.push(...MapStyleHelper.createLabelStyle(styleConfig, feature));
     }
     if (styleConfig.isSelected && (!styleConfig.pointType || (!!styleConfig.pointType && !styleConfig.label)) && typeof feature !== 'undefined') {
       styles.push(...MapStyleHelper.createOutlinedSelectionRectangle(feature, 1.3 * (resolution || 0)));

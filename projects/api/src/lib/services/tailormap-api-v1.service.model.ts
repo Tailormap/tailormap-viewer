@@ -1,4 +1,4 @@
-import { AppResponseModel, ComponentModel, LayerDetailsModel, MapResponseModel, VersionResponseModel } from '../models';
+import { AppResponseModel, ComponentModel, LayerDetailsModel, MapResponseModel, Sortorder, VersionResponseModel } from '../models';
 import { Observable } from 'rxjs';
 import { FeaturesResponseModel } from '../models/features-response.model';
 
@@ -31,6 +31,8 @@ export interface TailormapApiV1ServiceModel {
     simplify?: boolean;
     filter?: string;
     page?: number;
+    sortBy?: string;
+    sortOrder?: Sortorder;
   }): Observable<FeaturesResponseModel>;
 
 }
