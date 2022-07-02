@@ -37,7 +37,7 @@ export class AttributeListManagerService implements OnDestroy {
     pageIndex: 1,
     pageSize: 100,
     totalCount: null,
-    sortDirection: 'ASC',
+    sortDirection: '',
   };
 
   private destroyed = new Subject();

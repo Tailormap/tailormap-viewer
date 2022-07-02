@@ -5,9 +5,7 @@ import { combineLatest, filter, Observable, of, Subject } from 'rxjs';
 import { AttributeListRowModel } from '../models/attribute-list-row.model';
 import { Store } from '@ngrx/store';
 import { selectAttributeListTab, selectAttributeListTabData } from '../state/attribute-list.selectors';
-import {
-  ColumnMetadataModel, FeatureModel, TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel,
-} from '@tailormap-viewer/api';
+import { ColumnMetadataModel, FeatureModel, Sortorder, TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel } from '@tailormap-viewer/api';
 import { LoadAttributeListDataResultModel } from '../models/load-attribute-list-data-result.model';
 import { AttributeListDataModel } from '../models/attribute-list-data.model';
 import { selectApplicationId } from '../../../state/core.selectors';
@@ -69,6 +67,10 @@ export class AttributeListDataService implements OnDestroy {
           layerId,
           applicationId,
           page: start,
+          sortBy: selectedData.sortedColumn,
+          sortOrder: selectedData.sortDirection === 'desc'
+            ? Sortorder.DESC
+            : (selectedData.sortDirection === 'asc' ? Sortorder.ASC : undefined),
         })),
       ).pipe(
       catchError(() => of(null)),

@@ -10,6 +10,6 @@ export interface AttributeListDataModel {
   pageIndex: number;
   totalCount: number | null;
   sortedColumn?: string;
-  sortDirection: 'ASC' | 'DESC';
+  sortDirection: 'asc' | 'desc' | '';
 }
 
