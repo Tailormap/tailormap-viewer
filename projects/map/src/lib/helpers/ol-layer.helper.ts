@@ -12,7 +12,9 @@ import { WMSLayerModel } from '../models/wms-layer.model';
 import { WMTSLayerModel } from '../models/wmts-layer.model';
 import { WMTSCapabilities } from 'ol/format';
 import WMTSTileGrid from 'ol/tilegrid/WMTS';
-import { TileWMS } from 'ol/source';
+import { ImageWMS, TileWMS } from 'ol/source';
+import { ServerTypeHelper } from './server-type.helper';
+import ImageLayer from 'ol/layer/Image';
 
 export interface LayerProperties {
   id: string;
@@ -31,7 +33,7 @@ export class OlLayerHelper {
     olLayer.setProperties(layerProps);
   }
 
-  public static createLayer(layer: LayerModel, projection: Projection): TileLayer<TileWMS> | TileLayer<XYZ> | TileLayer<WMTS> | null {
+  public static createLayer(layer: LayerModel, projection: Projection): TileLayer<TileWMS> | ImageLayer<ImageWMS> | TileLayer<XYZ> | TileLayer<WMTS> | null {
     if (LayerTypesHelper.isTmsLayer(layer)) {
       return OlLayerHelper.createTMSLayer(layer, projection);
     }
@@ -51,18 +53,8 @@ export class OlLayerHelper {
     const parser = new WMTSCapabilities();
     const capabilities = parser.read(layer.capabilities);
 
-    const hiDpi = window.devicePixelRatio > 1;
-    let serviceHiDpi = false;
-    let hiDpiLayer = layer.layers;
-
-    // XXX hardcoded for now, in the future get this from the layer when configurable via admin interface
-    if (layer.url.includes('openbasiskaart.nl') && layer.layers === 'osm') {
-      serviceHiDpi = true;
-      hiDpiLayer = 'osm-hq';
-    }
-    if (layer.url.includes('service.pdok.nl/hwh/luchtfotorgb')) {
-      serviceHiDpi = true;
-    }
+    const hiDpi = window.devicePixelRatio > 1 && layer.hiDpiMode && layer.hiDpiMode !== 'disabled';
+    const hiDpiLayer = layer.hiDpiSubstituteLayer || layer.layers;
 
     const options = optionsFromCapabilities(capabilities, {
       layer: hiDpi ? hiDpiLayer : layer.layers,
@@ -72,29 +64,35 @@ export class OlLayerHelper {
       return null;
     }
 
-    if (serviceHiDpi) {
-      options.tilePixelRatio = hiDpi ? 2 : 1;
+    if (hiDpi) {
+      // For WMTS with hiDpiMode == 'substituteLayerTilePixelRatioOnly' just setting this option suffices. The service should send tiles with
+      // 2x the width and height as it advertises in the capabilities.
+      options.tilePixelRatio = 2;
 
-      // tilePixelRatio is for a service that advertises tile size x * y but actually sends tiles (2x) * (2y). However, a service like
-      // openbasiskaart has a layer with just higher DPI but advertises a correct tile size (although it is 512). To display a sharper
-      // image we need to adjust the resolutions of the WMTSTileGrid so OpenLayers uses a higher zoom level but scaled down for a sharper image.
+      // For WMTS layers with these options, the service sends the tile sizes as advertised (advised to use larger tiles than 256x256), but
+      // the tiles are DPI-independent (for instance an aero photo) or are rendered with high DPI (different layer name).
+      if (layer.hiDpiMode === 'showNextZoomLevel' || layer.hiDpiMode === 'substituteLayerShowNextZoomLevel') {
+        // To use with the OL tilePixelRatio option, we need to halve the tile width and height and double the resolutions to fake the
+        // capabilities to make the service look like it sends 2x the tile width/height and pick the tile for a deeper zoom level so we can
+        // show sharper details per intrinsic CSS pixel.
 
-      // An aerophoto service has no DPI dependent rendering, just display tiles at half size for a sharper image.
+        let tileSize = options.tileGrid.getTileSize(0);
+        if (Array.isArray(tileSize)) {
+          tileSize = (tileSize as number[]).map(value => value / 2);
+        } else {
+          tileSize = (tileSize as number) / 2;
+        }
 
-      let tileSize = options.tileGrid.getTileSize(0);
-      if (Array.isArray(tileSize)) {
-        tileSize = (tileSize as number[]).map(value => value / 2);
-      } else {
-        tileSize = (tileSize as number) / 2;
+        const resolutions = options.tileGrid.getResolutions().map(value => value * 2);
+
+        options.tileGrid = new WMTSTileGrid({
+          extent: options.tileGrid.getExtent(),
+          origin: options.tileGrid.getOrigin(0),
+          resolutions,
+          matrixIds: options.tileGrid.getMatrixIds(),
+          tileSize,
+        });
       }
-
-      options.tileGrid = new WMTSTileGrid({
-        extent: options.tileGrid.getExtent(),
-        origin: options.tileGrid.getOrigin(0),
-        resolutions: options.tileGrid.getResolutions().map(value => value * 2),
-        matrixIds: options.tileGrid.getMatrixIds(),
-        tileSize,
-      });
     }
 
     const source = new WMTS(options);
@@ -116,8 +114,23 @@ export class OlLayerHelper {
     });
   }
 
-  public static createWMSLayer(layer: WMSLayerModel): TileLayer<TileWMS> {
-    const source = new TileWMS({
+  public static createWMSLayer(layer: WMSLayerModel): TileLayer<TileWMS> | ImageLayer<ImageWMS> {
+
+    const defaultServerType = 'geoserver'; // Use the most common as default
+
+    let serverType: string | undefined;
+    let hidpi = true;
+
+    if (layer.hiDpiMode === 'disabled') {
+      serverType = undefined;
+      hidpi = false;
+    } else if (layer.hiDpiMode === 'auto') {
+      serverType = ServerTypeHelper.getFromUrl(layer.url) || defaultServerType;
+    } else {
+      serverType = layer.hiDpiMode || defaultServerType;
+    }
+
+    const sourceOptions = {
       url: OgcHelper.filterOgcUrlParameters(layer.url),
       params: {
         LAYERS: layer.layers,
@@ -126,12 +139,25 @@ export class OlLayerHelper {
         TRANSPARENT: 'TRUE',
       },
       crossOrigin: layer.crossOrigin,
-      serverType: 'geoserver',
-    });
-    return new TileLayer({
-      visible: layer.visible,
-      source,
-    });
-  }
+      serverType,
+      hidpi,
+    };
 
+    if (layer.tilingDisabled) {
+      const source = new ImageWMS(sourceOptions);
+      return new ImageLayer({
+        visible: layer.visible,
+        source,
+      });
+    } else {
+      const source = new TileWMS({
+        ...sourceOptions,
+        gutter: layer.tilingGutter || 0,
+      });
+      return new TileLayer({
+        visible: layer.visible,
+        source,
+      });
+    }
+  }
 }

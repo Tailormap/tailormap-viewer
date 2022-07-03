@@ -89,6 +89,8 @@ export class ApplicationMapService implements OnDestroy {
             url: service.url,
             crossOrigin: 'anonymous',
             capabilities: capabilities || '',
+            hiDpiMode: appLayer.hiDpiMode,
+            hiDpiSubstituteLayer: appLayer.hiDpiSubstituteLayer,
           })),
         );
     }
@@ -101,6 +103,9 @@ export class ApplicationMapService implements OnDestroy {
         visible: appLayer.visible,
         url: service.url,
         crossOrigin: 'anonymous',
+        hiDpiMode: service.hiDpiMode,
+        tilingDisabled: service.tilingDisabled,
+        tilingGutter: service.tilingGutter,
       };
       return of(layer);
     }
