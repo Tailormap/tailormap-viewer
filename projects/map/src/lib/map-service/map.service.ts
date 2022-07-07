@@ -1,8 +1,8 @@
 import { Injectable, NgZone } from '@angular/core';
 import { OpenLayersMap } from '../openlayers-map/openlayers-map';
-import { combineLatest, finalize, map, Observable, tap } from 'rxjs';
+import { combineLatest, concatMap, finalize, map, Observable, Subject, tap } from 'rxjs';
 import {
-  LayerManagerModel, LayerTypesEnum, MapResolutionModel, MapViewerOptionsModel, ToolConfigModel, VectorLayerModel, MapStyleModel, ToolModel,
+  LayerManagerModel, LayerTypesEnum, MapResolutionModel, MapStyleModel, MapViewerOptionsModel, ToolConfigModel, ToolModel, VectorLayerModel,
 } from '../models';
 import { ToolManagerModel } from '../models/tool-manager.model';
 import VectorLayer from 'ol/layer/Vector';
@@ -16,6 +16,8 @@ import { FeatureHelper } from '../helpers/feature.helper';
 import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
 import { MapSizeHelper } from '../helpers/map-size.helper';
 import { MapUnitEnum } from '../models/map-unit.enum';
+import { default as OlMap } from 'ol/Map';
+import { $localize } from '@angular/localize/init';
 
 @Injectable({
   providedIn: 'root',
@@ -173,4 +175,81 @@ export class MapService {
     this.map.zoomToInitialExtent();
   }
 
+  public createImageExport(width: number, height: number, resolution: number): Observable<string> {
+    // Adapted from https://github.com/openlayers/openlayers/blob/master/examples/export-pdf.js
+
+
+
+    return this.map.getMap$().pipe(
+      concatMap((olMap: OlMap) => {
+        // Save values to restore after printing
+        const originalSize = olMap.getSize();
+        const viewResolution = olMap.getView().getResolution();
+
+        if (!originalSize || !viewResolution) {
+          throw new Error('Map has no size or resolution');
+        }
+
+        // Calculate map size in mm for PDF. Pixels times dots-per-inch to mm. 1 inch is 25.4 mm
+        width = Math.round((width * resolution) / 25.4);
+        height = Math.round((height * resolution) / 25.4);
+
+        const renderedMapCanvasDataURL$ = new Subject<string>();
+        olMap.once('rendercomplete', () => {
+          try {
+            const mapCanvas = document.createElement('canvas');
+            mapCanvas.width = width;
+            mapCanvas.height = height;
+            const mapContext = mapCanvas.getContext('2d');
+            if (!mapContext) {
+              throw new Error('map canvas 2D context is null');
+            }
+            const layerCanvasList = Array.from(document.querySelectorAll<HTMLCanvasElement>('.ol-layer canvas'));
+            layerCanvasList.forEach(canvas => {
+              MapService.addLayerToCanvas(canvas, mapContext);
+            });
+            renderedMapCanvasDataURL$.next(mapCanvas.toDataURL());
+          } catch (e) {
+            console.error(e);
+            renderedMapCanvasDataURL$.error($localize `Unable to export map canvas to image: ${e}`);
+          }
+          // Reset original map size
+          olMap.setSize(originalSize);
+          olMap.getView().setResolution(viewResolution);
+          renderedMapCanvasDataURL$.complete();
+        });
+
+        const printSize = [width, height];
+        olMap.setSize(printSize);
+        const scaling = Math.min(width / originalSize[0], height / originalSize[1]);
+        olMap.getView().setResolution(viewResolution / scaling);
+
+        return renderedMapCanvasDataURL$.asObservable();
+      }),
+      finalize(() => {
+        document.body.style.cursor = 'auto';
+      }),
+    );
+  }
+
+  private static addLayerToCanvas(
+    canvas: HTMLCanvasElement,
+    mapContext: CanvasRenderingContext2D,
+  ) {
+    if (canvas.width > 0) {
+      const opacity = (canvas.parentNode as HTMLDivElement).style.opacity;
+      mapContext.globalAlpha = opacity === '' ? 1 : Number(opacity);
+      const transform = canvas.style.transform;
+      // Get the transform parameters from the style's transform matrix
+      // @ts-ignore
+      const matrix = transform
+        .match(/^matrix\(([^\(]*)\)$/)[1]
+        .split(',')
+        .map(Number);
+      // Apply the transform to the export map context
+      // @ts-ignore
+      CanvasRenderingContext2D.prototype.setTransform.apply(mapContext, matrix);
+      mapContext.drawImage(canvas, 0, 0);
+    }
+  }
 }

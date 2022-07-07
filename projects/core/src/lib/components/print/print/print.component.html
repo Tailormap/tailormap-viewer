@@ -1,1 +1,12 @@
-<p *ngIf="visible$ | async">print works!</p>
+<div *ngIf="visible$ | async">
+
+  <button *ngIf="!(printing$ | async)" mat-stroked-button
+          color="primary"
+          (click)="createPDF()">Download map image</button>
+
+  <p *ngIf="printing$ | async">Creating map image, please wait...</p>
+  <button *ngIf="printing$ | async" mat-stroked-button
+          color="primary"
+          (click)="cancel()">Cancel</button>
+
+</div>
