@@ -9,6 +9,7 @@ import { LegendModule } from './legend';
 import { BackgroundLayerToggleModule } from './background-layer-toggle';
 import { DrawingModule } from './drawing/drawing.module';
 import { AttributeListModule } from './attribute-list/attribute-list.module';
+import { PrintModule } from './print/print.module';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { AttributeListModule } from './attribute-list/attribute-list.module';
     BackgroundLayerToggleModule,
     DrawingModule,
     AttributeListModule,
+    PrintModule,
   ],
 })
 export class ComponentsModule {}

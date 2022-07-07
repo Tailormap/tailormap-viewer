@@ -1,5 +1,5 @@
 :host {
-  display: block;
+  /*display: block; FIXME: no scrollbar, but does not hide next component */
   height: 100%;
   overflow: auto;
 }
