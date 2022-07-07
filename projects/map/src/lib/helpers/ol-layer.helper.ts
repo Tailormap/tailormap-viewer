@@ -63,6 +63,7 @@ export class OlLayerHelper {
     if (options === null) {
       return null;
     }
+    options.crossOrigin = layer.crossOrigin;
 
     if (hiDpi) {
       // For WMTS with hiDpiMode == 'substituteLayerTilePixelRatioOnly' just setting this option suffices. The service should send tiles with
