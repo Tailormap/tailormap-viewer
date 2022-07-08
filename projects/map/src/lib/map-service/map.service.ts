@@ -175,10 +175,15 @@ export class MapService {
     this.map.zoomToInitialExtent();
   }
 
+  /**
+   * Export the current map to an image.
+   *
+   * @param width Width of the image in millimeters.
+   * @param height Height of the image in millimeters
+   * @param resolution Dots-per-inch of the image - the pixel resolution is width times DPI divided by 25.4 to convert inches to millimeters.
+   */
   public createImageExport(width: number, height: number, resolution: number): Observable<string> {
     // Adapted from https://github.com/openlayers/openlayers/blob/master/examples/export-pdf.js
-
-
 
     return this.map.getMap$().pipe(
       concatMap((olMap: OlMap) => {
@@ -225,9 +230,6 @@ export class MapService {
         olMap.getView().setResolution(viewResolution / scaling);
 
         return renderedMapCanvasDataURL$.asObservable();
-      }),
-      finalize(() => {
-        document.body.style.cursor = 'auto';
       }),
     );
   }
