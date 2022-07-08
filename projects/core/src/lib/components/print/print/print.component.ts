@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
-import { BehaviorSubject, catchError, finalize, map, Observable, of, Subject, takeUntil, tap } from 'rxjs';
+import { BehaviorSubject, catchError, finalize, Observable, of, Subject, take, takeUntil, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { MenubarService } from '../../menubar';
 import { PRINT_ID } from '../print-identifier';
@@ -55,7 +55,7 @@ export class PrintComponent implements OnInit, OnDestroy {
       pipe(
         takeUntil(this.destroyed),
         takeUntil(this.cancelled$),
-        map(dataURL => {
+        tap(dataURL => {
           const a = document.createElement('a');
           a.href = dataURL;
           a.download = 'map.png';
@@ -72,6 +72,7 @@ export class PrintComponent implements OnInit, OnDestroy {
           SnackBarMessageComponent.open$(this.snackBar, config);
           return of(null);
         }),
+        take(1), // make pipe complete after emitting once for finalize()
         finalize(() => {
           this.printing$.next(false);
         }),
