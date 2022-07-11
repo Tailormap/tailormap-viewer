@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { jsPDF } from 'jspdf';
 import { $localize } from '@angular/localize/init';
 import { MapService } from '@tailormap-viewer/map';
@@ -21,6 +21,7 @@ interface PrintOptions {
   orientation?: 'portrait' | 'landscape';
   size: 'a3' | 'a4';
   resolution?: 72 | 150 | 300;
+  filename?: string;
 }
 
 @Injectable({
@@ -29,7 +30,6 @@ interface PrintOptions {
 export class MapPdfService {
 
   private readonly defaultMargin = 5;
-  private readonly defaultLegendWidth = 0.3;
   private readonly titleSize = 12;
   private readonly defaultFontSize = 8;
 
@@ -42,6 +42,7 @@ export class MapPdfService {
   ): Observable<any> {
     let size = printOptions.size === 'a3' ? a3Size : a4Size;
     if (printOptions.orientation === 'portrait') {
+      // noinspection JSSuspiciousNameCombination
       size = { width: size.height, height: size.width };
     }
     const mapSize = {
@@ -70,11 +71,9 @@ export class MapPdfService {
 
     return this.addMapImage$(doc, x, y, mapSize, printOptions.resolution || 72).pipe(
       tap(() => {
-        const filenameDate = new Intl.DateTimeFormat('nl-NL',{ dateStyle: 'short', timeStyle: 'medium'}).format(new Date()).replace(' ', '_');
-        doc.save(`map-${filenameDate}.pdf`);
+        doc.save(printOptions.filename || 'map.pdf');
       }),
     );
-    return of(true);
   }
 
   private addMapImage$(doc: jsPDF, x: number, y: number, mapSize: Size, resolution: number): Observable<any> {

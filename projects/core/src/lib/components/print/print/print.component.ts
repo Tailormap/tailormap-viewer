@@ -23,6 +23,13 @@ export class PrintComponent implements OnInit, OnDestroy {
 
   public visible$: Observable<boolean> = of(false);
 
+  private _mapFilenameFn: (extension: string) => string = (extension: string) => {
+    const dateTime = new Intl.DateTimeFormat('nl-NL',{ dateStyle: 'short', timeStyle: 'medium'}).format(new Date())
+      .replace(' ', '_')
+      .replace(/:/g, '_');
+    return `map-${dateTime}.${extension}`;
+  };
+
   constructor(
     private store$: Store,
     private menubarService: MenubarService,
@@ -44,6 +51,19 @@ export class PrintComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this.destroyed.next(null);
     this.destroyed.complete();
+  }
+
+
+  get mapFilenameFn(): (extension: string) => string {
+    return this._mapFilenameFn;
+  }
+
+  /**
+   * Extension point to change the filename used for image and PDF download. Called with an extension that excludes the point (for example
+   * 'png' or 'pdf'). The default implementation generates a filename like 'map-2022-07-11_14_13_22.pdf'.
+   */
+  set mapFilenameFn(value: (extension: string) => string) {
+    this._mapFilenameFn = value;
   }
 
   public cancel(): void {
@@ -76,13 +96,19 @@ export class PrintComponent implements OnInit, OnDestroy {
       tap(dataURL => {
         const a = document.createElement('a');
         a.href = dataURL;
-        a.download = 'map.png';
+        a.download = this._mapFilenameFn('png');
         a.click();
       }),
     ));
   }
 
   public downloadPDF(): void {
-    this.wrapAction(this.mapPdfService.create$({ orientation: 'landscape', size: 'a4', resolution: 150, title: 'Print test'}));
+    this.wrapAction(this.mapPdfService.create$({
+      orientation: 'landscape',
+      size: 'a4',
+      resolution: 150,
+      title: 'Print test',
+      filename: this._mapFilenameFn('pdf'),
+    }));
   }
 }
