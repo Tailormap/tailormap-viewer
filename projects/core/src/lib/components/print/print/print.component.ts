@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
-import { BehaviorSubject, catchError, finalize, Observable, of, Subject, take, takeUntil, tap } from 'rxjs';
+import { BehaviorSubject, catchError, combineLatest, concatMap, finalize, Observable, of, Subject, take, takeUntil, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { MenubarService } from '../../menubar';
 import { PRINT_ID } from '../print-identifier';
@@ -26,11 +26,11 @@ export class PrintComponent implements OnInit, OnDestroy {
 
   public formControl = new FormControl('150', []);
 
-  private _mapFilenameFn: (extension: string) => string = (extension: string) => {
+  private _mapFilenameFn = (extension: string): Observable<string> => {
     const dateTime = new Intl.DateTimeFormat('nl-NL',{ dateStyle: 'short', timeStyle: 'medium'}).format(new Date())
       .replace(' ', '_')
       .replace(/:/g, '_');
-    return `map-${dateTime}.${extension}`;
+    return of(`map-${dateTime}.${extension}`);
   };
 
   constructor(
@@ -47,8 +47,7 @@ export class PrintComponent implements OnInit, OnDestroy {
 
     this.busy$.pipe(
       takeUntil(this.destroyed),
-      tap(printing => document.body.style.cursor = printing ? 'progress' : 'auto'),
-    ).subscribe();
+    ).subscribe(printing => document.body.style.cursor = printing ? 'progress' : 'auto');
   }
 
   public ngOnDestroy(): void {
@@ -56,7 +55,7 @@ export class PrintComponent implements OnInit, OnDestroy {
     this.destroyed.complete();
   }
 
-  public get mapFilenameFn(): (extension: string) => string {
+  public get mapFilenameFn(): (extension: string) => Observable<string> {
     return this._mapFilenameFn;
   }
 
@@ -64,7 +63,7 @@ export class PrintComponent implements OnInit, OnDestroy {
    * Extension point to change the filename used for image and PDF download. Called with an extension that excludes the point (for example
    * 'png' or 'pdf'). The default implementation generates a filename like 'map-2022-07-11_14_13_22.pdf'.
    */
-  public set mapFilenameFn(value: (extension: string) => string) {
+  public set mapFilenameFn(value: (extension: string) => Observable<string>) {
     this._mapFilenameFn = value;
   }
 
@@ -72,9 +71,11 @@ export class PrintComponent implements OnInit, OnDestroy {
     this.cancelled$.next(null);
   }
 
-  private wrapAction(observable$: Observable<any>): void {
+  private wrapFileExport(extension: string, toDataURLExporter: (filename: string) => Observable<string>): void {
     this.busy$.next(true);
-    observable$.pipe(
+    this._mapFilenameFn(extension).pipe(
+      concatMap(filename => combineLatest([of(filename), toDataURLExporter(filename)])),
+      tap(([filename, dataURL]) => PrintComponent.downloadDataURL(dataURL, filename)),
       takeUntil(this.destroyed),
       takeUntil(this.cancelled$),
       catchError(message => {
@@ -100,23 +101,25 @@ export class PrintComponent implements OnInit, OnDestroy {
   }
 
   public downloadMapImage(): void {
-    this.wrapAction(this.mapService.exportMapImage$(173.4, 130, this.getDpi(), console.log).pipe(
-      tap(dataURL => {
-        const a = document.createElement('a');
-        a.href = dataURL;
-        a.download = this._mapFilenameFn('png');
-        a.click();
-      }),
-    ));
+    this.wrapFileExport('png', () => this.mapService.exportMapImage$(173.4, 130, this.getDpi(), console.log));
   }
 
   public downloadPDF(): void {
-    this.wrapAction(this.mapPdfService.create$({
-      orientation: 'landscape',
-      size: 'a4',
-      resolution: this.getDpi(),
-      title: 'Print test',
-      filename: this._mapFilenameFn('pdf'),
-    }));
+    this.wrapFileExport('pdf', filename => this.mapPdfService.create$({
+        orientation: 'landscape',
+        size: 'a4',
+        resolution: this.getDpi(),
+        title: 'Print test',
+        filename,
+      }));
+  }
+
+  private static downloadDataURL(dataURL: string, filename: string): void {
+    const a = document.createElement('a');
+    a.href = dataURL;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   }
 }

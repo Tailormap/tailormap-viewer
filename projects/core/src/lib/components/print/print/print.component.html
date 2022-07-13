@@ -1,19 +1,22 @@
 <div *ngIf="visible$ | async">
 
-  <label i18n>DPI</label>
-  <input matInput [formControl]="formControl" [autofocus]="true" />
-  <p></p>
-  <button *ngIf="(busy$ | async) === false" mat-stroked-button
-          color="primary"
-          (click)="downloadMapImage()">Download map image</button>
-  <p></p>
-  <button *ngIf="(busy$ | async) === false" mat-stroked-button
-          color="primary"
-          (click)="downloadPDF()">Download map PDF</button>
+  <ng-container *ngIf="(busy$ | async) === false; else busy" >
+    <label i18n>DPI</label>
+    <input matInput [formControl]="formControl" [autofocus]="true" />
+    <p></p>
 
-  <p *ngIf="busy$ | async">Creating download, please wait...</p>
-  <button *ngIf="busy$ | async" mat-stroked-button
-          color="primary"
-          (click)="cancel()">Cancel</button>
+    <button mat-stroked-button
+            color="primary"
+            (click)="downloadMapImage()" i18n>Download map image</button>
+    <p></p>
+    <button  mat-stroked-button
+            color="primary"
+            (click)="downloadPDF()" i18n>Download map PDF</button>
+  </ng-container>
+
+  <ng-template #busy>
+    <p i18n>Creating download, please wait...</p>
+    <button mat-stroked-button color="primary" (click)="cancel()" i18n>Cancel</button>
+  </ng-template>
 
 </div>
