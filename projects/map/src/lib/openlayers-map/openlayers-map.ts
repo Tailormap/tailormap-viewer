@@ -197,15 +197,6 @@ export class OpenLayersMap implements MapViewerModel {
           throw new Error('Map has no size or resolution');
         }
 
-        const clearCache = (l: BaseLayer) => {
-          if (l instanceof LayerGroup) {
-            l.getLayers().forEach(clearCache);
-          }
-          if (l instanceof TileLayer) {
-            l.getSource().clear();
-          }
-        };
-
         const extent = olMap.getView().calculateExtent(originalSize);
         debug(`Map image export, original OL size: ${originalSize?.[0]} x ${originalSize?.[1]} px ` +
           `(width/height ratio: ${(originalSize?.[0] / originalSize?.[1]).toFixed(1)}, ` +
@@ -218,21 +209,68 @@ export class OpenLayersMap implements MapViewerModel {
         debug(`Map image export, requested size in mm: ${widthInMm} x ${heightInMm} in ${resolution} DPI, ${width} x ${height} px, ` +
           `width/height ratio ${(width / height).toFixed(1)}`);
 
+        const imageSize = [width, height];
+        // The ratio of the export image pixel size to the original map pixel size based on width
+        const sizeRatio = imageSize[0] / originalSize[0];
+        (olMap as any).pixelRatio_ = sizeRatio;
+        // When sizeRatio is higher than 1 reduce the map size, but get the higher pixel density image from the OL canvases because sizeRatio
+        // is used as OL pixelRatio
+        const imageExportOlSize = [imageSize[0]/sizeRatio, imageSize[1]/sizeRatio];
+
+        const target = document.createElement('div');
+        target.style.position = 'absolute';
+        target.style.top = '0';
+        target.style.left = '0';
+        target.style.visibility = 'hidden';
+        target.style.width = `${imageExportOlSize[0]}px`;
+        target.style.height = `${imageExportOlSize[1]}px`;
+        document.body.append(target);
+
+        const imageExportOlMap = new OlMap({
+          controls: [],
+          interactions: [],
+          target,
+          layers: olMap.getLayers(),
+          pixelRatio: sizeRatio,
+          view: new View({
+            projection: olMap.getView().getProjection(),
+            resolutions: olMap.getView().getResolutions(),
+            center: olMap.getView().getCenter(),
+            resolution: viewResolution,
+          }),
+        })
+
+        const imageExportExtent = olMap.getView().calculateExtent(olMap.getSize());
+        // @ts-ignore
+        debug(`Map image export OL size set to ${olMap.getSize()[0]} x ${olMap.getSize()[1]} px, ` +
+          `pixelRatio ${(olMap as any).pixelRatio_.toFixed(3)}, view extent ${imageExportExtent.map(n => n.toFixed(3))}`);
+
+        const clearCache = (l: BaseLayer) => {
+          if (l instanceof LayerGroup) {
+            l.getLayers().forEach(clearCache);
+          }
+          if (l instanceof TileLayer) {
+            l.getSource().clear();
+          }
+        };
+        // Clear tile layer caches, needed when rendering with a different pixelRatio
+        olMap.getLayers().forEach(clearCache);
+
         const renderedMapCanvasDataURL$ = new Subject<string>();
-        olMap.once('rendercomplete', () => {
+        imageExportOlMap.once('rendercomplete', () => {
           try {
-            const mapCanvas = document.createElement('canvas');
-            mapCanvas.width = width;
-            mapCanvas.height = height;
-            const mapContext = mapCanvas.getContext('2d');
+            const imageExportCanvas = document.createElement('canvas');
+            imageExportCanvas.width = width;
+            imageExportCanvas.height = height;
+            const mapContext = imageExportCanvas.getContext('2d');
             if (!mapContext) {
               throw new Error('canvas 2D context is null');
             }
-            const layerCanvasList = Array.from((olMap.getTarget() as HTMLElement).querySelectorAll<HTMLCanvasElement>('.ol-layer canvas'));
+            const layerCanvasList = Array.from((imageExportOlMap.getTarget() as HTMLElement).querySelectorAll<HTMLCanvasElement>('.ol-layer canvas'));
             layerCanvasList.forEach(canvas => {
-              OpenLayersMap.drawOlCanvasOnMapExportCanvas(canvas, mapContext, width);
+              OpenLayersMap.drawOlCanvasOnImageExportCanvas(canvas, mapContext, width);
             });
-            renderedMapCanvasDataURL$.next(mapCanvas.toDataURL());
+            renderedMapCanvasDataURL$.next(imageExportCanvas.toDataURL());
           } catch (e) {
             console.error(e);
             renderedMapCanvasDataURL$.error($localize `Unable to export map canvas to image: ${e}`);
@@ -241,32 +279,21 @@ export class OpenLayersMap implements MapViewerModel {
           renderedMapCanvasDataURL$.complete();
 
           olMap.getLayers().forEach(clearCache);
-          olMap.setSize(originalSize);
+          olMap.render();
 
-          (olMap as any).pixelRatio_ = originalPixelRatio;
+          imageExportOlMap.dispose();
+          document.body.removeChild(target);
         });
 
-        olMap.getLayers().forEach(clearCache);
-
-        const printSize = [width, height];
-        // The ratio of the print pixel size to the original map pixel size based on width
-        const sizeRatio = printSize[0] / originalSize[0];
-        // Set the pixelRatio and size so the map stays the same resolution, but we can change the pixel density
-        (olMap as any).pixelRatio_ = sizeRatio;
-        // When the pixelRatio is higher than 1 we reduce the map size, but we can get the higher pixel density image from the OL canvases
-        olMap.setSize([printSize[0]/sizeRatio, printSize[1]/sizeRatio]);
-
-        const printExtent = olMap.getView().calculateExtent(olMap.getSize());
-        // @ts-ignore
-        debug(`Map image export OL size set to ${olMap.getSize()[0]} x ${olMap.getSize()[1]} px, ` +
-          `pixelRatio ${(olMap as any).pixelRatio_.toFixed(3)}, view extent ${printExtent.map(n => n.toFixed(3))}`);
+        imageExportOlMap.setSize(imageExportOlSize);
+        imageExportOlMap.render();
 
         return renderedMapCanvasDataURL$.asObservable();
       }),
     );
   }
 
-  private static drawOlCanvasOnMapExportCanvas(
+  private static drawOlCanvasOnImageExportCanvas(
     olCanvas: HTMLCanvasElement,
     mapExportContext: CanvasRenderingContext2D,
     mapExportWidth: number,
