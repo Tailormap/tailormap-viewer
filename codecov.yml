@@ -1,0 +1,36 @@
+# https://docs.codecov.com/docs/codecovyml-reference
+# validate: curl -X POST --data-binary @codecov.yml https://codecov.io/validate
+codecov:
+  bot: 'codecov-io'
+  strict_yaml_branch: 'main'
+  branch: 'main'
+  require_ci_to_pass: true
+  notify:
+    after_n_builds: 3
+    wait_for_ci: true
+
+coverage:
+  precision: 0
+  round: 'up'
+  range: "70...100"
+  status:
+    changes: false
+    patch:
+      default:
+        target: auto
+        threshold: 1%
+    project:
+      default:
+        target: auto
+        threshold: 1%
+
+# https://docs.codecov.com/docs/github-checks
+github_checks:
+  annotations: true
+
+# https://docs.codecov.com/docs/pull-request-comments
+comment:
+  layout: "reach, diff, flags, files"
+  behavior: default
+  require_changes: true
+  after_n_builds: 3
