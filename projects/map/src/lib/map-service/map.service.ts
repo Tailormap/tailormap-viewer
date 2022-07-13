@@ -1,6 +1,6 @@
 import { Injectable, NgZone } from '@angular/core';
 import { OpenLayersMap } from '../openlayers-map/openlayers-map';
-import { combineLatest, concatMap, finalize, map, Observable, Subject, tap } from 'rxjs';
+import { combineLatest, finalize, map, Observable, tap } from 'rxjs';
 import {
   LayerManagerModel, LayerTypesEnum, MapResolutionModel, MapStyleModel, MapViewerOptionsModel, ToolConfigModel, ToolModel, VectorLayerModel,
 } from '../models';
@@ -16,8 +16,6 @@ import { FeatureHelper } from '../helpers/feature.helper';
 import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
 import { MapSizeHelper } from '../helpers/map-size.helper';
 import { MapUnitEnum } from '../models/map-unit.enum';
-import { default as OlMap } from 'ol/Map';
-import { $localize } from '@angular/localize/init';
 
 @Injectable({
   providedIn: 'root',
@@ -59,8 +57,8 @@ export class MapService {
             toolManager.removeTool(toolId);
           }
         }),
-        map(manager => ({ tool: manager.addTool<T, C>(tool), manager })),
-        tap(({ tool: createdTool }) => toolId = createdTool?.id || ''),
+        map(manager => ({tool: manager.addTool<T, C>(tool), manager})),
+        tap(({tool: createdTool}) => toolId = createdTool?.id || ''),
       );
   }
 
@@ -93,11 +91,11 @@ export class MapService {
     vectorLayerStyle?: MapStyleModel | ((feature: FeatureModel<T>) => MapStyleModel),
   ): Observable<VectorLayer<VectorSource<Geometry>> | null> {
     return combineLatest([
-      this.createVectorLayer$({ id: layerId, name: `${layerId} layer`, layerType: LayerTypesEnum.Vector, visible: true }, vectorLayerStyle),
+      this.createVectorLayer$({id: layerId, name: `${layerId} layer`, layerType: LayerTypesEnum.Vector, visible: true}, vectorLayerStyle),
       featureGeometry$,
     ])
       .pipe(
-        tap(([ vectorLayer, featureGeometry ]) => {
+        tap(([vectorLayer, featureGeometry]) => {
           if (!vectorLayer) {
             return;
           }
@@ -108,7 +106,7 @@ export class MapService {
             vectorLayer.getSource()?.addFeature(feature);
           });
         }),
-        map(([ vectorLayer ]) => vectorLayer),
+        map(([vectorLayer]) => vectorLayer),
       );
   }
 
@@ -131,7 +129,7 @@ export class MapService {
       );
   }
 
-  public getPixelForCoordinates$(coordinates: [ number, number ]): Observable<[ number, number ] | null> {
+  public getPixelForCoordinates$(coordinates: [number, number]): Observable<[number, number] | null> {
     return this.map.getPixelForCoordinates$(coordinates);
   }
 
@@ -149,8 +147,8 @@ export class MapService {
    * @see ol.proj.Units
    */
   public getUnitsOfMeasure$(): Observable<MapUnitEnum> {
-    return this.map.getProjection$().pipe( map(
-      p => p.getUnits() === undefined ? MapUnitEnum.m : p.getUnits().toLowerCase() as MapUnitEnum,
+    return this.map.getProjection$().pipe(map(
+        p => p.getUnits() === undefined ? MapUnitEnum.m : p.getUnits().toLowerCase() as MapUnitEnum,
       ),
     );
   }
@@ -178,80 +176,12 @@ export class MapService {
   /**
    * Export the current map to an image.
    *
-   * @param width Width of the image in millimeters.
-   * @param height Height of the image in millimeters
+   * @param widthInMm Width of the image in millimeters.
+   * @param heightInMm Height of the image in millimeters
    * @param resolution Dots-per-inch of the image - the pixel resolution is width times DPI divided by 25.4 to convert inches to millimeters.
+   * @param debug Optional function for debugging messages.
    */
-  public createImageExport(width: number, height: number, resolution: number): Observable<string> {
-    // Adapted from https://github.com/openlayers/openlayers/blob/master/examples/export-pdf.js
-
-    return this.map.getMap$().pipe(
-      concatMap((olMap: OlMap) => {
-        // Save values to restore after printing
-        const originalSize = olMap.getSize();
-        const viewResolution = olMap.getView().getResolution();
-
-        if (!originalSize || !viewResolution) {
-          throw new Error('Map has no size or resolution');
-        }
-
-        // Calculate map size in mm for PDF. Pixels times dots-per-inch to mm. 1 inch is 25.4 mm
-        width = Math.round((width * resolution) / 25.4);
-        height = Math.round((height * resolution) / 25.4);
-
-        const renderedMapCanvasDataURL$ = new Subject<string>();
-        olMap.once('rendercomplete', () => {
-          try {
-            const mapCanvas = document.createElement('canvas');
-            mapCanvas.width = width;
-            mapCanvas.height = height;
-            const mapContext = mapCanvas.getContext('2d');
-            if (!mapContext) {
-              throw new Error('map canvas 2D context is null');
-            }
-            const layerCanvasList = Array.from(document.querySelectorAll<HTMLCanvasElement>('.ol-layer canvas'));
-            layerCanvasList.forEach(canvas => {
-              MapService.addLayerToCanvas(canvas, mapContext);
-            });
-            renderedMapCanvasDataURL$.next(mapCanvas.toDataURL());
-          } catch (e) {
-            console.error(e);
-            renderedMapCanvasDataURL$.error($localize `Unable to export map canvas to image: ${e}`);
-          }
-          // Reset original map size
-          olMap.setSize(originalSize);
-          olMap.getView().setResolution(viewResolution);
-          renderedMapCanvasDataURL$.complete();
-        });
-
-        const printSize = [width, height];
-        olMap.setSize(printSize);
-        const scaling = Math.min(width / originalSize[0], height / originalSize[1]);
-        olMap.getView().setResolution(viewResolution / scaling);
-
-        return renderedMapCanvasDataURL$.asObservable();
-      }),
-    );
-  }
-
-  private static addLayerToCanvas(
-    canvas: HTMLCanvasElement,
-    mapContext: CanvasRenderingContext2D,
-  ) {
-    if (canvas.width > 0) {
-      const opacity = (canvas.parentNode as HTMLDivElement).style.opacity;
-      mapContext.globalAlpha = opacity === '' ? 1 : Number(opacity);
-      const transform = canvas.style.transform;
-      // Get the transform parameters from the style's transform matrix
-      // @ts-ignore
-      const matrix = transform
-        .match(/^matrix\(([^\(]*)\)$/)[1]
-        .split(',')
-        .map(Number);
-      // Apply the transform to the export map context
-      // @ts-ignore
-      CanvasRenderingContext2D.prototype.setTransform.apply(mapContext, matrix);
-      mapContext.drawImage(canvas, 0, 0);
-    }
+  public exportMapImage$(widthInMm: number, heightInMm: number, resolution: number, debug?: (msg: string) => void): Observable<string> {
+    return this.map.exportMapImage$(widthInMm, heightInMm, resolution, !debug ? () => {} : debug);
   }
 }

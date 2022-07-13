@@ -1,5 +1,8 @@
 <div *ngIf="visible$ | async">
 
+  <label i18n>DPI</label>
+  <input matInput [formControl]="formControl" [autofocus]="true" />
+  <p></p>
   <button *ngIf="(busy$ | async) === false" mat-stroked-button
           color="primary"
           (click)="downloadMapImage()">Download map image</button>

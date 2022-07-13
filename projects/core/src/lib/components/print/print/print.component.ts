@@ -8,6 +8,7 @@ import { MapService } from '@tailormap-viewer/map';
 import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MapPdfService } from '../../../services/map-pdf/map-pdf.service';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'tm-print',
@@ -22,6 +23,8 @@ export class PrintComponent implements OnInit, OnDestroy {
   public busy$ = new BehaviorSubject(false);
 
   public visible$: Observable<boolean> = of(false);
+
+  public formControl = new FormControl('150', []);
 
   private _mapFilenameFn: (extension: string) => string = (extension: string) => {
     const dateTime = new Intl.DateTimeFormat('nl-NL',{ dateStyle: 'short', timeStyle: 'medium'}).format(new Date())
@@ -53,8 +56,7 @@ export class PrintComponent implements OnInit, OnDestroy {
     this.destroyed.complete();
   }
 
-
-  get mapFilenameFn(): (extension: string) => string {
+  public get mapFilenameFn(): (extension: string) => string {
     return this._mapFilenameFn;
   }
 
@@ -62,7 +64,7 @@ export class PrintComponent implements OnInit, OnDestroy {
    * Extension point to change the filename used for image and PDF download. Called with an extension that excludes the point (for example
    * 'png' or 'pdf'). The default implementation generates a filename like 'map-2022-07-11_14_13_22.pdf'.
    */
-  set mapFilenameFn(value: (extension: string) => string) {
+  public set mapFilenameFn(value: (extension: string) => string) {
     this._mapFilenameFn = value;
   }
 
@@ -76,6 +78,7 @@ export class PrintComponent implements OnInit, OnDestroy {
       takeUntil(this.destroyed),
       takeUntil(this.cancelled$),
       catchError(message => {
+        console.error(message);
         const config: SnackBarMessageOptionsModel = {
           message,
           duration: 5000,
@@ -91,8 +94,13 @@ export class PrintComponent implements OnInit, OnDestroy {
     ).subscribe();
   }
 
+  private getDpi(): number {
+    const formValue = Number(this.formControl.value);
+    return Math.max(72, Math.min(600, formValue));
+  }
+
   public downloadMapImage(): void {
-    this.wrapAction(this.mapService.createImageExport(173.4, 130, 150).pipe(
+    this.wrapAction(this.mapService.exportMapImage$(173.4, 130, this.getDpi(), console.log).pipe(
       tap(dataURL => {
         const a = document.createElement('a');
         a.href = dataURL;
@@ -106,7 +114,7 @@ export class PrintComponent implements OnInit, OnDestroy {
     this.wrapAction(this.mapPdfService.create$({
       orientation: 'landscape',
       size: 'a4',
-      resolution: 150,
+      resolution: this.getDpi(),
       title: 'Print test',
       filename: this._mapFilenameFn('pdf'),
     }));

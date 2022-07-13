@@ -20,7 +20,7 @@ interface PrintOptions {
   showScale?: boolean;
   orientation?: 'portrait' | 'landscape';
   size: 'a3' | 'a4';
-  resolution?: 72 | 150 | 300;
+  resolution?: number;
   filename?: string;
 }
 
@@ -77,7 +77,7 @@ export class MapPdfService {
   }
 
   private addMapImage$(doc: jsPDF, x: number, y: number, mapSize: Size, resolution: number): Observable<any> {
-    return this.mapService.createImageExport(mapSize.width, mapSize.height, resolution).pipe(
+    return this.mapService.exportMapImage$(mapSize.width, mapSize.height, resolution, console.log).pipe(
       tap(dataURL => {
         doc.addImage(dataURL, 'PNG', x, y, mapSize.width, mapSize.height);
       }),

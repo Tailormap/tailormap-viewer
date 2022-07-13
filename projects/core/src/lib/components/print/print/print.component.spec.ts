@@ -16,7 +16,7 @@ describe('PrintComponent', () => {
       registerComponent: jest.fn(),
     };
     const mapServiceMock = {
-      createImageExport: jest.fn(() => of('')),
+      exportMapImage$: jest.fn(() => of('')),
     };
     await render(PrintComponent,{
       schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
@@ -34,7 +34,7 @@ describe('PrintComponent', () => {
     });
     expect(await screen.getByText('Download map image')).toBeInTheDocument();
     await userEvent.click(await screen.getByText('Download map image'));
-    expect(mapServiceMock.createImageExport).toHaveBeenCalled();
+    expect(mapServiceMock.exportMapImage$).toHaveBeenCalled();
   });
 
 });

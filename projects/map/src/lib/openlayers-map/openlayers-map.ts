@@ -8,11 +8,15 @@ import { LayerManagerModel, MapResolutionModel, MapViewerModel, MapViewerOptions
 import { ProjectionsHelper } from '../helpers/projections.helper';
 import { OpenlayersExtent } from '../models/extent.type';
 import { OpenLayersLayerManager } from './open-layers-layer-manager';
-import { BehaviorSubject, concatMap, filter, map, merge, Observable, take } from 'rxjs';
+import { BehaviorSubject, concatMap, filter, map, merge, Observable, Subject, take } from 'rxjs';
 import { Size } from 'ol/size';
 import { ToolManagerModel } from '../models/tool-manager.model';
 import { OpenLayersToolManager } from './open-layers-tool-manager';
 import { OpenLayersEventManager } from './open-layers-event-manager';
+import BaseLayer from 'ol/layer/Base';
+import LayerGroup from 'ol/layer/Group';
+import TileLayer from 'ol/layer/Tile';
+import { $localize } from '@angular/localize/init';
 
 export class OpenLayersMap implements MapViewerModel {
 
@@ -181,6 +185,109 @@ export class OpenLayersMap implements MapViewerModel {
       );
   }
 
+  public exportMapImage$(widthInMm: number, heightInMm: number, resolution: number, debug: (msg: string) => void): Observable<string> {
+    return this.getMap$().pipe(
+      take(1),
+      concatMap((olMap: OlMap) => {
+        const originalSize = olMap.getSize();
+        const viewResolution = olMap.getView().getResolution();
+        const originalPixelRatio = (olMap as any).pixelRatio_;
+
+        if (!originalSize || !viewResolution) {
+          throw new Error('Map has no size or resolution');
+        }
+
+        const clearCache = (l: BaseLayer) => {
+          if (l instanceof LayerGroup) {
+            l.getLayers().forEach(clearCache);
+          }
+          if (l instanceof TileLayer) {
+            l.getSource().clear();
+          }
+        };
+
+        const extent = olMap.getView().calculateExtent(originalSize);
+        debug(`Map image export, original OL size: ${originalSize?.[0]} x ${originalSize?.[1]} px ` +
+          `(width/height ratio: ${(originalSize?.[0] / originalSize?.[1]).toFixed(1)}, ` +
+          `pixelRatio: ${originalPixelRatio}), view resolution: ${viewResolution?.toFixed(3)}, ` +
+          `extent: ${extent.map(n => n.toFixed(3))}`);
+
+        // Calculate map image size in pixels. Size in mm times resolution converted from inches to mm. 1 inch is 25.4 mm.
+        const width = Math.round(widthInMm * resolution / 25.4);
+        const height = Math.round(heightInMm * resolution / 25.4);
+        debug(`Map image export, requested size in mm: ${widthInMm} x ${heightInMm} in ${resolution} DPI, ${width} x ${height} px, ` +
+          `width/height ratio ${(width / height).toFixed(1)}`);
+
+        const renderedMapCanvasDataURL$ = new Subject<string>();
+        olMap.once('rendercomplete', () => {
+          try {
+            const mapCanvas = document.createElement('canvas');
+            mapCanvas.width = width;
+            mapCanvas.height = height;
+            const mapContext = mapCanvas.getContext('2d');
+            if (!mapContext) {
+              throw new Error('canvas 2D context is null');
+            }
+            const layerCanvasList = Array.from((olMap.getTarget() as HTMLElement).querySelectorAll<HTMLCanvasElement>('.ol-layer canvas'));
+            layerCanvasList.forEach(canvas => {
+              OpenLayersMap.drawOlCanvasOnMapExportCanvas(canvas, mapContext, width);
+            });
+            renderedMapCanvasDataURL$.next(mapCanvas.toDataURL());
+          } catch (e) {
+            console.error(e);
+            renderedMapCanvasDataURL$.error($localize `Unable to export map canvas to image: ${e}`);
+          }
+
+          renderedMapCanvasDataURL$.complete();
+
+          olMap.getLayers().forEach(clearCache);
+          olMap.setSize(originalSize);
+
+          (olMap as any).pixelRatio_ = originalPixelRatio;
+        });
+
+        olMap.getLayers().forEach(clearCache);
+
+        const printSize = [width, height];
+        // The ratio of the print pixel size to the original map pixel size based on width
+        const sizeRatio = printSize[0] / originalSize[0];
+        // Set the pixelRatio and size so the map stays the same resolution, but we can change the pixel density
+        (olMap as any).pixelRatio_ = sizeRatio;
+        // When the pixelRatio is higher than 1 we reduce the map size, but we can get the higher pixel density image from the OL canvases
+        olMap.setSize([printSize[0]/sizeRatio, printSize[1]/sizeRatio]);
+
+        const printExtent = olMap.getView().calculateExtent(olMap.getSize());
+        // @ts-ignore
+        debug(`Map image export OL size set to ${olMap.getSize()[0]} x ${olMap.getSize()[1]} px, ` +
+          `pixelRatio ${(olMap as any).pixelRatio_.toFixed(3)}, view extent ${printExtent.map(n => n.toFixed(3))}`);
+
+        return renderedMapCanvasDataURL$.asObservable();
+      }),
+    );
+  }
+
+  private static drawOlCanvasOnMapExportCanvas(
+    olCanvas: HTMLCanvasElement,
+    mapExportContext: CanvasRenderingContext2D,
+    mapExportWidth: number,
+  ) {
+    if (olCanvas.width > 0) {
+      const opacity = (olCanvas.parentNode as HTMLDivElement).style.opacity;
+      mapExportContext.globalAlpha = opacity === '' ? 1 : Number(opacity);
+
+      // An OL canvas will have a CSS transform on it to make it fit the OL target element size. This can reduce a higher pixel density
+      // canvas (when pixelRatio > 1) to the CSS pixel size of the OL target element. Draw the original high density canvas to our map
+      // export canvas.
+
+      // For tile layers, an OL canvas will have an image with a map resolution of the tile grid and a transform to make it fit the OL
+      // target size. For those canvases set a transform on our map export canvas to scale it properly.
+
+      const ratio = mapExportWidth / olCanvas.width;
+      mapExportContext.setTransform(ratio, 0, 0, ratio, 0, 0);
+      mapExportContext.drawImage(olCanvas, 0, 0);
+    }
+  }
+
   private getSize$(): Observable<Size> {
     return this.getMap$().pipe(map(olMap => {
       const size = olMap.getSize();
@@ -190,7 +297,6 @@ export class OpenLayersMap implements MapViewerModel {
       return size;
     }));
   }
-
 
   private _render(container: HTMLElement) {
     this.executeMapAction(olMap => {
@@ -209,5 +315,4 @@ export class OpenLayersMap implements MapViewerModel {
       olMap.updateSize();
     });
   }
-
 }
