@@ -77,7 +77,7 @@ export class MapPdfService {
   private addMapImage$(doc: jsPDF, x: number, y: number, mapSize: Size, resolution: number): Observable<string> {
     return this.mapService.exportMapImage$(mapSize.width, mapSize.height, resolution, console.log).pipe(
       tap(dataURL => {
-        doc.addImage(dataURL, 'PNG', x, y, mapSize.width, mapSize.height);
+        doc.addImage(dataURL, 'PNG', x, y, mapSize.width, mapSize.height, '', 'FAST');
       }),
     );
   }
