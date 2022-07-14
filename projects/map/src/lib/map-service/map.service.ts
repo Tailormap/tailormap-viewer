@@ -2,7 +2,8 @@ import { Injectable, NgZone } from '@angular/core';
 import { OpenLayersMap } from '../openlayers-map/openlayers-map';
 import { combineLatest, finalize, map, Observable, tap } from 'rxjs';
 import {
-  LayerManagerModel, LayerTypesEnum, MapResolutionModel, MapStyleModel, MapViewerOptionsModel, ToolConfigModel, ToolModel, VectorLayerModel,
+  LayerManagerModel, LayerModel, LayerTypesEnum, MapResolutionModel, MapStyleModel, MapViewerOptionsModel, ToolConfigModel, ToolModel,
+  VectorLayerModel,
 } from '../models';
 import { ToolManagerModel } from '../models/tool-manager.model';
 import VectorLayer from 'ol/layer/Vector';
@@ -16,6 +17,13 @@ import { FeatureHelper } from '../helpers/feature.helper';
 import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
 import { MapSizeHelper } from '../helpers/map-size.helper';
 import { MapUnitEnum } from '../models/map-unit.enum';
+
+export interface MapExportOptions {
+  widthInMm: number;
+  heightInMm: number;
+  resolution: number;
+  layers: LayerModel[];
+}
 
 @Injectable({
   providedIn: 'root',
@@ -175,13 +183,8 @@ export class MapService {
 
   /**
    * Export the current map to an image.
-   *
-   * @param widthInMm Width of the image in millimeters.
-   * @param heightInMm Height of the image in millimeters
-   * @param resolution Dots-per-inch of the image - the pixel resolution is width times DPI divided by 25.4 to convert inches to millimeters.
-   * @param debug Optional function for debugging messages.
    */
-  public exportMapImage$(widthInMm: number, heightInMm: number, resolution: number, debug?: (msg: string) => void): Observable<string> {
-    return this.map.exportMapImage$(widthInMm, heightInMm, resolution, !debug ? () => {} : debug);
+  public exportMapImage$(options: MapExportOptions): Observable<string> {
+    return this.map.exportMapImage$(options);
   }
 }

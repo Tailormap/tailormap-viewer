@@ -1,14 +1,18 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
-import { BehaviorSubject, catchError, combineLatest, concatMap, finalize, Observable, of, Subject, take, takeUntil, tap } from 'rxjs';
+import {
+  BehaviorSubject, catchError, combineLatest, concatMap, finalize, forkJoin, map, Observable, of, Subject, take, takeUntil, tap,
+} from 'rxjs';
 import { Store } from '@ngrx/store';
 import { MenubarService } from '../../menubar';
 import { PRINT_ID } from '../print-identifier';
 import { PrintMenuButtonComponent } from '../print-menu-button/print-menu-button.component';
-import { MapService } from '@tailormap-viewer/map';
+import { LayerModel, MapService } from '@tailormap-viewer/map';
 import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MapPdfService } from '../../../services/map-pdf/map-pdf.service';
 import { FormControl } from '@angular/forms';
+import { ApplicationMapService } from '../../../map/services/application-map.service';
+import { selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersAndServices } from '../../../map/state/map.selectors';
 
 @Component({
   selector: 'tm-print',
@@ -39,7 +43,10 @@ export class PrintComponent implements OnInit, OnDestroy {
     private mapService: MapService,
     private snackBar: MatSnackBar,
     private mapPdfService: MapPdfService,
-  ) {}
+    private applicationMapService: ApplicationMapService,
+  ) {
+
+  }
 
   public ngOnInit(): void {
     this.visible$ = this.menubarService.isComponentVisible$(PRINT_ID);
@@ -71,10 +78,10 @@ export class PrintComponent implements OnInit, OnDestroy {
     this.cancelled$.next(null);
   }
 
-  private wrapFileExport(extension: string, toDataURLExporter: (filename: string) => Observable<string>): void {
+  private wrapFileExport(extension: string, toDataURLExporter: (filename: string, layers: LayerModel[]) => Observable<string>): void {
     this.busy$.next(true);
-    this._mapFilenameFn(extension).pipe(
-      concatMap(filename => combineLatest([of(filename), toDataURLExporter(filename)])),
+    forkJoin([this._mapFilenameFn(extension), this.getLayers$()]).pipe(
+      concatMap(([filename, layers]) => combineLatest([of(filename), toDataURLExporter(filename, layers)])),
       tap(([filename, dataURL]) => PrintComponent.downloadDataURL(dataURL, filename)),
       takeUntil(this.destroyed),
       takeUntil(this.cancelled$),
@@ -100,18 +107,29 @@ export class PrintComponent implements OnInit, OnDestroy {
     return Math.max(72, Math.min(600, formValue));
   }
 
+  private getLayers$(): Observable<LayerModel[]> {
+    const isValidLayer = (layer: LayerModel | null): layer is LayerModel => layer !== null;
+    return combineLatest([this.store$.select(selectOrderedVisibleBackgroundLayers), this.store$.select(selectOrderedVisibleLayersAndServices)]).pipe(
+      map(([backgroundLayers, layers]) => [...backgroundLayers,  ...layers]),
+      concatMap(layers => forkJoin(layers.map(layer => this.applicationMapService.convertAppLayerToMapLayer$(layer.layer, layer.service)))),
+      map(layers => layers.filter(isValidLayer)),
+      take(1),
+    );
+  }
+
   public downloadMapImage(): void {
-    this.wrapFileExport('png', () => this.mapService.exportMapImage$(173.4, 130, this.getDpi(), console.log));
+    this.wrapFileExport('png', (filename, layers) => this.mapService.exportMapImage$(
+      { widthInMm: 173.4, heightInMm: 130, resolution: this.getDpi(), layers}));
   }
 
   public downloadPDF(): void {
-    this.wrapFileExport('pdf', filename => this.mapPdfService.create$({
+    this.wrapFileExport('pdf', (filename, layers) => this.mapPdfService.create$({
         orientation: 'landscape',
         size: 'a4',
         resolution: this.getDpi(),
         title: 'Print test',
         filename,
-      }));
+      }, layers));
   }
 
   private static downloadDataURL(dataURL: string, filename: string): void {

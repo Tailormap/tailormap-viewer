@@ -73,7 +73,7 @@ export class ApplicationMapService implements OnDestroy {
     this.destroyed.complete();
   }
 
-  private convertAppLayerToMapLayer$(appLayer: AppLayerModel, service?: ServiceModel): Observable<LayerModel | null> {
+  public convertAppLayerToMapLayer$(appLayer: AppLayerModel, service?: ServiceModel): Observable<LayerModel | null> {
     if (!service) {
       return of(null);
     }
