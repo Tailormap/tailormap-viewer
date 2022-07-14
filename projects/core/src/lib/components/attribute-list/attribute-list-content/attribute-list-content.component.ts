@@ -10,7 +10,7 @@ import {
   selectRowCountForSelectedTab,
   selectRowsForSelectedTab, selectSortForSelectedTab,
 } from '../state/attribute-list.selectors';
-import { updateRowSelected } from '../state/attribute-list.actions';
+import { updateRowSelected, updateSort } from '../state/attribute-list.actions';
 import { AttributeListStateService } from '../services/attribute-list-state.service';
 
 @Component({
@@ -48,6 +48,16 @@ export class AttributeListContentComponent implements OnInit {
         dataId,
         rowId: row.id,
         selected: row.selected,
+      }));
+    });
+  }
+
+  public onSortClick(sort: { columnId: string; direction: 'asc' | 'desc' | '' }): void {
+    this.attributeListStateService.executeActionForCurrentData(dataId => {
+      this.store$.dispatch(updateSort({
+        dataId,
+        column: sort.columnId,
+        direction: sort.direction,
       }));
     });
   }

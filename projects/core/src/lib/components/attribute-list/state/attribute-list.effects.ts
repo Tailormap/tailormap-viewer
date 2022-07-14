@@ -20,9 +20,9 @@ export class AttributeListEffects {
     );
   });
 
-  public loadDataAfterPageChange$ = createEffect(() => {
+  public loadDataAfterChanges$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(AttributeListActions.updatePage),
+      ofType(AttributeListActions.updatePage, AttributeListActions.updateSort),
       concatLatestFrom(action => this.store$.select(selectAttributeListDataForId(action.dataId))),
       map(([ _action, data ]) => data),
       filter(TypesHelper.isDefined),

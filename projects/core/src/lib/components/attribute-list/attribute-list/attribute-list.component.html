@@ -13,7 +13,7 @@
         <mat-icon (click)="onMinimizeClick();" svgIcon="minimize"></mat-icon>
       </button>
       <button mat-icon-button class="maximize-btn">
-        <mat-icon (click)="onMaximizeClick();" svgIcon="chevron_top"></mat-icon>
+        <mat-icon (click)="onMaximizeClick();" [svgIcon]="maximized ? 'chevron_bottom' : 'chevron_top'"></mat-icon>
       </button>
       <button mat-icon-button>
         <mat-icon (click)="onCloseClick();" svgIcon="close"></mat-icon>

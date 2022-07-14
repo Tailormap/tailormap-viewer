@@ -165,7 +165,7 @@ const onUpdateSort = (
       d => ({
         ...d,
         sortedColumn: payload.direction !== '' ? payload.column : '',
-        sortDirection: payload.direction === 'desc' ? 'DESC' : 'ASC',
+        sortDirection: payload.direction,
       }),
     ),
   };

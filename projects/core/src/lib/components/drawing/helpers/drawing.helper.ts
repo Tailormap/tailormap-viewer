@@ -86,7 +86,9 @@ export class DrawingHelper {
     return {
       styleKey: 'drawing-style',
       zIndex: feature.attributes.zIndex || 0,
-      pointType: feature.attributes.type === DrawingFeatureTypeEnum.LABEL ? 'label' : style.marker,
+      pointType: feature.attributes.type === DrawingFeatureTypeEnum.LABEL
+        ? 'label'
+        : (feature.attributes.type === DrawingFeatureTypeEnum.POINT ? style.marker : undefined),
       pointSize: style.markerSize,
       pointFillColor: feature.attributes.type === DrawingFeatureTypeEnum.POINT
         ? style.markerFillColor

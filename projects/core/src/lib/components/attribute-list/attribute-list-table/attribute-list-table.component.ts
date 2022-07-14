@@ -37,8 +37,14 @@ export class AttributeListTableComponent {
     return this._columns;
   }
 
+  @Input()
+  public sort: { column: string; direction: string } | null = null;
+
   @Output()
   public selectRow = new EventEmitter<{ id: string; selected: boolean }>();
+
+  @Output()
+  public setSort = new EventEmitter<{ columnId: string; direction: 'asc' | 'desc' | '' }>();
 
   private _rows: AttributeListRowModel[] = [];
   private _columns: AttributeListColumnModel[] = [];
@@ -83,6 +89,17 @@ export class AttributeListTableComponent {
   public onRowClick($event: MouseEvent, row: AttributeListRowModel): void {
     $event.stopPropagation();
     this.selectRow.emit({ id: row.id, selected: !row.selected });
+  }
+
+  public onSortClick(columnId: string): void {
+    if (this.isResizing) {
+      return;
+    }
+    let direction: 'asc' | 'desc' | '' = 'asc';
+    if (this.sort && this.sort.column === columnId) {
+      direction = this.sort.direction === 'asc' ? 'desc' : '';
+    }
+    this.setSort.emit({ columnId, direction });
   }
 
 }

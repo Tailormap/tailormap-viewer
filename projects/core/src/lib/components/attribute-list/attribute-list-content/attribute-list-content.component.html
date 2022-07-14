@@ -8,6 +8,8 @@
                            role="table"
                            [rows]="rows$ | async"
                            [columns]="columns$ | async"
-                           (selectRow)="onSelectRow($event)"></tm-attribute-list-table>
+                           [sort]="sort$ | async"
+                           (selectRow)="onSelectRow($event)"
+                           (setSort)="onSortClick($event)"></tm-attribute-list-table>
 
 </div>
