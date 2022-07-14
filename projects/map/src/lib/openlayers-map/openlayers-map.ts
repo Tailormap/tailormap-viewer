@@ -139,15 +139,8 @@ export class OpenLayersMap implements MapViewerModel {
     const geom = olFeature.getGeometry();
     if (geom) {
       const geomExtent = geom.getExtent();
-      this.getVisibleExtent$()
-        .pipe(take(1))
-        .subscribe(mapExtent => {
-          if (containsExtent(mapExtent, geomExtent)) {
-            return;
-          }
-          const center = getCenter(geomExtent);
-          this.zoomTo(center[0], center[1]);
-        });
+      const center = getCenter(geomExtent);
+      this.zoomTo(center[0], center[1]);
     }
   }
 

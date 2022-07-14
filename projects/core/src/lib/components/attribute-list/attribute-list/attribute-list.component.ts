@@ -64,7 +64,9 @@ export class AttributeListComponent implements OnInit {
       {
         ...FeatureStylingHelper.DEFAULT_HIGHLIGHT_STYLE,
         styleKey: 'attribute-list-highlight-style',
-      })
+      },
+      true,
+    )
       .pipe(takeUntil(this.destroyed))
       .subscribe();
   }
