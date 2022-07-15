@@ -9,6 +9,7 @@ import { $localize } from '@angular/localize/init';
 import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 import { deregisterTool, registerTool } from '../../toolbar/state/toolbar.actions';
 import { ToolbarComponentEnum } from '../../toolbar/models/toolbar-component.enum';
+import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.helper';
 
 @Component({
   selector: 'tm-feature-info',
@@ -46,12 +47,8 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
       'feature-info-highlight-layer',
       this.store$.select(selectCurrentlySelectedFeatureGeometry),
       {
-        zIndex: 9999,
+        ...FeatureStylingHelper.DEFAULT_HIGHLIGHT_STYLE,
         styleKey: 'feature-info-highlight-style',
-        strokeColor: '#6236ff',
-        strokeWidth: 5,
-        pointType: 'square',
-        pointFillColor: '#6236ff',
       })
       .pipe(takeUntil(this.destroyed))
       .subscribe();
