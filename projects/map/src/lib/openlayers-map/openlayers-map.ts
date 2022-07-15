@@ -15,7 +15,7 @@ import { OpenLayersToolManager } from './open-layers-tool-manager';
 import { OpenLayersEventManager } from './open-layers-event-manager';
 import Feature from 'ol/Feature';
 import Geometry from 'ol/geom/Geometry';
-import { buffer, getCenter } from 'ol/extent';
+import { buffer } from 'ol/extent';
 
 export class OpenLayersMap implements MapViewerModel {
 
