@@ -15,7 +15,7 @@ import { OpenLayersToolManager } from './open-layers-tool-manager';
 import { OpenLayersEventManager } from './open-layers-event-manager';
 import Feature from 'ol/Feature';
 import Geometry from 'ol/geom/Geometry';
-import { containsExtent, getCenter } from 'ol/extent';
+import { buffer, getCenter } from 'ol/extent';
 
 export class OpenLayersMap implements MapViewerModel {
 
@@ -139,8 +139,9 @@ export class OpenLayersMap implements MapViewerModel {
     const geom = olFeature.getGeometry();
     if (geom) {
       const geomExtent = geom.getExtent();
-      const center = getCenter(geomExtent);
-      this.zoomTo(center[0], center[1]);
+      this.executeMapAction(olMap => {
+        olMap.getView().fit(buffer(geomExtent, 10), { duration: 1000 });
+      });
     }
   }
 
