@@ -15,6 +15,9 @@ import { OpenLayersToolManager } from './open-layers-tool-manager';
 import { OpenLayersEventManager } from './open-layers-event-manager';
 import { MapExportOptions } from '../map-service/map.service';
 import { OpenLayersMapImageExporter } from './openlayers-map-image-exporter';
+import Feature from 'ol/Feature';
+import Geometry from 'ol/geom/Geometry';
+import { buffer } from 'ol/extent';
 
 export class OpenLayersMap implements MapViewerModel {
 
@@ -130,6 +133,34 @@ export class OpenLayersMap implements MapViewerModel {
     this.executeMapAction(olMap => {
       if (this.initialExtent && this.initialExtent.length > 0) {
         olMap.getView().fit(this.initialExtent);
+      }
+    });
+  }
+
+  public zoomToFeature(olFeature: Feature<Geometry>) {
+    const geom = olFeature.getGeometry();
+    if (geom) {
+      const geomExtent = geom.getExtent();
+      this.executeMapAction(olMap => {
+        olMap.getView().fit(buffer(geomExtent, 10), { duration: 1000 });
+      });
+    }
+  }
+
+  public zoomTo(x: number, y: number, zoomLevel?: number, animationDuration = 1000, ignoreWhileAnimating = false) {
+    this.executeMapAction(olMap => {
+      if (olMap.getView().getAnimating() && ignoreWhileAnimating) {
+        return;
+      }
+      zoomLevel = !(zoomLevel) || zoomLevel < 0 ? olMap.getView().getZoom() : zoomLevel;
+      if (typeof zoomLevel === 'undefined') {
+        return;
+      }
+      if (animationDuration === 0) {
+        olMap.getView().setCenter([x, y]);
+        olMap.getView().setZoom(zoomLevel);
+      } else {
+        olMap.getView().animate({ duration: animationDuration, zoom: zoomLevel, center: [x, y] });
       }
     });
   }

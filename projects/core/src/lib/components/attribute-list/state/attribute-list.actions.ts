@@ -2,6 +2,7 @@ import { createAction, props } from '@ngrx/store';
 import { AttributeListTabModel } from '../models/attribute-list-tab.model';
 import { AttributeListDataModel } from '../models/attribute-list-data.model';
 import { LoadAttributeListDataResultModel } from '../models/load-attribute-list-data-result.model';
+import { FeatureModel } from '@tailormap-viewer/api';
 
 const attributeListActionsPrefix = '[Attributelist]';
 
@@ -57,6 +58,11 @@ export const updateSort = createAction(
 export const updateRowSelected = createAction(
   `${attributeListActionsPrefix} Update Row Selected`,
   props<{ dataId: string; rowId: string; selected: boolean }>(),
+);
+
+export const setHighlightedFeature = createAction(
+  `${attributeListActionsPrefix} Set Highlighted Feature`,
+  props<{ feature: FeatureModel | null }>(),
 );
 
 export const changeColumnPosition = createAction(

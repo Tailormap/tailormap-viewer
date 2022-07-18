@@ -13,6 +13,7 @@ export const selectAttributeListTabs = createSelector(selectAttributeListState, 
 export const selectAttributeListData = createSelector(selectAttributeListState, state => state.data);
 export const selectAttributeListHeight = createSelector(selectAttributeListState, state => state.height);
 export const selectAttributeListSelectedTab = createSelector(selectAttributeListState, state => state.selectedTabId);
+export const selectCurrentlyHighlightedFeature = createSelector(selectAttributeListState, state => state.highlightedFeature);
 
 export const selectAttributeListTab = (tabId: string) => createSelector(
   selectAttributeListTabs,
@@ -27,6 +28,21 @@ export const selectAttributeListTabData = (tabId: string) => createSelector(
 export const selectAttributeListDataForId = (dataId: string) => createSelector(
   selectAttributeListData,
   data => data.find(t => t.id === dataId),
+);
+
+export const selectAttributeListTabForDataId = (dataId: string) => createSelector(
+  selectAttributeListDataForId(dataId),
+  selectAttributeListTabs,
+  (data, tabs): AttributeListTabModel | null => {
+    return data ? (tabs.find(t => t.id === data.tabId) || null) : null;
+  },
+);
+
+export const selectAttributeListRow = (dataId: string, rowId: string) => createSelector(
+  selectAttributeListDataForId(dataId),
+  (data): AttributeListRowModel | null => {
+    return data ? (data.rows.find(r => r.id === rowId) || null) : null;
+  },
 );
 
 export const selectSelectedTab = createSelector(
@@ -95,5 +111,16 @@ export const selectPagingDataSelectedTab = createSelector(
       return { id: '', totalCount: 0, pageIndex: 0, pageSize: 0 };
     }
     return { id: data.id, totalCount: data.totalCount, pageIndex: data.pageIndex, pageSize: data.pageSize };
+  },
+);
+
+export const selectCurrentlySelectedFeatureGeometry = createSelector(
+  selectAttributeListVisible,
+  selectCurrentlyHighlightedFeature,
+  (attributeListVisible, feature): string | null => {
+    if (!attributeListVisible) {
+      return null;
+    }
+    return feature?.geometry || null;
   },
 );

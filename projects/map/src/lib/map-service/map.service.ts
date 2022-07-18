@@ -97,6 +97,7 @@ export class MapService {
     layerId: string,
     featureGeometry$: Observable<FeatureModelType<T> | Array<FeatureModelType<T>>>,
     vectorLayerStyle?: MapStyleModel | ((feature: FeatureModel<T>) => MapStyleModel),
+    zoomToFeature?: boolean,
   ): Observable<VectorLayer<VectorSource<Geometry>> | null> {
     return combineLatest([
       this.createVectorLayer$({id: layerId, name: `${layerId} layer`, layerType: LayerTypesEnum.Vector, visible: true}, vectorLayerStyle),
@@ -110,9 +111,13 @@ export class MapService {
           vectorLayer.getSource()?.getFeatures().forEach(feature => {
             vectorLayer.getSource()?.removeFeature(feature);
           });
-          FeatureHelper.getFeatures(featureGeometry).forEach(feature => {
+          const featureModels = FeatureHelper.getFeatures(featureGeometry);
+          featureModels.forEach(feature => {
             vectorLayer.getSource()?.addFeature(feature);
           });
+          if (zoomToFeature && featureModels.length === 1) {
+            this.map.zoomToFeature(featureModels[0]);
+          }
         }),
         map(([vectorLayer]) => vectorLayer),
       );

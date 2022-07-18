@@ -45,10 +45,20 @@ const onChangeAttributeListTabs = (
 const onSetSelectedTab = (
   state: AttributeListState,
   payload: ReturnType<typeof AttributeListActions.setSelectedTab>,
-): AttributeListState => ({
-  ...state,
-  selectedTabId: payload.tabId,
-});
+): AttributeListState => {
+  const currentSelectedTab = state.selectedTabId;
+  return {
+    ...state,
+    data: typeof currentSelectedTab === 'undefined'
+      ? state.data
+      : state.data.map(data => {
+          return data.tabId === currentSelectedTab
+            ? { ...data, rows: data.rows.map(row => ({ ...row, selected: false })) }
+            : data;
+      }),
+    selectedTabId: payload.tabId,
+  };
+};
 
 const onLoadData = (
   state: AttributeListState,
@@ -167,6 +177,7 @@ const onUpdateRowSelected = (
 ): AttributeListState => {
   return {
     ...state,
+    highlightedFeature: null,
     data: AttributeListStateHelper.updateData(
       state.data,
       payload.dataId,
@@ -180,6 +191,14 @@ const onUpdateRowSelected = (
     ),
   };
 };
+
+const onSetHighlightedFeature = (
+  state: AttributeListState,
+  payload: ReturnType<typeof AttributeListActions.setHighlightedFeature>,
+): AttributeListState => ({
+    ...state,
+    highlightedFeature: payload.feature,
+});
 
 const onChangeColumnPosition = (
   state: AttributeListState,
@@ -238,5 +257,6 @@ const attributeListReducerImpl = createReducer<AttributeListState>(
   on(AttributeListActions.updateRowSelected, onUpdateRowSelected),
   on(AttributeListActions.changeColumnPosition, onChangeColumnPosition),
   on(AttributeListActions.toggleColumnVisible, onToggleColumnVisible),
+  on(AttributeListActions.setHighlightedFeature, onSetHighlightedFeature),
 );
 export const attributeListReducer = (state: AttributeListState | undefined, action: Action) => attributeListReducerImpl(state, action);
