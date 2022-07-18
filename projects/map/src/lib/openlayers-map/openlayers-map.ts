@@ -222,7 +222,7 @@ export class OpenLayersMap implements MapViewerModel {
         // XXX maybe provide an extension point for DrawingComponent to provide layer instances for map image export, or ask the LayerManager
         // for VectorLayers that should be included in a map image export?
         const drawingLayer = olMap.getAllLayers().find(l => l.get('id') === 'drawing-layer');
-        return OpenLayersMapImageExporter.exportMapImage$(olMap.getSize() as Size, olMap.getView(), options, drawingLayer ? [drawingLayer] : []).pipe(
+        return OpenLayersMapImageExporter.exportMapImage$(olMap, olMap.getSize() as Size, olMap.getView(), options, drawingLayer ? [drawingLayer] : []).pipe(
           // Force redraw of vector layer with normal DPI
           tap(() => drawingLayer?.changed()),
         );
