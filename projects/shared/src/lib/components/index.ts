@@ -6,3 +6,5 @@ export * from './error-message';
 export * from './split-button';
 export * from './confirm-dialog';
 export * from './panel-resizer';
+export * from './color-picker/color-picker.component';
+export * from './icon-picker/icon-picker.component';
