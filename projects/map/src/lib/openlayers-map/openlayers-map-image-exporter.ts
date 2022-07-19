@@ -18,7 +18,7 @@ export class OpenLayersMapImageExporter {
    * instances are created and hidpi strategies for tiling layers used when the requested image resolution is high. For VectorLayers
    * use existing OpenLayers Layer instances in the options.olLayers.
    */
-  public static exportMapImage$(olMap: OlMap, olSize: Size, olView: View, options: MapExportOptions, extraLayers: BaseLayer[]): Observable<string> {
+  public static exportMapImage$(olSize: Size, olView: View, options: MapExportOptions, extraLayers: BaseLayer[]): Observable<string> {
     const viewResolution = olView.getResolution();
 
     if (!olSize || !viewResolution) {
