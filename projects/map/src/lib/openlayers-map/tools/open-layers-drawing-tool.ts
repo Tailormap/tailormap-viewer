@@ -2,7 +2,6 @@ import { merge, Subject } from 'rxjs';
 import { DrawingToolConfigModel, DrawingType } from '../../models/tools/drawing-tool-config.model';
 import OlMap from 'ol/Map';
 import Draw, { DrawEvent, GeometryFunction } from 'ol/interaction/Draw';
-import GeometryType from 'ol/geom/GeometryType';
 import { MapStyleHelper } from '../../helpers/map-style.helper';
 import { DrawingEnableToolArguments, DrawingToolEvent, DrawingToolModel } from '../../models/tools/drawing-tool.model';
 import { NgZone } from '@angular/core';
@@ -35,15 +34,15 @@ export class OpenLayersDrawingTool implements DrawingToolModel {
 
   private static getDrawingType(type?: DrawingType) {
     if (type === 'line') {
-      return GeometryType.LINE_STRING;
+      return 'LineString';
     }
     if (type === 'area') {
-      return GeometryType.POLYGON;
+      return 'Polygon';
     }
     if (type === 'circle' || type === 'ellipse' || type === 'square' || type === 'rectangle' || type === 'star') {
-      return GeometryType.CIRCLE;
+      return 'Circle';
     }
-    return GeometryType.POINT;
+    return 'Point';
   }
 
   private static getGeometryFunction(type?: DrawingType): GeometryFunction | undefined {
