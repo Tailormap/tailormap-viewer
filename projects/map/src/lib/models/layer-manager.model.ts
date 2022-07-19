@@ -7,8 +7,9 @@ import TileLayer from 'ol/layer/Tile';
 import ImageWMS from 'ol/source/ImageWMS';
 import WMTS from 'ol/source/WMTS';
 import XYZ from 'ol/source/XYZ';
+import { TileWMS } from 'ol/source';
 
-export type LayerTypes = VectorLayer<VectorSource<Geometry>> | ImageLayer<ImageWMS> | TileLayer<XYZ> | TileLayer<WMTS> | null;
+export type LayerTypes = VectorLayer<VectorSource<Geometry>> | TileLayer<TileWMS> | ImageLayer<ImageWMS> | TileLayer<XYZ> | TileLayer<WMTS> | null;
 
 export interface LayerManagerModel {
   setBackgroundLayers(layers: LayerModel[]): void;
