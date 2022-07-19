@@ -1,4 +1,3 @@
-import GeometryType from 'ol/geom/GeometryType';
 import { Circle, Geometry, LineString, Point, Polygon } from 'ol/geom';
 
 export class GeometryTypeHelper {
@@ -11,19 +10,19 @@ export class GeometryTypeHelper {
   }
 
   public static isPointGeometry(geometry?: Geometry): geometry is Point {
-    return geometry?.getType() === GeometryType.POINT;
+    return geometry?.getType() === 'Point';
   }
 
   public static isLineGeometry(geometry?: Geometry): geometry is LineString {
-    return geometry?.getType() === GeometryType.LINE_STRING;
+    return geometry?.getType() === 'LineString';
   }
 
   public static isPolygonGeometry(geometry?: Geometry): geometry is Polygon {
-    return geometry?.getType() === GeometryType.POLYGON;
+    return geometry?.getType() === 'Polygon';
   }
 
   public static isCircleGeometry(geometry?: Geometry): geometry is Circle {
-    return geometry?.getType() === GeometryType.CIRCLE;
+    return geometry?.getType() === 'Circle';
   }
 
 }

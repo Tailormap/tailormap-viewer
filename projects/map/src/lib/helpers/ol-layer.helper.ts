@@ -15,6 +15,8 @@ import WMTSTileGrid from 'ol/tilegrid/WMTS';
 import { ImageWMS, TileWMS } from 'ol/source';
 import { ServerTypeHelper } from './server-type.helper';
 import ImageLayer from 'ol/layer/Image';
+import { Options } from 'ol/source/ImageWMS';
+import { ServerType } from 'ol/source/wms';
 
 export interface LayerProperties {
   id: string;
@@ -119,7 +121,7 @@ export class OlLayerHelper {
 
     const defaultServerType = 'geoserver'; // Use the most common as default
 
-    let serverType: string | undefined;
+    let serverType: ServerType | undefined;
     let hidpi = true;
 
     if (layer.hiDpiMode === 'disabled') {
@@ -131,7 +133,7 @@ export class OlLayerHelper {
       serverType = layer.hiDpiMode || defaultServerType;
     }
 
-    const sourceOptions = {
+    const sourceOptions: Options = {
       url: OgcHelper.filterOgcUrlParameters(layer.url),
       params: {
         LAYERS: layer.layers,
