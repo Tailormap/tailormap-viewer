@@ -33,7 +33,7 @@ export class OlLayerHelper {
     olLayer.setProperties(layerProps);
   }
 
-  public static createLayer(layer: LayerModel, projection: Projection): TileLayer<TileWMS> | ImageLayer<ImageWMS> | TileLayer<XYZ> | TileLayer<WMTS> | null {
+  public static createLayer(layer: LayerModel, projection: Projection, pixelRatio?: number): TileLayer<TileWMS> | ImageLayer<ImageWMS> | TileLayer<XYZ> | TileLayer<WMTS> | null {
     if (LayerTypesHelper.isTmsLayer(layer)) {
       return OlLayerHelper.createTMSLayer(layer, projection);
     }
@@ -41,7 +41,7 @@ export class OlLayerHelper {
       return OlLayerHelper.createWMSLayer(layer);
     }
     if (LayerTypesHelper.isWmtsLayer(layer)) {
-      return OlLayerHelper.createWMTSLayer(layer, projection);
+      return OlLayerHelper.createWMTSLayer(layer, projection, pixelRatio);
     }
     return null;
   }
@@ -49,11 +49,11 @@ export class OlLayerHelper {
   /**
    * service is optional but can be passed to set the WMTSLayerModel properties from the WMTS Capabilities
    */
-  public static createWMTSLayer(layer: WMTSLayerModel, projection: Projection): TileLayer<WMTS> | null {
+  public static createWMTSLayer(layer: WMTSLayerModel, projection: Projection, pixelRatio?: number): TileLayer<WMTS> | null {
     const parser = new WMTSCapabilities();
     const capabilities = parser.read(layer.capabilities);
 
-    const hiDpi = window.devicePixelRatio > 1 && layer.hiDpiMode && layer.hiDpiMode !== 'disabled';
+    const hiDpi = (pixelRatio || window.devicePixelRatio) > 1 && layer.hiDpiMode && layer.hiDpiMode !== 'disabled';
     const hiDpiLayer = layer.hiDpiSubstituteLayer || layer.layers;
 
     const options = optionsFromCapabilities(capabilities, {
@@ -63,6 +63,7 @@ export class OlLayerHelper {
     if (options === null) {
       return null;
     }
+    options.crossOrigin = layer.crossOrigin;
 
     if (hiDpi) {
       // For WMTS with hiDpiMode == 'substituteLayerTilePixelRatioOnly' just setting this option suffices. The service should send tiles with

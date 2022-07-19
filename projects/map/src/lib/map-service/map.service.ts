@@ -2,7 +2,8 @@ import { Injectable, NgZone } from '@angular/core';
 import { OpenLayersMap } from '../openlayers-map/openlayers-map';
 import { combineLatest, finalize, map, Observable, tap } from 'rxjs';
 import {
-  LayerManagerModel, LayerTypesEnum, MapResolutionModel, MapViewerOptionsModel, ToolConfigModel, VectorLayerModel, MapStyleModel, ToolModel,
+  LayerManagerModel, LayerModel, LayerTypesEnum, MapResolutionModel, MapStyleModel, MapViewerOptionsModel, ToolConfigModel, ToolModel,
+  VectorLayerModel,
 } from '../models';
 import { ToolManagerModel } from '../models/tool-manager.model';
 import VectorLayer from 'ol/layer/Vector';
@@ -16,6 +17,13 @@ import { FeatureHelper } from '../helpers/feature.helper';
 import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
 import { MapSizeHelper } from '../helpers/map-size.helper';
 import { MapUnitEnum } from '../models/map-unit.enum';
+
+export interface MapExportOptions {
+  widthInMm: number;
+  heightInMm: number;
+  resolution: number;
+  layers: LayerModel[];
+}
 
 @Injectable({
   providedIn: 'root',
@@ -57,8 +65,8 @@ export class MapService {
             toolManager.removeTool(toolId);
           }
         }),
-        map(manager => ({ tool: manager.addTool<T, C>(tool), manager })),
-        tap(({ tool: createdTool }) => toolId = createdTool?.id || ''),
+        map(manager => ({tool: manager.addTool<T, C>(tool), manager})),
+        tap(({tool: createdTool}) => toolId = createdTool?.id || ''),
       );
   }
 
@@ -92,11 +100,11 @@ export class MapService {
     zoomToFeature?: boolean,
   ): Observable<VectorLayer<VectorSource<Geometry>> | null> {
     return combineLatest([
-      this.createVectorLayer$({ id: layerId, name: `${layerId} layer`, layerType: LayerTypesEnum.Vector, visible: true }, vectorLayerStyle),
+      this.createVectorLayer$({id: layerId, name: `${layerId} layer`, layerType: LayerTypesEnum.Vector, visible: true}, vectorLayerStyle),
       featureGeometry$,
     ])
       .pipe(
-        tap(([ vectorLayer, featureGeometry ]) => {
+        tap(([vectorLayer, featureGeometry]) => {
           if (!vectorLayer) {
             return;
           }
@@ -111,7 +119,7 @@ export class MapService {
             this.map.zoomToFeature(featureModels[0]);
           }
         }),
-        map(([ vectorLayer ]) => vectorLayer),
+        map(([vectorLayer]) => vectorLayer),
       );
   }
 
@@ -134,7 +142,7 @@ export class MapService {
       );
   }
 
-  public getPixelForCoordinates$(coordinates: [ number, number ]): Observable<[ number, number ] | null> {
+  public getPixelForCoordinates$(coordinates: [number, number]): Observable<[number, number] | null> {
     return this.map.getPixelForCoordinates$(coordinates);
   }
 
@@ -152,8 +160,8 @@ export class MapService {
    * @see ol.proj.Units
    */
   public getUnitsOfMeasure$(): Observable<MapUnitEnum> {
-    return this.map.getProjection$().pipe( map(
-      p => p.getUnits() === undefined ? MapUnitEnum.m : p.getUnits().toLowerCase() as MapUnitEnum,
+    return this.map.getProjection$().pipe(map(
+        p => p.getUnits() === undefined ? MapUnitEnum.m : p.getUnits().toLowerCase() as MapUnitEnum,
       ),
     );
   }
@@ -178,4 +186,10 @@ export class MapService {
     this.map.zoomToInitialExtent();
   }
 
+  /**
+   * Export the current map to an image.
+   */
+  public exportMapImage$(options: MapExportOptions): Observable<string> {
+    return this.map.exportMapImage$(options);
+  }
 }

@@ -48,3 +48,7 @@ testem.log
 .DS_Store
 Thumbs.db
 
+lcov-report/
+clover.xml
+coverage-final.json
+lcov.info

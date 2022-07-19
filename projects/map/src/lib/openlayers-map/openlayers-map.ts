@@ -1,18 +1,20 @@
 /* eslint-disable rxjs/finnish */
 import { default as OlMap } from 'ol/Map';
 import Projection from 'ol/proj/Projection';
-import View  from 'ol/View';
+import View from 'ol/View';
 import { NgZone } from '@angular/core';
 import { defaults as defaultInteractions } from 'ol/interaction';
 import { LayerManagerModel, MapResolutionModel, MapViewerModel, MapViewerOptionsModel } from '../models';
 import { ProjectionsHelper } from '../helpers/projections.helper';
 import { OpenlayersExtent } from '../models/extent.type';
 import { OpenLayersLayerManager } from './open-layers-layer-manager';
-import { BehaviorSubject, concatMap, filter, map, merge, Observable, take } from 'rxjs';
+import { BehaviorSubject, concatMap, filter, map, merge, Observable, take, tap } from 'rxjs';
 import { Size } from 'ol/size';
 import { ToolManagerModel } from '../models/tool-manager.model';
 import { OpenLayersToolManager } from './open-layers-tool-manager';
 import { OpenLayersEventManager } from './open-layers-event-manager';
+import { MapExportOptions } from '../map-service/map.service';
+import { OpenLayersMapImageExporter } from './openlayers-map-image-exporter';
 import Feature from 'ol/Feature';
 import Geometry from 'ol/geom/Geometry';
 import { buffer } from 'ol/extent';
@@ -212,6 +214,22 @@ export class OpenLayersMap implements MapViewerModel {
       );
   }
 
+  public exportMapImage$(options: MapExportOptions): Observable<string> {
+    return this.getMap$().pipe(
+      take(1),
+      tap((olMap: OlMap) => console.log(olMap)),
+      concatMap((olMap: OlMap) => {
+        // XXX maybe provide an extension point for DrawingComponent to provide layer instances for map image export, or ask the LayerManager
+        // for VectorLayers that should be included in a map image export?
+        const drawingLayer = olMap.getAllLayers().find(l => l.get('id') === 'drawing-layer');
+        return OpenLayersMapImageExporter.exportMapImage$(olMap.getSize() as Size, olMap.getView(), options, drawingLayer ? [drawingLayer] : []).pipe(
+          // Force redraw of vector layer with normal DPI
+          tap(() => drawingLayer?.changed()),
+        );
+      }),
+    );
+  }
+
   private getSize$(): Observable<Size> {
     return this.getMap$().pipe(map(olMap => {
       const size = olMap.getSize();
@@ -221,7 +239,6 @@ export class OpenLayersMap implements MapViewerModel {
       return size;
     }));
   }
-
 
   private _render(container: HTMLElement) {
     this.executeMapAction(olMap => {
@@ -240,5 +257,4 @@ export class OpenLayersMap implements MapViewerModel {
       olMap.updateSize();
     });
   }
-
 }
