@@ -46,3 +46,16 @@
 .ol-tooltip--static:before {
   border-top-color: #ffcc33;
 }
+
+.ol-scale-step-text {
+  /* paint-order property needed to make text-stroke for small fonts look proper. Supported by Firefox and html2canvas but not Webkit.
+     Text-stroke is not on the outside of the characters so 8-way shadow gives better effect. */
+  /*
+  -webkit-text-stroke: 3px white;
+  paint-order: stroke fill;
+  text-shadow: none;
+  */
+  text-shadow: -1px 0 white, 1px 0 white, 0 -1px white, 0 1px white, -1px -1px white, 1px 1px white, -1px 1px white, 1px -1px white;
+
+  font-family: sans-serif;
+}

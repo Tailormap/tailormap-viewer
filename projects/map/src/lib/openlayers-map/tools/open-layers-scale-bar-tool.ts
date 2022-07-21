@@ -56,6 +56,7 @@ export class OpenLayersScaleBarTool implements ScaleBarToolModel {
       bar: this.toolConfig.scaleType === 'bar',
       className: clsName || this.clsName,
       target: target || this.target,
+      minWidth: 100,
     });
   }
 

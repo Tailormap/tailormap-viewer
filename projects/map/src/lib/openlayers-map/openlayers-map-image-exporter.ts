@@ -6,6 +6,8 @@ import BaseLayer from 'ol/layer/Base';
 import View from 'ol/View';
 import { $localize } from '@angular/localize/init';
 import { Size } from 'ol/size';
+import { ScaleLine } from 'ol/control';
+import html2canvas from 'html2canvas';
 
 export class OpenLayersMapImageExporter {
   private constructor() {
@@ -49,6 +51,7 @@ export class OpenLayersMapImageExporter {
     target.style.visibility = 'hidden';
     target.style.width = `${imageExportOlSize[0]}px`;
     target.style.height = `${imageExportOlSize[1]}px`;
+    target.style.zIndex = '-10000';
     document.body.append(target);
 
     const layers = [
@@ -56,8 +59,15 @@ export class OpenLayersMapImageExporter {
         ...extraLayers,
     ];
 
+    const scaleLineControl = new ScaleLine({
+      units: 'metric',
+      bar: true,
+      steps: 4,
+      minWidth: 100,
+    });
+
     const imageExportOlMap = new OlMap({
-      controls: [],
+      controls: [scaleLineControl],
       interactions: [],
       target,
       layers,
@@ -84,16 +94,33 @@ export class OpenLayersMapImageExporter {
         layerCanvasList.forEach(canvas => {
           OpenLayersMapImageExporter.drawOlCanvasOnImageExportCanvas(canvas, mapContext, width);
         });
-        renderedMapCanvasDataURL$.next(imageExportCanvas.toDataURL());
+
+        // Render controls using html2canvas
+        const scaleBar = imageExportOlMap.getViewport().querySelector('.ol-scale-bar') as HTMLElement;
+
+        // Set element visible otherwise html2canvas won't render it
+        target.style.visibility = 'visible';
+
+        html2canvas(scaleBar, {
+          canvas: imageExportCanvas,
+          backgroundColor: null,
+          logging: false,
+          scale: sizeRatio,
+          width,
+          height,
+          x: -16,
+          y: -(height / sizeRatio) + 50,
+        }).then(() => {
+          renderedMapCanvasDataURL$.next(imageExportCanvas.toDataURL());
+          renderedMapCanvasDataURL$.complete();
+
+          imageExportOlMap.dispose();
+          document.body.removeChild(target);
+        });
       } catch (e) {
         console.error(e);
         renderedMapCanvasDataURL$.error($localize `Unable to export map canvas to image: ${e}`);
       }
-
-      renderedMapCanvasDataURL$.complete();
-
-      imageExportOlMap.dispose();
-      document.body.removeChild(target);
     });
 
     imageExportOlMap.setSize(imageExportOlSize);
