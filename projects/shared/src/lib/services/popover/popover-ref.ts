@@ -1,4 +1,4 @@
-import { OverlayRef as CdkOverlayRef } from '@angular/cdk/overlay/overlay-ref';
+import { OverlayRef as CdkOverlayRef } from '@angular/cdk/overlay';
 import {
   OverlayRef,
 } from '../overlay/overlay-ref';
