@@ -29,7 +29,7 @@ interface PrintOptions {
 })
 export class MapPdfService {
 
-  private readonly defaultMargin = 5;
+  private readonly defaultMargin = 8;
   private readonly titleSize = 12;
   private readonly defaultFontSize = 8;
 
@@ -83,11 +83,11 @@ export class MapPdfService {
   private addDateTime(doc: jsPDF, width: number, height: number) {
     const text = $localize `Gemaakt op `;
     const date = text + new Intl.DateTimeFormat('nl-NL', { dateStyle: 'full', timeStyle: 'medium'}).format(new Date());
-    const dateFontSize = 6;
+    const dateFontSize = 8;
     doc.setFontSize(dateFontSize);
     // See http://raw.githack.com/MrRio/jsPDF/master/docs/module-split_text_to_size.html#~getStringUnitWidth
     const dateWidthInMM = (doc.getStringUnitWidth(date) * dateFontSize) / (72 / 25.6);
-    doc.text(date, width - dateWidthInMM - 2, height - 2);
+    doc.text(date, width - dateWidthInMM - 8, height - 5);
     doc.setFontSize(this.defaultFontSize);
   }
 }

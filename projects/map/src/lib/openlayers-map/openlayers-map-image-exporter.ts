@@ -63,7 +63,7 @@ export class OpenLayersMapImageExporter {
       units: 'metric',
       bar: true,
       steps: 4,
-      minWidth: 100,
+      minWidth: 200,
     });
 
     const imageExportOlMap = new OlMap({

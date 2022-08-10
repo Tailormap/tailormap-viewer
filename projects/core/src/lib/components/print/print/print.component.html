@@ -1,17 +1,62 @@
 <div *ngIf="visible$ | async">
 
   <ng-container *ngIf="(busy$ | async) === false; else busy" >
-    <label i18n>DPI</label>
-    <input matInput [formControl]="formControl" [autofocus]="true" />
-    <p></p>
 
-    <button mat-stroked-button
-            color="primary"
-            (click)="downloadMapImage()" i18n>Download map image</button>
-    <p></p>
-    <button  mat-stroked-button
-            color="primary"
-            (click)="downloadPDF()" i18n>Download map PDF</button>
+    <h2 class="section-label" i18n>
+      Export map
+    </h2>
+
+    <mat-button-toggle-group [formControl]="exportType" class="lowerHeight">
+      <mat-button-toggle value="pdf"><span i18n>PDF document</span></mat-button-toggle>
+      <mat-button-toggle value="image"><span i18n>Map image</span></mat-button-toggle>
+    </mat-button-toggle-group>
+
+    <div *ngIf="exportType.value === 'image'" class="spaced">
+      <form [formGroup]="exportImageForm" (ngSubmit)="downloadMapImage()">
+          <span i18n>Image size in millimeters:</span>
+          <mat-form-field appearance="fill">
+            <mat-label i18n>Width</mat-label>
+            <input matInput formControlName="width" type="number" min="50" max="600">
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label i18n>Height</mat-label>
+            <input matInput formControlName="height" type="number" min="50" max="600">
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label i18n>DPI</mat-label>
+            <input matInput formControlName="dpi" type="number" min="90" max="600">
+          </mat-form-field>
+          <div class="padding">
+            Image resolution in pixels: {{getImageResolution()}}
+          </div>
+          <button mat-stroked-button color="primary" type="submit" [disabled]="!exportImageForm.valid" i18n>Download map image</button>
+      </form>
+    </div>
+
+    <div *ngIf="exportType.value === 'pdf'" class="spaced">
+      <form [formGroup]="exportPdfForm" (ngSubmit)="downloadPdf()">
+        <mat-button-toggle-group formControlName="orientation" class="lowerHeight" aria-label="Orientation">
+          <mat-button-toggle value="landscape"><span i18n>Landscape</span></mat-button-toggle>
+          <mat-button-toggle value="portrait"><span i18n>Portrait</span></mat-button-toggle>
+        </mat-button-toggle-group>
+        <mat-button-toggle-group formControlName="paperSize" class="lowerHeight" style="margin: 3px" aria-label="Paper size">
+          <mat-button-toggle value="a4"><span i18n>A4</span></mat-button-toggle>
+          <mat-button-toggle value="a3"><span i18n>A3</span></mat-button-toggle>
+        </mat-button-toggle-group>
+        <mat-form-field appearance="fill">
+          <mat-label i18n>Title</mat-label>
+          <input matInput formControlName="title" maxlength="100">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label i18n>DPI</mat-label>
+          <input matInput formControlName="dpi" type="number" min="90" max="600">
+        </mat-form-field>
+        <div class="padding">
+          <button mat-stroked-button color="primary" type="submit" [disabled]="!exportImageForm.valid" i18n>Download map PDF</button>
+        </div>
+      </form>
+    </div>
+
   </ng-container>
 
   <ng-template #busy>

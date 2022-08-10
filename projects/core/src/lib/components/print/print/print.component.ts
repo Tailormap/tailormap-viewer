@@ -10,7 +10,7 @@ import { LayerModel, MapService } from '@tailormap-viewer/map';
 import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MapPdfService } from '../../../services/map-pdf/map-pdf.service';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ApplicationMapService } from '../../../map/services/application-map.service';
 import { selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersAndServices } from '../../../map/state/map.selectors';
 
@@ -28,7 +28,20 @@ export class PrintComponent implements OnInit, OnDestroy {
 
   public visible$: Observable<boolean> = of(false);
 
-  public formControl = new FormControl('150', []);
+  public exportType = new FormControl('pdf', []);
+
+  public exportImageForm = new FormGroup({
+    width: new FormControl('86.7', Validators.required),
+    height: new FormControl('65', Validators.required),
+    dpi: new FormControl('300', Validators.required),
+  });
+
+  public exportPdfForm = new FormGroup({
+    orientation: new FormControl('landscape'),
+    title: new FormControl(''),
+    paperSize: new FormControl('a4'),
+    dpi: new FormControl('300', Validators.required),
+  });
 
   private _mapFilenameFn = (extension: string): Observable<string> => {
     const dateTime = new Intl.DateTimeFormat('nl-NL',{ dateStyle: 'short', timeStyle: 'medium'}).format(new Date())
@@ -102,11 +115,6 @@ export class PrintComponent implements OnInit, OnDestroy {
     ).subscribe();
   }
 
-  private getDpi(): number {
-    const formValue = Number(this.formControl.value);
-    return Math.max(72, Math.min(600, formValue));
-  }
-
   private getLayers$(): Observable<LayerModel[]> {
     const isValidLayer = (layer: LayerModel | null): layer is LayerModel => layer !== null;
     return combineLatest([this.store$.select(selectOrderedVisibleBackgroundLayers), this.store$.select(selectOrderedVisibleLayersAndServices)]).pipe(
@@ -117,17 +125,32 @@ export class PrintComponent implements OnInit, OnDestroy {
     );
   }
 
-  public downloadMapImage(): void {
-    this.wrapFileExport('png', (filename, layers) => this.mapService.exportMapImage$(
-      { widthInMm: 173.4, heightInMm: 130, resolution: this.getDpi(), layers}));
+  public getImageResolution() {
+    if (!this.exportImageForm.valid) {
+      return '';
+    }
+
+    const toPixels = (mm: number, theDpi: number) => (mm / 25.4 * theDpi).toFixed();
+    const dpi = +this.exportImageForm.value.dpi;
+    return `${toPixels(+this.exportImageForm.value.width, dpi)} × ${toPixels(+this.exportImageForm.value.height, dpi)}`;
   }
 
-  public downloadPDF(): void {
+  public downloadMapImage(): void {
+     this.wrapFileExport('png', (filename, layers) => this.mapService.exportMapImage$(
+       {
+         widthInMm: this.exportImageForm.value.width,
+         heightInMm: this.exportImageForm.value.height,
+         resolution: this.exportImageForm.value.dpi,
+         layers,
+     }));
+  }
+
+  public downloadPdf(): void {
     this.wrapFileExport('pdf', (filename, layers) => this.mapPdfService.create$({
-        orientation: 'landscape',
-        size: 'a4',
-        resolution: this.getDpi(),
-        title: 'Print test',
+        orientation: this.exportPdfForm.value.orientation,
+        size: this.exportPdfForm.value.paperSize,
+        resolution: +this.exportPdfForm.value.dpi,
+        title: this.exportPdfForm.value.title,
         filename,
       }, layers));
   }

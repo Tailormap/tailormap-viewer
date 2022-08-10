@@ -2,3 +2,16 @@
   display: block;
   padding: 14px 14px 0 14px;
 }
+
+::ng-deep .lowerHeight .mat-button-toggle-label-content {
+  line-height: 36px !important;
+}
+
+.spaced {
+  padding: 3px 0;
+  margin: 3px 0;
+}
+
+.padding {
+  padding: 6px 0;
+}
