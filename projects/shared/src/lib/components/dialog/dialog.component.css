@@ -55,6 +55,7 @@
 
 .dialog--collapsed {
   height: 64px !important;
+  min-height: auto !important;
 }
 
 .dialog--collapsed .dialog-content {

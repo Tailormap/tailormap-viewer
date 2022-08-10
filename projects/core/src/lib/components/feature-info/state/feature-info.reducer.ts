@@ -36,8 +36,16 @@ const onLoadFeatureInfoFailed = (
   currentFeatureIndex: 0,
 });
 
-const onShowFeatureInfoDialog = (state: FeatureInfoState): FeatureInfoState => ({ ...state, dialogVisible: true });
-const onHideFeatureInfoDialog = (state: FeatureInfoState): FeatureInfoState => ({ ...state, dialogVisible: false });
+const onShowFeatureInfoDialog = (state: FeatureInfoState): FeatureInfoState => ({
+  ...state,
+  dialogVisible: true,
+});
+
+const onHideFeatureInfoDialog = (state: FeatureInfoState): FeatureInfoState => ({
+  ...state,
+  dialogVisible: false,
+  dialogCollapsed: false,
+});
 
 const onExpandCollapseFeatureInfoDialog = (state: FeatureInfoState): FeatureInfoState => ({
   ...state,
