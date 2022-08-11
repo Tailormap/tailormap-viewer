@@ -10,7 +10,7 @@ import { LayerModel, MapService } from '@tailormap-viewer/map';
 import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MapPdfService } from '../../../services/map-pdf/map-pdf.service';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { ApplicationMapService } from '../../../map/services/application-map.service';
 import { selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersAndServices } from '../../../map/state/map.selectors';
 
@@ -28,7 +28,7 @@ export class PrintComponent implements OnInit, OnDestroy {
 
   public visible$: Observable<boolean> = of(false);
 
-  public formControl = new FormControl('150', []);
+  public formControl = new UntypedFormControl('150', []);
 
   private _mapFilenameFn = (extension: string): Observable<string> => {
     const dateTime = new Intl.DateTimeFormat('nl-NL',{ dateStyle: 'short', timeStyle: 'medium'}).format(new Date())
