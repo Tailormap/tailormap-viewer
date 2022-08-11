@@ -3,7 +3,7 @@ import { ArrowTypeEnum, DrawingFeatureStyleModel, LabelStyleEnum, StrokeTypeEnum
 import { DrawingFeatureTypeEnum } from '../models/drawing-feature-type.enum';
 import { DrawingHelper } from '../helpers/drawing.helper';
 import { MatSliderChange } from '@angular/material/slider';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { Subject, takeUntil } from 'rxjs';
 import { StyleHelper } from '@tailormap-viewer/shared';
@@ -44,13 +44,15 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
   @Output()
   public styleUpdated: EventEmitter<DrawingFeatureStyleModel> = new EventEmitter<DrawingFeatureStyleModel>();
 
-  public labelControl = new FormControl('');
-  public strokeTypeControl = new FormControl('', [
-    Validators.required,
-  ]);
-  public arrowTypeControl = new FormControl('', [
-    Validators.required,
-  ]);
+  public labelControl = new FormControl('', {
+    nonNullable: true,
+  });
+  public strokeTypeControl = new FormControl<StrokeTypeEnum>(StrokeTypeEnum.SOLID, {
+    nonNullable: true,
+  });
+  public arrowTypeControl = new FormControl<ArrowTypeEnum>(ArrowTypeEnum.NONE, {
+    nonNullable: true,
+  });
 
   private availableMarkers = DrawingHelper.getAvailableMarkers();
   public strokeTypeValues = DrawingHelper.strokeTypeValues;

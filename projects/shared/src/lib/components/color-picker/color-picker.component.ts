@@ -90,7 +90,7 @@ export class ColorPickerComponent implements OnInit, OnDestroy {
 
   private subscription = new Subscription();
 
-  public formControl = new FormControl('');
+  public formControl = new FormControl('', { nonNullable: true });
 
   private popoverRef: OverlayRef | undefined;
 
@@ -107,7 +107,7 @@ export class ColorPickerComponent implements OnInit, OnDestroy {
       validators.push(Validators.required);
     }
     this.formControl.setValidators(validators);
-    this.formControl.patchValue(this.color);
+    this.formControl.patchValue(this.color || '');
     const colorChange$ = this.formControl.valueChanges
       .pipe(debounceTime(250), filter(val => val !== '' && ColorHelper.isValidColor(val, this.allowEmptyColor)))
       .subscribe((val: string) => this.colorChange.emit(val));
@@ -187,7 +187,7 @@ export class ColorPickerComponent implements OnInit, OnDestroy {
   }
 
   public selectColor(color: string | undefined) {
-    this.formControl.setValue(color);
+    this.formControl.setValue(color || '');
     this.pickerOpen = false;
     this.colorChange.emit(color);
     this.popoverRef?.close();

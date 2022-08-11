@@ -14,7 +14,7 @@ import { updatePage } from '../state/attribute-list.actions';
 export class AttributeListPagingDialogComponent implements OnDestroy {
 
   private destroyed = new Subject();
-  public formControl = new FormControl('', []);
+  public formControl = new FormControl<number>(1, []);
 
   constructor(
     private store$: Store,
@@ -43,7 +43,7 @@ export class AttributeListPagingDialogComponent implements OnDestroy {
         debounceTime(500),
       )
       .subscribe(([ value, pagingData ]) => {
-        let page = +value;
+        let page = value === null ? 1 : +value;
         if (pagingData.totalCount) {
           const max = Math.floor(pagingData.totalCount / pagingData.pageSize);
           if (page > max) {
