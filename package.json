@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve app",
     "build": "ng build shared && ng build api && ng build map && ng build core && ng build app",
-    "build-app": "ng build",
-    "watch": "ng build --watch --configuration development",
+    "build-app": "ng build app",
+    "watch": "ng build --watch --configuration development app",
     "test": "jest --max-workers=4",
     "test:ci": "jest --ci --collect-coverage --reporters=default --reporters=jest-junit",
     "test-with-coverage": "jest --max-workers=4 --collect-coverage",
