@@ -31,7 +31,7 @@ describe('DrawingReducer', () => {
   });
 
   test('removes feature feature', () => {
-    const initialState: DrawingState = { ...initialDrawingState, features: [{...feature}] };
+    const initialState: DrawingState = { ...initialDrawingState, features: [{ ...feature }]};
     const action = DrawingActions.removeAllDrawingFeatures();
     expect(initialState.features).toEqual([feature]);
     const updatedState = drawingReducer(initialState, action);

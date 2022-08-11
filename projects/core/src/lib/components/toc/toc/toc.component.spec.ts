@@ -38,7 +38,7 @@ const getMockStore = (selectedLayer: string = '') => {
 };
 
 const getMenubarService = (visible: boolean, registerComponentFn: jest.Mock) => {
-  return { provide: MenubarService, useValue: { isComponentVisible$: () => of(visible), registerComponent: registerComponentFn }};
+  return { provide: MenubarService, useValue: { isComponentVisible$: () => of(visible), registerComponent: registerComponentFn } };
 };
 
 describe('TocComponent', () => {
@@ -100,7 +100,7 @@ describe('TocComponent', () => {
     const store = TestBed.inject(MockStore);
     store.dispatch = jest.fn();
     await userEvent.click(await screen.getByLabelText('toggle Disaster map'));
-    expect(store.dispatch).toHaveBeenCalledWith({ type: setLayerVisibility.type, visibility: [{ id: 1, checked: true }] });
+    expect(store.dispatch).toHaveBeenCalledWith({ type: setLayerVisibility.type, visibility: [{ id: 1, checked: true }]});
   });
 
 });

@@ -113,7 +113,7 @@ export class ApplicationMapService implements OnDestroy {
   }
 
   private getCapabilitiesForWMTS$(service: ServiceModel): Observable<string> {
-    if (!!service.capabilities) {
+    if (service.capabilities) {
       return of(service.capabilities);
     }
     return this.httpClient.get(OgcHelper.filterOgcUrlParameters(service.url), {

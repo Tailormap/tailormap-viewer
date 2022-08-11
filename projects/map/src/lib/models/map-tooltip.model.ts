@@ -4,7 +4,7 @@ export interface MapTooltipModel {
   hide(): MapTooltipModel;
   move(coordinates: number[]): MapTooltipModel;
   freeze(): MapTooltipModel;
-  setOffset([offsetLeft, offsetTop]: [number, number]): MapTooltipModel;
+  setOffset([ offsetLeft, offsetTop ]: [number, number]): MapTooltipModel;
   setContent(content: string | HTMLElement): MapTooltipModel;
   destroy(): void;
 }

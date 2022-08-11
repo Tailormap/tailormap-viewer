@@ -97,7 +97,7 @@ export const getColumnMetadataModel = (overrides?: Partial<ColumnMetadataModel>)
 });
 
 export const getFeaturesResponseModel = (overrides?: Partial<FeaturesResponseModel>): FeaturesResponseModel => ({
-  features: ['1', '2', '3', '4', '5'].map(id => getFeatureModel({ __fid: id })),
+  features: [ '1', '2', '3', '4', '5' ].map(id => getFeatureModel({ __fid: id })),
   columnMetadata: [ getColumnMetadataModel(), getColumnMetadataModel({ key: 'prop2', alias: 'Property 2' }) ],
   page: null,
   pageSize: null,
@@ -117,7 +117,7 @@ export const getAppResponseData = (overrides?: Partial<AppResponseModel>): AppRe
 export const getMapResponseData = (overrides?: Partial<MapResponseModel>): MapResponseModel => ({
   crs: getCrsModel(overrides?.crs),
   layerTreeNodes: [
-    getLayerTreeNode({ childrenIds: ['layer-1'] }),
+    getLayerTreeNode({ childrenIds: ['layer-1']}),
     getLayerTreeNode({ id: 'layer-1', appLayerId: 1, name: 'TEST', root: false }),
   ],
   baseLayerTreeNodes: [],

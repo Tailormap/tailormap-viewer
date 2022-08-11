@@ -6,7 +6,7 @@ describe('AppComponent', () => {
 
   test('should create the app', async () => {
     const { fixture } = await render(AppComponent, {
-      imports: [ RouterTestingModule ],
+      imports: [RouterTestingModule],
     });
     expect(fixture);
   });

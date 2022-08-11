@@ -14,7 +14,7 @@ describe('AttributeListContent', () => {
   it('renders content, loading, no rows', async () => {
     const store = getLoadingStore();
     await render(AttributeListContentComponent, {
-      imports: [ MatProgressSpinnerModule ],
+      imports: [MatProgressSpinnerModule],
       providers: [
         provideMockStore({
           initialState: store,

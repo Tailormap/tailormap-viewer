@@ -16,10 +16,14 @@
         "import"
       ],
       "extends": [
+        "eslint:recommended",
         "plugin:@angular-eslint/ng-cli-compat",
         "plugin:@angular-eslint/ng-cli-compat--formatting-add-on",
         "plugin:@angular-eslint/template/process-inline-templates"
       ],
+      "globals": {
+        "$localize": "readonly"
+      },
       "rules": {
         "@angular-eslint/component-selector": [
           "error",
@@ -96,7 +100,10 @@
           }
         ],
         "space-before-function-paren": "off",
-        "@typescript-eslint/space-before-function-paren": "off",
+        "@typescript-eslint/space-before-function-paren": ["error", {"anonymous": "always", "named": "ignore", "asyncArrow": "always"}],
+        "object-curly-spacing": ["error", "always", { "arraysInObjects": false }],
+        "no-array-constructor": ["error"],
+        "array-bracket-spacing": ["error", "always", { "arraysInArrays": false, "objectsInArrays": false, "singleValue": false }],
         "max-len": [
           "error",
           180
@@ -127,6 +134,9 @@
         "*.spec.ts",
         "*.mock.ts"
       ],
+      "env": {
+        "jest": true
+      },
       "rules": {
         "no-unused-vars": "off",
         "@typescript-eslint/no-unused-vars": "off",

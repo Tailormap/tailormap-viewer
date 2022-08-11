@@ -13,10 +13,10 @@ describe('FeatureInfoSpinnerComponent', () => {
     const mapService = { getPixelForCoordinates$: jest.fn((coords: [number, number]) => of(coords)) };
     const { container } = await render(FeatureInfoSpinnerComponent, {
       providers: [
-        provideMockStore({initialState: { [featureInfoStateKey]: { loadStatus: LoadingStateEnum.INITIAL, mapCoordinates: undefined } }}),
+        provideMockStore({ initialState: { [featureInfoStateKey]: { loadStatus: LoadingStateEnum.INITIAL, mapCoordinates: undefined } } }),
         { provide: MapService, useValue: mapService },
       ],
-      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
     });
     const spinner = container.querySelector<HTMLDivElement>('.spinner');
     expect(spinner).not.toBeNull();
@@ -28,16 +28,16 @@ describe('FeatureInfoSpinnerComponent', () => {
     const mapService = { getPixelForCoordinates$: jest.fn((coords: [number, number]) => of(coords)) };
     const { container } = await render(FeatureInfoSpinnerComponent, {
       providers: [
-        provideMockStore({initialState: { [featureInfoStateKey]: { loadStatus: LoadingStateEnum.LOADING, mapCoordinates: [5, 5]} }}),
+        provideMockStore({ initialState: { [featureInfoStateKey]: { loadStatus: LoadingStateEnum.LOADING, mapCoordinates: [ 5, 5 ]} } }),
         { provide: MapService, useValue: mapService },
       ],
-      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
     });
     const spinner = container.querySelector<HTMLDivElement>('.spinner');
     expect(spinner).not.toBeNull();
     expect(spinner?.style.left).toEqual('5px');
     expect(spinner?.style.top).toEqual('5px');
-    expect(mapService.getPixelForCoordinates$).toHaveBeenCalledWith([5, 5]);
+    expect(mapService.getPixelForCoordinates$).toHaveBeenCalledWith([ 5, 5 ]);
   });
 
 });

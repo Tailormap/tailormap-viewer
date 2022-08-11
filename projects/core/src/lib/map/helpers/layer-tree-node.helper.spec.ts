@@ -8,8 +8,8 @@ const layers = [
 ];
 
 const nodes = [
-  getLayerTreeNode({ root: true, childrenIds: ['lvl_1'] }),
-  getLayerTreeNode({ id: 'lvl_1', childrenIds: ['lvl_2', 'lyr_1', 'lyr_2']}),
+  getLayerTreeNode({ root: true, childrenIds: ['lvl_1']}),
+  getLayerTreeNode({ id: 'lvl_1', childrenIds: [ 'lvl_2', 'lyr_1', 'lyr_2' ]}),
   getLayerTreeNode({ id: 'lyr_1', appLayerId: 1 }),
   getLayerTreeNode({ id: 'lyr_2', appLayerId: 2 }),
   getLayerTreeNode({ id: 'lvl_2', childrenIds: ['lyr_3']}),
@@ -50,7 +50,7 @@ describe('LayerTreeNodeHelper', () => {
 
   test('gets all the app layer IDs from a tree', () => {
     const ids = LayerTreeNodeHelper.getAppLayerIds(nodes, nodes[0]);
-    expect(ids).toEqual([3, 1, 2]);
+    expect(ids).toEqual([ 3, 1, 2 ]);
     const ids2 = LayerTreeNodeHelper.getAppLayerIds(nodes, nodes[4]);
     expect(ids2).toEqual([3]);
     const ids3 = LayerTreeNodeHelper.getAppLayerIds(nodes, nodes[5]);

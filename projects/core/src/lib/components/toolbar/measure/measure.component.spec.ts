@@ -87,20 +87,20 @@ describe('MeasureComponent', () => {
     drawingSubject.next({ type: 'start' });
     expect(tooltipMock.hide).toHaveBeenCalled();
 
-    drawingSubject.next({ type: 'change', geometry: '', size: 100, lastCoordinate: [1, 2] });
+    drawingSubject.next({ type: 'change', geometry: '', size: 100, lastCoordinate: [ 1, 2 ]});
     expect(tooltipMock.show).toHaveBeenCalled();
     expect(tooltipMock.setContent).toHaveBeenCalledWith('100 m');
-    expect(tooltipMock.move).toHaveBeenCalledWith([1, 2]);
+    expect(tooltipMock.move).toHaveBeenCalledWith([ 1, 2 ]);
 
-    drawingSubject.next({ type: 'change', geometry: '', size: 10000, lastCoordinate: [5, 3] });
+    drawingSubject.next({ type: 'change', geometry: '', size: 10000, lastCoordinate: [ 5, 3 ]});
     expect(tooltipMock.show).toHaveBeenCalled();
     expect(tooltipMock.setContent).toHaveBeenCalledWith('10 km');
-    expect(tooltipMock.move).toHaveBeenCalledWith([5, 3]);
+    expect(tooltipMock.move).toHaveBeenCalledWith([ 5, 3 ]);
 
-    drawingSubject.next({ type: 'end', geometry: 'GEOM', size: 12000, lastCoordinate: [5, 3] });
+    drawingSubject.next({ type: 'end', geometry: 'GEOM', size: 12000, lastCoordinate: [ 5, 3 ]});
     expect(tooltipMock.show).toHaveBeenCalled();
     expect(tooltipMock.setContent).toHaveBeenCalledWith('12 km');
-    expect(tooltipMock.move).toHaveBeenCalledWith([5, 3]);
+    expect(tooltipMock.move).toHaveBeenCalledWith([ 5, 3 ]);
     expect(tooltipMock.freeze).toHaveBeenCalled();
 
     await userEvent.click(await screen.getByLabelText('Measure length'));

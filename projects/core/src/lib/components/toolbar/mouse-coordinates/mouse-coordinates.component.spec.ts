@@ -9,7 +9,7 @@ describe('MouseCoordinatesComponent', () => {
     const mapServiceMock = {
       createTool$: jest.fn(() => of({ tool: {
         mouseMove$: of({ type: 'move', mapCoordinates: [ 50, 60 ]}),
-      }})),
+      } })),
       getRoundedCoordinates$: jest.fn(coords => of(coords)),
     };
     await render(MouseCoordinatesComponent, {

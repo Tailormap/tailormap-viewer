@@ -31,7 +31,7 @@ export class PrintComponent implements OnInit, OnDestroy {
   public formControl = new UntypedFormControl('150', []);
 
   private _mapFilenameFn = (extension: string): Observable<string> => {
-    const dateTime = new Intl.DateTimeFormat('nl-NL',{ dateStyle: 'short', timeStyle: 'medium'}).format(new Date())
+    const dateTime = new Intl.DateTimeFormat('nl-NL',{ dateStyle: 'short', timeStyle: 'medium' }).format(new Date())
       .replace(' ', '_')
       .replace(/:/g, '_');
     return of(`map-${dateTime}.${extension}`);
@@ -80,9 +80,9 @@ export class PrintComponent implements OnInit, OnDestroy {
 
   private wrapFileExport(extension: string, toDataURLExporter: (filename: string, layers: LayerModel[]) => Observable<string>): void {
     this.busy$.next(true);
-    forkJoin([this._mapFilenameFn(extension), this.getLayers$()]).pipe(
-      concatMap(([filename, layers]) => combineLatest([of(filename), toDataURLExporter(filename, layers)])),
-      tap(([filename, dataURL]) => PrintComponent.downloadDataURL(dataURL, filename)),
+    forkJoin([ this._mapFilenameFn(extension), this.getLayers$() ]).pipe(
+      concatMap(([ filename, layers ]) => combineLatest([ of(filename), toDataURLExporter(filename, layers) ])),
+      tap(([ filename, dataURL ]) => PrintComponent.downloadDataURL(dataURL, filename)),
       takeUntil(this.destroyed),
       takeUntil(this.cancelled$),
       catchError(message => {
@@ -109,8 +109,8 @@ export class PrintComponent implements OnInit, OnDestroy {
 
   private getLayers$(): Observable<LayerModel[]> {
     const isValidLayer = (layer: LayerModel | null): layer is LayerModel => layer !== null;
-    return combineLatest([this.store$.select(selectOrderedVisibleBackgroundLayers), this.store$.select(selectOrderedVisibleLayersAndServices)]).pipe(
-      map(([backgroundLayers, layers]) => [...backgroundLayers,  ...layers]),
+    return combineLatest([ this.store$.select(selectOrderedVisibleBackgroundLayers), this.store$.select(selectOrderedVisibleLayersAndServices) ]).pipe(
+      map(([ backgroundLayers, layers ]) => [ ...backgroundLayers,  ...layers ]),
       concatMap(layers => forkJoin(layers.map(layer => this.applicationMapService.convertAppLayerToMapLayer$(layer.layer, layer.service)))),
       map(layers => layers.filter(isValidLayer)),
       take(1),
@@ -119,7 +119,7 @@ export class PrintComponent implements OnInit, OnDestroy {
 
   public downloadMapImage(): void {
     this.wrapFileExport('png', (filename, layers) => this.mapService.exportMapImage$(
-      { widthInMm: 173.4, heightInMm: 130, resolution: this.getDpi(), layers}));
+      { widthInMm: 173.4, heightInMm: 130, resolution: this.getDpi(), layers }));
   }
 
   public downloadPDF(): void {

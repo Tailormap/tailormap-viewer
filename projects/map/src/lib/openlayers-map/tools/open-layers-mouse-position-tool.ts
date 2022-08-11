@@ -23,7 +23,7 @@ export class OpenLayersMousePositionTool implements MousePositionToolModel {
     this.ngZone.run(() => {
       this.mouseMoveSubject.next({
         type: 'out',
-        ...(this.lastCoordinates || { mapCoordinates: [0, 0], mouseCoordinates: [0, 0] }),
+        ...(this.lastCoordinates || { mapCoordinates: [ 0, 0 ], mouseCoordinates: [ 0, 0 ]}),
       });
     });
   };
@@ -46,11 +46,11 @@ export class OpenLayersMousePositionTool implements MousePositionToolModel {
     OpenLayersEventManager.onMouseMove$()
       .pipe(takeUntil(this.enabled))
       .subscribe(evt => {
-        this.lastCoordinates = { mapCoordinates: [evt.coordinate[0], evt.coordinate[1]], mouseCoordinates: [evt.pixel[0], evt.pixel[1]] };
+        this.lastCoordinates = { mapCoordinates: [ evt.coordinate[0], evt.coordinate[1] ], mouseCoordinates: [ evt.pixel[0], evt.pixel[1] ]};
         this.mouseMoveSubject.next({
           type: 'move',
-          mapCoordinates: [evt.coordinate[0], evt.coordinate[1]],
-          mouseCoordinates: [evt.pixel[0], evt.pixel[1]],
+          mapCoordinates: [ evt.coordinate[0], evt.coordinate[1] ],
+          mouseCoordinates: [ evt.pixel[0], evt.pixel[1] ],
         });
       });
     this.olMap.getViewport().addEventListener('pointerout', this.pointerOutListener);

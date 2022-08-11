@@ -18,12 +18,12 @@ describe('FeatureInfoComponent', () => {
         mapCoordinates: [ 1, 2 ],
         mouseCoordinates: [ 2, 3 ],
       }),
-    }}));
+    } }));
     const mockDispatch = jest.fn();
     const mockSelect = jest.fn(() => of('POINT(1 2)'));
     const highlightFeaturesMock = jest.fn(() => of(null));
     await render(FeatureInfoComponent, {
-      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
       componentProviders: [
         {
           provide: MapService,
@@ -45,7 +45,7 @@ describe('FeatureInfoComponent', () => {
     expect(highlightArgs.length).toEqual(3);
     expect(highlightArgs[0]).toEqual('feature-info-highlight-layer');
 
-    expect(mockDispatch).toHaveBeenCalledWith(loadFeatureInfo({ mapCoordinates: [1,2], mouseCoordinates: [2,3] }));
+    expect(mockDispatch).toHaveBeenCalledWith(loadFeatureInfo({ mapCoordinates: [ 1,2 ], mouseCoordinates: [ 2,3 ]}));
     expect(mockSelect).toHaveBeenCalled();
   });
 
@@ -55,14 +55,14 @@ describe('FeatureInfoComponent', () => {
         mapCoordinates: [ 1, 2 ],
         mouseCoordinates: [ 2, 3 ],
       }),
-    }}));
+    } }));
     const mockDispatch = jest.fn();
     const mockSelect = jest.fn(() => of('POINT(1 2)'));
     const highlightFeaturesMock = jest.fn(() => of(null));
     const mockOpen = jest.fn();
     SnackBarMessageComponent.open$ = mockOpen;
     await render(FeatureInfoComponent, {
-      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
       componentProviders: [
         {
           provide: MapService,

@@ -50,7 +50,7 @@ describe('AttributeList', () => {
   });
 
   it('renders without tabs and layers', async () => {
-    const store = getStore(getLoadedStoreNoRows({ tabs: [], data: [] }));
+    const store = getStore(getLoadedStoreNoRows({ tabs: [], data: []}));
     await render(AttributeListComponent, {
       imports: [ MatIconModule, MatIconTestingModule, MatToolbarModule ],
       declarations: [ AttributeListComponent, PanelResizerComponent ],
@@ -66,7 +66,7 @@ describe('AttributeList', () => {
 
   it('renders without tabs but with layers', async () => {
     const store = getStore(
-      getLoadedStoreNoRows({ tabs: [], data: [] }),
+      getLoadedStoreNoRows({ tabs: [], data: []}),
       [
         getAppLayerModel({
           hasAttributes: true,

@@ -15,7 +15,7 @@ export class OpenLayersMapTooltip implements MapTooltipModel {
     this.contentEl.className = OpenLayersMapTooltip.BASE_CLASS;
     this.overlay = new Overlay({
       element: this.contentEl,
-      offset: [0, -15],
+      offset: [ 0, -15 ],
       positioning: 'bottom-center',
       stopEvent: false,
     });
@@ -40,7 +40,7 @@ export class OpenLayersMapTooltip implements MapTooltipModel {
 
   public freeze(): MapTooltipModel {
     this.setClassName('ol-tooltip--static');
-    this.setOffset([0, -7]);
+    this.setOffset([ 0, -7 ]);
     return this;
   }
 
@@ -68,8 +68,8 @@ export class OpenLayersMapTooltip implements MapTooltipModel {
     return this;
   }
 
-  public setOffset([offsetLeft, offsetTop]: [number, number]): MapTooltipModel {
-    this.overlay.setOffset([offsetLeft, offsetTop]);
+  public setOffset([ offsetLeft, offsetTop ]: [number, number]): MapTooltipModel {
+    this.overlay.setOffset([ offsetLeft, offsetTop ]);
     return this;
   }
 
