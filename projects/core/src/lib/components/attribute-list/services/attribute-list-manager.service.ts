@@ -119,7 +119,7 @@ export class AttributeListManagerService implements OnDestroy {
         tabId: id,
         pageSize,
       };
-      return of({ tab, data: [data]});
+      return of({ tab, data: [data] });
   }
 
 }

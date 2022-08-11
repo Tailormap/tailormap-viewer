@@ -21,7 +21,7 @@ describe('ZoomButtonsComponent', () => {
         zoomToInitialExtent: zoomToInitialExtentFn,
       },
     };
-    await render(ZoomButtonsComponent, { providers: [mapService], imports: [ MatIconTestingModule, SharedImportsModule ]});
+    await render(ZoomButtonsComponent, { providers: [mapService], imports: [ MatIconTestingModule, SharedImportsModule ] });
     const zoomInBtn = await screen.getByLabelText('Zoom in');
     const zoomOutBtn = await screen.getByLabelText('Zoom out');
     const zoomToInitialExtentBtn = await screen.getByLabelText('Zoom to initial extent');
@@ -44,7 +44,7 @@ describe('ZoomButtonsComponent', () => {
         zoomOut: jest.fn(),
       },
     };
-    await render(ZoomButtonsComponent, { providers: [mapService], imports: [ MatIconTestingModule, SharedImportsModule ]});
+    await render(ZoomButtonsComponent, { providers: [mapService], imports: [ MatIconTestingModule, SharedImportsModule ] });
     const zoomInBtn = await screen.getByLabelText<HTMLButtonElement>('Zoom in');
     const zoomOutBtn = await screen.getByLabelText<HTMLButtonElement>('Zoom out');
     expect(zoomInBtn.disabled).toEqual(true);
@@ -60,7 +60,7 @@ describe('ZoomButtonsComponent', () => {
         zoomOut: jest.fn(),
       },
     };
-    await render(ZoomButtonsComponent, { providers: [mapService], imports: [ MatIconTestingModule, SharedImportsModule ]});
+    await render(ZoomButtonsComponent, { providers: [mapService], imports: [ MatIconTestingModule, SharedImportsModule ] });
     const zoomInBtn = await screen.getByLabelText<HTMLButtonElement>('Zoom in');
     const zoomOutBtn = await screen.getByLabelText<HTMLButtonElement>('Zoom out');
     expect(zoomInBtn.disabled).toEqual(false);

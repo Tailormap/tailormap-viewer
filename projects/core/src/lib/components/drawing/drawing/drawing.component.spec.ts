@@ -33,7 +33,7 @@ describe('DrawingComponent', () => {
     const { container } = await render(DrawingComponent, {
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [
-        provideMockStore({ selectors: [{ selector: selectDrawingFeaturesIncludingSelected, value: []}]}),
+        provideMockStore({ selectors: [{ selector: selectDrawingFeaturesIncludingSelected, value: [] }] }),
         { provide: MapService, useValue: mapServiceMock },
         { provide: MenubarService, useValue: menubarServiceMock },
         { provide: ConfirmDialogService, useValue: confirmServiceMock },
@@ -59,7 +59,7 @@ describe('DrawingComponent', () => {
     const { container } = await render(DrawingComponent, {
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [
-        provideMockStore({ selectors: [{ selector: selectDrawingFeaturesIncludingSelected, value: []}]}),
+        provideMockStore({ selectors: [{ selector: selectDrawingFeaturesIncludingSelected, value: [] }] }),
         { provide: MapService, useValue: mapServiceMock },
         { provide: MenubarService, useValue: menubarServiceMock },
         { provide: ConfirmDialogService, useValue: confirmServiceMock },
@@ -89,11 +89,11 @@ describe('DrawingComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [
         provideMockStore({ selectors: [
-            { selector: selectDrawingFeaturesIncludingSelected, value: []},
+            { selector: selectDrawingFeaturesIncludingSelected, value: [] },
             { selector: selectSelectedDrawingStyle, value: null },
             { selector: selectSelectedDrawingFeature, value: selectedFeature },
             { selector: selectHasDrawingFeatures, value: true },
-          ]}),
+          ] }),
         { provide: MapService, useValue: mapServiceMock },
         { provide: MenubarService, useValue: menubarServiceMock },
         { provide: ConfirmDialogService, useValue: confirmServiceMock },

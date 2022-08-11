@@ -28,7 +28,7 @@ describe('FeatureInfoSpinnerComponent', () => {
     const mapService = { getPixelForCoordinates$: jest.fn((coords: [number, number]) => of(coords)) };
     const { container } = await render(FeatureInfoSpinnerComponent, {
       providers: [
-        provideMockStore({ initialState: { [featureInfoStateKey]: { loadStatus: LoadingStateEnum.LOADING, mapCoordinates: [ 5, 5 ]} } }),
+        provideMockStore({ initialState: { [featureInfoStateKey]: { loadStatus: LoadingStateEnum.LOADING, mapCoordinates: [ 5, 5 ] } } }),
         { provide: MapService, useValue: mapService },
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],

@@ -117,7 +117,7 @@ export const getAppResponseData = (overrides?: Partial<AppResponseModel>): AppRe
 export const getMapResponseData = (overrides?: Partial<MapResponseModel>): MapResponseModel => ({
   crs: getCrsModel(overrides?.crs),
   layerTreeNodes: [
-    getLayerTreeNode({ childrenIds: ['layer-1']}),
+    getLayerTreeNode({ childrenIds: ['layer-1'] }),
     getLayerTreeNode({ id: 'layer-1', appLayerId: 1, name: 'TEST', root: false }),
   ],
   baseLayerTreeNodes: [],

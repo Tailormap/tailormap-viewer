@@ -45,7 +45,7 @@ describe('FeatureInfoComponent', () => {
     expect(highlightArgs.length).toEqual(3);
     expect(highlightArgs[0]).toEqual('feature-info-highlight-layer');
 
-    expect(mockDispatch).toHaveBeenCalledWith(loadFeatureInfo({ mapCoordinates: [ 1,2 ], mouseCoordinates: [ 2,3 ]}));
+    expect(mockDispatch).toHaveBeenCalledWith(loadFeatureInfo({ mapCoordinates: [ 1,2 ], mouseCoordinates: [ 2,3 ] }));
     expect(mockSelect).toHaveBeenCalled();
   });
 

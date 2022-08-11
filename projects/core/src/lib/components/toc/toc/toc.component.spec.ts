@@ -100,7 +100,7 @@ describe('TocComponent', () => {
     const store = TestBed.inject(MockStore);
     store.dispatch = jest.fn();
     await userEvent.click(await screen.getByLabelText('toggle Disaster map'));
-    expect(store.dispatch).toHaveBeenCalledWith({ type: setLayerVisibility.type, visibility: [{ id: 1, checked: true }]});
+    expect(store.dispatch).toHaveBeenCalledWith({ type: setLayerVisibility.type, visibility: [{ id: 1, checked: true }] });
   });
 
 });

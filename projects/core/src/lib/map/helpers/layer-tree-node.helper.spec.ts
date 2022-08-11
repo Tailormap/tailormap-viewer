@@ -8,11 +8,11 @@ const layers = [
 ];
 
 const nodes = [
-  getLayerTreeNode({ root: true, childrenIds: ['lvl_1']}),
-  getLayerTreeNode({ id: 'lvl_1', childrenIds: [ 'lvl_2', 'lyr_1', 'lyr_2' ]}),
+  getLayerTreeNode({ root: true, childrenIds: ['lvl_1'] }),
+  getLayerTreeNode({ id: 'lvl_1', childrenIds: [ 'lvl_2', 'lyr_1', 'lyr_2' ] }),
   getLayerTreeNode({ id: 'lyr_1', appLayerId: 1 }),
   getLayerTreeNode({ id: 'lyr_2', appLayerId: 2 }),
-  getLayerTreeNode({ id: 'lvl_2', childrenIds: ['lyr_3']}),
+  getLayerTreeNode({ id: 'lvl_2', childrenIds: ['lyr_3'] }),
   getLayerTreeNode({ id: 'lyr_3', appLayerId: 3 }),
 ];
 

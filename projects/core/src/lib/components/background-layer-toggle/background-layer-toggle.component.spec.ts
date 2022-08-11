@@ -12,8 +12,8 @@ const getMockedState = (initiallySelected = '') => {
   return provideMockStore({
     selectors: [
       { selector: selectSelectedBackgroundNodeId, value: initiallySelected },
-      { selector: selectBackgroundNodesList, value: [getLayerTreeNode({ id: '1', name: 'Backgrounds' })]},
-      { selector: selectInitiallySelectedBackgroundNodes, value: [ getLayerTreeNode({ name: 'Test' }), getLayerTreeNode({ name: 'Test 2' }) ]},
+      { selector: selectBackgroundNodesList, value: [getLayerTreeNode({ id: '1', name: 'Backgrounds' })] },
+      { selector: selectInitiallySelectedBackgroundNodes, value: [ getLayerTreeNode({ name: 'Test' }), getLayerTreeNode({ name: 'Test 2' }) ] },
     ],
   });
 };

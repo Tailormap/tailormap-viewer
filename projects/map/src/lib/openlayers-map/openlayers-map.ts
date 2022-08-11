@@ -160,7 +160,7 @@ export class OpenLayersMap implements MapViewerModel {
         olMap.getView().setCenter([ x, y ]);
         olMap.getView().setZoom(zoomLevel);
       } else {
-        olMap.getView().animate({ duration: animationDuration, zoom: zoomLevel, center: [ x, y ]});
+        olMap.getView().animate({ duration: animationDuration, zoom: zoomLevel, center: [ x, y ] });
       }
     });
   }
