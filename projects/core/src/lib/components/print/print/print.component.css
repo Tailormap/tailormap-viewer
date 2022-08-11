@@ -3,7 +3,7 @@
   padding: 14px 14px 0 14px;
 }
 
-::ng-deep .lowerHeight .mat-button-toggle-label-content {
+.lowerHeight ::ng-deep .mat-button-toggle-label-content {
   line-height: 36px !important;
 }
 

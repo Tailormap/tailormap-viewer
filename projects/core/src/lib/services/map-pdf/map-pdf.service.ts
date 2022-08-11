@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, LOCALE_ID } from '@angular/core';
 import { map, Observable, tap } from 'rxjs';
 import { jsPDF } from 'jspdf';
 import { $localize } from '@angular/localize/init';
@@ -35,6 +35,7 @@ export class MapPdfService {
 
   constructor(
     private mapService: MapService,
+    @Inject(LOCALE_ID) public locale: string,
   ) { }
 
   public create$(printOptions: PrintOptions, layers: LayerModel[]): Observable<string> {
@@ -68,7 +69,7 @@ export class MapPdfService {
     this.addDateTime(doc, size.width, size.height);
 
     return this.addMapImage$(doc, x, y, mapSize, printOptions.resolution || 72, layers).pipe(
-      map(() => doc.output('dataurlstring', { filename: printOptions.filename || 'map.pdf'})),
+      map(() => doc.output('dataurlstring', { filename: printOptions.filename || $localize `map.pdf`})),
     );
   }
 
@@ -81,8 +82,8 @@ export class MapPdfService {
   }
 
   private addDateTime(doc: jsPDF, width: number, height: number) {
-    const text = $localize `Gemaakt op `;
-    const date = text + new Intl.DateTimeFormat('nl-NL', { dateStyle: 'full', timeStyle: 'medium'}).format(new Date());
+    const text = $localize `Created on `;
+    const date = text + new Intl.DateTimeFormat(this.locale, { dateStyle: 'full', timeStyle: 'medium'}).format(new Date());
     const dateFontSize = 8;
     doc.setFontSize(dateFontSize);
     // See http://raw.githack.com/MrRio/jsPDF/master/docs/module-split_text_to_size.html#~getStringUnitWidth
