@@ -25,7 +25,7 @@ describe('PrintComponent', () => {
         { provide: ApplicationMapService, useValue: null },
       ],
     });
-    expect(await screen.getByText('Download map image')).toBeInTheDocument();
+    expect(await screen.getByText('Export map')).toBeInTheDocument();
   });
 
 });
