@@ -13,7 +13,7 @@
 
     <div *ngIf="exportType.value === 'image'" class="spaced">
       <form [formGroup]="exportImageForm" (ngSubmit)="downloadMapImage()">
-          <span i18n>Image size in millimeters:</span>
+          <ng-container i18n>Image size in millimeters:</ng-container>
           <mat-form-field appearance="fill">
             <mat-label i18n>Width</mat-label>
             <input matInput formControlName="width" type="number" min="50" max="600">
@@ -57,7 +57,7 @@
           <mat-label i18n>DPI</mat-label>
           <input matInput formControlName="dpi" type="number" min="90" max="600">
         </mat-form-field>
-        <mat-checkbox formControlName="autoPrint">Automatically open print dialog</mat-checkbox>
+        <mat-checkbox formControlName="autoPrint" i18n>Automatically open print dialog</mat-checkbox>
         <div class="padding">
           <button mat-stroked-button color="primary" type="submit" [disabled]="!exportImageForm.valid" i18n>Download map PDF</button>
         </div>
