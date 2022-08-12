@@ -45,12 +45,19 @@
         </mat-button-toggle-group>
         <mat-form-field appearance="fill">
           <mat-label i18n>Title</mat-label>
-          <input matInput formControlName="title" maxlength="100">
+          <input #title matInput formControlName="title" maxlength="60">
+          <mat-hint align="end">{{title.value.length || 0}}/60</mat-hint>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label i18n>Footer</mat-label>
+          <input #footer matInput formControlName="footer" maxlength="60">
+          <mat-hint align="end">{{footer.value.length || 0}}/60</mat-hint>
         </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label i18n>DPI</mat-label>
           <input matInput formControlName="dpi" type="number" min="90" max="600">
         </mat-form-field>
+        <mat-checkbox formControlName="autoPrint">Automatically open print dialog</mat-checkbox>
         <div class="padding">
           <button mat-stroked-button color="primary" type="submit" [disabled]="!exportImageForm.valid" i18n>Download map PDF</button>
         </div>
@@ -59,7 +66,7 @@
 
   </ng-container>
   <ng-template #busy>
-    <p i18n>Creating download. This may take a while.</p>
+    <p i18n>Creating map, this may take a while.</p>
     <div class="centered spaced">
       <mat-spinner style="margin: 0 auto" color="primary" mode="indeterminate" diameter="20"></mat-spinner>
     </div>

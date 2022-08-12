@@ -39,8 +39,10 @@ export class PrintComponent implements OnInit, OnDestroy {
   public exportPdfForm = new FormBuilder().nonNullable.group({
     orientation: new FormControl<'landscape' | 'portrait'>('landscape', { nonNullable: true }),
     title: '',
+    footer: '',
     paperSize: new FormControl<'a4' | 'a3'>('a4', { nonNullable: true }),
     dpi: [300, Validators.required],
+    autoPrint: false,
   });
 
   private _mapFilenameFn = (extension: string): Observable<string> => {
@@ -153,6 +155,8 @@ export class PrintComponent implements OnInit, OnDestroy {
         size: form.paperSize,
         resolution: form.dpi,
         title: form.title,
+        footer: form.footer,
+        autoPrint: form.autoPrint,
         filename,
       }, layers));
   }
