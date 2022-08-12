@@ -22,7 +22,7 @@ const onApplicationLoadSuccess = (
     lang: payload.application.lang,
     styling: payload.application.styling,
   },
-  components: [ ...payload.components ],
+  components: [...payload.components],
 });
 
 const onApplicationLoadFailed = (

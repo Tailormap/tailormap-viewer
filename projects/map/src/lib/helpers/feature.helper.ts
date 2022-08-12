@@ -25,7 +25,7 @@ export class FeatureHelper {
 
     const features = Array.isArray(featureModel)
       ? featureModel
-      : [ featureModel ];
+      : [featureModel];
 
     return features.map(feature => {
       if (typeof feature === 'string') {

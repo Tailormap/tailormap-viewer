@@ -18,8 +18,8 @@ const isAppLayerTreeModel = (node: BaseTreeModel): node is AppLayerTreeModel => 
 @Component({
   selector: 'tm-toc',
   templateUrl: './toc.component.html',
-  styleUrls: ['./toc.component.css', '../../../../../assets/layer-tree-style.css'],
-  providers: [ TreeService ],
+  styleUrls: [ './toc.component.css', '../../../../../assets/layer-tree-style.css' ],
+  providers: [TreeService],
 })
 export class TocComponent implements OnInit, OnDestroy {
 

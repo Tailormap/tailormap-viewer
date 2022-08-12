@@ -16,7 +16,7 @@ describe('OverlayComponent', () => {
       }),
     };
     await render(OverlayComponent, {
-      imports: [ SharedImportsModule ],
+      imports: [SharedImportsModule],
       providers: [
         { provide: OverlayRef, useValue: overlayRefMock },
         { provide: OverlayContent, useValue: new OverlayContent('Overlay contents') },

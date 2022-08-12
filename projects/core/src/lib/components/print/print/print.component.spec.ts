@@ -15,7 +15,7 @@ describe('PrintComponent', () => {
       registerComponent: jest.fn(),
     };
     await render(PrintComponent,{
-      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
         providers: [
         provideMockStore(),
       ],

@@ -27,7 +27,7 @@ export class DrawingHelper {
       const fraction = i % 2 === 0 ? 1 : 0.5;
       const offsetX = radius * fraction * Math.cos(angle);
       const offsetY = radius * fraction * Math.sin(angle);
-      newCoordinates.push([center[0] + offsetX, center[1] + offsetY]);
+      newCoordinates.push([ center[0] + offsetX, center[1] + offsetY ]);
     }
     newCoordinates.push(newCoordinates[0].slice());
     if (!geometry) {
@@ -47,7 +47,7 @@ export class DrawingHelper {
     const dx = center[0] - last[0];
     const dy = center[1] - last[1];
     const radius = Math.sqrt(dx * dx + dy * dy);
-    const circle = new Circle([center[0], center[1]], radius);
+    const circle = new Circle([ center[0], center[1] ], radius);
     const polygon = fromCircle(circle, 64);
     polygon.scale(dx/radius, dy/radius);
     if (!geometry) {

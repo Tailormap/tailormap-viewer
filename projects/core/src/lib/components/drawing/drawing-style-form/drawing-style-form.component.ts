@@ -193,7 +193,7 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
   }
 
   private insertText(text: string) {
-    const label = !!this.style.label
+    const label = this.style.label
       ? `${this.style.label} ${text}`
       : text;
     this.change('label', label);

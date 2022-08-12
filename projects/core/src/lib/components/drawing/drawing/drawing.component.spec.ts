@@ -31,9 +31,9 @@ describe('DrawingComponent', () => {
       confirm$: jest.fn(() => of(true)),
     };
     const { container } = await render(DrawingComponent, {
-      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [
-        provideMockStore({ selectors: [{ selector: selectDrawingFeaturesIncludingSelected, value: [] }]}),
+        provideMockStore({ selectors: [{ selector: selectDrawingFeaturesIncludingSelected, value: [] }] }),
         { provide: MapService, useValue: mapServiceMock },
         { provide: MenubarService, useValue: menubarServiceMock },
         { provide: ConfirmDialogService, useValue: confirmServiceMock },
@@ -57,9 +57,9 @@ describe('DrawingComponent', () => {
       confirm$: jest.fn(() => of(true)),
     };
     const { container } = await render(DrawingComponent, {
-      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [
-        provideMockStore({ selectors: [{ selector: selectDrawingFeaturesIncludingSelected, value: [] }]}),
+        provideMockStore({ selectors: [{ selector: selectDrawingFeaturesIncludingSelected, value: [] }] }),
         { provide: MapService, useValue: mapServiceMock },
         { provide: MenubarService, useValue: menubarServiceMock },
         { provide: ConfirmDialogService, useValue: confirmServiceMock },
@@ -82,18 +82,18 @@ describe('DrawingComponent', () => {
     const confirmServiceMock = {
       confirm$: jest.fn(() => of(true)),
     };
-    const selectedFeature: DrawingFeatureModel = { __fid: '1', geometry: '', attributes: { type: DrawingFeatureTypeEnum.POINT, style: DrawingHelper.getDefaultStyle() }};
+    const selectedFeature: DrawingFeatureModel = { __fid: '1', geometry: '', attributes: { type: DrawingFeatureTypeEnum.POINT, style: DrawingHelper.getDefaultStyle() } };
     await render(DrawingComponent, {
       imports: [ SharedImportsModule, MatIconTestingModule ],
-      declarations: [ DrawingStyleFormComponent ],
-      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
+      declarations: [DrawingStyleFormComponent],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [
         provideMockStore({ selectors: [
             { selector: selectDrawingFeaturesIncludingSelected, value: [] },
             { selector: selectSelectedDrawingStyle, value: null },
             { selector: selectSelectedDrawingFeature, value: selectedFeature },
             { selector: selectHasDrawingFeatures, value: true },
-          ]}),
+          ] }),
         { provide: MapService, useValue: mapServiceMock },
         { provide: MenubarService, useValue: menubarServiceMock },
         { provide: ConfirmDialogService, useValue: confirmServiceMock },

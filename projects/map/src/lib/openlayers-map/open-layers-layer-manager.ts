@@ -197,7 +197,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     }
     const source = layer.getSource();
     if (source instanceof ImageWMS) {
-      source.updateParams({CACHE: Date.now()});
+      source.updateParams({ CACHE: Date.now() });
     }
     if (source instanceof WMTS || source instanceof XYZ) {
       const urls = (source.getUrls() || []).map(url => {

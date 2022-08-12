@@ -11,7 +11,7 @@ export const getActivatedRouteProvider = (routeData: Record<string, string>) => 
   return { provide: ActivatedRoute, useValue: {
       // eslint-disable-next-line rxjs/finnish
       paramMap: of(new Map<string, string>(Object.entries(routeData))),
-    }};
+    } };
 };
 
 describe('ViewerAppComponent', () => {
@@ -26,7 +26,7 @@ describe('ViewerAppComponent', () => {
         { provide: Store, useValue: mockStore },
         getActivatedRouteProvider({ id: '1' }),
       ],
-      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
     });
     expect(container.querySelector('tm-map')).not.toBeNull();
     expect(dispatchFn).toHaveBeenCalledWith({ type: '[Core] Load Application', id: 1 });

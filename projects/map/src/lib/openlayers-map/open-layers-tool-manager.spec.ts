@@ -17,7 +17,7 @@ describe('OpenLayersToolManager', () => {
 
   test('enables and disables a tool', done => {
     // @ts-ignore
-    OpenLayersEventManager.onMapClick$ = jest.fn(() => of({ coordinate: [1,2], pixel: [2,3] }));
+    OpenLayersEventManager.onMapClick$ = jest.fn(() => of({ coordinate: [ 1,2 ], pixel: [ 2,3 ] }));
     const tool = { type: ToolTypeEnum.MapClick };
     const manager = new OpenLayersToolManager({} as any, mockNgZone);
     const mapTool = manager.addTool(tool);
@@ -35,7 +35,7 @@ describe('OpenLayersToolManager', () => {
   });
 
   test('handles destroy', () => {
-    const onMapClickFn = jest.fn(() => of({ coordinate: [1,2], pixel: [2,3] }));
+    const onMapClickFn = jest.fn(() => of({ coordinate: [ 1,2 ], pixel: [ 2,3 ] }));
     // @ts-ignore
     OpenLayersEventManager.onMapClick$ = onMapClickFn;
     const tool = { type: ToolTypeEnum.MapClick };

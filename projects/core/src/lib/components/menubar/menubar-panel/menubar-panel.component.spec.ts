@@ -10,7 +10,7 @@ describe('MenubarPanelComponent', () => {
 
   test('does not render panel contents if active component is false', async () => {
     await render(MenubarPanelComponent, {
-      imports: [ SharedModule ],
+      imports: [SharedModule],
       providers: [
         { provide: MenubarService, useValue: { getActiveComponent$: () => of(null) } },
       ],

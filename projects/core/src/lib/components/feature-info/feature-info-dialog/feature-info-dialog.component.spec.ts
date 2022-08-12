@@ -13,10 +13,10 @@ import { showNextFeatureInfoFeature, showPreviousFeatureInfoFeature } from '../s
 
 const getFeatureInfo = (updated?: boolean): FeatureInfoModel => {
   const col1 = getColumnMetadataModel();
-  const col2 = getColumnMetadataModel({key: 'prop2', alias: 'Property 2'});
+  const col2 = getColumnMetadataModel({ key: 'prop2', alias: 'Property 2' });
   return {
-    feature: {__fid: updated ? '6' : '1', attributes: {prop: 'test', prop2: 'another test', fid: updated ? '6' : '1'}},
-    columnMetadata: new Map([[col1.key, col1], [col2.key, col2]]),
+    feature: { __fid: updated ? '6' : '1', attributes: { prop: 'test', prop2: 'another test', fid: updated ? '6' : '1' } },
+    columnMetadata: new Map([[ col1.key, col1 ], [ col2.key, col2 ]]),
     layer: getAppLayerModel(),
   };
 };
@@ -30,11 +30,11 @@ const renderWithState = async () => {
     ],
     providers: [
       provideMockStore({
-        initialState: {[featureInfoStateKey]: {...initialFeatureInfoState}},
+        initialState: { [featureInfoStateKey]: { ...initialFeatureInfoState } },
         selectors: [
           { selector: selectCurrentlySelectedFeature, value: getFeatureInfo() },
           { selector: selectFeatureInfoDialogVisible, value: true },
-          { selector: selectFeatureInfoCounts, value: { total: 1, current: 0 }},
+          { selector: selectFeatureInfoCounts, value: { total: 1, current: 0 } },
         ],
       }),
     ],
@@ -44,14 +44,14 @@ const renderWithState = async () => {
 describe('FeatureInfoDialogComponent', () => {
 
   test('runs without feature info', async () => {
-    const {container} = await render(FeatureInfoDialogComponent, {
+    const { container } = await render(FeatureInfoDialogComponent, {
       imports: [
         SharedModule,
         NoopAnimationsModule,
         MatIconTestingModule,
       ],
       providers: [
-        provideMockStore({initialState: {[featureInfoStateKey]: {...initialFeatureInfoState}}}),
+        provideMockStore({ initialState: { [featureInfoStateKey]: { ...initialFeatureInfoState } } }),
       ],
     });
     expect(container.querySelector('.feature-info')).toBeNull();

@@ -31,8 +31,8 @@ export class OpenLayersMapClickTool implements MapClickToolModel {
       .pipe(takeUntil(this.enabled))
       .subscribe(evt => {
         this.mapClickSubject.next({
-          mapCoordinates: [evt.coordinate[0], evt.coordinate[1]],
-          mouseCoordinates: [evt.pixel[0], evt.pixel[1]],
+          mapCoordinates: [ evt.coordinate[0], evt.coordinate[1] ],
+          mouseCoordinates: [ evt.pixel[0], evt.pixel[1] ],
         });
       });
     this.isActive = true;

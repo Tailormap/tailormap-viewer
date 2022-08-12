@@ -79,12 +79,12 @@ export class MapPdfService {
       doc.autoPrint();
     }
     return this.addMapImage$(doc, x, y, mapSize, printOptions.resolution || 72, layers).pipe(
-      map(() => doc.output('dataurlstring', { filename: printOptions.filename || $localize `map.pdf`})),
+      map(() => doc.output('dataurlstring', { filename: printOptions.filename || $localize `map.pdf` })),
     );
   }
 
   private addMapImage$(doc: jsPDF, x: number, y: number, mapSize: Size, resolution: number, layers: LayerModel[]): Observable<string> {
-    return this.mapService.exportMapImage$({ widthInMm: mapSize.width, heightInMm: mapSize.height, resolution, layers}).pipe(
+    return this.mapService.exportMapImage$({ widthInMm: mapSize.width, heightInMm: mapSize.height, resolution, layers }).pipe(
       tap(dataURL => {
         doc.addImage(dataURL, 'PNG', x, y, mapSize.width, mapSize.height, '', 'FAST');
       }),
@@ -93,7 +93,7 @@ export class MapPdfService {
 
   private addDateTime(doc: jsPDF, width: number, height: number) {
     const text = $localize `Created on `;
-    const date = text + new Intl.DateTimeFormat(this.locale, { dateStyle: 'full', timeStyle: 'medium'}).format(new Date());
+    const date = text + new Intl.DateTimeFormat(this.locale, { dateStyle: 'full', timeStyle: 'medium' }).format(new Date());
     const dateFontSize = 8;
     doc.setFontSize(dateFontSize);
     // See http://raw.githack.com/MrRio/jsPDF/master/docs/module-split_text_to_size.html#~getStringUnitWidth

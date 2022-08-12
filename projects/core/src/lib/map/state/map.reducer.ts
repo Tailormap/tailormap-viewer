@@ -20,7 +20,7 @@ const onLoadMapSuccess = (
     maxExtent: payload.maxExtent || undefined,
     crs: payload.crs,
   },
-  layers: [ ...payload.appLayers ],
+  layers: [...payload.appLayers],
   services: payload.services,
   baseLayerTreeNodes: payload.baseLayerTreeNodes.map(LayerTreeNodeHelper.getExtendedLayerTreeNode),
   layerTreeNodes: payload.layerTreeNodes.map(LayerTreeNodeHelper.getExtendedLayerTreeNode),
@@ -84,7 +84,7 @@ const onAddLayerTreeNodes = (state: MapState, payload: ReturnType<typeof MapActi
   const tree: keyof MapState = payload.isBaseLayerTree ? 'baseLayerTreeNodes' : 'layerTreeNodes';
   return {
     ...state,
-    [tree]: [...state[tree], ...payload.layerTreeNodes.map(LayerTreeNodeHelper.getExtendedLayerTreeNode)],
+    [tree]: [ ...state[tree], ...payload.layerTreeNodes.map(LayerTreeNodeHelper.getExtendedLayerTreeNode) ],
   };
 };
 

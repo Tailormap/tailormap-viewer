@@ -157,10 +157,10 @@ export class OpenLayersMap implements MapViewerModel {
         return;
       }
       if (animationDuration === 0) {
-        olMap.getView().setCenter([x, y]);
+        olMap.getView().setCenter([ x, y ]);
         olMap.getView().setZoom(zoomLevel);
       } else {
-        olMap.getView().animate({ duration: animationDuration, zoom: zoomLevel, center: [x, y] });
+        olMap.getView().animate({ duration: animationDuration, zoom: zoomLevel, center: [ x, y ] });
       }
     });
   }
@@ -190,7 +190,7 @@ export class OpenLayersMap implements MapViewerModel {
             if (!px) {
               return null;
             }
-            return [px[0], px[1]];
+            return [ px[0], px[1] ];
           }),
         );
   }

@@ -12,7 +12,7 @@ describe('ConfirmDialogComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ConfirmDialogComponent ],
+      declarations: [ConfirmDialogComponent],
       imports: [
         NoopAnimationsModule,
         MatCommonModule,
