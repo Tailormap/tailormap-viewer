@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, LOCALE_ID, OnDestroy, OnInit } from '@angular/core';
 import {
   BehaviorSubject, catchError, combineLatest, concatMap, finalize, forkJoin, map, Observable, of, Subject, take, takeUntil, tap,
 } from 'rxjs';
@@ -39,20 +39,22 @@ export class PrintComponent implements OnInit, OnDestroy {
   public exportType = new FormControl<'pdf' | 'image'>('pdf', { nonNullable: true });
 
   public exportImageForm = new FormBuilder().nonNullable.group({
-    width: [86.7, Validators.required],
-    height: [65, Validators.required],
-    dpi: [300, Validators.required],
+    width: [ 86.7, Validators.required ],
+    height: [ 65, Validators.required ],
+    dpi: [ 300, Validators.required ],
   });
 
   public exportPdfForm = new FormBuilder().nonNullable.group({
     orientation: new FormControl<'landscape' | 'portrait'>('landscape', { nonNullable: true }),
     title: '',
+    footer: '',
     paperSize: new FormControl<'a4' | 'a3'>('a4', { nonNullable: true }),
-    dpi: [300, Validators.required],
+    dpi: [ 300, Validators.required ],
+    autoPrint: false,
   });
 
   private _mapFilenameFn = (extension: string): Observable<string> => {
-    const dateTime = new Intl.DateTimeFormat('nl-NL',{ dateStyle: 'short', timeStyle: 'medium'}).format(new Date())
+    const dateTime = new Intl.DateTimeFormat(this.locale, { dateStyle: 'short', timeStyle: 'medium' }).format(new Date())
       .replace(' ', '_')
       .replace(/:/g, '_');
     return of(`map-${dateTime}.${extension}`);
@@ -65,6 +67,7 @@ export class PrintComponent implements OnInit, OnDestroy {
     private snackBar: MatSnackBar,
     private mapPdfService: MapPdfService,
     private applicationMapService: ApplicationMapService,
+    @Inject(LOCALE_ID) private locale: string,
   ) {
     this.hasDrawing$ = this.store$.select(selectHasDrawingFeatures).pipe(takeUntil(this.destroyed));
   }
@@ -101,9 +104,9 @@ export class PrintComponent implements OnInit, OnDestroy {
 
   private wrapFileExport(extension: string, toDataURLExporter: (filename: string, layers: LayerModel[]) => Observable<string>): void {
     this.busy$.next(true);
-    forkJoin([this._mapFilenameFn(extension), this.getLayers$()]).pipe(
-      concatMap(([filename, layers]) => combineLatest([of(filename), toDataURLExporter(filename, layers)])),
-      tap(([filename, dataURL]) => PrintComponent.downloadDataURL(dataURL, filename)),
+    forkJoin([ this._mapFilenameFn(extension), this.getLayers$() ]).pipe(
+      concatMap(([ filename, layers ]) => combineLatest([ of(filename), toDataURLExporter(filename, layers) ])),
+      tap(([ filename, dataURL ]) => PrintComponent.downloadDataURL(dataURL, filename)),
       takeUntil(this.destroyed),
       takeUntil(this.cancelled$),
       catchError(message => {
@@ -125,8 +128,8 @@ export class PrintComponent implements OnInit, OnDestroy {
 
   private getLayers$(): Observable<LayerModel[]> {
     const isValidLayer = (layer: LayerModel | null): layer is LayerModel => layer !== null;
-    return combineLatest([this.store$.select(selectOrderedVisibleBackgroundLayers), this.store$.select(selectOrderedVisibleLayersAndServices)]).pipe(
-      map(([backgroundLayers, layers]) => [...backgroundLayers,  ...layers]),
+    return combineLatest([ this.store$.select(selectOrderedVisibleBackgroundLayers), this.store$.select(selectOrderedVisibleLayersAndServices) ]).pipe(
+      map(([ backgroundLayers, layers ]) => [ ...backgroundLayers,  ...layers ]),
       concatMap(layers => forkJoin(layers.map(layer => this.applicationMapService.convertAppLayerToMapLayer$(layer.layer, layer.service)))),
       map(layers => layers.filter(isValidLayer)),
       take(1),
@@ -162,6 +165,8 @@ export class PrintComponent implements OnInit, OnDestroy {
         size: form.paperSize,
         resolution: form.dpi,
         title: form.title,
+        footer: form.footer,
+        autoPrint: form.autoPrint,
         filename,
       }, layers, this.vectorLayerFilter));
   }

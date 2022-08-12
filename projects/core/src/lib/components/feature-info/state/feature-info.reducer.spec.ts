@@ -8,19 +8,19 @@ import { LoadingStateEnum } from '@tailormap-viewer/shared';
 describe('FeatureInfoReducer', () => {
 
   test('handles LoadFeatureInfo', () => {
-    const state = {...initialFeatureInfoState};
-    const action = FeatureInfoActions.loadFeatureInfo({ mouseCoordinates: [1,2], mapCoordinates: [2,3] });
+    const state = { ...initialFeatureInfoState };
+    const action = FeatureInfoActions.loadFeatureInfo({ mouseCoordinates: [ 1,2 ], mapCoordinates: [ 2,3 ] });
     const updatedState = featureInfoReducer(state, action);
-    expect(updatedState.mapCoordinates).toEqual([2,3]);
-    expect(updatedState.mouseCoordinates).toEqual([1,2]);
+    expect(updatedState.mapCoordinates).toEqual([ 2,3 ]);
+    expect(updatedState.mouseCoordinates).toEqual([ 1,2 ]);
     expect(updatedState.loadStatus).toEqual(LoadingStateEnum.LOADING);
   });
 
   test('handles LoadFeatureInfoSuccess', () => {
-    const state = {...initialFeatureInfoState};
+    const state = { ...initialFeatureInfoState };
     const featureInfo: FeatureInfoResponseModel[] = [{
-      features: [ { ...getFeatureModel(), layerId: 1 } ],
-      columnMetadata: [ { ...getColumnMetadataModel(), layerId: 1 } ],
+      features: [{ ...getFeatureModel(), layerId: 1 }],
+      columnMetadata: [{ ...getColumnMetadataModel(), layerId: 1 }],
       layerId: 1,
     }];
     const action = FeatureInfoActions.loadFeatureInfoSuccess({ featureInfo });
@@ -32,7 +32,7 @@ describe('FeatureInfoReducer', () => {
   });
 
   test('handles LoadFeatureInfoFailed', () => {
-    const state = {...initialFeatureInfoState};
+    const state = { ...initialFeatureInfoState };
     const action = FeatureInfoActions.loadFeatureInfoFailed({ errorMessage: 'Loading data failed for some reason' });
     const updatedState = featureInfoReducer(state, action);
     expect(updatedState.features).toEqual([]);
@@ -42,21 +42,21 @@ describe('FeatureInfoReducer', () => {
   });
 
   test('handles ShowFeatureInfoDialog', () => {
-    const state = {...initialFeatureInfoState};
+    const state = { ...initialFeatureInfoState };
     const action = FeatureInfoActions.showFeatureInfoDialog();
     const updatedState = featureInfoReducer(state, action);
     expect(updatedState.dialogVisible).toEqual(true);
   });
 
   test('handles HideFeatureInfoDialog', () => {
-    const state = {...initialFeatureInfoState};
+    const state = { ...initialFeatureInfoState };
     const action = FeatureInfoActions.hideFeatureInfoDialog();
     const updatedState = featureInfoReducer(state, action);
     expect(updatedState.dialogVisible).toEqual(false);
   });
 
   test('handles expandCollapseFeatureInfoDialog', () => {
-    const state: FeatureInfoState = {...initialFeatureInfoState, dialogCollapsed: false };
+    const state: FeatureInfoState = { ...initialFeatureInfoState, dialogCollapsed: false };
     const action = FeatureInfoActions.expandCollapseFeatureInfoDialog();
     const updatedState = featureInfoReducer(state, action);
     expect(updatedState.dialogCollapsed).toEqual(true);

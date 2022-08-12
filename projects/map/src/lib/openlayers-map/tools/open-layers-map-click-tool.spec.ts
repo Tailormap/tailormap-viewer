@@ -7,12 +7,12 @@ describe('OpenLayersMapClickTool', () => {
 
   test('creates and enables map click tool', done => {
     // @ts-ignore
-    OpenLayersEventManager.onMapClick$ = jest.fn(() => of({ coordinate: [1,2], pixel: [2,3] }));
+    OpenLayersEventManager.onMapClick$ = jest.fn(() => of({ coordinate: [ 1,2 ], pixel: [ 2,3 ] }));
     const tool = new OpenLayersMapClickTool('tool-123', { type: ToolTypeEnum.MapClick });
     tool.mapClick$.subscribe(clickEvt => {
       expect(clickEvt).toEqual({
-        mapCoordinates: [1, 2],
-        mouseCoordinates: [2, 3],
+        mapCoordinates: [ 1, 2 ],
+        mouseCoordinates: [ 2, 3 ],
       });
       done();
     });

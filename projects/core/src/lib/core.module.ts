@@ -41,7 +41,7 @@ const getBaseHref = (platformLocation: PlatformLocation): string => {
         strictActionTypeUniqueness: true,
       },
     }),
-    EffectsModule.forRoot([ CoreEffects ]),
+    EffectsModule.forRoot([CoreEffects]),
     ApplicationMapModule,
     MapModule,
     SharedModule,

@@ -38,7 +38,7 @@ const getMockStore = (selectedLayer: string = '') => {
 };
 
 const getMenubarService = (visible: boolean, registerComponentFn: jest.Mock) => {
-  return { provide: MenubarService, useValue: { isComponentVisible$: () => of(visible), registerComponent: registerComponentFn }};
+  return { provide: MenubarService, useValue: { isComponentVisible$: () => of(visible), registerComponent: registerComponentFn } };
 };
 
 describe('TocComponent', () => {

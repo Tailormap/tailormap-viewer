@@ -9,7 +9,7 @@ describe('AutoFocusDirective', () => {
 
   test('does not add focus if autoFocus is 0', async () => {
     await render('<input type="text" [tmAutoFocus]="0" data-testid="input" />', {
-      declarations: [ AutoFocusDirective ],
+      declarations: [AutoFocusDirective],
     });
     jest.runAllTimers();
     const inputField = screen.getByTestId('input');
@@ -18,7 +18,7 @@ describe('AutoFocusDirective', () => {
 
   test('adds focus if autoFocus is 1', async () => {
     await render('<input type="text" [tmAutoFocus]="1" data-testid="input" />', {
-      declarations: [ AutoFocusDirective ],
+      declarations: [AutoFocusDirective],
     });
     jest.runAllTimers();
     const inputField = screen.getByTestId('input');
@@ -27,7 +27,7 @@ describe('AutoFocusDirective', () => {
 
   test('adds focus to a select element', async () => {
     await render('<select [tmAutoFocus]="1" data-testid="select"><option value="1">1</option></select>', {
-      declarations: [ AutoFocusDirective ],
+      declarations: [AutoFocusDirective],
     });
     jest.runAllTimers();
     const selectField = screen.getByTestId('select');

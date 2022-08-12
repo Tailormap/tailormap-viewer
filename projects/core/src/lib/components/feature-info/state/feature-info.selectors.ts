@@ -32,7 +32,7 @@ export const selectFeatureInfoList = createSelector(
       const columnMetadata = metadata.filter(m => m.layerId === feature.layerId);
       featureInfoModels.push({
         feature,
-        columnMetadata: new Map((columnMetadata || []).map(c => [c.key, c])),
+        columnMetadata: new Map((columnMetadata || []).map(c => [ c.key, c ])),
         layer,
       });
     });

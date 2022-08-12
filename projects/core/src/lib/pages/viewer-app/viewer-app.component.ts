@@ -25,11 +25,11 @@ export class ViewerAppComponent implements OnInit, OnDestroy {
         takeUntil(this.destroyed),
         map((params: ParamMap) => {
           const id = params.get('id');
-          if (!!id) {
+          if (id) {
             return { id: +(id) };
           }
           const name = params.get('name');
-          if (!!name) {
+          if (name) {
             return { name, version: params.get('version') || undefined };
           }
           return null;

@@ -29,7 +29,7 @@ describe('CreateDrawingButtonComponent', () => {
     await render(CreateDrawingButtonComponent, {
       imports: [ SharedImportsModule, MatIconTestingModule ],
       providers: [
-        { provide: Store, useValue: { dispatch: mockDispatch }},
+        { provide: Store, useValue: { dispatch: mockDispatch } },
         { provide: MapService, useValue: mapServiceMock },
       ],
     });

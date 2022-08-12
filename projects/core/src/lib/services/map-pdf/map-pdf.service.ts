@@ -15,6 +15,7 @@ const a3Size: Size = { width: 420, height: 297 };
 
 interface PrintOptions {
   title?: string;
+  footer?: string;
   showLegend?: boolean;
   showWindrose?: boolean;
   showScale?: boolean;
@@ -22,6 +23,7 @@ interface PrintOptions {
   size: 'a3' | 'a4';
   resolution?: number;
   filename?: string;
+  autoPrint?: boolean;
 }
 
 @Injectable({
@@ -66,15 +68,23 @@ export class MapPdfService {
       doc.setFontSize(this.defaultFontSize);
       y += 2;
     }
+    if (printOptions.footer) {
+      doc.setFontSize(8);
+      doc.text(printOptions.footer, x, size.height - 5);
+      doc.setFontSize(this.defaultFontSize);
+    }
     this.addDateTime(doc, size.width, size.height);
 
+    if (printOptions.autoPrint) {
+      doc.autoPrint();
+    }
     return this.addMapImage$(doc, x, y, mapSize, printOptions.resolution || 72, layers, vectorLayerFilter).pipe(
-      map(() => doc.output('dataurlstring', { filename: printOptions.filename || $localize `map.pdf`})),
+      map(() => doc.output('dataurlstring', { filename: printOptions.filename || $localize `map.pdf` })),
     );
   }
 
   private addMapImage$(doc: jsPDF, x: number, y: number, mapSize: Size, resolution: number, layers: LayerModel[], vectorLayerFilter?: OlLayerFilter): Observable<string> {
-    return this.mapService.exportMapImage$({ widthInMm: mapSize.width, heightInMm: mapSize.height, resolution, layers, vectorLayerFilter}).pipe(
+    return this.mapService.exportMapImage$({ widthInMm: mapSize.width, heightInMm: mapSize.height, resolution, layers, vectorLayerFilter }).pipe(
       tap(dataURL => {
         doc.addImage(dataURL, 'PNG', x, y, mapSize.width, mapSize.height, '', 'FAST');
       }),
@@ -83,7 +93,7 @@ export class MapPdfService {
 
   private addDateTime(doc: jsPDF, width: number, height: number) {
     const text = $localize `Created on `;
-    const date = text + new Intl.DateTimeFormat(this.locale, { dateStyle: 'full', timeStyle: 'medium'}).format(new Date());
+    const date = text + new Intl.DateTimeFormat(this.locale, { dateStyle: 'full', timeStyle: 'medium' }).format(new Date());
     const dateFontSize = 8;
     doc.setFontSize(dateFontSize);
     // See http://raw.githack.com/MrRio/jsPDF/master/docs/module-split_text_to_size.html#~getStringUnitWidth

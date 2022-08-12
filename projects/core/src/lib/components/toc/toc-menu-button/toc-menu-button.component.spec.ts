@@ -15,7 +15,7 @@ describe('TocMenuButtonComponent', () => {
       isComponentVisible$: () => of(false),
     };
     await render(TocMenuButtonComponent, {
-      declarations: [ MenubarButtonComponent ],
+      declarations: [MenubarButtonComponent],
       imports: [ SharedModule, MatIconTestingModule ],
       providers: [
         { provide: MenubarService, useValue: menubarService },

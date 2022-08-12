@@ -16,12 +16,12 @@ describe('ClickedCoordinatesComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA], providers: [{
         provide: MatSnackBar, useValue: { dismiss: jest.fn() },
       }, {
-        provide: MapService, useValue: {createTool$: createTool},
+        provide: MapService, useValue: { createTool$: createTool },
       }, provideMockStore({
         selectors: [
           { selector: isActiveToolbarTool(ToolbarComponentEnum.SELECT_COORDINATES), value: true },
         ],
-      })],
+      }) ],
     });
     expect(createTool).toHaveBeenCalled();
     expect(screen.getByLabelText('Coordinate picker'));

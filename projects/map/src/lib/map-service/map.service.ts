@@ -71,8 +71,8 @@ export class MapService {
             toolManager.removeTool(toolId);
           }
         }),
-        map(manager => ({tool: manager.addTool<T, C>(tool), manager})),
-        tap(({tool: createdTool}) => toolId = createdTool?.id || ''),
+        map(manager => ({ tool: manager.addTool<T, C>(tool), manager })),
+        tap(({ tool: createdTool }) => toolId = createdTool?.id || ''),
       );
   }
 
@@ -85,7 +85,7 @@ export class MapService {
       .pipe(
         tap(manager => layerManager = manager),
         finalize(() => {
-          if (!!layerManager) {
+          if (layerManager) {
             layerManager.removeLayer(layer.id);
           }
         }),
@@ -106,11 +106,11 @@ export class MapService {
     zoomToFeature?: boolean,
   ): Observable<VectorLayer<VectorSource<Geometry>> | null> {
     return combineLatest([
-      this.createVectorLayer$({id: layerId, name: `${layerId} layer`, layerType: LayerTypesEnum.Vector, visible: true}, vectorLayerStyle),
+      this.createVectorLayer$({ id: layerId, name: `${layerId} layer`, layerType: LayerTypesEnum.Vector, visible: true }, vectorLayerStyle),
       featureGeometry$,
     ])
       .pipe(
-        tap(([vectorLayer, featureGeometry]) => {
+        tap(([ vectorLayer, featureGeometry ]) => {
           if (!vectorLayer) {
             return;
           }
@@ -134,7 +134,7 @@ export class MapService {
     return this.map.getMap$()
       .pipe(
         finalize(() => {
-          if (!!tooltip) {
+          if (tooltip) {
             tooltip.destroy();
           }
         }),

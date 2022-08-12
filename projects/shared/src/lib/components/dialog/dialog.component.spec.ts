@@ -8,7 +8,7 @@ describe('OverlayPanelComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DialogComponent ],
+      declarations: [DialogComponent],
     })
     .compileComponents();
   });

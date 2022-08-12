@@ -143,7 +143,7 @@ export class OpenLayersMap implements MapViewerModel {
     if (geom) {
       const geomExtent = geom.getExtent();
       this.executeMapAction(olMap => {
-        olMap.getView().fit(buffer(geomExtent, 10), {duration: 1000});
+        olMap.getView().fit(buffer(geomExtent, 10), { duration: 1000 });
       });
     }
   }
@@ -158,10 +158,10 @@ export class OpenLayersMap implements MapViewerModel {
         return;
       }
       if (animationDuration === 0) {
-        olMap.getView().setCenter([x, y]);
+        olMap.getView().setCenter([ x, y ]);
         olMap.getView().setZoom(zoomLevel);
       } else {
-        olMap.getView().animate({duration: animationDuration, zoom: zoomLevel, center: [x, y]});
+        olMap.getView().animate({ duration: animationDuration, zoom: zoomLevel, center: [ x, y ] });
       }
     });
   }
@@ -185,15 +185,15 @@ export class OpenLayersMap implements MapViewerModel {
     return merge(
       this.getMap$(),
       OpenLayersEventManager.onMapMove$().pipe(map(evt => evt.map)))
-      .pipe(
-        map(olMap => {
-          const px = olMap.getPixelFromCoordinate(coordinates);
-          if (!px) {
-            return null;
-          }
-          return [px[0], px[1]];
-        }),
-      );
+        .pipe(
+          map(olMap => {
+            const px = olMap.getPixelFromCoordinate(coordinates);
+            if (!px) {
+              return null;
+            }
+            return [ px[0], px[1] ];
+          }),
+        );
   }
 
   public getResolution$(): Observable<MapResolutionModel> {

@@ -126,7 +126,7 @@ export class ColorPickerComponent implements OnInit, OnDestroy {
       return this.sortedColors;
     }
     // When we have a small screen we sort the colors by luminosity
-    const colors: Array<string | undefined> = [ ...defaultColors ];
+    const colors: Array<string | undefined> = [...defaultColors];
     if (this.allowEmptyColor) {
       colors.push(undefined);
     }

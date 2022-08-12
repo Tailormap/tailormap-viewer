@@ -71,7 +71,7 @@ export class MapStyleHelper {
           : ColorHelper.getRgbStyleForColor(styleConfig.fillColor, styleConfig.fillOpacity),
       }));
     }
-    const styles: Style[] = [ baseStyle ];
+    const styles: Style[] = [baseStyle];
     if (styleConfig.pointType) {
       styles.push(...MapStyleHelper.createShape(styleConfig.pointType, styleConfig));
     }
@@ -108,7 +108,7 @@ export class MapStyleHelper {
     const DEFAULT_SELECTION_PADDING = 10;
     const paddingTop: number = styleConfig.pointType === 'label'
       ? DEFAULT_SELECTION_PADDING
-      : (!!styleConfig.pointType ? offsetY + symbolSize + DEFAULT_SELECTION_PADDING : 0);
+      : (styleConfig.pointType ? offsetY + symbolSize + DEFAULT_SELECTION_PADDING : 0);
 
     const baseLabelStyle = new Style({
       zIndex: styleConfig.zIndex,
@@ -137,7 +137,7 @@ export class MapStyleHelper {
       outerSelectionRectangle.getText().setBackgroundStroke(MapStyleHelper.getSelectionStroke(true));
       return [ baseLabelStyle, outerSelectionRectangle ];
     }
-    return [ baseLabelStyle ];
+    return [baseLabelStyle];
   }
 
   private static replaceSpecialValues(label?: string, geometry?: Geometry) {
@@ -195,7 +195,7 @@ export class MapStyleHelper {
       rotation: MapStyleHelper.getRotationForDegrees(styleConfig.pointRotation),
       ...POINT_SHAPES[type],
     });
-    return [ new Style({ image: baseShape }) ];
+    return [new Style({ image: baseShape })];
   }
 
   private static createOutlinedSelectionRectangle(feature: Feature<Geometry>, buffer: number, translate?: number[]): Style[] {
@@ -220,11 +220,11 @@ export class MapStyleHelper {
     const extent = geometry.getExtent();
     const bufferedExtent = bufferExtent(extent, buffer);
     const rect = new Polygon([[
-      [bufferedExtent[0], bufferedExtent[1]],
-      [bufferedExtent[0], bufferedExtent[3]],
-      [bufferedExtent[2], bufferedExtent[3]],
-      [bufferedExtent[2], bufferedExtent[1]],
-      [bufferedExtent[0], bufferedExtent[1]],
+      [ bufferedExtent[0], bufferedExtent[1] ],
+      [ bufferedExtent[0], bufferedExtent[3] ],
+      [ bufferedExtent[2], bufferedExtent[3] ],
+      [ bufferedExtent[2], bufferedExtent[1] ],
+      [ bufferedExtent[0], bufferedExtent[1] ],
     ]]);
     if (translate) {
       rect.translate(translate[0], translate[1]);
