@@ -31,7 +31,7 @@ export class PrintComponent implements OnInit, OnDestroy {
   public formControl = new UntypedFormControl('150', []);
 
   private _mapFilenameFn = (extension: string): Observable<string> => {
-    const dateTime = new Intl.DateTimeFormat('nl-NL',{ dateStyle: 'short', timeStyle: 'medium' }).format(new Date())
+    const dateTime = new Intl.DateTimeFormat('nl-NL', { dateStyle: 'short', timeStyle: 'medium' }).format(new Date())
       .replace(' ', '_')
       .replace(/:/g, '_');
     return of(`map-${dateTime}.${extension}`);
