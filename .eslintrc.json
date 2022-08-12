@@ -104,6 +104,7 @@
         "object-curly-spacing": ["error", "always"],
         "no-array-constructor": ["error"],
         "array-bracket-spacing": ["error", "always", { "arraysInArrays": false, "objectsInArrays": false, "singleValue": false }],
+        "comma-spacing": ["error", { "before": false, "after": true }],
         "max-len": [
           "error",
           180

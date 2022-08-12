@@ -47,7 +47,7 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
           definition: '',
         },
         isBaseLayer: false,
-      },{
+      }, {
         id: 2,
         visible: true,
         hasAttributes: true,
@@ -59,7 +59,7 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
           definition: '',
         },
         isBaseLayer: false,
-      },{
+      }, {
         id: 3,
         visible: true,
         hasAttributes: true,
@@ -120,7 +120,7 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
         url: 'https://www.openbasiskaart.nl/mapcache/?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetCapabilities',
         styleLibraries: {},
         useProxy: false,
-      },{
+      }, {
         id: 2,
         name: 'Bestuurlijke gebieden',
         protocol: ServiceProtocol.WMS,

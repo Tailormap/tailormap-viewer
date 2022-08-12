@@ -9,10 +9,10 @@ describe('FeatureInfoReducer', () => {
 
   test('handles LoadFeatureInfo', () => {
     const state = { ...initialFeatureInfoState };
-    const action = FeatureInfoActions.loadFeatureInfo({ mouseCoordinates: [ 1,2 ], mapCoordinates: [ 2,3 ] });
+    const action = FeatureInfoActions.loadFeatureInfo({ mouseCoordinates: [ 1, 2 ], mapCoordinates: [ 2, 3 ] });
     const updatedState = featureInfoReducer(state, action);
-    expect(updatedState.mapCoordinates).toEqual([ 2,3 ]);
-    expect(updatedState.mouseCoordinates).toEqual([ 1,2 ]);
+    expect(updatedState.mapCoordinates).toEqual([ 2, 3 ]);
+    expect(updatedState.mouseCoordinates).toEqual([ 1, 2 ]);
     expect(updatedState.loadStatus).toEqual(LoadingStateEnum.LOADING);
   });
 

@@ -12,7 +12,7 @@
     </mat-button-toggle-group>
 
     <div *ngIf="hasDrawing$ | async" class="spaced">
-      <label><input type="checkbox" [formControl]="includeDrawing"><span i18n>Include drawing</span></label>
+      <mat-checkbox [formControl]="includeDrawing" i18n>Include drawing</mat-checkbox>
     </div>
 
     <div *ngIf="exportType.value === 'image'" class="spaced">

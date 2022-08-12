@@ -14,7 +14,7 @@ describe('PrintComponent', () => {
       isComponentVisible$: jest.fn(() => of(true)),
       registerComponent: jest.fn(),
     };
-    await render(PrintComponent,{
+    await render(PrintComponent, {
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
         providers: [
         provideMockStore(),

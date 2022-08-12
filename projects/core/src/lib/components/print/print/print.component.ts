@@ -55,8 +55,7 @@ export class PrintComponent implements OnInit, OnDestroy {
 
   private _mapFilenameFn = (extension: string): Observable<string> => {
     const dateTime = new Intl.DateTimeFormat(this.locale, { dateStyle: 'short', timeStyle: 'medium' }).format(new Date())
-      .replace(' ', '_')
-      .replace(/:/g, '_');
+      .replace(/ |:|,/g, '_');
     return of(`map-${dateTime}.${extension}`);
   };
 
