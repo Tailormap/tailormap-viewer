@@ -4,7 +4,7 @@ import {
 } from '../models/drawing-feature.model';
 import { DrawingToolEvent, MapStyleModel } from '@tailormap-viewer/map';
 import { nanoid } from 'nanoid';
-import { $localize } from '@angular/localize/init';
+
 
 export class DrawingHelper {
 

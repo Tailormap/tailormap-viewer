@@ -4,7 +4,6 @@ import { default as OlMap } from 'ol/Map';
 import { OlLayerHelper } from '../helpers/ol-layer.helper';
 import BaseLayer from 'ol/layer/Base';
 import View from 'ol/View';
-import { $localize } from '@angular/localize/init';
 import { Size } from 'ol/size';
 import { ScaleLine } from 'ol/control';
 import html2canvas from 'html2canvas';

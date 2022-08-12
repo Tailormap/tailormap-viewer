@@ -23,7 +23,7 @@
         "sourceLocale": "en-US",
         "locales": {
           "nl": {
-            "translation": "src/locale/messages.nl.xlf"
+            "translation": "locale/messages.nl.xlf"
           }
         }
       },
@@ -54,6 +54,16 @@
             ]
           },
           "configurations": {
+            "nl": {
+              "localize": ["nl"],
+              "tsConfig": "projects/app/tsconfig.app.json",
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            },
             "production": {
               "tsConfig": "projects/app/tsconfig.prod.json",
               "budgets": [
@@ -97,6 +107,9 @@
             },
             "development": {
               "browserTarget": "app:build:development"
+            },
+            "nl": {
+              "browserTarget": "app:build:nl"
             }
           },
           "options": {

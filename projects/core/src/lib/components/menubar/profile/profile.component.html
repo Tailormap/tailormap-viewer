@@ -1,4 +1,10 @@
 <tm-menubar-button [menuTrigger]="userMenu" [icon]="userDetails?.loggedIn ? 'user' : 'login'"></tm-menubar-button>
+
+<mat-menu #languageMenu="matMenu">
+  <button mat-menu-item (click)="setLanguage('en')">English</button>
+  <button mat-menu-item (click)="setLanguage('nl')">Nederlands</button>
+</mat-menu>
+
 <mat-menu #userMenu="matMenu" xPosition="after" yPosition="above">
   <button mat-menu-item disabled *ngIf="userDetails?.loggedIn && userDetails?.user">
     <span i18n>Logged in as</span>
@@ -6,6 +12,9 @@
   </button>
   <button mat-menu-item (click)="logout()" *ngIf="userDetails?.loggedIn && userDetails?.user">
     <span i18n>Logout</span>
+  </button>
+  <button mat-menu-item [matMenuTriggerFor]="languageMenu">
+    <span i18n>Language</span>
   </button>
   <button mat-menu-item (click)="login()" *ngIf="!userDetails?.loggedIn">
     <span i18n>Login</span>

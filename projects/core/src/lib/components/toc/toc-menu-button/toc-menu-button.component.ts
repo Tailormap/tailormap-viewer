@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { MenubarService } from '../../menubar';
 import { TOC_ID } from '../toc-identifier';
-import { $localize } from '@angular/localize/init';
+
 
 @Component({
   selector: 'tm-toc-menu-button',

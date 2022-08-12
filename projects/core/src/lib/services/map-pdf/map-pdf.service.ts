@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { map, Observable, tap } from 'rxjs';
 import { jsPDF } from 'jspdf';
-import { $localize } from '@angular/localize/init';
 import { LayerModel, MapService } from '@tailormap-viewer/map';
 
 interface Size {

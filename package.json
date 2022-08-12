@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve app",
+    "start-nl": "ng serve app --configuration=nl",
     "build": "ng build shared && ng build api && ng build map && ng build core && ng build app",
     "build-app": "ng build app",
     "watch": "ng build --watch --configuration development app",

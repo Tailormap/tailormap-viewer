@@ -4,7 +4,6 @@ import { Store } from '@ngrx/store';
 import { selectApplicationId} from '../../state/core.selectors';
 import { catchError, combineLatest, concatMap, forkJoin, map, Observable, of, take } from 'rxjs';
 import { FeatureInfoResponseModel } from './models/feature-info-response.model';
-import { $localize } from '@angular/localize/init';
 import { selectVisibleLayersWithAttributes } from '../../map/state/map.selectors';
 
 @Injectable({
