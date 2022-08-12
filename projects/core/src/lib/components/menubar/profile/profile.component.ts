@@ -53,7 +53,4 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl('/login');
   }
 
-  public setLanguage(language: string) {
-
-  }
 }
