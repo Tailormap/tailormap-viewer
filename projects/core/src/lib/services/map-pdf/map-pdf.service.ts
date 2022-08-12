@@ -1,8 +1,9 @@
 import { Inject, Injectable, LOCALE_ID } from '@angular/core';
-import { map, Observable, tap } from 'rxjs';
+import { concatMap, map, Observable, tap } from 'rxjs';
 import { jsPDF } from 'jspdf';
 import { $localize } from '@angular/localize/init';
 import { LayerModel, MapService, OlLayerFilter } from '@tailormap-viewer/map';
+import 'svg2pdf.js';
 
 interface Size {
   width: number;
@@ -79,6 +80,9 @@ export class MapPdfService {
       doc.autoPrint();
     }
     return this.addMapImage$(doc, x, y, mapSize, printOptions.resolution || 72, layers, vectorLayerFilter).pipe(
+      concatMap(() => {
+        return doc.svg(document.querySelector('mat-icon[svgicon=\'logo\'] svg') as HTMLElement, { x: size.width - 30, y, width: 20, height: 20 });
+      }),
       map(() => doc.output('dataurlstring', { filename: printOptions.filename || $localize `map.pdf` })),
     );
   }
@@ -86,6 +90,7 @@ export class MapPdfService {
   private addMapImage$(doc: jsPDF, x: number, y: number, mapSize: Size, resolution: number, layers: LayerModel[], vectorLayerFilter?: OlLayerFilter): Observable<string> {
     return this.mapService.exportMapImage$({ widthInMm: mapSize.width, heightInMm: mapSize.height, resolution, layers, vectorLayerFilter }).pipe(
       tap(dataURL => {
+        // Note: calling addImage() with a HTMLCanvasElement is actually slower than adding by PNG
         doc.addImage(dataURL, 'PNG', x, y, mapSize.width, mapSize.height, '', 'FAST');
       }),
     );
