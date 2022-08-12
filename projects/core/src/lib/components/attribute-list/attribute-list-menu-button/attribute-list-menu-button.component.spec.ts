@@ -17,7 +17,7 @@ describe('AttributeListMenuButtonComponent', () => {
       isComponentVisible$: () => of(false),
     };
     await render(AttributeListMenuButtonComponent, {
-      declarations: [ MenubarButtonComponent ],
+      declarations: [MenubarButtonComponent],
       imports: [ SharedModule, MatIconTestingModule ],
       providers: [
         { provide: MenubarService, useValue: menubarService },

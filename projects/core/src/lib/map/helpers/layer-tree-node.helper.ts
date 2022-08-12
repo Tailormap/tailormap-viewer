@@ -44,7 +44,7 @@ export class LayerTreeNodeHelper {
       return LayerTreeNodeHelper.getAppLayerIds(layerTreeNodes, LayerTreeNodeHelper.findLayerTreeNode(layerTreeNodes, id));
     });
     return (child?.appLayerId ? [child.appLayerId] : []).concat(...childIds);
-  };
+  }
 
   public static getSelectedTreeNodes(layerTreeNodes: LayerTreeNodeModel[], layers: AppLayerModel[]) {
     const tree = LayerTreeNodeHelper.layerTreeNodeToTree(layerTreeNodes, layers);

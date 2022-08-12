@@ -30,7 +30,7 @@ export class LegendService {
           map(appLayers => {
             return appLayers.map(appLayer => ({
               appLayer,
-              url: !!appLayer.legendImageUrl
+              url: appLayer.legendImageUrl
                 ? appLayer.legendImageUrl
                 : layerManager.getLegendUrl(`${appLayer.id}`),
             }));

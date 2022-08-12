@@ -133,7 +133,7 @@ export class OpenLayersDrawingTool implements DrawingToolModel {
 
   private getEvent(geometry: Geometry | undefined, type: 'start' | 'change' | 'end'): DrawingToolEvent {
     if (undefined === geometry){
-      return {centerCoordinate: [], lastCoordinate: [], type, geometry:''};
+      return { centerCoordinate: [], lastCoordinate: [], type, geometry:'' };
     }
     const coordinates = GeometryTypeHelper.isKnownGeometry(geometry)
       ? geometry.getFlatCoordinates()

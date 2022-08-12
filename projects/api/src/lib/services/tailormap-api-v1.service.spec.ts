@@ -9,8 +9,8 @@ describe('TailormapApiV1Service', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ HttpClientTestingModule ],
-      providers: [ TailormapApiV1Service ],
+      imports: [HttpClientTestingModule],
+      providers: [TailormapApiV1Service],
     });
     service = TestBed.inject(TailormapApiV1Service);
     httpController = TestBed.inject(HttpTestingController);

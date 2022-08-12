@@ -15,7 +15,7 @@ import { Store } from '@ngrx/store';
 const getMockStore = (loggedIn: boolean) => {
   return provideMockStore({
     selectors: [
-      { selector: selectUserDetails, value: { loggedIn, user: loggedIn ? { username: 'testusername' } : undefined }},
+      { selector: selectUserDetails, value: { loggedIn, user: loggedIn ? { username: 'testusername' } : undefined } },
     ],
   });
 };
@@ -31,7 +31,7 @@ describe('ProfileComponent', () => {
       ],
       providers: [
         getMockStore(false),
-        { provide: Router, useValue: { navigateByUrl: navigateFn }},
+        { provide: Router, useValue: { navigateByUrl: navigateFn } },
         { provide: SecurityService, useValue: { logout$: logoutFn } },
       ],
       imports: [
@@ -57,7 +57,7 @@ describe('ProfileComponent', () => {
       ],
       providers: [
         getMockStore(true),
-        { provide: Router, useValue: { navigateByUrl: navigateFn }},
+        { provide: Router, useValue: { navigateByUrl: navigateFn } },
         { provide: SecurityService, useValue: { logout$: logoutFn } },
       ],
       imports: [

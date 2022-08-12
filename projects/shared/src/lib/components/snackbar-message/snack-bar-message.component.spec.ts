@@ -8,10 +8,10 @@ describe('SnackbarMessageComponent', () => {
 
   test('should render', async () => {
     await render(SnackBarMessageComponent, {
-      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [
-        { provide: MAT_SNACK_BAR_DATA, useValue: { message: 'Here is a message' }},
-        { provide: MatSnackBarRef, useValue: { dismiss: jest.fn() }},
+        { provide: MAT_SNACK_BAR_DATA, useValue: { message: 'Here is a message' } },
+        { provide: MatSnackBarRef, useValue: { dismiss: jest.fn() } },
       ],
     });
     expect(screen.getByText('Here is a message'));
@@ -25,10 +25,10 @@ describe('SnackbarMessageComponent', () => {
       closeButtonText: 'Close',
     };
     await render(SnackBarMessageComponent, {
-      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [
         { provide: MAT_SNACK_BAR_DATA, useValue: config },
-        { provide: MatSnackBarRef, useValue: { dismiss: closeFn }},
+        { provide: MatSnackBarRef, useValue: { dismiss: closeFn } },
       ],
     });
     expect(screen.getByText('Some message'));

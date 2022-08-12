@@ -40,7 +40,7 @@ export class IconService {
   }
 
   public getUrlForIcon(icon: string, folder?: string) {
-    const path = [ this.getUrl() ];
+    const path = [this.getUrl()];
     if (folder) {
       path.push(folder, '/');
     }

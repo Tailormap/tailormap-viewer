@@ -19,13 +19,13 @@ describe('FlatTreeHelper', () => {
 
   test('checks if TreeModel has children', () => {
     expect(FlatTreeHelper.hasChildren(getTreeModelMock())).toEqual(false);
-    expect(FlatTreeHelper.hasChildren(getTreeModelMock({ children: [ getTreeModelMock() ]}))).toEqual(true);
+    expect(FlatTreeHelper.hasChildren(getTreeModelMock({ children: [getTreeModelMock()] }))).toEqual(true);
     expect(FlatTreeHelper.hasChildren(getTreeModelMock({ children: [] }))).toEqual(false);
   });
 
   test('gets children', () => {
     expect(FlatTreeHelper.getChildren(getTreeModelMock())).toBeUndefined();
-    expect(FlatTreeHelper.getChildren(getTreeModelMock({ children: [ getTreeModelMock() ]}))).toEqual([ getTreeModelMock() ]);
+    expect(FlatTreeHelper.getChildren(getTreeModelMock({ children: [getTreeModelMock()] }))).toEqual([getTreeModelMock()]);
     expect(FlatTreeHelper.getChildren(getTreeModelMock({ children: [] }))).toEqual([]);
   });
 
