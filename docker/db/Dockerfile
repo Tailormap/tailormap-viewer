@@ -1,4 +1,4 @@
-FROM postgres:14.4-alpine3.16
+FROM postgres:14.5-alpine3.16
 
 ARG TZ="Europe/Amsterdam"
 
