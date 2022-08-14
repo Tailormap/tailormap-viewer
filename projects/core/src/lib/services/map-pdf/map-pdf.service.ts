@@ -2,7 +2,7 @@ import { Inject, Injectable, LOCALE_ID } from '@angular/core';
 import { map, Observable, tap } from 'rxjs';
 import { jsPDF } from 'jspdf';
 import { $localize } from '@angular/localize/init';
-import { LayerModel, MapService } from '@tailormap-viewer/map';
+import { LayerModel, MapService, OlLayerFilter } from '@tailormap-viewer/map';
 
 interface Size {
   width: number;
@@ -40,7 +40,7 @@ export class MapPdfService {
     @Inject(LOCALE_ID) public locale: string,
   ) { }
 
-  public create$(printOptions: PrintOptions, layers: LayerModel[]): Observable<string> {
+  public create$(printOptions: PrintOptions, layers: LayerModel[], vectorLayerFilter?: OlLayerFilter): Observable<string> {
     let size = printOptions.size === 'a3' ? a3Size : a4Size;
     if (printOptions.orientation === 'portrait') {
       // noinspection JSSuspiciousNameCombination
@@ -78,13 +78,13 @@ export class MapPdfService {
     if (printOptions.autoPrint) {
       doc.autoPrint();
     }
-    return this.addMapImage$(doc, x, y, mapSize, printOptions.resolution || 72, layers).pipe(
+    return this.addMapImage$(doc, x, y, mapSize, printOptions.resolution || 72, layers, vectorLayerFilter).pipe(
       map(() => doc.output('dataurlstring', { filename: printOptions.filename || $localize `map.pdf` })),
     );
   }
 
-  private addMapImage$(doc: jsPDF, x: number, y: number, mapSize: Size, resolution: number, layers: LayerModel[]): Observable<string> {
-    return this.mapService.exportMapImage$({ widthInMm: mapSize.width, heightInMm: mapSize.height, resolution, layers }).pipe(
+  private addMapImage$(doc: jsPDF, x: number, y: number, mapSize: Size, resolution: number, layers: LayerModel[], vectorLayerFilter?: OlLayerFilter): Observable<string> {
+    return this.mapService.exportMapImage$({ widthInMm: mapSize.width, heightInMm: mapSize.height, resolution, layers, vectorLayerFilter }).pipe(
       tap(dataURL => {
         doc.addImage(dataURL, 'PNG', x, y, mapSize.width, mapSize.height, '', 'FAST');
       }),

@@ -17,12 +17,18 @@ import { FeatureHelper } from '../helpers/feature.helper';
 import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
 import { MapSizeHelper } from '../helpers/map-size.helper';
 import { MapUnitEnum } from '../models/map-unit.enum';
+import { Layer } from 'ol/layer';
+import { Source } from 'ol/source';
+import LayerRenderer from 'ol/renderer/Layer';
+
+export type OlLayerFilter = (layer: Layer<Source, LayerRenderer<any>>) => boolean;
 
 export interface MapExportOptions {
   widthInMm: number;
   heightInMm: number;
   resolution: number;
   layers: LayerModel[];
+  vectorLayerFilter?: OlLayerFilter;
 }
 
 @Injectable({

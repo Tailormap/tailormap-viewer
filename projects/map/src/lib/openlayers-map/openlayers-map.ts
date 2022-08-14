@@ -18,6 +18,7 @@ import { OpenLayersMapImageExporter } from './openlayers-map-image-exporter';
 import Feature from 'ol/Feature';
 import Geometry from 'ol/geom/Geometry';
 import { buffer } from 'ol/extent';
+import BaseLayer from 'ol/layer/Base';
 
 export class OpenLayersMap implements MapViewerModel {
 
@@ -215,16 +216,20 @@ export class OpenLayersMap implements MapViewerModel {
   }
 
   public exportMapImage$(options: MapExportOptions): Observable<string> {
+    const extraLayers: BaseLayer[] = [];
     return this.getMap$().pipe(
       take(1),
-      tap((olMap: OlMap) => console.log(olMap)),
+      tap((olMap: OlMap) => {
+        olMap.getAllLayers().forEach(l => {
+          if (options.vectorLayerFilter && options.vectorLayerFilter(l)) {
+            extraLayers.push(l);
+          }
+        });
+      }),
       concatMap((olMap: OlMap) => {
-        // XXX maybe provide an extension point for DrawingComponent to provide layer instances for map image export, or ask the LayerManager
-        // for VectorLayers that should be included in a map image export?
-        const drawingLayer = olMap.getAllLayers().find(l => l.get('id') === 'drawing-layer');
-        return OpenLayersMapImageExporter.exportMapImage$(olMap.getSize() as Size, olMap.getView(), options, drawingLayer ? [drawingLayer] : []).pipe(
-          // Force redraw of vector layer with normal DPI
-          tap(() => drawingLayer?.changed()),
+        return OpenLayersMapImageExporter.exportMapImage$(olMap.getSize() as Size, olMap.getView(), options, extraLayers).pipe(
+          // Force redraw of extra layers with normal DPI
+          tap(() => extraLayers.forEach(l => l.changed())),
         );
       }),
     );

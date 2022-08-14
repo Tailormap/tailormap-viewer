@@ -11,6 +11,10 @@
       <mat-button-toggle value="image" i18n>Map image</mat-button-toggle>
     </mat-button-toggle-group>
 
+    <div *ngIf="hasDrawing$ | async" class="spaced">
+      <mat-checkbox [formControl]="includeDrawing" i18n>Include drawing</mat-checkbox>
+    </div>
+
     <div *ngIf="exportType.value === 'image'" class="spaced">
       <form [formGroup]="exportImageForm" (ngSubmit)="downloadMapImage()">
           <ng-container i18n>Image size in millimeters:</ng-container>

@@ -6,13 +6,14 @@ import { Store } from '@ngrx/store';
 import { MenubarService } from '../../menubar';
 import { PRINT_ID } from '../print-identifier';
 import { PrintMenuButtonComponent } from '../print-menu-button/print-menu-button.component';
-import { LayerModel, MapService } from '@tailormap-viewer/map';
+import { LayerModel, MapService, OlLayerFilter } from '@tailormap-viewer/map';
 import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MapPdfService } from '../../../services/map-pdf/map-pdf.service';
 import { ApplicationMapService } from '../../../map/services/application-map.service';
 import { selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersAndServices } from '../../../map/state/map.selectors';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { selectHasDrawingFeatures } from '../../drawing/state/drawing.selectors';
 
 @Component({
   selector: 'tm-print',
@@ -27,6 +28,13 @@ export class PrintComponent implements OnInit, OnDestroy {
   public busy$ = new BehaviorSubject(false);
 
   public visible$: Observable<boolean> = of(false);
+
+  public hasDrawing$;
+
+  public includeDrawing = new FormControl(true);
+
+  // eslint-disable-next-line rxjs/finnish
+  private vectorLayerFilter: OlLayerFilter = layer => !!(this.includeDrawing.value && layer.get('id') === 'drawing-layer');
 
   public exportType = new FormControl<'pdf' | 'image'>('pdf', { nonNullable: true });
 
@@ -47,8 +55,7 @@ export class PrintComponent implements OnInit, OnDestroy {
 
   private _mapFilenameFn = (extension: string): Observable<string> => {
     const dateTime = new Intl.DateTimeFormat(this.locale, { dateStyle: 'short', timeStyle: 'medium' }).format(new Date())
-      .replace(' ', '_')
-      .replace(/:/g, '_');
+      .replace(/ |:|,/g, '_');
     return of(`map-${dateTime}.${extension}`);
   };
 
@@ -61,6 +68,7 @@ export class PrintComponent implements OnInit, OnDestroy {
     private applicationMapService: ApplicationMapService,
     @Inject(LOCALE_ID) private locale: string,
   ) {
+    this.hasDrawing$ = this.store$.select(selectHasDrawingFeatures).pipe(takeUntil(this.destroyed));
   }
 
   public ngOnInit(): void {
@@ -145,6 +153,7 @@ export class PrintComponent implements OnInit, OnDestroy {
         heightInMm: form.height,
         resolution: form.dpi,
         layers,
+        vectorLayerFilter: this.vectorLayerFilter,
       }));
   }
 
@@ -158,7 +167,7 @@ export class PrintComponent implements OnInit, OnDestroy {
         footer: form.footer,
         autoPrint: form.autoPrint,
         filename,
-      }, layers));
+      }, layers, this.vectorLayerFilter));
   }
 
   private static downloadDataURL(dataURL: string, filename: string): void {
