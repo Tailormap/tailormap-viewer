@@ -1,8 +1,12 @@
 import { Inject, Injectable, LOCALE_ID } from '@angular/core';
-import { map, Observable, tap } from 'rxjs';
+import { concatMap, map, Observable, tap } from 'rxjs';
 import { jsPDF } from 'jspdf';
 import { $localize } from '@angular/localize/init';
 import { LayerModel, MapService, OlLayerFilter } from '@tailormap-viewer/map';
+import 'svg2pdf.js';
+import { HttpClient } from '@angular/common/http';
+import { IconService } from '@tailormap-viewer/shared';
+import { Svg2pdfOptions } from 'svg2pdf.js';
 
 interface Size {
   width: number;
@@ -38,6 +42,8 @@ export class MapPdfService {
   constructor(
     private mapService: MapService,
     @Inject(LOCALE_ID) public locale: string,
+    private httpClient: HttpClient,
+    private iconService: IconService,
   ) { }
 
   public create$(printOptions: PrintOptions, layers: LayerModel[], vectorLayerFilter?: OlLayerFilter): Observable<string> {
@@ -79,13 +85,26 @@ export class MapPdfService {
       doc.autoPrint();
     }
     return this.addMapImage$(doc, x, y, mapSize, printOptions.resolution || 72, layers, vectorLayerFilter).pipe(
+      concatMap(() => this.addSvg2PDF$(doc, this.iconService.getUrlForIcon('logo'), { x: size.width - 30, y, width: 20, height: 20 })),
+      concatMap(() => this.addSvg2PDF$(doc, this.iconService.getUrlForIcon('north_arrow'), { x, y: y + 2, width: 20, height: 20 })),
       map(() => doc.output('dataurlstring', { filename: printOptions.filename || $localize `map.pdf` })),
+    );
+  }
+
+  private addSvg2PDF$(doc: jsPDF, url: string, options: Svg2pdfOptions): Observable<jsPDF> {
+    return this.httpClient.get(url, { responseType: 'text' }).pipe(
+      concatMap(svg => {
+        const element = document.createElement('div');
+        element.innerHTML = svg;
+        return doc.svg(element.firstChild as HTMLElement, options);
+      }),
     );
   }
 
   private addMapImage$(doc: jsPDF, x: number, y: number, mapSize: Size, resolution: number, layers: LayerModel[], vectorLayerFilter?: OlLayerFilter): Observable<string> {
     return this.mapService.exportMapImage$({ widthInMm: mapSize.width, heightInMm: mapSize.height, resolution, layers, vectorLayerFilter }).pipe(
       tap(dataURL => {
+        // Note: calling addImage() with a HTMLCanvasElement is actually slower than adding by PNG
         doc.addImage(dataURL, 'PNG', x, y, mapSize.width, mapSize.height, '', 'FAST');
       }),
     );

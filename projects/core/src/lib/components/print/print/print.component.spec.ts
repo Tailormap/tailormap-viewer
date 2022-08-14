@@ -6,6 +6,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { of } from 'rxjs';
 import { MenubarService } from '../../menubar';
 import { ApplicationMapService } from '../../../map/services/application-map.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ICON_SERVICE_ICON_LOCATION } from '@tailormap-viewer/shared';
+import { APP_BASE_HREF } from '@angular/common';
 
 describe('PrintComponent', () => {
 
@@ -15,6 +18,9 @@ describe('PrintComponent', () => {
       registerComponent: jest.fn(),
     };
     await render(PrintComponent, {
+      imports: [
+        HttpClientTestingModule,
+      ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
         providers: [
         provideMockStore(),
@@ -23,6 +29,8 @@ describe('PrintComponent', () => {
         { provide: MatSnackBar, useValue: null },
         { provide: MenubarService, useValue: menubarServiceMock },
         { provide: ApplicationMapService, useValue: null },
+        { provide: ICON_SERVICE_ICON_LOCATION, useValue: null },
+        { provide: APP_BASE_HREF, useValue: null },
       ],
     });
     expect(await screen.getByText('Export map')).toBeInTheDocument();
