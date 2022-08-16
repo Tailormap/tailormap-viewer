@@ -6,6 +6,7 @@ import { catchError, combineLatest, concatMap, forkJoin, map, Observable, of, ta
 import { FeatureInfoResponseModel } from './models/feature-info-response.model';
 import { $localize } from '@angular/localize/init';
 import { selectVisibleLayersWithAttributes } from '../../map/state/map.selectors';
+import { MapService } from '@tailormap-viewer/map';
 
 @Injectable({
   providedIn: 'root',
@@ -15,13 +16,13 @@ export class FeatureInfoService {
   private static LOAD_FEATURE_INFO_ERROR = $localize `Could not load feature info`;
 
   /**
-   * default buffer distance for feature info requests in native CRS units, eg. m for EPSG:28992 or EPSG:3857.
-   * For EPSG:4326 0.00004 would be a good value.
+   * default buffer distance for feature info requests in pixels.
    */
   private static DEFAULT_DISTANCE = 4;
 
   constructor(
     private store$: Store,
+    private mapService: MapService,
     @Inject(TAILORMAP_API_V1_SERVICE) private apiService: TailormapApiV1ServiceModel,
   ) {
   }
@@ -30,10 +31,11 @@ export class FeatureInfoService {
     return combineLatest([
       this.store$.select(selectVisibleLayersWithAttributes),
       this.store$.select(selectApplicationId),
+      this.mapService.getResolution$(),
     ])
       .pipe(
         take(1),
-        concatMap(([ layers, applicationId ]) => {
+        concatMap(([ layers, applicationId, resolutions ]) => {
           if (!applicationId || layers.length === 0) {
             return of([]);
           }
@@ -44,7 +46,8 @@ export class FeatureInfoService {
               applicationId,
               x: coordinates[0],
               y: coordinates[1],
-              distance: FeatureInfoService.DEFAULT_DISTANCE,
+              // meters per pixel * fixed value
+              distance: resolutions.resolution * FeatureInfoService.DEFAULT_DISTANCE,
               simplify: false,
             }).pipe(
               map((featureInfoResult: FeaturesResponseModel): FeatureInfoResponseModel => ({
