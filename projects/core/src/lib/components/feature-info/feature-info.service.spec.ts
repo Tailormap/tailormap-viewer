@@ -6,6 +6,8 @@ import { of } from 'rxjs';
 import { selectApplicationId } from '../../state/core.selectors';
 import { selectVisibleLayersWithAttributes } from '../../map/state/map.selectors';
 import { TestBed } from '@angular/core/testing';
+import { MapService } from '@tailormap-viewer/map';
+import { NgZone } from '@angular/core';
 
 describe('FeatureInfoService', () => {
 
@@ -16,11 +18,18 @@ describe('FeatureInfoService', () => {
 
   let store: MockStore;
   let service: FeatureInfoService;
+  const mapService = {
+    provide: MapService,
+    useValue: {
+      getResolution$: () => of({ resolution: 1 }),
+    },
+  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
         FeatureInfoService,
+        mapService,
         provideMockStore({ initialState }),
         { provide: TAILORMAP_API_V1_SERVICE, useValue: { getFeatures$ } },
       ],
@@ -33,6 +42,7 @@ describe('FeatureInfoService', () => {
     store.overrideSelector(selectVisibleLayersWithAttributes, [appLayer]);
     store.overrideSelector(selectApplicationId, 1);
     expect(service).toBeTruthy();
+    expect(mapService).toBeTruthy();
     service.getFeatures$([ 1, 2 ])
       .subscribe(featureInfo => {
         expect(featureInfo.length).toEqual(1);
