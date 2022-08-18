@@ -30,7 +30,7 @@ describe('Menubarcomponent', () => {
         MenubarComponent,
         MenubarButtonComponent,
       ],
-      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
       imports: [
         SharedModule,
         NoopAnimationsModule,

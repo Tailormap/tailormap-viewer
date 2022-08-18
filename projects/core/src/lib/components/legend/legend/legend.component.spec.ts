@@ -14,7 +14,7 @@ import { LegendLayerComponent } from '../legend-layer/legend-layer.component';
 import { LEGEND_ID } from '../legend-identifier';
 
 const getMapService = () => {
-  return { provide: MapService, useValue: { getLayerManager$: () => of({ getLegendUrl: (layerId: string) => `layer-${layerId}-url-from-service` }) }};
+  return { provide: MapService, useValue: { getLayerManager$: () => of({ getLegendUrl: (layerId: string) => `layer-${layerId}-url-from-service` }) } };
 };
 
 const getMockStore = () => {
@@ -40,7 +40,7 @@ describe('LegendComponent', () => {
       providers: [
         getMapService(),
         getMockStore(),
-        { provide: MenubarService, useValue: { registerComponent: registerComponentFn, isComponentVisible$: () => of(false) }},
+        { provide: MenubarService, useValue: { registerComponent: registerComponentFn, isComponentVisible$: () => of(false) } },
       ],
     });
     expect(await screen.queryByText('Legend')).toBeNull();
@@ -62,7 +62,7 @@ describe('LegendComponent', () => {
     expect(await screen.findByText('Layer 3')).toBeInTheDocument();
     const images = await screen.findAllByRole('img');
     expect(images.length).toEqual(3);
-    expect(images.map(i => i.getAttribute('src'))).toEqual(['layer-1-url-from-service', 'layer-2-url-from-service', 'layer-3-url']);
+    expect(images.map(i => i.getAttribute('src'))).toEqual([ 'layer-1-url-from-service', 'layer-2-url-from-service', 'layer-3-url' ]);
   });
 
 });

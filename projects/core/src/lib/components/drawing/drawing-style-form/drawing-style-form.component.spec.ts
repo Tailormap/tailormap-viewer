@@ -8,7 +8,7 @@ describe('DrawingStyleFormComponent', () => {
 
   test('should render empty without type', async () => {
     await render(DrawingStyleFormComponent, {
-      imports: [ SharedModule ],
+      imports: [SharedModule],
     });
     expect(screen.queryByText('Symbol')).not.toBeInTheDocument();
     expect(screen.queryByText('Line')).not.toBeInTheDocument();

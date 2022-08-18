@@ -57,7 +57,7 @@ describe('TreeComponent', () => {
         return { ...n, expanded: !n.expanded };
       }
       if (typeof n.children !== 'undefined') {
-        return { ...n, children: n.children.map(c => expandNodes(c, node) )};
+        return { ...n, children: n.children.map(c => expandNodes(c, node) ) };
       }
       return n;
     };

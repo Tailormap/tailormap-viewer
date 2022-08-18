@@ -134,12 +134,12 @@ const onUpdatePage = (
     tabs: AttributeListStateHelper.updateTab(
       state.tabs,
       data.tabId,
-      (tab => ({...tab, loadingData: true})),
+      (tab => ({ ...tab, loadingData: true })),
     ),
     data: AttributeListStateHelper.updateData(
       state.data,
       payload.dataId,
-      d => ({...d, pageIndex: payload.page}),
+      d => ({ ...d, pageIndex: payload.page }),
     ),
   };
 };
@@ -157,7 +157,7 @@ const onUpdateSort = (
     tabs: AttributeListStateHelper.updateTab(
       state.tabs,
       data.tabId,
-      (tab => ({...tab, loadingData: true})),
+      (tab => ({ ...tab, loadingData: true })),
     ),
     data: AttributeListStateHelper.updateData(
       state.data,

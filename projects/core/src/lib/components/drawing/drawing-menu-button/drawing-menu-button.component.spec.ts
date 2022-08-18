@@ -15,7 +15,7 @@ describe('DrawingMenuButtonComponent', () => {
       isComponentVisible$: () => of(false),
     };
     await render(DrawingMenuButtonComponent, {
-      declarations: [ MenubarButtonComponent ],
+      declarations: [MenubarButtonComponent],
       imports: [ SharedImportsModule, MatIconTestingModule ],
       providers: [
         { provide: MenubarService, useValue: menubarService },

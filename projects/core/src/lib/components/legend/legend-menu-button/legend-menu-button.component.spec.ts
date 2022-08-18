@@ -15,7 +15,7 @@ describe('LegendMenuButtonComponent', () => {
       isComponentVisible$: () => of(false),
     };
     await render(LegendMenuButtonComponent, {
-      declarations: [ MenubarButtonComponent ],
+      declarations: [MenubarButtonComponent],
       imports: [ SharedModule, MatIconTestingModule ],
       providers: [
         { provide: MenubarService, useValue: menubarServiceMock },

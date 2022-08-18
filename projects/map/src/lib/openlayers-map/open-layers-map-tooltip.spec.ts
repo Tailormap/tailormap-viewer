@@ -21,7 +21,7 @@ describe('OpenLayersMapTooltip', () => {
     expect(document.querySelector('.ol-tooltip')).not.toBeNull();
     tooltip.setContent('TEST CONTENT');
     expect(await screen.findByText('TEST CONTENT')).toBeInTheDocument();
-    tooltip.move([5, 5]);
+    tooltip.move([ 5, 5 ]);
     expect(document.querySelector('.ol-tooltip--moving')).not.toBeNull();
     tooltip.freeze();
     expect(document.querySelector('.ol-tooltip--moving')).toBeNull();

@@ -17,12 +17,18 @@ import { FeatureHelper } from '../helpers/feature.helper';
 import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
 import { MapSizeHelper } from '../helpers/map-size.helper';
 import { MapUnitEnum } from '../models/map-unit.enum';
+import { Layer } from 'ol/layer';
+import { Source } from 'ol/source';
+import LayerRenderer from 'ol/renderer/Layer';
+
+export type OlLayerFilter = (layer: Layer<Source, LayerRenderer<any>>) => boolean;
 
 export interface MapExportOptions {
   widthInMm: number;
   heightInMm: number;
   resolution: number;
   layers: LayerModel[];
+  vectorLayerFilter?: OlLayerFilter;
 }
 
 @Injectable({
@@ -65,8 +71,8 @@ export class MapService {
             toolManager.removeTool(toolId);
           }
         }),
-        map(manager => ({tool: manager.addTool<T, C>(tool), manager})),
-        tap(({tool: createdTool}) => toolId = createdTool?.id || ''),
+        map(manager => ({ tool: manager.addTool<T, C>(tool), manager })),
+        tap(({ tool: createdTool }) => toolId = createdTool?.id || ''),
       );
   }
 
@@ -79,7 +85,7 @@ export class MapService {
       .pipe(
         tap(manager => layerManager = manager),
         finalize(() => {
-          if (!!layerManager) {
+          if (layerManager) {
             layerManager.removeLayer(layer.id);
           }
         }),
@@ -100,11 +106,11 @@ export class MapService {
     zoomToFeature?: boolean,
   ): Observable<VectorLayer<VectorSource<Geometry>> | null> {
     return combineLatest([
-      this.createVectorLayer$({id: layerId, name: `${layerId} layer`, layerType: LayerTypesEnum.Vector, visible: true}, vectorLayerStyle),
+      this.createVectorLayer$({ id: layerId, name: `${layerId} layer`, layerType: LayerTypesEnum.Vector, visible: true }, vectorLayerStyle),
       featureGeometry$,
     ])
       .pipe(
-        tap(([vectorLayer, featureGeometry]) => {
+        tap(([ vectorLayer, featureGeometry ]) => {
           if (!vectorLayer) {
             return;
           }
@@ -128,7 +134,7 @@ export class MapService {
     return this.map.getMap$()
       .pipe(
         finalize(() => {
-          if (!!tooltip) {
+          if (tooltip) {
             tooltip.destroy();
           }
         }),

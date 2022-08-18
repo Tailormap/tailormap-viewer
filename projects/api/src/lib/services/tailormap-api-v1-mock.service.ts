@@ -47,7 +47,7 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
           definition: '',
         },
         isBaseLayer: false,
-      },{
+      }, {
         id: 2,
         visible: true,
         hasAttributes: true,
@@ -59,7 +59,7 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
           definition: '',
         },
         isBaseLayer: false,
-      },{
+      }, {
         id: 3,
         visible: true,
         hasAttributes: true,
@@ -97,7 +97,7 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
       }, {
         id: 'level-2',
         name: 'Bestuurlijke Gebieden',
-        childrenIds: ['applayer-2', 'applayer-3'],
+        childrenIds: [ 'applayer-2', 'applayer-3' ],
         appLayerId: null,
         root: false,
       }, {
@@ -120,7 +120,7 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
         url: 'https://www.openbasiskaart.nl/mapcache/?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetCapabilities',
         styleLibraries: {},
         useProxy: false,
-      },{
+      }, {
         id: 2,
         name: 'Bestuurlijke gebieden',
         protocol: ServiceProtocol.WMS,
@@ -186,14 +186,14 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
   }): Observable<FeaturesResponseModel> {
     return of({
       features: [
-        { __fid: '1', attributes: { object_id: '0606100000013912',  valid_from: '2010-06-29', year: 1960, status: 'Pand in gebruik' }},
-        { __fid: '2', attributes: { object_id: '0606100000017812',  valid_from: '2014-10-06', year: 2001, status: 'Pand in gebruik' }},
-        { __fid: '3', attributes: { object_id: '0622100000041685',  valid_from: '1929-01-22', year: 1989, status: 'Pand in gebruik' }},
-        { __fid: '4', attributes: { object_id: '0622100000041686',  valid_from: '1929-01-22', year: 1989, status: 'Pand in gebruik' }},
-        { __fid: '5', attributes: { object_id: '0622100000041687',  valid_from: '1931-05-15', year: 1983, status: 'Pand in gebruik' }},
-        { __fid: '6', attributes: { object_id: '0622100000041688',  valid_from: '2007-05-02', year: 1900, status: 'Pand in gebruik' }},
-        { __fid: '7', attributes: { object_id: '0622100000041689',  valid_from: '2016-04-19', year: 1700, status: 'Pand in gebruik' }},
-        { __fid: '8', attributes: { object_id: '0622100000041690',  valid_from: '2015-05-20', year: 1700, status: 'Pand in gebruik' }},
+        { __fid: '1', attributes: { object_id: '0606100000013912',  valid_from: '2010-06-29', year: 1960, status: 'Pand in gebruik' } },
+        { __fid: '2', attributes: { object_id: '0606100000017812',  valid_from: '2014-10-06', year: 2001, status: 'Pand in gebruik' } },
+        { __fid: '3', attributes: { object_id: '0622100000041685',  valid_from: '1929-01-22', year: 1989, status: 'Pand in gebruik' } },
+        { __fid: '4', attributes: { object_id: '0622100000041686',  valid_from: '1929-01-22', year: 1989, status: 'Pand in gebruik' } },
+        { __fid: '5', attributes: { object_id: '0622100000041687',  valid_from: '1931-05-15', year: 1983, status: 'Pand in gebruik' } },
+        { __fid: '6', attributes: { object_id: '0622100000041688',  valid_from: '2007-05-02', year: 1900, status: 'Pand in gebruik' } },
+        { __fid: '7', attributes: { object_id: '0622100000041689',  valid_from: '2016-04-19', year: 1700, status: 'Pand in gebruik' } },
+        { __fid: '8', attributes: { object_id: '0622100000041690',  valid_from: '2015-05-20', year: 1700, status: 'Pand in gebruik' } },
       ],
       columnMetadata: [
         { key: 'object_id', alias: 'Pand', type: FeatureAttributeTypeEnum.STRING },

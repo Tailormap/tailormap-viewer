@@ -63,7 +63,7 @@ export class MeasureComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.destroyed),
         tap(({ tool }) => {
-          this.store$.dispatch(registerTool({ tool: { id: ToolbarComponentEnum.MEASURE, mapToolId: tool.id }}));
+          this.store$.dispatch(registerTool({ tool: { id: ToolbarComponentEnum.MEASURE, mapToolId: tool.id } }));
         }),
         switchMap(({ tool }) => tool.drawing$),
       )
@@ -96,7 +96,7 @@ export class MeasureComponent implements OnInit, OnDestroy {
     this.hideTooltipAndGeom();
     this.store$.dispatch(activateTool({ tool: ToolbarComponentEnum.MEASURE, enableArguments: {
       type: type === 'area' ? 'area' : 'line',
-    }}));
+    } }));
   }
 
   private hideTooltipAndGeom() {

@@ -41,7 +41,7 @@ export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.destroyed),
         tap(({ tool }) => {
-          this.store$.dispatch(registerTool({tool: {id: ToolbarComponentEnum.SELECT_COORDINATES, mapToolId: tool.id}}));
+          this.store$.dispatch(registerTool({ tool: { id: ToolbarComponentEnum.SELECT_COORDINATES, mapToolId: tool.id } }));
         }),
         concatMap(({ tool }) => tool.mapClick$),
         switchMap(mapClick => {
@@ -59,7 +59,7 @@ export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
         }),
       ).subscribe(
       succesMsg => {
-        this.snackBar.open(succesMsg, '', {duration: 5000});
+        this.snackBar.open(succesMsg, '', { duration: 5000 });
       },
     );
   }
@@ -72,6 +72,6 @@ export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
   }
 
   public toggle() {
-    this.store$.dispatch(toggleTool({tool: ToolbarComponentEnum.SELECT_COORDINATES}));
+    this.store$.dispatch(toggleTool({ tool: ToolbarComponentEnum.SELECT_COORDINATES }));
   }
 }

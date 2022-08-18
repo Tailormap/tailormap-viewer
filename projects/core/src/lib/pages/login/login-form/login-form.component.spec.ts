@@ -14,7 +14,7 @@ describe('LoginFormComponent', () => {
 
   test('should render', async () => {
     await render(LoginFormComponent, {
-      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
       imports: [
         ReactiveFormsModule,
       ],
@@ -22,8 +22,8 @@ describe('LoginFormComponent', () => {
         AutoFocusDirective,
       ],
       providers: [
-        { provide: SecurityService, useValue: { login$: jest.fn() }},
-        { provide: Router, useValue: { navigateByUrl: jest.fn() }},
+        { provide: SecurityService, useValue: { login$: jest.fn() } },
+        { provide: Router, useValue: { navigateByUrl: jest.fn() } },
         provideMockStore({
           selectors: [{ selector: selectRouteBeforeLogin, value: '' }],
         }),
@@ -38,7 +38,7 @@ describe('LoginFormComponent', () => {
     const loginFn = jest.fn(() => of(true));
     const redirectFn = jest.fn();
     await render(LoginFormComponent, {
-      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
       imports: [
         ReactiveFormsModule,
       ],
@@ -46,8 +46,8 @@ describe('LoginFormComponent', () => {
         AutoFocusDirective,
       ],
       providers: [
-        { provide: SecurityService, useValue: { login$: loginFn }},
-        { provide: Router, useValue: { navigateByUrl: redirectFn }},
+        { provide: SecurityService, useValue: { login$: loginFn } },
+        { provide: Router, useValue: { navigateByUrl: redirectFn } },
         provideMockStore({
           selectors: [{ selector: selectRouteBeforeLogin, value: '' }],
         }),
@@ -66,7 +66,7 @@ describe('LoginFormComponent', () => {
     const loginFn = jest.fn(() => of(true));
     const redirectFn = jest.fn();
     await render(LoginFormComponent, {
-      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
       imports: [
         ReactiveFormsModule,
       ],
@@ -74,8 +74,8 @@ describe('LoginFormComponent', () => {
         AutoFocusDirective,
       ],
       providers: [
-        { provide: SecurityService, useValue: { login$: loginFn }},
-        { provide: Router, useValue: { navigateByUrl: redirectFn }},
+        { provide: SecurityService, useValue: { login$: loginFn } },
+        { provide: Router, useValue: { navigateByUrl: redirectFn } },
         provideMockStore({
           selectors: [{ selector: selectRouteBeforeLogin, value: '/app/some-app' }],
         }),

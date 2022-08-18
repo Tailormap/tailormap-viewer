@@ -8,16 +8,16 @@ import { LayerManagerModel, MapResolutionModel, MapViewerModel, MapViewerOptions
 import { ProjectionsHelper } from '../helpers/projections.helper';
 import { OpenlayersExtent } from '../models/extent.type';
 import { OpenLayersLayerManager } from './open-layers-layer-manager';
-import { BehaviorSubject, concatMap, filter, map, merge, Observable, take, tap } from 'rxjs';
+import { BehaviorSubject, concatMap, filter, forkJoin, from, map, merge, Observable, of, take } from 'rxjs';
 import { Size } from 'ol/size';
 import { ToolManagerModel } from '../models/tool-manager.model';
 import { OpenLayersToolManager } from './open-layers-tool-manager';
 import { OpenLayersEventManager } from './open-layers-event-manager';
 import { MapExportOptions } from '../map-service/map.service';
-import { OpenLayersMapImageExporter } from './openlayers-map-image-exporter';
 import Feature from 'ol/Feature';
 import Geometry from 'ol/geom/Geometry';
 import { buffer } from 'ol/extent';
+import BaseLayer from 'ol/layer/Base';
 
 export class OpenLayersMap implements MapViewerModel {
 
@@ -157,10 +157,10 @@ export class OpenLayersMap implements MapViewerModel {
         return;
       }
       if (animationDuration === 0) {
-        olMap.getView().setCenter([x, y]);
+        olMap.getView().setCenter([ x, y ]);
         olMap.getView().setZoom(zoomLevel);
       } else {
-        olMap.getView().animate({ duration: animationDuration, zoom: zoomLevel, center: [x, y] });
+        olMap.getView().animate({ duration: animationDuration, zoom: zoomLevel, center: [ x, y ] });
       }
     });
   }
@@ -190,7 +190,7 @@ export class OpenLayersMap implements MapViewerModel {
             if (!px) {
               return null;
             }
-            return [px[0], px[1]];
+            return [ px[0], px[1] ];
           }),
         );
   }
@@ -217,15 +217,21 @@ export class OpenLayersMap implements MapViewerModel {
   public exportMapImage$(options: MapExportOptions): Observable<string> {
     return this.getMap$().pipe(
       take(1),
-      tap((olMap: OlMap) => console.log(olMap)),
       concatMap((olMap: OlMap) => {
-        // XXX maybe provide an extension point for DrawingComponent to provide layer instances for map image export, or ask the LayerManager
-        // for VectorLayers that should be included in a map image export?
-        const drawingLayer = olMap.getAllLayers().find(l => l.get('id') === 'drawing-layer');
-        return OpenLayersMapImageExporter.exportMapImage$(olMap.getSize() as Size, olMap.getView(), options, drawingLayer ? [drawingLayer] : []).pipe(
-          // Force redraw of vector layer with normal DPI
-          tap(() => drawingLayer?.changed()),
-        );
+        const extraLayers: BaseLayer[] = olMap.getAllLayers().filter(l => options.vectorLayerFilter && options.vectorLayerFilter(l));
+        const export$: Observable<string> = from(import('./openlayers-map-image-exporter'))
+          .pipe(
+            map(m => m.OpenLayersMapImageExporter),
+            concatMap(mapExporter => {
+              return mapExporter.exportMapImage$(olMap.getSize() as Size, olMap.getView(), options, extraLayers);
+            }),
+          );
+        return forkJoin([ of(extraLayers), export$ ]);
+      }),
+      map(([ extraLayers, pdfExport ]) => {
+        // Force redraw of extra layers with normal DPI
+        extraLayers.forEach(l => l.changed());
+        return pdfExport;
       }),
     );
   }

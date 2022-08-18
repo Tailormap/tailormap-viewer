@@ -36,12 +36,12 @@ export class OpenLayersMapImageExporter {
     console.log(`Map image export, requested size in mm: ${options.widthInMm} x ${options.heightInMm} in ${options.resolution} DPI, ${width} x ${height} px, ` +
       `width/height ratio ${(width / height).toFixed(1)}`);
 
-    const imageSize = [width, height];
+    const imageSize = [ width, height ];
     // The ratio of the export image pixel size to the original map pixel size based on width
     const sizeRatio = imageSize[0] / olSize[0];
     // When sizeRatio is higher than 1 reduce the map size, but get the higher pixel density image from the OL canvases because sizeRatio
     // is used as OL pixelRatio
-    const imageExportOlSize = [imageSize[0]/sizeRatio, imageSize[1]/sizeRatio];
+    const imageExportOlSize = [ imageSize[0]/sizeRatio, imageSize[1]/sizeRatio ];
 
     const target = document.createElement('div');
     target.style.position = 'absolute';
@@ -62,7 +62,7 @@ export class OpenLayersMapImageExporter {
       units: 'metric',
       bar: true,
       steps: 4,
-      minWidth: 100,
+      minWidth: 200,
     });
 
     const imageExportOlMap = new OlMap({

@@ -34,7 +34,7 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.destroyed),
         tap(({ tool }) => {
-          this.store$.dispatch(registerTool({ tool: { id: ToolbarComponentEnum.FEATURE_INFO, mapToolId: tool.id }}));
+          this.store$.dispatch(registerTool({ tool: { id: ToolbarComponentEnum.FEATURE_INFO, mapToolId: tool.id } }));
         }),
         concatMap(({ tool }) => tool?.mapClick$ || of(null)),
       )

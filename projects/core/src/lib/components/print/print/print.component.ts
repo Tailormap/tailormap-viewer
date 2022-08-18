@@ -1,18 +1,18 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, Injector, LOCALE_ID, OnDestroy, OnInit } from '@angular/core';
 import {
-  BehaviorSubject, catchError, combineLatest, concatMap, finalize, forkJoin, map, Observable, of, Subject, take, takeUntil, tap,
+  BehaviorSubject, catchError, combineLatest, concatMap, finalize, forkJoin, from, map, Observable, of, Subject, take, takeUntil, tap,
 } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { MenubarService } from '../../menubar';
 import { PRINT_ID } from '../print-identifier';
 import { PrintMenuButtonComponent } from '../print-menu-button/print-menu-button.component';
-import { LayerModel, MapService } from '@tailormap-viewer/map';
+import { LayerModel, MapService, OlLayerFilter } from '@tailormap-viewer/map';
 import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MapPdfService } from '../../../services/map-pdf/map-pdf.service';
-import { UntypedFormControl } from '@angular/forms';
 import { ApplicationMapService } from '../../../map/services/application-map.service';
 import { selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersAndServices } from '../../../map/state/map.selectors';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { selectHasDrawingFeatures } from '../../drawing/state/drawing.selectors';
 
 @Component({
   selector: 'tm-print',
@@ -28,12 +28,33 @@ export class PrintComponent implements OnInit, OnDestroy {
 
   public visible$: Observable<boolean> = of(false);
 
-  public formControl = new UntypedFormControl('150', []);
+  public hasDrawing$;
+
+  public includeDrawing = new FormControl(true);
+
+  // eslint-disable-next-line rxjs/finnish
+  private vectorLayerFilter: OlLayerFilter = layer => !!(this.includeDrawing.value && layer.get('id') === 'drawing-layer');
+
+  public exportType = new FormControl<'pdf' | 'image'>('pdf', { nonNullable: true });
+
+  public exportImageForm = new FormBuilder().nonNullable.group({
+    width: [ 86.7, Validators.required ],
+    height: [ 65, Validators.required ],
+    dpi: [ 300, Validators.required ],
+  });
+
+  public exportPdfForm = new FormBuilder().nonNullable.group({
+    orientation: new FormControl<'landscape' | 'portrait'>('landscape', { nonNullable: true }),
+    title: '',
+    footer: '',
+    paperSize: new FormControl<'a4' | 'a3'>('a4', { nonNullable: true }),
+    dpi: [ 300, Validators.required ],
+    autoPrint: false,
+  });
 
   private _mapFilenameFn = (extension: string): Observable<string> => {
-    const dateTime = new Intl.DateTimeFormat('nl-NL',{ dateStyle: 'short', timeStyle: 'medium'}).format(new Date())
-      .replace(' ', '_')
-      .replace(/:/g, '_');
+    const dateTime = new Intl.DateTimeFormat(this.locale, { dateStyle: 'short', timeStyle: 'medium' }).format(new Date())
+      .replace(/ |:|,/g, '_');
     return of(`map-${dateTime}.${extension}`);
   };
 
@@ -42,10 +63,11 @@ export class PrintComponent implements OnInit, OnDestroy {
     private menubarService: MenubarService,
     private mapService: MapService,
     private snackBar: MatSnackBar,
-    private mapPdfService: MapPdfService,
+    private injector: Injector,
     private applicationMapService: ApplicationMapService,
+    @Inject(LOCALE_ID) private locale: string,
   ) {
-
+    this.hasDrawing$ = this.store$.select(selectHasDrawingFeatures).pipe(takeUntil(this.destroyed));
   }
 
   public ngOnInit(): void {
@@ -80,9 +102,9 @@ export class PrintComponent implements OnInit, OnDestroy {
 
   private wrapFileExport(extension: string, toDataURLExporter: (filename: string, layers: LayerModel[]) => Observable<string>): void {
     this.busy$.next(true);
-    forkJoin([this._mapFilenameFn(extension), this.getLayers$()]).pipe(
-      concatMap(([filename, layers]) => combineLatest([of(filename), toDataURLExporter(filename, layers)])),
-      tap(([filename, dataURL]) => PrintComponent.downloadDataURL(dataURL, filename)),
+    forkJoin([ this._mapFilenameFn(extension), this.getLayers$() ]).pipe(
+      concatMap(([ filename, layers ]) => combineLatest([ of(filename), toDataURLExporter(filename, layers) ])),
+      tap(([ filename, dataURL ]) => PrintComponent.downloadDataURL(dataURL, filename)),
       takeUntil(this.destroyed),
       takeUntil(this.cancelled$),
       catchError(message => {
@@ -102,34 +124,53 @@ export class PrintComponent implements OnInit, OnDestroy {
     ).subscribe();
   }
 
-  private getDpi(): number {
-    const formValue = Number(this.formControl.value);
-    return Math.max(72, Math.min(600, formValue));
-  }
-
   private getLayers$(): Observable<LayerModel[]> {
     const isValidLayer = (layer: LayerModel | null): layer is LayerModel => layer !== null;
-    return combineLatest([this.store$.select(selectOrderedVisibleBackgroundLayers), this.store$.select(selectOrderedVisibleLayersAndServices)]).pipe(
-      map(([backgroundLayers, layers]) => [...backgroundLayers,  ...layers]),
+    return combineLatest([ this.store$.select(selectOrderedVisibleBackgroundLayers), this.store$.select(selectOrderedVisibleLayersAndServices) ]).pipe(
+      map(([ backgroundLayers, layers ]) => [ ...backgroundLayers,  ...layers ]),
       concatMap(layers => forkJoin(layers.map(layer => this.applicationMapService.convertAppLayerToMapLayer$(layer.layer, layer.service)))),
       map(layers => layers.filter(isValidLayer)),
       take(1),
     );
   }
 
-  public downloadMapImage(): void {
-    this.wrapFileExport('png', (filename, layers) => this.mapService.exportMapImage$(
-      { widthInMm: 173.4, heightInMm: 130, resolution: this.getDpi(), layers}));
+  public getImageResolution() {
+    if (!this.exportImageForm.valid) {
+      return '';
+    }
+
+    const toPixels = (mm: number, theDpi: number) => (mm / 25.4 * theDpi).toFixed();
+    const dpi = this.exportImageForm.value.dpi as number;
+    return `${toPixels(this.exportImageForm.value.width as number, dpi)} × ${toPixels(this.exportImageForm.value.height as number, dpi)}`;
   }
 
-  public downloadPDF(): void {
-    this.wrapFileExport('pdf', (filename, layers) => this.mapPdfService.create$({
-        orientation: 'landscape',
-        size: 'a4',
-        resolution: this.getDpi(),
-        title: 'Print test',
-        filename,
-      }, layers));
+  public downloadMapImage(): void {
+    const form = this.exportImageForm.getRawValue();
+    this.wrapFileExport('png', (filename, layers) => this.mapService.exportMapImage$(
+      {
+        widthInMm: form.width,
+        heightInMm: form.height,
+        resolution: form.dpi,
+        layers,
+        vectorLayerFilter: this.vectorLayerFilter,
+      }));
+  }
+
+  public downloadPdf() {
+    const form = this.exportPdfForm.getRawValue();
+    from(import('../../../services/map-pdf/map-pdf.service'))
+      .pipe(map(m => this.injector.get(m.MapPdfService)))
+      .subscribe(mapPdfService => {
+        this.wrapFileExport('pdf', (filename, layers) => mapPdfService.create$({
+          orientation: form.orientation,
+          size: form.paperSize,
+          resolution: form.dpi,
+          title: form.title,
+          footer: form.footer,
+          autoPrint: form.autoPrint,
+          filename,
+        }, layers, this.vectorLayerFilter));
+      });
   }
 
   private static downloadDataURL(dataURL: string, filename: string): void {

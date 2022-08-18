@@ -16,8 +16,8 @@ import { setLoginDetails, setRouteBeforeLogin } from '../../../state/core.action
 export class LoginFormComponent implements OnInit {
 
   public loginForm = this.formBuilder.group({
-    username: ['', [Validators.required]],
-    password: ['', [Validators.required]],
+    username: [ '', [Validators.required]],
+    password: [ '', [Validators.required]],
   });
 
   private loggingInSubject = new BehaviorSubject(false);
@@ -48,7 +48,7 @@ export class LoginFormComponent implements OnInit {
         take(1),
         switchMap(success => {
           const beforeLoginUrl$ = this.store$.select(selectRouteBeforeLogin).pipe(take(1));
-          return forkJoin([of(success), beforeLoginUrl$]);
+          return forkJoin([ of(success), beforeLoginUrl$ ]);
         }),
       )
       .subscribe(([ success, beforeLoginUrl ]) => {
@@ -57,7 +57,7 @@ export class LoginFormComponent implements OnInit {
           this.errorMessageSubject.next('');
           this.router.navigateByUrl(beforeLoginUrl || '/');
           this.store$.dispatch(setRouteBeforeLogin({ route: '' }));
-          this.store$.dispatch(setLoginDetails({ loggedIn: true, user: { username }}));
+          this.store$.dispatch(setLoginDetails({ loggedIn: true, user: { username } }));
         } else {
           this.errorMessageSubject.next($localize `Login failed, please try again`);
         }
