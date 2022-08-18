@@ -1,7 +1,6 @@
 import { Inject, Injectable, LOCALE_ID } from '@angular/core';
 import { concatMap, map, Observable, tap } from 'rxjs';
 import { jsPDF } from 'jspdf';
-import { $localize } from '@angular/localize/init';
 import { LayerModel, MapService, OlLayerFilter } from '@tailormap-viewer/map';
 import 'svg2pdf.js';
 import { HttpClient } from '@angular/common/http';
