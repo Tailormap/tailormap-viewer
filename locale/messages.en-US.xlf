@@ -1,10 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-  <file source-language="en-US" datatype="plaintext" original="ng2.template" target-language="nl">
+  <file source-language="en-US" datatype="plaintext" original="ng2.template">
     <body>
       <trans-unit id="7803460230438661304" datatype="html">
         <source> No rows found </source>
-        <target state="translated"> Geen rijen gevonden</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/attribute-list/attribute-list-content/attribute-list-content.component.html</context>
           <context context-type="linenumber">4,5</context>
@@ -12,7 +11,6 @@
       </trans-unit>
       <trans-unit id="1286034572431173427" datatype="html">
         <source>Go to page</source>
-        <target state="translated">Ga naar pagina</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/attribute-list/attribute-list-paging-dialog/attribute-list-paging-dialog.component.html</context>
           <context context-type="linenumber">3</context>
@@ -20,7 +18,6 @@
       </trans-unit>
       <trans-unit id="7251686705365735219" datatype="html">
         <source>Attribute list</source>
-        <target state="translated">Attributenlijst</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/attribute-list/attribute-list/attribute-list.component.html</context>
           <context context-type="linenumber">10,11</context>
@@ -28,7 +25,6 @@
       </trans-unit>
       <trans-unit id="174013150468601581" datatype="html">
         <source>No layers with administrative data found</source>
-        <target state="translated">Geen lagen met administratieve data gevonden</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/attribute-list/attribute-list/attribute-list.component.html</context>
           <context context-type="linenumber">24</context>
@@ -36,7 +32,6 @@
       </trans-unit>
       <trans-unit id="9058087986215108737" datatype="html">
         <source>Failed to load attribute list data</source>
-        <target state="translated">Er is een fout opgetreden bij het laden van attributenlijst gegevens</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/attribute-list/services/attribute-list-data.service.ts</context>
           <context context-type="linenumber">22</context>
@@ -44,7 +39,6 @@
       </trans-unit>
       <trans-unit id="8270919828485542598" datatype="html">
         <source>No background</source>
-        <target state="translated">Geen achtergrondlaag</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/background-layer-toggle/background-layer-toggle.component.ts</context>
           <context context-type="linenumber">46</context>
@@ -52,7 +46,6 @@
       </trans-unit>
       <trans-unit id="5121320475401958995" datatype="html">
         <source>Select shape</source>
-        <target state="translated">Selecteer type object</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
           <context context-type="linenumber">1</context>
@@ -60,7 +53,6 @@
       </trans-unit>
       <trans-unit id="322394824231125404" datatype="html">
         <source>Draw point</source>
-        <target state="translated">Punt tekenen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
           <context context-type="linenumber">5</context>
@@ -72,7 +64,6 @@
       </trans-unit>
       <trans-unit id="7485144677537501434" datatype="html">
         <source>Draw line</source>
-        <target state="translated">Lijn tekenen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
           <context context-type="linenumber">13</context>
@@ -84,7 +75,6 @@
       </trans-unit>
       <trans-unit id="7671991962349582901" datatype="html">
         <source>Draw polygon</source>
-        <target state="translated">Polygoon tekenen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
           <context context-type="linenumber">21</context>
@@ -96,7 +86,6 @@
       </trans-unit>
       <trans-unit id="2781833388478062784" datatype="html">
         <source>Draw square</source>
-        <target state="translated">Vierkant tekenen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
           <context context-type="linenumber">29</context>
@@ -108,7 +97,6 @@
       </trans-unit>
       <trans-unit id="4387313461891481332" datatype="html">
         <source>Draw rectangle</source>
-        <target state="translated">Rechthoek tekenen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
           <context context-type="linenumber">37</context>
@@ -120,7 +108,6 @@
       </trans-unit>
       <trans-unit id="311011773985854729" datatype="html">
         <source>Draw circle</source>
-        <target state="translated">Cirkel tekenen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
           <context context-type="linenumber">47</context>
@@ -132,7 +119,6 @@
       </trans-unit>
       <trans-unit id="7227313553216215040" datatype="html">
         <source>Draw ellipse</source>
-        <target state="translated">Ellips tekenen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
           <context context-type="linenumber">55</context>
@@ -144,7 +130,6 @@
       </trans-unit>
       <trans-unit id="5253475635167844493" datatype="html">
         <source>Draw star</source>
-        <target state="translated">Ster tekenen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
           <context context-type="linenumber">63</context>
@@ -156,7 +141,6 @@
       </trans-unit>
       <trans-unit id="2791229108029362448" datatype="html">
         <source>Draw label</source>
-        <target state="translated">Label toevoegen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
           <context context-type="linenumber">71</context>
@@ -168,7 +152,6 @@
       </trans-unit>
       <trans-unit id="1805761197959018001" datatype="html">
         <source>Drawing</source>
-        <target state="translated">Tekening</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-menu-button/drawing-menu-button.component.ts</context>
           <context context-type="linenumber">25</context>
@@ -176,7 +159,6 @@
       </trans-unit>
       <trans-unit id="4296791989248007051" datatype="html">
         <source> Symbol </source>
-        <target state="translated"> Symbool</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
           <context context-type="linenumber">12,14</context>
@@ -184,7 +166,6 @@
       </trans-unit>
       <trans-unit id="8106025670158480144" datatype="html">
         <source>Symbol</source>
-        <target state="translated">Symbool</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
           <context context-type="linenumber">17</context>
@@ -192,7 +173,6 @@
       </trans-unit>
       <trans-unit id="5456294096164486435" datatype="html">
         <source>Fill color</source>
-        <target state="translated">Kleur vulling</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
           <context context-type="linenumber">25</context>
@@ -200,7 +180,6 @@
       </trans-unit>
       <trans-unit id="2622005448412870795" datatype="html">
         <source>Line thickness</source>
-        <target state="translated">Lijn dikte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
           <context context-type="linenumber">37</context>
@@ -208,7 +187,6 @@
       </trans-unit>
       <trans-unit id="45739481977493163" datatype="html">
         <source>Size</source>
-        <target state="translated">Grootte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
           <context context-type="linenumber">51</context>
@@ -220,7 +198,6 @@
       </trans-unit>
       <trans-unit id="5201860154481115497" datatype="html">
         <source>Rotation</source>
-        <target state="translated">Rotatie</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
           <context context-type="linenumber">65</context>
@@ -232,7 +209,6 @@
       </trans-unit>
       <trans-unit id="6428648557710235460" datatype="html">
         <source> Label </source>
-        <target state="translated">Label</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
           <context context-type="linenumber">82,84</context>
@@ -240,7 +216,6 @@
       </trans-unit>
       <trans-unit id="4077520913910941990" datatype="html">
         <source>Label</source>
-        <target state="translated">Label</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
           <context context-type="linenumber">87</context>
@@ -256,7 +231,6 @@
       </trans-unit>
       <trans-unit id="9074196091111459629" datatype="html">
         <source>Insert coordinates as label</source>
-        <target state="translated">Coördinaten toevoegen als label</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
           <context context-type="linenumber">94</context>
@@ -264,7 +238,6 @@
       </trans-unit>
       <trans-unit id="2674630746570314789" datatype="html">
         <source>Insert length as label</source>
-        <target state="translated">Lengte toevoegen als label</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
           <context context-type="linenumber">101</context>
@@ -272,7 +245,6 @@
       </trans-unit>
       <trans-unit id="2364558040255593699" datatype="html">
         <source>Insert area as label</source>
-        <target state="translated">Oppervlakte toevoegen als label</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
           <context context-type="linenumber">108</context>
@@ -280,7 +252,6 @@
       </trans-unit>
       <trans-unit id="7513076467032912668" datatype="html">
         <source>Format</source>
-        <target state="translated">Formaat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
           <context context-type="linenumber">118</context>
@@ -288,7 +259,6 @@
       </trans-unit>
       <trans-unit id="9011959596901584887" datatype="html">
         <source>Color</source>
-        <target state="translated">Kleur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
           <context context-type="linenumber">146</context>
@@ -304,7 +274,6 @@
       </trans-unit>
       <trans-unit id="2991656244957084973" datatype="html">
         <source>Halo</source>
-        <target state="translated">Halo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
           <context context-type="linenumber">152</context>
@@ -312,7 +281,6 @@
       </trans-unit>
       <trans-unit id="8148890784302351493" datatype="html">
         <source> Line </source>
-        <target state="translated">Lijn</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
           <context context-type="linenumber">176,178</context>
@@ -320,7 +288,6 @@
       </trans-unit>
       <trans-unit id="6907278263156340562" datatype="html">
         <source>Thickness</source>
-        <target state="translated">Dikte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
           <context context-type="linenumber">187</context>
@@ -328,7 +295,6 @@
       </trans-unit>
       <trans-unit id="8036200981586016464" datatype="html">
         <source>Opacity</source>
-        <target state="translated">Transparantie</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
           <context context-type="linenumber">201</context>
@@ -340,7 +306,6 @@
       </trans-unit>
       <trans-unit id="1111168969063432267" datatype="html">
         <source>Stroke type</source>
-        <target state="translated">Lijn type</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
           <context context-type="linenumber">216</context>
@@ -348,7 +313,6 @@
       </trans-unit>
       <trans-unit id="6565791317520947983" datatype="html">
         <source>Arrow</source>
-        <target state="translated">Pijl</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
           <context context-type="linenumber">230</context>
@@ -356,7 +320,6 @@
       </trans-unit>
       <trans-unit id="4507197510030624867" datatype="html">
         <source> Fill </source>
-        <target state="translated">Vulling</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
           <context context-type="linenumber">243,245</context>
@@ -364,7 +327,6 @@
       </trans-unit>
       <trans-unit id="3278060427571346996" datatype="html">
         <source>Striped fill</source>
-        <target state="translated">Gestreepte vulling</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
           <context context-type="linenumber">256</context>
@@ -372,7 +334,6 @@
       </trans-unit>
       <trans-unit id="4903782843340946337" datatype="html">
         <source> Remove selected drawing object </source>
-        <target state="translated">Verwijder geselecteerd teken object</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing/drawing.component.html</context>
           <context context-type="linenumber">13,14</context>
@@ -380,7 +341,6 @@
       </trans-unit>
       <trans-unit id="4914426843628055626" datatype="html">
         <source> Remove complete drawing </source>
-        <target state="translated">Verwijder gehele tekening</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing/drawing.component.html</context>
           <context context-type="linenumber">19,20</context>
@@ -388,7 +348,6 @@
       </trans-unit>
       <trans-unit id="5649887357982744151" datatype="html">
         <source>Remove drawing object</source>
-        <target state="translated">Verwijder teken object</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing/drawing.component.ts</context>
           <context context-type="linenumber">89,88</context>
@@ -396,7 +355,6 @@
       </trans-unit>
       <trans-unit id="4608792437035636989" datatype="html">
         <source>Are you sure you want to remove this object?</source>
-        <target state="translated">Weet u zeker dat u dit object wil verwijderen?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing/drawing.component.ts</context>
           <context context-type="linenumber">90,88</context>
@@ -404,7 +362,6 @@
       </trans-unit>
       <trans-unit id="1032811156591453807" datatype="html">
         <source>Remove complete drawing</source>
-        <target state="translated">Verwijder gehele tekening</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing/drawing.component.ts</context>
           <context context-type="linenumber">101,100</context>
@@ -412,7 +369,6 @@
       </trans-unit>
       <trans-unit id="5372044582578370237" datatype="html">
         <source>Are you sure you want to remove the complete drawing? All objects will be removed and this cannot be undone.</source>
-        <target state="translated">Weet u zeker dat u de gehele tekening wil verwijderen? Alle objecten worden verwijderd en u kunt dit niet terugdraaien.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing/drawing.component.ts</context>
           <context context-type="linenumber">102,100</context>
@@ -420,7 +376,6 @@
       </trans-unit>
       <trans-unit id="6252070156626006029" datatype="html">
         <source>None</source>
-        <target state="translated">Geen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/helpers/drawing.helper.ts</context>
           <context context-type="linenumber">43</context>
@@ -428,7 +383,6 @@
       </trans-unit>
       <trans-unit id="1701872860463509458" datatype="html">
         <source>At the start</source>
-        <target state="translated">Aan het begin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/helpers/drawing.helper.ts</context>
           <context context-type="linenumber">44</context>
@@ -436,7 +390,6 @@
       </trans-unit>
       <trans-unit id="7141623799937028795" datatype="html">
         <source>At the end</source>
-        <target state="translated">Aan het eind</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/helpers/drawing.helper.ts</context>
           <context context-type="linenumber">45</context>
@@ -444,7 +397,6 @@
       </trans-unit>
       <trans-unit id="2194801884503605029" datatype="html">
         <source>On both sides</source>
-        <target state="translated">Op beide zijdes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/helpers/drawing.helper.ts</context>
           <context context-type="linenumber">46</context>
@@ -452,7 +404,6 @@
       </trans-unit>
       <trans-unit id="665290780831643282" datatype="html">
         <source>On every segment</source>
-        <target state="translated">Op elk segment</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/helpers/drawing.helper.ts</context>
           <context context-type="linenumber">47</context>
@@ -460,7 +411,6 @@
       </trans-unit>
       <trans-unit id="8132424293432274889" datatype="html">
         <source> Back </source>
-        <target state="translated">Terug</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/feature-info/feature-info-dialog/feature-info-dialog.component.html</context>
           <context context-type="linenumber">19,20</context>
@@ -468,7 +418,6 @@
       </trans-unit>
       <trans-unit id="3971100408152984961" datatype="html">
         <source> Next </source>
-        <target state="translated">Volgende</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/feature-info/feature-info-dialog/feature-info-dialog.component.html</context>
           <context context-type="linenumber">22,23</context>
@@ -476,7 +425,6 @@
       </trans-unit>
       <trans-unit id="846829935027482468" datatype="html">
         <source>Could not load feature info</source>
-        <target state="translated">Kan object informatie niet laden</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/feature-info/feature-info.service.ts</context>
           <context context-type="linenumber">15</context>
@@ -484,7 +432,6 @@
       </trans-unit>
       <trans-unit id="447886253162748368" datatype="html">
         <source>Something went wrong while getting feature info, please try again</source>
-        <target state="translated">Er is iets mis gegaan bij het ophalen van object informatie, probeer het alstublieft opnieuw</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/feature-info/feature-info/feature-info.component.ts</context>
           <context context-type="linenumber">23</context>
@@ -492,7 +439,6 @@
       </trans-unit>
       <trans-unit id="2463987900933409187" datatype="html">
         <source>No features found</source>
-        <target state="translated"> Geen objecten gevonden</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/feature-info/feature-info/feature-info.component.ts</context>
           <context context-type="linenumber">24</context>
@@ -500,7 +446,6 @@
       </trans-unit>
       <trans-unit id="1671554457595569228" datatype="html">
         <source>Failed to load legend for</source>
-        <target state="translated">Het is niet gelukt om de legenda te laden voor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/legend/legend-layer/legend-layer.component.ts</context>
           <context context-type="linenumber">18</context>
@@ -508,7 +453,6 @@
       </trans-unit>
       <trans-unit id="7297822327994766046" datatype="html">
         <source>Legend</source>
-        <target state="translated">Legenda</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/legend/legend-menu-button/legend-menu-button.component.ts</context>
           <context context-type="linenumber">24</context>
@@ -516,7 +460,6 @@
       </trans-unit>
       <trans-unit id="8321457629272427993" datatype="html">
         <source>Logged in as</source>
-        <target state="translated">Ingelogd als</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/menubar/profile/profile.component.html</context>
           <context context-type="linenumber">5</context>
@@ -524,7 +467,6 @@
       </trans-unit>
       <trans-unit id="3797778920049399855" datatype="html">
         <source>Logout</source>
-        <target state="translated">Uitloggen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/menubar/profile/profile.component.html</context>
           <context context-type="linenumber">9</context>
@@ -532,7 +474,6 @@
       </trans-unit>
       <trans-unit id="2454050363478003966" datatype="html">
         <source>Login</source>
-        <target state="translated">Inloggen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/menubar/profile/profile.component.html</context>
           <context context-type="linenumber">12</context>
@@ -544,7 +485,6 @@
       </trans-unit>
       <trans-unit id="7049887240439736400" datatype="html">
         <source>Print</source>
-        <target state="translated">Printen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print-menu-button/print-menu-button.component.ts</context>
           <context context-type="linenumber">25</context>
@@ -552,7 +492,6 @@
       </trans-unit>
       <trans-unit id="1062178673270167416" datatype="html">
         <source> Export map </source>
-        <target state="translated">Exporteer kaart</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">6,7</context>
@@ -560,7 +499,6 @@
       </trans-unit>
       <trans-unit id="1920957033639148722" datatype="html">
         <source>PDF document</source>
-        <target state="translated">PDF bestand</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">10</context>
@@ -568,7 +506,6 @@
       </trans-unit>
       <trans-unit id="7982268423763340284" datatype="html">
         <source>Map image</source>
-        <target state="translated">Afbeelding van de kaart</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">11</context>
@@ -576,7 +513,6 @@
       </trans-unit>
       <trans-unit id="1946328750043131240" datatype="html">
         <source>Include drawing</source>
-        <target state="translated">Tekening toevoegen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">15</context>
@@ -584,7 +520,6 @@
       </trans-unit>
       <trans-unit id="4364462847409581262" datatype="html">
         <source>Image size in millimeters:</source>
-        <target state="translated">Grootte van afbeelding (in mm):</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">20</context>
@@ -592,7 +527,6 @@
       </trans-unit>
       <trans-unit id="2018922024247045709" datatype="html">
         <source>Width</source>
-        <target state="translated">Breedte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">22</context>
@@ -600,7 +534,6 @@
       </trans-unit>
       <trans-unit id="3033623772164647792" datatype="html">
         <source>Height</source>
-        <target state="translated">Hoogte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">26</context>
@@ -608,7 +541,6 @@
       </trans-unit>
       <trans-unit id="3330040801415354394" datatype="html">
         <source>DPI</source>
-        <target state="translated">DPI</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">30</context>
@@ -620,7 +552,6 @@
       </trans-unit>
       <trans-unit id="3757209454912764795" datatype="html">
         <source> Image resolution in pixels: <x id="INTERPOLATION" equiv-text="{{getImageResolution()}}"/> </source>
-        <target state="translated">Resolutie van afbeelding (in pixels): <x id="INTERPOLATION" equiv-text="{{getImageResolution()}}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">34,36</context>
@@ -628,7 +559,6 @@
       </trans-unit>
       <trans-unit id="1431493389100814651" datatype="html">
         <source>Download map image</source>
-        <target state="translated">Download kaart afbeelding</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">36,37</context>
@@ -636,7 +566,6 @@
       </trans-unit>
       <trans-unit id="1403507799985368460" datatype="html">
         <source>Landscape</source>
-        <target state="translated">Liggend</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">43</context>
@@ -644,7 +573,6 @@
       </trans-unit>
       <trans-unit id="9024440163320108713" datatype="html">
         <source>Portrait</source>
-        <target state="translated">Staand</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">44</context>
@@ -652,7 +580,6 @@
       </trans-unit>
       <trans-unit id="7438609089996892520" datatype="html">
         <source>A4</source>
-        <target state="translated">A4</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">47</context>
@@ -660,7 +587,6 @@
       </trans-unit>
       <trans-unit id="4346630494193384330" datatype="html">
         <source>A3</source>
-        <target state="translated">A3</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">48</context>
@@ -668,7 +594,6 @@
       </trans-unit>
       <trans-unit id="5701618810648052610" datatype="html">
         <source>Title</source>
-        <target state="translated">Titel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">51</context>
@@ -676,7 +601,6 @@
       </trans-unit>
       <trans-unit id="4636291172448223646" datatype="html">
         <source>Footer</source>
-        <target state="translated">Voettekst</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">56</context>
@@ -684,7 +608,6 @@
       </trans-unit>
       <trans-unit id="1605472530146889333" datatype="html">
         <source>Automatically open print dialog</source>
-        <target state="translated">Automatisch print dialoog openen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">64</context>
@@ -692,7 +615,6 @@
       </trans-unit>
       <trans-unit id="5715539409661008253" datatype="html">
         <source>Download map PDF</source>
-        <target state="translated">Download PDF met kaart</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">66,67</context>
@@ -700,7 +622,6 @@
       </trans-unit>
       <trans-unit id="7498219936774990397" datatype="html">
         <source>Creating map, this may take a while.</source>
-        <target state="translated">Bezig met het opbouwen van de kaart, dit kan even duren</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">73,74</context>
@@ -708,7 +629,6 @@
       </trans-unit>
       <trans-unit id="2159130950882492111" datatype="html">
         <source>Cancel</source>
-        <target state="translated">Annuleren</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">77,78</context>
@@ -716,7 +636,6 @@
       </trans-unit>
       <trans-unit id="1414622339183492234" datatype="html">
         <source>Available layers</source>
-        <target state="translated">Beschikbare lagen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/toc/toc-menu-button/toc-menu-button.component.ts</context>
           <context context-type="linenumber">25</context>
@@ -724,7 +643,6 @@
       </trans-unit>
       <trans-unit id="5126955618430711976" datatype="html">
         <source>Coordinate picker</source>
-        <target state="translated">Coördinaten opvragen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/toolbar/clicked-coordinates/clicked-coordinates.component.html</context>
           <context context-type="linenumber">5,6</context>
@@ -732,7 +650,6 @@
       </trans-unit>
       <trans-unit id="5170167478867715708" datatype="html">
         <source>Selected coordinates: <x id="PH" equiv-text="coordinates"/></source>
-        <target state="translated">Geselecteerde coördinaten: <x id="PH" equiv-text="coordinates"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/toolbar/clicked-coordinates/clicked-coordinates.component.ts</context>
           <context context-type="linenumber">53</context>
@@ -740,7 +657,6 @@
       </trans-unit>
       <trans-unit id="4323470180912194028" datatype="html">
         <source>Copy</source>
-        <target state="translated">Kopieren</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/toolbar/clicked-coordinates/clicked-coordinates.component.ts</context>
           <context context-type="linenumber">54</context>
@@ -748,7 +664,6 @@
       </trans-unit>
       <trans-unit id="4648900870671159218" datatype="html">
         <source>Success</source>
-        <target state="translated">Succes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/toolbar/clicked-coordinates/clicked-coordinates.component.ts</context>
           <context context-type="linenumber">56</context>
@@ -756,7 +671,6 @@
       </trans-unit>
       <trans-unit id="6366226732488883423" datatype="html">
         <source>Failed to copy to clipboard</source>
-        <target state="translated">Er is een fout opgetreden bij het kopiëren naar het klembord</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/toolbar/clicked-coordinates/clicked-coordinates.component.ts</context>
           <context context-type="linenumber">56</context>
@@ -764,7 +678,6 @@
       </trans-unit>
       <trans-unit id="3882439334368246349" datatype="html">
         <source>Measure length</source>
-        <target state="translated">Lengte meten</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/toolbar/measure/measure.component.html</context>
           <context context-type="linenumber">5</context>
@@ -772,7 +685,6 @@
       </trans-unit>
       <trans-unit id="8569609011590722949" datatype="html">
         <source>Measure area</source>
-        <target state="translated">Oppervlakte meten</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/toolbar/measure/measure.component.html</context>
           <context context-type="linenumber">13</context>
@@ -780,7 +692,6 @@
       </trans-unit>
       <trans-unit id="7260795646574446386" datatype="html">
         <source>Zoom to initial extent</source>
-        <target state="translated">Zoom naar start extent</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/toolbar/zoom-buttons/zoom-buttons.component.html</context>
           <context context-type="linenumber">6,7</context>
@@ -788,7 +699,6 @@
       </trans-unit>
       <trans-unit id="6500061599200357251" datatype="html">
         <source>Zoom in</source>
-        <target state="translated">Inzoomen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/toolbar/zoom-buttons/zoom-buttons.component.html</context>
           <context context-type="linenumber">16</context>
@@ -796,7 +706,6 @@
       </trans-unit>
       <trans-unit id="944767796496567082" datatype="html">
         <source>Zoom out</source>
-        <target state="translated">Uitzoomen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/toolbar/zoom-buttons/zoom-buttons.component.html</context>
           <context context-type="linenumber">24,25</context>
@@ -804,7 +713,6 @@
       </trans-unit>
       <trans-unit id="5129304310134933955" datatype="html">
         <source>Could not load map settings</source>
-        <target state="translated">Kan kaart instellingen niet laden</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/map/state/map.effects.ts</context>
           <context context-type="linenumber">12</context>
@@ -812,7 +720,6 @@
       </trans-unit>
       <trans-unit id="5248717555542428023" datatype="html">
         <source>Username</source>
-        <target state="translated">Gebruikersnaam</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/pages/login/login-form/login-form.component.html</context>
           <context context-type="linenumber">9,10</context>
@@ -820,7 +727,6 @@
       </trans-unit>
       <trans-unit id="1431416938026210429" datatype="html">
         <source>Password</source>
-        <target state="translated">Wachtwoord</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/pages/login/login-form/login-form.component.html</context>
           <context context-type="linenumber">18,19</context>
@@ -828,7 +734,6 @@
       </trans-unit>
       <trans-unit id="447939075326988690" datatype="html">
         <source>Login failed, please try again</source>
-        <target state="translated">Inloggen mislukt, probeer het alstublieft opnieuw</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/pages/login/login-form/login-form.component.ts</context>
           <context context-type="linenumber">62</context>
@@ -836,7 +741,6 @@
       </trans-unit>
       <trans-unit id="1716296864993085110" datatype="html">
         <source>Could not find or load the requested application</source>
-        <target state="translated">Kan de applicatie niet vinden</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/services/load-application.service.ts</context>
           <context context-type="linenumber">19</context>
@@ -844,7 +748,6 @@
       </trans-unit>
       <trans-unit id="1323168987955447534" datatype="html">
         <source>Could not load list of components</source>
-        <target state="translated">Kan de lijst met componenten niet ophalen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/services/load-application.service.ts</context>
           <context context-type="linenumber">20</context>
@@ -852,7 +755,6 @@
       </trans-unit>
       <trans-unit id="4239116036101171588" datatype="html">
         <source>map.pdf</source>
-        <target state="translated">kaart.pdf</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/services/map-pdf/map-pdf.service.ts</context>
           <context context-type="linenumber">89</context>
@@ -860,7 +762,6 @@
       </trans-unit>
       <trans-unit id="7213937044758184634" datatype="html">
         <source>Created on </source>
-        <target state="translated">Gemaakt op</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/services/map-pdf/map-pdf.service.ts</context>
           <context context-type="linenumber">113</context>
@@ -868,7 +769,6 @@
       </trans-unit>
       <trans-unit id="8950682845693208811" datatype="html">
         <source>Unable to export map canvas to image: <x id="PH" equiv-text="e"/></source>
-        <target state="translated">Het is niet gelukt om een export van de kaart te maken: <x id="PH" equiv-text="e"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/map/src/lib/openlayers-map/openlayers-map-image-exporter.ts</context>
           <context context-type="linenumber">121</context>
@@ -876,7 +776,6 @@
       </trans-unit>
       <trans-unit id="1002760959716392484" datatype="html">
         <source>Color code</source>
-        <target state="translated">Kleurcode</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/shared/src/lib/components/color-picker/color-picker.component.html</context>
           <context context-type="linenumber">34</context>
@@ -884,7 +783,6 @@
       </trans-unit>
       <trans-unit id="7518736402145395939" datatype="html">
         <source> Color is required </source>
-        <target state="translated">Kleur is verplicht</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/shared/src/lib/components/color-picker/color-picker.component.html</context>
           <context context-type="linenumber">35,37</context>
@@ -892,7 +790,6 @@
       </trans-unit>
       <trans-unit id="3542042671420335679" datatype="html">
         <source>No</source>
-        <target state="translated">Nee</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/shared/src/lib/components/confirm-dialog/confirm-dialog.component.html</context>
           <context context-type="linenumber">10</context>
@@ -900,7 +797,6 @@
       </trans-unit>
       <trans-unit id="2807800733729323332" datatype="html">
         <source>Yes</source>
-        <target state="translated">Ja</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/shared/src/lib/components/confirm-dialog/confirm-dialog.component.html</context>
           <context context-type="linenumber">11</context>

@@ -65,14 +65,7 @@
           },
           "configurations": {
             "nl": {
-              "localize": ["nl"],
-              "tsConfig": "projects/app/tsconfig.app.json",
-              "buildOptimizer": false,
-              "optimization": false,
-              "vendorChunk": true,
-              "extractLicenses": false,
-              "sourceMap": true,
-              "namedChunks": true
+              "localize": ["nl"]
             },
             "production": {
               "tsConfig": "projects/app/tsconfig.prod.json",
@@ -119,7 +112,7 @@
               "browserTarget": "app:build:development"
             },
             "nl": {
-              "browserTarget": "app:build:nl"
+              "browserTarget": "app:build:development,nl"
             }
           },
           "options": {
