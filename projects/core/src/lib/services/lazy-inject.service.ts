@@ -1,4 +1,5 @@
 import { Injectable, Injector, ProviderToken } from '@angular/core';
+import { from, map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -7,8 +8,9 @@ export class LazyInjectService {
 
   constructor(private injector: Injector) {}
 
-  public async get<T>(providerLoader: () => Promise<ProviderToken<T>>) {
-    return this.injector.get(await providerLoader());
+  public get$<T>(providerLoader: () => Promise<ProviderToken<T>>): Observable<T> {
+    return from(providerLoader())
+      .pipe(map(provider => this.injector.get(provider)));
   }
 
 }

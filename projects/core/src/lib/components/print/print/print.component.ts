@@ -158,20 +158,21 @@ export class PrintComponent implements OnInit, OnDestroy {
       }));
   }
 
-  public async downloadPdf() {
+  public downloadPdf() {
     const form = this.exportPdfForm.getRawValue();
-    const mapPdfService = await this.lazyInjector.get<MapPdfService>(() =>
+    this.lazyInjector.get$<MapPdfService>(() =>
       import('../../../services/map-pdf/map-pdf.service').then((m) => m.MapPdfService),
-    );
-    this.wrapFileExport('pdf', (filename, layers) => mapPdfService.create$({
-      orientation: form.orientation,
-      size: form.paperSize,
-      resolution: form.dpi,
-      title: form.title,
-      footer: form.footer,
-      autoPrint: form.autoPrint,
-      filename,
-    }, layers, this.vectorLayerFilter));
+    ).subscribe(mapPdfService => {
+      this.wrapFileExport('pdf', (filename, layers) => mapPdfService.create$({
+        orientation: form.orientation,
+        size: form.paperSize,
+        resolution: form.dpi,
+        title: form.title,
+        footer: form.footer,
+        autoPrint: form.autoPrint,
+        filename,
+      }, layers, this.vectorLayerFilter));
+    });
   }
 
   private static downloadDataURL(dataURL: string, filename: string): void {
