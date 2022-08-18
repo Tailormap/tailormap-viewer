@@ -43,6 +43,8 @@ services:
       - proxied
     networks:
       - tailormap-viewer
+    expose:
+      - "8080"
     environment:
       - "API_PROXY_ENABLED=${API_PROXY_ENABLED:-true}"
       - "API_PROXY_URL=${API_PROXY_URL:-http://api:8080/api/}"
@@ -56,6 +58,24 @@ services:
       traefik.http.services.tailormap-snapshot.loadbalancer.server.port: 80
       traefik.enable: true
     restart: unless-stopped
+
+
+  web-status:
+    profiles:
+      - proxied
+    depends_on:
+      - web-proxied
+    expose:
+      - "9113"
+    image: nginx/nginx-prometheus-exporter:0.10.0
+    environment:
+      SCRAPE_URI: http://web-proxied:8080/stub_status
+      NGINX_RETRIES: 3
+      TELEMETRY_PATH: /metrics
+    networks:
+      - tailormap-viewer
+    labels:
+      traefik.enable: false
 
 
   api:
