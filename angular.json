@@ -42,7 +42,17 @@
             "scripts": [],
             "allowedCommonJsDependencies": [
               "xml-utils",
-              "pbf"
+              "pbf",
+              "html2canvas",
+              "core-js",
+              "raf",
+              "rgbcolor",
+              "lru-cache",
+              "web-worker",
+              "dompurify",
+              "rbush",
+              "cssesc",
+              "font-family-papandreou"
             ]
           },
           "configurations": {

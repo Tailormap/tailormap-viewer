@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, Inject, LOCALE_ID, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, Injector, LOCALE_ID, OnDestroy, OnInit } from '@angular/core';
 import {
-  BehaviorSubject, catchError, combineLatest, concatMap, finalize, forkJoin, map, Observable, of, Subject, take, takeUntil, tap,
+  BehaviorSubject, catchError, combineLatest, concatMap, finalize, forkJoin, from, map, Observable, of, Subject, take, takeUntil, tap,
 } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { MenubarService } from '../../menubar';
@@ -9,7 +9,6 @@ import { PrintMenuButtonComponent } from '../print-menu-button/print-menu-button
 import { LayerModel, MapService, OlLayerFilter } from '@tailormap-viewer/map';
 import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MapPdfService } from '../../../services/map-pdf/map-pdf.service';
 import { ApplicationMapService } from '../../../map/services/application-map.service';
 import { selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersAndServices } from '../../../map/state/map.selectors';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
@@ -64,7 +63,7 @@ export class PrintComponent implements OnInit, OnDestroy {
     private menubarService: MenubarService,
     private mapService: MapService,
     private snackBar: MatSnackBar,
-    private mapPdfService: MapPdfService,
+    private injector: Injector,
     private applicationMapService: ApplicationMapService,
     @Inject(LOCALE_ID) private locale: string,
   ) {
@@ -157,17 +156,21 @@ export class PrintComponent implements OnInit, OnDestroy {
       }));
   }
 
-  public downloadPdf(): void {
+  public downloadPdf() {
     const form = this.exportPdfForm.getRawValue();
-    this.wrapFileExport('pdf', (filename, layers) => this.mapPdfService.create$({
-        orientation: form.orientation,
-        size: form.paperSize,
-        resolution: form.dpi,
-        title: form.title,
-        footer: form.footer,
-        autoPrint: form.autoPrint,
-        filename,
-      }, layers, this.vectorLayerFilter));
+    from(import('../../../services/map-pdf/map-pdf.service'))
+      .pipe(map(m => this.injector.get(m.MapPdfService)))
+      .subscribe(mapPdfService => {
+        this.wrapFileExport('pdf', (filename, layers) => mapPdfService.create$({
+          orientation: form.orientation,
+          size: form.paperSize,
+          resolution: form.dpi,
+          title: form.title,
+          footer: form.footer,
+          autoPrint: form.autoPrint,
+          filename,
+        }, layers, this.vectorLayerFilter));
+      });
   }
 
   private static downloadDataURL(dataURL: string, filename: string): void {
