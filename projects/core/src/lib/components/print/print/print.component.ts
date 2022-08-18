@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Inject, LOCALE_ID, OnDestroy, OnInit } from '@angular/core';
 import {
-  BehaviorSubject, catchError, combineLatest, concatMap, finalize, forkJoin, map, Observable, of, Subject, take, takeUntil, tap,
+  BehaviorSubject, catchError, combineLatest, concatMap, finalize, forkJoin, from, map, Observable, of, Subject, take, takeUntil, tap,
 } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { MenubarService } from '../../menubar';
@@ -161,7 +161,8 @@ export class PrintComponent implements OnInit, OnDestroy {
   public downloadPdf() {
     const form = this.exportPdfForm.getRawValue();
     this.lazyInjector.get$<MapPdfService>(() =>
-      import('../../../services/map-pdf/map-pdf.service').then((m) => m.MapPdfService),
+      from(import('../../../services/map-pdf/map-pdf.service'))
+        .pipe(map(m => m.MapPdfService)),
     ).subscribe(mapPdfService => {
       this.wrapFileExport('pdf', (filename, layers) => mapPdfService.create$({
         orientation: form.orientation,
