@@ -9,11 +9,12 @@ import { PrintMenuButtonComponent } from '../print-menu-button/print-menu-button
 import { LayerModel, MapService, OlLayerFilter } from '@tailormap-viewer/map';
 import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MapPdfService } from '../../../services/map-pdf/map-pdf.service';
+import type { MapPdfService } from '../../../services/map-pdf/map-pdf.service';
 import { ApplicationMapService } from '../../../map/services/application-map.service';
 import { selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersAndServices } from '../../../map/state/map.selectors';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { selectHasDrawingFeatures } from '../../drawing/state/drawing.selectors';
+import { LazyInjectService } from '../../../services/lazy-inject.service';
 
 @Component({
   selector: 'tm-print',
@@ -64,7 +65,7 @@ export class PrintComponent implements OnInit, OnDestroy {
     private menubarService: MenubarService,
     private mapService: MapService,
     private snackBar: MatSnackBar,
-    private mapPdfService: MapPdfService,
+    private lazyInjector: LazyInjectService,
     private applicationMapService: ApplicationMapService,
     @Inject(LOCALE_ID) private locale: string,
   ) {
@@ -157,17 +158,20 @@ export class PrintComponent implements OnInit, OnDestroy {
       }));
   }
 
-  public downloadPdf(): void {
+  public async downloadPdf() {
     const form = this.exportPdfForm.getRawValue();
-    this.wrapFileExport('pdf', (filename, layers) => this.mapPdfService.create$({
-        orientation: form.orientation,
-        size: form.paperSize,
-        resolution: form.dpi,
-        title: form.title,
-        footer: form.footer,
-        autoPrint: form.autoPrint,
-        filename,
-      }, layers, this.vectorLayerFilter));
+    const mapPdfService = await this.lazyInjector.get<MapPdfService>(() =>
+      import('../../../services/map-pdf/map-pdf.service').then((m) => m.MapPdfService),
+    );
+    this.wrapFileExport('pdf', (filename, layers) => mapPdfService.create$({
+      orientation: form.orientation,
+      size: form.paperSize,
+      resolution: form.dpi,
+      title: form.title,
+      footer: form.footer,
+      autoPrint: form.autoPrint,
+      filename,
+    }, layers, this.vectorLayerFilter));
   }
 
   private static downloadDataURL(dataURL: string, filename: string): void {
