@@ -8,13 +8,12 @@ import { LayerManagerModel, MapResolutionModel, MapViewerModel, MapViewerOptions
 import { ProjectionsHelper } from '../helpers/projections.helper';
 import { OpenlayersExtent } from '../models/extent.type';
 import { OpenLayersLayerManager } from './open-layers-layer-manager';
-import { BehaviorSubject, concatMap, filter, from, map, merge, Observable, take, tap } from 'rxjs';
+import { BehaviorSubject, concatMap, filter, forkJoin, from, map, merge, Observable, of, take, tap } from 'rxjs';
 import { Size } from 'ol/size';
 import { ToolManagerModel } from '../models/tool-manager.model';
 import { OpenLayersToolManager } from './open-layers-tool-manager';
 import { OpenLayersEventManager } from './open-layers-event-manager';
 import { MapExportOptions } from '../map-service/map.service';
-import { OpenLayersMapImageExporter } from './openlayers-map-image-exporter';
 import Feature from 'ol/Feature';
 import Geometry from 'ol/geom/Geometry';
 import { buffer } from 'ol/extent';
@@ -216,27 +215,24 @@ export class OpenLayersMap implements MapViewerModel {
   }
 
   public exportMapImage$(options: MapExportOptions): Observable<string> {
-    const extraLayers: BaseLayer[] = [];
     return this.getMap$().pipe(
       take(1),
-      tap((olMap: OlMap) => {
-        olMap.getAllLayers().forEach(l => {
-          if (options.vectorLayerFilter && options.vectorLayerFilter(l)) {
-            extraLayers.push(l);
-          }
-        });
-      }),
       concatMap((olMap: OlMap) => {
-        return from(import('./openlayers-map-image-exporter'))
+        const extraLayers: BaseLayer[] = olMap.getAllLayers().filter(l => options.vectorLayerFilter && options.vectorLayerFilter(l));
+        const export$: Observable<string> = from(import('./openlayers-map-image-exporter'))
           .pipe(
             map(m => m.OpenLayersMapImageExporter),
             concatMap(mapExporter => {
               return mapExporter.exportMapImage$(olMap.getSize() as Size, olMap.getView(), options, extraLayers);
             }),
           );
+        return forkJoin([ of(extraLayers), export$ ]);
       }),
-      // Force redraw of extra layers with normal DPI
-      tap(() => extraLayers.forEach(l => l.changed())),
+      map(([ extraLayers, pdfExport ]) => {
+        // Force redraw of extra layers with normal DPI
+        extraLayers.forEach(l => l.changed());
+        return pdfExport;
+      }),
     );
   }
 
