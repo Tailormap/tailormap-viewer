@@ -12,7 +12,8 @@
     "test-with-coverage": "jest --max-workers=4 --collect-coverage",
     "lint": "ng lint",
     "lint-fix": "ng lint --fix",
-    "release-new-package": "node bin/publish-new-release.js"
+    "release-new-package": "node bin/publish-new-release.js",
+    "analyze-bundle": "ng build app --stats-json && npx webpack-bundle-analyzer --mode static --report reports/report-bundle-size-tailorm.html dist/app/stats.json"
   },
   "private": true,
   "dependencies": {

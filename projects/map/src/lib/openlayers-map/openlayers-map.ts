@@ -8,7 +8,7 @@ import { LayerManagerModel, MapResolutionModel, MapViewerModel, MapViewerOptions
 import { ProjectionsHelper } from '../helpers/projections.helper';
 import { OpenlayersExtent } from '../models/extent.type';
 import { OpenLayersLayerManager } from './open-layers-layer-manager';
-import { BehaviorSubject, concatMap, filter, map, merge, Observable, take, tap } from 'rxjs';
+import { BehaviorSubject, concatMap, filter, from, map, merge, Observable, take, tap } from 'rxjs';
 import { Size } from 'ol/size';
 import { ToolManagerModel } from '../models/tool-manager.model';
 import { OpenLayersToolManager } from './open-layers-tool-manager';
@@ -227,11 +227,16 @@ export class OpenLayersMap implements MapViewerModel {
         });
       }),
       concatMap((olMap: OlMap) => {
-        return OpenLayersMapImageExporter.exportMapImage$(olMap.getSize() as Size, olMap.getView(), options, extraLayers).pipe(
-          // Force redraw of extra layers with normal DPI
-          tap(() => extraLayers.forEach(l => l.changed())),
-        );
+        return from(import('./openlayers-map-image-exporter'))
+          .pipe(
+            map(m => m.OpenLayersMapImageExporter),
+            concatMap(mapExporter => {
+              return mapExporter.exportMapImage$(olMap.getSize() as Size, olMap.getView(), options, extraLayers);
+            }),
+          );
       }),
+      // Force redraw of extra layers with normal DPI
+      tap(() => extraLayers.forEach(l => l.changed())),
     );
   }
 
