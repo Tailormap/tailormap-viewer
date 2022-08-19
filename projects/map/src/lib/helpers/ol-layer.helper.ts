@@ -154,7 +154,7 @@ export class OlLayerHelper {
       });
     } else {
       const source = new TileWMS({
-        ...sourceOptions,
+        ...sourceOptions as any,
         gutter: layer.tilingGutter || 0,
       });
       return new TileLayer({
