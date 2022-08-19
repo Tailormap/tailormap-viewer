@@ -113,7 +113,7 @@ export class MapStyleHelper {
     const baseLabelStyle = new Style({
       zIndex: styleConfig.zIndex,
       text: new Text({
-        placement: GeometryTypeHelper.isLineGeometry(geom) ? 'line' : '',
+        placement: GeometryTypeHelper.isLineGeometry(geom) ? 'line' : undefined,
         text: label,
         font,
         fill: new Fill({
