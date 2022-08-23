@@ -1,6 +1,7 @@
 .mouse-coordinates {
   font-weight: bold;
   font-size: 14px;
+  font-variant-numeric: tabular-nums;
   display: flex;
   align-items: center;
   border-radius: 3px;

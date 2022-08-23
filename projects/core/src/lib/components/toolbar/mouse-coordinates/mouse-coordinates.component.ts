@@ -36,7 +36,7 @@ export class MouseCoordinatesComponent implements OnInit, OnDestroy {
   }
 
   public estimateWidth(coordinate: string) {
-    return `${coordinate.length * 10}px`;
+    return `${coordinate.length + 1}ch`;
   }
 
   public ngOnDestroy() {
