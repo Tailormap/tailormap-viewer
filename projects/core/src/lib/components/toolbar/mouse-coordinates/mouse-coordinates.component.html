@@ -4,11 +4,9 @@
      (mouseenter)="isOverCoordinates(true)"
      (mouseout)="isOverCoordinates(false)"
      *ngIf="coordinates$ | async as coordinates">
-  <div class="mouse-coordinates__left"
-       *ngIf="coordinates[0]"
-       [style.width]="estimateWidth(coordinates[0])">{{coordinates[0]}}</div>
+  <span class="mouse-coordinates__coordinate"
+       *ngIf="coordinates[0]">{{coordinates[0]}}</span>
   <span *ngIf="coordinates[0] && coordinates[1]">|</span>
-  <div class="mouse-coordinates__right"
-       *ngIf="coordinates[1]"
-       [style.width]="estimateWidth(coordinates[1])">{{coordinates[1]}}</div>
+  <span class="mouse-coordinates__coordinate"
+       *ngIf="coordinates[1]">{{coordinates[1]}}</span>
 </div>
