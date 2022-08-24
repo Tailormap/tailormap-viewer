@@ -1,5 +1,4 @@
 import { Inject, Injectable } from '@angular/core';
-import { $localize } from '@angular/localize/init';
 import { AppResponseModel, ComponentModel, TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel } from '@tailormap-viewer/api';
 import { catchError, concatMap, forkJoin, map, Observable, of } from 'rxjs';
 

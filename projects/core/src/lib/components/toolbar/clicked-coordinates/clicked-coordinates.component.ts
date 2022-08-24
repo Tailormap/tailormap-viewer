@@ -3,7 +3,6 @@ import { concatMap, map, Observable, Subject, switchMap, takeUntil, tap } from '
 import { MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Clipboard } from '@angular/cdk/clipboard';
-import { $localize } from '@angular/localize/init';
 import { Store } from '@ngrx/store';
 import { isActiveToolbarTool } from '../state/toolbar.selectors';
 import { deregisterTool, registerTool, toggleTool } from '../state/toolbar.actions';

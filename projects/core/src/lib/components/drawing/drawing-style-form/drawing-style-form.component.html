@@ -117,13 +117,11 @@
     <div class="form-field form-field__columns form-field__buttons">
       <label i18n>Format</label>
       <mat-button-toggle-group multiple="true">
-        <mat-button-toggle i18n
-                           (click)="toggleStyle(labelStyleValues.bold)"
+        <mat-button-toggle (click)="toggleStyle(labelStyleValues.bold)"
                            [checked]="hasLabelStyle(labelStyleValues.bold)">
           <mat-icon svgIcon="style_bold"></mat-icon>
         </mat-button-toggle>
-        <mat-button-toggle i18n
-                           (click)="toggleStyle(labelStyleValues.italic)"
+        <mat-button-toggle (click)="toggleStyle(labelStyleValues.italic)"
                            [checked]="hasLabelStyle(labelStyleValues.italic)">
           <mat-icon svgIcon="style_italic"></mat-icon>
         </mat-button-toggle>

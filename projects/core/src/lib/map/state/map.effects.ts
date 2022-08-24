@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as MapActions from './map.actions';
 import { catchError, concatMap, map, of } from 'rxjs';
 import { TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel } from '@tailormap-viewer/api';
-import { $localize } from '@angular/localize/init';
+
 import * as CoreActions from '../../state/core.actions';
 
 @Injectable()

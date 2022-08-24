@@ -4,8 +4,9 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve app",
-    "build": "ng build shared && ng build api && ng build map && ng build core && ng build app",
-    "build-app": "ng build app",
+    "start-nl": "ng serve app --configuration=nl",
+    "build": "ng build app",
+    "build-localized": "ng build app --localize",
     "watch": "ng build --watch --configuration development app",
     "test": "jest --max-workers=4",
     "test:ci": "jest --ci --collect-coverage --reporters=default --reporters=jest-junit",
@@ -13,7 +14,8 @@
     "lint": "ng lint",
     "lint-fix": "ng lint --fix",
     "release-new-package": "node bin/publish-new-release.js",
-    "analyze-bundle": "ng build app --stats-json && npx webpack-bundle-analyzer --mode static --report reports/report-bundle-size-tailorm.html dist/app/stats.json"
+    "analyze-bundle": "ng build app --stats-json && npx webpack-bundle-analyzer --mode static --report reports/report-bundle-size-tailorm.html dist/app/stats.json",
+    "extract-locale": "ng extract-i18n --out-file=./locale/messages.en-US.xlf"
   },
   "private": true,
   "dependencies": {

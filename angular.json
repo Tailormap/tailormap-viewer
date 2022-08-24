@@ -19,6 +19,14 @@
       "root": "projects/app",
       "sourceRoot": "projects/app/src",
       "prefix": "app",
+      "i18n": {
+        "sourceLocale": "en-US",
+        "locales": {
+          "nl": {
+            "translation": "locale/messages.nl.xlf"
+          }
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -56,6 +64,9 @@
             ]
           },
           "configurations": {
+            "nl": {
+              "localize": ["nl"]
+            },
             "production": {
               "tsConfig": "projects/app/tsconfig.prod.json",
               "budgets": [
@@ -99,6 +110,9 @@
             },
             "development": {
               "browserTarget": "app:build:development"
+            },
+            "nl": {
+              "browserTarget": "app:build:development,nl"
             }
           },
           "options": {

@@ -1,7 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { MenubarService } from '../../menubar';
-import { $localize } from '@angular/localize/init';
 import { PRINT_ID } from '../print-identifier';
 
 @Component({

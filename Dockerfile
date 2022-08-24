@@ -14,7 +14,7 @@ COPY . /app
 # Disabled for now because of runtime -- GitHub Actions job runs tests in parallel
 #RUN npm run test
 
-RUN npm run build-app -- --base-href=${BASE_HREF}
+RUN npm run build -- --base-href=${BASE_HREF}
 
 FROM nginx:1.23.1-alpine
 

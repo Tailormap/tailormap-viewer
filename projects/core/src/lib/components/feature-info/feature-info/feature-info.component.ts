@@ -5,7 +5,6 @@ import { Store } from '@ngrx/store';
 import { loadFeatureInfo } from '../state/feature-info.actions';
 import { selectCurrentlySelectedFeatureGeometry, selectFeatureInfoError$ } from '../state/feature-info.selectors';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { $localize } from '@angular/localize/init';
 import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 import { deregisterTool, registerTool } from '../../toolbar/state/toolbar.actions';
 import { ToolbarComponentEnum } from '../../toolbar/models/toolbar-component.enum';
