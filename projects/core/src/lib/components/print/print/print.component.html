@@ -61,6 +61,8 @@
           <mat-label i18n>DPI</mat-label>
           <input matInput formControlName="dpi" type="number" min="90" max="600">
         </mat-form-field>
+<!--        <mat-checkbox formControlName="includeLegends" i18n>Include layer legends</mat-checkbox>-->
+
         <mat-checkbox formControlName="autoPrint" i18n>Automatically open print dialog</mat-checkbox>
         <div class="padding">
           <button mat-stroked-button color="primary" type="submit" [disabled]="!exportImageForm.valid" i18n>Download map PDF</button>

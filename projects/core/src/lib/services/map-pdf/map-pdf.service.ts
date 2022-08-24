@@ -1,11 +1,14 @@
 import { Inject, Injectable, LOCALE_ID } from '@angular/core';
-import { concatMap, map, Observable, tap } from 'rxjs';
+import { concatMap, forkJoin, map, Observable, of, tap } from 'rxjs';
 import { jsPDF } from 'jspdf';
 import { LayerModel, MapService, OlLayerFilter } from '@tailormap-viewer/map';
 import 'svg2pdf.js';
 import { HttpClient } from '@angular/common/http';
 import { IconService } from '@tailormap-viewer/shared';
 import { Svg2pdfOptions } from 'svg2pdf.js';
+import { LegendService } from '../../components/legend/services/legend.service';
+import { AppLayerModel, ServiceModel } from '@tailormap-viewer/api';
+import { ApplicationMapService } from '../../map/services/application-map.service';
 
 interface Size {
   width: number;
@@ -43,9 +46,11 @@ export class MapPdfService {
     @Inject(LOCALE_ID) public locale: string,
     private httpClient: HttpClient,
     private iconService: IconService,
+    private legendService: LegendService,
+    private applicationMapService: ApplicationMapService,
   ) { }
 
-  public create$(printOptions: PrintOptions, layers: LayerModel[], vectorLayerFilter?: OlLayerFilter): Observable<string> {
+  public create$(printOptions: PrintOptions, layers: Array<{ layer: AppLayerModel; service?: ServiceModel }>, vectorLayerFilter?: OlLayerFilter): Observable<string> {
     let size = printOptions.size === 'a3' ? a3Size : a4Size;
     if (printOptions.orientation === 'portrait') {
       // noinspection JSSuspiciousNameCombination
@@ -84,9 +89,27 @@ export class MapPdfService {
       doc.autoPrint();
     }
     return this.addMapImage$(doc, x, y, mapSize, printOptions.resolution || 72, layers, vectorLayerFilter).pipe(
+      concatMap(() => this.addLegendImages$(doc, size.width, size.height, layers)),
       concatMap(() => this.addSvg2PDF$(doc, this.iconService.getUrlForIcon('logo'), { x: size.width - 30, y, width: 20, height: 20 })),
       concatMap(() => this.addSvg2PDF$(doc, this.iconService.getUrlForIcon('north_arrow'), { x, y: y + 2, width: 20, height: 20 })),
       map(() => doc.output('dataurlstring', { filename: printOptions.filename || $localize `map.pdf` })),
+    );
+  }
+
+  private addLegendImages$(doc: jsPDF, width: number, height: number, layers: Array<{ layer: AppLayerModel; service?: ServiceModel }>) {
+    const legendImageDPI = (96 / 25.4) * 1.25;
+    return this.legendService.getLegendImages$(of(layers.map(layerWithService => layerWithService.layer))).pipe(
+      tap(legendImages => {
+        legendImages.forEach(legendImage => {
+          const widthMm = legendImage.width / legendImageDPI;
+          const heightMm = legendImage.height / legendImageDPI;
+          const x = width - widthMm - 10;
+          const y = height - heightMm - 10;
+          doc.addImage(legendImage.imageData, 'PNG', x, y, widthMm, heightMm, '', 'FAST');
+          doc.setDrawColor(0);
+          doc.rect(x, y, widthMm, heightMm, 'S');
+        });
+      }),
     );
   }
 
@@ -100,8 +123,12 @@ export class MapPdfService {
     );
   }
 
-  private addMapImage$(doc: jsPDF, x: number, y: number, mapSize: Size, resolution: number, layers: LayerModel[], vectorLayerFilter?: OlLayerFilter): Observable<string> {
-    return this.mapService.exportMapImage$({ widthInMm: mapSize.width, heightInMm: mapSize.height, resolution, layers, vectorLayerFilter }).pipe(
+  private addMapImage$(doc: jsPDF, x: number, y: number, mapSize: Size, resolution: number,
+                       layersWithService: Array<{ layer: AppLayerModel; service?: ServiceModel }>, vectorLayerFilter?: OlLayerFilter): Observable<string> {
+    const isValidLayer = (layer: LayerModel | null): layer is LayerModel => layer !== null;
+    return forkJoin(layersWithService.map(layer => this.applicationMapService.convertAppLayerToMapLayer$(layer.layer, layer.service))).pipe(
+      map(layers => layers.filter(isValidLayer)),
+      concatMap(layers => this.mapService.exportMapImage$({ widthInMm: mapSize.width, heightInMm: mapSize.height, resolution, layers, vectorLayerFilter })),
       tap(dataURL => {
         // Note: calling addImage() with a HTMLCanvasElement is actually slower than adding by PNG
         doc.addImage(dataURL, 'PNG', x, y, mapSize.width, mapSize.height, '', 'FAST');

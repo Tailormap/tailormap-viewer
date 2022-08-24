@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, map, Observable, switchMap } from 'rxjs';
+import { BehaviorSubject, catchError, concatMap, forkJoin, map, Observable, of, Subject, switchMap } from 'rxjs';
 import { AppLayerModel } from '@tailormap-viewer/api';
 import { MapService } from '@tailormap-viewer/map';
 
@@ -39,4 +39,58 @@ export class LegendService {
       );
   }
 
+  public getLegendImages$(appLayers$: Observable<AppLayerModel[]>): Observable<Array<{ appLayer: AppLayerModel; imageData: string; width: number; height: number }>> {
+    return this.getAppLayerAndUrl$(appLayers$).pipe(
+      concatMap(appLayerAndUrls => {
+        return forkJoin(appLayerAndUrls.filter(lu => lu.url !== '').map(appLayerWithLegendUrl => {
+          return LegendService.imageUrlToPng$(appLayerWithLegendUrl.url).pipe(
+            catchError((e) => {
+              console.log(`Error getting legend from URL ${appLayerWithLegendUrl.url}`, e);
+              return of(null);
+            }),
+            map(legendImage => ({
+                  ...legendImage,
+                  appLayer: appLayerWithLegendUrl.appLayer,
+            })),
+          );
+        }));
+      }),
+      map(array => {
+        return array.filter(a => a !== null) as Array<{ appLayer: AppLayerModel; imageData: string; width: number; height: number }>;
+      }),
+    );
+  }
+
+  public static imageUrlToPng$(imageUrl: string): Observable<{ imageData: string; width: number; height: number}> {
+    const subject = new Subject<{ imageData: string; width: number; height: number}>();
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    if (ctx === null) {
+      subject.error('Context is null');
+      subject.complete();
+    } else {
+      const img = document.createElement('img');
+      img.crossOrigin = 'anonymous';
+      img.addEventListener('load', () => {
+        try {
+          const width = img.width;
+          const height = img.height;
+          canvas.width = width;
+          canvas.height = height;
+          ctx.drawImage(img, 0, 0, width, height);
+          const imageData = canvas.toDataURL('image/png');
+          subject.next({ imageData, width, height });
+        } catch (e) {
+          subject.error(e);
+        }
+        subject.complete();
+      });
+      img.addEventListener('error', (e) => {
+        subject.error(e);
+        subject.complete();
+      });
+      img.setAttribute('src', imageUrl);
+    }
+    return subject.asObservable();
+  }
 }

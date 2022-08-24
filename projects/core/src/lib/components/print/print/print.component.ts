@@ -6,13 +6,14 @@ import { Store } from '@ngrx/store';
 import { MenubarService } from '../../menubar';
 import { PRINT_ID } from '../print-identifier';
 import { PrintMenuButtonComponent } from '../print-menu-button/print-menu-button.component';
-import { LayerModel, MapService, OlLayerFilter } from '@tailormap-viewer/map';
+import { MapService, OlLayerFilter } from '@tailormap-viewer/map';
 import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ApplicationMapService } from '../../../map/services/application-map.service';
 import { selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersAndServices } from '../../../map/state/map.selectors';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { selectHasDrawingFeatures } from '../../drawing/state/drawing.selectors';
+import { AppLayerModel, ServiceModel } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-print',
@@ -35,6 +36,9 @@ export class PrintComponent implements OnInit, OnDestroy {
   // eslint-disable-next-line rxjs/finnish
   private vectorLayerFilter: OlLayerFilter = layer => !!(this.includeDrawing.value && layer.get('id') === 'drawing-layer');
 
+  // Layer legends
+  public includeLegends = new FormControl(false);
+
   public exportType = new FormControl<'pdf' | 'image'>('pdf', { nonNullable: true });
 
   public exportImageForm = new FormBuilder().nonNullable.group({
@@ -54,7 +58,7 @@ export class PrintComponent implements OnInit, OnDestroy {
 
   private _mapFilenameFn = (extension: string): Observable<string> => {
     const dateTime = new Intl.DateTimeFormat(this.locale, { dateStyle: 'short', timeStyle: 'medium' }).format(new Date())
-      .replace(/ |:|,/g, '_');
+      .replace(/[ :,]/g, '_');
     return of(`map-${dateTime}.${extension}`);
   };
 
@@ -100,7 +104,7 @@ export class PrintComponent implements OnInit, OnDestroy {
     this.cancelled$.next(null);
   }
 
-  private wrapFileExport(extension: string, toDataURLExporter: (filename: string, layers: LayerModel[]) => Observable<string>): void {
+  private wrapFileExport(extension: string, toDataURLExporter: (filename: string, layers: Array<{ layer: AppLayerModel; service?: ServiceModel }>) => Observable<string>): void {
     this.busy$.next(true);
     forkJoin([ this._mapFilenameFn(extension), this.getLayers$() ]).pipe(
       concatMap(([ filename, layers ]) => combineLatest([ of(filename), toDataURLExporter(filename, layers) ])),
@@ -124,12 +128,9 @@ export class PrintComponent implements OnInit, OnDestroy {
     ).subscribe();
   }
 
-  private getLayers$(): Observable<LayerModel[]> {
-    const isValidLayer = (layer: LayerModel | null): layer is LayerModel => layer !== null;
+  private getLayers$(): Observable<{ layer: AppLayerModel; service: ServiceModel | undefined}[]> {
     return combineLatest([ this.store$.select(selectOrderedVisibleBackgroundLayers), this.store$.select(selectOrderedVisibleLayersAndServices) ]).pipe(
       map(([ backgroundLayers, layers ]) => [ ...backgroundLayers,  ...layers ]),
-      concatMap(layers => forkJoin(layers.map(layer => this.applicationMapService.convertAppLayerToMapLayer$(layer.layer, layer.service)))),
-      map(layers => layers.filter(isValidLayer)),
       take(1),
     );
   }
@@ -145,6 +146,7 @@ export class PrintComponent implements OnInit, OnDestroy {
   }
 
   public downloadMapImage(): void {
+/*
     const form = this.exportImageForm.getRawValue();
     this.wrapFileExport('png', (filename, layers) => this.mapService.exportMapImage$(
       {
@@ -154,6 +156,7 @@ export class PrintComponent implements OnInit, OnDestroy {
         layers,
         vectorLayerFilter: this.vectorLayerFilter,
       }));
+*/
   }
 
   public downloadPdf() {
