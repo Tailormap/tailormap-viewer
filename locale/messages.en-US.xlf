@@ -1,69 +1,58 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-  <file original="" xml:space="preserve" source-language="en-us" target-language="en-us">
-    <header>
-      <tool tool-id="poeditor.com" tool-name="POEditor"/>
-    </header>
+  <file source-language="en-US" datatype="plaintext" original="ng2.template">
     <body>
-      <trans-unit id="7803460230438661304">
+      <trans-unit id="7803460230438661304" datatype="html">
         <source> No rows found </source>
-        <target> No rows found </target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/attribute-list/attribute-list-content/attribute-list-content.component.html</context>
           <context context-type="linenumber">4,5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1286034572431173427">
+      <trans-unit id="1286034572431173427" datatype="html">
         <source>Go to page</source>
-        <target>Go to page</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/attribute-list/attribute-list-paging-dialog/attribute-list-paging-dialog.component.html</context>
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7251686705365735219">
+      <trans-unit id="7251686705365735219" datatype="html">
         <source>Attribute list</source>
-        <target>Attribute list</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/attribute-list/attribute-list/attribute-list.component.html</context>
           <context context-type="linenumber">10,11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="174013150468601581">
+      <trans-unit id="174013150468601581" datatype="html">
         <source>No layers with administrative data found</source>
-        <target>No layers with administrative data found</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/attribute-list/attribute-list/attribute-list.component.html</context>
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9058087986215108737">
+      <trans-unit id="9058087986215108737" datatype="html">
         <source>Failed to load attribute list data</source>
-        <target>Failed to load attribute list data</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/attribute-list/services/attribute-list-data.service.ts</context>
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8270919828485542598">
+      <trans-unit id="8270919828485542598" datatype="html">
         <source>No background</source>
-        <target>No background</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/background-layer-toggle/background-layer-toggle.component.ts</context>
           <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5121320475401958995">
+      <trans-unit id="5121320475401958995" datatype="html">
         <source>Select shape</source>
-        <target>Select shape</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="322394824231125404">
+      <trans-unit id="322394824231125404" datatype="html">
         <source>Draw point</source>
-        <target>Draw point</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
           <context context-type="linenumber">5</context>
@@ -73,9 +62,8 @@
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7485144677537501434">
+      <trans-unit id="7485144677537501434" datatype="html">
         <source>Draw line</source>
-        <target>Draw line</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
           <context context-type="linenumber">13</context>
@@ -85,9 +73,8 @@
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7671991962349582901">
+      <trans-unit id="7671991962349582901" datatype="html">
         <source>Draw polygon</source>
-        <target>Draw polygon</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
           <context context-type="linenumber">21</context>
@@ -97,9 +84,8 @@
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2781833388478062784">
+      <trans-unit id="2781833388478062784" datatype="html">
         <source>Draw square</source>
-        <target>Draw square</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
           <context context-type="linenumber">29</context>
@@ -109,9 +95,8 @@
           <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4387313461891481332">
+      <trans-unit id="4387313461891481332" datatype="html">
         <source>Draw rectangle</source>
-        <target>Draw rectangle</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
           <context context-type="linenumber">37</context>
@@ -121,9 +106,8 @@
           <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="311011773985854729">
+      <trans-unit id="311011773985854729" datatype="html">
         <source>Draw circle</source>
-        <target>Draw circle</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
           <context context-type="linenumber">47</context>
@@ -133,9 +117,8 @@
           <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7227313553216215040">
+      <trans-unit id="7227313553216215040" datatype="html">
         <source>Draw ellipse</source>
-        <target>Draw ellipse</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
           <context context-type="linenumber">55</context>
@@ -145,9 +128,8 @@
           <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5253475635167844493">
+      <trans-unit id="5253475635167844493" datatype="html">
         <source>Draw star</source>
-        <target>Draw star</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
           <context context-type="linenumber">63</context>
@@ -157,9 +139,8 @@
           <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2791229108029362448">
+      <trans-unit id="2791229108029362448" datatype="html">
         <source>Draw label</source>
-        <target>Draw label</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
           <context context-type="linenumber">71</context>
@@ -169,49 +150,43 @@
           <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1805761197959018001">
+      <trans-unit id="1805761197959018001" datatype="html">
         <source>Drawing</source>
-        <target>Drawing</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-menu-button/drawing-menu-button.component.ts</context>
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4296791989248007051">
+      <trans-unit id="4296791989248007051" datatype="html">
         <source> Symbol </source>
-        <target> Symbol </target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
           <context context-type="linenumber">12,14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8106025670158480144">
+      <trans-unit id="8106025670158480144" datatype="html">
         <source>Symbol</source>
-        <target>Symbol</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5456294096164486435">
+      <trans-unit id="5456294096164486435" datatype="html">
         <source>Fill color</source>
-        <target>Fill color</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2622005448412870795">
+      <trans-unit id="2622005448412870795" datatype="html">
         <source>Line thickness</source>
-        <target>Line thickness</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
           <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="45739481977493163">
+      <trans-unit id="45739481977493163" datatype="html">
         <source>Size</source>
-        <target>Size</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
           <context context-type="linenumber">51</context>
@@ -221,9 +196,8 @@
           <context context-type="linenumber">132</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5201860154481115497">
+      <trans-unit id="5201860154481115497" datatype="html">
         <source>Rotation</source>
-        <target>Rotation</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
           <context context-type="linenumber">65</context>
@@ -233,17 +207,15 @@
           <context context-type="linenumber">159</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6428648557710235460">
+      <trans-unit id="6428648557710235460" datatype="html">
         <source> Label </source>
-        <target> Label </target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
           <context context-type="linenumber">82,84</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4077520913910941990">
+      <trans-unit id="4077520913910941990" datatype="html">
         <source>Label</source>
-        <target>Label</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
           <context context-type="linenumber">87</context>
@@ -257,41 +229,36 @@
           <context context-type="linenumber">90</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9074196091111459629">
+      <trans-unit id="9074196091111459629" datatype="html">
         <source>Insert coordinates as label</source>
-        <target>Insert coordinates as label</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
           <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2674630746570314789">
+      <trans-unit id="2674630746570314789" datatype="html">
         <source>Insert length as label</source>
-        <target>Insert length as label</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
           <context context-type="linenumber">101</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2364558040255593699">
+      <trans-unit id="2364558040255593699" datatype="html">
         <source>Insert area as label</source>
-        <target>Insert area as label</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
           <context context-type="linenumber">108</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7513076467032912668">
+      <trans-unit id="7513076467032912668" datatype="html">
         <source>Format</source>
-        <target>Format</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
           <context context-type="linenumber">118</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9011959596901584887">
+      <trans-unit id="9011959596901584887" datatype="html">
         <source>Color</source>
-        <target>Color</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
           <context context-type="linenumber">146</context>
@@ -305,33 +272,29 @@
           <context context-type="linenumber">248</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2991656244957084973">
+      <trans-unit id="2991656244957084973" datatype="html">
         <source>Halo</source>
-        <target>Halo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
           <context context-type="linenumber">152</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8148890784302351493">
+      <trans-unit id="8148890784302351493" datatype="html">
         <source> Line </source>
-        <target> Line </target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
           <context context-type="linenumber">176,178</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6907278263156340562">
+      <trans-unit id="6907278263156340562" datatype="html">
         <source>Thickness</source>
-        <target>Thickness</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
           <context context-type="linenumber">187</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8036200981586016464">
+      <trans-unit id="8036200981586016464" datatype="html">
         <source>Opacity</source>
-        <target>Opacity</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
           <context context-type="linenumber">201</context>
@@ -341,201 +304,176 @@
           <context context-type="linenumber">260</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1111168969063432267">
+      <trans-unit id="1111168969063432267" datatype="html">
         <source>Stroke type</source>
-        <target>Stroke type</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
           <context context-type="linenumber">216</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6565791317520947983">
+      <trans-unit id="6565791317520947983" datatype="html">
         <source>Arrow</source>
-        <target>Arrow</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
           <context context-type="linenumber">230</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4507197510030624867">
+      <trans-unit id="4507197510030624867" datatype="html">
         <source> Fill </source>
-        <target> Fill </target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
           <context context-type="linenumber">243,245</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3278060427571346996">
+      <trans-unit id="3278060427571346996" datatype="html">
         <source>Striped fill</source>
-        <target>Striped fill</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
           <context context-type="linenumber">256</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4903782843340946337">
+      <trans-unit id="4903782843340946337" datatype="html">
         <source> Remove selected drawing object </source>
-        <target> Remove selected drawing object </target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing/drawing.component.html</context>
           <context context-type="linenumber">13,14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4914426843628055626">
+      <trans-unit id="4914426843628055626" datatype="html">
         <source> Remove complete drawing </source>
-        <target> Remove complete drawing </target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing/drawing.component.html</context>
           <context context-type="linenumber">19,20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5649887357982744151">
+      <trans-unit id="5649887357982744151" datatype="html">
         <source>Remove drawing object</source>
-        <target>Remove drawing object</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing/drawing.component.ts</context>
           <context context-type="linenumber">89,88</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4608792437035636989">
+      <trans-unit id="4608792437035636989" datatype="html">
         <source>Are you sure you want to remove this object?</source>
-        <target>Are you sure you want to remove this object?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing/drawing.component.ts</context>
           <context context-type="linenumber">90,88</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1032811156591453807">
+      <trans-unit id="1032811156591453807" datatype="html">
         <source>Remove complete drawing</source>
-        <target>Remove complete drawing</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing/drawing.component.ts</context>
           <context context-type="linenumber">101,100</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5372044582578370237">
+      <trans-unit id="5372044582578370237" datatype="html">
         <source>Are you sure you want to remove the complete drawing? All objects will be removed and this cannot be undone.</source>
-        <target>Are you sure you want to remove the complete drawing? All objects will be removed and this cannot be undone.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing/drawing.component.ts</context>
           <context context-type="linenumber">102,100</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6252070156626006029">
+      <trans-unit id="6252070156626006029" datatype="html">
         <source>None</source>
-        <target>None</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/helpers/drawing.helper.ts</context>
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1701872860463509458">
+      <trans-unit id="1701872860463509458" datatype="html">
         <source>At the start</source>
-        <target>At the start</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/helpers/drawing.helper.ts</context>
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7141623799937028795">
+      <trans-unit id="7141623799937028795" datatype="html">
         <source>At the end</source>
-        <target>At the end</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/helpers/drawing.helper.ts</context>
           <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2194801884503605029">
+      <trans-unit id="2194801884503605029" datatype="html">
         <source>On both sides</source>
-        <target>On both sides</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/helpers/drawing.helper.ts</context>
           <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="665290780831643282">
+      <trans-unit id="665290780831643282" datatype="html">
         <source>On every segment</source>
-        <target>On every segment</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/helpers/drawing.helper.ts</context>
           <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8132424293432274889">
+      <trans-unit id="8132424293432274889" datatype="html">
         <source> Back </source>
-        <target> Back </target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/feature-info/feature-info-dialog/feature-info-dialog.component.html</context>
           <context context-type="linenumber">19,20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3971100408152984961">
+      <trans-unit id="3971100408152984961" datatype="html">
         <source> Next </source>
-        <target> Next </target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/feature-info/feature-info-dialog/feature-info-dialog.component.html</context>
           <context context-type="linenumber">22,23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="846829935027482468">
+      <trans-unit id="846829935027482468" datatype="html">
         <source>Could not load feature info</source>
-        <target>Could not load feature info</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/feature-info/feature-info.service.ts</context>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="447886253162748368">
+      <trans-unit id="447886253162748368" datatype="html">
         <source>Something went wrong while getting feature info, please try again</source>
-        <target>Something went wrong while getting feature info, please try again</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/feature-info/feature-info/feature-info.component.ts</context>
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2463987900933409187">
+      <trans-unit id="2463987900933409187" datatype="html">
         <source>No features found</source>
-        <target>No features found</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/feature-info/feature-info/feature-info.component.ts</context>
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1671554457595569228">
+      <trans-unit id="1671554457595569228" datatype="html">
         <source>Failed to load legend for</source>
-        <target>Failed to load legend for</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/legend/legend-layer/legend-layer.component.ts</context>
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7297822327994766046">
+      <trans-unit id="7297822327994766046" datatype="html">
         <source>Legend</source>
-        <target>Legend</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/legend/legend-menu-button/legend-menu-button.component.ts</context>
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8321457629272427993">
+      <trans-unit id="8321457629272427993" datatype="html">
         <source>Logged in as</source>
-        <target>Logged in as</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/menubar/profile/profile.component.html</context>
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3797778920049399855">
+      <trans-unit id="3797778920049399855" datatype="html">
         <source>Logout</source>
-        <target>Logout</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/menubar/profile/profile.component.html</context>
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2454050363478003966">
+      <trans-unit id="2454050363478003966" datatype="html">
         <source>Login</source>
-        <target>Login</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/menubar/profile/profile.component.html</context>
           <context context-type="linenumber">12</context>
@@ -545,73 +483,64 @@
           <context context-type="linenumber">3,4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7049887240439736400">
+      <trans-unit id="7049887240439736400" datatype="html">
         <source>Print</source>
-        <target>Print</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print-menu-button/print-menu-button.component.ts</context>
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1062178673270167416">
+      <trans-unit id="1062178673270167416" datatype="html">
         <source> Export map </source>
-        <target> Export map </target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">6,7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1920957033639148722">
+      <trans-unit id="1920957033639148722" datatype="html">
         <source>PDF document</source>
-        <target>PDF document</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7982268423763340284">
+      <trans-unit id="7982268423763340284" datatype="html">
         <source>Map image</source>
-        <target>Map image</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1946328750043131240">
+      <trans-unit id="1946328750043131240" datatype="html">
         <source>Include drawing</source>
-        <target>Include drawing</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4364462847409581262">
+      <trans-unit id="4364462847409581262" datatype="html">
         <source>Image size in millimeters:</source>
-        <target>Image size in millimeters:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2018922024247045709">
+      <trans-unit id="2018922024247045709" datatype="html">
         <source>Width</source>
-        <target>Width</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3033623772164647792">
+      <trans-unit id="3033623772164647792" datatype="html">
         <source>Height</source>
-        <target>Height</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3330040801415354394">
+      <trans-unit id="3330040801415354394" datatype="html">
         <source>DPI</source>
-        <target>DPI</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">30</context>
@@ -621,289 +550,253 @@
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3757209454912764795">
+      <trans-unit id="3757209454912764795" datatype="html">
         <source> Image resolution in pixels: <x id="INTERPOLATION" equiv-text="{{getImageResolution()}}"/> </source>
-        <target> Image resolution in pixels: <x id="INTERPOLATION" equiv-text="{{getImageResolution()}}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">34,36</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1431493389100814651">
+      <trans-unit id="1431493389100814651" datatype="html">
         <source>Download map image</source>
-        <target>Download map image</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">36,37</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1403507799985368460">
+      <trans-unit id="1403507799985368460" datatype="html">
         <source>Landscape</source>
-        <target>Landscape</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9024440163320108713">
+      <trans-unit id="9024440163320108713" datatype="html">
         <source>Portrait</source>
-        <target>Portrait</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7438609089996892520">
+      <trans-unit id="7438609089996892520" datatype="html">
         <source>A4</source>
-        <target>A4</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4346630494193384330">
+      <trans-unit id="4346630494193384330" datatype="html">
         <source>A3</source>
-        <target>A3</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5701618810648052610">
+      <trans-unit id="5701618810648052610" datatype="html">
         <source>Title</source>
-        <target>Title</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4636291172448223646">
+      <trans-unit id="4636291172448223646" datatype="html">
         <source>Footer</source>
-        <target>Footer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1605472530146889333">
+      <trans-unit id="1605472530146889333" datatype="html">
         <source>Automatically open print dialog</source>
-        <target>Automatically open print dialog</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5715539409661008253">
+      <trans-unit id="5715539409661008253" datatype="html">
         <source>Download map PDF</source>
-        <target>Download map PDF</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">66,67</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7498219936774990397">
+      <trans-unit id="7498219936774990397" datatype="html">
         <source>Creating map, this may take a while.</source>
-        <target>Creating map, this may take a while.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">73,74</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2159130950882492111">
+      <trans-unit id="2159130950882492111" datatype="html">
         <source>Cancel</source>
-        <target>Cancel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">77,78</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1414622339183492234">
+      <trans-unit id="1414622339183492234" datatype="html">
         <source>Available layers</source>
-        <target>Available layers</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/toc/toc-menu-button/toc-menu-button.component.ts</context>
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5126955618430711976">
+      <trans-unit id="5126955618430711976" datatype="html">
         <source>Coordinate picker</source>
-        <target>Coordinate picker</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/toolbar/clicked-coordinates/clicked-coordinates.component.html</context>
           <context context-type="linenumber">5,6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5170167478867715708">
+      <trans-unit id="5170167478867715708" datatype="html">
         <source>Selected coordinates: <x id="PH" equiv-text="coordinates"/></source>
-        <target>Selected coordinates: <x id="PH" equiv-text="coordinates"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/toolbar/clicked-coordinates/clicked-coordinates.component.ts</context>
           <context context-type="linenumber">53</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4323470180912194028">
+      <trans-unit id="4323470180912194028" datatype="html">
         <source>Copy</source>
-        <target>Copy</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/toolbar/clicked-coordinates/clicked-coordinates.component.ts</context>
           <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4648900870671159218">
+      <trans-unit id="4648900870671159218" datatype="html">
         <source>Success</source>
-        <target>Success</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/toolbar/clicked-coordinates/clicked-coordinates.component.ts</context>
           <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6366226732488883423">
+      <trans-unit id="6366226732488883423" datatype="html">
         <source>Failed to copy to clipboard</source>
-        <target>Failed to copy to clipboard</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/toolbar/clicked-coordinates/clicked-coordinates.component.ts</context>
           <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3882439334368246349">
+      <trans-unit id="3882439334368246349" datatype="html">
         <source>Measure length</source>
-        <target>Measure length</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/toolbar/measure/measure.component.html</context>
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8569609011590722949">
+      <trans-unit id="8569609011590722949" datatype="html">
         <source>Measure area</source>
-        <target>Measure area</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/toolbar/measure/measure.component.html</context>
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7260795646574446386">
+      <trans-unit id="7260795646574446386" datatype="html">
         <source>Zoom to initial extent</source>
-        <target>Zoom to initial extent</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/toolbar/zoom-buttons/zoom-buttons.component.html</context>
           <context context-type="linenumber">6,7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6500061599200357251">
+      <trans-unit id="6500061599200357251" datatype="html">
         <source>Zoom in</source>
-        <target>Zoom in</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/toolbar/zoom-buttons/zoom-buttons.component.html</context>
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="944767796496567082">
+      <trans-unit id="944767796496567082" datatype="html">
         <source>Zoom out</source>
-        <target>Zoom out</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/toolbar/zoom-buttons/zoom-buttons.component.html</context>
           <context context-type="linenumber">24,25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5129304310134933955">
+      <trans-unit id="5129304310134933955" datatype="html">
         <source>Could not load map settings</source>
-        <target>Could not load map settings</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/map/state/map.effects.ts</context>
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5248717555542428023">
+      <trans-unit id="5248717555542428023" datatype="html">
         <source>Username</source>
-        <target>Username</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/pages/login/login-form/login-form.component.html</context>
           <context context-type="linenumber">9,10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1431416938026210429">
+      <trans-unit id="1431416938026210429" datatype="html">
         <source>Password</source>
-        <target>Password</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/pages/login/login-form/login-form.component.html</context>
           <context context-type="linenumber">18,19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="447939075326988690">
+      <trans-unit id="447939075326988690" datatype="html">
         <source>Login failed, please try again</source>
-        <target>Login failed, please try again</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/pages/login/login-form/login-form.component.ts</context>
           <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1716296864993085110">
+      <trans-unit id="1716296864993085110" datatype="html">
         <source>Could not find or load the requested application</source>
-        <target>Could not find or load the requested application</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/services/load-application.service.ts</context>
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1323168987955447534">
+      <trans-unit id="1323168987955447534" datatype="html">
         <source>Could not load list of components</source>
-        <target>Could not load list of components</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/services/load-application.service.ts</context>
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4239116036101171588">
+      <trans-unit id="4239116036101171588" datatype="html">
         <source>map.pdf</source>
-        <target>map.pdf</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/services/map-pdf/map-pdf.service.ts</context>
           <context context-type="linenumber">89</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7213937044758184634">
+      <trans-unit id="7213937044758184634" datatype="html">
         <source>Created on </source>
-        <target>Created on </target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/services/map-pdf/map-pdf.service.ts</context>
           <context context-type="linenumber">113</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8950682845693208811">
+      <trans-unit id="8950682845693208811" datatype="html">
         <source>Unable to export map canvas to image: <x id="PH" equiv-text="e"/></source>
-        <target>Unable to export map canvas to image: <x id="PH" equiv-text="e"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/map/src/lib/openlayers-map/openlayers-map-image-exporter.ts</context>
           <context context-type="linenumber">121</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1002760959716392484">
+      <trans-unit id="1002760959716392484" datatype="html">
         <source>Color code</source>
-        <target>Color code</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/shared/src/lib/components/color-picker/color-picker.component.html</context>
           <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7518736402145395939">
+      <trans-unit id="7518736402145395939" datatype="html">
         <source> Color is required </source>
-        <target> Color is required </target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/shared/src/lib/components/color-picker/color-picker.component.html</context>
           <context context-type="linenumber">35,37</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3542042671420335679">
+      <trans-unit id="3542042671420335679" datatype="html">
         <source>No</source>
-        <target>No</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/shared/src/lib/components/confirm-dialog/confirm-dialog.component.html</context>
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2807800733729323332">
+      <trans-unit id="2807800733729323332" datatype="html">
         <source>Yes</source>
-        <target>Yes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/shared/src/lib/components/confirm-dialog/confirm-dialog.component.html</context>
           <context context-type="linenumber">11</context>
