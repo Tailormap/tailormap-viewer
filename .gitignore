@@ -55,4 +55,4 @@ coverage-final.json
 lcov.info
 
 # generated from package.json
-/projects/app/src/version.json
+/version.json
