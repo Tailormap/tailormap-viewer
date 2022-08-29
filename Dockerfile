@@ -18,6 +18,16 @@ RUN npm run build -- --base-href=${BASE_HREF}
 
 FROM nginx:1.23.1-alpine
 
+LABEL org.opencontainers.image.authors="support@b3partners.nl" \
+      org.opencontainers.image.description="Tailormap Viewer provides the web interface for Tailormap" \
+      org.opencontainers.image.vendor="B3Partners BV" \
+      org.opencontainers.image.title="Tailormap Viewer" \
+      org.opencontainers.image.url="https://github.com/B3Partners/tailormap-viewer/" \
+      org.opencontainers.image.source="https://github.com/B3Partners/tailormap-viewer/" \
+      org.opencontainers.image.documentation="https://github.com/B3Partners/tailormap-viewer/" \
+      org.opencontainers.image.licenses="MIT" \
+      org.opencontainers.image.version="0.0.0"
+
 COPY --from=builder /app/dist/app /usr/share/nginx/html
 
 COPY docker/web/nginx.conf /etc/nginx/nginx.conf

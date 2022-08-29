@@ -2,6 +2,16 @@ FROM postgres:14.5-alpine3.16
 
 ARG TZ="Europe/Amsterdam"
 
+LABEL org.opencontainers.image.authors="support@b3partners.nl" \
+      org.opencontainers.image.description="Sample configuration database for Tailormap" \
+      org.opencontainers.image.vendor="B3Partners BV" \
+      org.opencontainers.image.title="Tailormap Viewer database" \
+      org.opencontainers.image.url="https://github.com/B3Partners/tailormap-viewer/" \
+      org.opencontainers.image.source="https://github.com/B3Partners/tailormap-viewer/" \
+      org.opencontainers.image.documentation="https://github.com/B3Partners/tailormap-viewer/" \
+      org.opencontainers.image.licenses="MIT" \
+      org.opencontainers.image.version="0.0.0"
+
 # get schema export from tailormap persistence
 RUN set -eux; \
     apk upgrade --update && apk -U add --no-cache tzdata curl unzip \
