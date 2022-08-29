@@ -39,11 +39,16 @@ export class LegendService {
       );
   }
 
-  public getLegendImages$(appLayers$: Observable<AppLayerModel[]>): Observable<Array<{ appLayer: AppLayerModel; imageData: string; width: number; height: number }>> {
+  public getLegendImages$(appLayers$: Observable<AppLayerModel[]>, urlCallback?: (layer: AppLayerModel, url: URL) => void):
+    Observable<Array<{ appLayer: AppLayerModel; imageData: string; width: number; height: number }>> {
     return this.getAppLayerAndUrl$(appLayers$).pipe(
       concatMap(appLayerAndUrls => {
         return forkJoin(appLayerAndUrls.filter(lu => lu.url !== '').map(appLayerWithLegendUrl => {
-          return LegendService.imageUrlToPng$(appLayerWithLegendUrl.url).pipe(
+          const url = new URL(appLayerWithLegendUrl.url);
+          if (urlCallback) {
+            urlCallback(appLayerWithLegendUrl.appLayer, url);
+          }
+          return LegendService.imageUrlToPng$(url.toString()).pipe(
             catchError((e) => {
               console.log(`Error getting legend from URL ${appLayerWithLegendUrl.url}`, e);
               return of(null);
@@ -61,7 +66,7 @@ export class LegendService {
     );
   }
 
-  public static imageUrlToPng$(imageUrl: string): Observable<{ imageData: string; width: number; height: number}> {
+  public static imageUrlToPng$(imageUrl: string): Observable<{ imageData: string; width: number; height: number }> {
     const subject = new Subject<{ imageData: string; width: number; height: number}>();
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');

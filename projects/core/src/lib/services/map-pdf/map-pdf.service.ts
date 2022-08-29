@@ -1,7 +1,7 @@
 import { Inject, Injectable, LOCALE_ID } from '@angular/core';
 import { concatMap, forkJoin, map, Observable, of, tap } from 'rxjs';
 import { jsPDF } from 'jspdf';
-import { LayerModel, MapService, OlLayerFilter } from '@tailormap-viewer/map';
+import { LayerModel, MapService, OlLayerFilter, ServerTypeHelper } from '@tailormap-viewer/map';
 import 'svg2pdf.js';
 import { HttpClient } from '@angular/common/http';
 import { IconService } from '@tailormap-viewer/shared';
@@ -97,12 +97,41 @@ export class MapPdfService {
   }
 
   private addLegendImages$(doc: jsPDF, width: number, height: number, layers: Array<{ layer: AppLayerModel; service?: ServiceModel }>) {
-    const legendImageDPI = (96 / 25.4) * 1.25;
-    return this.legendService.getLegendImages$(of(layers.map(layerWithService => layerWithService.layer))).pipe(
+
+    const servicesById = new Map<number, ServiceModel>();
+    layers.forEach(layerWithService => {
+      if (layerWithService.service) {
+        servicesById.set(layerWithService.service.id, layerWithService.service);
+      }
+    });
+
+    const legendDpiByLayer = new Map<AppLayerModel, number>();
+
+    const legendURLCallback = (layer: AppLayerModel, url: URL) => {
+      // Find service to get ServiceHiDpiMode
+      const service = servicesById.get(layer.serviceId);
+
+      legendDpiByLayer.set(layer, 90);
+
+      if (service && service.hiDpiMode) {
+        // Use LEGEND_OPTIONS vendor specific Geoserver parameter, see https://docs.geoserver.org/stable/en/user/services/wms/get_legend_graphic/index.html
+        if (service.hiDpiMode === 'geoserver' || (service.hiDpiMode === 'auto' && ServerTypeHelper.getFromUrl(service.url) === 'geoserver')) {
+          if (url.searchParams.get('REQUEST') === 'GetLegendGraphic') {
+            const dpi = 180;
+            legendDpiByLayer.set(layer, dpi);
+            url.searchParams.set('LEGEND_OPTIONS', `dpi:${dpi};fontAntiAliasing:true;labelMargin:0;columnheight:300`);
+          }
+        }
+      }
+    };
+
+    return this.legendService.getLegendImages$(of(layers.map(layerWithService => layerWithService.layer)), legendURLCallback).pipe(
       tap(legendImages => {
         legendImages.forEach(legendImage => {
-          const widthMm = legendImage.width / legendImageDPI;
-          const heightMm = legendImage.height / legendImageDPI;
+          const dpi = legendDpiByLayer.get(legendImage.appLayer) || 90;
+          const extraShrinkFactor = 1.25;
+          const widthMm = legendImage.width / (dpi / 25.4) / extraShrinkFactor; // 1 inch is 25.4 mm
+          const heightMm = legendImage.height / (dpi / 25.4) /extraShrinkFactor;
           const x = width - widthMm - 10;
           const y = height - heightMm - 10;
           doc.addImage(legendImage.imageData, 'PNG', x, y, widthMm, heightMm, '', 'FAST');
