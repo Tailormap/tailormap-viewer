@@ -1,4 +1,4 @@
 <div class="legend-layer">
   <strong>{{layer?.title}}</strong>
-  <img *ngIf="url" [alt]="failedToLoadMessage + ' ' + layer?.title" [src]="url" />
+  <img *ngIf="urlWithOptions" [alt]="failedToLoadMessage + ' ' + layer?.title" [src]="urlWithOptions" [srcset]="srcset" />
 </div>
