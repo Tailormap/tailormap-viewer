@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable, switchMap } from 'rxjs';
-import { AppLayerModel } from '@tailormap-viewer/api';
+import { AppLayerModel, ServiceModel } from '@tailormap-viewer/api';
 import { MapService } from '@tailormap-viewer/map';
 
 @Injectable({
@@ -23,16 +23,17 @@ export class LegendService {
     return this.visibleSubject$.asObservable();
   }
 
-  public getAppLayerAndUrl$(appLayers$: Observable<AppLayerModel[]>): Observable<Array<{ appLayer: AppLayerModel; url: string }>> {
+  public getAppLayerAndUrl$(appLayers$: Observable<Array<{ layer: AppLayerModel; service?: ServiceModel}>>):
+    Observable<Array<{ layer: AppLayerModel; service?: ServiceModel; url: string }>> {
     return this.mapService.getLayerManager$()
       .pipe(
         switchMap(layerManager => appLayers$.pipe(
           map(appLayers => {
-            return appLayers.map(appLayer => ({
-              appLayer,
-              url: appLayer.legendImageUrl
-                ? appLayer.legendImageUrl
-                : layerManager.getLegendUrl(`${appLayer.id}`),
+            return appLayers.map(appLayerAndService => ({
+              ...appLayerAndService,
+              url: appLayerAndService.layer.legendImageUrl
+                ? appLayerAndService.layer.legendImageUrl
+                : layerManager.getLegendUrl(`${appLayerAndService.layer.id}`),
             }));
           }),
         )),

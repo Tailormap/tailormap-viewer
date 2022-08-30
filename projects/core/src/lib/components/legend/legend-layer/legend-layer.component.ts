@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input, OnChanges } from '@angular/core';
-import { AppLayerModel } from '@tailormap-viewer/api';
+import { AppLayerModel, ServiceModel } from '@tailormap-viewer/api';
+import { ServerTypeHelper } from '@tailormap-viewer/map';
 
 @Component({
   selector: 'tm-legend-layer',
@@ -11,6 +12,9 @@ export class LegendLayerComponent implements OnChanges {
 
   @Input()
   public layer: AppLayerModel | null = null;
+
+  @Input()
+  public service: ServiceModel | null | undefined = null;
 
   @Input()
   public url: string | null = null;
@@ -29,7 +33,9 @@ export class LegendLayerComponent implements OnChanges {
     if (this.url) {
       try {
         const url = new URL(this.url);
-        if (url.pathname.includes('/geoserver/') && url.searchParams.get('REQUEST') === 'GetLegendGraphic') {
+        if (this.service
+          && (this.service.hiDpiMode === 'geoserver' || (this.service.hiDpiMode === 'auto' && ServerTypeHelper.getFromUrl(this.service.url) === 'geoserver')
+          && url.searchParams.get('REQUEST') === 'GetLegendGraphic')) {
 
           const legendOptions: any = {
             fontAntiAliasing: 'true',

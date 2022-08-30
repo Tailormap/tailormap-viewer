@@ -4,8 +4,8 @@ import { Observable, of, switchMap } from 'rxjs';
 import { MenubarService } from '../../menubar';
 import { LegendMenuButtonComponent } from '../legend-menu-button/legend-menu-button.component';
 import { Store } from '@ngrx/store';
-import { selectOrderedVisibleLayers } from '../../../map/state/map.selectors';
-import { AppLayerModel } from '@tailormap-viewer/api';
+import { selectOrderedVisibleLayersAndServices } from '../../../map/state/map.selectors';
+import { AppLayerModel, ServiceModel } from '@tailormap-viewer/api';
 import { LEGEND_ID } from '../legend-identifier';
 
 @Component({
@@ -17,8 +17,8 @@ import { LEGEND_ID } from '../legend-identifier';
 export class LegendComponent implements OnInit {
 
   public visible$: Observable<boolean>;
-  public layers$: Observable<{ appLayer: AppLayerModel; url: string }[]>;
-  public trackById = (index: number, item: { appLayer: AppLayerModel; url: string }) => item.appLayer.id;
+  public layers$: Observable<{ layer: AppLayerModel; service?: ServiceModel; url: string }[]>;
+  public trackById = (index: number, item: { layer: AppLayerModel; service?: ServiceModel; url: string }) => item.layer.id;
 
   constructor(
     private store$: Store,
@@ -30,7 +30,7 @@ export class LegendComponent implements OnInit {
       switchMap(visible => {
         return !visible
           ? of([])
-          : this.legendService.getAppLayerAndUrl$(this.store$.select(selectOrderedVisibleLayers));
+          : this.legendService.getAppLayerAndUrl$(this.store$.select(selectOrderedVisibleLayersAndServices));
       }),
     );
   }

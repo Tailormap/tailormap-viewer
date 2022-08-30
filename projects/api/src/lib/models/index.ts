@@ -21,6 +21,7 @@ export * from './relation-type.enum';
 export * from './security-model';
 export * from './service-protocol.enum';
 export * from './service.model';
+export * from './service-hi-dpi-mode.enum';
 export * from './tiling-protocol.enum';
 export * from './layer-tree-node.model';
 export * from './version-response.model';
