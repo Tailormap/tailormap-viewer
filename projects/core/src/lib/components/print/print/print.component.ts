@@ -128,7 +128,7 @@ export class PrintComponent implements OnInit, OnDestroy {
     const isValidLayer = (layer: LayerModel | null): layer is LayerModel => layer !== null;
     return combineLatest([ this.store$.select(selectOrderedVisibleBackgroundLayers), this.store$.select(selectOrderedVisibleLayersAndServices) ]).pipe(
       map(([ backgroundLayers, layers ]) => [ ...backgroundLayers,  ...layers ]),
-      concatMap(layers => forkJoin(layers.map(layer => this.applicationMapService.convertAppLayerToMapLayer$(layer.layer, layer.service)))),
+      concatMap(layers => forkJoin(layers.map(layer => this.applicationMapService.convertAppLayerToMapLayer$(layer, layer.service)))),
       map(layers => layers.filter(isValidLayer)),
       take(1),
     );

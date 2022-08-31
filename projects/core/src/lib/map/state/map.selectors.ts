@@ -1,6 +1,6 @@
 import { MapSettingsModel, MapState, mapStateKey } from './map.state';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { AppLayerModel, LayerTreeNodeModel, ServiceModel } from '@tailormap-viewer/api';
+import { AppLayerModel, AppLayerWithServiceModel, LayerTreeNodeModel, ServiceModel } from '@tailormap-viewer/api';
 import { TreeModel } from '@tailormap-viewer/shared';
 import { LayerTreeNodeHelper } from '../helpers/layer-tree-node.helper';
 import { ExtendedLayerTreeNodeModel } from '../models';
@@ -40,9 +40,9 @@ export const selectMapOptions = createSelector(
   },
 );
 
-const getLayersAndServices = (layers: AppLayerModel[], services: ServiceModel[]) => {
+const getLayersAndServices = (layers: AppLayerModel[], services: ServiceModel[]): AppLayerWithServiceModel[] => {
     return layers.map(layer => ({
-        layer,
+        ...layer,
         service: services.find(s => s.id === layer.serviceId),
     }));
 };
@@ -55,7 +55,7 @@ export const selectLayersAndServices = createSelector(
 
 export const selectVisibleLayersAndServices = createSelector(
     selectLayersAndServices,
-    layers => layers.filter(l => l.layer.visible),
+    layers => layers.filter(l => l.visible),
 );
 
 export const selectVisibleLayers = createSelector(
@@ -111,8 +111,8 @@ export const selectOrderedVisibleLayersAndServices = createSelector(
   selectOrderedLayerIds,
   (layers, orderedLayerIds) => {
     return layers
-      .filter(l => orderedLayerIds.includes(l.layer.id))
-      .sort(l => orderedLayerIds.findIndex(id => l.layer.id === id));
+      .filter(l => orderedLayerIds.includes(l.id))
+      .sort(l => orderedLayerIds.findIndex(id => l.id === id));
   },
 );
 
@@ -121,8 +121,8 @@ export const selectOrderedVisibleBackgroundLayers = createSelector(
   selectOrderedBackgroundLayerIds,
   (layers, orderedLayerIds) => {
     return layers
-      .filter(l => orderedLayerIds.includes(l.layer.id))
-      .sort(l => orderedLayerIds.findIndex(id => l.layer.id === id));
+      .filter(l => orderedLayerIds.includes(l.id))
+      .sort(l => orderedLayerIds.findIndex(id => l.id === id));
   },
 );
 
