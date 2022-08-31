@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input, OnChanges } from '@angular/core';
 import { AppLayerWithServiceModel } from '@tailormap-viewer/api';
 import { ServerTypeHelper } from '@tailormap-viewer/map';
+import { GeoServerLegendOptions, LegendService } from '../services/legend.service';
 
 @Component({
   selector: 'tm-legend-layer',
@@ -23,33 +24,18 @@ export class LegendLayerComponent implements OnChanges {
   public failedToLoadMessage = $localize `Failed to load legend for`;
 
   public ngOnChanges() {
-
     this.urlWithOptions = this.url;
     this.srcset = '';
 
-    if (this.url) {
-      try {
-        const url = new URL(this.url);
-        if (this.layer && this.layer.service
-          && (this.layer.service.hiDpiMode === 'geoserver' || (this.layer.service.hiDpiMode === 'auto' && ServerTypeHelper.getFromUrl(this.layer.service.url) === 'geoserver')
-          && url.searchParams.get('REQUEST') === 'GetLegendGraphic')) {
-
-          const legendOptions: any = {
-            fontAntiAliasing: 'true',
-            labelMargin: '0',
-          };
-
-          const updateUrlLegendOptions = () => url.searchParams.set('LEGEND_OPTIONS', Object.entries(legendOptions).map(entry => entry.join(':')).join(';'));
-          updateUrlLegendOptions();
-          this.urlWithOptions = url.toString();
-
-          if (window.devicePixelRatio > 1) {
-            legendOptions.dpi = 180;
-            updateUrlLegendOptions();
-            this.srcset = url.toString() + ' 2x';
-          }
-        }
-      } catch(_ignored) {
+    if (this.url && this.layer && ServerTypeHelper.isGeoServer(this.layer) && LegendService.isGetLegendGraphicRequest(this.url)) {
+      const legendOptions: GeoServerLegendOptions = {
+        fontAntiAliasing: true,
+        labelMargin: 0,
+      };
+      this.urlWithOptions = LegendService.addGeoServerLegendOptions(this.url, legendOptions);
+      if (window.devicePixelRatio > 1) {
+        legendOptions.dpi = 180;
+        this.srcset = LegendService.addGeoServerLegendOptions(this.url, legendOptions) + ' 2x';
       }
     }
   }

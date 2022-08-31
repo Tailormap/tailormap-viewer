@@ -10,7 +10,7 @@ import { LayerModel, MapService, OlLayerFilter } from '@tailormap-viewer/map';
 import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ApplicationMapService } from '../../../map/services/application-map.service';
-import { selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersAndServices } from '../../../map/state/map.selectors';
+import { selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersWithServices } from '../../../map/state/map.selectors';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { selectHasDrawingFeatures } from '../../drawing/state/drawing.selectors';
 
@@ -126,7 +126,7 @@ export class PrintComponent implements OnInit, OnDestroy {
 
   private getLayers$(): Observable<LayerModel[]> {
     const isValidLayer = (layer: LayerModel | null): layer is LayerModel => layer !== null;
-    return combineLatest([ this.store$.select(selectOrderedVisibleBackgroundLayers), this.store$.select(selectOrderedVisibleLayersAndServices) ]).pipe(
+    return combineLatest([ this.store$.select(selectOrderedVisibleBackgroundLayers), this.store$.select(selectOrderedVisibleLayersWithServices) ]).pipe(
       map(([ backgroundLayers, layers ]) => [ ...backgroundLayers,  ...layers ]),
       concatMap(layers => forkJoin(layers.map(layer => this.applicationMapService.convertAppLayerToMapLayer$(layer, layer.service)))),
       map(layers => layers.filter(isValidLayer)),

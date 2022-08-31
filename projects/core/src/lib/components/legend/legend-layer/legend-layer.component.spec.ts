@@ -28,8 +28,7 @@ describe('LegendLayerComponent', () => {
     await render(LegendLayerComponent, {
       componentProperties: {
         url: 'http://some-url/geoserver/wms?REQUEST=GetLegendGraphic',
-        layer: getAppLayerModel({ title: 'Layer title' }),
-        service: getServiceModel( { hiDpiMode: ServiceHiDpiMode.GEOSERVER }),
+        layer: { ...getAppLayerModel({ title: 'Layer title' }), service: getServiceModel( { hiDpiMode: ServiceHiDpiMode.GEOSERVER }) },
       },
     });
     const img = await screen.getByRole('img');
@@ -47,8 +46,8 @@ describe('LegendLayerComponent', () => {
     await render(LegendLayerComponent, {
       componentProperties: {
         url: 'http://some-url/geoserver/wms?REQUEST=GetLegendGraphic',
-        layer: getAppLayerModel({ title: 'Layer title' }),
-        service: getServiceModel({ hiDpiMode: ServiceHiDpiMode.AUTO, url: 'http://some-url/with/geoserver/in/the/path/' }),
+        layer: { ...getAppLayerModel({ title: 'Layer title' }),
+          service: getServiceModel( { hiDpiMode: ServiceHiDpiMode.AUTO, url: 'http://some-url/with/geoserver/in/the/path/' }) },
       },
     });
     const img = await screen.getByRole('img');

@@ -5,7 +5,7 @@ import { concatMap, distinctUntilChanged, filter, forkJoin, map, Observable, of,
 import { AppLayerModel, AppLayerWithServiceModel, ServiceModel, ServiceProtocol } from '@tailormap-viewer/api';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { ArrayHelper } from '@tailormap-viewer/shared';
-import { selectMapOptions, selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersAndServices } from '../state/map.selectors';
+import { selectMapOptions, selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersWithServices } from '../state/map.selectors';
 
 @Injectable({
    providedIn: 'root',
@@ -49,7 +49,7 @@ export class ApplicationMapService implements OnDestroy {
         layerManager.setBackgroundLayers(layers.filter(isValidLayer));
       });
 
-    this.store$.select(selectOrderedVisibleLayersAndServices)
+    this.store$.select(selectOrderedVisibleLayersWithServices)
       .pipe(
         takeUntil(this.destroyed),
         concatMap(layers => this.getLayersAndLayerManager$(layers)),
