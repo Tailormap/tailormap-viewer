@@ -31,10 +31,11 @@ export class FeatureInfoService {
       this.store$.select(selectVisibleLayersWithAttributes),
       this.store$.select(selectApplicationId),
       this.mapService.getResolution$(),
+      this.mapService.getProjectionCode$(),
     ])
       .pipe(
         take(1),
-        concatMap(([ layers, applicationId, resolutions ]) => {
+        concatMap(([ layers, applicationId, resolutions, projection ]) => {
           if (!applicationId || layers.length === 0) {
             return of([]);
           }
@@ -45,6 +46,7 @@ export class FeatureInfoService {
               applicationId,
               x: coordinates[0],
               y: coordinates[1],
+              crs: projection,
               // meters per pixel * fixed value
               distance: resolutions.resolution * FeatureInfoService.DEFAULT_DISTANCE,
               simplify: false,
