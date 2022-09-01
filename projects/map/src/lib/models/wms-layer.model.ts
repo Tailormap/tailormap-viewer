@@ -1,9 +1,11 @@
 import { ServiceLayerModel } from './service-layer.model';
+import { ResolvedServerType, ServerType } from '@tailormap-viewer/api';
 
 export interface WMSLayerModel extends ServiceLayerModel {
   layers: string;
   queryLayers?: string;
-  hiDpiMode?: 'auto' | 'geoserver' | 'mapserver' | 'disabled';
+  serverType: ServerType;
+  resolvedServerType: ResolvedServerType;
   tilingDisabled?: boolean;
   tilingGutter?: number;
 }
