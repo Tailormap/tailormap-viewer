@@ -67,6 +67,9 @@ export class LegendService {
     Observable<Array<{ appLayer: AppLayerWithServiceModel; imageData: string; width: number; height: number }>> {
     return this.getAppLayerAndUrl$(appLayers$).pipe(
       concatMap(appLayerAndUrls => {
+        if (appLayerAndUrls.length === 0) {
+          return of([]);
+        }
         return forkJoin(appLayerAndUrls.filter(lu => lu.url !== '').map(appLayerWithLegendUrl => {
           const url = new URL(appLayerWithLegendUrl.url);
           if (urlCallback) {

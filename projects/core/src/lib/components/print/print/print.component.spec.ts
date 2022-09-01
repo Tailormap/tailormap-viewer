@@ -34,7 +34,7 @@ describe('PrintComponent', () => {
         { provide: APP_BASE_HREF, useValue: null },
       ],
     });
-    expect(await screen.getByText('Export map')).toBeInTheDocument();
+    expect(await screen.getByText('No visible layers.')).toBeInTheDocument();
   });
 
 });

@@ -1,5 +1,5 @@
 export enum ServiceProtocol {
-    TILED = 'tiled',
+    TILED = 'tiled', // Only WMTS at the moment!
     WMS = 'wms',
     ARCGIS = 'arcgis',
 }

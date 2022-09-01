@@ -1,6 +1,6 @@
 import { MapSettingsModel, MapState, mapStateKey } from './map.state';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { AppLayerModel, LayerTreeNodeModel, ServiceModel } from '@tailormap-viewer/api';
+import { AppLayerModel, LayerTreeNodeModel, ServiceModel, ServiceProtocol } from '@tailormap-viewer/api';
 import { TreeModel } from '@tailormap-viewer/shared';
 import { LayerTreeNodeHelper } from '../helpers/layer-tree-node.helper';
 import { AppLayerWithServiceModel, ExtendedLayerTreeNodeModel } from '../models';
@@ -99,6 +99,13 @@ export const selectOrderedVisibleLayersWithServices = createSelector(
         return idx1 > idx2 ? 1 : -1;
       });
   },
+);
+
+// Only layers for which a legend can be shown at the moment: has a legendImageUrl set or is a WMS/WMTS layer
+// In the future, more layer types could be added but without immediate legend support.
+export const selectOrderedVisibleLayersWithLegend = createSelector(
+  selectOrderedVisibleLayersWithServices,
+  (layers) => layers.filter(layer => layer.legendImageUrl || layer.service && [ ServiceProtocol.WMS, ServiceProtocol.TILED ].includes(layer.service.protocol)),
 );
 
 export const selectOrderedVisibleBackgroundLayers = createSelector(

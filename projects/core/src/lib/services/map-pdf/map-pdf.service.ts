@@ -1,5 +1,5 @@
 import { Inject, Injectable, LOCALE_ID } from '@angular/core';
-import { concatMap, forkJoin, map, Observable, of, tap } from 'rxjs';
+import { concatMap, forkJoin, map, Observable, tap } from 'rxjs';
 import { jsPDF } from 'jspdf';
 import { LayerModel, MapService, OlLayerFilter } from '@tailormap-viewer/map';
 import 'svg2pdf.js';
@@ -51,7 +51,8 @@ export class MapPdfService {
     private applicationMapService: ApplicationMapService,
   ) { }
 
-  public create$(printOptions: PrintOptions, layers: Array<AppLayerWithServiceModel>, vectorLayerFilter?: OlLayerFilter): Observable<string> {
+  public create$(printOptions: PrintOptions, layers: Array<AppLayerWithServiceModel>, legendLayers$: Observable<AppLayerWithServiceModel[]>,
+                 vectorLayerFilter?: OlLayerFilter): Observable<string> {
     let size = printOptions.size === 'a3' ? a3Size : a4Size;
     if (printOptions.orientation === 'portrait') {
       // noinspection JSSuspiciousNameCombination
@@ -90,14 +91,14 @@ export class MapPdfService {
       doc.autoPrint();
     }
     return this.addMapImage$(doc, x, y, mapSize, printOptions.resolution || 72, layers, vectorLayerFilter).pipe(
-      concatMap(() => this.addLegendImages$(doc, size.width, size.height, layers)),
+      concatMap(() => this.addLegendImages$(doc, size.width, size.height, legendLayers$)),
       concatMap(() => this.addSvg2PDF$(doc, this.iconService.getUrlForIcon('logo'), { x: size.width - 30, y, width: 20, height: 20 })),
       concatMap(() => this.addSvg2PDF$(doc, this.iconService.getUrlForIcon('north_arrow'), { x, y: y + 2, width: 20, height: 20 })),
       map(() => doc.output('dataurlstring', { filename: printOptions.filename || $localize `map.pdf` })),
     );
   }
 
-  private addLegendImages$(doc: jsPDF, width: number, height: number, layers: Array<AppLayerWithServiceModel>) {
+  private addLegendImages$(doc: jsPDF, width: number, height: number, layers$: Observable<Array<AppLayerWithServiceModel>>) {
     const legendDpiByLayer = new Map<AppLayerWithServiceModel, number>();
 
     const legendURLCallback = (layer: AppLayerWithServiceModel, url: URL) => {
@@ -111,9 +112,10 @@ export class MapPdfService {
       }
     };
 
-    return this.legendService.getLegendImages$(of(layers), legendURLCallback).pipe(
+    return this.legendService.getLegendImages$(layers$, legendURLCallback).pipe(
       tap(legendImages => {
         legendImages.forEach(legendImage => {
+          // XXX put legend images on top of each other for now, more complex layout to be implemented later
           const dpi = legendDpiByLayer.get(legendImage.appLayer) || 90;
           const extraShrinkFactor = 1.25;
           const widthMm = legendImage.width / (dpi / 25.4) / extraShrinkFactor; // 1 inch is 25.4 mm

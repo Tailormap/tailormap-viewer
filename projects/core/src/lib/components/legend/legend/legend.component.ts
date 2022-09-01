@@ -4,7 +4,7 @@ import { Observable, of, switchMap } from 'rxjs';
 import { MenubarService } from '../../menubar';
 import { LegendMenuButtonComponent } from '../legend-menu-button/legend-menu-button.component';
 import { Store } from '@ngrx/store';
-import { selectOrderedVisibleLayersWithServices } from '../../../map/state/map.selectors';
+import { selectOrderedVisibleLayersWithLegend } from '../../../map/state/map.selectors';
 import { LEGEND_ID } from '../legend-identifier';
 import { AppLayerWithServiceModel } from '../../../map/models';
 
@@ -30,7 +30,7 @@ export class LegendComponent implements OnInit {
       switchMap(visible => {
         return !visible
           ? of([])
-          : this.legendService.getAppLayerAndUrl$(this.store$.select(selectOrderedVisibleLayersWithServices));
+          : this.legendService.getAppLayerAndUrl$(this.store$.select(selectOrderedVisibleLayersWithLegend));
       }),
     );
   }
