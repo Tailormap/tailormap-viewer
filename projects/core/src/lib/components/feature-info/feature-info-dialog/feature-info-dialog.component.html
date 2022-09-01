@@ -9,7 +9,7 @@
   <div class="feature-info" *ngIf="currentFeature$ | async as currentFeature">
     <div class="content">
       <h2>{{currentFeature.layer.title}}</h2>
-      <div *ngFor="let a of getAttributes(currentFeature) | keyvalue" class="row">
+      <div *ngFor="let a of getAttributes(currentFeature) | keyvalue: asIsOrder" class="row">
         <strong>{{a.value.label}}</strong>
         {{a.value.value}}
       </div>

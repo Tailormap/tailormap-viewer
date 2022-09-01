@@ -85,4 +85,10 @@ export class FeatureInfoDialogComponent implements OnInit, OnDestroy {
   public isNextDisabled() {
     return this.totalFeatures <= 1 || this.currentSelected === this.totalFeatures - 1;
   }
+
+  // keyA and keyB are KeyValue from the #getAttributes map, returning 1 should prevent alphabetical sorting
+  // inspired by https://github.com/angular/angular/issues/42490#issuecomment-1206562995
+  public asIsOrder(): number {
+    return 0;
+  }
 }
