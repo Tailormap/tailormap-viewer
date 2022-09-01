@@ -1,6 +1,6 @@
 import {
   AppLayerModel, AppResponseModel, BoundsModel, ComponentModel, CoordinateReferenceSystemModel, GeometryType, Language, LayerDetailsModel,
-  MapResponseModel, ServiceModel, ServiceProtocol,
+  MapResponseModel, ResolvedServerType, ServerType, ServiceModel, ServiceProtocol,
 } from '../models';
 import { FeatureModel } from '../models/feature.model';
 import { ColumnMetadataModel } from '../models/column-metadata.model';
@@ -53,6 +53,8 @@ export const getServiceModel = (overrides?: Partial<ServiceModel>): ServiceModel
   useProxy: false,
   styleLibraries: {},
   protocol: ServiceProtocol.WMS,
+  serverType: ServerType.AUTO,
+  resolvedServerType: ResolvedServerType.GEOSERVER,
   ...overrides,
 });
 

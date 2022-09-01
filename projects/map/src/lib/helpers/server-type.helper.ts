@@ -1,15 +1,32 @@
+import { ResolvedServerType, ServerType, ServiceModel } from '@tailormap-viewer/api';
 
 export class ServerTypeHelper {
-  public static getFromUrl(url: string): undefined | 'geoserver' | 'mapserver' {
+  public static getFromUrl(url: string): ResolvedServerType {
     if (url.includes('/arcgis/')) {
-      return undefined;
+      return ResolvedServerType.GENERIC;
     }
     if (url.includes('/geoserver/')) {
-      return 'geoserver';
+      return ResolvedServerType.GEOSERVER;
     }
     if (url.includes('/mapserv')) { // /cgi-bin/mapserv, /cgi-bin/mapserv.cgi, /cgi-bin/mapserv.fcgi
-      return 'mapserver';
+      return ResolvedServerType.MAPSERVER;
     }
-    return undefined;
+    return ResolvedServerType.GENERIC;
+  }
+
+  public static resolveAutoServerType(service: ServiceModel): ResolvedServerType {
+    if (!service) {
+      return ResolvedServerType.GENERIC;
+    }
+    if (service.serverType === ServerType.MAPSERVER) {
+      return ResolvedServerType.MAPSERVER;
+    }
+    if (service.serverType === ServerType.GEOSERVER) {
+      return ResolvedServerType.GEOSERVER;
+    }
+    if (service.serverType === ServerType.AUTO) {
+      return this.getFromUrl(service.url);
+    }
+    return ResolvedServerType.GENERIC;
   }
 }
