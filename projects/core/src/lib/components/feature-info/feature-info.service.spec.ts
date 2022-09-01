@@ -7,7 +7,6 @@ import { selectApplicationId } from '../../state/core.selectors';
 import { selectVisibleLayersWithAttributes } from '../../map/state/map.selectors';
 import { TestBed } from '@angular/core/testing';
 import { MapService } from '@tailormap-viewer/map';
-import { NgZone } from '@angular/core';
 
 describe('FeatureInfoService', () => {
 
@@ -22,6 +21,7 @@ describe('FeatureInfoService', () => {
     provide: MapService,
     useValue: {
       getResolution$: () => of({ resolution: 1 }),
+      getProjectionCode$: () => of('EPSG:4326'),
     },
   };
 

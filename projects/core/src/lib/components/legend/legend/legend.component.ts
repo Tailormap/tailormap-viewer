@@ -1,12 +1,12 @@
-import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { LegendService } from '../services/legend.service';
 import { Observable, of, switchMap } from 'rxjs';
 import { MenubarService } from '../../menubar';
 import { LegendMenuButtonComponent } from '../legend-menu-button/legend-menu-button.component';
 import { Store } from '@ngrx/store';
-import { selectOrderedVisibleLayers } from '../../../map/state/map.selectors';
-import { AppLayerModel } from '@tailormap-viewer/api';
+import { selectOrderedVisibleLayersWithServices } from '../../../map/state/map.selectors';
 import { LEGEND_ID } from '../legend-identifier';
+import { AppLayerWithServiceModel } from '../../../map/models';
 
 @Component({
   selector: 'tm-legend',
@@ -17,8 +17,8 @@ import { LEGEND_ID } from '../legend-identifier';
 export class LegendComponent implements OnInit {
 
   public visible$: Observable<boolean>;
-  public layers$: Observable<{ appLayer: AppLayerModel; url: string }[]>;
-  public trackById = (index: number, item: { appLayer: AppLayerModel; url: string }) => item.appLayer.id;
+  public layers$: Observable<Array<{ layer: AppLayerWithServiceModel; url: string }>>;
+  public trackById = (index: number, item: { layer: AppLayerWithServiceModel; url: string }) => item.layer.id;
 
   constructor(
     private store$: Store,
@@ -30,7 +30,7 @@ export class LegendComponent implements OnInit {
       switchMap(visible => {
         return !visible
           ? of([])
-          : this.legendService.getAppLayerAndUrl$(this.store$.select(selectOrderedVisibleLayers));
+          : this.legendService.getAppLayerAndUrl$(this.store$.select(selectOrderedVisibleLayersWithServices));
       }),
     );
   }

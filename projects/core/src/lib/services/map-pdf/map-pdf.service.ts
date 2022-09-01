@@ -1,14 +1,15 @@
 import { Inject, Injectable, LOCALE_ID } from '@angular/core';
 import { concatMap, forkJoin, map, Observable, of, tap } from 'rxjs';
 import { jsPDF } from 'jspdf';
-import { LayerModel, MapService, OlLayerFilter, ServerTypeHelper } from '@tailormap-viewer/map';
+import { LayerModel, MapService, OlLayerFilter } from '@tailormap-viewer/map';
 import 'svg2pdf.js';
 import { HttpClient } from '@angular/common/http';
 import { IconService } from '@tailormap-viewer/shared';
 import { Svg2pdfOptions } from 'svg2pdf.js';
 import { LegendService } from '../../components/legend/services/legend.service';
-import { AppLayerModel, ServiceModel } from '@tailormap-viewer/api';
+import { ResolvedServerType } from '@tailormap-viewer/api';
 import { ApplicationMapService } from '../../map/services/application-map.service';
+import { AppLayerWithServiceModel } from '../../map/models';
 
 interface Size {
   width: number;
@@ -50,7 +51,7 @@ export class MapPdfService {
     private applicationMapService: ApplicationMapService,
   ) { }
 
-  public create$(printOptions: PrintOptions, layers: Array<{ layer: AppLayerModel; service?: ServiceModel }>, vectorLayerFilter?: OlLayerFilter): Observable<string> {
+  public create$(printOptions: PrintOptions, layers: Array<AppLayerWithServiceModel>, vectorLayerFilter?: OlLayerFilter): Observable<string> {
     let size = printOptions.size === 'a3' ? a3Size : a4Size;
     if (printOptions.orientation === 'portrait') {
       // noinspection JSSuspiciousNameCombination
@@ -96,36 +97,21 @@ export class MapPdfService {
     );
   }
 
-  private addLegendImages$(doc: jsPDF, width: number, height: number, layers: Array<{ layer: AppLayerModel; service?: ServiceModel }>) {
+  private addLegendImages$(doc: jsPDF, width: number, height: number, layers: Array<AppLayerWithServiceModel>) {
+    const legendDpiByLayer = new Map<AppLayerWithServiceModel, number>();
 
-    const servicesById = new Map<number, ServiceModel>();
-    layers.forEach(layerWithService => {
-      if (layerWithService.service) {
-        servicesById.set(layerWithService.service.id, layerWithService.service);
-      }
-    });
-
-    const legendDpiByLayer = new Map<AppLayerModel, number>();
-
-    const legendURLCallback = (layer: AppLayerModel, url: URL) => {
-      // Find service to get ServiceHiDpiMode
-      const service = servicesById.get(layer.serviceId);
-
+    const legendURLCallback = (layer: AppLayerWithServiceModel, url: URL) => {
       legendDpiByLayer.set(layer, 90);
 
-      if (service && service.hiDpiMode) {
+      if (layer.service?.resolvedServerType === ResolvedServerType.GEOSERVER && LegendService.isGetLegendGraphicRequest(url.toString())) {
         // Use LEGEND_OPTIONS vendor specific Geoserver parameter, see https://docs.geoserver.org/stable/en/user/services/wms/get_legend_graphic/index.html
-        if (service.hiDpiMode === 'geoserver' || (service.hiDpiMode === 'auto' && ServerTypeHelper.getFromUrl(service.url) === 'geoserver')) {
-          if (url.searchParams.get('REQUEST') === 'GetLegendGraphic') {
-            const dpi = 180;
-            legendDpiByLayer.set(layer, dpi);
-            url.searchParams.set('LEGEND_OPTIONS', `dpi:${dpi};fontAntiAliasing:true;labelMargin:0;columnheight:300`);
-          }
-        }
+        const dpi = 180;
+        legendDpiByLayer.set(layer, dpi);
+        url.searchParams.set('LEGEND_OPTIONS', `dpi:${dpi};fontAntiAliasing:true;labelMargin:0;columnheight:300`);
       }
     };
 
-    return this.legendService.getLegendImages$(of(layers.map(layerWithService => layerWithService.layer)), legendURLCallback).pipe(
+    return this.legendService.getLegendImages$(of(layers), legendURLCallback).pipe(
       tap(legendImages => {
         legendImages.forEach(legendImage => {
           const dpi = legendDpiByLayer.get(legendImage.appLayer) || 90;
@@ -153,9 +139,9 @@ export class MapPdfService {
   }
 
   private addMapImage$(doc: jsPDF, x: number, y: number, mapSize: Size, resolution: number,
-                       layersWithService: Array<{ layer: AppLayerModel; service?: ServiceModel }>, vectorLayerFilter?: OlLayerFilter): Observable<string> {
+                       layersWithService: Array<AppLayerWithServiceModel>, vectorLayerFilter?: OlLayerFilter): Observable<string> {
     const isValidLayer = (layer: LayerModel | null): layer is LayerModel => layer !== null;
-    return forkJoin(layersWithService.map(layer => this.applicationMapService.convertAppLayerToMapLayer$(layer.layer, layer.service))).pipe(
+    return forkJoin(layersWithService.map(layer => this.applicationMapService.convertAppLayerToMapLayer$(layer, layer.service))).pipe(
       map(layers => layers.filter(isValidLayer)),
       concatMap(layers => this.mapService.exportMapImage$({ widthInMm: mapSize.width, heightInMm: mapSize.height, resolution, layers, vectorLayerFilter })),
       tap(dataURL => {

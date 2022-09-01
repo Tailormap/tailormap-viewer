@@ -1,7 +1,30 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, concatMap, forkJoin, map, Observable, of, Subject, switchMap } from 'rxjs';
-import { AppLayerModel } from '@tailormap-viewer/api';
 import { MapService } from '@tailormap-viewer/map';
+import { AppLayerWithServiceModel } from '../../../map/models';
+
+export interface GeoServerLegendOptions {
+  fontName?: string;
+  fontStyle?: 'italic' | 'bold';
+  fontSize?: number;
+  fontColor?: string;
+  fontAntiAliasing?: boolean;
+  bgColor?: string;
+  dpi?: number;
+  forceLabels?: 'on' | 'off';
+  forceTitles?: 'on' | 'off';
+  labelMargin?: number;
+  layout?: 'vertical' | 'horizontal';
+  columnheight?: number;
+  rowwidth?: number;
+  columns?: number;
+  rows?: number;
+  grouplayout?: 'vertical' | 'horizontal';
+  countMatched?: boolean;
+  hideEmptyRules?: boolean;
+  wrap?: boolean;
+  wrap_limit?: number;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -23,30 +46,31 @@ export class LegendService {
     return this.visibleSubject$.asObservable();
   }
 
-  public getAppLayerAndUrl$(appLayers$: Observable<AppLayerModel[]>): Observable<Array<{ appLayer: AppLayerModel; url: string }>> {
+  public getAppLayerAndUrl$(appLayers$: Observable<AppLayerWithServiceModel[]>):
+    Observable<Array<{ layer: AppLayerWithServiceModel; url: string }>> {
     return this.mapService.getLayerManager$()
       .pipe(
         switchMap(layerManager => appLayers$.pipe(
           map(appLayers => {
-            return appLayers.map(appLayer => ({
-              appLayer,
-              url: appLayer.legendImageUrl
-                ? appLayer.legendImageUrl
-                : layerManager.getLegendUrl(`${appLayer.id}`),
+            return appLayers.map(layer => ({
+              layer,
+              url: layer.legendImageUrl
+                ? layer.legendImageUrl
+                : layerManager.getLegendUrl(`${layer.id}`),
             }));
           }),
         )),
       );
   }
 
-  public getLegendImages$(appLayers$: Observable<AppLayerModel[]>, urlCallback?: (layer: AppLayerModel, url: URL) => void):
-    Observable<Array<{ appLayer: AppLayerModel; imageData: string; width: number; height: number }>> {
+  public getLegendImages$(appLayers$: Observable<AppLayerWithServiceModel[]>, urlCallback?: (layer: AppLayerWithServiceModel, url: URL) => void):
+    Observable<Array<{ appLayer: AppLayerWithServiceModel; imageData: string; width: number; height: number }>> {
     return this.getAppLayerAndUrl$(appLayers$).pipe(
       concatMap(appLayerAndUrls => {
         return forkJoin(appLayerAndUrls.filter(lu => lu.url !== '').map(appLayerWithLegendUrl => {
           const url = new URL(appLayerWithLegendUrl.url);
           if (urlCallback) {
-            urlCallback(appLayerWithLegendUrl.appLayer, url);
+            urlCallback(appLayerWithLegendUrl.layer, url);
           }
           return LegendService.imageUrlToPng$(url.toString()).pipe(
             catchError((e) => {
@@ -55,19 +79,19 @@ export class LegendService {
             }),
             map(legendImage => ({
                   ...legendImage,
-                  appLayer: appLayerWithLegendUrl.appLayer,
+                  appLayer: appLayerWithLegendUrl.layer,
             })),
           );
         }));
       }),
       map(array => {
-        return array.filter(a => a !== null) as Array<{ appLayer: AppLayerModel; imageData: string; width: number; height: number }>;
+        return array.filter(a => a !== null) as Array<{ appLayer: AppLayerWithServiceModel; imageData: string; width: number; height: number }>;
       }),
     );
   }
 
   public static imageUrlToPng$(imageUrl: string): Observable<{ imageData: string; width: number; height: number }> {
-    const subject = new Subject<{ imageData: string; width: number; height: number}>();
+    const subject = new Subject<{ imageData: string; width: number; height: number }>();
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
     if (ctx === null) {
@@ -98,4 +122,24 @@ export class LegendService {
     }
     return subject.asObservable();
   }
+
+  public static isGetLegendGraphicRequest(url: string): boolean {
+    try {
+      const u = new URL(url);
+      return u.searchParams.get('REQUEST') === 'GetLegendGraphic';
+    } catch(e) {
+      return false;
+    }
+  }
+
+  public static addGeoServerLegendOptions(url: string, legendOptions: GeoServerLegendOptions): string {
+    try {
+      const u = new URL(url);
+      u.searchParams.set('LEGEND_OPTIONS', Object.entries(legendOptions).map(entry => entry.join(':')).join(';'));
+      return u.toString();
+    } catch(e) {
+      return url;
+    }
+  }
 }
+

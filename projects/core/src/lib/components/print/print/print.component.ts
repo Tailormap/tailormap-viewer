@@ -10,10 +10,10 @@ import { MapService, OlLayerFilter } from '@tailormap-viewer/map';
 import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ApplicationMapService } from '../../../map/services/application-map.service';
-import { selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersAndServices } from '../../../map/state/map.selectors';
+import { selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersWithServices } from '../../../map/state/map.selectors';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { selectHasDrawingFeatures } from '../../drawing/state/drawing.selectors';
-import { AppLayerModel, ServiceModel } from '@tailormap-viewer/api';
+import { AppLayerWithServiceModel } from '../../../map/models';
 
 @Component({
   selector: 'tm-print',
@@ -104,7 +104,7 @@ export class PrintComponent implements OnInit, OnDestroy {
     this.cancelled$.next(null);
   }
 
-  private wrapFileExport(extension: string, toDataURLExporter: (filename: string, layers: Array<{ layer: AppLayerModel; service?: ServiceModel }>) => Observable<string>): void {
+  private wrapFileExport(extension: string, toDataURLExporter: (filename: string, layers: Array<AppLayerWithServiceModel>) => Observable<string>): void {
     this.busy$.next(true);
     forkJoin([ this._mapFilenameFn(extension), this.getLayers$() ]).pipe(
       concatMap(([ filename, layers ]) => combineLatest([ of(filename), toDataURLExporter(filename, layers) ])),
@@ -128,8 +128,8 @@ export class PrintComponent implements OnInit, OnDestroy {
     ).subscribe();
   }
 
-  private getLayers$(): Observable<{ layer: AppLayerModel; service: ServiceModel | undefined}[]> {
-    return combineLatest([ this.store$.select(selectOrderedVisibleBackgroundLayers), this.store$.select(selectOrderedVisibleLayersAndServices) ]).pipe(
+  private getLayers$(): Observable<Array<AppLayerWithServiceModel>> {
+    return combineLatest([ this.store$.select(selectOrderedVisibleBackgroundLayers), this.store$.select(selectOrderedVisibleLayersWithServices) ]).pipe(
       map(([ backgroundLayers, layers ]) => [ ...backgroundLayers,  ...layers ]),
       take(1),
     );

@@ -4302,7 +4302,7 @@ ALTER TABLE public.feature_type_attributes ENABLE TRIGGER ALL;
 
 ALTER TABLE public.feature_type_relation DISABLE TRIGGER ALL;
 
-COPY public.feature_type_relation (id, type, feature_type, foreign_feature_type) FROM stdin;
+COPY public.feature_type_relation (id, can_create_new_relation, search_next_relation, type, feature_type, foreign_feature_type) FROM stdin;
 \.
 
 
@@ -5060,7 +5060,7 @@ ALTER TABLE public.level_readers ENABLE TRIGGER ALL;
 ALTER TABLE public.metadata DISABLE TRIGGER ALL;
 
 COPY public.metadata (id, config_key, config_value) FROM stdin;
-1	database_version	47
+1	database_version	49
 2	default_application	1
 \.
 

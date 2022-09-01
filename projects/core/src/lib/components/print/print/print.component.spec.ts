@@ -7,7 +7,7 @@ import { of } from 'rxjs';
 import { MenubarService } from '../../menubar';
 import { ApplicationMapService } from '../../../map/services/application-map.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ICON_SERVICE_ICON_LOCATION } from '@tailormap-viewer/shared';
+import { ICON_SERVICE_ICON_LOCATION, SharedImportsModule } from '@tailormap-viewer/shared';
 import { APP_BASE_HREF } from '@angular/common';
 
 describe('PrintComponent', () => {
@@ -20,6 +20,7 @@ describe('PrintComponent', () => {
     await render(PrintComponent, {
       imports: [
         HttpClientTestingModule,
+        SharedImportsModule,
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
         providers: [

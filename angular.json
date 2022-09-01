@@ -37,6 +37,7 @@
             "polyfills": "projects/app/src/polyfills.ts",
             "assets": [
               "projects/app/src/favicon.ico",
+              { "glob": "version.json", "input": ".", "output": "." },
               {
                 "glob": "**/*",
                 "input": "projects/core/assets",

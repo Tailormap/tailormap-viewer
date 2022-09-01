@@ -8,6 +8,7 @@ import { selectAttributeListDataForId, selectAttributeListRow, selectAttributeLi
 import { TypesHelper } from '@tailormap-viewer/shared';
 import { TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel } from '@tailormap-viewer/api';
 import { selectApplicationId } from '../../../state/core.selectors';
+import { MapService } from '@tailormap-viewer/map';
 
 @Injectable()
 export class AttributeListEffects {
@@ -38,9 +39,10 @@ export class AttributeListEffects {
         this.store$.select(selectAttributeListTabForDataId(action.dataId)),
         this.store$.select(selectAttributeListRow(action.dataId, action.rowId)),
         this.store$.select(selectApplicationId),
+        this.mapService.getProjectionCode$(),
       ]),
       filter(([ _action, tab, row, applicationId ]) => !!tab && !!row && applicationId !== null),
-      mergeMap(([ _action, tab, row, applicationId ]) => {
+      mergeMap(([ _action, tab, row, applicationId, projection ]) => {
         if (!row || !row.__fid || !tab || !tab.layerId || applicationId === null) {
           return of({ type: 'noop' });
         }
@@ -48,6 +50,7 @@ export class AttributeListEffects {
           applicationId,
           layerId: tab.layerId,
           __fid: row.__fid,
+          crs: projection,
         }).pipe(
           map(result => {
             return AttributeListActions.setHighlightedFeature({
@@ -74,6 +77,7 @@ export class AttributeListEffects {
     private actions$: Actions,
     private store$: Store,
     private attributeListDataService: AttributeListDataService,
+    private mapService: MapService,
     @Inject(TAILORMAP_API_V1_SERVICE) private api: TailormapApiV1ServiceModel,
   ) {
   }
