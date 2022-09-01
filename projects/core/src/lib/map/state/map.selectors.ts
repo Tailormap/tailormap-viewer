@@ -3,7 +3,7 @@ import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { AppLayerModel, LayerTreeNodeModel, ServiceModel } from '@tailormap-viewer/api';
 import { TreeModel } from '@tailormap-viewer/shared';
 import { LayerTreeNodeHelper } from '../helpers/layer-tree-node.helper';
-import { ExtendedLayerTreeNodeModel } from '../models';
+import { AppLayerWithServiceModel, ExtendedLayerTreeNodeModel } from '../models';
 
 const selectMapState = createFeatureSelector<MapState>(mapStateKey);
 
@@ -40,31 +40,26 @@ export const selectMapOptions = createSelector(
   },
 );
 
-const getLayersAndServices = (layers: AppLayerModel[], services: ServiceModel[]) => {
+const getLayersWithServices = (layers: AppLayerModel[], services: ServiceModel[]): AppLayerWithServiceModel[] => {
     return layers.map(layer => ({
-        layer,
+        ...layer,
         service: services.find(s => s.id === layer.serviceId),
     }));
 };
 
-export const selectLayersAndServices = createSelector(
+export const selectLayersWithServices = createSelector(
   selectLayers,
   selectServices,
-  (layers, services: ServiceModel[]) => getLayersAndServices(layers, services),
+  (layers, services: ServiceModel[]) => getLayersWithServices(layers, services),
 );
 
-export const selectVisibleLayersAndServices = createSelector(
-    selectLayersAndServices,
-    layers => layers.filter(l => l.layer.visible),
-);
-
-export const selectVisibleLayers = createSelector(
-  selectLayers,
-  layers => layers.filter(l => l.visible),
+export const selectVisibleLayersWithServices = createSelector(
+    selectLayersWithServices,
+    layers => layers.filter(l => l.visible),
 );
 
 export const selectVisibleLayersWithAttributes = createSelector(
-  selectVisibleLayers,
+  selectVisibleLayersWithServices,
   layers => layers.filter(l => l.hasAttributes),
 );
 
@@ -89,8 +84,8 @@ export const selectOrderedBackgroundLayerIds = createSelector(
   baseLayerTreeNodes => LayerTreeNodeHelper.getAppLayerIds(baseLayerTreeNodes, baseLayerTreeNodes.find(l => l.root)),
 );
 
-export const selectOrderedVisibleLayers = createSelector(
-  selectVisibleLayers,
+export const selectOrderedVisibleLayersWithServices = createSelector(
+  selectVisibleLayersWithServices,
   selectOrderedLayerIds,
   (layers, orderedLayerIds) => {
     return layers
@@ -106,23 +101,13 @@ export const selectOrderedVisibleLayers = createSelector(
   },
 );
 
-export const selectOrderedVisibleLayersAndServices = createSelector(
-  selectVisibleLayersAndServices,
-  selectOrderedLayerIds,
-  (layers, orderedLayerIds) => {
-    return layers
-      .filter(l => orderedLayerIds.includes(l.layer.id))
-      .sort(l => orderedLayerIds.findIndex(id => l.layer.id === id));
-  },
-);
-
 export const selectOrderedVisibleBackgroundLayers = createSelector(
-  selectVisibleLayersAndServices,
+  selectVisibleLayersWithServices,
   selectOrderedBackgroundLayerIds,
   (layers, orderedLayerIds) => {
     return layers
-      .filter(l => orderedLayerIds.includes(l.layer.id))
-      .sort(l => orderedLayerIds.findIndex(id => l.layer.id === id));
+      .filter(l => orderedLayerIds.includes(l.id))
+      .sort(l => orderedLayerIds.findIndex(id => l.id === id));
   },
 );
 

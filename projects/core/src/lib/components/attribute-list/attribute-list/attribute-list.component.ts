@@ -12,7 +12,7 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
 import { AttributeListTabModel } from '../models/attribute-list-tab.model';
 import { MenubarService } from '../../menubar';
 import { AttributeListMenuButtonComponent } from '../attribute-list-menu-button/attribute-list-menu-button.component';
-import { selectVisibleLayers } from '../../../map/state/map.selectors';
+import { selectVisibleLayersWithServices } from '../../../map/state/map.selectors';
 import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.helper';
 import { MapService } from '@tailormap-viewer/map';
 
@@ -51,7 +51,7 @@ export class AttributeListComponent implements OnInit {
     this.store$.select(selectAttributeListSelectedTab)
       .pipe(takeUntil(this.destroyed))
       .subscribe(selectedTab => this.selectedTab = selectedTab);
-    this.hasLayersWithAttributes$ = this.store$.select(selectVisibleLayers)
+    this.hasLayersWithAttributes$ = this.store$.select(selectVisibleLayersWithServices)
       .pipe(map(layers => (layers || []).length > 0));
   }
 

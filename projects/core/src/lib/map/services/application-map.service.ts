@@ -5,7 +5,8 @@ import { concatMap, distinctUntilChanged, filter, forkJoin, map, Observable, of,
 import { AppLayerModel, ResolvedServerType, ServiceModel, ServiceProtocol } from '@tailormap-viewer/api';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { ArrayHelper } from '@tailormap-viewer/shared';
-import { selectMapOptions, selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersAndServices } from '../state/map.selectors';
+import { selectMapOptions, selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersWithServices } from '../state/map.selectors';
+import { AppLayerWithServiceModel } from '../models';
 
 @Injectable({
    providedIn: 'root',
@@ -49,7 +50,7 @@ export class ApplicationMapService implements OnDestroy {
         layerManager.setBackgroundLayers(layers.filter(isValidLayer));
       });
 
-    this.store$.select(selectOrderedVisibleLayersAndServices)
+    this.store$.select(selectOrderedVisibleLayersWithServices)
       .pipe(
         takeUntil(this.destroyed),
         concatMap(layers => this.getLayersAndLayerManager$(layers)),
@@ -59,9 +60,9 @@ export class ApplicationMapService implements OnDestroy {
       });
   }
 
-  private getLayersAndLayerManager$(serviceLayers: Array<{ layer: AppLayerModel; service?: ServiceModel }>) {
+  private getLayersAndLayerManager$(serviceLayers: AppLayerWithServiceModel[]) {
     const layers$ = serviceLayers
-      .map(layer => this.convertAppLayerToMapLayer$(layer.layer, layer.service));
+      .map(layer => this.convertAppLayerToMapLayer$(layer, layer.service));
     return forkJoin([
       layers$.length > 0 ? forkJoin(layers$) : of([]),
       this.mapService.getLayerManager$().pipe(take(1)),
