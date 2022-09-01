@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input, OnChanges } from '@angular/core';
-import { AppLayerWithServiceModel, ResolvedServerType } from '@tailormap-viewer/api';
+import { ResolvedServerType } from '@tailormap-viewer/api';
 import { GeoServerLegendOptions, LegendService } from '../services/legend.service';
+import { AppLayerWithServiceModel } from '../../../map/models';
 
 @Component({
   selector: 'tm-legend-layer',
@@ -26,8 +27,7 @@ export class LegendLayerComponent implements OnChanges {
     this.urlWithOptions = this.url;
     this.srcset = '';
 
-    if (this.url && this.layer && this.layer.service
-      && this.layer.service.resolvedServerType === ResolvedServerType.GEOSERVER
+    if (this.url && this.layer?.service?.resolvedServerType === ResolvedServerType.GEOSERVER
       && LegendService.isGetLegendGraphicRequest(this.url)) {
       const legendOptions: GeoServerLegendOptions = {
         fontAntiAliasing: true,

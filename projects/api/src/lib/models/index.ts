@@ -1,5 +1,4 @@
 export * from './app-layer.model';
-export * from './app-layer-with-service.model';
 export * from './app-response.model';
 export * from './attribute-type.enum';
 export * from './attribute.model';

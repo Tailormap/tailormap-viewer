@@ -5,8 +5,8 @@ import { MenubarService } from '../../menubar';
 import { LegendMenuButtonComponent } from '../legend-menu-button/legend-menu-button.component';
 import { Store } from '@ngrx/store';
 import { selectOrderedVisibleLayersWithServices } from '../../../map/state/map.selectors';
-import { AppLayerWithServiceModel } from '@tailormap-viewer/api';
 import { LEGEND_ID } from '../legend-identifier';
+import { AppLayerWithServiceModel } from '../../../map/models';
 
 @Component({
   selector: 'tm-legend',

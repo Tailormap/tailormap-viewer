@@ -2,10 +2,11 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { LayerModel, LayerTypesEnum, MapService, OgcHelper, WMSLayerModel, WMTSLayerModel } from '@tailormap-viewer/map';
 import { concatMap, distinctUntilChanged, filter, forkJoin, map, Observable, of, Subject, take, takeUntil } from 'rxjs';
-import { AppLayerModel, AppLayerWithServiceModel, ResolvedServerType, ServiceModel, ServiceProtocol } from '@tailormap-viewer/api';
+import { AppLayerModel, ResolvedServerType, ServiceModel, ServiceProtocol } from '@tailormap-viewer/api';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { ArrayHelper } from '@tailormap-viewer/shared';
 import { selectMapOptions, selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersWithServices } from '../state/map.selectors';
+import { AppLayerWithServiceModel } from '../models';
 
 @Injectable({
    providedIn: 'root',

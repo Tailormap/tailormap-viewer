@@ -1,9 +1,9 @@
 import { MapSettingsModel, MapState, mapStateKey } from './map.state';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { AppLayerModel, AppLayerWithServiceModel, LayerTreeNodeModel, ServiceModel } from '@tailormap-viewer/api';
+import { AppLayerModel, LayerTreeNodeModel, ServiceModel } from '@tailormap-viewer/api';
 import { TreeModel } from '@tailormap-viewer/shared';
 import { LayerTreeNodeHelper } from '../helpers/layer-tree-node.helper';
-import { ExtendedLayerTreeNodeModel } from '../models';
+import { AppLayerWithServiceModel, ExtendedLayerTreeNodeModel } from '../models';
 
 const selectMapState = createFeatureSelector<MapState>(mapStateKey);
 

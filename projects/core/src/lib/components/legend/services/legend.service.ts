@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable, switchMap } from 'rxjs';
-import { AppLayerWithServiceModel } from '@tailormap-viewer/api';
 import { MapService } from '@tailormap-viewer/map';
+import { AppLayerWithServiceModel } from '../../../map/models';
 
 export interface GeoServerLegendOptions {
   fontName?: string;
