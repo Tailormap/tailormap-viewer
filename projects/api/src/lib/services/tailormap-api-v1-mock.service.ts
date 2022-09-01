@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {
-  AppResponseModel, ComponentModel, GeometryType, Language, LayerDetailsModel, MapResponseModel, ServiceProtocol,
+  AppResponseModel, ComponentModel, GeometryType, Language, LayerDetailsModel, MapResponseModel, ServerType, ServiceProtocol,
   VersionResponseModel,
 } from '../models';
 import { delay, Observable, of } from 'rxjs';
@@ -120,6 +120,7 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
         url: 'https://www.openbasiskaart.nl/mapcache/?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetCapabilities',
         styleLibraries: {},
         useProxy: false,
+        serverType: ServerType.AUTO,
       }, {
         id: 2,
         name: 'Bestuurlijke gebieden',
@@ -127,6 +128,7 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
         url: 'https://service.pdok.nl/kadaster/bestuurlijkegebieden/wms/v1_0?request=GetCapabilities&service=WMS',
         styleLibraries: {},
         useProxy: false,
+        serverType: ServerType.AUTO,
       }],
       crs: {
         // eslint-disable-next-line max-len

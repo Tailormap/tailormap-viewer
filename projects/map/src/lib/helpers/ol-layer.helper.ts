@@ -1,9 +1,8 @@
 import BaseLayer from 'ol/layer/Base';
 import Projection from 'ol/proj/Projection';
-import TileLayer from  'ol/layer/Tile';
-import WMTS from 'ol/source/WMTS';
+import TileLayer from 'ol/layer/Tile';
+import WMTS, { optionsFromCapabilities } from 'ol/source/WMTS';
 import XYZ from 'ol/source/XYZ';
-import { optionsFromCapabilities } from 'ol/source/WMTS';
 import { TMSLayerModel } from '../models/tms-layer.model';
 import { LayerTypesHelper } from './layer-types.helper';
 import { OgcHelper } from './ogc.helper';
@@ -13,10 +12,10 @@ import { WMTSLayerModel } from '../models/wmts-layer.model';
 import { WMTSCapabilities } from 'ol/format';
 import WMTSTileGrid from 'ol/tilegrid/WMTS';
 import { ImageWMS, TileWMS } from 'ol/source';
-import { ServerTypeHelper } from './server-type.helper';
 import ImageLayer from 'ol/layer/Image';
 import { Options } from 'ol/source/ImageWMS';
 import { ServerType } from 'ol/source/wms';
+import { ResolvedServerType, ServerType as TMServerType } from '@tailormap-viewer/api';
 
 export interface LayerProperties {
   id: string;
@@ -118,19 +117,17 @@ export class OlLayerHelper {
   }
 
   public static createWMSLayer(layer: WMSLayerModel): TileLayer<TileWMS> | ImageLayer<ImageWMS> {
-
-    const defaultServerType = 'geoserver'; // Use the most common as default
-
     let serverType: ServerType | undefined;
     let hidpi = true;
 
-    if (layer.hiDpiMode === 'disabled') {
+    // If explicitly disabled do not use serverType for hidpi
+    if (layer.serverType === TMServerType.DISABLED) {
       serverType = undefined;
       hidpi = false;
-    } else if (layer.hiDpiMode === 'auto') {
-      serverType = ServerTypeHelper.getFromUrl(layer.url) || defaultServerType;
     } else {
-      serverType = layer.hiDpiMode || defaultServerType;
+      // Use the most common geoserver as default for OL hidpi support, it's harmless if the server doesn't support the parameters and returns
+      // low dpi images
+      serverType = layer.resolvedServerType === ResolvedServerType.GENERIC ? ResolvedServerType.GEOSERVER : layer.resolvedServerType;
     }
 
     const sourceOptions: Options = {

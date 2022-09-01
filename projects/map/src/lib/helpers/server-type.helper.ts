@@ -1,36 +1,32 @@
-import { AppLayerWithServiceModel, ServiceHiDpiMode } from '@tailormap-viewer/api';
+import { ResolvedServerType, ServerType, ServiceModel } from '@tailormap-viewer/api';
 
 export class ServerTypeHelper {
-  public static getFromUrl(url: string): ServiceHiDpiMode.GEOSERVER | ServiceHiDpiMode.MAPSERVER | undefined {
+  public static getFromUrl(url: string): ResolvedServerType {
     if (url.includes('/arcgis/')) {
-      return undefined;
+      return ResolvedServerType.GENERIC;
     }
     if (url.includes('/geoserver/')) {
-      return ServiceHiDpiMode.GEOSERVER;
+      return ResolvedServerType.GEOSERVER;
     }
     if (url.includes('/mapserv')) { // /cgi-bin/mapserv, /cgi-bin/mapserv.cgi, /cgi-bin/mapserv.fcgi
-      return ServiceHiDpiMode.MAPSERVER;
+      return ResolvedServerType.MAPSERVER;
     }
-    return undefined;
+    return ResolvedServerType.GENERIC;
   }
 
-  public static resolveAutoServerType(layer: AppLayerWithServiceModel): ServiceHiDpiMode.GEOSERVER | ServiceHiDpiMode.MAPSERVER | undefined {
-    if (!layer.service) {
-      return undefined;
+  public static resolveAutoServerType(service: ServiceModel): ResolvedServerType {
+    if (!service) {
+      return ResolvedServerType.GENERIC;
     }
-    if (layer.service.hiDpiMode === ServiceHiDpiMode.MAPSERVER || layer.service.hiDpiMode === ServiceHiDpiMode.GEOSERVER) {
-      return layer.service.hiDpiMode;
+    if (service.serverType === ServerType.MAPSERVER) {
+      return ResolvedServerType.MAPSERVER;
     }
-    if (layer.service.hiDpiMode === ServiceHiDpiMode.AUTO) {
-      return this.getFromUrl(layer.service.url);
+    if (service.serverType === ServerType.GEOSERVER) {
+      return ResolvedServerType.GEOSERVER;
     }
-    return undefined;
-  }
-
-  public static isGeoServer(layer: AppLayerWithServiceModel): boolean {
-    if (!layer.service) {
-      return false;
+    if (service.serverType === ServerType.AUTO) {
+      return this.getFromUrl(service.url);
     }
-    return this.resolveAutoServerType(layer) === ServiceHiDpiMode.GEOSERVER;
+    return ResolvedServerType.GENERIC;
   }
 }
