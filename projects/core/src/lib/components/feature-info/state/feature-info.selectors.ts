@@ -1,10 +1,11 @@
 import { FeatureInfoState, featureInfoStateKey } from './feature-info.state';
 import { createFeatureSelector, createSelector, select } from '@ngrx/store';
-import { LoadingStateEnum } from '@tailormap-viewer/shared';
+import { ArrayHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
 import { filter, pipe, take } from 'rxjs';
 import { FeatureInfoModel } from '../models/feature-info.model';
 import { FeatureInfoHelper } from '../helpers/feature-info.helper';
 import { selectVisibleLayersWithServices } from '../../../map/state/map.selectors';
+import { FeatureAttributeTypeEnum } from '@tailormap-viewer/api';
 
 const selectFeatureInfoState = createFeatureSelector<FeatureInfoState>(featureInfoStateKey);
 
@@ -30,10 +31,21 @@ export const selectFeatureInfoList = createSelector(
         return;
       }
       const columnMetadata = metadata.filter(m => m.layerId === feature.layerId);
+      const columnMetadataDict = new Map((columnMetadata || []).map(c => [ c.key, c ]));
+      const attributes: Array<{ label: string; attributeValue: any; key: string }> = [];
+      Object.keys(feature.attributes).forEach(key => {
+        const attMetadata = columnMetadataDict.get(key);
+        if (attMetadata?.type === FeatureAttributeTypeEnum.GEOMETRY) {
+          return;
+        }
+        attributes.push({ label: attMetadata?.alias || key, attributeValue: feature.attributes[key], key });
+      });
+      const attributeOrder = columnMetadata.map(c => c.key);
       featureInfoModels.push({
         feature,
-        columnMetadata: new Map((columnMetadata || []).map(c => [ c.key, c ])),
+        columnMetadata,
         layer,
+        sortedAttributes: attributes.sort(ArrayHelper.getArraySorter('key', attributeOrder)),
       });
     });
     return featureInfoModels;

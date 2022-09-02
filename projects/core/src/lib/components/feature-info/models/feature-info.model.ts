@@ -2,6 +2,7 @@ import { AppLayerModel, ColumnMetadataModel, FeatureModel } from '@tailormap-vie
 
 export interface FeatureInfoModel {
   feature: FeatureModel;
-  columnMetadata: Map<string, ColumnMetadataModel>;
+  columnMetadata: ColumnMetadataModel[];
   layer: AppLayerModel;
+  sortedAttributes: Array<{ label: string; attributeValue: any; key: string }>;
 }

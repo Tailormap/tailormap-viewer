@@ -1,7 +1,7 @@
 import { MapSettingsModel, MapState, mapStateKey } from './map.state';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { AppLayerModel, LayerTreeNodeModel, ServiceModel } from '@tailormap-viewer/api';
-import { TreeModel } from '@tailormap-viewer/shared';
+import { ArrayHelper, TreeModel } from '@tailormap-viewer/shared';
 import { LayerTreeNodeHelper } from '../helpers/layer-tree-node.helper';
 import { AppLayerWithServiceModel, ExtendedLayerTreeNodeModel } from '../models';
 
@@ -90,14 +90,7 @@ export const selectOrderedVisibleLayersWithServices = createSelector(
   (layers, orderedLayerIds) => {
     return layers
       .filter(l => orderedLayerIds.includes(l.id))
-      .sort((l1, l2) => {
-        const idx1 = orderedLayerIds.findIndex(id => l1.id === id);
-        const idx2 = orderedLayerIds.findIndex(id => l2.id === id);
-        if (idx1 === idx2) {
-          return 0;
-        }
-        return idx1 > idx2 ? 1 : -1;
-      });
+      .sort(ArrayHelper.getArraySorter('id', orderedLayerIds));
   },
 );
 
@@ -107,7 +100,7 @@ export const selectOrderedVisibleBackgroundLayers = createSelector(
   (layers, orderedLayerIds) => {
     return layers
       .filter(l => orderedLayerIds.includes(l.id))
-      .sort(l => orderedLayerIds.findIndex(id => l.id === id));
+      .sort(ArrayHelper.getArraySorter('id', orderedLayerIds));
   },
 );
 
