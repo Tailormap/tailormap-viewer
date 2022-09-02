@@ -1,5 +1,4 @@
 import { FeatureInfoResponseModel } from '../models/feature-info-response.model';
-import { FeatureInfoModel } from '../models/feature-info.model';
 import { FeatureAttributeTypeEnum } from '@tailormap-viewer/api';
 import { FeatureHelper } from '../../../shared/helpers/feature.helper';
 import { FeatureInfoFeatureModel } from '../models/feature-info-feature.model';
