@@ -42,10 +42,9 @@ export const selectFeatureInfoList = createSelector(
       });
       const attributeOrder = columnMetadata.map(c => c.key);
       featureInfoModels.push({
-        feature,
-        columnMetadata,
         layer,
         sortedAttributes: attributes.sort(ArrayHelper.getArraySorter('key', attributeOrder)),
+        geometry: FeatureInfoHelper.getGeometryForFeatureInfoFeature(feature, columnMetadata) || null,
       });
     });
     return featureInfoModels;
@@ -72,10 +71,10 @@ export const selectCurrentlySelectedFeatureGeometry = createSelector(
   selectFeatureInfoDialogVisible,
   selectCurrentlySelectedFeature,
   (dialogVisible, feature) => {
-    if (!dialogVisible) {
+    if (!dialogVisible || !feature) {
       return null;
     }
-    return FeatureInfoHelper.getGeometryForFeatureInfoFeature(feature);
+    return feature.geometry;
   },
 );
 

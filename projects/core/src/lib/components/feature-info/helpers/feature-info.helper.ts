@@ -2,6 +2,8 @@ import { FeatureInfoResponseModel } from '../models/feature-info-response.model'
 import { FeatureInfoModel } from '../models/feature-info.model';
 import { FeatureAttributeTypeEnum } from '@tailormap-viewer/api';
 import { FeatureHelper } from '../../../shared/helpers/feature.helper';
+import { FeatureInfoFeatureModel } from '../models/feature-info-feature.model';
+import { FeatureInfoColumnMetadataModel } from '../models/feature-info-column-metadata.model';
 
 export class FeatureInfoHelper {
 
@@ -9,18 +11,18 @@ export class FeatureInfoHelper {
     return featureInfo.reduce((totalCount, fI) => totalCount + fI.features.length, 0);
   }
 
-  public static getGeometryForFeatureInfoFeature(feature?: FeatureInfoModel | null): string | null {
+  public static getGeometryForFeatureInfoFeature(feature: FeatureInfoFeatureModel, columnMetadata: FeatureInfoColumnMetadataModel[]): string | null {
     if (!feature) {
       return null;
     }
-    if (feature.feature.geometry) {
-      return feature.feature.geometry;
+    if (feature.geometry) {
+      return feature.geometry;
     }
-    const geomAttribute = Array.from(feature.columnMetadata.values()).find(c => c.type === FeatureAttributeTypeEnum.GEOMETRY);
+    const geomAttribute = columnMetadata.find(c => c.type === FeatureAttributeTypeEnum.GEOMETRY);
     if (!geomAttribute) {
       return null;
     }
-    return FeatureHelper.getGeometryForFeature(feature.feature, geomAttribute.key);
+    return FeatureHelper.getGeometryForFeature(feature, geomAttribute.key);
   }
 
 }
