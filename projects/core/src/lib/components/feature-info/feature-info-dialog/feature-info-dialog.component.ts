@@ -8,7 +8,6 @@ import {
   expandCollapseFeatureInfoDialog, hideFeatureInfoDialog, showNextFeatureInfoFeature, showPreviousFeatureInfoFeature,
 } from '../state/feature-info.actions';
 import { FeatureInfoModel } from '../models/feature-info.model';
-import { FeatureAttributeTypeEnum } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-feature-info-dialog',
@@ -65,19 +64,6 @@ export class FeatureInfoDialogComponent implements OnInit, OnDestroy {
     this.destroyed.complete();
   }
 
-  public getAttributes(feature: FeatureInfoModel): ReadonlyMap<string, { label: string; value: string | number | boolean }> {
-    const attr = new Map();
-    Object.keys(feature.feature.attributes).forEach(key => {
-      const metadata = feature.columnMetadata.get(key);
-      if (metadata?.type === FeatureAttributeTypeEnum.GEOMETRY) {
-        return;
-      }
-      const label = metadata?.alias || key;
-      attr.set(key, { value: feature.feature.attributes[key], label });
-    });
-    return attr as ReadonlyMap<string, { label: string; value: string | number | boolean }>;
-  }
-
   public isBackDisabled() {
     return this.totalFeatures <= 1 || this.currentSelected === 0;
   }
@@ -85,4 +71,5 @@ export class FeatureInfoDialogComponent implements OnInit, OnDestroy {
   public isNextDisabled() {
     return this.totalFeatures <= 1 || this.currentSelected === this.totalFeatures - 1;
   }
+
 }
