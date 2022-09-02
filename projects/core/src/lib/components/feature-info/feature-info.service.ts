@@ -17,7 +17,7 @@ export class FeatureInfoService {
   /**
    * default buffer distance for feature info requests in pixels.
    */
-  private static DEFAULT_DISTANCE = 4;
+  private static DEFAULT_DISTANCE = 10;
 
   constructor(
     private store$: Store,
