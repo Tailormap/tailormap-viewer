@@ -12,12 +12,14 @@ import { FeatureInfoModel } from '../models/feature-info.model';
 import { showNextFeatureInfoFeature, showPreviousFeatureInfoFeature } from '../state/feature-info.actions';
 
 const getFeatureInfo = (updated?: boolean): FeatureInfoModel => {
-  const col1 = getColumnMetadataModel();
-  const col2 = getColumnMetadataModel({ key: 'prop2', alias: 'Property 2' });
   return {
-    feature: { __fid: updated ? '6' : '1', attributes: { prop: 'test', prop2: 'another test', fid: updated ? '6' : '1' } },
-    columnMetadata: new Map([[ col1.key, col1 ], [ col2.key, col2 ]]),
+    geometry: null,
     layer: getAppLayerModel(),
+    sortedAttributes: [
+      { key: 'prop', attributeValue: 'test', label: 'Property' },
+      { key: 'prop2', attributeValue: 'another test', label: 'Property 2' },
+      { key: 'fid', attributeValue: updated ? '6' : '1', label: 'fid' },
+    ],
   };
 };
 
