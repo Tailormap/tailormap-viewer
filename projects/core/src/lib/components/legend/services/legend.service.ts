@@ -65,7 +65,7 @@ export class LegendService {
   }
 
   public getLegendImages$(appLayers$: Observable<AppLayerWithServiceModel[]>, urlCallback?: (layer: AppLayerWithServiceModel, url: URL) => void):
-    Observable<Array<{ appLayer: AppLayerWithServiceModel; imageData: string; width: number; height: number }>> {
+    Observable<Array<{ appLayer: AppLayerWithServiceModel; imageData: string | null; width: number; height: number; error?: any }>> {
     return this.getAppLayerAndUrl$(appLayers$).pipe(
       concatMap(appLayerAndUrls => {
         if (appLayerAndUrls.length === 0) {
@@ -77,9 +77,9 @@ export class LegendService {
             urlCallback(appLayerWithLegendUrl.layer, url);
           }
           return ImageHelper.imageUrlToPng$(url.toString()).pipe(
-            catchError((e) => {
-              console.log(`Error getting legend from URL ${appLayerWithLegendUrl.url}`, e);
-              return of(null);
+            catchError((error) => {
+              console.log(`Error getting legend from URL ${appLayerWithLegendUrl.url}`, error);
+              return of({ imageData: null, width: 0, height: 0, appLayer: appLayerWithLegendUrl.layer, error });
             }),
             map(legendImage => ({
                   ...legendImage,
@@ -87,9 +87,6 @@ export class LegendService {
             })),
           );
         }));
-      }),
-      map(array => {
-        return array.filter(a => a !== null) as Array<{ appLayer: AppLayerWithServiceModel; imageData: string; width: number; height: number }>;
       }),
     );
   }

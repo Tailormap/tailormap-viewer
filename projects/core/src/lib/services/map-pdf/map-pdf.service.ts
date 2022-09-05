@@ -115,16 +115,18 @@ export class MapPdfService {
     return this.legendService.getLegendImages$(layers$, legendURLCallback).pipe(
       tap(legendImages => {
         legendImages.forEach(legendImage => {
-          // XXX put legend images on top of each other for now, more complex layout to be implemented later
-          const dpi = legendDpiByLayer.get(legendImage.appLayer) || 90;
-          const extraShrinkFactor = 1.25;
-          const widthMm = legendImage.width / (dpi / 25.4) / extraShrinkFactor; // 1 inch is 25.4 mm
-          const heightMm = legendImage.height / (dpi / 25.4) /extraShrinkFactor;
-          const x = width - widthMm - 10;
-          const y = height - heightMm - 10;
-          doc.addImage(legendImage.imageData, 'PNG', x, y, widthMm, heightMm, '', 'FAST');
-          doc.setDrawColor(0);
-          doc.rect(x, y, widthMm, heightMm, 'S');
+          if (legendImage.imageData != null) {
+            // XXX put legend images on top of each other for now, more complex layout to be implemented later
+            const dpi = legendDpiByLayer.get(legendImage.appLayer) || 90;
+            const extraShrinkFactor = 1.25;
+            const widthMm = legendImage.width / (dpi / 25.4) / extraShrinkFactor; // 1 inch is 25.4 mm
+            const heightMm = legendImage.height / (dpi / 25.4) / extraShrinkFactor;
+            const x = width - widthMm - 10;
+            const y = height - heightMm - 10;
+            doc.addImage(legendImage.imageData, 'PNG', x, y, widthMm, heightMm, '', 'FAST');
+            doc.setDrawColor(0);
+            doc.rect(x, y, widthMm, heightMm, 'S');
+          }
         });
       }),
     );
