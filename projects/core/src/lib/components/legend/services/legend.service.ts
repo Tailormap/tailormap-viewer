@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, concatMap, forkJoin, map, Observable, of, Subject, switchMap } from 'rxjs';
+import { BehaviorSubject, catchError, concatMap, forkJoin, map, Observable, of, switchMap } from 'rxjs';
 import { MapService } from '@tailormap-viewer/map';
 import { AppLayerWithServiceModel } from '../../../map/models';
+import { ImageHelper } from '../../../shared/helpers/image.helper';
 
 export interface GeoServerLegendOptions {
   fontName?: string;
@@ -75,7 +76,7 @@ export class LegendService {
           if (urlCallback) {
             urlCallback(appLayerWithLegendUrl.layer, url);
           }
-          return LegendService.imageUrlToPng$(url.toString()).pipe(
+          return ImageHelper.imageUrlToPng$(url.toString()).pipe(
             catchError((e) => {
               console.log(`Error getting legend from URL ${appLayerWithLegendUrl.url}`, e);
               return of(null);
@@ -91,39 +92,6 @@ export class LegendService {
         return array.filter(a => a !== null) as Array<{ appLayer: AppLayerWithServiceModel; imageData: string; width: number; height: number }>;
       }),
     );
-  }
-
-  public static imageUrlToPng$(imageUrl: string): Observable<{ imageData: string; width: number; height: number }> {
-    const subject = new Subject<{ imageData: string; width: number; height: number }>();
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    if (ctx === null) {
-      subject.error('Context is null');
-      subject.complete();
-    } else {
-      const img = document.createElement('img');
-      img.crossOrigin = 'anonymous';
-      img.addEventListener('load', () => {
-        try {
-          const width = img.width;
-          const height = img.height;
-          canvas.width = width;
-          canvas.height = height;
-          ctx.drawImage(img, 0, 0, width, height);
-          const imageData = canvas.toDataURL('image/png');
-          subject.next({ imageData, width, height });
-        } catch (e) {
-          subject.error(e);
-        }
-        subject.complete();
-      });
-      img.addEventListener('error', (e) => {
-        subject.error(e);
-        subject.complete();
-      });
-      img.setAttribute('src', imageUrl);
-    }
-    return subject.asObservable();
   }
 
   public static isGetLegendGraphicRequest(url: string): boolean {
