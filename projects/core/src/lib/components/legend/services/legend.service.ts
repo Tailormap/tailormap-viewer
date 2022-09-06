@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, map, Observable, switchMap } from 'rxjs';
+import { BehaviorSubject, catchError, concatMap, forkJoin, map, Observable, of, switchMap } from 'rxjs';
 import { MapService } from '@tailormap-viewer/map';
 import { AppLayerWithServiceModel } from '../../../map/models';
+import { ImageHelper } from '../../../shared/helpers/image.helper';
 
 export interface GeoServerLegendOptions {
   fontName?: string;
@@ -61,6 +62,33 @@ export class LegendService {
           }),
         )),
       );
+  }
+
+  public getLegendImages$(appLayers$: Observable<AppLayerWithServiceModel[]>, urlCallback?: (layer: AppLayerWithServiceModel, url: URL) => void):
+    Observable<Array<{ appLayer: AppLayerWithServiceModel; imageData: string | null; width: number; height: number; error?: any }>> {
+    return this.getAppLayerAndUrl$(appLayers$).pipe(
+      concatMap(appLayerAndUrls => {
+        if (appLayerAndUrls.length === 0) {
+          return of([]);
+        }
+        return forkJoin(appLayerAndUrls.filter(lu => lu.url !== '').map(appLayerWithLegendUrl => {
+          const url = new URL(appLayerWithLegendUrl.url);
+          if (urlCallback) {
+            urlCallback(appLayerWithLegendUrl.layer, url);
+          }
+          return ImageHelper.imageUrlToPng$(url.toString()).pipe(
+            catchError((error) => {
+              console.log(`Error getting legend from URL ${appLayerWithLegendUrl.url}`, error);
+              return of({ imageData: null, width: 0, height: 0, appLayer: appLayerWithLegendUrl.layer, error });
+            }),
+            map(legendImage => ({
+                  ...legendImage,
+                  appLayer: appLayerWithLegendUrl.layer,
+            })),
+          );
+        }));
+      }),
+    );
   }
 
   public static isGetLegendGraphicRequest(url: string): boolean {

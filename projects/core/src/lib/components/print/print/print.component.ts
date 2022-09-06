@@ -10,9 +10,12 @@ import { LayerModel, MapService, OlLayerFilter } from '@tailormap-viewer/map';
 import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ApplicationMapService } from '../../../map/services/application-map.service';
-import { selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersWithServices } from '../../../map/state/map.selectors';
+import {
+  selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersWithLegend, selectOrderedVisibleLayersWithServices,
+} from '../../../map/state/map.selectors';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { selectHasDrawingFeatures } from '../../drawing/state/drawing.selectors';
+import { AppLayerWithServiceModel } from '../../../map/models';
 
 @Component({
   selector: 'tm-print',
@@ -27,6 +30,8 @@ export class PrintComponent implements OnInit, OnDestroy {
   public busy$ = new BehaviorSubject(false);
 
   public visible$: Observable<boolean> = of(false);
+
+  public visibleLayers$;
 
   public hasDrawing$;
 
@@ -43,6 +48,8 @@ export class PrintComponent implements OnInit, OnDestroy {
     dpi: [ 300, Validators.required ],
   });
 
+  public availableLegendLayers$;
+
   public exportPdfForm = new FormBuilder().nonNullable.group({
     orientation: new FormControl<'landscape' | 'portrait'>('landscape', { nonNullable: true }),
     title: '',
@@ -50,11 +57,12 @@ export class PrintComponent implements OnInit, OnDestroy {
     paperSize: new FormControl<'a4' | 'a3'>('a4', { nonNullable: true }),
     dpi: [ 300, Validators.required ],
     autoPrint: false,
+    legendLayer: '',
   });
 
   private _mapFilenameFn = (extension: string): Observable<string> => {
     const dateTime = new Intl.DateTimeFormat(this.locale, { dateStyle: 'short', timeStyle: 'medium' }).format(new Date())
-      .replace(/ |:|,/g, '_');
+      .replace(/[ :,]/g, '_');
     return of(`map-${dateTime}.${extension}`);
   };
 
@@ -68,6 +76,11 @@ export class PrintComponent implements OnInit, OnDestroy {
     @Inject(LOCALE_ID) private locale: string,
   ) {
     this.hasDrawing$ = this.store$.select(selectHasDrawingFeatures).pipe(takeUntil(this.destroyed));
+    this.visibleLayers$ = combineLatest([ this.store$.select(selectOrderedVisibleBackgroundLayers), this.store$.select(selectOrderedVisibleLayersWithServices) ]).pipe(
+      map(([ backgroundLayers, layers ]) => [ ...backgroundLayers,  ...layers ]),
+      takeUntil(this.destroyed),
+    );
+    this.availableLegendLayers$ = this.store$.select(selectOrderedVisibleLayersWithLegend).pipe(takeUntil(this.destroyed));
   }
 
   public ngOnInit(): void {
@@ -100,7 +113,7 @@ export class PrintComponent implements OnInit, OnDestroy {
     this.cancelled$.next(null);
   }
 
-  private wrapFileExport(extension: string, toDataURLExporter: (filename: string, layers: LayerModel[]) => Observable<string>): void {
+  private wrapFileExport(extension: string, toDataURLExporter: (filename: string, layers: Array<AppLayerWithServiceModel>) => Observable<string>): void {
     this.busy$.next(true);
     forkJoin([ this._mapFilenameFn(extension), this.getLayers$() ]).pipe(
       concatMap(([ filename, layers ]) => combineLatest([ of(filename), toDataURLExporter(filename, layers) ])),
@@ -124,12 +137,18 @@ export class PrintComponent implements OnInit, OnDestroy {
     ).subscribe();
   }
 
-  private getLayers$(): Observable<LayerModel[]> {
-    const isValidLayer = (layer: LayerModel | null): layer is LayerModel => layer !== null;
-    return combineLatest([ this.store$.select(selectOrderedVisibleBackgroundLayers), this.store$.select(selectOrderedVisibleLayersWithServices) ]).pipe(
-      map(([ backgroundLayers, layers ]) => [ ...backgroundLayers,  ...layers ]),
-      concatMap(layers => forkJoin(layers.map(layer => this.applicationMapService.convertAppLayerToMapLayer$(layer, layer.service)))),
-      map(layers => layers.filter(isValidLayer)),
+  private getLayers$(): Observable<Array<AppLayerWithServiceModel>> {
+    return this.visibleLayers$.pipe(
+      take(1),
+    );
+  }
+
+  private getLegendLayers$(): Observable<Array<AppLayerWithServiceModel>> {
+    if (this.exportPdfForm.value.legendLayer === '') {
+      return of([]);
+    }
+    return this.store$.select(selectOrderedVisibleLayersWithLegend).pipe(
+      map(layers => layers.filter(layer => layer.id === +(this.exportPdfForm.value.legendLayer || ''))),
       take(1),
     );
   }
@@ -145,15 +164,25 @@ export class PrintComponent implements OnInit, OnDestroy {
   }
 
   public downloadMapImage(): void {
+    const isValidLayer = (layer: LayerModel | null): layer is LayerModel => layer !== null;
+
     const form = this.exportImageForm.getRawValue();
-    this.wrapFileExport('png', (filename, layers) => this.mapService.exportMapImage$(
-      {
-        widthInMm: form.width,
-        heightInMm: form.height,
-        resolution: form.dpi,
-        layers,
-        vectorLayerFilter: this.vectorLayerFilter,
-      }));
+
+    this.wrapFileExport('png', (filename, layers) =>
+      forkJoin(layers.map(layer => this.applicationMapService.convertAppLayerToMapLayer$(layer, layer.service))).pipe(
+        map(mapLayers => mapLayers.filter(isValidLayer)),
+        concatMap(mapLayers => {
+          return this.mapService.exportMapImage$(
+            {
+              widthInMm: form.width,
+              heightInMm: form.height,
+              resolution: form.dpi,
+              layers: mapLayers,
+              vectorLayerFilter: this.vectorLayerFilter,
+            });
+        }),
+      ),
+    );
   }
 
   public downloadPdf() {
@@ -169,7 +198,7 @@ export class PrintComponent implements OnInit, OnDestroy {
           footer: form.footer,
           autoPrint: form.autoPrint,
           filename,
-        }, layers, this.vectorLayerFilter));
+        }, layers, this.getLegendLayers$(), this.vectorLayerFilter));
       });
   }
 
