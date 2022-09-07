@@ -4,3 +4,7 @@ strong {
   padding-bottom: 2px;
   margin-bottom: 2px;
 }
+
+strong.out-of-scale {
+  color: gray;
+}

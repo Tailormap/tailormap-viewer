@@ -15,4 +15,13 @@ export class UrlHelper {
     return url.href;
   }
 
+  public static getParamCaseInsensitive(url: URL, param: string): string | null {
+    param = param.toLowerCase();
+    for(const entry of url.searchParams.entries()) {
+      if(entry[0].toLowerCase() === param) {
+        return entry[1];
+      }
+    }
+    return null;
+  }
 }

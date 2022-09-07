@@ -3,6 +3,7 @@ export interface MapResolutionModel {
   minZoomLevel: number;
   maxZoomLevel: number;
   resolution: number;
+  scale: number;
   minResolution: number;
   maxResolution: number;
 }

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input, OnChanges } from '@angular/core';
 import { ResolvedServerType } from '@tailormap-viewer/api';
 import { GeoServerLegendOptions, LegendService } from '../services/legend.service';
-import { AppLayerWithServiceModel } from '../../../map/models';
+import { LegendInfoModel } from '../models/legend-info.model';
 
 @Component({
   selector: 'tm-legend-layer',
@@ -12,10 +12,7 @@ import { AppLayerWithServiceModel } from '../../../map/models';
 export class LegendLayerComponent implements OnChanges {
 
   @Input()
-  public layer: AppLayerWithServiceModel | null = null;
-
-  @Input()
-  public url: string | null = null;
+  public legendInfo: LegendInfoModel | null = null;
 
   public urlWithOptions: string | null = null;
 
@@ -24,19 +21,22 @@ export class LegendLayerComponent implements OnChanges {
   public failedToLoadMessage = $localize `Failed to load legend for`;
 
   public ngOnChanges() {
-    this.urlWithOptions = this.url;
+    if (this.legendInfo === null) {
+      return;
+    }
+    this.urlWithOptions = this.legendInfo.url;
     this.srcset = '';
 
-    if (this.url && this.layer?.service?.resolvedServerType === ResolvedServerType.GEOSERVER
-      && LegendService.isGetLegendGraphicRequest(this.url)) {
+    if (this.legendInfo.layer.service?.resolvedServerType === ResolvedServerType.GEOSERVER
+      && LegendService.isGetLegendGraphicRequest(this.legendInfo.url)) {
       const legendOptions: GeoServerLegendOptions = {
         fontAntiAliasing: true,
         labelMargin: 0,
       };
-      this.urlWithOptions = LegendService.addGeoServerLegendOptions(this.url, legendOptions);
+      this.urlWithOptions = LegendService.addGeoServerLegendOptions(this.legendInfo.url, legendOptions);
       if (window.devicePixelRatio > 1) {
         legendOptions.dpi = 180;
-        this.srcset = LegendService.addGeoServerLegendOptions(this.url, legendOptions) + ' 2x';
+        this.srcset = LegendService.addGeoServerLegendOptions(this.legendInfo.url, legendOptions) + ' 2x';
       }
     }
   }

@@ -1,5 +1,3 @@
 <div class="legend-list" *ngIf="visible$ | async">
-  <tm-legend-layer *ngFor="let layerInfo of layers$ | async; trackBy: trackById"
-                   [layer]="layerInfo.layer"
-                   [url]="layerInfo.url"></tm-legend-layer>
+  <tm-legend-layer *ngFor="let legendInfo of layers$ | async; trackBy: trackById" [legendInfo]="legendInfo"></tm-legend-layer>
 </div>
