@@ -62,7 +62,8 @@
               "rbush",
               "cssesc",
               "font-family-papandreou"
-            ]
+            ],
+            "i18nMissingTranslation": "warning"
           },
           "configurations": {
             "nl": {
