@@ -5,7 +5,8 @@ const fs = require('fs-extra');
 const {version: appVersion} = require('../package.json')
 
 const info = git.gitDescribeSync({longSemver: true});
-const file = path.resolve(__dirname, '..', 'version.json');
+fs.mkdirp(path.join(__dirname, '../generated/'));
+const file = path.resolve(__dirname, '../generated/', 'version.json');
 
 fs.writeFileSync(file, JSON.stringify({version: appVersion, buildDate: Date(), gitInfo: info}), {encoding: 'utf-8'});
 
