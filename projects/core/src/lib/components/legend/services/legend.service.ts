@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, concatMap, forkJoin, map, Observable, of, switchMap } from 'rxjs';
-import { MapService } from '@tailormap-viewer/map';
+import { BehaviorSubject, catchError, combineLatest, concatMap, forkJoin, map, Observable, of, switchMap } from 'rxjs';
+import { MapResolutionModel, MapService, ScaleHelper } from '@tailormap-viewer/map';
 import { AppLayerWithServiceModel } from '../../../map/models';
 import { ImageHelper } from '../../../shared/helpers/image.helper';
+import { LegendInfoModel } from '../models/legend-info.model';
 
 export interface GeoServerLegendOptions {
   fontName?: string;
@@ -47,18 +48,29 @@ export class LegendService {
     return this.visibleSubject$.asObservable();
   }
 
-  public getAppLayerAndUrl$(appLayers$: Observable<AppLayerWithServiceModel[]>):
-    Observable<Array<{ layer: AppLayerWithServiceModel; url: string }>> {
+  public getLegendInfo$(appLayers$: Observable<AppLayerWithServiceModel[]>, mapResolution$?: Observable<MapResolutionModel>):
+    Observable<LegendInfoModel[]> {
     return this.mapService.getLayerManager$()
       .pipe(
-        switchMap(layerManager => appLayers$.pipe(
-          map(appLayers => {
-            return appLayers.map(layer => ({
-              layer,
-              url: layer.legendImageUrl
+        switchMap(layerManager => combineLatest([ appLayers$, mapResolution$ || of(null) ]).pipe(
+          map(([ appLayers, mapResolution ]) => {
+            return appLayers.map(layer => {
+              let url = layer.legendImageUrl
                 ? layer.legendImageUrl
-                : layerManager.getLegendUrl(`${layer.id}`),
-            }));
+                : layerManager.getLegendUrl(`${layer.id}`);
+              if (mapResolution) {
+                try {
+                  const urlObject = new URL(url);
+                  urlObject.searchParams.set('SCALE', mapResolution.scale.toString());
+                  url = urlObject.toString();
+                } catch(_ignored) {}
+              }
+              return {
+                layer,
+                url: url.toString(),
+                isInScale: ScaleHelper.isInScale(mapResolution?.scale, layer.minScale, layer.maxScale),
+              };
+            });
           }),
         )),
       );
@@ -66,7 +78,7 @@ export class LegendService {
 
   public getLegendImages$(appLayers$: Observable<AppLayerWithServiceModel[]>, urlCallback?: (layer: AppLayerWithServiceModel, url: URL) => void):
     Observable<Array<{ appLayer: AppLayerWithServiceModel; imageData: string | null; width: number; height: number; error?: any }>> {
-    return this.getAppLayerAndUrl$(appLayers$).pipe(
+    return this.getLegendInfo$(appLayers$).pipe(
       concatMap(appLayerAndUrls => {
         if (appLayerAndUrls.length === 0) {
           return of([]);

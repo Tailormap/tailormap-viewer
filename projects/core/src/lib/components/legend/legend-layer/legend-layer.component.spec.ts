@@ -11,8 +11,11 @@ describe('LegendLayerComponent', () => {
   test('should render', async () => {
     await render(LegendLayerComponent, {
       componentProperties: {
-        url: 'some-url',
-        layer: getAppLayerModel({ title: 'Layer title' }),
+        legendInfo: {
+          layer: getAppLayerModel({ title: 'Layer title' }),
+          url: 'some-url',
+          isInScale: true,
+        },
       },
     });
     expect(await screen.getByText('Layer title')).toBeInTheDocument();
@@ -27,8 +30,11 @@ describe('LegendLayerComponent', () => {
 
     await render(LegendLayerComponent, {
       componentProperties: {
-        url: 'http://some-url/geoserver/wms?REQUEST=GetLegendGraphic',
-        layer: { ...getAppLayerModel({ title: 'Layer title' }), service: getServiceModel() },
+        legendInfo: {
+          layer: { ...getAppLayerModel({ title: 'Layer title' }), service: getServiceModel() },
+          url: 'http://some-url/geoserver/wms?REQUEST=GetLegendGraphic',
+          isInScale: true,
+        },
       },
     });
     const img = await screen.getByRole('img');

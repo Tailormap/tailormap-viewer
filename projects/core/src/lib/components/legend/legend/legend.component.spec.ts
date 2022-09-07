@@ -4,17 +4,24 @@ import { SharedModule } from '@tailormap-viewer/shared';
 import { SharedCoreComponentsModule } from '../../../shared/components/shared-core-components.module';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MenubarService } from '../../menubar';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { provideMockStore } from '@ngrx/store/testing';
 import { selectOrderedVisibleLayersWithServices } from '../../../map/state/map.selectors';
 import { getAppLayerModel, getServiceModel } from '@tailormap-viewer/api';
-import { MapService } from '@tailormap-viewer/map';
+import { MapResolutionModel, MapService } from '@tailormap-viewer/map';
 import { TestBed } from '@angular/core/testing';
 import { LegendLayerComponent } from '../legend-layer/legend-layer.component';
 import { LEGEND_ID } from '../legend-identifier';
 
 const getMapService = () => {
-  return { provide: MapService, useValue: { getLayerManager$: () => of({ getLegendUrl: (layerId: string) => `layer-${layerId}-url-from-service` }) } };
+  return {
+    provide: MapService, useValue: {
+      getLayerManager$: () => of({ getLegendUrl: (layerId: string) => `layer-${layerId}-url-from-service` }),
+      getResolution$: (): Observable<MapResolutionModel> => of({
+        zoomLevel: 0, resolution: 1, maxResolution: 100, minResolution: 0.001, maxZoomLevel: 20, minZoomLevel: 0, scale: 1000,
+      }),
+    },
+  };
 };
 
 const getMockStore = () => {

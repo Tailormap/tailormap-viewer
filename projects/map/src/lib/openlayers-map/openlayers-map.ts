@@ -202,13 +202,23 @@ export class OpenLayersMap implements MapViewerModel {
       .pipe(
         map(olMap => {
           const view = olMap.getView();
+
+          // From ImageWMS.getLegendUrl(), for conversion of resolution to scale
+          const mpu = view.getProjection()
+            ? view.getProjection().getMetersPerUnit()
+            : 1;
+          const pixelSize = 0.00028;
+          const resolution = view.getResolution() || 0;
+          const scale = (resolution * (mpu || 1)) / pixelSize;
+
           return {
             zoomLevel: view.getZoom() || 0,
             minZoomLevel: view.getMinZoom() || 0,
             maxZoomLevel: view.getMaxZoom() || 0,
-            resolution: view.getResolution() || 0,
+            resolution,
             minResolution: view.getMinResolution() || 0,
             maxResolution: view.getMaxResolution() || 0,
+            scale,
           };
         }),
       );

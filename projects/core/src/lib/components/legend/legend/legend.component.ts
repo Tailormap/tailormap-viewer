@@ -6,7 +6,8 @@ import { LegendMenuButtonComponent } from '../legend-menu-button/legend-menu-but
 import { Store } from '@ngrx/store';
 import { selectOrderedVisibleLayersWithLegend } from '../../../map/state/map.selectors';
 import { LEGEND_ID } from '../legend-identifier';
-import { AppLayerWithServiceModel } from '../../../map/models';
+import { MapService } from '@tailormap-viewer/map';
+import { LegendInfoModel } from '../models/legend-info.model';
 
 @Component({
   selector: 'tm-legend',
@@ -17,20 +18,21 @@ import { AppLayerWithServiceModel } from '../../../map/models';
 export class LegendComponent implements OnInit {
 
   public visible$: Observable<boolean>;
-  public layers$: Observable<Array<{ layer: AppLayerWithServiceModel; url: string }>>;
-  public trackById = (index: number, item: { layer: AppLayerWithServiceModel; url: string }) => item.layer.id;
+  public layers$: Observable<LegendInfoModel[]>;
+  public trackById = (index: number, item: LegendInfoModel) => item.layer.id;
 
   constructor(
     private store$: Store,
     private legendService: LegendService,
     private menubarService: MenubarService,
+    private mapService: MapService,
   ) {
     this.visible$ = this.menubarService.isComponentVisible$(LEGEND_ID);
     this.layers$ = this.visible$.pipe(
       switchMap(visible => {
         return !visible
           ? of([])
-          : this.legendService.getAppLayerAndUrl$(this.store$.select(selectOrderedVisibleLayersWithLegend));
+          : this.legendService.getLegendInfo$(this.store$.select(selectOrderedVisibleLayersWithLegend), this.mapService.getResolution$());
       }),
     );
   }
@@ -38,5 +40,4 @@ export class LegendComponent implements OnInit {
   public ngOnInit() {
     this.menubarService.registerComponent(LegendMenuButtonComponent);
   }
-
 }
