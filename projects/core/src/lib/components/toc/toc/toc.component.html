@@ -1,5 +1,5 @@
 <ng-template #treeNode let-node>
-  <tm-tree-node-layer [node]="node"></tm-tree-node-layer>
+  <tm-toc-node-layer [node]="node" [scale]="scale"></tm-toc-node-layer>
 </ng-template>
 
 <tm-tree *ngIf="visible$ | async" class="toc-tree" [treeNodeTemplate]="treeNode" [expandOnGroupClick]="true"></tm-tree>

@@ -15,6 +15,7 @@
   --border-color: #e1e1e1;
   --primary-color-background: #eae5fa;
   --text-color: rgb(0, 10, 30);
+  --disabled-text-color: rgba(0, 10, 30, 0.5);
 
   --primary-color-0_5: rgba(98, 54, 255, 0.5);
   --primary-color-0_4: rgba(98, 54, 255, 0.4);

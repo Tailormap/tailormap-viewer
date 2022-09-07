@@ -7,9 +7,9 @@ import { getTreeModelMock, SharedModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { TestBed } from '@angular/core/testing';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { SharedCoreComponentsModule } from '../../../shared/components/shared-core-components.module';
 import { selectLayerTree, selectSelectedNode } from '../../../map/state/map.selectors';
 import { setLayerVisibility, setSelectedLayerId } from '../../../map/state/map.actions';
+import { TocNodeLayerComponent } from '../toc-node-layer/toc-node-layer.component';
 
 const getMockStore = (selectedLayer: string = '') => {
   const tree = [
@@ -46,7 +46,8 @@ describe('TocComponent', () => {
   test('renders TOC with visible false', async () => {
     const registerComponentFn = jest.fn();
     await render(TocComponent, {
-      imports: [ SharedModule, SharedCoreComponentsModule, MatIconTestingModule ],
+      imports: [ SharedModule, MatIconTestingModule ],
+      declarations: [TocNodeLayerComponent],
       providers: [
         getMockStore(),
         getMenubarService(false, registerComponentFn),
@@ -58,7 +59,8 @@ describe('TocComponent', () => {
   test('renders TOC with visible true', async () => {
     const registerComponentFn = jest.fn();
     await render(TocComponent, {
-      imports: [ SharedModule, SharedCoreComponentsModule, MatIconTestingModule ],
+      imports: [ SharedModule, MatIconTestingModule ],
+      declarations: [TocNodeLayerComponent],
       providers: [
         getMockStore(),
         getMenubarService(true, registerComponentFn),
@@ -71,7 +73,8 @@ describe('TocComponent', () => {
   test('handles layer selection', async () => {
     const registerComponentFn = jest.fn();
     await render(TocComponent, {
-      imports: [ SharedModule, SharedCoreComponentsModule, MatIconTestingModule ],
+      imports: [ SharedModule, MatIconTestingModule ],
+      declarations: [TocNodeLayerComponent],
       providers: [
         getMockStore('1'),
         getMenubarService(true, registerComponentFn),
@@ -91,7 +94,8 @@ describe('TocComponent', () => {
   test('handles checking layer', async () => {
     const registerComponentFn = jest.fn();
     await render(TocComponent, {
-      imports: [ SharedModule, SharedCoreComponentsModule, MatIconTestingModule ],
+      imports: [ SharedModule, MatIconTestingModule ],
+      declarations: [TocNodeLayerComponent],
       providers: [
         getMockStore('1'),
         getMenubarService(true, registerComponentFn),

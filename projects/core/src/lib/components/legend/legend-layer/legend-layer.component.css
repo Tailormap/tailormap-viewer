@@ -5,6 +5,6 @@ strong {
   margin-bottom: 2px;
 }
 
-strong.out-of-scale {
-  color: gray;
+.out-of-scale {
+  color: var(--disabled-text-color);
 }
