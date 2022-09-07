@@ -4,6 +4,7 @@ import { MapResolutionModel, MapService, ScaleHelper } from '@tailormap-viewer/m
 import { AppLayerWithServiceModel } from '../../../map/models';
 import { ImageHelper } from '../../../shared/helpers/image.helper';
 import { LegendInfoModel } from '../models/legend-info.model';
+import { UrlHelper } from '@tailormap-viewer/shared';
 
 export interface GeoServerLegendOptions {
   fontName?: string;
@@ -105,8 +106,8 @@ export class LegendService {
 
   public static isGetLegendGraphicRequest(url: string): boolean {
     try {
-      const u = new URL(url);
-      return u.searchParams.get('REQUEST') === 'GetLegendGraphic';
+      const request = UrlHelper.getParamCaseInsensitive(new URL(url), 'REQUEST');
+      return request?.toLowerCase() === 'getlegendgraphic';
     } catch(e) {
       return false;
     }

@@ -16,4 +16,11 @@ describe('UrlHelper', () => {
       .toThrowError('Invalid URL: test');
   });
 
+  test('gets case exact url parameter', () => {
+    expect(UrlHelper.getParamCaseInsensitive(new URL('http://test/?PARAM=VALUE'), 'PARAM')).toEqual('VALUE');
+  });
+
+  test('gets case insensitive url parameter', () => {
+    expect(UrlHelper.getParamCaseInsensitive(new URL('http://test/?PaRaM=VALUE'), 'PARAM')).toEqual('VALUE');
+  });
 });
