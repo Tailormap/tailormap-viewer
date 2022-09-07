@@ -17,11 +17,12 @@ export class UrlHelper {
 
   public static getParamCaseInsensitive(url: URL, param: string): string | null {
     param = param.toLowerCase();
-    for(const entry of url.searchParams.entries()) {
-      if(entry[0].toLowerCase() === param) {
-        return entry[1];
+    let result = null;
+    url.searchParams.forEach((value, key) => {
+      if(key.toLowerCase() === param) {
+        result = value;
       }
-    }
-    return null;
+    });
+    return result;
   }
 }
