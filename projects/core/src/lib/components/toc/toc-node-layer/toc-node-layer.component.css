@@ -52,3 +52,7 @@
   height: var(--tree-node-size);
   line-height: var(--tree-node-size);
 }
+
+.out-of-scale {
+  color: var(--disabled-text-color);
+}

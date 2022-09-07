@@ -1,5 +1,5 @@
 export class ScaleHelper {
-  public static isInScale(scale?: number, minScale?: number, maxScale?: number): boolean {
+  public static isInScale(scale?: number | null, minScale?: number, maxScale?: number): boolean {
     if (typeof scale === 'undefined' || scale === null) {
       return true;
     }

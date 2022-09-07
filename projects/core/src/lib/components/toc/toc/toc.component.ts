@@ -9,6 +9,7 @@ import { setLayerVisibility, setSelectedLayerId, toggleLevelExpansion } from '..
 import { selectLayerTree, selectSelectedNode } from '../../../map/state/map.selectors';
 import { AppLayerModel } from '@tailormap-viewer/api';
 import { TOC_ID } from '../toc-identifier';
+import { MapService } from '@tailormap-viewer/map';
 
 interface AppLayerTreeModel extends BaseTreeModel {
   metadata: AppLayerModel;
@@ -25,15 +26,21 @@ export class TocComponent implements OnInit, OnDestroy {
 
   private destroyed = new Subject();
   public visible$: Observable<boolean> = of(false);
+  public scale: number | null = null;
 
   constructor(
     private store$: Store,
     private treeService: TreeService<AppLayerModel>,
     private menubarService: MenubarService,
+    private mapService: MapService,
   ) {}
 
   public ngOnInit(): void {
     this.visible$ = this.menubarService.isComponentVisible$(TOC_ID);
+    this.mapService.getResolution$()
+      .pipe(takeUntil(this.destroyed), map(resolution => resolution.scale))
+      .subscribe(scale => this.scale = scale);
+
     this.treeService.setDataSource(
       this.store$.select(selectLayerTree),
     );
