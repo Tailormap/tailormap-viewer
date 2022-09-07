@@ -380,6 +380,10 @@
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/helpers/drawing.helper.ts</context>
           <context context-type="linenumber">43</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
+          <context context-type="linenumber">70</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="1701872860463509458" datatype="html">
         <source>At the start</source>
@@ -448,7 +452,7 @@
         <source>Failed to load legend for</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/legend/legend-layer/legend-layer.component.ts</context>
-          <context context-type="linenumber">18</context>
+          <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7297822327994766046" datatype="html">
@@ -494,144 +498,158 @@
         <source> Export map </source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">6,7</context>
+          <context context-type="linenumber">8,9</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1920957033639148722" datatype="html">
         <source>PDF document</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">10</context>
+          <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7982268423763340284" datatype="html">
         <source>Map image</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">11</context>
+          <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1946328750043131240" datatype="html">
         <source>Include drawing</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">15</context>
+          <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4364462847409581262" datatype="html">
         <source>Image size in millimeters:</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">20</context>
+          <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2018922024247045709" datatype="html">
         <source>Width</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">22</context>
+          <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3033623772164647792" datatype="html">
         <source>Height</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">26</context>
+          <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3330040801415354394" datatype="html">
         <source>DPI</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">30</context>
+          <context context-type="linenumber">32</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">61</context>
+          <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3757209454912764795" datatype="html">
         <source> Image resolution in pixels: <x id="INTERPOLATION" equiv-text="{{getImageResolution()}}"/> </source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">34,36</context>
+          <context context-type="linenumber">36,37</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1431493389100814651" datatype="html">
         <source>Download map image</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">36,37</context>
+          <context context-type="linenumber">38,39</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1403507799985368460" datatype="html">
         <source>Landscape</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">43</context>
+          <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9024440163320108713" datatype="html">
         <source>Portrait</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">44</context>
+          <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7438609089996892520" datatype="html">
         <source>A4</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">47</context>
+          <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4346630494193384330" datatype="html">
         <source>A3</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">48</context>
+          <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5701618810648052610" datatype="html">
         <source>Title</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">51</context>
+          <context context-type="linenumber">53</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4636291172448223646" datatype="html">
         <source>Footer</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">56</context>
+          <context context-type="linenumber">58</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4198293539412995628" datatype="html">
+        <source>Add legend for layer</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
+          <context context-type="linenumber">68</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1605472530146889333" datatype="html">
         <source>Automatically open print dialog</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">64</context>
+          <context context-type="linenumber">75</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5715539409661008253" datatype="html">
         <source>Download map PDF</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">66,67</context>
+          <context context-type="linenumber">77,78</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7751500190109896263" datatype="html">
+        <source>No visible layers.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
+          <context context-type="linenumber">83</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7498219936774990397" datatype="html">
         <source>Creating map, this may take a while.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">73,74</context>
+          <context context-type="linenumber">87,88</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2159130950882492111" datatype="html">
         <source>Cancel</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">77,78</context>
+          <context context-type="linenumber">91,92</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1414622339183492234" datatype="html">
@@ -715,7 +733,7 @@
         <source>Could not load map settings</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/map/state/map.effects.ts</context>
-          <context context-type="linenumber">12</context>
+          <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5248717555542428023" datatype="html">
@@ -757,14 +775,14 @@
         <source>map.pdf</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/services/map-pdf/map-pdf.service.ts</context>
-          <context context-type="linenumber">89</context>
+          <context context-type="linenumber">97</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7213937044758184634" datatype="html">
         <source>Created on </source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/services/map-pdf/map-pdf.service.ts</context>
-          <context context-type="linenumber">113</context>
+          <context context-type="linenumber">159</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8950682845693208811" datatype="html">

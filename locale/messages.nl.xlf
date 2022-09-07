@@ -682,6 +682,14 @@
           <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="4198293539412995628" datatype="html">
+        <source>Add legend for layer</source>
+        <target state="translated">Voeg legenda toe voor laag</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
+          <context context-type="linenumber">68</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="1605472530146889333" datatype="html">
         <source>Automatically open print dialog</source>
         <target state="translated">Automatisch print dialoog openen</target>
@@ -696,6 +704,14 @@
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">66,67</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7751500190109896263" datatype="html">
+        <source>No visible layers.</source>
+        <target state="translated">Geen zichtbare lagen.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
+          <context context-type="linenumber">83</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7498219936774990397" datatype="html">
