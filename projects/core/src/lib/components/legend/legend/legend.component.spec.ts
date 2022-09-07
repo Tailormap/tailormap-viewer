@@ -1,7 +1,6 @@
 import { render, screen } from '@testing-library/angular';
 import { LegendComponent } from './legend.component';
 import { SharedModule } from '@tailormap-viewer/shared';
-import { SharedCoreComponentsModule } from '../../../shared/components/shared-core-components.module';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MenubarService } from '../../menubar';
 import { Observable, of } from 'rxjs';
@@ -46,7 +45,7 @@ describe('LegendComponent', () => {
     const registerComponentFn = jest.fn();
     await render(LegendComponent, {
       declarations: [ LegendComponent, LegendLayerComponent ],
-      imports: [ SharedModule, SharedCoreComponentsModule, MatIconTestingModule ],
+      imports: [ SharedModule, MatIconTestingModule ],
       providers: [
         getMapService(),
         getMockStore(),
@@ -60,7 +59,7 @@ describe('LegendComponent', () => {
   test('renders Legend with visible true', async () => {
     await render(LegendComponent, {
       declarations: [ LegendComponent, LegendLayerComponent ],
-      imports: [ SharedModule, SharedCoreComponentsModule, MatIconTestingModule ],
+      imports: [ SharedModule, MatIconTestingModule ],
       providers: [
         getMapService(),
         getMockStore(),
