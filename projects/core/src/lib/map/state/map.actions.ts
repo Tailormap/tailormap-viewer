@@ -19,6 +19,9 @@ export const setLayerVisibility = createAction(
   `${mapActionsPrefix} Set Layer Visibility`,
   props<{ visibility: Array<{ id: number; checked: boolean }> }>(),
 );
+export const toggleAllLayersVisibility = createAction(
+  `${mapActionsPrefix} Toggle All Layers Visibility`,
+);
 export const toggleLevelExpansion = createAction(
   `${mapActionsPrefix} Toggle Level Expansion`,
   props<{ id: string; isBaseLayerTree?: boolean }>(),

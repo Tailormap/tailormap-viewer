@@ -94,6 +94,16 @@ export const selectOrderedVisibleLayersWithServices = createSelector(
   },
 );
 
+export const selectAllLayersVisible = createSelector(
+  selectLayers,
+  selectOrderedLayerIds,
+  (layers, orderedLayerIds) => {
+    return layers
+      .filter(l => orderedLayerIds.includes(l.id))
+      .every(l => l.visible);
+  },
+);
+
 // Only layers for which a legend can be shown at the moment: has a legendImageUrl set or is a WMS/WMTS layer
 // In the future, more layer types could be added but without immediate legend support.
 export const selectOrderedVisibleLayersWithLegend = createSelector(

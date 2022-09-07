@@ -2,4 +2,9 @@
   <tm-toc-node-layer [node]="node" [scale]="scale"></tm-toc-node-layer>
 </ng-template>
 
-<tm-tree *ngIf="visible$ | async" class="toc-tree" [treeNodeTemplate]="treeNode" [expandOnGroupClick]="true"></tm-tree>
+<div class="toc">
+  <div class="toc-header">
+    <tm-toggle-all-layers-button></tm-toggle-all-layers-button>
+  </div>
+  <tm-tree *ngIf="visible$ | async" class="toc-tree" [treeNodeTemplate]="treeNode" [expandOnGroupClick]="true"></tm-tree>
+</div>

@@ -59,6 +59,42 @@ describe('MapReducer', () => {
     expect(updatedState.layers[1].visible).toEqual(false);
   });
 
+  test('handles MapActions.toggleAllLayersVisibility', () => {
+    const initialState: MapState = {
+      ...initialMapState,
+      layers: [
+        getAppLayerModel({ id: 1, visible: false }),
+        getAppLayerModel({ id: 2, visible: true }),
+        getAppLayerModel({ id: 3, visible: true }),
+        getAppLayerModel({ id: 4, visible: false }),
+      ],
+      layerTreeNodes: [
+        getLayerTreeNode({ root: true, childrenIds: [ 'level-1', 'level-2' ] }),
+        getLayerTreeNode({ id: 'level-1', root: false, childrenIds: ['layer-1'] }),
+        getLayerTreeNode({ id: 'layer-1', appLayerId: 1, name: 'TEST', root: false }),
+        getLayerTreeNode({ id: 'level-2', root: false, childrenIds: [ 'layer-2', 'layer-3' ] }),
+        getLayerTreeNode({ id: 'layer-2', appLayerId: 2, name: 'TEST2', root: false }),
+        getLayerTreeNode({ id: 'layer-3', appLayerId: 3, name: 'TEST3', root: false }),
+      ],
+      baseLayerTreeNodes: [
+        getLayerTreeNode({ root: true, childrenIds: ['layer-4'] }),
+        getLayerTreeNode({ id: 'layer-4', appLayerId: 4, name: 'TEST4', root: false }),
+      ],
+    };
+    const action = MapActions.toggleAllLayersVisibility();
+    const updatedState = mapReducer(initialState, action);
+    expect(updatedState.layers.find(l => l.id === 1)?.visible).toEqual(true);
+    expect(updatedState.layers.find(l => l.id === 2)?.visible).toEqual(true);
+    expect(updatedState.layers.find(l => l.id === 3)?.visible).toEqual(true);
+    expect(updatedState.layers.find(l => l.id === 4)?.visible).toEqual(false);
+
+    const updatedState2 = mapReducer(updatedState, action);
+    expect(updatedState2.layers.find(l => l.id === 1)?.visible).toEqual(false);
+    expect(updatedState2.layers.find(l => l.id === 2)?.visible).toEqual(false);
+    expect(updatedState2.layers.find(l => l.id === 3)?.visible).toEqual(false);
+    expect(updatedState2.layers.find(l => l.id === 4)?.visible).toEqual(false);
+  });
+
   test('handles MapActions.toggleLevelExpansion', () => {
     const initialState: MapState = {
       ...initialMapState,
