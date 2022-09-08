@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/angular';
 import { MenubarButtonComponent } from './menubar-button.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { SharedImportsModule } from '@tailormap-viewer/shared';
+import { SharedModule } from '@tailormap-viewer/shared';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('MenubarButtonComponent', () => {
@@ -14,7 +14,7 @@ describe('MenubarButtonComponent', () => {
       ],
       imports: [
         MatIconTestingModule,
-        SharedImportsModule,
+        SharedModule,
         NoopAnimationsModule,
       ],
       componentProperties: {

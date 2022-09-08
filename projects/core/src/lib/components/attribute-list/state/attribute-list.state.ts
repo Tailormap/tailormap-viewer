@@ -11,6 +11,7 @@ export interface AttributeListState {
   selectedTabId?: string;
   height: number;
   highlightedFeature?: FeatureModel | null;
+  panelTitle: string;
 }
 
 export const initialAttributeListState: AttributeListState = {
@@ -18,4 +19,5 @@ export const initialAttributeListState: AttributeListState = {
   tabs: [],
   data: [],
   height: 350,
+  panelTitle: $localize `Attribute list`,
 };

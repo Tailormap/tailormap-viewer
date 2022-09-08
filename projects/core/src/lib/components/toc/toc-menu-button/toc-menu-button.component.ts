@@ -12,6 +12,7 @@ import { TOC_ID } from '../toc-identifier';
 export class TocMenuButtonComponent implements OnInit {
 
   public visible$: Observable<boolean> = of(false);
+  public panelLabel = $localize `Available layers`;
 
   constructor(
     private menubarService: MenubarService,
@@ -22,7 +23,7 @@ export class TocMenuButtonComponent implements OnInit {
   }
 
   public toggleToc() {
-    this.menubarService.toggleActiveComponent(TOC_ID, $localize `Available layers`);
+    this.menubarService.toggleActiveComponent(TOC_ID, this.panelLabel);
   }
 
 }

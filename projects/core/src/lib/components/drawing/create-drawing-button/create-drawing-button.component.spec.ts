@@ -4,7 +4,7 @@ import { of, Subject } from 'rxjs';
 import { MapService, ToolTypeEnum } from '@tailormap-viewer/map';
 import { Store } from '@ngrx/store';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { SharedImportsModule } from '@tailormap-viewer/shared';
+import { SharedModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 
 describe('CreateDrawingButtonComponent', () => {
@@ -27,7 +27,7 @@ describe('CreateDrawingButtonComponent', () => {
       getToolManager$: jest.fn(() => of(toolManagerMock)),
     };
     await render(CreateDrawingButtonComponent, {
-      imports: [ SharedImportsModule, MatIconTestingModule ],
+      imports: [ SharedModule, MatIconTestingModule ],
       providers: [
         { provide: Store, useValue: { dispatch: mockDispatch } },
         { provide: MapService, useValue: mapServiceMock },

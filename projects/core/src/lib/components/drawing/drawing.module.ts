@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DrawingComponent } from './drawing/drawing.component';
 import { DrawingMenuButtonComponent } from './drawing-menu-button/drawing-menu-button.component';
-import { SharedComponentsModule, SharedImportsModule } from '@tailormap-viewer/shared';
+import { SharedModule } from '@tailormap-viewer/shared';
 import { MenubarModule } from '../menubar';
 import { StoreModule } from '@ngrx/store';
 import { drawingStateKey } from './state/drawing.state';
@@ -19,8 +19,7 @@ import { DrawingStyleFormComponent } from './drawing-style-form/drawing-style-fo
   ],
   imports: [
     CommonModule,
-    SharedImportsModule,
-    SharedComponentsModule,
+    SharedModule,
     MenubarModule,
     StoreModule.forFeature(drawingStateKey, drawingReducer),
   ],

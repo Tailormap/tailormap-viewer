@@ -3,7 +3,7 @@ import { ZoomButtonsComponent } from './zoom-buttons.component';
 import { MapService } from '@tailormap-viewer/map';
 import { of } from 'rxjs';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { SharedImportsModule } from '@tailormap-viewer/shared';
+import { SharedModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 
 describe('ZoomButtonsComponent', () => {
@@ -21,7 +21,7 @@ describe('ZoomButtonsComponent', () => {
         zoomToInitialExtent: zoomToInitialExtentFn,
       },
     };
-    await render(ZoomButtonsComponent, { providers: [mapService], imports: [ MatIconTestingModule, SharedImportsModule ] });
+    await render(ZoomButtonsComponent, { providers: [mapService], imports: [ MatIconTestingModule, SharedModule ] });
     const zoomInBtn = await screen.getByLabelText('Zoom in');
     const zoomOutBtn = await screen.getByLabelText('Zoom out');
     const zoomToInitialExtentBtn = await screen.getByLabelText('Zoom to initial extent');
@@ -44,7 +44,7 @@ describe('ZoomButtonsComponent', () => {
         zoomOut: jest.fn(),
       },
     };
-    await render(ZoomButtonsComponent, { providers: [mapService], imports: [ MatIconTestingModule, SharedImportsModule ] });
+    await render(ZoomButtonsComponent, { providers: [mapService], imports: [ MatIconTestingModule, SharedModule ] });
     const zoomInBtn = await screen.getByLabelText<HTMLButtonElement>('Zoom in');
     const zoomOutBtn = await screen.getByLabelText<HTMLButtonElement>('Zoom out');
     expect(zoomInBtn.disabled).toEqual(true);
@@ -60,7 +60,7 @@ describe('ZoomButtonsComponent', () => {
         zoomOut: jest.fn(),
       },
     };
-    await render(ZoomButtonsComponent, { providers: [mapService], imports: [ MatIconTestingModule, SharedImportsModule ] });
+    await render(ZoomButtonsComponent, { providers: [mapService], imports: [ MatIconTestingModule, SharedModule ] });
     const zoomInBtn = await screen.getByLabelText<HTMLButtonElement>('Zoom in');
     const zoomOutBtn = await screen.getByLabelText<HTMLButtonElement>('Zoom out');
     expect(zoomInBtn.disabled).toEqual(false);

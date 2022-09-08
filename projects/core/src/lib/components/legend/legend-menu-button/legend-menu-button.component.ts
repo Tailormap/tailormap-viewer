@@ -11,6 +11,7 @@ import { LEGEND_ID } from '../legend-identifier';
 export class LegendMenuButtonComponent implements OnInit {
 
   public visible$: Observable<boolean> = of(false);
+  public panelTitle = $localize `Legend`;
 
   constructor(
     private menubarService: MenubarService,
@@ -21,7 +22,7 @@ export class LegendMenuButtonComponent implements OnInit {
   }
 
   public toggleLegend() {
-    this.menubarService.toggleActiveComponent(LEGEND_ID, $localize `Legend`);
+    this.menubarService.toggleActiveComponent(LEGEND_ID, this.panelTitle);
   }
 
 }

@@ -4,7 +4,7 @@ import { of } from 'rxjs';
 import { MenubarButtonComponent, MenubarService } from '../../menubar';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import userEvent from '@testing-library/user-event';
-import { SharedImportsModule } from '@tailormap-viewer/shared';
+import { SharedModule } from '@tailormap-viewer/shared';
 
 describe('DrawingMenuButtonComponent', () => {
 
@@ -16,7 +16,7 @@ describe('DrawingMenuButtonComponent', () => {
     };
     await render(DrawingMenuButtonComponent, {
       declarations: [MenubarButtonComponent],
-      imports: [ SharedImportsModule, MatIconTestingModule ],
+      imports: [ SharedModule, MatIconTestingModule ],
       providers: [
         { provide: MenubarService, useValue: menubarService },
       ],
