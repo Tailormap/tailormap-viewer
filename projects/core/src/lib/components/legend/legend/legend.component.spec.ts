@@ -80,7 +80,6 @@ describe('LegendComponent', () => {
     const url4 = new URL(images[3].getAttribute('src') || '');
     expect(url4.host).toEqual('layer-4-weird-case-url');
     expect(url4.searchParams.get('SCALE')).toEqual('1000');
-    console.log(url4.toString());
     expect(url4.searchParams.get('LEGEND_OPTIONS')).toBeTruthy(); // Should be case-insensitive to REQUEST=GetLegendGrapic URL param
   });
 });

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MeasureComponent } from './measure.component';
-import { SharedImportsModule } from '@tailormap-viewer/shared';
+import { SharedModule } from '@tailormap-viewer/shared';
 
 @NgModule({
   declarations: [
@@ -9,7 +9,7 @@ import { SharedImportsModule } from '@tailormap-viewer/shared';
   ],
   imports: [
     CommonModule,
-    SharedImportsModule,
+    SharedModule,
   ],
   exports: [
     MeasureComponent,

@@ -7,31 +7,26 @@ import { getTreeModelMock, SharedModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { TestBed } from '@angular/core/testing';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { selectLayerTree, selectSelectedNode } from '../../../map/state/map.selectors';
+import { selectLayers, selectLayerTree, selectLayerTreeNodes, selectSelectedNode } from '../../../map/state/map.selectors';
 import { setLayerVisibility, setSelectedLayerId } from '../../../map/state/map.actions';
 import { TocNodeLayerComponent } from '../toc-node-layer/toc-node-layer.component';
+import { ToggleAllLayersButtonComponent } from '../toggle-all-layers-button/toggle-all-layers-button.component';
+import { getAppLayerModel, getLayerTreeNode } from '@tailormap-viewer/api';
 
 const getMockStore = (selectedLayer: string = '') => {
+  const layers = [
+    getAppLayerModel({ title: 'Disaster map', visible: false }),
+    getAppLayerModel({ id: 2, title: 'Some other map', visible: false }),
+  ];
   const tree = [
-    getTreeModelMock({
-      label: 'Disaster map',
-      metadata: {
-        id: 1,
-        layerName: 'Disaster map',
-      },
-    }),
-    getTreeModelMock({
-      id: '2',
-      label: 'Some other map',
-      metadata: {
-        id: 2,
-        layerName: 'Some other map',
-      },
-    }),
+    getLayerTreeNode({ childrenIds: [ '1', '2' ] }),
+    getLayerTreeNode({ id: '1', name: 'Disaster map', appLayerId: 1 }),
+    getLayerTreeNode({ id: '2', name: 'Some other map', appLayerId: 2 }),
   ];
   return provideMockStore({
     selectors: [
-      { selector: selectLayerTree, value: tree },
+      { selector: selectLayers, value: layers },
+      { selector: selectLayerTreeNodes, value: tree },
       { selector: selectSelectedNode, value: selectedLayer },
     ],
   });
@@ -47,7 +42,7 @@ describe('TocComponent', () => {
     const registerComponentFn = jest.fn();
     await render(TocComponent, {
       imports: [ SharedModule, MatIconTestingModule ],
-      declarations: [TocNodeLayerComponent],
+      declarations: [ TocNodeLayerComponent, ToggleAllLayersButtonComponent ],
       providers: [
         getMockStore(),
         getMenubarService(false, registerComponentFn),
@@ -60,7 +55,7 @@ describe('TocComponent', () => {
     const registerComponentFn = jest.fn();
     await render(TocComponent, {
       imports: [ SharedModule, MatIconTestingModule ],
-      declarations: [TocNodeLayerComponent],
+      declarations: [ TocNodeLayerComponent, ToggleAllLayersButtonComponent ],
       providers: [
         getMockStore(),
         getMenubarService(true, registerComponentFn),
@@ -74,7 +69,7 @@ describe('TocComponent', () => {
     const registerComponentFn = jest.fn();
     await render(TocComponent, {
       imports: [ SharedModule, MatIconTestingModule ],
-      declarations: [TocNodeLayerComponent],
+      declarations: [ TocNodeLayerComponent, ToggleAllLayersButtonComponent ],
       providers: [
         getMockStore('1'),
         getMenubarService(true, registerComponentFn),
@@ -95,7 +90,7 @@ describe('TocComponent', () => {
     const registerComponentFn = jest.fn();
     await render(TocComponent, {
       imports: [ SharedModule, MatIconTestingModule ],
-      declarations: [TocNodeLayerComponent],
+      declarations: [ TocNodeLayerComponent, ToggleAllLayersButtonComponent ],
       providers: [
         getMockStore('1'),
         getMenubarService(true, registerComponentFn),

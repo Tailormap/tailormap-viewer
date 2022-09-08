@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/angular';
 import { ProfileComponent } from './profile.component';
 import { MenubarButtonComponent } from '../menubar-button/menubar-button.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { SharedImportsModule } from '@tailormap-viewer/shared';
+import { SharedModule } from '@tailormap-viewer/shared';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { selectUserDetails } from '../../../state/core.selectors';
 import { Router } from '@angular/router';
@@ -36,7 +36,7 @@ describe('ProfileComponent', () => {
       ],
       imports: [
         MatIconTestingModule,
-        SharedImportsModule,
+        SharedModule,
         NoopAnimationsModule,
       ],
     });
@@ -62,7 +62,7 @@ describe('ProfileComponent', () => {
       ],
       imports: [
         MatIconTestingModule,
-        SharedImportsModule,
+        SharedModule,
         NoopAnimationsModule,
       ],
     });

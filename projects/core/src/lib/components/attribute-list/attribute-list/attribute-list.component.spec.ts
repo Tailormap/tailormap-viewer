@@ -19,6 +19,7 @@ import { StoreModule } from '@ngrx/store';
 import { attributeListReducer } from '../state/attribute-list.reducer';
 import { mapReducer } from '../../../map/state/map.reducer';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 const getStore = (
   attributeListStore: { [attributeListStateKey]: AttributeListState },
@@ -40,6 +41,7 @@ describe('AttributeList', () => {
     await render(AttributeListComponent, {
       imports: [ MatIconModule, MatIconTestingModule, MatToolbarModule ],
       declarations: [ AttributeListComponent, PanelResizerComponent ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [
         provideMockStore({
           initialState: store,
@@ -54,6 +56,7 @@ describe('AttributeList', () => {
     await render(AttributeListComponent, {
       imports: [ MatIconModule, MatIconTestingModule, MatToolbarModule ],
       declarations: [ AttributeListComponent, PanelResizerComponent ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [
         provideMockStore({
           initialState: store,
@@ -77,6 +80,7 @@ describe('AttributeList', () => {
     await render(AttributeListComponent, {
       imports: [ MatProgressSpinnerModule, MatIconModule, MatIconTestingModule, MatToolbarModule ],
       declarations: [ AttributeListComponent, PanelResizerComponent ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [
         provideMockStore({
           initialState: store,
