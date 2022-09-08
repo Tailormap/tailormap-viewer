@@ -66,7 +66,7 @@ describe('MapReducer', () => {
         getAppLayerModel({ id: 1, visible: false }),
         getAppLayerModel({ id: 2, visible: true }),
         getAppLayerModel({ id: 3, visible: true }),
-        getAppLayerModel({ id: 4, visible: false }),
+        getAppLayerModel({ id: 4, visible: true }),
       ],
       layerTreeNodes: [
         getLayerTreeNode({ root: true, childrenIds: [ 'level-1', 'level-2' ] }),
@@ -83,16 +83,16 @@ describe('MapReducer', () => {
     };
     const action = MapActions.toggleAllLayersVisibility();
     const updatedState = mapReducer(initialState, action);
-    expect(updatedState.layers.find(l => l.id === 1)?.visible).toEqual(true);
-    expect(updatedState.layers.find(l => l.id === 2)?.visible).toEqual(true);
-    expect(updatedState.layers.find(l => l.id === 3)?.visible).toEqual(true);
-    expect(updatedState.layers.find(l => l.id === 4)?.visible).toEqual(false);
+    expect(updatedState.layers.find(l => l.id === 1)?.visible).toEqual(false);
+    expect(updatedState.layers.find(l => l.id === 2)?.visible).toEqual(false);
+    expect(updatedState.layers.find(l => l.id === 3)?.visible).toEqual(false);
+    expect(updatedState.layers.find(l => l.id === 4)?.visible).toEqual(true);
 
     const updatedState2 = mapReducer(updatedState, action);
-    expect(updatedState2.layers.find(l => l.id === 1)?.visible).toEqual(false);
-    expect(updatedState2.layers.find(l => l.id === 2)?.visible).toEqual(false);
-    expect(updatedState2.layers.find(l => l.id === 3)?.visible).toEqual(false);
-    expect(updatedState2.layers.find(l => l.id === 4)?.visible).toEqual(false);
+    expect(updatedState2.layers.find(l => l.id === 1)?.visible).toEqual(true);
+    expect(updatedState2.layers.find(l => l.id === 2)?.visible).toEqual(true);
+    expect(updatedState2.layers.find(l => l.id === 3)?.visible).toEqual(true);
+    expect(updatedState2.layers.find(l => l.id === 4)?.visible).toEqual(true);
   });
 
   test('handles MapActions.toggleLevelExpansion', () => {
