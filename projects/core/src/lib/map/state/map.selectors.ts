@@ -94,13 +94,13 @@ export const selectOrderedVisibleLayersWithServices = createSelector(
   },
 );
 
-export const selectAllLayersVisible = createSelector(
+export const selectSomeLayersVisible = createSelector(
   selectLayers,
   selectOrderedLayerIds,
   (layers, orderedLayerIds) => {
     return layers
       .filter(l => orderedLayerIds.includes(l.id))
-      .every(l => l.visible);
+      .some(l => l.visible);
   },
 );
 

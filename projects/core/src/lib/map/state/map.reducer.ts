@@ -53,14 +53,14 @@ const onToggleAllLayersVisibility = (state: MapState): MapState => {
   // Maybe we should specify which layers are foreground/background layers in the state when fetched from the API
   const foregroundLayerIds = new Set(LayerTreeNodeHelper.getAppLayerIds(state.layerTreeNodes, state.layerTreeNodes.find(l => l.root)));
   const foregroundLayers = state.layers.filter(l => foregroundLayerIds.has(l.id));
-  const allVisible = foregroundLayers.every(l => l.visible);
+  const someVisible = foregroundLayers.some(l => l.visible);
   return {
     ...state,
     layers: state.layers.map(layer => {
       if (foregroundLayerIds.has(layer.id)) {
         return {
           ...layer,
-          visible: !allVisible,
+          visible: !someVisible,
         };
       }
       return layer;

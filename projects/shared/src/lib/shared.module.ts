@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { SharedImportsModule } from './shared-imports.module';
 import { SharedComponentsModule } from './components';
-import { AutoFocusDirective } from './directives';
+import { AutoFocusDirective, TooltipDirective } from './directives';
 import { OverlayComponent } from './services/overlay/overlay/overlay.component';
 
 @NgModule({
@@ -11,12 +11,14 @@ import { OverlayComponent } from './services/overlay/overlay/overlay.component';
   ],
   declarations: [
     AutoFocusDirective,
+    TooltipDirective,
     OverlayComponent,
   ],
   exports: [
     SharedImportsModule,
     SharedComponentsModule,
     AutoFocusDirective,
+    TooltipDirective,
     OverlayComponent,
   ],
 })
