@@ -12,6 +12,7 @@ import { DRAWING_ID } from '../drawing-identifier';
 export class DrawingMenuButtonComponent implements OnInit {
 
   public visible$: Observable<boolean> = of(false);
+  public panelTitle = $localize `Drawing`;
 
   constructor(
     private menubarService: MenubarService,
@@ -22,7 +23,7 @@ export class DrawingMenuButtonComponent implements OnInit {
   }
 
   public toggleDrawingPanel() {
-    this.menubarService.toggleActiveComponent(DRAWING_ID, $localize `Drawing`);
+    this.menubarService.toggleActiveComponent(DRAWING_ID, this.panelTitle);
   }
 
 }

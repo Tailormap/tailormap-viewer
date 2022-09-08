@@ -9,6 +9,7 @@ import { AttributeListPagingDataType } from '../models/attribute-list-paging-dat
 const selectAttributeListState = createFeatureSelector<AttributeListState>(attributeListStateKey);
 
 export const selectAttributeListVisible = createSelector(selectAttributeListState, state => state.visible);
+export const selectAttributeListPanelTitle = createSelector(selectAttributeListState, state => state.panelTitle);
 export const selectAttributeListTabs = createSelector(selectAttributeListState, state => state.tabs);
 export const selectAttributeListData = createSelector(selectAttributeListState, state => state.data);
 export const selectAttributeListHeight = createSelector(selectAttributeListState, state => state.height);

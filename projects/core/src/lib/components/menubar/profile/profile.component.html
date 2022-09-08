@@ -1,4 +1,5 @@
-<tm-menubar-button [menuTrigger]="userMenu" [icon]="userDetails?.loggedIn ? 'user' : 'login'"></tm-menubar-button>
+<tm-menubar-button [menuTrigger]="userMenu"
+                   [icon]="userDetails?.loggedIn ? 'user' : 'login'"></tm-menubar-button>
 
 <mat-menu #userMenu="matMenu" xPosition="after" yPosition="above">
   <button mat-menu-item disabled *ngIf="userDetails?.loggedIn && userDetails?.user">

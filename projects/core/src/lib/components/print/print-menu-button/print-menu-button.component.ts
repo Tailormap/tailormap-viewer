@@ -12,6 +12,7 @@ import { PRINT_ID } from '../print-identifier';
 export class PrintMenuButtonComponent implements OnInit {
 
   public visible$: Observable<boolean> = of(false);
+  public panelTitle = $localize `Print`;
 
   constructor(
     private menubarService: MenubarService,
@@ -22,7 +23,7 @@ export class PrintMenuButtonComponent implements OnInit {
   }
 
   public togglePrint() {
-    this.menubarService.toggleActiveComponent(PRINT_ID, $localize `Print`);
+    this.menubarService.toggleActiveComponent(PRINT_ID, this.panelTitle);
   }
 
 }

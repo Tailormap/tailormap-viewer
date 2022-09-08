@@ -16,7 +16,10 @@ export class MenubarButtonComponent {
   public menuTrigger: MatMenuPanel | null = null;
 
   @Input()
-  public tooltip$: Observable<string> = of('');
+  public tooltip: string | undefined;
+
+  @Input()
+  public tooltip$: Observable<string> | undefined;
 
   @Input()
   public active$: Observable<boolean> = of(false);

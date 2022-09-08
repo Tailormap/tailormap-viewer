@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AttributeListState } from '../state/attribute-list.state';
 import {
-  selectAttributeListHeight, selectAttributeListSelectedTab, selectAttributeListTabs, selectAttributeListVisible,
+  selectAttributeListHeight, selectAttributeListPanelTitle, selectAttributeListSelectedTab, selectAttributeListTabs,
+  selectAttributeListVisible,
   selectCurrentlySelectedFeatureGeometry,
 } from '../state/attribute-list.selectors';
-import { map, Observable, Subject } from 'rxjs';
+import { map, Observable, of, Subject } from 'rxjs';
 import {  takeUntil } from 'rxjs/operators';
 import { setAttributeListVisibility, setSelectedTab, updateAttributeListHeight } from '../state/attribute-list.actions';
 import { MatTabChangeEvent } from '@angular/material/tabs';
@@ -33,6 +34,7 @@ export class AttributeListComponent implements OnInit {
   public maximized = false;
   public selectedTab?: string;
   public hasLayersWithAttributes$: Observable<boolean>;
+  public title$: Observable<string> = of('');
 
   constructor(
     private store$: Store<AttributeListState>,
@@ -40,6 +42,7 @@ export class AttributeListComponent implements OnInit {
     private mapService: MapService,
   ) {
     this.isVisible$ = this.store$.select(selectAttributeListVisible);
+    this.title$ = this.store$.select(selectAttributeListPanelTitle);
     this.store$.select(selectAttributeListTabs)
       .pipe(takeUntil(this.destroyed))
       .subscribe(tabs => {
