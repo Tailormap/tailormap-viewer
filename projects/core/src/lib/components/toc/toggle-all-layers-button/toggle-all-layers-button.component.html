@@ -1,0 +1,8 @@
+<button mat-icon-button color="primary" (click)="toggleAll()">
+  <ng-template #checkAll>
+    <mat-icon i18n-tmTooltip tmTooltip="Toggle all layers on" svgIcon="check_all"></mat-icon>
+  </ng-template>
+  <ng-container *ngIf="someLayersVisible$ | async; else: checkAll">
+    <mat-icon i18n-tmTooltip tmTooltip="Toggle all layers off" svgIcon="uncheck_all"></mat-icon>
+  </ng-container>
+</button>

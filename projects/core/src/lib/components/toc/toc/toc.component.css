@@ -1,8 +1,24 @@
 :host,
-.toc-tree {
+.toc {
   height: 100%;
 }
 
 ::ng-deep .tree-wrapper {
   padding: 6px 14px 0 14px;
+}
+
+.toc {
+  display: flex;
+  flex-direction: column;
+}
+
+.toc-header {
+  display: flex;
+  justify-content: flex-start;
+  padding: 6px 14px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.toc-tree {
+  flex: 1;
 }
