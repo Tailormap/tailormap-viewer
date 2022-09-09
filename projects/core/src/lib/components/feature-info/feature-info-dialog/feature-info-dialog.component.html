@@ -11,7 +11,7 @@
       <h2>{{currentFeature.layer.title}}</h2>
       <div *ngFor="let att of currentFeature.sortedAttributes" class="row">
         <strong>{{att.label}}</strong>
-        {{att.attributeValue}}
+        <div tmTransformUrls>{{att.attributeValue}}</div>
       </div>
     </div>
     <div class="buttons">

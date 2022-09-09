@@ -3,6 +3,7 @@ import { SharedImportsModule } from './shared-imports.module';
 import { SharedComponentsModule } from './components';
 import { AutoFocusDirective, TooltipDirective } from './directives';
 import { OverlayComponent } from './services/overlay/overlay/overlay.component';
+import { TransformUrlsDirective } from './directives/transform-urls.directive';
 
 @NgModule({
   imports: [
@@ -12,6 +13,7 @@ import { OverlayComponent } from './services/overlay/overlay/overlay.component';
   declarations: [
     AutoFocusDirective,
     TooltipDirective,
+    TransformUrlsDirective,
     OverlayComponent,
   ],
   exports: [
@@ -19,6 +21,7 @@ import { OverlayComponent } from './services/overlay/overlay/overlay.component';
     SharedComponentsModule,
     AutoFocusDirective,
     TooltipDirective,
+    TransformUrlsDirective,
     OverlayComponent,
   ],
 })
