@@ -32,8 +32,13 @@
               <mat-label i18n>DPI</mat-label>
               <input matInput formControlName="dpi" type="number" min="90" max="600">
             </mat-form-field>
-            <div class="padding" i18n>
-              Image resolution in pixels: {{getImageResolution()}}
+            <div [style.visibility]="exportImageForm.valid ? 'visible' : 'hidden'">
+              <div class="padding" i18n>
+                Image resolution in pixels: {{getImageResolution()}}
+              </div>
+              <div class="padding" i18n>
+                Width/height ratio: {{getImageRatio() | number: '1.1-2' }}
+              </div>
             </div>
             <button mat-stroked-button color="primary" type="submit" [disabled]="!exportImageForm.valid" i18n>Download map image</button>
         </form>

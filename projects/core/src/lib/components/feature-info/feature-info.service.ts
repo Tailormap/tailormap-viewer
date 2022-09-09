@@ -30,7 +30,7 @@ export class FeatureInfoService {
     return combineLatest([
       this.store$.select(selectVisibleLayersWithAttributes),
       this.store$.select(selectApplicationId),
-      this.mapService.getResolution$(),
+      this.mapService.getMapViewDetails$(),
       this.mapService.getProjectionCode$(),
     ])
       .pipe(

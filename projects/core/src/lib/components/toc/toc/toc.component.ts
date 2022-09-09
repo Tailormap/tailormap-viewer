@@ -37,7 +37,7 @@ export class TocComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.visible$ = this.menubarService.isComponentVisible$(TOC_ID);
-    this.mapService.getResolution$()
+    this.mapService.getMapViewDetails$()
       .pipe(takeUntil(this.destroyed), map(resolution => resolution.scale))
       .subscribe(scale => this.scale = scale);
 

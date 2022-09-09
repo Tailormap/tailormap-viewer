@@ -74,7 +74,7 @@ export class OpenLayersMapImageExporter {
       view: new View({
         projection: olView.getProjection(),
         resolutions: olView.getResolutions(),
-        center: olView.getCenter(),
+        center: options.center || olView.getCenter(),
         resolution: viewResolution,
       }),
     });

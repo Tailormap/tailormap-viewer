@@ -12,10 +12,13 @@ export class MenubarPanelComponent {
 
   public activeComponent$: Observable<{ componentId: string; dialogTitle: string } | null>;
 
+  public width;
+
   constructor(
     private menubarService: MenubarService,
   ) {
     this.activeComponent$ = this.menubarService.getActiveComponent$();
+    this.width = menubarService.panelWidth;
   }
 
   public closeDialog() {

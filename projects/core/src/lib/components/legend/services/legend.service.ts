@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, combineLatest, concatMap, forkJoin, map, Observable, of, switchMap } from 'rxjs';
-import { MapResolutionModel, MapService, ScaleHelper } from '@tailormap-viewer/map';
+import { MapViewDetailsModel, MapService, ScaleHelper } from '@tailormap-viewer/map';
 import { AppLayerWithServiceModel } from '../../../map/models';
 import { ImageHelper } from '../../../shared/helpers/image.helper';
 import { LegendInfoModel } from '../models/legend-info.model';
@@ -49,7 +49,7 @@ export class LegendService {
     return this.visibleSubject$.asObservable();
   }
 
-  public getLegendInfo$(appLayers$: Observable<AppLayerWithServiceModel[]>, mapResolution$?: Observable<MapResolutionModel>):
+  public getLegendInfo$(appLayers$: Observable<AppLayerWithServiceModel[]>, mapResolution$?: Observable<MapViewDetailsModel>):
     Observable<LegendInfoModel[]> {
     return this.mapService.getLayerManager$()
       .pipe(

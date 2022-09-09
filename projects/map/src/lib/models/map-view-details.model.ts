@@ -1,4 +1,6 @@
-export interface MapResolutionModel {
+import { OpenlayersExtent } from './extent.type';
+
+export interface MapViewDetailsModel {
   zoomLevel: number;
   minZoomLevel: number;
   maxZoomLevel: number;
@@ -6,4 +8,6 @@ export interface MapResolutionModel {
   scale: number;
   minResolution: number;
   maxResolution: number;
+  size: number[] | undefined;
+  extent: OpenlayersExtent | null;
 }

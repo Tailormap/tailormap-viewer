@@ -15,7 +15,7 @@ describe('ZoomButtonsComponent', () => {
     const mapService = {
       provide: MapService,
       useValue: {
-        getResolution$: () => of({ zoomLevel: 1, minZoomLevel: 0, maxZoomLevel: 2 }),
+        getMapViewDetails$: () => of({ zoomLevel: 1, minZoomLevel: 0, maxZoomLevel: 2 }),
         zoomIn: zoomInFn,
         zoomOut: zoomOutFn,
         zoomToInitialExtent: zoomToInitialExtentFn,
@@ -39,7 +39,7 @@ describe('ZoomButtonsComponent', () => {
     const mapService = {
       provide: MapService,
       useValue: {
-        getResolution$: () => of({ zoomLevel: 2, minZoomLevel: 0, maxZoomLevel: 2 }),
+        getMapViewDetails$: () => of({ zoomLevel: 2, minZoomLevel: 0, maxZoomLevel: 2 }),
         zoomIn: jest.fn(),
         zoomOut: jest.fn(),
       },
@@ -55,7 +55,7 @@ describe('ZoomButtonsComponent', () => {
     const mapService = {
       provide: MapService,
       useValue: {
-        getResolution$: () => of({ zoomLevel: 0, minZoomLevel: 0, maxZoomLevel: 2 }),
+        getMapViewDetails$: () => of({ zoomLevel: 0, minZoomLevel: 0, maxZoomLevel: 2 }),
         zoomIn: jest.fn(),
         zoomOut: jest.fn(),
       },

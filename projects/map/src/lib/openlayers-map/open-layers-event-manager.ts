@@ -6,6 +6,7 @@ import { default as BaseEvent } from 'ol/events/Event';
 import { EventsKey } from 'ol/events';
 import { unByKey } from 'ol/Observable';
 import { MapBrowserEvent } from 'ol';
+import { ObjectEvent } from 'ol/Object';
 
 type OlEventType = 'change' | 'error' | 'click' | 'dblclick' | 'pointermove' | 'singleclick' | 'pointerdrag'
   | 'movestart' | 'moveend' | 'propertychange' | 'change:layergroup' | 'change:size' | 'change:target' | 'change:view'
@@ -21,11 +22,13 @@ export class OpenLayersEventManager {
   private static mapMoveEndEvent: EventManagerEvent<MapEvent> = { stream: new Subject<MapEvent>() };
   private static mapClickEvent: EventManagerEvent<MapBrowserEvent<MouseEvent>> = { stream: new Subject<MapBrowserEvent<MouseEvent>>() };
   private static mouseMoveEvent: EventManagerEvent<MapBrowserEvent<MouseEvent>> = { stream: new Subject<MapBrowserEvent<MouseEvent>>() };
+  private static changeViewEvent: EventManagerEvent<ObjectEvent> = { stream: new Subject<ObjectEvent>() };
 
   public static initEvents(olMap: OlMap, ngZone: NgZone) {
     OpenLayersEventManager.registerEvent(olMap, ngZone, 'moveend', OpenLayersEventManager.mapMoveEndEvent);
     OpenLayersEventManager.registerEvent(olMap, ngZone, 'singleclick', OpenLayersEventManager.mapClickEvent);
     OpenLayersEventManager.registerEvent(olMap, ngZone, 'pointermove', OpenLayersEventManager.mouseMoveEvent);
+    OpenLayersEventManager.registerEvent(olMap, ngZone, 'change:view', OpenLayersEventManager.changeViewEvent);
   }
 
   private static registerEvent<EventType extends BaseEvent>(
@@ -54,6 +57,10 @@ export class OpenLayersEventManager {
 
   public static onMouseMove$(): Observable<MapBrowserEvent<MouseEvent>> {
     return OpenLayersEventManager.mouseMoveEvent.stream.asObservable();
+  }
+
+  public static onChangeView$(): Observable<ObjectEvent> {
+    return OpenLayersEventManager.changeViewEvent.stream.asObservable();
   }
 
 }

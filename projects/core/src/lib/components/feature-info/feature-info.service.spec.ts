@@ -20,7 +20,7 @@ describe('FeatureInfoService', () => {
   const mapService = {
     provide: MapService,
     useValue: {
-      getResolution$: () => of({ resolution: 1 }),
+      getMapViewDetails$: () => of({ resolution: 1 }),
       getProjectionCode$: () => of('EPSG:4326'),
     },
   };

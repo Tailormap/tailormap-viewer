@@ -1,4 +1,4 @@
-<tm-dialog [open]="(activeComponent$ | async) !== null"
+<tm-dialog [open]="(activeComponent$ | async) !== null" [width]="width"
            (closeDialog)="closeDialog()"
            [dialogTitle]="(activeComponent$ | async)?.dialogTitle || ''">
   <ng-content></ng-content>

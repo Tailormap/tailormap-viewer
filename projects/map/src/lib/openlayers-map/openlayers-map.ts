@@ -4,7 +4,7 @@ import Projection from 'ol/proj/Projection';
 import View from 'ol/View';
 import { NgZone } from '@angular/core';
 import { defaults as defaultInteractions } from 'ol/interaction';
-import { LayerManagerModel, MapResolutionModel, MapViewerModel, MapViewerOptionsModel } from '../models';
+import { LayerManagerModel, MapViewDetailsModel, MapViewerModel, MapViewerOptionsModel } from '../models';
 import { ProjectionsHelper } from '../helpers/projections.helper';
 import { OpenlayersExtent } from '../models/extent.type';
 import { OpenLayersLayerManager } from './open-layers-layer-manager';
@@ -195,7 +195,7 @@ export class OpenLayersMap implements MapViewerModel {
         );
   }
 
-  public getResolution$(): Observable<MapResolutionModel> {
+  public getMapViewDetails$(): Observable<MapViewDetailsModel> {
     return merge(
       this.getMap$(),
       OpenLayersEventManager.onMapMove$().pipe(map(evt => evt.map)))
@@ -219,6 +219,8 @@ export class OpenLayersMap implements MapViewerModel {
             minResolution: view.getMinResolution() || 0,
             maxResolution: view.getMaxResolution() || 0,
             scale,
+            size: olMap.getSize(),
+            extent: olMap.getView().getCenter() != null ? olMap.getView().calculateExtent(olMap.getSize()) : null,
           };
         }),
       );

@@ -9,6 +9,8 @@ export class MenubarService extends BaseComponentRegistryService {
 
   private activeComponent$ = new BehaviorSubject<{ componentId: string; dialogTitle: string } | null>(null);
 
+  public panelWidth = 300;
+
   public toggleActiveComponent(componentId: string, dialogTitle: string) {
     if (this.activeComponent$.value?.componentId === componentId) {
       this.closePanel();
@@ -29,4 +31,7 @@ export class MenubarService extends BaseComponentRegistryService {
     return this.activeComponent$.asObservable().pipe(map(c => c !== null && c.componentId === componentId));
   }
 
+  public getPanelWidth$() {
+    return this.activeComponent$.asObservable().pipe(map(c => c !== null ? this.panelWidth : 0));
+  }
 }
