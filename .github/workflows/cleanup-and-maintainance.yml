@@ -13,7 +13,7 @@ jobs:
         matrix:
           containers: [ 'tailormap-viewer', 'tailormap-config-db' ]
     steps:
-      - name: "Older than 1 week"
+      - name: "Untagged older than 1 week, keeping last 2"
         # https://github.com/marketplace/actions/ghcr-pruning
         uses: vlaurin/action-ghcr-prune@v0.4.0
         with:
@@ -24,7 +24,7 @@ jobs:
           older-than: 7
           keep-last: 2
           untagged: true
-      - name: "Older than 4 weeks"
+      - name: "All untagged older than 4 weeks"
         uses: vlaurin/action-ghcr-prune@v0.4.0
         with:
           token: ${{ secrets.GHCR_CLEANUP_PAT }}
@@ -34,6 +34,16 @@ jobs:
           older-than: 28
           keep-last: 0
           untagged: true
+      - name: "Tagged PRs older than 4 weeks"
+        uses: vlaurin/action-ghcr-prune@v0.4.0
+        with:
+          token: ${{ secrets.GHCR_CLEANUP_PAT }}
+          organization: B3Partners
+          container: ${{ matrix.containers }}
+          dry-run: false
+          older-than: 28
+          keep-last: 0
+          tag-regex: ^pr-
 
 
   stale:
