@@ -20,6 +20,7 @@ import { MapUnitEnum } from '../models/map-unit.enum';
 import { Layer } from 'ol/layer';
 import { Source } from 'ol/source';
 import LayerRenderer from 'ol/renderer/Layer';
+import { HttpClient } from '@angular/common/http';
 
 export type OlLayerFilter = (layer: Layer<Source, LayerRenderer<any>>) => boolean;
 
@@ -40,6 +41,7 @@ export class MapService {
 
   constructor(
     private ngZone: NgZone,
+    private httpService: HttpClient,
   ) {
     this.map = new OpenLayersMap(this.ngZone);
   }
@@ -198,4 +200,9 @@ export class MapService {
   public exportMapImage$(options: MapExportOptions): Observable<string> {
     return this.map.exportMapImage$(options);
   }
+
+  public getFeatureInfoForLayers$(layerId: string, coordinates: [number, number]): Observable<FeatureModel[]> {
+    return this.map.getFeatureInfoForLayers$(layerId, coordinates, this.httpService);
+  }
+
 }
