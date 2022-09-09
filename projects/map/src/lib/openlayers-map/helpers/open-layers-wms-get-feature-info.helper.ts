@@ -1,15 +1,20 @@
 import { OpenLayersLayerManager } from '../open-layers-layer-manager';
 import { isOpenLayersWMSLayer } from '../../helpers/ol-layer-types.helper';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { WFS } from 'ol/format';
+import { GeoJSON, WFS } from 'ol/format';
 import { Feature, FeatureCollection, GeoJsonProperties } from 'geojson';
 import { map, Observable, of } from 'rxjs';
 import { FeatureModel } from '@tailormap-viewer/api';
+import WKT from 'ol/format/WKT';
+import Geometry from 'ol/geom/Geometry';
 
 export class OpenLayersWmsGetFeatureInfoHelper {
 
   private static idCount = 0;
   private static isValidFeature = (item: FeatureModel | null): item is FeatureModel => item !== null;
+  private static wfsReader = new WFS();
+  private static wktParser = new WKT();
+  private static geoJSONReader = new GeoJSON();
 
   public static getFeatureInfoForLayer$(
     httpClient: HttpClient,
@@ -64,7 +69,12 @@ export class OpenLayersWmsGetFeatureInfoHelper {
       const features = OpenLayersWmsGetFeatureInfoHelper.getFeatures(JSON.parse(responseBody));
       if (features.length) {
         return features
-          .map((feature) => OpenLayersWmsGetFeatureInfoHelper.getFeatureModel(feature.properties))
+          .map((feature) => {
+            const olGeom = feature.geometry
+              ? OpenLayersWmsGetFeatureInfoHelper.geoJSONReader.readGeometry(feature.geometry)
+              : undefined;
+            return OpenLayersWmsGetFeatureInfoHelper.getFeatureModel(feature.properties, olGeom);
+          })
           .filter(OpenLayersWmsGetFeatureInfoHelper.isValidFeature);
       }
     } catch (e) {}
@@ -73,10 +83,10 @@ export class OpenLayersWmsGetFeatureInfoHelper {
 
   private static parseGmlResponse(responseBody: string): FeatureModel[] {
     try {
-      const features = (new WFS()).readFeatures(responseBody);
+      const features = OpenLayersWmsGetFeatureInfoHelper.wfsReader.readFeatures(responseBody);
       if (features.length) {
         return features
-          .map((feature) => OpenLayersWmsGetFeatureInfoHelper.getFeatureModel(feature.getProperties()))
+          .map((feature) => OpenLayersWmsGetFeatureInfoHelper.getFeatureModel(feature.getProperties(), feature.getGeometry()))
           .filter(OpenLayersWmsGetFeatureInfoHelper.isValidFeature);
       }
     } catch (e) {}
@@ -97,13 +107,14 @@ export class OpenLayersWmsGetFeatureInfoHelper {
       .filter(OpenLayersWmsGetFeatureInfoHelper.isValidFeature);
   }
 
-  private static getFeatureModel(properties: GeoJsonProperties): FeatureModel | null {
+  private static getFeatureModel(properties: GeoJsonProperties, geometry?: Geometry): FeatureModel | null {
     if (!properties) {
       return null;
     }
     return {
       __fid: `wms-get-feature-info-${OpenLayersWmsGetFeatureInfoHelper.idCount++}`,
       attributes: properties,
+      geometry: geometry ? OpenLayersWmsGetFeatureInfoHelper.wktParser.writeGeometry(geometry) : undefined,
     };
   }
 
