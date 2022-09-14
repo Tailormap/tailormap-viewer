@@ -41,7 +41,6 @@ export class MapService {
 
   constructor(
     private ngZone: NgZone,
-    private httpService: HttpClient,
   ) {
     this.map = new OpenLayersMap(this.ngZone);
   }
@@ -201,8 +200,12 @@ export class MapService {
     return this.map.exportMapImage$(options);
   }
 
-  public getFeatureInfoForLayers$(layerId: string, coordinates: [number, number]): Observable<FeatureModel[]> {
-    return this.map.getFeatureInfoForLayers$(layerId, coordinates, this.httpService);
+  public getFeatureInfoForLayers$(
+    layerId: string,
+    coordinates: [number, number],
+    httpService: HttpClient,
+  ): Observable<FeatureModel[]> {
+    return this.map.getFeatureInfoForLayers$(layerId, coordinates, httpService);
   }
 
 }

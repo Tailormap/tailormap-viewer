@@ -9,6 +9,7 @@ import { FeatureInfoResponseModel } from './models/feature-info-response.model';
 import { selectVisibleLayersWithAttributes, selectVisibleWMSLayersWithoutAttributes } from '../../map/state/map.selectors';
 import { MapResolutionModel, MapService } from '@tailormap-viewer/map';
 import { AppLayerWithServiceModel } from '../../map/models';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -25,6 +26,7 @@ export class FeatureInfoService {
   constructor(
     private store$: Store,
     private mapService: MapService,
+    private httpService: HttpClient,
     @Inject(TAILORMAP_API_V1_SERVICE) private apiService: TailormapApiV1ServiceModel,
   ) {
   }
@@ -45,7 +47,7 @@ export class FeatureInfoService {
           }
           const featureRequests$ = [
             ...layers.map(layer => this.getFeatureInfoFromApi$(layer, coordinates, applicationId, resolutions, projection)),
-            ...wmsLayers.map(layer => this.mapService.getFeatureInfoForLayers$(`${layer.id}`, coordinates).pipe(
+            ...wmsLayers.map(layer => this.mapService.getFeatureInfoForLayers$(`${layer.id}`, coordinates, this.httpService).pipe(
               map(features => this.featuresToFeatureInfoResponseModel(features, layer.id)),
             )),
           ];
