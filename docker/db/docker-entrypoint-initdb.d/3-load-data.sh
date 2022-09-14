@@ -2,8 +2,8 @@
 set -e
 
 # use the following to create the dump (ignore the circular foreign key constraints warnings):
-# docker-compose --profile http --profile full exec -u postgres db pg_dump -aOx -E UTF-8 -S postgres --disable-triggers tailormap -f /tmp/dump.sql
-# docker-compose --profile http --profile full exec db cat /tmp/dump.sql > docker/db/docker-entrypoint-initdb.d/3-dump.sql.script
+# docker compose --profile http --profile full exec -u postgres db pg_dump -aOx -E UTF-8 -S postgres --disable-triggers tailormap -f /tmp/dump.sql
+# docker compose --profile http --profile full exec db cat /tmp/dump.sql > docker/db/docker-entrypoint-initdb.d/3-dump.sql.script
 # or
 # docker exec -u postgres tailormap-db pg_dump -aOx -E UTF-8 -S postgres --disable-triggers tailormap -f /tmp/dump.sql
 # docker cp tailormap-db:/tmp/dump.sql  docker/db/docker-entrypoint-initdb.d/3-dump.sql.script
