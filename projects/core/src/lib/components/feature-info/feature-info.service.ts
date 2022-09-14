@@ -1,7 +1,5 @@
-import { Inject, Injectable } from '@angular/core';
-import {
-  FeatureAttributeTypeEnum, FeaturesResponseModel, TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel, FeatureModel,
-} from '@tailormap-viewer/api';
+import { inject, Injectable } from '@angular/core';
+import { FeatureAttributeTypeEnum, FeaturesResponseModel, TAILORMAP_API_V1_SERVICE, FeatureModel } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { selectApplicationId } from '../../state/core.selectors';
 import { catchError, combineLatest, concatMap, forkJoin, map, Observable, of, take } from 'rxjs';
@@ -23,13 +21,10 @@ export class FeatureInfoService {
    */
   private static DEFAULT_DISTANCE = 10;
 
-  constructor(
-    private store$: Store,
-    private mapService: MapService,
-    private httpService: HttpClient,
-    @Inject(TAILORMAP_API_V1_SERVICE) private apiService: TailormapApiV1ServiceModel,
-  ) {
-  }
+  private store$ = inject(Store);
+  private mapService = inject(MapService);
+  private httpService = inject(HttpClient);
+  private apiService = inject(TAILORMAP_API_V1_SERVICE);
 
   public getFeatures$(coordinates: [ number, number ]): Observable<FeatureInfoResponseModel[]> {
     return combineLatest([
