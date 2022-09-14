@@ -1,84 +1,97 @@
-name: Test and deploy
+name: 'Test and deploy'
 
-env:
-  # Keep this in sync with Dockerfile version
+env: # Keep this in sync with Dockerfile version
   NODE_VERSION: "16.17.0"
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   pull_request:
-    types: [opened, synchronize]
+    types: [ opened, synchronize ]
   workflow_dispatch:
 
 jobs:
   lint:
-    name: Lint
-    runs-on: ubuntu-18.04
+    name: 'Lint'
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
+
       - uses: actions/cache@v3
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
-      - name: Install
+
+      - name: 'Install'
         run: npm install
-      - name: Lint
+
+      - name: 'Lint'
         run: npm run lint
 
+
   test:
-    name: Test
-    runs-on: ubuntu-18.04
+    name: 'Test'
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
+
       - uses: actions/cache@v3
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
-      - name: Install
+
+      - name: 'Install'
         run: npm install
-      - name: Test
+
+      - name: 'Test'
         run: npm run test:ci
-      - name: Publish test results
+
+      - name: 'Publish test results'
         uses: EnricoMi/publish-unit-test-result-action@v2
         if: always()
         with:
           junit_files: junit.xml
           check_name: "Unit Test Results"
           comment_title: "Unit Test Results"
-      - name: Upload coverage to Codecov
+
+      - name: 'Upload coverage to Codecov'
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           directory: coverage
           flags: unittests
 
+
   build:
-    name: Build and deploy
-    # Do not use ubuntu-latest because of Docker compose version, see https://github.com/docker/compose/issues/7686
-    runs-on: ubuntu-18.04
+    name: 'Build and deploy'
+    runs-on: ubuntu-22.04
     env:
       VERSION_TAG: snapshot
       BASE_HREF: /
     steps:
       - uses: actions/checkout@v3
-      - name: GitHub Slug Action
+
+      - name: 'GitHub Slug Action'
         uses: rlespinasse/github-slug-action@v4
-      - name: Find Current Pull Request
+
+      - name: 'Find Current Pull Request'
         uses: jwalton/gh-find-current-pr@v1
         id: find-pr
+
       # TODO add some logic to determine version/tag name for releases
-      - name: Set variables for PR
+      - name: 'Set variables for PR'
         # When running on a PR, build and tag the Docker image for a deployment with a base-href and Nginx configuration for deployment of
         # the web container only on a sub-path, using the /api URL from the main branch deployment.
         if: ${{ success() && steps.find-pr.outputs.number }}
@@ -87,35 +100,47 @@ jobs:
         run: |
           echo "VERSION_TAG=pr-${PR}" >> $GITHUB_ENV
           echo "BASE_HREF=/pull-request/${PR}/${GITHUB_REF_NAME_SLUG_URL}/" >> $GITHUB_ENV
-      - name: Build and tag docker image
-        run: docker-compose build web db
-      - name: Log in to GitHub container registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-      - name: Push images to registry
-        run: docker-compose push web db
-      - uses: arwynfr/actions-docker-context@v2
-        name: Set Docker context for deployment
+
+      - name: 'Build and tag docker image'
+        run: docker compose build web db
+
+      - name: 'Log in to GitHub container registry'
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 'Push images to registry'
+        run: docker compose push web db
+
+      - name: 'Set Docker context for deployment'
+        uses: arwynfr/actions-docker-context@v2
         with:
           docker_host: ${{ secrets.DOCKER_HOST_SNAPSHOT }}
           context_name: 'dev-server'
           ssh_cert: ${{ secrets.DOCKER_HOST_SNAPSHOT_SSH_CERT }}
           ssh_key: ${{ secrets.DOCKER_HOST_SNAPSHOT_SSH_KEY }}
           use_context: true
-      - name: Add known hosts
+
+      - name: 'Add known hosts'
         run: |
           ssh-keyscan -H ${{ secrets.DOCKER_HOSTNAME }} > $HOME/.ssh/known_hosts
-      - name: Update main deployment using Docker Compose
+
+      - name: 'Update main deployment using Docker Compose'
         if: ${{ github.ref == 'refs/heads/main' }}
         run: |
-          docker-compose -f docker-compose.yml --profile proxied --profile full pull --quiet
-          DB_PORT=127.0.0.1:55432:5432 HOST=${{ secrets.DEPLOY_HOST_SNAPSHOT }} docker-compose -f docker-compose.yml -f docker-compose-db-ports.yml --profile proxied --profile full up -d
-      - name: Update pull request deployment using Docker Compose
+          docker compose -f docker-compose.yml --profile proxied --profile full pull --quiet
+          DB_PORT=127.0.0.1:55432:5432 HOST=${{ secrets.DEPLOY_HOST_SNAPSHOT }} docker compose -f docker-compose.yml -f docker-compose-db-ports.yml --profile proxied --profile full up -d
+
+      - name: 'Update pull request deployment using Docker Compose'
         if: ${{ steps.find-pr.outputs.number }}
         run: |
           export NAME=${{ env.VERSION_TAG }}
-          docker-compose -f docker-compose-pr.yml --project-name tailormap-snapshot-${NAME} pull --quiet
-          HOST=${{ secrets.DEPLOY_HOST_SNAPSHOT }} docker-compose -f docker-compose-pr.yml --project-name tailormap-snapshot-${NAME} up -d
-      - name: Create GitHub deployment
+          docker compose -f docker-compose-pr.yml --project-name tailormap-snapshot-${NAME} pull --quiet
+          HOST=${{ secrets.DEPLOY_HOST_SNAPSHOT }} docker compose -f docker-compose-pr.yml --project-name tailormap-snapshot-${NAME} up -d
+
+      - name: 'Create GitHub deployment'
         if: success()
         uses: chrnorm/deployment-action@releases/v1
         with:
@@ -133,8 +158,6 @@ jobs:
     permissions:
       contents: read
     steps:
-      - name: 'Checkout Repository'
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      - name: 'Dependency Review'
-        uses: actions/dependency-review-action@v2
+      - uses: actions/dependency-review-action@v2
