@@ -17,6 +17,7 @@ import { LoginFormComponent } from './pages/login/login-form/login-form.componen
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { SecurityInterceptor } from './interceptors/security.interceptor';
 import { ApplicationMapModule } from './map/application-map.module';
+import { FilterModule } from './filter/filter.module';
 
 const getBaseHref = (platformLocation: PlatformLocation): string => {
   return platformLocation.getBaseHrefFromDOM();
@@ -44,6 +45,7 @@ const getBaseHref = (platformLocation: PlatformLocation): string => {
     EffectsModule.forRoot([CoreEffects]),
     ApplicationMapModule,
     MapModule,
+    FilterModule,
     SharedModule,
     ComponentsModule,
   ],
