@@ -155,6 +155,14 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     layerIds.forEach(l => this.removeLayerAndSource(l, this.baseLayerGroup, this.layers));
   }
 
+  public getLayer(layerId: string) {
+    const layer = this.layers.get(layerId) || this.vectorLayers.get(layerId);
+    if (!layer) {
+      return;
+    }
+    return layer;
+  }
+
   public addLayers(layers: LayerModel[]) {
     layers.forEach(layer => this.addLayer(layer));
   }

@@ -18,11 +18,14 @@ import Feature from 'ol/Feature';
 import Geometry from 'ol/geom/Geometry';
 import { buffer } from 'ol/extent';
 import BaseLayer from 'ol/layer/Base';
+import { OpenLayersWmsGetFeatureInfoHelper } from './helpers/open-layers-wms-get-feature-info.helper';
+import { HttpClient } from '@angular/common/http';
+import { FeatureModel } from '@tailormap-viewer/api';
 
 export class OpenLayersMap implements MapViewerModel {
 
   private map: BehaviorSubject<OlMap | null> = new BehaviorSubject<OlMap | null>(null);
-  private layerManager: BehaviorSubject<LayerManagerModel | null> = new BehaviorSubject<LayerManagerModel | null>(null);
+  private layerManager: BehaviorSubject<OpenLayersLayerManager | null> = new BehaviorSubject<OpenLayersLayerManager | null>(null);
   private toolManager: BehaviorSubject<ToolManagerModel | null> = new BehaviorSubject<ToolManagerModel | null>(null);
 
   private readonly resizeObserver: ResizeObserver;
@@ -244,6 +247,32 @@ export class OpenLayersMap implements MapViewerModel {
         return pdfExport;
       }),
     );
+  }
+
+  public getFeatureInfoForLayers$(
+    layerId: string,
+    coordinates: [number, number],
+    httpClient: HttpClient,
+  ): Observable<FeatureModel[]> {
+    return forkJoin([
+      this.layerManager.asObservable().pipe(
+        filter((layerManager: OpenLayersLayerManager | null): layerManager is OpenLayersLayerManager => layerManager !== null),
+        take(1),
+      ),
+      this.getMap$().pipe(take(1)),
+    ])
+      .pipe(
+        concatMap(([ layerManager, olMap ]) => {
+          return OpenLayersWmsGetFeatureInfoHelper.getFeatureInfoForLayer$(
+            httpClient,
+            layerId,
+            coordinates,
+            olMap.getView().getResolution() || 0,
+            olMap.getView().getProjection().getCode(),
+            layerManager,
+          );
+        }),
+      );
   }
 
   private getSize$(): Observable<Size> {
