@@ -4,8 +4,13 @@ import { LayerTypesEnum } from '../models/layer-types.enum';
 import { VectorLayerModel } from '../models/vector-layer.model';
 import { TMSLayerModel } from '../models/tms-layer.model';
 import { WMTSLayerModel } from '../models/wmts-layer.model';
+import { ServiceLayerModel } from '../models/service-layer.model';
 
 export class LayerTypesHelper {
+
+  public static isServiceLayer(layer: LayerModel): layer is ServiceLayerModel {
+    return typeof (layer as ServiceLayerModel).url !== 'undefined';
+  }
 
   public static isWmsLayer(layer: LayerModel): layer is WMSLayerModel {
     return layer.layerType === LayerTypesEnum.WMS;

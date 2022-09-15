@@ -3,7 +3,8 @@ import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { AppLayerModel, LayerTreeNodeModel, ServiceModel, ServiceProtocol } from '@tailormap-viewer/api';
 import { ArrayHelper, TreeModel } from '@tailormap-viewer/shared';
 import { LayerTreeNodeHelper } from '../helpers/layer-tree-node.helper';
-import { AppLayerWithServiceModel, ExtendedLayerTreeNodeModel } from '../models';
+import { ExtendedAppLayerModel, ExtendedLayerTreeNodeModel } from '../models';
+import { selectCQLFilters } from '../../filter/state/filter.selectors';
 
 const selectMapState = createFeatureSelector<MapState>(mapStateKey);
 
@@ -40,7 +41,7 @@ export const selectMapOptions = createSelector(
   },
 );
 
-const getLayersWithServices = (layers: AppLayerModel[], services: ServiceModel[]): AppLayerWithServiceModel[] => {
+const getLayersWithServices = (layers: AppLayerModel[], services: ServiceModel[]): ExtendedAppLayerModel[] => {
     return layers.map(layer => ({
         ...layer,
         service: services.find(s => s.id === layer.serviceId),
@@ -92,10 +93,12 @@ export const selectOrderedBackgroundLayerIds = createSelector(
 export const selectOrderedVisibleLayersWithServices = createSelector(
   selectVisibleLayersWithServices,
   selectOrderedLayerIds,
-  (layers, orderedLayerIds) => {
+  selectCQLFilters,
+  (layers, orderedLayerIds, filters) => {
     return layers
       .filter(l => orderedLayerIds.includes(l.id))
-      .sort(ArrayHelper.getArraySorter('id', orderedLayerIds));
+      .sort(ArrayHelper.getArraySorter('id', orderedLayerIds))
+      .map(l => ({ ...l, filter: filters.get(l.id) }));
   },
 );
 

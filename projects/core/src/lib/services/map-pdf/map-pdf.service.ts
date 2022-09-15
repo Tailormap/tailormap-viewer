@@ -9,7 +9,7 @@ import { Svg2pdfOptions } from 'svg2pdf.js';
 import { LegendService } from '../../components/legend/services/legend.service';
 import { ResolvedServerType } from '@tailormap-viewer/api';
 import { ApplicationMapService } from '../../map/services/application-map.service';
-import { AppLayerWithServiceModel } from '../../map/models';
+import { ExtendedAppLayerModel } from '../../map/models';
 
 interface Size {
   width: number;
@@ -51,7 +51,7 @@ export class MapPdfService {
     private applicationMapService: ApplicationMapService,
   ) { }
 
-  public create$(printOptions: PrintOptions, layers: Array<AppLayerWithServiceModel>, legendLayers$: Observable<AppLayerWithServiceModel[]>,
+  public create$(printOptions: PrintOptions, layers: Array<ExtendedAppLayerModel>, legendLayers$: Observable<ExtendedAppLayerModel[]>,
                  vectorLayerFilter?: OlLayerFilter): Observable<string> {
     let size = printOptions.size === 'a3' ? a3Size : a4Size;
     if (printOptions.orientation === 'portrait') {
@@ -98,10 +98,10 @@ export class MapPdfService {
     );
   }
 
-  private addLegendImages$(doc: jsPDF, width: number, height: number, layers$: Observable<Array<AppLayerWithServiceModel>>) {
-    const legendDpiByLayer = new Map<AppLayerWithServiceModel, number>();
+  private addLegendImages$(doc: jsPDF, width: number, height: number, layers$: Observable<Array<ExtendedAppLayerModel>>) {
+    const legendDpiByLayer = new Map<ExtendedAppLayerModel, number>();
 
-    const legendURLCallback = (layer: AppLayerWithServiceModel, url: URL) => {
+    const legendURLCallback = (layer: ExtendedAppLayerModel, url: URL) => {
       legendDpiByLayer.set(layer, 90);
 
       if (layer.service?.resolvedServerType === ResolvedServerType.GEOSERVER && LegendService.isGetLegendGraphicRequest(url.toString())) {
@@ -143,9 +143,9 @@ export class MapPdfService {
   }
 
   private addMapImage$(doc: jsPDF, x: number, y: number, mapSize: Size, resolution: number,
-                       layersWithService: Array<AppLayerWithServiceModel>, vectorLayerFilter?: OlLayerFilter): Observable<string> {
+                       layersWithService: Array<ExtendedAppLayerModel>, vectorLayerFilter?: OlLayerFilter): Observable<string> {
     const isValidLayer = (layer: LayerModel | null): layer is LayerModel => layer !== null;
-    return forkJoin(layersWithService.map(layer => this.applicationMapService.convertAppLayerToMapLayer$(layer, layer.service))).pipe(
+    return forkJoin(layersWithService.map(layer => this.applicationMapService.convertAppLayerToMapLayer$(layer))).pipe(
       map(layers => layers.filter(isValidLayer)),
       concatMap(layers => this.mapService.exportMapImage$({ widthInMm: mapSize.width, heightInMm: mapSize.height, resolution, layers, vectorLayerFilter })),
       tap(dataURL => {
