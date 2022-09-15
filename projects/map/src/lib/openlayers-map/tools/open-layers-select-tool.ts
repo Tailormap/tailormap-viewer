@@ -6,7 +6,7 @@ import { EventsKey } from 'ol/events';
 import { unByKey } from 'ol/Observable';
 import { Select } from 'ol/interaction';
 import BaseLayer from 'ol/layer/Base';
-import { LayerProperties } from '../../helpers/ol-layer.helper';
+import { OlLayerHelper } from '../../helpers/ol-layer.helper';
 import { SelectEvent } from 'ol/interaction/Select';
 import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
 import { SelectToolConfigModel, SelectToolModel } from '../../models';
@@ -67,7 +67,7 @@ export class OpenLayersSelectTool<A extends FeatureModelAttributes = FeatureMode
   }
 
   private filterLayers(layer: BaseLayer) {
-    const layerProps: LayerProperties = layer.getProperties() as LayerProperties;
+    const layerProps = OlLayerHelper.getLayerProps(layer);
     return !(!layerProps || !this.layerFilterSet.has(layerProps.id));
   }
 
