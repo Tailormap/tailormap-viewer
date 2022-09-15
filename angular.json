@@ -36,7 +36,11 @@
             "main": "projects/app/src/main.ts",
             "polyfills": "projects/app/src/polyfills.ts",
             "assets": [
-              "projects/app/src/favicon.ico",
+              {
+                "glob": "**/*",
+                "input": "projects/app/src/assets",
+                "output": "."
+              },
               { "glob": "version.json", "input": "generated", "output": "." },
               {
                 "glob": "**/*",
