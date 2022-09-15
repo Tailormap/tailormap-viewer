@@ -1,12 +1,12 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { LayerModel, LayerTypesEnum, MapService, OgcHelper, WMSLayerModel, WMTSLayerModel } from '@tailormap-viewer/map';
-import { concatMap, distinctUntilChanged, filter, forkJoin, map, Observable, of, Subject, take, takeUntil, tap } from 'rxjs';
+import { concatMap, distinctUntilChanged, filter, forkJoin, map, Observable, of, Subject, take, takeUntil } from 'rxjs';
 import { AppLayerModel, ResolvedServerType, ServiceModel, ServiceProtocol } from '@tailormap-viewer/api';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { ArrayHelper } from '@tailormap-viewer/shared';
 import { selectMapOptions, selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersWithServices } from '../state/map.selectors';
-import { ExtendedAppLayerModel } from '../models';
+import { AppLayerWithServiceModel } from '../models';
 
 @Injectable({
    providedIn: 'root',
@@ -14,7 +14,6 @@ import { ExtendedAppLayerModel } from '../models';
 export class ApplicationMapService implements OnDestroy {
 
   private destroyed = new Subject();
-  private capabilities: Map<number, string> = new Map();
 
   constructor(
     private store$: Store,
@@ -61,9 +60,9 @@ export class ApplicationMapService implements OnDestroy {
       });
   }
 
-  private getLayersAndLayerManager$(serviceLayers: ExtendedAppLayerModel[]) {
+  private getLayersAndLayerManager$(serviceLayers: AppLayerWithServiceModel[]) {
     const layers$ = serviceLayers
-      .map(layer => this.convertAppLayerToMapLayer$(layer));
+      .map(layer => this.convertAppLayerToMapLayer$(layer, layer.service));
     return forkJoin([
       layers$.length > 0 ? forkJoin(layers$) : of([]),
       this.mapService.getLayerManager$().pipe(take(1)),
@@ -75,42 +74,41 @@ export class ApplicationMapService implements OnDestroy {
     this.destroyed.complete();
   }
 
-  public convertAppLayerToMapLayer$(extendedAppLayer: ExtendedAppLayerModel): Observable<LayerModel | null> {
-    if (!extendedAppLayer.service) {
+  // XXX use AppLayerModelWithService
+  public convertAppLayerToMapLayer$(appLayer: AppLayerModel, service?: ServiceModel): Observable<LayerModel | null> {
+    if (!service) {
       return of(null);
     }
-    const service = extendedAppLayer.service;
     if (service.protocol === ServiceProtocol.TILED) {
       return this.getCapabilitiesForWMTS$(service)
         .pipe(
           map((capabilities: string): WMTSLayerModel => ({
-            id: `${extendedAppLayer.id}`,
-            layers: extendedAppLayer.layerName,
-            name: extendedAppLayer.layerName,
+            id: `${appLayer.id}`,
+            layers: appLayer.layerName,
+            name: appLayer.layerName,
             layerType: LayerTypesEnum.WMTS,
-            visible: extendedAppLayer.visible,
+            visible: appLayer.visible,
             url: service.url,
             crossOrigin: 'anonymous',
             capabilities: capabilities || '',
-            hiDpiMode: extendedAppLayer.hiDpiMode,
-            hiDpiSubstituteLayer: extendedAppLayer.hiDpiSubstituteLayer,
+            hiDpiMode: appLayer.hiDpiMode,
+            hiDpiSubstituteLayer: appLayer.hiDpiSubstituteLayer,
           })),
         );
     }
     if (service.protocol === ServiceProtocol.WMS) {
       const layer: WMSLayerModel = {
-        id: `${extendedAppLayer.id}`,
-        layers: extendedAppLayer.layerName,
-        name: extendedAppLayer.layerName,
+        id: `${appLayer.id}`,
+        layers: appLayer.layerName,
+        name: appLayer.layerName,
         layerType: LayerTypesEnum.WMS,
-        visible: extendedAppLayer.visible,
+        visible: appLayer.visible,
         url: service.url,
         crossOrigin: 'anonymous',
         serverType: service.serverType,
         resolvedServerType: service.resolvedServerType as ResolvedServerType,
         tilingDisabled: service.tilingDisabled,
         tilingGutter: service.tilingGutter,
-        filter: extendedAppLayer.filter,
       };
       return of(layer);
     }
@@ -121,16 +119,10 @@ export class ApplicationMapService implements OnDestroy {
     if (service.capabilities) {
       return of(service.capabilities);
     }
-    const cachedCapabilities = this.capabilities.get(service.id);
-    if (cachedCapabilities) {
-      return of(cachedCapabilities);
-    }
     return this.httpClient.get(OgcHelper.filterOgcUrlParameters(service.url), {
       responseType: 'text',
       params: new HttpParams().append('REQUEST', 'GetCapabilities').append('SERVICE', 'WMTS'),
-    }).pipe(
-      tap(capabilities => this.capabilities.set(service.id, capabilities)),
-    );
+    });
   }
 
 }

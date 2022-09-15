@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, combineLatest, concatMap, forkJoin, map, Observable, of, switchMap } from 'rxjs';
 import { MapResolutionModel, MapService, ScaleHelper } from '@tailormap-viewer/map';
-import { ExtendedAppLayerModel } from '../../../map/models';
+import { AppLayerWithServiceModel } from '../../../map/models';
 import { ImageHelper } from '../../../shared/helpers/image.helper';
 import { LegendInfoModel } from '../models/legend-info.model';
 import { UrlHelper } from '@tailormap-viewer/shared';
@@ -49,7 +49,7 @@ export class LegendService {
     return this.visibleSubject$.asObservable();
   }
 
-  public getLegendInfo$(appLayers$: Observable<ExtendedAppLayerModel[]>, mapResolution$?: Observable<MapResolutionModel>):
+  public getLegendInfo$(appLayers$: Observable<AppLayerWithServiceModel[]>, mapResolution$?: Observable<MapResolutionModel>):
     Observable<LegendInfoModel[]> {
     return this.mapService.getLayerManager$()
       .pipe(
@@ -77,8 +77,8 @@ export class LegendService {
       );
   }
 
-  public getLegendImages$(appLayers$: Observable<ExtendedAppLayerModel[]>, urlCallback?: (layer: ExtendedAppLayerModel, url: URL) => void):
-    Observable<Array<{ appLayer: ExtendedAppLayerModel; imageData: string | null; width: number; height: number; error?: any }>> {
+  public getLegendImages$(appLayers$: Observable<AppLayerWithServiceModel[]>, urlCallback?: (layer: AppLayerWithServiceModel, url: URL) => void):
+    Observable<Array<{ appLayer: AppLayerWithServiceModel; imageData: string | null; width: number; height: number; error?: any }>> {
     return this.getLegendInfo$(appLayers$).pipe(
       concatMap(appLayerAndUrls => {
         if (appLayerAndUrls.length === 0) {

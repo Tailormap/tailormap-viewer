@@ -1,7 +1,7 @@
-import { ExtendedAppLayerModel } from '../../../map/models';
+import { AppLayerWithServiceModel } from '../../../map/models';
 
 export interface LegendInfoModel {
-  layer: ExtendedAppLayerModel;
+  layer: AppLayerWithServiceModel;
   url: string;
   isInScale: boolean;
 }
