@@ -6,7 +6,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { coreReducer } from './state/core.reducer';
 import { coreStateKey } from './state/core.state';
 import { CoreEffects } from './state/core.effects';
-import { TAILORMAP_API_V1_SERVICE, TailormapApiV1MockService, TailormapApiV1Service } from '@tailormap-viewer/api';
+import { TAILORMAP_API_V1_SERVICE, TailormapApiV1Service } from '@tailormap-viewer/api';
 import { ICON_SERVICE_ICON_LOCATION, IconService, SharedModule } from '@tailormap-viewer/shared';
 import { ComponentsModule } from './components/components.module';
 import { MatIconRegistry } from '@angular/material/icon';
@@ -54,7 +54,7 @@ const getBaseHref = (platformLocation: PlatformLocation): string => {
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: SecurityInterceptor, multi: true },
-    { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1MockService },
+    { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1Service },
     { provide: ICON_SERVICE_ICON_LOCATION, useValue: 'assets/core/imgs/' },
     { provide: APP_BASE_HREF, useFactory: getBaseHref, deps: [PlatformLocation] },
   ],
