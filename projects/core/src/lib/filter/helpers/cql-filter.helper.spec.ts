@@ -142,20 +142,4 @@ describe('CQLFilterHelper', () => {
     expect(filters.get(1)).toBe('((attribute LIKE \'%value%\') AND ((((attribute2 > 5) OR (attribute3 < 10)) OR (attribute5 IS NULL)) AND (attribute4 BETWEEN 5 AND 10)))');
   });
 
-  /*
-  (
-      (attribute LIKE '%value%')
-      AND
-      (
-         (
-           ((attribute2 > 5) AND (attribute3 < 10))
-           OR
-           (attribute5 IS NULL)
-         )
-         AND
-         (attribute4 BETWEEN 5 AND 10)
-      )
-  )
-  */
-
 });
