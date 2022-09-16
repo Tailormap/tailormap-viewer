@@ -1,6 +1,6 @@
 import { initialCoreState } from './core.state';
 import { loadApplication, loadApplicationFailed, loadApplicationSuccess } from './core.actions';
-import { getAppLayerModel, getAppResponseData, getMapResponseData } from '@tailormap-viewer/api';
+import { getAppResponseData } from '@tailormap-viewer/api';
 import { coreReducer } from './core.reducer';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 
