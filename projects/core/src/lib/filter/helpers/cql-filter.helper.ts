@@ -2,6 +2,7 @@ import { FilterGroupModel } from '../models/filter-group.model';
 import { AttributeFilterModel } from '../models/attribute-filter.model';
 import { FilterConditionEnum } from '../models/filter-condition.enum';
 import { FeatureAttributeTypeEnum } from '@tailormap-viewer/api';
+import { TypesHelper } from '@tailormap-viewer/shared';
 
 export class CqlFilterHelper {
 
@@ -21,14 +22,17 @@ export class CqlFilterHelper {
   }
 
   private static getFilterForGroup(filterGroup: FilterGroupModel, allFilterGroups: FilterGroupModel[]): string {
-    const filter = filterGroup.filters
+    const filter: string[] = [];
+    const baseFilter: string[] = filterGroup.filters
       .map(f => CqlFilterHelper.convertFilterToQuery(f))
-      .filter(f => f !== null);
+      .filter(TypesHelper.isDefined);
+    filter.push(CqlFilterHelper.wrapFilters(baseFilter, filterGroup.operator));
     const childFilters = allFilterGroups.filter(f => f.parentGroup === filterGroup.id);
     if (childFilters.length > 0) {
-      filter.push(...childFilters.map(f => CqlFilterHelper.getFilterForGroup(f, allFilterGroups)));
+      const childCql = childFilters.map(f => CqlFilterHelper.getFilterForGroup(f, allFilterGroups));
+      filter.push(CqlFilterHelper.wrapFilters(childCql, filterGroup.operator));
     }
-    return filter.join(` ${filterGroup.operator} `);
+    return CqlFilterHelper.wrapFilters(filter, filterGroup.operator);
   }
 
   private static convertFilterToQuery(filter: AttributeFilterModel): string | null {
@@ -37,7 +41,7 @@ export class CqlFilterHelper {
       return CqlFilterHelper.wrapFilter(`${filter.attribute} IN (${uniqueValList})`);
     }
     if (filter.condition === FilterConditionEnum.NULL_KEY) {
-      return CqlFilterHelper.wrapFilter(`${filter.attribute} IS NULL`);
+      return CqlFilterHelper.wrapFilter(`${filter.attribute} IS${filter.invertCondition ? ' NOT' : ''} NULL`);
     }
     const value = filter.value[0];
     if (CqlFilterHelper.isNumeric(filter.attributeType)
@@ -72,13 +76,19 @@ export class CqlFilterHelper {
     return `(${cql})`;
   }
 
+  private static wrapFilters(cqlFilters: string[], operator: 'AND' | 'OR') {
+    return cqlFilters.length === 1
+      ? cqlFilters[0]
+      : CqlFilterHelper.wrapFilter(cqlFilters.join(` ${operator} `));
+  }
+
   private static getQueryForString(filter: AttributeFilterModel) {
     const query: string[] = [filter.attribute];
     const value = filter.value[0];
     if (filter.invertCondition) {
       query.push('NOT');
     }
-    query.push('ILIKE');
+    query.push(filter.caseSensitive ? 'ILIKE' : 'LIKE');
     if (filter.condition === FilterConditionEnum.STRING_EQUALS_KEY) {
       query.push(CqlFilterHelper.getExpression(`${value}`, FeatureAttributeTypeEnum.STRING));
     }
