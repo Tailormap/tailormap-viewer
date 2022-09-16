@@ -6,8 +6,8 @@ import { catchError, combineLatest, concatMap, forkJoin, map, Observable, of, ta
 import { FeatureInfoResponseModel } from './models/feature-info-response.model';
 import { selectVisibleLayersWithAttributes, selectVisibleWMSLayersWithoutAttributes } from '../../map/state/map.selectors';
 import { MapResolutionModel, MapService } from '@tailormap-viewer/map';
-import { AppLayerWithServiceModel } from '../../map/models';
 import { HttpClient } from '@angular/common/http';
+import { ExtendedAppLayerModel } from '../../map/models';
 
 @Injectable({
   providedIn: 'root',
@@ -52,7 +52,7 @@ export class FeatureInfoService {
   }
 
   private getFeatureInfoFromApi$(
-    layer: AppLayerWithServiceModel,
+    layer: ExtendedAppLayerModel,
     coordinates: [ number, number ],
     applicationId: number,
     resolutions: MapResolutionModel,
