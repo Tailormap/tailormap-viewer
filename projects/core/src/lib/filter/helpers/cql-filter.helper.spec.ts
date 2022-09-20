@@ -22,7 +22,7 @@ describe('CQLFilterHelper', () => {
       source: 'SOME_COMPONENT',
     };
     const filters = CqlFilterHelper.getFilters([filterGroup]);
-    expect(filters.get(1)).toBe('(attribute LIKE \'%value%\')');
+    expect(filters.get(1)).toBe('(attribute ILIKE \'%value%\')');
   });
 
   test('combine multiple filters into a CQL filter', () => {
@@ -66,7 +66,7 @@ describe('CQLFilterHelper', () => {
       source: 'SOME_COMPONENT',
     };
     const filters = CqlFilterHelper.getFilters([filterGroup]);
-    expect(filters.get(1)).toBe('((attribute LIKE \'%value%\') AND (attribute2 = true) AND (attribute3 = 2020-01-01) AND (attribute4 IS NOT NULL))');
+    expect(filters.get(1)).toBe('((attribute ILIKE \'%value%\') AND (attribute2 = true) AND (attribute3 = 2020-01-01) AND (attribute4 IS NOT NULL))');
   });
 
   test('should create a CQL filter for a tree of filters', () => {
@@ -75,7 +75,7 @@ describe('CQLFilterHelper', () => {
       layerId: 1,
       filters: [{
         id: '1',
-        caseSensitive: false,
+        caseSensitive: true,
         invertCondition: false,
         attribute: 'attribute',
         attributeType: FeatureAttributeTypeEnum.STRING,

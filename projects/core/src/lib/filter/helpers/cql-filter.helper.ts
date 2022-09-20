@@ -88,7 +88,7 @@ export class CqlFilterHelper {
     if (filter.invertCondition) {
       query.push('NOT');
     }
-    query.push(filter.caseSensitive ? 'ILIKE' : 'LIKE');
+    query.push(filter.caseSensitive ? 'LIKE' : 'ILIKE');
     if (filter.condition === FilterConditionEnum.STRING_EQUALS_KEY) {
       query.push(CqlFilterHelper.getExpression(`${value}`, FeatureAttributeTypeEnum.STRING));
     }
