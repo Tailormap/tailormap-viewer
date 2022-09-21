@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { map } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { concatMap, map } from 'rxjs/operators';
+import { forkJoin, Observable, of, pipe, take } from 'rxjs';
 import { AttributeListRowModel } from '../models/attribute-list-row.model';
 import { Store } from '@ngrx/store';
 import { AttributeListState } from '../state/attribute-list.state';
@@ -8,10 +8,16 @@ import { AttributeListColumnModel } from '../models/attribute-list-column.model'
 import {
   selectColumnsForSelectedTab, selectLoadingDataSelectedTab,
   selectRowCountForSelectedTab,
-  selectRowsForSelectedTab, selectSortForSelectedTab,
+  selectRowsForSelectedTab, selectSelectedTab, selectSortForSelectedTab,
 } from '../state/attribute-list.selectors';
 import { updateRowSelected, updateSort } from '../state/attribute-list.actions';
 import { AttributeListStateService } from '../services/attribute-list-state.service';
+import { FeatureAttributeTypeEnum } from '@tailormap-viewer/api';
+import { SimpleAttributeFilterService } from '../../../filter/services/simple-attribute-filter.service';
+import { selectCQLFilters } from '../../../filter/state/filter.selectors';
+import { ATTRIBUTE_LIST_ID } from '../attribute-list-identifier';
+import { AttributeListFilterComponent, FilterDialogData } from '../attribute-list-filter/attribute-list-filter.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'tm-attribute-list-content',
@@ -28,10 +34,10 @@ export class AttributeListContentComponent implements OnInit {
   public hasRows$: Observable<boolean> = of(false);
   public hasNoRows$: Observable<boolean> = of(true);
 
-  constructor(
-    private store$: Store<AttributeListState>,
-    private attributeListStateService: AttributeListStateService,
-  ) { }
+  private store$ = inject(Store);
+  private attributeListStateService = inject(AttributeListStateService);
+  private simpleAttributeFilterService = inject(SimpleAttributeFilterService);
+  private dialog = inject(MatDialog);
 
   public ngOnInit(): void {
     this.rows$ = this.store$.select(selectRowsForSelectedTab);
@@ -62,4 +68,36 @@ export class AttributeListContentComponent implements OnInit {
     });
   }
 
+  public onSetFilter($event: { columnId: string; attributeType: FeatureAttributeTypeEnum }) {
+    this.store$.select(selectSelectedTab)
+      .pipe(
+        pipe(take(1)),
+        concatMap(selectedTab => {
+          if (!selectedTab || !selectedTab.layerId) {
+            return of(null);
+          }
+          const layerId = selectedTab.layerId;
+          return forkJoin([
+            this.simpleAttributeFilterService.getFilter(ATTRIBUTE_LIST_ID, layerId, $event.columnId),
+            this.store$.select(selectCQLFilters)
+              .pipe(take(1), map(cqlFilters => cqlFilters.get(layerId))),
+            of(layerId),
+          ]);
+        }),
+      )
+      .subscribe(result => {
+        if (!result) {
+          return;
+        }
+        const [ attributeFilterModel, cqlFilter, layerId ] = result;
+        const data: FilterDialogData = {
+          columnName: $event.columnId,
+          layerId,
+          filter: attributeFilterModel,
+          columnType: $event.attributeType,
+          cqlFilter,
+        };
+        this.dialog.open(AttributeListFilterComponent, { data });
+      });
+  }
 }
