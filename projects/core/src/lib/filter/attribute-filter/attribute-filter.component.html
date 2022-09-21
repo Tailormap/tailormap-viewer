@@ -1,0 +1,60 @@
+<ng-container [formGroup]="attributeFilterForm">
+
+  <div class="form-field">
+    <label i18n>Condition</label>
+    <mat-select formControlName="condition" panelClass="attribute-filter-condition-list-panel">
+      <mat-option *ngFor="let attr of filteredConditions$ | async" [value]="attr.condition">{{attr.label}}</mat-option>
+    </mat-select>
+  </div>
+
+  <div class="form-field" *ngIf="showValueInput()">
+    <label>
+      <ng-container *ngIf="!showValueBetweenInput()" i18n>Value</ng-container>
+      <ng-container *ngIf="showValueBetweenInput()" i18n>From</ng-container>
+    </label>
+    <input type="text" formControlName="value" />
+  </div>
+
+  <div class="form-field" *ngIf="showValueBetweenInput()">
+    <label i18n>Until</label>
+    <input type="text" formControlName="value2" />
+  </div>
+
+  <div class="form-field" *ngIf="showDateInput()">
+    <label>
+      <ng-container *ngIf="!showDateUntilInput()" i18n>Value</ng-container>
+      <ng-container *ngIf="showDateUntilInput()" i18n>From</ng-container>
+    </label>
+    <div class="datepicker-input">
+      <input matInput [matDatepicker]="dp" formControlName="value" />
+      <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+    </div>
+    <mat-datepicker #dp></mat-datepicker>
+  </div>
+
+  <div class="form-field" *ngIf="showDateUntilInput()">
+    <label i18n>Until</label>
+    <div class="datepicker-input">
+      <input matInput [matDatepicker]="dp2" formControlName="value2" />
+      <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
+    </div>
+    <mat-datepicker #dp2></mat-datepicker>
+  </div>
+
+  <mat-checkbox *ngIf="!loadingUniqueValues && showUniqueValuesInput()"
+                [checked]="allUniqueValuesSelected"
+                [indeterminate]="someUniqueValuesSelected"
+                (change)="toggleAllUniqueValues()"
+                class="unique-values-check-all">
+    <span *ngIf="allUniqueValuesSelected" i18n>Deselect all values</span>
+    <span *ngIf="!allUniqueValuesSelected" i18n>Select all values</span>
+  </mat-checkbox>
+
+  <div class="unique-values-list" *ngIf="showUniqueValuesInput()">
+    <mat-spinner mode="indeterminate" diameter="20" *ngIf="loadingUniqueValues"></mat-spinner>
+    <ng-container *ngFor="let uniqueValue of uniqueValues; let i = index; trackBy: trackByIndex">
+      <mat-checkbox [checked]="uniqueValue.selected" (change)="toggleUniqueValue(uniqueValue.value)">{{uniqueValue.value}}</mat-checkbox>
+    </ng-container>
+  </div>
+
+</ng-container>

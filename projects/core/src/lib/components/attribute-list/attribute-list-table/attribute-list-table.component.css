@@ -38,9 +38,14 @@ mat-table {
   white-space: nowrap;
 }
 
-.header-cell--with-filter mat-icon {
+.header-cell--with-filter .filter {
+  cursor: pointer;
   flex-shrink: 0;
   color: rgba(0, 0, 0, 0.26);
+}
+
+.header-cell--with-filter .filter:hover {
+  color: var(--primary-color-0_5);
 }
 
 .header-cell--with-filter .filter-active {
@@ -48,9 +53,13 @@ mat-table {
 }
 
 .header-cell--with-sort .sort {
+  cursor: pointer;
   visibility: hidden;
   color: rgba(0, 0, 0, 0.26);
-  transform: scale(1.5) translateY(-1px);
+}
+
+.header-cell--with-sort .sort:hover {
+  color: var(--primary-color-0_5);
 }
 
 .header-cell--with-sort:hover .sort {

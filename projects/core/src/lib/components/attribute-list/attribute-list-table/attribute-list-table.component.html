@@ -7,9 +7,15 @@
     <!-- Header -->
     <mat-header-cell *matHeaderCellDef
                      class="header-cell--with-resizer header-cell--with-sort"
+                     [class.header-cell--with-filter]="setFilter"
                      (click)="onSortClick(col.id)"
                      [style.flexBasis]="getColumnWidth(col)">
       <span [title]="col.label">{{col.label}}</span>
+      <mat-icon *ngIf="setFilter"
+                svgIcon="filter_outline"
+                class="filter"
+                [class.filter-active]="getIsFilterActive(col.id)"
+                (click)="onFilterClick($event, col)"></mat-icon>
       <mat-icon class="sort"
                 [class.sort-active]="sort?.column === col.id"
                 [svgIcon]="sort?.direction === 'desc' ? 'drop_top' : 'drop_down'"></mat-icon>

@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { AttributeFilterModel } from '../models/attribute-filter.model';
 import * as FilterActions from '../state/filter.actions';
 import { selectFilterGroup } from '../state/filter.selectors';
-import { take } from 'rxjs';
+import { map, Observable, take } from 'rxjs';
 import { nanoid } from 'nanoid';
 
 @Injectable({
@@ -33,6 +33,21 @@ export class SimpleAttributeFilterService {
         ...filter,
       });
     });
+  }
+
+  public getFilter(
+    source: string,
+    layerId: number,
+    attribute: string,
+  ): Observable<AttributeFilterModel | null> {
+    return this.getGroup$(source, layerId)
+      .pipe(
+        map(group => {
+          return group
+            ? group.filters.find(f => f.attribute === attribute) || null
+            : null;
+        }),
+      );
   }
 
   public removeFilter(

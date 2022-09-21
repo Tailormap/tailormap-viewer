@@ -1,6 +1,8 @@
 import { Component, Input, ChangeDetectionStrategy, EventEmitter, Output } from '@angular/core';
 import { AttributeListRowModel } from '../models/attribute-list-row.model';
 import { AttributeListColumnModel } from '../models/attribute-list-column.model';
+import { FeatureAttributeTypeEnum } from '@tailormap-viewer/api';
+import { AttributeFilterModel } from '../../../filter/models/attribute-filter.model';
 
 const DEFAULT_COLUMN_WIDTH = 170;
 
@@ -40,15 +42,27 @@ export class AttributeListTableComponent {
   @Input()
   public sort: { column: string; direction: string } | null = null;
 
+  @Input()
+  public set filters(filters: AttributeFilterModel[] | null) {
+    if (filters === null) {
+      return;
+    }
+    this.filtersDictionary = new Set<string>(filters.map(f => f.attribute));
+  }
+
   @Output()
   public selectRow = new EventEmitter<{ id: string; selected: boolean }>();
 
   @Output()
   public setSort = new EventEmitter<{ columnId: string; direction: 'asc' | 'desc' | '' }>();
 
+  @Output()
+  public setFilter = new EventEmitter<{ columnId: string; attributeType: FeatureAttributeTypeEnum }>();
+
   private _rows: AttributeListRowModel[] = [];
   private _columns: AttributeListColumnModel[] = [];
   public columnNames: string[] = [];
+  private filtersDictionary: Set<string> = new Set();
 
   private columnWidths: Map<string, number> = new Map();
   private isResizing = false;
@@ -100,6 +114,15 @@ export class AttributeListTableComponent {
       direction = this.sort.direction === 'asc' ? 'desc' : '';
     }
     this.setSort.emit({ columnId, direction });
+  }
+
+  public onFilterClick($event: MouseEvent, column: AttributeListColumnModel): void {
+    $event.stopPropagation();
+    this.setFilter.emit({ columnId: column.id, attributeType: column.type });
+  }
+
+  public getIsFilterActive(columnId: string) {
+    return this.filtersDictionary.has(columnId);
   }
 
 }

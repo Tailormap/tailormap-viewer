@@ -187,7 +187,7 @@ export class OlLayerHelper {
       QUERY_LAYERS: layer.queryLayers,
       TRANSPARENT: 'TRUE',
     };
-    if (layer.filter && layer.resolvedServerType !== ResolvedServerType.GEOSERVER) {
+    if (layer.filter && layer.resolvedServerType === ResolvedServerType.GEOSERVER) {
       // TODO: implement filtering for other servers than geoserver
       params.CQL_FILTER = layer.filter;
     }
