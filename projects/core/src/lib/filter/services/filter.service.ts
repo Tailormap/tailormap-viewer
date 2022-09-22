@@ -13,7 +13,11 @@ export class FilterService implements OnDestroy {
   private store$ = inject(Store);
   private currentFilters: Map<number, string | null> = new Map();
 
-  private changedFilters$: Observable<Map<number, string | null>> = this.initChangedFilters$();
+  private changedFiltersSubject$ = new Subject<Map<number, string | null>>();
+
+  public constructor() {
+    this.initChangedFilters$();
+  }
 
   public ngOnDestroy(): void {
     this.destroyed.next(null);
@@ -21,15 +25,15 @@ export class FilterService implements OnDestroy {
   }
 
   public getChangedFilters$(): Observable<Map<number, string | null>> {
-    return this.changedFilters$;
+    return this.changedFiltersSubject$.asObservable();
   }
 
-  public getFilterForLayer(layerId: number): string | null {
-    return this.currentFilters.get(layerId) || null;
+  public getFilterForLayer(layerId: number): string | undefined {
+    return this.currentFilters.get(layerId) || undefined;
   }
 
-  private initChangedFilters$(): Observable<Map<number, string | null>> {
-    return this.store$.select(selectCQLFilters)
+  private initChangedFilters$() {
+    this.store$.select(selectCQLFilters)
       .pipe(
         takeUntil(this.destroyed),
         map((filters) => {
@@ -42,9 +46,6 @@ export class FilterService implements OnDestroy {
           const changedFilters: Array<[ number, string ]> = Array.from(filters.keys())
             .filter((key) => this.currentFilters.get(key) !== filters.get(key))
             .map((key) => [ key, filters.get(key) || '' ]);
-          console.log('newFilters', newFilters);
-          console.log('removedFilters', removedFilters);
-          console.log('changedFilters', changedFilters);
           return [
             filters,
             new Map<number, string | null>([ ...newFilters, ...removedFilters, ...changedFilters ]),
@@ -53,7 +54,8 @@ export class FilterService implements OnDestroy {
         tap(([filters]) => this.currentFilters = filters),
         map(([ , changedFilters ]) => changedFilters),
         filter((filters) => filters.size > 0),
-      );
+      )
+      .subscribe((filters) => this.changedFiltersSubject$.next(filters));
   }
 
 }

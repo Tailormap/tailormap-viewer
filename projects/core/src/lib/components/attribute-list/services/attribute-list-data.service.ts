@@ -1,7 +1,7 @@
 import { Inject, Injectable, OnDestroy } from '@angular/core';
 import { AttributeListTabModel } from '../models/attribute-list-tab.model';
 import { catchError, concatMap, map, take, takeUntil, withLatestFrom } from 'rxjs/operators';
-import { combineLatest, filter, merge, Observable, of, Subject, zip } from 'rxjs';
+import { combineLatest, filter, Observable, of, Subject } from 'rxjs';
 import { AttributeListRowModel } from '../models/attribute-list-row.model';
 import { Store } from '@ngrx/store';
 import { selectAttributeListTab, selectAttributeListTabData, selectAttributeListTabs } from '../state/attribute-list.selectors';
@@ -90,7 +90,7 @@ export class AttributeListDataService implements OnDestroy {
           layerId,
           applicationId,
           page: start,
-          filter: layerFilter || undefined,
+          filter: layerFilter,
           sortBy: selectedData.sortedColumn,
           sortOrder: selectedData.sortDirection === 'desc'
             ? Sortorder.DESC

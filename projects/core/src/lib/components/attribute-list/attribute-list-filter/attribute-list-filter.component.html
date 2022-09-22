@@ -1,24 +1,26 @@
 <h3 mat-dialog-title>
-  Filter op {{data.columnName}}
+  <ng-container i18n>Filter on</ng-container>
+  {{getColumnName()}}
 </h3>
 <div>
 
-  <tm-attribute-filter [attributeType]="data.columnType"
+  <tm-attribute-filter [attributeType]="getAttributeType()"
                        [filter]="filter"
                        [uniqueValues$]="uniqueValues$"
                        (filterChanged)="updateFilter($event)"></tm-attribute-filter>
 
   <mat-dialog-actions>
+
     <button mat-raised-button color="primary"
-            (click)="onOk()">
-      OK
+            (click)="onOk()" i18n>
+      Set
     </button>
     <button mat-raised-button color="primary"
-            (click)="onClear()">
-      Wis
+            (click)="onClear()" i18n>
+      Clear
     </button>
     <button mat-raised-button color="primary"
-            (click)="onCancel()">
+            (click)="onCancel()" i18n>
       Cancel
     </button>
   </mat-dialog-actions>

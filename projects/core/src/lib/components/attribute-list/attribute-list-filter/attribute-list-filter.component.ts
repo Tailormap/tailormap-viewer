@@ -29,11 +29,11 @@ export class AttributeListFilterComponent implements OnInit {
 
   public uniqueValues$: Observable<string[]> | null = null;
   public filter: FilterType = {};
-  private updatedFilter: FilterType = {};
+  public updatedFilter: FilterType = {};
 
   private simpleAttributeFilterService = inject(SimpleAttributeFilterService);
   private dialogRef = inject(MatDialogRef<AttributeListFilterComponent>);
-  public data: FilterDialogData = inject(MAT_DIALOG_DATA);
+  private data: FilterDialogData = inject(MAT_DIALOG_DATA);
 
   public ngOnInit(): void {
     this.uniqueValues$ = this.getUniqueValues$();
@@ -53,7 +53,7 @@ export class AttributeListFilterComponent implements OnInit {
     }
     this.simpleAttributeFilterService.setFilter(ATTRIBUTE_LIST_ID, this.data.layerId, {
       condition: this.updatedFilter.condition,
-      value: this.getValue(),
+      value: typeof this.updatedFilter.value === 'undefined' ? [] : this.updatedFilter.value,
       attribute: this.data.columnName,
       attributeType: this.data.columnType,
       caseSensitive: false,
@@ -79,11 +79,12 @@ export class AttributeListFilterComponent implements OnInit {
     this.updatedFilter = filter;
   }
 
-  private getValue() {
-    if (typeof this.updatedFilter.value === 'undefined') {
-      return [];
-    }
-    return this.updatedFilter.value;
+  public getAttributeType() {
+    return this.data.columnType;
+  }
+
+  public getColumnName() {
+    return this.data.columnName;
   }
 
 }
