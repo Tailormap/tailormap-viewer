@@ -5,6 +5,7 @@ import {
 } from '../models';
 import { Observable } from 'rxjs';
 import { TailormapApiV1ServiceModel } from './tailormap-api-v1.service.model';
+import { UniqueValuesResponseModel } from '../models/unique-values-response.model';
 
 @Injectable()
 export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
@@ -82,6 +83,21 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
     });
     return this.httpClient.get<FeaturesResponseModel>(
       `${TailormapApiV1Service.BASE_URL}/app/${params.applicationId}/layer/${params.layerId}/features`,
+      { params: queryParams },
+    );
+  }
+
+  public getUniqueValues$(params: {
+    applicationId: number;
+    layerId: number;
+    attribute: string;
+    filter?: string;
+  }): Observable<UniqueValuesResponseModel> {
+    const queryParams = this.getQueryParams({
+      filter: params.filter,
+    });
+    return this.httpClient.get<UniqueValuesResponseModel>(
+      `${TailormapApiV1Service.BASE_URL}/app/${params.applicationId}/layer/${params.layerId}/unique/${params.attribute}`,
       { params: queryParams },
     );
   }
