@@ -5,6 +5,10 @@
   height: 100%;
 }
 
+.table-container-empty-message {
+  margin: 16px;
+}
+
 mat-spinner {
   margin: 16px;
 }

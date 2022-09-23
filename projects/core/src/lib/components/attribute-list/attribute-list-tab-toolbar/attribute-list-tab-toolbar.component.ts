@@ -61,7 +61,7 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
       this.pagingPopover = this.popoverService.open({
         origin: $event.target,
         content: AttributeListPagingDialogComponent,
-        height: 90,
+        height: 100,
         width: Math.min(WINDOW_WIDTH, window.innerWidth),
         closeOnClickOutside: true,
         position: PopoverPositionEnum.BOTTOM_RIGHT_DOWN,

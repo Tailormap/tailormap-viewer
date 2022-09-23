@@ -83,36 +83,35 @@
       Label
     </h2>
 
-    <div class="form-field">
-      <label i18n>Label</label>
-      <div class="form-field__columns">
-        <input matInput *ngIf="!isLabelType()" i18n-placeholder placeholder="Label" [formControl]="labelControl">
-        <textarea matInput *ngIf="isLabelType()" i18n-placeholder placeholder="Label" [formControl]="labelControl"></textarea>
-        <div class="icon-button-list">
-          <button *ngIf="showInsertCoordinates()"
-                  mat-stroked-button
-                  tmTooltip="Insert coordinates as label"
-                  i18n-tmTooltip
-                  (click)="insertCoordinates()">
-            <mat-icon svgIcon="coordinates"></mat-icon>
-          </button>
-          <button *ngIf="showInsertLength()"
-                  mat-stroked-button
-                  tmTooltip="Insert length as label"
-                  i18n-tmTooltip
-                  (click)="insertLength()">
-            <mat-icon svgIcon="tools_measure_length_outline"></mat-icon>
-          </button>
-          <button *ngIf="showInsertArea()"
-                  mat-stroked-button
-                  tmTooltip="Insert area as label"
-                  i18n-tmTooltip
-                  (click)="insertArea()">
-            <mat-icon svgIcon="tools_measure_area_outline"></mat-icon>
-          </button>
-        </div>
-      </div>
-    </div>
+    <mat-form-field appearance="outline" color="primary">
+      <mat-label i18n>Label</mat-label>
+      <input matInput *ngIf="!isLabelType()" i18n-placeholder placeholder="Label" [formControl]="labelControl">
+      <textarea matInput *ngIf="isLabelType()" i18n-placeholder placeholder="Label" [formControl]="labelControl"></textarea>
+      <button *ngIf="showInsertCoordinates()"
+              mat-icon-button
+              matSuffix
+              tmTooltip="Insert coordinates as label"
+              i18n-tmTooltip
+              (click)="insertCoordinates()">
+        <mat-icon svgIcon="coordinates"></mat-icon>
+      </button>
+      <button *ngIf="showInsertLength()"
+              mat-icon-button
+              matSuffix
+              tmTooltip="Insert length as label"
+              i18n-tmTooltip
+              (click)="insertLength()">
+        <mat-icon svgIcon="tools_measure_length_outline"></mat-icon>
+      </button>
+      <button *ngIf="showInsertArea()"
+              mat-icon-button
+              matSuffix
+              tmTooltip="Insert area as label"
+              i18n-tmTooltip
+              (click)="insertArea()">
+        <mat-icon svgIcon="tools_measure_area_outline"></mat-icon>
+      </button>
+    </mat-form-field>
 
     <div class="form-field form-field__columns form-field__buttons">
       <label i18n>Format</label>
@@ -212,8 +211,8 @@
                   (change)="changeStrokeOpacity($event)"></mat-slider>
     </div>
 
-    <div class="form-field">
-      <label i18n>Stroke type</label>
+    <mat-form-field appearance="outline" color="primary">
+      <mat-label i18n>Stroke type</mat-label>
       <mat-select [formControl]="strokeTypeControl"
                   panelClass="select-line-style"
                   class="select-line-style">
@@ -224,9 +223,9 @@
           <ng-container *ngTemplateOutlet="strokeTypeImage; context: { $implicit: strokeTypeValue }"></ng-container>
         </mat-option>
       </mat-select>
-    </div>
+    </mat-form-field>
 
-    <div class="form-field" *ngIf="showArrowSetting()">
+    <mat-form-field appearance="outline" color="primary" *ngIf="showArrowSetting()">
       <label i18n>Arrow</label>
       <mat-select [formControl]="arrowTypeControl">
         <mat-option *ngFor="let arrowTypeValue of arrowTypeValues"
@@ -234,7 +233,7 @@
           {{arrowTypeValue.label}}
         </mat-option>
       </mat-select>
-    </div>
+    </mat-form-field>
 
   </div>
 

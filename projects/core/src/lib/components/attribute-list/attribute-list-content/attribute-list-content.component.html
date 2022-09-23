@@ -1,6 +1,6 @@
 <div class="table-container">
 
-  <div *ngIf="(hasNoRows$ | async) && (notLoadingData$ | async)" i18n>
+  <div *ngIf="(hasNoRows$ | async) && (notLoadingData$ | async)" i18n class="table-container-empty-message">
     No rows found
   </div>
 
