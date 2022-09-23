@@ -20,6 +20,8 @@ import { attributeListReducer } from '../state/attribute-list.reducer';
 import { mapReducer } from '../../../map/state/map.reducer';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { filterStateKey, initialFilterState } from '../../../filter/state/filter.state';
+import { filterReducer } from '../../../filter/state/filter.reducer';
 
 const getStore = (
   attributeListStore: { [attributeListStateKey]: AttributeListState },
@@ -30,6 +32,9 @@ const getStore = (
     [mapStateKey]: {
       ...initialMapState,
       layers,
+    },
+    [filterStateKey]: {
+      ...initialFilterState,
     },
   };
 };
@@ -106,6 +111,7 @@ describe('AttributeList', () => {
         StoreModule.forRoot({
           [attributeListStateKey]: attributeListReducer,
           [mapStateKey]: mapReducer,
+          [filterStateKey]: filterReducer,
         }, { initialState: store }),
       ],
       declarations: [

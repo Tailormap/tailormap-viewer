@@ -2,10 +2,11 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/angular';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AttributeListFilterComponent, FilterDialogData } from './attribute-list-filter.component';
 import { SimpleAttributeFilterService } from '../../../filter/services/simple-attribute-filter.service';
-import { FeatureAttributeTypeEnum } from '@tailormap-viewer/api';
+import { FeatureAttributeTypeEnum, UniqueValuesService } from '@tailormap-viewer/api';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { AttributeFilterComponent } from '../../../filter/attribute-filter/attribute-filter.component';
 import userEvent from '@testing-library/user-event';
+import { of } from 'rxjs';
 
 describe('AttributeListFilterComponent', () => {
 
@@ -16,13 +17,18 @@ describe('AttributeListFilterComponent', () => {
       filter: null,
       layerId: 1,
       columnType: FeatureAttributeTypeEnum.STRING,
+      applicationId: 1,
     };
     const attributeFilterService = { setFilter: jest.fn(), removeFilter: jest.fn() };
+    const uniqueValuesService = {
+      getUniqueValues$: jest.fn(() => of({ values: [] })),
+    };
     await render(AttributeListFilterComponent, {
       providers: [
         { provide: MatDialogRef, useValue: dialogRef },
         { provide: MAT_DIALOG_DATA, useValue: dialogData },
         { provide: SimpleAttributeFilterService, useValue: attributeFilterService },
+        { provide: UniqueValuesService, useValue: uniqueValuesService },
       ],
       imports: [SharedModule],
       declarations: [AttributeFilterComponent],

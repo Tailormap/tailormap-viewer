@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Observable, of } from 'rxjs';
-import { FeatureAttributeTypeEnum } from '@tailormap-viewer/api';
+import { map, Observable } from 'rxjs';
+import { FeatureAttributeTypeEnum, UniqueValuesService } from '@tailormap-viewer/api';
 import { AttributeFilterModel } from '../../../filter/models/attribute-filter.model';
 import { FilterConditionEnum } from '../../../filter/models/filter-condition.enum';
 import { SimpleAttributeFilterService } from '../../../filter/services/simple-attribute-filter.service';
@@ -13,6 +13,7 @@ export interface FilterDialogData {
   filter: AttributeFilterModel | null;
   columnType: FeatureAttributeTypeEnum;
   cqlFilter?: string;
+  applicationId: number;
 }
 
 interface FilterType {
@@ -34,6 +35,7 @@ export class AttributeListFilterComponent implements OnInit {
   private simpleAttributeFilterService = inject(SimpleAttributeFilterService);
   private dialogRef = inject(MatDialogRef<AttributeListFilterComponent>);
   private data: FilterDialogData = inject(MAT_DIALOG_DATA);
+  private uniqueValuesService = inject(UniqueValuesService);
 
   public ngOnInit(): void {
     this.uniqueValues$ = this.getUniqueValues$();
@@ -72,7 +74,17 @@ export class AttributeListFilterComponent implements OnInit {
   }
 
   public getUniqueValues$(): Observable<string[]> {
-    return of([]);
+    return this.uniqueValuesService.getUniqueValues$({
+      attribute: this.data.columnName,
+      layerId: this.data.layerId,
+      filter: this.data.cqlFilter,
+      applicationId: this.data.applicationId,
+    })
+      .pipe(
+        map(response => {
+          return response.values.map(v => `${v}`) || [];
+        }),
+      );
   }
 
   public updateFilter(filter: { condition: FilterConditionEnum; value: string[] }) {
@@ -85,6 +97,13 @@ export class AttributeListFilterComponent implements OnInit {
 
   public getColumnName() {
     return this.data.columnName;
+  }
+
+  public submitValidFilter() {
+    if (this.updatedFilter.condition) {
+      this.onOk();
+    }
+    return;
   }
 
 }
