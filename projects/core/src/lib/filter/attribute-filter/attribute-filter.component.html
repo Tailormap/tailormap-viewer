@@ -1,11 +1,14 @@
-<ng-container [formGroup]="attributeFilterForm">
+<div [formGroup]="attributeFilterForm">
 
-  <div class="form-field">
-    <label i18n>Condition</label>
-    <mat-select formControlName="condition" panelClass="attribute-filter-condition-list-panel">
-      <mat-option *ngFor="let attr of filteredConditions$ | async" [value]="attr.condition">{{attr.label}}</mat-option>
+  <mat-form-field appearance="outline">
+    <mat-label i18n>Condition</mat-label>
+    <mat-select i18n-aria-label
+                aria-label="Select condition"
+                formControlName="condition"
+                panelClass="attribute-filter-condition-list-panel">
+      <mat-option *ngFor="let attr of filteredConditions" [value]="attr.condition">{{attr.label}}</mat-option>
     </mat-select>
-  </div>
+  </mat-form-field>
 
   <div class="form-field" *ngIf="showValueInput()">
     <label>
@@ -57,4 +60,4 @@
     </ng-container>
   </div>
 
-</ng-container>
+</div>

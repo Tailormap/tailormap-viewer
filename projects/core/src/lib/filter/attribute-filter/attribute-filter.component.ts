@@ -1,8 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 import { FormBuilder } from '@angular/forms';
 import { debounceTime, take, takeUntil, tap } from 'rxjs/operators';
-import { DateAdapter } from '@angular/material/core';
 import { DateTime } from 'luxon';
 import { FeatureAttributeTypeEnum } from '@tailormap-viewer/api';
 import { FilterConditionEnum } from '../models/filter-condition.enum';
@@ -41,7 +40,7 @@ export class AttributeFilterComponent implements OnInit, OnDestroy {
       value = filter.value[0];
     }
     this.attributeFilterForm.patchValue({
-      condition: filter.condition,
+      condition: filter.condition || '',
       value,
       value2,
     }, { emitEvent: false });
@@ -91,18 +90,12 @@ export class AttributeFilterComponent implements OnInit, OnDestroy {
 
   private destroyed = new Subject();
 
-  private filteredConditionsSubject$ = new BehaviorSubject<AttributeFilterTypeModel[]>([]);
-  public filteredConditions$ = this.filteredConditionsSubject$.asObservable();
+  public filteredConditions: AttributeFilterTypeModel[] = [];
 
   private formValues: FilterData = {};
   public trackByIndex = (idx: number) => idx;
 
-  constructor(
-    private fb: FormBuilder,
-    private adapter: DateAdapter<any>,
-  ) {
-    this.adapter.setLocale('nl');
-  }
+  constructor(private fb: FormBuilder) {}
 
   public ngOnInit(): void {
     this.attributeFilterForm.valueChanges
@@ -116,7 +109,7 @@ export class AttributeFilterComponent implements OnInit, OnDestroy {
         }),
       )
       .subscribe(formValues => {
-        const condition = this.filteredConditionsSubject$.value.find(c => c.condition === formValues.condition);
+        const condition = this.filteredConditions.find(c => c.condition === formValues.condition);
         if (!formValues.condition || !condition) {
           return;
         }
@@ -131,6 +124,8 @@ export class AttributeFilterComponent implements OnInit, OnDestroy {
         this.formValues = { ...updatedValue };
         this.filterChanged.emit({ ...updatedValue });
       });
+
+    this.updateConditions();
   }
 
   public ngOnDestroy() {
@@ -227,9 +222,8 @@ export class AttributeFilterComponent implements OnInit, OnDestroy {
     if (!attributeType) {
       return;
     }
-    const conditions = AttributeFilterHelper.getConditionTypes(this.hasUniqueValues)
+    this.filteredConditions = AttributeFilterHelper.getConditionTypes(this.hasUniqueValues)
       .filter(c => c.attributeType.length === 0 || c.attributeType.includes(attributeType));
-    this.filteredConditionsSubject$.next(conditions);
   }
 
   public toggleUniqueValue(uniqueValue: string) {
