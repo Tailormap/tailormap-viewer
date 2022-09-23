@@ -35,7 +35,12 @@ export class SimpleAttributeFilterService {
     });
   }
 
-  public getFilter(
+  public hasFilter$(source: string, layerId: number) {
+    return this.getGroup$(source, layerId)
+      .pipe(map(group => !!group));
+  }
+
+  public getFilter$(
     source: string,
     layerId: number,
     attribute: string,

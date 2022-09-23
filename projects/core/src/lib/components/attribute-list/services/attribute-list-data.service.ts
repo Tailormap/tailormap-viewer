@@ -38,12 +38,7 @@ export class AttributeListDataService implements OnDestroy {
       )
       .subscribe(tabs => {
         tabs.forEach(tab => {
-          this.loadDataForTab$(tab.id).subscribe(result => {
-            if (!result.success) {
-              this.store$.dispatch(AttributeListActions.loadDataFailed({ tabId: tab.id, data: result }));
-            }
-            this.store$.dispatch(AttributeListActions.loadDataSuccess({ tabId: tab.id, data: result }));
-          });
+          this.store$.dispatch(AttributeListActions.loadData({ tabId: tab.id }));
         });
       });
   }

@@ -31,6 +31,7 @@ interface WmsServiceParamsModel {
   QUERY_LAYERS?: string;
   TRANSPARENT: string;
   CQL_FILTER?: string;
+  CACHE?: number;
 }
 
 export class OlLayerHelper {
@@ -180,7 +181,7 @@ export class OlLayerHelper {
     }
   }
 
-  public static getWmsServiceParams(layer: WMSLayerModel): WmsServiceParamsModel {
+  public static getWmsServiceParams(layer: WMSLayerModel, addCacheBust?: boolean): WmsServiceParamsModel {
     const params: WmsServiceParamsModel = {
       LAYERS: layer.layers,
       VERSION: '1.1.1',
@@ -190,6 +191,9 @@ export class OlLayerHelper {
     if (layer.filter && layer.resolvedServerType === ResolvedServerType.GEOSERVER) {
       // TODO: implement filtering for other servers than geoserver
       params.CQL_FILTER = layer.filter;
+    }
+    if (addCacheBust) {
+      params.CACHE = Date.now();
     }
     return params;
   }
