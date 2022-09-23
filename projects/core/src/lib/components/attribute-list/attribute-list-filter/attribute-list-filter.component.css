@@ -11,14 +11,14 @@ h3 {
 
 .mat-dialog-actions {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding-top: 16px;
 }
 
 .mat-dialog-title {
   width: 100%;
-  text-align: center;
-  vertical-align: center;
+  margin-bottom: 1.5em;
 }
 
 .mat-radio-button {

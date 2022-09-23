@@ -8,10 +8,26 @@ import { FilterConditionEnum } from '../models/filter-condition.enum';
 import { AttributeFilterTypeModel } from '../models/attribute-filter-type.model';
 import { AttributeFilterHelper } from '../helpers/attribute-filter.helper';
 
-type FilterData = {
-  condition?: string;
+interface InputFilterData {
+  condition?: FilterConditionEnum;
+  value?: Array<string | DateTime>;
+  caseSensitive?: boolean;
+  invertCondition?: boolean;
+}
+
+interface FilterData {
+  condition?: FilterConditionEnum | string;
   value?: string[];
-};
+  caseSensitive?: boolean;
+  invertCondition?: boolean;
+}
+
+interface OutputFilterData {
+  condition: FilterConditionEnum;
+  value: string[];
+  caseSensitive?: boolean;
+  invertCondition?: boolean;
+}
 
 @Component({
   selector: 'tm-attribute-filter',
@@ -28,7 +44,7 @@ export class AttributeFilterComponent implements OnInit, OnDestroy {
   }
 
   @Input()
-  public set filter(filter: { condition?: FilterConditionEnum; value?: Array<string | DateTime> }) {
+  public set filter(filter: InputFilterData) {
     let value: string | DateTime = '';
     let value2: string | DateTime = '';
     if (filter.value && filter.value.length === 1 && this._attributeType === FeatureAttributeTypeEnum.DATE) {
@@ -39,15 +55,24 @@ export class AttributeFilterComponent implements OnInit, OnDestroy {
     } else if (filter.value && filter.value.length === 1) {
       value = filter.value[0];
     }
+    const caseSensitive = typeof filter.caseSensitive === 'boolean' ? filter.caseSensitive : false;
+    const invertCondition = typeof filter.invertCondition === 'boolean' ? filter.invertCondition : false;
     this.attributeFilterForm.patchValue({
       condition: filter.condition || '',
       value,
       value2,
+      caseSensitive,
+      invertCondition,
     }, { emitEvent: false });
     if (this.formValues && this.formValues.condition !== filter.condition && filter.condition === FilterConditionEnum.UNIQUE_VALUES_KEY) {
       this.initUniqueValues();
     }
-    this.formValues = { condition: filter.condition, value: filter.value ? filter.value.map(val => this.mapValueToString(val)) : [] };
+    this.formValues = {
+      condition: filter.condition,
+      value: filter.value ? filter.value.map(val => this.mapValueToString(val)) : [],
+      caseSensitive,
+      invertCondition,
+    };
   }
 
   @Input()
@@ -65,7 +90,7 @@ export class AttributeFilterComponent implements OnInit, OnDestroy {
   }
 
   @Output()
-  public filterChanged: EventEmitter<{ condition: FilterConditionEnum; value: string[] }> = new EventEmitter<{condition: FilterConditionEnum; value: string[] }>();
+  public filterChanged: EventEmitter<OutputFilterData> = new EventEmitter<OutputFilterData>();
 
   private hasUniqueValues = false;
   private uniqueValuesLoader$: Observable<string[]> = of([]);
@@ -80,10 +105,14 @@ export class AttributeFilterComponent implements OnInit, OnDestroy {
     condition: string;
     value: string | DateTime;
     value2: string | DateTime;
+    caseSensitive: boolean;
+    invertCondition: boolean;
   }>({
     condition: '',
     value: '',
     value2: '',
+    caseSensitive: false,
+    invertCondition: false,
   });
 
   private _attributeType: FeatureAttributeTypeEnum | null = null;
@@ -120,7 +149,14 @@ export class AttributeFilterComponent implements OnInit, OnDestroy {
         if (formValues.condition === FilterConditionEnum.UNIQUE_VALUES_KEY) {
           value = this.getSelectedUniqueValues();
         }
-        const updatedValue = { condition: condition.condition, value };
+        const caseSensitive = typeof formValues.caseSensitive === 'boolean' ? formValues.caseSensitive : false;
+        const invertCondition = typeof formValues.invertCondition === 'boolean' ? formValues.invertCondition : false;
+        const updatedValue = {
+          condition: condition.condition,
+          value,
+          caseSensitive,
+          invertCondition,
+        };
         this.formValues = { ...updatedValue };
         this.filterChanged.emit({ ...updatedValue });
       });
@@ -187,6 +223,17 @@ export class AttributeFilterComponent implements OnInit, OnDestroy {
         this._attributeType === FeatureAttributeTypeEnum.INTEGER ||
         this._attributeType === FeatureAttributeTypeEnum.DOUBLE
       );
+  }
+
+  public showCaseSensitiveInput() {
+    return this._attributeType === FeatureAttributeTypeEnum.STRING;
+  }
+
+  public showInvertConditionInput() {
+    return this._attributeType === FeatureAttributeTypeEnum.STRING ||
+      this._attributeType === FeatureAttributeTypeEnum.INTEGER ||
+      this._attributeType === FeatureAttributeTypeEnum.DOUBLE ||
+      this._attributeType === FeatureAttributeTypeEnum.DATE;
   }
 
   public showValueBetweenInput() {

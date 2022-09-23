@@ -19,6 +19,8 @@ export interface FilterDialogData {
 interface FilterType {
   condition?: FilterConditionEnum;
   value?: string[];
+  caseSensitive?: boolean;
+  invertCondition?: boolean;
 }
 
 @Component({
@@ -45,6 +47,8 @@ export class AttributeListFilterComponent implements OnInit {
     this.filter = {
       condition: this.data.filter.condition,
       value: this.data.filter.value,
+      caseSensitive: this.data.filter.caseSensitive,
+      invertCondition: this.data.filter.invertCondition,
     };
     this.updatedFilter = { ...this.filter };
   }
@@ -58,8 +62,12 @@ export class AttributeListFilterComponent implements OnInit {
       value: typeof this.updatedFilter.value === 'undefined' ? [] : this.updatedFilter.value,
       attribute: this.data.columnName,
       attributeType: this.data.columnType,
-      caseSensitive: false,
-      invertCondition: false,
+      caseSensitive: typeof this.updatedFilter.caseSensitive === 'boolean'
+        ? this.updatedFilter.caseSensitive
+        : false,
+      invertCondition: typeof this.updatedFilter.invertCondition === 'boolean'
+        ? this.updatedFilter.invertCondition
+        : false,
     });
     this.dialogRef.close();
   }
@@ -87,7 +95,12 @@ export class AttributeListFilterComponent implements OnInit {
       );
   }
 
-  public updateFilter(filter: { condition: FilterConditionEnum; value: string[] }) {
+  public updateFilter(filter: {
+    condition: FilterConditionEnum;
+    value: string[];
+    caseSensitive?: boolean;
+    invertCondition?: boolean;
+  }) {
     this.updatedFilter = filter;
   }
 
