@@ -12,6 +12,11 @@
   margin: 3px 0;
 }
 
+.spaced_top {
+  margin-top: 16px;
+}
+
 .padding {
   padding: 6px 0;
 }
+

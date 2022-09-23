@@ -17,6 +17,10 @@
   margin-left: 6px;
 }
 
+.section-label + mat-form-field {
+  margin-top: 16px;
+}
+
 .checkbox-field {
   padding-bottom: 6px;
 }
