@@ -1,6 +1,7 @@
 <mat-toolbar>
 
   <div class="buttons">
+    <button *ngIf="hasFilters$ | async" mat-flat-button color="primary" (click)="clearFilter()" i18n>Clear filters</button>
     <mat-spinner *ngIf="loadingData$ | async" color="primary" mode="indeterminate" diameter="20"></mat-spinner>
   </div>
 

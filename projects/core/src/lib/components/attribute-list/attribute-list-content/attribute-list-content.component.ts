@@ -78,7 +78,8 @@ export class AttributeListContentComponent implements OnInit {
           }
           const layerId = selectedTab.layerId;
           return forkJoin([
-            this.simpleAttributeFilterService.getFilter(ATTRIBUTE_LIST_ID, layerId, $event.columnId),
+            this.simpleAttributeFilterService.getFilter$(ATTRIBUTE_LIST_ID, layerId, $event.columnId)
+              .pipe(take(1)),
             this.store$.select(selectCQLFilters)
               .pipe(take(1), map(cqlFilters => cqlFilters.get(layerId))),
             of(layerId),

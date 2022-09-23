@@ -97,7 +97,8 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     removeLayer: (id: string) => void,
     getZIndexForLayer: (zIndex?: number) => number,
   ) {
-    if (ArrayHelper.arrayEquals(this.createLayerIdentifiers(layers), prevLayerIdentifiers)) {
+    const layerIdentifiers = this.createLayerIdentifiers(layers);
+    if (ArrayHelper.arrayEquals(layerIdentifiers, prevLayerIdentifiers)) {
       return prevLayerIdentifiers;
     }
     const layerIds = layers.map(layer => layer.id);
@@ -121,7 +122,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
         }
         addLayer(layer, zIndex);
       });
-    return layerIds;
+    return layerIdentifiers;
   }
 
   public addLayer<LayerType extends LayerTypes>(layer: LayerModel, zIndex?: number): LayerType | null {
@@ -169,7 +170,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     }
     OlLayerHelper.setLayerProps(layer, olLayer);
     if (isOpenLayersWMSLayer(olLayer)) {
-      olLayer.getSource()?.updateParams(OlLayerHelper.getWmsServiceParams(layer));
+      olLayer.getSource()?.updateParams({ CQL_FILTER: layer.filter });
     }
   }
 
