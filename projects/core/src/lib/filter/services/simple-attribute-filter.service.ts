@@ -40,7 +40,12 @@ export class SimpleAttributeFilterService {
       .pipe(map(group => !!group));
   }
 
-  public getFilter$(
+  public getFilters$(source: string, layerId: number) {
+    return this.getGroup$(source, layerId)
+      .pipe(map(group => group?.filters || []));
+  }
+
+  public getFilterForAttribute$(
     source: string,
     layerId: number,
     attribute: string,

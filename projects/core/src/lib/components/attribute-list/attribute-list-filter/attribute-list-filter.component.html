@@ -2,7 +2,7 @@
   <ng-container i18n>Filter on</ng-container>
   {{getColumnName()}}
 </h3>
-<div>
+<div (keydown.enter)="submitValidFilter()">
 
   <tm-attribute-filter [attributeType]="getAttributeType()"
                        [filter]="filter"

@@ -1,7 +1,7 @@
-import { inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { TAILORMAP_API_V1_SERVICE } from '../services';
 import { UniqueValuesResponseModel } from '../models/unique-values-response.model';
-import { Observable, of, tap } from 'rxjs';
+import { catchError, Observable, of, tap } from 'rxjs';
 
 interface UniqueValueParams {
   applicationId: number;
@@ -10,9 +10,12 @@ interface UniqueValueParams {
   filter?: string;
 }
 
+@Injectable({
+  providedIn: 'root',
+})
 export class UniqueValuesService {
 
-  private currentApplicationId: number;
+  private currentApplicationId = -1;
   private apiService = inject(TAILORMAP_API_V1_SERVICE);
 
   private cachedResponses: Map<string, UniqueValuesResponseModel> = new Map();
@@ -24,11 +27,19 @@ export class UniqueValuesService {
     }
     this.currentApplicationId = params.applicationId;
     const key = this.createKey(params);
-    if (this.cachedResponses.has(key)) {
-      return of(this.cachedResponses.get(key));
+    const cachedResponse = this.cachedResponses.get(key);
+    if (cachedResponse) {
+      return of(cachedResponse);
     }
     return this.apiService.getUniqueValues$(params)
-      .pipe(tap(response => this.cachedResponses.set(key, response)));
+      .pipe(
+        catchError(() => of({ hasError: true, filterApplied: false, values: [] })),
+        tap((response: UniqueValuesResponseModel & { hasError?: boolean }) => {
+          if (!response.hasError) {
+            this.cachedResponses.set(key, response);
+          }
+        }),
+      );
   }
 
   private createKey(params: UniqueValueParams): string {
