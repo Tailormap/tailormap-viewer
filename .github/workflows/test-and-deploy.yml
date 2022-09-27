@@ -129,13 +129,13 @@ jobs:
 
       - name: 'Update main deployment using Docker Compose'
         if: ${{ github.ref == 'refs/heads/main' }}
-        run: DB_PORT=127.0.0.1:55432:5432 HOST=${{ secrets.DEPLOY_HOST_SNAPSHOT }} docker compose -f docker-compose.yml -f docker-compose-db-ports.yml --profile proxied --profile full up -d --pull always
+        run: DB_PORT=127.0.0.1:55432:5432 HOST=${{ secrets.DEPLOY_HOST_SNAPSHOT }} docker compose -f docker-compose.yml -f docker-compose-db-ports.yml --profile proxied --profile full up -d --pull always --force-recreate
 
       - name: 'Update pull request deployment using Docker Compose'
         if: ${{ steps.find-pr.outputs.number }}
         run: |
           export NAME=${{ env.VERSION_TAG }}
-          HOST=${{ secrets.DEPLOY_HOST_SNAPSHOT }} docker compose -f docker-compose-pr.yml --project-name tailormap-snapshot-${NAME} up -d --pull always --quiet-pull
+          HOST=${{ secrets.DEPLOY_HOST_SNAPSHOT }} docker compose -f docker-compose-pr.yml --project-name tailormap-snapshot-${NAME} up -d --pull always --quiet-pull --force-recreate
 
       - name: 'Create GitHub deployment'
         if: success()
