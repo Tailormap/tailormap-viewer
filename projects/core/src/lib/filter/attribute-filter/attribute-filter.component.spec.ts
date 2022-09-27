@@ -8,19 +8,18 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 describe('AttributeFilterComponent', () => {
 
   test('should create a filter', async () => {
     const filterChangedFn = { emit: jest.fn(() => {}) };
     await render(AttributeFilterComponent, {
-      imports: [ ReactiveFormsModule, MatInputModule, MatSelectModule, MatDatepickerModule, MatNativeDateModule ],
+      imports: [ ReactiveFormsModule, MatInputModule, MatSelectModule, MatDatepickerModule, MatNativeDateModule, MatCheckboxModule ],
       componentProperties: {
         filter: {},
         attributeType: FeatureAttributeTypeEnum.STRING,
         filterChanged: filterChangedFn as any,
-        showCaseSensitiveInput: (): boolean => false,
-        showInvertConditionInput: (): boolean => false,
       },
     });
     await userEvent.click(screen.getByLabelText('Select condition'));
