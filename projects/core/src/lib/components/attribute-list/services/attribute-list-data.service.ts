@@ -1,16 +1,18 @@
 import { Inject, Injectable, OnDestroy } from '@angular/core';
 import { AttributeListTabModel } from '../models/attribute-list-tab.model';
-import { catchError, concatMap, map, take } from 'rxjs/operators';
+import { catchError, concatMap, map, take, takeUntil, withLatestFrom } from 'rxjs/operators';
 import { combineLatest, filter, Observable, of, Subject } from 'rxjs';
 import { AttributeListRowModel } from '../models/attribute-list-row.model';
 import { Store } from '@ngrx/store';
-import { selectAttributeListTab, selectAttributeListTabData } from '../state/attribute-list.selectors';
+import { selectAttributeListTab, selectAttributeListTabData, selectAttributeListTabs } from '../state/attribute-list.selectors';
 import { ColumnMetadataModel, FeatureModel, Sortorder, TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel } from '@tailormap-viewer/api';
 import { LoadAttributeListDataResultModel } from '../models/load-attribute-list-data-result.model';
 import { AttributeListDataModel } from '../models/attribute-list-data.model';
 import { selectApplicationId } from '../../../state/core.selectors';
 import { TypesHelper } from '@tailormap-viewer/shared';
 import { AttributeListColumnModel } from '../models/attribute-list-column.model';
+import { FilterService } from '../../../filter/services/filter.service';
+import * as AttributeListActions from '../state/attribute-list.actions';
 
 @Injectable({
   providedIn: 'root',
@@ -24,7 +26,22 @@ export class AttributeListDataService implements OnDestroy {
   constructor(
     @Inject(TAILORMAP_API_V1_SERVICE) private api: TailormapApiV1ServiceModel,
     private store$: Store,
-  ) {}
+    private filterService: FilterService,
+  ) {
+    this.filterService.getChangedFilters$()
+      .pipe(
+        takeUntil(this.destroyed),
+        withLatestFrom(this.store$.select(selectAttributeListTabs)),
+        map(([ filters, tabs ]) => {
+          return tabs.filter(tab => typeof tab.layerId === 'undefined' ? false : filters.has(tab.layerId));
+        }),
+      )
+      .subscribe(tabs => {
+        tabs.forEach(tab => {
+          this.store$.dispatch(AttributeListActions.loadData({ tabId: tab.id }));
+        });
+      });
+  }
 
   public ngOnDestroy() {
     this.destroyed.next(null);
@@ -60,6 +77,7 @@ export class AttributeListDataService implements OnDestroy {
       return of(AttributeListDataService.getErrorResult(dataId));
     }
     const start = selectedData.pageIndex;
+    const layerFilter = this.filterService.getFilterForLayer(layerId);
     return this.store$.select(selectApplicationId)
       .pipe(
         filter(TypesHelper.isDefined),
@@ -67,6 +85,7 @@ export class AttributeListDataService implements OnDestroy {
           layerId,
           applicationId,
           page: start,
+          filter: layerFilter,
           sortBy: selectedData.sortedColumn,
           sortOrder: selectedData.sortDirection === 'desc'
             ? Sortorder.DESC

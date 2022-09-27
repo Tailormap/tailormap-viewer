@@ -30,8 +30,9 @@
 
     <div class="form-field-wrap">
 
-      <mat-form-field class="color-picker__form-field">
-        <input matInput class="form-field" i18n-placeholder placeholder="Color code" [formControl]="formControl">
+      <mat-form-field appearance="outline" color="primary">
+        <mat-label i18n>Color code</mat-label>
+        <input matInput [formControl]="formControl">
         <mat-error *ngIf="hasError() && isRequired()" i18n>
           Color is required
         </mat-error>

@@ -1,3 +1,11 @@
+body .mat-form-field {
+  display: block;
+}
+
+body .mat-form-field-label {
+  color: var(--text-color);
+}
+
 .form-field + .form-field {
   margin-top: 16px;
 }

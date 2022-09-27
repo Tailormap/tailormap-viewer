@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SharedComponentsModule, SharedImportsModule } from '@tailormap-viewer/shared';
+import { SharedModule } from '@tailormap-viewer/shared';
 import { AttributeListMenuButtonComponent } from './attribute-list-menu-button/attribute-list-menu-button.component';
 import { AttributeListComponent } from './attribute-list/attribute-list.component';
 import { AttributeListTabComponent } from './attribute-list-tab/attribute-list-tab.component';
@@ -15,6 +15,8 @@ import { AttributeListContentComponent } from './attribute-list-content/attribut
 import { AttributeListTableComponent } from './attribute-list-table/attribute-list-table.component';
 import { AttributeListTabToolbarComponent } from './attribute-list-tab-toolbar/attribute-list-tab-toolbar.component';
 import { AttributeListPagingDialogComponent } from './attribute-list-paging-dialog/attribute-list-paging-dialog.component';
+import { AttributeListFilterComponent } from './attribute-list-filter/attribute-list-filter.component';
+import { FilterModule } from '../../filter/filter.module';
 
 @NgModule({
   declarations: [
@@ -25,14 +27,15 @@ import { AttributeListPagingDialogComponent } from './attribute-list-paging-dial
     AttributeListContentComponent,
     AttributeListTableComponent,
     AttributeListPagingDialogComponent,
+    AttributeListFilterComponent,
   ],
   imports: [
     CommonModule,
-    SharedImportsModule,
-    SharedComponentsModule,
+    SharedModule,
     MenubarModule,
     StoreModule.forFeature(attributeListStateKey, attributeListReducer),
     EffectsModule.forFeature([AttributeListEffects]),
+    FilterModule,
   ],
   exports: [
     AttributeListComponent,
