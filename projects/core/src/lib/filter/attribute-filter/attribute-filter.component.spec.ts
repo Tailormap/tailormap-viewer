@@ -19,6 +19,8 @@ describe('AttributeFilterComponent', () => {
         filter: {},
         attributeType: FeatureAttributeTypeEnum.STRING,
         filterChanged: filterChangedFn as any,
+        showCaseSensitiveInput: (): boolean => false,
+        showInvertConditionInput: (): boolean => false,
       },
     });
     await userEvent.click(screen.getByLabelText('Select condition'));
@@ -28,6 +30,8 @@ describe('AttributeFilterComponent', () => {
       expect(filterChangedFn.emit).toHaveBeenCalledWith({
         condition: FilterConditionEnum.STRING_LIKE_KEY,
         value: ['test'],
+        caseSensitive: false,
+        invertCondition: false,
       });
     });
   });
