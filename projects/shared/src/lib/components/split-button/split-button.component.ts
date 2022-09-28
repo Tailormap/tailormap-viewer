@@ -32,7 +32,7 @@ export class SplitButtonComponent {
   @Output()
   public optionSelected = new EventEmitter<string>();
 
-  private selectedOptionId: string | null = null;
+  public selectedOptionId: string | null = null;
   public selectedOptionObject: SplitButtonOptionModel | null = null;
   public optionsList: SplitButtonOptionModel[] = [];
 
