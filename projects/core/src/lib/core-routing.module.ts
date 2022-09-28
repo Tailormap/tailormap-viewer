@@ -19,6 +19,7 @@ const routes: Routes = [
   { path: 'app/:name', component: ViewerAppComponent },
   { path: 'app', component: ViewerAppComponent },
   { path: '', component: ViewerAppComponent },
+  { path: '**', redirectTo: '' },
 ];
 
 @NgModule({
