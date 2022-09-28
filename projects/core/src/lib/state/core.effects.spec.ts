@@ -10,8 +10,7 @@ import * as CoreActions from './core.actions';
 
 describe('CoreEffects', () => {
 
-  const setup = (currentPath: string, actions$: Observable<Actions>) => {
-    const getActions: () => Observable<Actions> = () => of({});
+  const setup = (currentPath: string, actions$: Observable<any>): [ CoreEffects, jest.Mock ] => {
     const loadApplicationServiceMock = {
       loadApplication$: () => of({ success: true, result: { application: getAppResponseData(), components: [] } }),
     };
@@ -29,10 +28,10 @@ describe('CoreEffects', () => {
       ],
     });
     const effects = TestBed.inject(CoreEffects);
-    return [ effects, replaceStateMock, getActions ];
+    return [ effects, replaceStateMock ];
   };
 
-  const getLoadApplicationSuccessAction = (name: string): Observable<Actions> => {
+  const getLoadApplicationSuccessAction = (name: string): Observable<any> => {
     return of(CoreActions.loadApplicationSuccess({ application: getAppResponseData({ name }), components: [] }));
   };
 
