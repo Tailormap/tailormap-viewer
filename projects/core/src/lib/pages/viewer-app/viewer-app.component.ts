@@ -1,8 +1,10 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
-import { map, Subject, takeUntil } from 'rxjs';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { map, Observable, of, Subject, takeUntil } from 'rxjs';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { loadApplication } from '../../state/core.actions';
+import { selectApplicationErrorMessage, selectApplicationLoadingState } from '../../state/core.selectors';
+import { LoadingStateEnum } from '@tailormap-viewer/shared';
 
 @Component({
   selector: 'tm-viewer-app',
@@ -13,10 +15,15 @@ import { loadApplication } from '../../state/core.actions';
 export class ViewerAppComponent implements OnInit, OnDestroy {
 
   private destroyed = new Subject();
+  public isLoading = false;
+  public loadingFailed = false;
+  public isLoaded = false;
+  public errorMessage$: Observable<string | undefined> = of(undefined);
 
   constructor(
     private store$: Store,
     private route: ActivatedRoute,
+    private cdr: ChangeDetectorRef,
   ) { }
 
   public ngOnInit(): void {
@@ -37,6 +44,16 @@ export class ViewerAppComponent implements OnInit, OnDestroy {
       )
       .subscribe(loadApplicationParams => {
         this.store$.dispatch(loadApplication(loadApplicationParams || {}));
+      });
+
+    this.errorMessage$ = this.store$.select(selectApplicationErrorMessage);
+    this.store$.select(selectApplicationLoadingState)
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(loadingState => {
+        this.isLoaded = loadingState === LoadingStateEnum.LOADED;
+        this.isLoading = loadingState === LoadingStateEnum.LOADING;
+        this.loadingFailed = loadingState === LoadingStateEnum.FAILED;
+        this.cdr.detectChanges();
       });
   }
 

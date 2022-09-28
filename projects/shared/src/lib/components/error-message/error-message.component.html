@@ -1,3 +1,6 @@
-<div class="error-message" *ngIf="!!message">
-  {{message}}
+<div class="error-message" *ngIf="message">{{message || emptyText}}</div>
+<div class="error-message" *ngIf="message$">
+  <ng-container *ngIf="message$ | async as message">
+    {{message || emptyText}}
+  </ng-container>
 </div>
