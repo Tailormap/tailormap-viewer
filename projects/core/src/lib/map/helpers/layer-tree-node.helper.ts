@@ -100,7 +100,7 @@ export class LayerTreeNodeHelper {
     if (!node) {
       return null;
     }
-    const children = node.childrenIds
+    const children = (node.childrenIds || [])
       .map(childId => LayerTreeNodeHelper.traverseTree<T>(layerTreeNodes, childId, transformer))
       .filter<T>((n: T | null): n is T => !!n);
     return transformer(node, children);
