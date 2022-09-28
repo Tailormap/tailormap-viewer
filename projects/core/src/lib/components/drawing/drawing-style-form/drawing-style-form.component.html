@@ -87,30 +87,29 @@
       <mat-label i18n>Label</mat-label>
       <input matInput *ngIf="!isLabelType()" i18n-placeholder placeholder="Label" [formControl]="labelControl">
       <textarea matInput *ngIf="isLabelType()" i18n-placeholder placeholder="Label" [formControl]="labelControl"></textarea>
-      <button *ngIf="showInsertCoordinates()"
-              mat-icon-button
-              matSuffix
-              tmTooltip="Insert coordinates as label"
-              i18n-tmTooltip
-              (click)="insertCoordinates()">
-        <mat-icon svgIcon="coordinates"></mat-icon>
-      </button>
-      <button *ngIf="showInsertLength()"
-              mat-icon-button
-              matSuffix
-              tmTooltip="Insert length as label"
-              i18n-tmTooltip
-              (click)="insertLength()">
-        <mat-icon svgIcon="tools_measure_length_outline"></mat-icon>
-      </button>
-      <button *ngIf="showInsertArea()"
-              mat-icon-button
-              matSuffix
-              tmTooltip="Insert area as label"
-              i18n-tmTooltip
-              (click)="insertArea()">
-        <mat-icon svgIcon="tools_measure_area_outline"></mat-icon>
-      </button>
+      <div matSuffix>
+        <button *ngIf="showInsertCoordinates()"
+                mat-icon-button
+                tmTooltip="Insert coordinates as label"
+                i18n-tmTooltip
+                (click)="insertCoordinates()">
+          <mat-icon svgIcon="coordinates"></mat-icon>
+        </button>
+        <button *ngIf="showInsertLength()"
+                mat-icon-button
+                tmTooltip="Insert length as label"
+                i18n-tmTooltip
+                (click)="insertLength()">
+          <mat-icon svgIcon="tools_measure_length_outline"></mat-icon>
+        </button>
+        <button *ngIf="showInsertArea()"
+                mat-icon-button
+                tmTooltip="Insert area as label"
+                i18n-tmTooltip
+                (click)="insertArea()">
+          <mat-icon svgIcon="tools_measure_area_outline"></mat-icon>
+        </button>
+      </div>
     </mat-form-field>
 
     <div class="form-field form-field__columns form-field__buttons">
