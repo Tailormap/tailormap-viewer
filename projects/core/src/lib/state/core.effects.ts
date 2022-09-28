@@ -3,7 +3,6 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as CoreActions from './core.actions';
 import { concatMap, map, tap } from 'rxjs';
 import { LoadApplicationService } from '../services/load-application.service';
-import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { UrlHelper } from '@tailormap-viewer/shared';
 import { filter } from 'rxjs/operators';
