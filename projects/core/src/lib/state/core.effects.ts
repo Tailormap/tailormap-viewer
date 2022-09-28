@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as CoreActions from './core.actions';
-import { concatMap, map, tap } from 'rxjs';
+import { concatMap, map, tap, filter } from 'rxjs';
 import { LoadApplicationService } from '../services/load-application.service';
 import { Location } from '@angular/common';
 import { UrlHelper } from '@tailormap-viewer/shared';
-import { filter } from 'rxjs/operators';
 
 @Injectable()
 export class CoreEffects {
