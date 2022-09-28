@@ -1,4 +1,3 @@
-import { Actions } from '@ngrx/effects';
 import { CoreEffects } from './core.effects';
 import { TestBed } from '@angular/core/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
@@ -49,12 +48,6 @@ describe('CoreEffects', () => {
 
   it('should not redirect url if application name is in URL already', () => {
     const [ effects, replaceStateMock ] = setup('/app/test', getLoadApplicationSuccessAction('test'));
-    effects.updateUrlAfterApplicationLoad$.subscribe();
-    expect(replaceStateMock).not.toHaveBeenCalled();
-  });
-
-  it('should not redirect url if url is not an empty or app/* url', () => {
-    const [ effects, replaceStateMock ] = setup('/login', getLoadApplicationSuccessAction('test'));
     effects.updateUrlAfterApplicationLoad$.subscribe();
     expect(replaceStateMock).not.toHaveBeenCalled();
   });

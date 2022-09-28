@@ -1,4 +1,16 @@
-<div class="viewer">
+<div class="viewer viewer--has-error" *ngIf="loadingFailed">
+  <mat-icon class="logo" svgIcon="logo"></mat-icon>
+  <tm-error-message [message$]="errorMessage$"
+                    i18n-emptyText
+                    emptyText="Something went wrong while loading the application. Please check if the URL is correct"></tm-error-message>
+</div>
+
+<div class="viewer viewer--loading" *ngIf="isLoading">
+  <mat-icon class="logo" svgIcon="logo"></mat-icon>
+  <mat-spinner mode="indeterminate" diameter="40"></mat-spinner>
+</div>
+
+<div class="viewer" *ngIf="isLoaded" aria-label="Tailormap viewer page">
   <div class="menubar">
     <tm-menubar></tm-menubar>
   </div>
