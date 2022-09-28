@@ -19,6 +19,7 @@ import { AttributeListFilterComponent, FilterDialogData } from '../attribute-lis
 import { MatDialog } from '@angular/material/dialog';
 import { AttributeFilterModel } from '../../../filter/models/attribute-filter.model';
 import { selectApplicationId } from '../../../state/core.selectors';
+import { CqlFilterHelper } from '../../../filter/helpers/cql-filter.helper';
 
 @Component({
   selector: 'tm-attribute-list-content',
@@ -90,10 +91,8 @@ export class AttributeListContentComponent implements OnInit {
           }
           const layerId = selectedTab.layerId;
           return forkJoin([
-            this.simpleAttributeFilterService.getFilterForAttribute$(ATTRIBUTE_LIST_ID, layerId, $event.columnId)
-              .pipe(take(1)),
-            this.store$.select(selectCQLFilters)
-              .pipe(take(1), map(cqlFilters => cqlFilters.get(layerId))),
+            this.simpleAttributeFilterService.getFilterForAttribute$(ATTRIBUTE_LIST_ID, layerId, $event.columnId),
+            this.simpleAttributeFilterService.getFiltersExcludingAttribute$(ATTRIBUTE_LIST_ID, layerId, $event.columnId),
             of(layerId),
             of(applicationId),
           ]);
@@ -103,7 +102,7 @@ export class AttributeListContentComponent implements OnInit {
         if (!result) {
           return;
         }
-        const [ attributeFilterModel, cqlFilter, layerId, applicationId ] = result;
+        const [ attributeFilterModel, otherFilters, layerId, applicationId ] = result;
         if (applicationId === null) {
           return;
         }
@@ -112,7 +111,7 @@ export class AttributeListContentComponent implements OnInit {
           layerId,
           filter: attributeFilterModel,
           columnType: $event.attributeType,
-          cqlFilter,
+          cqlFilter: CqlFilterHelper.getFilters(otherFilters).get(layerId),
           applicationId,
         };
         this.dialog.open(AttributeListFilterComponent, { data });

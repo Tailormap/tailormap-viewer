@@ -22,6 +22,19 @@ const getMockStore = (loggedIn: boolean) => {
 
 describe('ProfileComponent', () => {
 
+  const { location } = window;
+
+  beforeAll(() => {
+    // @ts-ignore
+    delete window.location;
+    // @ts-ignore
+    window.location = { reload: jest.fn() };
+  });
+
+  afterAll(() => {
+    window.location = location;
+  });
+
   test('should render without login', async () => {
     const navigateFn = jest.fn();
     const logoutFn = jest.fn(() => of(true));
@@ -51,6 +64,8 @@ describe('ProfileComponent', () => {
   test('should render when logged in', async () => {
     const navigateFn = jest.fn();
     const logoutFn = jest.fn(() => of(true));
+    const reloadFn = jest.fn();
+    jest.spyOn(window.location, 'reload');
     const { fixture } = await render(ProfileComponent, {
       declarations: [
         MenubarButtonComponent,
@@ -74,6 +89,7 @@ describe('ProfileComponent', () => {
     const menuItem = await screen.findByText(/Logout/);
     fireEvent.click(menuItem);
     expect(logoutFn).toHaveBeenCalled();
+    expect(window.location.reload).toHaveBeenCalled();
     const store = (TestBed.inject(Store) as MockStore);
     store.overrideSelector(selectUserDetails, { loggedIn: false });
     store.refreshState();

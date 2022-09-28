@@ -48,6 +48,7 @@ const getLayersWithServices = (layers: AppLayerModel[], services: ServiceModel[]
     }));
 };
 
+// Note: this includes the background layers
 export const selectLayersWithServices = createSelector(
   selectLayers,
   selectServices,
@@ -57,16 +58,6 @@ export const selectLayersWithServices = createSelector(
 export const selectVisibleLayersWithServices = createSelector(
     selectLayersWithServices,
     layers => layers.filter(l => l.visible),
-);
-
-export const selectVisibleLayersWithAttributes = createSelector(
-  selectVisibleLayersWithServices,
-  layers => layers.filter(l => l.hasAttributes),
-);
-
-export const selectVisibleWMSLayersWithoutAttributes = createSelector(
-  selectVisibleLayersWithServices,
-  layers => layers.filter(l => l.service?.protocol === ServiceProtocol.WMS && !l.hasAttributes),
 );
 
 export const selectSelectedLayer = createSelector(
@@ -100,6 +91,16 @@ export const selectOrderedVisibleLayersWithServices = createSelector(
       .sort(ArrayHelper.getArraySorter('id', orderedLayerIds))
       .map(l => ({ ...l, filter: filters.get(l.id) }));
   },
+);
+
+export const selectVisibleLayersWithAttributes = createSelector(
+  selectOrderedVisibleLayersWithServices,
+  layers => layers.filter(l => l.hasAttributes),
+);
+
+export const selectVisibleWMSLayersWithoutAttributes = createSelector(
+  selectOrderedVisibleLayersWithServices,
+  layers => layers.filter(l => l.service?.protocol === ServiceProtocol.WMS && !l.hasAttributes),
 );
 
 export const selectSomeLayersVisible = createSelector(

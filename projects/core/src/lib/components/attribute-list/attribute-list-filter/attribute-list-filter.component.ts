@@ -6,6 +6,7 @@ import { AttributeFilterModel } from '../../../filter/models/attribute-filter.mo
 import { FilterConditionEnum } from '../../../filter/models/filter-condition.enum';
 import { SimpleAttributeFilterService } from '../../../filter/services/simple-attribute-filter.service';
 import { ATTRIBUTE_LIST_ID } from '../attribute-list-identifier';
+import { AttributeFilterHelper } from '../../../filter/helpers/attribute-filter.helper';
 
 export interface FilterDialogData {
   columnName: string;
@@ -54,21 +55,11 @@ export class AttributeListFilterComponent implements OnInit {
   }
 
   public onOk() {
-    if (!this.updatedFilter.condition) {
+    const filter = this.getFilter();
+    if (!AttributeFilterHelper.isValidFilter(filter)) {
       return;
     }
-    this.simpleAttributeFilterService.setFilter(ATTRIBUTE_LIST_ID, this.data.layerId, {
-      condition: this.updatedFilter.condition,
-      value: typeof this.updatedFilter.value === 'undefined' ? [] : this.updatedFilter.value,
-      attribute: this.data.columnName,
-      attributeType: this.data.columnType,
-      caseSensitive: typeof this.updatedFilter.caseSensitive === 'boolean'
-        ? this.updatedFilter.caseSensitive
-        : false,
-      invertCondition: typeof this.updatedFilter.invertCondition === 'boolean'
-        ? this.updatedFilter.invertCondition
-        : false,
-    });
+    this.simpleAttributeFilterService.setFilter(ATTRIBUTE_LIST_ID, this.data.layerId, filter);
     this.dialogRef.close();
   }
 
@@ -112,11 +103,23 @@ export class AttributeListFilterComponent implements OnInit {
     return this.data.columnName;
   }
 
-  public submitValidFilter() {
-    if (this.updatedFilter.condition) {
-      this.onOk();
-    }
-    return;
+  public isValidFilter() {
+    return AttributeFilterHelper.isValidFilter(this.getFilter());
+  }
+
+  private getFilter(): Partial<AttributeFilterModel> {
+    return {
+      condition: this.updatedFilter.condition,
+      value: typeof this.updatedFilter.value === 'undefined' ? [] : this.updatedFilter.value,
+      attribute: this.data.columnName,
+      attributeType: this.data.columnType,
+      caseSensitive: typeof this.updatedFilter.caseSensitive === 'boolean'
+        ? this.updatedFilter.caseSensitive
+        : false,
+      invertCondition: typeof this.updatedFilter.invertCondition === 'boolean'
+        ? this.updatedFilter.invertCondition
+        : false,
+    };
   }
 
 }

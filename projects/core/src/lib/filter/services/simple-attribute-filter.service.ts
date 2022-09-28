@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AttributeFilterModel } from '../models/attribute-filter.model';
 import * as FilterActions from '../state/filter.actions';
-import { selectFilterGroup } from '../state/filter.selectors';
+import { selectFilterGroup, selectFilterGroups } from '../state/filter.selectors';
 import { map, Observable, take } from 'rxjs';
 import { nanoid } from 'nanoid';
 
@@ -43,6 +43,21 @@ export class SimpleAttributeFilterService {
   public getFilters$(source: string, layerId: number) {
     return this.getGroup$(source, layerId)
       .pipe(map(group => group?.filters || []));
+  }
+
+  public getFiltersExcludingAttribute$(source: string, layerId: number, attribute: string) {
+    return this.store$.select(selectFilterGroups)
+      .pipe(take(1), map(groups => {
+        return groups.map(group => {
+          if(group.source !== source || group.layerId !== layerId) {
+            return group;
+          }
+          return {
+            ...group,
+            filters: group.filters.filter(f => f.attribute !== attribute),
+          };
+        });
+      }));
   }
 
   public getFilterForAttribute$(

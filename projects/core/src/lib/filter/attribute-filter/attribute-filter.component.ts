@@ -55,8 +55,8 @@ export class AttributeFilterComponent implements OnInit, OnDestroy {
     } else if (filter.value && filter.value.length === 1) {
       value = filter.value[0];
     }
-    const caseSensitive = typeof filter.caseSensitive === 'boolean' ? filter.caseSensitive : false;
-    const invertCondition = typeof filter.invertCondition === 'boolean' ? filter.invertCondition : false;
+    const caseSensitive = this.toBoolean(filter.caseSensitive, false);
+    const invertCondition = this.toBoolean(filter.invertCondition, false);
     this.attributeFilterForm.patchValue({
       condition: filter.condition || '',
       value,
@@ -149,8 +149,8 @@ export class AttributeFilterComponent implements OnInit, OnDestroy {
         if (formValues.condition === FilterConditionEnum.UNIQUE_VALUES_KEY) {
           value = this.getSelectedUniqueValues();
         }
-        const caseSensitive = typeof formValues.caseSensitive === 'boolean' ? formValues.caseSensitive : false;
-        const invertCondition = typeof formValues.invertCondition === 'boolean' ? formValues.invertCondition : false;
+        const caseSensitive = this.toBoolean(formValues.caseSensitive, false);
+        const invertCondition = this.toBoolean(formValues.invertCondition, false);
         const updatedValue = {
           condition: condition.condition,
           value,
@@ -286,7 +286,12 @@ export class AttributeFilterComponent implements OnInit, OnDestroy {
 
     if (this.formValues.condition === FilterConditionEnum.UNIQUE_VALUES_KEY) {
       this.formValues.value = this.getSelectedUniqueValues();
-      this.filterChanged.emit({ condition: this.formValues.condition, value: this.formValues.value });
+      this.filterChanged.emit({
+        condition: this.formValues.condition,
+        value: this.formValues.value,
+        caseSensitive: this.formValues.caseSensitive,
+        invertCondition: this.formValues.invertCondition,
+      });
     }
   }
 
@@ -299,6 +304,10 @@ export class AttributeFilterComponent implements OnInit, OnDestroy {
       return DateTime.fromISO(input);
     }
     return input;
+  }
+
+  private toBoolean(input: string | boolean | undefined | null, defaultValue: boolean): boolean {
+    return typeof input === 'boolean' ? input : defaultValue;
   }
 
 }
