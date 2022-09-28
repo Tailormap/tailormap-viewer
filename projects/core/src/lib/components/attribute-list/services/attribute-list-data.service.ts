@@ -13,7 +13,6 @@ import { TypesHelper } from '@tailormap-viewer/shared';
 import { AttributeListColumnModel } from '../models/attribute-list-column.model';
 import { FilterService } from '../../../filter/services/filter.service';
 import * as AttributeListActions from '../state/attribute-list.actions';
-import { setHighlightedFeature } from '../state/attribute-list.actions';
 
 @Injectable({
   providedIn: 'root',

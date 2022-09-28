@@ -13,7 +13,6 @@ import { updateRowSelected, updateSort } from '../state/attribute-list.actions';
 import { AttributeListStateService } from '../services/attribute-list-state.service';
 import { FeatureAttributeTypeEnum } from '@tailormap-viewer/api';
 import { SimpleAttributeFilterService } from '../../../filter/services/simple-attribute-filter.service';
-import { selectCQLFilters } from '../../../filter/state/filter.selectors';
 import { ATTRIBUTE_LIST_ID } from '../attribute-list-identifier';
 import { AttributeListFilterComponent, FilterDialogData } from '../attribute-list-filter/attribute-list-filter.component';
 import { MatDialog } from '@angular/material/dialog';
