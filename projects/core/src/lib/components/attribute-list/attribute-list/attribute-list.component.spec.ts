@@ -5,7 +5,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AttributeListComponent } from './attribute-list.component';
 import { AttributeListState, attributeListStateKey } from '../state/attribute-list.state';
 import { initialMapState, mapStateKey } from '../../../map/state/map.state';
-import { AppLayerModel, getAppLayerModel } from '@tailormap-viewer/api';
+import { AppLayerModel, getAppLayerModel, getLayerTreeNode } from '@tailormap-viewer/api';
 import { MatIconModule } from '@angular/material/icon';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -32,6 +32,10 @@ const getStore = (
     [mapStateKey]: {
       ...initialMapState,
       layers,
+      layerTreeNodes: layers.length > 0 ? [
+        getLayerTreeNode({ childrenIds: layers.map(l => `lyr_${l.id}`) }),
+        ...layers.map(l => getLayerTreeNode({ id: `lyr_${l.id}`, appLayerId: l.id })),
+      ] : [],
     },
     [filterStateKey]: {
       ...initialFilterState,

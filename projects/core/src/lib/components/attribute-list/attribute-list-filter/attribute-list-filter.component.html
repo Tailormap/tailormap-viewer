@@ -2,7 +2,7 @@
   <ng-container i18n>Filter on</ng-container>
   {{getColumnName()}}
 </h3>
-<div (keydown.enter)="submitValidFilter()">
+<div (keydown.enter)="onOk()">
 
   <tm-attribute-filter [attributeType]="getAttributeType()"
                        [filter]="filter"
@@ -11,7 +11,9 @@
 
   <mat-dialog-actions>
 
-    <button mat-raised-button color="primary"
+    <button mat-raised-button
+            color="primary"
+            [disabled]="!isValidFilter()"
             (click)="onOk()" i18n>
       Set
     </button>

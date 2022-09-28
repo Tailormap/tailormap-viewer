@@ -37,8 +37,11 @@ export class CqlFilterHelper {
 
   private static convertFilterToQuery(filter: AttributeFilterModel): string | null {
     if (filter.condition === FilterConditionEnum.UNIQUE_VALUES_KEY) {
+      if (filter.value.length === 0) {
+        return null;
+      }
       const uniqueValList = filter.value.map(v => CqlFilterHelper.getExpression(v, filter.attributeType)).join(',');
-      return CqlFilterHelper.wrapFilter(`${filter.attribute} IN (${uniqueValList})`);
+      return CqlFilterHelper.wrapFilter(`${filter.attribute}${filter.invertCondition ? ' NOT' : ''} IN (${uniqueValList})`);
     }
     if (filter.condition === FilterConditionEnum.NULL_KEY) {
       return CqlFilterHelper.wrapFilter(`${filter.attribute} IS${filter.invertCondition ? ' NOT' : ''} NULL`);
@@ -77,6 +80,9 @@ export class CqlFilterHelper {
   }
 
   private static wrapFilters(cqlFilters: string[], operator: 'AND' | 'OR') {
+    if (cqlFilters.length === 0) {
+      return '';
+    }
     return cqlFilters.length === 1
       ? cqlFilters[0]
       : CqlFilterHelper.wrapFilter(cqlFilters.join(` ${operator} `));
