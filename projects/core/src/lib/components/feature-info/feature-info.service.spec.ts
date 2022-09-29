@@ -15,6 +15,7 @@ describe('FeatureInfoService', () => {
   const appLayer = {
     ...getAppLayerModel({ visible: true, hasAttributes: true }),
     service: getServiceModel({ id: 1 }),
+    filter: '',
   };
   const response = getFeaturesResponseModel();
   const getFeatures$ = () => of(response);
