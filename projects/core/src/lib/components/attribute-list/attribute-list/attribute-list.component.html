@@ -38,6 +38,6 @@
         </ng-template>
       </mat-tab>
     </mat-tab-group>
-    <tm-attribute-list-tab [id]="selectedTab"></tm-attribute-list-tab>
+    <tm-attribute-list-tab *ngIf="tabs.length > 0" [id]="selectedTab"></tm-attribute-list-tab>
   </div>
 </div>

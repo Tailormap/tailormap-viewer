@@ -5,7 +5,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AttributeListComponent } from './attribute-list.component';
 import { AttributeListState, attributeListStateKey } from '../state/attribute-list.state';
 import { initialMapState, mapStateKey } from '../../../map/state/map.state';
-import { AppLayerModel, getAppLayerModel } from '@tailormap-viewer/api';
+import { AppLayerModel, getAppLayerModel, getLayerTreeNode } from '@tailormap-viewer/api';
 import { MatIconModule } from '@angular/material/icon';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -20,6 +20,8 @@ import { attributeListReducer } from '../state/attribute-list.reducer';
 import { mapReducer } from '../../../map/state/map.reducer';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { filterStateKey, initialFilterState } from '../../../filter/state/filter.state';
+import { filterReducer } from '../../../filter/state/filter.reducer';
 
 const getStore = (
   attributeListStore: { [attributeListStateKey]: AttributeListState },
@@ -30,6 +32,13 @@ const getStore = (
     [mapStateKey]: {
       ...initialMapState,
       layers,
+      layerTreeNodes: layers.length > 0 ? [
+        getLayerTreeNode({ childrenIds: layers.map(l => `lyr_${l.id}`) }),
+        ...layers.map(l => getLayerTreeNode({ id: `lyr_${l.id}`, appLayerId: l.id })),
+      ] : [],
+    },
+    [filterStateKey]: {
+      ...initialFilterState,
     },
   };
 };
@@ -106,6 +115,7 @@ describe('AttributeList', () => {
         StoreModule.forRoot({
           [attributeListStateKey]: attributeListReducer,
           [mapStateKey]: mapReducer,
+          [filterStateKey]: filterReducer,
         }, { initialState: store }),
       ],
       declarations: [

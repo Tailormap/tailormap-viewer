@@ -1,6 +1,7 @@
 import { AppResponseModel, ComponentModel, LayerDetailsModel, MapResponseModel, Sortorder, VersionResponseModel } from '../models';
 import { Observable } from 'rxjs';
 import { FeaturesResponseModel } from '../models/features-response.model';
+import { UniqueValuesResponseModel } from '../models/unique-values-response.model';
 
 export interface TailormapApiV1ServiceModel {
 
@@ -35,5 +36,12 @@ export interface TailormapApiV1ServiceModel {
     sortBy?: string;
     sortOrder?: Sortorder;
   }): Observable<FeaturesResponseModel>;
+
+  getUniqueValues$(params: {
+    applicationId: number;
+    layerId: number;
+    attribute: string;
+    filter?: string;
+  }): Observable<UniqueValuesResponseModel>;
 
 }

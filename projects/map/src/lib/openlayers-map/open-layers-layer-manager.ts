@@ -9,12 +9,11 @@ import XYZ from 'ol/source/XYZ';
 import { LayerManagerModel, LayerTypes } from '../models';
 import { OlLayerHelper } from '../helpers/ol-layer.helper';
 import { LayerModel } from '../models/layer.model';
-import {
-  isOpenLayersVectorLayer, isOpenLayersWMSLayer, isPossibleRealtimeLayer,
-} from '../helpers/ol-layer-types.helper';
+import { isOpenLayersVectorLayer, isOpenLayersWMSLayer, isPossibleRealtimeLayer } from '../helpers/ol-layer-types.helper';
 import { LayerTypesHelper } from '../helpers/layer-types.helper';
 import Geometry from 'ol/geom/Geometry';
 import { ArrayHelper } from '@tailormap-viewer/shared';
+import { ResolvedServerType } from '@tailormap-viewer/api';
 
 export class OpenLayersLayerManager implements LayerManagerModel {
 
@@ -27,7 +26,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
   private vectorLayerGroup = new LayerGroup();
 
   private prevBackgroundLayerIds: string[] = [];
-  private prevLayerIds: string[] = [];
+  private prevLayerIdentifiers: string[] = [];
 
   constructor(private olMap: OlMap) {}
 
@@ -80,10 +79,10 @@ export class OpenLayersLayerManager implements LayerManagerModel {
   }
 
   public setLayers(layers: LayerModel[]) {
-    this.prevLayerIds = this.updateLayers(
+    this.prevLayerIdentifiers = this.updateLayers(
       layers,
       this.layers,
-      this.prevLayerIds,
+      this.prevLayerIdentifiers,
       this.addLayer.bind(this),
       this.removeLayer.bind(this),
       this.getZIndexForLayer.bind(this),
@@ -93,15 +92,16 @@ export class OpenLayersLayerManager implements LayerManagerModel {
   private updateLayers(
     layers: LayerModel[],
     currentLayerMap: Map<string, BaseLayer>,
-    prevLayers: string[],
+    prevLayerIdentifiers: string[],
     addLayer: (layer: LayerModel, zIndex: number) => void,
     removeLayer: (id: string) => void,
     getZIndexForLayer: (zIndex?: number) => number,
   ) {
-    const layerIds = layers.map(layer => layer.id);
-    if (ArrayHelper.arrayEquals(layerIds, prevLayers)) {
-      return prevLayers;
+    const layerIdentifiers = this.createLayerIdentifiers(layers);
+    if (ArrayHelper.arrayEquals(layerIdentifiers, prevLayerIdentifiers)) {
+      return prevLayerIdentifiers;
     }
+    const layerIds = layers.map(layer => layer.id);
     const layerIdSet = new Set(layerIds);
     const removableLayers: string[] = [];
     currentLayerMap.forEach((layer, id) => {
@@ -116,12 +116,13 @@ export class OpenLayersLayerManager implements LayerManagerModel {
         const zIndex = layerOrder.indexOf(layer.id);
         const existingLayer = currentLayerMap.get(layer.id);
         if (existingLayer) {
+          this.updateFilterIfChanged(layer, existingLayer);
           existingLayer.setZIndex(getZIndexForLayer(zIndex));
           return;
         }
         addLayer(layer, zIndex);
       });
-    return layerIds;
+    return layerIdentifiers;
   }
 
   public addLayer<LayerType extends LayerTypes>(layer: LayerModel, zIndex?: number): LayerType | null {
@@ -147,12 +148,46 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     return zIndex;
   }
 
+  // Create an identifier for each layer to quickly check if something changed and requires re-rendering
+  private createLayerIdentifiers(layers: LayerModel[]): string[] {
+    return layers.map(layer => {
+      const changingProps = [];
+      if (LayerTypesHelper.isServiceLayer(layer)) {
+        changingProps.push(layer.filter);
+      }
+      return [ layer.id, ...changingProps ].join('_');
+    });
+  }
+
+  private updateFilterIfChanged(layer: LayerModel, olLayer: BaseLayer) {
+    // For now, GeoServer & WMS only
+    if (!LayerTypesHelper.isWmsLayer(layer) || layer.resolvedServerType !== ResolvedServerType.GEOSERVER) {
+      return;
+    }
+    const existingProps = OlLayerHelper.getLayerProps(olLayer);
+    if (existingProps.filter === layer.filter) {
+      return;
+    }
+    OlLayerHelper.setLayerProps(layer, olLayer);
+    if (isOpenLayersWMSLayer(olLayer)) {
+      olLayer.getSource()?.updateParams({ CQL_FILTER: layer.filter });
+    }
+  }
+
   public removeLayer(id: string) {
     this.removeLayerAndSource(id, this.baseLayerGroup, this.layers);
   }
 
   public removeLayers(layerIds: string[]) {
     layerIds.forEach(l => this.removeLayerAndSource(l, this.baseLayerGroup, this.layers));
+  }
+
+  public getLayer(layerId: string) {
+    const layer = this.layers.get(layerId) || this.vectorLayers.get(layerId);
+    if (!layer) {
+      return;
+    }
+    return layer;
   }
 
   public addLayers(layers: LayerModel[]) {

@@ -1,5 +1,5 @@
-import { AppLayerModel, AppResponseModel, ComponentModel, getMockApiService, MapResponseModel } from '@tailormap-viewer/api';
-import { Observable } from 'rxjs';
+import { AppResponseModel, ComponentModel, getAppResponseData, getComponentModel, TailormapApiV1ServiceModel } from '@tailormap-viewer/api';
+import { Observable, of } from 'rxjs';
 import { LoadApplicationService } from './load-application.service';
 
 const getErrorObservable = <T>() => {
@@ -7,6 +7,14 @@ const getErrorObservable = <T>() => {
     observer.error(new Error('kaboom!'));
     observer.complete();
   });
+};
+
+export const getMockApiService = (overrides?: Partial<TailormapApiV1ServiceModel>) => {
+  return {
+    getApplication$: (params: { name?: string; version?: string; id?: number }) => of(getAppResponseData(params)),
+    getComponents$: () => of([getComponentModel()]),
+    ...overrides,
+  } as TailormapApiV1ServiceModel;
 };
 
 describe('LoadApplicationService', () => {

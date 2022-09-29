@@ -3,7 +3,8 @@ import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { AppLayerModel, LayerTreeNodeModel, ServiceModel, ServiceProtocol } from '@tailormap-viewer/api';
 import { ArrayHelper, TreeModel } from '@tailormap-viewer/shared';
 import { LayerTreeNodeHelper } from '../helpers/layer-tree-node.helper';
-import { AppLayerWithServiceModel, ExtendedLayerTreeNodeModel } from '../models';
+import { ExtendedAppLayerModel, ExtendedLayerTreeNodeModel } from '../models';
+import { selectCQLFilters } from '../../filter/state/filter.selectors';
 
 const selectMapState = createFeatureSelector<MapState>(mapStateKey);
 
@@ -40,13 +41,14 @@ export const selectMapOptions = createSelector(
   },
 );
 
-const getLayersWithServices = (layers: AppLayerModel[], services: ServiceModel[]): AppLayerWithServiceModel[] => {
+const getLayersWithServices = (layers: AppLayerModel[], services: ServiceModel[]): ExtendedAppLayerModel[] => {
     return layers.map(layer => ({
         ...layer,
         service: services.find(s => s.id === layer.serviceId),
     }));
 };
 
+// Note: this includes the background layers
 export const selectLayersWithServices = createSelector(
   selectLayers,
   selectServices,
@@ -56,11 +58,6 @@ export const selectLayersWithServices = createSelector(
 export const selectVisibleLayersWithServices = createSelector(
     selectLayersWithServices,
     layers => layers.filter(l => l.visible),
-);
-
-export const selectVisibleLayersWithAttributes = createSelector(
-  selectVisibleLayersWithServices,
-  layers => layers.filter(l => l.hasAttributes),
 );
 
 export const selectSelectedLayer = createSelector(
@@ -87,11 +84,23 @@ export const selectOrderedBackgroundLayerIds = createSelector(
 export const selectOrderedVisibleLayersWithServices = createSelector(
   selectVisibleLayersWithServices,
   selectOrderedLayerIds,
-  (layers, orderedLayerIds) => {
+  selectCQLFilters,
+  (layers, orderedLayerIds, filters) => {
     return layers
       .filter(l => orderedLayerIds.includes(l.id))
-      .sort(ArrayHelper.getArraySorter('id', orderedLayerIds));
+      .sort(ArrayHelper.getArraySorter('id', orderedLayerIds))
+      .map(l => ({ ...l, filter: filters.get(l.id) }));
   },
+);
+
+export const selectVisibleLayersWithAttributes = createSelector(
+  selectOrderedVisibleLayersWithServices,
+  layers => layers.filter(l => l.hasAttributes),
+);
+
+export const selectVisibleWMSLayersWithoutAttributes = createSelector(
+  selectOrderedVisibleLayersWithServices,
+  layers => layers.filter(l => l.service?.protocol === ServiceProtocol.WMS && !l.hasAttributes),
 );
 
 export const selectSomeLayersVisible = createSelector(

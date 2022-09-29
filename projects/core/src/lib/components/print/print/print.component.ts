@@ -16,9 +16,8 @@ import {
 } from '../../../map/state/map.selectors';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { selectHasDrawingFeatures } from '../../drawing/state/drawing.selectors';
-import { AppLayerWithServiceModel } from '../../../map/models';
 import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layout.service';
-
+import { ExtendedAppLayerModel } from '../../../map/models';
 
 @Component({
   selector: 'tm-print',
@@ -156,7 +155,7 @@ export class PrintComponent implements OnInit, OnDestroy {
     this.cancelled$.next(null);
   }
 
-  private wrapFileExport(extension: string, toDataURLExporter: (filename: string, layers: Array<AppLayerWithServiceModel>) => Observable<string>): void {
+  private wrapFileExport(extension: string, toDataURLExporter: (filename: string, layers: Array<ExtendedAppLayerModel>) => Observable<string>): void {
     this.busy$.next(true);
     forkJoin([ this._mapFilenameFn(extension), this.getLayers$() ]).pipe(
       concatMap(([ filename, layers ]) => combineLatest([ of(filename), toDataURLExporter(filename, layers) ])),
@@ -180,13 +179,13 @@ export class PrintComponent implements OnInit, OnDestroy {
     ).subscribe();
   }
 
-  private getLayers$(): Observable<Array<AppLayerWithServiceModel>> {
+  private getLayers$(): Observable<Array<ExtendedAppLayerModel>> {
     return this.visibleLayers$.pipe(
       take(1),
     );
   }
 
-  private getLegendLayers$(): Observable<Array<AppLayerWithServiceModel>> {
+  private getLegendLayers$(): Observable<Array<ExtendedAppLayerModel>> {
     if (this.exportPdfForm.value.legendLayer === '') {
       return of([]);
     }
@@ -244,7 +243,7 @@ export class PrintComponent implements OnInit, OnDestroy {
     const form = this.exportImageForm.getRawValue();
 
     this.wrapFileExport('png', (filename, layers) =>
-      forkJoin(layers.map(layer => this.applicationMapService.convertAppLayerToMapLayer$(layer, layer.service))).pipe(
+      forkJoin(layers.map(layer => this.applicationMapService.convertAppLayerToMapLayer$(layer))).pipe(
         map(mapLayers => mapLayers.filter(isValidLayer)),
         concatMap(mapLayers => {
           return this.mapService.exportMapImage$(

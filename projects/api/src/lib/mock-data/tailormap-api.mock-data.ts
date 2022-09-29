@@ -1,20 +1,26 @@
 import {
   AppLayerModel, AppResponseModel, BoundsModel, ComponentModel, CoordinateReferenceSystemModel, GeometryType, Language, LayerDetailsModel,
-  MapResponseModel, ResolvedServerType, ServerType, ServiceModel, ServiceProtocol,
+  MapResponseModel, ResolvedServerType, ServerType, ServiceModel, ServiceProtocol, VersionResponseModel,
 } from '../models';
 import { FeatureModel } from '../models/feature.model';
 import { ColumnMetadataModel } from '../models/column-metadata.model';
 import { FeatureAttributeTypeEnum } from '../models/feature-attribute-type.enum';
 import { FeaturesResponseModel } from '../models/features-response.model';
-import { of } from 'rxjs';
-import { TailormapApiV1ServiceModel } from '../services';
 import { LayerTreeNodeModel } from '../models/layer-tree-node.model';
+import { UniqueValuesResponseModel } from '../models/unique-values-response.model';
+
+export const getVersionResponseModel = (overrides?: VersionResponseModel): VersionResponseModel => ({
+  version: '0.1-SNAPSHOT',
+  databaseversion: '47',
+  apiVersion: 'v1',
+  ...overrides,
+});
 
 export const getBoundsModel = (overrides?: Partial<BoundsModel>): BoundsModel => ({
-  miny: 646.36,
-  minx: 308975.28,
-  maxy: 276050.82,
-  maxx: 636456.31,
+  minx: 123180,
+  miny: 445478,
+  maxx: 149359,
+  maxy: 463194,
   crs: 'EPSG:28992',
   ...overrides,
 });
@@ -60,15 +66,15 @@ export const getServiceModel = (overrides?: Partial<ServiceModel>): ServiceModel
 
 export const getLayerDetailsModel = (overrides?: Partial<LayerDetailsModel>): LayerDetailsModel => ({
   id: 1,
-  attributes: [],
   serviceId: 1,
-  editable: true,
-  featuretypeName: 'table',
-  metadata: null,
-  geometryAttribute: 'geom',
-  geometryAttributeIndex: 5,
-  geometryType: GeometryType.GEOMETRY,
   relations: [],
+  geometryType: GeometryType.GEOMETRY,
+  geometryAttributeIndex: 1,
+  geometryAttribute: 'geom',
+  metadata: null,
+  featuretypeName: 'test',
+  editable: false,
+  attributes: [],
   ...overrides,
 });
 
@@ -98,12 +104,36 @@ export const getColumnMetadataModel = (overrides?: Partial<ColumnMetadataModel>)
   ...overrides,
 });
 
-export const getFeaturesResponseModel = (overrides?: Partial<FeaturesResponseModel>): FeaturesResponseModel => ({
-  features: [ '1', '2', '3', '4', '5' ].map(id => getFeatureModel({ __fid: id })),
-  columnMetadata: [ getColumnMetadataModel(), getColumnMetadataModel({ key: 'prop2', alias: 'Property 2' }) ],
-  page: null,
-  pageSize: null,
-  total: 5,
+export const getFeaturesResponseModel = (overrides?: Partial<FeaturesResponseModel>): FeaturesResponseModel => {
+  const features: Partial<FeatureModel>[] = [
+    { __fid: '1', attributes: { object_id: '0606100000013912',  valid_from: '2010-06-29', year: 1960, status: 'Pand in gebruik' } },
+    { __fid: '2', attributes: { object_id: '0606100000017812',  valid_from: '2014-10-06', year: 2001, status: 'Pand in gebruik' } },
+    { __fid: '3', attributes: { object_id: '0622100000041685',  valid_from: '1929-01-22', year: 1989, status: 'Pand in gebruik' } },
+    { __fid: '4', attributes: { object_id: '0622100000041686',  valid_from: '1929-01-22', year: 1989, status: 'Pand in gebruik' } },
+    { __fid: '5', attributes: { object_id: '0622100000041687',  valid_from: '1931-05-15', year: 1983, status: 'Pand in gebruik' } },
+    { __fid: '6', attributes: { object_id: '0622100000041688',  valid_from: '2007-05-02', year: 1900, status: 'Pand in gebruik' } },
+    { __fid: '7', attributes: { object_id: '0622100000041689',  valid_from: '2016-04-19', year: 1700, status: 'Pand in gebruik' } },
+    { __fid: '8', attributes: { object_id: '0622100000041690',  valid_from: '2015-05-20', year: 1700, status: 'Pand in gebruik' } },
+  ];
+  const columnMetadata: Partial<ColumnMetadataModel>[] = [
+    { key: 'object_id', alias: 'Pand', type: FeatureAttributeTypeEnum.STRING },
+    { key: 'valid_from', alias: 'Geldig vanaf', type: FeatureAttributeTypeEnum.DATE },
+    { key: 'year', alias: 'Bouwjaar', type: FeatureAttributeTypeEnum.INTEGER },
+    { key: 'status', alias: 'Status', type: FeatureAttributeTypeEnum.STRING },
+  ];
+  return {
+    features: features.map(featureOverride => getFeatureModel({ ...featureOverride })),
+    columnMetadata: columnMetadata.map(columnMetadataOverride => getColumnMetadataModel({ ...columnMetadataOverride })),
+    page: null,
+    pageSize: null,
+    total: 8,
+    ...overrides,
+  };
+};
+
+export const getUniqueValuesResponseModel = (overrides?: Partial<UniqueValuesResponseModel>): UniqueValuesResponseModel => ({
+  values: [ 'Pand in gebruik', 'Pand niet in gebruik' ],
+  filterApplied: false,
   ...overrides,
 });
 
@@ -119,31 +149,36 @@ export const getAppResponseData = (overrides?: Partial<AppResponseModel>): AppRe
 export const getMapResponseData = (overrides?: Partial<MapResponseModel>): MapResponseModel => ({
   crs: getCrsModel(overrides?.crs),
   layerTreeNodes: [
-    getLayerTreeNode({ childrenIds: ['layer-1'] }),
-    getLayerTreeNode({ id: 'layer-1', appLayerId: 1, name: 'TEST', root: false }),
+    getLayerTreeNode({ childrenIds: ['level-2'] }),
+    getLayerTreeNode({ id: 'level-2', name: 'Bestuurlijke Gebieden', childrenIds: [ 'applayer-2', 'applayer-3' ], root: false }),
+    getLayerTreeNode({ id: 'applayer-2', appLayerId: 2, name: 'Gemeentegebied', root: false }),
+    getLayerTreeNode({ id: 'applayer-3', appLayerId: 3, name: 'Provinciegebied', root: false }),
   ],
-  baseLayerTreeNodes: [],
+  baseLayerTreeNodes: [
+    getLayerTreeNode({ id: 'rootbg', name: 'background', childrenIds: ['level-1'] }),
+    getLayerTreeNode({ id: 'level-1', name: 'Openstreetmap', childrenIds: ['applayer-1'], root: false }),
+    getLayerTreeNode({ id: 'applayer-1', appLayerId: 1, name: 'osm-nb-hq', root: false }),
+  ],
   appLayers: [
-    getAppLayerModel({ id: 1 }),
-    getAppLayerModel({ id: 2 }),
-    getAppLayerModel({ id: 3 }),
+    getAppLayerModel({ id: 1, layerName: 'osm-nb-hq', title: 'osm-nb-hq' }),
+    getAppLayerModel({ id: 2, hasAttributes: true, serviceId: 2, layerName: 'gemeentegebied', title: 'Gemeentegebied' }),
+    getAppLayerModel({ id: 3, hasAttributes: true, serviceId: 2, layerName: 'provinciegebied', title: 'Provinciegebied' }),
   ],
   initialExtent: overrides?.initialExtent === null ? null : getBoundsModel(overrides?.initialExtent),
   services: [
-    getServiceModel(),
+    getServiceModel({
+      id: 1,
+      name: 'Openbasiskaart',
+      url: 'https://www.openbasiskaart.nl/mapcache/?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetCapabilities',
+    }),
+    getServiceModel({
+      id: 2,
+      name: 'Bestuurlijke gebieden',
+      url: 'https://service.pdok.nl/kadaster/bestuurlijkegebieden/wms/v1_0?request=GetCapabilities&service=WMS',
+    }),
   ],
-  maxExtent: overrides?.maxExtent === null ? null : getBoundsModel(overrides?.maxExtent),
-  ...overrides,
-});
-
-export const getMockApiService = (
-  overrides?: Partial<TailormapApiV1ServiceModel>,
-): TailormapApiV1ServiceModel => ({
-  getVersion$: () => of({ version: '0.1-SNAPSHOT', databaseversion: '47', apiVersion: 'v1' }),
-  getApplication$: (params: { name?: string; version?: string; id?: number }) => of(getAppResponseData(params)),
-  getMap$: () => of(getMapResponseData()),
-  getComponents$: () => of([getComponentModel()]),
-  getDescribeLayer$: () => of(getLayerDetailsModel()),
-  getFeatures$: () => of(getFeaturesResponseModel()),
+  maxExtent: overrides?.maxExtent === null
+    ? getBoundsModel({ minx: -285401, miny: 22598, maxx: 595401, maxy: 903401 })
+    : getBoundsModel(overrides?.maxExtent),
   ...overrides,
 });

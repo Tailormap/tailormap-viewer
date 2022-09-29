@@ -45,28 +45,28 @@ A full stack also runs configuration database, backend api and administration in
 is build and put in a Nginx webserver container and serves as the main entry point. It reverse proxies the the `/api/` and `/admin/` paths.
 Run the stack using:
 
-`docker-compose --profile http --profile full up -d`
+`docker compose --profile http --profile full up -d`
 
 Go to http://localhost/ for the viewer and http://localhost/admin/ for administration. During the first startup you might see some
 exceptions connecting to the database while this is being initialized, these are harmless as it will be retried later, although you may need
-to restart the admin container using `docker-compose --profile http --profile restart admin`.
+to restart the admin container using `docker compose --profile http --profile restart admin`.
 
 The build configuration for the `db` container for the configuration database (with preloaded data) is also in this
 repository. The `api` and `admin` containers are the snapshot-tagged versions, which get updated in
 the registry automatically. If you want to update your running containers, execute:
 
-- `docker-compose --profile http --profile full pull` to pull new images
-- `docker-compose build web` to build a new Angular frontend image
-- `docker-compose build db` to build a new configuration database image (see note below)
+- `docker compose --profile http --profile full pull` to pull new images
+- `docker compose build web` to build a new Angular frontend image
+- `docker compose build db` to build a new configuration database image (see note below)
 
-Run `docker-compose --profile http --profile full up -d` again to use the updated images.
+Run `docker compose --profile http --profile full up -d` again to use the updated images.
 
 #### Default account
 
 When starting up for the first time, the `api` container creates a user account for user administration on startup with a randomly generated
 password. This password is printed to the logs of the `api` container. You can see the password with:
 
-`docker-compose --profile http --profile full logs api`
+`docker compose --profile http --profile full logs api`
 
 Look for the output containing:
 
@@ -89,7 +89,7 @@ password somewhere.
 If you ever forget the admin password but do not want to re-initialize the database, reset the password with:
 
 ```
-docker-compose --profile http --profile full exec --user postgres db \
+docker compose --profile http --profile full exec --user postgres db \
   psql tailormap -c "update user_ set password = '{noop}changeme' where username = 'admin'"
 ```
 
@@ -97,16 +97,16 @@ Remember to change this password using the administration interface. It will be 
 
 **Stopping**
 
-`docker-compose down`
+`docker compose down`
 
-You can use `docker-compose down --rmi all -v` to remove all built and pulled images and remove the volume with the configuration
+You can use `docker compose down --rmi all -v` to remove all built and pulled images and remove the volume with the configuration
 database. Use `--rmi local` to only remove locally built images.
 
 #### Refreshing the configuration database
 
 The `db` container is just a basic PostgreSQL container but with some initialization scripts to preload some Tailormap configuration. The
 database is saved on a volume. The initialization only runs when this volume does not already contain an initialized database. Stop the `db`
-container (or the entire stack), remove the volume with `docker volume rm tailormap-viewer_config-db` (or use `docker-compose down -v`) and
+container (or the entire stack), remove the volume with `docker volume rm tailormap-viewer_config-db` (or use `docker compose down -v`) and
 bring it up again to re-initialize the database.
 
 ### Running only the Angular frontend
@@ -120,7 +120,7 @@ This can be used to run only the web container and reverse proxy `/api/` to an i
 API_PROXY_URL=https://snapshot.tailormap.nl/api/ \
   API_PROXY_HOST=snapshot.tailormap.nl \
   ADMIN_PROXY_ENABLED=false \
-  docker-compose --profile http up
+  docker compose --profile http up
 ```
 
 These environment variables can be configured in a `.env` file. Copy the `.env.template` file to `.env` and modify the variables so you do

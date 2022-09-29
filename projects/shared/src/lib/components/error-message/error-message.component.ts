@@ -1,4 +1,5 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'tm-error-message',
@@ -6,14 +7,15 @@ import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core
   styleUrls: ['./error-message.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ErrorMessageComponent implements OnInit {
+export class ErrorMessageComponent {
 
   @Input()
-  public message = '';
+  public message: string | undefined;
 
-  constructor() { }
+  @Input()
+  public message$: Observable<string | undefined> | undefined;
 
-  public ngOnInit(): void {
-  }
+  @Input()
+  public emptyText: string | undefined;
 
 }

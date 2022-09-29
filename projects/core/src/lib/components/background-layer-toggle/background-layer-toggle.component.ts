@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { map, Observable } from 'rxjs';
+import { map, Observable, combineLatest } from 'rxjs';
 import {
   selectBackgroundNodesList, selectInitiallySelectedBackgroundNodes, selectSelectedBackgroundNodeId,
 } from '../../map/state/map.selectors';
@@ -24,7 +24,16 @@ export class BackgroundLayerToggleComponent {
   constructor(
     private store$: Store,
   ) {
-    this.selectedBackgroundNodeId$ = this.store$.select(selectSelectedBackgroundNodeId);
+    this.selectedBackgroundNodeId$ = combineLatest([
+      this.store$.select(selectInitiallySelectedBackgroundNodes),
+      this.store$.select(selectSelectedBackgroundNodeId),
+    ]).pipe(
+      map(([ initiallySelectedBackgroundNodes, selectedBackgroundNodeId ]) => {
+        return selectedBackgroundNodeId ||
+          (initiallySelectedBackgroundNodes.length === 1
+            ? initiallySelectedBackgroundNodes[0].id
+            : undefined);
+      }));
     this.backgroundLayers$ = this.store$.select(selectBackgroundNodesList).pipe(
       map(nodes => this.getEmptyOption().concat([
         ...nodes.map(node => ({ id: node.id, label: node.name })),

@@ -16,11 +16,22 @@ import ImageLayer from 'ol/layer/Image';
 import { Options } from 'ol/source/ImageWMS';
 import { ServerType } from 'ol/source/wms';
 import { ResolvedServerType, ServerType as TMServerType } from '@tailormap-viewer/api';
+import { ObjectHelper } from '@tailormap-viewer/shared';
 
 export interface LayerProperties {
   id: string;
   visible: boolean;
   name: string;
+  filter?: string;
+}
+
+interface WmsServiceParamsModel {
+  LAYERS: string;
+  VERSION: string;
+  QUERY_LAYERS?: string;
+  TRANSPARENT: string;
+  CQL_FILTER?: string;
+  CACHE?: number;
 }
 
 export class OlLayerHelper {
@@ -30,8 +41,22 @@ export class OlLayerHelper {
       id: layer.id,
       visible: layer.visible,
       name: layer.name,
+      filter: LayerTypesHelper.isServiceLayer(layer) ? layer.filter : undefined,
     };
     olLayer.setProperties(layerProps);
+  }
+
+  public static getLayerProps(olLayer: BaseLayer): LayerProperties {
+    const props = olLayer.getProperties();
+    if (!ObjectHelper.hasProperties(props, [ 'id', 'visible', 'name' ])) {
+      return { id: '', visible: false, name: 'Invalid layer' };
+    }
+    return {
+      id: props['id'],
+      visible: props['visible'],
+      name: props['name'],
+      filter: props['filter'],
+    };
   }
 
   public static createLayer(layer: LayerModel, projection: Projection, pixelRatio?: number): TileLayer<TileWMS> | ImageLayer<ImageWMS> | TileLayer<XYZ> | TileLayer<WMTS> | null {
@@ -132,12 +157,7 @@ export class OlLayerHelper {
 
     const sourceOptions: Options = {
       url: OgcHelper.filterOgcUrlParameters(layer.url),
-      params: {
-        LAYERS: layer.layers,
-        VERSION: '1.1.1',
-        QUERY_LAYERS: layer.queryLayers,
-        TRANSPARENT: 'TRUE',
-      },
+      params: OlLayerHelper.getWmsServiceParams(layer),
       crossOrigin: layer.crossOrigin,
       serverType,
       hidpi,
@@ -160,4 +180,22 @@ export class OlLayerHelper {
       });
     }
   }
+
+  public static getWmsServiceParams(layer: WMSLayerModel, addCacheBust?: boolean): WmsServiceParamsModel {
+    const params: WmsServiceParamsModel = {
+      LAYERS: layer.layers,
+      VERSION: '1.1.1',
+      QUERY_LAYERS: layer.queryLayers,
+      TRANSPARENT: 'TRUE',
+    };
+    if (layer.filter && layer.resolvedServerType === ResolvedServerType.GEOSERVER) {
+      // TODO: implement filtering for other servers than geoserver
+      params.CQL_FILTER = layer.filter;
+    }
+    if (addCacheBust) {
+      params.CACHE = Date.now();
+    }
+    return params;
+  }
+
 }

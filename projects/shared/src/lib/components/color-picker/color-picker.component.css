@@ -62,15 +62,14 @@
   border-radius: 0;
 }
 
-.color-picker__form-field,
-.form-field {
-  width: 100%;
+.form-field-wrap {
+  padding-right: 16px;
 }
 
 .color-picker__picker {
   overflow: auto;
-  padding-left: 10px;
-  padding-top: 10px;
+  padding-left: 16px;
+  padding-top: 16px;
   background-color: #fff;
   max-width: 515px;
 }

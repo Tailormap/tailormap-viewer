@@ -1,5 +1,9 @@
 export class UrlHelper {
 
+  public static getUrlSafeParam(param: string): string {
+    return encodeURIComponent(param).replace(/%20/g, '+');
+  }
+
   public static filterUrlParameters(
     urlString: string,
     filterFunction: (paramName: string, paramValue: string) => boolean,

@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as CoreActions from './core.actions';
-import { concatMap, map } from 'rxjs';
+import { concatMap, map, tap, filter } from 'rxjs';
 import { LoadApplicationService } from '../services/load-application.service';
+import { Location } from '@angular/common';
+import { UrlHelper } from '@tailormap-viewer/shared';
 
 @Injectable()
 export class CoreEffects {
@@ -27,9 +29,20 @@ export class CoreEffects {
     );
   });
 
+  public updateUrlAfterApplicationLoad$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(CoreActions.loadApplicationSuccess),
+      map(action => UrlHelper.getUrlSafeParam(action.application.name)),
+      // replace the current url if the application is loaded but the URL does not match /app/<name> or /app/<name>/<version>
+      filter(name => !(new RegExp(`^/app/${name}/?.*$`, 'i').test(this.location.path()))),
+      tap(name => this.location.replaceState(`/app/${name}`)),
+    );
+  }, { dispatch: false });
+
   constructor(
     private actions$: Actions,
     private loadApplicationService: LoadApplicationService,
+    private location: Location,
   ) {}
 
 }

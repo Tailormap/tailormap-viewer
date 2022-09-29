@@ -44,6 +44,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       .subscribe(loggedOut => {
         if (loggedOut) {
           this.store$.dispatch(setLoginDetails({ loggedIn: false }));
+          window.location.reload();
         }
       });
   }

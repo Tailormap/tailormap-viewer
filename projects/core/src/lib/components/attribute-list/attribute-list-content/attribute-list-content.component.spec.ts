@@ -8,13 +8,14 @@ import { MatTableModule } from '@angular/material/table';
 import { PanelResizerComponent } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDialogModule } from '@angular/material/dialog';
 
 describe('AttributeListContent', () => {
 
   it('renders content, loading, no rows', async () => {
     const store = getLoadingStore();
     await render(AttributeListContentComponent, {
-      imports: [MatProgressSpinnerModule],
+      imports: [ MatProgressSpinnerModule, MatDialogModule ],
       providers: [
         provideMockStore({
           initialState: store,
@@ -28,6 +29,7 @@ describe('AttributeListContent', () => {
   it('renders content, not loading, no rows', async () => {
     const store = getLoadedStoreNoRows();
     await render(AttributeListContentComponent, {
+      imports: [MatDialogModule],
       providers: [
         provideMockStore({
           initialState: store,
@@ -40,7 +42,7 @@ describe('AttributeListContent', () => {
   it('renders content, loaded and with rows', async () => {
     const store = getLoadedStoreWithRows();
     await render(AttributeListContentComponent, {
-      imports: [ MatTableModule, MatIconModule, MatIconTestingModule ],
+      imports: [ MatTableModule, MatIconModule, MatIconTestingModule, MatDialogModule ],
       declarations: [ AttributeListContentComponent, AttributeListTableComponent, PanelResizerComponent ],
       providers: [
         provideMockStore({

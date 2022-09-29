@@ -1,17 +1,24 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { map } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { concatMap, map } from 'rxjs/operators';
+import { forkJoin, Observable, of, pipe, take, combineLatest } from 'rxjs';
 import { AttributeListRowModel } from '../models/attribute-list-row.model';
 import { Store } from '@ngrx/store';
-import { AttributeListState } from '../state/attribute-list.state';
 import { AttributeListColumnModel } from '../models/attribute-list-column.model';
 import {
   selectColumnsForSelectedTab, selectLoadingDataSelectedTab,
   selectRowCountForSelectedTab,
-  selectRowsForSelectedTab, selectSortForSelectedTab,
+  selectRowsForSelectedTab, selectSelectedTab, selectSortForSelectedTab,
 } from '../state/attribute-list.selectors';
 import { updateRowSelected, updateSort } from '../state/attribute-list.actions';
 import { AttributeListStateService } from '../services/attribute-list-state.service';
+import { FeatureAttributeTypeEnum } from '@tailormap-viewer/api';
+import { SimpleAttributeFilterService } from '../../../filter/services/simple-attribute-filter.service';
+import { ATTRIBUTE_LIST_ID } from '../attribute-list-identifier';
+import { AttributeListFilterComponent, FilterDialogData } from '../attribute-list-filter/attribute-list-filter.component';
+import { MatDialog } from '@angular/material/dialog';
+import { AttributeFilterModel } from '../../../filter/models/attribute-filter.model';
+import { selectApplicationId } from '../../../state/core.selectors';
+import { CqlFilterHelper } from '../../../filter/helpers/cql-filter.helper';
 
 @Component({
   selector: 'tm-attribute-list-content',
@@ -25,13 +32,14 @@ export class AttributeListContentComponent implements OnInit {
   public columns$: Observable<AttributeListColumnModel[]> = of([]);
   public notLoadingData$: Observable<boolean> = of(false);
   public sort$: Observable<{ column: string; direction: string } | null> = of(null);
+  public filters$: Observable<AttributeFilterModel[]> = of([]);
   public hasRows$: Observable<boolean> = of(false);
   public hasNoRows$: Observable<boolean> = of(true);
 
-  constructor(
-    private store$: Store<AttributeListState>,
-    private attributeListStateService: AttributeListStateService,
-  ) { }
+  private store$ = inject(Store);
+  private attributeListStateService = inject(AttributeListStateService);
+  private simpleAttributeFilterService = inject(SimpleAttributeFilterService);
+  private dialog = inject(MatDialog);
 
   public ngOnInit(): void {
     this.rows$ = this.store$.select(selectRowsForSelectedTab);
@@ -40,6 +48,13 @@ export class AttributeListContentComponent implements OnInit {
     this.hasNoRows$ = this.hasRows$.pipe(map(hasRows => !hasRows));
     this.columns$ = this.store$.select(selectColumnsForSelectedTab);
     this.notLoadingData$ = this.store$.select(selectLoadingDataSelectedTab).pipe(map(loading => !loading));
+    this.filters$ = this.store$.select(selectSelectedTab)
+      .pipe(concatMap(tab => {
+        if (!tab || !tab.layerId) {
+          return of([]);
+        }
+        return this.simpleAttributeFilterService.getFilters$(ATTRIBUTE_LIST_ID, tab.layerId);
+      }));
   }
 
   public onSelectRow(row: { id: string; selected: boolean }): void {
@@ -62,4 +77,43 @@ export class AttributeListContentComponent implements OnInit {
     });
   }
 
+  public onSetFilter($event: { columnId: string; attributeType: FeatureAttributeTypeEnum }) {
+    combineLatest([
+      this.store$.select(selectSelectedTab),
+      this.store$.select(selectApplicationId),
+    ])
+      .pipe(
+        pipe(take(1)),
+        concatMap(([ selectedTab, applicationId ]) => {
+          if (!selectedTab || !selectedTab.layerId) {
+            return of(null);
+          }
+          const layerId = selectedTab.layerId;
+          return forkJoin([
+            this.simpleAttributeFilterService.getFilterForAttribute$(ATTRIBUTE_LIST_ID, layerId, $event.columnId),
+            this.simpleAttributeFilterService.getFiltersExcludingAttribute$(ATTRIBUTE_LIST_ID, layerId, $event.columnId),
+            of(layerId),
+            of(applicationId),
+          ]);
+        }),
+      )
+      .subscribe(result => {
+        if (!result) {
+          return;
+        }
+        const [ attributeFilterModel, otherFilters, layerId, applicationId ] = result;
+        if (applicationId === null) {
+          return;
+        }
+        const data: FilterDialogData = {
+          columnName: $event.columnId,
+          layerId,
+          filter: attributeFilterModel,
+          columnType: $event.attributeType,
+          cqlFilter: CqlFilterHelper.getFilters(otherFilters).get(layerId),
+          applicationId,
+        };
+        this.dialog.open(AttributeListFilterComponent, { data });
+      });
+  }
 }
