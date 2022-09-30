@@ -19,6 +19,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AttributeFilterModel } from '../../../filter/models/attribute-filter.model';
 import { selectApplicationId } from '../../../state/core.selectors';
 import { CqlFilterHelper } from '../../../filter/helpers/cql-filter.helper';
+import { CssHelper } from '@tailormap-viewer/shared';
 
 @Component({
   selector: 'tm-attribute-list-content',
@@ -113,7 +114,7 @@ export class AttributeListContentComponent implements OnInit {
           cqlFilter: CqlFilterHelper.getFilters(otherFilters).get(layerId),
           applicationId,
         };
-        this.dialog.open(AttributeListFilterComponent, { data });
+        this.dialog.open(AttributeListFilterComponent, { data, maxHeight: CssHelper.MAX_SCREEN_HEIGHT });
       });
   }
 }

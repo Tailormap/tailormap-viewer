@@ -1,10 +1,10 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { map, Observable, of, Subject, takeUntil } from 'rxjs';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { loadApplication } from '../../state/core.actions';
 import { selectApplicationErrorMessage, selectApplicationLoadingState } from '../../state/core.selectors';
-import { BrowserHelper, CssHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
+import { LoadingStateEnum } from '@tailormap-viewer/shared';
 
 @Component({
   selector: 'tm-viewer-app',
@@ -19,11 +19,6 @@ export class ViewerAppComponent implements OnInit, OnDestroy {
   public loadingFailed = false;
   public isLoaded = false;
   public errorMessage$: Observable<string | undefined> = of(undefined);
-
-  @HostListener('window:resize', ['$event'])
-  public onResize() {
-    this.updateCssVUnits();
-  }
 
   constructor(
     private store$: Store,
@@ -60,8 +55,6 @@ export class ViewerAppComponent implements OnInit, OnDestroy {
         this.loadingFailed = loadingState === LoadingStateEnum.FAILED;
         this.cdr.detectChanges();
       });
-
-    this.updateCssVUnits();
   }
 
   public ngOnDestroy() {
@@ -69,10 +62,4 @@ export class ViewerAppComponent implements OnInit, OnDestroy {
     this.destroyed.complete();
   }
 
-  private updateCssVUnits() {
-    const vh = BrowserHelper.getScreenHeight() * 0.01;
-    const vw = BrowserHelper.getScreenWith() * 0.01;
-    CssHelper.setCssVariableValue('--vh', `${vh}px`);
-    CssHelper.setCssVariableValue('--vw', `${vw}px`);
-  }
 }
