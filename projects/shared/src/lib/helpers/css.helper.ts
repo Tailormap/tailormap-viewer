@@ -1,5 +1,5 @@
 import { BrowserHelper } from './browser.helper';
-import { combineLatest, fromEvent, race } from 'rxjs';
+import { fromEvent, race } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
 export class CssHelper {
