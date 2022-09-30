@@ -8,6 +8,9 @@
   --dialog-z-index: 998;
   --body-margin: 16px;
   --overlay-panel-z-index: 1000;
+  --menubar-width: 70px;
+  --vh: 1vh;
+  --vw: 1vw;
 
   --primary-color: #6236ff;
   --error-color: #ff3636;

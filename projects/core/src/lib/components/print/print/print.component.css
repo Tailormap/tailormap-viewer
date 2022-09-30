@@ -1,6 +1,8 @@
 :host {
   display: block;
   padding: 14px 14px 0 14px;
+  overflow: auto;
+  height: 100%;
 }
 
 .lowerHeight ::ng-deep .mat-button-toggle-label-content {

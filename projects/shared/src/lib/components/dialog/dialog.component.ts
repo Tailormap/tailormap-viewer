@@ -1,6 +1,9 @@
-import { Component, EventEmitter, HostBinding, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, HostBinding, HostListener, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { style, transition, trigger, animate } from '@angular/animations';
 import { DialogService } from './dialog.service';
+import { BrowserHelper } from '../../helpers';
+
+const DEFAULT_WIDTH = 300;
 
 @Component({
   selector: 'tm-dialog',
@@ -43,7 +46,10 @@ export class DialogComponent implements OnInit, OnChanges {
   public collapsed: boolean | null = false;
 
   @Input()
-  public width = 300;
+  public width = DEFAULT_WIDTH;
+
+  @Input()
+  public widthMargin = 0;
 
   @Output()
   public closeDialog = new EventEmitter();
@@ -56,6 +62,13 @@ export class DialogComponent implements OnInit, OnChanges {
     return this.dialogId;
   }
 
+  @HostListener('window:resize', ['$event'])
+  public onResize() {
+    this.updateActualWidth();
+    this.dialogService.dialogChanged(this.dialogId, this.getLeft(), this.getRight());
+  }
+
+  public actualWidth = DEFAULT_WIDTH;
   public dialogId = '';
 
   constructor(
@@ -67,14 +80,20 @@ export class DialogComponent implements OnInit, OnChanges {
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
+    this.updateActualWidth();
     if (
       changes['hidden']?.currentValue !== changes['hidden']?.previousValue ||
       changes['open']?.currentValue !== changes['open']?.previousValue ||
       changes['openFromRight']?.currentValue !== changes['openFromRight']?.previousValue ||
-      changes['width']?.currentValue !== changes['width']?.previousValue
+      changes['width']?.currentValue !== changes['width']?.previousValue ||
+      changes['maxWidth']?.currentValue !== changes['maxWidth']?.previousValue
     ) {
       this.dialogService.dialogChanged(this.dialogId, this.getLeft(), this.getRight());
     }
+  }
+
+  public updateActualWidth() {
+    this.actualWidth = Math.min(this.width, BrowserHelper.getScreenWith() - this.widthMargin);
   }
 
   private getHidden() {
@@ -82,11 +101,11 @@ export class DialogComponent implements OnInit, OnChanges {
   }
 
   private getLeft() {
-    return this.getHidden() || this.openFromRight ? 0 : this.width;
+    return this.getHidden() || this.openFromRight ? 0 : this.actualWidth;
   }
 
   private getRight() {
-    return this.getHidden() || !this.openFromRight ? 0 : this.width;
+    return this.getHidden() || !this.openFromRight ? 0 : this.actualWidth;
   }
 
   public close() {

@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { ColorHelper } from '../../helpers/color.helper';
 import { PopoverService } from '../../services/popover/popover.service';
 import { OverlayRef } from '../../services/overlay/overlay-ref';
+import { BrowserHelper } from '../../helpers';
 
 const defaultColors: Array<string | undefined> = [
   'rgb(136, 14, 79)',
@@ -116,7 +117,7 @@ export class ColorPickerComponent implements OnInit, OnDestroy {
   }
 
   public getPickerColors(): Array<string | undefined> {
-    if (window.innerWidth > this.preferredWindowWidth) {
+    if (BrowserHelper.getScreenWith() > this.preferredWindowWidth) {
       if (this.allowEmptyColor) {
         return defaultColors.concat(undefined);
       }
@@ -170,7 +171,7 @@ export class ColorPickerComponent implements OnInit, OnDestroy {
       origin: this.colorPickerButton.nativeElement,
       content: this.colorPickerContent,
       height: 215,
-      width: Math.min(this.preferredWindowWidth, window.innerWidth),
+      width: Math.min(this.preferredWindowWidth, BrowserHelper.getScreenWith()),
       closeOnClickOutside: true,
     });
   }
