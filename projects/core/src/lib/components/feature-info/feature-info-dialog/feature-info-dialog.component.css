@@ -4,7 +4,7 @@
   top: var(--body-margin);
   bottom: auto;
   min-height: 40vh;
-  max-height: calc(100vh - var(--body-margin) - var(--body-margin));
+  max-height: calc((var(--vh) * 100) - var(--body-margin) - var(--body-margin));
 }
 
 .feature-info-dialog ::ng-deep .dialog-content {

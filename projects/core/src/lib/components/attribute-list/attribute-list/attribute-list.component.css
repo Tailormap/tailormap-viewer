@@ -15,7 +15,7 @@
   flex-flow: column nowrap;
   font-size: 15px;
   background-color: #fff;
-  max-height: 100vh;
+  max-height: calc(var(--vh) * 100);
 }
 
 .panel--minimized {

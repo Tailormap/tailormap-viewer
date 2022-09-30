@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { CssHelper } from '../../helpers';
 
 @Injectable({
   providedIn: 'root',
@@ -45,15 +46,15 @@ export class DialogService {
   private updateStyle() {
     const maxDialogLeftWidth = Math.max(...this.dialogs.map(d => d.left));
     const maxDialogRightWidth = Math.max(...this.dialogs.map(d => d.right));
-    document.body.style.setProperty('--dialog-width-left', `${maxDialogLeftWidth}px`);
-    document.body.style.setProperty('--dialog-width-right', `${maxDialogRightWidth}px`);
+    CssHelper.setCssVariableValue('--dialog-width-left', `${maxDialogLeftWidth}px`);
+    CssHelper.setCssVariableValue('--dialog-width-right', `${maxDialogRightWidth}px`);
     document.body.classList.toggle('body--has-dialog-left', maxDialogLeftWidth > 0);
     document.body.classList.toggle('body--has-dialog-right', maxDialogRightWidth > 0);
     this.visibleStack.forEach((id, idx) => {
       if (!id) {
         return;
       }
-      document.querySelector<HTMLDivElement>(`.${id}`)?.style.setProperty('--dialog-stack-index', `${idx}`);
+      CssHelper.setCssVariableValue('--dialog-stack-index', `${idx}`, document.querySelector<HTMLDivElement>(`.${id}`));
     });
   }
 

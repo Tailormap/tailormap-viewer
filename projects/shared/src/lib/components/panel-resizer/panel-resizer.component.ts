@@ -1,6 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { fromEvent } from 'rxjs';
 import { finalize, map, switchMap, takeUntil } from 'rxjs/operators';
+import { CssHelper } from '../../helpers';
 
 @Component({
   selector: 'tm-panel-resize',
@@ -86,7 +87,7 @@ export class PanelResizerComponent implements OnInit {
     if (!this.resizer) {
       return;
     }
-    this.resizer.nativeElement.style.setProperty('--translate-pos', position + 'px');
+    CssHelper.setCssVariableValue('--translate-pos', position + 'px', this.resizer.nativeElement);
   }
 
 }

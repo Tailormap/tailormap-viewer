@@ -111,3 +111,32 @@ tm-error-message {
 ::ng-deep.body--has-dialog-right .map-controls-right--on-bottom {
   transform: none;
 }
+
+@media screen and (max-width: 725px) {
+  ::ng-deep.body--has-dialog-left .map-controls-left {
+    transform: none;
+  }
+  ::ng-deep.body--has-dialog-right .map-controls-right {
+    transform: none;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .map-controls-right {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+  .map-controls-right tm-background-layer-toggle {
+    margin-right: 0;
+    margin-bottom: 9px;
+  }
+  .map-controls-right--on-bottom {
+    margin-bottom: 40px;
+  }
+}
+
+@media screen and (max-width: 375px) {
+  .map-controls-right {
+    margin-top: 49px;
+  }
+}

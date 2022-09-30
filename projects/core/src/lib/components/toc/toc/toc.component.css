@@ -21,4 +21,5 @@
 
 .toc-tree {
   flex: 1;
+  overflow: hidden;
 }

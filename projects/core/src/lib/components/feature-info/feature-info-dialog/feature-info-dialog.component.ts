@@ -8,6 +8,7 @@ import {
   expandCollapseFeatureInfoDialog, hideFeatureInfoDialog, showNextFeatureInfoFeature, showPreviousFeatureInfoFeature,
 } from '../state/feature-info.actions';
 import { FeatureInfoModel } from '../models/feature-info.model';
+import { CssHelper } from '@tailormap-viewer/shared';
 
 @Component({
   selector: 'tm-feature-info-dialog',
@@ -24,6 +25,8 @@ export class FeatureInfoDialogComponent implements OnInit, OnDestroy {
   public currentSelected = 0;
   public currentFeature$: Observable<FeatureInfoModel> | undefined;
   public totalFeatures = 0;
+
+  public panelWidthMargin = CssHelper.getCssVariableValueNumeric('--menubar-width') + (CssHelper.getCssVariableValueNumeric('--body-margin') * 2);
 
   constructor(
     private store$: Store,
