@@ -22,4 +22,6 @@ RUN set -eux; \
     && unzip -p /tmp/tailormap-persistence.jar scripts/postgresql-schema-export.sql > ./docker-entrypoint-initdb.d/2-postgresql-schema-export.sql.script \
     && rm -rf /tmp/*
 
+USER postgres
+
 COPY ./docker-entrypoint-initdb.d /docker-entrypoint-initdb.d
