@@ -145,14 +145,12 @@ export class OlLayerHelper {
     let serverType: ServerType | undefined;
     let hidpi = true;
 
-    // If explicitly disabled do not use serverType for hidpi
-    if (layer.serverType === TMServerType.DISABLED) {
+    // If explicitly disabled or no server type known do not use serverType for hidpi
+    if (layer.serverType === TMServerType.DISABLED || layer.resolvedServerType === ResolvedServerType.GENERIC) {
       serverType = undefined;
       hidpi = false;
     } else {
-      // Use the most common geoserver as default for OL hidpi support, it's harmless if the server doesn't support the parameters and returns
-      // low dpi images
-      serverType = layer.resolvedServerType === ResolvedServerType.GENERIC ? ResolvedServerType.GEOSERVER : layer.resolvedServerType;
+      serverType = layer.resolvedServerType;
     }
 
     const sourceOptions: Options = {
