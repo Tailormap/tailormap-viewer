@@ -38,6 +38,6 @@
   <mat-row *matRowDef="let row; let dataIndex = dataIndex; columns: columnNames;"
            (click)="onRowClick($event, row);"
            [class.even_row]="dataIndex % 2 === 1"
-           [class.selected_row]="row.selected"></mat-row>
+           [class.selected_row]="isSelected(row)"></mat-row>
 
 </mat-table>

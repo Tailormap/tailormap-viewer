@@ -62,7 +62,7 @@ export const updateRowSelected = createAction(
 
 export const setHighlightedFeature = createAction(
   `${attributeListActionsPrefix} Set Highlighted Feature`,
-  props<{ feature: FeatureModel | null }>(),
+  props<{ feature: FeatureModel & { tabId: string } | null }>(),
 );
 
 export const changeColumnPosition = createAction(

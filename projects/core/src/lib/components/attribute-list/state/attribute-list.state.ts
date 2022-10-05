@@ -10,7 +10,7 @@ export interface AttributeListState {
   data: AttributeListDataModel[];
   selectedTabId?: string;
   height: number;
-  highlightedFeature?: FeatureModel | null;
+  highlightedFeature?: FeatureModel & { tabId: string } | null;
   panelTitle: string;
 }
 

@@ -6,6 +6,7 @@ export interface AttributeListDataModel {
   tabId: string;
   columns: AttributeListColumnModel[];
   rows: AttributeListRowModel[];
+  selectedRowId?: string;
   pageSize: number;
   pageIndex: number;
   totalCount: number | null;

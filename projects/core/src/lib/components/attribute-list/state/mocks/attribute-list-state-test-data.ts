@@ -33,7 +33,6 @@ export const createDummyRow = (
 ): AttributeListRowModel => ({
   id,
   __fid: id,
-  selected: false,
   attributes: {
     attribute1: id + ': Test',
     attribute2: id + ': Some other value',

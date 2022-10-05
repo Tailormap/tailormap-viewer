@@ -7,7 +7,7 @@ import { AttributeListColumnModel } from '../models/attribute-list-column.model'
 import {
   selectColumnsForSelectedTab, selectLoadingDataSelectedTab,
   selectRowCountForSelectedTab,
-  selectRowsForSelectedTab, selectSelectedTab, selectSortForSelectedTab,
+  selectRowsForSelectedTab, selectSelectedRowIdForSelectedTab, selectSelectedTab, selectSortForSelectedTab,
 } from '../state/attribute-list.selectors';
 import { updateRowSelected, updateSort } from '../state/attribute-list.actions';
 import { AttributeListStateService } from '../services/attribute-list-state.service';
@@ -34,6 +34,7 @@ export class AttributeListContentComponent implements OnInit {
   public notLoadingData$: Observable<boolean> = of(false);
   public sort$: Observable<{ column: string; direction: string } | null> = of(null);
   public filters$: Observable<AttributeFilterModel[]> = of([]);
+  public selectedRowId$: Observable<string | undefined> = of(undefined);
   public hasRows$: Observable<boolean> = of(false);
   public hasNoRows$: Observable<boolean> = of(true);
 
@@ -56,6 +57,7 @@ export class AttributeListContentComponent implements OnInit {
         }
         return this.simpleAttributeFilterService.getFilters$(ATTRIBUTE_LIST_ID, tab.layerId);
       }));
+    this.selectedRowId$ = this.store$.select(selectSelectedRowIdForSelectedTab);
   }
 
   public onSelectRow(row: { id: string; selected: boolean }): void {
