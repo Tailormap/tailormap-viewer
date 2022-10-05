@@ -58,16 +58,8 @@ export class CqlFilterHelper {
     if (filter.attributeType === FeatureAttributeTypeEnum.STRING) {
       return CqlFilterHelper.wrapFilter(CqlFilterHelper.getQueryForString(filter));
     }
-    if (filter.attributeType === FeatureAttributeTypeEnum.DATE
-      && filter.condition === FilterConditionEnum.DATE_BETWEEN_KEY
-      && filter.value.length > 1) {
-      const dateFrom = filter.value[0];
-      const dateUntil = filter.value[1];
-      return CqlFilterHelper.wrapFilter(`${filter.attribute} BETWEEN ${dateFrom} AND ${dateUntil}`);
-    }
-    if (filter.attributeType === FeatureAttributeTypeEnum.DATE) {
-      const cond = filter.condition === FilterConditionEnum.DATE_ON_KEY ? '=' : filter.condition === 'AFTER' ? '>' : '<';
-      return CqlFilterHelper.wrapFilter(`${filter.attribute} ${cond} ${value}`);
+    if (CqlFilterHelper.isDate(filter.attributeType)) {
+      return CqlFilterHelper.wrapFilter(CqlFilterHelper.getQueryForDate(filter));
     }
     if (filter.attributeType === FeatureAttributeTypeEnum.BOOLEAN) {
       return CqlFilterHelper.wrapFilter(`${filter.attribute} = ${filter.condition === FilterConditionEnum.BOOLEAN_TRUE_KEY ? 'true' : 'false'}`);
@@ -110,8 +102,31 @@ export class CqlFilterHelper {
     return `${query.join(' ')}`;
   }
 
+  private static getQueryForDate(filter: AttributeFilterModel) {
+    const query: string[] = [filter.attribute];
+    const isTimestampOnDate = filter.attributeType === FeatureAttributeTypeEnum.TIMESTAMP && filter.condition === FilterConditionEnum.DATE_ON_KEY;
+    if ((filter.condition === FilterConditionEnum.DATE_BETWEEN_KEY && filter.value.length > 1) || isTimestampOnDate) {
+      const dateFrom = filter.value[0];
+      const dateUntil = isTimestampOnDate ? filter.value[0] : filter.value[1];
+      if (filter.invertCondition) {
+        query.push('NOT');
+      }
+      query.push('BETWEEN');
+      query.push(filter.attributeType === FeatureAttributeTypeEnum.TIMESTAMP
+        ? `${dateFrom}T00:00:00 AND ${dateUntil}T23:59:59`
+        : `${dateFrom} AND ${dateUntil}`);
+      return `${query.join(' ')}`;
+    }
+    const cond = filter.condition === FilterConditionEnum.DATE_ON_KEY
+      ? (filter.invertCondition ? '!=' : '=')
+      : (filter.condition === 'AFTER' || filter.invertCondition) ? 'AFTER' : 'BEFORE';
+    query.push(cond);
+    query.push(filter.value[0]);
+    return query.join(' ');
+  }
+
   public static getExpression(value: string | number | boolean, attributeType: FeatureAttributeTypeEnum): string {
-    if (attributeType === FeatureAttributeTypeEnum.STRING || attributeType === FeatureAttributeTypeEnum.DATE) {
+    if (attributeType === FeatureAttributeTypeEnum.STRING || CqlFilterHelper.isDate(attributeType)) {
       if (typeof value === 'string') {
         value = value.replace(/'/g, '\'\'');
       }
@@ -122,6 +137,10 @@ export class CqlFilterHelper {
 
   private static isNumeric(attributeType: FeatureAttributeTypeEnum) {
     return attributeType === FeatureAttributeTypeEnum.DOUBLE || attributeType === FeatureAttributeTypeEnum.INTEGER;
+  }
+
+  private static isDate(attributeType: FeatureAttributeTypeEnum) {
+    return attributeType === FeatureAttributeTypeEnum.DATE || attributeType === FeatureAttributeTypeEnum.TIMESTAMP;
   }
 
 }
