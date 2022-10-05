@@ -104,7 +104,8 @@ export class CqlFilterHelper {
 
   private static getQueryForDate(filter: AttributeFilterModel) {
     const query: string[] = [filter.attribute];
-    const isTimestampOnDate = filter.attributeType === FeatureAttributeTypeEnum.TIMESTAMP && filter.condition === FilterConditionEnum.DATE_ON_KEY;
+    const isTimestampType = filter.attributeType === FeatureAttributeTypeEnum.TIMESTAMP;
+    const isTimestampOnDate = isTimestampType && filter.condition === FilterConditionEnum.DATE_ON_KEY;
     if ((filter.condition === FilterConditionEnum.DATE_BETWEEN_KEY && filter.value.length > 1) || isTimestampOnDate) {
       const dateFrom = filter.value[0];
       const dateUntil = isTimestampOnDate ? filter.value[0] : filter.value[1];
@@ -112,16 +113,17 @@ export class CqlFilterHelper {
         query.push('NOT');
       }
       query.push('BETWEEN');
-      query.push(filter.attributeType === FeatureAttributeTypeEnum.TIMESTAMP
-        ? `${dateFrom}T00:00:00 AND ${dateUntil}T23:59:59`
-        : `${dateFrom} AND ${dateUntil}`);
+      query.push(isTimestampType ? `${dateFrom}T00:00:00Z AND ${dateUntil}T23:59:59Z` : `${dateFrom} AND ${dateUntil}`);
       return `${query.join(' ')}`;
     }
     const cond = filter.condition === FilterConditionEnum.DATE_ON_KEY
       ? (filter.invertCondition ? '!=' : '=')
       : (filter.condition === 'AFTER' || filter.invertCondition) ? 'AFTER' : 'BEFORE';
     query.push(cond);
-    query.push(filter.value[0]);
+    const value = isTimestampType
+      ? (cond === 'AFTER' ? `${filter.value[0]}T23:59:59Z` : `${filter.value[0]}T00:00:00Z`)
+      : filter.value[0];
+    query.push(value);
     return query.join(' ');
   }
 
