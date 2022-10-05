@@ -8,8 +8,8 @@ export class TransformUrlsDirective implements AfterViewInit {
   constructor(public elementRef: ElementRef<HTMLElement>) {}
 
   private static URL_REGEXP = /(https?:\/\/[^ ]*)/ig;
-  private static IMG_REGEXP = /.*\.(jpg|jpeg|png|webp|gif)/i;
-  private static VENDOR_SPECIFIC_IMAGE_REGEXP = /.*getimage.ashx.*/i;
+  private static IMG_REGEXP = /\.(jpg|jpeg|png|webp|gif)/i;
+  private static VENDOR_SPECIFIC_IMAGE_REGEXP = /getimage\.ashx/i;
 
   private static linkReplacer(match: string): string {
     if (TransformUrlsDirective.IMG_REGEXP.test(match)
