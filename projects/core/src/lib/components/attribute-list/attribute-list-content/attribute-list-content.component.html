@@ -10,6 +10,7 @@
                            [columns]="columns$ | async"
                            [sort]="sort$ | async"
                            [filters]="filters$ | async"
+                           [selectedRowId]="selectedRowId$ | async"
                            (selectRow)="onSelectRow($event)"
                            (setSort)="onSortClick($event)"
                            (setFilter)="onSetFilter($event)"></tm-attribute-list-table>

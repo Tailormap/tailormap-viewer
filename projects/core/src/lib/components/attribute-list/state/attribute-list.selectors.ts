@@ -115,6 +115,13 @@ export const selectPagingDataSelectedTab = createSelector(
   },
 );
 
+export const selectSelectedRowIdForSelectedTab = createSelector(
+  selectDataForSelectedTab,
+  (data): string | undefined => {
+    return data?.selectedRowId || undefined;
+  },
+);
+
 export const selectCurrentlySelectedFeatureGeometry = createSelector(
   selectAttributeListVisible,
   selectCurrentlyHighlightedFeature,

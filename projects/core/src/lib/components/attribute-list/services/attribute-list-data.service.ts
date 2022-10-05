@@ -118,7 +118,6 @@ export class AttributeListDataService implements OnDestroy {
       return {
         id: rowId,
         __fid: feature.__fid,
-        selected: false,
         attributes: feature.attributes,
       };
     });

@@ -50,6 +50,9 @@ export class AttributeListTableComponent {
     this.filtersDictionary = new Set<string>(filters.map(f => f.attribute));
   }
 
+  @Input()
+  public selectedRowId: string | undefined | null;
+
   @Output()
   public selectRow = new EventEmitter<{ id: string; selected: boolean }>();
 
@@ -102,7 +105,7 @@ export class AttributeListTableComponent {
 
   public onRowClick($event: MouseEvent, row: AttributeListRowModel): void {
     $event.stopPropagation();
-    this.selectRow.emit({ id: row.id, selected: !row.selected });
+    this.selectRow.emit({ id: row.id, selected: !this.isSelected(row) });
   }
 
   public onSortClick(columnId: string): void {
@@ -123,6 +126,10 @@ export class AttributeListTableComponent {
 
   public getIsFilterActive(columnId: string) {
     return this.filtersDictionary.has(columnId);
+  }
+
+  public isSelected(row: AttributeListRowModel) {
+    return this.selectedRowId === row.id;
   }
 
 }
