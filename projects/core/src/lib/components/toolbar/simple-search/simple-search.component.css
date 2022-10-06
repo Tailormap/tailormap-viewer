@@ -1,0 +1,56 @@
+.simple-search-container {
+  justify-content: stretch;
+  overflow: hidden;
+  background-color: #fff;
+  width: 40px;
+  height: 40px;
+  transition: all 0.2s ease-in-out;
+}
+
+.simple-search-container--is-active {
+  padding: 5px 6px 5px 0;
+  width: 500px;
+  height: 70px;
+  max-width: var(--max-control-width);
+}
+
+.simple-search-container button {
+  border-radius: 3px;
+}
+
+.simple-search-field-wrapper {
+  flex: 1;
+}
+
+.simple-search-container mat-form-field {
+  width: 100%;
+}
+
+.simple-search-container ::ng-deep .mat-form-field-wrapper {
+  padding-bottom: 0;
+}
+
+@media screen and (max-width: 730px) {
+  .simple-search-container--is-active {
+    padding: 0;
+    width: var(--map-control-size);
+    height: var(--map-control-size);
+  }
+
+  .simple-search-field-wrapper {
+    position: absolute;
+    top: calc(var(--map-control-size) + 9px);
+    left: 0;
+    background: #fff;
+    width: 260px;
+    max-width: var(--max-control-width);
+    z-index: 20;
+    padding: 9px;
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .simple-search-field-wrapper {
+    width: var(--max-control-width);
+  }
+}

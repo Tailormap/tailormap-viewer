@@ -87,7 +87,7 @@ tm-error-message {
   display: flex;
 }
 
-.map-controls-left tm-clicked-coordinates {
+.map-controls-left > * + * {
   margin-left: 9px;
 }
 
@@ -121,8 +121,8 @@ tm-error-message {
   }
 }
 
-@media screen and (max-width: 450px) {
-  .map-controls-right {
+@media screen and (max-width: 475px) {
+  .map-controls-right:not(.map-controls-right--on-bottom) {
     flex-direction: column;
     align-items: flex-end;
   }
@@ -130,10 +130,24 @@ tm-error-message {
     margin-right: 0;
     margin-bottom: 9px;
   }
+}
+
+@media screen and (max-width: 450px) {
+  .map-controls-right {
+    flex-direction: column;
+    align-items: flex-end;
+  }
   .map-controls-right--on-bottom {
     margin-bottom: 40px;
   }
 }
+
+@media screen and (max-width: 425px) {
+  .map-controls-right:not(.map-controls-right--on-bottom) {
+    margin-top: 49px;
+  }
+}
+
 
 @media screen and (max-width: 375px) {
   .map-controls-right {

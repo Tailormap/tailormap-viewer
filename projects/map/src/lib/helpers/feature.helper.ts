@@ -74,4 +74,14 @@ export class FeatureHelper {
     return FeatureHelper.wktFormatter.writeGeometry(geom, { decimals });
   }
 
+  public static fromWKT(geometry: string, sourceProjection?: string, mapProjection?: string): Geometry {
+    if (!sourceProjection || !mapProjection || sourceProjection === mapProjection) {
+      return FeatureHelper.wktFormatter.readGeometry(geometry);
+    }
+    return FeatureHelper.wktFormatter.readGeometry(geometry, {
+      dataProjection: sourceProjection,
+      featureProjection: mapProjection,
+    });
+  }
+
 }
