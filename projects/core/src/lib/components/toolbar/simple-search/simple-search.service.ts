@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { ProjectionCodesEnum } from '@tailormap-viewer/map';
 
 export interface SearchResultModel {
   results: SearchResult[];
@@ -38,7 +39,7 @@ export class SimpleSearchService {
   private httpClient = inject(HttpClient);
 
   public search$(projection: string, searchTerm: string): Observable<SearchResultModel> {
-    if (projection === 'EPSG:28992') {
+    if (projection === ProjectionCodesEnum.RD) {
       return this.searchRd$(searchTerm);
     }
     return this.searchOSMNomatim$(searchTerm);
@@ -54,18 +55,18 @@ export class SimpleSearchService {
     }).pipe(
       catchError(() => of([])),
       map(result => ({
-        attribution: 'Data by [OpenStreetMap](https://www.openstreetmap.org/copyright)',
+        attribution: $localize `Data by [OpenStreetMap](https://www.openstreetmap.org/copyright)`,
         results: result.slice(0, SimpleSearchService.MAX_RESULTS).map(res => ({
           label: res.display_name,
           geometry: res.geotext,
-          projectionCode: 'WGS84',
+          projectionCode: ProjectionCodesEnum.WGS84,
         })),
       })),
     );
   }
 
   private searchRd$(searchTerm: string): Observable<SearchResultModel> {
-    return this.httpClient.get<LocationServerResponse>(`https://geodata.nationaalgeoregister.nl/locatieserver/v3/free`, {
+    return this.httpClient.get<LocationServerResponse>(`https://geodata.nationaalgeoregister.nl/locatieserver/v3/suggest`, {
       params: {
         q: searchTerm,
         rows: SimpleSearchService.MAX_RESULTS.toString(),
@@ -74,11 +75,11 @@ export class SimpleSearchService {
     }).pipe(
       catchError(() => of({ response: { docs: [] } })),
       map(result => ({
-        attribution: 'Data by [PDOK](https://geodata.nationaalgeoregister.nl)',
+        attribution: $localize `Data by [PDOK](https://geodata.nationaalgeoregister.nl)`,
         results: result.response.docs.slice(0, SimpleSearchService.MAX_RESULTS).map(doc => ({
           label: doc.weergavenaam,
           geometry: doc.geometrie_rd || doc.centroide_rd,
-          projectionCode: 'EPSG:28992',
+          projectionCode: ProjectionCodesEnum.RD,
         })),
       })),
     );
