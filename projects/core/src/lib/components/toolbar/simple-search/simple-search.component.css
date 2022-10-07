@@ -30,6 +30,12 @@
   padding-bottom: 0;
 }
 
+.attribution,
+.hint {
+  font-size: 11px;
+  color: var(--disabled-text-color);
+}
+
 @media screen and (max-width: 730px) {
   .simple-search-container--is-active {
     padding: 0;

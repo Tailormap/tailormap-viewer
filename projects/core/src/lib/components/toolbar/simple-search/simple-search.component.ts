@@ -1,11 +1,11 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { concatMap, Observable, of, startWith, Subject } from 'rxjs';
+import { concatMap, map, Observable, of, startWith, Subject, tap } from 'rxjs';
 import { SearchResult, SearchResultModel, SimpleSearchService } from './simple-search.service';
 import { debounceTime, filter, takeUntil, withLatestFrom } from 'rxjs/operators';
 import { MapService } from '@tailormap-viewer/map';
 
-const EMPTY_SEARCH_RESULT = { results: [], attribution: '' };
+type SearchStatusType = 'empty'|'no_results'|'searching'|'belowMinLength'|'complete';
 
 @Component({
   selector: 'tm-simple-search',
@@ -16,8 +16,15 @@ const EMPTY_SEARCH_RESULT = { results: [], attribution: '' };
 export class SimpleSearchComponent implements OnInit, OnDestroy {
 
   public active = false;
+  public minLength = 4;
   public searchControl = new FormControl<string | SearchResult>('');
-  public searchResults$: Observable<SearchResultModel> = of(EMPTY_SEARCH_RESULT);
+
+  private searchResultsSubject = new Subject<SearchResultModel | null>();
+  public searchResults$: Observable<SearchResultModel | null> = this.searchResultsSubject.asObservable();
+
+  private searchStatusSubject = new Subject<SearchStatusType>();
+  public searchStatus$: Observable<SearchStatusType> = this.searchStatusSubject.asObservable();
+
   private destroyed = new Subject();
   public focusCount = 0;
 
@@ -27,18 +34,31 @@ export class SimpleSearchComponent implements OnInit, OnDestroy {
   private mapService = inject(MapService);
 
   public ngOnInit(): void {
-    this.searchResults$ = this.searchControl.valueChanges.pipe(
+    const searchTerm$ = this.searchControl.valueChanges.pipe(
       startWith(''),
-      filter((value): value is string => typeof value === 'string'),
+      filter(() => this.active),
+      filter((value): value is string => typeof value === 'string'));
+
+    this.searchStatusSubject.next('empty');
+    searchTerm$.pipe(
+      takeUntil(this.destroyed),
+      tap(searchStr => {
+        if (searchStr.length < this.minLength) {
+          this.searchResultsSubject.next(null);
+          this.searchStatusSubject.next(searchStr.length > 0 ? 'belowMinLength' : 'empty');
+        }
+      }),
+      filter(searchStr => (searchStr || '').length >= this.minLength),
+      tap(() => {
+        this.searchStatusSubject.next('searching');
+      }),
       debounceTime(SimpleSearchComponent.SEARCH_DEBOUNCE_TIME),
       withLatestFrom(this.mapService.getProjectionCode$()),
-      concatMap(([ searchStr, projectionCode ]) => {
-        if (!searchStr || searchStr.length <= 3) {
-          return of(EMPTY_SEARCH_RESULT);
-        }
-        return this.searchService.search$(projectionCode, searchStr);
-      }),
-    );
+      concatMap(([ searchStr, projectionCode ]) => this.searchService.search$(projectionCode, searchStr)),
+    ).subscribe(searchResult => {
+      this.searchResultsSubject.next(searchResult);
+      this.searchStatusSubject.next(searchResult.results.length === 0 ? 'no_results' : 'complete');
+    });
 
     this.searchControl.valueChanges
       .pipe(

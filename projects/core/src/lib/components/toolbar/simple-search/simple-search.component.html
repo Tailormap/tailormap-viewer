@@ -24,12 +24,23 @@
       <mat-autocomplete autoActiveFirstOption
                         #auto="matAutocomplete"
                         [displayWith]="displayLabel">
+        <ng-container *ngIf="searchStatus$ | async as searchStatus">
+          <mat-option disabled class="hint" *ngIf="searchStatus === 'belowMinLength'" i18n>
+            Type at least {{ minLength }} characters to start searching
+          </mat-option>
+          <mat-option disabled class="hint" *ngIf="searchStatus === 'no_results'" i18n>
+            No results found
+          </mat-option>
+          <mat-option disabled class="hint" *ngIf="searchStatus === 'searching'">
+            <mat-spinner color="primary" mode="indeterminate" diameter="20"></mat-spinner>
+          </mat-option>
+        </ng-container>
         <ng-container *ngIf="searchResults$ | async as searchResults">
-          <ng-container *ngIf="searchResults.results.length > 0">
+          <ng-container *ngIf="searchResults && searchResults.results.length > 0">
             <mat-option *ngFor="let option of searchResults.results" [value]="option">
               {{option.label}}
             </mat-option>
-            <mat-option disabled tmTransformUrls>{{ searchResults.attribution }}</mat-option>
+            <mat-option class="attribution" disabled tmTransformUrls>{{ searchResults.attribution }}</mat-option>
           </ng-container>
         </ng-container>
       </mat-autocomplete>
