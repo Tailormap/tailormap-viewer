@@ -141,13 +141,17 @@ export class OpenLayersMap implements MapViewerModel {
   }
 
   public zoomToFeature(olFeature: Feature<Geometry>) {
-    const geom = olFeature.getGeometry();
-    if (geom) {
-      const geomExtent = geom.getExtent();
-      this.executeMapAction(olMap => {
-        olMap.getView().fit(buffer(geomExtent, 10), { duration: 1000 });
-      });
+    this.zoomToGeometry(olFeature.getGeometry());
+  }
+
+  public zoomToGeometry(geom?: Geometry) {
+    if (!geom) {
+      return;
     }
+    const geomExtent = geom.getExtent();
+    this.executeMapAction(olMap => {
+      olMap.getView().fit(buffer(geomExtent, 10), { duration: 1000 });
+    });
   }
 
   public zoomTo(x: number, y: number, zoomLevel?: number, animationDuration = 1000, ignoreWhileAnimating = false) {
