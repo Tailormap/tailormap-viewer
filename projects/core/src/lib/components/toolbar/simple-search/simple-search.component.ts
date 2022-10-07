@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { concatMap, map, Observable, of, startWith, Subject, tap } from 'rxjs';
+import { concatMap, Observable, startWith, Subject, tap } from 'rxjs';
 import { SearchResult, SearchResultModel, SimpleSearchService } from './simple-search.service';
 import { debounceTime, filter, takeUntil, withLatestFrom } from 'rxjs/operators';
 import { MapService } from '@tailormap-viewer/map';
