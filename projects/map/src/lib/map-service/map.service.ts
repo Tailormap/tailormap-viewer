@@ -1,6 +1,6 @@
 import { Injectable, NgZone } from '@angular/core';
 import { OpenLayersMap } from '../openlayers-map/openlayers-map';
-import { combineLatest, finalize, map, Observable, tap } from 'rxjs';
+import { combineLatest, finalize, map, Observable, take, tap } from 'rxjs';
 import {
   LayerManagerModel, LayerModel, LayerTypesEnum, MapStyleModel, MapViewDetailsModel, MapViewerOptionsModel, ToolConfigModel, ToolModel,
   VectorLayerModel,
@@ -193,6 +193,14 @@ export class MapService {
 
   public zoomToInitialExtent() {
     this.map.zoomToInitialExtent();
+  }
+
+  public zoomTo(geometry: string, projectionCode: string) {
+    this.getProjectionCode$()
+      .pipe(take(1))
+      .subscribe(mapProjection => {
+        this.map.zoomToGeometry(FeatureHelper.fromWKT(geometry, projectionCode, mapProjection));
+      });
   }
 
   /**

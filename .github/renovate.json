@@ -1,0 +1,32 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base",
+    ":disableDependencyDashboard"
+  ],
+  "onboarding": false,
+  "username": "Renovate [bot]",
+  "platform": "github",
+  "repositories": [
+    "B3Partners/tailormap-viewer"
+  ],
+  "branchPrefix": "renovate-update/",
+  "dependencyDashboard": false,
+  "labels": [
+    "dependencies"
+  ],
+  "packageRules": [
+    {
+      "matchDatasources": [
+        "docker"
+      ],
+      "labels": [
+        "docker-update"
+      ],
+      "commitMessagePrefix": "⬆️ Docker update: "
+    }
+  ],
+  "enabledManagers": [
+    "docker-compose"
+  ]
+}

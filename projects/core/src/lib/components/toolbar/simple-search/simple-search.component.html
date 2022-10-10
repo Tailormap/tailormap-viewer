@@ -1,0 +1,50 @@
+<div class="simple-search-container map-control-button-container"
+     [class.simple-search-container--is-active]="active"
+     (keyup.escape)="toggle(true)">
+
+  <button mat-flat-button
+          i18n-tmTooltip
+          class="map-control-button"
+          tmTooltip="Search location"
+          (click)="toggle()">
+    <mat-icon svgIcon="search"></mat-icon>
+  </button>
+
+  <div class="simple-search-field-wrapper"
+       *ngIf="active">
+    <mat-form-field appearance="outline">
+      <mat-label i18n>Search location</mat-label>
+      <input matInput
+             type="text"
+             i18n-placeholder
+             [tmAutoFocus]="focusCount"
+             placeholder="Search location"
+             [formControl]="searchControl"
+             [matAutocomplete]="auto" />
+      <mat-autocomplete autoActiveFirstOption
+                        #auto="matAutocomplete"
+                        [displayWith]="displayLabel">
+        <ng-container *ngIf="searchStatus$ | async as searchStatus">
+          <mat-option disabled class="hint" *ngIf="searchStatus === 'belowMinLength'" i18n>
+            Type at least {{ minLength }} characters to start searching
+          </mat-option>
+          <mat-option disabled class="hint" *ngIf="searchStatus === 'no_results'" i18n>
+            No results found
+          </mat-option>
+          <mat-option disabled class="hint" *ngIf="searchStatus === 'searching'">
+            <mat-spinner color="primary" mode="indeterminate" diameter="20"></mat-spinner>
+          </mat-option>
+        </ng-container>
+        <ng-container *ngIf="searchResults$ | async as searchResults">
+          <ng-container *ngIf="searchResults && searchResults.results.length > 0">
+            <mat-option *ngFor="let option of searchResults.results" [value]="option">
+              {{option.label}}
+            </mat-option>
+            <mat-option class="attribution" disabled tmTransformUrls>{{ searchResults.attribution }}</mat-option>
+          </ng-container>
+        </ng-container>
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
+
+</div>

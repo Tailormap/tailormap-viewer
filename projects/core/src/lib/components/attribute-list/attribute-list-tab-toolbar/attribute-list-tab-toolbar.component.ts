@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { AttributeListColumnModel } from '../models/attribute-list-column.model';
 import { Store } from '@ngrx/store';
-import { PopoverService, OverlayRef, PopoverPositionEnum } from '@tailormap-viewer/shared';
+import { PopoverService, OverlayRef, PopoverPositionEnum, BrowserHelper } from '@tailormap-viewer/shared';
 import { concatMap, Observable, of, take } from 'rxjs';
 import { selectLoadingDataSelectedTab, selectPagingDataSelectedTab, selectSelectedTab } from '../state/attribute-list.selectors';
 import { PageEvent } from '@angular/material/paginator';
@@ -75,7 +75,7 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
         origin: $event.target,
         content: AttributeListPagingDialogComponent,
         height: 100,
-        width: Math.min(WINDOW_WIDTH, window.innerWidth),
+        width: Math.min(WINDOW_WIDTH, BrowserHelper.getScreenWith()),
         closeOnClickOutside: true,
         position: PopoverPositionEnum.BOTTOM_RIGHT_DOWN,
         positionOffset: 10,

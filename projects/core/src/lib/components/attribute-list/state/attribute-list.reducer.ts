@@ -10,6 +10,8 @@ const onSetAttributeListVisibility = (
 ): AttributeListState => ({
   ...state,
   visible: typeof payload.visible === 'undefined' ? !state.visible : payload.visible,
+  highlightedFeature: undefined,
+  data: state.data.map(d => ({ ...d, selectedRowId: undefined })),
 });
 
 const onUpdateAttributeListHeight = (
@@ -39,6 +41,9 @@ const onChangeAttributeListTabs = (
     tabs: updatedTabs,
     data: data.concat(newData),
     selectedTabId,
+    highlightedFeature: state.highlightedFeature && payload.closedTabs.indexOf(state.highlightedFeature.tabId) !== -1
+      ? undefined
+      : state.highlightedFeature,
   };
 };
 
@@ -53,10 +58,11 @@ const onSetSelectedTab = (
       ? state.data
       : state.data.map(data => {
           return data.tabId === currentSelectedTab
-            ? { ...data, rows: data.rows.map(row => ({ ...row, selected: false })) }
+            ? { ...data, selectedRowId: undefined }
             : data;
       }),
     selectedTabId: payload.tabId,
+    highlightedFeature: currentSelectedTab === payload.tabId ? state.highlightedFeature : undefined,
   };
 };
 
@@ -92,6 +98,7 @@ const onLoadDataSuccess = (
         totalCount: payload.data.totalCount,
         rows: payload.data.rows,
         columns: data.columns.length > 0 ? data.columns : payload.data.columns,
+        selectedRowId: undefined,
       }),
     ),
   };
@@ -183,10 +190,7 @@ const onUpdateRowSelected = (
       payload.dataId,
       data => ({
         ...data,
-        rows: data.rows.map(row => ({
-          ...row,
-          selected: row.id === payload.rowId ? payload.selected : false,
-        })),
+        selectedRowId: data.selectedRowId === payload.rowId ? undefined : payload.rowId,
       }),
     ),
   };

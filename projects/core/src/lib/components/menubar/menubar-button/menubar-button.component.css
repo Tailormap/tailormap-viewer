@@ -1,6 +1,7 @@
 button {
-  margin: 5px 15px;
+  margin: 5px 0;
   border-radius: 4px;
+  max-width: 100%;
 }
 
 button,

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { ConfirmDialogComponent, ConfirmDialogData } from './confirm-dialog.component';
+import { CssHelper } from '../../helpers';
 
 @Injectable({
   providedIn: 'root',
@@ -23,6 +24,7 @@ export class ConfirmDialogService {
     };
     this.dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: '400px',
+      maxHeight: CssHelper.MAX_SCREEN_HEIGHT,
       data,
     });
     return this.dialogRef.afterClosed();

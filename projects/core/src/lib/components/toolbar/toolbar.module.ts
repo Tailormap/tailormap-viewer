@@ -10,6 +10,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { ToolbarEffects } from './state/toolbar.effects';
 import { MouseCoordinatesModule } from './mouse-coordinates/mouse-coordinates.module';
 import { ScaleBarModule } from './scale-bar/scale-bar.module';
+import { SimpleSearchModule } from './simple-search';
 
 @NgModule({
   declarations: [],
@@ -24,6 +25,7 @@ import { ScaleBarModule } from './scale-bar/scale-bar.module';
     ClickedCoordinatesModule,
     MouseCoordinatesModule,
     ScaleBarModule,
+    SimpleSearchModule,
   ],
 })
 export class ToolbarModule { }

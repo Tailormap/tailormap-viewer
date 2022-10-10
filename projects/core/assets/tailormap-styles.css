@@ -8,6 +8,10 @@
   --dialog-z-index: 998;
   --body-margin: 16px;
   --overlay-panel-z-index: 1000;
+  --menubar-width: 70px;
+  --map-control-size: 40px;
+  --vh: 1vh;
+  --vw: 1vw;
 
   --primary-color: #6236ff;
   --error-color: #ff3636;
@@ -22,6 +26,9 @@
   --primary-color-0_1: rgba(98, 54, 255, 0.1);
   --error-color-0_5: rgba(255, 54, 54, 0.5);
   --primary-color-background-0_8: rgba(234, 229, 250, 0.8);
+
+  --max-control-height: calc(var(--vh) * 100 - (var(--body-margin) * 2));
+  --max-control-width: calc(var(--vw) * 100 - (var(--menubar-width) + var(--body-margin) * 2));
 }
 
 html {
@@ -94,6 +101,30 @@ body {
 .toggle-button--active {
   color: var(--primary-color);
   background-color: var(--primary-color-background);
+}
+
+.map-control-button-container {
+  display: flex;
+  flex-direction: row;
+  box-shadow: 0 1px 0 0 rgba(0,0,0,0.05), 0 3px 4px 0 rgba(0,0,0,0.08);
+  border-radius: 3px;
+}
+
+.map-control-button,
+.map-control-button.mat-flat-button {
+  background-color: #fff;
+  border: 0 none;
+  width: var(--map-control-size);
+  height: var(--map-control-size);
+  padding: 0;
+  cursor: pointer;
+  min-width: 40px;
+}
+
+.map-control-button mat-icon {
+  width: calc(var(--map-control-size) - 16px);
+  height: calc(var(--map-control-size) - 16px);
+  margin: 8px;
 }
 
 .mat-button-base.button--active,

@@ -67,7 +67,7 @@ services:
       - web-proxied
     expose:
       - "9113"
-    image: nginx/nginx-prometheus-exporter:0.10.0
+    image: nginx/nginx-prometheus-exporter:0.11.0
     # see https://github.com/nginxinc/nginx-prometheus-exporter#command-line-arguments
     environment:
       SCRAPE_URI: http://web-proxied:8080/stub_status

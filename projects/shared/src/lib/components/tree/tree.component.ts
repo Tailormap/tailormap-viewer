@@ -5,6 +5,7 @@ import { FlatTreeHelper } from './helpers/flat-tree.helper';
 import { FlatTreeModel } from './models';
 import { Subject } from 'rxjs';
 import { DropZoneOptions, TreeDragDropService, treeNodeBaseClass } from './tree-drag-drop.service';
+import { CssHelper } from '../../helpers';
 
 @Component({
   selector: 'tm-tree',
@@ -169,7 +170,7 @@ export class TreeComponent implements OnDestroy {
     const targetIsHTMLElement = (target: EventTarget): target is HTMLElement => !!(target as HTMLElement).nodeName;
     if (targetIsHTMLElement(currentTarget) && this.scrollLeft !== currentTarget.scrollLeft) {
       this.scrollLeft = currentTarget.scrollLeft;
-      currentTarget.style.setProperty('--scroll-pos', this.scrollLeft + 'px');
+      CssHelper.setCssVariableValue('--scroll-pos', this.scrollLeft + 'px', currentTarget);
     }
   }
 

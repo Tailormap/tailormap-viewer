@@ -53,9 +53,10 @@ export class AttributeListEffects {
           crs: projection,
         }).pipe(
           map(result => {
-            return AttributeListActions.setHighlightedFeature({
-              feature: result.features && result.features.length > 0 ? result.features[0] : null,
-            });
+            const feature = result.features && result.features.length > 0
+              ? { ...result.features[0], tabId: tab.id }
+              : null;
+            return AttributeListActions.setHighlightedFeature({ feature });
           }),
         );
       }),

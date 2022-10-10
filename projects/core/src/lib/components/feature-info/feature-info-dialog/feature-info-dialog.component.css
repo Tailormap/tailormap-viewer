@@ -4,7 +4,7 @@
   top: var(--body-margin);
   bottom: auto;
   min-height: 40vh;
-  max-height: calc(100vh - var(--body-margin) - var(--body-margin));
+  max-height: var(--max-control-height);
 }
 
 .feature-info-dialog ::ng-deep .dialog-content {
@@ -47,6 +47,11 @@
   font-size: 13px;
   font-weight: 600;
   line-height: 16px;
+}
+
+.row ::ng-deep img {
+  max-width: 100%;
+  max-height: 200px;
 }
 
 .buttons {

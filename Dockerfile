@@ -37,6 +37,8 @@ COPY docker/web/enable-proxies.sh /docker-entrypoint.d/enable-proxies.sh
 
 EXPOSE 80
 
+# NO USER command; nginx drops to nginx user for worker processes
+
 HEALTHCHECK --interval=30s --timeout=3s --retries=2 CMD wget --spider --header 'Accept: text/html' http://localhost/ || exit 1
 
 CMD ["nginx", "-g", "daemon off;"]

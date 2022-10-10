@@ -7,7 +7,7 @@ import { AttributeListColumnModel } from '../models/attribute-list-column.model'
 import {
   selectColumnsForSelectedTab, selectLoadingDataSelectedTab,
   selectRowCountForSelectedTab,
-  selectRowsForSelectedTab, selectSelectedTab, selectSortForSelectedTab,
+  selectRowsForSelectedTab, selectSelectedRowIdForSelectedTab, selectSelectedTab, selectSortForSelectedTab,
 } from '../state/attribute-list.selectors';
 import { updateRowSelected, updateSort } from '../state/attribute-list.actions';
 import { AttributeListStateService } from '../services/attribute-list-state.service';
@@ -19,6 +19,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AttributeFilterModel } from '../../../filter/models/attribute-filter.model';
 import { selectApplicationId } from '../../../state/core.selectors';
 import { CqlFilterHelper } from '../../../filter/helpers/cql-filter.helper';
+import { CssHelper } from '@tailormap-viewer/shared';
 
 @Component({
   selector: 'tm-attribute-list-content',
@@ -33,6 +34,7 @@ export class AttributeListContentComponent implements OnInit {
   public notLoadingData$: Observable<boolean> = of(false);
   public sort$: Observable<{ column: string; direction: string } | null> = of(null);
   public filters$: Observable<AttributeFilterModel[]> = of([]);
+  public selectedRowId$: Observable<string | undefined> = of(undefined);
   public hasRows$: Observable<boolean> = of(false);
   public hasNoRows$: Observable<boolean> = of(true);
 
@@ -55,6 +57,7 @@ export class AttributeListContentComponent implements OnInit {
         }
         return this.simpleAttributeFilterService.getFilters$(ATTRIBUTE_LIST_ID, tab.layerId);
       }));
+    this.selectedRowId$ = this.store$.select(selectSelectedRowIdForSelectedTab);
   }
 
   public onSelectRow(row: { id: string; selected: boolean }): void {
@@ -113,7 +116,7 @@ export class AttributeListContentComponent implements OnInit {
           cqlFilter: CqlFilterHelper.getFilters(otherFilters).get(layerId),
           applicationId,
         };
-        this.dialog.open(AttributeListFilterComponent, { data });
+        this.dialog.open(AttributeListFilterComponent, { data, maxHeight: CssHelper.MAX_SCREEN_HEIGHT });
       });
   }
 }

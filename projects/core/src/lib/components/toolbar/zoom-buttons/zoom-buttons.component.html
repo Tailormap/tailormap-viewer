@@ -1,16 +1,16 @@
 <ng-container *ngIf="resolution$ | async as resolution">
-<div class="zoom-buttons">
+<div class="zoom-buttons map-control-button-container">
   <button mat-flat-button
-          class="zoom-initial-extent"
+          class="zoom-initial-extent map-control-button"
           i18n-tmTooltip
           tmTooltip="Zoom to initial extent"
           (click)="zoomToInitialExtent()">
     <mat-icon svgIcon="zoom_max"></mat-icon>
   </button>
 </div>
-<div class="zoom-buttons">
+<div class="zoom-buttons map-control-button-container">
   <button mat-flat-button
-          class="zoom-in"
+          class="zoom-in map-control-button"
           i18n-tmTooltip
           tmTooltip="Zoom in"
           [disabled]="resolution.zoomLevel >= resolution.maxZoomLevel"
@@ -19,7 +19,7 @@
   </button>
   <div class="divider"></div>
   <button mat-flat-button
-          class="zoom-out"
+          class="zoom-out map-control-button"
           i18n-tmTooltip
           tmTooltip="Zoom out"
           [disabled]="resolution.zoomLevel <= resolution.minZoomLevel"

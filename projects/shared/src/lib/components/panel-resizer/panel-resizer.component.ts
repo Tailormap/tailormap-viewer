@@ -1,6 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { fromEvent } from 'rxjs';
+import { fromEvent, tap } from 'rxjs';
 import { finalize, map, switchMap, takeUntil } from 'rxjs/operators';
+import { CssHelper } from '../../helpers';
 
 @Component({
   selector: 'tm-panel-resize',
@@ -32,25 +33,31 @@ export class PanelResizerComponent implements OnInit {
     if (!resizeHandle) {
       return;
     }
-    fromEvent<MouseEvent>(resizeHandle, 'mousedown')
+    this.createResizingObserver(resizeHandle, [ 'mousedown', 'mousemove', 'mouseup' ]);
+    this.createResizingObserver(resizeHandle, [ 'touchstart', 'touchmove', 'touchend' ]);
+  }
+
+  private createResizingObserver(resizeHandle: Element, events: [ downEvent: string, moveEvent: string, upEvent: string ]) {
+    fromEvent<MouseEvent | TouchEvent>(resizeHandle, events[0])
       .pipe(
-        map((event: MouseEvent) => {
+        tap(event => event.preventDefault()),
+        map((event: MouseEvent | TouchEvent) => {
           if (this.orientation === 'horizontal') {
-            return event.pageX;
+            return this.getPageXY(event, 'pageX');
           }
-          return event.pageY;
+          return this.getPageXY(event, 'pageY');
         }),
         switchMap((initialPosition: number) => {
           this.startResize();
-          return fromEvent<MouseEvent>(document, 'mousemove')
+          return fromEvent<MouseEvent | TouchEvent>(document, events[1])
             .pipe(
-              map((event: MouseEvent) => {
+              map((event: MouseEvent | TouchEvent) => {
                 if (this.orientation === 'horizontal') {
-                  return event.pageX - initialPosition;
+                  return this.getPageXY(event, 'pageX') - initialPosition;
                 }
-                return event.pageY - initialPosition;
+                return this.getPageXY(event, 'pageY') - initialPosition;
               }),
-              takeUntil(fromEvent(document, 'mouseup')),
+              takeUntil(fromEvent(document, events[2])),
               finalize(() => this.resizeComplete()),
             );
         }),
@@ -59,6 +66,17 @@ export class PanelResizerComponent implements OnInit {
         this.position = result;
         this.updateResizeIndicatorPosition(result);
       });
+  }
+
+  private getPageXY(event: MouseEvent | TouchEvent, prop: 'pageX' | 'pageY'): number {
+    if (this.isTouchEvent(event)) {
+      return event.touches[0][prop];
+    }
+    return event[prop];
+  }
+
+  private isTouchEvent(event: MouseEvent | TouchEvent): event is TouchEvent {
+    return (event as TouchEvent).touches !== undefined && (event as TouchEvent).touches.length > 0;
   }
 
   private startResize() {
@@ -86,7 +104,7 @@ export class PanelResizerComponent implements OnInit {
     if (!this.resizer) {
       return;
     }
-    this.resizer.nativeElement.style.setProperty('--translate-pos', position + 'px');
+    CssHelper.setCssVariableValue('--translate-pos', position + 'px', this.resizer.nativeElement);
   }
 
 }

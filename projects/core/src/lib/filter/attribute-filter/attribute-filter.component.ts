@@ -47,9 +47,9 @@ export class AttributeFilterComponent implements OnInit, OnDestroy {
   public set filter(filter: InputFilterData) {
     let value: string | DateTime = '';
     let value2: string | DateTime = '';
-    if (filter.value && filter.value.length === 1 && this._attributeType === FeatureAttributeTypeEnum.DATE) {
+    if (filter.value && filter.value.length === 1 && this.isDateLikeAttributeType()) {
       value = this.toDateTime(filter.value[0]);
-    } else if (filter.value && filter.value.length === 2 && this._attributeType === FeatureAttributeTypeEnum.DATE) {
+    } else if (filter.value && filter.value.length === 2 && this.isDateLikeAttributeType()) {
       value = this.toDateTime(filter.value[0]);
       value2 = this.toDateTime(filter.value[1]);
     } else if (filter.value && filter.value.length === 1) {
@@ -170,7 +170,7 @@ export class AttributeFilterComponent implements OnInit, OnDestroy {
   }
 
   private mapValueToString(inputValue: string | DateTime | undefined | null): string {
-    if (inputValue && this._attributeType === FeatureAttributeTypeEnum.DATE && DateTime.isDateTime(inputValue)) {
+    if (inputValue && this.isDateLikeAttributeType() && DateTime.isDateTime(inputValue)) {
       return inputValue.toISODate();
     }
     if (typeof inputValue === 'string') {
@@ -233,7 +233,7 @@ export class AttributeFilterComponent implements OnInit, OnDestroy {
     return this._attributeType === FeatureAttributeTypeEnum.STRING ||
       this._attributeType === FeatureAttributeTypeEnum.INTEGER ||
       this._attributeType === FeatureAttributeTypeEnum.DOUBLE ||
-      this._attributeType === FeatureAttributeTypeEnum.DATE;
+      this.isDateLikeAttributeType();
   }
 
   public showValueBetweenInput() {
@@ -242,7 +242,7 @@ export class AttributeFilterComponent implements OnInit, OnDestroy {
 
   public showDateInput() {
     return !this.showUniqueValuesInput()
-      && this._attributeType === FeatureAttributeTypeEnum.DATE
+      && this.isDateLikeAttributeType()
       && this.formValues.condition !== FilterConditionEnum.NULL_KEY;
   }
 
@@ -297,6 +297,11 @@ export class AttributeFilterComponent implements OnInit, OnDestroy {
 
   private getSelectedUniqueValues(): string[] {
     return (this.uniqueValues || []).filter(val => val.selected).map(val => val.value);
+  }
+
+  private isDateLikeAttributeType() {
+    return this._attributeType === FeatureAttributeTypeEnum.DATE
+      || this._attributeType === FeatureAttributeTypeEnum.TIMESTAMP;
   }
 
   private toDateTime(input: string | DateTime) {
