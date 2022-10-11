@@ -25,6 +25,7 @@ services:
     environment:
       - API_PROXY_ENABLED=false
       - ADMIN_PROXY_ENABLED=false
+      - "SENTRY_DSN=${VIEWER_SENTRY_DSN:-}"
     labels:
       - "traefik.http.routers.tailormap-snapshot-${NAME}.rule=Host(`${HOST:-localhost}`) && PathPrefix(`${BASE_HREF}`)"
       - traefik.http.routers.tailormap-snapshot-${NAME}.tls=true

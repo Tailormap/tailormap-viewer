@@ -129,6 +129,11 @@ jobs:
 
       - name: 'Update main deployment using Docker Compose'
         if: ${{ github.ref == 'refs/heads/main' }}
+        env:
+          DB_PORT: "127.0.0.1:55432:5432"
+          HOST: ${{ secrets.DEPLOY_HOST_SNAPSHOT }}
+          API_SENTRY_DSN: ${{ secrets.API_SENTRY_DSN }}
+          VIEWER_SENTRY_DSN: ${{ secrets.VIEWER_SENTRY_DSN }}
         # use the old/python docker-compose for pulling to prevent errors like https://github.com/docker/buildx/issues/764
         # WARNING: Some service image(s) must be built from source by running:
         #    docker compose build %s db web-proxied
@@ -136,14 +141,17 @@ jobs:
         # command [ssh -l github-docker-actions -- *** docker system dial-stdio] has exited with signal: killed, please make sure the URL is valid, and Docker 18.09 or later is installed on the remote host: stderr=
         run: |
           docker-compose -f docker-compose.yml --profile proxied --profile full pull -q
-          DB_PORT=127.0.0.1:55432:5432 HOST=${{ secrets.DEPLOY_HOST_SNAPSHOT }} docker compose -f docker-compose.yml -f docker-compose-db-ports.yml --profile proxied --profile full up -d --pull=always
+          docker compose -f docker-compose.yml -f docker-compose-db-ports.yml --profile proxied --profile full up -d --pull=always
 
       - name: 'Update pull request deployment using Docker Compose'
         if: ${{ steps.find-pr.outputs.number }}
+        env:
+          NAME: ${{ env.VERSION_TAG }}
+          HOST: ${{ secrets.DEPLOY_HOST_SNAPSHOT }}
+          VIEWER_SENTRY_DSN: ${{ secrets.VIEWER_SENTRY_DSN }}
         run: |
-          export NAME=${{ env.VERSION_TAG }}
           docker compose -f docker-compose-pr.yml --project-name tailormap-snapshot-${NAME} pull
-          HOST=${{ secrets.DEPLOY_HOST_SNAPSHOT }} docker compose -f docker-compose-pr.yml --project-name tailormap-snapshot-${NAME} up -d --pull=always
+          docker compose -f docker-compose-pr.yml --project-name tailormap-snapshot-${NAME} up -d --pull=always
 
       - name: 'Create GitHub deployment'
         if: success()
