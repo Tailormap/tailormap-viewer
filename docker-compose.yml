@@ -14,6 +14,7 @@ services:
       context: .
       args:
         - "BASE_HREF=${BASE_HREF:-/}"
+        - "VERSION_TAG=${VERSION_TAG:-snapshot}"
     profiles:
       - http
     ports:
@@ -38,7 +39,8 @@ services:
     build:
       context: .
       args:
-        - BASE_HREF=${BASE_HREF:-/}
+        - "BASE_HREF=${BASE_HREF:-/}"
+        - "VERSION_TAG=${VERSION_TAG:-snapshot}"
     profiles:
       - proxied
     networks:
@@ -112,6 +114,8 @@ services:
     image: ghcr.io/b3partners/tailormap-config-db:snapshot
     build:
       context: docker/db
+      args:
+        - "VERSION_TAG=${VERSION_TAG:-snapshot}"
     profiles:
       - full
     networks:
