@@ -1,7 +1,7 @@
 FROM postgres:14.5-alpine3.16
 
 ARG TZ="Europe/Amsterdam"
-ARG VERSION_TAG="snapshot"
+ARG VERSION="snapshot"
 
 LABEL org.opencontainers.image.authors="support@b3partners.nl" \
       org.opencontainers.image.description="Sample configuration database for Tailormap" \
@@ -11,7 +11,7 @@ LABEL org.opencontainers.image.authors="support@b3partners.nl" \
       org.opencontainers.image.source="https://github.com/B3Partners/tailormap-viewer/docker/db/" \
       org.opencontainers.image.documentation="https://github.com/B3Partners/tailormap-viewer/" \
       org.opencontainers.image.licenses="MIT" \
-      org.opencontainers.image.version="${VERSION_TAG}"
+      org.opencontainers.image.version="${VERSION}"
 
 # get schema export from tailormap persistence
 RUN set -eux; \
