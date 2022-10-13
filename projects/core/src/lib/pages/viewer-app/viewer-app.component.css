@@ -141,16 +141,3 @@ tm-error-message {
     margin-bottom: 40px;
   }
 }
-
-@media screen and (max-width: 425px) {
-  .map-controls-right:not(.map-controls-right--on-bottom) {
-    margin-top: 49px;
-  }
-}
-
-
-@media screen and (max-width: 375px) {
-  .map-controls-right {
-    margin-top: 49px;
-  }
-}
