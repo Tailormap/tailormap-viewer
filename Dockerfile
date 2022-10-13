@@ -18,6 +18,8 @@ RUN npm run build -- --base-href=${BASE_HREF}
 
 FROM nginx:1.23.1-alpine
 
+ARG VERSION=snapshot
+
 LABEL org.opencontainers.image.authors="support@b3partners.nl" \
       org.opencontainers.image.description="Tailormap Viewer provides the web interface for Tailormap" \
       org.opencontainers.image.vendor="B3Partners BV" \
@@ -26,7 +28,7 @@ LABEL org.opencontainers.image.authors="support@b3partners.nl" \
       org.opencontainers.image.source="https://github.com/B3Partners/tailormap-viewer/" \
       org.opencontainers.image.documentation="https://github.com/B3Partners/tailormap-viewer/" \
       org.opencontainers.image.licenses="MIT" \
-      org.opencontainers.image.version="0.0.0"
+      org.opencontainers.image.version="${VERSION}"
 
 COPY --from=builder /app/dist/app /usr/share/nginx/html
 
@@ -34,6 +36,7 @@ COPY docker/web/nginx.conf /etc/nginx/nginx.conf
 COPY docker/web/api-proxy.conf.template /etc/nginx/templates/api-proxy.conf.template
 COPY docker/web/admin-proxy.conf.template /etc/nginx/templates/admin-proxy.conf.template
 COPY docker/web/enable-proxies.sh /docker-entrypoint.d/enable-proxies.sh
+COPY docker/web/configure-sentry.sh /docker-entrypoint.d/99-configure-sentry.sh
 
 EXPOSE 80
 

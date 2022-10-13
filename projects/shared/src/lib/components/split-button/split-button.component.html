@@ -1,4 +1,4 @@
-<mat-button-toggle-group>
+<mat-button-toggle-group [class.hide-on-small-screens]="!!small_screens_icon">
   <mat-button-toggle (click)="cycleNextOption()">
     {{getLabel()}}
   </mat-button-toggle>
@@ -6,6 +6,16 @@
     <mat-icon svgIcon="drop_down"></mat-icon>
   </mat-button-toggle>
 </mat-button-toggle-group>
+
+<div class="map-control-button-container" *ngIf="small_screens_icon">
+  <button mat-flat-button
+          i18n-tmTooltip
+          class="map-control-button"
+          tmTooltip="Background layer selection"
+          [matMenuTriggerFor]="dropdownMenu">
+    <mat-icon [svgIcon]="small_screens_icon"></mat-icon>
+  </button>
+</div>
 
 <mat-menu #dropdownMenu="matMenu" class="split-button-panel">
   <button mat-menu-item

@@ -14,6 +14,7 @@ services:
       context: .
       args:
         - "BASE_HREF=${BASE_HREF:-/}"
+        - "VERSION=${VERSION_TAG:-snapshot}"
     profiles:
       - http
     ports:
@@ -27,6 +28,7 @@ services:
       - "ADMIN_PROXY_ENABLED=${ADMIN_PROXY_ENABLED:-true}"
       - "ADMIN_PROXY_URL=${ADMIN_PROXY_URL:-http://admin:8080/admin/}"
       - "ADMIN_PROXY_HOST=${ADMIN_PROXY_HOST:-localhost}"
+      - "SENTRY_DSN=${VIEWER_SENTRY_DSN:-}"
     labels:
       traefik.enable: false
     restart: unless-stopped
@@ -38,7 +40,8 @@ services:
     build:
       context: .
       args:
-        - BASE_HREF=${BASE_HREF:-/}
+        - "BASE_HREF=${BASE_HREF:-/}"
+        - "VERSION=${VERSION_TAG:-snapshot}"
     profiles:
       - proxied
     networks:
@@ -51,6 +54,7 @@ services:
       - "ADMIN_PROXY_ENABLED=${ADMIN_PROXY_ENABLED:-true}"
       - "ADMIN_PROXY_URL=${ADMIN_PROXY_URL:-http://admin:8080/admin/}"
       - "HOST=${HOST:-localhost}"
+      - "SENTRY_DSN=${VIEWER_SENTRY_DSN:-}"
     labels:
       traefik.http.routers.tailormap-snapshot.rule: "Host(`${HOST:-localhost}`)"
       traefik.http.routers.tailormap-snapshot.tls: "true"
@@ -82,7 +86,7 @@ services:
 
 
   api:
-    image: ghcr.io/b3partners/tailormap-api:snapshot
+    image: ghcr.io/b3partners/tailormap-api:${RELEASE_VERSION:-snapshot}
     profiles:
       - full
     networks:
@@ -90,13 +94,16 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db/tailormap
       DB_PASSWORD: ${TAILORMAP_DB_PASSWORD:-tailormap}
+      SENTRY_DSN: ${API_SENTRY_DSN:-}
+      # Sample 20% of API requests for now.
+      SENTRY_TRACES_SAMPLE_RATE: 0.2
     labels:
       traefik.enable: false
     restart: unless-stopped
 
 
   admin:
-    image: ghcr.io/b3partners/tailormap-admin:snapshot
+    image: ghcr.io/b3partners/tailormap-admin:${RELEASE_VERSION:-snapshot}
     profiles:
       - full
     networks:
@@ -109,9 +116,11 @@ services:
 
 
   db:
-    image: ghcr.io/b3partners/tailormap-config-db:snapshot
+    image: ghcr.io/b3partners/tailormap-config-db:${RELEASE_VERSION:-snapshot}
     build:
       context: docker/db
+      args:
+        - "VERSION=${RELEASE_VERSION:-snapshot}"
     profiles:
       - full
     networks:
