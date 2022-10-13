@@ -36,6 +36,7 @@ COPY docker/web/nginx.conf /etc/nginx/nginx.conf
 COPY docker/web/api-proxy.conf.template /etc/nginx/templates/api-proxy.conf.template
 COPY docker/web/admin-proxy.conf.template /etc/nginx/templates/admin-proxy.conf.template
 COPY docker/web/enable-proxies.sh /docker-entrypoint.d/enable-proxies.sh
+COPY docker/web/configure-sentry.sh /docker-entrypoint.d/99-configure-sentry.sh
 
 EXPOSE 80
 
