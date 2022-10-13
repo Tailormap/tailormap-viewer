@@ -1,0 +1,37 @@
+tag-template: v$NEXT_PATCH_VERSION
+name-template: v$NEXT_PATCH_VERSION 🎁
+
+version-template: "$MAJOR.$MINOR.$PATCH"
+
+template: |
+  ## What’s Changed
+
+  $CHANGES
+
+categories:
+#  - title: 🚨 Removed
+#    label: removed
+#  - title: ⚠️ Deprecated
+#    label: deprecated
+  - title: 🚀 New features and improvements
+    labels:
+      - enhancement
+      - feature
+  - title: 🐛 Bug Fixes
+    labels:
+      - bug
+      - fix
+      - bugfix
+      - regression
+  - title: 📖 Documentation updates
+    label: documentation
+  - title: 🔨 Dependency updates
+    label: dependencies
+  - title: 🚦 Tests and Infrastructure
+    labels:
+      - tests
+      - infrastructure
+
+replacers:
+  - search: '/CVE-(\d{4})-(\d+)/g'
+    replace: 'https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-$1-$2'
