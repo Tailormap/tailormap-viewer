@@ -35,7 +35,7 @@ Use Docker Compose to build, push and run images.
 
 Requires a Docker compose version supporting version 3.9 of the compose specification (profiles). Do not use 1.25 included in some Ubuntu
 repositories. Download version 1.28.5 (later version like 1.29.2 may give OpenSSL conflict if server uses Ubuntu 20.04 LTS included Docker
-packages).
+packages). Or better yet use the docker compose (v2) plugin.
 
 Note that you may need to set the environment variable `COMPOSE_DOCKER_CLI_BUILD` to `0` if you get an error like `ERRO[0000] Can't close tar writer: io: read/write on closed pipe`.
 
@@ -60,6 +60,13 @@ the registry automatically. If you want to update your running containers, execu
 - `docker compose build db` to build a new configuration database image (see note below)
 
 Run `docker compose --profile http --profile full up -d` again to use the updated images.
+
+#### Running a specific version
+
+To run a specific version of the stack set the `RELEASE_VERSION` and `VERSION_TAG` environment variables to the desired (and identical)
+version. For example: `VERSION_TAG=10.0.0-rc1;RELEASE_VERSION=10.0.0-rc1;docker compose --profile http --profile full up -d` to run
+release version 10.0.0-rc1. Or `VERSION_TAG=latest;RELEASE_VERSION=latest;docker compose --profile http --profile full up -d` to run
+latest release.
 
 #### Default account
 

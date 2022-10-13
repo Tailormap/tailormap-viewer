@@ -14,7 +14,7 @@ services:
       context: .
       args:
         - "BASE_HREF=${BASE_HREF:-/}"
-        - "VERSION_TAG=${VERSION_TAG:-snapshot}"
+        - "VERSION=${VERSION_TAG:-snapshot}"
     profiles:
       - http
     ports:
@@ -40,7 +40,7 @@ services:
       context: .
       args:
         - "BASE_HREF=${BASE_HREF:-/}"
-        - "VERSION_TAG=${VERSION_TAG:-snapshot}"
+        - "VERSION=${VERSION_TAG:-snapshot}"
     profiles:
       - proxied
     networks:
@@ -84,7 +84,7 @@ services:
 
 
   api:
-    image: ghcr.io/b3partners/tailormap-api:snapshot
+    image: ghcr.io/b3partners/tailormap-api:${RELEASE_VERSION:-snapshot}
     profiles:
       - full
     networks:
@@ -98,7 +98,7 @@ services:
 
 
   admin:
-    image: ghcr.io/b3partners/tailormap-admin:snapshot
+    image: ghcr.io/b3partners/tailormap-admin:${RELEASE_VERSION:-snapshot}
     profiles:
       - full
     networks:
@@ -111,11 +111,11 @@ services:
 
 
   db:
-    image: ghcr.io/b3partners/tailormap-config-db:snapshot
+    image: ghcr.io/b3partners/tailormap-config-db:${RELEASE_VERSION:-snapshot}
     build:
       context: docker/db
       args:
-        - "VERSION_TAG=${VERSION_TAG:-snapshot}"
+        - "VERSION=${RELEASE_VERSION:-snapshot}"
     profiles:
       - full
     networks:
