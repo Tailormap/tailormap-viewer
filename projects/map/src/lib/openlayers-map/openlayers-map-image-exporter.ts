@@ -7,6 +7,8 @@ import View from 'ol/View';
 import { Size } from 'ol/size';
 import { ScaleLine } from 'ol/control';
 import html2canvas from 'html2canvas';
+import { ExtentHelper } from '../helpers/extent.helper';
+import { OpenlayersExtent } from '../models';
 
 export class OpenLayersMapImageExporter {
   private constructor() {
@@ -34,11 +36,19 @@ export class OpenLayersMapImageExporter {
     const width = Math.round(options.widthInMm * options.resolution / 25.4);
     const height = Math.round(options.heightInMm * options.resolution / 25.4);
     console.log(`Map image export, requested size in mm: ${options.widthInMm} x ${options.heightInMm} in ${options.resolution} DPI, ${width} x ${height} px, ` +
-      `width/height ratio ${(width / height).toFixed(1)}`);
+      `width/height ratio ${(width / height).toFixed(1)}, map center ${options.center}`);
+
+    let exportExtentFactor = 1;
+    if (options.extent) {
+      // When exact export extent is specified, adjust the imageExportOlSize based on the ratio of the export extent to the extent of the
+      // entire olMap.
+      exportExtentFactor = (ExtentHelper.getWidth(options.extent as OpenlayersExtent) / viewResolution) / olSize[0];
+      console.log(`Export extent ${options.extent} with size factor ${exportExtentFactor}`);
+    }
 
     const imageSize = [ width, height ];
     // The ratio of the export image pixel size to the original map pixel size based on width
-    const sizeRatio = imageSize[0] / olSize[0];
+    const sizeRatio = imageSize[0] / olSize[0] / exportExtentFactor;
     // When sizeRatio is higher than 1 reduce the map size, but get the higher pixel density image from the OL canvases because sizeRatio
     // is used as OL pixelRatio
     const imageExportOlSize = [ imageSize[0]/sizeRatio, imageSize[1]/sizeRatio ];
@@ -126,7 +136,7 @@ export class OpenLayersMapImageExporter {
     imageExportOlMap.render();
 
     const imageExportExtent = imageExportOlMap.getView().calculateExtent(imageExportOlMap.getSize());
-    console.log(`Map image export OL size set to ${imageExportOlSize[0]} x ${imageExportOlSize[1]} px, ` +
+    console.log(`Map image export OL size set to ${imageExportOlSize[0]} x ${imageExportOlSize[1]} px, for final image size ${width} x ${height}, ` +
       `pixelRatio ${sizeRatio.toFixed(3)}, view extent ${imageExportExtent.map(n => n.toFixed(3))}`);
 
     return renderedMapCanvasDataURL$.asObservable();

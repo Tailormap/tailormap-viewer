@@ -2,7 +2,8 @@ import { Injectable, NgZone } from '@angular/core';
 import { OpenLayersMap } from '../openlayers-map/openlayers-map';
 import { combineLatest, finalize, map, Observable, take, tap } from 'rxjs';
 import {
-  LayerManagerModel, LayerModel, LayerTypesEnum, MapStyleModel, MapViewDetailsModel, MapViewerOptionsModel, ToolConfigModel, ToolModel,
+  LayerManagerModel, LayerModel, LayerTypesEnum, MapStyleModel, MapViewDetailsModel, MapViewerOptionsModel, OpenlayersExtent,
+  ToolConfigModel, ToolModel,
   VectorLayerModel,
 } from '../models';
 import { ToolManagerModel } from '../models/tool-manager.model';
@@ -29,6 +30,7 @@ export interface MapExportOptions {
   widthInMm: number;
   heightInMm: number;
   resolution: number;
+  extent?: OpenlayersExtent | null;
   center?: Coordinate;
   layers: LayerModel[];
   vectorLayerFilter?: OlLayerFilter;

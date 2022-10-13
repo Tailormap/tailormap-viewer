@@ -19,6 +19,9 @@ import { selectHasDrawingFeatures } from '../../drawing/state/drawing.selectors'
 import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layout.service';
 import { ExtendedAppLayerModel } from '../../../map/models';
 
+// Draw the vector layer with the print extent on the exported map image
+const DEBUG_PRINT_EXTENT = true;
+
 @Component({
   selector: 'tm-print',
   templateUrl: './print.component.html',
@@ -40,7 +43,8 @@ export class PrintComponent implements OnInit, OnDestroy {
   public includeDrawing = new FormControl(true);
 
   // eslint-disable-next-line rxjs/finnish
-  private vectorLayerFilter: OlLayerFilter = layer => !!(this.includeDrawing.value && layer.get('id') === 'drawing-layer');
+  private vectorLayerFilter: OlLayerFilter = layer => (this.includeDrawing.value && layer.get('id') === 'drawing-layer'
+    || (DEBUG_PRINT_EXTENT && layer.get('id') === 'print-preview-layer'));
 
   public exportType = new FormControl<'pdf' | 'image'>('pdf', { nonNullable: true });
 
@@ -251,6 +255,7 @@ export class PrintComponent implements OnInit, OnDestroy {
               widthInMm: form.width,
               heightInMm: form.height,
               resolution: form.dpi,
+              extent: this.exportExtent,
               center: ExtentHelper.getCenter(this.exportExtent as OpenlayersExtent), // XXX
               layers: mapLayers,
               vectorLayerFilter: this.vectorLayerFilter,
