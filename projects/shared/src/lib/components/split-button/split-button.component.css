@@ -38,3 +38,16 @@ mat-button-toggle ::ng-deep .mat-button-toggle-label-content {
 .mat-button-toggle + .mat-button-toggle {
   border-left: 0 none;
 }
+
+.map-control-button-container {
+  display: none;
+}
+
+@media screen and (max-width: 625px) {
+  .hide-on-small-screens {
+    display: none;
+  }
+  .map-control-button-container {
+    display: block;
+  }
+}

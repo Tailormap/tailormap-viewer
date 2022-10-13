@@ -32,6 +32,9 @@ export class SplitButtonComponent {
   @Output()
   public optionSelected = new EventEmitter<string>();
 
+  @Input()
+  public small_screens_icon: string | undefined;
+
   public selectedOptionId: string | null = null;
   public selectedOptionObject: SplitButtonOptionModel | null = null;
   public optionsList: SplitButtonOptionModel[] = [];
