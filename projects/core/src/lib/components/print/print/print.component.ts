@@ -200,12 +200,17 @@ export class PrintComponent implements OnInit, OnDestroy {
   }
 
   private adjustExtentRatioToExportSettings(extent: OpenlayersExtent): OpenlayersExtent | null {
+    let ratio = null;
+    const extentRatio = ExtentHelper.getWidth(extent) / ExtentHelper.getHeight(extent);
     if (this.exportType.value === 'image' && this.exportImageForm.valid) {
       const form = this.exportImageForm.getRawValue();
-      console.log('Adjust extent ratio for image export form', form);
-      const ratio = form.width / form.height;
-      const extentRatio = ExtentHelper.getWidth(extent) / ExtentHelper.getHeight(extent);
+      ratio = form.width / form.height;
+    } else if (this.exportType.value === 'pdf' && this.exportPdfForm.valid) {
+      const form = this.exportPdfForm.getRawValue();
+      ratio = form.orientation === 'portrait' ? 1 / Math.sqrt(2) : Math.sqrt(2);
+    }
 
+    if (ratio) {
       extent = extent.slice();
       if (extentRatio > ratio) {
          const extentWidth = ExtentHelper.getHeight(extent) * ratio;
@@ -273,6 +278,7 @@ export class PrintComponent implements OnInit, OnDestroy {
         this.wrapFileExport('pdf', (filename, layers) => mapPdfService.create$({
           orientation: form.orientation,
           size: form.paperSize,
+          mapExtent: this.exportExtent,
           resolution: form.dpi,
           title: form.title,
           footer: form.footer,

@@ -26,6 +26,17 @@ export class OpenLayersMapImageExporter {
       throw new Error('Map has no size or resolution');
     }
 
+    let exportExtentFactor = 1;
+    if (options.extent) {
+      // When export extent is specified adjust the imageExportOlSize based on the ratio of the export extent to the extent of the
+      // entire olMap, so that it is the width and height in CSS pixels of the preview rectangle on screen. The pixelRatio calculated later
+      // allows drawing it on a canvas with 'real' pixels for the final width and height of the exported image with the proper resolution.
+      exportExtentFactor = (ExtentHelper.getWidth(options.extent as OpenlayersExtent) / viewResolution) / olSize[0];
+      console.log(`Export extent ${options.extent} with size factor ${exportExtentFactor}`);
+
+      options.center = ExtentHelper.getCenter(options.extent);
+    }
+
     const extent = olView.calculateExtent(olSize);
     console.log(`Map image export, OL map size: ${olSize?.[0]} x ${olSize?.[1]} px ` +
       `(width/height ratio: ${(olSize?.[0] / olSize?.[1]).toFixed(1)}, ` +
@@ -37,14 +48,6 @@ export class OpenLayersMapImageExporter {
     const height = Math.round(options.heightInMm * options.resolution / 25.4);
     console.log(`Map image export, requested size in mm: ${options.widthInMm} x ${options.heightInMm} in ${options.resolution} DPI, ${width} x ${height} px, ` +
       `width/height ratio ${(width / height).toFixed(1)}, map center ${options.center}`);
-
-    let exportExtentFactor = 1;
-    if (options.extent) {
-      // When exact export extent is specified, adjust the imageExportOlSize based on the ratio of the export extent to the extent of the
-      // entire olMap.
-      exportExtentFactor = (ExtentHelper.getWidth(options.extent as OpenlayersExtent) / viewResolution) / olSize[0];
-      console.log(`Export extent ${options.extent} with size factor ${exportExtentFactor}`);
-    }
 
     const imageSize = [ width, height ];
     // The ratio of the export image pixel size to the original map pixel size based on width
@@ -72,7 +75,7 @@ export class OpenLayersMapImageExporter {
       units: 'metric',
       bar: true,
       steps: 4,
-      minWidth: 200,
+      minWidth: 80,
     });
 
     const imageExportOlMap = new OlMap({
