@@ -20,7 +20,7 @@ import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layo
 import { ExtendedAppLayerModel } from '../../../map/models';
 
 // Draw the vector layer with the print extent on the exported map image
-const DEBUG_PRINT_EXTENT = true;
+const DEBUG_PRINT_EXTENT = false;
 
 @Component({
   selector: 'tm-print',
@@ -66,7 +66,7 @@ export class PrintComponent implements OnInit, OnDestroy {
     legendLayer: '',
   });
 
-  private exportExtent: OpenlayersExtent | null = null;
+  private printMapExtent$: Observable<OpenlayersExtent | null> = of(null);
 
   private _mapFilenameFn = (extension: string): Observable<string> => {
     const dateTime = new Intl.DateTimeFormat(this.locale, { dateStyle: 'short', timeStyle: 'medium' }).format(new Date())
@@ -96,7 +96,7 @@ export class PrintComponent implements OnInit, OnDestroy {
     this.visible$ = this.menubarService.isComponentVisible$(PRINT_ID);
     this.menubarService.registerComponent(PrintMenuButtonComponent);
 
-    const printPreviewFeature$ = combineLatest([
+    this.printMapExtent$ = combineLatest([
       this.viewerLayoutService.getUIVisibleMapExtent$(),
       this.visible$,
       this.exportType.valueChanges.pipe(startWith(null)),
@@ -105,28 +105,30 @@ export class PrintComponent implements OnInit, OnDestroy {
     ]).pipe(
       map(([ extent, visible ]) => {
         if (!visible || extent.uiVisibleExtent === null) {
-          return [];
+          return null;
         }
 
         const uiVisibleExtent = this.adjustExtentRatioToExportSettings(extent.uiVisibleExtent);
-
         if (uiVisibleExtent === null) {
-          return [];
+          return null;
         }
 
         ExtentHelper.shrink(uiVisibleExtent, 20 * extent.resolution);
-
         if (ExtentHelper.isEmpty(uiVisibleExtent)) {
-          return [];
+          return null;
         }
 
-        // XXX
-        this.exportExtent = uiVisibleExtent;
+        return uiVisibleExtent;
+      }),
+    );
 
-        return [ExtentHelper.toPolygon(uiVisibleExtent)];
-    }));
+    const printMapExtentFeature$ = this.printMapExtent$.pipe(
+      map(printMapExtent => {
+        return printMapExtent === null ? [] : [ExtentHelper.toPolygon(printMapExtent)];
+      }),
+    );
 
-    this.mapService.renderFeatures$('print-preview-layer', printPreviewFeature$, {
+    this.mapService.renderFeatures$('print-preview-layer', printMapExtentFeature$, {
       styleKey: 'print-preview-style',
       zIndex: 9999,
       strokeColor: '#6236ff',
@@ -251,41 +253,45 @@ export class PrintComponent implements OnInit, OnDestroy {
 
     const form = this.exportImageForm.getRawValue();
 
-    this.wrapFileExport('png', (filename, layers) =>
-      forkJoin(layers.map(layer => this.applicationMapService.convertAppLayerToMapLayer$(layer))).pipe(
-        map(mapLayers => mapLayers.filter(isValidLayer)),
-        concatMap(mapLayers => {
-          return this.mapService.exportMapImage$(
-            {
-              widthInMm: form.width,
-              heightInMm: form.height,
-              resolution: form.dpi,
-              extent: this.exportExtent,
-              center: ExtentHelper.getCenter(this.exportExtent as OpenlayersExtent), // XXX
-              layers: mapLayers,
-              vectorLayerFilter: this.vectorLayerFilter,
-            });
-        }),
-      ),
-    );
+    this.printMapExtent$.pipe(take(1)).subscribe(printMapExtent => {
+      this.wrapFileExport('png', (filename, layers) =>
+        forkJoin(layers.map(layer => this.applicationMapService.convertAppLayerToMapLayer$(layer))).pipe(
+          map(mapLayers => mapLayers.filter(isValidLayer)),
+          concatMap(mapLayers => {
+            return this.mapService.exportMapImage$(
+              {
+                widthInMm: form.width,
+                heightInMm: form.height,
+                resolution: form.dpi,
+                extent: printMapExtent,
+                layers: mapLayers,
+                vectorLayerFilter: this.vectorLayerFilter,
+              });
+          }),
+        ),
+      );
+    });
   }
 
   public downloadPdf() {
     const form = this.exportPdfForm.getRawValue();
-    from(import('../../../services/map-pdf/map-pdf.service'))
-      .pipe(map(m => this.injector.get(m.MapPdfService)))
-      .subscribe(mapPdfService => {
-        this.wrapFileExport('pdf', (filename, layers) => mapPdfService.create$({
-          orientation: form.orientation,
-          size: form.paperSize,
-          mapExtent: this.exportExtent,
-          resolution: form.dpi,
-          title: form.title,
-          footer: form.footer,
-          autoPrint: form.autoPrint,
-          filename,
-        }, layers, this.getLegendLayers$(), this.vectorLayerFilter));
-      });
+
+    this.printMapExtent$.pipe(take(1)).subscribe(printMapExtent => {
+      from(import('../../../services/map-pdf/map-pdf.service'))
+        .pipe(map(m => this.injector.get(m.MapPdfService)))
+        .subscribe(mapPdfService => {
+          this.wrapFileExport('pdf', (filename, layers) => mapPdfService.create$({
+            orientation: form.orientation,
+            size: form.paperSize,
+            mapExtent: printMapExtent,
+            resolution: form.dpi,
+            title: form.title,
+            footer: form.footer,
+            autoPrint: form.autoPrint,
+            filename,
+          }, layers, this.getLegendLayers$(), this.vectorLayerFilter));
+        });
+    });
   }
 
   private static downloadDataURL(dataURL: string, filename: string): void {
