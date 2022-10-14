@@ -262,7 +262,7 @@ export class PrintComponent implements OnInit, OnDestroy {
               {
                 widthInMm: form.width,
                 heightInMm: form.height,
-                resolution: form.dpi,
+                dpi: form.dpi,
                 extent: printMapExtent,
                 layers: mapLayers,
                 vectorLayerFilter: this.vectorLayerFilter,
@@ -284,7 +284,7 @@ export class PrintComponent implements OnInit, OnDestroy {
             orientation: form.orientation,
             size: form.paperSize,
             mapExtent: printMapExtent,
-            resolution: form.dpi,
+            dpi: form.dpi,
             title: form.title,
             footer: form.footer,
             autoPrint: form.autoPrint,

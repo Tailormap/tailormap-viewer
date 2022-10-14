@@ -29,7 +29,7 @@ interface PrintOptions {
   orientation?: 'portrait' | 'landscape';
   size: 'a3' | 'a4';
   mapExtent?: OpenlayersExtent | null; // Must be in ISO standard paper width/height ratio of Math.sqrt(2) (depending on orientation)!
-  resolution?: number;
+  dpi?: number;
   filename?: string;
   autoPrint?: boolean;
 }
@@ -94,7 +94,7 @@ export class MapPdfService {
     if (printOptions.autoPrint) {
       doc.autoPrint();
     }
-    return this.addMapImage$(doc, x, y, mapSize, printOptions.mapExtent || null, printOptions.resolution || 72, layers, vectorLayerFilter).pipe(
+    return this.addMapImage$(doc, x, y, mapSize, printOptions.mapExtent || null, printOptions.dpi || 72, layers, vectorLayerFilter).pipe(
       concatMap(() => this.addLegendImages$(doc, size.width, size.height, legendLayers$)),
       concatMap(() => this.addSvg2PDF$(doc, this.iconService.getUrlForIcon('logo'), { x: size.width - 30, y, width: 20, height: 20 })),
       concatMap(() => this.addSvg2PDF$(doc, this.iconService.getUrlForIcon('north_arrow'), { x, y: y + 2, width: 20, height: 20 })),
@@ -146,12 +146,12 @@ export class MapPdfService {
     );
   }
 
-  private addMapImage$(doc: jsPDF, x: number, y: number, mapSize: Size, extent: OpenlayersExtent | null, resolution: number,
+  private addMapImage$(doc: jsPDF, x: number, y: number, mapSize: Size, extent: OpenlayersExtent | null, dpi: number,
                        layersWithService: Array<ExtendedAppLayerModel>, vectorLayerFilter?: OlLayerFilter): Observable<string> {
     const isValidLayer = (layer: LayerModel | null): layer is LayerModel => layer !== null;
     return forkJoin(layersWithService.map(layer => this.applicationMapService.convertAppLayerToMapLayer$(layer))).pipe(
       map(layers => layers.filter(isValidLayer)),
-      concatMap(layers => this.mapService.exportMapImage$({ widthInMm: mapSize.width, heightInMm: mapSize.height, extent, resolution, layers, vectorLayerFilter })),
+      concatMap(layers => this.mapService.exportMapImage$({ widthInMm: mapSize.width, heightInMm: mapSize.height, extent, dpi, layers, vectorLayerFilter })),
       tap(dataURL => {
         // Note: calling addImage() with a HTMLCanvasElement is actually slower than adding by PNG
         doc.addImage(dataURL, 'PNG', x, y, mapSize.width, mapSize.height, '', 'FAST');

@@ -43,8 +43,8 @@ export class OpenLayersMapImageExporter {
     //   `extent: ${extent.map(n => n.toFixed(3))}`);
 
     // Calculate map image size in pixels. Size in mm times resolution converted from inches to mm. 1 inch is 25.4 mm.
-    const width = Math.round(options.widthInMm * options.resolution / 25.4);
-    const height = Math.round(options.heightInMm * options.resolution / 25.4);
+    const width = Math.round(options.widthInMm * options.dpi / 25.4);
+    const height = Math.round(options.heightInMm * options.dpi / 25.4);
     // console.log(`Map image export, requested size in mm: ${options.widthInMm} x ${options.heightInMm} in ${options.resolution} DPI, ${width} x ${height} px, ` +
     //   `width/height ratio ${(width / height).toFixed(1)}, map center ${options.center}`);
 

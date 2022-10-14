@@ -29,7 +29,7 @@ export type OlLayerFilter = (layer: Layer<Source, LayerRenderer<any>>) => boolea
 export interface MapExportOptions {
   widthInMm: number;
   heightInMm: number;
-  resolution: number;
+  dpi: number;
   extent?: OpenlayersExtent | null;
   center?: Coordinate;
   layers: LayerModel[];
