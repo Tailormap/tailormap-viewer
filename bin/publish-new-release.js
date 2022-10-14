@@ -1,7 +1,7 @@
 const path = require('path');
 const { runCommand, checkCleanGitRepo, requestProject} = require("./shared");
 
-// checkCleanGitRepo();
+checkCleanGitRepo();
 
 const publishRelease = (project, version) => {
   const versionCommand = !!version ? ['version', version] : ['version', 'patch'];
