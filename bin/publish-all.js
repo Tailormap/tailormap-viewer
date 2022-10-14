@@ -9,12 +9,12 @@ if (version === null) {
   process.exit(1);
 }
 
-checkCleanGitRepo();
+// checkCleanGitRepo();
 
 const projects = ['api', 'shared', 'map', 'core'];
 (async function main() {
   for (const project of projects) {
-    await runCommand('node', ['publish-new-release.js', '--project=' + project, '--version=' + version]);
+    await runCommand('node', ['bin/publish-new-release.js', '--project=' + project, '--version=' + version]);
   }
   await runCommand('git', ['tag', version], path.resolve(__dirname, '../'));
 })();
