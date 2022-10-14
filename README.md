@@ -64,9 +64,19 @@ Run `docker compose --profile http --profile full up -d` again to use the update
 #### Running a specific version
 
 To run a specific version of the stack set the `RELEASE_VERSION` and `VERSION_TAG` environment variables to the desired (and identical)
-version. For example: `VERSION_TAG=10.0.0-rc1;RELEASE_VERSION=10.0.0-rc1;docker compose --profile http --profile full up -d` to run
-release version 10.0.0-rc1. Or `VERSION_TAG=latest;RELEASE_VERSION=latest;docker compose --profile http --profile full up -d` to run
-latest release.
+version, and run:
+
+For a specific version:
+```
+export VERSION_TAG=10.0.0-rc1
+export RELEASE_VERSION=${VERSION_TAG}
+docker pull ghcr.io/b3partners/tailormap-config-db:${VERSION_TAG}
+docker pull ghcr.io/b3partners/tailormap-viewer:${VERSION_TAG}
+docker compose --profile http --profile full up -d --no-build
+```
+
+For the latest version do the same but use `VERSION_TAG=latest`. The `latest` tag will point to the latest release. To update
+a running stack after a new version is release, run `docker compose` with the `pull` and `up` commands.
 
 #### Default account
 
