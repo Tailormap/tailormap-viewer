@@ -7,6 +7,8 @@ import View from 'ol/View';
 import { Size } from 'ol/size';
 import { ScaleLine } from 'ol/control';
 import html2canvas from 'html2canvas';
+import { ExtentHelper } from '../helpers/extent.helper';
+import { OpenlayersExtent } from '../models';
 
 export class OpenLayersMapImageExporter {
   private constructor() {
@@ -24,23 +26,33 @@ export class OpenLayersMapImageExporter {
       throw new Error('Map has no size or resolution');
     }
 
-    const extent = olView.calculateExtent(olSize);
-    console.log(`Map image export, OL map size: ${olSize?.[0]} x ${olSize?.[1]} px ` +
-      `(width/height ratio: ${(olSize?.[0] / olSize?.[1]).toFixed(1)}, ` +
-      `view resolution: ${viewResolution?.toFixed(3)}, ` +
-      `extent: ${extent.map(n => n.toFixed(3))}`);
+    let exportExtentFactor = 1;
+    if (options.extent) {
+      // When export extent is specified adjust the imageExportOlSize based on the ratio of the export extent to the extent of the
+      // entire olMap, so that it is the width and height in CSS pixels of the preview rectangle on screen. The pixelRatio calculated later
+      // allows drawing it on a canvas with 'real' pixels for the final width and height of the exported image with the proper resolution.
+      exportExtentFactor = (ExtentHelper.getWidth(options.extent as OpenlayersExtent) / viewResolution) / olSize[0];
+
+      options.center = ExtentHelper.getCenter(options.extent);
+    }
+
+    // const extent = olView.calculateExtent(olSize);
+    // console.log(`Map image export, OL map size: ${olSize?.[0]} x ${olSize?.[1]} px ` +
+    //   `(width/height ratio: ${(olSize?.[0] / olSize?.[1]).toFixed(1)}, ` +
+    //   `view resolution: ${viewResolution?.toFixed(3)}, ` +
+    //   `extent: ${extent.map(n => n.toFixed(3))}`);
 
     // Calculate map image size in pixels. Size in mm times resolution converted from inches to mm. 1 inch is 25.4 mm.
-    const width = Math.round(options.widthInMm * options.resolution / 25.4);
-    const height = Math.round(options.heightInMm * options.resolution / 25.4);
-    console.log(`Map image export, requested size in mm: ${options.widthInMm} x ${options.heightInMm} in ${options.resolution} DPI, ${width} x ${height} px, ` +
-      `width/height ratio ${(width / height).toFixed(1)}`);
+    const width = Math.round(options.widthInMm * options.dpi / 25.4);
+    const height = Math.round(options.heightInMm * options.dpi / 25.4);
+    // console.log(`Map image export, requested size in mm: ${options.widthInMm} x ${options.heightInMm} in ${options.resolution} DPI, ${width} x ${height} px, ` +
+    //   `width/height ratio ${(width / height).toFixed(1)}, map center ${options.center}`);
 
     const imageSize = [ width, height ];
-    // The ratio of the export image pixel size to the original map pixel size based on width
-    const sizeRatio = imageSize[0] / olSize[0];
-    // When sizeRatio is higher than 1 reduce the map size, but get the higher pixel density image from the OL canvases because sizeRatio
-    // is used as OL pixelRatio
+    // The ratio of the export image pixel size to the original map CSS pixel size based on width
+    const sizeRatio = imageSize[0] / olSize[0] / exportExtentFactor;
+    // When sizeRatio is higher than 1 reduce the map CSS pixel size. We get the higher real pixel density image from the OL canvases
+    // because sizeRatio is used as the OL pixelRatio
     const imageExportOlSize = [ imageSize[0]/sizeRatio, imageSize[1]/sizeRatio ];
 
     const target = document.createElement('div');
@@ -62,7 +74,7 @@ export class OpenLayersMapImageExporter {
       units: 'metric',
       bar: true,
       steps: 4,
-      minWidth: 200,
+      minWidth: 80,
     });
 
     const imageExportOlMap = new OlMap({
@@ -74,7 +86,7 @@ export class OpenLayersMapImageExporter {
       view: new View({
         projection: olView.getProjection(),
         resolutions: olView.getResolutions(),
-        center: olView.getCenter(),
+        center: options.center || olView.getCenter(),
         resolution: viewResolution,
       }),
     });
@@ -125,9 +137,9 @@ export class OpenLayersMapImageExporter {
     imageExportOlMap.setSize(imageExportOlSize);
     imageExportOlMap.render();
 
-    const imageExportExtent = imageExportOlMap.getView().calculateExtent(imageExportOlMap.getSize());
-    console.log(`Map image export OL size set to ${imageExportOlSize[0]} x ${imageExportOlSize[1]} px, ` +
-      `pixelRatio ${sizeRatio.toFixed(3)}, view extent ${imageExportExtent.map(n => n.toFixed(3))}`);
+    // const imageExportExtent = imageExportOlMap.getView().calculateExtent(imageExportOlMap.getSize());
+    // console.log(`Map image export OL size set to ${imageExportOlSize[0]} x ${imageExportOlSize[1]} px, for final image size ${width} x ${height}, ` +
+    //   `pixelRatio ${sizeRatio.toFixed(3)}, view extent ${imageExportExtent.map(n => n.toFixed(3))}`);
 
     return renderedMapCanvasDataURL$.asObservable();
   }

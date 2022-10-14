@@ -20,6 +20,7 @@ export class MenubarPanelComponent {
     private menubarService: MenubarService,
   ) {
     this.activeComponent$ = this.menubarService.getActiveComponent$();
+    this.panelWidth = menubarService.panelWidth;
   }
 
   public closeDialog() {

@@ -16,6 +16,7 @@ describe('PrintComponent', () => {
     const menubarServiceMock = {
       isComponentVisible$: jest.fn(() => of(true)),
       registerComponent: jest.fn(),
+      getPanelWidth$: jest.fn(() => of(300)),
     };
     await render(PrintComponent, {
       imports: [

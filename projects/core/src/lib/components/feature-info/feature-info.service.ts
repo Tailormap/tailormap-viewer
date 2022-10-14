@@ -5,7 +5,7 @@ import { selectApplicationId } from '../../state/core.selectors';
 import { catchError, combineLatest, concatMap, forkJoin, map, Observable, of, take } from 'rxjs';
 import { FeatureInfoResponseModel } from './models/feature-info-response.model';
 import { selectVisibleLayersWithAttributes, selectVisibleWMSLayersWithoutAttributes } from '../../map/state/map.selectors';
-import { MapResolutionModel, MapService } from '@tailormap-viewer/map';
+import { MapService, MapViewDetailsModel } from '@tailormap-viewer/map';
 import { HttpClient } from '@angular/common/http';
 import { ExtendedAppLayerModel } from '../../map/models';
 
@@ -31,7 +31,7 @@ export class FeatureInfoService {
       this.store$.select(selectVisibleLayersWithAttributes),
       this.store$.select(selectVisibleWMSLayersWithoutAttributes),
       this.store$.select(selectApplicationId),
-      this.mapService.getResolution$(),
+      this.mapService.getMapViewDetails$(),
       this.mapService.getProjectionCode$(),
     ])
       .pipe(
@@ -55,7 +55,7 @@ export class FeatureInfoService {
     layer: ExtendedAppLayerModel,
     coordinates: [ number, number ],
     applicationId: number,
-    resolutions: MapResolutionModel,
+    resolutions: MapViewDetailsModel,
     projection: string,
   ): Observable<FeatureInfoResponseModel> {
     const layerId = layer.id;

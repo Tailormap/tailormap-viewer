@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { MapResolutionModel, MapService } from '@tailormap-viewer/map';
+import { MapViewDetailsModel, MapService } from '@tailormap-viewer/map';
 import { Observable, of } from 'rxjs';
 
 @Component({
@@ -10,12 +10,12 @@ import { Observable, of } from 'rxjs';
 })
 export class ZoomButtonsComponent {
 
-  public resolution$: Observable<MapResolutionModel | null> = of(null);
+  public resolution$: Observable<MapViewDetailsModel | null> = of(null);
 
   constructor(
     private mapService: MapService,
   ) {
-    this.resolution$ = this.mapService.getResolution$();
+    this.resolution$ = this.mapService.getMapViewDetails$();
   }
 
   public zoomIn() {

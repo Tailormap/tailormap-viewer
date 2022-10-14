@@ -2,7 +2,8 @@ import { Injectable, NgZone } from '@angular/core';
 import { OpenLayersMap } from '../openlayers-map/openlayers-map';
 import { combineLatest, finalize, map, Observable, take, tap } from 'rxjs';
 import {
-  LayerManagerModel, LayerModel, LayerTypesEnum, MapResolutionModel, MapStyleModel, MapViewerOptionsModel, ToolConfigModel, ToolModel,
+  LayerManagerModel, LayerModel, LayerTypesEnum, MapStyleModel, MapViewDetailsModel, MapViewerOptionsModel, OpenlayersExtent,
+  ToolConfigModel, ToolModel,
   VectorLayerModel,
 } from '../models';
 import { ToolManagerModel } from '../models/tool-manager.model';
@@ -20,6 +21,7 @@ import { MapUnitEnum } from '../models/map-unit.enum';
 import { Layer } from 'ol/layer';
 import { Source } from 'ol/source';
 import LayerRenderer from 'ol/renderer/Layer';
+import { Coordinate } from 'ol/coordinate';
 import { HttpClient } from '@angular/common/http';
 
 export type OlLayerFilter = (layer: Layer<Source, LayerRenderer<any>>) => boolean;
@@ -27,7 +29,9 @@ export type OlLayerFilter = (layer: Layer<Source, LayerRenderer<any>>) => boolea
 export interface MapExportOptions {
   widthInMm: number;
   heightInMm: number;
-  resolution: number;
+  dpi: number;
+  extent?: OpenlayersExtent | null;
+  center?: Coordinate;
   layers: LayerModel[];
   vectorLayerFilter?: OlLayerFilter;
 }
@@ -153,8 +157,8 @@ export class MapService {
     return this.map.getPixelForCoordinates$(coordinates);
   }
 
-  public getResolution$(): Observable<MapResolutionModel> {
-    return this.map.getResolution$();
+  public getMapViewDetails$(): Observable<MapViewDetailsModel> {
+    return this.map.getMapViewDetails$();
   }
 
   public getProjectionCode$(): Observable<string> {

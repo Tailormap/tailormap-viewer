@@ -32,7 +32,7 @@ export class LegendComponent implements OnInit {
       switchMap(visible => {
         return !visible
           ? of([])
-          : this.legendService.getLegendInfo$(this.store$.select(selectOrderedVisibleLayersWithLegend), this.mapService.getResolution$());
+          : this.legendService.getLegendInfo$(this.store$.select(selectOrderedVisibleLayersWithLegend), this.mapService.getMapViewDetails$());
       }),
     );
   }

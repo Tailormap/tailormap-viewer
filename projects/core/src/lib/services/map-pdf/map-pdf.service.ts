@@ -1,7 +1,7 @@
 import { Inject, Injectable, LOCALE_ID } from '@angular/core';
 import { concatMap, forkJoin, map, Observable, tap } from 'rxjs';
 import { jsPDF } from 'jspdf';
-import { LayerModel, MapService, OlLayerFilter } from '@tailormap-viewer/map';
+import { LayerModel, MapService, OlLayerFilter, OpenlayersExtent } from '@tailormap-viewer/map';
 import 'svg2pdf.js';
 import { HttpClient } from '@angular/common/http';
 import { IconService } from '@tailormap-viewer/shared';
@@ -28,7 +28,8 @@ interface PrintOptions {
   showScale?: boolean;
   orientation?: 'portrait' | 'landscape';
   size: 'a3' | 'a4';
-  resolution?: number;
+  mapExtent?: OpenlayersExtent | null; // Must be in ISO standard paper width/height ratio of Math.sqrt(2) (depending on orientation)!
+  dpi?: number;
   filename?: string;
   autoPrint?: boolean;
 }
@@ -58,6 +59,9 @@ export class MapPdfService {
       // noinspection JSSuspiciousNameCombination
       size = { width: size.height, height: size.width };
     }
+    // Map extent assumed to be in width/height ratio of ISO standard paper sizes depending on orientation: Math.sqrt(2)
+    // When different layouts are added in the future with a different map image width/height ratio, the map preview width/height ratio must
+    // be kept the same as the image ratio used in the layout.
     const mapSize = {
       width: size.width - (2 * this.defaultMargin),
       height: size.height - (2 * this.defaultMargin),
@@ -90,7 +94,7 @@ export class MapPdfService {
     if (printOptions.autoPrint) {
       doc.autoPrint();
     }
-    return this.addMapImage$(doc, x, y, mapSize, printOptions.resolution || 72, layers, vectorLayerFilter).pipe(
+    return this.addMapImage$(doc, x, y, mapSize, printOptions.mapExtent || null, printOptions.dpi || 72, layers, vectorLayerFilter).pipe(
       concatMap(() => this.addLegendImages$(doc, size.width, size.height, legendLayers$)),
       concatMap(() => this.addSvg2PDF$(doc, this.iconService.getUrlForIcon('logo'), { x: size.width - 30, y, width: 20, height: 20 })),
       concatMap(() => this.addSvg2PDF$(doc, this.iconService.getUrlForIcon('north_arrow'), { x, y: y + 2, width: 20, height: 20 })),
@@ -142,12 +146,12 @@ export class MapPdfService {
     );
   }
 
-  private addMapImage$(doc: jsPDF, x: number, y: number, mapSize: Size, resolution: number,
+  private addMapImage$(doc: jsPDF, x: number, y: number, mapSize: Size, extent: OpenlayersExtent | null, dpi: number,
                        layersWithService: Array<ExtendedAppLayerModel>, vectorLayerFilter?: OlLayerFilter): Observable<string> {
     const isValidLayer = (layer: LayerModel | null): layer is LayerModel => layer !== null;
     return forkJoin(layersWithService.map(layer => this.applicationMapService.convertAppLayerToMapLayer$(layer))).pipe(
       map(layers => layers.filter(isValidLayer)),
-      concatMap(layers => this.mapService.exportMapImage$({ widthInMm: mapSize.width, heightInMm: mapSize.height, resolution, layers, vectorLayerFilter })),
+      concatMap(layers => this.mapService.exportMapImage$({ widthInMm: mapSize.width, heightInMm: mapSize.height, extent, dpi, layers, vectorLayerFilter })),
       tap(dataURL => {
         // Note: calling addImage() with a HTMLCanvasElement is actually slower than adding by PNG
         doc.addImage(dataURL, 'PNG', x, y, mapSize.width, mapSize.height, '', 'FAST');

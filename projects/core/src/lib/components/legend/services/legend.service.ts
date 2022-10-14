@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, combineLatest, concatMap, forkJoin, map, Observable, of, switchMap } from 'rxjs';
-import { MapResolutionModel, MapService, ScaleHelper } from '@tailormap-viewer/map';
+import { MapService, MapViewDetailsModel, ScaleHelper } from '@tailormap-viewer/map';
 import { ExtendedAppLayerModel } from '../../../map/models';
 import { ImageHelper } from '../../../shared/helpers/image.helper';
-import { LegendInfoModel } from '../models/legend-info.model';
 import { UrlHelper } from '@tailormap-viewer/shared';
+import { LegendInfoModel } from '../models/legend-info.model';
 
 export interface GeoServerLegendOptions {
   fontName?: string;
@@ -49,7 +49,7 @@ export class LegendService {
     return this.visibleSubject$.asObservable();
   }
 
-  public getLegendInfo$(appLayers$: Observable<ExtendedAppLayerModel[]>, mapResolution$?: Observable<MapResolutionModel>):
+  public getLegendInfo$(appLayers$: Observable<ExtendedAppLayerModel[]>, mapResolution$?: Observable<MapViewDetailsModel>):
     Observable<LegendInfoModel[]> {
     return this.mapService.getLayerManager$()
       .pipe(
