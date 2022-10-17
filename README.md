@@ -31,28 +31,22 @@ Run `npm run test` to execute the unit tests via [Jest](https://jestjs.io).
 
 ## Running with Docker Compose
 
-Use Docker Compose to build, push and run images.
-
-Requires a Docker compose version supporting version 3.9 of the compose specification (profiles). Do not use 1.25 included in some Ubuntu
-repositories. Download version 1.28.5 (later version like 1.29.2 may give OpenSSL conflict if server uses Ubuntu 20.04 LTS included Docker
-packages). Or better yet use the docker compose (v2) plugin.
-
-Note that you may need to set the environment variable `COMPOSE_DOCKER_CLI_BUILD` to `0` if you get an error like `ERRO[0000] Can't close tar writer: io: read/write on closed pipe`.
+Use Docker Compose to build, push and run images. It is best to use the Docker Compose (v2) plugin using the `docker compose` command, but
+Python version (`docker-compose` command) may also work.
 
 ### Running a full Tailormap stack
 
 A full stack also runs configuration database, backend api and administration interface containers. The Angular frontend in this repository
-is build and put in a Nginx webserver container and serves as the main entry point. It reverse proxies the the `/api/` and `/admin/` paths.
-Run the stack using:
+is built and put in a Nginx webserver container to serve as the main entry point. It reverse proxies the `/api/` and `/admin/` paths. Run the stack using:
 
 `docker compose --profile http --profile full up -d`
 
 Go to http://localhost/ for the viewer and http://localhost/admin/ for administration. During the first startup you might see some
-exceptions connecting to the database while this is being initialized, these are harmless as it will be retried later, although you may need
+exceptions connecting to the database while this is being initialized -- these are harmless as it will be retried later, although you may need
 to restart the admin container using `docker compose --profile http --profile restart admin`.
 
 The build configuration for the `db` container for the configuration database (with preloaded data) is also in this
-repository. The `api` and `admin` containers are the snapshot-tagged versions, which get updated in
+repository. The `api` and `admin` containers are the snapshot-tagged versions by default, which get updated in
 the registry automatically. If you want to update your running containers, execute:
 
 - `docker compose --profile http --profile full pull` to pull new images
@@ -125,6 +119,37 @@ The `db` container is just a basic PostgreSQL container but with some initializa
 database is saved on a volume. The initialization only runs when this volume does not already contain an initialized database. Stop the `db`
 container (or the entire stack), remove the volume with `docker volume rm tailormap-viewer_config-db` (or use `docker compose down -v`) and
 bring it up again to re-initialize the database.
+
+#### Backing up the configuration database
+
+The configuration database needs to be backed up if you don't want to lose your configuration. The backup procedure isn't any different when
+using containers from using PostgreSQL without them: use `pg_dump` and do not backup just the files in `/var/lib/postgresql/`, tempting as
+that may be.
+
+Creating a backup:
+
+```
+docker compose --profile full exec --user postgres db pg_dump tailormap > tailormap.sql
+```
+
+#### Restoring a backup
+
+The restore procedure: drop the database, recreate it and load the backup. You may need to stop the 'api' or 'admin' containers to close any
+connections.
+
+```
+docker compose  --profile full exec --user postgres db dropdb tailormap
+docker compose  --profile full exec --user postgres db createdb --owner=tailormap tailormap
+cat tailormap.sql | docker compose --profile full exec -T --user postgres db psql tailormap
+```
+
+#### Upgrading to a new major PostgreSQL version
+
+The Docker image for the configuration database is kept up to date with the latest PostgreSQL releases and can move to a new major version
+with a new Tailormap release. In this case the database must be dumped and restored (see above). Take note of the major PostgreSQL version
+in the release notes whether this is required. You will see an error opening Tailormap and see errors about the PostgreSQL version in the
+logs of the 'db' container if you don't do this upgrade. If you did not have a recent backup ready, downgrade the image used by the 'db'
+container to the previous major version and backup the database as normal and restore on the newer major version.
 
 ### Running only the Angular frontend
 
