@@ -12,22 +12,17 @@ set -e
 # case you forget: all user accounts are deleted when the dump is loaded (see below). tailormap-api will create a new account with a
 # randomly generated password.
 
-if [ -n "$USE_TEST_DATA" ]
-then
-  if [ "$USE_TEST_DATA" == "y" ]
+
+if [ "$CONFIG_DB_INIT_EMPTY" = true ]
   then
     echo "Loading Tailormap default data"
-	# use admin to be able to disable triggers
-	PGPASSWORD="$POSTGRES_PASSWORD" psql -v ON_ERROR_STOP=1 --username "postgres" --dbname tailormap -f /docker-entrypoint-initdb.d/3-dump.sql.script
-  elif [ "$USE_TEST_DATA" == "n" ]
-  then
     echo "Initializing empty database"
     PGPASSWORD="$POSTGRES_PASSWORD" psql -v ON_ERROR_STOP=1 --username "postgres" --dbname tailormap -f /docker-entrypoint-initdb.d/3-initialize-empty-database.sql.script
-  fi
-else
-  echo "USE_TEST_DATA not set; Falling back to loading test data"
-  PGPASSWORD="$POSTGRES_PASSWORD" psql -v ON_ERROR_STOP=1 --username "postgres" --dbname tailormap -f /docker-entrypoint-initdb.d/3-dump.sql.script
+  else
+    # use admin to be able to disable triggers
+    PGPASSWORD="$POSTGRES_PASSWORD" psql -v ON_ERROR_STOP=1 --username "postgres" --dbname tailormap -f /docker-entrypoint-initdb.d/3-dump.sql.script
 fi
+
 
 
 psql --username postgres --dbname tailormap -c "delete from user_ips; delete from user_details; delete from user_groups; delete from user_;"

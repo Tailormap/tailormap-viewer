@@ -7,5 +7,3 @@ insert into group_(name,description) values ('UserAdmin','Beheer van gebruikers 
 insert into group_(name,description) values ('ApplicationAdmin','Beheer van applicaties');
 insert into group_(name,description) values ('ServiceAdmin','Beheerders van services: e-mail notificatie bij monitoring');
 insert into group_(name,description) values ('ExtendedUser','Interne medewerkers (via LDAP geauthenticeerd)');
-
-insert into user_groups(username,group_) values('admin','Admin');
