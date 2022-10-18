@@ -15,10 +15,10 @@ set -e
 
 if [ "$CONFIG_DB_INIT_EMPTY" = true ]
   then
-    echo "Loading Tailormap default data"
     echo "Initializing empty database"
     PGPASSWORD="$POSTGRES_PASSWORD" psql -v ON_ERROR_STOP=1 --username "postgres" --dbname tailormap -f /docker-entrypoint-initdb.d/3-initialize-empty-database.sql.script
   else
+    echo "Loading Tailormap default data"
     # use admin to be able to disable triggers
     PGPASSWORD="$POSTGRES_PASSWORD" psql -v ON_ERROR_STOP=1 --username "postgres" --dbname tailormap -f /docker-entrypoint-initdb.d/3-dump.sql.script
 fi

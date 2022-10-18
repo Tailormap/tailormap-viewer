@@ -130,7 +130,7 @@ services:
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
       TAILORMAP_PASSWORD: ${TAILORMAP_DB_PASSWORD:-tailormap}
-      USE_TEST_DATA: ${USE_TEST_DATA:-y}
+      CONFIG_DB_INIT_EMPTY: ${CONFIG_DB_INIT_EMPTY:-false}
     volumes:
       - config-db:/var/lib/postgresql/data
     healthcheck:
