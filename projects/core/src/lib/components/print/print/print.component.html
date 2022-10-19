@@ -20,18 +20,29 @@
       <div *ngIf="exportType.value === 'image'" class="spaced spaced_top">
         <form [formGroup]="exportImageForm" (ngSubmit)="downloadMapImage()">
             <ng-container i18n>Image size in millimeters:</ng-container>
-            <mat-form-field appearance="outline" color="primary">
-              <mat-label i18n>Width</mat-label>
-              <input matInput formControlName="width" type="number" min="50" max="600">
-            </mat-form-field>
-            <mat-form-field appearance="outline" color="primary">
-              <mat-label i18n>Height</mat-label>
-              <input matInput formControlName="height" type="number" min="50" max="600">
-            </mat-form-field>
-            <mat-form-field appearance="outline" color="primary">
-              <mat-label i18n>DPI</mat-label>
-              <input matInput formControlName="dpi" type="number" min="90" max="600">
-            </mat-form-field>
+            <p>
+              <mat-form-field appearance="outline" color="primary">
+                <mat-label i18n>Width</mat-label>
+                <mat-hint align="end" i18n>Range: 50 - 600</mat-hint>
+                <input matInput formControlName="width" type="number" min="50" max="600">
+              </mat-form-field>
+            </p>
+            <p>
+              <mat-form-field appearance="outline" color="primary">
+                <mat-label i18n>Height</mat-label>
+                <mat-hint align="end" i18n>Range: 50 - 600</mat-hint>
+                <input matInput formControlName="height" type="number" min="50" max="600">
+              </mat-form-field>
+            </p>
+            <p>
+              <mat-form-field appearance="outline" color="primary">
+                <mat-label i18n>DPI</mat-label>
+                <mat-hint align="end" i18n>Range: 90 - 600</mat-hint>
+
+                <input matInput formControlName="dpi" type="number" min="90" max="600">
+              </mat-form-field>
+            </p>
+            <p>
             <div [style.visibility]="exportImageForm.valid ? 'visible' : 'hidden'">
               <div class="padding" i18n>
                 Image resolution in pixels: {{getImageResolution()}}
@@ -40,44 +51,59 @@
                 Width/height ratio: {{getImageRatio() | number: '1.1-2' }}
               </div>
             </div>
-            <button mat-flat-button color="primary" type="submit" [disabled]="!exportImageForm.valid" i18n>Download map image</button>
+            <div class="padding">
+              <button mat-flat-button color="primary" type="submit" [disabled]="!exportImageForm.valid" i18n>Download map image</button>
+            </div>
         </form>
       </div>
 
       <div *ngIf="exportType.value === 'pdf'" class="spaced">
         <form [formGroup]="exportPdfForm" (ngSubmit)="downloadPdf()">
-          <mat-button-toggle-group formControlName="orientation" class="lowerHeight" aria-label="Orientation">
-            <mat-button-toggle value="landscape" i18n>Landscape</mat-button-toggle>
-            <mat-button-toggle value="portrait" i18n>Portrait</mat-button-toggle>
-          </mat-button-toggle-group>
-          <mat-button-toggle-group formControlName="paperSize" class="lowerHeight" style="margin: 3px" aria-label="Paper size">
-            <mat-button-toggle value="a4" i18n>A4</mat-button-toggle>
-            <mat-button-toggle value="a3" i18n>A3</mat-button-toggle>
-          </mat-button-toggle-group>
-          <mat-form-field appearance="outline" color="primary" class="spaced_top">
-            <mat-label i18n>Title</mat-label>
-            <input #title matInput formControlName="title" maxlength="60">
-            <mat-hint align="end">{{title.value.length || 0}}/60</mat-hint>
-          </mat-form-field>
-          <mat-form-field appearance="outline" color="primary">
-            <mat-label i18n>Footer</mat-label>
-            <input #footer matInput formControlName="footer" maxlength="60">
-            <mat-hint align="end">{{footer.value.length || 0}}/60</mat-hint>
-          </mat-form-field>
-          <mat-form-field appearance="outline" color="primary">
-            <mat-label i18n>DPI</mat-label>
-            <input matInput formControlName="dpi" type="number" min="90" max="600">
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" color="primary">
-            <mat-label i18n>Add legend for layer</mat-label>
-            <mat-select formControlName="legendLayer">
-              <mat-option i18n>None</mat-option>
-              <mat-option *ngFor="let layer of availableLegendLayers$ | async"  [value]="layer.id">{{layer.title}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-
-          <mat-checkbox formControlName="autoPrint" i18n>Automatically open print dialog</mat-checkbox>
+          <p>
+            <mat-button-toggle-group formControlName="orientation" class="lowerHeight" aria-label="Orientation">
+              <mat-button-toggle value="landscape" i18n>Landscape</mat-button-toggle>
+              <mat-button-toggle value="portrait" i18n>Portrait</mat-button-toggle>
+            </mat-button-toggle-group>
+          </p>
+          <p>
+            <mat-button-toggle-group formControlName="paperSize" class="lowerHeight" style="margin: 3px" aria-label="Paper size">
+              <mat-button-toggle value="a4" i18n>A4</mat-button-toggle>
+              <mat-button-toggle value="a3" i18n>A3</mat-button-toggle>
+            </mat-button-toggle-group>
+          </p>
+          <p>
+            <mat-form-field appearance="outline" color="primary" class="spaced_top">
+              <mat-label i18n>Title</mat-label>
+              <input #title matInput formControlName="title" maxlength="60">
+              <mat-hint align="end">{{title.value.length || 0}}/60</mat-hint>
+            </mat-form-field>
+          </p>
+          <p>
+            <mat-form-field appearance="outline" color="primary">
+              <mat-label i18n>Footer</mat-label>
+              <input #footer matInput formControlName="footer" maxlength="60">
+              <mat-hint align="end">{{footer.value.length || 0}}/60</mat-hint>
+            </mat-form-field>
+          </p>
+          <p>
+            <mat-form-field appearance="outline" color="primary">
+              <mat-label i18n>DPI</mat-label>
+              <mat-hint align="end" i18n>Range: 90 - 600</mat-hint>
+              <input matInput formControlName="dpi" type="number" min="90" max="600">
+            </mat-form-field>
+          </p>
+          <p>
+            <mat-form-field appearance="outline" color="primary">
+              <mat-label i18n>Add legend for layer</mat-label>
+              <mat-select formControlName="legendLayer">
+                <mat-option i18n>None</mat-option>
+                <mat-option *ngFor="let layer of availableLegendLayers$ | async"  [value]="layer.id">{{layer.title}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </p>
+          <p>
+            <mat-checkbox formControlName="autoPrint" i18n>Automatically open print dialog</mat-checkbox>
+          </p>
           <div class="padding">
             <button mat-flat-button color="primary" type="submit" [disabled]="!exportPdfForm.valid" i18n>Download map PDF</button>
           </div>
