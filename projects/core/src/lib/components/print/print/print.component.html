@@ -45,7 +45,7 @@
             <p>
             <div [style.visibility]="exportImageForm.valid ? 'visible' : 'hidden'">
               <div class="padding" i18n>
-                Image resolution in pixels: {{getImageResolution()}}
+                Image size in pixels: {{getImageResolution()}}
               </div>
               <div class="padding" i18n>
                 Width/height ratio: {{getImageRatio() | number: '1.1-2' }}

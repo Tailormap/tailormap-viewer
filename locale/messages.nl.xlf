@@ -568,7 +568,7 @@
       </trans-unit>
       <trans-unit id="7982268423763340284" datatype="html">
         <source>Map image</source>
-        <target state="translated">Afbeelding van de kaart</target>
+        <target state="translated">Kaartafbeelding</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">11</context>
@@ -584,7 +584,7 @@
       </trans-unit>
       <trans-unit id="4364462847409581262" datatype="html">
         <source>Image size in millimeters:</source>
-        <target state="translated">Grootte van afbeelding (in mm):</target>
+        <target state="translated">Formaat (in mm):</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">20</context>
@@ -596,6 +596,18 @@
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5281001311618507204" datatype="html">
+        <source>Range: 50 - 600</source>
+        <target state="translated">Limiet: 50 t/m 600</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
+          <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3033623772164647792" datatype="html">
@@ -618,17 +630,37 @@
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3757209454912764795" datatype="html">
-        <source> Image resolution in pixels: <x id="INTERPOLATION" equiv-text="{{getImageResolution()}}"/> </source>
-        <target state="translated">Resolutie van afbeelding (in pixels): <x id="INTERPOLATION" equiv-text="{{getImageResolution()}}"/> </target>
+      <trans-unit id="3554648966284537052" datatype="html">
+        <source>Range: 90 - 600</source>
+        <target state="translated">Limiet: 50 t/m 600</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">34,36</context>
+          <context context-type="linenumber">40</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
+          <context context-type="linenumber">91</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3826728385291699828" datatype="html">
+        <source> Image size in pixels: <x id="INTERPOLATION" equiv-text="{{getImageResolution()}}"/> </source>
+        <target state="translated">Formaat in pixels: <x id="INTERPOLATION" equiv-text="{{getImageResolution()}}"/> </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
+          <context context-type="linenumber">48,49</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6288365980016802803" datatype="html">
+        <source> Width/height ratio: <x id="INTERPOLATION" equiv-text="{{getImageRatio() | number: &apos;1.1-2&apos; }}"/> </source>
+        <target state="translated">Breedte/hoogte verhouding: <x id="INTERPOLATION" equiv-text="{{getImageRatio() | number: &apos;1.1-2&apos; }}"/> </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
+          <context context-type="linenumber">51,52</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1431493389100814651" datatype="html">
         <source>Download map image</source>
-        <target state="translated">Download kaart afbeelding</target>
+        <target state="translated">Download kaartafbeelding</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">36,37</context>
@@ -692,7 +724,7 @@
       </trans-unit>
       <trans-unit id="1605472530146889333" datatype="html">
         <source>Automatically open print dialog</source>
-        <target state="translated">Automatisch print dialoog openen</target>
+        <target state="translated">Automatisch printdialoog openen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
           <context context-type="linenumber">64</context>

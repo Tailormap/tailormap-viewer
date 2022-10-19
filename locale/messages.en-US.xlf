@@ -9,6 +9,34 @@
           <context context-type="linenumber">4,5</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="9131892069991263437" datatype="html">
+        <source>Filter on</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/components/attribute-list/attribute-list-filter/attribute-list-filter.component.html</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2671827835175438409" datatype="html">
+        <source> Set </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/components/attribute-list/attribute-list-filter/attribute-list-filter.component.html</context>
+          <context context-type="linenumber">17,19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1238583382012712938" datatype="html">
+        <source> Clear </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/components/attribute-list/attribute-list-filter/attribute-list-filter.component.html</context>
+          <context context-type="linenumber">21,23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2330577642930707695" datatype="html">
+        <source> Cancel </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/components/attribute-list/attribute-list-filter/attribute-list-filter.component.html</context>
+          <context context-type="linenumber">25,27</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="1286034572431173427" datatype="html">
         <source>Go to page</source>
         <context-group purpose="location">
@@ -16,11 +44,11 @@
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7251686705365735219" datatype="html">
-        <source>Attribute list</source>
+      <trans-unit id="6559246822757089203" datatype="html">
+        <source>Clear filters</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/attribute-list/attribute-list/attribute-list.component.html</context>
-          <context context-type="linenumber">10,11</context>
+          <context context-type="sourcefile">projects/core/src/lib/components/attribute-list/attribute-list-tab-toolbar/attribute-list-tab-toolbar.component.html</context>
+          <context context-type="linenumber">4,5</context>
         </context-group>
       </trans-unit>
       <trans-unit id="174013150468601581" datatype="html">
@@ -34,6 +62,13 @@
         <source>Failed to load attribute list data</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/attribute-list/services/attribute-list-data.service.ts</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7251686705365735219" datatype="html">
+        <source>Attribute list</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/components/attribute-list/state/attribute-list.state.ts</context>
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
@@ -41,7 +76,7 @@
         <source>No background</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/background-layer-toggle/background-layer-toggle.component.ts</context>
-          <context context-type="linenumber">46</context>
+          <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5121320475401958995" datatype="html">
@@ -57,104 +92,68 @@
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
           <context context-type="linenumber">5</context>
         </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
-          <context context-type="linenumber">7</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="7485144677537501434" datatype="html">
         <source>Draw line</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
-          <context context-type="linenumber">13</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
-          <context context-type="linenumber">15</context>
+          <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7671991962349582901" datatype="html">
         <source>Draw polygon</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
-          <context context-type="linenumber">21</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
-          <context context-type="linenumber">23</context>
+          <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2781833388478062784" datatype="html">
         <source>Draw square</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
-          <context context-type="linenumber">29</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
-          <context context-type="linenumber">31</context>
+          <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4387313461891481332" datatype="html">
         <source>Draw rectangle</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
-          <context context-type="linenumber">37</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
-          <context context-type="linenumber">39</context>
+          <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
       <trans-unit id="311011773985854729" datatype="html">
         <source>Draw circle</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
-          <context context-type="linenumber">47</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
-          <context context-type="linenumber">49</context>
+          <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7227313553216215040" datatype="html">
         <source>Draw ellipse</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
-          <context context-type="linenumber">55</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
-          <context context-type="linenumber">57</context>
+          <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5253475635167844493" datatype="html">
         <source>Draw star</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
-          <context context-type="linenumber">63</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
-          <context context-type="linenumber">65</context>
+          <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2791229108029362448" datatype="html">
         <source>Draw label</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
-          <context context-type="linenumber">71</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
-          <context context-type="linenumber">73</context>
+          <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1805761197959018001" datatype="html">
         <source>Drawing</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-menu-button/drawing-menu-button.component.ts</context>
-          <context context-type="linenumber">25</context>
+          <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4296791989248007051" datatype="html">
@@ -193,7 +192,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">132</context>
+          <context context-type="linenumber">130</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5201860154481115497" datatype="html">
@@ -204,7 +203,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">159</context>
+          <context context-type="linenumber">157</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6428648557710235460" datatype="html">
@@ -222,114 +221,114 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">89</context>
+          <context context-type="linenumber">88</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">90</context>
+          <context context-type="linenumber">89</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9074196091111459629" datatype="html">
         <source>Insert coordinates as label</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">94</context>
+          <context context-type="linenumber">93</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2674630746570314789" datatype="html">
         <source>Insert length as label</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">101</context>
+          <context context-type="linenumber">100</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2364558040255593699" datatype="html">
         <source>Insert area as label</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">108</context>
+          <context context-type="linenumber">107</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7513076467032912668" datatype="html">
         <source>Format</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">118</context>
+          <context context-type="linenumber">116</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9011959596901584887" datatype="html">
         <source>Color</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">146</context>
+          <context context-type="linenumber">144</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">181</context>
+          <context context-type="linenumber">179</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">248</context>
+          <context context-type="linenumber">246</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2991656244957084973" datatype="html">
         <source>Halo</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">152</context>
+          <context context-type="linenumber">150</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8148890784302351493" datatype="html">
         <source> Line </source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">176,178</context>
+          <context context-type="linenumber">174,176</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6907278263156340562" datatype="html">
         <source>Thickness</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">187</context>
+          <context context-type="linenumber">185</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8036200981586016464" datatype="html">
         <source>Opacity</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">201</context>
+          <context context-type="linenumber">199</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">260</context>
+          <context context-type="linenumber">258</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1111168969063432267" datatype="html">
         <source>Stroke type</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">216</context>
+          <context context-type="linenumber">214</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6565791317520947983" datatype="html">
         <source>Arrow</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">230</context>
+          <context context-type="linenumber">228</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4507197510030624867" datatype="html">
         <source> Fill </source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">243,245</context>
+          <context context-type="linenumber">241,243</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3278060427571346996" datatype="html">
         <source>Striped fill</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">256</context>
+          <context context-type="linenumber">254</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4903782843340946337" datatype="html">
@@ -382,7 +381,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">70</context>
+          <context context-type="linenumber">99</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1701872860463509458" datatype="html">
@@ -417,21 +416,21 @@
         <source> Back </source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/feature-info/feature-info-dialog/feature-info-dialog.component.html</context>
-          <context context-type="linenumber">19,20</context>
+          <context context-type="linenumber">20,21</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3971100408152984961" datatype="html">
         <source> Next </source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/feature-info/feature-info-dialog/feature-info-dialog.component.html</context>
-          <context context-type="linenumber">22,23</context>
+          <context context-type="linenumber">23,24</context>
         </context-group>
       </trans-unit>
       <trans-unit id="846829935027482468" datatype="html">
         <source>Could not load feature info</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/feature-info/feature-info.service.ts</context>
-          <context context-type="linenumber">15</context>
+          <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
       <trans-unit id="447886253162748368" datatype="html">
@@ -459,28 +458,28 @@
         <source>Legend</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/legend/legend-menu-button/legend-menu-button.component.ts</context>
-          <context context-type="linenumber">24</context>
+          <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8321457629272427993" datatype="html">
         <source>Logged in as</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/menubar/profile/profile.component.html</context>
-          <context context-type="linenumber">5</context>
+          <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3797778920049399855" datatype="html">
         <source>Logout</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/menubar/profile/profile.component.html</context>
-          <context context-type="linenumber">9</context>
+          <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2454050363478003966" datatype="html">
         <source>Login</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/menubar/profile/profile.component.html</context>
-          <context context-type="linenumber">12</context>
+          <context context-type="linenumber">13</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/pages/login/login-form/login-form.component.html</context>
@@ -491,7 +490,7 @@
         <source>Print</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print-menu-button/print-menu-button.component.ts</context>
-          <context context-type="linenumber">25</context>
+          <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1062178673270167416" datatype="html">
@@ -533,130 +532,173 @@
         <source>Width</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">24</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5281001311618507204" datatype="html">
+        <source>Range: 50 - 600</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
+          <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3033623772164647792" datatype="html">
         <source>Height</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">28</context>
+          <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3330040801415354394" datatype="html">
         <source>DPI</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">32</context>
+          <context context-type="linenumber">39</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">63</context>
+          <context context-type="linenumber">90</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3757209454912764795" datatype="html">
-        <source> Image resolution in pixels: <x id="INTERPOLATION" equiv-text="{{getImageResolution()}}"/> </source>
+      <trans-unit id="3554648966284537052" datatype="html">
+        <source>Range: 90 - 600</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">36,37</context>
+          <context context-type="linenumber">40</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
+          <context context-type="linenumber">91</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3826728385291699828" datatype="html">
+        <source> Image size in pixels: <x id="INTERPOLATION" equiv-text="{{getImageResolution()}}"/> </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
+          <context context-type="linenumber">48,49</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6288365980016802803" datatype="html">
+        <source> Width/height ratio: <x id="INTERPOLATION" equiv-text="{{getImageRatio() | number: &apos;1.1-2&apos; }}"/> </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
+          <context context-type="linenumber">51,52</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1431493389100814651" datatype="html">
         <source>Download map image</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">38,39</context>
+          <context context-type="linenumber">55,56</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1403507799985368460" datatype="html">
         <source>Landscape</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">45</context>
+          <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9024440163320108713" datatype="html">
         <source>Portrait</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">46</context>
+          <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7438609089996892520" datatype="html">
         <source>A4</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">49</context>
+          <context context-type="linenumber">70</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4346630494193384330" datatype="html">
         <source>A3</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">50</context>
+          <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5701618810648052610" datatype="html">
         <source>Title</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">53</context>
+          <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4636291172448223646" datatype="html">
         <source>Footer</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">58</context>
+          <context context-type="linenumber">83</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4198293539412995628" datatype="html">
         <source>Add legend for layer</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">68</context>
+          <context context-type="linenumber">97</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1605472530146889333" datatype="html">
         <source>Automatically open print dialog</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">75</context>
+          <context context-type="linenumber">105</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5715539409661008253" datatype="html">
         <source>Download map PDF</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">77,78</context>
+          <context context-type="linenumber">108,109</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7751500190109896263" datatype="html">
         <source>No visible layers.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">83</context>
+          <context context-type="linenumber">114</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7498219936774990397" datatype="html">
         <source>Creating map, this may take a while.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">87,88</context>
+          <context context-type="linenumber">118,119</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2159130950882492111" datatype="html">
         <source>Cancel</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">91,92</context>
+          <context context-type="linenumber">122,123</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1414622339183492234" datatype="html">
         <source>Available layers</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/toc/toc-menu-button/toc-menu-button.component.ts</context>
-          <context context-type="linenumber">25</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9198130089685180173" datatype="html">
+        <source>Toggle all layers on</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/components/toc/toggle-all-layers-button/toggle-all-layers-button.component.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4463867724650981374" datatype="html">
+        <source>Toggle all layers off</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/components/toc/toggle-all-layers-button/toggle-all-layers-button.component.html</context>
+          <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5126955618430711976" datatype="html">
@@ -708,6 +750,49 @@
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="5381054561352410435" datatype="html">
+        <source>Search location</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/components/toolbar/simple-search/simple-search.component.html</context>
+          <context context-type="linenumber">8,9</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/components/toolbar/simple-search/simple-search.component.html</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/components/toolbar/simple-search/simple-search.component.html</context>
+          <context context-type="linenumber">21,22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5377660698191427239" datatype="html">
+        <source> Type at least <x id="INTERPOLATION" equiv-text="{{ minLength }}"/> characters to start searching </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/components/toolbar/simple-search/simple-search.component.html</context>
+          <context context-type="linenumber">29,30</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2236371857137398396" datatype="html">
+        <source> No results found </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/components/toolbar/simple-search/simple-search.component.html</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4922459598364532932" datatype="html">
+        <source>Data by [OpenStreetMap](https://www.openstreetmap.org/copyright)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/components/toolbar/simple-search/simple-search.service.ts</context>
+          <context context-type="linenumber">58</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2412260204074853227" datatype="html">
+        <source>Data by [PDOK](https://geodata.nationaalgeoregister.nl)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/components/toolbar/simple-search/simple-search.service.ts</context>
+          <context context-type="linenumber">78</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7260795646574446386" datatype="html">
         <source>Zoom to initial extent</source>
         <context-group purpose="location">
@@ -727,6 +812,321 @@
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/components/toolbar/zoom-buttons/zoom-buttons.component.html</context>
           <context context-type="linenumber">24,25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2838129566011107043" datatype="html">
+        <source>Condition</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/attribute-filter/attribute-filter.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="739336552178553107" datatype="html">
+        <source>Select condition</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/attribute-filter/attribute-filter.component.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6555318547274416232" datatype="html">
+        <source>Value</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/attribute-filter/attribute-filter.component.html</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/attribute-filter/attribute-filter.component.html</context>
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5203279511751768967" datatype="html">
+        <source>From</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/attribute-filter/attribute-filter.component.html</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/attribute-filter/attribute-filter.component.html</context>
+          <context context-type="linenumber">29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="706270083777559326" datatype="html">
+        <source>Until</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/attribute-filter/attribute-filter.component.html</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/attribute-filter/attribute-filter.component.html</context>
+          <context context-type="linenumber">37</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1601518217526203092" datatype="html">
+        <source> Case sensitive </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/attribute-filter/attribute-filter.component.html</context>
+          <context context-type="linenumber">44,46</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3550956596122180517" datatype="html">
+        <source> Invert condition </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/attribute-filter/attribute-filter.component.html</context>
+          <context context-type="linenumber">50,52</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1648302799385755181" datatype="html">
+        <source>Deselect all values</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/attribute-filter/attribute-filter.component.html</context>
+          <context context-type="linenumber">60</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7960697062777566925" datatype="html">
+        <source>Select all values</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/attribute-filter/attribute-filter.component.html</context>
+          <context context-type="linenumber">61</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6424246633820870206" datatype="html">
+        <source>Equals</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
+          <context context-type="linenumber">33</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
+          <context context-type="linenumber">69</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6058990727665238036" datatype="html">
+        <source>equals to</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
+          <context context-type="linenumber">70</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7732309408488818531" datatype="html">
+        <source>Greater than</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
+          <context context-type="linenumber">39</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="890702457876425132" datatype="html">
+        <source>is greater than</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
+          <context context-type="linenumber">40</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1781083671516331203" datatype="html">
+        <source>Small than</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
+          <context context-type="linenumber">45</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1309979618532194127" datatype="html">
+        <source>is smaller than</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
+          <context context-type="linenumber">46</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9087788064443057357" datatype="html">
+        <source>Greater than or equal to</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
+          <context context-type="linenumber">51</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7437056168294682826" datatype="html">
+        <source>is greater than or equal to</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8356978342856431342" datatype="html">
+        <source>Small than or equal to</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
+          <context context-type="linenumber">57</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4403693524033419513" datatype="html">
+        <source>is smaller than or equal to</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
+          <context context-type="linenumber">58</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3890131054593067798" datatype="html">
+        <source>Between</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
+          <context context-type="linenumber">63</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
+          <context context-type="linenumber">111</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="103862121239127059" datatype="html">
+        <source>is between</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
+          <context context-type="linenumber">64</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
+          <context context-type="linenumber">112</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6238291467288576076" datatype="html">
+        <source>Contains</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
+          <context context-type="linenumber">75</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="326106955650253946" datatype="html">
+        <source>contains</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
+          <context context-type="linenumber">76</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8863611568205528132" datatype="html">
+        <source>Starts with</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
+          <context context-type="linenumber">81</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5840053709154100532" datatype="html">
+        <source>starts with</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
+          <context context-type="linenumber">82</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7402672269023827698" datatype="html">
+        <source>Ends with</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
+          <context context-type="linenumber">87</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6387705929814330940" datatype="html">
+        <source>ends with</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
+          <context context-type="linenumber">88</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8990769651805334695" datatype="html">
+        <source>On</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
+          <context context-type="linenumber">93</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1008100476778775555" datatype="html">
+        <source>is on</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
+          <context context-type="linenumber">94</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6371576811194810854" datatype="html">
+        <source>After</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
+          <context context-type="linenumber">99</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4557203537565915133" datatype="html">
+        <source>is after</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
+          <context context-type="linenumber">100</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1218334388194408974" datatype="html">
+        <source>Before</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
+          <context context-type="linenumber">105</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="114923036829185897" datatype="html">
+        <source>is before</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
+          <context context-type="linenumber">106</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5215254897571607793" datatype="html">
+        <source>Is true</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
+          <context context-type="linenumber">117</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8366095040965494104" datatype="html">
+        <source>is true</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
+          <context context-type="linenumber">118</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3540525584759007757" datatype="html">
+        <source>Is false</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
+          <context context-type="linenumber">123</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1767917250203365119" datatype="html">
+        <source>is false</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
+          <context context-type="linenumber">124</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6504828068656625171" datatype="html">
+        <source>Is null</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
+          <context context-type="linenumber">129</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3453198530328338392" datatype="html">
+        <source>is null</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
+          <context context-type="linenumber">130</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5728801976868426890" datatype="html">
+        <source>Choose values</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
+          <context context-type="linenumber">137</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4721871668005705294" datatype="html">
+        <source>contains one of the values</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
+          <context context-type="linenumber">138</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5129304310134933955" datatype="html">
@@ -757,6 +1157,13 @@
           <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="3213171010465652016" datatype="html">
+        <source>Something went wrong while loading the application. Please check if the URL is correct</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/core/src/lib/pages/viewer-app/viewer-app.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="1716296864993085110" datatype="html">
         <source>Could not find or load the requested application</source>
         <context-group purpose="location">
@@ -775,21 +1182,14 @@
         <source>map.pdf</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/services/map-pdf/map-pdf.service.ts</context>
-          <context context-type="linenumber">97</context>
+          <context context-type="linenumber">101</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7213937044758184634" datatype="html">
         <source>Created on </source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/core/src/lib/services/map-pdf/map-pdf.service.ts</context>
-          <context context-type="linenumber">159</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="8950682845693208811" datatype="html">
-        <source>Unable to export map canvas to image: <x id="PH" equiv-text="e"/></source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/map/src/lib/openlayers-map/openlayers-map-image-exporter.ts</context>
-          <context context-type="linenumber">121</context>
+          <context context-type="linenumber">163</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1002760959716392484" datatype="html">
@@ -803,7 +1203,7 @@
         <source> Color is required </source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/shared/src/lib/components/color-picker/color-picker.component.html</context>
-          <context context-type="linenumber">35,37</context>
+          <context context-type="linenumber">36,38</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3542042671420335679" datatype="html">
@@ -818,6 +1218,13 @@
         <context-group purpose="location">
           <context context-type="sourcefile">projects/shared/src/lib/components/confirm-dialog/confirm-dialog.component.html</context>
           <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6563353603432420930" datatype="html">
+        <source>Background layer selection</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/shared/src/lib/components/split-button/split-button.component.html</context>
+          <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
     </body>
