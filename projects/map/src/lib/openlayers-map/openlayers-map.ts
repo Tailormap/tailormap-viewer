@@ -8,7 +8,7 @@ import { LayerManagerModel, MapViewDetailsModel, MapViewerModel, MapViewerOption
 import { ProjectionsHelper } from '../helpers/projections.helper';
 import { OpenlayersExtent } from '../models/extent.type';
 import { OpenLayersLayerManager } from './open-layers-layer-manager';
-import { BehaviorSubject, concatMap, filter, forkJoin, from, map, merge, Observable, of, take } from 'rxjs';
+import { BehaviorSubject, concatMap, filter, forkJoin, map, merge, Observable, of, take } from 'rxjs';
 import { Size } from 'ol/size';
 import { ToolManagerModel } from '../models/tool-manager.model';
 import { OpenLayersToolManager } from './open-layers-tool-manager';
@@ -21,6 +21,7 @@ import BaseLayer from 'ol/layer/Base';
 import { OpenLayersWmsGetFeatureInfoHelper } from './helpers/open-layers-wms-get-feature-info.helper';
 import { HttpClient } from '@angular/common/http';
 import { FeatureModel } from '@tailormap-viewer/api';
+import { OpenLayersMapImageExporter } from './openlayers-map-image-exporter';
 
 export class OpenLayersMap implements MapViewerModel {
 
@@ -238,14 +239,10 @@ export class OpenLayersMap implements MapViewerModel {
       take(1),
       concatMap((olMap: OlMap) => {
         const extraLayers: BaseLayer[] = olMap.getAllLayers().filter(l => options.vectorLayerFilter && options.vectorLayerFilter(l));
-        const export$: Observable<string> = from(import('./openlayers-map-image-exporter'))
-          .pipe(
-            map(m => m.OpenLayersMapImageExporter),
-            concatMap(mapExporter => {
-              return mapExporter.exportMapImage$(olMap.getSize() as Size, olMap.getView(), options, extraLayers);
-            }),
-          );
-        return forkJoin([ of(extraLayers), export$ ]);
+        return forkJoin([
+          of(extraLayers),
+          OpenLayersMapImageExporter.exportMapImage$(olMap.getSize() as Size, olMap.getView(), options, extraLayers),
+        ]);
       }),
       map(([ extraLayers, pdfExport ]) => {
         // Force redraw of extra layers with normal DPI

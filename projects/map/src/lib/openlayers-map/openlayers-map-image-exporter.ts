@@ -1,18 +1,16 @@
 import { MapExportOptions } from '../map-service/map.service';
-import { Observable, Subject } from 'rxjs';
+import { concatMap, from, map, Observable, Subject, take } from 'rxjs';
 import { default as OlMap } from 'ol/Map';
 import { OlLayerHelper } from '../helpers/ol-layer.helper';
 import BaseLayer from 'ol/layer/Base';
 import View from 'ol/View';
 import { Size } from 'ol/size';
 import { ScaleLine } from 'ol/control';
-import html2canvas from 'html2canvas';
+import type html2canvas from 'html2canvas';
 import { ExtentHelper } from '../helpers/extent.helper';
 import { OpenlayersExtent } from '../models';
 
 export class OpenLayersMapImageExporter {
-  private constructor() {
-  }
 
   /**
    * Export a map image to a data URL using OpenLayers. For image layers specify LayerModels in options.layers: new OpenLayers Layer
@@ -112,22 +110,29 @@ export class OpenLayersMapImageExporter {
         // Set element visible otherwise html2canvas won't render it
         target.style.visibility = 'visible';
 
-        html2canvas(scaleBar, {
-          canvas: imageExportCanvas,
-          backgroundColor: null,
-          logging: false,
-          scale: sizeRatio,
-          width,
-          height,
-          x: -16,
-          y: -(height / sizeRatio) + 50,
-        }).then(() => {
-          renderedMapCanvasDataURL$.next(imageExportCanvas.toDataURL());
-          renderedMapCanvasDataURL$.complete();
-
-          imageExportOlMap.dispose();
-          document.body.removeChild(target);
-        });
+        from(import('html2canvas'))
+          .pipe(
+            map(i => i.default),
+            concatMap((html2canvasImport: typeof html2canvas) => {
+              return from(html2canvasImport(scaleBar, {
+                canvas: imageExportCanvas,
+                backgroundColor: null,
+                logging: false,
+                scale: sizeRatio,
+                width,
+                height,
+                x: -16,
+                y: -(height / sizeRatio) + 50,
+              }));
+            }),
+            take(1),
+          )
+          .subscribe(() => {
+            renderedMapCanvasDataURL$.next(imageExportCanvas.toDataURL());
+            renderedMapCanvasDataURL$.complete();
+            imageExportOlMap.dispose();
+            document.body.removeChild(target);
+          });
       } catch (e) {
         console.error(e);
         // TODO $localize
