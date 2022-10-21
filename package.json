@@ -14,7 +14,7 @@
     "test-with-coverage": "jest --max-workers=4 --collect-coverage",
     "lint": "ng lint",
     "lint-fix": "ng lint --fix",
-    "release-new-package": "node bin/publish-new-release.js",
+    "release-packages": "node bin/publish-all.js",
     "analyze-bundle": "ng build app --stats-json && npx webpack-bundle-analyzer --mode static --report reports/report-bundle-size-tailorm.html dist/app/stats.json",
     "extract-locale": "ng extract-i18n --out-file=./locale/messages.en-US.xlf"
   },

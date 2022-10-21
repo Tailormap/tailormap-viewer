@@ -1,26 +1,27 @@
-const {checkCleanGitRepo, runCommand, availableProjects, getCliArgument} = require("./shared");
+const {checkCleanGitRepo, publishRelease, requestVersion, runCommand, availableProjects, getCliArgument, hasCliArgument} = require("./shared");
 const path = require("path");
-
-const version = getCliArgument('--version');
-const dryRun = getCliArgument('--dry-run');
-
-if (version === null) {
-  console.error('Supply version');
-  process.exit(1);
-}
 
 checkCleanGitRepo();
 
 (async function main() {
+  let version = getCliArgument('--version');
+  const dryRun = hasCliArgument('--dry-run');
+
+  if (version === null) {
+    version = await requestVersion()
+  }
+
+  if (!version) {
+    console.error('Supply version');
+    process.exit(1);
+  }
+
   try {
     for (const project of availableProjects) {
-      const args = ['bin/publish-new-release.js', '--project=' + project, '--version=' + version];
-      if (dryRun) {
-        args.push('--dry-run');
-      }
-      await runCommand('node', args) || process.exit(1);
+      await publishRelease(project, version, dryRun);
     }
-    await runCommand('git', ['tag', version], path.resolve(__dirname, '../'));
+    const tagVersion = version.startsWith('v') ? version : `v${version}`;
+    await runCommand('git', ['tag', tagVersion], path.resolve(__dirname, '../'));
   } catch (e) {
     console.log('Error occurred: ', e);
   }
