@@ -2,6 +2,17 @@ const { spawn, execSync } = require('child_process');
 const path = require('path');
 const inquirer = require('inquirer');
 
+const availableProjects = ['api', 'shared', 'map', 'core'];
+
+const getCliArgument = (varName) => {
+  const cliArgIdx = process.argv.findIndex(a => a.indexOf(varName) !== -1);
+  return cliArgIdx !== -1 ? process.argv[cliArgIdx].replace(varName, '').toLowerCase() : null;
+}
+
+const hasCliArgument = (varName) => {
+  return process.argv.findIndex(a => a.indexOf(varName) !== -1) !== -1;
+};
+
 const checkCleanGitRepo = () => {
   const gitStatus = execSync('git status --short').toString();
   const gitDirty = gitStatus !== '';
@@ -16,7 +27,7 @@ const requestProject = (message, callback) => {
     type: 'list',
     name: 'project',
     message: message,
-    choices: ['api', 'core', 'map', 'shared'],
+    choices: availableProjects,
   }])
     .then(answers => {
       const project = answers.project;
@@ -48,3 +59,6 @@ const runCommand = (command, args, cwd) => {
 exports.requestProject = requestProject;
 exports.checkCleanGitRepo = checkCleanGitRepo;
 exports.runCommand = runCommand;
+exports.availableProjects = availableProjects;
+exports.getCliArgument = getCliArgument;
+exports.hasCliArgument = hasCliArgument;
