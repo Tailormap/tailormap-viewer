@@ -12,14 +12,18 @@ if (version === null) {
 checkCleanGitRepo();
 
 (async function main() {
-  for (const project of availableProjects) {
-    const args = ['bin/publish-new-release.js', '--project=' + project, '--version=' + version];
-    if (dryRun) {
-      args.push('--dry-run');
+  try {
+    for (const project of availableProjects) {
+      const args = ['bin/publish-new-release.js', '--project=' + project, '--version=' + version];
+      if (dryRun) {
+        args.push('--dry-run');
+      }
+      await runCommand('node', args) || process.exit(1);
     }
-    await runCommand('node', args) || process.exit(1);
+    await runCommand('git', ['tag', version], path.resolve(__dirname, '../'));
+  } catch (e) {
+    console.log('Error occurred: ', e);
   }
-  await runCommand('git', ['tag', version], path.resolve(__dirname, '../'));
 })();
 
 

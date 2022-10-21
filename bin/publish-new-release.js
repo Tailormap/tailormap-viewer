@@ -44,6 +44,9 @@ const publishRelease = (project, version, dryRun) => {
       }
       return Promise.resolve();
       // return runCommand('git', ['commit', '-m', `Released version ${currentVersion} of ${project} project`]);
+    })
+    .catch(error => {
+      console.log('Error occurred: ', error);
     });
 };
 
