@@ -135,8 +135,7 @@ export class OpenLayersMapImageExporter {
           });
       } catch (e) {
         console.error(e);
-        // TODO $localize
-        renderedMapCanvasDataURL$.error(`Unable to export map canvas to image: ${e}`);
+        renderedMapCanvasDataURL$.error($localize `Unable to export map canvas to image: ${e}`);
       }
     });
 
