@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Inject, Injector, LOCALE_ID, OnDestroy, OnInit } from '@angular/core';
 import {
-  BehaviorSubject, catchError, combineLatest, concatMap, finalize, forkJoin, from, map, Observable, of, startWith, Subject, take, takeUntil,
+  BehaviorSubject, catchError, combineLatest, concatMap, finalize, forkJoin, map, Observable, of, startWith, Subject, take, takeUntil,
   tap,
 } from 'rxjs';
 import { Store } from '@ngrx/store';
