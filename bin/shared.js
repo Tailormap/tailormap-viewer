@@ -12,7 +12,6 @@ const getCliArgument = (varName) => {
 }
 
 const hasCliArgument = (varName) => {
-  console.log('Checking for argument', varName, process.argv.findIndex(a => a.indexOf(varName) !== -1), process.argv);
   return process.argv.findIndex(a => a.indexOf(varName) !== -1) !== -1;
 };
 
