@@ -174,8 +174,8 @@ API_PROXY_URL=https://snapshot.tailormap.nl/api/ \
   docker compose --profile http up
 ```
 
-These environment variables can be configured in a `.env` file. Copy the `.env.template` file to `.env` and modify the variables so you do
-not have to specify them everytime.
+These environment variables can be configured in a `.env` file as mentioned above under the 'Running a specific version and other variables'
+section.
 
 ### Using Traefik
 
