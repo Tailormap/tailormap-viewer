@@ -1,11 +1,10 @@
 import { Inject, Injectable, LOCALE_ID } from '@angular/core';
-import { concatMap, forkJoin, map, Observable, tap } from 'rxjs';
-import { jsPDF } from 'jspdf';
+import { concatMap, forkJoin, from, map, Observable, of, tap } from 'rxjs';
 import { LayerModel, MapService, OlLayerFilter, OpenlayersExtent } from '@tailormap-viewer/map';
-import 'svg2pdf.js';
 import { HttpClient } from '@angular/common/http';
 import { IconService } from '@tailormap-viewer/shared';
-import { Svg2pdfOptions } from 'svg2pdf.js';
+import type { jsPDF } from 'jspdf';
+import type { Svg2pdfOptions } from 'svg2pdf.js';
 import { LegendService } from '../../components/legend/services/legend.service';
 import { ResolvedServerType } from '@tailormap-viewer/api';
 import { ApplicationMapService } from '../../map/services/application-map.service';
@@ -45,15 +44,19 @@ export class MapPdfService {
 
   constructor(
     private mapService: MapService,
-    @Inject(LOCALE_ID) public locale: string,
+    @Inject(LOCALE_ID) private locale: string,
     private httpClient: HttpClient,
     private iconService: IconService,
     private legendService: LegendService,
     private applicationMapService: ApplicationMapService,
   ) { }
 
-  public create$(printOptions: PrintOptions, layers: Array<ExtendedAppLayerModel>, legendLayers$: Observable<ExtendedAppLayerModel[]>,
-                 vectorLayerFilter?: OlLayerFilter): Observable<string> {
+  public create$(
+    printOptions: PrintOptions,
+    layers: Array<ExtendedAppLayerModel>,
+    legendLayers$: Observable<ExtendedAppLayerModel[]>,
+    vectorLayerFilter?: OlLayerFilter,
+  ): Observable<string> {
     let size = printOptions.size === 'a3' ? a3Size : a4Size;
     if (printOptions.orientation === 'portrait') {
       // noinspection JSSuspiciousNameCombination
@@ -69,7 +72,35 @@ export class MapPdfService {
     if (printOptions.title) {
       mapSize.height -= 2;
     }
-    const doc = new jsPDF({
+
+    return from(import('jspdf'))
+      .pipe(
+        map(m => m.jsPDF),
+        concatMap(jsPdfImport => forkJoin([ of(jsPdfImport), from(import('svg2pdf.js')) ])),
+        concatMap(([jsPdfImport]) => {
+          return this.createPdfDoc$(
+            jsPdfImport,
+            printOptions,
+            size,
+            mapSize,
+            layers,
+            legendLayers$,
+            vectorLayerFilter,
+          );
+        }),
+      );
+  }
+
+  private createPdfDoc$(
+    pdfCreator: typeof jsPDF,
+    printOptions: PrintOptions,
+    size: Size,
+    mapSize: Size,
+    layers: Array<ExtendedAppLayerModel>,
+    legendLayers$: Observable<ExtendedAppLayerModel[]>,
+    vectorLayerFilter?: OlLayerFilter,
+  ) {
+    const doc = new pdfCreator({
       format: printOptions.size,
       orientation: printOptions.orientation || 'landscape',
     });

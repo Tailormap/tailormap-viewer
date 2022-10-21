@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Inject, Injector, LOCALE_ID, OnDestroy, OnInit } from '@angular/core';
 import {
-  BehaviorSubject, catchError, combineLatest, concatMap, finalize, forkJoin, from, map, Observable, of, startWith, Subject, take, takeUntil,
+  BehaviorSubject, catchError, combineLatest, concatMap, finalize, forkJoin, map, Observable, of, startWith, Subject, take, takeUntil,
   tap,
 } from 'rxjs';
 import { Store } from '@ngrx/store';
@@ -18,6 +18,7 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { selectHasDrawingFeatures } from '../../drawing/state/drawing.selectors';
 import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layout.service';
 import { ExtendedAppLayerModel } from '../../../map/models';
+import { MapPdfService } from '../../../services/map-pdf/map-pdf.service';
 
 // Draw the vector layer with the print extent on the exported map image
 const DEBUG_PRINT_EXTENT = false;
@@ -82,6 +83,7 @@ export class PrintComponent implements OnInit, OnDestroy {
     private injector: Injector,
     private applicationMapService: ApplicationMapService,
     private viewerLayoutService: ViewerLayoutService,
+    private mapPdfService: MapPdfService,
     @Inject(LOCALE_ID) private locale: string,
   ) {
     this.hasDrawing$ = this.store$.select(selectHasDrawingFeatures).pipe(takeUntil(this.destroyed));
@@ -277,20 +279,16 @@ export class PrintComponent implements OnInit, OnDestroy {
     const form = this.exportPdfForm.getRawValue();
 
     this.printMapExtent$.pipe(take(1)).subscribe(printMapExtent => {
-      from(import('../../../services/map-pdf/map-pdf.service'))
-        .pipe(map(m => this.injector.get(m.MapPdfService)))
-        .subscribe(mapPdfService => {
-          this.wrapFileExport('pdf', (filename, layers) => mapPdfService.create$({
-            orientation: form.orientation,
-            size: form.paperSize,
-            mapExtent: printMapExtent,
-            dpi: form.dpi,
-            title: form.title,
-            footer: form.footer,
-            autoPrint: form.autoPrint,
-            filename,
-          }, layers, this.getLegendLayers$(), this.vectorLayerFilter));
-        });
+      this.wrapFileExport('pdf', (filename, layers) => this.mapPdfService.create$({
+        orientation: form.orientation,
+        size: form.paperSize,
+        mapExtent: printMapExtent,
+        dpi: form.dpi,
+        title: form.title,
+        footer: form.footer,
+        autoPrint: form.autoPrint,
+        filename,
+      }, layers, this.getLegendLayers$(), this.vectorLayerFilter));
     });
   }
 
