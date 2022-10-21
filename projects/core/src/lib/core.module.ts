@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, ErrorHandler, NgModule } from '@angular/core';
+import { APP_INITIALIZER, InjectionToken, NgModule } from '@angular/core';
 import { ViewerAppComponent } from './pages';
 import { MapModule } from '@tailormap-viewer/map';
 import { StoreModule } from '@ngrx/store';
@@ -19,11 +19,21 @@ import { SecurityInterceptor } from './interceptors/security.interceptor';
 import { ApplicationMapModule } from './map/application-map.module';
 import { FilterModule } from './filter/filter.module';
 import { Router } from '@angular/router';
-import * as Sentry from '@sentry/angular';
 
 const getBaseHref = (platformLocation: PlatformLocation): string => {
   return platformLocation.getBaseHrefFromDOM();
 };
+
+const TRACE_SERVICE = new InjectionToken('SENTRY_TRACE_SERVICE');
+const SENTRY_DSN: string = (window as any).SENTRY_DSN;
+const sentryTraceServiceFactory = async (router: Router) => {
+  const sentry = await import('@sentry/angular');
+  return new sentry.TraceService(router);
+};
+const sentryProviders = SENTRY_DSN === '@SENTRY_DSN@' ? [] : [
+  { provide: TRACE_SERVICE, useFactory: sentryTraceServiceFactory, deps: [Router] },
+  { provide: APP_INITIALIZER, useFactory: () => () => {}, deps: [TRACE_SERVICE], multi: true },
+];
 
 @NgModule({
   declarations: [
@@ -59,9 +69,7 @@ const getBaseHref = (platformLocation: PlatformLocation): string => {
     { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1Service },
     { provide: ICON_SERVICE_ICON_LOCATION, useValue: 'assets/core/imgs/' },
     { provide: APP_BASE_HREF, useFactory: getBaseHref, deps: [PlatformLocation] },
-    { provide: ErrorHandler, useValue: Sentry.createErrorHandler({ showDialog: false }) },
-    { provide: Sentry.TraceService, deps: [Router] },
-    { provide: APP_INITIALIZER, useFactory: () => () => {}, deps: [Sentry.TraceService], multi: true },
+    ...sentryProviders,
   ],
 })
 export class CoreModule {
