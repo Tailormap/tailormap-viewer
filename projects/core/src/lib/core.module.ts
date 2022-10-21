@@ -19,6 +19,8 @@ import { SecurityInterceptor } from './interceptors/security.interceptor';
 import { ApplicationMapModule } from './map/application-map.module';
 import { FilterModule } from './filter/filter.module';
 import { Router } from '@angular/router';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { LuxonDateAdapter, MAT_LUXON_DATE_FORMATS } from '@angular/material-luxon-adapter';
 
 const getBaseHref = (platformLocation: PlatformLocation): string => {
   return platformLocation.getBaseHrefFromDOM();
@@ -69,6 +71,8 @@ const sentryProviders = SENTRY_DSN === '@SENTRY_DSN@' ? [] : [
     { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1Service },
     { provide: ICON_SERVICE_ICON_LOCATION, useValue: 'assets/core/imgs/' },
     { provide: APP_BASE_HREF, useFactory: getBaseHref, deps: [PlatformLocation] },
+    { provide: DateAdapter, useClass: LuxonDateAdapter, deps: [MAT_DATE_LOCALE] },
+    { provide: MAT_DATE_FORMATS, useValue: MAT_LUXON_DATE_FORMATS },
     ...sentryProviders,
   ],
 })
