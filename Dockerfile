@@ -16,7 +16,7 @@ COPY . /app
 
 RUN npm run build -- --base-href=${BASE_HREF}
 
-FROM nginx:1.23.1-alpine
+FROM nginx:1.23.2-alpine
 
 ARG VERSION=snapshot
 
