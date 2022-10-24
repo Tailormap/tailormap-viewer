@@ -2,11 +2,24 @@
   "name": "@tailormap-viewer/core",
   "version": "10.0.0-rc1",
   "peerDependencies": {
-    "@angular/common": "^13.0.0",
-    "@angular/core": "^13.0.0",
-    "@tailormap-viewer/shared": ">=0.0.3 <1.0",
-    "@tailormap-viewer/map": ">=0.0.5 <1.0",
-    "@tailormap-viewer/api": ">=0.0.2 <1.0"
+    "@angular/common": "^14.1.0",
+    "@angular/core": "^14.1.0",
+    "@angular/forms": "^14.1.0",
+    "@angular/material": "^14.1.0",
+    "@angular/material-luxon-adapter": "^14.1.0",
+    "@angular/platform-browser": "^14.1.0",
+    "@angular/router": "^14.1.0",
+    "@ngrx/effects": "^14.1.0",
+    "@ngrx/store": "^14.1.0",
+    "@sentry/angular": "^7.14.1",
+    "@tailormap-viewer/shared": "^10.0.0-rc1",
+    "@tailormap-viewer/map": "^10.0.0-rc1",
+    "@tailormap-viewer/api": "^10.0.0-rc1",
+    "jspdf": "^2.5.1",
+    "luxon": "^2.5.0",
+    "nanoid": "^4.0.0",
+    "rxjs": "^7.5.5",
+    "svg2pdf.js": "^2.2.1"
   },
   "dependencies": {
     "tslib": "^2.3.0"

@@ -23,8 +23,6 @@ import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-import { LuxonDateAdapter, MAT_LUXON_DATE_FORMATS } from '@angular/material-luxon-adapter';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @NgModule({
@@ -56,13 +54,5 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatDatepickerModule,
     MatAutocompleteModule,
   ],
-  providers: [{
-    provide: DateAdapter,
-    useClass: LuxonDateAdapter,
-    deps: [MAT_DATE_LOCALE],
-  }, {
-    provide: MAT_DATE_FORMATS,
-    useValue: MAT_LUXON_DATE_FORMATS,
-  }],
 })
 export class SharedImportsModule { }
