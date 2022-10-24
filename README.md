@@ -55,7 +55,7 @@ the registry automatically. If you want to update your running containers, execu
 
 Run `docker compose --profile http --profile full up -d` again to use the updated images.
 
-#### Running a specific version
+#### Running a specific version and other variables
 
 To run a specific version of the stack set the `RELEASE_VERSION` and `VERSION_TAG` environment variables to the desired (and identical)
 version, and run:
@@ -71,6 +71,15 @@ docker compose --profile http --profile full up -d --no-build
 
 For the latest version do the same but use `VERSION_TAG=latest`. The `latest` tag will point to the latest release. To update
 a running stack after a new version is release, run `docker compose` with the `pull` and `up` commands.
+
+Environment variables can also be set in a file named `.env` or in a file specified when running Docker Compose with the `--env-file`
+command line option. More environment variables are available - copy `.env.template` to `.env` and they will be picked up by Docker Compose.
+Some notable variables:
+
+ - `CONFIG_DB_INIT_EMPTY`: Do not initialize the Tailormap configuration database with some preconfigured services and applications.
+ - `HOST`: Hostname when running proxied `web-proxied`.
+
+Some other variables are available (such as enabling Sentry), see the Docker Compose configuration for details.
 
 #### Default account
 
@@ -165,8 +174,8 @@ API_PROXY_URL=https://snapshot.tailormap.nl/api/ \
   docker compose --profile http up
 ```
 
-These environment variables can be configured in a `.env` file. Copy the `.env.template` file to `.env` and modify the variables so you do
-not have to specify them everytime.
+These environment variables can be configured in a `.env` file as mentioned above under the 'Running a specific version and other variables'
+section.
 
 ### Using Traefik
 
