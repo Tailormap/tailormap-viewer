@@ -14,7 +14,7 @@ LABEL org.opencontainers.image.authors="support@b3partners.nl" \
       org.opencontainers.image.version="${VERSION}"
 
 # get schema export from tailormap persistence
-RUN set -eux; \
+RUN set -eux;ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone\
     apk upgrade --update && apk -U add --no-cache tzdata curl unzip \
     # this will get the latest version of tailormap persistence from nexus using nexus REST API \
     # see https://help.sonatype.com/repomanager3/integrations/rest-and-integration-api/search-api#SearchAPI-DownloadingtheLatestVersionofanAsset
