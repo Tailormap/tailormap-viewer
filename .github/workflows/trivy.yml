@@ -3,7 +3,7 @@ on:
   # use pull request so this workflow dos not fail when triggered by dependabot PR's
   pull_request:
   schedule:
-    - cron: "17 23 * * 0"
+    - cron: '17 23 * * MON'
   workflow_dispatch:
 
 jobs:
@@ -11,13 +11,13 @@ jobs:
     name: Trivy Scan
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: 'actions/checkout@v3'
 
       - name: Build images
         run: docker compose build --pull --parallel --no-cache db web
 
       - name: Run Trivy vulnerability scanner on tailormap-viewer
-        uses: aquasecurity/trivy-action@0.7.1
+        uses: 'aquasecurity/trivy-action@0.7.1'
         # docker run --rm -v trivy_cache:/root/.cache/ aquasec/trivy image ghcr.io/b3partners/tailormap-viewer:snapshot
         with:
           image-ref: 'ghcr.io/b3partners/tailormap-viewer:snapshot'
@@ -26,7 +26,7 @@ jobs:
           severity: 'HIGH,CRITICAL'
 
       - name: Run Trivy vulnerability scanner on tailormap-config-db
-        uses: aquasecurity/trivy-action@0.7.1
+        uses: 'aquasecurity/trivy-action@0.7.1'
         # docker run --rm -v trivy_cache:/root/.cache/ aquasec/trivy image ghcr.io/b3partners/tailormap-config-db:snapshot
         with:
           image-ref: 'ghcr.io/b3partners/tailormap-config-db:snapshot'
@@ -35,14 +35,14 @@ jobs:
           severity: 'HIGH,CRITICAL'
 
       - name: Upload tailormap-viewer Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v2
+        uses: 'github/codeql-action/upload-sarif@v2'
         if: always()
         with:
           sarif_file: 'viewer-trivy-results.sarif'
           category: 'tailormap-viewer'
 
       - name: Upload tailormap-config-db Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v2
+        uses: 'github/codeql-action/upload-sarif@v2'
         if: always()
         with:
           sarif_file: 'config-db-trivy-results.sarif'
