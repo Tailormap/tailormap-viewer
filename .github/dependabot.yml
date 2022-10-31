@@ -1,37 +1,37 @@
 version: 2
 updates:
-  - package-ecosystem: "github-actions"
-    directory: "/"
+  - package-ecosystem: github-actions
+    directory: '/'
     schedule:
-      interval: "weekly"
-      day: saturday
-      time: "21:00"
-      timezone: Europe/Amsterdam
+      interval: weekly
+      day: monday
+      time: '21:00'
+      timezone: 'Europe/Amsterdam'
     labels:
       - infrastucture
 
   - package-ecosystem: docker
-    directory: "/"
+    directory: '/'
     schedule:
       interval: weekly
-      day: saturday
-      time: "21:00"
-      timezone: Europe/Amsterdam
+      day: monday
+      time: '21:00'
+      timezone: 'Europe/Amsterdam'
     target-branch: main
     labels:
       - infrastucture
     ignore:
       - dependency-name: node
         versions:
-          - ">= 17"
+          - '>= 17'
 
   - package-ecosystem: docker
-    directory: "/docker/db/"
+    directory: '/docker/db/'
     schedule:
       interval: weekly
-      day: saturday
-      time: "21:00"
-      timezone: Europe/Amsterdam
+      day: monday
+      time: '21:00'
+      timezone: 'Europe/Amsterdam'
     target-branch: main
     labels:
       - infrastucture

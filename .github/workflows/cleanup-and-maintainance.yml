@@ -3,7 +3,7 @@ name: 'Cleanup and Maintainance'
 on:
   workflow_dispatch:
   schedule:
-    - cron: "19 17 * * 1"
+    - cron: '19 17 * * MON'
 
 jobs:
   dockercleanup:
@@ -15,7 +15,7 @@ jobs:
     steps:
       - name: 'Untagged older than 1 week, keeping last 2'
         # https://github.com/marketplace/actions/ghcr-pruning
-        uses: vlaurin/action-ghcr-prune@v0.4.0
+        uses: 'vlaurin/action-ghcr-prune@v0.4.0'
         with:
           token: ${{ secrets.GHCR_CLEANUP_PAT }}
           organization: B3Partners
@@ -26,7 +26,7 @@ jobs:
           untagged: true
 
       - name: 'All untagged older than 4 weeks'
-        uses: vlaurin/action-ghcr-prune@v0.4.0
+        uses: 'vlaurin/action-ghcr-prune@v0.4.0'
         with:
           token: ${{ secrets.GHCR_CLEANUP_PAT }}
           organization: B3Partners
@@ -37,7 +37,7 @@ jobs:
           untagged: true
 
       - name: 'Tagged PRs older than 4 weeks'
-        uses: vlaurin/action-ghcr-prune@v0.4.0
+        uses: 'vlaurin/action-ghcr-prune@v0.4.0'
         with:
           token: ${{ secrets.GHCR_CLEANUP_PAT }}
           organization: B3Partners
@@ -54,7 +54,7 @@ jobs:
     permissions:
       pull-requests: write
     steps:
-      - uses: actions/stale@v6
+      - uses: 'actions/stale@v6'
         with:
           days-before-stale: 60
           days-before-close: 10
@@ -64,7 +64,7 @@ jobs:
     runs-on: ubuntu-latest
     name: 'Cleanup old workflow runs'
     steps:
-      - uses: Mattraks/delete-workflow-runs@v2
+      - uses: 'Mattraks/delete-workflow-runs@v2'
         with:
           token: ${{ github.token }}
           repository: ${{ github.repository }}
