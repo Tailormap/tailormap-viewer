@@ -137,7 +137,7 @@ services:
       interval: 1m
       timeout: 5s
       retries: 5
-      test: su postgres -c pg_isready
+      test: pg_isready
     restart: unless-stopped
 
 
