@@ -19,6 +19,7 @@ RUN npm run build -- --base-href=${BASE_HREF}
 FROM nginx:1.23.2-alpine
 
 ARG VERSION=snapshot
+ARG TZ="Europe/Amsterdam"
 
 LABEL org.opencontainers.image.authors="support@b3partners.nl" \
       org.opencontainers.image.description="Tailormap Viewer provides the web interface for Tailormap" \
@@ -37,6 +38,12 @@ COPY docker/web/api-proxy.conf.template /etc/nginx/templates/api-proxy.conf.temp
 COPY docker/web/admin-proxy.conf.template /etc/nginx/templates/admin-proxy.conf.template
 COPY docker/web/enable-proxies.sh /docker-entrypoint.d/enable-proxies.sh
 COPY docker/web/configure-sentry.sh /docker-entrypoint.d/99-configure-sentry.sh
+
+# set-up timezone
+RUN set -eux;ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
+    # update curl for CVE-2022-32221, CVE-2022-42915 and CVE-2022-42916,  \
+    # can be probably removed when upgrading to > nginx:1.23.2-alpine
+    && apk add --no-cache curl=7.83.1-r4 libcurl=7.83.1-r4
 
 EXPOSE 80
 
