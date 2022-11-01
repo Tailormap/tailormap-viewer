@@ -1,5 +1,5 @@
 # Note when updating this version also update the version in the workflow files
-FROM node:16.18.0 AS builder
+FROM --platform=$BUILDPLATFORM node:16.18.0 AS builder
 
 ARG BASE_HREF=/
 
@@ -10,9 +10,6 @@ COPY ./package-lock.json /app
 RUN npm install
 
 COPY . /app
-
-# Disabled for now because of runtime -- GitHub Actions job runs tests in parallel
-#RUN npm run test
 
 RUN npm run build -- --base-href=${BASE_HREF}
 
@@ -41,6 +38,7 @@ COPY docker/web/configure-sentry.sh /docker-entrypoint.d/99-configure-sentry.sh
 
 # set-up timezone
 RUN set -eux;ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
+    && apk upgrade --update && apk -U add --no-cache tzdata \
     # update curl for CVE-2022-32221, CVE-2022-42915 and CVE-2022-42916,  \
     # can be probably removed when upgrading to > nginx:1.23.2-alpine
     && apk add --no-cache curl=7.83.1-r4 libcurl=7.83.1-r4
