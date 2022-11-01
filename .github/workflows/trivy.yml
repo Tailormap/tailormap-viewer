@@ -17,7 +17,7 @@ jobs:
         run: docker compose build --pull --parallel --no-cache db web
 
       - name: Run Trivy vulnerability scanner on tailormap-viewer
-        uses: 'aquasecurity/trivy-action@0.7.1'
+        uses: 'aquasecurity/trivy-action@0.8.0'
         # docker run --rm -v trivy_cache:/root/.cache/ aquasec/trivy image ghcr.io/b3partners/tailormap-viewer:snapshot
         with:
           image-ref: 'ghcr.io/b3partners/tailormap-viewer:snapshot'
@@ -26,7 +26,7 @@ jobs:
           severity: 'HIGH,CRITICAL'
 
       - name: Run Trivy vulnerability scanner on tailormap-config-db
-        uses: 'aquasecurity/trivy-action@0.7.1'
+        uses: 'aquasecurity/trivy-action@0.8.0'
         # docker run --rm -v trivy_cache:/root/.cache/ aquasec/trivy image ghcr.io/b3partners/tailormap-config-db:snapshot
         with:
           image-ref: 'ghcr.io/b3partners/tailormap-config-db:snapshot'
