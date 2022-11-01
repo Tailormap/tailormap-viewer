@@ -39,7 +39,8 @@ Run `npm run test` to execute the unit tests via [Jest](https://jestjs.io).
 ## Building docker images
 
 Use below commands to build and push the cross-platform Docker images to the GitHub container registry.
-Please see Docker documentation for more information: https://docs.docker.com/build/building/multi-platform/
+Please see Docker documentation for more information:
+[Building multi-platform images](https://docs.docker.com/build/building/multi-platform/)
 
 ```shell
 # install QEMU architectures
@@ -47,11 +48,12 @@ docker buildx create --use --name tailormap-builder
 docker run --privileged --rm tonistiigi/binfmt --install all
 # version of the docker image. This is also the version of the application
 VERSION=snapshot
+BASE_HREF=/
 # build and push config-db and viewer images
 docker buildx build --pull --build-arg VERSION=${VERSION} \
       --platform linux/amd64,linux/arm64 -t ghcr.io/b3partners/tailormap-config-db:${VERSION} \
       ./docker/db --push
-docker buildx build --pull --build-arg VERSION=${VERSION} \
+docker buildx build --pull --build-arg VERSION=${VERSION} --build-arg BASE_HREF=${BASE_HREF} \
       --platform linux/amd64,linux/arm64 -t ghcr.io/b3partners/tailormap-viewer:${VERSION} \
       . --push
 ```
