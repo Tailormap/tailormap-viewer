@@ -2,6 +2,13 @@
 
 This project is an Angular frontend for Tailormap.
 
+## Development requirements
+
+The following are required for successfully building Tailormap viewer:
+- NodeJS 16.18 (https://nodejs.org/en/)
+- npm 8 (included with NodeJS)
+- Docker (https://docs.docker.com/engine/install/) including Buildx and Compose v2 (https://docs.docker.com/compose/install/)
+
 ## Development server
 
 Run `npm run start` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
@@ -28,6 +35,27 @@ Run `npm run build` to build the project. The build artifacts will be stored in 
 ## Running unit tests
 
 Run `npm run test` to execute the unit tests via [Jest](https://jestjs.io).
+
+## Building docker images
+
+Use below commands to build and push the cross-platform Docker images to the GitHub container registry.
+Please see Docker documentation for more information: https://docs.docker.com/build/building/multi-platform/
+
+```shell
+# install QEMU architectures
+docker buildx create --use --name tailormap-builder
+docker run --privileged --rm tonistiigi/binfmt --install all
+# version of the docker image. This is also the version of the application
+VERSION=snapshot
+# build and push config-db and viewer images
+docker buildx build --pull --build-arg VERSION=${VERSION} \
+      --platform linux/amd64,linux/arm64 -t ghcr.io/b3partners/tailormap-config-db:${VERSION} \
+      ./docker/db --push
+docker buildx build --pull --build-arg VERSION=${VERSION} \
+      --platform linux/amd64,linux/arm64 -t ghcr.io/b3partners/tailormap-viewer:${VERSION} \
+      . --push
+```
+If you want to see what is going on you can add `--progress plain` in there.
 
 ## Running with Docker Compose
 
