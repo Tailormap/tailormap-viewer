@@ -10,12 +10,9 @@ export class ProjectionsHelper {
     definition: string,
     projectionAliases?: string[],
   ) {
-    if (proj4.defs(projection)) {
-      return;
-    }
-    proj4.defs(projection, definition);
+    ProjectionsHelper.registerProjection(projection, definition);
     (projectionAliases || []).forEach(alias => {
-      proj4.defs(alias, proj4.defs(projection));
+      ProjectionsHelper.registerProjection(alias, definition);
     });
     register(proj4);
   }
@@ -29,6 +26,12 @@ export class ProjectionsHelper {
       resolutions[i] = startResolution / Math.pow(2, i);
     }
     return resolutions;
+  }
+
+  private static registerProjection(projection: string, definition: string) {
+    if (!proj4.defs(projection) && !!definition) {
+      proj4.defs(projection, definition);
+    }
   }
 
 }
