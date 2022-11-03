@@ -24,9 +24,10 @@ interface LocationServerResponse {
   };
 }
 
-interface NomatimResponse {
+interface NominatimResponse {
   display_name: string;
   geotext: string;
+  licence: string;
 }
 
 @Injectable({
@@ -42,11 +43,11 @@ export class SimpleSearchService {
     if (projection === ProjectionCodesEnum.RD) {
       return this.searchRd$(searchTerm);
     }
-    return this.searchOSMNomatim$(searchTerm);
+    return this.searchOSMNominatim$(searchTerm);
   }
 
-  private searchOSMNomatim$(searchTerm: string): Observable<SearchResultModel> {
-    return this.httpClient.get<NomatimResponse[]>(`https://nominatim.openstreetmap.org/search`, {
+  private searchOSMNominatim$(searchTerm: string): Observable<SearchResultModel> {
+    return this.httpClient.get<NominatimResponse[]>(`https://nominatim.openstreetmap.org/search`, {
       params: {
         q: searchTerm,
         format: 'jsonv2',
@@ -55,7 +56,7 @@ export class SimpleSearchService {
     }).pipe(
       catchError(() => of([])),
       map(result => ({
-        attribution: $localize `Data by [OpenStreetMap](https://www.openstreetmap.org/copyright)`,
+        attribution: result.length > 0 ? result[0].licence : '',
         results: result.slice(0, SimpleSearchService.MAX_RESULTS).map(res => ({
           label: res.display_name,
           geometry: res.geotext,
