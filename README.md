@@ -102,8 +102,6 @@ For a specific version:
 ```
 export VERSION_TAG=10.0.0-rc1
 export RELEASE_VERSION=${VERSION_TAG}
-docker pull ghcr.io/b3partners/tailormap-config-db:${VERSION_TAG}
-docker pull ghcr.io/b3partners/tailormap-viewer:${VERSION_TAG}
 docker compose --profile http --profile full up -d
 ```
 
