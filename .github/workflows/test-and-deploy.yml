@@ -101,9 +101,6 @@ jobs:
           echo "VERSION_TAG=pr-${PR}" >> $GITHUB_ENV
           echo "BASE_HREF=/pull-request/${PR}/${GITHUB_REF_NAME_SLUG_URL}/" >> $GITHUB_ENV
 
-      - name: 'Build and tag docker image'
-        run: docker compose build web db
-
       - name: 'Log in to GitHub container registry'
         uses: docker/login-action@v2
         with:
@@ -111,8 +108,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 'Push images to registry'
-        run: docker compose push web db
+      - name: 'Build, tag and push images to registry'
+        run: |
+          docker buildx create --use --name tailormap-builder
+          docker run --privileged --rm tonistiigi/binfmt --install all
+          docker buildx build --pull --build-arg VERSION=${VERSION_TAG} --platform linux/amd64,linux/arm64 -t ghcr.io/b3partners/tailormap-config-db:${VERSION_TAG} ./docker/db --push
+          docker buildx build --pull --build-arg VERSION=${VERSION_TAG} --build-arg BASE_HREF=${BASE_HREF} --platform linux/amd64,linux/arm64 -t ghcr.io/b3partners/tailormap-viewer:${VERSION_TAG} . --push
 
       - name: 'Set Docker context for deployment'
         uses: arwynfr/actions-docker-context@v2
@@ -155,12 +156,13 @@ jobs:
 
       - name: 'Create GitHub deployment'
         if: success()
-        uses: chrnorm/deployment-action@releases/v1
+        uses: chrnorm/deployment-action@v2
         with:
           token: "${{ secrets.GITHUB_TOKEN }}"
-          target_url: "https://${{ secrets.DEPLOY_HOST_SNAPSHOT }}${{ env.BASE_HREF}}"
+          environment-url: "https://${{ secrets.DEPLOY_HOST_SNAPSHOT }}${{ env.BASE_HREF}}"
+          description: "Deployment for ${{ env.VERSION_TAG }}"
           environment: ${{ env.VERSION_TAG }}
-          initial_status: success
+          initial-status: success
           ref: "${{ env.GITHUB_HEAD_REF }}"
 
 

@@ -1,5 +1,6 @@
 version: '3.9'
 
+# This compose file is geared towards Continuous Integration. It can be used as a base for production.
 # See README.md for usage details
 
 networks:
@@ -7,14 +8,13 @@ networks:
     name: tailormap-viewer
 
 
+volumes:
+  config-db:
+
+
 services:
   web:
     image: ghcr.io/b3partners/tailormap-viewer:${VERSION_TAG:-snapshot}
-    build:
-      context: .
-      args:
-        - "BASE_HREF=${BASE_HREF:-/}"
-        - "VERSION=${VERSION_TAG:-snapshot}"
     profiles:
       - http
     ports:
@@ -37,11 +37,6 @@ services:
   # The same as web, but without port 80 exposed and with labels for using with Traefik as a reverse proxy.
   web-proxied:
     image: ghcr.io/b3partners/tailormap-viewer:${VERSION_TAG:-snapshot}
-    build:
-      context: .
-      args:
-        - "BASE_HREF=${BASE_HREF:-/}"
-        - "VERSION=${VERSION_TAG:-snapshot}"
     profiles:
       - proxied
     networks:
@@ -100,6 +95,8 @@ services:
     labels:
       traefik.enable: false
     restart: unless-stopped
+    depends_on:
+      - db
 
 
   admin:
@@ -113,14 +110,12 @@ services:
     labels:
       traefik.enable: false
     restart: unless-stopped
+    depends_on:
+      - db
 
 
   db:
     image: ghcr.io/b3partners/tailormap-config-db:${RELEASE_VERSION:-snapshot}
-    build:
-      context: docker/db
-      args:
-        - "VERSION=${RELEASE_VERSION:-snapshot}"
     profiles:
       - full
     networks:
@@ -139,7 +134,3 @@ services:
       retries: 5
       test: pg_isready
     restart: unless-stopped
-
-
-volumes:
-  config-db:

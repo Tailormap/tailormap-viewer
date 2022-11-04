@@ -1,6 +1,13 @@
 # Tailormap viewer
 
-This project is an Angular frontend for Tailormap.
+The Angular frontend for Tailormap.
+
+## Development requirements
+
+The following are required for successfully building Tailormap viewer:
+- NodeJS 16.18 (https://nodejs.org/en/)
+- npm 8 (included with NodeJS)
+- Docker (https://docs.docker.com/engine/install/) including Buildx and Compose v2 (https://docs.docker.com/compose/install/)
 
 ## Development server
 
@@ -29,9 +36,42 @@ Run `npm run build` to build the project. The build artifacts will be stored in 
 
 Run `npm run test` to execute the unit tests via [Jest](https://jestjs.io).
 
+## Building docker images
+
+Use below commands to build and push the cross-platform Docker images to the GitHub container registry.
+Please see Docker documentation for more information:
+[Building multi-platform images](https://docs.docker.com/build/building/multi-platform/)
+
+```shell
+# create a container for x-platform builds (only needed once)
+docker buildx create --use --name tailormap-builder --platform linux/arm64,linux/arm/v8
+# or activate an existing container
+docker buildx use tailormap-builder
+# install necessary QEMU platform architectures
+docker run --privileged --rm tonistiigi/binfmt --install all
+# set version of the docker image and base ref. This will also be the reported version of the application
+export VERSION=snapshot
+export BASE_HREF=/
+# build and push tailormap-config-db (aka "db") and tailormap-viewer (aka "web") images
+# for pushing to the GitHub container registry, you need to be logged in with docker login
+docker buildx build --pull --build-arg VERSION=${VERSION} \
+      --platform linux/amd64,linux/arm64 \
+      -t ghcr.io/b3partners/tailormap-config-db:${VERSION} ./docker/db \
+      --push
+docker buildx build --pull --build-arg VERSION=${VERSION} --build-arg BASE_HREF=${BASE_HREF} \
+      --platform linux/amd64,linux/arm64 \
+      -t ghcr.io/b3partners/tailormap-viewer:${VERSION} . \
+      --push
+```
+### reference documentation
+
+- [docker buildx build](https://docs.docker.com/engine/reference/commandline/buildx_build/)
+- [docker buildx create](https://docs.docker.com/engine/reference/commandline/buildx_create/)
+
+
 ## Running with Docker Compose
 
-Use Docker Compose to build, push and run images. It is best to use the Docker Compose (v2) plugin using the `docker compose` command, but
+Use Docker Compose to run images. It is best to use the Docker Compose (v2) plugin using the `docker compose` command, but
 Python version (`docker-compose` command) may also work.
 
 ### Running a full Tailormap stack
@@ -50,8 +90,6 @@ repository. The `api` and `admin` containers are the snapshot-tagged versions by
 the registry automatically. If you want to update your running containers, execute:
 
 - `docker compose --profile http --profile full pull` to pull new images
-- `docker compose build web` to build a new Angular frontend image
-- `docker compose build db` to build a new configuration database image (see note below)
 
 Run `docker compose --profile http --profile full up -d` again to use the updated images.
 
@@ -64,9 +102,7 @@ For a specific version:
 ```
 export VERSION_TAG=10.0.0-rc1
 export RELEASE_VERSION=${VERSION_TAG}
-docker pull ghcr.io/b3partners/tailormap-config-db:${VERSION_TAG}
-docker pull ghcr.io/b3partners/tailormap-viewer:${VERSION_TAG}
-docker compose --profile http --profile full up -d --no-build
+docker compose --profile http --profile full up -d
 ```
 
 For the latest version do the same but use `VERSION_TAG=latest`. The `latest` tag will point to the latest release. To update
