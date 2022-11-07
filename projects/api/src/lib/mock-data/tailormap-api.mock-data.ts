@@ -80,9 +80,7 @@ export const getLayerDetailsModel = (overrides?: Partial<LayerDetailsModel>): La
 
 export const getComponentModel = (overrides?: Partial<ComponentModel>): ComponentModel => ({
   config: {
-    label: 'label',
-    title: 'title',
-    tooltip: 'tooltip',
+    enabled: true,
   },
   type: 'test',
   ...overrides,
