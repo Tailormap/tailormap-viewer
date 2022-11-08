@@ -38,10 +38,10 @@ COPY docker/web/configure-sentry.sh /docker-entrypoint.d/99-configure-sentry.sh
 
 # set-up timezone
 RUN set -eux;ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
-    && apk upgrade --update && apk -U add --no-cache tzdata \
+    && apk upgrade --no-cache && apk -U add --no-cache tzdata
     # update curl for CVE-2022-32221, CVE-2022-42915 and CVE-2022-42916,  \
     # can be probably removed when upgrading to > nginx:1.23.2-alpine
-    && apk add --no-cache curl=7.83.1-r4 libcurl=7.83.1-r4
+    # && apk add --no-cache curl=7.83.1-r4 libcurl=7.83.1-r4 openssl3=3.0.7-r0
 
 EXPOSE 80
 

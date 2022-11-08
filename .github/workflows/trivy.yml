@@ -10,11 +10,17 @@ jobs:
   build:
     name: Trivy Scan
     runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
     steps:
       - uses: 'actions/checkout@v3'
 
       - name: Build images
-        run: docker compose build --pull --parallel --no-cache db web
+        run: |
+          docker buildx build --pull --build-arg VERSION=snapshot -t ghcr.io/b3partners/tailormap-config-db:snapshot ./docker/db --load
+          docker buildx build --pull --build-arg VERSION=snapshot --build-arg BASE_HREF=/ -t ghcr.io/b3partners/tailormap-viewer:snapshot . --load
 
       - name: Run Trivy vulnerability scanner on tailormap-viewer
         uses: 'aquasecurity/trivy-action@0.8.0'
