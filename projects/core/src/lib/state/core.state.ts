@@ -10,6 +10,7 @@ export interface ApplicationState {
   title?: string;
   lang?: Language;
   styling?: object;
+  components: ComponentModel[];
 }
 
 export interface CoreState {
@@ -18,11 +19,9 @@ export interface CoreState {
   routeBeforeLogin?: string;
   security: SecurityModel;
   application?: ApplicationState;
-  components: ComponentModel[];
 }
 
 export const initialCoreState: CoreState = {
   loadStatus: LoadingStateEnum.INITIAL,
   security: { loggedIn: false },
-  components: [],
 };

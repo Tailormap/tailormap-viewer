@@ -1,4 +1,4 @@
-import { AppResponseModel, ComponentModel, LayerDetailsModel, MapResponseModel, Sortorder, VersionResponseModel } from '../models';
+import { AppResponseModel, LayerDetailsModel, MapResponseModel, Sortorder, VersionResponseModel } from '../models';
 import { Observable } from 'rxjs';
 import { FeaturesResponseModel } from '../models/features-response.model';
 import { UniqueValuesResponseModel } from '../models/unique-values-response.model';
@@ -14,8 +14,6 @@ export interface TailormapApiV1ServiceModel {
   }): Observable<AppResponseModel>;
 
   getMap$(applicationId: number): Observable<MapResponseModel>;
-
-  getComponents$(applicationId: number): Observable<ComponentModel[]>;
 
   getDescribeLayer$(params: {
     applicationId: number;

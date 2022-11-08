@@ -141,6 +141,7 @@ export const getAppResponseData = (overrides?: Partial<AppResponseModel>): AppRe
   name: 'viewer',
   title: 'My viewer',
   lang: Language.NL_NL,
+  components: [],
   ...overrides,
 });
 

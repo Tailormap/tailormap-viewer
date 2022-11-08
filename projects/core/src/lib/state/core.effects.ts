@@ -21,7 +21,6 @@ export class CoreEffects {
               }
               return CoreActions.loadApplicationSuccess({
                 application: response.result.application,
-                components: response.result.components,
               });
             }),
           );

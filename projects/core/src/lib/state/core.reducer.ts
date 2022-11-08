@@ -21,8 +21,8 @@ const onApplicationLoadSuccess = (
     title: payload.application.title,
     lang: payload.application.lang,
     styling: payload.application.styling,
+    components: payload.application.components,
   },
-  components: [...payload.components],
 });
 
 const onApplicationLoadFailed = (

@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { AppResponseModel, ComponentModel } from '@tailormap-viewer/api';
+import { AppResponseModel } from '@tailormap-viewer/api';
 
 const prefix = '[Core]';
 
@@ -9,7 +9,7 @@ export const loadApplication = createAction(
 );
 export const loadApplicationSuccess = createAction(
   `${prefix} Application Load Success`,
-  props<{ application: AppResponseModel; components: ComponentModel[] }>(),
+  props<{ application: AppResponseModel }>(),
 );
 export const loadApplicationFailed = createAction(
   `${prefix} Application Load Failed`,
