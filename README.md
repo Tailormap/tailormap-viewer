@@ -45,8 +45,10 @@ Please see Docker documentation for more information:
 ```shell
 # create a container for x-platform builds (only needed once)
 docker buildx create --use --name tailormap-builder --platform linux/arm64,linux/arm/v8
+
 # or activate an existing container
 docker buildx use tailormap-builder
+
 # install necessary QEMU platform architectures
 docker run --privileged --rm tonistiigi/binfmt --install all
 # set version of the docker image and base ref. This will also be the reported version of the application
@@ -62,6 +64,20 @@ docker buildx build --pull --build-arg VERSION=${VERSION} --build-arg BASE_HREF=
       --platform linux/amd64,linux/arm64 \
       -t ghcr.io/b3partners/tailormap-viewer:${VERSION} . \
       --push
+
+# leave the buildx context
+docker buildx use default
+```
+
+To only build local images you can use the following commands:
+
+```shell
+export VERSION=snapshot
+export BASE_HREF=/
+docker buildx build --pull --build-arg VERSION=${VERSION} \
+      -t ghcr.io/b3partners/tailormap-config-db:${VERSION} ./docker/db --load
+docker buildx build --pull --build-arg VERSION=${VERSION} --build-arg BASE_HREF=${BASE_HREF} \
+      -t ghcr.io/b3partners/tailormap-viewer:${VERSION} . --load
 ```
 ### reference documentation
 
