@@ -1,0 +1,119 @@
+:host {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: stretch;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  justify-content: stretch;
+  flex-direction: column;
+}
+
+.center {
+  display: flex;
+  flex: 1;
+  justify-content: stretch;
+}
+
+.left {
+  position: relative;
+}
+
+.map {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.bottom {
+  position: relative;
+}
+
+.map-controls-right {
+  display: flex;
+  align-items: flex-start;
+  position: absolute;
+  top: var(--body-margin);
+  right: var(--body-margin);
+  transition: transform ease-in-out 0.25s;
+}
+
+.map-controls-right--on-bottom {
+  bottom: var(--body-margin);
+  top: auto;
+}
+
+.map-controls-right tm-background-layer-toggle {
+  margin-right: 9px;
+}
+
+.map-controls-right tm-background-layer-toggle ::ng-deep mat-button-toggle-group {
+  box-shadow: 0 1px 0 0 rgba(0,0,0,0.05), 0 3px 4px 0 rgba(0,0,0,0.08);
+  height: 40px;
+}
+
+.map-controls-left {
+  position: absolute;
+  top: var(--body-margin);
+  left: var(--body-margin);
+  transition: transform ease-in-out 0.25s;
+  display: flex;
+}
+
+.map-controls-left > * + * {
+  margin-left: 9px;
+}
+
+.map-controls-left--on-bottom {
+  bottom: var(--body-margin);
+  top: auto;
+}
+
+::ng-deep.body--has-dialog-left .map-controls-left {
+  transform: translateX(var(--dialog-width-left));
+}
+
+::ng-deep.body--has-dialog-left .map-controls-left--on-bottom {
+  transform: none;
+}
+
+::ng-deep.body--has-dialog-right .map-controls-right {
+  transform: translateX(calc((var(--dialog-width-right) + var(--body-margin)) * -1));
+}
+
+::ng-deep.body--has-dialog-right .map-controls-right--on-bottom {
+  transform: none;
+}
+
+@media screen and (max-width: 725px) {
+  ::ng-deep.body--has-dialog-left .map-controls-left {
+    transform: none;
+  }
+  ::ng-deep.body--has-dialog-right .map-controls-right {
+    transform: none;
+  }
+}
+
+@media screen and (max-width: 475px) {
+  .map-controls-right:not(.map-controls-right--on-bottom) {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+  .map-controls-right tm-background-layer-toggle {
+    margin-right: 0;
+    margin-bottom: 9px;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .map-controls-right {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+  .map-controls-right--on-bottom {
+    margin-bottom: 40px;
+  }
+}

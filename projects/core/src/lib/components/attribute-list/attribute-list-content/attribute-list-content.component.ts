@@ -11,9 +11,8 @@ import {
 } from '../state/attribute-list.selectors';
 import { updateRowSelected, updateSort } from '../state/attribute-list.actions';
 import { AttributeListStateService } from '../services/attribute-list-state.service';
-import { FeatureAttributeTypeEnum } from '@tailormap-viewer/api';
+import { BaseComponentTypeEnum, FeatureAttributeTypeEnum } from '@tailormap-viewer/api';
 import { SimpleAttributeFilterService } from '../../../filter/services/simple-attribute-filter.service';
-import { ATTRIBUTE_LIST_ID } from '../attribute-list-identifier';
 import { AttributeListFilterComponent, FilterDialogData } from '../attribute-list-filter/attribute-list-filter.component';
 import { MatDialog } from '@angular/material/dialog';
 import { AttributeFilterModel } from '../../../filter/models/attribute-filter.model';
@@ -55,7 +54,7 @@ export class AttributeListContentComponent implements OnInit {
         if (!tab || !tab.layerId) {
           return of([]);
         }
-        return this.simpleAttributeFilterService.getFilters$(ATTRIBUTE_LIST_ID, tab.layerId);
+        return this.simpleAttributeFilterService.getFilters$(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerId);
       }));
     this.selectedRowId$ = this.store$.select(selectSelectedRowIdForSelectedTab);
   }
@@ -93,8 +92,8 @@ export class AttributeListContentComponent implements OnInit {
           }
           const layerId = selectedTab.layerId;
           return forkJoin([
-            this.simpleAttributeFilterService.getFilterForAttribute$(ATTRIBUTE_LIST_ID, layerId, $event.columnId),
-            this.simpleAttributeFilterService.getFiltersExcludingAttribute$(ATTRIBUTE_LIST_ID, layerId, $event.columnId),
+            this.simpleAttributeFilterService.getFilterForAttribute$(BaseComponentTypeEnum.ATTRIBUTE_LIST, layerId, $event.columnId),
+            this.simpleAttributeFilterService.getFiltersExcludingAttribute$(BaseComponentTypeEnum.ATTRIBUTE_LIST, layerId, $event.columnId),
             of(layerId),
             of(applicationId),
           ]);

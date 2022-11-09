@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { MenubarService } from '../../menubar';
-import { PRINT_ID } from '../print-identifier';
+import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-print-menu-button',
@@ -19,11 +19,11 @@ export class PrintMenuButtonComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
-    this.visible$ = this.menubarService.isComponentVisible$(PRINT_ID);
+    this.visible$ = this.menubarService.isComponentVisible$(BaseComponentTypeEnum.PRINT);
   }
 
   public togglePrint() {
-    this.menubarService.toggleActiveComponent(PRINT_ID, this.panelTitle);
+    this.menubarService.toggleActiveComponent(BaseComponentTypeEnum.PRINT, this.panelTitle);
   }
 
 }

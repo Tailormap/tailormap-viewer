@@ -5,7 +5,6 @@ import {
 } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { MenubarService } from '../../menubar';
-import { PRINT_ID } from '../print-identifier';
 import { PrintMenuButtonComponent } from '../print-menu-button/print-menu-button.component';
 import { ExtentHelper, LayerModel, MapService, OlLayerFilter, OpenlayersExtent } from '@tailormap-viewer/map';
 import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
@@ -19,6 +18,7 @@ import { selectHasDrawingFeatures } from '../../drawing/state/drawing.selectors'
 import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layout.service';
 import { ExtendedAppLayerModel } from '../../../map/models';
 import { MapPdfService } from '../../../services/map-pdf/map-pdf.service';
+import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 
 // Draw the vector layer with the print extent on the exported map image
 const DEBUG_PRINT_EXTENT = false;
@@ -95,7 +95,7 @@ export class PrintComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.visible$ = this.menubarService.isComponentVisible$(PRINT_ID);
+    this.visible$ = this.menubarService.isComponentVisible$(BaseComponentTypeEnum.PRINT);
     this.menubarService.registerComponent(PrintMenuButtonComponent);
 
     this.printMapExtent$ = combineLatest([

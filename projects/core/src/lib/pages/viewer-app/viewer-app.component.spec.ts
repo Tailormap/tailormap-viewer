@@ -40,7 +40,7 @@ describe('ViewerAppComponent', () => {
 
   test('should render', async () => {
     const { container, store } = await setup();
-    expect(container.querySelector('tm-map')).toBeInTheDocument();
+    expect(container.querySelector('tm-base-layout')).toBeInTheDocument();
     expect(await firstValueFrom(store.scannedActions$)).toEqual({ type: '[Core] Load Application', id: 1 });
   });
 

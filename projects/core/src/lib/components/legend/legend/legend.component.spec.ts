@@ -6,11 +6,10 @@ import { MenubarService } from '../../menubar';
 import { Observable, of } from 'rxjs';
 import { provideMockStore } from '@ngrx/store/testing';
 import { selectOrderedVisibleLayersWithServices } from '../../../map/state/map.selectors';
-import { getAppLayerModel, getServiceModel } from '@tailormap-viewer/api';
+import { BaseComponentTypeEnum, getAppLayerModel, getServiceModel } from '@tailormap-viewer/api';
 import { MapViewDetailsModel, MapService } from '@tailormap-viewer/map';
 import { TestBed } from '@angular/core/testing';
 import { LegendLayerComponent } from '../legend-layer/legend-layer.component';
-import { LEGEND_ID } from '../legend-identifier';
 
 const getMapService = () => {
   return {
@@ -65,7 +64,7 @@ describe('LegendComponent', () => {
         getMockStore(),
       ],
     });
-    TestBed.inject(MenubarService).toggleActiveComponent(LEGEND_ID, 'Legend');
+    TestBed.inject(MenubarService).toggleActiveComponent(BaseComponentTypeEnum.LEGEND, 'Legend');
     expect(await screen.findByText('Layer 1')).toBeInTheDocument();
     expect(await screen.findByText('Layer 2')).toBeInTheDocument();
     expect(await screen.findByText('Layer 3')).toBeInTheDocument();
