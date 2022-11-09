@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { MenubarService } from '../../menubar';
-import { LEGEND_ID } from '../legend-identifier';
+import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-legend-menu-button',
@@ -18,11 +18,11 @@ export class LegendMenuButtonComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
-    this.visible$ = this.menubarService.isComponentVisible$(LEGEND_ID);
+    this.visible$ = this.menubarService.isComponentVisible$(BaseComponentTypeEnum.LEGEND);
   }
 
   public toggleLegend() {
-    this.menubarService.toggleActiveComponent(LEGEND_ID, this.panelTitle);
+    this.menubarService.toggleActiveComponent(BaseComponentTypeEnum.LEGEND, this.panelTitle);
   }
 
 }

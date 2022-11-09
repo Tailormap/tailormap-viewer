@@ -1,11 +1,10 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { map, Observable } from 'rxjs';
-import { FeatureAttributeTypeEnum, UniqueValuesService } from '@tailormap-viewer/api';
+import { BaseComponentTypeEnum, FeatureAttributeTypeEnum, UniqueValuesService } from '@tailormap-viewer/api';
 import { AttributeFilterModel } from '../../../filter/models/attribute-filter.model';
 import { FilterConditionEnum } from '../../../filter/models/filter-condition.enum';
 import { SimpleAttributeFilterService } from '../../../filter/services/simple-attribute-filter.service';
-import { ATTRIBUTE_LIST_ID } from '../attribute-list-identifier';
 import { AttributeFilterHelper } from '../../../filter/helpers/attribute-filter.helper';
 
 export interface FilterDialogData {
@@ -59,7 +58,7 @@ export class AttributeListFilterComponent implements OnInit {
     if (!AttributeFilterHelper.isValidFilter(filter)) {
       return;
     }
-    this.simpleAttributeFilterService.setFilter(ATTRIBUTE_LIST_ID, this.data.layerId, filter);
+    this.simpleAttributeFilterService.setFilter(BaseComponentTypeEnum.ATTRIBUTE_LIST, this.data.layerId, filter);
     this.dialogRef.close();
   }
 
@@ -68,7 +67,7 @@ export class AttributeListFilterComponent implements OnInit {
   }
 
   public onClear() {
-    this.simpleAttributeFilterService.removeFilter(ATTRIBUTE_LIST_ID, this.data.layerId, this.data.columnName);
+    this.simpleAttributeFilterService.removeFilter(BaseComponentTypeEnum.ATTRIBUTE_LIST, this.data.layerId, this.data.columnName);
     this.dialogRef.close();
   }
 

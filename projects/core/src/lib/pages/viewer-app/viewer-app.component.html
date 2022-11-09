@@ -11,41 +11,5 @@
 </div>
 
 <div class="viewer" *ngIf="isLoaded" aria-label="Tailormap viewer page">
-  <div class="menubar">
-    <tm-menubar></tm-menubar>
-  </div>
-  <div class="content">
-    <div class="center">
-      <div class="left">
-        <tm-menubar-panel>
-          <tm-toc></tm-toc>
-          <tm-legend></tm-legend>
-          <tm-drawing></tm-drawing>
-          <tm-print></tm-print>
-        </tm-menubar-panel>
-      </div>
-      <div class="map">
-        <tm-feature-info></tm-feature-info>
-        <tm-map></tm-map>
-        <tm-map-controls></tm-map-controls>
-        <tm-attribute-list></tm-attribute-list>
-        <div class="map-controls-left">
-          <tm-measure></tm-measure>
-          <tm-clicked-coordinates></tm-clicked-coordinates>
-          <tm-simple-search></tm-simple-search>
-        </div>
-        <div class="map-controls-right">
-          <tm-background-layer-toggle></tm-background-layer-toggle>
-          <tm-zoom-buttons></tm-zoom-buttons>
-        </div>
-        <div class="map-controls-left map-controls-left--on-bottom">
-          <tm-scale-bar></tm-scale-bar>
-        </div>
-        <div class="map-controls-right map-controls-right--on-bottom">
-          <tm-mouse-coordinates></tm-mouse-coordinates>
-        </div>
-      </div>
-    </div>
-    <div class="bottom"></div>
-  </div>
+  <tm-base-layout></tm-base-layout>
 </div>

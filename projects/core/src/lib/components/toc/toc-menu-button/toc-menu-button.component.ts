@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { MenubarService } from '../../menubar';
-import { TOC_ID } from '../toc-identifier';
+import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 
 
 @Component({
@@ -19,11 +19,11 @@ export class TocMenuButtonComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
-    this.visible$ = this.menubarService.isComponentVisible$(TOC_ID);
+    this.visible$ = this.menubarService.isComponentVisible$(BaseComponentTypeEnum.TOC);
   }
 
   public toggleToc() {
-    this.menubarService.toggleActiveComponent(TOC_ID, this.panelLabel);
+    this.menubarService.toggleActiveComponent(BaseComponentTypeEnum.TOC, this.panelLabel);
   }
 
 }

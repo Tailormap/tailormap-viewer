@@ -10,7 +10,7 @@ import { AttributeListStateService } from '../services/attribute-list-state.serv
 import { AttributeListPagingDialogComponent } from '../attribute-list-paging-dialog/attribute-list-paging-dialog.component';
 import { AttributeListPagingDataType } from '../models/attribute-list-paging-data.type';
 import { SimpleAttributeFilterService } from '../../../filter/services/simple-attribute-filter.service';
-import { ATTRIBUTE_LIST_ID } from '../attribute-list-identifier';
+import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-attribute-list-tab-toolbar',
@@ -44,7 +44,7 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
           if (!tab?.layerId) {
             return of(false);
           }
-          return this.simpleAttributeFilterService.hasFilter$(ATTRIBUTE_LIST_ID, tab.layerId);
+          return this.simpleAttributeFilterService.hasFilter$(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerId);
         }),
       );
   }
@@ -90,7 +90,7 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
         if (!tab?.layerId) {
           return;
         }
-        return this.simpleAttributeFilterService.removeFiltersForLayer(ATTRIBUTE_LIST_ID, tab.layerId);
+        return this.simpleAttributeFilterService.removeFiltersForLayer(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerId);
       });
   }
 

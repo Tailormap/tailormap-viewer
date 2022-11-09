@@ -5,9 +5,9 @@ import { MenubarService } from '../../menubar';
 import { LegendMenuButtonComponent } from '../legend-menu-button/legend-menu-button.component';
 import { Store } from '@ngrx/store';
 import { selectOrderedVisibleLayersWithLegend } from '../../../map/state/map.selectors';
-import { LEGEND_ID } from '../legend-identifier';
 import { MapService } from '@tailormap-viewer/map';
 import { LegendInfoModel } from '../models/legend-info.model';
+import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-legend',
@@ -27,7 +27,7 @@ export class LegendComponent implements OnInit {
     private menubarService: MenubarService,
     private mapService: MapService,
   ) {
-    this.visible$ = this.menubarService.isComponentVisible$(LEGEND_ID);
+    this.visible$ = this.menubarService.isComponentVisible$(BaseComponentTypeEnum.LEGEND);
     this.layers$ = this.visible$.pipe(
       switchMap(visible => {
         return !visible

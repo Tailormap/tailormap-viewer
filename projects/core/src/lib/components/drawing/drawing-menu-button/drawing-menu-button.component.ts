@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { MenubarService } from '../../menubar';
-import { DRAWING_ID } from '../drawing-identifier';
+import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-drawing-menu-button',
@@ -19,11 +19,11 @@ export class DrawingMenuButtonComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
-    this.visible$ = this.menubarService.isComponentVisible$(DRAWING_ID);
+    this.visible$ = this.menubarService.isComponentVisible$(BaseComponentTypeEnum.DRAWING);
   }
 
   public toggleDrawingPanel() {
-    this.menubarService.toggleActiveComponent(DRAWING_ID, this.panelTitle);
+    this.menubarService.toggleActiveComponent(BaseComponentTypeEnum.DRAWING, this.panelTitle);
   }
 
 }

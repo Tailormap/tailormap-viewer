@@ -7,8 +7,7 @@ import { TocMenuButtonComponent } from '../toc-menu-button/toc-menu-button.compo
 import { Store } from '@ngrx/store';
 import { setLayerVisibility, setSelectedLayerId, toggleLevelExpansion } from '../../../map/state/map.actions';
 import { selectLayerTree, selectSelectedNode } from '../../../map/state/map.selectors';
-import { AppLayerModel } from '@tailormap-viewer/api';
-import { TOC_ID } from '../toc-identifier';
+import { AppLayerModel, BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { MapService } from '@tailormap-viewer/map';
 
 interface AppLayerTreeModel extends BaseTreeModel {
@@ -36,7 +35,7 @@ export class TocComponent implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit(): void {
-    this.visible$ = this.menubarService.isComponentVisible$(TOC_ID);
+    this.visible$ = this.menubarService.isComponentVisible$(BaseComponentTypeEnum.TOC);
     this.mapService.getMapViewDetails$()
       .pipe(takeUntil(this.destroyed), map(resolution => resolution.scale))
       .subscribe(scale => this.scale = scale);

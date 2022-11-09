@@ -9,10 +9,10 @@ import { DrawingHelper } from '../helpers/drawing.helper';
 import { MenubarService } from '../../menubar';
 import { DrawingMenuButtonComponent } from '../drawing-menu-button/drawing-menu-button.component';
 import { DrawingFeatureModel, DrawingFeatureModelAttributes, DrawingFeatureStyleModel } from '../models/drawing-feature.model';
-import { DRAWING_ID } from '../drawing-identifier';
 import { removeAllDrawingFeatures, removeDrawingFeature, updateDrawingFeatureStyle } from '../state/drawing.actions';
 import { DrawingFeatureTypeEnum } from '../models/drawing-feature-type.enum';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
+import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-drawing',
@@ -39,7 +39,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
   ) { }
 
   public ngOnInit() {
-    this.active$ = this.menubarService.isComponentVisible$(DRAWING_ID);
+    this.active$ = this.menubarService.isComponentVisible$(BaseComponentTypeEnum.DRAWING);
     this.hasFeatures$ = this.store$.select(selectHasDrawingFeatures);
 
     this.mapService.renderFeatures$<DrawingFeatureModelAttributes>(
