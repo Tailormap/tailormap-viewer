@@ -1,4 +1,4 @@
-import { AppResponseModel, ComponentModel, getAppResponseData, getComponentModel, TailormapApiV1ServiceModel } from '@tailormap-viewer/api';
+import { AppResponseModel, getAppResponseData, getComponentModel, TailormapApiV1ServiceModel } from '@tailormap-viewer/api';
 import { Observable, of } from 'rxjs';
 import { LoadApplicationService } from './load-application.service';
 
@@ -25,7 +25,7 @@ describe('LoadApplicationService', () => {
       expect(result.success).toEqual(true);
       expect(result.error).toBeUndefined();
       expect(result.result?.application.id).toEqual(1);
-      expect(result.result?.components.length).toEqual(1);
+      expect(result.result?.application.components.length).toEqual(0);
       done();
     });
   });
@@ -37,18 +37,6 @@ describe('LoadApplicationService', () => {
     service.loadApplication$().subscribe(result => {
       expect(result.success).toEqual(false);
       expect(result.error).toEqual('Could not find or load the requested application');
-      expect(result.result).toBeUndefined();
-      done();
-    });
-  });
-
-  test('test load components error', done => {
-    const service = new LoadApplicationService(getMockApiService({
-      getComponents$: () => getErrorObservable<ComponentModel[]>(),
-    }));
-    service.loadApplication$().subscribe(result => {
-      expect(result.success).toEqual(false);
-      expect(result.error).toEqual('Could not load list of components');
       expect(result.result).toBeUndefined();
       done();
     });

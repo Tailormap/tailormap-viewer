@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { AppResponseModel, ComponentModel, LayerDetailsModel, MapResponseModel, VersionResponseModel } from '../models';
+import { AppResponseModel, LayerDetailsModel, MapResponseModel, VersionResponseModel } from '../models';
 import { delay, Observable, of } from 'rxjs';
 import { TailormapApiV1ServiceModel } from './tailormap-api-v1.service.model';
 import { FeaturesResponseModel } from '../models/features-response.model';
 import { UniqueValuesResponseModel } from '../models/unique-values-response.model';
 import {
-  getAppResponseData, getComponentModel, getFeaturesResponseModel, getLayerDetailsModel, getMapResponseData,
+  getAppResponseData, getFeaturesResponseModel, getLayerDetailsModel, getMapResponseData,
   getUniqueValuesResponseModel,
   getVersionResponseModel,
 } from '../mock-data';
@@ -23,10 +23,6 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
 
   public getMap$(_applicationId: number): Observable<MapResponseModel> {
     return of(getMapResponseData());
-  }
-
-  public getComponents$(_applicationId: number): Observable<ComponentModel[]> {
-    return of([getComponentModel()]);
   }
 
   public getDescribeLayer$(_params: {

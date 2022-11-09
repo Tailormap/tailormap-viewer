@@ -46,12 +46,6 @@ describe('TailormapApiV1Service', () => {
     req.flush(null);
   });
 
-  test('queries API for getComponents$', () => {
-    service.getComponents$(1).subscribe();
-    const req = httpController.expectOne({ url: '/api/app/1/components', method: 'GET' });
-    req.flush(null);
-  });
-
   test('queries API for getDescribeLayer$', () => {
     service.getDescribeLayer$({ applicationId: 1, layerId: 1 }).subscribe();
     const req = httpController.expectOne({ url: '/api/app/1/layer/1/describe', method: 'GET' });

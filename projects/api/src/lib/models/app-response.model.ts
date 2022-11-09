@@ -1,4 +1,5 @@
 import { Language } from './language.enum';
+import { ComponentModel } from './component.model';
 
 export interface AppResponseModel {
     id: number;
@@ -7,4 +8,5 @@ export interface AppResponseModel {
     title: string;
     lang: Language;
     styling?: object;
+    components: ComponentModel[];
 }
