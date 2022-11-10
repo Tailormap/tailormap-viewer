@@ -5,7 +5,7 @@ The Angular frontend for Tailormap.
 ## Development requirements
 
 The following are required for successfully building Tailormap viewer:
-- NodeJS 16.18 (https://nodejs.org/en/)
+- NodeJS 18.x (https://nodejs.org/en/); the current LTS
 - npm 8 (included with NodeJS)
 - Docker (https://docs.docker.com/engine/install/) including Buildx and Compose v2 (https://docs.docker.com/compose/install/)
 
