@@ -1,5 +1,5 @@
 # Note when updating this version also update the version in the workflow files
-FROM --platform=$BUILDPLATFORM node:16.18.0 AS builder
+FROM --platform=$BUILDPLATFORM node:18.12.1 AS builder
 
 ARG BASE_HREF=/
 
