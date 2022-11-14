@@ -177,4 +177,4 @@ jobs:
 
       - uses: actions/dependency-review-action@v3
         with:
-          deny-licenses: GPL-1+, AGPL-3.0+
+          deny-licenses: GPL-2.0+, AGPL-3.0+
