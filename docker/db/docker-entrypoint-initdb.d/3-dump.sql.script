@@ -2310,31 +2310,31 @@ COPY public.attribute_descriptor (id, name_alias, name, type) FROM stdin;
 1748	\N	geom	polygon
 1749	\N	geom	point
 1750	\N	geom	point
-1751	\N	geom
+1751	\N	geom	\N
 1752	\N	plaatsingspunt	point
 1753	\N	geom_kruinlijn	linestring
 1754	\N	geom	polygon
 1755	\N	geom	polygon
 1756	\N	geom_kruinlijn	linestring
 1757	\N	geom	polygon
-1758	\N	geom
+1758	\N	geom	\N
 1759	\N	plaatsingspunt	point
 1760	\N	geom	polygon
 1761	\N	geom	polygon
-1762	\N	geom
+1762	\N	geom	\N
 1763	\N	geom	point
 1764	\N	geom	multipolygon
 1765	\N	geom	point
-1766	\N	geom
+1766	\N	geom	\N
 1767	\N	geom	point
 1768	\N	geom	linestring
 1769	\N	geom	point
-1770	\N	geom
+1770	\N	geom	\N
 1771	\N	geom	polygon
 1772	\N	geom	point
 1773	\N	geom_kruinlijn	linestring
 1774	\N	geom	polygon
-1775	\N	geom
+1775	\N	geom	\N
 1776	\N	f_table_schema	string
 1777	\N	f_table_name	string
 1778	\N	f_geometry_column	string
