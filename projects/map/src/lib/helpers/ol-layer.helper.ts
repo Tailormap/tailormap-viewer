@@ -122,6 +122,14 @@ export class OlLayerHelper {
       }
     }
 
+    // Replace url by url from layer object, which may refer to the proxy endpoint of tailormap-api. This only works with KVP
+    // encoding for the moment
+    if (options.requestEncoding === 'KVP') {
+      delete options.urls;
+      delete options.url;
+      options.url = layer.url;
+    }
+
     const source = new WMTS(options);
     return new TileLayer({
       visible: layer.visible,
