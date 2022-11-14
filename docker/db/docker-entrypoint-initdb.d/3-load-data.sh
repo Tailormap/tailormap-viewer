@@ -24,5 +24,4 @@ if [ "$CONFIG_DB_INIT_EMPTY" = true ]
 fi
 
 
-
-psql --username postgres --dbname tailormap -c "delete from user_ips; delete from user_details; delete from user_groups; delete from user_;"
+psql --username postgres --dbname tailormap -c "delete from user_ips; delete from user_details; delete from user_groups where group_ = 'Admin' or username = 'admin'; delete from user_ where username = 'admin';"
