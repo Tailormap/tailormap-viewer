@@ -108,7 +108,7 @@ const onUpdateFilter = (
   });
 };
 
-const onTggleFilterDisabled = (
+const onToggleFilterDisabled = (
   state: FilterState,
   payload: ReturnType<typeof FilterActions.toggleFilterDisabled>,
 ): FilterState => {
@@ -128,6 +128,6 @@ const filterReducerImpl = createReducer<FilterState>(
   on(FilterActions.addFilter, onAddFilter),
   on(FilterActions.removeFilter, onRemoveFilter),
   on(FilterActions.updateFilter, onUpdateFilter),
-  on(FilterActions.toggleFilterDisabled, onTggleFilterDisabled),
+  on(FilterActions.toggleFilterDisabled, onToggleFilterDisabled),
 );
 export const filterReducer = (state: FilterState | undefined, action: Action) => filterReducerImpl(state, action);
