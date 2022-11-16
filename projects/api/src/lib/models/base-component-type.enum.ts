@@ -12,4 +12,5 @@ export enum BaseComponentTypeEnum {
   SCALE_BAR = 'SCALE_BAR',
   SIMPLE_SEARCH = 'SIMPLE_SEARCH',
   ZOOM = 'ZOOM',
+  FILTER = 'FILTER',
 }

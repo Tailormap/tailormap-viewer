@@ -29,7 +29,7 @@ const onAddFilterGroup = (
   ...state,
   filterGroups: [
     ...state.filterGroups,
-    payload,
+    payload.group,
   ],
 });
 
@@ -108,6 +108,18 @@ const onUpdateFilter = (
   });
 };
 
+const onToggleFilterDisabled = (
+  state: FilterState,
+  payload: ReturnType<typeof FilterActions.toggleFilterDisabled>,
+): FilterState => {
+  return updateFilterGroup(state, payload.filterGroupId, fg => {
+    return {
+      ...fg,
+      disabled: !fg.disabled,
+    };
+  });
+};
+
 const filterReducerImpl = createReducer<FilterState>(
   initialFilterState,
   on(FilterActions.addFilterGroup, onAddFilterGroup),
@@ -116,5 +128,6 @@ const filterReducerImpl = createReducer<FilterState>(
   on(FilterActions.addFilter, onAddFilter),
   on(FilterActions.removeFilter, onRemoveFilter),
   on(FilterActions.updateFilter, onUpdateFilter),
+  on(FilterActions.toggleFilterDisabled, onToggleFilterDisabled),
 );
 export const filterReducer = (state: FilterState | undefined, action: Action) => filterReducerImpl(state, action);

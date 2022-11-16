@@ -1,0 +1,4 @@
+<button mat-flat-button color="primary" [matMenuTriggerFor]="menu" i18n>Add filter</button>
+<mat-menu #menu="matMenu">
+  <button mat-menu-item i18n (click)="createFilter(filterTypes.SPATIAL)">Spatial</button>
+</mat-menu>

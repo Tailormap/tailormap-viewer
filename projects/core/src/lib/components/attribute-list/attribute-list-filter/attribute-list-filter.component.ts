@@ -6,6 +6,7 @@ import { AttributeFilterModel } from '../../../filter/models/attribute-filter.mo
 import { FilterConditionEnum } from '../../../filter/models/filter-condition.enum';
 import { SimpleAttributeFilterService } from '../../../filter/services/simple-attribute-filter.service';
 import { AttributeFilterHelper } from '../../../filter/helpers/attribute-filter.helper';
+import { FilterTypeEnum } from '../../../filter/models/filter-type.enum';
 
 export interface FilterDialogData {
   columnName: string;
@@ -106,8 +107,12 @@ export class AttributeListFilterComponent implements OnInit {
     return AttributeFilterHelper.isValidFilter(this.getFilter());
   }
 
-  private getFilter(): Partial<AttributeFilterModel> {
+  private getFilter(): Omit<AttributeFilterModel, 'id'> | null {
+    if (!this.updatedFilter.condition) {
+      return null;
+    }
     return {
+      type: FilterTypeEnum.ATTRIBUTE,
       condition: this.updatedFilter.condition,
       value: typeof this.updatedFilter.value === 'undefined' ? [] : this.updatedFilter.value,
       attribute: this.data.columnName,

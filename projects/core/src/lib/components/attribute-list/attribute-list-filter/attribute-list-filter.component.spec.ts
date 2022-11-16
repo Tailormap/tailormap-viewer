@@ -7,6 +7,7 @@ import { SharedModule } from '@tailormap-viewer/shared';
 import { AttributeFilterComponent } from '../../../filter/attribute-filter/attribute-filter.component';
 import userEvent from '@testing-library/user-event';
 import { of } from 'rxjs';
+import { FilterTypeEnum } from '../../../filter/models/filter-type.enum';
 
 describe('AttributeListFilterComponent', () => {
 
@@ -46,6 +47,7 @@ describe('AttributeListFilterComponent', () => {
       caseSensitive: false,
       condition: 'EQUALS',
       invertCondition: false,
+      type: FilterTypeEnum.ATTRIBUTE,
       value: ['test'],
     });
     expect(dialogRef.close).toHaveBeenCalled();

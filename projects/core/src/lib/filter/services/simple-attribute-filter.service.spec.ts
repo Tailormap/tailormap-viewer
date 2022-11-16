@@ -6,6 +6,8 @@ import { filterStateKey } from '../state/filter.state';
 import { selectFilterGroups } from '../state/filter.selectors';
 import { Store, StoreModule } from '@ngrx/store';
 import { filterReducer } from '../state/filter.reducer';
+import { AttributeFilterModel } from '../models/attribute-filter.model';
+import { FilterTypeEnum } from '../models/filter-type.enum';
 
 let idCount = 0;
 jest.mock('nanoid', () => ({
@@ -27,8 +29,10 @@ const createService = () => {
   };
 };
 
-const createFilter = (attribute = 'attribute', value = 'value') => ({
+const createFilter = (attribute = 'attribute', value = 'value'): AttributeFilterModel => ({
   attribute,
+  id: '',
+  type: FilterTypeEnum.ATTRIBUTE,
   value: [value],
   attributeType: FeatureAttributeTypeEnum.STRING,
   caseSensitive: false,
@@ -45,7 +49,7 @@ describe('SimpleAttributeFilterService', () => {
       expect(filterGroups.length).toEqual(1);
       expect(filterGroups[0].id).toEqual('id-1');
       expect(filterGroups[0].filters.length).toEqual(1);
-      expect(filterGroups[0].filters[0].attribute).toEqual('attribute');
+      expect((filterGroups[0].filters[0] as AttributeFilterModel).attribute).toEqual('attribute');
       done();
     });
   });
@@ -59,10 +63,11 @@ describe('SimpleAttributeFilterService', () => {
       expect(filterGroups.length).toEqual(1);
       expect(filterGroups[0].id).toEqual('id-1');
       expect(filterGroups[0].filters.length).toEqual(2);
-      expect(filterGroups[0].filters[0].attribute).toEqual('attribute');
-      expect(filterGroups[0].filters[0].value).toEqual(['other_value']);
-      expect(filterGroups[0].filters[1].attribute).toEqual('attribute2');
-      expect(filterGroups[0].filters[1].value).toEqual(['value']);
+      const filters = filterGroups[0].filters as AttributeFilterModel[];
+      expect(filters[0].attribute).toEqual('attribute');
+      expect(filters[0].value).toEqual(['other_value']);
+      expect(filters[1].attribute).toEqual('attribute2');
+      expect(filters[1].value).toEqual(['value']);
       done();
     });
   });
@@ -90,7 +95,7 @@ describe('SimpleAttributeFilterService', () => {
       expect(filterGroups.length).toEqual(1);
       expect(filterGroups[0].id).toEqual('id-1');
       expect(filterGroups[0].filters.length).toEqual(1);
-      expect(filterGroups[0].filters[0].attribute).toEqual('attribute2');
+      expect((filterGroups[0].filters[0] as AttributeFilterModel).attribute).toEqual('attribute2');
       done();
     });
   });
@@ -103,8 +108,8 @@ describe('SimpleAttributeFilterService', () => {
     service.removeFiltersForLayer('source', 2);
     store.select(selectFilterGroups).subscribe(filterGroups => {
       expect(filterGroups.length).toEqual(2);
-      expect(filterGroups[0].layerId).toEqual(1);
-      expect(filterGroups[1].layerId).toEqual(3);
+      expect(filterGroups[0].layerIds).toEqual([1]);
+      expect(filterGroups[1].layerIds).toEqual([3]);
       done();
     });
   });

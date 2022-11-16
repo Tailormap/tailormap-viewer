@@ -17,7 +17,7 @@
   </button>
 </div>
 
-<mat-menu #dropdownMenu="matMenu" class="split-button-panel">
+<mat-menu #dropdownMenu="matMenu">
   <button mat-menu-item
           *ngFor="let option of optionsList"
           (click)="selectOption(option.id)">

@@ -5,7 +5,7 @@ import { debounceTime, take, takeUntil, tap } from 'rxjs/operators';
 import { DateTime } from 'luxon';
 import { FeatureAttributeTypeEnum } from '@tailormap-viewer/api';
 import { FilterConditionEnum } from '../models/filter-condition.enum';
-import { AttributeFilterTypeModel } from '../models/attribute-filter-type.model';
+import { FilterConditionModel } from '../models/filter-condition.model';
 import { AttributeFilterHelper } from '../helpers/attribute-filter.helper';
 
 interface InputFilterData {
@@ -119,7 +119,7 @@ export class AttributeFilterComponent implements OnInit, OnDestroy {
 
   private destroyed = new Subject();
 
-  public filteredConditions: AttributeFilterTypeModel[] = [];
+  public filteredConditions: FilterConditionModel[] = [];
 
   private formValues: FilterData = {};
   public trackByIndex = (idx: number) => idx;

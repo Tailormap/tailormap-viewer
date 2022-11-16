@@ -2,36 +2,23 @@ import { FilterGroupModel } from '../models/filter-group.model';
 import { FeatureAttributeTypeEnum } from '@tailormap-viewer/api';
 import { FilterConditionEnum } from '../models/filter-condition.enum';
 import { CqlFilterHelper } from './cql-filter.helper';
+import { AttributeFilterModel } from '../models/attribute-filter.model';
+import { FilterTypeEnum } from '../models/filter-type.enum';
+import { getFilterGroup } from './attribute-filter.helper.spec';
 
 describe('CQLFilterHelper', () => {
 
   test('should create a basic CQL filter', () => {
-    const filterGroup: FilterGroupModel = {
-      id: '1',
-      layerId: 1,
-      filters: [{
-        id: '1',
-        caseSensitive: false,
-        invertCondition: false,
-        attribute: 'attribute',
-        attributeType: FeatureAttributeTypeEnum.STRING,
-        condition: FilterConditionEnum.STRING_LIKE_KEY,
-        value: ['value'],
-      }],
-      operator: 'AND',
-      source: 'SOME_COMPONENT',
-    };
+    const filterGroup = getFilterGroup();
     const filters = CqlFilterHelper.getFilters([filterGroup]);
     expect(filters.get(1)).toBe('(attribute ILIKE \'%value%\')');
   });
 
   test('combine multiple filters into a CQL filter', () => {
-    const filterGroup: FilterGroupModel = {
-      id: '1',
-      layerId: 1,
-      filters: [{
+    const filterGroup = getFilterGroup([{
         id: '1',
         caseSensitive: false,
+        type: FilterTypeEnum.ATTRIBUTE,
         invertCondition: false,
         attribute: 'attribute',
         attributeType: FeatureAttributeTypeEnum.STRING,
@@ -40,6 +27,7 @@ describe('CQLFilterHelper', () => {
       }, {
         id: '2',
         caseSensitive: false,
+        type: FilterTypeEnum.ATTRIBUTE,
         invertCondition: false,
         attribute: 'attribute2',
         attributeType: FeatureAttributeTypeEnum.BOOLEAN,
@@ -48,6 +36,7 @@ describe('CQLFilterHelper', () => {
       }, {
         id: '3',
         caseSensitive: false,
+        type: FilterTypeEnum.ATTRIBUTE,
         invertCondition: false,
         attribute: 'attribute3',
         attributeType: FeatureAttributeTypeEnum.DATE,
@@ -56,26 +45,26 @@ describe('CQLFilterHelper', () => {
       }, {
         id: '4',
         caseSensitive: false,
+        type: FilterTypeEnum.ATTRIBUTE,
         invertCondition: true,
         attribute: 'attribute4',
         attributeType: FeatureAttributeTypeEnum.DATE,
         condition: FilterConditionEnum.NULL_KEY,
         value: [],
-      }],
-      operator: 'AND',
-      source: 'SOME_COMPONENT',
-    };
+      }]);
     const filters = CqlFilterHelper.getFilters([filterGroup]);
     expect(filters.get(1)).toBe('((attribute ILIKE \'%value%\') AND (attribute2 = true) AND (attribute3 = 2020-01-01) AND (attribute4 IS NOT NULL))');
   });
 
   test('should create a CQL filter for a tree of filters', () => {
-    const filterGroups: FilterGroupModel[] = [{
+    const filterGroups: FilterGroupModel<AttributeFilterModel>[] = [{
       id: '1',
-      layerId: 1,
+      type: FilterTypeEnum.ATTRIBUTE,
+      layerIds: [1],
       filters: [{
         id: '1',
         caseSensitive: true,
+        type: FilterTypeEnum.ATTRIBUTE,
         invertCondition: false,
         attribute: 'attribute',
         attributeType: FeatureAttributeTypeEnum.STRING,
@@ -86,10 +75,12 @@ describe('CQLFilterHelper', () => {
       source: 'SOME_COMPONENT',
     }, {
       id: '2',
-      layerId: 1,
+      type: FilterTypeEnum.ATTRIBUTE,
+      layerIds: [1],
       filters: [{
         id: '2',
         caseSensitive: false,
+        type: FilterTypeEnum.ATTRIBUTE,
         invertCondition: false,
         attribute: 'attribute2',
         attributeType: FeatureAttributeTypeEnum.INTEGER,
@@ -98,6 +89,7 @@ describe('CQLFilterHelper', () => {
       }, {
         id: '3',
         caseSensitive: false,
+        type: FilterTypeEnum.ATTRIBUTE,
         invertCondition: false,
         attribute: 'attribute3',
         attributeType: FeatureAttributeTypeEnum.INTEGER,
@@ -109,10 +101,12 @@ describe('CQLFilterHelper', () => {
       parentGroup: '1',
     }, {
       id: '3',
-      layerId: 1,
+      type: FilterTypeEnum.ATTRIBUTE,
+      layerIds: [1],
       filters: [{
         id: '4',
         caseSensitive: false,
+        type: FilterTypeEnum.ATTRIBUTE,
         invertCondition: false,
         attribute: 'attribute4',
         attributeType: FeatureAttributeTypeEnum.INTEGER,
@@ -124,10 +118,12 @@ describe('CQLFilterHelper', () => {
       parentGroup: '1',
     }, {
       id: '4',
-      layerId: 1,
+      type: FilterTypeEnum.ATTRIBUTE,
+      layerIds: [1],
       filters: [{
         id: '5',
         caseSensitive: false,
+        type: FilterTypeEnum.ATTRIBUTE,
         invertCondition: false,
         attribute: 'attribute5',
         attributeType: FeatureAttributeTypeEnum.STRING,

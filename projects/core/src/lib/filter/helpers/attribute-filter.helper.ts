@@ -1,6 +1,6 @@
 import { FilterConditionEnum } from '../models/filter-condition.enum';
 import { FeatureAttributeTypeEnum } from '@tailormap-viewer/api';
-import { AttributeFilterTypeModel } from '../models/attribute-filter-type.model';
+import { FilterConditionModel } from '../models/filter-condition.model';
 import { AttributeFilterModel } from '../models/attribute-filter.model';
 
 export class AttributeFilterHelper {
@@ -26,8 +26,8 @@ export class AttributeFilterHelper {
     FilterConditionEnum.DATE_BETWEEN_KEY,
   ]);
 
-  public static getConditionTypes(includeUniqueValues: boolean = false): AttributeFilterTypeModel[] {
-    const types: AttributeFilterTypeModel[] = [
+  public static getConditionTypes(includeUniqueValues: boolean = false): FilterConditionModel[] {
+    const types: FilterConditionModel[] = [
       {
         condition: FilterConditionEnum.NUMBER_EQUALS_KEY,
         label: $localize `Equals`,
@@ -142,8 +142,8 @@ export class AttributeFilterHelper {
     return types;
   }
 
-  public static isValidFilter(filter: Partial<AttributeFilterModel>): filter is AttributeFilterModel {
-    if (!filter.condition || !filter.attribute || !filter.attributeType) {
+  public static isValidFilter(filter: Partial<AttributeFilterModel> | null): filter is AttributeFilterModel {
+    if (!filter || !filter.condition || !filter.attribute || !filter.attributeType) {
       return false;
     }
     if (AttributeFilterHelper.filtersRequiringTwoValues.has(filter.condition)) {
