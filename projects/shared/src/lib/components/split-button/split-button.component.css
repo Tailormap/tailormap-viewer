@@ -7,21 +7,6 @@ mat-button-toggle-group {
   border-radius: 3px;
 }
 
-::ng-deep .split-button-panel {
-  min-height: 54px;
-}
-
-::ng-deep .split-button-panel .mat-menu-item mat-icon {
-  width: 16px;
-  height: 16px;
-  margin-right: 2px;
-}
-
-.mat-menu-item {
-  height: 38px;
-  line-height: 38px;
-}
-
 mat-button-toggle ::ng-deep .mat-button-toggle-label-content {
   line-height: 38px;
 }

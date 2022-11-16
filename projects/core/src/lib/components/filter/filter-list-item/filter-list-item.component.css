@@ -1,0 +1,12 @@
+.spacer {
+  flex: 1 1 auto;
+}
+
+mat-card-title {
+  font-size: 14px;
+}
+
+mat-checkbox {
+  margin-left: 8px;
+  align-self: center;
+}

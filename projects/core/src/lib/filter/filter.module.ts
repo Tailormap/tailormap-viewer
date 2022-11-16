@@ -5,12 +5,14 @@ import { filterStateKey } from './state/filter.state';
 import { filterReducer } from './state/filter.reducer';
 import { AttributeFilterComponent } from './attribute-filter/attribute-filter.component';
 import { SharedModule } from '@tailormap-viewer/shared';
+import { FilterDescriptionComponent } from './filter-description/filter-description.component';
 
 
 
 @NgModule({
   declarations: [
     AttributeFilterComponent,
+    FilterDescriptionComponent,
   ],
   imports: [
     CommonModule,
@@ -19,6 +21,7 @@ import { SharedModule } from '@tailormap-viewer/shared';
   ],
   exports: [
     AttributeFilterComponent,
+    FilterDescriptionComponent,
   ],
 })
 export class FilterModule { }

@@ -4,7 +4,6 @@ import { AppLayerModel, LayerTreeNodeModel, ServiceModel, ServiceProtocol } from
 import { ArrayHelper, TreeModel } from '@tailormap-viewer/shared';
 import { LayerTreeNodeHelper } from '../helpers/layer-tree-node.helper';
 import { ExtendedAppLayerModel, ExtendedLayerTreeNodeModel } from '../models';
-import { selectCQLFilters } from '../../filter/state/filter.selectors';
 
 const selectMapState = createFeatureSelector<MapState>(mapStateKey);
 
@@ -84,12 +83,10 @@ export const selectOrderedBackgroundLayerIds = createSelector(
 export const selectOrderedVisibleLayersWithServices = createSelector(
   selectVisibleLayersWithServices,
   selectOrderedLayerIds,
-  selectCQLFilters,
-  (layers, orderedLayerIds, filters) => {
+  (layers, orderedLayerIds) => {
     return layers
       .filter(l => orderedLayerIds.includes(l.id))
-      .sort(ArrayHelper.getArraySorter('id', orderedLayerIds))
-      .map(l => ({ ...l, filter: filters.get(l.id) }));
+      .sort(ArrayHelper.getArraySorter('id', orderedLayerIds));
   },
 );
 

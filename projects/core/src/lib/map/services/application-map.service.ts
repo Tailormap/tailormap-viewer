@@ -1,12 +1,13 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { LayerModel, LayerTypesEnum, MapService, OgcHelper, WMSLayerModel, WMTSLayerModel } from '@tailormap-viewer/map';
-import { concatMap, distinctUntilChanged, filter, forkJoin, map, Observable, of, Subject, take, takeUntil, tap } from 'rxjs';
+import { combineLatest, concatMap, distinctUntilChanged, filter, forkJoin, map, Observable, of, Subject, take, takeUntil, tap } from 'rxjs';
 import { ResolvedServerType, ServiceModel, ServiceProtocol } from '@tailormap-viewer/api';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { ArrayHelper } from '@tailormap-viewer/shared';
 import { selectMapOptions, selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersWithServices } from '../state/map.selectors';
 import { ExtendedAppLayerModel } from '../models';
+import { selectCQLFilters } from '../../filter/state/filter.selectors';
 
 @Injectable({
    providedIn: 'root',
@@ -51,14 +52,27 @@ export class ApplicationMapService implements OnDestroy {
         layerManager.setBackgroundLayers(layers.filter(isValidLayer));
       });
 
-    this.store$.select(selectOrderedVisibleLayersWithServices)
+    this.selectOrderedVisibleLayersWithFilters$()
       .pipe(
         takeUntil(this.destroyed),
         concatMap(layers => this.getLayersAndLayerManager$(layers)),
       )
       .subscribe(([ layers, layerManager ]) => {
+        console.log(layers);
         layerManager.setLayers(layers.filter(isValidLayer));
       });
+  }
+
+  public selectOrderedVisibleLayersWithFilters$() {
+    return combineLatest([
+      this.store$.select(selectOrderedVisibleLayersWithServices),
+      this.store$.select(selectCQLFilters),
+    ]).pipe(
+      map(([ layers, filters ]) => {
+        console.log(layers, filters);
+        return layers.map(l => ({ ...l, filter: filters.get(l.id) }));
+      }),
+    );
   }
 
   private getLayersAndLayerManager$(serviceLayers: ExtendedAppLayerModel[]) {

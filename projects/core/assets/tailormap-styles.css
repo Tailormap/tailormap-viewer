@@ -151,3 +151,18 @@ body {
   font-weight: bold;
   text-decoration: underline;
 }
+
+.mat-menu-panel[role="menu"] {
+  min-height: 54px;
+}
+
+.mat-menu-content .mat-menu-item {
+  height: 38px;
+  line-height: 38px;
+}
+
+.mat-menu-content .mat-menu-item mat-icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 2px;
+}

@@ -3,14 +3,20 @@ import { AttributeFilterModel } from '../models/attribute-filter.model';
 import { FilterConditionEnum } from '../models/filter-condition.enum';
 import { FeatureAttributeTypeEnum } from '@tailormap-viewer/api';
 import { TypesHelper } from '@tailormap-viewer/shared';
+import { FilterTypeHelper } from './filter-type.helper';
+import { SpatialFilterModel } from '../models/spatial-filter.model';
+import { BaseFilterModel } from '../models/base-filter.model';
 
 export class CqlFilterHelper {
 
   public static getFilters(filterGroups: FilterGroupModel[]): Map<number, string> {
     const cqlDict = new Map<number, string>();
-    const layerIds = new Set<number>(filterGroups.map(f => f.layerId));
+    const layerIdList = filterGroups.reduce<number[]>((ids, f) => {
+      return [ ...ids, ...f.layerIds ];
+    }, []);
+    const layerIds = new Set<number>(layerIdList);
     layerIds.forEach(layerId => {
-      const filtersForLayer = filterGroups.filter(f => f.layerId === layerId);
+      const filtersForLayer = filterGroups.filter(f => f.layerIds.includes(layerId));
       cqlDict.set(layerId, CqlFilterHelper.getFilterForLayer(filtersForLayer));
     });
     return cqlDict;
@@ -35,7 +41,17 @@ export class CqlFilterHelper {
     return CqlFilterHelper.wrapFilters(filter, filterGroup.operator);
   }
 
-  private static convertFilterToQuery(filter: AttributeFilterModel): string | null {
+  private static convertFilterToQuery(filter: BaseFilterModel): string | null {
+    if (FilterTypeHelper.isAttributeFilter(filter)) {
+      return CqlFilterHelper.convertAttributeFilterToQuery(filter);
+    }
+    if (FilterTypeHelper.isSpatialFilter(filter)) {
+      return CqlFilterHelper.convertSpatialFilterToQuery(filter);
+    }
+    return null;
+  }
+
+  private static convertAttributeFilterToQuery(filter: AttributeFilterModel): string | null {
     if (filter.condition === FilterConditionEnum.UNIQUE_VALUES_KEY) {
       if (filter.value.length === 0) {
         return null;
@@ -143,6 +159,10 @@ export class CqlFilterHelper {
 
   private static isDate(attributeType: FeatureAttributeTypeEnum) {
     return attributeType === FeatureAttributeTypeEnum.DATE || attributeType === FeatureAttributeTypeEnum.TIMESTAMP;
+  }
+
+  private static convertSpatialFilterToQuery(_filter: SpatialFilterModel): string | null {
+    return null;
   }
 
 }

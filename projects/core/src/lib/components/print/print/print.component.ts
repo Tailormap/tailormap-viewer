@@ -11,7 +11,7 @@ import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailorma
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ApplicationMapService } from '../../../map/services/application-map.service';
 import {
-  selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersWithLegend, selectOrderedVisibleLayersWithServices,
+  selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersWithLegend,
 } from '../../../map/state/map.selectors';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { selectHasDrawingFeatures } from '../../drawing/state/drawing.selectors';
@@ -87,7 +87,7 @@ export class PrintComponent implements OnInit, OnDestroy {
     @Inject(LOCALE_ID) private locale: string,
   ) {
     this.hasDrawing$ = this.store$.select(selectHasDrawingFeatures).pipe(takeUntil(this.destroyed));
-    this.visibleLayers$ = combineLatest([ this.store$.select(selectOrderedVisibleBackgroundLayers), this.store$.select(selectOrderedVisibleLayersWithServices) ]).pipe(
+    this.visibleLayers$ = combineLatest([ this.store$.select(selectOrderedVisibleBackgroundLayers), this.applicationMapService.selectOrderedVisibleLayersWithFilters$() ]).pipe(
       map(([ backgroundLayers, layers ]) => [ ...backgroundLayers,  ...layers ]),
       takeUntil(this.destroyed),
     );

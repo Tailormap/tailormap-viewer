@@ -1,0 +1,11 @@
+.filter-panel {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  padding-bottom: 14px;
+}
+
+tm-create-filter-button {
+  margin: 14px;
+}

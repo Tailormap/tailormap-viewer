@@ -30,7 +30,7 @@ describe('PrintComponent', () => {
       componentProviders: [
         { provide: MatSnackBar, useValue: null },
         { provide: MenubarService, useValue: menubarServiceMock },
-        { provide: ApplicationMapService, useValue: null },
+        { provide: ApplicationMapService, useValue: { selectOrderedVisibleLayersWithFilters$: () => of([]) } },
         { provide: ICON_SERVICE_ICON_LOCATION, useValue: null },
         { provide: APP_BASE_HREF, useValue: null },
       ],

@@ -6,7 +6,7 @@ const filterActionsPrefix = '[Filter]';
 
 export const addFilterGroup = createAction(
   `${filterActionsPrefix} Add Filter Group`,
-  props<FilterGroupModel>(),
+  props<{ group: FilterGroupModel }>(),
 );
 
 export const removeFilterGroup = createAction(
@@ -32,4 +32,9 @@ export const removeFilter = createAction(
 export const updateFilter = createAction(
   `${filterActionsPrefix} Update Attribute Filter`,
   props<{ filterGroupId: string; filter: AttributeFilterModel }>(),
+);
+
+export const toggleFilterDisabled = createAction(
+  `${filterActionsPrefix} Toggle Filter Disabled`,
+  props<{ filterGroupId: string }>(),
 );

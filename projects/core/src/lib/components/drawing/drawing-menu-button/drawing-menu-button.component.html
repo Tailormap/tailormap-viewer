@@ -1,4 +1,4 @@
-<tm-menubar-button [active$]="visible$"
-                   (buttonClicked)="toggleDrawingPanel()"
+<tm-menubar-button [component]="componentType"
+                   [panelTitle]="panelTitle"
                    [tooltip]="panelTitle"
                    icon="components_drawing"></tm-menubar-button>

@@ -1,4 +1,4 @@
-<tm-menubar-button [active$]="visible$"
-                   (buttonClicked)="toggleToc()"
+<tm-menubar-button [component]="componentType"
+                   [panelTitle]="panelLabel"
                    [tooltip]="panelLabel"
                    icon="components_table_of_contents"></tm-menubar-button>

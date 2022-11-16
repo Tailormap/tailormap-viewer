@@ -2,9 +2,12 @@ import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AttributeFilterModel } from '../models/attribute-filter.model';
 import * as FilterActions from '../state/filter.actions';
-import { selectFilterGroup, selectFilterGroups } from '../state/filter.selectors';
+import { selectFilterGroupForType, selectFilterGroups } from '../state/filter.selectors';
 import { map, Observable, take } from 'rxjs';
 import { nanoid } from 'nanoid';
+import { FilterTypeHelper } from '../helpers/filter-type.helper';
+import { FilterTypeEnum } from '../models/filter-type.enum';
+import { FilterGroupModel } from '../models/filter-group.model';
 
 @Injectable({
   providedIn: 'root',
@@ -40,7 +43,7 @@ export class SimpleAttributeFilterService {
       .pipe(map(group => !!group));
   }
 
-  public getFilters$(source: string, layerId: number) {
+  public getFilters$(source: string, layerId: number): Observable<AttributeFilterModel[]> {
     return this.getGroup$(source, layerId)
       .pipe(map(group => group?.filters || []));
   }
@@ -49,12 +52,12 @@ export class SimpleAttributeFilterService {
     return this.store$.select(selectFilterGroups)
       .pipe(take(1), map(groups => {
         return groups.map(group => {
-          if(group.source !== source || group.layerId !== layerId) {
+          if(group.source !== source || !group.layerIds.includes(layerId)) {
             return group;
           }
           return {
             ...group,
-            filters: group.filters.filter(f => f.attribute !== attribute),
+            filters: group.filters.filter(f => FilterTypeHelper.isAttributeFilter(f) && f.attribute !== attribute),
           };
         });
       }));
@@ -109,16 +112,18 @@ export class SimpleAttributeFilterService {
   }
 
   private createGroup(source: string, layerId: number, filter: Omit<AttributeFilterModel, 'id'>) {
-    this.store$.dispatch(FilterActions.addFilterGroup({
+    const filterGroup: FilterGroupModel<AttributeFilterModel> = {
       id: nanoid(),
       source,
-      layerId,
+      type: FilterTypeEnum.ATTRIBUTE,
+      layerIds: [layerId],
       filters: [{
         id: nanoid(),
         ...filter,
       }],
       operator: 'AND',
-    }));
+    };
+    this.store$.dispatch(FilterActions.addFilterGroup({ group: filterGroup }));
   }
 
   private createFilter(groupId: string, filter: Omit<AttributeFilterModel, 'id'>) {
@@ -139,8 +144,10 @@ export class SimpleAttributeFilterService {
   }
 
   private getGroup$(source: string, layerId: number) {
-    return this.store$.select(selectFilterGroup(source, layerId))
-      .pipe(take(1));
+    return this.store$.select(selectFilterGroupForType<AttributeFilterModel>(source, layerId, FilterTypeEnum.ATTRIBUTE))
+      .pipe(
+        take(1),
+      );
   }
 
 }

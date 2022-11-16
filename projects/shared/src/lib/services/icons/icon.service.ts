@@ -18,7 +18,7 @@ export class IconService {
     'folder_filled', 'folder_outline', 'filter_filled', 'filter_outline', 'user', 'login', 'plus', 'minus',
     'check', 'check_all', 'uncheck_all',
     { folder: 'markers', icons: [ 'arrow', 'circle', 'cross', 'square', 'star', 'triangle', 'diamond' ] },
-    { folder: 'components', icons: [ 'attribute_list', 'legend', 'table_of_contents', 'drawing', 'print' ] },
+    { folder: 'components', icons: [ 'attribute_list', 'legend', 'table_of_contents', 'drawing', 'print', 'filter' ] },
     {
       folder: 'tools',
       icons: [
