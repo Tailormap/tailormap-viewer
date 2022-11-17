@@ -162,7 +162,34 @@ export class CqlFilterHelper {
   }
 
   private static convertSpatialFilterToQuery(_filter: SpatialFilterModel): string | null {
-    return null;
+    if (_filter.geometries.length === 0 || _filter.geometryColumns.length === 0) {
+      return null;
+    }
+    if (_filter.baseLayerId) {
+      throw new Error('Spatial filter on base layer not yet supported');
+    }
+    if (_filter.geometryColumns.length !== 1) {
+      throw new Error('Only one layer supported cause we do not know for which layer to make the filter in this method');
+    }
+    if (_filter.geometryColumns[0].column.length !== 1) {
+      throw new Error('Only one geometry column supported as of yet');
+    }
+    const geometries = _filter.geometries.map(g => {
+      g = g.trim();
+      if (g.startsWith('CIRCLE(')) {
+        g = g.substring(7, g.length - 1);
+        const [ x, y, radius ] = g.split(/\s+/);
+        return `BUFFER(POINT(${x} ${y}), ${radius})`;
+      } else {
+        return g;
+      }
+    });
+    let geomParam = geometries.length === 1 ? geometries[0] : 'GEOMETRYCOLLECTION(' + geometries.join(', ') + ')';
+    if (_filter.buffer) {
+      // Can't use DWITHIN because we don't know the projection units
+      geomParam = `BUFFER(${geomParam}, ${_filter.buffer})`;
+    }
+    return CqlFilterHelper.wrapFilter(`${_filter.geometryColumns[0].column[0]} INTERSECTS ${geomParam}`);
   }
 
 }
