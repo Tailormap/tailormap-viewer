@@ -165,9 +165,6 @@ export class CqlFilterHelper {
     if (filter.geometries.length === 0 || filter.geometryColumns.length === 0) {
       return null;
     }
-    if (filter.baseLayerId) {
-      throw new Error('Spatial filter on base layer not yet supported');
-    }
     const geometries = filter.geometries.map(g => {
       g = g.trim();
       if (g.startsWith('CIRCLE(')) {
