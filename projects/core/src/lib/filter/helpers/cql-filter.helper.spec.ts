@@ -5,6 +5,7 @@ import { CqlFilterHelper } from './cql-filter.helper';
 import { AttributeFilterModel } from '../models/attribute-filter.model';
 import { FilterTypeEnum } from '../models/filter-type.enum';
 import { getFilterGroup } from './attribute-filter.helper.spec';
+import { SpatialFilterModel } from '../models/spatial-filter.model';
 
 describe('CQLFilterHelper', () => {
 
@@ -12,6 +13,84 @@ describe('CQLFilterHelper', () => {
     const filterGroup = getFilterGroup();
     const filters = CqlFilterHelper.getFilters([filterGroup]);
     expect(filters.get(1)).toBe('(attribute ILIKE \'%value%\')');
+  });
+
+  test('should create a spatial filter', () => {
+    const filterGroup = getFilterGroup([
+      {
+        type: FilterTypeEnum.SPATIAL,
+        geometryColumns: [{ layerId: 1, column: ['the_geom'] }],
+        geometries: ['POINT(1 2)'],
+      } as SpatialFilterModel,
+    ]);
+    const filters = CqlFilterHelper.getFilters([filterGroup]);
+    expect(filters.get(1)).toBe('(the_geom INTERSECTS POINT(1 2))');
+  });
+
+  test('should create a spatial filter for circle', () => {
+    const filterGroup = getFilterGroup([
+      {
+        type: FilterTypeEnum.SPATIAL,
+        geometryColumns: [{ layerId: 1, column: ['the_geom'] }],
+        geometries: ['CIRCLE(1 2 3)'],
+      } as SpatialFilterModel,
+    ]);
+    const filters = CqlFilterHelper.getFilters([filterGroup]);
+    expect(filters.get(1)).toBe('(the_geom INTERSECTS BUFFER(POINT(1 2), 3))');
+  });
+
+  test('should create a spatial filter for multiple geometries', () => {
+    const filterGroup = getFilterGroup([
+      {
+        type: FilterTypeEnum.SPATIAL,
+        geometryColumns: [{ layerId: 1, column: ['the_geom'] }],
+        geometries: [ 'POINT(1 2)', 'POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))' ],
+      } as SpatialFilterModel,
+    ]);
+    const filters = CqlFilterHelper.getFilters([filterGroup]);
+    expect(filters.get(1)).toBe('(the_geom INTERSECTS GEOMETRYCOLLECTION(POINT(1 2), POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))))');
+  });
+
+  test('should create a spatial filters for multiple layers', () => {
+    const filterGroup = {
+      ...getFilterGroup([
+                       {
+                         type: FilterTypeEnum.SPATIAL,
+                         geometryColumns: [{ layerId: 1, column: ['the_geom'] }, { layerId: 2, column: ['geom'] }],
+                         geometries: ['POINT(1 2)'],
+                       } as SpatialFilterModel,
+                     ]),
+      layerIds: [ 1, 2 ],
+    };
+    const filters = CqlFilterHelper.getFilters([filterGroup]);
+    expect(filters.size).toBe(2);
+    expect(filters.get(1)).toBe('(the_geom INTERSECTS POINT(1 2))');
+    expect(filters.get(2)).toBe('(geom INTERSECTS POINT(1 2))');
+  });
+
+  test('should create a spatial filter for multiple geometry columns', () => {
+    const filterGroup = getFilterGroup([
+      {
+        type: FilterTypeEnum.SPATIAL,
+        geometryColumns: [{ layerId: 1, column: [ 'the_geom', 'some_other_geom_column' ] }],
+        geometries: ['POINT(1 2)'],
+      } as SpatialFilterModel,
+    ]);
+    const filters = CqlFilterHelper.getFilters([filterGroup]);
+    expect(filters.get(1)).toBe('((the_geom INTERSECTS POINT(1 2)) OR (some_other_geom_column INTERSECTS POINT(1 2)))');
+  });
+
+  test('should create a spatial filter with buffer', () => {
+    const filterGroup = getFilterGroup([
+      {
+        type: FilterTypeEnum.SPATIAL,
+        geometryColumns: [{ layerId: 1, column: ['the_geom'] }],
+        buffer: 10,
+        geometries: ['POINT(1 2)'],
+      } as SpatialFilterModel,
+    ]);
+    const filters = CqlFilterHelper.getFilters([filterGroup]);
+    expect(filters.get(1)).toBe('(the_geom INTERSECTS BUFFER(POINT(1 2), 10))');
   });
 
   test('combine multiple filters into a CQL filter', () => {
