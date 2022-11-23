@@ -58,11 +58,6 @@ export class DrawingHelper {
       type,
       style: DrawingHelper.getDefaultStyle(),
     };
-    if (type ===  DrawingFeatureTypeEnum.CIRCLE) {
-      attributes.isCircle = true;
-      attributes.radius = drawingEvent.radius;
-      attributes.center = drawingEvent.centerCoordinate;
-    }
     return {
       __fid: nanoid(),
       geometry: drawingEvent.geometry,

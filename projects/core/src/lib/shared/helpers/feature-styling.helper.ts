@@ -10,4 +10,11 @@ export class FeatureStylingHelper {
     pointFillColor: '#6236ff',
   };
 
+  public static getDefaultHighlightStyle(styleKey: string): MapStyleModel {
+    return {
+      ...FeatureStylingHelper.DEFAULT_HIGHLIGHT_STYLE,
+      styleKey,
+    };
+  }
+
 }

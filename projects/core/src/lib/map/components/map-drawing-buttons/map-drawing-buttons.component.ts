@@ -29,6 +29,9 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
   public selectionStyle: Partial<MapStyleModel> | ((feature: FeatureModel) => MapStyleModel) | undefined = undefined;
 
   @Input()
+  public drawSingleShape = false;
+
+  @Input()
   public allowedShapes: DrawingFeatureTypeEnum[] | undefined = undefined;
 
   @Output()
@@ -65,6 +68,9 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
       .subscribe(drawEvent => {
         if (drawEvent && drawEvent.type === 'end' && this.activeTool) {
           this.drawingAdded.emit(drawEvent);
+          if (this.drawSingleShape) {
+            this.toggleTool(this.drawingFeatureTypeToDrawingType(this.activeTool), this.activeTool);
+          }
         }
       });
 

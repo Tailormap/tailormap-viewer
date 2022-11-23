@@ -166,29 +166,30 @@ export class CqlFilterHelper {
       return null;
     }
     const geometries = filter.geometries.map(g => {
-      g = g.trim();
-      if (g.startsWith('CIRCLE(')) {
-        g = g.substring(7, g.length - 1);
-        const [ x, y, radius ] = g.split(/\s+/);
-        return `BUFFER(POINT(${x} ${y}), ${radius})`;
-      } else {
-        return g;
+      let geom = g.geometry.trim();
+      if (geom.startsWith('CIRCLE(')) {
+        geom = geom.substring(7, geom.length - 1);
+        const [ x, y, radius ] = geom.split(/\s+/);
+        const bufferedRadius = parseFloat(radius) + (filter.buffer || 0);
+        return `BUFFER(POINT(${x} ${y}), ${bufferedRadius})`;
       }
+      return filter.buffer ? `BUFFER(${geom}, ${filter.buffer})` : geom;
     });
-    let geomParam = geometries.length === 1 ? geometries[0] : 'GEOMETRYCOLLECTION(' + geometries.join(', ') + ')';
-    if (filter.buffer) {
-      // Can't use DWITHIN because we don't know the projection units
-      geomParam = `BUFFER(${geomParam}, ${filter.buffer})`;
-    }
 
     const geometryColumnsForLayer = filter.geometryColumns.find(gc => gc.layerId === layerId);
     if (!geometryColumnsForLayer) {
       return null;
     }
+
     const geometryColumnClauses = geometryColumnsForLayer.column.map(geometryColumn => {
-      return CqlFilterHelper.wrapFilter(`${geometryColumn} INTERSECTS ${geomParam}`);
+      const intersectGeoms = geometries.map(geomParam => `INTERSECTS(${geometryColumn}, ${geomParam})`);
+      return intersectGeoms.length === 1
+        ? intersectGeoms[0]
+        : CqlFilterHelper.wrapFilter(intersectGeoms.join(' OR '));
     });
-    return geometryColumnClauses.length === 1 ? geometryColumnClauses[0] : CqlFilterHelper.wrapFilter(geometryColumnClauses.join(' OR '));
+    return geometryColumnClauses.length === 1
+      ? geometryColumnClauses[0]
+      : CqlFilterHelper.wrapFilter(geometryColumnClauses.join(' OR '));
   }
 
 }

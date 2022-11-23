@@ -1,6 +1,9 @@
 <div class="filter-panel" *ngIf="visible$ | async">
   <tm-create-filter-button></tm-create-filter-button>
-  <div>
+  <div class="filter-form" *ngIf="spatialFormVisible$ | async">
+    <tm-spatial-filter-form></tm-spatial-filter-form>
+  </div>
+  <div class="filter-list" *ngIf="(spatialFormVisible$ | async) === false">
     <tm-filter-list></tm-filter-list>
   </div>
 </div>

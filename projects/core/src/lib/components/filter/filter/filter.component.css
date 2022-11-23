@@ -9,3 +9,7 @@
 tm-create-filter-button {
   margin: 14px;
 }
+
+.filter-form {
+  padding: 0 14px 14px 14px;
+}
