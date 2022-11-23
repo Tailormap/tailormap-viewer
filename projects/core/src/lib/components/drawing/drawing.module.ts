@@ -9,7 +9,7 @@ import { drawingStateKey } from './state/drawing.state';
 import { drawingReducer } from './state/drawing.reducer';
 import { CreateDrawingButtonComponent } from './create-drawing-button/create-drawing-button.component';
 import { DrawingStyleFormComponent } from './drawing-style-form/drawing-style-form.component';
-import { ApplicationMapModule } from "../../map/application-map.module";
+import { ApplicationMapModule } from '../../map/application-map.module';
 
 @NgModule({
   declarations: [
