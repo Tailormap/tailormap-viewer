@@ -183,7 +183,7 @@ export class CqlFilterHelper {
 
     const geometryColumnsForLayer = filter.geometryColumns.find(gc => gc.layerId === layerId);
     if (!geometryColumnsForLayer) {
-      throw new Error('Could not find geometry columns for layer to make filter for');
+      return null;
     }
     const geometryColumnClauses = geometryColumnsForLayer.column.map(geometryColumn => {
       return CqlFilterHelper.wrapFilter(`${geometryColumn} INTERSECTS ${geomParam}`);
