@@ -1,7 +1,6 @@
 import * as FilterComponentActions from './filter-component.actions';
 import { Action, createReducer, on } from '@ngrx/store';
 import { FilterComponentState, initialFilterComponentState } from './filter-component.state';
-import { closeForm } from './filter-component.actions';
 
 const onCreateFilter = (
   state: FilterComponentState,
