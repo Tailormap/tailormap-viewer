@@ -17,41 +17,41 @@ export class CqlFilterHelper {
     const layerIds = new Set<number>(layerIdList);
     layerIds.forEach(layerId => {
       const filtersForLayer = filterGroups.filter(f => f.layerIds.includes(layerId));
-      cqlDict.set(layerId, CqlFilterHelper.getFilterForLayer(filtersForLayer));
+      cqlDict.set(layerId, CqlFilterHelper.getFilterForLayer(filtersForLayer, layerId));
     });
     return cqlDict;
   }
 
-  public static getFilterForLayer(filterGroups: FilterGroupModel[]): string {
+  public static getFilterForLayer(filterGroups: FilterGroupModel[], layerId: number): string {
     const rootFilterGroups = filterGroups.filter(f => (typeof f.parentGroup === 'undefined' || f.parentGroup === null));
-    return rootFilterGroups.map(f => CqlFilterHelper.getFilterForGroup(f, filterGroups)).join(' AND ');
+    return rootFilterGroups.map(f => CqlFilterHelper.getFilterForGroup(f, filterGroups, layerId)).join(' AND ');
   }
 
-  private static getFilterForGroup(filterGroup: FilterGroupModel, allFilterGroups: FilterGroupModel[]): string {
+  private static getFilterForGroup(filterGroup: FilterGroupModel, allFilterGroups: FilterGroupModel[], layerId: number): string {
     const filter: string[] = [];
     const baseFilter: string[] = filterGroup.filters
-      .map(f => CqlFilterHelper.convertFilterToQuery(f))
+      .map(f => CqlFilterHelper.convertFilterToQuery(f, layerId))
       .filter(TypesHelper.isDefined);
     filter.push(CqlFilterHelper.wrapFilters(baseFilter, filterGroup.operator));
     const childFilters = allFilterGroups.filter(f => f.parentGroup === filterGroup.id);
     if (childFilters.length > 0) {
-      const childCql = childFilters.map(f => CqlFilterHelper.getFilterForGroup(f, allFilterGroups));
+      const childCql = childFilters.map(f => CqlFilterHelper.getFilterForGroup(f, allFilterGroups, layerId));
       filter.push(CqlFilterHelper.wrapFilters(childCql, filterGroup.operator));
     }
     return CqlFilterHelper.wrapFilters(filter, filterGroup.operator);
   }
 
-  private static convertFilterToQuery(filter: BaseFilterModel): string | null {
+  private static convertFilterToQuery(filter: BaseFilterModel, layerId: number): string | null {
     if (FilterTypeHelper.isAttributeFilter(filter)) {
-      return CqlFilterHelper.convertAttributeFilterToQuery(filter);
+      return CqlFilterHelper.convertAttributeFilterToQuery(filter, layerId);
     }
     if (FilterTypeHelper.isSpatialFilter(filter)) {
-      return CqlFilterHelper.convertSpatialFilterToQuery(filter);
+      return CqlFilterHelper.convertSpatialFilterToQuery(filter, layerId);
     }
     return null;
   }
 
-  private static convertAttributeFilterToQuery(filter: AttributeFilterModel): string | null {
+  private static convertAttributeFilterToQuery(filter: AttributeFilterModel, _layerId: number): string | null {
     if (filter.condition === FilterConditionEnum.UNIQUE_VALUES_KEY) {
       if (filter.value.length === 0) {
         return null;
@@ -161,15 +161,12 @@ export class CqlFilterHelper {
     return attributeType === FeatureAttributeTypeEnum.DATE || attributeType === FeatureAttributeTypeEnum.TIMESTAMP;
   }
 
-  private static convertSpatialFilterToQuery(filter: SpatialFilterModel): string | null {
+  private static convertSpatialFilterToQuery(filter: SpatialFilterModel, layerId: number): string | null {
     if (filter.geometries.length === 0 || filter.geometryColumns.length === 0) {
       return null;
     }
     if (filter.baseLayerId) {
       throw new Error('Spatial filter on base layer not yet supported');
-    }
-    if (filter.geometryColumns.length !== 1) {
-      throw new Error('Only one layer supported cause we do not know for which layer to make the filter in this method');
     }
     const geometries = filter.geometries.map(g => {
       g = g.trim();
@@ -187,7 +184,11 @@ export class CqlFilterHelper {
       geomParam = `BUFFER(${geomParam}, ${filter.buffer})`;
     }
 
-    const geometryColumnClauses = filter.geometryColumns[0].column.map(geometryColumn => {
+    const geometryColumnsForLayer = filter.geometryColumns.find(gc => gc.layerId === layerId);
+    if (!geometryColumnsForLayer) {
+      throw new Error('Could not find geometry columns for layer to make filter for');
+    }
+    const geometryColumnClauses = geometryColumnsForLayer.column.map(geometryColumn => {
       return CqlFilterHelper.wrapFilter(`${geometryColumn} INTERSECTS ${geomParam}`);
     });
     return geometryColumnClauses.length === 1 ? geometryColumnClauses[0] : CqlFilterHelper.wrapFilter(geometryColumnClauses.join(' OR '));

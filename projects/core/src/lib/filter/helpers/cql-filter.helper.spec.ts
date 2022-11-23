@@ -51,6 +51,23 @@ describe('CQLFilterHelper', () => {
     expect(filters.get(1)).toBe('(the_geom INTERSECTS GEOMETRYCOLLECTION(POINT(1 2), POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))))');
   });
 
+  test('should create a spatial filters for multiple layers', () => {
+    const filterGroup = {
+      ...getFilterGroup([
+                       {
+                         type: FilterTypeEnum.SPATIAL,
+                         geometryColumns: [{ layerId: 1, column: ['the_geom'] }, { layerId: 2, column: ['geom'] }],
+                         geometries: ['POINT(1 2)'],
+                       } as SpatialFilterModel,
+                     ]),
+      layerIds: [ 1, 2 ],
+    };
+    const filters = CqlFilterHelper.getFilters([filterGroup]);
+    expect(filters.size).toBe(2);
+    expect(filters.get(1)).toBe('(the_geom INTERSECTS POINT(1 2))');
+    expect(filters.get(2)).toBe('(geom INTERSECTS POINT(1 2))');
+  });
+
   test('should create a spatial filter for multiple geometry columns', () => {
     const filterGroup = getFilterGroup([
       {
