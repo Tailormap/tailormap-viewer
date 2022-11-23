@@ -161,20 +161,17 @@ export class CqlFilterHelper {
     return attributeType === FeatureAttributeTypeEnum.DATE || attributeType === FeatureAttributeTypeEnum.TIMESTAMP;
   }
 
-  private static convertSpatialFilterToQuery(_filter: SpatialFilterModel): string | null {
-    if (_filter.geometries.length === 0 || _filter.geometryColumns.length === 0) {
+  private static convertSpatialFilterToQuery(filter: SpatialFilterModel): string | null {
+    if (filter.geometries.length === 0 || filter.geometryColumns.length === 0) {
       return null;
     }
-    if (_filter.baseLayerId) {
+    if (filter.baseLayerId) {
       throw new Error('Spatial filter on base layer not yet supported');
     }
-    if (_filter.geometryColumns.length !== 1) {
+    if (filter.geometryColumns.length !== 1) {
       throw new Error('Only one layer supported cause we do not know for which layer to make the filter in this method');
     }
-    if (_filter.geometryColumns[0].column.length !== 1) {
-      throw new Error('Only one geometry column supported as of yet');
-    }
-    const geometries = _filter.geometries.map(g => {
+    const geometries = filter.geometries.map(g => {
       g = g.trim();
       if (g.startsWith('CIRCLE(')) {
         g = g.substring(7, g.length - 1);
@@ -185,11 +182,15 @@ export class CqlFilterHelper {
       }
     });
     let geomParam = geometries.length === 1 ? geometries[0] : 'GEOMETRYCOLLECTION(' + geometries.join(', ') + ')';
-    if (_filter.buffer) {
+    if (filter.buffer) {
       // Can't use DWITHIN because we don't know the projection units
-      geomParam = `BUFFER(${geomParam}, ${_filter.buffer})`;
+      geomParam = `BUFFER(${geomParam}, ${filter.buffer})`;
     }
-    return CqlFilterHelper.wrapFilter(`${_filter.geometryColumns[0].column[0]} INTERSECTS ${geomParam}`);
+
+    const geometryColumnClauses = filter.geometryColumns[0].column.map(geometryColumn => {
+      return CqlFilterHelper.wrapFilter(`${geometryColumn} INTERSECTS ${geomParam}`);
+    });
+    return geometryColumnClauses.length === 1 ? geometryColumnClauses[0] : CqlFilterHelper.wrapFilter(geometryColumnClauses.join(' OR '));
   }
 
 }
