@@ -1,59 +1,6 @@
 <p class="label" i18n>Select shape</p>
-<div class="icon-button-list">
-  <button [class.button--active]="activeTool === 'POINT'"
-          i18n-tmTooltip
-          tmTooltip="Draw point"
-          mat-stroked-button
-          color="primary"
-          (click)="drawPoint()"><mat-icon svgIcon="tools_draw_point"></mat-icon></button>
-  <button [class.button--active]="activeTool === 'LINE'"
-          i18n-tmTooltip
-          tmTooltip="Draw line"
-          mat-stroked-button
-          color="primary"
-          (click)="drawLine()"><mat-icon svgIcon="tools_draw_line"></mat-icon></button>
-  <button [class.button--active]="activeTool === 'POLYGON'"
-          i18n-tmTooltip
-          tmTooltip="Draw polygon"
-          mat-stroked-button
-          color="primary"
-          (click)="drawPolygon()"><mat-icon svgIcon="tools_draw_polygon"></mat-icon></button>
-  <button [class.button--active]="activeTool === 'SQUARE'"
-          i18n-tmTooltip
-          tmTooltip="Draw square"
-          mat-stroked-button
-          color="primary"
-          (click)="drawSquare()"><mat-icon svgIcon="tools_draw_square"></mat-icon></button>
-  <button [class.button--active]="activeTool === 'RECTANGLE'"
-          i18n-tmTooltip
-          tmTooltip="Draw rectangle"
-          mat-stroked-button
-          color="primary"
-          (click)="drawRectangle()"><mat-icon svgIcon="tools_draw_rectangle"></mat-icon></button>
-</div>
-<div class="icon-button-list">
-  <button [class.button--active]="activeTool === 'CIRCLE'"
-          i18n-tmTooltip
-          tmTooltip="Draw circle"
-          mat-stroked-button
-          color="primary"
-          (click)="drawCircle()"><mat-icon svgIcon="tools_draw_circle"></mat-icon></button>
-  <button [class.button--active]="activeTool === 'ELLIPSE'"
-          i18n-tmTooltip
-          tmTooltip="Draw ellipse"
-          mat-stroked-button
-          color="primary"
-          (click)="drawEllipse()"><mat-icon svgIcon="tools_draw_ellipse"></mat-icon></button>
-  <button [class.button--active]="activeTool === 'STAR'"
-          i18n-tmTooltip
-          tmTooltip="Draw star"
-          mat-stroked-button
-          color="primary"
-          (click)="drawStar()"><mat-icon svgIcon="tools_draw_star"></mat-icon></button>
-  <button [class.button--active]="activeTool === 'LABEL'"
-          i18n-tmTooltip
-          tmTooltip="Draw label"
-          mat-stroked-button
-          color="primary"
-          (click)="drawLabel()"><mat-icon svgIcon="tools_draw_label"></mat-icon></button>
-</div>
+<tm-map-drawing-buttons [drawingLayerId]="drawingLayerId"
+                        [selectionStyle]="selectionStyle"
+                        (drawingAdded)="onDrawingAdded($event)"
+                        (activeToolChanged)="onActiveToolChanged($event)"
+                        (featureSelected)="onFeatureSelected($event)"></tm-map-drawing-buttons>

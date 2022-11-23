@@ -1,5 +1,5 @@
 import { DrawingFeatureModel } from '../models/drawing-feature.model';
-import { DrawingFeatureTypeEnum } from '../models/drawing-feature-type.enum';
+import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type.enum';
 
 export const drawingStateKey = 'drawing';
 

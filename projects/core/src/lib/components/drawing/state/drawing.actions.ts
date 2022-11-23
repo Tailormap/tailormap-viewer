@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { DrawingFeatureModel, DrawingFeatureStyleModel } from '../models/drawing-feature.model';
-import { DrawingFeatureTypeEnum } from '../models/drawing-feature-type.enum';
+import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type.enum';
 
 const drawingActionsPrefix = '[Drawing]';
 

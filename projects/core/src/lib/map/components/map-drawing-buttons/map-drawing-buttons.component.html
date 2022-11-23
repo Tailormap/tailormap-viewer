@@ -1,0 +1,67 @@
+<div class="icon-button-list">
+  <button *ngIf="isAllowedShape(drawingTypes.POINT)"
+          [class.button--active]="activeTool === 'POINT'"
+          i18n-tmTooltip
+          tmTooltip="Draw point"
+          mat-stroked-button
+          color="primary"
+          (click)="draw(drawingTypes.POINT)"><mat-icon svgIcon="tools_draw_point"></mat-icon></button>
+  <button *ngIf="isAllowedShape(drawingTypes.LINE)"
+          [class.button--active]="activeTool === 'LINE'"
+          i18n-tmTooltip
+          tmTooltip="Draw line"
+          mat-stroked-button
+          color="primary"
+          (click)="draw(drawingTypes.LINE)"><mat-icon svgIcon="tools_draw_line"></mat-icon></button>
+  <button *ngIf="isAllowedShape(drawingTypes.POLYGON)"
+          [class.button--active]="activeTool === 'POLYGON'"
+          i18n-tmTooltip
+          tmTooltip="Draw polygon"
+          mat-stroked-button
+          color="primary"
+          (click)="draw(drawingTypes.POLYGON)"><mat-icon svgIcon="tools_draw_polygon"></mat-icon></button>
+  <button *ngIf="isAllowedShape(drawingTypes.SQUARE)"
+          [class.button--active]="activeTool === 'SQUARE'"
+          i18n-tmTooltip
+          tmTooltip="Draw square"
+          mat-stroked-button
+          color="primary"
+          (click)="draw(drawingTypes.SQUARE)"><mat-icon svgIcon="tools_draw_square"></mat-icon></button>
+  <button *ngIf="isAllowedShape(drawingTypes.RECTANGLE)"
+          [class.button--active]="activeTool === 'RECTANGLE'"
+          i18n-tmTooltip
+          tmTooltip="Draw rectangle"
+          mat-stroked-button
+          color="primary"
+          (click)="draw(drawingTypes.RECTANGLE)"><mat-icon svgIcon="tools_draw_rectangle"></mat-icon></button>
+</div>
+<div class="icon-button-list">
+  <button *ngIf="isAllowedShape(drawingTypes.CIRCLE)"
+          [class.button--active]="activeTool === 'CIRCLE'"
+          i18n-tmTooltip
+          tmTooltip="Draw circle"
+          mat-stroked-button
+          color="primary"
+          (click)="draw(drawingTypes.CIRCLE)"><mat-icon svgIcon="tools_draw_circle"></mat-icon></button>
+  <button *ngIf="isAllowedShape(drawingTypes.ELLIPSE)"
+          [class.button--active]="activeTool === 'ELLIPSE'"
+          i18n-tmTooltip
+          tmTooltip="Draw ellipse"
+          mat-stroked-button
+          color="primary"
+          (click)="draw(drawingTypes.ELLIPSE)"><mat-icon svgIcon="tools_draw_ellipse"></mat-icon></button>
+  <button *ngIf="isAllowedShape(drawingTypes.STAR)"
+          [class.button--active]="activeTool === 'STAR'"
+          i18n-tmTooltip
+          tmTooltip="Draw star"
+          mat-stroked-button
+          color="primary"
+          (click)="draw(drawingTypes.STAR)"><mat-icon svgIcon="tools_draw_star"></mat-icon></button>
+  <button *ngIf="isAllowedShape(drawingTypes.LABEL)"
+          [class.button--active]="activeTool === 'LABEL'"
+          i18n-tmTooltip
+          tmTooltip="Draw label"
+          mat-stroked-button
+          color="primary"
+          (click)="draw(drawingTypes.LABEL)"><mat-icon svgIcon="tools_draw_label"></mat-icon></button>
+</div>

@@ -1,7 +1,7 @@
 import * as DrawingActions from './drawing.actions';
 import { DrawingState, initialDrawingState } from './drawing.state';
 import { drawingReducer } from './drawing.reducer';
-import { DrawingFeatureTypeEnum } from '../models/drawing-feature-type.enum';
+import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type.enum';
 import { DrawingFeatureModel } from '../models/drawing-feature.model';
 import { DrawingHelper } from '../helpers/drawing.helper';
 

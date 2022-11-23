@@ -1,5 +1,5 @@
 import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
-import { DrawingFeatureTypeEnum } from './drawing-feature-type.enum';
+import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type.enum';
 
 export type MakerType = 'circle' | 'square' | 'triangle' | 'diamond' | 'cross' | 'star' | 'arrow';
 
