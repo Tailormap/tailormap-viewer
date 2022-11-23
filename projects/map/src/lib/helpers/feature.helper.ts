@@ -67,11 +67,26 @@ export class FeatureHelper {
     return null;
   }
 
-  public static getWKT(geometry: Geometry, map: OlMap) {
-    const geom = GeometryTypeHelper.isCircleGeometry(geometry) ? fromCircle(geometry) : geometry;
+  public static getWKT(geometry: Geometry, map: OlMap, linearizeCircle: boolean = false) {
     const units = map.getView().getProjection().getUnits();
     const decimals = MapSizeHelper.getCoordinatePrecision(units ? units.toLowerCase() as MapUnitEnum: MapUnitEnum.m);
+
+    if (GeometryTypeHelper.isCircleGeometry(geometry) && !linearizeCircle) {
+      return FeatureHelper.writeCircleWKT(geometry, decimals);
+    }
+    const geom = GeometryTypeHelper.isCircleGeometry(geometry) ? fromCircle(geometry) : geometry;
     return FeatureHelper.wktFormatter.writeGeometry(geom, { decimals });
+  }
+
+  private static writeCircleWKT(circle: Circle, decimals?: number): string {
+    let xyr = [ circle.getCenter()[0], circle.getCenter()[1], circle.getRadius() ];
+    if (decimals) {
+      // Code from ol/format/Feature transformGeometryWithOptions()
+      // Can't use directly on Circle Geometry because of radius
+      const power = Math.pow(10, decimals);
+      xyr = xyr.map(v => Math.round(v * power) / power);
+    }
+    return `CIRCLE(${xyr.join(' ')})`;
   }
 
   public static fromWKT(geometry: string, sourceProjection?: string, mapProjection?: string): Geometry {
