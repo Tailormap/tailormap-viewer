@@ -4,12 +4,14 @@ import { FilterTypeEnum } from '../models/filter-type.enum';
 import { FeatureAttributeTypeEnum } from '@tailormap-viewer/api';
 import { FilterConditionEnum } from '../models/filter-condition.enum';
 import { AttributeFilterHelper } from './attribute-filter.helper';
+import { SpatialFilterModel } from '../models/spatial-filter.model';
 
-export const getFilterGroup = (filters?: AttributeFilterModel[]):  FilterGroupModel<AttributeFilterModel> => {
+export const getFilterGroup = (filters?: (AttributeFilterModel | SpatialFilterModel)[],
+                               type = FilterTypeEnum.ATTRIBUTE):  FilterGroupModel<AttributeFilterModel | SpatialFilterModel> => {
   return {
     id: '1',
     layerIds: [1],
-    type: FilterTypeEnum.ATTRIBUTE,
+    type,
     filters: filters || [{
       id: '1',
       type: FilterTypeEnum.ATTRIBUTE,
