@@ -1,4 +1,4 @@
-import { DrawingFeatureTypeEnum } from '../models/drawing-feature-type.enum';
+import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type.enum';
 import {
   ArrowTypeEnum, DrawingFeatureModel, DrawingFeatureModelAttributes, DrawingFeatureStyleModel, LabelStyleEnum, MakerType, StrokeTypeEnum,
 } from '../models/drawing-feature.model';

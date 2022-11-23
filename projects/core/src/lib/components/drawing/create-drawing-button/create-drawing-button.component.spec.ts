@@ -6,6 +6,7 @@ import { Store } from '@ngrx/store';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { SharedModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
+import { MapDrawingButtonsComponent } from '../../../map/components/map-drawing-buttons/map-drawing-buttons.component';
 
 describe('CreateDrawingButtonComponent', () => {
 
@@ -28,6 +29,7 @@ describe('CreateDrawingButtonComponent', () => {
     };
     await render(CreateDrawingButtonComponent, {
       imports: [ SharedModule, MatIconTestingModule ],
+      declarations: [MapDrawingButtonsComponent],
       providers: [
         { provide: Store, useValue: { dispatch: mockDispatch } },
         { provide: MapService, useValue: mapServiceMock },

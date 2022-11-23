@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ArrowTypeEnum, DrawingFeatureStyleModel, LabelStyleEnum, StrokeTypeEnum } from '../models/drawing-feature.model';
-import { DrawingFeatureTypeEnum } from '../models/drawing-feature-type.enum';
+import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type.enum';
 import { DrawingHelper } from '../helpers/drawing.helper';
 import { MatSliderChange } from '@angular/material/slider';
 import { FormControl } from '@angular/forms';

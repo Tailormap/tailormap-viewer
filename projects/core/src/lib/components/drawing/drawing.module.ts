@@ -9,6 +9,7 @@ import { drawingStateKey } from './state/drawing.state';
 import { drawingReducer } from './state/drawing.reducer';
 import { CreateDrawingButtonComponent } from './create-drawing-button/create-drawing-button.component';
 import { DrawingStyleFormComponent } from './drawing-style-form/drawing-style-form.component';
+import { ApplicationMapModule } from "../../map/application-map.module";
 
 @NgModule({
   declarations: [
@@ -17,12 +18,13 @@ import { DrawingStyleFormComponent } from './drawing-style-form/drawing-style-fo
     CreateDrawingButtonComponent,
     DrawingStyleFormComponent,
   ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    MenubarModule,
-    StoreModule.forFeature(drawingStateKey, drawingReducer),
-  ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        MenubarModule,
+        StoreModule.forFeature(drawingStateKey, drawingReducer),
+        ApplicationMapModule,
+    ],
   exports: [
     DrawingComponent,
   ],
