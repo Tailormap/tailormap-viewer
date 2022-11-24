@@ -34,8 +34,6 @@
           mat-stroked-button
           color="primary"
           (click)="draw(drawingTypes.RECTANGLE)"><mat-icon svgIcon="tools_draw_rectangle"></mat-icon></button>
-</div>
-<div class="icon-button-list">
   <button *ngIf="isAllowedShape(drawingTypes.CIRCLE)"
           [class.button--active]="activeTool === 'CIRCLE'"
           i18n-tmTooltip

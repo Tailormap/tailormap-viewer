@@ -1,7 +1,4 @@
 export interface FeatureModelAttributes {
-  isCircle?: boolean;
-  center?: number[];
-  radius?: number;
   [x: string]: any;
 }
 

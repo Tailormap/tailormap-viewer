@@ -1,6 +1,6 @@
 import { MapSettingsModel, MapState, mapStateKey } from './map.state';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { AppLayerModel, LayerTreeNodeModel, ServiceModel, ServiceProtocol } from '@tailormap-viewer/api';
+import { AppLayerModel, LayerTreeNodeModel, ResolvedServerType, ServiceModel, ServiceProtocol } from '@tailormap-viewer/api';
 import { ArrayHelper, TreeModel } from '@tailormap-viewer/shared';
 import { LayerTreeNodeHelper } from '../helpers/layer-tree-node.helper';
 import { ExtendedAppLayerModel, ExtendedLayerTreeNodeModel } from '../models';
@@ -98,6 +98,11 @@ export const selectVisibleLayersWithAttributes = createSelector(
 export const selectVisibleWMSLayersWithoutAttributes = createSelector(
   selectOrderedVisibleLayersWithServices,
   layers => layers.filter(l => l.service?.protocol === ServiceProtocol.WMS && !l.hasAttributes),
+);
+
+export const selectFilterableLayers = createSelector(
+  selectOrderedVisibleLayersWithServices,
+  layers => layers.filter(l => l.service?.resolvedServerType === ResolvedServerType.GEOSERVER),
 );
 
 export const selectSomeLayersVisible = createSelector(

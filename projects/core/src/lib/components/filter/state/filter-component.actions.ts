@@ -8,4 +8,9 @@ export const createFilter = createAction(
   props<{ filterType: FilterTypeEnum }>(),
 );
 
-export const clearCreateFilter = createAction(`${filterComponentActionsPrefix} Clear Create Filter`);
+export const closeForm = createAction(`${filterComponentActionsPrefix} Close Filter Form`);
+
+export const setSelectedFilterGroup = createAction(
+  `${filterComponentActionsPrefix} Set Selected Filter Group`,
+  props<{ id: string }>(),
+);

@@ -58,7 +58,6 @@ export class ApplicationMapService implements OnDestroy {
         concatMap(layers => this.getLayersAndLayerManager$(layers)),
       )
       .subscribe(([ layers, layerManager ]) => {
-        console.log(layers);
         layerManager.setLayers(layers.filter(isValidLayer));
       });
   }
@@ -69,7 +68,6 @@ export class ApplicationMapService implements OnDestroy {
       this.store$.select(selectCQLFilters),
     ]).pipe(
       map(([ layers, filters ]) => {
-        console.log(layers, filters);
         return layers.map(l => ({ ...l, filter: filters.get(l.id) }));
       }),
     );

@@ -30,19 +30,20 @@ export class FeatureHelper {
     return features.map(feature => {
       if (typeof feature === 'string') {
         try {
-          return FeatureHelper.wktFormatter.readFeature(feature);
+          const geometry = FeatureHelper.fromWKT(feature);
+          return new Feature(geometry);
         } catch (e) {
           return null;
         }
       }
       if (FeatureHelper.isFeatureModel(feature)) {
-        const geometry = feature.attributes.isCircle && typeof feature.attributes.radius !== 'undefined' && typeof feature.attributes.center !== 'undefined'
-          ? new Circle(feature.attributes.center, feature.attributes.radius)
-          : FeatureHelper.wktFormatter.readGeometry(feature.geometry);
+        if (!feature.geometry) {
+          return null;
+        }
         return new Feature<Geometry>({
           __fid: feature.__fid,
           attributes: feature.attributes,
-          geometry,
+          geometry: FeatureHelper.fromWKT(feature.geometry),
         });
       }
       if (feature instanceof Geometry) {
@@ -90,6 +91,9 @@ export class FeatureHelper {
   }
 
   public static fromWKT(geometry: string, sourceProjection?: string, mapProjection?: string): Geometry {
+    if (geometry.startsWith('CIRCLE')) {
+      return FeatureHelper.readCircleWKT(geometry, sourceProjection, mapProjection);
+    }
     if (!sourceProjection || !mapProjection || sourceProjection === mapProjection) {
       return FeatureHelper.wktFormatter.readGeometry(geometry);
     }
@@ -97,6 +101,17 @@ export class FeatureHelper {
       dataProjection: sourceProjection,
       featureProjection: mapProjection,
     });
+  }
+
+  private static readCircleWKT(geometry: string, sourceProjection?: string, mapProjection?: string) {
+    const circleXY = geometry.replace('CIRCLE(', '').replace(')', '').split(' ');
+    const center = [ parseFloat(circleXY[0]), parseFloat(circleXY[1]) ];
+    const radius = parseFloat(circleXY[2]);
+    const geom = new Circle(center, radius);
+    if (!sourceProjection || !mapProjection || sourceProjection === mapProjection) {
+      return geom;
+    }
+    return geom.transform(sourceProjection, mapProjection);
   }
 
 }
