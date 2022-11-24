@@ -2,10 +2,14 @@ import { APP_INITIALIZER, InjectionToken, NgModule } from '@angular/core';
 import { ViewerAppComponent } from './pages';
 import { MapModule } from '@tailormap-viewer/map';
 import { StoreModule } from '@ngrx/store';
+import { StoreRouterConnectingModule, routerReducer } from '@ngrx/router-store';
 import { EffectsModule } from '@ngrx/effects';
 import { coreReducer } from './state/core.reducer';
 import { coreStateKey } from './state/core.state';
+import { bookmarkReducer } from  './bookmark/bookmark.reducer';
+import { bookmarkStateKey } from './bookmark/bookmark.state';
 import { CoreEffects } from './state/core.effects';
+import { BookmarkEffects } from './bookmark/bookmark.effects';
 import { TAILORMAP_API_V1_SERVICE, TailormapApiV1Service } from '@tailormap-viewer/api';
 import { ICON_SERVICE_ICON_LOCATION, IconService, SharedModule } from '@tailormap-viewer/shared';
 import { ComponentsModule } from './components/components.module';
@@ -47,6 +51,8 @@ const sentryProviders = SENTRY_DSN === '@SENTRY_DSN@' ? [] : [
   imports: [
     StoreModule.forRoot({
       [coreStateKey]: coreReducer,
+      [bookmarkStateKey]: bookmarkReducer,
+      router: routerReducer,
     }, {
       runtimeChecks: {
         strictActionImmutability: true,
@@ -57,7 +63,8 @@ const sentryProviders = SENTRY_DSN === '@SENTRY_DSN@' ? [] : [
         strictActionTypeUniqueness: true,
       },
     }),
-    EffectsModule.forRoot([CoreEffects]),
+    StoreRouterConnectingModule.forRoot(),
+    EffectsModule.forRoot([ CoreEffects, BookmarkEffects ]),
     ApplicationMapModule,
     MapModule,
     FilterModule,

@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { map, Observable, of, Subject, takeUntil } from 'rxjs';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { map, Observable, of, Subject, takeUntil, filter, combineLatest, debounceTime } from 'rxjs';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { loadApplication } from '../../state/core.actions';
 import { selectApplicationErrorMessage, selectApplicationLoadingState } from '../../state/core.selectors';
+import { selectBookmarkFragment } from '../../bookmark/bookmark.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 
 @Component({
@@ -23,6 +24,7 @@ export class ViewerAppComponent implements OnInit, OnDestroy {
   constructor(
     private store$: Store,
     private route: ActivatedRoute,
+    private router: Router,
     private cdr: ChangeDetectorRef,
   ) { }
 
@@ -54,6 +56,21 @@ export class ViewerAppComponent implements OnInit, OnDestroy {
         this.isLoading = loadingState === LoadingStateEnum.LOADING;
         this.loadingFailed = loadingState === LoadingStateEnum.FAILED;
         this.cdr.detectChanges();
+      });
+
+    combineLatest([ this.store$.select(selectBookmarkFragment), this.store$.select(selectApplicationLoadingState) ])
+      .pipe(
+        takeUntil(this.destroyed),
+        filter(([ bookmark, loadingState ]) => bookmark !== undefined && loadingState === LoadingStateEnum.LOADED),
+        debounceTime(10),
+      )
+      .subscribe(([ bookmark, _ ]) => {
+          if (bookmark === '') {
+              this.router.navigate([], { relativeTo: this.route, fragment: undefined, replaceUrl: true });
+              return;
+          }
+
+          this.router.navigate([], { relativeTo: this.route, fragment: bookmark, replaceUrl: true });
       });
   }
 
