@@ -142,6 +142,14 @@ export class OpenLayersMap implements MapViewerModel {
     });
   }
 
+  public setCenterAndZoom(center: number[], zoom: number) {
+      this.executeMapAction(olMap => {
+          const view = olMap.getView();
+          view.setCenter(center);
+          view.setZoom(zoom);
+      });
+  }
+
   public zoomToFeature(olFeature: Feature<Geometry>) {
     this.zoomToGeometry(olFeature.getGeometry());
   }
@@ -229,6 +237,7 @@ export class OpenLayersMap implements MapViewerModel {
             maxResolution: view.getMaxResolution() || 0,
             scale,
             size: olMap.getSize(),
+            center: olMap.getView().getCenter() != null ? olMap.getView().getCenter() : undefined,
             extent: olMap.getView().getCenter() != null ? olMap.getView().calculateExtent(olMap.getSize()) : null,
           };
         }),

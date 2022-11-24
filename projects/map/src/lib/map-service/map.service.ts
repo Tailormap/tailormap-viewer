@@ -198,6 +198,10 @@ export class MapService {
     this.map.zoomToInitialExtent();
   }
 
+  public setCenterAndZoom(center: number[], zoom: number) {
+      this.map.setCenterAndZoom(center, zoom);
+  }
+
   public zoomTo(geometry: string, projectionCode: string) {
     this.getProjectionCode$()
       .pipe(take(1))
