@@ -17,6 +17,7 @@ import { Options } from 'ol/source/ImageWMS';
 import { ServerType } from 'ol/source/wms';
 import { ResolvedServerType, ServerType as TMServerType } from '@tailormap-viewer/api';
 import { ObjectHelper } from '@tailormap-viewer/shared';
+import { createForProjection } from 'ol/tilegrid';
 
 export interface LayerProperties {
   id: string;
@@ -64,7 +65,7 @@ export class OlLayerHelper {
       return OlLayerHelper.createTMSLayer(layer, projection);
     }
     if (LayerTypesHelper.isWmsLayer(layer)) {
-      return OlLayerHelper.createWMSLayer(layer);
+      return OlLayerHelper.createWMSLayer(layer, projection);
     }
     if (LayerTypesHelper.isWmtsLayer(layer)) {
       return OlLayerHelper.createWMTSLayer(layer, projection, pixelRatio);
@@ -149,7 +150,7 @@ export class OlLayerHelper {
     });
   }
 
-  public static createWMSLayer(layer: WMSLayerModel): TileLayer<TileWMS> | ImageLayer<ImageWMS> {
+  public static createWMSLayer(layer: WMSLayerModel, projection: Projection): TileLayer<TileWMS> | ImageLayer<ImageWMS> {
     let serverType: ServerType | undefined;
     let hidpi = true;
 
@@ -176,9 +177,11 @@ export class OlLayerHelper {
         source,
       });
     } else {
+      const tileGrid = createForProjection(projection, undefined, 512);
       const source = new TileWMS({
         ...sourceOptions as any,
         gutter: layer.tilingGutter || 0,
+        tileGrid,
       });
       return new TileLayer({
         visible: layer.visible,
