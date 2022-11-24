@@ -22,7 +22,7 @@ import { Layer } from 'ol/layer';
 import { Source } from 'ol/source';
 import LayerRenderer from 'ol/renderer/Layer';
 import { Coordinate } from 'ol/coordinate';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpXsrfTokenExtractor } from '@angular/common/http';
 
 export type OlLayerFilter = (layer: Layer<Source, LayerRenderer<any>>) => boolean;
 
@@ -45,8 +45,9 @@ export class MapService {
 
   constructor(
     private ngZone: NgZone,
+    private httpXsrfTokenExtractor: HttpXsrfTokenExtractor,
   ) {
-    this.map = new OpenLayersMap(this.ngZone);
+    this.map = new OpenLayersMap(this.ngZone, this.httpXsrfTokenExtractor);
   }
 
   public initMap(options: MapViewerOptionsModel) {
