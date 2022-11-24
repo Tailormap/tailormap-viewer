@@ -14,6 +14,7 @@ import { LayerTypesHelper } from '../helpers/layer-types.helper';
 import Geometry from 'ol/geom/Geometry';
 import { ArrayHelper } from '@tailormap-viewer/shared';
 import { ResolvedServerType } from '@tailormap-viewer/api';
+import { NgZone } from '@angular/core';
 
 export class OpenLayersLayerManager implements LayerManagerModel {
 
@@ -28,7 +29,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
   private prevBackgroundLayerIds: string[] = [];
   private prevLayerIdentifiers: string[] = [];
 
-  constructor(private olMap: OlMap) {}
+  constructor(private olMap: OlMap, private ngZone: NgZone) {}
 
   public init() {
     this.olMap.addLayer(this.backgroundLayerGroup);
@@ -314,7 +315,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     if (LayerTypesHelper.isVectorLayer(layer)) {
       return this.createVectorLayer(layer);
     }
-    const olLayer = OlLayerHelper.createLayer(layer, this.olMap.getView().getProjection());
+    const olLayer = OlLayerHelper.createLayer(layer, this.olMap.getView().getProjection(), undefined, this.ngZone);
     if (!olLayer) {
       return null;
     }

@@ -17,6 +17,9 @@ import { Options } from 'ol/source/ImageWMS';
 import { ServerType } from 'ol/source/wms';
 import { ResolvedServerType, ServerType as TMServerType } from '@tailormap-viewer/api';
 import { ObjectHelper } from '@tailormap-viewer/shared';
+import { ImageTile } from 'ol';
+import { NgZone } from '@angular/core';
+import TileState from 'ol/TileState';
 import { createForProjection } from 'ol/tilegrid';
 
 export interface LayerProperties {
@@ -34,6 +37,8 @@ interface WmsServiceParamsModel {
   CQL_FILTER?: string;
   CACHE?: number;
 }
+
+const MAX_URL_LENGTH_BEFORE_POST = 4096;
 
 export class OlLayerHelper {
 
@@ -60,12 +65,17 @@ export class OlLayerHelper {
     };
   }
 
-  public static createLayer(layer: LayerModel, projection: Projection, pixelRatio?: number): TileLayer<TileWMS> | ImageLayer<ImageWMS> | TileLayer<XYZ> | TileLayer<WMTS> | null {
+  public static createLayer(
+    layer: LayerModel,
+    projection: Projection,
+    pixelRatio?: number,
+    ngZone?: NgZone,
+  ): TileLayer<TileWMS> | ImageLayer<ImageWMS> | TileLayer<XYZ> | TileLayer<WMTS> | null {
     if (LayerTypesHelper.isTmsLayer(layer)) {
       return OlLayerHelper.createTMSLayer(layer, projection);
     }
     if (LayerTypesHelper.isWmsLayer(layer)) {
-      return OlLayerHelper.createWMSLayer(layer, projection);
+      return OlLayerHelper.createWMSLayer(layer, projection, ngZone);
     }
     if (LayerTypesHelper.isWmtsLayer(layer)) {
       return OlLayerHelper.createWMTSLayer(layer, projection, pixelRatio);
@@ -150,7 +160,7 @@ export class OlLayerHelper {
     });
   }
 
-  public static createWMSLayer(layer: WMSLayerModel, projection: Projection): TileLayer<TileWMS> | ImageLayer<ImageWMS> {
+  public static createWMSLayer(layer: WMSLayerModel, projection: Projection, ngZone?: NgZone): TileLayer<TileWMS> | ImageLayer<ImageWMS> {
     let serverType: ServerType | undefined;
     let hidpi = true;
 
@@ -177,10 +187,15 @@ export class OlLayerHelper {
         source,
       });
     } else {
+      const tileLoadFunction = !ngZone ? null : OlLayerHelper.getWmsPOSTTileLoadFunction(
+        ngZone,
+        MAX_URL_LENGTH_BEFORE_POST,
+        ['CQL_FILTER']);
       const tileGrid = createForProjection(projection, undefined, 512);
       const source = new TileWMS({
         ...sourceOptions as any,
         gutter: layer.tilingGutter || 0,
+        tileLoadFunction,
         tileGrid,
       });
       return new TileLayer({
@@ -188,6 +203,46 @@ export class OlLayerHelper {
         source,
       });
     }
+  }
+
+  private static getWmsPOSTTileLoadFunction(ngZone: NgZone, maxUrlLength: number, paramsToPutInBody: string[]) {
+    return (tile: ImageTile, src: string) => {
+      if (src.length > maxUrlLength) {
+        ngZone.runOutsideAngular(() => {
+          const url = new URL(src);
+          const body = new URLSearchParams();
+          paramsToPutInBody.forEach(param => {
+            if (url.searchParams.has(param)) {
+              body.set(param, url.searchParams.get(param) as string);
+              url.searchParams.delete(param);
+            }
+          });
+          const headers = new Headers();
+          headers.set('Content-Type', 'application/x-www-form-urlencoded');
+          fetch(url.toString(), {
+            method: 'POST',
+            headers,
+            body,
+          }).then(response => {
+            if (response.ok) {
+              response.blob().then(blob => {
+                const image: HTMLImageElement = tile.getImage() as HTMLImageElement;
+                const objectUrl = URL.createObjectURL(blob);
+                image.src = objectUrl;
+                image.onload = () => {
+                  URL.revokeObjectURL(objectUrl);
+                };
+              });
+            } else {
+              tile.setState(TileState.ERROR);
+            }
+          });
+        });
+      } else {
+        // @ts-ignore
+        tile.getImage().src = src;
+      }
+    };
   }
 
   public static getWmsServiceParams(layer: WMSLayerModel, addCacheBust?: boolean): WmsServiceParamsModel {
