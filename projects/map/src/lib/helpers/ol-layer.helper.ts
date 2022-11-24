@@ -217,7 +217,7 @@ export class OlLayerHelper {
               url.searchParams.delete(param);
             }
           });
-          const headers: HeadersInit = new Headers();
+          const headers = new Headers();
           headers.set('Content-Type', 'application/x-www-form-urlencoded');
           fetch(url.toString(), {
             method: 'POST',
