@@ -20,6 +20,7 @@ import { ObjectHelper } from '@tailormap-viewer/shared';
 import { ImageTile } from 'ol';
 import { NgZone } from '@angular/core';
 import TileState from 'ol/TileState';
+import { createForProjection } from 'ol/tilegrid';
 
 export interface LayerProperties {
   id: string;
@@ -64,13 +65,17 @@ export class OlLayerHelper {
     };
   }
 
-  public static createLayer(layer: LayerModel, projection: Projection, pixelRatio?: number,
-                            ngZone?: NgZone): TileLayer<TileWMS> | ImageLayer<ImageWMS> | TileLayer<XYZ> | TileLayer<WMTS> | null {
+  public static createLayer(
+    layer: LayerModel,
+    projection: Projection,
+    pixelRatio?: number,
+    ngZone?: NgZone,
+  ): TileLayer<TileWMS> | ImageLayer<ImageWMS> | TileLayer<XYZ> | TileLayer<WMTS> | null {
     if (LayerTypesHelper.isTmsLayer(layer)) {
       return OlLayerHelper.createTMSLayer(layer, projection);
     }
     if (LayerTypesHelper.isWmsLayer(layer)) {
-      return OlLayerHelper.createWMSLayer(layer, ngZone);
+      return OlLayerHelper.createWMSLayer(layer, projection, ngZone);
     }
     if (LayerTypesHelper.isWmtsLayer(layer)) {
       return OlLayerHelper.createWMTSLayer(layer, projection, pixelRatio);
@@ -155,7 +160,7 @@ export class OlLayerHelper {
     });
   }
 
-  public static createWMSLayer(layer: WMSLayerModel, ngZone?: NgZone): TileLayer<TileWMS> | ImageLayer<ImageWMS> {
+  public static createWMSLayer(layer: WMSLayerModel, projection: Projection, ngZone?: NgZone): TileLayer<TileWMS> | ImageLayer<ImageWMS> {
     let serverType: ServerType | undefined;
     let hidpi = true;
 
@@ -186,10 +191,12 @@ export class OlLayerHelper {
         ngZone,
         MAX_URL_LENGTH_BEFORE_POST,
         ['CQL_FILTER']);
+      const tileGrid = createForProjection(projection, undefined, 512);
       const source = new TileWMS({
         ...sourceOptions as any,
         gutter: layer.tilingGutter || 0,
         tileLoadFunction,
+        tileGrid,
       });
       return new TileLayer({
         visible: layer.visible,

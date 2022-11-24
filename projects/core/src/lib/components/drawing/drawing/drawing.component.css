@@ -10,6 +10,7 @@
 
 .drawing-form ::ng-deep .icon-button-list {
   display: flex;
+  flex-wrap: wrap;
 }
 
 .drawing-form ::ng-deep .icon-button-list + .icon-button-list {
@@ -20,10 +21,11 @@
   min-width: 32px;
   padding: 0 8px;
   border-radius: 3px;
+  margin: 8px 8px 0 0;
 }
 
-.drawing-form ::ng-deep .icon-button-list .mat-stroked-button + .mat-stroked-button {
-  margin-left: 8px;
+.drawing-form ::ng-deep .icon-button-list .mat-stroked-button:last-of-type {
+  margin-right: 0;
 }
 
 .remove-buttons {

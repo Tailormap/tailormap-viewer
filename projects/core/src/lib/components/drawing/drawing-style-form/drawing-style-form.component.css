@@ -13,10 +13,6 @@
   margin-bottom: 6px;
 }
 
-.settings-section .icon-button-list {
-  margin-left: 6px;
-}
-
 .section-label + mat-form-field {
   margin-top: 16px;
 }

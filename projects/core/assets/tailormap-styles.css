@@ -166,3 +166,19 @@ body {
   height: 16px;
   margin-right: 2px;
 }
+
+.icon-button-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.icon-button-list .mat-stroked-button {
+  min-width: 32px;
+  padding: 0 8px;
+  border-radius: 3px;
+  margin: 8px 8px 0 0;
+}
+
+.icon-button-list .mat-stroked-button:last-of-type {
+  margin-right: 0;
+}

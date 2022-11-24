@@ -1,0 +1,31 @@
+<h2 i18n>Add spatial filter</h2>
+
+<ng-template #noLayers>
+  <div i18n>No layers available to filter on</div>
+</ng-template>
+
+<ng-container *ngIf="(availableLayers$ | async) as availableLayers">
+  <ng-container *ngIf="availableLayers.length > 0; else: noLayers">
+
+    <mat-form-field appearance="fill">
+      <mat-label i18n>Select layer(s)</mat-label>
+      <mat-select [formControl]="selectedLayers" multiple>
+        <mat-option *ngFor="let layer of availableLayers" [value]="layer.id">{{layer.title}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div *ngIf="selectedLayers.value.length > 0">
+      <div i18n>Draw filter geometry</div>
+      <tm-map-drawing-buttons [allowedShapes]="allowedGeometryTypes"
+                              [drawingLayerId]="drawingLayerId"
+                              [drawSingleShape]="true"
+                              (drawingAdded)="drawingAdded($event)"></tm-map-drawing-buttons>
+    </div>
+
+    <div *ngIf="currentGroup" class="buttons">
+      <button mat-flat-button (click)="remove()" i18n>Remove</button>
+      <button mat-flat-button color="primary" (click)="save()" i18n>Save</button>
+    </div>
+
+  </ng-container>
+</ng-container>

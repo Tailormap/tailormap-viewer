@@ -1,4 +1,4 @@
-<div *ngIf="visible$ | async">
+<div class="print-panel" *ngIf="visible$ | async">
 
   <ng-container *ngIf="(busy$ | async) === false; else busy" >
 
