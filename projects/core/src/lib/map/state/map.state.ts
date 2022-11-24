@@ -15,6 +15,7 @@ export interface MapState {
   errorMessage?: string;
   mapSettings?: MapSettingsModel;
   services: ServiceModel[];
+  initiallyVisibleLayers: AppLayerModel[];
   layers: AppLayerModel[];
   baseLayerTreeNodes: ExtendedLayerTreeNodeModel[];
   layerTreeNodes: ExtendedLayerTreeNodeModel[];
@@ -25,6 +26,7 @@ export interface MapState {
 export const initialMapState: MapState = {
   loadStatus: LoadingStateEnum.INITIAL,
   services: [],
+  initiallyVisibleLayers: [],
   layers: [],
   baseLayerTreeNodes: [],
   layerTreeNodes: [],

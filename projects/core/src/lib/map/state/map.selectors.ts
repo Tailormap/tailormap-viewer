@@ -7,6 +7,7 @@ import { ExtendedAppLayerModel, ExtendedLayerTreeNodeModel } from '../models';
 
 const selectMapState = createFeatureSelector<MapState>(mapStateKey);
 
+export const selectInitiallyVisibleLayers = createSelector(selectMapState, state => state.initiallyVisibleLayers);
 export const selectServices = createSelector(selectMapState, state => state.services);
 export const selectLayers = createSelector(selectMapState, state => state.layers);
 export const selectSelectedLayerId = createSelector(selectMapState, state => state.selectedLayer);
@@ -14,6 +15,7 @@ export const selectMapSettings = createSelector(selectMapState, state => state.m
 export const selectLayerTreeNodes = createSelector(selectMapState, state => state.layerTreeNodes);
 export const selectBackgroundLayerTreeNodes = createSelector(selectMapState, state => state.baseLayerTreeNodes);
 export const selectSelectedBackgroundNodeId = createSelector(selectMapState, state => state.selectedBackgroundNode);
+export const selectLoadStatus = createSelector(selectMapState, state => state.loadStatus);
 
 export const selectMapOptions = createSelector(
   selectMapSettings,
@@ -78,6 +80,14 @@ export const selectOrderedLayerIds = createSelector(
 export const selectOrderedBackgroundLayerIds = createSelector(
   selectBackgroundLayerTreeNodes,
   baseLayerTreeNodes => LayerTreeNodeHelper.getAppLayerIds(baseLayerTreeNodes, baseLayerTreeNodes.find(l => l.root)),
+);
+
+export const selectChangedLayers  = createSelector(
+  selectLayers,
+  selectInitiallyVisibleLayers,
+
+  (layers: AppLayerModel[], initiallyVisible: AppLayerModel[]) =>
+    layers.filter(a => (a.visible !== (initiallyVisible.find(b => b.id === a.id) !== undefined))),
 );
 
 export const selectOrderedVisibleLayersWithServices = createSelector(

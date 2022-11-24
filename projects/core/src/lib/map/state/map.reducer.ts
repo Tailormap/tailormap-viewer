@@ -20,6 +20,7 @@ const onLoadMapSuccess = (
     maxExtent: payload.maxExtent || undefined,
     crs: payload.crs,
   },
+  initiallyVisibleLayers: payload.appLayers.filter(a => a.visible),
   layers: [...payload.appLayers],
   services: payload.services,
   baseLayerTreeNodes: payload.baseLayerTreeNodes.map(LayerTreeNodeHelper.getExtendedLayerTreeNode),
@@ -96,6 +97,7 @@ const onAddServices = (state: MapState, payload: ReturnType<typeof MapActions.ad
 
 const onAddAppLayers = (state: MapState, payload: ReturnType<typeof MapActions.addAppLayers>): MapState => ({
   ...state,
+  initiallyVisibleLayers: [ ...state.initiallyVisibleLayers, ...payload.appLayers.filter(a => a.visible) ],
   layers: [ ...state.layers, ...payload.appLayers ],
 });
 
