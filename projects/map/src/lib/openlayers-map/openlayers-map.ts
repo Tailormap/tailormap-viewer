@@ -19,7 +19,7 @@ import Geometry from 'ol/geom/Geometry';
 import { buffer } from 'ol/extent';
 import BaseLayer from 'ol/layer/Base';
 import { OpenLayersWmsGetFeatureInfoHelper } from './helpers/open-layers-wms-get-feature-info.helper';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpXsrfTokenExtractor } from '@angular/common/http';
 import { FeatureModel } from '@tailormap-viewer/api';
 import { OpenLayersMapImageExporter } from './openlayers-map-image-exporter';
 
@@ -34,6 +34,7 @@ export class OpenLayersMap implements MapViewerModel {
 
   constructor(
     private ngZone: NgZone,
+    private httpXsrfTokenExtractor: HttpXsrfTokenExtractor,
   ) {
     this.resizeObserver = new ResizeObserver(() => this.updateMapSize());
   }
@@ -85,7 +86,7 @@ export class OpenLayersMap implements MapViewerModel {
       this.map.value.dispose();
     }
 
-    const layerManager = new OpenLayersLayerManager(olMap, this.ngZone);
+    const layerManager = new OpenLayersLayerManager(olMap, this.ngZone, this.httpXsrfTokenExtractor);
     layerManager.init();
     const toolManager = new OpenLayersToolManager(olMap, this.ngZone);
     OpenLayersEventManager.initEvents(olMap, this.ngZone);
