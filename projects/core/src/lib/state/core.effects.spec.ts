@@ -5,6 +5,7 @@ import { Observable, of } from 'rxjs';
 import { LoadApplicationService } from '../services/load-application.service';
 import { getAppResponseData } from '@tailormap-viewer/api';
 import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 import * as CoreActions from './core.actions';
 
 describe('CoreEffects', () => {
@@ -13,10 +14,12 @@ describe('CoreEffects', () => {
     const loadApplicationServiceMock = {
       loadApplication$: () => of({ success: true, result: { application: getAppResponseData(), components: [] } }),
     };
-    const replaceStateMock = jest.fn();
     const locationMock = {
       path: () => currentPath,
-      replaceState: replaceStateMock,
+    };
+    const navigateMock = jest.fn();
+    const routerMock = {
+      navigate: navigateMock,
     };
     TestBed.configureTestingModule({
       providers: [
@@ -24,10 +27,11 @@ describe('CoreEffects', () => {
         provideMockActions(() => actions$),
         { provide: LoadApplicationService, useValue: loadApplicationServiceMock },
         { provide: Location, useValue: locationMock },
+        { provide: Router, useValue: routerMock },
       ],
     });
     const effects = TestBed.inject(CoreEffects);
-    return [ effects, replaceStateMock ];
+    return [ effects, navigateMock ];
   };
 
   const getLoadApplicationSuccessAction = (name: string): Observable<any> => {
@@ -35,21 +39,21 @@ describe('CoreEffects', () => {
   };
 
   it('should redirect url is empty', () => {
-    const [ effects, replaceStateMock ] = setup('/', getLoadApplicationSuccessAction('test'));
+    const [ effects, navigateMock ] = setup('/', getLoadApplicationSuccessAction('test'));
     effects.updateUrlAfterApplicationLoad$.subscribe();
-    expect(replaceStateMock).toHaveBeenCalledWith('/app/test');
+    expect(navigateMock).toHaveBeenCalledWith([ 'app', 'test' ], { preserveFragment: true, skipLocationChange: true });
   });
 
   it('should redirect url is the current app name does not match the loaded app', () => {
-    const [ effects, replaceStateMock ] = setup('/app/does-not-match', getLoadApplicationSuccessAction('some name'));
+    const [ effects, navigateMock ] = setup('/app/does-not-match', getLoadApplicationSuccessAction('some name'));
     effects.updateUrlAfterApplicationLoad$.subscribe();
-    expect(replaceStateMock).toHaveBeenCalledWith('/app/some+name');
+    expect(navigateMock).toHaveBeenCalledWith([ 'app', 'some+name' ], { preserveFragment: true, skipLocationChange: true });
   });
 
   it('should not redirect url if application name is in URL already', () => {
-    const [ effects, replaceStateMock ] = setup('/app/test', getLoadApplicationSuccessAction('test'));
+    const [ effects, navigateMock ] = setup('/app/test', getLoadApplicationSuccessAction('test'));
     effects.updateUrlAfterApplicationLoad$.subscribe();
-    expect(replaceStateMock).not.toHaveBeenCalled();
+    expect(navigateMock).not.toHaveBeenCalled();
   });
 
 });
