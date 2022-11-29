@@ -5,6 +5,7 @@ import {
   BinaryFragmentType, BinaryFragmentData,
   PositionAndZoomFragmentType, PositionAndZoomFragmentData,
   LayerAndFlagsFragmentType, LayerAndFlagsFragmentData,
+  PositionFragmentType, PositionFragmentData,
   BookmarkFragmentType,
 } from './bookmark.model';
 
@@ -17,6 +18,7 @@ const selectSingleUnappliedFragment = (id: number) => createSelector(selectBookm
 type UnappliedFragmentMethod = {
   <State>(id: number, type: BinaryFragmentType): MemoizedSelector<State, BinaryFragmentData | undefined>;
   <State>(id: number, type: PositionAndZoomFragmentType): MemoizedSelector<State, PositionAndZoomFragmentData | undefined>;
+  <State>(id: number, type: PositionFragmentType): MemoizedSelector<State, PositionFragmentData | undefined>;
   <State, T extends { [Property in keyof T]: boolean }>(id: number, type: LayerAndFlagsFragmentType<T>): MemoizedSelector<State, LayerAndFlagsFragmentData<T> | undefined>;
 };
 

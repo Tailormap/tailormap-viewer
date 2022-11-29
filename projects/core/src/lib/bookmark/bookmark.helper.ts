@@ -3,6 +3,7 @@ import {
   BinaryFragmentType, BinaryFragmentData,
   PositionAndZoomFragmentType, PositionAndZoomFragmentData,
   LayerAndFlagsFragmentType, LayerAndFlagsFragmentData,
+  PositionFragmentType, PositionFragmentData,
 } from './bookmark.model';
 
 /* eslint-disable no-bitwise, no-dupe-class-members */
@@ -184,6 +185,15 @@ export class BookmarkHelper {
 
       case 'binary':
         return BookmarkHelper.encodeBytes(bookmark.id, Uint8Array.from(bookmark.value.value));
+
+      case 'position': {
+        const buf = new Uint8Array(8);
+        const view = new DataView(buf.buffer);
+        view.setFloat32(0, bookmark.value.position[0]);
+        view.setFloat32(4, bookmark.value.position[1]);
+
+        return BookmarkHelper.encodeBytes(bookmark.id, buf);
+      }
     }
   }
 
@@ -236,6 +246,7 @@ export class BookmarkHelper {
     id: number,
     fragmentData: string, key: LayerAndFlagsFragmentType<T>
   ): LayerAndFlagsFragmentData<T> | undefined;
+  public static deserializeBookmarkFragment(id: number, fragmentData: string, key: PositionFragmentType): PositionFragmentData | undefined;
   public static deserializeBookmarkFragment(id: number, fragmentData: string, key: BookmarkFragmentType): BookmarkFragmentData | undefined {
     switch (key.type) {
       case 'binary': {
@@ -287,6 +298,24 @@ export class BookmarkHelper {
         const precision = data[0].indexOf('.') === -1 ? 0 : data[0].length - data[0].indexOf('.') - 1;
 
         return { type: 'positionandzoom', position: [ parseFloat(data[0]), parseFloat(data[1]) ], zoom: parseFloat(data[2]), precision };
+      }
+
+      case 'position': {
+        const decoded = BookmarkHelper.decodeBytes(id, fragmentData);
+        if (decoded === undefined || decoded.length != 8) {
+          return undefined;
+        }
+
+        const view = new DataView(decoded.buffer);
+
+        const x = view.getFloat32(0);
+        const y = view.getFloat32(4);
+
+        if (!isFinite(x) || !isFinite(y)) {
+            return undefined;
+        }
+
+        return { type: 'position', position: [ x, y ] };
       }
     }
   }

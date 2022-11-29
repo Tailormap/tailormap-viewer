@@ -16,6 +16,11 @@ export interface BinaryFragmentType {
     type: 'binary';
 }
 
+export interface PositionFragmentType {
+    type: 'position';
+}
+
+
 export interface PositionAndZoomFragmentData extends PositionAndZoomFragmentType {
     position: [number, number];
     zoom: number;
@@ -30,8 +35,12 @@ export interface BinaryFragmentData extends BinaryFragmentType {
     value: Array<number>;
 }
 
-export type BookmarkFragmentType = PositionAndZoomFragmentType | LayerAndFlagsFragmentType<{ [_: string]: boolean }> | BinaryFragmentType;
-export type BookmarkFragmentData = PositionAndZoomFragmentData | LayerAndFlagsFragmentData<{ [_: string]: boolean }> | BinaryFragmentData;
+export interface PositionFragmentData extends PositionFragmentType {
+    position: [number, number];
+}
+
+export type BookmarkFragmentType = PositionAndZoomFragmentType | LayerAndFlagsFragmentType<{ [_: string]: boolean }> | BinaryFragmentType | PositionFragmentType;
+export type BookmarkFragmentData = PositionAndZoomFragmentData | LayerAndFlagsFragmentData<{ [_: string]: boolean }> | BinaryFragmentData | PositionFragmentData;
 
 export interface BookmarkFragment {
     id: BookmarkType | number;
