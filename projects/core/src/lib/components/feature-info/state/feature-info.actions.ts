@@ -5,7 +5,7 @@ const featureInfoActionsPrefix = '[Feature Info]';
 
 export const loadFeatureInfo = createAction(
   `${featureInfoActionsPrefix} Load Feature Info`,
-  props<{ mouseCoordinates: [number, number]; mapCoordinates: [number, number] }>(),
+  props<{ mouseCoordinates?: [number, number]; mapCoordinates: [number, number] }>(),
 );
 
 export const loadFeatureInfoSuccess = createAction(

@@ -1,6 +1,7 @@
 export enum BookmarkType {
     POSITION_ZOOM = 0,
     LAYER_VISIBILITY = 1,
+    FEATURE_COORDINATES = 2,
 }
 
 export interface PositionAndZoomFragmentType {
