@@ -32,7 +32,7 @@ export class BackgroundLayerToggleComponent {
         return selectedBackgroundNodeId ||
           (initiallySelectedBackgroundNodes.length === 1
             ? initiallySelectedBackgroundNodes[0].id
-            : undefined);
+            : 'EMPTY_BACKGROUND');
       }));
     this.backgroundLayers$ = this.store$.select(selectBackgroundNodesList).pipe(
       map(nodes => this.getEmptyOption().concat([
