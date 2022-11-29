@@ -11,6 +11,10 @@ export const setBookmarkData = createAction(
   `${prefix} Set Bookmark Data`,
   props<{ data: BookmarkFragment }>(),
 );
+export const unsetBookmarkData = createAction(
+  `${prefix} Unset Bookmark Data`,
+  props<{ id: number }>(),
+);
 export const appliedBookmarkData = createAction(
   `${prefix} Applied Bookmark Data`,
   props<{ bookmark?: BookmarkFragment }>(),

@@ -45,6 +45,21 @@ const onSetBookmarkData = (
   };
 };
 
+const onUnsetBookmarkData = (
+  state: BookmarkState,
+  payload: ReturnType<typeof BookmarkActions.unsetBookmarkData>,
+): BookmarkState => {
+  if (!state.primed) {
+    return state;
+  }
+
+  return {
+    ...state,
+    fragmentContents: [ ...state.fragmentContents.filter(a => a.id !== payload.id)],
+    appliedBookmarks: state.appliedBookmarks.filter(a => a !== payload.id),
+  };
+};
+
 const onAppliedBookmarkData = (
   state: BookmarkState,
   payload: ReturnType<typeof BookmarkActions.appliedBookmarkData>,
@@ -94,6 +109,7 @@ const bookmarkReducerImpl = createReducer<BookmarkState>(
   initialBookmarkState,
   on(BookmarkActions.loadFragment, onLoadFragment),
   on(BookmarkActions.setBookmarkData, onSetBookmarkData),
+  on(BookmarkActions.unsetBookmarkData, onUnsetBookmarkData),
   on(BookmarkActions.appliedBookmarkData, onAppliedBookmarkData),
 );
 export const bookmarkReducer = (state: BookmarkState | undefined, action: Action) => bookmarkReducerImpl(state, action);
