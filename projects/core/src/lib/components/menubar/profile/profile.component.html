@@ -2,6 +2,9 @@
                    [icon]="userDetails?.loggedIn ? 'user' : 'login'"></tm-menubar-button>
 
 <mat-menu #userMenu="matMenu" xPosition="after" yPosition="above">
+  <button mat-menu-item (click)="share()" *ngIf="canShare">
+    <span i18n>Share link</span>
+  </button>
   <button mat-menu-item disabled *ngIf="userDetails?.loggedIn && userDetails?.user">
     <span i18n>Logged in as</span>
     <span>{{' '}}{{userDetails?.user?.username}}</span>

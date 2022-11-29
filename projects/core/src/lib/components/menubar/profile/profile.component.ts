@@ -6,6 +6,7 @@ import { SecurityModel } from '@tailormap-viewer/api';
 import { SecurityService } from '../../../services/security.service';
 import { setLoginDetails, setRouteBeforeLogin } from '../../../state/core.actions';
 import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'tm-profile',
@@ -16,12 +17,14 @@ import { Router } from '@angular/router';
 export class ProfileComponent implements OnInit, OnDestroy {
 
   public userDetails: SecurityModel | null = null;
+  public canShare = !!navigator.share;
   private destroyed = new Subject();
 
   constructor(
     private store$: Store,
     private securityService: SecurityService,
     private router: Router,
+    private location: Location,
     private cdr: ChangeDetectorRef,
   ) {}
 
@@ -47,6 +50,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
           window.location.reload();
         }
       });
+  }
+
+  public share() {
+      navigator.share({ url: this.location.prepareExternalUrl(this.router.url) });
   }
 
   public login() {
