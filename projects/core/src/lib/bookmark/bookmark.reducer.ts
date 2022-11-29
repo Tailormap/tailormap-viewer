@@ -2,32 +2,17 @@ import * as BookmarkActions from './bookmark.actions';
 import { Action, createReducer, on } from '@ngrx/store';
 import { BookmarkState, initialBookmarkState } from './bookmark.state';
 import { BookmarkHelper } from './bookmark.helper';
-import { SerializedBookmark } from './bookmark.model';
-
-const bookmarkEquals = (a: SerializedBookmark, b: SerializedBookmark) => {
-  if (a.id !== b.id || a.value.length !== b.value.length) {
-    return false;
-  }
-
-  for (let i = 0; i < a.value.length; i++) {
-    if (a.value[i] !== b.value[i]) {
-      return false;
-    }
-  }
-
-  return true;
-};
 
 const onLoadFragment = (
-  state: BookmarkState,
+  _: BookmarkState,
   payload: ReturnType<typeof BookmarkActions.loadFragment>,
 ): BookmarkState => {
   if (payload.fragment === undefined || payload.fragment === null) { // TODO(puck): fragment can be null somehow
     return { ...initialBookmarkState, primed: true };
   }
 
-  const decomposed = BookmarkHelper.decomposeBookmarks(payload.fragment);
-  return { primed: true, bookmarkData: decomposed, appliedBookmarks: [] };
+  const decomposed = BookmarkHelper.splitBookmarks(payload.fragment);
+  return { primed: true, fragmentContents: decomposed, appliedBookmarks: [] };
 };
 
 const onSetBookmarkData = (
@@ -38,14 +23,24 @@ const onSetBookmarkData = (
     return state;
   }
 
-  const previousBookmark = state.bookmarkData.find(a => a.id === payload.data.id);
-  if (previousBookmark && bookmarkEquals(previousBookmark, payload.data)) {
+  const fragment = BookmarkHelper.serializeBookmarkData(payload.data);
+  const previousBookmark = state.fragmentContents.find(a => a.id === payload.data.id);
+
+  if (previousBookmark && previousBookmark.data === fragment) {
     return state;
+  }
+
+  if (fragment === '') {
+    return {
+      ...state,
+      fragmentContents: [...state.fragmentContents.filter(a => a.id !== payload.data.id)],
+      appliedBookmarks: state.appliedBookmarks.filter(a => a !== payload.data.id),
+    };
   }
 
   return {
     ...state,
-    bookmarkData: [ ...state.bookmarkData.filter(a => a.id !== payload.data.id), payload.data ],
+    fragmentContents: [ ...state.fragmentContents.filter(a => a.id !== payload.data.id), { id: payload.data.id, data: fragment }],
     appliedBookmarks: state.appliedBookmarks.filter(a => a !== payload.data.id),
   };
 };
@@ -59,16 +54,40 @@ const onAppliedBookmarkData = (
   }
 
   const bookmark = payload.bookmark;
+  if (bookmark === undefined) {
+      return state;
+  }
 
-  const appliedCorrectBookmark = state.bookmarkData.find(a => bookmarkEquals(a, bookmark));
-  if (appliedCorrectBookmark) {
-    return {
-      ...state,
-      appliedBookmarks: [ ...state.appliedBookmarks.filter(a => a !== bookmark.id), bookmark.id ],
-    };
-  } else {
+  const fragment = BookmarkHelper.serializeBookmarkData(payload.bookmark);
+  const currentBookmark = state.fragmentContents.find(a => a.id === bookmark.id);
+  if (currentBookmark === undefined) {
     return state;
   }
+
+  if (currentBookmark.data !== fragment) {
+      // Reserialize the old data; it might represent the same data.
+      const deserialized = BookmarkHelper.deserializeBookmarkFragment(currentBookmark.id, currentBookmark.data, bookmark.value as any);
+      if (deserialized === undefined) {
+          return state;
+      }
+
+      const reserialized = BookmarkHelper.serializeBookmarkData({ id: currentBookmark.id, value: deserialized });
+      if (reserialized !== fragment) {
+          return state;
+      }
+
+      // If so, update the fragment (so the URI updates)
+      return {
+        ...state,
+        appliedBookmarks: [ ...state.appliedBookmarks.filter(a => a !== bookmark.id), bookmark.id ],
+        fragmentContents: [ ...state.fragmentContents.filter(a => a.id !== bookmark.id), { id: bookmark.id, data: reserialized }],
+      };
+  }
+
+  return {
+    ...state,
+    appliedBookmarks: [ ...state.appliedBookmarks.filter(a => a !== bookmark.id), bookmark.id ],
+  };
 };
 
 const bookmarkReducerImpl = createReducer<BookmarkState>(

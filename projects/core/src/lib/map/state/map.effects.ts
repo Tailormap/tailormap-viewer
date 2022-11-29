@@ -12,14 +12,21 @@ import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { selectChangedLayers, selectLayers, selectLoadStatus } from './map.selectors';
 import { setLayerVisibility } from './map.actions';
 import { setBookmarkData, appliedBookmarkData } from '../../bookmark/bookmark.actions';
-import { BookmarkType } from '../../bookmark/bookmark.model';
-import { LayerBookmarkHelper, LayerVisibilityBookmarkItem } from '../helpers/layer-bookmark.helper';
+import { BookmarkType, LayerAndFlagsFragmentType } from '../../bookmark/bookmark.model';
 import { selectHasUnappliedFragment, selectUnappliedFragment } from '../../bookmark/bookmark.selectors';
+
+type BookmarkFlags = {
+  visible: boolean;
+};
 
 @Injectable()
 export class MapEffects {
 
-  private static LOAD_MAP_ERROR = $localize `Could not load map settings`;
+  private static LOAD_MAP_ERROR = $localize`Could not load map settings`;
+  private static BOOKMARK_TYPE: LayerAndFlagsFragmentType<BookmarkFlags> = {
+    type: 'layerandflags',
+    flagTypes: ['visible'],
+  };
 
   public triggerLoadMap$ = createEffect(() => {
     return this.actions$.pipe(
@@ -61,46 +68,51 @@ export class MapEffects {
     return combineLatest([ changedLayers$, loadingStateChanged$, hasUnappliedFragment$ ])
       .pipe(
         filter(([ , loadingState, hasUnappliedFragment ]) => loadingState === LoadingStateEnum.LOADED && !hasUnappliedFragment),
-        map(([layers]) => setBookmarkData({ data: LayerBookmarkHelper.serializeLayerVisibility(layers.map(a => ({ layerId: a.id, visible: a.visible }))) })));
+        map(([layers]) => setBookmarkData({
+          data: {
+            id: BookmarkType.LAYER_VISIBILITY,
+            value: { ...MapEffects.BOOKMARK_TYPE, data: layers.map(a => ({ id: a.id, data: { visible: a.visible } })) },
+          },
+        })));
   });
 
   public setLayerVisibilityFromBookmark$ = createEffect(() => {
-    const unappliedFragment$ = this.store$.select(selectUnappliedFragment(BookmarkType.LAYER_VISIBILITY));
+    const unappliedFragment$ = this.store$.select(selectUnappliedFragment(BookmarkType.LAYER_VISIBILITY, MapEffects.BOOKMARK_TYPE));
     const layers$ = this.store$.select(selectLayers);
     const changedLayers$ = this.store$.select(selectChangedLayers);
     const loadingStateChanged$ = this.store$.select(selectLoadStatus); //.pipe(distinctUntilChanged());
 
-    return combineLatest([unappliedFragment$, changedLayers$, loadingStateChanged$])
+    return combineLatest([ unappliedFragment$, changedLayers$, loadingStateChanged$ ])
       .pipe(
         withLatestFrom(layers$),
-        filter(([[, , loadingState]]) => loadingState === LoadingStateEnum.LOADED),
-        mergeMap(([[bookmark, changedLayers], layers]) => {
+        filter(([[ , , loadingState ]]) => loadingState === LoadingStateEnum.LOADED),
+        mergeMap(([[ bookmark, changedLayers ], layers ]) => {
           if (bookmark === undefined) {
-              return [];
+            return [];
           }
 
           const changes = [];
-          const items: LayerVisibilityBookmarkItem[] = LayerBookmarkHelper.deserializeLayerVisibility(bookmark) || [];
+          const items = bookmark.data;
           for (const layer of items) {
-            if (layers.find(a => a.id === layer.layerId) === undefined) {
-                // We got a layer that does not exist anymore. Skip it.
-                continue;
+            if (layers.find(a => a.id === layer.id) === undefined) {
+              // We got a layer that does not exist anymore. Skip it.
+              continue;
             }
 
-            const changedLayer = changedLayers.find(a => a.id === layer.layerId);
-            if (changedLayer === undefined || changedLayer.visible !== layer.visible) {
-              changes.push({ id: layer.layerId, checked: layer.visible });
+            const changedLayer = changedLayers.find(a => a.id === layer.id);
+            if (changedLayer === undefined || changedLayer.visible !== layer.data.visible) {
+              changes.push({ id: layer.id, checked: layer.data.visible });
             }
           }
 
           for (const layer of changedLayers) {
-            if (items.find(a => a.layerId === layer.id) === undefined) {
+            if (items.find(a => a.id === layer.id) === undefined) {
               changes.push({ id: layer.id, checked: !layer.visible });
             }
           }
 
           if (changes.length === 0) {
-            return [appliedBookmarkData({ bookmark })];
+            return [appliedBookmarkData({ bookmark: { id: BookmarkType.LAYER_VISIBILITY, value: bookmark } })];
           } else {
             return [setLayerVisibility({ visibility: changes })];
           }

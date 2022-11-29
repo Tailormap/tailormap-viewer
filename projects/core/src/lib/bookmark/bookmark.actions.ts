@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { SerializedBookmark } from './bookmark.model';
+import { BookmarkFragment } from './bookmark.model';
 
 const prefix = '[Bookmark]';
 
@@ -9,9 +9,9 @@ export const loadFragment = createAction(
 );
 export const setBookmarkData = createAction(
   `${prefix} Set Bookmark Data`,
-  props<{ data: SerializedBookmark }>(),
+  props<{ data: BookmarkFragment }>(),
 );
 export const appliedBookmarkData = createAction(
   `${prefix} Applied Bookmark Data`,
-  props<{ bookmark?: SerializedBookmark }>(),
+  props<{ bookmark?: BookmarkFragment }>(),
 );

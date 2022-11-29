@@ -1,15 +1,15 @@
-import { SerializedBookmark } from './bookmark.model';
+import { BookmarkFragmentString } from './bookmark.model';
 
 export const bookmarkStateKey = 'bookmark';
 
 export interface BookmarkState {
     primed: boolean;
     appliedBookmarks: number[];
-    bookmarkData: SerializedBookmark[];
+    fragmentContents: BookmarkFragmentString[];
 }
 
 export const initialBookmarkState: BookmarkState = {
     primed: false,
     appliedBookmarks: [],
-    bookmarkData: [],
+    fragmentContents: [],
 };
