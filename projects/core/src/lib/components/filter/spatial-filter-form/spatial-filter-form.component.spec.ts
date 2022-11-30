@@ -7,6 +7,8 @@ import { MapService } from '@tailormap-viewer/map';
 import { of } from 'rxjs';
 import { CreateFilterService } from '../services/create-filter.service';
 import { getFilterGroup } from '../../../filter/helpers/attribute-filter.helper.spec';
+import { SharedImportsModule } from '@tailormap-viewer/shared';
+import { RemoveFilterService } from '../services/remove-filter.service';
 
 const setup = async () => {
   const store = provideMockStore({
@@ -23,11 +25,16 @@ const setup = async () => {
     createSpatialFilter$: jest.fn(() => of(getFilterGroup())),
     updateSpatialFilter$: jest.fn(() => of(getFilterGroup())),
   };
+  const removeFilterServiceMock = {
+    removeFilter$: jest.fn(),
+  };
   await render(SpatialFilterFormComponent, {
+    imports: [SharedImportsModule],
     providers: [
       store,
       { provide: MapService, useValue: mapServiceMock },
       { provide: CreateFilterService, useValue: createFilterServiceMock },
+      { provide: RemoveFilterService, useValue: removeFilterServiceMock },
     ],
   });
 };

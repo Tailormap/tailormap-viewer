@@ -6,6 +6,7 @@ import { MenubarService } from '../../menubar';
 import { of } from 'rxjs';
 import { CreateFilterButtonComponent } from '../create-filter-button/create-filter-button.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { selectSpatialFormVisible } from '../state/filter-component.selectors';
 
 describe('FilterComponent', () => {
 
@@ -13,7 +14,12 @@ describe('FilterComponent', () => {
     await render(FilterComponent, {
       imports: [SharedImportsModule],
       providers: [
-        provideMockStore({ initialState: { filter: { filterGroups: [] } } }),
+        provideMockStore({
+          initialState: { filter: { filterGroups: [] } },
+          selectors: [
+            { selector: selectSpatialFormVisible, value: false },
+          ],
+        }),
       ],
     });
     expect(screen.queryByText('Add filter')).not.toBeInTheDocument();

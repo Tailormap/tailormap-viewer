@@ -110,7 +110,7 @@ export class OpenLayersDrawingTool implements DrawingToolModel {
 
   private getMeasureDrawingStyle() {
     return MapStyleHelper.getStyle({
-      styleKey: 'drawing-style',
+      styleKey: 'drawing-tool-style',
       zIndex: 9999,
       strokeColor: 'rgba(0, 0, 0, 0.3)',
       strokeWidth: 2,
