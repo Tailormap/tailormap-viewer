@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectFilterableLayers } from '../../../map/state/map.selectors';
 import { ExtendedAppLayerModel } from '../../../map/models';
@@ -42,6 +42,7 @@ export class SpatialFilterFormComponent implements OnInit, OnDestroy {
   private mapService = inject(MapService);
   private createFilterService = inject(CreateFilterService);
   private removeFilterService = inject(RemoveFilterService);
+  private cdr = inject(ChangeDetectorRef);
 
   private destroyed = new Subject();
 
@@ -133,6 +134,7 @@ export class SpatialFilterFormComponent implements OnInit, OnDestroy {
       this.currentGroup = undefined;
       this.selectedLayers.patchValue([], { emitEvent: false });
       this.geometriesSubject$.next([]);
+      this.cdr.detectChanges();
       return;
     }
     const geometries = group.filters.reduce<SpatialFilterGeometry[]>((g, filter) => {
@@ -141,6 +143,7 @@ export class SpatialFilterFormComponent implements OnInit, OnDestroy {
     this.currentGroup = group;
     this.geometriesSubject$.next(geometries);
     this.selectedLayers.patchValue(group.layerIds, { emitEvent: false });
+    this.cdr.detectChanges();
   }
 
   private updateCreateGroup(layers: number[], geometries: SpatialFilterGeometry[]) {
