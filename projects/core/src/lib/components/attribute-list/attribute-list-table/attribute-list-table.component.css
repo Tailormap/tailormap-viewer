@@ -52,6 +52,24 @@ mat-table {
   color: #6236ff;
 }
 
+.header-cell--with-filter .filter-disabled {
+  position: relative;
+}
+
+.header-cell--with-filter .filter-disabled:after{
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 3px;
+  background-color: var(--primary-color-0_5);
+  border-left: 2px solid #fff;
+  border-right: 2px solid #fff;
+  transform: rotate(313deg);
+  transform-origin: 100% 0;
+  top: 4px;
+  left: 1px;
+}
+
 .header-cell--with-sort .sort {
   cursor: pointer;
   visibility: hidden;

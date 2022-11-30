@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AttributeFilterModel } from '../models/attribute-filter.model';
 import * as FilterActions from '../state/filter.actions';
-import { selectFilterGroupForType, selectFilterGroups } from '../state/filter.selectors';
+import { selectEnabledFilterGroups, selectFilterGroupForType } from '../state/filter.selectors';
 import { map, Observable, take } from 'rxjs';
 import { nanoid } from 'nanoid';
 import { FilterTypeHelper } from '../helpers/filter-type.helper';
@@ -21,7 +21,7 @@ export class SimpleAttributeFilterService {
     layerId: number,
     filter: Omit<AttributeFilterModel, 'id'>,
   ) {
-    this.getGroup$(source, layerId).subscribe(group => {
+    this.getGroup$(source, layerId).pipe(take(1)).subscribe(group => {
       if (!group) {
         this.createGroup(source, layerId, filter);
         return;
@@ -45,11 +45,13 @@ export class SimpleAttributeFilterService {
 
   public getFilters$(source: string, layerId: number): Observable<AttributeFilterModel[]> {
     return this.getGroup$(source, layerId)
-      .pipe(map(group => group?.filters || []));
+      .pipe(map(group => {
+        return (group?.filters || []).map(f => ({ ...f, disabled: group?.disabled }));
+      }));
   }
 
   public getFiltersExcludingAttribute$(source: string, layerId: number, attribute: string) {
-    return this.store$.select(selectFilterGroups)
+    return this.store$.select(selectEnabledFilterGroups)
       .pipe(take(1), map(groups => {
         return groups.map(group => {
           if(group.source !== source || !group.layerIds.includes(layerId)) {
@@ -83,7 +85,7 @@ export class SimpleAttributeFilterService {
     layerId: number,
     attribute: string,
   ) {
-    this.getGroup$(source, layerId).subscribe(group => {
+    this.getGroup$(source, layerId).pipe(take(1)).subscribe(group => {
       if (!group) {
         return;
       }
@@ -103,7 +105,7 @@ export class SimpleAttributeFilterService {
     source: string,
     layerId: number,
   ) {
-    this.getGroup$(source, layerId).subscribe(group => {
+    this.getGroup$(source, layerId).pipe(take(1)).subscribe(group => {
       if (!group) {
         return;
       }
@@ -144,10 +146,7 @@ export class SimpleAttributeFilterService {
   }
 
   private getGroup$(source: string, layerId: number) {
-    return this.store$.select(selectFilterGroupForType<AttributeFilterModel>(source, layerId, FilterTypeEnum.ATTRIBUTE))
-      .pipe(
-        take(1),
-      );
+    return this.store$.select(selectFilterGroupForType<AttributeFilterModel>(source, layerId, FilterTypeEnum.ATTRIBUTE));
   }
 
 }

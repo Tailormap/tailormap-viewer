@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/
 import { AttributeListColumnModel } from '../models/attribute-list-column.model';
 import { Store } from '@ngrx/store';
 import { PopoverService, OverlayRef, PopoverPositionEnum, BrowserHelper } from '@tailormap-viewer/shared';
-import { concatMap, Observable, of, take } from 'rxjs';
+import { Observable, of, switchMap, take } from 'rxjs';
 import { selectLoadingDataSelectedTab, selectPagingDataSelectedTab, selectSelectedTab } from '../state/attribute-list.selectors';
 import { PageEvent } from '@angular/material/paginator';
 import { updatePage } from '../state/attribute-list.actions';
@@ -40,7 +40,7 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
     this.pagingData$ = this.store$.select(selectPagingDataSelectedTab);
     this.hasFilters$ = this.store$.select(selectSelectedTab)
       .pipe(
-        concatMap(tab => {
+        switchMap(tab => {
           if (!tab?.layerId) {
             return of(false);
           }
