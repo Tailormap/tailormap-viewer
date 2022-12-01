@@ -22,16 +22,12 @@ export class FilterDescriptionComponent {
   private AND = $localize `and`;
   private OR = $localize `or`;
 
-  public description: SafeHtml | null = null;
+  public description: SafeHtml = '';
 
   // @TODO: support multiple filterGroups with parentGroups
   @Input()
   public set filterGroup(filterGroup: ExtendedFilterGroupModel) {
     const queryDescription = this.convertGroupToDescription(filterGroup);
-    if (!queryDescription) {
-      this.description = null;
-      return;
-    }
     this.description = this.sanitizer.bypassSecurityTrustHtml(queryDescription);
   }
 
@@ -43,7 +39,7 @@ export class FilterDescriptionComponent {
 
   private convertFilterToDescription(filter: BaseFilterModel) {
     if (FilterTypeHelper.isSpatialFilter(filter)) {
-      return '';
+      return $localize `intersects with drawn geometry`;
     }
     if (FilterTypeHelper.isAttributeFilter(filter)) {
       return this.convertAttributeFilterToDescription(filter);

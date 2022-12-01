@@ -1,15 +1,9 @@
-<ng-template #panelTemplate let-spatialFormVisible>
-  <div class="filter-panel">
-    <tm-create-filter-button *ngIf="!spatialFormVisible"></tm-create-filter-button>
-    <div class="filter-form" *ngIf="spatialFormVisible">
-      <tm-spatial-filter-form></tm-spatial-filter-form>
-    </div>
-    <div class="filter-list" *ngIf="!spatialFormVisible">
-      <tm-filter-list></tm-filter-list>
-    </div>
+<div class="filter-panel" *ngIf="visible$ | async">
+  <tm-create-filter-button></tm-create-filter-button>
+  <div class="filter-form" *ngIf="spatialFormVisible$ | async">
+    <tm-spatial-filter-form></tm-spatial-filter-form>
   </div>
-</ng-template>
-
-<ng-container *ngIf="visible$ | async">
-  <ng-container *ngTemplateOutlet="panelTemplate; context: { $implicit: spatialFormVisible$ | async }"></ng-container>
-</ng-container>
+  <div class="filter-list" *ngIf="(spatialFormVisible$ | async) === false">
+    <tm-filter-list></tm-filter-list>
+  </div>
+</div>

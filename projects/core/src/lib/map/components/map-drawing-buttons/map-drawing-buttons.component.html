@@ -62,10 +62,4 @@
           mat-stroked-button
           color="primary"
           (click)="draw(drawingTypes.LABEL)"><mat-icon svgIcon="tools_draw_label"></mat-icon></button>
-  <button *ngIf="allowRemoveSelectedFeature && selectedFeatureId"
-          i18n-tmTooltip
-          tmTooltip="Remove selected feature"
-          mat-stroked-button
-          color="warn"
-          (click)="removeSelectedFeature()"><mat-icon svgIcon="trash_filled"></mat-icon></button>
 </div>

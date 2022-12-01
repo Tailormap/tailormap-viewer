@@ -2,10 +2,9 @@ import { ChangeDetectionStrategy, Component, inject, Input, OnInit } from '@angu
 import { ExtendedFilterGroupModel } from '../../../filter/models/extended-filter-group.model';
 import { FilterTypeEnum } from '../../../filter/models/filter-type.enum';
 import { Store } from '@ngrx/store';
-import { toggleFilterDisabled } from '../../../filter/state/filter.actions';
+import { removeFilterGroup, toggleFilterDisabled } from '../../../filter/state/filter.actions';
 import { AppLayerModel } from '@tailormap-viewer/api';
-import { setSelectedFilterGroup } from '../state/filter-component.actions';
-import { RemoveFilterService } from '../services/remove-filter.service';
+import { ConfirmDialogService } from '@tailormap-viewer/shared';
 
 @Component({
   selector: 'tm-filter-list-item',
@@ -19,7 +18,7 @@ export class FilterListItemComponent implements OnInit {
   public filter: ExtendedFilterGroupModel | null = null;
 
   private store$ = inject(Store);
-  private removeFilterService = inject(RemoveFilterService);
+  private confirmService = inject(ConfirmDialogService);
 
   public ngOnInit(): void {
   }
@@ -41,11 +40,15 @@ export class FilterListItemComponent implements OnInit {
   }
 
   public removeFilter(groupId: string) {
-    this.removeFilterService.removeFilter$(groupId).subscribe();
-  }
-
-  public editFilter(id: string) {
-    this.store$.dispatch(setSelectedFilterGroup({ id }));
+    this.confirmService.confirm$(
+      $localize `Remove filter?`,
+      $localize `Are you sure you want to remove this filter?`,
+      true,
+    ).subscribe((confirmed) => {
+      if (confirmed) {
+        this.store$.dispatch(removeFilterGroup({ filterGroupId: groupId }));
+      }
+    });
   }
 
 }

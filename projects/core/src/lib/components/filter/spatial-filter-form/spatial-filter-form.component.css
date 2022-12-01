@@ -1,25 +1,3 @@
 h2 {
-  margin-top: 16px;
   margin-bottom: 8px;
-}
-
-.form-section + .form-section {
-  margin-top: 16px;
-}
-
-.form-section--with-form-field + .form-section {
-  margin-top: 0;
-}
-
-.form-section-label {
-  padding-bottom: 6px;
-}
-
-.buttons {
-  border-top: 1px solid var(--border-color);
-  padding-top: 8px;
-}
-
-.buttons button + button {
-  margin-left: 8px;
 }

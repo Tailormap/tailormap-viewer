@@ -7,12 +7,12 @@ import { MatIconTestingModule } from '@angular/material/icon/testing';
 import userEvent from '@testing-library/user-event';
 import { DrawingFeatureTypeEnum } from '../../models/drawing-feature-type.enum';
 
-export const createMapServiceMock = () => {
+const setup = async (allowedDrawingShapes?: DrawingFeatureTypeEnum[]) => {
   const toolManagerMock = {
     enableTool: jest.fn(),
     disableTool: jest.fn(),
   };
-  const drawingSubject = new BehaviorSubject<{ type: string; geometry?: string }>({ type: 'start' });
+  const drawingSubject = new BehaviorSubject({ type: 'start' });
   const selectedFeaturesSubject = new Subject();
   const mapServiceMock = {
     createTool$: jest.fn(({ type }) => {
@@ -22,25 +22,14 @@ export const createMapServiceMock = () => {
       return of({ tool, manager: toolManagerMock });
     }),
     getToolManager$: jest.fn(() => of(toolManagerMock)),
-    renderFeatures$: jest.fn(() => of([])),
   };
 
-  return {
-    provider: { provide: MapService, useValue: mapServiceMock },
-    addDrawingEvent: (event: { type: string; geometry?: string }) => drawingSubject.next(event),
-    toolManager: toolManagerMock,
-    createTool$: mapServiceMock.createTool$,
-  };
-};
-
-const setup = async (allowedDrawingShapes?: DrawingFeatureTypeEnum[]) => {
-  const mapServiceMock = createMapServiceMock();
   const toolChanged = jest.fn();
   const drawingAdded = jest.fn();
   await render(MapDrawingButtonsComponent, {
     imports: [ SharedModule, MatIconTestingModule ],
     providers: [
-      mapServiceMock.provider,
+      { provide: MapService, useValue: mapServiceMock },
     ],
     componentProperties: {
       allowedShapes: allowedDrawingShapes,
@@ -49,20 +38,20 @@ const setup = async (allowedDrawingShapes?: DrawingFeatureTypeEnum[]) => {
     },
   });
 
-  return { addDrawingEvent: mapServiceMock.addDrawingEvent, toolChanged, drawingAdded };
+  return { drawingSubject, toolChanged, drawingAdded };
 };
 
 describe('MapDrawingButtonsComponent', () => {
 
   test('should emit events after enabling tool and drawing', async () => {
-    const { addDrawingEvent, toolChanged, drawingAdded } = await setup();
+    const { drawingSubject, toolChanged, drawingAdded } = await setup();
     expect(screen.getAllByRole('button').length).toEqual(9);
-    addDrawingEvent({ type: 'end' });
+    drawingSubject.next({ type: 'end' });
     expect(drawingAdded).not.toHaveBeenCalled();
-    addDrawingEvent({ type: 'start' });
+    drawingSubject.next({ type: 'start' });
     await userEvent.click(screen.getByLabelText('Draw point'));
     expect(toolChanged).toHaveBeenCalledWith(DrawingFeatureTypeEnum.POINT);
-    addDrawingEvent({ type: 'end' });
+    drawingSubject.next({ type: 'end' });
     expect(drawingAdded).toHaveBeenCalledWith({ type: 'end' });
   });
 
