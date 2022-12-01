@@ -1,21 +1,22 @@
-import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectFilterableLayers } from '../../../map/state/map.selectors';
 import { ExtendedAppLayerModel } from '../../../map/models';
-import { BehaviorSubject, combineLatest, map, Observable, of, Subject, take, takeUntil } from 'rxjs';
+import { BehaviorSubject, map, Observable, of, Subject, take, takeUntil } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type.enum';
 import { DrawingToolEvent, MapService } from '@tailormap-viewer/map';
 import { nanoid } from 'nanoid';
-import { DrawingFeatureModelAttributes } from '../../drawing/models/drawing-feature.model';
 import { SpatialFilterGeometry, SpatialFilterModel } from '../../../filter/models/spatial-filter.model';
 import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.helper';
-import { addFilterGroup, removeFilterGroup, updateFilterGroup } from '../../../filter/state/filter.actions';
+import { addFilterGroup, updateFilterGroup } from '../../../filter/state/filter.actions';
 import { selectSelectedFilterGroup } from '../state/filter-component.selectors';
 import { FilterGroupModel } from '../../../filter/models/filter-group.model';
 import { FilterTypeHelper } from '../../../filter/helpers/filter-type.helper';
 import { closeForm, setSelectedFilterGroup } from '../state/filter-component.actions';
 import { CreateFilterService } from '../services/create-filter.service';
+import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
+import { RemoveFilterService } from '../services/remove-filter.service';
 
 @Component({
   selector: 'tm-spatial-filter-form',
@@ -25,9 +26,23 @@ import { CreateFilterService } from '../services/create-filter.service';
 })
 export class SpatialFilterFormComponent implements OnInit, OnDestroy {
 
+  private DEFAULT_STYLE = FeatureStylingHelper.getDefaultHighlightStyle('filter-drawing-style', {
+    pointType: undefined,
+    fillColor: '#6236ff',
+    fillOpacity: 10,
+    strokeWidth: 2,
+  });
+
+  private SELECTED_STYLE = () => FeatureStylingHelper.getDefaultHighlightStyle('filter-selected-style', {
+    ...this.DEFAULT_STYLE,
+    isSelected: true,
+  });
+
   private store$ = inject(Store);
   private mapService = inject(MapService);
   private createFilterService = inject(CreateFilterService);
+  private removeFilterService = inject(RemoveFilterService);
+  private cdr = inject(ChangeDetectorRef);
 
   private destroyed = new Subject();
 
@@ -38,15 +53,22 @@ export class SpatialFilterFormComponent implements OnInit, OnDestroy {
     DrawingFeatureTypeEnum.POLYGON,
     DrawingFeatureTypeEnum.CIRCLE,
   ];
+  public selectedStyle = this.SELECTED_STYLE;
 
   public selectedLayers = new FormControl<number[]>([], {
     nonNullable: true,
   });
-  private geometries$ = new BehaviorSubject<SpatialFilterGeometry[]>([]);
-  private drawingFeatures$: Observable<string[]> = this.geometries$.asObservable()
-    .pipe(map(geometries => geometries.map(geom => geom.geometry)));
+  private geometriesSubject$ = new BehaviorSubject<SpatialFilterGeometry[]>([]);
+  private geometries$ = this.geometriesSubject$.asObservable();
+  private drawingFeatures$: Observable<FeatureModel[]> = this.geometries$
+    .pipe(map(geometries => {
+      return geometries.map<FeatureModel>(geom => ({
+        __fid: geom.id,
+        geometry: geom.geometry,
+        attributes: {},
+      }));
+    }));
   public currentGroup: FilterGroupModel<SpatialFilterModel> | undefined;
-  private updatingForm = false;
 
   public ngOnInit(): void {
     this.availableLayers$ = this.store$.select(selectFilterableLayers);
@@ -57,16 +79,15 @@ export class SpatialFilterFormComponent implements OnInit, OnDestroy {
         this.setForm(group);
       });
 
-    this.mapService.renderFeatures$<DrawingFeatureModelAttributes>(
+    this.mapService.renderFeatures$<FeatureModelAttributes>(
       this.drawingLayerId,
       this.drawingFeatures$,
-      FeatureStylingHelper.getDefaultHighlightStyle('filter-drawing-style'),
+      this.DEFAULT_STYLE,
     ).pipe(takeUntil(this.destroyed)).subscribe();
 
-    combineLatest([
-      this.selectedLayers.valueChanges,
-      this.geometries$.asObservable(),
-    ]).pipe(takeUntil(this.destroyed)).subscribe(([ layers, geometries ]) => this.updateCreateGroup(layers, geometries));
+    this.selectedLayers.valueChanges
+      .pipe(takeUntil(this.destroyed))
+      .subscribe((layers) => this.updateCreateGroup(layers, this.geometriesSubject$.value));
   }
 
   public ngOnDestroy(): void {
@@ -75,36 +96,62 @@ export class SpatialFilterFormComponent implements OnInit, OnDestroy {
   }
 
   public drawingAdded($event: DrawingToolEvent) {
-    this.geometries$.next(this.geometries$.value.concat({
-      id: nanoid(),
-      geometry: $event.geometry,
-    }));
+    const currentGeometries = this.geometriesSubject$.value;
+    const updatedGeometries = [ ...currentGeometries, { id: nanoid(), geometry: $event.geometry }];
+    this.geometriesSubject$.next(updatedGeometries);
+    this.updateCreateGroup(this.selectedLayers.value, updatedGeometries);
+  }
+
+  public featureRemoved($event: string) {
+    const currentGeometries = this.geometriesSubject$.value;
+    const updatedGeometries = currentGeometries.filter(geom => geom.id !== $event);
+    this.geometriesSubject$.next(updatedGeometries);
+    this.updateCreateGroup(this.selectedLayers.value, updatedGeometries);
+  }
+
+  public save() {
+    this.store$.dispatch(closeForm());
+  }
+
+  public cancel() {
+    this.store$.dispatch(closeForm());
+  }
+
+  public remove() {
+    if (!this.currentGroup) {
+      return;
+    }
+    this.removeFilterService.removeFilter$(this.currentGroup.id)
+      .subscribe((removed) => {
+        if (removed) {
+          this.store$.dispatch(closeForm());
+        }
+      });
   }
 
   private setForm(group?: FilterGroupModel) {
     if (!FilterTypeHelper.isSpatialFilterGroup(group)) {
-      this.geometries$.next([]);
+      this.currentGroup = undefined;
+      this.selectedLayers.patchValue([], { emitEvent: false });
+      this.geometriesSubject$.next([]);
+      this.cdr.detectChanges();
       return;
     }
     const geometries = group.filters.reduce<SpatialFilterGeometry[]>((g, filter) => {
       return [ ...g, ...filter.geometries ];
     }, []);
-    this.updatingForm = true;
     this.currentGroup = group;
-    this.geometries$.next(geometries);
+    this.geometriesSubject$.next(geometries);
     this.selectedLayers.patchValue(group.layerIds, { emitEvent: false });
+    this.cdr.detectChanges();
   }
 
   private updateCreateGroup(layers: number[], geometries: SpatialFilterGeometry[]) {
     if (layers.length === 0 || geometries.length === 0) {
       return;
     }
-    if (this.updatingForm) {
-      this.updatingForm = false;
-      return;
-    }
     if (!this.currentGroup) {
-      this.createFilterService.createSpatialFilterGroup$(geometries, layers)
+      this.createFilterService.createSpatialFilterGroup$(geometries || [], layers)
         .pipe(take(1))
         .subscribe(group => {
           this.store$.dispatch(addFilterGroup({ group }));
@@ -117,18 +164,6 @@ export class SpatialFilterFormComponent implements OnInit, OnDestroy {
       .subscribe(updatedFilterGroup => {
         this.store$.dispatch(updateFilterGroup({ filterGroup: updatedFilterGroup }));
       });
-  }
-
-  public save() {
-    this.store$.dispatch(closeForm());
-  }
-
-  public remove() {
-    if (!this.currentGroup) {
-      return;
-    }
-    this.store$.dispatch(removeFilterGroup({ filterGroupId: this.currentGroup.id }));
-    this.store$.dispatch(closeForm());
   }
 
 }

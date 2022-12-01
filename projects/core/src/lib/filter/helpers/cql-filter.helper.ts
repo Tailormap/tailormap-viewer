@@ -17,7 +17,10 @@ export class CqlFilterHelper {
     const layerIds = new Set<number>(layerIdList);
     layerIds.forEach(layerId => {
       const filtersForLayer = filterGroups.filter(f => f.layerIds.includes(layerId));
-      cqlDict.set(layerId, CqlFilterHelper.getFilterForLayer(filtersForLayer, layerId));
+      const cqlFilter = CqlFilterHelper.getFilterForLayer(filtersForLayer, layerId);
+      if (cqlFilter) {
+        cqlDict.set(layerId, cqlFilter);
+      }
     });
     return cqlDict;
   }

@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Subject, switchMap, take, takeUntil, tap } from 'rxjs';
 import {
   DrawingToolConfigModel, DrawingToolEvent, DrawingToolModel, DrawingType, MapService, MapStyleModel, SelectToolConfigModel,
@@ -32,10 +32,16 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
   public drawSingleShape = false;
 
   @Input()
+  public allowRemoveSelectedFeature = false;
+
+  @Input()
   public allowedShapes: DrawingFeatureTypeEnum[] | undefined = undefined;
 
   @Output()
   public drawingAdded: EventEmitter<DrawingToolEvent> = new EventEmitter<DrawingToolEvent>();
+
+  @Output()
+  public featureRemoved: EventEmitter<string> = new EventEmitter<string>();
 
   @Output()
   public featureSelected: EventEmitter<string | null> = new EventEmitter<string | null>();
@@ -50,8 +56,11 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
   public activeTool: DrawingFeatureTypeEnum | null = null;
   private selectTool: SelectToolModel | null = null;
 
+  public selectedFeatureId: string | null = null;
+
   constructor(
     private mapService: MapService,
+    private cdr: ChangeDetectorRef,
   ) { }
 
   public ngOnInit(): void {
@@ -69,7 +78,10 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
         if (drawEvent && drawEvent.type === 'end' && this.activeTool) {
           this.drawingAdded.emit(drawEvent);
           if (this.drawSingleShape) {
-            this.toggleTool(this.drawingFeatureTypeToDrawingType(this.activeTool), this.activeTool);
+            const activeTool = this.activeTool;
+            setTimeout(() => {
+              this.toggleTool(this.drawingFeatureTypeToDrawingType(activeTool), activeTool);
+            }, 100);
           }
         }
       });
@@ -89,6 +101,8 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
       )
       .subscribe(selectedFeatures => {
         const selectedFeature = selectedFeatures && selectedFeatures.length > 0 && selectedFeatures[0] ? selectedFeatures[0].__fid : null;
+        this.selectedFeatureId = selectedFeature;
+        this.cdr.detectChanges();
         this.featureSelected.emit(selectedFeature);
       });
   }
@@ -137,6 +151,14 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
       manager.enableTool(this.tool.id, true, { type });
       manager.disableTool(this.selectTool.id, true);
     });
+  }
+
+  public removeSelectedFeature() {
+    if (!this.selectedFeatureId) {
+      return;
+    }
+    this.featureRemoved.emit(this.selectedFeatureId);
+    this.selectedFeatureId = null;
   }
 
 }

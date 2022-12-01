@@ -19,12 +19,36 @@
       <tm-map-drawing-buttons [allowedShapes]="allowedGeometryTypes"
                               [drawingLayerId]="drawingLayerId"
                               [drawSingleShape]="true"
-                              (drawingAdded)="drawingAdded($event)"></tm-map-drawing-buttons>
+                              [allowRemoveSelectedFeature]="true"
+                              [selectionStyle]="selectedStyle"
+                              (drawingAdded)="drawingAdded($event)"
+                              (featureRemoved)="featureRemoved($event)"></tm-map-drawing-buttons>
     </div>
 
-    <div *ngIf="currentGroup" class="buttons">
-      <button mat-flat-button (click)="remove()" i18n>Remove</button>
-      <button mat-flat-button color="primary" (click)="save()" i18n>Save</button>
+    <div class="buttons">
+
+      <button mat-stroked-button
+              *ngIf="!currentGroup"
+              (click)="cancel()"
+              tmTooltip="Close filter form"
+              i18n-tmTooltip
+              i18n>Cancel</button>
+
+      <button mat-stroked-button
+              *ngIf="currentGroup"
+              color="warn"
+              (click)="remove()"
+              tmTooltip="Remove this filter"
+              i18n-tmTooltip
+              i18n>Remove</button>
+
+      <button mat-flat-button
+              *ngIf="currentGroup"
+              color="primary"
+              (click)="save()"
+              tmTooltip="Save filter"
+              i18n-tmTooltip
+              i18n>Save</button>
     </div>
 
   </ng-container>
