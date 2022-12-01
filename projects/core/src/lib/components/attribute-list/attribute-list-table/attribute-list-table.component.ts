@@ -47,7 +47,7 @@ export class AttributeListTableComponent {
     if (filters === null) {
       return;
     }
-    this.filtersDictionary = new Set<string>(filters.map(f => f.attribute));
+    this.filtersDictionary = new Map<string, AttributeFilterModel>(filters.map(f => [ f.attribute, f ]));
   }
 
   @Input()
@@ -65,7 +65,7 @@ export class AttributeListTableComponent {
   private _rows: AttributeListRowModel[] = [];
   private _columns: AttributeListColumnModel[] = [];
   public columnNames: string[] = [];
-  private filtersDictionary: Set<string> = new Set();
+  private filtersDictionary: Map<string, AttributeFilterModel> = new Map();
 
   private columnWidths: Map<string, number> = new Map();
   private isResizing = false;
@@ -124,8 +124,12 @@ export class AttributeListTableComponent {
     this.setFilter.emit({ columnId: column.id, attributeType: column.type });
   }
 
-  public getIsFilterActive(columnId: string) {
+  public hasFilter(columnId: string) {
     return this.filtersDictionary.has(columnId);
+  }
+
+  public hasDisabledFilter(columnId: string) {
+    return this.filtersDictionary.get(columnId)?.disabled;
   }
 
   public isSelected(row: AttributeListRowModel) {

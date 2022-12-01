@@ -14,7 +14,8 @@
       <mat-icon *ngIf="setFilter"
                 svgIcon="filter_outline"
                 class="filter"
-                [class.filter-active]="getIsFilterActive(col.id)"
+                [class.filter-active]="hasFilter(col.id)"
+                [class.filter-disabled]="hasDisabledFilter(col.id)"
                 (click)="onFilterClick($event, col)"></mat-icon>
       <mat-icon class="sort"
                 [class.sort-active]="sort?.column === col.id"
