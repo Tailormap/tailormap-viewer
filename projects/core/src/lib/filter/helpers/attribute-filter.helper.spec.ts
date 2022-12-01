@@ -9,9 +9,10 @@ import { AttributeFilterModel } from '../models/attribute-filter.model';
 export const getFilterGroup = <T extends BaseFilterModel = AttributeFilterModel>(
   filters?: T[],
   type?: FilterTypeEnum,
+  id?: string,
 ):  FilterGroupModel<T> => {
   const attributeFilter: AttributeFilterModel = {
-    id: '1',
+    id: id || '1',
     type: FilterTypeEnum.ATTRIBUTE,
     caseSensitive: false,
     invertCondition: false,

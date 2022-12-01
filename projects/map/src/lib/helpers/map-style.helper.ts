@@ -6,7 +6,7 @@ import { default as RegularShape, Options as RegularShapeOptions } from 'ol/styl
 import { MapStyleModel, MapStylePointType, OlMapStyleType } from '../models';
 import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
 import Feature from 'ol/Feature';
-import { Geometry, Point, Polygon } from 'ol/geom';
+import { Circle, Geometry, LinearRing, LineString, MultiLineString, MultiPoint, MultiPolygon, Point, Polygon } from 'ol/geom';
 import { forEach as forEachSegments } from 'ol/geom/flat/segments';
 import { buffer as bufferExtent } from 'ol/extent';
 import RenderFeature from 'ol/render/Feature';
@@ -15,6 +15,9 @@ import { ColorHelper, StyleHelper } from '@tailormap-viewer/shared';
 import { Icon } from 'ol/style';
 import { GeometryTypeHelper } from './geometry-type.helper';
 import { MapSizeHelper } from '../helpers/map-size.helper';
+import { OL3Parser } from 'jsts/org/locationtech/jts/io';
+import { BufferOp } from 'jsts/org/locationtech/jts/operation/buffer';
+import { fromCircle } from 'ol/geom/Polygon';
 
 export class MapStyleHelper {
 
@@ -22,6 +25,7 @@ export class MapStyleHelper {
   private static DEFAULT_SYMBOL_SIZE = 5;
   private static DEFAULT_FONT_SIZE = 12;
   private static DEFAULT_LABEL_COLOR = '#000000';
+  private static BUFFER_OPACITY_DECREASE = 20;
 
   private static DEFAULT_STYLE = MapStyleHelper.mapStyleModelToOlStyle({
     styleKey: 'DEFAULT_STYLE',
@@ -52,17 +56,13 @@ export class MapStyleHelper {
 
   private static mapStyleModelToOlStyle(styleConfig: MapStyleModel, feature?: Feature<Geometry>, resolution?: number) {
     const baseStyle = new Style();
-    if (styleConfig.strokeColor) {
-      const dash = StyleHelper.getDashArray(styleConfig.strokeType, styleConfig.strokeWidth);
-      const stroke = new Stroke({
-        color: ColorHelper.getRgbStyleForColor(styleConfig.strokeColor, styleConfig.strokeOpacity),
-        width: styleConfig.strokeWidth || 1,
-      });
-      if (dash.length > 0) {
-        stroke.setLineDash(dash);
-        stroke.setLineCap(styleConfig.strokeType === 'dot' ? 'round' : 'square');
-      }
+    const stroke = MapStyleHelper.createStroke(styleConfig);
+    if (stroke) {
       baseStyle.setStroke(stroke);
+    }
+    const fill = MapStyleHelper.createFill(styleConfig, MapStyleHelper.getOpacity(styleConfig.fillOpacity, !!styleConfig.buffer));
+    if (fill) {
+      baseStyle.setFill(fill);
     }
     if (styleConfig.fillColor) {
       baseStyle.setFill(new Fill({
@@ -82,7 +82,40 @@ export class MapStyleHelper {
     if (styleConfig.isSelected && (!styleConfig.pointType || (!!styleConfig.pointType && !styleConfig.label)) && typeof feature !== 'undefined') {
       styles.push(...MapStyleHelper.createOutlinedSelectionRectangle(feature, 1.3 * (resolution || 0)));
     }
+    if (styleConfig.isSelected && (!styleConfig.pointType || (!!styleConfig.pointType && !styleConfig.label)) && typeof feature !== 'undefined') {
+      styles.push(...MapStyleHelper.createOutlinedSelectionRectangle(feature, 1.3 * (resolution || 0)));
+    }
+    if (typeof styleConfig.buffer !== 'undefined' && styleConfig.buffer > 0 && typeof feature !== 'undefined') {
+      styles.push(...MapStyleHelper.createBuffer(feature, styleConfig.buffer, styleConfig));
+    }
     return styles;
+  }
+
+  private static createStroke(styleConfig: MapStyleModel, overrideOpacity?: number) {
+    if (!styleConfig.strokeColor) {
+      return null;
+    }
+    const dash = StyleHelper.getDashArray(styleConfig.strokeType, styleConfig.strokeWidth);
+    const stroke = new Stroke({
+      color: ColorHelper.getRgbStyleForColor(styleConfig.strokeColor, overrideOpacity || styleConfig.strokeOpacity),
+      width: styleConfig.strokeWidth || 1,
+    });
+    if (dash.length > 0) {
+      stroke.setLineDash(dash);
+      stroke.setLineCap(styleConfig.strokeType === 'dot' ? 'round' : 'square');
+    }
+    return stroke;
+  }
+
+  private static createFill(styleConfig: MapStyleModel, overrideOpacity?: number) {
+    if (!styleConfig.fillColor) {
+      return null;
+    }
+    return new Fill({
+      color: styleConfig.stripedFill
+        ? MapStyleHelper.createFillPattern(styleConfig.fillColor, overrideOpacity || styleConfig.fillOpacity)
+        : ColorHelper.getRgbStyleForColor(styleConfig.fillColor, overrideOpacity || styleConfig.fillOpacity),
+    });
   }
 
   private static createLabelStyle(styleConfig: MapStyleModel, feature?: Feature<Geometry>) {
@@ -196,6 +229,44 @@ export class MapStyleHelper {
       ...POINT_SHAPES[type],
     });
     return [new Style({ image: baseShape })];
+  }
+
+  private static createBuffer(feature: Feature<Geometry>, buffer: number, config: MapStyleModel) {
+    const geometry = feature.getGeometry();
+    if (!geometry) {
+      return [];
+    }
+    const parser = new OL3Parser();
+    parser.inject(
+      Point,
+      LineString,
+      LinearRing,
+      Polygon,
+      MultiPoint,
+      MultiLineString,
+      MultiPolygon,
+      Circle,
+    );
+    const jstsGeom = parser.read(GeometryTypeHelper.isCircleGeometry(geometry) ? fromCircle(geometry, 50) : geometry);
+    const buffered = BufferOp.bufferOp(jstsGeom, buffer);
+    const bufferedGeometry: Geometry = parser.write(buffered);
+
+    const bufferStyle = new Style({
+      geometry: bufferedGeometry,
+    });
+    const fill = MapStyleHelper.createFill(config, MapStyleHelper.getOpacity(config.fillOpacity, true));
+    if (fill) {
+      bufferStyle.setFill(fill);
+    }
+    const stroke = MapStyleHelper.createStroke(config, MapStyleHelper.getOpacity(config.strokeOpacity, true));
+    if (stroke) {
+      bufferStyle.setStroke(stroke);
+    }
+    return [bufferStyle];
+  }
+
+  private static getOpacity(opacity: number | undefined, hasBuffer?: boolean) {
+    return Math.max(0, (opacity || 100) - (hasBuffer ? MapStyleHelper.BUFFER_OPACITY_DECREASE : 0));
   }
 
   private static createOutlinedSelectionRectangle(feature: Feature<Geometry>, buffer: number, translate?: number[]): Style[] {
@@ -327,14 +398,6 @@ export class MapStyleHelper {
     const dx = args.arrowEnd[0] - args.arrowStart[0];
     const dy = args.arrowEnd[1] - args.arrowStart[1];
     const arrowAngle  = Math.atan2(dy, dx);
-    // let outlineStroke;
-    // if (args.styleConfig.lineOutline) {
-    //   const outlineRgb = getRgbForColor(args.styleConfig.lineOutline);
-    //   outlineStroke = new Stroke({
-    //     color: `rgba(${outlineRgb.r}, ${outlineRgb.g}, ${outlineRgb.b}, ${args.styleConfig.strokeOpacity})`,
-    //     width: 1,
-    //   });
-    // }
     return new Style({
       geometry: new Point(args.pointCoordinates || args.arrowEnd),
       image: new RegularShape({
