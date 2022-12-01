@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
-import { concatMap, map } from 'rxjs/operators';
+import { concatMap, map, switchMap } from 'rxjs/operators';
 import { forkJoin, Observable, of, pipe, take, combineLatest } from 'rxjs';
 import { AttributeListRowModel } from '../models/attribute-list-row.model';
 import { Store } from '@ngrx/store';
@@ -50,7 +50,7 @@ export class AttributeListContentComponent implements OnInit {
     this.columns$ = this.store$.select(selectColumnsForSelectedTab);
     this.notLoadingData$ = this.store$.select(selectLoadingDataSelectedTab).pipe(map(loading => !loading));
     this.filters$ = this.store$.select(selectSelectedTab)
-      .pipe(concatMap(tab => {
+      .pipe(switchMap(tab => {
         if (!tab || !tab.layerId) {
           return of([]);
         }
@@ -92,8 +92,8 @@ export class AttributeListContentComponent implements OnInit {
           }
           const layerId = selectedTab.layerId;
           return forkJoin([
-            this.simpleAttributeFilterService.getFilterForAttribute$(BaseComponentTypeEnum.ATTRIBUTE_LIST, layerId, $event.columnId),
-            this.simpleAttributeFilterService.getFiltersExcludingAttribute$(BaseComponentTypeEnum.ATTRIBUTE_LIST, layerId, $event.columnId),
+            this.simpleAttributeFilterService.getFilterForAttribute$(BaseComponentTypeEnum.ATTRIBUTE_LIST, layerId, $event.columnId).pipe(take(1)),
+            this.simpleAttributeFilterService.getFiltersExcludingAttribute$(BaseComponentTypeEnum.ATTRIBUTE_LIST, layerId, $event.columnId).pipe(take(1)),
             of(layerId),
             of(applicationId),
           ]);
