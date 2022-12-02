@@ -16,4 +16,18 @@ export class StateHelper {
     ];
   }
 
+  public static removeArrayItemFromState<T>(
+    list: T[],
+    findIndex: (item: T) => boolean,
+  ): T[] {
+    const rowIdx = list.findIndex(findIndex);
+    if (rowIdx === -1) {
+      return list;
+    }
+    return [
+      ...list.slice(0, rowIdx),
+      ...list.slice(rowIdx + 1),
+    ];
+  }
+
 }

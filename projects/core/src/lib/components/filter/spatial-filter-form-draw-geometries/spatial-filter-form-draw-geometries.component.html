@@ -1,0 +1,7 @@
+<tm-map-drawing-buttons [allowedShapes]="allowedGeometryTypes"
+                        [drawingLayerId]="drawingLayerId"
+                        [drawSingleShape]="true"
+                        [allowRemoveSelectedFeature]="true"
+                        [selectionStyle]="selectedStyle"
+                        (drawingAdded)="drawingAdded($event)"
+                        (featureRemoved)="featureRemoved($event)"></tm-map-drawing-buttons>

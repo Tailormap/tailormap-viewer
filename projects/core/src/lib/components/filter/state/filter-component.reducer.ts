@@ -15,7 +15,9 @@ const onSetSelectedFilterGroup = (
   payload: ReturnType<typeof FilterComponentActions.setSelectedFilterGroup>,
 ): FilterComponentState => ({
   ...state,
-  selectedFilterGroup: payload.id,
+  selectedFilterGroup: payload.filterGroup.id,
+  selectedLayers: payload.filterGroup.layerIds,
+  createFilterType: undefined,
 });
 
 const onCloseForm = (
@@ -26,10 +28,19 @@ const onCloseForm = (
   selectedFilterGroup: undefined,
 });
 
+const onSetSelectedLayers = (
+  state: FilterComponentState,
+  payload: ReturnType<typeof FilterComponentActions.setSelectedLayers>,
+): FilterComponentState => ({
+  ...state,
+  selectedLayers: payload.layers,
+});
+
 const filterComponentReducerImpl = createReducer<FilterComponentState>(
   initialFilterComponentState,
   on(FilterComponentActions.createFilter, onCreateFilter),
   on(FilterComponentActions.setSelectedFilterGroup, onSetSelectedFilterGroup),
   on(FilterComponentActions.closeForm, onCloseForm),
+  on(FilterComponentActions.setSelectedLayers, onSetSelectedLayers),
 );
 export const filterComponentReducer = (state: FilterComponentState | undefined, action: Action) => filterComponentReducerImpl(state, action);

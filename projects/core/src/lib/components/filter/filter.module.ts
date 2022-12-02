@@ -13,6 +13,11 @@ import { ApplicationMapModule } from '../../map/application-map.module';
 import { StoreModule } from '@ngrx/store';
 import { filterComponentStateKey } from './state/filter-component.state';
 import { filterComponentReducer } from './state/filter-component.reducer';
+import { SpatialFilterFormSelectLayersComponent } from './spatial-filter-form-select-layers/spatial-filter-form-select-layers.component';
+import { SpatialFilterFormDrawGeometriesComponent } from './spatial-filter-form-draw-geometries/spatial-filter-form-draw-geometries.component';
+import { SpatialFilterFormBufferComponent } from './spatial-filter-form-buffer/spatial-filter-form-buffer.component';
+import { EffectsModule } from '@ngrx/effects';
+import { FilterComponentEffects } from './state/filter-component.effects';
 
 
 
@@ -24,10 +29,14 @@ import { filterComponentReducer } from './state/filter-component.reducer';
     FilterListComponent,
     FilterListItemComponent,
     SpatialFilterFormComponent,
+    SpatialFilterFormSelectLayersComponent,
+    SpatialFilterFormDrawGeometriesComponent,
+    SpatialFilterFormBufferComponent,
   ],
   imports: [
     CommonModule,
     StoreModule.forFeature(filterComponentStateKey, filterComponentReducer),
+    EffectsModule.forFeature([FilterComponentEffects]),
     MenubarModule,
     SharedModule,
     CoreFilterModule,

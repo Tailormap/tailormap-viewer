@@ -11,7 +11,7 @@ import { selectApplicationId } from '../../../state/core.selectors';
 @Injectable({
   providedIn: 'root',
 })
-export class CreateFilterService {
+export class SpatialFilterCrudService {
 
   private describeAppLayerService = inject(DescribeAppLayerService);
   private store$ = inject(Store);
@@ -19,58 +19,83 @@ export class CreateFilterService {
   public createSpatialFilterGroup$(
     geometries: SpatialFilterGeometry[],
     layers: number[],
-    buffer?: number,
   ): Observable<FilterGroupModel<SpatialFilterModel>> {
-    return this.getLayerDetailsAndCreateFilter$(layers, geometries, buffer);
+    return this.getLayerDetails$(layers).pipe(
+      map(layerDetails => {
+        return this.createFilterForLayers(layerDetails, geometries);
+      }),
+    );
   }
 
-  public updateSpatialFilterGroup$(
+  public addGeometry(
     group: FilterGroupModel<SpatialFilterModel>,
-    geometries: SpatialFilterGeometry[],
-    layers: number[],
-    buffer?: number,
-  ): Observable<FilterGroupModel> {
-    if (!group || group.filters.length === 0) {
-      return this.createSpatialFilterGroup$(geometries, layers, buffer);
-    }
-    return this.getLayerDetailsAndCreateFilter$(layers, geometries, buffer)
-      .pipe(
-        map(filterGroup => {
-          return {
-            ...group,
-            layerIds: layers,
-            filters: filterGroup.filters,
-          };
-        }),
-      );
+    geometry: SpatialFilterGeometry,
+  ): FilterGroupModel {
+    return {
+      ...group,
+      filters: group.filters.map(filter => ({ ...filter, geometries: [ ...filter.geometries, geometry ] })),
+    };
   }
 
-  private getLayerDetailsAndCreateFilter$(
+  public removeGeometry(
+    group: FilterGroupModel<SpatialFilterModel>,
+    id: string,
+  ): FilterGroupModel {
+    return {
+      ...group,
+      filters: group.filters.map(filter => ({ ...filter, geometries: filter.geometries.filter(g => g.id === id) })),
+    };
+  }
+
+  public updateBuffer(
+    group: FilterGroupModel<SpatialFilterModel>,
+    buffer: number | undefined,
+  ): FilterGroupModel {
+    return { ...group, filters: group.filters.map(f => ({ ...f, buffer })) };
+  }
+
+  public updateLayers$(
+    group: FilterGroupModel<SpatialFilterModel>,
     layers: number[],
-    geometries: SpatialFilterGeometry[],
-    buffer?: number,
-  ): Observable<FilterGroupModel<SpatialFilterModel>> {
+  ): Observable<FilterGroupModel> {
+    return this.getLayerDetails$(layers).pipe(
+      map(layerDetails => {
+        return {
+          ...group,
+          layerIds: layerDetails.map(layer => layer.id),
+          filters: group.filters.map(filter => {
+            return {
+              ...filter,
+              geometryColumns: layerDetails.map(layer => ({
+                layerId: layer.id,
+                column: [layer.geometryAttribute],
+              })),
+            };
+          }),
+        };
+      }),
+    );
+  }
+
+  private getLayerDetails$(
+    layers: number[],
+  ): Observable<LayerDetailsModel[]> {
     return this.store$.select(selectApplicationId).pipe(
       concatMap(applicationId =>
         forkJoin(layers.map(layer => this.describeAppLayerService.getDescribeAppLayer$(applicationId as number, layer))),
       ),
       take(1),
-      map(layerDetails => {
-        return this.createFilterForLayers(layerDetails, geometries, buffer);
-      }),
     );
   }
 
   private createFilterForLayers(
     layers: LayerDetailsModel[],
     geometries: SpatialFilterGeometry[],
-    buffer?: number,
   ): FilterGroupModel<SpatialFilterModel> {
     const filter: SpatialFilterModel = {
       id: nanoid(),
       type: FilterTypeEnum.SPATIAL,
       geometries,
-      buffer,
       geometryColumns: layers.map(layer => ({
         layerId: layer.id,
         column: [layer.geometryAttribute],
