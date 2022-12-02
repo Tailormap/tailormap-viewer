@@ -1,4 +1,5 @@
 export interface FeatureModelAttributes {
+  buffer?: number;
   [x: string]: any;
 }
 

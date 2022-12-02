@@ -67,6 +67,7 @@ describe('SpatialFilterFormComponent', () => {
 
   test('should add and update a spatial filter', async () => {
     const userEvt = userEvent.setup();
+    const expectedGeom = { geometry: 'CIRCLE(1,2,3)', id: 'id-1' };
     const { addDrawingEvent, createFilterServiceMock } = await setup([
       getAppLayerModel({ id: 1, title: 'Layer 1' }),
       getAppLayerModel({ id: 2, title: 'Layer 2' }),
@@ -78,10 +79,9 @@ describe('SpatialFilterFormComponent', () => {
     await userEvt.click(await screen.findByText('Layer 1'));
     await userEvt.click(screen.getByRole('combobox'));
     await userEvt.click(screen.getByLabelText('Draw circle'));
-    addDrawingEvent({ type: 'end', geometry: 'CIRCLE(1,2,3)' });
+    addDrawingEvent({ type: 'end', geometry: expectedGeom.geometry });
     await waitFor(() => {
-      const expectedGeom = { geometry: 'CIRCLE(1,2,3)', id: 'id-1' };
-      expect(createFilterServiceMock.createSpatialFilterGroup$).toHaveBeenCalledWith([expectedGeom], [1]);
+      expect(createFilterServiceMock.createSpatialFilterGroup$).toHaveBeenCalledWith([expectedGeom], [1], undefined);
     });
     const filterGroup = getFilterGroup<SpatialFilterModel>([{
       id: 'id-1',
@@ -97,8 +97,13 @@ describe('SpatialFilterFormComponent', () => {
     await userEvt.click(screen.getByRole('combobox'));
     await userEvt.click(await screen.findByText('Layer 2'));
     await waitFor(() => {
-      const expectedGeom = { geometry: 'CIRCLE(1,2,3)', id: 'id-1' };
-      expect(createFilterServiceMock.updateSpatialFilterGroup$).toHaveBeenCalledWith(filterGroup, [expectedGeom], [ 1, 2 ]);
+      expect(createFilterServiceMock.updateSpatialFilterGroup$).toHaveBeenCalledWith(filterGroup, [expectedGeom], [ 1, 2 ], undefined);
+    });
+
+    // set buffer
+    await userEvt.type(screen.getByRole('spinbutton'), '10');
+    await waitFor(() => {
+      expect(createFilterServiceMock.updateSpatialFilterGroup$).toHaveBeenCalledWith(filterGroup, [expectedGeom], [ 1, 2 ], 10);
     });
   });
 

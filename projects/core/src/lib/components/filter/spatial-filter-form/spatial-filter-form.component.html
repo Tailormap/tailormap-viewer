@@ -7,15 +7,15 @@
 <ng-container *ngIf="(availableLayers$ | async) as availableLayers">
   <ng-container *ngIf="availableLayers.length > 0; else: noLayers">
 
-    <mat-form-field appearance="fill">
+    <mat-form-field class="form-section form-section--with-form-field" appearance="fill">
       <mat-label i18n>Select layer(s)</mat-label>
       <mat-select [formControl]="selectedLayers" multiple>
         <mat-option *ngFor="let layer of availableLayers" [value]="layer.id">{{layer.title}}</mat-option>
       </mat-select>
     </mat-form-field>
 
-    <div *ngIf="selectedLayers.value.length > 0">
-      <div i18n>Draw filter geometry</div>
+    <div class="form-section" *ngIf="selectedLayers.value.length > 0">
+      <div i18n class="form-section-label">Draw filter geometry</div>
       <tm-map-drawing-buttons [allowedShapes]="allowedGeometryTypes"
                               [drawingLayerId]="drawingLayerId"
                               [drawSingleShape]="true"
@@ -25,7 +25,15 @@
                               (featureRemoved)="featureRemoved($event)"></tm-map-drawing-buttons>
     </div>
 
-    <div class="buttons">
+    <div class="form-section form-section--with-form-field" *ngIf="selectedLayers.value.length > 0 && (hasGeometry$ | async)">
+      <div i18n class="form-section-label">Set optional buffer</div>
+      <mat-form-field appearance="outline" color="primary">
+        <mat-label i18n>Buffer in meters</mat-label>
+        <input matInput type="number" [formControl]="buffer">
+      </mat-form-field>
+    </div>
+
+    <div class="form-section buttons">
 
       <button mat-stroked-button
               *ngIf="!currentGroup"
