@@ -6,6 +6,7 @@ import { filterReducer } from './state/filter.reducer';
 import { AttributeFilterComponent } from './attribute-filter/attribute-filter.component';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { FilterDescriptionComponent } from './filter-description/filter-description.component';
+import { SpatialFilterReferenceLayerService } from './services/spatial-filter-reference-layer.service';
 
 
 
@@ -24,4 +25,6 @@ import { FilterDescriptionComponent } from './filter-description/filter-descript
     FilterDescriptionComponent,
   ],
 })
-export class FilterModule { }
+export class FilterModule {
+  constructor(_spatialFilterReferenceLayerService: SpatialFilterReferenceLayerService) {}
+}

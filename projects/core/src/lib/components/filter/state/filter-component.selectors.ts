@@ -5,6 +5,7 @@ import { FilterTypeEnum } from '../../../filter/models/filter-type.enum';
 import { FilterTypeHelper } from '../../../filter/helpers/filter-type.helper';
 import { FeatureModel } from '@tailormap-viewer/api';
 import { SpatialFilterGeometry } from '../../../filter/models/spatial-filter.model';
+import { selectFilterableLayers, selectVisibleLayersWithAttributes } from '../../../map/state/map.selectors';
 
 const selectFilterComponentState = createFeatureSelector<FilterComponentState>(filterComponentStateKey);
 export const selectCreateFilterType = createSelector(selectFilterComponentState, state => state.createFilterType);
@@ -35,6 +36,24 @@ export const selectBuffer = createSelector(
       return undefined;
     }
     return group.filters[0].buffer;
+  },
+);
+
+export const selectReferencableLayers = createSelector(
+  selectSelectedLayers,
+  selectVisibleLayersWithAttributes,
+  (selectedLayers, availableLayers) => {
+    return availableLayers.filter(layer => !selectedLayers.includes(layer.id));
+  },
+);
+
+export const selectReferenceLayer = createSelector(
+  selectSelectedFilterGroup,
+  group => {
+    if (!group || group.filters.length === 0 || !FilterTypeHelper.isSpatialFilterGroup(group)) {
+      return undefined;
+    }
+    return group.filters[0].baseLayerId;
   },
 );
 

@@ -8,6 +8,8 @@ const onCreateFilter = (
 ): FilterComponentState => ({
   ...state,
   createFilterType: payload.filterType,
+  selectedFilterGroup: undefined,
+  selectedLayers: undefined,
 });
 
 const onSetSelectedFilterGroup = (

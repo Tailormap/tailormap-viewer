@@ -17,6 +17,11 @@
       <tm-spatial-filter-form-draw-geometries [drawingLayerId]="drawingLayerId"></tm-spatial-filter-form-draw-geometries>
     </div>
 
+    <div class="form-section" *ngIf="hasSelectedLayers$ | async">
+      <div i18n class="form-section-label">or select reference layer</div>
+      <tm-spatial-filter-form-select-reference-layer></tm-spatial-filter-form-select-reference-layer>
+    </div>
+
     <div class="form-section form-section--with-form-field" *ngIf="hasSelectedLayersAndGeometry$ | async">
       <div i18n class="form-section-label">Set optional buffer</div>
       <tm-spatial-filter-form-buffer></tm-spatial-filter-form-buffer>

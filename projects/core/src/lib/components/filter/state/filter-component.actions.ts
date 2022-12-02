@@ -36,3 +36,8 @@ export const setBuffer = createAction(
   `${filterComponentActionsPrefix} Set Buffer`,
   props<{ buffer: number | undefined }>(),
 );
+
+export const setReferenceLayer = createAction(
+  `${filterComponentActionsPrefix} Set Reference Layer`,
+  props<{ layer: number | undefined }>(),
+);

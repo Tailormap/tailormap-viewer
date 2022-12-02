@@ -94,6 +94,32 @@ export class FilterComponentEffects {
     );
   });
 
+  public setReferenceLayer$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(FilterComponentActions.setReferenceLayer),
+      concatLatestFrom(() => [
+        this.store$.select(selectSelectedFilterGroup),
+        this.store$.select(selectSelectedLayers),
+      ]),
+      concatMap(([ action, selectedGroup, selectedLayers ]) => {
+        if (selectedGroup && !FilterTypeHelper.isSpatialFilterGroup(selectedGroup)) {
+          return of(null);
+        }
+        if (!selectedGroup) {
+          return this.filterCrudService.createSpatialFilterGroup$([], selectedLayers, action.layer)
+            .pipe(
+              mergeMap(filterGroup => {
+                return [ addFilterGroup({ filterGroup }), setSelectedFilterGroup({ filterGroup }) ];
+              }),
+            );
+        }
+        const updatedGroup = this.filterCrudService.updateReferenceLayer(selectedGroup, action.layer);
+        return of(updateFilterGroup({ filterGroup: updatedGroup }));
+      }),
+      filter(TypesHelper.isDefined),
+    );
+  });
+
   constructor(
     private actions$: Actions,
     private store$: Store,

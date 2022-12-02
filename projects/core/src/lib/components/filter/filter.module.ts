@@ -18,6 +18,9 @@ import { SpatialFilterFormDrawGeometriesComponent } from './spatial-filter-form-
 import { SpatialFilterFormBufferComponent } from './spatial-filter-form-buffer/spatial-filter-form-buffer.component';
 import { EffectsModule } from '@ngrx/effects';
 import { FilterComponentEffects } from './state/filter-component.effects';
+import {
+  SpatialFilterFormSelectReferenceLayerComponent,
+} from './spatial-filter-form-select-reference-layer/spatial-filter-form-select-reference-layer.component';
 
 
 
@@ -32,6 +35,7 @@ import { FilterComponentEffects } from './state/filter-component.effects';
     SpatialFilterFormSelectLayersComponent,
     SpatialFilterFormDrawGeometriesComponent,
     SpatialFilterFormBufferComponent,
+    SpatialFilterFormSelectReferenceLayerComponent,
   ],
   imports: [
     CommonModule,

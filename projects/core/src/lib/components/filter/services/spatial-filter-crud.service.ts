@@ -19,10 +19,11 @@ export class SpatialFilterCrudService {
   public createSpatialFilterGroup$(
     geometries: SpatialFilterGeometry[],
     layers: number[],
+    referenceLayer?: number,
   ): Observable<FilterGroupModel<SpatialFilterModel>> {
     return this.getLayerDetails$(layers).pipe(
       map(layerDetails => {
-        return this.createFilterForLayers(layerDetails, geometries);
+        return this.createFilterForLayers(layerDetails, geometries, referenceLayer);
       }),
     );
   }
@@ -43,7 +44,7 @@ export class SpatialFilterCrudService {
   ): FilterGroupModel {
     return {
       ...group,
-      filters: group.filters.map(filter => ({ ...filter, geometries: filter.geometries.filter(g => g.id === id) })),
+      filters: group.filters.map(filter => ({ ...filter, geometries: filter.geometries.filter(g => g.id !== id) })),
     };
   }
 
@@ -52,6 +53,13 @@ export class SpatialFilterCrudService {
     buffer: number | undefined,
   ): FilterGroupModel {
     return { ...group, filters: group.filters.map(f => ({ ...f, buffer })) };
+  }
+
+  public updateReferenceLayer(
+    group: FilterGroupModel<SpatialFilterModel>,
+    layer: number | undefined,
+  ): FilterGroupModel {
+    return { ...group, filters: group.filters.map(f => ({ ...f, baseLayerId: layer })) };
   }
 
   public updateLayers$(
@@ -91,11 +99,13 @@ export class SpatialFilterCrudService {
   private createFilterForLayers(
     layers: LayerDetailsModel[],
     geometries: SpatialFilterGeometry[],
+    referenceLayer?: number,
   ): FilterGroupModel<SpatialFilterModel> {
     const filter: SpatialFilterModel = {
       id: nanoid(),
       type: FilterTypeEnum.SPATIAL,
       geometries,
+      baseLayerId: referenceLayer,
       geometryColumns: layers.map(layer => ({
         layerId: layer.id,
         column: [layer.geometryAttribute],
