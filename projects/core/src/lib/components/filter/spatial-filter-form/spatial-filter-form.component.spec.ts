@@ -100,7 +100,7 @@ describe('SpatialFilterFormComponent', () => {
     expect(await screen.findByText('Set optional buffer')).toBeInTheDocument();
   });
 
-  test('should show buffer field', async () => {
+  test('should save/remove buttons', async () => {
     const group = getFilterGroup();
     const { dispatch, removeFilter$ } = await setup({
       layers,
@@ -110,7 +110,7 @@ describe('SpatialFilterFormComponent', () => {
     expect(await screen.findByText('Remove')).toBeInTheDocument();
     await userEvent.click(await screen.findByText('Save'));
     expect(dispatch).toHaveBeenCalledWith(closeForm());
-    await userEvent.click(await screen.findByText('Cancel'));
+    await userEvent.click(await screen.findByText('Remove'));
     expect(removeFilter$).toHaveBeenCalledWith(group.id);
   });
 
