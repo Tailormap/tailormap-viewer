@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { map, Observable, of, Subject, takeUntil } from 'rxjs';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { loadApplication } from '../../state/core.actions';
 import { selectApplicationErrorMessage, selectApplicationLoadingState } from '../../state/core.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
+import { BookmarkService } from '../../bookmark/bookmark.service';
 
 @Component({
   selector: 'tm-viewer-app',
@@ -23,7 +24,9 @@ export class ViewerAppComponent implements OnInit, OnDestroy {
   constructor(
     private store$: Store,
     private route: ActivatedRoute,
+    private router: Router,
     private cdr: ChangeDetectorRef,
+    private bookmarkService: BookmarkService,
   ) { }
 
   public ngOnInit(): void {
@@ -54,6 +57,18 @@ export class ViewerAppComponent implements OnInit, OnDestroy {
         this.isLoading = loadingState === LoadingStateEnum.LOADING;
         this.loadingFailed = loadingState === LoadingStateEnum.FAILED;
         this.cdr.detectChanges();
+      });
+
+    this.route.fragment
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(fragment => {
+          this.bookmarkService.setBookmark(fragment === null ? undefined : fragment);
+      });
+
+    this.bookmarkService.getBookmarkValue$()
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(bookmark => {
+          this.router.navigate([], { relativeTo: this.route, fragment: bookmark, replaceUrl: true });
       });
   }
 
