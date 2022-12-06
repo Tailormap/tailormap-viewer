@@ -67,7 +67,7 @@ ALTER TABLE public.user_ DISABLE TRIGGER ALL;
 COPY public.user_ (username, password) FROM stdin;
 proxyuser	{noop}proxyuser
 noproxyuser	{noop}noproxyuser
-admin	{bcrypt}$2a$10$m58UBSAstcZljttlvl22WOGmoyj5v2AkbYbYkAp11gzFk1Ezy8jZy
+admin	{bcrypt}$2a$10$V8G7fbI7N1skBzKuxjLA7ulB4CAoZJIW/634qxHBiIiodlj8U8jGa
 \.
 
 
@@ -83,8 +83,8 @@ COPY public.application (id, authenticated_required, authorizations_modified, la
 2	t	2022-03-17 16:04:43.694	nl_NL	{"header":{"layout":{"height":"","heightmeasure":"px","maxheight":"","useTabs":false,"bgcolor":"#FFFFFF"},"components":[]},"leftmargin_top":{"layout":{"width":"","widthmeasure":"px","maxwidth":"","useTabs":false,"enableCollapse":false,"defaultCollapsed":false,"enableFloating":false,"panelTitle":"","bgcolor":"#FFFFFF"},"components":[]},"leftmargin_bottom":{"layout":{"height":"","heightmeasure":"px","maxheight":"","useTabs":false,"bgcolor":"#FFFFFF"},"components":[]},"left_menu":{"layout":{"width":"","widthmeasure":"px","maxwidth":"","enableFloating":false,"floatingPosition":"tl","bgcolor":"#FFFFFF"},"components":[]},"top_menu":{"layout":{"height":"","heightmeasure":"px","maxheight":"","bgcolor":"#FFFFFF"},"components":[]},"content":{"layout":{},"components":[{"componentClass":"viewer.mapcomponents.OpenLayers5Map","name":"openLayers5Map1"}]},"content_bottom":{"layout":{"height":"","heightmeasure":"px","maxheight":"","bgcolor":"#FFFFFF"},"components":[]},"popupwindow":{"layout":{"height":"","heightmeasure":"px","maxheight":"","width":"","widthmeasure":"px","maxwidth":"","useTabs":false,"title":"","posx":"","posy":"","bgcolor":"#FFFFFF"},"components":[]},"rightmargin_top":{"layout":{"width":"","widthmeasure":"px","maxwidth":"","useTabs":false,"enableCollapse":false,"defaultCollapsed":false,"enableFloating":false,"panelTitle":"","bgcolor":"#FFFFFF"},"components":[]},"rightmargin_bottom":{"layout":{"height":"","heightmeasure":"px","maxheight":"","useTabs":false,"bgcolor":"#FFFFFF"},"components":[]},"footer":{"layout":{"height":"","heightmeasure":"px","maxheight":"","useTabs":false,"bgcolor":"#FFFFFF"},"components":[]}}	EPSG:28992	595401	903401	-285401	22598	secure	EPSG:28992[+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.237,50.0087,465.658,-0.406857,0.350733,-1.87035,4.0812 +units=m +no_defs]	EPSG:28992	149359	463194	123180	445487	\N	\N	\N	6
 1	f	2022-10-04 14:56:22.724	nl_NL	{"header":{"layout":{"height":"","heightmeasure":"px","maxheight":"","useTabs":false,"bgcolor":"#FFFFFF"},"components":[]},"leftmargin_top":{"layout":{"width":"","widthmeasure":"px","maxwidth":"","useTabs":false,"enableCollapse":false,"defaultCollapsed":false,"enableFloating":false,"panelTitle":"","bgcolor":"#FFFFFF"},"components":[]},"leftmargin_bottom":{"layout":{"height":"","heightmeasure":"px","maxheight":"","useTabs":false,"bgcolor":"#FFFFFF"},"components":[]},"left_menu":{"layout":{"width":"","widthmeasure":"px","maxwidth":"","enableFloating":false,"floatingPosition":"tl","bgcolor":"#FFFFFF"},"components":[]},"top_menu":{"layout":{"height":"","heightmeasure":"px","maxheight":"","bgcolor":"#FFFFFF"},"components":[]},"content":{"layout":{},"components":[{"componentClass":"viewer.mapcomponents.OpenLayers5Map","name":"openLayers5Map1"}]},"content_bottom":{"layout":{"height":"","heightmeasure":"px","maxheight":"","bgcolor":"#FFFFFF"},"components":[]},"popupwindow":{"layout":{"height":"","heightmeasure":"px","maxheight":"","width":"","widthmeasure":"px","maxwidth":"","useTabs":false,"title":"","posx":"","posy":"","bgcolor":"#FFFFFF"},"components":[]},"rightmargin_top":{"layout":{"width":"","widthmeasure":"px","maxwidth":"","useTabs":false,"enableCollapse":false,"defaultCollapsed":false,"enableFloating":false,"panelTitle":"","bgcolor":"#FFFFFF"},"components":[]},"rightmargin_bottom":{"layout":{"height":"","heightmeasure":"px","maxheight":"","useTabs":false,"bgcolor":"#FFFFFF"},"components":[]},"footer":{"layout":{"height":"","heightmeasure":"px","maxheight":"","useTabs":false,"bgcolor":"#FFFFFF"},"components":[]}}	EPSG:28992	595401	903401	-285401	22598	default	EPSG:28992[+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.237,50.0087,465.658,-0.406857,0.350733,-1.87035,4.0812 +units=m +no_defs]	EPSG:28992	132703	459995	130011	458031	\N	\N	\N	1
 4	f	2022-10-04 15:06:44.223	nl_NL	\N	\N	\N	\N	\N	\N	vienna	EPSG:3857[+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext  +no_defs]	EPSG:3857	1962942	6331466	906146	5783226	\N	\N	\N	14
-6	t	2022-11-11 17:45:36.215	nl_NL	\N	\N	\N	\N	\N	\N	proxy_secured_services	EPSG:28992[+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.237,50.0087,465.658,-0.406857,0.350733,-1.87035,4.0812 +units=m +no_defs]	\N	\N	\N	\N	\N	\N	\N	\N	25
 5	f	2022-12-06 20:14:01.289	nl_NL	\N	\N	\N	\N	\N	\N	proxy	EPSG:28992[+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.237,50.0087,465.658,-0.406857,0.350733,-1.87035,4.0812 +units=m +no_defs]	\N	\N	\N	\N	\N	\N	\N	\N	17
+6	t	2022-12-06 23:12:51.632	nl_NL	\N	\N	\N	\N	\N	\N	proxy_secured_services	EPSG:28992[+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.237,50.0087,465.658,-0.406857,0.350733,-1.87035,4.0812 +units=m +no_defs]	\N	\N	\N	\N	\N	\N	\N	\N	25
 \.
 
 
@@ -181,6 +181,7 @@ COPY public.application_layer (id, layer_name, service) FROM stdin;
 18	osm	3
 19	Provinciegebied	13
 20	Actueel_ortho25	14
+21	Landgebied	13
 \.
 
 
@@ -193,12 +194,12 @@ ALTER TABLE public.application_layer ENABLE TRIGGER ALL;
 ALTER TABLE public.feature_source DISABLE TRIGGER ALL;
 
 COPY public.feature_source (protocol, id, name, password, url, username, db_schema, linked_service) FROM stdin;
-jdbc	4	SQL Server geodata	980f1c8A-25933b2	{"database":"geodata;encrypt=false","port":"1433","dbtype":"sqlserver","host":"sqlserver"}	geodata	dbo	\N
-jdbc	2	PostGIS geodata	980f1c8A-25933b2	{"database":"geodata","port":"5432","dbtype":"postgis","host":"postgis"}	geodata	public	\N
-jdbc	3	Oracle geodata	980f1c8A-25933b2	{"database":"/XEPDB1","port":"1521","dbtype":"oracle","host":"oracle"}	geodata	GEODATA	\N
-jdbc	5	PostGIS geodata/osm	980f1c8A-25933b2	{"database":"geodata","port":"5432","dbtype":"postgis","host":"postgis"}	geodata	osm	\N
 wfs	6	GeoServer Web Feature Service	\N	https://snapshot.tailormap.nl/geoserver/wfs?	\N	\N	6
 wfs	1	Bestuurlijke Gebieden	\N	https://service.pdok.nl/kadaster/bestuurlijkegebieden/wfs/v1_0?request=GetCapabilities&service=WFS&version=2.0.0	\N	\N	\N
+jdbc	4	SQL Server geodata	980f1c8A-25933b2	{"database":"geodata;encrypt=false","port":"1433","dbtype":"sqlserver","host":"127.0.0.1"}	geodata	dbo	\N
+jdbc	2	PostGIS geodata	980f1c8A-25933b2	{"database":"geodata","port":"54322","dbtype":"postgis","host":"127.0.0.1"}	geodata	public	\N
+jdbc	3	Oracle geodata	980f1c8A-25933b2	{"database":"/XEPDB1","port":"1521","dbtype":"oracle","host":"127.0.0.1"}	geodata	GEODATA	\N
+jdbc	5	PostGIS geodata/osm	980f1c8A-25933b2	{"database":"geodata","port":"54322","dbtype":"postgis","host":"127.0.0.1"}	geodata	osm	\N
 \.
 
 
@@ -400,6 +401,12 @@ COPY public.configured_attribute (id, allow_value_list_only, attribute_name, aut
 98	f	code	f	\N		f	f	\N	\N	\N	f	f		f	\N	\N	\N	t	1	\N	\N
 99	f	ligtInLandCode	f	\N		f	f	\N	\N	\N	f	f		f	\N	\N	\N	t	1	\N	\N
 100	f	ligtInLandNaam	f	\N		f	f	\N	\N	\N	f	f		f	\N	\N	\N	t	1	\N	\N
+107	f	geom	f	\N		f	f	\N	\N	\N	f	f		f	\N	\N	\N	f	1	\N	\N
+108	f	identificatie	f	\N		f	f	\N	\N	\N	f	f		f	\N	\N	\N	t	1	\N	\N
+109	f	naam	f	\N		f	f	\N	\N	\N	f	f		f	\N	\N	\N	t	1	\N	\N
+110	f	code	f	\N		f	f	\N	\N	\N	f	f		f	\N	\N	\N	t	1	\N	\N
+111	f	ligtInLandCode	f	\N		f	f	\N	\N	\N	f	f		f	\N	\N	\N	t	1	\N	\N
+112	f	ligtInLandNaam	f	\N		f	f	\N	\N	\N	f	f		f	\N	\N	\N	t	1	\N	\N
 \.
 
 
@@ -487,6 +494,12 @@ COPY public.application_layer_attributes (application_layer, attribute_, list_in
 17	98	3
 17	99	4
 17	100	5
+19	107	0
+19	108	1
+19	109	2
+19	110	3
+19	111	4
+19	112	5
 \.
 
 
@@ -525,6 +538,8 @@ COPY public.application_layer_details (application_layer, value, details_key) FR
 2	Provinciegebied	summary.title
 17	[{"name":"Provinciegebied","checked":false,"title":"Provinciegebied","order":0}]	stylesOrder
 17	registry_default	style
+19	[{"name":"Provinciegebied","checked":false,"title":"Provinciegebied","order":0}]	stylesOrder
+19	registry_default	style
 \.
 
 
@@ -5786,6 +5801,7 @@ COPY public.level_layers (level_, layer, list_index) FROM stdin;
 27	18	0
 30	19	0
 28	20	0
+30	21	1
 \.
 
 
@@ -5889,6 +5905,7 @@ COPY public.start_layer (id, checked, removed, selected_index, application, appl
 22	f	f	\N	6	20
 20	t	f	\N	6	18
 21	t	f	\N	6	19
+23	f	f	\N	6	21
 \.
 
 
@@ -6620,7 +6637,7 @@ SELECT pg_catalog.setval('public.application_id_seq', 6, true);
 -- Name: application_layer_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.application_layer_id_seq', 20, true);
+SELECT pg_catalog.setval('public.application_layer_id_seq', 21, true);
 
 
 --
@@ -6648,7 +6665,7 @@ SELECT pg_catalog.setval('public.category_id_seq', 6, true);
 -- Name: configured_attribute_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.configured_attribute_id_seq', 100, true);
+SELECT pg_catalog.setval('public.configured_attribute_id_seq', 112, true);
 
 
 --
@@ -6746,7 +6763,7 @@ SELECT pg_catalog.setval('public.solr_conf_id_seq', 1, false);
 -- Name: start_layer_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.start_layer_id_seq', 22, true);
+SELECT pg_catalog.setval('public.start_layer_id_seq', 23, true);
 
 
 --

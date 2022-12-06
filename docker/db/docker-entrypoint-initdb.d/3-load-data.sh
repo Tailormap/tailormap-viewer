@@ -2,14 +2,10 @@
 set -e
 
 # use the following to create the dump (ignore the circular foreign key constraints warnings):
-# docker compose --profile http --profile full exec -u postgres db pg_dump -aOx -E UTF-8 -S postgres --disable-triggers tailormap -f /tmp/dump.sql
-# docker compose --profile http --profile full exec db cat /tmp/dump.sql > docker/db/docker-entrypoint-initdb.d/3-dump.sql.script
-# or
-# docker exec -u postgres tailormap-db pg_dump -aOx -E UTF-8 -S postgres --disable-triggers tailormap -f /tmp/dump.sql
-# docker cp tailormap-db:/tmp/dump.sql  docker/db/docker-entrypoint-initdb.d/3-dump.sql.script
+# docker compose --profile full exec -u postgres db pg_dump -aOx -E UTF-8 -S postgres --disable-triggers tailormap > docker/db/docker-entrypoint-initdb.d/3-dump.sql.script
 
 # NOTE! When you update this dump using the command above, you can leave the admin account in the dump. You could remove it manually but in
-# case you forget: all user accounts are deleted when the dump is loaded (see below). tailormap-api will create a new account with a
+# case you forget: all admin accounts are deleted when the dump is loaded (see below). tailormap-api will create a new account with a
 # randomly generated password.
 
 
