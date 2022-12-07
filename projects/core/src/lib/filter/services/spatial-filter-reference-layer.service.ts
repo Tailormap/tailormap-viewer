@@ -1,6 +1,6 @@
 import { inject, Injectable, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { concatMap, distinctUntilChanged, filter, forkJoin, map, Subject, switchMap, take } from 'rxjs';
+import { distinctUntilChanged, filter, Subject, switchMap, take } from 'rxjs';
 import { selectCQLFilters, selectSpatialFilterGroupsWithReferenceLayers } from '../state/filter.selectors';
 import { takeUntil, withLatestFrom } from 'rxjs/operators';
 import { FilterGroupModel } from '../models/filter-group.model';
@@ -57,6 +57,7 @@ export class SpatialFilterReferenceLayerService implements OnDestroy {
             page: 1,
             filter: cqlFilter,
             simplify: false,
+            onlyGeometries: true,
           });
         }),
       )
