@@ -15,8 +15,9 @@ Run `npm run start` for a dev server. Navigate to `http://localhost:4200/`. The 
 
 ## Using a Tailormap backend
 
-When running a dev server, the tailormap-api is proxied on the `/api` path. See [proxy.config.json](proxy.config.js). You can change the URL to connect to a
-different tailormap-api instance (you can also run one locally).
+When running a dev server, the tailormap-api is proxied on the `/api` path. See [proxy.config.js](proxy.config.js). You can change the URL
+to connect to a different tailormap-api instance. You can also run one locally and set the `PROXY_USE_LOCALHOST` environment variable to
+`true` when running the viewer development server.
 
 ## Code scaffolding
 

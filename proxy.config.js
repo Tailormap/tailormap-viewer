@@ -1,5 +1,5 @@
 
-const useLocalhost = false;
+const useLocalhost = process.env.PROXY_USE_LOCALHOST === 'true';
 
 module.exports = {
   "/api/*":{
