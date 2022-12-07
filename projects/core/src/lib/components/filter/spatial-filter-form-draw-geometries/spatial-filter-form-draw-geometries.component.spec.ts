@@ -6,7 +6,7 @@ import { SharedModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { Store } from '@ngrx/store';
 import userEvent from '@testing-library/user-event';
-import { addGeometry } from '../state/filter-component.actions';
+import { SpatialFilterCrudService } from '../services/spatial-filter-crud.service';
 
 let idCount = 0;
 jest.mock('nanoid', () => ({
@@ -19,17 +19,20 @@ jest.mock('nanoid', () => ({
 const setup = async () => {
   const store = { dispatch: jest.fn() };
   const mapServiceMock = createMapServiceMock();
+  const mockSpatialCrudService = { addGeometry: jest.fn(), removeGeometry: jest.fn() };
   await render(SpatialFilterFormDrawGeometriesComponent, {
     declarations: [MapDrawingButtonsComponent],
     imports: [ SharedModule, MatIconTestingModule ],
     providers: [
       { provide: Store, useValue: store },
       mapServiceMock.provider,
+      { provide: SpatialFilterCrudService, useValue: mockSpatialCrudService },
     ],
   });
   return {
     addDrawingEvent: mapServiceMock.addDrawingEvent,
-    dispatch: store.dispatch,
+    addGeometry: mockSpatialCrudService.addGeometry,
+    removeGeometry: mockSpatialCrudService.removeGeometry,
   };
 };
 
@@ -37,11 +40,11 @@ describe('SpatialFilterFormDrawGeometriesComponent', () => {
 
   test('should render and handle add drawing event', async () => {
     const expectedGeom = { geometry: 'CIRCLE(1,2,3)', id: 'id-1' };
-    const { addDrawingEvent, dispatch } = await setup();
+    const { addDrawingEvent, addGeometry } = await setup();
     await userEvent.click(screen.getByLabelText('Draw circle'));
     addDrawingEvent({ type: 'end', geometry: expectedGeom.geometry });
     await waitFor(() => {
-      expect(dispatch).toHaveBeenCalledWith(addGeometry({ geometry: expectedGeom }));
+      expect(addGeometry).toHaveBeenCalledWith(expectedGeom);
     });
   });
 

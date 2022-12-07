@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { FilterTypeEnum } from '../../../filter/models/filter-type.enum';
-import { SpatialFilterGeometry, SpatialFilterModel } from '../../../filter/models/spatial-filter.model';
+import { SpatialFilterModel } from '../../../filter/models/spatial-filter.model';
 import { FilterGroupModel } from '../../../filter/models/filter-group.model';
 
 const filterComponentActionsPrefix = '[FilterComponent]';
@@ -20,24 +20,4 @@ export const setSelectedFilterGroup = createAction(
 export const setSelectedLayers = createAction(
   `${filterComponentActionsPrefix} Set Selected Layers`,
   props<{ layers: number[] }>(),
-);
-
-export const addGeometry = createAction(
-  `${filterComponentActionsPrefix} Add Geometry`,
-  props<{ geometry: SpatialFilterGeometry }>(),
-);
-
-export const removeGeometry = createAction(
-  `${filterComponentActionsPrefix} Remove Geometry`,
-  props<{ id: string }>(),
-);
-
-export const setBuffer = createAction(
-  `${filterComponentActionsPrefix} Set Buffer`,
-  props<{ buffer: number | undefined }>(),
-);
-
-export const setReferenceLayer = createAction(
-  `${filterComponentActionsPrefix} Set Reference Layer`,
-  props<{ layer: number | undefined }>(),
 );

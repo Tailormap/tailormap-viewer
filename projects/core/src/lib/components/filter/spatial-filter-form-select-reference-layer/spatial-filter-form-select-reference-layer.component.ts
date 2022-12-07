@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { selectReferencableLayers, selectReferenceLayer } from '../state/filter-component.selectors';
 import { FormControl } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
-import { setReferenceLayer } from '../state/filter-component.actions';
+import { SpatialFilterCrudService } from '../services/spatial-filter-crud.service';
 
 @Component({
   selector: 'tm-spatial-filter-form-select-reference-layer',
@@ -17,6 +17,7 @@ export class SpatialFilterFormSelectReferenceLayerComponent implements OnInit, O
 
   private destroyed = new Subject();
   private store$ = inject(Store);
+  private filterCrudService = inject(SpatialFilterCrudService);
 
   public availableLayers$: Observable<AppLayerModel[]> = of([]);
   public referenceLayerControl = new FormControl<number | undefined>(undefined, {
@@ -35,7 +36,7 @@ export class SpatialFilterFormSelectReferenceLayerComponent implements OnInit, O
     this.referenceLayerControl.valueChanges
       .pipe(takeUntil(this.destroyed))
       .subscribe((value) => {
-        this.store$.dispatch(setReferenceLayer({ layer: value }));
+        this.filterCrudService.updateReferenceLayer(value);
       });
   }
 

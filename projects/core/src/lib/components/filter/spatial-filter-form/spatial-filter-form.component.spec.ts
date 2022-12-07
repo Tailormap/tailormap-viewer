@@ -3,7 +3,7 @@ import { SpatialFilterFormComponent } from './spatial-filter-form.component';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { selectFilterableLayers } from '../../../map/state/map.selectors';
 import {
-  hasSelectedLayers, hasSelectedLayersAndGeometry, selectSelectedFilterGroup, selectSelectedFilterGroupId,
+  hasSelectedLayers, hasSelectedLayersAndGeometry, selectFilterFeatures, selectSelectedFilterGroup, selectSelectedFilterGroupId,
 } from '../state/filter-component.selectors';
 import { getFilterGroup } from '../../../filter/helpers/attribute-filter.helper.spec';
 import { SharedImportsModule } from '@tailormap-viewer/shared';
@@ -15,14 +15,7 @@ import { TestBed } from '@angular/core/testing';
 import { FilterGroupModel } from '../../../filter/models/filter-group.model';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { closeForm } from '../state/filter-component.actions';
-
-let idCount = 0;
-jest.mock('nanoid', () => ({
-  nanoid: () => {
-    idCount++;
-    return `id-${idCount}`;
-  },
-}));
+import { of } from 'rxjs';
 
 const setup = async (conf: {
   layers?: AppLayerModel[];
@@ -36,12 +29,12 @@ const setup = async (conf: {
       { selector: selectFilterableLayers, value: conf.layers || [] },
       { selector: hasSelectedLayers, value: conf.selectedLayers || false },
       { selector: hasSelectedLayersAndGeometry, value: conf.selectedLayersAndGeometry || false },
-      { selector: selectSelectedFilterGroup, value: conf.selectedFilterGroup || null },
       { selector: selectSelectedFilterGroupId, value: conf.selectedFilterGroup?.id || null },
+      { selector: selectFilterFeatures, value: [] },
     ],
   });
   const mapServiceMock = createMapServiceMock();
-  const removeFilterServiceMock = { removeFilter$: jest.fn() };
+  const removeFilterServiceMock = { removeFilter$: jest.fn(() => of(true)) };
   const { container } = await render(SpatialFilterFormComponent, {
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     imports: [SharedImportsModule],

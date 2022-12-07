@@ -5,7 +5,7 @@ import { FilterTypeEnum } from '../../../filter/models/filter-type.enum';
 import { FilterTypeHelper } from '../../../filter/helpers/filter-type.helper';
 import { FeatureModel } from '@tailormap-viewer/api';
 import { SpatialFilterGeometry } from '../../../filter/models/spatial-filter.model';
-import { selectFilterableLayers, selectVisibleLayersWithAttributes } from '../../../map/state/map.selectors';
+import { selectVisibleLayersWithAttributes } from '../../../map/state/map.selectors';
 
 const selectFilterComponentState = createFeatureSelector<FilterComponentState>(filterComponentStateKey);
 export const selectCreateFilterType = createSelector(selectFilterComponentState, state => state.createFilterType);

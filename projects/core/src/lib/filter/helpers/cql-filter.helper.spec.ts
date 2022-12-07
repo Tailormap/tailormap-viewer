@@ -7,14 +7,14 @@ import { FilterTypeEnum } from '../models/filter-type.enum';
 import { getFilterGroup } from './attribute-filter.helper.spec';
 import { SpatialFilterModel } from '../models/spatial-filter.model';
 
-const getSpatialFilterGroup = (geoms: string[], columns?: Array<{ layerId: number; column: string[] }>, buffer?: number) => {
+export const getSpatialFilterGroup = (geoms: string[], columns?: Array<{ layerId: number; column: string[] }>, buffer?: number) => {
   const group = getFilterGroup<SpatialFilterModel>([{
     id: '1',
     type: FilterTypeEnum.SPATIAL,
     geometryColumns: columns || [{ layerId: 1, column: ['the_geom'] }],
-    geometries: geoms.map((g, idx) => ({ id: `${idx}`, geometry: g })),
+    geometries: geoms.map((g, idx) => ({ id: `${idx + 1}`, geometry: g })),
     buffer,
-  }]);
+  }], FilterTypeEnum.SPATIAL);
   if (columns) {
     return { ...group, layerIds: columns.map(c => c.layerId) };
   }

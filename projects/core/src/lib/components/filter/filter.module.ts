@@ -16,8 +16,6 @@ import { filterComponentReducer } from './state/filter-component.reducer';
 import { SpatialFilterFormSelectLayersComponent } from './spatial-filter-form-select-layers/spatial-filter-form-select-layers.component';
 import { SpatialFilterFormDrawGeometriesComponent } from './spatial-filter-form-draw-geometries/spatial-filter-form-draw-geometries.component';
 import { SpatialFilterFormBufferComponent } from './spatial-filter-form-buffer/spatial-filter-form-buffer.component';
-import { EffectsModule } from '@ngrx/effects';
-import { FilterComponentEffects } from './state/filter-component.effects';
 import {
   SpatialFilterFormSelectReferenceLayerComponent,
 } from './spatial-filter-form-select-reference-layer/spatial-filter-form-select-reference-layer.component';
@@ -40,7 +38,6 @@ import {
   imports: [
     CommonModule,
     StoreModule.forFeature(filterComponentStateKey, filterComponentReducer),
-    EffectsModule.forFeature([FilterComponentEffects]),
     MenubarModule,
     SharedModule,
     CoreFilterModule,

@@ -4,9 +4,13 @@ import { SpatialFilterGeometry, SpatialFilterModel } from '../../../filter/model
 import { FilterGroupModel } from '../../../filter/models/filter-group.model';
 import { nanoid } from 'nanoid';
 import { FilterTypeEnum } from '../../../filter/models/filter-type.enum';
-import { concatMap, forkJoin, map, Observable, take } from 'rxjs';
+import { concatMap, forkJoin, map, Observable, take, combineLatest, filter, of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectApplicationId } from '../../../state/core.selectors';
+import { setSelectedFilterGroup, setSelectedLayers } from '../state/filter-component.actions';
+import { selectSelectedFilterGroup, selectSelectedLayers } from '../state/filter-component.selectors';
+import { FilterTypeHelper } from '../../../filter/helpers/filter-type.helper';
+import { addFilterGroup, updateFilterGroup } from '../../../filter/state/filter.actions';
 
 @Injectable({
   providedIn: 'root',
@@ -16,53 +20,49 @@ export class SpatialFilterCrudService {
   private describeAppLayerService = inject(DescribeAppLayerService);
   private store$ = inject(Store);
 
-  public createSpatialFilterGroup$(
-    geometries: SpatialFilterGeometry[],
-    layers: number[],
-    referenceLayer?: number,
-  ): Observable<FilterGroupModel<SpatialFilterModel>> {
-    return this.getLayerDetails$(layers).pipe(
-      map(layerDetails => {
-        return this.createFilterForLayers(layerDetails, geometries, referenceLayer);
+  public updateSelectedLayers(layers: number[]) {
+    this.store$.dispatch(setSelectedLayers({ layers }));
+    this.updateSelectedGroup(group => this.updateLayers$(group, layers));
+  }
+
+  public addGeometry(geometry: SpatialFilterGeometry) {
+    this.updateOrCreateGroup(
+      [geometry],
+      undefined,
+      group => of({
+        ...group,
+        filters: group.filters.map(f => ({ ...f, geometries: [ ...f.geometries, geometry ] })),
       }),
     );
   }
 
-  public addGeometry(
-    group: FilterGroupModel<SpatialFilterModel>,
-    geometry: SpatialFilterGeometry,
-  ): FilterGroupModel {
-    return {
+  public removeGeometry(id: string) {
+    this.updateSelectedGroup(group => of({
       ...group,
-      filters: group.filters.map(filter => ({ ...filter, geometries: [ ...filter.geometries, geometry ] })),
-    };
+      filters: group.filters.map(f => ({ ...f, geometries: f.geometries.filter(g => g.id !== id) })),
+    }));
   }
 
-  public removeGeometry(
-    group: FilterGroupModel<SpatialFilterModel>,
-    id: string,
-  ): FilterGroupModel {
-    return {
+  public updateBuffer(buffer: number | undefined) {
+    this.updateSelectedGroup(group => of({
       ...group,
-      filters: group.filters.map(filter => ({ ...filter, geometries: filter.geometries.filter(g => g.id !== id) })),
-    };
+      filters: group.filters.map(f => ({ ...f, buffer })),
+    }));
   }
 
-  public updateBuffer(
-    group: FilterGroupModel<SpatialFilterModel>,
-    buffer: number | undefined,
-  ): FilterGroupModel {
-    return { ...group, filters: group.filters.map(f => ({ ...f, buffer })) };
+  public updateReferenceLayer(layer: number | undefined) {
+    this.updateOrCreateGroup(
+      [],
+      layer,
+      group => of({
+        ...group,
+        filters: group.filters.map(f => ({ ...f, baseLayerId: layer })),
+      }),
+    );
+    return ;
   }
 
-  public updateReferenceLayer(
-    group: FilterGroupModel<SpatialFilterModel>,
-    layer: number | undefined,
-  ): FilterGroupModel {
-    return { ...group, filters: group.filters.map(f => ({ ...f, baseLayerId: layer })) };
-  }
-
-  public updateLayers$(
+  private updateLayers$(
     group: FilterGroupModel<SpatialFilterModel>,
     layers: number[],
   ): Observable<FilterGroupModel> {
@@ -71,9 +71,9 @@ export class SpatialFilterCrudService {
         return {
           ...group,
           layerIds: layerDetails.map(layer => layer.id),
-          filters: group.filters.map(filter => {
+          filters: group.filters.map(f => {
             return {
-              ...filter,
+              ...f,
               geometryColumns: layerDetails.map(layer => ({
                 layerId: layer.id,
                 column: [layer.geometryAttribute],
@@ -83,6 +83,57 @@ export class SpatialFilterCrudService {
         };
       }),
     );
+  }
+
+  private getSelectedGroup$(): Observable<FilterGroupModel<SpatialFilterModel>> {
+    return this.store$.select(selectSelectedFilterGroup)
+      .pipe(
+        take(1),
+        filter((group): group is FilterGroupModel<SpatialFilterModel> => !!group && FilterTypeHelper.isSpatialFilterGroup(group)),
+      );
+  }
+
+  private updateOrCreateGroup(
+    geometry: SpatialFilterGeometry[],
+    referenceLayer: number | undefined,
+    updateFn: (group: FilterGroupModel<SpatialFilterModel>) => Observable<FilterGroupModel>,
+  ) {
+    combineLatest([
+      this.store$.select(selectSelectedFilterGroup),
+      this.store$.select(selectSelectedLayers),
+    ])
+      .pipe(
+        take(1),
+      )
+      .subscribe(([ selectedGroup, selectedLayers ]) => {
+        if (selectedGroup && !FilterTypeHelper.isSpatialFilterGroup(selectedGroup)) {
+          return;
+        }
+        if (!selectedGroup) {
+          this.createSpatialFilterGroup(geometry, selectedLayers, referenceLayer);
+          return;
+        }
+        this.updateSelectedGroup(updateFn);
+      });
+  }
+
+  private updateSelectedGroup(updateFn: (group: FilterGroupModel<SpatialFilterModel>) => Observable<FilterGroupModel>) {
+    this.getSelectedGroup$()
+      .pipe(concatMap(group => updateFn(group)))
+      .subscribe(group => this.store$.dispatch(updateFilterGroup({ filterGroup: group })));
+  }
+
+  private createSpatialFilterGroup(
+    geometries: SpatialFilterGeometry[],
+    layers: number[],
+    referenceLayer?: number,
+  ): void {
+    this.getLayerDetails$(layers)
+      .pipe(map(layerDetails => this.createFilterForLayers(layerDetails, geometries, referenceLayer)))
+      .subscribe(filterGroup => {
+        this.store$.dispatch(addFilterGroup({ filterGroup }));
+        this.store$.dispatch(setSelectedFilterGroup({ filterGroup }));
+      });
   }
 
   private getLayerDetails$(
@@ -101,11 +152,12 @@ export class SpatialFilterCrudService {
     geometries: SpatialFilterGeometry[],
     referenceLayer?: number,
   ): FilterGroupModel<SpatialFilterModel> {
-    const filter: SpatialFilterModel = {
+    const spatialFilter: SpatialFilterModel = {
       id: nanoid(),
       type: FilterTypeEnum.SPATIAL,
       geometries,
       baseLayerId: referenceLayer,
+      buffer: undefined,
       geometryColumns: layers.map(layer => ({
         layerId: layer.id,
         column: [layer.geometryAttribute],
@@ -116,7 +168,7 @@ export class SpatialFilterCrudService {
       type: FilterTypeEnum.SPATIAL,
       layerIds: layers.map(layer => layer.id),
       operator: 'AND',
-      filters: [filter],
+      filters: [spatialFilter],
       source: 'SPATIAL_FILTER_FORM',
     };
   }

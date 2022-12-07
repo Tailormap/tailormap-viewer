@@ -2,55 +2,49 @@ import { render, screen } from '@testing-library/angular';
 import { SpatialFilterFormSelectReferenceLayerComponent } from './spatial-filter-form-select-reference-layer.component';
 import { SharedImportsModule } from '@tailormap-viewer/shared';
 import { AppLayerModel, getAppLayerModel } from '@tailormap-viewer/api';
-import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { selectFilterableLayers } from '../../../map/state/map.selectors';
-import { selectSelectedLayers } from '../state/filter-component.selectors';
-import { TestBed } from '@angular/core/testing';
+import { provideMockStore } from '@ngrx/store/testing';
+import { selectReferencableLayers, selectReferenceLayer, selectSelectedLayers } from '../state/filter-component.selectors';
 import userEvent from '@testing-library/user-event';
-import { setSelectedLayers } from '../state/filter-component.actions';
+import { SpatialFilterCrudService } from '../services/spatial-filter-crud.service';
 
-const setup = async (layers: AppLayerModel[], selectedLayers: number[]) => {
+const availableLayers = [
+  getAppLayerModel({ id: 1, title: 'Layer 1' }),
+  getAppLayerModel({ id: 2, title: 'Layer 2' }),
+];
+
+const setup = async (layers: AppLayerModel[], selectedLayer?: number) => {
   const store = provideMockStore({
     initialState: {},
     selectors: [
-      { selector: selectFilterableLayers, value: layers },
-      { selector: selectSelectedLayers, value: selectedLayers },
+      { selector: selectReferencableLayers, value: layers },
+      { selector: selectReferenceLayer, value: selectedLayer },
     ],
   });
+  const mockSpatialCrudService = { updateReferenceLayer: jest.fn() };
   await render(SpatialFilterFormSelectReferenceLayerComponent, {
     imports: [SharedImportsModule],
-    providers: [store],
+    providers: [ store, { provide: SpatialFilterCrudService, useValue: mockSpatialCrudService }],
   });
-  const injectedStore = TestBed.inject(MockStore);
-  injectedStore.dispatch = jest.fn();
-  return { dispatch: injectedStore.dispatch };
+  return { updateReferenceLayer: mockSpatialCrudService.updateReferenceLayer };
 };
 
-describe('SpatialFilterFormSelectLayersComponent', () => {
+describe('SpatialFilterFormSelectReferenceLayerComponent', () => {
 
   test('should render', async () => {
-    await setup([], []);
-    expect(screen.getByText('Select layer(s)')).toBeInTheDocument();
+    await setup([]);
+    expect(screen.getByText('Select layer to use as filter')).toBeInTheDocument();
   });
 
   test('select layers from list', async () => {
-    const availableLayers = [
-      getAppLayerModel({ id: 1, title: 'Layer 1' }),
-      getAppLayerModel({ id: 2, title: 'Layer 2' }),
-    ];
-    const { dispatch } = await setup(availableLayers, []);
-    expect(screen.getByText('Select layer(s)')).toBeInTheDocument();
+    const { updateReferenceLayer } = await setup(availableLayers);
+    expect(screen.getByText('Select layer to use as filter')).toBeInTheDocument();
     await userEvent.click(screen.getByRole('combobox'));
     await userEvent.click(await screen.findByText('Layer 1'));
-    expect(dispatch).toHaveBeenCalledWith(setSelectedLayers({ layers: [1] }));
+    expect(updateReferenceLayer).toHaveBeenCalledWith(1);
   });
 
   test('patch value with initial value', async () => {
-    const availableLayers = [
-      getAppLayerModel({ id: 1, title: 'Layer 1' }),
-      getAppLayerModel({ id: 2, title: 'Layer 2' }),
-    ];
-    await setup(availableLayers, [1]);
+    await setup(availableLayers, 1);
     expect(await screen.findByText('Layer 1')).toBeInTheDocument();
   });
 

@@ -1,11 +1,10 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, inject } from '@angular/core';
 import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type.enum';
 import { FeatureModel } from '@tailormap-viewer/api';
 import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.helper';
 import { DrawingToolEvent } from '@tailormap-viewer/map';
-import { Store } from '@ngrx/store';
-import { addGeometry, removeGeometry } from '../state/filter-component.actions';
 import { nanoid } from 'nanoid';
+import { SpatialFilterCrudService } from '../services/spatial-filter-crud.service';
 
 @Component({
   selector: 'tm-spatial-filter-form-draw-geometries',
@@ -13,9 +12,9 @@ import { nanoid } from 'nanoid';
   styleUrls: ['./spatial-filter-form-draw-geometries.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SpatialFilterFormDrawGeometriesComponent implements OnInit {
+export class SpatialFilterFormDrawGeometriesComponent {
 
-  private store$ = inject(Store);
+  private filterCrudService = inject(SpatialFilterCrudService);
 
   @Input()
   public drawingLayerId = '';
@@ -35,17 +34,12 @@ export class SpatialFilterFormDrawGeometriesComponent implements OnInit {
     DrawingFeatureTypeEnum.CIRCLE,
   ];
 
-  constructor() { }
-
-  public ngOnInit(): void {
-  }
-
   public drawingAdded($event: DrawingToolEvent) {
-    this.store$.dispatch(addGeometry({ geometry: { id: nanoid(), geometry: $event.geometry } }));
+    this.filterCrudService.addGeometry({ id: nanoid(), geometry: $event.geometry });
   }
 
   public featureRemoved($event: string) {
-    this.store$.dispatch(removeGeometry({ id: $event }));
+    this.filterCrudService.removeGeometry($event);
   }
 
 }

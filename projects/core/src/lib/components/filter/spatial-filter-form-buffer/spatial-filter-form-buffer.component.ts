@@ -2,9 +2,9 @@ import { Component, OnInit, ChangeDetectionStrategy, inject, OnDestroy } from '@
 import { FormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { debounceTime, takeUntil } from 'rxjs/operators';
-import { setBuffer } from '../state/filter-component.actions';
 import { Subject } from 'rxjs';
 import { selectBuffer } from '../state/filter-component.selectors';
+import { SpatialFilterCrudService } from '../services/spatial-filter-crud.service';
 
 @Component({
   selector: 'tm-spatial-filter-form-buffer',
@@ -16,6 +16,7 @@ export class SpatialFilterFormBufferComponent implements OnInit, OnDestroy {
 
   private destroyed = new Subject();
   private store$ = inject(Store);
+  private filterCrudService = inject(SpatialFilterCrudService);
 
   public bufferControl = new FormControl<number>(0, {
     nonNullable: true,
@@ -30,7 +31,7 @@ export class SpatialFilterFormBufferComponent implements OnInit, OnDestroy {
     this.bufferControl.valueChanges
       .pipe(takeUntil(this.destroyed), debounceTime(250))
       .subscribe((value) => {
-        this.store$.dispatch(setBuffer({ buffer: this.getBufferValue(value) }));
+        this.filterCrudService.updateBuffer(this.getBufferValue(value));
       });
   }
 

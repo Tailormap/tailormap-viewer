@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { selectSelectedLayers } from '../state/filter-component.selectors';
 import { FormControl } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
-import { setSelectedLayers } from '../state/filter-component.actions';
+import { SpatialFilterCrudService } from '../services/spatial-filter-crud.service';
 
 @Component({
   selector: 'tm-spatial-filter-form-select-layers',
@@ -18,6 +18,7 @@ export class SpatialFilterFormSelectLayersComponent implements OnInit, OnDestroy
 
   private destroyed = new Subject();
   private store$ = inject(Store);
+  private filterCrudService = inject(SpatialFilterCrudService);
 
   public availableLayers$: Observable<AppLayerModel[]> = of([]);
   public selectedLayersControl = new FormControl<number[]>([], {
@@ -36,7 +37,7 @@ export class SpatialFilterFormSelectLayersComponent implements OnInit, OnDestroy
     this.selectedLayersControl.valueChanges
       .pipe(takeUntil(this.destroyed))
       .subscribe((value) => {
-        this.store$.dispatch(setSelectedLayers({ layers: value || [] }));
+        this.filterCrudService.updateSelectedLayers(value || []);
       });
   }
 
