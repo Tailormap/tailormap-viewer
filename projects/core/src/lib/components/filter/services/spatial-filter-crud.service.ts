@@ -56,7 +56,17 @@ export class SpatialFilterCrudService {
       layer,
       group => of({
         ...group,
-        filters: group.filters.map(f => ({ ...f, baseLayerId: layer })),
+        filters: group.filters.map(f => {
+          const currentReferenceLayer = f.baseLayerId;
+          const geometries = typeof layer === 'undefined'
+            ? f.geometries.filter(g => g.referenceLayerId !== currentReferenceLayer)
+            : f.geometries;
+          return {
+            ...f,
+            geometries,
+            baseLayerId: layer,
+          };
+        }),
       }),
     );
     return ;

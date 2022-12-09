@@ -69,6 +69,7 @@ export class SpatialFilterReferenceLayerService implements OnDestroy {
           return {
             id: feat.__fid,
             geometry: feat.geometry,
+            referenceLayerId: referenceLayer,
           };
         }).filter(TypesHelper.isDefined);
         const updatedGroup = {

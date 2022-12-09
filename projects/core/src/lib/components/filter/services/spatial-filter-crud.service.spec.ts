@@ -26,11 +26,12 @@ const selectedGroup = getSpatialFilterGroup(['CIRCLE(1 2 3)'], [{ layerId: 1, co
 const setup = (
   hasSelectedFilterGroup?: boolean,
   hasSelectedLayers?: boolean,
+  overrideGroup?: FilterGroupModel<SpatialFilterModel>,
 ) => {
   const mockStore = provideMockStore({
     initialState: {},
     selectors: [
-      { selector: selectSelectedFilterGroup, value: hasSelectedFilterGroup ? selectedGroup : undefined },
+      { selector: selectSelectedFilterGroup, value: hasSelectedFilterGroup ? (overrideGroup || selectedGroup) : undefined },
       { selector: selectSelectedLayers, value: hasSelectedLayers ? [1] : [] },
       { selector: selectApplicationId, value: 1 },
     ],
@@ -165,6 +166,28 @@ describe('SpatialFilterCrudService', () => {
     const updatedGroup: FilterGroupModel<SpatialFilterModel> = {
       ...selectedGroup,
       filters: selectedGroup.filters.map((filter) => ({ ...filter, baseLayerId: 5 })),
+    };
+    expect(dispatch).toHaveBeenNthCalledWith(1, updateFilterGroup({ filterGroup: updatedGroup }));
+  });
+
+  test('clear geometry after clearing reference layer', async () => {
+    const group = getSpatialFilterGroup(['CIRCLE(1 2 3)'], [{ layerId: 1, column: ['geom'] }]);
+    const groupWithReferenceGeom: FilterGroupModel<SpatialFilterModel> = {
+      ...group,
+      filters: group.filters.map((filter) => ({
+        ...filter,
+        baseLayerId: 5,
+        geometries: filter.geometries.map((geom) => ({ ...geom, referenceLayerId: 5 })),
+      })),
+    };
+    const { service, dispatch } = setup(true, true, groupWithReferenceGeom);
+    service.updateReferenceLayer(undefined);
+    await waitFor(() => {
+      expect(dispatch).toHaveBeenCalledTimes(1);
+    });
+    const updatedGroup: FilterGroupModel<SpatialFilterModel> = {
+      ...selectedGroup,
+      filters: selectedGroup.filters.map((filter) => ({ ...filter, baseLayerId: undefined, geometries: [] })),
     };
     expect(dispatch).toHaveBeenNthCalledWith(1, updateFilterGroup({ filterGroup: updatedGroup }));
   });
