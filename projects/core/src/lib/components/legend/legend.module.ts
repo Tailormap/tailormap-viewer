@@ -19,6 +19,7 @@ import { LegendLayerComponent } from './legend-layer/legend-layer.component';
   ],
   exports: [
     LegendComponent,
+    LegendLayerComponent,
   ],
 })
 export class LegendModule { }

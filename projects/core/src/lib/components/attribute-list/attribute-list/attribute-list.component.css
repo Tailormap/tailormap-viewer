@@ -7,7 +7,7 @@
 }
 
 .panel {
-  box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.05), 0 -3px 4px 0 rgba(0, 0, 0, 0.08);
+  box-shadow: var(--box-shadow-top);
   width: 100%;
   height: 350px;
   overflow: hidden;

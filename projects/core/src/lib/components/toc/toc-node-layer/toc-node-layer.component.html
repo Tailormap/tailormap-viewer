@@ -5,4 +5,9 @@
   <div class="tree-node__label">
     <span class="tree-node__label-content">{{node.label}}</span>
   </div>
+  <div class="tree-node__actions">
+    <button *ngIf="isLayer()"
+            mat-icon-button
+            (click)="showInfo($event, node.metadata)"><mat-icon svgIcon="info"></mat-icon></button>
+  </div>
 </div>

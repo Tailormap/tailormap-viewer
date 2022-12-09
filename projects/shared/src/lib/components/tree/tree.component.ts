@@ -5,7 +5,6 @@ import { FlatTreeHelper } from './helpers/flat-tree.helper';
 import { FlatTreeModel } from './models';
 import { Subject } from 'rxjs';
 import { DropZoneOptions, TreeDragDropService, treeNodeBaseClass } from './tree-drag-drop.service';
-import { CssHelper } from '../../helpers';
 
 @Component({
   selector: 'tm-tree',
@@ -34,8 +33,6 @@ export class TreeComponent implements OnDestroy {
   public treeDragDropServiceEnabled = false;
 
   public readOnlyMode = false;
-
-  private scrollLeft = 0;
 
   private checkedRadioNode: FlatTreeModel | undefined;
 
@@ -161,17 +158,6 @@ export class TreeComponent implements OnDestroy {
     this.ngZone.runOutsideAngular(() => {
       this.treeDragDropService.handleDragStart(event, node, [ dropZoneConfig, ...(this.additionalDropZones || []) ]);
     });
-  }
-
-  public handleTreeScroll(currentTarget: EventTarget | null) {
-    if (!currentTarget) {
-      return;
-    }
-    const targetIsHTMLElement = (target: EventTarget): target is HTMLElement => !!(target as HTMLElement).nodeName;
-    if (targetIsHTMLElement(currentTarget) && this.scrollLeft !== currentTarget.scrollLeft) {
-      this.scrollLeft = currentTarget.scrollLeft;
-      CssHelper.setCssVariableValue('--scroll-pos', this.scrollLeft + 'px', currentTarget);
-    }
   }
 
   public handleRadioChange(node: FlatTreeModel) {

@@ -1,6 +1,5 @@
 :host {
   flex: 1;
-  overflow: hidden;
 }
 
 .mat-icon {
@@ -11,7 +10,7 @@
 }
 
 .tree-node__label {
-  padding-right: 40px;
+  padding-right: 8px;
   display: flex;
   align-items: center;
 }
@@ -37,14 +36,23 @@
 }
 
 .tree-node__actions {
+  position: sticky;
+  right: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   height: var(--tree-node-size);
-  background-image: linear-gradient(to right, rgba(214, 222, 255, 0) 0%, rgba(214, 222, 255, 1) 30%, rgba(214, 222, 255, 1) 100%);
-  position: var(--actions-pos);
-  right: 0;
-  margin-right: calc(-1 * var(--scroll-pos));
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 20%, rgba(255, 255, 255, 1) 100%);
+}
+
+.tree-node__actions::after {
+  /* mask to cover text behind the icon */
+  content: " ";
+  position: absolute;
+  right: calc(-1 * var(--toc-side-padding));
+  width: var(--toc-side-padding);
+  height: 100%;
+  background-color: #fff;
 }
 
 .tree-node__actions .mat-icon-button {

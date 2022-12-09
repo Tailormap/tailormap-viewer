@@ -6,6 +6,8 @@ import { TocMenuButtonComponent } from './toc-menu-button/toc-menu-button.compon
 import { MenubarModule } from '../menubar';
 import { TocNodeLayerComponent } from './toc-node-layer/toc-node-layer.component';
 import { ToggleAllLayersButtonComponent } from './toggle-all-layers-button/toggle-all-layers-button.component';
+import { LayerDetailsComponent } from './layer-details/layer-details.component';
+import { LegendModule } from '../legend';
 
 @NgModule({
   declarations: [
@@ -13,11 +15,13 @@ import { ToggleAllLayersButtonComponent } from './toggle-all-layers-button/toggl
     TocMenuButtonComponent,
     TocNodeLayerComponent,
     ToggleAllLayersButtonComponent,
+    LayerDetailsComponent,
   ],
   imports: [
     CommonModule,
     SharedModule,
     MenubarModule,
+    LegendModule,
   ],
   exports: [
     TocComponent,
