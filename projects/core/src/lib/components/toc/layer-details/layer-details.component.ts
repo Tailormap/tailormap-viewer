@@ -36,6 +36,7 @@ export class LayerDetailsComponent implements OnInit {
 
   private panelHeightSubject = new BehaviorSubject<number | undefined>(undefined);
   public panelHeight$ = this.panelHeightSubject.asObservable().pipe(map(height => height ? `${height}px` : undefined));
+
   public legendInfo$: Observable<LegendInfoModel | null> = of(null);
 
   public ngOnInit(): void {
