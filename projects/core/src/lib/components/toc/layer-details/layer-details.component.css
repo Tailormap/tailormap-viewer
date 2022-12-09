@@ -3,6 +3,8 @@
   height: 40vh;
   border-top: 1px solid var(--border-color);
   box-shadow: var(--box-shadow-top);
+  display: flex;
+  flex-direction: column;
 }
 
 .layer-details-panel-header {
@@ -10,6 +12,7 @@
   align-items: center;
   padding: 14px 0 8px 0;
   border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
 }
 
 .layer-details-panel-header h2 {
@@ -19,4 +22,14 @@
 
 .layer-details-panel-header button {
   flex-shrink: 0;
+}
+
+.layer-details-panel-content {
+  flex: 1;
+  padding: 0 14px 14px 14px;
+  overflow: auto;
+}
+
+.layer-details-panel-section + .layer-details-panel-section {
+  margin-top: 14px;
 }

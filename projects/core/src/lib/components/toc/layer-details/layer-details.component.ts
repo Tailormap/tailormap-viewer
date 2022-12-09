@@ -1,7 +1,10 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, ViewChild, ElementRef, inject } from '@angular/core';
 import { ExtendedAppLayerModel } from '../../../map/models';
 import { BrowserHelper } from '@tailormap-viewer/shared';
-import { BehaviorSubject, map } from 'rxjs';
+import { BehaviorSubject, map, Observable, of } from 'rxjs';
+import { LegendService } from '../../legend/services/legend.service';
+import { MapService } from '@tailormap-viewer/map';
+import { LegendInfoModel } from '../../legend/models/legend-info.model';
 
 @Component({
   selector: 'tm-layer-details',
@@ -11,17 +14,29 @@ import { BehaviorSubject, map } from 'rxjs';
 })
 export class LayerDetailsComponent implements OnInit {
 
+  private legendService = inject(LegendService);
+  private mapService = inject(MapService);
+
+  private _layer: ExtendedAppLayerModel | null = null;
+
   @Input()
-  public layer: ExtendedAppLayerModel | null = null;
+  public set layer(layer: ExtendedAppLayerModel | null) {
+    this._layer = layer;
+    this.updateLegend();
+  }
+  public get layer(): ExtendedAppLayerModel | null {
+    return this._layer;
+  }
 
   @Output()
   public closeDetails = new EventEmitter<void>();
 
-  @ViewChild('detailsPanel', { static: true, read: ElementRef })
+  @ViewChild('detailsPanel', { static: false, read: ElementRef })
   private detailsPanel: ElementRef | undefined;
 
   private panelHeightSubject = new BehaviorSubject<number | undefined>(undefined);
   public panelHeight$ = this.panelHeightSubject.asObservable().pipe(map(height => height ? `${height}px` : undefined));
+  public legendInfo$: Observable<LegendInfoModel | null> = of(null);
 
   public ngOnInit(): void {
     this.updateHeight();
@@ -29,6 +44,14 @@ export class LayerDetailsComponent implements OnInit {
 
   public panelResized(delta: number) {
     this.updateHeight(delta);
+  }
+
+  private updateLegend() {
+    if (!this.layer) {
+      return;
+    }
+    this.legendInfo$ = this.legendService.getLegendInfo$(of([this.layer]), this.mapService.getMapViewDetails$())
+      .pipe(map(legendInfo => legendInfo.length !== 0 ? legendInfo[0] : null));
   }
 
   private updateHeight(delta?: number) {

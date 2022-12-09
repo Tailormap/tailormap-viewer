@@ -11,4 +11,10 @@
             i18n-tmTooltip
             (click)="close()"><mat-icon svgIcon="close"></mat-icon></button>
   </div>
+  <div class="layer-details-panel-content">
+    <div *ngIf="legendInfo$ | async as legendInfo" class="layer-details-panel-section">
+      <h3 i18n>Legend</h3>
+      <tm-legend-layer [legendInfo]="legendInfo"></tm-legend-layer>
+    </div>
+  </div>
 </div>
