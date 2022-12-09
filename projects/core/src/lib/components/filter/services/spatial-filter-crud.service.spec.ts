@@ -165,7 +165,7 @@ describe('SpatialFilterCrudService', () => {
     });
     const updatedGroup: FilterGroupModel<SpatialFilterModel> = {
       ...selectedGroup,
-      filters: selectedGroup.filters.map((filter) => ({ ...filter, baseLayerId: 5 })),
+      filters: selectedGroup.filters.map((filter) => ({ ...filter, baseLayerId: 5, geometries: [] })),
     };
     expect(dispatch).toHaveBeenNthCalledWith(1, updateFilterGroup({ filterGroup: updatedGroup }));
   });
