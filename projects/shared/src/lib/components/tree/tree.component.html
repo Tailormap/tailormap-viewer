@@ -2,7 +2,7 @@
   {{node.label}}
 </ng-template>
 
-<div class="tree-wrapper" (scroll)="handleTreeScroll($event.currentTarget)">
+<div class="tree-wrapper">
   <mat-tree #treeElement
             [dataSource]="getDataSource()"
             [treeControl]="getTreeControl()">

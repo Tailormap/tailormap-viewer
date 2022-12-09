@@ -12,8 +12,6 @@ mat-checkbox {
 }
 
 ::ng-deep .tree-wrapper {
-  --scroll-pos: 0;
-  --actions-pos: absolute;
   --tree-node-size: 34px;
 }
 

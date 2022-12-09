@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { filter, Observable, of, Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, filter, Observable, of, Subject, takeUntil } from 'rxjs';
 import { BaseTreeModel, TreeService } from '@tailormap-viewer/shared';
 import { map } from 'rxjs/operators';
 import { MenubarService } from '../../menubar';
@@ -26,6 +26,9 @@ export class TocComponent implements OnInit, OnDestroy {
   private destroyed = new Subject();
   public visible$: Observable<boolean> = of(false);
   public scale: number | null = null;
+
+  private selectedLayerDetailsSubject = new BehaviorSubject<AppLayerModel | null>(null);
+  public selectedLayerDetails$ = this.selectedLayerDetailsSubject.asObservable();
 
   constructor(
     private store$: Store,
@@ -68,6 +71,14 @@ export class TocComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this.destroyed.next(null);
     this.destroyed.complete();
+  }
+
+  public showLayerInfo(layer: AppLayerModel) {
+    this.selectedLayerDetailsSubject.next(layer);
+  }
+
+  public layerInfoClosed() {
+    this.selectedLayerDetailsSubject.next(null);
   }
 
 }

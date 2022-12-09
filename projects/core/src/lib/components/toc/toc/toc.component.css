@@ -1,10 +1,15 @@
 :host,
 .toc {
   height: 100%;
+  --toc-side-padding: 14px;
 }
 
 ::ng-deep .tree-wrapper {
-  padding: 6px 14px 0 14px;
+  padding: 6px var(--toc-side-padding) 0 var(--toc-side-padding);
+}
+
+::ng-deep .mat-tree {
+  min-width: min-content;
 }
 
 .toc {
