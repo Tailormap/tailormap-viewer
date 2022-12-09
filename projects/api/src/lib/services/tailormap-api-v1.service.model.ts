@@ -33,6 +33,7 @@ export interface TailormapApiV1ServiceModel {
     page?: number;
     sortBy?: string;
     sortOrder?: Sortorder;
+    onlyGeometries?: boolean;
   }): Observable<FeaturesResponseModel>;
 
   getUniqueValues$(params: {

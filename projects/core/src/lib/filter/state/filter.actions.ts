@@ -6,7 +6,7 @@ const filterActionsPrefix = '[Filter]';
 
 export const addFilterGroup = createAction(
   `${filterActionsPrefix} Add Filter Group`,
-  props<{ group: FilterGroupModel }>(),
+  props<{ filterGroup: FilterGroupModel }>(),
 );
 
 export const removeFilterGroup = createAction(

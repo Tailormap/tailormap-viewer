@@ -6,6 +6,8 @@ import { toggleFilterDisabled } from '../../../filter/state/filter.actions';
 import { AppLayerModel } from '@tailormap-viewer/api';
 import { setSelectedFilterGroup } from '../state/filter-component.actions';
 import { RemoveFilterService } from '../services/remove-filter.service';
+import { FilterGroupModel } from '../../../filter/models/filter-group.model';
+import { FilterTypeHelper } from '../../../filter/helpers/filter-type.helper';
 
 @Component({
   selector: 'tm-filter-list-item',
@@ -44,8 +46,11 @@ export class FilterListItemComponent implements OnInit {
     this.removeFilterService.removeFilter$(groupId).subscribe();
   }
 
-  public editFilter(id: string) {
-    this.store$.dispatch(setSelectedFilterGroup({ id }));
+  public editFilter(group: FilterGroupModel) {
+    if (!FilterTypeHelper.isSpatialFilterGroup(group)) {
+      return;
+    }
+    this.store$.dispatch(setSelectedFilterGroup({ filterGroup: group }));
   }
 
 }

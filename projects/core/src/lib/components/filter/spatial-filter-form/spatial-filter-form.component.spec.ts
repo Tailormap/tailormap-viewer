@@ -1,110 +1,110 @@
-import { render, screen, waitFor } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
 import { SpatialFilterFormComponent } from './spatial-filter-form.component';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { selectFilterableLayers } from '../../../map/state/map.selectors';
-import { selectSelectedFilterGroup } from '../state/filter-component.selectors';
-import { of } from 'rxjs';
-import { CreateFilterService } from '../services/create-filter.service';
+import {
+  hasSelectedLayers, hasSelectedLayersAndGeometry, selectFilterFeatures, selectSelectedFilterGroup, selectSelectedFilterGroupId,
+} from '../state/filter-component.selectors';
 import { getFilterGroup } from '../../../filter/helpers/attribute-filter.helper.spec';
-import { SharedModule } from '@tailormap-viewer/shared';
+import { SharedImportsModule } from '@tailormap-viewer/shared';
 import { RemoveFilterService } from '../services/remove-filter.service';
 import { AppLayerModel, getAppLayerModel } from '@tailormap-viewer/api';
 import userEvent from '@testing-library/user-event';
-import { MapDrawingButtonsComponent } from '../../../map/components/map-drawing-buttons/map-drawing-buttons.component';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { createMapServiceMock } from '../../../map/components/map-drawing-buttons/map-drawing-buttons.component.spec';
 import { TestBed } from '@angular/core/testing';
-import { Store } from '@ngrx/store';
-import { SpatialFilterModel } from '../../../filter/models/spatial-filter.model';
-import { FilterTypeEnum } from '../../../filter/models/filter-type.enum';
+import { FilterGroupModel } from '../../../filter/models/filter-group.model';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { closeForm } from '../state/filter-component.actions';
+import { of } from 'rxjs';
 
-let idCount = 0;
-jest.mock('nanoid', () => ({
-  nanoid: () => {
-    idCount++;
-    return `id-${idCount}`;
-  },
-}));
-
-const setup = async (layers: AppLayerModel[] = []) => {
+const setup = async (conf: {
+  layers?: AppLayerModel[];
+  selectedLayers?: boolean;
+  selectedLayersAndGeometry?: boolean;
+  selectedFilterGroup?: FilterGroupModel;
+}) => {
   const store = provideMockStore({
     initialState: {},
     selectors: [
-      { selector: selectFilterableLayers, value: layers },
-      { selector: selectSelectedFilterGroup, value: undefined },
+      { selector: selectFilterableLayers, value: conf.layers || [] },
+      { selector: hasSelectedLayers, value: conf.selectedLayers || false },
+      { selector: hasSelectedLayersAndGeometry, value: conf.selectedLayersAndGeometry || false },
+      { selector: selectSelectedFilterGroupId, value: conf.selectedFilterGroup?.id || null },
+      { selector: selectFilterFeatures, value: [] },
     ],
   });
   const mapServiceMock = createMapServiceMock();
-  const createFilterServiceMock = {
-    createSpatialFilterGroup$: jest.fn(() => of(getFilterGroup(undefined, undefined, 'CREATED'))),
-    updateSpatialFilterGroup$: jest.fn(() => of(getFilterGroup(undefined, undefined, 'UPDATED'))),
-  };
-  const removeFilterServiceMock = {
-    removeFilter$: jest.fn(),
-  };
-  await render(SpatialFilterFormComponent, {
-    declarations: [MapDrawingButtonsComponent],
-    imports: [ SharedModule, MatIconTestingModule ],
+  const removeFilterServiceMock = { removeFilter$: jest.fn(() => of(true)) };
+  const { container } = await render(SpatialFilterFormComponent, {
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [SharedImportsModule],
     providers: [
       store,
       mapServiceMock.provider,
-      { provide: CreateFilterService, useValue: createFilterServiceMock },
       { provide: RemoveFilterService, useValue: removeFilterServiceMock },
     ],
   });
+  const injectedStore = TestBed.inject(MockStore);
+  injectedStore.dispatch = jest.fn();
   return {
-    addDrawingEvent: mapServiceMock.addDrawingEvent,
-    createFilterServiceMock,
+    dispatch: injectedStore.dispatch,
+    removeFilter$: removeFilterServiceMock.removeFilter$,
+    container,
   };
 };
+
+const layers = [
+  getAppLayerModel({ id: 1, title: 'Layer 1' }),
+  getAppLayerModel({ id: 2, title: 'Layer 2' }),
+];
 
 describe('SpatialFilterFormComponent', () => {
 
   test('should render', async () => {
-    await setup();
+    await setup({});
+    expect(await screen.findByText('Add spatial filter'));
     expect(await screen.findByText('No layers available to filter on'));
   });
 
-  test('should add and update a spatial filter', async () => {
-    const userEvt = userEvent.setup();
-    const expectedGeom = { geometry: 'CIRCLE(1,2,3)', id: 'id-1' };
-    const { addDrawingEvent, createFilterServiceMock } = await setup([
-      getAppLayerModel({ id: 1, title: 'Layer 1' }),
-      getAppLayerModel({ id: 2, title: 'Layer 2' }),
-    ]);
-    const mockStore = TestBed.inject(Store) as MockStore;
-    expect(await screen.findByText('Select layer(s)'));
-    expect(await screen.findByText('Cancel'));
-    await userEvt.click(screen.getByRole('combobox'));
-    await userEvt.click(await screen.findByText('Layer 1'));
-    await userEvt.click(screen.getByRole('combobox'));
-    await userEvt.click(screen.getByLabelText('Draw circle'));
-    addDrawingEvent({ type: 'end', geometry: expectedGeom.geometry });
-    await waitFor(() => {
-      expect(createFilterServiceMock.createSpatialFilterGroup$).toHaveBeenCalledWith([expectedGeom], [1], undefined);
+  test('should show layer selector', async () => {
+    const { container, dispatch } = await setup({
+      layers,
     });
-    const filterGroup = getFilterGroup<SpatialFilterModel>([{
-      id: 'id-1',
-      type: FilterTypeEnum.SPATIAL,
-      geometries: [{ geometry: 'CIRCLE(1,2,3)', id: 'id-1' }],
-      geometryColumns: [{ layerId: 1, column: ['geom'] }],
-    }], FilterTypeEnum.SPATIAL, 'CREATED');
-    mockStore.overrideSelector(selectSelectedFilterGroup, filterGroup);
-    mockStore.refreshState();
-    await waitFor(() => {
-      expect(screen.getByText('Save'));
-    });
-    await userEvt.click(screen.getByRole('combobox'));
-    await userEvt.click(await screen.findByText('Layer 2'));
-    await waitFor(() => {
-      expect(createFilterServiceMock.updateSpatialFilterGroup$).toHaveBeenCalledWith(filterGroup, [expectedGeom], [ 1, 2 ], undefined);
-    });
+    expect(container.querySelector('tm-spatial-filter-form-select-layers')).toBeInTheDocument();
+    expect(await screen.findByText('Cancel')).toBeInTheDocument();
+    await userEvent.click(await screen.findByText('Cancel'));
+    expect(dispatch).toHaveBeenCalledWith(closeForm());
+  });
 
-    // set buffer
-    await userEvt.type(screen.getByRole('spinbutton'), '10');
-    await waitFor(() => {
-      expect(createFilterServiceMock.updateSpatialFilterGroup$).toHaveBeenCalledWith(filterGroup, [expectedGeom], [ 1, 2 ], 10);
+  test('should show geometry drawing buttons', async () => {
+    await setup({
+      layers,
+      selectedLayers: true,
     });
+    expect(await screen.findByText('Draw filter geometry')).toBeInTheDocument();
+  });
+
+  test('should show buffer field', async () => {
+    await setup({
+      layers,
+      selectedLayers: true,
+      selectedLayersAndGeometry: true,
+    });
+    expect(await screen.findByText('Set optional buffer')).toBeInTheDocument();
+  });
+
+  test('should save/remove buttons', async () => {
+    const group = getFilterGroup();
+    const { dispatch, removeFilter$ } = await setup({
+      layers,
+      selectedFilterGroup: group,
+    });
+    expect(await screen.findByText('Save')).toBeInTheDocument();
+    expect(await screen.findByText('Remove')).toBeInTheDocument();
+    await userEvent.click(await screen.findByText('Save'));
+    expect(dispatch).toHaveBeenCalledWith(closeForm());
+    await userEvent.click(await screen.findByText('Remove'));
+    expect(removeFilter$).toHaveBeenCalledWith(group.id);
   });
 
 });

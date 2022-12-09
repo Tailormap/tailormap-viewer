@@ -7,6 +7,8 @@ import { TypesHelper } from '@tailormap-viewer/shared';
 import { FilterTypeEnum } from '../models/filter-type.enum';
 import { BaseFilterModel } from '../models/base-filter.model';
 import { FilterGroupModel } from '../models/filter-group.model';
+import { FilterTypeHelper } from '../helpers/filter-type.helper';
+import { SpatialFilterModel } from '../models/spatial-filter.model';
 
 const selectFilterState = createFeatureSelector<FilterState>(filterStateKey);
 
@@ -45,4 +47,12 @@ export const selectEnabledFilterGroups = createSelector(
 export const selectCQLFilters = createSelector(
   selectEnabledFilterGroups,
   (groups): Map<number, string> => CqlFilterHelper.getFilters(groups),
+);
+
+export const selectSpatialFilterGroupsWithReferenceLayers = createSelector(
+  selectFilterGroups,
+  (groups): FilterGroupModel<SpatialFilterModel>[] => {
+    return groups.filter(FilterTypeHelper.isSpatialFilterGroup)
+      .filter(group => group.filters.length > 0 && group.filters[0].baseLayerId);
+    },
 );

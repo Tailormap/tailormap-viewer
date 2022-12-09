@@ -1,63 +1,57 @@
 <h2 i18n>Add spatial filter</h2>
 
-<ng-template #noLayers>
-  <div i18n>No layers available to filter on</div>
-</ng-template>
+<ng-template #formTemplate let-availableLayers>
 
-<ng-container *ngIf="(availableLayers$ | async) as availableLayers">
+  <ng-template #noLayers>
+    <div i18n>No layers available to filter on</div>
+  </ng-template>
+
   <ng-container *ngIf="availableLayers.length > 0; else: noLayers">
 
-    <mat-form-field class="form-section form-section--with-form-field" appearance="fill">
-      <mat-label i18n>Select layer(s)</mat-label>
-      <mat-select [formControl]="selectedLayers" multiple>
-        <mat-option *ngFor="let layer of availableLayers" [value]="layer.id">{{layer.title}}</mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <div class="form-section" *ngIf="selectedLayers.value.length > 0">
-      <div i18n class="form-section-label">Draw filter geometry</div>
-      <tm-map-drawing-buttons [allowedShapes]="allowedGeometryTypes"
-                              [drawingLayerId]="drawingLayerId"
-                              [drawSingleShape]="true"
-                              [allowRemoveSelectedFeature]="true"
-                              [selectionStyle]="selectedStyle"
-                              (drawingAdded)="drawingAdded($event)"
-                              (featureRemoved)="featureRemoved($event)"></tm-map-drawing-buttons>
+    <div class="form-section form-section--with-form-field">
+      <tm-spatial-filter-form-select-layers></tm-spatial-filter-form-select-layers>
     </div>
 
-    <div class="form-section form-section--with-form-field" *ngIf="selectedLayers.value.length > 0 && (hasGeometry$ | async)">
+    <div class="form-section" *ngIf="hasSelectedLayers$ | async">
+      <div i18n class="form-section-label">Draw filter geometry</div>
+      <tm-spatial-filter-form-draw-geometries [drawingLayerId]="drawingLayerId"></tm-spatial-filter-form-draw-geometries>
+    </div>
+
+    <div class="form-section" *ngIf="hasSelectedLayers$ | async">
+      <div i18n class="form-section-label">or select reference layer</div>
+      <tm-spatial-filter-form-select-reference-layer></tm-spatial-filter-form-select-reference-layer>
+    </div>
+
+    <div class="form-section form-section--with-form-field" *ngIf="hasSelectedLayersAndGeometry$ | async">
       <div i18n class="form-section-label">Set optional buffer</div>
-      <mat-form-field appearance="outline" color="primary">
-        <mat-label i18n>Buffer in meters</mat-label>
-        <input matInput type="number" [formControl]="buffer">
-      </mat-form-field>
+      <tm-spatial-filter-form-buffer></tm-spatial-filter-form-buffer>
     </div>
 
     <div class="form-section buttons">
 
-      <button mat-stroked-button
-              *ngIf="!currentGroup"
-              (click)="cancel()"
-              tmTooltip="Close filter form"
-              i18n-tmTooltip
-              i18n>Cancel</button>
-
-      <button mat-stroked-button
-              *ngIf="currentGroup"
-              color="warn"
-              (click)="remove()"
-              tmTooltip="Remove this filter"
-              i18n-tmTooltip
-              i18n>Remove</button>
-
-      <button mat-flat-button
-              *ngIf="currentGroup"
-              color="primary"
-              (click)="save()"
-              tmTooltip="Save filter"
-              i18n-tmTooltip
-              i18n>Save</button>
+      <ng-template #cancelButton>
+        <button mat-stroked-button
+                (click)="cancel()"
+                tmTooltip="Close filter form"
+                i18n-tmTooltip
+                i18n>Cancel</button>
+      </ng-template>
+      <ng-container *ngIf="currentGroup$ | async as currentGroup; else cancelButton">
+        <button mat-stroked-button
+                color="warn"
+                (click)="remove(currentGroup)"
+                tmTooltip="Remove this filter"
+                i18n-tmTooltip
+                i18n>Remove</button>
+        <button mat-flat-button
+                color="primary"
+                (click)="save()"
+                tmTooltip="Save filter"
+                i18n-tmTooltip
+                i18n>Save</button>
+      </ng-container>
     </div>
-
   </ng-container>
-</ng-container>
+</ng-template>
+
+<ng-container *ngTemplateOutlet="formTemplate; context: { $implicit: availableLayers$ | async }"></ng-container>

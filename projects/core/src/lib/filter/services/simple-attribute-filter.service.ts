@@ -125,7 +125,7 @@ export class SimpleAttributeFilterService {
       }],
       operator: 'AND',
     };
-    this.store$.dispatch(FilterActions.addFilterGroup({ group: filterGroup }));
+    this.store$.dispatch(FilterActions.addFilterGroup({ filterGroup }));
   }
 
   private createFilter(groupId: string, filter: Omit<AttributeFilterModel, 'id'>) {

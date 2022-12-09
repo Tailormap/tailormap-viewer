@@ -4,6 +4,7 @@ import { BaseFilterModel } from './base-filter.model';
 export interface SpatialFilterGeometry {
   id: string;
   geometry: string;
+  referenceLayerId?: number;
 }
 
 export interface SpatialFilterModel extends BaseFilterModel {

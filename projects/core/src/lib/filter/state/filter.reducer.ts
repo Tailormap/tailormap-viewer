@@ -29,7 +29,7 @@ const onAddFilterGroup = (
   ...state,
   filterGroups: [
     ...state.filterGroups,
-    payload.group,
+    payload.filterGroup,
   ],
 });
 

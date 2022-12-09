@@ -62,6 +62,7 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
     page?: number;
     sortBy?: string;
     sortOrder?: Sortorder;
+    onlyGeometries?: boolean;
   }): Observable<FeaturesResponseModel> {
     const queryParams = this.getQueryParams({
       x: params.x,
@@ -74,6 +75,7 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
       page: params.page,
       sortBy: params.sortBy,
       sortOrder: params.sortOrder,
+      onlyGeometries: params.onlyGeometries,
     });
     return this.httpClient.get<FeaturesResponseModel>(
       `${TailormapApiV1Service.BASE_URL}/app/${params.applicationId}/layer/${params.layerId}/features`,
