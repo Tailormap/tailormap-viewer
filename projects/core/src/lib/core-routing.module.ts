@@ -3,7 +3,7 @@ import { RouterModule, Routes, UrlMatcher, UrlSegment } from '@angular/router';
 import { LoginComponent, ViewerAppComponent } from './pages';
 
 const matchById: UrlMatcher = (urls: UrlSegment[]) => {
-  if (urls.length > 1 && urls[0].path === 'app' && /\d+/.test(urls[1].path)) {
+  if (urls.length > 1 && urls[0].path === 'app' && /^\d+$/.test(urls[1].path)) {
     return {
       consumed: urls,
       posParams: { id: urls[1] },
