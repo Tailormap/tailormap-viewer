@@ -5,12 +5,15 @@ import { combineLatest, concatMap, distinctUntilChanged, filter, forkJoin, map, 
 import { ResolvedServerType, ServiceModel, ServiceProtocol } from '@tailormap-viewer/api';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { ArrayHelper } from '@tailormap-viewer/shared';
-import { selectMapOptions, selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersWithServices } from '../state/map.selectors';
+import { selectLoadStatus, selectMapOptions, selectOrderedVisibleBackgroundLayers,
+  selectOrderedVisibleLayersWithServices, selectInitiallyVisibleLayers, selectLayers } from '../state/map.selectors';
 import { ExtendedAppLayerModel } from '../models';
 import { selectCQLFilters } from '../../filter/state/filter.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
-import { BookmarkFragmentStringDescriptor } from '../../bookmark/bookmark.models';
+import { BookmarkFragmentStringDescriptor, BookmarkFragmentProtoDescriptor } from '../../bookmark/bookmark.models';
 import { BookmarkService } from '../../bookmark/bookmark.service';
+import { setLayerVisibility } from '../state/map.actions';
+import { LayerVisibilityBookmarkFragment } from '../bookmark/bookmark_pb';
 import { MapBookmarkHelper } from '../bookmark/bookmark.helper';
 
 @Injectable({
@@ -18,6 +21,11 @@ import { MapBookmarkHelper } from '../bookmark/bookmark.helper';
 })
 export class ApplicationMapService implements OnDestroy {
   private static LOCATION_BOOKMARK_DESCRIPTOR: BookmarkFragmentStringDescriptor = { type: 'string', identifier: '' };
+  private static VISIBILITY_BOOKMARK_DESCRIPTOR: BookmarkFragmentProtoDescriptor<LayerVisibilityBookmarkFragment> = {
+    type: 'proto',
+    proto: LayerVisibilityBookmarkFragment,
+    identifier: '1',
+  };
 
   private destroyed = new Subject();
   private capabilities: Map<number, string> = new Map();
@@ -65,6 +73,31 @@ export class ApplicationMapService implements OnDestroy {
       )
       .subscribe(([ layers, layerManager ]) => {
         layerManager.setLayers(layers.filter(isValidLayer));
+      });
+
+    combineLatest([
+      this.bookmarkService.registerFragment$(ApplicationMapService.VISIBILITY_BOOKMARK_DESCRIPTOR),
+      this.store$.select(selectLayers),
+      this.store$.select(selectInitiallyVisibleLayers),
+      this.store$.select(selectLoadStatus),
+    ]).pipe(
+        takeUntil(this.destroyed),
+        filter(([ ,,, loadStatus ]) => loadStatus === LoadingStateEnum.LOADED),
+        distinctUntilKeyChanged('0'),
+      )
+      .subscribe(([ fragment, layers, initiallyVisible ]) => {
+        const visibilityData = MapBookmarkHelper.visibilityDataFromFragment(fragment, layers, initiallyVisible);
+        if (visibilityData.length > 0) {
+          this.store$.dispatch(setLayerVisibility({ visibility: visibilityData }));
+        }
+      });
+
+    this.getVisibilityBookmarkData()
+      .pipe(
+        takeUntil(this.destroyed),
+      )
+      .subscribe(bookmark => {
+          this.bookmarkService.updateFragment(ApplicationMapService.VISIBILITY_BOOKMARK_DESCRIPTOR, bookmark);
       });
 
     combineLatest([ this.mapService.getMapViewDetails$(), this.mapService.getUnitsOfMeasure$() ])
@@ -115,6 +148,20 @@ export class ApplicationMapService implements OnDestroy {
       this.mapService.getLayerManager$().pipe(take(1)),
     ]);
   }
+
+  private getVisibilityBookmarkData() {
+    return combineLatest([
+      this.store$.select(selectInitiallyVisibleLayers),
+      this.store$.select(selectLayers),
+      this.store$.select(selectLoadStatus),
+    ]).pipe(
+      filter(([ ,, loadStatus ]) => loadStatus === LoadingStateEnum.LOADED),
+      map(([ initiallyVisible, layers ]) => {
+        return MapBookmarkHelper.fragmentFromVisibilityData(initiallyVisible, layers);
+      }),
+    );
+  }
+
 
   public ngOnDestroy() {
     this.destroyed.next(null);

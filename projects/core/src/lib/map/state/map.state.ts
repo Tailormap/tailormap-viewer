@@ -20,6 +20,7 @@ export interface MapState {
   layerTreeNodes: ExtendedLayerTreeNodeModel[];
   selectedLayer?: number;
   selectedBackgroundNode?: string;
+  initiallyVisibleLayers: number[];
 }
 
 export const initialMapState: MapState = {
@@ -28,4 +29,5 @@ export const initialMapState: MapState = {
   layers: [],
   baseLayerTreeNodes: [],
   layerTreeNodes: [],
+  initiallyVisibleLayers: [],
 };
