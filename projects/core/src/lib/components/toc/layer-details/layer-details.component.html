@@ -12,6 +12,9 @@
             (click)="close()"><mat-icon svgIcon="close"></mat-icon></button>
   </div>
   <div class="layer-details-panel-content">
+    <div class="layer-details-panel-section">
+      <tm-layer-transparency [layer]="layer.id"></tm-layer-transparency>
+    </div>
     <div *ngIf="legendInfo$ | async as legendInfo" class="layer-details-panel-section">
       <h3 i18n>Legend</h3>
       <tm-legend-layer [legendInfo]="legendInfo"></tm-legend-layer>

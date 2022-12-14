@@ -1,0 +1,19 @@
+<h3 i18n>Opacity</h3>
+<div class="form-field form-field__slider">
+  <mat-slider min="0"
+              max="100"
+              step="1"
+              [thumbLabel]="true"
+              [displayWith]="formatThumb"
+              [value]="opacity$ | async"
+              (change)="updateOpacity($event)"></mat-slider>
+  <button mat-icon-button
+          (click)="resetOpacity()"
+          color="primary"
+          [disabled]="(opacity$ | async) === 100"
+          i18n-tmTooltip
+          tmTooltip="Reset opacity"
+          i18n>
+    <mat-icon svgIcon="reset"></mat-icon>
+  </button>
+</div>

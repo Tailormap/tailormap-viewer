@@ -118,6 +118,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
         const zIndex = layerOrder.indexOf(layer.id);
         const existingLayer = currentLayerMap.get(layer.id);
         if (existingLayer) {
+          this.updatePropertiesIfChanged(layer, existingLayer);
           this.updateFilterIfChanged(layer, existingLayer);
           existingLayer.setZIndex(getZIndexForLayer(zIndex));
           return;
@@ -153,12 +154,20 @@ export class OpenLayersLayerManager implements LayerManagerModel {
   // Create an identifier for each layer to quickly check if something changed and requires re-rendering
   private createLayerIdentifiers(layers: LayerModel[]): string[] {
     return layers.map(layer => {
-      const changingProps = [];
+      const changingProps = [layer.opacity ? `${layer.opacity}` : undefined];
       if (LayerTypesHelper.isServiceLayer(layer)) {
         changingProps.push(layer.filter);
       }
-      return [ layer.id, ...changingProps ].join('_');
+      return [ layer.id, ...changingProps.filter(Boolean) ].join('_');
     });
+  }
+
+  private updatePropertiesIfChanged(layer: LayerModel, olLayer: BaseLayer) {
+    const currentOpacity = olLayer.getOpacity();
+    const layerOpacity = typeof layer.opacity === 'undefined' ? 1 : layer.opacity / 100;
+    if (currentOpacity !== layerOpacity) {
+      olLayer.setOpacity(layerOpacity);
+    }
   }
 
   private updateFilterIfChanged(layer: LayerModel, olLayer: BaseLayer) {
@@ -320,8 +329,8 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     if (!olLayer) {
       return null;
     }
-    if (typeof layer.transparency === 'number') {
-      olLayer.setOpacity(layer.transparency / 100);
+    if (typeof layer.opacity === 'number') {
+      olLayer.setOpacity(layer.opacity / 100);
     }
     return olLayer;
   }
