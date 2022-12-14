@@ -1,0 +1,16 @@
+.form-field__slider {
+  display: flex;
+  align-items: center;
+}
+
+h3 {
+  margin: 0;
+}
+
+mat-slider {
+  flex: 1;
+}
+
+button {
+  margin-left: 8px;
+}

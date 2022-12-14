@@ -220,6 +220,7 @@ body .mat-form-field-label {
 
 .form-field__slider .mat-accent .mat-slider-thumb-label-text {
   color: #fff;
+  font-size: 11px;
 }
 
 .form-field__columns > * {

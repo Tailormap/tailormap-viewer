@@ -106,6 +106,7 @@ export class ApplicationMapService implements OnDestroy {
             capabilities: capabilities || '',
             hiDpiMode: extendedAppLayer.hiDpiMode,
             hiDpiSubstituteLayer: extendedAppLayer.hiDpiSubstituteLayer,
+            opacity: extendedAppLayer.opacity,
           })),
         );
     }
@@ -123,6 +124,7 @@ export class ApplicationMapService implements OnDestroy {
         tilingDisabled: service.tilingDisabled,
         tilingGutter: service.tilingGutter,
         filter: extendedAppLayer.filter,
+        opacity: extendedAppLayer.opacity,
       };
       return of(layer);
     }

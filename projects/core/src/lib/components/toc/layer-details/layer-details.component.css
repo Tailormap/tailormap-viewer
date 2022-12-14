@@ -30,6 +30,6 @@
   overflow: auto;
 }
 
-.layer-details-panel-section + .layer-details-panel-section {
+.layer-details-panel-section {
   margin-top: 14px;
 }

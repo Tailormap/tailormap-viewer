@@ -1,7 +1,7 @@
 import * as MapActions from './map.actions';
 import { Action, createReducer, on } from '@ngrx/store';
 import { MapState, initialMapState } from './map.state';
-import { LoadingStateEnum } from '@tailormap-viewer/shared';
+import { LoadingStateEnum, StateHelper } from '@tailormap-viewer/shared';
 import { LayerTreeNodeHelper } from '../helpers/layer-tree-node.helper';
 
 const onLoadMap = (state: MapState): MapState => ({
@@ -157,6 +157,14 @@ const onSetSelectedBackgroundNodeId = (state: MapState, payload: ReturnType<type
   selectedBackgroundNode: payload.id,
 });
 
+const onSetLayerOpacity = (state: MapState, payload: ReturnType<typeof MapActions.setLayerOpacity>): MapState => ({
+  ...state,
+  layers: StateHelper.updateArrayItemInState(state.layers, l => l.id === payload.layerId, layer => ({
+    ...layer,
+    opacity: payload.opacity,
+  })),
+});
+
 const mapReducerImpl = createReducer<MapState>(
   initialMapState,
   on(MapActions.loadMap, onLoadMap),
@@ -171,5 +179,6 @@ const mapReducerImpl = createReducer<MapState>(
   on(MapActions.addLayerTreeNodes, onAddLayerTreeNodes),
   on(MapActions.moveLayerTreeNode, onMoveLayerTreeNode),
   on(MapActions.setSelectedBackgroundNodeId, onSetSelectedBackgroundNodeId),
+  on(MapActions.setLayerOpacity, onSetLayerOpacity),
 );
 export const mapReducer = (state: MapState | undefined, action: Action) => mapReducerImpl(state, action);

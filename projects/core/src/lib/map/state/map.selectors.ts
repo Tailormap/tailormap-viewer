@@ -173,3 +173,8 @@ export const selectSelectedNode = createSelector(
     const layerTreeNode = treeNodes.find(node => !!node.appLayerId && node.appLayerId === selectedLayerId);
     return layerTreeNode ? layerTreeNode.id : '';
   });
+
+export const selectLayerOpacity = (layerId: number) => createSelector(
+  selectLayers,
+  (layers) => layers.find(l => l.id === layerId)?.opacity || 100,
+);

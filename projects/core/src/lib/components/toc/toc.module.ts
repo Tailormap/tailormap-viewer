@@ -8,6 +8,7 @@ import { TocNodeLayerComponent } from './toc-node-layer/toc-node-layer.component
 import { ToggleAllLayersButtonComponent } from './toggle-all-layers-button/toggle-all-layers-button.component';
 import { LayerDetailsComponent } from './layer-details/layer-details.component';
 import { LegendModule } from '../legend';
+import { LayerTransparencyComponent } from './layer-details/layer-transparency/layer-transparency.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { LegendModule } from '../legend';
     TocNodeLayerComponent,
     ToggleAllLayersButtonComponent,
     LayerDetailsComponent,
+    LayerTransparencyComponent,
   ],
   imports: [
     CommonModule,
