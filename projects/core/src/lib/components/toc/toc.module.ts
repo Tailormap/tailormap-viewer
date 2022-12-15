@@ -6,9 +6,10 @@ import { TocMenuButtonComponent } from './toc-menu-button/toc-menu-button.compon
 import { MenubarModule } from '../menubar';
 import { TocNodeLayerComponent } from './toc-node-layer/toc-node-layer.component';
 import { ToggleAllLayersButtonComponent } from './toggle-all-layers-button/toggle-all-layers-button.component';
-import { LayerDetailsComponent } from './layer-details/layer-details.component';
+import { TocNodeDetailsComponent } from './toc-node-details/toc-node-details.component';
 import { LegendModule } from '../legend';
-import { LayerTransparencyComponent } from './layer-details/layer-transparency/layer-transparency.component';
+import { LayerTransparencyComponent } from './toc-node-details/layer-transparency/layer-transparency.component';
+import { LayerDetailsComponent } from './toc-node-details/layer-details/layer-details.component';
 
 @NgModule({
   declarations: [
@@ -16,8 +17,9 @@ import { LayerTransparencyComponent } from './layer-details/layer-transparency/l
     TocMenuButtonComponent,
     TocNodeLayerComponent,
     ToggleAllLayersButtonComponent,
-    LayerDetailsComponent,
+    TocNodeDetailsComponent,
     LayerTransparencyComponent,
+    LayerDetailsComponent,
   ],
   imports: [
     CommonModule,

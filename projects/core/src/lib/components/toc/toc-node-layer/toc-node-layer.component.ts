@@ -17,7 +17,7 @@ export class TocNodeLayerComponent {
   public scale: number | null = null;
 
   @Output()
-  public showLayerInfo = new EventEmitter<AppLayerModel>();
+  public showTreeNodeInfo = new EventEmitter<string>();
 
   constructor() { }
 
@@ -33,12 +33,9 @@ export class TocNodeLayerComponent {
     return !ScaleHelper.isInScale(this.scale, this.node?.metadata?.minScale, this.node?.metadata?.maxScale);
   }
 
-  public showInfo($event: MouseEvent, metadata: AppLayerModel | undefined) {
-    if (!metadata) {
-      return;
-    }
+  public showInfo($event: MouseEvent, nodeId: string) {
     $event.stopPropagation();
-    this.showLayerInfo.emit(metadata);
+    this.showTreeNodeInfo.emit(nodeId);
   }
 
 }

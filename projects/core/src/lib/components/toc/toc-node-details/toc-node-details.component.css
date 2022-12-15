@@ -1,4 +1,4 @@
-.layer-details-panel {
+.toc-node-details-panel {
   position: relative;
   height: 40vh;
   border-top: 1px solid var(--border-color);
@@ -7,7 +7,7 @@
   flex-direction: column;
 }
 
-.layer-details-panel-header {
+.toc-node-details-panel-header {
   display: flex;
   align-items: center;
   padding: 14px 0 8px 0;
@@ -15,21 +15,22 @@
   flex-shrink: 0;
 }
 
-.layer-details-panel-header h2 {
+.toc-node-details-panel-header h2 {
   flex: 1;
   padding: 0 14px;
 }
 
-.layer-details-panel-header button {
+.toc-node-details-panel-header button {
   flex-shrink: 0;
 }
 
-.layer-details-panel-content {
+.toc-node-details-panel-content {
   flex: 1;
   padding: 0 14px 14px 14px;
   overflow: auto;
 }
 
-.layer-details-panel-section {
+.toc-node-details-panel-content ::ng-deep .toc-node-details-panel-section,
+.toc-node-details-panel-section {
   margin-top: 14px;
 }

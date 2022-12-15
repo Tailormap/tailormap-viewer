@@ -27,8 +27,8 @@ export class TocComponent implements OnInit, OnDestroy {
   public visible$: Observable<boolean> = of(false);
   public scale: number | null = null;
 
-  private selectedLayerDetailsSubject = new BehaviorSubject<AppLayerModel | null>(null);
-  public selectedLayerDetails$ = this.selectedLayerDetailsSubject.asObservable();
+  private infoTreeNodeId = new BehaviorSubject<string | null>(null);
+  public infoTreeNodeId$ = this.infoTreeNodeId.asObservable();
 
   constructor(
     private store$: Store,
@@ -73,12 +73,12 @@ export class TocComponent implements OnInit, OnDestroy {
     this.destroyed.complete();
   }
 
-  public showLayerInfo(layer: AppLayerModel) {
-    this.selectedLayerDetailsSubject.next(layer);
+  public showTreeNodeInfo(nodeId: string) {
+    this.infoTreeNodeId.next(nodeId);
   }
 
   public layerInfoClosed() {
-    this.selectedLayerDetailsSubject.next(null);
+    this.infoTreeNodeId.next(null);
   }
 
 }

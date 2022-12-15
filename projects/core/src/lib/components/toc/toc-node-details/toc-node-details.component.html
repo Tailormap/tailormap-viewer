@@ -1,0 +1,17 @@
+<div class="toc-node-details-panel"
+     *ngIf="node$ | async as node"
+     #detailsPanel
+     [style.height]="panelHeight$ | async">
+  <tm-panel-resize orientation="vertical" (positionChanged)="panelResized($event)"></tm-panel-resize>
+  <div class="toc-node-details-panel-header">
+    <h2 i18n>Details for {{node.name}}</h2>
+    <button mat-icon-button
+            class="close-button"
+            tmTooltip="Close details"
+            i18n-tmTooltip
+            (click)="close()"><mat-icon svgIcon="close"></mat-icon></button>
+  </div>
+  <div class="toc-node-details-panel-content">
+    <tm-layer-details *ngIf="node.appLayerId" [layerId]="node.appLayerId"></tm-layer-details>
+  </div>
+</div>

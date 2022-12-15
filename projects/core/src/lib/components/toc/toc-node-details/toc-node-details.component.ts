@@ -1,31 +1,33 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, ViewChild, ElementRef, inject } from '@angular/core';
-import { ExtendedAppLayerModel } from '../../../map/models';
 import { BrowserHelper } from '@tailormap-viewer/shared';
 import { BehaviorSubject, map, Observable, of } from 'rxjs';
-import { LegendService } from '../../legend/services/legend.service';
-import { MapService } from '@tailormap-viewer/map';
-import { LegendInfoModel } from '../../legend/models/legend-info.model';
+import { LayerTreeNodeModel } from '@tailormap-viewer/api';
+import { Store } from '@ngrx/store';
+import { selectLayerTreeNode } from '../../../map/state/map.selectors';
 
 @Component({
-  selector: 'tm-layer-details',
-  templateUrl: './layer-details.component.html',
-  styleUrls: ['./layer-details.component.css'],
+  selector: 'tm-toc-node-details',
+  templateUrl: './toc-node-details.component.html',
+  styleUrls: ['./toc-node-details.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LayerDetailsComponent implements OnInit {
+export class TocNodeDetailsComponent implements OnInit {
 
-  private legendService = inject(LegendService);
-  private mapService = inject(MapService);
+  private store$ = inject(Store);
 
-  private _layer: ExtendedAppLayerModel | null = null;
+  public node$: Observable<LayerTreeNodeModel | null> = of(null);
+  private _nodeId: string | null = null;
 
   @Input()
-  public set layer(layer: ExtendedAppLayerModel | null) {
-    this._layer = layer;
-    this.updateLegend();
+  public set nodeId(nodeId: string | null) {
+    this._nodeId = nodeId;
+    this.node$ = nodeId === null
+      ? of(null)
+      : this.store$.select(selectLayerTreeNode(nodeId));
   }
-  public get layer(): ExtendedAppLayerModel | null {
-    return this._layer;
+
+  public get nodeId(): string | null {
+    return this._nodeId;
   }
 
   @Output()
@@ -37,22 +39,12 @@ export class LayerDetailsComponent implements OnInit {
   private panelHeightSubject = new BehaviorSubject<number | undefined>(undefined);
   public panelHeight$ = this.panelHeightSubject.asObservable().pipe(map(height => height ? `${height}px` : undefined));
 
-  public legendInfo$: Observable<LegendInfoModel | null> = of(null);
-
   public ngOnInit(): void {
     this.updateHeight();
   }
 
   public panelResized(delta: number) {
     this.updateHeight(delta);
-  }
-
-  private updateLegend() {
-    if (!this.layer) {
-      return;
-    }
-    this.legendInfo$ = this.legendService.getLegendInfo$(of([this.layer]), this.mapService.getMapViewDetails$())
-      .pipe(map(legendInfo => legendInfo.length !== 0 ? legendInfo[0] : null));
   }
 
   private updateHeight(delta?: number) {

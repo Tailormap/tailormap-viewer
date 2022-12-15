@@ -3,7 +3,7 @@ import { BehaviorSubject, catchError, combineLatest, concatMap, forkJoin, map, O
 import { MapService, MapViewDetailsModel, ScaleHelper } from '@tailormap-viewer/map';
 import { ExtendedAppLayerModel } from '../../../map/models';
 import { ImageHelper } from '../../../shared/helpers/image.helper';
-import { UrlHelper } from '@tailormap-viewer/shared';
+import { TypesHelper, UrlHelper } from '@tailormap-viewer/shared';
 import { LegendInfoModel } from '../models/legend-info.model';
 
 export interface GeoServerLegendOptions {
@@ -49,13 +49,14 @@ export class LegendService {
     return this.visibleSubject$.asObservable();
   }
 
-  public getLegendInfo$(appLayers$: Observable<ExtendedAppLayerModel[]>, mapResolution$?: Observable<MapViewDetailsModel>):
+  public getLegendInfo$(appLayers$: Observable<Array<ExtendedAppLayerModel | null> | ExtendedAppLayerModel | null>, mapResolution$?: Observable<MapViewDetailsModel>):
     Observable<LegendInfoModel[]> {
     return this.mapService.getLayerManager$()
       .pipe(
         switchMap(layerManager => combineLatest([ appLayers$, mapResolution$ || of(null) ]).pipe(
           map(([ appLayers, mapResolution ]) => {
-            return appLayers.map(layer => {
+            const layers = Array.isArray(appLayers) ? appLayers : [appLayers];
+            return layers.filter(TypesHelper.isDefined).map(layer => {
               let url = layer.legendImageUrl
                 ? layer.legendImageUrl
                 : layerManager.getLegendUrl(`${layer.id}`);

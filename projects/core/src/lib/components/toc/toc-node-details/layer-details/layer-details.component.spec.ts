@@ -1,16 +1,16 @@
 import { render, screen } from '@testing-library/angular';
 import { LayerDetailsComponent } from './layer-details.component';
 import { getAppLayerModel, getServiceModel } from '@tailormap-viewer/api';
-import userEvent from '@testing-library/user-event';
+import { of } from 'rxjs';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { of } from 'rxjs';
+import { LegendLayerComponent } from '../../../legend/legend-layer/legend-layer.component';
+import { LayerTransparencyComponent } from '../layer-transparency/layer-transparency.component';
 import { MapService } from '@tailormap-viewer/map';
-import { LegendService } from '../../legend/services/legend.service';
-import { LegendLayerComponent } from '../../legend/legend-layer/legend-layer.component';
+import { LegendService } from '../../../legend/services/legend.service';
+import { provideMockStore } from '@ngrx/store/testing';
 
-const setup = async (withLayer: boolean) => {
-  const closeMock = jest.fn();
+const setup = async () => {
   const appLayer = getAppLayerModel({ title: 'The Layer' });
   const mapServiceMock = {
     getMapViewDetails$: jest.fn(),
@@ -26,36 +26,27 @@ const setup = async (withLayer: boolean) => {
   };
   await render(LayerDetailsComponent, {
     imports: [ SharedModule, MatIconTestingModule ],
-    declarations: [LegendLayerComponent],
+    declarations: [ LegendLayerComponent, LayerTransparencyComponent ],
     providers: [
       { provide: MapService, useValue: mapServiceMock },
       { provide: LegendService, useValue: legendServiceMock },
+      provideMockStore({
+        initialState: { map: { layers: [appLayer] } },
+      }),
     ],
     componentProperties: {
-      layer: withLayer ? appLayer : undefined,
-      closeDetails: { emit: closeMock } as any,
+      layerId: appLayer.id,
     },
   });
-  return { close: closeMock };
 };
 
 describe('LayerDetailsComponent', () => {
 
-  test('should render nothing if no layer is passed', async () => {
-    await setup(false);
-    expect(screen.queryByText('Details for')).not.toBeInTheDocument();
-  });
-
-  test('should render layer name', async () => {
-    await setup(true);
-    expect(screen.getByText('Details for The Layer')).toBeInTheDocument();
+  test('should render', async () => {
+    await setup();
+    expect(screen.getByText('Legend')).toBeInTheDocument();
     expect(screen.getByRole('img')).toBeInTheDocument();
-  });
-
-  test('should trigger close', async () => {
-    const { close } = await setup(true);
-    await userEvent.click(screen.getByLabelText('Close details'));
-    expect(close).toHaveBeenCalled();
+    expect(screen.getByRole('slider')).toBeInTheDocument();
   });
 
 });
