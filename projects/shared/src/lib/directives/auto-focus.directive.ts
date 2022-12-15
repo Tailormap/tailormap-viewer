@@ -29,6 +29,11 @@ export class AutoFocusDirective implements OnChanges {
     }
 
     AutoFocusDirective.timeout = window.setTimeout(() => {
+      if (document.activeElement !== null && document.activeElement !== document.body) {
+        // something else already has focus
+        return;
+      }
+
       if (this.isSelectElement()) {
         this.el.nativeElement.select();
         return;
