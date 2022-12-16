@@ -12,6 +12,10 @@
             (click)="close()"><mat-icon svgIcon="close"></mat-icon></button>
   </div>
   <div class="toc-node-details-panel-content">
+    <div *ngIf="node.description" class="toc-node-details-panel-section">
+      <h3 i18n>Description</h3>
+      <div [innerHTML]="node.description | htmlify"></div>
+    </div>
     <tm-layer-details *ngIf="node.appLayerId" [layerId]="node.appLayerId"></tm-layer-details>
   </div>
 </div>

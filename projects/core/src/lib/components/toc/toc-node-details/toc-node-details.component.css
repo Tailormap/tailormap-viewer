@@ -30,7 +30,18 @@
   overflow: auto;
 }
 
+tm-layer-details {
+  padding-top: 8px;
+  display: block;
+}
+
 .toc-node-details-panel-content ::ng-deep .toc-node-details-panel-section,
 .toc-node-details-panel-section {
   margin-top: 14px;
+}
+
+.toc-node-details-panel-content ::ng-deep .toc-node-details-panel-section > h3,
+.toc-node-details-panel-section > h3 {
+  margin: 0;
+  margin-bottom: 8px;
 }

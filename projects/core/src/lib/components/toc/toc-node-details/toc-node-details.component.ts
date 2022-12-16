@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, ViewChild, ElementRef, inject } from '@angular/core';
 import { BrowserHelper } from '@tailormap-viewer/shared';
-import { BehaviorSubject, map, Observable, of } from 'rxjs';
+import { BehaviorSubject, map, mergeMap, Observable, of } from 'rxjs';
 import { LayerTreeNodeModel } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { selectLayerTreeNode } from '../../../map/state/map.selectors';
@@ -15,19 +15,18 @@ export class TocNodeDetailsComponent implements OnInit {
 
   private store$ = inject(Store);
 
-  public node$: Observable<LayerTreeNodeModel | null> = of(null);
-  private _nodeId: string | null = null;
+  private nodeIdSubject = new BehaviorSubject<string | null>(null);
+  public node$: Observable<LayerTreeNodeModel | null> = this.nodeIdSubject.asObservable().pipe(
+    mergeMap(nodeId => nodeId !== null ? this.store$.select(selectLayerTreeNode(nodeId)) : of(null)),
+  );
 
   @Input()
   public set nodeId(nodeId: string | null) {
-    this._nodeId = nodeId;
-    this.node$ = nodeId === null
-      ? of(null)
-      : this.store$.select(selectLayerTreeNode(nodeId));
+    this.nodeIdSubject.next(nodeId);
   }
 
   public get nodeId(): string | null {
-    return this._nodeId;
+    return this.nodeIdSubject.value;
   }
 
   @Output()
