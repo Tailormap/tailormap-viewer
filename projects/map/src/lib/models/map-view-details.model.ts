@@ -9,5 +9,6 @@ export interface MapViewDetailsModel {
   minResolution: number;
   maxResolution: number;
   size: number[] | undefined;
+  center: number[] | undefined;
   extent: OpenlayersExtent | null;
 }

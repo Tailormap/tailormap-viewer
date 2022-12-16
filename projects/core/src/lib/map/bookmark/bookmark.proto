@@ -1,0 +1,29 @@
+// To regenerate bookmark_pb.ts from this file,
+// use `buf` and protoc-gen-es, and run `buf generate` in this directory.
+
+syntax = "proto3";
+package bookmark;
+
+// Represents differences in layer visibility from the default configuration.
+message LayerVisibilityBookmarkFragment {
+    repeated LayerInformation layers = 1;
+}
+
+enum TristateBoolean {
+    UNSET = 0;
+    FALSE = 1;
+    TRUE = 2;
+}
+
+message LayerInformation {
+    // The ID of this layer, relative to the previous layer plus one.
+    //
+    // (e.g. if the previous layer was 3, and this layer is 5, the relative_id will be 1)
+    int32 relative_id = 1;
+
+    // the new visibility state of the layer.
+    // 
+    // note: this is a tristate value, as all values in protobuf are optional,
+    // and will default to `false` otherwise.
+    TristateBoolean visible = 2;
+}

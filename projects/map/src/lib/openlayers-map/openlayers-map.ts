@@ -31,6 +31,7 @@ export class OpenLayersMap implements MapViewerModel {
 
   private readonly resizeObserver: ResizeObserver;
   private initialExtent: OpenlayersExtent = [];
+  private initialCenterZoom?: [number[], number] = undefined;
 
   constructor(
     private ngZone: NgZone,
@@ -43,7 +44,10 @@ export class OpenLayersMap implements MapViewerModel {
     if (this.map.value && this.map.value.getView().getProjection().getCode() === options.projection) {
       // Do not re-create the map if the projection is the same as previous
       this.map.value.getView().getProjection().setExtent(options.maxExtent);
-      if (options.initialExtent && options.initialExtent.length > 0) {
+      if (this.initialCenterZoom !== undefined) {
+          this.map.value.getView().setCenter(this.initialCenterZoom[0]);
+          this.map.value.getView().setZoom(this.initialCenterZoom[1]);
+      } else if (options.initialExtent && options.initialExtent.length > 0) {
         this.map.value.getView().fit(options.initialExtent);
       }
       return;
@@ -142,6 +146,16 @@ export class OpenLayersMap implements MapViewerModel {
     });
   }
 
+  public setCenterAndZoom(center: number[], zoom: number) {
+      this.initialCenterZoom = [ center, zoom ];
+
+      this.executeMapAction(olMap => {
+          const view = olMap.getView();
+          view.setCenter(center);
+          view.setZoom(zoom);
+      });
+  }
+
   public zoomToFeature(olFeature: Feature<Geometry>) {
     this.zoomToGeometry(olFeature.getGeometry());
   }
@@ -229,6 +243,7 @@ export class OpenLayersMap implements MapViewerModel {
             maxResolution: view.getMaxResolution() || 0,
             scale,
             size: olMap.getSize(),
+            center: olMap.getView().getCenter() != null ? olMap.getView().getCenter() : undefined,
             extent: olMap.getView().getCenter() != null ? olMap.getView().calculateExtent(olMap.getSize()) : null,
           };
         }),
@@ -293,7 +308,10 @@ export class OpenLayersMap implements MapViewerModel {
     this.executeMapAction(olMap => {
       olMap.setTarget(container);
       olMap.render();
-      if (this.initialExtent && this.initialExtent.length > 0) {
+      if (this.initialCenterZoom !== undefined) {
+          olMap.getView().setCenter(this.initialCenterZoom[0]);
+          olMap.getView().setZoom(this.initialCenterZoom[1]);
+      } else if (this.initialExtent && this.initialExtent.length > 0) {
         olMap.getView().fit(this.initialExtent);
       }
       window.setTimeout(() => this.updateMapSize(), 0);

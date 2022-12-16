@@ -4,6 +4,7 @@ import * as CoreActions from './core.actions';
 import { concatMap, map, tap, filter } from 'rxjs';
 import { LoadApplicationService } from '../services/load-application.service';
 import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 import { UrlHelper } from '@tailormap-viewer/shared';
 
 @Injectable()
@@ -34,7 +35,7 @@ export class CoreEffects {
       map(action => UrlHelper.getUrlSafeParam(action.application.name)),
       // replace the current url if the application is loaded but the URL does not match /app/<name> or /app/<name>/<version>
       filter(name => !(new RegExp(`^/app/${name}/?.*$`, 'i').test(this.location.path()))),
-      tap(name => this.location.replaceState(`/app/${name}`)),
+      tap(name => this.router.navigate([ 'app', name ], { preserveFragment: true, skipLocationChange: true })),
     );
   }, { dispatch: false });
 
@@ -42,6 +43,7 @@ export class CoreEffects {
     private actions$: Actions,
     private loadApplicationService: LoadApplicationService,
     private location: Location,
+    private router: Router,
   ) {}
 
 }

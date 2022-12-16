@@ -9,10 +9,12 @@ import { ErrorMessageComponent, LoadingStateEnum } from '@tailormap-viewer/share
 import { selectApplicationErrorMessage, selectApplicationLoadingState } from '../../state/core.selectors';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
-export const getActivatedRouteProvider = (routeData: Record<string, string>) => {
+export const getActivatedRouteProvider = (routeData: Record<string, string>, fragment: string = '') => {
   return { provide: ActivatedRoute, useValue: {
       // eslint-disable-next-line rxjs/finnish
       paramMap: of(new Map<string, string>(Object.entries(routeData))),
+      // eslint-disable-next-line rxjs/finnish
+      fragment: of(fragment),
     } };
 };
 

@@ -14,6 +14,8 @@ export const selectMapSettings = createSelector(selectMapState, state => state.m
 export const selectLayerTreeNodes = createSelector(selectMapState, state => state.layerTreeNodes);
 export const selectBackgroundLayerTreeNodes = createSelector(selectMapState, state => state.baseLayerTreeNodes);
 export const selectSelectedBackgroundNodeId = createSelector(selectMapState, state => state.selectedBackgroundNode);
+export const selectInitiallyVisibleLayers = createSelector(selectMapState, state => state.initiallyVisibleLayers);
+export const selectLoadStatus = createSelector(selectMapState, state => state.loadStatus);
 
 export const selectMapOptions = createSelector(
   selectMapSettings,

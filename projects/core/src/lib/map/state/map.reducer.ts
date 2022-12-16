@@ -24,6 +24,7 @@ const onLoadMapSuccess = (
   services: payload.services,
   baseLayerTreeNodes: payload.baseLayerTreeNodes.map(LayerTreeNodeHelper.getExtendedLayerTreeNode),
   layerTreeNodes: payload.layerTreeNodes.map(LayerTreeNodeHelper.getExtendedLayerTreeNode),
+  initiallyVisibleLayers: payload.appLayers.filter(a => a.visible).map(a => a.id),
 });
 
 const onLoadMapFailed = (
