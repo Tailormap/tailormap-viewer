@@ -35,6 +35,10 @@ tm-layer-details {
   display: block;
 }
 
+.toc-node-description ::ng-deep img {
+  max-width: 100%;
+}
+
 .toc-node-details-panel-content ::ng-deep .toc-node-details-panel-section,
 .toc-node-details-panel-section {
   margin-top: 14px;

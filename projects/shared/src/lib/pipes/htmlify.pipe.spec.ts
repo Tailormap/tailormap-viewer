@@ -1,8 +1,6 @@
 import { HtmlifyPipe } from './htmlify.pipe';
-import { SecurityContext } from '@angular/core';
 
 const sanitizerMock: any = {
-  sanitize: (ctx: SecurityContext, str: string | null) => str,
   bypassSecurityTrustHtml: (str: string | null) => str,
 };
 
@@ -45,6 +43,15 @@ describe('TransformUrlsDirective', () => {
   it('transforms MD-links into hyperlinks', async () => {
     expect(htmlify('Some text with some [link](https://www.test.nl) in it'))
       .toEqual('Some text with some <a href="https://www.test.nl" target="_blank">link</a> in it');
+  });
+
+  it('transforms multiple links with whitespace', async () => {
+    expect(htmlify('Deze laag toont gegevens uit http://www.postgis.net/\r\n\r\nhttps://postgis.net/logos/postgis-logo.png'))
+      // eslint-disable-next-line max-len
+      .toEqual('Deze laag toont gegevens uit <a href="http://www.postgis.net/" target="_blank">http://www.postgis.net/</a><br />\r\n<br />\r\n<a href="https://postgis.net/logos/postgis-logo.png" target="_blank"><img src="https://postgis.net/logos/postgis-logo.png" alt="https://postgis.net/logos/postgis-logo.png" /></a>');
+    expect(htmlify('Deze laag toont gegevens uit http://www.postgis.net/ https://postgis.net/logos/postgis-logo.png'))
+      // eslint-disable-next-line max-len
+      .toEqual('Deze laag toont gegevens uit <a href="http://www.postgis.net/" target="_blank">http://www.postgis.net/</a> <a href="https://postgis.net/logos/postgis-logo.png" target="_blank"><img src="https://postgis.net/logos/postgis-logo.png" alt="https://postgis.net/logos/postgis-logo.png" /></a>');
   });
 
 });

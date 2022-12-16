@@ -9,7 +9,7 @@ export class HtmlifyPipe implements PipeTransform {
   public constructor(private sanitizer: DomSanitizer) {}
 
   // Matches everything that starts with http until the first space
-  private static readonly URL_PART = 'https?:\\/\\/[^ ]*';
+  private static readonly URL_PART = 'https?:\\/\\/[^\\s\\r\\n]*';
   // Matches a Markdown URL: [LABEL](URL)
   private static readonly MD_PART = '\\[[\\w\\s\\d]+]\\(https?:\\/\\/[^) ]*\\)';
 
@@ -33,15 +33,22 @@ export class HtmlifyPipe implements PipeTransform {
 
   public transform(value: string | null): SafeHtml | null {
     if (typeof value === 'string') {
-      const sanitizedHTML = this.sanitizer.sanitize(SecurityContext.HTML, value);
+      const sanitizedHTML = HtmlifyPipe.escapeText(value);
       if (!sanitizedHTML) {
         return sanitizedHTML;
       }
-      return this.sanitizer.bypassSecurityTrustHtml(sanitizedHTML
-        .replace(HtmlifyPipe.NEWLINE_REGEXP, '$1<br />$2')
-        .replace(HtmlifyPipe.URL_REGEXP, HtmlifyPipe.linkReplacer));
+      const replaceUrls = sanitizedHTML.replace(HtmlifyPipe.URL_REGEXP, HtmlifyPipe.linkReplacer);
+      const replacedBreaks = replaceUrls.replace(HtmlifyPipe.NEWLINE_REGEXP, '$1<br />$2');
+      return this.sanitizer.bypassSecurityTrustHtml(replacedBreaks);
     }
     return value;
+  }
+
+  private static escapeText(text: string) {
+    return text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
   }
 
 }
