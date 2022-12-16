@@ -2,6 +2,10 @@ import { ResolvedServerType, ServerType, ServiceModel } from '@tailormap-viewer/
 
 export class ServerTypeHelper {
   public static getFromUrl(url: string): ResolvedServerType {
+    if (!url) {
+      // In case of a proxied service the server type must be explicitly set to use vendor-specific features
+      return ResolvedServerType.GENERIC;
+    }
     if (url.includes('/arcgis/')) {
       return ResolvedServerType.GENERIC;
     }
