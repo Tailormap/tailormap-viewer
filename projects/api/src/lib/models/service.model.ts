@@ -6,7 +6,6 @@ export interface ServiceModel {
     id: number;
     name: string;
     url: string;
-    useProxy: boolean;
     styleLibraries: object;
     protocol: ServiceProtocol;
     tilingProtocol?: TilingProtocol;

@@ -6,6 +6,7 @@ export interface AppLayerModel {
   layerName: string;
   title: string;
   serviceId: number;
+  url?: string;
   visible: boolean;
   hasAttributes: boolean;
   crs?: CoordinateReferenceSystemModel;

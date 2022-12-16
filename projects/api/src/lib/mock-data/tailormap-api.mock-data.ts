@@ -56,7 +56,6 @@ export const getServiceModel = (overrides?: Partial<ServiceModel>): ServiceModel
   id: 1,
   name: 'myservice',
   url: 'https://test.nl',
-  useProxy: false,
   styleLibraries: {},
   protocol: ServiceProtocol.WMS,
   serverType: ServerType.AUTO,
