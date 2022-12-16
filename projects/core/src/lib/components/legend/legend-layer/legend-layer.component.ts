@@ -14,6 +14,9 @@ export class LegendLayerComponent implements OnChanges {
   @Input()
   public legendInfo: LegendInfoModel | null = null;
 
+  @Input()
+  public showTitle = true;
+
   public urlWithOptions: string | null = null;
 
   public srcset = '';
