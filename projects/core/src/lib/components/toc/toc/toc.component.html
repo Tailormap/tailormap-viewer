@@ -1,5 +1,5 @@
 <ng-template #treeNode let-node>
-  <tm-toc-node-layer [node]="node" [scale]="scale" (showLayerInfo)="showLayerInfo($event)"></tm-toc-node-layer>
+  <tm-toc-node-layer [node]="node" [scale]="scale" (showTreeNodeInfo)="showTreeNodeInfo($event)"></tm-toc-node-layer>
 </ng-template>
 
 <div class="toc" *ngIf="visible$ | async">
@@ -7,7 +7,7 @@
     <tm-toggle-all-layers-button></tm-toggle-all-layers-button>
   </div>
   <tm-tree class="toc-tree" [treeNodeTemplate]="treeNode" [expandOnGroupClick]="true"></tm-tree>
-  <tm-layer-details *ngIf="selectedLayerDetails$ | async as selectedLayerDetail"
-                    [layer]="selectedLayerDetail"
-                    (closeDetails)="layerInfoClosed()"></tm-layer-details>
+  <tm-toc-node-details *ngIf="infoTreeNodeId$ | async as selectedLayerDetail"
+                    [nodeId]="selectedLayerDetail"
+                    (closeDetails)="layerInfoClosed()"></tm-toc-node-details>
 </div>

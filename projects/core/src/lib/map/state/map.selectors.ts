@@ -42,6 +42,11 @@ export const selectMapOptions = createSelector(
   },
 );
 
+export const selectLayerTreeNode = (nodeId: string) => createSelector(
+  selectLayerTreeNodes,
+  (layerTreeNodes?: LayerTreeNodeModel[]) => (layerTreeNodes || []).find(node => node.id === nodeId) || null,
+);
+
 const getLayersWithServices = (layers: AppLayerModel[], services: ServiceModel[]): ExtendedAppLayerModel[] => {
     return layers.map(layer => ({
         ...layer,
@@ -176,7 +181,12 @@ export const selectSelectedNode = createSelector(
     return layerTreeNode ? layerTreeNode.id : '';
   });
 
-export const selectLayerOpacity = (layerId: number) => createSelector(
+export const selectLayer = (layerId: number) => createSelector(
   selectLayers,
-  (layers) => layers.find(l => l.id === layerId)?.opacity || 100,
+  (layers: AppLayerModel[]) => layers.find(l => l.id === layerId) || null,
+);
+
+export const selectLayerOpacity = (layerId: number) => createSelector(
+  selectLayer(layerId),
+  (layer) => layer?.opacity || 100,
 );

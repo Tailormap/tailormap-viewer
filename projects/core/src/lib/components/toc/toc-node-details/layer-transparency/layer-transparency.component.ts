@@ -20,7 +20,12 @@ export class LayerTransparencyComponent {
   private layerId: number | undefined;
 
   @Input()
-  public set layer(layer: number) {
+  public set layer(layer: number | null) {
+    if (layer === null) {
+      this.layerId = undefined;
+      this.opacity$ = of(100);
+      return;
+    }
     this.layerId = layer;
     this.opacity$ = this.store$.select(selectLayerOpacity(layer));
   }

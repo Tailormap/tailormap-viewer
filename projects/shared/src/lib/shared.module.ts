@@ -3,7 +3,7 @@ import { SharedImportsModule } from './shared-imports.module';
 import { SharedComponentsModule } from './components';
 import { AutoFocusDirective, TooltipDirective } from './directives';
 import { OverlayComponent } from './services/overlay/overlay/overlay.component';
-import { TransformUrlsDirective } from './directives/transform-urls.directive';
+import { HtmlifyPipe } from './pipes/htmlify.pipe';
 
 // Importing CSS helper to make sure the vh/vw CSS variables are available
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -17,7 +17,7 @@ import { CssHelper } from './helpers';
   declarations: [
     AutoFocusDirective,
     TooltipDirective,
-    TransformUrlsDirective,
+    HtmlifyPipe,
     OverlayComponent,
   ],
   exports: [
@@ -25,7 +25,7 @@ import { CssHelper } from './helpers';
     SharedComponentsModule,
     AutoFocusDirective,
     TooltipDirective,
-    TransformUrlsDirective,
+    HtmlifyPipe,
     OverlayComponent,
   ],
 })

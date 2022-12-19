@@ -4,4 +4,5 @@ export interface LayerTreeNodeModel {
   root: boolean;
   name: string;
   childrenIds: string[];
+  description?: string;
 }

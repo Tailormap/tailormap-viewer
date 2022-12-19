@@ -1,0 +1,51 @@
+.toc-node-details-panel {
+  position: relative;
+  height: 40vh;
+  border-top: 1px solid var(--border-color);
+  box-shadow: var(--box-shadow-top);
+  display: flex;
+  flex-direction: column;
+}
+
+.toc-node-details-panel-header {
+  display: flex;
+  align-items: center;
+  padding: 14px 0 8px 0;
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.toc-node-details-panel-header h2 {
+  flex: 1;
+  padding: 0 14px;
+}
+
+.toc-node-details-panel-header button {
+  flex-shrink: 0;
+}
+
+.toc-node-details-panel-content {
+  flex: 1;
+  padding: 0 14px 14px 14px;
+  overflow: auto;
+}
+
+tm-layer-details {
+  padding-top: 8px;
+  display: block;
+}
+
+.toc-node-description ::ng-deep img {
+  max-width: 100%;
+}
+
+.toc-node-details-panel-content ::ng-deep .toc-node-details-panel-section,
+.toc-node-details-panel-section {
+  margin-top: 14px;
+}
+
+.toc-node-details-panel-content ::ng-deep .toc-node-details-panel-section > h3,
+.toc-node-details-panel-section > h3 {
+  margin: 0;
+  margin-bottom: 8px;
+}

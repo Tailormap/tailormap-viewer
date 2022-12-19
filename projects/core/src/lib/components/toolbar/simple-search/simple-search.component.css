@@ -36,6 +36,11 @@
   color: var(--disabled-text-color);
 }
 
+.attribution ::ng-deep a {
+  display: inline-block;
+  padding-left: 3px;
+}
+
 @media screen and (max-width: 730px) {
   .simple-search-container--is-active {
     padding: 0;

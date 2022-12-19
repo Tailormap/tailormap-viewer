@@ -40,7 +40,7 @@
             <mat-option *ngFor="let option of searchResults.results" [value]="option">
               {{option.label}}
             </mat-option>
-            <mat-option class="attribution" disabled tmTransformUrls>{{ searchResults.attribution }}</mat-option>
+            <mat-option class="attribution" disabled [innerHTML]="searchResults.attribution | htmlify"></mat-option>
           </ng-container>
         </ng-container>
       </mat-autocomplete>

@@ -1,0 +1,8 @@
+<div class="toc-node-details-panel-section">
+  <tm-layer-transparency [layer]="layerId"></tm-layer-transparency>
+</div>
+<div *ngIf="legendInfo$ | async as legendInfo"
+     class="toc-node-details-panel-section layer-legend">
+  <h3 i18n>Legend</h3>
+  <tm-legend-layer [legendInfo]="legendInfo" [showTitle]="false"></tm-legend-layer>
+</div>

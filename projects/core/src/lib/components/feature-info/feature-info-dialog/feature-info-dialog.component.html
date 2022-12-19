@@ -12,7 +12,7 @@
       <h2>{{currentFeature.layer.title}}</h2>
       <div *ngFor="let att of currentFeature.sortedAttributes" class="row">
         <strong>{{att.label}}</strong>
-        <div tmTransformUrls>{{att.attributeValue}}</div>
+        <div [innerHTML]="att.attributeValue | htmlify"></div>
       </div>
     </div>
     <div class="buttons">
