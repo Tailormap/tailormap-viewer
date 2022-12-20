@@ -57,7 +57,7 @@ export class SpatialFilterReferenceLayerService implements OnDestroy {
             layerId: referenceLayer,
             applicationId,
             page: 1,
-            filter: cqlFilter,
+            filter: cqlFilter === '' ? undefined : cqlFilter,
             simplify: false,
             onlyGeometries: true,
           });
