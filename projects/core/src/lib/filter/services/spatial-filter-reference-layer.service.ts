@@ -19,7 +19,7 @@ export class SpatialFilterReferenceLayerService implements OnDestroy {
   private api = inject<TailormapApiV1ServiceModel>(TAILORMAP_API_V1_SERVICE);
 
   private destroyed = new Subject();
-  private geometriesLoaded: Map<string, string | undefined> = new Map();
+  private geometriesLoaded: Map<string, string> = new Map();
 
   constructor() {
     this.store$.select(selectCQLFilters)
@@ -36,7 +36,9 @@ export class SpatialFilterReferenceLayerService implements OnDestroy {
           if (!referenceLayer) {
             return;
           }
-          const cqlFilter = allFilters.get(referenceLayer);
+          // When no filter is set, save empty string as filter to distinguish 'no geometries loaded' from 'geometries loaded for layer
+          // without filter'
+          const cqlFilter = allFilters.get(referenceLayer) || '';
           if (currentFilter !== cqlFilter) {
             this.geometriesLoaded.set(group.id, cqlFilter);
             this.loadGeometries(group, referenceLayer, cqlFilter);
