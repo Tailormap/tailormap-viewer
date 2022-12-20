@@ -30,6 +30,11 @@ export class ApplicationMapService implements OnDestroy {
   private destroyed = new Subject();
   private capabilities: Map<number, string> = new Map();
 
+  // Set to true once the bookmark has been read out at least once. This
+  // is to make sure that, on slower(?) systems, the bookmark is checked
+  // before the location of the map is initially written back.
+  private bookmarkChecked = false;
+
   constructor(
     private store$: Store,
     private mapService: MapService,
@@ -104,7 +109,7 @@ export class ApplicationMapService implements OnDestroy {
       .pipe(takeUntil(this.destroyed))
       .subscribe(([ info, measure ]) => {
         const fragment = MapBookmarkHelper.fragmentFromLocationAndZoom(info, measure);
-        if (fragment !== undefined) {
+        if (fragment !== undefined && this.bookmarkChecked) {
           this.bookmarkService.updateFragment(ApplicationMapService.LOCATION_BOOKMARK_DESCRIPTOR, fragment);
         }
       });
@@ -121,6 +126,8 @@ export class ApplicationMapService implements OnDestroy {
       )
       .subscribe(([ descriptor, viewDetails, unitsOfMeasure ]) => {
         const centerAndZoom = MapBookmarkHelper.locationAndZoomFromFragment(descriptor, viewDetails, unitsOfMeasure);
+        this.bookmarkChecked = true;
+
         if (centerAndZoom === undefined) {
           return;
         }
