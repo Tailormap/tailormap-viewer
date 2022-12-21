@@ -32,7 +32,7 @@ describe('CQLFilterHelper', () => {
   test('should create a spatial filter', () => {
     const filterGroup = getSpatialFilterGroup(['POINT(1 2)']);
     const filters = CqlFilterHelper.getFilters([filterGroup]);
-    expect(filters.get(1)).toBe('INTERSECTS(the_geom, POINT(1 2))');
+    expect(filters.get(1)).toBe('INTERSECTS(the_geom, GEOMETRYCOLLECTION(POINT(1 2)))');
   });
 
   test('should create a spatial filter for circle', () => {
@@ -44,27 +44,27 @@ describe('CQLFilterHelper', () => {
   test('should create a spatial filter for multiple geometries', () => {
     const filterGroup = getSpatialFilterGroup([ 'POINT(1 2)', 'POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))' ]);
     const filters = CqlFilterHelper.getFilters([filterGroup]);
-    expect(filters.get(1)).toBe('(INTERSECTS(the_geom, POINT(1 2)) OR INTERSECTS(the_geom, POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))))');
+    expect(filters.get(1)).toBe('INTERSECTS(the_geom, GEOMETRYCOLLECTION(POINT(1 2),POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))))');
   });
 
   test('should create a spatial filters for multiple layers', () => {
     const filterGroup = getSpatialFilterGroup(['POINT(1 2)'], [{ layerId: 1, column: ['the_geom'] }, { layerId: 2, column: ['geom'] }]);
     const filters = CqlFilterHelper.getFilters([filterGroup]);
     expect(filters.size).toBe(2);
-    expect(filters.get(1)).toBe('INTERSECTS(the_geom, POINT(1 2))');
-    expect(filters.get(2)).toBe('INTERSECTS(geom, POINT(1 2))');
+    expect(filters.get(1)).toBe('INTERSECTS(the_geom, GEOMETRYCOLLECTION(POINT(1 2)))');
+    expect(filters.get(2)).toBe('INTERSECTS(geom, GEOMETRYCOLLECTION(POINT(1 2)))');
   });
 
   test('should create a spatial filter for multiple geometry columns', () => {
     const filterGroup = getSpatialFilterGroup(['POINT(1 2)'], [{ layerId: 1, column: [ 'the_geom', 'some_other_geom_column' ] }]);
     const filters = CqlFilterHelper.getFilters([filterGroup]);
-    expect(filters.get(1)).toBe('(INTERSECTS(the_geom, POINT(1 2)) OR INTERSECTS(some_other_geom_column, POINT(1 2)))');
+    expect(filters.get(1)).toBe('(INTERSECTS(the_geom, GEOMETRYCOLLECTION(POINT(1 2))) OR INTERSECTS(some_other_geom_column, GEOMETRYCOLLECTION(POINT(1 2))))');
   });
 
   test('should create a spatial filter with buffer', () => {
     const filterGroup = getSpatialFilterGroup(['POINT(1 2)'], undefined, 10);
     const filters = CqlFilterHelper.getFilters([filterGroup]);
-    expect(filters.get(1)).toBe('INTERSECTS(the_geom, BUFFER(POINT(1 2), 10))');
+    expect(filters.get(1)).toBe('INTERSECTS(the_geom, BUFFER(GEOMETRYCOLLECTION(POINT(1 2)), 10))');
   });
 
   test('combine multiple filters into a CQL filter', () => {
