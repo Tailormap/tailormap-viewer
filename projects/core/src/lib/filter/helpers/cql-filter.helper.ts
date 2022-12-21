@@ -4,7 +4,6 @@ import { FilterConditionEnum } from '../models/filter-condition.enum';
 import { FeatureAttributeTypeEnum } from '@tailormap-viewer/api';
 import { TypesHelper } from '@tailormap-viewer/shared';
 import { FilterTypeHelper } from './filter-type.helper';
-import { SpatialFilterModel } from '../models/spatial-filter.model';
 import { BaseFilterModel } from '../models/base-filter.model';
 import { CqlSpatialFilterHelper } from './cql-spatial-filter.helper';
 
