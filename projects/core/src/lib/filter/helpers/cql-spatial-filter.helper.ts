@@ -10,8 +10,8 @@ export class CqlSpatialFilterHelper {
     const { baseGeometries, circles } = this.categorizeGeometries(filter.geometries.map(g => g.geometry));
     const filterGeometries: string[] = [];
     if (baseGeometries.length > 0) {
-      const geometryCollection = 'GEOMETRYCOLLECTION(' + baseGeometries.join(',') + ')';
-      filterGeometries.push(filter.buffer ? `BUFFER(${geometryCollection}, ${filter.buffer})` : geometryCollection);
+      const baseGeom = baseGeometries.length === 1 ? baseGeometries[0] : 'GEOMETRYCOLLECTION(' + baseGeometries.join(',') + ')';
+      filterGeometries.push(filter.buffer ? `BUFFER(${baseGeom}, ${filter.buffer})` : baseGeom);
     }
     if (circles.length > 0) {
       filterGeometries.push(...circles.map(circle => CqlSpatialFilterHelper.getCircleQuery(circle)));
