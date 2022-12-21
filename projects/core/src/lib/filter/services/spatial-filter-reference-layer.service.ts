@@ -1,6 +1,6 @@
 import { inject, Injectable, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { distinctUntilChanged, filter, Subject, switchMap, take } from 'rxjs';
+import { BehaviorSubject, catchError, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, tap } from 'rxjs';
 import { selectCQLFilters, selectSpatialFilterGroupsWithReferenceLayers } from '../state/filter.selectors';
 import { takeUntil, withLatestFrom } from 'rxjs/operators';
 import { FilterGroupModel } from '../models/filter-group.model';
@@ -21,6 +21,8 @@ export class SpatialFilterReferenceLayerService implements OnDestroy {
   private destroyed = new Subject();
   private geometriesLoaded: Map<string, string> = new Map();
 
+  private loadingGeometries = new BehaviorSubject<string[]>([]);
+
   constructor() {
     this.store$.select(selectCQLFilters)
       .pipe(
@@ -31,20 +33,23 @@ export class SpatialFilterReferenceLayerService implements OnDestroy {
       .subscribe(([ allFilters, spatialFilterGroups ]) => {
         this.cleanUpOldGeometries(spatialFilterGroups);
         spatialFilterGroups.forEach(group => {
-          const currentFilter = this.geometriesLoaded.get(group.id);
+          const currentLoadedKey = this.geometriesLoaded.get(group.id);
           const referenceLayer = group.filters[0].baseLayerId;
           if (!referenceLayer) {
             return;
           }
-          // When no filter is set, save empty string as filter to distinguish 'no geometries loaded' from 'geometries loaded for layer
-          // without filter'
           const cqlFilter = allFilters.get(referenceLayer) || '';
-          if (currentFilter !== cqlFilter) {
-            this.geometriesLoaded.set(group.id, cqlFilter);
+          const loadedKey = `${referenceLayer}-${cqlFilter}`;
+          if (currentLoadedKey !== loadedKey) {
+            this.geometriesLoaded.set(group.id, loadedKey);
             this.loadGeometries(group, referenceLayer, cqlFilter);
           }
         });
       });
+  }
+
+  public isLoadingGeometryForGroup$(groupId: string): Observable<boolean> {
+    return this.loadingGeometries.asObservable().pipe(map(groups => groups.includes(groupId)));
   }
 
   private loadGeometries(group: FilterGroupModel<SpatialFilterModel>, referenceLayer: number, cqlFilter: string | undefined): void {
@@ -52,6 +57,7 @@ export class SpatialFilterReferenceLayerService implements OnDestroy {
       .pipe(
         take(1),
         filter(TypesHelper.isDefined),
+        tap(() => this.loadingGeometries.next([ ...this.loadingGeometries.value, group.id ])),
         switchMap(applicationId => {
           return this.api.getFeatures$({
             layerId: referenceLayer,
@@ -60,7 +66,15 @@ export class SpatialFilterReferenceLayerService implements OnDestroy {
             filter: cqlFilter === '' ? undefined : cqlFilter,
             simplify: false,
             onlyGeometries: true,
-          });
+          }).pipe(
+            map(response => ({
+              features: response.features,
+              error: false,
+            })),
+            catchError(() => {
+              return of(({ features: [], error: true }));
+            }),
+          );
         }),
       )
       .subscribe(response => {
@@ -74,16 +88,19 @@ export class SpatialFilterReferenceLayerService implements OnDestroy {
             referenceLayerId: referenceLayer,
           };
         }).filter(TypesHelper.isDefined);
-        const updatedGroup = {
+        const updatedGroup: FilterGroupModel<SpatialFilterModel> = {
           ...group,
+          error: response.error ? $localize `Error loading reference layer geometries` : undefined,
           filters: group.filters.map(f => ({
             ...f,
+            baseLayerId: response.error ? undefined : f.baseLayerId,
             geometries: [
               ...f.geometries.filter(g => typeof g.referenceLayerId === 'undefined' || g.referenceLayerId === referenceLayer),
               ...geometries,
             ],
           })),
         };
+        this.loadingGeometries.next(this.loadingGeometries.value.filter(id => id !== group.id));
         this.store$.dispatch(updateFilterGroup({ filterGroup: updatedGroup }));
       });
   }

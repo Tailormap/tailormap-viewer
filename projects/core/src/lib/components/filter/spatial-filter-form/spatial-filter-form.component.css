@@ -23,3 +23,14 @@ h2 {
 .buttons button + button {
   margin-left: 8px;
 }
+
+.loading-reference-geometry {
+  display: flex;
+  align-items: center;
+  padding-right: 10px;
+}
+
+.loading-reference-geometry mat-spinner {
+  margin-left: 10px;
+  flex-shrink: 0;
+}

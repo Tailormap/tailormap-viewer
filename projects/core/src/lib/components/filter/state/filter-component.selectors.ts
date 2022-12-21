@@ -22,6 +22,11 @@ export const selectSelectedFilterGroup = createSelector(
   },
 );
 
+export const selectSelectedFilterGroupError = createSelector(
+  selectSelectedFilterGroup,
+  filterGroup => filterGroup?.error,
+);
+
 export const selectSpatialFormVisible = createSelector(
   selectSelectedFilterGroup,
   selectCreateFilterType,

@@ -28,7 +28,15 @@
         <div class="form-section">
           <div i18n class="form-section-label">Select reference layer</div>
           <tm-spatial-filter-form-select-reference-layer></tm-spatial-filter-form-select-reference-layer>
+          <div *ngIf="isLoadingReferenceGeometry$ | async" class="loading-reference-geometry">
+            <div i18n>Loading reference geometry</div>
+            <mat-spinner color="primary" [diameter]="20" mode="indeterminate"></mat-spinner>
+          </div>
         </div>
+
+        <tm-error-message *ngIf="currentGroupError$ | async as currentGroupError"
+                          [message]="currentGroupError"
+                          [friendlyError]="true">{{currentGroup$}}</tm-error-message>
       </ng-container>
     </ng-container>
 

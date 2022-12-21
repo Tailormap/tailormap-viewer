@@ -6,3 +6,8 @@
   border-radius: 2px;
   margin-bottom: 16px;
 }
+
+.error-message--friendly {
+  background-color: transparent;
+  color: var(--error-color);
+}

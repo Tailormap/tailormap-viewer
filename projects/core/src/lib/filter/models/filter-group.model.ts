@@ -14,4 +14,5 @@ export interface FilterGroupModel<FilterType = BaseFilterModel> {
   disabled?: boolean;
   operator: 'AND' | 'OR';
   parentGroup?: string;
+  error?: string;
 }

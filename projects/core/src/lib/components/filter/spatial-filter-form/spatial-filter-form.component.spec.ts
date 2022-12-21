@@ -17,6 +17,7 @@ import { FilterGroupModel } from '../../../filter/models/filter-group.model';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { closeForm } from '../state/filter-component.actions';
 import { of } from 'rxjs';
+import { SpatialFilterReferenceLayerService } from '../../../filter/services/spatial-filter-reference-layer.service';
 
 const setup = async (conf: {
   layers?: AppLayerModel[];
@@ -43,6 +44,7 @@ const setup = async (conf: {
       store,
       mapServiceMock.provider,
       { provide: RemoveFilterService, useValue: removeFilterServiceMock },
+      { provide: SpatialFilterReferenceLayerService, useValue: { isLoadingGeometryForGroup$: () => of(false) } },
     ],
   });
   const injectedStore = TestBed.inject(MockStore);
