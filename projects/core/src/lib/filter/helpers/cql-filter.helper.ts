@@ -4,8 +4,8 @@ import { FilterConditionEnum } from '../models/filter-condition.enum';
 import { FeatureAttributeTypeEnum } from '@tailormap-viewer/api';
 import { TypesHelper } from '@tailormap-viewer/shared';
 import { FilterTypeHelper } from './filter-type.helper';
-import { SpatialFilterModel } from '../models/spatial-filter.model';
 import { BaseFilterModel } from '../models/base-filter.model';
+import { CqlSpatialFilterHelper } from './cql-spatial-filter.helper';
 
 export class CqlFilterHelper {
 
@@ -52,7 +52,7 @@ export class CqlFilterHelper {
       return CqlFilterHelper.convertAttributeFilterToQuery(filter, layerId);
     }
     if (FilterTypeHelper.isSpatialFilter(filter)) {
-      return CqlFilterHelper.convertSpatialFilterToQuery(filter, layerId);
+      return CqlSpatialFilterHelper.convertSpatialFilterToQuery(filter, layerId);
     }
     return null;
   }
@@ -165,37 +165,6 @@ export class CqlFilterHelper {
 
   private static isDate(attributeType: FeatureAttributeTypeEnum) {
     return attributeType === FeatureAttributeTypeEnum.DATE || attributeType === FeatureAttributeTypeEnum.TIMESTAMP;
-  }
-
-  private static convertSpatialFilterToQuery(filter: SpatialFilterModel, layerId: number): string | null {
-    if (filter.geometries.length === 0 || filter.geometryColumns.length === 0) {
-      return null;
-    }
-    const geometries = filter.geometries.map(g => {
-      let geom = g.geometry.trim();
-      if (geom.startsWith('CIRCLE(')) {
-        geom = geom.substring(7, geom.length - 1);
-        const [ x, y, radius ] = geom.split(/\s+/);
-        const bufferedRadius = parseFloat(radius) + (filter.buffer || 0);
-        return `BUFFER(POINT(${x} ${y}), ${bufferedRadius})`;
-      }
-      return filter.buffer ? `BUFFER(${geom}, ${filter.buffer})` : geom;
-    });
-
-    const geometryColumnsForLayer = filter.geometryColumns.find(gc => gc.layerId === layerId);
-    if (!geometryColumnsForLayer) {
-      return null;
-    }
-
-    const geometryColumnClauses = geometryColumnsForLayer.column.map(geometryColumn => {
-      const intersectGeoms = geometries.map(geomParam => `INTERSECTS(${geometryColumn}, ${geomParam})`);
-      return intersectGeoms.length === 1
-        ? intersectGeoms[0]
-        : CqlFilterHelper.wrapFilter(intersectGeoms.join(' OR '));
-    });
-    return geometryColumnClauses.length === 1
-      ? geometryColumnClauses[0]
-      : CqlFilterHelper.wrapFilter(geometryColumnClauses.join(' OR '));
   }
 
 }

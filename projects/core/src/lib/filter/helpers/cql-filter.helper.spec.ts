@@ -44,7 +44,7 @@ describe('CQLFilterHelper', () => {
   test('should create a spatial filter for multiple geometries', () => {
     const filterGroup = getSpatialFilterGroup([ 'POINT(1 2)', 'POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))' ]);
     const filters = CqlFilterHelper.getFilters([filterGroup]);
-    expect(filters.get(1)).toBe('(INTERSECTS(the_geom, POINT(1 2)) OR INTERSECTS(the_geom, POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))))');
+    expect(filters.get(1)).toBe('INTERSECTS(the_geom, GEOMETRYCOLLECTION(POINT(1 2),POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))))');
   });
 
   test('should create a spatial filters for multiple layers', () => {
