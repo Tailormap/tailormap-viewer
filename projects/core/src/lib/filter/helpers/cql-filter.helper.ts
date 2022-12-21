@@ -27,7 +27,10 @@ export class CqlFilterHelper {
 
   public static getFilterForLayer(filterGroups: FilterGroupModel[], layerId: number): string {
     const rootFilterGroups = filterGroups.filter(f => (typeof f.parentGroup === 'undefined' || f.parentGroup === null));
-    return rootFilterGroups.map(f => CqlFilterHelper.getFilterForGroup(f, filterGroups, layerId)).join(' AND ');
+    return rootFilterGroups
+      .map(f => CqlFilterHelper.getFilterForGroup(f, filterGroups, layerId))
+      .filter(f => !!f && f !== '()')
+      .join(' AND ');
   }
 
   private static getFilterForGroup(filterGroup: FilterGroupModel, allFilterGroups: FilterGroupModel[], layerId: number): string {

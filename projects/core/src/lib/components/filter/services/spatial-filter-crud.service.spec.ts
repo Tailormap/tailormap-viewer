@@ -165,7 +165,7 @@ describe('SpatialFilterCrudService', () => {
     });
     const updatedGroup: FilterGroupModel<SpatialFilterModel> = {
       ...selectedGroup,
-      filters: selectedGroup.filters.map((filter) => ({ ...filter, baseLayerId: 5, geometries: [] })),
+      filters: selectedGroup.filters.map((filter) => ({ ...filter, baseLayerId: 5 })),
     };
     expect(dispatch).toHaveBeenNthCalledWith(1, updateFilterGroup({ filterGroup: updatedGroup }));
   });
@@ -186,8 +186,8 @@ describe('SpatialFilterCrudService', () => {
       expect(dispatch).toHaveBeenCalledTimes(1);
     });
     const updatedGroup: FilterGroupModel<SpatialFilterModel> = {
-      ...selectedGroup,
-      filters: selectedGroup.filters.map((filter) => ({ ...filter, baseLayerId: undefined, geometries: [] })),
+      ...groupWithReferenceGeom,
+      filters: groupWithReferenceGeom.filters.map((filter) => ({ ...filter, baseLayerId: undefined, geometries: [] })),
     };
     expect(dispatch).toHaveBeenNthCalledWith(1, updateFilterGroup({ filterGroup: updatedGroup }));
   });

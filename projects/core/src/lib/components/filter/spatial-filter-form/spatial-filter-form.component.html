@@ -9,21 +9,39 @@
   <ng-container *ngIf="availableLayers.length > 0; else: noLayers">
 
     <div class="form-section form-section--with-form-field">
+      <div i18n class="form-section-label">Select the layer(s) you want to filter</div>
       <tm-spatial-filter-form-select-layers></tm-spatial-filter-form-select-layers>
     </div>
 
-    <div class="form-section" *ngIf="hasSelectedLayers$ | async">
-      <div i18n class="form-section-label">Draw filter geometry</div>
-      <tm-spatial-filter-form-draw-geometries [drawingLayerId]="drawingLayerId"></tm-spatial-filter-form-draw-geometries>
-    </div>
+    <ng-container *ngIf="selectedLayersCount$ | async as layerCount">
+      <ng-container *ngIf="layerCount > 0">
+        <div class="form-section-label">
+          <p i18n>Filtering the selected {layerCount, plural, =1 {layer} other {layers}} can be done by drawing geometry and/or selecting a reference layer.</p>
+          <p i18n>The geometries from this reference layer will then be used to filter the selected {layerCount, plural, =1 {layer} other {layers}}.</p>
+        </div>
 
-    <div class="form-section" *ngIf="hasSelectedLayers$ | async">
-      <div i18n class="form-section-label">or select reference layer</div>
-      <tm-spatial-filter-form-select-reference-layer></tm-spatial-filter-form-select-reference-layer>
-    </div>
+        <div class="form-section">
+          <div i18n class="form-section-label">Draw filter geometry</div>
+          <tm-spatial-filter-form-draw-geometries [drawingLayerId]="drawingLayerId"></tm-spatial-filter-form-draw-geometries>
+        </div>
+
+        <div class="form-section">
+          <div i18n class="form-section-label">Select reference layer</div>
+          <tm-spatial-filter-form-select-reference-layer></tm-spatial-filter-form-select-reference-layer>
+          <div *ngIf="isLoadingReferenceGeometry$ | async" class="loading-reference-geometry">
+            <div i18n>Loading reference geometry</div>
+            <mat-spinner color="primary" [diameter]="20" mode="indeterminate"></mat-spinner>
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
+
+    <tm-error-message *ngIf="currentGroupError$ | async as currentGroupError"
+                      [message]="currentGroupError"
+                      [friendlyError]="true">{{currentGroup$}}</tm-error-message>
 
     <div class="form-section form-section--with-form-field" *ngIf="hasSelectedLayersAndGeometry$ | async">
-      <div i18n class="form-section-label">Set optional buffer</div>
+      <div i18n class="form-section-label">Optionally you can buffer the geometry</div>
       <tm-spatial-filter-form-buffer></tm-spatial-filter-form-buffer>
     </div>
 

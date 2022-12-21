@@ -7,7 +7,7 @@ import { CreateFilterButtonComponent } from './create-filter-button/create-filte
 import { SharedModule } from '@tailormap-viewer/shared';
 import { FilterListComponent } from './filter-list/filter-list.component';
 import { FilterListItemComponent } from './filter-list-item/filter-list-item.component';
-import { FilterModule as CoreFilterModule } from '../../filter/filter.module';
+import { FilterModule } from '../../filter/filter.module';
 import { SpatialFilterFormComponent } from './spatial-filter-form/spatial-filter-form.component';
 import { ApplicationMapModule } from '../../map/application-map.module';
 import { StoreModule } from '@ngrx/store';
@@ -40,11 +40,11 @@ import {
     StoreModule.forFeature(filterComponentStateKey, filterComponentReducer),
     MenubarModule,
     SharedModule,
-    CoreFilterModule,
+    FilterModule,
     ApplicationMapModule,
   ],
   exports: [
     FilterComponent,
   ],
 })
-export class FilterModule { }
+export class FilterComponentModule { }

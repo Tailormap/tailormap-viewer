@@ -3,10 +3,11 @@ import { SpatialFilterFormComponent } from './spatial-filter-form.component';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { selectFilterableLayers } from '../../../map/state/map.selectors';
 import {
-  hasSelectedLayers, hasSelectedLayersAndGeometry, selectFilterFeatures, selectSelectedFilterGroup, selectSelectedFilterGroupId,
+  hasSelectedLayersAndGeometry, selectFilterFeatures, selectSelectedFilterGroupError, selectSelectedFilterGroupId,
+  selectSelectedLayersCount,
 } from '../state/filter-component.selectors';
 import { getFilterGroup } from '../../../filter/helpers/attribute-filter.helper.spec';
-import { SharedImportsModule } from '@tailormap-viewer/shared';
+import { SharedModule } from '@tailormap-viewer/shared';
 import { RemoveFilterService } from '../services/remove-filter.service';
 import { AppLayerModel, getAppLayerModel } from '@tailormap-viewer/api';
 import userEvent from '@testing-library/user-event';
@@ -16,6 +17,7 @@ import { FilterGroupModel } from '../../../filter/models/filter-group.model';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { closeForm } from '../state/filter-component.actions';
 import { of } from 'rxjs';
+import { SpatialFilterReferenceLayerService } from '../../../filter/services/spatial-filter-reference-layer.service';
 
 const setup = async (conf: {
   layers?: AppLayerModel[];
@@ -27,21 +29,23 @@ const setup = async (conf: {
     initialState: {},
     selectors: [
       { selector: selectFilterableLayers, value: conf.layers || [] },
-      { selector: hasSelectedLayers, value: conf.selectedLayers || false },
+      { selector: selectSelectedLayersCount, value: conf.selectedLayers ? 1 : 0 },
       { selector: hasSelectedLayersAndGeometry, value: conf.selectedLayersAndGeometry || false },
       { selector: selectSelectedFilterGroupId, value: conf.selectedFilterGroup?.id || null },
       { selector: selectFilterFeatures, value: [] },
+      { selector: selectSelectedFilterGroupError, value: conf.selectedFilterGroup?.error || undefined },
     ],
   });
   const mapServiceMock = createMapServiceMock();
   const removeFilterServiceMock = { removeFilter$: jest.fn(() => of(true)) };
   const { container } = await render(SpatialFilterFormComponent, {
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    imports: [SharedImportsModule],
+    imports: [SharedModule],
     providers: [
       store,
       mapServiceMock.provider,
       { provide: RemoveFilterService, useValue: removeFilterServiceMock },
+      { provide: SpatialFilterReferenceLayerService, useValue: { isLoadingGeometryForGroup$: () => of(false) } },
     ],
   });
   const injectedStore = TestBed.inject(MockStore);
@@ -90,7 +94,7 @@ describe('SpatialFilterFormComponent', () => {
       selectedLayers: true,
       selectedLayersAndGeometry: true,
     });
-    expect(await screen.findByText('Set optional buffer')).toBeInTheDocument();
+    expect(await screen.findByText('Optionally you can buffer the geometry')).toBeInTheDocument();
   });
 
   test('should save/remove buttons', async () => {
@@ -105,6 +109,15 @@ describe('SpatialFilterFormComponent', () => {
     expect(dispatch).toHaveBeenCalledWith(closeForm());
     await userEvent.click(await screen.findByText('Remove'));
     expect(removeFilter$).toHaveBeenCalledWith(group.id);
+  });
+
+  test('shows an error message for a filter group', async () => {
+    const group = getFilterGroup();
+    await setup({
+      layers,
+      selectedFilterGroup: { ...group, error: 'This group has some error' },
+    });
+    expect(await screen.findByText('This group has some error')).toBeInTheDocument();
   });
 
 });

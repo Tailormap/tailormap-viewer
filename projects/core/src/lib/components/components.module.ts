@@ -10,7 +10,7 @@ import { BackgroundLayerToggleModule } from './background-layer-toggle';
 import { DrawingModule } from './drawing/drawing.module';
 import { AttributeListModule } from './attribute-list/attribute-list.module';
 import { PrintModule } from './print/print.module';
-import { FilterModule } from './filter/filter.module';
+import { FilterComponentModule } from './filter/filter-component.module';
 
 @NgModule({
   declarations: [
@@ -30,7 +30,7 @@ import { FilterModule } from './filter/filter.module';
     DrawingModule,
     AttributeListModule,
     PrintModule,
-    FilterModule,
+    FilterComponentModule,
   ],
 })
 export class ComponentsModule {}

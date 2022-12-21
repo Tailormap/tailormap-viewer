@@ -18,4 +18,7 @@ export class ErrorMessageComponent {
   @Input()
   public emptyText: string | undefined;
 
+  @Input()
+  public friendlyError: boolean | undefined;
+
 }
