@@ -3,11 +3,11 @@ import { SpatialFilterFormComponent } from './spatial-filter-form.component';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { selectFilterableLayers } from '../../../map/state/map.selectors';
 import {
-  hasSelectedLayersAndGeometry, selectFilterFeatures, selectSelectedFilterGroupId,
+  hasSelectedLayersAndGeometry, selectFilterFeatures, selectSelectedFilterGroupError, selectSelectedFilterGroupId,
   selectSelectedLayersCount,
 } from '../state/filter-component.selectors';
 import { getFilterGroup } from '../../../filter/helpers/attribute-filter.helper.spec';
-import { SharedImportsModule } from '@tailormap-viewer/shared';
+import { SharedModule } from '@tailormap-viewer/shared';
 import { RemoveFilterService } from '../services/remove-filter.service';
 import { AppLayerModel, getAppLayerModel } from '@tailormap-viewer/api';
 import userEvent from '@testing-library/user-event';
@@ -33,13 +33,14 @@ const setup = async (conf: {
       { selector: hasSelectedLayersAndGeometry, value: conf.selectedLayersAndGeometry || false },
       { selector: selectSelectedFilterGroupId, value: conf.selectedFilterGroup?.id || null },
       { selector: selectFilterFeatures, value: [] },
+      { selector: selectSelectedFilterGroupError, value: conf.selectedFilterGroup?.error || undefined },
     ],
   });
   const mapServiceMock = createMapServiceMock();
   const removeFilterServiceMock = { removeFilter$: jest.fn(() => of(true)) };
   const { container } = await render(SpatialFilterFormComponent, {
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    imports: [SharedImportsModule],
+    imports: [SharedModule],
     providers: [
       store,
       mapServiceMock.provider,
@@ -108,6 +109,15 @@ describe('SpatialFilterFormComponent', () => {
     expect(dispatch).toHaveBeenCalledWith(closeForm());
     await userEvent.click(await screen.findByText('Remove'));
     expect(removeFilter$).toHaveBeenCalledWith(group.id);
+  });
+
+  test('shows an error message for a filter group', async () => {
+    const group = getFilterGroup();
+    await setup({
+      layers,
+      selectedFilterGroup: { ...group, error: 'This group has some error' },
+    });
+    expect(await screen.findByText('This group has some error')).toBeInTheDocument();
   });
 
 });
