@@ -54,25 +54,27 @@ describe('TailormapApiV1Service', () => {
 
   test('queries API for getFeatures$', () => {
     service.getFeatures$({ applicationId: 1, layerId: 1 }).subscribe();
-    const req = httpController.expectOne({ url: '/api/app/1/layer/1/features', method: 'GET' });
+    const req = httpController.expectOne({ url: '/api/app/1/layer/1/features', method: 'POST' });
     req.flush(null);
   });
 
   test('queries API for getFeatures$ - with params', () => {
     service.getFeatures$({ applicationId: 1, layerId: 1, x: 1, y: 2, distance: 10 }).subscribe();
-    const req = httpController.expectOne({ url: '/api/app/1/layer/1/features?x=1&y=2&distance=10', method: 'GET' });
+    const req = httpController.expectOne({ url: '/api/app/1/layer/1/features?x=1&y=2&distance=10', method: 'POST' });
     req.flush(null);
   });
 
   test('queries API for getUniqueValues$', () => {
     service.getUniqueValues$({ applicationId: 1, layerId: 1, attribute: 'attribute' }).subscribe();
-    const req = httpController.expectOne({ url: '/api/app/1/layer/1/unique/attribute', method: 'GET' });
+    const req = httpController.expectOne({ url: '/api/app/1/layer/1/unique/attribute', method: 'POST' });
     req.flush(null);
   });
 
   test('queries API for getUniqueValues$ - with filter', () => {
     service.getUniqueValues$({ applicationId: 1, layerId: 1, attribute: 'attribute', filter: '(attribute2 LIKE \'%test%\')' }).subscribe();
-    const req = httpController.expectOne({ url: '/api/app/1/layer/1/unique/attribute?filter=(attribute2%20LIKE%20\'%25test%25\')', method: 'GET' });
+    const req = httpController.expectOne({ url: '/api/app/1/layer/1/unique/attribute', method: 'POST' });
+    expect(req.request.headers.get('Content-Type')).toEqual('application/x-www-form-urlencoded');
+    expect(req.request.body.get('filter')).toEqual('(attribute2 LIKE \'%test%\')');
     req.flush(null);
   });
 

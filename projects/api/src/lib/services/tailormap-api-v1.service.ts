@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import {
   AppResponseModel, FeaturesResponseModel, LayerDetailsModel, MapResponseModel, Sortorder, VersionResponseModel,
 } from '../models';
@@ -71,16 +71,18 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
       distance: params.distance,
       __fid: params.__fid,
       simplify: params.simplify,
-      filter: params.filter,
       page: params.page,
       sortBy: params.sortBy,
       sortOrder: params.sortOrder,
       onlyGeometries: params.onlyGeometries,
     });
-    return this.httpClient.get<FeaturesResponseModel>(
+    return this.httpClient.post<FeaturesResponseModel>(
       `${TailormapApiV1Service.BASE_URL}/app/${params.applicationId}/layer/${params.layerId}/features`,
-      { params: queryParams },
-    );
+      params.filter ? this.getQueryParams({ filter:  params.filter }) : '',
+      {
+        headers: new HttpHeaders('Content-Type: application/x-www-form-urlencoded'),
+        params: queryParams,
+      });
   }
 
   public getUniqueValues$(params: {
@@ -89,12 +91,10 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
     attribute: string;
     filter?: string;
   }): Observable<UniqueValuesResponseModel> {
-    const queryParams = this.getQueryParams({
-      filter: params.filter,
-    });
-    return this.httpClient.get<UniqueValuesResponseModel>(
+    return this.httpClient.post<UniqueValuesResponseModel>(
       `${TailormapApiV1Service.BASE_URL}/app/${params.applicationId}/layer/${params.layerId}/unique/${params.attribute}`,
-      { params: queryParams },
+      params.filter ? this.getQueryParams({ filter: params.filter }) : '',
+      { headers: new HttpHeaders('Content-Type: application/x-www-form-urlencoded') },
     );
   }
 
