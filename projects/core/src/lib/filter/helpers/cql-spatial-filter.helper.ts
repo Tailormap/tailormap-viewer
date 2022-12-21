@@ -62,7 +62,12 @@ export class CqlSpatialFilterHelper {
   }
 
   private static isBaseGeometry(geom: string): boolean {
-    return geom.startsWith('POLYGON(') || geom.startsWith('LINESTRING(') || geom.startsWith('POINT(');
+    return geom.startsWith('POLYGON')
+      || geom.startsWith('LINESTRING')
+      || geom.startsWith('POINT')
+      || geom.startsWith('MULTIPOLYGON')
+      || geom.startsWith('MULTILINESTRING')
+      || geom.startsWith('MULTIPOINT');
   }
 
 }
