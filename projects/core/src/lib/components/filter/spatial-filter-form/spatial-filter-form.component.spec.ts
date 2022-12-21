@@ -3,7 +3,8 @@ import { SpatialFilterFormComponent } from './spatial-filter-form.component';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { selectFilterableLayers } from '../../../map/state/map.selectors';
 import {
-  hasSelectedLayers, hasSelectedLayersAndGeometry, selectFilterFeatures, selectSelectedFilterGroup, selectSelectedFilterGroupId,
+  hasSelectedLayersAndGeometry, selectFilterFeatures, selectSelectedFilterGroupId,
+  selectSelectedLayersCount,
 } from '../state/filter-component.selectors';
 import { getFilterGroup } from '../../../filter/helpers/attribute-filter.helper.spec';
 import { SharedImportsModule } from '@tailormap-viewer/shared';
@@ -27,7 +28,7 @@ const setup = async (conf: {
     initialState: {},
     selectors: [
       { selector: selectFilterableLayers, value: conf.layers || [] },
-      { selector: hasSelectedLayers, value: conf.selectedLayers || false },
+      { selector: selectSelectedLayersCount, value: conf.selectedLayers ? 1 : 0 },
       { selector: hasSelectedLayersAndGeometry, value: conf.selectedLayersAndGeometry || false },
       { selector: selectSelectedFilterGroupId, value: conf.selectedFilterGroup?.id || null },
       { selector: selectFilterFeatures, value: [] },
@@ -90,7 +91,7 @@ describe('SpatialFilterFormComponent', () => {
       selectedLayers: true,
       selectedLayersAndGeometry: true,
     });
-    expect(await screen.findByText('Set optional buffer')).toBeInTheDocument();
+    expect(await screen.findByText('Optionally you can buffer the geometry')).toBeInTheDocument();
   });
 
   test('should save/remove buttons', async () => {

@@ -5,9 +5,7 @@ import { ExtendedAppLayerModel } from '../../../map/models';
 import { Observable, of, Subject, takeUntil } from 'rxjs';
 import { MapService } from '@tailormap-viewer/map';
 import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.helper';
-import {
-  hasSelectedLayers, hasSelectedLayersAndGeometry, selectFilterFeatures, selectSelectedFilterGroupId,
-} from '../state/filter-component.selectors';
+import { hasSelectedLayersAndGeometry, selectFilterFeatures, selectSelectedFilterGroupId, selectSelectedLayersCount } from '../state/filter-component.selectors';
 import { closeForm } from '../state/filter-component.actions';
 import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
 import { RemoveFilterService } from '../services/remove-filter.service';
@@ -38,12 +36,12 @@ export class SpatialFilterFormComponent implements OnInit, OnDestroy {
   public availableLayers$: Observable<ExtendedAppLayerModel[]> = of([]);
 
   public currentGroup$: Observable<string | undefined> = of(undefined);
-  public hasSelectedLayers$: Observable<boolean> = of(false);
+  public selectedLayersCount$: Observable<number> = of(0);
   public hasSelectedLayersAndGeometry$: Observable<boolean> = of(false);
 
   public ngOnInit(): void {
     this.availableLayers$ = this.store$.select(selectFilterableLayers);
-    this.hasSelectedLayers$ = this.store$.select(hasSelectedLayers);
+    this.selectedLayersCount$ = this.store$.select(selectSelectedLayersCount);
     this.hasSelectedLayersAndGeometry$ = this.store$.select(hasSelectedLayersAndGeometry);
     this.currentGroup$ = this.store$.select(selectSelectedFilterGroupId);
 

@@ -11,7 +11,8 @@ const selectFilterComponentState = createFeatureSelector<FilterComponentState>(f
 export const selectCreateFilterType = createSelector(selectFilterComponentState, state => state.createFilterType);
 export const selectSelectedFilterGroupId = createSelector(selectFilterComponentState, state => state.selectedFilterGroup);
 export const selectSelectedLayers = createSelector(selectFilterComponentState, state => state.selectedLayers || []);
-export const hasSelectedLayers = createSelector(selectSelectedLayers, selectedLayers => selectedLayers.length > 0);
+export const selectSelectedLayersCount = createSelector(selectSelectedLayers, selectedLayers => selectedLayers.length);
+export const hasSelectedLayers = createSelector(selectSelectedLayersCount, selectedLayersCount => selectedLayersCount > 0);
 
 export const selectSelectedFilterGroup = createSelector(
   selectFilterGroups,

@@ -76,7 +76,13 @@ export class SpatialFilterReferenceLayerService implements OnDestroy {
         }).filter(TypesHelper.isDefined);
         const updatedGroup = {
           ...group,
-          filters: group.filters.map(f => ({ ...f, geometries })),
+          filters: group.filters.map(f => ({
+            ...f,
+            geometries: [
+              ...f.geometries.filter(g => typeof g.referenceLayerId === 'undefined' || g.referenceLayerId === referenceLayer),
+              ...geometries,
+            ],
+          })),
         };
         this.store$.dispatch(updateFilterGroup({ filterGroup: updatedGroup }));
       });
