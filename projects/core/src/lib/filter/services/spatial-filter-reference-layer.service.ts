@@ -91,14 +91,14 @@ export class SpatialFilterReferenceLayerService implements OnDestroy {
         const updatedGroup: FilterGroupModel<SpatialFilterModel> = {
           ...group,
           error: response.error ? $localize `Error loading reference layer geometries` : undefined,
-          filters: group.filters.map(f => ({
-            ...f,
-            baseLayerId: response.error ? undefined : f.baseLayerId,
-            geometries: [
-              ...f.geometries.filter(g => typeof g.referenceLayerId === 'undefined'),
-              ...geometries,
-            ],
-          })),
+          filters: group.filters.map(f => {
+            const userDrawnGeometries = f.geometries.filter(g => typeof g.referenceLayerId === 'undefined');
+            return {
+              ...f,
+              baseLayerId: response.error ? undefined : f.baseLayerId,
+              geometries: userDrawnGeometries.concat(geometries),
+            };
+          }),
         };
         this.loadingGeometries.next(this.loadingGeometries.value.filter(id => id !== group.id));
         this.store$.dispatch(updateFilterGroup({ filterGroup: updatedGroup }));
