@@ -14,7 +14,7 @@ export class CqlSpatialFilterHelper {
       filterGeometries.push(filter.buffer ? `BUFFER(${baseGeom}, ${filter.buffer})` : baseGeom);
     }
     if (circles.length > 0) {
-      filterGeometries.push(...circles.map(circle => CqlSpatialFilterHelper.getCircleQuery(circle)));
+      filterGeometries.push(...circles.map(circle => CqlSpatialFilterHelper.getCircleQuery(circle, filter.buffer)));
     }
 
     const geometryColumnsForLayer = filter.geometryColumns.find(gc => gc.layerId === layerId);

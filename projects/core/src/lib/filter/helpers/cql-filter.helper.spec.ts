@@ -67,6 +67,12 @@ describe('CQLFilterHelper', () => {
     expect(filters.get(1)).toBe('INTERSECTS(the_geom, BUFFER(POINT(1 2), 10))');
   });
 
+  test('should create a spatial filter for a circle with buffer', () => {
+    const filterGroup = getSpatialFilterGroup(['CIRCLE(1 2 3)'], undefined, 10);
+    const filters = CqlFilterHelper.getFilters([filterGroup]);
+    expect(filters.get(1)).toBe('INTERSECTS(the_geom, BUFFER(POINT(1 2), 13))');
+  });
+
   test('combine multiple filters into a CQL filter', () => {
     const filterGroup = getFilterGroup([{
         id: '1',
