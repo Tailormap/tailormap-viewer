@@ -41,6 +41,12 @@
   transition: transform ease-in-out 0.25s;
 }
 
+.map-controls-column {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+}
+
 .map-controls-right--on-bottom {
   bottom: var(--body-margin);
   top: auto;

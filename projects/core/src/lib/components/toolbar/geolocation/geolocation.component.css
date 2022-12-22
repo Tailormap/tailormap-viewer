@@ -1,0 +1,9 @@
+.geolocation-buttons {
+  flex-direction: column;
+  width: var(--map-control-size);
+  margin-top: 9px;
+}
+
+.geolocation-buttons .toggle-button {
+  border-radius: 3px;
+}
