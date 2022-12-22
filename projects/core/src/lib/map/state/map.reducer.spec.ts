@@ -168,7 +168,7 @@ describe('MapReducer', () => {
         getLayerTreeNode({ id: 'layer-3', appLayerId: 4, name: 'TEST4', root: false }),
       ],
     };
-    const action = MapActions.moveLayerTreeNode({ nodeId: 'layer-3' });
+    const action = MapActions.moveLayerTreeNode({ nodeId: 'layer-3', position: 'inside' });
     const updatedState = mapReducer(initialState, action);
     expect(updatedState.layerTreeNodes[0].childrenIds).toEqual([ 'level-1', 'level-2', 'layer-3' ]);
     expect(updatedState.layerTreeNodes[3].childrenIds).toEqual(['layer-2']);
@@ -186,7 +186,7 @@ describe('MapReducer', () => {
         getLayerTreeNode({ id: 'layer-3', appLayerId: 4, name: 'TEST4', root: false }),
       ],
     };
-    const action = MapActions.moveLayerTreeNode({ nodeId: 'layer-3', parentId: 'level-1' });
+    const action = MapActions.moveLayerTreeNode({ nodeId: 'layer-3', position: 'inside', parentId: 'level-1' });
     const updatedState = mapReducer(initialState, action);
     expect(updatedState.layerTreeNodes[1].childrenIds).toEqual([ 'layer-1', 'layer-3' ]);
     expect(updatedState.layerTreeNodes[3].childrenIds).toEqual(['layer-2']);
@@ -204,7 +204,7 @@ describe('MapReducer', () => {
         getLayerTreeNode({ id: 'layer-3', appLayerId: 4, name: 'TEST4', root: false }),
       ],
     };
-    const action = MapActions.moveLayerTreeNode({ nodeId: 'layer-3', parentId: 'level-1', beforeNodeId: 'layer-1' });
+    const action = MapActions.moveLayerTreeNode({ nodeId: 'layer-3', position: 'after', parentId: 'level-1', sibling: 'layer-1' });
     const updatedState = mapReducer(initialState, action);
     expect(updatedState.layerTreeNodes[1].childrenIds).toEqual([ 'layer-3', 'layer-1' ]);
     expect(updatedState.layerTreeNodes[3].childrenIds).toEqual(['layer-2']);

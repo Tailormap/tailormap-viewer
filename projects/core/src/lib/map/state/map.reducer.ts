@@ -118,12 +118,9 @@ const onMoveLayerTreeNode = (state: MapState, payload: ReturnType<typeof MapActi
     ...state,
     [tree]: state[tree].map((node, idx) => {
       if (newParentIdx === idx) {
-        let pos = typeof payload.beforeNodeId !== 'undefined'
-          ? node.childrenIds.indexOf(payload.beforeNodeId)
-          : -1;
-        if (pos === -1) {
-          pos = node.childrenIds.length;
-        }
+        const pos = typeof payload.sibling !== 'undefined'
+          ? node.childrenIds.indexOf(payload.sibling) + (payload.position === 'before' ? -1 : 0)
+          : node.childrenIds.length;
         return {
           ...node,
           childrenIds: [
