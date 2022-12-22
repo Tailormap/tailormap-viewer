@@ -95,7 +95,7 @@ export class SpatialFilterReferenceLayerService implements OnDestroy {
             ...f,
             baseLayerId: response.error ? undefined : f.baseLayerId,
             geometries: [
-              ...f.geometries.filter(g => typeof g.referenceLayerId === 'undefined' || g.referenceLayerId === referenceLayer),
+              ...f.geometries.filter(g => typeof g.referenceLayerId === 'undefined'),
               ...geometries,
             ],
           })),
