@@ -3,6 +3,7 @@ export interface BaseTreeModel<T = any> {
   label: string;
   checked?: boolean;
   expanded?: boolean;
+  expandable?: boolean;
   type?: string;
   metadata?: T;
 }

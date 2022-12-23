@@ -1,7 +1,7 @@
 import * as MapActions from './map.actions';
 import { Action, createReducer, on } from '@ngrx/store';
 import { MapState, initialMapState } from './map.state';
-import { LoadingStateEnum, StateHelper } from '@tailormap-viewer/shared';
+import { ArrayHelper, ChangePositionHelper, LoadingStateEnum, StateHelper } from '@tailormap-viewer/shared';
 import { LayerTreeNodeHelper } from '../helpers/layer-tree-node.helper';
 
 const onLoadMap = (state: MapState): MapState => ({
@@ -118,16 +118,9 @@ const onMoveLayerTreeNode = (state: MapState, payload: ReturnType<typeof MapActi
     ...state,
     [tree]: state[tree].map((node, idx) => {
       if (newParentIdx === idx) {
-        const pos = typeof payload.sibling !== 'undefined'
-          ? node.childrenIds.indexOf(payload.sibling) + (payload.position === 'before' ? -1 : 0)
-          : node.childrenIds.length;
         return {
           ...node,
-          childrenIds: [
-            ...node.childrenIds.slice(0, pos),
-            payload.nodeId,
-            ...node.childrenIds.slice(pos),
-          ],
+          childrenIds: ChangePositionHelper.updateOrderInList(node.childrenIds, payload.nodeId, payload.position, payload.sibling),
         };
       }
       if (currentParentIdx === idx) {

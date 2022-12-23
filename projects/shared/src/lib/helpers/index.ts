@@ -9,3 +9,4 @@ export * from './object.helper';
 export * from './style.helper';
 export * from './state.helper';
 export * from './types.helper';
+export * from './change-position.helper';

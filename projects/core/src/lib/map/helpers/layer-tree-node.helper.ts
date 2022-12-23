@@ -32,6 +32,7 @@ export class LayerTreeNodeHelper {
         ? layer?.visible
         : true, // must be boolean but for levels this is determined by the checked status of the layers inside
       expanded: node.expanded,
+      expandable: !isAppLayerNode,
     };
   }
 
