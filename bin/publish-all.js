@@ -17,6 +17,7 @@ checkCleanGitRepo();
   }
 
   try {
+    await runCommand('rm', ['-rf', 'dist'], path.resolve(__dirname, '../'));
     for (const project of availableProjects) {
       await publishRelease(project, version, dryRun);
     }
