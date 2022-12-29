@@ -31,7 +31,7 @@ export class TreeDragDropService implements OnDestroy {
     this.handleMouseMoveListener = this.handleMouseMove.bind(this);
   }
 
-  private treeDragDropEnabled = new BehaviorSubject<boolean>(!BrowserHelper.isTouchDevice);
+  private treeDragDropEnabled = new BehaviorSubject<boolean>(true);
   public treeDragDropEnabled$ = this.treeDragDropEnabled.asObservable();
 
   private readonly handleDragOverListener: DragDropEventHandler;

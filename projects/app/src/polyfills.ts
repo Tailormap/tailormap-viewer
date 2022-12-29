@@ -55,3 +55,6 @@ import 'zone.js';  // Included with Angular CLI.
 /***************************************************************************************************
  * APPLICATION IMPORTS
  */
+
+// Drag-drop polyfill to support HTML5 drag and drop on touch devices. Used to reorder tree nodes.
+import './polyfills/drag-drop-touch/DragDropTouch.js';
