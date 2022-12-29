@@ -1,7 +1,7 @@
 const { spawn, execSync } = require('child_process');
 const path = require('path');
 const inquirer = require('inquirer');
-const fs = require("fs");
+const fs = require("fs/promises");
 
 const scope = '@tailormap-viewer';
 const availableProjects = ['api', 'shared', 'map', 'core'];
@@ -41,7 +41,7 @@ const requestProject = (message, callback) => {
     });
 };
 
-async function requestVersion(message) {
+const requestVersion = async (message) => {
   const answers = await inquirer.prompt([{
     type: 'input',
     name: 'version',
@@ -55,14 +55,15 @@ async function requestVersion(message) {
     }
   }]);
   return answers.version;
-}
+};
 
 const runCommand = (command, args, cwd) => {
   return new Promise((resolve, reject) => {
+    const workingDir = cwd || path.resolve(path.dirname('../'));
     const cmd = spawn(command, args, {
       stdio: 'inherit',
       env: process.env,
-      cwd: cwd || path.resolve(__dirname, '../')
+      cwd: workingDir,
     });
     cmd.on('error', err => {
       console.error(err);
@@ -74,23 +75,38 @@ const runCommand = (command, args, cwd) => {
   });
 };
 
-function updatePeerDependencies(project) {
-  const currentVersion = require(path.resolve(__dirname, '../projects/', project, 'package.json')).version
-  availableProjects.forEach(availableProject => {
-    const jsonPath = path.resolve(__dirname, '../projects/', availableProject, 'package.json');
-    const packageJson = require(jsonPath);
+const getPackageJsonPath = (project) => {
+  return path.resolve(__dirname, '../projects/', project, 'package.json');
+}
+
+const getPackageJson = async (project) => {
+  const packageJson = await fs.readFile(getPackageJsonPath(project));
+  return JSON.parse(packageJson.toString());
+};
+
+const getCurrentVersion = async (project) => {
+  return (await getPackageJson(project)).version;
+};
+
+const updatePeerDependencies = async (project) => {
+  console.log('Updating peer dependencies of ' + project);
+  const currentVersion = await getCurrentVersion(project);
+  for (const availableProject of availableProjects) {
+    const packageJson = await getPackageJson(availableProject);
     let madeChanges = false;
-    Object.keys(packageJson.peerDependencies).forEach(key => {
+    const keys = Object.keys(packageJson.peerDependencies);
+    for (const key of keys) {
       if (key === scope + '/' + project) {
+        console.log('Updating peer dependency for ' + availableProject + ': ' + key + ' from ' + packageJson.peerDependencies[key] + ' to ' + currentVersion);
         packageJson.peerDependencies[key] = `^${currentVersion}`;
         madeChanges = true;
       }
-    });
-    fs.writeFileSync(jsonPath, JSON.stringify(packageJson, null, 2));
-  });
+    }
+    await fs.writeFile(getPackageJsonPath(availableProject), JSON.stringify(packageJson, null, 2));
+  }
 }
 
-async function publishRelease(project, version, dryRun) {
+const publishRelease = async (project, version, dryRun) => {
   console.log(`Publishing release for ${project}. Supplied version: ${version}. Dry-run: ${dryRun ? 'true' : 'false'}`);
   const npmVersion = version.startsWith('v') ? version.substring(1) : version;
   const versionCommand = !!version ? ['version', npmVersion] : ['version', 'patch'];
@@ -101,19 +117,20 @@ async function publishRelease(project, version, dryRun) {
   } else {
     await runCommand('npm', ['publish', '--scope=' + scope, '--registry=https://repo.b3p.nl/nexus/repository/npm-public'], path.resolve(__dirname, '../dist/', project));
   }
-  updatePeerDependencies(project);
+  await updatePeerDependencies(project);
   if (dryRun) {
     console.log('Would add all changed files to Git, but running in dry-run mode');
   } else {
     await runCommand('git', ['add', '-A']);
   }
-  const currentVersion = require(path.resolve(__dirname, '../projects/', project, 'package.json')).version
+  const currentVersion = await getCurrentVersion(project);
   const message = `Released version ${currentVersion} of ${project} project`;
   if (dryRun) {
     console.log('Would commit: ' + message + ', but running in dry-run mode');
   } else {
     await runCommand('git', ['commit', '-m', `Released version ${currentVersion} of ${project} project`])
   }
+  console.log(message);
 }
 
 exports.requestProject = requestProject;

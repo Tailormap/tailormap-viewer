@@ -6,6 +6,7 @@ import { ColorHelper } from '../../helpers/color.helper';
 import { PopoverService } from '../../services/popover/popover.service';
 import { OverlayRef } from '../../services/overlay/overlay-ref';
 import { BrowserHelper } from '../../helpers';
+import { PopoverPositionEnum } from '../../services';
 
 const defaultColors: Array<string | undefined> = [
   'rgb(136, 14, 79)',
@@ -84,6 +85,9 @@ export class ColorPickerComponent implements OnInit, OnDestroy {
 
   @Input()
   public allowEmptyColor = false;
+
+  @Input()
+  public dropdownPosition: PopoverPositionEnum | undefined;
 
   public pickerOpen = false;
 
@@ -170,6 +174,7 @@ export class ColorPickerComponent implements OnInit, OnDestroy {
     this.popoverRef = this.popper.open({
       origin: this.colorPickerButton.nativeElement,
       content: this.colorPickerContent,
+      position: this.dropdownPosition || PopoverPositionEnum.TOP_LEFT_UP,
       height: 215,
       width: Math.min(this.preferredWindowWidth, BrowserHelper.getScreenWith()),
       closeOnClickOutside: true,

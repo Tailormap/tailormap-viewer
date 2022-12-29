@@ -1,5 +1,6 @@
 import { Language } from './language.enum';
 import { ComponentModel } from './component.model';
+import { AppStylingModel } from './app-styling.model';
 
 export interface AppResponseModel {
     id: number;
@@ -7,6 +8,6 @@ export interface AppResponseModel {
     name: string;
     title: string;
     lang: Language;
-    styling?: object;
+    styling?: AppStylingModel;
     components: ComponentModel[];
 }
