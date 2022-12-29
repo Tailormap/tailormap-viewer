@@ -1,0 +1,8 @@
+<img *ngIf="logo$ | async as logo; else defaultLogo"
+     [src]="getSafeUrl(logo)"
+     class="logo custom-logo"
+     alt="">
+
+<ng-template #defaultLogo>
+  <mat-icon class="logo" svgIcon="logo"></mat-icon>
+</ng-template>

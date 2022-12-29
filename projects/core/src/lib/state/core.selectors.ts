@@ -21,3 +21,6 @@ export const selectComponentsConfig = createSelector<CoreState, ApplicationState
     return state.components;
   },
 );
+
+export const selectApplicationStyling = createSelector(selectApplicationState, state => state?.styling || null);
+export const selectApplicationLogo = createSelector(selectApplicationStyling, styling => styling?.logo || null);

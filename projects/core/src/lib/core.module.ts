@@ -22,6 +22,7 @@ import { Router } from '@angular/router';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { LuxonDateAdapter, MAT_LUXON_DATE_FORMATS } from '@angular/material-luxon-adapter';
 import { LayoutModule } from './layout/layout.module';
+import { ApplicationStyleService } from './services/application-style.service';
 
 const getBaseHref = (platformLocation: PlatformLocation): string => {
   return platformLocation.getBaseHrefFromDOM();
@@ -83,6 +84,7 @@ export class CoreModule {
     matIconRegistry: MatIconRegistry,
     domSanitizer: DomSanitizer,
     iconService: IconService,
+    _appStyleService: ApplicationStyleService,
   ) {
     iconService.loadIconsToIconRegistry(matIconRegistry, domSanitizer);
   }

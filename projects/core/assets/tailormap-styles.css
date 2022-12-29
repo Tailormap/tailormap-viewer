@@ -17,15 +17,15 @@
   --error-color: #ff3636;
   --disabled-color: rgb(241, 241, 241);
   --border-color: #e1e1e1;
-  --primary-color-background: #eae5fa;
   --text-color: rgb(0, 10, 30);
   --disabled-text-color: rgba(0, 10, 30, 0.5);
 
+  --primary-color-0_6: rgba(98, 54, 255, 0.6);
   --primary-color-0_5: rgba(98, 54, 255, 0.5);
   --primary-color-0_4: rgba(98, 54, 255, 0.4);
   --primary-color-0_1: rgba(98, 54, 255, 0.1);
   --error-color-0_5: rgba(255, 54, 54, 0.5);
-  --primary-color-background-0_8: rgba(234, 229, 250, 0.8);
+  --map-overlay-background-0_8: rgba(255, 255, 255, 0.8);
 
   --max-control-height: calc(var(--vh) * 100 - (var(--body-margin) * 2));
   --max-control-width: calc(var(--vw) * 100 - (var(--menubar-width) + var(--body-margin) * 2));
@@ -102,7 +102,7 @@ body {
 
 .toggle-button--active {
   color: var(--primary-color);
-  background-color: var(--primary-color-background);
+  background-color: var(--primary-color-0_1);
 }
 
 .map-control-button-container {
@@ -131,14 +131,14 @@ body {
 
 .mat-button-base.button--active,
 .button--active {
-  background-color: rgba(98, 54, 255, 0.1);
+  background-color: var(--primary-color-0_1);
 }
 
 .mat-button-base.button--active,
 .button--active,
 .mat-button-base.button--active mat-icon,
 .button--active mat-icon {
-  color: #6236ff;
+  color: var(--primary-color);
 }
 
 .cdk-overlay-container .mat-snack-bar-container {

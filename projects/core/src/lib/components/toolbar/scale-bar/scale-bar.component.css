@@ -4,7 +4,7 @@
 
 .tm-scale--line {
   border-radius: 3px;
-  background-color: var(--primary-color-background-0_8);
+  background-color: var(--map-overlay-background-0_8);
   padding: 8px;
 }
 

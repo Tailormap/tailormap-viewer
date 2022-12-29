@@ -64,10 +64,7 @@ export class AttributeListComponent implements OnInit {
     this.mapService.renderFeatures$(
       'attribute-list-highlight-layer',
       this.store$.select(selectCurrentlySelectedFeatureGeometry),
-      {
-        ...FeatureStylingHelper.DEFAULT_HIGHLIGHT_STYLE,
-        styleKey: 'attribute-list-highlight-style',
-      },
+      FeatureStylingHelper.getDefaultHighlightStyle('attribute-list-highlight-style'),
       true,
     )
       .pipe(takeUntil(this.destroyed))

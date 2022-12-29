@@ -23,8 +23,8 @@ mat-checkbox {
 }
 
 .tree-node--selected {
-  background-color: rgba(98, 54, 255, 0.1);
-  color: #6236ff;
+  background-color: var(--primary-color-0_1);
+  color: var(--primary-color);
 }
 
 .tree-node-wrapper {

@@ -8,6 +8,8 @@ export class CssHelper {
 
   private static isListeningToResize = false;
 
+  private static cachedVariableValues = new Map<string, string>();
+
   public static updateCssViewportUnits() {
     if (!CssHelper.isListeningToResize) {
       CssHelper.isListeningToResize = true;
@@ -22,8 +24,18 @@ export class CssHelper {
     CssHelper.setCssVariableValue('--vw', `${vw.toFixed(2)}px`);
   }
 
-  public static getCssVariableValue(variableName: string): string {
-    return getComputedStyle(document.documentElement).getPropertyValue(variableName);
+  public static getCssVariableValue(variableName: string, el?: HTMLElement | null): string {
+    const cachedValue = !el
+      ? CssHelper.cachedVariableValues.get(variableName)
+      : null;
+    if (cachedValue) {
+      return cachedValue;
+    }
+    const propertyValue = getComputedStyle(el || document.documentElement).getPropertyValue(variableName);
+    if (!el) {
+      CssHelper.cachedVariableValues.set(variableName, propertyValue);
+    }
+    return propertyValue;
   }
 
   public static getCssVariableValueNumeric(variableName: string): number {
@@ -40,6 +52,9 @@ export class CssHelper {
 
   public static setCssVariableValue(variableName: string, value: string, el?: HTMLElement | null) {
     (el || document.documentElement).style.setProperty(variableName, value);
+    if (!el) {
+      CssHelper.cachedVariableValues.set(variableName, value);
+    }
   }
 
 }

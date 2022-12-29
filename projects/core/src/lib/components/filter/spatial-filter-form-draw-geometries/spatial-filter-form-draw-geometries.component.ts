@@ -5,6 +5,7 @@ import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.he
 import { DrawingToolEvent } from '@tailormap-viewer/map';
 import { nanoid } from 'nanoid';
 import { SpatialFilterCrudService } from '../services/spatial-filter-crud.service';
+import { ApplicationStyleService } from '../../../services/application-style.service';
 
 @Component({
   selector: 'tm-spatial-filter-form-draw-geometries',
@@ -21,7 +22,7 @@ export class SpatialFilterFormDrawGeometriesComponent {
 
   public selectedStyle = (feature: FeatureModel) => FeatureStylingHelper.getDefaultHighlightStyle('filter-selected-style', {
     pointType: undefined,
-    fillColor: '#6236ff',
+    fillColor: ApplicationStyleService.getPrimaryColor(),
     fillOpacity: 30,
     strokeWidth: 2,
     isSelected: true,

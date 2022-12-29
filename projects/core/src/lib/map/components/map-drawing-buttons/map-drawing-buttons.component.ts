@@ -6,6 +6,7 @@ import {
 } from '@tailormap-viewer/map';
 import { DrawingFeatureTypeEnum } from '../../models/drawing-feature-type.enum';
 import { FeatureModel } from '@tailormap-viewer/api';
+import { ApplicationStyleService } from '../../../services/application-style.service';
 
 @Component({
   selector: 'tm-map-drawing-buttons',
@@ -15,12 +16,12 @@ import { FeatureModel } from '@tailormap-viewer/api';
 })
 export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
 
-  private static DEFAULT_STYLE: Partial<MapStyleModel> = {
+  private static getDefaultStyle = (): Partial<MapStyleModel> => ({
     pointType: 'circle',
-    strokeColor: '#6236ff',
+    strokeColor: ApplicationStyleService.getPrimaryColor(),
     pointFillColor: 'transparent',
-    pointStrokeColor: '#6236ff',
-  };
+    pointStrokeColor: ApplicationStyleService.getPrimaryColor(),
+  });
 
   @Input()
   public drawingLayerId = '';
@@ -67,7 +68,7 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
     this.mapService.createTool$<DrawingToolModel, DrawingToolConfigModel>({
       type: ToolTypeEnum.Draw,
       computeSize: false,
-      style: MapDrawingButtonsComponent.DEFAULT_STYLE,
+      style: MapDrawingButtonsComponent.getDefaultStyle(),
     })
       .pipe(
         takeUntil(this.destroyed),
@@ -89,7 +90,7 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
     this.mapService.createTool$<SelectToolModel, SelectToolConfigModel>({
       type: ToolTypeEnum.Select,
       layers: [this.drawingLayerId],
-      style: this.selectionStyle || MapDrawingButtonsComponent.DEFAULT_STYLE,
+      style: this.selectionStyle || MapDrawingButtonsComponent.getDefaultStyle(),
     })
       .pipe(
         takeUntil(this.destroyed),
