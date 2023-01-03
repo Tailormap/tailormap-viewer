@@ -1,6 +1,7 @@
 import { MapSizeHelper, MapViewDetailsModel, MapUnitEnum } from '@tailormap-viewer/map';
 import { AppLayerModel } from '@tailormap-viewer/api';
 import { TristateBoolean, LayerVisibilityBookmarkFragment, LayerInformation } from './bookmark_pb';
+import { AppLayerWithInitialValuesModel } from '../models';
 
 export class MapBookmarkHelper {
   public static locationAndZoomFromFragment(fragment: string, viewDetails: MapViewDetailsModel, unitsOfMeasure: MapUnitEnum): [[number, number], number] | undefined {
@@ -47,7 +48,7 @@ export class MapBookmarkHelper {
     return `${viewDetails.center[0].toFixed(precision)},${viewDetails.center[1].toFixed(precision)},${viewDetails.zoomLevel.toFixed(1)}`;
   }
 
-  public static visibilityDataFromFragment(fragment: LayerVisibilityBookmarkFragment, layers: AppLayerModel[], initiallyVisible: number[]): { id: number; checked: boolean }[] {
+  public static visibilityDataFromFragment(fragment: LayerVisibilityBookmarkFragment, layers: AppLayerWithInitialValuesModel[]): { id: number; checked: boolean }[] {
     let id = -1;
     const checkedValues = new Set();
     const visibilityData = [];
@@ -55,10 +56,6 @@ export class MapBookmarkHelper {
       id = layer.relativeId + id + 1;
 
       checkedValues.add(id);
-
-      if (layer.visible === TristateBoolean.UNSET) {
-        continue;
-      }
 
       const currentLayer = layers.find(a => a.id === id);
       if (currentLayer === undefined) { continue; }
@@ -75,7 +72,7 @@ export class MapBookmarkHelper {
       const currentLayer = layers.find(a => a.id === layer.id);
       if (currentLayer === undefined) { continue; }
 
-      const layerInitiallyVisible = initiallyVisible.find(a => a === layer.id) !== undefined;
+      const layerInitiallyVisible = currentLayer.initialValues.visible;
       if (layerInitiallyVisible === currentLayer.visible) { continue; }
       visibilityData.push({ id: layer.id, checked: layerInitiallyVisible });
     }
@@ -83,15 +80,19 @@ export class MapBookmarkHelper {
     return visibilityData;
   }
 
-  public static fragmentFromVisibilityData(initiallyVisible: number[], layers: AppLayerModel[]): LayerVisibilityBookmarkFragment {
+  public static fragmentFromVisibilityData(layers: AppLayerWithInitialValuesModel[]): LayerVisibilityBookmarkFragment {
     const newLayers = new Map<number, LayerInformation>();
     for (const layer of layers) {
-      const wasVisible = initiallyVisible.find(a => a === layer.id) !== undefined;
+      const info = new LayerInformation();
+      let changed = false;
 
-      if (wasVisible !== layer.visible) {
-        newLayers.set(layer.id, new LayerInformation({
-          visible: layer.visible ? TristateBoolean.TRUE : TristateBoolean.FALSE,
-        }));
+      if (layer.visible !== layer.initialValues?.visible) {
+          info.visible = layer.visible ? TristateBoolean.TRUE : TristateBoolean.FALSE;
+          changed = true;
+      }
+
+      if (changed) {
+        newLayers.set(layer.id, info);
       }
     }
 

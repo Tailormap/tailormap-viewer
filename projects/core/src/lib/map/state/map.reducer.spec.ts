@@ -34,7 +34,7 @@ describe('MapReducer', () => {
     expect(updatedState.loadStatus).toEqual(LoadingStateEnum.LOADED);
     expect(updatedState.mapSettings?.crs).toEqual(crs);
     expect(updatedState.mapSettings?.initialExtent).toEqual(initialExtent);
-    expect(updatedState.layers).toEqual(appLayers);
+    expect(updatedState.layers).toEqual(appLayers.map(a => ({ ...a, initialValues: { visible: a.visible, opacity: a.opacity } })));
   });
 
   test('handles MapActions.loadMapFailed', () => {

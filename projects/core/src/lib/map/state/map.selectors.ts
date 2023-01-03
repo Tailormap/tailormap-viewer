@@ -3,7 +3,7 @@ import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { AppLayerModel, LayerTreeNodeModel, ResolvedServerType, ServiceModel, ServiceProtocol } from '@tailormap-viewer/api';
 import { ArrayHelper, TreeModel } from '@tailormap-viewer/shared';
 import { LayerTreeNodeHelper } from '../helpers/layer-tree-node.helper';
-import { ExtendedAppLayerModel, ExtendedLayerTreeNodeModel } from '../models';
+import { ExtendedAppLayerModel, ExtendedLayerTreeNodeModel, AppLayerWithInitialValuesModel } from '../models';
 
 const selectMapState = createFeatureSelector<MapState>(mapStateKey);
 
@@ -14,7 +14,6 @@ export const selectMapSettings = createSelector(selectMapState, state => state.m
 export const selectLayerTreeNodes = createSelector(selectMapState, state => state.layerTreeNodes);
 export const selectBackgroundLayerTreeNodes = createSelector(selectMapState, state => state.baseLayerTreeNodes);
 export const selectSelectedBackgroundNodeId = createSelector(selectMapState, state => state.selectedBackgroundNode);
-export const selectInitiallyVisibleLayers = createSelector(selectMapState, state => state.initiallyVisibleLayers);
 export const selectLoadStatus = createSelector(selectMapState, state => state.loadStatus);
 
 export const selectMapOptions = createSelector(
@@ -47,7 +46,7 @@ export const selectLayerTreeNode = (nodeId: string) => createSelector(
   (layerTreeNodes?: LayerTreeNodeModel[]) => (layerTreeNodes || []).find(node => node.id === nodeId) || null,
 );
 
-const getLayersWithServices = (layers: AppLayerModel[], services: ServiceModel[]): ExtendedAppLayerModel[] => {
+const getLayersWithServices = (layers: AppLayerWithInitialValuesModel[], services: ServiceModel[]): ExtendedAppLayerModel[] => {
     return layers.map(layer => ({
         ...layer,
         service: services.find(s => s.id === layer.serviceId),
@@ -193,10 +192,13 @@ export const selectSelectedNode = createSelector(
 
 export const selectLayer = (layerId: number) => createSelector(
   selectLayers,
-  (layers: AppLayerModel[]) => layers.find(l => l.id === layerId) || null,
+  (layers: AppLayerWithInitialValuesModel[]) => layers.find(l => l.id === layerId) || null,
 );
 
 export const selectLayerOpacity = (layerId: number) => createSelector(
   selectLayer(layerId),
   (layer) => layer?.opacity || 100,
 );
+
+export const selectChangedLayers = createSelector(selectLayers,
+  layers => layers.filter(a => a.initialValues.visible !== a.visible || a.initialValues.opacity !== a.opacity));

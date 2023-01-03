@@ -20,11 +20,10 @@ const onLoadMapSuccess = (
     maxExtent: payload.maxExtent || undefined,
     crs: payload.crs,
   },
-  layers: [...payload.appLayers],
+  layers: payload.appLayers.map(a => ({ ...a, initialValues: { visible: a.visible, opacity: a.opacity } })),
   services: payload.services,
   baseLayerTreeNodes: payload.baseLayerTreeNodes.map(LayerTreeNodeHelper.getExtendedLayerTreeNode),
   layerTreeNodes: payload.layerTreeNodes.map(LayerTreeNodeHelper.getExtendedLayerTreeNode),
-  initiallyVisibleLayers: payload.appLayers.filter(a => a.visible).map(a => a.id),
 });
 
 const onLoadMapFailed = (
@@ -97,7 +96,7 @@ const onAddServices = (state: MapState, payload: ReturnType<typeof MapActions.ad
 
 const onAddAppLayers = (state: MapState, payload: ReturnType<typeof MapActions.addAppLayers>): MapState => ({
   ...state,
-  layers: [ ...state.layers, ...payload.appLayers ],
+  layers: [ ...state.layers, ...payload.appLayers.map(a => ({ ...a, initialValues: { visible: a.visible, opacity: a.opacity } })) ],
 });
 
 const onAddLayerTreeNodes = (state: MapState, payload: ReturnType<typeof MapActions.addLayerTreeNodes>): MapState => {

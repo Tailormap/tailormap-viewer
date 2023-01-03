@@ -6,7 +6,7 @@ import { ResolvedServerType, ServiceModel, ServiceProtocol } from '@tailormap-vi
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { ArrayHelper } from '@tailormap-viewer/shared';
 import { selectLoadStatus, selectMapOptions, selectOrderedVisibleBackgroundLayers,
-  selectOrderedVisibleLayersWithServices, selectInitiallyVisibleLayers, selectLayers } from '../state/map.selectors';
+  selectOrderedVisibleLayersWithServices, selectChangedLayers, selectLayers } from '../state/map.selectors';
 import { ExtendedAppLayerModel } from '../models';
 import { selectCQLFilters } from '../../filter/state/filter.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
@@ -83,15 +83,14 @@ export class ApplicationMapService implements OnDestroy {
     combineLatest([
       this.bookmarkService.registerFragment$(ApplicationMapService.VISIBILITY_BOOKMARK_DESCRIPTOR),
       this.store$.select(selectLayers),
-      this.store$.select(selectInitiallyVisibleLayers),
       this.store$.select(selectLoadStatus),
     ]).pipe(
         takeUntil(this.destroyed),
-        filter(([ ,,, loadStatus ]) => loadStatus === LoadingStateEnum.LOADED),
+        filter(([ ,, loadStatus ]) => loadStatus === LoadingStateEnum.LOADED),
         distinctUntilKeyChanged('0'),
       )
-      .subscribe(([ fragment, layers, initiallyVisible ]) => {
-        const visibilityData = MapBookmarkHelper.visibilityDataFromFragment(fragment, layers, initiallyVisible);
+      .subscribe(([ fragment, layers ]) => {
+        const visibilityData = MapBookmarkHelper.visibilityDataFromFragment(fragment, layers);
         if (visibilityData.length > 0) {
           this.store$.dispatch(setLayerVisibility({ visibility: visibilityData }));
         }
@@ -158,13 +157,12 @@ export class ApplicationMapService implements OnDestroy {
 
   private getVisibilityBookmarkData() {
     return combineLatest([
-      this.store$.select(selectInitiallyVisibleLayers),
       this.store$.select(selectLayers),
       this.store$.select(selectLoadStatus),
     ]).pipe(
-      filter(([ ,, loadStatus ]) => loadStatus === LoadingStateEnum.LOADED),
-      map(([ initiallyVisible, layers ]) => {
-        return MapBookmarkHelper.fragmentFromVisibilityData(initiallyVisible, layers);
+      filter(([ , loadStatus ]) => loadStatus === LoadingStateEnum.LOADED),
+      map(([ layers ]) => {
+        return MapBookmarkHelper.fragmentFromVisibilityData(layers);
       }),
     );
   }

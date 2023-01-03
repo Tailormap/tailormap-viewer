@@ -1,6 +1,6 @@
-import { AppLayerModel, BoundsModel, CoordinateReferenceSystemModel, ServiceModel } from '@tailormap-viewer/api';
+import { BoundsModel, CoordinateReferenceSystemModel, ServiceModel } from '@tailormap-viewer/api';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
-import { ExtendedLayerTreeNodeModel } from '../models';
+import { AppLayerWithInitialValuesModel, ExtendedLayerTreeNodeModel } from '../models';
 
 export const mapStateKey = 'map';
 
@@ -15,12 +15,11 @@ export interface MapState {
   errorMessage?: string;
   mapSettings?: MapSettingsModel;
   services: ServiceModel[];
-  layers: AppLayerModel[];
+  layers: AppLayerWithInitialValuesModel[];
   baseLayerTreeNodes: ExtendedLayerTreeNodeModel[];
   layerTreeNodes: ExtendedLayerTreeNodeModel[];
   selectedLayer?: number;
   selectedBackgroundNode?: string;
-  initiallyVisibleLayers: number[];
 }
 
 export const initialMapState: MapState = {
@@ -29,5 +28,4 @@ export const initialMapState: MapState = {
   layers: [],
   baseLayerTreeNodes: [],
   layerTreeNodes: [],
-  initiallyVisibleLayers: [],
 };
