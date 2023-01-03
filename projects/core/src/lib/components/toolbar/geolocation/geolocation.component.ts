@@ -12,11 +12,13 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GeolocationComponent implements OnInit, OnDestroy {
-
   private destroyed = new Subject();
   private featureGeom = new Subject<FeatureModel[]>();
 
   private activeWatch: number | undefined = undefined;
+  private activeWatchTimeout = -1;
+
+  private static GEOLOCATION_TIMEOUT_MS = 12 * 1000;
 
   public hasGeolocation = navigator.geolocation !== undefined;
   public isWatching = false;
@@ -80,6 +82,7 @@ export class GeolocationComponent implements OnInit, OnDestroy {
           if (!this.hasFix) {
             this.hasFix = true;
             this.mapService.zoomTo(circleWkt, projectionCode);
+            this.activeWatchTimeout = window.setTimeout(() => this.cancelGeolocation(), GeolocationComponent.GEOLOCATION_TIMEOUT_MS);
             this.cdr.detectChanges();
           }
       });
@@ -89,6 +92,8 @@ export class GeolocationComponent implements OnInit, OnDestroy {
       if (this.activeWatch !== undefined) {
         navigator.geolocation.clearWatch(this.activeWatch);
         this.activeWatch = undefined;
+
+        clearTimeout(this.activeWatchTimeout);
       }
 
       this.featureGeom.next([]);
