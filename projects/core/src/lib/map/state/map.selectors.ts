@@ -199,6 +199,3 @@ export const selectLayerOpacity = (layerId: number) => createSelector(
   selectLayer(layerId),
   (layer) => layer?.opacity || 100,
 );
-
-export const selectChangedLayers = createSelector(selectLayers,
-  layers => layers.filter(a => a.initialValues.visible !== a.visible || a.initialValues.opacity !== a.opacity));

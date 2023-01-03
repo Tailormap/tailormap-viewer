@@ -4,6 +4,8 @@
 syntax = "proto3";
 package bookmark;
 
+import "google/protobuf/wrappers.proto";
+
 // Represents differences in layer visibility from the default configuration.
 message LayerVisibilityBookmarkFragment {
     repeated LayerInformation layers = 1;
@@ -26,4 +28,7 @@ message LayerInformation {
     // note: this is a tristate value, as all values in protobuf are optional,
     // and will default to `false` otherwise.
     TristateBoolean visible = 2;
+
+    // The opacity of the layer.
+    google.protobuf.FloatValue opacity = 3;
 }
