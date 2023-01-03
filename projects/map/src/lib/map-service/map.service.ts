@@ -110,9 +110,10 @@ export class MapService {
     featureGeometry$: Observable<FeatureModelType<T> | Array<FeatureModelType<T>>>,
     vectorLayerStyle?: MapStyleModel | ((feature: FeatureModel<T>) => MapStyleModel),
     zoomToFeature?: boolean,
+    updateWhileAnimating?: boolean,
   ): Observable<VectorLayer<VectorSource<Geometry>> | null> {
     return combineLatest([
-      this.createVectorLayer$({ id: layerId, name: `${layerId} layer`, layerType: LayerTypesEnum.Vector, visible: true }, vectorLayerStyle),
+      this.createVectorLayer$({ id: layerId, name: `${layerId} layer`, layerType: LayerTypesEnum.Vector, visible: true, updateWhileAnimating }, vectorLayerStyle),
       featureGeometry$,
     ])
       .pipe(

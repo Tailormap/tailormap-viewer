@@ -9,6 +9,7 @@ import XYZ from 'ol/source/XYZ';
 import { LayerManagerModel, LayerTypes } from '../models';
 import { OlLayerHelper } from '../helpers/ol-layer.helper';
 import { LayerModel } from '../models/layer.model';
+import { VectorLayerModel } from '../models/vector-layer.model';
 import { isOpenLayersVectorLayer, isOpenLayersWMSLayer, isPossibleRealtimeLayer } from '../helpers/ol-layer-types.helper';
 import { LayerTypesHelper } from '../helpers/layer-types.helper';
 import Geometry from 'ol/geom/Geometry';
@@ -335,9 +336,10 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     return olLayer;
   }
 
-  private createVectorLayer(layer: LayerModel): VectorLayer<VectorSource<Geometry>> | null {
+  private createVectorLayer(layer: VectorLayerModel): VectorLayer<VectorSource<Geometry>> | null {
+    const updateWhileAnimating = layer.updateWhileAnimating ?? false;
     const source = new VectorSource({ wrapX: true });
-    const vectorLayer = new VectorLayer({ source, visible: layer.visible });
+    const vectorLayer = new VectorLayer({ source, visible: layer.visible, updateWhileAnimating, updateWhileInteracting: updateWhileAnimating });
     this.vectorLayers.set(layer.id, vectorLayer);
     return vectorLayer;
   }
