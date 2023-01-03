@@ -3,6 +3,7 @@ import { MapService, CoordinateHelper } from '@tailormap-viewer/map';
 import { Subject, takeUntil, take } from 'rxjs';
 import { FeatureModel } from '@tailormap-viewer/api';
 import { ApplicationStyleService } from '../../../services/application-style.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'tm-geolocation',
@@ -23,6 +24,7 @@ export class GeolocationComponent implements OnInit, OnDestroy {
 
   constructor(
     private mapService: MapService,
+    private snackBar: MatSnackBar,
     private cdr: ChangeDetectorRef,
   ) { }
 
@@ -95,7 +97,18 @@ export class GeolocationComponent implements OnInit, OnDestroy {
       this.cdr.detectChanges();
   }
 
-  private positionError(_e: GeolocationPositionError) {
+  private positionError(e: GeolocationPositionError) {
+      switch (e.code) {
+        case GeolocationPositionError.PERMISSION_DENIED:
+          this.snackBar.open($localize`Fetching location failed: permission denied`, undefined, { duration: 5000 });
+          break;
+        case GeolocationPositionError.POSITION_UNAVAILABLE:
+          this.snackBar.open($localize`Fetching location failed: location unavailable`, undefined, { duration: 5000 });
+          break;
+        case GeolocationPositionError.TIMEOUT:
+          this.snackBar.open($localize`Fetching location failed: timeout`, undefined, { duration: 5000 });
+          break;
+      }
       this.cancelGeolocation();
   }
 
