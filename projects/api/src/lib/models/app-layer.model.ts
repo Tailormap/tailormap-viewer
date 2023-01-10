@@ -15,5 +15,5 @@ export interface AppLayerModel {
   legendImageUrl?: string;
   hiDpiMode?: LayerHiDpiMode;
   hiDpiSubstituteLayer?: string;
-  opacity?: number;
+  opacity: number;
 }

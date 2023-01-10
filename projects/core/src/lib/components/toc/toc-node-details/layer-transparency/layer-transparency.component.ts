@@ -46,7 +46,7 @@ export class LayerTransparencyComponent {
     if (!this.layerId) {
       return;
     }
-    this.store$.dispatch(setLayerOpacity({ layerId: this.layerId, opacity: undefined }));
+    this.store$.dispatch(setLayerOpacity({ layerId: this.layerId, opacity: 100 }));
   }
 
 }
