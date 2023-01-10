@@ -77,10 +77,11 @@ export class MapBookmarkHelper {
         }
       }
 
-      if (layer.opacity !== undefined) {
+      if (layer.opacity !== 0) {
+        const opacity = layer.opacity - 1;
         checkedOpacityValues.add(id);
-        if (layer.opacity !== currentLayer.opacity) {
-          opacityData.push({ layerId: id, opacity: layer.opacity });
+        if (opacity !== currentLayer.opacity) {
+          opacityData.push({ layerId: id, opacity });
         }
       }
     }
@@ -112,8 +113,8 @@ export class MapBookmarkHelper {
           changed = true;
       }
 
-      if (layer.opacity !== layer.initialValues.opacity) {
-          info.opacity = layer.opacity;
+      if (layer.opacity !== layer.initialValues?.opacity) {
+          info.opacity = layer.opacity + 1;
           changed = true;
       }
 

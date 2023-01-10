@@ -7,7 +7,7 @@
 // @ts-nocheck
 
 import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
-import { FloatValue, Message, proto3 } from "@bufbuild/protobuf";
+import { Message, proto3 } from "@bufbuild/protobuf";
 
 /**
  * @generated from enum bookmark.TristateBoolean
@@ -98,11 +98,13 @@ export class LayerInformation extends Message<LayerInformation> {
   visible = TristateBoolean.UNSET;
 
   /**
-   * The opacity of the layer.
+   * The opacity of the layer, in percent (0-100, represented as 1-101).
+   * If this value is 0, the layer-default opacity is used. A value of 1 maps to 0%,
+   * etc.
    *
-   * @generated from field: google.protobuf.FloatValue opacity = 3;
+   * @generated from field: uint32 opacity = 3;
    */
-  opacity?: number;
+  opacity = 0;
 
   constructor(data?: PartialMessage<LayerInformation>) {
     super();
@@ -114,7 +116,7 @@ export class LayerInformation extends Message<LayerInformation> {
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "relative_id", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
     { no: 2, name: "visible", kind: "enum", T: proto3.getEnumType(TristateBoolean) },
-    { no: 3, name: "opacity", kind: "message", T: FloatValue },
+    { no: 3, name: "opacity", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): LayerInformation {
