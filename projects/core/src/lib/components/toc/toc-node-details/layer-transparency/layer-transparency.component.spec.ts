@@ -19,7 +19,7 @@ describe('LayerTransparencyComponent', () => {
         provideMockStore({
           initialState: {
             map: {
-              layers: [{ id: 1, opacity: 50 }],
+              layers: [{ id: 1, opacity: 50, initialValues: { opacity: 100 } }],
             },
           },
         }),
