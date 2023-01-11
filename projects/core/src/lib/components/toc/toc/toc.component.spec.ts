@@ -62,7 +62,7 @@ describe('TocComponent', () => {
     const registerComponentFn = jest.fn();
     await render(TocComponent, {
       imports: [ SharedModule, MatIconTestingModule ],
-      declarations: [ TocNodeLayerComponent, ToggleAllLayersButtonComponent ],
+      declarations: [ TocNodeLayerComponent, ToggleAllLayersButtonComponent, TocFilterInputComponent ],
       providers: [
         getMockStore(),
         getMenubarService(true, registerComponentFn),
@@ -98,13 +98,15 @@ describe('TocComponent', () => {
     const registerComponentFn = jest.fn();
     await render(TocComponent, {
       imports: [ SharedModule, MatIconTestingModule ],
-      declarations: [ TocNodeLayerComponent, ToggleAllLayersButtonComponent ],
+      declarations: [ TocNodeLayerComponent, ToggleAllLayersButtonComponent, TocFilterInputComponent ],
       providers: [
         getMockStore('1'),
         getMenubarService(true, registerComponentFn),
       ],
     });
     const store = TestBed.inject(MockStore);
+    store.overrideSelector(selectFilterTerm, null); // ???
+    store.refreshState();
     store.dispatch = jest.fn();
     expect((await screen.findByText('Disaster map')).closest('.mat-tree-node')).toHaveClass('tree-node--selected');
     await userEvent.click(await screen.findByText('Some other map'));
@@ -119,7 +121,7 @@ describe('TocComponent', () => {
     const registerComponentFn = jest.fn();
     await render(TocComponent, {
       imports: [ SharedModule, MatIconTestingModule ],
-      declarations: [ TocNodeLayerComponent, ToggleAllLayersButtonComponent ],
+      declarations: [ TocNodeLayerComponent, ToggleAllLayersButtonComponent, TocFilterInputComponent ],
       providers: [
         getMockStore('1'),
         getMenubarService(true, registerComponentFn),
