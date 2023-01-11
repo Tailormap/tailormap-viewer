@@ -23,23 +23,14 @@ export interface DropZoneOptions {
 @Injectable()
 export class TreeDragDropService implements OnDestroy {
 
-  public constructor() {
-    this.handleDragOverListener = this.handleDragOver.bind(this);
-    this.handleDragLeaveListener = this.handleDragLeave.bind(this);
-    this.handleDropListener = this.handleDrop.bind(this);
-    this.handleDragEndListener = this.handleDragEnd.bind(this);
-    this.handleMouseMoveListener = this.handleMouseMove.bind(this);
-  }
-
   private treeDragDropEnabled = new BehaviorSubject<boolean>(true);
   public treeDragDropEnabled$ = this.treeDragDropEnabled.asObservable();
 
-  private readonly handleDragOverListener: DragDropEventHandler;
-  private readonly handleDragLeaveListener: DragDropEventHandler;
-  private readonly handleDropListener: DragDropEventHandler;
-  private readonly handleDragEndListener: DragDropEventHandler;
-
-  private readonly handleMouseMoveListener: MouseEventHandler;
+  private readonly handleDragOverListener: DragDropEventHandler = e => this.handleDragOver(e);
+  private readonly handleDragLeaveListener: DragDropEventHandler = e => this.handleDragLeave(e);
+  private readonly handleDropListener: DragDropEventHandler = e => this.handleDrop(e);
+  private readonly handleDragEndListener = () => this.handleDragEnd();
+  private readonly handleMouseMoveListener: MouseEventHandler = e => this.handleMouseMove(e);
 
   private dragNode: FlatTreeModel | null = null;
   private dragNodeExpandOverWaitTimeMs = 300;
