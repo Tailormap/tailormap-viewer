@@ -9,6 +9,14 @@ const onSetFilterEnabled = (
   ...state,
   filterEnabled: payload.filterEnabled,
 });
+
+const onToggleFilterEnabled = (
+  state: TocState,
+): TocState => ({
+  ...state,
+  filterEnabled: !state.filterEnabled,
+});
+
 const onSetFilterTerm = (
   state: TocState,
   payload: ReturnType<typeof TocActions.setFilterTerm>,
@@ -28,6 +36,7 @@ const onSetInfoTreeNodeId = (
 const tocReducerImpl = createReducer<TocState>(
   initialTocState,
   on(TocActions.setFilterEnabled, onSetFilterEnabled),
+  on(TocActions.toggleFilterEnabled, onToggleFilterEnabled),
   on(TocActions.setFilterTerm, onSetFilterTerm),
   on(TocActions.setInfoTreeNodeId, onSetInfoTreeNodeId),
 );

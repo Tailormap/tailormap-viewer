@@ -82,6 +82,16 @@ export const selectOrderedLayerIds = createSelector(
   layerTreeNodes => LayerTreeNodeHelper.getAppLayerIds(layerTreeNodes, layerTreeNodes.find(l => l.root)),
 );
 
+export const selectOrderedLayerNodes = createSelector(
+  selectLayerTreeNodes,
+  selectOrderedLayerIds,
+  (layers, orderedLayerIds) => {
+    return layers
+      .filter(node => LayerTreeNodeHelper.isAppLayerNode(node))
+      .sort(ArrayHelper.getArraySorter('appLayerId', orderedLayerIds));
+  },
+);
+
 export const selectOrderedBackgroundLayerIds = createSelector(
   selectBackgroundLayerTreeNodes,
   baseLayerTreeNodes => LayerTreeNodeHelper.getAppLayerIds(baseLayerTreeNodes, baseLayerTreeNodes.find(l => l.root)),

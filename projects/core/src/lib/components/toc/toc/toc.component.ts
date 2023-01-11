@@ -1,16 +1,16 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { filter, Observable, of, Subject, take, takeUntil } from 'rxjs';
+import { filter, Observable, of, Subject, takeUntil } from 'rxjs';
 import { BaseTreeModel, TreeService } from '@tailormap-viewer/shared';
 import { map } from 'rxjs/operators';
 import { MenubarService } from '../../menubar';
 import { TocMenuButtonComponent } from '../toc-menu-button/toc-menu-button.component';
 import { Store } from '@ngrx/store';
 import { setLayerVisibility, setSelectedLayerId, toggleLevelExpansion } from '../../../map/state/map.actions';
-import { selectLayerTree, selectSelectedNode } from '../../../map/state/map.selectors';
+import { selectSelectedNode } from '../../../map/state/map.selectors';
 import { AppLayerModel, BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { MapService } from '@tailormap-viewer/map';
-import { selectFilterEnabled, selectInfoTreeNodeId } from '../state/toc.selectors';
-import { setFilterEnabled, setInfoTreeNodeId } from '../state/toc.actions';
+import { selectFilteredLayerTree, selectFilterEnabled, selectInfoTreeNodeId } from '../state/toc.selectors';
+import { setInfoTreeNodeId, toggleFilterEnabled } from '../state/toc.actions';
 
 interface AppLayerTreeModel extends BaseTreeModel {
   metadata: AppLayerModel;
@@ -47,7 +47,7 @@ export class TocComponent implements OnInit, OnDestroy {
       .subscribe(scale => this.scale = scale);
 
     this.treeService.setDataSource(
-      this.store$.select(selectLayerTree),
+      this.store$.select(selectFilteredLayerTree),
     );
     this.treeService.setSelectedNode(this.store$.select(selectSelectedNode));
     this.treeService.checkStateChangedSource$
@@ -84,9 +84,6 @@ export class TocComponent implements OnInit, OnDestroy {
     this.store$.dispatch(setInfoTreeNodeId({ infoTreeNodeId: null }));
   }
   public toggleLayerFilter() {
-    this.store$.select(selectFilterEnabled).pipe(
-      take(1),
-      map(filterEnabled => !filterEnabled),
-    ).subscribe(filterEnabled => this.store$.dispatch(setFilterEnabled({ filterEnabled })));
+    this.store$.dispatch(toggleFilterEnabled());
   }
 }
