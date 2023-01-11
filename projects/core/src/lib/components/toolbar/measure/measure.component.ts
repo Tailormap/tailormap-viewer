@@ -8,6 +8,7 @@ import { Store } from '@ngrx/store';
 import { activateTool, deactivateTool, deregisterTool, registerTool } from '../state/toolbar.actions';
 import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
 import { selectActiveTool } from '../state/toolbar.selectors';
+import { ApplicationStyleService } from '../../../services/application-style.service';
 
 @Component({
   selector: 'tm-measure',
@@ -47,7 +48,7 @@ export class MeasureComponent implements OnInit, OnDestroy {
     this.mapService.renderFeatures$('measurement-layer', this.featureGeom.asObservable(), {
       styleKey: 'measurement-style',
       zIndex: 9999,
-      strokeColor: '#6236ff',
+      strokeColor: ApplicationStyleService.getPrimaryColor(),
       strokeWidth: 3,
     }).pipe(takeUntil(this.destroyed)).subscribe();
 
@@ -55,9 +56,9 @@ export class MeasureComponent implements OnInit, OnDestroy {
       type: ToolTypeEnum.Draw,
       computeSize: true,
       style: {
-        strokeColor: '#6236ff',
+        strokeColor: ApplicationStyleService.getPrimaryColor(),
         pointFillColor: 'transparent',
-        pointStrokeColor: '#6236ff',
+        pointStrokeColor: ApplicationStyleService.getPrimaryColor(),
       },
     })
       .pipe(

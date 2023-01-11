@@ -17,7 +17,7 @@
       <label i18n>Symbol</label>
       <tm-icon-picker [icons]="getMarkers()"
                       [selectedIcon]="getSelectedMarker()"
-                      iconColor="#6236ff"
+                      [iconColor]="iconColor"
                       (iconChange)="changeMarker($event)"></tm-icon-picker>
     </div>
 

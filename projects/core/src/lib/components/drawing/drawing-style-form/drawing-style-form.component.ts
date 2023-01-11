@@ -8,6 +8,7 @@ import { debounceTime } from 'rxjs/operators';
 import { Subject, takeUntil } from 'rxjs';
 import { StyleHelper } from '@tailormap-viewer/shared';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { ApplicationStyleService } from '../../../services/application-style.service';
 
 @Component({
   selector: 'tm-drawing-style-form',
@@ -62,6 +63,8 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
   private debounce: number | undefined;
   private updatedProps: Map<keyof DrawingFeatureStyleModel, string | number | null | boolean | LabelStyleEnum[]> = new Map();
   private destroyed = new Subject();
+
+  public iconColor = ApplicationStyleService.getPrimaryColor();
 
   constructor(
     private cdr: ChangeDetectorRef,

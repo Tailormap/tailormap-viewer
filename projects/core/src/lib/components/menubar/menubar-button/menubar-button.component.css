@@ -15,5 +15,5 @@ button + button {
 
 button:hover,
 mat-icon:hover {
-  color: #6236ff;
+  color: var(--primary-color);
 }

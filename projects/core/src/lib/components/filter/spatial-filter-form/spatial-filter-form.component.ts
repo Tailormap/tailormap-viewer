@@ -14,6 +14,7 @@ import { RemoveFilterService } from '../services/remove-filter.service';
 import { SpatialFilterReferenceLayerService } from '../../../filter/services/spatial-filter-reference-layer.service';
 import { filter } from 'rxjs/operators';
 import { TypesHelper } from '@tailormap-viewer/shared';
+import { ApplicationStyleService } from '../../../services/application-style.service';
 
 @Component({
   selector: 'tm-spatial-filter-form',
@@ -25,7 +26,7 @@ export class SpatialFilterFormComponent implements OnInit, OnDestroy {
 
   private DEFAULT_STYLE = (feature: FeatureModel) => FeatureStylingHelper.getDefaultHighlightStyle('filter-drawing-style', {
     pointType: undefined,
-    fillColor: '#6236ff',
+    fillColor: ApplicationStyleService.getPrimaryColor(),
     fillOpacity: 30,
     strokeWidth: 2,
     buffer: feature.attributes?.buffer,

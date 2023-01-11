@@ -15,7 +15,7 @@ mat-table {
 .expand-disabled {
   font-size: 20px;
   font-weight: bold;
-  color: #6236ff;
+  color: var(--primary-color);
 }
 
 .expand-disabled {
@@ -49,7 +49,7 @@ mat-table {
 }
 
 .header-cell--with-filter .filter-active {
-  color: #6236ff;
+  color: var(--primary-color);
 }
 
 .header-cell--with-filter .filter-disabled {
@@ -86,7 +86,7 @@ mat-table {
 
 .header-cell--with-sort .sort-active {
   visibility: visible;
-  color: #6236ff;
+  color: var(--primary-color);
 }
 
 .header-cell--with-resizer .resizer {
@@ -168,11 +168,11 @@ mat-footer-cell {
 }
 
 .selected_row {
-  background-color: rgba(98, 54, 255, 0.1);
+  background-color: var(--primary-color-0_1);
 }
 
 .selected_row .mat-cell {
-  color: #6236ff;
+  color: var(--primary-color);
 }
 
 .expanded_row {
@@ -184,7 +184,7 @@ mat-footer-cell {
 }
 
 .statistics-placeholder {
-  border: 1px dashed #6236ff;
+  border: 1px dashed var(--primary-color);
   margin: 3px;
   flex: 1;
   align-self: stretch;
@@ -199,7 +199,7 @@ mat-footer-cell {
 }
 
 .statistics-placeholder mat-icon {
-  color: #6236ff;
+  color: var(--primary-color);
 }
 
 .resizer ::ng-deep .resize-panel--horizontal {

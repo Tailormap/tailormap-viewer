@@ -45,10 +45,8 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
     this.mapService.renderFeatures$(
       'feature-info-highlight-layer',
       this.store$.select(selectCurrentlySelectedFeatureGeometry),
-      {
-        ...FeatureStylingHelper.DEFAULT_HIGHLIGHT_STYLE,
-        styleKey: 'feature-info-highlight-style',
-      })
+      FeatureStylingHelper.getDefaultHighlightStyle('feature-info-highlight-style'),
+    )
       .pipe(takeUntil(this.destroyed))
       .subscribe();
   }

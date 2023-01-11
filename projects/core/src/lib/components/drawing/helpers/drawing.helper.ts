@@ -4,26 +4,10 @@ import {
 } from '../models/drawing-feature.model';
 import { DrawingToolEvent, MapStyleModel } from '@tailormap-viewer/map';
 import { nanoid } from 'nanoid';
+import { ApplicationStyleService } from '../../../services/application-style.service';
 
 
 export class DrawingHelper {
-
-  private static defaultStyle: DrawingFeatureStyleModel = {
-    marker: 'circle',
-    markerFillColor: '#6236ff',
-    markerStrokeColor: '#6236ff',
-    markerSize: 5,
-    markerStrokeWidth: 1,
-    markerRotation: 0,
-    fillOpacity: 30,
-    fillColor: '#6236ff',
-    strokeColor: '#6236ff',
-    strokeOpacity: 100,
-    strokeWidth: 3,
-    label: '',
-    labelSize: 12,
-    labelColor: '#000000',
-  };
 
   private static updatedDefaultStyle: Partial<DrawingFeatureStyleModel> = {};
 
@@ -73,7 +57,23 @@ export class DrawingHelper {
   }
 
   public static getDefaultStyle(): DrawingFeatureStyleModel {
-    return { ...DrawingHelper.defaultStyle, ...DrawingHelper.updatedDefaultStyle };
+    const defaultStyle: DrawingFeatureStyleModel = {
+      marker: 'circle',
+      markerFillColor: ApplicationStyleService.getPrimaryColor(),
+      markerStrokeColor: ApplicationStyleService.getPrimaryColor(),
+      markerSize: 5,
+      markerStrokeWidth: 1,
+      markerRotation: 0,
+      fillOpacity: 30,
+      fillColor: ApplicationStyleService.getPrimaryColor(),
+      strokeColor: ApplicationStyleService.getPrimaryColor(),
+      strokeOpacity: 100,
+      strokeWidth: 3,
+      label: '',
+      labelSize: 12,
+      labelColor: '#000000',
+    };
+    return { ...defaultStyle, ...DrawingHelper.updatedDefaultStyle };
   }
 
   public static applyDrawingStyle(feature: DrawingFeatureModel): MapStyleModel {

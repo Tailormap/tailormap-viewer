@@ -19,6 +19,7 @@ import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layo
 import { ExtendedAppLayerModel } from '../../../map/models';
 import { MapPdfService } from '../../../services/map-pdf/map-pdf.service';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
+import { ApplicationStyleService } from '../../../services/application-style.service';
 
 // Draw the vector layer with the print extent on the exported map image
 const DEBUG_PRINT_EXTENT = false;
@@ -133,7 +134,7 @@ export class PrintComponent implements OnInit, OnDestroy {
     this.mapService.renderFeatures$('print-preview-layer', printMapExtentFeature$, {
       styleKey: 'print-preview-style',
       zIndex: 9999,
-      strokeColor: '#6236ff',
+      strokeColor: ApplicationStyleService.getPrimaryColor(),
       strokeWidth: 3,
     }).pipe(takeUntil(this.destroyed)).subscribe();
 
