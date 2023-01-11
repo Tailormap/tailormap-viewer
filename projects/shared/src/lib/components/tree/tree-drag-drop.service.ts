@@ -55,10 +55,10 @@ export class TreeDragDropService implements OnDestroy {
   private dropZones: DropZoneOptions[] = [];
 
   private static getDragTarget(e: DragEvent): HTMLDivElement | null {
-    if (e.target && (e.target as HTMLElement).className && (e.target as HTMLElement).className.indexOf(treeNodeBaseClass) !== -1) {
-      return e.target as HTMLDivElement;
+    if (!e.target) {
+      return null;
     }
-    return null;
+    return (e.target as HTMLElement).closest(`.${treeNodeBaseClass}`);
   }
 
   private static getNodeId(treeNode: HTMLDivElement): string {
@@ -85,10 +85,16 @@ export class TreeDragDropService implements OnDestroy {
     this.dropZones = dropZones;
     this.dragNode = dragNode;
 
-    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-    if (!isSafari && event.dataTransfer && event.dataTransfer.setDragImage) {
-      // Hides the 'ghost' image while dragging. Safari seems to have a issue so we don't hide it on Safari
-      event.dataTransfer.setDragImage(document.createElement('span'), 0, 0);
+    if (event.dataTransfer) {
+      if (dropZones.length > 0 && event.dataTransfer.setDragImage) {
+        const dragImage = document.createElement('div');
+        dragImage.classList.add('tree-node__drag-image');
+        dragImage.innerText = dragNode.label;
+        dropZones[0].getTargetElement().appendChild(dragImage);
+        event.dataTransfer.setDragImage(dragImage, 0, BrowserHelper.isTouchDevice ? 75 : 25);
+      }
+      event.dataTransfer.setData('text/plain', dragNode.label);
+      event.dataTransfer.effectAllowed = 'move';
     }
 
     this.dragOverNodeId = null;
@@ -248,6 +254,7 @@ export class TreeDragDropService implements OnDestroy {
         return;
       }
       treeElement.classList.remove(`mat-tree--drag-active`);
+      treeElement.querySelector('.tree-node__drag-image')?.remove();
       const scrollContainer = treeElement.closest('.tree-wrapper') as HTMLDivElement;
       scrollContainer.removeEventListener('dragover', this.handleMouseMoveListener);
       TreeDragDropService.loopNodes(treeElement, treeNode => {

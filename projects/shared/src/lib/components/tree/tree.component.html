@@ -14,9 +14,7 @@
                    matTreeNodePaddingIndent="20"
                    (click)="setNodeSelected(node)">
       <div [className]="getNodeClassName(node)"
-           [draggable]="treeDragDropServiceEnabled ? true : null"
-           [attr.data-nodeid]="node.id"
-           (dragstart)="treeDragDropServiceEnabled ? handleDragStart($event, node) : null">
+           [attr.data-nodeid]="node.id">
         <mat-checkbox *ngIf="node.checkbox && !useRadioInputs"
                       class="checklist-leaf-node"
                       [aria-label]="'toggle ' + node.label"
@@ -32,7 +30,12 @@
                           (change)="handleRadioChange(node)"
                           (click)="$event.stopPropagation()"
                           [value]="node"></mat-radio-button>
-        <ng-container class="tree-node-container" *ngTemplateOutlet="treeNodeTemplate ? treeNodeTemplate : defaultTreeNodeTemplate; context: {$implicit: node}"></ng-container>
+        <div class="tree-node__drag-container"
+             [draggable]="treeDragDropServiceEnabled ? true : null"
+             [attr.data-nodeid]="node.id"
+             (dragstart)="treeDragDropServiceEnabled ? handleDragStart($event, node) : null">
+          <ng-container *ngTemplateOutlet="treeNodeTemplate ? treeNodeTemplate : defaultTreeNodeTemplate; context: {$implicit: node}"></ng-container>
+        </div>
       </div>
     </mat-tree-node>
 
@@ -42,9 +45,7 @@
                    class="mat-tree-node--folder"
                    (click)="setNodeSelected(node)">
       <div [className]="getNodeClassName(node)"
-           [draggable]="treeDragDropServiceEnabled ? true : null"
-           [attr.data-nodeid]="node.id"
-           (dragstart)="treeDragDropServiceEnabled ? handleDragStart($event, node) : null">
+           [attr.data-nodeid]="node.id">
         <button mat-icon-button
                 (click)="toggleNodeExpansion($event, node)"
                 [attr.aria-label]="'toggle ' + node.label">
@@ -59,7 +60,11 @@
                       [checked]="isChecked(node)"
                       [indeterminate]="isIndeterminate(node)"
         ></mat-checkbox>
-        <ng-container *ngTemplateOutlet="treeNodeTemplate ? treeNodeTemplate : defaultTreeNodeTemplate; context: {$implicit: node}"></ng-container>
+        <div class="tree-node__drag-container"
+             [draggable]="treeDragDropServiceEnabled ? true : null"
+             (dragstart)="treeDragDropServiceEnabled ? handleDragStart($event, node) : null">
+          <ng-container *ngTemplateOutlet="treeNodeTemplate ? treeNodeTemplate : defaultTreeNodeTemplate; context: {$implicit: node}"></ng-container>
+        </div>
       </div>
     </mat-tree-node>
 
