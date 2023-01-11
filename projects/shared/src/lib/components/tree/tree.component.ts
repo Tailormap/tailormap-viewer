@@ -147,8 +147,8 @@ export class TreeComponent implements OnDestroy {
     const dragElement = this.treeElement.nativeElement;
     const dropZoneConfig: DropZoneOptions = {
       getTargetElement: () => dragElement,
-      dropAllowed: (nodeId) => this.treeService.hasNode(nodeId),
-      dropInsideAllowed: (nodeId) => this.treeService.isExpandable(nodeId),
+      dropAllowed: (nodeId) => this.treeService.hasNode(nodeId) && !this.treeService.isNodeOrInsideOwnTree(nodeId, node),
+      dropInsideAllowed: (nodeId) => this.treeService.isExpandable(nodeId) && !this.treeService.isNodeOrInsideOwnTree(nodeId, node),
       isExpandable: (nodeId) => this.treeService.isExpandable(nodeId),
       isExpanded: (nodeId) => this.treeService.isExpanded(nodeId),
       expandNode: (nodeId) => this.treeService.expandNode(nodeId),
@@ -168,6 +168,20 @@ export class TreeComponent implements OnDestroy {
     checkChange.push({ ...node, checked: true });
     this.treeService.checkStateChanged(checkChange);
     this.checkedRadioNode = node;
+  }
+
+  public enableDrag($event: MouseEvent | TouchEvent) {
+    if (!$event.target || !this.treeDragDropServiceEnabled) {
+      return;
+    }
+    ($event.target as HTMLElement).closest(`.${treeNodeBaseClass}`)?.setAttribute('draggable', 'true');
+  }
+
+  public stopDrag($event: MouseEvent | TouchEvent) {
+    if (!$event.target) {
+      return;
+    }
+    ($event.target as HTMLElement).closest(`.${treeNodeBaseClass}`)?.setAttribute('draggable', 'false');
   }
 
 }
