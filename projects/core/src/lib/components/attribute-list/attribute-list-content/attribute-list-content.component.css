@@ -9,6 +9,14 @@
   margin: 16px;
 }
 
+.table-container-error-message {
+  margin: 8px;
+}
+
+tm-error-message {
+  display: inline-block;
+}
+
 mat-spinner {
   margin: 16px;
 }

@@ -79,6 +79,11 @@ export const selectLoadingDataSelectedTab = createSelector(
   },
 );
 
+export const selectLoadErrorForSelectedTab = createSelector(
+  selectSelectedTab,
+  (tab): string | undefined => tab?.loadingError,
+);
+
 export const selectRowsForSelectedTab = createSelector(
   selectDataForSelectedTab,
   (data): AttributeListRowModel[] => {
@@ -96,6 +101,13 @@ export const selectColumnsForSelectedTab = createSelector(
 export const selectRowCountForSelectedTab = createSelector(
   selectRowsForSelectedTab,
   rows => rows.length,
+);
+
+export const selectHasNoRowsForSelectedTab = createSelector(
+  selectRowCountForSelectedTab,
+  selectLoadErrorForSelectedTab,
+  selectLoadingDataSelectedTab,
+  (rowCount, error, loadingData) => rowCount === 0 && !error && !loadingData,
 );
 
 export const selectSortForSelectedTab = createSelector(

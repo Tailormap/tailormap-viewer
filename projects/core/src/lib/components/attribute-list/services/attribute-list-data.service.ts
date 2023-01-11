@@ -96,7 +96,7 @@ export class AttributeListDataService implements OnDestroy {
       catchError(() => of(null)),
       map((response): LoadAttributeListDataResultModel => {
         if (response === null) {
-          return AttributeListDataService.getErrorResult(selectedData.id);
+          return AttributeListDataService.getErrorResult(selectedData.id, $localize `Failed to load attribute list data for ${tab.label}`);
         }
         return {
           id: selectedData.id,

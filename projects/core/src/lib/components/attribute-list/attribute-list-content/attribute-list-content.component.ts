@@ -5,11 +5,11 @@ import { AttributeListRowModel } from '../models/attribute-list-row.model';
 import { Store } from '@ngrx/store';
 import { AttributeListColumnModel } from '../models/attribute-list-column.model';
 import {
-  selectColumnsForSelectedTab, selectLoadingDataSelectedTab,
+  selectColumnsForSelectedTab, selectHasNoRowsForSelectedTab, selectLoadErrorForSelectedTab, selectLoadingDataSelectedTab,
   selectRowCountForSelectedTab,
   selectRowsForSelectedTab, selectSelectedRowIdForSelectedTab, selectSelectedTab, selectSortForSelectedTab,
 } from '../state/attribute-list.selectors';
-import { updateRowSelected, updateSort } from '../state/attribute-list.actions';
+import { loadData, updateRowSelected, updateSort } from '../state/attribute-list.actions';
 import { AttributeListStateService } from '../services/attribute-list-state.service';
 import { BaseComponentTypeEnum, FeatureAttributeTypeEnum } from '@tailormap-viewer/api';
 import { SimpleAttributeFilterService } from '../../../filter/services/simple-attribute-filter.service';
@@ -34,6 +34,7 @@ export class AttributeListContentComponent implements OnInit {
   public sort$: Observable<{ column: string; direction: string } | null> = of(null);
   public filters$: Observable<AttributeFilterModel[]> = of([]);
   public selectedRowId$: Observable<string | undefined> = of(undefined);
+  public errorMessage$: Observable<string | undefined> = of(undefined);
   public hasRows$: Observable<boolean> = of(false);
   public hasNoRows$: Observable<boolean> = of(true);
 
@@ -43,10 +44,11 @@ export class AttributeListContentComponent implements OnInit {
   private dialog = inject(MatDialog);
 
   public ngOnInit(): void {
+    this.errorMessage$ = this.store$.select(selectLoadErrorForSelectedTab);
     this.rows$ = this.store$.select(selectRowsForSelectedTab);
     this.sort$ = this.store$.select(selectSortForSelectedTab);
     this.hasRows$ = this.store$.select(selectRowCountForSelectedTab).pipe(map(rowCount => rowCount > 0));
-    this.hasNoRows$ = this.hasRows$.pipe(map(hasRows => !hasRows));
+    this.hasNoRows$ = this.store$.select(selectHasNoRowsForSelectedTab);
     this.columns$ = this.store$.select(selectColumnsForSelectedTab);
     this.notLoadingData$ = this.store$.select(selectLoadingDataSelectedTab).pipe(map(loading => !loading));
     this.filters$ = this.store$.select(selectSelectedTab)
@@ -118,4 +120,16 @@ export class AttributeListContentComponent implements OnInit {
         this.dialog.open(AttributeListFilterComponent, { data, maxHeight: CssHelper.MAX_SCREEN_HEIGHT });
       });
   }
+
+  public reloadData() {
+    this.store$.select(selectSelectedTab)
+      .pipe(take(1))
+      .subscribe(tab => {
+        if (!tab || !tab.layerId) {
+          return;
+        }
+        this.store$.dispatch(loadData({ tabId: tab.id }));
+      });
+  }
+
 }

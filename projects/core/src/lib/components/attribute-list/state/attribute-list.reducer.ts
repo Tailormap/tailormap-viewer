@@ -74,7 +74,7 @@ const onLoadData = (
   tabs: AttributeListStateHelper.updateTab(
     state.tabs,
     payload.tabId,
-    tab => ({ ...tab, loadingData: true }),
+    tab => ({ ...tab, loadingData: true, loadingError: undefined }),
   ),
 });
 
