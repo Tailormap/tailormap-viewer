@@ -18,13 +18,12 @@ export const selectFilteredLayerTree = createSelector(
   selectLayers,
   selectLayerTree,
   (filterTerm: string | null, layerTreeNodes, layers, layerTree): TreeModel[] => {
-      if (filterTerm) {
-        const filterRegexes: RegExp[] = filterTerm.trim().split(' ').map(f => new RegExp(f, 'i'));
-        return layerTreeNodes
-          .filter(layerNode => filterRegexes.every(f => f.test(layerNode.name)))
-          .map(layerNode => LayerTreeNodeHelper.getTreeModelForLayerTreeNode(layerNode, layers));
-      } else {
-        return layerTree;
-      }
+    if (!filterTerm) {
+      return layerTree;
+    }
+    const filterRegexes: RegExp[] = filterTerm.trim().split(' ').map(f => new RegExp(f, 'i'));
+    return layerTreeNodes
+      .filter(layerNode => filterRegexes.every(f => f.test(layerNode.name)))
+      .map(layerNode => LayerTreeNodeHelper.getTreeModelForLayerTreeNode(layerNode, layers));
   },
 );
