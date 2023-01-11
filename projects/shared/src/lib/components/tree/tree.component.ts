@@ -147,8 +147,8 @@ export class TreeComponent implements OnDestroy {
     const dragElement = this.treeElement.nativeElement;
     const dropZoneConfig: DropZoneOptions = {
       getTargetElement: () => dragElement,
-      dropAllowed: (nodeId) => this.treeService.hasNode(nodeId),
-      dropInsideAllowed: (nodeId) => this.treeService.isExpandable(nodeId),
+      dropAllowed: (nodeId) => this.treeService.hasNode(nodeId) && !this.treeService.isNodeOrInsideOwnTree(nodeId, node),
+      dropInsideAllowed: (nodeId) => this.treeService.isExpandable(nodeId) && !this.treeService.isNodeOrInsideOwnTree(nodeId, node),
       isExpandable: (nodeId) => this.treeService.isExpandable(nodeId),
       isExpanded: (nodeId) => this.treeService.isExpanded(nodeId),
       expandNode: (nodeId) => this.treeService.expandNode(nodeId),

@@ -1,11 +1,15 @@
 import { AppLayerModel, LayerTreeNodeModel } from '@tailormap-viewer/api';
 import { ExtendedLayerTreeNodeModel } from '../models';
-import { TreeModel } from '@tailormap-viewer/shared';
+import { TreeModel, TypesHelper } from '@tailormap-viewer/shared';
 
 export class LayerTreeNodeHelper {
 
   public static isAppLayerNode(node: LayerTreeNodeModel) {
     return typeof node.appLayerId === 'number';
+  }
+
+  public static isLevelNode(node: LayerTreeNodeModel) {
+    return typeof node.appLayerId === 'undefined' || node.appLayerId === null;
   }
 
   public static getExtendedLayerTreeNode(node: LayerTreeNodeModel): ExtendedLayerTreeNodeModel {
@@ -41,10 +45,13 @@ export class LayerTreeNodeHelper {
   }
 
   public static getAppLayerIds(layerTreeNodes: LayerTreeNodeModel[], child?: LayerTreeNodeModel): number[] {
-    const childIds = (child?.childrenIds || []).map(id => {
-      return LayerTreeNodeHelper.getAppLayerIds(layerTreeNodes, LayerTreeNodeHelper.findLayerTreeNode(layerTreeNodes, id));
-    });
-    return (child?.appLayerId ? [child.appLayerId] : []).concat(...childIds);
+    return LayerTreeNodeHelper.getChildNodes(layerTreeNodes, child)
+      .map(node => node.appLayerId)
+      .filter(TypesHelper.isDefined);
+  }
+
+  public static getChildNodeIds(layerTreeNodes: LayerTreeNodeModel[], child?: LayerTreeNodeModel): string[] {
+    return LayerTreeNodeHelper.getChildNodes(layerTreeNodes, child).map(node => node.id);
   }
 
   public static getSelectedTreeNodes(layerTreeNodes: LayerTreeNodeModel[], layers: AppLayerModel[]) {
@@ -105,6 +112,13 @@ export class LayerTreeNodeHelper {
       .map(childId => LayerTreeNodeHelper.traverseTree<T>(layerTreeNodes, childId, transformer))
       .filter<T>((n: T | null): n is T => !!n);
     return transformer(node, children);
+  }
+
+  private static getChildNodes(layerTreeNodes: LayerTreeNodeModel[], child?: LayerTreeNodeModel): LayerTreeNodeModel[] {
+    const childIds = (child?.childrenIds || []).map(id => {
+      return LayerTreeNodeHelper.getChildNodes(layerTreeNodes, LayerTreeNodeHelper.findLayerTreeNode(layerTreeNodes, id));
+    });
+    return (child ? [child] : []).concat(...childIds);
   }
 
 }

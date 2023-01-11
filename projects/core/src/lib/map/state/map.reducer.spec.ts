@@ -228,6 +228,28 @@ describe('MapReducer', () => {
     expect(updatedState.layerTreeNodes[3].childrenIds).toEqual(['layer-2']);
   });
 
+  test('handles MapActions.moveLayerTreeNode - dont drag folder into itself', () => {
+    const initialState: MapState = {
+      ...initialMapState,
+      layerTreeNodes: [
+        getLayerTreeNode({ root: true, childrenIds: [ 'level-1', 'level-2' ] }),
+        getLayerTreeNode({ id: 'level-1', root: false, childrenIds: ['layer-1'] }),
+        getLayerTreeNode({ id: 'layer-1', appLayerId: 1, name: 'TEST', root: false }),
+        getLayerTreeNode({ id: 'level-2', root: false, childrenIds: [ 'level-3', 'layer-2', 'layer-3' ] }),
+        getLayerTreeNode({ id: 'layer-2', appLayerId: 2, name: 'TEST2', root: false }),
+        getLayerTreeNode({ id: 'layer-3', appLayerId: 4, name: 'TEST4', root: false }),
+        getLayerTreeNode({ id: 'level-3', name: 'LEVEL 3', childrenIds: ['layer-4'], root: false }),
+        getLayerTreeNode({ id: 'layer-4', appLayerId: 5, name: 'TEST5', root: false }),
+      ],
+    };
+    const beforeChildAction = MapActions.moveLayerTreeNode({ nodeId: 'level-2', position: 'before', parentId: 'level-2', sibling: 'layer-3' });
+    expect(mapReducer(initialState, beforeChildAction) === initialState).toEqual(true);
+    const insideChildLevelAction = MapActions.moveLayerTreeNode({ nodeId: 'level-2', position: 'inside', parentId: 'level-3' });
+    expect(mapReducer(initialState, insideChildLevelAction) === initialState).toEqual(true);
+    const afterChildInChildLevelAction = MapActions.moveLayerTreeNode({ nodeId: 'level-2', position: 'after', parentId: 'level-3', sibling: 'layer-4' });
+    expect(mapReducer(initialState, afterChildInChildLevelAction) === initialState).toEqual(true);
+  });
+
   test('handles MapActions.setSelectedBackgroundNodeId - make background layers visible', () => {
     const layers = [
       getAppLayerModel({ id: 1, visible: false }),

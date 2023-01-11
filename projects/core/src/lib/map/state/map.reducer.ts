@@ -113,6 +113,15 @@ const onMoveLayerTreeNode = (state: MapState, payload: ReturnType<typeof MapActi
   const newParentIdx = payload.parentId
     ? state[tree].findIndex(n => n.id === payload.parentId)
     : state[tree].findIndex(n => n.root);
+  const draggedNode = state[tree].find(n => n.id === payload.nodeId);
+  if (!draggedNode || payload.sibling === payload.nodeId || payload.parentId === payload.nodeId) {
+    return state;
+  }
+  const childIds = LayerTreeNodeHelper.isLevelNode(draggedNode) ? LayerTreeNodeHelper.getChildNodeIds(state[tree], draggedNode) : [];
+  if (childIds.includes(payload.sibling || '') || childIds.includes(payload.parentId || '')) {
+    // don't drag level into itself or its children
+    return state;
+  }
   const currentParentIdx = state[tree].findIndex(n => n.childrenIds.includes(payload.nodeId));
   return {
     ...state,

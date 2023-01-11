@@ -98,6 +98,17 @@ export class TreeService<T = any> implements OnDestroy {
     return null;
   }
 
+  public isNodeOrInsideOwnTree(nodeId: string, dragNode: FlatTreeModel) {
+    if (nodeId === dragNode.id) {
+      return true;
+    }
+    if (!dragNode.expandable) {
+      return false;
+    }
+    const children = this.getTreeControl().getDescendants(dragNode).map(node => node.id);
+    return children.includes(nodeId);
+  }
+
   // Service message commands
   public setDataSource(dataSource$: Observable<TreeModel[]>) {
     dataSource$
