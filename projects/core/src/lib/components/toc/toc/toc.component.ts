@@ -1,6 +1,6 @@
 import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, filter, Observable, of, Subject, takeUntil } from 'rxjs';
-import { BaseTreeModel, NodePositionChangedEventModel, TreeDragDropService, TreeService } from '@tailormap-viewer/shared';
+import { BaseTreeModel, BrowserHelper, NodePositionChangedEventModel, TreeDragDropService, TreeService } from '@tailormap-viewer/shared';
 import { map } from 'rxjs/operators';
 import { MenubarService } from '../../menubar';
 import { TocMenuButtonComponent } from '../toc-menu-button/toc-menu-button.component';
@@ -29,10 +29,13 @@ export class TocComponent implements OnInit, OnDestroy {
 
   private infoTreeNodeId = new BehaviorSubject<string | null>(null);
   public infoTreeNodeId$ = this.infoTreeNodeId.asObservable();
+  public isMobileDevice = BrowserHelper.isTouchDevice;
+  public dragDropEnabled = !this.isMobileDevice;
 
   constructor(
     private store$: Store,
     private treeService: TreeService<AppLayerModel>,
+    private treeDragDropService: TreeDragDropService,
     private menubarService: MenubarService,
     private mapService: MapService,
     private ngZone: NgZone,
@@ -46,6 +49,7 @@ export class TocComponent implements OnInit, OnDestroy {
 
     this.treeService.setDataSource(this.store$.select(selectLayerTree));
     this.treeService.setSelectedNode(this.store$.select(selectSelectedNode));
+    this.treeDragDropService.setDragDropEnabled(!this.isMobileDevice);
     this.treeService.checkStateChangedSource$
       .pipe(
         takeUntil(this.destroyed),
@@ -94,6 +98,11 @@ export class TocComponent implements OnInit, OnDestroy {
         sibling: evt.sibling,
       }));
     });
+  }
+
+  public toggleReordering() {
+    this.dragDropEnabled = !this.dragDropEnabled;
+    this.treeDragDropService.setDragDropEnabled(this.dragDropEnabled);
   }
 
 }

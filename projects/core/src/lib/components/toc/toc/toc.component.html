@@ -4,7 +4,19 @@
 
 <div class="toc" *ngIf="visible$ | async">
   <div class="toc-header">
-    <tm-toggle-all-layers-button></tm-toggle-all-layers-button>
+    <div class="toc-header-left">
+      <tm-toggle-all-layers-button></tm-toggle-all-layers-button>
+    </div>
+    <div class="toc-header-right">
+      <button *ngIf="isMobileDevice"
+              mat-icon-button
+              matTooltip="Re-order layers"
+              color="primary"
+              [class.button--active]="dragDropEnabled"
+              (click)="toggleReordering()">
+        <mat-icon svgIcon="reorder"></mat-icon>
+      </button>
+    </div>
   </div>
   <tm-tree class="toc-tree" [treeNodeTemplate]="treeNode" [expandOnGroupClick]="true"></tm-tree>
   <tm-toc-node-details *ngIf="infoTreeNodeId$ | async as selectedLayerDetail"
