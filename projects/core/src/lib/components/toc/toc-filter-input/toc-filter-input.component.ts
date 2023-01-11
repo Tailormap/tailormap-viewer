@@ -13,7 +13,7 @@ import { selectFilterTerm } from '../state/toc.selectors';
 })
 export class TocFilterInputComponent implements OnInit, OnDestroy {
 
-  public filterControl = new FormControl<string>('');
+  public filterControl = new FormControl<string>('', { nonNullable: true });
 
   private destroyed = new Subject();
   constructor(
@@ -29,12 +29,12 @@ export class TocFilterInputComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this.store$.select(selectFilterTerm).pipe(
       take(1),
-    ).subscribe(filterTerm => this.filterControl.setValue(filterTerm));
+    ).subscribe(filterTerm => this.filterControl.setValue(filterTerm || ''));
 
     this.filterControl.valueChanges.pipe(
       takeUntil(this.destroyed),
       debounceTime(200),
-      map(filterTerm => filterTerm != null && filterTerm.trim() === '' ? null : filterTerm),
+      map(filterTerm => filterTerm.trim() === '' ? undefined : filterTerm),
     ).subscribe(filterTerm => this.store$.dispatch(setFilterTerm({ filterTerm })));
   }
 }

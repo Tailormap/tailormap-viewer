@@ -91,7 +91,7 @@ export class TocComponent implements OnInit, OnDestroy {
   }
 
   public layerInfoClosed() {
-    this.store$.dispatch(setInfoTreeNodeId({ infoTreeNodeId: null }));
+    this.store$.dispatch(setInfoTreeNodeId({ infoTreeNodeId: undefined }));
   }
   public toggleLayerFilter() {
     this.store$.dispatch(toggleFilterEnabled());

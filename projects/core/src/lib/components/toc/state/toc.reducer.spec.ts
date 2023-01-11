@@ -7,7 +7,7 @@ describe('TocReducer', () => {
   test('sets filterTerm prop', () => {
     const initialState: TocState = { ...initialTocState };
     const action = TocActions.setFilterTerm({ filterTerm: 'test' });
-    expect(initialState.filterTerm).toEqual(null);
+    expect(initialState.filterTerm).toEqual(undefined);
     const updatedState = tocReducer(initialState, action);
     expect(updatedState.filterTerm).toEqual('test');
   });

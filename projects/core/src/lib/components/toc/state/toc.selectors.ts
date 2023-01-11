@@ -6,19 +6,20 @@ import { TreeModel } from '@tailormap-viewer/shared';
 
 const selectTocState = createFeatureSelector<TocState>(tocStateKey);
 
-export const selectFilterTerm = createSelector(selectTocState, state => state.filterEnabled ? state.filterTerm : null);
+export const selectFilterTerm = createSelector(selectTocState, state => state.filterTerm);
 
 export const selectFilterEnabled = createSelector(selectTocState, state => state.filterEnabled);
 
 export const selectInfoTreeNodeId = createSelector(selectTocState, state => state.infoTreeNodeId);
 
 export const selectFilteredLayerTree = createSelector(
+  selectFilterEnabled,
   selectFilterTerm,
   selectOrderedLayerNodes,
   selectLayers,
   selectLayerTree,
-  (filterTerm: string | null, layerTreeNodes, layers, layerTree): TreeModel[] => {
-    if (!filterTerm) {
+  (filterEnabled, filterTerm, layerTreeNodes, layers, layerTree): TreeModel[] => {
+    if (!filterEnabled || !filterTerm) {
       return layerTree;
     }
     const filterRegexes: RegExp[] = filterTerm.trim().split(' ').map(f => new RegExp(f, 'i'));

@@ -13,10 +13,10 @@ export const toggleFilterEnabled = createAction(
 
 export const setFilterTerm = createAction(
   `${tocActionsPrefix} Set filter term`,
-  props<{ filterTerm: string | null }>(),
+  props<{ filterTerm: string | undefined }>(),
 );
 
 export const setInfoTreeNodeId = createAction(
   `${tocActionsPrefix} Set info tree node ID`,
-  props<{ infoTreeNodeId: string | null }>(),
+  props<{ infoTreeNodeId: string | undefined }>(),
 );
