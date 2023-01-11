@@ -12,10 +12,9 @@ import { setLayerVisibility, setSelectedLayerId } from '../../../map/state/map.a
 import { TocNodeLayerComponent } from '../toc-node-layer/toc-node-layer.component';
 import { ToggleAllLayersButtonComponent } from '../toggle-all-layers-button/toggle-all-layers-button.component';
 import { getAppLayerModel, getLayerTreeNode } from '@tailormap-viewer/api';
-import { initialTocState, tocStateKey } from '../state/toc.state';
 import { TocFilterInputComponent } from '../toc-filter-input/toc-filter-input.component';
 import { toggleFilterEnabled } from '../state/toc.actions';
-import { selectFilterEnabled, selectFilterTerm } from '../state/toc.selectors';
+import { selectFilterEnabled, selectFilterTerm, selectInfoTreeNodeId } from '../state/toc.selectors';
 
 const getMockStore = (selectedLayer: string = '') => {
   const layers = [
@@ -28,10 +27,10 @@ const getMockStore = (selectedLayer: string = '') => {
     getLayerTreeNode({ id: '2', name: 'Some other map', appLayerId: 2 }),
   ];
   return provideMockStore({
-    initialState: {
-      [tocStateKey]: initialTocState,
-    },
     selectors: [
+      { selector: selectFilterEnabled, value: false },
+      { selector: selectFilterTerm, value: null },
+      { selector: selectInfoTreeNodeId, value: null },
       { selector: selectLayers, value: layers },
       { selector: selectLayerTreeNodes, value: tree },
       { selector: selectSelectedNode, value: selectedLayer },
@@ -105,8 +104,6 @@ describe('TocComponent', () => {
       ],
     });
     const store = TestBed.inject(MockStore);
-    store.overrideSelector(selectFilterTerm, null); // ???
-    store.refreshState();
     store.dispatch = jest.fn();
     expect((await screen.findByText('Disaster map')).closest('.mat-tree-node')).toHaveClass('tree-node--selected');
     await userEvent.click(await screen.findByText('Some other map'));
