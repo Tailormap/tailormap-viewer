@@ -6,7 +6,16 @@
   <div class="toc-header">
     <div class="toc-header-left">
       <tm-toggle-all-layers-button></tm-toggle-all-layers-button>
+      <button mat-icon-button
+              color="primary"
+              i18n-tmTooltip
+              class="map-control-button"
+              tmTooltip="Filter layers"
+              (click)="toggleLayerFilter()">
+        <mat-icon svgIcon="search"></mat-icon>
+      </button>
     </div>
+
     <div class="toc-header-right">
       <button *ngIf="isMobileDevice"
               mat-icon-button
@@ -17,6 +26,9 @@
         <mat-icon svgIcon="reorder"></mat-icon>
       </button>
     </div>
+  </div>
+  <div *ngIf="filterEnabled$ | async" class="toc-search">
+    <tm-toc-filter-input></tm-toc-filter-input>
   </div>
   <tm-tree class="toc-tree" [treeNodeTemplate]="treeNode" [expandOnGroupClick]="true"></tm-tree>
   <tm-toc-node-details *ngIf="infoTreeNodeId$ | async as selectedLayerDetail"
