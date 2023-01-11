@@ -19,9 +19,9 @@ export const selectFilteredLayerTree = createSelector(
   selectLayerTree,
   (filterTerm: string | null, layerTreeNodes, layers, layerTree): TreeModel[] => {
       if (filterTerm) {
-        const term = (filterTerm || '').toLowerCase();
+        const filterRegexes: RegExp[] = filterTerm.trim().split(' ').map(f => new RegExp(f, 'i'));
         return layerTreeNodes
-          .filter(layerNode => layerNode.name.toLowerCase().includes(term))
+          .filter(layerNode => filterRegexes.every(f => f.test(layerNode.name)))
           .map(layerNode => LayerTreeNodeHelper.getTreeModelForLayerTreeNode(layerNode, layers));
       } else {
         return layerTree;
