@@ -14,7 +14,6 @@
                    matTreeNodePaddingIndent="20"
                    (click)="setNodeSelected(node)">
       <div [className]="getNodeClassName(node)"
-           [draggable]="treeDragDropServiceEnabled ? true : null"
            [attr.data-nodeid]="node.id"
            (dragstart)="treeDragDropServiceEnabled ? handleDragStart($event, node) : null">
         <mat-checkbox *ngIf="node.checkbox && !useRadioInputs"
@@ -32,7 +31,13 @@
                           (change)="handleRadioChange(node)"
                           (click)="$event.stopPropagation()"
                           [value]="node"></mat-radio-button>
-        <ng-container class="tree-node-container" *ngTemplateOutlet="treeNodeTemplate ? treeNodeTemplate : defaultTreeNodeTemplate; context: {$implicit: node}"></ng-container>
+        <div class="tree-node__drag-container"
+             (mousedown)="enableDrag($event)"
+             (mouseup)="stopDrag($event)"
+             (touchstart)="enableDrag($event)"
+             (touchend)="stopDrag($event)">
+          <ng-container *ngTemplateOutlet="treeNodeTemplate ? treeNodeTemplate : defaultTreeNodeTemplate; context: {$implicit: node}"></ng-container>
+        </div>
       </div>
     </mat-tree-node>
 
@@ -42,7 +47,6 @@
                    class="mat-tree-node--folder"
                    (click)="setNodeSelected(node)">
       <div [className]="getNodeClassName(node)"
-           [draggable]="treeDragDropServiceEnabled ? true : null"
            [attr.data-nodeid]="node.id"
            (dragstart)="treeDragDropServiceEnabled ? handleDragStart($event, node) : null">
         <button mat-icon-button
@@ -59,7 +63,13 @@
                       [checked]="isChecked(node)"
                       [indeterminate]="isIndeterminate(node)"
         ></mat-checkbox>
-        <ng-container *ngTemplateOutlet="treeNodeTemplate ? treeNodeTemplate : defaultTreeNodeTemplate; context: {$implicit: node}"></ng-container>
+        <div class="tree-node__drag-container"
+             (mousedown)="enableDrag($event)"
+             (mouseup)="stopDrag($event)"
+             (touchstart)="enableDrag($event)"
+             (touchend)="stopDrag($event)">
+          <ng-container *ngTemplateOutlet="treeNodeTemplate ? treeNodeTemplate : defaultTreeNodeTemplate; context: {$implicit: node}"></ng-container>
+        </div>
       </div>
     </mat-tree-node>
 

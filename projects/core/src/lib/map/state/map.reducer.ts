@@ -1,7 +1,7 @@
 import * as MapActions from './map.actions';
 import { Action, createReducer, on } from '@ngrx/store';
 import { MapState, initialMapState } from './map.state';
-import { LoadingStateEnum, StateHelper } from '@tailormap-viewer/shared';
+import { ChangePositionHelper, LoadingStateEnum, StateHelper } from '@tailormap-viewer/shared';
 import { LayerTreeNodeHelper } from '../helpers/layer-tree-node.helper';
 
 const onLoadMap = (state: MapState): MapState => ({
@@ -113,24 +113,23 @@ const onMoveLayerTreeNode = (state: MapState, payload: ReturnType<typeof MapActi
   const newParentIdx = payload.parentId
     ? state[tree].findIndex(n => n.id === payload.parentId)
     : state[tree].findIndex(n => n.root);
+  const draggedNode = state[tree].find(n => n.id === payload.nodeId);
+  if (!draggedNode || payload.sibling === payload.nodeId || payload.parentId === payload.nodeId) {
+    return state;
+  }
+  const childIds = LayerTreeNodeHelper.isLevelNode(draggedNode) ? LayerTreeNodeHelper.getChildNodeIds(state[tree], draggedNode) : [];
+  if (childIds.includes(payload.sibling || '') || childIds.includes(payload.parentId || '')) {
+    // don't drag level into itself or its children
+    return state;
+  }
   const currentParentIdx = state[tree].findIndex(n => n.childrenIds.includes(payload.nodeId));
   return {
     ...state,
     [tree]: state[tree].map((node, idx) => {
       if (newParentIdx === idx) {
-        let pos = typeof payload.beforeNodeId !== 'undefined'
-          ? node.childrenIds.indexOf(payload.beforeNodeId)
-          : -1;
-        if (pos === -1) {
-          pos = node.childrenIds.length;
-        }
         return {
           ...node,
-          childrenIds: [
-            ...node.childrenIds.slice(0, pos),
-            payload.nodeId,
-            ...node.childrenIds.slice(pos),
-          ],
+          childrenIds: ChangePositionHelper.updateOrderInList(node.childrenIds, payload.nodeId, payload.position, payload.sibling),
         };
       }
       if (currentParentIdx === idx) {

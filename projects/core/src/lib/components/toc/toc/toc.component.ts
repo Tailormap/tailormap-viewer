@@ -1,16 +1,16 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { filter, Observable, of, Subject, takeUntil } from 'rxjs';
-import { BaseTreeModel, TreeService } from '@tailormap-viewer/shared';
+import { BaseTreeModel, BrowserHelper, NodePositionChangedEventModel, TreeDragDropService, TreeService } from '@tailormap-viewer/shared';
 import { map } from 'rxjs/operators';
 import { MenubarService } from '../../menubar';
 import { TocMenuButtonComponent } from '../toc-menu-button/toc-menu-button.component';
 import { Store } from '@ngrx/store';
-import { setLayerVisibility, setSelectedLayerId, toggleLevelExpansion } from '../../../map/state/map.actions';
-import { selectSelectedNode } from '../../../map/state/map.selectors';
 import { AppLayerModel, BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { MapService } from '@tailormap-viewer/map';
 import { selectFilteredLayerTree, selectFilterEnabled, selectInfoTreeNodeId } from '../state/toc.selectors';
 import { setInfoTreeNodeId, toggleFilterEnabled } from '../state/toc.actions';
+import { selectSelectedNode } from '../../../map/state/map.selectors';
+import { moveLayerTreeNode, setLayerVisibility, setSelectedLayerId, toggleLevelExpansion } from '../../../map/state/map.actions';
 
 interface AppLayerTreeModel extends BaseTreeModel {
   metadata: AppLayerModel;
@@ -21,7 +21,7 @@ const isAppLayerTreeModel = (node: BaseTreeModel): node is AppLayerTreeModel => 
   selector: 'tm-toc',
   templateUrl: './toc.component.html',
   styleUrls: [ './toc.component.css', '../../../../../assets/layer-tree-style.css' ],
-  providers: [TreeService],
+  providers: [ TreeService, TreeDragDropService ],
 })
 export class TocComponent implements OnInit, OnDestroy {
 
@@ -32,12 +32,16 @@ export class TocComponent implements OnInit, OnDestroy {
   public infoTreeNodeId$ = this.store$.select(selectInfoTreeNodeId);
 
   public filterEnabled$ = this.store$.select(selectFilterEnabled);
+  public isMobileDevice = BrowserHelper.isTouchDevice;
+  public dragDropEnabled = !this.isMobileDevice;
 
   constructor(
     private store$: Store,
     private treeService: TreeService<AppLayerModel>,
+    private treeDragDropService: TreeDragDropService,
     private menubarService: MenubarService,
     private mapService: MapService,
+    private ngZone: NgZone,
   ) {}
 
   public ngOnInit(): void {
@@ -50,6 +54,7 @@ export class TocComponent implements OnInit, OnDestroy {
       this.store$.select(selectFilteredLayerTree),
     );
     this.treeService.setSelectedNode(this.store$.select(selectSelectedNode));
+    this.treeDragDropService.setDragDropEnabled(!this.isMobileDevice);
     this.treeService.checkStateChangedSource$
       .pipe(
         takeUntil(this.destroyed),
@@ -68,6 +73,11 @@ export class TocComponent implements OnInit, OnDestroy {
         map(node => node.metadata.id),
       )
       .subscribe(layerId => this.store$.dispatch(setSelectedLayerId({ layerId })));
+
+    this.treeService.nodePositionChangedSource$
+      .pipe(takeUntil(this.destroyed))
+      .subscribe((evt) => this.handleNodePositionChanged(evt));
+
     this.menubarService.registerComponent(TocMenuButtonComponent);
   }
 
@@ -85,5 +95,21 @@ export class TocComponent implements OnInit, OnDestroy {
   }
   public toggleLayerFilter() {
     this.store$.dispatch(toggleFilterEnabled());
+  }
+
+  public handleNodePositionChanged(evt: NodePositionChangedEventModel) {
+    this.ngZone.run(() => {
+      this.store$.dispatch(moveLayerTreeNode({
+        nodeId: evt.nodeId,
+        position: evt.position,
+        parentId: evt.toParent || undefined,
+        sibling: evt.sibling,
+      }));
+    });
+  }
+
+  public toggleReordering() {
+    this.dragDropEnabled = !this.dragDropEnabled;
+    this.treeDragDropService.setDragDropEnabled(this.dragDropEnabled);
   }
 }

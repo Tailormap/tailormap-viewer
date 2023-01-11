@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { BehaviorSubject, filter, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, filter, Observable, Subject } from 'rxjs';
 
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { FlatTreeHelper } from './helpers/flat-tree.helper';
@@ -98,11 +98,23 @@ export class TreeService<T = any> implements OnDestroy {
     return null;
   }
 
+  public isNodeOrInsideOwnTree(nodeId: string, dragNode: FlatTreeModel) {
+    if (nodeId === dragNode.id) {
+      return true;
+    }
+    if (!dragNode.expandable) {
+      return false;
+    }
+    const children = this.getTreeControl().getDescendants(dragNode).map(node => node.id);
+    return children.includes(nodeId);
+  }
+
   // Service message commands
   public setDataSource(dataSource$: Observable<TreeModel[]>) {
     dataSource$
       .pipe(
         takeUntil(this.destroyed),
+        distinctUntilChanged(),
         filter(data => !!data),
       )
       .subscribe(data => {
@@ -116,8 +128,8 @@ export class TreeService<T = any> implements OnDestroy {
   }
 
   private dataChanged(newTreeNodes: FlatTreeModel[]) {
-    const currentNodeIds = this.treeControl.dataNodes.map(node => node.id).sort();
-    const newTreeNodeIds = newTreeNodes.map(node => node.id).sort();
+    const currentNodeIds = this.treeControl.dataNodes.map(node => node.id);
+    const newTreeNodeIds = newTreeNodes.map(node => node.id);
     return !ArrayHelper.arrayEquals(currentNodeIds, newTreeNodeIds);
   }
 

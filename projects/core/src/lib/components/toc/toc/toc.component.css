@@ -24,6 +24,14 @@
   border-bottom: 1px solid var(--border-color);
 }
 
+.toc-header-left {
+  flex: 1;
+}
+
+.toc-header-right {
+  flex-shrink: 0;
+}
+
 .toc-tree {
   flex: 1;
   overflow: hidden;

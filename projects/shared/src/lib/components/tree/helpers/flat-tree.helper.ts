@@ -23,7 +23,7 @@ export class FlatTreeHelper {
       label: node.label,
       level,
       expanded: !!node.expanded,
-      expandable: FlatTreeHelper.hasChildren(node),
+      expandable: typeof node.expandable !== 'undefined' ? node.expandable : FlatTreeHelper.hasChildren(node),
       checked: !!node.checked,
       checkbox: typeof node.checked !== 'undefined',
       type: node.type,
