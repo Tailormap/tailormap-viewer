@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { filter, Observable, of, Subject, takeUntil } from 'rxjs';
+import { filter, Observable, of, Subject, take, takeUntil } from 'rxjs';
 import { BaseTreeModel, TreeService } from '@tailormap-viewer/shared';
 import { map } from 'rxjs/operators';
 import { MenubarService } from '../../menubar';
@@ -9,8 +9,8 @@ import { setLayerVisibility, setSelectedLayerId, toggleLevelExpansion } from '..
 import { selectLayerTree, selectSelectedNode } from '../../../map/state/map.selectors';
 import { AppLayerModel, BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { MapService } from '@tailormap-viewer/map';
-import { selectInfoTreeNodeId } from '../state/toc.selectors';
-import { setInfoTreeNodeId } from '../state/toc.actions';
+import { selectFilterEnabled, selectInfoTreeNodeId } from '../state/toc.selectors';
+import { setFilterEnabled, setInfoTreeNodeId } from '../state/toc.actions';
 
 interface AppLayerTreeModel extends BaseTreeModel {
   metadata: AppLayerModel;
@@ -80,5 +80,11 @@ export class TocComponent implements OnInit, OnDestroy {
 
   public layerInfoClosed() {
     this.store$.dispatch(setInfoTreeNodeId({ infoTreeNodeId: null }));
+  }
+  public toggleLayerFilter() {
+    this.store$.select(selectFilterEnabled).pipe(
+      take(1),
+      map(filterEnabled => !filterEnabled),
+    ).subscribe(filterEnabled => this.store$.dispatch(setFilterEnabled({ filterEnabled })));
   }
 }
