@@ -24,6 +24,11 @@
   border-bottom: 1px solid var(--border-color);
 }
 
+.toc-search {
+  padding: 6px 14px;
+  border-bottom: 1px solid var(--border-color);
+}
+
 .toc-header-left {
   flex: 1;
 }

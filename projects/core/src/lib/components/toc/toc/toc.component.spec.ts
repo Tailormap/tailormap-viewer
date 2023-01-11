@@ -13,6 +13,9 @@ import { TocNodeLayerComponent } from '../toc-node-layer/toc-node-layer.componen
 import { ToggleAllLayersButtonComponent } from '../toggle-all-layers-button/toggle-all-layers-button.component';
 import { getAppLayerModel, getLayerTreeNode } from '@tailormap-viewer/api';
 import { initialTocState, tocStateKey } from '../state/toc.state';
+import { TocFilterInputComponent } from '../toc-filter-input/toc-filter-input.component';
+import { toggleFilterEnabled } from '../state/toc.actions';
+import { selectFilterEnabled, selectFilterTerm } from '../state/toc.selectors';
 
 const getMockStore = (selectedLayer: string = '') => {
   const layers = [
@@ -67,6 +70,28 @@ describe('TocComponent', () => {
     });
     expect(await screen.findByText('Disaster map')).toBeInTheDocument();
     expect(await screen.findByText('Some other map')).toBeInTheDocument();
+  });
+
+  test('renders TOC with filter term', async () => {
+    const registerComponentFn = jest.fn();
+    await render(TocComponent, {
+      imports: [ SharedModule, MatIconTestingModule ],
+      declarations: [ TocNodeLayerComponent, ToggleAllLayersButtonComponent, TocFilterInputComponent ],
+      providers: [
+        getMockStore(),
+        getMenubarService(true, registerComponentFn),
+      ],
+    });
+    const store = TestBed.inject(MockStore);
+    store.dispatch = jest.fn();
+    await userEvent.click(await screen.findByLabelText('Filter layers'));
+    expect(store.dispatch).toHaveBeenCalledWith({ type: toggleFilterEnabled.type });
+    store.overrideSelector(selectFilterEnabled, true);
+    store.overrideSelector(selectFilterTerm, 'dis');
+    store.refreshState();
+    expect(await screen.findByPlaceholderText('Filter by layer name...')).toBeInTheDocument();
+    expect(await screen.findByText('Disaster map')).toBeInTheDocument();
+    expect(await screen.queryByText('Some other map')).not.toBeInTheDocument();
   });
 
   test('handles layer selection', async () => {
