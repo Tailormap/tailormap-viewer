@@ -31,6 +31,8 @@ export class TocComponent implements OnInit, OnDestroy {
 
   public infoTreeNodeId$ = this.store$.select(selectInfoTreeNodeId);
 
+  public filterEnabled$ = this.store$.select(selectFilterEnabled);
+
   constructor(
     private store$: Store,
     private treeService: TreeService<AppLayerModel>,

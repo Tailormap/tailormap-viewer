@@ -13,6 +13,7 @@
             (click)="toggleLayerFilter()">
       <mat-icon svgIcon="search"></mat-icon>
     </button>
+    <tm-toc-filter-input *ngIf="filterEnabled$ | async"></tm-toc-filter-input>
   </div>
   <tm-tree class="toc-tree" [treeNodeTemplate]="treeNode" [expandOnGroupClick]="true"></tm-tree>
   <tm-toc-node-details *ngIf="infoTreeNodeId$ | async as selectedLayerDetail"

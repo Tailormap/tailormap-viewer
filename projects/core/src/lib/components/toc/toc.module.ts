@@ -13,6 +13,7 @@ import { LayerDetailsComponent } from './toc-node-details/layer-details/layer-de
 import { StoreModule } from '@ngrx/store';
 import { tocStateKey } from './state/toc.state';
 import { tocReducer } from './state/toc.reducer';
+import { TocFilterInputComponent } from './toc-filter-input/toc-filter-input.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { tocReducer } from './state/toc.reducer';
     TocNodeDetailsComponent,
     LayerTransparencyComponent,
     LayerDetailsComponent,
+    TocFilterInputComponent,
   ],
   imports: [
     CommonModule,
