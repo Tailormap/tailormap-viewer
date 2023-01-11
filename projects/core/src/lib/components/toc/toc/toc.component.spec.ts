@@ -3,15 +3,17 @@ import { render, screen } from '@testing-library/angular';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { MenubarService } from '../../menubar';
 import { of } from 'rxjs';
-import { getTreeModelMock, SharedModule } from '@tailormap-viewer/shared';
+import { SharedModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { TestBed } from '@angular/core/testing';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { selectLayers, selectLayerTree, selectLayerTreeNodes, selectSelectedNode } from '../../../map/state/map.selectors';
+import { selectLayers, selectSelectedNode } from '../../../map/state/map.selectors';
 import { setLayerVisibility, setSelectedLayerId } from '../../../map/state/map.actions';
 import { TocNodeLayerComponent } from '../toc-node-layer/toc-node-layer.component';
 import { ToggleAllLayersButtonComponent } from '../toggle-all-layers-button/toggle-all-layers-button.component';
 import { getAppLayerModel, getLayerTreeNode } from '@tailormap-viewer/api';
+import { selectFilteredLayerTree } from '../state/toc.selectors';
+import { initialTocState, tocStateKey } from '../state/toc.state';
 
 const getMockStore = (selectedLayer: string = '') => {
   const layers = [
@@ -24,9 +26,12 @@ const getMockStore = (selectedLayer: string = '') => {
     getLayerTreeNode({ id: '2', name: 'Some other map', appLayerId: 2 }),
   ];
   return provideMockStore({
+    initialState: {
+      [tocStateKey]: initialTocState,
+    },
     selectors: [
       { selector: selectLayers, value: layers },
-      { selector: selectLayerTreeNodes, value: tree },
+      { selector: selectFilteredLayerTree, value: tree },
       { selector: selectSelectedNode, value: selectedLayer },
     ],
   });

@@ -9,7 +9,7 @@ describe('TocReducer', () => {
     const action = TocActions.setFilterTerm({ filterTerm: 'test' });
     expect(initialState.filterTerm).toEqual(null);
     const updatedState = tocReducer(initialState, action);
-    expect(updatedState.filterTerm).toEqual(test);
+    expect(updatedState.filterTerm).toEqual('test');
   });
 
 });
