@@ -10,6 +10,9 @@ import { TocNodeDetailsComponent } from './toc-node-details/toc-node-details.com
 import { LegendModule } from '../legend';
 import { LayerTransparencyComponent } from './toc-node-details/layer-transparency/layer-transparency.component';
 import { LayerDetailsComponent } from './toc-node-details/layer-details/layer-details.component';
+import { StoreModule } from '@ngrx/store';
+import { tocStateKey } from './state/toc.state';
+import { tocReducer } from './state/toc.reducer';
 
 @NgModule({
   declarations: [
@@ -26,6 +29,7 @@ import { LayerDetailsComponent } from './toc-node-details/layer-details/layer-de
     SharedModule,
     MenubarModule,
     LegendModule,
+    StoreModule.forFeature(tocStateKey, tocReducer),
   ],
   exports: [
     TocComponent,

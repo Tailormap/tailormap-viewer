@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { BehaviorSubject, filter, Observable, of, Subject, takeUntil } from 'rxjs';
+import { filter, Observable, of, Subject, takeUntil } from 'rxjs';
 import { BaseTreeModel, TreeService } from '@tailormap-viewer/shared';
 import { map } from 'rxjs/operators';
 import { MenubarService } from '../../menubar';
@@ -9,6 +9,8 @@ import { setLayerVisibility, setSelectedLayerId, toggleLevelExpansion } from '..
 import { selectLayerTree, selectSelectedNode } from '../../../map/state/map.selectors';
 import { AppLayerModel, BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { MapService } from '@tailormap-viewer/map';
+import { selectInfoTreeNodeId } from '../state/toc.selectors';
+import { setInfoTreeNodeId } from '../state/toc.actions';
 
 interface AppLayerTreeModel extends BaseTreeModel {
   metadata: AppLayerModel;
@@ -27,8 +29,7 @@ export class TocComponent implements OnInit, OnDestroy {
   public visible$: Observable<boolean> = of(false);
   public scale: number | null = null;
 
-  private infoTreeNodeId = new BehaviorSubject<string | null>(null);
-  public infoTreeNodeId$ = this.infoTreeNodeId.asObservable();
+  public infoTreeNodeId$ = this.store$.select(selectInfoTreeNodeId);
 
   constructor(
     private store$: Store,
@@ -73,12 +74,11 @@ export class TocComponent implements OnInit, OnDestroy {
     this.destroyed.complete();
   }
 
-  public showTreeNodeInfo(nodeId: string) {
-    this.infoTreeNodeId.next(nodeId);
+  public showTreeNodeInfo(infoTreeNodeId: string) {
+    this.store$.dispatch(setInfoTreeNodeId({ infoTreeNodeId }));
   }
 
   public layerInfoClosed() {
-    this.infoTreeNodeId.next(null);
+    this.store$.dispatch(setInfoTreeNodeId({ infoTreeNodeId: null }));
   }
-
 }
