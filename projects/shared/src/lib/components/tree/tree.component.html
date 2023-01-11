@@ -31,7 +31,11 @@
                           (change)="handleRadioChange(node)"
                           (click)="$event.stopPropagation()"
                           [value]="node"></mat-radio-button>
-        <div class="tree-node__drag-container" (mousedown)="enableDrag($event)" (mouseup)="stopDrag($event)">
+        <div class="tree-node__drag-container"
+             (mousedown)="enableDrag($event)"
+             (mouseup)="stopDrag($event)"
+             (touchstart)="enableDrag($event)"
+             (touchend)="stopDrag($event)">
           <ng-container *ngTemplateOutlet="treeNodeTemplate ? treeNodeTemplate : defaultTreeNodeTemplate; context: {$implicit: node}"></ng-container>
         </div>
       </div>
@@ -59,7 +63,11 @@
                       [checked]="isChecked(node)"
                       [indeterminate]="isIndeterminate(node)"
         ></mat-checkbox>
-        <div class="tree-node__drag-container" (mousedown)="enableDrag($event)" (mouseup)="stopDrag($event)">
+        <div class="tree-node__drag-container"
+             (mousedown)="enableDrag($event)"
+             (mouseup)="stopDrag($event)"
+             (touchstart)="enableDrag($event)"
+             (touchend)="stopDrag($event)">
           <ng-container *ngTemplateOutlet="treeNodeTemplate ? treeNodeTemplate : defaultTreeNodeTemplate; context: {$implicit: node}"></ng-container>
         </div>
       </div>

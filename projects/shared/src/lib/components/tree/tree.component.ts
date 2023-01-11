@@ -170,14 +170,14 @@ export class TreeComponent implements OnDestroy {
     this.checkedRadioNode = node;
   }
 
-  public enableDrag($event: MouseEvent) {
+  public enableDrag($event: MouseEvent | TouchEvent) {
     if (!$event.target || !this.treeDragDropServiceEnabled) {
       return;
     }
     ($event.target as HTMLElement).closest(`.${treeNodeBaseClass}`)?.setAttribute('draggable', 'true');
   }
 
-  public stopDrag($event: MouseEvent) {
+  public stopDrag($event: MouseEvent | TouchEvent) {
     if (!$event.target) {
       return;
     }
