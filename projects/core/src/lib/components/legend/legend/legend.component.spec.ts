@@ -16,7 +16,16 @@ const getMapService = () => {
     provide: MapService, useValue: {
       getLayerManager$: () => of({ getLegendUrl: (layerId: string) => `layer-${layerId}-url-from-service` }),
       getMapViewDetails$: (): Observable<MapViewDetailsModel> => of({
-        zoomLevel: 0, resolution: 1, maxResolution: 100, minResolution: 0.001, maxZoomLevel: 20, minZoomLevel: 0, scale: 1000, size: undefined, extent: null,
+        zoomLevel: 0,
+        resolution: 1,
+        maxResolution: 100,
+        minResolution: 0.001,
+        maxZoomLevel: 20,
+        minZoomLevel: 0,
+        scale: 1000,
+        size: undefined,
+        extent: null,
+        center: undefined,
       }),
     },
   };
