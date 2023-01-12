@@ -7,6 +7,7 @@ import { SimpleSearchService } from './simple-search.service';
 import { MapService, ProjectionCodesEnum } from '@tailormap-viewer/map';
 import userEvent from '@testing-library/user-event';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
+import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.helper';
 
 const setup = async () => {
   const mockedSearchService = {
@@ -17,7 +18,7 @@ const setup = async () => {
   };
   const mockedMapService = {
     getProjectionCode$: jest.fn(() => of(ProjectionCodesEnum.RD)),
-    zoomTo: jest.fn(),
+    renderFeatures$: jest.fn(() => of(null)),
   };
   await render(SimpleSearchComponent, {
     imports: [ SharedModule, MatIconTestingModule ],
@@ -47,7 +48,9 @@ describe('SimpleSearchComponent', () => {
       expect(screen.getByText('Better result')).toBeInTheDocument();
     }, { timeout: 1100 });
     await userEvent.click(await screen.findByText('Better result'));
-    expect(mapService.zoomTo).toHaveBeenCalledWith('POINT(2 2)', ProjectionCodesEnum.RD);
+    expect(mapService.renderFeatures$).toHaveBeenCalled();
+    const renderFeaturesCall = (mapService.renderFeatures$ as jest.Mock).mock.calls[0];
+    expect(renderFeaturesCall[0]).toEqual('search-result-highlight');
   });
 
 });

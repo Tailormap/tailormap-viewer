@@ -124,7 +124,7 @@ export class MapService {
           vectorLayer.getSource()?.getFeatures().forEach(feature => {
             vectorLayer.getSource()?.removeFeature(feature);
           });
-          const featureModels = FeatureHelper.getFeatures(featureGeometry);
+          const featureModels = FeatureHelper.getFeatures(featureGeometry, vectorLayer.getSource()?.getProjection()?.getCode());
           featureModels.forEach(feature => {
             vectorLayer.getSource()?.addFeature(feature);
           });
