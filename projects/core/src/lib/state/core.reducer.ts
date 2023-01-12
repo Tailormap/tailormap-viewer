@@ -2,7 +2,6 @@ import * as CoreActions from './core.actions';
 import { Action, createReducer, on } from '@ngrx/store';
 import { CoreState, initialCoreState } from './core.state';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
-import { updateApplicationStyle } from './core.actions';
 
 const onLoadApplication = (state: CoreState): CoreState => ({
   ...state,
