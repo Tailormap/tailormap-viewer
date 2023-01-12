@@ -1,9 +1,10 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { concatMap, Observable, startWith, Subject, tap } from 'rxjs';
+import { concatMap, Observable, of, startWith, Subject, tap, timer } from 'rxjs';
 import { SearchResult, SearchResultModel, SimpleSearchService } from './simple-search.service';
 import { debounceTime, filter, takeUntil, withLatestFrom } from 'rxjs/operators';
 import { MapService } from '@tailormap-viewer/map';
+import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.helper';
 
 type SearchStatusType = 'empty'|'no_results'|'searching'|'belowMinLength'|'complete';
 
@@ -67,9 +68,7 @@ export class SimpleSearchComponent implements OnInit, OnDestroy {
           return typeof value !== 'string' && !!value && !!(value as SearchResult).geometry;
         }),
       )
-      .subscribe(searchResult => {
-        this.mapService.zoomTo(searchResult.geometry, searchResult.projectionCode);
-      });
+      .subscribe(searchResult => this.showResult(searchResult));
   }
 
   public ngOnDestroy() {
@@ -86,6 +85,17 @@ export class SimpleSearchComponent implements OnInit, OnDestroy {
 
   public displayLabel(result: SearchResult): string {
     return result && result.label ? result.label : '';
+  }
+
+  private showResult(searchResult: SearchResult) {
+    this.mapService.renderFeatures$('search-result-highlight', of({
+      __fid: 'search-result-highlight-feature',
+      geometry: searchResult.geometry,
+      crs: searchResult.projectionCode,
+      attributes: {},
+    }), FeatureStylingHelper.getDefaultHighlightStyle('search-result-highlight-style'), true, true).pipe(
+      takeUntil(timer(5000)),
+    ).subscribe();
   }
 
 }

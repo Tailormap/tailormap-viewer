@@ -18,7 +18,7 @@ export class FeatureHelper {
     return !!(feature as FeatureModel).__fid;
   }
 
-  public static getFeatures(featureModel?: FeatureModelType | FeatureModelType[]): Feature<Geometry>[] {
+  public static getFeatures(featureModel?: FeatureModelType | FeatureModelType[], mapProjection?: string): Feature<Geometry>[] {
     if (!featureModel) {
       return [];
     }
@@ -43,7 +43,7 @@ export class FeatureHelper {
         return new Feature<Geometry>({
           __fid: feature.__fid,
           attributes: feature.attributes,
-          geometry: FeatureHelper.fromWKT(feature.geometry),
+          geometry: FeatureHelper.fromWKT(feature.geometry, feature.crs, mapProjection),
         });
       }
       if (feature instanceof Geometry) {
