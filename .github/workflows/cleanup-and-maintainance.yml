@@ -15,37 +15,37 @@ jobs:
     steps:
       - name: 'Untagged older than 1 week, keeping last 2'
         # https://github.com/marketplace/actions/ghcr-pruning
-        uses: 'vlaurin/action-ghcr-prune@v0.4.0'
+        uses: 'vlaurin/action-ghcr-prune@v0.5.0'
         with:
           token: ${{ secrets.GHCR_CLEANUP_PAT }}
           organization: B3Partners
           container: ${{ matrix.containers }}
           dry-run: false
-          older-than: 7
+          keep-younger-than: 7
           keep-last: 2
-          untagged: true
+          prune-untagged: true
 
       - name: 'All untagged older than 4 weeks'
-        uses: 'vlaurin/action-ghcr-prune@v0.4.0'
+        uses: 'vlaurin/action-ghcr-prune@v0.5.0'
         with:
           token: ${{ secrets.GHCR_CLEANUP_PAT }}
           organization: B3Partners
           container: ${{ matrix.containers }}
           dry-run: false
-          older-than: 28
+          keep-younger-than: 28
           keep-last: 0
-          untagged: true
+          prune-untagged: true
 
       - name: 'Tagged PRs older than 4 weeks'
-        uses: 'vlaurin/action-ghcr-prune@v0.4.0'
+        uses: 'vlaurin/action-ghcr-prune@v0.5.0'
         with:
           token: ${{ secrets.GHCR_CLEANUP_PAT }}
           organization: B3Partners
           container: ${{ matrix.containers }}
           dry-run: false
-          older-than: 28
+          keep-younger-than: 28
           keep-last: 0
-          tag-regex: ^pr-
+          prune-tags-regexes: ^pr-
 
 
   stale:
