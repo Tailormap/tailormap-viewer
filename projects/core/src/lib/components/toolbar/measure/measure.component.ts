@@ -50,7 +50,7 @@ export class MeasureComponent implements OnInit, OnDestroy {
       zIndex: 9999,
       strokeColor: ApplicationStyleService.getPrimaryColor(),
       strokeWidth: 3,
-    }).pipe(takeUntil(this.destroyed)).subscribe();
+    }, undefined, true).pipe(takeUntil(this.destroyed)).subscribe();
 
     this.mapService.createTool$<DrawingToolModel, DrawingToolConfigModel>({
       type: ToolTypeEnum.Draw,
