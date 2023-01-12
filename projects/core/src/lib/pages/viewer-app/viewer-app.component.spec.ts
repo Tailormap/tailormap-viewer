@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/angular';
 import { ViewerAppComponent } from './viewer-app.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom, of } from 'rxjs';
 import { TestBed } from '@angular/core/testing';
 import { ErrorMessageComponent, LoadingStateEnum } from '@tailormap-viewer/shared';
@@ -18,12 +18,17 @@ export const getActivatedRouteProvider = (routeData: Record<string, string>, fra
     } };
 };
 
+export const getMockedRouterProvider = () => {
+  return { provide: Router, useValue: { navigate: jest.fn() } };
+};
+
 const setup = async (loadingState?: LoadingStateEnum, errorMessage?: string) => {
   const { container } = await render(ViewerAppComponent, {
     declarations: [ ViewerAppComponent, ErrorMessageComponent ],
     imports: [MatProgressSpinnerModule],
     providers: [
       getActivatedRouteProvider({ id: '1' }),
+      getMockedRouterProvider(),
       provideMockStore({
         initialState: {},
         selectors: [

@@ -6,6 +6,7 @@ import { loadApplication } from '../../state/core.actions';
 import { selectApplicationErrorMessage, selectApplicationLoadingState } from '../../state/core.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { BookmarkService } from '../../bookmark/bookmark.service';
+import { ApplicationStyleService } from '../../services/application-style.service';
 
 @Component({
   selector: 'tm-viewer-app',
@@ -27,6 +28,7 @@ export class ViewerAppComponent implements OnInit, OnDestroy {
     private router: Router,
     private cdr: ChangeDetectorRef,
     private bookmarkService: BookmarkService,
+    private appStyleService: ApplicationStyleService,
   ) { }
 
   public ngOnInit(): void {
@@ -46,6 +48,7 @@ export class ViewerAppComponent implements OnInit, OnDestroy {
         }),
       )
       .subscribe(loadApplicationParams => {
+        this.appStyleService.resetStyling();
         this.store$.dispatch(loadApplication(loadApplicationParams || {}));
       });
 
@@ -73,6 +76,7 @@ export class ViewerAppComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
+    this.appStyleService.resetStyling();
     this.destroyed.next(null);
     this.destroyed.complete();
   }
