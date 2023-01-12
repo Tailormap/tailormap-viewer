@@ -35,6 +35,7 @@ export class LegendLayerComponent implements OnChanges {
       const legendOptions: GeoServerLegendOptions = {
         fontAntiAliasing: true,
         labelMargin: 0,
+        forceLabels: 'on',
       };
       this.urlWithOptions = LegendService.addGeoServerLegendOptions(this.legendInfo.url, legendOptions);
       if (window.devicePixelRatio > 1) {
