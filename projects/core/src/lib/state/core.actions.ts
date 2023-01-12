@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { AppResponseModel } from '@tailormap-viewer/api';
+import { AppResponseModel, AppStylingModel } from '@tailormap-viewer/api';
 
 const prefix = '[Core]';
 
@@ -22,4 +22,8 @@ export const setRouteBeforeLogin = createAction(
 export const setLoginDetails = createAction(
   `${prefix} Set Login Details`,
   props<{ loggedIn: boolean; user?: { username?: string } }>(),
+);
+export const updateApplicationStyle = createAction(
+  `${prefix} Update Application Style`,
+  props<{ style: AppStylingModel }>(),
 );
