@@ -6,13 +6,13 @@ import { ResolvedServerType, ServiceModel, ServiceProtocol } from '@tailormap-vi
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { ArrayHelper } from '@tailormap-viewer/shared';
 import { selectLoadStatus, selectMapOptions, selectOrderedVisibleBackgroundLayers,
-  selectOrderedVisibleLayersWithServices, selectInitiallyVisibleLayers, selectLayers } from '../state/map.selectors';
+  selectOrderedVisibleLayersWithServices, selectLayers } from '../state/map.selectors';
 import { ExtendedAppLayerModel } from '../models';
 import { selectCQLFilters } from '../../filter/state/filter.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { BookmarkFragmentStringDescriptor, BookmarkFragmentProtoDescriptor } from '../../bookmark/bookmark.models';
 import { BookmarkService } from '../../bookmark/bookmark.service';
-import { setLayerVisibility } from '../state/map.actions';
+import { setLayerVisibility, setLayerOpacity } from '../state/map.actions';
 import { LayerVisibilityBookmarkFragment } from '../bookmark/bookmark_pb';
 import { MapBookmarkHelper } from '../bookmark/bookmark.helper';
 
@@ -83,17 +83,20 @@ export class ApplicationMapService implements OnDestroy {
     combineLatest([
       this.bookmarkService.registerFragment$(ApplicationMapService.VISIBILITY_BOOKMARK_DESCRIPTOR),
       this.store$.select(selectLayers),
-      this.store$.select(selectInitiallyVisibleLayers),
       this.store$.select(selectLoadStatus),
     ]).pipe(
         takeUntil(this.destroyed),
-        filter(([ ,,, loadStatus ]) => loadStatus === LoadingStateEnum.LOADED),
+        filter(([ ,, loadStatus ]) => loadStatus === LoadingStateEnum.LOADED),
         distinctUntilKeyChanged('0'),
       )
-      .subscribe(([ fragment, layers, initiallyVisible ]) => {
-        const visibilityData = MapBookmarkHelper.visibilityDataFromFragment(fragment, layers, initiallyVisible);
-        if (visibilityData.length > 0) {
-          this.store$.dispatch(setLayerVisibility({ visibility: visibilityData }));
+      .subscribe(([ fragment, layers ]) => {
+        const bookmarkContents = MapBookmarkHelper.visibilityDataFromFragment(fragment, layers);
+        if (bookmarkContents.visibilityChanges.length > 0) {
+          this.store$.dispatch(setLayerVisibility({ visibility: bookmarkContents.visibilityChanges }));
+        }
+
+        for (const item of bookmarkContents.opacityChanges) {
+          this.store$.dispatch(setLayerOpacity(item));
         }
       });
 
@@ -158,13 +161,12 @@ export class ApplicationMapService implements OnDestroy {
 
   private getVisibilityBookmarkData() {
     return combineLatest([
-      this.store$.select(selectInitiallyVisibleLayers),
       this.store$.select(selectLayers),
       this.store$.select(selectLoadStatus),
     ]).pipe(
-      filter(([ ,, loadStatus ]) => loadStatus === LoadingStateEnum.LOADED),
-      map(([ initiallyVisible, layers ]) => {
-        return MapBookmarkHelper.fragmentFromVisibilityData(initiallyVisible, layers);
+      filter(([ , loadStatus ]) => loadStatus === LoadingStateEnum.LOADED),
+      map(([layers]) => {
+        return MapBookmarkHelper.fragmentFromVisibilityData(layers);
       }),
     );
   }

@@ -26,4 +26,9 @@ message LayerInformation {
     // note: this is a tristate value, as all values in protobuf are optional,
     // and will default to `false` otherwise.
     TristateBoolean visible = 2;
+
+    // The opacity of the layer, in percent (0-100, represented as 1-101).
+    // If this value is 0, the layer-default opacity is used. A value of 1 maps to 0%,
+    // etc.
+    uint32 opacity = 3;
 }

@@ -49,6 +49,7 @@ export const getAppLayerModel = (overrides?: Partial<AppLayerModel>): AppLayerMo
   crs: getCrsModel(overrides?.crs),
   title: 'Test',
   layerName: 'test',
+  opacity: 100,
   ...overrides,
 });
 

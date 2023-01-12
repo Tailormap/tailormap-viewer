@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, Input, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { of } from 'rxjs';
-import { selectLayerOpacity } from '../../../../map/state/map.selectors';
+import { of, take } from 'rxjs';
+import { selectLayerOpacity, selectLayer } from '../../../../map/state/map.selectors';
 import { MatSliderChange } from '@angular/material/slider';
 import { setLayerOpacity } from '../../../../map/state/map.actions';
 
@@ -43,10 +43,18 @@ export class LayerTransparencyComponent {
   }
 
   public resetOpacity() {
-    if (!this.layerId) {
+    if (this.layerId === undefined) {
       return;
     }
-    this.store$.dispatch(setLayerOpacity({ layerId: this.layerId, opacity: undefined }));
-  }
 
+    this.store$.select(selectLayer(this.layerId))
+      .pipe(take(1))
+      .subscribe(layer => {
+        if (!this.layerId) {
+          return;
+        }
+
+        this.store$.dispatch(setLayerOpacity({ layerId: this.layerId, opacity: layer?.initialValues?.opacity ?? 100 }));
+      });
+  }
 }

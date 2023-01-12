@@ -52,5 +52,5 @@ export const setSelectedBackgroundNodeId = createAction(
 );
 export const setLayerOpacity = createAction(
   `${mapActionsPrefix} Set Layer Opacity`,
-  props<{ layerId: number; opacity: number | undefined }>(),
+  props<{ layerId: number; opacity: number }>(),
 );

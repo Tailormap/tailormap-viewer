@@ -1,16 +1,45 @@
 import { MapBookmarkHelper } from './bookmark.helper';
-import { getAppLayerModel } from '@tailormap-viewer/api';
+import { AppLayerModel, getAppLayerModel } from '@tailormap-viewer/api';
 import { MapViewDetailsModel, MapUnitEnum } from '@tailormap-viewer/map';
 import { TristateBoolean, LayerVisibilityBookmarkFragment } from './bookmark_pb';
+import { AppLayerWithInitialValuesModel } from '../models';
 
-const layers = [
-  getAppLayerModel({ id: 1, visible: true }),
-  getAppLayerModel({ id: 2, visible: false }),
-  getAppLayerModel({ id: 3, visible: true }),
-  getAppLayerModel({ id: 9, visible: true }),
-  getAppLayerModel({ id: 256, visible: false }),
-  getAppLayerModel({ id: 512, visible: true }),
+const getAppLayerWithInitialValuesModel =
+  (partial: Partial<AppLayerModel>, initialVisibility?: boolean, initialOpacity?: number): AppLayerWithInitialValuesModel => {
+    const model = getAppLayerModel(partial);
+    return {
+      ...model,
+      initialValues: { visible: initialVisibility ?? model.visible, opacity: initialOpacity ?? model.opacity },
+    };
+  };
+
+const initialLayers = [
+  getAppLayerWithInitialValuesModel({ id: 1, visible: true }),
+  getAppLayerWithInitialValuesModel({ id: 2, visible: false }),
+  getAppLayerWithInitialValuesModel({ id: 3, visible: true }),
+  getAppLayerWithInitialValuesModel({ id: 9, visible: true }),
+  getAppLayerWithInitialValuesModel({ id: 256, visible: false }),
+  getAppLayerWithInitialValuesModel({ id: 512, visible: true }),
 ];
+
+const twoFlippedLayers = [
+  getAppLayerWithInitialValuesModel({ id: 1, visible: true }, false),
+  getAppLayerWithInitialValuesModel({ id: 2, visible: false }, true),
+  getAppLayerWithInitialValuesModel({ id: 3, visible: true }),
+  getAppLayerWithInitialValuesModel({ id: 9, visible: true }),
+  getAppLayerWithInitialValuesModel({ id: 256, visible: false }),
+  getAppLayerWithInitialValuesModel({ id: 512, visible: true }),
+];
+
+const allFlippedLayers = [
+  getAppLayerWithInitialValuesModel({ id: 1, visible: true }, false),
+  getAppLayerWithInitialValuesModel({ id: 2, visible: false }, true),
+  getAppLayerWithInitialValuesModel({ id: 3, visible: true }, false),
+  getAppLayerWithInitialValuesModel({ id: 9, visible: true }, false),
+  getAppLayerWithInitialValuesModel({ id: 256, visible: false }, true),
+  getAppLayerWithInitialValuesModel({ id: 512, visible: true }, false),
+];
+
 
 const mapViewDetails: MapViewDetailsModel = {
   zoomLevel: 0,
@@ -85,7 +114,7 @@ describe('MapBookmarkHelper', () => {
             { relativeId: 1, visible: TristateBoolean.FALSE },
             { relativeId: (256 - 1 - 1), visible: TristateBoolean.TRUE },
         ],
-    }), layers, [ 1, 3, 9, 512 ])).toEqual([{ id: 1, checked: false }, { id: 256, checked: true }]);
+    }), initialLayers)).toEqual({ visibilityChanges: [{ id: 1, checked: false }, { id: 256, checked: true }], opacityChanges: [] });
   });
 
   test('visibilityDataFromFragment skips unknown IDs', () => {
@@ -93,7 +122,7 @@ describe('MapBookmarkHelper', () => {
         layers: [
             { relativeId: 4, visible: TristateBoolean.TRUE },
         ],
-    }), layers, [ 1, 3, 9, 512 ])).toEqual([]);
+    }), initialLayers)).toEqual({ visibilityChanges: [], opacityChanges: [] });
   });
 
   test('visibilityDataFromFragment skips unset bookmarks', () => {
@@ -102,7 +131,7 @@ describe('MapBookmarkHelper', () => {
             { relativeId: 1, visible: TristateBoolean.UNSET },
             { relativeId: (256 - 1 - 1), visible: TristateBoolean.TRUE },
         ],
-    }), layers, [ 1, 3, 9, 512 ])).toEqual([{ id: 256, checked: true }]);
+    }), initialLayers)).toEqual({ visibilityChanges: [{ id: 256, checked: true }], opacityChanges: [] });
   });
 
   test('visibilityDataFromFragment does not change already-changed visibility flags', () => {
@@ -110,23 +139,23 @@ describe('MapBookmarkHelper', () => {
         layers: [
             { relativeId: 1, visible: TristateBoolean.TRUE },
         ],
-    }), layers, [ 1, 3, 9, 512 ])).toEqual([]);
+    }), initialLayers)).toEqual({ visibilityChanges: [], opacityChanges: [] });
   });
 
   test('visibilityDataFromFragment resets layers back to initial value when not referenced', () => {
     expect(MapBookmarkHelper.visibilityDataFromFragment(new LayerVisibilityBookmarkFragment({
-    }), layers, [ 2, 3, 9, 512 ])).toEqual([{ id: 1, checked: false }, { id: 2, checked: true }]);
+    }), twoFlippedLayers)).toEqual({ visibilityChanges: [{ id: 1, checked: false }, { id: 2, checked: true }], opacityChanges: [] });
   });
 
   test('fragmentFromVisibilityData serializes changes', () => {
-    expect(MapBookmarkHelper.fragmentFromVisibilityData([ 1, 3, 9, 512 ], layers)).toEqual(new LayerVisibilityBookmarkFragment());
-    expect(MapBookmarkHelper.fragmentFromVisibilityData([ 2, 3, 9, 512 ], layers)).toEqual(new LayerVisibilityBookmarkFragment({
+    expect(MapBookmarkHelper.fragmentFromVisibilityData(initialLayers)).toEqual(new LayerVisibilityBookmarkFragment());
+    expect(MapBookmarkHelper.fragmentFromVisibilityData(twoFlippedLayers)).toEqual(new LayerVisibilityBookmarkFragment({
         layers: [
             { relativeId: 1, visible: TristateBoolean.TRUE },
             { relativeId: 0, visible: TristateBoolean.FALSE },
         ],
     }));
-    expect(MapBookmarkHelper.fragmentFromVisibilityData([ 2, 256 ], layers)).toEqual(new LayerVisibilityBookmarkFragment({
+    expect(MapBookmarkHelper.fragmentFromVisibilityData(allFlippedLayers)).toEqual(new LayerVisibilityBookmarkFragment({
         layers: [
             { relativeId: 1, visible: TristateBoolean.TRUE },
             { relativeId: (2 - 1 - 1), visible: TristateBoolean.FALSE },
