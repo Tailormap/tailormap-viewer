@@ -33,10 +33,21 @@
   color: #fff;
 }
 
-.paging {
+.end {
   display: flex;
   flex: 1;
   justify-content: flex-end;
+
+}
+.tools {
+}
+
+.paging {
+  /*
+  display: flex;
+  flex: 1;
+  justify-content: flex-end;
+  */
 }
 
 .paging ::ng-deep .mat-paginator-container {

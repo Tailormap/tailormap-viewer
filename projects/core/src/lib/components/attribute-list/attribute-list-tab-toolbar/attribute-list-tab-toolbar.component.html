@@ -5,16 +5,22 @@
     <mat-spinner *ngIf="loadingData$ | async" color="primary" mode="indeterminate" diameter="20"></mat-spinner>
   </div>
 
-  <div class="paging" *ngIf="pagingData$ | async as pagingData">
-    <mat-paginator [pageSize]="pagingData.pageSize"
-                   [pageIndex]="pagingData.pageIndex - 1"
-                   [length]="pagingData.totalCount || 0"
-                   [hidePageSize]="true"
-                   [disabled]="loadingData$ | async"
-                   [showFirstLastButtons]="true"
-                   (click)="showJumpToPage($event)"
-                   (page)="onPageChange($event)">
-    </mat-paginator>
+  <div class="end">
+    <div class="tools">
+      <button mat-flat-button color="accent" i18n>Download</button>
+    </div>
+
+    <div class="paging" *ngIf="pagingData$ | async as pagingData">
+      <mat-paginator [pageSize]="pagingData.pageSize"
+                     [pageIndex]="pagingData.pageIndex - 1"
+                     [length]="pagingData.totalCount || 0"
+                     [hidePageSize]="true"
+                     [disabled]="loadingData$ | async"
+                     [showFirstLastButtons]="true"
+                     (click)="showJumpToPage($event)"
+                     (page)="onPageChange($event)">
+      </mat-paginator>
+    </div>
   </div>
 
 </mat-toolbar>
