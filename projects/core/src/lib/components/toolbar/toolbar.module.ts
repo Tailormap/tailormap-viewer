@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MeasureModule } from './measure/measure.module';
+import { GeolocationModule } from './geolocation/geolocation.module';
 import { ZoomButtonsModule } from './zoom-buttons/zoom-buttons.module';
 import { StoreModule } from '@ngrx/store';
 import { toolbarStateKey } from './state/toolbar.state';
@@ -26,6 +27,7 @@ import { SimpleSearchModule } from './simple-search';
     MouseCoordinatesModule,
     ScaleBarModule,
     SimpleSearchModule,
+    GeolocationModule,
   ],
 })
 export class ToolbarModule { }

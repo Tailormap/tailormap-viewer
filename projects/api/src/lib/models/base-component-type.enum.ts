@@ -13,4 +13,5 @@ export enum BaseComponentTypeEnum {
   SIMPLE_SEARCH = 'SIMPLE_SEARCH',
   ZOOM = 'ZOOM',
   FILTER = 'FILTER',
+  GEOLOCATION = 'GEOLOCATION',
 }
