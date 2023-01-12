@@ -26,7 +26,6 @@ export class SimpleSearchComponent implements OnInit, OnDestroy {
   public searchStatus$: Observable<SearchStatusType> = this.searchStatusSubject.asObservable();
 
   private destroyed = new Subject();
-  public focusCount = 0;
 
   private static readonly SEARCH_DEBOUNCE_TIME = 1000;
 
@@ -79,9 +78,6 @@ export class SimpleSearchComponent implements OnInit, OnDestroy {
 
   public toggle(close?: boolean) {
     this.active = close ? false : !this.active;
-    if (this.active) {
-      this.focusCount++;
-    }
   }
 
   public displayLabel(result: SearchResult): string {
