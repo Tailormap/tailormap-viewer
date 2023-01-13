@@ -2,10 +2,13 @@ import { AppResponseModel, LayerDetailsModel, MapResponseModel, Sortorder, Versi
 import { Observable } from 'rxjs';
 import { FeaturesResponseModel } from '../models/features-response.model';
 import { UniqueValuesResponseModel } from '../models/unique-values-response.model';
+import { UserResponseModel } from '../models/user-response.model';
 
 export interface TailormapApiV1ServiceModel {
 
   getVersion$(): Observable<VersionResponseModel>;
+
+  getUser$(): Observable<UserResponseModel>;
 
   getApplication$(params: {
     name?: string;

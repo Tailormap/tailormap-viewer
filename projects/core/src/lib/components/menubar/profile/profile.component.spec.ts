@@ -11,6 +11,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { of } from 'rxjs';
 import { TestBed } from '@angular/core/testing';
 import { Store } from '@ngrx/store';
+import { TAILORMAP_API_V1_SERVICE, TailormapApiV1MockService } from '@tailormap-viewer/api';
 
 const getMockStore = (loggedIn: boolean) => {
   return provideMockStore({
@@ -46,6 +47,7 @@ describe('ProfileComponent', () => {
         getMockStore(false),
         { provide: Router, useValue: { navigateByUrl: navigateFn } },
         { provide: SecurityService, useValue: { logout$: logoutFn } },
+        { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1MockService },
       ],
       imports: [
         MatIconTestingModule,
