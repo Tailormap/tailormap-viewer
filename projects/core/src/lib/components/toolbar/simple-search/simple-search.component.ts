@@ -84,12 +84,17 @@ export class SimpleSearchComponent implements OnInit, OnDestroy {
   }
 
   private showResult(searchResult: SearchResult) {
+    const style = FeatureStylingHelper.getDefaultHighlightStyle('search-result-highlight-style', {
+      pointSize: 10,
+      pointType: 'circle',
+      pointStrokeWidth: 0,
+    });
     this.mapService.renderFeatures$('search-result-highlight', of({
       __fid: 'search-result-highlight-feature',
       geometry: searchResult.geometry,
       crs: searchResult.projectionCode,
       attributes: {},
-    }), FeatureStylingHelper.getDefaultHighlightStyle('search-result-highlight-style'), true, true).pipe(
+    }), style, true, true).pipe(
       takeUntil(timer(5000)),
     ).subscribe();
   }

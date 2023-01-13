@@ -224,7 +224,7 @@ export class MapStyleHelper {
     };
     const baseShape = new RegularShape({
       fill: new Fill({ color:fillColor  }),
-      stroke: new Stroke({ color: strokeColor, width: strokeWidth }),
+      stroke: strokeWidth === 0 || !strokeColor ? undefined : new Stroke({ color: strokeColor, width: strokeWidth }),
       rotation: MapStyleHelper.getRotationForDegrees(styleConfig.pointRotation),
       ...POINT_SHAPES[type],
     });
