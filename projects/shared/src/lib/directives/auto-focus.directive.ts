@@ -1,23 +1,16 @@
-import { Directive, ElementRef, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { AfterViewInit, Directive, ElementRef } from '@angular/core';
 
 @Directive({
   selector: '[tmAutoFocus]',
 })
-export class AutoFocusDirective implements OnChanges {
+export class AutoFocusDirective implements AfterViewInit {
 
   private static timeout: number;
 
-  // This number needs to be increased by the directive using component to trigger changes
-  @Input('tmAutoFocus')
-  public autoFocus = 0;
-
   constructor(private el: ElementRef<HTMLInputElement>) {}
 
-  public ngOnChanges(changes: SimpleChanges): void {
-    if (changes['autoFocus'].currentValue !== changes['autoFocus'].previousValue
-      && changes['autoFocus'].currentValue > 0) {
-      this.applyAutoFocus();
-    }
+  public ngAfterViewInit(): void {
+    this.applyAutoFocus();
   }
 
   private applyAutoFocus() {
@@ -36,7 +29,7 @@ export class AutoFocusDirective implements OnChanges {
       if (this.el && this.el.nativeElement && this.el.nativeElement.focus) {
         this.el.nativeElement.focus();
       }
-    }, 300);
+    }, 0);
   }
 
   private isSelectElement() {

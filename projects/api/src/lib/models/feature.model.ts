@@ -7,4 +7,5 @@ export interface FeatureModel<AttributesType extends FeatureModelAttributes = Fe
   __fid: string;
   geometry?: string;
   attributes: AttributesType;
+  crs?: string;
 }

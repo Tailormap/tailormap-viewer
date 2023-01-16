@@ -1,6 +1,6 @@
 import {
   AppLayerModel, AppResponseModel, BoundsModel, ComponentModel, CoordinateReferenceSystemModel, GeometryType, Language, LayerDetailsModel,
-  MapResponseModel, ResolvedServerType, ServerType, ServiceModel, ServiceProtocol, VersionResponseModel,
+  MapResponseModel, ResolvedServerType, ServerType, ServiceModel, ServiceProtocol, UserResponseModel, VersionResponseModel,
 } from '../models';
 import { FeatureModel } from '../models/feature.model';
 import { ColumnMetadataModel } from '../models/column-metadata.model';
@@ -13,6 +13,12 @@ export const getVersionResponseModel = (overrides?: VersionResponseModel): Versi
   version: '0.1-SNAPSHOT',
   databaseversion: '47',
   apiVersion: 'v1',
+  ...overrides,
+});
+
+export const getUserResponseModel = (overrides?: Partial<UserResponseModel>): UserResponseModel => ({
+  isAuthenticated: false,
+  username: '',
   ...overrides,
 });
 

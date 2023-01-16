@@ -22,6 +22,12 @@ describe('TailormapApiV1Service', () => {
     req.flush(null);
   });
 
+  test('queries API for getUser$', () => {
+    service.getUser$().subscribe();
+    const req = httpController.expectOne({ url: '/api/user', method: 'GET' });
+    req.flush(null);
+  });
+
   test('queries API for getApplication$', () => {
     service.getApplication$({}).subscribe();
     const req = httpController.expectOne({ url: '/api/app', method: 'GET' });

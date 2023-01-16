@@ -54,6 +54,17 @@ const onSetLoginDetails = (
   },
 });
 
+const onUpdateApplicationStyle = (
+  state: CoreState,
+  payload: ReturnType<typeof CoreActions.updateApplicationStyle>,
+): CoreState => ({
+  ...state,
+  application: typeof state.application === 'undefined' ? undefined : {
+    ...state.application,
+    styling: { ...state.application?.styling, ...payload.style },
+  },
+});
+
 const coreReducerImpl = createReducer<CoreState>(
   initialCoreState,
   on(CoreActions.loadApplication, onLoadApplication),
@@ -61,5 +72,6 @@ const coreReducerImpl = createReducer<CoreState>(
   on(CoreActions.loadApplicationFailed, onApplicationLoadFailed),
   on(CoreActions.setRouteBeforeLogin, onSetRouteBeforeLogin),
   on(CoreActions.setLoginDetails, onSetLoginDetails),
+  on(CoreActions.updateApplicationStyle, onUpdateApplicationStyle),
 );
 export const coreReducer = (state: CoreState | undefined, action: Action) => coreReducerImpl(state, action);

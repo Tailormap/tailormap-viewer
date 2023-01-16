@@ -146,7 +146,7 @@ export class OpenLayersDrawingTool implements DrawingToolModel {
       )
       : [];
     return {
-      geometry: FeatureHelper.getWKT(geometry, this.olMap),
+      geometry: FeatureHelper.getWKT(geometry, this.olMap.getView().getProjection()),
       lastCoordinate,
       centerCoordinate: getCenter(geometry.getExtent()),
       radius: GeometryTypeHelper.isCircleGeometry(geometry) ? geometry.getRadius() : undefined,

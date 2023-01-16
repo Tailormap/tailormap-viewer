@@ -6,9 +6,9 @@ import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
 import { Circle } from 'ol/geom';
 import { fromCircle } from 'ol/geom/Polygon';
 import { MapSizeHelper } from '../helpers/map-size.helper';
-import OlMap from 'ol/Map';
 import { MapUnitEnum } from '../models/map-unit.enum';
 import { GeometryTypeHelper } from './geometry-type.helper';
+import { Projection } from 'ol/proj';
 
 export class FeatureHelper {
 
@@ -18,7 +18,7 @@ export class FeatureHelper {
     return !!(feature as FeatureModel).__fid;
   }
 
-  public static getFeatures(featureModel?: FeatureModelType | FeatureModelType[]): Feature<Geometry>[] {
+  public static getFeatures(featureModel?: FeatureModelType | FeatureModelType[], mapProjection?: string): Feature<Geometry>[] {
     if (!featureModel) {
       return [];
     }
@@ -43,7 +43,7 @@ export class FeatureHelper {
         return new Feature<Geometry>({
           __fid: feature.__fid,
           attributes: feature.attributes,
-          geometry: FeatureHelper.fromWKT(feature.geometry),
+          geometry: FeatureHelper.fromWKT(feature.geometry, feature.crs, mapProjection),
         });
       }
       if (feature instanceof Geometry) {
@@ -55,21 +55,21 @@ export class FeatureHelper {
 
   public static getFeatureModelForFeature<T extends FeatureModelAttributes>(
     feature: Feature<Geometry>,
-    map?: OlMap,
+    projection?: Projection,
   ): FeatureModel<T> | null {
     const geom = feature.getGeometry();
     if (geom && feature.get('__fid') && feature.get('attributes')) {
       return {
         __fid: feature.get('__fid'),
         attributes: feature.get('attributes'),
-        geometry: !map ? undefined : FeatureHelper.getWKT(geom, map),
+        geometry: !projection ? undefined : FeatureHelper.getWKT(geom, projection),
       };
     }
     return null;
   }
 
-  public static getWKT(geometry: Geometry, map: OlMap, linearizeCircle: boolean = false) {
-    const units = map.getView().getProjection().getUnits();
+  public static getWKT(geometry: Geometry, projection: Projection, linearizeCircle: boolean = false) {
+    const units = projection.getUnits();
     const decimals = MapSizeHelper.getCoordinatePrecision(units ? units.toLowerCase() as MapUnitEnum: MapUnitEnum.m);
 
     if (GeometryTypeHelper.isCircleGeometry(geometry) && !linearizeCircle) {

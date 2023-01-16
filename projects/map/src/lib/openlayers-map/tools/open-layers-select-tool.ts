@@ -61,7 +61,7 @@ export class OpenLayersSelectTool<A extends FeatureModelAttributes = FeatureMode
         if (!feature) {
           return null;
         }
-        return FeatureHelper.getFeatureModelForFeature<A>(feature, this.olMap);
+        return FeatureHelper.getFeatureModelForFeature<A>(feature, this.olMap.getView().getProjection());
       })));
     }));
   }

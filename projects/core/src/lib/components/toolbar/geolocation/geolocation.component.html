@@ -1,0 +1,11 @@
+<div class="geolocation-buttons map-control-button-container" *ngIf="hasGeolocation">
+  <button mat-flat-button
+          class="toggle-button map-control-button"
+          i18n-tmTooltip
+          tmTooltip="Zoom to location"
+          [class.toggle-button--active]="isWatching"
+          (click)="onClick()">
+    <mat-icon svgIcon="location_searching" *ngIf="!hasFix"></mat-icon>
+    <mat-icon svgIcon="my_location" *ngIf="hasFix"></mat-icon>
+  </button>
+</div>

@@ -5,6 +5,7 @@ import { takeUntil } from 'rxjs/operators';
 import { distinctUntilChanged, Subject } from 'rxjs';
 import { ColorHelper, CssHelper } from '@tailormap-viewer/shared';
 import { AppStylingModel } from '@tailormap-viewer/api';
+import { updateApplicationStyle } from '../state/core.actions';
 
 @Injectable({
   providedIn: 'root',
@@ -13,12 +14,18 @@ export class ApplicationStyleService implements OnDestroy {
 
   private destroyed = new Subject();
 
+  private static initialPrimaryColor = CssHelper.getCssVariableValue('--primary-color');
+
   constructor(private store$: Store) {
     this.store$.select(selectApplicationStyling)
       .pipe(takeUntil(this.destroyed), distinctUntilChanged())
       .subscribe((appStyling) => {
         this.updateStyling(appStyling);
       });
+  }
+
+  public resetStyling() {
+    this.store$.dispatch(updateApplicationStyle({ style: { primaryColor: ApplicationStyleService.initialPrimaryColor } }));
   }
 
   private updateStyling(appStyling?: AppStylingModel | null) {
