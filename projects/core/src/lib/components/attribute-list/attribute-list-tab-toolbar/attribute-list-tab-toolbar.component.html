@@ -7,7 +7,7 @@
 
   <div class="end">
     <div class="tools">
-      <button mat-flat-button color="accent" i18n>Download</button>
+      <button mat-flat-button color="accent" (click)="download()" i18n>Download</button>
     </div>
 
     <div class="paging" *ngIf="pagingData$ | async as pagingData">

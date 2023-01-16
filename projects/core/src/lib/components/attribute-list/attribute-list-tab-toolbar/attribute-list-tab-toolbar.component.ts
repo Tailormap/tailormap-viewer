@@ -10,7 +10,9 @@ import { AttributeListStateService } from '../services/attribute-list-state.serv
 import { AttributeListPagingDialogComponent } from '../attribute-list-paging-dialog/attribute-list-paging-dialog.component';
 import { AttributeListPagingDataType } from '../models/attribute-list-paging-data.type';
 import { SimpleAttributeFilterService } from '../../../filter/services/simple-attribute-filter.service';
-import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
+import { BaseComponentTypeEnum, TailormapApiV1Service } from '@tailormap-viewer/api';
+import { withLatestFrom } from 'rxjs/operators';
+import { selectApplicationId } from '../../../state/core.selectors';
 
 @Component({
   selector: 'tm-attribute-list-tab-toolbar',
@@ -91,6 +93,26 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
           return;
         }
         return this.simpleAttributeFilterService.removeFiltersForLayer(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerId);
+      });
+  }
+
+  public download() {
+    this.store$.select(selectSelectedTab)
+      .pipe(
+        withLatestFrom(this.store$.select(selectApplicationId)),
+        take(1))
+      .subscribe(([ tab, appId ]) => {
+        if (!tab?.layerId) {
+          return;
+        }
+
+        const a = document.createElement('a');
+        // XXX
+        a.href = `${TailormapApiV1Service.BASE_URL}/app/${appId}/layer/${tab.layerId}/export/download?outputFormat=gpkg`;
+        a.download = '';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
       });
   }
 
