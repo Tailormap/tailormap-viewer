@@ -1,8 +1,8 @@
-import { Component, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef, OnInit, Inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectUserDetails } from '../../../state/core.selectors';
-import { Subject, takeUntil } from 'rxjs';
-import { SecurityModel } from '@tailormap-viewer/api';
+import { catchError, Observable, of, Subject, take, takeUntil } from 'rxjs';
+import { SecurityModel, TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel, UserResponseModel } from '@tailormap-viewer/api';
 import { SecurityService } from '../../../services/security.service';
 import { setLoginDetails, setRouteBeforeLogin } from '../../../state/core.actions';
 import { Router } from '@angular/router';
@@ -23,6 +23,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private securityService: SecurityService,
     private router: Router,
     private cdr: ChangeDetectorRef,
+    @Inject(TAILORMAP_API_V1_SERVICE) private api: TailormapApiV1ServiceModel,
   ) {}
 
   public ngOnInit() {
@@ -31,6 +32,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
       .subscribe(userDetails => {
         this.userDetails = userDetails;
         this.cdr.detectChanges();
+      });
+
+    this.api.getUser$()
+      .pipe(
+        take(1),
+        catchError((): Observable<UserResponseModel> => of({ isAuthenticated: false, username: '' })),
+      )
+      .subscribe(userDetails => {
+        this.store$.dispatch(setLoginDetails({ loggedIn: userDetails.isAuthenticated, user: { username: userDetails.username } }));
       });
   }
 

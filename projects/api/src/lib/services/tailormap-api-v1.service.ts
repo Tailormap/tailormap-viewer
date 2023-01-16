@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import {
-  AppResponseModel, FeaturesResponseModel, LayerDetailsModel, MapResponseModel, Sortorder, VersionResponseModel,
+  AppResponseModel, FeaturesResponseModel, LayerDetailsModel, MapResponseModel, Sortorder, UserResponseModel, VersionResponseModel,
 } from '../models';
 import { Observable } from 'rxjs';
 import { TailormapApiV1ServiceModel } from './tailormap-api-v1.service.model';
@@ -20,6 +20,12 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
   public getVersion$(): Observable<VersionResponseModel> {
     return this.httpClient.get<VersionResponseModel>(
       `${TailormapApiV1Service.BASE_URL}/version`,
+    );
+  }
+
+  public getUser$(): Observable<UserResponseModel> {
+    return this.httpClient.get<UserResponseModel>(
+      `${TailormapApiV1Service.BASE_URL}/user`,
     );
   }
 

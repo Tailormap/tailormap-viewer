@@ -28,3 +28,4 @@ export * from './tiling-protocol.enum';
 export * from './layer-tree-node.model';
 export * from './version-response.model';
 export * from './sortorder.enum';
+export * from './user-response.model';
