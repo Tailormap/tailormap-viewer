@@ -76,6 +76,7 @@ describe('ProfileComponent', () => {
         getMockStore(true),
         { provide: Router, useValue: { navigateByUrl: navigateFn } },
         { provide: SecurityService, useValue: { logout$: logoutFn } },
+        { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1MockService },
       ],
       imports: [
         MatIconTestingModule,
