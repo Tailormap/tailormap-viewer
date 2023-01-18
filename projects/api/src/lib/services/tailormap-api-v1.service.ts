@@ -119,6 +119,8 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
     layerId: number;
     outputFormat: string;
     filter?: string;
+    sort: { column: string; direction: string} | null;
+    attributes?: string[];
   }): string {
     // Can't use new URL() because that needs a scheme
     const url = `${TailormapApiV1Service.BASE_URL}/app/${params.applicationId}/layer/${params.layerId}/export/download`;
@@ -126,6 +128,15 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
     searchParams.append('outputFormat', params.outputFormat);
     if (params.filter) {
       searchParams.append('filter', params.filter);
+    }
+    if (params.sort?.column) {
+      searchParams.append('sortBy', params.sort.column);
+    }
+    if (params.sort?.direction) {
+      searchParams.append('sortOrder', params.sort.direction);
+    }
+    if (params.attributes) {
+      searchParams.append('attributes', params.attributes.join(','));
     }
     return url + '?' + searchParams.toString();
   }

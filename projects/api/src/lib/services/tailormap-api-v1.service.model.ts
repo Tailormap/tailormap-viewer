@@ -57,6 +57,8 @@ export interface TailormapApiV1ServiceModel {
     layerId: number;
     outputFormat: string;
     filter?: string;
+    sort: { column: string; direction: string} | null;
+    attributes?: string[];
   }): string;
 
 }

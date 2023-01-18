@@ -62,7 +62,13 @@ export class AttributeListExportService {
     );
   }
 
-  public export$(layerId: number, layerName: string, format: SupportedExportFormats, filter?: string): Observable<boolean> {
+  public export$(
+    layerId: number,
+    layerName: string,
+    format: SupportedExportFormats,
+    filter: string | undefined, sort: { column: string; direction: string } | null,
+    attributes: string[],
+  ): Observable<boolean> {
     return combineLatest([
       this.getOutputFormat$(layerId, format),
       this.store$.select(selectApplicationId),
@@ -75,7 +81,7 @@ export class AttributeListExportService {
         }
         this.showSnackbarMessage();
         const a = document.createElement('a');
-        a.href = this.api.getLayerExportUrl({ applicationId, layerId, outputFormat, filter });
+        a.href = this.api.getLayerExportUrl({ applicationId, layerId, outputFormat, filter, sort, attributes });
         // Do not specify a filename, the server should provide a Content-Disposition header with the correct file extension
         a.download = '';
         document.body.appendChild(a);
