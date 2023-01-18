@@ -6,7 +6,6 @@ import { catchError, combineLatest, map, Observable, of, switchMap, take, tap } 
 import { Store } from '@ngrx/store';
 import { selectApplicationId } from '../../../state/core.selectors';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
-import { DateTime } from 'luxon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 
@@ -75,10 +74,10 @@ export class AttributeListExportService {
           return of(false);
         }
         this.showSnackbarMessage();
-        const date = DateTime.now().setLocale(this.dateLocale).toLocaleString(DateTime.DATETIME_SHORT).replace(/,? /g, '_');
         const a = document.createElement('a');
         a.href = this.api.getLayerExportUrl({ applicationId, layerId, outputFormat });
-        a.download = [ $localize `Export`, layerName, date ].join('_') + '.' + outputFormat;
+        // Do not specify a filename, the server should provide a Content-Disposition header with the correct file extension
+        a.download = '';
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -98,7 +97,7 @@ export class AttributeListExportService {
   }
 
   private getOutputFormat$(layerId: number, format: SupportedExportFormats): Observable<string | null> {
-    return this.getExportFormats$(layerId)
+    return this.getExportCapabilities$(layerId)
       .pipe(
         take(1),
         map(formats => {
