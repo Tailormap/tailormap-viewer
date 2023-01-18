@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import {
-  TAILORMAP_API_V1_SERVICE, TailormapApiV1Service, TailormapApiV1ServiceModel,
+  TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel,
 } from '@tailormap-viewer/api';
 import { catchError, combineLatest, map, Observable, of, switchMap, take, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
@@ -24,10 +24,10 @@ export enum SupportedExportFormats {
 export class AttributeListExportService {
 
   private static CSV_FORMATS = [ 'csv', 'text/csv' ];
-  private static XLSX_FORMATS = ['xlsx'];
-  private static SHAPE_FORMATS = ['SHAPE-ZIP'];
+  private static XLSX_FORMATS = [ 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'excel2007' ];
+  private static SHAPE_FORMATS = [ 'application/vnd.shp', 'application/x-zipped-shp', 'SHAPE-ZIP' ];
   private static GEOPACKAGE_FORMATS = [ 'application/geopackage+sqlite3', 'application/x-gpkg', 'geopackage', 'geopkg', 'gpkg' ];
-  private static GEOJSON_FORMATS = [ 'application/json', 'json' ];
+  private static GEOJSON_FORMATS = [ 'application/geo+json', 'application/geojson', 'application/json', 'json' ];
 
   private cachedFormats: Map<string, string[]> = new Map();
 
@@ -77,7 +77,7 @@ export class AttributeListExportService {
         this.showSnackbarMessage();
         const date = DateTime.now().setLocale(this.dateLocale).toLocaleString(DateTime.DATETIME_SHORT).replace(/,? /g, '_');
         const a = document.createElement('a');
-        a.href = `${TailormapApiV1Service.BASE_URL}/app/${applicationId}/layer/${layerId}/export/download?outputFormat=${outputFormat}`;
+        a.href = this.api.getLayerExportUrl({ applicationId, layerId, outputFormat });
         a.download = [ $localize `Export`, layerName, date ].join('_') + '.' + outputFormat;
         document.body.appendChild(a);
         a.click();

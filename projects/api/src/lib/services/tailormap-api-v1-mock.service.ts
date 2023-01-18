@@ -68,4 +68,14 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
     return of(getLayerExportCapabilitiesModel());
   }
 
+  public getLayerExportUrl(params: {
+    applicationId: number;
+    layerId: number;
+    outputFormat: string;
+  }): string {
+    const url = new URL(`http://example.com/export/download`);
+    url.searchParams.append('outputFormat', params.outputFormat);
+    return url.href;
+  }
+
 }

@@ -114,6 +114,18 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
     );
   }
 
+  public getLayerExportUrl(params: {
+    applicationId: number;
+    layerId: number;
+    outputFormat: string;
+  }): string {
+    // Can't use new URL() because that needs a scheme
+    const url = `${TailormapApiV1Service.BASE_URL}/app/${params.applicationId}/layer/${params.layerId}/export/download`;
+    const searchParams = new URLSearchParams();
+    searchParams.append('outputFormat', params.outputFormat);
+    return url + '?' + searchParams.toString();
+  }
+
   private getQueryParams(params: Record<string, string | number | boolean | undefined>): HttpParams {
     let queryParams = new HttpParams();
     Object.keys(params).forEach(key => {

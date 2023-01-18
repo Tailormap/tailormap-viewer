@@ -52,4 +52,10 @@ export interface TailormapApiV1ServiceModel {
     layerId: number;
   }): Observable<LayerExportCapabilitiesModel>;
 
+  getLayerExportUrl(params: {
+    applicationId: number;
+    layerId: number;
+    outputFormat: string;
+  }): string;
+
 }
