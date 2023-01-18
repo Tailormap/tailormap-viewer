@@ -17,6 +17,7 @@ import { AttributeListTabToolbarComponent } from './attribute-list-tab-toolbar/a
 import { AttributeListPagingDialogComponent } from './attribute-list-paging-dialog/attribute-list-paging-dialog.component';
 import { AttributeListFilterComponent } from './attribute-list-filter/attribute-list-filter.component';
 import { FilterModule } from '../../filter/filter.module';
+import { AttributeListExportButtonComponent } from './attribute-list-export-button/attribute-list-export-button.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { FilterModule } from '../../filter/filter.module';
     AttributeListTableComponent,
     AttributeListPagingDialogComponent,
     AttributeListFilterComponent,
+    AttributeListExportButtonComponent,
   ],
   imports: [
     CommonModule,

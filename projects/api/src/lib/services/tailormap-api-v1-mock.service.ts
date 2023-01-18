@@ -7,8 +7,9 @@ import { UniqueValuesResponseModel } from '../models/unique-values-response.mode
 import {
   getAppResponseData, getFeaturesResponseModel, getLayerDetailsModel, getMapResponseData,
   getUniqueValuesResponseModel,
-  getVersionResponseModel, getUserResponseModel,
+  getVersionResponseModel, getUserResponseModel, getLayerExportCapabilitiesModel,
 } from '../mock-data';
+import { LayerExportCapabilitiesModel } from '../models/layer-export-capabilities.model';
 
 @Injectable()
 export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
@@ -58,6 +59,13 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
     filter?: string;
   }): Observable<UniqueValuesResponseModel> {
     return of(getUniqueValuesResponseModel());
+  }
+
+  public getLayerExportCapabilities$(_params: {
+    applicationId: number;
+    layerId: number;
+  }): Observable<LayerExportCapabilitiesModel> {
+    return of(getLayerExportCapabilitiesModel());
   }
 
 }

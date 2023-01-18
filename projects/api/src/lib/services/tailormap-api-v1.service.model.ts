@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { FeaturesResponseModel } from '../models/features-response.model';
 import { UniqueValuesResponseModel } from '../models/unique-values-response.model';
 import { UserResponseModel } from '../models/user-response.model';
+import { LayerExportCapabilitiesModel } from '../models/layer-export-capabilities.model';
 
 export interface TailormapApiV1ServiceModel {
 
@@ -45,5 +46,10 @@ export interface TailormapApiV1ServiceModel {
     attribute: string;
     filter?: string;
   }): Observable<UniqueValuesResponseModel>;
+
+  getLayerExportCapabilities$(params: {
+    applicationId: number;
+    layerId: number;
+  }): Observable<LayerExportCapabilitiesModel>;
 
 }

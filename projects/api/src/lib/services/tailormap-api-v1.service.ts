@@ -6,6 +6,7 @@ import {
 import { Observable } from 'rxjs';
 import { TailormapApiV1ServiceModel } from './tailormap-api-v1.service.model';
 import { UniqueValuesResponseModel } from '../models/unique-values-response.model';
+import { LayerExportCapabilitiesModel } from '../models/layer-export-capabilities.model';
 
 @Injectable()
 export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
@@ -101,6 +102,15 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
       `${TailormapApiV1Service.BASE_URL}/app/${params.applicationId}/layer/${params.layerId}/unique/${params.attribute}`,
       params.filter ? this.getQueryParams({ filter: params.filter }) : '',
       { headers: new HttpHeaders('Content-Type: application/x-www-form-urlencoded') },
+    );
+  }
+
+  public getLayerExportCapabilities$(params: {
+    applicationId: number;
+    layerId: number;
+  }): Observable<LayerExportCapabilitiesModel> {
+    return this.httpClient.get<LayerExportCapabilitiesModel>(
+      `${TailormapApiV1Service.BASE_URL}/app/${params.applicationId}/layer/${params.layerId}/export/capabilities`,
     );
   }
 
