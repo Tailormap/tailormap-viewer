@@ -3,6 +3,8 @@ import { BehaviorSubject, concatMap, distinctUntilChanged, map, Observable, of, 
 import { AttributeListExportService, SupportedExportFormats } from '../services/attribute-list-export.service';
 import { Store } from '@ngrx/store';
 import { selectSelectedTab, selectSelectedTabLayerId } from '../state/attribute-list.selectors';
+import { withLatestFrom } from 'rxjs/operators';
+import { selectCQLFilters } from '../../../filter/state/filter.selectors';
 
 @Component({
   selector: 'tm-attribute-list-export-button',
@@ -38,12 +40,14 @@ export class AttributeListExportButtonComponent {
   public onExportClick(format: SupportedExportFormats) {
     this.store$.select(selectSelectedTab)
       .pipe(
+        withLatestFrom(this.store$.select(selectCQLFilters)),
         take(1),
-        concatMap(tab => {
+        concatMap(([ tab, filters ]) => {
           if (tab === null || typeof tab.layerId === 'undefined') {
             return of(false);
           }
-          return this.exportService.export$(tab.layerId, tab.label, format);
+          const filter = filters.get(tab.layerId);
+          return this.exportService.export$(tab.layerId, tab.label, format, filter);
         }))
       .subscribe();
   }

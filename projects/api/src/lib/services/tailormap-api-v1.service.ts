@@ -118,11 +118,15 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
     applicationId: number;
     layerId: number;
     outputFormat: string;
+    filter?: string;
   }): string {
     // Can't use new URL() because that needs a scheme
     const url = `${TailormapApiV1Service.BASE_URL}/app/${params.applicationId}/layer/${params.layerId}/export/download`;
     const searchParams = new URLSearchParams();
     searchParams.append('outputFormat', params.outputFormat);
+    if (params.filter) {
+      searchParams.append('filter', params.filter);
+    }
     return url + '?' + searchParams.toString();
   }
 

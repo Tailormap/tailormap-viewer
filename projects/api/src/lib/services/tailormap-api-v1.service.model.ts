@@ -56,6 +56,7 @@ export interface TailormapApiV1ServiceModel {
     applicationId: number;
     layerId: number;
     outputFormat: string;
+    filter?: string;
   }): string;
 
 }
