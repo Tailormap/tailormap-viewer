@@ -139,7 +139,7 @@ export class AttributeListExportService {
             catchError(() => of({ exportable: false, outputFormats: [] })),
             tap(capabilities => {
               if (capabilities.exportable) {
-                this.cachedFormats.set(layerId.toString(), capabilities.outputFormats);
+                this.cachedFormats.set(key, capabilities.outputFormats);
               }
             }),
             map(capabilities => capabilities.exportable ? (capabilities.outputFormats || []) : []),
