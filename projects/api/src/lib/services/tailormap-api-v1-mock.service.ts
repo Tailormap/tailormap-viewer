@@ -10,6 +10,7 @@ import {
   getVersionResponseModel, getUserResponseModel, getLayerExportCapabilitiesModel,
 } from '../mock-data';
 import { LayerExportCapabilitiesModel } from '../models/layer-export-capabilities.model';
+import { HttpResponse } from '@angular/common/http';
 
 @Injectable()
 export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
@@ -68,17 +69,16 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
     return of(getLayerExportCapabilitiesModel());
   }
 
-  public getLayerExportUrl(params: {
+  public getLayerExport$(_params: {
     applicationId: number;
     layerId: number;
     outputFormat: string;
     filter?: string;
     sort: { column: string; direction: string} | null;
     attributes?: string[];
-  }): string {
-    const url = new URL(`http://example.com/export/download`);
-    url.searchParams.append('outputFormat', params.outputFormat);
-    return url.href;
+    crs?: string;
+  }): Observable<HttpResponse<Blob>> {
+    return of(new HttpResponse<Blob>({ body: new Blob(['']) }));
   }
 
 }

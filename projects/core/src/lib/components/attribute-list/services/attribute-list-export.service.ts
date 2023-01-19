@@ -7,7 +7,9 @@ import { Store } from '@ngrx/store';
 import { selectApplicationId } from '../../../state/core.selectors';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
+import { FileHelper, SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
+import { HttpResponse } from '@angular/common/http';
+import { DateTime } from 'luxon';
 
 export enum SupportedExportFormats {
   CSV = 'csv',
@@ -62,39 +64,58 @@ export class AttributeListExportService {
     );
   }
 
-  public export$(
-    layerId: number,
-    layerName: string,
-    format: SupportedExportFormats,
-    filter: string | undefined, sort: { column: string; direction: string } | null,
-    attributes: string[],
-  ): Observable<boolean> {
+  public export$(params: {
+    layerId: number;
+    layerName: string;
+    format: SupportedExportFormats;
+    filter: string | undefined;
+    sort: { column: string; direction: string } | null;
+    attributes: string[];
+  }): Observable<boolean> {
     return combineLatest([
-      this.getOutputFormat$(layerId, format),
+      this.getOutputFormat$(params.layerId, params.format),
       this.store$.select(selectApplicationId),
     ]).pipe(
       take(1),
       switchMap(([ outputFormat, applicationId ]) => {
+        const defaultErrorMessage = $localize `Exporting data for layer ${params.layerName} and format ${params.format} failed`;
         if (applicationId === null || outputFormat === null) {
-          this.showSnackbarMessage($localize `Exporting data for format ${format} failed`);
-          return of(false);
+          this.showSnackbarMessage(defaultErrorMessage);
+          return of(null);
         }
-        this.showSnackbarMessage();
-        const a = document.createElement('a');
-        a.href = this.api.getLayerExportUrl({ applicationId, layerId, outputFormat, filter, sort, attributes });
-        // Do not specify a filename, the server should provide a Content-Disposition header with the correct file extension
-        a.download = '';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        return of(true);
+        return this.api.getLayerExport$({
+          applicationId,
+          layerId: params.layerId,
+          outputFormat,
+          filter: params.filter,
+          sort: params.sort,
+          attributes: params.attributes,
+        })
+          .pipe(
+            catchError(() => {
+              this.showSnackbarMessage(defaultErrorMessage);
+              return of(null);
+            }),
+          );
+      }),
+      tap((response: HttpResponse<Blob> | null) => {
+        if (!response || !response.body) {
+          return;
+        }
+        const date = DateTime.now().setLocale(this.dateLocale).toLocaleString(DateTime.DATETIME_SHORT).replace(/,? /g, '_');
+        const defaultFilename = [ $localize `Export`, params.layerName, date ].join('_') + '.' + this.getExtensionForFormat(params.format);
+        const fileName = FileHelper.extractFileNameFromContentDispositionHeader(response.headers.get('Content-Disposition') || '', defaultFilename);
+        FileHelper.saveAsFile(response.body, fileName);
+      }),
+      map((response: HttpResponse<Blob> | null) => {
+        return !!(response && response.body);
       }),
     );
   }
 
-  private showSnackbarMessage(msg?: string) {
+  private showSnackbarMessage(msg: string) {
     const config: SnackBarMessageOptionsModel = {
-      message: msg || $localize `Download started, please check your downloads`,
+      message: msg,
       duration: 5000,
       showDuration: true,
       showCloseButton: true,
@@ -126,6 +147,22 @@ export class AttributeListExportService {
 
   private getOutputFormat(supportedFormats: string[], requiredFormats: string[]): string | null {
     return supportedFormats.find(format => requiredFormats.includes(format)) || null;
+  }
+
+  private getExtensionForFormat(format: SupportedExportFormats): string {
+    switch (format) {
+      case SupportedExportFormats.CSV:
+        return 'csv';
+      case SupportedExportFormats.XLSX:
+        return 'xlsx';
+      case SupportedExportFormats.SHAPE:
+        return 'zip';
+      case SupportedExportFormats.GEOPACKAGE:
+        return 'gpkg';
+      case SupportedExportFormats.GEOJSON:
+        return 'geojson';
+    }
+    return 'txt';
   }
 
   private getExportCapabilities$(layerId: number): Observable<string[]> {

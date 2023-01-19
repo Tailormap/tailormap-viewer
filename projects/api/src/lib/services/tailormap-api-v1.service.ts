@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import {
   AppResponseModel, FeaturesResponseModel, LayerDetailsModel, MapResponseModel, Sortorder, UserResponseModel, VersionResponseModel,
 } from '../models';
@@ -114,31 +114,32 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
     );
   }
 
-  public getLayerExportUrl(params: {
+  public getLayerExport$(params: {
     applicationId: number;
     layerId: number;
     outputFormat: string;
     filter?: string;
     sort: { column: string; direction: string} | null;
     attributes?: string[];
-  }): string {
-    // Can't use new URL() because that needs a scheme
-    const url = `${TailormapApiV1Service.BASE_URL}/app/${params.applicationId}/layer/${params.layerId}/export/download`;
-    const searchParams = new URLSearchParams();
-    searchParams.append('outputFormat', params.outputFormat);
-    if (params.filter) {
-      searchParams.append('filter', params.filter);
-    }
-    if (params.sort?.column) {
-      searchParams.append('sortBy', params.sort.column);
-    }
-    if (params.sort?.direction) {
-      searchParams.append('sortOrder', params.sort.direction);
-    }
-    if (params.attributes) {
-      searchParams.append('attributes', params.attributes.join(','));
-    }
-    return url + '?' + searchParams.toString();
+    crs?: string;
+  }): Observable<HttpResponse<Blob>> {
+    const queryParams = this.getQueryParams({
+      outputFormat: params.outputFormat,
+      attributes: params.attributes?.join(','),
+      sortBy: params.sort?.column,
+      sortOrder: params.sort?.direction,
+      crs: params.crs,
+    });
+    return this.httpClient.post(
+      `${TailormapApiV1Service.BASE_URL}/app/${params.applicationId}/layer/${params.layerId}/export/download`,
+      params.filter ? this.getQueryParams({ filter: params.filter }) : '',
+      {
+        headers: new HttpHeaders('Content-Type: application/x-www-form-urlencoded'),
+        params: queryParams,
+        observe: 'response',
+        responseType: 'blob',
+      },
+    );
   }
 
   private getQueryParams(params: Record<string, string | number | boolean | undefined>): HttpParams {

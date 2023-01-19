@@ -1,12 +1,15 @@
 import { render, screen } from '@testing-library/angular';
 import { AttributeListExportButtonComponent } from './attribute-list-export-button.component';
 import { provideMockStore } from '@ngrx/store/testing';
-import { selectSelectedTab, selectSelectedTabLayerId } from '../state/attribute-list.selectors';
+import {
+  selectColumnsForSelectedTab, selectSelectedTab, selectSelectedTabLayerId, selectSortForSelectedTab,
+} from '../state/attribute-list.selectors';
 import { of } from 'rxjs';
 import { AttributeListExportService, SupportedExportFormats } from '../services/attribute-list-export.service';
 import userEvent from '@testing-library/user-event';
 import { SharedImportsModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
+import { selectCQLFilters } from '../../../filter/state/filter.selectors';
 
 const setup = async (layerId: number | null = null, supportedFormats: SupportedExportFormats[] = []) => {
   const store = provideMockStore({
@@ -14,6 +17,9 @@ const setup = async (layerId: number | null = null, supportedFormats: SupportedE
     selectors: [
       { selector: selectSelectedTabLayerId, value: layerId },
       { selector: selectSelectedTab, value: layerId ? { layerId, label: 'Some layer' } : null },
+      { selector: selectCQLFilters, value: new Map() },
+      { selector: selectColumnsForSelectedTab, value: [] },
+      { selector: selectSortForSelectedTab, value: null },
     ],
   });
   const exportService = {
@@ -47,7 +53,7 @@ describe('AttributeListExportButtonComponent', () => {
     expect(screen.getByText('Excel')).toBeInTheDocument();
     expect(screen.queryByText('GeoPackage')).not.toBeInTheDocument();
     await userEvent.click(screen.getByText('CSV'));
-    expect(exportService.export$).toHaveBeenCalledWith(1, 'Some layer', SupportedExportFormats.CSV);
+    expect(exportService.export$).toHaveBeenCalledWith({ layerId: 1, layerName: 'Some layer', format: 'csv', filter: undefined, sort: null, attributes: [] });
   });
 
 });

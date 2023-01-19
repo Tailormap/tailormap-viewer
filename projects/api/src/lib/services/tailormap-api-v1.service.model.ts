@@ -4,6 +4,7 @@ import { FeaturesResponseModel } from '../models/features-response.model';
 import { UniqueValuesResponseModel } from '../models/unique-values-response.model';
 import { UserResponseModel } from '../models/user-response.model';
 import { LayerExportCapabilitiesModel } from '../models/layer-export-capabilities.model';
+import { HttpResponse } from '@angular/common/http';
 
 export interface TailormapApiV1ServiceModel {
 
@@ -52,13 +53,14 @@ export interface TailormapApiV1ServiceModel {
     layerId: number;
   }): Observable<LayerExportCapabilitiesModel>;
 
-  getLayerExportUrl(params: {
+  getLayerExport$(params: {
     applicationId: number;
     layerId: number;
     outputFormat: string;
     filter?: string;
     sort: { column: string; direction: string} | null;
     attributes?: string[];
-  }): string;
+    crs?: string;
+  }): Observable<HttpResponse<Blob>>;
 
 }

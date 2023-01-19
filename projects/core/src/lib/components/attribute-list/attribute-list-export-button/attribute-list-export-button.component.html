@@ -1,6 +1,12 @@
-<button mat-stroked-button [matMenuTriggerFor]="exportMenu" *ngIf="showExportButton$ | async">
-  <span i18n>Export</span>
-  <mat-icon svgIcon="drop_down"></mat-icon>
+<button mat-stroked-button
+        [matMenuTriggerFor]="exportMenu"
+        *ngIf="showExportButton$ | async"
+        [disabled]="isExporting$ | async">
+  <ng-template #exportLabel>
+    <span i18n>Export</span>
+    <mat-icon svgIcon="drop_down"></mat-icon>
+  </ng-template>
+  <mat-spinner *ngIf="(isExporting$ | async); else: exportLabel" diameter="20" color="primary" mode="indeterminate"></mat-spinner>
 </button>
 
 <mat-menu #exportMenu="matMenu">
