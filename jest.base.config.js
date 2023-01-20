@@ -10,5 +10,5 @@ module.exports = {
       isolatedModules: true
     }
   },
-  transformIgnorePatterns: ['node_modules/(?!(.*\\.mjs$|ol|observable-fns|quick-lru|nanoid))'],
+  transformIgnorePatterns: ['node_modules/(?!(.*\\.mjs$|ol|observable-fns|quick-lru|nanoid|@tinyhttp/))'],
 };
