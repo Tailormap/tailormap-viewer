@@ -17,6 +17,7 @@ export enum SupportedExportFormats {
   GEOJSON = 'geojson',
   XLSX = 'xlsx',
   GEOPACKAGE = 'geopackage',
+  DXF = 'dxf',
 }
 
 @Injectable({
@@ -29,6 +30,7 @@ export class AttributeListExportService {
   private static SHAPE_FORMATS = [ 'application/vnd.shp', 'application/x-zipped-shp', 'SHAPE-ZIP' ];
   private static GEOPACKAGE_FORMATS = [ 'application/geopackage+sqlite3', 'application/x-gpkg', 'geopackage', 'geopkg', 'gpkg' ];
   private static GEOJSON_FORMATS = [ 'application/geo+json', 'application/geojson', 'application/json', 'json' ];
+  private static DXF_FORMATS = ['DXF-ZIP'];
 
   private cachedFormats: Map<string, string[]> = new Map();
 
@@ -58,6 +60,9 @@ export class AttributeListExportService {
         }
         if (this.hasSupport(formats, AttributeListExportService.GEOJSON_FORMATS)) {
           supportedFormats.push(SupportedExportFormats.GEOJSON);
+        }
+        if (this.hasSupport(formats, AttributeListExportService.DXF_FORMATS)) {
+          supportedFormats.push(SupportedExportFormats.DXF);
         }
         return supportedFormats;
       }),
@@ -139,6 +144,8 @@ export class AttributeListExportService {
               return this.getOutputFormat(formats, AttributeListExportService.GEOPACKAGE_FORMATS);
             case SupportedExportFormats.GEOJSON:
               return this.getOutputFormat(formats, AttributeListExportService.GEOJSON_FORMATS);
+            case SupportedExportFormats.DXF:
+              return this.getOutputFormat(formats, AttributeListExportService.DXF_FORMATS);
           }
           return null;
         }),
@@ -161,6 +168,8 @@ export class AttributeListExportService {
         return 'gpkg';
       case SupportedExportFormats.GEOJSON:
         return 'geojson';
+      case SupportedExportFormats.DXF:
+        return 'zip';
     }
     return 'txt';
   }

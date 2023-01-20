@@ -30,4 +30,8 @@
           mat-menu-item
           (click)="onExportClick(supportedFormats.SHAPE)"
           i18n>Shapefile</button>
+  <button *ngIf="isFormatSupported$(supportedFormats.DXF) | async"
+          mat-menu-item
+          (click)="onExportClick(supportedFormats.DXF)"
+          i18n>DXF</button>
 </mat-menu>
