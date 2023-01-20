@@ -9,7 +9,8 @@
     "@angular/forms": "^14.1.0",
     "@angular/material": "^14.1.0",
     "@angular/platform-browser": "^14.1.0",
-    "rxjs": "^7.5.5"
+    "rxjs": "^7.5.5",
+    "@tinyhttp/content-disposition": "^2.0.8"
   },
   "dependencies": {
     "tslib": "^2.3.0"
