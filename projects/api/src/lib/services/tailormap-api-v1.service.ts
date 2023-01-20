@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import {
   AppResponseModel, FeaturesResponseModel, LayerDetailsModel, MapResponseModel, Sortorder, UserResponseModel, VersionResponseModel,
 } from '../models';
 import { Observable } from 'rxjs';
 import { TailormapApiV1ServiceModel } from './tailormap-api-v1.service.model';
 import { UniqueValuesResponseModel } from '../models/unique-values-response.model';
+import { LayerExportCapabilitiesModel } from '../models/layer-export-capabilities.model';
 
 @Injectable()
 export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
@@ -101,6 +102,43 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
       `${TailormapApiV1Service.BASE_URL}/app/${params.applicationId}/layer/${params.layerId}/unique/${params.attribute}`,
       params.filter ? this.getQueryParams({ filter: params.filter }) : '',
       { headers: new HttpHeaders('Content-Type: application/x-www-form-urlencoded') },
+    );
+  }
+
+  public getLayerExportCapabilities$(params: {
+    applicationId: number;
+    layerId: number;
+  }): Observable<LayerExportCapabilitiesModel> {
+    return this.httpClient.get<LayerExportCapabilitiesModel>(
+      `${TailormapApiV1Service.BASE_URL}/app/${params.applicationId}/layer/${params.layerId}/export/capabilities`,
+    );
+  }
+
+  public getLayerExport$(params: {
+    applicationId: number;
+    layerId: number;
+    outputFormat: string;
+    filter?: string;
+    sort: { column: string; direction: string} | null;
+    attributes?: string[];
+    crs?: string;
+  }): Observable<HttpResponse<Blob>> {
+    const queryParams = this.getQueryParams({
+      outputFormat: params.outputFormat,
+      attributes: params.attributes?.join(','),
+      sortBy: params.sort?.column,
+      sortOrder: params.sort?.direction,
+      crs: params.crs,
+    });
+    return this.httpClient.post(
+      `${TailormapApiV1Service.BASE_URL}/app/${params.applicationId}/layer/${params.layerId}/export/download`,
+      params.filter ? this.getQueryParams({ filter: params.filter }) : '',
+      {
+        headers: new HttpHeaders('Content-Type: application/x-www-form-urlencoded'),
+        params: queryParams,
+        observe: 'response',
+        responseType: 'blob',
+      },
     );
   }
 

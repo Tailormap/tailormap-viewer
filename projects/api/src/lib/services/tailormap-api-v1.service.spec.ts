@@ -84,4 +84,10 @@ describe('TailormapApiV1Service', () => {
     req.flush(null);
   });
 
+  test('queries API for getLayerExportCapabilities$', () => {
+    service.getLayerExportCapabilities$({ applicationId: 1, layerId: 1 }).subscribe();
+    const req = httpController.expectOne({ url: '/api/app/1/layer/1/export/capabilities', method: 'GET' });
+    req.flush(null);
+  });
+
 });

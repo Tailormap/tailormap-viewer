@@ -1,0 +1,37 @@
+<button mat-stroked-button
+        [matMenuTriggerFor]="exportMenu"
+        *ngIf="showExportButton$ | async"
+        [disabled]="isExporting$ | async">
+  <ng-template #exportLabel>
+    <span i18n>Export</span>
+    <mat-icon svgIcon="drop_down"></mat-icon>
+  </ng-template>
+  <mat-spinner *ngIf="(isExporting$ | async); else: exportLabel" diameter="20" color="primary" mode="indeterminate"></mat-spinner>
+</button>
+
+<mat-menu #exportMenu="matMenu">
+  <button *ngIf="isFormatSupported$(supportedFormats.GEOPACKAGE) | async"
+          mat-menu-item
+          (click)="onExportClick(supportedFormats.GEOPACKAGE)"
+          i18n>GeoPackage</button>
+  <button *ngIf="isFormatSupported$(supportedFormats.GEOJSON) | async"
+          mat-menu-item
+          (click)="onExportClick(supportedFormats.GEOJSON)"
+          i18n>GeoJSON</button>
+  <button *ngIf="isFormatSupported$(supportedFormats.CSV) | async"
+          mat-menu-item
+          (click)="onExportClick(supportedFormats.CSV)"
+          i18n>CSV</button>
+  <button *ngIf="isFormatSupported$(supportedFormats.XLSX) | async"
+          mat-menu-item
+          (click)="onExportClick(supportedFormats.XLSX)"
+          i18n>Excel</button>
+  <button *ngIf="isFormatSupported$(supportedFormats.SHAPE) | async"
+          mat-menu-item
+          (click)="onExportClick(supportedFormats.SHAPE)"
+          i18n>Shapefile</button>
+  <button *ngIf="isFormatSupported$(supportedFormats.DXF) | async"
+          mat-menu-item
+          (click)="onExportClick(supportedFormats.DXF)"
+          i18n>DXF</button>
+</mat-menu>

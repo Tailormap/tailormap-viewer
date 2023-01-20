@@ -37,6 +37,7 @@
     "@ngrx/store-devtools": "^14.1.0",
     "@sentry/angular": "^7.20.1",
     "@sentry/tracing": "^7.20.1",
+    "@tinyhttp/content-disposition": "^2.0.8",
     "html2canvas": "^1.4.1",
     "jspdf": "^2.5.1",
     "jsts": "^2.9.3",

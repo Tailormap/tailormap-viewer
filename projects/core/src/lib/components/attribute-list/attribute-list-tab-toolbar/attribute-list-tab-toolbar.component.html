@@ -2,6 +2,7 @@
 
   <div class="buttons">
     <button *ngIf="hasFilters$ | async" mat-flat-button color="primary" (click)="clearFilter()" i18n>Clear filters</button>
+    <tm-attribute-list-export-button></tm-attribute-list-export-button>
     <mat-spinner *ngIf="loadingData$ | async" color="primary" mode="indeterminate" diameter="20"></mat-spinner>
   </div>
 

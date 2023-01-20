@@ -8,6 +8,7 @@ import { FeatureAttributeTypeEnum } from '../models/feature-attribute-type.enum'
 import { FeaturesResponseModel } from '../models/features-response.model';
 import { LayerTreeNodeModel } from '../models/layer-tree-node.model';
 import { UniqueValuesResponseModel } from '../models/unique-values-response.model';
+import { LayerExportCapabilitiesModel } from '../models/layer-export-capabilities.model';
 
 export const getVersionResponseModel = (overrides?: VersionResponseModel): VersionResponseModel => ({
   version: '0.1-SNAPSHOT',
@@ -148,6 +149,12 @@ export const getAppResponseData = (overrides?: Partial<AppResponseModel>): AppRe
   title: 'My viewer',
   lang: Language.NL_NL,
   components: [],
+  ...overrides,
+});
+
+export const getLayerExportCapabilitiesModel = (overrides?: Partial<LayerExportCapabilitiesModel>): LayerExportCapabilitiesModel => ({
+  exportable: true,
+  outputFormats: [ 'SHAPE-ZIP',  'excel2007',  'gpkg',  'json',  'text/csv' ],
   ...overrides,
 });
 
