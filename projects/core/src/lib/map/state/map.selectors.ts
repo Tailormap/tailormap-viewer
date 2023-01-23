@@ -195,6 +195,11 @@ export const selectLayer = (layerId: number) => createSelector(
   (layers: AppLayerWithInitialValuesModel[]) => layers.find(l => l.id === layerId) || null,
 );
 
+export const selectLayerWithService = (layerId: number) => createSelector(
+  selectLayersWithServices,
+  (layers: AppLayerWithInitialValuesModel[]) => layers.find(l => l.id === layerId) || null,
+);
+
 export const selectLayerOpacity = (layerId: number) => createSelector(
   selectLayer(layerId),
   (layer) => layer?.opacity || 100,
