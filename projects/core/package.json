@@ -13,7 +13,7 @@
     "@ngrx/store": "^14.1.0",
     "@sentry/angular": "^7.14.1",
     "@tailormap-viewer/shared": "^10.0.1",
-    "@tailormap-viewer/map": "^10.0.0",
+    "@tailormap-viewer/map": "^10.0.1",
     "@tailormap-viewer/api": "^10.0.1",
     "jspdf": "^2.5.1",
     "luxon": "^2.5.0",
