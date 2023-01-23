@@ -23,7 +23,7 @@ updates:
     ignore:
       - dependency-name: node
         versions:
-          - '>= 17'
+          - '>= 19'
 
   - package-ecosystem: docker
     directory: '/docker/db/'
