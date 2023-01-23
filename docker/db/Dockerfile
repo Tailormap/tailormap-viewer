@@ -1,4 +1,4 @@
-FROM postgres:15.1-alpine3.16
+FROM postgres:15.1-alpine3.17
 
 ARG TZ="Europe/Amsterdam"
 ARG VERSION="snapshot"
@@ -16,9 +16,6 @@ LABEL org.opencontainers.image.authors="support@b3partners.nl" \
 # get schema export from tailormap persistence
 RUN set -eux;ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone\
     && apk upgrade --no-cache && apk -U add --no-cache tzdata curl unzip \
-    # update curl for CVE-2022-40303, CVE-2022-40304
-    # can be probably removed at some time when upgrading base image
-    && apk add --no-cache libxml2=2.9.14-r2 \
     # this will get the latest version of tailormap persistence from nexus using nexus REST API \
     # see https://help.sonatype.com/repomanager3/integrations/rest-and-integration-api/search-api#SearchAPI-DownloadingtheLatestVersionofanAsset
     && curl -v -L -X GET 'https://repo.b3p.nl/nexus/service/rest/v1/search/assets/download?sort=version&repository=public&maven.groupId=nl.b3p.tailormap&maven.artifactId=tailormap-persistence&maven.extension=jar&maven.classifier' -H 'accept: application/json'  -o /tmp/tailormap-persistence.jar \
