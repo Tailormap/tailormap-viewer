@@ -197,7 +197,7 @@ export const selectLayer = (layerId: number) => createSelector(
 
 export const selectLayerWithService = (layerId: number) => createSelector(
   selectLayersWithServices,
-  (layers: AppLayerWithInitialValuesModel[]) => layers.find(l => l.id === layerId) || null,
+  (layers: ExtendedAppLayerModel[]) => layers.find(l => l.id === layerId) || null,
 );
 
 export const selectLayerOpacity = (layerId: number) => createSelector(
