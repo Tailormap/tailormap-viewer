@@ -22,6 +22,7 @@ describe('TransformUrlsDirective', () => {
       'Some text with some https://www.test.nl/image.jpg in it',
       'Some text with some https://www.test.nl/image.jpeg in it',
       'Some text with some https://www.test.nl/image.png in it',
+      'Some text with some https://www.test.nl/image.svg in it',
       'Some text with some https://www.test.nl/image.webp in it',
       'Some text with some https://www.test.nl/image.gif in it',
       'Some text with a vendor specific image inside https://www.test.nl/getimage.ashx?id=testtest in it',
@@ -31,6 +32,7 @@ describe('TransformUrlsDirective', () => {
       'Some text with some <a href="https://www.test.nl/image.jpg" target="_blank"><img src="https://www.test.nl/image.jpg" alt="https://www.test.nl/image.jpg" /></a> in it',
       'Some text with some <a href="https://www.test.nl/image.jpeg" target="_blank"><img src="https://www.test.nl/image.jpeg" alt="https://www.test.nl/image.jpeg" /></a> in it',
       'Some text with some <a href="https://www.test.nl/image.png" target="_blank"><img src="https://www.test.nl/image.png" alt="https://www.test.nl/image.png" /></a> in it',
+      'Some text with some <a href="https://www.test.nl/image.svg" target="_blank"><img src="https://www.test.nl/image.svg" alt="https://www.test.nl/image.svg" /></a> in it',
       'Some text with some <a href="https://www.test.nl/image.webp" target="_blank"><img src="https://www.test.nl/image.webp" alt="https://www.test.nl/image.webp" /></a> in it',
       'Some text with some <a href="https://www.test.nl/image.gif" target="_blank"><img src="https://www.test.nl/image.gif" alt="https://www.test.nl/image.gif" /></a> in it',
       // eslint-disable-next-line max-len

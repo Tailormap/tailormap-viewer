@@ -14,7 +14,7 @@ export class HtmlifyPipe implements PipeTransform {
   private static readonly MD_PART = '\\[[\\w\\s\\d]+]\\(https?:\\/\\/[^) ]*\\)';
 
   private static readonly URL_REGEXP = new RegExp(`${HtmlifyPipe.MD_PART}|${HtmlifyPipe.URL_PART}`, 'ig');
-  private static readonly IMG_REGEXP = /\.(jpg|jpeg|png|webp|gif)/i;
+  private static readonly IMG_REGEXP = /\.(jpg|jpeg|png|webp|svg|gif)/i;
   private static readonly VENDOR_SPECIFIC_IMAGE_REGEXP = /getimage\.ashx/i;
   private static readonly NEWLINE_REGEXP = /([^>\r\n]?)(\r\n|\n\r|\r|\n)/g;
 
