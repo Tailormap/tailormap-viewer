@@ -1,12 +1,14 @@
-tm-tree ::ng-deep .tree-node-wrapper > .mat-icon-button {
+tm-tree ::ng-deep .tree-node-wrapper > .mdc-icon-button {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-tm-tree ::ng-deep .tree-node-wrapper > .mat-icon-button mat-icon {
-  width: 18px;
-  height: 18px;
+tm-tree ::ng-deep .tree-node-wrapper > .mdc-icon-button mat-icon {
+  --mdc-icon-button-icon-size: 18px;
+  width: var(--mdc-icon-button-icon-size);
+  height: var(--mdc-icon-button-icon-size);
+  overflow: visible;
 }
 
 tm-tree ::ng-deep .tree-node-wrapper--folder {

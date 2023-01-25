@@ -13,7 +13,7 @@
   --vh: 1vh;
   --vw: 1vw;
 
-  --primary-color: #6236ff;
+  --primary-color: rgb(98, 54, 255);
   --error-color: #ff3636;
   --disabled-color: rgb(241, 241, 241);
   --border-color: #e1e1e1;
@@ -31,6 +31,9 @@
   --max-control-width: calc(var(--vw) * 100 - (var(--menubar-width) + var(--body-margin) * 2));
 
   --box-shadow-top: 0 1px 0 0 rgba(0, 0, 0, 0.05), 0 -3px 4px 0 rgba(0, 0, 0, 0.08);
+
+  --mdc-typography-button-font-weight: 400;
+  --mdc-typography-button-letter-spacing: 0.0714285712;
 }
 
 html {
@@ -91,7 +94,7 @@ body {
   color: var(--primary-color);
 }
 
-.mat-flat-button.mat-accent {
+.mdc-button--unelevated.mat-accent {
   background-color: var(--primary-color-0_4);
   color: var(--primary-color);
 }
@@ -113,7 +116,7 @@ body {
 }
 
 .map-control-button,
-.map-control-button.mat-flat-button {
+.map-control-button.mdc-button--unelevated {
   background-color: #fff;
   border: 0 none;
   width: var(--map-control-size);
@@ -123,10 +126,10 @@ body {
   min-width: 40px;
 }
 
-.map-control-button mat-icon {
+.map-control-button.mdc-button--unelevated > mat-icon {
   width: calc(var(--map-control-size) - 16px);
   height: calc(var(--map-control-size) - 16px);
-  margin: 8px;
+  margin: 0;
 }
 
 .mat-button-base.button--active,

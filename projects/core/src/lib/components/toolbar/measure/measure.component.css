@@ -11,15 +11,3 @@
   border-top-right-radius: 3px;
   border-bottom-right-radius: 3px;
 }
-
-.measure-buttons .divider {
-  width: 1px;
-  height: var(--size);
-  background-color: #DFDFDF;
-}
-
-.measure-buttons mat-icon {
-  width: calc(var(--size) - 16px);
-  height: calc(var(--size) - 16px);
-  margin: 8px;
-}

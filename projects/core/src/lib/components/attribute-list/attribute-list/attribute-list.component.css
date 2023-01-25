@@ -42,33 +42,15 @@
   border-bottom: 1px solid #e1e1e1;
 }
 
+mat-tab-group {
+  border-bottom: 1px solid #e1e1e1;
+}
+
 .mat-toolbar span {
   color: #0c0524;
   font-size: 16px;
   font-weight: 600;
   line-height: 24px;
-}
-
-.mat-icon-button {
-  width: 20px;
-  height: 20px;
-  line-height: 20px;
-}
-
-.mat-icon {
-  width: 18px;
-  height: 18px;
-  line-height: 18px;
-}
-
-.mat-icon-button + .mat-icon-button {
-  margin-left: 12px;
-}
-
-.mat-flat-button {
-  margin-right: 20px;
-  line-height: 22px;
-  display: none;
 }
 
 .mat-divider {
