@@ -20,7 +20,7 @@ const setupSentryProviders = async () => {
   } catch (error) {}
   sentry.init({
     dsn: SENTRY_DSN,
-    release: version?.semverString,
+    release: version?.gitInfo.semverString,
     environment: environment.production ? 'production' : 'development',
     integrations: [
       new tracing.BrowserTracing({
