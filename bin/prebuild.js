@@ -9,6 +9,8 @@ const info = git.gitDescribeSync({longSemver: true, customArguments: [ '--abbrev
 fs.mkdirp(path.join(__dirname, '../generated/'));
 const file = path.resolve(__dirname, '../generated/', 'version.json');
 
-fs.writeFileSync(file, JSON.stringify({version: appVersion, buildDate: Date(), gitInfo: info}), {encoding: 'utf-8'});
+const version = JSON.stringify({version: appVersion, buildDate: Date(), gitInfo: info}, null, 2);
 
-console.log(chalk.green(`Wrote version info ${appVersion}, ${info.raw} to ${path.relative(path.resolve(__dirname, '..'), file)}`));
+fs.writeFileSync(file, version, {encoding: 'utf-8'});
+
+console.log(chalk.green(`Wrote version info to ${path.relative(path.resolve(__dirname, '..'), file)}:\n${version}`));
