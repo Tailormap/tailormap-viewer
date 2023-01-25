@@ -2,7 +2,8 @@ const chalk = require('chalk');
 const git = require('git-describe');
 const path = require('path');
 const fs = require('fs-extra');
-const {version: appVersion} = require('../package.json')
+
+const {version: appVersion} = require('../projects/core/package.json');
 
 const info = git.gitDescribeSync({longSemver: true, customArguments: [ '--abbrev=40' ]});
 fs.mkdirp(path.join(__dirname, '../generated/'));

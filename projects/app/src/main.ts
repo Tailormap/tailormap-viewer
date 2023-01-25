@@ -3,7 +3,6 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
-import version from 'generated/version.json';
 
 const SENTRY_DSN: string = (window as any).SENTRY_DSN;
 
@@ -13,9 +12,14 @@ const setupSentryProviders = async () => {
   }
   const sentry = await import('@sentry/angular');
   const tracing = await import('@sentry/tracing');
+  let version;
+  try {
+    version = await fetch('/version.json')
+      .then(response => response.json());
+  } catch (error) {}
   sentry.init({
     dsn: SENTRY_DSN,
-    release: version.gitInfo.hash,
+    release: version?.gitInfo.raw,
     environment: environment.production ? 'production' : 'development',
     integrations: [
       new tracing.BrowserTracing({
