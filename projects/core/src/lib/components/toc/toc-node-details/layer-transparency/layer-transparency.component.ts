@@ -34,11 +34,11 @@ export class LayerTransparencyComponent {
     return `${Math.round(value)}%`;
   }
 
-  public updateOpacity($event: MatSliderChange) {
+  public updateOpacity($event: number | null) {
     if (!this.layerId) {
       return;
     }
-    const opacity = $event.value === null ? 100 : $event.value;
+    const opacity = $event === null ? 100 : $event;
     this.store$.dispatch(setLayerOpacity({ layerId: this.layerId, opacity }));
   }
 

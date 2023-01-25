@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, In
 import { ArrowTypeEnum, DrawingFeatureStyleModel, LabelStyleEnum, StrokeTypeEnum } from '../models/drawing-feature.model';
 import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type.enum';
 import { DrawingHelper } from '../helpers/drawing.helper';
-import { MatSliderChange } from '@angular/material/slider';
 import { FormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { Subject, takeUntil } from 'rxjs';
@@ -147,36 +146,36 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
     this.change('markerStrokeColor', $event);
   }
 
-  public changeMarkerStrokeWidth($event: MatSliderChange) {
-    this.change('markerStrokeWidth', $event.value);
+  public changeMarkerStrokeWidth($event: number) {
+    this.change('markerStrokeWidth', $event);
   }
 
-  public changeMarkerSize($event: MatSliderChange) {
-    this.change('markerSize', $event.value);
+  public changeMarkerSize($event: number) {
+    this.change('markerSize', $event);
   }
 
-  public changeMarkerRotation($event: MatSliderChange) {
-    this.change('markerRotation', $event.value);
+  public changeMarkerRotation($event: number) {
+    this.change('markerRotation', $event);
   }
 
-  public changeStrokeOpacity($event: MatSliderChange) {
-    this.change('strokeOpacity', $event.value);
+  public changeStrokeOpacity($event: number) {
+    this.change('strokeOpacity', $event);
   }
 
   public getDashArray(strokeType: StrokeTypeEnum) {
     return StyleHelper.getDashArray(strokeType, 0).join(' ');
   }
 
-  public changeStrokeWidth($event: MatSliderChange) {
-    this.change('strokeWidth', $event.value);
+  public changeStrokeWidth($event: number) {
+    this.change('strokeWidth', $event);
   }
 
   public changeFillColor($event: string) {
     this.change('fillColor', $event);
   }
 
-  public changeFillOpacity($event: MatSliderChange) {
-    this.change('fillOpacity', $event.value);
+  public changeFillOpacity($event: number) {
+    this.change('fillOpacity', $event);
   }
 
   public changeStripedFill($event: MatCheckboxChange) {
@@ -202,8 +201,8 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
     this.change('label', label);
   }
 
-  public changeLabelSize($event: MatSliderChange) {
-    this.change('labelSize', $event.value);
+  public changeLabelSize($event: number) {
+    this.change('labelSize', $event);
   }
 
   public changeLabelColor($event: string) {
@@ -228,8 +227,8 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
     return (this.style.labelStyle || []).indexOf(style) !== -1;
   }
 
-  public changeLabelRotation($event: MatSliderChange) {
-    this.change('labelRotation', $event.value);
+  public changeLabelRotation($event: number) {
+    this.change('labelRotation', $event);
   }
 
   public getMarkers() {

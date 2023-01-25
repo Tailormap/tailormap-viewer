@@ -3,10 +3,12 @@
   <mat-slider min="0"
               max="100"
               step="1"
-              [thumbLabel]="true"
-              [displayWith]="formatThumb"
-              [value]="opacity$ | async"
-              (change)="updateOpacity($event)"></mat-slider>
+              [displayWith]="formatThumb">
+    <input matSliderThumb
+           type="number"
+           [value]="opacity$ | async"
+           (valueChange)="updateOpacity($event)">
+  </mat-slider>
   <button mat-icon-button
           (click)="resetOpacity()"
           color="primary"
