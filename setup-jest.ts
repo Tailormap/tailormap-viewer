@@ -1,6 +1,11 @@
 import 'jest-preset-angular/setup-jest';
 import './projects/app/src/polyfills';
 import '@testing-library/jest-dom/extend-expect';
+import { TextEncoder, TextDecoder } from 'util';
+
+global.TextEncoder = TextEncoder
+// @ts-ignore
+global.TextDecoder = TextDecoder
 
 window.ResizeObserver =
   window.ResizeObserver ||
