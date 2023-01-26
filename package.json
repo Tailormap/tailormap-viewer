@@ -38,6 +38,7 @@
     "@sentry/angular": "^7.33.0",
     "@sentry/tracing": "^7.33.0",
     "@tinyhttp/content-disposition": "^2.0.8",
+    "angular-material-css-vars": "^4.2.0",
     "html2canvas": "^1.4.1",
     "jspdf": "^2.5.1",
     "jsts": "^2.9.3",

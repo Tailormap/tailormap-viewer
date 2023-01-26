@@ -1,25 +1,32 @@
+
+/* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
 .mat-button-toggle,
 .mat-button-toggle-checked {
   background-color: #fff;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
 mat-button-toggle-group {
   border-radius: 3px;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
 mat-button-toggle ::ng-deep .mat-button-toggle-label-content {
   line-height: 38px;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
 .drop-down-button ::ng-deep .mat-button-toggle-label-content {
   padding: 0 8px;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
 .drop-down-button ::ng-deep .mat-button-toggle-label-content svg {
   width: 20px;
   height: 20px;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
 .mat-button-toggle + .mat-button-toggle {
   border-left: 0 none;
 }

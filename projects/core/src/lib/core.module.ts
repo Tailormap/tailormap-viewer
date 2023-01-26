@@ -23,6 +23,7 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 import { LuxonDateAdapter, MAT_LUXON_DATE_FORMATS } from '@angular/material-luxon-adapter';
 import { LayoutModule } from './layout/layout.module';
 import { ApplicationStyleService } from './services/application-style.service';
+import { MaterialCssVarsModule } from 'angular-material-css-vars';
 
 const getBaseHref = (platformLocation: PlatformLocation): string => {
   return platformLocation.getBaseHrefFromDOM();
@@ -59,6 +60,7 @@ const sentryProviders = SENTRY_DSN === '@SENTRY_DSN@' ? [] : [
       },
     }),
     EffectsModule.forRoot([CoreEffects]),
+    MaterialCssVarsModule.forRoot(),
     ApplicationMapModule,
     MapModule,
     FilterModule,

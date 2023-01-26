@@ -3,7 +3,7 @@
   <mat-slider min="0"
               max="100"
               step="1"
-              [displayWith]="formatThumb">
+              [displayWith]="formatThumb"><input matSliderThumb />
     <input matSliderThumb
            type="number"
            [value]="opacity$ | async"

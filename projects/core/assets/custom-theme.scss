@@ -1,75 +1,12 @@
-// Custom Theming for Angular Material
-// For more information: https://material.angular.io/guide/theming
+@use 'angular-material-css-vars/main' as mat-css-main;
 @use '@angular/material' as mat;
-// Plus imports for other components in your app.
+@use '@angular/material/theming' as mat-theming;
 
 $custom-typography: mat.define-typography-config(
   $font-family: 'Inter, "Lucida Sans Unicode", "Lucida Grande", sans-serif',
 );
 
-// Include the common styles for Angular Material. We include this here so that you only
-// have to load a single css file for Angular Material in your app.
-// Be sure that you only ever include this mixin once!
-@include mat.core();
-
-$mat-tailormap: (
-  50: #efe8fe,
-  100: #d5c6fc,
-  200: #b89ffb,
-  300: #9976fb,
-  400: #7e56fa,
-  500: #6236ff,
-  600: #5130f0,
-  700: #3a28e8,
-  800: #1722e2,
-  900: #0012db,
-  A100: #fff,
-  A200: #6236ff,
-  A400: rgba(98, 54, 255, 0.4),
-  A700: rgba(98, 54, 255, 0.6),
-  contrast: (
-    50 : #000,
-    100 : #000,
-    200 : #000,
-    300 : #fff,
-    400 : #fff,
-    500 : #fff,
-    600 : #fff,
-    700 : #fff,
-    800 : #fff,
-    900 : #fff,
-    A100 : #000,
-    A200 : #6236ff,
-    A400 : #6236ff,
-    A700 : #fff,
-  )
-);
-
-// Define the palettes for your theme using the Material Design palettes available in palette.scss
-// (imported above). For each palette, you can optionally specify a default, lighter, and darker
-// hue. Available color palettes: https://material.io/design/color/
-$tailormap-app-primary: mat.define-palette($mat-tailormap);
-$tailormap-app-accent:  mat.define-palette($mat-tailormap, A200, A100, A400);
-
-// The warn palette is optional (defaults to red).
-$app-warn: mat.define-palette(mat.$red-palette);
-
-// Create the theme object. A theme consists of configurations for individual
-// theming systems such as "color" or "typography".
-$app-theme: mat.define-light-theme((
-  color: (
-    primary: $tailormap-app-primary,
-    accent: $tailormap-app-accent,
-    warn: $app-warn,
-  ),
-  typography: $custom-typography,
-  density: -1,
-));
-
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
-@include mat.all-component-themes($app-theme);
+@include mat-css-main.init-material-css-vars($typography-config: $custom-typography);
 
 @include mat.radio-density(-1);
 @include mat.checkbox-density(-1);

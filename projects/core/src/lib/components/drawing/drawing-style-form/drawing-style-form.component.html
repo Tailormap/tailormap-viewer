@@ -39,7 +39,7 @@
     </div>
 
     <div class="form-field form-field__slider">
-      <mat-slider [max]="10" [min]="1" [step]="1">
+      <mat-slider [max]="10" [min]="1" [step]="1"><input matSliderThumb />
         <input (valueChange)="changeMarkerStrokeWidth($event)"
                [value]="style.markerStrokeWidth"
                type="number"
@@ -53,7 +53,7 @@
     </div>
 
     <div class="form-field form-field__slider">
-      <mat-slider [max]="20" [min]="1" [step]="1">
+      <mat-slider [max]="20" [min]="1" [step]="1"><input matSliderThumb />
         <input (valueChange)="changeMarkerSize($event)"
                [value]="style.markerSize"
                type="number"
@@ -67,7 +67,7 @@
     </div>
 
     <div class="form-field form-field__slider">
-      <mat-slider [max]="360" [min]="0" [step]="1">
+      <mat-slider [max]="360" [min]="0" [step]="1"><input matSliderThumb />
         <input (valueChange)="changeMarkerRotation($event)"
                [value]="style.markerRotation"
                type="number"
@@ -132,7 +132,7 @@
     </div>
 
     <div class="form-field form-field__slider">
-      <mat-slider [max]="30" [min]="1" [step]="1">
+      <mat-slider [max]="30" [min]="1" [step]="1"><input matSliderThumb />
         <input (valueChange)="changeLabelSize($event)"
                [value]="style.labelSize"
                type="number"
@@ -159,7 +159,7 @@
     </div>
 
     <div class="form-field form-field__slider">
-      <mat-slider [max]="360" [min]="0" [step]="1">
+      <mat-slider [max]="360" [min]="0" [step]="1"><input matSliderThumb />
         <input (valueChange)="changeLabelRotation($event)"
                [value]="style.labelRotation"
                type="number"
@@ -187,7 +187,7 @@
     </div>
 
     <div class="form-field form-field__slider">
-      <mat-slider [max]="20" [min]="1" [step]="1">
+      <mat-slider [max]="20" [min]="1" [step]="1"><input matSliderThumb />
         <input (valueChange)="changeStrokeWidth($event)"
                [value]="style.strokeWidth"
                type="number"
@@ -201,7 +201,7 @@
     </div>
 
     <div class="form-field form-field__slider">
-      <mat-slider [max]="100" [min]="0" [step]="1" [displayWith]="formatThumb">
+      <mat-slider [max]="100" [min]="0" [step]="1" [displayWith]="formatThumb"><input matSliderThumb />
         <input (valueChange)="changeStrokeOpacity($event)"
                [value]="style.strokeOpacity"
                type="number"
@@ -259,7 +259,7 @@
     </div>
 
     <div class="form-field form-field__slider">
-      <mat-slider [max]="100" [min]="0" [step]="1" [displayWith]="formatThumb">
+      <mat-slider [max]="100" [min]="0" [step]="1" [displayWith]="formatThumb"><input matSliderThumb />
         <input [value]="style.fillOpacity"
                (valueChange)="changeFillOpacity($event)"
                type="number"

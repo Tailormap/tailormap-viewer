@@ -1,4 +1,4 @@
-::ng-deep .cdk-overlay-container .mat-snack-bar-container.snack-bar-message-panel {
+::ng-deep .cdk-overlay-container .mat-mdc-snack-bar-container.snack-bar-message-panel {
   position: relative;
   padding: 0;
 }
@@ -17,7 +17,7 @@
   padding: 16px;
 }
 
-.message-container .mat-spinner.mat-progress-spinner ::ng-deep circle {
+.message-container .mat-mdc-progress-spinner.mat-mdc-progress-spinner ::ng-deep circle {
   stroke: white;
 }
 
