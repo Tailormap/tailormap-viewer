@@ -1,14 +1,11 @@
 <h3 i18n>Opacity</h3>
 <div class="form-field form-field__slider">
-  <mat-slider min="0"
-              max="100"
-              step="1"
-              [displayWith]="formatThumb"><input matSliderThumb />
-    <input matSliderThumb
-           type="number"
-           [value]="opacity$ | async"
-           (valueChange)="updateOpacity($event)">
-  </mat-slider>
+  <tm-slider [min]="0"
+             [max]="100"
+             [step]="1"
+             [displayWith]="formatThumb"
+             (valueChange)="updateOpacity($event)">
+  </tm-slider>
   <button mat-icon-button
           (click)="resetOpacity()"
           color="primary"

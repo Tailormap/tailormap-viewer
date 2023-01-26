@@ -2,7 +2,6 @@ import { Component, ChangeDetectionStrategy, Input, inject } from '@angular/core
 import { Store } from '@ngrx/store';
 import { of, take } from 'rxjs';
 import { selectLayerOpacity, selectLayer } from '../../../../map/state/map.selectors';
-import { MatSliderChange } from '@angular/material/slider';
 import { setLayerOpacity } from '../../../../map/state/map.actions';
 
 @Component({
