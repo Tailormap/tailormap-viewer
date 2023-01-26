@@ -82,7 +82,10 @@ jobs:
       BASE_HREF: /
     steps:
       - uses: actions/checkout@v3
-
+        with:
+          # If tags aren't fetched the bin/prebuild.js script will leave fields in generated/version.json empty
+          # https://github.com/actions/checkout/issues/701
+          fetch-depth: 0
       - name: 'GitHub Slug Action'
         uses: rlespinasse/github-slug-action@v4
 
