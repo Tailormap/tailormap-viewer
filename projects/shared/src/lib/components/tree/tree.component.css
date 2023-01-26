@@ -2,7 +2,6 @@
   display: block;
 }
 
-/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
 mat-checkbox {
   margin: 0 5px;
 }
@@ -34,12 +33,6 @@ mat-checkbox {
   height: var(--tree-node-size);
   min-height: initial;
   flex: 1;
-}
-
-.tree-node-wrapper ::ng-deep > .mdc-icon-button {
-  width: 18px;
-  height: 18px;
-  line-height: 18px;
 }
 
 /* the ::ng-deep above will be removed after compilation so this selector is actually more specific */

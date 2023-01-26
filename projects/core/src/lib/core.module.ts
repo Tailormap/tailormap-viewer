@@ -24,6 +24,7 @@ import { LuxonDateAdapter, MAT_LUXON_DATE_FORMATS } from '@angular/material-luxo
 import { LayoutModule } from './layout/layout.module';
 import { ApplicationStyleService } from './services/application-style.service';
 import { MaterialCssVarsModule } from 'angular-material-css-vars';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 
 const getBaseHref = (platformLocation: PlatformLocation): string => {
   return platformLocation.getBaseHrefFromDOM();
@@ -78,6 +79,7 @@ const sentryProviders = SENTRY_DSN === '@SENTRY_DSN@' ? [] : [
     { provide: APP_BASE_HREF, useFactory: getBaseHref, deps: [PlatformLocation] },
     { provide: DateAdapter, useClass: LuxonDateAdapter, deps: [MAT_DATE_LOCALE] },
     { provide: MAT_DATE_FORMATS, useValue: MAT_LUXON_DATE_FORMATS },
+    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { subscriptSizing: 'dynamic' } },
     ...sentryProviders,
   ],
 })

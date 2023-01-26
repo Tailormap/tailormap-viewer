@@ -35,6 +35,7 @@ export class ApplicationStyleService implements OnDestroy {
   private updateStyling(appStyling?: AppStylingModel | null) {
     if (appStyling && appStyling.primaryColor) {
       this.materialCssVarsService.setPrimaryColor(appStyling.primaryColor);
+      this.materialCssVarsService.setAccentColor(appStyling.primaryColor);
       CssHelper.setCssVariableValue('--primary-color', ColorHelper.getRgbStyleForColor(appStyling.primaryColor));
       CssHelper.setCssVariableValue('--primary-color-0_6', ColorHelper.getRgbStyleForColor(appStyling.primaryColor, 60));
       CssHelper.setCssVariableValue('--primary-color-0_5', ColorHelper.getRgbStyleForColor(appStyling.primaryColor, 50));

@@ -94,11 +94,6 @@ body {
   color: var(--primary-color);
 }
 
-.mdc-button--unelevated.mat-accent {
-  background-color: var(--primary-color-0_4);
-  color: var(--primary-color);
-}
-
 .toggle-button {
   background-color: #fff;
 }
@@ -139,7 +134,7 @@ body {
 
 .mat-mdc-button-base.button--active,
 .button--active,
-.mat-button-base.button--active mat-icon,
+.mat-mdc-button-base.button--active mat-icon,
 .button--active mat-icon {
   color: var(--primary-color);
 }
@@ -170,20 +165,4 @@ body {
   width: 16px;
   height: 16px;
   margin-right: 2px;
-}
-
-.icon-button-list {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.icon-button-list .mat-mdc-outlined-button {
-  min-width: 32px;
-  padding: 0 8px;
-  border-radius: 3px;
-  margin: 8px 8px 0 0;
-}
-
-.icon-button-list .mat-mdc-outlined-button:last-of-type {
-  margin-right: 0;
 }

@@ -4,7 +4,7 @@
   left: 0;
   right: 0;
   z-index: calc(var(--overlay-panel-z-index) - 1);
-  transition: left ease-in-out 0.25s;
+  transition: left ease-in-out 0.15s;
 }
 
 ::ng-deep .body--has-dialog-left .attribute-list-container {
@@ -37,6 +37,10 @@
   margin: 16px;
 }
 
+.size-18 + .size-18 {
+  margin-left: 12px;
+}
+
 .spacer {
   flex: 1 1 auto;
 }
@@ -48,7 +52,6 @@
   border-bottom: 1px solid #e1e1e1;
 }
 
-/* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
 mat-tab-group {
   border-bottom: 1px solid #e1e1e1;
 }

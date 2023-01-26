@@ -4,13 +4,6 @@ tm-tree ::ng-deep .tree-node-wrapper > .mdc-icon-button {
   align-items: center;
 }
 
-tm-tree ::ng-deep .tree-node-wrapper > .mdc-icon-button mat-icon {
-  --mdc-icon-button-icon-size: 18px;
-  width: var(--mdc-icon-button-icon-size);
-  height: var(--mdc-icon-button-icon-size);
-  overflow: visible;
-}
-
 tm-tree ::ng-deep .tree-node-wrapper--folder {
   font-weight: 600;
 }

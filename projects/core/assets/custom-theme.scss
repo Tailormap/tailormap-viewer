@@ -15,5 +15,79 @@ $custom-typography: mat.define-typography-config(
 button.mdc-button,
 button.mdc-button--outlined,
 button.mdc-button--unelevated {
-  border-radius: 0;
+  --mdc-filled-button-container-shape: 0;
+}
+
+.mat-mdc-icon-button.mat-mdc-button-base {
+  width: 40px;
+  height: 40px;
+  padding: 8px;
+}
+
+button.mat-mdc-raised-button.mat-primary,
+button.mdc-button--unelevated.mat-primary,
+button.mdc-button--unelevated.mat-accent {
+  --mdc-filled-button-label-text-color: var(--palette-primary-contrast-500-rgb);
+  --mdc-protected-button-label-text-color: var(--palette-primary-contrast-500-rgb);
+}
+
+.mat-mdc-checkbox.mat-accent {
+  --mdc-checkbox-selected-checkmark-color: var(--palette-primary-contrast-500-rgb);
+}
+
+.mat-datepicker-content .mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical),
+.mat-datepicker-content .cdk-keyboard-focused .mat-calendar-body-active > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical),
+.mat-datepicker-content .cdk-program-focused .mat-calendar-body-active > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
+  color: var(--palette-primary-contrast-500-rgb);
+}
+
+.mat-mdc-dialog-container .mdc-dialog__title {
+  --mdc-dialog-subhead-line-height: 16px;
+  --mdc-dialog-subhead-size: 16px;
+  --mdc-dialog-subhead-weight: 600;
+  padding: 0;
+  margin-bottom: 1.5em;
+}
+
+.mat-mdc-dialog-container .mdc-dialog__title::before {
+  height: var(--mdc-dialog-subhead-line-height);
+}
+
+.mat-mdc-dialog-container .mdc-dialog__surface {
+  padding: 16px;
+}
+
+.mat-mdc-icon-button.size-18 {
+  --mdc-icon-button-icon-size: 18px;
+  width: var(--mdc-icon-button-icon-size);
+  height: var(--mdc-icon-button-icon-size);
+  line-height: var(--mdc-icon-button-icon-size);
+  padding: 0;
+}
+
+.mat-mdc-icon-button.size-18 mat-icon {
+  width: var(--mdc-icon-button-icon-size);
+  height: var(--mdc-icon-button-icon-size);
+  overflow: visible;
+}
+
+.mat-mdc-icon-button.size-18 .mat-mdc-button-touch-target {
+  height: calc(var(--mdc-icon-button-icon-size) + 6px);
+  width: calc(var(--mdc-icon-button-icon-size) + 6px);
+}
+
+mat-form-field + mat-form-field {
+  margin-top: 16px;
+}
+
+.mdc-button mat-icon {
+  vertical-align: middle;
+}
+
+.mdc-snackbar .mdc-snackbar__label {
+  padding: 2px;
+}
+
+.mat-mdc-progress-bar .mdc-linear-progress__buffer-bar {
+  background-color: var(--palette-primary-200-rgb);
 }

@@ -50,10 +50,10 @@
            [attr.data-nodeid]="node.id"
            (dragstart)="treeDragDropServiceEnabled ? handleDragStart($event, node) : null">
         <button mat-icon-button
+                class="size-18"
                 (click)="toggleNodeExpansion($event, node)"
                 [attr.aria-label]="'toggle ' + node.label">
-          <mat-icon class="mat-icon-rtl-mirror"
-                    [svgIcon]="isExpanded(node) ? 'chevron_bottom' : 'chevron_right'"></mat-icon>
+          <mat-icon [svgIcon]="isExpanded(node) ? 'chevron_bottom' : 'chevron_right'"></mat-icon>
         </button>
         <mat-checkbox *ngIf="node.checkbox && !useRadioInputs"
                       [disabled]="readOnlyMode"

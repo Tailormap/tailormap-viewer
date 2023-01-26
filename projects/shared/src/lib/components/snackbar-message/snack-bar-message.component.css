@@ -28,10 +28,6 @@
   bottom: -4px;
 }
 
-button {
-  margin-right: 8px;
-}
-
 mat-icon ::ng-deep path {
   fill: #fff;
 }
