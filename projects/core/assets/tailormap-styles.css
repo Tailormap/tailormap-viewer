@@ -216,12 +216,7 @@ body {
 .mat-mdc-menu-content .mat-mdc-menu-item {
   height: 38px;
   line-height: 38px;
-}
-
-.mat-mdc-menu-content .mat-mdc-menu-item mat-icon {
-  width: 16px;
-  height: 16px;
-  margin-right: 2px;
+  min-height: 38px;
 }
 
 mat-form-field + mat-form-field {

@@ -111,12 +111,20 @@ $app-theme: mat.define-light-theme((
 :root {
   --mdc-typography-button-font-weight: 400;
   --mdc-typography-button-letter-spacing: 0.0714285712;
+  --mdc-typography-body1-letter-spacing: 0.0714285712;
+  --mdc-typography-subtitle1-font-size: 14px;
+  --mdc-typography-body1-font-size: 14px;
 }
 
-button.mdc-button,
-button.mdc-button--outlined,
-button.mdc-button--unelevated {
+.mat-mdc-form-field .mdc-text-field--outlined .mdc-notched-outline--upgraded .mdc-floating-label--float-above {
+  font-size: var(--mdc-typography-body1-font-size);
+}
+
+button.mat-mdc-button-base.mdc-button,
+button.mat-mdc-button-base.mdc-button--outlined,
+button.mat-mdc-button-base.mdc-button--unelevated {
   --mdc-filled-button-container-shape: 0;
+  height: 36px;
 }
 
 .mat-mdc-icon-button.mat-mdc-button-base {
@@ -161,6 +169,10 @@ button.mdc-button--unelevated.mat-accent {
 
 .mat-mdc-dialog-container .mdc-dialog__title::before {
   height: var(--mdc-dialog-subhead-line-height);
+}
+
+.mat-mdc-card-title {
+  padding: 8px 16px;
 }
 
 .mat-mdc-dialog-container .mdc-dialog__surface {

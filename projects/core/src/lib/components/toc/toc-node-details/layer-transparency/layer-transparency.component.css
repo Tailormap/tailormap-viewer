@@ -7,7 +7,6 @@ h3 {
   margin: 0;
 }
 
-/* TODO(mdc-migration): The following rule targets internal classes of slider that may no longer apply for the MDC version. */
 mat-slider {
   flex: 1;
 }

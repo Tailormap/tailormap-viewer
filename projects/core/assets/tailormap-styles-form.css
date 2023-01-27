@@ -2,11 +2,6 @@ body .mat-mdc-form-field {
   display: block;
 }
 
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-body .mat-form-field-label {
-  color: var(--text-color);
-}
-
 mat-form-field + .form-field,
 .form-field + .form-field {
   margin-top: 16px;
@@ -59,12 +54,6 @@ mat-form-field + .form-field,
   padding-right: 0;
 }
 
-/* TODO(mdc-migration): The following rule targets internal classes of slider that may no longer apply for the MDC version. */
-.form-field .mat-slider-horizontal .mat-slider-wrapper {
-  left: 0;
-  right: 0;
-}
-
 .form-field .form-button {
   padding: 5px;
 }
@@ -85,15 +74,11 @@ mat-form-field + .form-field,
   outline: none;
 }
 
-/* TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
 .form-field input[disabled],
-.form-field .mat-select-disabled,
 .form-field textarea[disabled],
 .form-field input[disabled]:hover,
-.form-field .mat-select-disabled:hover,
 .form-field textarea[disabled]:hover,
 .form-field input[disabled]:focus,
-.form-field .mat-select-disabled:focus,
 .form-field textarea[disabled]:focus {
   background-color: var(--disabled-color);
   border-color: #fff;
@@ -119,53 +104,11 @@ mat-form-field + .form-field,
   margin-bottom: -1.25em;
 }
 
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-.form-field .mat-form-field-underline {
-  display: none;
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-.form-field .mat-form-field-infix {
-  padding: 0;
-  border-top: 0 none;
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-.form-field .mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label,
-.form-field .mat-form-field-appearance-legacy.mat-form-field-can-float .mat-input-server:focus + .mat-form-field-label-wrapper .mat-form-field-label {
-  display: none;
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-.form-field .mat-form-field-empty.mat-form-field-label {
-  left: 12px;
-  top: 1.4em;
-  display: block;
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of autocomplete that may no longer apply for the MDC version. */
-.mat-autocomplete-panel .mat-option {
+.mat-mdc-autocomplete-panel .mat-mdc-option {
   font-size: 14px;
-  line-height: 3em;
-  height: 3em;
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
-.form-field .form-button .mat-button-wrapper {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  padding: 0 5px;
-  line-height: 28px;
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
-.form-field .form-button .mat-button-wrapper span {
-  flex: 1;
-  text-align: left;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  line-height: 1em;
+  height: 40px;
+  min-height: 40px;
 }
 
 .datepicker-input {
@@ -182,12 +125,10 @@ mat-form-field + .form-field,
   color: var(--primary-color);
 }
 
-/* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
 .form-field .mat-button-toggle-button {
   height: 36px;
 }
 
-/* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
 .form-field .mat-button-toggle-button .mat-button-toggle-label-content {
   padding: 0 8px;
   line-height: 36px;
