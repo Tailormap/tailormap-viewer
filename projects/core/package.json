@@ -20,7 +20,6 @@
     "@tailormap-viewer/shared": "^10.0.1",
     "@tailormap-viewer/map": "^10.0.1",
     "@tailormap-viewer/api": "^10.0.1",
-    "angular-material-css-vars": "^4.2.0",
     "jspdf": "^2.5.1",
     "luxon": "^3.2.0",
     "nanoid": "^4.0.0",

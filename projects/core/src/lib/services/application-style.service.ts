@@ -3,10 +3,9 @@ import { Store } from '@ngrx/store';
 import { selectApplicationStyling } from '../state/core.selectors';
 import { takeUntil } from 'rxjs/operators';
 import { distinctUntilChanged, Subject } from 'rxjs';
-import { ColorHelper, CssHelper } from '@tailormap-viewer/shared';
+import { ColorHelper, ColorPaletteHelper, CssHelper } from '@tailormap-viewer/shared';
 import { AppStylingModel } from '@tailormap-viewer/api';
 import { updateApplicationStyle } from '../state/core.actions';
-import { MaterialCssVarsService } from 'angular-material-css-vars';
 
 @Injectable({
   providedIn: 'root',
@@ -17,10 +16,7 @@ export class ApplicationStyleService implements OnDestroy {
 
   private static initialPrimaryColor = CssHelper.getCssVariableValue('--primary-color');
 
-  constructor(
-    private store$: Store,
-    private materialCssVarsService: MaterialCssVarsService,
-  ) {
+  constructor(private store$: Store) {
     this.store$.select(selectApplicationStyling)
       .pipe(takeUntil(this.destroyed), distinctUntilChanged())
       .subscribe((appStyling) => {
@@ -34,12 +30,10 @@ export class ApplicationStyleService implements OnDestroy {
 
   private updateStyling(appStyling?: AppStylingModel | null) {
     if (appStyling && appStyling.primaryColor) {
-      this.materialCssVarsService.setPrimaryColor(appStyling.primaryColor);
-      this.materialCssVarsService.setAccentColor(appStyling.primaryColor);
+      const primaryPalette = ColorPaletteHelper.createPalette(appStyling.primaryColor);
+      primaryPalette.forEach((color) => CssHelper.setCssVariableValue(color.name, color.val));
       CssHelper.setCssVariableValue('--primary-color', ColorHelper.getRgbStyleForColor(appStyling.primaryColor));
-      CssHelper.setCssVariableValue('--primary-color-0_6', ColorHelper.getRgbStyleForColor(appStyling.primaryColor, 60));
       CssHelper.setCssVariableValue('--primary-color-0_5', ColorHelper.getRgbStyleForColor(appStyling.primaryColor, 50));
-      CssHelper.setCssVariableValue('--primary-color-0_4', ColorHelper.getRgbStyleForColor(appStyling.primaryColor, 40));
       CssHelper.setCssVariableValue('--primary-color-0_1', ColorHelper.getRgbStyleForColor(appStyling.primaryColor, 10));
     }
   }

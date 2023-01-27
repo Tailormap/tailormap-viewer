@@ -1,16 +1,117 @@
-@use 'angular-material-css-vars/main' as mat-css-main;
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
 @use '@angular/material' as mat;
-@use '@angular/material/theming' as mat-theming;
+// Plus imports for other components in your app.
 
 $custom-typography: mat.define-typography-config(
   $font-family: 'Inter, "Lucida Sans Unicode", "Lucida Grande", sans-serif',
 );
 
-@include mat-css-main.init-material-css-vars($typography-config: $custom-typography);
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+
+$mat-tailormap-primary: (
+  50: var(--palette-primary-50),
+  100: var(--palette-primary-100),
+  200: var(--palette-primary-200),
+  300: var(--palette-primary-300),
+  400: var(--palette-primary-400),
+  500: var(--palette-primary-500),
+  600: var(--palette-primary-600),
+  700: var(--palette-primary-700),
+  800: var(--palette-primary-800),
+  900: var(--palette-primary-900),
+  A100: var(--palette-primary-A100),
+  A200: var(--palette-primary-A200),
+  A400: var(--palette-primary-A400),
+  A700: var(--palette-primary-A700),
+  contrast: (
+    50 : var(--palette-primary-contrast-50),
+    100 : var(--palette-primary-contrast-100),
+    200 : var(--palette-primary-contrast-200),
+    300 : var(--palette-primary-contrast-300),
+    400 : var(--palette-primary-contrast-400),
+    500 : var(--palette-primary-contrast-500),
+    600 : var(--palette-primary-contrast-600),
+    700 : var(--palette-primary-contrast-700),
+    800 : var(--palette-primary-contrast-800),
+    900 : var(--palette-primary-contrast-900),
+    A100 : var(--palette-primary-contrast-A100),
+    A200 : var(--palette-primary-contrast-A200),
+    A400 : var(--palette-primary-contrast-A400),
+    A700 : var(--palette-primary-contrast-A700),
+  )
+);
+
+$mat-tailormap-accent: (
+  50: var(--palette-accent-50),
+  100: var(--palette-accent-100),
+  200: var(--palette-accent-200),
+  300: var(--palette-accent-300),
+  400: var(--palette-accent-400),
+  500: var(--palette-accent-500),
+  600: var(--palette-accent-600),
+  700: var(--palette-accent-700),
+  800: var(--palette-accent-800),
+  900: var(--palette-accent-900),
+  A100: var(--palette-accent-A100),
+  A200: var(--palette-accent-A200),
+  A400: var(--palette-accent-A400),
+  A700: var(--palette-accent-A700),
+  contrast: (
+    50 : var(--palette-accent-contrast-50),
+    100 : var(--palette-accent-contrast-100),
+    200 : var(--palette-accent-contrast-200),
+    300 : var(--palette-accent-contrast-300),
+    400 : var(--palette-accent-contrast-400),
+    500 : var(--palette-accent-contrast-500),
+    600 : var(--palette-accent-contrast-600),
+    700 : var(--palette-accent-contrast-700),
+    800 : var(--palette-accent-contrast-800),
+    900 : var(--palette-accent-contrast-900),
+    A100 : var(--palette-accent-contrast-A100),
+    A200 : var(--palette-accent-contrast-A200),
+    A400 : var(--palette-accent-contrast-A400),
+    A700 : var(--palette-accent-contrast-A700),
+  )
+);
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$tailormap-app-primary: mat.define-palette($mat-tailormap-primary);
+$tailormap-app-accent:  mat.define-palette($mat-tailormap-accent);
+
+// The warn palette is optional (defaults to red).
+$app-warn: mat.define-palette(mat.$red-palette);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$app-theme: mat.define-light-theme((
+  color: (
+    primary: $tailormap-app-primary,
+    accent: $tailormap-app-accent,
+    warn: $app-warn,
+  ),
+  typography: $custom-typography,
+  density: -1,
+));
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include mat.all-component-themes($app-theme);
 
 @include mat.radio-density(-1);
 @include mat.checkbox-density(-1);
 @include mat.slide-toggle-density(-1);
+
+:root {
+  --mdc-typography-button-font-weight: 400;
+  --mdc-typography-button-letter-spacing: 0.0714285712;
+}
 
 button.mdc-button,
 button.mdc-button--outlined,
@@ -27,18 +128,27 @@ button.mdc-button--unelevated {
 button.mat-mdc-raised-button.mat-primary,
 button.mdc-button--unelevated.mat-primary,
 button.mdc-button--unelevated.mat-accent {
-  --mdc-filled-button-label-text-color: var(--palette-primary-contrast-500-rgb);
-  --mdc-protected-button-label-text-color: var(--palette-primary-contrast-500-rgb);
+  --mdc-filled-button-label-text-color: var(--palette-primary-contrast-500);
+  --mdc-protected-button-label-text-color: var(--palette-primary-contrast-500);
+}
+
+button.mdc-button--unelevated.mat-accent {
+  --mdc-filled-button-label-text-color: var(--palette-accent-contrast-500);
+  --mdc-protected-button-label-text-color: var(--palette-accent-contrast-500);
+}
+
+.mat-mdc-checkbox.mat-primary {
+  --mdc-checkbox-selected-checkmark-color: var(--palette-primary-contrast-500);
 }
 
 .mat-mdc-checkbox.mat-accent {
-  --mdc-checkbox-selected-checkmark-color: var(--palette-primary-contrast-500-rgb);
+  --mdc-checkbox-selected-checkmark-color: var(--palette-accent-contrast-500);
 }
 
 .mat-datepicker-content .mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical),
 .mat-datepicker-content .cdk-keyboard-focused .mat-calendar-body-active > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical),
 .mat-datepicker-content .cdk-program-focused .mat-calendar-body-active > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
-  color: var(--palette-primary-contrast-500-rgb);
+  color: var(--palette-primary-contrast-500);
 }
 
 .mat-mdc-dialog-container .mdc-dialog__title {
@@ -74,10 +184,6 @@ button.mdc-button--unelevated.mat-accent {
 .mat-mdc-icon-button.size-18 .mat-mdc-button-touch-target {
   height: calc(var(--mdc-icon-button-icon-size) + 6px);
   width: calc(var(--mdc-icon-button-icon-size) + 6px);
-}
-
-mat-form-field + mat-form-field {
-  margin-top: 16px;
 }
 
 .mdc-button mat-icon {

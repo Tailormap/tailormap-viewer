@@ -13,6 +13,68 @@
   --vh: 1vh;
   --vw: 1vw;
 
+  --dark-primary-text: rgb(0, 10, 30);
+  --light-primary-text: rgb(255, 255, 255);
+
+  /* Palette */
+  --palette-primary-50: rgb(236, 231, 255);
+  --palette-primary-contrast-50: var(--dark-primary-text);
+  --palette-primary-100: rgb(208, 195, 255);
+  --palette-primary-contrast-100: var(--dark-primary-text);
+  --palette-primary-200: rgb(177, 155, 255);
+  --palette-primary-contrast-200: var(--dark-primary-text);
+  --palette-primary-300: rgb(145, 114, 255);
+  --palette-primary-contrast-300: var(--dark-primary-text);
+  --palette-primary-400: rgb(122, 84, 255);
+  --palette-primary-contrast-400: var(--light-primary-text);
+  --palette-primary-500: rgb(98, 54, 255);
+  --palette-primary-contrast-500: var(--light-primary-text);
+  --palette-primary-600: rgb(90, 48, 255);
+  --palette-primary-contrast-600: var(--light-primary-text);
+  --palette-primary-700: rgb(80, 41, 255);
+  --palette-primary-contrast-700: var(--light-primary-text);
+  --palette-primary-800: rgb(70, 34, 255);
+  --palette-primary-contrast-800: var(--light-primary-text);
+  --palette-primary-900: rgb(52, 22, 255);
+  --palette-primary-contrast-900: var(--light-primary-text);
+  --palette-primary-A100: rgb(255, 255, 255);
+  --palette-primary-contrast-A100: var(--dark-primary-text);
+  --palette-primary-A200: rgb(252, 252, 255);
+  --palette-primary-contrast-A200: var(--dark-primary-text);
+  --palette-primary-A400: rgb(206, 201, 255);
+  --palette-primary-contrast-A400: var(--dark-primary-text);
+  --palette-primary-A700: rgb(184, 175, 255);
+  --palette-primary-contrast-A700: var(--dark-primary-text);
+
+  --palette-accent-50: rgb(242, 238, 255);
+  --palette-accent-contrast-50: var(--dark-primary-text);
+  --palette-accent-100: rgb(222, 213, 255);
+  --palette-accent-contrast-100: var(--dark-primary-text);
+  --palette-accent-200: rgb(200, 185, 255);
+  --palette-accent-contrast-200: var(--dark-primary-text);
+  --palette-accent-300: rgb(178, 156, 255);
+  --palette-accent-contrast-300: var(--dark-primary-text);
+  --palette-accent-400: rgb(162, 135, 255);
+  --palette-accent-contrast-400: var(--dark-primary-text);
+  --palette-accent-500: rgb(145, 114, 255);
+  --palette-accent-contrast-500: var(--dark-primary-text);
+  --palette-accent-600: rgb(137, 106, 255);
+  --palette-accent-contrast-600: var(--dark-primary-text);
+  --palette-accent-700: rgb(126, 95, 255);
+  --palette-accent-contrast-700: var(--light-primary-text);
+  --palette-accent-800: rgb(116, 85, 255);
+  --palette-accent-contrast-800: var(--light-primary-text);
+  --palette-accent-900: rgb(98, 66, 255);
+  --palette-accent-contrast-900: var(--light-primary-text);
+  --palette-accent-A100: rgb(255, 255, 255);
+  --palette-accent-contrast-A100: var(--dark-primary-text);
+  --palette-accent-A200: rgb(255, 255, 255);
+  --palette-accent-contrast-A200: var(--dark-primary-text);
+  --palette-accent-A400: rgb(237, 234, 255);
+  --palette-accent-contrast-A400: var(--dark-primary-text);
+  --palette-accent-A700: rgb(216, 208, 255);
+  --palette-accent-contrast-A700: var(--dark-primary-text);
+
   --primary-color: rgb(98, 54, 255);
   --error-color: #ff3636;
   --disabled-color: rgb(241, 241, 241);
@@ -20,9 +82,7 @@
   --text-color: rgb(0, 10, 30);
   --disabled-text-color: rgba(0, 10, 30, 0.5);
 
-  --primary-color-0_6: rgba(98, 54, 255, 0.6);
   --primary-color-0_5: rgba(98, 54, 255, 0.5);
-  --primary-color-0_4: rgba(98, 54, 255, 0.4);
   --primary-color-0_1: rgba(98, 54, 255, 0.1);
   --error-color-0_5: rgba(255, 54, 54, 0.5);
   --map-overlay-background-0_8: rgba(255, 255, 255, 0.8);
@@ -31,9 +91,6 @@
   --max-control-width: calc(var(--vw) * 100 - (var(--menubar-width) + var(--body-margin) * 2));
 
   --box-shadow-top: 0 1px 0 0 rgba(0, 0, 0, 0.05), 0 -3px 4px 0 rgba(0, 0, 0, 0.08);
-
-  --mdc-typography-button-font-weight: 400;
-  --mdc-typography-button-letter-spacing: 0.0714285712;
 }
 
 html {
@@ -165,4 +222,8 @@ body {
   width: 16px;
   height: 16px;
   margin-right: 2px;
+}
+
+mat-form-field + mat-form-field {
+  margin-top: 16px;
 }
