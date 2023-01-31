@@ -192,7 +192,7 @@ export class ApplicationMapService implements OnDestroy {
             layerType: LayerTypesEnum.WMTS,
             visible: extendedAppLayer.visible,
             url: extendedAppLayer.url || service.url,
-            crossOrigin: undefined, // Explicitly set to undefined for no-cors, 'anonymous' requires CORS!
+            crossOrigin: 'anonymous',
             capabilities: capabilities || '',
             hiDpiMode: extendedAppLayer.hiDpiMode,
             hiDpiSubstituteLayer: extendedAppLayer.hiDpiSubstituteLayer,
@@ -208,7 +208,7 @@ export class ApplicationMapService implements OnDestroy {
         layerType: LayerTypesEnum.WMS,
         visible: extendedAppLayer.visible,
         url: extendedAppLayer.url || service.url,
-        crossOrigin: undefined, // Explicitly set to undefined for no-cors, 'anonymous' requires CORS!
+        crossOrigin: 'anonymous',
         serverType: service.serverType,
         resolvedServerType: service.resolvedServerType as ResolvedServerType,
         tilingDisabled: service.tilingDisabled,
