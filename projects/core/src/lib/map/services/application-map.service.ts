@@ -192,7 +192,7 @@ export class ApplicationMapService implements OnDestroy {
             layerType: LayerTypesEnum.WMTS,
             visible: extendedAppLayer.visible,
             url: extendedAppLayer.url || service.url,
-            crossOrigin: 'anonymous',
+            crossOrigin: 'anonymous', // We don't want a 'tainted canvas' for features such as printing. TM requires CORS-enabled or proxied services.
             capabilities: capabilities || '',
             hiDpiMode: extendedAppLayer.hiDpiMode,
             hiDpiSubstituteLayer: extendedAppLayer.hiDpiSubstituteLayer,
@@ -208,7 +208,7 @@ export class ApplicationMapService implements OnDestroy {
         layerType: LayerTypesEnum.WMS,
         visible: extendedAppLayer.visible,
         url: extendedAppLayer.url || service.url,
-        crossOrigin: 'anonymous',
+        crossOrigin: 'anonymous', // We don't want a 'tainted canvas' for features such as printing. TM requires CORS-enabled or proxied services.
         serverType: service.serverType,
         resolvedServerType: service.resolvedServerType as ResolvedServerType,
         tilingDisabled: service.tilingDisabled,
