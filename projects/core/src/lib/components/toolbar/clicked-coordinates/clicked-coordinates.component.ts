@@ -7,6 +7,7 @@ import { Store } from '@ngrx/store';
 import { isActiveToolbarTool } from '../state/toolbar.selectors';
 import { deregisterTool, registerTool, toggleTool } from '../state/toolbar.actions';
 import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
+import { SnackBarMessageComponent } from '@tailormap-viewer/shared';
 
 @Component({
   selector: 'tm-clicked-coordinates',
@@ -51,15 +52,28 @@ export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
         }),
         concatMap(coordinates => {
           const coordinatesMsg = $localize`Selected coordinates: ${coordinates}`;
-          return this.snackBar.open(coordinatesMsg, $localize`Copy`).onAction().pipe(
-            map(() => {
-              return this.clipboard.copy(coordinates) ? $localize`Success` : $localize`Failed to copy to clipboard`;
+          return SnackBarMessageComponent.open$(this.snackBar, {
+            message: coordinatesMsg,
+            showCloseButton: true,
+            closeButtonText: $localize`Copy`,
+          }).pipe(
+            map((dismiss) => {
+              if (dismiss.dismissedByAction) {
+                return this.clipboard.copy(coordinates) ? $localize`Success` : $localize`Failed to copy to clipboard`;
+              }
+              return '';
             }),
           );
         }),
       ).subscribe(
       succesMsg => {
-        this.snackBar.open(succesMsg, '', { duration: 5000 });
+        if (succesMsg) {
+          SnackBarMessageComponent.open$(this.snackBar, {
+            message: succesMsg,
+            showCloseButton: true,
+            duration: 5000,
+          });
+        }
       },
     );
   }

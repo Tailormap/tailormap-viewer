@@ -197,6 +197,8 @@ body {
 }
 
 .cdk-overlay-container .mat-mdc-snack-bar-container {
+  --mdc-snackbar-container-color: #0c0524;
+  --mat-mdc-snack-bar-button-color: var(--palette-primary-contrast-500);
   background-color: #0c0524;
   color: #fff;
   padding: 16px;

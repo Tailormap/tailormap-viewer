@@ -68,7 +68,7 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
           message: error.error === 'error'
             ? error.errorMessage || FeatureInfoComponent.DEFAULT_ERROR_MESSAGE
             : FeatureInfoComponent.DEFAULT_NO_FEATURES_FOUND_MESSAGE,
-          duration: 5000000,
+          duration: 5000,
           showDuration: true,
           showCloseButton: true,
         };

@@ -21,7 +21,7 @@ export class SnackBarMessageComponent implements OnInit {
   public static open$(matSnackBar: MatSnackBar, config: SnackBarMessageOptionsModel): Observable<MatSnackBarDismiss> {
     const ref = matSnackBar.openFromComponent<SnackBarMessageComponent>(SnackBarMessageComponent, {
       data: config,
-      panelClass: 'snack-bar-message-panel',
+      panelClass: [ 'snack-bar-message-panel', config.showDuration ? 'snack-bar-message-panel--show-duration' : '' ],
       duration: config.duration || undefined,
     });
     return ref.afterDismissed();
@@ -40,6 +40,6 @@ export class SnackBarMessageComponent implements OnInit {
   }
 
   public closeSnackBar() {
-    this.snackBarRef.dismiss();
+    this.snackBarRef.dismissWithAction();
   }
 }
