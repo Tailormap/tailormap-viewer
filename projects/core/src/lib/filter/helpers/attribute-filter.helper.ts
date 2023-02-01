@@ -42,7 +42,7 @@ export class AttributeFilterHelper {
       },
       {
         condition: FilterConditionEnum.NUMBER_SMALLER_THAN_KEY,
-        label: $localize `Small than`,
+        label: $localize `Smaller than`,
         readableLabel: $localize `is smaller than`,
         attributeType: [ FeatureAttributeTypeEnum.INTEGER, FeatureAttributeTypeEnum.DOUBLE ],
       },
@@ -54,7 +54,7 @@ export class AttributeFilterHelper {
       },
       {
         condition: FilterConditionEnum.NUMBER_SMALLER_EQUALS_THAN_KEY,
-        label: $localize `Small than or equal to`,
+        label: $localize `Smaller than or equal to`,
         readableLabel: $localize `is smaller than or equal to`,
         attributeType: [ FeatureAttributeTypeEnum.INTEGER, FeatureAttributeTypeEnum.DOUBLE ],
       },
