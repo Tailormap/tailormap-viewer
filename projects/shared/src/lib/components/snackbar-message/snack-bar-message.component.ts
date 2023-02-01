@@ -19,9 +19,13 @@ export class SnackBarMessageComponent implements OnInit {
   ) { }
 
   public static open$(matSnackBar: MatSnackBar, config: SnackBarMessageOptionsModel): Observable<MatSnackBarDismiss> {
+    const panelClass = ['snack-bar-message-panel'];
+    if (config.showDuration) {
+      panelClass.push('snack-bar-message-panel--show-duration');
+    }
     const ref = matSnackBar.openFromComponent<SnackBarMessageComponent>(SnackBarMessageComponent, {
       data: config,
-      panelClass: [ 'snack-bar-message-panel', config.showDuration ? 'snack-bar-message-panel--show-duration' : '' ],
+      panelClass,
       duration: config.duration || undefined,
     });
     return ref.afterDismissed();
