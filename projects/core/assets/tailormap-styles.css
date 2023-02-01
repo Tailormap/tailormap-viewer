@@ -156,9 +156,11 @@ body {
   background-color: #fff;
 }
 
+button.toggle-button--active.mat-mdc-button-base.mdc-button,
+button.toggle-button--active.mat-mdc-button-base.mdc-button--outlined,
+button.toggle-button--active.mat-mdc-button-base.mdc-button--unelevated,
 .toggle-button--active {
   color: var(--primary-color);
-  background-color: var(--primary-color-0_1);
 }
 
 .map-control-button-container {
