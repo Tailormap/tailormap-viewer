@@ -114,6 +114,7 @@ $app-theme: mat.define-light-theme((
   --mdc-typography-body1-letter-spacing: 0.0714285712;
   --mdc-typography-subtitle1-font-size: 14px;
   --mdc-typography-body1-font-size: 14px;
+  --base-button-height: 36px;
 }
 
 .mat-mdc-form-field .mdc-text-field--outlined .mdc-notched-outline--upgraded .mdc-floating-label--float-above {
@@ -124,7 +125,7 @@ button.mat-mdc-button-base.mdc-button,
 button.mat-mdc-button-base.mdc-button--outlined,
 button.mat-mdc-button-base.mdc-button--unelevated {
   --mdc-filled-button-container-shape: 0;
-  height: 36px;
+  height: var(--base-button-height);
 }
 
 .mat-mdc-icon-button.mat-mdc-button-base {

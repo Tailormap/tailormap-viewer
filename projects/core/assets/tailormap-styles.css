@@ -86,6 +86,7 @@
   --primary-color-0_1: rgba(98, 54, 255, 0.1);
   --error-color-0_5: rgba(255, 54, 54, 0.5);
   --map-overlay-background-0_8: rgba(255, 255, 255, 0.8);
+  --snackbar-background-color: #0c0524;
 
   --max-control-height: calc(var(--vh) * 100 - (var(--body-margin) * 2));
   --max-control-width: calc(var(--vw) * 100 - (var(--menubar-width) + var(--body-margin) * 2));
@@ -169,10 +170,10 @@ body {
 
 .map-control-button,
 .map-control-button.mdc-button--unelevated {
+  --base-button-height: var(--map-control-size);
   background-color: #fff;
   border: 0 none;
   width: var(--map-control-size);
-  height: var(--map-control-size);
   padding: 0;
   cursor: pointer;
   min-width: 40px;
@@ -197,9 +198,9 @@ body {
 }
 
 .cdk-overlay-container .mat-mdc-snack-bar-container {
-  --mdc-snackbar-container-color: #0c0524;
+  --mdc-snackbar-container-color: var(--snackbar-background-color);
   --mat-mdc-snack-bar-button-color: var(--palette-primary-contrast-500);
-  background-color: #0c0524;
+  background-color: var(--snackbar-background-color);
   color: #fff;
   padding: 16px;
   border-radius: 2px;

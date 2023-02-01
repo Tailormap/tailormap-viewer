@@ -1,4 +1,6 @@
-import { Component, EventEmitter, HostBinding, HostListener, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import {
+  Component, EventEmitter, HostBinding, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges,
+} from '@angular/core';
 import { style, transition, trigger, animate } from '@angular/animations';
 import { DialogService } from './dialog.service';
 import { BrowserHelper } from '../../helpers';
@@ -25,7 +27,7 @@ const DEFAULT_WIDTH = 300;
     ),
   ],
 })
-export class DialogComponent implements OnInit, OnChanges {
+export class DialogComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input()
   public open: boolean | null = false;
@@ -77,6 +79,10 @@ export class DialogComponent implements OnInit, OnChanges {
 
   public ngOnInit(): void {
     this.dialogId = this.dialogService.registerDialog(this.getLeft(), this.getRight());
+  }
+
+  public ngOnDestroy(): void {
+    this.dialogService.unregisterDialog(this.dialogId);
   }
 
   public ngOnChanges(changes: SimpleChanges): void {

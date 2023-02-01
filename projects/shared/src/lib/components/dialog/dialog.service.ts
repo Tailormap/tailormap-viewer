@@ -17,6 +17,12 @@ export class DialogService {
     return id;
   }
 
+  public unregisterDialog(id: string) {
+    this.dialogs = this.dialogs.filter(d => d.id !== id);
+    this.visibleStack = this.visibleStack.filter(d => d !== id);
+    this.updateStyle();
+  }
+
   public dialogChanged(id: string, left: number, right: number) {
     this.dialogs = this.dialogs.map(dialog => {
       if (dialog.id === id) {
