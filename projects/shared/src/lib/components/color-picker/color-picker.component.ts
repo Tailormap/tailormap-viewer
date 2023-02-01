@@ -175,7 +175,7 @@ export class ColorPickerComponent implements OnInit, OnDestroy {
       origin: this.colorPickerButton.nativeElement,
       content: this.colorPickerContent,
       position: this.dropdownPosition || PopoverPositionEnum.TOP_LEFT_UP,
-      height: 215,
+      height: 235,
       width: Math.min(this.preferredWindowWidth, BrowserHelper.getScreenWith()),
       closeOnClickOutside: true,
     });

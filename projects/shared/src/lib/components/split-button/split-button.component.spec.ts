@@ -19,7 +19,8 @@ describe('SplitButtonComponent', () => {
     await userEvent.click(buttons[1]);
     const labels = await screen.findAllByText('Test 1');
     expect(labels.length).toEqual(2);
-    expect(labels[1].querySelector('mat-icon')).toBeInTheDocument();
+    const itemWrapper = labels[1].closest('.split-button-menu-item');
+    expect(itemWrapper?.querySelector('mat-icon')).toBeInTheDocument();
     expect(await screen.getByText('Test 2'));
   });
 

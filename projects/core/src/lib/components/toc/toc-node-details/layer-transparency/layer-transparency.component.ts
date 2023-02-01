@@ -2,7 +2,6 @@ import { Component, ChangeDetectionStrategy, Input, inject } from '@angular/core
 import { Store } from '@ngrx/store';
 import { of, take } from 'rxjs';
 import { selectLayerOpacity, selectLayer } from '../../../../map/state/map.selectors';
-import { MatSliderChange } from '@angular/material/slider';
 import { setLayerOpacity } from '../../../../map/state/map.actions';
 
 @Component({
@@ -34,11 +33,11 @@ export class LayerTransparencyComponent {
     return `${Math.round(value)}%`;
   }
 
-  public updateOpacity($event: MatSliderChange) {
+  public updateOpacity($event: number | null) {
     if (!this.layerId) {
       return;
     }
-    const opacity = $event.value === null ? 100 : $event.value;
+    const opacity = $event === null ? 100 : $event;
     this.store$.dispatch(setLayerOpacity({ layerId: this.layerId, opacity }));
   }
 

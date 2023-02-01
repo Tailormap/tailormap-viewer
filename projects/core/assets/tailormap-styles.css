@@ -13,19 +13,80 @@
   --vh: 1vh;
   --vw: 1vw;
 
-  --primary-color: #6236ff;
+  --dark-primary-text: rgb(0, 10, 30);
+  --light-primary-text: rgb(255, 255, 255);
+
+  /* Palette */
+  --palette-primary-50: rgb(236, 231, 255);
+  --palette-primary-contrast-50: var(--dark-primary-text);
+  --palette-primary-100: rgb(208, 195, 255);
+  --palette-primary-contrast-100: var(--dark-primary-text);
+  --palette-primary-200: rgb(177, 155, 255);
+  --palette-primary-contrast-200: var(--dark-primary-text);
+  --palette-primary-300: rgb(145, 114, 255);
+  --palette-primary-contrast-300: var(--dark-primary-text);
+  --palette-primary-400: rgb(122, 84, 255);
+  --palette-primary-contrast-400: var(--light-primary-text);
+  --palette-primary-500: rgb(98, 54, 255);
+  --palette-primary-contrast-500: var(--light-primary-text);
+  --palette-primary-600: rgb(90, 48, 255);
+  --palette-primary-contrast-600: var(--light-primary-text);
+  --palette-primary-700: rgb(80, 41, 255);
+  --palette-primary-contrast-700: var(--light-primary-text);
+  --palette-primary-800: rgb(70, 34, 255);
+  --palette-primary-contrast-800: var(--light-primary-text);
+  --palette-primary-900: rgb(52, 22, 255);
+  --palette-primary-contrast-900: var(--light-primary-text);
+  --palette-primary-A100: rgb(255, 255, 255);
+  --palette-primary-contrast-A100: var(--dark-primary-text);
+  --palette-primary-A200: rgb(252, 252, 255);
+  --palette-primary-contrast-A200: var(--dark-primary-text);
+  --palette-primary-A400: rgb(206, 201, 255);
+  --palette-primary-contrast-A400: var(--dark-primary-text);
+  --palette-primary-A700: rgb(184, 175, 255);
+  --palette-primary-contrast-A700: var(--dark-primary-text);
+
+  --palette-accent-50: rgb(242, 238, 255);
+  --palette-accent-contrast-50: var(--dark-primary-text);
+  --palette-accent-100: rgb(222, 213, 255);
+  --palette-accent-contrast-100: var(--dark-primary-text);
+  --palette-accent-200: rgb(200, 185, 255);
+  --palette-accent-contrast-200: var(--dark-primary-text);
+  --palette-accent-300: rgb(178, 156, 255);
+  --palette-accent-contrast-300: var(--dark-primary-text);
+  --palette-accent-400: rgb(162, 135, 255);
+  --palette-accent-contrast-400: var(--dark-primary-text);
+  --palette-accent-500: rgb(145, 114, 255);
+  --palette-accent-contrast-500: var(--dark-primary-text);
+  --palette-accent-600: rgb(137, 106, 255);
+  --palette-accent-contrast-600: var(--dark-primary-text);
+  --palette-accent-700: rgb(126, 95, 255);
+  --palette-accent-contrast-700: var(--light-primary-text);
+  --palette-accent-800: rgb(116, 85, 255);
+  --palette-accent-contrast-800: var(--light-primary-text);
+  --palette-accent-900: rgb(98, 66, 255);
+  --palette-accent-contrast-900: var(--light-primary-text);
+  --palette-accent-A100: rgb(255, 255, 255);
+  --palette-accent-contrast-A100: var(--dark-primary-text);
+  --palette-accent-A200: rgb(255, 255, 255);
+  --palette-accent-contrast-A200: var(--dark-primary-text);
+  --palette-accent-A400: rgb(237, 234, 255);
+  --palette-accent-contrast-A400: var(--dark-primary-text);
+  --palette-accent-A700: rgb(216, 208, 255);
+  --palette-accent-contrast-A700: var(--dark-primary-text);
+
+  --primary-color: rgb(98, 54, 255);
   --error-color: #ff3636;
   --disabled-color: rgb(241, 241, 241);
   --border-color: #e1e1e1;
   --text-color: rgb(0, 10, 30);
   --disabled-text-color: rgba(0, 10, 30, 0.5);
 
-  --primary-color-0_6: rgba(98, 54, 255, 0.6);
   --primary-color-0_5: rgba(98, 54, 255, 0.5);
-  --primary-color-0_4: rgba(98, 54, 255, 0.4);
   --primary-color-0_1: rgba(98, 54, 255, 0.1);
   --error-color-0_5: rgba(255, 54, 54, 0.5);
   --map-overlay-background-0_8: rgba(255, 255, 255, 0.8);
+  --snackbar-background-color: #0c0524;
 
   --max-control-height: calc(var(--vh) * 100 - (var(--body-margin) * 2));
   --max-control-width: calc(var(--vw) * 100 - (var(--menubar-width) + var(--body-margin) * 2));
@@ -56,7 +117,7 @@ body {
   z-index: calc(var(--overlay-panel-z-index) + 100) !important;
 }
 
-.tailormap-menu-panel.mat-menu-panel {
+.tailormap-menu-panel.mat-mdc-menu-panel {
   min-width: 170px;
 }
 
@@ -65,7 +126,7 @@ body {
 }
 
 [ng-version],
-.mat-dialog-container,
+.mat-mdc-dialog-container,
 .form-field textarea,
 .cdk-overlay-container {
   font-family: Inter, sans-serif;
@@ -91,18 +152,15 @@ body {
   color: var(--primary-color);
 }
 
-.mat-flat-button.mat-accent {
-  background-color: var(--primary-color-0_4);
-  color: var(--primary-color);
-}
-
 .toggle-button {
   background-color: #fff;
 }
 
+button.toggle-button--active.mat-mdc-button-base.mdc-button,
+button.toggle-button--active.mat-mdc-button-base.mdc-button--outlined,
+button.toggle-button--active.mat-mdc-button-base.mdc-button--unelevated,
 .toggle-button--active {
   color: var(--primary-color);
-  background-color: var(--primary-color-0_1);
 }
 
 .map-control-button-container {
@@ -113,74 +171,59 @@ body {
 }
 
 .map-control-button,
-.map-control-button.mat-flat-button {
+.map-control-button.mdc-button--unelevated {
+  --base-button-height: var(--map-control-size);
   background-color: #fff;
   border: 0 none;
   width: var(--map-control-size);
-  height: var(--map-control-size);
   padding: 0;
   cursor: pointer;
   min-width: 40px;
 }
 
-.map-control-button mat-icon {
+.map-control-button.mdc-button--unelevated > mat-icon {
   width: calc(var(--map-control-size) - 16px);
   height: calc(var(--map-control-size) - 16px);
-  margin: 8px;
+  margin: 0;
 }
 
-.mat-button-base.button--active,
+.mat-mdc-button-base.button--active,
 .button--active {
   background-color: var(--primary-color-0_1);
 }
 
-.mat-button-base.button--active,
+.mat-mdc-button-base.button--active,
 .button--active,
-.mat-button-base.button--active mat-icon,
+.mat-mdc-button-base.button--active mat-icon,
 .button--active mat-icon {
   color: var(--primary-color);
 }
 
-.cdk-overlay-container .mat-snack-bar-container {
-  background-color: #0c0524;
+.cdk-overlay-container .mat-mdc-snack-bar-container {
+  --mdc-snackbar-container-color: var(--snackbar-background-color);
+  --mat-mdc-snack-bar-button-color: var(--palette-primary-contrast-500);
+  background-color: var(--snackbar-background-color);
   color: #fff;
   padding: 16px;
   border-radius: 2px;
 }
 
-.cdk-overlay-container .mat-snack-bar-container .mat-simple-snackbar-action button {
+.cdk-overlay-container .mat-mdc-snack-bar-container .mat-mdc-snack-bar-action button {
   color: #fff;
   font-weight: bold;
   text-decoration: underline;
 }
 
-.mat-menu-panel[role="menu"] {
+.mat-mdc-menu-panel[role="menu"] {
   min-height: 54px;
 }
 
-.mat-menu-content .mat-menu-item {
+.mat-mdc-menu-content .mat-mdc-menu-item {
   height: 38px;
   line-height: 38px;
+  min-height: 38px;
 }
 
-.mat-menu-content .mat-menu-item mat-icon {
-  width: 16px;
-  height: 16px;
-  margin-right: 2px;
-}
-
-.icon-button-list {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.icon-button-list .mat-stroked-button {
-  min-width: 32px;
-  padding: 0 8px;
-  border-radius: 3px;
-  margin: 8px 8px 0 0;
-}
-
-.icon-button-list .mat-stroked-button:last-of-type {
-  margin-right: 0;
+mat-form-field + mat-form-field {
+  margin-top: 16px;
 }

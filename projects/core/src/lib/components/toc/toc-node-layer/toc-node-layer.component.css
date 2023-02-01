@@ -55,10 +55,18 @@
   background-color: #fff;
 }
 
-.tree-node__actions .mat-icon-button {
+.tree-node__actions .mdc-icon-button {
   width: var(--tree-node-size);
   height: var(--tree-node-size);
   line-height: var(--tree-node-size);
+}
+
+.tree-node__actions .mdc-icon-button mat-icon {
+  --mdc-icon-button-icon-size: 18px;
+  width: var(--mdc-icon-button-icon-size);
+  height: var(--mdc-icon-button-icon-size);
+  overflow: visible;
+  vertical-align: top;
 }
 
 .out-of-scale {

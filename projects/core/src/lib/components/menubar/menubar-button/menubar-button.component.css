@@ -4,7 +4,6 @@ button {
   max-width: 100%;
 }
 
-button,
 mat-icon {
   color: rgba(19, 9, 54, 0.4);
 }
@@ -13,7 +12,6 @@ button + button {
   margin-top: 0;
 }
 
-button:hover,
-mat-icon:hover {
+button:hover mat-icon {
   color: var(--primary-color);
 }

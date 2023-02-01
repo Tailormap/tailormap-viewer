@@ -28,7 +28,7 @@ describe('SnackbarMessageComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [
         { provide: MAT_SNACK_BAR_DATA, useValue: config },
-        { provide: MatSnackBarRef, useValue: { dismiss: closeFn } },
+        { provide: MatSnackBarRef, useValue: { dismiss: closeFn, dismissWithAction: closeFn } },
       ],
     });
     expect(screen.getByText('Some message'));

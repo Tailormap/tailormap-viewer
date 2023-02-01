@@ -8,3 +8,4 @@ export * from './confirm-dialog';
 export * from './panel-resizer';
 export * from './color-picker/color-picker.component';
 export * from './icon-picker/icon-picker.component';
+export * from './slider/slider.component';

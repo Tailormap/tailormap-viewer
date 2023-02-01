@@ -39,12 +39,12 @@
     </div>
 
     <div class="form-field form-field__slider">
-      <mat-slider [max]="10"
-                  [min]="1"
-                  [step]="1"
-                  [thumbLabel]="true"
-                  [value]="style.markerStrokeWidth"
-                  (change)="changeMarkerStrokeWidth($event)"></mat-slider>
+      <tm-slider [max]="10"
+                 [min]="1"
+                 [step]="1"
+                 (valueChange)="changeMarkerStrokeWidth($event)"
+                 [value]="style.markerStrokeWidth">
+      </tm-slider>
     </div>
 
     <div class="form-field form-field__columns">
@@ -53,12 +53,12 @@
     </div>
 
     <div class="form-field form-field__slider">
-      <mat-slider [max]="20"
-                  [min]="1"
-                  [step]="1"
-                  [thumbLabel]="true"
-                  [value]="style.markerSize"
-                  (change)="changeMarkerSize($event)"></mat-slider>
+      <tm-slider [max]="20"
+                 [min]="1"
+                 [step]="1"
+                 (valueChange)="changeMarkerSize($event)"
+                 [value]="style.markerSize">
+      </tm-slider>
     </div>
 
     <div class="form-field form-field__columns">
@@ -67,12 +67,12 @@
     </div>
 
     <div class="form-field form-field__slider">
-      <mat-slider [max]="360"
-                  [min]="0"
-                  [step]="1"
-                  [thumbLabel]="true"
-                  [value]="style.markerRotation"
-                  (change)="changeMarkerRotation($event)"></mat-slider>
+      <tm-slider [max]="360"
+                 [min]="0"
+                 [step]="1"
+                 (valueChange)="changeMarkerRotation($event)"
+                 [value]="style.markerRotation">
+      </tm-slider>
     </div>
 
   </div>
@@ -132,12 +132,12 @@
     </div>
 
     <div class="form-field form-field__slider">
-      <mat-slider [max]="30"
-                  [min]="1"
-                  [step]="1"
-                  [thumbLabel]="true"
-                  [value]="style.labelSize"
-                  (change)="changeLabelSize($event)"></mat-slider>
+      <tm-slider [max]="30"
+                 [min]="1"
+                 [step]="1"
+                 (valueChange)="changeLabelSize($event)"
+                 [value]="style.labelSize">
+      </tm-slider>
     </div>
 
     <div class="form-field form-field__columns">
@@ -159,12 +159,12 @@
     </div>
 
     <div class="form-field form-field__slider">
-      <mat-slider [max]="360"
-                  [min]="0"
-                  [step]="1"
-                  [thumbLabel]="true"
-                  [value]="style.labelRotation"
-                  (change)="changeLabelRotation($event)"></mat-slider>
+      <tm-slider [max]="360"
+                 [min]="0"
+                 [step]="1"
+                 (valueChange)="changeLabelRotation($event)"
+                 [value]="style.labelRotation">
+      </tm-slider>
     </div>
 
   </div>
@@ -187,12 +187,12 @@
     </div>
 
     <div class="form-field form-field__slider">
-      <mat-slider [max]="20"
-                  [min]="1"
-                  [step]="1"
-                  [thumbLabel]="true"
-                  [value]="style.strokeWidth"
-                  (change)="changeStrokeWidth($event)"></mat-slider>
+      <tm-slider [max]="20"
+                 [min]="1"
+                 [step]="1"
+                 (valueChange)="changeStrokeWidth($event)"
+                 [value]="style.strokeWidth">
+      </tm-slider>
     </div>
 
     <div class="form-field form-field__columns">
@@ -201,13 +201,13 @@
     </div>
 
     <div class="form-field form-field__slider">
-      <mat-slider [max]="100"
-                  [min]="0"
-                  [step]="1"
-                  [thumbLabel]="true"
-                  [displayWith]="formatThumb"
-                  [value]="style.strokeOpacity"
-                  (change)="changeStrokeOpacity($event)"></mat-slider>
+      <tm-slider [max]="100"
+                 [min]="0"
+                 [step]="1"
+                 [displayWith]="formatThumb"
+                 (valueChange)="changeStrokeOpacity($event)"
+                 [value]="style.strokeOpacity">
+      </tm-slider>
     </div>
 
     <mat-form-field appearance="outline" color="primary">
@@ -260,13 +260,13 @@
     </div>
 
     <div class="form-field form-field__slider">
-      <mat-slider [max]="100"
-                  [min]="0"
-                  [step]="1"
-                  [thumbLabel]="true"
-                  [displayWith]="formatThumb"
-                  [value]="style.fillOpacity"
-                  (change)="changeFillOpacity($event)"></mat-slider>
+      <tm-slider [max]="100"
+                 [min]="0"
+                 [step]="1"
+                 [displayWith]="formatThumb"
+                 [value]="style.fillOpacity"
+                 (valueChange)="changeFillOpacity($event)">
+      </tm-slider>
     </div>
 
   </div>

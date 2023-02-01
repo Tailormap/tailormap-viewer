@@ -35,15 +35,9 @@ mat-checkbox {
   flex: 1;
 }
 
-.tree-node-wrapper ::ng-deep > .mat-icon-button {
-  width: 18px;
-  height: 18px;
-  line-height: 18px;
-}
-
 /* the ::ng-deep above will be removed after compilation so this selector is actually more specific */
 /* stylelint-disable-next-line no-descending-specificity */
-.tree-node-wrapper--no-checkbox > .mat-icon-button {
+.tree-node-wrapper--no-checkbox > .mdc-icon-button {
   margin-top: -6px;
   margin-right: 3px;
 }

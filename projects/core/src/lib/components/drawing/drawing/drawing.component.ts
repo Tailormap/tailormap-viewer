@@ -78,6 +78,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
       ...style,
       label: '',
     });
+    this.style = DrawingHelper.getDefaultStyle();
   }
 
   public removeSelectedFeature() {

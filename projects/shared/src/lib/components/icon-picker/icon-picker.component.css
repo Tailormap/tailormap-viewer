@@ -18,11 +18,6 @@
   min-width: auto;
 }
 
-.icon-picker__button ::ng-deep .mat-button-wrapper {
-  display: flex;
-  align-items: center;
-}
-
 .icon-picker__button .icon-picker__chevron {
   width: 18px;
   height: 18px;

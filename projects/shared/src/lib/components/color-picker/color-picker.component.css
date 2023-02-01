@@ -11,11 +11,6 @@
   min-width: auto;
 }
 
-.color-picker__button ::ng-deep .mat-button-wrapper {
-  display: flex;
-  align-items: center;
-}
-
 .color-picker__chevron {
   width: 18px;
   height: 18px;

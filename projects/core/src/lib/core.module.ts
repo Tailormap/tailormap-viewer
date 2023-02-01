@@ -23,6 +23,8 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 import { LuxonDateAdapter, MAT_LUXON_DATE_FORMATS } from '@angular/material-luxon-adapter';
 import { LayoutModule } from './layout/layout.module';
 import { ApplicationStyleService } from './services/application-style.service';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
+import { MAT_CHECKBOX_DEFAULT_OPTIONS } from '@angular/material/checkbox';
 
 const getBaseHref = (platformLocation: PlatformLocation): string => {
   return platformLocation.getBaseHrefFromDOM();
@@ -76,6 +78,8 @@ const sentryProviders = SENTRY_DSN === '@SENTRY_DSN@' ? [] : [
     { provide: APP_BASE_HREF, useFactory: getBaseHref, deps: [PlatformLocation] },
     { provide: DateAdapter, useClass: LuxonDateAdapter, deps: [MAT_DATE_LOCALE] },
     { provide: MAT_DATE_FORMATS, useValue: MAT_LUXON_DATE_FORMATS },
+    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { subscriptSizing: 'dynamic' } },
+    { provide: MAT_CHECKBOX_DEFAULT_OPTIONS, useValue: { color: 'primary' } },
     ...sentryProviders,
   ],
 })

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AttributeListState } from '../state/attribute-list.state';
 import {
@@ -22,7 +22,7 @@ import { MapService } from '@tailormap-viewer/map';
   templateUrl: './attribute-list.component.html',
   styleUrls: ['./attribute-list.component.css'],
 })
-export class AttributeListComponent implements OnInit {
+export class AttributeListComponent implements OnInit, OnDestroy {
 
   public isVisible$: Observable<boolean>;
 
@@ -69,6 +69,12 @@ export class AttributeListComponent implements OnInit {
     )
       .pipe(takeUntil(this.destroyed))
       .subscribe();
+  }
+
+  public ngOnDestroy(): void {
+    this.store$.dispatch(setAttributeListVisibility({ visible: false }));
+    this.destroyed.next(null);
+    this.destroyed.complete();
   }
 
   public onMaximizeClick(): void {

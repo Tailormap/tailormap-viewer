@@ -1,5 +1,5 @@
 import { TocComponent } from './toc.component';
-import { render, screen } from '@testing-library/angular';
+import { render, screen, waitFor } from '@testing-library/angular';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { MenubarService } from '../../menubar';
 import { of } from 'rxjs';
@@ -110,8 +110,10 @@ describe('TocComponent', () => {
     expect(store.dispatch).toHaveBeenCalledWith({ type: setSelectedLayerId.type, layerId: 2 });
     store.overrideSelector(selectSelectedNode, '2');
     store.refreshState();
-    expect((await screen.findByText('Disaster map')).closest('.mat-tree-node')).not.toHaveClass('tree-node--selected');
-    expect((await screen.findByText('Some other map')).closest('.mat-tree-node')).toHaveClass('tree-node--selected');
+    await waitFor(() => {
+      expect((screen.getByText('Disaster map')).closest('.mat-tree-node')).not.toHaveClass('tree-node--selected');
+      expect((screen.getByText('Some other map')).closest('.mat-tree-node')).toHaveClass('tree-node--selected');
+    });
   });
 
   test('handles checking layer', async () => {

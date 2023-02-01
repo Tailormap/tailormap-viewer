@@ -1,4 +1,3 @@
-
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
 @use '@angular/material' as mat;
@@ -6,64 +5,84 @@
 
 $custom-typography: mat.define-typography-config(
   $font-family: 'Inter, "Lucida Sans Unicode", "Lucida Grande", sans-serif',
-  $display-4:     mat.define-typography-level(112px, 112px, 400, $letter-spacing: -0.05em),
-  $display-3:     mat.define-typography-level(56px, 56px, 400, $letter-spacing: -0.02em),
-  $display-2:     mat.define-typography-level(45px, 48px, 400, $letter-spacing: -0.005em),
-  $display-1:     mat.define-typography-level(34px, 40px, 400),
-  $headline:      mat.define-typography-level(24px, 32px, 400),
-  $title:         mat.define-typography-level(20px, 32px, 600),
-  $subheading-2:  mat.define-typography-level(16px, 28px, 400),
-  $subheading-1:  mat.define-typography-level(15px, 24px, 400),
-  $body-2:        mat.define-typography-level(14px, 24px, 600),
-  $body-1:        mat.define-typography-level(14px, 20px, 400),
-  $caption:       mat.define-typography-level(12px, 20px, 400),
-  $button:        mat.define-typography-level(14px, 14px, 400),
-  $input:         mat.define-typography-level(inherit, 1.125, 400)
 );
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
 // Be sure that you only ever include this mixin once!
-@include mat.core($custom-typography);
+@include mat.core();
 
-$mat-tailormap: (
-  50: #efe8fe,
-  100: #d5c6fc,
-  200: #b89ffb,
-  300: #9976fb,
-  400: #7e56fa,
-  500: var(--primary-color),
-  600: #5130f0,
-  700: #3a28e8,
-  800: #1722e2,
-  900: #0012db,
-  A100: #fff,
-  A200: var(--primary-color),
-  A400: var(--primary-color-0_4),
-  A700: var(--primary-color-0_6),
+$mat-tailormap-primary: (
+  50: var(--palette-primary-50),
+  100: var(--palette-primary-100),
+  200: var(--palette-primary-200),
+  300: var(--palette-primary-300),
+  400: var(--palette-primary-400),
+  500: var(--palette-primary-500),
+  600: var(--palette-primary-600),
+  700: var(--palette-primary-700),
+  800: var(--palette-primary-800),
+  900: var(--palette-primary-900),
+  A100: var(--palette-primary-A100),
+  A200: var(--palette-primary-A200),
+  A400: var(--palette-primary-A400),
+  A700: var(--palette-primary-A700),
   contrast: (
-    50 : #000,
-    100 : #000,
-    200 : #000,
-    300 : #fff,
-    400 : #fff,
-    500 : #fff,
-    600 : #fff,
-    700 : #fff,
-    800 : #fff,
-    900 : #fff,
-    A100 : #000,
-    A200 : var(--primary-color),
-    A400 : var(--primary-color),
-    A700 : #fff,
+    50 : var(--palette-primary-contrast-50),
+    100 : var(--palette-primary-contrast-100),
+    200 : var(--palette-primary-contrast-200),
+    300 : var(--palette-primary-contrast-300),
+    400 : var(--palette-primary-contrast-400),
+    500 : var(--palette-primary-contrast-500),
+    600 : var(--palette-primary-contrast-600),
+    700 : var(--palette-primary-contrast-700),
+    800 : var(--palette-primary-contrast-800),
+    900 : var(--palette-primary-contrast-900),
+    A100 : var(--palette-primary-contrast-A100),
+    A200 : var(--palette-primary-contrast-A200),
+    A400 : var(--palette-primary-contrast-A400),
+    A700 : var(--palette-primary-contrast-A700),
+  )
+);
+
+$mat-tailormap-accent: (
+  50: var(--palette-accent-50),
+  100: var(--palette-accent-100),
+  200: var(--palette-accent-200),
+  300: var(--palette-accent-300),
+  400: var(--palette-accent-400),
+  500: var(--palette-accent-500),
+  600: var(--palette-accent-600),
+  700: var(--palette-accent-700),
+  800: var(--palette-accent-800),
+  900: var(--palette-accent-900),
+  A100: var(--palette-accent-A100),
+  A200: var(--palette-accent-A200),
+  A400: var(--palette-accent-A400),
+  A700: var(--palette-accent-A700),
+  contrast: (
+    50 : var(--palette-accent-contrast-50),
+    100 : var(--palette-accent-contrast-100),
+    200 : var(--palette-accent-contrast-200),
+    300 : var(--palette-accent-contrast-300),
+    400 : var(--palette-accent-contrast-400),
+    500 : var(--palette-accent-contrast-500),
+    600 : var(--palette-accent-contrast-600),
+    700 : var(--palette-accent-contrast-700),
+    800 : var(--palette-accent-contrast-800),
+    900 : var(--palette-accent-contrast-900),
+    A100 : var(--palette-accent-contrast-A100),
+    A200 : var(--palette-accent-contrast-A200),
+    A400 : var(--palette-accent-contrast-A400),
+    A700 : var(--palette-accent-contrast-A700),
   )
 );
 
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$tailormap-app-primary: mat.define-palette($mat-tailormap);
-$tailormap-app-accent:  mat.define-palette($mat-tailormap, A200, A100, A400);
+$tailormap-app-primary: mat.define-palette($mat-tailormap-primary);
+$tailormap-app-accent:  mat.define-palette($mat-tailormap-accent);
 
 // The warn palette is optional (defaults to red).
 $app-warn: mat.define-palette(mat.$red-palette);
@@ -75,7 +94,9 @@ $app-theme: mat.define-light-theme((
     primary: $tailormap-app-primary,
     accent: $tailormap-app-accent,
     warn: $app-warn,
-  )
+  ),
+  typography: $custom-typography,
+  density: -1,
 ));
 
 // Include theme styles for core and each component used in your app.
@@ -83,15 +104,109 @@ $app-theme: mat.define-light-theme((
 // that you are using.
 @include mat.all-component-themes($app-theme);
 
-button.mat-button,
-button.mat-stroked-button,
-button.mat-flat-button {
-  border-radius: 0;
+@include mat.radio-density(-1);
+@include mat.checkbox-density(-1);
+@include mat.slide-toggle-density(-1);
+
+:root {
+  --mdc-typography-button-font-weight: 400;
+  --mdc-typography-button-letter-spacing: 0.0714285712;
+  --mdc-typography-body1-letter-spacing: 0.0714285712;
+  --mdc-typography-subtitle1-font-size: 14px;
+  --mdc-typography-body1-font-size: 14px;
+  --base-button-height: 36px;
 }
 
-button.mat-stroked-button {
-  border: 1px solid #eeeeef;
-  background-color: #fff;
-  box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.08);
+.mat-mdc-form-field .mdc-text-field--outlined .mdc-notched-outline--upgraded .mdc-floating-label--float-above {
+  font-size: var(--mdc-typography-body1-font-size);
 }
 
+button.mat-mdc-button-base.mdc-button,
+button.mat-mdc-button-base.mdc-button--outlined,
+button.mat-mdc-button-base.mdc-button--unelevated {
+  --mdc-filled-button-container-shape: 0;
+  height: var(--base-button-height);
+}
+
+.mat-mdc-icon-button.mat-mdc-button-base {
+  width: 40px;
+  height: 40px;
+  padding: 8px;
+}
+
+button.mat-mdc-raised-button.mat-primary,
+button.mdc-button--unelevated.mat-primary,
+button.mdc-button--unelevated.mat-accent {
+  --mdc-filled-button-label-text-color: var(--palette-primary-contrast-500);
+  --mdc-protected-button-label-text-color: var(--palette-primary-contrast-500);
+}
+
+button.mdc-button--unelevated.mat-accent {
+  --mdc-filled-button-label-text-color: var(--palette-accent-contrast-500);
+  --mdc-protected-button-label-text-color: var(--palette-accent-contrast-500);
+}
+
+.mat-mdc-checkbox.mat-primary {
+  --mdc-checkbox-selected-checkmark-color: var(--palette-primary-contrast-500);
+}
+
+.mat-mdc-checkbox.mat-accent {
+  --mdc-checkbox-selected-checkmark-color: var(--palette-accent-contrast-500);
+}
+
+.mat-datepicker-content .mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical),
+.mat-datepicker-content .cdk-keyboard-focused .mat-calendar-body-active > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical),
+.mat-datepicker-content .cdk-program-focused .mat-calendar-body-active > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
+  color: var(--palette-primary-contrast-500);
+}
+
+.mat-mdc-dialog-container .mdc-dialog__title {
+  --mdc-dialog-subhead-line-height: 16px;
+  --mdc-dialog-subhead-size: 16px;
+  --mdc-dialog-subhead-weight: 600;
+  padding: 0;
+  margin-bottom: 1.5em;
+}
+
+.mat-mdc-dialog-container .mdc-dialog__title::before {
+  height: var(--mdc-dialog-subhead-line-height);
+}
+
+.mat-mdc-card-title {
+  padding: 8px 16px;
+}
+
+.mat-mdc-dialog-container .mdc-dialog__surface {
+  padding: 16px;
+}
+
+.mat-mdc-icon-button.size-18 {
+  --mdc-icon-button-icon-size: 18px;
+  width: var(--mdc-icon-button-icon-size);
+  height: var(--mdc-icon-button-icon-size);
+  line-height: var(--mdc-icon-button-icon-size);
+  padding: 0;
+}
+
+.mat-mdc-icon-button.size-18 mat-icon {
+  width: var(--mdc-icon-button-icon-size);
+  height: var(--mdc-icon-button-icon-size);
+  overflow: visible;
+}
+
+.mat-mdc-icon-button.size-18 .mat-mdc-button-touch-target {
+  height: calc(var(--mdc-icon-button-icon-size) + 6px);
+  width: calc(var(--mdc-icon-button-icon-size) + 6px);
+}
+
+.mdc-button mat-icon {
+  vertical-align: middle;
+}
+
+.mdc-snackbar .mdc-snackbar__label {
+  padding: 2px;
+}
+
+.mat-mdc-progress-bar .mdc-linear-progress__buffer-bar {
+  background-color: var(--palette-primary-200-rgb);
+}

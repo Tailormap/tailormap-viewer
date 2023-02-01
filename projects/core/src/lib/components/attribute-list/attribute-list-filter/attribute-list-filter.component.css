@@ -4,28 +4,23 @@ h3 {
   line-height: 16px;
 }
 
-.mat-checkbox {
+.mat-mdc-checkbox {
   margin-right: 4px;
   font-size: 14px;
 }
 
-.mat-dialog-actions {
+.mat-mdc-dialog-actions {
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
   padding-top: 16px;
 }
 
-.mat-dialog-title {
-  width: 100%;
-  margin-bottom: 1.5em;
-}
-
-.mat-radio-button {
+.mat-mdc-radio-button {
   padding-bottom: 4px;
 }
 
-.mat-form-field {
+.mat-mdc-form-field {
   font-size: 14px;
   line-height: 2;
 }

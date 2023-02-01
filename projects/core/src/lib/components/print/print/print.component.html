@@ -8,13 +8,15 @@
         Export map
       </h2>
 
-      <mat-button-toggle-group [formControl]="exportType" class="lowerHeight">
-        <mat-button-toggle value="pdf" i18n>PDF document</mat-button-toggle>
-        <mat-button-toggle value="image" i18n>Map image</mat-button-toggle>
-      </mat-button-toggle-group>
+      <div class="form-field">
+        <mat-button-toggle-group [formControl]="exportType">
+          <mat-button-toggle value="pdf" i18n>PDF document</mat-button-toggle>
+          <mat-button-toggle value="image" i18n>Map image</mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
 
       <div *ngIf="hasDrawing$ | async" class="spaced spaced_top">
-        <mat-checkbox [formControl]="includeDrawing" i18n>Include drawing</mat-checkbox>
+        <mat-checkbox color="primary" [formControl]="includeDrawing" i18n>Include drawing</mat-checkbox>
       </div>
 
       <div *ngIf="exportType.value === 'image'" class="spaced spaced_top">
@@ -59,14 +61,14 @@
 
       <div *ngIf="exportType.value === 'pdf'" class="spaced">
         <form [formGroup]="exportPdfForm" (ngSubmit)="downloadPdf()">
-          <p>
-            <mat-button-toggle-group formControlName="orientation" class="lowerHeight" aria-label="Orientation">
+          <p class="form-field">
+            <mat-button-toggle-group formControlName="orientation" aria-label="Orientation">
               <mat-button-toggle value="landscape" i18n>Landscape</mat-button-toggle>
               <mat-button-toggle value="portrait" i18n>Portrait</mat-button-toggle>
             </mat-button-toggle-group>
           </p>
-          <p>
-            <mat-button-toggle-group formControlName="paperSize" class="lowerHeight" style="margin: 3px" aria-label="Paper size">
+          <p class="form-field">
+            <mat-button-toggle-group formControlName="paperSize" style="margin: 3px" aria-label="Paper size">
               <mat-button-toggle value="a4" i18n>A4</mat-button-toggle>
               <mat-button-toggle value="a3" i18n>A3</mat-button-toggle>
             </mat-button-toggle-group>
@@ -102,7 +104,7 @@
             </mat-form-field>
           </p>
           <p>
-            <mat-checkbox formControlName="autoPrint" i18n>Automatically open print dialog</mat-checkbox>
+            <mat-checkbox color="primary" formControlName="autoPrint" i18n>Automatically open print dialog</mat-checkbox>
           </p>
           <div class="padding">
             <button mat-flat-button color="primary" type="submit" [disabled]="!exportPdfForm.valid" i18n>Download map PDF</button>

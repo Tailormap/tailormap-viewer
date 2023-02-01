@@ -1,11 +1,11 @@
-import { render, screen } from '@testing-library/angular';
+import { render, screen, waitFor } from '@testing-library/angular';
 import { FeatureInfoDialogComponent } from './feature-info-dialog.component';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { featureInfoStateKey, initialFeatureInfoState } from '../state/feature-info.state';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { selectCurrentlySelectedFeature, selectFeatureInfoCounts, selectFeatureInfoDialogVisible } from '../state/feature-info.selectors';
-import { getAppLayerModel, getColumnMetadataModel } from '@tailormap-viewer/api';
+import { getAppLayerModel } from '@tailormap-viewer/api';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { TestBed } from '@angular/core/testing';
 import { FeatureInfoModel } from '../models/feature-info.model';
@@ -77,7 +77,9 @@ describe('FeatureInfoDialogComponent', () => {
     const store = TestBed.inject(MockStore);
     store.overrideSelector(selectCurrentlySelectedFeature, getFeatureInfo(true));
     store.refreshState();
-    expect((await screen.findByText(/fid/)).nextSibling?.textContent?.trim()).toEqual('6');
+    await waitFor(() => {
+      expect((screen.getByText(/fid/)).nextSibling?.textContent?.trim()).toEqual('6');
+    });
   });
 
 });

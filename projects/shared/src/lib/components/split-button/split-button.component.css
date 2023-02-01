@@ -28,6 +28,14 @@ mat-button-toggle ::ng-deep .mat-button-toggle-label-content {
   display: none;
 }
 
+.split-button-menu-item mat-icon {
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+  margin-right: 8px;
+}
+
+
 @media screen and (max-width: 625px) {
   .hide-on-small-screens {
     display: none;

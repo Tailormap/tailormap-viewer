@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { MenubarService } from '../menubar.service';
 import { Observable } from 'rxjs';
 import { CssHelper } from '@tailormap-viewer/shared';
@@ -9,7 +9,7 @@ import { CssHelper } from '@tailormap-viewer/shared';
   styleUrls: ['./menubar-panel.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MenubarPanelComponent {
+export class MenubarPanelComponent implements OnDestroy {
 
   public activeComponent$: Observable<{ componentId: string; dialogTitle: string } | null>;
 
@@ -21,6 +21,10 @@ export class MenubarPanelComponent {
   ) {
     this.activeComponent$ = this.menubarService.getActiveComponent$();
     this.panelWidth = menubarService.panelWidth;
+  }
+
+  public ngOnDestroy() {
+    this.menubarService.closePanel();
   }
 
   public closeDialog() {

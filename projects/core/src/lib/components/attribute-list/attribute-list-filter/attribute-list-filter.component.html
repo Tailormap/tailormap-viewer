@@ -1,7 +1,4 @@
-<h3 mat-dialog-title>
-  <ng-container i18n>Filter on</ng-container>
-  {{getColumnName()}}
-</h3>
+<h3 mat-dialog-title i18n>Filter on {{getColumnName()}}</h3>
 <div (keydown.enter)="onOk()">
 
   <tm-attribute-filter [attributeType]="getAttributeType()"

@@ -25,6 +25,11 @@
   font-weight: normal;
 }
 
+::ng-deep .select-line-style .mdc-list-item__primary-text {
+  display: block;
+  flex: 1;
+}
+
 ::ng-deep .select-line-style svg {
   display: inline-block;
   margin-bottom: -7px;

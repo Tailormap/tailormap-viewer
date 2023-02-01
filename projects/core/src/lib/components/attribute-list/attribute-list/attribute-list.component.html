@@ -1,4 +1,4 @@
-<div class="container" role="tabpanel" *ngIf="isVisible$ | async">
+<div class="container attribute-list-container" role="tabpanel" *ngIf="isVisible$ | async">
   <tm-panel-resize (positionChanged)="sizeChanged($event)"></tm-panel-resize>
 
   <div class="panel"
@@ -9,14 +9,14 @@
     <mat-toolbar>
       <span>{{title$ | async}}</span>
       <span class="spacer"></span>
-      <button mat-icon-button>
-        <mat-icon (click)="onMinimizeClick();" svgIcon="minimize"></mat-icon>
+      <button mat-icon-button class="size-18" (click)="onMinimizeClick();">
+        <mat-icon svgIcon="minimize"></mat-icon>
       </button>
-      <button mat-icon-button class="maximize-btn">
-        <mat-icon (click)="onMaximizeClick();" [svgIcon]="maximized ? 'chevron_bottom' : 'chevron_top'"></mat-icon>
+      <button mat-icon-button class="size-18 maximize-btn" (click)="onMaximizeClick();">
+        <mat-icon [svgIcon]="maximized ? 'chevron_bottom' : 'chevron_top'"></mat-icon>
       </button>
-      <button mat-icon-button>
-        <mat-icon (click)="onCloseClick();" svgIcon="close"></mat-icon>
+      <button mat-icon-button class="size-18" (click)="onCloseClick();">
+        <mat-icon svgIcon="close"></mat-icon>
       </button>
     </mat-toolbar>
 
@@ -28,6 +28,7 @@
     </span>
 
     <mat-tab-group class="panel-content tab-group"
+                   mat-stretch-tabs="false"
                    *ngIf="tabs.length > 0"
                    animationDuration="0ms"
                    (selectedTabChange)="onSelectedTabChange($event);">

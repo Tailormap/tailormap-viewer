@@ -38,15 +38,12 @@
   background-color: #fff;
 }
 
-.dialog-header mat-icon {
-  width: 20px;
-  height: 20px;
-  line-height: 20px;
-  font-size: 20px;
+.dialog-header mat-icon ::ng-deep svg {
+  transition: transform 250ms ease-in-out;
 }
 
-.close-button mat-icon:hover {
-  transform: rotate(180deg);
+.close-button:hover ::ng-deep svg {
+  transform: rotate(90deg);
 }
 
 .dialog--hidden {

@@ -79,7 +79,7 @@
                 {
                   "type": "initial",
                   "maximumWarning": "2mb",
-                  "maximumError": "2.2mb"
+                  "maximumError": "2.5mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -152,7 +152,8 @@
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
-            "project": "projects/core/ng-package.json"
+            "project": "projects/core/ng-package.json",
+            "tsConfig": "projects/core/tsconfig.lib.json"
           },
           "configurations": {
             "production": {
@@ -184,7 +185,8 @@
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
-            "project": "projects/api/ng-package.json"
+            "project": "projects/api/ng-package.json",
+            "tsConfig": "projects/api/tsconfig.lib.json"
           },
           "configurations": {
             "production": {
@@ -216,7 +218,8 @@
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
-            "project": "projects/shared/ng-package.json"
+            "project": "projects/shared/ng-package.json",
+            "tsConfig": "projects/shared/tsconfig.lib.json"
           },
           "configurations": {
             "production": {
@@ -248,7 +251,8 @@
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
-            "project": "projects/map/ng-package.json"
+            "project": "projects/map/ng-package.json",
+            "tsConfig": "projects/map/tsconfig.lib.json"
           },
           "configurations": {
             "production": {

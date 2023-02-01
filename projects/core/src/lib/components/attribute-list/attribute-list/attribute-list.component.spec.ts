@@ -5,7 +5,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AttributeListComponent } from './attribute-list.component';
 import { AttributeListState, attributeListStateKey } from '../state/attribute-list.state';
 import { initialMapState, mapStateKey } from '../../../map/state/map.state';
-import { AppLayerModel, getAppLayerModel, getLayerTreeNode } from '@tailormap-viewer/api';
+import {
+  AppLayerModel, getAppLayerModel, getLayerTreeNode, TAILORMAP_API_V1_SERVICE, TailormapApiV1MockService,
+} from '@tailormap-viewer/api';
 import { MatIconModule } from '@angular/material/icon';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -23,6 +25,9 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { filterStateKey, initialFilterState } from '../../../filter/state/filter.state';
 import { filterReducer } from '../../../filter/state/filter.reducer';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { AttributeListExportButtonComponent } from '../attribute-list-export-button/attribute-list-export-button.component';
+import { coreStateKey } from '../../../state/core.state';
+import { coreReducer } from '../../../state/core.reducer';
 
 const getStore = (
   attributeListStore: { [attributeListStateKey]: AttributeListState },
@@ -108,16 +113,21 @@ describe('AttributeList', () => {
         getAppLayerModel({ id: 2,  hasAttributes: true,  visible: true }),
       ],
     );
+    const reducers = {
+      [attributeListStateKey]: attributeListReducer,
+      [mapStateKey]: mapReducer,
+      [filterStateKey]: filterReducer,
+      [coreStateKey]: coreReducer,
+    };
     await render(AttributeListComponent, {
       imports: [
         SharedImportsModule,
         NoopAnimationsModule,
         MatIconTestingModule,
-        StoreModule.forRoot({
-          [attributeListStateKey]: attributeListReducer,
-          [mapStateKey]: mapReducer,
-          [filterStateKey]: filterReducer,
-        }, { initialState: store }),
+        StoreModule.forRoot(reducers, { initialState: store }),
+      ],
+      providers: [
+        { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1MockService },
       ],
       declarations: [
         AttributeListComponent,
@@ -126,6 +136,7 @@ describe('AttributeList', () => {
         AttributeListTableComponent,
         AttributeListTabComponent,
         AttributeListTabToolbarComponent,
+        AttributeListExportButtonComponent,
       ],
     });
 
@@ -136,7 +147,9 @@ describe('AttributeList', () => {
     expect(await screen.findByText('1: Test')).toBeInTheDocument();
     expect(await screen.findByText('10: Test')).toBeInTheDocument();
 
-    await userEvent.click(await screen.findByText('Tab 2'));
+    const tabEl = await screen.findByText('Tab 2');
+    tabEl.style.pointerEvents = 'auto';
+    await userEvent.click(tabEl);
 
     await waitFor(() => {
       expect(screen.queryByText('Attribute 1')).not.toBeInTheDocument();

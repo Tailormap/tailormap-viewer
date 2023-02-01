@@ -10,6 +10,7 @@ import { ColorPickerComponent } from './color-picker/color-picker.component';
 import { IconPickerComponent } from './icon-picker/icon-picker.component';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { PanelResizerComponent } from './panel-resizer';
+import { SliderComponent } from './slider/slider.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { PanelResizerComponent } from './panel-resizer';
     IconPickerComponent,
     ConfirmDialogComponent,
     PanelResizerComponent,
+    SliderComponent,
   ],
   imports: [
     SharedImportsModule,
@@ -36,6 +38,7 @@ import { PanelResizerComponent } from './panel-resizer';
     ColorPickerComponent,
     IconPickerComponent,
     PanelResizerComponent,
+    SliderComponent,
   ],
 })
 export class SharedComponentsModule {

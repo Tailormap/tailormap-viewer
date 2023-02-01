@@ -16,6 +16,6 @@
   margin-top: 3px;
 }
 
-::ng-deep .mat-select-panel.attribute-filter-condition-list-panel {
+::ng-deep .mat-mdc-select-panel.attribute-filter-condition-list-panel {
   max-height: 350px;
 }
