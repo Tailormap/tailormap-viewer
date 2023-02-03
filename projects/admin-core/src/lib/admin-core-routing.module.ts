@@ -11,6 +11,7 @@ const routes: Routes = [
   { path: RoutesEnum.GEO_REGISTRY_SOURCES, component: GeoRegistrySourcesPageComponent },
   { path: RoutesEnum.GEO_REGISTRY_ATTRIBUTES, component: GeoRegistryAttributesPageComponent },
   { path: RoutesEnum.ADMIN_HOME, component: AdminHomePageComponent },
+  { path: '**', redirectTo: '' },
 ];
 
 @NgModule({
