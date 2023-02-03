@@ -22,6 +22,11 @@
         "dist/map/map",
         "dist/map",
         "projects/map/src"
+      ],
+      "@tailormap-admin/admin-core": [
+        "dist/admin-core/admin-core",
+        "dist/admin-core",
+        "projects/admin-core/src"
       ]
     },
   }

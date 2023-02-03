@@ -4,12 +4,14 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { ICON_SERVICE_ICON_LOCATION } from './icon-service.injection-token';
 import { APP_BASE_HREF } from '@angular/common';
 
+type IconDefinition = string | { folder: string; icons: string[] };
+
 @Injectable({
   providedIn: 'root',
 })
 export class IconService {
 
-  public icons: Array<string | { folder: string; icons: string[] }> = [
+  public icons: IconDefinition[] = [
     'draw_polygon', 'draw_line', 'draw_point', 'split', 'new_object', 'merge',
     'drag', 'resize', 'chevron_bottom', 'chevron_left', 'chevron_right', 'chevron_top',
     'close', 'minimize', 'drop_down', 'drop_top', 'search', 'copy_filled', 'copy_outline',
@@ -50,14 +52,18 @@ export class IconService {
     return path.join('');
   }
 
-  public loadIconsToIconRegistry(matIconRegistry: MatIconRegistry, domSanitizer: DomSanitizer) {
+  public loadIconsToIconRegistry(
+    matIconRegistry: MatIconRegistry,
+    domSanitizer: DomSanitizer,
+    icons: IconDefinition[] = this.icons,
+  ) {
     const addIcon = (iconName: string, iconFile: string, folder?: string) => {
       matIconRegistry.addSvgIcon(
         iconName,
         domSanitizer.bypassSecurityTrustResourceUrl(this.getUrlForIcon(iconFile, folder)),
       );
     };
-    this.icons.forEach(value => {
+    icons.forEach(value => {
       if (typeof value === 'string') {
         addIcon(value, value);
         return;

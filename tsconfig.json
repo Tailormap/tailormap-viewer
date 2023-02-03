@@ -16,6 +16,9 @@
       ],
       "@tailormap-viewer/map": [
         "projects/map/src"
+      ],
+      "@tailormap-admin/admin-core": [
+        "projects/admin-core/src"
       ]
     },
     "outDir": "./dist/out-tsc",

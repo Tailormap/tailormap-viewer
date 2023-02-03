@@ -1,0 +1,63 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.navigation-bar {
+  flex: 1;
+  background-color: var(--primary-color);
+  width: var(--navigation-size);
+  display: flex;
+  flex-direction: column;
+  padding-top: 16px;
+}
+
+.submenu {
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+}
+
+.divider {
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 8px;
+  width: 100%;
+}
+
+.navigation-bar tm-admin-navigation-button + tm-admin-navigation-button {
+  margin-top: 8px;
+}
+
+.menu-button.mat-mdc-unelevated-button {
+  --mdc-filled-button-container-color: transparent;
+
+  color: var(--palette-primary-contrast-500);
+  display: flex;
+  position: relative;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.has-submenu + .submenu {
+  display: none;
+}
+
+.active.has-submenu + .submenu {
+  display: block;
+}
+
+.submenu {
+  margin-left: 32px;
+}
+
+.active {
+  font-weight: bold;
+}
+
+.menu-button.mat-mdc-unelevated-button.active:not(.has-submenu),
+.submenu .menu-button.mat-mdc-unelevated-button.active {
+  --mdc-filled-button-container-color: #fff;
+  color: var(--primary-color);
+}
+

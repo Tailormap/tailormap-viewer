@@ -3,7 +3,8 @@ module.exports = {
   setupFilesAfterEnv: ['<rootDir>/../../setup-jest.ts'],
   "testRegex": "((\\.|/*.)(spec))\\.ts?$",
   moduleNameMapper: {
-    "^@tailormap-viewer/(.*)$": "<rootDir>/../../projects/$1/src"
+    "^@tailormap-viewer/(.*)$": "<rootDir>/../../projects/$1/src",
+    "^@tailormap-admin/(.*)$": "<rootDir>/../../projects/$1/src"
   },
   globals: {
     "ts-jest": {

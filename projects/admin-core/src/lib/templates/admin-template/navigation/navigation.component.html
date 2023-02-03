@@ -1,0 +1,26 @@
+<ng-template #menuButton let-buttonPropsInput>
+  <ng-container *ngIf="getButtonProps(buttonPropsInput) as buttonProps">
+    <button mat-flat-button
+            class="menu-button"
+            [routerLink]="'/' + buttonProps.link"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{exact: buttonProps.matchExact}"
+            [tmTooltip]="buttonProps.label"
+            [class.has-submenu]="buttonProps.subMenu"
+            matTooltipPosition="right">
+      <mat-icon *ngIf="buttonProps.icon" [svgIcon]="buttonProps.icon"></mat-icon>
+      <span *ngIf="buttonProps.label">{{ buttonProps.label }}</span>
+    </button>
+    <div *ngIf="buttonProps.subMenu" class="submenu">
+      <ng-container *ngFor="let subMenu of buttonProps.subMenu">
+        <ng-container *ngTemplateOutlet="menuButton; context: {$implicit: subMenu}"></ng-container>
+      </ng-container>
+    </div>
+  </ng-container>
+</ng-template>
+
+<div class="navigation-bar">
+  <ng-container *ngFor="let menu of buttons">
+    <ng-container *ngTemplateOutlet="menuButton; context: {$implicit: menu}"></ng-container>
+  </ng-container>
+</div>
