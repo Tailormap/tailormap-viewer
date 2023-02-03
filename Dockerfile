@@ -12,6 +12,7 @@ RUN npm install
 COPY . /app
 
 RUN npm run build -- --base-href=${BASE_HREF}
+RUN npm run build-admin -- --base-href=${BASE_HREF}
 
 FROM nginx:1.23.3-alpine
 
