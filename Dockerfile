@@ -12,6 +12,7 @@ RUN npm install
 COPY . /app
 
 RUN npm run build -- --base-href=${BASE_HREF}
+RUN npm run build-admin -- --base-href=${BASE_HREF}admin/
 
 FROM nginx:1.23.3-alpine
 
@@ -29,6 +30,7 @@ LABEL org.opencontainers.image.authors="support@b3partners.nl" \
       org.opencontainers.image.version="${VERSION}"
 
 COPY --from=builder /app/dist/app /usr/share/nginx/html
+COPY --from=builder /app/dist/admin /usr/share/nginx/html/admin
 
 COPY docker/web/nginx.conf /etc/nginx/nginx.conf
 COPY docker/web/api-proxy.conf.template /etc/nginx/templates/api-proxy.conf.template

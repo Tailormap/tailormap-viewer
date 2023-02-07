@@ -1,4 +1,4 @@
-function getInvalidImportsRule(projectName, allowOpenLayers) {
+function getInvalidImportsRule(projectName, allowOpenLayers, allowAdmin) {
   const rule = {
     // node packages
     paths: ["assert", "buffer", "child_process", "cluster", "crypto", "dgram", "dns", "domain", "events", "freelist", "fs", "http", "https", "module", "net", "os", "path", "punycode", "querystring", "readline", "repl", "smalloc", "stream", "string_decoder", "sys", "timers", "tls", "tracing", "tty", "url", "util", "vm", "zlib"],
@@ -13,6 +13,13 @@ function getInvalidImportsRule(projectName, allowOpenLayers) {
     rule.patterns.push({
       "group": ["ol", "ol/*"],
       "message": "Please wrap OpenLayers functionality in map project."
+    });
+  }
+  if (!allowAdmin) {
+    // in most cases also do not allow imports from OpenLayers directly
+    rule.patterns.push({
+      "group": ["@tailormap-admin", "@tailormap-admin/*"],
+      "message": "Do not import from admin project."
     });
   }
   return rule;
