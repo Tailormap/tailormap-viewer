@@ -1,7 +1,0 @@
-# Port 8080 of the web container is not mapped by default for use with a reverse proxy such as Traefik doing SSL termination.
-# Specify this as an additional compose file to use have tailormap listen port 80 for development.
-
-services:
-  tailormap:
-    ports:
-      - 127.0.0.1:${LOCALHOST_PORT:-8080}:8080

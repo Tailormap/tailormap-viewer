@@ -1,6 +1,0 @@
-# Specify this as an additional Docker Compose configuration file to map the PostgreSQL port, so you can connect to it for development
-
-services:
-  db:
-    ports:
-      - "127.0.0.1:${DB_PORT:-55432}:5432"

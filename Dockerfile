@@ -17,8 +17,6 @@ COPY . /app
 RUN npm run build -- --base-href=${BASE_HREF}
 RUN npm run build-admin -- --base-href=${BASE_HREF}admin/
 
-RUN mkdir -p dist/app/ dist/admin/; echo test > dist/hallo.txt
-
 FROM --platform=$BUILDPLATFORM ghcr.io/b3partners/tailormap-api:${VERSION}
 
 LABEL org.opencontainers.image.authors="info@b3partners.nl" \

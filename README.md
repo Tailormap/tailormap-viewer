@@ -8,24 +8,26 @@ Install [Docker](https://docs.docker.com/engine/install/) and [Docker Compose](h
 run:
 
 ```shell
-docker network create traefik 2>/dev/null
-docker compose -f docker-compose.yml -f docker-compose-http.yml up
+docker compose up -d
 ```
 
-This runs Tailormap on http://localhost:8080/.
+This runs Tailormap on http://localhost:8080/ and PostgreSQL on localhost:5432. Make sure no other applications are listening on these
+ports.
 
-Tailormap will run in the foreground (press Control+C to stop) unless you start it with `docker compose up -d`. Stop Tailormap
-using `docker compose down` (add `-v` to remove the volume for the database).
+Remove the Tailormap stack using `docker compose down` (add `-v` to remove the volume with the database).
 
-By default, the latest development Docker image will be used (tagged with `snapshot`). This is published automatically by a GitHub Action from the `main` branch. To use the latest released versions, copy `.env.template` to `.env` and set the `VERSION` variable to `latest` before running.
-
-To update a running stack after a new version is released, run `docker compose` with the `pull` and `up` commands.
+By default, the latest development Docker image will be used (tagged with `snapshot`). This is published automatically by a GitHub Action on
+every change to the `main` branch, so this might be an unstable version. To use the latest (stable) released versions, copy `.env.template`
+to `.env` and set the `VERSION` variable to `latest` before running. To update a running stack after a new version is released,
+run `docker compose` with the `pull` and `up` commands but _check the release
+notes beforehand_.
 
 ### Default admin account
 
 To log in to the admin interface go to http://localhost:8080/admin/.
 
-When starting up for the first a password will the randonly generated for the admin account. This password is printed to the logs of the `tailormap` container. You can see the password with:
+When starting up for the first a password will the randonly generated for the admin account. This password is printed to the logs of
+the `tailormap` container. You can see the password with:
 
 `docker compose logs tailormap`
 
@@ -37,11 +39,13 @@ tailormap-viewer-tailormap-1          | ***
 tailormap-viewer-tailormap-1          | *** Use this account for administrating users:
 tailormap-viewer-tailormap-1          | ***
 tailormap-viewer-tailormap-1          | *** Username: admin
-tailormap-viewer-tailormap-1          | *** Password: 6814a911-455b-4d4c-af31-387f89015a2e
+tailormap-viewer-tailormap-1          | *** Password: ********
 tailormap-viewer-tailormap-1          | ***
 ```
 
-Log in to the administration interface with this account to set up security. The default admin account can only change security settings, add it to the `Admin` group for full control (you need to log in again for changes to take effect). Change the password or save the generated password somewhere.
+Log in to the administration interface with this account to set up security. The default admin account can only change security settings,
+add it to the `admin` group for full control (you need to log in again for changes to take effect). Change the password or save the
+generated password somewhere.
 
 #### Resetting an account password
 
@@ -58,12 +62,25 @@ Remember to change this password using the administration interface. It will be 
 
 To run Tailormap in production, you need to put it behind a reverse proxy that handles SSL termination.
 
-Copy `.env.template` to `.env`, set the variables and run `docker compose up -d` and connect your reverse proxy container such as Traefik to
-the `tailormap` container on port 8080. You can set the `PROXY_NETWORK` variable in `.env` to specify the external network the reverse proxy
-container is in to make tailormap reachable by the proxy.
+Copy `.env.template` to `.env` and change the `HOST` variables to the hostname Tailormap will be running on. Tailormap must run on the `/`
+path.
 
-If you're using a reverse proxy without Docker just use `docker compose -f docker-compose.yml -f docker-compose-http.yml` to have Tailormap
-listen only on the loopback interface on port 8080 only reachable by your reverse proxy. You can customize the port using a `.env` file.
+If you're using a reverse proxy without Docker just use `docker compose up` and reverse proxy 127.0.0.1:8080 (this port is added
+in `docker-compose.override.yml` along with the PostgreSQL port). The ports can be changed in an `.env` file (or use another override file).
+
+It's a good idea to use Traefik as a reverse proxy because it can be automatically configured by Docker labels and can automatically request
+Let's Encrypt certificates. Specify the `docker-compose.traefik.yml` file as overrides (see that file for details):
+
+```
+docker compose -f docker-compose.yml -f docker-compose.traefik.yml up -d
+```
+
+You can also run multiple Tailormap stacks on one host, even running different versions. Just specify another `.env` file with a
+different `HOST` and `COMPOSE_PROJECT_NAME` and specify it using the `--env-file <env>` option. Note that if you use the `latest` tag and
+pull a new image, stacks will only run with the updated version after recreating the containers with `docker compose up`. It might be
+advisable to only set `VERSION` to a specific version and use a tool such
+as [renovatebot](https://www.mend.io/free-developer-tools/renovate/) to automatically update your configuration when a new version is
+released.
 
 #### Refreshing the configuration database
 
@@ -106,7 +123,9 @@ container to the previous major version and backup the database as normal and re
 
 ## Development
 
-After you've made your some changes to the source you can build your own Docker image using `docker compose build`. For development, it's quicker to run a development server without Docker.
+After you've made your some changes to the source you can build your own Docker image using `docker compose build`. You may want to remove
+the `node_modules` and `.angular` directories to reduce the Docker build context size. For development, it's quicker to run a development
+server without Docker.
 
 The following is required for successfully building Tailormap:
 
@@ -120,25 +139,20 @@ will automatically reload if you change any of the source files.
 
 ### Connecting to the PostgreSQL database
 
-Run Docker Compose with:
-
-```shell
-docker compose -f docker-compose.yml -f docker-compose-http.yml -f docker-compose-db-port.yml up
-```
-
 You can connect to the PostgreSQL database with `psql -h localhost -U tailormap tailormap` with the default password `tailormap`.
 
-The port PostgreSQL should listen to can be customized using the `DB_PORT` variable in the `.env` file.
+The port PostgreSQL listens on can be customized using the `DB_PORT` variable in an `.env` file.
 
 ### Using a local Tailormap backend
 
 The Spring Boot backend middleware is developed in a separate [tailormap-api](https://www.github.com/B3Partners/tailormap-api) repository.
 
-When running a dev server, the tailormap-api is reverse proxied on the `/api` path from `https://snapshot.tailormap.nl/api` which runs the
+When running a dev server, the tailormap-api is reverse proxied on the `http://localhost/api` path from `https://snapshot.tailormap.nl/api`
+which runs the
 latest `snapshot`, so you don't even need to run the backend and database locally.
 
-If you want to change the viewer configuration you need to log in of course! Just run Tailormap locally as described above and set the
-`PROXY_USE_LOCALHOST` environment variable:
+If you want to change the viewer configuration you of course need to log in! Just run Tailormap locally as described above and set
+the `PROXY_USE_LOCALHOST` environment variable:
 
 ```shell
 PROXY_USE_LOCALHOST=true npm run start
@@ -146,7 +160,12 @@ PROXY_USE_LOCALHOST=true npm run start
 
 There is a Swagger UI for the API on http://localhost:8080/swagger-ui/.
 
-If you've made some changes to the backend, only start the `db` container from this stack and run the backend from the tailormap-api repository with `mvn -Pdeveloping spring-boot:run`.
+If you've made some changes to the backend, only start the `db` container from this stack and run the backend from the tailormap-api
+repository with `mvn -Pdeveloping spring-boot:run`.
+
+_Warning:_ if you want to use a locally built `ghcr.io/b3partners/tailormap-api` image to build `ghcr.io/b3partners/tailormap`, you _must
+disable buildx_ using `DOCKER_BUILDKIT=0 docker compose build` otherwise your local image won't be used.
+See [this issue](https://github.com/docker/compose/issues/9939).
 
 ### Code scaffolding
 
@@ -165,7 +184,12 @@ Run `npm run test` to execute the unit tests via [Jest](https://jestjs.io).
 
 ### Building multi-arch images
 
-Use the commands below to build and push the cross-platform Docker images to the GitHub container registry. See the Docker documentation for more information about [building multi-platform images](https://docs.docker.com/build/building/multi-platform/) and the [docker buildx build](https://docs.docker.com/engine/reference/commandline/buildx_build/) and  [docker buildx create](https://docs.docker.com/engine/reference/commandline/buildx_create/) commands.
+TODO: can we do this using `docker compose build`?
+
+Use the commands below to build and push the cross-platform Docker images to the GitHub container registry. See the Docker documentation for
+more information about [building multi-platform images](https://docs.docker.com/build/building/multi-platform/) and
+the [docker buildx build](https://docs.docker.com/engine/reference/commandline/buildx_build/)
+and  [docker buildx create](https://docs.docker.com/engine/reference/commandline/buildx_create/) commands.
 
 ```shell
 # create a container for x-platform builds (only needed once)
@@ -182,7 +206,7 @@ export BASE_HREF=/
 # for pushing to the GitHub container registry, you need to be logged in with docker login
 docker buildx build --pull --build-arg VERSION=${VERSION} --build-arg BASE_HREF=${BASE_HREF} \
       --platform linux/amd64,linux/arm64 \
-      -t ghcr.io/b3partners/tailormap-viewer:${VERSION} . \
+      -t ghcr.io/b3partners/tailormap:${VERSION} . \
       --push
 # leave the buildx context
 docker buildx use default

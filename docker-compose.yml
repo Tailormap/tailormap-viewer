@@ -1,24 +1,18 @@
-networks:
-  reverse-proxy:
-    external: true
-    name: ${PROXY_NETWORK:-traefik}
-
 volumes:
   config-db:
 
 services:
   tailormap:
-    image: ghcr.io/b3partners/tailormap-viewer:${VERSION:-snapshot}
-    # See README.md for how to build multi-arch images
+    image: ghcr.io/b3partners/tailormap:${VERSION:-snapshot}
+    # See README.md for how to build multi-arch images.
+    # Run `DOCKER_BUILDKIT=0 docker compose build` if you want to use a locally modified ghcr.io/b3partners/tailormap-api image!
     build:
       context: .
       args:
-        BUILDPLATFORM: ${BUILDPLATFORM:-linux/amd64}
         VERSION: ${VERSION:-snapshot}
         BASE_HREF: ${BASE_HREF:-/}
     networks:
       - default
-      - reverse-proxy
     expose:
       - 8080
       - 8081 # for monitoring
@@ -26,12 +20,6 @@ services:
       - "HOST=${HOST:-localhost}"
       - "SPRING_DATASOURCE_URL=jdbc:postgresql://db/tailormap"
       - "DB_PASSWORD=${TAILORMAP_DB_PASSWORD:-tailormap}"
-    labels:
-      traefik.http.routers.${COMPOSE_PROJECT_NAME:-tailormap}.rule: "Host(`${HOST:-localhost}`)"
-      traefik.http.routers.${COMPOSE_PROJECT_NAME:-tailormap}.tls: "true"
-      traefik.http.routers.${COMPOSE_PROJECT_NAME:-tailormap}.tls.certresolver: "letsencrypt"
-      traefik.http.services.${COMPOSE_PROJECT_NAME:-tailormap}.loadbalancer.server.port: 80
-      traefik.enable: true
     restart: unless-stopped
     depends_on:
       - db

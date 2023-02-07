@@ -1,0 +1,19 @@
+# Specify as additional Compose file for use with Traefik. Puts the tailormap container in an external network where the Traefik container
+# should also be in, so it is reachable. Also adds labels for Traefik configuration using the Docker provider.
+
+networks:
+  reverse-proxy:
+    external: true
+    name: ${PROXY_NETWORK:-traefik}
+
+services:
+  tailormap:
+    networks:
+      - reverse-proxy
+    labels:
+      traefik.http.routers.${COMPOSE_PROJECT_NAME:-tailormap}.rule: "Host(`${HOST:-localhost}`)"
+      traefik.http.routers.${COMPOSE_PROJECT_NAME:-tailormap}.tls: "true"
+      traefik.http.routers.${COMPOSE_PROJECT_NAME:-tailormap}.tls.certresolver: "letsencrypt"
+      traefik.http.services.${COMPOSE_PROJECT_NAME:-tailormap}.loadbalancer.server.port: 80
+      traefik.docker.network: ${PROXY_NETWORK:-traefik}"
+      traefik.enable: true
