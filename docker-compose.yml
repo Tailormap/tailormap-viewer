@@ -1,8 +1,9 @@
 volumes:
-  config-db:
+  db:
 
 services:
   tailormap:
+    container_name: ${COMPOSE_PROJECT_NAME}-server
     image: ghcr.io/b3partners/tailormap:${VERSION:-snapshot}
     # See README.md for how to build multi-arch images.
     # Run `DOCKER_BUILDKIT=0 docker compose build` if you want to use a locally modified ghcr.io/b3partners/tailormap-api image!
@@ -25,6 +26,7 @@ services:
       - db
 
   db:
+    container_name: ${COMPOSE_PROJECT_NAME}-db
     image: postgres:15.1-alpine3.17
     environment:
       POSTGRES_PASSWORD: ${TAILORMAP_DB_PASSWORD:-tailormap}
@@ -32,7 +34,7 @@ services:
       POSTGRES_DB: tailormap
       PGUSER: postgres # for pg_isready
     volumes:
-      - config-db:/var/lib/postgresql/data
+      - db:/var/lib/postgresql/data
     healthcheck:
       interval: 1m
       timeout: 5s

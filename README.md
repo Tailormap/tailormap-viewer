@@ -62,18 +62,12 @@ Remember to change this password using the administration interface. It will be 
 
 To run Tailormap in production, you need to put it behind a reverse proxy that handles SSL termination.
 
-Copy `.env.template` to `.env` and change the `HOST` variables to the hostname Tailormap will be running on. Tailormap must run on the `/`
-path.
+Copy the `.env.template` file to `.env` and change the `HOST` variable to the hostname Tailormap will be running on. Tailormap must run on the `/` path.
 
-If you're using a reverse proxy without Docker just use `docker compose up` and reverse proxy 127.0.0.1:8080 (this port is added
-in `docker-compose.override.yml` along with the PostgreSQL port). The ports can be changed in an `.env` file (or use another override file).
+If you're using a reverse proxy without Docker just reverse proxy 127.0.0.1:8080 (this port is added in `docker-compose.override.yml` along with the PostgreSQL port). The ports can be changed in an `.env` file or by using another override file in `COMPOSE_FILE`.
 
 It's a good idea to use Traefik as a reverse proxy because it can be automatically configured by Docker labels and can automatically request
-Let's Encrypt certificates. Specify the `docker-compose.traefik.yml` file as overrides (see that file for details):
-
-```
-docker compose -f docker-compose.yml -f docker-compose.traefik.yml up -d
-```
+Let's Encrypt certificates. Add `docker-compose.traefik.yml` to `COMPOSE_FILE` in the `.env` file. See the file for details.
 
 You can also run multiple Tailormap stacks on one host, even running different versions. Just specify another `.env` file with a
 different `HOST` and `COMPOSE_PROJECT_NAME` and specify it using the `--env-file <env>` option. Note that if you use the `latest` tag and
