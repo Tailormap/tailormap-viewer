@@ -1,131 +1,48 @@
-version: '3.9'
-
-# This compose file is geared towards Continuous Integration. It can be used as a base for production.
-# See README.md for usage details
-
 networks:
-  tailormap-viewer:
-    name: tailormap-viewer
-
+  reverse-proxy:
+    external: true
+    name: ${PROXY_NETWORK:-traefik}
 
 volumes:
   config-db:
 
-
 services:
-  web:
-    image: ghcr.io/b3partners/tailormap-viewer:${VERSION_TAG:-snapshot}
-    profiles:
-      - http
-    ports:
-      - "80:80"
+  tailormap:
+    image: ghcr.io/b3partners/tailormap-viewer:${VERSION:-snapshot}
+    # See README.md for how to build multi-arch images
+    build:
+      context: .
+      args:
+        BUILDPLATFORM: ${BUILDPLATFORM:-linux/amd64}
+        VERSION: ${VERSION:-snapshot}
+        BASE_HREF: ${BASE_HREF:-/}
     networks:
-      - tailormap-viewer
-    environment:
-      - "API_PROXY_ENABLED=${API_PROXY_ENABLED:-true}"
-      - "API_PROXY_URL=${API_PROXY_URL:-http://api:8080/api/}"
-      - "API_PROXY_HOST=${API_PROXY_HOST:-localhost}"
-      - "ADMIN_PROXY_ENABLED=${ADMIN_PROXY_ENABLED:-true}"
-      - "ADMIN_PROXY_URL=${ADMIN_PROXY_URL:-http://admin:8080/admin/}"
-      - "ADMIN_PROXY_HOST=${ADMIN_PROXY_HOST:-localhost}"
-      - "SENTRY_DSN=${VIEWER_SENTRY_DSN:-}"
-    labels:
-      traefik.enable: false
-    restart: unless-stopped
-
-
-  # The same as web, but without port 80 exposed and with labels for using with Traefik as a reverse proxy.
-  web-proxied:
-    image: ghcr.io/b3partners/tailormap-viewer:${VERSION_TAG:-snapshot}
-    profiles:
-      - proxied
-    networks:
-      - tailormap-viewer
+      - default
+      - reverse-proxy
     expose:
-      - "8080"
+      - 8080
+      - 8081 # for monitoring
     environment:
-      - "API_PROXY_ENABLED=${API_PROXY_ENABLED:-true}"
-      - "API_PROXY_URL=${API_PROXY_URL:-http://api:8080/api/}"
-      - "ADMIN_PROXY_ENABLED=${ADMIN_PROXY_ENABLED:-true}"
-      - "ADMIN_PROXY_URL=${ADMIN_PROXY_URL:-http://admin:8080/admin/}"
       - "HOST=${HOST:-localhost}"
-      - "SENTRY_DSN=${VIEWER_SENTRY_DSN:-}"
+      - "SPRING_DATASOURCE_URL=jdbc:postgresql://db/tailormap"
+      - "DB_PASSWORD=${TAILORMAP_DB_PASSWORD:-tailormap}"
     labels:
-      traefik.http.routers.tailormap-snapshot.rule: "Host(`${HOST:-localhost}`)"
-      traefik.http.routers.tailormap-snapshot.tls: "true"
-      traefik.http.routers.tailormap-snapshot.tls.certresolver: "letsencrypt"
-      traefik.http.services.tailormap-snapshot.loadbalancer.server.port: 80
+      traefik.http.routers.${COMPOSE_PROJECT_NAME:-tailormap}.rule: "Host(`${HOST:-localhost}`)"
+      traefik.http.routers.${COMPOSE_PROJECT_NAME:-tailormap}.tls: "true"
+      traefik.http.routers.${COMPOSE_PROJECT_NAME:-tailormap}.tls.certresolver: "letsencrypt"
+      traefik.http.services.${COMPOSE_PROJECT_NAME:-tailormap}.loadbalancer.server.port: 80
       traefik.enable: true
     restart: unless-stopped
-
-
-  web-status:
-    profiles:
-      - proxied
-    depends_on:
-      - web-proxied
-    expose:
-      - "9113"
-    image: nginx/nginx-prometheus-exporter:0.11.0
-    # see https://github.com/nginxinc/nginx-prometheus-exporter#command-line-arguments
-    environment:
-      SCRAPE_URI: http://web-proxied:8080/stub_status
-      NGINX_RETRIES: 5
-      TELEMETRY_PATH: /metrics
-      # defaults
-      # LISTEN_ADDRESS: ":9113"
-    networks:
-      - tailormap-viewer
-    labels:
-      traefik.enable: false
-
-
-  api:
-    image: ghcr.io/b3partners/tailormap-api:${RELEASE_VERSION:-snapshot}
-    profiles:
-      - full
-    networks:
-      - tailormap-viewer
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db/tailormap
-      DB_PASSWORD: ${TAILORMAP_DB_PASSWORD:-tailormap}
-      SENTRY_DSN: ${API_SENTRY_DSN:-}
-      # Sample 20% of API requests for now.
-      SENTRY_TRACES_SAMPLE_RATE: 0.2
-    labels:
-      traefik.enable: false
-    restart: unless-stopped
     depends_on:
       - db
-
-
-  admin:
-    image: ghcr.io/b3partners/tailormap-admin:${RELEASE_VERSION:-snapshot}
-    profiles:
-      - full
-    networks:
-      - tailormap-viewer
-    environment:
-      CATALINA_OPTS: -DPG_HOST=db -DPG_PORT=5432 -DPG_DATABASE=tailormap -DDB_NAME=tailormap -DDB_USER=tailormap -DDB_PASSWORD=${TAILORMAP_DB_PASSWORD:-tailormap} -DURL_SCHEME=http
-    labels:
-      traefik.enable: false
-    restart: unless-stopped
-    depends_on:
-      - db
-
 
   db:
-    image: ghcr.io/b3partners/tailormap-config-db:${RELEASE_VERSION:-snapshot}
-    profiles:
-      - full
-    networks:
-      - tailormap-viewer
-    labels:
-      traefik.enable: false
+    image: postgres:15.1-alpine3.17
     environment:
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
-      TAILORMAP_PASSWORD: ${TAILORMAP_DB_PASSWORD:-tailormap}
-      CONFIG_DB_INIT_EMPTY: ${CONFIG_DB_INIT_EMPTY:-false}
+      POSTGRES_PASSWORD: ${TAILORMAP_DB_PASSWORD:-tailormap}
+      POSTGRES_USER: tailormap
+      POSTGRES_DB: tailormap
+      PGUSER: postgres # for pg_isready
     volumes:
       - config-db:/var/lib/postgresql/data
     healthcheck:
