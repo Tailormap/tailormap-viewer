@@ -12,6 +12,7 @@ services:
       args:
         VERSION: ${VERSION:-snapshot}
         BASE_HREF: ${BASE_HREF:-/}
+        API_VERSION: snapshot
     networks:
       - default
     expose:
