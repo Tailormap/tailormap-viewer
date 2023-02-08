@@ -21,11 +21,11 @@ services:
       - SPRING_PROFILES_ACTIVE=static-only
     labels:
       - "traefik.http.routers.${COMPOSE_PROJECT_NAME:-tailormap}.rule=Host(`${HOST:-localhost}`) && PathPrefix(`${BASE_HREF}`)"
-      - traefik.http.routers.${COMPOSE_PROJECT_NAME:-tailormap}.tls=true
-      - traefik.http.routers.${COMPOSE_PROJECT_NAME:-tailormap}.tls.certresolver=letsencrypt
-      - traefik.http.routers.${COMPOSE_PROJECT_NAME:-tailormap}.middlewares=${COMPOSE_PROJECT_NAME:-tailormap}-stripprefix
-      - traefik.http.services.${COMPOSE_PROJECT_NAME:-tailormap}.loadbalancer.server.port=80
-      - traefik.http.middlewares.${COMPOSE_PROJECT_NAME:-tailormap}-stripprefix.stripprefix.prefixes=${BASE_HREF}
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME:-tailormap}.tls=true"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME:-tailormap}.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME:-tailormap}.middlewares=${COMPOSE_PROJECT_NAME:-tailormap}-stripprefix"
+      - "traefik.http.services.${COMPOSE_PROJECT_NAME:-tailormap}.loadbalancer.server.port=8080"
+      - "traefik.http.middlewares.${COMPOSE_PROJECT_NAME:-tailormap}-stripprefix.stripprefix.prefixes=${BASE_HREF}"
     restart: unless-stopped
 
   db:

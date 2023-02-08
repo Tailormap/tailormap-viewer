@@ -106,7 +106,7 @@ jobs:
           PR: ${{ steps.find-pr.outputs.number }}
         run: |
           echo "VERSION=pr-${PR}" >> $GITHUB_ENV
-          echo "COMPOSE_PROJECT_NAME=tailormap-${VERSION}" >> $GITHUB_ENV
+          echo "COMPOSE_PROJECT_NAME=tailormap-pr-${PR}" >> $GITHUB_ENV
           echo "COMPOSE_FILE=docker-compose.yml:docker-compose.traefik.yml:docker-compose.pr.yml" >> $GITHUB_ENV
           echo "BASE_HREF=/pull-request/${PR}/${GITHUB_REF_NAME_SLUG_URL}/" >> $GITHUB_ENV
 

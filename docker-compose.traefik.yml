@@ -11,9 +11,9 @@ services:
     networks:
       - reverse-proxy
     labels:
-      traefik.http.routers.${COMPOSE_PROJECT_NAME:-tailormap}.rule: "Host(`${HOST:-localhost}`)"
-      traefik.http.routers.${COMPOSE_PROJECT_NAME:-tailormap}.tls: "true"
-      traefik.http.routers.${COMPOSE_PROJECT_NAME:-tailormap}.tls.certresolver: "letsencrypt"
-      traefik.http.services.${COMPOSE_PROJECT_NAME:-tailormap}.loadbalancer.server.port: 80
-      traefik.docker.network: ${PROXY_NETWORK:-traefik}"
-      traefik.enable: true
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME:-tailormap}.rule=Host(`${HOST:-localhost}`)"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME:-tailormap}.tls=true"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME:-tailormap}.tls.certresolver=letsencrypt"
+      - "traefik.http.services.${COMPOSE_PROJECT_NAME:-tailormap}.loadbalancer.server.port=80"
+      - "traefik.docker.network=${PROXY_NETWORK:-traefik}"
+      - "traefik.enable=true"
