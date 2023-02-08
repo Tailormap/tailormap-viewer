@@ -121,20 +121,20 @@ const onMoveLayerTreeNode = (state: MapState, payload: ReturnType<typeof MapActi
     // don't drag level into itself or its children
     return state;
   }
-  const currentParentIdx = state[tree].findIndex(n => n.childrenIds.includes(payload.nodeId));
+  const currentParentIdx = state[tree].findIndex(n => n.childrenIds?.includes(payload.nodeId));
   return {
     ...state,
     [tree]: state[tree].map((node, idx) => {
       if (newParentIdx === idx) {
         return {
           ...node,
-          childrenIds: ChangePositionHelper.updateOrderInList(node.childrenIds, payload.nodeId, payload.position, payload.sibling),
+          childrenIds: ChangePositionHelper.updateOrderInList(node.childrenIds ?? [], payload.nodeId, payload.position, payload.sibling),
         };
       }
       if (currentParentIdx === idx) {
         return {
           ...node,
-          childrenIds: node.childrenIds.filter(id => id !== payload.nodeId),
+          childrenIds: node.childrenIds?.filter(id => id !== payload.nodeId) ?? [],
         };
       }
       return node;
