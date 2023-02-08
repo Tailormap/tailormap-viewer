@@ -78,8 +78,13 @@ jobs:
     name: 'Build and deploy'
     runs-on: ubuntu-22.04
     env:
-      VERSION_TAG: snapshot
+      VERSION: snapshot
+      COMPOSE_PROJECT_NAME: tailormap-snapshot
+      COMPOSE_FILE: docker-compose.yml:docker-compose.traefik.yml
       BASE_HREF: /
+      HOST: ${{ secrets.DEPLOY_HOST_SNAPSHOT }}
+      API_SENTRY_DSN: ${{ secrets.API_SENTRY_DSN }}
+      VIEWER_SENTRY_DSN: ${{ secrets.VIEWER_SENTRY_DSN }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -100,7 +105,9 @@ jobs:
         env:
           PR: ${{ steps.find-pr.outputs.number }}
         run: |
-          echo "VERSION_TAG=pr-${PR}" >> $GITHUB_ENV
+          echo "VERSION=pr-${{ env.PR }}" >> $GITHUB_ENV
+          echo "COMPOSE_PROJECT_NAME=tailormap-${{ env.VERSION }}" >> $GITHUB_ENV
+          echo "COMPOSE_FILE=docker-compose.yml:docker-compose.traefik.yml:docker-compose.pr.yml  >> $GITHUB_ENV
           echo "BASE_HREF=/pull-request/${PR}/${GITHUB_REF_NAME_SLUG_URL}/" >> $GITHUB_ENV
 
       - name: 'Log in to GitHub container registry'
@@ -115,14 +122,14 @@ jobs:
         run: |
           docker buildx create --use --name tailormap-builder
           docker run --privileged --rm tonistiigi/binfmt --install all
-          docker buildx build --pull --build-arg VERSION=${VERSION_TAG} --build-arg BASE_HREF=${BASE_HREF} --platform linux/amd64,linux/arm64 -t ghcr.io/b3partners/tailormap:${VERSION_TAG} . --push
+          docker buildx build --progress plain --pull --build-arg VERSION=${VERSION} --build-arg BASE_HREF=${BASE_HREF} --platform linux/amd64,linux/arm64 -t ghcr.io/b3partners/tailormap:${VERSION} . --push
 
       - name: 'Build, tag and push image to registry'
         if: ${{ steps.find-pr.outputs.number }}
         run: |
           # Multi-arch builds too slow for PR's, just do linux/amd64
           docker compose build
-          docker compose push
+          docker compose push -q
 
       - name: 'Set Docker context for deployment'
         uses: arwynfr/actions-docker-context@v2
@@ -139,11 +146,6 @@ jobs:
 
       - name: 'Update main deployment using Docker Compose'
         if: ${{ github.ref == 'refs/heads/main' }}
-        env:
-          COMPOSE_FILE: docker-compose.yml:docker-compose.traefik.yml
-          HOST: ${{ secrets.DEPLOY_HOST_SNAPSHOT }}
-          API_SENTRY_DSN: ${{ secrets.API_SENTRY_DSN }}
-          VIEWER_SENTRY_DSN: ${{ secrets.VIEWER_SENTRY_DSN }}
         # use the old/python docker-compose for pulling to prevent errors like https://github.com/docker/buildx/issues/764
         # WARNING: Some service image(s) must be built from source by running:
         #    docker compose build %s db web-proxied
@@ -155,12 +157,6 @@ jobs:
 
       - name: 'Update pull request deployment using Docker Compose'
         if: ${{ steps.find-pr.outputs.number }}
-        env:
-          COMPOSE_FILE: docker-compose.yml:docker-compose.traefik.yml:docker-compose.pr.yml
-          COMPOSE_PROJECT_NAME: tailormap-${{ env.VERSION_TAG }}
-          NAME: ${{ env.VERSION_TAG }}
-          HOST: ${{ secrets.DEPLOY_HOST_SNAPSHOT }}
-          VIEWER_SENTRY_DSN: ${{ secrets.VIEWER_SENTRY_DSN }}
         run: |
           docker-compose pull -q
           docker compose up -d --pull=always
@@ -171,8 +167,8 @@ jobs:
         with:
           token: "${{ secrets.GITHUB_TOKEN }}"
           environment-url: "https://${{ secrets.DEPLOY_HOST_SNAPSHOT }}${{ env.BASE_HREF}}"
-          description: "Deployment for ${{ env.VERSION_TAG }}"
-          environment: ${{ env.VERSION_TAG }}
+          description: "Deployment for ${{ env.VERSION }}"
+          environment: ${{ env.VERSION }}
           initial-status: success
           ref: "${{ env.GITHUB_HEAD_REF }}"
 
