@@ -19,6 +19,9 @@ services:
     image: ghcr.io/b3partners/tailormap:${VERSION}
     environment:
       - SPRING_PROFILES_ACTIVE=static-only
+    healthcheck:
+      # With the static-only profile the management port 8081 is disabled so the default HEALTHCHECK won't succeed
+      test: [NONE]
     labels:
       - "traefik.http.routers.${COMPOSE_PROJECT_NAME:-tailormap}.rule=Host(`${HOST:-localhost}`) && PathPrefix(`${BASE_HREF}`)"
       - "traefik.http.routers.${COMPOSE_PROJECT_NAME:-tailormap}.tls=true"
