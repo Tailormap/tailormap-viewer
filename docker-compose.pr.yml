@@ -4,11 +4,11 @@
 
 # Usage (see also the GitHub Actions workflows in .github):
 # cat << EOF > env-pr
-# NAME=pr-xxx
+# VERSION=pr-xxx
 # BASE_HREF=/pr-xxx/
 # HOST=tailormap.example.com
 # COMPOSE_FILE=docker-compose.yml:docker-compose.traefik.yml:docker-compose.pr.yml
-# COMPOSE_PROJECT_NAME=tailormap-pr-xxx
+# COMPOSE_PROJECT_NAME=tailormap-${VERSION}
 # EOF
 # docker compose --env-file env-pr build
 # docker compose --env-file env-pr up -d
@@ -16,7 +16,7 @@
 
 services:
   tailormap:
-    image: ghcr.io/b3partners/tailormap:${NAME}
+    image: ghcr.io/b3partners/tailormap:${VERSION}
     environment:
       - SPRING_PROFILES_ACTIVE=static-only
     labels:
