@@ -93,10 +93,9 @@ jobs:
         uses: jwalton/gh-find-current-pr@v1
         id: find-pr
 
-      # TODO add some logic to determine version/tag name for releases
       - name: 'Set variables for PR'
-        # When running on a PR, build and tag the Docker image for a deployment with a base-href and Nginx configuration for deployment of
-        # the web container only on a sub-path, using the /api URL from the main branch deployment.
+        # When running on a PR, build and tag the Docker image for a deployment with a different base-href and a static-only deployment on
+        # a path prefix, with the frontend using the /api URL from the main branch deployment.
         if: ${{ success() && steps.find-pr.outputs.number }}
         env:
           PR: ${{ steps.find-pr.outputs.number }}
@@ -115,7 +114,6 @@ jobs:
         run: |
           docker buildx create --use --name tailormap-builder
           docker run --privileged --rm tonistiigi/binfmt --install all
-          docker buildx build --pull --build-arg VERSION=${VERSION_TAG} --platform linux/amd64,linux/arm64 -t ghcr.io/b3partners/tailormap-config-db:${VERSION_TAG} ./docker/db --push
           docker buildx build --pull --build-arg VERSION=${VERSION_TAG} --build-arg BASE_HREF=${BASE_HREF} --platform linux/amd64,linux/arm64 -t ghcr.io/b3partners/tailormap-viewer:${VERSION_TAG} . --push
 
       - name: 'Set Docker context for deployment'
@@ -134,28 +132,25 @@ jobs:
       - name: 'Update main deployment using Docker Compose'
         if: ${{ github.ref == 'refs/heads/main' }}
         env:
-          DB_PORT: "127.0.0.1:55432:5432"
+          COMPOSE_FILE: docker-compose.yml:docker-compose.traefik.yml
           HOST: ${{ secrets.DEPLOY_HOST_SNAPSHOT }}
           API_SENTRY_DSN: ${{ secrets.API_SENTRY_DSN }}
           VIEWER_SENTRY_DSN: ${{ secrets.VIEWER_SENTRY_DSN }}
-        # use the old/python docker-compose for pulling to prevent errors like https://github.com/docker/buildx/issues/764
-        # WARNING: Some service image(s) must be built from source by running:
-        #    docker compose build %s db web-proxied
-        # error during connect: Post "http://docker.example.com/v1.41/images/create?fromImage=nginx%2Fnginx-prometheus-exporter&tag=0.10.0":
-        # command [ssh -l github-docker-actions -- *** docker system dial-stdio] has exited with signal: killed, please make sure the URL is valid, and Docker 18.09 or later is installed on the remote host: stderr=
         run: |
-          docker-compose -f docker-compose.yml --profile proxied --profile full pull -q
-          docker compose -f docker-compose.yml -f docker-compose-db-ports.yml --profile proxied --profile full up -d --pull=always
+          docker compose pull -q
+          docker compose up -d --pull=always
 
       - name: 'Update pull request deployment using Docker Compose'
         if: ${{ steps.find-pr.outputs.number }}
         env:
+          COMPOSE_FILE: docker-compose.yml:docker-compose.traefik.yml:docker-compose.pr.yml
+          COMPOSE_PROJECT_NAME: tailormap-${{ env.VERSION_TAG }}
           NAME: ${{ env.VERSION_TAG }}
           HOST: ${{ secrets.DEPLOY_HOST_SNAPSHOT }}
           VIEWER_SENTRY_DSN: ${{ secrets.VIEWER_SENTRY_DSN }}
         run: |
-          docker compose -f docker-compose-pr.yml --project-name tailormap-snapshot-${NAME} pull
-          docker compose -f docker-compose-pr.yml --project-name tailormap-snapshot-${NAME} up -d --pull=always
+          docker compose pull
+          docker compose up -d --pull=always
 
       - name: 'Create GitHub deployment'
         if: success()

@@ -1,0 +1,33 @@
+# Docker Compose overrides for continuous deployment of a PR with a different BASE_HREF, serving only the static frontend without the
+# backend API controllers. Traefik labels configure Tailormap to run on a path prefix. The Angular frontend uses `/api/` (absolute URL) to
+# the backend, not a relative URL so the backend of Tailormap for the main branch is used.
+
+# Usage (see also the GitHub Actions workflows in .github):
+# cat << EOF > env-pr
+# NAME=pr-xxx
+# BASE_HREF=/pr-xxx/
+# HOST=tailormap.example.com
+# COMPOSE_FILE=docker-compose.yml:docker-compose.traefik.yml:docker-compose.pr.yml
+# COMPOSE_PROJECT_NAME=tailormap-pr-xxx
+# EOF
+# docker compose --env-file env-pr build
+# docker compose --env-file env-pr up -d
+# docker compose --env-file env-pr down -v
+
+services:
+  tailormap:
+    image: ghcr.io/b3partners/tailormap:${NAME}
+    environment:
+      - SPRING_PROFILES_ACTIVE=static-only
+    labels:
+      - "traefik.http.routers.tailormap-${NAME}.rule=Host(`${HOST:-localhost}`) && PathPrefix(`${BASE_HREF}`)"
+      - traefik.http.routers.tailormap-${NAME}.tls=true
+      - traefik.http.routers.tailormap-${NAME}.tls.certresolver=letsencrypt
+      - traefik.http.routers.tailormap-${NAME}.middlewares=tailormap-${NAME}-stripprefix
+      - traefik.http.services.tailormap-${NAME}.loadbalancer.server.port=80
+      - traefik.http.middlewares.tailormap-${NAME}-stripprefix.stripprefix.prefixes=${BASE_HREF}
+    restart: unless-stopped
+
+  db:
+    profiles:
+      - disabled

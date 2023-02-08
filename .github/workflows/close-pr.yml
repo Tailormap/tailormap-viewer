@@ -36,9 +36,12 @@ jobs:
           ssh-keyscan -H ${{ secrets.DOCKER_HOSTNAME }} > $HOME/.ssh/known_hosts
 
       - name: 'Remove pull request deployment and image'
+        env:
+          COMPOSE_FILE: docker-compose.yml:docker-compose.traefik.yml:docker-compose.pr.yml
+          COMPOSE_PROJECT_NAME: tailormap-${{ env.VERSION_TAG }}
+          NAME: ${{ env.VERSION_TAG }}
         run: |
-          export NAME=${{ env.VERSION_TAG }}
-          docker compose -f docker-compose-pr.yml --project-name tailormap-snapshot-${NAME} down --rmi all --remove-orphans
+          docker compose down --rmi all --remove-orphans
 
       - name: 'Remove image from registry'
         if: ${{ always() }}
@@ -46,7 +49,7 @@ jobs:
         with:
           token: "${{ secrets.GHCR_CLEANUP_PAT }}"
           owner: ${{ github.repository_owner }}
-          name: ${{ github.event.repository.name }}
+          name: tailormap
           tag: "${{ env.VERSION_TAG }}"
 
       - name: 'Remove GitHub deployment and environment'
