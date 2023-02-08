@@ -115,13 +115,14 @@ jobs:
         run: |
           docker buildx create --use --name tailormap-builder
           docker run --privileged --rm tonistiigi/binfmt --install all
-          docker buildx build --pull --build-arg VERSION=${VERSION_TAG} --build-arg BASE_HREF=${BASE_HREF} --platform linux/amd64,linux/arm64 -t ghcr.io/b3partners/tailormap-viewer:${VERSION_TAG} . --push
+          docker buildx build --pull --build-arg VERSION=${VERSION_TAG} --build-arg BASE_HREF=${BASE_HREF} --platform linux/amd64,linux/arm64 -t ghcr.io/b3partners/tailormap:${VERSION_TAG} . --push
 
       - name: 'Build, tag and push image to registry'
-        if: ${{ github.ref == 'refs/heads/main' }}
+        if: ${{ steps.find-pr.outputs.number }}
         run: |
           # Multi-arch builds too slow for PR's, just do linux/amd64
-          docker compose build --push
+          docker compose build
+          docker compose push
 
       - name: 'Set Docker context for deployment'
         uses: arwynfr/actions-docker-context@v2
@@ -161,7 +162,7 @@ jobs:
           HOST: ${{ secrets.DEPLOY_HOST_SNAPSHOT }}
           VIEWER_SENTRY_DSN: ${{ secrets.VIEWER_SENTRY_DSN }}
         run: |
-          docker-compose pull
+          docker-compose pull -q
           docker compose up -d --pull=always
 
       - name: 'Create GitHub deployment'
