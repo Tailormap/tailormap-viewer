@@ -136,3 +136,77 @@ export class LayerInformation extends Message<LayerInformation> {
   }
 }
 
+/**
+ * @generated from message bookmark.LayerTreeOrderBookmarkFragment
+ */
+export class LayerTreeOrderBookmarkFragment extends Message<LayerTreeOrderBookmarkFragment> {
+  /**
+   * @generated from field: map<string, bookmark.LayerTreeOrderInformation> ordering = 1;
+   */
+  ordering: { [key: string]: LayerTreeOrderInformation } = {};
+
+  constructor(data?: PartialMessage<LayerTreeOrderBookmarkFragment>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime = proto3;
+  static readonly typeName = "bookmark.LayerTreeOrderBookmarkFragment";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "ordering", kind: "map", K: 9 /* ScalarType.STRING */, V: {kind: "message", T: LayerTreeOrderInformation} },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): LayerTreeOrderBookmarkFragment {
+    return new LayerTreeOrderBookmarkFragment().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): LayerTreeOrderBookmarkFragment {
+    return new LayerTreeOrderBookmarkFragment().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): LayerTreeOrderBookmarkFragment {
+    return new LayerTreeOrderBookmarkFragment().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: LayerTreeOrderBookmarkFragment | PlainMessage<LayerTreeOrderBookmarkFragment> | undefined, b: LayerTreeOrderBookmarkFragment | PlainMessage<LayerTreeOrderBookmarkFragment> | undefined): boolean {
+    return proto3.util.equals(LayerTreeOrderBookmarkFragment, a, b);
+  }
+}
+
+/**
+ * @generated from message bookmark.LayerTreeOrderInformation
+ */
+export class LayerTreeOrderInformation extends Message<LayerTreeOrderInformation> {
+  /**
+   * @generated from field: repeated string children = 1;
+   */
+  children: string[] = [];
+
+  constructor(data?: PartialMessage<LayerTreeOrderInformation>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime = proto3;
+  static readonly typeName = "bookmark.LayerTreeOrderInformation";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "children", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): LayerTreeOrderInformation {
+    return new LayerTreeOrderInformation().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): LayerTreeOrderInformation {
+    return new LayerTreeOrderInformation().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): LayerTreeOrderInformation {
+    return new LayerTreeOrderInformation().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: LayerTreeOrderInformation | PlainMessage<LayerTreeOrderInformation> | undefined, b: LayerTreeOrderInformation | PlainMessage<LayerTreeOrderInformation> | undefined): boolean {
+    return proto3.util.equals(LayerTreeOrderInformation, a, b);
+  }
+}
+

@@ -162,14 +162,14 @@ export const selectBackgroundLayerTree = createSelector(
 
 export const selectBackgroundNodesList = createSelector(
   selectBackgroundLayerTreeNodes,
-  (treeNodes: ExtendedLayerTreeNodeModel[]): LayerTreeNodeModel[] => {
+  (treeNodes: ExtendedLayerTreeNodeModel[]): ExtendedLayerTreeNodeModel[] => {
     const root = treeNodes.find(l => l.root);
     if (!root) {
       return [];
     }
-    return (root.childrenIds || [])
+    return (root.childrenIds ?? [])
       .map(childId => LayerTreeNodeHelper.findLayerTreeNode(treeNodes, childId))
-      .filter((node: LayerTreeNodeModel | undefined): node is LayerTreeNodeModel => typeof node !== 'undefined');
+      .filter((node: ExtendedLayerTreeNodeModel| undefined): node is ExtendedLayerTreeNodeModel => typeof node !== 'undefined');
   },
 );
 

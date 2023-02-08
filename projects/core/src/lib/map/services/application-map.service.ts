@@ -6,14 +6,14 @@ import { ResolvedServerType, ServiceModel, ServiceProtocol } from '@tailormap-vi
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { ArrayHelper } from '@tailormap-viewer/shared';
 import { selectLoadStatus, selectMapOptions, selectOrderedVisibleBackgroundLayers,
-  selectOrderedVisibleLayersWithServices, selectLayers } from '../state/map.selectors';
+  selectOrderedVisibleLayersWithServices, selectLayers, selectLayerTreeNodes } from '../state/map.selectors';
 import { ExtendedAppLayerModel } from '../models';
 import { selectCQLFilters } from '../../filter/state/filter.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { BookmarkFragmentStringDescriptor, BookmarkFragmentProtoDescriptor } from '../../bookmark/bookmark.models';
 import { BookmarkService } from '../../bookmark/bookmark.service';
-import { setLayerVisibility, setLayerOpacity } from '../state/map.actions';
-import { LayerVisibilityBookmarkFragment } from '../bookmark/bookmark_pb';
+import { setLayerVisibility, setLayerOpacity, setLayerTreeNodeChildren } from '../state/map.actions';
+import { LayerVisibilityBookmarkFragment, LayerTreeOrderBookmarkFragment } from '../bookmark/bookmark_pb';
 import { MapBookmarkHelper } from '../bookmark/bookmark.helper';
 
 @Injectable({
@@ -25,6 +25,12 @@ export class ApplicationMapService implements OnDestroy {
     type: 'proto',
     proto: LayerVisibilityBookmarkFragment,
     identifier: '1',
+  };
+
+  private static ORDERING_BOOKMARK_DESCRIPTOR: BookmarkFragmentProtoDescriptor<LayerTreeOrderBookmarkFragment> = {
+    type: 'proto',
+    proto: LayerTreeOrderBookmarkFragment,
+    identifier: '2',
   };
 
   private destroyed = new Subject();
@@ -100,12 +106,36 @@ export class ApplicationMapService implements OnDestroy {
         }
       });
 
+    combineLatest([
+      this.bookmarkService.registerFragment$(ApplicationMapService.ORDERING_BOOKMARK_DESCRIPTOR),
+      this.store$.select(selectLayerTreeNodes),
+      this.store$.select(selectLoadStatus),
+    ]).pipe(
+        takeUntil(this.destroyed),
+        filter(([ ,, loadStatus ]) => loadStatus === LoadingStateEnum.LOADED),
+        distinctUntilKeyChanged('0'),
+      )
+      .subscribe(([ fragment, layers ]) => {
+        const bookmarkContents = MapBookmarkHelper.layerTreeOrderFromFragment(fragment, layers);
+        for (const [ key, children ] of bookmarkContents) {
+          this.store$.dispatch(setLayerTreeNodeChildren({ nodeId: key, children }));
+        }
+      });
+
     this.getVisibilityBookmarkData()
       .pipe(
         takeUntil(this.destroyed),
       )
       .subscribe(bookmark => {
           this.bookmarkService.updateFragment(ApplicationMapService.VISIBILITY_BOOKMARK_DESCRIPTOR, bookmark);
+      });
+
+    this.getOrderBookmarkData()
+      .pipe(
+        takeUntil(this.destroyed),
+      )
+      .subscribe(bookmark => {
+          this.bookmarkService.updateFragment(ApplicationMapService.ORDERING_BOOKMARK_DESCRIPTOR, bookmark);
       });
 
     combineLatest([ this.mapService.getMapViewDetails$(), this.mapService.getUnitsOfMeasure$() ])
@@ -167,6 +197,18 @@ export class ApplicationMapService implements OnDestroy {
       filter(([ , loadStatus ]) => loadStatus === LoadingStateEnum.LOADED),
       map(([layers]) => {
         return MapBookmarkHelper.fragmentFromVisibilityData(layers);
+      }),
+    );
+  }
+
+  private getOrderBookmarkData() {
+    return combineLatest([
+      this.store$.select(selectLayerTreeNodes),
+      this.store$.select(selectLoadStatus),
+    ]).pipe(
+      filter(([ , loadStatus ]) => loadStatus === LoadingStateEnum.LOADED),
+      map(([layers]) => {
+        return MapBookmarkHelper.fragmentFromLayerTreeOrder(layers);
       }),
     );
   }

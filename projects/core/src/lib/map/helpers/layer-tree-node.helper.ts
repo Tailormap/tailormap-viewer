@@ -13,12 +13,10 @@ export class LayerTreeNodeHelper {
   }
 
   public static getExtendedLayerTreeNode(node: LayerTreeNodeModel): ExtendedLayerTreeNodeModel {
-    if (LayerTreeNodeHelper.isAppLayerNode(node)) {
-      return node;
-    }
     return {
       ...node,
-      expanded: true,
+      expanded: LayerTreeNodeHelper.isAppLayerNode(node) ? undefined : true,
+      initialChildren: node.childrenIds ?? [],
     };
   }
 
@@ -40,7 +38,7 @@ export class LayerTreeNodeHelper {
     };
   }
 
-  public static findLayerTreeNode(layerTreeNodes: LayerTreeNodeModel[], id: string) {
+  public static findLayerTreeNode<T extends LayerTreeNodeModel>(layerTreeNodes: T[], id: string) {
     return layerTreeNodes.find(l => l.id === id);
   }
 
@@ -54,7 +52,7 @@ export class LayerTreeNodeHelper {
     return LayerTreeNodeHelper.getChildNodes(layerTreeNodes, child).map(node => node.id);
   }
 
-  public static getSelectedTreeNodes(layerTreeNodes: LayerTreeNodeModel[], layers: AppLayerModel[]) {
+  public static getSelectedTreeNodes(layerTreeNodes: ExtendedLayerTreeNodeModel[], layers: AppLayerModel[]) {
     const tree = LayerTreeNodeHelper.layerTreeNodeToTree(layerTreeNodes, layers);
     const checkedNodes: Set<string> = new Set();
     tree.forEach(node => {

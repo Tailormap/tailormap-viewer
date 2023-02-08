@@ -1,6 +1,7 @@
+import { ArrayHelper } from '@tailormap-viewer/shared';
 import { MapSizeHelper, MapViewDetailsModel, MapUnitEnum } from '@tailormap-viewer/map';
-import { TristateBoolean, LayerVisibilityBookmarkFragment, LayerInformation } from './bookmark_pb';
-import { AppLayerWithInitialValuesModel } from '../models';
+import { TristateBoolean, LayerVisibilityBookmarkFragment, LayerInformation, LayerTreeOrderBookmarkFragment, LayerTreeOrderInformation } from './bookmark_pb';
+import { AppLayerWithInitialValuesModel, ExtendedLayerTreeNodeModel } from '../models';
 
 export interface MapBookmarkContents {
   visibilityChanges: { id: number; checked: boolean }[];
@@ -138,4 +139,33 @@ export class MapBookmarkHelper {
 
     return bookmarkData;
   }
+
+  public static fragmentFromLayerTreeOrder(tree: ExtendedLayerTreeNodeModel[]): LayerTreeOrderBookmarkFragment {
+    const data: { [name: string]: LayerTreeOrderInformation } = {};
+
+    for (const layer of tree) {
+      if (!ArrayHelper.arrayEquals(layer.initialChildren, layer.childrenIds ?? [])) {
+       data[layer.id] = new LayerTreeOrderInformation({ children: layer.childrenIds ?? [] });
+      }
+    }
+
+    return new LayerTreeOrderBookmarkFragment({ ordering: data });
+  }
+
+  public static layerTreeOrderFromFragment(
+    fragment: LayerTreeOrderBookmarkFragment,
+    layers: ExtendedLayerTreeNodeModel[],
+  ): Map<string, string[]> {
+    const output = new Map<string, string[]>();
+
+    for (const layer of layers) {
+       const newChildren = fragment.ordering[layer.id]?.children?.filter(a => layers.some(b => b.id === a)) ?? layer.initialChildren;
+       if (!ArrayHelper.arrayEquals(layer.childrenIds ?? [], newChildren)) {
+         output.set(layer.id, newChildren);
+       }
+    }
+
+    return output;
+  }
+
 }
