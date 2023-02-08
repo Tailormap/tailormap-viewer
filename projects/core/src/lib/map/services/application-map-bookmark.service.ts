@@ -69,9 +69,9 @@ export class ApplicationMapBookmarkService implements OnDestroy {
         distinctUntilKeyChanged('0'),
       )
       .subscribe(([ fragment, layers ]) => {
-        const bookmarkContents = MapBookmarkHelper.layerTreeOrderFromFragment(fragment, layers);
-        for (const [ key, children ] of bookmarkContents) {
-          this.store$.dispatch(setLayerTreeNodeChildren({ nodeId: key, children }));
+        const nodes = MapBookmarkHelper.layerTreeOrderFromFragment(fragment, layers);
+        if (nodes.length > 0) {
+          this.store$.dispatch(setLayerTreeNodeChildren({ nodes }));
         }
       });
 

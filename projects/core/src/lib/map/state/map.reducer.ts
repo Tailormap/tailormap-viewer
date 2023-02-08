@@ -148,10 +148,11 @@ const onSetLayerTreeNodeChildren = (state: MapState, payload: ReturnType<typeof 
   return {
     ...state,
     [tree]: state[tree].map(node => {
-      if (payload.nodeId === node.id) {
+      const matches = payload.nodes.find(a => a.nodeId === node.id);
+      if (matches !== undefined) {
         return {
           ...node,
-          childrenIds: payload.children,
+          childrenIds: matches.children,
         };
       }
       return node;

@@ -155,13 +155,13 @@ export class MapBookmarkHelper {
   public static layerTreeOrderFromFragment(
     fragment: LayerTreeOrderBookmarkFragment,
     layers: ExtendedLayerTreeNodeModel[],
-  ): Map<string, string[]> {
-    const output = new Map<string, string[]>();
+  ): { nodeId: string; children: string[] }[] {
+    const output = [];
 
     for (const layer of layers) {
        const newChildren = fragment.ordering[layer.id]?.children?.filter(a => layers.some(b => b.id === a)) ?? layer.initialChildren;
        if (!ArrayHelper.arrayEquals(layer.childrenIds ?? [], newChildren)) {
-         output.set(layer.id, newChildren);
+         output.push({ nodeId: layer.id, children: newChildren });
        }
     }
 
