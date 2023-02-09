@@ -19,37 +19,20 @@ jobs:
 
       - name: Build images
         run: |
-          docker buildx build --pull --build-arg VERSION=snapshot -t ghcr.io/b3partners/tailormap-config-db:snapshot ./docker/db --load
-          docker buildx build --pull --build-arg VERSION=snapshot --build-arg BASE_HREF=/ -t ghcr.io/b3partners/tailormap-viewer:snapshot . --load
+          docker buildx build --pull --build-arg VERSION=snapshot --build-arg BASE_HREF=/ -t ghcr.io/b3partners/tailormap:snapshot . --load
 
       - name: Run Trivy vulnerability scanner on tailormap-viewer
         uses: 'aquasecurity/trivy-action@0.9.0'
-        # docker run --rm -v trivy_cache:/root/.cache/ aquasec/trivy image ghcr.io/b3partners/tailormap-viewer:snapshot
+        # docker run --rm -v trivy_cache:/root/.cache/ aquasec/trivy image ghcr.io/b3partners/tailormap:snapshot
         with:
-          image-ref: 'ghcr.io/b3partners/tailormap-viewer:snapshot'
+          image-ref: 'ghcr.io/b3partners/tailormap:snapshot'
           format: 'sarif'
-          output: 'viewer-trivy-results.sarif'
-          severity: 'HIGH,CRITICAL'
-
-      - name: Run Trivy vulnerability scanner on tailormap-config-db
-        uses: 'aquasecurity/trivy-action@0.9.0'
-        # docker run --rm -v trivy_cache:/root/.cache/ aquasec/trivy image ghcr.io/b3partners/tailormap-config-db:snapshot
-        with:
-          image-ref: 'ghcr.io/b3partners/tailormap-config-db:snapshot'
-          format: 'sarif'
-          output: 'config-db-trivy-results.sarif'
+          output: 'tailormap-trivy-results.sarif'
           severity: 'HIGH,CRITICAL'
 
       - name: Upload tailormap-viewer Trivy scan results to GitHub Security tab
         uses: 'github/codeql-action/upload-sarif@v2'
         if: always()
         with:
-          sarif_file: 'viewer-trivy-results.sarif'
-          category: 'tailormap-viewer'
-
-      - name: Upload tailormap-config-db Trivy scan results to GitHub Security tab
-        uses: 'github/codeql-action/upload-sarif@v2'
-        if: always()
-        with:
-          sarif_file: 'config-db-trivy-results.sarif'
-          category: 'tailormap-config-db'
+          sarif_file: 'tailormap-trivy-results.sarif'
+          category: 'tailormap'

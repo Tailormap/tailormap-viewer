@@ -1,0 +1,10 @@
+# Extra ports for development. For production only specify DOCKER_FILE=docker-compose.yml.
+
+services:
+  tailormap:
+    ports:
+      - 127.0.0.1:${LOCALHOST_PORT:-8080}:8080
+
+  db:
+    ports:
+      - "127.0.0.1:${DB_PORT:-5432}:5432"

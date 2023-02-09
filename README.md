@@ -2,46 +2,206 @@
 
 The Angular frontend for Tailormap.
 
-## Development requirements
+## Running using Docker Compose
 
-The following are required for successfully building Tailormap viewer:
+Install [Docker](https://docs.docker.com/engine/install/) and [Docker Compose](https://docs.docker.com/compose/install/) (version 2) and
+run:
+
+```shell
+docker compose up -d
+```
+
+This runs Tailormap on http://localhost:8080/ and PostgreSQL on localhost:5432. Make sure no other applications are listening on these
+ports.
+
+Remove the Tailormap stack using `docker compose down` (add `-v` to remove the volume with the database).
+
+By default, the latest development Docker image will be used (tagged with `snapshot`). This is published automatically by a GitHub Action on
+every change to the `main` branch, so this might be an unstable version. To use the latest (stable) released versions, copy `.env.template`
+to `.env` and set the `VERSION` variable to `latest` before running. To update a running stack after a new version is released,
+run `docker compose` with the `pull` and `up` commands but _check the release
+notes beforehand_.
+
+## Running just the Tailormap container
+
+The Docker Compose stack includes a PostgreSQL database, but you can also just run Tailormap with an existing PostgreSQL. By the default the
+database name, user and password must be `tailormap`:
+
+```shell
+createuser tailormap
+createdb tailormap --owner=tailormap
+psql tailormap -c "alter role tailormap password 'tailormap'"
+docker run -it --rm --network=host -e SERVER_PORT=8080 ghcr.io/b3partners/tailormap:snapshot
+```
+
+Specify `-e SPRING_DATASOURCE_URL=jdbc:postgresql://host:port/database -e SPRING_DATASOURCE_USERNAME=user -e SPRING_DATASOURCE_PASSWORD=pass`
+with `docker run` to change the database connection settings.
+
+Note that by default a management endpoint is started on port 8081. Do not expose this publicly.
+
+## Default admin account
+
+To log in to the admin interface go to http://localhost:8080/admin/.
+
+When starting up for the first a password will the randonly generated for the admin account. This password is printed to the logs of
+the `tailormap` container. You can see the password with:
+
+`docker compose logs tailormap`
+
+Look for the output containing:
+
+```
+tailormap-viewer-tailormap-1          | INFO 1 --- [           main] n.b.t.a.s.StartupAdminAccountBean        :
+tailormap-viewer-tailormap-1          | ***
+tailormap-viewer-tailormap-1          | *** Use this account for administrating users:
+tailormap-viewer-tailormap-1          | ***
+tailormap-viewer-tailormap-1          | *** Username: admin
+tailormap-viewer-tailormap-1          | *** Password: ********
+tailormap-viewer-tailormap-1          | ***
+```
+
+Log in to the administration interface with this account to set up security. The default admin account can only change security settings,
+add it to the `admin` group for full control (you need to log in again for changes to take effect). Change the password or save the
+generated password somewhere.
+
+### Resetting an account password
+
+If you ever forget the admin password but do not want to re-initialize the database, reset the password with:
+
+```
+docker compose exec --user postgres db \
+  psql tailormap -U tailormap -c "update user set password = '{noop}changeme' where username = 'admin'"
+```
+
+Remember to change this password using the administration interface. It will be hashed securely using bcrypt.
+
+## Running in production behind a reverse proxy
+
+To run Tailormap in production, you need to put it behind a reverse proxy that handles SSL termination.
+
+Copy the `.env.template` file to `.env` and change the `HOST` variable to the hostname Tailormap will be running on. Tailormap must run on the `/` path.
+
+If you're using a reverse proxy without Docker just reverse proxy 127.0.0.1:8080 (this port is added in `docker-compose.override.yml` along with the PostgreSQL port). The ports can be changed in an `.env` file or by using another override file in `COMPOSE_FILE`.
+
+It's a good idea to use Traefik as a reverse proxy because it can be automatically configured by Docker labels and can automatically request
+Let's Encrypt certificates. Add `docker-compose.traefik.yml` to `COMPOSE_FILE` in the `.env` file. See the file for details.
+
+You can also run multiple Tailormap stacks on one host, even running different versions. Just specify another `.env` file with a
+different `HOST` and `COMPOSE_PROJECT_NAME` and specify it using the `--env-file <env>` option. Note that if you use the `latest` tag and
+pull a new image, stacks will only run with the updated version after recreating the containers with `docker compose up`. It might be
+advisable to only set `VERSION` to a specific version and use a tool such
+as [renovatebot](https://www.mend.io/free-developer-tools/renovate/) to automatically update your configuration when a new version is
+released.
+
+## Database
+
+### Refreshing the database
+
+Tailormap creates database tables automatically. To start fresh, bring the stack down removing the database volume with
+`docker compose down -v` and restart Tailormap.
+
+### Backing up the configuration database
+
+The configuration database needs to be backed up if you don't want to lose your configuration. The backup procedure isn't any different when
+using containers from using PostgreSQL without them: use `pg_dump` and do not back up just the files in `/var/lib/postgresql/`, tempting as
+that may be.
+
+Creating a backup:
+
+```
+docker compose exec --user postgres db pg_dump -U tailormap tailormap > tailormap.sql
+```
+
+### Restoring a backup
+
+The restore procedure: drop the database, recreate it and load the backup. You may need to stop the `tailormap` container to close any
+connections.
+
+```
+docker compose stop tailormap
+docker compose exec --user postgres db dropdb -U tailormap tailormap
+docker compose exec --user postgres db createdb -U tailormap --owner=tailormap tailormap
+cat tailormap.sql | docker compose --profile full exec -T --user postgres db psql tailormap
+cat tailormap.sql | docker compose exec -T --user postgres db psql -U tailormap tailormap
+docker compose start tailormap
+```
+
+### Upgrading to a new major PostgreSQL version
+
+The Docker image for the configuration database is kept up to date with the latest PostgreSQL releases and can move to a new major version
+with a new Tailormap release. In this case the database must be dumped and restored (see above). Take note of the major PostgreSQL version
+in the release notes whether this is required. You will see an error opening Tailormap and see errors about the PostgreSQL version in the
+logs of the `db` container if you don't do this upgrade. If you did not have a recent backup ready, downgrade the image used by the `db`
+container to the previous major version and backup the database as normal and restore on the newer major version.
+
+## Development
+
+After you've made your some changes to the source you can build your own Docker image using `docker compose build`. You may want to remove
+the `node_modules` and `.angular` directories to reduce the Docker build context size. For development, it's quicker to run a development
+server without Docker.
+
+The following is required for successfully building Tailormap:
+
 - NodeJS 18.x (https://nodejs.org/en/); the current LTS
 - npm 8 (included with NodeJS)
-- Docker (https://docs.docker.com/engine/install/) including Buildx and Compose v2 (https://docs.docker.com/compose/install/)
 
-## Development server
+### Dev server
 
-Run `npm run start` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Run `npm run start` for a dev server, or `npm run start-nl` for the Dutch localized version. Navigate to `http://localhost:4200/`. The app
+will automatically reload if you change any of the source files.
 
-## Using a Tailormap backend
+### Connecting to the PostgreSQL database
 
-When running a dev server, the tailormap-api is proxied on the `/api` path. See [proxy.config.js](proxy.config.js). You can change the URL
-to connect to a different tailormap-api instance. You can also run one locally and set the `PROXY_USE_LOCALHOST` environment variable to
-`true` when running the viewer development server.
+You can connect to the PostgreSQL database with `psql -h localhost -U tailormap tailormap` with the default password `tailormap`.
 
-## Code scaffolding
+The port PostgreSQL listens on can be customized using the `DB_PORT` variable in an `.env` file.
 
-Run `npm run ng -- generate component components/[name] --project core|map` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### Using a local Tailormap backend
+
+The Spring Boot backend middleware is developed in a separate [tailormap-api](https://www.github.com/B3Partners/tailormap-api) repository.
+
+When running a dev server, the tailormap-api is reverse proxied on the `http://localhost/api` path from `https://snapshot.tailormap.nl/api`
+which runs the latest `snapshot`, so you don't even need to run the backend and database locally.
+
+If you want to change the viewer configuration you of course need to log in! Just run Tailormap locally as described above and set
+the `PROXY_USE_LOCALHOST` environment variable:
+
+```shell
+PROXY_USE_LOCALHOST=true npm run start
+```
+
+There is a Swagger UI for the API on http://localhost:8080/swagger-ui/.
+
+If you've made some changes to the backend, only start the `db` container from this stack and run the backend from the tailormap-api
+repository with `mvn -Pdeveloping spring-boot:run`.
+
+_Warning:_ if you want to use a locally built `ghcr.io/b3partners/tailormap-api` image to build `ghcr.io/b3partners/tailormap`, you _must
+disable buildx_ using `DOCKER_BUILDKIT=0 docker compose build` otherwise your local image won't be used.
+See [this issue](https://github.com/docker/compose/issues/9939).
+
+### Code scaffolding
+
+Run `npm run ng -- generate component components/[name] --project core|map` to generate a new component. You can also
+use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
 To create a new service which uses the HttpClient to make API calls run
 
 `npm run ng -- generate service services/[name] --project core|map --http-service`
 
-This creates a service with a HttpClient injected and adjusted spec file to test HTTP calls
+This creates a service with a HttpClient injected and adjusted spec file to test HTTP calls.
 
-## Build
-
-Run `npm run build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
+### Running unit tests
 
 Run `npm run test` to execute the unit tests via [Jest](https://jestjs.io).
 
-## Building docker images
+## Building multi-arch images
 
-Use below commands to build and push the cross-platform Docker images to the GitHub container registry.
-Please see Docker documentation for more information:
-[Building multi-platform images](https://docs.docker.com/build/building/multi-platform/)
+TODO: can we do this using `docker compose build`?
+
+Use the commands below to build and push the cross-platform Docker images to the GitHub container registry. See the Docker documentation for
+more information about [building multi-platform images](https://docs.docker.com/build/building/multi-platform/) and
+the [docker buildx build](https://docs.docker.com/engine/reference/commandline/buildx_build/)
+and  [docker buildx create](https://docs.docker.com/engine/reference/commandline/buildx_create/) commands.
 
 ```shell
 # create a container for x-platform builds (only needed once)
@@ -55,184 +215,11 @@ docker run --privileged --rm tonistiigi/binfmt --install all
 # set version of the docker image and base ref. This will also be the reported version of the application
 export VERSION=snapshot
 export BASE_HREF=/
-# build and push tailormap-config-db (aka "db") and tailormap-viewer (aka "web") images
 # for pushing to the GitHub container registry, you need to be logged in with docker login
-docker buildx build --pull --build-arg VERSION=${VERSION} \
-      --platform linux/amd64,linux/arm64 \
-      -t ghcr.io/b3partners/tailormap-config-db:${VERSION} ./docker/db \
-      --push
 docker buildx build --pull --build-arg VERSION=${VERSION} --build-arg BASE_HREF=${BASE_HREF} \
       --platform linux/amd64,linux/arm64 \
-      -t ghcr.io/b3partners/tailormap-viewer:${VERSION} . \
+      -t ghcr.io/b3partners/tailormap:${VERSION} . \
       --push
-
 # leave the buildx context
 docker buildx use default
 ```
-
-To only build local images you can use the following commands:
-
-```shell
-export VERSION=snapshot
-export BASE_HREF=/
-docker buildx build --pull --build-arg VERSION=${VERSION} \
-      -t ghcr.io/b3partners/tailormap-config-db:${VERSION} ./docker/db --load
-docker buildx build --pull --build-arg VERSION=${VERSION} --build-arg BASE_HREF=${BASE_HREF} \
-      -t ghcr.io/b3partners/tailormap-viewer:${VERSION} . --load
-```
-### reference documentation
-
-- [docker buildx build](https://docs.docker.com/engine/reference/commandline/buildx_build/)
-- [docker buildx create](https://docs.docker.com/engine/reference/commandline/buildx_create/)
-
-
-## Running with Docker Compose
-
-Use Docker Compose to run images. It is best to use the Docker Compose (v2) plugin using the `docker compose` command, but
-Python version (`docker-compose` command) may also work.
-
-### Running a full Tailormap stack
-
-A full stack also runs configuration database, backend api and administration interface containers. The Angular frontend in this repository
-is built and put in a Nginx webserver container to serve as the main entry point. It reverse proxies the `/api/` and `/admin/` paths. Run the stack using:
-
-`docker compose --profile http --profile full up -d`
-
-Go to http://localhost/ for the viewer and http://localhost/admin/ for administration. During the first startup you might see some
-exceptions connecting to the database while this is being initialized -- these are harmless as it will be retried later, although you may need
-to restart the admin container using `docker compose --profile http --profile restart admin`.
-
-The build configuration for the `db` container for the configuration database (with preloaded data) is also in this
-repository. The `api` and `admin` containers are the snapshot-tagged versions by default, which get updated in
-the registry automatically. If you want to update your running containers, execute:
-
-- `docker compose --profile http --profile full pull` to pull new images
-
-Run `docker compose --profile http --profile full up -d` again to use the updated images.
-
-#### Running a specific version and other variables
-
-To run a specific version of the stack set the `RELEASE_VERSION` and `VERSION_TAG` environment variables to the desired (and identical)
-version, and run:
-
-For a specific version:
-```
-export VERSION_TAG=10.0.0-rc1
-export RELEASE_VERSION=${VERSION_TAG}
-docker compose --profile http --profile full up -d
-```
-
-For the latest version do the same but use `VERSION_TAG=latest`. The `latest` tag will point to the latest release. To update
-a running stack after a new version is release, run `docker compose` with the `pull` and `up` commands.
-
-Environment variables can also be set in a file named `.env` or in a file specified when running Docker Compose with the `--env-file`
-command line option. More environment variables are available - copy `.env.template` to `.env` and they will be picked up by Docker Compose.
-Some notable variables:
-
- - `CONFIG_DB_INIT_EMPTY`: Do not initialize the Tailormap configuration database with some preconfigured services and applications.
- - `HOST`: Hostname when running proxied `web-proxied`.
-
-Some other variables are available (such as enabling Sentry), see the Docker Compose configuration for details.
-
-#### Default account
-
-When starting up for the first time, the `api` container creates a user account for user administration on startup with a randomly generated
-password. This password is printed to the logs of the `api` container. You can see the password with:
-
-`docker compose --profile http --profile full logs api`
-
-Look for the output containing:
-
-```
-api_1          | INFO 1 --- [           main] n.b.t.a.s.StartupAdminAccountBean        :
-api_1          | ***
-api_1          | *** Use this account for administrating users:
-api_1          | ***
-api_1          | *** Username: admin
-api_1          | *** Password: 6814a911-455b-4d4c-af31-387f89015a2e
-api_1          | ***
-```
-
-Log in to the administration interface with this account to setup security. The default admin account can only change security settings, add
-it to the `Admin` group for full control (you need to login again for changes to take effect). Change the password or save the generated
-password somewhere.
-
-#### Resetting account password
-
-If you ever forget the admin password but do not want to re-initialize the database, reset the password with:
-
-```
-docker compose --profile http --profile full exec --user postgres db \
-  psql tailormap -c "update user_ set password = '{noop}changeme' where username = 'admin'"
-```
-
-Remember to change this password using the administration interface. It will be hashed securely using bcrypt.
-
-**Stopping**
-
-`docker compose down`
-
-You can use `docker compose down --rmi all -v` to remove all built and pulled images and remove the volume with the configuration
-database. Use `--rmi local` to only remove locally built images.
-
-#### Refreshing the configuration database
-
-The `db` container is just a basic PostgreSQL container but with some initialization scripts to preload some Tailormap configuration. The
-database is saved on a volume. The initialization only runs when this volume does not already contain an initialized database. Stop the `db`
-container (or the entire stack), remove the volume with `docker volume rm tailormap-viewer_config-db` (or use `docker compose down -v`) and
-bring it up again to re-initialize the database.
-
-#### Backing up the configuration database
-
-The configuration database needs to be backed up if you don't want to lose your configuration. The backup procedure isn't any different when
-using containers from using PostgreSQL without them: use `pg_dump` and do not backup just the files in `/var/lib/postgresql/`, tempting as
-that may be.
-
-Creating a backup:
-
-```
-docker compose --profile full exec --user postgres db pg_dump tailormap > tailormap.sql
-```
-
-#### Restoring a backup
-
-The restore procedure: drop the database, recreate it and load the backup. You may need to stop the 'api' or 'admin' containers to close any
-connections.
-
-```
-docker compose  --profile full exec --user postgres db dropdb tailormap
-docker compose  --profile full exec --user postgres db createdb --owner=tailormap tailormap
-cat tailormap.sql | docker compose --profile full exec -T --user postgres db psql tailormap
-```
-
-#### Upgrading to a new major PostgreSQL version
-
-The Docker image for the configuration database is kept up to date with the latest PostgreSQL releases and can move to a new major version
-with a new Tailormap release. In this case the database must be dumped and restored (see above). Take note of the major PostgreSQL version
-in the release notes whether this is required. You will see an error opening Tailormap and see errors about the PostgreSQL version in the
-logs of the 'db' container if you don't do this upgrade. If you did not have a recent backup ready, downgrade the image used by the 'db'
-container to the previous major version and backup the database as normal and restore on the newer major version.
-
-### Running only the Angular frontend
-
-Environment variables can be used to reconfigure the `/api/` and `/admin/` Nginx reverse proxies. You can set the URL, HTTP host header (for
-when your proxy target is behind name-based virtual hosting and for correct absolute URL generation) or disable them.
-
-This can be used to run only the web container and reverse proxy `/api/` to an instance deployed elsewhere:
-
-```
-API_PROXY_URL=https://snapshot.tailormap.nl/api/ \
-  API_PROXY_HOST=snapshot.tailormap.nl \
-  ADMIN_PROXY_ENABLED=false \
-  docker compose --profile http up
-```
-
-These environment variables can be configured in a `.env` file as mentioned above under the 'Running a specific version and other variables'
-section.
-
-### Using Traefik
-
-The `http` profile starts the `web` container exposing port 80. You can use the `proxied` profile to run a webserver container which does
-not expose port 80. It has labels to configure Traefik automatically. Run this profile with Traefik in the same network so your stack is
-deployed with name-based virtual hosting and with automatic SSL redirection and termination and provisioning of Let's Encrypt SSL
-certificates.

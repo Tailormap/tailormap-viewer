@@ -1,9 +1,0 @@
-version: '3.9'
-
-# Specify this as an additional Docker Compose configuration file if it is more convenient to map the PostgreSQL port for the configuration
-# database, for development for instance. See .env.template.
-
-services:
-  db:
-    ports:
-      - "${DB_PORT:?required}"
