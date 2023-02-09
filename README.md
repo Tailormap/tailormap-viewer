@@ -22,7 +22,24 @@ to `.env` and set the `VERSION` variable to `latest` before running. To update a
 run `docker compose` with the `pull` and `up` commands but _check the release
 notes beforehand_.
 
-### Default admin account
+## Running just the Tailormap container
+
+The Docker Compose stack includes a PostgreSQL database, but you can also just run Tailormap with an existing PostgreSQL. By the default the
+database name, user and password must be `tailormap`:
+
+```shell
+createuser tailormap
+createdb tailormap --owner=tailormap
+psql tailormap -c "alter role tailormap password 'tailormap'"
+docker run -it --rm --network=host -e SERVER_PORT=8080 ghcr.io/b3partners/tailormap:snapshot
+```
+
+Specify `-e SPRING_DATASOURCE_URL=jdbc:postgresql://host:port/database -e SPRING_DATASOURCE_USERNAME=user -e SPRING_DATASOURCE_PASSWORD=pass`
+with `docker run` to change the database connection settings.
+
+Note that by default a management endpoint is started on port 8081. Do not expose this publicly.
+
+## Default admin account
 
 To log in to the admin interface go to http://localhost:8080/admin/.
 
@@ -47,7 +64,7 @@ Log in to the administration interface with this account to set up security. The
 add it to the `admin` group for full control (you need to log in again for changes to take effect). Change the password or save the
 generated password somewhere.
 
-#### Resetting an account password
+### Resetting an account password
 
 If you ever forget the admin password but do not want to re-initialize the database, reset the password with:
 
@@ -58,7 +75,7 @@ docker compose exec --user postgres db \
 
 Remember to change this password using the administration interface. It will be hashed securely using bcrypt.
 
-### Running in production behind a reverse proxy
+## Running in production behind a reverse proxy
 
 To run Tailormap in production, you need to put it behind a reverse proxy that handles SSL termination.
 
@@ -76,12 +93,14 @@ advisable to only set `VERSION` to a specific version and use a tool such
 as [renovatebot](https://www.mend.io/free-developer-tools/renovate/) to automatically update your configuration when a new version is
 released.
 
-#### Refreshing the configuration database
+## Database
+
+### Refreshing the database
 
 Tailormap creates database tables automatically. To start fresh, bring the stack down removing the database volume with
 `docker compose down -v` and restart Tailormap.
 
-#### Backing up the configuration database
+### Backing up the configuration database
 
 The configuration database needs to be backed up if you don't want to lose your configuration. The backup procedure isn't any different when
 using containers from using PostgreSQL without them: use `pg_dump` and do not back up just the files in `/var/lib/postgresql/`, tempting as
@@ -93,7 +112,7 @@ Creating a backup:
 docker compose exec --user postgres db pg_dump -U tailormap tailormap > tailormap.sql
 ```
 
-#### Restoring a backup
+### Restoring a backup
 
 The restore procedure: drop the database, recreate it and load the backup. You may need to stop the `tailormap` container to close any
 connections.
@@ -107,7 +126,7 @@ cat tailormap.sql | docker compose exec -T --user postgres db psql -U tailormap 
 docker compose start tailormap
 ```
 
-#### Upgrading to a new major PostgreSQL version
+### Upgrading to a new major PostgreSQL version
 
 The Docker image for the configuration database is kept up to date with the latest PostgreSQL releases and can move to a new major version
 with a new Tailormap release. In this case the database must be dumped and restored (see above). Take note of the major PostgreSQL version
@@ -142,8 +161,7 @@ The port PostgreSQL listens on can be customized using the `DB_PORT` variable in
 The Spring Boot backend middleware is developed in a separate [tailormap-api](https://www.github.com/B3Partners/tailormap-api) repository.
 
 When running a dev server, the tailormap-api is reverse proxied on the `http://localhost/api` path from `https://snapshot.tailormap.nl/api`
-which runs the
-latest `snapshot`, so you don't even need to run the backend and database locally.
+which runs the latest `snapshot`, so you don't even need to run the backend and database locally.
 
 If you want to change the viewer configuration you of course need to log in! Just run Tailormap locally as described above and set
 the `PROXY_USE_LOCALHOST` environment variable:
@@ -176,7 +194,7 @@ This creates a service with a HttpClient injected and adjusted spec file to test
 
 Run `npm run test` to execute the unit tests via [Jest](https://jestjs.io).
 
-### Building multi-arch images
+## Building multi-arch images
 
 TODO: can we do this using `docker compose build`?
 
