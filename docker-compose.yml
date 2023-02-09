@@ -13,7 +13,6 @@ services:
     environment:
       - "HOST=${HOST:-localhost}"
       - "SPRING_DATASOURCE_URL=jdbc:postgresql://db/tailormap"
-      - "DB_PASSWORD=${TAILORMAP_DB_PASSWORD:-tailormap}"
     restart: unless-stopped
     depends_on:
       - db
