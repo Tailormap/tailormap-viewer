@@ -2,6 +2,8 @@ ARG BUILDPLATFORM=linux/amd64
 ARG VERSION=snapshot
 ARG API_VERSION=snapshot
 
+# Requires docker buildx, see README.md
+
 # Note when updating this version also update the version in the workflow files
 FROM FROM --platform=linux/amd64 node:18.14.0 AS builder node:18.14.0 AS builder
 
