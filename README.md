@@ -11,8 +11,8 @@ run:
 docker compose up -d
 ```
 
-This runs Tailormap on http://localhost:8080/ and PostgreSQL on localhost:5432. Make sure no other applications are listening on these
-ports.
+This runs Tailormap on http://localhost:8080/ and PostgreSQL on localhost:5432. If other applications are listening on these ports, copy
+`.env.template` to `.env` and change the variables. Tailormap will only accept connections from the loopback interface.
 
 Remove the Tailormap stack using `docker compose down` (add `-v` to remove the volume with the database).
 
@@ -31,13 +31,20 @@ database name, user and password must be `tailormap`:
 createuser tailormap
 createdb tailormap --owner=tailormap
 psql tailormap -c "alter role tailormap password 'tailormap'"
-docker run -it --rm --network=host -e SERVER_PORT=8080 ghcr.io/b3partners/tailormap:snapshot
+docker run -it --rm --network=host \
+  -e SERVER_PORT=8080 \
+  -e SERVER_ADDRESS=localhost \
+  -e MANAGEMENT_SERVER_ADDRESS=localhost \
+  --name tailormap \
+  ghcr.io/b3partners/tailormap:snapshot
 ```
 
 Specify `-e SPRING_DATASOURCE_URL=jdbc:postgresql://host:port/database -e SPRING_DATASOURCE_USERNAME=user -e SPRING_DATASOURCE_PASSWORD=pass`
 with `docker run` to change the database connection settings.
 
-Note that by default a management endpoint is started on port 8081. Do not expose this publicly.
+Note: you can run without `--network=host` and the `SERVER_PORT`, `SERVER_ADDRESS` and `MANAGEMENT_SERVER_ADDRESS` variables and publish the port with `--publish 8080:8080` if your database is not listening on localhost (connecting to a database on localhost without host network mode can be problematic). Of course, you need to specify `SPRING_DATASOURCE_URL`.
+
+In host network mode the `*_ADDRESS=localhost` variables are needed to avoid exposing the management endpoint publicly if you don't have a firewall. The management port should never be publicly exposed because it may disclose internal information.
 
 ## Default admin account
 
@@ -138,10 +145,6 @@ container to the previous major version and backup the database as normal and re
 
 ## Development
 
-After you've made your some changes to the source you can build your own Docker image using `docker compose build`. You may want to remove
-the `node_modules` and `.angular` directories to reduce the Docker build context size. For development, it's quicker to run a development
-server without Docker.
-
 The following is required for successfully building Tailormap:
 
 - NodeJS 18.x (https://nodejs.org/en/); the current LTS
@@ -149,8 +152,8 @@ The following is required for successfully building Tailormap:
 
 ### Dev server
 
-Run `npm run start` for a dev server, or `npm run start-nl` for the Dutch localized version. Navigate to `http://localhost:4200/`. The app
-will automatically reload if you change any of the source files.
+Run `npm install` and `npm run start` to start a dev server, or `npm run start-nl` for the Dutch localized version. Navigate
+to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
 ### Connecting to the PostgreSQL database
 
@@ -192,12 +195,23 @@ This creates a service with a HttpClient injected and adjusted spec file to test
 
 Run `npm run test` to execute the unit tests via [Jest](https://jestjs.io).
 
-## Building a multi-arch Docker image
+## Building a Docker image
 
-Docker `buildx` is required to build a Docker image.
+After you've made your some changes to the source you can build your own Docker image using the following command. You may want to remove
+the `node_modules` and `.angular` directories to reduce the Docker build context size.
 
-To build a local `ghcr.io/b3partners/tailormap-api` image to build `ghcr.io/b3partners/tailormap` from, use `mvn install` in
-the `tailormap-api` repository to build the image.
+```
+docker build -t ghcr.io/b3partners/tailormap:snapshot .
+```
+
+Add the argument `--build-arg API_VERSION=snapshot` to set the tag of the `ghcr.io/b3partners/tailormap-api` base image to use.
+
+## Building a custom tailormap-api base image
+
+To build a local `ghcr.io/b3partners/tailormap-api` base image with your own modifications, run `mvn install` in the `tailormap-api`
+repository before building the `tailormap` image.
+
+## Multi-arch build with Docker buildx
 
 Use the commands below to build and push the cross-platform Docker images to the GitHub container registry. See the Docker documentation for
 more information about [building multi-platform images](https://docs.docker.com/build/building/multi-platform/) and
