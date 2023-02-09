@@ -157,12 +157,35 @@ export class MapBookmarkHelper {
     layers: ExtendedLayerTreeNodeModel[],
   ): { nodeId: string; children: string[] }[] {
     const output = [];
+    const outMap = new Map<string, { nodeId: string; children: string[] }>();
+    const missingChildren = new Set(layers.map(a => a.id));
 
     for (const layer of layers) {
        const newChildren = fragment.ordering[layer.id]?.children?.filter(a => layers.some(b => b.id === a)) ?? layer.initialChildren;
-       if (!ArrayHelper.arrayEquals(layer.childrenIds ?? [], newChildren)) {
-         output.push({ nodeId: layer.id, children: newChildren });
+       for (const child of newChildren) {
+         missingChildren.delete(child);
        }
+
+       if (!ArrayHelper.arrayEquals(layer.childrenIds ?? [], newChildren)) {
+         const arr = { nodeId: layer.id, children: newChildren };
+         output.push(arr);
+         outMap.set(layer.id, arr);
+       }
+    }
+
+    for (const layer of layers) {
+      for (const child of layer.initialChildren) {
+        if (missingChildren.has(child)) {
+          const item = outMap.get(layer.id);
+          if (item === undefined) {
+            // Layer tree is missing a child, while  it has not been modified from its initial state.
+            // This should not happen. Ignore it, for resilience.
+            continue;
+          }
+
+          item.children.push(child);
+        }
+      }
     }
 
     return output;
