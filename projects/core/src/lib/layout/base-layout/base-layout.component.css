@@ -41,6 +41,14 @@
   transition: transform ease-in-out 0.25s;
 }
 
+.map-controls-left, .map-controls-right {
+  pointer-events: none;
+}
+
+.map-controls-right>*, .map-controls-left>* {
+  pointer-events: auto;
+}
+
 .map-controls-column {
   display: flex;
   align-items: flex-start;
