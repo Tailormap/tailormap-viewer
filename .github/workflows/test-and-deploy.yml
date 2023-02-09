@@ -117,19 +117,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 'Build, tag and push image to registry (multi-arch, main branch only)'
-        if: ${{ github.ref == 'refs/heads/main' }}
+      - name: 'Build, tag and push image to registry'
+        # Always uses the 'snapshot' tag of the tailormap-api base image by setting the API_VERSION build arg
         run: |
           docker buildx create --use --name tailormap-builder
           docker run --privileged --rm tonistiigi/binfmt --install all
-          docker buildx build --progress plain --pull --build-arg VERSION=${VERSION} --build-arg BASE_HREF=${BASE_HREF} --platform linux/amd64,linux/arm64 -t ghcr.io/b3partners/tailormap:${VERSION} . --push
-
-      - name: 'Build, tag and push image to registry'
-        if: ${{ steps.find-pr.outputs.number }}
-        run: |
-          # Multi-arch builds too slow for PR's, just do linux/amd64
-          docker compose build
-          docker compose push -q
+          docker buildx build --progress plain --pull --build-arg VERSION=${VERSION} --build-arg API_VERSION=snapshot --build-arg BASE_HREF=${BASE_HREF} --platform linux/amd64,linux/arm64 -t ghcr.io/b3partners/tailormap:${VERSION} . --push
 
       - name: 'Set Docker context for deployment'
         uses: arwynfr/actions-docker-context@v2

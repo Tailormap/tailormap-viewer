@@ -79,9 +79,11 @@ Remember to change this password using the administration interface. It will be 
 
 To run Tailormap in production, you need to put it behind a reverse proxy that handles SSL termination.
 
-Copy the `.env.template` file to `.env` and change the `HOST` variable to the hostname Tailormap will be running on. Tailormap must run on the `/` path.
+Copy the `.env.template` file to `.env` and change the `HOST` variable to the hostname Tailormap will be running on. Tailormap must run on
+the `/` path.
 
-If you're using a reverse proxy without Docker just reverse proxy 127.0.0.1:8080 (this port is added in `docker-compose.override.yml` along with the PostgreSQL port). The ports can be changed in an `.env` file or by using another override file in `COMPOSE_FILE`.
+If you're using a reverse proxy without Docker just reverse proxy 127.0.0.1:8080 (this port is added in `docker-compose.override.yml` along
+with the PostgreSQL port). The ports can be changed in an `.env` file or by using another override file in `COMPOSE_FILE`.
 
 It's a good idea to use Traefik as a reverse proxy because it can be automatically configured by Docker labels and can automatically request
 Let's Encrypt certificates. Add `docker-compose.traefik.yml` to `COMPOSE_FILE` in the `.env` file. See the file for details.
@@ -175,10 +177,6 @@ There is a Swagger UI for the API on http://localhost:8080/swagger-ui/.
 If you've made some changes to the backend, only start the `db` container from this stack and run the backend from the tailormap-api
 repository with `mvn -Pdeveloping spring-boot:run`.
 
-_Warning:_ if you want to use a locally built `ghcr.io/b3partners/tailormap-api` image to build `ghcr.io/b3partners/tailormap`, you _must
-disable buildx_ using `DOCKER_BUILDKIT=0 docker compose build` otherwise your local image won't be used.
-See [this issue](https://github.com/docker/compose/issues/9939).
-
 ### Code scaffolding
 
 Run `npm run ng -- generate component components/[name] --project core|map` to generate a new component. You can also
@@ -194,9 +192,12 @@ This creates a service with a HttpClient injected and adjusted spec file to test
 
 Run `npm run test` to execute the unit tests via [Jest](https://jestjs.io).
 
-## Building multi-arch images
+## Building a multi-arch Docker image
 
-TODO: can we do this using `docker compose build`?
+Docker `buildx` is required to build a Docker image.
+
+To build a local `ghcr.io/b3partners/tailormap-api` image to build `ghcr.io/b3partners/tailormap` from, use `mvn install` in
+the `tailormap-api` repository to build the image.
 
 Use the commands below to build and push the cross-platform Docker images to the GitHub container registry. See the Docker documentation for
 more information about [building multi-platform images](https://docs.docker.com/build/building/multi-platform/) and
@@ -216,7 +217,7 @@ docker run --privileged --rm tonistiigi/binfmt --install all
 export VERSION=snapshot
 export BASE_HREF=/
 # for pushing to the GitHub container registry, you need to be logged in with docker login
-docker buildx build --pull --build-arg VERSION=${VERSION} --build-arg BASE_HREF=${BASE_HREF} \
+docker buildx build --pull --build-arg VERSION=${VERSION} --build-arg API_VERSION=${VERSION} --build-arg BASE_HREF=${BASE_HREF} \
       --platform linux/amd64,linux/arm64 \
       -t ghcr.io/b3partners/tailormap:${VERSION} . \
       --push

@@ -5,14 +5,6 @@ services:
   tailormap:
     container_name: ${COMPOSE_PROJECT_NAME}-server
     image: ghcr.io/b3partners/tailormap:${VERSION:-snapshot}
-    # See README.md for how to build multi-arch images.
-    # Run `DOCKER_BUILDKIT=0 docker compose build` if you want to use a locally modified ghcr.io/b3partners/tailormap-api image!
-    build:
-      context: .
-      args:
-        VERSION: ${VERSION:-snapshot}
-        BASE_HREF: ${BASE_HREF:-/}
-        API_VERSION: snapshot
     networks:
       - default
     expose:
@@ -21,7 +13,6 @@ services:
     environment:
       - "HOST=${HOST:-localhost}"
       - "SPRING_DATASOURCE_URL=jdbc:postgresql://db/tailormap"
-      - "DB_PASSWORD=${TAILORMAP_DB_PASSWORD:-tailormap}"
     restart: unless-stopped
     depends_on:
       - db
