@@ -144,19 +144,12 @@ jobs:
         run: |
           ssh-keyscan -H ${{ secrets.DOCKER_HOSTNAME }} > $HOME/.ssh/known_hosts
 
-      - name: 'Update main deployment using Docker Compose'
-        if: ${{ github.ref == 'refs/heads/main' }}
+      - name: 'Update deployment using Docker Compose'
         # use the old/python docker-compose for pulling to prevent errors like https://github.com/docker/buildx/issues/764
         # WARNING: Some service image(s) must be built from source by running:
         #    docker compose build %s db web-proxied
         # error during connect: Post "http://docker.example.com/v1.41/images/create?fromImage=nginx%2Fnginx-prometheus-exporter&tag=0.10.0":
         # command [ssh -l github-docker-actions -- *** docker system dial-stdio] has exited with signal: killed, please make sure the URL is valid, and Docker 18.09 or later is installed on the remote host: stderr=
-        run: |
-          docker-compose pull -q
-          docker compose up -d --pull=always
-
-      - name: 'Update pull request deployment using Docker Compose'
-        if: ${{ steps.find-pr.outputs.number }}
         run: |
           docker-compose pull -q
           docker compose up -d --pull=always
@@ -171,7 +164,6 @@ jobs:
           environment: ${{ env.VERSION }}
           initial-status: success
           ref: "${{ env.GITHUB_HEAD_REF }}"
-
 
   dependency-review:
     name: 'Dependency Review'
