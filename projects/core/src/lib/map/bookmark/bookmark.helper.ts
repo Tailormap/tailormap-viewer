@@ -1,6 +1,7 @@
+import { ArrayHelper } from '@tailormap-viewer/shared';
 import { MapSizeHelper, MapViewDetailsModel, MapUnitEnum } from '@tailormap-viewer/map';
-import { TristateBoolean, LayerVisibilityBookmarkFragment, LayerInformation } from './bookmark_pb';
-import { AppLayerWithInitialValuesModel } from '../models';
+import { TristateBoolean, LayerVisibilityBookmarkFragment, LayerInformation, LayerTreeOrderBookmarkFragment, LayerTreeOrderInformation } from './bookmark_pb';
+import { AppLayerWithInitialValuesModel, ExtendedLayerTreeNodeModel } from '../models';
 
 export interface MapBookmarkContents {
   visibilityChanges: { id: number; checked: boolean }[];
@@ -138,4 +139,56 @@ export class MapBookmarkHelper {
 
     return bookmarkData;
   }
+
+  public static fragmentFromLayerTreeOrder(tree: ExtendedLayerTreeNodeModel[]): LayerTreeOrderBookmarkFragment {
+    const data: { [name: string]: LayerTreeOrderInformation } = {};
+
+    for (const layer of tree) {
+      if (!ArrayHelper.arrayEquals(layer.initialChildren, layer.childrenIds ?? [])) {
+       data[layer.id] = new LayerTreeOrderInformation({ children: layer.childrenIds ?? [] });
+      }
+    }
+
+    return new LayerTreeOrderBookmarkFragment({ ordering: data });
+  }
+
+  public static layerTreeOrderFromFragment(
+    fragment: LayerTreeOrderBookmarkFragment,
+    layers: ExtendedLayerTreeNodeModel[],
+  ): { nodeId: string; children: string[] }[] {
+    const output = [];
+    const outMap = new Map<string, { nodeId: string; children: string[] }>();
+    const missingChildren = new Set(layers.map(a => a.id));
+
+    for (const layer of layers) {
+       const newChildren = fragment.ordering[layer.id]?.children?.filter(a => layers.some(b => b.id === a)) ?? layer.initialChildren;
+       for (const child of newChildren) {
+         missingChildren.delete(child);
+       }
+
+       if (!ArrayHelper.arrayEquals(layer.childrenIds ?? [], newChildren)) {
+         const arr = { nodeId: layer.id, children: newChildren };
+         output.push(arr);
+         outMap.set(layer.id, arr);
+       }
+    }
+
+    for (const layer of layers) {
+      for (const child of layer.initialChildren) {
+        if (missingChildren.has(child)) {
+          const item = outMap.get(layer.id);
+          if (item === undefined) {
+            // Layer tree is missing a child, while  it has not been modified from its initial state.
+            // This should not happen. Ignore it, for resilience.
+            continue;
+          }
+
+          item.children.push(child);
+        }
+      }
+    }
+
+    return output;
+  }
+
 }

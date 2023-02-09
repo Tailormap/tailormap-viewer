@@ -32,3 +32,12 @@ message LayerInformation {
     // etc.
     uint32 opacity = 3;
 }
+
+// The (changed) ordering of children in a layer tree
+message LayerTreeOrderBookmarkFragment {
+    map<string, LayerTreeOrderInformation> ordering = 1;
+}
+
+message LayerTreeOrderInformation {
+    repeated string children = 1;
+}
