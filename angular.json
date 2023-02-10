@@ -289,7 +289,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/admin",
+            "outputPath": "dist/app/admin",
             "index": "projects/admin-app/src/index.html",
             "main": "projects/admin-app/src/main.ts",
             "polyfills": "projects/admin-app/src/polyfills.ts",
