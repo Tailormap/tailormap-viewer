@@ -94,7 +94,12 @@
                 }
               ],
               "outputHashing": "all",
-              "sourceMap": true
+              "sourceMap": {
+                "styles": false,
+                "scripts": true,
+                "vendor": true,
+                "hidden": false
+              }
             },
             "development": {
               "tsConfig": "projects/app/tsconfig.app.json",
@@ -337,7 +342,13 @@
                   "with": "projects/admin-app/src/environments/environment.prod.ts"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "sourceMap": {
+                "styles": false,
+                "scripts": true,
+                "vendor": true,
+                "hidden": false
+              }
             },
             "development": {
               "buildOptimizer": false,
