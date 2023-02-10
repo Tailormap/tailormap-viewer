@@ -30,4 +30,3 @@ LABEL org.opencontainers.image.authors="info@b3partners.nl" \
       org.opencontainers.image.version="${VERSION}"
 
 COPY --from=builder /app/dist/app static/
-COPY --from=builder /app/dist/admin static/admin/
