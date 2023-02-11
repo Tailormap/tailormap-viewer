@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { TailormapApiV1ServiceModel } from './tailormap-api-v1.service.model';
 import { UniqueValuesResponseModel } from '../models/unique-values-response.model';
 import { LayerExportCapabilitiesModel } from '../models/layer-export-capabilities.model';
+import { ApiHelper } from '../helpers/api.helper';
 
 @Injectable()
 export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
@@ -37,7 +38,7 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
   }): Observable<AppResponseModel> {
     return this.httpClient.get<AppResponseModel>(
       `${TailormapApiV1Service.BASE_URL}/app`,
-      { params: this.getQueryParams({ id: params.id, name: params.name, version: params.version }) },
+      { params: ApiHelper.getQueryParams({ id: params.id, name: params.name, version: params.version }) },
     );
   }
 
@@ -71,7 +72,7 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
     sortOrder?: Sortorder;
     onlyGeometries?: boolean;
   }): Observable<FeaturesResponseModel> {
-    const queryParams = this.getQueryParams({
+    const queryParams = ApiHelper.getQueryParams({
       x: params.x,
       y: params.y,
       crs: params.crs,
@@ -85,7 +86,7 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
     });
     return this.httpClient.post<FeaturesResponseModel>(
       `${TailormapApiV1Service.BASE_URL}/app/${params.applicationId}/layer/${params.layerId}/features`,
-      params.filter ? this.getQueryParams({ filter:  params.filter }) : '',
+      params.filter ? ApiHelper.getQueryParams({ filter:  params.filter }) : '',
       {
         headers: new HttpHeaders('Content-Type: application/x-www-form-urlencoded'),
         params: queryParams,
@@ -100,7 +101,7 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
   }): Observable<UniqueValuesResponseModel> {
     return this.httpClient.post<UniqueValuesResponseModel>(
       `${TailormapApiV1Service.BASE_URL}/app/${params.applicationId}/layer/${params.layerId}/unique/${params.attribute}`,
-      params.filter ? this.getQueryParams({ filter: params.filter }) : '',
+      params.filter ? ApiHelper.getQueryParams({ filter: params.filter }) : '',
       { headers: new HttpHeaders('Content-Type: application/x-www-form-urlencoded') },
     );
   }
@@ -123,7 +124,7 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
     attributes?: string[];
     crs?: string;
   }): Observable<HttpResponse<Blob>> {
-    const queryParams = this.getQueryParams({
+    const queryParams = ApiHelper.getQueryParams({
       outputFormat: params.outputFormat,
       attributes: params.attributes?.join(','),
       sortBy: params.sort?.column,
@@ -132,7 +133,7 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
     });
     return this.httpClient.post(
       `${TailormapApiV1Service.BASE_URL}/app/${params.applicationId}/layer/${params.layerId}/export/download`,
-      params.filter ? this.getQueryParams({ filter: params.filter }) : '',
+      params.filter ? ApiHelper.getQueryParams({ filter: params.filter }) : '',
       {
         headers: new HttpHeaders('Content-Type: application/x-www-form-urlencoded'),
         params: queryParams,

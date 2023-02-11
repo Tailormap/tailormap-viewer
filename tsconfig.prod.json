@@ -27,6 +27,11 @@
         "dist/admin-core/admin-core",
         "dist/admin-core",
         "projects/admin-core/src"
+      ],
+      "@tailormap-admin/admin-api": [
+        "dist/admin-api/admin-api",
+        "dist/admin-api",
+        "projects/admin-api/src"
       ]
     },
   }

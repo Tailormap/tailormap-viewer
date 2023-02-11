@@ -1,29 +1,25 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminHomePageComponent } from './admin-home-page/admin-home-page.component';
-import { GeoRegistryPageComponent } from './geo-registry-page/geo-registry-page.component';
+import { CatalogPageComponent } from './catalog-page/catalog-page.component';
 import { TemplatesModule } from '../templates/templates.module';
-import { GeoRegistrySourcesPageComponent } from './geo-registry-sources-page/geo-registry-sources-page.component';
-import { GeoRegistryAttributesPageComponent } from './geo-registry-attributes-page/geo-registry-attributes-page.component';
+import { CatalogModule } from '../catalog/catalog.module';
 
 
 
 @NgModule({
   declarations: [
     AdminHomePageComponent,
-    GeoRegistryPageComponent,
-    GeoRegistrySourcesPageComponent,
-    GeoRegistryAttributesPageComponent,
+    CatalogPageComponent,
   ],
   imports: [
     CommonModule,
     TemplatesModule,
+    CatalogModule,
   ],
   exports: [
     AdminHomePageComponent,
-    GeoRegistryPageComponent,
-    GeoRegistrySourcesPageComponent,
-    GeoRegistryAttributesPageComponent,
+    CatalogPageComponent,
   ],
 })
 export class PagesModule { }

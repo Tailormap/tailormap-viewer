@@ -1,7 +1,7 @@
 import { MapSettingsModel, MapState, mapStateKey } from './map.state';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { AppLayerModel, LayerTreeNodeModel, ResolvedServerType, ServiceModel, ServiceProtocol } from '@tailormap-viewer/api';
-import { ArrayHelper, TreeModel } from '@tailormap-viewer/shared';
+import { ArrayHelper, TreeHelper, TreeModel } from '@tailormap-viewer/shared';
 import { LayerTreeNodeHelper } from '../helpers/layer-tree-node.helper';
 import { ExtendedAppLayerModel, ExtendedLayerTreeNodeModel, AppLayerWithInitialValuesModel } from '../models';
 
@@ -167,9 +167,9 @@ export const selectBackgroundNodesList = createSelector(
     if (!root) {
       return [];
     }
-    return (root.childrenIds ?? [])
-      .map(childId => LayerTreeNodeHelper.findLayerTreeNode(treeNodes, childId))
-      .filter((node: ExtendedLayerTreeNodeModel| undefined): node is ExtendedLayerTreeNodeModel => typeof node !== 'undefined');
+    return (root.childrenIds || [])
+      .map(childId => TreeHelper.findNode(treeNodes, childId))
+      .filter((node: ExtendedLayerTreeNodeModel | undefined): node is ExtendedLayerTreeNodeModel => typeof node !== 'undefined');
   },
 );
 

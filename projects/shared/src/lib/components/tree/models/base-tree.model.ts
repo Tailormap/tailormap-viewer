@@ -6,4 +6,5 @@ export interface BaseTreeModel<T = any> {
   expandable?: boolean;
   type?: string;
   metadata?: T;
+  loadingPlaceholder?: boolean;
 }

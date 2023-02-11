@@ -1,18 +1,19 @@
 import { render, screen } from '@testing-library/angular';
-import { GeoRegistrySourcesPageComponent } from './geo-registry-sources-page.component';
+import { CatalogPageComponent } from './catalog-page.component';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { AdminTemplateComponent } from '../../templates/admin-template/admin-template.component';
 import { NavigationComponent } from '../../templates/admin-template/navigation/navigation.component';
 
-describe('GeoRegistrySourcesPageComponent', () => {
+describe('GeoRegistryPageComponent', () => {
 
   test('should render', async () => {
-    await render(GeoRegistrySourcesPageComponent, {
+    await render(CatalogPageComponent, {
       imports: [ SharedModule, MatIconTestingModule ],
       declarations: [ AdminTemplateComponent, NavigationComponent ],
     });
-    expect(screen.getByText('Geo Registry - Sources'));
+    // Menu item and title
+    expect(await screen.findAllByText('Geo Registry')).toHaveLength(2);
   });
 
 });
