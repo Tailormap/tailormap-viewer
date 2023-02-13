@@ -94,7 +94,12 @@
                 }
               ],
               "outputHashing": "all",
-              "sourceMap": true
+              "sourceMap": {
+                "styles": false,
+                "scripts": true,
+                "vendor": true,
+                "hidden": false
+              }
             },
             "development": {
               "tsConfig": "projects/app/tsconfig.app.json",
@@ -289,7 +294,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/admin",
+            "outputPath": "dist/app/admin",
             "index": "projects/admin-app/src/index.html",
             "main": "projects/admin-app/src/main.ts",
             "polyfills": "projects/admin-app/src/polyfills.ts",
@@ -337,7 +342,13 @@
                   "with": "projects/admin-app/src/environments/environment.prod.ts"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "sourceMap": {
+                "styles": false,
+                "scripts": true,
+                "vendor": true,
+                "hidden": false
+              }
             },
             "development": {
               "buildOptimizer": false,
