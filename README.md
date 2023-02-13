@@ -12,39 +12,36 @@ docker compose up -d
 ```
 
 This runs Tailormap on http://localhost:8080/ and PostgreSQL on localhost:5432. If other applications are listening on these ports, copy
-`.env.template` to `.env` and change the variables. Tailormap will only accept connections from the loopback interface.
+`.env.template` to `.env` and change the variables for the ports. Tailormap will only accept connections from the loopback interface.
 
 Remove the Tailormap stack using `docker compose down` (add `-v` to remove the volume with the database).
 
 By default, the latest development Docker image will be used (tagged with `snapshot`). This is published automatically by a GitHub Action on
-every change to the `main` branch, so this might be an unstable version. To use the latest (stable) released versions, copy `.env.template`
+every change to the `main` branch, so this might be an unstable version. To use the latest (stable) released version, copy `.env.template`
 to `.env` and set the `VERSION` variable to `latest` before running. To update a running stack after a new version is released,
 run `docker compose` with the `pull` and `up` commands but _check the release
 notes beforehand_.
 
 ## Running just the Tailormap container
 
-The Docker Compose stack includes a PostgreSQL database, but you can also just run Tailormap with an existing PostgreSQL. By the default the
-database name, user and password must be `tailormap`:
+The Docker Compose stack includes a PostgreSQL database, but you can also run just the Tailormap container with an existing PostgreSQL
+database. The default database name, user and password are all `tailormap`:
 
 ```shell
 createuser tailormap
 createdb tailormap --owner=tailormap
 psql tailormap -c "alter role tailormap password 'tailormap'"
-docker run -it --rm --network=host \
-  -e SERVER_PORT=8080 \
-  -e SERVER_ADDRESS=localhost \
-  -e MANAGEMENT_SERVER_ADDRESS=localhost \
-  --name tailormap \
-  ghcr.io/b3partners/tailormap:snapshot
+docker run -it --rm --network=host --name tailormap ghcr.io/b3partners/tailormap:snapshot
 ```
 
-Specify `-e SPRING_DATASOURCE_URL=jdbc:postgresql://host:port/database -e SPRING_DATASOURCE_USERNAME=user -e SPRING_DATASOURCE_PASSWORD=pass`
-with `docker run` to change the database connection settings.
+Specify the following command line parameters with `docker run` to change the database connection settings:
 
-Note: you can run without `--network=host` and the `SERVER_PORT`, `SERVER_ADDRESS` and `MANAGEMENT_SERVER_ADDRESS` variables and publish the port with `--publish 8080:8080` if your database is not listening on localhost (connecting to a database on localhost without host network mode can be problematic). Of course, you need to specify `SPRING_DATASOURCE_URL`.
+- `-e SPRING_DATASOURCE_URL=jdbc:postgresql://host:port/database`
+- `-e SPRING_DATASOURCE_USERNAME=user`
+- `-e SPRING_DATASOURCE_PASSWORD=pass`
 
-In host network mode the `*_ADDRESS=localhost` variables are needed to avoid exposing the management endpoint publicly if you don't have a firewall. The management port should never be publicly exposed because it may disclose internal information.
+If your database is running on localhost using `--network=host` is recommended. If your database is on another host you can specify
+`--publish 8080:8080` instead. Of course, you need to specify `SPRING_DATASOURCE_URL` with the database hostname.
 
 ## Default admin account
 
