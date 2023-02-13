@@ -6,9 +6,9 @@ import { IconService } from '@tailormap-viewer/shared';
 import type { jsPDF } from 'jspdf';
 import type { Svg2pdfOptions } from 'svg2pdf.js';
 import { LegendService } from '../../components/legend/services/legend.service';
-import { ResolvedServerType } from '@tailormap-viewer/api';
 import { ApplicationMapService } from '../../map/services/application-map.service';
 import { ExtendedAppLayerModel } from '../../map/models';
+import { ServerType } from '@tailormap-viewer/api';
 
 interface Size {
   width: number;
@@ -139,7 +139,7 @@ export class MapPdfService {
     const legendURLCallback = (layer: ExtendedAppLayerModel, url: URL) => {
       legendDpiByLayer.set(layer, 90);
 
-      if (layer.service?.resolvedServerType === ResolvedServerType.GEOSERVER && LegendService.isGetLegendGraphicRequest(url.toString())) {
+      if (layer.service?.serverType === ServerType.GEOSERVER && LegendService.isGetLegendGraphicRequest(url.toString())) {
         // Use LEGEND_OPTIONS vendor specific Geoserver parameter, see https://docs.geoserver.org/stable/en/user/services/wms/get_legend_graphic/index.html
         const dpi = 180;
         legendDpiByLayer.set(layer, dpi);
