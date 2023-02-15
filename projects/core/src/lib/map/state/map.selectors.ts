@@ -1,6 +1,6 @@
 import { MapSettingsModel, MapState, mapStateKey } from './map.state';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { AppLayerModel, LayerTreeNodeModel, ResolvedServerType, ServiceModel, ServiceProtocol } from '@tailormap-viewer/api';
+import { AppLayerModel, LayerTreeNodeModel, ServerType, ServiceModel, ServiceProtocol } from '@tailormap-viewer/api';
 import { ArrayHelper, TreeModel } from '@tailormap-viewer/shared';
 import { LayerTreeNodeHelper } from '../helpers/layer-tree-node.helper';
 import { ExtendedAppLayerModel, ExtendedLayerTreeNodeModel, AppLayerWithInitialValuesModel } from '../models';
@@ -118,7 +118,7 @@ export const selectVisibleWMSLayersWithoutAttributes = createSelector(
 
 export const selectFilterableLayers = createSelector(
   selectOrderedVisibleLayersWithServices,
-  layers => layers.filter(l => l.service?.resolvedServerType === ResolvedServerType.GEOSERVER),
+  layers => layers.filter(l => l.service?.serverType === ServerType.GEOSERVER),
 );
 
 export const selectSomeLayersVisible = createSelector(
@@ -135,7 +135,7 @@ export const selectSomeLayersVisible = createSelector(
 // In the future, more layer types could be added but without immediate legend support.
 export const selectOrderedVisibleLayersWithLegend = createSelector(
   selectOrderedVisibleLayersWithServices,
-  (layers) => layers.filter(layer => layer.legendImageUrl || layer.service && [ ServiceProtocol.WMS, ServiceProtocol.TILED ].includes(layer.service.protocol)),
+  (layers) => layers.filter(layer => layer.legendImageUrl || layer.service && [ ServiceProtocol.WMS, ServiceProtocol.WMTS ].includes(layer.service.protocol)),
 );
 
 export const selectOrderedVisibleBackgroundLayers = createSelector(

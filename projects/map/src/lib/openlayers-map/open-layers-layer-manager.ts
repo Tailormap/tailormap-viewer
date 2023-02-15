@@ -14,9 +14,9 @@ import { isOpenLayersVectorLayer, isOpenLayersWMSLayer, isPossibleRealtimeLayer 
 import { LayerTypesHelper } from '../helpers/layer-types.helper';
 import Geometry from 'ol/geom/Geometry';
 import { ArrayHelper } from '@tailormap-viewer/shared';
-import { ResolvedServerType } from '@tailormap-viewer/api';
 import { NgZone } from '@angular/core';
 import { HttpXsrfTokenExtractor } from '@angular/common/http';
+import { ServerType } from '@tailormap-viewer/api';
 
 export class OpenLayersLayerManager implements LayerManagerModel {
 
@@ -173,7 +173,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
 
   private updateFilterIfChanged(layer: LayerModel, olLayer: BaseLayer) {
     // For now, GeoServer & WMS only
-    if (!LayerTypesHelper.isWmsLayer(layer) || layer.resolvedServerType !== ResolvedServerType.GEOSERVER) {
+    if (!LayerTypesHelper.isWmsLayer(layer) || layer.serverType !== ServerType.GEOSERVER) {
       return;
     }
     const existingProps = OlLayerHelper.getLayerProps(olLayer);

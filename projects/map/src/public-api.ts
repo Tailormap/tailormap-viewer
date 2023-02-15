@@ -14,6 +14,5 @@ export * from './lib/map.module';
 export * from './lib/helpers/ogc.helper';
 export * from './lib/helpers/map-size.helper';
 export * from './lib/helpers/scale.helper';
-export * from './lib/helpers/server-type.helper';
 export * from './lib/helpers/extent.helper';
 export * from './lib/helpers/coordinate.helper';

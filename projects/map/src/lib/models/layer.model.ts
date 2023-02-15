@@ -7,6 +7,7 @@ export interface LayerModel {
   visible: boolean;
   layers?: string;
   tilePixelRatio?: number;
+  hiDpiDisabled?: boolean;
   wfsUrl?: string;
   wfsFeatureTypeName?: string;
   wfsFeatureGeomName?: string;

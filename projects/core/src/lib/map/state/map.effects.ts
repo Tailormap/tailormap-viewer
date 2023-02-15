@@ -5,7 +5,6 @@ import { catchError, concatMap, map, of } from 'rxjs';
 import { TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel } from '@tailormap-viewer/api';
 
 import * as CoreActions from '../../state/core.actions';
-import { ServerTypeHelper } from '@tailormap-viewer/map';
 
 @Injectable()
 export class MapEffects {
@@ -30,11 +29,6 @@ export class MapEffects {
               if (typeof response === 'string') {
                 return MapActions.loadMapFailed({ error: response });
               }
-              response.services = response.services.map(service => ({
-                ...service,
-                // resolve 'auto' server types for services for server-specific features such as hi dpi maps and legends, etc.
-                resolvedServerType: ServerTypeHelper.resolveAutoServerType(service),
-              }));
               return MapActions.loadMapSuccess({
                 ...response,
               });

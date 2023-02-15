@@ -2,7 +2,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { LayerModel, LayerTypesEnum, MapService, OgcHelper, WMSLayerModel, WMTSLayerModel } from '@tailormap-viewer/map';
 import { combineLatest, concatMap, distinctUntilChanged, filter, forkJoin, map, Observable, of, Subject, take, takeUntil, tap } from 'rxjs';
-import { ResolvedServerType, ServiceModel, ServiceProtocol } from '@tailormap-viewer/api';
+import { ServiceModel, ServiceProtocol } from '@tailormap-viewer/api';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { ArrayHelper } from '@tailormap-viewer/shared';
 import { selectMapOptions, selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersWithServices } from '../state/map.selectors';
@@ -93,7 +93,7 @@ export class ApplicationMapService implements OnDestroy {
       return of(null);
     }
     const service = extendedAppLayer.service;
-    if (service.protocol === ServiceProtocol.TILED) {
+    if (service.protocol === ServiceProtocol.WMTS) {
       return this.getCapabilitiesForWMTS$(service)
         .pipe(
           map((capabilities: string): WMTSLayerModel => ({
@@ -121,9 +121,8 @@ export class ApplicationMapService implements OnDestroy {
         url: extendedAppLayer.url || service.url,
         crossOrigin: 'anonymous', // We don't want a 'tainted canvas' for features such as printing. TM requires CORS-enabled or proxied services.
         serverType: service.serverType,
-        resolvedServerType: service.resolvedServerType as ResolvedServerType,
-        tilingDisabled: service.tilingDisabled,
-        tilingGutter: service.tilingGutter,
+        tilingDisabled: extendedAppLayer.tilingDisabled,
+        tilingGutter: extendedAppLayer.tilingGutter,
         filter: extendedAppLayer.filter,
         opacity: extendedAppLayer.opacity,
       };
