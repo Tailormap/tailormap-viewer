@@ -1,6 +1,6 @@
 import {
   AppLayerModel, AppResponseModel, BoundsModel, ComponentModel, CoordinateReferenceSystemModel, GeometryType, Language, LayerDetailsModel,
-  MapResponseModel, ResolvedServerType, ServerType, ServiceModel, ServiceProtocol, UserResponseModel, VersionResponseModel,
+  MapResponseModel, ServerType, ServiceModel, ServiceProtocol, UserResponseModel, VersionResponseModel,
 } from '../models';
 import { FeatureModel } from '../models/feature.model';
 import { ColumnMetadataModel } from '../models/column-metadata.model';
@@ -53,7 +53,6 @@ export const getAppLayerModel = (overrides?: Partial<AppLayerModel>): AppLayerMo
   serviceId: 1,
   visible: true,
   hasAttributes: false,
-  crs: getCrsModel(overrides?.crs),
   title: 'Test',
   layerName: 'test',
   opacity: 100,
@@ -64,10 +63,8 @@ export const getServiceModel = (overrides?: Partial<ServiceModel>): ServiceModel
   id: 1,
   name: 'myservice',
   url: 'https://test.nl',
-  styleLibraries: {},
   protocol: ServiceProtocol.WMS,
-  serverType: ServerType.AUTO,
-  resolvedServerType: ResolvedServerType.GEOSERVER,
+  serverType: ServerType.GEOSERVER,
   ...overrides,
 });
 

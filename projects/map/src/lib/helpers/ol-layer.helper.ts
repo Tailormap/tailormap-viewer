@@ -15,7 +15,7 @@ import { ImageWMS, TileWMS } from 'ol/source';
 import ImageLayer from 'ol/layer/Image';
 import { Options } from 'ol/source/ImageWMS';
 import { ServerType } from 'ol/source/wms';
-import { ResolvedServerType, ServerType as TMServerType } from '@tailormap-viewer/api';
+import { ServerType as TMServerType } from '@tailormap-viewer/api';
 import { ObjectHelper } from '@tailormap-viewer/shared';
 import { ImageTile } from 'ol';
 import { NgZone } from '@angular/core';
@@ -92,7 +92,7 @@ export class OlLayerHelper {
     const parser = new WMTSCapabilities();
     const capabilities = parser.read(layer.capabilities);
 
-    const hiDpi = (pixelRatio || window.devicePixelRatio) > 1 && layer.hiDpiMode && layer.hiDpiMode !== 'disabled';
+    const hiDpi = (pixelRatio || window.devicePixelRatio) > 1 && !layer.hiDpiDisabled && layer.hiDpiMode;
     const hiDpiLayer = layer.hiDpiSubstituteLayer || layer.layers;
 
     const options = optionsFromCapabilities(capabilities, {
@@ -172,11 +172,11 @@ export class OlLayerHelper {
     let hidpi = true;
 
     // If explicitly disabled or no server type known do not use serverType for hidpi
-    if (layer.serverType === TMServerType.DISABLED || layer.resolvedServerType === ResolvedServerType.GENERIC) {
+    if (layer.hiDpiDisabled || layer.serverType === TMServerType.GENERIC) {
       serverType = undefined;
       hidpi = false;
     } else {
-      serverType = layer.resolvedServerType;
+      serverType = layer.serverType;
     }
 
     const sourceOptions: Options = {
@@ -266,8 +266,8 @@ export class OlLayerHelper {
       QUERY_LAYERS: layer.queryLayers,
       TRANSPARENT: 'TRUE',
     };
-    if (layer.filter && layer.resolvedServerType === ResolvedServerType.GEOSERVER) {
-      // TODO: implement filtering for other servers than geoserver
+    if (layer.filter && layer.serverType === TMServerType.GEOSERVER) {
+      // TODO: implement filtering for other servers than geoserver (transform CQL to SLD for SLD_BODY param)
       params.CQL_FILTER = layer.filter;
     }
     if (addCacheBust) {

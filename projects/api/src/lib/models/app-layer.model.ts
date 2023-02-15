@@ -1,5 +1,4 @@
-import { CoordinateReferenceSystemModel } from './coordinate-reference-system.model';
-import { LayerHiDpiMode } from './layer-hi-dpi-mode.enum';
+import { TileLayerHiDpiMode } from './layer-hi-dpi-mode.enum';
 
 export interface AppLayerModel {
   id: number;
@@ -9,11 +8,13 @@ export interface AppLayerModel {
   url?: string;
   visible: boolean;
   hasAttributes: boolean;
-  crs?: CoordinateReferenceSystemModel;
   minScale?: number;
   maxScale?: number;
   legendImageUrl?: string;
-  hiDpiMode?: LayerHiDpiMode;
+  tilingDisabled?: boolean;
+  tilingGutter?: number;
+  hiDpiDisabled?: boolean;
+  hiDpiMode?: TileLayerHiDpiMode;
   hiDpiSubstituteLayer?: string;
   opacity: number;
 }

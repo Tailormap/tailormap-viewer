@@ -118,7 +118,7 @@ export const selectVisibleWMSLayersWithoutAttributes = createSelector(
 
 export const selectFilterableLayers = createSelector(
   selectOrderedVisibleLayersWithServices,
-  layers => layers.filter(l => l.service?.resolvedServerType === ResolvedServerType.GEOSERVER),
+  layers => layers.filter(l => l.service?.serverType === ServerType.GEOSERVER),
 );
 
 export const selectSomeLayersVisible = createSelector(
@@ -135,7 +135,7 @@ export const selectSomeLayersVisible = createSelector(
 // In the future, more layer types could be added but without immediate legend support.
 export const selectOrderedVisibleLayersWithLegend = createSelector(
   selectOrderedVisibleLayersWithServices,
-  (layers) => layers.filter(layer => layer.legendImageUrl || layer.service && [ ServiceProtocol.WMS, ServiceProtocol.TILED ].includes(layer.service.protocol)),
+  (layers) => layers.filter(layer => layer.legendImageUrl || layer.service && [ ServiceProtocol.WMS, ServiceProtocol.WMTS ].includes(layer.service.protocol)),
 );
 
 export const selectOrderedVisibleBackgroundLayers = createSelector(
