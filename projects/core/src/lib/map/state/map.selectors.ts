@@ -1,6 +1,6 @@
 import { MapSettingsModel, MapState, mapStateKey } from './map.state';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { AppLayerModel, LayerTreeNodeModel, ResolvedServerType, ServiceModel, ServiceProtocol } from '@tailormap-viewer/api';
+import { AppLayerModel, LayerTreeNodeModel, ServerType, ServiceModel, ServiceProtocol } from '@tailormap-viewer/api';
 import { ArrayHelper, TreeHelper, TreeModel } from '@tailormap-viewer/shared';
 import { LayerTreeNodeHelper } from '../helpers/layer-tree-node.helper';
 import { ExtendedAppLayerModel, ExtendedLayerTreeNodeModel, AppLayerWithInitialValuesModel } from '../models';
