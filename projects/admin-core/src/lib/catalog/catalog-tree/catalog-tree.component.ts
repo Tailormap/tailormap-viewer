@@ -3,11 +3,11 @@ import { LoadingStateEnum, TreeService } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
 import { selectCatalogLoadError, selectCatalogLoadStatus, selectCatalogTree } from '../state/catalog.selectors';
 import { expandTree, loadCatalog } from '../state/catalog.actions';
-import { filter, map, Observable, of, Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, filter, map, Observable, of, Subject, takeUntil } from 'rxjs';
 import { CatalogTreeModel } from '../models/catalog-tree.model';
 import { CatalogHelper } from '../helpers/catalog.helper';
 import { CatalogService } from '../services/catalog.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { RoutesEnum } from '../../routes';
 
 @Component({
@@ -23,11 +23,14 @@ export class CatalogTreeComponent implements OnInit, OnDestroy {
   public errorMessage$: Observable<string | null> = of(null);
   private destroyed = new Subject();
 
+  private selectedNodeId = new BehaviorSubject<string>('');
+
   constructor(
     private treeService: TreeService,
     private store$: Store,
     private catalogService: CatalogService,
     private router: Router,
+    private route: ActivatedRoute,
   ) { }
 
   public ngOnInit(): void {
@@ -42,6 +45,22 @@ export class CatalogTreeComponent implements OnInit, OnDestroy {
     this.treeService.selectionStateChangedSource$
       .pipe(takeUntil(this.destroyed))
       .subscribe(node => this.navigateToDetails(node));
+    this.treeService.setSelectedNode(this.selectedNodeId.asObservable());
+
+    this.route.url
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(() => {
+        const currentRoute = this.router.url
+          .replace(RoutesEnum.CATALOG, '')
+          .split('/')
+          .filter(part => !!part);
+        if (currentRoute.length === 4 && currentRoute[0] === 'service' && currentRoute[2] === 'layer') {
+          this.selectedNodeId.next(CatalogHelper.getIdForLayerNode(currentRoute[3]));
+        }
+        if (currentRoute.length === 2 && currentRoute[0] === 'service') {
+          this.selectedNodeId.next(CatalogHelper.getIdForServiceNode(currentRoute[1]));
+        }
+      });
 
     this.store$.dispatch(loadCatalog());
   }

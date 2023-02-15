@@ -2,7 +2,18 @@ import * as MapActions from './map.actions';
 import { initialMapState, MapState } from './map.state';
 import { mapReducer } from './map.reducer';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
-import { getAppLayerModel, getBoundsModel, getCrsModel, getLayerTreeNode, getServiceModel } from '@tailormap-viewer/api';
+import {
+  getAppLayerModel, getBoundsModel, getCrsModel, getLayerTreeNode as mockGetLayerTreeNode, getServiceModel, LayerTreeNodeModel,
+} from '@tailormap-viewer/api';
+import { ExtendedLayerTreeNodeModel } from '../models';
+
+const getLayerTreeNode = (overrides?: Partial<LayerTreeNodeModel>): ExtendedLayerTreeNodeModel => {
+  const node = mockGetLayerTreeNode(overrides);
+  return {
+    ...node,
+    initialChildren: node.childrenIds || [],
+  };
+};
 
 describe('MapReducer', () => {
 

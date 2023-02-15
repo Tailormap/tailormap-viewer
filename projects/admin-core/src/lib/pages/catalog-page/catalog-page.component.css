@@ -1,0 +1,14 @@
+.catalog-page-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: stretch;
+  max-height: 100%;
+}
+
+.catalog-tree {
+  width: 300px;
+}
+
+.catalog-content {
+  flex: 1;
+}

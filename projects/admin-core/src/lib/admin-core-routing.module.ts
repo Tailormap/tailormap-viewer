@@ -12,12 +12,12 @@ const routes: Routes = [
     component: CatalogPageComponent,
     children: [
       {
-        path: RoutesEnum.CATALOG_SERVICE,
-        component: GeoServiceDetailsComponent,
-      },
-      {
         path: RoutesEnum.CATALOG_LAYER,
         component: GeoServiceLayerDetailsComponent,
+      },
+      {
+        path: RoutesEnum.CATALOG_SERVICE,
+        component: GeoServiceDetailsComponent,
       },
     ],
   },

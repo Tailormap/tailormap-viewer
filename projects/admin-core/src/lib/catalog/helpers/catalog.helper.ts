@@ -61,7 +61,7 @@ export class CatalogHelper {
 
   private static getTreeModelForCatalogNode(node: ExtendedCatalogNodeModel): CatalogTreeModel {
     return {
-      id: `catalog-${node.id}`,
+      id: CatalogHelper.getIdForCatalogNode(node.id),
       label: node.title,
       type: CatalogTreeModelTypeEnum.CATALOG_NODE_TYPE,
       metadata: node,
@@ -76,7 +76,7 @@ export class CatalogHelper {
       return null;
     }
     return {
-      id: `feature-source-${featureSource.id}`,
+      id: CatalogHelper.getIdForFeatureSourceNode(featureSource.id),
       label: featureSource.title,
       type: CatalogTreeModelTypeEnum.FEATURE_SOURCE_TYPE,
       metadata: featureSource,
@@ -94,7 +94,7 @@ export class CatalogHelper {
       .map(id => allLayers.find(l => l.id === id) || null)
       .filter((l): l is ExtendedGeoServiceLayerModel => l !== null && l.root);
     return {
-      id: `geo-service-${service.id}`,
+      id: CatalogHelper.getIdForServiceNode(service.id),
       label: service.title,
       type: CatalogTreeModelTypeEnum.SERVICE_TYPE,
       checked: undefined,
@@ -116,7 +116,7 @@ export class CatalogHelper {
       })
       .filter((l): l is TreeModel => !!l);
     return {
-      id: `layer-${layer.id}`,
+      id: CatalogHelper.getIdForLayerNode(layer.id),
       label: layer.title,
       type: CatalogTreeModelTypeEnum.SERVICE_LAYER_TYPE,
       metadata: layer,
@@ -125,6 +125,22 @@ export class CatalogHelper {
       expandable: layerChildren.length > 0,
       children: layerChildren.length > 0 ? layerChildren : undefined,
     };
+  }
+
+  public static getIdForCatalogNode(id: string) {
+    return `catalog-${id}`;
+  }
+
+  public static getIdForServiceNode(id: string) {
+    return `service-${id}`;
+  }
+
+  public static getIdForLayerNode(id: string) {
+    return `layer-${id}`;
+  }
+
+  public static getIdForFeatureSourceNode(id: string) {
+    return `feature-source-${id}`;
   }
 
   public static isCatalogNode(node: CatalogTreeModel): node is TreeModel<ExtendedCatalogNodeModel> {
