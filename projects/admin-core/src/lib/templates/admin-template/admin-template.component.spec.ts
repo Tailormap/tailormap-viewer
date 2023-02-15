@@ -16,7 +16,7 @@ describe('AdminComponent', () => {
     });
     expect(await screen.findByText('admin works!'));
     expect(await screen.findByText('Home')).toBeInTheDocument();
-    expect(await screen.findByText('Geo Registry')).toBeInTheDocument();
+    expect(await screen.findByText('Catalog')).toBeInTheDocument();
   });
 
 });

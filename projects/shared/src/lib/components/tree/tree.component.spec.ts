@@ -62,7 +62,7 @@ describe('TreeComponent', () => {
       return n;
     };
     treeService.nodeExpansionChangedSource$
-      .subscribe(node => {
+      .subscribe(({ node }) => {
         treeData.next(treeData.value.map(n => expandNodes(n, node)));
       });
     treeService.setDataSource(treeData.asObservable());
@@ -71,13 +71,13 @@ describe('TreeComponent', () => {
     expect(await screen.findByText('Item 2')).toBeInTheDocument();
     expect(await screen.queryByText('Item 2 - 1')).toBeNull();
 
-    await userEvent.click(await screen.findByRole('button', { name: 'toggle Item 2' }));
+    await userEvent.click(await screen.findByRole('button', { name: 'expand Item 2' }));
     expect(await screen.findByText('Item 1')).toBeInTheDocument();
     expect(await screen.findByText('Item 2')).toBeInTheDocument();
     expect(await screen.findByText('Item 2 - 1')).toBeInTheDocument();
     expect(await screen.queryByText('Item 2 - 2 - 1')).toBeNull();
 
-    await userEvent.click(await screen.findByRole('button', { name: 'toggle Item 2 - 2' }));
+    await userEvent.click(await screen.findByRole('button', { name: 'expand Item 2 - 2' }));
     expect(await screen.findByText('Item 1')).toBeInTheDocument();
     expect(await screen.findByText('Item 2')).toBeInTheDocument();
     expect(await screen.findByText('Item 2 - 1')).toBeInTheDocument();

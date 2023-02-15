@@ -13,7 +13,7 @@ describe('GeoRegistryPageComponent', () => {
       declarations: [ AdminTemplateComponent, NavigationComponent ],
     });
     // Menu item and title
-    expect(await screen.findAllByText('Geo Registry')).toHaveLength(2);
+    expect(await screen.findAllByText('Catalog')).toHaveLength(2);
   });
 
 });

@@ -4,6 +4,7 @@ import { AdminHomePageComponent } from './admin-home-page/admin-home-page.compon
 import { CatalogPageComponent } from './catalog-page/catalog-page.component';
 import { TemplatesModule } from '../templates/templates.module';
 import { CatalogModule } from '../catalog/catalog.module';
+import { RouterOutlet } from '@angular/router';
 
 
 
@@ -14,6 +15,7 @@ import { CatalogModule } from '../catalog/catalog.module';
   ],
   imports: [
     CommonModule,
+    RouterOutlet,
     TemplatesModule,
     CatalogModule,
   ],

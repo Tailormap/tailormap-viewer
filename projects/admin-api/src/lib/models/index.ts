@@ -1,4 +1,5 @@
 export * from './geo-service.model';
+export * from './geo-service-with-layers.model';
 export * from './catalog-node.model';
 export * from './geo-service-layer.model';
 export * from './geo-service-protocol.enum';

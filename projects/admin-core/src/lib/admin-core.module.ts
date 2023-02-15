@@ -12,7 +12,7 @@ import { MAT_CHECKBOX_DEFAULT_OPTIONS } from '@angular/material/checkbox';
 import { PagesModule } from './pages/pages.module';
 import { TemplatesModule } from './templates/templates.module';
 import { CatalogModule } from './catalog/catalog.module';
-import { TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1MockService } from '@tailormap-admin/admin-api';
+import { TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1MockService, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 
 const getBaseHref = (platformLocation: PlatformLocation): string => {
   return platformLocation.getBaseHrefFromDOM();
@@ -37,7 +37,7 @@ const getBaseHref = (platformLocation: PlatformLocation): string => {
   ],
   providers: [
     { provide: ICON_SERVICE_ICON_LOCATION, useValue: 'icons/' },
-    { provide: TAILORMAP_ADMIN_API_V1_SERVICE, useClass: TailormapAdminApiV1MockService },
+    { provide: TAILORMAP_ADMIN_API_V1_SERVICE, useClass: TailormapAdminApiV1Service },
     { provide: APP_BASE_HREF, useFactory: getBaseHref, deps: [PlatformLocation] },
     { provide: DateAdapter, useClass: LuxonDateAdapter, deps: [MAT_DATE_LOCALE] },
     { provide: MAT_DATE_FORMATS, useValue: MAT_LUXON_DATE_FORMATS },
@@ -51,7 +51,7 @@ export class AdminCoreModule {
     domSanitizer: DomSanitizer,
     iconService: IconService,
   ) {
-    const adminIcons = [{ folder: 'admin', icons: [ 'home', 'catalog' ] }];
+    const adminIcons = [{ folder: 'admin', icons: [ 'home', 'catalog', 'service' ] }];
     iconService.loadIconsToIconRegistry(matIconRegistry, domSanitizer);
     iconService.loadIconsToIconRegistry(matIconRegistry, domSanitizer, adminIcons);
   }

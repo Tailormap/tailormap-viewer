@@ -28,6 +28,7 @@ export class FlatTreeHelper {
       checkbox: typeof node.checked !== 'undefined',
       type: node.type,
       metadata: node.metadata,
+      loadingPlaceholder: node.loadingPlaceholder,
     };
   }
 

@@ -18,13 +18,13 @@ describe('TailormapAdminApiV1Service', () => {
 
   test('queries API for getCatalog$', () => {
     service.getCatalog$().subscribe();
-    const req = httpController.expectOne({ url: '/api/admin/catalog', method: 'GET' });
+    const req = httpController.expectOne({ url: '/api/admin/catalogs/main', method: 'GET' });
     req.flush(null);
   });
 
   test('queries API for getGeoService$', () => {
-    service.getGeoService$({ id: 1 }).subscribe();
-    const req = httpController.expectOne({ url: '/api/admin/geo-service/1', method: 'GET' });
+    service.getGeoService$({ id: '1' }).subscribe();
+    const req = httpController.expectOne({ url: '/api/admin/geo-services/1', method: 'GET' });
     req.flush(null);
   });
 

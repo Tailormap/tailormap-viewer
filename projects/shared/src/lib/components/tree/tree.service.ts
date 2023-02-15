@@ -19,7 +19,7 @@ export class TreeService<T = any> implements OnDestroy {
   private readonlyMode = new BehaviorSubject<boolean>(false);
   private checkStateChangedSource = new Subject<BaseTreeModel<T>[]>();
   private selectionStateChangedSource = new Subject<BaseTreeModel<T>>();
-  private nodeExpansionChangedSource = new Subject<BaseTreeModel<T>>();
+  private nodeExpansionChangedSource = new Subject<{ expanded: boolean; node: BaseTreeModel<T> }>();
   private nodePositionChangedSource = new Subject<NodePositionChangedEventModel>();
 
   // Streams used in the tree component
@@ -155,7 +155,7 @@ export class TreeService<T = any> implements OnDestroy {
 
   public toggleNodeExpanded(node: FlatTreeModel) {
     this.treeControl.toggle(node);
-    this.nodeExpansionChangedSource.next(node);
+    this.nodeExpansionChangedSource.next({ expanded: this.treeControl.isExpanded(node), node });
   }
 
   public nodePositionChanged(evt: NodePositionChangedEventModel) {

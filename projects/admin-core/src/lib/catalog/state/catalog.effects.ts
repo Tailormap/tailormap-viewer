@@ -1,8 +1,10 @@
 import { Inject, Injectable } from '@angular/core';
 import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects';
 import * as CatalogActions from './catalog.actions';
-import { concatMap, map, catchError, of } from 'rxjs';
-import { CatalogNodeModel, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel } from '@tailormap-admin/admin-api';
+import { map, catchError, of, filter, switchMap } from 'rxjs';
+import {
+  CatalogNodeModel, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel,
+} from '@tailormap-admin/admin-api';
 import { Store } from '@ngrx/store';
 import { selectCatalogLoadStatus } from './catalog.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
@@ -16,10 +18,8 @@ export class CatalogEffects {
     return this.actions$.pipe(
       ofType(CatalogActions.loadCatalog),
       concatLatestFrom(() => this.store$.select(selectCatalogLoadStatus)),
-      concatMap(([ _action, loadStatus ]) => {
-        if (loadStatus === LoadingStateEnum.LOADED) {
-          return of({ type: 'EMPTY_ACTION' });
-        }
+      filter(([ _action, loadStatus ]) => loadStatus !== LoadingStateEnum.LOADED),
+      switchMap(([_action]) => {
         return this.adminApiService.getCatalog$()
           .pipe(
             catchError(() => {

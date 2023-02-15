@@ -1,0 +1,10 @@
+<div *ngIf="node" class="tree-node" [class.tree-node--selectable]="isSelectable()">
+  <div class="tree-node__label">
+    <span class="tree-node__icon">
+      <mat-icon *ngIf="isCatalogNode()" svgIcon="folder_filled"></mat-icon>
+      <mat-icon *ngIf="isServiceNode()" svgIcon="admin_service"></mat-icon>
+      <mat-icon *ngIf="isLayerNode()" svgIcon="admin_catalog"></mat-icon>
+    </span>
+    <span class="tree-node__label-content">{{node.label}}</span>
+  </div>
+</div>

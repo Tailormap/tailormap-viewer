@@ -1,9 +1,10 @@
 import { CatalogNodeModel } from '../models/catalog-node.model';
-import { GeoServiceModel } from '@tailormap-admin/admin-api';
+import { GeoServiceWithLayersModel } from '../models/geo-service-with-layers.model';
 import { ServiceCapsModel } from '../models/service-caps.model';
 import { GeoServiceLayerModel } from '../models/geo-service-layer.model';
 import { GeoServiceProtocolEnum } from '../models/geo-service-protocol.enum';
 import { CatalogItemKindEnum } from '../models/catalog-item-kind.enum';
+import { ServerType } from '@tailormap-viewer/api';
 
 export const getCatalogNode = (overrides?: Partial<CatalogNodeModel>): CatalogNodeModel => ({
   id: 'root',
@@ -21,7 +22,7 @@ export const getCatalogTree = (): CatalogNodeModel[] => {
     // eslint-disable-next-line max-len
     getCatalogNode({ id: 'child1.1', title: 'Background services - aerial', items: [{ id: '1', kind: CatalogItemKindEnum.GEO_SERVICE }, { id: '2', kind: CatalogItemKindEnum.GEO_SERVICE }] }),
     // eslint-disable-next-line max-len
-    getCatalogNode({ id: 'child1.1', title: 'Background services - terrain', items: [{ id: '3', kind: CatalogItemKindEnum.GEO_SERVICE }, { id: '4', kind: CatalogItemKindEnum.GEO_SERVICE }] }),
+    getCatalogNode({ id: 'child1.2', title: 'Background services - terrain', items: [{ id: '3', kind: CatalogItemKindEnum.GEO_SERVICE }, { id: '4', kind: CatalogItemKindEnum.GEO_SERVICE }] }),
     getCatalogNode({ id: 'child2', title: 'Other services', items: [{ id: '5', kind: CatalogItemKindEnum.GEO_SERVICE }, { id: '6', kind: CatalogItemKindEnum.GEO_SERVICE }] }),
   ];
 };
@@ -56,7 +57,7 @@ export const getServiceCaps = (): ServiceCapsModel => ({
 export const getGeoServiceLayer = (overrides?: Partial<GeoServiceLayerModel>): GeoServiceLayerModel => ({
   title: 'Gemeentegebied',
   name: 'Gemeentegebied',
-  root: false,
+  root: true,
   children: null,
   virtual: false,
   maxScale: undefined,
@@ -66,25 +67,26 @@ export const getGeoServiceLayer = (overrides?: Partial<GeoServiceLayerModel>): G
   ...overrides,
 });
 
-export const getGeoService = (overrides?: Partial<GeoServiceModel>): GeoServiceModel => ({
+export const getGeoService = (overrides?: Partial<GeoServiceWithLayersModel>): GeoServiceWithLayersModel => ({
   id: '1',
-  adminComments: '',
+  notes: '',
   protocol: GeoServiceProtocolEnum.WMS,
   url: 'https://service.pdok.nl/kadaster/bestuurlijkegebieden/wms/v1_0',
   authentication: {},
-  capabilities: new Blob(),
+  serviceCapabilities: getServiceCaps(),
   capabilitiesContentType: 'application/xml',
   capabilitiesFetched: '2021-01-01T00:00:00.000Z',
   title: 'Bestuurlijke Gebieden View Service',
   advertisedUrl: 'https://service.pdok.nl/kadaster/bestuurlijkegebieden/wms/v1_0',
-  serviceCapabilities: getServiceCaps(),
   layers: [
     getGeoServiceLayer(),
     getGeoServiceLayer({ title: 'Provinciegebied', name: 'Provinciegebied' }),
     getGeoServiceLayer({ title: 'Landgebied', name: 'Landgebied' }),
   ],
-  settings: {},
-  layerSettings: {},
-  tileServiceInfo: {},
+  settings: {
+    serverType: ServerType.GEOSERVER,
+    layerSettings: [],
+    defaultLayerSettings: {},
+  },
   ...overrides,
 });

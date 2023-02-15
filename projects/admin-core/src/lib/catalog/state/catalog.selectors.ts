@@ -7,6 +7,7 @@ const selectCatalogState = createFeatureSelector<CatalogState>(catalogStateKey);
 
 export const selectCatalog = createSelector(selectCatalogState, state => state.catalog);
 export const selectGeoServices = createSelector(selectCatalogState, state => state.geoServices);
+export const selectGeoServiceLayers = createSelector(selectCatalogState, state => state.geoServiceLayers);
 export const selectFeatureSources = createSelector(selectCatalogState, state => state.featureSources);
 export const selectCatalogLoadStatus = createSelector(selectCatalogState, state => state.catalogLoadStatus);
 export const selectCatalogLoadError = createSelector(selectCatalogState, state => state.catalogLoadError);
@@ -14,6 +15,9 @@ export const selectCatalogLoadError = createSelector(selectCatalogState, state =
 export const selectCatalogTree = createSelector(
   selectCatalog,
   selectGeoServices,
+  selectGeoServiceLayers,
   selectFeatureSources,
-  (catalog, services, featureSources): TreeModel[] => CatalogHelper.catalogToTree(catalog, services, featureSources),
+  (catalog, services, layers, featureSources): TreeModel[] => {
+    return CatalogHelper.catalogToTree(catalog, services, layers, featureSources);
+  },
 );
