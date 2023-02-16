@@ -5,6 +5,7 @@ import { CatalogPageComponent } from './pages/catalog-page/catalog-page.componen
 import { RoutesEnum } from './routes';
 import { GeoServiceDetailsComponent } from './catalog/geo-service-details/geo-service-details.component';
 import { GeoServiceLayerDetailsComponent } from './catalog/geo-service-layer-details/geo-service-layer-details.component';
+import { CatalogNodeDetailsComponent } from './catalog/catalog-node-details/catalog-node-details.component';
 
 const routes: Routes = [
   {
@@ -12,12 +13,16 @@ const routes: Routes = [
     component: CatalogPageComponent,
     children: [
       {
-        path: RoutesEnum.CATALOG_LAYER,
+        path: RoutesEnum.CATALOG_LAYER_DETAILS,
         component: GeoServiceLayerDetailsComponent,
       },
       {
-        path: RoutesEnum.CATALOG_SERVICE,
+        path: RoutesEnum.CATALOG_SERVICE_DETAILS,
         component: GeoServiceDetailsComponent,
+      },
+      {
+        path: RoutesEnum.CATALOG_NODE_DETAILS,
+        component: CatalogNodeDetailsComponent,
       },
     ],
   },

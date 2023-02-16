@@ -1,6 +1,7 @@
 export enum RoutesEnum {
   CATALOG = 'page/catalog',
-  CATALOG_SERVICE = 'service/:id',
-  CATALOG_LAYER = 'service/:serviceId/layer/:id',
+  CATALOG_NODE_DETAILS = 'node/:nodeId',
+  CATALOG_SERVICE_DETAILS = 'node/:nodeId/service/:serviceId',
+  CATALOG_LAYER_DETAILS = 'node/:nodeId/service/:serviceId/layer/:layerId',
   ADMIN_HOME = '',
 }

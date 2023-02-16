@@ -52,14 +52,14 @@ export class CatalogHelper {
         return CatalogHelper.getTreeModelForFeatureSource(featureSources, item.id);
       }
       return null;
-    }).filter((n): n is TreeModel => !!n);
+    }).filter((n): n is CatalogTreeModel => !!n);
     if (items.length > 0 && itemChildren.length === 0) {
       return [{ id: `placeholder-node-${node.id}`, label: 'Loading...', loadingPlaceholder: true }];
     }
     return itemChildren;
   }
 
-  private static getTreeModelForCatalogNode(node: ExtendedCatalogNodeModel): CatalogTreeModel {
+  public static getTreeModelForCatalogNode(node: ExtendedCatalogNodeModel): CatalogTreeModel {
     return {
       id: CatalogHelper.getIdForCatalogNode(node.id),
       label: node.title,
@@ -70,7 +70,7 @@ export class CatalogHelper {
     };
   }
 
-  private static getTreeModelForFeatureSource(featureSources: FeatureSourceModel[], featureSourceId: string): CatalogTreeModel | null {
+  public static getTreeModelForFeatureSource(featureSources: FeatureSourceModel[], featureSourceId: string): CatalogTreeModel | null {
     const featureSource = featureSources.find(s => s.id === featureSourceId);
     if (!featureSource) {
       return null;
@@ -84,7 +84,7 @@ export class CatalogHelper {
     };
   }
 
-  private static getTreeModelForService(services: ExtendedGeoServiceModel[], allLayers: ExtendedGeoServiceLayerModel[], serviceId: string): CatalogTreeModel | null {
+  public static getTreeModelForService(services: ExtendedGeoServiceModel[], allLayers: ExtendedGeoServiceLayerModel[], serviceId: string): CatalogTreeModel | null {
     const service = services.find(s => s.id === serviceId);
     if (!service) {
       return null;
@@ -105,7 +105,7 @@ export class CatalogHelper {
     };
   }
 
-  private static getTreeModelForLayer(layer: ExtendedGeoServiceLayerModel, allLayers: ExtendedGeoServiceLayerModel[]): CatalogTreeModel {
+  public static getTreeModelForLayer(layer: ExtendedGeoServiceLayerModel, allLayers: ExtendedGeoServiceLayerModel[]): CatalogTreeModel {
     const layerChildren: CatalogTreeModel[] = (layer.children || [])
       .map(id => {
         const childLayer = allLayers.find(l => l.id === id && l.serviceId === layer.serviceId);
@@ -114,7 +114,7 @@ export class CatalogHelper {
         }
         return CatalogHelper.getTreeModelForLayer(childLayer, allLayers);
       })
-      .filter((l): l is TreeModel => !!l);
+      .filter((l): l is CatalogTreeModel => !!l);
     return {
       id: CatalogHelper.getIdForLayerNode(layer.id),
       label: layer.title,
@@ -143,23 +143,23 @@ export class CatalogHelper {
     return `feature-source-${id}`;
   }
 
-  public static isCatalogNode(node: CatalogTreeModel): node is TreeModel<ExtendedCatalogNodeModel> {
+  public static isCatalogNode(node: CatalogTreeModel): node is TreeModel<ExtendedCatalogNodeModel, CatalogTreeModelTypeEnum> {
     return node.type === CatalogTreeModelTypeEnum.CATALOG_NODE_TYPE;
   }
 
-  public static isServiceNode(node: CatalogTreeModel): node is TreeModel<ExtendedGeoServiceModel> {
+  public static isServiceNode(node: CatalogTreeModel): node is TreeModel<ExtendedGeoServiceModel, CatalogTreeModelTypeEnum> {
     return node.type === CatalogTreeModelTypeEnum.SERVICE_TYPE;
   }
 
-  public static isLayerNode(node: CatalogTreeModel): node is TreeModel<ExtendedGeoServiceLayerModel> {
+  public static isLayerNode(node: CatalogTreeModel): node is TreeModel<ExtendedGeoServiceLayerModel, CatalogTreeModelTypeEnum> {
     return node.type === CatalogTreeModelTypeEnum.SERVICE_LAYER_TYPE;
   }
 
-  public static isFeatureSource(node: CatalogTreeModel): node is TreeModel<FeatureSourceModel> {
+  public static isFeatureSource(node: CatalogTreeModel): node is TreeModel<FeatureSourceModel, CatalogTreeModelTypeEnum> {
     return node.type === CatalogTreeModelTypeEnum.FEATURE_SOURCE_TYPE;
   }
 
-  public static isExpandableNode(node: CatalogTreeModel): node is TreeModel<ExtendedGeoServiceModel> {
+  public static isExpandableNode(node: CatalogTreeModel): node is CatalogTreeModel {
     return CatalogHelper.isCatalogNode(node) || CatalogHelper.isServiceNode(node) || CatalogHelper.isLayerNode(node);
   }
 

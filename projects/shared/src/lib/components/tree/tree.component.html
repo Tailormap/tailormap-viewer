@@ -50,6 +50,7 @@
                    matTreeNodePadding
                    matTreeNodePaddingIndent="20"
                    class="mat-tree-node--folder"
+                   [class.tree-node--selected]="selectedNodeId === node.id"
                    (click)="setNodeSelected(node)">
       <div [className]="getNodeClassName(node)"
            [attr.data-nodeid]="node.id"

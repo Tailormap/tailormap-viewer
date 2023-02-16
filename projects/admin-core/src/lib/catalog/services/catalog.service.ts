@@ -3,9 +3,9 @@ import { Store } from '@ngrx/store';
 import {
   CatalogItemKindEnum, CatalogItemModel, GeoServiceWithLayersModel, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel,
 } from '@tailormap-admin/admin-api';
-import { catchError, concatMap, forkJoin, of, Subject, takeUntil, timer } from 'rxjs';
+import { catchError, concatMap, filter, forkJoin, of, Subject, takeUntil, timer } from 'rxjs';
 import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
-import { selectGeoServices } from '../state/catalog.selectors';
+import { selectCatalogNodeById, selectGeoServices } from '../state/catalog.selectors';
 import { addGeoServices } from '../state/catalog.actions';
 import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -35,29 +35,36 @@ export class CatalogService implements OnDestroy {
     this.destroyed.complete();
   }
 
-  public loadCatalogNodeItems(node: ExtendedCatalogNodeModel) {
-    const serviceItems = (node.items || []).filter(item => item.kind === CatalogItemKindEnum.GEO_SERVICE);
-    const services$ = this.getServiceRequests$(serviceItems);
-    if (services$.length === 0) {
-      return;
-    }
-    const nodeId = node.id;
+  public loadCatalogNodeItems$(nodeId: string) {
     this.cancelCurrentSubscription(nodeId);
     const newSubscription = new Subject<null>();
     this.loadServiceSubscriptions.set(nodeId, newSubscription);
-    forkJoin(services$).pipe(takeUntil(newSubscription))
-      .subscribe(responses => {
-        const hasError = responses.some(response => response === null);
-        if (hasError) {
-          SnackBarMessageComponent.open$(this.snackBar, {
-            message: $localize `Error while loading service(s). Please collapse/expand the node again to try again.`,
-            duration: 5000,
-            showCloseButton: true,
-          }).pipe(takeUntil(newSubscription)).subscribe();
-        }
-        const services = responses.filter((response): response is GeoServiceWithLayersModel => response !== null);
-        this.store$.dispatch(addGeoServices({ services }));
-      });
+    const sub = new Subject<boolean>();
+    this.store$.select(selectCatalogNodeById(nodeId)).pipe(
+      takeUntil(newSubscription),
+      filter((node): node is ExtendedCatalogNodeModel => !!node && (node.items || []).length > 0),
+      concatMap(node => {
+        const serviceItems = (node.items || []).filter(item => item.kind === CatalogItemKindEnum.GEO_SERVICE);
+        const services$ = this.getServiceRequests$(serviceItems);
+        return forkJoin(services$);
+      }),
+    ).subscribe(responses => {
+      const hasError = responses.some(response => response === null);
+      if (hasError) {
+        SnackBarMessageComponent.open$(this.snackBar, {
+          message: $localize `Error while loading service(s). Please collapse/expand the node again to try again.`,
+          duration: 5000,
+          showCloseButton: true,
+        }).pipe(takeUntil(newSubscription)).subscribe();
+      }
+      const services = responses.filter((response): response is GeoServiceWithLayersModel => response !== null);
+      if (services.length > 0) {
+        this.store$.dispatch(addGeoServices({ services, parentNode: nodeId }));
+      }
+      sub.next(true);
+      sub.complete();
+    });
+    return sub;
   }
 
   private getServiceRequests$(serviceItems: CatalogItemModel[]) {

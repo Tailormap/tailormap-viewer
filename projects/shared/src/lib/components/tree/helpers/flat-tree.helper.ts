@@ -3,21 +3,21 @@ import { TreeModel, FlatTreeModel } from '../models';
 
 export class FlatTreeHelper {
 
-  public static hasChildren = (node: TreeModel): boolean => !!node.children && node.children.length > 0;
-  public static getChildren = (node: TreeModel): TreeModel[] | undefined => node.children;
-  public static getLevel = (node: FlatTreeModel) => node.level;
-  public static isExpandable = (node: FlatTreeModel) => node.expandable;
+  public static hasChildren = <T = any, TypeDef extends string = string>(node: TreeModel<T, TypeDef>): boolean => !!node.children && node.children.length > 0;
+  public static getChildren = <T = any, TypeDef extends string = string>(node: TreeModel<T, TypeDef>): TreeModel<T, TypeDef>[] | undefined => node.children;
+  public static getLevel = <T = any, TypeDef extends string = string>(node: FlatTreeModel<T, TypeDef>) => node.level;
+  public static isExpandable = <T = any, TypeDef extends string = string>(node: FlatTreeModel<T, TypeDef>) => node.expandable;
 
-  public static getTreeFlattener() {
+  public static getTreeFlattener<T = any, TypeDef extends string = string>() {
     return new MatTreeFlattener(
-      FlatTreeHelper.transformer,
-      FlatTreeHelper.getLevel,
-      FlatTreeHelper.isExpandable,
-      FlatTreeHelper.getChildren,
+      (node: TreeModel<T, TypeDef>, level: number) => FlatTreeHelper.transformer<T, TypeDef>(node, level),
+      (node: FlatTreeModel<T, TypeDef>) => FlatTreeHelper.getLevel<T, TypeDef>(node),
+      (node: FlatTreeModel<T, TypeDef>) => FlatTreeHelper.isExpandable<T, TypeDef>(node),
+      (node: TreeModel<T, TypeDef>) => FlatTreeHelper.getChildren<T, TypeDef>(node),
     );
   }
 
-  public static transformer(node: TreeModel, level: number): FlatTreeModel {
+  public static transformer<T = any, TypeDef extends string = string>(node: TreeModel<T, TypeDef>, level: number): FlatTreeModel<T, TypeDef> {
     return {
       id: node.id,
       label: node.label,

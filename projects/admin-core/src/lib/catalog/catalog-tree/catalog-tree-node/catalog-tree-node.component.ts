@@ -32,7 +32,9 @@ export class CatalogTreeNodeComponent {
     if (!this.node) {
       return false;
     }
-    return this.isServiceNode() || (CatalogHelper.isLayerNode(this.node) && !this.node?.metadata?.virtual);
+    return this.isCatalogNode()
+      || this.isServiceNode()
+      || (CatalogHelper.isLayerNode(this.node) && !this.node?.metadata?.virtual);
   }
 
 }

@@ -10,6 +10,7 @@ import { CatalogEffects } from './state/catalog.effects';
 import { CatalogTreeNodeComponent } from './catalog-tree/catalog-tree-node/catalog-tree-node.component';
 import { GeoServiceDetailsComponent } from './geo-service-details/geo-service-details.component';
 import { GeoServiceLayerDetailsComponent } from './geo-service-layer-details/geo-service-layer-details.component';
+import { CatalogNodeDetailsComponent } from './catalog-node-details/catalog-node-details.component';
 
 
 
@@ -19,6 +20,7 @@ import { GeoServiceLayerDetailsComponent } from './geo-service-layer-details/geo
     CatalogTreeNodeComponent,
     GeoServiceDetailsComponent,
     GeoServiceLayerDetailsComponent,
+    CatalogNodeDetailsComponent,
   ],
   imports: [
     CommonModule,

@@ -9,6 +9,7 @@ import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { of } from 'rxjs';
 import userEvent from '@testing-library/user-event';
 import { addGeoServices } from '../state/catalog.actions';
+import { CatalogTreeNodeComponent } from './catalog-tree-node/catalog-tree-node.component';
 
 const setup = async (state: Partial<CatalogState> = {}) => {
   const mockStore = getMockStore({
@@ -23,6 +24,7 @@ const setup = async (state: Partial<CatalogState> = {}) => {
   };
   await render(CatalogTreeComponent, {
     imports: [ SharedModule, MatIconTestingModule ],
+    declarations: [CatalogTreeNodeComponent],
     providers: [
       { provide: Store, useValue: mockStore },
       { provide: TAILORMAP_ADMIN_API_V1_SERVICE, useValue: mockApiService },
@@ -31,7 +33,7 @@ const setup = async (state: Partial<CatalogState> = {}) => {
   return { mockStore, mockDispatch, mockApiService };
 };
 
-describe('GeoRegistryTreeComponent', () => {
+describe('CatalogTreeComponent', () => {
 
   test('should trigger loading catalog', async () => {
     const { mockDispatch } = await setup();
@@ -51,7 +53,7 @@ describe('GeoRegistryTreeComponent', () => {
     };
     const { mockDispatch, mockApiService } = await setup(state);
     expect(await screen.queryByRole('progressbar')).not.toBeInTheDocument();
-    expect(await screen.findByText(catalogNodes[1].title)).toBeInTheDocument();
+    expect(await screen.findByText(`Background services`)).toBeInTheDocument();
 
     await userEvent.click(await screen.findByLabelText(`expand Background services`));
     await userEvent.click(await screen.findByLabelText(`expand Background services - aerial`));
@@ -69,7 +71,7 @@ describe('GeoRegistryTreeComponent', () => {
     };
     const { mockDispatch, mockApiService } = await setup(state);
     expect(await screen.queryByRole('progressbar')).not.toBeInTheDocument();
-    expect(await screen.findByText(catalogNodes[1].title)).toBeInTheDocument();
+    expect(await screen.findByText(`Background services`)).toBeInTheDocument();
 
     await userEvent.click(await screen.findByLabelText(`expand Background services`));
     await userEvent.click(await screen.findByLabelText(`expand Background services - aerial`));
