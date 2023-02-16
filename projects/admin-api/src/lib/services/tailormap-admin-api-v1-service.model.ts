@@ -4,5 +4,6 @@ import { GeoServiceWithLayersModel } from '../models/geo-service-with-layers.mod
 
 export interface TailormapAdminApiV1ServiceModel {
   getCatalog$(): Observable<CatalogNodeModel[]>;
+  updateCatalog$(catalog: CatalogNodeModel[]): Observable<CatalogNodeModel[]>;
   getGeoService$(params: { id: string }): Observable<GeoServiceWithLayersModel>;
 }

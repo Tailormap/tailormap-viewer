@@ -21,4 +21,8 @@ export class TailormapAdminApiV1MockService implements TailormapAdminApiV1Servic
     })).pipe(delay(this.delay));
   }
 
+  public updateCatalog$(node: CatalogNodeModel[]): Observable<CatalogNodeModel[]> {
+    return of(node).pipe(delay(this.delay));
+  }
+
 }

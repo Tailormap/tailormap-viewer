@@ -16,7 +16,7 @@ export const selectCatalogLoadError = createSelector(selectCatalogState, state =
 
 export const selectCatalogNodeById = (id: string) => createSelector(
   selectCatalog,
-  (catalog): ExtendedCatalogNodeModel | undefined => catalog.find(node => node.id === id),
+  (catalog): ExtendedCatalogNodeModel | null => catalog.find(node => node.id === id) || null,
 );
 
 export const selectCatalogTree = createSelector(

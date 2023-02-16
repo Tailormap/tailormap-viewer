@@ -5,6 +5,7 @@ import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { CatalogTreeModelTypeEnum } from '../models/catalog-tree-model-type.enum';
 import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-layer.model';
+import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
 
 type ExpandableNode = { id: string; children?: string[] | null; expanded?: boolean };
 
@@ -114,6 +115,21 @@ const onExpandTree = (
   return state;
 };
 
+const onUpdateCatalog = (
+  state: CatalogState,
+  payload: ReturnType<typeof CatalogActions.updateCatalog>,
+): CatalogState => {
+  const currentCatalog: Map<string, ExtendedCatalogNodeModel> = new Map(state.catalog.map(node => [ node.id, node ]));
+  return {
+    ...state,
+    catalog: payload.nodes.map<ExtendedCatalogNodeModel>(node => ({
+      ...node,
+      expanded: currentCatalog.get(node.id)?.expanded || false,
+      parentId: payload.nodes.find(n => (n.children || []).includes(node.id))?.id || null,
+    })),
+  };
+};
+
 const catalogReducerImpl = createReducer<CatalogState>(
   initialCatalogState,
   on(CatalogActions.loadCatalog, onLoadCatalog),
@@ -122,6 +138,7 @@ const catalogReducerImpl = createReducer<CatalogState>(
   on(CatalogActions.addGeoServices, onAddGeoServices),
   on(CatalogActions.addFeatureSource, onAddFeatureSource),
   on(CatalogActions.expandTree, onExpandTree),
+  on(CatalogActions.updateCatalog, onUpdateCatalog),
 );
 export const catalogReducer = (state: CatalogState | undefined, action: Action) => catalogReducerImpl(state, action);
 

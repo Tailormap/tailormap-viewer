@@ -110,7 +110,10 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
   }
 
   // Service message commands
-  public setDataSource(dataSource$: Observable<TreeModel<T, TypeDef>[]>) {
+  public setDataSource(
+    dataSource$: Observable<TreeModel<T, TypeDef>[]>,
+    dataChangedCompareFn: (oldTree: FlatTreeModel<T, TypeDef>[], newTree: FlatTreeModel<T, TypeDef>[]) => boolean = TreeService.dataChanged,
+  ) {
     dataSource$
       .pipe(
         takeUntil(this.destroyed),
@@ -119,7 +122,7 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
       )
       .subscribe(data => {
         const flatTree = FlatTreeHelper.getTreeFlattener<T, TypeDef>().flattenNodes(data);
-        if (this.dataChanged(flatTree)) {
+        if (dataChangedCompareFn(this.treeControl.dataNodes, flatTree)) {
           this.dataSource.data = data;
         }
         this.updateCaches(flatTree);
@@ -127,8 +130,8 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
       });
   }
 
-  private dataChanged(newTreeNodes: FlatTreeModel<T, TypeDef>[]) {
-    const currentNodeIds = this.treeControl.dataNodes.map(node => node.id);
+  private static dataChanged<T = any, TypeDef extends string = string>(oldTree: FlatTreeModel<T, TypeDef>[], newTreeNodes: FlatTreeModel<T, TypeDef>[]) {
+    const currentNodeIds = oldTree.map(node => node.id);
     const newTreeNodeIds = newTreeNodes.map(node => node.id);
     return !ArrayHelper.arrayEquals(currentNodeIds, newTreeNodeIds);
   }

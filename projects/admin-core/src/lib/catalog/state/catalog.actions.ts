@@ -28,3 +28,7 @@ export const expandTree = createAction(
   `${catalogActionsPrefix} Expand Tree`,
   props<{ id: string; nodeType: CatalogTreeModelTypeEnum }>(),
 );
+export const updateCatalog = createAction(
+  `${catalogActionsPrefix}  Update Catalog`,
+  props<{ nodes: CatalogNodeModel[] }>(),
+);

@@ -3,11 +3,11 @@ import { LoadingStateEnum, TreeService } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
 import { selectCatalogLoadError, selectCatalogLoadStatus, selectCatalogTree } from '../state/catalog.selectors';
 import { expandTree, loadCatalog } from '../state/catalog.actions';
-import { BehaviorSubject, filter, map, Observable, of, Subject, take, takeUntil, tap } from 'rxjs';
+import { BehaviorSubject, filter, map, Observable, of, Subject, take, takeUntil } from 'rxjs';
 import { CatalogTreeModel, CatalogTreeModelMetadataTypes } from '../models/catalog-tree.model';
 import { CatalogHelper } from '../helpers/catalog.helper';
 import { CatalogService } from '../services/catalog.service';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { RoutesEnum } from '../../routes';
 import { CatalogTreeModelTypeEnum } from '../models/catalog-tree-model-type.enum';
 
@@ -49,7 +49,7 @@ export class CatalogTreeComponent implements OnInit, OnDestroy {
           return tree;
         }),
       );
-    this.treeService.setDataSource(catalogTree$);
+    this.treeService.setDataSource(catalogTree$, () => true);
     this.treeService.nodeExpansionChangedSource$
       .pipe(takeUntil(this.destroyed))
       .subscribe(({ node, expanded }) => this.toggleExpansion(node, expanded));

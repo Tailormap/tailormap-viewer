@@ -11,6 +11,8 @@ import { CatalogTreeNodeComponent } from './catalog-tree/catalog-tree-node/catal
 import { GeoServiceDetailsComponent } from './geo-service-details/geo-service-details.component';
 import { GeoServiceLayerDetailsComponent } from './geo-service-layer-details/geo-service-layer-details.component';
 import { CatalogNodeDetailsComponent } from './catalog-node-details/catalog-node-details.component';
+import { CatalogNodeFormComponent } from './catalog-node-form/catalog-node-form.component';
+import { CatalogNodeFormDialogComponent } from './catalog-node-form-dialog/catalog-node-form-dialog.component';
 
 
 
@@ -21,6 +23,8 @@ import { CatalogNodeDetailsComponent } from './catalog-node-details/catalog-node
     GeoServiceDetailsComponent,
     GeoServiceLayerDetailsComponent,
     CatalogNodeDetailsComponent,
+    CatalogNodeFormComponent,
+    CatalogNodeFormDialogComponent,
   ],
   imports: [
     CommonModule,

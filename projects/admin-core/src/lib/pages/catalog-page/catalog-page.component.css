@@ -11,4 +11,13 @@
 
 .catalog-content {
   flex: 1;
+  margin-left: 16px;
+}
+
+.catalog-content ::ng-deep .page-details-title {
+  margin-bottom: 1em;
+}
+
+.catalog-content ::ng-deep .page-details-actions {
+  margin: 1em 0;
 }
