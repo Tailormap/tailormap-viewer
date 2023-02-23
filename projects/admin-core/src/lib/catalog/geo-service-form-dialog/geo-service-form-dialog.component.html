@@ -1,0 +1,17 @@
+<h2 mat-dialog-title>
+  <ng-container *ngIf="!data.geoService" i18n>Create new service</ng-container>
+  <ng-container *ngIf="data.geoService" i18n>Edit {{data.geoService.title}}</ng-container>
+</h2>
+<mat-dialog-content>
+  <tm-admin-geo-service-form [geoService]="data.geoService"
+                             (changed)="updateGeoService($event)"></tm-admin-geo-service-form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-flat-button (click)="cancel()" i18n>Cancel</button>
+  <button mat-flat-button color="primary" (click)="save()" [disabled]="!geoService || (saving$ | async)">
+    <ng-template #saveLabel><ng-container i18n>Save</ng-container></ng-template>
+    <ng-container *ngIf="saving$ | async; else: saveLabel">
+      <mat-spinner diameter="20"></mat-spinner>
+    </ng-container>
+  </button>
+</mat-dialog-actions>

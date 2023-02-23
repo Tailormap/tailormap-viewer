@@ -4,6 +4,7 @@ import { TailormapAdminApiV1ServiceModel } from './tailormap-admin-api-v1-servic
 import * as mockData from '../mock-data/tailormap-admin-api.mock-data';
 import { CatalogNodeModel } from '../models/catalog-node.model';
 import { GeoServiceWithLayersModel } from '../models/geo-service-with-layers.model';
+import { GeoServiceModel } from '../models';
 
 @Injectable()
 export class TailormapAdminApiV1MockService implements TailormapAdminApiV1ServiceModel {
@@ -23,6 +24,18 @@ export class TailormapAdminApiV1MockService implements TailormapAdminApiV1Servic
 
   public updateCatalog$(node: CatalogNodeModel[]): Observable<CatalogNodeModel[]> {
     return of(node).pipe(delay(this.delay));
+  }
+
+  public createGeoService$(params: { geoService: GeoServiceModel }): Observable<GeoServiceWithLayersModel> {
+    return of({ ...params.geoService, layers: [] }).pipe(delay(this.delay));
+  }
+
+  public updateGeoService$(params: { id: string; geoService: GeoServiceModel }): Observable<GeoServiceWithLayersModel> {
+    return of({ ...params.geoService, layers: [] }).pipe(delay(this.delay));
+  }
+
+  public deleteGeoService$(_params: { id: string }): Observable<boolean> {
+    return of(true).pipe(delay(this.delay));
   }
 
 }

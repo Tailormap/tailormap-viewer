@@ -2,14 +2,17 @@ import { render, screen, waitFor } from '@testing-library/angular';
 import { CatalogTreeComponent } from './catalog-tree.component';
 import { getMockStore } from '@ngrx/store/testing';
 import { LoadingStateEnum, SharedModule } from '@tailormap-viewer/shared';
-import { Store } from '@ngrx/store';
-import { getCatalogTree, getGeoService, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1MockService } from '@tailormap-admin/admin-api';
+import { createSelector, Store } from '@ngrx/store';
+import {
+  CatalogNodeModel, getCatalogTree, getGeoService, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1MockService,
+} from '@tailormap-admin/admin-api';
 import { CatalogState, catalogStateKey, initialCatalogState } from '../state/catalog.state';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { of } from 'rxjs';
 import userEvent from '@testing-library/user-event';
 import { addGeoServices } from '../state/catalog.actions';
 import { CatalogTreeNodeComponent } from './catalog-tree-node/catalog-tree-node.component';
+import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
 
 const setup = async (state: Partial<CatalogState> = {}) => {
   const mockStore = getMockStore({
@@ -33,6 +36,10 @@ const setup = async (state: Partial<CatalogState> = {}) => {
   return { mockStore, mockDispatch, mockApiService };
 };
 
+const getExtendedCatalogNodes = (catalogNodes: CatalogNodeModel[]) => {
+  return catalogNodes.map<ExtendedCatalogNodeModel>(node => ({ ...node, parentId: catalogNodes.find(c => c.children?.includes(node.id))?.id || null }));
+};
+
 describe('CatalogTreeComponent', () => {
 
   test('should trigger loading catalog', async () => {
@@ -49,7 +56,7 @@ describe('CatalogTreeComponent', () => {
     const catalogNodes = getCatalogTree();
     const state: Partial<CatalogState> = {
       catalogLoadStatus: LoadingStateEnum.LOADED,
-      catalog: catalogNodes,
+      catalog: getExtendedCatalogNodes(catalogNodes),
     };
     const { mockDispatch, mockApiService } = await setup(state);
     expect(await screen.queryByRole('progressbar')).not.toBeInTheDocument();
@@ -57,7 +64,9 @@ describe('CatalogTreeComponent', () => {
 
     await userEvent.click(await screen.findByLabelText(`expand Background services`));
     await userEvent.click(await screen.findByLabelText(`expand Background services - aerial`));
-    expect(mockApiService.getGeoService$).toHaveBeenCalledTimes(2);
+    await waitFor(() => {
+      expect(mockApiService.getGeoService$).toHaveBeenCalledTimes(2);
+    });
     expect(mockDispatch).toHaveBeenCalledTimes(4); // load catalog, expand, expand, add services
     expect(mockDispatch.mock.calls[3][0].type).toEqual(addGeoServices.type);
   });
@@ -66,8 +75,8 @@ describe('CatalogTreeComponent', () => {
     const catalogNodes = getCatalogTree();
     const state: Partial<CatalogState> = {
       catalogLoadStatus: LoadingStateEnum.LOADED,
-      catalog: catalogNodes,
-      geoServices: [{ ...getGeoService({ id: '1' }), layers: [] }, { ...getGeoService({ id: '2' }), layers: [] }],
+      catalog: getExtendedCatalogNodes(catalogNodes),
+      geoServices: [{ ...getGeoService({ id: '1' }), layers: [], catalogNodeId: 'child1.1' }, { ...getGeoService({ id: '2' }), layers: [], catalogNodeId: 'child1.1' }],
     };
     const { mockDispatch, mockApiService } = await setup(state);
     expect(await screen.queryByRole('progressbar')).not.toBeInTheDocument();

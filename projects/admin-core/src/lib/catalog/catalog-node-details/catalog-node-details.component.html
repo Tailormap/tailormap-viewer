@@ -5,12 +5,16 @@
       <mat-icon svgIcon="plus"></mat-icon>
       <span i18n>Add folder</span>
     </button>
+    <button color="primary" mat-flat-button (click)="addGeoService(node)">
+      <mat-icon svgIcon="plus"></mat-icon>
+      <span i18n>Add service</span>
+    </button>
   </div>
   <tm-admin-catalog-node-form [node]="node"
                               [parentNode]="node.parentId"
                               (changed)="updateNode($event)"></tm-admin-catalog-node-form>
   <div class="page-details-actions">
-    <button mat-flat-button color="primary" (click)="save()" [disabled]="!updatedNode || (saving$ | async)">
+    <button mat-flat-button color="primary" (click)="save(node.id)" [disabled]="!updatedNode || (saving$ | async)">
       <ng-template #saveLabel><ng-container i18n>Save</ng-container></ng-template>
       <ng-container *ngIf="saving$ | async; else: saveLabel">
         <mat-spinner diameter="20"></mat-spinner>

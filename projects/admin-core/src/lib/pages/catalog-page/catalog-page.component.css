@@ -21,3 +21,7 @@
 .catalog-content ::ng-deep .page-details-actions {
   margin: 1em 0;
 }
+
+.catalog-content ::ng-deep .page-details-actions button + button {
+  margin-left: 16px;
+}

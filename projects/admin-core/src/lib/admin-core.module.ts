@@ -12,7 +12,7 @@ import { MAT_CHECKBOX_DEFAULT_OPTIONS } from '@angular/material/checkbox';
 import { PagesModule } from './pages/pages.module';
 import { TemplatesModule } from './templates/templates.module';
 import { CatalogModule } from './catalog/catalog.module';
-import { TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1MockService, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
+import { TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 
 const getBaseHref = (platformLocation: PlatformLocation): string => {
   return platformLocation.getBaseHrefFromDOM();

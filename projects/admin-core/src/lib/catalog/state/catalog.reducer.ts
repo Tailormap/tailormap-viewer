@@ -6,6 +6,8 @@ import { CatalogTreeModelTypeEnum } from '../models/catalog-tree-model-type.enum
 import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-layer.model';
 import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
+import { CatalogHelper } from '../helpers/catalog.helper';
+import { GeoServiceHelper } from '../helpers/geo-service.helper';
 
 type ExpandableNode = { id: string; children?: string[] | null; expanded?: boolean };
 
@@ -14,11 +16,7 @@ const findParentsForExpansion = (list: ExpandableNode[], nodeId: string) => {
   if (!shouldExpand) {
     return [];
   }
-  const findParents = (id: string): string[] => {
-    const parents = list.filter(n => n.children?.includes(id));
-    return parents.reduce<string[]>((acc, parent) => [ ...acc, parent.id, ...findParents(parent.id) ], []);
-  };
-  return findParents(nodeId);
+  return CatalogHelper.findParentsForNode(list, nodeId);
 };
 
 const expandNode = <T extends ExpandableNode>(list: T[], nodeId: string): T[] => {
@@ -69,25 +67,49 @@ const onAddGeoServices = (
   const layerModels: ExtendedGeoServiceLayerModel[] = [];
   const services: ExtendedGeoServiceModel[] = [];
   payload.services.forEach(service => {
-    const serviceLayers: ExtendedGeoServiceLayerModel[] = service.layers.map((layer, idx) => ({
-      ...layer,
-      id: layer.name || `virtual-layer-${idx}`,
-      serviceId: `${service.id}`,
-      catalogNodeId: payload.parentNode,
-    }));
-    services.push({
-      ...service,
-      id: `${service.id}`,
-      catalogNodeId: payload.parentNode,
-      layers: serviceLayers.map(layer => layer.id),
-      capabilities: undefined, // do not store Blob in the state, should not be loaded anyway
-    });
+    const [ extService, serviceLayers ] = GeoServiceHelper.getExtendedGeoService(service, payload.parentNode);
+    services.push(extService);
     layerModels.push(...serviceLayers);
   });
   return {
     ...state,
     geoServices: [ ...state.geoServices, ...services ],
     geoServiceLayers: [ ...state.geoServiceLayers, ...layerModels ],
+  };
+};
+
+const onUpdateGeoService = (
+  state: CatalogState,
+  payload: ReturnType<typeof CatalogActions.updateGeoService>,
+): CatalogState => {
+  const serviceId = `${payload.service.id}`;
+  const currentLayers = state.geoServiceLayers.filter(layer => layer.serviceId === serviceId);
+  const currentService = state.geoServices.find(service => service.id === serviceId);
+  const layers = state.geoServiceLayers.filter(layer => layer.serviceId !== serviceId);
+  const services = state.geoServices.filter(service => service.id !== serviceId);
+  const [ extendedService, serviceLayers ] = GeoServiceHelper.getExtendedGeoService(payload.service, payload.parentNode);
+  const updatedLayers = serviceLayers.map(layer => {
+    const currentLayer = currentLayers.find(l => l.id === layer.id);
+    return { ...layer, expanded: currentLayer?.expanded || false };
+  });
+  const updatedService = { ...extendedService, expanded: currentService?.expanded || false };
+  return {
+    ...state,
+    geoServices: [ ...services, updatedService ],
+    geoServiceLayers: [ ...layers, ...updatedLayers ],
+  };
+};
+
+const onDeleteGeoService = (
+  state: CatalogState,
+  payload: ReturnType<typeof CatalogActions.deleteGeoService>,
+): CatalogState => {
+  const layers = state.geoServiceLayers.filter(layer => layer.serviceId !== payload.id);
+  const services = state.geoServices.filter(service => service.id !== payload.id);
+  return {
+    ...state,
+    geoServices: services,
+    geoServiceLayers: layers,
   };
 };
 
@@ -136,6 +158,8 @@ const catalogReducerImpl = createReducer<CatalogState>(
   on(CatalogActions.loadCatalogSuccess, onLoadCatalogsSuccess),
   on(CatalogActions.loadCatalogFailed, onLoadCatalogsFailed),
   on(CatalogActions.addGeoServices, onAddGeoServices),
+  on(CatalogActions.updateGeoService, onUpdateGeoService),
+  on(CatalogActions.deleteGeoService, onDeleteGeoService),
   on(CatalogActions.addFeatureSource, onAddFeatureSource),
   on(CatalogActions.expandTree, onExpandTree),
   on(CatalogActions.updateCatalog, onUpdateCatalog),

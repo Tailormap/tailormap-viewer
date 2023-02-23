@@ -1,4 +1,4 @@
 export enum GeoServiceProtocolEnum {
-  WMS = 'WMS',
-  WMTS = 'WMTS',
+  WMS = 'wms',
+  WMTS = 'wmts',
 }

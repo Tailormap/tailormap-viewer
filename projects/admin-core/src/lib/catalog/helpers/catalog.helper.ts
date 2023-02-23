@@ -107,8 +107,8 @@ export class CatalogHelper {
 
   public static getTreeModelForLayer(layer: ExtendedGeoServiceLayerModel, allLayers: ExtendedGeoServiceLayerModel[]): CatalogTreeModel {
     const layerChildren: CatalogTreeModel[] = (layer.children || [])
-      .map(id => {
-        const childLayer = allLayers.find(l => l.id === id && l.serviceId === layer.serviceId);
+      .map(name => {
+        const childLayer = allLayers.find(l => l.name === name && l.serviceId === layer.serviceId);
         if (!childLayer) {
           return null;
         }
@@ -161,6 +161,14 @@ export class CatalogHelper {
 
   public static isExpandableNode(node: CatalogTreeModel): node is CatalogTreeModel {
     return CatalogHelper.isCatalogNode(node) || CatalogHelper.isServiceNode(node) || CatalogHelper.isLayerNode(node);
+  }
+
+  public static findParentsForNode(list: Array<{ id: string; children?: string[] | null }>, nodeId: string): string[] {
+    const findParents = (id: string): string[] => {
+      const parents = (list || []).filter(n => n.children?.includes(id));
+      return parents.reduce<string[]>((acc, parent) => [ ...acc, parent.id, ...findParents(parent.id) ], []);
+    };
+    return findParents(nodeId);
   }
 
 }

@@ -6,11 +6,12 @@ import {
 } from '@tailormap-admin/admin-api';
 import { catchError, concatMap, filter, forkJoin, of, Subject, take, takeUntil, tap } from 'rxjs';
 import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
-import { selectCatalog, selectCatalogNodeById, selectGeoServices } from '../state/catalog.selectors';
+import { selectCatalog, selectCatalogNodeById, selectGeoServices, selectParentsForCatalogNode } from '../state/catalog.selectors';
 import { addGeoServices, updateCatalog } from '../state/catalog.actions';
 import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackBarMessageComponent } from '@tailormap-viewer/shared';
+import { nanoid } from 'nanoid';
 
 @Injectable({
   providedIn: 'root',
@@ -36,7 +37,21 @@ export class CatalogService implements OnDestroy {
     this.destroyed.complete();
   }
 
-  public loadCatalogNodeItems$(nodeId: string) {
+  public loadCatalogNodeItems$(nodeId: string, includeParents?: boolean) {
+    return this.store$.select(selectParentsForCatalogNode(nodeId))
+      .pipe(
+        take(1),
+        concatMap(parentIds => {
+          const requests$ = [this.loadCatalogChildren$(nodeId)];
+          if (includeParents) {
+            requests$.push(...parentIds.map(id => this.loadCatalogChildren$(id)));
+          }
+          return forkJoin(requests$);
+        }),
+      );
+  }
+
+  private loadCatalogChildren$(nodeId: string) {
     this.cancelCurrentSubscription(nodeId);
     const newSubscription = new Subject<null>();
     this.loadServiceSubscriptions.set(nodeId, newSubscription);
@@ -50,22 +65,26 @@ export class CatalogService implements OnDestroy {
         return forkJoin(services$);
       }),
     ).subscribe(responses => {
-      const hasError = responses.some(response => response === null);
-      if (hasError) {
-        SnackBarMessageComponent.open$(this.snackBar, {
-          message: $localize `Error while loading service(s). Please collapse/expand the node again to try again.`,
-          duration: 5000,
-          showCloseButton: true,
-        }).pipe(takeUntil(newSubscription)).subscribe();
-      }
-      const services = responses.filter((response): response is GeoServiceWithLayersModel => response !== null);
-      if (services.length > 0) {
-        this.store$.dispatch(addGeoServices({ services, parentNode: nodeId }));
-      }
+      this.handleResponses(nodeId, responses, newSubscription);
       sub.next(true);
       sub.complete();
     });
     return sub;
+  }
+
+  private handleResponses(nodeId: string, responses: Array<GeoServiceWithLayersModel | null>, newSubscription: Subject<null>) {
+    const hasError = responses.some(response => response === null);
+    if (hasError) {
+      SnackBarMessageComponent.open$(this.snackBar, {
+        message: $localize `Error while loading service(s). Please collapse/expand the node again to try again.`,
+        duration: 5000,
+        showCloseButton: true,
+      }).pipe(takeUntil(newSubscription)).subscribe();
+    }
+    const services = responses.filter((response): response is GeoServiceWithLayersModel => response !== null);
+    if (services.length > 0) {
+      this.store$.dispatch(addGeoServices({ services, parentNode: nodeId }));
+    }
   }
 
   private getServiceRequests$(serviceItems: CatalogItemModel[]) {
@@ -87,12 +106,29 @@ export class CatalogService implements OnDestroy {
     }
   }
 
-  public createCatalogNode$(node: ExtendedCatalogNodeModel) {
-    return this.updateCatalog$(node, 'create');
+  public createCatalogNode$(node: Omit<ExtendedCatalogNodeModel, 'id'>) {
+    return this.updateCatalog$({ ...node, id: nanoid() }, 'create');
   }
 
   public updateCatalogNode$(node: ExtendedCatalogNodeModel) {
     return this.updateCatalog$(node, 'update');
+  }
+
+  public addServiceToCatalog$(nodeId: string, serviceId: string) {
+    return this.store$.select(selectCatalogNodeById(nodeId))
+      .pipe(
+        take(1),
+        concatMap(node => {
+          if (!node) {
+            return of(null);
+          }
+          const updatedNode: ExtendedCatalogNodeModel = {
+            ...node,
+            items: [ ...(node.items || []), { id: serviceId, kind: CatalogItemKindEnum.GEO_SERVICE }],
+          };
+          return this.updateCatalog$(updatedNode, 'update');
+        }),
+      );
   }
 
   private updateCatalog$(node: ExtendedCatalogNodeModel, action: 'create' | 'update' | 'delete') {

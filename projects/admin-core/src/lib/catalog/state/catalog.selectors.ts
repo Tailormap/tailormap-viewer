@@ -1,9 +1,9 @@
 import { CatalogState, catalogStateKey } from './catalog.state';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { TreeModel } from '@tailormap-viewer/shared';
 import { CatalogHelper } from '../helpers/catalog.helper';
 import { CatalogTreeModel } from '../models/catalog-tree.model';
 import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
+import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 
 const selectCatalogState = createFeatureSelector<CatalogState>(catalogStateKey);
 
@@ -17,6 +17,18 @@ export const selectCatalogLoadError = createSelector(selectCatalogState, state =
 export const selectCatalogNodeById = (id: string) => createSelector(
   selectCatalog,
   (catalog): ExtendedCatalogNodeModel | null => catalog.find(node => node.id === id) || null,
+);
+
+export const selectGeoServiceById = (id: string) => createSelector(
+  selectGeoServices,
+  (services): ExtendedGeoServiceModel | null => services.find(service => service.id === id) || null,
+);
+
+export const selectParentsForCatalogNode = (id: string) => createSelector(
+  selectCatalog,
+  (catalog): string[] => {
+    return CatalogHelper.findParentsForNode(catalog, id);
+  },
 );
 
 export const selectCatalogTree = createSelector(

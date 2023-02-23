@@ -13,6 +13,8 @@ import { GeoServiceLayerDetailsComponent } from './geo-service-layer-details/geo
 import { CatalogNodeDetailsComponent } from './catalog-node-details/catalog-node-details.component';
 import { CatalogNodeFormComponent } from './catalog-node-form/catalog-node-form.component';
 import { CatalogNodeFormDialogComponent } from './catalog-node-form-dialog/catalog-node-form-dialog.component';
+import { GeoServiceFormDialogComponent } from './geo-service-form-dialog/geo-service-form-dialog.component';
+import { GeoServiceFormComponent } from './geo-service-form/geo-service-form.component';
 
 
 
@@ -25,6 +27,8 @@ import { CatalogNodeFormDialogComponent } from './catalog-node-form-dialog/catal
     CatalogNodeDetailsComponent,
     CatalogNodeFormComponent,
     CatalogNodeFormDialogComponent,
+    GeoServiceFormDialogComponent,
+    GeoServiceFormComponent,
   ],
   imports: [
     CommonModule,

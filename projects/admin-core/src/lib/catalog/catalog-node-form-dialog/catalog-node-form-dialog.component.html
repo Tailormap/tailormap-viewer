@@ -1,5 +1,5 @@
 <h2 mat-dialog-title>
-  <ng-container *ngIf="data.createNew" i18n>Create new folder</ng-container>
+  <ng-container *ngIf="!data.node" i18n>Create new folder</ng-container>
   <ng-container *ngIf="data.node" i18n>Edit {{data.node.title}}</ng-container>
 </h2>
 <mat-dialog-content>

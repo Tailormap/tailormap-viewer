@@ -4,15 +4,15 @@ import { GeoServiceSettingsModel } from './geo-service-settings.model';
 
 export interface GeoServiceModel {
   id: string;
-  notes: string | null;
+  notes?: string | null;
   protocol: GeoServiceProtocolEnum;
   url: string;
-  authentication: Record<string, any> | null;
+  authentication?: Record<string, any> | null;
   capabilities?: Blob; // should not be sent by the API
-  serviceCapabilities: ServiceCapsModel;
-  capabilitiesContentType: string;
-  capabilitiesFetched: string;
+  serviceCapabilities?: ServiceCapsModel;
+  capabilitiesContentType?: string;
+  capabilitiesFetched?: string;
   title: string;
-  advertisedUrl: string;
-  settings: GeoServiceSettingsModel;
+  advertisedUrl?: string;
+  settings?: GeoServiceSettingsModel;
 }

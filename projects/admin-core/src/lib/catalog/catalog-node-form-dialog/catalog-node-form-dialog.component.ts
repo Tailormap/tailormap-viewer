@@ -5,7 +5,6 @@ import { CatalogService } from '../services/catalog.service';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 
 export interface CatalogNodeFormDialogData {
-  createNew?: boolean;
   node: ExtendedCatalogNodeModel | null;
   parentNode: string;
 }
@@ -18,7 +17,7 @@ export interface CatalogNodeFormDialogData {
 })
 export class CatalogNodeFormDialogComponent {
 
-  public node: ExtendedCatalogNodeModel | null = null;
+  public node: Omit<ExtendedCatalogNodeModel, 'id'> | null = null;
 
   private destroyed = new Subject();
   private savingSubject = new BehaviorSubject(false);
@@ -49,16 +48,16 @@ export class CatalogNodeFormDialogComponent {
       return;
     }
     this.savingSubject.next(true);
-    (this.data.createNew
+    (this.data.node === null
       ? this.catalogService.createCatalogNode$(this.node)
-      : this.catalogService.updateCatalogNode$(this.node)
+      : this.catalogService.updateCatalogNode$({ ...this.node, id: this.data.node.id })
     )
       .pipe(takeUntil(this.destroyed))
       .subscribe(() => this.savingSubject.next(false));
     this.dialogRef.close(this.node);
   }
 
-  public updateNode($event: ExtendedCatalogNodeModel) {
+  public updateNode($event: Omit<ExtendedCatalogNodeModel, 'id'>) {
     this.node = $event;
   }
 

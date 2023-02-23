@@ -1,7 +1,9 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { LoadingStateEnum, TreeService } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
-import { selectCatalogLoadError, selectCatalogLoadStatus, selectCatalogTree } from '../state/catalog.selectors';
+import {
+  selectCatalogLoadError, selectCatalogLoadStatus, selectCatalogTree,
+} from '../state/catalog.selectors';
 import { expandTree, loadCatalog } from '../state/catalog.actions';
 import { BehaviorSubject, filter, map, Observable, of, Subject, take, takeUntil } from 'rxjs';
 import { CatalogTreeModel, CatalogTreeModelMetadataTypes } from '../models/catalog-tree.model';
@@ -83,7 +85,7 @@ export class CatalogTreeComponent implements OnInit, OnDestroy {
       this.store$.dispatch(expandTree({ id: node.metadata.id, nodeType: node.type }));
     }
     if (expanded && CatalogHelper.isCatalogNode(node) && !!node.metadata) {
-      this.catalogService.loadCatalogNodeItems$(node.metadata.id);
+      this.catalogService.loadCatalogNodeItems$(node.metadata.id).subscribe();
     }
   }
 
@@ -139,7 +141,7 @@ export class CatalogTreeComponent implements OnInit, OnDestroy {
     const catalogNode = urlParts.find(part => part.type === CatalogTreeModelTypeEnum.CATALOG_NODE_TYPE);
     if (catalogNode) {
       this.store$.dispatch(expandTree({ id: catalogNode.id, nodeType: catalogNode.type }));
-      this.catalogService.loadCatalogNodeItems$(catalogNode.id)
+      this.catalogService.loadCatalogNodeItems$(catalogNode.id, true)
         .pipe(take(1))
         .subscribe(() => {
           const serviceNode = urlParts.find(part => part.type === CatalogTreeModelTypeEnum.SERVICE_TYPE);

@@ -18,14 +18,8 @@ export class CatalogNodeFormComponent implements OnInit, OnDestroy {
   @Input()
   public set node(node: ExtendedCatalogNodeModel | null) {
     this.catalogNodeForm.patchValue({
-      id: node ? node.id : '',
       title: node ? node.title : '',
     });
-    if (node) {
-      this.catalogNodeForm.get('id')?.disable();
-    } else {
-      this.catalogNodeForm.get('id')?.enable();
-    }
     this._node = node;
   }
 
@@ -33,10 +27,9 @@ export class CatalogNodeFormComponent implements OnInit, OnDestroy {
   public parentNode: string | null = null;
 
   @Output()
-  public changed = new EventEmitter<ExtendedCatalogNodeModel>();
+  public changed = new EventEmitter<Omit<ExtendedCatalogNodeModel, 'id'>>();
 
   public catalogNodeForm = new FormGroup({
-    id: new FormControl('', { nonNullable: true }),
     title: new FormControl('', { nonNullable: true }),
   });
 
@@ -53,7 +46,6 @@ export class CatalogNodeFormComponent implements OnInit, OnDestroy {
           return;
         }
         this.changed.emit({
-          id: value.id || this._node?.id || '',
           title: value.title || '',
           parentId: this.parentNode,
           root: false,
@@ -70,12 +62,8 @@ export class CatalogNodeFormComponent implements OnInit, OnDestroy {
 
   private isValidForm() {
     const values = this.catalogNodeForm.getRawValue();
-    return FormHelper.isValidValue(values.id)
-      && FormHelper.isValidValue(values.title)
-      && FormHelper.someValuesChanged([
-        [ values.id, this._node?.id ],
-        [ values.title, this._node?.title ],
-      ]);
+    return FormHelper.isValidValue(values.title)
+    && this.catalogNodeForm.dirty;
   }
 
 }

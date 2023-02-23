@@ -18,13 +18,13 @@ const setup = async (node: CatalogTreeModel | null) => {
 describe('CatalogTreeNodeComponent', () => {
 
   test('should render', async () => {
-    await setup(CatalogHelper.getTreeModelForCatalogNode(getCatalogNode({ title: 'catalog-tree-node works!' })));
+    await setup(CatalogHelper.getTreeModelForCatalogNode({ parentId: '', ...getCatalogNode({ title: 'catalog-tree-node works!' }) }));
     expect(await screen.findByText('catalog-tree-node works!')).toBeInTheDocument();
     expect(await screen.findByLabelText('Catalog')).toBeInTheDocument();
   });
 
   test('should render service', async () => {
-    const service: ExtendedGeoServiceModel = { ...getGeoService({ id: 'this-one', title: 'my wonderful service' }), layers: [] };
+    const service: ExtendedGeoServiceModel = { ...getGeoService({ id: 'this-one', title: 'my wonderful service' }), layers: [], catalogNodeId: '1' };
     const node = CatalogHelper.getTreeModelForService([service], [], 'this-one');
     await setup(node);
     expect(await screen.findByText('my wonderful service')).toBeInTheDocument();
@@ -32,7 +32,7 @@ describe('CatalogTreeNodeComponent', () => {
   });
 
   test('should render layer', async () => {
-    const layer: ExtendedGeoServiceLayerModel = { id: 'my-layer', ...getGeoServiceLayer({ name: 'my-layer', title: 'nice layer' }), serviceId: 'test' };
+    const layer: ExtendedGeoServiceLayerModel = { id: 'my-layer', ...getGeoServiceLayer({ name: 'my-layer', title: 'nice layer' }), serviceId: 'test', catalogNodeId: '1' };
     const node = CatalogHelper.getTreeModelForLayer(layer, []);
     await setup(node);
     expect(await screen.findByText('nice layer')).toBeInTheDocument();
