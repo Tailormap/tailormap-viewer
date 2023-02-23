@@ -13,7 +13,7 @@ export class MapEffects {
 
   public triggerLoadMap$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(CoreActions.loadApplicationSuccess),
+      ofType(CoreActions.loadViewerSuccess),
       map(action => MapActions.loadMap({ id: action.application.id })),
     );
   });

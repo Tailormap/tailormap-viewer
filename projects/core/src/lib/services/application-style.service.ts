@@ -4,8 +4,8 @@ import { selectApplicationStyling } from '../state/core.selectors';
 import { takeUntil } from 'rxjs/operators';
 import { distinctUntilChanged, Subject } from 'rxjs';
 import { ColorHelper, ColorPaletteHelper, CssHelper } from '@tailormap-viewer/shared';
-import { AppStylingModel } from '@tailormap-viewer/api';
-import { updateApplicationStyle } from '../state/core.actions';
+import { ViewerStylingModel } from '@tailormap-viewer/api';
+import { updateViewerStyle } from '../state/core.actions';
 
 @Injectable({
   providedIn: 'root',
@@ -25,10 +25,10 @@ export class ApplicationStyleService implements OnDestroy {
   }
 
   public resetStyling() {
-    this.store$.dispatch(updateApplicationStyle({ style: { primaryColor: ApplicationStyleService.initialPrimaryColor } }));
+    this.store$.dispatch(updateViewerStyle({ style: { primaryColor: ApplicationStyleService.initialPrimaryColor } }));
   }
 
-  private updateStyling(appStyling?: AppStylingModel | null) {
+  private updateStyling(appStyling?: ViewerStylingModel | null) {
     if (appStyling && appStyling.primaryColor) {
       const primaryPalette = ColorPaletteHelper.createPalette(appStyling.primaryColor);
       primaryPalette.forEach((color) => CssHelper.setCssVariableValue(color.name, color.val));

@@ -2,8 +2,8 @@ import { CoreEffects } from './core.effects';
 import { TestBed } from '@angular/core/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Observable, of } from 'rxjs';
-import { LoadApplicationService } from '../services/load-application.service';
-import { getAppResponseData } from '@tailormap-viewer/api';
+import { LoadViewerService } from '../services/load-viewer.service';
+import { getViewerResponseData } from '@tailormap-viewer/api';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import * as CoreActions from './core.actions';
@@ -12,7 +12,7 @@ describe('CoreEffects', () => {
 
   const setup = (currentPath: string, actions$: Observable<any>): [ CoreEffects, jest.Mock ] => {
     const loadApplicationServiceMock = {
-      loadApplication$: () => of({ success: true, result: { application: getAppResponseData(), components: [] } }),
+      loadApplication$: () => of({ success: true, result: { application: getViewerResponseData(), components: [] } }),
     };
     const locationMock = {
       path: () => currentPath,
@@ -25,7 +25,7 @@ describe('CoreEffects', () => {
       providers: [
         CoreEffects,
         provideMockActions(() => actions$),
-        { provide: LoadApplicationService, useValue: loadApplicationServiceMock },
+        { provide: LoadViewerService, useValue: loadApplicationServiceMock },
         { provide: Location, useValue: locationMock },
         { provide: Router, useValue: routerMock },
       ],
@@ -35,7 +35,7 @@ describe('CoreEffects', () => {
   };
 
   const getLoadApplicationSuccessAction = (name: string): Observable<any> => {
-    return of(CoreActions.loadApplicationSuccess({ application: getAppResponseData({ name }), components: [] }));
+    return of(CoreActions.loadViewerSuccess({ application: getViewerResponseData({ name }), components: [] }));
   };
 
   it('should redirect url is empty', () => {

@@ -1,5 +1,5 @@
 import {
-  AppLayerModel, AppResponseModel, BoundsModel, ComponentModel, CoordinateReferenceSystemModel, GeometryType, Language, LayerDetailsModel,
+  AppLayerModel, ViewerResponseModel, BoundsModel, ComponentModel, CoordinateReferenceSystemModel, GeometryType, Language, LayerDetailsModel,
   MapResponseModel, ServerType, ServiceModel, ServiceProtocol, UserResponseModel, VersionResponseModel,
 } from '../models';
 import { FeatureModel } from '../models/feature.model';
@@ -139,12 +139,13 @@ export const getUniqueValuesResponseModel = (overrides?: Partial<UniqueValuesRes
   ...overrides,
 });
 
-export const getAppResponseData = (overrides?: Partial<AppResponseModel>): AppResponseModel => ({
-  id: 1,
-  apiVersion: 'v1',
+export const getViewerResponseData = (overrides?: Partial<ViewerResponseModel>): ViewerResponseModel => ({
+  kind: 'app',
   name: 'viewer',
   title: 'My viewer',
-  lang: Language.NL_NL,
+  baseViewers: [],
+  languages: [Language.NL_NL],
+  projections: ['EPSG:28992'],
   components: [],
   ...overrides,
 });

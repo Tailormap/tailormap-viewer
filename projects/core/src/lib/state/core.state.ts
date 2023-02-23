@@ -1,4 +1,4 @@
-import { AppStylingModel, ComponentModel, Language, SecurityModel } from '@tailormap-viewer/api';
+import { ViewerStylingModel, ComponentModel, Language, SecurityModel } from '@tailormap-viewer/api';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 
 export const coreStateKey = 'core';
@@ -9,7 +9,7 @@ export interface ApplicationState {
   name?: string;
   title?: string;
   lang?: Language;
-  styling?: AppStylingModel;
+  styling?: ViewerStylingModel;
   components: ComponentModel[];
 }
 

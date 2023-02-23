@@ -1,6 +1,6 @@
 import { initialCoreState } from './core.state';
-import { loadApplication, loadApplicationFailed, loadApplicationSuccess } from './core.actions';
-import { getAppResponseData } from '@tailormap-viewer/api';
+import { loadViewer, loadViewerFailed, loadViewerSuccess } from './core.actions';
+import { getViewerResponseData } from '@tailormap-viewer/api';
 import { coreReducer } from './core.reducer';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 
@@ -8,7 +8,7 @@ describe('CoreReducer', () => {
 
   test('load application action', () => {
     const initialState = { ...initialCoreState };
-    const action = loadApplication({});
+    const action = loadViewer({});
     expect(initialState.loadStatus).toEqual(LoadingStateEnum.INITIAL);
     const updatedState = coreReducer(initialState, action);
     expect(updatedState.loadStatus).toEqual(LoadingStateEnum.LOADING);
@@ -16,8 +16,8 @@ describe('CoreReducer', () => {
 
   test('load application success action', () => {
     const initialState = { ...initialCoreState };
-    const action = loadApplicationSuccess({
-      application: getAppResponseData(),
+    const action = loadViewerSuccess({
+      application: getViewerResponseData(),
       components: [],
     });
     expect(initialState.loadStatus).toEqual(LoadingStateEnum.INITIAL);
@@ -27,7 +27,7 @@ describe('CoreReducer', () => {
 
   test('load application failed action', () => {
     const initialState = { ...initialCoreState };
-    const action = loadApplicationFailed({
+    const action = loadViewerFailed({
       error: 'Something went really wrong',
     });
     expect(initialState.loadStatus).toEqual(LoadingStateEnum.INITIAL);

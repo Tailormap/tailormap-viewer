@@ -1,18 +1,18 @@
 import { createAction, props } from '@ngrx/store';
-import { AppResponseModel, AppStylingModel } from '@tailormap-viewer/api';
+import { ViewerResponseModel, ViewerStylingModel } from '@tailormap-viewer/api';
 
 const prefix = '[Core]';
 
-export const loadApplication = createAction(
-  `${prefix} Load Application`,
-  props<{ id?: number; name?: string; version?: string }>(),
+export const loadViewer = createAction(
+  `${prefix} Load Viewer`,
+  props<{ kind?: string, name?: string }>(),
 );
-export const loadApplicationSuccess = createAction(
-  `${prefix} Application Load Success`,
-  props<{ application: AppResponseModel }>(),
+export const loadViewerSuccess = createAction(
+  `${prefix} Viewer Load Success`,
+  props<{ viewer: ViewerResponseModel }>(),
 );
-export const loadApplicationFailed = createAction(
-  `${prefix} Application Load Failed`,
+export const loadViewerFailed = createAction(
+  `${prefix} Viewer Load Failed`,
   props<{ error?: string }>(),
 );
 export const setRouteBeforeLogin = createAction(
@@ -23,7 +23,7 @@ export const setLoginDetails = createAction(
   `${prefix} Set Login Details`,
   props<{ loggedIn: boolean; user?: { username?: string } }>(),
 );
-export const updateApplicationStyle = createAction(
-  `${prefix} Update Application Style`,
-  props<{ style: AppStylingModel }>(),
+export const updateViewerStyle = createAction(
+  `${prefix} Update Viewer Style`,
+  props<{ style: ViewerStylingModel }>(),
 );
