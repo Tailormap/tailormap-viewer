@@ -49,7 +49,7 @@ export const selectReferencableLayers = createSelector(
   selectSelectedLayers,
   selectVisibleLayersWithAttributes,
   (selectedLayers, availableLayers) => {
-    return availableLayers.filter(layer => !selectedLayers.includes(layer.id));
+    return availableLayers.filter(layer => !selectedLayers.includes(layer.name));
   },
 );
 
@@ -59,7 +59,7 @@ export const selectReferenceLayer = createSelector(
     if (!group || group.filters.length === 0 || !FilterTypeHelper.isSpatialFilterGroup(group)) {
       return undefined;
     }
-    return group.filters[0].baseLayerId;
+    return group.filters[0].baseLayerName;
   },
 );
 

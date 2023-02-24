@@ -10,11 +10,11 @@ import { FilterTypeEnum } from '../../../filter/models/filter-type.enum';
 
 export interface FilterDialogData {
   columnName: string;
-  layerId: number;
+  layerName: string;
   filter: AttributeFilterModel | null;
   columnType: FeatureAttributeTypeEnum;
   cqlFilter?: string;
-  applicationId: number;
+  applicationId: string;
 }
 
 interface FilterType {
@@ -59,7 +59,7 @@ export class AttributeListFilterComponent implements OnInit {
     if (!AttributeFilterHelper.isValidFilter(filter)) {
       return;
     }
-    this.simpleAttributeFilterService.setFilter(BaseComponentTypeEnum.ATTRIBUTE_LIST, this.data.layerId, filter);
+    this.simpleAttributeFilterService.setFilter(BaseComponentTypeEnum.ATTRIBUTE_LIST, this.data.layerName, filter);
     this.dialogRef.close();
   }
 
@@ -68,14 +68,14 @@ export class AttributeListFilterComponent implements OnInit {
   }
 
   public onClear() {
-    this.simpleAttributeFilterService.removeFilter(BaseComponentTypeEnum.ATTRIBUTE_LIST, this.data.layerId, this.data.columnName);
+    this.simpleAttributeFilterService.removeFilter(BaseComponentTypeEnum.ATTRIBUTE_LIST, this.data.layerName, this.data.columnName);
     this.dialogRef.close();
   }
 
   public getUniqueValues$(): Observable<string[]> {
     return this.uniqueValuesService.getUniqueValues$({
       attribute: this.data.columnName,
-      layerId: this.data.layerId,
+      layerName: this.data.layerName,
       filter: this.data.cqlFilter,
       applicationId: this.data.applicationId,
     })

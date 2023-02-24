@@ -39,8 +39,8 @@ const getStore = (
       ...initialMapState,
       layers,
       layerTreeNodes: layers.length > 0 ? [
-        getLayerTreeNode({ childrenIds: layers.map(l => `lyr_${l.id}`) }),
-        ...layers.map(l => getLayerTreeNode({ id: `lyr_${l.id}`, appLayerId: l.id })),
+        getLayerTreeNode({ childrenIds: layers.map(l => `lyr_${l.name}`) }),
+        ...layers.map(l => getLayerTreeNode({ id: `lyr_${l.name}`, appLayerName: l.name })),
       ] : [],
     },
     [filterStateKey]: {
@@ -109,8 +109,8 @@ describe('AttributeList', () => {
     const store = getStore(
       getLoadedStoreWithMultipleTabs(),
       [
-        getAppLayerModel({ id: 1,  hasAttributes: true,  visible: true }),
-        getAppLayerModel({ id: 2,  hasAttributes: true,  visible: true }),
+        getAppLayerModel({ name: 1,  hasAttributes: true,  visible: true }),
+        getAppLayerModel({ name: 2,  hasAttributes: true,  visible: true }),
       ],
     );
     const reducers = {

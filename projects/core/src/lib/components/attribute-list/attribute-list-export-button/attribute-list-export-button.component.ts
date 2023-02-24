@@ -3,7 +3,7 @@ import { BehaviorSubject, concatMap, distinctUntilChanged, map, Observable, of, 
 import { AttributeListExportService, SupportedExportFormats } from '../services/attribute-list-export.service';
 import { Store } from '@ngrx/store';
 import {
-  selectColumnsForSelectedTab, selectSelectedTab, selectSelectedTabLayerId, selectSortForSelectedTab,
+  selectColumnsForSelectedTab, selectSelectedTab, selectSelectedTabLayerName, selectSortForSelectedTab,
 } from '../state/attribute-list.selectors';
 import { selectCQLFilters } from '../../../filter/state/filter.selectors';
 
@@ -30,15 +30,15 @@ export class AttributeListExportButtonComponent implements OnDestroy {
     private store$: Store,
     private exportService: AttributeListExportService,
   ) {
-    this.store$.select(selectSelectedTabLayerId)
+    this.store$.select(selectSelectedTabLayerName)
       .pipe(
         takeUntil(this.destroyed),
         distinctUntilChanged(),
-        concatMap(layerId => {
-          if (layerId === null) {
+        concatMap(layerName => {
+          if (layerName === null) {
             return of([]);
           }
-          return this.exportService.getExportFormats$(layerId);
+          return this.exportService.getExportFormats$(layerName);
         }),
       )
       .subscribe(formats => this.supportedFormatsSubject.next(formats));
@@ -60,12 +60,12 @@ export class AttributeListExportButtonComponent implements OnDestroy {
         ),
         take(1),
         concatMap(([ tab, filters, sort, columns ]) => {
-          if (tab === null || typeof tab.layerId === 'undefined') {
+          if (tab === null || typeof tab.layerName === 'undefined') {
             return of(false);
           }
-          const filter = filters.get(tab.layerId);
+          const filter = filters.get(tab.layerName);
           const attributes = columns.filter(c => c.visible).map(c => c.id);
-          return this.exportService.export$({ layerId: tab.layerId, layerName: tab.label, format, filter, sort, attributes });
+          return this.exportService.export$({ layerName: tab.layerName, serviceLayerName: tab.label, format, filter, sort, attributes });
         }))
       .subscribe(() => {
         this.isExportingSubject.next(false);

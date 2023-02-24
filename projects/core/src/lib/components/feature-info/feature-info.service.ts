@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { FeatureAttributeTypeEnum, FeaturesResponseModel, TAILORMAP_API_V1_SERVICE, FeatureModel } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
-import { selectApplicationId } from '../../state/core.selectors';
+import { selectViewerId } from '../../state/core.selectors';
 import { catchError, combineLatest, concatMap, forkJoin, map, Observable, of, take } from 'rxjs';
 import { FeatureInfoResponseModel } from './models/feature-info-response.model';
 import { selectVisibleLayersWithAttributes, selectVisibleWMSLayersWithoutAttributes } from '../../map/state/map.selectors';
@@ -30,7 +30,7 @@ export class FeatureInfoService {
     return combineLatest([
       this.store$.select(selectVisibleLayersWithAttributes),
       this.store$.select(selectVisibleWMSLayersWithoutAttributes),
-      this.store$.select(selectApplicationId),
+      this.store$.select(selectViewerId),
       this.mapService.getMapViewDetails$(),
       this.mapService.getProjectionCode$(),
     ])
@@ -42,8 +42,8 @@ export class FeatureInfoService {
           }
           const featureRequests$ = [
             ...layers.map(layer => this.getFeatureInfoFromApi$(layer, coordinates, applicationId, resolutions, projection)),
-            ...wmsLayers.map(layer => this.mapService.getFeatureInfoForLayers$(`${layer.id}`, coordinates, this.httpService).pipe(
-              map(features => this.featuresToFeatureInfoResponseModel(features, layer.id)),
+            ...wmsLayers.map(layer => this.mapService.getFeatureInfoForLayers$(layer.name, coordinates, this.httpService).pipe(
+              map(features => this.featuresToFeatureInfoResponseModel(features, layer.name)),
             )),
           ];
           return forkJoin(featureRequests$);
@@ -54,13 +54,13 @@ export class FeatureInfoService {
   private getFeatureInfoFromApi$(
     layer: ExtendedAppLayerModel,
     coordinates: [ number, number ],
-    applicationId: number,
+    applicationId: string,
     resolutions: MapViewDetailsModel,
     projection: string,
   ): Observable<FeatureInfoResponseModel> {
-    const layerId = layer.id;
+    const layerName = layer.name;
     return this.apiService.getFeatures$({
-      layerId,
+      layerName,
       applicationId,
       x: coordinates[0],
       y: coordinates[1],
@@ -70,32 +70,32 @@ export class FeatureInfoService {
       simplify: false,
     }).pipe(
       map((featureInfoResult: FeaturesResponseModel): FeatureInfoResponseModel => ({
-        features: (featureInfoResult.features || []).map(feature => ({ ...feature, layerId })),
-        columnMetadata: (featureInfoResult.columnMetadata || []).map(metadata => ({ ...metadata, layerId })),
-        layerId,
+        features: (featureInfoResult.features || []).map(feature => ({ ...feature, layerName })),
+        columnMetadata: (featureInfoResult.columnMetadata || []).map(metadata => ({ ...metadata, layerName })),
+        layerName,
       })),
       catchError((): Observable<FeatureInfoResponseModel> => {
         return of({
           features: [],
           columnMetadata: [],
-          layerId,
+          layerName,
           error: FeatureInfoService.LOAD_FEATURE_INFO_ERROR,
         });
       }),
     );
   }
 
-  private featuresToFeatureInfoResponseModel(features: FeatureModel[], layerId: number): FeatureInfoResponseModel {
+  private featuresToFeatureInfoResponseModel(features: FeatureModel[], layerName: string): FeatureInfoResponseModel {
     const columnMetadata = Object.keys(features.length > 0 ? features[0].attributes : {}).map(key => ({
-      layerId,
+      layerName,
       type: FeatureAttributeTypeEnum.STRING,
       key,
       alias: key,
     }));
     return {
-      features: features.map(feature => ({ ...feature, layerId })),
+      features: features.map(feature => ({ ...feature, layerName })),
       columnMetadata,
-      layerId,
+      layerName,
     };
   }
 }

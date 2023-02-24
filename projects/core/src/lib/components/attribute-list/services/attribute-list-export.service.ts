@@ -4,7 +4,7 @@ import {
 } from '@tailormap-viewer/api';
 import { catchError, combineLatest, map, Observable, of, switchMap, take, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { selectApplicationId } from '../../../state/core.selectors';
+import { selectViewerId } from '../../../state/core.selectors';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FileHelper, SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
@@ -42,8 +42,8 @@ export class AttributeListExportService {
   ) {
   }
 
-  public getExportFormats$(layerId: number): Observable<SupportedExportFormats[]> {
-    return this.getExportCapabilities$(layerId).pipe(
+  public getExportFormats$(layerName: string): Observable<SupportedExportFormats[]> {
+    return this.getExportCapabilities$(layerName).pipe(
       map(formats => {
         const supportedFormats: SupportedExportFormats[] = [];
         if (this.hasSupport(formats, AttributeListExportService.CSV_FORMATS)) {
@@ -70,27 +70,27 @@ export class AttributeListExportService {
   }
 
   public export$(params: {
-    layerId: number;
     layerName: string;
+    serviceLayerName: string;
     format: SupportedExportFormats;
     filter: string | undefined;
     sort: { column: string; direction: string } | null;
     attributes: string[];
   }): Observable<boolean> {
     return combineLatest([
-      this.getOutputFormat$(params.layerId, params.format),
-      this.store$.select(selectApplicationId),
+      this.getOutputFormat$(params.layerName, params.format),
+      this.store$.select(selectViewerId),
     ]).pipe(
       take(1),
       switchMap(([ outputFormat, applicationId ]) => {
-        const defaultErrorMessage = $localize `Exporting data for layer ${params.layerName} and format ${params.format} failed`;
+        const defaultErrorMessage = $localize `Exporting data for layer ${params.serviceLayerName} and format ${params.format} failed`;
         if (applicationId === null || outputFormat === null) {
           this.showSnackbarMessage(defaultErrorMessage);
           return of(null);
         }
         return this.api.getLayerExport$({
           applicationId,
-          layerId: params.layerId,
+          layerName: params.layerName,
           outputFormat,
           filter: params.filter,
           sort: params.sort,
@@ -108,7 +108,7 @@ export class AttributeListExportService {
           return;
         }
         const date = DateTime.now().setLocale(this.dateLocale).toLocaleString(DateTime.DATETIME_SHORT).replace(/,? /g, '_');
-        const defaultFilename = [ $localize `Export`, params.layerName, date ].join('_') + '.' + this.getExtensionForFormat(params.format);
+        const defaultFilename = [ $localize `Export`, params.serviceLayerName, date ].join('_') + '.' + this.getExtensionForFormat(params.format);
         const fileName = FileHelper.extractFileNameFromContentDispositionHeader(response.headers.get('Content-Disposition') || '', defaultFilename);
         FileHelper.saveAsFile(response.body, fileName);
       }),
@@ -128,8 +128,8 @@ export class AttributeListExportService {
     SnackBarMessageComponent.open$(this.snackBar, config).subscribe();
   }
 
-  private getOutputFormat$(layerId: number, format: SupportedExportFormats): Observable<string | null> {
-    return this.getExportCapabilities$(layerId)
+  private getOutputFormat$(layerName: string, format: SupportedExportFormats): Observable<string | null> {
+    return this.getExportCapabilities$(layerName)
       .pipe(
         take(1),
         map(formats => {
@@ -174,19 +174,19 @@ export class AttributeListExportService {
     return 'txt';
   }
 
-  private getExportCapabilities$(layerId: number): Observable<string[]> {
-    return this.store$.select(selectApplicationId).pipe(
+  private getExportCapabilities$(layerName: string): Observable<string[]> {
+    return this.store$.select(selectViewerId).pipe(
       take(1),
       switchMap(applicationId => {
         if (applicationId === null) {
           return of([]);
         }
-        const key = this.getCacheKey(applicationId, layerId);
+        const key = this.getCacheKey(applicationId, layerName);
         const cached = this.cachedFormats.get(key);
         if (cached) {
           return of(cached);
         }
-        return this.api.getLayerExportCapabilities$({ applicationId, layerId })
+        return this.api.getLayerExportCapabilities$({ applicationId, layerName: layerName })
           .pipe(
             catchError(() => of({ exportable: false, outputFormats: [] })),
             tap(capabilities => {
@@ -204,8 +204,8 @@ export class AttributeListExportService {
     return supportedFormats.some(format => requiredFormats.includes(format));
   }
 
-  private getCacheKey(applicationId: number, layerId: number): string {
-    return `${applicationId}-${layerId}`;
+  private getCacheKey(applicationId: string, layerName: string): string {
+    return `${applicationId}-${layerName}`;
   }
 
 }

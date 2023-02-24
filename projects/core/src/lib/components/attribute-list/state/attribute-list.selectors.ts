@@ -54,13 +54,13 @@ export const selectSelectedTab = createSelector(
   },
 );
 
-export const selectSelectedTabLayerId = createSelector(
+export const selectSelectedTabLayerName = createSelector(
   selectSelectedTab,
-  (selectedTab): number | null => {
-    if (!selectedTab || typeof selectedTab.layerId === 'undefined') {
+  (selectedTab): string | null => {
+    if (!selectedTab || typeof selectedTab.layerName === 'undefined') {
       return null;
     }
-    return selectedTab.layerId;
+    return selectedTab.layerName;
   },
 );
 

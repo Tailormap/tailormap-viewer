@@ -49,11 +49,11 @@ describe('MapReducer', () => {
     const initialState: MapState = {
       ...initialMapState,
       layers: [
-        getAppLayerModel({ id: 1, visible: false }),
-        getAppLayerModel({ id: 2, visible: true }),
+        getAppLayerModel({ name: 1, visible: false }),
+        getAppLayerModel({ name: 2, visible: true }),
       ],
     };
-    const action = MapActions.setLayerVisibility({ visibility: [{ id: 1, checked: true }, { id: 2, checked: false }] });
+    const action = MapActions.setLayerVisibility({ visibility: [{ name: 1, checked: true }, { name: 2, checked: false }] });
     const updatedState = mapReducer(initialState, action);
     expect(updatedState.layers[0].visible).toEqual(true);
     expect(updatedState.layers[1].visible).toEqual(false);
@@ -63,36 +63,36 @@ describe('MapReducer', () => {
     const initialState: MapState = {
       ...initialMapState,
       layers: [
-        getAppLayerModel({ id: 1, visible: false }),
-        getAppLayerModel({ id: 2, visible: true }),
-        getAppLayerModel({ id: 3, visible: true }),
-        getAppLayerModel({ id: 4, visible: true }),
+        getAppLayerModel({ name: 1, visible: false }),
+        getAppLayerModel({ name: 2, visible: true }),
+        getAppLayerModel({ name: 3, visible: true }),
+        getAppLayerModel({ name: 4, visible: true }),
       ],
       layerTreeNodes: [
         getLayerTreeNode({ root: true, childrenIds: [ 'level-1', 'level-2' ] }),
         getLayerTreeNode({ id: 'level-1', root: false, childrenIds: ['layer-1'] }),
-        getLayerTreeNode({ id: 'layer-1', appLayerId: 1, name: 'TEST', root: false }),
+        getLayerTreeNode({ id: 'layer-1', appLayerName: 1, name: 'TEST', root: false }),
         getLayerTreeNode({ id: 'level-2', root: false, childrenIds: [ 'layer-2', 'layer-3' ] }),
-        getLayerTreeNode({ id: 'layer-2', appLayerId: 2, name: 'TEST2', root: false }),
-        getLayerTreeNode({ id: 'layer-3', appLayerId: 3, name: 'TEST3', root: false }),
+        getLayerTreeNode({ id: 'layer-2', appLayerName: 2, name: 'TEST2', root: false }),
+        getLayerTreeNode({ id: 'layer-3', appLayerName: 3, name: 'TEST3', root: false }),
       ],
       baseLayerTreeNodes: [
         getLayerTreeNode({ root: true, childrenIds: ['layer-4'] }),
-        getLayerTreeNode({ id: 'layer-4', appLayerId: 4, name: 'TEST4', root: false }),
+        getLayerTreeNode({ id: 'layer-4', appLayerName: 4, name: 'TEST4', root: false }),
       ],
     };
     const action = MapActions.toggleAllLayersVisibility();
     const updatedState = mapReducer(initialState, action);
-    expect(updatedState.layers.find(l => l.id === 1)?.visible).toEqual(false);
-    expect(updatedState.layers.find(l => l.id === 2)?.visible).toEqual(false);
-    expect(updatedState.layers.find(l => l.id === 3)?.visible).toEqual(false);
-    expect(updatedState.layers.find(l => l.id === 4)?.visible).toEqual(true);
+    expect(updatedState.layers.find(l => l.name === 1)?.visible).toEqual(false);
+    expect(updatedState.layers.find(l => l.name === 2)?.visible).toEqual(false);
+    expect(updatedState.layers.find(l => l.name === 3)?.visible).toEqual(false);
+    expect(updatedState.layers.find(l => l.name === 4)?.visible).toEqual(true);
 
     const updatedState2 = mapReducer(updatedState, action);
-    expect(updatedState2.layers.find(l => l.id === 1)?.visible).toEqual(true);
-    expect(updatedState2.layers.find(l => l.id === 2)?.visible).toEqual(true);
-    expect(updatedState2.layers.find(l => l.id === 3)?.visible).toEqual(true);
-    expect(updatedState2.layers.find(l => l.id === 4)?.visible).toEqual(true);
+    expect(updatedState2.layers.find(l => l.name === 1)?.visible).toEqual(true);
+    expect(updatedState2.layers.find(l => l.name === 2)?.visible).toEqual(true);
+    expect(updatedState2.layers.find(l => l.name === 3)?.visible).toEqual(true);
+    expect(updatedState2.layers.find(l => l.name === 4)?.visible).toEqual(true);
   });
 
   test('handles MapActions.toggleLevelExpansion', () => {
@@ -109,9 +109,9 @@ describe('MapReducer', () => {
     expect(updatedState.layerTreeNodes[1].expanded).toEqual(true);
   });
 
-  test('handles MapActions.setSelectedLayerId', () => {
+  test('handles MapActions.setSelectedLayerName', () => {
     const initialState: MapState = { ...initialMapState };
-    const action = MapActions.setSelectedLayerId({ layerId: 1 });
+    const action = MapActions.setSelectedLayerName({ layerName: 1 });
     const updatedState = mapReducer(initialState, action);
     expect(updatedState.selectedLayer).toEqual(1);
   });
@@ -120,26 +120,26 @@ describe('MapReducer', () => {
     const initialState: MapState = {
       ...initialMapState,
       services: [
-        getServiceModel({ id: 1 }),
+        getServiceModel({ name: 1 }),
       ],
     };
-    const action = MapActions.addServices({ services: [getServiceModel({ id: 2 })] });
+    const action = MapActions.addServices({ services: [getServiceModel({ name: 2 })] });
     const updatedState = mapReducer(initialState, action);
     expect(updatedState.services.length).toEqual(2);
-    expect(updatedState.services.map(s => s.id)).toEqual([ 1, 2 ]);
+    expect(updatedState.services.map(s => s.name)).toEqual([ 1, 2 ]);
   });
 
   test('handles MapActions.addAppLayers', () => {
     const initialState: MapState = {
       ...initialMapState,
       layers: [
-        getAppLayerModel({ id: 1 }),
+        getAppLayerModel({ name: 1 }),
       ],
     };
-    const action = MapActions.addAppLayers({ appLayers: [getAppLayerModel({ id: 2 })] });
+    const action = MapActions.addAppLayers({ appLayers: [getAppLayerModel({ name: 2 })] });
     const updatedState = mapReducer(initialState, action);
     expect(updatedState.layers.length).toEqual(2);
-    expect(updatedState.layers.map(s => s.id)).toEqual([ 1, 2 ]);
+    expect(updatedState.layers.map(s => s.name)).toEqual([ 1, 2 ]);
   });
 
   test('handles MapActions.addLayerTreeNodes', () => {
@@ -162,10 +162,10 @@ describe('MapReducer', () => {
       layerTreeNodes: [
         getLayerTreeNode({ root: true, childrenIds: [ 'level-1', 'level-2' ] }),
         getLayerTreeNode({ id: 'level-1', root: false, childrenIds: ['layer-1'] }),
-        getLayerTreeNode({ id: 'layer-1', appLayerId: 1, name: 'TEST', root: false }),
+        getLayerTreeNode({ id: 'layer-1', appLayerName: 1, name: 'TEST', root: false }),
         getLayerTreeNode({ id: 'level-2', root: false, childrenIds: [ 'layer-2', 'layer-3' ] }),
-        getLayerTreeNode({ id: 'layer-2', appLayerId: 2, name: 'TEST2', root: false }),
-        getLayerTreeNode({ id: 'layer-3', appLayerId: 4, name: 'TEST4', root: false }),
+        getLayerTreeNode({ id: 'layer-2', appLayerName: 2, name: 'TEST2', root: false }),
+        getLayerTreeNode({ id: 'layer-3', appLayerName: 4, name: 'TEST4', root: false }),
       ],
     };
     const action = MapActions.moveLayerTreeNode({ nodeId: 'layer-3', position: 'inside' });
@@ -180,10 +180,10 @@ describe('MapReducer', () => {
       layerTreeNodes: [
         getLayerTreeNode({ root: true, childrenIds: [ 'level-1', 'level-2' ] }),
         getLayerTreeNode({ id: 'level-1', root: false, childrenIds: ['layer-1'] }),
-        getLayerTreeNode({ id: 'layer-1', appLayerId: 1, name: 'TEST', root: false }),
+        getLayerTreeNode({ id: 'layer-1', appLayerName: 1, name: 'TEST', root: false }),
         getLayerTreeNode({ id: 'level-2', root: false, childrenIds: [ 'layer-2', 'layer-3' ] }),
-        getLayerTreeNode({ id: 'layer-2', appLayerId: 2, name: 'TEST2', root: false }),
-        getLayerTreeNode({ id: 'layer-3', appLayerId: 4, name: 'TEST4', root: false }),
+        getLayerTreeNode({ id: 'layer-2', appLayerName: 2, name: 'TEST2', root: false }),
+        getLayerTreeNode({ id: 'layer-3', appLayerName: 4, name: 'TEST4', root: false }),
       ],
     };
     const action = MapActions.moveLayerTreeNode({ nodeId: 'layer-3', position: 'inside', parentId: 'level-1' });
@@ -198,10 +198,10 @@ describe('MapReducer', () => {
       layerTreeNodes: [
         getLayerTreeNode({ root: true, childrenIds: [ 'level-1', 'level-2' ] }),
         getLayerTreeNode({ id: 'level-1', root: false, childrenIds: ['layer-1'] }),
-        getLayerTreeNode({ id: 'layer-1', appLayerId: 1, name: 'TEST', root: false }),
+        getLayerTreeNode({ id: 'layer-1', appLayerName: 1, name: 'TEST', root: false }),
         getLayerTreeNode({ id: 'level-2', root: false, childrenIds: [ 'layer-2', 'layer-3' ] }),
-        getLayerTreeNode({ id: 'layer-2', appLayerId: 2, name: 'TEST2', root: false }),
-        getLayerTreeNode({ id: 'layer-3', appLayerId: 4, name: 'TEST4', root: false }),
+        getLayerTreeNode({ id: 'layer-2', appLayerName: 2, name: 'TEST2', root: false }),
+        getLayerTreeNode({ id: 'layer-3', appLayerName: 4, name: 'TEST4', root: false }),
       ],
     };
     const action = MapActions.moveLayerTreeNode({ nodeId: 'layer-3', position: 'after', parentId: 'level-1', sibling: 'layer-1' });
@@ -216,10 +216,10 @@ describe('MapReducer', () => {
       layerTreeNodes: [
         getLayerTreeNode({ root: true, childrenIds: [ 'level-1', 'level-2' ] }),
         getLayerTreeNode({ id: 'level-1', root: false, childrenIds: ['layer-1'] }),
-        getLayerTreeNode({ id: 'layer-1', appLayerId: 1, name: 'TEST', root: false }),
+        getLayerTreeNode({ id: 'layer-1', appLayerName: 1, name: 'TEST', root: false }),
         getLayerTreeNode({ id: 'level-2', root: false, childrenIds: [ 'layer-2', 'layer-3' ] }),
-        getLayerTreeNode({ id: 'layer-2', appLayerId: 2, name: 'TEST2', root: false }),
-        getLayerTreeNode({ id: 'layer-3', appLayerId: 4, name: 'TEST4', root: false }),
+        getLayerTreeNode({ id: 'layer-2', appLayerName: 2, name: 'TEST2', root: false }),
+        getLayerTreeNode({ id: 'layer-3', appLayerName: 4, name: 'TEST4', root: false }),
       ],
     };
     const action = MapActions.moveLayerTreeNode({ nodeId: 'layer-3', position: 'before', parentId: 'level-1', sibling: 'layer-1' });
@@ -234,12 +234,12 @@ describe('MapReducer', () => {
       layerTreeNodes: [
         getLayerTreeNode({ root: true, childrenIds: [ 'level-1', 'level-2' ] }),
         getLayerTreeNode({ id: 'level-1', root: false, childrenIds: ['layer-1'] }),
-        getLayerTreeNode({ id: 'layer-1', appLayerId: 1, name: 'TEST', root: false }),
+        getLayerTreeNode({ id: 'layer-1', appLayerName: 1, name: 'TEST', root: false }),
         getLayerTreeNode({ id: 'level-2', root: false, childrenIds: [ 'level-3', 'layer-2', 'layer-3' ] }),
-        getLayerTreeNode({ id: 'layer-2', appLayerId: 2, name: 'TEST2', root: false }),
-        getLayerTreeNode({ id: 'layer-3', appLayerId: 4, name: 'TEST4', root: false }),
+        getLayerTreeNode({ id: 'layer-2', appLayerName: 2, name: 'TEST2', root: false }),
+        getLayerTreeNode({ id: 'layer-3', appLayerName: 4, name: 'TEST4', root: false }),
         getLayerTreeNode({ id: 'level-3', name: 'LEVEL 3', childrenIds: ['layer-4'], root: false }),
-        getLayerTreeNode({ id: 'layer-4', appLayerId: 5, name: 'TEST5', root: false }),
+        getLayerTreeNode({ id: 'layer-4', appLayerName: 5, name: 'TEST5', root: false }),
       ],
     };
     const beforeChildAction = MapActions.moveLayerTreeNode({ nodeId: 'level-2', position: 'before', parentId: 'level-2', sibling: 'layer-3' });
@@ -252,19 +252,19 @@ describe('MapReducer', () => {
 
   test('handles MapActions.setSelectedBackgroundNodeId - make background layers visible', () => {
     const layers = [
-      getAppLayerModel({ id: 1, visible: false }),
-      getAppLayerModel({ id: 2, visible: false }),
-      getAppLayerModel({ id: 3, visible: false }),
-      getAppLayerModel({ id: 4, visible: false }),
-      getAppLayerModel({ id: 5, visible: true }),
+      getAppLayerModel({ name: 1, visible: false }),
+      getAppLayerModel({ name: 2, visible: false }),
+      getAppLayerModel({ name: 3, visible: false }),
+      getAppLayerModel({ name: 4, visible: false }),
+      getAppLayerModel({ name: 5, visible: true }),
     ];
     const nodes = [
       getLayerTreeNode({ root: true, childrenIds: ['lvl_1'] }),
       getLayerTreeNode({ id: 'lvl_1', childrenIds: [ 'lvl_2', 'lyr_1', 'lyr_2' ] }),
-      getLayerTreeNode({ id: 'lyr_1', appLayerId: 1 }),
-      getLayerTreeNode({ id: 'lyr_2', appLayerId: 2 }),
+      getLayerTreeNode({ id: 'lyr_1', appLayerName: 1 }),
+      getLayerTreeNode({ id: 'lyr_2', appLayerName: 2 }),
       getLayerTreeNode({ id: 'lvl_2', childrenIds: ['lyr_3'] }),
-      getLayerTreeNode({ id: 'lyr_3', appLayerId: 3 }),
+      getLayerTreeNode({ id: 'lyr_3', appLayerName: 3 }),
     ];
     const initialState: MapState = {
       ...initialMapState,
@@ -283,19 +283,19 @@ describe('MapReducer', () => {
 
   test('handles MapActions.setSelectedBackgroundNodeId - make background layers visible with multiple background layer groups', () => {
     const layers = [
-      getAppLayerModel({ id: 1, visible: false }),
-      getAppLayerModel({ id: 2, visible: false }),
-      getAppLayerModel({ id: 3, visible: false }),
-      getAppLayerModel({ id: 4, visible: false }),
-      getAppLayerModel({ id: 5, visible: true }),
+      getAppLayerModel({ name: 1, visible: false }),
+      getAppLayerModel({ name: 2, visible: false }),
+      getAppLayerModel({ name: 3, visible: false }),
+      getAppLayerModel({ name: 4, visible: false }),
+      getAppLayerModel({ name: 5, visible: true }),
     ];
     const nodes = [
       getLayerTreeNode({ root: true, childrenIds: [ 'lvl_1', 'lvl_2' ] }),
       getLayerTreeNode({ id: 'lvl_1', childrenIds: [ 'lyr_1', 'lyr_2' ] }),
-      getLayerTreeNode({ id: 'lyr_1', appLayerId: 1 }),
-      getLayerTreeNode({ id: 'lyr_2', appLayerId: 2 }),
+      getLayerTreeNode({ id: 'lyr_1', appLayerName: 1 }),
+      getLayerTreeNode({ id: 'lyr_2', appLayerName: 2 }),
       getLayerTreeNode({ id: 'lvl_2', childrenIds: ['lyr_3'] }),
-      getLayerTreeNode({ id: 'lyr_3', appLayerId: 3 }),
+      getLayerTreeNode({ id: 'lyr_3', appLayerName: 3 }),
     ];
     const initialState: MapState = {
       ...initialMapState,
@@ -323,19 +323,19 @@ describe('MapReducer', () => {
 
   test('handles MapActions.setSelectedBackgroundNodeId - make background layers hidden', () => {
     const layers = [
-      getAppLayerModel({ id: 1, visible: true }),
-      getAppLayerModel({ id: 2, visible: true }),
-      getAppLayerModel({ id: 3, visible: true }),
-      getAppLayerModel({ id: 4, visible: false }),
-      getAppLayerModel({ id: 5, visible: true }),
+      getAppLayerModel({ name: 1, visible: true }),
+      getAppLayerModel({ name: 2, visible: true }),
+      getAppLayerModel({ name: 3, visible: true }),
+      getAppLayerModel({ name: 4, visible: false }),
+      getAppLayerModel({ name: 5, visible: true }),
     ];
     const nodes = [
       getLayerTreeNode({ root: true, childrenIds: ['lvl_1'] }),
       getLayerTreeNode({ id: 'lvl_1', childrenIds: [ 'lvl_2', 'lyr_1', 'lyr_2' ] }),
-      getLayerTreeNode({ id: 'lyr_1', appLayerId: 1 }),
-      getLayerTreeNode({ id: 'lyr_2', appLayerId: 2 }),
+      getLayerTreeNode({ id: 'lyr_1', appLayerName: 1 }),
+      getLayerTreeNode({ id: 'lyr_2', appLayerName: 2 }),
       getLayerTreeNode({ id: 'lvl_2', childrenIds: ['lyr_3'] }),
-      getLayerTreeNode({ id: 'lyr_3', appLayerId: 3 }),
+      getLayerTreeNode({ id: 'lyr_3', appLayerName: 3 }),
     ];
     const initialState: MapState = {
       ...initialMapState,

@@ -8,7 +8,7 @@ import { selectAttributeListTab, selectAttributeListTabData, selectAttributeList
 import { ColumnMetadataModel, FeatureModel, Sortorder, TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel } from '@tailormap-viewer/api';
 import { LoadAttributeListDataResultModel } from '../models/load-attribute-list-data-result.model';
 import { AttributeListDataModel } from '../models/attribute-list-data.model';
-import { selectApplicationId } from '../../../state/core.selectors';
+import { selectViewerId } from '../../../state/core.selectors';
 import { TypesHelper } from '@tailormap-viewer/shared';
 import { AttributeListColumnModel } from '../models/attribute-list-column.model';
 import { FilterService } from '../../../filter/services/filter.service';
@@ -33,7 +33,7 @@ export class AttributeListDataService implements OnDestroy {
         takeUntil(this.destroyed),
         withLatestFrom(this.store$.select(selectAttributeListTabs)),
         map(([ filters, tabs ]) => {
-          return tabs.filter(tab => typeof tab.layerId === 'undefined' ? false : filters.has(tab.layerId));
+          return tabs.filter(tab => typeof tab.layerName === 'undefined' ? false : filters.has(tab.layerName));
         }),
       )
       .subscribe(tabs => {
@@ -56,7 +56,7 @@ export class AttributeListDataService implements OnDestroy {
     ]).pipe(
       take(1),
       concatMap(([ tab, data ]) => {
-        if (!tab || !tab.layerId) {
+        if (!tab || !tab.layerName) {
           return of(AttributeListDataService.getErrorResult(''));
         }
         return this.loadData$(tab, tab.selectedDataId, data);
@@ -69,21 +69,21 @@ export class AttributeListDataService implements OnDestroy {
     dataId: string,
     data: AttributeListDataModel[],
   ): Observable<LoadAttributeListDataResultModel> {
-    if (!tab.layerId) {
+    if (!tab.layerName) {
       return of(AttributeListDataService.getErrorResult(dataId));
     }
-    const layerId = tab.layerId;
+    const layerName = tab.layerName;
     const selectedData = data.find(d => d.id === dataId);
     if (!selectedData) {
       return of(AttributeListDataService.getErrorResult(dataId));
     }
     const start = selectedData.pageIndex;
-    const layerFilter = this.filterService.getFilterForLayer(layerId);
-    return this.store$.select(selectApplicationId)
+    const layerFilter = this.filterService.getFilterForLayer(layerName);
+    return this.store$.select(selectViewerId)
       .pipe(
         filter(TypesHelper.isDefined),
         concatMap(applicationId => this.api.getFeatures$({
-          layerId,
+          layerName,
           applicationId,
           page: start,
           filter: layerFilter,

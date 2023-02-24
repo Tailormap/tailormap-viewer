@@ -14,7 +14,7 @@ import { LegendLayerComponent } from '../legend-layer/legend-layer.component';
 const getMapService = () => {
   return {
     provide: MapService, useValue: {
-      getLayerManager$: () => of({ getLegendUrl: (layerId: string) => `layer-${layerId}-url-from-service` }),
+      getLayerManager$: () => of({ getLegendUrl: (layerName: string) => `layer-${layerName}-url-from-service` }),
       getMapViewDetails$: (): Observable<MapViewDetailsModel> => of({
         zoomLevel: 0,
         resolution: 1,
@@ -34,10 +34,10 @@ const getMapService = () => {
 const getMockStore = () => {
   const layersAndServices = [
     { ...getAppLayerModel({ title: 'Layer 1', layerName: 'layer1' }), service: getServiceModel() },
-    { ...getAppLayerModel({ id: 2, title: 'Layer 2', layerName: 'layer2' }), service: getServiceModel() },
-    { ...getAppLayerModel({ id: 3, title: 'Layer 3', layerName: 'layer3',
+    { ...getAppLayerModel({ name: '2', title: 'Layer 2', layerName: 'layer2' }), service: getServiceModel() },
+    { ...getAppLayerModel({ name: '3', title: 'Layer 3', layerName: 'layer3',
         legendImageUrl: 'https://layer-3-url/wms/?REQUEST=GetLegendGraphic' }), service: getServiceModel() },
-    { ...getAppLayerModel({ id: 4, title: 'Layer 4', layerName: 'layer4',
+    { ...getAppLayerModel({ name: '4', title: 'Layer 4', layerName: 'layer4',
         legendImageUrl: 'https://layer-4-weird-case-url/wms/?ReQuEST=GetLeGeNdGraphic' }), service: getServiceModel() },
   ];
   return provideMockStore({

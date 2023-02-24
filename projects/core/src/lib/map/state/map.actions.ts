@@ -5,7 +5,7 @@ const mapActionsPrefix = '[Map]';
 
 export const loadMap = createAction(
   `${mapActionsPrefix} Load Map`,
-  props<{ id: number }>(),
+  props<{ id: string }>(),
 );
 export const loadMapSuccess = createAction(
   `${mapActionsPrefix} Map Load Success`,
@@ -17,7 +17,7 @@ export const loadMapFailed = createAction(
 );
 export const setLayerVisibility = createAction(
   `${mapActionsPrefix} Set Layer Visibility`,
-  props<{ visibility: Array<{ id: number; checked: boolean }> }>(),
+  props<{ visibility: Array<{ name: string; checked: boolean }> }>(),
 );
 export const toggleAllLayersVisibility = createAction(
   `${mapActionsPrefix} Toggle All Layers Visibility`,
@@ -26,9 +26,9 @@ export const toggleLevelExpansion = createAction(
   `${mapActionsPrefix} Toggle Level Expansion`,
   props<{ id: string; isBaseLayerTree?: boolean }>(),
 );
-export const setSelectedLayerId = createAction(
-  `${mapActionsPrefix} Set Selected Layer ID`,
-  props<{ layerId: number }>(),
+export const setSelectedLayerName = createAction(
+  `${mapActionsPrefix} Set Selected Layer Name`,
+  props<{ layerName: string }>(),
 );
 export const addServices = createAction(
   `${mapActionsPrefix} Add Services`,
@@ -56,5 +56,5 @@ export const setSelectedBackgroundNodeId = createAction(
 );
 export const setLayerOpacity = createAction(
   `${mapActionsPrefix} Set Layer Opacity`,
-  props<{ layerId: number; opacity: number }>(),
+  props<{ layerName: string; opacity: number }>(),
 );

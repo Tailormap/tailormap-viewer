@@ -20,7 +20,7 @@ export class SpatialFilterFormSelectReferenceLayerComponent implements OnInit, O
   private filterCrudService = inject(SpatialFilterCrudService);
 
   public availableLayers$: Observable<AppLayerModel[]> = of([]);
-  public referenceLayerControl = new FormControl<number | undefined>(undefined, {
+  public referenceLayerControl = new FormControl<string | undefined>(undefined, {
     nonNullable: true,
   });
 

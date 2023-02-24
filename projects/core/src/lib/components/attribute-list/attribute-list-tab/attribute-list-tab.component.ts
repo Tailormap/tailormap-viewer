@@ -34,7 +34,7 @@ export class AttributeListTabComponent {
     this.store$.select(selectAttributeListTab(id))
       .pipe(take(1))
       .subscribe(tab => {
-        if (!tab || !tab.layerId || tab.initialDataLoaded) {
+        if (!tab || !tab.layerName || tab.initialDataLoaded) {
           return;
         }
         this.store$.dispatch(loadData({ tabId: id }));

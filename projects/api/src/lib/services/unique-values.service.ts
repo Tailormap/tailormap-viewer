@@ -4,8 +4,8 @@ import { UniqueValuesResponseModel } from '../models/unique-values-response.mode
 import { catchError, Observable, of, tap } from 'rxjs';
 
 interface UniqueValueParams {
-  applicationId: number;
-  layerId: number;
+  applicationId: string;
+  layerName: string;
   attribute: string;
   filter?: string;
 }
@@ -15,7 +15,7 @@ interface UniqueValueParams {
 })
 export class UniqueValuesService {
 
-  private currentApplicationId = -1;
+  private currentApplicationId = '';
   private apiService = inject(TAILORMAP_API_V1_SERVICE);
 
   private cachedResponses: Map<string, UniqueValuesResponseModel> = new Map();
@@ -43,7 +43,7 @@ export class UniqueValuesService {
   }
 
   private createKey(params: UniqueValueParams): string {
-    const key = [ params.applicationId, params.layerId, params.attribute ];
+    const key = [ params.applicationId, params.layerName, params.attribute ];
     if (params.filter) {
       key.push(params.filter);
     }

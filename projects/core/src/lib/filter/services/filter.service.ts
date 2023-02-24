@@ -11,9 +11,9 @@ export class FilterService implements OnDestroy {
 
   private destroyed = new Subject();
   private store$ = inject(Store);
-  private currentFilters: Map<number, string | null> = new Map();
+  private currentFilters: Map<string, string | null> = new Map();
 
-  private changedFiltersSubject$ = new Subject<Map<number, string | null>>();
+  private changedFiltersSubject$ = new Subject<Map<string, string | null>>();
 
   public constructor() {
     this.initChangedFilters$();
@@ -24,12 +24,12 @@ export class FilterService implements OnDestroy {
     this.destroyed.complete();
   }
 
-  public getChangedFilters$(): Observable<Map<number, string | null>> {
+  public getChangedFilters$(): Observable<Map<string, string | null>> {
     return this.changedFiltersSubject$.asObservable();
   }
 
-  public getFilterForLayer(layerId: number): string | undefined {
-    return this.currentFilters.get(layerId) || undefined;
+  public getFilterForLayer(layerName: string): string | undefined {
+    return this.currentFilters.get(layerName) || undefined;
   }
 
   private initChangedFilters$() {
@@ -37,18 +37,18 @@ export class FilterService implements OnDestroy {
       .pipe(
         takeUntil(this.destroyed),
         map((filters) => {
-          const newFilters: Array<[ number, string ]> = Array.from(filters.keys())
+          const newFilters: Array<[ string, string ]> = Array.from(filters.keys())
             .filter((key) => !this.currentFilters.has(key))
             .map((key) => [ key, filters.get(key) || '' ]);
-          const removedFilters: Array<[ number, null ]> = Array.from(this.currentFilters.keys())
+          const removedFilters: Array<[ string, null ]> = Array.from(this.currentFilters.keys())
             .filter((key) => !filters.has(key))
             .map((key) => [ key, null ]);
-          const changedFilters: Array<[ number, string ]> = Array.from(filters.keys())
+          const changedFilters: Array<[ string, string ]> = Array.from(filters.keys())
             .filter((key) => this.currentFilters.get(key) !== filters.get(key))
             .map((key) => [ key, filters.get(key) || '' ]);
           return [
             filters,
-            new Map<number, string | null>([ ...newFilters, ...removedFilters, ...changedFilters ]),
+            new Map<string, string | null>([ ...newFilters, ...removedFilters, ...changedFilters ]),
           ];
         }),
         tap(([filters]) => this.currentFilters = filters),

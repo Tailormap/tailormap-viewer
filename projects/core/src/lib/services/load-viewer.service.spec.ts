@@ -11,7 +11,7 @@ const getErrorObservable = <T>() => {
 
 export const getMockApiService = (overrides?: Partial<TailormapApiV1ServiceModel>) => {
   return {
-    getViewer$: (params: { kind?: string; name?: string }) => of(getViewerResponseData(params)),
+    getViewer$: (id?: string) => of(getViewerResponseData(id ? { id } : {})),
     getComponents$: () => of([getComponentModel()]),
     ...overrides,
   } as TailormapApiV1ServiceModel;
@@ -24,8 +24,9 @@ describe('LoadViewerService', () => {
     service.loadViewer$().subscribe(result => {
       expect(result.success).toEqual(true);
       expect(result.error).toBeUndefined();
+      expect(result.result?.viewer.id).toEqual('app/default');
       expect(result.result?.viewer.kind).toEqual('app');
-      expect(result.result?.viewer.name).toEqual('viewer');
+      expect(result.result?.viewer.name).toEqual('default');
       expect(result.result?.viewer.components.length).toEqual(0);
       done();
     });

@@ -8,7 +8,7 @@ import userEvent from '@testing-library/user-event';
 import { TestBed } from '@angular/core/testing';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { selectLayers, selectLayerTreeNodes, selectSelectedNode } from '../../../map/state/map.selectors';
-import { setLayerVisibility, setSelectedLayerId } from '../../../map/state/map.actions';
+import { setLayerVisibility, setSelectedLayerName } from '../../../map/state/map.actions';
 import { TocNodeLayerComponent } from '../toc-node-layer/toc-node-layer.component';
 import { ToggleAllLayersButtonComponent } from '../toggle-all-layers-button/toggle-all-layers-button.component';
 import { getAppLayerModel, getLayerTreeNode } from '@tailormap-viewer/api';
@@ -19,12 +19,12 @@ import { selectFilterEnabled, selectFilterTerm, selectInfoTreeNodeId } from '../
 const getMockStore = (selectedLayer: string = '') => {
   const layers = [
     getAppLayerModel({ title: 'Disaster map', visible: false }),
-    getAppLayerModel({ id: 2, title: 'Some other map', visible: false }),
+    getAppLayerModel({ name: '2', title: 'Some other map', visible: false }),
   ];
   const tree = [
     getLayerTreeNode({ childrenIds: [ '1', '2' ] }),
-    getLayerTreeNode({ id: '1', name: 'Disaster map', appLayerId: 1 }),
-    getLayerTreeNode({ id: '2', name: 'Some other map', appLayerId: 2 }),
+    getLayerTreeNode({ id: '1', name: 'Disaster map', appLayerName: '1' }),
+    getLayerTreeNode({ id: '2', name: 'Some other map', appLayerName: '2' }),
   ];
   return provideMockStore({
     selectors: [
@@ -107,7 +107,7 @@ describe('TocComponent', () => {
     store.dispatch = jest.fn();
     expect((await screen.findByText('Disaster map')).closest('.mat-tree-node')).toHaveClass('tree-node--selected');
     await userEvent.click(await screen.findByText('Some other map'));
-    expect(store.dispatch).toHaveBeenCalledWith({ type: setSelectedLayerId.type, layerId: 2 });
+    expect(store.dispatch).toHaveBeenCalledWith({ type: setSelectedLayerName.type, layerName: '2' });
     store.overrideSelector(selectSelectedNode, '2');
     store.refreshState();
     await waitFor(() => {
@@ -129,7 +129,7 @@ describe('TocComponent', () => {
     const store = TestBed.inject(MockStore);
     store.dispatch = jest.fn();
     await userEvent.click(await screen.getByLabelText('toggle Disaster map'));
-    expect(store.dispatch).toHaveBeenCalledWith({ type: setLayerVisibility.type, visibility: [{ id: 1, checked: true }] });
+    expect(store.dispatch).toHaveBeenCalledWith({ type: setLayerVisibility.type, visibility: [{ name: '1', checked: true }] });
   });
 
 });

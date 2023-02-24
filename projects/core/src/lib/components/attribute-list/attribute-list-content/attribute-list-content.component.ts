@@ -16,7 +16,7 @@ import { SimpleAttributeFilterService } from '../../../filter/services/simple-at
 import { AttributeListFilterComponent, FilterDialogData } from '../attribute-list-filter/attribute-list-filter.component';
 import { MatDialog } from '@angular/material/dialog';
 import { AttributeFilterModel } from '../../../filter/models/attribute-filter.model';
-import { selectApplicationId } from '../../../state/core.selectors';
+import { selectViewerId } from '../../../state/core.selectors';
 import { CqlFilterHelper } from '../../../filter/helpers/cql-filter.helper';
 import { CssHelper } from '@tailormap-viewer/shared';
 
@@ -53,10 +53,10 @@ export class AttributeListContentComponent implements OnInit {
     this.notLoadingData$ = this.store$.select(selectLoadingDataSelectedTab).pipe(map(loading => !loading));
     this.filters$ = this.store$.select(selectSelectedTab)
       .pipe(switchMap(tab => {
-        if (!tab || !tab.layerId) {
+        if (!tab || !tab.layerName) {
           return of([]);
         }
-        return this.simpleAttributeFilterService.getFilters$(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerId);
+        return this.simpleAttributeFilterService.getFilters$(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerName);
       }));
     this.selectedRowId$ = this.store$.select(selectSelectedRowIdForSelectedTab);
   }
@@ -84,19 +84,19 @@ export class AttributeListContentComponent implements OnInit {
   public onSetFilter($event: { columnId: string; attributeType: FeatureAttributeTypeEnum }) {
     combineLatest([
       this.store$.select(selectSelectedTab),
-      this.store$.select(selectApplicationId),
+      this.store$.select(selectViewerId),
     ])
       .pipe(
         pipe(take(1)),
         concatMap(([ selectedTab, applicationId ]) => {
-          if (!selectedTab || !selectedTab.layerId) {
+          if (!selectedTab || !selectedTab.layerName) {
             return of(null);
           }
-          const layerId = selectedTab.layerId;
+          const layerName = selectedTab.layerName;
           return forkJoin([
-            this.simpleAttributeFilterService.getFilterForAttribute$(BaseComponentTypeEnum.ATTRIBUTE_LIST, layerId, $event.columnId).pipe(take(1)),
-            this.simpleAttributeFilterService.getFiltersExcludingAttribute$(BaseComponentTypeEnum.ATTRIBUTE_LIST, layerId, $event.columnId).pipe(take(1)),
-            of(layerId),
+            this.simpleAttributeFilterService.getFilterForAttribute$(BaseComponentTypeEnum.ATTRIBUTE_LIST, layerName, $event.columnId).pipe(take(1)),
+            this.simpleAttributeFilterService.getFiltersExcludingAttribute$(BaseComponentTypeEnum.ATTRIBUTE_LIST, layerName, $event.columnId).pipe(take(1)),
+            of(layerName),
             of(applicationId),
           ]);
         }),
@@ -105,16 +105,16 @@ export class AttributeListContentComponent implements OnInit {
         if (!result) {
           return;
         }
-        const [ attributeFilterModel, otherFilters, layerId, applicationId ] = result;
+        const [ attributeFilterModel, otherFilters, layerName, applicationId ] = result;
         if (applicationId === null) {
           return;
         }
         const data: FilterDialogData = {
           columnName: $event.columnId,
-          layerId,
+          layerName: layerName,
           filter: attributeFilterModel,
           columnType: $event.attributeType,
-          cqlFilter: CqlFilterHelper.getFilters(otherFilters).get(layerId),
+          cqlFilter: CqlFilterHelper.getFilters(otherFilters).get(layerName),
           applicationId,
         };
         this.dialog.open(AttributeListFilterComponent, { data, maxHeight: CssHelper.MAX_SCREEN_HEIGHT });
@@ -125,7 +125,7 @@ export class AttributeListContentComponent implements OnInit {
     this.store$.select(selectSelectedTab)
       .pipe(take(1))
       .subscribe(tab => {
-        if (!tab || !tab.layerId) {
+        if (!tab || !tab.layerName) {
           return;
         }
         this.store$.dispatch(loadData({ tabId: tab.id }));

@@ -23,7 +23,7 @@ export const getFilterGroup = <T extends BaseFilterModel = AttributeFilterModel>
   };
   return {
     id: '1',
-    layerIds: [1],
+    layerNames: ['1'],
     type: type || FilterTypeEnum.ATTRIBUTE,
     filters: filters || [attributeFilter as unknown as T],
     operator: 'AND',

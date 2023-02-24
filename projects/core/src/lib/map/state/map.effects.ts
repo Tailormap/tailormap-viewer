@@ -14,7 +14,7 @@ export class MapEffects {
   public triggerLoadMap$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(CoreActions.loadViewerSuccess),
-      map(action => MapActions.loadMap({ id: action.application.id })),
+      map(action => MapActions.loadMap({ id: action.viewer.id })), // XXX
     );
   });
 

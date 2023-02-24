@@ -15,7 +15,7 @@ import { ApplicationMapBookmarkService } from './application-map-bookmark.servic
 })
 export class ApplicationMapService implements OnDestroy {
   private destroyed = new Subject();
-  private capabilities: Map<number, string> = new Map();
+  private capabilities: Map<string, string> = new Map();
 
   constructor(
     private store$: Store,
@@ -69,7 +69,7 @@ export class ApplicationMapService implements OnDestroy {
       this.store$.select(selectCQLFilters),
     ]).pipe(
       map(([ layers, filters ]) => {
-        return layers.map(l => ({ ...l, filter: filters.get(l.id) }));
+        return layers.map(l => ({ ...l, filter: filters.get(l.name) }));
       }),
     );
   }
@@ -97,7 +97,7 @@ export class ApplicationMapService implements OnDestroy {
       return this.getCapabilitiesForWMTS$(service)
         .pipe(
           map((capabilities: string): WMTSLayerModel => ({
-            id: `${extendedAppLayer.id}`,
+            id: `${extendedAppLayer.name}`,
             layers: extendedAppLayer.layerName,
             name: extendedAppLayer.layerName,
             layerType: LayerTypesEnum.WMTS,
@@ -113,7 +113,7 @@ export class ApplicationMapService implements OnDestroy {
     }
     if (service.protocol === ServiceProtocol.WMS) {
       const layer: WMSLayerModel = {
-        id: `${extendedAppLayer.id}`,
+        id: `${extendedAppLayer.name}`,
         layers: extendedAppLayer.layerName,
         name: extendedAppLayer.layerName,
         layerType: LayerTypesEnum.WMS,
@@ -135,7 +135,7 @@ export class ApplicationMapService implements OnDestroy {
     if (service.capabilities) {
       return of(service.capabilities);
     }
-    const cachedCapabilities = this.capabilities.get(service.id);
+    const cachedCapabilities = this.capabilities.get(service.name);
     if (cachedCapabilities) {
       return of(cachedCapabilities);
     }
@@ -143,7 +143,7 @@ export class ApplicationMapService implements OnDestroy {
       responseType: 'text',
       params: new HttpParams().append('REQUEST', 'GetCapabilities').append('SERVICE', 'WMTS'),
     }).pipe(
-      tap(capabilities => this.capabilities.set(service.id, capabilities)),
+      tap(capabilities => this.capabilities.set(service.name, capabilities)),
     );
   }
 

@@ -2,6 +2,6 @@
   <mat-label i18n>Select layer to use as filter</mat-label>
   <mat-select [formControl]="referenceLayerControl">
     <mat-option [value]="undefined" i18n>None</mat-option>
-    <mat-option *ngFor="let layer of availableLayers$ | async" [value]="layer.id">{{layer.title}}</mat-option>
+    <mat-option *ngFor="let layer of availableLayers$ | async" [value]="layer.name">{{layer.title}}</mat-option>
   </mat-select>
 </mat-form-field>

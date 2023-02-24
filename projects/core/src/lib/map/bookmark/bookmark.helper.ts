@@ -4,8 +4,8 @@ import { TristateBoolean, LayerVisibilityBookmarkFragment, LayerInformation, Lay
 import { AppLayerWithInitialValuesModel, ExtendedLayerTreeNodeModel } from '../models';
 
 export interface MapBookmarkContents {
-  visibilityChanges: { id: number; checked: boolean }[];
-  opacityChanges: { layerId: number; opacity: number }[];
+  visibilityChanges: { name: string; checked: boolean }[];
+  opacityChanges: { layerName: string; opacity: number }[];
 }
 
 export class MapBookmarkHelper {
@@ -64,39 +64,40 @@ export class MapBookmarkHelper {
     const visibilityData = [];
     const opacityData = [];
 
-    for (const layer of fragment.layers) {
-      id = layer.relativeId + id + 1;
-
-      const currentLayer = layers.find(a => a.id === id);
-      if (currentLayer === undefined) { continue; }
-
-      if (layer.visible !== TristateBoolean.UNSET) {
-        checkedVisibilityValues.add(id);
-        const isLayerVisible = layer.visible === TristateBoolean.TRUE;
-        if (isLayerVisible !== currentLayer.visible) {
-          visibilityData.push({ id, checked: isLayerVisible });
-        }
-      }
-
-      if (layer.opacity !== 0) {
-        const opacity = layer.opacity - 1;
-        checkedOpacityValues.add(id);
-        if (opacity !== currentLayer.opacity) {
-          opacityData.push({ layerId: id, opacity });
-        }
-      }
-    }
+    // TODO we use string layer names now
+    // for (const layer of fragment.layers) {
+    //   id = layer.relativeId + id + 1;
+    //
+    //   const currentLayer = layers.find(a => a.name === id);
+    //   if (currentLayer === undefined) { continue; }
+    //
+    //   if (layer.visible !== TristateBoolean.UNSET) {
+    //     checkedVisibilityValues.add(id);
+    //     const isLayerVisible = layer.visible === TristateBoolean.TRUE;
+    //     if (isLayerVisible !== currentLayer.visible) {
+    //       visibilityData.push({ id, checked: isLayerVisible });
+    //     }
+    //   }
+    //
+    //   if (layer.opacity !== 0) {
+    //     const opacity = layer.opacity - 1;
+    //     checkedOpacityValues.add(id);
+    //     if (opacity !== currentLayer.opacity) {
+    //       opacityData.push({ layerId: id, opacity });
+    //     }
+    //   }
+    // }
 
     for (const layer of layers) {
-      const currentLayer = layers.find(a => a.id === layer.id);
+      const currentLayer = layers.find(a => a.name === layer.name);
       if (currentLayer === undefined) { continue; }
 
-      if (!checkedVisibilityValues.has(layer.id) && currentLayer.initialValues?.visible !== currentLayer.visible) {
-        visibilityData.push({ id: layer.id, checked: currentLayer.initialValues?.visible ?? true });
+      if (!checkedVisibilityValues.has(layer.name) && currentLayer.initialValues?.visible !== currentLayer.visible) {
+        visibilityData.push({ name: layer.name, checked: currentLayer.initialValues?.visible ?? true });
       }
 
-      if (!checkedOpacityValues.has(layer.id) && currentLayer.initialValues?.opacity !== currentLayer.opacity) {
-        opacityData.push({ layerId: layer.id, opacity: currentLayer.initialValues?.opacity ?? 100 });
+      if (!checkedOpacityValues.has(layer.name) && currentLayer.initialValues?.opacity !== currentLayer.opacity) {
+        opacityData.push({ layerName: layer.name, opacity: currentLayer.initialValues?.opacity ?? 100 });
       }
     }
 
@@ -104,7 +105,7 @@ export class MapBookmarkHelper {
   }
 
   public static fragmentFromVisibilityData(layers: AppLayerWithInitialValuesModel[]): LayerVisibilityBookmarkFragment {
-    const newLayers = new Map<number, LayerInformation>();
+    const newLayers = new Map<string, LayerInformation>();
     for (const layer of layers) {
       const info = new LayerInformation();
       let changed = false;
@@ -120,22 +121,23 @@ export class MapBookmarkHelper {
       }
 
       if (changed) {
-        newLayers.set(layer.id, info);
+        newLayers.set(layer.name, info);
       }
     }
 
-    const sortedKeys = [...newLayers.keys()].sort((a, b) => a - b);
+    // TODO: use layer name strings instead of ids
+    // const sortedKeys = [...newLayers.keys()].sort((a, b) => a - b);
     const bookmarkData = new LayerVisibilityBookmarkFragment();
-    let previousId = -1;
-    for (const key of sortedKeys) {
-      const layer = newLayers.get(key);
-      if (layer === undefined) { continue; }
-
-      layer.relativeId = key - previousId - 1;
-      previousId = key;
-
-      bookmarkData.layers.push(layer);
-    }
+    // let previousId = -1;
+    // for (const key of sortedKeys) {
+    //   const layer = newLayers.get(key);
+    //   if (layer === undefined) { continue; }
+    //
+    //   layer.relativeId = key - previousId - 1;
+    //   previousId = key;
+    //
+    //   bookmarkData.layers.push(layer);
+    // }
 
     return bookmarkData;
   }

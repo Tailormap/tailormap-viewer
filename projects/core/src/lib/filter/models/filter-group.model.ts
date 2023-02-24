@@ -8,7 +8,7 @@ import { FilterTypeEnum } from './filter-type.enum';
 export interface FilterGroupModel<FilterType = BaseFilterModel> {
   id: string;
   source: string;
-  layerIds: number[];
+  layerNames: string[];
   type: FilterTypeEnum;
   filters: FilterType[];
   disabled?: boolean;

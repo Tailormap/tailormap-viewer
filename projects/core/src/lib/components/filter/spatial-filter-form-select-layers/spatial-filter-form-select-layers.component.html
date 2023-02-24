@@ -1,6 +1,6 @@
 <mat-form-field appearance="fill">
   <mat-label i18n>Select layer(s)</mat-label>
   <mat-select [formControl]="selectedLayersControl" multiple>
-    <mat-option *ngFor="let layer of availableLayers$ | async" [value]="layer.id">{{layer.title}}</mat-option>
+    <mat-option *ngFor="let layer of availableLayers$ | async" [value]="layer.name">{{layer.title}}</mat-option>
   </mat-select>
 </mat-form-field>

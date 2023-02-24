@@ -269,7 +269,7 @@ export class OpenLayersMap implements MapViewerModel {
   }
 
   public getFeatureInfoForLayers$(
-    layerId: string,
+    layerName: string,
     coordinates: [number, number],
     httpClient: HttpClient,
   ): Observable<FeatureModel[]> {
@@ -284,7 +284,7 @@ export class OpenLayersMap implements MapViewerModel {
         concatMap(([ layerManager, olMap ]) => {
           return OpenLayersWmsGetFeatureInfoHelper.getFeatureInfoForLayer$(
             httpClient,
-            layerId,
+            layerName,
             coordinates,
             olMap.getView().getResolution() || 0,
             olMap.getView().getProjection().getCode(),

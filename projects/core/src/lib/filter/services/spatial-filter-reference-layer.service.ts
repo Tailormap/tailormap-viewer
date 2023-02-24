@@ -6,7 +6,7 @@ import { takeUntil, withLatestFrom } from 'rxjs/operators';
 import { FilterGroupModel } from '../models/filter-group.model';
 import { SpatialFilterGeometry, SpatialFilterModel } from '../models/spatial-filter.model';
 import { TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel } from '@tailormap-viewer/api';
-import { selectApplicationId } from '../../state/core.selectors';
+import { selectViewerId } from '../../state/core.selectors';
 import { TypesHelper } from '@tailormap-viewer/shared';
 import { updateFilterGroup } from '../state/filter.actions';
 
@@ -34,7 +34,7 @@ export class SpatialFilterReferenceLayerService implements OnDestroy {
         this.cleanUpOldGeometries(spatialFilterGroups);
         spatialFilterGroups.forEach(group => {
           const currentLoadedKey = this.geometriesLoaded.get(group.id);
-          const referenceLayer = group.filters[0].baseLayerId;
+          const referenceLayer = group.filters[0].baseLayerName;
           if (!referenceLayer) {
             return;
           }
@@ -52,15 +52,15 @@ export class SpatialFilterReferenceLayerService implements OnDestroy {
     return this.loadingGeometries.asObservable().pipe(map(groups => groups.includes(groupId)));
   }
 
-  private loadGeometries(group: FilterGroupModel<SpatialFilterModel>, referenceLayer: number, cqlFilter: string | undefined): void {
-    this.store$.select(selectApplicationId)
+  private loadGeometries(group: FilterGroupModel<SpatialFilterModel>, referenceLayer: string, cqlFilter: string | undefined): void {
+    this.store$.select(selectViewerId)
       .pipe(
         take(1),
         filter(TypesHelper.isDefined),
         tap(() => this.loadingGeometries.next([ ...this.loadingGeometries.value, group.id ])),
         switchMap(applicationId => {
           return this.api.getFeatures$({
-            layerId: referenceLayer,
+            layerName: referenceLayer,
             applicationId,
             page: 1,
             filter: cqlFilter === '' ? undefined : cqlFilter,
@@ -85,17 +85,17 @@ export class SpatialFilterReferenceLayerService implements OnDestroy {
           return {
             id: feat.__fid,
             geometry: feat.geometry,
-            referenceLayerId: referenceLayer,
+            referenceLayerName: referenceLayer,
           };
         }).filter(TypesHelper.isDefined);
         const updatedGroup: FilterGroupModel<SpatialFilterModel> = {
           ...group,
           error: response.error ? $localize `Error loading reference layer geometries` : undefined,
           filters: group.filters.map(f => {
-            const userDrawnGeometries = f.geometries.filter(g => typeof g.referenceLayerId === 'undefined');
+            const userDrawnGeometries = f.geometries.filter(g => typeof g.referenceLayerName === 'undefined');
             return {
               ...f,
-              baseLayerId: response.error ? undefined : f.baseLayerId,
+              baseLayerName: response.error ? undefined : f.baseLayerName,
               geometries: userDrawnGeometries.concat(geometries),
             };
           }),

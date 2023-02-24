@@ -19,9 +19,9 @@ describe('FeatureInfoReducer', () => {
   test('handles LoadFeatureInfoSuccess', () => {
     const state = { ...initialFeatureInfoState };
     const featureInfo: FeatureInfoResponseModel[] = [{
-      features: [{ ...getFeatureModel(), layerId: 1 }],
-      columnMetadata: [{ ...getColumnMetadataModel(), layerId: 1 }],
-      layerId: 1,
+      features: [{ ...getFeatureModel(), layerName: '1' }],
+      columnMetadata: [{ ...getColumnMetadataModel(), layerName: '1' }],
+      layerName: '1',
     }];
     const action = FeatureInfoActions.loadFeatureInfoSuccess({ featureInfo });
     const updatedState = featureInfoReducer(state, action);

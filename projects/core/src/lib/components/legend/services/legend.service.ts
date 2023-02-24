@@ -59,7 +59,7 @@ export class LegendService {
             return layers.filter(TypesHelper.isDefined).map(layer => {
               let url = layer.legendImageUrl
                 ? layer.legendImageUrl
-                : layerManager.getLegendUrl(`${layer.id}`);
+                : layerManager.getLegendUrl(`${layer.name}`);
               if (mapResolution) {
                 try {
                   const urlObject = new URL(url);

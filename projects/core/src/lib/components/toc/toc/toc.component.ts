@@ -10,7 +10,7 @@ import { MapService } from '@tailormap-viewer/map';
 import { selectFilteredLayerTree, selectFilterEnabled, selectInfoTreeNodeId } from '../state/toc.selectors';
 import { setInfoTreeNodeId, toggleFilterEnabled } from '../state/toc.actions';
 import { selectSelectedNode } from '../../../map/state/map.selectors';
-import { moveLayerTreeNode, setLayerVisibility, setSelectedLayerId, toggleLevelExpansion } from '../../../map/state/map.actions';
+import { moveLayerTreeNode, setLayerVisibility, setSelectedLayerName, toggleLevelExpansion } from '../../../map/state/map.actions';
 
 interface AppLayerTreeModel extends BaseTreeModel {
   metadata: AppLayerModel;
@@ -60,7 +60,7 @@ export class TocComponent implements OnInit, OnDestroy {
         takeUntil(this.destroyed),
         map(checkChange => checkChange
           .filter(isAppLayerTreeModel)
-          .map(node => ({ id: node.metadata.id, checked: !!node.checked }))),
+          .map(node => ({ name: node.metadata.name, checked: !!node.checked }))),
       )
       .subscribe(checkChanged => this.store$.dispatch(setLayerVisibility({ visibility: checkChanged })));
     this.treeService.nodeExpansionChangedSource$
@@ -70,9 +70,9 @@ export class TocComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.destroyed),
         filter(isAppLayerTreeModel),
-        map(node => node.metadata.id),
+        map(node => node.metadata.name),
       )
-      .subscribe(layerId => this.store$.dispatch(setSelectedLayerId({ layerId })));
+      .subscribe(layerName => this.store$.dispatch(setSelectedLayerName({ layerName })));
 
     this.treeService.nodePositionChangedSource$
       .pipe(takeUntil(this.destroyed))

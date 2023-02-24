@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { selectApplicationStyling } from '../state/core.selectors';
+import { selectViewerStyling } from '../state/core.selectors';
 import { takeUntil } from 'rxjs/operators';
 import { distinctUntilChanged, Subject } from 'rxjs';
 import { ColorHelper, ColorPaletteHelper, CssHelper } from '@tailormap-viewer/shared';
@@ -17,7 +17,7 @@ export class ApplicationStyleService implements OnDestroy {
   private static initialPrimaryColor = CssHelper.getCssVariableValue('--primary-color');
 
   constructor(private store$: Store) {
-    this.store$.select(selectApplicationStyling)
+    this.store$.select(selectViewerStyling)
       .pipe(takeUntil(this.destroyed), distinctUntilChanged())
       .subscribe((appStyling) => {
         this.updateStyling(appStyling);

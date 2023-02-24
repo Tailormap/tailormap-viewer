@@ -22,10 +22,8 @@ export class LoadViewerService {
   ) {
   }
 
-  public loadViewer$(
-    params?: { kind?: string; name?: string},
-  ): Observable<LoadViewerResponse> {
-    return this.apiService.getViewer$(params || {})
+  public loadViewer$(id?: string): Observable<LoadViewerResponse> {
+    return this.apiService.getViewer$(id)
       .pipe(
         catchError(() => {
           return of(LoadViewerService.LOAD_VIEWER_ERROR);

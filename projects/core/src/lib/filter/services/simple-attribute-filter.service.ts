@@ -18,12 +18,12 @@ export class SimpleAttributeFilterService {
 
   public setFilter(
     source: string,
-    layerId: number,
+    layerName: string,
     filter: Omit<AttributeFilterModel, 'id'>,
   ) {
-    this.getGroup$(source, layerId).pipe(take(1)).subscribe(group => {
+    this.getGroup$(source, layerName).pipe(take(1)).subscribe(group => {
       if (!group) {
-        this.createGroup(source, layerId, filter);
+        this.createGroup(source, layerName, filter);
         return;
       }
       const existingFilter = group.filters.find(f => f.attribute === filter.attribute);
@@ -38,23 +38,23 @@ export class SimpleAttributeFilterService {
     });
   }
 
-  public hasFilter$(source: string, layerId: number) {
-    return this.getGroup$(source, layerId)
+  public hasFilter$(source: string, layerName: string) {
+    return this.getGroup$(source, layerName)
       .pipe(map(group => !!group));
   }
 
-  public getFilters$(source: string, layerId: number): Observable<AttributeFilterModel[]> {
-    return this.getGroup$(source, layerId)
+  public getFilters$(source: string, layerName: string): Observable<AttributeFilterModel[]> {
+    return this.getGroup$(source, layerName)
       .pipe(map(group => {
         return (group?.filters || []).map(f => ({ ...f, disabled: group?.disabled }));
       }));
   }
 
-  public getFiltersExcludingAttribute$(source: string, layerId: number, attribute: string) {
+  public getFiltersExcludingAttribute$(source: string, layerName: string, attribute: string) {
     return this.store$.select(selectEnabledFilterGroups)
       .pipe(take(1), map(groups => {
         return groups.map(group => {
-          if(group.source !== source || !group.layerIds.includes(layerId)) {
+          if(group.source !== source || !group.layerNames.includes(layerName)) {
             return group;
           }
           return {
@@ -67,10 +67,10 @@ export class SimpleAttributeFilterService {
 
   public getFilterForAttribute$(
     source: string,
-    layerId: number,
+    layerName: string,
     attribute: string,
   ): Observable<AttributeFilterModel | null> {
-    return this.getGroup$(source, layerId)
+    return this.getGroup$(source, layerName)
       .pipe(
         map(group => {
           return group
@@ -82,10 +82,10 @@ export class SimpleAttributeFilterService {
 
   public removeFilter(
     source: string,
-    layerId: number,
+    layerName: string,
     attribute: string,
   ) {
-    this.getGroup$(source, layerId).pipe(take(1)).subscribe(group => {
+    this.getGroup$(source, layerName).pipe(take(1)).subscribe(group => {
       if (!group) {
         return;
       }
@@ -103,9 +103,9 @@ export class SimpleAttributeFilterService {
 
   public removeFiltersForLayer(
     source: string,
-    layerId: number,
+    layerName: string,
   ) {
-    this.getGroup$(source, layerId).pipe(take(1)).subscribe(group => {
+    this.getGroup$(source, layerName).pipe(take(1)).subscribe(group => {
       if (!group) {
         return;
       }
@@ -113,12 +113,12 @@ export class SimpleAttributeFilterService {
     });
   }
 
-  private createGroup(source: string, layerId: number, filter: Omit<AttributeFilterModel, 'id'>) {
+  private createGroup(source: string, layerName: string, filter: Omit<AttributeFilterModel, 'id'>) {
     const filterGroup: FilterGroupModel<AttributeFilterModel> = {
       id: nanoid(),
       source,
       type: FilterTypeEnum.ATTRIBUTE,
-      layerIds: [layerId],
+      layerNames: [layerName],
       filters: [{
         id: nanoid(),
         ...filter,
@@ -145,8 +145,8 @@ export class SimpleAttributeFilterService {
     }));
   }
 
-  private getGroup$(source: string, layerId: number) {
-    return this.store$.select(selectFilterGroupForType<AttributeFilterModel>(source, layerId, FilterTypeEnum.ATTRIBUTE));
+  private getGroup$(source: string, layerName: string) {
+    return this.store$.select(selectFilterGroupForType<AttributeFilterModel>(source, layerName, FilterTypeEnum.ATTRIBUTE));
   }
 
 }

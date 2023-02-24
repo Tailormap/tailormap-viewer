@@ -23,24 +23,23 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
     return of(getUserResponseModel());
   }
 
-  public getApplication$(_params: { name?: string; version?: string; id?: number }): Observable<ViewerResponseModel> {
+  public getViewer$(_id?: string): Observable<ViewerResponseModel> {
     return of(getViewerResponseData());
   }
-
-  public getMap$(_applicationId: number): Observable<MapResponseModel> {
+  public getMap$(_applicationId: string): Observable<MapResponseModel> {
     return of(getMapResponseData());
   }
 
   public getDescribeLayer$(_params: {
-    applicationId: number;
-    layerId: number;
+    applicationId: string;
+    layerName: string;
   }): Observable<LayerDetailsModel> {
     return of(getLayerDetailsModel());
   }
 
   public getFeatures$(_params: {
-    applicationId: number;
-    layerId: number;
+    applicationId: string;
+    layerName: string;
     x?: number;
     y?: number;
     crs?: string;
@@ -54,8 +53,8 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
   }
 
   public getUniqueValues$(_params: {
-    applicationId: number;
-    layerId: number;
+    applicationId: string;
+    layerName: string;
     attribute: string;
     filter?: string;
   }): Observable<UniqueValuesResponseModel> {
@@ -63,15 +62,15 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
   }
 
   public getLayerExportCapabilities$(_params: {
-    applicationId: number;
-    layerId: number;
+    applicationId: string;
+    layerName: string;
   }): Observable<LayerExportCapabilitiesModel> {
     return of(getLayerExportCapabilitiesModel());
   }
 
   public getLayerExport$(_params: {
-    applicationId: number;
-    layerId: number;
+    applicationId: string;
+    layerName: string;
     outputFormat: string;
     filter?: string;
     sort: { column: string; direction: string} | null;

@@ -58,8 +58,8 @@ const setup = async (conf: {
 };
 
 const layers = [
-  getAppLayerModel({ id: 1, title: 'Layer 1' }),
-  getAppLayerModel({ id: 2, title: 'Layer 2' }),
+  getAppLayerModel({ name: 1, title: 'Layer 1' }),
+  getAppLayerModel({ name: 2, title: 'Layer 2' }),
 ];
 
 describe('SpatialFilterFormComponent', () => {

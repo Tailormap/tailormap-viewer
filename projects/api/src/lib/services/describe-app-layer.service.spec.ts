@@ -7,7 +7,7 @@ describe('DescribeAppLayerService', () => {
 
   let service: DescribeAppLayerService;
   const tailormapServiceMock = {
-    getDescribeLayer$: jest.fn((args) => of('describe layer ' + args.layerId + ' for application ' + args.applicationId)),
+    getDescribeLayer$: jest.fn((args) => of('describe layer ' + args.layerName + ' for application ' + args.applicationId)),
   };
 
   beforeEach(() => {
@@ -21,18 +21,18 @@ describe('DescribeAppLayerService', () => {
   });
 
   test('get and cache app layer descriptions', done => {
-    service.getDescribeAppLayer$(1, 1)
+    service.getDescribeAppLayer$('1', 1)
       .pipe(
         concatMap(response => {
           expect(response).toEqual('describe layer 1 for application 1');
           expect(tailormapServiceMock.getDescribeLayer$).toHaveBeenCalledTimes(1);
-          return service.getDescribeAppLayer$(1, 1);
+          return service.getDescribeAppLayer$('1', '1');
         }),
         concatMap(response2 => {
           expect(response2).toEqual('describe layer 1 for application 1');
           // still expect 1 since we are calling with the same props
           expect(tailormapServiceMock.getDescribeLayer$).toHaveBeenCalledTimes(1);
-          return service.getDescribeAppLayer$(2, 1);
+          return service.getDescribeAppLayer$('2', '1');
         }),
         concatMap(response3 => {
           expect(response3).toEqual('describe layer 1 for application 2');

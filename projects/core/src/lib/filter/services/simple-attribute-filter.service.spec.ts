@@ -108,8 +108,8 @@ describe('SimpleAttributeFilterService', () => {
     service.removeFiltersForLayer('source', 2);
     store.select(selectFilterGroups).subscribe(filterGroups => {
       expect(filterGroups.length).toEqual(2);
-      expect(filterGroups[0].layerIds).toEqual([1]);
-      expect(filterGroups[1].layerIds).toEqual([3]);
+      expect(filterGroups[0].layerNames).toEqual([1]);
+      expect(filterGroups[1].layerNames).toEqual([3]);
       done();
     });
   });

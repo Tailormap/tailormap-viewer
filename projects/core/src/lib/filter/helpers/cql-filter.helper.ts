@@ -9,55 +9,55 @@ import { CqlSpatialFilterHelper } from './cql-spatial-filter.helper';
 
 export class CqlFilterHelper {
 
-  public static getFilters(filterGroups: FilterGroupModel[]): Map<number, string> {
-    const cqlDict = new Map<number, string>();
-    const layerIdList = filterGroups.reduce<number[]>((ids, f) => {
-      return [ ...ids, ...f.layerIds ];
+  public static getFilters(filterGroups: FilterGroupModel[]): Map<string, string> {
+    const cqlDict = new Map<string, string>();
+    const layerNameList = filterGroups.reduce<string[]>((names, f) => {
+      return [ ...names, ...f.layerNames ];
     }, []);
-    const layerIds = new Set<number>(layerIdList);
-    layerIds.forEach(layerId => {
-      const filtersForLayer = filterGroups.filter(f => f.layerIds.includes(layerId));
-      const cqlFilter = CqlFilterHelper.getFilterForLayer(filtersForLayer, layerId);
+    const layerNames = new Set<string>(layerNameList);
+    layerNames.forEach(layerName => {
+      const filtersForLayer = filterGroups.filter(f => f.layerNames.includes(layerName));
+      const cqlFilter = CqlFilterHelper.getFilterForLayer(filtersForLayer, layerName);
       if (cqlFilter) {
-        cqlDict.set(layerId, cqlFilter);
+        cqlDict.set(layerName, cqlFilter);
       }
     });
     return cqlDict;
   }
 
-  public static getFilterForLayer(filterGroups: FilterGroupModel[], layerId: number): string {
+  public static getFilterForLayer(filterGroups: FilterGroupModel[], layerName: string): string {
     const rootFilterGroups = filterGroups.filter(f => (typeof f.parentGroup === 'undefined' || f.parentGroup === null));
     return rootFilterGroups
-      .map(f => CqlFilterHelper.getFilterForGroup(f, filterGroups, layerId))
+      .map(f => CqlFilterHelper.getFilterForGroup(f, filterGroups, layerName))
       .filter(f => !!f && f !== '()')
       .join(' AND ');
   }
 
-  private static getFilterForGroup(filterGroup: FilterGroupModel, allFilterGroups: FilterGroupModel[], layerId: number): string {
+  private static getFilterForGroup(filterGroup: FilterGroupModel, allFilterGroups: FilterGroupModel[], layerName: string): string {
     const filter: string[] = [];
     const baseFilter: string[] = filterGroup.filters
-      .map(f => CqlFilterHelper.convertFilterToQuery(f, layerId))
+      .map(f => CqlFilterHelper.convertFilterToQuery(f, layerName))
       .filter(TypesHelper.isDefined);
     filter.push(CqlFilterHelper.wrapFilters(baseFilter, filterGroup.operator));
     const childFilters = allFilterGroups.filter(f => f.parentGroup === filterGroup.id);
     if (childFilters.length > 0) {
-      const childCql = childFilters.map(f => CqlFilterHelper.getFilterForGroup(f, allFilterGroups, layerId));
+      const childCql = childFilters.map(f => CqlFilterHelper.getFilterForGroup(f, allFilterGroups, layerName));
       filter.push(CqlFilterHelper.wrapFilters(childCql, filterGroup.operator));
     }
     return CqlFilterHelper.wrapFilters(filter, filterGroup.operator);
   }
 
-  private static convertFilterToQuery(filter: BaseFilterModel, layerId: number): string | null {
+  private static convertFilterToQuery(filter: BaseFilterModel, layerName: string): string | null {
     if (FilterTypeHelper.isAttributeFilter(filter)) {
-      return CqlFilterHelper.convertAttributeFilterToQuery(filter, layerId);
+      return CqlFilterHelper.convertAttributeFilterToQuery(filter, layerName);
     }
     if (FilterTypeHelper.isSpatialFilter(filter)) {
-      return CqlSpatialFilterHelper.convertSpatialFilterToQuery(filter, layerId);
+      return CqlSpatialFilterHelper.convertSpatialFilterToQuery(filter, layerName);
     }
     return null;
   }
 
-  private static convertAttributeFilterToQuery(filter: AttributeFilterModel, _layerId: number): string | null {
+  private static convertAttributeFilterToQuery(filter: AttributeFilterModel, _layerName: string): string | null {
     if (filter.condition === FilterConditionEnum.UNIQUE_VALUES_KEY) {
       if (filter.value.length === 0) {
         return null;

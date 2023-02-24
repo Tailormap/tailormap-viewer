@@ -35,7 +35,7 @@ const setup = async () => {
       }),
     ],
     componentProperties: {
-      layerId: appLayer.id,
+      layerName: appLayer.name,
     },
   });
 };

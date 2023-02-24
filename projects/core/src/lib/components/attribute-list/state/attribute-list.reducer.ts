@@ -27,7 +27,7 @@ const onChangeAttributeListTabs = (
   payload: ReturnType<typeof AttributeListActions.changeAttributeListTabs>,
 ): AttributeListState => {
   const tabs = [...state.tabs].filter(t => payload.closedTabs.indexOf(t.id) === -1);
-  const newTabs = payload.newTabs.filter(newTab => !tabs.some(t => t.layerId === newTab.layerId));
+  const newTabs = payload.newTabs.filter(newTab => !tabs.some(t => t.layerName === newTab.layerName));
   const updatedTabs = tabs.concat(newTabs);
   const data = [...state.data].filter(d => payload.closedTabs.indexOf(d.tabId) === -1);
   const newData = payload.newData

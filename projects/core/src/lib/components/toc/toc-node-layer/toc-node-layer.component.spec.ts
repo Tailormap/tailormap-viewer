@@ -19,7 +19,7 @@ describe('TocNodeLayerComponent', () => {
   test('renders layer', async () => {
     const appLayer = getAppLayerModel();
     const layer: TreeModel<AppLayerModel> = {
-      id: `${appLayer.id}`,
+      id: `${appLayer.name}`,
       label: appLayer.title,
       type: 'layer',
       metadata: appLayer,
@@ -56,7 +56,7 @@ describe('TocNodeLayerComponent', () => {
   test('renders out-of-scale layer', async () => {
     const appLayer = getAppLayerModel({ maxScale: 1000 });
     const layer: TreeModel<AppLayerModel> = {
-      id: `${appLayer.id}`,
+      id: `${appLayer.name}`,
       label: appLayer.title,
       type: 'layer',
       metadata: appLayer,

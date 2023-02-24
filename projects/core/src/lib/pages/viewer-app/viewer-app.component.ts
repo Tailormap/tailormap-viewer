@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { map, Observable, of, Subject, takeUntil } from 'rxjs';
-import { Router, ActivatedRoute, ParamMap, UrlSegment } from '@angular/router';
+import { Router, ActivatedRoute, UrlSegment } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { loadViewer } from '../../state/core.actions';
-import { selectApplicationErrorMessage, selectApplicationLoadingState } from '../../state/core.selectors';
+import { selectViewerErrorMessage, selectViewerLoadingState } from '../../state/core.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { BookmarkService } from '../../bookmark/bookmark.service';
 import { ApplicationStyleService } from '../../services/application-style.service';
@@ -36,23 +36,23 @@ export class ViewerAppComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.destroyed),
         map((urls: UrlSegment[]) => {
-          if (urls.length == 2) {
+          if (urls.length === 2) {
             const kind = urls[0].path;
             const name = urls[1].path;
-            if (['app', 'service'].includes(kind)) {
-              return { kind, name };
+            if ([ 'app', 'service' ].includes(kind)) {
+              return { id: `${kind}/${name}` };
             }
           }
           return undefined;
         }),
       )
-      .subscribe(loadApplicationParams => {
+      .subscribe(loadViewerParams => {
         this.appStyleService.resetStyling();
-        this.store$.dispatch(loadViewer(loadApplicationParams || {}));
+        this.store$.dispatch(loadViewer(loadViewerParams || {}));
       });
 
-    this.errorMessage$ = this.store$.select(selectApplicationErrorMessage);
-    this.store$.select(selectApplicationLoadingState)
+    this.errorMessage$ = this.store$.select(selectViewerErrorMessage);
+    this.store$.select(selectViewerLoadingState)
       .pipe(takeUntil(this.destroyed))
       .subscribe(loadingState => {
         this.isLoaded = loadingState === LoadingStateEnum.LOADED;

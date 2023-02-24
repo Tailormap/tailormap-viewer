@@ -4,13 +4,13 @@ import { BaseFilterModel } from './base-filter.model';
 export interface SpatialFilterGeometry {
   id: string;
   geometry: string;
-  referenceLayerId?: number;
+  referenceLayerName?: string;
 }
 
 export interface SpatialFilterModel extends BaseFilterModel {
   type: FilterTypeEnum.SPATIAL;
-  geometryColumns: Array<{ layerId: number; column: string[] }>;
+  geometryColumns: Array<{ layerName: string; column: string[] }>;
   geometries: SpatialFilterGeometry[];
-  baseLayerId?: number;
+  baseLayerName?: string;
   buffer?: number;
 }

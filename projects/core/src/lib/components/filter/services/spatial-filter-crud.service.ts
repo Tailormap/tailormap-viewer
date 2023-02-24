@@ -6,7 +6,7 @@ import { nanoid } from 'nanoid';
 import { FilterTypeEnum } from '../../../filter/models/filter-type.enum';
 import { concatMap, forkJoin, map, Observable, take, combineLatest, filter, of } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { selectApplicationId } from '../../../state/core.selectors';
+import { selectViewerId } from '../../../state/core.selectors';
 import { setSelectedFilterGroup, setSelectedLayers } from '../state/filter-component.actions';
 import { selectSelectedFilterGroup, selectSelectedLayers } from '../state/filter-component.selectors';
 import { FilterTypeHelper } from '../../../filter/helpers/filter-type.helper';
@@ -20,7 +20,7 @@ export class SpatialFilterCrudService {
   private describeAppLayerService = inject(DescribeAppLayerService);
   private store$ = inject(Store);
 
-  public updateSelectedLayers(layers: number[]) {
+  public updateSelectedLayers(layers: string[]) {
     this.store$.dispatch(setSelectedLayers({ layers }));
     this.updateSelectedGroup(group => this.updateLayers$(group, layers));
   }
@@ -50,7 +50,7 @@ export class SpatialFilterCrudService {
     }));
   }
 
-  public updateReferenceLayer(layer: number | undefined) {
+  public updateReferenceLayer(layer: string | undefined) {
     this.updateOrCreateGroup(
       [],
       layer,
@@ -58,20 +58,20 @@ export class SpatialFilterCrudService {
         ...group,
         error: undefined,
         filters: group.filters.map(f => {
-          const currentReferenceLayer = f.baseLayerId;
+          const currentReferenceLayer = f.baseLayerName;
           const geometries = f.geometries.filter(g => {
             if (typeof layer === 'undefined') {
-              return typeof g.referenceLayerId === 'undefined';
+              return typeof g.referenceLayerName === 'undefined';
             }
             if (layer !== currentReferenceLayer) {
-              return typeof g.referenceLayerId === 'undefined' || g.referenceLayerId !== currentReferenceLayer;
+              return typeof g.referenceLayerName === 'undefined' || g.referenceLayerName !== currentReferenceLayer;
             }
             return true;
           });
           return {
             ...f,
             geometries,
-            baseLayerId: layer,
+            baseLayerName: layer,
           };
         }),
       }),
@@ -81,18 +81,18 @@ export class SpatialFilterCrudService {
 
   private updateLayers$(
     group: FilterGroupModel<SpatialFilterModel>,
-    layers: number[],
+    layers: string[],
   ): Observable<FilterGroupModel> {
     return this.getLayerDetails$(layers).pipe(
       map(layerDetails => {
         return {
           ...group,
-          layerIds: layerDetails.map(layer => layer.id),
+          layerNames: layerDetails.map(layer => layer.name),
           filters: group.filters.map(f => {
             return {
               ...f,
               geometryColumns: layerDetails.map(layer => ({
-                layerId: layer.id,
+                layerName: layer.name,
                 column: [layer.geometryAttribute],
               })),
             };
@@ -112,7 +112,7 @@ export class SpatialFilterCrudService {
 
   private updateOrCreateGroup(
     geometry: SpatialFilterGeometry[],
-    referenceLayer: number | undefined,
+    referenceLayer: string | undefined,
     updateFn: (group: FilterGroupModel<SpatialFilterModel>) => Observable<FilterGroupModel>,
   ) {
     combineLatest([
@@ -142,8 +142,8 @@ export class SpatialFilterCrudService {
 
   private createSpatialFilterGroup(
     geometries: SpatialFilterGeometry[],
-    layers: number[],
-    referenceLayer?: number,
+    layers: string[],
+    referenceLayer?: string,
   ): void {
     this.getLayerDetails$(layers)
       .pipe(map(layerDetails => this.createFilterForLayers(layerDetails, geometries, referenceLayer)))
@@ -154,11 +154,11 @@ export class SpatialFilterCrudService {
   }
 
   private getLayerDetails$(
-    layers: number[],
+    layers: string[],
   ): Observable<LayerDetailsModel[]> {
-    return this.store$.select(selectApplicationId).pipe(
+    return this.store$.select(selectViewerId).pipe(
       concatMap(applicationId =>
-        forkJoin(layers.map(layer => this.describeAppLayerService.getDescribeAppLayer$(applicationId as number, layer))),
+        forkJoin(layers.map(layer => this.describeAppLayerService.getDescribeAppLayer$(applicationId as string, layer))),
       ),
       take(1),
     );
@@ -167,23 +167,23 @@ export class SpatialFilterCrudService {
   private createFilterForLayers(
     layers: LayerDetailsModel[],
     geometries: SpatialFilterGeometry[],
-    referenceLayer?: number,
+    referenceLayer?: string,
   ): FilterGroupModel<SpatialFilterModel> {
     const spatialFilter: SpatialFilterModel = {
       id: nanoid(),
       type: FilterTypeEnum.SPATIAL,
       geometries,
-      baseLayerId: referenceLayer,
+      baseLayerName: referenceLayer,
       buffer: undefined,
       geometryColumns: layers.map(layer => ({
-        layerId: layer.id,
+        layerName: layer.name,
         column: [layer.geometryAttribute],
       })),
     };
     return {
       id: nanoid(),
       type: FilterTypeEnum.SPATIAL,
-      layerIds: layers.map(layer => layer.id),
+      layerNames: layers.map(layer => layer.name),
       operator: 'AND',
       filters: [spatialFilter],
       source: 'SPATIAL_FILTER_FORM',
