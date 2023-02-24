@@ -3,7 +3,7 @@ import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { GeoServiceService } from '../services/geo-service.service';
-import { GeoServiceUpdateModel } from '../models/geo-service-update.model';
+import { GeoServiceCreateModel, GeoServiceUpdateModel } from '../models/geo-service-update.model';
 
 export interface GeoServiceFormDialogData {
   geoService: ExtendedGeoServiceModel | null;
@@ -18,7 +18,7 @@ export interface GeoServiceFormDialogData {
 })
 export class GeoServiceFormDialogComponent {
 
-  public geoService: GeoServiceUpdateModel | null = null;
+  public geoService: GeoServiceCreateModel | null = null;
   private destroyed = new Subject();
   private savingSubject = new BehaviorSubject(false);
   public saving$ = this.savingSubject.asObservable();
@@ -58,7 +58,7 @@ export class GeoServiceFormDialogComponent {
     this.dialogRef.close(this.geoService);
   }
 
-  public updateGeoService($event: GeoServiceUpdateModel) {
+  public updateGeoService($event: GeoServiceCreateModel) {
     this.geoService = $event;
   }
 }

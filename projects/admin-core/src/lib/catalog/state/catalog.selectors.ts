@@ -4,6 +4,7 @@ import { CatalogHelper } from '../helpers/catalog.helper';
 import { CatalogTreeModel } from '../models/catalog-tree.model';
 import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
 import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
+import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-layer.model';
 
 const selectCatalogState = createFeatureSelector<CatalogState>(catalogStateKey);
 
@@ -22,6 +23,21 @@ export const selectCatalogNodeById = (id: string) => createSelector(
 export const selectGeoServiceById = (id: string) => createSelector(
   selectGeoServices,
   (services): ExtendedGeoServiceModel | null => services.find(service => service.id === id) || null,
+);
+
+export const selectGeoServiceAndLayerById = (serviceId: string, layerId: string) => createSelector(
+  selectGeoServiceById(serviceId),
+  selectGeoServiceLayers,
+  (service, layers): { service: ExtendedGeoServiceModel; layer: ExtendedGeoServiceLayerModel } | null => {
+    if (!service) {
+      return null;
+    }
+    const layer = layers.find(l => l.id === layerId && l.serviceId === service.id);
+    if (!layer) {
+      return null;
+    }
+    return { service, layer };
+  },
 );
 
 export const selectParentsForCatalogNode = (id: string) => createSelector(

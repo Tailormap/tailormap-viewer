@@ -4,7 +4,7 @@ import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 import { FormControl, FormGroup } from '@angular/forms';
 import { GeoServiceProtocolEnum } from '@tailormap-admin/admin-api';
 import { FormHelper } from '../../helpers/form.helper';
-import { GeoServiceUpdateModel } from '../models/geo-service-update.model';
+import { GeoServiceCreateModel } from '../models/geo-service-update.model';
 
 @Component({
   selector: 'tm-admin-geo-service-form',
@@ -39,7 +39,7 @@ export class GeoServiceFormComponent implements OnInit {
   }
 
   @Output()
-  public changed = new EventEmitter<GeoServiceUpdateModel>();
+  public changed = new EventEmitter<GeoServiceCreateModel>();
 
   public geoServiceForm = new FormGroup({
     title: new FormControl('', { nonNullable: true }),

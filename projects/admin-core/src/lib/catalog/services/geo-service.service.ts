@@ -8,7 +8,7 @@ import { catchError, concatMap, map, of, tap } from 'rxjs';
 import { SnackBarMessageComponent } from '@tailormap-viewer/shared';
 import { addGeoServices, deleteGeoService, updateGeoService } from '../state/catalog.actions';
 import { CatalogService } from './catalog.service';
-import { GeoServiceUpdateModel, GeoServiceWithIdUpdateModel } from '../models/geo-service-update.model';
+import { GeoServiceCreateModel, GeoServiceUpdateModel, GeoServiceWithIdUpdateModel } from '../models/geo-service-update.model';
 
 @Injectable({
   providedIn: 'root',
@@ -22,7 +22,7 @@ export class GeoServiceService {
     private catalogService: CatalogService,
   ) { }
 
-  public createGeoService$(geoService: GeoServiceUpdateModel, catalogNodeId: string) {
+  public createGeoService$(geoService: GeoServiceCreateModel, catalogNodeId: string) {
     return this.adminApiService.createGeoService$({ geoService }).pipe(
       catchError(() => {
         this.showErrorMessage($localize `Error while creating geo service.`);

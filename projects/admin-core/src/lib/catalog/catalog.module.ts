@@ -15,6 +15,7 @@ import { CatalogNodeFormComponent } from './catalog-node-form/catalog-node-form.
 import { CatalogNodeFormDialogComponent } from './catalog-node-form-dialog/catalog-node-form-dialog.component';
 import { GeoServiceFormDialogComponent } from './geo-service-form-dialog/geo-service-form-dialog.component';
 import { GeoServiceFormComponent } from './geo-service-form/geo-service-form.component';
+import { LayerSettingsFormComponent } from './layer-settings-form/layer-settings-form.component';
 
 
 
@@ -29,6 +30,7 @@ import { GeoServiceFormComponent } from './geo-service-form/geo-service-form.com
     CatalogNodeFormDialogComponent,
     GeoServiceFormDialogComponent,
     GeoServiceFormComponent,
+    LayerSettingsFormComponent,
   ],
   imports: [
     CommonModule,

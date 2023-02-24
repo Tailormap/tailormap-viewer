@@ -318,7 +318,8 @@
             ],
             "styles": [
               "projects/core/assets/custom-theme.scss",
-              "projects/core/assets/tailormap-styles.css"
+              "projects/core/assets/tailormap-styles.css",
+              "projects/admin-core/assets/tailormap-admin-styles.css"
             ],
             "scripts": []
           },

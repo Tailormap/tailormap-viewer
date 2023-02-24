@@ -85,7 +85,7 @@ export const getGeoService = (overrides?: Partial<GeoServiceWithLayersModel>): G
   ],
   settings: {
     serverType: ServerType.GEOSERVER,
-    layerSettings: [],
+    layerSettings: {},
     defaultLayerSettings: {},
   },
   ...overrides,

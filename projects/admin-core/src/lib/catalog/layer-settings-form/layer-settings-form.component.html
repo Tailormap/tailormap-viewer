@@ -1,0 +1,7 @@
+<form [formGroup]="layerSettingsForm">
+  <mat-form-field *ngIf="showTitle">
+    <mat-label i18n>Title</mat-label>
+    <input matInput tmAutoFocus placeholder="Title" i18n-placeholder formControlName="title" />
+  </mat-form-field>
+  <mat-slide-toggle formControlName="hiDpiEnabled" i18n>High-DPI mode</mat-slide-toggle>
+</form>

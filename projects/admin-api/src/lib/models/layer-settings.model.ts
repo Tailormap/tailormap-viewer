@@ -1,4 +1,4 @@
 export interface LayerSettingsModel {
   title?: string;
-  hiDpiDisabled?: false;
+  hiDpiDisabled?: boolean;
 }
