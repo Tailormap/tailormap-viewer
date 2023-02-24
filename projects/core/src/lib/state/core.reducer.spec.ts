@@ -17,8 +17,7 @@ describe('CoreReducer', () => {
   test('load application success action', () => {
     const initialState = { ...initialCoreState };
     const action = loadViewerSuccess({
-      application: getViewerResponseData(),
-      components: [],
+      viewer: getViewerResponseData(),
     });
     expect(initialState.loadStatus).toEqual(LoadingStateEnum.INITIAL);
     const updatedState = coreReducer(initialState, action);

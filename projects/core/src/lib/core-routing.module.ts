@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes, UrlMatcher, UrlSegment } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent, ViewerAppComponent } from './pages';
 
 

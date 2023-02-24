@@ -23,23 +23,27 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
     return of(getUserResponseModel());
   }
 
+  public getViewer$(_id?: string): Observable<ViewerResponseModel> {
+    return of(getViewerResponseData());
+  }
+
   public getApplication$(_params: { name?: string; version?: string; id?: number }): Observable<ViewerResponseModel> {
     return of(getViewerResponseData());
   }
 
-  public getMap$(_applicationId: number): Observable<MapResponseModel> {
+  public getMap$(_applicationId: string): Observable<MapResponseModel> {
     return of(getMapResponseData());
   }
 
   public getDescribeLayer$(_params: {
-    applicationId: number;
+    applicationId: string;
     layerId: number;
   }): Observable<LayerDetailsModel> {
     return of(getLayerDetailsModel());
   }
 
   public getFeatures$(_params: {
-    applicationId: number;
+    applicationId: string;
     layerId: number;
     x?: number;
     y?: number;
@@ -54,7 +58,7 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
   }
 
   public getUniqueValues$(_params: {
-    applicationId: number;
+    applicationId: string;
     layerId: number;
     attribute: string;
     filter?: string;
@@ -63,14 +67,14 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
   }
 
   public getLayerExportCapabilities$(_params: {
-    applicationId: number;
+    applicationId: string;
     layerId: number;
   }): Observable<LayerExportCapabilitiesModel> {
     return of(getLayerExportCapabilitiesModel());
   }
 
   public getLayerExport$(_params: {
-    applicationId: number;
+    applicationId: string;
     layerId: number;
     outputFormat: string;
     filter?: string;

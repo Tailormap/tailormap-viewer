@@ -14,14 +14,15 @@ export class CoreEffects {
     return this.actions$.pipe(
       ofType(CoreActions.loadViewer),
       concatMap(action => {
-        return this.loadViewerService.loadViewer$({ kind: action.kind, name: action.name })
+        return this.loadViewerService.loadViewer$(action.id)
           .pipe(
             map(response => {
               if (!response.success || !response.result) {
                 return CoreActions.loadViewerFailed({ error: response.error });
               }
+              const viewer = response.result.viewer;
               return CoreActions.loadViewerSuccess({
-                viewer: response.result.viewer,
+                viewer: { ...viewer, id: `${viewer.kind}/${viewer.name}` },
               });
             }),
           );
@@ -29,11 +30,11 @@ export class CoreEffects {
     );
   });
 
-  public updateUrlAfterApplicationLoad$ = createEffect(() => {
+  public updateUrlAfterViewerLoad$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(CoreActions.loadViewerSuccess),
-      map(action => [action.viewer.kind, UrlHelper.getUrlSafeParam(action.viewer.name)]),
-      filter(paths => this.location.path() !== paths.join('/')),
+      map(action => action.viewer.id.split('/').map(UrlHelper.getUrlSafeParam)),
+      filter(paths => this.location.path() !== '/' + paths.join('/')),
       tap(paths => this.router.navigate(paths, { preserveFragment: true, skipLocationChange: true })),
     );
   }, { dispatch: false });

@@ -14,7 +14,7 @@ export interface FilterDialogData {
   filter: AttributeFilterModel | null;
   columnType: FeatureAttributeTypeEnum;
   cqlFilter?: string;
-  applicationId: number;
+  applicationId: string;
 }
 
 interface FilterType {

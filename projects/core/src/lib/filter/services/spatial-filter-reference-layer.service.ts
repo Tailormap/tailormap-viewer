@@ -6,7 +6,7 @@ import { takeUntil, withLatestFrom } from 'rxjs/operators';
 import { FilterGroupModel } from '../models/filter-group.model';
 import { SpatialFilterGeometry, SpatialFilterModel } from '../models/spatial-filter.model';
 import { TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel } from '@tailormap-viewer/api';
-import { selectApplicationId } from '../../state/core.selectors';
+import { selectViewerId } from '../../state/core.selectors';
 import { TypesHelper } from '@tailormap-viewer/shared';
 import { updateFilterGroup } from '../state/filter.actions';
 
@@ -53,7 +53,7 @@ export class SpatialFilterReferenceLayerService implements OnDestroy {
   }
 
   private loadGeometries(group: FilterGroupModel<SpatialFilterModel>, referenceLayer: number, cqlFilter: string | undefined): void {
-    this.store$.select(selectApplicationId)
+    this.store$.select(selectViewerId)
       .pipe(
         take(1),
         filter(TypesHelper.isDefined),

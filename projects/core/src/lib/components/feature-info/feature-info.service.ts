@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { FeatureAttributeTypeEnum, FeaturesResponseModel, TAILORMAP_API_V1_SERVICE, FeatureModel } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
-import { selectApplicationId } from '../../state/core.selectors';
+import { selectViewerId } from '../../state/core.selectors';
 import { catchError, combineLatest, concatMap, forkJoin, map, Observable, of, take } from 'rxjs';
 import { FeatureInfoResponseModel } from './models/feature-info-response.model';
 import { selectVisibleLayersWithAttributes, selectVisibleWMSLayersWithoutAttributes } from '../../map/state/map.selectors';
@@ -30,7 +30,7 @@ export class FeatureInfoService {
     return combineLatest([
       this.store$.select(selectVisibleLayersWithAttributes),
       this.store$.select(selectVisibleWMSLayersWithoutAttributes),
-      this.store$.select(selectApplicationId),
+      this.store$.select(selectViewerId),
       this.mapService.getMapViewDetails$(),
       this.mapService.getProjectionCode$(),
     ])
@@ -54,7 +54,7 @@ export class FeatureInfoService {
   private getFeatureInfoFromApi$(
     layer: ExtendedAppLayerModel,
     coordinates: [ number, number ],
-    applicationId: number,
+    applicationId: string,
     resolutions: MapViewDetailsModel,
     projection: string,
   ): Observable<FeatureInfoResponseModel> {

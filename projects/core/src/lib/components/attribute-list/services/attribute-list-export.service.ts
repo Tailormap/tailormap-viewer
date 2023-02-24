@@ -4,7 +4,7 @@ import {
 } from '@tailormap-viewer/api';
 import { catchError, combineLatest, map, Observable, of, switchMap, take, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { selectApplicationId } from '../../../state/core.selectors';
+import { selectViewerId } from '../../../state/core.selectors';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FileHelper, SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
@@ -79,7 +79,7 @@ export class AttributeListExportService {
   }): Observable<boolean> {
     return combineLatest([
       this.getOutputFormat$(params.layerId, params.format),
-      this.store$.select(selectApplicationId),
+      this.store$.select(selectViewerId),
     ]).pipe(
       take(1),
       switchMap(([ outputFormat, applicationId ]) => {
@@ -175,7 +175,7 @@ export class AttributeListExportService {
   }
 
   private getExportCapabilities$(layerId: number): Observable<string[]> {
-    return this.store$.select(selectApplicationId).pipe(
+    return this.store$.select(selectViewerId).pipe(
       take(1),
       switchMap(applicationId => {
         if (applicationId === null) {
@@ -204,7 +204,7 @@ export class AttributeListExportService {
     return supportedFormats.some(format => requiredFormats.includes(format));
   }
 
-  private getCacheKey(applicationId: number, layerId: number): string {
+  private getCacheKey(applicationId: string, layerId: number): string {
     return `${applicationId}-${layerId}`;
   }
 

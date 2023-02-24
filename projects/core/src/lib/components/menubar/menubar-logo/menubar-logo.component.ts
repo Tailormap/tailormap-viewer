@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { selectApplicationLogo } from '../../../state/core.selectors';
+import { selectViewerLogo } from '../../../state/core.selectors';
 import { distinctUntilChanged, Observable, of } from 'rxjs';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
@@ -20,7 +20,7 @@ export class MenubarLogoComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
-    this.logo$ = this.store$.select(selectApplicationLogo).pipe(distinctUntilChanged());
+    this.logo$ = this.store$.select(selectViewerLogo).pipe(distinctUntilChanged());
   }
 
   public getSafeUrl(url: string): SafeUrl | string {

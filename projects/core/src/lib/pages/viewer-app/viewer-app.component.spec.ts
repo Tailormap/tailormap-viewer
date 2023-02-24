@@ -2,17 +2,17 @@ import { render, screen } from '@testing-library/angular';
 import { ViewerAppComponent } from './viewer-app.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
 import { firstValueFrom, of } from 'rxjs';
 import { TestBed } from '@angular/core/testing';
 import { ErrorMessageComponent, LoadingStateEnum } from '@tailormap-viewer/shared';
-import { selectApplicationErrorMessage, selectApplicationLoadingState } from '../../state/core.selectors';
+import { selectViewerErrorMessage, selectViewerLoadingState } from '../../state/core.selectors';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
-export const getActivatedRouteProvider = (routeData: Record<string, string>, fragment: string = '') => {
+export const getActivatedRouteProvider = (segments: string[], fragment: string = '') => {
   return { provide: ActivatedRoute, useValue: {
       // eslint-disable-next-line rxjs/finnish
-      paramMap: of(new Map<string, string>(Object.entries(routeData))),
+      url: of(segments.map(s => new UrlSegment(s, {}))),
       // eslint-disable-next-line rxjs/finnish
       fragment: of(fragment),
     } };
@@ -27,13 +27,13 @@ const setup = async (loadingState?: LoadingStateEnum, errorMessage?: string) => 
     declarations: [ ViewerAppComponent, ErrorMessageComponent ],
     imports: [MatProgressSpinnerModule],
     providers: [
-      getActivatedRouteProvider({ id: '1' }),
+      getActivatedRouteProvider([ 'app', 'default' ]),
       getMockedRouterProvider(),
       provideMockStore({
         initialState: {},
         selectors: [
-          { selector: selectApplicationErrorMessage, value: errorMessage || undefined },
-          { selector: selectApplicationLoadingState, value: loadingState || LoadingStateEnum.LOADED },
+          { selector: selectViewerErrorMessage, value: errorMessage || undefined },
+          { selector: selectViewerLoadingState, value: loadingState || LoadingStateEnum.LOADED },
         ],
       }),
     ],
@@ -48,7 +48,7 @@ describe('ViewerAppComponent', () => {
   test('should render', async () => {
     const { container, store } = await setup();
     expect(container.querySelector('tm-base-layout')).toBeInTheDocument();
-    expect(await firstValueFrom(store.scannedActions$)).toEqual({ type: '[Core] Load Application', id: 1 });
+    expect(await firstValueFrom(store.scannedActions$)).toEqual({ type: '[Core] Load Viewer', id: 'app/default' });
   });
 
   test('should render an error', async () => {

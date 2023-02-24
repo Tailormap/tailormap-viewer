@@ -140,8 +140,9 @@ export const getUniqueValuesResponseModel = (overrides?: Partial<UniqueValuesRes
 });
 
 export const getViewerResponseData = (overrides?: Partial<ViewerResponseModel>): ViewerResponseModel => ({
+  id: 'app/default',
   kind: 'app',
-  name: 'viewer',
+  name: 'default',
   title: 'My viewer',
   baseViewers: [],
   languages: [Language.NL_NL],

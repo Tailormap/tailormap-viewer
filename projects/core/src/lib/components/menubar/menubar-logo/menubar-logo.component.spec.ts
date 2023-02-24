@@ -19,7 +19,7 @@ describe('MenubarLogoComponent', () => {
   test('should render custom logo', async () => {
     const stateWithLogo: CoreState = {
       ...initialCoreState,
-      application: {
+      viewer: {
         components: [],
         styling: {
           logo: 'https://tailormap.nl/logo.png',

@@ -3,29 +3,27 @@ import { Action, createReducer, on } from '@ngrx/store';
 import { CoreState, initialCoreState } from './core.state';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 
-const onLoadApplication = (state: CoreState): CoreState => ({
+const onLoadViewer = (state: CoreState): CoreState => ({
   ...state,
   loadStatus: LoadingStateEnum.LOADING,
 });
 
-const onApplicationLoadSuccess = (
+const onViewerLoadSuccess = (
   state: CoreState,
   payload: ReturnType<typeof CoreActions.loadViewerSuccess>,
 ): CoreState => ({
   ...state,
   loadStatus: LoadingStateEnum.LOADED,
-  application: {
-    id: payload.application.id,
-    apiVersion: payload.application.apiVersion,
-    name: payload.application.name,
-    title: payload.application.title,
-    lang: payload.application.lang,
-    styling: payload.application.styling,
-    components: payload.application.components,
+  viewer: {
+    id: payload.viewer.id,
+    title: payload.viewer.title,
+    languages: payload.viewer.languages,
+    styling: payload.viewer.styling,
+    components: payload.viewer.components,
   },
 });
 
-const onApplicationLoadFailed = (
+const onViewerLoadFailed = (
   state: CoreState,
   payload: ReturnType<typeof CoreActions.loadViewerFailed>,
 ): CoreState => ({
@@ -54,24 +52,24 @@ const onSetLoginDetails = (
   },
 });
 
-const onUpdateApplicationStyle = (
+const onUpdateViewerStyle = (
   state: CoreState,
   payload: ReturnType<typeof CoreActions.updateViewerStyle>,
 ): CoreState => ({
   ...state,
-  application: typeof state.application === 'undefined' ? undefined : {
-    ...state.application,
-    styling: { ...state.application?.styling, ...payload.style },
+  viewer: typeof state.viewer === 'undefined' ? undefined : {
+    ...state.viewer,
+    styling: { ...state.viewer?.styling, ...payload.style },
   },
 });
 
 const coreReducerImpl = createReducer<CoreState>(
   initialCoreState,
-  on(CoreActions.loadViewer, onLoadApplication),
-  on(CoreActions.loadViewerSuccess, onApplicationLoadSuccess),
-  on(CoreActions.loadViewerFailed, onApplicationLoadFailed),
+  on(CoreActions.loadViewer, onLoadViewer),
+  on(CoreActions.loadViewerSuccess, onViewerLoadSuccess),
+  on(CoreActions.loadViewerFailed, onViewerLoadFailed),
   on(CoreActions.setRouteBeforeLogin, onSetRouteBeforeLogin),
   on(CoreActions.setLoginDetails, onSetLoginDetails),
-  on(CoreActions.updateViewerStyle, onUpdateApplicationStyle),
+  on(CoreActions.updateViewerStyle, onUpdateViewerStyle),
 );
 export const coreReducer = (state: CoreState | undefined, action: Action) => coreReducerImpl(state, action);

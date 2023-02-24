@@ -5,7 +5,7 @@ const mapActionsPrefix = '[Map]';
 
 export const loadMap = createAction(
   `${mapActionsPrefix} Load Map`,
-  props<{ id: number }>(),
+  props<{ id: string }>(),
 );
 export const loadMapSuccess = createAction(
   `${mapActionsPrefix} Map Load Success`,

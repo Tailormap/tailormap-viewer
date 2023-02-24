@@ -1,9 +1,8 @@
 import { FeatureInfoService } from './feature-info.service';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { CoreState, initialCoreState } from '../../state/core.state';
 import { getAppLayerModel, getFeaturesResponseModel, getServiceModel, TAILORMAP_API_V1_SERVICE } from '@tailormap-viewer/api';
 import { of } from 'rxjs';
-import { selectApplicationId } from '../../state/core.selectors';
+import { selectViewerId } from '../../state/core.selectors';
 import { selectVisibleLayersWithAttributes, selectVisibleWMSLayersWithoutAttributes } from '../../map/state/map.selectors';
 import { TestBed } from '@angular/core/testing';
 import { MapService } from '@tailormap-viewer/map';
@@ -49,7 +48,7 @@ describe('FeatureInfoService', () => {
   test('should get features', done => {
     store.overrideSelector(selectVisibleLayersWithAttributes, [appLayer]);
     store.overrideSelector(selectVisibleWMSLayersWithoutAttributes, []);
-    store.overrideSelector(selectApplicationId, 1);
+    store.overrideSelector(selectViewerId, '1');
     expect(service).toBeTruthy();
     expect(mapService).toBeTruthy();
     service.getFeatures$([ 1, 2 ])
@@ -65,7 +64,7 @@ describe('FeatureInfoService', () => {
   test('returns empty array when there are no visible layers', done => {
     store.overrideSelector(selectVisibleLayersWithAttributes, []);
     store.overrideSelector(selectVisibleWMSLayersWithoutAttributes, []);
-    store.overrideSelector(selectApplicationId, 1);
+    store.overrideSelector(selectViewerId, '1');
     expect(service).toBeTruthy();
     service.getFeatures$([ 1, 2 ])
       .subscribe(featureInfo => {
@@ -77,7 +76,7 @@ describe('FeatureInfoService', () => {
   test('returns empty array when there is no application id', done => {
     store.overrideSelector(selectVisibleLayersWithAttributes, []);
     store.overrideSelector(selectVisibleWMSLayersWithoutAttributes, []);
-    store.overrideSelector(selectApplicationId, 0);
+    store.overrideSelector(selectViewerId, '0');
     expect(service).toBeTruthy();
     service.getFeatures$([ 1, 2 ])
       .subscribe(featureInfo => {
@@ -90,7 +89,7 @@ describe('FeatureInfoService', () => {
     const httpClient = TestBed.inject(HttpClient);
     store.overrideSelector(selectVisibleLayersWithAttributes, []);
     store.overrideSelector(selectVisibleWMSLayersWithoutAttributes, [appLayer]);
-    store.overrideSelector(selectApplicationId, 1);
+    store.overrideSelector(selectViewerId, '1');
     expect(service).toBeTruthy();
     service.getFeatures$([ 1, 2 ])
       .subscribe(featureInfo => {

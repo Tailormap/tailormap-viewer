@@ -16,7 +16,7 @@ import { SimpleAttributeFilterService } from '../../../filter/services/simple-at
 import { AttributeListFilterComponent, FilterDialogData } from '../attribute-list-filter/attribute-list-filter.component';
 import { MatDialog } from '@angular/material/dialog';
 import { AttributeFilterModel } from '../../../filter/models/attribute-filter.model';
-import { selectApplicationId } from '../../../state/core.selectors';
+import { selectViewerId } from '../../../state/core.selectors';
 import { CqlFilterHelper } from '../../../filter/helpers/cql-filter.helper';
 import { CssHelper } from '@tailormap-viewer/shared';
 
@@ -84,7 +84,7 @@ export class AttributeListContentComponent implements OnInit {
   public onSetFilter($event: { columnId: string; attributeType: FeatureAttributeTypeEnum }) {
     combineLatest([
       this.store$.select(selectSelectedTab),
-      this.store$.select(selectApplicationId),
+      this.store$.select(selectViewerId),
     ])
       .pipe(
         pipe(take(1)),

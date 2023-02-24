@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
 import { DescribeAppLayerService, LayerDetailsModel } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { selectSelectedFilterGroup, selectSelectedLayers } from '../state/filter-component.selectors';
-import { selectApplicationId } from '../../../state/core.selectors';
+import { selectViewerId } from '../../../state/core.selectors';
 import { getSpatialFilterGroup } from '../../../filter/helpers/cql-filter.helper.spec';
 import { setSelectedFilterGroup, setSelectedLayers } from '../state/filter-component.actions';
 import { addFilterGroup, updateFilterGroup } from '../../../filter/state/filter.actions';
@@ -33,7 +33,7 @@ const setup = (
     selectors: [
       { selector: selectSelectedFilterGroup, value: hasSelectedFilterGroup ? (overrideGroup || selectedGroup) : undefined },
       { selector: selectSelectedLayers, value: hasSelectedLayers ? [1] : [] },
-      { selector: selectApplicationId, value: 1 },
+      { selector: selectViewerId, value: 1 },
     ],
   });
   const describeLayerMock = {

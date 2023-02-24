@@ -12,26 +12,17 @@ export interface TailormapApiV1ServiceModel {
 
   getUser$(): Observable<UserResponseModel>;
 
-  getViewer$(params: {
-    kind?: string,
-    name?: string;
-  }): Observable<ViewerResponseModel>;
+  getViewer$(id?: string): Observable<ViewerResponseModel>;
 
-  getApplication$(params: {
-    name?: string;
-    version?: string;
-    id?: number;
-  }): Observable<ViewerResponseModel>;
-
-  getMap$(applicationId: number): Observable<MapResponseModel>;
+  getMap$(applicationId: string): Observable<MapResponseModel>;
 
   getDescribeLayer$(params: {
-    applicationId: number;
+    applicationId: string;
     layerId: number;
   }): Observable<LayerDetailsModel>;
 
   getFeatures$(params: {
-    applicationId: number;
+    applicationId: string;
     layerId: number;
     x?: number;
     y?: number;
@@ -47,19 +38,19 @@ export interface TailormapApiV1ServiceModel {
   }): Observable<FeaturesResponseModel>;
 
   getUniqueValues$(params: {
-    applicationId: number;
+    applicationId: string;
     layerId: number;
     attribute: string;
     filter?: string;
   }): Observable<UniqueValuesResponseModel>;
 
   getLayerExportCapabilities$(params: {
-    applicationId: number;
+    applicationId: string;
     layerId: number;
   }): Observable<LayerExportCapabilitiesModel>;
 
   getLayerExport$(params: {
-    applicationId: number;
+    applicationId: string;
     layerId: number;
     outputFormat: string;
     filter?: string;

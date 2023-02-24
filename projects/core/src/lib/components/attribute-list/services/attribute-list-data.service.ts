@@ -8,7 +8,7 @@ import { selectAttributeListTab, selectAttributeListTabData, selectAttributeList
 import { ColumnMetadataModel, FeatureModel, Sortorder, TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel } from '@tailormap-viewer/api';
 import { LoadAttributeListDataResultModel } from '../models/load-attribute-list-data-result.model';
 import { AttributeListDataModel } from '../models/attribute-list-data.model';
-import { selectApplicationId } from '../../../state/core.selectors';
+import { selectViewerId } from '../../../state/core.selectors';
 import { TypesHelper } from '@tailormap-viewer/shared';
 import { AttributeListColumnModel } from '../models/attribute-list-column.model';
 import { FilterService } from '../../../filter/services/filter.service';
@@ -79,7 +79,7 @@ export class AttributeListDataService implements OnDestroy {
     }
     const start = selectedData.pageIndex;
     const layerFilter = this.filterService.getFilterForLayer(layerId);
-    return this.store$.select(selectApplicationId)
+    return this.store$.select(selectViewerId)
       .pipe(
         filter(TypesHelper.isDefined),
         concatMap(applicationId => this.api.getFeatures$({

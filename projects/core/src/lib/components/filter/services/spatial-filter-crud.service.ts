@@ -6,7 +6,7 @@ import { nanoid } from 'nanoid';
 import { FilterTypeEnum } from '../../../filter/models/filter-type.enum';
 import { concatMap, forkJoin, map, Observable, take, combineLatest, filter, of } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { selectApplicationId } from '../../../state/core.selectors';
+import { selectViewerId } from '../../../state/core.selectors';
 import { setSelectedFilterGroup, setSelectedLayers } from '../state/filter-component.actions';
 import { selectSelectedFilterGroup, selectSelectedLayers } from '../state/filter-component.selectors';
 import { FilterTypeHelper } from '../../../filter/helpers/filter-type.helper';
@@ -156,9 +156,9 @@ export class SpatialFilterCrudService {
   private getLayerDetails$(
     layers: number[],
   ): Observable<LayerDetailsModel[]> {
-    return this.store$.select(selectApplicationId).pipe(
+    return this.store$.select(selectViewerId).pipe(
       concatMap(applicationId =>
-        forkJoin(layers.map(layer => this.describeAppLayerService.getDescribeAppLayer$(applicationId as number, layer))),
+        forkJoin(layers.map(layer => this.describeAppLayerService.getDescribeAppLayer$(applicationId as string, layer))),
       ),
       take(1),
     );

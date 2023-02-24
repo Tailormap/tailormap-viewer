@@ -5,7 +5,7 @@ const prefix = '[Core]';
 
 export const loadViewer = createAction(
   `${prefix} Load Viewer`,
-  props<{ kind?: string, name?: string }>(),
+  props<{ id?: string }>(),
 );
 export const loadViewerSuccess = createAction(
   `${prefix} Viewer Load Success`,
