@@ -192,6 +192,10 @@ This creates a service with a HttpClient injected and adjusted spec file to test
 
 Run `npm run test` to execute the unit tests via [Jest](https://jestjs.io).
 
+### Create CycloneDX BOM
+
+Run `npx @cyclonedx/cyclonedx-npm --output-file bom.xml --mc-type application --output-format XML` to create a CycloneDX BOM file.
+
 ## Building a Docker image
 
 After you've made your some changes to the source you can build your own Docker image using the following command. You may want to remove
