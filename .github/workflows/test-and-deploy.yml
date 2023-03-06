@@ -1,7 +1,7 @@
 name: 'Test and deploy'
 
 env: # Keep this in sync with Dockerfile version
-  NODE_VERSION: "18.14.1"
+  NODE_VERSION: "18.14.2"
 
 on:
   push:
