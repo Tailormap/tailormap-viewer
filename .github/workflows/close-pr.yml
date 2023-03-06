@@ -45,7 +45,7 @@ jobs:
 
       - name: 'Remove image from registry'
         if: ${{ always() }}
-        uses: bots-house/ghcr-delete-image-action@v1.0.1
+        uses: bots-house/ghcr-delete-image-action@v1.1.0
         with:
           token: "${{ secrets.GHCR_CLEANUP_PAT }}"
           owner: ${{ github.repository_owner }}
