@@ -1,7 +1,7 @@
 name: 'Test and deploy'
 
 env: # Keep this in sync with Dockerfile version
-  NODE_VERSION: "18.14.0"
+  NODE_VERSION: "18.14.2"
 
 on:
   push:
@@ -80,11 +80,12 @@ jobs:
     env:
       VERSION: snapshot
       COMPOSE_PROJECT_NAME: tailormap-snapshot
-      COMPOSE_FILE: docker-compose.yml:docker-compose.traefik.yml
+      COMPOSE_FILE: docker-compose.yml:docker-compose.traefik.yml:ci/docker-compose.snapshot.yml
       BASE_HREF: /
       HOST: ${{ secrets.DEPLOY_HOST_SNAPSHOT }}
       API_SENTRY_DSN: ${{ secrets.API_SENTRY_DSN }}
       VIEWER_SENTRY_DSN: ${{ secrets.VIEWER_SENTRY_DSN }}
+    needs: [ lint, test ]
     steps:
       - uses: actions/checkout@v3
         with:
@@ -107,7 +108,7 @@ jobs:
         run: |
           echo "VERSION=pr-${PR}" >> $GITHUB_ENV
           echo "COMPOSE_PROJECT_NAME=tailormap-pr-${PR}" >> $GITHUB_ENV
-          echo "COMPOSE_FILE=docker-compose.yml:docker-compose.traefik.yml:docker-compose.pr.yml" >> $GITHUB_ENV
+          echo "COMPOSE_FILE=docker-compose.yml:docker-compose.traefik.yml:ci/docker-compose.pr.yml" >> $GITHUB_ENV
           echo "BASE_HREF=/pull-request/${PR}/${GITHUB_REF_NAME_SLUG_URL}/" >> $GITHUB_ENV
 
       - name: 'Log in to GitHub container registry'
@@ -170,3 +171,37 @@ jobs:
       - uses: actions/dependency-review-action@v3
         with:
           deny-licenses: GPL-2.0+, AGPL-3.0+
+
+  cyclonedx:
+    name: 'CycloneDX'
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      contents: read
+    if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event_name == 'schedule') }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - run: npm install
+
+      - name: 'Create SBOM with CycloneDX'
+        uses: CycloneDX/gh-node-module-generatebom@v1
+
+      - name: 'Deploy SBOM'
+        uses: DependencyTrack/gh-upload-sbom@master
+        with:
+          serverhostname: ${{ secrets.DEPENDENCY_TRACK_HOSTNAME }}
+          apikey: ${{ secrets.DEPENDENCY_TRACK_APIKEY }}
+          project: 'e63f997e-e070-423b-afc0-8ab704e14abf'
+          bomfilename: 'bom.xml'

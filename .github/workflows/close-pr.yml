@@ -37,7 +37,7 @@ jobs:
 
       - name: 'Remove pull request deployment and image'
         env:
-          COMPOSE_FILE: docker-compose.yml:docker-compose.traefik.yml:docker-compose.pr.yml
+          COMPOSE_FILE: docker-compose.yml:docker-compose.traefik.yml:ci/docker-compose.pr.yml
           COMPOSE_PROJECT_NAME: tailormap-${{ env.VERSION_TAG }}
           VERSION: ${{ env.VERSION_TAG }}
         run: |
@@ -45,7 +45,7 @@ jobs:
 
       - name: 'Remove image from registry'
         if: ${{ always() }}
-        uses: bots-house/ghcr-delete-image-action@v1.0.1
+        uses: bots-house/ghcr-delete-image-action@v1.1.0
         with:
           token: "${{ secrets.GHCR_CLEANUP_PAT }}"
           owner: ${{ github.repository_owner }}

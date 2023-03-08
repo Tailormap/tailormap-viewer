@@ -1,0 +1,13 @@
+# Docker Compose overrides for continuous deployment of the main branch with the tailormap-data stack (see tailormap-api/build/ci)
+
+networks:
+  tailormap-data:
+    external: true
+
+services:
+  tailormap:
+    networks:
+      - tailormap-data
+    environment:
+      - SPATIAL_DBS_CONNECT=true
+      - SPATIAL_DBS_LOCALHOST=false

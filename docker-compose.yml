@@ -30,8 +30,5 @@ services:
     volumes:
       - db:/var/lib/postgresql/data
     healthcheck:
-      interval: 1m
-      timeout: 5s
-      retries: 5
-      test: pg_isready
+      test: 'pg_isready -U tailormap'
     restart: unless-stopped

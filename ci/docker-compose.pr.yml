@@ -7,7 +7,7 @@
 # VERSION=pr-xxx
 # BASE_HREF=/pr-xxx/
 # HOST=tailormap.example.com
-# COMPOSE_FILE=docker-compose.yml:docker-compose.traefik.yml:docker-compose.pr.yml
+# COMPOSE_FILE=docker-compose.yml:docker-compose.traefik.yml:ci/docker-compose.pr.yml
 # COMPOSE_PROJECT_NAME=tailormap-${VERSION}
 # EOF
 # docker compose --env-file env-pr build
