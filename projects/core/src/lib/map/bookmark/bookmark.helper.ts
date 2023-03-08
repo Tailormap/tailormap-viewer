@@ -57,7 +57,7 @@ export class MapBookmarkHelper {
     fragment: LayerVisibilityBookmarkFragment,
     layers: AppLayerWithInitialValuesModel[],
   ): MapBookmarkContents {
-    let id = -1;
+    const id = -1;
     const checkedVisibilityValues = new Set();
     const checkedOpacityValues = new Set();
 

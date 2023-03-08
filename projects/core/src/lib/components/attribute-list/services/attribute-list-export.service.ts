@@ -186,7 +186,7 @@ export class AttributeListExportService {
         if (cached) {
           return of(cached);
         }
-        return this.api.getLayerExportCapabilities$({ applicationId, layerName: layerName })
+        return this.api.getLayerExportCapabilities$({ applicationId, layerName })
           .pipe(
             catchError(() => of({ exportable: false, outputFormats: [] })),
             tap(capabilities => {

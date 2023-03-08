@@ -111,7 +111,7 @@ export class AttributeListContentComponent implements OnInit {
         }
         const data: FilterDialogData = {
           columnName: $event.columnId,
-          layerName: layerName,
+          layerName,
           filter: attributeFilterModel,
           columnType: $event.attributeType,
           cqlFilter: CqlFilterHelper.getFilters(otherFilters).get(layerName),

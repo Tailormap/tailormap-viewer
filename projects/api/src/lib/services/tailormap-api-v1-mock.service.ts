@@ -26,6 +26,7 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
   public getViewer$(_id?: string): Observable<ViewerResponseModel> {
     return of(getViewerResponseData());
   }
+
   public getMap$(_applicationId: string): Observable<MapResponseModel> {
     return of(getMapResponseData());
   }
