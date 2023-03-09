@@ -107,8 +107,8 @@ export class CatalogHelper {
 
   public static getTreeModelForLayer(layer: ExtendedGeoServiceLayerModel, allLayers: ExtendedGeoServiceLayerModel[]): CatalogTreeModel {
     const layerChildren: CatalogTreeModel[] = (layer.children || [])
-      .map(name => {
-        const childLayer = allLayers.find(l => l.name === name && l.serviceId === layer.serviceId);
+      .map(id => {
+        const childLayer = allLayers.find(l => l.id === id && l.serviceId === layer.serviceId);
         if (!childLayer) {
           return null;
         }

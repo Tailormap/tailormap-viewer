@@ -13,22 +13,16 @@ import { FormHelper } from '../../helpers/form.helper';
 export class LayerSettingsFormComponent implements OnInit {
 
   private destroyed = new Subject();
-  private _layerSettings: LayerSettingsModel | null = null;
 
   @Input()
   public showTitle = true;
 
   @Input()
-  public set layerSettings(layerSettings: LayerSettingsModel | null) {
+  public set layerSettings(layerSettings: LayerSettingsModel | null | undefined) {
     this.layerSettingsForm.patchValue({
       title: layerSettings ? layerSettings.title : '',
       hiDpiEnabled: layerSettings ? !layerSettings.hiDpiDisabled : true,
     });
-    this._layerSettings = layerSettings;
-  }
-
-  public get layerSettings(): LayerSettingsModel | null {
-    return this._layerSettings;
   }
 
   @Output()

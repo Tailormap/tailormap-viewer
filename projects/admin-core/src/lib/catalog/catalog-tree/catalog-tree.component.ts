@@ -5,7 +5,7 @@ import {
   selectCatalogLoadError, selectCatalogLoadStatus, selectCatalogTree,
 } from '../state/catalog.selectors';
 import { expandTree, loadCatalog } from '../state/catalog.actions';
-import { BehaviorSubject, filter, map, Observable, of, Subject, take, takeUntil } from 'rxjs';
+import { BehaviorSubject, filter, map, Observable, of, Subject, takeUntil } from 'rxjs';
 import { CatalogTreeModel, CatalogTreeModelMetadataTypes } from '../models/catalog-tree.model';
 import { CatalogHelper } from '../helpers/catalog.helper';
 import { CatalogService } from '../services/catalog.service';
@@ -138,22 +138,7 @@ export class CatalogTreeComponent implements OnInit, OnDestroy {
     if (urlParts.length === 0) {
       return;
     }
-    const catalogNode = urlParts.find(part => part.type === CatalogTreeModelTypeEnum.CATALOG_NODE_TYPE);
-    if (catalogNode) {
-      this.store$.dispatch(expandTree({ id: catalogNode.id, nodeType: catalogNode.type }));
-      this.catalogService.loadCatalogNodeItems$(catalogNode.id, true)
-        .pipe(take(1))
-        .subscribe(() => {
-          const serviceNode = urlParts.find(part => part.type === CatalogTreeModelTypeEnum.SERVICE_TYPE);
-          if (serviceNode) {
-            this.store$.dispatch(expandTree({ id: serviceNode.id, nodeType: serviceNode.type }));
-          }
-          const layerNode = urlParts.find(part => part.type === CatalogTreeModelTypeEnum.SERVICE_LAYER_TYPE);
-          if (layerNode) {
-            this.store$.dispatch(expandTree({ id: layerNode.id, nodeType: layerNode.type }));
-          }
-        });
-    }
+    this.catalogService.expandTreeToSelectedItem(urlParts);
   }
 
 }

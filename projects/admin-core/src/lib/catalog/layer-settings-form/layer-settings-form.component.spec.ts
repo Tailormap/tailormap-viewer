@@ -20,7 +20,7 @@ describe('LayerSettingsFormComponent', () => {
       expect(changedFn).toHaveBeenCalledTimes(1);
       expect(changedFn).toHaveBeenCalledWith({ title: 'Some title', hiDpiDisabled: false });
     });
-    await userEvent.click(await screen.findByText('Hi-DPI mode'));
+    await userEvent.click(await screen.findByText('High-DPI mode'));
     await waitFor(() => {
       expect(changedFn).toHaveBeenCalledTimes(2);
       expect(changedFn).toHaveBeenNthCalledWith(2, { title: 'Some title', hiDpiDisabled: true });

@@ -5,6 +5,7 @@ import { CatalogTreeModel } from '../models/catalog-tree.model';
 import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
 import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-layer.model';
+import { GeoServiceLayerSettingsModel } from '../models/geo-service-layer-settings.model';
 
 const selectCatalogState = createFeatureSelector<CatalogState>(catalogStateKey);
 
@@ -37,6 +38,22 @@ export const selectGeoServiceAndLayerById = (serviceId: string, layerId: string)
       return null;
     }
     return { service, layer };
+  },
+);
+
+export const selectGeoServiceLayerSettingsById = (serviceId: string, layerId: string) => createSelector(
+  selectGeoServiceAndLayerById(serviceId, layerId),
+  (serviceAndLayer: { service: ExtendedGeoServiceModel; layer: ExtendedGeoServiceLayerModel } | null): GeoServiceLayerSettingsModel | null => {
+    if (!serviceAndLayer) {
+      return null;
+    }
+    const layerSettings = serviceAndLayer.service.settings?.layerSettings || {};
+    return {
+      layerName: serviceAndLayer.layer.name,
+      layerTitle: serviceAndLayer.layer.title,
+      serviceId: serviceAndLayer.service.id,
+      settings: layerSettings[serviceAndLayer.layer.name] || {},
+    };
   },
 );
 

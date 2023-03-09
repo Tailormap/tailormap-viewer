@@ -4,14 +4,15 @@ import {
   CatalogItemKindEnum, CatalogItemModel, CatalogNodeModel, GeoServiceWithLayersModel, TAILORMAP_ADMIN_API_V1_SERVICE,
   TailormapAdminApiV1ServiceModel,
 } from '@tailormap-admin/admin-api';
-import { catchError, concatMap, filter, forkJoin, of, Subject, take, takeUntil, tap } from 'rxjs';
+import { catchError, concatMap, forkJoin, of, Subject, take, takeUntil, tap } from 'rxjs';
 import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
 import { selectCatalog, selectCatalogNodeById, selectGeoServices, selectParentsForCatalogNode } from '../state/catalog.selectors';
-import { addGeoServices, updateCatalog } from '../state/catalog.actions';
+import { addGeoServices, expandTree, updateCatalog } from '../state/catalog.actions';
 import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackBarMessageComponent } from '@tailormap-viewer/shared';
 import { nanoid } from 'nanoid';
+import { CatalogTreeModelTypeEnum } from '../models/catalog-tree-model-type.enum';
 
 @Injectable({
   providedIn: 'root',
@@ -37,15 +38,35 @@ export class CatalogService implements OnDestroy {
     this.destroyed.complete();
   }
 
+  public expandTreeToSelectedItem(nodesList: Array<{ type: CatalogTreeModelTypeEnum; treeNodeId: string; id: string }>) {
+    const catalogNode = nodesList.find(part => part.type === CatalogTreeModelTypeEnum.CATALOG_NODE_TYPE);
+    if (catalogNode) {
+      this.store$.dispatch(expandTree({ id: catalogNode.id, nodeType: catalogNode.type }));
+      this.loadCatalogNodeItems$(catalogNode.id, true)
+        .pipe(take(1))
+        .subscribe(() => {
+          const serviceNode = nodesList.find(part => part.type === CatalogTreeModelTypeEnum.SERVICE_TYPE);
+          if (serviceNode) {
+            this.store$.dispatch(expandTree({ id: serviceNode.id, nodeType: serviceNode.type }));
+          }
+          const layerNode = nodesList.find(part => part.type === CatalogTreeModelTypeEnum.SERVICE_LAYER_TYPE);
+          if (layerNode) {
+            this.store$.dispatch(expandTree({ id: layerNode.id, nodeType: layerNode.type }));
+          }
+        });
+    }
+  }
+
   public loadCatalogNodeItems$(nodeId: string, includeParents?: boolean) {
     return this.store$.select(selectParentsForCatalogNode(nodeId))
       .pipe(
         take(1),
         concatMap(parentIds => {
-          const requests$ = [this.loadCatalogChildren$(nodeId)];
+          const requests$ = [];
           if (includeParents) {
             requests$.push(...parentIds.map(id => this.loadCatalogChildren$(id)));
           }
+          requests$.push(this.loadCatalogChildren$(nodeId));
           return forkJoin(requests$);
         }),
       );
@@ -55,24 +76,27 @@ export class CatalogService implements OnDestroy {
     this.cancelCurrentSubscription(nodeId);
     const newSubscription = new Subject<null>();
     this.loadServiceSubscriptions.set(nodeId, newSubscription);
-    const sub = new Subject<boolean>();
-    this.store$.select(selectCatalogNodeById(nodeId)).pipe(
-      takeUntil(newSubscription),
-      filter((node): node is ExtendedCatalogNodeModel => !!node && (node.items || []).length > 0),
+    return this.store$.select(selectCatalogNodeById(nodeId)).pipe(
+      take(1),
       concatMap(node => {
+        if (!node || (node.items || []).length === 0) {
+          return of([]);
+        }
         const serviceItems = (node.items || []).filter(item => item.kind === CatalogItemKindEnum.GEO_SERVICE);
-        const services$ = this.getServiceRequests$(serviceItems);
+        const services$ = this.getServiceRequests$(serviceItems, newSubscription);
+        if (services$.length === 0) {
+          return of([]);
+        }
         return forkJoin(services$);
       }),
-    ).subscribe(responses => {
-      this.handleResponses(nodeId, responses, newSubscription);
-      sub.next(true);
-      sub.complete();
-    });
-    return sub;
+      tap(responses => this.handleResponses(nodeId, responses, newSubscription)),
+    );
   }
 
   private handleResponses(nodeId: string, responses: Array<GeoServiceWithLayersModel | null>, newSubscription: Subject<null>) {
+    if (responses.length === 0) {
+      return;
+    }
     const hasError = responses.some(response => response === null);
     if (hasError) {
       SnackBarMessageComponent.open$(this.snackBar, {
@@ -87,10 +111,11 @@ export class CatalogService implements OnDestroy {
     }
   }
 
-  private getServiceRequests$(serviceItems: CatalogItemModel[]) {
+  private getServiceRequests$(serviceItems: CatalogItemModel[], subscription: Subject<null>) {
     return serviceItems.filter(item => !this.geoServices.has(item.id)).map(item => {
       return this.adminApiService.getGeoService$({ id: item.id })
         .pipe(
+          takeUntil(subscription),
           catchError(() => {
             return of(null);
           }),

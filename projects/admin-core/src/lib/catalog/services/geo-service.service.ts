@@ -8,7 +8,7 @@ import { catchError, concatMap, map, of, tap } from 'rxjs';
 import { SnackBarMessageComponent } from '@tailormap-viewer/shared';
 import { addGeoServices, deleteGeoService, updateGeoService } from '../state/catalog.actions';
 import { CatalogService } from './catalog.service';
-import { GeoServiceCreateModel, GeoServiceUpdateModel, GeoServiceWithIdUpdateModel } from '../models/geo-service-update.model';
+import { GeoServiceCreateModel, GeoServiceWithIdUpdateModel } from '../models/geo-service-update.model';
 
 @Injectable({
   providedIn: 'root',

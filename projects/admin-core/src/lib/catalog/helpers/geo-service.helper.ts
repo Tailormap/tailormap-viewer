@@ -5,7 +5,7 @@ import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-lay
 export class GeoServiceHelper {
 
   public static getExtendedGeoServiceLayer(geoService: GeoServiceWithLayersModel, catalogNodeId: string): ExtendedGeoServiceLayerModel[] {
-    return geoService.layers.map((layer, idx) => {
+    const serviceLayers = geoService.layers.map((layer, idx) => {
       const id = layer.name || `virtual-layer-${idx}`;
       return {
         ...layer,
@@ -14,6 +14,12 @@ export class GeoServiceHelper {
         catalogNodeId,
       };
     });
+    return serviceLayers.map<ExtendedGeoServiceLayerModel>(layer => ({
+      ...layer,
+      children: layer.children // map children to point to ID instead of name
+        ? layer.children.map<string>(child => serviceLayers.find(l => l.name === child)?.id || '')
+        : null,
+    }));
   }
 
   public static getExtendedGeoService(geoService: GeoServiceWithLayersModel, catalogNodeId: string): [ ExtendedGeoServiceModel, ExtendedGeoServiceLayerModel[] ] {

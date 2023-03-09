@@ -3,7 +3,7 @@ import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { GeoServiceService } from '../services/geo-service.service';
-import { GeoServiceCreateModel, GeoServiceUpdateModel } from '../models/geo-service-update.model';
+import { GeoServiceCreateModel } from '../models/geo-service-update.model';
 
 export interface GeoServiceFormDialogData {
   geoService: ExtendedGeoServiceModel | null;
