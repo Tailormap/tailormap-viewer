@@ -50,9 +50,9 @@ export class ApplicationMapBookmarkService implements OnDestroy {
       )
       .subscribe(([ fragment, layers ]) => {
         const bookmarkContents = MapBookmarkHelper.visibilityDataFromFragment(fragment, layers);
-        if (bookmarkContents.visibilityChanges.length > 0) {
-          this.store$.dispatch(setLayerVisibility({ visibility: bookmarkContents.visibilityChanges }));
-        }
+        // if (bookmarkContents.visibilityChanges.length > 0) {
+        //   this.store$.dispatch(setLayerVisibility({ visibility: bookmarkContents.visibilityChanges }));
+        // }
 
         for (const item of bookmarkContents.opacityChanges) {
           this.store$.dispatch(setLayerOpacity(item));
