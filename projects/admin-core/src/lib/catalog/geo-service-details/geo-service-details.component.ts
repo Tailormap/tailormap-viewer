@@ -1,11 +1,12 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
-import { BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, takeUntil } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { selectGeoServiceById } from '../state/catalog.selectors';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 import { GeoServiceService } from '../services/geo-service.service';
-import { GeoServiceUpdateModel } from '../models/geo-service-update.model';
+import { GeoServiceUpdateModel, GeoServiceWithIdUpdateModel } from '../models/geo-service-update.model';
+import { LayerSettingsModel } from '@tailormap-admin/admin-api';
 
 @Component({
   selector: 'tm-admin-geo-service-details',
@@ -18,6 +19,7 @@ export class GeoServiceDetailsComponent implements OnInit, OnDestroy {
   public geoService$: Observable<ExtendedGeoServiceModel | null> = of(null);
   private destroyed = new Subject();
   public updatedGeoService: GeoServiceUpdateModel | null = null;
+  public updatedDefaultLayerSettings: LayerSettingsModel | null = null;
 
   private savingSubject = new BehaviorSubject(false);
   public saving$ = this.savingSubject.asObservable();
@@ -35,6 +37,7 @@ export class GeoServiceDetailsComponent implements OnInit, OnDestroy {
       distinctUntilChanged(),
       filter((serviceId): serviceId is string => !!serviceId),
       switchMap(serviceId => this.store$.select(selectGeoServiceById(serviceId))),
+      tap(geoService => { if (geoService) { this.updatedGeoService = null; }}),
     );
   }
 
@@ -47,12 +50,20 @@ export class GeoServiceDetailsComponent implements OnInit, OnDestroy {
     this.updatedGeoService = $event;
   }
 
-  public save(geoServiceId: string, catalogNodeId: string) {
-    if (!this.updatedGeoService) {
+  public updateDefaultLayerSettings($event: LayerSettingsModel) {
+    this.updatedDefaultLayerSettings = $event;
+  }
+
+  public save(geoServiceId: string) {
+    if (!this.updatedGeoService && !this.updatedDefaultLayerSettings) {
       return;
     }
     this.savingSubject.next(true);
-    this.geoServiceService.updateGeoService$({ ...this.updatedGeoService, id: geoServiceId }, catalogNodeId)
+    this.geoServiceService.updateGeoService$(
+      geoServiceId,
+      () => this.updatedGeoService || {},
+      serviceSetting => ({ defaultLayerSettings: { ...serviceSetting.defaultLayerSettings, ...(this.updatedDefaultLayerSettings || {}) } }),
+    )
       .pipe(takeUntil(this.destroyed))
       .subscribe(() => this.savingSubject.next(false));
   }

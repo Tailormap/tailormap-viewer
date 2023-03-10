@@ -1,7 +1,15 @@
 <form [formGroup]="layerSettingsForm">
-  <mat-form-field *ngIf="showTitle">
+  <mat-form-field *ngIf="isLayerSpecific">
     <mat-label i18n>Title</mat-label>
     <input matInput tmAutoFocus placeholder="Title" i18n-placeholder formControlName="title" />
   </mat-form-field>
-  <mat-slide-toggle formControlName="hiDpiEnabled" i18n>High-DPI mode</mat-slide-toggle>
+  <mat-slide-toggle *ngIf="!isLayerSpecific" formControlName="hiDpiEnabled" i18n>High-DPI mode</mat-slide-toggle>
+  <ng-container *ngIf="isLayerSpecific">
+    <h4 i18n>High-DPI mode</h4>
+    <mat-button-toggle-group aria-label="High-DPI mode" [value]="getHiDPIMode()" (change)="setHiDPIMode($event)">
+      <mat-button-toggle value="INHERIT" i18n>Default</mat-button-toggle>
+      <mat-button-toggle [value]="false" i18n>Disabled</mat-button-toggle>
+      <mat-button-toggle [value]="true" i18n>Enabled</mat-button-toggle>
+    </mat-button-toggle-group>
+  </ng-container>
 </form>

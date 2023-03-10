@@ -2,8 +2,11 @@
   <h2 class="page-details-title" i18n>Edit {{ geoService.title }}</h2>
   <tm-admin-geo-service-form [geoService]="geoService"
                              (changed)="updateGeoService($event)"></tm-admin-geo-service-form>
+  <h3>Default layer settings</h3>
+  <tm-admin-layer-settings-form [layerSettings]="geoService.settings?.defaultLayerSettings"
+                                (changed)="updateDefaultLayerSettings($event)"></tm-admin-layer-settings-form>
   <div class="page-details-actions">
-    <button mat-flat-button color="primary" (click)="save(geoService.id, geoService.catalogNodeId)" [disabled]="!updatedGeoService || (saving$ | async)">
+    <button mat-flat-button color="primary" (click)="save(geoService.id)" [disabled]="(!updatedGeoService && !updatedDefaultLayerSettings) || (saving$ | async)">
       <ng-template #saveLabel><ng-container i18n>Save</ng-container></ng-template>
       <ng-container *ngIf="saving$ | async; else: saveLabel">
         <mat-spinner diameter="20"></mat-spinner>

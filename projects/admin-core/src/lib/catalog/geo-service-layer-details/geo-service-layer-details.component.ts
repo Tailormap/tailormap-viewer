@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
-import { BehaviorSubject, concatMap, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take } from 'rxjs';
+import { BehaviorSubject, concatMap, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, tap } from 'rxjs';
 import { selectGeoServiceById, selectGeoServiceLayerSettingsById } from '../state/catalog.selectors';
 import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 import { ActivatedRoute, ParamMap } from '@angular/router';
@@ -21,7 +21,7 @@ export class GeoServiceLayerDetailsComponent implements OnInit, OnDestroy {
   private savingSubject = new BehaviorSubject(false);
   public saving$ = this.savingSubject.asObservable();
 
-  public updatedLayerSettings: LayerSettingsModel = {};
+  public updatedLayerSettings: LayerSettingsModel | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -41,6 +41,7 @@ export class GeoServiceLayerDetailsComponent implements OnInit, OnDestroy {
         }
         return this.store$.select(selectGeoServiceLayerSettingsById(serviceId, layerId));
       }),
+      tap(layerSettings => { if (layerSettings) { this.updatedLayerSettings = null; }}),
     );
   }
 
@@ -57,22 +58,13 @@ export class GeoServiceLayerDetailsComponent implements OnInit, OnDestroy {
     if (!this.updatedLayerSettings) {
       return;
     }
+    const updatedLayerSettings = { ...this.updatedLayerSettings };
     this.savingSubject.next(true);
-    this.store$.select(selectGeoServiceById(serviceId))
-      .pipe(
-        take(1),
-        filter((service): service is ExtendedGeoServiceModel => !!service),
-        concatMap(service => {
-          const updatedSettings: GeoServiceSettingsModel = {
-            ...service.settings,
-            layerSettings: {
-              ...(service.settings?.layerSettings || {}),
-              [layerName]: this.updatedLayerSettings,
-            },
-          };
-          return this.geoServiceService.updateGeoService$({ settings: updatedSettings, id: service.id }, service.catalogNodeId);
-        }),
-      )
+    this.geoServiceService.updateGeoService$(
+      serviceId,
+      () => ({}),
+      serviceSetting => ({ layerSettings: { ...(serviceSetting.layerSettings || {}), [layerName]: updatedLayerSettings } }),
+    )
       .subscribe(() => {
         this.savingSubject.next(false);
       });

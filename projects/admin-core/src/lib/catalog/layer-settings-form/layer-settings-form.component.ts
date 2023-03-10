@@ -3,6 +3,7 @@ import { debounceTime, filter, Subject, takeUntil } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
 import { LayerSettingsModel } from '@tailormap-admin/admin-api';
 import { FormHelper } from '../../helpers/form.helper';
+import { MatButtonToggleChange } from '@angular/material/button-toggle';
 
 @Component({
   selector: 'tm-admin-layer-settings-form',
@@ -13,16 +14,25 @@ import { FormHelper } from '../../helpers/form.helper';
 export class LayerSettingsFormComponent implements OnInit {
 
   private destroyed = new Subject();
+  private _layerSettings: LayerSettingsModel | null | undefined;
+  private _isLayerSpecific = false;
 
   @Input()
-  public showTitle = true;
+  public set isLayerSpecific(isLayerSpecific: boolean | undefined) {
+    this._isLayerSpecific = !!isLayerSpecific;
+    this.patchForm();
+  }
+  public get isLayerSpecific() {
+    return this._isLayerSpecific;
+  }
 
   @Input()
   public set layerSettings(layerSettings: LayerSettingsModel | null | undefined) {
-    this.layerSettingsForm.patchValue({
-      title: layerSettings ? layerSettings.title : '',
-      hiDpiEnabled: layerSettings ? !layerSettings.hiDpiDisabled : true,
-    });
+    this._layerSettings = layerSettings;
+    this.patchForm();
+  }
+  public get layerSettings() {
+    return this._layerSettings;
   }
 
   @Output()
@@ -30,7 +40,7 @@ export class LayerSettingsFormComponent implements OnInit {
 
   public layerSettingsForm = new FormGroup({
     title: new FormControl('', { nonNullable: true }),
-    hiDpiEnabled: new FormControl<boolean>(true, { nonNullable: true }),
+    hiDpiEnabled: new FormControl<boolean | null>(null, { nonNullable: false }),
   });
 
   constructor() { }
@@ -43,19 +53,49 @@ export class LayerSettingsFormComponent implements OnInit {
         filter(() => this.isValidForm()),
       )
       .subscribe(value => {
-        this.changed.emit({
-          title: value.title || '',
-          hiDpiDisabled: typeof value === 'undefined' || typeof value.hiDpiEnabled === 'undefined'
-            ? true
-            : !value.hiDpiEnabled,
-        });
+        this.changed.emit(this.getUpdatedLayerSettings(value));
       });
   }
 
+  private getUpdatedLayerSettings(value: Partial<{title: string; hiDpiEnabled: boolean | null}>): LayerSettingsModel {
+    const hiDpiDisabled = typeof value === 'undefined' || typeof value.hiDpiEnabled === 'undefined' || value.hiDpiEnabled === null
+      ? undefined
+      : !value.hiDpiEnabled;
+
+    return { title: value.title || '', hiDpiDisabled };
+  }
+
   private isValidForm() {
-    const values = this.layerSettingsForm.getRawValue();
-    return FormHelper.isValidValue(values.title)
-      && this.layerSettingsForm.dirty;
+    if (!this._layerSettings) {
+      return this.layerSettingsForm.dirty;
+    }
+    const values = this.getUpdatedLayerSettings(this.layerSettingsForm.getRawValue());
+    return FormHelper.someValuesChanged([
+      [ values.title, this._layerSettings.title ],
+      [ values.hiDpiDisabled, this._layerSettings.hiDpiDisabled ],
+    ]);
+  }
+
+  public getHiDPIMode() {
+    const mode = this.layerSettingsForm.get('hiDpiEnabled')?.value;
+    return typeof mode === 'boolean' ? mode : 'INHERIT';
+  }
+
+  public setHiDPIMode($event: MatButtonToggleChange) {
+    this.layerSettingsForm.patchValue({
+      hiDpiEnabled: typeof $event.value === 'boolean' ? $event.value : null,
+    });
+  }
+
+  private patchForm() {
+    const defaultHiDpiValue = this.isLayerSpecific ? null : true;
+    this.layerSettingsForm.patchValue({
+      title: this.layerSettings?.title ? this.layerSettings.title : '',
+      hiDpiEnabled: this.layerSettings
+        ? (typeof this.layerSettings.hiDpiDisabled === 'boolean' ? !this.layerSettings.hiDpiDisabled : defaultHiDpiValue)
+        : defaultHiDpiValue,
+    }, { emitEvent: false, onlySelf: true });
+    this.layerSettingsForm.markAsUntouched();
   }
 
 }

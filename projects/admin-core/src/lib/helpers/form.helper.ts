@@ -4,9 +4,9 @@ export class FormHelper {
     return typeof value !== 'undefined' && value !== null && value.length > 0;
   }
 
-  public static someValuesChanged(param: Array<[ string | undefined | null, string | undefined ]>) {
+  public static someValuesChanged(param: Array<[ string | boolean | undefined | null, string | boolean | undefined | null ]>) {
     return param.some(([ value, original ]) => {
-      return !!value && value !== original;
+      return value !== original;
     });
   }
 

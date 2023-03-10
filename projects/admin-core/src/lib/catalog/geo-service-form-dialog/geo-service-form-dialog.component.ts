@@ -50,7 +50,7 @@ export class GeoServiceFormDialogComponent {
     this.savingSubject.next(true);
     const saveObservable$ = (this.data.geoService === null
         ? this.geoServiceService.createGeoService$(this.geoService, this.data.parentNode)
-        : this.geoServiceService.updateGeoService$({ ...this.geoService, id: this.data.geoService.id }, this.data.parentNode)
+        : this.geoServiceService.updateGeoService$(this.data.geoService.id, () => this.geoService || {})
     );
     saveObservable$
       .pipe(takeUntil(this.destroyed))

@@ -1,14 +1,17 @@
 import { Inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
+  GeoServiceSettingsModel,
   TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel,
 } from '@tailormap-admin/admin-api';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { catchError, concatMap, map, of, tap } from 'rxjs';
+import { catchError, concatMap, filter, map, of, take, tap } from 'rxjs';
 import { SnackBarMessageComponent } from '@tailormap-viewer/shared';
 import { addGeoServices, deleteGeoService, updateGeoService } from '../state/catalog.actions';
 import { CatalogService } from './catalog.service';
-import { GeoServiceCreateModel, GeoServiceWithIdUpdateModel } from '../models/geo-service-update.model';
+import { GeoServiceCreateModel, GeoServiceUpdateModel, GeoServiceWithIdUpdateModel } from '../models/geo-service-update.model';
+import { selectGeoServiceById } from '../state/catalog.selectors';
+import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 
 @Injectable({
   providedIn: 'root',
@@ -41,7 +44,26 @@ export class GeoServiceService {
     );
   }
 
-  public updateGeoService$(geoService: GeoServiceWithIdUpdateModel, catalogNodeId: string) {
+  public updateGeoService$(
+    geoServiceId: string,
+    getUpdatedService: (service: ExtendedGeoServiceModel) => Partial<GeoServiceUpdateModel>,
+    getUpdatedSettings?: (settings: GeoServiceSettingsModel) => Partial<GeoServiceSettingsModel>,
+  ) {
+    return this.store$.select(selectGeoServiceById(geoServiceId))
+      .pipe(
+        take(1),
+        filter((service): service is ExtendedGeoServiceModel => !!service),
+        concatMap(service => {
+          return this._updateGeoService$({
+            ...getUpdatedService(service),
+            settings: { ...service.settings, ...(getUpdatedSettings ? getUpdatedSettings(service.settings || {}) : {}) },
+            id: service.id,
+          }, service.catalogNodeId);
+        }),
+      );
+  }
+
+  private _updateGeoService$(geoService: GeoServiceWithIdUpdateModel, catalogNodeId: string) {
     return this.adminApiService.updateGeoService$({ id: geoService.id, geoService }).pipe(
       catchError(() => {
         this.showErrorMessage($localize `Error while updating geo service.`);

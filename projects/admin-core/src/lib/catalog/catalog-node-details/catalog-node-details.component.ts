@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, takeUntil } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
 import { Store } from '@ngrx/store';
 import { selectCatalogNodeById } from '../state/catalog.selectors';
@@ -39,6 +39,7 @@ export class CatalogNodeDetailsComponent implements OnInit, OnDestroy {
       distinctUntilChanged(),
       filter((nodeId): nodeId is string => !!nodeId),
       switchMap(nodeId => this.store$.select(selectCatalogNodeById(nodeId))),
+      tap(node => { if (node) { this.updatedNode = null; }}),
     );
   }
 
