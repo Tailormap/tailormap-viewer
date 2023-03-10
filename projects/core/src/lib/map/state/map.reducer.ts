@@ -38,7 +38,7 @@ const onLoadMapFailed = (
 const onSetLayerVisibility = (state: MapState, payload: ReturnType<typeof MapActions.setLayerVisibility>): MapState => ({
   ...state,
   layers: state.layers.map(layer => {
-    const updated = payload.visibility.find(v => v.name === layer.name);
+    const updated = payload.visibility.find(v => v.id === layer.id);
     const visible = updated
       ? updated.checked
       : layer.visible;
@@ -51,13 +51,13 @@ const onSetLayerVisibility = (state: MapState, payload: ReturnType<typeof MapAct
 
 const onToggleAllLayersVisibility = (state: MapState): MapState => {
   // Maybe we should specify which layers are foreground/background layers in the state when fetched from the API
-  const foregroundLayerNames = new Set(LayerTreeNodeHelper.getAppLayerNames(state.layerTreeNodes, state.layerTreeNodes.find(l => l.root)));
-  const foregroundLayers = state.layers.filter(l => foregroundLayerNames.has(l.name));
+  const foregroundLayerIds = new Set(LayerTreeNodeHelper.getAppLayerIds(state.layerTreeNodes, state.layerTreeNodes.find(l => l.root)));
+  const foregroundLayers = state.layers.filter(l => foregroundLayerIds.has(l.id));
   const someVisible = foregroundLayers.some(l => l.visible);
   return {
     ...state,
     layers: state.layers.map(layer => {
-      if (foregroundLayerNames.has(layer.name)) {
+      if (foregroundLayerIds.has(layer.id)) {
         return {
           ...layer,
           visible: !someVisible,
@@ -68,9 +68,9 @@ const onToggleAllLayersVisibility = (state: MapState): MapState => {
   };
 };
 
-const onSetSelectedLayerName = (state: MapState, payload: ReturnType<typeof MapActions.setSelectedLayerName>): MapState => ({
+const onSetSelectedLayerId = (state: MapState, payload: ReturnType<typeof MapActions.setSelectedLayerId>): MapState => ({
   ...state,
-  selectedLayer: payload.layerName,
+  selectedLayer: payload.layerId,
 });
 
 const onToggleLevelExpansion = (state: MapState, payload: ReturnType<typeof MapActions.toggleLevelExpansion>): MapState => {
@@ -176,7 +176,7 @@ const onSetSelectedBackgroundNodeId = (state: MapState, payload: ReturnType<type
 
 const onSetLayerOpacity = (state: MapState, payload: ReturnType<typeof MapActions.setLayerOpacity>): MapState => ({
   ...state,
-  layers: StateHelper.updateArrayItemInState(state.layers, l => l.name === payload.layerName, layer => ({
+  layers: StateHelper.updateArrayItemInState(state.layers, l => l.id === payload.layerId, layer => ({
     ...layer,
     opacity: payload.opacity,
   })),
@@ -190,7 +190,7 @@ const mapReducerImpl = createReducer<MapState>(
   on(MapActions.setLayerVisibility, onSetLayerVisibility),
   on(MapActions.toggleAllLayersVisibility, onToggleAllLayersVisibility),
   on(MapActions.toggleLevelExpansion, onToggleLevelExpansion),
-  on(MapActions.setSelectedLayerName, onSetSelectedLayerName),
+  on(MapActions.setSelectedLayerId, onSetSelectedLayerId),
   on(MapActions.addServices, onAddServices),
   on(MapActions.addAppLayers, onAddAppLayers),
   on(MapActions.addLayerTreeNodes, onAddLayerTreeNodes),

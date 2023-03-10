@@ -14,30 +14,30 @@ const getAppLayerWithInitialValuesModel =
   };
 
 const initialLayers = [
-  getAppLayerWithInitialValuesModel({ name: '1', visible: true }),
-  getAppLayerWithInitialValuesModel({ name: '2', visible: false }),
-  getAppLayerWithInitialValuesModel({ name: '3', visible: true }),
-  getAppLayerWithInitialValuesModel({ name: '9', visible: true }),
-  getAppLayerWithInitialValuesModel({ name: '256', visible: false }),
-  getAppLayerWithInitialValuesModel({ name: '512', visible: true }),
+  getAppLayerWithInitialValuesModel({ id: '1', visible: true }),
+  getAppLayerWithInitialValuesModel({ id: '2', visible: false }),
+  getAppLayerWithInitialValuesModel({ id: '3', visible: true }),
+  getAppLayerWithInitialValuesModel({ id: '9', visible: true }),
+  getAppLayerWithInitialValuesModel({ id: '256', visible: false }),
+  getAppLayerWithInitialValuesModel({ id: '512', visible: true }),
 ];
 
 const twoFlippedLayers = [
-  getAppLayerWithInitialValuesModel({ name: '1', visible: true }, false),
-  getAppLayerWithInitialValuesModel({ name: '2', visible: false }, true),
-  getAppLayerWithInitialValuesModel({ name: '3', visible: true }),
-  getAppLayerWithInitialValuesModel({ name: '9', visible: true }),
-  getAppLayerWithInitialValuesModel({ name: '256', visible: false }),
-  getAppLayerWithInitialValuesModel({ name: '512', visible: true }),
+  getAppLayerWithInitialValuesModel({ id: '1', visible: true }, false),
+  getAppLayerWithInitialValuesModel({ id: '2', visible: false }, true),
+  getAppLayerWithInitialValuesModel({ id: '3', visible: true }),
+  getAppLayerWithInitialValuesModel({ id: '9', visible: true }),
+  getAppLayerWithInitialValuesModel({ id: '256', visible: false }),
+  getAppLayerWithInitialValuesModel({ id: '512', visible: true }),
 ];
 
 const allFlippedLayers = [
-  getAppLayerWithInitialValuesModel({ name: '1', visible: true }, false),
-  getAppLayerWithInitialValuesModel({ name: '2', visible: false }, true),
-  getAppLayerWithInitialValuesModel({ name: '3', visible: true }, false),
-  getAppLayerWithInitialValuesModel({ name: '9', visible: true }, false),
-  getAppLayerWithInitialValuesModel({ name: '256', visible: false }, true),
-  getAppLayerWithInitialValuesModel({ name: '512', visible: true }, false),
+  getAppLayerWithInitialValuesModel({ id: '1', visible: true }, false),
+  getAppLayerWithInitialValuesModel({ id: '2', visible: false }, true),
+  getAppLayerWithInitialValuesModel({ id: '3', visible: true }, false),
+  getAppLayerWithInitialValuesModel({ id: '9', visible: true }, false),
+  getAppLayerWithInitialValuesModel({ id: '256', visible: false }, true),
+  getAppLayerWithInitialValuesModel({ id: '512', visible: true }, false),
 ];
 
 

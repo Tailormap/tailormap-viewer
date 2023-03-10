@@ -2,7 +2,7 @@ import { SpatialFilterModel } from '../models/spatial-filter.model';
 
 export class CqlSpatialFilterHelper {
 
-  public static convertSpatialFilterToQuery(filter: SpatialFilterModel, layerName: string): string | null {
+  public static convertSpatialFilterToQuery(filter: SpatialFilterModel, layerId: string): string | null {
     if (filter.geometries.length === 0 || filter.geometryColumns.length === 0) {
       return null;
     }
@@ -17,7 +17,7 @@ export class CqlSpatialFilterHelper {
       filterGeometries.push(...circles.map(circle => CqlSpatialFilterHelper.getCircleQuery(circle, filter.buffer)));
     }
 
-    const geometryColumnsForLayer = filter.geometryColumns.find(gc => gc.layerName === layerName);
+    const geometryColumnsForLayer = filter.geometryColumns.find(gc => gc.layerId === layerId);
     if (!geometryColumnsForLayer) {
       return null;
     }

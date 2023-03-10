@@ -14,16 +14,16 @@ const selectFilterState = createFeatureSelector<FilterState>(filterStateKey);
 
 export const selectFilterGroups = createSelector(selectFilterState, state => state.filterGroups);
 
-export const selectFilterGroup = (source: string, layerName: string) => createSelector(
+export const selectFilterGroup = (source: string, layerId: string) => createSelector(
   selectFilterGroups,
-  groups => groups.find(group => group.source === source && group.layerNames.includes(layerName)),
+  groups => groups.find(group => group.source === source && group.layerIds.includes(layerId)),
 );
 
-export const selectFilterGroupForType = <T extends BaseFilterModel>(source: string, layerName: string, filterType: FilterTypeEnum) => createSelector(
+export const selectFilterGroupForType = <T extends BaseFilterModel>(source: string, layerId: string, filterType: FilterTypeEnum) => createSelector(
   selectFilterGroups,
   (groups): FilterGroupModel<T> | undefined => {
     const isOfType = (g: FilterGroupModel): g is FilterGroupModel<T> => g.type === filterType;
-    const group = groups.find(g => g.source === source && g.layerNames.includes(layerName));
+    const group = groups.find(g => g.source === source && g.layerIds.includes(layerId));
     return group && isOfType(group) ? group : undefined;
   },
 );
@@ -33,8 +33,8 @@ export const selectFilterGroupsWithLayers = createSelector(
   selectLayersWithServices,
   (groups, layers): ExtendedFilterGroupModel[] => groups.map(group => ({
     ...group,
-    layers: group.layerNames
-      .map(layerName => layers.find(layer => layer.name === layerName))
+    layers: group.layerIds
+      .map(layerId => layers.find(layer => layer.id === layerId))
       .filter(TypesHelper.isDefined),
   })),
 );
@@ -53,6 +53,6 @@ export const selectSpatialFilterGroupsWithReferenceLayers = createSelector(
   selectFilterGroups,
   (groups): FilterGroupModel<SpatialFilterModel>[] => {
     return groups.filter(FilterTypeHelper.isSpatialFilterGroup)
-      .filter(group => group.filters.length > 0 && group.filters[0].baseLayerName);
+      .filter(group => group.filters.length > 0 && group.filters[0].baseLayerId);
     },
 );

@@ -16,7 +16,7 @@ describe('AttributeListFilterComponent', () => {
     const dialogData: FilterDialogData = {
       columnName: 'col',
       filter: null,
-      layerName: '1',
+      layerId: '1',
       columnType: FeatureAttributeTypeEnum.STRING,
       applicationId: '1',
     };

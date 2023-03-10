@@ -5,7 +5,7 @@ import { catchError, Observable, of, tap } from 'rxjs';
 
 interface UniqueValueParams {
   applicationId: string;
-  layerName: string;
+  layerId: string;
   attribute: string;
   filter?: string;
 }
@@ -43,7 +43,7 @@ export class UniqueValuesService {
   }
 
   private createKey(params: UniqueValueParams): string {
-    const key = [ params.applicationId, params.layerName, params.attribute ];
+    const key = [ params.applicationId, params.layerId, params.attribute ];
     if (params.filter) {
       key.push(params.filter);
     }

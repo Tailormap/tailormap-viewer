@@ -21,25 +21,25 @@ describe('UniqueValuesService', () => {
   });
 
   test('get and cache unique values from api', done => {
-    service.getUniqueValues$({ applicationId: 1, layerName: 1, attribute: 'test' })
+    service.getUniqueValues$({ applicationId: '1', layerId: '1', attribute: 'test' })
       .pipe(
         concatMap(response => {
           expect(response).toEqual({ filterApplied: false, values: [ 'a', 'b', 'c' ] });
           expect(tailormapServiceMock.getUniqueValues$).toHaveBeenCalledTimes(1);
-          return service.getUniqueValues$({ applicationId: 1, layerName: 1, attribute: 'test' });
+          return service.getUniqueValues$({ applicationId: '1', layerId: '1', attribute: 'test' });
         }),
         concatMap(response2 => {
           expect(response2).toEqual({ filterApplied: false, values: [ 'a', 'b', 'c' ] });
           // still expect 1 since we are calling with the same props
           expect(tailormapServiceMock.getUniqueValues$).toHaveBeenCalledTimes(1);
-          return service.getUniqueValues$({ applicationId: 2, layerName: 1, attribute: 'test' });
+          return service.getUniqueValues$({ applicationId: '2', layerId: '1', attribute: 'test' });
         }),
         concatMap(response3 => {
           expect(response3).toEqual({ filterApplied: false, values: [ 'a', 'b', 'c' ] });
           // expect 2 since we are calling with different props
           expect(tailormapServiceMock.getUniqueValues$).toHaveBeenCalledTimes(2);
           // old application id again
-          return service.getUniqueValues$({ applicationId: 1, layerName: 1, attribute: 'test' });
+          return service.getUniqueValues$({ applicationId: '1', layerId: '1', attribute: 'test' });
         }),
       )
       .subscribe(response4 => {

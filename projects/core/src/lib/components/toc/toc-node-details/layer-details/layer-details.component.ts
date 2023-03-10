@@ -18,15 +18,15 @@ export class LayerDetailsComponent implements OnInit {
   private mapService = inject(MapService);
   private store$ = inject(Store);
 
-  private _layerName: string | null = null;
+  private _layerId: string | null = null;
 
   @Input()
-  public set layerName(layerName: string | null) {
-    this._layerName = layerName;
+  public set layerId(layerId: string | null) {
+    this._layerId = layerId;
     this.updateLegend();
   }
-  public get layerName(): string | null {
-    return this._layerName;
+  public get layerId(): string | null {
+    return this._layerId;
   }
 
   public legendInfo$: Observable<LegendInfoModel | null> = of(null);
@@ -37,11 +37,11 @@ export class LayerDetailsComponent implements OnInit {
   }
 
   private updateLegend() {
-    if (!this.layerName) {
+    if (!this.layerId) {
       return;
     }
     this.legendInfo$ = this.legendService.getLegendInfo$(
-      this.store$.select(selectLayerWithService(this.layerName)),
+      this.store$.select(selectLayerWithService(this.layerId)),
       this.mapService.getMapViewDetails$(),
     )
       .pipe(map(legendInfo => legendInfo.length !== 0 ? legendInfo[0] : null));

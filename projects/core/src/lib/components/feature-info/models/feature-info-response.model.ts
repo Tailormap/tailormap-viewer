@@ -4,6 +4,6 @@ import { FeatureInfoColumnMetadataModel } from './feature-info-column-metadata.m
 export interface FeatureInfoResponseModel {
   features: FeatureInfoFeatureModel[];
   columnMetadata: FeatureInfoColumnMetadataModel[];
-  layerName: string;
+  layerId: string;
   error?: string;
 }

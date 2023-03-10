@@ -16,16 +16,16 @@ export class LayerTransparencyComponent {
 
   public opacity$ = of(100);
 
-  private layerName: string | undefined;
+  private layerId: string | undefined;
 
   @Input()
   public set layer(layer: string | null) {
     if (layer === null) {
-      this.layerName = undefined;
+      this.layerId = undefined;
       this.opacity$ = of(100);
       return;
     }
-    this.layerName = layer;
+    this.layerId = layer;
     this.opacity$ = this.store$.select(selectLayerOpacity(layer));
   }
 
@@ -34,26 +34,26 @@ export class LayerTransparencyComponent {
   }
 
   public updateOpacity($event: number | null) {
-    if (!this.layerName) {
+    if (!this.layerId) {
       return;
     }
     const opacity = $event === null ? 100 : $event;
-    this.store$.dispatch(setLayerOpacity({ layerName: this.layerName, opacity }));
+    this.store$.dispatch(setLayerOpacity({ layerId: this.layerId, opacity }));
   }
 
   public resetOpacity() {
-    if (this.layerName === undefined) {
+    if (this.layerId === undefined) {
       return;
     }
 
-    this.store$.select(selectLayer(this.layerName))
+    this.store$.select(selectLayer(this.layerId))
       .pipe(take(1))
       .subscribe(layer => {
-        if (!this.layerName) {
+        if (!this.layerId) {
           return;
         }
 
-        this.store$.dispatch(setLayerOpacity({ layerName: this.layerName, opacity: layer?.initialValues?.opacity ?? 100 }));
+        this.store$.dispatch(setLayerOpacity({ layerId: this.layerId, opacity: layer?.initialValues?.opacity ?? 100 }));
       });
   }
 }

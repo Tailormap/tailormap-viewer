@@ -44,16 +44,16 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
 
   public getDescribeLayer$(params: {
     applicationId: string;
-    layerName: string;
+    layerId: string;
   }): Observable<LayerDetailsModel> {
     return this.httpClient.get<LayerDetailsModel>(
-      `${TailormapApiV1Service.BASE_URL}/${params.applicationId}/layer/${params.layerName}/describe`,
+      `${TailormapApiV1Service.BASE_URL}/${params.applicationId}/layer/${params.layerId}/describe`,
     );
   }
 
   public getFeatures$(params: {
     applicationId: string;
-    layerName: string;
+    layerId: string;
     x?: number;
     y?: number;
     crs?: string;
@@ -79,7 +79,7 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
       onlyGeometries: params.onlyGeometries,
     });
     return this.httpClient.post<FeaturesResponseModel>(
-      `${TailormapApiV1Service.BASE_URL}/${params.applicationId}/layer/${params.layerName}/features`,
+      `${TailormapApiV1Service.BASE_URL}/${params.applicationId}/layer/${params.layerId}/features`,
       params.filter ? this.getQueryParams({ filter:  params.filter }) : '',
       {
         headers: new HttpHeaders('Content-Type: application/x-www-form-urlencoded'),
@@ -89,12 +89,12 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
 
   public getUniqueValues$(params: {
     applicationId: string;
-    layerName: string;
+    layerId: string;
     attribute: string;
     filter?: string;
   }): Observable<UniqueValuesResponseModel> {
     return this.httpClient.post<UniqueValuesResponseModel>(
-      `${TailormapApiV1Service.BASE_URL}/${params.applicationId}/layer/${params.layerName}/unique/${params.attribute}`,
+      `${TailormapApiV1Service.BASE_URL}/${params.applicationId}/layer/${params.layerId}/unique/${params.attribute}`,
       params.filter ? this.getQueryParams({ filter: params.filter }) : '',
       { headers: new HttpHeaders('Content-Type: application/x-www-form-urlencoded') },
     );
@@ -102,16 +102,16 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
 
   public getLayerExportCapabilities$(params: {
     applicationId: string;
-    layerName: string;
+    layerId: string;
   }): Observable<LayerExportCapabilitiesModel> {
     return this.httpClient.get<LayerExportCapabilitiesModel>(
-      `${TailormapApiV1Service.BASE_URL}/${params.applicationId}/layer/${params.layerName}/export/capabilities`,
+      `${TailormapApiV1Service.BASE_URL}/${params.applicationId}/layer/${params.layerId}/export/capabilities`,
     );
   }
 
   public getLayerExport$(params: {
     applicationId: string;
-    layerName: string;
+    layerId: string;
     outputFormat: string;
     filter?: string;
     sort: { column: string; direction: string} | null;
@@ -126,7 +126,7 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
       crs: params.crs,
     });
     return this.httpClient.post(
-      `${TailormapApiV1Service.BASE_URL}/${params.applicationId}/layer/${params.layerName}/export/download`,
+      `${TailormapApiV1Service.BASE_URL}/${params.applicationId}/layer/${params.layerId}/export/download`,
       params.filter ? this.getQueryParams({ filter: params.filter }) : '',
       {
         headers: new HttpHeaders('Content-Type: application/x-www-form-urlencoded'),

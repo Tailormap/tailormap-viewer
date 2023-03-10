@@ -4,8 +4,8 @@ import { TristateBoolean, LayerVisibilityBookmarkFragment, LayerInformation, Lay
 import { AppLayerWithInitialValuesModel, ExtendedLayerTreeNodeModel } from '../models';
 
 export interface MapBookmarkContents {
-  visibilityChanges: { name: string; checked: boolean }[];
-  opacityChanges: { layerName: string; opacity: number }[];
+  visibilityChanges: { id: string; checked: boolean }[];
+  opacityChanges: { layerId: string; opacity: number }[];
 }
 
 export class MapBookmarkHelper {
@@ -57,7 +57,7 @@ export class MapBookmarkHelper {
     fragment: LayerVisibilityBookmarkFragment,
     layers: AppLayerWithInitialValuesModel[],
   ): MapBookmarkContents {
-    const id = -1;
+    //let id = -1;
     const checkedVisibilityValues = new Set();
     const checkedOpacityValues = new Set();
 
@@ -89,15 +89,15 @@ export class MapBookmarkHelper {
     // }
 
     for (const layer of layers) {
-      const currentLayer = layers.find(a => a.name === layer.name);
+      const currentLayer = layers.find(a => a.id === layer.id);
       if (currentLayer === undefined) { continue; }
 
-      if (!checkedVisibilityValues.has(layer.name) && currentLayer.initialValues?.visible !== currentLayer.visible) {
-        visibilityData.push({ name: layer.name, checked: currentLayer.initialValues?.visible ?? true });
+      if (!checkedVisibilityValues.has(layer.id) && currentLayer.initialValues?.visible !== currentLayer.visible) {
+        visibilityData.push({ id: layer.id, checked: currentLayer.initialValues?.visible ?? true });
       }
 
-      if (!checkedOpacityValues.has(layer.name) && currentLayer.initialValues?.opacity !== currentLayer.opacity) {
-        opacityData.push({ layerName: layer.name, opacity: currentLayer.initialValues?.opacity ?? 100 });
+      if (!checkedOpacityValues.has(layer.id) && currentLayer.initialValues?.opacity !== currentLayer.opacity) {
+        opacityData.push({ layerId: layer.id, opacity: currentLayer.initialValues?.opacity ?? 100 });
       }
     }
 
@@ -121,7 +121,7 @@ export class MapBookmarkHelper {
       }
 
       if (changed) {
-        newLayers.set(layer.name, info);
+        newLayers.set(layer.id, info);
       }
     }
 

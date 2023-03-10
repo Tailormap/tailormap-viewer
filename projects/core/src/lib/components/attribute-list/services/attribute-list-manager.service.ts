@@ -80,7 +80,7 @@ export class AttributeListManagerService implements OnDestroy {
       return [];
     }
     return currentTabs
-      .filter(tab => visibleLayers.findIndex(l => l.name === tab.layerName) === -1)
+      .filter(tab => visibleLayers.findIndex(l => l.id === tab.layerId) === -1)
       .map<string>(tab => tab.id);
   }
 
@@ -91,7 +91,7 @@ export class AttributeListManagerService implements OnDestroy {
     if (!visibleLayers || visibleLayers.length === 0) {
       return of([]);
     }
-    const layersWithoutTab = visibleLayers.filter(layer => currentTabs.findIndex(t => t.layerName === layer.name) === -1);
+    const layersWithoutTab = visibleLayers.filter(layer => currentTabs.findIndex(t => t.layerId === layer.id) === -1);
     if (layersWithoutTab.length === 0) {
       return of([]);
     }
@@ -109,7 +109,7 @@ export class AttributeListManagerService implements OnDestroy {
       const tab: AttributeListTabModel = {
         ...AttributeListManagerService.EMPTY_ATTRIBUTE_LIST_TAB,
         id,
-        layerName: layer.name,
+        layerId: layer.id,
         label: layer.title || layer.layerName,
         selectedDataId: dataId,
       };

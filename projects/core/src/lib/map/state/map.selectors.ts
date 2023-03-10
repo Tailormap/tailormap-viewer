@@ -9,7 +9,7 @@ const selectMapState = createFeatureSelector<MapState>(mapStateKey);
 
 export const selectServices = createSelector(selectMapState, state => state.services);
 export const selectLayers = createSelector(selectMapState, state => state.layers);
-export const selectSelectedLayerName = createSelector(selectMapState, state => state.selectedLayer);
+export const selectSelectedLayerId = createSelector(selectMapState, state => state.selectedLayer);
 export const selectMapSettings = createSelector(selectMapState, state => state.mapSettings);
 export const selectLayerTreeNodes = createSelector(selectMapState, state => state.layerTreeNodes);
 export const selectBackgroundLayerTreeNodes = createSelector(selectMapState, state => state.baseLayerTreeNodes);
@@ -66,43 +66,43 @@ export const selectVisibleLayersWithServices = createSelector(
 );
 
 export const selectSelectedLayer = createSelector(
-    selectSelectedLayerName,
+    selectSelectedLayerId,
     selectLayers,
     (selectedId, layers): AppLayerModel | null => {
         if (typeof selectedId === 'undefined') {
             return null;
         }
-        return layers.find(l => l.name === selectedId) || null;
+        return layers.find(l => l.id === selectedId) || null;
     },
 );
 
-export const selectOrderedLayerNames = createSelector(
+export const selectOrderedLayerIds = createSelector(
   selectLayerTreeNodes,
-  layerTreeNodes => LayerTreeNodeHelper.getAppLayerNames(layerTreeNodes, layerTreeNodes.find(l => l.root)),
+  layerTreeNodes => LayerTreeNodeHelper.getAppLayerIds(layerTreeNodes, layerTreeNodes.find(l => l.root)),
 );
 
 export const selectOrderedLayerNodes = createSelector(
   selectLayerTreeNodes,
-  selectOrderedLayerNames,
-  (layers, orderedLayerNames) => {
+  selectOrderedLayerIds,
+  (layers, orderedLayerIds) => {
     return layers
       .filter(node => LayerTreeNodeHelper.isAppLayerNode(node))
-      .sort(ArrayHelper.getArraySorter('appLayerName', orderedLayerNames));
+      .sort(ArrayHelper.getArraySorter('appLayerId', orderedLayerIds));
   },
 );
 
-export const selectOrderedBackgroundLayerNames = createSelector(
+export const selectOrderedBackgroundLayerIds = createSelector(
   selectBackgroundLayerTreeNodes,
-  baseLayerTreeNodes => LayerTreeNodeHelper.getAppLayerNames(baseLayerTreeNodes, baseLayerTreeNodes.find(l => l.root)),
+  baseLayerTreeNodes => LayerTreeNodeHelper.getAppLayerIds(baseLayerTreeNodes, baseLayerTreeNodes.find(l => l.root)),
 );
 
 export const selectOrderedVisibleLayersWithServices = createSelector(
   selectVisibleLayersWithServices,
-  selectOrderedLayerNames,
-  (layers, orderedLayerNames) => {
+  selectOrderedLayerIds,
+  (layers, orderedLayerIds) => {
     return layers
-      .filter(l => orderedLayerNames.includes(l.name))
-      .sort(ArrayHelper.getArraySorter('name', orderedLayerNames));
+      .filter(l => orderedLayerIds.includes(l.id))
+      .sort(ArrayHelper.getArraySorter('id', orderedLayerIds));
   },
 );
 
@@ -123,10 +123,10 @@ export const selectFilterableLayers = createSelector(
 
 export const selectSomeLayersVisible = createSelector(
   selectLayers,
-  selectOrderedLayerNames,
-  (layers, orderedLayerNames) => {
+  selectOrderedLayerIds,
+  (layers, orderedLayerIds) => {
     return layers
-      .filter(l => orderedLayerNames.includes(l.name))
+      .filter(l => orderedLayerIds.includes(l.id))
       .some(l => l.visible);
   },
 );
@@ -140,11 +140,11 @@ export const selectOrderedVisibleLayersWithLegend = createSelector(
 
 export const selectOrderedVisibleBackgroundLayers = createSelector(
   selectVisibleLayersWithServices,
-  selectOrderedBackgroundLayerNames,
-  (layers, orderedLayerNames) => {
+  selectOrderedBackgroundLayerIds,
+  (layers, orderedLayerIds) => {
     return layers
-      .filter(l => orderedLayerNames.includes(l.name))
-      .sort(ArrayHelper.getArraySorter('name', orderedLayerNames));
+      .filter(l => orderedLayerIds.includes(l.id))
+      .sort(ArrayHelper.getArraySorter('id', orderedLayerIds));
   },
 );
 
@@ -180,27 +180,27 @@ export const selectInitiallySelectedBackgroundNodes = createSelector(
 );
 
 export const selectSelectedNode = createSelector(
-  selectSelectedLayerName,
+  selectSelectedLayerId,
   selectLayerTreeNodes,
-  (selectedLayerName, treeNodes) => {
-    if (!selectedLayerName) {
+  (selectedLayerId, treeNodes) => {
+    if (!selectedLayerId) {
       return '';
     }
-    const layerTreeNode = treeNodes.find(node => !!node.appLayerName && node.appLayerName === selectedLayerName);
+    const layerTreeNode = treeNodes.find(node => !!node.appLayerId && node.appLayerId === selectedLayerId);
     return layerTreeNode ? layerTreeNode.id : '';
   });
 
-export const selectLayer = (layerName: string) => createSelector(
+export const selectLayer = (layerId: string) => createSelector(
   selectLayers,
-  (layers: AppLayerWithInitialValuesModel[]) => layers.find(l => l.name === layerName) || null,
+  (layers: AppLayerWithInitialValuesModel[]) => layers.find(l => l.id === layerId) || null,
 );
 
-export const selectLayerWithService = (layerName: string) => createSelector(
+export const selectLayerWithService = (layerId: string) => createSelector(
   selectLayersWithServices,
-  (layers: ExtendedAppLayerModel[]) => layers.find(l => l.name === layerName) || null,
+  (layers: ExtendedAppLayerModel[]) => layers.find(l => l.id === layerId) || null,
 );
 
-export const selectLayerOpacity = (layerName: string) => createSelector(
-  selectLayer(layerName),
+export const selectLayerOpacity = (layerId: string) => createSelector(
+  selectLayer(layerId),
   (layer) => layer?.opacity || 100,
 );

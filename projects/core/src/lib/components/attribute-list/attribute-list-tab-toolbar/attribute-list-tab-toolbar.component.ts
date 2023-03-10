@@ -41,10 +41,10 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
     this.hasFilters$ = this.store$.select(selectSelectedTab)
       .pipe(
         switchMap(tab => {
-          if (!tab?.layerName) {
+          if (!tab?.layerId) {
             return of(false);
           }
-          return this.simpleAttributeFilterService.hasFilter$(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerName);
+          return this.simpleAttributeFilterService.hasFilter$(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerId);
         }),
       );
   }
@@ -87,10 +87,10 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
     this.store$.select(selectSelectedTab)
       .pipe(take(1))
       .subscribe(tab => {
-        if (!tab?.layerName) {
+        if (!tab?.layerId) {
           return;
         }
-        return this.simpleAttributeFilterService.removeFiltersForLayer(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerName);
+        return this.simpleAttributeFilterService.removeFiltersForLayer(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerId);
       });
   }
 

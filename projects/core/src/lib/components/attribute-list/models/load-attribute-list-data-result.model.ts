@@ -3,7 +3,7 @@ import { AttributeListColumnModel } from './attribute-list-column.model';
 
 export interface LoadAttributeListDataResultModel {
   id: string;
-  layerName?: string;
+  layerId?: string;
   success: boolean;
   errorMessage?: string;
   totalCount: number | null;

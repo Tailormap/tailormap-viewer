@@ -49,7 +49,7 @@ export const getLayerTreeNode = (overrides?: Partial<LayerTreeNodeModel>): Layer
 });
 
 export const getAppLayerModel = (overrides?: Partial<AppLayerModel>): AppLayerModel => ({
-  name: '1',
+  id: '1',
   serviceName: '1',
   visible: true,
   hasAttributes: false,
@@ -68,7 +68,7 @@ export const getServiceModel = (overrides?: Partial<ServiceModel>): ServiceModel
 });
 
 export const getLayerDetailsModel = (overrides?: Partial<LayerDetailsModel>): LayerDetailsModel => ({
-  name: '1',
+  id: '1',
   serviceId: 1,
   relations: [],
   geometryType: GeometryType.GEOMETRY,
@@ -161,18 +161,18 @@ export const getMapResponseData = (overrides?: Partial<MapResponseModel>): MapRe
   layerTreeNodes: [
     getLayerTreeNode({ childrenIds: ['level-2'] }),
     getLayerTreeNode({ id: 'level-2', name: 'Bestuurlijke Gebieden', childrenIds: [ 'applayer-2', 'applayer-3' ], root: false }),
-    getLayerTreeNode({ id: 'applayer-2', appLayerName: '2', name: 'Gemeentegebied', root: false }),
-    getLayerTreeNode({ id: 'applayer-3', appLayerName: '3', name: 'Provinciegebied', root: false }),
+    getLayerTreeNode({ id: 'applayer-2', appLayerId: '2', name: 'Gemeentegebied', root: false }),
+    getLayerTreeNode({ id: 'applayer-3', appLayerId: '3', name: 'Provinciegebied', root: false }),
   ],
   baseLayerTreeNodes: [
     getLayerTreeNode({ id: 'rootbg', name: 'background', childrenIds: ['level-1'] }),
     getLayerTreeNode({ id: 'level-1', name: 'Openstreetmap', childrenIds: ['applayer-1'], root: false }),
-    getLayerTreeNode({ id: 'applayer-1', appLayerName: '1', name: 'osm-nb-hq', root: false }),
+    getLayerTreeNode({ id: 'applayer-1', appLayerId: '1', name: 'osm-nb-hq', root: false }),
   ],
   appLayers: [
-    getAppLayerModel({ name: '1', layerName: 'osm-nb-hq', title: 'osm-nb-hq' }),
-    getAppLayerModel({ name: '2', hasAttributes: true, serviceName: 'bestuurlijkegebieden', layerName: 'gemeentegebied', title: 'Gemeentegebied' }),
-    getAppLayerModel({ name: '3', hasAttributes: true, serviceName: 'bestuurlijkegebieden', layerName: 'provinciegebied', title: 'Provinciegebied' }),
+    getAppLayerModel({ id: '1', layerName: 'osm-nb-hq', title: 'osm-nb-hq' }),
+    getAppLayerModel({ id: '2', hasAttributes: true, serviceName: 'bestuurlijkegebieden', layerName: 'gemeentegebied', title: 'Gemeentegebied' }),
+    getAppLayerModel({ id: '3', hasAttributes: true, serviceName: 'bestuurlijkegebieden', layerName: 'provinciegebied', title: 'Provinciegebied' }),
   ],
   initialExtent: overrides?.initialExtent === null ? null : getBoundsModel(overrides?.initialExtent),
   services: [

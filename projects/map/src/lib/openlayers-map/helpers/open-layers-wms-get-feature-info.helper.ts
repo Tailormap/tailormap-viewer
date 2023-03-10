@@ -18,13 +18,13 @@ export class OpenLayersWmsGetFeatureInfoHelper {
 
   public static getFeatureInfoForLayer$(
     httpClient: HttpClient,
-    layerName: string,
+    layerId: string,
     coordinates: [number, number],
     resolution: number,
     projection: string,
     layerManager: OpenLayersLayerManager,
   ): Observable<FeatureModel[]> {
-    const layer = layerManager.getLayer(layerName);
+    const layer = layerManager.getLayer(layerId);
     if (!layer || !isOpenLayersWMSLayer(layer)) {
       return of([]);
     }

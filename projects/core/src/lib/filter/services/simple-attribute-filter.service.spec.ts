@@ -44,7 +44,7 @@ describe('SimpleAttributeFilterService', () => {
 
   test('should create filter', (done) => {
     const { service, store } = createService();
-    service.setFilter('source', 1, createFilter());
+    service.setFilter('source', '1', createFilter());
     store.select(selectFilterGroups).subscribe(filterGroups => {
       expect(filterGroups.length).toEqual(1);
       expect(filterGroups[0].id).toEqual('id-1');
@@ -56,9 +56,9 @@ describe('SimpleAttributeFilterService', () => {
 
   test('should update an existing filter', (done) => {
     const { service, store } = createService();
-    service.setFilter('source', 1, createFilter());
-    service.setFilter('source', 1, createFilter('attribute2'));
-    service.setFilter('source', 1, createFilter('attribute', 'other_value'));
+    service.setFilter('source', '1', createFilter());
+    service.setFilter('source', '1', createFilter('attribute2'));
+    service.setFilter('source', '1', createFilter('attribute', 'other_value'));
     store.select(selectFilterGroups).subscribe(filterGroups => {
       expect(filterGroups.length).toEqual(1);
       expect(filterGroups[0].id).toEqual('id-1');
@@ -75,11 +75,11 @@ describe('SimpleAttributeFilterService', () => {
   test('should remove filter and group', (done) => {
     const { service, store } = createService();
     // remove from empty state to make sure we don't get errors here
-    service.removeFilter('source', 1, 'attribute');
+    service.removeFilter('source', '1', 'attribute');
     // add a filter first
-    service.setFilter('source', 1, createFilter());
+    service.setFilter('source', '1', createFilter());
     // now remove that filter
-    service.removeFilter('source', 1, 'attribute');
+    service.removeFilter('source', '1', 'attribute');
     store.select(selectFilterGroups).subscribe(filterGroups => {
       expect(filterGroups.length).toEqual(0);
       done();
@@ -88,9 +88,9 @@ describe('SimpleAttributeFilterService', () => {
 
   test('should remove single filter', (done) => {
     const { service, store } = createService();
-    service.setFilter('source', 1, createFilter());
-    service.setFilter('source', 1, createFilter('attribute2'));
-    service.removeFilter('source', 1, 'attribute');
+    service.setFilter('source', '1', createFilter());
+    service.setFilter('source', '1', createFilter('attribute2'));
+    service.removeFilter('source', '1', 'attribute');
     store.select(selectFilterGroups).subscribe(filterGroups => {
       expect(filterGroups.length).toEqual(1);
       expect(filterGroups[0].id).toEqual('id-1');
@@ -102,14 +102,14 @@ describe('SimpleAttributeFilterService', () => {
 
   test('should remove all filters for a layer', (done) => {
     const { service, store } = createService();
-    service.setFilter('source', 1, createFilter());
-    service.setFilter('source', 2, createFilter());
-    service.setFilter('source', 3, createFilter());
-    service.removeFiltersForLayer('source', 2);
+    service.setFilter('source', '1', createFilter());
+    service.setFilter('source', '2', createFilter());
+    service.setFilter('source', '3', createFilter());
+    service.removeFiltersForLayer('source', '2');
     store.select(selectFilterGroups).subscribe(filterGroups => {
       expect(filterGroups.length).toEqual(2);
-      expect(filterGroups[0].layerNames).toEqual([1]);
-      expect(filterGroups[1].layerNames).toEqual([3]);
+      expect(filterGroups[0].layerIds).toEqual(['1']);
+      expect(filterGroups[1].layerIds).toEqual(['3']);
       done();
     });
   });

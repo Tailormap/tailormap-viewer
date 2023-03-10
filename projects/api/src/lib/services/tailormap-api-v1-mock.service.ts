@@ -33,14 +33,14 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
 
   public getDescribeLayer$(_params: {
     applicationId: string;
-    layerName: string;
+    layerId: string;
   }): Observable<LayerDetailsModel> {
     return of(getLayerDetailsModel());
   }
 
   public getFeatures$(_params: {
     applicationId: string;
-    layerName: string;
+    layerId: string;
     x?: number;
     y?: number;
     crs?: string;
@@ -55,7 +55,7 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
 
   public getUniqueValues$(_params: {
     applicationId: string;
-    layerName: string;
+    layerId: string;
     attribute: string;
     filter?: string;
   }): Observable<UniqueValuesResponseModel> {
@@ -64,14 +64,14 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
 
   public getLayerExportCapabilities$(_params: {
     applicationId: string;
-    layerName: string;
+    layerId: string;
   }): Observable<LayerExportCapabilitiesModel> {
     return of(getLayerExportCapabilitiesModel());
   }
 
   public getLayerExport$(_params: {
     applicationId: string;
-    layerName: string;
+    layerId: string;
     outputFormat: string;
     filter?: string;
     sort: { column: string; direction: string} | null;

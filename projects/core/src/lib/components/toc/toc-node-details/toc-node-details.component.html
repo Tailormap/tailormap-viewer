@@ -16,6 +16,6 @@
       <h3 i18n>Description</h3>
       <div class="toc-node-description" [innerHTML]="node.description | htmlify"></div>
     </div>
-    <tm-layer-details *ngIf="node.appLayerName" [layerName]="node.appLayerName"></tm-layer-details>
+    <tm-layer-details *ngIf="node.appLayerId" [layerId]="node.appLayerId"></tm-layer-details>
   </div>
 </div>

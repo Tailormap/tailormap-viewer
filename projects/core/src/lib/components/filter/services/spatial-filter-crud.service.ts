@@ -58,20 +58,20 @@ export class SpatialFilterCrudService {
         ...group,
         error: undefined,
         filters: group.filters.map(f => {
-          const currentReferenceLayer = f.baseLayerName;
+          const currentReferenceLayer = f.baseLayerId;
           const geometries = f.geometries.filter(g => {
             if (typeof layer === 'undefined') {
-              return typeof g.referenceLayerName === 'undefined';
+              return typeof g.referenceLayerId === 'undefined';
             }
             if (layer !== currentReferenceLayer) {
-              return typeof g.referenceLayerName === 'undefined' || g.referenceLayerName !== currentReferenceLayer;
+              return typeof g.referenceLayerId === 'undefined' || g.referenceLayerId !== currentReferenceLayer;
             }
             return true;
           });
           return {
             ...f,
             geometries,
-            baseLayerName: layer,
+            baseLayerId: layer,
           };
         }),
       }),
@@ -87,12 +87,12 @@ export class SpatialFilterCrudService {
       map(layerDetails => {
         return {
           ...group,
-          layerNames: layerDetails.map(layer => layer.name),
+          layerIds: layerDetails.map(layer => layer.id),
           filters: group.filters.map(f => {
             return {
               ...f,
               geometryColumns: layerDetails.map(layer => ({
-                layerName: layer.name,
+                layerId: layer.id,
                 column: [layer.geometryAttribute],
               })),
             };
@@ -173,17 +173,17 @@ export class SpatialFilterCrudService {
       id: nanoid(),
       type: FilterTypeEnum.SPATIAL,
       geometries,
-      baseLayerName: referenceLayer,
+      baseLayerId: referenceLayer,
       buffer: undefined,
       geometryColumns: layers.map(layer => ({
-        layerName: layer.name,
+        layerId: layer.id,
         column: [layer.geometryAttribute],
       })),
     };
     return {
       id: nanoid(),
       type: FilterTypeEnum.SPATIAL,
-      layerNames: layers.map(layer => layer.name),
+      layerIds: layers.map(layer => layer.id),
       operator: 'AND',
       filters: [spatialFilter],
       source: 'SPATIAL_FILTER_FORM',

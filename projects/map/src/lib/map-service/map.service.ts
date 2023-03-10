@@ -106,14 +106,14 @@ export class MapService {
   }
 
   public renderFeatures$<T extends FeatureModelAttributes = FeatureModelAttributes>(
-    layerName: string,
+    layerId: string,
     featureGeometry$: Observable<FeatureModelType<T> | Array<FeatureModelType<T>>>,
     vectorLayerStyle?: MapStyleModel | ((feature: FeatureModel<T>) => MapStyleModel),
     zoomToFeature?: boolean,
     updateWhileAnimating?: boolean,
   ): Observable<VectorLayer<VectorSource<Geometry>> | null> {
     return combineLatest([
-      this.createVectorLayer$({ id: layerName, name: `${layerName} layer`, layerType: LayerTypesEnum.Vector, visible: true, updateWhileAnimating }, vectorLayerStyle),
+      this.createVectorLayer$({ id: layerId, name: `${layerId} layer`, layerType: LayerTypesEnum.Vector, visible: true, updateWhileAnimating }, vectorLayerStyle),
       featureGeometry$,
     ])
       .pipe(
@@ -219,11 +219,11 @@ export class MapService {
   }
 
   public getFeatureInfoForLayers$(
-    layerName: string,
+    layerId: string,
     coordinates: [number, number],
     httpService: HttpClient,
   ): Observable<FeatureModel[]> {
-    return this.map.getFeatureInfoForLayers$(layerName, coordinates, httpService);
+    return this.map.getFeatureInfoForLayers$(layerId, coordinates, httpService);
   }
 
 }

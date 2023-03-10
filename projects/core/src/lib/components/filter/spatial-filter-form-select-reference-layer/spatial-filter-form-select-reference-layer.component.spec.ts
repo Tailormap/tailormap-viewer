@@ -8,8 +8,8 @@ import userEvent from '@testing-library/user-event';
 import { SpatialFilterCrudService } from '../services/spatial-filter-crud.service';
 
 const availableLayers = [
-  getAppLayerModel({ name: '1', title: 'Layer 1' }),
-  getAppLayerModel({ name: '2', title: 'Layer 2' }),
+  getAppLayerModel({ id: '1', title: 'Layer 1' }),
+  getAppLayerModel({ id: '2', title: 'Layer 2' }),
 ];
 
 const setup = async (layers: AppLayerModel[], selectedLayer?: string) => {

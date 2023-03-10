@@ -5,11 +5,11 @@ import { TreeModel, TypesHelper } from '@tailormap-viewer/shared';
 export class LayerTreeNodeHelper {
 
   public static isAppLayerNode(node: LayerTreeNodeModel) {
-    return typeof node.appLayerName === 'string';
+    return typeof node.appLayerId === 'string';
   }
 
   public static isLevelNode(node: LayerTreeNodeModel) {
-    return typeof node.appLayerName === 'undefined' || node.appLayerName === null;
+    return typeof node.appLayerId === 'undefined' || node.appLayerId === null;
   }
 
   public static getExtendedLayerTreeNode(node: LayerTreeNodeModel): ExtendedLayerTreeNodeModel {
@@ -23,7 +23,7 @@ export class LayerTreeNodeHelper {
   public static getTreeModelForLayerTreeNode(node: ExtendedLayerTreeNodeModel, layers?: AppLayerModel[]): TreeModel {
     const isAppLayerNode = LayerTreeNodeHelper.isAppLayerNode(node);
     const layer = isAppLayerNode
-      ? (layers || []).find(l => l.name === node.appLayerName)
+      ? (layers || []).find(l => l.id === node.appLayerId)
       : null;
     return {
       id: node.id,
@@ -42,9 +42,9 @@ export class LayerTreeNodeHelper {
     return layerTreeNodes.find(l => l.id === id);
   }
 
-  public static getAppLayerNames(layerTreeNodes: LayerTreeNodeModel[], child?: LayerTreeNodeModel): string[] {
+  public static getAppLayerIds(layerTreeNodes: LayerTreeNodeModel[], child?: LayerTreeNodeModel): string[] {
     return LayerTreeNodeHelper.getChildNodes(layerTreeNodes, child)
-      .map(node => node.appLayerName)
+      .map(node => node.appLayerId)
       .filter(TypesHelper.isDefined);
   }
 
@@ -71,7 +71,7 @@ export class LayerTreeNodeHelper {
 
   public static getTopParent(layerTreeNodes: ExtendedLayerTreeNodeModel[], layer: AppLayerModel): LayerTreeNodeModel | undefined {
     const root = layerTreeNodes.find(l => l.root);
-    const isLayerNode = (n?: LayerTreeNodeModel) => n?.appLayerName === layer.name;
+    const isLayerNode = (n?: LayerTreeNodeModel) => n?.appLayerId === layer.id;
     const findInChildren = (n?: LayerTreeNodeModel): LayerTreeNodeModel | undefined => (n?.childrenIds || [])
       .map(id => LayerTreeNodeHelper.findLayerTreeNode(layerTreeNodes, id))
       .find(child => isLayerNode(child) || findInChildren(child));

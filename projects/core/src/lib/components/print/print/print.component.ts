@@ -199,7 +199,7 @@ export class PrintComponent implements OnInit, OnDestroy {
       return of([]);
     }
     return this.store$.select(selectOrderedVisibleLayersWithLegend).pipe(
-      map(layers => layers.filter(layer => layer.name === this.exportPdfForm.value.legendLayer || '')),
+      map(layers => layers.filter(layer => layer.id === this.exportPdfForm.value.legendLayer || '')),
       take(1),
     );
   }

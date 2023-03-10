@@ -3,7 +3,7 @@ import { LayerRelationModel } from './layer-relation.model';
 import { AttributeModel } from './attribute.model';
 
 export interface LayerDetailsModel {
-    name: string;
+    id: string;
     featuretypeName: string;
     serviceId: number;
     geometryAttribute: string;

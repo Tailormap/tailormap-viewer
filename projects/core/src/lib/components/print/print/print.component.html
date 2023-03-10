@@ -99,7 +99,7 @@
               <mat-label i18n>Add legend for layer</mat-label>
               <mat-select formControlName="legendLayer">
                 <mat-option i18n>None</mat-option>
-                <mat-option *ngFor="let layer of availableLegendLayers$ | async"  [value]="layer.name">{{layer.title}}</mat-option>
+                <mat-option *ngFor="let layer of availableLegendLayers$ | async"  [value]="layer.id">{{layer.title}}</mat-option>
               </mat-select>
             </mat-form-field>
           </p>

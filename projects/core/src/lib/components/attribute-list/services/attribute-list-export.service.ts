@@ -42,8 +42,8 @@ export class AttributeListExportService {
   ) {
   }
 
-  public getExportFormats$(layerName: string): Observable<SupportedExportFormats[]> {
-    return this.getExportCapabilities$(layerName).pipe(
+  public getExportFormats$(layerId: string): Observable<SupportedExportFormats[]> {
+    return this.getExportCapabilities$(layerId).pipe(
       map(formats => {
         const supportedFormats: SupportedExportFormats[] = [];
         if (this.hasSupport(formats, AttributeListExportService.CSV_FORMATS)) {
@@ -70,7 +70,7 @@ export class AttributeListExportService {
   }
 
   public export$(params: {
-    layerName: string;
+    layerId: string;
     serviceLayerName: string;
     format: SupportedExportFormats;
     filter: string | undefined;
@@ -78,7 +78,7 @@ export class AttributeListExportService {
     attributes: string[];
   }): Observable<boolean> {
     return combineLatest([
-      this.getOutputFormat$(params.layerName, params.format),
+      this.getOutputFormat$(params.layerId, params.format),
       this.store$.select(selectViewerId),
     ]).pipe(
       take(1),
@@ -90,7 +90,7 @@ export class AttributeListExportService {
         }
         return this.api.getLayerExport$({
           applicationId,
-          layerName: params.layerName,
+          layerId: params.layerId,
           outputFormat,
           filter: params.filter,
           sort: params.sort,
@@ -128,8 +128,8 @@ export class AttributeListExportService {
     SnackBarMessageComponent.open$(this.snackBar, config).subscribe();
   }
 
-  private getOutputFormat$(layerName: string, format: SupportedExportFormats): Observable<string | null> {
-    return this.getExportCapabilities$(layerName)
+  private getOutputFormat$(layerId: string, format: SupportedExportFormats): Observable<string | null> {
+    return this.getExportCapabilities$(layerId)
       .pipe(
         take(1),
         map(formats => {
@@ -174,19 +174,19 @@ export class AttributeListExportService {
     return 'txt';
   }
 
-  private getExportCapabilities$(layerName: string): Observable<string[]> {
+  private getExportCapabilities$(layerId: string): Observable<string[]> {
     return this.store$.select(selectViewerId).pipe(
       take(1),
       switchMap(applicationId => {
         if (applicationId === null) {
           return of([]);
         }
-        const key = this.getCacheKey(applicationId, layerName);
+        const key = this.getCacheKey(applicationId, layerId);
         const cached = this.cachedFormats.get(key);
         if (cached) {
           return of(cached);
         }
-        return this.api.getLayerExportCapabilities$({ applicationId, layerName })
+        return this.api.getLayerExportCapabilities$({ applicationId, layerId })
           .pipe(
             catchError(() => of({ exportable: false, outputFormats: [] })),
             tap(capabilities => {
@@ -204,8 +204,8 @@ export class AttributeListExportService {
     return supportedFormats.some(format => requiredFormats.includes(format));
   }
 
-  private getCacheKey(applicationId: string, layerName: string): string {
-    return `${applicationId}-${layerName}`;
+  private getCacheKey(applicationId: string, layerId: string): string {
+    return `${applicationId}-${layerId}`;
   }
 
 }

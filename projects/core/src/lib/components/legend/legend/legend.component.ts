@@ -19,7 +19,7 @@ export class LegendComponent implements OnInit {
 
   public visible$: Observable<boolean>;
   public layers$: Observable<LegendInfoModel[]>;
-  public trackById = (index: number, item: LegendInfoModel) => item.layer.name;
+  public trackById = (index: number, item: LegendInfoModel) => item.layer.id;
 
   constructor(
     private store$: Store,

@@ -19,7 +19,7 @@ describe('LayerTransparencyComponent', () => {
         provideMockStore({
           initialState: {
             map: {
-              layers: [{ name: '1', opacity: 50, initialValues: { opacity: 100 } }],
+              layers: [{ id: '1', opacity: 50, initialValues: { opacity: 100 } }],
             },
           },
         }),
@@ -35,7 +35,7 @@ describe('LayerTransparencyComponent', () => {
     });
 
     await userEvent.click(screen.getByLabelText('Reset opacity'));
-    expect(dispatch).toHaveBeenCalledWith(setLayerOpacity({ layerName: '1', opacity: 100 }));
+    expect(dispatch).toHaveBeenCalledWith(setLayerOpacity({ layerId: '1', opacity: 100 }));
   });
 
 });

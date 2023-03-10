@@ -69,7 +69,7 @@ export class ApplicationMapService implements OnDestroy {
       this.store$.select(selectCQLFilters),
     ]).pipe(
       map(([ layers, filters ]) => {
-        return layers.map(l => ({ ...l, filter: filters.get(l.name) }));
+        return layers.map(l => ({ ...l, filter: filters.get(l.id) }));
       }),
     );
   }
@@ -97,7 +97,7 @@ export class ApplicationMapService implements OnDestroy {
       return this.getCapabilitiesForWMTS$(service)
         .pipe(
           map((capabilities: string): WMTSLayerModel => ({
-            id: `${extendedAppLayer.name}`,
+            id: `${extendedAppLayer.id}`,
             layers: extendedAppLayer.layerName,
             name: extendedAppLayer.layerName,
             layerType: LayerTypesEnum.WMTS,
@@ -113,7 +113,7 @@ export class ApplicationMapService implements OnDestroy {
     }
     if (service.protocol === ServiceProtocol.WMS) {
       const layer: WMSLayerModel = {
-        id: `${extendedAppLayer.name}`,
+        id: `${extendedAppLayer.id}`,
         layers: extendedAppLayer.layerName,
         name: extendedAppLayer.layerName,
         layerType: LayerTypesEnum.WMS,

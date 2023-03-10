@@ -28,8 +28,8 @@ export class FilterService implements OnDestroy {
     return this.changedFiltersSubject$.asObservable();
   }
 
-  public getFilterForLayer(layerName: string): string | undefined {
-    return this.currentFilters.get(layerName) || undefined;
+  public getFilterForLayer(layerId: string): string | undefined {
+    return this.currentFilters.get(layerId) || undefined;
   }
 
   private initChangedFilters$() {

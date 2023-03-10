@@ -54,9 +54,9 @@ describe('FeatureInfoService', () => {
     service.getFeatures$([ 1, 2 ])
       .subscribe(featureInfo => {
         expect(featureInfo.length).toEqual(1);
-        expect(featureInfo[0].features).toEqual(response.features.map(f => ({ ...f, layerName: appLayer.name })));
-        expect(featureInfo[0].layerName).toEqual(appLayer.name);
-        expect(featureInfo[0].columnMetadata).toEqual(response.columnMetadata.map(m => ({ ...m, layerName: appLayer.name })));
+        expect(featureInfo[0].features).toEqual(response.features.map(f => ({ ...f, layerId: appLayer.id })));
+        expect(featureInfo[0].layerId).toEqual(appLayer.id);
+        expect(featureInfo[0].columnMetadata).toEqual(response.columnMetadata.map(m => ({ ...m, layerId: appLayer.id })));
         done();
       });
   });
@@ -94,7 +94,7 @@ describe('FeatureInfoService', () => {
     service.getFeatures$([ 1, 2 ])
       .subscribe(featureInfo => {
         expect(featureInfo.length).toEqual(1);
-        expect(getFeatureInfoForLayers$).toHaveBeenCalledWith('1', [ 1, 2 ], httpClient);
+        expect(getFeatureInfoForLayers$).toHaveBeenCalledWith('test', [ 1, 2 ], httpClient);
         done();
       });
   });

@@ -10,7 +10,7 @@ describe('FilterDescriptionComponent', () => {
   it('should create', async () => {
     const filterGroup: ExtendedFilterGroupModel<AttributeFilterModel> = {
       ...getFilterGroup(),
-      layers: [getAppLayerModel({ name: 1, title: 'layer1' })],
+      layers: [getAppLayerModel({ id: '1', title: 'layer1' })],
     };
     await render(FilterDescriptionComponent, { componentProperties: { filterGroup } });
     expect(await screen.findByText('attribute')).toBeInTheDocument();

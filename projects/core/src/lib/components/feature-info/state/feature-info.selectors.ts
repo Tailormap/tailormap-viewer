@@ -26,11 +26,11 @@ export const selectFeatureInfoList = createSelector(
   (features, metadata, layers): FeatureInfoModel[] => {
     const featureInfoModels: FeatureInfoModel[] = [];
     features.forEach(feature => {
-      const layer = layers.find(l => l.name === feature.layerName);
+      const layer = layers.find(l => l.id === feature.layerId);
       if (!layer) {
         return;
       }
-      const columnMetadata = metadata.filter(m => m.layerName === feature.layerName);
+      const columnMetadata = metadata.filter(m => m.layerId === feature.layerId);
       const columnMetadataDict = new Map((columnMetadata || []).map(c => [ c.key, c ]));
       const attributes: Array<{ label: string; attributeValue: any; key: string }> = [];
       Object.keys(feature.attributes).forEach(key => {

@@ -41,31 +41,31 @@ describe('TailormapApiV1Service', () => {
   });
 
   test('queries API for getDescribeLayer$', () => {
-    service.getDescribeLayer$({ applicationId: 'app/default', layerName: 1 }).subscribe();
+    service.getDescribeLayer$({ applicationId: 'app/default', layerId: '1' }).subscribe();
     const req = httpController.expectOne({ url: '/api/app/default/layer/1/describe', method: 'GET' });
     req.flush(null);
   });
 
   test('queries API for getFeatures$', () => {
-    service.getFeatures$({ applicationId: 'app/default', layerName: '1' }).subscribe();
+    service.getFeatures$({ applicationId: 'app/default', layerId: '1' }).subscribe();
     const req = httpController.expectOne({ url: '/api/app/default/layer/1/features', method: 'POST' });
     req.flush(null);
   });
 
   test('queries API for getFeatures$ - with params', () => {
-    service.getFeatures$({ applicationId: 'app/default', layerName: '1', x: 1, y: 2, distance: 10 }).subscribe();
+    service.getFeatures$({ applicationId: 'app/default', layerId: '1', x: 1, y: 2, distance: 10 }).subscribe();
     const req = httpController.expectOne({ url: '/api/app/default/layer/1/features?x=1&y=2&distance=10', method: 'POST' });
     req.flush(null);
   });
 
   test('queries API for getUniqueValues$', () => {
-    service.getUniqueValues$({ applicationId: 'app/default', layerName: 1, attribute: 'attribute' }).subscribe();
+    service.getUniqueValues$({ applicationId: 'app/default', layerId: '1', attribute: 'attribute' }).subscribe();
     const req = httpController.expectOne({ url: '/api/app/default/layer/1/unique/attribute', method: 'POST' });
     req.flush(null);
   });
 
   test('queries API for getUniqueValues$ - with filter', () => {
-    service.getUniqueValues$({ applicationId: 'app/default', layerName: 1, attribute: 'attribute', filter: '(attribute2 LIKE \'%test%\')' }).subscribe();
+    service.getUniqueValues$({ applicationId: 'app/default', layerId: '1', attribute: 'attribute', filter: '(attribute2 LIKE \'%test%\')' }).subscribe();
     const req = httpController.expectOne({ url: '/api/app/default/layer/1/unique/attribute', method: 'POST' });
     expect(req.request.headers.get('Content-Type')).toEqual('application/x-www-form-urlencoded');
     expect(req.request.body.get('filter')).toEqual('(attribute2 LIKE \'%test%\')');
@@ -73,7 +73,7 @@ describe('TailormapApiV1Service', () => {
   });
 
   test('queries API for getLayerExportCapabilities$', () => {
-    service.getLayerExportCapabilities$({ applicationId: 'app/default', layerName: 1 }).subscribe();
+    service.getLayerExportCapabilities$({ applicationId: 'app/default', layerId: '1' }).subscribe();
     const req = httpController.expectOne({ url: '/api/app/default/layer/1/export/capabilities', method: 'GET' });
     req.flush(null);
   });

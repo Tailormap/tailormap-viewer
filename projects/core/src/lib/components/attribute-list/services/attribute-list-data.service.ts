@@ -33,7 +33,7 @@ export class AttributeListDataService implements OnDestroy {
         takeUntil(this.destroyed),
         withLatestFrom(this.store$.select(selectAttributeListTabs)),
         map(([ filters, tabs ]) => {
-          return tabs.filter(tab => typeof tab.layerName === 'undefined' ? false : filters.has(tab.layerName));
+          return tabs.filter(tab => typeof tab.layerId === 'undefined' ? false : filters.has(tab.layerId));
         }),
       )
       .subscribe(tabs => {
@@ -56,7 +56,7 @@ export class AttributeListDataService implements OnDestroy {
     ]).pipe(
       take(1),
       concatMap(([ tab, data ]) => {
-        if (!tab || !tab.layerName) {
+        if (!tab || !tab.layerId) {
           return of(AttributeListDataService.getErrorResult(''));
         }
         return this.loadData$(tab, tab.selectedDataId, data);
@@ -69,21 +69,21 @@ export class AttributeListDataService implements OnDestroy {
     dataId: string,
     data: AttributeListDataModel[],
   ): Observable<LoadAttributeListDataResultModel> {
-    if (!tab.layerName) {
+    if (!tab.layerId) {
       return of(AttributeListDataService.getErrorResult(dataId));
     }
-    const layerName = tab.layerName;
+    const layerId = tab.layerId;
     const selectedData = data.find(d => d.id === dataId);
     if (!selectedData) {
       return of(AttributeListDataService.getErrorResult(dataId));
     }
     const start = selectedData.pageIndex;
-    const layerFilter = this.filterService.getFilterForLayer(layerName);
+    const layerFilter = this.filterService.getFilterForLayer(layerId);
     return this.store$.select(selectViewerId)
       .pipe(
         filter(TypesHelper.isDefined),
         concatMap(applicationId => this.api.getFeatures$({
-          layerName,
+          layerId: layerId,
           applicationId,
           page: start,
           filter: layerFilter,

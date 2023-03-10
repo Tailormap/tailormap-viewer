@@ -7,16 +7,16 @@ import { FilterTypeEnum } from '../models/filter-type.enum';
 import { getFilterGroup } from './attribute-filter.helper.spec';
 import { SpatialFilterModel } from '../models/spatial-filter.model';
 
-export const getSpatialFilterGroup = (geoms: string[], columns?: Array<{ layerName: string; column: string[] }>, buffer?: number) => {
+export const getSpatialFilterGroup = (geoms: string[], columns?: Array<{ layerId: string; column: string[] }>, buffer?: number) => {
   const group = getFilterGroup<SpatialFilterModel>([{
     id: '1',
     type: FilterTypeEnum.SPATIAL,
-    geometryColumns: columns || [{ layerName: '1', column: ['the_geom'] }],
+    geometryColumns: columns || [{ layerId: '1', column: ['the_geom'] }],
     geometries: geoms.map((g, idx) => ({ id: `${idx + 1}`, geometry: g })),
     buffer,
   }], FilterTypeEnum.SPATIAL);
   if (columns) {
-    return { ...group, layerNames: columns.map(c => c.layerName) };
+    return { ...group, layerIds: columns.map(c => c.layerId) };
   }
   return group;
 };
@@ -48,7 +48,7 @@ describe('CQLFilterHelper', () => {
   });
 
   test('should create a spatial filters for multiple layers', () => {
-    const filterGroup = getSpatialFilterGroup(['POINT(1 2)'], [{ layerName: '1', column: ['the_geom'] }, { layerName: '2', column: ['geom'] }]);
+    const filterGroup = getSpatialFilterGroup(['POINT(1 2)'], [{ layerId: '1', column: ['the_geom'] }, { layerId: '2', column: ['geom'] }]);
     const filters = CqlFilterHelper.getFilters([filterGroup]);
     expect(filters.size).toBe(2);
     expect(filters.get('1')).toBe('INTERSECTS(the_geom, POINT(1 2))');
@@ -56,7 +56,7 @@ describe('CQLFilterHelper', () => {
   });
 
   test('should create a spatial filter for multiple geometry columns', () => {
-    const filterGroup = getSpatialFilterGroup(['POINT(1 2)'], [{ layerName: '1', column: [ 'the_geom', 'some_other_geom_column' ] }]);
+    const filterGroup = getSpatialFilterGroup(['POINT(1 2)'], [{ layerId: '1', column: [ 'the_geom', 'some_other_geom_column' ] }]);
     const filters = CqlFilterHelper.getFilters([filterGroup]);
     expect(filters.get('1')).toBe('(INTERSECTS(the_geom, POINT(1 2)) OR INTERSECTS(some_other_geom_column, POINT(1 2)))');
   });
@@ -119,7 +119,7 @@ describe('CQLFilterHelper', () => {
     const filterGroups: FilterGroupModel<AttributeFilterModel>[] = [{
       id: '1',
       type: FilterTypeEnum.ATTRIBUTE,
-      layerNames: ['1'],
+      layerIds: ['1'],
       filters: [{
         id: '1',
         caseSensitive: true,
@@ -135,7 +135,7 @@ describe('CQLFilterHelper', () => {
     }, {
       id: '2',
       type: FilterTypeEnum.ATTRIBUTE,
-      layerNames: ['1'],
+      layerIds: ['1'],
       filters: [{
         id: '2',
         caseSensitive: false,
@@ -161,7 +161,7 @@ describe('CQLFilterHelper', () => {
     }, {
       id: '3',
       type: FilterTypeEnum.ATTRIBUTE,
-      layerNames: ['1'],
+      layerIds: ['1'],
       filters: [{
         id: '4',
         caseSensitive: false,
@@ -178,7 +178,7 @@ describe('CQLFilterHelper', () => {
     }, {
       id: '4',
       type: FilterTypeEnum.ATTRIBUTE,
-      layerNames: ['1'],
+      layerIds: ['1'],
       filters: [{
         id: '5',
         caseSensitive: false,

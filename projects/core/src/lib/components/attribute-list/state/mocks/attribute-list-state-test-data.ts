@@ -11,7 +11,7 @@ export const createDummyAttributeListTab = (
   id: '1',
   selectedDataId: '1',
   loadingData: true,
-  layerName: 1,
+  layerId: '1',
   initialDataLoaded: false,
   label: 'First tab',
   loadingError: '',
@@ -118,7 +118,7 @@ export const getLoadedStoreWithMultipleTabs = (overrides?: Partial<AttributeList
     selectedTabId: '1',
     tabs: [
       createDummyAttributeListTab({ loadingData: false, initialDataLoaded: true }),
-      createDummyAttributeListTab({ id: '2', layerName: 2, selectedDataId: '2', label: 'Tab 2', loadingData: false, initialDataLoaded: true }),
+      createDummyAttributeListTab({ id: '2', layerId: '2', selectedDataId: '2', label: 'Tab 2', loadingData: false, initialDataLoaded: true }),
     ],
     data: [
       createDummyAttributeListData({

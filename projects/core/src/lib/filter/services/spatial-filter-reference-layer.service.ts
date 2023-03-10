@@ -34,7 +34,7 @@ export class SpatialFilterReferenceLayerService implements OnDestroy {
         this.cleanUpOldGeometries(spatialFilterGroups);
         spatialFilterGroups.forEach(group => {
           const currentLoadedKey = this.geometriesLoaded.get(group.id);
-          const referenceLayer = group.filters[0].baseLayerName;
+          const referenceLayer = group.filters[0].baseLayerId;
           if (!referenceLayer) {
             return;
           }
@@ -60,7 +60,7 @@ export class SpatialFilterReferenceLayerService implements OnDestroy {
         tap(() => this.loadingGeometries.next([ ...this.loadingGeometries.value, group.id ])),
         switchMap(applicationId => {
           return this.api.getFeatures$({
-            layerName: referenceLayer,
+            layerId: referenceLayer,
             applicationId,
             page: 1,
             filter: cqlFilter === '' ? undefined : cqlFilter,
@@ -85,17 +85,17 @@ export class SpatialFilterReferenceLayerService implements OnDestroy {
           return {
             id: feat.__fid,
             geometry: feat.geometry,
-            referenceLayerName: referenceLayer,
+            referenceLayerId: referenceLayer,
           };
         }).filter(TypesHelper.isDefined);
         const updatedGroup: FilterGroupModel<SpatialFilterModel> = {
           ...group,
           error: response.error ? $localize `Error loading reference layer geometries` : undefined,
           filters: group.filters.map(f => {
-            const userDrawnGeometries = f.geometries.filter(g => typeof g.referenceLayerName === 'undefined');
+            const userDrawnGeometries = f.geometries.filter(g => typeof g.referenceLayerId === 'undefined');
             return {
               ...f,
-              baseLayerName: response.error ? undefined : f.baseLayerName,
+              baseLayerId: response.error ? undefined : f.baseLayerId,
               geometries: userDrawnGeometries.concat(geometries),
             };
           }),

@@ -18,7 +18,7 @@ const onSetSelectedFilterGroup = (
 ): FilterComponentState => ({
   ...state,
   selectedFilterGroup: payload.filterGroup.id,
-  selectedLayers: payload.filterGroup.layerNames,
+  selectedLayers: payload.filterGroup.layerIds,
   createFilterType: undefined,
 });
 
