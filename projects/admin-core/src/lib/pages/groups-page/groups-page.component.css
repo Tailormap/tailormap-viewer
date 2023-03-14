@@ -1,0 +1,17 @@
+.groupadmin-page-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: stretch;
+  max-height: 100%;
+}
+
+.groupadmin-grouplist {
+  width: 300px;
+  max-height: 100%;
+}
+
+.groupadmin-form {
+  margin-left: 1em;
+  width: 100%;
+  max-width: inherit;
+}

@@ -28,4 +28,16 @@ describe('TailormapAdminApiV1Service', () => {
     req.flush(null);
   });
 
+  test('queries API for getUsers$', () => {
+    service.getUsers$().subscribe();
+    const req = httpController.expectOne({ url: '/api/admin/users?size=1000&sort=username', method: 'GET' });
+    req.flush(null);
+  });
+
+  test('queries API for getGroups$', () => {
+    service.getGroups$().subscribe();
+    const req = httpController.expectOne({ url: '/api/admin/groups?size=1000&sort=name', method: 'GET' });
+    req.flush(null);
+  });
+
 });

@@ -1,0 +1,16 @@
+.useradmin-page-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: stretch;
+  max-height: 100%;
+}
+
+.useradmin-form {
+  margin-left: 1em;
+  width: 100%;
+  max-width: inherit;
+}
+
+.useradmin-userlist {
+  width: 300px;
+}
