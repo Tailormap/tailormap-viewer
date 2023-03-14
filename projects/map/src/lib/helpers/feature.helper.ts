@@ -114,4 +114,20 @@ export class FeatureHelper {
     return geom.transform(sourceProjection, mapProjection);
   }
 
+  /**
+   * Transforms a WKT geometry from one projection to another.
+   *
+   * @param wktGeom WKT of the geometry to transform
+   * @param sourceProjection The projection of the geometry, eg. 'EPSG:28992'
+   * @param targetProjection The projection to transform to, eg. 'EPSG:4326'
+   */
+  public static transformGeometry(wktGeom: string, sourceProjection: string, targetProjection: string): string {
+    if (!sourceProjection || !targetProjection || sourceProjection === targetProjection) {
+      return wktGeom;
+    }
+    const geom = FeatureHelper.wktFormatter.readGeometry(wktGeom, { dataProjection: sourceProjection });
+    geom.transform(sourceProjection, targetProjection);
+    return FeatureHelper.wktFormatter.writeGeometry(geom);
+  }
+
 }
