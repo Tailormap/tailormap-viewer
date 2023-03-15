@@ -1,11 +1,10 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
-import { BehaviorSubject, concatMap, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, tap } from 'rxjs';
-import { selectGeoServiceById, selectGeoServiceLayerSettingsById } from '../state/catalog.selectors';
-import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
+import { BehaviorSubject, distinctUntilChanged, map, Observable, of, Subject, switchMap, tap } from 'rxjs';
+import { selectGeoServiceLayerSettingsById } from '../state/catalog.selectors';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { GeoServiceService } from '../services/geo-service.service';
-import { GeoServiceSettingsModel, LayerSettingsModel } from '@tailormap-admin/admin-api';
+import { LayerSettingsModel } from '@tailormap-admin/admin-api';
 import { GeoServiceLayerSettingsModel } from '../models/geo-service-layer-settings.model';
 
 @Component({

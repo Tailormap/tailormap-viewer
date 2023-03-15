@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 import { GeoServiceService } from '../services/geo-service.service';
-import { GeoServiceUpdateModel, GeoServiceWithIdUpdateModel } from '../models/geo-service-update.model';
+import { GeoServiceUpdateModel } from '../models/geo-service-update.model';
 import { LayerSettingsModel } from '@tailormap-admin/admin-api';
 
 @Component({
