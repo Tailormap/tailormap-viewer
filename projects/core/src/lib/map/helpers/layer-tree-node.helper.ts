@@ -1,6 +1,6 @@
 import { AppLayerModel, LayerTreeNodeModel } from '@tailormap-viewer/api';
 import { ExtendedLayerTreeNodeModel } from '../models';
-import { TreeModel, TypesHelper } from '@tailormap-viewer/shared';
+import { TreeHelper, TreeModel, TypesHelper } from '@tailormap-viewer/shared';
 
 export class LayerTreeNodeHelper {
 
@@ -38,10 +38,6 @@ export class LayerTreeNodeHelper {
     };
   }
 
-  public static findLayerTreeNode<T extends LayerTreeNodeModel>(layerTreeNodes: T[], id: string) {
-    return layerTreeNodes.find(l => l.id === id);
-  }
-
   public static getAppLayerIds(layerTreeNodes: LayerTreeNodeModel[], child?: LayerTreeNodeModel): number[] {
     return LayerTreeNodeHelper.getChildNodes(layerTreeNodes, child)
       .map(node => node.appLayerId)
@@ -73,7 +69,7 @@ export class LayerTreeNodeHelper {
     const root = layerTreeNodes.find(l => l.root);
     const isLayerNode = (n?: LayerTreeNodeModel) => n?.appLayerId === layer.id;
     const findInChildren = (n?: LayerTreeNodeModel): LayerTreeNodeModel | undefined => (n?.childrenIds || [])
-      .map(id => LayerTreeNodeHelper.findLayerTreeNode(layerTreeNodes, id))
+      .map(id => TreeHelper.findNode(layerTreeNodes, id))
       .find(child => isLayerNode(child) || findInChildren(child));
     return findInChildren(root);
   }
@@ -83,13 +79,14 @@ export class LayerTreeNodeHelper {
     if (!root) {
       return [];
     }
-    const tree = LayerTreeNodeHelper.traverseTree<TreeModel<AppLayerModel>>(
+    const tree = TreeHelper.traverseTree<TreeModel<AppLayerModel>, ExtendedLayerTreeNodeModel>(
       layerTreeNodes,
       root.id,
       (node, children) => ({
         ...LayerTreeNodeHelper.getTreeModelForLayerTreeNode(node, layers),
         children,
       }),
+      node => node.childrenIds || [],
     );
     if (!tree) {
       return [];
@@ -98,23 +95,9 @@ export class LayerTreeNodeHelper {
     return tree.children || [];
   }
 
-  private static traverseTree<T>(
-    layerTreeNodes: ExtendedLayerTreeNodeModel[],
-    id: string,
-    transformer: (node: ExtendedLayerTreeNodeModel, children: T[]) => T | null): T | null {
-    const node = LayerTreeNodeHelper.findLayerTreeNode(layerTreeNodes, id);
-    if (!node) {
-      return null;
-    }
-    const children = (node.childrenIds || [])
-      .map(childId => LayerTreeNodeHelper.traverseTree<T>(layerTreeNodes, childId, transformer))
-      .filter<T>((n: T | null): n is T => !!n);
-    return transformer(node, children);
-  }
-
   private static getChildNodes(layerTreeNodes: LayerTreeNodeModel[], child?: LayerTreeNodeModel): LayerTreeNodeModel[] {
     const childIds = (child?.childrenIds || []).map(id => {
-      return LayerTreeNodeHelper.getChildNodes(layerTreeNodes, LayerTreeNodeHelper.findLayerTreeNode(layerTreeNodes, id));
+      return LayerTreeNodeHelper.getChildNodes(layerTreeNodes, TreeHelper.findNode(layerTreeNodes, id));
     });
     return (child ? [child] : []).concat(...childIds);
   }

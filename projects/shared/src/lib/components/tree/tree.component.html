@@ -36,7 +36,12 @@
              (mouseup)="stopDrag($event)"
              (touchstart)="enableDrag($event)"
              (touchend)="stopDrag($event)">
-          <ng-container *ngTemplateOutlet="treeNodeTemplate ? treeNodeTemplate : defaultTreeNodeTemplate; context: {$implicit: node}"></ng-container>
+          <ng-container *ngIf="node.loadingPlaceholder">
+            <mat-spinner diameter="20"></mat-spinner>
+          </ng-container>
+          <ng-container *ngIf="!node.loadingPlaceholder">
+            <ng-container *ngTemplateOutlet="treeNodeTemplate ? treeNodeTemplate : defaultTreeNodeTemplate; context: {$implicit: node}"></ng-container>
+          </ng-container>
         </div>
       </div>
     </mat-tree-node>
@@ -45,6 +50,7 @@
                    matTreeNodePadding
                    matTreeNodePaddingIndent="20"
                    class="mat-tree-node--folder"
+                   [class.tree-node--selected]="selectedNodeId === node.id"
                    (click)="setNodeSelected(node)">
       <div [className]="getNodeClassName(node)"
            [attr.data-nodeid]="node.id"
@@ -52,7 +58,7 @@
         <button mat-icon-button
                 class="size-18"
                 (click)="toggleNodeExpansion($event, node)"
-                [attr.aria-label]="'toggle ' + node.label">
+                [attr.aria-label]="(isExpanded(node) ? 'collapse ' : 'expand ') + node.label">
           <mat-icon [svgIcon]="isExpanded(node) ? 'chevron_bottom' : 'chevron_right'"></mat-icon>
         </button>
         <mat-checkbox *ngIf="node.checkbox && !useRadioInputs"
@@ -68,7 +74,12 @@
              (mouseup)="stopDrag($event)"
              (touchstart)="enableDrag($event)"
              (touchend)="stopDrag($event)">
-          <ng-container *ngTemplateOutlet="treeNodeTemplate ? treeNodeTemplate : defaultTreeNodeTemplate; context: {$implicit: node}"></ng-container>
+          <ng-container *ngIf="node.loadingPlaceholder">
+            <mat-spinner diameter="20"></mat-spinner>
+          </ng-container>
+          <ng-container *ngIf="!node.loadingPlaceholder">
+            <ng-container *ngTemplateOutlet="treeNodeTemplate ? treeNodeTemplate : defaultTreeNodeTemplate; context: {$implicit: node}"></ng-container>
+          </ng-container>
         </div>
       </div>
     </mat-tree-node>

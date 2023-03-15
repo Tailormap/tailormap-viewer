@@ -7,6 +7,7 @@ module.exports = {
     '<rootDir>/projects/map',
     '<rootDir>/projects/shared',
     '<rootDir>/projects/admin-app',
+    '<rootDir>/projects/admin-api',
     '<rootDir>/projects/admin-core',
   ]
 };

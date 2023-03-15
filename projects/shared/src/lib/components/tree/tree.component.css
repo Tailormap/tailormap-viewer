@@ -38,7 +38,6 @@ mat-checkbox {
 /* the ::ng-deep above will be removed after compilation so this selector is actually more specific */
 /* stylelint-disable-next-line no-descending-specificity */
 .tree-node-wrapper--no-checkbox > .mdc-icon-button {
-  margin-top: -6px;
   margin-right: 3px;
 }
 

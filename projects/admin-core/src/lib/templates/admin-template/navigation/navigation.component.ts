@@ -19,13 +19,7 @@ export class NavigationComponent implements OnInit {
 
   public buttons: ButtonProps[] = [
     { label: $localize `Home`, matchExact: true, link: RoutesEnum.ADMIN_HOME, icon: 'admin_home' },
-    {
-      label: $localize `Geo Registry`, matchExact: false, link: RoutesEnum.GEO_REGISTRY, icon: 'admin_geo_registry', subMenu: [
-        { label: $localize `Services`, matchExact: true, link: RoutesEnum.GEO_REGISTRY },
-        { label: $localize `Sources`, matchExact: true, link: RoutesEnum.GEO_REGISTRY_SOURCES },
-        { label: $localize `Attributes`, matchExact: true, link: RoutesEnum.GEO_REGISTRY_ATTRIBUTES },
-      ],
-    },
+    { label: $localize `Catalog`, matchExact: false, link: RoutesEnum.CATALOG, icon: 'admin_catalog' },
   ];
 
   constructor() { }

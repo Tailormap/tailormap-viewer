@@ -1,0 +1,18 @@
+<h2 mat-dialog-title>
+  <ng-container *ngIf="!data.node" i18n>Create new folder</ng-container>
+  <ng-container *ngIf="data.node" i18n>Edit {{data.node.title}}</ng-container>
+</h2>
+<mat-dialog-content>
+  <tm-admin-catalog-node-form [node]="data.node"
+                              [parentNode]="data.parentNode"
+                              (changed)="updateNode($event)"></tm-admin-catalog-node-form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-flat-button (click)="cancel()" i18n>Cancel</button>
+  <button mat-flat-button color="primary" aria-label="Save" (click)="save()" [disabled]="!node || (saving$ | async)">
+    <ng-template #saveLabel><ng-container i18n>Save</ng-container></ng-template>
+    <ng-container *ngIf="saving$ | async; else: saveLabel">
+      <mat-spinner diameter="20"></mat-spinner>
+    </ng-container>
+  </button>
+</mat-dialog-actions>

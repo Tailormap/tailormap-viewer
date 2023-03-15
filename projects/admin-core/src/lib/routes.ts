@@ -1,6 +1,7 @@
 export enum RoutesEnum {
-  GEO_REGISTRY = 'geo-registry',
-  GEO_REGISTRY_SOURCES = 'geo-registry/sources',
-  GEO_REGISTRY_ATTRIBUTES = 'geo-registry/attributes',
+  CATALOG = 'page/catalog',
+  CATALOG_NODE_DETAILS = 'node/:nodeId',
+  CATALOG_SERVICE_DETAILS = 'node/:nodeId/service/:serviceId',
+  CATALOG_LAYER_DETAILS = 'node/:nodeId/service/:serviceId/layer/:layerId',
   ADMIN_HOME = '',
 }

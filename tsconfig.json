@@ -19,6 +19,9 @@
       ],
       "@tailormap-admin/admin-core": [
         "projects/admin-core/src"
+      ],
+      "@tailormap-admin/admin-api": [
+        "projects/admin-api/src"
       ]
     },
     "outDir": "./dist/out-tsc",

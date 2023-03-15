@@ -318,7 +318,8 @@
             ],
             "styles": [
               "projects/core/assets/custom-theme.scss",
-              "projects/core/assets/tailormap-styles.css"
+              "projects/core/assets/tailormap-styles.css",
+              "projects/admin-core/assets/tailormap-admin-styles.css"
             ],
             "scripts": []
           },
@@ -371,6 +372,9 @@
               "browserTarget": "admin-app:build:development"
             }
           },
+          "options": {
+            "proxyConfig": "proxy.config.js"
+          },
           "defaultConfiguration": "development"
         },
         "extract-i18n": {
@@ -407,6 +411,38 @@
             },
             "development": {
               "tsConfig": "projects/admin-core/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/admin-core/**/*.ts",
+              "projects/admin-core/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "admin-api": {
+      "projectType": "library",
+      "root": "projects/admin-api",
+      "sourceRoot": "projects/admin-api/src",
+      "prefix": "tm",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/admin-api/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/admin-api/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/admin-api/tsconfig.lib.json"
             }
           },
           "defaultConfiguration": "production"

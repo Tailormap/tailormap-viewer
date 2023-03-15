@@ -1,0 +1,24 @@
+:host {
+  flex: 1;
+}
+
+.mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+  line-height: 18px;
+}
+
+.tree-node--selectable {
+  cursor: pointer;
+}
+
+.tree-node__label,
+.tree-node__icon {
+  display: flex;
+  align-items: center;
+}
+
+.tree-node__label-content {
+  padding-left: 4px;
+}
