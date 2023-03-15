@@ -65,7 +65,13 @@ export class GeoServiceDetailsComponent implements OnInit, OnDestroy {
       serviceSetting => ({ defaultLayerSettings: { ...serviceSetting.defaultLayerSettings, ...(this.updatedDefaultLayerSettings || {}) } }),
     )
       .pipe(takeUntil(this.destroyed))
-      .subscribe(() => this.savingSubject.next(false));
+      .subscribe(success => {
+        if (success) {
+          this.updatedGeoService = null;
+          this.updatedDefaultLayerSettings = null;
+        }
+        this.savingSubject.next(false);
+      });
   }
 
 }

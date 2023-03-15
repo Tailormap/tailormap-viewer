@@ -62,7 +62,13 @@ export class LayerSettingsFormComponent implements OnInit {
       ? undefined
       : !value.hiDpiEnabled;
 
-    return { title: value.title || '', hiDpiDisabled };
+    const settings: LayerSettingsModel = {
+      hiDpiDisabled,
+    };
+    if (this.isLayerSpecific) {
+      settings.title = value.title || undefined;
+    }
+    return settings;
   }
 
   private isValidForm() {

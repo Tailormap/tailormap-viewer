@@ -15,12 +15,12 @@ import { CatalogNodeFormDialogComponent } from '../catalog-node-form-dialog/cata
 import { GeoServiceFormDialogComponent } from '../geo-service-form-dialog/geo-service-form-dialog.component';
 import { GeoServiceFormComponent } from '../geo-service-form/geo-service-form.component';
 import { GeoServiceService } from '../services/geo-service.service';
+import { TestSaveHelper } from '../../test-helpers/test-save.helper';
+import { createGeoServiceMock } from '../helpers/mocks/geo-service.service.mock';
 
 const setup = async () => {
   const createCatalogNodeMock = jest.fn(() => of(true));
-  const createGeoServiceMock = jest.fn(() => of(true));
   const updateCatalogNodeMock = jest.fn(() => of(true));
-  const updateGeoServiceMock = jest.fn(() => of(true));
   const activeRoute = {
     paramMap: of({ get: () => '1' }),
   };
@@ -28,10 +28,7 @@ const setup = async () => {
     createCatalogNode$: createCatalogNodeMock,
     updateCatalogNode$: updateCatalogNodeMock,
   };
-  const geoServiceService = {
-    createGeoService$: createGeoServiceMock,
-    updateGeoService$: updateGeoServiceMock,
-  };
+  const { geoServiceService, createGeoService$ } = createGeoServiceMock();
   const catalogNodeModel = getCatalogNode({ id: '1', title: 'Random services folder' });
   const store = getMockStore({
     initialState: { [catalogStateKey]: { ...initialCatalogState, catalog: [{ ...catalogNodeModel, root: false, parentId: 'root' }] } },
@@ -51,7 +48,7 @@ const setup = async () => {
       { provide: Store, useValue: store },
     ],
   });
-  return { createCatalogNodeMock, updateCatalogNodeMock, createGeoServiceMock };
+  return { createCatalogNodeMock, updateCatalogNodeMock, createGeoService$ };
 };
 
 describe('CatalogNodeDetailsComponent', () => {
@@ -64,10 +61,7 @@ describe('CatalogNodeDetailsComponent', () => {
   test('should handle editing', async () => {
     const { updateCatalogNodeMock } = await setup();
     await userEvent.type(await screen.findByPlaceholderText('Title'), ' premium');
-    await waitFor(() => {
-      expect(screen.getByText('Save').closest('button')).not.toBeDisabled();
-    });
-    await userEvent.click(await screen.findByText('Save'));
+    await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save');
     expect(updateCatalogNodeMock).toHaveBeenCalledWith({
       id: '1',
       title: 'Random services folder premium',
@@ -83,10 +77,7 @@ describe('CatalogNodeDetailsComponent', () => {
     await userEvent.click(await screen.findByText('Add folder'));
     expect(await screen.findByText('Create new folder')).toBeInTheDocument();
     await userEvent.type((await screen.findAllByPlaceholderText('Title'))[1], 'New Folder Inside');
-    await waitFor(() => {
-      expect(screen.getAllByText('Save')[1].closest('button')).not.toBeDisabled();
-    });
-    await userEvent.click(screen.getAllByText('Save')[1]);
+    await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save', 1);
     expect(createCatalogNodeMock).toHaveBeenCalledWith({
       title: 'New Folder Inside',
       root: false,
@@ -97,15 +88,12 @@ describe('CatalogNodeDetailsComponent', () => {
   });
 
   test('should open add geo service', async () => {
-    const { createGeoServiceMock } = await setup();
+    const { createGeoService$ } = await setup();
     await userEvent.click(await screen.findByText('Add service'));
     expect(await screen.findByText('Create new service')).toBeInTheDocument();
     await userEvent.type(await screen.findByPlaceholderText('URL'), 'http://service.url');
-    await waitFor(() => {
-      expect(screen.getAllByText('Save')[1].closest('button')).not.toBeDisabled();
-    });
-    await userEvent.click(screen.getAllByText('Save')[1]);
-    expect(createGeoServiceMock).toHaveBeenCalledWith({
+    await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save', 1);
+    expect(createGeoService$).toHaveBeenCalledWith({
       title: '',
       url: 'http://service.url',
       protocol: 'wms',

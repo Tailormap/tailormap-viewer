@@ -14,7 +14,7 @@
                               [parentNode]="node.parentId"
                               (changed)="updateNode($event)"></tm-admin-catalog-node-form>
   <div class="page-details-actions">
-    <button mat-flat-button color="primary" (click)="save(node.id)" [disabled]="!updatedNode || (saving$ | async)">
+    <button mat-flat-button color="primary" aria-label="Save" (click)="save(node.id)" [disabled]="!updatedNode || (saving$ | async)">
       <ng-template #saveLabel><ng-container i18n>Save</ng-container></ng-template>
       <ng-container *ngIf="saving$ | async; else: saveLabel">
         <mat-spinner diameter="20"></mat-spinner>

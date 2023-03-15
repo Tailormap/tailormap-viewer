@@ -4,16 +4,14 @@ import { of } from 'rxjs';
 import { getGeoService, getGeoServiceLayer } from '@tailormap-admin/admin-api';
 import { getMockStore } from '@ngrx/store/testing';
 import { catalogStateKey, initialCatalogState } from '../state/catalog.state';
-import { GeoServiceDetailsComponent } from '../geo-service-details/geo-service-details.component';
-import { GeoServiceFormComponent } from '../geo-service-form/geo-service-form.component';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { ActivatedRoute } from '@angular/router';
 import { GeoServiceService } from '../services/geo-service.service';
 import { Store } from '@ngrx/store';
 import { LayerSettingsFormComponent } from '../layer-settings-form/layer-settings-form.component';
+import { createGeoServiceMock } from '../helpers/mocks/geo-service.service.mock';
 
 const setup = async () => {
-  const updateGeoServiceMock = jest.fn(() => of(true));
   const activeRoute = {
     paramMap: of({
       get: (param: string) => {
@@ -27,9 +25,7 @@ const setup = async () => {
       },
     }),
   };
-  const geoServiceService = {
-    updateGeoService$: updateGeoServiceMock,
-  };
+  const { geoServiceService, updateGeoService$ } = createGeoServiceMock();
   const geoServiceModel = getGeoService({ id: '1', title: 'The Service' });
   const layerModel = getGeoServiceLayer({ name: 'layer_2', title: 'The Layer' });
   const store = getMockStore({
@@ -48,7 +44,7 @@ const setup = async () => {
       { provide: Store, useValue: store },
     ],
   });
-  return { updateGeoServiceMock, geoServiceModel };
+  return { updateGeoService$, geoServiceModel };
 };
 
 describe('GeoServiceLayerDetailsComponent', () => {
