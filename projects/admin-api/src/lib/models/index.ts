@@ -9,3 +9,4 @@ export * from './service-caps.model';
 export * from './catalog-item.model';
 export * from './catalog-item-kind.enum';
 export * from './feature-source.model';
+export * from './tile-layer-hi-dpi-mode.enum';

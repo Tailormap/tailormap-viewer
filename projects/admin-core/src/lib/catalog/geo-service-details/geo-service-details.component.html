@@ -4,6 +4,7 @@
                              (changed)="updateGeoService($event)"></tm-admin-geo-service-form>
   <h3>Default layer settings</h3>
   <tm-admin-layer-settings-form [layerSettings]="geoService.settings?.defaultLayerSettings"
+                                [protocol]="geoService.protocol"
                                 (changed)="updateDefaultLayerSettings($event)"></tm-admin-layer-settings-form>
   <div class="page-details-actions">
     <button mat-flat-button color="primary" aria-label="Save" (click)="save(geoService.id)" [disabled]="(!updatedGeoService && !updatedDefaultLayerSettings) || (saving$ | async)">

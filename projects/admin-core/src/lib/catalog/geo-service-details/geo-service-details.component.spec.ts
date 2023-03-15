@@ -58,7 +58,7 @@ describe('GeoServiceDetailsComponent', () => {
       defaultLayerSettings: {},
     });
     TestSaveHelper.waitForButtonToBeDisabled('Save');
-    await userEvent.click(await screen.findByText('High-DPI mode'));
+    await userEvent.click(await screen.findByText('High-DPI enabled'));
     // @ts-ignore
     await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save');
     expect(updateGeoService$).toHaveBeenNthCalledWith(2, '1', expect.anything(), expect.anything());

@@ -3,13 +3,34 @@
     <mat-label i18n>Title</mat-label>
     <input matInput tmAutoFocus placeholder="Title" i18n-placeholder formControlName="title" />
   </mat-form-field>
-  <mat-slide-toggle *ngIf="!isLayerSpecific" formControlName="hiDpiEnabled" i18n>High-DPI mode</mat-slide-toggle>
-  <ng-container *ngIf="isLayerSpecific">
-    <h4 i18n>High-DPI mode</h4>
-    <mat-button-toggle-group aria-label="High-DPI mode" [value]="getHiDPIMode()" (change)="setHiDPIMode($event)">
-      <mat-button-toggle value="INHERIT" i18n>Default</mat-button-toggle>
-      <mat-button-toggle [value]="false" i18n>Disabled</mat-button-toggle>
-      <mat-button-toggle [value]="true" i18n>Enabled</mat-button-toggle>
-    </mat-button-toggle-group>
+  <ng-container *ngIf="!isLayerSpecific">
+    <mat-slide-toggle formControlName="hiDpiEnabled" i18n>High-DPI enabled</mat-slide-toggle>
+    <mat-slide-toggle formControlName="tilingEnabled" i18n *ngIf="isWMS">Use tiling</mat-slide-toggle>
   </ng-container>
+  <ng-container *ngIf="isLayerSpecific">
+    <div class="toggle-control">
+      <strong i18n>High-DPI enabled</strong>
+      <tm-admin-tri-state-boolean formControlName="hiDpiEnabled"></tm-admin-tri-state-boolean>
+    </div>
+    <mat-form-field class="form-control" *ngIf="isWMTS">
+      <mat-label i18n>Hi-DPI mode</mat-label>
+      <mat-select formControlName="hiDpiMode" i18n-placeholder placeholder="High-DPI mode">
+        <mat-option [value]="hiDpiModes.SHOW_NEXT_ZOOM_LEVEL" i18n>Show next zoom level</mat-option>
+        <mat-option [value]="hiDpiModes.SUBSTITUTE_LAYER_SHOW_NEXT_ZOOM_LEVEL" i18n>Substitute layer, show next zoom level</mat-option>
+        <mat-option [value]="hiDpiModes.SUBSTITUTE_LAYER_TILE_PIXEL_RATIO_ONLY" i18n>Substitute layer, tile pixel ratio only</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field *ngIf="isWMTS">
+      <mat-label i18n>Hi-DPI substitute layer</mat-label>
+      <input matInput tmAutoFocus placeholder="Hi-DPI substitute layer" i18n-placeholder formControlName="hiDpiSubstituteLayer" />
+    </mat-form-field>
+    <div class="toggle-control" *ngIf="isWMS">
+      <strong i18n>Use tiling</strong>
+      <tm-admin-tri-state-boolean formControlName="tilingEnabled"></tm-admin-tri-state-boolean>
+    </div>
+  </ng-container>
+  <mat-form-field class="form-control number-control" *ngIf="isWMS">
+    <mat-label i18n>Tiling gutter</mat-label>
+    <input matInput type="number" formControlName="tilingGutter" />
+  </mat-form-field>
 </form>

@@ -16,6 +16,7 @@ import { CatalogNodeFormDialogComponent } from './catalog-node-form-dialog/catal
 import { GeoServiceFormDialogComponent } from './geo-service-form-dialog/geo-service-form-dialog.component';
 import { GeoServiceFormComponent } from './geo-service-form/geo-service-form.component';
 import { LayerSettingsFormComponent } from './layer-settings-form/layer-settings-form.component';
+import { SharedAdminComponentsModule } from "../shared/components/shared-admin-components.module";
 
 
 
@@ -32,12 +33,13 @@ import { LayerSettingsFormComponent } from './layer-settings-form/layer-settings
     GeoServiceFormComponent,
     LayerSettingsFormComponent,
   ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    StoreModule.forFeature(catalogStateKey, catalogReducer),
-    EffectsModule.forFeature([CatalogEffects]),
-  ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        StoreModule.forFeature(catalogStateKey, catalogReducer),
+        EffectsModule.forFeature([CatalogEffects]),
+        SharedAdminComponentsModule,
+    ],
   exports: [
     CatalogTreeComponent,
   ],

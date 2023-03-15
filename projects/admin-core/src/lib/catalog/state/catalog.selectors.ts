@@ -52,6 +52,7 @@ export const selectGeoServiceLayerSettingsById = (serviceId: string, layerId: st
       layerName: serviceAndLayer.layer.name,
       layerTitle: serviceAndLayer.layer.title,
       serviceId: serviceAndLayer.service.id,
+      protocol: serviceAndLayer.service.protocol,
       settings: layerSettings[serviceAndLayer.layer.name] || {},
     };
   },

@@ -92,7 +92,7 @@ export class OlLayerHelper {
     const parser = new WMTSCapabilities();
     const capabilities = parser.read(layer.capabilities);
 
-    const hiDpi = (pixelRatio || window.devicePixelRatio) > 1 && !layer.hiDpiDisabled && layer.hiDpiMode;
+    const hiDpi = (pixelRatio || window.devicePixelRatio) > 1 && !layer.hiDpiDisabled;
     const hiDpiLayer = layer.hiDpiSubstituteLayer || layer.layers;
 
     const options = optionsFromCapabilities(capabilities, {
@@ -105,13 +105,14 @@ export class OlLayerHelper {
     options.crossOrigin = layer.crossOrigin;
 
     if (hiDpi) {
+      const hiDpiMode = layer.hiDpiMode || 'showNextZoomLevel';
       // For WMTS with hiDpiMode == 'substituteLayerTilePixelRatioOnly' just setting this option suffices. The service should send tiles with
       // 2x the width and height as it advertises in the capabilities.
       options.tilePixelRatio = 2;
 
       // For WMTS layers with these options, the service sends the tile sizes as advertised (advised to use larger tiles than 256x256), but
       // the tiles are DPI-independent (for instance an aero photo) or are rendered with high DPI (different layer name).
-      if (layer.hiDpiMode === 'showNextZoomLevel' || layer.hiDpiMode === 'substituteLayerShowNextZoomLevel') {
+      if (hiDpiMode === 'showNextZoomLevel' || hiDpiMode === 'substituteLayerShowNextZoomLevel') {
         // To use with the OL tilePixelRatio option, we need to halve the tile width and height and double the resolutions to fake the
         // capabilities to make the service look like it sends 2x the tile width/height and pick the tile for a deeper zoom level so we can
         // show sharper details per intrinsic CSS pixel.

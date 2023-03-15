@@ -1,0 +1,18 @@
+mat-slide-toggle {
+  display: block;
+}
+
+.form-control,
+.toggle-control,
+mat-slide-toggle + mat-slide-toggle {
+  margin-top: 16px;
+}
+
+.toggle-control strong {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.number-control {
+  max-width: 250px;
+}
