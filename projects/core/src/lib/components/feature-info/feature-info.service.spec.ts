@@ -13,7 +13,7 @@ describe('FeatureInfoService', () => {
 
   const appLayer = {
     ...getAppLayerModel({ visible: true, hasAttributes: true }),
-    service: getServiceModel({ name: '1' }),
+    service: getServiceModel({ id: '1' }),
     filter: '',
   };
   const response = getFeaturesResponseModel();
@@ -94,7 +94,7 @@ describe('FeatureInfoService', () => {
     service.getFeatures$([ 1, 2 ])
       .subscribe(featureInfo => {
         expect(featureInfo.length).toEqual(1);
-        expect(getFeatureInfoForLayers$).toHaveBeenCalledWith('test', [ 1, 2 ], httpClient);
+        expect(getFeatureInfoForLayers$).toHaveBeenCalledWith('1', [ 1, 2 ], httpClient);
         done();
       });
   });

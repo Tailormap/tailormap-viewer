@@ -49,7 +49,7 @@ export const selectLayerTreeNode = (nodeId: string) => createSelector(
 const getLayersWithServices = (layers: AppLayerWithInitialValuesModel[], services: ServiceModel[]): ExtendedAppLayerModel[] => {
     return layers.map(layer => ({
         ...layer,
-        service: services.find(s => s.name === layer.serviceName),
+        service: services.find(s => s.id === layer.serviceId),
     }));
 };
 

@@ -120,13 +120,13 @@ describe('MapReducer', () => {
     const initialState: MapState = {
       ...initialMapState,
       services: [
-        getServiceModel({ name: '1' }),
+        getServiceModel({ id: '1' }),
       ],
     };
-    const action = MapActions.addServices({ services: [getServiceModel({ name: '2' })] });
+    const action = MapActions.addServices({ services: [getServiceModel({ id: '2' })] });
     const updatedState = mapReducer(initialState, action);
     expect(updatedState.services.length).toEqual(2);
-    expect(updatedState.services.map(s => s.name)).toEqual([ '1', '2' ]);
+    expect(updatedState.services.map(s => s.id)).toEqual([ '1', '2' ]);
   });
 
   test('handles MapActions.addAppLayers', () => {

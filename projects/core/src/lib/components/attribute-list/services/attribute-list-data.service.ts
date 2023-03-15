@@ -83,7 +83,7 @@ export class AttributeListDataService implements OnDestroy {
       .pipe(
         filter(TypesHelper.isDefined),
         concatMap(applicationId => this.api.getFeatures$({
-          layerId: layerId,
+          layerId,
           applicationId,
           page: start,
           filter: layerFilter,

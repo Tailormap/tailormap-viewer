@@ -50,7 +50,7 @@ export const getLayerTreeNode = (overrides?: Partial<LayerTreeNodeModel>): Layer
 
 export const getAppLayerModel = (overrides?: Partial<AppLayerModel>): AppLayerModel => ({
   id: '1',
-  serviceName: '1',
+  serviceId: '1',
   visible: true,
   hasAttributes: false,
   title: 'Test',
@@ -60,7 +60,7 @@ export const getAppLayerModel = (overrides?: Partial<AppLayerModel>): AppLayerMo
 });
 
 export const getServiceModel = (overrides?: Partial<ServiceModel>): ServiceModel => ({
-  name: 'myservice',
+  id: 'myservice',
   url: 'https://test.nl',
   protocol: ServiceProtocol.WMS,
   serverType: ServerType.GEOSERVER,
@@ -171,17 +171,17 @@ export const getMapResponseData = (overrides?: Partial<MapResponseModel>): MapRe
   ],
   appLayers: [
     getAppLayerModel({ id: '1', layerName: 'osm-nb-hq', title: 'osm-nb-hq' }),
-    getAppLayerModel({ id: '2', hasAttributes: true, serviceName: 'bestuurlijkegebieden', layerName: 'gemeentegebied', title: 'Gemeentegebied' }),
-    getAppLayerModel({ id: '3', hasAttributes: true, serviceName: 'bestuurlijkegebieden', layerName: 'provinciegebied', title: 'Provinciegebied' }),
+    getAppLayerModel({ id: '2', hasAttributes: true, serviceId: 'bestuurlijkegebieden', layerName: 'gemeentegebied', title: 'Gemeentegebied' }),
+    getAppLayerModel({ id: '3', hasAttributes: true, serviceId: 'bestuurlijkegebieden', layerName: 'provinciegebied', title: 'Provinciegebied' }),
   ],
   initialExtent: overrides?.initialExtent === null ? null : getBoundsModel(overrides?.initialExtent),
   services: [
     getServiceModel({
-      name: 'openbasiskaart',
+      id: 'openbasiskaart',
       url: 'https://www.openbasiskaart.nl/mapcache/?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetCapabilities',
     }),
     getServiceModel({
-      name: 'bestuurlijkegebieden',
+      id: 'bestuurlijkegebieden',
       url: 'https://service.pdok.nl/kadaster/bestuurlijkegebieden/wms/v1_0?request=GetCapabilities&service=WMS',
     }),
   ],

@@ -135,7 +135,7 @@ export class ApplicationMapService implements OnDestroy {
     if (service.capabilities) {
       return of(service.capabilities);
     }
-    const cachedCapabilities = this.capabilities.get(service.name);
+    const cachedCapabilities = this.capabilities.get(service.id);
     if (cachedCapabilities) {
       return of(cachedCapabilities);
     }
@@ -143,7 +143,7 @@ export class ApplicationMapService implements OnDestroy {
       responseType: 'text',
       params: new HttpParams().append('REQUEST', 'GetCapabilities').append('SERVICE', 'WMTS'),
     }).pipe(
-      tap(capabilities => this.capabilities.set(service.name, capabilities)),
+      tap(capabilities => this.capabilities.set(service.id, capabilities)),
     );
   }
 

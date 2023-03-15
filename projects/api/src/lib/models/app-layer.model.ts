@@ -4,7 +4,7 @@ export interface AppLayerModel {
   id: string;
   layerName: string;
   title: string;
-  serviceName: string;
+  serviceId: string;
   url?: string;
   visible: boolean;
   hasAttributes: boolean;
