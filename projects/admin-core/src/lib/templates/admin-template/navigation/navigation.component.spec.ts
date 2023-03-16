@@ -10,10 +10,7 @@ describe('NavigationComponent', () => {
       imports: [ SharedModule, MatIconTestingModule ],
     });
     expect(await screen.findByText('Home')).toBeInTheDocument();
-    expect(await screen.findByText('Geo Registry')).toBeInTheDocument();
-    expect(await screen.findByText('Services')).toBeInTheDocument();
-    expect(await screen.findByText('Sources')).toBeInTheDocument();
-    expect(await screen.findByText('Attributes')).toBeInTheDocument();
+    expect(await screen.findByText('Catalog')).toBeInTheDocument();
   });
 
 });

@@ -65,7 +65,7 @@ export class TocComponent implements OnInit, OnDestroy {
       .subscribe(checkChanged => this.store$.dispatch(setLayerVisibility({ visibility: checkChanged })));
     this.treeService.nodeExpansionChangedSource$
       .pipe(takeUntil(this.destroyed))
-      .subscribe(node => this.store$.dispatch(toggleLevelExpansion({ id: node.id })));
+      .subscribe(({ node }) => this.store$.dispatch(toggleLevelExpansion({ id: node.id })));
     this.treeService.selectionStateChangedSource$
       .pipe(
         takeUntil(this.destroyed),

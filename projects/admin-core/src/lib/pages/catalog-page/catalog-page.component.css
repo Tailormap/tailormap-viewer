@@ -1,0 +1,27 @@
+.catalog-page-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: stretch;
+  max-height: 100%;
+}
+
+.catalog-tree {
+  width: 300px;
+}
+
+.catalog-content {
+  flex: 1;
+  margin-left: 16px;
+}
+
+.catalog-content ::ng-deep .page-details-title {
+  margin-bottom: 1em;
+}
+
+.catalog-content ::ng-deep .page-details-actions {
+  margin: 1em 0;
+}
+
+.catalog-content ::ng-deep .page-details-actions button + button {
+  margin-left: 16px;
+}

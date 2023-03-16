@@ -1,5 +1,6 @@
 import { LayerTreeNodeHelper } from './layer-tree-node.helper';
-import { getAppLayerModel, getLayerTreeNode } from '@tailormap-viewer/api';
+import { getAppLayerModel, getLayerTreeNode, LayerTreeNodeModel } from '@tailormap-viewer/api';
+import { TreeHelper } from '@tailormap-viewer/shared';
 
 const layers = [
   getAppLayerModel({ id: '1' }),
@@ -7,9 +8,14 @@ const layers = [
   getAppLayerModel({ id: '3' }),
 ];
 
+const getExtendedLayerTreeNode = (overrides?: Partial<LayerTreeNodeModel>) => {
+  const node = getLayerTreeNode(overrides);
+  return { ...node, expanded: true, initialChildren: node.childrenIds ?? [] };
+};
+
 const nodes = [
-  getLayerTreeNode({ root: true, childrenIds: ['lvl_1'] }),
-  getLayerTreeNode({ id: 'lvl_1', childrenIds: [ 'lvl_2', 'lyr_1', 'lyr_2' ] }),
+  getExtendedLayerTreeNode({ root: true, childrenIds: ['lvl_1'] }),
+  getExtendedLayerTreeNode({ id: 'lvl_1', childrenIds: [ 'lvl_2', 'lyr_1', 'lyr_2' ] }),
   getLayerTreeNode({ id: 'lyr_1', appLayerId: '1' }),
   getLayerTreeNode({ id: 'lyr_2', appLayerId: '2' }),
   getLayerTreeNode({ id: 'lvl_2', childrenIds: ['lyr_3'] }),
@@ -31,20 +37,20 @@ describe('LayerTreeNodeHelper', () => {
   });
 
   test('gets TreeModel for LayerTreeNode', () => {
-    const treeModel1 = LayerTreeNodeHelper.getTreeModelForLayerTreeNode(getLayerTreeNode(), layers);
+    const treeModel1 = LayerTreeNodeHelper.getTreeModelForLayerTreeNode(getExtendedLayerTreeNode(), layers);
     expect(treeModel1.type).toEqual('level');
     expect(treeModel1.metadata).toEqual(null);
 
-    const treeModel2 = LayerTreeNodeHelper.getTreeModelForLayerTreeNode(getLayerTreeNode({ appLayerId: '1' }), layers);
+    const treeModel2 = LayerTreeNodeHelper.getTreeModelForLayerTreeNode(getExtendedLayerTreeNode({ appLayerId: '1' }), layers);
     expect(treeModel2.type).toEqual('layer');
     expect(treeModel2.metadata).toEqual(layers[0]);
   });
 
   test('finds LayerTreeNode', () => {
-    const node = LayerTreeNodeHelper.findLayerTreeNode(nodes, 'lvl_2');
+    const node = TreeHelper.findNode(nodes, 'lvl_2');
     expect(node).not.toBeUndefined();
     expect(node?.id).toEqual('lvl_2');
-    const nonExistingNode = LayerTreeNodeHelper.findLayerTreeNode(nodes, 'does_not_exist');
+    const nonExistingNode = TreeHelper.findNode(nodes, 'does_not_exist');
     expect(nonExistingNode).toBeUndefined();
   });
 

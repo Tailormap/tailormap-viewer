@@ -28,20 +28,21 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { AttributeListExportButtonComponent } from '../attribute-list-export-button/attribute-list-export-button.component';
 import { coreStateKey } from '../../../state/core.state';
 import { coreReducer } from '../../../state/core.reducer';
+import { ExtendedAppLayerModel } from '../../../map/models';
 
 const getStore = (
   attributeListStore: { [attributeListStateKey]: AttributeListState },
-  layers: AppLayerModel[] = [],
+  layers: ExtendedAppLayerModel[] = [],
 ) => {
   return {
     ...attributeListStore,
     [mapStateKey]: {
       ...initialMapState,
       layers,
-      layerTreeNodes: layers.length > 0 ? [
+      layerTreeNodes: (layers.length > 0 ? [
         getLayerTreeNode({ childrenIds: layers.map(l => `lyr_${l.id}`) }),
         ...layers.map(l => getLayerTreeNode({ id: `lyr_${l.id}`, appLayerId: l.id })),
-      ] : [],
+      ] : []).map(l => ({ ...l, initialChildren: l.childrenIds || [] })),
     },
     [filterStateKey]: {
       ...initialFilterState,
@@ -109,8 +110,8 @@ describe('AttributeList', () => {
     const store = getStore(
       getLoadedStoreWithMultipleTabs(),
       [
-        getAppLayerModel({ id: '1',  hasAttributes: true,  visible: true }),
-        getAppLayerModel({ id: '2',  hasAttributes: true,  visible: true }),
+        { ...getAppLayerModel({ id: '1',  hasAttributes: true,  visible: true }) },
+        { ...getAppLayerModel({ id: '2',  hasAttributes: true,  visible: true }) },
       ],
     );
     const reducers = {

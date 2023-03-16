@@ -2,10 +2,13 @@ import { TocNodeLayerComponent } from './toc-node-layer.component';
 import { render, screen } from '@testing-library/angular';
 import { TreeModel } from '@tailormap-viewer/shared';
 import { AppLayerModel, getAppLayerModel } from '@tailormap-viewer/api';
+import { MatIconModule } from '@angular/material/icon';
+import { MatIconTestingModule } from '@angular/material/icon/testing';
 
 describe('TocNodeLayerComponent', () => {
   test('renders', async () => {
     await render(TocNodeLayerComponent, {
+      imports: [ MatIconModule, MatIconTestingModule ],
       componentProperties: {
         node: {
           id: '1',
@@ -25,6 +28,7 @@ describe('TocNodeLayerComponent', () => {
       metadata: appLayer,
     };
     await render(TocNodeLayerComponent, {
+      imports: [ MatIconModule, MatIconTestingModule ],
       componentProperties: {
         node: layer,
         scale: 1000000,
@@ -44,6 +48,7 @@ describe('TocNodeLayerComponent', () => {
       metadata: undefined,
     };
     await render(TocNodeLayerComponent, {
+      imports: [ MatIconModule, MatIconTestingModule ],
       componentProperties: {
         node: layer,
       },
@@ -62,6 +67,7 @@ describe('TocNodeLayerComponent', () => {
       metadata: appLayer,
     };
     await render(TocNodeLayerComponent, {
+      imports: [ MatIconModule, MatIconTestingModule ],
       componentProperties: {
         node: layer,
         scale: 2000,

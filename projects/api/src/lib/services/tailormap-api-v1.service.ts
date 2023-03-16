@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { TailormapApiV1ServiceModel } from './tailormap-api-v1.service.model';
 import { UniqueValuesResponseModel } from '../models/unique-values-response.model';
 import { LayerExportCapabilitiesModel } from '../models/layer-export-capabilities.model';
+import { ApiHelper } from '../helpers/api.helper';
 
 @Injectable()
 export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
@@ -66,7 +67,7 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
     sortOrder?: Sortorder;
     onlyGeometries?: boolean;
   }): Observable<FeaturesResponseModel> {
-    const queryParams = this.getQueryParams({
+    const queryParams = ApiHelper.getQueryParams({
       x: params.x,
       y: params.y,
       crs: params.crs,
@@ -118,7 +119,7 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
     attributes?: string[];
     crs?: string;
   }): Observable<HttpResponse<Blob>> {
-    const queryParams = this.getQueryParams({
+    const queryParams = ApiHelper.getQueryParams({
       outputFormat: params.outputFormat,
       attributes: params.attributes?.join(','),
       sortBy: params.sort?.column,

@@ -25,6 +25,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatCardModule } from '@angular/material/card';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
   exports: [
@@ -55,6 +56,7 @@ import { MatCardModule } from '@angular/material/card';
     MatDatepickerModule,
     MatAutocompleteModule,
     MatCardModule,
+    MatSlideToggleModule,
   ],
 })
 export class SharedImportsModule { }

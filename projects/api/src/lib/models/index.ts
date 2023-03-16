@@ -25,6 +25,7 @@ export * from './service-protocol.enum';
 export * from './service.model';
 export * from './server-type.enum';
 export * from './tiling-protocol.enum';
+export * from './tile-layer-hi-dpi-mode.enum';
 export * from './layer-tree-node.model';
 export * from './version-response.model';
 export * from './sortorder.enum';
