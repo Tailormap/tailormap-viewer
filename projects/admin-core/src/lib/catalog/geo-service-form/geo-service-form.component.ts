@@ -22,6 +22,7 @@ export class GeoServiceFormComponent implements OnInit {
   @Input()
   public set geoService(geoService: ExtendedGeoServiceModel | null) {
     this.geoServiceForm.patchValue({
+      id: geoService ? geoService.id : '',
       title: geoService ? geoService.title : '',
       protocol: geoService ? geoService.protocol : GeoServiceProtocolEnum.WMS,
       url: geoService ? geoService.url : '',
@@ -42,6 +43,7 @@ export class GeoServiceFormComponent implements OnInit {
   public changed = new EventEmitter<GeoServiceCreateModel>();
 
   public geoServiceForm = new FormGroup({
+    id: new FormControl('', { nonNullable: true }),
     title: new FormControl('', { nonNullable: true }),
     protocol: new FormControl<GeoServiceProtocolEnum>(GeoServiceProtocolEnum.WMS, { nonNullable: true }),
     url: new FormControl('', { nonNullable: true }),
@@ -58,6 +60,7 @@ export class GeoServiceFormComponent implements OnInit {
       )
       .subscribe(value => {
         this.changed.emit({
+          id: value.id || '',
           title: value.title || '',
           url: value.url || '',
           protocol: value.protocol || GeoServiceProtocolEnum.WMS,
