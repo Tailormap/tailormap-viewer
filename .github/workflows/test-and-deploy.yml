@@ -33,6 +33,8 @@ jobs:
 
       - name: 'Lint'
         run: npm run lint
+        env:
+          NODE_OPTIONS: '--max-old-space-size=8192'
 
 
   test:
