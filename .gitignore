@@ -56,3 +56,6 @@ lcov.info
 
 # generated from package.json
 /generated
+
+# generated from protobuf by bin/prebuild.js
+/projects/core/src/lib/map/bookmark/bookmark_pb.ts
