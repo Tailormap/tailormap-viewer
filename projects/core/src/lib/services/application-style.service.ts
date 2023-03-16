@@ -39,7 +39,7 @@ export class ApplicationStyleService implements OnDestroy {
   }
 
   public static getPrimaryColor(): string {
-    return CssHelper.getCssVariableValue('--primary-color');
+    return CssHelper.getCssVariableValue('--primary-color').trim();
   }
 
   public ngOnDestroy() {

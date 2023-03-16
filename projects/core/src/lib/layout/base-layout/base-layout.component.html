@@ -21,6 +21,7 @@
         <div class="map-controls-left">
           <tm-measure *ngIf="isComponentEnabled(config, componentTypes.MEASURE)"></tm-measure>
           <tm-clicked-coordinates *ngIf="isComponentEnabled(config, componentTypes.COORDINATE_PICKER)"></tm-clicked-coordinates>
+          <tm-streetview *ngIf="isComponentEnabled(config, componentTypes.STREETVIEW)"></tm-streetview>
           <tm-simple-search *ngIf="isComponentEnabled(config, componentTypes.SIMPLE_SEARCH)"></tm-simple-search>
         </div>
         <div class="map-controls-right">

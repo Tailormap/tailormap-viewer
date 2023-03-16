@@ -12,6 +12,7 @@ import { ToolbarEffects } from './state/toolbar.effects';
 import { MouseCoordinatesModule } from './mouse-coordinates/mouse-coordinates.module';
 import { ScaleBarModule } from './scale-bar/scale-bar.module';
 import { SimpleSearchModule } from './simple-search';
+import { StreetviewModule } from './streetview/streetview.module';
 
 @NgModule({
   declarations: [],
@@ -28,6 +29,7 @@ import { SimpleSearchModule } from './simple-search';
     ScaleBarModule,
     SimpleSearchModule,
     GeolocationModule,
+    StreetviewModule,
   ],
 })
 export class ToolbarModule { }
