@@ -53,9 +53,7 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: 'Install'
-        run: |
-          npm install
-          npm run prebuild
+        run: npm install
 
       - name: 'Test'
         run: npm run test:ci
