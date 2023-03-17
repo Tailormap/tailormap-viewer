@@ -29,4 +29,14 @@ export class UrlHelper {
     });
     return result;
   }
+
+  public static bytesToUrlBase64(bytes: Uint8Array): string {
+    return btoa(String.fromCharCode(...bytes)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  }
+
+  public static urlBase64ToBytes(base64: string): Uint8Array {
+    base64 = base64.replace(/-/g, '+').replace(/_/g, '/');
+    const s = atob(base64);
+    return Uint8Array.from(s, v => v.charCodeAt(0));
+  }
 }

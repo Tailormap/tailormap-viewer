@@ -1,8 +1,22 @@
-// The bookmark_pb.ts is generated from this file by the bin/prebuild.js script that is run
-// automatically when running 'npm run build'
+// Regenerate bookmark_pb.ts by using `npm run generate-protobuf`
 
 syntax = "proto3";
 package bookmark;
+
+// The bookmark fragments with binary (protobuf) data. Because fragments may use long strings to refer to the same app layer or node ids,
+// these are combined in this message and compressed once instead of compressed separately
+message BinaryBookmarkFragments {
+  // Versioning to allow for backwards compatibility for old bookmarks
+  uint32 version = 1;
+  repeated BookmarkFragment fragments = 3;
+}
+
+message BookmarkFragment {
+  // The identifier of BookmarkFragmentDescriptor
+  string identifier = 1;
+  // Wrapped protobuf
+  bytes bytes = 2;
+}
 
 // Represents differences in layer visibility from the default configuration.
 message LayerVisibilityBookmarkFragment {
