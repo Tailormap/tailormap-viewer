@@ -41,13 +41,13 @@ export class ApplicationMapBookmarkService implements OnDestroy {
       this.store$.select(selectLoadStatus),
     ]).pipe(
       takeUntil(this.destroyed),
-      filter(([, , loadStatus]) => loadStatus === LoadingStateEnum.LOADED),
+      filter(([ , , loadStatus ]) => loadStatus === LoadingStateEnum.LOADED),
       distinctUntilKeyChanged('0'),
     )
-      .subscribe(([fragment, layers]) => {
+      .subscribe(([ fragment, layers ]) => {
         const bookmarkContents = MapBookmarkHelper.visibilityDataFromFragment(fragment, layers);
         if (bookmarkContents.visibilityChanges.length > 0) {
-          this.store$.dispatch(setLayerVisibility({visibility: bookmarkContents.visibilityChanges}));
+          this.store$.dispatch(setLayerVisibility({ visibility: bookmarkContents.visibilityChanges }));
         }
 
         for (const item of bookmarkContents.opacityChanges) {
@@ -61,14 +61,14 @@ export class ApplicationMapBookmarkService implements OnDestroy {
       this.store$.select(selectLoadStatus),
     ]).pipe(
       takeUntil(this.destroyed),
-      filter(([, , loadStatus]) => loadStatus === LoadingStateEnum.LOADED),
+      filter(([ , , loadStatus ]) => loadStatus === LoadingStateEnum.LOADED),
       distinctUntilKeyChanged('0'),
     )
-      .subscribe(([fragment, layers]) => {
+      .subscribe(([ fragment, layers ]) => {
         const nodes = MapBookmarkHelper.layerTreeOrderFromFragment(fragment, layers);
 
         if (nodes.length > 0) {
-          this.store$.dispatch(setLayerTreeNodeChildren({nodes}));
+          this.store$.dispatch(setLayerTreeNodeChildren({ nodes }));
         }
       });
 
@@ -88,9 +88,9 @@ export class ApplicationMapBookmarkService implements OnDestroy {
         this.bookmarkService.updateFragment(ApplicationMapBookmarkService.ORDERING_BOOKMARK_DESCRIPTOR, bookmark);
       });
 
-    combineLatest([this.mapService.getMapViewDetails$(), this.mapService.getUnitsOfMeasure$()])
+    combineLatest([ this.mapService.getMapViewDetails$(), this.mapService.getUnitsOfMeasure$() ])
       .pipe(takeUntil(this.destroyed))
-      .subscribe(([info, measure]) => {
+      .subscribe(([ info, measure ]) => {
         const fragment = MapBookmarkHelper.fragmentFromLocationAndZoom(info, measure);
         if (fragment !== undefined && this.bookmarkChecked) {
           this.bookmarkService.updateFragment(ApplicationMapBookmarkService.LOCATION_BOOKMARK_DESCRIPTOR, fragment);
@@ -107,7 +107,7 @@ export class ApplicationMapBookmarkService implements OnDestroy {
         debounceTime(0),
         distinctUntilKeyChanged('0'),
       )
-      .subscribe(([descriptor, viewDetails, unitsOfMeasure]) => {
+      .subscribe(([ descriptor, viewDetails, unitsOfMeasure ]) => {
         const centerAndZoom = MapBookmarkHelper.locationAndZoomFromFragment(descriptor, viewDetails, unitsOfMeasure);
         this.bookmarkChecked = true;
 
@@ -124,7 +124,7 @@ export class ApplicationMapBookmarkService implements OnDestroy {
       this.store$.select(selectLayers),
       this.store$.select(selectLoadStatus),
     ]).pipe(
-      filter(([, loadStatus]) => loadStatus === LoadingStateEnum.LOADED),
+      filter(([ , loadStatus ]) => loadStatus === LoadingStateEnum.LOADED),
       map(([layers]) => {
         return MapBookmarkHelper.fragmentFromVisibilityData(layers);
       }),
@@ -136,7 +136,7 @@ export class ApplicationMapBookmarkService implements OnDestroy {
       this.store$.select(selectLayerTreeNodes),
       this.store$.select(selectLoadStatus),
     ]).pipe(
-      filter(([, loadStatus]) => loadStatus === LoadingStateEnum.LOADED),
+      filter(([ , loadStatus ]) => loadStatus === LoadingStateEnum.LOADED),
       map(([layers]) => {
         return MapBookmarkHelper.fragmentFromLayerTreeOrder(layers);
       }),

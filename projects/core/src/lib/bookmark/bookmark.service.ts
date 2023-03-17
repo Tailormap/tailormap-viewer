@@ -4,6 +4,7 @@ import { Message } from '@bufbuild/protobuf';
 import { BookmarkProtoFragmentDescriptor, BookmarkFragmentDescriptor, BookmarkID } from './bookmark.models';
 import { BinaryBookmarkFragments, BookmarkFragment } from '../map/bookmark/bookmark_pb';
 import { UrlHelper } from '@tailormap-viewer/shared';
+import { Deflater, Inflater, mergeBuffers } from '@stardazed/zlib';
 
 type BookmarkFragmentValueObservable = BehaviorSubject<any>;
 
@@ -17,9 +18,9 @@ export class BookmarkService {
   private joinedBookmark: Subject<string | undefined> = new Subject();
 
   private getFragmentById(identifier: string): [BookmarkFragmentDescriptor, BookmarkFragmentValueObservable] | undefined {
-    for(const [descriptor, value] of this.fragments.entries()) {
+    for(const [ descriptor, value ] of this.fragments.entries()) {
       if (descriptor.identifier === identifier) {
-        return [descriptor, value];
+        return [ descriptor, value ];
       }
     }
     return undefined;
@@ -39,9 +40,7 @@ export class BookmarkService {
       throw new Error('Invalid identifier');
     }
 
-    let fragment$: BehaviorSubject<any>;
-
-    fragment$ = new BehaviorSubject<any>(descriptor.initialValue);
+    const fragment$ = new BehaviorSubject(descriptor.initialValue);
 
     const pendingFragment = this.pendingFragments.get(descriptor.identifier);
 
@@ -75,11 +74,11 @@ export class BookmarkService {
 
     // Binary fragments are appended at the end and compressed together, so that string ids used in multiple fragments can be efficiently
     // compressed
-    const binaryFragments = new BinaryBookmarkFragments({version: BookmarkService.BINARY_FRAGMENTS_VERSION_1});
+    const binaryFragments = new BinaryBookmarkFragments({ version: BookmarkService.BINARY_FRAGMENTS_VERSION_1 });
 
     const fragmentById = new Map<string, [BookmarkFragmentDescriptor, BookmarkFragmentValueObservable]>();
-    for (const [key, fragment] of this.fragments) {
-      fragmentById.set(key.identifier, [key, fragment]);
+    for (const [ key, fragment ] of this.fragments) {
+      fragmentById.set(key.identifier, [ key, fragment ]);
     }
 
     for(const id of [...fragmentById.keys()].sort()) {
@@ -114,8 +113,12 @@ export class BookmarkService {
 
     if (binaryFragments.fragments.length > 0) {
       const protobuf = binaryFragments.toBinary();
-      // TODO: compress
-      const base64 = UrlHelper.bytesToUrlBase64(protobuf);
+      const deflater = new Deflater({ format: 'raw', level: 9 });
+      deflater.append(protobuf);
+      const buffers = deflater.finish();
+      const compressed = mergeBuffers(buffers);
+      console.log(`Protobuf size ${protobuf.length}, raw deflated size: ${compressed.length}, ratio ${(compressed.length / protobuf.length).toFixed(1)}`);
+      const base64 = UrlHelper.bytesToUrlBase64(compressed);
       output += '!' + base64;
     }
 
@@ -128,8 +131,15 @@ export class BookmarkService {
 
   private static decodeBinaryFragments(s: string): BinaryBookmarkFragments {
     const bytes = UrlHelper.urlBase64ToBytes(s);
-    // TODO decompress
-    const fragments = BinaryBookmarkFragments.fromBinary(bytes);
+    const inflater = new Inflater({ raw: true });
+    const buffers = inflater.append(bytes);
+    const result = inflater.finish();
+    if (!result.success) {
+      console.log(`Error decompressing binary bookmark fragment`, result);
+      return new BinaryBookmarkFragments();
+    }
+    const decompressed = mergeBuffers(buffers);
+    const fragments = BinaryBookmarkFragments.fromBinary(decompressed);
     if (fragments.version !== this.BINARY_FRAGMENTS_VERSION_1) {
       console.log(`Unsupported bookmark binary fragments version ${fragments.version}, ignoring`);
       return new BinaryBookmarkFragments();
@@ -144,15 +154,15 @@ export class BookmarkService {
     const bookmarkComponents = new Map<BookmarkID, any>();
 
     if (bookmark) {
-      for (let component of bookmark.split('!')) {
+      for (const component of bookmark.split('!')) {
         if (component.startsWith('@')) {
           bookmarkComponents.set('', component.substring(1));
         } else {
           const split = component.indexOf(':');
           if (split > 0) {
             // Fragment with type === 'string'
-            bookmarkComponents.set(component.substring(0, split), component.substring(split + 1))
-          } else if (split == -1) {
+            bookmarkComponents.set(component.substring(0, split), component.substring(split + 1));
+          } else if (split === -1) {
             // Binary fragments are at the end with no identifier and ':' after '!'
             const binaryFragments = BookmarkService.decodeBinaryFragments(component);
             for (const fragment of binaryFragments.fragments) {
@@ -164,7 +174,7 @@ export class BookmarkService {
       console.log('Bookmark components', bookmarkComponents);
     }
 
-    for(const [identifier, valueFromBookmark] of bookmarkComponents.entries()) {
+    for(const [ identifier, valueFromBookmark ] of bookmarkComponents.entries()) {
       const fragment = this.getFragmentById(identifier);
       if (!fragment) {
         console.log(`Pending bookmark value for unknown descriptor with id "${identifier}"`, valueFromBookmark);
@@ -177,16 +187,17 @@ export class BookmarkService {
 
         const decodedValue = descriptor.deserialize(valueFromBookmark);
 
-        let equals = descriptor.equals(currentValue$.value, decodedValue);
+        const equals = descriptor.equals(currentValue$.value, decodedValue);
         if (!equals) {
-          console.log(`Emitting new bookmark value for ${descriptor.type} descriptor "${descriptor.identifier}" (current value "${currentValue$.value}")`, decodedValue);
+          console.log(`Emitting new bookmark value for ${descriptor.type} descriptor "${descriptor.identifier}"
+            (current value "${JSON.stringify(currentValue$.value)}")`, decodedValue);
           currentValue$.next(decodedValue);
         }
       }
     }
 
     // Unset any existing values.
-    for (const [descriptor, value$] of this.fragments) {
+    for (const [ descriptor, value$ ] of this.fragments) {
       if (missingIdentifiers.has(descriptor.identifier)) {
         value$.next(descriptor.initialValue);
       }

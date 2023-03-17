@@ -21,20 +21,20 @@ export class BookmarkStringFragmentDescriptor implements BookmarkFragmentDescrip
     this._identifier = identifier;
   }
 
-  get identifier(): BookmarkID {
+  public get identifier(): BookmarkID {
     return this._identifier;
   }
 
-  get type(): BookmarkType {
+  public get type(): BookmarkType {
     return 'string';
   }
 
-  get initialValue(): string | any {
+  public get initialValue(): string | any {
     return '';
   }
 
   public equals(one: string | any, other: string | any): boolean {
-    return one == other;
+    return one === other;
   }
 
   public serialize(value: any): string | Uint8Array {
@@ -54,15 +54,15 @@ export class BookmarkProtoFragmentDescriptor<T extends Message<T> = AnyMessage> 
     this._identifier = identifier;
     this._messageType = messageType;
   }
-  get identifier(): BookmarkID {
+  public get identifier(): BookmarkID {
     return this._identifier;
   }
 
-  get type(): BookmarkType {
+  public get type(): BookmarkType {
     return 'binary';
   }
 
-  get initialValue(): T {
+  public get initialValue(): T {
     return new this._messageType();
   }
 
