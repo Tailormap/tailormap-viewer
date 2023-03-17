@@ -11,6 +11,7 @@
   <mat-form-field>
     <mat-label i18n>URL</mat-label>
     <input matInput
+           [tmAutoFocus]="!geoService"
            placeholder="URL"
            i18n-placeholder
            formControlName="url"

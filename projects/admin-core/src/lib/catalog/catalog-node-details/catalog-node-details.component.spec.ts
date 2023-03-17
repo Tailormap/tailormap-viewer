@@ -91,11 +91,9 @@ describe('CatalogNodeDetailsComponent', () => {
     const { createGeoService$ } = await setup();
     await userEvent.click(await screen.findByText('Add service'));
     expect(await screen.findByText('Create new service')).toBeInTheDocument();
-    await userEvent.type(await screen.findByPlaceholderText('ID'), 'hoi');
     await userEvent.type(await screen.findByPlaceholderText('URL'), 'http://service.url');
     await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save', 1);
     expect(createGeoService$).toHaveBeenCalledWith({
-      id: 'hoi',
       title: '',
       url: 'http://service.url',
       protocol: 'wms',
