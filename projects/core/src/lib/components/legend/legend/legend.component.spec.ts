@@ -34,10 +34,10 @@ const getMapService = () => {
 const getMockStore = () => {
   const layersAndServices = [
     { ...getAppLayerModel({ title: 'Layer 1', layerName: 'layer1' }), service: getServiceModel() },
-    { ...getAppLayerModel({ id: 2, title: 'Layer 2', layerName: 'layer2' }), service: getServiceModel() },
-    { ...getAppLayerModel({ id: 3, title: 'Layer 3', layerName: 'layer3',
+    { ...getAppLayerModel({ id: '2', title: 'Layer 2', layerName: 'layer2' }), service: getServiceModel() },
+    { ...getAppLayerModel({ id: '3', title: 'Layer 3', layerName: 'layer3',
         legendImageUrl: 'https://layer-3-url/wms/?REQUEST=GetLegendGraphic' }), service: getServiceModel() },
-    { ...getAppLayerModel({ id: 4, title: 'Layer 4', layerName: 'layer4',
+    { ...getAppLayerModel({ id: '4', title: 'Layer 4', layerName: 'layer4',
         legendImageUrl: 'https://layer-4-weird-case-url/wms/?ReQuEST=GetLeGeNdGraphic' }), service: getServiceModel() },
   ];
   return provideMockStore({

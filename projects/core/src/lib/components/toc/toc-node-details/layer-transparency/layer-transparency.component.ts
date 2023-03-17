@@ -16,10 +16,10 @@ export class LayerTransparencyComponent {
 
   public opacity$ = of(100);
 
-  private layerId: number | undefined;
+  private layerId: string | undefined;
 
   @Input()
-  public set layer(layer: number | null) {
+  public set layer(layer: string | null) {
     if (layer === null) {
       this.layerId = undefined;
       this.opacity$ = of(100);

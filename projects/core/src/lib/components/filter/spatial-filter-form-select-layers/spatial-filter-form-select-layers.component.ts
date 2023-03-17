@@ -21,7 +21,7 @@ export class SpatialFilterFormSelectLayersComponent implements OnInit, OnDestroy
   private filterCrudService = inject(SpatialFilterCrudService);
 
   public availableLayers$: Observable<AppLayerModel[]> = of([]);
-  public selectedLayersControl = new FormControl<number[]>([], {
+  public selectedLayersControl = new FormControl<string[]>([], {
     nonNullable: true,
   });
 

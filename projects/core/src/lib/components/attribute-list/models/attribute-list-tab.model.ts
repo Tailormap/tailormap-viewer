@@ -1,7 +1,7 @@
 export interface AttributeListTabModel {
   id: string;
   label: string;
-  layerId?: number;
+  layerId?: string;
   selectedDataId: string;
   initialDataLoaded: boolean;
   loadingData: boolean;

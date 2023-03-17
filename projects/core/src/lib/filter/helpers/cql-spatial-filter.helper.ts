@@ -2,7 +2,7 @@ import { SpatialFilterModel } from '../models/spatial-filter.model';
 
 export class CqlSpatialFilterHelper {
 
-  public static convertSpatialFilterToQuery(filter: SpatialFilterModel, layerId: number): string | null {
+  public static convertSpatialFilterToQuery(filter: SpatialFilterModel, layerId: string): string | null {
     if (filter.geometries.length === 0 || filter.geometryColumns.length === 0) {
       return null;
     }

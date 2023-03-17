@@ -28,65 +28,53 @@ describe('TailormapApiV1Service', () => {
     req.flush(null);
   });
 
-  test('queries API for getApplication$', () => {
-    service.getApplication$({}).subscribe();
+  test('queries API for getViewer$', () => {
+    service.getViewer$().subscribe();
     const req = httpController.expectOne({ url: '/api/app', method: 'GET' });
     req.flush(null);
   });
 
-  test('queries API with app/version for getApplication$', () => {
-    service.getApplication$({ version: 'v1', name: 'test' }).subscribe();
-    const req = httpController.expectOne({ url: '/api/app?name=test&version=v1', method: 'GET' });
-    req.flush(null);
-  });
-
-  test('queries API with id for getApplication$', () => {
-    service.getApplication$({ id: 123 }).subscribe();
-    const req = httpController.expectOne({ url: '/api/app?id=123', method: 'GET' });
-    req.flush(null);
-  });
-
   test('queries API for getMap$', () => {
-    service.getMap$(1).subscribe();
-    const req = httpController.expectOne({ url: '/api/app/1/map', method: 'GET' });
+    service.getMap$('app/default').subscribe();
+    const req = httpController.expectOne({ url: '/api/app/default/map', method: 'GET' });
     req.flush(null);
   });
 
   test('queries API for getDescribeLayer$', () => {
-    service.getDescribeLayer$({ applicationId: 1, layerId: 1 }).subscribe();
-    const req = httpController.expectOne({ url: '/api/app/1/layer/1/describe', method: 'GET' });
+    service.getDescribeLayer$({ applicationId: 'app/default', layerId: '1' }).subscribe();
+    const req = httpController.expectOne({ url: '/api/app/default/layer/1/describe', method: 'GET' });
     req.flush(null);
   });
 
   test('queries API for getFeatures$', () => {
-    service.getFeatures$({ applicationId: 1, layerId: 1 }).subscribe();
-    const req = httpController.expectOne({ url: '/api/app/1/layer/1/features', method: 'POST' });
+    service.getFeatures$({ applicationId: 'app/default', layerId: '1' }).subscribe();
+    const req = httpController.expectOne({ url: '/api/app/default/layer/1/features', method: 'POST' });
     req.flush(null);
   });
 
   test('queries API for getFeatures$ - with params', () => {
-    service.getFeatures$({ applicationId: 1, layerId: 1, x: 1, y: 2, distance: 10 }).subscribe();
-    const req = httpController.expectOne({ url: '/api/app/1/layer/1/features?x=1&y=2&distance=10', method: 'POST' });
+    service.getFeatures$({ applicationId: 'app/default', layerId: '1', x: 1, y: 2, distance: 10 }).subscribe();
+    const req = httpController.expectOne({ url: '/api/app/default/layer/1/features?x=1&y=2&distance=10', method: 'POST' });
     req.flush(null);
   });
 
   test('queries API for getUniqueValues$', () => {
-    service.getUniqueValues$({ applicationId: 1, layerId: 1, attribute: 'attribute' }).subscribe();
-    const req = httpController.expectOne({ url: '/api/app/1/layer/1/unique/attribute', method: 'POST' });
+    service.getUniqueValues$({ applicationId: 'app/default', layerId: '1', attribute: 'attribute' }).subscribe();
+    const req = httpController.expectOne({ url: '/api/app/default/layer/1/unique/attribute', method: 'POST' });
     req.flush(null);
   });
 
   test('queries API for getUniqueValues$ - with filter', () => {
-    service.getUniqueValues$({ applicationId: 1, layerId: 1, attribute: 'attribute', filter: '(attribute2 LIKE \'%test%\')' }).subscribe();
-    const req = httpController.expectOne({ url: '/api/app/1/layer/1/unique/attribute', method: 'POST' });
+    service.getUniqueValues$({ applicationId: 'app/default', layerId: '1', attribute: 'attribute', filter: '(attribute2 LIKE \'%test%\')' }).subscribe();
+    const req = httpController.expectOne({ url: '/api/app/default/layer/1/unique/attribute', method: 'POST' });
     expect(req.request.headers.get('Content-Type')).toEqual('application/x-www-form-urlencoded');
     expect(req.request.body.get('filter')).toEqual('(attribute2 LIKE \'%test%\')');
     req.flush(null);
   });
 
   test('queries API for getLayerExportCapabilities$', () => {
-    service.getLayerExportCapabilities$({ applicationId: 1, layerId: 1 }).subscribe();
-    const req = httpController.expectOne({ url: '/api/app/1/layer/1/export/capabilities', method: 'GET' });
+    service.getLayerExportCapabilities$({ applicationId: 'app/default', layerId: '1' }).subscribe();
+    const req = httpController.expectOne({ url: '/api/app/default/layer/1/export/capabilities', method: 'GET' });
     req.flush(null);
   });
 

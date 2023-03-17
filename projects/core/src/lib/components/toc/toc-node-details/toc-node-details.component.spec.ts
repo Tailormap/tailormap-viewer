@@ -14,7 +14,7 @@ import { LayerTransparencyComponent } from './layer-transparency/layer-transpare
 
 const setup = async (withLayer: boolean) => {
   const closeMock = jest.fn();
-  const node = getLayerTreeNode({ id: 'applayer-1', appLayerId: 1, name: 'The Layer', root: false });
+  const node = getLayerTreeNode({ id: 'applayer-1', appLayerId: '1', name: 'The Layer', root: false });
   const appLayer = getAppLayerModel({ title: 'The Layer' });
   const mapServiceMock = {
     getMapViewDetails$: jest.fn(),

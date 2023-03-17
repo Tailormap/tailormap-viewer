@@ -14,12 +14,12 @@ const selectFilterState = createFeatureSelector<FilterState>(filterStateKey);
 
 export const selectFilterGroups = createSelector(selectFilterState, state => state.filterGroups);
 
-export const selectFilterGroup = (source: string, layerId: number) => createSelector(
+export const selectFilterGroup = (source: string, layerId: string) => createSelector(
   selectFilterGroups,
   groups => groups.find(group => group.source === source && group.layerIds.includes(layerId)),
 );
 
-export const selectFilterGroupForType = <T extends BaseFilterModel>(source: string, layerId: number, filterType: FilterTypeEnum) => createSelector(
+export const selectFilterGroupForType = <T extends BaseFilterModel>(source: string, layerId: string, filterType: FilterTypeEnum) => createSelector(
   selectFilterGroups,
   (groups): FilterGroupModel<T> | undefined => {
     const isOfType = (g: FilterGroupModel): g is FilterGroupModel<T> => g.type === filterType;
@@ -46,7 +46,7 @@ export const selectEnabledFilterGroups = createSelector(
 
 export const selectCQLFilters = createSelector(
   selectEnabledFilterGroups,
-  (groups): Map<number, string> => CqlFilterHelper.getFilters(groups),
+  (groups): Map<string, string> => CqlFilterHelper.getFilters(groups),
 );
 
 export const selectSpatialFilterGroupsWithReferenceLayers = createSelector(

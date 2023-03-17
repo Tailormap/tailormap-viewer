@@ -9,12 +9,12 @@ import { CqlSpatialFilterHelper } from './cql-spatial-filter.helper';
 
 export class CqlFilterHelper {
 
-  public static getFilters(filterGroups: FilterGroupModel[]): Map<number, string> {
-    const cqlDict = new Map<number, string>();
-    const layerIdList = filterGroups.reduce<number[]>((ids, f) => {
+  public static getFilters(filterGroups: FilterGroupModel[]): Map<string, string> {
+    const cqlDict = new Map<string, string>();
+    const layerIdList = filterGroups.reduce<string[]>((ids, f) => {
       return [ ...ids, ...f.layerIds ];
     }, []);
-    const layerIds = new Set<number>(layerIdList);
+    const layerIds = new Set<string>(layerIdList);
     layerIds.forEach(layerId => {
       const filtersForLayer = filterGroups.filter(f => f.layerIds.includes(layerId));
       const cqlFilter = CqlFilterHelper.getFilterForLayer(filtersForLayer, layerId);
@@ -25,7 +25,7 @@ export class CqlFilterHelper {
     return cqlDict;
   }
 
-  public static getFilterForLayer(filterGroups: FilterGroupModel[], layerId: number): string {
+  public static getFilterForLayer(filterGroups: FilterGroupModel[], layerId: string): string {
     const rootFilterGroups = filterGroups.filter(f => (typeof f.parentGroup === 'undefined' || f.parentGroup === null));
     return rootFilterGroups
       .map(f => CqlFilterHelper.getFilterForGroup(f, filterGroups, layerId))
@@ -33,7 +33,7 @@ export class CqlFilterHelper {
       .join(' AND ');
   }
 
-  private static getFilterForGroup(filterGroup: FilterGroupModel, allFilterGroups: FilterGroupModel[], layerId: number): string {
+  private static getFilterForGroup(filterGroup: FilterGroupModel, allFilterGroups: FilterGroupModel[], layerId: string): string {
     const filter: string[] = [];
     const baseFilter: string[] = filterGroup.filters
       .map(f => CqlFilterHelper.convertFilterToQuery(f, layerId))
@@ -47,7 +47,7 @@ export class CqlFilterHelper {
     return CqlFilterHelper.wrapFilters(filter, filterGroup.operator);
   }
 
-  private static convertFilterToQuery(filter: BaseFilterModel, layerId: number): string | null {
+  private static convertFilterToQuery(filter: BaseFilterModel, layerId: string): string | null {
     if (FilterTypeHelper.isAttributeFilter(filter)) {
       return CqlFilterHelper.convertAttributeFilterToQuery(filter, layerId);
     }
@@ -57,7 +57,7 @@ export class CqlFilterHelper {
     return null;
   }
 
-  private static convertAttributeFilterToQuery(filter: AttributeFilterModel, _layerId: number): string | null {
+  private static convertAttributeFilterToQuery(filter: AttributeFilterModel, _layerId: string): string | null {
     if (filter.condition === FilterConditionEnum.UNIQUE_VALUES_KEY) {
       if (filter.value.length === 0) {
         return null;

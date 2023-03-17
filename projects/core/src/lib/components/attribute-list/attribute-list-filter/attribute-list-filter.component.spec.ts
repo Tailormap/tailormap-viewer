@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AttributeListFilterComponent, FilterDialogData } from './attribute-list-filter.component';
 import { SimpleAttributeFilterService } from '../../../filter/services/simple-attribute-filter.service';
@@ -16,9 +16,9 @@ describe('AttributeListFilterComponent', () => {
     const dialogData: FilterDialogData = {
       columnName: 'col',
       filter: null,
-      layerId: 1,
+      layerId: '1',
       columnType: FeatureAttributeTypeEnum.STRING,
-      applicationId: 1,
+      applicationId: '1',
     };
     const attributeFilterService = { setFilter: jest.fn(), removeFilter: jest.fn() };
     const uniqueValuesService = {
@@ -41,7 +41,7 @@ describe('AttributeListFilterComponent', () => {
     await userEvent.type(await screen.findByRole('textbox'), 'test');
     await new Promise((resolve) => setTimeout(resolve, 300));
     await userEvent.click(await screen.findByRole('button', { name: 'Set' }));
-    expect(attributeFilterService.setFilter).toHaveBeenCalledWith('ATTRIBUTE_LIST', 1, {
+    expect(attributeFilterService.setFilter).toHaveBeenCalledWith('ATTRIBUTE_LIST', '1', {
       attribute: 'col',
       attributeType: FeatureAttributeTypeEnum.STRING,
       caseSensitive: false,

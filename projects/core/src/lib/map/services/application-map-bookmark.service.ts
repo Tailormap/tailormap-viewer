@@ -70,6 +70,7 @@ export class ApplicationMapBookmarkService implements OnDestroy {
       )
       .subscribe(([ fragment, layers ]) => {
         const nodes = MapBookmarkHelper.layerTreeOrderFromFragment(fragment, layers);
+
         if (nodes.length > 0) {
           this.store$.dispatch(setLayerTreeNodeChildren({ nodes }));
         }

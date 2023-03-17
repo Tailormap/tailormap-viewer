@@ -11,7 +11,7 @@ import { SharedImportsModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { selectCQLFilters } from '../../../filter/state/filter.selectors';
 
-const setup = async (layerId: number | null = null, supportedFormats: SupportedExportFormats[] = []) => {
+const setup = async (layerId: string | null = null, supportedFormats: SupportedExportFormats[] = []) => {
   const store = provideMockStore({
     initialState: {},
     selectors: [
@@ -41,19 +41,19 @@ describe('AttributeListExportButtonComponent', () => {
   });
 
   test('should render nothing with layer but without supported formats', async () => {
-    await setup(1);
+    await setup('1');
     expect(screen.queryByRole('button')).not.toBeInTheDocument();
   });
 
   test('should render button for selected layer and supported formats', async () => {
-    const { exportService } = await setup(1, [ SupportedExportFormats.CSV, SupportedExportFormats.XLSX ]);
+    const { exportService } = await setup('1', [ SupportedExportFormats.CSV, SupportedExportFormats.XLSX ]);
     expect(screen.getByRole('button')).toBeInTheDocument();
     await userEvent.click(screen.getByRole('button'));
     expect(screen.getByText('CSV')).toBeInTheDocument();
     expect(screen.getByText('Excel')).toBeInTheDocument();
     expect(screen.queryByText('GeoPackage')).not.toBeInTheDocument();
     await userEvent.click(screen.getByText('CSV'));
-    expect(exportService.export$).toHaveBeenCalledWith({ layerId: 1, layerName: 'Some layer', format: 'csv', filter: undefined, sort: null, attributes: [] });
+    expect(exportService.export$).toHaveBeenCalledWith({ layerId: '1', serviceLayerName: 'Some layer', format: 'csv', filter: undefined, sort: null, attributes: [] });
   });
 
 });

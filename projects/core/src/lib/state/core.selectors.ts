@@ -1,19 +1,19 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { ApplicationState, CoreState, coreStateKey } from './core.state';
+import { ViewerState, CoreState, coreStateKey } from './core.state';
 import { ComponentModel } from '@tailormap-viewer/api';
 
 const selectCoreState = createFeatureSelector<CoreState>(coreStateKey);
-const selectApplicationState = createSelector(selectCoreState, state => state.application);
-export const selectApplicationLoadingState = createSelector(selectCoreState, state => state.loadStatus);
+const selectViewerState = createSelector(selectCoreState, state => state.viewer);
+export const selectViewerLoadingState = createSelector(selectCoreState, state => state.loadStatus);
 
-export const selectApplicationId = createSelector(selectApplicationState, state => state?.id || null);
+export const selectViewerId = createSelector(selectViewerState, state => state?.id || null);
 export const selectRouteBeforeLogin = createSelector(selectCoreState, state => state.routeBeforeLogin);
-export const selectApplicationErrorMessage = createSelector(selectCoreState, (state) => state.error);
+export const selectViewerErrorMessage = createSelector(selectCoreState, (state) => state.error);
 
 export const selectUserDetails = createSelector(selectCoreState, state => state.security);
 
-export const selectComponentsConfig = createSelector<CoreState, ApplicationState | undefined, ComponentModel[]>(
-  selectApplicationState,
+export const selectComponentsConfig = createSelector<CoreState, ViewerState | undefined, ComponentModel[]>(
+  selectViewerState,
   state => {
     if (!state?.components || !Array.isArray(state.components)) {
       return [];
@@ -22,5 +22,5 @@ export const selectComponentsConfig = createSelector<CoreState, ApplicationState
   },
 );
 
-export const selectApplicationStyling = createSelector(selectApplicationState, state => state?.styling || null);
-export const selectApplicationLogo = createSelector(selectApplicationStyling, styling => styling?.logo || null);
+export const selectViewerStyling = createSelector(selectViewerState, state => state?.styling || null);
+export const selectViewerLogo = createSelector(selectViewerStyling, styling => styling?.logo || null);

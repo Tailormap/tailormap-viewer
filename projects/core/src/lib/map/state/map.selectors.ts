@@ -190,17 +190,17 @@ export const selectSelectedNode = createSelector(
     return layerTreeNode ? layerTreeNode.id : '';
   });
 
-export const selectLayer = (layerId: number) => createSelector(
+export const selectLayer = (layerId: string) => createSelector(
   selectLayers,
   (layers: AppLayerWithInitialValuesModel[]) => layers.find(l => l.id === layerId) || null,
 );
 
-export const selectLayerWithService = (layerId: number) => createSelector(
+export const selectLayerWithService = (layerId: string) => createSelector(
   selectLayersWithServices,
   (layers: ExtendedAppLayerModel[]) => layers.find(l => l.id === layerId) || null,
 );
 
-export const selectLayerOpacity = (layerId: number) => createSelector(
+export const selectLayerOpacity = (layerId: string) => createSelector(
   selectLayer(layerId),
   (layer) => layer?.opacity || 100,
 );

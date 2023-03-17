@@ -19,5 +19,5 @@ export const setSelectedFilterGroup = createAction(
 
 export const setSelectedLayers = createAction(
   `${filterComponentActionsPrefix} Set Selected Layers`,
-  props<{ layers: number[] }>(),
+  props<{ layers: string[] }>(),
 );
