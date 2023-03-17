@@ -50,7 +50,6 @@ describe('GeoServiceDetailsComponent', () => {
     await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save');
     expect(updateGeoService$).toHaveBeenNthCalledWith(1, '1', expect.anything(), expect.anything());
     expect(updateGeoServiceDetails).toHaveBeenNthCalledWith(1, {
-      id: '1',
       title: geoServiceModel.title + '___',
       url: geoServiceModel.url,
       protocol: geoServiceModel.protocol,

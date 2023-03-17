@@ -42,11 +42,9 @@ describe('GeoServiceFormDialogComponent', () => {
   test('should save new node', async () => {
     const { geoServiceService, dialogRefMock } = await setup();
     expect(screen.getByText('Create new service')).toBeInTheDocument();
-    await userEvent.type(screen.getByLabelText('ID'), 'super');
     await userEvent.type(screen.getByLabelText('URL'), 'http://www.super-service.com');
     await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save');
     expect(geoServiceService.createGeoService$).toHaveBeenCalledWith({
-      id: 'super',
       url: 'http://www.super-service.com',
       title: '',
       protocol: 'wms',
@@ -62,7 +60,6 @@ describe('GeoServiceFormDialogComponent', () => {
     await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save');
     expect(updateGeoService$).toHaveBeenCalledWith('2', expect.anything());
     expect(updateGeoServiceDetails).toHaveBeenCalledWith({
-      id: '2',
       url: 'http://test.service',
       title: 'my service',
       protocol: 'wmts',
