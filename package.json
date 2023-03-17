@@ -6,6 +6,7 @@
     "start-nl": "ng serve app --configuration=nl",
     "start-admin": "ng serve admin-app --port=4201",
     "prebuild": "node bin/prebuild.js",
+    "generate-protobuf": "node bin/generate-protobuf.js",
     "build": "ng build app",
     "build-admin": "ng build admin-app",
     "build-localized": "ng build app --localize",
