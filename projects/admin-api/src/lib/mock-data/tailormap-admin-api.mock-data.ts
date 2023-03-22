@@ -5,6 +5,8 @@ import { GeoServiceLayerModel } from '../models/geo-service-layer.model';
 import { GeoServiceProtocolEnum } from '../models/geo-service-protocol.enum';
 import { CatalogItemKindEnum } from '../models/catalog-item-kind.enum';
 import { ServerType } from '@tailormap-viewer/api';
+import { FeatureSourceModel } from '../models';
+import { FeatureSourceProtocolEnum } from '../models/feature-source-protocol.enum';
 
 export const getCatalogNode = (overrides?: Partial<CatalogNodeModel>): CatalogNodeModel => ({
   id: 'root',
@@ -69,6 +71,7 @@ export const getGeoServiceLayer = (overrides?: Partial<GeoServiceLayerModel>): G
 
 export const getGeoService = (overrides?: Partial<GeoServiceWithLayersModel>): GeoServiceWithLayersModel => ({
   id: '1',
+  type: 'geo-service',
   notes: '',
   protocol: GeoServiceProtocolEnum.WMS,
   url: 'https://service.pdok.nl/kadaster/bestuurlijkegebieden/wms/v1_0',
@@ -88,5 +91,15 @@ export const getGeoService = (overrides?: Partial<GeoServiceWithLayersModel>): G
     layerSettings: {},
     defaultLayerSettings: {},
   },
+  ...overrides,
+});
+
+export const getFeatureSource = (overrides?: Partial<FeatureSourceModel>): FeatureSourceModel => ({
+  id: '1',
+  type: 'feature-source',
+  featureTypes: [],
+  url: 'https://wfs-url',
+  protocol: FeatureSourceProtocolEnum.WFS,
+  title: 'Some WFS Source',
   ...overrides,
 });

@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
+  CatalogItemKindEnum,
   GeoServiceModel,
   GeoServiceProtocolEnum, GeoServiceSettingsModel, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel,
 } from '@tailormap-admin/admin-api';
@@ -26,7 +27,7 @@ export class GeoServiceService {
   ) { }
 
   public createGeoService$(geoService: GeoServiceCreateModel, catalogNodeId: string) {
-    const geoServiceModel: Omit<GeoServiceModel, 'id'> = {
+    const geoServiceModel: Omit<GeoServiceModel, 'id' | 'type'> = {
       ...geoService,
       settings: {
         defaultLayerSettings: {
@@ -42,7 +43,7 @@ export class GeoServiceService {
       concatMap(createdService => {
         if (createdService) {
           this.store$.dispatch(addGeoServices({ services: [createdService], parentNode: catalogNodeId }));
-          return this.catalogService.addServiceToCatalog$(catalogNodeId, createdService.id)
+          return this.catalogService.addNodeToCatalog$(catalogNodeId, createdService.id, CatalogItemKindEnum.GEO_SERVICE)
             .pipe(
               map(() => createdService),
             );

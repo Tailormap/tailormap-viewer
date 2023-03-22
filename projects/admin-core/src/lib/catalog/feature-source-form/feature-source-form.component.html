@@ -1,0 +1,61 @@
+<form [formGroup]="featureSourceForm">
+  <mat-form-field>
+    <mat-label i18n>Title</mat-label>
+    <input matInput
+           [tmAutoFocus]="!!featureSource"
+           placeholder="Title"
+           i18n-placeholder
+           formControlName="title"
+    />
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label i18n>Protocol</mat-label>
+    <mat-select formControlName="protocol">
+      <mat-option *ngFor="let protocol of protocols" [value]="protocol" i18n>
+        {{ protocol }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field *ngIf="isWFSSource()">
+    <mat-label i18n>URL</mat-label>
+    <input matInput
+           [tmAutoFocus]="!featureSource"
+           placeholder="URL"
+           i18n-placeholder
+           formControlName="url"
+    />
+  </mat-form-field>
+  <ng-container *ngIf="isJDBCSource()">
+    <mat-form-field>
+      <mat-label i18n>Database type</mat-label>
+      <mat-select formControlName="dbType">
+        <mat-option *ngFor="let dbType of dbTypes" [value]="dbType" i18n>
+          {{ dbType }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label i18n>Database</mat-label>
+      <input matInput formControlName="database" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label i18n>Host</mat-label>
+      <input matInput formControlName="host" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label i18n>Port</mat-label>
+      <input matInput type="number" formControlName="port" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label i18n>Schema</mat-label>
+      <input matInput formControlName="schema" />
+    </mat-form-field>
+  </ng-container>
+  <ng-container *ngIf="isJDBCSource() || isWFSSource()">
+    <mat-form-field>
+      <mat-label i18n>Username</mat-label>
+      <input matInput formControlName="username" />
+    </mat-form-field>
+    <tm-admin-password-field formControlName="password" label="Password" i18n-label></tm-admin-password-field>
+  </ng-container>
+</form>

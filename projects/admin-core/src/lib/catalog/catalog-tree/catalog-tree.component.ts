@@ -103,6 +103,11 @@ export class CatalogTreeComponent implements OnInit, OnDestroy {
         .replace(':nodeId', node.metadata.catalogNodeId)
         .replace(':serviceId', node.metadata.id);
     }
+    if (CatalogHelper.isFeatureSource(node)) {
+      baseUrl = RoutesEnum.FEATURE_SOURCE_DETAILS
+        .replace(':nodeId', node.metadata.catalogNodeId)
+        .replace(':featureSourceId', node.metadata.id);
+    }
     if (CatalogHelper.isLayerNode(node) && !node.metadata.virtual) {
       baseUrl = RoutesEnum.CATALOG_LAYER_DETAILS
         .replace(':nodeId', node.metadata.catalogNodeId)
@@ -126,6 +131,9 @@ export class CatalogTreeComponent implements OnInit, OnDestroy {
     }
     if (currentRoute.length >= 4 && currentRoute[2] === 'service') {
       parts.push({ type: CatalogTreeModelTypeEnum.SERVICE_TYPE, treeNodeId: CatalogHelper.getIdForServiceNode(currentRoute[3]), id: currentRoute[3] });
+    }
+    if (currentRoute.length >= 4 && currentRoute[2] === 'feature-source') {
+      parts.push({ type: CatalogTreeModelTypeEnum.FEATURE_SOURCE_TYPE, treeNodeId: CatalogHelper.getIdForFeatureSourceNode(currentRoute[3]), id: currentRoute[3] });
     }
     if (currentRoute.length >= 6 && currentRoute[4] === 'layer') {
       parts.push({ type: CatalogTreeModelTypeEnum.SERVICE_LAYER_TYPE, treeNodeId: CatalogHelper.getIdForLayerNode(currentRoute[5]), id: currentRoute[5] });

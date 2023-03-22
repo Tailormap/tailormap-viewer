@@ -8,6 +8,8 @@ import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-lay
 import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
 import { CatalogHelper } from '../helpers/catalog.helper';
 import { GeoServiceHelper } from '../helpers/geo-service.helper';
+import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
+import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 
 type ExpandableNode = { id: string; children?: string[] | null; expanded?: boolean };
 
@@ -115,11 +117,56 @@ const onDeleteGeoService = (
 
 const onAddFeatureSource = (
   state: CatalogState,
-  payload: ReturnType<typeof CatalogActions.addFeatureSource>,
-): CatalogState => ({
-  ...state,
-  featureSources: [ ...state.featureSources, payload.featureSource ],
-});
+  payload: ReturnType<typeof CatalogActions.addFeatureSources>,
+): CatalogState => {
+  const featureTypes: ExtendedFeatureTypeModel[] = [];
+  const featureSources: ExtendedFeatureSourceModel[] = [];
+  payload.featureSources.forEach(source => {
+    const [ extFeatureSource, sourceFeatureTypes ] = GeoServiceHelper.getExtendedFeatureSource(source, payload.parentNode);
+    featureSources.push(extFeatureSource);
+    featureTypes.push(...sourceFeatureTypes);
+  });
+  return {
+    ...state,
+    featureSources: [ ...state.featureSources, ...featureSources ],
+    featureTypes: [ ...state.featureTypes, ...featureTypes ],
+  };
+};
+
+const onUpdateFeatureSource = (
+  state: CatalogState,
+  payload: ReturnType<typeof CatalogActions.updateFeatureSource>,
+): CatalogState => {
+  const idx = state.featureSources.findIndex(f => f.id === payload.featureSource.id);
+  if (idx === -1) {
+    return state;
+  }
+  return {
+    ...state,
+    featureSources: [
+      ...state.featureSources.slice(0, idx),
+      { ...payload.featureSource, catalogNodeId: payload.parentNode },
+      ...state.featureSources.slice(idx + 1),
+    ],
+  };
+};
+
+const onDeleteFeatureSource = (
+  state: CatalogState,
+  payload: ReturnType<typeof CatalogActions.deleteFeatureSource>,
+): CatalogState => {
+  const idx = state.featureSources.findIndex(f => f.id === payload.id);
+  if (idx === -1) {
+    return state;
+  }
+  return {
+    ...state,
+    featureSources: [
+      ...state.featureSources.slice(0, idx),
+      ...state.featureSources.slice(idx + 1),
+    ],
+  };
+};
 
 const onExpandTree = (
   state: CatalogState,
@@ -133,6 +180,9 @@ const onExpandTree = (
   }
   if (payload.nodeType === CatalogTreeModelTypeEnum.SERVICE_LAYER_TYPE) {
     return { ...state, geoServiceLayers: expandNode(state.geoServiceLayers, payload.id) };
+  }
+  if (payload.nodeType === CatalogTreeModelTypeEnum.FEATURE_SOURCE_TYPE) {
+    return { ...state, featureSources: expandNode(state.featureSources, payload.id) };
   }
   return state;
 };
@@ -160,7 +210,9 @@ const catalogReducerImpl = createReducer<CatalogState>(
   on(CatalogActions.addGeoServices, onAddGeoServices),
   on(CatalogActions.updateGeoService, onUpdateGeoService),
   on(CatalogActions.deleteGeoService, onDeleteGeoService),
-  on(CatalogActions.addFeatureSource, onAddFeatureSource),
+  on(CatalogActions.addFeatureSources, onAddFeatureSource),
+  on(CatalogActions.updateFeatureSource, onUpdateFeatureSource),
+  on(CatalogActions.deleteFeatureSource, onDeleteFeatureSource),
   on(CatalogActions.expandTree, onExpandTree),
   on(CatalogActions.updateCatalog, onUpdateCatalog),
 );

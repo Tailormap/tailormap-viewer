@@ -4,6 +4,8 @@ import { GeoServiceSettingsModel } from './geo-service-settings.model';
 
 export interface GeoServiceModel {
   id: string;
+  type: 'geo-service';
+  title: string;
   notes?: string | null;
   protocol: GeoServiceProtocolEnum;
   url: string;
@@ -12,7 +14,6 @@ export interface GeoServiceModel {
   serviceCapabilities?: ServiceCapsModel;
   capabilitiesContentType?: string;
   capabilitiesFetched?: string;
-  title: string;
   advertisedUrl?: string;
   settings?: GeoServiceSettingsModel;
 }

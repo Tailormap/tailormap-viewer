@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CatalogTreeModel } from '../../models/catalog-tree.model';
 import { CatalogTreeModelTypeEnum } from '../../models/catalog-tree-model-type.enum';
 import { CatalogHelper } from '../../helpers/catalog.helper';
@@ -28,12 +28,17 @@ export class CatalogTreeNodeComponent {
     return this.node?.type === CatalogTreeModelTypeEnum.SERVICE_LAYER_TYPE;
   }
 
+  public isFeatureSourceNode() {
+    return this.node?.type === CatalogTreeModelTypeEnum.FEATURE_SOURCE_TYPE;
+  }
+
   public isSelectable() {
     if (!this.node) {
       return false;
     }
     return this.isCatalogNode()
       || this.isServiceNode()
+      || this.isFeatureSourceNode()
       || (CatalogHelper.isLayerNode(this.node) && !this.node?.metadata?.virtual);
   }
 

@@ -1,6 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { CatalogNodeModel, FeatureSourceModel, GeoServiceWithLayersModel } from '@tailormap-admin/admin-api';
 import { CatalogTreeModelTypeEnum } from '../models/catalog-tree-model-type.enum';
+import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 
 const catalogActionsPrefix = '[Catalog]';
 
@@ -27,9 +28,17 @@ export const deleteGeoService = createAction(
   `${catalogActionsPrefix} Delete Geo Service`,
   props<{ id: string }>(),
 );
-export const addFeatureSource = createAction(
+export const addFeatureSources = createAction(
   `${catalogActionsPrefix} Add Feature Source`,
-  props<{ featureSource: FeatureSourceModel }>(),
+  props<{ featureSources: FeatureSourceModel[]; parentNode: string }>(),
+);
+export const updateFeatureSource = createAction(
+  `${catalogActionsPrefix} Update Feature Source`,
+  props<{ featureSource: FeatureSourceModel; parentNode: string }>(),
+);
+export const deleteFeatureSource = createAction(
+  `${catalogActionsPrefix} Delete Feature Source`,
+  props<{ id: string }>(),
 );
 export const expandTree = createAction(
   `${catalogActionsPrefix} Expand Tree`,

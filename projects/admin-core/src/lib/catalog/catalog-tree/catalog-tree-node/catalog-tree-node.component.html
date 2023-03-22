@@ -4,6 +4,7 @@
       <mat-icon *ngIf="isCatalogNode()" i18n-aria-label aria-label="Catalog" svgIcon="folder_filled"></mat-icon>
       <mat-icon *ngIf="isServiceNode()" i18n-aria-label aria-label="Service" svgIcon="admin_service"></mat-icon>
       <mat-icon *ngIf="isLayerNode()" i18n-aria-label aria-label="Layer" svgIcon="admin_catalog"></mat-icon>
+      <mat-icon *ngIf="isFeatureSourceNode()" i18n-aria-label aria-label="Feature Source" svgIcon="admin_storage"></mat-icon>
     </span>
     <span class="tree-node__label-content">{{node.label}}</span>
   </div>
