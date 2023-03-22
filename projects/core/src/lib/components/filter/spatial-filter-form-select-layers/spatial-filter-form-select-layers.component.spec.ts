@@ -9,11 +9,11 @@ import userEvent from '@testing-library/user-event';
 import { SpatialFilterCrudService } from '../services/spatial-filter-crud.service';
 
 const availableLayers = [
-  getAppLayerModel({ id: 1, title: 'Layer 1' }),
-  getAppLayerModel({ id: 2, title: 'Layer 2' }),
+  getAppLayerModel({ id: '1', title: 'Layer 1' }),
+  getAppLayerModel({ id: '2', title: 'Layer 2' }),
 ];
 
-const setup = async (layers: AppLayerModel[], selectedLayers: number[]) => {
+const setup = async (layers: AppLayerModel[], selectedLayers: string[]) => {
   const store = provideMockStore({
     initialState: {},
     selectors: [
@@ -41,11 +41,11 @@ describe('SpatialFilterFormSelectLayersComponent', () => {
     expect(screen.getByText('Select layer(s)')).toBeInTheDocument();
     await userEvent.click(screen.getByRole('combobox'));
     await userEvent.click(await screen.findByText('Layer 1'));
-    expect(updateLayers).toHaveBeenCalledWith([1]);
+    expect(updateLayers).toHaveBeenCalledWith(['1']);
   });
 
   test('patch value with initial value', async () => {
-    await setup(availableLayers, [1]);
+    await setup(availableLayers, ['1']);
     expect(await screen.findByText('Layer 1')).toBeInTheDocument();
   });
 

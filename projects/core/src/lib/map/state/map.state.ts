@@ -18,7 +18,7 @@ export interface MapState {
   layers: AppLayerWithInitialValuesModel[];
   baseLayerTreeNodes: ExtendedLayerTreeNodeModel[];
   layerTreeNodes: ExtendedLayerTreeNodeModel[];
-  selectedLayer?: number;
+  selectedLayer?: string;
   selectedBackgroundNode?: string;
 }
 

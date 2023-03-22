@@ -7,7 +7,6 @@ import { SimpleSearchService } from './simple-search.service';
 import { MapService, ProjectionCodesEnum } from '@tailormap-viewer/map';
 import userEvent from '@testing-library/user-event';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.helper';
 
 const setup = async () => {
   const mockedSearchService = {

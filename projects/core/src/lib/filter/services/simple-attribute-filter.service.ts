@@ -18,7 +18,7 @@ export class SimpleAttributeFilterService {
 
   public setFilter(
     source: string,
-    layerId: number,
+    layerId: string,
     filter: Omit<AttributeFilterModel, 'id'>,
   ) {
     this.getGroup$(source, layerId).pipe(take(1)).subscribe(group => {
@@ -38,19 +38,19 @@ export class SimpleAttributeFilterService {
     });
   }
 
-  public hasFilter$(source: string, layerId: number) {
+  public hasFilter$(source: string, layerId: string) {
     return this.getGroup$(source, layerId)
       .pipe(map(group => !!group));
   }
 
-  public getFilters$(source: string, layerId: number): Observable<AttributeFilterModel[]> {
+  public getFilters$(source: string, layerId: string): Observable<AttributeFilterModel[]> {
     return this.getGroup$(source, layerId)
       .pipe(map(group => {
         return (group?.filters || []).map(f => ({ ...f, disabled: group?.disabled }));
       }));
   }
 
-  public getFiltersExcludingAttribute$(source: string, layerId: number, attribute: string) {
+  public getFiltersExcludingAttribute$(source: string, layerId: string, attribute: string) {
     return this.store$.select(selectEnabledFilterGroups)
       .pipe(take(1), map(groups => {
         return groups.map(group => {
@@ -67,7 +67,7 @@ export class SimpleAttributeFilterService {
 
   public getFilterForAttribute$(
     source: string,
-    layerId: number,
+    layerId: string,
     attribute: string,
   ): Observable<AttributeFilterModel | null> {
     return this.getGroup$(source, layerId)
@@ -82,7 +82,7 @@ export class SimpleAttributeFilterService {
 
   public removeFilter(
     source: string,
-    layerId: number,
+    layerId: string,
     attribute: string,
   ) {
     this.getGroup$(source, layerId).pipe(take(1)).subscribe(group => {
@@ -103,7 +103,7 @@ export class SimpleAttributeFilterService {
 
   public removeFiltersForLayer(
     source: string,
-    layerId: number,
+    layerId: string,
   ) {
     this.getGroup$(source, layerId).pipe(take(1)).subscribe(group => {
       if (!group) {
@@ -113,7 +113,7 @@ export class SimpleAttributeFilterService {
     });
   }
 
-  private createGroup(source: string, layerId: number, filter: Omit<AttributeFilterModel, 'id'>) {
+  private createGroup(source: string, layerId: string, filter: Omit<AttributeFilterModel, 'id'>) {
     const filterGroup: FilterGroupModel<AttributeFilterModel> = {
       id: nanoid(),
       source,
@@ -145,7 +145,7 @@ export class SimpleAttributeFilterService {
     }));
   }
 
-  private getGroup$(source: string, layerId: number) {
+  private getGroup$(source: string, layerId: string) {
     return this.store$.select(selectFilterGroupForType<AttributeFilterModel>(source, layerId, FilterTypeEnum.ATTRIBUTE));
   }
 

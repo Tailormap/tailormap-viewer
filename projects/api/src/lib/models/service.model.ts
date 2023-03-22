@@ -2,8 +2,7 @@ import { ServiceProtocol } from './service-protocol.enum';
 import {  ServerType } from './server-type.enum';
 
 export interface ServiceModel {
-    id: number;
-    name: string;
+    id: string;
     url: string;
     protocol: ServiceProtocol;
     capabilities?: string;

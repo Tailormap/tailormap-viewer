@@ -10,11 +10,11 @@ import { FilterTypeEnum } from '../../../filter/models/filter-type.enum';
 
 export interface FilterDialogData {
   columnName: string;
-  layerId: number;
+  layerId: string;
   filter: AttributeFilterModel | null;
   columnType: FeatureAttributeTypeEnum;
   cqlFilter?: string;
-  applicationId: number;
+  applicationId: string;
 }
 
 interface FilterType {

@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
 import { DescribeAppLayerService, LayerDetailsModel } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { selectSelectedFilterGroup, selectSelectedLayers } from '../state/filter-component.selectors';
-import { selectApplicationId } from '../../../state/core.selectors';
+import { selectViewerId } from '../../../state/core.selectors';
 import { getSpatialFilterGroup } from '../../../filter/helpers/cql-filter.helper.spec';
 import { setSelectedFilterGroup, setSelectedLayers } from '../state/filter-component.actions';
 import { addFilterGroup, updateFilterGroup } from '../../../filter/state/filter.actions';
@@ -21,7 +21,7 @@ jest.mock('nanoid', () => ({
   },
 }));
 
-const selectedGroup = getSpatialFilterGroup(['CIRCLE(1 2 3)'], [{ layerId: 1, column: ['geom'] }]);
+const selectedGroup = getSpatialFilterGroup(['CIRCLE(1 2 3)'], [{ layerId: '1', column: ['geom'] }]);
 
 const setup = (
   hasSelectedFilterGroup?: boolean,
@@ -32,8 +32,8 @@ const setup = (
     initialState: {},
     selectors: [
       { selector: selectSelectedFilterGroup, value: hasSelectedFilterGroup ? (overrideGroup || selectedGroup) : undefined },
-      { selector: selectSelectedLayers, value: hasSelectedLayers ? [1] : [] },
-      { selector: selectApplicationId, value: 1 },
+      { selector: selectSelectedLayers, value: hasSelectedLayers ? ['1'] : [] },
+      { selector: selectViewerId, value: '1' },
     ],
   });
   const describeLayerMock = {
@@ -63,21 +63,21 @@ describe('SpatialFilterCrudService', () => {
 
   test('updates the selected layers', () => {
     const { service, dispatch } = setup();
-    service.updateSelectedLayers([ 2, 3 ]);
+    service.updateSelectedLayers([ '2', '3' ]);
     expect(dispatch).toHaveBeenCalledTimes(1);
-    expect(dispatch).toHaveBeenCalledWith(setSelectedLayers({ layers: [ 2, 3 ] }));
+    expect(dispatch).toHaveBeenCalledWith(setSelectedLayers({ layers: [ '2', '3' ] }));
   });
 
   test('updates the selected layers and selected filter group', async () => {
     const { service, dispatch } = setup(true);
-    service.updateSelectedLayers([ 2, 3 ]);
+    service.updateSelectedLayers([ '2', '3' ]);
     await waitFor(() => {
       expect(dispatch).toHaveBeenCalledTimes(2);
     });
-    expect(dispatch).toHaveBeenNthCalledWith(1, setSelectedLayers({ layers: [ 2, 3 ] }));
+    expect(dispatch).toHaveBeenNthCalledWith(1, setSelectedLayers({ layers: [ '2', '3' ] }));
     const updatedGroup = getSpatialFilterGroup(
       ['CIRCLE(1 2 3)'],
-      [{ layerId: 2, column: ['geom'] }, { layerId: 3, column: ['geom'] }],
+      [{ layerId: '2', column: ['geom'] }, { layerId: '3', column: ['geom'] }],
     );
     expect(dispatch).toHaveBeenNthCalledWith(2, updateFilterGroup({ filterGroup: updatedGroup }));
   });
@@ -98,7 +98,7 @@ describe('SpatialFilterCrudService', () => {
     });
     const spatialGroup = getSpatialFilterGroup(
       ['CIRCLE(1 2 3)'],
-      [{ layerId: 1, column: ['geom'] }],
+      [{ layerId: '1', column: ['geom'] }],
     );
     const createdGroup: FilterGroupModel<SpatialFilterModel> = {
       ...spatialGroup,
@@ -118,7 +118,7 @@ describe('SpatialFilterCrudService', () => {
     });
     const updatedGroup = getSpatialFilterGroup(
       [ 'CIRCLE(1 2 3)', 'CIRCLE(4 5 6)' ],
-      [{ layerId: 1, column: ['geom'] }],
+      [{ layerId: '1', column: ['geom'] }],
     );
     expect(dispatch).toHaveBeenNthCalledWith(1, updateFilterGroup({ filterGroup: updatedGroup }));
   });
@@ -131,7 +131,7 @@ describe('SpatialFilterCrudService', () => {
     });
     const updatedGroup = getSpatialFilterGroup(
       [],
-      [{ layerId: 1, column: ['geom'] }],
+      [{ layerId: '1', column: ['geom'] }],
     );
     expect(dispatch).toHaveBeenNthCalledWith(1, updateFilterGroup({ filterGroup: updatedGroup }));
   });
@@ -159,25 +159,25 @@ describe('SpatialFilterCrudService', () => {
 
   test('updates reference layer', async () => {
     const { service, dispatch } = setup(true, true);
-    service.updateReferenceLayer(5);
+    service.updateReferenceLayer('5');
     await waitFor(() => {
       expect(dispatch).toHaveBeenCalledTimes(1);
     });
     const updatedGroup: FilterGroupModel<SpatialFilterModel> = {
       ...selectedGroup,
-      filters: selectedGroup.filters.map((filter) => ({ ...filter, baseLayerId: 5 })),
+      filters: selectedGroup.filters.map((filter) => ({ ...filter, baseLayerId: '5' })),
     };
     expect(dispatch).toHaveBeenNthCalledWith(1, updateFilterGroup({ filterGroup: updatedGroup }));
   });
 
   test('clear geometry after clearing reference layer', async () => {
-    const group = getSpatialFilterGroup(['CIRCLE(1 2 3)'], [{ layerId: 1, column: ['geom'] }]);
+    const group = getSpatialFilterGroup(['CIRCLE(1 2 3)'], [{ layerId: '1', column: ['geom'] }]);
     const groupWithReferenceGeom: FilterGroupModel<SpatialFilterModel> = {
       ...group,
       filters: group.filters.map((filter) => ({
         ...filter,
-        baseLayerId: 5,
-        geometries: filter.geometries.map((geom) => ({ ...geom, referenceLayerId: 5 })),
+        baseLayerId: '5',
+        geometries: filter.geometries.map((geom) => ({ ...geom, referenceLayerId: '5' })),
       })),
     };
     const { service, dispatch } = setup(true, true, groupWithReferenceGeom);

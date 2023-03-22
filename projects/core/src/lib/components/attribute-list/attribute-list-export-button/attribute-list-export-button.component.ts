@@ -65,7 +65,7 @@ export class AttributeListExportButtonComponent implements OnDestroy {
           }
           const filter = filters.get(tab.layerId);
           const attributes = columns.filter(c => c.visible).map(c => c.id);
-          return this.exportService.export$({ layerId: tab.layerId, layerName: tab.label, format, filter, sort, attributes });
+          return this.exportService.export$({ layerId: tab.layerId, serviceLayerName: tab.label, format, filter, sort, attributes });
         }))
       .subscribe(() => {
         this.isExportingSubject.next(false);

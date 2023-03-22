@@ -1,5 +1,5 @@
 import {
-  AppLayerModel, AppResponseModel, BoundsModel, ComponentModel, CoordinateReferenceSystemModel, GeometryType, Language, LayerDetailsModel,
+  AppLayerModel, ViewerResponseModel, BoundsModel, ComponentModel, CoordinateReferenceSystemModel, GeometryType, Language, LayerDetailsModel,
   MapResponseModel, ServerType, ServiceModel, ServiceProtocol, UserResponseModel, VersionResponseModel,
 } from '../models';
 import { FeatureModel } from '../models/feature.model';
@@ -49,8 +49,8 @@ export const getLayerTreeNode = (overrides?: Partial<LayerTreeNodeModel>): Layer
 });
 
 export const getAppLayerModel = (overrides?: Partial<AppLayerModel>): AppLayerModel => ({
-  id: 1,
-  serviceId: 1,
+  id: '1',
+  serviceId: '1',
   visible: true,
   hasAttributes: false,
   title: 'Test',
@@ -60,8 +60,7 @@ export const getAppLayerModel = (overrides?: Partial<AppLayerModel>): AppLayerMo
 });
 
 export const getServiceModel = (overrides?: Partial<ServiceModel>): ServiceModel => ({
-  id: 1,
-  name: 'myservice',
+  id: 'myservice',
   url: 'https://test.nl',
   protocol: ServiceProtocol.WMS,
   serverType: ServerType.GEOSERVER,
@@ -69,7 +68,7 @@ export const getServiceModel = (overrides?: Partial<ServiceModel>): ServiceModel
 });
 
 export const getLayerDetailsModel = (overrides?: Partial<LayerDetailsModel>): LayerDetailsModel => ({
-  id: 1,
+  id: '1',
   serviceId: 1,
   relations: [],
   geometryType: GeometryType.GEOMETRY,
@@ -139,12 +138,14 @@ export const getUniqueValuesResponseModel = (overrides?: Partial<UniqueValuesRes
   ...overrides,
 });
 
-export const getAppResponseData = (overrides?: Partial<AppResponseModel>): AppResponseModel => ({
-  id: 1,
-  apiVersion: 'v1',
-  name: 'viewer',
+export const getViewerResponseData = (overrides?: Partial<ViewerResponseModel>): ViewerResponseModel => ({
+  id: 'app/default',
+  kind: 'app',
+  name: 'default',
   title: 'My viewer',
-  lang: Language.NL_NL,
+  baseViewers: [],
+  languages: [Language.NL_NL],
+  projections: ['EPSG:28992'],
   components: [],
   ...overrides,
 });
@@ -160,29 +161,27 @@ export const getMapResponseData = (overrides?: Partial<MapResponseModel>): MapRe
   layerTreeNodes: [
     getLayerTreeNode({ childrenIds: ['level-2'] }),
     getLayerTreeNode({ id: 'level-2', name: 'Bestuurlijke Gebieden', childrenIds: [ 'applayer-2', 'applayer-3' ], root: false }),
-    getLayerTreeNode({ id: 'applayer-2', appLayerId: 2, name: 'Gemeentegebied', root: false }),
-    getLayerTreeNode({ id: 'applayer-3', appLayerId: 3, name: 'Provinciegebied', root: false }),
+    getLayerTreeNode({ id: 'applayer-2', appLayerId: '2', name: 'Gemeentegebied', root: false }),
+    getLayerTreeNode({ id: 'applayer-3', appLayerId: '3', name: 'Provinciegebied', root: false }),
   ],
   baseLayerTreeNodes: [
     getLayerTreeNode({ id: 'rootbg', name: 'background', childrenIds: ['level-1'] }),
     getLayerTreeNode({ id: 'level-1', name: 'Openstreetmap', childrenIds: ['applayer-1'], root: false }),
-    getLayerTreeNode({ id: 'applayer-1', appLayerId: 1, name: 'osm-nb-hq', root: false }),
+    getLayerTreeNode({ id: 'applayer-1', appLayerId: '1', name: 'osm-nb-hq', root: false }),
   ],
   appLayers: [
-    getAppLayerModel({ id: 1, layerName: 'osm-nb-hq', title: 'osm-nb-hq' }),
-    getAppLayerModel({ id: 2, hasAttributes: true, serviceId: 2, layerName: 'gemeentegebied', title: 'Gemeentegebied' }),
-    getAppLayerModel({ id: 3, hasAttributes: true, serviceId: 2, layerName: 'provinciegebied', title: 'Provinciegebied' }),
+    getAppLayerModel({ id: '1', layerName: 'osm-nb-hq', title: 'osm-nb-hq' }),
+    getAppLayerModel({ id: '2', hasAttributes: true, serviceId: 'bestuurlijkegebieden', layerName: 'gemeentegebied', title: 'Gemeentegebied' }),
+    getAppLayerModel({ id: '3', hasAttributes: true, serviceId: 'bestuurlijkegebieden', layerName: 'provinciegebied', title: 'Provinciegebied' }),
   ],
   initialExtent: overrides?.initialExtent === null ? null : getBoundsModel(overrides?.initialExtent),
   services: [
     getServiceModel({
-      id: 1,
-      name: 'Openbasiskaart',
+      id: 'openbasiskaart',
       url: 'https://www.openbasiskaart.nl/mapcache/?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetCapabilities',
     }),
     getServiceModel({
-      id: 2,
-      name: 'Bestuurlijke gebieden',
+      id: 'bestuurlijkegebieden',
       url: 'https://service.pdok.nl/kadaster/bestuurlijkegebieden/wms/v1_0?request=GetCapabilities&service=WMS',
     }),
   ],

@@ -15,7 +15,7 @@ import { ApplicationMapBookmarkService } from './application-map-bookmark.servic
 })
 export class ApplicationMapService implements OnDestroy {
   private destroyed = new Subject();
-  private capabilities: Map<number, string> = new Map();
+  private capabilities: Map<string, string> = new Map();
 
   constructor(
     private store$: Store,

@@ -1,4 +1,4 @@
-import { AppResponseModel, LayerDetailsModel, MapResponseModel, Sortorder, VersionResponseModel } from '../models';
+import { ViewerResponseModel, LayerDetailsModel, MapResponseModel, Sortorder, VersionResponseModel } from '../models';
 import { Observable } from 'rxjs';
 import { FeaturesResponseModel } from '../models/features-response.model';
 import { UniqueValuesResponseModel } from '../models/unique-values-response.model';
@@ -12,22 +12,18 @@ export interface TailormapApiV1ServiceModel {
 
   getUser$(): Observable<UserResponseModel>;
 
-  getApplication$(params: {
-    name?: string;
-    version?: string;
-    id?: number;
-  }): Observable<AppResponseModel>;
+  getViewer$(id?: string): Observable<ViewerResponseModel>;
 
-  getMap$(applicationId: number): Observable<MapResponseModel>;
+  getMap$(applicationId: string): Observable<MapResponseModel>;
 
   getDescribeLayer$(params: {
-    applicationId: number;
-    layerId: number;
+    applicationId: string;
+    layerId: string;
   }): Observable<LayerDetailsModel>;
 
   getFeatures$(params: {
-    applicationId: number;
-    layerId: number;
+    applicationId: string;
+    layerId: string;
     x?: number;
     y?: number;
     crs?: string;
@@ -42,20 +38,20 @@ export interface TailormapApiV1ServiceModel {
   }): Observable<FeaturesResponseModel>;
 
   getUniqueValues$(params: {
-    applicationId: number;
-    layerId: number;
+    applicationId: string;
+    layerId: string;
     attribute: string;
     filter?: string;
   }): Observable<UniqueValuesResponseModel>;
 
   getLayerExportCapabilities$(params: {
-    applicationId: number;
-    layerId: number;
+    applicationId: string;
+    layerId: string;
   }): Observable<LayerExportCapabilitiesModel>;
 
   getLayerExport$(params: {
-    applicationId: number;
-    layerId: number;
+    applicationId: string;
+    layerId: string;
     outputFormat: string;
     filter?: string;
     sort: { column: string; direction: string} | null;

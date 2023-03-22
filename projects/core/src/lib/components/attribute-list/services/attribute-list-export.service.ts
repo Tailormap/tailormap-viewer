@@ -4,7 +4,7 @@ import {
 } from '@tailormap-viewer/api';
 import { catchError, combineLatest, map, Observable, of, switchMap, take, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { selectApplicationId } from '../../../state/core.selectors';
+import { selectViewerId } from '../../../state/core.selectors';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FileHelper, SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
@@ -42,7 +42,7 @@ export class AttributeListExportService {
   ) {
   }
 
-  public getExportFormats$(layerId: number): Observable<SupportedExportFormats[]> {
+  public getExportFormats$(layerId: string): Observable<SupportedExportFormats[]> {
     return this.getExportCapabilities$(layerId).pipe(
       map(formats => {
         const supportedFormats: SupportedExportFormats[] = [];
@@ -70,8 +70,8 @@ export class AttributeListExportService {
   }
 
   public export$(params: {
-    layerId: number;
-    layerName: string;
+    layerId: string;
+    serviceLayerName: string;
     format: SupportedExportFormats;
     filter: string | undefined;
     sort: { column: string; direction: string } | null;
@@ -79,11 +79,11 @@ export class AttributeListExportService {
   }): Observable<boolean> {
     return combineLatest([
       this.getOutputFormat$(params.layerId, params.format),
-      this.store$.select(selectApplicationId),
+      this.store$.select(selectViewerId),
     ]).pipe(
       take(1),
       switchMap(([ outputFormat, applicationId ]) => {
-        const defaultErrorMessage = $localize `Exporting data for layer ${params.layerName} and format ${params.format} failed`;
+        const defaultErrorMessage = $localize `Exporting data for layer ${params.serviceLayerName} and format ${params.format} failed`;
         if (applicationId === null || outputFormat === null) {
           this.showSnackbarMessage(defaultErrorMessage);
           return of(null);
@@ -108,7 +108,7 @@ export class AttributeListExportService {
           return;
         }
         const date = DateTime.now().setLocale(this.dateLocale).toLocaleString(DateTime.DATETIME_SHORT).replace(/,? /g, '_');
-        const defaultFilename = [ $localize `Export`, params.layerName, date ].join('_') + '.' + this.getExtensionForFormat(params.format);
+        const defaultFilename = [ $localize `Export`, params.serviceLayerName, date ].join('_') + '.' + this.getExtensionForFormat(params.format);
         const fileName = FileHelper.extractFileNameFromContentDispositionHeader(response.headers.get('Content-Disposition') || '', defaultFilename);
         FileHelper.saveAsFile(response.body, fileName);
       }),
@@ -128,7 +128,7 @@ export class AttributeListExportService {
     SnackBarMessageComponent.open$(this.snackBar, config).subscribe();
   }
 
-  private getOutputFormat$(layerId: number, format: SupportedExportFormats): Observable<string | null> {
+  private getOutputFormat$(layerId: string, format: SupportedExportFormats): Observable<string | null> {
     return this.getExportCapabilities$(layerId)
       .pipe(
         take(1),
@@ -174,8 +174,8 @@ export class AttributeListExportService {
     return 'txt';
   }
 
-  private getExportCapabilities$(layerId: number): Observable<string[]> {
-    return this.store$.select(selectApplicationId).pipe(
+  private getExportCapabilities$(layerId: string): Observable<string[]> {
+    return this.store$.select(selectViewerId).pipe(
       take(1),
       switchMap(applicationId => {
         if (applicationId === null) {
@@ -204,7 +204,7 @@ export class AttributeListExportService {
     return supportedFormats.some(format => requiredFormats.includes(format));
   }
 
-  private getCacheKey(applicationId: number, layerId: number): string {
+  private getCacheKey(applicationId: string, layerId: string): string {
     return `${applicationId}-${layerId}`;
   }
 

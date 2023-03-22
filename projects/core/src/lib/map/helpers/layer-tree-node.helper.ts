@@ -5,7 +5,7 @@ import { TreeHelper, TreeModel, TypesHelper } from '@tailormap-viewer/shared';
 export class LayerTreeNodeHelper {
 
   public static isAppLayerNode(node: LayerTreeNodeModel) {
-    return typeof node.appLayerId === 'number';
+    return typeof node.appLayerId === 'string';
   }
 
   public static isLevelNode(node: LayerTreeNodeModel) {
@@ -38,7 +38,7 @@ export class LayerTreeNodeHelper {
     };
   }
 
-  public static getAppLayerIds(layerTreeNodes: LayerTreeNodeModel[], child?: LayerTreeNodeModel): number[] {
+  public static getAppLayerIds(layerTreeNodes: LayerTreeNodeModel[], child?: LayerTreeNodeModel): string[] {
     return LayerTreeNodeHelper.getChildNodes(layerTreeNodes, child)
       .map(node => node.appLayerId)
       .filter(TypesHelper.isDefined);

@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { AppResponseModel, LayerDetailsModel, MapResponseModel, UserResponseModel, VersionResponseModel } from '../models';
+import { ViewerResponseModel, LayerDetailsModel, MapResponseModel, UserResponseModel, VersionResponseModel } from '../models';
 import { delay, Observable, of } from 'rxjs';
 import { TailormapApiV1ServiceModel } from './tailormap-api-v1.service.model';
 import { FeaturesResponseModel } from '../models/features-response.model';
 import { UniqueValuesResponseModel } from '../models/unique-values-response.model';
 import {
-  getAppResponseData, getFeaturesResponseModel, getLayerDetailsModel, getMapResponseData,
+  getViewerResponseData, getFeaturesResponseModel, getLayerDetailsModel, getMapResponseData,
   getUniqueValuesResponseModel,
   getVersionResponseModel, getUserResponseModel, getLayerExportCapabilitiesModel,
 } from '../mock-data';
@@ -23,24 +23,24 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
     return of(getUserResponseModel());
   }
 
-  public getApplication$(_params: { name?: string; version?: string; id?: number }): Observable<AppResponseModel> {
-    return of(getAppResponseData());
+  public getViewer$(_id?: string): Observable<ViewerResponseModel> {
+    return of(getViewerResponseData());
   }
 
-  public getMap$(_applicationId: number): Observable<MapResponseModel> {
+  public getMap$(_applicationId: string): Observable<MapResponseModel> {
     return of(getMapResponseData());
   }
 
   public getDescribeLayer$(_params: {
-    applicationId: number;
-    layerId: number;
+    applicationId: string;
+    layerId: string;
   }): Observable<LayerDetailsModel> {
     return of(getLayerDetailsModel());
   }
 
   public getFeatures$(_params: {
-    applicationId: number;
-    layerId: number;
+    applicationId: string;
+    layerId: string;
     x?: number;
     y?: number;
     crs?: string;
@@ -54,8 +54,8 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
   }
 
   public getUniqueValues$(_params: {
-    applicationId: number;
-    layerId: number;
+    applicationId: string;
+    layerId: string;
     attribute: string;
     filter?: string;
   }): Observable<UniqueValuesResponseModel> {
@@ -63,15 +63,15 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
   }
 
   public getLayerExportCapabilities$(_params: {
-    applicationId: number;
-    layerId: number;
+    applicationId: string;
+    layerId: string;
   }): Observable<LayerExportCapabilitiesModel> {
     return of(getLayerExportCapabilitiesModel());
   }
 
   public getLayerExport$(_params: {
-    applicationId: number;
-    layerId: number;
+    applicationId: string;
+    layerId: string;
     outputFormat: string;
     filter?: string;
     sort: { column: string; direction: string} | null;

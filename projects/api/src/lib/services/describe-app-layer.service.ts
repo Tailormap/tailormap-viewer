@@ -12,7 +12,7 @@ export class DescribeAppLayerService {
   private cachedDetails: Map<string, LayerDetailsModel> = new Map();
   private apiService = inject<TailormapApiV1ServiceModel>(TAILORMAP_API_V1_SERVICE);
 
-  public getDescribeAppLayer$(applicationId: number, layerId: number): Observable<LayerDetailsModel> {
+  public getDescribeAppLayer$(applicationId: string, layerId: string): Observable<LayerDetailsModel> {
     const cachedDetails = this.cachedDetails.get(this.getCacheKey(applicationId, layerId));
     if (cachedDetails) {
       return of(cachedDetails);
@@ -21,7 +21,7 @@ export class DescribeAppLayerService {
       .pipe(tap((details) => this.cachedDetails.set(this.getCacheKey(applicationId, layerId), details)));
   }
 
-  private getCacheKey(applicationId: number, layerId: number) {
+  private getCacheKey(applicationId: string, layerId: string) {
     return `${applicationId}-${layerId}`;
   }
 

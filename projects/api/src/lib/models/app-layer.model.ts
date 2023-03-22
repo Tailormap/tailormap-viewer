@@ -1,10 +1,10 @@
 import { TileLayerHiDpiMode } from './layer-hi-dpi-mode.enum';
 
 export interface AppLayerModel {
-  id: number;
+  id: string;
   layerName: string;
   title: string;
-  serviceId: number;
+  serviceId: string;
   url?: string;
   visible: boolean;
   hasAttributes: boolean;

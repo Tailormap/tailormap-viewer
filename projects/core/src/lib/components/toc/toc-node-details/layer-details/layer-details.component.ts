@@ -18,14 +18,14 @@ export class LayerDetailsComponent implements OnInit {
   private mapService = inject(MapService);
   private store$ = inject(Store);
 
-  private _layerId: number | null = null;
+  private _layerId: string | null = null;
 
   @Input()
-  public set layerId(layerId: number | null) {
+  public set layerId(layerId: string | null) {
     this._layerId = layerId;
     this.updateLegend();
   }
-  public get layerId(): number | null {
+  public get layerId(): string | null {
     return this._layerId;
   }
 

@@ -56,7 +56,7 @@ export const selectSelectedTab = createSelector(
 
 export const selectSelectedTabLayerId = createSelector(
   selectSelectedTab,
-  (selectedTab): number | null => {
+  (selectedTab): string | null => {
     if (!selectedTab || typeof selectedTab.layerId === 'undefined') {
       return null;
     }

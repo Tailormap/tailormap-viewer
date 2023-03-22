@@ -110,8 +110,8 @@ describe('AttributeList', () => {
     const store = getStore(
       getLoadedStoreWithMultipleTabs(),
       [
-        { ...getAppLayerModel({ id: 1,  hasAttributes: true,  visible: true }) },
-        { ...getAppLayerModel({ id: 2,  hasAttributes: true,  visible: true }) },
+        { ...getAppLayerModel({ id: '1',  hasAttributes: true,  visible: true }) },
+        { ...getAppLayerModel({ id: '2',  hasAttributes: true,  visible: true }) },
       ],
     );
     const reducers = {
