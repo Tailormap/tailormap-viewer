@@ -12,7 +12,6 @@ type BookmarkFragmentValueObservable = BehaviorSubject<any>;
   providedIn: 'root',
 })
 export class BookmarkService {
-  private static BINARY_FRAGMENTS_VERSION_1 = 1;
   private pendingFragments: Map<BookmarkID, any> = new Map();
   private fragments: Map<BookmarkFragmentDescriptor, BookmarkFragmentValueObservable> = new Map();
   private joinedBookmark: Subject<string | undefined> = new Subject();
@@ -74,7 +73,7 @@ export class BookmarkService {
 
     // Binary fragments are appended at the end and compressed together, so that string ids used in multiple fragments can be efficiently
     // compressed
-    const binaryFragments = new BinaryBookmarkFragments({ version: BookmarkService.BINARY_FRAGMENTS_VERSION_1 });
+    const binaryFragments = new BinaryBookmarkFragments();
 
     const fragmentById = new Map<string, [BookmarkFragmentDescriptor, BookmarkFragmentValueObservable]>();
     for (const [ key, fragment ] of this.fragments) {
@@ -139,13 +138,7 @@ export class BookmarkService {
       return new BinaryBookmarkFragments();
     }
     const decompressed = mergeBuffers(buffers);
-    const fragments = BinaryBookmarkFragments.fromBinary(decompressed);
-    if (fragments.version !== this.BINARY_FRAGMENTS_VERSION_1) {
-      console.log(`Unsupported bookmark binary fragments version ${fragments.version}, ignoring`);
-      return new BinaryBookmarkFragments();
-    } else {
-      return fragments;
-    }
+    return BinaryBookmarkFragments.fromBinary(decompressed);
   }
 
   public setBookmark(bookmark?: string) {

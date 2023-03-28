@@ -35,19 +35,12 @@ proto3.util.setEnumType(TristateBoolean, "bookmark.TristateBoolean", [
 ]);
 
 /**
- * The bookmark fragments which protobuf data. Because fragments may use long strings to refer to the same app layer or node ids, these are
- * combined in this message and compressed once instead of compressed separately
+ * The bookmark fragments with binary (protobuf) data. Because fragments may use long strings to refer to the same app layer or node ids,
+ * these are combined in this message and compressed once instead of compressed separately
  *
  * @generated from message bookmark.BinaryBookmarkFragments
  */
 export class BinaryBookmarkFragments extends Message<BinaryBookmarkFragments> {
-  /**
-   * Versioning to allow for backwards compatibility for old bookmarks, set to 1 currently
-   *
-   * @generated from field: uint32 version = 1;
-   */
-  version = 0;
-
   /**
    * @generated from field: repeated bookmark.BookmarkFragment fragments = 3;
    */
@@ -61,7 +54,6 @@ export class BinaryBookmarkFragments extends Message<BinaryBookmarkFragments> {
   static readonly runtime: typeof proto3 = proto3;
   static readonly typeName = "bookmark.BinaryBookmarkFragments";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "version", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
     { no: 3, name: "fragments", kind: "message", T: BookmarkFragment, repeated: true },
   ]);
 

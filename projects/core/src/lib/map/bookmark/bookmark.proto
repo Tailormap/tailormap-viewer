@@ -6,8 +6,6 @@ package bookmark;
 // The bookmark fragments with binary (protobuf) data. Because fragments may use long strings to refer to the same app layer or node ids,
 // these are combined in this message and compressed once instead of compressed separately
 message BinaryBookmarkFragments {
-  // Versioning to allow for backwards compatibility for old bookmarks
-  uint32 version = 1;
   repeated BookmarkFragment fragments = 3;
 }
 
