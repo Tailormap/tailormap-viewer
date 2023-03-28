@@ -4,7 +4,7 @@ import { Message } from '@bufbuild/protobuf';
 import { BookmarkProtoFragmentDescriptor, BookmarkFragmentDescriptor, BookmarkID } from './bookmark.models';
 import { BinaryBookmarkFragments, BookmarkFragment } from '../map/bookmark/bookmark_pb';
 import { UrlHelper } from '@tailormap-viewer/shared';
-import { Deflater, Inflater, mergeBuffers } from '@stardazed/zlib';
+import { deflate, inflate } from '@stardazed/zlib';
 
 type BookmarkFragmentValueObservable = BehaviorSubject<any>;
 
@@ -112,11 +112,8 @@ export class BookmarkService {
 
     if (binaryFragments.fragments.length > 0) {
       const protobuf = binaryFragments.toBinary();
-      const deflater = new Deflater({ format: 'raw', level: 9 });
-      deflater.append(protobuf);
-      const buffers = deflater.finish();
-      const compressed = mergeBuffers(buffers);
-      console.log(`Protobuf size ${protobuf.length}, raw deflated size: ${compressed.length}, ratio ${(compressed.length / protobuf.length).toFixed(1)}`);
+      const compressed = deflate(protobuf, { format: 'deflate', level: 9});
+      console.log(`Protobuf size ${protobuf.length}, deflated size: ${compressed.length}, ratio ${(compressed.length / protobuf.length).toFixed(1)}`);
       const base64 = UrlHelper.bytesToUrlBase64(compressed);
       output += '!' + base64;
     }
@@ -130,14 +127,7 @@ export class BookmarkService {
 
   private static decodeBinaryFragments(s: string): BinaryBookmarkFragments {
     const bytes = UrlHelper.urlBase64ToBytes(s);
-    const inflater = new Inflater({ raw: true });
-    const buffers = inflater.append(bytes);
-    const result = inflater.finish();
-    if (!result.success) {
-      console.log(`Error decompressing binary bookmark fragment`, result);
-      return new BinaryBookmarkFragments();
-    }
-    const decompressed = mergeBuffers(buffers);
+    const decompressed = inflate(bytes);
     return BinaryBookmarkFragments.fromBinary(decompressed);
   }
 
