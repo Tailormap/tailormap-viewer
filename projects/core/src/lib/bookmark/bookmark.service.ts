@@ -130,7 +130,6 @@ export class BookmarkService {
     } else if (binaryFragments.fragments.length > 0) {
       const protobuf = binaryFragments.toBinary();
       const compressed = deflate(protobuf, { format: 'deflate', level: 9 });
-      console.log(`Protobuf size ${protobuf.length}, deflated size: ${compressed.length}, ratio ${(compressed.length / protobuf.length).toFixed(1)}`);
       const base64 = UrlHelper.bytesToUrlBase64(compressed);
       outputs.push('!', base64);
       this.binaryFragmentsBase64 = base64;
@@ -172,13 +171,11 @@ export class BookmarkService {
           }
         }
       }
-      console.log('Bookmark components', bookmarkComponents);
     }
 
     for(const [ identifier, valueFromBookmark ] of bookmarkComponents.entries()) {
       const fragment = this.getFragmentById(identifier);
       if (!fragment) {
-        console.log(`Pending bookmark value for unknown descriptor with id "${identifier}"`, valueFromBookmark);
         this.pendingFragments.set(identifier, valueFromBookmark);
       } else {
         missingIdentifiers.delete(identifier);
@@ -197,8 +194,6 @@ export class BookmarkService {
           equals = currentValue$.value === decodedValue;
         }
         if (!equals) {
-          console.log(`Emitting new bookmark value for ${descriptor.type} descriptor "${descriptor.identifier}"
-            (current value "${JSON.stringify(currentValue$.value)}")`, decodedValue);
           currentValue$.next(decodedValue);
         }
       }
