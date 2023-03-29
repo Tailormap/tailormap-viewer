@@ -10,9 +10,8 @@ import { SnackBarMessageComponent } from '@tailormap-viewer/shared';
 })
 export class GroupdetailsService implements OnDestroy {
 
-  // @ts-ignore
-  private selectedGroup: BehaviorSubject<GroupModel> = new BehaviorSubject<GroupModel>(null);
-  public selectedGroup$: Observable<GroupModel> = this.selectedGroup.asObservable();
+  private selectedGroup: BehaviorSubject<GroupModel|null> = new BehaviorSubject<GroupModel |null>(null);
+  public selectedGroup$: Observable<GroupModel|null> = this.selectedGroup.asObservable();
   private groupList: BehaviorSubject<GroupModel[]> = new BehaviorSubject<GroupModel[]>([]);
   public groupList$: Observable<GroupModel[]> = this.groupList.asObservable();
   private destroyed = new Subject();

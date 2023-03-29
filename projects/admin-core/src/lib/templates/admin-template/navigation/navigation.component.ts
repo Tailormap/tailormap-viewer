@@ -20,8 +20,8 @@ export class NavigationComponent implements OnInit {
   public buttons: ButtonProps[] = [
     { label: $localize `Home`, matchExact: true, link: RoutesEnum.ADMIN_HOME, icon: 'admin_home' },
     { label: $localize `Catalog`, matchExact: false, link: RoutesEnum.CATALOG, icon: 'admin_catalog' },
-    { label: $localize `Users`, matchExact: true, link: RoutesEnum.USER_ADMIN, icon: 'admin_user' },
-    { label: $localize `Groups`, matchExact: true, link: RoutesEnum.GROUP_ADMIN, icon: 'admin_groups' },
+    { label: $localize `Users`, matchExact: true, link: RoutesEnum.USER, icon: 'admin_user' },
+    { label: $localize `Groups`, matchExact: true, link: RoutesEnum.GROUP, icon: 'admin_groups' },
   ];
 
   constructor() { }

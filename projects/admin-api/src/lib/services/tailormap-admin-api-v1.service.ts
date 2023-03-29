@@ -88,6 +88,10 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
       map(response => {
           const user = response.body;
           user.groups = response.body?._embedded?.groups;
+          if (user.validUntil) {
+            // parse json response into date object
+            user.validUntil = new Date(user.validUntil);
+          }
           return user;
       }),
     );

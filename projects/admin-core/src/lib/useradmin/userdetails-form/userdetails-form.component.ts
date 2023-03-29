@@ -61,7 +61,7 @@ export class UserdetailsFormComponent implements OnInit, OnDestroy {
           groups: user ? user.groups : [],
         });
 
-        this.existingUser = user?.username.length > 0;
+        this.existingUser = (user!=null && user?.username.length > 0);
       });
   }
 

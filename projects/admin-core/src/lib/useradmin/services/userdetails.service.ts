@@ -8,9 +8,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   providedIn: 'root',
 })
 export class UserDetailsService implements OnDestroy {
-  // @ts-ignore
-  private selectedUser: BehaviorSubject<UserModel> = new BehaviorSubject<UserModel>(null);
-  public selectedUser$: Observable<UserModel> = this.selectedUser.asObservable();
+  private selectedUser: BehaviorSubject<UserModel | null> = new BehaviorSubject<UserModel|null>(null);
+  public selectedUser$: Observable<UserModel|null> = this.selectedUser.asObservable();
   private userList: BehaviorSubject<UserModel[]> = new BehaviorSubject<UserModel[]>([]);
   public userList$: Observable<UserModel[]> = this.userList.asObservable();
   private destroyed = new Subject();
@@ -49,11 +48,6 @@ export class UserDetailsService implements OnDestroy {
         }))
       .subscribe(user => {
         if (user) {
-          if (user.validUntil) {
-            // parse json response into date object
-            // TODO we may need to do a timezone correction here
-            user.validUntil = new Date(user.validUntil);
-          }
           this.selectedUser.next(user);
         }
       });

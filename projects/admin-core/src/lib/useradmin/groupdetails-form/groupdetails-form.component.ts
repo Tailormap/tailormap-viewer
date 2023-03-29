@@ -42,7 +42,7 @@ export class GroupdetailsFormComponent implements OnInit, OnDestroy {
           notes: group ? group.notes : null,
           systemGroup: group ? group.systemGroup : false,
         });
-        this.existingGroup = group?.name.length > 0;
+        this.existingGroup = (group!=null && group.name?.length > 0);
       });
   }
 
