@@ -1,5 +1,5 @@
 export interface ServiceAuthenticationModel {
-  method: 'PASSWORD';
+  method: 'password';
   username: string;
   password: string;
 }

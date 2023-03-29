@@ -55,9 +55,6 @@ export class CatalogTreeComponent implements OnInit, OnDestroy {
     this.treeService.nodeExpansionChangedSource$
       .pipe(takeUntil(this.destroyed))
       .subscribe(({ node, expanded }) => this.toggleExpansion(node, expanded));
-    this.treeService.selectionStateChangedSource$
-      .pipe(takeUntil(this.destroyed))
-      .subscribe(node => this.navigateToDetails(node));
     this.treeService.setSelectedNode(this.selectedNodeId.asObservable());
 
     this.route.url
@@ -87,37 +84,6 @@ export class CatalogTreeComponent implements OnInit, OnDestroy {
     if (expanded && CatalogHelper.isCatalogNode(node) && !!node.metadata) {
       this.catalogService.loadCatalogNodeItems$(node.metadata.id).subscribe();
     }
-  }
-
-  private navigateToDetails(node: CatalogTreeModel) {
-    if (!node.metadata) {
-      return;
-    }
-    let baseUrl: string | undefined;
-    if (CatalogHelper.isCatalogNode(node)) {
-      baseUrl = RoutesEnum.CATALOG_NODE_DETAILS
-        .replace(':nodeId', node.metadata.id);
-    }
-    if (CatalogHelper.isServiceNode(node)) {
-      baseUrl = RoutesEnum.CATALOG_SERVICE_DETAILS
-        .replace(':nodeId', node.metadata.catalogNodeId)
-        .replace(':serviceId', node.metadata.id);
-    }
-    if (CatalogHelper.isFeatureSource(node)) {
-      baseUrl = RoutesEnum.FEATURE_SOURCE_DETAILS
-        .replace(':nodeId', node.metadata.catalogNodeId)
-        .replace(':featureSourceId', node.metadata.id);
-    }
-    if (CatalogHelper.isLayerNode(node) && !node.metadata.virtual) {
-      baseUrl = RoutesEnum.CATALOG_LAYER_DETAILS
-        .replace(':nodeId', node.metadata.catalogNodeId)
-        .replace(':serviceId', node.metadata.serviceId)
-        .replace(':layerId', node.metadata.id);
-    }
-    if (typeof baseUrl === 'undefined') {
-      return;
-    }
-    this.router.navigateByUrl([ RoutesEnum.CATALOG, baseUrl ].join('/'));
   }
 
   private readNodesFromUrl(): Array<{ type: CatalogTreeModelTypeEnum; treeNodeId: string; id: string }> {

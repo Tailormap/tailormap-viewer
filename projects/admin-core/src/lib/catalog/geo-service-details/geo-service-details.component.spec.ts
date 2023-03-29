@@ -64,7 +64,7 @@ describe('GeoServiceDetailsComponent', () => {
     expect(updateGeoService$).toHaveBeenNthCalledWith(2, '1', expect.anything(), expect.anything());
     expect(updateGeoServiceDetails).toHaveBeenNthCalledWith(2, {});
     expect(updateGeoServiceSettings).toHaveBeenNthCalledWith(2, {
-      defaultLayerSettings: { hiDpiDisabled: true },
+      defaultLayerSettings: { hiDpiDisabled: true, tilingDisabled: false, tilingGutter: undefined },
     });
   });
 

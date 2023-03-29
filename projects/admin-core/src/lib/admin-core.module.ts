@@ -51,7 +51,7 @@ export class AdminCoreModule {
     domSanitizer: DomSanitizer,
     iconService: IconService,
   ) {
-    const adminIcons = [{ folder: 'admin', icons: [ 'home', 'catalog', 'service', 'storage' ] }];
+    const adminIcons = [{ folder: 'admin', icons: [ 'home', 'catalog', 'service', 'feature_source', 'feature_type' ] }];
     iconService.loadIconsToIconRegistry(matIconRegistry, domSanitizer);
     iconService.loadIconsToIconRegistry(matIconRegistry, domSanitizer, adminIcons);
   }

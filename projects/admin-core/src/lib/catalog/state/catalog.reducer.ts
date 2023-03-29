@@ -137,7 +137,8 @@ const onUpdateFeatureSource = (
   state: CatalogState,
   payload: ReturnType<typeof CatalogActions.updateFeatureSource>,
 ): CatalogState => {
-  const idx = state.featureSources.findIndex(f => f.id === payload.featureSource.id);
+  const [ updatedFeatureSource, updatedFeatureTypes ] = GeoServiceHelper.getExtendedFeatureSource(payload.featureSource, payload.parentNode);
+  const idx = state.featureSources.findIndex(f => f.id === updatedFeatureSource.id);
   if (idx === -1) {
     return state;
   }
@@ -145,8 +146,12 @@ const onUpdateFeatureSource = (
     ...state,
     featureSources: [
       ...state.featureSources.slice(0, idx),
-      { ...payload.featureSource, catalogNodeId: payload.parentNode },
+      { ...updatedFeatureSource, expanded: state.featureSources[idx]?.expanded ?? false, catalogNodeId: payload.parentNode },
       ...state.featureSources.slice(idx + 1),
+    ],
+    featureTypes: [
+      ...state.featureTypes.filter(f => f.featureSourceId !== updatedFeatureSource.id),
+      ...updatedFeatureTypes,
     ],
   };
 };

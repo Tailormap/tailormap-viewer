@@ -19,6 +19,9 @@ import { LayerSettingsFormComponent } from './layer-settings-form/layer-settings
 import { SharedAdminComponentsModule } from '../shared/components/shared-admin-components.module';
 import { FeatureSourceDetailsComponent } from './feature-source-details/feature-source-details.component';
 import { FeatureSourceFormComponent } from './feature-source-form/feature-source-form.component';
+import { RouterLink } from '@angular/router';
+import { FeatureSourceFormDialogComponent } from './feature-source-form-dialog/feature-source-form-dialog.component';
+import { FeatureTypeDetailsComponent } from './feature-type-details/feature-type-details.component';
 
 
 
@@ -36,6 +39,8 @@ import { FeatureSourceFormComponent } from './feature-source-form/feature-source
     LayerSettingsFormComponent,
     FeatureSourceDetailsComponent,
     FeatureSourceFormComponent,
+    FeatureSourceFormDialogComponent,
+    FeatureTypeDetailsComponent,
   ],
     imports: [
         CommonModule,
@@ -43,6 +48,7 @@ import { FeatureSourceFormComponent } from './feature-source-form/feature-source
         StoreModule.forFeature(catalogStateKey, catalogReducer),
         EffectsModule.forFeature([CatalogEffects]),
         SharedAdminComponentsModule,
+        RouterLink,
     ],
   exports: [
     CatalogTreeComponent,

@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/angular';
-import { GeoServiceLayerDetailsComponent } from './geo-service-layer-details.component';
+import { FeatureTypeDetailsComponent } from './feature-type-details.component';
 import { of } from 'rxjs';
 import { getGeoService, getGeoServiceLayer } from '@tailormap-admin/admin-api';
 import { getMockStore } from '@ngrx/store/testing';
@@ -36,7 +36,7 @@ const setup = async () => {
       geoServiceLayers: [{ ...layerModel, catalogNodeId: 'node-1', id: '2', serviceId: '1' }],
     } },
   });
-  await render(GeoServiceLayerDetailsComponent, {
+  await render(FeatureTypeDetailsComponent, {
     declarations: [ LayerSettingsFormComponent, TriStateBooleanComponent ],
     imports: [SharedModule],
     providers: [

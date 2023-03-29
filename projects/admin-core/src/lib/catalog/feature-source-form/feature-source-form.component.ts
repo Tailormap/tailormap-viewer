@@ -36,11 +36,6 @@ export class FeatureSourceFormComponent implements OnInit {
       username: featureSource?.authentication?.username || null,
       password: featureSource?.authentication?.password || null,
     });
-    if (!featureSource) {
-      this.featureSourceForm.get('title')?.disable();
-    } else {
-      this.featureSourceForm.get('title')?.enable();
-    }
     this._featureSource = featureSource;
   }
 
@@ -101,7 +96,7 @@ export class FeatureSourceFormComponent implements OnInit {
   private isValidForm() {
     const values = this.featureSourceForm.getRawValue();
     return FormHelper.isValidValue(values.protocol)
-      && FormHelper.isValidValue(values.url)
+      && FormHelper.isValidValue(values.title)
       && this.featureSourceForm.dirty;
   }
 
@@ -129,7 +124,7 @@ export class FeatureSourceFormComponent implements OnInit {
       return undefined;
     }
     return {
-      method: 'PASSWORD',
+      method: 'password',
       username: value.username,
       password: value.password || '',
     };

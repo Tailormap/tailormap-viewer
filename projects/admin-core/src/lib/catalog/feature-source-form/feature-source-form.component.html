@@ -3,6 +3,7 @@
     <mat-label i18n>Title</mat-label>
     <input matInput
            [tmAutoFocus]="!!featureSource"
+           type="text"
            placeholder="Title"
            i18n-placeholder
            formControlName="title"
@@ -10,7 +11,7 @@
   </mat-form-field>
   <mat-form-field>
     <mat-label i18n>Protocol</mat-label>
-    <mat-select formControlName="protocol">
+    <mat-select formControlName="protocol" placeholder="Protocol" i18n-placeholder>
       <mat-option *ngFor="let protocol of protocols" [value]="protocol" i18n>
         {{ protocol }}
       </mat-option>
@@ -21,6 +22,7 @@
     <input matInput
            [tmAutoFocus]="!featureSource"
            placeholder="URL"
+           type="text"
            i18n-placeholder
            formControlName="url"
     />
@@ -28,7 +30,7 @@
   <ng-container *ngIf="isJDBCSource()">
     <mat-form-field>
       <mat-label i18n>Database type</mat-label>
-      <mat-select formControlName="dbType">
+      <mat-select formControlName="dbType" placeholder="Database type" i18n-placeholder>
         <mat-option *ngFor="let dbType of dbTypes" [value]="dbType" i18n>
           {{ dbType }}
         </mat-option>
@@ -36,25 +38,25 @@
     </mat-form-field>
     <mat-form-field>
       <mat-label i18n>Database</mat-label>
-      <input matInput formControlName="database" />
+      <input matInput type="text" formControlName="database" placeholder="Database" i18n-placeholder />
     </mat-form-field>
     <mat-form-field>
       <mat-label i18n>Host</mat-label>
-      <input matInput formControlName="host" />
+      <input matInput type="text" formControlName="host" placeholder="Host" i18n-placeholder />
     </mat-form-field>
     <mat-form-field>
       <mat-label i18n>Port</mat-label>
-      <input matInput type="number" formControlName="port" />
+      <input matInput type="number" formControlName="port" placeholder="Port" i18n-placeholder />
     </mat-form-field>
     <mat-form-field>
       <mat-label i18n>Schema</mat-label>
-      <input matInput formControlName="schema" />
+      <input matInput type="text" formControlName="schema" placeholder="Schema" i18n-placeholder />
     </mat-form-field>
   </ng-container>
   <ng-container *ngIf="isJDBCSource() || isWFSSource()">
     <mat-form-field>
       <mat-label i18n>Username</mat-label>
-      <input matInput formControlName="username" />
+      <input matInput type="text" formControlName="username" placeholder="Username" i18n-placeholder />
     </mat-form-field>
     <tm-admin-password-field formControlName="password" label="Password" i18n-label></tm-admin-password-field>
   </ng-container>

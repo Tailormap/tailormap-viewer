@@ -8,6 +8,7 @@ import { CatalogService } from '../services/catalog.service';
 import { CatalogNodeFormDialogComponent } from '../catalog-node-form-dialog/catalog-node-form-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { GeoServiceFormDialogComponent } from '../geo-service-form-dialog/geo-service-form-dialog.component';
+import { FeatureSourceFormDialogComponent } from '../feature-source-form-dialog/feature-source-form-dialog.component';
 
 @Component({
   selector: 'tm-admin-catalog-node-details',
@@ -58,6 +59,13 @@ export class CatalogNodeDetailsComponent implements OnInit, OnDestroy {
   public addGeoService(node: ExtendedCatalogNodeModel) {
     GeoServiceFormDialogComponent.open(this.dialog, {
       geoService: null,
+      parentNode: node.id,
+    }).afterClosed().pipe(takeUntil(this.destroyed)).subscribe();
+  }
+
+  public addFeatureSource(node: ExtendedCatalogNodeModel) {
+    FeatureSourceFormDialogComponent.open(this.dialog, {
+      featureSource: null,
       parentNode: node.id,
     }).afterClosed().pipe(takeUntil(this.destroyed)).subscribe();
   }

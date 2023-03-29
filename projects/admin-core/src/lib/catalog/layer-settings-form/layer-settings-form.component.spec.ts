@@ -2,6 +2,7 @@ import { render, screen, waitFor } from '@testing-library/angular';
 import { LayerSettingsFormComponent } from './layer-settings-form.component';
 import { SharedModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
+import { TriStateBooleanComponent } from '../../shared/components/tri-state-boolean/tri-state-boolean.component';
 
 describe('LayerSettingsFormComponent', () => {
 
@@ -9,6 +10,7 @@ describe('LayerSettingsFormComponent', () => {
     const changedFn = jest.fn();
     await render(LayerSettingsFormComponent, {
       imports: [SharedModule],
+      declarations: [TriStateBooleanComponent],
       componentInputs: {
         isLayerSpecific: true,
       },
@@ -21,12 +23,24 @@ describe('LayerSettingsFormComponent', () => {
     await userEvent.type(await screen.findByPlaceholderText('Title'), 'Some title');
     await waitFor(() => {
       expect(changedFn).toHaveBeenCalledTimes(1);
-      expect(changedFn).toHaveBeenCalledWith({ title: 'Some title', hiDpiDisabled: undefined });
+      expect(changedFn).toHaveBeenCalledWith({
+        title: 'Some title',
+        hiDpiMode: 'showNextZoomLevel',
+        hiDpiDisabled: undefined,
+        tilingDisabled: undefined,
+        tilingGutter: undefined,
+      });
     });
     await userEvent.click(await screen.findByText('Disabled'));
     await waitFor(() => {
       expect(changedFn).toHaveBeenCalledTimes(2);
-      expect(changedFn).toHaveBeenNthCalledWith(2, { title: 'Some title', hiDpiDisabled: true });
+      expect(changedFn).toHaveBeenNthCalledWith(2, {
+        title: 'Some title',
+        hiDpiDisabled: true,
+        hiDpiMode: 'showNextZoomLevel',
+        tilingDisabled: undefined,
+        tilingGutter: undefined,
+      });
     });
   });
 

@@ -11,35 +11,37 @@ import { CatalogHelper } from '../../helpers/catalog.helper';
 })
 export class CatalogTreeNodeComponent {
 
+  private static readonly nodeLabel = {
+    [CatalogTreeModelTypeEnum.CATALOG_NODE_TYPE]: $localize `Catalog`,
+    [CatalogTreeModelTypeEnum.SERVICE_TYPE]: $localize `Service`,
+    [CatalogTreeModelTypeEnum.SERVICE_LAYER_TYPE]: $localize `Layer`,
+    [CatalogTreeModelTypeEnum.FEATURE_SOURCE_TYPE]: $localize `Feature Source`,
+    [CatalogTreeModelTypeEnum.FEATURE_TYPE_TYPE]: $localize `Feature Type`,
+    unknown: '',
+  };
+
+  private static readonly nodeIcon = {
+    [CatalogTreeModelTypeEnum.CATALOG_NODE_TYPE]: 'folder_filled',
+    [CatalogTreeModelTypeEnum.SERVICE_TYPE]: 'admin_service',
+    [CatalogTreeModelTypeEnum.SERVICE_LAYER_TYPE]: 'admin_catalog',
+    [CatalogTreeModelTypeEnum.FEATURE_SOURCE_TYPE]: 'admin_feature_source',
+    [CatalogTreeModelTypeEnum.FEATURE_TYPE_TYPE]: 'admin_feature_type',
+    unknown: '',
+  };
+
+  private _node: CatalogTreeModel | null = null;
+  public nodeSettings: { label: string; icon: string; selectable: boolean; link: string | null } = { label: '', icon: '', selectable: false, link: null };
+
   @Input()
-  public node: CatalogTreeModel | null = null;
-
-  constructor() { }
-
-  public isCatalogNode() {
-    return this.node?.type === CatalogTreeModelTypeEnum.CATALOG_NODE_TYPE;
+  public set node(node: CatalogTreeModel | null) {
+    this._node = node;
+    this.nodeSettings.label = CatalogTreeNodeComponent.nodeLabel[node?.type || 'unknown'] || '';
+    this.nodeSettings.icon = CatalogTreeNodeComponent.nodeIcon[node?.type || 'unknown'] || '';
+    this.nodeSettings.selectable = CatalogHelper.isNodeWithRoute(node);
+    this.nodeSettings.link = CatalogHelper.getRouterLink(node);
   }
-
-  public isServiceNode() {
-    return this.node?.type === CatalogTreeModelTypeEnum.SERVICE_TYPE;
-  }
-
-  public isLayerNode() {
-    return this.node?.type === CatalogTreeModelTypeEnum.SERVICE_LAYER_TYPE;
-  }
-
-  public isFeatureSourceNode() {
-    return this.node?.type === CatalogTreeModelTypeEnum.FEATURE_SOURCE_TYPE;
-  }
-
-  public isSelectable() {
-    if (!this.node) {
-      return false;
-    }
-    return this.isCatalogNode()
-      || this.isServiceNode()
-      || this.isFeatureSourceNode()
-      || (CatalogHelper.isLayerNode(this.node) && !this.node?.metadata?.virtual);
+  public get node(): CatalogTreeModel | null {
+    return this._node;
   }
 
 }

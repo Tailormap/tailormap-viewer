@@ -1,7 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { CatalogNodeModel, FeatureSourceModel, GeoServiceWithLayersModel } from '@tailormap-admin/admin-api';
 import { CatalogTreeModelTypeEnum } from '../models/catalog-tree-model-type.enum';
-import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 
 const catalogActionsPrefix = '[Catalog]';
 
