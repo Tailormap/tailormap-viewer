@@ -1,0 +1,8 @@
+.userdetails-wrapper {
+}
+
+/* make sure we can use a picker,
+see: https://stackoverflow.com/questions/75066261/angular-material-15-does-not-have-time-or-datetime-picker-icon-for-selection-of */
+:host ::ng-deep .mdc-text-field__input::-webkit-calendar-picker-indicator {
+  display: block;
+}

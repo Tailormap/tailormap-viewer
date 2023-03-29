@@ -6,4 +6,6 @@ export enum RoutesEnum {
   FEATURE_SOURCE_DETAILS = 'node/:nodeId/feature-source/:featureSourceId',
   FEATURE_TYPE_DETAILS = 'node/:nodeId/feature-source/:featureSourceId/feature-type/:featureTypeId',
   ADMIN_HOME = '',
+  USER = 'user',
+  GROUP = 'group',
 }

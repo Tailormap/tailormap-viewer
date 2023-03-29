@@ -1,0 +1,45 @@
+<h3 i18n>User Details</h3>
+<form [formGroup]="userdetailsForm" class="userdetails-wrapper">
+  <div>
+    <mat-form-field>
+      <mat-label i18n>Username</mat-label>
+      <input formControlName="username" matInput>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label i18n>Password</mat-label>
+      <input formControlName="password" matInput type="password">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label i18n>Confirm password</mat-label>
+      <input formControlName="confirmedPassword" matInput type="password">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label i18n>Email</mat-label>
+      <input formControlName="email" matInput type="email">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label i18n>Name</mat-label>
+      <input formControlName="name" matInput>
+    </mat-form-field>
+    <mat-checkbox formControlName="enabled" i18n labelPosition="before">Enabled</mat-checkbox>
+    <mat-form-field>
+      <mat-label i18n>validUntil</mat-label>
+      <input formControlName="validUntil" matInput type="datetime-local">
+    </mat-form-field>
+  </div>
+
+  <div>
+    <h4 i18n>User Groups</h4>
+    <mat-selection-list [compareWith]="compareGroup" formControlName="groups">
+      <mat-list-option *ngFor="let group of allGroups$ | async" [value]="group">
+        {{group.name}}
+      </mat-list-option>
+    </mat-selection-list>
+  </div>
+</form>
+
+<mat-toolbar>
+  <button (click)="addOrUpdate()" color="primary" i18n mat-button mat-flat-button>{{existingUser ? 'Update' : 'Add'}}</button>
+  <button (click)="clearForm()" color="primary" i18n mat-button mat-flat-button>Cancel</button>
+  <button (click)="delete()" color="primary" disabled="{{!existingUser}}" i18n mat-button mat-flat-button>Delete</button>
+</mat-toolbar>

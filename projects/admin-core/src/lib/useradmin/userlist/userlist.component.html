@@ -1,0 +1,24 @@
+<h2 i18n>Users</h2>
+<div class="userlist-wrapper form-group has-search">
+
+  <mat-form-field appearance="outline" class="userlist-filter">
+    <mat-label i18n>Filter users</mat-label>
+    <input [formControl]="userFilter"
+           i18n-placeholder
+           matInput
+           placeholder="Filter..."
+           tmAutoFocus
+           type="text"
+    />
+    <button (click)="userFilter.setValue('')" *ngIf="userFilter.getRawValue()" aria-label="Clear" mat-icon-button matSuffix>
+      <mat-icon svgIcon="close"></mat-icon>
+    </button>
+  </mat-form-field>
+
+  <mat-selection-list class="userlist">
+    <mat-list-item (click)="onSelectUser(user.username)" *ngFor="let user of filteredUsers$ | async">
+      <span class="userdetail">{{user.username}}</span>
+    </mat-list-item>
+  </mat-selection-list>
+
+</div>

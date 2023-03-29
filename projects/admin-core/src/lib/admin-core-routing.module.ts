@@ -6,6 +6,8 @@ import { RoutesEnum } from './routes';
 import { GeoServiceDetailsComponent } from './catalog/geo-service-details/geo-service-details.component';
 import { GeoServiceLayerDetailsComponent } from './catalog/geo-service-layer-details/geo-service-layer-details.component';
 import { CatalogNodeDetailsComponent } from './catalog/catalog-node-details/catalog-node-details.component';
+import { UserAdminPageComponent } from './pages/user-admin-page/user-admin-page.component';
+import { GroupsPageComponent } from './pages/groups-page/groups-page.component';
 import { FeatureSourceDetailsComponent } from './catalog/feature-source-details/feature-source-details.component';
 
 const routes: Routes = [
@@ -32,6 +34,8 @@ const routes: Routes = [
     ],
   },
   { path: RoutesEnum.ADMIN_HOME, component: AdminHomePageComponent },
+  { path: RoutesEnum.USER, component: UserAdminPageComponent },
+  { path: RoutesEnum.GROUP, component: GroupsPageComponent },
   { path: '**', redirectTo: '' },
 ];
 

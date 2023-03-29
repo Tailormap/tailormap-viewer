@@ -1,12 +1,8 @@
-import { CatalogNodeModel } from '../models/catalog-node.model';
-import { GeoServiceWithLayersModel } from '../models/geo-service-with-layers.model';
-import { ServiceCapsModel } from '../models/service-caps.model';
-import { GeoServiceLayerModel } from '../models/geo-service-layer.model';
-import { GeoServiceProtocolEnum } from '../models/geo-service-protocol.enum';
-import { CatalogItemKindEnum } from '../models/catalog-item-kind.enum';
+import {
+  CatalogItemKindEnum, CatalogNodeModel, GeoServiceLayerModel, GeoServiceProtocolEnum, GeoServiceWithLayersModel, GroupModel,
+  ServiceCapsModel, UserModel, FeatureSourceModel, FeatureSourceProtocolEnum
+} from '../models';
 import { ServerType } from '@tailormap-viewer/api';
-import { FeatureSourceModel } from '../models';
-import { FeatureSourceProtocolEnum } from '../models/feature-source-protocol.enum';
 
 export const getCatalogNode = (overrides?: Partial<CatalogNodeModel>): CatalogNodeModel => ({
   id: 'root',
@@ -93,6 +89,44 @@ export const getGeoService = (overrides?: Partial<GeoServiceWithLayersModel>): G
   },
   ...overrides,
 });
+
+export const getGroup = (overrides?: Partial<GroupModel>): GroupModel => ({
+  name: 'admin',
+  description: 'Administrators with full access',
+  systemGroup: true,
+  version: null,
+  ...overrides,
+});
+
+export const getGroups = (): GroupModel[] => {
+  return [
+    getGroup({ name: 'admin', description: 'Administrators with full access' }),
+    getGroup({ name: 'admin-catalog', description: 'Users authorized to edit the catalog' }),
+    getGroup({ name: 'admin-users', description: 'Users authorized to create and edit user accounts' }),
+    getGroup({ name: 'admin-applications', description: 'Users authorized to edit applications' }),
+    getGroup({ name: 'app-authenticated', description: 'Users authorized for application with authentication required' }),
+    getGroup({ name: 'actuator', description: 'Users authorized for Spring Boot Actuator (monitoring and management)' }),
+    getGroup({ name: 'test', description: 'Users that can test', systemGroup: false, notes: 'This is a test group' }),
+  ];
+};
+
+export const getUser = (overrides?: Partial<UserModel>): UserModel => ({
+  username: 'admin',
+  name: null,
+  validUntil: null,
+  email: null,
+  enabled: true,
+  groups: [getGroup({ name: 'test', description: 'Users that can test', systemGroup: false, notes: 'This is a test group' })],
+  ...overrides,
+});
+
+export const getUsers = (): UserModel[] => {
+  return [
+    getUser({ username: 'user', email: 'test@example.com' }),
+    getUser({ username: 'useradmin' }),
+    getUser({ username: 'tm-admin' }),
+  ];
+};
 
 export const getFeatureSource = (overrides?: Partial<FeatureSourceModel>): FeatureSourceModel => ({
   id: '1',
