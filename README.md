@@ -187,6 +187,7 @@ To create a new service which uses the HttpClient to make API calls run
 `npm run ng -- generate service services/[name] --project core|map --http-service`
 
 This creates a service with a HttpClient injected and adjusted spec file to test HTTP calls.
+Please use `kebab-case` for filenames and `PascalCase` for class names.
 
 ### Running unit tests
 

@@ -1,0 +1,24 @@
+<h2 i18n>Groups</h2>
+<div class="grouplist-wrapper form-group has-search">
+
+  <mat-form-field appearance="outline" class="grouplist-filter">
+    <mat-label i18n>Filter groups</mat-label>
+    <input [formControl]="groupFilter"
+           i18n-placeholder
+           matInput
+           placeholder="Filter..."
+           tmAutoFocus
+           type="text"
+    />
+    <button (click)="groupFilter.setValue('')" *ngIf="groupFilter.getRawValue()" aria-label="Clear" mat-icon-button matSuffix>
+      <mat-icon svgIcon="close"></mat-icon>
+    </button>
+  </mat-form-field>
+
+  <mat-selection-list class="grouplist">
+    <mat-list-item (click)="onSelect(group.name)" *ngFor="let group of filteredGroups$ | async">
+      <span class="detail">{{group.name}}</span>
+    </mat-list-item>
+  </mat-selection-list>
+
+</div>

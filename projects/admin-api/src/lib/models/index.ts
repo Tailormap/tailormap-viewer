@@ -9,3 +9,5 @@ export * from './service-caps.model';
 export * from './catalog-item.model';
 export * from './catalog-item-kind.enum';
 export * from './feature-source.model';
+export * from './user.model';
+export * from './group.model';

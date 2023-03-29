@@ -5,6 +5,9 @@ import { CatalogPageComponent } from './catalog-page/catalog-page.component';
 import { TemplatesModule } from '../templates/templates.module';
 import { CatalogModule } from '../catalog/catalog.module';
 import { RouterOutlet } from '@angular/router';
+import { UserAdminPageComponent } from './user-admin-page/user-admin-page.component';
+import { UseradminModule } from '../useradmin/useradmin.module';
+import { GroupsPageComponent } from './groups-page/groups-page.component';
 
 
 
@@ -12,16 +15,21 @@ import { RouterOutlet } from '@angular/router';
   declarations: [
     AdminHomePageComponent,
     CatalogPageComponent,
+    UserAdminPageComponent,
+    GroupsPageComponent,
   ],
   imports: [
     CommonModule,
     RouterOutlet,
     TemplatesModule,
     CatalogModule,
+    UseradminModule,
   ],
   exports: [
     AdminHomePageComponent,
     CatalogPageComponent,
+    UserAdminPageComponent,
+    GroupsPageComponent,
   ],
 })
 export class PagesModule { }
