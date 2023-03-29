@@ -5,7 +5,7 @@ import { combineLatest, filter, map, Subject, takeUntil, distinctUntilKeyChanged
 import { selectLoadStatus, selectLayers, selectLayerTreeNodes } from '../state/map.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import {
-  BookmarkProtoFragmentDescriptor, BookmarkFragmentDescriptor, BookmarkStringFragmentDescriptor,
+  BookmarkProtoFragmentDescriptor, BookmarkStringFragmentDescriptor,
 } from '../../bookmark/bookmark.models';
 import { BookmarkService } from '../../bookmark/bookmark.service';
 import { setLayerVisibility, setLayerOpacity, setLayerTreeNodeChildren } from '../state/map.actions';
@@ -16,7 +16,7 @@ import { MapBookmarkHelper } from '../bookmark/bookmark.helper';
   providedIn: 'root',
 })
 export class ApplicationMapBookmarkService implements OnDestroy {
-  private static LOCATION_BOOKMARK_DESCRIPTOR: BookmarkFragmentDescriptor = new BookmarkStringFragmentDescriptor('');
+  private static LOCATION_BOOKMARK_DESCRIPTOR: BookmarkStringFragmentDescriptor = new BookmarkStringFragmentDescriptor('');
   private static VISIBILITY_BOOKMARK_DESCRIPTOR: BookmarkProtoFragmentDescriptor<LayerVisibilityBookmarkFragment>
     = new BookmarkProtoFragmentDescriptor('1', LayerVisibilityBookmarkFragment);
 

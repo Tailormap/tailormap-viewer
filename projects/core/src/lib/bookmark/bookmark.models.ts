@@ -4,65 +4,39 @@ export type BookmarkID = string;
 export type BookmarkType = 'string' | 'binary';
 
 export interface BookmarkFragmentDescriptor {
-  get identifier(): BookmarkID;
-  get type(): BookmarkType;
-  get initialValue(): string | any;
-
-  // Return equality of decoded values
-  equals(one: any, other: any): boolean;
-  serialize(value: any): string | Uint8Array;
-  deserialize(value: string | Uint8Array): any;
+  readonly identifier: BookmarkID;
+  readonly type: BookmarkType;
+  getInitialValue(): string | any;
 }
 
 export class BookmarkStringFragmentDescriptor implements BookmarkFragmentDescriptor {
-  private readonly _identifier: BookmarkID;
+  public readonly identifier: BookmarkID;
+  public readonly type: BookmarkType = 'string';
 
-  constructor(identifier: BookmarkID) {
-    this._identifier = identifier;
+   constructor(identifier: BookmarkID) {
+    this.identifier = identifier;
   }
 
-  public get identifier(): BookmarkID {
-    return this._identifier;
-  }
-
-  public get type(): BookmarkType {
-    return 'string';
-  }
-
-  public get initialValue(): string | any {
+  public getInitialValue(): string | any {
     return '';
-  }
-
-  public equals(one: string | any, other: string | any): boolean {
-    return one === other;
-  }
-
-  public serialize(value: any): string | Uint8Array {
-    return value;
-  }
-  public deserialize(value: string | Uint8Array): any {
-    return value;
   }
 }
 
+export const isBookmarkProtoFragmentDescriptor = (fragment: BookmarkFragmentDescriptor): fragment is BookmarkProtoFragmentDescriptor =>
+  fragment.type === 'binary';
+
 export class BookmarkProtoFragmentDescriptor<T extends Message<T> = AnyMessage> implements BookmarkFragmentDescriptor {
 
-  private readonly _identifier: BookmarkID;
+  public readonly identifier: BookmarkID;
+  public readonly type: BookmarkType = 'binary';
   private readonly _messageType: MessageType<T>;
 
   constructor(identifier: BookmarkID, messageType: MessageType<T>) {
-    this._identifier = identifier;
+    this.identifier = identifier;
     this._messageType = messageType;
   }
-  public get identifier(): BookmarkID {
-    return this._identifier;
-  }
 
-  public get type(): BookmarkType {
-    return 'binary';
-  }
-
-  public get initialValue(): T {
+  public getInitialValue(): T {
     return new this._messageType();
   }
 

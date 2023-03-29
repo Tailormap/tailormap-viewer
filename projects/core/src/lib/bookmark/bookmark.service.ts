@@ -1,12 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Subject, BehaviorSubject, Observable } from 'rxjs';
 import { Message } from '@bufbuild/protobuf';
-import { BookmarkProtoFragmentDescriptor, BookmarkFragmentDescriptor, BookmarkID } from './bookmark.models';
+import {
+  BookmarkProtoFragmentDescriptor, BookmarkFragmentDescriptor, BookmarkID, BookmarkStringFragmentDescriptor,
+  isBookmarkProtoFragmentDescriptor,
+} from './bookmark.models';
 import { BinaryBookmarkFragments, BookmarkFragment } from '../map/bookmark/bookmark_pb';
 import { UrlHelper } from '@tailormap-viewer/shared';
 import { deflate, inflate } from '@stardazed/zlib';
 
 type BookmarkFragmentValueObservable = BehaviorSubject<any>;
+
+// TODO: clear internal caches when route changes to different application
 
 @Injectable({
   providedIn: 'root',
@@ -40,12 +45,12 @@ export class BookmarkService {
       throw new Error('Invalid identifier');
     }
 
-    const fragment$ = new BehaviorSubject(descriptor.initialValue);
+    const fragment$ = new BehaviorSubject(descriptor.getInitialValue());
 
     const pendingFragment = this.pendingFragments.get(descriptor.identifier);
 
     if (pendingFragment !== undefined) {
-      fragment$.next(descriptor.deserialize(pendingFragment));
+      fragment$.next(isBookmarkProtoFragmentDescriptor(descriptor) ? descriptor.deserialize(pendingFragment) : pendingFragment);
       this.pendingFragments.delete(descriptor.identifier);
     }
 
@@ -54,7 +59,7 @@ export class BookmarkService {
   }
 
   public updateFragment<T extends Message<T>>(descriptor: BookmarkProtoFragmentDescriptor<T>, message: T): void;
-  public updateFragment(descriptor: BookmarkFragmentDescriptor, message: string): void;
+  public updateFragment(descriptor: BookmarkStringFragmentDescriptor, message: string): void;
   public updateFragment(descriptor: BookmarkFragmentDescriptor, message: any) {
     if (!this.fragments.has(descriptor)) {
       this.registerFragment$(descriptor as any);
@@ -65,8 +70,8 @@ export class BookmarkService {
       return;
     }
 
-    if (descriptor.type === 'binary') {
-      // Clear cache to make sure the binary fragments are updated
+    if (isBookmarkProtoFragmentDescriptor(descriptor)) {
+      // Clear cached bookmark value of compressed binary fragments, so it gets updated
       this.binaryFragmentsBase64 = null;
     }
 
@@ -105,7 +110,7 @@ export class BookmarkService {
         }
         // Identifier does not need to be URL encoded, see regexp check in registerFragment$()
         outputs.push(`!${descriptor.identifier}:`, encodeURIComponent(value));
-      } else if (descriptor.type === 'binary') {
+      } else if (isBookmarkProtoFragmentDescriptor(descriptor)) {
         // Only if binary value was changed
         if (this.binaryFragmentsBase64 === null) {
           const bytes = descriptor.serialize(value) as Uint8Array;
@@ -120,11 +125,11 @@ export class BookmarkService {
     }
 
     if (this.binaryFragmentsBase64 !== null) {
-      // Use cache, only string fragments were updated
+      // Use cached value because only string fragments were updated
       outputs.push('!', this.binaryFragmentsBase64);
     } else if (binaryFragments.fragments.length > 0) {
       const protobuf = binaryFragments.toBinary();
-      const compressed = deflate(protobuf, {format: 'deflate', level: 9});
+      const compressed = deflate(protobuf, { format: 'deflate', level: 9 });
       console.log(`Protobuf size ${protobuf.length}, deflated size: ${compressed.length}, ratio ${(compressed.length / protobuf.length).toFixed(1)}`);
       const base64 = UrlHelper.bytesToUrlBase64(compressed);
       outputs.push('!', base64);
@@ -157,7 +162,7 @@ export class BookmarkService {
           const split = component.indexOf(':');
           if (split > 0) {
             // Fragment with type === 'string'
-            bookmarkComponents.set(component.substring(0, split), component.substring(split + 1));
+            bookmarkComponents.set(component.substring(0, split), decodeURIComponent(component.substring(split + 1)));
           } else if (split === -1) {
             // Binary fragments are at the end with no identifier and ':' after '!'
             const binaryFragments = BookmarkService.decodeBinaryFragments(component);
@@ -181,9 +186,16 @@ export class BookmarkService {
         const descriptor = fragment[0];
         const currentValue$ = fragment[1];
 
-        const decodedValue = descriptor.deserialize(valueFromBookmark);
+        let decodedValue;
+        let equals;
 
-        const equals = descriptor.equals(currentValue$.value, decodedValue);
+        if (isBookmarkProtoFragmentDescriptor(descriptor)) {
+          decodedValue = descriptor.deserialize(valueFromBookmark);
+          equals = descriptor.equals(currentValue$.value, decodedValue);
+        } else {
+          decodedValue = valueFromBookmark;
+          equals = currentValue$.value === decodedValue;
+        }
         if (!equals) {
           console.log(`Emitting new bookmark value for ${descriptor.type} descriptor "${descriptor.identifier}"
             (current value "${JSON.stringify(currentValue$.value)}")`, decodedValue);
@@ -195,7 +207,7 @@ export class BookmarkService {
     // Unset any existing values.
     for (const [ descriptor, value$ ] of this.fragments) {
       if (missingIdentifiers.has(descriptor.identifier)) {
-        value$.next(descriptor.initialValue);
+        value$.next(descriptor.getInitialValue());
       }
     }
   }
