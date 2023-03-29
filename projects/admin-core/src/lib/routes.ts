@@ -4,6 +4,6 @@ export enum RoutesEnum {
   CATALOG_SERVICE_DETAILS = 'node/:nodeId/service/:serviceId',
   CATALOG_LAYER_DETAILS = 'node/:nodeId/service/:serviceId/layer/:layerId',
   ADMIN_HOME = '',
-  USER_ADMIN = 'user-admin',
-  GROUP_ADMIN = 'group-admin',
+  USER = 'user',
+  GROUP = 'group',
 }

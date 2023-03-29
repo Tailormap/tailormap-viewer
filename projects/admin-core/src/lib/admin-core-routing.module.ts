@@ -29,8 +29,8 @@ const routes: Routes = [
     ],
   },
   { path: RoutesEnum.ADMIN_HOME, component: AdminHomePageComponent },
-  { path: RoutesEnum.USER_ADMIN, component: UserAdminPageComponent },
-  { path: RoutesEnum.GROUP_ADMIN, component: GroupsPageComponent },
+  { path: RoutesEnum.USER, component: UserAdminPageComponent },
+  { path: RoutesEnum.GROUP, component: GroupsPageComponent },
   { path: '**', redirectTo: '' },
 ];
 
