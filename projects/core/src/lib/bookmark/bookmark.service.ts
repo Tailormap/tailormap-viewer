@@ -15,6 +15,7 @@ export class BookmarkService {
   private pendingFragments: Map<BookmarkID, any> = new Map();
   private fragments: Map<BookmarkFragmentDescriptor, BookmarkFragmentValueObservable> = new Map();
   private joinedBookmark: Subject<string | undefined> = new Subject();
+  private binaryFragmentsBase64: string | null = null;
 
   private getFragmentById(identifier: string): [BookmarkFragmentDescriptor, BookmarkFragmentValueObservable] | undefined {
     for(const [ descriptor, value ] of this.fragments.entries()) {
@@ -64,12 +65,17 @@ export class BookmarkService {
       return;
     }
 
+    if (descriptor.type === 'binary') {
+      // Clear cache to make sure the binary fragments are updated
+      this.binaryFragmentsBase64 = null;
+    }
+
     fragment$.next(message);
     this._serializeBookmark();
   }
 
   private _serializeBookmark() {
-    let output = '';
+    const outputs = [];
 
     // Binary fragments are appended at the end and compressed together, so that string ids used in multiple fragments can be efficiently
     // compressed
@@ -92,36 +98,43 @@ export class BookmarkService {
       if (descriptor.identifier === '') {
         // This will be first when sorted by identifier
         // Value is location, no need for URL encoding
-        output += '@' + value;
+        outputs.push('@', value);
       } else if (descriptor.type === 'string') {
         if (value.includes('!')) {
           throw new Error('String bookmark fragment value may not contain \'!\' separator');
         }
         // Identifier does not need to be URL encoded, see regexp check in registerFragment$()
-        output += `!${descriptor.identifier}:` + encodeURIComponent(value);
+        outputs.push(`!${descriptor.identifier}:`, encodeURIComponent(value));
       } else if (descriptor.type === 'binary') {
-        const bytes = descriptor.serialize(value) as Uint8Array;
-        if (bytes.length > 0) {
-          binaryFragments.fragments.push(new BookmarkFragment({
-            identifier: descriptor.identifier,
-            bytes,
-          }));
+        // Only if binary value was changed
+        if (this.binaryFragmentsBase64 === null) {
+          const bytes = descriptor.serialize(value) as Uint8Array;
+          if (bytes.length > 0) {
+            binaryFragments.fragments.push(new BookmarkFragment({
+              identifier: descriptor.identifier,
+              bytes,
+            }));
+          }
         }
       }
     }
 
-    if (binaryFragments.fragments.length > 0) {
+    if (this.binaryFragmentsBase64 !== null) {
+      // Use cache, only string fragments were updated
+      outputs.push('!', this.binaryFragmentsBase64);
+    } else if (binaryFragments.fragments.length > 0) {
       const protobuf = binaryFragments.toBinary();
-      const compressed = deflate(protobuf, { format: 'deflate', level: 9});
+      const compressed = deflate(protobuf, {format: 'deflate', level: 9});
       console.log(`Protobuf size ${protobuf.length}, deflated size: ${compressed.length}, ratio ${(compressed.length / protobuf.length).toFixed(1)}`);
       const base64 = UrlHelper.bytesToUrlBase64(compressed);
-      output += '!' + base64;
+      outputs.push('!', base64);
+      this.binaryFragmentsBase64 = base64;
     }
 
-    if (output === '') {
+    if (outputs.length === 0) {
       this.joinedBookmark.next(undefined);
     } else {
-      this.joinedBookmark.next(output);
+      this.joinedBookmark.next(outputs.join(''));
     }
   }
 
