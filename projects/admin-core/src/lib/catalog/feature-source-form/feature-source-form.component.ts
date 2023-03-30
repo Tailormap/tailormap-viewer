@@ -26,7 +26,7 @@ export class FeatureSourceFormComponent implements OnInit {
   public set featureSource(featureSource: ExtendedFeatureSourceModel | null) {
     this.featureSourceForm.patchValue({
       title: featureSource?.title || '',
-      protocol: featureSource?.protocol || FeatureSourceProtocolEnum.JDBC,
+      protocol: featureSource?.protocol || null,
       url: featureSource?.url || '',
       dbType: featureSource?.jdbcConnection?.dbtype || null,
       database: featureSource?.jdbcConnection?.database || null,

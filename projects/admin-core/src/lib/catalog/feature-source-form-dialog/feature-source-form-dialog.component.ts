@@ -1,9 +1,6 @@
 import { Component, ChangeDetectionStrategy, Inject } from '@angular/core';
-import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { GeoServiceService } from '../services/geo-service.service';
-import { GeoServiceCreateModel } from '../models/geo-service-update.model';
 import { FeatureSourceCreateModel } from '../models/feature-source-update.model';
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 import { FeatureSourceService } from '../services/feature-source.service';
