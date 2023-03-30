@@ -11,6 +11,7 @@ import { Store } from '@ngrx/store';
 import { LayerSettingsFormComponent } from '../layer-settings-form/layer-settings-form.component';
 import { createGeoServiceMock } from '../helpers/mocks/geo-service.service.mock';
 import { TriStateBooleanComponent } from '../../shared/components/tri-state-boolean/tri-state-boolean.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 const setup = async () => {
   const activeRoute = {
@@ -37,6 +38,7 @@ const setup = async () => {
     } },
   });
   await render(GeoServiceLayerDetailsComponent, {
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
     declarations: [ LayerSettingsFormComponent, TriStateBooleanComponent ],
     imports: [SharedModule],
     providers: [

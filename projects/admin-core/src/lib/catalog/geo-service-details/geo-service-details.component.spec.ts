@@ -13,6 +13,7 @@ import userEvent from '@testing-library/user-event';
 import { createGeoServiceMock } from '../helpers/mocks/geo-service.service.mock';
 import { LayerSettingsFormComponent } from '../layer-settings-form/layer-settings-form.component';
 import { TestSaveHelper } from '../../test-helpers/test-save.helper';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 const setup = async () => {
   const activeRoute = {
@@ -24,6 +25,7 @@ const setup = async () => {
     initialState: { [catalogStateKey]: { ...initialCatalogState, geoServices: [{ ...geoServiceModel, catalogNodeId: 'node-1' }] } },
   });
   await render(GeoServiceDetailsComponent, {
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
     declarations: [ GeoServiceFormComponent, LayerSettingsFormComponent ],
     imports: [SharedModule],
     providers: [

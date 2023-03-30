@@ -59,7 +59,7 @@ describe('FeatureTypeDetailsComponent', () => {
 
   test('should render', async () => {
     await setup();
-    expect(await screen.findByText('Details for some table')).toBeInTheDocument();
+    expect(await screen.findByText('Details for feature type some table')).toBeInTheDocument();
   });
 
 });
