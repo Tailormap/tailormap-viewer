@@ -1,12 +1,12 @@
 import { Inject, Injectable } from '@angular/core';
 import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects';
 import * as CatalogActions from './catalog.actions';
-import { map, catchError, of, filter, switchMap } from 'rxjs';
+import { map, catchError, of, filter, switchMap, tap } from 'rxjs';
 import {
-  CatalogNodeModel, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel,
+  CatalogNodeModel, FeatureSourceModel, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel,
 } from '@tailormap-admin/admin-api';
 import { Store } from '@ngrx/store';
-import { selectCatalogLoadStatus } from './catalog.selectors';
+import { selectCatalogLoadStatus, selectFeatureSourceLoadStatus } from './catalog.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 
 type ErrorResponse = { error: string };
@@ -18,7 +18,8 @@ export class CatalogEffects {
     return this.actions$.pipe(
       ofType(CatalogActions.loadCatalog),
       concatLatestFrom(() => this.store$.select(selectCatalogLoadStatus)),
-      filter(([ _action, loadStatus ]) => loadStatus !== LoadingStateEnum.LOADED),
+      filter(([ _action, loadStatus ]) => loadStatus !== LoadingStateEnum.LOADED && loadStatus !== LoadingStateEnum.LOADING),
+      tap(() => this.store$.dispatch(CatalogActions.loadCatalogStart())),
       switchMap(([_action]) => {
         return this.adminApiService.getCatalog$()
           .pipe(
@@ -33,6 +34,32 @@ export class CatalogEffects {
                 return CatalogActions.loadCatalogFailed({ error: response.error });
               }
               return CatalogActions.loadCatalogSuccess({ nodes: response });
+            }),
+          );
+      }),
+    );
+  });
+
+  public loadFeatureSources$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(CatalogActions.loadFeatureSources),
+      concatLatestFrom(() => this.store$.select(selectFeatureSourceLoadStatus)),
+      filter(([ _action, loadStatus ]) => loadStatus !== LoadingStateEnum.LOADED && loadStatus !== LoadingStateEnum.LOADING),
+      tap(() => this.store$.dispatch(CatalogActions.loadFeatureSourcesStart())),
+      switchMap(([_action]) => {
+        return this.adminApiService.getAllFeatureSources$()
+          .pipe(
+            catchError(() => {
+              return of({ error: $localize `Error while loading feature sources` });
+            }),
+            map(response => {
+              const isErrorResponse = (res: FeatureSourceModel[] | ErrorResponse): res is ErrorResponse => {
+                return typeof (res as ErrorResponse).error !== 'undefined';
+              };
+              if (isErrorResponse(response)) {
+                return CatalogActions.loadFeatureSourcesFailed({ error: response.error });
+              }
+              return CatalogActions.loadFeatureSourcesSuccess({ featureSources: response });
             }),
           );
       }),

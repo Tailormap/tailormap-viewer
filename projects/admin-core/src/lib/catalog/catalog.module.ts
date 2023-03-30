@@ -22,6 +22,7 @@ import { FeatureSourceFormComponent } from './feature-source-form/feature-source
 import { RouterLink } from '@angular/router';
 import { FeatureSourceFormDialogComponent } from './feature-source-form-dialog/feature-source-form-dialog.component';
 import { FeatureTypeDetailsComponent } from './feature-type-details/feature-type-details.component';
+import { FeatureTypeSelectorComponent } from './feature-type-selector/feature-type-selector.component';
 
 
 
@@ -41,15 +42,16 @@ import { FeatureTypeDetailsComponent } from './feature-type-details/feature-type
     FeatureSourceFormComponent,
     FeatureSourceFormDialogComponent,
     FeatureTypeDetailsComponent,
+    FeatureTypeSelectorComponent,
   ],
-    imports: [
-        CommonModule,
-        SharedModule,
-        StoreModule.forFeature(catalogStateKey, catalogReducer),
-        EffectsModule.forFeature([CatalogEffects]),
-        SharedAdminComponentsModule,
-        RouterLink,
-    ],
+  imports: [
+    CommonModule,
+    SharedModule,
+    StoreModule.forFeature(catalogStateKey, catalogReducer),
+    EffectsModule.forFeature([CatalogEffects]),
+    SharedAdminComponentsModule,
+    RouterLink,
+  ],
   exports: [
     CatalogTreeComponent,
   ],

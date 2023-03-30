@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CatalogTreeModel } from '../../models/catalog-tree.model';
 import { CatalogTreeModelTypeEnum } from '../../models/catalog-tree-model-type.enum';
-import { CatalogHelper } from '../../helpers/catalog.helper';
+import { CatalogTreeHelper } from '../../helpers/catalog-tree.helper';
 
 @Component({
   selector: 'tm-admin-catalog-tree-node',
@@ -37,8 +37,8 @@ export class CatalogTreeNodeComponent {
     this._node = node;
     this.nodeSettings.label = CatalogTreeNodeComponent.nodeLabel[node?.type || 'unknown'] || '';
     this.nodeSettings.icon = CatalogTreeNodeComponent.nodeIcon[node?.type || 'unknown'] || '';
-    this.nodeSettings.selectable = CatalogHelper.isNodeWithRoute(node);
-    this.nodeSettings.link = CatalogHelper.getRouterLink(node);
+    this.nodeSettings.selectable = CatalogTreeHelper.isNodeWithRoute(node);
+    this.nodeSettings.link = CatalogTreeHelper.getRouterLink(node);
   }
   public get node(): CatalogTreeModel | null {
     return this._node;

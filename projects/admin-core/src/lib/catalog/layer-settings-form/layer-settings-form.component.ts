@@ -3,6 +3,7 @@ import { debounceTime, filter, Subject, takeUntil, tap } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
 import { GeoServiceProtocolEnum, LayerSettingsModel, TileLayerHiDpiModeEnum } from '@tailormap-admin/admin-api';
 import { FormHelper } from '../../helpers/form.helper';
+import { TypesHelper } from '@tailormap-viewer/shared';
 
 @Component({
   selector: 'tm-admin-layer-settings-form',
@@ -40,6 +41,9 @@ export class LayerSettingsFormComponent implements OnInit {
     return this._layerSettings;
   }
 
+  @Input()
+  public layerName: string | null | undefined;
+
   @Output()
   public changed = new EventEmitter<LayerSettingsModel>();
 
@@ -49,6 +53,8 @@ export class LayerSettingsFormComponent implements OnInit {
 
   public layerSettingsForm = new FormGroup({
     title: new FormControl('', { nonNullable: true }),
+    featureSourceId: new FormControl<number | null>(null),
+    featureTypeName: new FormControl<string | null>(null),
     hiDpiEnabled: new FormControl<boolean | null>(null),
     tilingEnabled: new FormControl<boolean | null>(null),
     tilingGutter: new FormControl<number | null>(null),
@@ -81,6 +87,12 @@ export class LayerSettingsFormComponent implements OnInit {
       settings.title = value.title || undefined;
       settings.hiDpiMode = value?.hiDpiMode || undefined;
       settings.hiDpiSubstituteLayer = this.layerSettings?.hiDpiSubstituteLayer || undefined;
+      if (TypesHelper.isDefined(value.featureSourceId) && TypesHelper.isDefined(value.featureTypeName)) {
+        settings.featureType = {
+          featureSourceId: value?.featureSourceId,
+          featureTypeName: value?.featureTypeName,
+        };
+      }
     }
     return settings;
   }
@@ -108,6 +120,8 @@ export class LayerSettingsFormComponent implements OnInit {
     }
     this.layerSettingsForm.patchValue({
       title: this.layerSettings?.title ? this.layerSettings.title : '',
+      featureSourceId: this.layerSettings?.featureType?.featureSourceId || null,
+      featureTypeName: this.layerSettings?.featureType?.featureTypeName || null,
       hiDpiEnabled,
       tilingEnabled: LayerSettingsFormComponent.getInverseBooleanOrDefault(this.layerSettings?.tilingDisabled, this.isLayerSpecific ? null : true),
       tilingGutter: this.layerSettings?.tilingGutter || null,
@@ -139,6 +153,13 @@ export class LayerSettingsFormComponent implements OnInit {
 
   private static getInverseBooleanOrDefault<T = null | undefined>(value: boolean | null | undefined, defaultValue: boolean | T): boolean | T {
     return typeof value === 'boolean' ? !value : defaultValue;
+  }
+
+  public updateFeatureTypeSelection($event: { featureSourceId: number; featureTypeName?: string }) {
+    this.layerSettingsForm.patchValue({
+      featureSourceId: +($event.featureSourceId),
+      featureTypeName: $event.featureTypeName,
+    });
   }
 
 }

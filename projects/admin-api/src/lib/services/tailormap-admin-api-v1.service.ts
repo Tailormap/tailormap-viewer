@@ -53,6 +53,12 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
     return this.httpClient.get<FeatureSourceModel>(`${TailormapAdminApiV1Service.BASE_URL}/feature-sources/${params.id}`)
       .pipe(map(CatalogModelHelper.addTypeToFeatureSourceModel));
   }
+
+  public getAllFeatureSources$(): Observable<FeatureSourceModel[]> {
+    return this.httpClient.get<{ _embedded: { ['feature-sources']: FeatureSourceModel[] }}>(`${TailormapAdminApiV1Service.BASE_URL}/feature-sources?size=1000&sort=title`)
+      .pipe(map(response => (response?._embedded['feature-sources'] || []).map(CatalogModelHelper.addTypeToFeatureSourceModel)));
+  }
+
   public createFeatureSource$(params: { featureSource: Omit<FeatureSourceModel, 'id'> }): Observable<FeatureSourceModel> {
     return this.httpClient.post<FeatureSourceModel>(`${TailormapAdminApiV1Service.BASE_URL}/feature-sources`, params.featureSource)
       .pipe(map(CatalogModelHelper.addTypeToFeatureSourceModel));
