@@ -10,6 +10,7 @@ import { GeoServiceService } from '../services/geo-service.service';
 import { Store } from '@ngrx/store';
 import { LayerSettingsFormComponent } from '../layer-settings-form/layer-settings-form.component';
 import { createGeoServiceMock } from '../helpers/mocks/geo-service.service.mock';
+import { TriStateBooleanComponent } from '../../shared/components/tri-state-boolean/tri-state-boolean.component';
 
 const setup = async () => {
   const activeRoute = {
@@ -36,7 +37,7 @@ const setup = async () => {
     } },
   });
   await render(GeoServiceLayerDetailsComponent, {
-    declarations: [LayerSettingsFormComponent],
+    declarations: [ LayerSettingsFormComponent, TriStateBooleanComponent ],
     imports: [SharedModule],
     providers: [
       { provide: ActivatedRoute, useValue: activeRoute },

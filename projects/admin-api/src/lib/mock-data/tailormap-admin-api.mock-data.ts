@@ -1,6 +1,6 @@
 import {
   CatalogItemKindEnum, CatalogNodeModel, GeoServiceLayerModel, GeoServiceProtocolEnum, GeoServiceWithLayersModel, GroupModel,
-  ServiceCapsModel, UserModel,
+  ServiceCapsModel, UserModel, FeatureSourceModel, FeatureSourceProtocolEnum
 } from '../models';
 import { ServerType } from '@tailormap-viewer/api';
 
@@ -67,6 +67,7 @@ export const getGeoServiceLayer = (overrides?: Partial<GeoServiceLayerModel>): G
 
 export const getGeoService = (overrides?: Partial<GeoServiceWithLayersModel>): GeoServiceWithLayersModel => ({
   id: '1',
+  type: 'geo-service',
   notes: '',
   protocol: GeoServiceProtocolEnum.WMS,
   url: 'https://service.pdok.nl/kadaster/bestuurlijkegebieden/wms/v1_0',
@@ -126,3 +127,13 @@ export const getUsers = (): UserModel[] => {
     getUser({ username: 'tm-admin' }),
   ];
 };
+
+export const getFeatureSource = (overrides?: Partial<FeatureSourceModel>): FeatureSourceModel => ({
+  id: '1',
+  type: 'feature-source',
+  featureTypes: [],
+  url: 'https://wfs-url',
+  protocol: FeatureSourceProtocolEnum.WFS,
+  title: 'Some WFS Source',
+  ...overrides,
+});

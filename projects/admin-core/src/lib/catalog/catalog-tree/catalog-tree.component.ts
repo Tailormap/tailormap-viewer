@@ -55,9 +55,6 @@ export class CatalogTreeComponent implements OnInit, OnDestroy {
     this.treeService.nodeExpansionChangedSource$
       .pipe(takeUntil(this.destroyed))
       .subscribe(({ node, expanded }) => this.toggleExpansion(node, expanded));
-    this.treeService.selectionStateChangedSource$
-      .pipe(takeUntil(this.destroyed))
-      .subscribe(node => this.navigateToDetails(node));
     this.treeService.setSelectedNode(this.selectedNodeId.asObservable());
 
     this.route.url
@@ -89,32 +86,6 @@ export class CatalogTreeComponent implements OnInit, OnDestroy {
     }
   }
 
-  private navigateToDetails(node: CatalogTreeModel) {
-    if (!node.metadata) {
-      return;
-    }
-    let baseUrl: string | undefined;
-    if (CatalogHelper.isCatalogNode(node)) {
-      baseUrl = RoutesEnum.CATALOG_NODE_DETAILS
-        .replace(':nodeId', node.metadata.id);
-    }
-    if (CatalogHelper.isServiceNode(node)) {
-      baseUrl = RoutesEnum.CATALOG_SERVICE_DETAILS
-        .replace(':nodeId', node.metadata.catalogNodeId)
-        .replace(':serviceId', node.metadata.id);
-    }
-    if (CatalogHelper.isLayerNode(node) && !node.metadata.virtual) {
-      baseUrl = RoutesEnum.CATALOG_LAYER_DETAILS
-        .replace(':nodeId', node.metadata.catalogNodeId)
-        .replace(':serviceId', node.metadata.serviceId)
-        .replace(':layerId', node.metadata.id);
-    }
-    if (typeof baseUrl === 'undefined') {
-      return;
-    }
-    this.router.navigateByUrl([ RoutesEnum.CATALOG, baseUrl ].join('/'));
-  }
-
   private readNodesFromUrl(): Array<{ type: CatalogTreeModelTypeEnum; treeNodeId: string; id: string }> {
     const currentRoute = this.router.url
       .replace(RoutesEnum.CATALOG, '')
@@ -126,6 +97,9 @@ export class CatalogTreeComponent implements OnInit, OnDestroy {
     }
     if (currentRoute.length >= 4 && currentRoute[2] === 'service') {
       parts.push({ type: CatalogTreeModelTypeEnum.SERVICE_TYPE, treeNodeId: CatalogHelper.getIdForServiceNode(currentRoute[3]), id: currentRoute[3] });
+    }
+    if (currentRoute.length >= 4 && currentRoute[2] === 'feature-source') {
+      parts.push({ type: CatalogTreeModelTypeEnum.FEATURE_SOURCE_TYPE, treeNodeId: CatalogHelper.getIdForFeatureSourceNode(currentRoute[3]), id: currentRoute[3] });
     }
     if (currentRoute.length >= 6 && currentRoute[4] === 'layer') {
       parts.push({ type: CatalogTreeModelTypeEnum.SERVICE_LAYER_TYPE, treeNodeId: CatalogHelper.getIdForLayerNode(currentRoute[5]), id: currentRoute[5] });

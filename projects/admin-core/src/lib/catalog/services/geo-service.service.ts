@@ -1,8 +1,9 @@
 import { Inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
-  GeoServiceSettingsModel,
-  TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel,
+  CatalogItemKindEnum,
+  GeoServiceModel,
+  GeoServiceProtocolEnum, GeoServiceSettingsModel, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel,
 } from '@tailormap-admin/admin-api';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { catchError, concatMap, filter, map, of, take, tap } from 'rxjs';
@@ -26,7 +27,15 @@ export class GeoServiceService {
   ) { }
 
   public createGeoService$(geoService: GeoServiceCreateModel, catalogNodeId: string) {
-    return this.adminApiService.createGeoService$({ geoService }).pipe(
+    const geoServiceModel: Omit<GeoServiceModel, 'id' | 'type'> = {
+      ...geoService,
+      settings: {
+        defaultLayerSettings: {
+          hiDpiDisabled: geoService.protocol === GeoServiceProtocolEnum.WMTS,
+        },
+      },
+    };
+    return this.adminApiService.createGeoService$({ geoService: geoServiceModel }).pipe(
       catchError(() => {
         this.showErrorMessage($localize `Error while creating geo service.`);
         return of(null);
@@ -34,7 +43,7 @@ export class GeoServiceService {
       concatMap(createdService => {
         if (createdService) {
           this.store$.dispatch(addGeoServices({ services: [createdService], parentNode: catalogNodeId }));
-          return this.catalogService.addServiceToCatalog$(catalogNodeId, createdService.id)
+          return this.catalogService.addNodeToCatalog$(catalogNodeId, createdService.id, CatalogItemKindEnum.GEO_SERVICE)
             .pipe(
               map(() => createdService),
             );

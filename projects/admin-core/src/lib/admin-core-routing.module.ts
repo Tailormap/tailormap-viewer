@@ -8,6 +8,7 @@ import { GeoServiceLayerDetailsComponent } from './catalog/geo-service-layer-det
 import { CatalogNodeDetailsComponent } from './catalog/catalog-node-details/catalog-node-details.component';
 import { UserAdminPageComponent } from './pages/user-admin-page/user-admin-page.component';
 import { GroupsPageComponent } from './pages/groups-page/groups-page.component';
+import { FeatureSourceDetailsComponent } from './catalog/feature-source-details/feature-source-details.component';
 
 const routes: Routes = [
   {
@@ -25,6 +26,10 @@ const routes: Routes = [
       {
         path: RoutesEnum.CATALOG_NODE_DETAILS,
         component: CatalogNodeDetailsComponent,
+      },
+      {
+        path: RoutesEnum.FEATURE_SOURCE_DETAILS,
+        component: FeatureSourceDetailsComponent,
       },
     ],
   },

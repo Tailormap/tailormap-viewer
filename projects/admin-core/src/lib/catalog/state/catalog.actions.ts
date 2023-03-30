@@ -27,9 +27,17 @@ export const deleteGeoService = createAction(
   `${catalogActionsPrefix} Delete Geo Service`,
   props<{ id: string }>(),
 );
-export const addFeatureSource = createAction(
+export const addFeatureSources = createAction(
   `${catalogActionsPrefix} Add Feature Source`,
-  props<{ featureSource: FeatureSourceModel }>(),
+  props<{ featureSources: FeatureSourceModel[]; parentNode: string }>(),
+);
+export const updateFeatureSource = createAction(
+  `${catalogActionsPrefix} Update Feature Source`,
+  props<{ featureSource: FeatureSourceModel; parentNode: string }>(),
+);
+export const deleteFeatureSource = createAction(
+  `${catalogActionsPrefix} Delete Feature Source`,
+  props<{ id: string }>(),
 );
 export const expandTree = createAction(
   `${catalogActionsPrefix} Expand Tree`,

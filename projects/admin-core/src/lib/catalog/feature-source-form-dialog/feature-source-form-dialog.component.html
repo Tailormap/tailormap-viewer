@@ -1,0 +1,17 @@
+<h2 mat-dialog-title>
+  <ng-container *ngIf="!data.featureSource" i18n>Create new feature source</ng-container>
+  <ng-container *ngIf="data.featureSource" i18n>Edit {{data.featureSource.title}}</ng-container>
+</h2>
+<mat-dialog-content>
+  <tm-admin-feature-source-form [featureSource]="data.featureSource"
+                                (changed)="updateFeatureSource($event)"></tm-admin-feature-source-form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-flat-button (click)="cancel()" i18n>Cancel</button>
+  <button mat-flat-button color="primary" aria-label="Save" (click)="save()" [disabled]="!featureSource || (saving$ | async)">
+    <ng-template #saveLabel><ng-container i18n>Save</ng-container></ng-template>
+    <ng-container *ngIf="saving$ | async; else: saveLabel">
+      <mat-spinner diameter="20"></mat-spinner>
+    </ng-container>
+  </button>
+</mat-dialog-actions>

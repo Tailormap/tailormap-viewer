@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { delay, Observable, of } from 'rxjs';
 import { TailormapAdminApiV1ServiceModel } from './tailormap-admin-api-v1-service.model';
 import * as mockData from '../mock-data/tailormap-admin-api.mock-data';
-import { CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, UserModel } from '../models';
+import { CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel } from '../models';
 
 @Injectable()
 export class TailormapAdminApiV1MockService implements TailormapAdminApiV1ServiceModel {
@@ -33,6 +33,25 @@ export class TailormapAdminApiV1MockService implements TailormapAdminApiV1Servic
   }
 
   public deleteGeoService$(_params: { id: string }): Observable<boolean> {
+    return of(true).pipe(delay(this.delay));
+  }
+
+  public getFeatureSource$(params: { id: string }): Observable<FeatureSourceModel> {
+    return of(mockData.getFeatureSource({
+      id: params.id,
+      title: 'Service ' + params.id,
+    })).pipe(delay(this.delay));
+  }
+
+  public createFeatureSource$(params: { featureSource: FeatureSourceModel }): Observable<FeatureSourceModel> {
+    return of({ ...params.featureSource }).pipe(delay(this.delay));
+  }
+
+  public updateFeatureSource$(params: { id: string; featureSource: FeatureSourceModel }): Observable<FeatureSourceModel> {
+    return of({ ...params.featureSource }).pipe(delay(this.delay));
+  }
+
+  public deleteFeatureSource$(_params: { id: string }): Observable<boolean> {
     return of(true).pipe(delay(this.delay));
   }
 

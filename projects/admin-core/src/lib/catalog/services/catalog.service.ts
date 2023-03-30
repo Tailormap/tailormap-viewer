@@ -1,18 +1,22 @@
 import { Inject, Injectable, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
-  CatalogItemKindEnum, CatalogItemModel, CatalogNodeModel, GeoServiceWithLayersModel, TAILORMAP_ADMIN_API_V1_SERVICE,
+  CatalogItemKindEnum, CatalogItemModel, CatalogModelHelper, CatalogNodeModel, FeatureSourceModel, GeoServiceWithLayersModel,
+  TAILORMAP_ADMIN_API_V1_SERVICE,
   TailormapAdminApiV1ServiceModel,
 } from '@tailormap-admin/admin-api';
 import { catchError, concatMap, forkJoin, of, Subject, take, takeUntil, tap } from 'rxjs';
 import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
-import { selectCatalog, selectCatalogNodeById, selectGeoServices, selectParentsForCatalogNode } from '../state/catalog.selectors';
-import { addGeoServices, expandTree, updateCatalog } from '../state/catalog.actions';
+import {
+  selectCatalog, selectCatalogNodeById, selectFeatureSources, selectGeoServices, selectParentsForCatalogNode,
+} from '../state/catalog.selectors';
+import { addFeatureSources, addGeoServices, expandTree, updateCatalog } from '../state/catalog.actions';
 import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackBarMessageComponent } from '@tailormap-viewer/shared';
 import { nanoid } from 'nanoid';
 import { CatalogTreeModelTypeEnum } from '../models/catalog-tree-model-type.enum';
+import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 
 @Injectable({
   providedIn: 'root',
@@ -22,6 +26,7 @@ export class CatalogService implements OnDestroy {
   private destroyed = new Subject();
   private loadServiceSubscriptions = new Map<string, Subject<null>>();
   private geoServices: Map<string, ExtendedGeoServiceModel> = new Map();
+  private featureSources: Map<string, ExtendedFeatureSourceModel> = new Map();
 
   constructor(
     private store$: Store,
@@ -30,6 +35,9 @@ export class CatalogService implements OnDestroy {
   ) {
     this.store$.select(selectGeoServices).pipe(takeUntil(this.destroyed)).subscribe(services => {
       this.geoServices = new Map(services.map(service => [ service.id, service ]));
+    });
+    this.store$.select(selectFeatureSources).pipe(takeUntil(this.destroyed)).subscribe(featureSources => {
+      this.featureSources = new Map(featureSources.map(featureSource => [ featureSource.id, featureSource ]));
     });
   }
 
@@ -52,6 +60,10 @@ export class CatalogService implements OnDestroy {
           const layerNode = nodesList.find(part => part.type === CatalogTreeModelTypeEnum.SERVICE_LAYER_TYPE);
           if (layerNode) {
             this.store$.dispatch(expandTree({ id: layerNode.id, nodeType: layerNode.type }));
+          }
+          const featureSourceNode = nodesList.find(part => part.type === CatalogTreeModelTypeEnum.FEATURE_SOURCE_TYPE);
+          if (featureSourceNode) {
+            this.store$.dispatch(expandTree({ id: featureSourceNode.id, nodeType: featureSourceNode.type }));
           }
         });
     }
@@ -83,17 +95,19 @@ export class CatalogService implements OnDestroy {
           return of([]);
         }
         const serviceItems = (node.items || []).filter(item => item.kind === CatalogItemKindEnum.GEO_SERVICE);
+        const featureSourceItems = (node.items || []).filter(item => item.kind === CatalogItemKindEnum.FEATURE_SOURCE);
         const services$ = this.getServiceRequests$(serviceItems, newSubscription);
-        if (services$.length === 0) {
+        const featureSources$ = this.getFeatureSourceRequests$(featureSourceItems, newSubscription);
+        if (services$.length === 0 && featureSources$.length === 0) {
           return of([]);
         }
-        return forkJoin(services$);
+        return forkJoin([ ...services$, ...featureSources$ ]);
       }),
       tap(responses => this.handleResponses(nodeId, responses, newSubscription)),
     );
   }
 
-  private handleResponses(nodeId: string, responses: Array<GeoServiceWithLayersModel | null>, newSubscription: Subject<null>) {
+  private handleResponses(nodeId: string, responses: Array<GeoServiceWithLayersModel | FeatureSourceModel | null>, newSubscription: Subject<null>) {
     if (responses.length === 0) {
       return;
     }
@@ -105,15 +119,35 @@ export class CatalogService implements OnDestroy {
         showCloseButton: true,
       }).pipe(takeUntil(newSubscription)).subscribe();
     }
-    const services = responses.filter((response): response is GeoServiceWithLayersModel => response !== null);
+    const services = responses.filter((response): response is GeoServiceWithLayersModel => {
+      return CatalogModelHelper.isGeoServiceModel(response);
+    });
+    const featureSources = responses.filter((response): response is FeatureSourceModel => {
+      return CatalogModelHelper.isFeatureSourceModel(response);
+    });
     if (services.length > 0) {
       this.store$.dispatch(addGeoServices({ services, parentNode: nodeId }));
+    }
+    if (featureSources.length > 0) {
+      this.store$.dispatch(addFeatureSources({ featureSources, parentNode: nodeId }));
     }
   }
 
   private getServiceRequests$(serviceItems: CatalogItemModel[], subscription: Subject<null>) {
     return serviceItems.filter(item => !this.geoServices.has(item.id)).map(item => {
       return this.adminApiService.getGeoService$({ id: item.id })
+        .pipe(
+          takeUntil(subscription),
+          catchError(() => {
+            return of(null);
+          }),
+        );
+    });
+  }
+
+  private getFeatureSourceRequests$(serviceItems: CatalogItemModel[], subscription: Subject<null>) {
+    return serviceItems.filter(item => !this.featureSources.has(item.id)).map(item => {
+      return this.adminApiService.getFeatureSource$({ id: item.id })
         .pipe(
           takeUntil(subscription),
           catchError(() => {
@@ -139,7 +173,7 @@ export class CatalogService implements OnDestroy {
     return this.updateCatalog$(node, 'update');
   }
 
-  public addServiceToCatalog$(nodeId: string, serviceId: string) {
+  public addNodeToCatalog$(nodeId: string, itemId: string, itemKind: CatalogItemKindEnum) {
     return this.store$.select(selectCatalogNodeById(nodeId))
       .pipe(
         take(1),
@@ -149,7 +183,7 @@ export class CatalogService implements OnDestroy {
           }
           const updatedNode: ExtendedCatalogNodeModel = {
             ...node,
-            items: [ ...(node.items || []), { id: serviceId, kind: CatalogItemKindEnum.GEO_SERVICE }],
+            items: [ ...(node.items || []), { id: itemId, kind: itemKind }],
           };
           return this.updateCatalog$(updatedNode, 'update');
         }),

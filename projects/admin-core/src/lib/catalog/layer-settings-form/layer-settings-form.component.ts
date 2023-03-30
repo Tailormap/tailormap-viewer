@@ -1,9 +1,8 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { debounceTime, filter, Subject, takeUntil } from 'rxjs';
+import { debounceTime, filter, Subject, takeUntil, tap } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
-import { LayerSettingsModel } from '@tailormap-admin/admin-api';
+import { GeoServiceProtocolEnum, LayerSettingsModel, TileLayerHiDpiModeEnum } from '@tailormap-admin/admin-api';
 import { FormHelper } from '../../helpers/form.helper';
-import { MatButtonToggleChange } from '@angular/material/button-toggle';
 
 @Component({
   selector: 'tm-admin-layer-settings-form',
@@ -16,6 +15,12 @@ export class LayerSettingsFormComponent implements OnInit {
   private destroyed = new Subject();
   private _layerSettings: LayerSettingsModel | null | undefined;
   private _isLayerSpecific = false;
+
+  @Input()
+  public set protocol(protocol: GeoServiceProtocolEnum) {
+    this.isWMS = protocol === GeoServiceProtocolEnum.WMS;
+    this.isWMTS = protocol === GeoServiceProtocolEnum.WMTS;
+  }
 
   @Input()
   public set isLayerSpecific(isLayerSpecific: boolean | undefined) {
@@ -38,9 +43,17 @@ export class LayerSettingsFormComponent implements OnInit {
   @Output()
   public changed = new EventEmitter<LayerSettingsModel>();
 
+  public isWMS = false;
+  public isWMTS = false;
+  public hiDpiModes = TileLayerHiDpiModeEnum;
+
   public layerSettingsForm = new FormGroup({
     title: new FormControl('', { nonNullable: true }),
-    hiDpiEnabled: new FormControl<boolean | null>(null, { nonNullable: false }),
+    hiDpiEnabled: new FormControl<boolean | null>(null),
+    tilingEnabled: new FormControl<boolean | null>(null),
+    tilingGutter: new FormControl<number | null>(null),
+    hiDpiMode: new FormControl<TileLayerHiDpiModeEnum | null>(null),
+    hiDpiSubstituteLayer: new FormControl<string | null>(null),
   });
 
   constructor() { }
@@ -49,6 +62,7 @@ export class LayerSettingsFormComponent implements OnInit {
     this.layerSettingsForm.valueChanges
       .pipe(
         takeUntil(this.destroyed),
+        tap(() => this.updateDisabledState()),
         debounceTime(250),
         filter(() => this.isValidForm()),
       )
@@ -57,16 +71,16 @@ export class LayerSettingsFormComponent implements OnInit {
       });
   }
 
-  private getUpdatedLayerSettings(value: Partial<{title: string; hiDpiEnabled: boolean | null}>): LayerSettingsModel {
-    const hiDpiDisabled = typeof value === 'undefined' || typeof value.hiDpiEnabled === 'undefined' || value.hiDpiEnabled === null
-      ? undefined
-      : !value.hiDpiEnabled;
-
+  private getUpdatedLayerSettings(value: Partial<typeof this.layerSettingsForm.value>): LayerSettingsModel {
     const settings: LayerSettingsModel = {
-      hiDpiDisabled,
+      hiDpiDisabled: LayerSettingsFormComponent.getInverseBooleanOrDefault(value?.hiDpiEnabled, undefined),
+      tilingDisabled: LayerSettingsFormComponent.getInverseBooleanOrDefault(value?.tilingEnabled, undefined),
+      tilingGutter: value?.tilingGutter || undefined,
     };
     if (this.isLayerSpecific) {
       settings.title = value.title || undefined;
+      settings.hiDpiMode = value?.hiDpiMode || undefined;
+      settings.hiDpiSubstituteLayer = this.layerSettings?.hiDpiSubstituteLayer || undefined;
     }
     return settings;
   }
@@ -79,29 +93,52 @@ export class LayerSettingsFormComponent implements OnInit {
     return FormHelper.someValuesChanged([
       [ values.title, this._layerSettings.title ],
       [ values.hiDpiDisabled, this._layerSettings.hiDpiDisabled ],
+      [ values.tilingDisabled, this._layerSettings.tilingDisabled ],
+      [ values.tilingGutter, this._layerSettings.tilingGutter ],
+      [ values.hiDpiMode, this._layerSettings.hiDpiMode ],
+      [ values.hiDpiSubstituteLayer, this._layerSettings.hiDpiSubstituteLayer ],
     ]);
   }
 
-  public getHiDPIMode() {
-    const mode = this.layerSettingsForm.get('hiDpiEnabled')?.value;
-    return typeof mode === 'boolean' ? mode : 'INHERIT';
-  }
-
-  public setHiDPIMode($event: MatButtonToggleChange) {
-    this.layerSettingsForm.patchValue({
-      hiDpiEnabled: typeof $event.value === 'boolean' ? $event.value : null,
-    });
-  }
-
   private patchForm() {
-    const defaultHiDpiValue = this.isLayerSpecific ? null : true;
+    const hiDpiEnabled = LayerSettingsFormComponent.getInverseBooleanOrDefault(this.layerSettings?.hiDpiDisabled, this.isLayerSpecific ? null : true);
+    let hiDpiMode = this.layerSettings?.hiDpiMode || null;
+    if (this.isLayerSpecific && hiDpiEnabled !== false && !hiDpiMode) {
+      hiDpiMode = TileLayerHiDpiModeEnum.SHOW_NEXT_ZOOM_LEVEL;
+    }
     this.layerSettingsForm.patchValue({
       title: this.layerSettings?.title ? this.layerSettings.title : '',
-      hiDpiEnabled: this.layerSettings
-        ? (typeof this.layerSettings.hiDpiDisabled === 'boolean' ? !this.layerSettings.hiDpiDisabled : defaultHiDpiValue)
-        : defaultHiDpiValue,
+      hiDpiEnabled,
+      tilingEnabled: LayerSettingsFormComponent.getInverseBooleanOrDefault(this.layerSettings?.tilingDisabled, this.isLayerSpecific ? null : true),
+      tilingGutter: this.layerSettings?.tilingGutter || null,
+      hiDpiMode,
+      hiDpiSubstituteLayer: this.layerSettings?.hiDpiSubstituteLayer || null,
     }, { emitEvent: false, onlySelf: true });
     this.layerSettingsForm.markAsUntouched();
+    this.updateDisabledState();
+  }
+
+  private updateDisabledState() {
+    if (this.layerSettingsForm.get('tilingEnabled')?.value !== false) {
+      this.layerSettingsForm.get('tilingGutter')?.enable({ emitEvent: false, onlySelf: true });
+    } else {
+      this.layerSettingsForm.get('tilingGutter')?.disable({ emitEvent: false, onlySelf: true });
+    }
+    const isHiDpiEnabled = this.layerSettingsForm.get('hiDpiEnabled')?.value !== false;
+    if (isHiDpiEnabled) {
+      this.layerSettingsForm.get('hiDpiMode')?.enable({ emitEvent: false, onlySelf: true });
+    } else {
+      this.layerSettingsForm.get('hiDpiMode')?.disable({ emitEvent: false, onlySelf: true });
+    }
+    if (!isHiDpiEnabled || this.layerSettingsForm.get('hiDpiMode')?.value === TileLayerHiDpiModeEnum.SHOW_NEXT_ZOOM_LEVEL) {
+      this.layerSettingsForm.get('hiDpiSubstituteLayer')?.disable({ emitEvent: false, onlySelf: true });
+    } else {
+      this.layerSettingsForm.get('hiDpiSubstituteLayer')?.enable({ emitEvent: false, onlySelf: true });
+    }
+  }
+
+  private static getInverseBooleanOrDefault<T = null | undefined>(value: boolean | null | undefined, defaultValue: boolean | T): boolean | T {
+    return typeof value === 'boolean' ? !value : defaultValue;
   }
 
 }

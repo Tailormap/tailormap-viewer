@@ -9,6 +9,10 @@
       <mat-icon svgIcon="plus"></mat-icon>
       <span i18n>Add service</span>
     </button>
+    <button color="primary" mat-flat-button (click)="addFeatureSource(node)">
+      <mat-icon svgIcon="plus"></mat-icon>
+      <span i18n>Add feature source</span>
+    </button>
   </div>
   <tm-admin-catalog-node-form [node]="node"
                               [parentNode]="node.parentId"
