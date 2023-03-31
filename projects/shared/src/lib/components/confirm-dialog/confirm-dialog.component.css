@@ -2,6 +2,11 @@
   margin-bottom: 0;
 }
 
+.mat-mdc-dialog-title::before {
+  display: none;
+}
+
 .content {
+  padding-top: 16px;
   white-space: pre-line;
 }

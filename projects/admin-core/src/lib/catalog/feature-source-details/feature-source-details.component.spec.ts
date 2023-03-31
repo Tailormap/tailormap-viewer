@@ -13,6 +13,7 @@ import { TestSaveHelper } from '../../test-helpers/test-save.helper';
 import { FeatureSourceFormComponent } from '../feature-source-form/feature-source-form.component';
 import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
+import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
 
 const setup = async (protocol: FeatureSourceProtocolEnum) => {
   const activeRoute = {
@@ -24,7 +25,7 @@ const setup = async (protocol: FeatureSourceProtocolEnum) => {
     initialState: { [catalogStateKey]: { ...initialCatalogState, featureSources: [{ ...featureSourceModel, catalogNodeId: 'node-1' }] } },
   });
   await render(FeatureSourceDetailsComponent, {
-    declarations: [ FeatureSourceFormComponent, PasswordFieldComponent ],
+    declarations: [ FeatureSourceFormComponent, PasswordFieldComponent, SaveButtonComponent ],
     imports: [ SharedModule, MatIconTestingModule ],
     providers: [
       { provide: ActivatedRoute, useValue: activeRoute },

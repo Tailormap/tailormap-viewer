@@ -10,6 +10,10 @@ import { UserAdminPageComponent } from './pages/user-admin-page/user-admin-page.
 import { GroupsPageComponent } from './pages/groups-page/groups-page.component';
 import { FeatureSourceDetailsComponent } from './catalog/feature-source-details/feature-source-details.component';
 import { FeatureTypeDetailsComponent } from './catalog/feature-type-details/feature-type-details.component';
+import { ApplicationPageComponent } from './pages/application-page/application-page.component';
+import { ApplicationCreateComponent } from './application/application-create/application-create.component';
+import { ApplicationDetailsComponent } from './application/application-details/application-details.component';
+import { ApplicationHomeComponent } from './application/application-home/application-home.component';
 
 const routes: Routes = [
   {
@@ -35,6 +39,24 @@ const routes: Routes = [
       {
         path: RoutesEnum.FEATURE_TYPE_DETAILS,
         component: FeatureTypeDetailsComponent,
+      },
+    ],
+  },
+  {
+    path: RoutesEnum.APPLICATION,
+    component: ApplicationPageComponent,
+    children: [
+      {
+        path: '',
+        component: ApplicationHomeComponent,
+      },
+      {
+        path: RoutesEnum.APPLICATION_CREATE,
+        component: ApplicationCreateComponent,
+      },
+      {
+        path: RoutesEnum.APPLICATION_DETAILS,
+        component: ApplicationDetailsComponent,
       },
     ],
   },

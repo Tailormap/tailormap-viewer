@@ -8,6 +8,8 @@ import { RouterOutlet } from '@angular/router';
 import { UserAdminPageComponent } from './user-admin-page/user-admin-page.component';
 import { UseradminModule } from '../useradmin/useradmin.module';
 import { GroupsPageComponent } from './groups-page/groups-page.component';
+import { ApplicationPageComponent } from './application-page/application-page.component';
+import { ApplicationModule } from '../application/application.module';
 
 
 
@@ -17,6 +19,7 @@ import { GroupsPageComponent } from './groups-page/groups-page.component';
     CatalogPageComponent,
     UserAdminPageComponent,
     GroupsPageComponent,
+    ApplicationPageComponent,
   ],
   imports: [
     CommonModule,
@@ -24,12 +27,14 @@ import { GroupsPageComponent } from './groups-page/groups-page.component';
     TemplatesModule,
     CatalogModule,
     UseradminModule,
+    ApplicationModule,
   ],
   exports: [
     AdminHomePageComponent,
     CatalogPageComponent,
     UserAdminPageComponent,
     GroupsPageComponent,
+    ApplicationPageComponent,
   ],
 })
 export class PagesModule { }

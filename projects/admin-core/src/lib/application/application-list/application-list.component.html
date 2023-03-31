@@ -1,0 +1,33 @@
+<h2 i18n>Applications</h2>
+<ng-container *ngIf="applicationsLoadStatus$ | async as applicationsLoadStatus">
+  <mat-spinner *ngIf="applicationsLoadStatus === 'LOADING'" diameter="20" mode="indeterminate"></mat-spinner>
+  <ng-container *ngIf="errorMessage$ | async as message">
+    <tm-error-message [message]="message"></tm-error-message>
+    <button mat-raised-button color="primary" (click)="onRetryClick()" i18n>Retry</button>
+  </ng-container>
+  <div *ngIf="applicationsLoadStatus === 'LOADED'"
+       class="form-group has-search">
+    <mat-form-field appearance="outline">
+      <mat-label i18n>Filter applications</mat-label>
+      <input [formControl]="filter"
+             i18n-placeholder
+             matInput
+             placeholder="Filter..."
+             tmAutoFocus
+             type="text"
+      />
+      <button (click)="filter.setValue('')" *ngIf="filter.getRawValue()" aria-label="Clear" mat-icon-button matSuffix>
+        <mat-icon svgIcon="close"></mat-icon>
+      </button>
+    </mat-form-field>
+
+    <mat-selection-list>
+      <mat-list-item *ngFor="let application of applications$ | async"
+                     [class.selected]="selectedApplicationId === application.id"
+                     [routerLink]="'/applications/application/'+application.id">
+        <span class="detail">{{application.title || application.name}}</span>
+      </mat-list-item>
+    </mat-selection-list>
+
+  </div>
+</ng-container>

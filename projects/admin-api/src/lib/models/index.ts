@@ -1,3 +1,6 @@
+export * from './app-content.model';
+export * from './app-layer-ref.model';
+export * from './application.model';
 export * from './geo-service.model';
 export * from './geo-service-with-layers.model';
 export * from './catalog-node.model';

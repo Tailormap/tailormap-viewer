@@ -2,7 +2,10 @@ import { Injectable } from '@angular/core';
 import { delay, Observable, of } from 'rxjs';
 import { TailormapAdminApiV1ServiceModel } from './tailormap-admin-api-v1-service.model';
 import * as mockData from '../mock-data/tailormap-admin-api.mock-data';
-import { CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel } from '../models';
+import {
+  CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel,
+} from '../models';
+import { nanoid } from 'nanoid';
 
 @Injectable()
 export class TailormapAdminApiV1MockService implements TailormapAdminApiV1ServiceModel {
@@ -67,17 +70,16 @@ export class TailormapAdminApiV1MockService implements TailormapAdminApiV1Servic
     return of(mockData.getGroup({ name })).pipe(delay(this.delay));
   }
 
-  public createGroup$(_params: { group: GroupModel }): Observable<GroupModel> {
-    return of({ ..._params.group }).pipe(delay(this.delay));
+  public createGroup$(params: { group: GroupModel }): Observable<GroupModel> {
+    return of({ ...params.group }).pipe(delay(this.delay));
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public deleteGroup$(name: string): Observable<boolean> {
+  public deleteGroup$(_name: string): Observable<boolean> {
     return of(true).pipe(delay(this.delay));
   }
 
-  public updateGroup$(_params: { name: string; group: GroupModel }): Observable<GroupModel> {
-    return of({ ..._params.group }).pipe(delay(this.delay));
+  public updateGroup$(params: { name: string; group: GroupModel }): Observable<GroupModel> {
+    return of({ ...params.group }).pipe(delay(this.delay));
   }
 
   public getUser$(username: string): Observable<any> {
@@ -88,17 +90,32 @@ export class TailormapAdminApiV1MockService implements TailormapAdminApiV1Servic
     return of(mockData.getUsers()).pipe(delay(this.delay));
   }
 
-  public createUser$(_params: { user: UserModel }): Observable<UserModel> {
-    return of({ ..._params.user }).pipe(delay(this.delay));
+  public createUser$(params: { user: UserModel }): Observable<UserModel> {
+    return of({ ...params.user }).pipe(delay(this.delay));
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public deleteUser$(username: string): Observable<boolean> {
+  public deleteUser$(_username: string): Observable<boolean> {
     return of(true).pipe(delay(this.delay));
   }
 
-  public updateUser$(_params: { username: string; user: UserModel }): Observable<UserModel> {
-    return of({ ..._params.user }).pipe(delay(this.delay));
+  public updateUser$(params: { username: string; user: UserModel }): Observable<UserModel> {
+    return of({ ...params.user }).pipe(delay(this.delay));
+  }
+
+  public getApplications$(): Observable<ApplicationModel[]> {
+    return of([mockData.getApplication()]).pipe(delay(this.delay));
+  }
+
+  public createApplication$(params: { application: Omit<ApplicationModel, 'id'> }): Observable<ApplicationModel> {
+    return of({ ...params.application, id: nanoid() }).pipe(delay(this.delay));
+  }
+
+  public updateApplication$(params: { id: string; application: ApplicationModel }): Observable<ApplicationModel> {
+    return of({ ...params.application }).pipe(delay(this.delay));
+  }
+
+  public deleteApplication$(_id: string): Observable<boolean> {
+    return of(true).pipe(delay(this.delay));
   }
 
 }

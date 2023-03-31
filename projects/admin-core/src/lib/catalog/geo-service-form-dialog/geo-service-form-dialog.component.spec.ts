@@ -9,13 +9,14 @@ import { GeoServiceFormComponent } from '../geo-service-form/geo-service-form.co
 import { GeoServiceService } from '../services/geo-service.service';
 import { createGeoServiceMock } from '../helpers/mocks/geo-service.service.mock';
 import { TestSaveHelper } from '../../test-helpers/test-save.helper';
+import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
 
 const setup = async (editMode = false) => {
   const dialogRefMock = { close: jest.fn() };
   const { geoServiceService, updateGeoService$, updateGeoServiceDetails } = createGeoServiceMock();
   await render(GeoServiceFormDialogComponent, {
     imports: [SharedModule],
-    declarations: [GeoServiceFormComponent],
+    declarations: [ GeoServiceFormComponent, SaveButtonComponent ],
     providers: [
       { provide: MatDialogRef, useValue: dialogRefMock },
       { provide: GeoServiceService, useValue: geoServiceService },

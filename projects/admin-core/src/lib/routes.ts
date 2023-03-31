@@ -1,5 +1,5 @@
 export enum RoutesEnum {
-  CATALOG = 'page/catalog',
+  CATALOG = 'catalog',
   CATALOG_NODE_DETAILS = 'node/:nodeId',
   CATALOG_SERVICE_DETAILS = 'node/:nodeId/service/:serviceId',
   CATALOG_LAYER_DETAILS = 'node/:nodeId/service/:serviceId/layer/:layerId',
@@ -8,4 +8,7 @@ export enum RoutesEnum {
   ADMIN_HOME = '',
   USER = 'user',
   GROUP = 'group',
+  APPLICATION = 'applications',
+  APPLICATION_CREATE = 'create',
+  APPLICATION_DETAILS = 'application/:applicationId',
 }

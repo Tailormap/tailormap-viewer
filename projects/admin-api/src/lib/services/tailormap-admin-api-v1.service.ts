@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { TailormapAdminApiV1ServiceModel } from './tailormap-admin-api-v1-service.model';
 import { map, Observable } from 'rxjs';
-import { CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel } from '../models';
+import {
+  CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel,
+} from '../models';
 import { CatalogModelHelper } from '../helpers/catalog-model.helper';
 
 @Injectable()
@@ -139,6 +141,27 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
 
   public deleteUser$(username: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(`${TailormapAdminApiV1Service.BASE_URL}/users/${username}`, {
+      observe: 'response',
+    }).pipe(
+      map(response => response.status === 204),
+    );
+  }
+
+  public getApplications$(): Observable<ApplicationModel[]> {
+    return this.httpClient.get<{ _embedded: { applications: ApplicationModel[] }}>(`${TailormapAdminApiV1Service.BASE_URL}/applications?size=1000`)
+      .pipe(map(response => response._embedded.applications));
+  }
+
+  public createApplication$(params: { application: ApplicationModel }): Observable<ApplicationModel> {
+    return this.httpClient.post<ApplicationModel>(`${TailormapAdminApiV1Service.BASE_URL}/applications`, params.application);
+  }
+
+  public updateApplication$(params: { id: string; application: Partial<ApplicationModel> }): Observable<ApplicationModel> {
+    return this.httpClient.patch<ApplicationModel>(`${TailormapAdminApiV1Service.BASE_URL}/applications/${params.id}`, params.application);
+  }
+
+  public deleteApplication$(id: string): Observable<boolean> {
+    return this.httpClient.delete<boolean>(`${TailormapAdminApiV1Service.BASE_URL}/applications/${id}`, {
       observe: 'response',
     }).pipe(
       map(response => response.status === 204),

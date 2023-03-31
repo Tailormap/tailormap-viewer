@@ -2,7 +2,34 @@ mat-form-field + mat-slide-toggle {
   margin-top: 16px;
 }
 
+mat-checkbox {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.wrapper .mdc-list-item,
+.wrapper .mdc-list-item.mdc-list-item--with-one-line {
+  height: 34px;
+}
+
+.mdc-list-item.selected {
+  background-color: var(--primary-color-0_1);
+  color: var(--primary-color);
+}
+
+.mdc-list-item.selected .mdc-list-item__primary-text {
+  color: var(--primary-color);
+}
+
+.mdc-list-item.selected.mat-mdc-list-item-interactive:focus::before {
+  opacity: 0;
+}
+
 .mdc-dialog .mdc-dialog__surface .mdc-dialog__content {
   padding-left: 0;
   padding-right: 0;
+}
+
+.has-search {
+  padding-top: 8px;
 }

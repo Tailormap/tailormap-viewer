@@ -160,6 +160,14 @@ button.mdc-button--unelevated.mat-accent {
   color: var(--palette-primary-contrast-500);
 }
 
+.mat-mdc-dialog-container .mdc-dialog__content {
+  --mdc-dialog-supporting-text-font-size: 14px;
+  --mdc-dialog-supporting-text-line-height: 1.5em;
+  --mdc-dialog-supporting-text-size: 14px;
+  --mdc-dialog-supporting-text-weight: 500;
+  --mdc-dialog-supporting-text-tracking: 0;
+}
+
 .mat-mdc-dialog-container .mdc-dialog__title {
   --mdc-dialog-subhead-line-height: 16px;
   --mdc-dialog-subhead-size: 16px;
@@ -169,7 +177,7 @@ button.mdc-button--unelevated.mat-accent {
 }
 
 .mat-mdc-dialog-container .mdc-dialog__title::before {
-  height: var(--mdc-dialog-subhead-line-height);
+  display: none;
 }
 
 .mat-mdc-card-title {

@@ -17,6 +17,7 @@ import { GeoServiceFormComponent } from '../geo-service-form/geo-service-form.co
 import { GeoServiceService } from '../services/geo-service.service';
 import { TestSaveHelper } from '../../test-helpers/test-save.helper';
 import { createGeoServiceMock } from '../helpers/mocks/geo-service.service.mock';
+import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
 
 const setup = async () => {
   const createCatalogNodeMock = jest.fn(() => of(true));
@@ -39,6 +40,7 @@ const setup = async () => {
       CatalogNodeFormDialogComponent,
       GeoServiceFormDialogComponent,
       GeoServiceFormComponent,
+      SaveButtonComponent,
     ],
     imports: [ SharedModule, MatIconTestingModule ],
     providers: [

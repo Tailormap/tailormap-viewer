@@ -1,4 +1,5 @@
 import {
+  ApplicationModel,
   CatalogItemKindEnum, CatalogNodeModel, FeatureSourceModel, FeatureSourceProtocolEnum, FeatureTypeModel, GeoServiceLayerModel,
   GeoServiceProtocolEnum, GeoServiceWithLayersModel, GroupModel, ServiceCapsModel, UserModel,
 } from '../models';
@@ -153,5 +154,13 @@ export const getFeatureSource = (overrides?: Partial<FeatureSourceModel>): Featu
   url: 'https://wfs-url',
   protocol: FeatureSourceProtocolEnum.WFS,
   title: 'Some WFS Source',
+  ...overrides,
+});
+
+export const getApplication = (overrides?: Partial<ApplicationModel>): ApplicationModel => ({
+  id: '1',
+  name: 'app1',
+  title: 'My application',
+  components: [],
   ...overrides,
 });
