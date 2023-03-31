@@ -7,10 +7,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { CatalogService } from './catalog.service';
 import { catchError, concatMap, filter, map, of, take } from 'rxjs';
 import { addFeatureSources, updateFeatureSource } from '../state/catalog.actions';
-import { FeatureSourceCreateModel, FeatureSourceUpdateModel } from '../models/feature-source-update.model';
+import { FeatureSourceCreateModel, FeatureSourceUpdateModel, FeatureTypeUpdateModel } from '../models/feature-source-update.model';
 import { SnackBarMessageComponent } from '@tailormap-viewer/shared';
-import { selectFeatureSourceById } from '../state/catalog.selectors';
+import { selectFeatureSourceById, selectFeatureTypeById } from '../state/catalog.selectors';
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
+import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
 
 @Injectable({
   providedIn: 'root',
@@ -66,6 +67,21 @@ export class FeatureSourceService {
               return null;
             }),
           );
+        }),
+      );
+  }
+
+  public updateFeatureType$(
+    featureSourceId: string,
+    featureTypeId: string,
+    updatedFeatureType: FeatureTypeUpdateModel,
+  ) {
+    return this.store$.select(selectFeatureTypeById(featureTypeId))
+      .pipe(
+        take(1),
+        filter((featureType): featureType is ExtendedFeatureTypeModel => !!featureType),
+        concatMap(featureType => {
+          return of({ ...featureType, ...updatedFeatureType });
         }),
       );
   }

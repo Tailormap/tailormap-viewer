@@ -6,7 +6,7 @@ import { AdminTemplateComponent } from '../../templates/admin-template/admin-tem
 import { NavigationComponent } from '../../templates/admin-template/navigation/navigation.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
-describe('GeoRegistryPageComponent', () => {
+describe('CatalogPageComponent', () => {
 
   test('should render', async () => {
     await render(CatalogPageComponent, {

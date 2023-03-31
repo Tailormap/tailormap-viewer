@@ -12,6 +12,7 @@
 .catalog-content {
   flex: 1;
   margin-left: 16px;
+  max-width: 500px;
 }
 
 .catalog-content ::ng-deep .page-details-title {

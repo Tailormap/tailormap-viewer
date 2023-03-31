@@ -5,12 +5,12 @@ import {
   TAILORMAP_ADMIN_API_V1_SERVICE,
   TailormapAdminApiV1ServiceModel,
 } from '@tailormap-admin/admin-api';
-import { catchError, concatMap, forkJoin, of, Subject, take, takeUntil, tap } from 'rxjs';
+import { catchError, concatMap, forkJoin, map, of, Subject, take, takeUntil, tap } from 'rxjs';
 import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
 import {
   selectCatalog, selectCatalogNodeById, selectFeatureSources, selectGeoServices, selectParentsForCatalogNode,
 } from '../state/catalog.selectors';
-import { addFeatureSources, addGeoServices, expandTree, updateCatalog } from '../state/catalog.actions';
+import { addFeatureSources, addGeoServices, expandTree, updateCatalog, updateFeatureSourceNodeIds } from '../state/catalog.actions';
 import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackBarMessageComponent } from '@tailormap-viewer/shared';
@@ -90,12 +90,18 @@ export class CatalogService implements OnDestroy {
     this.loadServiceSubscriptions.set(nodeId, newSubscription);
     return this.store$.select(selectCatalogNodeById(nodeId)).pipe(
       take(1),
-      concatMap(node => {
-        if (!node || (node.items || []).length === 0) {
-          return of([]);
+      map(node => {
+        if (!node || (node?.items || []).length === 0) {
+          return [[], []];
         }
         const serviceItems = (node.items || []).filter(item => item.kind === CatalogItemKindEnum.GEO_SERVICE);
         const featureSourceItems = (node.items || []).filter(item => item.kind === CatalogItemKindEnum.FEATURE_SOURCE);
+        return [ serviceItems, featureSourceItems ];
+      }),
+      tap(([ _, featureSourceItems ]) => {
+        this.updateNodeIdForExistingFeatureSources(featureSourceItems, nodeId);
+      }),
+      concatMap(([ serviceItems, featureSourceItems ]) => {
         const services$ = this.getServiceRequests$(serviceItems, newSubscription);
         const featureSources$ = this.getFeatureSourceRequests$(featureSourceItems, newSubscription);
         if (services$.length === 0 && featureSources$.length === 0) {
@@ -145,8 +151,8 @@ export class CatalogService implements OnDestroy {
     });
   }
 
-  private getFeatureSourceRequests$(serviceItems: CatalogItemModel[], subscription: Subject<null>) {
-    return serviceItems.filter(item => !this.featureSources.has(item.id)).map(item => {
+  private getFeatureSourceRequests$(featureSourceItems: CatalogItemModel[], subscription: Subject<null>) {
+    return featureSourceItems.filter(item => !this.featureSources.has(item.id)).map(item => {
       return this.adminApiService.getFeatureSource$({ id: item.id })
         .pipe(
           takeUntil(subscription),
@@ -238,6 +244,19 @@ export class CatalogService implements OnDestroy {
           }
         }),
       );
+  }
+
+  private updateNodeIdForExistingFeatureSources(featureSourceItems: undefined | CatalogItemModel[], nodeId: string) {
+    if (typeof featureSourceItems === 'undefined') {
+      return;
+    }
+    const featureSourceIds = new Set(featureSourceItems.map(item => item.id));
+    const featuresWithoutNodeId = Array.from(this.featureSources.values())
+      .filter(featureSource => featureSourceIds.has(featureSource.id) && !featureSource.catalogNodeId)
+      .map(fs => fs.id);
+    if (featuresWithoutNodeId.length > 0) {
+      this.store$.dispatch(updateFeatureSourceNodeIds({ featureSources: featuresWithoutNodeId, nodeId }));
+    }
   }
 
 }

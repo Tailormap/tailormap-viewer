@@ -5,9 +5,9 @@ import {
   selectCatalogLoadError, selectCatalogLoadStatus, selectCatalogTree,
 } from '../state/catalog.selectors';
 import { expandTree, loadCatalog } from '../state/catalog.actions';
-import { BehaviorSubject, filter, map, Observable, of, Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, filter, map, Observable, of, Subject, take, takeUntil } from 'rxjs';
 import { CatalogTreeModel, CatalogTreeModelMetadataTypes } from '../models/catalog-tree.model';
-import { CatalogHelper } from '../helpers/catalog.helper';
+import { CatalogTreeHelper } from '../helpers/catalog-tree.helper';
 import { CatalogService } from '../services/catalog.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoutesEnum } from '../../routes';
@@ -65,7 +65,13 @@ export class CatalogTreeComponent implements OnInit, OnDestroy {
         this.selectedNodeId.next(lastItem ? lastItem.treeNodeId : '');
       });
 
-    this.store$.dispatch(loadCatalog());
+    this.store$.select(selectCatalogLoadStatus)
+      .pipe(take(1))
+      .subscribe(loadStatus => {
+        if (loadStatus === LoadingStateEnum.INITIAL || loadStatus === LoadingStateEnum.LOADED) {
+          this.store$.dispatch(loadCatalog());
+        }
+      });
   }
 
   public ngOnDestroy(): void {
@@ -78,10 +84,10 @@ export class CatalogTreeComponent implements OnInit, OnDestroy {
   }
 
   private toggleExpansion(node: CatalogTreeModel, expanded: boolean) {
-    if (CatalogHelper.isExpandableNode(node) && node.metadata && node.type) {
+    if (CatalogTreeHelper.isExpandableNode(node) && node.metadata && node.type) {
       this.store$.dispatch(expandTree({ id: node.metadata.id, nodeType: node.type }));
     }
-    if (expanded && CatalogHelper.isCatalogNode(node) && !!node.metadata) {
+    if (expanded && CatalogTreeHelper.isCatalogNode(node) && !!node.metadata) {
       this.catalogService.loadCatalogNodeItems$(node.metadata.id).subscribe();
     }
   }
@@ -93,16 +99,19 @@ export class CatalogTreeComponent implements OnInit, OnDestroy {
       .filter(part => !!part);
     const parts: Array<{ type: CatalogTreeModelTypeEnum; treeNodeId: string; id: string }> = [];
     if (currentRoute.length >= 2 && currentRoute[0] === 'node') {
-      parts.push({ type: CatalogTreeModelTypeEnum.CATALOG_NODE_TYPE, treeNodeId: CatalogHelper.getIdForCatalogNode(currentRoute[1]), id: currentRoute[1] });
+      parts.push({ type: CatalogTreeModelTypeEnum.CATALOG_NODE_TYPE, treeNodeId: CatalogTreeHelper.getIdForCatalogNode(currentRoute[1]), id: currentRoute[1] });
     }
     if (currentRoute.length >= 4 && currentRoute[2] === 'service') {
-      parts.push({ type: CatalogTreeModelTypeEnum.SERVICE_TYPE, treeNodeId: CatalogHelper.getIdForServiceNode(currentRoute[3]), id: currentRoute[3] });
+      parts.push({ type: CatalogTreeModelTypeEnum.SERVICE_TYPE, treeNodeId: CatalogTreeHelper.getIdForServiceNode(currentRoute[3]), id: currentRoute[3] });
     }
     if (currentRoute.length >= 4 && currentRoute[2] === 'feature-source') {
-      parts.push({ type: CatalogTreeModelTypeEnum.FEATURE_SOURCE_TYPE, treeNodeId: CatalogHelper.getIdForFeatureSourceNode(currentRoute[3]), id: currentRoute[3] });
+      parts.push({ type: CatalogTreeModelTypeEnum.FEATURE_SOURCE_TYPE, treeNodeId: CatalogTreeHelper.getIdForFeatureSourceNode(currentRoute[3]), id: currentRoute[3] });
+    }
+    if (currentRoute.length >= 6 && currentRoute[4] === 'feature-type') {
+      parts.push({ type: CatalogTreeModelTypeEnum.FEATURE_TYPE_TYPE, treeNodeId: CatalogTreeHelper.getIdForFeatureTypeNode(currentRoute[5]), id: currentRoute[5] });
     }
     if (currentRoute.length >= 6 && currentRoute[4] === 'layer') {
-      parts.push({ type: CatalogTreeModelTypeEnum.SERVICE_LAYER_TYPE, treeNodeId: CatalogHelper.getIdForLayerNode(currentRoute[5]), id: currentRoute[5] });
+      parts.push({ type: CatalogTreeModelTypeEnum.SERVICE_LAYER_TYPE, treeNodeId: CatalogTreeHelper.getIdForLayerNode(currentRoute[5]), id: currentRoute[5] });
     }
     return parts;
   }

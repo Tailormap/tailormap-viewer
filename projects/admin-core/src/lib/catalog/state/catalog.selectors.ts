@@ -1,12 +1,13 @@
 import { CatalogState, catalogStateKey } from './catalog.state';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { CatalogHelper } from '../helpers/catalog.helper';
+import { CatalogTreeHelper } from '../helpers/catalog-tree.helper';
 import { CatalogTreeModel } from '../models/catalog-tree.model';
 import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
 import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-layer.model';
 import { GeoServiceLayerSettingsModel } from '../models/geo-service-layer-settings.model';
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
+import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
 
 const selectCatalogState = createFeatureSelector<CatalogState>(catalogStateKey);
 
@@ -17,6 +18,7 @@ export const selectFeatureSources = createSelector(selectCatalogState, state => 
 export const selectFeatureTypes = createSelector(selectCatalogState, state => state.featureTypes);
 export const selectCatalogLoadStatus = createSelector(selectCatalogState, state => state.catalogLoadStatus);
 export const selectCatalogLoadError = createSelector(selectCatalogState, state => state.catalogLoadError);
+export const selectFeatureSourceLoadStatus = createSelector(selectCatalogState, state => state.featureSourcesLoadStatus);
 
 export const selectCatalogNodeById = (id: string) => createSelector(
   selectCatalog,
@@ -31,6 +33,16 @@ export const selectGeoServiceById = (id: string) => createSelector(
 export const selectFeatureSourceById = (id: string) => createSelector(
   selectFeatureSources,
   (sources): ExtendedFeatureSourceModel | null => sources.find(source => source.id === id) || null,
+);
+
+export const selectFeatureTypeById = (id: string) => createSelector(
+  selectFeatureTypes,
+  (featureTypes): ExtendedFeatureTypeModel | null => featureTypes.find(featureType => featureType.id === id) || null,
+);
+
+export const selectFeatureTypesForSource = (featureSourceId: string) => createSelector(
+  selectFeatureTypes,
+  (featureTypes): ExtendedFeatureTypeModel[] => featureTypes.filter(featureType => featureType.featureSourceId === featureSourceId),
 );
 
 export const selectGeoServiceAndLayerById = (serviceId: string, layerId: string) => createSelector(
@@ -68,7 +80,7 @@ export const selectGeoServiceLayerSettingsById = (serviceId: string, layerId: st
 export const selectParentsForCatalogNode = (id: string) => createSelector(
   selectCatalog,
   (catalog): string[] => {
-    return CatalogHelper.findParentsForNode(catalog, id);
+    return CatalogTreeHelper.findParentsForNode(catalog, id);
   },
 );
 
@@ -79,6 +91,6 @@ export const selectCatalogTree = createSelector(
   selectFeatureSources,
   selectFeatureTypes,
   (catalog, services, layers, featureSources, featureTypes): CatalogTreeModel[] => {
-    return CatalogHelper.catalogToTree(catalog, services, layers, featureSources, featureTypes);
+    return CatalogTreeHelper.catalogToTree(catalog, services, layers, featureSources, featureTypes);
   },
 );

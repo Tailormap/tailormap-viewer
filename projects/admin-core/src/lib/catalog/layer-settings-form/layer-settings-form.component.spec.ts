@@ -3,6 +3,7 @@ import { LayerSettingsFormComponent } from './layer-settings-form.component';
 import { SharedModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { TriStateBooleanComponent } from '../../shared/components/tri-state-boolean/tri-state-boolean.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('LayerSettingsFormComponent', () => {
 
@@ -10,6 +11,7 @@ describe('LayerSettingsFormComponent', () => {
     const changedFn = jest.fn();
     await render(LayerSettingsFormComponent, {
       imports: [SharedModule],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
       declarations: [TriStateBooleanComponent],
       componentInputs: {
         isLayerSpecific: true,

@@ -7,6 +7,9 @@ const catalogActionsPrefix = '[Catalog]';
 export const loadCatalog = createAction(
   `${catalogActionsPrefix} Load Catalog`,
 );
+export const loadCatalogStart = createAction(
+  `${catalogActionsPrefix} Load Catalog Start`,
+);
 export const loadCatalogSuccess = createAction(
   `${catalogActionsPrefix}  Load Catalog Success`,
   props<{ nodes: CatalogNodeModel[] }>(),
@@ -46,4 +49,22 @@ export const expandTree = createAction(
 export const updateCatalog = createAction(
   `${catalogActionsPrefix}  Update Catalog`,
   props<{ nodes: CatalogNodeModel[] }>(),
+);
+export const loadFeatureSources = createAction(
+  `${catalogActionsPrefix} Load FeatureSources`,
+);
+export const loadFeatureSourcesStart = createAction(
+  `${catalogActionsPrefix} Load Feature Sources Start`,
+);
+export const loadFeatureSourcesSuccess = createAction(
+  `${catalogActionsPrefix}  Load Feature Sources Success`,
+  props<{ featureSources: FeatureSourceModel[] }>(),
+);
+export const loadFeatureSourcesFailed = createAction(
+  `${catalogActionsPrefix}  Load Feature Sources Failed`,
+  props<{ error?: string }>(),
+);
+export const updateFeatureSourceNodeIds = createAction(
+  `${catalogActionsPrefix} Update Feature Source Node Ids`,
+  props<{ featureSources: string[]; nodeId: string }>(),
 );

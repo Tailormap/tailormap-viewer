@@ -43,6 +43,10 @@ export class TailormapAdminApiV1MockService implements TailormapAdminApiV1Servic
     })).pipe(delay(this.delay));
   }
 
+  public getAllFeatureSources$(): Observable<FeatureSourceModel[]> {
+    return of([mockData.getFeatureSource()]).pipe(delay(this.delay));
+  }
+
   public createFeatureSource$(params: { featureSource: FeatureSourceModel }): Observable<FeatureSourceModel> {
     return of({ ...params.featureSource }).pipe(delay(this.delay));
   }

@@ -8,6 +8,7 @@ mat-slide-toggle + mat-slide-toggle {
   margin-top: 16px;
 }
 
+.form-control strong,
 .toggle-control strong {
   display: block;
   margin-bottom: 8px;

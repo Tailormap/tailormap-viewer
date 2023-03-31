@@ -1,58 +1,65 @@
 import { render, screen } from '@testing-library/angular';
 import { FeatureTypeDetailsComponent } from './feature-type-details.component';
 import { of } from 'rxjs';
-import { getGeoService, getGeoServiceLayer } from '@tailormap-admin/admin-api';
+import { FeatureSourceProtocolEnum, getFeatureSource, getFeatureType } from '@tailormap-admin/admin-api';
 import { getMockStore } from '@ngrx/store/testing';
-import { catalogStateKey, initialCatalogState } from '../state/catalog.state';
+import { CatalogState, catalogStateKey, initialCatalogState } from '../state/catalog.state';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { ActivatedRoute } from '@angular/router';
-import { GeoServiceService } from '../services/geo-service.service';
 import { Store } from '@ngrx/store';
-import { LayerSettingsFormComponent } from '../layer-settings-form/layer-settings-form.component';
-import { createGeoServiceMock } from '../helpers/mocks/geo-service.service.mock';
-import { TriStateBooleanComponent } from '../../shared/components/tri-state-boolean/tri-state-boolean.component';
+import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
+import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
+import { FeatureSourceService } from '../services/feature-source.service';
 
 const setup = async () => {
   const activeRoute = {
     paramMap: of({
       get: (param: string) => {
-        if (param === 'serviceId') {
+        if (param === 'featureSourceId') {
           return '1';
         }
-        if (param === 'layerId') {
-          return '2';
+        if (param === 'featureTypeId') {
+          return 'ft_1';
         }
         return null;
       },
     }),
   };
-  const { geoServiceService, updateGeoService$ } = createGeoServiceMock();
-  const geoServiceModel = getGeoService({ id: '1', title: 'The Service' });
-  const layerModel = getGeoServiceLayer({ name: 'layer_2', title: 'The Layer' });
-  const store = getMockStore({
-    initialState: { [catalogStateKey]: {
-      ...initialCatalogState,
-      geoServices: [{ ...geoServiceModel, catalogNodeId: 'node-1', layers: ['2'] }],
-      geoServiceLayers: [{ ...layerModel, catalogNodeId: 'node-1', id: '2', serviceId: '1' }],
-    } },
-  });
+  const featureSourceService = { updateFeatureSource$: jest.fn(() => of({})) };
+  const featureTypeModel: ExtendedFeatureTypeModel = {
+    ...getFeatureType({ name: 'ft_1', title: 'some table' }),
+    id: 'ft_1',
+    originalId: 'ft_1',
+    featureSourceId: '1',
+    catalogNodeId: 'node-1',
+  };
+  const featureSourceModel: ExtendedFeatureSourceModel = {
+    ...getFeatureSource({ id: '1', title: 'JDBC source', protocol: FeatureSourceProtocolEnum.JDBC }),
+    children: ['ft_1'],
+    catalogNodeId: 'node-1',
+  };
+  const catalogState: CatalogState = {
+    ...initialCatalogState,
+    featureTypes: [featureTypeModel],
+    featureSources: [featureSourceModel],
+  };
+  const store = getMockStore({ initialState: { [catalogStateKey]: catalogState } });
   await render(FeatureTypeDetailsComponent, {
-    declarations: [ LayerSettingsFormComponent, TriStateBooleanComponent ],
     imports: [SharedModule],
     providers: [
       { provide: ActivatedRoute, useValue: activeRoute },
-      { provide: GeoServiceService, useValue: geoServiceService },
+      { provide: FeatureSourceService, useValue: featureSourceService },
       { provide: Store, useValue: store },
     ],
   });
-  return { updateGeoService$, geoServiceModel };
+  return { featureSourceService, featureTypeModel };
 };
 
-describe('GeoServiceLayerDetailsComponent', () => {
+describe('FeatureTypeDetailsComponent', () => {
 
   test('should render', async () => {
     await setup();
-    expect(await screen.findByText('Edit settings for layer The Layer')).toBeInTheDocument();
+    expect(await screen.findByText('Details for feature type some table')).toBeInTheDocument();
   });
 
 });

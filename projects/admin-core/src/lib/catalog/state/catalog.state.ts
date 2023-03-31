@@ -5,7 +5,7 @@ import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-lay
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
 
-export const catalogStateKey = 'geoRegistry';
+export const catalogStateKey = 'catalog';
 
 export interface CatalogState {
   catalogLoadStatus: LoadingStateEnum;
@@ -15,6 +15,7 @@ export interface CatalogState {
   geoServiceLayers: ExtendedGeoServiceLayerModel[];
   featureSources: ExtendedFeatureSourceModel[];
   featureTypes: ExtendedFeatureTypeModel[];
+  featureSourcesLoadStatus: LoadingStateEnum;
 }
 
 export const initialCatalogState: CatalogState = {
@@ -24,4 +25,5 @@ export const initialCatalogState: CatalogState = {
   geoServiceLayers: [],
   featureSources: [],
   featureTypes: [],
+  featureSourcesLoadStatus: LoadingStateEnum.INITIAL,
 };

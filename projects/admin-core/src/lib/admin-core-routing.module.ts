@@ -9,6 +9,7 @@ import { CatalogNodeDetailsComponent } from './catalog/catalog-node-details/cata
 import { UserAdminPageComponent } from './pages/user-admin-page/user-admin-page.component';
 import { GroupsPageComponent } from './pages/groups-page/groups-page.component';
 import { FeatureSourceDetailsComponent } from './catalog/feature-source-details/feature-source-details.component';
+import { FeatureTypeDetailsComponent } from './catalog/feature-type-details/feature-type-details.component';
 
 const routes: Routes = [
   {
@@ -30,6 +31,10 @@ const routes: Routes = [
       {
         path: RoutesEnum.FEATURE_SOURCE_DETAILS,
         component: FeatureSourceDetailsComponent,
+      },
+      {
+        path: RoutesEnum.FEATURE_TYPE_DETAILS,
+        component: FeatureTypeDetailsComponent,
       },
     ],
   },

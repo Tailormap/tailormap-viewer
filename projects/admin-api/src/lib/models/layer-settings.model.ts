@@ -7,4 +7,5 @@ export interface LayerSettingsModel {
   tilingGutter?: number;
   hiDpiMode?: TileLayerHiDpiModeEnum;
   hiDpiSubstituteLayer?: string;
+  featureType?: { featureSourceId: number; featureTypeName: string };
 }

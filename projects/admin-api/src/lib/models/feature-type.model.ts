@@ -1,5 +1,6 @@
 import { AttributeDescriptorModel } from './attribute-descriptor.model';
 import { FeatureTypeInfoModel } from './feature-type-info.model';
+import { FeatureTypeSettingsModel } from './feature-type-settings.model';
 
 export interface FeatureTypeModel {
   id: string;
@@ -12,6 +13,6 @@ export interface FeatureTypeModel {
   defaultGeometryAttribute?: string;
   primaryKeyAttribute?: string;
   attributes: AttributeDescriptorModel[];
-  settings: Record<string, any>;
+  settings: FeatureTypeSettingsModel;
   defaultGeometryDescriptor?: AttributeDescriptorModel;
 }

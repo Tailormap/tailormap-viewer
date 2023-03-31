@@ -2,6 +2,7 @@
   <h2 class="page-details-title" i18n>Edit settings for layer {{ geoServiceSettings.layerTitle }}</h2>
   <tm-admin-layer-settings-form [layerSettings]="geoServiceSettings.settings"
                                 [protocol]="geoServiceSettings.protocol"
+                                [layerName]="geoServiceSettings.layerName"
                                 [isLayerSpecific]="true"
                                 (changed)="updateSettings($event)"></tm-admin-layer-settings-form>
   <div class="page-details-actions">

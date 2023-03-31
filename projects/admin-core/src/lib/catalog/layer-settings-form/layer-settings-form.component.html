@@ -8,6 +8,13 @@
     <mat-slide-toggle formControlName="tilingEnabled" i18n *ngIf="isWMS">Use tiling</mat-slide-toggle>
   </ng-container>
   <ng-container *ngIf="isLayerSpecific">
+    <div class="form-control">
+      <strong i18n>Connected feature source and type</strong>
+      <tm-admin-feature-type-selector [featureSourceId]="layerSettingsForm.get('featureSourceId')?.value"
+                                      [featureTypeName]="layerSettingsForm.get('featureTypeName')?.value"
+                                      [layerName]="layerName"
+                                      (featureTypeSelected)="updateFeatureTypeSelection($event)"></tm-admin-feature-type-selector>
+    </div>
     <div class="toggle-control">
       <strong i18n>High-DPI enabled</strong>
       <tm-admin-tri-state-boolean formControlName="hiDpiEnabled"></tm-admin-tri-state-boolean>

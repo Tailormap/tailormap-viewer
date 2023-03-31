@@ -1,8 +1,10 @@
 import {
-  CatalogItemKindEnum, CatalogNodeModel, GeoServiceLayerModel, GeoServiceProtocolEnum, GeoServiceWithLayersModel, GroupModel,
-  ServiceCapsModel, UserModel, FeatureSourceModel, FeatureSourceProtocolEnum
+  CatalogItemKindEnum, CatalogNodeModel, FeatureSourceModel, FeatureSourceProtocolEnum, FeatureTypeModel, GeoServiceLayerModel,
+  GeoServiceProtocolEnum, GeoServiceWithLayersModel, GroupModel, ServiceCapsModel, UserModel,
 } from '../models';
 import { ServerType } from '@tailormap-viewer/api';
+import { AttributeDescriptorModel } from '../models/attribute-descriptor.model';
+import { AttributeTypeEnum } from '../models/attribute-type.enum';
 
 export const getCatalogNode = (overrides?: Partial<CatalogNodeModel>): CatalogNodeModel => ({
   id: 'root',
@@ -127,6 +129,22 @@ export const getUsers = (): UserModel[] => {
     getUser({ username: 'tm-admin' }),
   ];
 };
+
+export const getAttributeDescriptor = (overrides?: Partial<AttributeDescriptorModel>): AttributeDescriptorModel => ({
+  id: 'att1',
+  name: 'att1',
+  type: AttributeTypeEnum.STRING,
+  ...overrides,
+});
+
+export const getFeatureType = (overrides?: Partial<FeatureTypeModel>): FeatureTypeModel => ({
+  id: '1',
+  title: 'table1',
+  name: 'table1',
+  settings: {},
+  attributes: [],
+  ...overrides,
+});
 
 export const getFeatureSource = (overrides?: Partial<FeatureSourceModel>): FeatureSourceModel => ({
   id: '1',
