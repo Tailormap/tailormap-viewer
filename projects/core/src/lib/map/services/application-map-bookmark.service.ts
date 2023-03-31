@@ -4,28 +4,24 @@ import { MapService } from '@tailormap-viewer/map';
 import { combineLatest, filter, map, Subject, takeUntil, distinctUntilKeyChanged, debounceTime } from 'rxjs';
 import { selectLoadStatus, selectLayers, selectLayerTreeNodes } from '../state/map.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
-import { BookmarkFragmentStringDescriptor, BookmarkFragmentProtoDescriptor } from '../../bookmark/bookmark.models';
+import {
+  BookmarkProtoFragmentDescriptor, BookmarkStringFragmentDescriptor,
+} from '../../bookmark/bookmark.models';
 import { BookmarkService } from '../../bookmark/bookmark.service';
 import { setLayerVisibility, setLayerOpacity, setLayerTreeNodeChildren } from '../state/map.actions';
 import { LayerVisibilityBookmarkFragment, LayerTreeOrderBookmarkFragment } from '../bookmark/bookmark_pb';
 import { MapBookmarkHelper } from '../bookmark/bookmark.helper';
 
 @Injectable({
-   providedIn: 'root',
+  providedIn: 'root',
 })
 export class ApplicationMapBookmarkService implements OnDestroy {
-  private static LOCATION_BOOKMARK_DESCRIPTOR: BookmarkFragmentStringDescriptor = { type: 'string', identifier: '' };
-  private static VISIBILITY_BOOKMARK_DESCRIPTOR: BookmarkFragmentProtoDescriptor<LayerVisibilityBookmarkFragment> = {
-    type: 'proto',
-    proto: LayerVisibilityBookmarkFragment,
-    identifier: '1',
-  };
+  private static LOCATION_BOOKMARK_DESCRIPTOR: BookmarkStringFragmentDescriptor = new BookmarkStringFragmentDescriptor('');
+  private static VISIBILITY_BOOKMARK_DESCRIPTOR: BookmarkProtoFragmentDescriptor<LayerVisibilityBookmarkFragment>
+    = new BookmarkProtoFragmentDescriptor('1', LayerVisibilityBookmarkFragment);
 
-  private static ORDERING_BOOKMARK_DESCRIPTOR: BookmarkFragmentProtoDescriptor<LayerTreeOrderBookmarkFragment> = {
-    type: 'proto',
-    proto: LayerTreeOrderBookmarkFragment,
-    identifier: '2',
-  };
+  private static ORDERING_BOOKMARK_DESCRIPTOR: BookmarkProtoFragmentDescriptor<LayerTreeOrderBookmarkFragment>
+    = new BookmarkProtoFragmentDescriptor<LayerTreeOrderBookmarkFragment>('2', LayerTreeOrderBookmarkFragment);
 
   private destroyed = new Subject();
 
@@ -44,10 +40,10 @@ export class ApplicationMapBookmarkService implements OnDestroy {
       this.store$.select(selectLayers),
       this.store$.select(selectLoadStatus),
     ]).pipe(
-        takeUntil(this.destroyed),
-        filter(([ ,, loadStatus ]) => loadStatus === LoadingStateEnum.LOADED),
-        distinctUntilKeyChanged('0'),
-      )
+      takeUntil(this.destroyed),
+      filter(([ , , loadStatus ]) => loadStatus === LoadingStateEnum.LOADED),
+      distinctUntilKeyChanged('0'),
+    )
       .subscribe(([ fragment, layers ]) => {
         const bookmarkContents = MapBookmarkHelper.visibilityDataFromFragment(fragment, layers);
         if (bookmarkContents.visibilityChanges.length > 0) {
@@ -64,10 +60,10 @@ export class ApplicationMapBookmarkService implements OnDestroy {
       this.store$.select(selectLayerTreeNodes),
       this.store$.select(selectLoadStatus),
     ]).pipe(
-        takeUntil(this.destroyed),
-        filter(([ ,, loadStatus ]) => loadStatus === LoadingStateEnum.LOADED),
-        distinctUntilKeyChanged('0'),
-      )
+      takeUntil(this.destroyed),
+      filter(([ , , loadStatus ]) => loadStatus === LoadingStateEnum.LOADED),
+      distinctUntilKeyChanged('0'),
+    )
       .subscribe(([ fragment, layers ]) => {
         const nodes = MapBookmarkHelper.layerTreeOrderFromFragment(fragment, layers);
 
@@ -81,7 +77,7 @@ export class ApplicationMapBookmarkService implements OnDestroy {
         takeUntil(this.destroyed),
       )
       .subscribe(bookmark => {
-          this.bookmarkService.updateFragment(ApplicationMapBookmarkService.VISIBILITY_BOOKMARK_DESCRIPTOR, bookmark);
+        this.bookmarkService.updateFragment(ApplicationMapBookmarkService.VISIBILITY_BOOKMARK_DESCRIPTOR, bookmark);
       });
 
     this.getOrderBookmarkData()
@@ -89,7 +85,7 @@ export class ApplicationMapBookmarkService implements OnDestroy {
         takeUntil(this.destroyed),
       )
       .subscribe(bookmark => {
-          this.bookmarkService.updateFragment(ApplicationMapBookmarkService.ORDERING_BOOKMARK_DESCRIPTOR, bookmark);
+        this.bookmarkService.updateFragment(ApplicationMapBookmarkService.ORDERING_BOOKMARK_DESCRIPTOR, bookmark);
       });
 
     combineLatest([ this.mapService.getMapViewDetails$(), this.mapService.getUnitsOfMeasure$() ])
