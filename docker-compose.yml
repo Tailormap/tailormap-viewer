@@ -12,6 +12,7 @@ services:
     environment:
       - "HOST=${HOST:-localhost}"
       - "SPRING_DATASOURCE_URL=jdbc:postgresql://db/tailormap"
+      - "SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE:-default}"
       # The container binds to localhost for running the tailormap container by itself in host network mode
       # Change to 0.0.0.0 so it is reachable by reverse proxy such as Traefik
       - "SERVER_ADDRESS=0.0.0.0"
