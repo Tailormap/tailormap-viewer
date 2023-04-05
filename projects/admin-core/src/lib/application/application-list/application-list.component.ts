@@ -9,7 +9,6 @@ import {
 } from '../state/application.selectors';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
-import { RoutesEnum } from '../../routes';
 
 @Component({
   selector: 'tm-admin-application-list',
