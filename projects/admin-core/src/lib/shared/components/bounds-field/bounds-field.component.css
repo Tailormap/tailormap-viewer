@@ -1,0 +1,15 @@
+.fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 16px;
+}
+
+mat-form-field {
+  margin-top: 16px;
+}
+
+.label a {
+  margin-left: 16px;
+  text-decoration: underline;
+  cursor: pointer;
+}

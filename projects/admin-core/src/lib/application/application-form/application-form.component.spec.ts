@@ -4,6 +4,8 @@ import { getApplication } from '@tailormap-admin/admin-api';
 import { SharedModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { BoundsModel, getBoundsModel } from '@tailormap-viewer/api';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { BoundsFieldComponent } from '../../shared/components/bounds-field/bounds-field.component';
 
 const setup = async (hasApp?: boolean) => {
   const onUpdate = jest.fn();
@@ -15,6 +17,7 @@ const setup = async (hasApp?: boolean) => {
   });
   await render(ApplicationFormComponent, {
     imports: [SharedModule],
+    declarations: [BoundsFieldComponent],
     componentInputs: {
       application: hasApp ? application : undefined,
     },
@@ -26,8 +29,6 @@ const setup = async (hasApp?: boolean) => {
   });
   return { application, onUpdate };
 };
-
-const EMPTY_BOUNDS: BoundsModel = { minx: 0, miny: 0, maxx: 0, maxy: 0 };
 
 describe('ApplicationFormComponent', () => {
 
@@ -42,8 +43,8 @@ describe('ApplicationFormComponent', () => {
         title: 'Cool application',
         adminComments: '',
         crs: '',
-        initialExtent: EMPTY_BOUNDS,
-        maxExtent: EMPTY_BOUNDS,
+        initialExtent: undefined,
+        maxExtent: undefined,
         authenticatedRequired: false,
       });
     });

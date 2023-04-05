@@ -5,8 +5,6 @@ import { ApplicationModel } from '@tailormap-admin/admin-api';
 import { debounceTime, filter, Subject, takeUntil } from 'rxjs';
 import { FormHelper } from '../../helpers/form.helper';
 
-const EMPTY_BOUNDS: BoundsModel = { minx: 0, miny: 0, maxx: 0, maxy: 0 };
-
 @Component({
   selector: 'tm-admin-application-form',
   templateUrl: './application-form.component.html',
@@ -31,11 +29,11 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
 
   public applicationForm = new FormGroup({
     name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    title: new FormControl(''),
+    title: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     adminComments: new FormControl(''),
     crs: new FormControl(''),
-    initialExtent: new FormControl<BoundsModel>(EMPTY_BOUNDS),
-    maxExtent: new FormControl<BoundsModel>(EMPTY_BOUNDS),
+    initialExtent: new FormControl<BoundsModel | null>(null),
+    maxExtent: new FormControl<BoundsModel | null>(null),
     authenticatedRequired: new FormControl(false),
   });
 
@@ -45,6 +43,10 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
   ];
 
   private destroyed = new Subject();
+
+  public get projection(): string | null {
+    return this.applicationForm.get('crs')?.value || null;
+  }
 
   constructor() { }
 
@@ -61,8 +63,8 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
           title: value.title || '',
           adminComments: value.adminComments || '',
           crs: value.crs || '',
-          initialExtent: value.initialExtent || EMPTY_BOUNDS,
-          maxExtent: value.maxExtent || EMPTY_BOUNDS,
+          initialExtent: value.initialExtent || undefined,
+          maxExtent: value.maxExtent || undefined,
           authenticatedRequired: value.authenticatedRequired || false,
         });
       });
@@ -79,8 +81,8 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
       title: application ? application.title : '',
       adminComments: application ? application.adminComments : '',
       crs: application ? application.crs : '',
-      initialExtent: application ? application.initialExtent : EMPTY_BOUNDS,
-      maxExtent: application ? application.maxExtent : EMPTY_BOUNDS,
+      initialExtent: application ? application.initialExtent : null,
+      maxExtent: application ? application.maxExtent : null,
       authenticatedRequired: application ? application.authenticatedRequired : false,
     }, { emitEvent: false });
   }

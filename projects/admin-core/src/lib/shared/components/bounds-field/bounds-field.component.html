@@ -1,0 +1,29 @@
+<div [formGroup]="boundsForm" (change)="hasManualChanges = true">
+  <div class="label">
+    <mat-label>
+      <ng-container *ngIf="label">{{ label }}</ng-container>
+      <ng-container *ngIf="!label" i18n>Bounds</ng-container>
+    </mat-label>
+    <a *ngIf="projection" (click)="setBoundsForProjection(projection)">
+      Use max extent from projection {{projection}}
+    </a>
+  </div>
+  <div class="fields">
+    <mat-form-field>
+      <mat-label i18n>Min X</mat-label>
+      <input matInput type="number" formControlName="minX" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label i18n>Min Y</mat-label>
+      <input matInput type="number" formControlName="minY" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label i18n>Max X</mat-label>
+      <input matInput type="number" formControlName="maxX" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label i18n>Max Y</mat-label>
+      <input matInput type="number" formControlName="maxY" />
+    </mat-form-field>
+  </div>
+</div>

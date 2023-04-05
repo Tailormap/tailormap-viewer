@@ -1,0 +1,8 @@
+tm-admin-bounds-form-field,
+mat-slide-toggle {
+  margin-top: 16px;
+}
+
+tm-admin-bounds-form-field {
+  display: block;
+}
