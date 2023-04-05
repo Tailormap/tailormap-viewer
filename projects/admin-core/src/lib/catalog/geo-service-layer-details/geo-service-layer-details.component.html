@@ -6,14 +6,6 @@
                                 [isLayerSpecific]="true"
                                 (changed)="updateSettings($event)"></tm-admin-layer-settings-form>
   <div class="page-details-actions">
-    <button mat-flat-button
-            color="primary"
-            (click)="save(geoServiceSettings.serviceId, geoServiceSettings.layerName)"
-            [disabled]="!updatedLayerSettings || (saving$ | async)">
-      <ng-template #saveLabel><ng-container i18n>Save</ng-container></ng-template>
-      <ng-container *ngIf="saving$ | async; else: saveLabel">
-        <mat-spinner diameter="20"></mat-spinner>
-      </ng-container>
-    </button>
+    <tm-admin-save-button [saving$]="saving$" [disabled]="!updatedLayerSettings" (save)="save(geoServiceSettings.serviceId, geoServiceSettings.layerName)"></tm-admin-save-button>
   </div>
 </ng-container>

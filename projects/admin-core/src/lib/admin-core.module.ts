@@ -13,6 +13,7 @@ import { PagesModule } from './pages/pages.module';
 import { TemplatesModule } from './templates/templates.module';
 import { CatalogModule } from './catalog/catalog.module';
 import { TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
+import { ApplicationModule } from './application/application.module';
 
 const getBaseHref = (platformLocation: PlatformLocation): string => {
   return platformLocation.getBaseHrefFromDOM();
@@ -34,6 +35,7 @@ const getBaseHref = (platformLocation: PlatformLocation): string => {
     PagesModule,
     TemplatesModule,
     CatalogModule,
+    ApplicationModule,
   ],
   providers: [
     { provide: ICON_SERVICE_ICON_LOCATION, useValue: 'icons/' },
@@ -51,7 +53,10 @@ export class AdminCoreModule {
     domSanitizer: DomSanitizer,
     iconService: IconService,
   ) {
-    const adminIcons = [{ folder: 'admin', icons: [ 'home', 'catalog', 'service', 'user', 'groups', 'feature_source', 'feature_type' ] }];
+    const adminIcons = [{
+      folder: 'admin',
+      icons: [ 'home', 'catalog', 'service', 'user', 'groups', 'feature_source', 'feature_type', 'application' ],
+    }];
     iconService.loadIconsToIconRegistry(matIconRegistry, domSanitizer);
     iconService.loadIconsToIconRegistry(matIconRegistry, domSanitizer, adminIcons);
   }

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { SharedImportsModule } from '@tailormap-viewer/shared';
 import { TriStateBooleanComponent } from './tri-state-boolean/tri-state-boolean.component';
 import { PasswordFieldComponent } from './password-field/password-field.component';
+import { SaveButtonComponent } from './save-button/save-button.component';
 
 
 
@@ -10,6 +11,7 @@ import { PasswordFieldComponent } from './password-field/password-field.componen
   declarations: [
     TriStateBooleanComponent,
     PasswordFieldComponent,
+    SaveButtonComponent,
   ],
   imports: [
     CommonModule,
@@ -18,6 +20,7 @@ import { PasswordFieldComponent } from './password-field/password-field.componen
     exports: [
         TriStateBooleanComponent,
         PasswordFieldComponent,
+        SaveButtonComponent,
     ],
 })
 export class SharedAdminComponentsModule { }

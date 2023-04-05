@@ -3,5 +3,5 @@ export interface BoundsModel {
     minx: number;
     maxy: number;
     maxx: number;
-    crs: string;
+    crs?: string;
 }

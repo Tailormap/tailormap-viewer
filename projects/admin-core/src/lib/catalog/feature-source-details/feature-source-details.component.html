@@ -4,11 +4,6 @@
                                 (changed)="updateFeatureSource($event)"></tm-admin-feature-source-form>
 
   <div class="page-details-actions">
-    <button mat-flat-button color="primary" aria-label="Save" (click)="save(featureSource.id)" [disabled]="!updatedFeatureSource || (saving$ | async)">
-      <ng-template #saveLabel><ng-container i18n>Save</ng-container></ng-template>
-      <ng-container *ngIf="saving$ | async; else: saveLabel">
-        <mat-spinner diameter="20"></mat-spinner>
-      </ng-container>
-    </button>
+    <tm-admin-save-button [saving$]="saving$" [disabled]="!updatedFeatureSource" (save)="save(featureSource.id)"></tm-admin-save-button>
   </div>
 </ng-container>

@@ -7,6 +7,7 @@ import { getCatalogNode } from '@tailormap-admin/admin-api';
 import { CatalogNodeFormComponent } from '../catalog-node-form/catalog-node-form.component';
 import userEvent from '@testing-library/user-event';
 import { SharedModule } from '@tailormap-viewer/shared';
+import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
 
 const setup = async (editMode = false) => {
   const dialogRefMock = { close: jest.fn() };
@@ -16,7 +17,7 @@ const setup = async (editMode = false) => {
   };
   await render(CatalogNodeFormDialogComponent, {
     imports: [SharedModule],
-    declarations: [CatalogNodeFormComponent],
+    declarations: [ CatalogNodeFormComponent, SaveButtonComponent ],
     providers: [
       { provide: MatDialogRef, useValue: dialogRefMock },
       { provide: CatalogService, useValue: catalogServiceMock },

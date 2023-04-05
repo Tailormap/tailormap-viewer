@@ -62,3 +62,34 @@
   flex: 1;
   padding: 16px;
 }
+
+.content-wrapper ::ng-deep .admin-page-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: stretch;
+  max-height: 100%;
+}
+
+.content-wrapper ::ng-deep .admin-tree {
+  width: 300px;
+}
+
+.content-wrapper ::ng-deep .admin-content {
+  flex: 1;
+  margin-left: 16px;
+  max-width: 500px;
+}
+
+.content-wrapper ::ng-deep .admin-content .page-details-title {
+  margin-bottom: 1em;
+}
+
+.content-wrapper ::ng-deep .admin-content .page-details-actions {
+  margin: 1em 0;
+}
+
+.content-wrapper ::ng-deep .admin-content .page-details-actions button + tm-admin-save-button,
+.content-wrapper ::ng-deep .admin-content .page-details-actions tm-admin-save-button + button,
+.content-wrapper ::ng-deep .admin-content .page-details-actions button + button {
+  margin-left: 16px;
+}
