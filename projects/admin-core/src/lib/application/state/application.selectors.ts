@@ -7,6 +7,7 @@ export const selectApplications = createSelector(selectApplicationState, state =
 export const selectApplicationsLoadStatus = createSelector(selectApplicationState, state => state.applicationsLoadStatus);
 export const selectApplicationsLoadError = createSelector(selectApplicationState, state => state.applicationsLoadError);
 export const selectApplicationListFilter = createSelector(selectApplicationState, state => state.applicationListFilter);
+export const selectSelectedApplicationId = createSelector(selectApplicationState, state => state.selectedApplication);
 
 export const selectApplicationList = createSelector(
   selectApplications,
@@ -24,7 +25,12 @@ export const selectApplicationList = createSelector(
   },
 );
 
-export const selectApplicationById = (id: string) => createSelector(
+export const selectSelectedApplication = createSelector(
   selectApplications,
-  applications => applications.find(a => a.id === id) || null,
+  selectSelectedApplicationId,
+  (applications, selectedApplicationId) => {
+    return selectedApplicationId
+      ? applications.find(a => a.id === selectedApplicationId) || null
+      : null;
+  },
 );

@@ -1,11 +1,12 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, takeUntil, tap } from 'rxjs';
-import { selectApplicationById } from '../state/application.selectors';
+import { BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, takeUntil } from 'rxjs';
+import { selectSelectedApplication } from '../state/application.selectors';
 import { ApplicationModel } from '@tailormap-admin/admin-api';
 import { ApplicationService } from '../services/application.service';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
+import { setSelectedApplication } from '../state/application.actions';
 
 @Component({
   selector: 'tm-admin-application-details',
@@ -32,14 +33,16 @@ export class ApplicationDetailsComponent implements OnInit, OnDestroy {
   ) { }
 
   public ngOnInit(): void {
-    this.application$ = this.route.paramMap.pipe(
+    this.route.paramMap.pipe(
       takeUntil(this.destroyed),
       map(params => params.get('applicationId')),
       distinctUntilChanged(),
       filter((appId): appId is string => !!appId),
-      switchMap(appId => this.store$.select(selectApplicationById(appId))),
-      tap(app => { if (app) { this.updatedApplication = null; }}),
-    );
+    ).subscribe(appId => {
+      this.store$.dispatch(setSelectedApplication({ applicationId: appId }));
+      this.updatedApplication = null;
+    });
+    this.application$ = this.store$.select(selectSelectedApplication);
   }
 
   public ngOnDestroy(): void {

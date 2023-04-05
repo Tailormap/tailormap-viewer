@@ -14,6 +14,7 @@ const setup = async (hasApplication: boolean) => {
   const appState: ApplicationState = {
     ...initialApplicationState,
     applications: hasApplication ? [getApplication({ id: '1', title: 'Test application' })] : [],
+    selectedApplication: hasApplication ? '1' : null,
   };
   const store = getMockStore({
     initialState: { [applicationStateKey]: appState },

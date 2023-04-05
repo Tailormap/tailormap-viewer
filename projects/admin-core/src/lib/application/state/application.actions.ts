@@ -26,6 +26,11 @@ export const setApplicationListFilter = createAction(
   props<{ filter: string | null | undefined }>(),
 );
 
+export const setSelectedApplication = createAction(
+  `${applicationActionsPrefix} Set Selected Application`,
+  props<{ applicationId: string | null }>(),
+);
+
 export const addApplications = createAction(
   `${applicationActionsPrefix} Add Applications`,
   props<{ applications: ApplicationModel[] }>(),

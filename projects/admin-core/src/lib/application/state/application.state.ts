@@ -8,6 +8,7 @@ export interface ApplicationState {
   applicationsLoadError?: string;
   applications: ApplicationModel[];
   applicationListFilter?: string | null;
+  selectedApplication?: string | null;
 }
 
 export const initialApplicationState: ApplicationState = {

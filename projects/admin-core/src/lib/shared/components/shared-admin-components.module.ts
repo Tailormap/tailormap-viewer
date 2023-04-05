@@ -4,7 +4,7 @@ import { SharedImportsModule } from '@tailormap-viewer/shared';
 import { TriStateBooleanComponent } from './tri-state-boolean/tri-state-boolean.component';
 import { PasswordFieldComponent } from './password-field/password-field.component';
 import { SaveButtonComponent } from './save-button/save-button.component';
-
+import { BoundsFieldComponent } from './bounds-field/bounds-field.component';
 
 
 @NgModule({
@@ -12,15 +12,18 @@ import { SaveButtonComponent } from './save-button/save-button.component';
     TriStateBooleanComponent,
     PasswordFieldComponent,
     SaveButtonComponent,
+    BoundsFieldComponent,
   ],
   imports: [
     CommonModule,
     SharedImportsModule,
   ],
-    exports: [
-        TriStateBooleanComponent,
-        PasswordFieldComponent,
-        SaveButtonComponent,
-    ],
+  exports: [
+    TriStateBooleanComponent,
+    PasswordFieldComponent,
+    SaveButtonComponent,
+    BoundsFieldComponent,
+  ],
 })
-export class SharedAdminComponentsModule { }
+export class SharedAdminComponentsModule {
+}
