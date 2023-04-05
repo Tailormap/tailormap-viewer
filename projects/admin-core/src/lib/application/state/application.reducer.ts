@@ -44,6 +44,14 @@ const onSetApplicationListFilter = (
   applicationListFilter: payload.filter,
 });
 
+const onSetSelectedApplication = (
+  state: ApplicationState,
+  payload: ReturnType<typeof ApplicationActions.setSelectedApplication>,
+): ApplicationState => ({
+  ...state,
+  selectedApplication: payload.applicationId,
+});
+
 const onAddApplications = (
   state: ApplicationState,
   payload: ReturnType<typeof ApplicationActions.addApplications>,
@@ -88,6 +96,7 @@ const applicationReducerImpl = createReducer<ApplicationState>(
   on(ApplicationActions.loadApplicationsSuccess, onLoadApplicationsSuccess),
   on(ApplicationActions.loadApplicationsFailed, onLoadApplicationsFailed),
   on(ApplicationActions.setApplicationListFilter, onSetApplicationListFilter),
+  on(ApplicationActions.setSelectedApplication, onSetSelectedApplication),
   on(ApplicationActions.addApplications, onAddApplications),
   on(ApplicationActions.updateApplication, onUpdateApplication),
   on(ApplicationActions.deleteApplication, onDeleteApplication),

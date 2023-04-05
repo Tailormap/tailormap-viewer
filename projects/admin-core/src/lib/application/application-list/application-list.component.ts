@@ -1,10 +1,12 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ApplicationModel } from '@tailormap-admin/admin-api';
-import { Observable, of, Subject, take, takeUntil } from 'rxjs';
+import { distinctUntilChanged, Observable, of, Subject, take, takeUntil } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { loadApplications, setApplicationListFilter } from '../state/application.actions';
-import { selectApplicationList, selectApplicationsLoadError, selectApplicationsLoadStatus } from '../state/application.selectors';
+import {
+  selectApplicationList, selectApplicationsLoadError, selectApplicationsLoadStatus, selectSelectedApplicationId,
+} from '../state/application.selectors';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { RoutesEnum } from '../../routes';
@@ -19,7 +21,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
 
   public filter = new FormControl('');
   public applications$: Observable<ApplicationModel[]> = of([]);
-  public selectedApplicationId: string | null = null;
+  public selectedApplicationId: string | null | undefined;
   public applicationsLoadStatus$: Observable<LoadingStateEnum> = of(LoadingStateEnum.INITIAL);
   public errorMessage$: Observable<string | undefined> = of(undefined);
 
@@ -41,10 +43,10 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
     this.applicationsLoadStatus$ = this.store$.select(selectApplicationsLoadStatus);
     this.errorMessage$ = this.store$.select(selectApplicationsLoadError);
     this.applications$ = this.store$.select(selectApplicationList);
-    this.route.url
-      .pipe(takeUntil(this.destroyed))
-      .subscribe(() => {
-        this.selectedApplicationId = this.readSelectedApplicationFromUrl();
+    this.store$.select(selectSelectedApplicationId)
+      .pipe(takeUntil(this.destroyed), distinctUntilChanged())
+      .subscribe(appId => {
+        this.selectedApplicationId = appId;
         this.cdr.detectChanges();
       });
     this.applicationsLoadStatus$
@@ -61,18 +63,8 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
     this.destroyed.complete();
   }
 
-  private readSelectedApplicationFromUrl(): string | null {
-    const currentRoute = this.router.url
-      .replace(RoutesEnum.APPLICATION, '')
-      .split('/')
-      .filter(part => !!part);
-    if (currentRoute.length >= 2 && currentRoute[0] === 'application') {
-      return currentRoute[1];
-    }
-    return null;
-  }
-
   public onRetryClick() {
     this.store$.dispatch(loadApplications());
   }
+
 }

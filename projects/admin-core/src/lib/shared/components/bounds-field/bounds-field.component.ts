@@ -23,22 +23,16 @@ export class BoundsFieldComponent implements OnInit, OnDestroy, ControlValueAcce
   private _bounds: BoundsModel | null = null;
   private _projection: string | null = null;
   private destroyed = new Subject();
-  public hasManualChanges = false;
-
-  private applyProjectionBounds = false;
 
   @Input()
   public set bounds(bounds: BoundsModel | null) {
     this._bounds = bounds;
-    if (bounds) {
-      this.boundsForm.patchValue({
-        minX: bounds.minx,
-        minY: bounds.miny,
-        maxX: bounds.maxx,
-        maxY: bounds.maxy,
-      }, { emitEvent: false });
-      this.hasManualChanges = true;
-    }
+    this.boundsForm.patchValue({
+      minX: bounds ? bounds.minx : null,
+      minY: bounds ? bounds.miny : null,
+      maxX: bounds ? bounds.maxx : null,
+      maxY: bounds ? bounds.maxy : null,
+    }, { emitEvent: false });
   }
 
   public get bounds(): BoundsModel | null {
