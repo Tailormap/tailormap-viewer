@@ -1,10 +1,12 @@
 import { TreeHelper, TreeModel } from '@tailormap-viewer/shared';
 import { AppTreeNodeModel } from '@tailormap-admin/admin-api';
 import { ApplicationModelHelper } from './application-model.helper';
+import { ExtendedGeoServiceLayerModel } from '../../catalog/models/extended-geo-service-layer.model';
+import { ApplicationTreeService } from '../services/application-tree.service';
 
 export class ApplicationTreeHelper {
 
-  public static layerTreeNodeToTree(layerTreeNodes: AppTreeNodeModel[]) {
+  public static layerTreeNodeToTree(layerTreeNodes: AppTreeNodeModel[], layers: ExtendedGeoServiceLayerModel[]): TreeModel<AppTreeNodeModel>[] {
     const root = layerTreeNodes.find(l => ApplicationModelHelper.isLevelTreeNode(l) && l.root);
     if (!root) {
       return [];
@@ -13,7 +15,7 @@ export class ApplicationTreeHelper {
       layerTreeNodes,
       root.id,
       (node, children) => ({
-        ...ApplicationTreeHelper.getTreeModelForLayerTreeNode(node),
+        ...ApplicationTreeHelper.getTreeModelForLayerTreeNode(node, layers),
         children,
       }),
       node => ApplicationModelHelper.isLevelTreeNode(node) ? node.childrenIds : [],
@@ -22,15 +24,25 @@ export class ApplicationTreeHelper {
       return [];
     }
     // Skip root, start with children
-    return tree.children || [];
+    return [tree];
   }
 
-  public static getTreeModelForLayerTreeNode(node: AppTreeNodeModel): TreeModel {
+  public static getTreeModelForLayerTreeNode(node: AppTreeNodeModel, layers: ExtendedGeoServiceLayerModel[]): TreeModel<AppTreeNodeModel> {
     const isAppLayerNode = ApplicationModelHelper.isLayerTreeNode(node);
     const isAppLevelNode = ApplicationModelHelper.isLevelTreeNode(node);
+    const layer = isAppLayerNode
+      ? layers.find(l => l.name === node.layerName && l.serviceId === node.serviceId) || null
+      : null;
+    let label = '';
+    if (isAppLevelNode) {
+      label = node.root ? ApplicationTreeService.ROOT_NODE_TITLE : node.title;
+    }
+    if (isAppLayerNode) {
+      label = layer?.title || node.layerName;
+    }
     return {
       id: node.id,
-      label: isAppLevelNode ? node.title : node.id,
+      label,
       type: isAppLayerNode ? 'layer' : 'level',
       metadata: node,
       checked: isAppLayerNode

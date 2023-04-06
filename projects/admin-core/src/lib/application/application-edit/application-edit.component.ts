@@ -1,11 +1,11 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { distinctUntilChanged, filter, map, Observable, of, Subject, takeUntil } from 'rxjs';
-import { setSelectedApplication } from '../state/application.actions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectSelectedApplication } from '../state/application.selectors';
 import { ApplicationModel } from '@tailormap-admin/admin-api';
 import { RoutesEnum } from '../../routes';
+import { ApplicationTreeService } from '../services/application-tree.service';
 
 @Component({
   selector: 'tm-admin-application-edit',
@@ -28,6 +28,7 @@ export class ApplicationEditComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private store$: Store,
     private router: Router,
+    private applicationTreeService: ApplicationTreeService,
   ) {
     this.route.paramMap.pipe(
       takeUntil(this.destroyed),
@@ -35,7 +36,7 @@ export class ApplicationEditComponent implements OnInit, OnDestroy {
       distinctUntilChanged(),
       filter((appId): appId is string => !!appId),
     ).subscribe(appId => {
-      this.store$.dispatch(setSelectedApplication({ applicationId: appId }));
+      this.applicationTreeService.setSelectedApplication(appId);
     });
     this.selectedTabIdx$ = this.route.url
       .pipe(
@@ -67,7 +68,6 @@ export class ApplicationEditComponent implements OnInit, OnDestroy {
         url.push(subRoute.path);
       }
     });
-    console.log(url.join('/'));
     this.router.navigateByUrl(url.join('/'));
   }
 

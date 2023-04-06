@@ -1,9 +1,9 @@
-<div class="catalog-tree">
-  <ng-template #treeNode let-node>
-    <tm-admin-catalog-base-tree-node [node]="node" [selectable]="selectableNode(node)"></tm-admin-catalog-base-tree-node>
-  </ng-template>
-  <tm-admin-catalog-base-tree [treeNodeTemplate]="treeNode"></tm-admin-catalog-base-tree>
-</div>
-<div class="application-tree">
-
+<div class="edit-application-tree">
+  <div class="catalog-tree">
+    <tm-admin-application-catalog-tree [applicationTreeService]="applicationTreeService"></tm-admin-application-catalog-tree>
+  </div>
+  <div class="application-tree">
+    <tm-admin-application-layer-tree [treeNodes$]="treeNodes$"
+                                     (addSubFolder)="addSubFolder($event)"></tm-admin-application-layer-tree>
+  </div>
 </div>

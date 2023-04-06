@@ -1,1 +1,5 @@
-<p>application-layer-tree works!</p>
+<ng-template #treeNode let-node>
+  <tm-admin-application-layer-tree-node [node]="node"
+                                        (addSubFolder)="addSubFolder.emit($event)"></tm-admin-application-layer-tree-node>
+</ng-template>
+<tm-tree [treeNodeTemplate]="treeNode"></tm-tree>

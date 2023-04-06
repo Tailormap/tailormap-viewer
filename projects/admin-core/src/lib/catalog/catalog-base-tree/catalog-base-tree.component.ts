@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, Input, TemplateRef } from '@angular/core';
-import { LoadingStateEnum, TreeService } from '@tailormap-viewer/shared';
+import { DropZoneOptions, LoadingStateEnum, TreeService } from '@tailormap-viewer/shared';
 import { CatalogTreeModel, CatalogTreeModelMetadataTypes } from '../models/catalog-tree.model';
 import { CatalogTreeModelTypeEnum } from '../models/catalog-tree-model-type.enum';
 import { Store } from '@ngrx/store';
@@ -23,6 +23,9 @@ export class CatalogBaseTreeComponent implements OnInit, OnDestroy {
 
   @Input()
   public treeNodeTemplate?: TemplateRef<any>;
+
+  @Input()
+  public additionalDropZones?: DropZoneOptions[];
 
   constructor(
     private treeService: TreeService<CatalogTreeModelMetadataTypes, CatalogTreeModelTypeEnum>,

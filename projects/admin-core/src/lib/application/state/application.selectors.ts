@@ -1,6 +1,7 @@
 import { ApplicationState, applicationStateKey } from './application.state';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { ApplicationTreeHelper } from '../helpers/application-tree.helper';
+import { selectGeoServiceLayers } from '../../catalog/state/catalog.selectors';
 
 const selectApplicationState = createFeatureSelector<ApplicationState>(applicationStateKey);
 
@@ -26,6 +27,13 @@ export const selectApplicationList = createSelector(
   },
 );
 
+export const selectApplicationById = (id: string) => createSelector(
+  selectApplications,
+  (applications) => {
+    return applications.find(a => a.id === id) || null;
+  },
+);
+
 export const selectSelectedApplication = createSelector(
   selectApplications,
   selectSelectedApplicationId,
@@ -38,10 +46,11 @@ export const selectSelectedApplication = createSelector(
 
 export const selectAppLayerTreeForSelectedApplication = createSelector(
   selectSelectedApplication,
-  application => {
+  selectGeoServiceLayers,
+  (application, layers) => {
     if (!application?.contentRoot?.layerNodes) {
-      return null;
+      return [];
     }
-    return ApplicationTreeHelper.layerTreeNodeToTree(application.contentRoot.layerNodes);
+    return ApplicationTreeHelper.layerTreeNodeToTree(application.contentRoot.layerNodes, layers);
   },
 );

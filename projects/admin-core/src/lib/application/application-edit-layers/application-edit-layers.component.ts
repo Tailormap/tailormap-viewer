@@ -1,31 +1,55 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { TreeDragDropService, TreeModel, TreeService } from '@tailormap-viewer/shared';
-import { selectServiceLayerTree } from '../../catalog/state/catalog.selectors';
+import { TreeModel, TreeService } from '@tailormap-viewer/shared';
 import { CatalogTreeModelMetadataTypes } from '../../catalog/models/catalog-tree.model';
 import { CatalogTreeModelTypeEnum } from '../../catalog/models/catalog-tree-model-type.enum';
-import { CatalogTreeHelper } from '../../catalog/helpers/catalog-tree.helper';
+import { selectAppLayerTreeForSelectedApplication, selectSelectedApplicationId } from '../state/application.selectors';
+import { Observable, of, take } from 'rxjs';
+import { AppTreeLevelNodeModel, AppTreeNodeModel } from '@tailormap-admin/admin-api';
+import { addApplicationTreeNodes } from '../state/application.actions';
+import { nanoid } from 'nanoid';
 
 @Component({
   selector: 'tm-admin-application-edit-layers',
   templateUrl: './application-edit-layers.component.html',
   styleUrls: ['./application-edit-layers.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [ TreeService, TreeDragDropService ],
+  providers: [TreeService],
 })
 export class ApplicationEditLayersComponent implements OnInit {
 
+  public treeNodes$: Observable<TreeModel<AppTreeNodeModel>[]> = of([]);
+
   constructor(
     private store$: Store,
-    private treeService: TreeService<CatalogTreeModelMetadataTypes, CatalogTreeModelTypeEnum>,
+    public applicationTreeService: TreeService<CatalogTreeModelMetadataTypes, CatalogTreeModelTypeEnum>,
   ) {}
 
   public ngOnInit(): void {
-    this.treeService.setDataSource(this.store$.select(selectServiceLayerTree));
+    this.treeNodes$ = this.store$.select(selectAppLayerTreeForSelectedApplication);
   }
 
-  public selectableNode(node: TreeModel<CatalogTreeModelMetadataTypes, CatalogTreeModelTypeEnum>): boolean {
-    return CatalogTreeHelper.isLayerNode(node) && !!node.metadata && !node.metadata.virtual;
+  public addSubFolder(parentId: string) {
+    this.store$.select(selectSelectedApplicationId)
+      .pipe(take(1))
+      .subscribe(applicationId => {
+        if (!applicationId) {
+          return;
+        }
+        const node: AppTreeLevelNodeModel = {
+          id: nanoid(),
+          description: '',
+          objectType: 'AppTreeLevelNode',
+          title: $localize `New folder`,
+          root: false,
+          childrenIds: [],
+        };
+        this.store$.dispatch(addApplicationTreeNodes({
+          applicationId,
+          tree: 'layer',
+          treeNodes: [node],
+          parentId,
+        }));
+      });
   }
-
 }

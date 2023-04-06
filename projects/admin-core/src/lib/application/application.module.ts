@@ -18,6 +18,10 @@ import { ApplicationEditLayersComponent } from './application-edit-layers/applic
 import { ApplicationEditBaseLayersComponent } from './application-edit-base-layers/application-edit-base-layers.component';
 import { CatalogModule } from '../catalog/catalog.module';
 import { ApplicationLayerTreeComponent } from './application-layer-tree/application-layer-tree.component';
+import { ApplicationCatalogTreeComponent } from './application-catalog-tree/application-catalog-tree.component';
+import {
+  ApplicationLayerTreeNodeComponent,
+} from './application-layer-tree/application-layer-tree-node/application-layer-tree-node.component';
 
 
 
@@ -32,6 +36,8 @@ import { ApplicationLayerTreeComponent } from './application-layer-tree/applicat
     ApplicationEditLayersComponent,
     ApplicationEditBaseLayersComponent,
     ApplicationLayerTreeComponent,
+    ApplicationCatalogTreeComponent,
+    ApplicationLayerTreeNodeComponent,
   ],
   imports: [
     CommonModule,
