@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, takeUntil } from 'rxjs';
+import { BehaviorSubject, filter, Observable, of, Subject, switchMap, take, takeUntil } from 'rxjs';
 import { selectSelectedApplication } from '../state/application.selectors';
 import { ApplicationModel } from '@tailormap-admin/admin-api';
 import { ApplicationService } from '../services/application.service';
@@ -9,12 +9,12 @@ import { ConfirmDialogService } from '@tailormap-viewer/shared';
 import { setSelectedApplication } from '../state/application.actions';
 
 @Component({
-  selector: 'tm-admin-application-details',
-  templateUrl: './application-details.component.html',
-  styleUrls: ['./application-details.component.css'],
+  selector: 'tm-admin-application-edit-settings',
+  templateUrl: './application-edit-settings.component.html',
+  styleUrls: ['./application-edit-settings.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ApplicationDetailsComponent implements OnInit, OnDestroy {
+export class ApplicationEditSettingsComponent implements OnInit, OnDestroy {
 
   public application$: Observable<ApplicationModel | null> = of(null);
   public updatedApplication: Omit<ApplicationModel, 'id'> | null = null;
@@ -25,7 +25,6 @@ export class ApplicationDetailsComponent implements OnInit, OnDestroy {
   private destroyed = new Subject();
 
   constructor(
-    private route: ActivatedRoute,
     private store$: Store,
     private applicationService: ApplicationService,
     private confirmDelete: ConfirmDialogService,
@@ -33,15 +32,6 @@ export class ApplicationDetailsComponent implements OnInit, OnDestroy {
   ) { }
 
   public ngOnInit(): void {
-    this.route.paramMap.pipe(
-      takeUntil(this.destroyed),
-      map(params => params.get('applicationId')),
-      distinctUntilChanged(),
-      filter((appId): appId is string => !!appId),
-    ).subscribe(appId => {
-      this.store$.dispatch(setSelectedApplication({ applicationId: appId }));
-      this.updatedApplication = null;
-    });
     this.application$ = this.store$.select(selectSelectedApplication);
   }
 
@@ -84,6 +74,10 @@ export class ApplicationDetailsComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.router.navigateByUrl('/applications');
       });
+  }
+
+  public clearSelectedApplication() {
+    this.store$.dispatch(setSelectedApplication({ applicationId: null }));
   }
 
 }

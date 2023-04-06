@@ -1,0 +1,9 @@
+<div *ngIf="node"
+     class="tree-node"
+     [routerLink]="link"
+     [class.tree-node--selectable]="selectable">
+  <div class="tree-node__label">
+    <span class="tree-node__icon"><mat-icon [attr.aria-label]="nodeSettings.label" [svgIcon]="nodeSettings.icon"></mat-icon></span>
+    <span class="tree-node__label-content">{{node.label}}</span>
+  </div>
+</div>

@@ -1,22 +1,21 @@
 import { Inject, Injectable, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
-  CatalogItemKindEnum, CatalogItemModel, CatalogModelHelper, CatalogNodeModel, FeatureSourceModel, GeoServiceWithLayersModel,
+  CatalogItemKindEnum, CatalogModelHelper, CatalogNodeModel, FeatureSourceModel, GeoServiceWithLayersModel,
   TAILORMAP_ADMIN_API_V1_SERVICE,
   TailormapAdminApiV1ServiceModel,
 } from '@tailormap-admin/admin-api';
-import { catchError, concatMap, forkJoin, map, of, Subject, take, takeUntil, tap } from 'rxjs';
+import { catchError, concatMap, forkJoin, of, Subject, take, takeUntil, tap } from 'rxjs';
 import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
 import {
-  selectCatalog, selectCatalogNodeById, selectFeatureSources, selectGeoServices, selectParentsForCatalogNode,
+  selectCatalog, selectCatalogNodeById, selectFeatureSourceIds, selectGeoServiceIds,
 } from '../state/catalog.selectors';
-import { addFeatureSources, addGeoServices, expandTree, updateCatalog, updateFeatureSourceNodeIds } from '../state/catalog.actions';
-import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
+import {
+  addFeatureSources, addGeoServices, updateCatalog,
+} from '../state/catalog.actions';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackBarMessageComponent } from '@tailormap-viewer/shared';
 import { nanoid } from 'nanoid';
-import { CatalogTreeModelTypeEnum } from '../models/catalog-tree-model-type.enum';
-import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 
 @Injectable({
   providedIn: 'root',
@@ -24,21 +23,20 @@ import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.mo
 export class CatalogService implements OnDestroy {
 
   private destroyed = new Subject();
-  private loadServiceSubscriptions = new Map<string, Subject<null>>();
-  private geoServices: Map<string, ExtendedGeoServiceModel> = new Map();
-  private featureSources: Map<string, ExtendedFeatureSourceModel> = new Map();
+  private geoServicesIds: Set<string> = new Set();
+  private featureSourcesIds: Set<string> = new Set();
 
   constructor(
     private store$: Store,
     @Inject(TAILORMAP_ADMIN_API_V1_SERVICE) private adminApiService: TailormapAdminApiV1ServiceModel,
     private snackBar: MatSnackBar,
   ) {
-    this.store$.select(selectGeoServices).pipe(takeUntil(this.destroyed)).subscribe(services => {
-      this.geoServices = new Map(services.map(service => [ service.id, service ]));
-    });
-    this.store$.select(selectFeatureSources).pipe(takeUntil(this.destroyed)).subscribe(featureSources => {
-      this.featureSources = new Map(featureSources.map(featureSource => [ featureSource.id, featureSource ]));
-    });
+    this.store$.select(selectGeoServiceIds)
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(services => this.geoServicesIds = services);
+    this.store$.select(selectFeatureSourceIds)
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(featureSources => this.featureSourcesIds = featureSources);
   }
 
   public ngOnDestroy() {
@@ -46,129 +44,84 @@ export class CatalogService implements OnDestroy {
     this.destroyed.complete();
   }
 
-  public expandTreeToSelectedItem(nodesList: Array<{ type: CatalogTreeModelTypeEnum; treeNodeId: string; id: string }>) {
-    const catalogNode = nodesList.find(part => part.type === CatalogTreeModelTypeEnum.CATALOG_NODE_TYPE);
-    if (catalogNode) {
-      this.store$.dispatch(expandTree({ id: catalogNode.id, nodeType: catalogNode.type }));
-      this.loadCatalogNodeItems$(catalogNode.id, true)
-        .pipe(take(1))
-        .subscribe(() => {
-          const serviceNode = nodesList.find(part => part.type === CatalogTreeModelTypeEnum.SERVICE_TYPE);
-          if (serviceNode) {
-            this.store$.dispatch(expandTree({ id: serviceNode.id, nodeType: serviceNode.type }));
-          }
-          const layerNode = nodesList.find(part => part.type === CatalogTreeModelTypeEnum.SERVICE_LAYER_TYPE);
-          if (layerNode) {
-            this.store$.dispatch(expandTree({ id: layerNode.id, nodeType: layerNode.type }));
-          }
-          const featureSourceNode = nodesList.find(part => part.type === CatalogTreeModelTypeEnum.FEATURE_SOURCE_TYPE);
-          if (featureSourceNode) {
-            this.store$.dispatch(expandTree({ id: featureSourceNode.id, nodeType: featureSourceNode.type }));
-          }
-        });
+  public getServices$(
+    serviceIds: string[],
+    subscription: Subject<null>,
+    parentNodeId?: string,
+  ) {
+    const requests$ = serviceIds
+      .filter(id => !this.geoServicesIds.has(id))
+      .map(id => {
+        return this.adminApiService.getGeoService$({ id })
+          .pipe(
+            takeUntil(subscription),
+            catchError(() => {
+              return of(null);
+            }),
+          );
+      });
+    if (requests$.length === 0) {
+      return null;
     }
-  }
-
-  public loadCatalogNodeItems$(nodeId: string, includeParents?: boolean) {
-    return this.store$.select(selectParentsForCatalogNode(nodeId))
+    return forkJoin(requests$)
       .pipe(
-        take(1),
-        concatMap(parentIds => {
-          const requests$ = [];
-          if (includeParents) {
-            requests$.push(...parentIds.map(id => this.loadCatalogChildren$(id)));
+        tap(responses => {
+          const services = responses.filter((response): response is GeoServiceWithLayersModel => {
+            return CatalogModelHelper.isGeoServiceModel(response);
+          });
+          if (services.length > 0) {
+            this.store$.dispatch(addGeoServices({ services, parentNode: parentNodeId || '' }));
           }
-          requests$.push(this.loadCatalogChildren$(nodeId));
-          return forkJoin(requests$);
+          const hasError = responses.some(response => response === null);
+          if (hasError) {
+            SnackBarMessageComponent.open$(this.snackBar, {
+              message: $localize `Error while loading service(s). Please collapse/expand the node again to try again.`,
+              duration: 5000,
+              showCloseButton: true,
+            }).pipe(takeUntil(subscription)).subscribe();
+          }
         }),
       );
   }
 
-  private loadCatalogChildren$(nodeId: string) {
-    this.cancelCurrentSubscription(nodeId);
-    const newSubscription = new Subject<null>();
-    this.loadServiceSubscriptions.set(nodeId, newSubscription);
-    return this.store$.select(selectCatalogNodeById(nodeId)).pipe(
-      take(1),
-      map(node => {
-        if (!node || (node?.items || []).length === 0) {
-          return [[], []];
-        }
-        const serviceItems = (node.items || []).filter(item => item.kind === CatalogItemKindEnum.GEO_SERVICE);
-        const featureSourceItems = (node.items || []).filter(item => item.kind === CatalogItemKindEnum.FEATURE_SOURCE);
-        return [ serviceItems, featureSourceItems ];
-      }),
-      tap(([ _, featureSourceItems ]) => {
-        this.updateNodeIdForExistingFeatureSources(featureSourceItems, nodeId);
-      }),
-      concatMap(([ serviceItems, featureSourceItems ]) => {
-        const services$ = this.getServiceRequests$(serviceItems, newSubscription);
-        const featureSources$ = this.getFeatureSourceRequests$(featureSourceItems, newSubscription);
-        if (services$.length === 0 && featureSources$.length === 0) {
-          return of([]);
-        }
-        return forkJoin([ ...services$, ...featureSources$ ]);
-      }),
-      tap(responses => this.handleResponses(nodeId, responses, newSubscription)),
-    );
-  }
-
-  private handleResponses(nodeId: string, responses: Array<GeoServiceWithLayersModel | FeatureSourceModel | null>, newSubscription: Subject<null>) {
-    if (responses.length === 0) {
-      return;
+  public getFeatureSources$(
+    featureSourceIds: string[],
+    subscription: Subject<null>,
+    parentNodeId?: string,
+  ){
+    const requests$ = featureSourceIds
+      .filter(id => !this.featureSourcesIds.has(id))
+      .map(id => {
+        return this.adminApiService.getFeatureSource$({ id })
+          .pipe(
+            takeUntil(subscription),
+            catchError(() => {
+              return of(null);
+            }),
+          );
+      });
+    if (requests$.length === 0) {
+      return null;
     }
-    const hasError = responses.some(response => response === null);
-    if (hasError) {
-      SnackBarMessageComponent.open$(this.snackBar, {
-        message: $localize `Error while loading service(s). Please collapse/expand the node again to try again.`,
-        duration: 5000,
-        showCloseButton: true,
-      }).pipe(takeUntil(newSubscription)).subscribe();
-    }
-    const services = responses.filter((response): response is GeoServiceWithLayersModel => {
-      return CatalogModelHelper.isGeoServiceModel(response);
-    });
-    const featureSources = responses.filter((response): response is FeatureSourceModel => {
-      return CatalogModelHelper.isFeatureSourceModel(response);
-    });
-    if (services.length > 0) {
-      this.store$.dispatch(addGeoServices({ services, parentNode: nodeId }));
-    }
-    if (featureSources.length > 0) {
-      this.store$.dispatch(addFeatureSources({ featureSources, parentNode: nodeId }));
-    }
-  }
-
-  private getServiceRequests$(serviceItems: CatalogItemModel[], subscription: Subject<null>) {
-    return serviceItems.filter(item => !this.geoServices.has(item.id)).map(item => {
-      return this.adminApiService.getGeoService$({ id: item.id })
-        .pipe(
-          takeUntil(subscription),
-          catchError(() => {
-            return of(null);
-          }),
-        );
-    });
-  }
-
-  private getFeatureSourceRequests$(featureSourceItems: CatalogItemModel[], subscription: Subject<null>) {
-    return featureSourceItems.filter(item => !this.featureSources.has(item.id)).map(item => {
-      return this.adminApiService.getFeatureSource$({ id: item.id })
-        .pipe(
-          takeUntil(subscription),
-          catchError(() => {
-            return of(null);
-          }),
-        );
-    });
-  }
-
-  private cancelCurrentSubscription(nodeId: string) {
-    const currentSubscription = this.loadServiceSubscriptions.get(nodeId);
-    if (currentSubscription) {
-      currentSubscription.next(null);
-      currentSubscription.complete();
-    }
+    return forkJoin(requests$)
+      .pipe(
+        tap(responses => {
+          const featureSources = responses.filter((response): response is FeatureSourceModel => {
+            return CatalogModelHelper.isFeatureSourceModel(response);
+          });
+          if (featureSources.length > 0) {
+            this.store$.dispatch(addFeatureSources({ featureSources, parentNode: parentNodeId || '' }));
+          }
+          const hasError = responses.some(response => response === null);
+          if (hasError) {
+            SnackBarMessageComponent.open$(this.snackBar, {
+              message: $localize `Error while loading feature source(s). Please collapse/expand the node again to try again.`,
+              duration: 5000,
+              showCloseButton: true,
+            }).pipe(takeUntil(subscription)).subscribe();
+          }
+        }),
+      );
   }
 
   public createCatalogNode$(node: Omit<ExtendedCatalogNodeModel, 'id'>) {
@@ -244,19 +197,6 @@ export class CatalogService implements OnDestroy {
           }
         }),
       );
-  }
-
-  private updateNodeIdForExistingFeatureSources(featureSourceItems: undefined | CatalogItemModel[], nodeId: string) {
-    if (typeof featureSourceItems === 'undefined') {
-      return;
-    }
-    const featureSourceIds = new Set(featureSourceItems.map(item => item.id));
-    const featuresWithoutNodeId = Array.from(this.featureSources.values())
-      .filter(featureSource => featureSourceIds.has(featureSource.id) && !featureSource.catalogNodeId)
-      .map(fs => fs.id);
-    if (featuresWithoutNodeId.length > 0) {
-      this.store$.dispatch(updateFeatureSourceNodeIds({ featureSources: featuresWithoutNodeId, nodeId }));
-    }
   }
 
 }

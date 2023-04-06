@@ -1,10 +1,9 @@
 <ng-container *ngIf="application$ | async as application">
-  <h2 class="page-details-title" i18n>Edit {{ application.title }}</h2>
   <tm-admin-application-form [application]="application"
                              (updateApplication)="updateApplication($event)"></tm-admin-application-form>
   <div class="page-details-actions">
     <tm-admin-save-button [saving$]="saving$" [disabled]="!updatedApplication" (save)="save(application.id)"></tm-admin-save-button>
     <button mat-flat-button color="warn" (click)="delete(application)" i18n>Delete</button>
-    <button mat-flat-button routerLink="/applications" i18n>Close</button>
+    <button mat-flat-button (click)="clearSelectedApplication()" routerLink="/applications" i18n>Close</button>
   </div>
 </ng-container>

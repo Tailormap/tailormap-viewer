@@ -1,0 +1,15 @@
+<ng-container *ngIf="application$ | async as application">
+  <h2 class="page-details-title" i18n>Edit {{ application.title }}</h2>
+
+  <mat-tab-group [selectedIndex]="selectedTabIdx$ | async" (selectedIndexChange)="navigateTo(application.id, $event)">
+    <mat-tab>
+      <ng-template mat-tab-label><ng-container i18n>Settings</ng-container></ng-template>
+    </mat-tab>
+    <mat-tab>
+      <ng-template mat-tab-label><ng-container i18n>Selected layers</ng-container></ng-template>
+    </mat-tab>
+  </mat-tab-group>
+
+  <router-outlet></router-outlet>
+
+</ng-container>

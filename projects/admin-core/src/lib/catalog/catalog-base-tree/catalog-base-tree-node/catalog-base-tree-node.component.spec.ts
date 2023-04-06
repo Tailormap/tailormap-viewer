@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/angular';
-import { CatalogTreeNodeComponent } from './catalog-tree-node.component';
+import { CatalogBaseTreeNodeComponent } from './catalog-base-tree-node.component';
 import { getCatalogNode, getGeoService, getGeoServiceLayer } from '@tailormap-admin/admin-api';
 import { CatalogTreeHelper } from '../../helpers/catalog-tree.helper';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
@@ -7,12 +7,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { CatalogTreeModel } from '../../models/catalog-tree.model';
 import { ExtendedGeoServiceModel } from '../../models/extended-geo-service.model';
 import { ExtendedGeoServiceLayerModel } from '../../models/extended-geo-service-layer.model';
-import { CatalogBaseTreeNodeComponent } from '../../catalog-base-tree/catalog-base-tree-node/catalog-base-tree-node.component';
 
 const setup = async (node: CatalogTreeModel | null) => {
-  await render(CatalogTreeNodeComponent, {
+  await render(CatalogBaseTreeNodeComponent, {
     imports: [ MatIconModule, MatIconTestingModule ],
-    declarations: [CatalogBaseTreeNodeComponent],
     componentProperties: { node },
   });
 };

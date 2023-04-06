@@ -8,6 +8,7 @@ import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-lay
 import { GeoServiceLayerSettingsModel } from '../models/geo-service-layer-settings.model';
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
+import { CatalogItemKindEnum } from '@tailormap-admin/admin-api';
 
 const selectCatalogState = createFeatureSelector<CatalogState>(catalogStateKey);
 
@@ -19,6 +20,23 @@ export const selectFeatureTypes = createSelector(selectCatalogState, state => st
 export const selectCatalogLoadStatus = createSelector(selectCatalogState, state => state.catalogLoadStatus);
 export const selectCatalogLoadError = createSelector(selectCatalogState, state => state.catalogLoadError);
 export const selectFeatureSourceLoadStatus = createSelector(selectCatalogState, state => state.featureSourcesLoadStatus);
+
+export const selectGeoServiceIds = createSelector(selectGeoServices, services => new Set(services.map(service => service.id)));
+export const selectFeatureSourceIds = createSelector(selectFeatureSources, sources => new Set(sources.map(service => service.id)));
+
+export const selectGeoServicesWithoutCatalogId = createSelector(
+  selectGeoServices,
+  services => {
+    return services.filter(service => !service.catalogNodeId).map(s => s.id);
+  },
+);
+
+export const selectFeatureSourcesWithoutCatalogId = createSelector(
+  selectFeatureSources,
+  featureSources => {
+    return featureSources.filter(featureSource => !featureSource.catalogNodeId).map(fs => fs.id);
+  },
+);
 
 export const selectCatalogNodeById = (id: string) => createSelector(
   selectCatalog,
@@ -92,5 +110,22 @@ export const selectCatalogTree = createSelector(
   selectFeatureTypes,
   (catalog, services, layers, featureSources, featureTypes): CatalogTreeModel[] => {
     return CatalogTreeHelper.catalogToTree(catalog, services, layers, featureSources, featureTypes);
+  },
+);
+
+export const selectServiceLayerTree = createSelector(
+  selectCatalog,
+  selectGeoServices,
+  selectGeoServiceLayers,
+  (catalog, services, layers): CatalogTreeModel[] => {
+    const filteredNodes = catalog
+      .map(node => ({
+        ...node,
+        items: node.items ? node.items.filter(item => item.kind ===  CatalogItemKindEnum.GEO_SERVICE) : node.items,
+      }))
+      .filter(node => {
+        return (node.children || []).length > 0 || (node.items || []).length > 0;
+      });
+    return CatalogTreeHelper.catalogToTree(filteredNodes, services, layers, [], []);
   },
 );

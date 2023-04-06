@@ -23,7 +23,8 @@ import { RouterLink } from '@angular/router';
 import { FeatureSourceFormDialogComponent } from './feature-source-form-dialog/feature-source-form-dialog.component';
 import { FeatureTypeDetailsComponent } from './feature-type-details/feature-type-details.component';
 import { FeatureTypeSelectorComponent } from './feature-type-selector/feature-type-selector.component';
-
+import { CatalogBaseTreeComponent } from './catalog-base-tree/catalog-base-tree.component';
+import { CatalogBaseTreeNodeComponent } from './catalog-base-tree/catalog-base-tree-node/catalog-base-tree-node.component';
 
 
 @NgModule({
@@ -43,6 +44,8 @@ import { FeatureTypeSelectorComponent } from './feature-type-selector/feature-ty
     FeatureSourceFormDialogComponent,
     FeatureTypeDetailsComponent,
     FeatureTypeSelectorComponent,
+    CatalogBaseTreeComponent,
+    CatalogBaseTreeNodeComponent,
   ],
   imports: [
     CommonModule,
@@ -54,6 +57,9 @@ import { FeatureTypeSelectorComponent } from './feature-type-selector/feature-ty
   ],
   exports: [
     CatalogTreeComponent,
+    CatalogBaseTreeComponent,
+    CatalogBaseTreeNodeComponent,
   ],
 })
-export class CatalogModule { }
+export class CatalogModule {
+}

@@ -1,7 +1,6 @@
-import { AppLayerRefModel } from './app-layer-ref.model';
+import { AppTreeNodeModel } from './app-tree-node.model';
 
 export interface AppContentModel {
-  baseLayers: Array<{ title: string; layers: AppLayerRefModel[] }>;
-  layers: AppLayerRefModel[];
-  children: AppContentModel[];
+  baseLayerNodes: AppTreeNodeModel[];
+  layerNodes: AppTreeNodeModel[];
 }

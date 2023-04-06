@@ -251,6 +251,24 @@ const onUpdateFeatureSourceNodeIds = (
   };
 };
 
+const onUpdateGeoServiceNodeIds = (
+  state: CatalogState,
+  payload: ReturnType<typeof CatalogActions.updateGeoServiceNodeIds>,
+): CatalogState => {
+  const geoServiceIds = new Set(payload.geoServices);
+  return {
+    ...state,
+    geoServices: state.geoServices.map(source => ({
+      ...source,
+      catalogNodeId: geoServiceIds.has(source.id) ? payload.nodeId : source.catalogNodeId,
+    })),
+    geoServiceLayers: state.geoServiceLayers.map(layer => ({
+      ...layer,
+      catalogNodeId: geoServiceIds.has(layer.serviceId) ? payload.nodeId : layer.catalogNodeId,
+    })),
+  };
+};
+
 const catalogReducerImpl = createReducer<CatalogState>(
   initialCatalogState,
   on(CatalogActions.loadCatalogStart, onLoadCatalogStart),
@@ -268,6 +286,7 @@ const catalogReducerImpl = createReducer<CatalogState>(
   on(CatalogActions.loadFeatureSourcesSuccess, onLoadFeatureSourcesSuccess),
   on(CatalogActions.loadFeatureSourcesFailed, onLoadFeatureSourcesFailed),
   on(CatalogActions.updateFeatureSourceNodeIds, onUpdateFeatureSourceNodeIds),
+  on(CatalogActions.updateGeoServiceNodeIds, onUpdateGeoServiceNodeIds),
 );
 export const catalogReducer = (state: CatalogState | undefined, action: Action) => catalogReducerImpl(state, action);
 

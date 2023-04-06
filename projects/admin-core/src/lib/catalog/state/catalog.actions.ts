@@ -68,3 +68,7 @@ export const updateFeatureSourceNodeIds = createAction(
   `${catalogActionsPrefix} Update Feature Source Node Ids`,
   props<{ featureSources: string[]; nodeId: string }>(),
 );
+export const updateGeoServiceNodeIds = createAction(
+  `${catalogActionsPrefix} Update Geo Service Node Ids`,
+  props<{ geoServices: string[]; nodeId: string }>(),
+);

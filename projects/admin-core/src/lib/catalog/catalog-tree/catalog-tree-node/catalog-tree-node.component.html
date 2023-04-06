@@ -1,9 +1,3 @@
-<div *ngIf="node"
-     class="tree-node"
-     [routerLink]="nodeSettings.link"
-     [class.tree-node--selectable]="nodeSettings.selectable">
-  <div class="tree-node__label">
-    <span class="tree-node__icon"><mat-icon [attr.aria-label]="nodeSettings.label" [svgIcon]="nodeSettings.icon"></mat-icon></span>
-    <span class="tree-node__label-content">{{node.label}}</span>
-  </div>
-</div>
+<tm-admin-catalog-base-tree-node [node]="node"
+                                 [selectable]="nodeSettings.selectable"
+                                 [link]="nodeSettings.link"></tm-admin-catalog-base-tree-node>

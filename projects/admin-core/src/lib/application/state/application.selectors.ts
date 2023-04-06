@@ -1,5 +1,6 @@
 import { ApplicationState, applicationStateKey } from './application.state';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { ApplicationTreeHelper } from '../helpers/application-tree.helper';
 
 const selectApplicationState = createFeatureSelector<ApplicationState>(applicationStateKey);
 
@@ -32,5 +33,15 @@ export const selectSelectedApplication = createSelector(
     return selectedApplicationId
       ? applications.find(a => a.id === selectedApplicationId) || null
       : null;
+  },
+);
+
+export const selectAppLayerTreeForSelectedApplication = createSelector(
+  selectSelectedApplication,
+  application => {
+    if (!application?.contentRoot?.layerNodes) {
+      return null;
+    }
+    return ApplicationTreeHelper.layerTreeNodeToTree(application.contentRoot.layerNodes);
   },
 );

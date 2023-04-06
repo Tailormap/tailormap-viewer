@@ -1,5 +1,6 @@
 import { BoundsModel, ComponentModel, ViewerStylingModel } from '@tailormap-viewer/api';
 import { AppContentModel } from './app-content.model';
+import { AppSettingsModel } from './app-settings.model';
 
 export interface ApplicationModel {
   id: string;
@@ -12,7 +13,7 @@ export interface ApplicationModel {
   maxExtent?: BoundsModel;
   authenticatedRequired?: boolean;
   contentRoot?: AppContentModel;
-  layerSettings?: Record<string, any>;
+  settings?: AppSettingsModel;
   components?: ComponentModel[];
   styling?: ViewerStylingModel;
 }

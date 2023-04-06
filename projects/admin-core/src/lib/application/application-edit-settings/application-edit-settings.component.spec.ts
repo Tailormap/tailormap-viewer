@@ -1,5 +1,5 @@
-import { render, screen } from '@testing-library/angular';
-import { ApplicationDetailsComponent } from './application-details.component';
+import { render, screen, waitFor } from '@testing-library/angular';
+import { ApplicationEditSettingsComponent } from './application-edit-settings.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
@@ -8,7 +8,9 @@ import { ApplicationState, applicationStateKey, initialApplicationState } from '
 import { Store } from '@ngrx/store';
 import { ApplicationService } from '../services/application.service';
 import { getApplication } from '@tailormap-admin/admin-api';
-import { ConfirmDialogService } from '@tailormap-viewer/shared';
+import { ConfirmDialogService, SharedImportsModule } from '@tailormap-viewer/shared';
+import { ApplicationFormComponent } from '../application-form/application-form.component';
+import { BoundsFieldComponent } from '../../shared/components/bounds-field/bounds-field.component';
 
 const setup = async (hasApplication: boolean) => {
   const appState: ApplicationState = {
@@ -20,8 +22,10 @@ const setup = async (hasApplication: boolean) => {
     initialState: { [applicationStateKey]: appState },
   });
   const appService = { updateApplication$: jest.fn() };
-  await render(ApplicationDetailsComponent, {
+  await render(ApplicationEditSettingsComponent, {
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [SharedImportsModule],
+    declarations: [ ApplicationFormComponent, BoundsFieldComponent ],
     providers: [
       { provide: ActivatedRoute, useValue: { paramMap: of({ get: () => '1' }) } },
       { provide: Store, useValue: store },
@@ -31,16 +35,18 @@ const setup = async (hasApplication: boolean) => {
   });
 };
 
-describe('ApplicationDetailsComponent', () => {
+describe('ApplicationEditSettingsComponent', () => {
 
   test('should render empty', async () => {
     await setup(false);
     expect(await screen.queryByText('Edit')).not.toBeInTheDocument();
   });
 
-  test('should render application', async () => {
+  test('should render application form', async () => {
     await setup(true);
-    expect(await screen.queryByText('Edit Test application')).toBeInTheDocument();
+    expect(await screen.findByPlaceholderText('Name')).toBeInTheDocument();
+    expect(await screen.findByPlaceholderText('Title')).toBeInTheDocument();
+    expect(await screen.findByPlaceholderText('Title')).toHaveValue('Test application');
   });
 
 });
