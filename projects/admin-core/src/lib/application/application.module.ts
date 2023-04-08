@@ -22,6 +22,7 @@ import { ApplicationCatalogTreeComponent } from './application-catalog-tree/appl
 import {
   ApplicationLayerTreeNodeComponent,
 } from './application-layer-tree/application-layer-tree-node/application-layer-tree-node.component';
+import { CreateSubFolderComponent } from './application-layer-tree/create-subfolder/create-sub-folder.component';
 
 
 
@@ -38,6 +39,7 @@ import {
     ApplicationLayerTreeComponent,
     ApplicationCatalogTreeComponent,
     ApplicationLayerTreeNodeComponent,
+    CreateSubFolderComponent,
   ],
   imports: [
     CommonModule,

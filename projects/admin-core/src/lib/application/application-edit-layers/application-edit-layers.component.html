@@ -1,9 +1,11 @@
 <div class="edit-application-tree">
   <div class="catalog-tree">
-    <tm-admin-application-catalog-tree [applicationTreeService]="applicationTreeService"></tm-admin-application-catalog-tree>
+    <tm-admin-application-catalog-tree [applicationTreeService]="applicationTreeService"
+                                       (addLayer)="addLayer($event)"></tm-admin-application-catalog-tree>
   </div>
   <div class="application-tree">
     <tm-admin-application-layer-tree [treeNodes$]="treeNodes$"
+                                     (nodePositionChanged)="nodePositionChanged($event)"
                                      (addSubFolder)="addSubFolder($event)"></tm-admin-application-layer-tree>
   </div>
 </div>

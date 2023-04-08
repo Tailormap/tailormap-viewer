@@ -1,0 +1,20 @@
+<h2 i18n>Create folder</h2>
+<mat-dialog-content>
+  <mat-form-field>
+    <mat-label i18n>Folder name</mat-label>
+    <input matInput
+           type="text"
+           tmAutoFocus
+           [formControl]="nameControl" />
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-flat-button
+          (click)="onCancel()"
+          i18n>Cancel</button>
+  <button mat-flat-button
+          [disabled]="nameControl.invalid"
+          (click)="onCreate()"
+          color="primary"
+          i18n>Create</button>
+</mat-dialog-actions>

@@ -1,25 +1,11 @@
 <div *ngIf="node"
      class="tree-node"
      [class.level]="isLevel()">
-  <div class="tree-node__label" (dblclick)="showNameInput($event)">
+  <div class="tree-node__label">
     <span class="tree-node__icon">
       <mat-icon [attr.aria-label]="node.label" [svgIcon]="isLevel() ? 'folder_filled' : 'admin_catalog'"></mat-icon>
     </span>
-    <span class="tree-node__label-content" [class.tree-node__label-content--has-control]="showFormControl">
-      <ng-container *ngIf="showFormControl">
-        <mat-form-field class="tree-node__form-field">
-          <input matInput
-                 [formControl]="nameControl"
-                 [placeholder]="node.label"
-                 (blur)="hideNameInput()"
-                 (keyup.enter)="hideNameInput()"
-                 (keyup.escape)="hideNameInput()">
-        </mat-form-field>
-      </ng-container>
-      <ng-container *ngIf="!showFormControl">
-        {{node.label}}
-      </ng-container>
-    </span>
+    <span class="tree-node__label-content">{{node.label}}</span>
   </div>
   <div class="tree-node__actions">
     <button *ngIf="isLevel()"

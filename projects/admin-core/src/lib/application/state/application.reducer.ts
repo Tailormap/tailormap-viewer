@@ -1,7 +1,7 @@
 import * as ApplicationActions from './application.actions';
 import { Action, createReducer, on } from '@ngrx/store';
 import { ApplicationState, initialApplicationState } from './application.state';
-import { LoadingStateEnum } from '@tailormap-viewer/shared';
+import { ChangePositionHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
 import { AppContentModel, ApplicationModel, AppTreeLevelNodeModel } from '@tailormap-admin/admin-api';
 import { ApplicationModelHelper } from '../helpers/application-model.helper';
 
@@ -101,27 +101,38 @@ const onAddApplicationTreeNodes = (
   }
   const application = state.applications[idx];
   const tree: 'baseLayerNodes' | 'layerNodes' = payload.tree === 'baseLayer' ? 'baseLayerNodes' : 'layerNodes';
-  const contentRoot: AppContentModel = application.contentRoot || { layerNodes: [], baseLayerNodes: [] };
-  const updatedTree = [ ...(contentRoot[tree] || []), ...payload.treeNodes ];
-  if (payload.parentId) {
-    const parentIdx = updatedTree.findIndex(node => node.id === payload.parentId);
-    if (parentIdx !== -1 && ApplicationModelHelper.isLevelTreeNode(updatedTree[parentIdx])) {
-      const parent = updatedTree[parentIdx];
-      if (ApplicationModelHelper.isLevelTreeNode(parent)) {
-        const parentNode: AppTreeLevelNodeModel = {
-          ...parent,
-          childrenIds: [
-            ...(parent.childrenIds || []),
-            ...payload.treeNodes.map(node => node.id),
-          ],
-        };
-        updatedTree[parentIdx] = parentNode;
-      }
-    }
-  }
+  const contentRoot = ApplicationModelHelper.getApplicationContentRoot(application);
   const updatedContentRoot: AppContentModel = {
     ...contentRoot,
-    [tree]: updatedTree,
+    [tree]: ApplicationModelHelper.addNodesToApplicationTree(application, contentRoot[tree], payload),
+  };
+  return {
+    ...state,
+    applications: [
+      ...state.applications.slice(0, idx),
+      {
+        ...application,
+        contentRoot: updatedContentRoot,
+      },
+      ...state.applications.slice(idx + 1),
+    ],
+  };
+};
+
+export const onUpdateApplicationTreeOder = (
+  state: ApplicationState,
+  payload: ReturnType<typeof ApplicationActions.updateApplicationTreeOrder>,
+): ApplicationState => {
+  const idx = state.applications.findIndex(app => app.id === payload.applicationId);
+  if (idx === -1) {
+    return state;
+  }
+  const application = state.applications[idx];
+  const tree: 'baseLayerNodes' | 'layerNodes' = payload.tree === 'baseLayer' ? 'baseLayerNodes' : 'layerNodes';
+  const contentRoot = ApplicationModelHelper.getApplicationContentRoot(application);
+  const updatedContentRoot: AppContentModel = {
+    ...contentRoot,
+    [tree]: ApplicationModelHelper.updateApplicationOrder(application, contentRoot[tree], payload),
   };
   return {
     ...state,
@@ -147,5 +158,6 @@ const applicationReducerImpl = createReducer<ApplicationState>(
   on(ApplicationActions.updateApplication, onUpdateApplication),
   on(ApplicationActions.deleteApplication, onDeleteApplication),
   on(ApplicationActions.addApplicationTreeNodes, onAddApplicationTreeNodes),
+  on(ApplicationActions.updateApplicationTreeOrder, onUpdateApplicationTreeOder),
 );
 export const applicationReducer = (state: ApplicationState | undefined, action: Action) => applicationReducerImpl(state, action);

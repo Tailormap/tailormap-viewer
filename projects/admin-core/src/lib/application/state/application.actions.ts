@@ -1,5 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { ApplicationModel, AppTreeNodeModel } from '@tailormap-admin/admin-api';
+import { TreeNodePosition } from '@tailormap-viewer/shared';
 
 const applicationActionsPrefix = '[Application]';
 
@@ -48,7 +49,26 @@ export const deleteApplication = createAction(
 
 export const addApplicationTreeNodes = createAction(
   `${applicationActionsPrefix} Add Application Tree Nodes`,
-  props<{ applicationId: string; treeNodes: AppTreeNodeModel[]; tree: 'layer' | 'baseLayer'; parentId?: string }>(),
+  props<{
+    applicationId: string;
+    treeNodes: AppTreeNodeModel[];
+    tree: 'layer' | 'baseLayer';
+    parentId?: string;
+    position?: TreeNodePosition;
+    sibling?: string;
+  }>(),
+);
+
+export const updateApplicationTreeOrder = createAction(
+  `${applicationActionsPrefix} Update Application Tree Order`,
+  props<{
+    applicationId: string;
+    nodeId: string;
+    tree: 'layer' | 'baseLayer';
+    parentId?: string;
+    position: TreeNodePosition;
+    sibling?: string;
+  }>(),
 );
 
 export const updateApplicationTreeNode = createAction(
