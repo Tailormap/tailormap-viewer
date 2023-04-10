@@ -53,8 +53,8 @@
   /* mask to cover text behind the icon */
   content: " ";
   position: absolute;
-  right: calc(-1 * var(--toc-side-padding));
-  width: var(--toc-side-padding);
+  right: calc(-1 * var(--admin-tree-side-padding));
+  width: var(--admin-tree-side-padding);
   height: 100%;
   background-color: #fff;
 }

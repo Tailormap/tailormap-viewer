@@ -1,7 +1,7 @@
 import {
   AppContentModel, ApplicationModel, AppTreeLayerNodeModel, AppTreeLevelNodeModel, AppTreeNodeModel,
 } from '@tailormap-admin/admin-api';
-import { ChangePositionHelper, NodePositionChangedEventModel, TreeHelper, TreeNodePosition } from '@tailormap-viewer/shared';
+import { ChangePositionHelper, TreeHelper, TreeNodePosition } from '@tailormap-viewer/shared';
 
 export class ApplicationModelHelper {
 

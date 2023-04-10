@@ -6,6 +6,7 @@ import {
   CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel,
 } from '../models';
 import { CatalogModelHelper } from '../helpers/catalog-model.helper';
+import { Subset } from '@tailormap-viewer/shared';
 
 @Injectable()
 export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceModel {
@@ -156,7 +157,7 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
     return this.httpClient.post<ApplicationModel>(`${TailormapAdminApiV1Service.BASE_URL}/applications`, params.application);
   }
 
-  public updateApplication$(params: { id: string; application: Partial<ApplicationModel> }): Observable<ApplicationModel> {
+  public updateApplication$(params: { id: string; application: Subset<ApplicationModel> }): Observable<ApplicationModel> {
     return this.httpClient.patch<ApplicationModel>(`${TailormapAdminApiV1Service.BASE_URL}/applications/${params.id}`, params.application);
   }
 

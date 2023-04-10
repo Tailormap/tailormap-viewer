@@ -7,7 +7,7 @@ import { ApplicationEditSettingsComponent } from './application-edit-settings/ap
 import { ApplicationCreateComponent } from './application-create/application-create.component';
 import { ApplicationListComponent } from './application-list/application-list.component';
 import { SharedModule } from '@tailormap-viewer/shared';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { EffectsModule } from '@ngrx/effects';
 import { ApplicationEffects } from './state/application.effects';
 import { ApplicationFormComponent } from './application-form/application-form.component';
@@ -22,7 +22,7 @@ import { ApplicationCatalogTreeComponent } from './application-catalog-tree/appl
 import {
   ApplicationLayerTreeNodeComponent,
 } from './application-layer-tree/application-layer-tree-node/application-layer-tree-node.component';
-import { CreateSubFolderComponent } from './application-layer-tree/create-subfolder/create-sub-folder.component';
+import { ApplicationFolderNodeNameComponent } from './application-layer-tree/application-folder-node-name/application-folder-node-name.component';
 
 
 
@@ -39,7 +39,7 @@ import { CreateSubFolderComponent } from './application-layer-tree/create-subfol
     ApplicationLayerTreeComponent,
     ApplicationCatalogTreeComponent,
     ApplicationLayerTreeNodeComponent,
-    CreateSubFolderComponent,
+    ApplicationFolderNodeNameComponent,
   ],
   imports: [
     CommonModule,
@@ -50,6 +50,7 @@ import { CreateSubFolderComponent } from './application-layer-tree/create-subfol
     SharedAdminComponentsModule,
     RouterOutlet,
     CatalogModule,
+    RouterLinkActive,
   ],
   exports: [
     ApplicationListComponent,

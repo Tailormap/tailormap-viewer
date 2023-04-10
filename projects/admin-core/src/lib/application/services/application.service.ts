@@ -1,11 +1,12 @@
 import { Inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
-  ApplicationModel, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel,
+  AppContentModel,
+  ApplicationModel, AppTreeNodeModel, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel,
 } from '@tailormap-admin/admin-api';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { catchError, map, of } from 'rxjs';
-import { SnackBarMessageComponent } from '@tailormap-viewer/shared';
+import { SnackBarMessageComponent, Subset } from '@tailormap-viewer/shared';
 import { addApplications, deleteApplication, updateApplication } from '../state/application.actions';
 
 type ApplicationEditModel = Omit<ApplicationModel, 'id'>;
@@ -43,6 +44,28 @@ export class ApplicationService {
       .pipe(
         catchError(() => {
           this.showErrorMessage($localize `Error while updating application.`);
+          return of(null);
+        }),
+        map(updatedApplication => {
+          if (updatedApplication) {
+            this.store$.dispatch(updateApplication({ application: updatedApplication }));
+            return updatedApplication;
+          }
+          return null;
+        }),
+      );
+  }
+
+  public updateApplicationTree$(id: string, applicationTree: AppTreeNodeModel[], treeKey: keyof AppContentModel) {
+    const patchModel: Subset<ApplicationModel> = {
+      contentRoot: {
+        [treeKey]: applicationTree,
+      },
+    };
+    return this.adminApiService.updateApplication$({ id, application: patchModel })
+      .pipe(
+        catchError(() => {
+          this.showErrorMessage($localize `Error while updating application tree.`);
           return of(null);
         }),
         map(updatedApplication => {

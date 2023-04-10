@@ -54,3 +54,14 @@ export const selectAppLayerTreeForSelectedApplication = createSelector(
     return ApplicationTreeHelper.layerTreeNodeToTree(application.contentRoot.layerNodes, layers);
   },
 );
+
+export const selectBaseLayerTreeForSelectedApplication = createSelector(
+  selectSelectedApplication,
+  selectGeoServiceLayers,
+  (application, layers) => {
+    if (!application?.contentRoot?.baseLayerNodes) {
+      return [];
+    }
+    return ApplicationTreeHelper.layerTreeNodeToTree(application.contentRoot.baseLayerNodes, layers);
+  },
+);

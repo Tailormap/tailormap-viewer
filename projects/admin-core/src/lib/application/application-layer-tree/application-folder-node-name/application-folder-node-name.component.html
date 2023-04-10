@@ -13,7 +13,7 @@
           (click)="onCancel()"
           i18n>Cancel</button>
   <button mat-flat-button
-          [disabled]="nameControl.invalid"
+          [disabled]="nameControl.invalid || nameControl.pristine"
           (click)="onCreate()"
           color="primary"
           i18n>Create</button>

@@ -1,11 +1,11 @@
 .edit-application-tree {
   display: flex;
-  padding-top: 16px;
 }
 
 .application-tree,
 .catalog-tree {
-  width: 400px;
+  min-width: 400px;
+  width: 40%;
   border: 1px solid var(--border-color);
   padding: 10px;
 }

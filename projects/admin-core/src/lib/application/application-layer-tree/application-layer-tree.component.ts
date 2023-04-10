@@ -3,7 +3,7 @@ import { NodePositionChangedEventModel, TreeDragDropService, TreeModel, TreeNode
 import { Observable, of, Subject, take, takeUntil } from 'rxjs';
 import { AppTreeNodeModel } from '@tailormap-admin/admin-api';
 import { MatDialog } from '@angular/material/dialog';
-import { CreateSubFolderComponent } from './create-subfolder/create-sub-folder.component';
+import { ApplicationFolderNodeNameComponent } from './application-folder-node-name/application-folder-node-name.component';
 
 @Component({
   selector: 'tm-admin-application-layer-tree',
@@ -23,7 +23,16 @@ export class ApplicationLayerTreeComponent implements OnInit, OnDestroy {
   public addSubFolder = new EventEmitter<{ nodeId: string; title: string }>();
 
   @Output()
+  public renameFolder = new EventEmitter<{ nodeId: string; title: string }>();
+
+  @Output()
+  public removeNode = new EventEmitter<{ nodeId: string }>();
+
+  @Output()
   public nodePositionChanged = new EventEmitter<{ nodeId: string; position: TreeNodePosition; parentId?: string; sibling: string }>();
+
+  @Output()
+  public visibilityChanged = new EventEmitter<Array<{ nodeId: string; visible: boolean }>>();
 
   constructor(
     private treeService: TreeService,
@@ -33,10 +42,13 @@ export class ApplicationLayerTreeComponent implements OnInit, OnDestroy {
     this.treeService.nodePositionChangedSource$
       .pipe(takeUntil(this.destroyed))
       .subscribe((evt) => this.handleNodePositionChanged(evt));
+    this.treeService.checkStateChangedSource$
+      .pipe(takeUntil(this.destroyed))
+      .subscribe((evt) => this.visibilityChanged.emit(evt.map((e) => ({ nodeId: e.id, visible: !!e.checked }))));
   }
 
   public ngOnInit(): void {
-    this.treeService.setDataSource(this.treeNodes$);
+    this.treeService.setDataSource(this.treeNodes$, () => true);
   }
 
   public ngOnDestroy() {
@@ -56,13 +68,27 @@ export class ApplicationLayerTreeComponent implements OnInit, OnDestroy {
   }
 
   public onAddSubFolder(nodeId: string) {
-    CreateSubFolderComponent.openDialog$(this.dialog)
+    ApplicationFolderNodeNameComponent.openDialog$(this.dialog)
       .pipe(take(1))
       .subscribe((title: string | null | undefined) => {
         if (title) {
           this.addSubFolder.emit({ nodeId, title });
         }
       });
+  }
+
+  public onRenameSubFolder($event: { nodeId: string; title: string }) {
+    ApplicationFolderNodeNameComponent.openDialog$(this.dialog, $event.title)
+      .pipe(take(1))
+      .subscribe((title: string | null | undefined) => {
+        if (title) {
+          this.renameFolder.emit({ nodeId: $event.nodeId, title });
+        }
+      });
+  }
+
+  public onDeleteNode(nodeId: string) {
+    this.removeNode.emit({ nodeId });
   }
 
 }

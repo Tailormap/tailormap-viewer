@@ -1,5 +1,7 @@
 <ng-template #treeNode let-node>
   <tm-admin-application-layer-tree-node [node]="node"
-                                        (addSubFolder)="onAddSubFolder($event)"></tm-admin-application-layer-tree-node>
+                                        (addSubFolder)="onAddSubFolder($event)"
+                                        (renameSubFolder)="onRenameSubFolder($event)"
+                                        (deleteNode)="onDeleteNode($event)"></tm-admin-application-layer-tree-node>
 </ng-template>
 <tm-tree [treeNodeTemplate]="treeNode"></tm-tree>

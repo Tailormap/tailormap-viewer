@@ -6,6 +6,13 @@
   <div class="application-tree">
     <tm-admin-application-layer-tree [treeNodes$]="treeNodes$"
                                      (nodePositionChanged)="nodePositionChanged($event)"
-                                     (addSubFolder)="addSubFolder($event)"></tm-admin-application-layer-tree>
+                                     (visibilityChanged)="visibilityChanged($event)"
+                                     (addSubFolder)="addSubFolder($event)"
+                                     (renameFolder)="renameFolder($event)"
+                                     (removeNode)="removeNode($event)"></tm-admin-application-layer-tree>
   </div>
+</div>
+<div class="page-details-actions">
+  <tm-admin-save-button [saving$]="saving$" [disabled]="!hasChanges" (save)="save()"></tm-admin-save-button>
+  <button mat-flat-button (click)="clearSelectedApplication()" routerLink="/applications" i18n>Close</button>
 </div>

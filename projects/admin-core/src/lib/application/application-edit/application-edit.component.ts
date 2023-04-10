@@ -17,12 +17,6 @@ export class ApplicationEditComponent implements OnInit, OnDestroy {
 
   private destroyed = new Subject();
   public application$: Observable<ApplicationModel | null> = of(null);
-  public selectedTabIdx$: Observable<number> = of(0);
-
-  private subRoutes = [
-    { idx: 0, path: '' },
-    { idx: 1, path: RoutesEnum.APPLICATION_DETAILS_LAYERS },
-  ];
 
   constructor(
     private route: ActivatedRoute,
@@ -38,15 +32,6 @@ export class ApplicationEditComponent implements OnInit, OnDestroy {
     ).subscribe(appId => {
       this.applicationTreeService.setSelectedApplication(appId);
     });
-    this.selectedTabIdx$ = this.route.url
-      .pipe(
-        distinctUntilChanged(),
-        map(() => {
-          const url = this.route.snapshot.children.length > 0 ? this.route.snapshot.children[0].url.map(segment => segment.path).join('/') : '';
-          const idx = this.subRoutes.find(subRoute => subRoute.path === url)?.idx || -1;
-          return idx !== -1 ? idx : 0;
-        }),
-      );
     this.application$ = this.store$.select(selectSelectedApplication);
   }
 
@@ -58,17 +43,20 @@ export class ApplicationEditComponent implements OnInit, OnDestroy {
     this.destroyed.complete();
   }
 
-  public navigateTo(appId: string, tabIdx: number) {
+  public getUrl(applicationId: string, route: 'settings' | 'layers') {
+    const routes = {
+      settings: '',
+      layers: RoutesEnum.APPLICATION_DETAILS_LAYERS,
+    };
     const url = [
       RoutesEnum.APPLICATION,
-      RoutesEnum.APPLICATION_DETAILS.replace(':applicationId', appId),
+      RoutesEnum.APPLICATION_DETAILS.replace(':applicationId', applicationId),
     ];
-    this.subRoutes.forEach(subRoute => {
-      if (tabIdx === subRoute.idx && subRoute.path) {
-        url.push(subRoute.path);
-      }
-    });
-    this.router.navigateByUrl(url.join('/'));
+    if (routes[route]) {
+      url.push(routes[route]);
+    }
+    return url.join('/');
   }
 
+  protected readonly RoutesEnum = RoutesEnum;
 }

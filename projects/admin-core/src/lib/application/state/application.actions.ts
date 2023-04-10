@@ -73,5 +73,19 @@ export const updateApplicationTreeOrder = createAction(
 
 export const updateApplicationTreeNode = createAction(
   `${applicationActionsPrefix} Update Application Tree Node`,
-  props<{ applicationId: string; updatedNode: AppTreeNodeModel; tree: 'layer' | 'baseLayer' }>(),
+  props<{ applicationId: string; nodeId: string; updatedNode: Partial<AppTreeNodeModel>; tree: 'layer' | 'baseLayer' }>(),
+);
+
+export const removeApplicationTreeNode = createAction(
+  `${applicationActionsPrefix} Remove Application Tree Node`,
+  props<{ applicationId: string; nodeId: string; tree: 'layer' | 'baseLayer' }>(),
+);
+
+export const updateApplicationTreeNodeVisibility = createAction(
+  `${applicationActionsPrefix} Update Application Tree Node Visibility`,
+  props<{
+    applicationId: string;
+    tree: 'layer' | 'baseLayer';
+    visibility: Array<{ nodeId: string; visible: boolean }>;
+  }>(),
 );

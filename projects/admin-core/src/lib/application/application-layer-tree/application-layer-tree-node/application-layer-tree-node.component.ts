@@ -15,6 +15,12 @@ export class ApplicationLayerTreeNodeComponent {
   @Output()
   public addSubFolder = new EventEmitter<string>();
 
+  @Output()
+  public renameSubFolder = new EventEmitter<{ nodeId: string; title: string }>();
+
+  @Output()
+  public deleteNode = new EventEmitter<string>();
+
   public isLevel() {
     return this.node?.type === 'level';
   }
@@ -23,9 +29,16 @@ export class ApplicationLayerTreeNodeComponent {
     return this.node?.type === 'layer';
   }
 
-  public addFolder($event: MouseEvent, nodeId: string) {
-    $event.stopPropagation();
+  public addFolder(nodeId: string) {
     this.addSubFolder.emit(nodeId);
+  }
+
+  public renameFolder(nodeId: string, title: string) {
+    this.renameSubFolder.emit({ nodeId, title });
+  }
+
+  public removeNode(nodeId: string) {
+    this.deleteNode.emit(nodeId);
   }
 
 }
