@@ -67,7 +67,7 @@ export class SimpleSearchService {
   }
 
   private searchRd$(searchTerm: string): Observable<SearchResultModel> {
-    return this.httpClient.get<LocationServerResponse>(`https://geodata.nationaalgeoregister.nl/locatieserver/v3/suggest`, {
+    return this.httpClient.get<LocationServerResponse>(`https://api.pdok.nl/bzk/locatieserver/search/v3_1/suggest`, {
       params: {
         q: searchTerm,
         rows: SimpleSearchService.MAX_RESULTS.toString(),
@@ -76,7 +76,7 @@ export class SimpleSearchService {
     }).pipe(
       catchError(() => of({ response: { docs: [] } })),
       map(result => ({
-        attribution: $localize `Data by [PDOK](https://geodata.nationaalgeoregister.nl)`,
+        attribution: $localize `Data by [PDOK](https://pdok.nl)`,
         results: result.response.docs.slice(0, SimpleSearchService.MAX_RESULTS).map(doc => ({
           label: doc.weergavenaam,
           geometry: doc.geometrie_rd || doc.centroide_rd,
