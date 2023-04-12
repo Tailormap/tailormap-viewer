@@ -1,0 +1,4 @@
+<div *ngIf="config">
+  <h2>{{ label }}</h2>
+  <mat-checkbox [checked]="getEnabled()" (change)="toggleEnabled()" i18n>Enabled</mat-checkbox>
+</div>

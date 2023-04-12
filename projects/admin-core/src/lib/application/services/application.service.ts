@@ -14,7 +14,7 @@ import { selectSelectedApplication } from '../state/application.selectors';
 import { CatalogService } from '../../catalog/services/catalog.service';
 import { ApplicationModelHelper } from '../helpers/application-model.helper';
 
-type ApplicationEditModel = Omit<ApplicationModel, 'id'>;
+type ApplicationEditModel = Partial<Omit<ApplicationModel, 'id'>>;
 
 @Injectable({
   providedIn: 'root',

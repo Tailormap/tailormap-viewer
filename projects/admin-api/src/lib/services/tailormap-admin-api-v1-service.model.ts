@@ -2,7 +2,6 @@ import { Observable } from 'rxjs';
 import {
   CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel,
 } from '../models';
-import { Subset } from '@tailormap-viewer/shared';
 
 export interface TailormapAdminApiV1ServiceModel {
   getCatalog$(): Observable<CatalogNodeModel[]>;
@@ -29,7 +28,7 @@ export interface TailormapAdminApiV1ServiceModel {
   updateUser$(params: { username: string; user: Partial<UserModel> }): Observable<UserModel>;
   deleteUser$(username: string): Observable<boolean>;
   getApplications$(): Observable<ApplicationModel[]>;
-  createApplication$(params: { application: Omit<ApplicationModel, 'id'> }): Observable<ApplicationModel>;
+  createApplication$(params: { application: Partial<Omit<ApplicationModel, 'id'>> }): Observable<ApplicationModel>;
   updateApplication$(params: { id: string; application: Partial<ApplicationModel> }): Observable<ApplicationModel>;
   deleteApplication$(id: string): Observable<boolean>;
 }

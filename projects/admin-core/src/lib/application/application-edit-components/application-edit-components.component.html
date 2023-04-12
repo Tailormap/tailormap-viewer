@@ -1,0 +1,10 @@
+<div class="components-config-page">
+  <tm-admin-save-button [saving$]="saving$" (save)="save()"></tm-admin-save-button>
+  <div class="components-list">
+    <strong i18n>List of available components</strong>
+    <tm-admin-components-list (selectComponent)="setSelectedComponent($event)"></tm-admin-components-list>
+  </div>
+  <div class="component-configuration">
+    <tm-admin-component-config-renderer [selectedComponent]="selectedComponent$ | async"></tm-admin-component-config-renderer>
+  </div>
+</div>
