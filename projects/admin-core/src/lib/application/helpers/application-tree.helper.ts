@@ -1,10 +1,18 @@
 import { TreeHelper, TreeModel } from '@tailormap-viewer/shared';
-import { AppTreeNodeModel } from '@tailormap-admin/admin-api';
+import { AppTreeLayerNodeModel, AppTreeLevelNodeModel, AppTreeNodeModel } from '@tailormap-admin/admin-api';
 import { ApplicationModelHelper } from './application-model.helper';
 import { ExtendedGeoServiceLayerModel } from '../../catalog/models/extended-geo-service-layer.model';
 import { ApplicationService } from '../services/application.service';
 
 export class ApplicationTreeHelper {
+
+  public static isLevelTreeNode(node?: TreeModel<AppTreeNodeModel> | null): node is TreeModel<AppTreeLevelNodeModel> {
+    return !!(node && node.metadata && ApplicationModelHelper.isLevelTreeNode(node.metadata));
+  }
+
+  public static isLayerTreeNode(node?: TreeModel<AppTreeNodeModel> | null): node is TreeModel<AppTreeLayerNodeModel> {
+    return !!(node && node.metadata && ApplicationModelHelper.isLayerTreeNode(node.metadata));
+  }
 
   public static layerTreeNodeToTree(
     layerTreeNodes: AppTreeNodeModel[],

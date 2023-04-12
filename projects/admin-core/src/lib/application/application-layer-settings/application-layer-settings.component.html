@@ -1,0 +1,11 @@
+<form [formGroup]="layerSettingsForm" *ngIf="node">
+  <h2>Settings for {{ node.label }}</h2>
+  <mat-form-field>
+    <mat-label>Title</mat-label>
+    <input matInput formControlName="title" />
+  </mat-form-field>
+  <div class="form-field form-field__slider">
+    <strong>Opacity</strong>
+    <tm-slider formControlName="opacity"></tm-slider>
+  </div>
+</form>

@@ -51,6 +51,13 @@ export const selectSelectedApplication = createSelector(
   },
 );
 
+export const selectSelectedApplicationLayerSettings = createSelector(
+  selectSelectedApplication,
+  (application) => {
+    return application?.settings?.layerSettings || {};
+  },
+);
+
 export const selectAppLayerTreeForSelectedApplication = createSelector(
   selectSelectedApplication,
   selectGeoServiceLayers,
@@ -84,5 +91,16 @@ export const selectComponentsConfigByType = (type: string) => createSelector(
     return (config || []).find(c => c.type === type);
   },
 );
+
+export const selectDisabledComponentsForSelectedApplication = createSelector(
+  selectComponentsConfig,
+  (config): string[] => {
+    if (!config || !Array.isArray(config)) {
+      return [];
+    }
+    return (config || [])
+      .filter(c => !c.config.enabled)
+      .map(c => c.type);
+  });
 
 export const selectStylingConfig = createSelector(selectSelectedApplication, application => application?.styling);

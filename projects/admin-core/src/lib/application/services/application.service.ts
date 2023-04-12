@@ -1,7 +1,6 @@
 import { Inject, Injectable, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
-  AppContentModel,
   ApplicationModel, AppTreeLevelNodeModel, AppTreeNodeModel, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel,
 } from '@tailormap-admin/admin-api';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -14,7 +13,8 @@ import { selectSelectedApplication } from '../state/application.selectors';
 import { CatalogService } from '../../catalog/services/catalog.service';
 import { ApplicationModelHelper } from '../helpers/application-model.helper';
 
-type ApplicationEditModel = Partial<Omit<ApplicationModel, 'id'>>;
+type ApplicationCreateModel = Omit<ApplicationModel, 'id'>;
+type ApplicationEditModel = Partial<ApplicationCreateModel>;
 
 @Injectable({
   providedIn: 'root',
@@ -50,7 +50,7 @@ export class ApplicationService implements OnDestroy {
     this.destroyed.complete();
   }
 
-  public createApplication$(application: ApplicationEditModel) {
+  public createApplication$(application: ApplicationCreateModel) {
     return this.adminApiService.createApplication$({ application })
       .pipe(
         catchError(() => {
@@ -72,23 +72,6 @@ export class ApplicationService implements OnDestroy {
       .pipe(
         catchError(() => {
           this.showErrorMessage($localize `Error while updating application.`);
-          return of(null);
-        }),
-        map(updatedApplication => {
-          if (updatedApplication) {
-            this.store$.dispatch(updateApplication({ application: updatedApplication }));
-            return updatedApplication;
-          }
-          return null;
-        }),
-      );
-  }
-
-  public updateApplicationTree$(id: string, contentRoot: AppContentModel) {
-    return this.adminApiService.updateApplication$({ id, application: { contentRoot } })
-      .pipe(
-        catchError(() => {
-          this.showErrorMessage($localize `Error while updating application tree.`);
           return of(null);
         }),
         map(updatedApplication => {

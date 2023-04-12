@@ -1,16 +1,42 @@
 .edit-application-tree {
   display: flex;
+  overflow-x: auto;
+}
+
+.catalog-tree,
+.application-layer-settings {
+  display: none;
+  position: relative;
+}
+
+.has-selected-layer .application-layer-settings {
+  display: block;
+}
+
+.has-catalog-tree-visible .catalog-tree {
+  display: block;
+  flex: 1;
+}
+
+.application-catalog {
+  display: flex;
+  border: 1px solid var(--border-color);
 }
 
 .application-tree,
-.catalog-tree {
-  min-width: 400px;
-  width: 40%;
+.has-catalog-tree-visible .application-catalog,
+.application-layer-settings {
+  min-width: 300px;
+  flex: 1;
   border: 1px solid var(--border-color);
   padding: 10px;
 }
 
-.application-tree {
+.edit-application-tree > div + div {
   margin-left: 16px;
+}
+
+tm-admin-application-layer-settings {
+  display: block;
 }
 

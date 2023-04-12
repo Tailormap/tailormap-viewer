@@ -27,6 +27,7 @@ import { ApplicationEditComponentsComponent } from './application-edit-component
 import { ComponentsModule } from './components/components.module';
 import { ApplicationEditStylingComponent } from './application-edit-styling/application-edit-styling.component';
 import { ImageUploadFieldComponent } from './styling/image-upload-field/image-upload-field.component';
+import { ApplicationLayerSettingsComponent } from './application-layer-settings/application-layer-settings.component';
 
 
 
@@ -47,6 +48,7 @@ import { ImageUploadFieldComponent } from './styling/image-upload-field/image-up
     ApplicationFolderNodeNameComponent,
     ApplicationEditStylingComponent,
     ImageUploadFieldComponent,
+    ApplicationLayerSettingsComponent,
   ],
   imports: [
     CommonModule,

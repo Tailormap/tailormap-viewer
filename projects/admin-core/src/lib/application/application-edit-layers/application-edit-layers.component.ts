@@ -1,24 +1,25 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { TreeModel, TreeNodePosition, TreeService } from '@tailormap-viewer/shared';
-import { CatalogTreeModelMetadataTypes } from '../../catalog/models/catalog-tree.model';
-import { CatalogTreeModelTypeEnum } from '../../catalog/models/catalog-tree-model-type.enum';
 import {
   isLoadingApplicationServices,
   selectAppLayerTreeForSelectedApplication, selectBaseLayerTreeForSelectedApplication,
   selectSelectedApplication,
   selectSelectedApplicationId,
 } from '../state/application.selectors';
-import { BehaviorSubject, Observable, of, Subject, take, takeUntil } from 'rxjs';
-import { AppTreeLayerNodeModel, AppTreeLevelNodeModel, AppTreeNodeModel } from '@tailormap-admin/admin-api';
+import { BehaviorSubject, map, Observable, of, Subject, take, takeUntil } from 'rxjs';
 import {
-  addApplicationTreeNodes, removeApplicationTreeNode, setSelectedApplication, updateApplicationTreeNode,
+  AppLayerSettingsModel, ApplicationModel, AppTreeLayerNodeModel, AppTreeLevelNodeModel, AppTreeNodeModel,
+} from '@tailormap-admin/admin-api';
+import {
+  addApplicationTreeNodes, removeApplicationTreeNode, setSelectedApplication, updateApplicationNodeSettings, updateApplicationTreeNode,
   updateApplicationTreeNodeVisibility,
   updateApplicationTreeOrder,
 } from '../state/application.actions';
 import { nanoid } from 'nanoid';
 import { AddLayerEvent } from '../application-catalog-tree/application-catalog-tree.component';
 import { ApplicationService } from '../services/application.service';
+import { ApplicationTreeHelper } from '../helpers/application-tree.helper';
 
 @Component({
   selector: 'tm-admin-application-edit-layers',
@@ -32,12 +33,15 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
   private savingSubject = new BehaviorSubject(false);
   public saving$ = this.savingSubject.asObservable();
 
-  private selectedNodeIdSubject = new BehaviorSubject<string>('');
-  public selectedNodeId$ = this.selectedNodeIdSubject.asObservable();
+  private selectedNodeIdSubject = new BehaviorSubject<TreeModel<AppTreeNodeModel> | null>(null);
+  public selectedNode$ = this.selectedNodeIdSubject.asObservable();
+  public selectedLayerNode$: Observable<TreeModel<AppTreeLayerNodeModel> | null> = this.selectedNode$.pipe(
+    map(node => ApplicationTreeHelper.isLayerTreeNode(node) ? node : null),
+  );
 
   private destroyed = new Subject();
 
-  public hasChanges = false;
+  public hasChanges: Array<'tree'|'settings'> = [];
 
   @Input()
   public applicationStateTree: 'layer' | 'baseLayer' = 'layer';
@@ -45,10 +49,11 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
   public treeNodes$: Observable<TreeModel<AppTreeNodeModel>[]> = of([]);
 
   public loadingServices$: Observable<boolean> = of(false);
+  public catalogTreeOpened = true;
 
   constructor(
     private store$: Store,
-    public applicationTreeService: TreeService<CatalogTreeModelMetadataTypes, CatalogTreeModelTypeEnum>,
+    public applicationTreeService: TreeService<AppTreeNodeModel>,
     private applicationService: ApplicationService,
   ) {}
 
@@ -59,12 +64,17 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
     this.loadingServices$ = this.store$.select(isLoadingApplicationServices);
 
     if (this.applicationStateTree === 'layer') {
-      this.applicationTreeService.setSelectedNode(this.selectedNodeId$);
+      this.applicationTreeService.setSelectedNode(this.selectedNode$
+        .pipe(map(node => node?.id || '')),
+      );
       this.applicationTreeService.selectionStateChangedSource$
         .pipe(takeUntil(this.destroyed))
         .subscribe(node => {
-          console.log(node);
-          this.selectedNodeIdSubject.next(node.id);
+          if (!node.metadata) {
+            this.selectedNodeIdSubject.next(null);
+            return;
+          }
+          this.selectedNodeIdSubject.next(node);
         });
     }
   }
@@ -104,7 +114,7 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
     position?: TreeNodePosition,
     sibling?: string,
   ) {
-    this.executeAction(applicationId => {
+    this.executeAction('tree', applicationId => {
       this.store$.dispatch(addApplicationTreeNodes({
         applicationId,
         tree: this.applicationStateTree,
@@ -117,7 +127,7 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
   }
 
   public nodePositionChanged($event: { nodeId: string; position: TreeNodePosition; parentId?: string; sibling: string }) {
-    this.executeAction(applicationId => {
+    this.executeAction('tree', applicationId => {
       this.store$.dispatch(updateApplicationTreeOrder({
         applicationId,
         nodeId: $event.nodeId,
@@ -130,7 +140,7 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
   }
 
   public visibilityChanged($event: Array<{ nodeId: string; visible: boolean }>) {
-    this.executeAction(applicationId => {
+    this.executeAction('tree', applicationId => {
       this.store$.dispatch(updateApplicationTreeNodeVisibility({
         applicationId,
         tree: this.applicationStateTree,
@@ -141,7 +151,7 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
 
   public renameFolder($event: { nodeId: string; title: string }) {
     const updatedNode: Partial<AppTreeLevelNodeModel> = { title: $event.title };
-    this.executeAction(applicationId => {
+    this.executeAction('tree', applicationId => {
       this.store$.dispatch(updateApplicationTreeNode({
         applicationId,
         tree: this.applicationStateTree,
@@ -152,7 +162,7 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
   }
 
   public removeNode($event: { nodeId: string }) {
-    this.executeAction(applicationId => {
+    this.executeAction('tree', applicationId => {
       this.store$.dispatch(removeApplicationTreeNode({
         applicationId,
         tree: this.applicationStateTree,
@@ -162,27 +172,30 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
   }
 
   public save() {
-    if (!this.hasChanges) {
+    if (this.hasChanges.length === 0) {
       return;
     }
     this.savingSubject.next(true);
     this.store$.select(selectSelectedApplication)
       .pipe(take(1))
       .subscribe(application => {
-        if (!application) {
+        if (!application || this.hasChanges.length === 0) {
           this.savingSubject.next(false);
           return;
         }
-        const contentRoot = application.contentRoot;
-        if (!contentRoot) {
-          this.savingSubject.next(false);
-          return;
+        this.savingSubject.next(true);
+        const updatedApplication: Partial<ApplicationModel> = {};
+        if (this.hasChanges.includes('tree')) {
+          updatedApplication.contentRoot = application.contentRoot;
         }
-        this.applicationService.updateApplicationTree$(application.id, contentRoot)
+        if (this.hasChanges.includes('settings')) {
+          updatedApplication.settings = application.settings;
+        }
+        this.applicationService.updateApplication$(application.id, updatedApplication)
           .pipe(take(1))
           .subscribe(success => {
             if (success) {
-              this.hasChanges = false;
+              this.hasChanges = [];
             }
             this.savingSubject.next(false);
           });
@@ -193,14 +206,28 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
     this.store$.dispatch(setSelectedApplication({ applicationId: null }));
   }
 
-  private executeAction(action: (applicationId: string) => void) {
+  public toggleCatalogTree() {
+    this.catalogTreeOpened = !this.catalogTreeOpened;
+  }
+
+  public layerSettingsChanged($event: { nodeId: string; settings: AppLayerSettingsModel | null }) {
+    this.executeAction('settings', applicationId => {
+      this.store$.dispatch(updateApplicationNodeSettings({
+        applicationId,
+        nodeId: $event.nodeId,
+        settings: $event.settings,
+      }));
+    });
+  }
+
+  private executeAction(whatChanged: 'tree' | 'settings', action: (applicationId: string) => void) {
     this.store$.select(selectSelectedApplicationId)
       .pipe(take(1))
       .subscribe(applicationId => {
         if (!applicationId) {
           return;
         }
-        this.hasChanges = true;
+        this.hasChanges.push(whatChanged);
         action(applicationId);
       });
   }
