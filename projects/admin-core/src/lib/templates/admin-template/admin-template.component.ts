@@ -17,10 +17,10 @@ export class AdminTemplateComponent implements OnInit {
   }
 
   public login() {
-    fetch('http://localhost:4201/api/user').then(r => r.json().then(user => {
+    fetch('/api/user').then(r => r.json().then(user => {
       if (!user.isAuthenticated) {
         const token = new URLSearchParams((document.cookie || '').replace(/; /g, '&')).get('XSRF-TOKEN');
-        fetch('http://localhost:4201/api/login', {
+        fetch('/api/login', {
           // @ts-ignore
           headers: {
             // @ts-ignore
