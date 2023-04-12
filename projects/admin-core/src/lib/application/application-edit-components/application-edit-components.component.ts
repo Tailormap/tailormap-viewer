@@ -3,6 +3,7 @@ import { BehaviorSubject, Subject, take, takeUntil } from 'rxjs';
 import { ApplicationService } from '../services/application.service';
 import { selectSelectedApplication } from '../state/application.selectors';
 import { Store } from '@ngrx/store';
+import { setSelectedApplication } from '../state/application.actions';
 
 @Component({
   selector: 'tm-admin-application-edit-components',
@@ -55,5 +56,8 @@ export class ApplicationEditComponentsComponent implements OnInit, OnDestroy {
             this.savingSubject.next(false);
           });
       });
+  }
+  public clearSelectedApplication() {
+    this.store$.dispatch(setSelectedApplication({ applicationId: null }));
   }
 }

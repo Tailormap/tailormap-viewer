@@ -1,0 +1,20 @@
+<div class="form-field">
+  <tm-error-message [message]="imageError || undefined" [friendlyError]="true"></tm-error-message>
+  <div class="img-space">
+    <img *ngIf="currentImage" [src]="currentImage" i18n-alt alt="Current image"/>
+    <div class="upload-wrapper" [class.upload-complete]="isImageSaved">
+      <input type="file"
+             accept="image/*"
+             (change)="fileChangeEvent($event)"
+             class="fileInputProfile">
+      <button mat-stroked-button
+              *ngIf="isImageSaved || currentImage"
+              color="warn"
+              tmTooltip="Remove the image"
+              i18n-tmTooltip
+              (click)="clearImage()">
+        <mat-icon svgIcon="trash_filled"></mat-icon>
+      </button>
+    </div>
+  </div>
+</div>

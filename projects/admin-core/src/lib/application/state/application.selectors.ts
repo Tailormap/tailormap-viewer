@@ -84,3 +84,5 @@ export const selectComponentsConfigByType = (type: string) => createSelector(
     return (config || []).find(c => c.type === type);
   },
 );
+
+export const selectStylingConfig = createSelector(selectSelectedApplication, application => application?.styling);
