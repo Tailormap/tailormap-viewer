@@ -23,6 +23,8 @@ import {
   ApplicationLayerTreeNodeComponent,
 } from './application-layer-tree/application-layer-tree-node/application-layer-tree-node.component';
 import { ApplicationFolderNodeNameComponent } from './application-layer-tree/application-folder-node-name/application-folder-node-name.component';
+import { ApplicationEditComponentsComponent } from './application-edit-components/application-edit-components.component';
+import { ComponentsModule } from './components/components.module';
 
 
 
@@ -36,6 +38,7 @@ import { ApplicationFolderNodeNameComponent } from './application-layer-tree/app
     ApplicationEditComponent,
     ApplicationEditLayersComponent,
     ApplicationEditBaseLayersComponent,
+    ApplicationEditComponentsComponent,
     ApplicationLayerTreeComponent,
     ApplicationCatalogTreeComponent,
     ApplicationLayerTreeNodeComponent,
@@ -51,6 +54,7 @@ import { ApplicationFolderNodeNameComponent } from './application-layer-tree/app
     RouterOutlet,
     CatalogModule,
     RouterLinkActive,
+    ComponentsModule,
   ],
   exports: [
     ApplicationListComponent,

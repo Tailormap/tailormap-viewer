@@ -4,6 +4,7 @@ import { ApplicationState, initialApplicationState } from './application.state';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { AppContentModel, ApplicationModel, AppTreeNodeModel } from '@tailormap-admin/admin-api';
 import { ApplicationModelHelper } from '../helpers/application-model.helper';
+import { ComponentModel } from '@tailormap-viewer/api';
 
 const getApplication = (application: ApplicationModel) => ({
   ...application,
@@ -200,6 +201,35 @@ const onLoadApplicationServicesSuccess = (state: ApplicationState): ApplicationS
   applicationServicesLoadStatus: LoadingStateEnum.LOADED,
 });
 
+const onUpdateApplicationComponentConfig = (state: ApplicationState, payload: ReturnType<typeof ApplicationActions.updateApplicationComponentConfig>): ApplicationState => {
+  const idx = state.applications.findIndex(app => app.id === payload.applicationId);
+  if (idx === -1) {
+    return state;
+  }
+  const application = state.applications[idx];
+  const components = application.components || [];
+  const componentIdx = components.findIndex(component => component.type === payload.componentType);
+  const updatedComponents: ComponentModel[] = [
+    ...components.slice(0, componentIdx),
+    {
+      type: payload.componentType,
+      config: payload.config,
+    },
+    ...components.slice(componentIdx + 1),
+  ];
+  return {
+    ...state,
+    applications: [
+      ...state.applications.slice(0, idx),
+      {
+        ...application,
+        components: updatedComponents,
+      },
+      ...state.applications.slice(idx + 1),
+    ],
+  };
+};
+
 const applicationReducerImpl = createReducer<ApplicationState>(
   initialApplicationState,
   on(ApplicationActions.loadApplicationsStart, onLoadApplicationStart),
@@ -217,5 +247,6 @@ const applicationReducerImpl = createReducer<ApplicationState>(
   on(ApplicationActions.updateApplicationTreeNodeVisibility, onUpdateApplicationTreeNodeVisibility),
   on(ApplicationActions.loadApplicationServices, onLoadApplicationServices),
   on(ApplicationActions.loadApplicationServicesSuccess, onLoadApplicationServicesSuccess),
+  on(ApplicationActions.updateApplicationComponentConfig, onUpdateApplicationComponentConfig),
 );
 export const applicationReducer = (state: ApplicationState | undefined, action: Action) => applicationReducerImpl(state, action);

@@ -1,6 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { ApplicationModel, AppTreeNodeModel } from '@tailormap-admin/admin-api';
 import { TreeNodePosition } from '@tailormap-viewer/shared';
+import { ComponentBaseConfigModel } from '@tailormap-viewer/api';
 
 const applicationActionsPrefix = '[Application]';
 
@@ -96,4 +97,9 @@ export const loadApplicationServices = createAction(
 
 export const loadApplicationServicesSuccess = createAction(
   `${applicationActionsPrefix} Load Application Services Success`,
+);
+
+export const updateApplicationComponentConfig = createAction(
+  `${applicationActionsPrefix} Update component config`,
+  props<{ applicationId: string; componentType: string; config: ComponentBaseConfigModel }>(),
 );

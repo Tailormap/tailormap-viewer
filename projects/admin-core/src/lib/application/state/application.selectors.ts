@@ -72,3 +72,15 @@ export const selectBaseLayerTreeForSelectedApplication = createSelector(
     return ApplicationTreeHelper.layerTreeNodeToTree(application.contentRoot.baseLayerNodes, layers, true);
   },
 );
+
+export const selectComponentsConfig = createSelector(selectSelectedApplication, application => application?.components);
+
+export const selectComponentsConfigByType = (type: string) => createSelector(
+  selectComponentsConfig,
+  config => {
+    if (!config || !Array.isArray(config)) {
+      return undefined;
+    }
+    return (config || []).find(c => c.type === type);
+  },
+);

@@ -17,6 +17,7 @@ import { ApplicationEditComponent } from './application/application-edit/applica
 import { ApplicationEditSettingsComponent } from './application/application-edit-settings/application-edit-settings.component';
 import { ApplicationEditLayersComponent } from './application/application-edit-layers/application-edit-layers.component';
 import { ApplicationEditBaseLayersComponent } from './application/application-edit-base-layers/application-edit-base-layers.component';
+import { ApplicationEditComponentsComponent } from './application/application-edit-components/application-edit-components.component';
 
 const routes: Routes = [
   {
@@ -73,6 +74,10 @@ const routes: Routes = [
           {
             path: RoutesEnum.APPLICATION_DETAILS_BASE_LAYERS,
             component: ApplicationEditBaseLayersComponent,
+          },
+          {
+            path: RoutesEnum.APPLICATION_DETAILS_COMPONENTS,
+            component: ApplicationEditComponentsComponent,
           },
         ],
       },
