@@ -2,6 +2,7 @@ import { ApplicationState, applicationStateKey } from './application.state';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { ApplicationTreeHelper } from '../helpers/application-tree.helper';
 import { selectGeoServiceLayers } from '../../catalog/state/catalog.selectors';
+import { LoadingStateEnum } from '@tailormap-viewer/shared';
 
 const selectApplicationState = createFeatureSelector<ApplicationState>(applicationStateKey);
 
@@ -10,6 +11,12 @@ export const selectApplicationsLoadStatus = createSelector(selectApplicationStat
 export const selectApplicationsLoadError = createSelector(selectApplicationState, state => state.applicationsLoadError);
 export const selectApplicationListFilter = createSelector(selectApplicationState, state => state.applicationListFilter);
 export const selectSelectedApplicationId = createSelector(selectApplicationState, state => state.selectedApplication);
+export const selectApplicationServicesLoadStatus = createSelector(selectApplicationState, state => state.applicationServicesLoadStatus);
+
+export const isLoadingApplicationServices = createSelector(
+  selectApplicationServicesLoadStatus,
+  status => status === LoadingStateEnum.LOADING,
+);
 
 export const selectApplicationList = createSelector(
   selectApplications,
@@ -62,6 +69,6 @@ export const selectBaseLayerTreeForSelectedApplication = createSelector(
     if (!application?.contentRoot?.baseLayerNodes) {
       return [];
     }
-    return ApplicationTreeHelper.layerTreeNodeToTree(application.contentRoot.baseLayerNodes, layers);
+    return ApplicationTreeHelper.layerTreeNodeToTree(application.contentRoot.baseLayerNodes, layers, true);
   },
 );

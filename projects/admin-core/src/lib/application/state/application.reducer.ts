@@ -190,6 +190,16 @@ export const onUpdateApplicationTreeNodeVisibility = (
   });
 };
 
+const onLoadApplicationServices = (state: ApplicationState): ApplicationState => ({
+  ...state,
+  applicationServicesLoadStatus: LoadingStateEnum.LOADING,
+});
+
+const onLoadApplicationServicesSuccess = (state: ApplicationState): ApplicationState => ({
+  ...state,
+  applicationServicesLoadStatus: LoadingStateEnum.LOADED,
+});
+
 const applicationReducerImpl = createReducer<ApplicationState>(
   initialApplicationState,
   on(ApplicationActions.loadApplicationsStart, onLoadApplicationStart),
@@ -205,5 +215,7 @@ const applicationReducerImpl = createReducer<ApplicationState>(
   on(ApplicationActions.removeApplicationTreeNode, onRemoveApplicationTreeNode),
   on(ApplicationActions.updateApplicationTreeOrder, onUpdateApplicationTreeOrder),
   on(ApplicationActions.updateApplicationTreeNodeVisibility, onUpdateApplicationTreeNodeVisibility),
+  on(ApplicationActions.loadApplicationServices, onLoadApplicationServices),
+  on(ApplicationActions.loadApplicationServicesSuccess, onLoadApplicationServicesSuccess),
 );
 export const applicationReducer = (state: ApplicationState | undefined, action: Action) => applicationReducerImpl(state, action);

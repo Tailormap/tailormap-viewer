@@ -84,7 +84,7 @@ export class CatalogTreeService {
       concatMap(([ serviceItems, featureSourceItems ]) => {
         const services$ = this.catalogService.getServices$(serviceItems, newSubscription, nodeId);
         const featureSources$ = this.catalogService.getFeatureSources$(featureSourceItems, newSubscription, nodeId);
-        const requests$: Array<Observable<(GeoServiceWithLayersModel | FeatureSourceModel | null)[]>> = [];
+        const requests$: Array<Observable<GeoServiceWithLayersModel[] | FeatureSourceModel[]>> = [];
         if (services$) {
           requests$.push(services$);
         }

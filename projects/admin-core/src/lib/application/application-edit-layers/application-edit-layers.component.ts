@@ -1,13 +1,15 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Input, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { TreeModel, TreeNodePosition, TreeService } from '@tailormap-viewer/shared';
 import { CatalogTreeModelMetadataTypes } from '../../catalog/models/catalog-tree.model';
 import { CatalogTreeModelTypeEnum } from '../../catalog/models/catalog-tree-model-type.enum';
 import {
-  selectAppLayerTreeForSelectedApplication, selectBaseLayerTreeForSelectedApplication, selectSelectedApplication,
+  isLoadingApplicationServices,
+  selectAppLayerTreeForSelectedApplication, selectBaseLayerTreeForSelectedApplication,
+  selectSelectedApplication,
   selectSelectedApplicationId,
 } from '../state/application.selectors';
-import { BehaviorSubject, Observable, of, take, takeUntil } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject, take, takeUntil } from 'rxjs';
 import { AppTreeLayerNodeModel, AppTreeLevelNodeModel, AppTreeNodeModel } from '@tailormap-admin/admin-api';
 import {
   addApplicationTreeNodes, removeApplicationTreeNode, setSelectedApplication, updateApplicationTreeNode,
@@ -25,10 +27,15 @@ import { ApplicationService } from '../services/application.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [TreeService],
 })
-export class ApplicationEditLayersComponent implements OnInit {
+export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
 
   private savingSubject = new BehaviorSubject(false);
   public saving$ = this.savingSubject.asObservable();
+
+  private selectedNodeIdSubject = new BehaviorSubject<string>('');
+  public selectedNodeId$ = this.selectedNodeIdSubject.asObservable();
+
+  private destroyed = new Subject();
 
   public hasChanges = false;
 
@@ -36,6 +43,8 @@ export class ApplicationEditLayersComponent implements OnInit {
   public applicationStateTree: 'layer' | 'baseLayer' = 'layer';
 
   public treeNodes$: Observable<TreeModel<AppTreeNodeModel>[]> = of([]);
+
+  public loadingServices$: Observable<boolean> = of(false);
 
   constructor(
     private store$: Store,
@@ -47,6 +56,22 @@ export class ApplicationEditLayersComponent implements OnInit {
     this.treeNodes$ = this.applicationStateTree === 'baseLayer'
       ? this.store$.select(selectBaseLayerTreeForSelectedApplication)
       : this.store$.select(selectAppLayerTreeForSelectedApplication);
+    this.loadingServices$ = this.store$.select(isLoadingApplicationServices);
+
+    if (this.applicationStateTree === 'layer') {
+      this.applicationTreeService.setSelectedNode(this.selectedNodeId$);
+      this.applicationTreeService.selectionStateChangedSource$
+        .pipe(takeUntil(this.destroyed))
+        .subscribe(node => {
+          console.log(node);
+          this.selectedNodeIdSubject.next(node.id);
+        });
+    }
+  }
+
+  public ngOnDestroy(): void {
+    this.destroyed.next(null);
+    this.destroyed.complete();
   }
 
   public addSubFolder(params: { nodeId: string; title: string }) {
@@ -153,8 +178,7 @@ export class ApplicationEditLayersComponent implements OnInit {
           this.savingSubject.next(false);
           return;
         }
-        const treeKey: 'baseLayerNodes' | 'layerNodes' = this.applicationStateTree === 'baseLayer' ? 'baseLayerNodes' : 'layerNodes';
-        this.applicationService.updateApplicationTree$(application.id, contentRoot[treeKey], treeKey)
+        this.applicationService.updateApplicationTree$(application.id, contentRoot)
           .pipe(take(1))
           .subscribe(success => {
             if (success) {

@@ -8,10 +8,12 @@ export interface TailormapAdminApiV1ServiceModel {
   getCatalog$(): Observable<CatalogNodeModel[]>;
   updateCatalog$(catalog: CatalogNodeModel[]): Observable<CatalogNodeModel[]>;
   getGeoService$(params: { id: string }): Observable<GeoServiceWithLayersModel>;
+  getGeoServices$(params: { ids: string[] }): Observable<GeoServiceWithLayersModel[]>;
   createGeoService$(params: { geoService: Omit<GeoServiceModel, 'id' | 'type'> }): Observable<GeoServiceWithLayersModel>;
   updateGeoService$(params: { id: string; geoService: Omit<Partial<GeoServiceModel>, 'type'> }): Observable<GeoServiceWithLayersModel>;
   deleteGeoService$(params: { id: string }): Observable<boolean>;
   getFeatureSource$(params: { id: string }): Observable<FeatureSourceModel>;
+  getFeatureSources$(params: { ids: string[] }): Observable<FeatureSourceModel[]>;
   getAllFeatureSources$(): Observable<FeatureSourceModel[]>;
   createFeatureSource$(params: { featureSource: Omit<FeatureSourceModel, 'id' | 'type' | 'featureTypes'> }): Observable<FeatureSourceModel>;
   updateFeatureSource$(params: { id: string; featureSource: Omit<Partial<FeatureSourceModel>, 'type' | 'featureTypes'> }): Observable<FeatureSourceModel>;
@@ -28,6 +30,6 @@ export interface TailormapAdminApiV1ServiceModel {
   deleteUser$(username: string): Observable<boolean>;
   getApplications$(): Observable<ApplicationModel[]>;
   createApplication$(params: { application: Omit<ApplicationModel, 'id'> }): Observable<ApplicationModel>;
-  updateApplication$(params: { id: string; application: Subset<ApplicationModel> }): Observable<ApplicationModel>;
+  updateApplication$(params: { id: string; application: Partial<ApplicationModel> }): Observable<ApplicationModel>;
   deleteApplication$(id: string): Observable<boolean>;
 }

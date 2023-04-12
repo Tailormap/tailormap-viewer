@@ -42,7 +42,7 @@ export class CatalogBaseTreeNodeComponent {
   }
 
   @Input()
-  public selectable: boolean = false;
+  public selectable = false;
 
   @Input()
   public link: string | null = null;

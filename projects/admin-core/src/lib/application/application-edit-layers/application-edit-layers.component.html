@@ -4,12 +4,17 @@
                                        (addLayer)="addLayer($event)"></tm-admin-application-catalog-tree>
   </div>
   <div class="application-tree">
-    <tm-admin-application-layer-tree [treeNodes$]="treeNodes$"
-                                     (nodePositionChanged)="nodePositionChanged($event)"
-                                     (visibilityChanged)="visibilityChanged($event)"
-                                     (addSubFolder)="addSubFolder($event)"
-                                     (renameFolder)="renameFolder($event)"
-                                     (removeNode)="removeNode($event)"></tm-admin-application-layer-tree>
+    <ng-template #applicationTree>
+      <tm-admin-application-layer-tree [treeNodes$]="treeNodes$"
+                                       (nodePositionChanged)="nodePositionChanged($event)"
+                                       (visibilityChanged)="visibilityChanged($event)"
+                                       (addSubFolder)="addSubFolder($event)"
+                                       (renameFolder)="renameFolder($event)"
+                                       (removeNode)="removeNode($event)"></tm-admin-application-layer-tree>
+    </ng-template>
+    <ng-container *ngIf="loadingServices$ | async; else: applicationTree">
+      <mat-spinner mode="indeterminate" diameter="20" color="primary"></mat-spinner>
+    </ng-container>
   </div>
 </div>
 <div class="page-details-actions">

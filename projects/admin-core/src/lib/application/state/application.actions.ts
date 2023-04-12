@@ -89,3 +89,11 @@ export const updateApplicationTreeNodeVisibility = createAction(
     visibility: Array<{ nodeId: string; visible: boolean }>;
   }>(),
 );
+
+export const loadApplicationServices = createAction(
+  `${applicationActionsPrefix} Load Application Services`,
+);
+
+export const loadApplicationServicesSuccess = createAction(
+  `${applicationActionsPrefix} Load Application Services Success`,
+);

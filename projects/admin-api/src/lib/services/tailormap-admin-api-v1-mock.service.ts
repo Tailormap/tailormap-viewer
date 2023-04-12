@@ -23,6 +23,13 @@ export class TailormapAdminApiV1MockService implements TailormapAdminApiV1Servic
     })).pipe(delay(this.delay));
   }
 
+  public getGeoServices$(params: { ids: string[] }): Observable<GeoServiceWithLayersModel[]> {
+    return of(params.ids.map(id => mockData.getGeoService({
+      id,
+      title: 'Service ' + id,
+    }))).pipe(delay(this.delay));
+  }
+
   public updateCatalog$(node: CatalogNodeModel[]): Observable<CatalogNodeModel[]> {
     return of(node).pipe(delay(this.delay));
   }
@@ -42,8 +49,15 @@ export class TailormapAdminApiV1MockService implements TailormapAdminApiV1Servic
   public getFeatureSource$(params: { id: string }): Observable<FeatureSourceModel> {
     return of(mockData.getFeatureSource({
       id: params.id,
-      title: 'Service ' + params.id,
+      title: 'Feature Source ' + params.id,
     })).pipe(delay(this.delay));
+  }
+
+  public getFeatureSources$(params: { ids: string[] }): Observable<FeatureSourceModel[]> {
+    return of(params.ids.map(id => mockData.getFeatureSource({
+      id,
+      title: 'Feature Source ' + id,
+    }))).pipe(delay(this.delay));
   }
 
   public getAllFeatureSources$(): Observable<FeatureSourceModel[]> {

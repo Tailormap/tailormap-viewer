@@ -2,11 +2,15 @@ import { TreeHelper, TreeModel } from '@tailormap-viewer/shared';
 import { AppTreeNodeModel } from '@tailormap-admin/admin-api';
 import { ApplicationModelHelper } from './application-model.helper';
 import { ExtendedGeoServiceLayerModel } from '../../catalog/models/extended-geo-service-layer.model';
-import { ApplicationTreeService } from '../services/application-tree.service';
+import { ApplicationService } from '../services/application.service';
 
 export class ApplicationTreeHelper {
 
-  public static layerTreeNodeToTree(layerTreeNodes: AppTreeNodeModel[], layers: ExtendedGeoServiceLayerModel[]): TreeModel<AppTreeNodeModel>[] {
+  public static layerTreeNodeToTree(
+    layerTreeNodes: AppTreeNodeModel[],
+    layers: ExtendedGeoServiceLayerModel[],
+    baseLayerTree?: boolean,
+  ): TreeModel<AppTreeNodeModel>[] {
     const root = layerTreeNodes.find(l => ApplicationModelHelper.isLevelTreeNode(l) && l.root);
     if (!root) {
       return [];
@@ -15,7 +19,7 @@ export class ApplicationTreeHelper {
       layerTreeNodes,
       root.id,
       (node, children) => ({
-        ...ApplicationTreeHelper.getTreeModelForLayerTreeNode(node, layers),
+        ...ApplicationTreeHelper.getTreeModelForLayerTreeNode(node, layers, baseLayerTree),
         children,
       }),
       node => ApplicationModelHelper.isLevelTreeNode(node) ? node.childrenIds : [],
@@ -27,7 +31,11 @@ export class ApplicationTreeHelper {
     return [tree];
   }
 
-  public static getTreeModelForLayerTreeNode(node: AppTreeNodeModel, layers: ExtendedGeoServiceLayerModel[]): TreeModel<AppTreeNodeModel> {
+  public static getTreeModelForLayerTreeNode(
+    node: AppTreeNodeModel,
+    layers: ExtendedGeoServiceLayerModel[],
+    baseLayerTree?: boolean,
+  ): TreeModel<AppTreeNodeModel> {
     const isAppLayerNode = ApplicationModelHelper.isLayerTreeNode(node);
     const isAppLevelNode = ApplicationModelHelper.isLevelTreeNode(node);
     const layer = isAppLayerNode
@@ -35,7 +43,9 @@ export class ApplicationTreeHelper {
       : null;
     let label = '';
     if (isAppLevelNode) {
-      label = node.root ? ApplicationTreeService.ROOT_NODE_TITLE : node.title;
+      label = node.root
+        ? (baseLayerTree ? ApplicationService.ROOT_BACKGROUND_NODE_TITLE : ApplicationService.ROOT_NODE_TITLE)
+        : node.title;
     }
     if (isAppLayerNode) {
       label = layer?.title || node.layerName;

@@ -5,7 +5,7 @@ import {
   TAILORMAP_ADMIN_API_V1_SERVICE,
   TailormapAdminApiV1ServiceModel,
 } from '@tailormap-admin/admin-api';
-import { catchError, concatMap, forkJoin, of, Subject, take, takeUntil, tap } from 'rxjs';
+import { catchError, concatMap, map, of, Subject, take, takeUntil, tap } from 'rxjs';
 import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
 import {
   selectCatalog, selectCatalogNodeById, selectFeatureSourceIds, selectGeoServiceIds,
@@ -49,36 +49,29 @@ export class CatalogService implements OnDestroy {
     subscription: Subject<null>,
     parentNodeId?: string,
   ) {
-    const requests$ = serviceIds
-      .filter(id => !this.geoServicesIds.has(id))
-      .map(id => {
-        return this.adminApiService.getGeoService$({ id })
-          .pipe(
-            takeUntil(subscription),
-            catchError(() => {
-              return of(null);
-            }),
-          );
-      });
-    if (requests$.length === 0) {
+    const unloadedServices = serviceIds
+      .filter(id => !this.geoServicesIds.has(id));
+    if (unloadedServices.length === 0) {
       return null;
     }
-    return forkJoin(requests$)
+    return this.adminApiService.getGeoServices$({ ids: unloadedServices })
       .pipe(
+        takeUntil(subscription),
+        catchError(() => {
+          SnackBarMessageComponent.open$(this.snackBar, {
+            message: $localize `Error while loading service(s). Please collapse/expand the node again to try again.`,
+            duration: 5000,
+            showCloseButton: true,
+          }).pipe(takeUntil(subscription)).subscribe();
+          return of(null);
+        }),
+        map(responses => responses || []),
         tap(responses => {
           const services = responses.filter((response): response is GeoServiceWithLayersModel => {
             return CatalogModelHelper.isGeoServiceModel(response);
           });
           if (services.length > 0) {
             this.store$.dispatch(addGeoServices({ services, parentNode: parentNodeId || '' }));
-          }
-          const hasError = responses.some(response => response === null);
-          if (hasError) {
-            SnackBarMessageComponent.open$(this.snackBar, {
-              message: $localize `Error while loading service(s). Please collapse/expand the node again to try again.`,
-              duration: 5000,
-              showCloseButton: true,
-            }).pipe(takeUntil(subscription)).subscribe();
           }
         }),
       );
@@ -89,36 +82,29 @@ export class CatalogService implements OnDestroy {
     subscription: Subject<null>,
     parentNodeId?: string,
   ){
-    const requests$ = featureSourceIds
-      .filter(id => !this.featureSourcesIds.has(id))
-      .map(id => {
-        return this.adminApiService.getFeatureSource$({ id })
-          .pipe(
-            takeUntil(subscription),
-            catchError(() => {
-              return of(null);
-            }),
-          );
-      });
-    if (requests$.length === 0) {
+    const notLoadedFeatureSources = featureSourceIds
+      .filter(id => !this.featureSourcesIds.has(id));
+    if (notLoadedFeatureSources.length === 0) {
       return null;
     }
-    return forkJoin(requests$)
+    return this.adminApiService.getFeatureSources$({ ids: notLoadedFeatureSources })
       .pipe(
+        takeUntil(subscription),
+        catchError(() => {
+          SnackBarMessageComponent.open$(this.snackBar, {
+            message: $localize `Error while loading feature source(s). Please collapse/expand the node again to try again.`,
+            duration: 5000,
+            showCloseButton: true,
+          }).pipe(takeUntil(subscription)).subscribe();
+          return of(null);
+        }),
+        map(responses => responses || []),
         tap(responses => {
           const featureSources = responses.filter((response): response is FeatureSourceModel => {
             return CatalogModelHelper.isFeatureSourceModel(response);
           });
           if (featureSources.length > 0) {
             this.store$.dispatch(addFeatureSources({ featureSources, parentNode: parentNodeId || '' }));
-          }
-          const hasError = responses.some(response => response === null);
-          if (hasError) {
-            SnackBarMessageComponent.open$(this.snackBar, {
-              message: $localize `Error while loading feature source(s). Please collapse/expand the node again to try again.`,
-              duration: 5000,
-              showCloseButton: true,
-            }).pipe(takeUntil(subscription)).subscribe();
           }
         }),
       );

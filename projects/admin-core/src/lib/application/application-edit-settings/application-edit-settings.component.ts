@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, filter, Observable, of, Subject, switchMap, take, takeUntil } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, filter, Observable, of, Subject, switchMap, take, takeUntil } from 'rxjs';
 import { selectSelectedApplication } from '../state/application.selectors';
 import { ApplicationModel } from '@tailormap-admin/admin-api';
 import { ApplicationService } from '../services/application.service';
@@ -32,7 +32,12 @@ export class ApplicationEditSettingsComponent implements OnInit, OnDestroy {
   ) { }
 
   public ngOnInit(): void {
-    this.application$ = this.store$.select(selectSelectedApplication);
+    this.application$ = this.store$.select(selectSelectedApplication)
+      .pipe(
+        distinctUntilChanged((a, b) => {
+          return a?.id === b?.id;
+        }),
+      );
   }
 
   public ngOnDestroy(): void {
