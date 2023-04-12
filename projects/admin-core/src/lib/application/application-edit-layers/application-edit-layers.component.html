@@ -1,7 +1,14 @@
-<div class="edit-application-tree">
-  <div class="catalog-tree">
-    <tm-admin-application-catalog-tree [applicationTreeService]="applicationTreeService"
-                                       (addLayer)="addLayer($event)"></tm-admin-application-catalog-tree>
+<div class="edit-application-tree"
+     [class.has-catalog-tree-visible]="catalogTreeOpened"
+     [class.has-selected-layer]="selectedLayerNode$ | async">
+  <div class="application-catalog">
+    <div class="catalog-tree">
+      <tm-admin-application-catalog-tree [applicationTreeService]="applicationTreeService"
+                                         (addLayer)="addLayer($event)"></tm-admin-application-catalog-tree>
+    </div>
+    <button mat-icon-button (click)="toggleCatalogTree()" class="toggle-tree-icon">
+      <mat-icon [svgIcon]="catalogTreeOpened ? 'chevron_left' : 'chevron_right'"></mat-icon>
+    </button>
   </div>
   <div class="application-tree">
     <ng-template #applicationTree>
@@ -16,8 +23,12 @@
       <mat-spinner mode="indeterminate" diameter="20" color="primary"></mat-spinner>
     </ng-container>
   </div>
+  <div class="application-layer-settings">
+    <tm-admin-application-layer-settings [node]="selectedLayerNode$ | async"
+                                         (layerSettingsChange)="layerSettingsChanged($event)"></tm-admin-application-layer-settings>
+  </div>
 </div>
 <div class="page-details-actions">
-  <tm-admin-save-button [saving$]="saving$" [disabled]="!hasChanges" (save)="save()"></tm-admin-save-button>
+  <tm-admin-save-button [saving$]="saving$" [disabled]="hasChanges.length === 0" (save)="save()"></tm-admin-save-button>
   <button mat-flat-button (click)="clearSelectedApplication()" routerLink="/applications" i18n>Close</button>
 </div>

@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { ApplicationModel, AppTreeNodeModel } from '@tailormap-admin/admin-api';
+import { AppLayerSettingsModel, ApplicationModel, AppTreeNodeModel } from '@tailormap-admin/admin-api';
 import { TreeNodePosition } from '@tailormap-viewer/shared';
 import { ComponentBaseConfigModel, ViewerStylingModel } from '@tailormap-viewer/api';
 
@@ -89,6 +89,11 @@ export const updateApplicationTreeNodeVisibility = createAction(
     tree: 'layer' | 'baseLayer';
     visibility: Array<{ nodeId: string; visible: boolean }>;
   }>(),
+);
+
+export const updateApplicationNodeSettings = createAction(
+  `${applicationActionsPrefix} Update Application Node Settings`,
+  props<{ applicationId: string; nodeId: string; settings: AppLayerSettingsModel | null }>(),
 );
 
 export const loadApplicationServices = createAction(

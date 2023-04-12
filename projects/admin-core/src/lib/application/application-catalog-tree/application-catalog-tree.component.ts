@@ -8,6 +8,7 @@ import { CatalogTreeModelTypeEnum } from '../../catalog/models/catalog-tree-mode
 import { selectServiceLayerTree } from '../../catalog/state/catalog.selectors';
 import { CatalogTreeHelper } from '../../catalog/helpers/catalog-tree.helper';
 import { ExtendedGeoServiceLayerModel } from '../../catalog/models/extended-geo-service-layer.model';
+import { AppTreeNodeModel } from '@tailormap-admin/admin-api';
 
 export interface AddLayerEvent {
   layer: ExtendedGeoServiceLayerModel;
@@ -26,7 +27,7 @@ export interface AddLayerEvent {
 export class ApplicationCatalogTreeComponent implements OnInit {
 
   @Input()
-  public applicationTreeService: TreeService<CatalogTreeModelMetadataTypes, CatalogTreeModelTypeEnum> | undefined;
+  public applicationTreeService: TreeService<AppTreeNodeModel> | undefined;
 
   @Output()
   public addLayer = new EventEmitter<AddLayerEvent>();

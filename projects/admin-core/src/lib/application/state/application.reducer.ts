@@ -11,6 +11,26 @@ const getApplication = (application: ApplicationModel) => ({
   id: `${application.id}`,
 });
 
+const updateApplication = (
+  state: ApplicationState,
+  applicationId: string,
+  updateMethod: (application: ApplicationModel) => ApplicationModel,
+) => {
+  const idx = state.applications.findIndex(app => app.id === applicationId);
+  if (idx === -1) {
+    return state;
+  }
+  const application = state.applications[idx];
+  return {
+    ...state,
+    applications: [
+      ...state.applications.slice(0, idx),
+      updateMethod(application),
+      ...state.applications.slice(idx + 1),
+    ],
+  };
+};
+
 const updateApplicationTree = (
   state: ApplicationState,
   applicationId: string,
@@ -191,6 +211,31 @@ export const onUpdateApplicationTreeNodeVisibility = (
   });
 };
 
+const onUpdateApplicationNodeSettings = (
+  state: ApplicationState,
+  payload: ReturnType<typeof ApplicationActions.updateApplicationNodeSettings>,
+): ApplicationState => {
+  return updateApplication(state, payload.applicationId, application => {
+    const updatedSettings = {
+      ...application.settings?.layerSettings || {},
+      [payload.nodeId]: {
+        ...application.settings?.layerSettings?.[payload.nodeId] || {},
+        ...payload.settings || {},
+      },
+    };
+    if (!payload.settings) {
+      delete updatedSettings[payload.nodeId];
+    }
+    return {
+      ...application,
+      settings: {
+        ...application.settings,
+        layerSettings: updatedSettings,
+      },
+    };
+  });
+};
+
 const onLoadApplicationServices = (state: ApplicationState): ApplicationState => ({
   ...state,
   applicationServicesLoadStatus: LoadingStateEnum.LOADING,
@@ -267,6 +312,7 @@ const applicationReducerImpl = createReducer<ApplicationState>(
   on(ApplicationActions.removeApplicationTreeNode, onRemoveApplicationTreeNode),
   on(ApplicationActions.updateApplicationTreeOrder, onUpdateApplicationTreeOrder),
   on(ApplicationActions.updateApplicationTreeNodeVisibility, onUpdateApplicationTreeNodeVisibility),
+  on(ApplicationActions.updateApplicationNodeSettings, onUpdateApplicationNodeSettings),
   on(ApplicationActions.loadApplicationServices, onLoadApplicationServices),
   on(ApplicationActions.loadApplicationServicesSuccess, onLoadApplicationServicesSuccess),
   on(ApplicationActions.updateApplicationComponentConfig, onUpdateApplicationComponentConfig),

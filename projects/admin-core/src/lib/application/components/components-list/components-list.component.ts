@@ -1,6 +1,8 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { ConfigurationComponentRegistryService } from '../../services/configuration-component-registry.service';
-import { map, Observable } from 'rxjs';
+import { map, Observable, Subject, takeUntil } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { selectDisabledComponentsForSelectedApplication } from '../../state/application.selectors';
 
 @Component({
   selector: 'tm-admin-components-list',
@@ -8,9 +10,7 @@ import { map, Observable } from 'rxjs';
   styleUrls: ['./components-list.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ComponentsListComponent implements OnInit {
-
-  private configurationComponentRegistryService = inject(ConfigurationComponentRegistryService);
+export class ComponentsListComponent implements OnInit, OnDestroy {
 
   public listOfComponents$: Observable<Array<{ type: string; label: string }>>;
 
@@ -18,8 +18,14 @@ export class ComponentsListComponent implements OnInit {
   public selectComponent = new EventEmitter<string>();
 
   public selectedComponent: string | null = null;
+  private destroyed = new Subject();
+  public disabledComponents: Set<string> = new Set();
 
-  constructor() {
+  constructor(
+    private configurationComponentRegistryService: ConfigurationComponentRegistryService,
+    private store$: Store,
+    private cdr: ChangeDetectorRef,
+  ) {
     this.listOfComponents$ = this.configurationComponentRegistryService.getRegisteredConfigurationComponents$()
       .pipe(
         map((components) => {
@@ -33,6 +39,17 @@ export class ComponentsListComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    this.store$.select(selectDisabledComponentsForSelectedApplication)
+      .pipe(takeUntil(this.destroyed))
+      .subscribe((disabledComponents) => {
+        this.disabledComponents = new Set(disabledComponents);
+        this.cdr.detectChanges();
+      });
+  }
+
+  public ngOnDestroy(): void {
+    this.destroyed.next(null);
+    this.destroyed.complete();
   }
 
   public setActiveComponent(component: string) {
