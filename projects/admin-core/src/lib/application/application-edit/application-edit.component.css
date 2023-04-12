@@ -1,0 +1,18 @@
+.secondary-navigation {
+  display: flex;
+  margin-bottom: 16px;
+}
+
+.secondary-navigation a {
+  display: block;
+}
+
+.secondary-navigation a.active {
+  font-weight: bold;
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.secondary-navigation a + a {
+  margin-left: 16px;
+}

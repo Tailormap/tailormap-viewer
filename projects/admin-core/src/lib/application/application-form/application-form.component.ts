@@ -28,7 +28,13 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
   public updateApplication = new EventEmitter<Omit<ApplicationModel, 'id'>>();
 
   public applicationForm = new FormGroup({
-    name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    name: new FormControl('', {
+      nonNullable: true,
+      validators: [
+        Validators.required,
+        Validators.pattern(/^[a-zA-Z0-9-]+$/),
+      ],
+    }),
     title: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     adminComments: new FormControl(''),
     crs: new FormControl(''),

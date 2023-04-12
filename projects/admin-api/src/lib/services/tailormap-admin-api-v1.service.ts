@@ -6,6 +6,7 @@ import {
   CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel,
 } from '../models';
 import { CatalogModelHelper } from '../helpers/catalog-model.helper';
+import { Subset } from '@tailormap-viewer/shared';
 
 @Injectable()
 export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceModel {
@@ -33,6 +34,14 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
       .pipe(map(CatalogModelHelper.addTypeToGeoServiceModel));
   }
 
+  public getGeoServices$(params: { ids: string[] }): Observable<GeoServiceWithLayersModel[]> {
+    return this.httpClient.get<{ _embedded: { ['geo-services']: GeoServiceWithLayersModel[] }}>(`${TailormapAdminApiV1Service.BASE_URL}/geo-services/search/findByIds`, {
+      params: {
+        ids: params.ids.join(','),
+      },
+    }).pipe(map(response => (response?._embedded?.['geo-services'] || []).map(CatalogModelHelper.addTypeToGeoServiceModel)));
+  }
+
   public createGeoService$(params: { geoService: Omit<GeoServiceModel, 'id'> }): Observable<GeoServiceWithLayersModel> {
     return this.httpClient.post<GeoServiceWithLayersModel>(`${TailormapAdminApiV1Service.BASE_URL}/geo-services`, params.geoService)
       .pipe(map(CatalogModelHelper.addTypeToGeoServiceModel));
@@ -54,6 +63,14 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
   public getFeatureSource$(params: { id: string }): Observable<FeatureSourceModel> {
     return this.httpClient.get<FeatureSourceModel>(`${TailormapAdminApiV1Service.BASE_URL}/feature-sources/${params.id}`)
       .pipe(map(CatalogModelHelper.addTypeToFeatureSourceModel));
+  }
+
+  public getFeatureSources$(params: { ids: string[] }): Observable<FeatureSourceModel[]> {
+    return this.httpClient.get<{ _embedded: { ['feature-sources']: FeatureSourceModel[] }}>(`${TailormapAdminApiV1Service.BASE_URL}/feature-sources/search/findByIds`, {
+      params: {
+        ids: params.ids.join(','),
+      },
+    }).pipe(map(response => (response?._embedded['feature-sources'] || []).map(CatalogModelHelper.addTypeToFeatureSourceModel)));
   }
 
   public getAllFeatureSources$(): Observable<FeatureSourceModel[]> {

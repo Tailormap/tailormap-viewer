@@ -1,5 +1,6 @@
 import { createAction, props } from '@ngrx/store';
-import { ApplicationModel } from '@tailormap-admin/admin-api';
+import { ApplicationModel, AppTreeNodeModel } from '@tailormap-admin/admin-api';
+import { TreeNodePosition } from '@tailormap-viewer/shared';
 
 const applicationActionsPrefix = '[Application]';
 
@@ -44,4 +45,55 @@ export const updateApplication = createAction(
 export const deleteApplication = createAction(
   `${applicationActionsPrefix} Delete Application`,
   props<{ applicationId: string }>(),
+);
+
+export const addApplicationTreeNodes = createAction(
+  `${applicationActionsPrefix} Add Application Tree Nodes`,
+  props<{
+    applicationId: string;
+    treeNodes: AppTreeNodeModel[];
+    tree: 'layer' | 'baseLayer';
+    parentId?: string;
+    position?: TreeNodePosition;
+    sibling?: string;
+  }>(),
+);
+
+export const updateApplicationTreeOrder = createAction(
+  `${applicationActionsPrefix} Update Application Tree Order`,
+  props<{
+    applicationId: string;
+    nodeId: string;
+    tree: 'layer' | 'baseLayer';
+    parentId?: string;
+    position: TreeNodePosition;
+    sibling?: string;
+  }>(),
+);
+
+export const updateApplicationTreeNode = createAction(
+  `${applicationActionsPrefix} Update Application Tree Node`,
+  props<{ applicationId: string; nodeId: string; updatedNode: Partial<AppTreeNodeModel>; tree: 'layer' | 'baseLayer' }>(),
+);
+
+export const removeApplicationTreeNode = createAction(
+  `${applicationActionsPrefix} Remove Application Tree Node`,
+  props<{ applicationId: string; nodeId: string; tree: 'layer' | 'baseLayer' }>(),
+);
+
+export const updateApplicationTreeNodeVisibility = createAction(
+  `${applicationActionsPrefix} Update Application Tree Node Visibility`,
+  props<{
+    applicationId: string;
+    tree: 'layer' | 'baseLayer';
+    visibility: Array<{ nodeId: string; visible: boolean }>;
+  }>(),
+);
+
+export const loadApplicationServices = createAction(
+  `${applicationActionsPrefix} Load Application Services`,
+);
+
+export const loadApplicationServicesSuccess = createAction(
+  `${applicationActionsPrefix} Load Application Services Success`,
 );

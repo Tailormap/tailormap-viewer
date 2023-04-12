@@ -11,4 +11,6 @@ export enum RoutesEnum {
   APPLICATION = 'applications',
   APPLICATION_CREATE = 'create',
   APPLICATION_DETAILS = 'application/:applicationId',
+  APPLICATION_DETAILS_LAYERS = 'layers',
+  APPLICATION_DETAILS_BASE_LAYERS = 'base-layers',
 }

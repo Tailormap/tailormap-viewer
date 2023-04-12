@@ -27,7 +27,7 @@ export class LayerTreeNodeHelper {
       : null;
     return {
       id: node.id,
-      label: node.name,
+      label: layer ? layer.title : node.name,
       type: isAppLayerNode ? 'layer' : 'level',
       metadata: layer,
       checked: isAppLayerNode

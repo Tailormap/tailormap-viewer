@@ -12,8 +12,11 @@ import { FeatureSourceDetailsComponent } from './catalog/feature-source-details/
 import { FeatureTypeDetailsComponent } from './catalog/feature-type-details/feature-type-details.component';
 import { ApplicationPageComponent } from './pages/application-page/application-page.component';
 import { ApplicationCreateComponent } from './application/application-create/application-create.component';
-import { ApplicationDetailsComponent } from './application/application-details/application-details.component';
 import { ApplicationHomeComponent } from './application/application-home/application-home.component';
+import { ApplicationEditComponent } from './application/application-edit/application-edit.component';
+import { ApplicationEditSettingsComponent } from './application/application-edit-settings/application-edit-settings.component';
+import { ApplicationEditLayersComponent } from './application/application-edit-layers/application-edit-layers.component';
+import { ApplicationEditBaseLayersComponent } from './application/application-edit-base-layers/application-edit-base-layers.component';
 
 const routes: Routes = [
   {
@@ -56,7 +59,22 @@ const routes: Routes = [
       },
       {
         path: RoutesEnum.APPLICATION_DETAILS,
-        component: ApplicationDetailsComponent,
+        component: ApplicationEditComponent,
+        data: { className: 'full-screen-settings' },
+        children: [
+          {
+            path: '',
+            component: ApplicationEditSettingsComponent,
+          },
+          {
+            path: RoutesEnum.APPLICATION_DETAILS_LAYERS,
+            component: ApplicationEditLayersComponent,
+          },
+          {
+            path: RoutesEnum.APPLICATION_DETAILS_BASE_LAYERS,
+            component: ApplicationEditBaseLayersComponent,
+          },
+        ],
       },
     ],
   },

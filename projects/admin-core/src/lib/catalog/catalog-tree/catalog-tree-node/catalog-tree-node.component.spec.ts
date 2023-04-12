@@ -7,10 +7,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { CatalogTreeModel } from '../../models/catalog-tree.model';
 import { ExtendedGeoServiceModel } from '../../models/extended-geo-service.model';
 import { ExtendedGeoServiceLayerModel } from '../../models/extended-geo-service-layer.model';
+import { CatalogBaseTreeNodeComponent } from '../../catalog-base-tree/catalog-base-tree-node/catalog-base-tree-node.component';
 
 const setup = async (node: CatalogTreeModel | null) => {
   await render(CatalogTreeNodeComponent, {
     imports: [ MatIconModule, MatIconTestingModule ],
+    declarations: [CatalogBaseTreeNodeComponent],
     componentProperties: { node },
   });
 };

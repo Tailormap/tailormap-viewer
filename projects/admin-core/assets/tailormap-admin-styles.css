@@ -33,3 +33,7 @@ mat-checkbox {
 .has-search {
   padding-top: 8px;
 }
+
+mat-hint.error {
+  color: var(--error-color);
+}

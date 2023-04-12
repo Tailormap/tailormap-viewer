@@ -10,7 +10,7 @@ type MouseEventHandler = (e: MouseEvent) => void;
 
 export interface DropZoneOptions {
   dropInsideOnly?: boolean;
-  getTargetElement(): HTMLDivElement;
+  getTargetElement(): HTMLDivElement | null;
   dropAllowed(nodeid: string): boolean;
   dropInsideAllowed(nodeid: string): boolean;
   isExpandable(nodeid: string): boolean;
@@ -81,7 +81,7 @@ export class TreeDragDropService implements OnDestroy {
         const dragImage = document.createElement('div');
         dragImage.classList.add('tree-node__drag-image');
         dragImage.innerText = dragNode.label;
-        dropZones[0].getTargetElement().appendChild(dragImage);
+        dropZones[0].getTargetElement()?.appendChild(dragImage);
         event.dataTransfer.setDragImage(dragImage, 0, BrowserHelper.isTouchDevice ? 75 : 25);
       }
       event.dataTransfer.setData('text/plain', dragNode.label);

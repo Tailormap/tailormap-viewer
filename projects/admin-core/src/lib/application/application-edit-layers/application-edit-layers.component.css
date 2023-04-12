@@ -1,0 +1,16 @@
+.edit-application-tree {
+  display: flex;
+}
+
+.application-tree,
+.catalog-tree {
+  min-width: 400px;
+  width: 40%;
+  border: 1px solid var(--border-color);
+  padding: 10px;
+}
+
+.application-tree {
+  margin-left: 16px;
+}
+

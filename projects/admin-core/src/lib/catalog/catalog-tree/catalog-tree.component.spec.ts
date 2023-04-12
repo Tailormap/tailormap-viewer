@@ -13,6 +13,8 @@ import userEvent from '@testing-library/user-event';
 import { addGeoServices } from '../state/catalog.actions';
 import { CatalogTreeNodeComponent } from './catalog-tree-node/catalog-tree-node.component';
 import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
+import { CatalogBaseTreeComponent } from '../catalog-base-tree/catalog-base-tree.component';
+import { CatalogBaseTreeNodeComponent } from '../catalog-base-tree/catalog-base-tree-node/catalog-base-tree-node.component';
 
 const setup = async (state: Partial<CatalogState> = {}) => {
   const mockStore = getMockStore({
@@ -21,13 +23,13 @@ const setup = async (state: Partial<CatalogState> = {}) => {
   const mockDispatch = jest.fn();
   mockStore.dispatch = mockDispatch;
   const mockApiService = {
-    getGeoService$: jest.fn(() => {
-      return of(getGeoService());
+    getGeoServices$: jest.fn(() => {
+      return of([getGeoService()]);
     }),
   };
   await render(CatalogTreeComponent, {
     imports: [ SharedModule, MatIconTestingModule ],
-    declarations: [CatalogTreeNodeComponent],
+    declarations: [ CatalogTreeNodeComponent, CatalogBaseTreeComponent, CatalogBaseTreeNodeComponent ],
     providers: [
       { provide: Store, useValue: mockStore },
       { provide: TAILORMAP_ADMIN_API_V1_SERVICE, useValue: mockApiService },
@@ -65,7 +67,7 @@ describe('CatalogTreeComponent', () => {
     await userEvent.click(await screen.findByLabelText(`expand Background services`));
     await userEvent.click(await screen.findByLabelText(`expand Background services - aerial`));
     await waitFor(() => {
-      expect(mockApiService.getGeoService$).toHaveBeenCalledTimes(2);
+      expect(mockApiService.getGeoServices$).toHaveBeenCalledTimes(1);
     });
     expect(mockDispatch).toHaveBeenCalledTimes(4); // load catalog, expand, expand, add services
     expect(mockDispatch.mock.calls[3][0].type).toEqual(addGeoServices.type);
@@ -84,7 +86,7 @@ describe('CatalogTreeComponent', () => {
 
     await userEvent.click(await screen.findByLabelText(`expand Background services`));
     await userEvent.click(await screen.findByLabelText(`expand Background services - aerial`));
-    expect(mockApiService.getGeoService$).not.toHaveBeenCalled();
+    expect(mockApiService.getGeoServices$).not.toHaveBeenCalled();
     expect(mockDispatch).toHaveBeenCalledTimes(3); // load catalog, expand, expand
   });
 

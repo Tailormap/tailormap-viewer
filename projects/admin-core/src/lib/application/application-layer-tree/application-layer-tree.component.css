@@ -1,0 +1,21 @@
+tm-tree {
+  height: 100%;
+}
+
+tm-tree ::ng-deep mat-tree {
+  height: 100%;
+  min-width: min-content;
+}
+
+tm-tree ::ng-deep .tree-wrapper {
+  --admin-tree-side-padding: 14px;
+  padding: 6px var(--admin-tree-side-padding) 0 var(--admin-tree-side-padding);
+}
+
+tm-tree ::ng-deep .tree-node-wrapper--leaf {
+  padding-left: 18px;
+}
+
+tm-tree ::ng-deep .mat-tree {
+
+}
