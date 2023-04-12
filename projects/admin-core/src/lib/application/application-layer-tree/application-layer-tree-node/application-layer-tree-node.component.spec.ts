@@ -1,14 +1,15 @@
 import { ApplicationLayerTreeNodeComponent } from './application-layer-tree-node.component';
 import { render, screen } from '@testing-library/angular';
 import { TreeModel } from '@tailormap-viewer/shared';
-import { AppLayerModel, getAppLayerModel } from '@tailormap-viewer/api';
 import { MatIconModule } from '@angular/material/icon';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
+import { MatMenuModule } from '@angular/material/menu';
+import { AppTreeLayerNodeModel, AppTreeLevelNodeModel, AppTreeNodeModel } from '@tailormap-admin/admin-api';
 
-describe('TocNodeLayerComponent', () => {
+describe('ApplicationLayerTreeNodeComponent', () => {
   test('renders', async () => {
     await render(ApplicationLayerTreeNodeComponent, {
-      imports: [ MatIconModule, MatIconTestingModule ],
+      imports: [ MatIconModule, MatIconTestingModule, MatMenuModule ],
       componentProperties: {
         node: {
           id: '1',
@@ -20,35 +21,46 @@ describe('TocNodeLayerComponent', () => {
   });
 
   test('renders layer', async () => {
-    const appLayer = getAppLayerModel();
-    const layer: TreeModel<AppLayerModel> = {
-      id: `${appLayer.id}`,
-      label: appLayer.title,
-      type: 'layer',
+    const appLayer: AppTreeLayerNodeModel = {
+      id: '1',
+      layerName: 'layer',
+      serviceId: '1',
+      objectType: 'AppTreeLayerNode',
+      visible: true,
+    };
+    const layer: TreeModel<AppTreeNodeModel> = {
+      id: appLayer.id,
+      label: appLayer.layerName,
+      type: '',
       metadata: appLayer,
     };
     await render(ApplicationLayerTreeNodeComponent, {
-      imports: [ MatIconModule, MatIconTestingModule ],
+      imports: [ MatIconModule, MatIconTestingModule, MatMenuModule ],
       componentProperties: {
         node: layer,
-        scale: 1000000,
       },
     });
-    expect(await screen.findByText(appLayer.title)).toBeInTheDocument();
-    expect((await screen.findByText(appLayer.title)).closest('.tree-node')).toBeInTheDocument();
-    expect((await screen.findByText(appLayer.title)).closest('.level')).not.toBeInTheDocument();
-    expect((await screen.findByText(appLayer.title)).closest('.out-of-scale')).not.toBeInTheDocument();
+    expect(await screen.findByText(appLayer.layerName)).toBeInTheDocument();
+    expect((await screen.findByText(appLayer.layerName)).closest('.tree-node')).toBeInTheDocument();
+    expect((await screen.findByText(appLayer.layerName)).closest('.level')).not.toBeInTheDocument();
   });
 
   test('renders level', async () => {
-    const layer: TreeModel<AppLayerModel> = {
-      id: `1`,
-      label: 'Level 1',
+    const appLevel: AppTreeLevelNodeModel = {
+      id: '1',
+      title: 'Level 1',
+      root: false,
+      childrenIds: [],
+      objectType: 'AppTreeLevelNode',
+    };
+    const layer: TreeModel<AppTreeNodeModel> = {
+      id: appLevel.id,
+      label: appLevel.title,
       type: 'level',
-      metadata: undefined,
+      metadata: appLevel,
     };
     await render(ApplicationLayerTreeNodeComponent, {
-      imports: [ MatIconModule, MatIconTestingModule ],
+      imports: [ MatIconModule, MatIconTestingModule, MatMenuModule ],
       componentProperties: {
         node: layer,
       },
@@ -56,24 +68,6 @@ describe('TocNodeLayerComponent', () => {
     expect(await screen.findByText('Level 1')).toBeInTheDocument();
     expect((await screen.findByText('Level 1')).closest('.tree-node')).toBeInTheDocument();
     expect((await screen.findByText('Level 1')).closest('.level')).toBeInTheDocument();
-  });
-
-  test('renders out-of-scale layer', async () => {
-    const appLayer = getAppLayerModel({ maxScale: 1000 });
-    const layer: TreeModel<AppLayerModel> = {
-      id: `${appLayer.id}`,
-      label: appLayer.title,
-      type: 'layer',
-      metadata: appLayer,
-    };
-    await render(ApplicationLayerTreeNodeComponent, {
-      imports: [ MatIconModule, MatIconTestingModule ],
-      componentProperties: {
-        node: layer,
-        scale: 2000,
-      },
-    });
-    expect((await screen.findByText(appLayer.title)).closest('.out-of-scale')).toBeInTheDocument();
   });
 
 });

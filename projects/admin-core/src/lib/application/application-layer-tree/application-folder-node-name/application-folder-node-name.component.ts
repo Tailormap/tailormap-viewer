@@ -17,7 +17,7 @@ export class ApplicationFolderNodeNameComponent implements OnInit {
 
   constructor(
     private dialogRef: MatDialogRef<ApplicationFolderNodeNameComponent, string | null>,
-    @Inject(MAT_DIALOG_DATA) private data: { currentName?: string },
+    @Inject(MAT_DIALOG_DATA) public data: { currentName?: string },
   ) {}
 
   public static openDialog$(matDialog: MatDialog, currentName?: string) {
