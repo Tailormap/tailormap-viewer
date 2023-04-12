@@ -230,6 +230,28 @@ const onUpdateApplicationComponentConfig = (state: ApplicationState, payload: Re
   };
 };
 
+const onUpdateApplicationStylingConfig = (state: ApplicationState, payload: ReturnType<typeof ApplicationActions.updateApplicationStylingConfig>): ApplicationState => {
+  const idx = state.applications.findIndex(app => app.id === payload.applicationId);
+  if (idx === -1) {
+    return state;
+  }
+  const application = state.applications[idx];
+  return {
+    ...state,
+    applications: [
+      ...state.applications.slice(0, idx),
+      {
+        ...application,
+        styling: {
+          ...application.styling,
+          ...payload.styling,
+        },
+      },
+      ...state.applications.slice(idx + 1),
+    ],
+  };
+};
+
 const applicationReducerImpl = createReducer<ApplicationState>(
   initialApplicationState,
   on(ApplicationActions.loadApplicationsStart, onLoadApplicationStart),
@@ -248,5 +270,6 @@ const applicationReducerImpl = createReducer<ApplicationState>(
   on(ApplicationActions.loadApplicationServices, onLoadApplicationServices),
   on(ApplicationActions.loadApplicationServicesSuccess, onLoadApplicationServicesSuccess),
   on(ApplicationActions.updateApplicationComponentConfig, onUpdateApplicationComponentConfig),
+  on(ApplicationActions.updateApplicationStylingConfig, onUpdateApplicationStylingConfig),
 );
 export const applicationReducer = (state: ApplicationState | undefined, action: Action) => applicationReducerImpl(state, action);

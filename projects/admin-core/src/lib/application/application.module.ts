@@ -25,6 +25,8 @@ import {
 import { ApplicationFolderNodeNameComponent } from './application-layer-tree/application-folder-node-name/application-folder-node-name.component';
 import { ApplicationEditComponentsComponent } from './application-edit-components/application-edit-components.component';
 import { ComponentsModule } from './components/components.module';
+import { ApplicationEditStylingComponent } from './application-edit-styling/application-edit-styling.component';
+import { ImageUploadFieldComponent } from './styling/image-upload-field/image-upload-field.component';
 
 
 
@@ -43,6 +45,8 @@ import { ComponentsModule } from './components/components.module';
     ApplicationCatalogTreeComponent,
     ApplicationLayerTreeNodeComponent,
     ApplicationFolderNodeNameComponent,
+    ApplicationEditStylingComponent,
+    ImageUploadFieldComponent,
   ],
   imports: [
     CommonModule,

@@ -1,0 +1,24 @@
+<div *ngIf="stylingConfig$ | async as stylingConfig">
+  <div class="form-row">
+    <strong i18n>Primary color used in application</strong>
+    <tm-color-picker
+      [dropdownPosition]="dropdownPosition"
+      [color]="stylingConfig.primaryColor || DEFAULT_PRIMARY_COLOR"
+      (colorChange)="onPrimaryColorChange($event)"></tm-color-picker>
+  </div>
+
+  <div class="form-row">
+    <strong i18n>Upload logo for application</strong>
+    <tm-image-upload-field (imageChanged)="onImageChanged($event)"
+                           [maxSize]="2"
+                           [resizeSize]="600"
+                           [currentImage]="stylingConfig.logo"></tm-image-upload-field>
+  </div>
+
+
+  <div class="page-details-actions">
+    <tm-admin-save-button [saving$]="saving$" (save)="save()"></tm-admin-save-button>
+    <button mat-flat-button (click)="clearSelectedApplication()" routerLink="/applications" i18n>Close</button>
+  </div>
+
+</div>

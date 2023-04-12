@@ -1,0 +1,12 @@
+.form-row + .form-row {
+  margin-top: 20px;
+}
+
+.form-row strong {
+  display: block;
+  padding-bottom: 10px;
+}
+
+button mat-spinner {
+  margin: 8px;
+}
