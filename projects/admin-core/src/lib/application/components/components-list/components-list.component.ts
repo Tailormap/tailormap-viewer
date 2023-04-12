@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, inject, OnDestroy, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { ConfigurationComponentRegistryService } from '../../services/configuration-component-registry.service';
-import { map, Observable, of, Subject, takeUntil } from 'rxjs';
+import { map, Observable, Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectDisabledComponentsForSelectedApplication } from '../../state/application.selectors';
 
