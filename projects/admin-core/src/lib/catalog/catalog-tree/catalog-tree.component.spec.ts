@@ -23,8 +23,8 @@ const setup = async (state: Partial<CatalogState> = {}) => {
   const mockDispatch = jest.fn();
   mockStore.dispatch = mockDispatch;
   const mockApiService = {
-    getGeoService$: jest.fn(() => {
-      return of(getGeoService());
+    getGeoServices$: jest.fn(() => {
+      return of([getGeoService()]);
     }),
   };
   await render(CatalogTreeComponent, {
@@ -67,7 +67,7 @@ describe('CatalogTreeComponent', () => {
     await userEvent.click(await screen.findByLabelText(`expand Background services`));
     await userEvent.click(await screen.findByLabelText(`expand Background services - aerial`));
     await waitFor(() => {
-      expect(mockApiService.getGeoService$).toHaveBeenCalledTimes(2);
+      expect(mockApiService.getGeoServices$).toHaveBeenCalledTimes(1);
     });
     expect(mockDispatch).toHaveBeenCalledTimes(4); // load catalog, expand, expand, add services
     expect(mockDispatch.mock.calls[3][0].type).toEqual(addGeoServices.type);
@@ -86,7 +86,7 @@ describe('CatalogTreeComponent', () => {
 
     await userEvent.click(await screen.findByLabelText(`expand Background services`));
     await userEvent.click(await screen.findByLabelText(`expand Background services - aerial`));
-    expect(mockApiService.getGeoService$).not.toHaveBeenCalled();
+    expect(mockApiService.getGeoServices$).not.toHaveBeenCalled();
     expect(mockDispatch).toHaveBeenCalledTimes(3); // load catalog, expand, expand
   });
 

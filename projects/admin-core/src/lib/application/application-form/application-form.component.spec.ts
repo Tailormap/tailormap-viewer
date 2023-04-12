@@ -35,11 +35,11 @@ describe('ApplicationFormComponent', () => {
   test('should render', async () => {
     const { onUpdate } = await setup();
     expect(await screen.findByPlaceholderText('Name')).toHaveValue('');
-    await userEvent.type(await screen.findByPlaceholderText('Name'), 'new_app');
+    await userEvent.type(await screen.findByPlaceholderText('Name'), 'new-app');
     await userEvent.type(await screen.findByPlaceholderText('Title'), 'Cool application');
     await waitFor(() => {
       expect(onUpdate).toHaveBeenCalledWith({
-        name: 'new_app',
+        name: 'new-app',
         title: 'Cool application',
         adminComments: '',
         crs: '',
