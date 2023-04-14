@@ -23,6 +23,26 @@
   <ng-container *ngFor="let menu of buttons$ | async">
     <ng-container *ngTemplateOutlet="menuButton; context: {$implicit: menu}"></ng-container>
   </ng-container>
+
   <div class="divider"></div>
-  <tm-admin-profile></tm-admin-profile>
+
+  <ng-container *ngIf="userDetails$ | async as userDetails">
+    <button mat-flat-button
+            class="menu-button"
+            [matMenuTriggerFor]="userMenu"
+            [tmTooltip]="userDetails.isAuthenticated && userDetails.username ? userDetails.username : loginLabel"
+            matTooltipPosition="right">
+      <mat-icon [svgIcon]="userDetails.isAuthenticated ? 'user' : 'login'"></mat-icon>
+      <span class="menu-button-label">{{userDetails.isAuthenticated && userDetails.username ? userDetails.username : loginLabel}}</span>
+    </button>
+    <mat-menu #userMenu="matMenu" xPosition="before" yPosition="above">
+      <button mat-menu-item (click)="logout()" *ngIf="userDetails.isAuthenticated && userDetails.username">
+        <span i18n>Logout</span>
+      </button>
+      <button mat-menu-item (click)="login()" *ngIf="!userDetails.isAuthenticated">
+        <span>{{loginLabel}}</span>
+      </button>
+    </mat-menu>
+  </ng-container>
+
 </div>

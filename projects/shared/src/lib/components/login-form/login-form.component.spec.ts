@@ -24,7 +24,7 @@ describe('LoginFormComponent', () => {
   });
 
   test('triggers login method', async () => {
-    const loginFn = jest.fn(() => of(true));
+    const loginFn = jest.fn(() => of({ isAuthenticated: true, username: 'user', roles: [] }));
     const loggedIn = { emit: jest.fn() } as any;
     await render(LoginFormComponent, {
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -47,7 +47,7 @@ describe('LoginFormComponent', () => {
     await userEvent.type(passwordControl, 'p@ssw0rd');
     await userEvent.click(await screen.findByRole('button', { name: /login/i }));
     expect(loginFn).toHaveBeenCalledWith('my_username', 'p@ssw0rd');
-    expect(loggedIn.emit).toHaveBeenCalledWith({ loggedIn: true, user: { username: 'my_username' } });
+    expect(loggedIn.emit).toHaveBeenCalledWith({ isAuthenticated: true, username: 'user', roles: [] });
   });
 
 });

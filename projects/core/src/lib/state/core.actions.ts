@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { UserResponseModel, ViewerResponseModel, ViewerStylingModel } from '@tailormap-viewer/api';
+import { ViewerResponseModel, ViewerStylingModel } from '@tailormap-viewer/api';
 
 const prefix = '[Core]';
 

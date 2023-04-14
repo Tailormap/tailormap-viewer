@@ -6,17 +6,16 @@ import { SharedModule } from '@tailormap-viewer/shared';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { selectUserDetails } from '../../../state/core.selectors';
 import { Router } from '@angular/router';
-import { SecurityService } from '../../../services/security.service';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { of } from 'rxjs';
 import { TestBed } from '@angular/core/testing';
 import { Store } from '@ngrx/store';
-import { TAILORMAP_API_V1_SERVICE, TailormapApiV1MockService } from '@tailormap-viewer/api';
+import { TAILORMAP_SECURITY_API_V1_SERVICE, TailormapSecurityApiV1MockService } from '@tailormap-viewer/api';
 
 const getMockStore = (loggedIn: boolean) => {
   return provideMockStore({
     selectors: [
-      { selector: selectUserDetails, value: { loggedIn, user: loggedIn ? { username: 'testusername' } : undefined } },
+      { selector: selectUserDetails, value: { isAuthenticated: loggedIn, username: loggedIn ? 'testusername' : undefined, roles: [] } },
     ],
   });
 };
@@ -46,8 +45,7 @@ describe('ProfileComponent', () => {
       providers: [
         getMockStore(false),
         { provide: Router, useValue: { navigateByUrl: navigateFn } },
-        { provide: SecurityService, useValue: { logout$: logoutFn } },
-        { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1MockService },
+        { provide: TAILORMAP_SECURITY_API_V1_SERVICE, useClass: TailormapSecurityApiV1MockService },
       ],
       imports: [
         MatIconTestingModule,
@@ -65,8 +63,12 @@ describe('ProfileComponent', () => {
 
   test('should render when logged in', async () => {
     const navigateFn = jest.fn();
-    const logoutFn = jest.fn(() => of(true));
     const reloadFn = jest.fn();
+    const service = {
+      getUser$: jest.fn(() => of({})),
+      login$: jest.fn(() => of({})),
+      logout$: jest.fn(() => of(true)),
+    };
     jest.spyOn(window.location, 'reload');
     const { fixture } = await render(ProfileComponent, {
       declarations: [
@@ -75,8 +77,7 @@ describe('ProfileComponent', () => {
       providers: [
         getMockStore(true),
         { provide: Router, useValue: { navigateByUrl: navigateFn } },
-        { provide: SecurityService, useValue: { logout$: logoutFn } },
-        { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1MockService },
+        { provide: TAILORMAP_SECURITY_API_V1_SERVICE, useValue: service },
       ],
       imports: [
         MatIconTestingModule,
@@ -91,10 +92,10 @@ describe('ProfileComponent', () => {
     expect(await screen.findByText(/testusername/)).toBeInTheDocument();
     const menuItem = await screen.findByText(/Logout/);
     fireEvent.click(menuItem);
-    expect(logoutFn).toHaveBeenCalled();
+    expect(service.logout$).toHaveBeenCalled();
     expect(window.location.reload).toHaveBeenCalled();
     const store = (TestBed.inject(Store) as MockStore);
-    store.overrideSelector(selectUserDetails, { loggedIn: false });
+    store.overrideSelector(selectUserDetails, { isAuthenticated: false });
     store.refreshState();
     fireEvent.click(button);
     expect(await screen.findByText('Login')).toBeInTheDocument();

@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef, OnInit, Inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectUserDetails } from '../../../state/core.selectors';
-import { Observable, of, Subject, take, takeUntil } from 'rxjs';
+import { Observable, of, Subject, take } from 'rxjs';
 import {
   SecurityModel, TAILORMAP_SECURITY_API_V1_SERVICE,
   TailormapSecurityApiV1ServiceModel,
