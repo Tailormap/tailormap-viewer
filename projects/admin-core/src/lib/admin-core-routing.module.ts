@@ -19,6 +19,7 @@ import { ApplicationEditLayersComponent } from './application/application-edit-l
 import { ApplicationEditBaseLayersComponent } from './application/application-edit-base-layers/application-edit-base-layers.component';
 import { ApplicationEditComponentsComponent } from './application/application-edit-components/application-edit-components.component';
 import { ApplicationEditStylingComponent } from './application/application-edit-styling/application-edit-styling.component';
+import { AdminLoginPageComponent } from './pages/admin-login-page/admin-login-page.component';
 
 const routes: Routes = [
   {
@@ -89,6 +90,7 @@ const routes: Routes = [
     ],
   },
   { path: RoutesEnum.ADMIN_HOME, component: AdminHomePageComponent },
+  { path: RoutesEnum.LOGIN, component: AdminLoginPageComponent },
   { path: RoutesEnum.USER, component: UserAdminPageComponent },
   { path: RoutesEnum.GROUP, component: GroupsPageComponent },
   { path: '**', redirectTo: '' },

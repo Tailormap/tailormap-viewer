@@ -1,18 +1,18 @@
-import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
-import { selectRouteBeforeLogin } from '../../state/core.selectors';
 import { take } from 'rxjs';
-import { setLoginDetails, setRouteBeforeLogin } from '../../state/core.actions';
+import { selectRouteBeforeLogin } from '../../state/admin-core.selectors';
+import { setLoginDetails, setRouteBeforeLogin } from '../../state/admin-core.actions';
 import { TAILORMAP_SECURITY_API_V1_SERVICE, TailormapSecurityApiV1ServiceModel, UserResponseModel } from '@tailormap-viewer/api';
 
 @Component({
-  selector: 'tm-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
+  selector: 'tm-admin-login-page',
+  templateUrl: './admin-login-page.component.html',
+  styleUrls: ['./admin-login-page.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoginComponent {
+export class AdminLoginPageComponent {
 
   public login$ = (username: string, password: string) => this.api.login$(username, password);
 

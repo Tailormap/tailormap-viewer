@@ -1,19 +1,19 @@
 import { APP_INITIALIZER, InjectionToken, NgModule } from '@angular/core';
-import { ViewerAppComponent } from './pages';
+import { LoginComponent, ViewerAppComponent } from './pages';
 import { MapModule } from '@tailormap-viewer/map';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { coreReducer } from './state/core.reducer';
 import { coreStateKey } from './state/core.state';
 import { CoreEffects } from './state/core.effects';
-import { TAILORMAP_API_V1_SERVICE, TailormapApiV1Service } from '@tailormap-viewer/api';
+import {
+  TAILORMAP_API_V1_SERVICE, TAILORMAP_SECURITY_API_V1_SERVICE, TailormapApiV1Service, TailormapSecurityApiV1Service,
+} from '@tailormap-viewer/api';
 import { ICON_SERVICE_ICON_LOCATION, IconService, SharedModule } from '@tailormap-viewer/shared';
 import { ComponentsModule } from './components/components.module';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { APP_BASE_HREF, PlatformLocation } from '@angular/common';
-import { LoginComponent } from './pages/login/login.component';
-import { LoginFormComponent } from './pages/login/login-form/login-form.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { SecurityInterceptor } from './interceptors/security.interceptor';
 import { ApplicationMapModule } from './map/application-map.module';
@@ -45,7 +45,6 @@ const sentryProviders = SENTRY_DSN === '@SENTRY_DSN@' ? [] : [
   declarations: [
     ViewerAppComponent,
     LoginComponent,
-    LoginFormComponent,
   ],
   imports: [
     StoreModule.forRoot({
@@ -73,6 +72,7 @@ const sentryProviders = SENTRY_DSN === '@SENTRY_DSN@' ? [] : [
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: SecurityInterceptor, multi: true },
+    { provide: TAILORMAP_SECURITY_API_V1_SERVICE, useClass: TailormapSecurityApiV1Service },
     { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1Service },
     { provide: ICON_SERVICE_ICON_LOCATION, useValue: 'icons/' },
     { provide: APP_BASE_HREF, useFactory: getBaseHref, deps: [PlatformLocation] },

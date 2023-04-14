@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { ViewerResponseModel, ViewerStylingModel } from '@tailormap-viewer/api';
+import { UserResponseModel, ViewerResponseModel, ViewerStylingModel } from '@tailormap-viewer/api';
 
 const prefix = '[Core]';
 
@@ -21,7 +21,7 @@ export const setRouteBeforeLogin = createAction(
 );
 export const setLoginDetails = createAction(
   `${prefix} Set Login Details`,
-  props<{ loggedIn: boolean; user?: { username?: string } }>(),
+  props<{ isAuthenticated: boolean; username?: string; roles?: string[] }>(),
 );
 export const updateViewerStyle = createAction(
   `${prefix} Update Viewer Style`,

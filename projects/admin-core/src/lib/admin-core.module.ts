@@ -14,6 +14,11 @@ import { TemplatesModule } from './templates/templates.module';
 import { CatalogModule } from './catalog/catalog.module';
 import { TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 import { ApplicationModule } from './application/application.module';
+import { TAILORMAP_SECURITY_API_V1_SERVICE, TailormapSecurityApiV1Service } from '@tailormap-viewer/api';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { SecurityInterceptor } from './interceptors/security.interceptor';
+import { adminCoreStateKey } from './state/admin-core.state';
+import { adminCoreReducer } from './state/admin-core.reducer';
 
 const getBaseHref = (platformLocation: PlatformLocation): string => {
   return platformLocation.getBaseHrefFromDOM();
@@ -21,7 +26,9 @@ const getBaseHref = (platformLocation: PlatformLocation): string => {
 
 @NgModule({
   imports: [
-    StoreModule.forRoot({}, {
+    StoreModule.forRoot({
+      [adminCoreStateKey]: adminCoreReducer,
+    }, {
       runtimeChecks: {
         strictActionImmutability: true,
         strictActionSerializability: true,
@@ -39,6 +46,8 @@ const getBaseHref = (platformLocation: PlatformLocation): string => {
   ],
   providers: [
     { provide: ICON_SERVICE_ICON_LOCATION, useValue: 'icons/' },
+    { provide: HTTP_INTERCEPTORS, useClass: SecurityInterceptor, multi: true },
+    { provide: TAILORMAP_SECURITY_API_V1_SERVICE, useClass: TailormapSecurityApiV1Service },
     { provide: TAILORMAP_ADMIN_API_V1_SERVICE, useClass: TailormapAdminApiV1Service },
     { provide: APP_BASE_HREF, useFactory: getBaseHref, deps: [PlatformLocation] },
     { provide: DateAdapter, useClass: LuxonDateAdapter, deps: [MAT_DATE_LOCALE] },

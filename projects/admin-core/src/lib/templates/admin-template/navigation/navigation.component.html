@@ -9,7 +9,7 @@
             [class.has-submenu]="buttonProps.subMenu"
             matTooltipPosition="right">
       <mat-icon *ngIf="buttonProps.icon" [svgIcon]="buttonProps.icon"></mat-icon>
-      <span *ngIf="buttonProps.label">{{ buttonProps.label }}</span>
+      <span *ngIf="buttonProps.label" class="menu-button-label">{{ buttonProps.label }}</span>
     </button>
     <div *ngIf="buttonProps.subMenu" class="submenu">
       <ng-container *ngFor="let subMenu of buttonProps.subMenu">
@@ -20,7 +20,9 @@
 </ng-template>
 
 <div class="navigation-bar">
-  <ng-container *ngFor="let menu of buttons">
+  <ng-container *ngFor="let menu of buttons$ | async">
     <ng-container *ngTemplateOutlet="menuButton; context: {$implicit: menu}"></ng-container>
   </ng-container>
+  <div class="divider"></div>
+  <tm-admin-profile></tm-admin-profile>
 </div>

@@ -17,6 +17,7 @@ export class ApplicationEditStylingComponent {
 
   public stylingConfig$: Observable<ViewerStylingModel | undefined> = new BehaviorSubject<ViewerStylingModel>({});
 
+  public hasChanges = false;
 
   private savingSubject = new BehaviorSubject(false);
   public saving$ = this.savingSubject.asObservable();
@@ -38,6 +39,7 @@ export class ApplicationEditStylingComponent {
         if (!applicationId) {
           return;
         }
+        this.hasChanges = true;
         this.store$.dispatch(updateApplicationStylingConfig({
           applicationId,
           styling,

@@ -1,11 +1,12 @@
 export enum RoutesEnum {
+  ADMIN_HOME = '',
+  LOGIN = 'login',
   CATALOG = 'catalog',
   CATALOG_NODE_DETAILS = 'node/:nodeId',
   CATALOG_SERVICE_DETAILS = 'node/:nodeId/service/:serviceId',
   CATALOG_LAYER_DETAILS = 'node/:nodeId/service/:serviceId/layer/:layerId',
   FEATURE_SOURCE_DETAILS = 'node/:nodeId/feature-source/:featureSourceId',
   FEATURE_TYPE_DETAILS = 'node/:nodeId/feature-source/:featureSourceId/feature-type/:featureTypeId',
-  ADMIN_HOME = '',
   USER = 'user',
   GROUP = 'group',
   APPLICATION = 'applications',
@@ -14,6 +15,5 @@ export enum RoutesEnum {
   APPLICATION_DETAILS_LAYERS = 'layers',
   APPLICATION_DETAILS_BASE_LAYERS = 'base-layers',
   APPLICATION_DETAILS_COMPONENTS = 'components',
-
   APPLICATION_DETAILS_STYLING = 'styling',
 }

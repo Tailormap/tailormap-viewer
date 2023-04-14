@@ -1,15 +1,17 @@
-<tm-menubar-button [menuTrigger]="userMenu"
-                   [icon]="userDetails?.loggedIn ? 'user' : 'login'"></tm-menubar-button>
+<ng-container *ngIf="userDetails$ | async as userDetails">
+  <tm-menubar-button [menuTrigger]="userMenu"
+                     [icon]="userDetails.isAuthenticated ? 'user' : 'login'"></tm-menubar-button>
 
-<mat-menu #userMenu="matMenu" xPosition="after" yPosition="above">
-  <button mat-menu-item disabled *ngIf="userDetails?.loggedIn && userDetails?.user">
-    <span i18n>Logged in as</span>
-    <span>{{' '}}{{userDetails?.user?.username}}</span>
-  </button>
-  <button mat-menu-item (click)="logout()" *ngIf="userDetails?.loggedIn && userDetails?.user">
-    <span i18n>Logout</span>
-  </button>
-  <button mat-menu-item (click)="login()" *ngIf="!userDetails?.loggedIn">
-    <span i18n>Login</span>
-  </button>
-</mat-menu>
+  <mat-menu #userMenu="matMenu" xPosition="after" yPosition="above">
+    <button mat-menu-item disabled *ngIf="userDetails.isAuthenticated && userDetails.username">
+      <span i18n>Logged in as</span>
+      <span>{{' '}}{{userDetails.username}}</span>
+    </button>
+    <button mat-menu-item (click)="logout()" *ngIf="userDetails.isAuthenticated && userDetails.username">
+      <span i18n>Logout</span>
+    </button>
+    <button mat-menu-item (click)="login()" *ngIf="!userDetails.isAuthenticated">
+      <span i18n>Login</span>
+    </button>
+  </mat-menu>
+</ng-container>

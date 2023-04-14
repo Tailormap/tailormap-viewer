@@ -4,12 +4,14 @@ import { AdminTemplateComponent } from './admin-template/admin-template.componen
 import { NavigationComponent } from './admin-template/navigation/navigation.component';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { ProfileComponent } from './admin-template/navigation/profile/profile.component';
 
 
 @NgModule({
   declarations: [
     AdminTemplateComponent,
     NavigationComponent,
+    ProfileComponent,
   ],
   imports: [
     CommonModule,

@@ -11,6 +11,7 @@ import { IconPickerComponent } from './icon-picker/icon-picker.component';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { PanelResizerComponent } from './panel-resizer';
 import { SliderComponent } from './slider/slider.component';
+import { LoginFormComponent } from './login-form/login-form.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { SliderComponent } from './slider/slider.component';
     ConfirmDialogComponent,
     PanelResizerComponent,
     SliderComponent,
+    LoginFormComponent,
   ],
   imports: [
     SharedImportsModule,
@@ -39,6 +41,7 @@ import { SliderComponent } from './slider/slider.component';
     IconPickerComponent,
     PanelResizerComponent,
     SliderComponent,
+    LoginFormComponent,
   ],
 })
 export class SharedComponentsModule {
