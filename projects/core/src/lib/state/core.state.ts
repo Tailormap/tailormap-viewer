@@ -21,5 +21,5 @@ export interface CoreState {
 
 export const initialCoreState: CoreState = {
   loadStatus: LoadingStateEnum.INITIAL,
-  security: { loggedIn: false },
+  security: { isAuthenticated: false },
 };

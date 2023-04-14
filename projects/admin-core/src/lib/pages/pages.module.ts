@@ -10,6 +10,8 @@ import { UseradminModule } from '../useradmin/useradmin.module';
 import { GroupsPageComponent } from './groups-page/groups-page.component';
 import { ApplicationPageComponent } from './application-page/application-page.component';
 import { ApplicationModule } from '../application/application.module';
+import { AdminLoginPageComponent } from './admin-login-page/admin-login-page.component';
+import { SharedComponentsModule } from '@tailormap-viewer/shared';
 
 
 
@@ -20,6 +22,7 @@ import { ApplicationModule } from '../application/application.module';
     UserAdminPageComponent,
     GroupsPageComponent,
     ApplicationPageComponent,
+    AdminLoginPageComponent,
   ],
   imports: [
     CommonModule,
@@ -28,6 +31,7 @@ import { ApplicationModule } from '../application/application.module';
     CatalogModule,
     UseradminModule,
     ApplicationModule,
+    SharedComponentsModule,
   ],
   exports: [
     AdminHomePageComponent,
@@ -35,6 +39,7 @@ import { ApplicationModule } from '../application/application.module';
     UserAdminPageComponent,
     GroupsPageComponent,
     ApplicationPageComponent,
+    AdminLoginPageComponent,
   ],
 })
 export class PagesModule { }

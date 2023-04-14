@@ -11,6 +11,7 @@
   display: flex;
   flex-direction: column;
   padding-top: 16px;
+  padding-bottom: 8px;
 }
 
 .submenu {
@@ -20,16 +21,14 @@
 }
 
 .divider {
-  border-bottom: 1px solid #e0e0e0;
-  margin-bottom: 8px;
-  width: 100%;
+  flex: 1;
 }
 
 .navigation-bar tm-admin-navigation-button + tm-admin-navigation-button {
   margin-top: 8px;
 }
 
-.menu-button.mat-mdc-unelevated-button {
+.navigation-bar ::ng-deep .menu-button.mat-mdc-unelevated-button {
   --mdc-filled-button-container-color: transparent;
 
   color: var(--palette-primary-contrast-500);
@@ -55,8 +54,8 @@
   font-weight: bold;
 }
 
-.menu-button.mat-mdc-unelevated-button.active:not(.has-submenu),
-.submenu .menu-button.mat-mdc-unelevated-button.active {
+.navigation-bar ::ng-deep .menu-button.mat-mdc-unelevated-button.active:not(.has-submenu),
+.navigation-bar .submenu ::ng-deep .menu-button.mat-mdc-unelevated-button.active {
   --mdc-filled-button-container-color: #fff;
   color: var(--primary-color);
 }

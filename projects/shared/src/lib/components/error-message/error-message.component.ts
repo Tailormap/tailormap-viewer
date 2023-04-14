@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 export class ErrorMessageComponent {
 
   @Input()
-  public message: string | undefined;
+  public message: string | undefined | null;
 
   @Input()
   public message$: Observable<string | undefined> | undefined;

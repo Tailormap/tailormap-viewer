@@ -1,5 +1,5 @@
 <div class="form-field">
-  <tm-error-message [message]="imageError || undefined" [friendlyError]="true"></tm-error-message>
+  <tm-error-message *ngIf="imageError" [message]="imageError" [friendlyError]="true"></tm-error-message>
   <div class="img-space">
     <img *ngIf="currentImage" [src]="currentImage" i18n-alt alt="Current image"/>
     <div class="upload-wrapper" [class.upload-complete]="isImageSaved">

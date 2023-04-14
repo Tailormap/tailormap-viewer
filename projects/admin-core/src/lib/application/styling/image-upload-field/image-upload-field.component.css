@@ -7,10 +7,13 @@
 }
 
 .img-space {
-  margin-top: 16px;
   max-height: 84px;
   display: flex;
   align-items: flex-start;
+}
+
+tm-error-message + .img-space {
+  margin-top: 16px;
 }
 
 .img-space img {

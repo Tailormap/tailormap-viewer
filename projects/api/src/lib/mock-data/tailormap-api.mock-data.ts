@@ -20,6 +20,7 @@ export const getVersionResponseModel = (overrides?: VersionResponseModel): Versi
 export const getUserResponseModel = (overrides?: Partial<UserResponseModel>): UserResponseModel => ({
   isAuthenticated: false,
   username: '',
+  roles: [],
   ...overrides,
 });
 

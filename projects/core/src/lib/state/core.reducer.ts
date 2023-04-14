@@ -47,8 +47,9 @@ const onSetLoginDetails = (
   ...state,
   security: {
     ...state.security,
-    loggedIn: payload.loggedIn,
-    user: payload.user,
+    isAuthenticated: payload.isAuthenticated,
+    username: payload.username || undefined,
+    roles: payload.roles || undefined,
   },
 });
 

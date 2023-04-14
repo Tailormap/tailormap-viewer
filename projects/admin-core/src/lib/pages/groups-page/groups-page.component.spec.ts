@@ -9,6 +9,9 @@ import { AdminTemplateComponent } from '../../templates/admin-template/admin-tem
 import { NavigationComponent } from '../../templates/admin-template/navigation/navigation.component';
 import { GrouplistComponent } from '../../useradmin/grouplist/grouplist.component';
 import { GroupdetailsFormComponent } from '../../useradmin/groupdetails-form/groupdetails-form.component';
+import { provideMockStore } from '@ngrx/store/testing';
+import { adminCoreStateKey, initialAdminCoreState } from '../../state/admin-core.state';
+import { TAILORMAP_SECURITY_API_V1_SERVICE } from '@tailormap-viewer/api';
 
 
 const setup = async () => {
@@ -22,6 +25,12 @@ const setup = async () => {
     declarations: [ AdminTemplateComponent, NavigationComponent, GroupdetailsFormComponent, GrouplistComponent ],
     providers: [
       { provide: TAILORMAP_ADMIN_API_V1_SERVICE, useValue: mockApiService },
+      { provide: TAILORMAP_SECURITY_API_V1_SERVICE, useValue: { getUser$: jest.fn(() => of({})) } },
+      provideMockStore({
+        initialState: {
+          [adminCoreStateKey]: { ...initialAdminCoreState, security: { isAuthenticated: true, roles: ['admin'] } },
+        },
+      }),
     ],
   });
   return { mockApiService };

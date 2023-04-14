@@ -10,6 +10,9 @@ import { getUsers, TAILORMAP_ADMIN_API_V1_SERVICE } from '@tailormap-admin/admin
 import { of } from 'rxjs';
 import { GrouplistComponent } from '../../useradmin/grouplist/grouplist.component';
 import { MatListModule } from '@angular/material/list';
+import { provideMockStore } from '@ngrx/store/testing';
+import { adminCoreStateKey, initialAdminCoreState } from '../../state/admin-core.state';
+import { TAILORMAP_SECURITY_API_V1_SERVICE } from '@tailormap-viewer/api';
 
 
 const setup = async () => {
@@ -22,6 +25,12 @@ const setup = async () => {
     imports: [ SharedModule, MatListModule, MatIconTestingModule ],
     declarations: [ AdminTemplateComponent, NavigationComponent, UserdetailsFormComponent, UserlistComponent, GrouplistComponent ],
     providers: [
+      { provide: TAILORMAP_SECURITY_API_V1_SERVICE, useValue: { getUser$: jest.fn(() => of({})) } },
+      provideMockStore({
+        initialState: {
+          [adminCoreStateKey]: { ...initialAdminCoreState, security: { isAuthenticated: true, roles: ['admin'] } },
+        },
+      }),
       { provide: TAILORMAP_ADMIN_API_V1_SERVICE, useValue: mockApiService },
     ],
   });
