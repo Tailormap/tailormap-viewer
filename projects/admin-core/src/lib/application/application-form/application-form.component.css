@@ -1,6 +1,8 @@
 tm-admin-bounds-form-field,
-mat-slide-toggle {
+mat-slide-toggle,
+tm-admin-authorization-edit {
   margin-top: 16px;
+  margin-bottom: 16px;
 }
 
 tm-admin-bounds-form-field {

@@ -89,6 +89,7 @@ export class ApplicationService implements OnDestroy {
               settings: application.settings,
               components: application.components,
               styling: application.styling,
+              authorizationRules: application.authorizationRules,
             };
             return this.updateApplication$(draftApplication.id, draftApplication);
           }

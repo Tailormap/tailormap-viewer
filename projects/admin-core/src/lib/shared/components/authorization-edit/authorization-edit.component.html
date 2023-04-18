@@ -1,0 +1,52 @@
+<div>
+  <div>
+    <mat-label i18n>Allow access from:</mat-label>
+    <mat-chip-listbox [(ngModel)]="selectedChip" (change)="changeAuthenticationType($event.value)">
+      <mat-chip-option i18n value="anonymous">Anyone</mat-chip-option>
+      <mat-chip-option i18n value="loggedIn">Logged in</mat-chip-option>
+      <mat-chip-option i18n value="specificGroups">Specific groups</mat-chip-option>
+    </mat-chip-listbox>
+  </div>
+
+  <table mat-table *ngIf="selectedChip === 'specificGroups'" [dataSource]="value">
+    <ng-container matColumnDef="groupName">
+      <th mat-header-cell i18n *matHeaderCellDef>Access</th>
+      <td mat-cell *matCellDef="let rule">{{rule.groupName}}</td>
+      <td mat-footer-cell *matFooterCellDef>
+        <mat-form-field>
+          <mat-label i18n>Group name</mat-label>
+          <mat-select [(value)]="newRuleGroup" (selectionChange)="addRule($event.value)">
+            <mat-option *ngFor="let group of groupList" [value]="group.name" [disabled]="group.used">
+              {{group.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </td>
+    </ng-container>
+  
+    <ng-container matColumnDef="read">
+      <th mat-header-cell i18n *matHeaderCellDef>Read</th>
+      <td mat-cell *matCellDef="let rule">
+        <mat-checkbox [checked]="rule.decisions.read?.decision === 'allow'" (change)="changeRule(rule.groupName, 'read', $event.checked)"></mat-checkbox>
+      </td>
+      <td mat-footer-cell *matFooterCellDef>
+        <mat-checkbox [(ngModel)]="newRuleDecision"></mat-checkbox>
+      </td>
+    </ng-container>
+  
+    <ng-container matColumnDef="button">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let rule">
+        <button mat-icon-button color="warn" aria-label="Delete group rules" (click)="deleteRule(rule.groupName)">
+          <mat-icon svgIcon="trash_filled"></mat-icon>
+        </button>
+      </td>
+      <td mat-footer-cell *matFooterCellDef>
+      </td>
+    </ng-container>
+  
+    <tr mat-header-row *matHeaderRowDef="['groupName', 'read', 'button']"></tr>
+    <tr mat-row *matRowDef="let rule; columns: ['groupName', 'read', 'button']"></tr>
+    <tr mat-footer-row *matFooterRowDef="['groupName', 'read', 'button']" [hidden]="!canAddRule"></tr>
+  </table>
+</div>

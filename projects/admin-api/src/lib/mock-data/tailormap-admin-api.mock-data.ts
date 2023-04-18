@@ -77,6 +77,7 @@ export const getGeoService = (overrides?: Partial<GeoServiceWithLayersModel>): G
   url: 'https://service.pdok.nl/kadaster/bestuurlijkegebieden/wms/v1_0',
   authentication: null,
   serviceCapabilities: getServiceCaps(),
+  authorizationRules: [],
   capabilitiesContentType: 'application/xml',
   capabilitiesFetched: '2021-01-01T00:00:00.000Z',
   title: 'Bestuurlijke Gebieden View Service',
@@ -163,6 +164,7 @@ export const getApplication = (overrides?: Partial<ApplicationModel>): Applicati
   name: 'app1',
   title: 'My application',
   components: [],
+  authorizationRules: [],
   ...overrides,
 });
 

@@ -1,6 +1,7 @@
 import { BoundsModel, ComponentModel, ViewerStylingModel } from '@tailormap-viewer/api';
 import { AppContentModel } from './app-content.model';
 import { AppSettingsModel } from './app-settings.model';
+import { AuthorizationRuleGroup } from './authorization-rules.model';
 
 export interface ApplicationModel {
   id: string;
@@ -15,4 +16,5 @@ export interface ApplicationModel {
   settings?: AppSettingsModel;
   components?: ComponentModel[];
   styling?: ViewerStylingModel;
+  authorizationRules: AuthorizationRuleGroup[];
 }
