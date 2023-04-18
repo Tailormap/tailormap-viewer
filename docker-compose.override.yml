@@ -1,4 +1,4 @@
-# Extra ports for development. For production only specify DOCKER_FILE=docker-compose.yml.
+# Extra ports for development. For production only specify COMPOSE_FILE=docker-compose.yml.
 
 services:
   tailormap:
