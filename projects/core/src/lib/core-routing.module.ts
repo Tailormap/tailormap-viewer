@@ -4,6 +4,8 @@ import { LoginComponent, ViewerAppComponent } from './pages';
 
 
 const routes: Routes = [
+  // IMPORTANT: When you add a route, also add it to the FrontController class of tailormap-api, otherwise a user will get a 404 when
+  // pressing F5 in their browser on your route.
   { path: 'login', component: LoginComponent },
   { path: 'app/:name', component: ViewerAppComponent },
   { path: 'app', component: ViewerAppComponent },

@@ -89,6 +89,8 @@ const routes: Routes = [
       },
     ],
   },
+  // IMPORTANT: When you add a route, also add it to the FrontController class of tailormap-api, otherwise a user will get a 404 when
+  // pressing F5 in their browser on your route.
   { path: RoutesEnum.ADMIN_HOME, component: AdminHomePageComponent },
   { path: RoutesEnum.LOGIN, component: AdminLoginPageComponent },
   { path: RoutesEnum.USER, component: UserAdminPageComponent },
