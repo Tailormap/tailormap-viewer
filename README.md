@@ -47,7 +47,7 @@ If your database is running on localhost using `--network=host` is recommended. 
 
 To log in to the admin interface go to http://localhost:8080/admin/.
 
-When starting up for the first a password will the randonly generated for the admin account. This password is printed to the logs of
+When starting up for the first time a password will be randomly generated for the admin account. This password is printed to the logs of
 the `tailormap` container. You can see the password with:
 
 `docker compose logs tailormap`
@@ -55,29 +55,38 @@ the `tailormap` container. You can see the password with:
 Look for the output containing:
 
 ```
-tailormap-viewer-tailormap-1          | INFO 1 --- [           main] n.b.t.a.s.StartupAdminAccountBean        :
-tailormap-viewer-tailormap-1          | ***
-tailormap-viewer-tailormap-1          | *** Use this account for administrating users:
-tailormap-viewer-tailormap-1          | ***
-tailormap-viewer-tailormap-1          | *** Username: admin
-tailormap-viewer-tailormap-1          | *** Password: ********
-tailormap-viewer-tailormap-1          | ***
-```
+tailormap-server  | INFO 1 --- [           main] n.b.t.api.security.AdminAccountCreator   :
+tailormap-server  |
+tailormap-server  | +------                                 ------+
+tailormap-server  | | +-----------------------------------------+ |
+tailormap-server  | | |  ______     _ __                        | |
+tailormap-server  | | | /_  __/__ _(_) /__  ______ _  ___ ____  | |
+tailormap-server  | | |  / / / _ `/ / / _ \/ __/  ' \/ _ `/ _ \ | |
+tailormap-server  | | | /_/  \_,_/_/_/\___/_/ /_/_/_/\_,_/ .__/ | |
+tailormap-server  | | |                                 /_/     | |
+tailormap-server  | | +-----------------------------------------+ |
+tailormap-server  | +------                                 ------+
+tailormap-server  |
+tailormap-server  | *** Use this account to access the admin:
+tailormap-server  |
+tailormap-server  | *** Username: tm-admin
+tailormap-server  | *** Password: ***********
 
-Log in to the administration interface with this account to set up security. The default admin account can only change security settings,
-add it to the `admin` group for full control (you need to log in again for changes to take effect). Change the password or save the
-generated password somewhere.
+```
 
 ### Resetting an account password
 
 If you ever forget the admin password but do not want to re-initialize the database, reset the password with:
 
 ```
+ HASH=`docker run --rm rocko/spring-boot-cli-docker spring encodepassword [newpassword]
 docker compose exec --user postgres db \
-  psql tailormap -U tailormap -c "update user set password = '{noop}changeme' where username = 'admin'"
+  psql tailormap -U tailormap -c "update users set password = '${HASH}' where username = 'tm-admin'"
 ```
 
-Remember to change this password using the administration interface. It will be hashed securely using bcrypt.
+Resetting a password in this way will securely hash the password (depending on your shell the space before the first command will also
+prevent the password from remaining in your shell history). If you're in a bind you can also set a plain text password with a value like
+`{noop}changeme` but it is recommended you change it immediately so it will be hashed securely using bcrypt.
 
 ## Running in production behind a reverse proxy
 
@@ -150,7 +159,8 @@ The following is required for successfully building Tailormap:
 ### Dev server
 
 Run `npm install` and `npm run start` to start a dev server, or `npm run start-nl` for the Dutch localized version. Navigate
-to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+to http://localhost:4200/. Run `npm run start-admin` to start the admin interface on http://localhost:4201/. The app will automatically
+reload if you change any of the source files.
 
 ### Connecting to the PostgreSQL database
 
@@ -162,11 +172,11 @@ The port PostgreSQL listens on can be customized using the `DB_PORT` variable in
 
 The Spring Boot backend middleware is developed in a separate [tailormap-api](https://www.github.com/B3Partners/tailormap-api) repository.
 
-When running a dev server, the tailormap-api is reverse proxied on the `http://localhost/api` path from `https://snapshot.tailormap.nl/api`
+When running a dev server, the tailormap-api is reverse proxied on the `http://localhost:4200/api` path from `https://snapshot.tailormap.nl/api`
 which runs the latest `snapshot`, so you don't even need to run the backend and database locally.
 
-If you want to change the viewer configuration you of course need to log in! Just run Tailormap locally as described above and set
-the `PROXY_USE_LOCALHOST` environment variable:
+If you want to change the viewer configuration you of course need to log in to the admin! Just run Tailormap locally as described above and
+set the `PROXY_USE_LOCALHOST` environment variable:
 
 ```shell
 PROXY_USE_LOCALHOST=true npm run start
@@ -174,8 +184,8 @@ PROXY_USE_LOCALHOST=true npm run start
 
 There is a Swagger UI for the API on http://localhost:8080/swagger-ui/.
 
-If you've made some changes to the backend, only start the `db` container from this stack and run the backend from the tailormap-api
-repository with `mvn -Pdeveloping spring-boot:run`.
+If you want to make some changes to the backend source code, only start the `db` container from this stack and run the backend from the [tailormap-api](https://www.github.com/B3Partners/tailormap-api)
+repository as described in the README in that project.
 
 ### Code scaffolding
 
@@ -206,14 +216,13 @@ the `node_modules` and `.angular` directories to reduce the Docker build context
 docker build -t ghcr.io/b3partners/tailormap:snapshot .
 ```
 
-Add the argument `--build-arg API_VERSION=snapshot` to set the tag of the `ghcr.io/b3partners/tailormap-api` base image to use.
+The Dockerfile in this repository uses the `ghcr.io/b3partners/tailormap-api` base image with the webserver and backend and adds the Angular
+frontend bundles to it. To use your own base image with modifications, run `mvn install` in the [tailormap-api](https://www.github.com/B3Partners/tailormap-api)
+repository to build the base image before building the `tailormap` image.
 
-## Building a custom tailormap-api base image
+You can also add the argument `--build-arg API_VERSION=snapshot` to set the tag of the `ghcr.io/b3partners/tailormap-api` base image to use.
 
-To build a local `ghcr.io/b3partners/tailormap-api` base image with your own modifications, run `mvn install` in the `tailormap-api`
-repository before building the `tailormap` image.
-
-## Multi-arch build with Docker buildx
+### Multi-arch build with Docker buildx
 
 Use the commands below to build and push the cross-platform Docker images to the GitHub container registry. See the Docker documentation for
 more information about [building multi-platform images](https://docs.docker.com/build/building/multi-platform/) and
