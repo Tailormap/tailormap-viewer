@@ -87,6 +87,7 @@ jobs:
       HOST: ${{ secrets.DEPLOY_HOST_SNAPSHOT }}
       API_SENTRY_DSN: ${{ secrets.API_SENTRY_DSN }}
       VIEWER_SENTRY_DSN: ${{ secrets.VIEWER_SENTRY_DSN }}
+      ADMIN_HASHED_PASSWORD: ${{ secrets.ADMIN_HASHED_PASSWORD }}
       BUILDX_NO_DEFAULT_ATTESTATIONS: 1
     needs: [ lint, test ]
     steps:

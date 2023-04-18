@@ -10,6 +10,7 @@ services:
       - tailormap-data
     environment:
       - SPRING_PROFILES_ACTIVE=populate-testdata
+      - ADMIN_HASHED_PASSWORD
       - SPATIAL_DBS_CONNECT=true
       - SPATIAL_DBS_LOCALHOST=false
 
