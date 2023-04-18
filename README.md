@@ -136,7 +136,6 @@ connections.
 docker compose stop tailormap
 docker compose exec --user postgres db dropdb -U tailormap tailormap
 docker compose exec --user postgres db createdb -U tailormap --owner=tailormap tailormap
-cat tailormap.sql | docker compose --profile full exec -T --user postgres db psql tailormap
 cat tailormap.sql | docker compose exec -T --user postgres db psql -U tailormap tailormap
 docker compose start tailormap
 ```
