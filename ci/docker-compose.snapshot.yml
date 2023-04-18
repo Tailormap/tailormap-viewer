@@ -9,6 +9,7 @@ services:
     networks:
       - tailormap-data
     environment:
+      - SPRING_PROFILES_ACTIVE=populate-testdata
       - SPATIAL_DBS_CONNECT=true
       - SPATIAL_DBS_LOCALHOST=false
 
