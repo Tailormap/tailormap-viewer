@@ -27,7 +27,7 @@ const setup = async (hasNode = false) => {
   };
   const { geoServiceService, createGeoService$ } = createGeoServiceMock();
   const rootModel = getCatalogNode({ id: 'root', title: 'Root', root: true });
-  const catalogNodeModel = { ...getCatalogNode({ id: '1', title: 'Random services folder', root: false }), parentId: 'root' }
+  const catalogNodeModel = { ...getCatalogNode({ id: '1', title: 'Random services folder', root: false }), parentId: 'root' };
   const store = getMockStore({
     initialState: { [catalogStateKey]: { ...initialCatalogState, catalog: [ rootModel, catalogNodeModel ] } },
   });

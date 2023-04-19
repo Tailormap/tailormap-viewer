@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TreeModel } from '@tailormap-viewer/shared';
 import { AppTreeNodeModel } from '@tailormap-admin/admin-api';
-import { ApplicationModelHelper } from '../../helpers/application-model.helper';
 import { ApplicationTreeHelper } from '../../helpers/application-tree.helper';
 
 @Component({
