@@ -1,0 +1,4 @@
+tm-admin-catalog-base-tree ::ng-deep mat-tree {
+  min-width: min-content;
+  max-width: 100%;
+}

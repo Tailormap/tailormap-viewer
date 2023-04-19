@@ -33,7 +33,6 @@ const availableButtons: ButtonProps[] = [
 export class NavigationComponent implements OnInit {
 
   public userDetails$: Observable<SecurityModel | null> = of(null);
-  public readonly loginLabel = $localize `Login`;
   public buttons$: Observable<ButtonProps[]> = of([]);
 
   constructor(

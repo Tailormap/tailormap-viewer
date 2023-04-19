@@ -12,6 +12,8 @@
   --map-control-size: 40px;
   --vh: 1vh;
   --vw: 1vw;
+  --100vh: calc(100 * var(--vh));
+  --100vw: calc(100 * var(--vw));
 
   --dark-primary-text: rgb(0, 10, 30);
   --light-primary-text: rgb(255, 255, 255);

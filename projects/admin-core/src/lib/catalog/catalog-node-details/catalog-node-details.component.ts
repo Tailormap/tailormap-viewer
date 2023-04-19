@@ -5,10 +5,6 @@ import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model'
 import { Store } from '@ngrx/store';
 import { selectCatalogNodeById } from '../state/catalog.selectors';
 import { CatalogService } from '../services/catalog.service';
-import { CatalogNodeFormDialogComponent } from '../catalog-node-form-dialog/catalog-node-form-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
-import { GeoServiceFormDialogComponent } from '../geo-service-form-dialog/geo-service-form-dialog.component';
-import { FeatureSourceFormDialogComponent } from '../feature-source-form-dialog/feature-source-form-dialog.component';
 
 @Component({
   selector: 'tm-admin-catalog-node-details',
@@ -30,7 +26,6 @@ export class CatalogNodeDetailsComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private store$: Store,
     private catalogService: CatalogService,
-    private dialog: MatDialog,
   ) { }
 
   public ngOnInit(): void {
@@ -47,27 +42,6 @@ export class CatalogNodeDetailsComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this.destroyed.next(null);
     this.destroyed.complete();
-  }
-
-  public addCatalogNode(node: ExtendedCatalogNodeModel) {
-    CatalogNodeFormDialogComponent.open(this.dialog, {
-      node: null,
-      parentNode: node.id,
-    }).afterClosed().pipe(takeUntil(this.destroyed)).subscribe();
-  }
-
-  public addGeoService(node: ExtendedCatalogNodeModel) {
-    GeoServiceFormDialogComponent.open(this.dialog, {
-      geoService: null,
-      parentNode: node.id,
-    }).afterClosed().pipe(takeUntil(this.destroyed)).subscribe();
-  }
-
-  public addFeatureSource(node: ExtendedCatalogNodeModel) {
-    FeatureSourceFormDialogComponent.open(this.dialog, {
-      featureSource: null,
-      parentNode: node.id,
-    }).afterClosed().pipe(takeUntil(this.destroyed)).subscribe();
   }
 
   public updateNode($event: Omit<ExtendedCatalogNodeModel, 'id'>) {

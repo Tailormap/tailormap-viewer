@@ -1,18 +1,7 @@
 <ng-container *ngIf="node$ | async as node">
   <h2 class="page-details-title" i18n>Edit {{ node.title }}</h2>
   <div class="page-details-actions">
-    <button color="primary" mat-flat-button (click)="addCatalogNode(node)">
-      <mat-icon svgIcon="plus"></mat-icon>
-      <span i18n>Add folder</span>
-    </button>
-    <button color="primary" mat-flat-button (click)="addGeoService(node)">
-      <mat-icon svgIcon="plus"></mat-icon>
-      <span i18n>Add service</span>
-    </button>
-    <button color="primary" mat-flat-button (click)="addFeatureSource(node)">
-      <mat-icon svgIcon="plus"></mat-icon>
-      <span i18n>Add feature source</span>
-    </button>
+    <tm-admin-catalog-create-buttons [node]="node"></tm-admin-catalog-create-buttons>
   </div>
   <tm-admin-catalog-node-form [node]="node"
                               [parentNode]="node.parentId"

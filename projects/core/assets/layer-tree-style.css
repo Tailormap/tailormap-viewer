@@ -16,6 +16,6 @@ tm-tree ::ng-deep .mat-tree-node--folder + .mat-tree-node--folder {
   margin-top: 7px;
 }
 
-tm-tree ::ng-deep .tree-node-wrapper--leaf {
-  margin-left: -10px;
-}
+/*tm-tree ::ng-deep .tree-node-wrapper--leaf {*/
+/*  margin-left: -10px;*/
+/*}*/

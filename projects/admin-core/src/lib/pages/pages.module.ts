@@ -11,8 +11,7 @@ import { GroupsPageComponent } from './groups-page/groups-page.component';
 import { ApplicationPageComponent } from './application-page/application-page.component';
 import { ApplicationModule } from '../application/application.module';
 import { AdminLoginPageComponent } from './admin-login-page/admin-login-page.component';
-import { SharedComponentsModule } from '@tailormap-viewer/shared';
-
+import { SharedComponentsModule, SharedImportsModule } from '@tailormap-viewer/shared';
 
 
 @NgModule({
@@ -32,6 +31,7 @@ import { SharedComponentsModule } from '@tailormap-viewer/shared';
     UseradminModule,
     ApplicationModule,
     SharedComponentsModule,
+    SharedImportsModule,
   ],
   exports: [
     AdminHomePageComponent,
