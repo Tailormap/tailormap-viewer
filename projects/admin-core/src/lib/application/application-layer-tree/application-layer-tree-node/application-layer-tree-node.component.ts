@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TreeModel } from '@tailormap-viewer/shared';
 import { AppTreeNodeModel } from '@tailormap-admin/admin-api';
+import { ApplicationModelHelper } from '../../helpers/application-model.helper';
+import { ApplicationTreeHelper } from '../../helpers/application-tree.helper';
 
 @Component({
   selector: 'tm-admin-application-layer-tree-node',
@@ -41,4 +43,8 @@ export class ApplicationLayerTreeNodeComponent {
     this.deleteNode.emit(nodeId);
   }
 
+  public isNonRoot() {
+    const isRoot = ApplicationTreeHelper.isLevelTreeNode(this.node) && this.node.metadata?.root;
+    return !isRoot;
+  }
 }

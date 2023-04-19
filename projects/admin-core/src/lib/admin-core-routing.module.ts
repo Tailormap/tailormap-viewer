@@ -20,12 +20,17 @@ import { ApplicationEditBaseLayersComponent } from './application/application-ed
 import { ApplicationEditComponentsComponent } from './application/application-edit-components/application-edit-components.component';
 import { ApplicationEditStylingComponent } from './application/application-edit-styling/application-edit-styling.component';
 import { AdminLoginPageComponent } from './pages/admin-login-page/admin-login-page.component';
+import { CatalogHomeComponent } from './catalog/catalog-home/catalog-home.component';
 
 const routes: Routes = [
   {
     path: RoutesEnum.CATALOG,
     component: CatalogPageComponent,
     children: [
+      {
+        path: '',
+        component: CatalogHomeComponent,
+      },
       {
         path: RoutesEnum.CATALOG_LAYER_DETAILS,
         component: GeoServiceLayerDetailsComponent,

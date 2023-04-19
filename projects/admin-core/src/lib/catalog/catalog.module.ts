@@ -25,6 +25,8 @@ import { FeatureTypeDetailsComponent } from './feature-type-details/feature-type
 import { FeatureTypeSelectorComponent } from './feature-type-selector/feature-type-selector.component';
 import { CatalogBaseTreeComponent } from './catalog-base-tree/catalog-base-tree.component';
 import { CatalogBaseTreeNodeComponent } from './catalog-base-tree/catalog-base-tree-node/catalog-base-tree-node.component';
+import { CatalogHomeComponent } from './catalog-home/catalog-home.component';
+import { CatalogCreateButtonsComponent } from './catalog-create-buttons/catalog-create-buttons.component';
 
 
 @NgModule({
@@ -46,6 +48,8 @@ import { CatalogBaseTreeNodeComponent } from './catalog-base-tree/catalog-base-t
     FeatureTypeSelectorComponent,
     CatalogBaseTreeComponent,
     CatalogBaseTreeNodeComponent,
+    CatalogHomeComponent,
+    CatalogCreateButtonsComponent,
   ],
   imports: [
     CommonModule,
