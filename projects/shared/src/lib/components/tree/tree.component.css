@@ -43,7 +43,12 @@ mat-checkbox {
 
 .tree-node-wrapper--level-0.tree-node-wrapper--leaf,
 .tree-node-wrapper--leaf {
-  padding-left: 29px;
+  padding-left: 22px;
+}
+
+.tree-node-wrapper--level-0.tree-node-wrapper--leaf.tree-node-wrapper--checkbox,
+.tree-node-wrapper--leaf.tree-node-wrapper--checkbox {
+  padding-left: 18px;
 }
 
 .tree-node-wrapper--level-0 {

@@ -110,10 +110,8 @@ export class TreeComponent implements OnDestroy {
       treeNodeBaseClass,
       FlatTreeHelper.isExpandable(node) ? `${treeNodeBaseClass}--folder` : `${treeNodeBaseClass}--leaf`,
       `${treeNodeBaseClass}--level-${FlatTreeHelper.getLevel(node)}`,
+      `${treeNodeBaseClass}--${!node.checkbox ? 'no-' : ''}checkbox`,
     ];
-    if (!node.checkbox) {
-      cls.push(`${treeNodeBaseClass}--no-checkbox`);
-    }
     return cls.join(' ');
   }
 

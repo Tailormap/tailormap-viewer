@@ -1,6 +1,15 @@
 .edit-application-tree {
+  --other-content-height: calc(var(--header-height) + 200px);
+  --app-tree-list-width: 300px;
+
   display: flex;
   overflow-x: auto;
+  flex-wrap: wrap;
+  max-width: calc(var(--100vw) - var(--navigation-size) - var(--app-tree-list-width) - calc(3 * 16px))
+}
+
+.edit-application-tree ::ng-deep .tree-wrapper {
+  max-height: calc(var(--100vh) - var(--other-content-height));
 }
 
 .catalog-tree,
@@ -16,11 +25,18 @@
 .has-catalog-tree-visible .catalog-tree {
   display: block;
   flex: 1;
+  max-width: 100%;
+}
+
+.has-catalog-tree-visible .toggle-tree-icon {
+  position: absolute;
+  right: 20px;
 }
 
 .application-catalog {
   display: flex;
   border: 1px solid var(--border-color);
+  position: relative;
 }
 
 .application-tree,
@@ -40,3 +56,40 @@ tm-admin-application-layer-settings {
   display: block;
 }
 
+@media screen and (max-width: 1460px) {
+  .edit-application-tree > div + .application-layer-settings,
+  .application-layer-settings {
+    margin-left: 0;
+    margin-top: 16px;
+    flex-basis: 100%;
+    max-height: calc(var(--vh) * 30);
+  }
+
+  .edit-application-tree ::ng-deep .tree-wrapper {
+    max-height: calc((70 * var(--vh)) - var(--other-content-height));
+  }
+}
+
+@media screen and (max-width: 1160px) {
+  .edit-application-tree > div + div {
+    margin-left: 0;
+    margin-top: 16px;
+    flex-basis: 100%;
+  }
+
+  .edit-application-tree ::ng-deep .tree-wrapper {
+    max-height: calc(30 * var(--vh));
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .edit-application-tree > div + div {
+    margin-left: 0;
+    margin-top: 16px;
+    flex-basis: 100%;
+  }
+
+  .edit-application-tree ::ng-deep .tree-wrapper {
+    max-height: calc(30 * var(--vh));
+  }
+}

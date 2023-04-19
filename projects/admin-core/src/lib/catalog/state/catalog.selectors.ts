@@ -24,6 +24,11 @@ export const selectFeatureSourceLoadStatus = createSelector(selectCatalogState, 
 export const selectGeoServiceIds = createSelector(selectGeoServices, services => new Set(services.map(service => service.id)));
 export const selectFeatureSourceIds = createSelector(selectFeatureSources, sources => new Set(sources.map(service => service.id)));
 
+export const selectCatalogRootNodeId = createSelector(selectCatalog, catalog => {
+  const rootNode = catalog.find(node => node.root);
+  return rootNode ? rootNode.id : null;
+});
+
 export const selectGeoServicesWithoutCatalogId = createSelector(
   selectGeoServices,
   services => {

@@ -72,6 +72,7 @@ export class CatalogTreeHelper {
       metadata: node,
       checked: undefined,
       expanded: node.expanded,
+      expandable: (node.children || []).length > 0 || (node.items || []).length > 0,
     };
   }
 

@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { CatalogTreeModelTypeEnum } from '../models/catalog-tree-model-type.enum';
 import { expandTree, updateFeatureSourceNodeIds, updateGeoServiceNodeIds } from '../state/catalog.actions';
-import { concatMap, forkJoin, map, Observable, of, Subject, take, tap } from 'rxjs';
+import { concatMap, filter, forkJoin, map, Observable, of, Subject, take, tap } from 'rxjs';
 import {
+  selectCatalog,
   selectCatalogNodeById, selectFeatureSourcesWithoutCatalogId, selectGeoServicesWithoutCatalogId, selectParentsForCatalogNode,
 } from '../state/catalog.selectors';
 import { CatalogItemKindEnum, FeatureSourceModel, GeoServiceWithLayersModel } from '@tailormap-admin/admin-api';
@@ -20,6 +21,18 @@ export class CatalogTreeService {
     private store$: Store,
     private catalogService: CatalogService,
   ) {
+    // Load items for root node on init
+    this.store$.select(selectCatalog)
+      .pipe(
+        filter(catalog => !!catalog && catalog.length > 0),
+        take(1),
+      )
+      .subscribe(catalog => {
+        const root = catalog.find(n => n.root);
+        if (root) {
+          this.loadCatalogNodeItems$(root.id, true).subscribe();
+        }
+      });
   }
 
   public expandTreeToSelectedItem(nodesList: Array<{ type: CatalogTreeModelTypeEnum; treeNodeId: string; id: string }>) {
@@ -46,16 +59,17 @@ export class CatalogTreeService {
   }
 
   public loadCatalogNodeItems$(nodeId: string, includeParents?: boolean) {
+    if (!includeParents) {
+      return forkJoin([this.loadCatalogChildren$(nodeId)]);
+    }
     return this.store$.select(selectParentsForCatalogNode(nodeId))
       .pipe(
         take(1),
         concatMap(parentIds => {
-          const requests$ = [];
-          if (includeParents) {
-            requests$.push(...parentIds.map(id => this.loadCatalogChildren$(id)));
-          }
-          requests$.push(this.loadCatalogChildren$(nodeId));
-          return forkJoin(requests$);
+          return forkJoin([
+            ...parentIds.map(id => this.loadCatalogChildren$(id)),
+            this.loadCatalogChildren$(nodeId),
+          ]);
         }),
       );
   }
