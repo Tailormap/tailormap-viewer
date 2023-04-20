@@ -11,7 +11,6 @@ export interface ApplicationModel {
   crs?: string;
   initialExtent?: BoundsModel;
   maxExtent?: BoundsModel;
-  authenticatedRequired?: boolean;
   contentRoot?: AppContentModel;
   settings?: AppSettingsModel;
   components?: ComponentModel[];

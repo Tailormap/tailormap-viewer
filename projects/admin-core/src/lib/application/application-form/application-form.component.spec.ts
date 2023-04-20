@@ -45,7 +45,6 @@ describe('ApplicationFormComponent', () => {
         crs: '',
         initialExtent: undefined,
         maxExtent: undefined,
-        authenticatedRequired: false,
       });
     });
   });
@@ -56,7 +55,6 @@ describe('ApplicationFormComponent', () => {
     expect(await screen.findByPlaceholderText('Title')).toHaveValue(application.title);
     await userEvent.click(await screen.findByPlaceholderText('Projection'));
     await userEvent.click(await screen.findByText('EPSG:3857', { exact: false }));
-    await userEvent.click(await screen.findByText('Authentication required'));
     await waitFor(() => {
       expect(onUpdate).toHaveBeenCalledWith({
         name: application.name,
@@ -65,7 +63,6 @@ describe('ApplicationFormComponent', () => {
         crs: 'EPSG:3857',
         initialExtent: application.initialExtent,
         maxExtent: application.maxExtent,
-        authenticatedRequired: true,
       });
     });
   });

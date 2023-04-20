@@ -40,7 +40,6 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
     crs: new FormControl(''),
     initialExtent: new FormControl<BoundsModel | null>(null),
     maxExtent: new FormControl<BoundsModel | null>(null),
-    authenticatedRequired: new FormControl(false),
   });
 
   public projections = [
@@ -71,7 +70,6 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
           crs: value.crs || '',
           initialExtent: value.initialExtent || undefined,
           maxExtent: value.maxExtent || undefined,
-          authenticatedRequired: value.authenticatedRequired || false,
         });
       });
   }
@@ -89,7 +87,6 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
       crs: application ? application.crs : '',
       initialExtent: application ? application.initialExtent : null,
       maxExtent: application ? application.maxExtent : null,
-      authenticatedRequired: application ? application.authenticatedRequired : false,
     }, { emitEvent: false });
   }
 
