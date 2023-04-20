@@ -8,6 +8,7 @@ import { CatalogTreeModelTypeEnum } from '../models/catalog-tree-model-type.enum
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
 import { RoutesEnum } from '../../routes';
+import { CatalogRouteHelper } from './catalog-route.helper';
 
 export class CatalogTreeHelper {
 
@@ -225,40 +226,21 @@ export class CatalogTreeHelper {
       return null;
     }
     if (CatalogTreeHelper.isCatalogNode(node)) {
-      return CatalogTreeHelper.getUrl(RoutesEnum.CATALOG_NODE_DETAILS, [[ ':nodeId', node.metadata.id ]]);
+      return CatalogRouteHelper.getCatalogNodeUrl(node.metadata);
     }
     if (CatalogTreeHelper.isServiceNode(node)) {
-      return CatalogTreeHelper.getUrl(RoutesEnum.CATALOG_SERVICE_DETAILS, [
-        [ ':nodeId', node.metadata.catalogNodeId ],
-        [ ':serviceId', node.metadata.id ],
-      ]);
+      return CatalogRouteHelper.getGeoServiceUrl(node.metadata);
     }
     if (CatalogTreeHelper.isLayerNode(node)) {
-      return CatalogTreeHelper.getUrl(RoutesEnum.CATALOG_LAYER_DETAILS, [
-        [ ':nodeId',  node.metadata.catalogNodeId ],
-        [ ':serviceId',  node.metadata.serviceId ],
-        [ ':layerId',  node.metadata.id ],
-      ]);
+      return CatalogRouteHelper.getGeoServiceLayerUrl(node.metadata);
     }
     if (CatalogTreeHelper.isFeatureSource(node)) {
-      return CatalogTreeHelper.getUrl(RoutesEnum.FEATURE_SOURCE_DETAILS, [
-        [ ':nodeId', node.metadata.catalogNodeId ],
-        [ ':featureSourceId', node.metadata.id ],
-      ]);
+      return CatalogRouteHelper.getFeatureSourceUrl(node.metadata);
     }
     if (CatalogTreeHelper.isFeatureType(node)) {
-      return CatalogTreeHelper.getUrl(RoutesEnum.FEATURE_TYPE_DETAILS, [
-        [ ':nodeId', node.metadata.catalogNodeId ],
-        [ ':featureSourceId', node.metadata.featureSourceId ],
-        [ ':featureTypeId', node.metadata.id ],
-      ]);
+      return CatalogRouteHelper.getFeatureTypeUrl(node.metadata);
     }
     return null;
-  }
-
-  private static getUrl(baseUrl: string, replacements: Array<[string, string]>) {
-    const nodeUrl = replacements.reduce<string>((url, [ key, replacement ]) => url.replace(key, replacement), baseUrl);
-    return [ '', RoutesEnum.CATALOG, nodeUrl ].join('/');
   }
 
 }

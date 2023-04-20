@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
 import { CatalogNodeFormDialogComponent } from '../catalog-node-form-dialog/catalog-node-form-dialog.component';
 import { Subject, takeUntil } from 'rxjs';
@@ -7,6 +7,10 @@ import { FeatureSourceFormDialogComponent } from '../feature-source-form-dialog/
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { selectCatalogRootNodeId } from '../state/catalog.selectors';
+import { CatalogRouteHelper } from '../helpers/catalog-route.helper';
+import { Router } from '@angular/router';
+import { expandTree } from '../state/catalog.actions';
+import { CatalogTreeModelTypeEnum } from '../models/catalog-tree-model-type.enum';
 
 @Component({
   selector: 'tm-admin-catalog-create-buttons',
@@ -26,6 +30,7 @@ export class CatalogCreateButtonsComponent implements OnInit, OnDestroy {
   constructor(
     private dialog: MatDialog,
     private store$: Store,
+    private router: Router,
   ) { }
 
   public ngOnInit(): void {
@@ -47,7 +52,11 @@ export class CatalogCreateButtonsComponent implements OnInit, OnDestroy {
     CatalogNodeFormDialogComponent.open(this.dialog, {
       node: null,
       parentNode,
-    }).afterClosed().pipe(takeUntil(this.destroyed)).subscribe();
+    }).afterClosed().pipe(takeUntil(this.destroyed)).subscribe(node => {
+      if (node) {
+        this.router.navigateByUrl(CatalogRouteHelper.getCatalogNodeUrl({ id: node.id }));
+      }
+    });
   }
 
   public addGeoService() {
@@ -58,7 +67,12 @@ export class CatalogCreateButtonsComponent implements OnInit, OnDestroy {
     GeoServiceFormDialogComponent.open(this.dialog, {
       geoService: null,
       parentNode,
-    }).afterClosed().pipe(takeUntil(this.destroyed)).subscribe();
+    }).afterClosed().pipe(takeUntil(this.destroyed)).subscribe(createdService => {
+      if (createdService) {
+        this.router.navigateByUrl(CatalogRouteHelper.getGeoServiceUrl({ id: createdService.id, catalogNodeId: parentNode }));
+        this.store$.dispatch(expandTree({ id: createdService.id, nodeType: CatalogTreeModelTypeEnum.SERVICE_TYPE }));
+      }
+    });
   }
 
   public addFeatureSource() {
@@ -69,7 +83,12 @@ export class CatalogCreateButtonsComponent implements OnInit, OnDestroy {
     FeatureSourceFormDialogComponent.open(this.dialog, {
       featureSource: null,
       parentNode,
-    }).afterClosed().pipe(takeUntil(this.destroyed)).subscribe();
+    }).afterClosed().pipe(takeUntil(this.destroyed)).subscribe(featureSource => {
+      if (featureSource) {
+        this.router.navigateByUrl(CatalogRouteHelper.getFeatureSourceUrl({ id: featureSource.id, catalogNodeId: parentNode }));
+        this.store$.dispatch(expandTree({ id: featureSource.id, nodeType: CatalogTreeModelTypeEnum.FEATURE_SOURCE_TYPE }));
+      }
+    });
   }
 
 }

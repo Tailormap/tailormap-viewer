@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, NgZone, OnDestroy, Optional, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, NgZone, OnDestroy, Optional, TemplateRef, ViewChild } from '@angular/core';
 import { TreeService } from './tree.service';
 import { takeUntil } from 'rxjs/operators';
 import { FlatTreeHelper } from './helpers/flat-tree.helper';
@@ -41,11 +41,15 @@ export class TreeComponent implements OnDestroy {
   constructor(
     private treeService: TreeService,
     private ngZone: NgZone,
+    private cdr: ChangeDetectorRef,
     @Optional() private treeDragDropService: TreeDragDropService,
   ) {
     this.treeService.selectedNode$
       .pipe(takeUntil(this.destroyed))
-      .subscribe(selectedNodeId => this.selectedNodeId = selectedNodeId);
+      .subscribe(selectedNodeId => {
+        this.selectedNodeId = selectedNodeId;
+        this.cdr.detectChanges();
+      });
     this.treeService.readonlyMode$
       .pipe(takeUntil(this.destroyed))
       .subscribe(readOnlyMode => {
