@@ -1,4 +1,6 @@
-import { ChangeDetectorRef, Component, ElementRef, Input, NgZone, OnDestroy, Optional, TemplateRef, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, Optional, TemplateRef, ViewChild,
+} from '@angular/core';
 import { TreeService } from './tree.service';
 import { takeUntil } from 'rxjs/operators';
 import { FlatTreeHelper } from './helpers/flat-tree.helper';
@@ -11,7 +13,7 @@ import { DropZoneOptions, TreeDragDropService, treeNodeBaseClass } from './tree-
   templateUrl: './tree.component.html',
   styleUrls: ['./tree.component.css'],
 })
-export class TreeComponent implements OnDestroy {
+export class TreeComponent implements OnInit, OnDestroy {
 
   @Input()
   public treeNodeTemplate?: TemplateRef<any>;
@@ -43,7 +45,9 @@ export class TreeComponent implements OnDestroy {
     private ngZone: NgZone,
     private cdr: ChangeDetectorRef,
     @Optional() private treeDragDropService: TreeDragDropService,
-  ) {
+  ) { }
+
+  public ngOnInit(): void {
     this.treeService.selectedNode$
       .pipe(takeUntil(this.destroyed))
       .subscribe(selectedNodeId => {
@@ -56,7 +60,7 @@ export class TreeComponent implements OnDestroy {
         this.readOnlyMode = readOnlyMode;
         this.treeDragDropServiceEnabled = false;
       });
-    if (treeDragDropService) {
+    if (this.treeDragDropService) {
       this.treeDragDropService.treeDragDropEnabled$
         .pipe(takeUntil(this.destroyed))
         .subscribe(enabled => this.treeDragDropServiceEnabled = enabled);

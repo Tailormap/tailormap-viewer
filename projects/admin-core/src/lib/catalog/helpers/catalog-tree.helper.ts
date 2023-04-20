@@ -7,7 +7,6 @@ import { CatalogItemKindEnum, CatalogItemModel } from '@tailormap-admin/admin-ap
 import { CatalogTreeModelTypeEnum } from '../models/catalog-tree-model-type.enum';
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
-import { RoutesEnum } from '../../routes';
 import { CatalogRouteHelper } from './catalog-route.helper';
 
 export class CatalogTreeHelper {

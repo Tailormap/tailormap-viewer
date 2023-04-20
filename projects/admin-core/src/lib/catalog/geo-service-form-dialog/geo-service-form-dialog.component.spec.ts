@@ -56,14 +56,13 @@ describe('GeoServiceFormDialogComponent', () => {
   test('should edit node', async () => {
     const { updateGeoService$, updateGeoServiceDetails, dialogRefMock } = await setup(true);
     expect(screen.getByText('Edit my service')).toBeInTheDocument();
-    await userEvent.click(await screen.findByText('wms'));
-    await userEvent.click(await screen.findByText('wmts'));
+    await userEvent.type(screen.getByLabelText('URL'), '?123');
     await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save');
     expect(updateGeoService$).toHaveBeenCalledWith('2', expect.anything());
     expect(updateGeoServiceDetails).toHaveBeenCalledWith({
-      url: 'http://test.service',
+      url: 'http://test.service?123',
       title: 'my service',
-      protocol: 'wmts',
+      protocol: 'wms',
     });
     expect(dialogRefMock.close).toHaveBeenCalled();
   });
