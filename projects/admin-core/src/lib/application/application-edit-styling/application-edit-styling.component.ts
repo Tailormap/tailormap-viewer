@@ -3,9 +3,9 @@ import { Store } from '@ngrx/store';
 import { BehaviorSubject, concatMap, Observable, of, take } from 'rxjs';
 import { PopoverPositionEnum } from '@tailormap-viewer/shared';
 import { ViewerStylingModel } from '@tailormap-viewer/api';
-import { selectSelectedApplication, selectSelectedApplicationId, selectStylingConfig } from '../state/application.selectors';
+import { selectDraftApplication, selectSelectedApplicationId, selectStylingConfig } from '../state/application.selectors';
 import { ApplicationService } from '../services/application.service';
-import { setSelectedApplication, updateApplicationStylingConfig } from '../state/application.actions';
+import { clearSelectedApplication, updateApplicationStylingConfig } from '../state/application.actions';
 
 @Component({
   selector: 'tm-admin-application-edit-styling',
@@ -48,7 +48,7 @@ export class ApplicationEditStylingComponent {
   }
 
   public clearSelectedApplication() {
-    this.store$.dispatch(setSelectedApplication({ applicationId: null }));
+    this.store$.dispatch(clearSelectedApplication());
   }
 
   public onPrimaryColorChange($event: string) {
@@ -62,7 +62,7 @@ export class ApplicationEditStylingComponent {
   public save() {
     this.savingSubject.next(true);
 
-    this.store$.select(selectSelectedApplication)
+    this.store$.select(selectDraftApplication)
       .pipe(
         take(1),
         concatMap(application => {

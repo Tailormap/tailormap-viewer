@@ -5,6 +5,7 @@ import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { AppContentModel, ApplicationModel, AppTreeNodeModel } from '@tailormap-admin/admin-api';
 import { ApplicationModelHelper } from '../helpers/application-model.helper';
 import { ComponentModel } from '@tailormap-viewer/api';
+import { clearSelectedApplication } from './application.actions';
 
 const getApplication = (application: ApplicationModel) => ({
   ...application,
@@ -14,20 +15,17 @@ const getApplication = (application: ApplicationModel) => ({
 const updateApplication = (
   state: ApplicationState,
   applicationId: string,
-  updateMethod: (application: ApplicationModel) => ApplicationModel,
+  updateMethod: (application: ApplicationModel) => Partial<ApplicationModel>,
 ) => {
-  const idx = state.applications.findIndex(app => app.id === applicationId);
-  if (idx === -1) {
+  if (!state.draftApplication || applicationId !== state.draftApplication.id) {
     return state;
   }
-  const application = state.applications[idx];
   return {
     ...state,
-    applications: [
-      ...state.applications.slice(0, idx),
-      updateMethod(application),
-      ...state.applications.slice(idx + 1),
-    ],
+    draftApplication: {
+      ...state.draftApplication,
+      ...updateMethod(state.draftApplication),
+    },
   };
 };
 
@@ -37,27 +35,21 @@ const updateApplicationTree = (
   treeKey: 'layer' | 'baseLayer',
   updateMethod: (application: ApplicationModel, tree: AppTreeNodeModel[]) => AppTreeNodeModel[],
 ) => {
-  const idx = state.applications.findIndex(app => app.id === applicationId);
-  if (idx === -1) {
+  if (!state.draftApplication || applicationId !== state.draftApplication.id) {
     return state;
   }
-  const application = state.applications[idx];
   const tree: 'baseLayerNodes' | 'layerNodes' = treeKey === 'baseLayer' ? 'baseLayerNodes' : 'layerNodes';
-  const contentRoot = ApplicationModelHelper.getApplicationContentRoot(application);
+  const contentRoot = ApplicationModelHelper.getApplicationContentRoot(state.draftApplication);
   const updatedContentRoot: AppContentModel = {
     ...contentRoot,
-    [tree]: updateMethod(application, contentRoot[tree]),
+    [tree]: updateMethod(state.draftApplication, contentRoot[tree]),
   };
   return {
     ...state,
-    applications: [
-      ...state.applications.slice(0, idx),
-      {
-        ...application,
-        contentRoot: updatedContentRoot,
-      },
-      ...state.applications.slice(idx + 1),
-    ],
+    draftApplication: {
+      ...state.draftApplication,
+      contentRoot: updatedContentRoot,
+    },
   };
 };
 
@@ -99,9 +91,19 @@ const onSetApplicationListFilter = (
 const onSetSelectedApplication = (
   state: ApplicationState,
   payload: ReturnType<typeof ApplicationActions.setSelectedApplication>,
-): ApplicationState => ({
+): ApplicationState => {
+  const draftApplication = payload.applicationId !== null
+    ? state.applications.find(a => a.id === payload.applicationId)
+    : null;
+  return {
+    ...state,
+    draftApplication: draftApplication ? { ...draftApplication } : null,
+  };
+};
+
+const onClearSelectedApplication = (state: ApplicationState): ApplicationState => ({
   ...state,
-  selectedApplication: payload.applicationId,
+  draftApplication: null,
 });
 
 const onAddApplications = (
@@ -227,7 +229,6 @@ const onUpdateApplicationNodeSettings = (
       delete updatedSettings[payload.nodeId];
     }
     return {
-      ...application,
       settings: {
         ...application.settings,
         layerSettings: updatedSettings,
@@ -247,54 +248,30 @@ const onLoadApplicationServicesSuccess = (state: ApplicationState): ApplicationS
 });
 
 const onUpdateApplicationComponentConfig = (state: ApplicationState, payload: ReturnType<typeof ApplicationActions.updateApplicationComponentConfig>): ApplicationState => {
-  const idx = state.applications.findIndex(app => app.id === payload.applicationId);
-  if (idx === -1) {
-    return state;
-  }
-  const application = state.applications[idx];
-  const components = application.components || [];
-  const componentIdx = components.findIndex(component => component.type === payload.componentType);
-  const updatedComponents: ComponentModel[] = [
-    ...components.slice(0, componentIdx),
-    {
-      type: payload.componentType,
-      config: payload.config,
-    },
-    ...components.slice(componentIdx + 1),
-  ];
-  return {
-    ...state,
-    applications: [
-      ...state.applications.slice(0, idx),
+  return updateApplication(state, payload.applicationId, application => {
+    const components = application.components || [];
+    const componentIdx = components.findIndex(component => component.type === payload.componentType);
+    const updatedComponents: ComponentModel[] = [
+      ...components.slice(0, componentIdx),
       {
-        ...application,
-        components: updatedComponents,
+        type: payload.componentType,
+        config: payload.config,
       },
-      ...state.applications.slice(idx + 1),
-    ],
-  };
+      ...components.slice(componentIdx + 1),
+    ];
+    return { components: updatedComponents };
+  });
 };
 
 const onUpdateApplicationStylingConfig = (state: ApplicationState, payload: ReturnType<typeof ApplicationActions.updateApplicationStylingConfig>): ApplicationState => {
-  const idx = state.applications.findIndex(app => app.id === payload.applicationId);
-  if (idx === -1) {
-    return state;
-  }
-  const application = state.applications[idx];
-  return {
-    ...state,
-    applications: [
-      ...state.applications.slice(0, idx),
-      {
-        ...application,
-        styling: {
-          ...application.styling,
-          ...payload.styling,
-        },
+  return updateApplication(state, payload.applicationId, application => {
+    return {
+      styling: {
+        ...application.styling,
+        ...payload.styling,
       },
-      ...state.applications.slice(idx + 1),
-    ],
-  };
+    };
+  });
 };
 
 const applicationReducerImpl = createReducer<ApplicationState>(
@@ -304,6 +281,7 @@ const applicationReducerImpl = createReducer<ApplicationState>(
   on(ApplicationActions.loadApplicationsFailed, onLoadApplicationsFailed),
   on(ApplicationActions.setApplicationListFilter, onSetApplicationListFilter),
   on(ApplicationActions.setSelectedApplication, onSetSelectedApplication),
+  on(ApplicationActions.clearSelectedApplication, onClearSelectedApplication),
   on(ApplicationActions.addApplications, onAddApplications),
   on(ApplicationActions.updateApplication, onUpdateApplication),
   on(ApplicationActions.deleteApplication, onDeleteApplication),

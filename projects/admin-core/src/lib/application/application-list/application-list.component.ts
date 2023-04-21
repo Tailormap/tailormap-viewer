@@ -3,7 +3,7 @@ import { ApplicationModel } from '@tailormap-admin/admin-api';
 import { distinctUntilChanged, Observable, of, Subject, take, takeUntil } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { loadApplications, setApplicationListFilter, setSelectedApplication } from '../state/application.actions';
+import { clearSelectedApplication, loadApplications, setApplicationListFilter } from '../state/application.actions';
 import {
   selectApplicationList, selectApplicationsLoadError, selectApplicationsLoadStatus, selectSelectedApplicationId,
 } from '../state/application.selectors';
@@ -58,7 +58,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.store$.dispatch(setSelectedApplication({ applicationId: null }));
+    this.store$.dispatch(clearSelectedApplication());
     this.destroyed.next(null);
     this.destroyed.complete();
   }

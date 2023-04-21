@@ -1,9 +1,9 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Subject, take, takeUntil } from 'rxjs';
 import { ApplicationService } from '../services/application.service';
-import { selectSelectedApplication } from '../state/application.selectors';
+import { selectDraftApplication } from '../state/application.selectors';
 import { Store } from '@ngrx/store';
-import { setSelectedApplication } from '../state/application.actions';
+import { clearSelectedApplication } from '../state/application.actions';
 
 @Component({
   selector: 'tm-admin-application-edit-components',
@@ -42,7 +42,7 @@ export class ApplicationEditComponentsComponent implements OnInit, OnDestroy {
   public save() {
     this.savingSubject.next(true);
 
-    this.store$.select(selectSelectedApplication)
+    this.store$.select(selectDraftApplication)
       .pipe(take(1))
       .subscribe(application => {
         if (!application) {
@@ -57,7 +57,9 @@ export class ApplicationEditComponentsComponent implements OnInit, OnDestroy {
           });
       });
   }
+
   public clearSelectedApplication() {
-    this.store$.dispatch(setSelectedApplication({ applicationId: null }));
+    this.store$.dispatch(clearSelectedApplication());
   }
+
 }

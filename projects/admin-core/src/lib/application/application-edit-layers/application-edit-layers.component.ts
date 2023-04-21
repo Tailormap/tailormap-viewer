@@ -4,7 +4,7 @@ import { TreeModel, TreeNodePosition, TreeService } from '@tailormap-viewer/shar
 import {
   isLoadingApplicationServices,
   selectAppLayerTreeForSelectedApplication, selectBaseLayerTreeForSelectedApplication,
-  selectSelectedApplication,
+  selectDraftApplication,
   selectSelectedApplicationId,
 } from '../state/application.selectors';
 import { BehaviorSubject, map, Observable, of, Subject, take, takeUntil } from 'rxjs';
@@ -12,7 +12,7 @@ import {
   AppLayerSettingsModel, ApplicationModel, AppTreeLayerNodeModel, AppTreeLevelNodeModel, AppTreeNodeModel,
 } from '@tailormap-admin/admin-api';
 import {
-  addApplicationTreeNodes, removeApplicationTreeNode, setSelectedApplication, updateApplicationNodeSettings, updateApplicationTreeNode,
+  addApplicationTreeNodes, clearSelectedApplication, removeApplicationTreeNode, updateApplicationNodeSettings, updateApplicationTreeNode,
   updateApplicationTreeNodeVisibility,
   updateApplicationTreeOrder,
 } from '../state/application.actions';
@@ -176,7 +176,7 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
       return;
     }
     this.savingSubject.next(true);
-    this.store$.select(selectSelectedApplication)
+    this.store$.select(selectDraftApplication)
       .pipe(take(1))
       .subscribe(application => {
         if (!application || this.hasChanges.length === 0) {
@@ -203,7 +203,7 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
   }
 
   public clearSelectedApplication() {
-    this.store$.dispatch(setSelectedApplication({ applicationId: null }));
+    this.store$.dispatch(clearSelectedApplication());
   }
 
   public toggleCatalogTree() {

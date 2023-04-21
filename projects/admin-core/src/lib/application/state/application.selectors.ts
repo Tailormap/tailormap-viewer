@@ -10,7 +10,8 @@ export const selectApplications = createSelector(selectApplicationState, state =
 export const selectApplicationsLoadStatus = createSelector(selectApplicationState, state => state.applicationsLoadStatus);
 export const selectApplicationsLoadError = createSelector(selectApplicationState, state => state.applicationsLoadError);
 export const selectApplicationListFilter = createSelector(selectApplicationState, state => state.applicationListFilter);
-export const selectSelectedApplicationId = createSelector(selectApplicationState, state => state.selectedApplication);
+export const selectDraftApplication = createSelector(selectApplicationState, state => state.draftApplication || null);
+export const selectSelectedApplicationId = createSelector(selectApplicationState, state => state.draftApplication?.id || null);
 export const selectApplicationServicesLoadStatus = createSelector(selectApplicationState, state => state.applicationServicesLoadStatus);
 
 export const isLoadingApplicationServices = createSelector(
@@ -41,25 +42,15 @@ export const selectApplicationById = (id: string) => createSelector(
   },
 );
 
-export const selectSelectedApplication = createSelector(
-  selectApplications,
-  selectSelectedApplicationId,
-  (applications, selectedApplicationId) => {
-    return selectedApplicationId
-      ? applications.find(a => a.id === selectedApplicationId) || null
-      : null;
-  },
-);
-
 export const selectSelectedApplicationLayerSettings = createSelector(
-  selectSelectedApplication,
+  selectDraftApplication,
   (application) => {
     return application?.settings?.layerSettings || {};
   },
 );
 
 export const selectAppLayerTreeForSelectedApplication = createSelector(
-  selectSelectedApplication,
+  selectDraftApplication,
   selectGeoServiceLayers,
   (application, layers) => {
     if (!application?.contentRoot?.layerNodes) {
@@ -70,7 +61,7 @@ export const selectAppLayerTreeForSelectedApplication = createSelector(
 );
 
 export const selectBaseLayerTreeForSelectedApplication = createSelector(
-  selectSelectedApplication,
+  selectDraftApplication,
   selectGeoServiceLayers,
   (application, layers) => {
     if (!application?.contentRoot?.baseLayerNodes) {
@@ -80,7 +71,7 @@ export const selectBaseLayerTreeForSelectedApplication = createSelector(
   },
 );
 
-export const selectComponentsConfig = createSelector(selectSelectedApplication, application => application?.components);
+export const selectComponentsConfig = createSelector(selectDraftApplication, application => application?.components);
 
 export const selectComponentsConfigByType = (type: string) => createSelector(
   selectComponentsConfig,
@@ -103,4 +94,4 @@ export const selectDisabledComponentsForSelectedApplication = createSelector(
       .map(c => c.type);
   });
 
-export const selectStylingConfig = createSelector(selectSelectedApplication, application => application?.styling);
+export const selectStylingConfig = createSelector(selectDraftApplication, application => application?.styling);

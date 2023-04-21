@@ -1,11 +1,12 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
-import { distinctUntilChanged, filter, map, Observable, of, Subject, takeUntil } from 'rxjs';
+import { concatMap, distinctUntilChanged, filter, forkJoin, map, Observable, of, Subject, switchMap, takeUntil } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { selectSelectedApplication } from '../state/application.selectors';
+import { selectApplicationsLoadStatus, selectDraftApplication } from '../state/application.selectors';
 import { ApplicationModel } from '@tailormap-admin/admin-api';
 import { RoutesEnum } from '../../routes';
 import { setSelectedApplication } from '../state/application.actions';
+import { LoadingStateEnum } from '@tailormap-viewer/shared';
 
 @Component({
   selector: 'tm-admin-application-edit',
@@ -24,7 +25,9 @@ export class ApplicationEditComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private store$: Store,
   ) {
-    this.route.paramMap.pipe(
+    this.store$.select(selectApplicationsLoadStatus).pipe(
+      filter(loadStatus => loadStatus === LoadingStateEnum.LOADED),
+      switchMap(() => this.route.paramMap),
       takeUntil(this.destroyed),
       map(params => params.get('applicationId')),
       distinctUntilChanged(),
@@ -32,7 +35,7 @@ export class ApplicationEditComponent implements OnInit, OnDestroy {
     ).subscribe(applicationId => {
       this.store$.dispatch(setSelectedApplication({ applicationId }));
     });
-    this.application$ = this.store$.select(selectSelectedApplication);
+    this.application$ = this.store$.select(selectDraftApplication);
   }
 
   public ngOnInit(): void {

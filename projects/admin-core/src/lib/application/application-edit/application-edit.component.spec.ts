@@ -8,7 +8,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 const setup = async (hasApp: boolean) => {
   const mockState: ApplicationState = {
     ...initialApplicationState,
-    selectedApplication: '1',
+    draftApplication: '1',
     applications: !hasApp ? [] : [
       getApplication({ id: '1', title: 'my app' }),
     ],

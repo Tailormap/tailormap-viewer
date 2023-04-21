@@ -9,7 +9,7 @@ import { SnackBarMessageComponent } from '@tailormap-viewer/shared';
 import {
   addApplications, addApplicationTreeNodes, deleteApplication, loadApplicationServices, loadApplicationServicesSuccess, updateApplication,
 } from '../state/application.actions';
-import { selectSelectedApplication } from '../state/application.selectors';
+import { selectDraftApplication } from '../state/application.selectors';
 import { CatalogService } from '../../catalog/services/catalog.service';
 import { ApplicationModelHelper } from '../helpers/application-model.helper';
 
@@ -32,7 +32,7 @@ export class ApplicationService implements OnDestroy {
     private snackBar: MatSnackBar,
     private catalogService: CatalogService,
   ) {
-    this.store$.select(selectSelectedApplication)
+    this.store$.select(selectDraftApplication)
       .pipe(
         takeUntil(this.destroyed),
         distinctUntilChanged((a, b) => {

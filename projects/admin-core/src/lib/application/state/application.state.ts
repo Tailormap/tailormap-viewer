@@ -9,7 +9,7 @@ export interface ApplicationState {
   applicationServicesLoadStatus: LoadingStateEnum;
   applications: ApplicationModel[];
   applicationListFilter?: string | null;
-  selectedApplication?: string | null;
+  draftApplication?: ApplicationModel | null;
 }
 
 export const initialApplicationState: ApplicationState = {

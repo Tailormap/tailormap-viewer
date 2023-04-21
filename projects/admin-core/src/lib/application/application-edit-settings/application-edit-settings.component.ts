@@ -2,11 +2,11 @@ import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { BehaviorSubject, distinctUntilChanged, filter, Observable, of, Subject, switchMap, take, takeUntil } from 'rxjs';
-import { selectSelectedApplication } from '../state/application.selectors';
+import { selectDraftApplication } from '../state/application.selectors';
 import { ApplicationModel } from '@tailormap-admin/admin-api';
 import { ApplicationService } from '../services/application.service';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
-import { setSelectedApplication } from '../state/application.actions';
+import { clearSelectedApplication } from '../state/application.actions';
 
 @Component({
   selector: 'tm-admin-application-edit-settings',
@@ -32,7 +32,7 @@ export class ApplicationEditSettingsComponent implements OnInit, OnDestroy {
   ) { }
 
   public ngOnInit(): void {
-    this.application$ = this.store$.select(selectSelectedApplication)
+    this.application$ = this.store$.select(selectDraftApplication)
       .pipe(
         distinctUntilChanged((a, b) => {
           return a?.id === b?.id;
@@ -82,7 +82,7 @@ export class ApplicationEditSettingsComponent implements OnInit, OnDestroy {
   }
 
   public clearSelectedApplication() {
-    this.store$.dispatch(setSelectedApplication({ applicationId: null }));
+    this.store$.dispatch(clearSelectedApplication());
   }
 
 }
