@@ -7,7 +7,7 @@
     </span>
     <span class="tree-node__label-content">{{node.label}}</span>
   </div>
-  <div class="tree-node__actions" *ngIf="isNonRoot()">
+  <div class="tree-node__actions">
     <button *ngIf="isLayer()"
             mat-icon-button
             matTooltip="Remove layer from application"
@@ -32,7 +32,7 @@
         <mat-icon svgIcon="edit"></mat-icon>
         <span>Rename</span>
       </button>
-      <button mat-menu-item
+      <button mat-menu-item *ngIf="isNonRoot()"
               (click)="removeNode(node.id)">
         <mat-icon svgIcon="close"></mat-icon>
         <span>Remove</span>
