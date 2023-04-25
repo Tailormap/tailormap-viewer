@@ -1,5 +1,5 @@
 <h3 i18n>User Details</h3>
-<form [formGroup]="userdetailsForm" class="userdetails-wrapper">
+<form [formGroup]="userdetailsForm" class="userdetails-wrapper" autocomplete="off">
   <div>
     <mat-form-field>
       <mat-label i18n>Username</mat-label>
@@ -39,7 +39,7 @@
 </form>
 
 <mat-toolbar>
-  <button (click)="addOrUpdate()" color="primary" i18n mat-button mat-flat-button>{{existingUser ? 'Update' : 'Add'}}</button>
+  <button (click)="addOrUpdate()" [disabled]="!userdetailsForm.valid" color="primary" i18n mat-button mat-flat-button>{{existingUser ? 'Update' : 'Add'}}</button>
   <button (click)="clearForm()" color="primary" i18n mat-button mat-flat-button>Cancel</button>
   <button (click)="delete()" color="primary" disabled="{{!existingUser}}" i18n mat-button mat-flat-button>Delete</button>
 </mat-toolbar>

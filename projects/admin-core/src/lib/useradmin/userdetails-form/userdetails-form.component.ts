@@ -14,7 +14,9 @@ import { formatDate } from '@angular/common';
 })
 export class UserdetailsFormComponent implements OnInit, OnDestroy {
   public userdetailsForm = new FormGroup({
-    username: new FormControl<string>('', { nonNullable: true, validators: Validators.required }),
+    username: new FormControl<string>('', {
+      nonNullable: true, validators: [ Validators.required, Validators.pattern('[a-zA-Z0-9]*') ],
+    }),
     password: new FormControl<string>('', { nonNullable: true, validators: Validators.minLength(8) }),
     confirmedPassword: new FormControl<string>('', { nonNullable: true, validators: Validators.minLength(8) }),
     email: new FormControl<string>('', { nonNullable: false, validators: Validators.email }),
