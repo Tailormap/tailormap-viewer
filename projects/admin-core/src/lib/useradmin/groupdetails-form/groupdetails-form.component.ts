@@ -14,7 +14,10 @@ export class GroupdetailsFormComponent implements OnInit, OnDestroy {
   public existingGroup = false;
 
   public groupdetailsForm = new FormGroup({
-    name: new FormControl<string>('', { nonNullable: true, validators: Validators.required }),
+    name: new FormControl<string>('', {
+      nonNullable: true,
+      validators: [ Validators.required, Validators.pattern('[a-zA-Z0-9]*') ],
+    }),
     description: new FormControl<string>('', { nonNullable: false }),
     notes: new FormControl<string>('', { nonNullable: false }),
     systemGroup: new FormControl<boolean>(false, { nonNullable: true }),
