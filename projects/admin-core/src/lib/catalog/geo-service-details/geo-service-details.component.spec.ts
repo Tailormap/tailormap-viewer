@@ -3,7 +3,7 @@ import { GeoServiceDetailsComponent } from './geo-service-details.component';
 import { of } from 'rxjs';
 import { getMockStore } from '@ngrx/store/testing';
 import { catalogStateKey, initialCatalogState } from '../state/catalog.state';
-import { getGeoService } from '@tailormap-admin/admin-api';
+import { TAILORMAP_ADMIN_API_V1_SERVICE, getGeoService } from '@tailormap-admin/admin-api';
 import { ActivatedRoute } from '@angular/router';
 import { GeoServiceService } from '../services/geo-service.service';
 import { Store } from '@ngrx/store';
@@ -17,6 +17,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
 import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
+import { AuthorizationEditComponent } from '../../shared/components/authorization-edit/authorization-edit.component';
 
 const setup = async () => {
   const activeRoute = {
@@ -29,12 +30,13 @@ const setup = async () => {
   });
   await render(GeoServiceDetailsComponent, {
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    declarations: [ GeoServiceFormComponent, PasswordFieldComponent, LayerSettingsFormComponent, SaveButtonComponent ],
+    declarations: [ GeoServiceFormComponent, PasswordFieldComponent, LayerSettingsFormComponent, SaveButtonComponent, AuthorizationEditComponent ],
     imports: [ SharedModule, MatIconTestingModule ],
     providers: [
       { provide: ActivatedRoute, useValue: activeRoute },
       { provide: GeoServiceService, useValue: geoServiceService },
       { provide: Store, useValue: store },
+      { provide: TAILORMAP_ADMIN_API_V1_SERVICE, useValue: { getGroups$: jest.fn(() => of(null)) } },
     ],
   });
   return { updateGeoServiceDetails, updateGeoServiceSettings, updateGeoService$, geoServiceModel };
@@ -55,6 +57,7 @@ describe('GeoServiceDetailsComponent', () => {
     await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save');
     expect(updateGeoService$).toHaveBeenNthCalledWith(1, '1', expect.anything(), expect.anything());
     expect(updateGeoServiceDetails).toHaveBeenNthCalledWith(1, {
+      authorizationRules: [],
       title: geoServiceModel.title + '___',
       url: geoServiceModel.url,
       protocol: geoServiceModel.protocol,

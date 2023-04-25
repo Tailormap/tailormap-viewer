@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { TestSaveHelper } from '../../test-helpers/test-save.helper';
 import { of } from 'rxjs';
 import { createGeoServiceMock } from '../helpers/mocks/geo-service.service.mock';
-import { getCatalogNode } from '@tailormap-admin/admin-api';
+import { TAILORMAP_ADMIN_API_V1_SERVICE, getCatalogNode, AUTHORIZATION_RULE_ANONYMOUS } from '@tailormap-admin/admin-api';
 import { getMockStore } from '@ngrx/store/testing';
 import { catalogStateKey, initialCatalogState } from '../state/catalog.state';
 import { CatalogNodeFormDialogComponent } from '../catalog-node-form-dialog/catalog-node-form-dialog.component';
@@ -19,6 +19,7 @@ import { GeoServiceFormComponent } from '../geo-service-form/geo-service-form.co
 import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
 import { Router } from '@angular/router';
 import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
+import { AuthorizationEditComponent } from '../../shared/components/authorization-edit/authorization-edit.component';
 
 const setup = async (hasNode = false) => {
   const createCatalogNodeMock = jest.fn(() => of(true));
@@ -41,6 +42,7 @@ const setup = async (hasNode = false) => {
       GeoServiceFormComponent,
       SaveButtonComponent,
       PasswordFieldComponent,
+      AuthorizationEditComponent,
     ],
     componentInputs: {
       node: hasNode ? catalogNodeModel : null,
@@ -51,6 +53,7 @@ const setup = async (hasNode = false) => {
       { provide: GeoServiceService, useValue: geoServiceService },
       { provide: Store, useValue: store },
       { provide: Router, useValue: { navigateToUrl: jest.fn() } },
+      { provide: TAILORMAP_ADMIN_API_V1_SERVICE, useValue: { getGroups$: jest.fn(() => of(null)) } },
     ],
   });
   return { createCatalogNodeMock, updateCatalogNodeMock, createGeoService$ };
@@ -85,6 +88,7 @@ describe('CatalogCreateButtonsComponent', () => {
     await userEvent.type(await screen.findByPlaceholderText('URL'), 'http://service.url');
     await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save', 0);
     expect(createGeoService$).toHaveBeenCalledWith({
+      authorizationRules: [AUTHORIZATION_RULE_ANONYMOUS],
       title: '',
       url: 'http://service.url',
       protocol: 'wms',
