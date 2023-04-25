@@ -1,12 +1,13 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { debounceTime, filter, Subject, takeUntil } from 'rxjs';
+import { Observable, debounceTime, filter, Subject, takeUntil } from 'rxjs';
 import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 import { FormControl, FormGroup } from '@angular/forms';
-import { GeoServiceProtocolEnum, AuthorizationRuleGroup, AUTHORIZATION_RULE_ANONYMOUS } from '@tailormap-admin/admin-api';
+import { GeoServiceProtocolEnum, GroupModel, AuthorizationRuleGroup, AUTHORIZATION_RULE_ANONYMOUS } from '@tailormap-admin/admin-api';
 import { FormHelper } from '../../helpers/form.helper';
 import { GeoServiceCreateModel } from '../models/geo-service-update.model';
 import { StringHelper } from '@tailormap-viewer/shared';
 import { $localize } from '@angular/localize/init';
+import { GroupdetailsService } from '../../useradmin/services/groupdetails.service';
 
 @Component({
   selector: 'tm-admin-geo-service-form',
@@ -59,7 +60,10 @@ export class GeoServiceFormComponent implements OnInit {
     authorizationRules: new FormControl<AuthorizationRuleGroup[]>([]),
   });
 
-  constructor() { }
+  public groups$: Observable<GroupModel[]>;
+  constructor(groupdetailsService: GroupdetailsService) {
+      this.groups$ = groupdetailsService.groupList$;
+  }
 
   private formHasAuthentication() {
     const value = this.geoServiceForm.getRawValue();

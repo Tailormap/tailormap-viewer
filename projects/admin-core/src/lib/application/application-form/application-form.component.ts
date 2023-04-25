@@ -1,9 +1,10 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { BoundsModel } from '@tailormap-viewer/api';
-import { ApplicationModel, AuthorizationRuleGroup, AUTHORIZATION_RULE_ANONYMOUS } from '@tailormap-admin/admin-api';
-import { debounceTime, filter, Subject, takeUntil } from 'rxjs';
+import { ApplicationModel, GroupModel, AuthorizationRuleGroup, AUTHORIZATION_RULE_ANONYMOUS } from '@tailormap-admin/admin-api';
+import { Observable, debounceTime, filter, Subject, takeUntil } from 'rxjs';
 import { FormHelper } from '../../helpers/form.helper';
+import { GroupdetailsService } from '../../useradmin/services/groupdetails.service';
 
 @Component({
   selector: 'tm-admin-application-form',
@@ -54,7 +55,10 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
     return this.applicationForm.get('crs')?.value || null;
   }
 
-  constructor() { }
+  public groups$: Observable<GroupModel[]>;
+  constructor(groupdetailsService: GroupdetailsService) {
+      this.groups$ = groupdetailsService.groupList$;
+  }
 
   public ngOnInit(): void {
     this.applicationForm.valueChanges

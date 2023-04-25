@@ -1,8 +1,7 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { AuthorizationRuleDecision, AuthorizationRuleGroup, GroupModel } from '@tailormap-admin/admin-api';
-import { GroupdetailsService } from '../../../useradmin/services/groupdetails.service';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'tm-admin-authorization-edit',
@@ -20,27 +19,26 @@ export class AuthorizationEditComponent implements OnInit, OnDestroy, ControlVal
   private _onChange: (_: any) => void = () => undefined;
   public value: AuthorizationRuleGroup[] = [];
 
-  public newRuleGroup = '';
-  public newRuleDecision = true;
-
-  private groups: GroupModel[] = [];
+  private _groups: GroupModel[] = [];
 
   public groupList: { name: string; used: boolean }[] = [];
-
-  public selectedChip = 'anonymous';
   public canAddRule = true;
 
-  constructor(
-    private groupdetailsService: GroupdetailsService,
-    private changeDetectorRef: ChangeDetectorRef,
-  ) {
+  @Input()
+  public set groups(value: GroupModel[]) {
+      this._groups = value;
+      this.updateGroupList();
   }
 
+  private updateGroupList() {
+      this.groupList = this._groups.filter(a => !a.systemGroup).map(a => ({ name: a.name, used: this.value.find(b => b.groupName === a.name) !== undefined }));
+      this.canAddRule = this.groupList.find(a => !a.used) !== undefined;
+  }
+
+
+  constructor() { }
+
   public ngOnInit(): void {
-      this.groupdetailsService.groupList$.pipe(takeUntil(this.destroyed)).subscribe(items => {
-          this.groups = items;
-          this.updateValue(this.value, false);
-      });
   }
 
   public ngOnDestroy() {
@@ -48,13 +46,11 @@ export class AuthorizationEditComponent implements OnInit, OnDestroy, ControlVal
       this.destroyed.complete();
   }
 
+  public selectedChip = 'anonymous';
 
   private updateValue(value: AuthorizationRuleGroup[], notify: boolean) {
       this.value = value;
-      this.groupList = this.groups
-        .filter(a => a.name !== 'anonymous' && a.name !== 'app-authenticated')
-        .map(a => ({ name: a.name, used: this.value.find(b => b.groupName === a.name) !== undefined }));
-      this.canAddRule = this.groupList.find(a => !a.used) !== undefined;
+      this.updateGroupList();
 
       if (notify) {
           this._onChange(value);
@@ -62,6 +58,7 @@ export class AuthorizationEditComponent implements OnInit, OnDestroy, ControlVal
 
       const anonymousGroup = this.value.find(a => a.groupName === 'anonymous');
       const loggedInGroup = this.value.find(a => a.groupName === 'app-authenticated');
+
       if (anonymousGroup?.decisions?.['read']?.decision === AuthorizationRuleDecision.ALLOW) {
           this.selectedChip = 'anonymous';
       } else if (loggedInGroup?.decisions?.['read']?.decision === AuthorizationRuleDecision.ALLOW) {
@@ -69,9 +66,6 @@ export class AuthorizationEditComponent implements OnInit, OnDestroy, ControlVal
       } else {
           this.selectedChip = 'specificGroups';
       }
-
-      // Needed to make sure the initial load of groups works reliably.
-      this.changeDetectorRef.detectChanges();
   }
 
   public writeValue(value: AuthorizationRuleGroup[]) {
@@ -124,22 +118,22 @@ export class AuthorizationEditComponent implements OnInit, OnDestroy, ControlVal
       this.updateValue(newValue, true);
   }
 
-  public addRule(groupName?: string): void {
-      if (groupName !== undefined) {
-          this.newRuleGroup = groupName;
-      }
-
+  public newRuleDecision = true;
+  public addRule(newGroup: string): void {
       const newValue = [
         ...this.value,
         {
-            groupName: this.newRuleGroup,
+            groupName: newGroup,
             decisions: { read: { decision: this.newRuleDecision ? AuthorizationRuleDecision.ALLOW : AuthorizationRuleDecision.DENY } },
         },
       ];
 
       this.updateValue(newValue, true);
-
       this.newRuleDecision = true;
-      this.newRuleGroup = '';
+  }
+
+  // Disable the select options actually changing.
+  public compareValues(): boolean {
+      return false;
   }
 }

@@ -34,5 +34,5 @@
                               label="Max extent"
                               [projection]="projection"></tm-admin-bounds-form-field>
 
-  <tm-admin-authorization-edit class="authorization-edit" formControlName="authorizationRules"></tm-admin-authorization-edit>
+  <tm-admin-authorization-edit class="authorization-edit" formControlName="authorizationRules" [groups]="(groups$ | async) ?? []"></tm-admin-authorization-edit>
 </form>

@@ -15,7 +15,7 @@
       <td mat-footer-cell *matFooterCellDef>
         <mat-form-field>
           <mat-label i18n>Group name</mat-label>
-          <mat-select [(value)]="newRuleGroup" (selectionChange)="addRule($event.value)">
+          <mat-select (selectionChange)="addRule($event.value)" [compareWith]="compareValues">
             <mat-option *ngFor="let group of groupList" [value]="group.name" [disabled]="group.used">
               {{group.name}}
             </mat-option>
