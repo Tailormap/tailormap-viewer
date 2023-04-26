@@ -15,10 +15,17 @@
             (click)="removeNode(node.id)">
       <mat-icon svgIcon="close"></mat-icon>
     </button>
-    <button mat-icon-button
+    <button *ngIf="!isNonRoot()"
+            mat-icon-button
+            matTooltip="Add sub folder"
+            i18n-matTooltip
+            (click)="addFolder(node.id)">
+      <mat-icon svgIcon="plus"></mat-icon>
+    </button>
+    <button *ngIf="isLevel() && isNonRoot()"
+            mat-icon-button
             [matMenuTriggerFor]="menu"
-            aria-label="Tree node menu"
-            *ngIf="isLevel()">
+            aria-label="Tree node menu">
       <mat-icon svgIcon="admin_more"></mat-icon>
     </button>
     <mat-menu #menu="matMenu">
@@ -32,7 +39,7 @@
         <mat-icon svgIcon="edit"></mat-icon>
         <span>Rename</span>
       </button>
-      <button mat-menu-item *ngIf="isNonRoot()"
+      <button mat-menu-item
               (click)="removeNode(node.id)">
         <mat-icon svgIcon="close"></mat-icon>
         <span>Remove</span>
