@@ -1,4 +1,4 @@
-<form [formGroup]="geoServiceForm">
+<form [formGroup]="geoServiceForm" autocomplete="off">
   <mat-form-field>
     <mat-label i18n>Title</mat-label>
     <input matInput
@@ -24,15 +24,25 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
-  <h3 i18n>Authentication</h3>
-  <p i18n>If the service requires HTTP Basic authentication, enter the account details below. These will never be sent to a viewer but only
-    used when proxying. Layers from a service proxied with credentials will not be available in a viewer that does not require logging in
-    to prevent exposing private map data unintentionally.
-  </p>
-  <mat-checkbox formControlName="proxy" i18n labelPosition="after">Reverse proxy WMS requests for viewers (required when using authentication)</mat-checkbox>
-  <mat-form-field>
-    <mat-label i18n>Username</mat-label>
-    <input matInput type="text" formControlName="username" placeholder="Username" i18n-placeholder />
-  </mat-form-field>
-  <tm-admin-password-field formControlName="password" label="Password" i18n-label></tm-admin-password-field>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title i18n style="flex-grow: 1">Authentication and proxy</mat-panel-title>
+      <mat-panel-description style="flex-grow: 1">
+        {{ getAuthDescription() }}
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <p i18n>Enter account details below if the service requires HTTP Basic authentication. Enable reverse proxying to allow a layer which
+      requires authentication to be used in a viewer by having Tailormap do the WMS requests for the end user without sending the
+      credentials to the users' browser.
+    </p>
+    <mat-checkbox formControlName="useProxy" labelPosition="after">
+      <ng-container i18n>Reverse proxy WMS requests for viewers</ng-container>
+    </mat-checkbox>
+    <mat-form-field>
+      <mat-label i18n>Username</mat-label>
+      <input matInput type="text" formControlName="username" autocomplete="off" placeholder="Username" i18n-placeholder />
+    </mat-form-field>
+    <tm-admin-password-field formControlName="password" label="Password" i18n-label></tm-admin-password-field>
+  </mat-expansion-panel>
+  <p i18n>Warning: Password managers may auto-complete credentials with undesired values, please double check.</p>
 </form>

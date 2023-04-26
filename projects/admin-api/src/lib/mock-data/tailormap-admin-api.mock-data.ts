@@ -74,7 +74,7 @@ export const getGeoService = (overrides?: Partial<GeoServiceWithLayersModel>): G
   notes: '',
   protocol: GeoServiceProtocolEnum.WMS,
   url: 'https://service.pdok.nl/kadaster/bestuurlijkegebieden/wms/v1_0',
-  authentication: {},
+  authentication: null,
   serviceCapabilities: getServiceCaps(),
   capabilitiesContentType: 'application/xml',
   capabilitiesFetched: '2021-01-01T00:00:00.000Z',

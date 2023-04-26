@@ -5,6 +5,8 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { GeoServiceProtocolEnum } from '@tailormap-admin/admin-api';
 import { FormHelper } from '../../helpers/form.helper';
 import { GeoServiceCreateModel } from '../models/geo-service-update.model';
+import { StringHelper } from '@tailormap-viewer/shared';
+import { $localize } from '@angular/localize/init';
 
 @Component({
   selector: 'tm-admin-geo-service-form',
@@ -25,6 +27,9 @@ export class GeoServiceFormComponent implements OnInit {
       title: geoService ? geoService.title : '',
       protocol: geoService ? geoService.protocol : GeoServiceProtocolEnum.WMS,
       url: geoService ? geoService.url : '',
+      useProxy: geoService?.settings?.useProxy || false,
+      username: geoService?.authentication?.username || '',
+      password: geoService?.authentication?.password || '',
     });
     if (!geoService) {
       this.geoServiceForm.get('title')?.disable();
@@ -45,9 +50,17 @@ export class GeoServiceFormComponent implements OnInit {
     title: new FormControl('', { nonNullable: true }),
     protocol: new FormControl<GeoServiceProtocolEnum>(GeoServiceProtocolEnum.WMS, { nonNullable: true }),
     url: new FormControl('', { nonNullable: true }),
+    useProxy: new FormControl(false, { nonNullable: true }),
+    username: new FormControl(''),
+    password: new FormControl(''),
   });
 
   constructor() { }
+
+  private formHasAuthentication() {
+    const value = this.geoServiceForm.getRawValue();
+    return StringHelper.isNotBlank(value.username) && StringHelper.isNotBlank(value.password);
+  }
 
   public ngOnInit(): void {
     this.geoServiceForm.valueChanges
@@ -61,6 +74,12 @@ export class GeoServiceFormComponent implements OnInit {
           title: value.title || '',
           url: value.url || '',
           protocol: value.protocol || GeoServiceProtocolEnum.WMS,
+          settings: { useProxy: value.useProxy },
+          authentication: !this.formHasAuthentication() ? null : {
+            method: 'password',
+            username: value.username as string,
+            password: value.password as string,
+          },
         });
       });
   }
@@ -72,4 +91,17 @@ export class GeoServiceFormComponent implements OnInit {
       && this.geoServiceForm.dirty;
   }
 
+  public getAuthDescription() {
+    const formHasAuthentication = this.formHasAuthentication();
+    const proxyEnabled = this.geoServiceForm.getRawValue().useProxy;
+    if (formHasAuthentication && proxyEnabled) {
+      return $localize`Credentials set and proxy enabled`;
+    } else if (formHasAuthentication) {
+      return $localize `Credentials set`;
+    } else if (proxyEnabled) {
+      return $localize `Proxy enabled`;
+    } else {
+      return $localize `Not set`;
+    }
+  }
 }

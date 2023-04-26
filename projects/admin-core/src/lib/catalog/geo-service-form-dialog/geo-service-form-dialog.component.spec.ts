@@ -49,6 +49,10 @@ describe('GeoServiceFormDialogComponent', () => {
       url: 'http://www.super-service.com',
       title: '',
       protocol: 'wms',
+      authentication: null,
+      settings: {
+        useProxy: false,
+      },
     }, '1');
     expect(dialogRefMock.close).toHaveBeenCalled();
   });
@@ -64,6 +68,10 @@ describe('GeoServiceFormDialogComponent', () => {
       url: 'http://test.service',
       title: 'my service',
       protocol: 'wmts',
+      authentication: null,
+      settings: {
+        useProxy: false,
+      },
     });
     expect(dialogRefMock.close).toHaveBeenCalled();
   });

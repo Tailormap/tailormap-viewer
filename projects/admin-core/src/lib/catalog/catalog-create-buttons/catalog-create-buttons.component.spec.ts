@@ -84,6 +84,10 @@ describe('CatalogCreateButtonsComponent', () => {
       title: '',
       url: 'http://service.url',
       protocol: 'wms',
+      authentication: null,
+      settings: {
+        useProxy: false,
+      },
     }, '1');
   });
 
