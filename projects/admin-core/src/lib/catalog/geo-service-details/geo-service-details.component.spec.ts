@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
 import { GeoServiceDetailsComponent } from './geo-service-details.component';
 import { of } from 'rxjs';
 import { getMockStore } from '@ngrx/store/testing';
@@ -15,6 +15,7 @@ import { LayerSettingsFormComponent } from '../layer-settings-form/layer-setting
 import { TestSaveHelper } from '../../test-helpers/test-save.helper';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
+import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
 
 const setup = async () => {
   const activeRoute = {
@@ -27,7 +28,7 @@ const setup = async () => {
   });
   await render(GeoServiceDetailsComponent, {
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    declarations: [ GeoServiceFormComponent, LayerSettingsFormComponent, SaveButtonComponent ],
+    declarations: [ GeoServiceFormComponent, PasswordFieldComponent, LayerSettingsFormComponent, SaveButtonComponent ],
     imports: [SharedModule],
     providers: [
       { provide: ActivatedRoute, useValue: activeRoute },
@@ -56,9 +57,12 @@ describe('GeoServiceDetailsComponent', () => {
       title: geoServiceModel.title + '___',
       url: geoServiceModel.url,
       protocol: geoServiceModel.protocol,
+      authentication: null,
+      settings: { useProxy: false },
     });
     expect(updateGeoServiceSettings).toHaveBeenNthCalledWith(1, {
       defaultLayerSettings: {},
+      useProxy: false,
     });
     TestSaveHelper.waitForButtonToBeDisabled('Save');
     await userEvent.click(await screen.findByText('High-DPI enabled'));

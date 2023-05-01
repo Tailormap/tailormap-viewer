@@ -1,7 +1,6 @@
-import { render, screen, waitFor } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
 import { GeoServiceFormDialogComponent } from './geo-service-form-dialog.component';
 import userEvent from '@testing-library/user-event';
-import { of } from 'rxjs';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { getGeoService } from '@tailormap-admin/admin-api';
@@ -10,13 +9,14 @@ import { GeoServiceService } from '../services/geo-service.service';
 import { createGeoServiceMock } from '../helpers/mocks/geo-service.service.mock';
 import { TestSaveHelper } from '../../test-helpers/test-save.helper';
 import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
+import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
 
 const setup = async (editMode = false) => {
   const dialogRefMock = { close: jest.fn() };
   const { geoServiceService, updateGeoService$, updateGeoServiceDetails } = createGeoServiceMock();
   await render(GeoServiceFormDialogComponent, {
     imports: [SharedModule],
-    declarations: [ GeoServiceFormComponent, SaveButtonComponent ],
+    declarations: [ GeoServiceFormComponent, PasswordFieldComponent, SaveButtonComponent ],
     providers: [
       { provide: MatDialogRef, useValue: dialogRefMock },
       { provide: GeoServiceService, useValue: geoServiceService },
