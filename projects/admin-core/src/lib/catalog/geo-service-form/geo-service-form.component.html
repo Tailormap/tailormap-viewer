@@ -35,6 +35,9 @@
       requires authentication to be used in a viewer by having Tailormap do the WMS requests for the end user without sending the
       credentials to the users' browser.
     </p>
+    <p i18n>Reverse proxying without authentication can be used to bypass missing CORS headers but check with the server administrator if
+      it's allowed and whether CORS can be enabled so proxying isn't necessary.
+    </p>
     <mat-checkbox formControlName="useProxy" labelPosition="after">
       <ng-container i18n>Reverse proxy WMS requests for viewers</ng-container>
     </mat-checkbox>
