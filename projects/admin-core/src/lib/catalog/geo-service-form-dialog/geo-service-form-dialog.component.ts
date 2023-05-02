@@ -4,6 +4,7 @@ import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { GeoServiceService } from '../services/geo-service.service';
 import { GeoServiceCreateModel } from '../models/geo-service-update.model';
+import { GeoServiceWithLayersModel } from '@tailormap-admin/admin-api';
 
 export interface GeoServiceFormDialogData {
   geoService: ExtendedGeoServiceModel | null;
@@ -25,14 +26,14 @@ export class GeoServiceFormDialogComponent {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: GeoServiceFormDialogData,
-    private dialogRef: MatDialogRef<GeoServiceFormDialogComponent>,
+    private dialogRef: MatDialogRef<GeoServiceFormDialogComponent, GeoServiceWithLayersModel | null>,
     private geoServiceService: GeoServiceService,
   ) { }
 
   public static open(
     dialog: MatDialog,
     data: GeoServiceFormDialogData,
-  ): MatDialogRef<GeoServiceFormDialogComponent> {
+  ): MatDialogRef<GeoServiceFormDialogComponent, GeoServiceWithLayersModel | null> {
     return dialog.open(GeoServiceFormDialogComponent, {
       data,
       width: '500px',
@@ -54,8 +55,10 @@ export class GeoServiceFormDialogComponent {
     );
     saveObservable$
       .pipe(takeUntil(this.destroyed))
-      .subscribe(() => this.savingSubject.next(false));
-    this.dialogRef.close(this.geoService);
+      .subscribe(result => {
+        this.savingSubject.next(false);
+        this.dialogRef.close(result);
+      });
   }
 
   public updateGeoService($event: GeoServiceCreateModel) {
