@@ -17,6 +17,7 @@ import { Store } from '@ngrx/store';
 import { CatalogNodeFormComponent } from '../catalog-node-form/catalog-node-form.component';
 import { GeoServiceFormComponent } from '../geo-service-form/geo-service-form.component';
 import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
+import { Router } from '@angular/router';
 
 const setup = async (hasNode = false) => {
   const createCatalogNodeMock = jest.fn(() => of(true));
@@ -47,6 +48,7 @@ const setup = async (hasNode = false) => {
       { provide: CatalogService, useValue: catalogService },
       { provide: GeoServiceService, useValue: geoServiceService },
       { provide: Store, useValue: store },
+      { provide: Router, useValue: { navigateToUrl: jest.fn() } },
     ],
   });
   return { createCatalogNodeMock, updateCatalogNodeMock, createGeoService$ };

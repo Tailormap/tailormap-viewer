@@ -4,6 +4,7 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import { FeatureSourceCreateModel } from '../models/feature-source-update.model';
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 import { FeatureSourceService } from '../services/feature-source.service';
+import { FeatureSourceModel } from '@tailormap-admin/admin-api';
 
 export interface FeatureSourceFormDialogData {
   featureSource: ExtendedFeatureSourceModel | null;
@@ -25,14 +26,14 @@ export class FeatureSourceFormDialogComponent {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: FeatureSourceFormDialogData,
-    private dialogRef: MatDialogRef<FeatureSourceFormDialogComponent>,
+    private dialogRef: MatDialogRef<FeatureSourceFormDialogComponent, FeatureSourceModel | null>,
     private featureSourceService: FeatureSourceService,
   ) { }
 
   public static open(
     dialog: MatDialog,
     data: FeatureSourceFormDialogData,
-  ): MatDialogRef<FeatureSourceFormDialogComponent> {
+  ): MatDialogRef<FeatureSourceFormDialogComponent, FeatureSourceModel | null> {
     return dialog.open(FeatureSourceFormDialogComponent, {
       data,
       width: '500px',
@@ -54,8 +55,10 @@ export class FeatureSourceFormDialogComponent {
     );
     saveObservable$
       .pipe(takeUntil(this.destroyed))
-      .subscribe(() => this.savingSubject.next(false));
-    this.dialogRef.close(this.featureSource);
+      .subscribe(result => {
+        this.savingSubject.next(false);
+        this.dialogRef.close(result);
+      });
   }
 
   public updateFeatureSource($event: FeatureSourceCreateModel) {

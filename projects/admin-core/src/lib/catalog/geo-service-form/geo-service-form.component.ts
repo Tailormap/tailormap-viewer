@@ -33,8 +33,10 @@ export class GeoServiceFormComponent implements OnInit {
     });
     if (!geoService) {
       this.geoServiceForm.get('title')?.disable();
+      this.geoServiceForm.get('protocol')?.enable();
     } else {
       this.geoServiceForm.get('title')?.enable();
+      this.geoServiceForm.get('protocol')?.disable();
     }
     this._geoService = geoService;
   }

@@ -182,6 +182,12 @@ export class CatalogService implements OnDestroy {
             this.store$.dispatch(updateCatalog({ nodes: updatedCatalog }));
           }
         }),
+        map(catalog => {
+          if (catalog) {
+            return { catalog, node };
+          }
+          return null;
+        }),
       );
   }
 

@@ -3,6 +3,7 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
 import { CatalogService } from '../services/catalog.service';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
+import { CatalogNodeModel } from '@tailormap-admin/admin-api';
 
 export interface CatalogNodeFormDialogData {
   node: ExtendedCatalogNodeModel | null;
@@ -25,14 +26,14 @@ export class CatalogNodeFormDialogComponent {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: CatalogNodeFormDialogData,
-    private dialogRef: MatDialogRef<CatalogNodeFormDialogComponent>,
+    private dialogRef: MatDialogRef<CatalogNodeFormDialogComponent, CatalogNodeModel | null>,
     private catalogService: CatalogService,
   ) {}
 
   public static open(
     dialog: MatDialog,
     data: CatalogNodeFormDialogData,
-  ): MatDialogRef<CatalogNodeFormDialogComponent> {
+  ): MatDialogRef<CatalogNodeFormDialogComponent, CatalogNodeModel | null> {
     return dialog.open(CatalogNodeFormDialogComponent, {
       data,
       width: '500px',
@@ -53,8 +54,10 @@ export class CatalogNodeFormDialogComponent {
       : this.catalogService.updateCatalogNode$({ ...this.node, id: this.data.node.id })
     )
       .pipe(takeUntil(this.destroyed))
-      .subscribe(() => this.savingSubject.next(false));
-    this.dialogRef.close(this.node);
+      .subscribe(result => {
+        this.savingSubject.next(false);
+        this.dialogRef.close(result ? result.node : null);
+      });
   }
 
   public updateNode($event: Omit<ExtendedCatalogNodeModel, 'id'>) {
