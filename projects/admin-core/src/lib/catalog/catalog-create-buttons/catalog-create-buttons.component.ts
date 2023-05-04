@@ -55,6 +55,7 @@ export class CatalogCreateButtonsComponent implements OnInit, OnDestroy {
     }).afterClosed().pipe(takeUntil(this.destroyed)).subscribe(node => {
       if (node) {
         this.router.navigateByUrl(CatalogRouteHelper.getCatalogNodeUrl({ id: node.id }));
+        this.store$.dispatch(expandTree({ id: node.id, nodeType: CatalogTreeModelTypeEnum.CATALOG_NODE_TYPE }));
       }
     });
   }
