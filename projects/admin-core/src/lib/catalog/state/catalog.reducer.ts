@@ -22,10 +22,12 @@ const findParentsForExpansion = (list: ExpandableNode[], nodeId: string) => {
   return CatalogTreeHelper.findParentsForNode(list, nodeId);
 };
 
-const expandNode = <T extends ExpandableNode>(list: T[], nodeId: string): T[] => {
+const expandNode = <T extends ExpandableNode>(list: T[], nodeId: string, forceExpand?: boolean): T[] => {
   const parentIds = findParentsForExpansion(list, nodeId);
   return list.map<T>(node => {
-    let expanded = node.id === nodeId ? !node.expanded : node.expanded;
+    let expanded = node.id === nodeId
+      ? (typeof forceExpand === 'boolean' ? forceExpand : !node.expanded)
+      : node.expanded;
     if (parentIds.includes(node.id)) {
       expanded = true;
     }
@@ -185,13 +187,29 @@ const onExpandTree = (
     return { ...state, catalog: expandNode(state.catalog, payload.id) };
   }
   if (payload.nodeType === CatalogTreeModelTypeEnum.SERVICE_TYPE) {
-    return { ...state, geoServices: expandNode(state.geoServices, payload.id) };
+    const service = state.geoServices.find(s => s.id === payload.id);
+    return {
+      ...state,
+      geoServices: expandNode(state.geoServices, payload.id),
+      catalog: service && !service.expanded ? expandNode(state.catalog, service.catalogNodeId, true) : state.catalog,
+    };
   }
   if (payload.nodeType === CatalogTreeModelTypeEnum.SERVICE_LAYER_TYPE) {
-    return { ...state, geoServiceLayers: expandNode(state.geoServiceLayers, payload.id) };
+    const layer = state.geoServiceLayers.find(l => l.id === payload.id);
+    return {
+      ...state,
+      geoServiceLayers: expandNode(state.geoServiceLayers, payload.id),
+      geoServices: layer && !layer.expanded ? expandNode(state.geoServices, layer.serviceId, true) : state.geoServices,
+      catalog: layer && !layer.expanded ? expandNode(state.catalog, layer.catalogNodeId, true) : state.catalog,
+    };
   }
   if (payload.nodeType === CatalogTreeModelTypeEnum.FEATURE_SOURCE_TYPE) {
-    return { ...state, featureSources: expandNode(state.featureSources, payload.id) };
+    const featureSource = state.featureSources.find(f => f.id === payload.id);
+    return {
+      ...state,
+      featureSources: expandNode(state.featureSources, payload.id),
+      catalog: featureSource && !featureSource.expanded ? expandNode(state.catalog, featureSource.catalogNodeId, true) : state.catalog,
+    };
   }
   return state;
 };
