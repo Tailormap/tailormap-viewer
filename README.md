@@ -11,16 +11,17 @@ run:
 docker compose up -d
 ```
 
-This runs Tailormap on http://localhost:8080/ and PostgreSQL on localhost:5432. If other applications are listening on these ports, copy
-`.env.template` to `.env` and change the variables for the ports. Tailormap will only accept connections from the loopback interface.
+This runs Tailormap on http://localhost:8080/ together with a PostgreSQL container to store configuration. The port (and other options) can
+be changed by copying `.env.template` to `.env` and changing the variables. Tailormap will only accept connections from the loopback
+interface.
 
 Remove the Tailormap stack using `docker compose down` (add `-v` to remove the volume with the database).
 
 By default, the latest development Docker image will be used (tagged with `snapshot`). This is published automatically by a GitHub Action on
 every change to the `main` branch, so this might be an unstable version. To use the latest (stable) released version, copy `.env.template`
 to `.env` and set the `VERSION` variable to `latest` before running. To update a running stack after a new version is released,
-run `docker compose` with the `pull` and `up` commands but _check the release
-notes beforehand_.
+run `docker compose` with the `pull` and `up` commands but _check the release notes beforehand_ because it may contain important information
+about upgrading to a new version.
 
 ## Running just the Tailormap container
 
@@ -40,8 +41,12 @@ Specify the following command line parameters with `docker run` to change the da
 - `-e SPRING_DATASOURCE_USERNAME=user`
 - `-e SPRING_DATASOURCE_PASSWORD=pass`
 
-If your database is running on localhost using `--network=host` is recommended. If your database is on another host you can specify
-`--publish 8080:8080` instead. Of course, you need to specify `SPRING_DATASOURCE_URL` with the database hostname.
+If your database is running on localhost using `--network=host` is recommended (you can try using the hostname `host.docker.internal` but
+that may not always work). If your database is on another host you can specify `--publish 8080:8080` instead. Of course, you need to specify
+`SPRING_DATASOURCE_URL` with the database hostname.
+
+You can also bind the PostgreSQL database to your host when running with Docker Compose for development reasons by adding
+`docker-compose.db-port.yml` to the `COMPOSE_FILE` environment variable.
 
 ## Default admin account
 
