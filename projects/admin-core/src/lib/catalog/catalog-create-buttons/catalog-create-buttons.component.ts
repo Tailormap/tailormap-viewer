@@ -71,7 +71,6 @@ export class CatalogCreateButtonsComponent implements OnInit, OnDestroy {
     }).afterClosed().pipe(takeUntil(this.destroyed)).subscribe(createdService => {
       if (createdService) {
         this.router.navigateByUrl(CatalogRouteHelper.getGeoServiceUrl({ id: createdService.id, catalogNodeId: parentNode }));
-        this.store$.dispatch(expandTree({ id: parentNode, nodeType: CatalogTreeModelTypeEnum.CATALOG_NODE_TYPE }));
         this.store$.dispatch(expandTree({ id: createdService.id, nodeType: CatalogTreeModelTypeEnum.SERVICE_TYPE }));
       }
     });
@@ -88,7 +87,6 @@ export class CatalogCreateButtonsComponent implements OnInit, OnDestroy {
     }).afterClosed().pipe(takeUntil(this.destroyed)).subscribe(featureSource => {
       if (featureSource) {
         this.router.navigateByUrl(CatalogRouteHelper.getFeatureSourceUrl({ id: featureSource.id, catalogNodeId: parentNode }));
-        this.store$.dispatch(expandTree({ id: parentNode, nodeType: CatalogTreeModelTypeEnum.CATALOG_NODE_TYPE }));
         this.store$.dispatch(expandTree({ id: featureSource.id, nodeType: CatalogTreeModelTypeEnum.FEATURE_SOURCE_TYPE }));
       }
     });
