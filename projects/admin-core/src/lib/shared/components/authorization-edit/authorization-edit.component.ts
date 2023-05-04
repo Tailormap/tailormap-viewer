@@ -57,11 +57,11 @@ export class AuthorizationEditComponent implements OnInit, OnDestroy, ControlVal
       }
 
       const anonymousGroup = this.value.find(a => a.groupName === 'anonymous');
-      const loggedInGroup = this.value.find(a => a.groupName === 'app-authenticated');
+      const loggedInGroup = this.value.find(a => a.groupName === 'authenticated');
 
-      if (anonymousGroup?.decisions?.['read']?.decision === AuthorizationRuleDecision.ALLOW) {
+      if (anonymousGroup?.decisions?.['read'] === AuthorizationRuleDecision.ALLOW) {
           this.selectedChip = 'anonymous';
-      } else if (loggedInGroup?.decisions?.['read']?.decision === AuthorizationRuleDecision.ALLOW) {
+      } else if (loggedInGroup?.decisions?.['read'] === AuthorizationRuleDecision.ALLOW) {
           this.selectedChip = 'loggedIn';
       } else {
           this.selectedChip = 'specificGroups';
@@ -83,13 +83,13 @@ export class AuthorizationEditComponent implements OnInit, OnDestroy, ControlVal
   public changeAuthenticationType(type: string) {
       switch (type) {
       case 'anonymous':
-          this.updateValue([{ groupName: 'anonymous', decisions: { read: { decision: AuthorizationRuleDecision.ALLOW } } }], true);
+          this.updateValue([{ groupName: 'anonymous', decisions: { read: AuthorizationRuleDecision.ALLOW } }], true);
           break;
       case 'loggedIn':
-          this.updateValue([{ groupName: 'app-authenticated', decisions: { read: { decision: AuthorizationRuleDecision.ALLOW } } }], true);
+          this.updateValue([{ groupName: 'authenticated', decisions: { read: AuthorizationRuleDecision.ALLOW } }], true);
           break;
       case 'specificGroups':
-          this.updateValue(this.value.filter(a => a.groupName !== 'anonymous' && a.groupName !== 'app-authenticated'), true);
+          this.updateValue(this.value.filter(a => a.groupName !== 'anonymous' && a.groupName !== 'authenticated'), true);
           break;
       }
   }
@@ -99,9 +99,9 @@ export class AuthorizationEditComponent implements OnInit, OnDestroy, ControlVal
           if (a.groupName === groupName) {
               const newDecisions = { ...a.decisions };
               if (checked) {
-                  newDecisions[typ] = { decision: AuthorizationRuleDecision.ALLOW };
+                  newDecisions[typ] = AuthorizationRuleDecision.ALLOW;
               } else {
-                  newDecisions[typ] = { decision: AuthorizationRuleDecision.DENY };
+                  newDecisions[typ] = AuthorizationRuleDecision.DENY;
               }
 
               return { groupName, decisions: newDecisions };
@@ -124,7 +124,7 @@ export class AuthorizationEditComponent implements OnInit, OnDestroy, ControlVal
         ...this.value,
         {
             groupName: newGroup,
-            decisions: { read: { decision: this.newRuleDecision ? AuthorizationRuleDecision.ALLOW : AuthorizationRuleDecision.DENY } },
+            decisions: { read: this.newRuleDecision ? AuthorizationRuleDecision.ALLOW : AuthorizationRuleDecision.DENY },
         },
       ];
 
