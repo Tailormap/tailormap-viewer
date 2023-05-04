@@ -22,9 +22,12 @@ const setup = async () => {
 };
 
 describe('UserdetailsFormComponent', () => {
-  test('should render', async () => {
+  test('should render with Add/Delete button disabled', async () => {
     await setup();
+    expect(screen.getByText('User Details'));
+    expect(screen.getByText('Add'));
+    expect(screen.getByText('Add').parentNode).toHaveProperty('disabled', true);
     expect(screen.getByText('Delete'));
+    expect(screen.getByText('Delete').parentNode).toHaveProperty('disabled', true);
   });
-
 });

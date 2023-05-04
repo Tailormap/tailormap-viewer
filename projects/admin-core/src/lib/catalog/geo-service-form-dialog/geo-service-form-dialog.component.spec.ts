@@ -1,7 +1,6 @@
-import { render, screen, waitFor } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
 import { GeoServiceFormDialogComponent } from './geo-service-form-dialog.component';
 import userEvent from '@testing-library/user-event';
-import { of } from 'rxjs';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { getGeoService } from '@tailormap-admin/admin-api';
@@ -10,13 +9,14 @@ import { GeoServiceService } from '../services/geo-service.service';
 import { createGeoServiceMock } from '../helpers/mocks/geo-service.service.mock';
 import { TestSaveHelper } from '../../test-helpers/test-save.helper';
 import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
+import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
 
 const setup = async (editMode = false) => {
   const dialogRefMock = { close: jest.fn() };
   const { geoServiceService, updateGeoService$, updateGeoServiceDetails } = createGeoServiceMock();
   await render(GeoServiceFormDialogComponent, {
     imports: [SharedModule],
-    declarations: [ GeoServiceFormComponent, SaveButtonComponent ],
+    declarations: [ GeoServiceFormComponent, PasswordFieldComponent, SaveButtonComponent ],
     providers: [
       { provide: MatDialogRef, useValue: dialogRefMock },
       { provide: GeoServiceService, useValue: geoServiceService },
@@ -49,6 +49,10 @@ describe('GeoServiceFormDialogComponent', () => {
       url: 'http://www.super-service.com',
       title: '',
       protocol: 'wms',
+      authentication: null,
+      settings: {
+        useProxy: false,
+      },
     }, '1');
     expect(dialogRefMock.close).toHaveBeenCalled();
   });
@@ -56,14 +60,17 @@ describe('GeoServiceFormDialogComponent', () => {
   test('should edit node', async () => {
     const { updateGeoService$, updateGeoServiceDetails, dialogRefMock } = await setup(true);
     expect(screen.getByText('Edit my service')).toBeInTheDocument();
-    await userEvent.click(await screen.findByText('wms'));
-    await userEvent.click(await screen.findByText('wmts'));
+    await userEvent.type(screen.getByLabelText('URL'), '?123');
     await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save');
     expect(updateGeoService$).toHaveBeenCalledWith('2', expect.anything());
     expect(updateGeoServiceDetails).toHaveBeenCalledWith({
-      url: 'http://test.service',
+      url: 'http://test.service?123',
       title: 'my service',
-      protocol: 'wmts',
+      protocol: 'wms',
+      authentication: null,
+      settings: {
+        useProxy: false,
+      },
     });
     expect(dialogRefMock.close).toHaveBeenCalled();
   });

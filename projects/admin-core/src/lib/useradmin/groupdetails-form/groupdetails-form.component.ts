@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { debounceTime, filter, Subject, takeUntil } from 'rxjs';
 import { GroupModel } from '@tailormap-admin/admin-api';
 import { GroupdetailsService } from '../services/groupdetails.service';
+import { NAME_REGEX } from '../constants';
 
 @Component({
   selector: 'tm-admin-groupdetails-form',
@@ -14,7 +15,10 @@ export class GroupdetailsFormComponent implements OnInit, OnDestroy {
   public existingGroup = false;
 
   public groupdetailsForm = new FormGroup({
-    name: new FormControl<string>('', { nonNullable: true, validators: Validators.required }),
+    name: new FormControl<string>('', {
+      nonNullable: true,
+      validators: [ Validators.required, Validators.pattern(NAME_REGEX) ],
+    }),
     description: new FormControl<string>('', { nonNullable: false }),
     notes: new FormControl<string>('', { nonNullable: false }),
     systemGroup: new FormControl<boolean>(false, { nonNullable: true }),

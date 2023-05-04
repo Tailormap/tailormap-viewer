@@ -3,6 +3,7 @@ import { LayerSettingsModel } from './layer-settings.model';
 
 export interface GeoServiceSettingsModel {
   serverType?: ServerType;
+  useProxy?: boolean;
   defaultLayerSettings?: LayerSettingsModel;
   layerSettings?: Record<string, LayerSettingsModel>;
 }

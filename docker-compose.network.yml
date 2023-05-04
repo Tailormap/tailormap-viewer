@@ -1,0 +1,13 @@
+# Docker Compose override to add a network to the tailormap container, for example where spatial databases are reachable.
+
+# Another option is to put other services in the ${COMPOSE_PROJECT_NAME}_default network of the tailormap-viewer Docker Compose stack.
+
+networks:
+  geodata:
+    name: ${GEODATA_NETWORK:-geodata}
+    external: true
+
+services:
+  tailormap:
+    networks:
+      - geodata

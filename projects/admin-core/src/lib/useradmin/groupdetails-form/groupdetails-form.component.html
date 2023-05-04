@@ -18,7 +18,7 @@
 </form>
 
 <mat-toolbar>
-  <button (click)="addOrUpdate()" color="primary" i18n mat-button mat-flat-button>{{existingGroup ? 'Update' : 'Add'}}</button>
+  <button (click)="addOrUpdate()"  [disabled]="!groupdetailsForm.valid" color="primary" i18n mat-button mat-flat-button>{{existingGroup ? 'Update' : 'Add'}}</button>
   <button (click)="clearForm()" color="primary" i18n mat-button mat-flat-button>Cancel</button>
   <button (click)="delete()" color="primary" disabled="{{!existingGroup}}" i18n mat-button mat-flat-button>Delete</button>
 </mat-toolbar>

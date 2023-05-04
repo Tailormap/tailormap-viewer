@@ -27,6 +27,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatCardModule } from '@angular/material/card';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatListModule } from '@angular/material/list';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule({
   exports: [
@@ -59,6 +60,7 @@ import { MatListModule } from '@angular/material/list';
     MatCardModule,
     MatSlideToggleModule,
     MatListModule,
+    MatExpansionModule,
   ],
 })
 export class SharedImportsModule { }

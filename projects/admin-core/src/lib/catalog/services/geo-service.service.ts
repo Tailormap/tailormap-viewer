@@ -30,6 +30,7 @@ export class GeoServiceService {
     const geoServiceModel: Omit<GeoServiceModel, 'id' | 'type'> = {
       ...geoService,
       settings: {
+        ...geoService.settings,
         defaultLayerSettings: {
           hiDpiDisabled: geoService.protocol === GeoServiceProtocolEnum.WMTS,
         },

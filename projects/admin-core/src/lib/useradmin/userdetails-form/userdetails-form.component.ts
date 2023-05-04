@@ -5,6 +5,7 @@ import { debounceTime, filter, Observable, Subject, takeUntil } from 'rxjs';
 import { UserDetailsService } from '../services/userdetails.service';
 import { GroupdetailsService } from '../services/groupdetails.service';
 import { formatDate } from '@angular/common';
+import { NAME_REGEX } from '../constants';
 
 @Component({
   selector: 'tm-admin-userdetails-form',
@@ -14,7 +15,10 @@ import { formatDate } from '@angular/common';
 })
 export class UserdetailsFormComponent implements OnInit, OnDestroy {
   public userdetailsForm = new FormGroup({
-    username: new FormControl<string>('', { nonNullable: true, validators: Validators.required }),
+    username: new FormControl<string>('', {
+      nonNullable: true,
+      validators: [ Validators.required, Validators.pattern(NAME_REGEX) ],
+    }),
     password: new FormControl<string>('', { nonNullable: true, validators: Validators.minLength(8) }),
     confirmedPassword: new FormControl<string>('', { nonNullable: true, validators: Validators.minLength(8) }),
     email: new FormControl<string>('', { nonNullable: false, validators: Validators.email }),
@@ -28,7 +32,7 @@ export class UserdetailsFormComponent implements OnInit, OnDestroy {
     ],
   });
   public existingUser = false;
-  public allGroups$: Observable<GroupModel[]>;
+  public allGroups$: Observable<GroupModel[]> | undefined;
   private destroyed = new Subject();
   private _user: UserModel | null = null;
 
