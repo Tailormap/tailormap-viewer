@@ -1,9 +1,10 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { distinctUntilChanged, Observable, of } from 'rxjs';
+import { distinctUntilChanged, map, Observable, of, switchMap, take } from 'rxjs';
 import { selectDraftApplication } from '../state/application.selectors';
 import { ApplicationModel } from '@tailormap-admin/admin-api';
 import { updateDraftApplication } from '../state/application.actions';
+import { ConfigService } from '../../config/services/config.service';
 
 @Component({
   selector: 'tm-admin-application-edit-settings',
@@ -14,9 +15,11 @@ import { updateDraftApplication } from '../state/application.actions';
 export class ApplicationEditSettingsComponent implements OnInit {
 
   public application$: Observable<ApplicationModel | null> = of(null);
+  public isDefaultApplication$: Observable<boolean> = of(false);
 
   constructor(
     private store$: Store,
+    private configService: ConfigService,
   ) { }
 
   public ngOnInit(): void {
@@ -26,10 +29,27 @@ export class ApplicationEditSettingsComponent implements OnInit {
           return a?.id === b?.id;
         }),
       );
+    this.isDefaultApplication$ = this.application$
+      .pipe(
+        switchMap(a => {
+          return this.configService.getConfigValue$(ConfigService.DEFAULT_APPLICATION_KEY)
+            .pipe(
+              map(defaultApplication => defaultApplication === a?.name),
+            );
+        }),
+      );
   }
 
   public updateApplication($event: Omit<ApplicationModel, 'id'>) {
     this.store$.dispatch(updateDraftApplication({ application: $event }));
+  }
+
+  public toggleDefaultApplication(applicationName: string) {
+    this.configService.saveConfig$({
+      key: ConfigService.DEFAULT_APPLICATION_KEY,
+      value: applicationName,
+      jsonValue: null,
+    }).pipe(take(1)).subscribe();
   }
 
 }

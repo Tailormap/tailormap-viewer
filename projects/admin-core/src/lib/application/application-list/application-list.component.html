@@ -23,13 +23,22 @@
 
     <mat-selection-list>
       <mat-list-item *ngFor="let application of applications$ | async"
-                     [class.selected]="selectedApplicationId === application.id"
+                     [class.selected]="application.selected"
                      [routerLink]="'/applications/application/'+application.id">
         <span class="detail">{{application.title || application.name}}</span>
+        <mat-icon *ngIf="application.defaultApplication"
+                  matListItemMeta
+                  color="primary"
+                  tmTooltip="Default application"
+                  i18n-tmTooltip
+                  svgIcon="admin_default_application"></mat-icon>
         <a class="icon"
            (click)="stopPropagation($event)"
            [href]="viewerBaseUrl + application.name"
            target="new"
+           tmTooltip="Open application"
+           matTooltipPosition="right"
+           i18n-tmTooltip
            matListItemMeta>
           <mat-icon svgIcon="admin_link_new_window"></mat-icon>
         </a>

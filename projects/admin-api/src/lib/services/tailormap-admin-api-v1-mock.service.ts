@@ -3,9 +3,10 @@ import { delay, Observable, of } from 'rxjs';
 import { TailormapAdminApiV1ServiceModel } from './tailormap-admin-api-v1-service.model';
 import * as mockData from '../mock-data/tailormap-admin-api.mock-data';
 import {
-  CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel,
+  CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel, ConfigModel,
 } from '../models';
 import { nanoid } from 'nanoid';
+import { getConfigModel } from '../mock-data/tailormap-admin-api.mock-data';
 
 @Injectable()
 export class TailormapAdminApiV1MockService implements TailormapAdminApiV1ServiceModel {
@@ -130,6 +131,18 @@ export class TailormapAdminApiV1MockService implements TailormapAdminApiV1Servic
 
   public deleteApplication$(_id: string): Observable<boolean> {
     return of(true).pipe(delay(this.delay));
+  }
+
+  public getConfig$(params: { key: string }): Observable<ConfigModel> {
+    return of(mockData.getConfigModel({ key: params.key })).pipe(delay(this.delay));
+  }
+
+  public createConfig$(params: { config: ConfigModel }): Observable<ConfigModel> {
+    return of({ ...params.config }).pipe(delay(this.delay));
+  }
+
+  public updateConfig$(params: { config: ConfigModel }): Observable<ConfigModel> {
+    return of({ ...params.config }).pipe(delay(this.delay));
   }
 
 }

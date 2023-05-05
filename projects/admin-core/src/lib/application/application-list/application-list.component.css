@@ -3,8 +3,12 @@
   height: 16px;
 }
 
-.icon mat-icon {
+mat-icon {
   width: 16px;
   height: 16px;
   vertical-align: bottom;
+}
+
+.mdc-list-item__end + .mdc-list-item__end {
+  margin-left: 0;
 }

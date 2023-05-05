@@ -25,3 +25,4 @@ export * from './tile-layer-hi-dpi-mode.enum';
 export * from './service-authentication.model';
 export * from './user.model';
 export * from './group.model';
+export * from './config.model';

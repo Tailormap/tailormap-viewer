@@ -60,7 +60,7 @@ export class ApplicationEditComponent implements OnInit, OnDestroy {
   public save() {
     this.savingSubject.next(true);
     this.applicationService.saveDraftApplication$()
-      .pipe(takeUntil(this.destroyed))
+      .pipe(take(1))
       .subscribe(() => {
         this.savingSubject.next(false);
       });
