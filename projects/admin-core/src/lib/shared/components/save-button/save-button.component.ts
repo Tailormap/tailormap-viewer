@@ -15,6 +15,9 @@ export class SaveButtonComponent {
   @Input()
   public disabled: boolean | null = false;
 
+  @Input()
+  public label?: string;
+
   @Output()
   public save = new EventEmitter();
 

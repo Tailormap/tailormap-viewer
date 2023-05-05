@@ -32,6 +32,7 @@ const updateApplicationTree = (
   state: ApplicationState,
   treeKey: 'layer' | 'baseLayer',
   updateMethod: (application: ApplicationModel, tree: AppTreeNodeModel[]) => AppTreeNodeModel[],
+  skipUpdatedFlag = false,
 ) => {
   if (!state.draftApplication) {
     return state;
@@ -48,7 +49,7 @@ const updateApplicationTree = (
       ...state.draftApplication,
       contentRoot: updatedContentRoot,
     },
-    draftApplicationUpdated: true,
+    draftApplicationUpdated: skipUpdatedFlag ? state.draftApplicationUpdated : true,
   };
 };
 
@@ -162,6 +163,15 @@ const onAddApplicationTreeNodes = (
   return updateApplicationTree(state, payload.tree, (application, tree) => {
     return ApplicationModelHelper.addNodesToApplicationTree(application, tree, payload);
   });
+};
+
+const onAddApplicationRootNodes = (
+  state: ApplicationState,
+  payload: ReturnType<typeof ApplicationActions.addApplicationRootNodes>,
+): ApplicationState => {
+  return updateApplicationTree(state, payload.tree, (application, tree) => {
+    return ApplicationModelHelper.addNodesToApplicationTree(application, tree, payload);
+  }, true);
 };
 
 const onUpdateApplicationTreeNode = (
@@ -298,6 +308,7 @@ const applicationReducerImpl = createReducer<ApplicationState>(
   on(ApplicationActions.deleteApplication, onDeleteApplication),
   on(ApplicationActions.updateDraftApplication, onUpdateDraftApplication),
   on(ApplicationActions.addApplicationTreeNodes, onAddApplicationTreeNodes),
+  on(ApplicationActions.addApplicationRootNodes, onAddApplicationRootNodes),
   on(ApplicationActions.updateApplicationTreeNode, onUpdateApplicationTreeNode),
   on(ApplicationActions.removeApplicationTreeNode, onRemoveApplicationTreeNode),
   on(ApplicationActions.updateApplicationTreeOrder, onUpdateApplicationTreeOrder),

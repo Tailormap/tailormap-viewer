@@ -16,6 +16,7 @@ import { TestSaveHelper } from '../../test-helpers/test-save.helper';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
 import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
+import { MatIconTestingModule } from '@angular/material/icon/testing';
 
 const setup = async () => {
   const activeRoute = {
@@ -29,7 +30,7 @@ const setup = async () => {
   await render(GeoServiceDetailsComponent, {
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     declarations: [ GeoServiceFormComponent, PasswordFieldComponent, LayerSettingsFormComponent, SaveButtonComponent ],
-    imports: [SharedModule],
+    imports: [ SharedModule, MatIconTestingModule ],
     providers: [
       { provide: ActivatedRoute, useValue: activeRoute },
       { provide: GeoServiceService, useValue: geoServiceService },

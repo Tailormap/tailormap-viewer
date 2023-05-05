@@ -3,5 +3,6 @@
   <tm-admin-application-form (updateApplication)="updateApplication($event)"></tm-admin-application-form>
 </div>
 <div class="page-details-actions">
-  <tm-admin-save-button [saving$]="saving$" [disabled]="!application" (save)="save()"></tm-admin-save-button>
+  <tm-admin-save-button label="Create" i18n-label [saving$]="saving$" [disabled]="!application" (save)="save()"></tm-admin-save-button>
+  <button mat-flat-button routerLink="/applications" i18n>Cancel</button>
 </div>

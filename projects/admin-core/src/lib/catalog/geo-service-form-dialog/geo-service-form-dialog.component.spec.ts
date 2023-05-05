@@ -10,12 +10,13 @@ import { createGeoServiceMock } from '../helpers/mocks/geo-service.service.mock'
 import { TestSaveHelper } from '../../test-helpers/test-save.helper';
 import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
 import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
+import { MatIconTestingModule } from '@angular/material/icon/testing';
 
 const setup = async (editMode = false) => {
   const dialogRefMock = { close: jest.fn() };
   const { geoServiceService, updateGeoService$, updateGeoServiceDetails } = createGeoServiceMock();
   await render(GeoServiceFormDialogComponent, {
-    imports: [SharedModule],
+    imports: [ SharedModule, MatIconTestingModule ],
     declarations: [ GeoServiceFormComponent, PasswordFieldComponent, SaveButtonComponent ],
     providers: [
       { provide: MatDialogRef, useValue: dialogRefMock },

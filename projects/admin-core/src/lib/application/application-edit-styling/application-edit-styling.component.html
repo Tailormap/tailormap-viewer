@@ -14,11 +14,4 @@
                            [resizeSize]="600"
                            [currentImage]="stylingConfig.logo"></tm-image-upload-field>
   </div>
-
-
-  <div class="page-details-actions">
-    <tm-admin-save-button [disabled]="!hasChanges" [saving$]="saving$" (save)="save()"></tm-admin-save-button>
-    <button mat-flat-button (click)="clearSelectedApplication()" routerLink="/applications" i18n>Close</button>
-  </div>
-
 </div>

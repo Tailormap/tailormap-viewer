@@ -1,9 +1,5 @@
-import { Component, OnInit, ChangeDetectionStrategy, inject, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Subject, take, takeUntil } from 'rxjs';
-import { ApplicationService } from '../services/application.service';
-import { selectDraftApplication } from '../state/application.selectors';
-import { Store } from '@ngrx/store';
-import { clearSelectedApplication } from '../state/application.actions';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'tm-admin-application-edit-components',
@@ -11,55 +7,13 @@ import { clearSelectedApplication } from '../state/application.actions';
   styleUrls: ['./application-edit-components.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ApplicationEditComponentsComponent implements OnInit, OnDestroy {
+export class ApplicationEditComponentsComponent {
 
   private selectedComponentSubject = new BehaviorSubject<string>('');
-
   public selectedComponent$ = this.selectedComponentSubject.asObservable();
-
-  private savingSubject = new BehaviorSubject(false);
-  public saving$ = this.savingSubject.asObservable();
-
-  private applicationService = inject(ApplicationService);
-
-  private store$ = inject(Store);
-
-  private destroyed = new Subject();
-  constructor() { }
-
-  public ngOnInit(): void {
-  }
-
-  public ngOnDestroy() {
-    this.destroyed.next(null);
-    this.destroyed.complete();
-  }
 
   public setSelectedComponent(value: string) {
     this.selectedComponentSubject.next(value);
-  }
-
-  public save() {
-    this.savingSubject.next(true);
-
-    this.store$.select(selectDraftApplication)
-      .pipe(take(1))
-      .subscribe(application => {
-        if (!application) {
-          return;
-        }
-        this.applicationService.updateApplication$(application.id, {
-          components: application.components,
-        })
-          .pipe(takeUntil(this.destroyed))
-          .subscribe(() => {
-            this.savingSubject.next(false);
-          });
-      });
-  }
-
-  public clearSelectedApplication() {
-    this.store$.dispatch(clearSelectedApplication());
   }
 
 }

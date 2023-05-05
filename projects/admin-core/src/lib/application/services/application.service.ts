@@ -7,7 +7,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { catchError, concatMap, distinctUntilChanged, map, of, Subject, takeUntil } from 'rxjs';
 import { SnackBarMessageComponent } from '@tailormap-viewer/shared';
 import {
-  addApplications, addApplicationTreeNodes, deleteApplication, loadApplicationServices, loadApplicationServicesSuccess, updateApplication,
+  addApplicationRootNodes,
+  addApplications, deleteApplication, loadApplicationServices, loadApplicationServicesSuccess, updateApplication,
 } from '../state/application.actions';
 import { selectDraftApplication } from '../state/application.selectors';
 import { CatalogService } from '../../catalog/services/catalog.service';
@@ -155,7 +156,7 @@ export class ApplicationService implements OnDestroy {
   }
 
   private addNodeToTree(tree: 'layer' | 'baseLayer', nodes: AppTreeNodeModel[]) {
-    this.store$.dispatch(addApplicationTreeNodes({ tree, treeNodes: nodes }));
+    this.store$.dispatch(addApplicationRootNodes({ tree, treeNodes: nodes }));
   }
 
   private createRootNode(title: string): AppTreeLevelNodeModel {

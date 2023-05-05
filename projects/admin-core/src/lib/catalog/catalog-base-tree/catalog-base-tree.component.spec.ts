@@ -71,8 +71,8 @@ describe('CatalogBaseTreeComponent', () => {
     await waitFor(() => {
       expect(mockApiService.getGeoServices$).toHaveBeenCalledTimes(1);
     });
-    expect(mockDispatch).toHaveBeenCalledTimes(4); // load catalog, expand, expand, add services
-    expect(mockDispatch.mock.calls[3][0].type).toEqual(addGeoServices.type);
+    expect(mockDispatch).toHaveBeenCalledTimes(3); // expand, expand, add services
+    expect(mockDispatch.mock.calls[2][0].type).toEqual(addGeoServices.type);
   });
 
   test('should render tree for nodes and not load service for already loaded services', async () => {
@@ -92,7 +92,7 @@ describe('CatalogBaseTreeComponent', () => {
     await userEvent.click(await screen.findByLabelText(`expand Background services`));
     await userEvent.click(await screen.findByLabelText(`expand Background services - aerial`));
     expect(mockApiService.getGeoServices$).not.toHaveBeenCalled();
-    expect(mockDispatch).toHaveBeenCalledTimes(3); // load catalog, expand, expand
+    expect(mockDispatch).toHaveBeenCalledTimes(2); // expand, expand
   });
 
 });

@@ -4,20 +4,18 @@ import { TreeModel, TreeNodePosition, TreeService } from '@tailormap-viewer/shar
 import {
   isLoadingApplicationServices,
   selectAppLayerTreeForSelectedApplication, selectBaseLayerTreeForSelectedApplication,
-  selectDraftApplication,
 } from '../state/application.selectors';
-import { BehaviorSubject, map, Observable, of, Subject, take, takeUntil } from 'rxjs';
+import { BehaviorSubject, map, Observable, of, Subject, takeUntil } from 'rxjs';
 import {
-  AppLayerSettingsModel, ApplicationModel, AppTreeLayerNodeModel, AppTreeLevelNodeModel, AppTreeNodeModel,
+  AppLayerSettingsModel, AppTreeLayerNodeModel, AppTreeLevelNodeModel, AppTreeNodeModel,
 } from '@tailormap-admin/admin-api';
 import {
-  addApplicationTreeNodes, clearSelectedApplication, removeApplicationTreeNode, updateApplicationNodeSettings, updateApplicationTreeNode,
+  addApplicationTreeNodes, removeApplicationTreeNode, updateApplicationNodeSettings, updateApplicationTreeNode,
   updateApplicationTreeNodeVisibility,
   updateApplicationTreeOrder,
 } from '../state/application.actions';
 import { nanoid } from 'nanoid';
 import { AddLayerEvent } from '../application-catalog-tree/application-catalog-tree.component';
-import { ApplicationService } from '../services/application.service';
 import { ApplicationTreeHelper } from '../helpers/application-tree.helper';
 
 @Component({
@@ -40,8 +38,6 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
 
   private destroyed = new Subject();
 
-  public hasChanges: Array<'tree'|'settings'> = [];
-
   @Input()
   public applicationStateTree: 'layer' | 'baseLayer' = 'layer';
 
@@ -53,7 +49,6 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
   constructor(
     private store$: Store,
     public applicationTreeService: TreeService<AppTreeNodeModel>,
-    private applicationService: ApplicationService,
   ) {}
 
   public ngOnInit(): void {

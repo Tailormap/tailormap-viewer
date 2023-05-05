@@ -68,6 +68,14 @@ export const addApplicationTreeNodes = createAction(
   }>(),
 );
 
+export const addApplicationRootNodes = createAction(
+  `${applicationActionsPrefix} Add Application Root Nodes`,
+  props<{
+    treeNodes: AppTreeNodeModel[];
+    tree: 'layer' | 'baseLayer';
+  }>(),
+);
+
 export const updateApplicationTreeOrder = createAction(
   `${applicationActionsPrefix} Update Application Tree Order`,
   props<{
