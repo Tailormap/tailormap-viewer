@@ -1,0 +1,10 @@
+.icon {
+  line-height: 16px;
+  height: 16px;
+}
+
+.icon mat-icon {
+  width: 16px;
+  height: 16px;
+  vertical-align: bottom;
+}

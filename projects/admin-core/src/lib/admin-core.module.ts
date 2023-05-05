@@ -64,7 +64,7 @@ export class AdminCoreModule {
   ) {
     const adminIcons = [{
       folder: 'admin',
-      icons: [ 'home', 'catalog', 'service', 'user', 'groups', 'feature_source', 'feature_type', 'application', 'more' ],
+      icons: [ 'home', 'catalog', 'service', 'user', 'groups', 'feature_source', 'feature_type', 'application', 'more', 'link_new_window' ],
     }];
     iconService.loadIconsToIconRegistry(matIconRegistry, domSanitizer);
     iconService.loadIconsToIconRegistry(matIconRegistry, domSanitizer, adminIcons);
