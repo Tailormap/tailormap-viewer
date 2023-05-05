@@ -74,7 +74,24 @@ export class ApplicationService implements OnDestroy {
         takeUntil(this.destroyed),
         concatMap(application => {
           if (application) {
-            return this.updateApplication$(application.id, application);
+            // Save specific properties only.
+            // By default, the API adds properties like _links etc., we don't want to patch those
+            const draftApplication: ApplicationModel = {
+              id: application.id,
+              name: application.name,
+              title: application.title,
+              adminComments: application.adminComments,
+              previewText: application.previewText,
+              crs: application.crs,
+              initialExtent: application.initialExtent,
+              maxExtent: application.maxExtent,
+              authenticatedRequired: application.authenticatedRequired,
+              contentRoot: application.contentRoot,
+              settings: application.settings,
+              components: application.components,
+              styling: application.styling,
+            };
+            return this.updateApplication$(draftApplication.id, draftApplication);
           }
           return of(null);
         }),
