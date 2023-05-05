@@ -3,9 +3,4 @@
     <tm-admin-application-form [application]="application"
                                (updateApplication)="updateApplication($event)"></tm-admin-application-form>
   </div>
-  <div class="page-details-actions">
-    <tm-admin-save-button [saving$]="saving$" [disabled]="!updatedApplication" (save)="save(application.id)"></tm-admin-save-button>
-    <button mat-flat-button color="warn" (click)="delete(application)" i18n>Delete</button>
-    <button mat-flat-button (click)="clearSelectedApplication()" routerLink="/applications" i18n>Close</button>
-  </div>
 </ng-container>

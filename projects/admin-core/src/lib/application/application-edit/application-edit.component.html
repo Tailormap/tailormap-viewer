@@ -9,6 +9,14 @@
     <a [routerLink]="routes.APPLICATION_DETAILS_COMPONENTS" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" i18n>Components</a>
   </div>
 
-  <router-outlet></router-outlet>
+  <div class="application-edit-content">
+    <router-outlet></router-outlet>
+  </div>
+
+  <div class="page-details-actions application-edit-buttons">
+    <tm-admin-save-button [saving$]="saving$" [disabled]="draftApplicationPristine$ | async" (save)="save()"></tm-admin-save-button>
+    <button mat-flat-button color="warn" (click)="delete(application)" i18n>Delete</button>
+    <button mat-flat-button (click)="clearSelectedApplication()" routerLink="/applications" i18n>Close</button>
+  </div>
 
 </ng-container>

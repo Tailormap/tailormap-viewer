@@ -6,7 +6,7 @@ import { selectDraftApplication } from '../state/application.selectors';
 import { ApplicationModel } from '@tailormap-admin/admin-api';
 import { ApplicationService } from '../services/application.service';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
-import { clearSelectedApplication } from '../state/application.actions';
+import { clearSelectedApplication, updateApplication, updateDraftApplication } from '../state/application.actions';
 
 @Component({
   selector: 'tm-admin-application-edit-settings',
@@ -61,7 +61,7 @@ export class ApplicationEditSettingsComponent implements OnInit, OnDestroy {
   }
 
   public updateApplication($event: Omit<ApplicationModel, 'id'>) {
-    this.updatedApplication = $event;
+    this.store$.dispatch(updateDraftApplication({ application: $event }));
   }
 
   public delete(application: ApplicationModel) {

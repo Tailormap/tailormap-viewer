@@ -10,10 +10,12 @@ export interface ApplicationState {
   applications: ApplicationModel[];
   applicationListFilter?: string | null;
   draftApplication?: ApplicationModel | null;
+  draftApplicationUpdated: boolean;
 }
 
 export const initialApplicationState: ApplicationState = {
   applicationsLoadStatus: LoadingStateEnum.INITIAL,
   applications: [],
   applicationServicesLoadStatus: LoadingStateEnum.INITIAL,
+  draftApplicationUpdated: false,
 };

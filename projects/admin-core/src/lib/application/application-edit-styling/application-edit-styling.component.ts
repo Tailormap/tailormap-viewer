@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { BehaviorSubject, concatMap, Observable, of, take } from 'rxjs';
 import { PopoverPositionEnum } from '@tailormap-viewer/shared';
 import { ViewerStylingModel } from '@tailormap-viewer/api';
-import { selectDraftApplication, selectSelectedApplicationId, selectStylingConfig } from '../state/application.selectors';
+import { selectDraftApplication, selectStylingConfig } from '../state/application.selectors';
 import { ApplicationService } from '../services/application.service';
 import { clearSelectedApplication, updateApplicationStylingConfig } from '../state/application.actions';
 
@@ -33,18 +33,7 @@ export class ApplicationEditStylingComponent {
   }
 
   private updateStyling(styling: ViewerStylingModel) {
-    this.store$.select(selectSelectedApplicationId)
-      .pipe(take(1))
-      .subscribe(applicationId => {
-        if (!applicationId) {
-          return;
-        }
-        this.hasChanges = true;
-        this.store$.dispatch(updateApplicationStylingConfig({
-          applicationId,
-          styling,
-        }));
-      });
+    this.store$.dispatch(updateApplicationStylingConfig({ styling }));
   }
 
   public clearSelectedApplication() {

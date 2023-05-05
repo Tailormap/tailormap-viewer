@@ -4,7 +4,7 @@ import {
   ApplicationModel, AppTreeLevelNodeModel, AppTreeNodeModel, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel,
 } from '@tailormap-admin/admin-api';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { catchError, distinctUntilChanged, map, of, Subject, takeUntil } from 'rxjs';
+import { catchError, concatMap, distinctUntilChanged, map, of, Subject, takeUntil } from 'rxjs';
 import { SnackBarMessageComponent } from '@tailormap-viewer/shared';
 import {
   addApplications, addApplicationTreeNodes, deleteApplication, loadApplicationServices, loadApplicationServicesSuccess, updateApplication,
@@ -63,6 +63,19 @@ export class ApplicationService implements OnDestroy {
             return createApplication;
           }
           return null;
+        }),
+      );
+  }
+
+  public saveDraftApplication$() {
+    return this.store$.select(selectDraftApplication)
+      .pipe(
+        takeUntil(this.destroyed),
+        concatMap(application => {
+          if (application) {
+            return this.updateApplication$(application.id, application);
+          }
+          return of(null);
         }),
       );
   }
@@ -134,15 +147,15 @@ export class ApplicationService implements OnDestroy {
       return;
     }
     if ((application.contentRoot?.layerNodes || []).length === 0) {
-      this.addNodeToTree(application.id, 'layer', [this.createRootNode(ApplicationService.ROOT_NODE_TITLE)]);
+      this.addNodeToTree('layer', [this.createRootNode(ApplicationService.ROOT_NODE_TITLE)]);
     }
     if ((application.contentRoot?.baseLayerNodes || []).length === 0) {
-      this.addNodeToTree(application.id, 'baseLayer', [this.createRootNode(ApplicationService.ROOT_BACKGROUND_NODE_TITLE)]);
+      this.addNodeToTree('baseLayer', [this.createRootNode(ApplicationService.ROOT_BACKGROUND_NODE_TITLE)]);
     }
   }
 
-  private addNodeToTree(applicationId: string, tree: 'layer' | 'baseLayer', nodes: AppTreeNodeModel[]) {
-    this.store$.dispatch(addApplicationTreeNodes({ applicationId, tree, treeNodes: nodes }));
+  private addNodeToTree(tree: 'layer' | 'baseLayer', nodes: AppTreeNodeModel[]) {
+    this.store$.dispatch(addApplicationTreeNodes({ tree, treeNodes: nodes }));
   }
 
   private createRootNode(title: string): AppTreeLevelNodeModel {

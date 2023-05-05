@@ -52,10 +52,14 @@ export const deleteApplication = createAction(
   props<{ applicationId: string }>(),
 );
 
+export const updateDraftApplication = createAction(
+  `${applicationActionsPrefix} Update Draft Application`,
+  props<{ application: Omit<ApplicationModel, 'id'> }>(),
+);
+
 export const addApplicationTreeNodes = createAction(
   `${applicationActionsPrefix} Add Application Tree Nodes`,
   props<{
-    applicationId: string;
     treeNodes: AppTreeNodeModel[];
     tree: 'layer' | 'baseLayer';
     parentId?: string;
@@ -67,7 +71,6 @@ export const addApplicationTreeNodes = createAction(
 export const updateApplicationTreeOrder = createAction(
   `${applicationActionsPrefix} Update Application Tree Order`,
   props<{
-    applicationId: string;
     nodeId: string;
     tree: 'layer' | 'baseLayer';
     parentId?: string;
@@ -78,18 +81,17 @@ export const updateApplicationTreeOrder = createAction(
 
 export const updateApplicationTreeNode = createAction(
   `${applicationActionsPrefix} Update Application Tree Node`,
-  props<{ applicationId: string; nodeId: string; updatedNode: Partial<AppTreeNodeModel>; tree: 'layer' | 'baseLayer' }>(),
+  props<{ nodeId: string; updatedNode: Partial<AppTreeNodeModel>; tree: 'layer' | 'baseLayer' }>(),
 );
 
 export const removeApplicationTreeNode = createAction(
   `${applicationActionsPrefix} Remove Application Tree Node`,
-  props<{ applicationId: string; nodeId: string; tree: 'layer' | 'baseLayer' }>(),
+  props<{ nodeId: string; tree: 'layer' | 'baseLayer' }>(),
 );
 
 export const updateApplicationTreeNodeVisibility = createAction(
   `${applicationActionsPrefix} Update Application Tree Node Visibility`,
   props<{
-    applicationId: string;
     tree: 'layer' | 'baseLayer';
     visibility: Array<{ nodeId: string; visible: boolean }>;
   }>(),
@@ -97,7 +99,7 @@ export const updateApplicationTreeNodeVisibility = createAction(
 
 export const updateApplicationNodeSettings = createAction(
   `${applicationActionsPrefix} Update Application Node Settings`,
-  props<{ applicationId: string; nodeId: string; settings: AppLayerSettingsModel | null }>(),
+  props<{ nodeId: string; settings: AppLayerSettingsModel | null }>(),
 );
 
 export const loadApplicationServices = createAction(
@@ -110,10 +112,10 @@ export const loadApplicationServicesSuccess = createAction(
 
 export const updateApplicationComponentConfig = createAction(
   `${applicationActionsPrefix} Update component config`,
-  props<{ applicationId: string; componentType: string; config: ComponentBaseConfigModel }>(),
+  props<{ componentType: string; config: ComponentBaseConfigModel }>(),
 );
 
 export const updateApplicationStylingConfig = createAction(
   `${applicationActionsPrefix} Update styling config`,
-  props<{ applicationId: string; styling: ViewerStylingModel }>(),
+  props<{ styling: ViewerStylingModel }>(),
 );

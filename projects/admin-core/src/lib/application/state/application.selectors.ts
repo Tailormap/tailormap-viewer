@@ -13,6 +13,7 @@ export const selectApplicationListFilter = createSelector(selectApplicationState
 export const selectDraftApplication = createSelector(selectApplicationState, state => state.draftApplication || null);
 export const selectSelectedApplicationId = createSelector(selectApplicationState, state => state.draftApplication?.id || null);
 export const selectApplicationServicesLoadStatus = createSelector(selectApplicationState, state => state.applicationServicesLoadStatus);
+export const selectDraftApplicationUpdated = createSelector(selectApplicationState, state => state.draftApplicationUpdated);
 
 export const isLoadingApplicationServices = createSelector(
   selectApplicationServicesLoadStatus,
