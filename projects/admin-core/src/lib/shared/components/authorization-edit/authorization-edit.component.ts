@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { AuthorizationRuleDecision, AuthorizationRuleGroup, GroupModel } from '@tailormap-admin/admin-api';
+import { AuthorizationRuleDecision, AuthorizationRuleGroup, AuthorizationGroups, GroupModel } from '@tailormap-admin/admin-api';
 import { Subject } from 'rxjs';
 
 @Component({
@@ -56,8 +56,8 @@ export class AuthorizationEditComponent implements OnInit, OnDestroy, ControlVal
           this._onChange(value);
       }
 
-      const anonymousGroup = this.value.find(a => a.groupName === 'anonymous');
-      const loggedInGroup = this.value.find(a => a.groupName === 'authenticated');
+      const anonymousGroup = this.value.find(a => a.groupName === AuthorizationGroups.ANONYMOUS);
+      const loggedInGroup = this.value.find(a => a.groupName === AuthorizationGroups.APP_AUTHENTICATED);
 
       if (anonymousGroup?.decisions?.['read'] === AuthorizationRuleDecision.ALLOW) {
           this.selectedChip = 'anonymous';
@@ -83,13 +83,13 @@ export class AuthorizationEditComponent implements OnInit, OnDestroy, ControlVal
   public changeAuthenticationType(type: string) {
       switch (type) {
       case 'anonymous':
-          this.updateValue([{ groupName: 'anonymous', decisions: { read: AuthorizationRuleDecision.ALLOW } }], true);
+          this.updateValue([{ groupName: AuthorizationGroups.ANONYMOUS, decisions: { read: AuthorizationRuleDecision.ALLOW } }], true);
           break;
       case 'loggedIn':
-          this.updateValue([{ groupName: 'authenticated', decisions: { read: AuthorizationRuleDecision.ALLOW } }], true);
+          this.updateValue([{ groupName: AuthorizationGroups.APP_AUTHENTICATED, decisions: { read: AuthorizationRuleDecision.ALLOW } }], true);
           break;
       case 'specificGroups':
-          this.updateValue(this.value.filter(a => a.groupName !== 'anonymous' && a.groupName !== 'authenticated'), true);
+          this.updateValue(this.value.filter(a => a.groupName !== AuthorizationGroups.ANONYMOUS && a.groupName !== AuthorizationGroups.APP_AUTHENTICATED), true);
           break;
       }
   }

@@ -8,7 +8,12 @@ export interface AuthorizationRuleGroup {
   decisions: { [name: string]: AuthorizationRuleDecision },
 }
 
+export enum AuthorizationGroups {
+  ANONYMOUS = 'anonymous',
+  APP_AUTHENTICATED = 'app-authenticated',
+};
+
 export const AUTHORIZATION_RULE_ANONYMOUS: AuthorizationRuleGroup = {
-    groupName: 'anonymous',
+    groupName: AuthorizationGroups.ANONYMOUS,
     decisions: { read: AuthorizationRuleDecision.ALLOW },
 };
