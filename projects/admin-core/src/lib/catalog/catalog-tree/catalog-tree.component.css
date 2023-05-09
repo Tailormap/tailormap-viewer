@@ -1,3 +1,8 @@
 :host ::ng-deep .tree-wrapper {
-  max-height: calc((100 * var(--vh)) - var(--header-height) - 34px);
+  max-height: var(--content-height);
+}
+
+:host ::ng-deep mat-tree {
+  min-width: min-content;
+  max-width: 100%;
 }

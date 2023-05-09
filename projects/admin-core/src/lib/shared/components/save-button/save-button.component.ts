@@ -13,7 +13,10 @@ export class SaveButtonComponent {
   public saving$: Observable<boolean> = of(false);
 
   @Input()
-  public disabled = false;
+  public disabled: boolean | null = false;
+
+  @Input()
+  public label?: string;
 
   @Output()
   public save = new EventEmitter();

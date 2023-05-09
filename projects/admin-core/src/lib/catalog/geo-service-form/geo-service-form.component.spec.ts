@@ -3,13 +3,14 @@ import { GeoServiceFormComponent } from './geo-service-form.component';
 import { SharedModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
+import { MatIconTestingModule } from '@angular/material/icon/testing';
 
 describe('GeoServiceFormComponent', () => {
 
   test('should render', async () => {
     const changedFn = jest.fn();
     await render(GeoServiceFormComponent, {
-      imports: [SharedModule],
+      imports: [ SharedModule, MatIconTestingModule ],
       declarations: [PasswordFieldComponent],
       componentProperties: {
         changed: {

@@ -1,8 +1,8 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject, ChangeDetectorRef, Input, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Subject, take, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { ComponentBaseConfigModel } from '@tailormap-viewer/api';
-import { selectComponentsConfigByType, selectSelectedApplicationId } from '../../state/application.selectors';
+import { selectComponentsConfigByType } from '../../state/application.selectors';
 import { ComponentConfigHelper } from '../../helpers/component-config.helper';
 import { updateApplicationComponentConfig } from '../../state/application.actions';
 
@@ -54,25 +54,16 @@ export class BaseComponentConfigComponent implements OnInit, OnDestroy {
   }
 
   public toggleEnabled() {
-
-    this.store$.select(selectSelectedApplicationId)
-      .pipe(take(1))
-      .subscribe(applicationId => {
-        if (!applicationId) {
-          return;
-        }
-        if (!this.config || !this.type) {
-          return;
-        }
-        this.store$.dispatch(updateApplicationComponentConfig({
-          applicationId,
-          componentType: this.type,
-          config: {
-            ...this.config,
-            enabled: !this.config.enabled,
-          },
-        }));
-      });
+    if (!this.config || !this.type) {
+      return;
+    }
+    this.store$.dispatch(updateApplicationComponentConfig({
+      componentType: this.type,
+      config: {
+        ...this.config,
+        enabled: !this.config.enabled,
+      },
+    }));
   }
 
 }

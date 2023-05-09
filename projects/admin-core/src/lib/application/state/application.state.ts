@@ -9,11 +9,13 @@ export interface ApplicationState {
   applicationServicesLoadStatus: LoadingStateEnum;
   applications: ApplicationModel[];
   applicationListFilter?: string | null;
-  selectedApplication?: string | null;
+  draftApplication?: ApplicationModel | null;
+  draftApplicationUpdated: boolean;
 }
 
 export const initialApplicationState: ApplicationState = {
   applicationsLoadStatus: LoadingStateEnum.INITIAL,
   applications: [],
   applicationServicesLoadStatus: LoadingStateEnum.INITIAL,
+  draftApplicationUpdated: false,
 };

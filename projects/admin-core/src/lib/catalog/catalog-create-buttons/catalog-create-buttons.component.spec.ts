@@ -18,6 +18,7 @@ import { CatalogNodeFormComponent } from '../catalog-node-form/catalog-node-form
 import { GeoServiceFormComponent } from '../geo-service-form/geo-service-form.component';
 import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
 import { Router } from '@angular/router';
+import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
 
 const setup = async (hasNode = false) => {
   const createCatalogNodeMock = jest.fn(() => of(true));
@@ -39,6 +40,7 @@ const setup = async (hasNode = false) => {
       CatalogNodeFormComponent,
       GeoServiceFormComponent,
       SaveButtonComponent,
+      PasswordFieldComponent,
     ],
     componentInputs: {
       node: hasNode ? catalogNodeModel : null,

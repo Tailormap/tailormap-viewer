@@ -4,12 +4,13 @@ import {
   ApplicationModel, AppTreeLevelNodeModel, AppTreeNodeModel, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel,
 } from '@tailormap-admin/admin-api';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { catchError, distinctUntilChanged, map, of, Subject, takeUntil } from 'rxjs';
+import { catchError, concatMap, distinctUntilChanged, map, of, Subject, takeUntil } from 'rxjs';
 import { SnackBarMessageComponent } from '@tailormap-viewer/shared';
 import {
-  addApplications, addApplicationTreeNodes, deleteApplication, loadApplicationServices, loadApplicationServicesSuccess, updateApplication,
+  addApplicationRootNodes,
+  addApplications, deleteApplication, loadApplicationServices, loadApplicationServicesSuccess, updateApplication,
 } from '../state/application.actions';
-import { selectSelectedApplication } from '../state/application.selectors';
+import { selectDraftApplication } from '../state/application.selectors';
 import { CatalogService } from '../../catalog/services/catalog.service';
 import { ApplicationModelHelper } from '../helpers/application-model.helper';
 
@@ -32,7 +33,7 @@ export class ApplicationService implements OnDestroy {
     private snackBar: MatSnackBar,
     private catalogService: CatalogService,
   ) {
-    this.store$.select(selectSelectedApplication)
+    this.store$.select(selectDraftApplication)
       .pipe(
         takeUntil(this.destroyed),
         distinctUntilChanged((a, b) => {
@@ -63,6 +64,36 @@ export class ApplicationService implements OnDestroy {
             return createApplication;
           }
           return null;
+        }),
+      );
+  }
+
+  public saveDraftApplication$() {
+    return this.store$.select(selectDraftApplication)
+      .pipe(
+        takeUntil(this.destroyed),
+        concatMap(application => {
+          if (application) {
+            // Save specific properties only.
+            // By default, the API adds properties like _links etc., we don't want to patch those
+            const draftApplication: ApplicationModel = {
+              id: application.id,
+              name: application.name,
+              title: application.title,
+              adminComments: application.adminComments,
+              previewText: application.previewText,
+              crs: application.crs,
+              initialExtent: application.initialExtent,
+              maxExtent: application.maxExtent,
+              authenticatedRequired: application.authenticatedRequired,
+              contentRoot: application.contentRoot,
+              settings: application.settings,
+              components: application.components,
+              styling: application.styling,
+            };
+            return this.updateApplication$(draftApplication.id, draftApplication);
+          }
+          return of(null);
         }),
       );
   }
@@ -134,15 +165,15 @@ export class ApplicationService implements OnDestroy {
       return;
     }
     if ((application.contentRoot?.layerNodes || []).length === 0) {
-      this.addNodeToTree(application.id, 'layer', [this.createRootNode(ApplicationService.ROOT_NODE_TITLE)]);
+      this.addNodeToTree('layer', [this.createRootNode(ApplicationService.ROOT_NODE_TITLE)]);
     }
     if ((application.contentRoot?.baseLayerNodes || []).length === 0) {
-      this.addNodeToTree(application.id, 'baseLayer', [this.createRootNode(ApplicationService.ROOT_BACKGROUND_NODE_TITLE)]);
+      this.addNodeToTree('baseLayer', [this.createRootNode(ApplicationService.ROOT_BACKGROUND_NODE_TITLE)]);
     }
   }
 
-  private addNodeToTree(applicationId: string, tree: 'layer' | 'baseLayer', nodes: AppTreeNodeModel[]) {
-    this.store$.dispatch(addApplicationTreeNodes({ applicationId, tree, treeNodes: nodes }));
+  private addNodeToTree(tree: 'layer' | 'baseLayer', nodes: AppTreeNodeModel[]) {
+    this.store$.dispatch(addApplicationRootNodes({ tree, treeNodes: nodes }));
   }
 
   private createRootNode(title: string): AppTreeLevelNodeModel {

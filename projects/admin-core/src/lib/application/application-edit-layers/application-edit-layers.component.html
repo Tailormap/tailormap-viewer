@@ -28,7 +28,3 @@
                                          (layerSettingsChange)="layerSettingsChanged($event)"></tm-admin-application-layer-settings>
   </div>
 </div>
-<div class="page-details-actions">
-  <tm-admin-save-button [saving$]="saving$" [disabled]="hasChanges.length === 0" (save)="save()"></tm-admin-save-button>
-  <button mat-flat-button (click)="clearSelectedApplication()" routerLink="/applications" i18n>Close</button>
-</div>

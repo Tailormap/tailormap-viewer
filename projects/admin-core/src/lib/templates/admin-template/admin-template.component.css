@@ -21,10 +21,13 @@
 }
 
 .content {
+  --content-height: calc(100vh - var(--header-height) - 32px); /* 100vh - header - padding */
+
   flex: 1;
   display: flex;
-  flex-direction: column;
   justify-content: stretch;
+  align-items: stretch;
+  padding: 16px;
 }
 
 .page-title {
@@ -58,38 +61,43 @@
   white-space: nowrap;
 }
 
-.content-wrapper {
+.content ::ng-deep .admin-page-wrapper {
   flex: 1;
-  padding: 16px;
-}
-
-.content-wrapper ::ng-deep .admin-page-wrapper {
   display: flex;
   flex-direction: row;
   justify-content: stretch;
-  max-height: 100%;
+  max-height: var(--content-height);
 }
 
-.content-wrapper ::ng-deep .admin-tree {
+.content ::ng-deep .admin-tree {
   width: 300px;
+  overflow: hidden;
 }
 
-.content-wrapper ::ng-deep .admin-content {
+.content ::ng-deep .admin-content {
   flex: 1;
   margin-left: 16px;
+  overflow: auto;
+}
+
+.content ::ng-deep .admin-content-wrapper {
   max-width: 500px;
 }
 
-.content-wrapper ::ng-deep .admin-content .page-details-title {
+.content ::ng-deep .full-screen-settings .admin-content-wrapper {
+  max-width: none;
+}
+
+.content ::ng-deep .admin-content .page-details-title {
   margin-bottom: 1em;
 }
 
-.content-wrapper ::ng-deep .admin-content .page-details-actions {
+.content ::ng-deep .admin-content .page-details-actions {
   margin: 1em 0;
 }
 
-.content-wrapper ::ng-deep .admin-content .page-details-actions button + tm-admin-save-button,
-.content-wrapper ::ng-deep .admin-content .page-details-actions tm-admin-save-button + button,
-.content-wrapper ::ng-deep .admin-content .page-details-actions button + button {
+.content ::ng-deep .admin-content .page-details-actions button + tm-admin-save-button,
+.content ::ng-deep .admin-content .page-details-actions tm-admin-save-button + button,
+.content ::ng-deep .admin-content .page-details-actions button + button {
   margin-left: 16px;
 }

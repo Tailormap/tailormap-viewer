@@ -42,7 +42,7 @@ export class CatalogBaseTreeComponent implements OnInit, OnDestroy {
     this.store$.select(selectCatalogLoadStatus)
       .pipe(take(1))
       .subscribe(loadStatus => {
-        if (loadStatus === LoadingStateEnum.INITIAL || loadStatus === LoadingStateEnum.LOADED) {
+        if (loadStatus === LoadingStateEnum.INITIAL || loadStatus === LoadingStateEnum.FAILED) {
           this.store$.dispatch(loadCatalog());
         }
       });
