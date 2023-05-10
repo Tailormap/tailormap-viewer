@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { ConfigModel, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel } from '@tailormap-admin/admin-api';
-import { BehaviorSubject, catchError, map, Observable, of, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, of, tap } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({
@@ -20,25 +20,27 @@ export class ConfigService {
   public getConfig$(key: string): Observable<ConfigModel | null> {
     return this.configSubject.asObservable()
       .pipe(
-        switchMap(configMap => {
-          const config = configMap.get(key);
-          if (config) {
-            return of(config);
+        tap(configMap => {
+          if (!configMap.has(key)) {
+            this.fetchConfig$(key);
           }
-          return this.adminApiService.getConfig$({ key })
-            .pipe(
-              catchError(() => of(null)),
-              tap(c => {
-                if (c) {
-                  this.setConfigValue(c);
-                }
-              }),
-              switchMap(() => this.configSubject.asObservable().pipe(
-                map(m => m.get(key) || null),
-              )),
-            );
+        }),
+        map(configMap => {
+          return configMap.get(key) || null;
         }),
       );
+  }
+
+  private fetchConfig$(key: string): void {
+    this.adminApiService.getConfig$({ key })
+      .pipe(
+        catchError(() => of(null)),
+      )
+      .subscribe(config => {
+        if (config) {
+          this.setConfigValue(config);
+        }
+      });
   }
 
   public getConfigValue$(key: string): Observable<string | null> {

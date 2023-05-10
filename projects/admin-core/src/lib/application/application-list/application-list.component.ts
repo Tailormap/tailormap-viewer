@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { ApplicationModel } from '@tailormap-admin/admin-api';
-import { distinctUntilChanged, map, Observable, of, Subject, take, takeUntil, combineLatest, concatMap } from 'rxjs';
+import { distinctUntilChanged, map, Observable, of, Subject, take, takeUntil, combineLatest } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { clearSelectedApplication, loadApplications, setApplicationListFilter } from '../state/application.actions';
@@ -44,16 +44,13 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
       });
     this.applicationsLoadStatus$ = this.store$.select(selectApplicationsLoadStatus);
     this.errorMessage$ = this.store$.select(selectApplicationsLoadError);
-    this.applications$ = this.configService.getConfigValue$(ConfigService.DEFAULT_APPLICATION_KEY)
+    this.applications$ = combineLatest([
+      this.store$.select(selectApplicationList),
+      this.store$.select(selectSelectedApplicationId).pipe(distinctUntilChanged()),
+      this.configService.getConfigValue$(ConfigService.DEFAULT_APPLICATION_KEY),
+    ])
       .pipe(
         distinctUntilChanged(),
-        concatMap(defaultApplication => {
-          return combineLatest([
-            this.store$.select(selectApplicationList),
-            this.store$.select(selectSelectedApplicationId).pipe(distinctUntilChanged()),
-            of(defaultApplication),
-          ]);
-        }),
         map(([ applications, selectedApplicationId, defaultApplication ]) => {
           return applications.map(a => ({
             ...a,
