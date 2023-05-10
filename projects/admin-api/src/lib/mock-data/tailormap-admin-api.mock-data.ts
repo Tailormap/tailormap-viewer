@@ -56,6 +56,7 @@ export const getServiceCaps = (): ServiceCapsModel => ({
 });
 
 export const getGeoServiceLayer = (overrides?: Partial<GeoServiceLayerModel>): GeoServiceLayerModel => ({
+  id: '1',
   title: 'Gemeentegebied',
   name: 'Gemeentegebied',
   root: true,
@@ -82,8 +83,8 @@ export const getGeoService = (overrides?: Partial<GeoServiceWithLayersModel>): G
   advertisedUrl: 'https://service.pdok.nl/kadaster/bestuurlijkegebieden/wms/v1_0',
   layers: [
     getGeoServiceLayer(),
-    getGeoServiceLayer({ title: 'Provinciegebied', name: 'Provinciegebied' }),
-    getGeoServiceLayer({ title: 'Landgebied', name: 'Landgebied' }),
+    getGeoServiceLayer({ id: '2', title: 'Provinciegebied', name: 'Provinciegebied' }),
+    getGeoServiceLayer({ id: '3', title: 'Landgebied', name: 'Landgebied' }),
   ],
   settings: {
     serverType: ServerType.GEOSERVER,

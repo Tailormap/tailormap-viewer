@@ -1,4 +1,5 @@
 export interface GeoServiceLayerModel {
+  id: string;
   name: string;
   root: boolean;
   title: string;

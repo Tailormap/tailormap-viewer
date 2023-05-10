@@ -8,10 +8,9 @@ export class CatalogModelHelper {
 
   public static getExtendedGeoServiceLayer(geoService: GeoServiceWithLayersModel, catalogNodeId: string): ExtendedGeoServiceLayerModel[] {
     const serviceLayers = geoService.layers.map((layer, idx) => {
-      const id = layer.name || `virtual-layer-${idx}`;
       return {
         ...layer,
-        id: `${geoService.id}_${id}`,
+        id: `${geoService.id}_${layer.id}`,
         serviceId: `${geoService.id}`,
         catalogNodeId,
       };
@@ -19,7 +18,7 @@ export class CatalogModelHelper {
     return serviceLayers.map<ExtendedGeoServiceLayerModel>(layer => ({
       ...layer,
       children: layer.children // map children to point to ID instead of name
-        ? layer.children.map<string>(child => serviceLayers.find(l => l.name === child)?.id || '')
+        ? layer.children.map<string>(id => `${geoService.id}_${id}`)
         : null,
     }));
   }
