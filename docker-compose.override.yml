@@ -1,10 +1,7 @@
-# Extra ports for development. For production only specify COMPOSE_FILE=docker-compose.yml.
+# Default override when running locally: binds to 127.0.0.1:8080 or another port specified in an env-file.
+# When running behind a Docker reverse proxy specify only COMPOSE_FILE=docker-compose.yml to disable this port binding.
 
 services:
   tailormap:
     ports:
       - 127.0.0.1:${LOCALHOST_PORT:-8080}:8080
-
-  db:
-    ports:
-      - "127.0.0.1:${DB_PORT:-5432}:5432"

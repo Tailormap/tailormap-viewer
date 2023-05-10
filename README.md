@@ -11,16 +11,17 @@ run:
 docker compose up -d
 ```
 
-This runs Tailormap on http://localhost:8080/ and PostgreSQL on localhost:5432. If other applications are listening on these ports, copy
-`.env.template` to `.env` and change the variables for the ports. Tailormap will only accept connections from the loopback interface.
+This runs Tailormap on http://localhost:8080/ together with a PostgreSQL container to store configuration. The port (and other options) can
+be changed by copying `.env.template` to `.env` and changing the variables. Tailormap will only accept connections from the loopback
+interface.
 
 Remove the Tailormap stack using `docker compose down` (add `-v` to remove the volume with the database).
 
 By default, the latest development Docker image will be used (tagged with `snapshot`). This is published automatically by a GitHub Action on
 every change to the `main` branch, so this might be an unstable version. To use the latest (stable) released version, copy `.env.template`
 to `.env` and set the `VERSION` variable to `latest` before running. To update a running stack after a new version is released,
-run `docker compose` with the `pull` and `up` commands but _check the release
-notes beforehand_.
+run `docker compose` with the `pull` and `up` commands but _check the release notes beforehand_ because it may contain important information
+about upgrading to a new version.
 
 ## Running just the Tailormap container
 
@@ -40,8 +41,9 @@ Specify the following command line parameters with `docker run` to change the da
 - `-e SPRING_DATASOURCE_USERNAME=user`
 - `-e SPRING_DATASOURCE_PASSWORD=pass`
 
-If your database is running on localhost using `--network=host` is recommended. If your database is on another host you can specify
-`--publish 8080:8080` instead. Of course, you need to specify `SPRING_DATASOURCE_URL` with the database hostname.
+If your database is running on localhost using `--network=host` is recommended (you can try using the hostname `host.docker.internal` but
+that may not always work). If your database is on another host you can specify `--publish 8080:8080` instead of `--network=host`. Of course,
+you need to specify `SPRING_DATASOURCE_URL` with the database hostname.
 
 ## Default admin account
 
@@ -79,7 +81,7 @@ tailormap-server  | *** Password: ***********
 If you ever forget the admin password but do not want to re-initialize the database, reset the password with:
 
 ```
- HASH=`docker run --rm rocko/spring-boot-cli-docker spring encodepassword [newpassword]
+ HASH=`docker run --rm rocko/spring-boot-cli-docker spring encodepassword [newpassword]`
 docker compose exec --user postgres db \
   psql tailormap -U tailormap -c "update users set password = '${HASH}' where username = 'tm-admin'"
 ```
@@ -95,8 +97,8 @@ To run Tailormap in production, you need to put it behind a reverse proxy that h
 Copy the `.env.template` file to `.env` and change the `HOST` variable to the hostname Tailormap will be running on. Tailormap must run on
 the `/` path.
 
-If you're using a reverse proxy without Docker just reverse proxy 127.0.0.1:8080 (this port is added in `docker-compose.override.yml` along
-with the PostgreSQL port). The ports can be changed in an `.env` file or by using another override file in `COMPOSE_FILE`.
+If you're using a reverse proxy without Docker just reverse proxy 127.0.0.1:8080 (this port binding is added in
+`docker-compose.override.yml`). The ports can be changed in an `.env` file or by using another override file in `COMPOSE_FILE`.
 
 It's a good idea to use Traefik as a reverse proxy because it can be automatically configured by Docker labels and can automatically request
 Let's Encrypt certificates. Add `docker-compose.traefik.yml` to `COMPOSE_FILE` in the `.env` file. See the file for details.
@@ -163,9 +165,12 @@ reload if you change any of the source files.
 
 ### Connecting to the PostgreSQL database
 
+To bind the port of the PostgreSQL database of the Docker Compose stack, add `docker-compose.db-port.yml` to the `COMPOSE_FILE` environment
+variable in the `.env` file when running `docker compose up`, see [above](#running-using-docker-compose).
+
 You can connect to the PostgreSQL database with `psql -h localhost -U tailormap tailormap` with the default password `tailormap`.
 
-The port PostgreSQL listens on can be customized using the `DB_PORT` variable in an `.env` file.
+The port PostgreSQL listens on can be customized using the `DB_PORT` variable in the `.env` file.
 
 ### Using a local Tailormap backend
 
