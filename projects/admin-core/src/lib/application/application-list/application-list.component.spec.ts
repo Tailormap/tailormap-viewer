@@ -8,6 +8,9 @@ import { ApplicationState, applicationStateKey, initialApplicationState } from '
 import { Store } from '@ngrx/store';
 import { loadApplications } from '../state/application.actions';
 import userEvent from '@testing-library/user-event';
+import { of } from 'rxjs';
+import { ConfigService } from '../../config/services/config.service';
+import { MatIconTestingModule } from '@angular/material/icon/testing';
 
 const setup = async (
   loadStatus: LoadingStateEnum = LoadingStateEnum.INITIAL,
@@ -29,10 +32,12 @@ const setup = async (
     initialState: { [applicationStateKey]: applicationState },
   });
   mockStore.dispatch = jest.fn();
+  const configService = { getConfigValue$: jest.fn(() => of('app2')) };
   await render(ApplicationListComponent, {
-    imports: [ SharedModule, MatListModule ],
+    imports: [ SharedModule, MatListModule, MatIconTestingModule ],
     providers: [
       { provide: Store, useValue: mockStore },
+      { provide: ConfigService, useValue: configService },
     ],
   });
   return { mockStore, appModels };
@@ -56,8 +61,9 @@ describe('ApplicationListComponent', () => {
 
   test('should render list of applications', async () => {
     await setup(LoadingStateEnum.LOADED);
-    expect(await screen.findByText('Amazing application')).toBeInTheDocument();
     expect(await screen.findByText('Something different')).toBeInTheDocument();
+    expect(await screen.findByLabelText('Default application')).toBeInTheDocument();
+    expect(await screen.findByText('Amazing application')).toBeInTheDocument();
   });
 
   test('should render filtered list of applications', async () => {

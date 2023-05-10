@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { TailormapAdminApiV1ServiceModel } from './tailormap-admin-api-v1-service.model';
 import { map, Observable } from 'rxjs';
 import {
-  CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel,
+  CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel, ConfigModel,
 } from '../models';
 import { CatalogModelHelper } from '../helpers/catalog-model.helper';
 
@@ -182,6 +182,18 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
     }).pipe(
       map(response => response.status === 204),
     );
+  }
+
+  public getConfig$(params: { key: string }): Observable<ConfigModel> {
+    return this.httpClient.get<ConfigModel>(`${TailormapAdminApiV1Service.BASE_URL}/configs/${params.key}`);
+  }
+
+  public createConfig$(params: { config: ConfigModel }): Observable<ConfigModel> {
+    return this.httpClient.post<ConfigModel>(`${TailormapAdminApiV1Service.BASE_URL}/configs`, params.config);
+  }
+
+  public updateConfig$(params: { config: ConfigModel }): Observable<ConfigModel> {
+    return this.httpClient.patch<ConfigModel>(`${TailormapAdminApiV1Service.BASE_URL}/configs/${params.config.key}`, params.config);
   }
 
 }

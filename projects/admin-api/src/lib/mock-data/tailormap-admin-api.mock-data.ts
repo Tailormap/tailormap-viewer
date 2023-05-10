@@ -1,6 +1,6 @@
 import {
   ApplicationModel,
-  CatalogItemKindEnum, CatalogNodeModel, FeatureSourceModel, FeatureSourceProtocolEnum, FeatureTypeModel, GeoServiceLayerModel,
+  CatalogItemKindEnum, CatalogNodeModel, ConfigModel, FeatureSourceModel, FeatureSourceProtocolEnum, FeatureTypeModel, GeoServiceLayerModel,
   GeoServiceProtocolEnum, GeoServiceWithLayersModel, GroupModel, ServiceCapsModel, UserModel,
 } from '../models';
 import { ServerType } from '@tailormap-viewer/api';
@@ -162,5 +162,12 @@ export const getApplication = (overrides?: Partial<ApplicationModel>): Applicati
   name: 'app1',
   title: 'My application',
   components: [],
+  ...overrides,
+});
+
+export const getConfigModel = (overrides?: Partial<ConfigModel>): ConfigModel => ({
+  key: 'default-app',
+  value: 'default',
+  jsonValue: null,
   ...overrides,
 });

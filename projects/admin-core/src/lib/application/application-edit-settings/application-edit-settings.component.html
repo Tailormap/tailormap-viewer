@@ -2,5 +2,13 @@
   <div class="form-wrapper">
     <tm-admin-application-form [application]="application"
                                (updateApplication)="updateApplication($event)"></tm-admin-application-form>
+    <mat-slide-toggle class="set-default-application"
+                      (toggleChange)="toggleDefaultApplication(application.name)"
+                      [checked]="isDefaultApplication$ | async"
+                      [disabled]="isDefaultApplication$ | async"
+                      i18n>Set default application</mat-slide-toggle>
+    <div *ngIf="(isDefaultApplication$ | async) === false"
+         class="set-default-application-hint"
+         i18n>Setting this application as default will overwrite the current default application</div>
   </div>
 </ng-container>
