@@ -1,12 +1,15 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
-import { BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, takeUntil, tap } from 'rxjs';
 import { selectGeoServiceById } from '../state/catalog.selectors';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 import { GeoServiceService } from '../services/geo-service.service';
 import { GeoServiceUpdateModel } from '../models/geo-service-update.model';
 import { LayerSettingsModel } from '@tailormap-admin/admin-api';
+import { ConfirmDialogService } from '@tailormap-viewer/shared';
+import { MatDialog } from '@angular/material/dialog';
+import { GeoServiceUsedDialogComponent } from './geo-service-used-dialog/geo-service-used-dialog.component';
 
 @Component({
   selector: 'tm-admin-geo-service-details',
@@ -28,6 +31,9 @@ export class GeoServiceDetailsComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private store$: Store,
     private geoServiceService: GeoServiceService,
+    private confirmDelete: ConfirmDialogService,
+    private dialog: MatDialog,
+    private router: Router,
   ) { }
 
   public ngOnInit(): void {
@@ -71,6 +77,28 @@ export class GeoServiceDetailsComponent implements OnInit, OnDestroy {
           this.updatedDefaultLayerSettings = null;
         }
         this.savingSubject.next(false);
+      });
+  }
+
+  public deleteService(geoService: ExtendedGeoServiceModel) {
+    this.confirmDelete.confirm$(
+      `Delete service ${geoService.title}`,
+      `Are you sure you want to delete service ${geoService.title}? This action cannot be undone.`,
+      true,
+    )
+      .pipe(
+        take(1),
+        filter(answer => answer),
+        switchMap(() => this.geoServiceService.deleteGeoService$(geoService.id, geoService.catalogNodeId)),
+      )
+      .subscribe(response => {
+        if (!response.success && response.applicationsUsingService) {
+          this.dialog.open(GeoServiceUsedDialogComponent, {
+            data: { applications: response.applicationsUsingService, service: geoService },
+          });
+          return;
+        }
+        this.router.navigateByUrl('/catalog');
       });
   }
 

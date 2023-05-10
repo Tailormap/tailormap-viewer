@@ -135,6 +135,23 @@ export class CatalogService implements OnDestroy {
       );
   }
 
+  public removeNodeFromCatalog$(nodeId: string, itemId: string, itemKind: CatalogItemKindEnum) {
+    return this.store$.select(selectCatalogNodeById(nodeId))
+      .pipe(
+        take(1),
+        concatMap(node => {
+          if (!node) {
+            return of(null);
+          }
+          const updatedNode: ExtendedCatalogNodeModel = {
+            ...node,
+            items: (node.items || []).filter(item => !(item.id === itemId && item.kind === itemKind)),
+          };
+          return this.updateCatalog$(updatedNode, 'update');
+        }),
+      );
+  }
+
   private updateCatalog$(node: ExtendedCatalogNodeModel, action: 'create' | 'update' | 'delete') {
     return this.store$.select(selectCatalog)
       .pipe(
