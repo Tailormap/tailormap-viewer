@@ -9,6 +9,7 @@ import {
 } from '../state/application.selectors';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
+import { environment } from '../../../../../admin-app/src/environments/environment';
 
 @Component({
   selector: 'tm-admin-application-list',
@@ -23,6 +24,8 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
   public selectedApplicationId: string | null | undefined;
   public applicationsLoadStatus$: Observable<LoadingStateEnum> = of(LoadingStateEnum.INITIAL);
   public errorMessage$: Observable<string | undefined> = of(undefined);
+
+  public viewerBaseUrl = environment.viewerBaseUrl;
 
   private destroyed = new Subject();
 
@@ -65,6 +68,10 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
 
   public onRetryClick() {
     this.store$.dispatch(loadApplications());
+  }
+
+  public stopPropagation(event: Event) {
+    event.stopPropagation();
   }
 
 }

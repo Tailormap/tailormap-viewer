@@ -26,6 +26,13 @@
                      [class.selected]="selectedApplicationId === application.id"
                      [routerLink]="'/applications/application/'+application.id">
         <span class="detail">{{application.title || application.name}}</span>
+        <a class="icon"
+           (click)="stopPropagation($event)"
+           [href]="viewerBaseUrl + application.name"
+           target="new"
+           matListItemMeta>
+          <mat-icon svgIcon="admin_link_new_window"></mat-icon>
+        </a>
       </mat-list-item>
     </mat-selection-list>
 
