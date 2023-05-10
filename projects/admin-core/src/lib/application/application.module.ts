@@ -29,8 +29,6 @@ import { ApplicationEditStylingComponent } from './application-edit-styling/appl
 import { ImageUploadFieldComponent } from './styling/image-upload-field/image-upload-field.component';
 import { ApplicationLayerSettingsComponent } from './application-layer-settings/application-layer-settings.component';
 
-
-
 @NgModule({
   declarations: [
     ApplicationEditSettingsComponent,
@@ -61,7 +59,7 @@ import { ApplicationLayerSettingsComponent } from './application-layer-settings/
     CatalogModule,
     RouterLinkActive,
     ComponentsModule,
-  ],
+ ],
   exports: [
     ApplicationListComponent,
   ],

@@ -1,4 +1,5 @@
 export * from './app-content.model';
+export * from './authorization-rules.model';
 export * from './app-layer-settings.model';
 export * from './app-settings.model';
 export * from './app-tree-level-node.model';

@@ -3,7 +3,8 @@ import { GeoServiceFormDialogComponent } from './geo-service-form-dialog.compone
 import userEvent from '@testing-library/user-event';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { getGeoService } from '@tailormap-admin/admin-api';
+import { TAILORMAP_ADMIN_API_V1_SERVICE, getGeoService, AUTHORIZATION_RULE_ANONYMOUS } from '@tailormap-admin/admin-api';
+import { of } from 'rxjs';
 import { GeoServiceFormComponent } from '../geo-service-form/geo-service-form.component';
 import { GeoServiceService } from '../services/geo-service.service';
 import { createGeoServiceMock } from '../helpers/mocks/geo-service.service.mock';
@@ -11,17 +12,19 @@ import { TestSaveHelper } from '../../test-helpers/test-save.helper';
 import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
 import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
+import { AuthorizationEditComponent } from '../../shared/components/authorization-edit/authorization-edit.component';
 
 const setup = async (editMode = false) => {
   const dialogRefMock = { close: jest.fn() };
   const { geoServiceService, updateGeoService$, updateGeoServiceDetails } = createGeoServiceMock();
   await render(GeoServiceFormDialogComponent, {
     imports: [ SharedModule, MatIconTestingModule ],
-    declarations: [ GeoServiceFormComponent, PasswordFieldComponent, SaveButtonComponent ],
+    declarations: [ GeoServiceFormComponent, PasswordFieldComponent, SaveButtonComponent, AuthorizationEditComponent ],
     providers: [
       { provide: MatDialogRef, useValue: dialogRefMock },
       { provide: GeoServiceService, useValue: geoServiceService },
       { provide: MAT_DIALOG_DATA, useValue: { geoService: editMode ? getGeoService({ id: '2', title: 'my service', url: 'http://test.service' }) : null, parentNode: '1' } },
+      { provide: TAILORMAP_ADMIN_API_V1_SERVICE, useValue: { getGroups$: jest.fn(() => of(null)) } },
     ],
   });
   return {
@@ -47,6 +50,7 @@ describe('GeoServiceFormDialogComponent', () => {
     await userEvent.type(screen.getByLabelText('URL'), 'http://www.super-service.com');
     await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save');
     expect(geoServiceService.createGeoService$).toHaveBeenCalledWith({
+      authorizationRules: [AUTHORIZATION_RULE_ANONYMOUS],
       url: 'http://www.super-service.com',
       title: '',
       protocol: 'wms',
@@ -66,6 +70,7 @@ describe('GeoServiceFormDialogComponent', () => {
     expect(updateGeoService$).toHaveBeenCalledWith('2', expect.anything());
     expect(updateGeoServiceDetails).toHaveBeenCalledWith({
       url: 'http://test.service?123',
+      authorizationRules: [],
       title: 'my service',
       protocol: 'wms',
       authentication: null,

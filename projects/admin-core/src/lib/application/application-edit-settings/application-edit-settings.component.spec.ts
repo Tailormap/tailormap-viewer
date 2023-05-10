@@ -4,13 +4,14 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { getMockStore } from '@ngrx/store/testing';
 import { ApplicationState, applicationStateKey, initialApplicationState } from '../state/application.state';
 import { Store } from '@ngrx/store';
-import { getApplication } from '@tailormap-admin/admin-api';
+import { TAILORMAP_ADMIN_API_V1_SERVICE, getApplication } from '@tailormap-admin/admin-api';
 import { SharedImportsModule } from '@tailormap-viewer/shared';
 import { ApplicationFormComponent } from '../application-form/application-form.component';
 import { BoundsFieldComponent } from '../../shared/components/bounds-field/bounds-field.component';
 import { of } from 'rxjs';
 import { ConfigService } from '../../config/services/config.service';
 import userEvent from '@testing-library/user-event';
+import { AuthorizationEditComponent } from '../../shared/components/authorization-edit/authorization-edit.component';
 
 const setup = async (hasApplication: boolean, isDefaultApplication?: boolean) => {
   const appState: ApplicationState = {
@@ -28,10 +29,11 @@ const setup = async (hasApplication: boolean, isDefaultApplication?: boolean) =>
   await render(ApplicationEditSettingsComponent, {
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     imports: [SharedImportsModule],
-    declarations: [ ApplicationFormComponent, BoundsFieldComponent ],
+    declarations: [ ApplicationFormComponent, BoundsFieldComponent, AuthorizationEditComponent ],
     providers: [
       { provide: Store, useValue: store },
       { provide: ConfigService, useValue: configService },
+      { provide: TAILORMAP_ADMIN_API_V1_SERVICE, useValue: { getGroups$: jest.fn(() => of(null)) } },
     ],
   });
   return { configService };

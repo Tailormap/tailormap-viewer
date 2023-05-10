@@ -5,7 +5,7 @@ import { TriStateBooleanComponent } from './tri-state-boolean/tri-state-boolean.
 import { PasswordFieldComponent } from './password-field/password-field.component';
 import { SaveButtonComponent } from './save-button/save-button.component';
 import { BoundsFieldComponent } from './bounds-field/bounds-field.component';
-
+import { AuthorizationEditComponent } from './authorization-edit/authorization-edit.component';
 
 @NgModule({
   declarations: [
@@ -13,6 +13,7 @@ import { BoundsFieldComponent } from './bounds-field/bounds-field.component';
     PasswordFieldComponent,
     SaveButtonComponent,
     BoundsFieldComponent,
+    AuthorizationEditComponent,
   ],
   imports: [
     CommonModule,
@@ -23,6 +24,7 @@ import { BoundsFieldComponent } from './bounds-field/bounds-field.component';
     PasswordFieldComponent,
     SaveButtonComponent,
     BoundsFieldComponent,
+    AuthorizationEditComponent,
   ],
 })
 export class SharedAdminComponentsModule {

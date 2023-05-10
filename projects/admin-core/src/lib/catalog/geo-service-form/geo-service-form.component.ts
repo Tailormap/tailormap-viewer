@@ -1,12 +1,13 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { debounceTime, filter, Subject, takeUntil } from 'rxjs';
+import { Observable, debounceTime, filter, Subject, takeUntil } from 'rxjs';
 import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 import { FormControl, FormGroup } from '@angular/forms';
-import { GeoServiceProtocolEnum } from '@tailormap-admin/admin-api';
+import { GeoServiceProtocolEnum, GroupModel, AuthorizationRuleGroup, AUTHORIZATION_RULE_ANONYMOUS } from '@tailormap-admin/admin-api';
 import { FormHelper } from '../../helpers/form.helper';
 import { GeoServiceCreateModel } from '../models/geo-service-update.model';
 import { StringHelper } from '@tailormap-viewer/shared';
 import { $localize } from '@angular/localize/init';
+import { GroupdetailsService } from '../../useradmin/services/groupdetails.service';
 
 @Component({
   selector: 'tm-admin-geo-service-form',
@@ -30,6 +31,7 @@ export class GeoServiceFormComponent implements OnInit {
       useProxy: geoService?.settings?.useProxy || false,
       username: geoService?.authentication?.username || '',
       password: geoService?.authentication?.password || '',
+      authorizationRules: geoService ? geoService.authorizationRules : [AUTHORIZATION_RULE_ANONYMOUS],
     });
     if (!geoService) {
       this.geoServiceForm.get('title')?.disable();
@@ -55,9 +57,13 @@ export class GeoServiceFormComponent implements OnInit {
     useProxy: new FormControl(false, { nonNullable: true }),
     username: new FormControl(''),
     password: new FormControl(''),
+    authorizationRules: new FormControl<AuthorizationRuleGroup[]>([]),
   });
 
-  constructor() { }
+  public groups$: Observable<GroupModel[]>;
+  constructor(groupdetailsService: GroupdetailsService) {
+      this.groups$ = groupdetailsService.groupList$;
+  }
 
   private formHasAuthentication() {
     const value = this.geoServiceForm.getRawValue();
@@ -82,6 +88,7 @@ export class GeoServiceFormComponent implements OnInit {
             username: value.username as string,
             password: value.password as string,
           },
+          authorizationRules: value.authorizationRules || [],
         });
       });
   }

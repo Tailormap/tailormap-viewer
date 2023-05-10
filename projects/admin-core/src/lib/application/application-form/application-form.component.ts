@@ -1,9 +1,10 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { BoundsModel } from '@tailormap-viewer/api';
-import { ApplicationModel } from '@tailormap-admin/admin-api';
-import { debounceTime, filter, Subject, takeUntil } from 'rxjs';
+import { ApplicationModel, GroupModel, AuthorizationRuleGroup, AUTHORIZATION_RULE_ANONYMOUS } from '@tailormap-admin/admin-api';
+import { Observable, debounceTime, filter, Subject, takeUntil } from 'rxjs';
 import { FormHelper } from '../../helpers/form.helper';
+import { GroupdetailsService } from '../../useradmin/services/groupdetails.service';
 
 @Component({
   selector: 'tm-admin-application-form',
@@ -40,7 +41,7 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
     crs: new FormControl(''),
     initialExtent: new FormControl<BoundsModel | null>(null),
     maxExtent: new FormControl<BoundsModel | null>(null),
-    authenticatedRequired: new FormControl(false),
+    authorizationRules: new FormControl<AuthorizationRuleGroup[]>([AUTHORIZATION_RULE_ANONYMOUS]),
   });
 
   public projections = [
@@ -54,7 +55,10 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
     return this.applicationForm.get('crs')?.value || null;
   }
 
-  constructor() { }
+  public groups$: Observable<GroupModel[]>;
+  constructor(groupdetailsService: GroupdetailsService) {
+      this.groups$ = groupdetailsService.groupList$;
+  }
 
   public ngOnInit(): void {
     this.applicationForm.valueChanges
@@ -71,7 +75,7 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
           crs: value.crs || '',
           initialExtent: value.initialExtent || undefined,
           maxExtent: value.maxExtent || undefined,
-          authenticatedRequired: value.authenticatedRequired || false,
+          authorizationRules: value.authorizationRules || [],
         });
       });
   }
@@ -89,7 +93,7 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
       crs: application ? application.crs : '',
       initialExtent: application ? application.initialExtent : null,
       maxExtent: application ? application.maxExtent : null,
-      authenticatedRequired: application ? application.authenticatedRequired : false,
+      authorizationRules: application ? application.authorizationRules : [AUTHORIZATION_RULE_ANONYMOUS],
     }, { emitEvent: false });
   }
 
