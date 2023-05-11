@@ -138,7 +138,7 @@ export class GeoServiceService {
       );
   }
 
-  private getApplicationsUsingService$(serviceId: string) {
+  public getApplicationsUsingService$(serviceId: string) {
     return this.applicationService.getApplications$()
       .pipe(
         map(applications => {

@@ -1,5 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
-import { BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, takeUntil, tap } from 'rxjs';
+import {
+  BehaviorSubject, concatMap, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, takeUntil, tap,
+} from 'rxjs';
 import { selectGeoServiceById } from '../state/catalog.selectors';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -81,21 +83,30 @@ export class GeoServiceDetailsComponent implements OnInit, OnDestroy {
   }
 
   public deleteService(geoService: ExtendedGeoServiceModel) {
-    this.confirmDelete.confirm$(
-      `Delete service ${geoService.title}`,
-      `Are you sure you want to delete service ${geoService.title}? This action cannot be undone.`,
-      true,
-    )
+    this.geoServiceService.getApplicationsUsingService$(geoService.id)
       .pipe(
         take(1),
-        filter(answer => answer),
-        switchMap(() => this.geoServiceService.deleteGeoService$(geoService.id, geoService.catalogNodeId)),
+        concatMap(applications => {
+          if (applications.length > 0) {
+            return this.dialog.open(GeoServiceUsedDialogComponent, {
+              data: { applications, service: geoService },
+            }).afterClosed().pipe(map(() => false));
+          }
+          return this.confirmDelete.confirm$(
+            `Delete service ${geoService.title}`,
+            `Are you sure you want to delete service ${geoService.title}? This action cannot be undone.`,
+            true,
+          );
+        }),
+        concatMap(confirmed => {
+          if (confirmed) {
+            return this.geoServiceService.deleteGeoService$(geoService.id, geoService.catalogNodeId);
+          }
+          return of({ success: false });
+        }),
       )
       .subscribe(response => {
-        if (!response.success && response.applicationsUsingService) {
-          this.dialog.open(GeoServiceUsedDialogComponent, {
-            data: { applications: response.applicationsUsingService, service: geoService },
-          });
+        if (!response.success) {
           return;
         }
         this.router.navigateByUrl('/catalog');
