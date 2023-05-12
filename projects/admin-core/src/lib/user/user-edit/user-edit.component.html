@@ -1,0 +1,14 @@
+<ng-container *ngIf="user$ | async as user">
+  <h2 class="page-details-title" i18n>Edit {{ user.username }}</h2>
+
+  <div class="">
+    <tm-admin-user-form [user]="user" (userUpdated)="updateUser($event)"></tm-admin-user-form>
+  </div>
+
+  <div class="page-details-actions application-edit-buttons">
+    <tm-admin-save-button [saving$]="saving$" [disabled]="!updatedUser" (save)="save()"></tm-admin-save-button>
+    <button mat-flat-button color="warn" (click)="delete(user)" i18n>Delete</button>
+    <button mat-flat-button (click)="clearSelectedUser()" routerLink="/user" i18n>Close</button>
+  </div>
+
+</ng-container>

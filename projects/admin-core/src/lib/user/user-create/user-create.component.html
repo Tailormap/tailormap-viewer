@@ -1,0 +1,8 @@
+<h2 class="page-details-title" i18n>Add user</h2>
+<div class="form-wrapper">
+  <tm-admin-user-form (userUpdated)="updateUser($event)"></tm-admin-user-form>
+</div>
+<div class="page-details-actions">
+  <tm-admin-save-button label="Create" i18n-label [saving$]="saving$" [disabled]="!user" (save)="save()"></tm-admin-save-button>
+  <button mat-flat-button routerLink="/user" i18n>Cancel</button>
+</div>

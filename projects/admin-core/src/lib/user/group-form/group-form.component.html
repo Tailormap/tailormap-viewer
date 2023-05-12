@@ -1,0 +1,17 @@
+<form [formGroup]="groupForm" class="groupdetails-wrapper">
+  <div>
+    <mat-form-field>
+      <mat-label i18n>Name</mat-label>
+      <input formControlName="name" matInput maxlength="255">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label i18n>Description</mat-label>
+      <input formControlName="description" matInput maxlength="255">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label i18n>Notes</mat-label>
+      <textarea formControlName="notes" matInput type="text"></textarea>
+    </mat-form-field>
+    <mat-checkbox formControlName="systemGroup" i18n labelPosition="before">System Group</mat-checkbox>
+  </div>
+</form>

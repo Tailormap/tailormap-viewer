@@ -1,0 +1,14 @@
+<ng-container *ngIf="group$ | async as group">
+  <h2 class="page-details-title" i18n>Edit {{ group.name }}</h2>
+
+  <div class="">
+    <tm-admin-group-form [group]="group" (groupUpdated)="updateGroup($event)"></tm-admin-group-form>
+  </div>
+
+  <div class="page-details-actions application-edit-buttons">
+    <tm-admin-save-button [saving$]="saving$" [disabled]="!updatedGroup" (save)="save()"></tm-admin-save-button>
+    <button mat-flat-button color="warn" (click)="delete(group)" i18n>Delete</button>
+    <button mat-flat-button (click)="clearSelectedGroup()" routerLink="/user" i18n>Close</button>
+  </div>
+
+</ng-container>
