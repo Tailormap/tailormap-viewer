@@ -60,13 +60,12 @@ jobs:
       - name: 'Test'
         run: npm run test:ci
 
-      - name: 'Publish test results'
-        uses: EnricoMi/publish-unit-test-result-action@v2
+      - name: 'Upload test results'
+        uses: actions/upload-artifact@v3
         if: always()
         with:
-          junit_files: junit.xml
-          check_name: "Unit Test Results"
-          comment_title: "Unit Test Results"
+          name: Test Results
+          path: junit.xml
 
       - name: 'Upload coverage to Codecov'
         uses: codecov/codecov-action@v3
@@ -75,6 +74,17 @@ jobs:
           directory: coverage
           flags: unittests
 
+  # Upload event file so test results can be processed for the PR
+  # https://github.com/EnricoMi/publish-unit-test-result-action#support-fork-repositories-and-dependabot-branches
+  event_file:
+    name: "Event File"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: Event File
+          path: ${{ github.event_path }}
 
   build:
     name: 'Build and deploy'
