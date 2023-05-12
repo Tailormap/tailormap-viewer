@@ -4,13 +4,15 @@ import {
   ApplicationModel, AppTreeLevelNodeModel, AppTreeNodeModel, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel,
 } from '@tailormap-admin/admin-api';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { catchError, concatMap, distinctUntilChanged, map, of, Subject, takeUntil } from 'rxjs';
-import { SnackBarMessageComponent } from '@tailormap-viewer/shared';
+import {
+  catchError, concatMap, distinctUntilChanged, map, of, Subject, takeUntil, tap, filter, switchMap,
+} from 'rxjs';
+import { LoadingStateEnum, SnackBarMessageComponent } from '@tailormap-viewer/shared';
 import {
   addApplicationRootNodes,
-  addApplications, deleteApplication, loadApplicationServices, loadApplicationServicesSuccess, updateApplication,
+  addApplications, deleteApplication, loadApplications, loadApplicationServices, loadApplicationServicesSuccess, updateApplication,
 } from '../state/application.actions';
-import { selectDraftApplication } from '../state/application.selectors';
+import { selectApplicationList, selectApplicationsLoadStatus, selectDraftApplication } from '../state/application.selectors';
 import { CatalogService } from '../../catalog/services/catalog.service';
 import { ApplicationModelHelper } from '../helpers/application-model.helper';
 
@@ -49,6 +51,19 @@ export class ApplicationService implements OnDestroy {
   public ngOnDestroy(): void {
     this.destroyed.next(null);
     this.destroyed.complete();
+  }
+
+  public getApplications$() {
+    return this.store$.select(selectApplicationsLoadStatus)
+      .pipe(
+        tap(loadStatus => {
+          if (loadStatus === LoadingStateEnum.INITIAL) {
+            this.store$.dispatch(loadApplications());
+          }
+        }),
+        filter(loadStatus => loadStatus === LoadingStateEnum.LOADED),
+        switchMap(() => this.store$.select(selectApplicationList)),
+      );
   }
 
   public createApplication$(application: ApplicationCreateModel) {

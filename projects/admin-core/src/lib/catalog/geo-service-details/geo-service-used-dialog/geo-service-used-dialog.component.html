@@ -1,0 +1,16 @@
+<h1 mat-dialog-title>Service is used in applications</h1>
+
+<div mat-dialog-content>
+  <p class="content" i18n>The service {{data.service.title}} is used in the following applications.</p>
+  <ul>
+    <li *ngFor="let app of data.applications">
+      <a [routerLink]="'/applications/application/'+app.id"
+         (click)="onConfirm()">{{app.title || app.name}}</a>
+    </li>
+  </ul>
+  <p class="content" i18n>Please remove the layers from this service from the applications first</p>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" (click)="onConfirm()" i18n>Ok</button>
+</div>
