@@ -1,9 +1,12 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { debounceTime, filter, Subject, takeUntil, tap } from 'rxjs';
+import { debounceTime, filter, map, Observable, of, Subject, takeUntil, tap } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
-import { GeoServiceProtocolEnum, LayerSettingsModel, TileLayerHiDpiModeEnum } from '@tailormap-admin/admin-api';
+import { AuthorizationRuleGroup, GeoServiceProtocolEnum, GroupModel, LayerSettingsModel, TileLayerHiDpiModeEnum } from '@tailormap-admin/admin-api';
 import { FormHelper } from '../../helpers/form.helper';
 import { TypesHelper } from '@tailormap-viewer/shared';
+import { GroupDetailsService } from '../../user/services/group-details.service';
+import { Store } from '@ngrx/store';
+import { selectGeoServiceById } from '../state/catalog.selectors';
 
 @Component({
   selector: 'tm-admin-layer-settings-form',
@@ -16,6 +19,7 @@ export class LayerSettingsFormComponent implements OnInit {
   private destroyed = new Subject();
   private _layerSettings: LayerSettingsModel | null | undefined;
   private _isLayerSpecific = false;
+  private _serviceId: string | undefined = undefined;
 
   @Input()
   public set protocol(protocol: GeoServiceProtocolEnum) {
@@ -33,6 +37,20 @@ export class LayerSettingsFormComponent implements OnInit {
   }
 
   @Input()
+  public set serviceId(serviceId: string | undefined) {
+    this._serviceId = serviceId;
+
+    if (serviceId === undefined) {
+        this.geoServiceAuthorizations$ = of([]);
+    } else {
+        this.geoServiceAuthorizations$ = this.store$.select(selectGeoServiceById(serviceId)).pipe(takeUntil(this.destroyed), map((settings) => settings?.authorizationRules ?? []));
+    }
+  }
+  public get serviceId() {
+    return this._serviceId;
+  }
+
+  @Input()
   public set layerSettings(layerSettings: LayerSettingsModel | null | undefined) {
     this._layerSettings = layerSettings;
     this.patchForm();
@@ -46,6 +64,10 @@ export class LayerSettingsFormComponent implements OnInit {
 
   @Output()
   public changed = new EventEmitter<LayerSettingsModel>();
+
+  public groups$: Observable<GroupModel[]>;
+
+  public geoServiceAuthorizations$: Observable<AuthorizationRuleGroup[]> = of([]);
 
   public isWMS = false;
   public isWMTS = false;
@@ -62,7 +84,12 @@ export class LayerSettingsFormComponent implements OnInit {
     tilingGutter: new FormControl<number | null>(null),
     hiDpiMode: new FormControl<TileLayerHiDpiModeEnum | null>(null),
     hiDpiSubstituteLayer: new FormControl<string | null>(null),
+    authorizationRules: new FormControl<AuthorizationRuleGroup[]>([]),
   });
+
+  constructor(groupDetailsService: GroupDetailsService, private store$: Store) {
+    this.groups$ = groupDetailsService.getGroups$();
+  }
 
   public ngOnInit(): void {
     this.layerSettingsForm.valueChanges
@@ -89,6 +116,7 @@ export class LayerSettingsFormComponent implements OnInit {
       settings.title = value.title || undefined;
       settings.hiDpiMode = value?.hiDpiMode || undefined;
       settings.hiDpiSubstituteLayer = this.layerSettings?.hiDpiSubstituteLayer || undefined;
+      settings.authorizationRules = value?.authorizationRules ?? [];
       if (TypesHelper.isDefined(value.featureSourceId) && TypesHelper.isDefined(value.featureTypeName)) {
         settings.featureType = {
           featureSourceId: value.featureSourceId,
@@ -115,6 +143,7 @@ export class LayerSettingsFormComponent implements OnInit {
       [ values.tilingGutter, this._layerSettings.tilingGutter ],
       [ values.hiDpiMode, this._layerSettings.hiDpiMode ],
       [ values.hiDpiSubstituteLayer, this._layerSettings.hiDpiSubstituteLayer ],
+      [ values.authorizationRules, this._layerSettings.authorizationRules ],
     ]);
   }
 
@@ -135,6 +164,7 @@ export class LayerSettingsFormComponent implements OnInit {
       tilingGutter: this.layerSettings?.tilingGutter || null,
       hiDpiMode,
       hiDpiSubstituteLayer: this.layerSettings?.hiDpiSubstituteLayer || null,
+      authorizationRules: this.layerSettings?.authorizationRules ?? [],
     }, { emitEvent: false, onlySelf: true });
     this.layerSettingsForm.markAsUntouched();
     this.updateDisabledState();

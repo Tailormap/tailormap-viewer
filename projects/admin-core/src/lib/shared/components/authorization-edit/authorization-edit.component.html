@@ -2,16 +2,17 @@
   <div>
     <mat-label i18n>Allow access from:</mat-label>
     <mat-chip-listbox [(ngModel)]="selectedChip" (change)="changeAuthenticationType($event.value)">
-      <mat-chip-option i18n value="anonymous">Anyone</mat-chip-option>
-      <mat-chip-option i18n value="loggedIn">Logged in</mat-chip-option>
-      <mat-chip-option i18n value="specificGroups">Specific groups</mat-chip-option>
+      <mat-chip-option i18n value="inherit" *ngIf="parentChip !== undefined && parentChip !== 'specificGroups'">Inherit from {{parentType}} ({parentChip, select, anonymous {Anyone} loggedIn {Logged in} specificGroups {Specific groups}})</mat-chip-option>
+      <mat-chip-option i18n value="anonymous" *ngIf="parentChip === undefined">Anyone</mat-chip-option>
+      <mat-chip-option i18n value="loggedIn" *ngIf="parentChip !== 'specificGroups'">Logged in</mat-chip-option>
+      <mat-chip-option i18n value="specificGroups">Specific groups {parentChip, select, specificGroups {(inherited)}}</mat-chip-option>
     </mat-chip-listbox>
   </div>
 
-  <table mat-table *ngIf="selectedChip === 'specificGroups'" [dataSource]="value">
+  <table mat-table *ngIf="selectedChip === 'specificGroups'" [dataSource]="decisions">
     <ng-container matColumnDef="groupName">
       <th mat-header-cell i18n *matHeaderCellDef>Access</th>
-      <td mat-cell *matCellDef="let rule">{{rule.groupName}}</td>
+      <td mat-cell *matCellDef="let rule">{{rule.groupName}} <small *ngIf="rule.overridden" i18n>(overridden)</small></td>
       <td mat-footer-cell *matFooterCellDef>
         <mat-form-field>
           <mat-label i18n>Group name</mat-label>
@@ -23,11 +24,15 @@
         </mat-form-field>
       </td>
     </ng-container>
+
+    <ng-container matColumnDef="header">
+      <td class="subheader" mat-cell *matCellDef="let rule" colspan="3">{{rule.headerText}}</td>
+    </ng-container>
   
     <ng-container matColumnDef="read">
       <th mat-header-cell i18n *matHeaderCellDef>Read</th>
       <td mat-cell *matCellDef="let rule">
-        <mat-checkbox [checked]="rule.decisions.read === 'allow'" (change)="changeRule(rule.groupName, 'read', $event.checked)"></mat-checkbox>
+        <mat-checkbox [checked]="rule.decisions.read === 'allow'" [disabled]="rule.decisions.read === 'deny' && rule.inherited" (change)="changeRule(rule.groupName, 'read', $event.checked)"></mat-checkbox>
       </td>
       <td mat-footer-cell *matFooterCellDef>
         <mat-checkbox [(ngModel)]="newRuleDecision"></mat-checkbox>
@@ -37,8 +42,14 @@
     <ng-container matColumnDef="button">
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let rule">
-        <button mat-icon-button color="warn" aria-label="Delete group rules" (click)="deleteRule(rule.groupName)">
+        <button mat-icon-button color="warn" aria-label="Delete group rules" (click)="deleteRule(rule.groupName)" *ngIf="!rule.inherited && !rule.overridden">
           <mat-icon svgIcon="trash_filled"></mat-icon>
+        </button>
+        <button mat-icon-button aria-label="Reset to inherited value" title="Reset to inherited value" (click)="deleteRule(rule.groupName)" *ngIf="rule.overridden">
+          <mat-icon svgIcon="reset"></mat-icon>
+        </button>
+        <button mat-icon-button disabled style="visibility: hidden" *ngIf="rule.inherited">
+          <mat-icon svgIcon="reset"></mat-icon>
         </button>
       </td>
       <td mat-footer-cell *matFooterCellDef>
@@ -46,7 +57,8 @@
     </ng-container>
   
     <tr mat-header-row *matHeaderRowDef="['groupName', 'read', 'button']"></tr>
-    <tr mat-row *matRowDef="let rule; columns: ['groupName', 'read', 'button']"></tr>
+    <tr mat-row *matRowDef="let rule; columns: ['groupName', 'read', 'button']; when: isNormalRow"></tr>
+    <tr mat-row *matRowDef="let rule; columns: ['header']; when: isHeaderRow"></tr>
     <tr mat-footer-row *matFooterRowDef="['groupName', 'read', 'button']" [hidden]="!canAddRule"></tr>
   </table>
 </div>

@@ -1,3 +1,4 @@
+import { AuthorizationRuleGroup } from './authorization-rules.model';
 import { TileLayerHiDpiModeEnum } from './tile-layer-hi-dpi-mode.enum';
 
 export interface LayerSettingsModel {
@@ -10,4 +11,5 @@ export interface LayerSettingsModel {
   hiDpiSubstituteLayer?: string;
   featureType?: { featureSourceId: number; featureTypeName: string };
   attribution?: string;
+  authorizationRules?: AuthorizationRuleGroup[];
 }

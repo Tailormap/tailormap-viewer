@@ -43,6 +43,13 @@
       <strong i18n>Use tiling</strong>
       <tm-admin-tri-state-boolean formControlName="tilingEnabled"></tm-admin-tri-state-boolean>
     </div>
+
+    <tm-admin-authorization-edit class="authorization-edit"
+                                 formControlName="authorizationRules"
+                                 [groups]="(groups$ | async) ?? []"
+                                 [parentAuthorizations]="geoServiceAuthorizations$ | async"
+                                 parentType="GeoService"
+                                 selfType="Layer"></tm-admin-authorization-edit>
   </ng-container>
   <mat-form-field class="form-control number-control" *ngIf="isWMS">
     <mat-label i18n>Tiling gutter</mat-label>

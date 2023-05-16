@@ -3,6 +3,7 @@
   <tm-admin-layer-settings-form [layerSettings]="geoServiceSettings.settings"
                                 [protocol]="geoServiceSettings.protocol"
                                 [layerName]="geoServiceSettings.layerName"
+                                [serviceId]="geoServiceSettings.serviceId"
                                 [isLayerSpecific]="true"
                                 (changed)="updateSettings($event)"></tm-admin-layer-settings-form>
   <div class="page-details-actions">
