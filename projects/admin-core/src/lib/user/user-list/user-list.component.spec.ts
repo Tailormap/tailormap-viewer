@@ -20,7 +20,7 @@ const setup = async () => {
   return { mockApiService };
 };
 
-describe('UserlistComponent', () => {
+describe('UserListComponent', () => {
   test('should render', async () => {
     const { mockApiService } = await setup();
     expect(screen.getByText('Users'));

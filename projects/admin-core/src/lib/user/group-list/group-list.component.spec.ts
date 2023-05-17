@@ -19,9 +19,11 @@ const setup = async () => {
   return { mockApiService };
 };
 
-describe('GrouplistComponent', () => {
+describe('GroupListComponent', () => {
+
   test('should render', async () => {
     const { mockApiService } = await setup();
     expect(screen.getByText('Groups'));
   });
+
 });

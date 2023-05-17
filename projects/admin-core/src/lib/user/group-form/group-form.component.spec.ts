@@ -1,33 +1,36 @@
-import { render, screen } from '@testing-library/angular';
+import { render, screen, waitFor } from '@testing-library/angular';
 import { GroupFormComponent } from './group-form.component';
-import { of } from 'rxjs';
-import { SharedModule } from '@tailormap-viewer/shared';
-import { MatListModule } from '@angular/material/list';
-import { TAILORMAP_ADMIN_API_V1_SERVICE } from '@tailormap-admin/admin-api';
+import { SharedImportsModule } from '@tailormap-viewer/shared';
+import userEvent from '@testing-library/user-event';
 
 
 const setup = async () => {
-  const mockApiService = {
-    getGroups$: jest.fn(() => of(null)),
-  };
-
+  const groupUpdated = jest.fn();
   await render(GroupFormComponent, {
-    imports: [ SharedModule, MatListModule ],
-    providers: [
-      { provide: TAILORMAP_ADMIN_API_V1_SERVICE, useValue: mockApiService },
-    ],
+    imports: [SharedImportsModule],
+    componentOutputs: {
+      groupUpdated: {
+        emit: groupUpdated,
+      } as any,
+    },
   });
-  return { mockApiService };
+  return { groupUpdated };
 };
-describe('GroupdetailsFormComponent', () => {
 
-  test('should render with Add/Delete button disabled', async () => {
-    await setup();
-    expect(screen.getByText('Group Details'));
-    expect(screen.getByText('Add'));
-    expect(screen.getByText('Add').parentNode).toHaveProperty('disabled', true);
-    expect(screen.getByText('Delete'));
-    expect(screen.getByText('Delete').parentNode).toHaveProperty('disabled', true);
+describe('GroupFormComponent', () => {
+
+  test('should trigger user updated for a valid form', async () => {
+    const { groupUpdated } = await setup();
+    await userEvent.type(screen.getByLabelText('Name'), 'secret-group');
+    await userEvent.type(screen.getByLabelText('Description'), 'A very secret group');
+    await waitFor(() => {
+      expect(groupUpdated).toHaveBeenCalledWith({
+        name: 'secret-group',
+        description: 'A very secret group',
+        notes: null,
+        systemGroup: false,
+      });
+    });
   });
 
 });

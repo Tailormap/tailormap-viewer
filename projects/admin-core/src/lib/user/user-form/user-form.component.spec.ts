@@ -1,33 +1,52 @@
-import { render, screen } from '@testing-library/angular';
+import { render, screen, waitFor } from '@testing-library/angular';
 import { UserFormComponent } from './user-form.component';
 import { of } from 'rxjs';
 import { TAILORMAP_ADMIN_API_V1_SERVICE } from '@tailormap-admin/admin-api';
-import { SharedModule } from '@tailormap-viewer/shared';
-import { MatListModule } from '@angular/material/list';
+import { SharedImportsModule } from '@tailormap-viewer/shared';
+import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
+import userEvent from '@testing-library/user-event';
 
 
 const setup = async () => {
   const mockApiService = {
-    getGroups$: jest.fn(() => of(null)),
-    getUsers$: jest.fn(() => of(null)),
+    getGroups$: jest.fn(() => of([])),
   };
-
+  const userUpdated = jest.fn();
   await render(UserFormComponent, {
-    imports: [ SharedModule, MatListModule ],
+    imports: [SharedImportsModule],
+    declarations: [PasswordFieldComponent],
+    componentOutputs: {
+      userUpdated: {
+        emit: userUpdated,
+      } as any,
+    },
     providers: [
       { provide: TAILORMAP_ADMIN_API_V1_SERVICE, useValue: mockApiService },
     ],
   });
-  return { mockApiService };
+  return { userUpdated };
 };
 
-describe('UserDetailsFormComponent', () => {
-  test('should render with Add/Delete button disabled', async () => {
-    await setup();
-    expect(screen.getByText('User Details'));
-    expect(screen.getByText('Add'));
-    expect(screen.getByText('Add').parentNode).toHaveProperty('disabled', true);
-    expect(screen.getByText('Delete'));
-    expect(screen.getByText('Delete').parentNode).toHaveProperty('disabled', true);
+describe('UserFormComponent', () => {
+
+  test('should trigger user updated for a valid form', async () => {
+    const { userUpdated } = await setup();
+    await userEvent.type(screen.getByLabelText('Username'), 'user1');
+    await userEvent.type(screen.getByLabelText('Name'), 'Real name');
+    await userEvent.type(screen.getByLabelText('Email'), 'test@test.com');
+    await userEvent.type(screen.getByLabelText('Password'), 'secret-secret');
+    await userEvent.type(screen.getByLabelText('Confirm password'), 'secret-secret');
+    await waitFor(() => {
+      expect(userUpdated).toHaveBeenCalledWith({
+        username: 'user1',
+        email: 'test@test.com',
+        name: 'Real name',
+        enabled: false,
+        validUntil: null,
+        groups: [],
+        password: 'secret-secret',
+      });
+    });
   });
+
 });
