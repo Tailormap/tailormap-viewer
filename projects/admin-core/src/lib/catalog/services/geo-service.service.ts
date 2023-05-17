@@ -6,9 +6,7 @@ import {
   GeoServiceModel,
   GeoServiceProtocolEnum, GeoServiceSettingsModel, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel,
 } from '@tailormap-admin/admin-api';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { catchError, concatMap, filter, map, Observable, of, take, tap } from 'rxjs';
-import { SnackBarMessageComponent } from '@tailormap-viewer/shared';
 import { addGeoServices, deleteGeoService, updateGeoService } from '../state/catalog.actions';
 import { CatalogService } from './catalog.service';
 import { GeoServiceCreateModel, GeoServiceUpdateModel, GeoServiceWithIdUpdateModel } from '../models/geo-service-update.model';
@@ -16,6 +14,7 @@ import { selectGeoServiceById } from '../state/catalog.selectors';
 import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 import { ApplicationService } from '../../application/services/application.service';
 import { ApplicationModelHelper } from '../../application/helpers/application-model.helper';
+import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 
 export interface DeleteGeoServiceResponse {
   success: boolean;
@@ -30,7 +29,7 @@ export class GeoServiceService {
   constructor(
     private store$: Store,
     @Inject(TAILORMAP_ADMIN_API_V1_SERVICE) private adminApiService: TailormapAdminApiV1ServiceModel,
-    private snackBar: MatSnackBar,
+    private adminSnackbarService: AdminSnackbarService,
     private catalogService: CatalogService,
     private applicationService: ApplicationService,
   ) { }
@@ -47,7 +46,7 @@ export class GeoServiceService {
     };
     return this.adminApiService.createGeoService$({ geoService: geoServiceModel }).pipe(
       catchError(() => {
-        this.showErrorMessage($localize `Error while creating geo service.`);
+        this.adminSnackbarService.showMessage($localize `Error while creating geo service.`);
         return of(null);
       }),
       concatMap(createdService => {
@@ -85,7 +84,7 @@ export class GeoServiceService {
   private _updateGeoService$(geoService: GeoServiceWithIdUpdateModel, catalogNodeId: string) {
     return this.adminApiService.updateGeoService$({ id: geoService.id, geoService }).pipe(
       catchError(() => {
-        this.showErrorMessage($localize `Error while updating geo service.`);
+        this.adminSnackbarService.showMessage($localize `Error while updating geo service.`);
         return of(null);
       }),
       map(updatedService => {
@@ -114,7 +113,7 @@ export class GeoServiceService {
           // Delete the service
           return this.adminApiService.deleteGeoService$({ id: geoServiceId }).pipe(
             catchError(() => {
-              this.showErrorMessage($localize `Error while deleting geo service.`);
+              this.adminSnackbarService.showMessage($localize `Error while deleting geo service.`);
               return of(null);
             }),
             tap(success => {
@@ -153,14 +152,6 @@ export class GeoServiceService {
           });
         }),
       );
-  }
-
-  private showErrorMessage(message: string) {
-    SnackBarMessageComponent.open$(this.snackBar, {
-      message,
-      duration: 3000,
-      showCloseButton: true,
-    });
   }
 
 }

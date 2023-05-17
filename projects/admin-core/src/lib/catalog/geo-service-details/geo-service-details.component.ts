@@ -12,6 +12,7 @@ import { LayerSettingsModel } from '@tailormap-admin/admin-api';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
 import { MatDialog } from '@angular/material/dialog';
 import { GeoServiceUsedDialogComponent } from './geo-service-used-dialog/geo-service-used-dialog.component';
+import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 
 @Component({
   selector: 'tm-admin-geo-service-details',
@@ -36,6 +37,7 @@ export class GeoServiceDetailsComponent implements OnInit, OnDestroy {
     private confirmDelete: ConfirmDialogService,
     private dialog: MatDialog,
     private router: Router,
+    private adminSnackbarService: AdminSnackbarService,
   ) { }
 
   public ngOnInit(): void {
@@ -75,6 +77,7 @@ export class GeoServiceDetailsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyed))
       .subscribe(success => {
         if (success) {
+          this.adminSnackbarService.showMessage($localize `Service updated`);
           this.updatedGeoService = null;
           this.updatedDefaultLayerSettings = null;
         }
@@ -109,6 +112,7 @@ export class GeoServiceDetailsComponent implements OnInit, OnDestroy {
         if (!response.success) {
           return;
         }
+        this.adminSnackbarService.showMessage($localize `Service ${geoService.title} removed`);
         this.router.navigateByUrl('/catalog');
       });
   }

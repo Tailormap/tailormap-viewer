@@ -3,11 +3,10 @@ import { Store } from '@ngrx/store';
 import {
   ApplicationModel, AppTreeLevelNodeModel, AppTreeNodeModel, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel,
 } from '@tailormap-admin/admin-api';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import {
   catchError, concatMap, distinctUntilChanged, map, of, Subject, takeUntil, tap, filter, switchMap,
 } from 'rxjs';
-import { LoadingStateEnum, SnackBarMessageComponent } from '@tailormap-viewer/shared';
+import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import {
   addApplicationRootNodes,
   addApplications, deleteApplication, loadApplications, loadApplicationServices, loadApplicationServicesSuccess, updateApplication,
@@ -15,6 +14,7 @@ import {
 import { selectApplicationList, selectApplicationsLoadStatus, selectDraftApplication } from '../state/application.selectors';
 import { CatalogService } from '../../catalog/services/catalog.service';
 import { ApplicationModelHelper } from '../helpers/application-model.helper';
+import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 
 type ApplicationCreateModel = Omit<ApplicationModel, 'id'>;
 type ApplicationEditModel = Partial<ApplicationCreateModel>;
@@ -32,7 +32,7 @@ export class ApplicationService implements OnDestroy {
   public constructor(
     private store$: Store,
     @Inject(TAILORMAP_ADMIN_API_V1_SERVICE) private adminApiService: TailormapAdminApiV1ServiceModel,
-    private snackBar: MatSnackBar,
+    private adminSnackbarService: AdminSnackbarService,
     private catalogService: CatalogService,
   ) {
     this.store$.select(selectDraftApplication)
@@ -70,7 +70,7 @@ export class ApplicationService implements OnDestroy {
     return this.adminApiService.createApplication$({ application })
       .pipe(
         catchError(() => {
-          this.showErrorMessage($localize `Error while creating application.`);
+          this.adminSnackbarService.showMessage($localize `Error while creating application.`);
           return of(null);
         }),
         map(createApplication => {
@@ -117,7 +117,7 @@ export class ApplicationService implements OnDestroy {
     return this.adminApiService.updateApplication$({ id, application })
       .pipe(
         catchError(() => {
-          this.showErrorMessage($localize `Error while updating application.`);
+          this.adminSnackbarService.showMessage($localize `Error while updating application.`);
           return of(null);
         }),
         map(updatedApplication => {
@@ -134,7 +134,7 @@ export class ApplicationService implements OnDestroy {
     return this.adminApiService.deleteApplication$(id)
       .pipe(
         catchError(() => {
-          this.showErrorMessage($localize `Error while deleting application.`);
+          this.adminSnackbarService.showMessage($localize `Error while deleting application.`);
           return of(null);
         }),
         map(success => {
@@ -145,14 +145,6 @@ export class ApplicationService implements OnDestroy {
           return null;
         }),
       );
-  }
-
-  private showErrorMessage(message: string) {
-    SnackBarMessageComponent.open$(this.snackBar, {
-      message,
-      duration: 3000,
-      showCloseButton: true,
-    });
   }
 
   private loadServicesForApplication(application?: ApplicationModel | null) {

@@ -4,6 +4,7 @@ import { GroupModel } from '@tailormap-admin/admin-api';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GroupDetailsService } from '../services/group-details.service';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
+import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 
 @Component({
   selector: 'tm-admin-group-edit',
@@ -25,6 +26,7 @@ export class GroupEditComponent implements OnInit, OnDestroy {
     private groupService: GroupDetailsService,
     private confirmDelete: ConfirmDialogService,
     private router: Router,
+    private adminSnackbarService: AdminSnackbarService,
   ) { }
 
   public ngOnInit(): void {
@@ -61,6 +63,7 @@ export class GroupEditComponent implements OnInit, OnDestroy {
         switchMap(() => this.groupService.deleteGroup$(group.name)),
       )
       .subscribe(() => {
+        this.adminSnackbarService.showMessage($localize `Group ${group.name} removed`);
         this.router.navigateByUrl('/groups');
       });
   }
@@ -73,6 +76,7 @@ export class GroupEditComponent implements OnInit, OnDestroy {
     this.groupService.addOrUpdateGroup$(false, this.updatedGroup)
       .pipe(take(1))
       .subscribe(() => {
+        this.adminSnackbarService.showMessage($localize `Group updated`);
         this.savingSubject.next(false);
       });
   }

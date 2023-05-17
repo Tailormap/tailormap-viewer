@@ -4,6 +4,7 @@ import { UserDetailsService } from '../services/user-details.service';
 import { BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, takeUntil } from 'rxjs';
 import { UserModel } from '@tailormap-admin/admin-api';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
+import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 
 @Component({
   selector: 'tm-admin-user-edit',
@@ -25,6 +26,7 @@ export class UserEditComponent implements OnInit, OnDestroy {
     private userService: UserDetailsService,
     private confirmDelete: ConfirmDialogService,
     private router: Router,
+    private adminSnackbarService: AdminSnackbarService,
   ) { }
 
   public ngOnInit(): void {
@@ -61,6 +63,7 @@ export class UserEditComponent implements OnInit, OnDestroy {
         switchMap(() => this.userService.deleteUser$(user.username)),
       )
       .subscribe(() => {
+        this.adminSnackbarService.showMessage($localize `User ${user.username} removed`);
         this.router.navigateByUrl('/users');
       });
   }
@@ -73,6 +76,7 @@ export class UserEditComponent implements OnInit, OnDestroy {
     this.userService.addOrUpdateUser$(false, this.updatedUser)
       .pipe(take(1))
       .subscribe(() => {
+        this.adminSnackbarService.showMessage($localize `User updated`);
         this.savingSubject.next(false);
       });
   }

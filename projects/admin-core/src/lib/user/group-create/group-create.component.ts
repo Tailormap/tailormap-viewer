@@ -3,6 +3,7 @@ import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { GroupModel } from '@tailormap-admin/admin-api';
 import { Router } from '@angular/router';
 import { GroupDetailsService } from '../services/group-details.service';
+import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 
 @Component({
   selector: 'tm-admin-group-create',
@@ -21,6 +22,7 @@ export class GroupCreateComponent implements OnInit, OnDestroy {
   constructor(
     private groupDetailsService: GroupDetailsService,
     private router: Router,
+    private adminSnackbarService: AdminSnackbarService,
   ) { }
 
   public ngOnInit(): void {
@@ -44,6 +46,7 @@ export class GroupCreateComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyed))
       .subscribe(createGroup => {
         if (createGroup) {
+          this.adminSnackbarService.showMessage($localize `Group ${createGroup.name} created`);
           this.router.navigateByUrl('/groups/group/' + createGroup.name);
         }
         this.savingSubject.next(false);

@@ -1,8 +1,7 @@
 import { Inject, Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, catchError, Observable, of, Subject, tap } from 'rxjs';
 import { GroupModel, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel } from '@tailormap-admin/admin-api';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { SnackBarMessageComponent } from '@tailormap-viewer/shared';
+import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 
 
 @Injectable({
@@ -21,7 +20,7 @@ export class GroupDetailsService implements OnDestroy {
 
   public constructor(
     @Inject(TAILORMAP_ADMIN_API_V1_SERVICE) private adminApiService: TailormapAdminApiV1ServiceModel,
-    private snackBar: MatSnackBar,
+    private adminSnackbarService: AdminSnackbarService,
   ) {
     this.getGroups();
   }
@@ -42,7 +41,7 @@ export class GroupDetailsService implements OnDestroy {
     this.adminApiService.getGroups$()
       .pipe(
         catchError(response => {
-          this.showErrorMessage($localize`Error while getting groups. ${response.error?.message}`);
+          this.adminSnackbarService.showMessage($localize`Error while getting groups. ${response.error?.message}`);
           return of(null);
         }),
       )
@@ -61,7 +60,7 @@ export class GroupDetailsService implements OnDestroy {
     this.adminApiService.getGroup$(selectedName)
       .pipe(
         catchError(response => {
-          this.showErrorMessage($localize`Error while getting group ${selectedName}. ${response.error?.message}`);
+          this.adminSnackbarService.showMessage($localize`Error while getting group ${selectedName}. ${response.error?.message}`);
           return of(null);
         }),
       )
@@ -77,7 +76,7 @@ export class GroupDetailsService implements OnDestroy {
       return this.adminApiService.createGroup$({ group })
         .pipe(
           catchError((response) => {
-            this.showErrorMessage($localize`Error while creating group ${group.name}. ${response.error?.message}`);
+            this.adminSnackbarService.showMessage($localize`Error while creating group ${group.name}. ${response.error?.message}`);
             return of(null);
           }),
           tap(createdGroup => {
@@ -90,7 +89,7 @@ export class GroupDetailsService implements OnDestroy {
     return this.adminApiService.updateGroup$({ name: group.name, group })
       .pipe(
         catchError((response) => {
-          this.showErrorMessage($localize`Error while updating group ${group.name}. ${response.error?.message}`);
+          this.adminSnackbarService.showMessage($localize`Error while updating group ${group.name}. ${response.error?.message}`);
           return of(null);
         }),
         tap(updatedGroup => {
@@ -105,7 +104,7 @@ export class GroupDetailsService implements OnDestroy {
     return this.adminApiService.deleteGroup$(groupName)
       .pipe(
         catchError((response) => {
-          this.showErrorMessage($localize`Error while deleting group ${groupName}. ${response.error?.message}`);
+          this.adminSnackbarService.showMessage($localize`Error while deleting group ${groupName}. ${response.error?.message}`);
           return of(null);
         }),
         tap(response => {
@@ -117,12 +116,6 @@ export class GroupDetailsService implements OnDestroy {
           }
         }),
       );
-  }
-
-  private showErrorMessage(message: string) {
-    SnackBarMessageComponent.open$(this.snackBar, {
-      message, duration: 3000, showCloseButton: true,
-    });
   }
 
 }

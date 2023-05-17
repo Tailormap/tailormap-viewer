@@ -5,6 +5,7 @@ import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model'
 import { Store } from '@ngrx/store';
 import { selectCatalogNodeById } from '../state/catalog.selectors';
 import { CatalogService } from '../services/catalog.service';
+import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 
 @Component({
   selector: 'tm-admin-catalog-node-details',
@@ -26,6 +27,7 @@ export class CatalogNodeDetailsComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private store$: Store,
     private catalogService: CatalogService,
+    private adminSnackbarService: AdminSnackbarService,
   ) { }
 
   public ngOnInit(): void {
@@ -55,7 +57,10 @@ export class CatalogNodeDetailsComponent implements OnInit, OnDestroy {
     this.savingSubject.next(true);
     this.catalogService.updateCatalogNode$({ ...this.updatedNode, id: nodeId })
       .pipe(takeUntil(this.destroyed))
-      .subscribe(() => this.savingSubject.next(false));
+      .subscribe(() => {
+        this.adminSnackbarService.showMessage($localize `Node updated`);
+        this.savingSubject.next(false);
+      });
   }
 
 }

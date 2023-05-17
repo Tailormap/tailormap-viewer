@@ -13,9 +13,8 @@ import {
 import {
   addFeatureSources, addGeoServices, updateCatalog,
 } from '../state/catalog.actions';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { SnackBarMessageComponent } from '@tailormap-viewer/shared';
 import { nanoid } from 'nanoid';
+import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 
 @Injectable({
   providedIn: 'root',
@@ -29,7 +28,7 @@ export class CatalogService implements OnDestroy {
   constructor(
     private store$: Store,
     @Inject(TAILORMAP_ADMIN_API_V1_SERVICE) private adminApiService: TailormapAdminApiV1ServiceModel,
-    private snackBar: MatSnackBar,
+    private adminSnackbarService: AdminSnackbarService,
   ) {
     this.store$.select(selectGeoServiceIds)
       .pipe(takeUntil(this.destroyed))
@@ -58,11 +57,8 @@ export class CatalogService implements OnDestroy {
       .pipe(
         takeUntil(subscription),
         catchError(() => {
-          SnackBarMessageComponent.open$(this.snackBar, {
-            message: $localize `Error while loading service(s). Please collapse/expand the node again to try again.`,
-            duration: 5000,
-            showCloseButton: true,
-          }).pipe(takeUntil(subscription)).subscribe();
+          this.adminSnackbarService.showMessage($localize `Error while loading service(s). Please collapse/expand the node again to try again.`)
+            .pipe(takeUntil(subscription)).subscribe();
           return of(null);
         }),
         map(responses => responses || []),
@@ -91,11 +87,9 @@ export class CatalogService implements OnDestroy {
       .pipe(
         takeUntil(subscription),
         catchError(() => {
-          SnackBarMessageComponent.open$(this.snackBar, {
-            message: $localize `Error while loading feature source(s). Please collapse/expand the node again to try again.`,
-            duration: 5000,
-            showCloseButton: true,
-          }).pipe(takeUntil(subscription)).subscribe();
+          this.adminSnackbarService.showMessage($localize `Error while loading feature source(s). Please collapse/expand the node again to try again.`)
+            .pipe(takeUntil(subscription))
+            .subscribe();
           return of(null);
         }),
         map(responses => responses || []),
@@ -185,11 +179,7 @@ export class CatalogService implements OnDestroy {
           return this.adminApiService.updateCatalog$(updatedCatalog)
             .pipe(
               catchError(() => {
-                SnackBarMessageComponent.open$(this.snackBar, {
-                  message: $localize `Error while updating catalog.`,
-                  duration: 3000,
-                  showCloseButton: true,
-                });
+                this.adminSnackbarService.showMessage($localize `Error while updating catalog.`);
                 return of(null);
               }),
             );

@@ -3,6 +3,7 @@ import { ApplicationModel } from '@tailormap-admin/admin-api';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { ApplicationService } from '../services/application.service';
 import { Router } from '@angular/router';
+import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 
 @Component({
   selector: 'tm-admin-application-create',
@@ -21,6 +22,7 @@ export class ApplicationCreateComponent implements OnInit, OnDestroy {
   constructor(
     private applicationService: ApplicationService,
     private router: Router,
+    private adminSnackbarService: AdminSnackbarService,
   ) { }
 
   public ngOnInit(): void {
@@ -44,6 +46,7 @@ export class ApplicationCreateComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyed))
       .subscribe(createdApplication => {
         if (createdApplication) {
+          this.adminSnackbarService.showMessage($localize `Application ${createdApplication.title || createdApplication.name} created`);
           this.router.navigateByUrl('/applications/application/' + createdApplication.id);
         }
         this.savingSubject.next(false);

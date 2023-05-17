@@ -6,6 +6,7 @@ import { Store } from '@ngrx/store';
 import { GeoServiceService } from '../services/geo-service.service';
 import { LayerSettingsModel } from '@tailormap-admin/admin-api';
 import { GeoServiceLayerSettingsModel } from '../models/geo-service-layer-settings.model';
+import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 
 @Component({
   selector: 'tm-admin-geo-service-layer-details',
@@ -26,6 +27,7 @@ export class GeoServiceLayerDetailsComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private store$: Store,
     private geoServiceService: GeoServiceService,
+    private adminSnackbarService: AdminSnackbarService,
   ) { }
 
   public ngOnInit(): void {
@@ -65,6 +67,7 @@ export class GeoServiceLayerDetailsComponent implements OnInit, OnDestroy {
       serviceSetting => ({ layerSettings: { ...(serviceSetting.layerSettings || {}), [layerName]: updatedLayerSettings } }),
     )
       .subscribe(() => {
+        this.adminSnackbarService.showMessage($localize `Layer settings updated`);
         this.savingSubject.next(false);
       });
   }

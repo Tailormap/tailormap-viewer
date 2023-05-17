@@ -1,8 +1,7 @@
 import { BehaviorSubject, catchError, Observable, of, tap } from 'rxjs';
 import { Inject, Injectable } from '@angular/core';
 import { TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel, UserModel } from '@tailormap-admin/admin-api';
-import { SnackBarMessageComponent } from '@tailormap-viewer/shared';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +17,7 @@ export class UserDetailsService {
 
   public constructor(
     @Inject(TAILORMAP_ADMIN_API_V1_SERVICE) private adminApiService: TailormapAdminApiV1ServiceModel,
-    private snackBar: MatSnackBar,
+    private adminSnackbarService: AdminSnackbarService,
   ) {
     this.getUsers();
   }
@@ -34,7 +33,7 @@ export class UserDetailsService {
     this.adminApiService.getUsers$()
       .pipe(
         catchError(err => {
-          this.showErrorMessage($localize`Error while getting users ${err}`);
+          this.adminSnackbarService.showMessage($localize`Error while getting users ${err}`);
           return of(null);
         }),
       )
@@ -54,7 +53,7 @@ export class UserDetailsService {
     this.adminApiService.getUser$(username, 'GroupName')
       .pipe(
         catchError(() => {
-          this.showErrorMessage($localize`Error while getting user ${username}`);
+          this.adminSnackbarService.showMessage($localize`Error while getting user ${username}`);
           return of(null);
         }))
       .subscribe(user => {
@@ -71,7 +70,7 @@ export class UserDetailsService {
     if (add) {
       return this.adminApiService.createUser$({ user }).pipe(
         catchError((response) => {
-          this.showErrorMessage($localize`Error while creating user ${user.username}. ${this.getErrorMessage(response)}`);
+          this.adminSnackbarService.showMessage($localize`Error while creating user ${user.username}. ${this.getErrorMessage(response)}`);
           return of(null);
         }),
         tap(response => {
@@ -83,7 +82,7 @@ export class UserDetailsService {
     }
     return this.adminApiService.updateUser$({ username: user.username, user }).pipe(
       catchError((response) => {
-        this.showErrorMessage($localize`Error while updating user ${user.username}. ${this.getErrorMessage(response)}`);
+        this.adminSnackbarService.showMessage($localize`Error while updating user ${user.username}. ${this.getErrorMessage(response)}`);
         return of(null);
       }),
       tap(response => {
@@ -98,7 +97,7 @@ export class UserDetailsService {
     return this.adminApiService.deleteUser$(userName)
       .pipe(
         catchError((response) => {
-          this.showErrorMessage($localize`Error while deleting user ${userName}. ${response.error?.message}`);
+          this.adminSnackbarService.showMessage($localize`Error while deleting user ${userName}. ${response.error?.message}`);
           return of(false);
         }),
         tap(response => {
@@ -114,12 +113,6 @@ export class UserDetailsService {
 
   public validatePasswordStrength$(password: string) {
     return this.adminApiService.validatePasswordStrength$(password);
-  }
-
-  private showErrorMessage(message: string) {
-    SnackBarMessageComponent.open$(this.snackBar, {
-      message, duration: 10000, showCloseButton: true,
-    });
   }
 
   private getErrorMessage(response: { error?: { message: string } }) {

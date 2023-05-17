@@ -27,7 +27,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
       updateOn: 'blur',
     }),
     confirmedPassword: new FormControl<string>('', { nonNullable: true, validators: [ Validators.required, Validators.minLength(8) ] }),
-    email: new FormControl<string>('', { nonNullable: false, validators: [ Validators.email ] }),
+    email: new FormControl<string>('', { nonNullable: false, validators: [Validators.email] }),
     name: new FormControl<string>('', { nonNullable: false }),
     enabled: new FormControl<boolean>(false, { nonNullable: true }),
     validUntil: new FormControl<string>('', { nonNullable: false }),
