@@ -112,6 +112,10 @@ export class UserDetailsService {
       );
   }
 
+  public validatePasswordStrength$(password: string) {
+    return this.adminApiService.validatePasswordStrength$(password);
+  }
+
   private showErrorMessage(message: string) {
     SnackBarMessageComponent.open$(this.snackBar, {
       message, duration: 10000, showCloseButton: true,

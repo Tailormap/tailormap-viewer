@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { GroupModel, UserModel } from '@tailormap-admin/admin-api';
-import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { debounceTime, filter, Observable, Subject, takeUntil } from 'rxjs';
+import { AbstractControl, AsyncValidatorFn, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { debounceTime, filter, map, Observable, of, Subject, takeUntil } from 'rxjs';
 import { GroupDetailsService } from '../services/group-details.service';
 import { formatDate } from '@angular/common';
 import { NAME_REGEX } from '../constants';
+import { UserDetailsService } from '../services/user-details.service';
 
 @Component({
   selector: 'tm-admin-user-form',
@@ -19,9 +20,14 @@ export class UserFormComponent implements OnInit, OnDestroy {
       nonNullable: true,
       validators: [ Validators.required, Validators.pattern(NAME_REGEX) ],
     }),
-    password: new FormControl<string>('', { nonNullable: true, validators: Validators.minLength(8) }),
-    confirmedPassword: new FormControl<string>('', { nonNullable: true, validators: Validators.minLength(8) }),
-    email: new FormControl<string>('', { nonNullable: false, validators: Validators.email }),
+    password: new FormControl<string>('', {
+      nonNullable: true,
+      validators: [ Validators.required, Validators.minLength(8) ],
+      asyncValidators: [this.passwordStrengthValidator()],
+      updateOn: 'blur',
+    }),
+    confirmedPassword: new FormControl<string>('', { nonNullable: true, validators: [ Validators.required, Validators.minLength(8) ] }),
+    email: new FormControl<string>('', { nonNullable: false, validators: [ Validators.email ] }),
     name: new FormControl<string>('', { nonNullable: false }),
     enabled: new FormControl<boolean>(false, { nonNullable: true }),
     validUntil: new FormControl<string>('', { nonNullable: false }),
@@ -46,6 +52,9 @@ export class UserFormComponent implements OnInit, OnDestroy {
       validUntil: (user && user.validUntil) ? formatDate(user.validUntil, 'yyyy-MM-ddTHH:mm:ss', 'en') : null,
       groups: user ? user.groups : [],
     });
+    const defaultPasswordValidator = [Validators.minLength(8)];
+    this.userForm.get('password')?.setValidators(user ? defaultPasswordValidator : [ Validators.required, ...defaultPasswordValidator ]);
+    this.userForm.get('confirmedPassword')?.setValidators(user ? defaultPasswordValidator : [ Validators.required, ...defaultPasswordValidator ]);
   }
   public get user(): UserModel | null {
     return this._user;
@@ -60,6 +69,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
 
   constructor(
     private groupDetailsService: GroupDetailsService,
+    private userDetailsService: UserDetailsService,
   ) {
     this.allGroups$ = this.groupDetailsService.getGroups$();
   }
@@ -130,4 +140,18 @@ export class UserFormComponent implements OnInit, OnDestroy {
       return null;
     };
   }
+
+  private passwordStrengthValidator(): AsyncValidatorFn {
+    return (control: AbstractControl): Observable<ValidationErrors | null> => {
+      if (!control.value || control.value < 8) {
+        return of(null);
+      }
+      return this.userDetailsService.validatePasswordStrength$(control.value).pipe(
+        map((result: boolean) => {
+          return result ? null : { weakPassword: true };
+        }),
+      );
+    };
+  }
+
 }

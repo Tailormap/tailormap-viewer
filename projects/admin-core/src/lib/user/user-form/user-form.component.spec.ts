@@ -7,9 +7,11 @@ import { PasswordFieldComponent } from '../../shared/components/password-field/p
 import userEvent from '@testing-library/user-event';
 
 
-const setup = async () => {
+const setup = async (isValidPassword: boolean) => {
   const mockApiService = {
     getGroups$: jest.fn(() => of([])),
+    getUsers$: jest.fn(() => of([])),
+    validatePasswordStrength$: jest.fn(() => of(isValidPassword)),
   };
   const userUpdated = jest.fn();
   await render(UserFormComponent, {
@@ -30,7 +32,7 @@ const setup = async () => {
 describe('UserFormComponent', () => {
 
   test('should trigger user updated for a valid form', async () => {
-    const { userUpdated } = await setup();
+    const { userUpdated } = await setup(true);
     await userEvent.type(screen.getByLabelText('Username'), 'user1');
     await userEvent.type(screen.getByLabelText('Name'), 'Real name');
     await userEvent.type(screen.getByLabelText('Email'), 'test@test.com');
@@ -47,6 +49,13 @@ describe('UserFormComponent', () => {
         password: 'secret-secret',
       });
     });
+  });
+
+  test('gives warning for weak password', async () => {
+    const { userUpdated } = await setup(false);
+    await userEvent.type(screen.getByLabelText('Password'), 'secret-secret');
+    await userEvent.tab();
+    expect(await screen.findByText('Password too short or too easily guessable')).toBeInTheDocument();
   });
 
 });

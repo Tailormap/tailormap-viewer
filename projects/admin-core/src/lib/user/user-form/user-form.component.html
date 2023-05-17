@@ -6,11 +6,15 @@
     </mat-form-field>
     <mat-form-field>
       <mat-label i18n>Password</mat-label>
-      <input formControlName="password" matInput type="password">
+      <input formControlName="password" matInput type="password" #passwordControl>
+      <mat-error *ngIf="!userForm.get('password')?.valid && userForm.get('password')?.errors?.['weakPassword']"
+                 i18n>Password too short or too easily guessable</mat-error>
     </mat-form-field>
     <mat-form-field>
       <mat-label i18n>Confirm password</mat-label>
       <input formControlName="confirmedPassword" matInput type="password">
+      <mat-error *ngIf="!userForm.valid && userForm.errors?.['matching']"
+                 i18n>Passwords need to match</mat-error>
     </mat-form-field>
     <mat-form-field>
       <mat-label i18n>Email</mat-label>
