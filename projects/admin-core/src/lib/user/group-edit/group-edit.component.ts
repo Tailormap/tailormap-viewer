@@ -40,6 +40,7 @@ export class GroupEditComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
+    this.clearSelectedGroup();
     this.destroyed.next(null);
     this.destroyed.complete();
   }

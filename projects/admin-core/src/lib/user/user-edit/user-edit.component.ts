@@ -40,6 +40,7 @@ export class UserEditComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
+    this.clearSelectedUser();
     this.destroyed.next(null);
     this.destroyed.complete();
   }

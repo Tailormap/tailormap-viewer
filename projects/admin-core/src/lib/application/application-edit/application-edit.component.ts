@@ -53,6 +53,7 @@ export class ApplicationEditComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
+    this.clearSelectedApplication();
     this.destroyed.next(null);
     this.destroyed.complete();
   }
