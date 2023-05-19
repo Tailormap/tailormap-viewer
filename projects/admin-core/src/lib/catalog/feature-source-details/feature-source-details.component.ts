@@ -6,6 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectFeatureSourceById } from '../state/catalog.selectors';
 import { FeatureSourceService } from '../services/feature-source.service';
+import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 
 @Component({
   selector: 'tm-admin-feature-source-details',
@@ -26,6 +27,7 @@ export class FeatureSourceDetailsComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private store$: Store,
     private featureSourceService: FeatureSourceService,
+    private adminSnackbarService: AdminSnackbarService,
   ) { }
 
   public ngOnInit(): void {
@@ -60,6 +62,7 @@ export class FeatureSourceDetailsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyed))
       .subscribe(success => {
         if (success) {
+          this.adminSnackbarService.showMessage($localize `Feature source updated`);
           this.updatedFeatureSource = null;
         }
         this.savingSubject.next(false);

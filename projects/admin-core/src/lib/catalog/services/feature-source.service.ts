@@ -3,15 +3,14 @@ import { Inject, Injectable } from '@angular/core';
 import {
   CatalogItemKindEnum, FeatureSourceModel, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel,
 } from '@tailormap-admin/admin-api';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { CatalogService } from './catalog.service';
 import { catchError, concatMap, filter, map, of, take } from 'rxjs';
 import { addFeatureSources, updateFeatureSource } from '../state/catalog.actions';
 import { FeatureSourceCreateModel, FeatureSourceUpdateModel, FeatureTypeUpdateModel } from '../models/feature-source-update.model';
-import { SnackBarMessageComponent } from '@tailormap-viewer/shared';
 import { selectFeatureSourceById, selectFeatureTypeById } from '../state/catalog.selectors';
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
+import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +20,7 @@ export class FeatureSourceService {
   constructor(
     private store$: Store,
     @Inject(TAILORMAP_ADMIN_API_V1_SERVICE) private adminApiService: TailormapAdminApiV1ServiceModel,
-    private snackBar: MatSnackBar,
+    private adminSnackbarService: AdminSnackbarService,
     private catalogService: CatalogService,
   ) { }
 
@@ -29,7 +28,7 @@ export class FeatureSourceService {
     const featureSource: Omit<FeatureSourceModel, 'id' | 'type' | 'featureTypes'> = { ...source };
     return this.adminApiService.createFeatureSource$({ featureSource }).pipe(
       catchError(() => {
-        this.showErrorMessage($localize `Error while creating feature source.`);
+        this.adminSnackbarService.showMessage($localize `Error while creating feature source.`);
         return of(null);
       }),
       concatMap(createdFeatureSource => {
@@ -56,7 +55,7 @@ export class FeatureSourceService {
         concatMap(featureSource => {
           return this.adminApiService.updateFeatureSource$({ id: featureSource.id, featureSource: { id: featureSource.id, ...updatedSource } }).pipe(
             catchError(() => {
-              this.showErrorMessage($localize `Error while updating feature source.`);
+              this.adminSnackbarService.showMessage($localize `Error while updating feature source.`);
               return of(null);
             }),
             map(updatedFeatureSource => {
@@ -84,14 +83,6 @@ export class FeatureSourceService {
           return of({ ...featureType, ...updatedFeatureType });
         }),
       );
-  }
-
-  private showErrorMessage(message: string) {
-    SnackBarMessageComponent.open$(this.snackBar, {
-      message,
-      duration: 3000,
-      showCloseButton: true,
-    });
   }
 
 }

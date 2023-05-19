@@ -11,6 +11,7 @@ import { CatalogRouteHelper } from '../helpers/catalog-route.helper';
 import { Router } from '@angular/router';
 import { expandTree } from '../state/catalog.actions';
 import { CatalogTreeModelTypeEnum } from '../models/catalog-tree-model-type.enum';
+import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 
 @Component({
   selector: 'tm-admin-catalog-create-buttons',
@@ -31,6 +32,7 @@ export class CatalogCreateButtonsComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private store$: Store,
     private router: Router,
+    private adminSnackbarService: AdminSnackbarService,
   ) { }
 
   public ngOnInit(): void {
@@ -54,6 +56,7 @@ export class CatalogCreateButtonsComponent implements OnInit, OnDestroy {
       parentNode,
     }).afterClosed().pipe(takeUntil(this.destroyed)).subscribe(node => {
       if (node) {
+        this.adminSnackbarService.showMessage($localize `Folder ${node.title} created`);
         this.router.navigateByUrl(CatalogRouteHelper.getCatalogNodeUrl({ id: node.id }));
         this.store$.dispatch(expandTree({ id: node.id, nodeType: CatalogTreeModelTypeEnum.CATALOG_NODE_TYPE }));
       }
@@ -70,6 +73,7 @@ export class CatalogCreateButtonsComponent implements OnInit, OnDestroy {
       parentNode,
     }).afterClosed().pipe(takeUntil(this.destroyed)).subscribe(createdService => {
       if (createdService) {
+        this.adminSnackbarService.showMessage($localize `Service ${createdService.title} created`);
         this.router.navigateByUrl(CatalogRouteHelper.getGeoServiceUrl({ id: createdService.id, catalogNodeId: parentNode }));
         this.store$.dispatch(expandTree({ id: createdService.id, nodeType: CatalogTreeModelTypeEnum.SERVICE_TYPE }));
       }
@@ -86,6 +90,7 @@ export class CatalogCreateButtonsComponent implements OnInit, OnDestroy {
       parentNode,
     }).afterClosed().pipe(takeUntil(this.destroyed)).subscribe(featureSource => {
       if (featureSource) {
+        this.adminSnackbarService.showMessage($localize `Feature source ${featureSource.title} created`);
         this.router.navigateByUrl(CatalogRouteHelper.getFeatureSourceUrl({ id: featureSource.id, catalogNodeId: parentNode }));
         this.store$.dispatch(expandTree({ id: featureSource.id, nodeType: CatalogTreeModelTypeEnum.FEATURE_SOURCE_TYPE }));
       }

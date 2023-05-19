@@ -1,10 +1,10 @@
 <tm-admin-template i18n-pageTitle pageTitle="Group Administration">
   <div class="admin-page-wrapper">
     <div class="admin-tree">
-      <tm-admin-grouplist></tm-admin-grouplist>
+      <tm-admin-group-list></tm-admin-group-list>
     </div>
     <div class="admin-content">
-      <tm-admin-groupdetails-form></tm-admin-groupdetails-form>
+      <router-outlet></router-outlet>
     </div>
   </div>
 </tm-admin-template>

@@ -1,10 +1,10 @@
 <tm-admin-template i18n-pageTitle pageTitle="User Administration">
   <div class="admin-page-wrapper">
     <div class="admin-tree">
-      <tm-admin-userlist></tm-admin-userlist>
+      <tm-admin-user-list></tm-admin-user-list>
     </div>
     <div class="admin-content">
-      <tm-admin-userdetails-form></tm-admin-userdetails-form>
+      <router-outlet></router-outlet>
     </div>
   </div>
 </tm-admin-template>

@@ -6,12 +6,12 @@ import { TemplatesModule } from '../templates/templates.module';
 import { CatalogModule } from '../catalog/catalog.module';
 import { RouterOutlet } from '@angular/router';
 import { UserAdminPageComponent } from './user-admin-page/user-admin-page.component';
-import { UseradminModule } from '../useradmin/useradmin.module';
 import { GroupsPageComponent } from './groups-page/groups-page.component';
 import { ApplicationPageComponent } from './application-page/application-page.component';
 import { ApplicationModule } from '../application/application.module';
 import { AdminLoginPageComponent } from './admin-login-page/admin-login-page.component';
 import { SharedComponentsModule, SharedImportsModule } from '@tailormap-viewer/shared';
+import { UserModule } from '../user/user.module';
 
 
 @NgModule({
@@ -28,7 +28,7 @@ import { SharedComponentsModule, SharedImportsModule } from '@tailormap-viewer/s
     RouterOutlet,
     TemplatesModule,
     CatalogModule,
-    UseradminModule,
+    UserModule,
     ApplicationModule,
     SharedComponentsModule,
     SharedImportsModule,

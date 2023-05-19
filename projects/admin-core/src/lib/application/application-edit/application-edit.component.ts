@@ -10,6 +10,7 @@ import { RoutesEnum } from '../../routes';
 import { clearSelectedApplication, setSelectedApplication } from '../state/application.actions';
 import { ConfirmDialogService, LoadingStateEnum } from '@tailormap-viewer/shared';
 import { ApplicationService } from '../services/application.service';
+import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 
 @Component({
   selector: 'tm-admin-application-edit',
@@ -34,6 +35,7 @@ export class ApplicationEditComponent implements OnInit, OnDestroy {
     private applicationService: ApplicationService,
     private confirmDelete: ConfirmDialogService,
     private router: Router,
+    private adminSnackbarService: AdminSnackbarService,
   ) {
   }
 
@@ -53,6 +55,7 @@ export class ApplicationEditComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
+    this.clearSelectedApplication();
     this.destroyed.next(null);
     this.destroyed.complete();
   }
@@ -62,6 +65,7 @@ export class ApplicationEditComponent implements OnInit, OnDestroy {
     this.applicationService.saveDraftApplication$()
       .pipe(take(1))
       .subscribe(() => {
+        this.adminSnackbarService.showMessage($localize `Application updated`);
         this.savingSubject.next(false);
       });
   }
@@ -79,6 +83,7 @@ export class ApplicationEditComponent implements OnInit, OnDestroy {
         switchMap(() => this.applicationService.deleteApplication$(application.id)),
       )
       .subscribe(() => {
+        this.adminSnackbarService.showMessage($localize `Application ${title} removed`);
         this.router.navigateByUrl('/applications');
       });
   }

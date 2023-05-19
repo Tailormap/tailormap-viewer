@@ -21,6 +21,12 @@ import { ApplicationEditComponentsComponent } from './application/application-ed
 import { ApplicationEditStylingComponent } from './application/application-edit-styling/application-edit-styling.component';
 import { AdminLoginPageComponent } from './pages/admin-login-page/admin-login-page.component';
 import { CatalogHomeComponent } from './catalog/catalog-home/catalog-home.component';
+import { UserHomeComponent } from './user/user-home/user-home.component';
+import { UserCreateComponent } from './user/user-create/user-create.component';
+import { UserEditComponent } from './user/user-edit/user-edit.component';
+import { GroupHomeComponent } from './user/group-home/group-home.component';
+import { GroupCreateComponent } from './user/group-create/group-create.component';
+import { GroupEditComponent } from './user/group-edit/group-edit.component';
 
 const routes: Routes = [
   {
@@ -98,8 +104,42 @@ const routes: Routes = [
   // pressing F5 in their browser on your route.
   { path: RoutesEnum.ADMIN_HOME, component: AdminHomePageComponent },
   { path: RoutesEnum.LOGIN, component: AdminLoginPageComponent },
-  { path: RoutesEnum.USER, component: UserAdminPageComponent },
-  { path: RoutesEnum.GROUP, component: GroupsPageComponent },
+  {
+    path: RoutesEnum.USER,
+    component: UserAdminPageComponent,
+    children: [
+      {
+        path: '',
+        component: UserHomeComponent,
+      },
+      {
+        path: RoutesEnum.USER_CREATE,
+        component: UserCreateComponent,
+      },
+      {
+        path: RoutesEnum.USER_DETAILS,
+        component: UserEditComponent,
+      },
+    ],
+  },
+  {
+    path: RoutesEnum.GROUP,
+    component: GroupsPageComponent,
+    children: [
+      {
+        path: '',
+        component: GroupHomeComponent,
+      },
+      {
+        path: RoutesEnum.GROUP_CREATE,
+        component: GroupCreateComponent,
+      },
+      {
+        path: RoutesEnum.GROUP_DETAILS,
+        component: GroupEditComponent,
+      },
+    ],
+  },
   { path: '**', redirectTo: '' },
 ];
 

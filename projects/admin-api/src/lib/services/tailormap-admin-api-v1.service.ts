@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { TailormapAdminApiV1ServiceModel } from './tailormap-admin-api-v1-service.model';
 import { map, Observable } from 'rxjs';
 import {
@@ -161,6 +161,12 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
     }).pipe(
       map(response => response.status === 204),
     );
+  }
+
+  public validatePasswordStrength$(password: string): Observable<boolean> {
+    const body = new HttpParams().set('password', password);
+    return this.httpClient.post<{ result: boolean }>(`${TailormapAdminApiV1Service.BASE_URL}/validate-password`, body)
+      .pipe(map(response => response.result));
   }
 
   public getApplications$(): Observable<ApplicationModel[]> {

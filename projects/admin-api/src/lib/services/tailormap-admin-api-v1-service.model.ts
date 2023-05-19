@@ -27,6 +27,7 @@ export interface TailormapAdminApiV1ServiceModel {
   createUser$(params: { user: UserModel }): Observable<UserModel>;
   updateUser$(params: { username: string; user: Partial<UserModel> }): Observable<UserModel>;
   deleteUser$(username: string): Observable<boolean>;
+  validatePasswordStrength$(password: string): Observable<boolean>;
   getApplications$(): Observable<ApplicationModel[]>;
   createApplication$(params: { application: Partial<Omit<ApplicationModel, 'id'>> }): Observable<ApplicationModel>;
   updateApplication$(params: { id: string; application: Partial<ApplicationModel> }): Observable<ApplicationModel>;

@@ -4,7 +4,7 @@ import { BoundsModel } from '@tailormap-viewer/api';
 import { ApplicationModel, GroupModel, AuthorizationRuleGroup, AUTHORIZATION_RULE_ANONYMOUS } from '@tailormap-admin/admin-api';
 import { Observable, debounceTime, filter, Subject, takeUntil } from 'rxjs';
 import { FormHelper } from '../../helpers/form.helper';
-import { GroupdetailsService } from '../../useradmin/services/groupdetails.service';
+import { GroupDetailsService } from '../../user/services/group-details.service';
 
 @Component({
   selector: 'tm-admin-application-form',
@@ -56,8 +56,8 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
   }
 
   public groups$: Observable<GroupModel[]>;
-  constructor(groupdetailsService: GroupdetailsService) {
-      this.groups$ = groupdetailsService.groupList$;
+  constructor(groupDetailsService: GroupDetailsService) {
+      this.groups$ = groupDetailsService.getGroups$();
   }
 
   public ngOnInit(): void {

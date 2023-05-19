@@ -113,6 +113,10 @@ export class TailormapAdminApiV1MockService implements TailormapAdminApiV1Servic
     return of(true).pipe(delay(this.delay));
   }
 
+  public validatePasswordStrength$(_password: string): Observable<boolean> {
+    return of(true).pipe(delay(this.delay));
+  }
+
   public updateUser$(params: { username: string; user: UserModel }): Observable<UserModel> {
     return of({ ...params.user }).pipe(delay(this.delay));
   }
