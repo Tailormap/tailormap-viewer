@@ -1,9 +1,10 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base", "schedule:earlyMondays", ":disableDependencyDashboard"
+    "config:base", "schedule:earlyMondays"
   ],
-  "timezone": "Europe/Brussels"
+  "timezone": "Europe/Brussels",
+  "dependencyDashboard": false,
   "branchPrefix": "renovate-update/",
   "labels": [
     "dependencies"
