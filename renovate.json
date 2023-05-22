@@ -1,6 +1,24 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base"
+    "config:base", "schedule:earlyMondays", ":disableDependencyDashboard"
+  ],
+  "branchPrefix": "renovate-update/",
+  "labels": [
+    "dependencies"
+  ],
+  "packageRules": [
+    {
+      "matchDatasources": [
+        "docker"
+      ],
+      "labels": [
+        "docker-update"
+      ],
+      "commitMessagePrefix": "⬆️ Docker update: "
+    }
+  ],
+  "enabledManagers": [
+    "docker-compose"
   ]
 }
