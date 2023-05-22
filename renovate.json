@@ -30,7 +30,7 @@
       "matchPackageNames": ["node"],
       "allowedVersions": "<19",
       "commitMessagePrefix": "⬆️ Docker update: "
-    },
+    }
   ],
   "enabledManagers": [
     "docker-compose",
