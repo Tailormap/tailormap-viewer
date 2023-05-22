@@ -19,7 +19,18 @@
         "docker-update"
       ],
       "commitMessagePrefix": "⬆️ Docker update: "
-    }
+    },
+    {
+      "matchDatasources": [
+        "docker"
+      ],
+      "labels": [
+        "docker-update"
+      ],
+      "matchPackageNames": ["node"],
+      "allowedVersions": "<19",
+      "commitMessagePrefix": "⬆️ Docker update: "
+    },
   ],
   "enabledManagers": [
     "docker-compose",
