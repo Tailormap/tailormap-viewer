@@ -3,6 +3,7 @@
   "extends": [
     "config:base", "schedule:earlyMondays", ":disableDependencyDashboard"
   ],
+  "timezone": "Europe/Brussels"
   "branchPrefix": "renovate-update/",
   "labels": [
     "dependencies"
