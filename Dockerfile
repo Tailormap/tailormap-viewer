@@ -28,6 +28,8 @@ LABEL org.opencontainers.image.authors="info@b3partners.nl" \
       org.opencontainers.image.source="https://github.com/B3Partners/tailormap-viewer/" \
       org.opencontainers.image.documentation="https://github.com/B3Partners/tailormap-viewer/" \
       org.opencontainers.image.licenses="MIT" \
-      org.opencontainers.image.version="${VERSION}"
+      org.opencontainers.image.version="$VERSION" \
+      org.opencontainers.image.base.name="b3partners/tailormap-api:$API_VERSION" \
+      tailormap-api.version=$API_VERSION
 
 COPY --from=builder /app/dist/app static/
