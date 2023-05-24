@@ -35,7 +35,14 @@ export class FeatureSourceFormComponent implements OnInit {
       schema: featureSource?.jdbcConnection?.schema || null,
       username: featureSource?.authentication?.username || null,
       password: featureSource?.authentication?.password || null,
-    });
+    }, { emitEvent: false });
+    if (!featureSource) {
+      this.featureSourceForm.get('protocol')?.enable({ emitEvent: false });
+      this.featureSourceForm.get('dbType')?.enable({ emitEvent: false });
+    } else {
+      this.featureSourceForm.get('protocol')?.disable({ emitEvent: false });
+      this.featureSourceForm.get('dbType')?.disable({ emitEvent: false });
+    }
     this._featureSource = featureSource;
   }
 
@@ -72,14 +79,15 @@ export class FeatureSourceFormComponent implements OnInit {
         filter(() => this.isValidForm()),
       )
       .subscribe(value => {
-        if (!value.protocol) {
+        const protocol = this.featureSource ? this.featureSource.protocol : value.protocol;
+        if (!protocol) {
           return;
         }
         this.changed.emit({
           title: value.title || '',
-          protocol: value.protocol,
+          protocol,
           url: value.url || '',
-          jdbcConnection: this.getJdbcConnection(value),
+          jdbcConnection: this.getJdbcConnection(protocol, this.featureSource?.jdbcConnection?.dbtype || value.dbType, value),
           authentication: this.getAuthentication(value),
         });
       });
@@ -100,10 +108,14 @@ export class FeatureSourceFormComponent implements OnInit {
       && this.featureSourceForm.dirty;
   }
 
-  private getJdbcConnection(value: typeof this.featureSourceForm.value): JdbcConnectionPropertiesModel | undefined {
+  private getJdbcConnection(
+    protocol: FeatureSourceProtocolEnum,
+    dbType: JdbcDatabaseTypeEnum | undefined | null,
+    value: typeof this.featureSourceForm.value,
+  ): JdbcConnectionPropertiesModel | undefined {
     if (
-      value.protocol !== FeatureSourceProtocolEnum.JDBC
-      || !value.dbType
+      protocol !== FeatureSourceProtocolEnum.JDBC
+      || !dbType
       || typeof value.port === 'undefined' || value.port === null
       || !value.database
       || !value.schema
@@ -111,7 +123,7 @@ export class FeatureSourceFormComponent implements OnInit {
       return undefined;
     }
     return {
-      dbtype: value.dbType,
+      dbtype: dbType,
       port: value.port,
       host: value.host || 'localhost',
       database: value.database,
