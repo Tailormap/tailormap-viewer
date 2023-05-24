@@ -59,6 +59,11 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
     );
   }
 
+  public refreshGeoService$(params: { id: string }): Observable<GeoServiceWithLayersModel> {
+    return this.httpClient.post<GeoServiceWithLayersModel>(`${TailormapAdminApiV1Service.BASE_URL}/geo-services/${params.id}/refresh-capabilities`, {})
+      .pipe(map(CatalogModelHelper.addTypeToGeoServiceModel));
+  }
+
   public getFeatureSource$(params: { id: string }): Observable<FeatureSourceModel> {
     return this.httpClient.get<FeatureSourceModel>(`${TailormapAdminApiV1Service.BASE_URL}/feature-sources/${params.id}`)
       .pipe(map(CatalogModelHelper.addTypeToFeatureSourceModel));
@@ -93,6 +98,11 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
     }).pipe(
       map(response => response.status === 204),
     );
+  }
+
+  public refreshFeatureSource$(params: { id: string }): Observable<FeatureSourceModel> {
+    return this.httpClient.post<FeatureSourceModel>(`${TailormapAdminApiV1Service.BASE_URL}/feature-sources/${params.id}/refresh-capabilities`, {})
+      .pipe(map(CatalogModelHelper.addTypeToFeatureSourceModel));
   }
 
     public getGroups$(): Observable<GroupModel[]> {

@@ -1,24 +1,34 @@
 import { of } from 'rxjs';
+import { GeoServiceWithLayersModel } from '@tailormap-admin/admin-api';
 
-export const createGeoServiceMock = () => {
+export const createGeoServiceMock = (geoServiceModelMock?: GeoServiceWithLayersModel) => {
   const updateGeoServiceDetails = jest.fn((_details) => ({}));
   const updateGeoServiceSettings = jest.fn((_settings) => ({}));
   const geoServiceService = {
     createGeoService$: jest.fn(() => of(true)),
     updateGeoService$: jest.fn((id, serviceCallback, settingsCallback) => {
-      const result = serviceCallback({});
+      const result = serviceCallback(geoServiceModelMock || {});
       updateGeoServiceDetails(result);
+      let settings = geoServiceModelMock?.settings || {};
       if (settingsCallback) {
-        const result2 = settingsCallback({});
-        updateGeoServiceSettings(result2);
+        settings = settingsCallback(geoServiceModelMock?.settings || {});
+        updateGeoServiceSettings(settings);
       }
-      return of(true);
+      return of({
+        ...(geoServiceModelMock || {}),
+        ...result,
+        settings,
+      });
+    }),
+    refreshGeoService$: jest.fn((geoServiceId: string) => {
+      return of(geoServiceModelMock || {});
     }),
   };
   return {
     geoServiceService,
     createGeoService$: geoServiceService.createGeoService$,
     updateGeoService$: geoServiceService.updateGeoService$,
+    refreshGeoService$: geoServiceService.refreshGeoService$,
     updateGeoServiceDetails,
     updateGeoServiceSettings,
   };

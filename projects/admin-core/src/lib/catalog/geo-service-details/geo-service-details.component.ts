@@ -8,11 +8,12 @@ import { Store } from '@ngrx/store';
 import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 import { GeoServiceService } from '../services/geo-service.service';
 import { GeoServiceUpdateModel } from '../models/geo-service-update.model';
-import { LayerSettingsModel } from '@tailormap-admin/admin-api';
+import { GeoServiceWithLayersModel, LayerSettingsModel } from '@tailormap-admin/admin-api';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
 import { MatDialog } from '@angular/material/dialog';
 import { GeoServiceUsedDialogComponent } from './geo-service-used-dialog/geo-service-used-dialog.component';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
+import { FormHelper } from '../../helpers/form.helper';
 
 @Component({
   selector: 'tm-admin-geo-service-details',
@@ -30,11 +31,14 @@ export class GeoServiceDetailsComponent implements OnInit, OnDestroy {
   private savingSubject = new BehaviorSubject(false);
   public saving$ = this.savingSubject.asObservable();
 
+  private refreshingSubject = new BehaviorSubject(false);
+  public refreshing$ = this.refreshingSubject.asObservable();
+
   constructor(
     private route: ActivatedRoute,
     private store$: Store,
     private geoServiceService: GeoServiceService,
-    private confirmDelete: ConfirmDialogService,
+    private confirmDialog: ConfirmDialogService,
     private dialog: MatDialog,
     private router: Router,
     private adminSnackbarService: AdminSnackbarService,
@@ -47,7 +51,10 @@ export class GeoServiceDetailsComponent implements OnInit, OnDestroy {
       distinctUntilChanged(),
       filter((serviceId): serviceId is string => !!serviceId),
       switchMap(serviceId => this.store$.select(selectGeoServiceById(serviceId))),
-      tap(geoService => { if (geoService) { this.updatedGeoService = null; }}),
+      tap(geoService => { if (geoService) {
+        this.updatedGeoService = null;
+        this.updatedDefaultLayerSettings = null;
+      }}),
     );
   }
 
@@ -64,24 +71,57 @@ export class GeoServiceDetailsComponent implements OnInit, OnDestroy {
     this.updatedDefaultLayerSettings = $event;
   }
 
-  public save(geoServiceId: string) {
+  public save(geoService: ExtendedGeoServiceModel) {
     if (!this.updatedGeoService && !this.updatedDefaultLayerSettings) {
       return;
     }
     this.savingSubject.next(true);
     this.geoServiceService.updateGeoService$(
-      geoServiceId,
+      geoService.id,
       () => this.updatedGeoService || {},
       serviceSetting => ({ ...this.updatedGeoService?.settings, defaultLayerSettings: { ...serviceSetting.defaultLayerSettings, ...(this.updatedDefaultLayerSettings || {}) } }),
     )
       .pipe(takeUntil(this.destroyed))
-      .subscribe(success => {
-        if (success) {
+      .subscribe(updatedGeoService => {
+        if (updatedGeoService) {
+          this.checkToRefresh(geoService, updatedGeoService);
           this.adminSnackbarService.showMessage($localize `Service updated`);
           this.updatedGeoService = null;
           this.updatedDefaultLayerSettings = null;
         }
         this.savingSubject.next(false);
+      });
+  }
+
+  private checkToRefresh(service: ExtendedGeoServiceModel, updatedService: GeoServiceWithLayersModel | null) {
+    if (!updatedService || !FormHelper.someValuesChanged([
+      [ service.url, updatedService.url ],
+      [ service.authentication?.username, updatedService.authentication?.username ],
+      [ service.authentication?.password, updatedService.authentication?.password ],
+    ])) {
+      return;
+    }
+    this.confirmDialog.confirm$(
+      $localize `Refresh service?`,
+      $localize `The settings for the service are updated. Do you want to refresh the service to refresh the capabilities and layers?`,
+    )
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(result => {
+        if (result) {
+          this.refresh(service.id);
+        }
+      });
+  }
+
+  public refresh(serviceId: string) {
+    this.refreshingSubject.next(true);
+    this.geoServiceService.refreshGeoService$(serviceId)
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(success => {
+        if (success) {
+          this.adminSnackbarService.showMessage($localize `Service refreshed`);
+        }
+        this.refreshingSubject.next(false);
       });
   }
 
@@ -95,7 +135,7 @@ export class GeoServiceDetailsComponent implements OnInit, OnDestroy {
               data: { applications, service: geoService },
             }).afterClosed().pipe(map(() => false));
           }
-          return this.confirmDelete.confirm$(
+          return this.confirmDialog.confirm$(
             `Delete service ${geoService.title}`,
             `Are you sure you want to delete service ${geoService.title}? This action cannot be undone.`,
             true,

@@ -7,6 +7,9 @@ import { Store } from '@ngrx/store';
 import { selectFeatureSourceById } from '../state/catalog.selectors';
 import { FeatureSourceService } from '../services/feature-source.service';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
+import { FeatureSourceModel } from '@tailormap-admin/admin-api';
+import { FormHelper } from '../../helpers/form.helper';
+import { ConfirmDialogService } from '@tailormap-viewer/shared';
 
 @Component({
   selector: 'tm-admin-feature-source-details',
@@ -23,11 +26,15 @@ export class FeatureSourceDetailsComponent implements OnInit, OnDestroy {
   private savingSubject = new BehaviorSubject(false);
   public saving$ = this.savingSubject.asObservable();
 
+  private refreshingSubject = new BehaviorSubject(false);
+  public refreshing$ = this.refreshingSubject.asObservable();
+
   constructor(
     private route: ActivatedRoute,
     private store$: Store,
     private featureSourceService: FeatureSourceService,
     private adminSnackbarService: AdminSnackbarService,
+    private confirmDialog: ConfirmDialogService,
   ) { }
 
   public ngOnInit(): void {
@@ -50,22 +57,59 @@ export class FeatureSourceDetailsComponent implements OnInit, OnDestroy {
     this.updatedFeatureSource = $event;
   }
 
-  public save(featureSourceId: string) {
+  public save(featureSource: ExtendedFeatureSourceModel) {
     if (!this.updatedFeatureSource) {
       return;
     }
     this.savingSubject.next(true);
     this.featureSourceService.updateFeatureSource$(
-      featureSourceId,
+      featureSource.id,
       this.updatedFeatureSource,
     )
       .pipe(takeUntil(this.destroyed))
-      .subscribe(success => {
-        if (success) {
+      .subscribe(updatedSource => {
+        if (updatedSource) {
+          this.checkToRefresh(featureSource, updatedSource);
           this.adminSnackbarService.showMessage($localize `Feature source updated`);
           this.updatedFeatureSource = null;
         }
         this.savingSubject.next(false);
+      });
+  }
+
+  private checkToRefresh(featureSource: ExtendedFeatureSourceModel, updatedFeatureSource?: FeatureSourceModel) {
+    if (!updatedFeatureSource || !FormHelper.someValuesChanged([
+      [ featureSource.url, updatedFeatureSource.url ],
+      [ featureSource.jdbcConnection?.host, updatedFeatureSource.jdbcConnection?.host ],
+      [ featureSource.jdbcConnection?.database, updatedFeatureSource.jdbcConnection?.database ],
+      [ featureSource.jdbcConnection?.schema, updatedFeatureSource.jdbcConnection?.schema ],
+      [ featureSource.jdbcConnection?.port, updatedFeatureSource.jdbcConnection?.port ],
+      [ featureSource.authentication?.username, updatedFeatureSource.authentication?.username ],
+      [ featureSource.authentication?.password, updatedFeatureSource.authentication?.password ],
+    ])) {
+      return;
+    }
+    this.confirmDialog.confirm$(
+      $localize `Refresh feature source?`,
+      $localize `The settings for the feature source are updated. Do you want to refresh the feature source to refresh the feature types?`,
+    )
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(result => {
+        if (result) {
+          this.refresh(featureSource.id);
+        }
+      });
+  }
+
+  public refresh(featureSourceId: string) {
+    this.refreshingSubject.next(true);
+    this.featureSourceService.refreshFeatureSource$(featureSourceId)
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(success => {
+        if (success) {
+          this.adminSnackbarService.showMessage($localize `Feature source refreshed`);
+        }
+        this.refreshingSubject.next(false);
       });
   }
 

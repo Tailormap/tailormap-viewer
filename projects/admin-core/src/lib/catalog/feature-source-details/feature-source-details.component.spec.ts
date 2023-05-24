@@ -1,7 +1,7 @@
-import { render, screen, waitFor } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
 import { FeatureSourceDetailsComponent } from './feature-source-details.component';
 import { of } from 'rxjs';
-import { FeatureSourceProtocolEnum, getFeatureSource } from '@tailormap-admin/admin-api';
+import { FeatureSourceProtocolEnum, getFeatureSource, JdbcDatabaseTypeEnum } from '@tailormap-admin/admin-api';
 import { getMockStore } from '@ngrx/store/testing';
 import { catalogStateKey, initialCatalogState } from '../state/catalog.state';
 import { SharedModule } from '@tailormap-viewer/shared';
@@ -19,8 +19,27 @@ const setup = async (protocol: FeatureSourceProtocolEnum) => {
   const activeRoute = {
     paramMap: of({ get: () => '1' }),
   };
-  const featureServiceMock = { updateFeatureSource$: jest.fn(() => of({})) };
-  const featureSourceModel = getFeatureSource({ id: '1', title: `Some ${protocol} source`, protocol });
+  const featureSourceModel = getFeatureSource({
+    id: '1',
+    title: `Some ${protocol} source`,
+    protocol,
+    jdbcConnection: protocol === FeatureSourceProtocolEnum.JDBC ? {
+      dbtype: JdbcDatabaseTypeEnum.POSTGIS,
+      host: '',
+      port: 0,
+      database: '',
+      schema: '',
+    } : undefined,
+  });
+  const featureServiceMock = {
+    updateFeatureSource$: jest.fn((_id, updatedSource) => of({
+      ...featureSourceModel,
+      ...updatedSource,
+    })),
+    refreshFeatureSource$: jest.fn(() => of({
+      ...featureSourceModel,
+    })),
+  };
   const store = getMockStore({
     initialState: { [catalogStateKey]: { ...initialCatalogState, featureSources: [{ ...featureSourceModel, catalogNodeId: 'node-1' }] } },
   });
@@ -44,11 +63,9 @@ describe('FeatureSourceDetailsComponent', () => {
     expect(await screen.findByLabelText('Save')).toBeDisabled();
     expect(await screen.queryByText('URL')).not.toBeInTheDocument();
     await userEvent.type(await screen.findByPlaceholderText('Title'), '___');
-    await userEvent.click(await screen.findByPlaceholderText('Database type'));
-    await userEvent.click(await screen.findByText('postgis'));
     await userEvent.type(await screen.findByPlaceholderText('Database'), 'geo_db');
     await userEvent.type(await screen.findByPlaceholderText('Host'), 'localhost');
-    await userEvent.type(await screen.findByPlaceholderText('Port'), '5432');
+    await userEvent.type(await screen.findByPlaceholderText('Port'), '[Backspace]5432');
     await userEvent.type(await screen.findByPlaceholderText('Schema'), 'roads');
     await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save');
     expect(featureServiceMock.updateFeatureSource$).toHaveBeenCalledWith('1', {
@@ -56,7 +73,7 @@ describe('FeatureSourceDetailsComponent', () => {
       protocol: featureSourceModel.protocol,
       url: featureSourceModel.url,
       jdbcConnection: {
-        dbtype: 'postgis',
+        dbtype: featureSourceModel.jdbcConnection?.dbtype,
         database: 'geo_db',
         port: 5432,
         host: 'localhost',
@@ -64,6 +81,23 @@ describe('FeatureSourceDetailsComponent', () => {
       },
       authentication: undefined,
     });
+    expect(await screen.findByText('Refresh feature source?')).toBeInTheDocument();
+    await userEvent.click(await screen.findByText('Yes'));
+    expect(featureServiceMock.refreshFeatureSource$).toHaveBeenCalled();
+  });
+
+  test('should not ask to refresh when just updating title', async () => {
+    const { featureSourceModel, featureServiceMock } = await setup(FeatureSourceProtocolEnum.WFS);
+    await userEvent.type(await screen.findByPlaceholderText('Title'), '___');
+    await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save');
+    expect(featureServiceMock.updateFeatureSource$).toHaveBeenCalledWith('1', {
+      title: featureSourceModel.title + '___',
+      protocol: featureSourceModel.protocol,
+      url: featureSourceModel.url,
+      jdbcConnection: undefined,
+      authentication: undefined,
+    });
+    expect(await screen.queryByText('Refresh feature source?')).not.toBeInTheDocument();
   });
 
   test('should render and handle editing WFS source', async () => {
@@ -88,6 +122,15 @@ describe('FeatureSourceDetailsComponent', () => {
         password: 'secret',
       },
     });
+    expect(await screen.findByText('Refresh feature source?')).toBeInTheDocument();
+    await userEvent.click(await screen.findByText('No'));
+    expect(featureServiceMock.refreshFeatureSource$).not.toHaveBeenCalled();
+  });
+
+  test('should refresh', async () => {
+    const { featureServiceMock } = await setup(FeatureSourceProtocolEnum.JDBC);
+    await TestSaveHelper.waitForButtonToBeEnabledAndClick('Refresh feature source');
+    expect(featureServiceMock.refreshFeatureSource$).toHaveBeenCalled();
   });
 
 });

@@ -70,7 +70,7 @@ export class UserDetailsService {
     if (add) {
       return this.adminApiService.createUser$({ user }).pipe(
         catchError((response) => {
-          this.adminSnackbarService.showMessage($localize`Error while creating user ${user.username}. ${this.getErrorMessage(response)}`);
+          this.adminSnackbarService.showMessage($localize`Error while creating user ${user.username}. ${response.error?.message}`);
           return of(null);
         }),
         tap(response => {
@@ -82,7 +82,7 @@ export class UserDetailsService {
     }
     return this.adminApiService.updateUser$({ username: user.username, user }).pipe(
       catchError((response) => {
-        this.adminSnackbarService.showMessage($localize`Error while updating user ${user.username}. ${this.getErrorMessage(response)}`);
+        this.adminSnackbarService.showMessage($localize`Error while updating user ${user.username}. ${response.error?.message}`);
         return of(null);
       }),
       tap(response => {
@@ -113,15 +113,6 @@ export class UserDetailsService {
 
   public validatePasswordStrength$(password: string) {
     return this.adminApiService.validatePasswordStrength$(password);
-  }
-
-  private getErrorMessage(response: { error?: { message: string } }) {
-    console.log(response);
-    const errorMsg = response.error?.message;
-    if (errorMsg && /Minimum password strength of \d+ was not met/i.test(errorMsg)) {
-      return $localize `Password is too easy, please choose a stronger one.`;
-    }
-    return errorMsg;
   }
 
 }

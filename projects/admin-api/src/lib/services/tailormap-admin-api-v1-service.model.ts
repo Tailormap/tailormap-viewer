@@ -11,12 +11,14 @@ export interface TailormapAdminApiV1ServiceModel {
   createGeoService$(params: { geoService: Omit<GeoServiceModel, 'id' | 'type'> }): Observable<GeoServiceWithLayersModel>;
   updateGeoService$(params: { id: string; geoService: Omit<Partial<GeoServiceModel>, 'type'> }): Observable<GeoServiceWithLayersModel>;
   deleteGeoService$(params: { id: string }): Observable<boolean>;
+  refreshGeoService$(params: { id: string }): Observable<GeoServiceWithLayersModel>;
   getFeatureSource$(params: { id: string }): Observable<FeatureSourceModel>;
   getFeatureSources$(params: { ids: string[] }): Observable<FeatureSourceModel[]>;
   getAllFeatureSources$(): Observable<FeatureSourceModel[]>;
   createFeatureSource$(params: { featureSource: Omit<FeatureSourceModel, 'id' | 'type' | 'featureTypes'> }): Observable<FeatureSourceModel>;
   updateFeatureSource$(params: { id: string; featureSource: Omit<Partial<FeatureSourceModel>, 'type' | 'featureTypes'> }): Observable<FeatureSourceModel>;
   deleteFeatureSource$(params: { id: string }): Observable<boolean>;
+  refreshFeatureSource$(params: { id: string }): Observable<FeatureSourceModel>;
   getGroups$(): Observable<GroupModel[]>;
   getGroup$(name: string): Observable<GroupModel>;
   createGroup$(params: { group: GroupModel }): Observable<GroupModel>;

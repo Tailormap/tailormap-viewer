@@ -1,4 +1,4 @@
-<button mat-flat-button color="primary" aria-label="Save" (click)="saveClicked()" [disabled]="disabled || (saving$ | async)">
+<button mat-flat-button color="primary" [attr.aria-label]="label || 'Save'" (click)="saveClicked()" [disabled]="disabled || (saving$ | async)">
   <ng-template #saveLabel>
     <ng-container *ngIf="label">{{label}}</ng-container>
     <ng-container *ngIf="!label" i18n>Save</ng-container>

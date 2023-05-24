@@ -16,14 +16,15 @@ import { AuthorizationEditComponent } from '../../shared/components/authorizatio
 
 const setup = async (editMode = false) => {
   const dialogRefMock = { close: jest.fn() };
-  const { geoServiceService, updateGeoService$, updateGeoServiceDetails } = createGeoServiceMock();
+  const geoServiceModelMock = getGeoService({ id: '2', title: 'my service', url: 'http://test.service' });
+  const { geoServiceService, updateGeoService$, updateGeoServiceDetails } = createGeoServiceMock(geoServiceModelMock);
   await render(GeoServiceFormDialogComponent, {
     imports: [ SharedModule, MatIconTestingModule ],
     declarations: [ GeoServiceFormComponent, PasswordFieldComponent, SaveButtonComponent, AuthorizationEditComponent ],
     providers: [
       { provide: MatDialogRef, useValue: dialogRefMock },
       { provide: GeoServiceService, useValue: geoServiceService },
-      { provide: MAT_DIALOG_DATA, useValue: { geoService: editMode ? getGeoService({ id: '2', title: 'my service', url: 'http://test.service' }) : null, parentNode: '1' } },
+      { provide: MAT_DIALOG_DATA, useValue: { geoService: editMode ? geoServiceModelMock : null, parentNode: '1' } },
       { provide: TAILORMAP_ADMIN_API_V1_SERVICE, useValue: { getGroups$: jest.fn(() => of(null)) } },
     ],
   });

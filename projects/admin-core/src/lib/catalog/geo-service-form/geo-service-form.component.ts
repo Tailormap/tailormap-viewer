@@ -32,13 +32,11 @@ export class GeoServiceFormComponent implements OnInit {
       username: geoService?.authentication?.username || '',
       password: geoService?.authentication?.password || '',
       authorizationRules: geoService ? geoService.authorizationRules : [AUTHORIZATION_RULE_ANONYMOUS],
-    });
+    }, { emitEvent: false });
     if (!geoService) {
-      this.geoServiceForm.get('title')?.disable();
       this.geoServiceForm.get('protocol')?.enable();
     } else {
-      this.geoServiceForm.get('title')?.enable();
-      this.geoServiceForm.get('protocol')?.disable();
+      this.geoServiceForm.get('protocol')?.disable({ emitEvent: false });
     }
     this._geoService = geoService;
   }
