@@ -27,9 +27,9 @@ const setup = async () => {
       },
     }),
   };
-  const { geoServiceService, updateGeoService$ } = createGeoServiceMock();
   const geoServiceModel = getGeoService({ id: '1', title: 'The Service' });
   const layerModel = getGeoServiceLayer({ name: 'layer_2', title: 'The Layer' });
+  const { geoServiceService, updateGeoService$ } = createGeoServiceMock(geoServiceModel);
   const store = getMockStore({
     initialState: { [catalogStateKey]: {
       ...initialCatalogState,

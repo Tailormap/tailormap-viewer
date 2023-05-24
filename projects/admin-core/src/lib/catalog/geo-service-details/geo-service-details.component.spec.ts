@@ -23,8 +23,8 @@ const setup = async () => {
   const activeRoute = {
     paramMap: of({ get: () => '1' }),
   };
-  const { geoServiceService, updateGeoService$, refreshGeoService$, updateGeoServiceDetails, updateGeoServiceSettings } = createGeoServiceMock();
   const geoServiceModel = getGeoService({ id: '1', title: 'The Service' });
+  const { geoServiceService, updateGeoService$, refreshGeoService$, updateGeoServiceDetails, updateGeoServiceSettings } = createGeoServiceMock(geoServiceModel);
   const store = getMockStore({
     initialState: { [catalogStateKey]: { ...initialCatalogState, geoServices: [{ ...geoServiceModel, catalogNodeId: 'node-1' }] } },
   });
@@ -51,8 +51,10 @@ describe('GeoServiceDetailsComponent', () => {
   });
 
   test('should handle editing', async () => {
-    const { updateGeoService$, updateGeoServiceDetails, updateGeoServiceSettings, geoServiceModel } = await setup();
+    const { updateGeoService$, refreshGeoService$, updateGeoServiceDetails, updateGeoServiceSettings, geoServiceModel } = await setup();
     expect(await screen.findByText('Edit The Service')).toBeInTheDocument();
+
+    // Update title
     await userEvent.type(await screen.findByPlaceholderText('Title'), '___');
     await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save');
     expect(updateGeoService$).toHaveBeenNthCalledWith(1, '1', expect.anything(), expect.anything());
@@ -68,15 +70,35 @@ describe('GeoServiceDetailsComponent', () => {
       defaultLayerSettings: {},
       useProxy: false,
     });
+    expect(await screen.queryByText('Refresh service?')).not.toBeInTheDocument();
     TestSaveHelper.waitForButtonToBeDisabled('Save');
+
+    // Update layer settings
     await userEvent.click(await screen.findByText('High-DPI enabled'));
-    // @ts-ignore
     await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save');
     expect(updateGeoService$).toHaveBeenNthCalledWith(2, '1', expect.anything(), expect.anything());
     expect(updateGeoServiceDetails).toHaveBeenNthCalledWith(2, {});
     expect(updateGeoServiceSettings).toHaveBeenNthCalledWith(2, {
       defaultLayerSettings: { hiDpiDisabled: true, tilingDisabled: false, tilingGutter: undefined },
     });
+    expect(await screen.queryByText('Refresh service?')).not.toBeInTheDocument();
+    TestSaveHelper.waitForButtonToBeDisabled('Save');
+
+    // Ask to refresh after updating URL
+    await userEvent.type(await screen.findByPlaceholderText('URL'), '?test=test');
+    await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save');
+    expect(updateGeoService$).toHaveBeenNthCalledWith(3, '1', expect.anything(), expect.anything());
+    expect(updateGeoServiceDetails).toHaveBeenNthCalledWith(3, {
+      authorizationRules: [],
+      title: geoServiceModel.title + '___',
+      url: geoServiceModel.url + '?test=test',
+      protocol: geoServiceModel.protocol,
+      authentication: null,
+      settings: { useProxy: false },
+    });
+    expect(await screen.queryByText('Refresh service?')).toBeInTheDocument();
+    await userEvent.click(await screen.findByText('Yes'));
+    expect(refreshGeoService$).toHaveBeenCalled();
   });
 
   test('should refresh', async () => {
