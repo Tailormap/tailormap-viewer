@@ -23,6 +23,9 @@ export class FeatureSourceDetailsComponent implements OnInit, OnDestroy {
   private savingSubject = new BehaviorSubject(false);
   public saving$ = this.savingSubject.asObservable();
 
+  private refreshingSubject = new BehaviorSubject(false);
+  public refreshing$ = this.refreshingSubject.asObservable();
+
   constructor(
     private route: ActivatedRoute,
     private store$: Store,
@@ -66,6 +69,18 @@ export class FeatureSourceDetailsComponent implements OnInit, OnDestroy {
           this.updatedFeatureSource = null;
         }
         this.savingSubject.next(false);
+      });
+  }
+
+  public refresh(featureSourceId: string) {
+    this.refreshingSubject.next(true);
+    this.featureSourceService.refreshFeatureSource$(featureSourceId)
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(success => {
+        if (success) {
+          this.adminSnackbarService.showMessage($localize `Feature source refreshed`);
+        }
+        this.refreshingSubject.next(false);
       });
   }
 

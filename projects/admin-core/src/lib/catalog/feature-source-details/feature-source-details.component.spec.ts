@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
 import { FeatureSourceDetailsComponent } from './feature-source-details.component';
 import { of } from 'rxjs';
 import { FeatureSourceProtocolEnum, getFeatureSource } from '@tailormap-admin/admin-api';
@@ -19,7 +19,10 @@ const setup = async (protocol: FeatureSourceProtocolEnum) => {
   const activeRoute = {
     paramMap: of({ get: () => '1' }),
   };
-  const featureServiceMock = { updateFeatureSource$: jest.fn(() => of({})) };
+  const featureServiceMock = {
+    updateFeatureSource$: jest.fn(() => of({})),
+    refreshFeatureSource$: jest.fn(() => of({})),
+  };
   const featureSourceModel = getFeatureSource({ id: '1', title: `Some ${protocol} source`, protocol });
   const store = getMockStore({
     initialState: { [catalogStateKey]: { ...initialCatalogState, featureSources: [{ ...featureSourceModel, catalogNodeId: 'node-1' }] } },
@@ -88,6 +91,12 @@ describe('FeatureSourceDetailsComponent', () => {
         password: 'secret',
       },
     });
+  });
+
+  test('should refresh', async () => {
+    const { featureServiceMock } = await setup(FeatureSourceProtocolEnum.JDBC);
+    await TestSaveHelper.waitForButtonToBeEnabledAndClick('Refresh feature source');
+    expect(featureServiceMock.refreshFeatureSource$).toHaveBeenCalled();
   });
 
 });

@@ -100,6 +100,11 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
     );
   }
 
+  public refreshFeatureSource$(params: { id: string }): Observable<FeatureSourceModel> {
+    return this.httpClient.post<FeatureSourceModel>(`${TailormapAdminApiV1Service.BASE_URL}/feature-sources/${params.id}/refresh-capabilities`, {})
+      .pipe(map(CatalogModelHelper.addTypeToFeatureSourceModel));
+  }
+
     public getGroups$(): Observable<GroupModel[]> {
     return this.httpClient.get<any>(`${TailormapAdminApiV1Service.BASE_URL}/groups?size=1000&sort=name`)
       .pipe(map(response => response._embedded.groups));

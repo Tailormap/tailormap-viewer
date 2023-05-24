@@ -18,6 +18,7 @@ export interface TailormapAdminApiV1ServiceModel {
   createFeatureSource$(params: { featureSource: Omit<FeatureSourceModel, 'id' | 'type' | 'featureTypes'> }): Observable<FeatureSourceModel>;
   updateFeatureSource$(params: { id: string; featureSource: Omit<Partial<FeatureSourceModel>, 'type' | 'featureTypes'> }): Observable<FeatureSourceModel>;
   deleteFeatureSource$(params: { id: string }): Observable<boolean>;
+  refreshFeatureSource$(params: { id: string }): Observable<FeatureSourceModel>;
   getGroups$(): Observable<GroupModel[]>;
   getGroup$(name: string): Observable<GroupModel>;
   createGroup$(params: { group: GroupModel }): Observable<GroupModel>;

@@ -5,5 +5,9 @@
 
   <div class="page-details-actions">
     <tm-admin-save-button [saving$]="saving$" [disabled]="!updatedFeatureSource" (save)="save(featureSource.id)"></tm-admin-save-button>
+    <tm-admin-save-button i18n-label
+                          label="Refresh feature source"
+                          [saving$]="refreshing$"
+                          (save)="refresh(featureSource.id)"></tm-admin-save-button>
   </div>
 </ng-container>
