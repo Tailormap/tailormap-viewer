@@ -8,6 +8,10 @@
                                 (changed)="updateDefaultLayerSettings($event)"></tm-admin-layer-settings-form>
   <div class="page-details-actions">
     <tm-admin-save-button [saving$]="saving$" [disabled]="!updatedGeoService && !updatedDefaultLayerSettings" (save)="save(geoService.id)"></tm-admin-save-button>
+    <tm-admin-save-button i18n-label
+                          label="Refresh service"
+                          [saving$]="refreshing$"
+                          (save)="refresh(geoService.id)"></tm-admin-save-button>
     <button mat-flat-button color="warn" (click)="deleteService(geoService)" i18n>Delete</button>
   </div>
 </ng-container>

@@ -14,11 +14,15 @@ export const createGeoServiceMock = () => {
       }
       return of(true);
     }),
+    refreshGeoService$: jest.fn((geoServiceId: string) => {
+      return of(true);
+    }),
   };
   return {
     geoServiceService,
     createGeoService$: geoServiceService.createGeoService$,
     updateGeoService$: geoServiceService.updateGeoService$,
+    refreshGeoService$: geoServiceService.refreshGeoService$,
     updateGeoServiceDetails,
     updateGeoServiceSettings,
   };

@@ -23,7 +23,7 @@ const setup = async () => {
   const activeRoute = {
     paramMap: of({ get: () => '1' }),
   };
-  const { geoServiceService, updateGeoService$, updateGeoServiceDetails, updateGeoServiceSettings } = createGeoServiceMock();
+  const { geoServiceService, updateGeoService$, refreshGeoService$, updateGeoServiceDetails, updateGeoServiceSettings } = createGeoServiceMock();
   const geoServiceModel = getGeoService({ id: '1', title: 'The Service' });
   const store = getMockStore({
     initialState: { [catalogStateKey]: { ...initialCatalogState, geoServices: [{ ...geoServiceModel, catalogNodeId: 'node-1' }] } },
@@ -39,7 +39,7 @@ const setup = async () => {
       { provide: TAILORMAP_ADMIN_API_V1_SERVICE, useValue: { getGroups$: jest.fn(() => of(null)) } },
     ],
   });
-  return { updateGeoServiceDetails, updateGeoServiceSettings, updateGeoService$, geoServiceModel };
+  return { updateGeoServiceDetails, updateGeoServiceSettings, updateGeoService$, refreshGeoService$, geoServiceModel };
 };
 
 describe('GeoServiceDetailsComponent', () => {
@@ -77,6 +77,12 @@ describe('GeoServiceDetailsComponent', () => {
     expect(updateGeoServiceSettings).toHaveBeenNthCalledWith(2, {
       defaultLayerSettings: { hiDpiDisabled: true, tilingDisabled: false, tilingGutter: undefined },
     });
+  });
+
+  test('should refresh', async () => {
+    const { refreshGeoService$ } = await setup();
+    await TestSaveHelper.waitForButtonToBeEnabledAndClick('Refresh service');
+    expect(refreshGeoService$).toHaveBeenCalled();
   });
 
 });

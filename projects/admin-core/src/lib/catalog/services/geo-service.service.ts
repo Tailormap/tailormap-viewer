@@ -4,9 +4,10 @@ import {
   ApplicationModel,
   CatalogItemKindEnum,
   GeoServiceModel,
-  GeoServiceProtocolEnum, GeoServiceSettingsModel, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel,
+  GeoServiceProtocolEnum, GeoServiceSettingsModel, GeoServiceWithLayersModel, TAILORMAP_ADMIN_API_V1_SERVICE,
+  TailormapAdminApiV1ServiceModel,
 } from '@tailormap-admin/admin-api';
-import { catchError, concatMap, filter, map, Observable, of, take, tap } from 'rxjs';
+import { catchError, concatMap, filter, map, MonoTypeOperatorFunction, Observable, of, pipe, take, tap } from 'rxjs';
 import { addGeoServices, deleteGeoService, updateGeoService } from '../state/catalog.actions';
 import { CatalogService } from './catalog.service';
 import { GeoServiceCreateModel, GeoServiceUpdateModel, GeoServiceWithIdUpdateModel } from '../models/geo-service-update.model';
@@ -67,34 +68,19 @@ export class GeoServiceService {
     getUpdatedService: (service: ExtendedGeoServiceModel) => Partial<GeoServiceUpdateModel>,
     getUpdatedSettings?: (settings: GeoServiceSettingsModel) => Partial<GeoServiceSettingsModel>,
   ) {
-    return this.store$.select(selectGeoServiceById(geoServiceId))
+    return this.getGeoServiceById$(geoServiceId)
       .pipe(
-        take(1),
-        filter((service): service is ExtendedGeoServiceModel => !!service),
         concatMap(service => {
-          return this._updateGeoService$({
+          const updatedGeoService: GeoServiceWithIdUpdateModel = {
             ...getUpdatedService(service),
             settings: { ...service.settings, ...(getUpdatedSettings ? getUpdatedSettings(service.settings || {}) : {}) },
             id: service.id,
-          }, service.catalogNodeId);
+          };
+          return this.adminApiService.updateGeoService$({ id: updatedGeoService.id, geoService: updatedGeoService }).pipe(
+            this.handleUpdateGeoService($localize `Error while updating geo service.`, service.catalogNodeId),
+          );
         }),
       );
-  }
-
-  private _updateGeoService$(geoService: GeoServiceWithIdUpdateModel, catalogNodeId: string) {
-    return this.adminApiService.updateGeoService$({ id: geoService.id, geoService }).pipe(
-      catchError(() => {
-        this.adminSnackbarService.showMessage($localize `Error while updating geo service.`);
-        return of(null);
-      }),
-      map(updatedService => {
-        if (updatedService) {
-          this.store$.dispatch(updateGeoService({ service: updatedService, parentNode: catalogNodeId }));
-          return updatedService;
-        }
-        return null;
-      }),
-    );
   }
 
   public deleteGeoService$(geoServiceId: string, catalogNodeId: string): Observable<DeleteGeoServiceResponse> {
@@ -152,6 +138,42 @@ export class GeoServiceService {
           });
         }),
       );
+  }
+
+  public refreshGeoService$(serviceId: string): Observable<GeoServiceModel | null> {
+    return this.getGeoServiceById$(serviceId)
+      .pipe(
+        concatMap(service => {
+          return this.adminApiService.refreshGeoService$({ id: service.id })
+            .pipe(
+              this.handleUpdateGeoService($localize `Error while refreshing geo service.`, service.catalogNodeId),
+            );
+        }),
+      );
+  }
+
+  private getGeoServiceById$(serviceId: string) {
+    return this.store$.select(selectGeoServiceById(serviceId))
+      .pipe(
+        take(1),
+        filter((service): service is ExtendedGeoServiceModel => !!service),
+      );
+  }
+
+  private handleUpdateGeoService(errorMsg: string, catalogNodeId: string): MonoTypeOperatorFunction<GeoServiceWithLayersModel | null> {
+    return pipe(
+      catchError(() => {
+        this.adminSnackbarService.showMessage(errorMsg);
+        return of(null);
+      }),
+      map((updatedService: GeoServiceWithLayersModel | null) => {
+        if (updatedService) {
+          this.store$.dispatch(updateGeoService({ service: updatedService, parentNode: catalogNodeId }));
+          return updatedService;
+        }
+        return null;
+      }),
+    );
   }
 
 }

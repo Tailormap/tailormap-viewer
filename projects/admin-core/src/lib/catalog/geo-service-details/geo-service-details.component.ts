@@ -30,6 +30,9 @@ export class GeoServiceDetailsComponent implements OnInit, OnDestroy {
   private savingSubject = new BehaviorSubject(false);
   public saving$ = this.savingSubject.asObservable();
 
+  private refreshingSubject = new BehaviorSubject(false);
+  public refreshing$ = this.refreshingSubject.asObservable();
+
   constructor(
     private route: ActivatedRoute,
     private store$: Store,
@@ -47,7 +50,10 @@ export class GeoServiceDetailsComponent implements OnInit, OnDestroy {
       distinctUntilChanged(),
       filter((serviceId): serviceId is string => !!serviceId),
       switchMap(serviceId => this.store$.select(selectGeoServiceById(serviceId))),
-      tap(geoService => { if (geoService) { this.updatedGeoService = null; }}),
+      tap(geoService => { if (geoService) {
+        this.updatedGeoService = null;
+        this.updatedDefaultLayerSettings = null;
+      }}),
     );
   }
 
@@ -82,6 +88,18 @@ export class GeoServiceDetailsComponent implements OnInit, OnDestroy {
           this.updatedDefaultLayerSettings = null;
         }
         this.savingSubject.next(false);
+      });
+  }
+
+  public refresh(serviceId: string) {
+    this.refreshingSubject.next(true);
+    this.geoServiceService.refreshGeoService$(serviceId)
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(success => {
+        if (success) {
+          this.adminSnackbarService.showMessage($localize `Service refreshed`);
+        }
+        this.refreshingSubject.next(false);
       });
   }
 

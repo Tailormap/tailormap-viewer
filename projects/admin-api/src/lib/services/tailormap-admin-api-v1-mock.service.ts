@@ -47,6 +47,13 @@ export class TailormapAdminApiV1MockService implements TailormapAdminApiV1Servic
     return of(true).pipe(delay(this.delay));
   }
 
+  public refreshGeoService$(params: { id: string }): Observable<GeoServiceWithLayersModel> {
+    return of(mockData.getGeoService({
+      id: params.id,
+      title: 'Service ' + params.id,
+    })).pipe(delay(this.delay));
+  }
+
   public getFeatureSource$(params: { id: string }): Observable<FeatureSourceModel> {
     return of(mockData.getFeatureSource({
       id: params.id,
