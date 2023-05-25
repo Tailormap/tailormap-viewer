@@ -28,6 +28,11 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
   @Output()
   public updateApplication = new EventEmitter<Omit<ApplicationModel, 'id'>>();
 
+  public projections = [
+    { code: 'EPSG:28992', label: 'EPSG:28992 (Amersfoort / RD New)' },
+    { code: 'EPSG:3857', label: 'EPSG:3857 (WGS 84 / Pseudo-Mercator)' },
+  ];
+
   public applicationForm = new FormGroup({
     name: new FormControl('', {
       nonNullable: true,
@@ -38,16 +43,19 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
     }),
     title: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     adminComments: new FormControl(''),
-    crs: new FormControl(''),
+    /* default to first crs from our supported collection of projections */
+    crs: new FormControl(this.projections[0].code, {
+      nonNullable: true,
+      validators: [
+        Validators.required,
+        Validators.minLength(5),
+      ],
+    }),
     initialExtent: new FormControl<BoundsModel | null>(null),
     maxExtent: new FormControl<BoundsModel | null>(null),
     authorizationRules: new FormControl<AuthorizationRuleGroup[]>([AUTHORIZATION_RULE_ANONYMOUS]),
   });
 
-  public projections = [
-    { code: 'EPSG:28992', label: 'EPSG:28992 (Amersfoort / RD New)' },
-    { code: 'EPSG:3857', label: 'EPSG:3857 (WGS 84 / Pseudo-Mercator)' },
-  ];
 
   private destroyed = new Subject();
 
@@ -90,7 +98,7 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
       name: application ? application.name : '',
       title: application ? application.title : '',
       adminComments: application ? application.adminComments : '',
-      crs: application ? application.crs : '',
+      crs: application ? application.crs : this.projections[0].code,
       initialExtent: application ? application.initialExtent : null,
       maxExtent: application ? application.maxExtent : null,
       authorizationRules: application ? application.authorizationRules : [AUTHORIZATION_RULE_ANONYMOUS],
@@ -101,6 +109,7 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
     const values = this.applicationForm.getRawValue();
     return FormHelper.isValidValue(values.name)
       && FormHelper.isValidValue(values.title)
+      && FormHelper.isValidValue(values.crs)
       && this.applicationForm.dirty
       && this.applicationForm.valid;
   }

@@ -48,7 +48,7 @@ describe('ApplicationFormComponent', () => {
         name: 'new-app',
         title: 'Cool application',
         adminComments: '',
-        crs: '',
+        crs: 'EPSG:28992',
         initialExtent: undefined,
         maxExtent: undefined,
       });
