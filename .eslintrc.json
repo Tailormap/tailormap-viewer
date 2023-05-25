@@ -24,6 +24,11 @@
       "globals": {
         "$localize": "readonly"
       },
+      "parserOptions": {
+        "project": [
+          "tsconfig.json"
+        ]
+      },
       "rules": {
         "@angular-eslint/component-selector": [
           "error",
@@ -33,6 +38,7 @@
             "style": "kebab-case"
           }
         ],
+        "@typescript-eslint/no-explicit-any": "off",
         "@angular-eslint/directive-selector": [
           "error",
           {
@@ -167,7 +173,9 @@
       "rules": {
         "no-unused-vars": "off",
         "@typescript-eslint/no-unused-vars": "off",
-        "rxjs/finnish": "off"
+        "rxjs/finnish": "off",
+        "@typescript-eslint/ban-ts-comment": "off",
+        "@typescript-eslint/no-empty-function": "off"
       }
     },
     {

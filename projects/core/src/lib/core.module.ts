@@ -38,7 +38,7 @@ const sentryTraceServiceFactory = async (router: Router) => {
 };
 const sentryProviders = SENTRY_DSN === '@SENTRY_DSN@' ? [] : [
   { provide: TRACE_SERVICE, useFactory: sentryTraceServiceFactory, deps: [Router] },
-  { provide: APP_INITIALIZER, useFactory: () => () => {}, deps: [TRACE_SERVICE], multi: true },
+  { provide: APP_INITIALIZER, useFactory: () => () => {/*do nothing*/}, deps: [TRACE_SERVICE], multi: true },
 ];
 
 @NgModule({

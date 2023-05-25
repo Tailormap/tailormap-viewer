@@ -24,5 +24,7 @@ import { SharedModule } from '@tailormap-viewer/shared';
   ],
 })
 export class ApplicationMapModule {
-  constructor(_applicationMapService: ApplicationMapService) {}
+  constructor(_applicationMapService: ApplicationMapService) {
+    // constructor is used to initialize the service
+  }
 }

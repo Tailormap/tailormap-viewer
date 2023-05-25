@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'tm-admin-catalog-page',
@@ -6,11 +6,5 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
   styleUrls: ['./catalog-page.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CatalogPageComponent implements OnInit {
-
-  constructor() { }
-
-  public ngOnInit(): void {
-  }
-
+export class CatalogPageComponent {
 }

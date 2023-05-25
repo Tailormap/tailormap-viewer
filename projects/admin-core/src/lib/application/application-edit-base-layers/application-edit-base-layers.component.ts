@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'tm-admin-application-edit-base-layers',
@@ -6,11 +6,5 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
   styleUrls: ['./application-edit-base-layers.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ApplicationEditBaseLayersComponent implements OnInit {
-
-  constructor() { }
-
-  public ngOnInit(): void {
-  }
-
+export class ApplicationEditBaseLayersComponent {
 }

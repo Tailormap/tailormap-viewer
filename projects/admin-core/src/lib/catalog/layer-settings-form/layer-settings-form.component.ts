@@ -62,8 +62,6 @@ export class LayerSettingsFormComponent implements OnInit {
     hiDpiSubstituteLayer: new FormControl<string | null>(null),
   });
 
-  constructor() { }
-
   public ngOnInit(): void {
     this.layerSettingsForm.valueChanges
       .pipe(

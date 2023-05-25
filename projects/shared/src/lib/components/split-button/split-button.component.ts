@@ -39,8 +39,6 @@ export class SplitButtonComponent {
   public selectedOptionObject: SplitButtonOptionModel | null = null;
   public optionsList: SplitButtonOptionModel[] = [];
 
-  constructor() { }
-
   public cycleNextOption() {
     const idx = this.optionsList.findIndex(o => o.id === this.selectedOptionId);
     let nextIdx = idx + 1;

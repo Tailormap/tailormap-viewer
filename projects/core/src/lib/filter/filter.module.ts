@@ -26,5 +26,7 @@ import { SpatialFilterReferenceLayerService } from './services/spatial-filter-re
   ],
 })
 export class FilterModule {
-  constructor(_spatialFilterReferenceLayerService: SpatialFilterReferenceLayerService) {}
+  constructor(_spatialFilterReferenceLayerService: SpatialFilterReferenceLayerService) {
+    // constructor is used to initialize the service
+  }
 }

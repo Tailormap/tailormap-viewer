@@ -65,7 +65,9 @@ export class LegendService {
                   const urlObject = new URL(url);
                   urlObject.searchParams.set('SCALE', mapResolution.scale.toString());
                   url = urlObject.toString();
-                } catch(_ignored) {}
+                } catch(_ignored) {
+                  // Ignore errors
+                }
               }
               return {
                 layer,

@@ -142,7 +142,7 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
    * @param username an existing username
    * @param projection the projection to use, default is `groupName`
    */
-  public getUser$(username: string, projection: string='groupName'): Observable<UserModel> {
+  public getUser$(username: string, projection = 'groupName'): Observable<UserModel> {
     return this.httpClient.get<any>(`${TailormapAdminApiV1Service.BASE_URL}/users/${username}?projection=${projection}`, {
       observe: 'response',
     }).pipe(

@@ -77,7 +77,9 @@ export class OpenLayersWmsGetFeatureInfoHelper {
           })
           .filter(OpenLayersWmsGetFeatureInfoHelper.isValidFeature);
       }
-    } catch (e) {}
+    } catch (e) {
+      // ignore error
+    }
     return [];
   }
 
@@ -89,7 +91,9 @@ export class OpenLayersWmsGetFeatureInfoHelper {
           .map((feature) => OpenLayersWmsGetFeatureInfoHelper.getFeatureModel(feature.getProperties(), feature.getGeometry()))
           .filter(OpenLayersWmsGetFeatureInfoHelper.isValidFeature);
       }
-    } catch (e) {}
+    } catch (e) {
+      // ignore error
+    }
     return [];
   }
 

@@ -14,8 +14,6 @@ import { updateApplicationComponentConfig } from '../../state/application.action
 })
 export class BaseComponentConfigComponent implements OnInit, OnDestroy {
 
-  constructor() { }
-
   private store$ = inject(Store);
   private cdr = inject(ChangeDetectorRef);
   private destroyed = new Subject();

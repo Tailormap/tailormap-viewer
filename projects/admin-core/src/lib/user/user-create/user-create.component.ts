@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { UserModel } from '@tailormap-admin/admin-api';
 import { Router } from '@angular/router';
@@ -11,7 +11,7 @@ import { AdminSnackbarService } from '../../shared/services/admin-snackbar.servi
   styleUrls: ['./user-create.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UserCreateComponent implements OnInit, OnDestroy {
+export class UserCreateComponent implements OnDestroy {
 
   private savingSubject = new BehaviorSubject(false);
   private destroyed = new Subject();
@@ -24,9 +24,6 @@ export class UserCreateComponent implements OnInit, OnDestroy {
     private router: Router,
     private adminSnackbarService: AdminSnackbarService,
   ) { }
-
-  public ngOnInit(): void {
-  }
 
   public ngOnDestroy(): void {
     this.destroyed.next(null);

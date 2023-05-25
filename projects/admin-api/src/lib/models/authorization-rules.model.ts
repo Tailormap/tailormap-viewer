@@ -11,7 +11,7 @@ export interface AuthorizationRuleGroup {
 export enum AuthorizationGroups {
   ANONYMOUS = 'anonymous',
   APP_AUTHENTICATED = 'app-authenticated',
-};
+}
 
 export const AUTHORIZATION_RULE_ANONYMOUS: AuthorizationRuleGroup = {
     groupName: AuthorizationGroups.ANONYMOUS,

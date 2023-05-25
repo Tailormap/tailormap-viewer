@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
 import { ImageHelper } from '../../helpers/image.helper';
 
 @Component({
@@ -7,7 +7,7 @@ import { ImageHelper } from '../../helpers/image.helper';
   styleUrls: ['./image-upload-field.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ImageUploadFieldComponent implements OnInit {
+export class ImageUploadFieldComponent {
 
   public isImageSaved = false;
   public isImageRemoved = false;
@@ -29,8 +29,6 @@ export class ImageUploadFieldComponent implements OnInit {
   constructor(
     private cdr: ChangeDetectorRef,
   ) {}
-
-  public ngOnInit(): void {}
 
   public fileChangeEvent($event: Event) {
     this.imageError = null;

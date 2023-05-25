@@ -25,7 +25,9 @@ export class FileHelper {
     try {
       const jsonData = JSON.stringify(data);
       new Blob([jsonData], { type: 'application/json' });
-    } catch (e) {}
+    } catch (e) {
+      // ignore error
+    }
     return new Blob([], { type: 'application/json' });
   }
 

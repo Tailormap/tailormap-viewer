@@ -24,8 +24,6 @@ export class SpatialFilterFormSelectReferenceLayerComponent implements OnInit, O
     nonNullable: true,
   });
 
-  constructor() { }
-
   public ngOnInit(): void {
     this.availableLayers$ = this.store$.select(selectReferencableLayers);
     this.store$.select(selectReferenceLayer)

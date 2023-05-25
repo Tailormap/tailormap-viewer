@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, Input, TemplateRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnDestroy, Input, TemplateRef } from '@angular/core';
 import { DropZoneOptions, LoadingStateEnum, TreeService } from '@tailormap-viewer/shared';
 import { CatalogTreeModel, CatalogTreeModelMetadataTypes } from '../models/catalog-tree.model';
 import { CatalogTreeModelTypeEnum } from '../models/catalog-tree-model-type.enum';
@@ -15,7 +15,7 @@ import { CatalogTreeService } from '../services/catalog-tree.service';
   styleUrls: ['./catalog-base-tree.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CatalogBaseTreeComponent implements OnInit, OnDestroy {
+export class CatalogBaseTreeComponent implements OnDestroy {
 
   public isLoading$: Observable<boolean> = of(false);
   public errorMessage$: Observable<string | null> = of(null);
@@ -46,9 +46,6 @@ export class CatalogBaseTreeComponent implements OnInit, OnDestroy {
           this.store$.dispatch(loadCatalog());
         }
       });
-  }
-
-  public ngOnInit(): void {
   }
 
   private toggleExpansion(node: CatalogTreeModel, expanded: boolean) {
