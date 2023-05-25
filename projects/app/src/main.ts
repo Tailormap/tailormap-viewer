@@ -10,7 +10,7 @@ const setupSentryProviders = async () => {
   if (SENTRY_DSN === '@SENTRY_DSN@') {
     return [];
   }
-  const sentry = await import('@sentry/angular');
+  const sentry = await import('@sentry/angular-ivy');
   const tracing = await import('@sentry/tracing');
   let version;
   try {

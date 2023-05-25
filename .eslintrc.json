@@ -17,8 +17,8 @@
       ],
       "extends": [
         "eslint:recommended",
-        "plugin:@angular-eslint/ng-cli-compat",
-        "plugin:@angular-eslint/ng-cli-compat--formatting-add-on",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@angular-eslint/recommended",
         "plugin:@angular-eslint/template/process-inline-templates"
       ],
       "globals": {
@@ -100,11 +100,37 @@
           }
         ],
         "space-before-function-paren": "off",
-        "@typescript-eslint/space-before-function-paren": ["error", {"anonymous": "always", "named": "ignore", "asyncArrow": "always"}],
-        "object-curly-spacing": ["error", "always"],
-        "no-array-constructor": ["error"],
-        "array-bracket-spacing": ["error", "always", { "arraysInArrays": false, "objectsInArrays": false, "singleValue": false }],
-        "comma-spacing": ["error", { "before": false, "after": true }],
+        "@typescript-eslint/space-before-function-paren": [
+          "error",
+          {
+            "anonymous": "always",
+            "named": "ignore",
+            "asyncArrow": "always"
+          }
+        ],
+        "object-curly-spacing": [
+          "error",
+          "always"
+        ],
+        "no-array-constructor": [
+          "error"
+        ],
+        "array-bracket-spacing": [
+          "error",
+          "always",
+          {
+            "arraysInArrays": false,
+            "objectsInArrays": false,
+            "singleValue": false
+          }
+        ],
+        "comma-spacing": [
+          "error",
+          {
+            "before": false,
+            "after": true
+          }
+        ],
         "max-len": [
           "error",
           180
