@@ -5,6 +5,7 @@
                                 [layerName]="geoServiceSettings.layerName"
                                 [serviceId]="geoServiceSettings.serviceId"
                                 [isLayerSpecific]="true"
+                                [isLeaf]="isLeaf$ | async"
                                 (changed)="updateSettings($event)"></tm-admin-layer-settings-form>
   <div class="page-details-actions">
     <tm-admin-save-button [saving$]="saving$" [disabled]="!updatedLayerSettings" (save)="save(geoServiceSettings.serviceId, geoServiceSettings.layerName)"></tm-admin-save-button>

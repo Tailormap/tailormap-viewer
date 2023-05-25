@@ -60,6 +60,9 @@ export class LayerSettingsFormComponent implements OnInit {
   }
 
   @Input()
+  public isLeaf: boolean | null = null;
+
+  @Input()
   public layerName: string | null | undefined;
 
   @Output()

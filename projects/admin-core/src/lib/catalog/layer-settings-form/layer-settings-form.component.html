@@ -46,6 +46,7 @@
 
     <tm-admin-authorization-edit class="authorization-edit"
                                  formControlName="authorizationRules"
+                                 *ngIf="isLeaf || layerSettingsForm.get('authorizationRules')?.value?.length"
                                  [groups]="(groups$ | async) ?? []"
                                  [parentAuthorizations]="geoServiceAuthorizations$ | async"
                                  parentType="GeoService"

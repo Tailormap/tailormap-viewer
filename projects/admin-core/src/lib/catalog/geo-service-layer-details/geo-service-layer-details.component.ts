@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { BehaviorSubject, distinctUntilChanged, map, Observable, of, Subject, switchMap, tap } from 'rxjs';
-import { selectGeoServiceLayerSettingsById } from '../state/catalog.selectors';
+import { selectGeoServiceAndLayerById, selectGeoServiceLayerSettingsById } from '../state/catalog.selectors';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { GeoServiceService } from '../services/geo-service.service';
@@ -23,6 +23,8 @@ export class GeoServiceLayerDetailsComponent implements OnInit, OnDestroy {
 
   public updatedLayerSettings: LayerSettingsModel | null = null;
 
+  public isLeaf$: Observable<boolean | null> = of(true);
+
   constructor(
     private route: ActivatedRoute,
     private store$: Store,
@@ -31,11 +33,14 @@ export class GeoServiceLayerDetailsComponent implements OnInit, OnDestroy {
   ) { }
 
   public ngOnInit(): void {
-    this.geoServiceLayerSettings$ = this.route.paramMap.pipe(
+    const infoSelector$ = this.route.paramMap.pipe(
       distinctUntilChanged((prev: ParamMap, curr: ParamMap) => {
         return prev.get('serviceId') === curr.get('serviceId') && prev.get('layerId') === curr.get('layerId');
       }),
       map(params => ({ serviceId: params.get('serviceId'), layerId: params.get('layerId') })),
+    );
+
+    this.geoServiceLayerSettings$ = infoSelector$.pipe(
       switchMap(({ serviceId, layerId }) => {
         if (typeof serviceId !== 'string' || typeof layerId !== 'string') {
           return of(null);
@@ -43,6 +48,16 @@ export class GeoServiceLayerDetailsComponent implements OnInit, OnDestroy {
         return this.store$.select(selectGeoServiceLayerSettingsById(serviceId, layerId));
       }),
       tap(layerSettings => { if (layerSettings) { this.updatedLayerSettings = null; }}),
+    );
+
+    this.isLeaf$ = infoSelector$.pipe(
+      switchMap(({ serviceId, layerId }) => {
+        if (typeof serviceId !== 'string' || typeof layerId !== 'string') {
+          return of(null);
+        }
+        return this.store$.select(selectGeoServiceAndLayerById(serviceId, layerId));
+      }),
+      map(info => { if (info) { return info.layer.children?.length == 0 ?? true; } else { return true; } }),
     );
   }
 
