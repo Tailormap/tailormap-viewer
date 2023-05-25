@@ -6,11 +6,12 @@ import {
   CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel, ConfigModel,
 } from '../models';
 import { CatalogModelHelper } from '../helpers/catalog-model.helper';
+import { TailormapApiConstants } from '@tailormap-viewer/api';
 
 @Injectable()
 export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceModel {
 
-  public static BASE_URL = '/api/admin';
+  public static BASE_URL = `${TailormapApiConstants.BASE_URL}/admin`;
 
   constructor(
     private httpClient: HttpClient,

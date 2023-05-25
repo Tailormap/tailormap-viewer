@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/angular';
 import { ApplicationEditComponent } from './application-edit.component';
 import { ApplicationState, applicationStateKey, initialApplicationState } from '../state/application.state';
 import { getApplication } from '@tailormap-admin/admin-api';
-import { getMockStore, provideMockStore } from '@ngrx/store/testing';
+import { createMockStore, provideMockStore } from '@ngrx/store/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ApplicationService } from '../services/application.service';
 import { ConfirmDialogService, SharedModule } from '@tailormap-viewer/shared';
@@ -13,6 +13,7 @@ import { clearSelectedApplication } from '../state/application.actions';
 import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
 import { TestSaveHelper } from '../../test-helpers/test-save.helper';
 import { RouterTestingModule } from '@angular/router/testing';
+import { MatIconTestingModule } from '@angular/material/icon/testing';
 
 const setup = async (hasApp: boolean, hasChanges?: boolean) => {
   const mockState: ApplicationState = {
@@ -27,11 +28,11 @@ const setup = async (hasApp: boolean, hasChanges?: boolean) => {
     saveDraftApplication$: jest.fn(() => of(true)),
     deleteApplication$: jest.fn(() => of(true)),
   };
-  const mockStore = getMockStore({ initialState: { [applicationStateKey]: mockState } });
+  const mockStore = createMockStore({ initialState: { [applicationStateKey]: mockState } });
   const mockDispatch = jest.fn();
   mockStore.dispatch = mockDispatch;
   await render(ApplicationEditComponent, {
-    imports: [ SharedModule, RouterTestingModule.withRoutes(
+    imports: [ SharedModule, MatIconTestingModule, RouterTestingModule.withRoutes(
       [{ path: 'applications', component: ApplicationEditComponent }],
     ) ],
     declarations: [SaveButtonComponent],

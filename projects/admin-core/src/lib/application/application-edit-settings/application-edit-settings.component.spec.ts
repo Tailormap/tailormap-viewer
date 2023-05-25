@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/angular';
 import { ApplicationEditSettingsComponent } from './application-edit-settings.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { getMockStore } from '@ngrx/store/testing';
+import { createMockStore } from '@ngrx/store/testing';
 import { ApplicationState, applicationStateKey, initialApplicationState } from '../state/application.state';
 import { Store } from '@ngrx/store';
 import { TAILORMAP_ADMIN_API_V1_SERVICE, getApplication } from '@tailormap-admin/admin-api';
@@ -19,7 +19,7 @@ const setup = async (hasApplication: boolean, isDefaultApplication?: boolean) =>
     applications: hasApplication ? [getApplication({ id: '1', title: 'Test application' })] : [],
     draftApplication: hasApplication ? getApplication({ id: '1', title: 'Test application' }) : null,
   };
-  const store = getMockStore({
+  const store = createMockStore({
     initialState: { [applicationStateKey]: appState },
   });
   const configService = {

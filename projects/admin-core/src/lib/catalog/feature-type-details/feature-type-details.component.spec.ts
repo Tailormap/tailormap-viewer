@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/angular';
 import { FeatureTypeDetailsComponent } from './feature-type-details.component';
 import { of } from 'rxjs';
 import { FeatureSourceProtocolEnum, getFeatureSource, getFeatureType } from '@tailormap-admin/admin-api';
-import { getMockStore } from '@ngrx/store/testing';
+import { createMockStore } from '@ngrx/store/testing';
 import { CatalogState, catalogStateKey, initialCatalogState } from '../state/catalog.state';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { ActivatedRoute } from '@angular/router';
@@ -43,7 +43,7 @@ const setup = async () => {
     featureTypes: [featureTypeModel],
     featureSources: [featureSourceModel],
   };
-  const store = getMockStore({ initialState: { [catalogStateKey]: catalogState } });
+  const store = createMockStore({ initialState: { [catalogStateKey]: catalogState } });
   await render(FeatureTypeDetailsComponent, {
     imports: [SharedModule],
     providers: [

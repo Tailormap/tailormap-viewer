@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/angular';
 import { GeolocationComponent } from './geolocation.component';
-import { MapService } from '@tailormap-viewer/map';
+import { CoordinateHelper, MapService } from '@tailormap-viewer/map';
 import { of } from 'rxjs';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { SharedModule } from '@tailormap-viewer/shared';
@@ -42,6 +42,6 @@ describe('GeolocationComponent', () => {
     const zoomToLocationBtn = screen.getByLabelText('Zoom to location');
     expect(zoomToLocationBtn).toBeInTheDocument();
     await userEvent.click(zoomToLocationBtn);
-    expect(zoomTo).toHaveBeenCalled();
+      expect(zoomTo).toHaveBeenCalled();
   });
 });

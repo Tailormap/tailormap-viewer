@@ -17,7 +17,7 @@ const setupSentryProviders = async () => {
     const baseHref: string = (document.querySelector<HTMLBaseElement>('base[href]')?.href) || '/';
     version = await fetch(baseHref + 'version.json')
       .then(response => response.json());
-  } catch (error) {}
+  } catch (error) {/**/}
   sentry.init({
     dsn: SENTRY_DSN,
     release: version?.gitInfo.semverString,

@@ -5,7 +5,7 @@ import { TestSaveHelper } from '../../test-helpers/test-save.helper';
 import { of } from 'rxjs';
 import { createGeoServiceMock } from '../helpers/mocks/geo-service.service.mock';
 import { TAILORMAP_ADMIN_API_V1_SERVICE, getCatalogNode, AUTHORIZATION_RULE_ANONYMOUS } from '@tailormap-admin/admin-api';
-import { getMockStore } from '@ngrx/store/testing';
+import { createMockStore } from '@ngrx/store/testing';
 import { catalogStateKey, initialCatalogState } from '../state/catalog.state';
 import { CatalogNodeFormDialogComponent } from '../catalog-node-form-dialog/catalog-node-form-dialog.component';
 import { GeoServiceFormDialogComponent } from '../geo-service-form-dialog/geo-service-form-dialog.component';
@@ -31,7 +31,7 @@ const setup = async (hasNode = false) => {
   const { geoServiceService, createGeoService$ } = createGeoServiceMock();
   const rootModel = getCatalogNode({ id: 'root', title: 'Root', root: true });
   const catalogNodeModel = { ...getCatalogNode({ id: '1', title: 'Random services folder', root: false }), parentId: 'root' };
-  const store = getMockStore({
+  const store = createMockStore({
     initialState: { [catalogStateKey]: { ...initialCatalogState, catalog: [ rootModel, catalogNodeModel ] } },
   });
   await render(CatalogCreateButtonsComponent, {

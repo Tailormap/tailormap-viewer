@@ -1,6 +1,6 @@
 import { getWidth } from 'ol/extent';
 import { register } from 'ol/proj/proj4';
-import proj4 from 'proj4';
+import * as proj4 from 'proj4';
 import { OpenlayersExtent } from '../models/extent.type';
 
 export class ProjectionsHelper {

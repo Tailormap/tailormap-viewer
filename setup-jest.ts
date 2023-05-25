@@ -2,6 +2,9 @@ import 'jest-preset-angular/setup-jest';
 import './projects/app/src/polyfills';
 import '@testing-library/jest-dom/extend-expect';
 import { TextEncoder, TextDecoder } from 'util';
+import * as failOnConsole from 'jest-fail-on-console'
+
+failOnConsole();
 
 global.TextEncoder = TextEncoder
 // @ts-ignore

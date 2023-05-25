@@ -31,7 +31,7 @@ const getMapService = () => {
   };
 };
 
-const getMockStore = () => {
+const createMockStore = () => {
   const layersAndServices = [
     { ...getAppLayerModel({ title: 'Layer 1', layerName: 'layer1' }), service: getServiceModel() },
     { ...getAppLayerModel({ id: '2', title: 'Layer 2', layerName: 'layer2' }), service: getServiceModel() },
@@ -56,7 +56,7 @@ describe('LegendComponent', () => {
       imports: [ SharedModule, MatIconTestingModule ],
       providers: [
         getMapService(),
-        getMockStore(),
+        createMockStore(),
         { provide: MenubarService, useValue: { registerComponent: registerComponentFn, isComponentVisible$: () => of(false) } },
       ],
     });
@@ -70,7 +70,7 @@ describe('LegendComponent', () => {
       imports: [ SharedModule, MatIconTestingModule ],
       providers: [
         getMapService(),
-        getMockStore(),
+        createMockStore(),
       ],
     });
     TestBed.inject(MenubarService).toggleActiveComponent(BaseComponentTypeEnum.LEGEND, 'Legend');

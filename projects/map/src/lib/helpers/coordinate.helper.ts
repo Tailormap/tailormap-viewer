@@ -1,4 +1,4 @@
-import proj4 from 'proj4';
+import * as proj4 from 'proj4';
 import { circular } from 'ol/geom/Polygon';
 import { getTransform, get as getProjection } from 'ol/proj';
 import { FeatureHelper } from './feature.helper';

@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/angular';
 import { GeoServiceLayerDetailsComponent } from './geo-service-layer-details.component';
 import { of } from 'rxjs';
 import { getGeoService, getGeoServiceLayer } from '@tailormap-admin/admin-api';
-import { getMockStore } from '@ngrx/store/testing';
+import { createMockStore } from '@ngrx/store/testing';
 import { catalogStateKey, initialCatalogState } from '../state/catalog.state';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { ActivatedRoute } from '@angular/router';
@@ -30,7 +30,7 @@ const setup = async () => {
   const geoServiceModel = getGeoService({ id: '1', title: 'The Service' });
   const layerModel = getGeoServiceLayer({ name: 'layer_2', title: 'The Layer' });
   const { geoServiceService, updateGeoService$ } = createGeoServiceMock(geoServiceModel);
-  const store = getMockStore({
+  const store = createMockStore({
     initialState: { [catalogStateKey]: {
       ...initialCatalogState,
       geoServices: [{ ...geoServiceModel, catalogNodeId: 'node-1', layers: ['2'] }],

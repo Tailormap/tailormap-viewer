@@ -1,6 +1,6 @@
 export class StyleHelper {
 
-  public static getDashArray(strokeType?: 'solid' | 'dash' | 'dot', strokeWidth: number = 0): number[] {
+  public static getDashArray(strokeType?: 'solid' | 'dash' | 'dot', strokeWidth = 0): number[] {
     if (strokeType === 'dash') {
       return [ Math.max(0, strokeWidth) + 4, Math.max(6, strokeWidth) + 6 ];
     }

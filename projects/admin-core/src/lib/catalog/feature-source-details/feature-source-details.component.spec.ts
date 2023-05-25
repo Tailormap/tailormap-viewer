@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/angular';
 import { FeatureSourceDetailsComponent } from './feature-source-details.component';
 import { of } from 'rxjs';
 import { FeatureSourceProtocolEnum, getFeatureSource, JdbcDatabaseTypeEnum } from '@tailormap-admin/admin-api';
-import { getMockStore } from '@ngrx/store/testing';
+import { createMockStore } from '@ngrx/store/testing';
 import { catalogStateKey, initialCatalogState } from '../state/catalog.state';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { ActivatedRoute } from '@angular/router';
@@ -40,7 +40,7 @@ const setup = async (protocol: FeatureSourceProtocolEnum) => {
       ...featureSourceModel,
     })),
   };
-  const store = getMockStore({
+  const store = createMockStore({
     initialState: { [catalogStateKey]: { ...initialCatalogState, featureSources: [{ ...featureSourceModel, catalogNodeId: 'node-1' }] } },
   });
   await render(FeatureSourceDetailsComponent, {

@@ -16,7 +16,7 @@ import { TocFilterInputComponent } from '../toc-filter-input/toc-filter-input.co
 import { toggleFilterEnabled } from '../state/toc.actions';
 import { selectFilterEnabled, selectFilterTerm, selectInfoTreeNodeId } from '../state/toc.selectors';
 
-const getMockStore = (selectedLayer: string = '') => {
+const createMockStore = (selectedLayer = '') => {
   const layers = [
     getAppLayerModel({ title: 'Disaster map', visible: false }),
     getAppLayerModel({ id: '2', title: 'Some other map', visible: false }),
@@ -50,7 +50,7 @@ describe('TocComponent', () => {
       imports: [ SharedModule, MatIconTestingModule ],
       declarations: [ TocNodeLayerComponent, ToggleAllLayersButtonComponent ],
       providers: [
-        getMockStore(),
+        createMockStore(),
         getMenubarService(false, registerComponentFn),
       ],
     });
@@ -63,7 +63,7 @@ describe('TocComponent', () => {
       imports: [ SharedModule, MatIconTestingModule ],
       declarations: [ TocNodeLayerComponent, ToggleAllLayersButtonComponent, TocFilterInputComponent ],
       providers: [
-        getMockStore(),
+        createMockStore(),
         getMenubarService(true, registerComponentFn),
       ],
     });
@@ -77,7 +77,7 @@ describe('TocComponent', () => {
       imports: [ SharedModule, MatIconTestingModule ],
       declarations: [ TocNodeLayerComponent, ToggleAllLayersButtonComponent, TocFilterInputComponent ],
       providers: [
-        getMockStore(),
+        createMockStore(),
         getMenubarService(true, registerComponentFn),
       ],
     });
@@ -99,7 +99,7 @@ describe('TocComponent', () => {
       imports: [ SharedModule, MatIconTestingModule ],
       declarations: [ TocNodeLayerComponent, ToggleAllLayersButtonComponent, TocFilterInputComponent ],
       providers: [
-        getMockStore('1'),
+        createMockStore('1'),
         getMenubarService(true, registerComponentFn),
       ],
     });
@@ -122,7 +122,7 @@ describe('TocComponent', () => {
       imports: [ SharedModule, MatIconTestingModule ],
       declarations: [ TocNodeLayerComponent, ToggleAllLayersButtonComponent, TocFilterInputComponent ],
       providers: [
-        getMockStore('1'),
+        createMockStore('1'),
         getMenubarService(true, registerComponentFn),
       ],
     });

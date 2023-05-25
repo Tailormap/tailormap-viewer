@@ -26,7 +26,7 @@ export class AttributeFilterHelper {
     FilterConditionEnum.DATE_BETWEEN_KEY,
   ]);
 
-  public static getConditionTypes(includeUniqueValues: boolean = false): FilterConditionModel[] {
+  public static getConditionTypes(includeUniqueValues = false): FilterConditionModel[] {
     const types: FilterConditionModel[] = [
       {
         condition: FilterConditionEnum.NUMBER_EQUALS_KEY,

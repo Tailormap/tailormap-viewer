@@ -3,7 +3,7 @@ import { ApplicationListComponent } from './application-list.component';
 import { getApplication } from '@tailormap-admin/admin-api';
 import { LoadingStateEnum, SharedModule } from '@tailormap-viewer/shared';
 import { MatListModule } from '@angular/material/list';
-import { getMockStore } from '@ngrx/store/testing';
+import { createMockStore } from '@ngrx/store/testing';
 import { ApplicationState, applicationStateKey, initialApplicationState } from '../state/application.state';
 import { Store } from '@ngrx/store';
 import { loadApplications } from '../state/application.actions';
@@ -28,7 +28,7 @@ const setup = async (
     applicationListFilter: listFilter,
     applicationsLoadError: errorMessage,
   };
-  const mockStore = getMockStore({
+  const mockStore = createMockStore({
     initialState: { [applicationStateKey]: applicationState },
   });
   mockStore.dispatch = jest.fn();
