@@ -3,7 +3,7 @@ import { BrowserHelper } from '@tailormap-viewer/shared';
 import { BehaviorSubject, map, mergeMap, Observable, of } from 'rxjs';
 import { LayerTreeNodeModel } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
-import { selectLayerTreeNode } from '../../../map/state/map.selectors';
+import { selectLayer, selectLayerTreeNode } from '../../../map/state/map.selectors';
 
 @Component({
   selector: 'tm-toc-node-details',
@@ -18,6 +18,14 @@ export class TocNodeDetailsComponent implements OnInit {
   private nodeIdSubject = new BehaviorSubject<string | null>(null);
   public node$: Observable<LayerTreeNodeModel | null> = this.nodeIdSubject.asObservable().pipe(
     mergeMap(nodeId => nodeId !== null ? this.store$.select(selectLayerTreeNode(nodeId)) : of(null)),
+  );
+  public name$ = this.node$.pipe(
+    mergeMap(node => {
+      if (node?.appLayerId) {
+        return this.store$.select(selectLayer(node.appLayerId)).pipe(map(layer => layer?.title));
+      }
+      return of(node?.name);
+    }),
   );
 
   @Input()
