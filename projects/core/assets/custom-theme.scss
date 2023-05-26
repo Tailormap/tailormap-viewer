@@ -117,6 +117,10 @@ $app-theme: mat.define-light-theme((
   --base-button-height: 36px;
 }
 
+.mat-mdc-tab-header {
+  --mat-tab-header-label-text-letter-spacing: 0.0714285712;
+}
+
 .mat-mdc-form-field .mdc-text-field--outlined .mdc-notched-outline--upgraded .mdc-floating-label--float-above {
   font-size: var(--mdc-typography-body1-font-size);
 }
