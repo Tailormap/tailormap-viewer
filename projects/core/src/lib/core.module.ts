@@ -33,12 +33,12 @@ const getBaseHref = (platformLocation: PlatformLocation): string => {
 const TRACE_SERVICE = new InjectionToken('SENTRY_TRACE_SERVICE');
 const SENTRY_DSN: string = (window as any).SENTRY_DSN;
 const sentryTraceServiceFactory = async (router: Router) => {
-  const sentry = await import('@sentry/angular');
+  const sentry = await import('@sentry/angular-ivy');
   return new sentry.TraceService(router);
 };
 const sentryProviders = SENTRY_DSN === '@SENTRY_DSN@' ? [] : [
   { provide: TRACE_SERVICE, useFactory: sentryTraceServiceFactory, deps: [Router] },
-  { provide: APP_INITIALIZER, useFactory: () => () => {}, deps: [TRACE_SERVICE], multi: true },
+  { provide: APP_INITIALIZER, useFactory: () => () => {/*do nothing*/}, deps: [TRACE_SERVICE], multi: true },
 ];
 
 @NgModule({

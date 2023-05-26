@@ -12,7 +12,7 @@ import { TestBed } from '@angular/core/testing';
 import { Store } from '@ngrx/store';
 import { TAILORMAP_SECURITY_API_V1_SERVICE, TailormapSecurityApiV1MockService } from '@tailormap-viewer/api';
 
-const getMockStore = (loggedIn: boolean) => {
+const createMockStore = (loggedIn: boolean) => {
   return provideMockStore({
     selectors: [
       { selector: selectUserDetails, value: { isAuthenticated: loggedIn, username: loggedIn ? 'testusername' : undefined, roles: [] } },
@@ -43,7 +43,7 @@ describe('ProfileComponent', () => {
         MenubarButtonComponent,
       ],
       providers: [
-        getMockStore(false),
+        createMockStore(false),
         { provide: Router, useValue: { navigateByUrl: navigateFn } },
         { provide: TAILORMAP_SECURITY_API_V1_SERVICE, useClass: TailormapSecurityApiV1MockService },
       ],
@@ -75,7 +75,7 @@ describe('ProfileComponent', () => {
         MenubarButtonComponent,
       ],
       providers: [
-        getMockStore(true),
+        createMockStore(true),
         { provide: Router, useValue: { navigateByUrl: navigateFn } },
         { provide: TAILORMAP_SECURITY_API_V1_SERVICE, useValue: service },
       ],

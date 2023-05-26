@@ -1,5 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { HtmlifyConstants } from './htmlify.constants';
 
 @Pipe({
   name: 'htmlify',
@@ -8,12 +9,7 @@ export class HtmlifyPipe implements PipeTransform {
 
   public constructor(private sanitizer: DomSanitizer) {}
 
-  // Matches everything that starts with http until the first space
-  private static readonly URL_PART = 'https?:\\/\\/[^\\s\\r\\n]*';
-  // Matches a Markdown URL: [LABEL](URL)
-  private static readonly MD_PART = '\\[[\\w\\s\\d]+]\\(https?:\\/\\/[^) ]*\\)';
-
-  private static readonly URL_REGEXP = new RegExp(`${HtmlifyPipe.MD_PART}|${HtmlifyPipe.URL_PART}`, 'ig');
+  private static readonly URL_REGEXP = new RegExp(`${HtmlifyConstants.MD_PART}|${HtmlifyConstants.URL_PART}`, 'ig');
   private static readonly IMG_REGEXP = /\.(jpg|jpeg|png|webp|svg|gif)/i;
   private static readonly VENDOR_SPECIFIC_IMAGE_REGEXP = /getimage\.ashx/i;
   private static readonly NEWLINE_REGEXP = /([^>\r\n]?)(\r\n|\n\r|\r|\n)/g;

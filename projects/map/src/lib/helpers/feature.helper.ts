@@ -68,7 +68,7 @@ export class FeatureHelper {
     return null;
   }
 
-  public static getWKT(geometry: Geometry, projection: Projection, linearizeCircle: boolean = false) {
+  public static getWKT(geometry: Geometry, projection: Projection, linearizeCircle = false) {
     const units = projection.getUnits();
     const decimals = MapSizeHelper.getCoordinatePrecision(units ? units.toLowerCase() as MapUnitEnum: MapUnitEnum.m);
 

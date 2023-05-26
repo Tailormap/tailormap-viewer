@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core';
 import { ExtendedFilterGroupModel } from '../../../filter/models/extended-filter-group.model';
 import { FilterTypeEnum } from '../../../filter/models/filter-type.enum';
 import { Store } from '@ngrx/store';
@@ -15,16 +15,13 @@ import { FilterTypeHelper } from '../../../filter/helpers/filter-type.helper';
   styleUrls: ['./filter-list-item.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FilterListItemComponent implements OnInit {
+export class FilterListItemComponent {
 
   @Input()
   public filter: ExtendedFilterGroupModel | null = null;
 
   private store$ = inject(Store);
   private removeFilterService = inject(RemoveFilterService);
-
-  public ngOnInit(): void {
-  }
 
   public isAttributeFilter(type: FilterTypeEnum) {
     return type === FilterTypeEnum.ATTRIBUTE;

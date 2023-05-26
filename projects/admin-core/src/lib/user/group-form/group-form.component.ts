@@ -42,8 +42,6 @@ export class GroupFormComponent implements OnInit, OnDestroy {
   private destroyed = new Subject();
   private _group: GroupModel | null = null;
 
-  constructor() {}
-
   public ngOnInit(): void {
     this.groupForm.valueChanges
       .pipe(

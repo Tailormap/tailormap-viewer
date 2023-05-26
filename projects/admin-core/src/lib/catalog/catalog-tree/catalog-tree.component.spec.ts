@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/angular';
 import { CatalogTreeComponent } from './catalog-tree.component';
-import { getMockStore } from '@ngrx/store/testing';
+import { createMockStore } from '@ngrx/store/testing';
 import { LoadingStateEnum, SharedModule } from '@tailormap-viewer/shared';
 import { createSelector, Store } from '@ngrx/store';
 import {
@@ -17,7 +17,7 @@ import { CatalogBaseTreeComponent } from '../catalog-base-tree/catalog-base-tree
 import { CatalogBaseTreeNodeComponent } from '../catalog-base-tree/catalog-base-tree-node/catalog-base-tree-node.component';
 
 const setup = async (state: Partial<CatalogState> = {}) => {
-  const mockStore = getMockStore({
+  const mockStore = createMockStore({
     initialState: { [catalogStateKey]: { ...initialCatalogState, ...state } },
   });
   const mockDispatch = jest.fn();

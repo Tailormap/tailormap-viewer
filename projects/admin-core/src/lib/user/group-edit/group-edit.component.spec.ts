@@ -9,6 +9,7 @@ import { SharedImportsModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { TestSaveHelper } from '../../test-helpers/test-save.helper';
 import { GroupFormComponent } from '../group-form/group-form.component';
+import { MatIconTestingModule } from '@angular/material/icon/testing';
 
 const setup = async (hasGroup?: boolean) => {
   const activeRoute = {
@@ -25,7 +26,7 @@ const setup = async (hasGroup?: boolean) => {
   };
   await render(GroupEditComponent, {
     declarations: [ GroupFormComponent, SaveButtonComponent ],
-    imports: [SharedImportsModule],
+    imports: [ SharedImportsModule, MatIconTestingModule ],
     providers: [
       { provide: ActivatedRoute, useValue: activeRoute },
       { provide: GroupDetailsService, useValue: groupService },

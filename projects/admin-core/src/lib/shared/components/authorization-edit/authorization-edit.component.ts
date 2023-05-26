@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnDestroy, Input } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { AuthorizationRuleDecision, AuthorizationRuleGroup, AuthorizationGroups, GroupModel } from '@tailormap-admin/admin-api';
 import { Subject } from 'rxjs';
@@ -13,7 +13,7 @@ import { Subject } from 'rxjs';
     useExisting: AuthorizationEditComponent,
   }],
 })
-export class AuthorizationEditComponent implements OnInit, OnDestroy, ControlValueAccessor {
+export class AuthorizationEditComponent implements OnDestroy, ControlValueAccessor {
   private destroyed = new Subject();
 
   private _onChange: (_: any) => void = () => undefined;
@@ -33,12 +33,6 @@ export class AuthorizationEditComponent implements OnInit, OnDestroy, ControlVal
   private updateGroupList() {
       this.groupList = this._groups.filter(a => !a.systemGroup).map(a => ({ name: a.name, used: this.value.find(b => b.groupName === a.name) !== undefined }));
       this.canAddRule = this.groupList.find(a => !a.used) !== undefined;
-  }
-
-
-  constructor() { }
-
-  public ngOnInit(): void {
   }
 
   public ngOnDestroy() {
@@ -76,9 +70,13 @@ export class AuthorizationEditComponent implements OnInit, OnDestroy, ControlVal
       this._onChange = fn;
   }
 
-  public registerOnTouched() { }
+  public registerOnTouched() {
+    // do nothing
+  }
 
-  public setDisabledState() { }
+  public setDisabledState() {
+    // do nothing
+  }
 
   public changeAuthenticationType(type: string) {
       switch (type) {

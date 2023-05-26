@@ -40,13 +40,13 @@
     <mat-datepicker #dp2></mat-datepicker>
   </mat-form-field>
 
-  <div *ngIf="showCaseSensitiveInput()">
+  <div *ngIf="showCaseSensitiveInput()" class="checkbox-margin">
     <mat-checkbox i18n formControlName="caseSensitive">
       Case sensitive
     </mat-checkbox>
   </div>
 
-  <div *ngIf="showInvertConditionInput()" class="checkbox-margin">
+  <div *ngIf="showInvertConditionInput()">
     <mat-checkbox i18n formControlName="invertCondition">
       Invert condition
     </mat-checkbox>
@@ -55,8 +55,7 @@
   <mat-checkbox *ngIf="!loadingUniqueValues && showUniqueValuesInput()"
                 [checked]="allUniqueValuesSelected"
                 [indeterminate]="someUniqueValuesSelected"
-                (change)="toggleAllUniqueValues()"
-                class="checkbox-margin">
+                (change)="toggleAllUniqueValues()">
     <span *ngIf="allUniqueValuesSelected" i18n>Deselect all values</span>
     <span *ngIf="!allUniqueValuesSelected" i18n>Select all values</span>
   </mat-checkbox>

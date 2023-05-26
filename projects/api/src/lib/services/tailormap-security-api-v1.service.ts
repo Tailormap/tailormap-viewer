@@ -5,13 +5,10 @@ import {
 import { UserResponseModel } from '../models';
 import { catchError, map, Observable, of, switchMap, throwError } from 'rxjs';
 import { TailormapSecurityApiV1ServiceModel } from './tailormap-security-api-v1.service.model';
+import { TailormapApiConstants } from './tailormap-api.constants';
 
 @Injectable()
 export class TailormapSecurityApiV1Service implements TailormapSecurityApiV1ServiceModel {
-
-  public static BASE_URL = '/api';
-  public static LOGIN_URL = `${TailormapSecurityApiV1Service.BASE_URL}/login`;
-  public static LOGOUT_URL = `${TailormapSecurityApiV1Service.BASE_URL}/logout`;
 
   constructor(
     private httpClient: HttpClient,
@@ -31,7 +28,7 @@ export class TailormapSecurityApiV1Service implements TailormapSecurityApiV1Serv
           catchError(error => {
             if (
               error instanceof HttpErrorResponse
-              && (req.url.startsWith(baseUrl) && req.url !== TailormapSecurityApiV1Service.LOGIN_URL)
+              && (req.url.startsWith(baseUrl) && req.url !== TailormapApiConstants.LOGIN_URL)
               && error.status === 401
             ) {
               shouldLogin();
@@ -44,7 +41,7 @@ export class TailormapSecurityApiV1Service implements TailormapSecurityApiV1Serv
 
   public getUser$(): Observable<UserResponseModel> {
     return this.httpClient.get<UserResponseModel>(
-      `${TailormapSecurityApiV1Service.BASE_URL}/user`,
+      `${TailormapApiConstants.BASE_URL}/user`,
     ).pipe(
       catchError((): Observable<UserResponseModel> => of({ isAuthenticated: false, username: '', roles: [] })),
     );
@@ -53,7 +50,7 @@ export class TailormapSecurityApiV1Service implements TailormapSecurityApiV1Serv
   public login$(username: string, password: string): Observable<UserResponseModel> {
     // When logging in as the first thing after navigation start we may not have a XSRF token yet. If so, do a request to get it first.
     const ensureXsrfToken$ = this.httpXsrfTokenExtractor.getToken() == null
-      ? this.httpClient.options(TailormapSecurityApiV1Service.LOGIN_URL).pipe(catchError(() => of(true)))
+      ? this.httpClient.options(TailormapApiConstants.LOGIN_URL).pipe(catchError(() => of(true)))
       : of(true);
 
     const body = new HttpParams({
@@ -64,7 +61,7 @@ export class TailormapSecurityApiV1Service implements TailormapSecurityApiV1Serv
     });
     return ensureXsrfToken$.pipe(
       switchMap(() => {
-        return this.httpClient.post(TailormapSecurityApiV1Service.LOGIN_URL, body, { observe: 'response', responseType: 'text' }).pipe(
+        return this.httpClient.post(TailormapApiConstants.LOGIN_URL, body, { observe: 'response', responseType: 'text' }).pipe(
           map(response => response.status === 200 && /^(?!.*[?]error$).*$/.test(response.url || '')),
           catchError(() => of(false)),
         );
@@ -79,7 +76,7 @@ export class TailormapSecurityApiV1Service implements TailormapSecurityApiV1Serv
   }
 
   public logout$(): Observable<boolean> {
-    return this.httpClient.post(TailormapSecurityApiV1Service.LOGOUT_URL, null, { observe: 'response' }).pipe(
+    return this.httpClient.post(TailormapApiConstants.LOGOUT_URL, null, { observe: 'response' }).pipe(
       map(response => response.status === 200),
       catchError(() => of(false)),
     );

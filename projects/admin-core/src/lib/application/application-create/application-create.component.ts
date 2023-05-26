@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { ApplicationModel } from '@tailormap-admin/admin-api';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { ApplicationService } from '../services/application.service';
@@ -11,7 +11,7 @@ import { AdminSnackbarService } from '../../shared/services/admin-snackbar.servi
   styleUrls: ['./application-create.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ApplicationCreateComponent implements OnInit, OnDestroy {
+export class ApplicationCreateComponent implements OnDestroy {
 
   private savingSubject = new BehaviorSubject(false);
   private destroyed = new Subject();
@@ -24,9 +24,6 @@ export class ApplicationCreateComponent implements OnInit, OnDestroy {
     private router: Router,
     private adminSnackbarService: AdminSnackbarService,
   ) { }
-
-  public ngOnInit(): void {
-  }
 
   public ngOnDestroy(): void {
     this.destroyed.next(null);

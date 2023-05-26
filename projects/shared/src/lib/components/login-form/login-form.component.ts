@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Output, EventEmitter, Input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Output, EventEmitter, Input } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { BehaviorSubject, Observable, take } from 'rxjs';
 import { UserResponseModel } from '@tailormap-viewer/api';
@@ -9,7 +9,7 @@ import { UserResponseModel } from '@tailormap-viewer/api';
   styleUrls: ['./login-form.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoginFormComponent implements OnInit {
+export class LoginFormComponent {
 
   @Input()
   public login$: ((username: string, password: string) => Observable<UserResponseModel>) | null = null;
@@ -31,9 +31,6 @@ export class LoginFormComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
   ) { }
-
-  public ngOnInit(): void {
-  }
 
   public login() {
     const username = this.loginForm.get('username')?.value;

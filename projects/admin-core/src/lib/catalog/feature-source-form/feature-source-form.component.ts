@@ -69,8 +69,6 @@ export class FeatureSourceFormComponent implements OnInit {
     password: new FormControl<string | null>(null),
   });
 
-  constructor() { }
-
   public ngOnInit(): void {
     this.featureSourceForm.valueChanges
       .pipe(

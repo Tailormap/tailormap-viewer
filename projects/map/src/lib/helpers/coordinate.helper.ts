@@ -1,11 +1,11 @@
-import proj4 from 'proj4';
 import { circular } from 'ol/geom/Polygon';
 import { getTransform, get as getProjection } from 'ol/proj';
 import { FeatureHelper } from './feature.helper';
+import { Proj4Helper } from './proj4.helper';
 
 export class CoordinateHelper {
   public static projectCoordinates(coords: number[], fromProjection: string, toProjection: string): number[] {
-    return proj4(fromProjection, toProjection, coords);
+    return Proj4Helper.proj4(fromProjection, toProjection, coords);
   }
 
   /**

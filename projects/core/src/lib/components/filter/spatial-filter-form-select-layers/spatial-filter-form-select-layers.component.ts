@@ -25,8 +25,6 @@ export class SpatialFilterFormSelectLayersComponent implements OnInit, OnDestroy
     nonNullable: true,
   });
 
-  constructor() { }
-
   public ngOnInit(): void {
     this.availableLayers$ = this.store$.select(selectFilterableLayers);
     this.store$.select(selectSelectedLayers)

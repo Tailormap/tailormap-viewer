@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core';
 import { map, Observable, of } from 'rxjs';
 import { LegendInfoModel } from '../../../legend/models/legend-info.model';
 import { LegendService } from '../../../legend/services/legend.service';
@@ -12,7 +12,7 @@ import { selectLayerWithService } from '../../../../map/state/map.selectors';
   styleUrls: ['./layer-details.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LayerDetailsComponent implements OnInit {
+export class LayerDetailsComponent {
 
   private legendService = inject(LegendService);
   private mapService = inject(MapService);
@@ -30,11 +30,6 @@ export class LayerDetailsComponent implements OnInit {
   }
 
   public legendInfo$: Observable<LegendInfoModel | null> = of(null);
-
-  constructor() { }
-
-  public ngOnInit(): void {
-  }
 
   private updateLegend() {
     if (!this.layerId) {

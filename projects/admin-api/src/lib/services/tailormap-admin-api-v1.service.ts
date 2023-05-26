@@ -6,11 +6,12 @@ import {
   CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel, ConfigModel,
 } from '../models';
 import { CatalogModelHelper } from '../helpers/catalog-model.helper';
+import { TailormapApiConstants } from '@tailormap-viewer/api';
 
 @Injectable()
 export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceModel {
 
-  public static BASE_URL = '/api/admin';
+  public static BASE_URL = `${TailormapApiConstants.BASE_URL}/admin`;
 
   constructor(
     private httpClient: HttpClient,
@@ -141,7 +142,7 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
    * @param username an existing username
    * @param projection the projection to use, default is `groupName`
    */
-  public getUser$(username: string, projection: string='groupName'): Observable<UserModel> {
+  public getUser$(username: string, projection = 'groupName'): Observable<UserModel> {
     return this.httpClient.get<any>(`${TailormapAdminApiV1Service.BASE_URL}/users/${username}?projection=${projection}`, {
       observe: 'response',
     }).pipe(

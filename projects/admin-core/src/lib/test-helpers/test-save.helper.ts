@@ -5,6 +5,7 @@ export class TestSaveHelper {
 
   public static async waitForButtonToBeEnabledAndClick(labelText: string, idx?: number) {
     const btnIdx = typeof idx === 'number' ? idx : 0;
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     await waitFor(async () => {
       // eslint-disable-next-line no-undef
@@ -15,6 +16,7 @@ export class TestSaveHelper {
 
   public static async waitForButtonToBeDisabled(labelText: string, idx?: number) {
     const btnIdx = typeof idx === 'number' ? idx : 0;
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     await waitFor(async () => {
       // eslint-disable-next-line no-undef

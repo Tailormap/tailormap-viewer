@@ -17,12 +17,17 @@
       ],
       "extends": [
         "eslint:recommended",
-        "plugin:@angular-eslint/ng-cli-compat",
-        "plugin:@angular-eslint/ng-cli-compat--formatting-add-on",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@angular-eslint/recommended",
         "plugin:@angular-eslint/template/process-inline-templates"
       ],
       "globals": {
         "$localize": "readonly"
+      },
+      "parserOptions": {
+        "project": [
+          "tsconfig.json"
+        ]
       },
       "rules": {
         "@angular-eslint/component-selector": [
@@ -33,6 +38,7 @@
             "style": "kebab-case"
           }
         ],
+        "@typescript-eslint/no-explicit-any": "off",
         "@angular-eslint/directive-selector": [
           "error",
           {
@@ -100,11 +106,37 @@
           }
         ],
         "space-before-function-paren": "off",
-        "@typescript-eslint/space-before-function-paren": ["error", {"anonymous": "always", "named": "ignore", "asyncArrow": "always"}],
-        "object-curly-spacing": ["error", "always"],
-        "no-array-constructor": ["error"],
-        "array-bracket-spacing": ["error", "always", { "arraysInArrays": false, "objectsInArrays": false, "singleValue": false }],
-        "comma-spacing": ["error", { "before": false, "after": true }],
+        "@typescript-eslint/space-before-function-paren": [
+          "error",
+          {
+            "anonymous": "always",
+            "named": "ignore",
+            "asyncArrow": "always"
+          }
+        ],
+        "object-curly-spacing": [
+          "error",
+          "always"
+        ],
+        "no-array-constructor": [
+          "error"
+        ],
+        "array-bracket-spacing": [
+          "error",
+          "always",
+          {
+            "arraysInArrays": false,
+            "objectsInArrays": false,
+            "singleValue": false
+          }
+        ],
+        "comma-spacing": [
+          "error",
+          {
+            "before": false,
+            "after": true
+          }
+        ],
         "max-len": [
           "error",
           180
@@ -141,7 +173,9 @@
       "rules": {
         "no-unused-vars": "off",
         "@typescript-eslint/no-unused-vars": "off",
-        "rxjs/finnish": "off"
+        "rxjs/finnish": "off",
+        "@typescript-eslint/ban-ts-comment": "off",
+        "@typescript-eslint/no-empty-function": "off"
       }
     },
     {

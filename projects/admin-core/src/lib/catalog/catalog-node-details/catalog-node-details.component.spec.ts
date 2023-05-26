@@ -2,7 +2,7 @@ import { render, screen, waitFor } from '@testing-library/angular';
 import { CatalogNodeDetailsComponent } from './catalog-node-details.component';
 import { of } from 'rxjs';
 import { getCatalogNode } from '@tailormap-admin/admin-api';
-import { getMockStore } from '@ngrx/store/testing';
+import { createMockStore } from '@ngrx/store/testing';
 import { catalogStateKey, initialCatalogState } from '../state/catalog.state';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { ActivatedRoute } from '@angular/router';
@@ -24,7 +24,7 @@ const setup = async () => {
     updateCatalogNode$: updateCatalogNodeMock,
   };
   const catalogNodeModel = getCatalogNode({ id: '1', title: 'Random services folder' });
-  const store = getMockStore({
+  const store = createMockStore({
     initialState: { [catalogStateKey]: { ...initialCatalogState, catalog: [{ ...catalogNodeModel, root: false, parentId: 'root' }] } },
   });
   await render(CatalogNodeDetailsComponent, {

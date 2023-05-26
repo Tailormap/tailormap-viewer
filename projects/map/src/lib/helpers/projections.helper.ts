@@ -1,7 +1,7 @@
 import { getWidth } from 'ol/extent';
 import { register } from 'ol/proj/proj4';
-import proj4 from 'proj4';
 import { OpenlayersExtent } from '../models/extent.type';
+import { Proj4Helper } from './proj4.helper';
 
 export class ProjectionsHelper {
 
@@ -14,7 +14,7 @@ export class ProjectionsHelper {
     (projectionAliases || []).forEach(alias => {
       ProjectionsHelper.registerProjection(alias, definition);
     });
-    register(proj4);
+    register(Proj4Helper.proj4);
   }
 
   public static getResolutions(projection: string, extent: OpenlayersExtent): number[] {
@@ -29,8 +29,8 @@ export class ProjectionsHelper {
   }
 
   private static registerProjection(projection: string, definition: string) {
-    if (!proj4.defs(projection) && !!definition) {
-      proj4.defs(projection, definition);
+    if (!Proj4Helper.proj4.defs(projection) && !!definition) {
+      Proj4Helper.proj4.defs(projection, definition);
     }
   }
 

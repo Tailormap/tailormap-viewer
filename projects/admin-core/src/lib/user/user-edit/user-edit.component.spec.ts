@@ -11,6 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SharedImportsModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { TestSaveHelper } from '../../test-helpers/test-save.helper';
+import { MatIconTestingModule } from '@angular/material/icon/testing';
 
 const setup = async (hasUser?: boolean) => {
   const activeRoute = {
@@ -30,7 +31,7 @@ const setup = async (hasUser?: boolean) => {
   };
   await render(UserEditComponent, {
     declarations: [ UserFormComponent, SaveButtonComponent, PasswordFieldComponent ],
-    imports: [SharedImportsModule],
+    imports: [ SharedImportsModule, MatIconTestingModule ],
     providers: [
       { provide: ActivatedRoute, useValue: activeRoute },
       { provide: UserDetailsService, useValue: userService },

@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/angular';
 import { FeatureTypeSelectorComponent } from './feature-type-selector.component';
 import { CatalogState, catalogStateKey, initialCatalogState } from '../state/catalog.state';
-import { getMockStore } from '@ngrx/store/testing';
+import { createMockStore } from '@ngrx/store/testing';
 import { LoadingStateEnum, SharedImportsModule } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
 import { loadFeatureSources } from '../state/catalog.actions';
@@ -29,7 +29,7 @@ const setup = async (status: LoadingStateEnum, layerName?: string) => {
     featureSources: [featureSourceModel],
     featureSourcesLoadStatus: status,
   };
-  const store = getMockStore({ initialState: { [catalogStateKey]: catalogState } });
+  const store = createMockStore({ initialState: { [catalogStateKey]: catalogState } });
   const dispatch = jest.fn();
   store.dispatch = dispatch;
   const featureTypeSelected = jest.fn();

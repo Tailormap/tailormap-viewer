@@ -6,10 +6,14 @@ module.exports = {
     "^@tailormap-viewer/(.*)$": "<rootDir>/../../projects/$1/src",
     "^@tailormap-admin/(.*)$": "<rootDir>/../../projects/$1/src"
   },
-  globals: {
-    "ts-jest": {
-      isolatedModules: true
-    }
+  transform: {
+    '^.+\\.(ts|js|html|svg)$': [
+      'jest-preset-angular',
+      {
+        stringifyContentPathRegex: '\\.(html|svg)$',
+        isolatedModules: true,
+      },
+    ],
   },
   transformIgnorePatterns: ['node_modules/(?!(.*\\.mjs$|ol|observable-fns|quick-lru|nanoid|@tinyhttp/|@stardazed/))'],
 };

@@ -19,8 +19,6 @@ export class TocNodeLayerComponent {
   @Output()
   public showTreeNodeInfo = new EventEmitter<string>();
 
-  constructor() { }
-
   public isLevel() {
     return this.node?.type === 'level';
   }

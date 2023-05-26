@@ -5,7 +5,7 @@ import { CatalogNodeModel, getCatalogTree, getGeoService, TAILORMAP_ADMIN_API_V1
 import { CatalogState, catalogStateKey, initialCatalogState } from '../state/catalog.state';
 import userEvent from '@testing-library/user-event';
 import { addGeoServices } from '../state/catalog.actions';
-import { getMockStore } from '@ngrx/store/testing';
+import { createMockStore } from '@ngrx/store/testing';
 import { of } from 'rxjs';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { CatalogBaseTreeNodeComponent } from './catalog-base-tree-node/catalog-base-tree-node.component';
@@ -15,7 +15,7 @@ import { TestBed } from '@angular/core/testing';
 import { CatalogTreeHelper } from '../helpers/catalog-tree.helper';
 
 const setup = async (state: Partial<CatalogState> = {}) => {
-  const mockStore = getMockStore({
+  const mockStore = createMockStore({
     initialState: { [catalogStateKey]: { ...initialCatalogState, ...state } },
   });
   const mockDispatch = jest.fn();

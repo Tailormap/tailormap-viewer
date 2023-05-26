@@ -8,7 +8,9 @@ const getMapMock = () => ({
   removeOverlay: jest.fn(overlay => {
     try {
       document.body.removeChild(overlay.getElement());
-    } catch (e) {}
+    } catch (e) {
+      // ignore error
+    }
   }),
 });
 

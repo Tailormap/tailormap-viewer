@@ -1,7 +1,7 @@
 /*
  * Public API Surface of map
  */
-/// <reference path="typings.d.ts" />
+import "./typings.d.ts";
 
 if (typeof window.$localize === 'undefined') {
   window.$localize = (messageParts: TemplateStringsArray) => messageParts.join('');

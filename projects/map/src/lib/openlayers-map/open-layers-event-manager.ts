@@ -41,6 +41,7 @@ export class OpenLayersEventManager {
       unByKey(event.eventKey);
     }
     event.eventKey = olMap.on(
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore - for some weird reason TS won't recognize the type of evtKey and sees it as string
       evtKey,
       (e: EventType) => ngZone.run(() => event.stream.next(e)),

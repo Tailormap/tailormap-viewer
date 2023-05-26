@@ -8,11 +8,10 @@ import { TailormapApiV1ServiceModel } from './tailormap-api-v1.service.model';
 import { UniqueValuesResponseModel } from '../models/unique-values-response.model';
 import { LayerExportCapabilitiesModel } from '../models/layer-export-capabilities.model';
 import { ApiHelper } from '../helpers/api.helper';
+import { TailormapApiConstants } from './tailormap-api.constants';
 
 @Injectable()
 export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
-
-  public static BASE_URL = '/api';
 
   constructor(
     private httpClient: HttpClient,
@@ -21,25 +20,25 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
 
   public getVersion$(): Observable<VersionResponseModel> {
     return this.httpClient.get<VersionResponseModel>(
-      `${TailormapApiV1Service.BASE_URL}/version`,
+      `${TailormapApiConstants.BASE_URL}/version`,
     );
   }
 
   public getUser$(): Observable<UserResponseModel> {
     return this.httpClient.get<UserResponseModel>(
-      `${TailormapApiV1Service.BASE_URL}/user`,
+      `${TailormapApiConstants.BASE_URL}/user`,
     );
   }
 
   public getViewer$(id?: string): Observable<ViewerResponseModel> {
     return this.httpClient.get<ViewerResponseModel>(
-      TailormapApiV1Service.BASE_URL + '/' + (id || 'app'),
+      TailormapApiConstants.BASE_URL + '/' + (id || 'app'),
     );
   }
 
   public getMap$(applicationId: string): Observable<MapResponseModel> {
     return this.httpClient.get<MapResponseModel>(
-      `${TailormapApiV1Service.BASE_URL}/${applicationId}/map`,
+      `${TailormapApiConstants.BASE_URL}/${applicationId}/map`,
     );
   }
 
@@ -48,7 +47,7 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
     layerId: string;
   }): Observable<LayerDetailsModel> {
     return this.httpClient.get<LayerDetailsModel>(
-      `${TailormapApiV1Service.BASE_URL}/${params.applicationId}/layer/${params.layerId}/describe`,
+      `${TailormapApiConstants.BASE_URL}/${params.applicationId}/layer/${params.layerId}/describe`,
     );
   }
 
@@ -80,7 +79,7 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
       onlyGeometries: params.onlyGeometries,
     });
     return this.httpClient.post<FeaturesResponseModel>(
-      `${TailormapApiV1Service.BASE_URL}/${params.applicationId}/layer/${params.layerId}/features`,
+      `${TailormapApiConstants.BASE_URL}/${params.applicationId}/layer/${params.layerId}/features`,
       params.filter ? this.getQueryParams({ filter:  params.filter }) : '',
       {
         headers: new HttpHeaders('Content-Type: application/x-www-form-urlencoded'),
@@ -95,7 +94,7 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
     filter?: string;
   }): Observable<UniqueValuesResponseModel> {
     return this.httpClient.post<UniqueValuesResponseModel>(
-      `${TailormapApiV1Service.BASE_URL}/${params.applicationId}/layer/${params.layerId}/unique/${params.attribute}`,
+      `${TailormapApiConstants.BASE_URL}/${params.applicationId}/layer/${params.layerId}/unique/${params.attribute}`,
       params.filter ? this.getQueryParams({ filter: params.filter }) : '',
       { headers: new HttpHeaders('Content-Type: application/x-www-form-urlencoded') },
     );
@@ -106,7 +105,7 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
     layerId: string;
   }): Observable<LayerExportCapabilitiesModel> {
     return this.httpClient.get<LayerExportCapabilitiesModel>(
-      `${TailormapApiV1Service.BASE_URL}/${params.applicationId}/layer/${params.layerId}/export/capabilities`,
+      `${TailormapApiConstants.BASE_URL}/${params.applicationId}/layer/${params.layerId}/export/capabilities`,
     );
   }
 
@@ -127,7 +126,7 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
       crs: params.crs,
     });
     return this.httpClient.post(
-      `${TailormapApiV1Service.BASE_URL}/${params.applicationId}/layer/${params.layerId}/export/download`,
+      `${TailormapApiConstants.BASE_URL}/${params.applicationId}/layer/${params.layerId}/export/download`,
       params.filter ? this.getQueryParams({ filter: params.filter }) : '',
       {
         headers: new HttpHeaders('Content-Type: application/x-www-form-urlencoded'),

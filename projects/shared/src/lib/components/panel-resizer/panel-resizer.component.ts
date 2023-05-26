@@ -23,8 +23,6 @@ export class PanelResizerComponent implements OnInit {
 
   public resizing = false;
 
-  constructor() {}
-
   public ngOnInit() {
     if (!this.resizer) {
       return;
