@@ -4,7 +4,7 @@
      [style.height]="panelHeight$ | async">
   <tm-panel-resize orientation="vertical" (positionChanged)="panelResized($event)"></tm-panel-resize>
   <div class="toc-node-details-panel-header">
-    <h2 i18n>Details for {{node.name}}</h2>
+    <h2 i18n>Details for {{name$ | async}}</h2>
     <button mat-icon-button
             class="close-button"
             tmTooltip="Close details"
