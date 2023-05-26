@@ -51,12 +51,12 @@ describe('GroupEditComponent', () => {
 
   test('should update group', async () => {
     const { groupService } = await setup(true);
-    await userEvent.type(screen.getByLabelText('Name'), '-123');
+    await userEvent.type(screen.getByLabelText('Notes'), 'some extra notes');
     await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save');
     expect(groupService.addOrUpdateGroup$).toHaveBeenCalledWith(false, {
-      name: 'secret-group-123',
+      name: 'secret-group',
       description: 'some secret group',
-      notes: null,
+      notes: 'some extra notes',
       systemGroup: true,
     });
   });

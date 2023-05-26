@@ -75,8 +75,10 @@ export class UserEditComponent implements OnInit, OnDestroy {
     this.savingSubject.next(true);
     this.userService.addOrUpdateUser$(false, this.updatedUser)
       .pipe(take(1))
-      .subscribe(() => {
-        this.adminSnackbarService.showMessage($localize `User updated`);
+      .subscribe(updatedUser => {
+        if (updatedUser) {
+          this.adminSnackbarService.showMessage($localize `User updated`);
+        }
         this.savingSubject.next(false);
       });
   }
