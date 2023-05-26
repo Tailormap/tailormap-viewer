@@ -171,7 +171,7 @@ export class AttributeFilterComponent implements OnInit, OnDestroy {
 
   private mapValueToString(inputValue: string | DateTime | undefined | null): string {
     if (inputValue && this.isDateLikeAttributeType() && DateTime.isDateTime(inputValue)) {
-      return inputValue.toISODate();
+      return inputValue.toISODate() || '';
     }
     if (typeof inputValue === 'string') {
       return inputValue;
@@ -287,7 +287,7 @@ export class AttributeFilterComponent implements OnInit, OnDestroy {
     if (this.formValues.condition === FilterConditionEnum.UNIQUE_VALUES_KEY) {
       this.formValues.value = this.getSelectedUniqueValues();
       this.filterChanged.emit({
-        condition: this.formValues.condition,
+        condition: FilterConditionEnum.UNIQUE_VALUES_KEY,
         value: this.formValues.value,
         caseSensitive: this.formValues.caseSensitive,
         invertCondition: this.formValues.invertCondition,

@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { setRouteBeforeLogin } from '../state/core.actions';
-import { TailormapApiV1Service, TailormapSecurityApiV1Service } from '@tailormap-viewer/api';
+import { TailormapApiConstants, TailormapApiV1Service, TailormapSecurityApiV1Service } from '@tailormap-viewer/api';
 
 @Injectable()
 export class SecurityInterceptor implements HttpInterceptor {
@@ -16,7 +16,7 @@ export class SecurityInterceptor implements HttpInterceptor {
   }
 
   public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    return TailormapSecurityApiV1Service.createSecurityInterceptor(TailormapApiV1Service.BASE_URL, () => {
+    return TailormapSecurityApiV1Service.createSecurityInterceptor(TailormapApiConstants.BASE_URL, () => {
       this.store$.dispatch(setRouteBeforeLogin({ route: this.router.url }));
       this.router.navigateByUrl('/login');
     })(req, next);
