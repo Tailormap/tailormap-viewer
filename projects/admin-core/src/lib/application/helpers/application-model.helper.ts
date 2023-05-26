@@ -61,7 +61,7 @@ export class ApplicationModelHelper {
       position: TreeNodePosition;
       sibling?: string;
     },
-  ){
+  ): AppTreeNodeModel[] {
     const [ parent, parentIdx ] = ApplicationModelHelper.getParent(tree, params.parentId);
     if (!parent) {
       return tree;
@@ -76,7 +76,7 @@ export class ApplicationModelHelper {
       return tree;
     }
     const currentParentIdx = tree.findIndex(n => ApplicationModelHelper.isLevelTreeNode(n) && n.childrenIds?.includes(params.nodeId));
-    return tree.map((node, idx) => {
+    return tree.map((node, idx): AppTreeNodeModel | AppTreeLevelNodeModel => {
       if (!ApplicationModelHelper.isLevelTreeNode(node)) {
         return node;
       }
@@ -96,7 +96,7 @@ export class ApplicationModelHelper {
     });
   }
 
-  private static getParent(tree: AppTreeNodeModel[], parentId?: string): [AppTreeLevelNodeModel | null, number] {
+  public static getParent(tree: AppTreeNodeModel[], parentId?: string | null): [AppTreeLevelNodeModel | null, number] {
     if (!parentId) {
       return [ null, -1 ];
     }
