@@ -29,7 +29,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
     confirmedPassword: new FormControl<string>('', { nonNullable: true, validators: [ Validators.required, Validators.minLength(8) ] }),
     email: new FormControl<string>('', { nonNullable: false, validators: [Validators.email] }),
     name: new FormControl<string>('', { nonNullable: false }),
-    enabled: new FormControl<boolean>(false, { nonNullable: true }),
+    enabled: new FormControl<boolean>(true, { nonNullable: true }),
     validUntil: new FormControl<string>('', { nonNullable: false }),
     groups: new FormControl<GroupModel[]>([], { nonNullable: false }),
   }, {
@@ -47,7 +47,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
       username: user ? user.username : '',
       email: user ? user.email : '',
       name: user ? user.name : '',
-      enabled: user ? user.enabled : false,
+      enabled: user ? user.enabled : true,
       // HTML input expects 2023-10-27T01:22:00.000, it seems problematic to set a Date object
       validUntil: (user && user.validUntil) ? formatDate(user.validUntil, 'yyyy-MM-ddTHH:mm:ss', 'en') : null,
       groups: user ? user.groups : [],
