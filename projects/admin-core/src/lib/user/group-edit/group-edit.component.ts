@@ -75,8 +75,10 @@ export class GroupEditComponent implements OnInit, OnDestroy {
     this.savingSubject.next(true);
     this.groupService.addOrUpdateGroup$(false, this.updatedGroup)
       .pipe(take(1))
-      .subscribe(() => {
-        this.adminSnackbarService.showMessage($localize `Group updated`);
+      .subscribe(updatedGroup => {
+        if (updatedGroup) {
+          this.adminSnackbarService.showMessage($localize `Group updated`);
+        }
         this.savingSubject.next(false);
       });
   }

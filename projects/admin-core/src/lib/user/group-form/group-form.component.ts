@@ -31,6 +31,11 @@ export class GroupFormComponent implements OnInit, OnDestroy {
       notes: group ? group.notes : null,
       systemGroup: group ? group.systemGroup : false,
     });
+    if (group) {
+      this.groupForm.get('name')?.disable();
+    } else {
+      this.groupForm.get('name')?.enable();
+    }
   }
   public get group(): GroupModel | null {
     return this._group;
