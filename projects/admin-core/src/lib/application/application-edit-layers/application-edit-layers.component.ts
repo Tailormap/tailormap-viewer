@@ -147,6 +147,7 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
     this.store$.dispatch(removeApplicationTreeNode({
       tree: this.applicationStateTree,
       nodeId: $event.nodeId,
+      parentId: this.applicationTreeService.getParent($event.nodeId),
     }));
   }
 

@@ -94,7 +94,7 @@ export const updateApplicationTreeNode = createAction(
 
 export const removeApplicationTreeNode = createAction(
   `${applicationActionsPrefix} Remove Application Tree Node`,
-  props<{ nodeId: string; tree: 'layer' | 'baseLayer' }>(),
+  props<{ nodeId: string; parentId: string | null; tree: 'layer' | 'baseLayer' }>(),
 );
 
 export const updateApplicationTreeNodeVisibility = createAction(

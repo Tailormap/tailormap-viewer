@@ -2,7 +2,9 @@ import * as ApplicationActions from './application.actions';
 import { Action, createReducer, on } from '@ngrx/store';
 import { ApplicationState, initialApplicationState } from './application.state';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
-import { AppContentModel, ApplicationModel, AppTreeNodeModel } from '@tailormap-admin/admin-api';
+import {
+  AppContentModel, ApplicationModel, AppTreeLayerNodeModel, AppTreeNodeModel,
+} from '@tailormap-admin/admin-api';
 import { ApplicationModelHelper } from '../helpers/application-model.helper';
 import { ComponentModel } from '@tailormap-viewer/api';
 
@@ -203,9 +205,19 @@ const onRemoveApplicationTreeNode = (
     if (idx === -1) {
       return tree;
     }
-    return [
+    const updatedTree = [
       ...tree.slice(0, idx),
       ...tree.slice(idx + 1),
+    ];
+    const [ parent, parentIdx ] = ApplicationModelHelper.getParent(updatedTree, payload.parentId);
+    if (!parent) {
+      return updatedTree;
+    }
+    const updatedParent = { ...parent, childrenIds: parent.childrenIds.filter(id => id !== payload.nodeId) };
+    return [
+      ...updatedTree.slice(0, parentIdx),
+      updatedParent,
+      ...updatedTree.slice(parentIdx + 1),
     ];
   });
 };
@@ -225,7 +237,7 @@ export const onUpdateApplicationTreeNodeVisibility = (
 ): ApplicationState => {
   const visibilityChanged = new Map<string, boolean>(payload.visibility.map(v => [ v.nodeId, v.visible ]));
   return updateApplicationTree(state, payload.tree, (_, tree) => {
-    return tree.map(node => {
+    return tree.map((node): AppTreeLayerNodeModel | AppTreeNodeModel => {
       if (ApplicationModelHelper.isLayerTreeNode(node) && visibilityChanged.has(node.id)) {
         return { ...node, visible: !!visibilityChanged.get(node.id) };
       }
