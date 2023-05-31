@@ -79,7 +79,7 @@ export class GeoServiceFormComponent implements OnInit {
         this.changed.emit({
           title: value.title || '',
           url: value.url || '',
-          protocol: value.protocol || GeoServiceProtocolEnum.WMS,
+          protocol: this.geoService ? this.geoService.protocol : (value.protocol || GeoServiceProtocolEnum.WMS),
           settings: { useProxy: value.useProxy },
           authentication: !this.formHasAuthentication() ? null : {
             method: 'password',
