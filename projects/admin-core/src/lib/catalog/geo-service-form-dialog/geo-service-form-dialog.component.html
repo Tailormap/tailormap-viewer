@@ -5,8 +5,14 @@
 <mat-dialog-content>
   <tm-admin-geo-service-form [geoService]="data.geoService"
                              (changed)="updateGeoService($event)"></tm-admin-geo-service-form>
+  <ng-container *ngIf="data.geoService">
+    <h3>Default layer settings</h3>
+    <tm-admin-layer-settings-form [layerSettings]="data.geoService.settings?.defaultLayerSettings"
+                                  [protocol]="data.geoService.protocol"
+                                  (changed)="updateDefaultLayerSettings($event)"></tm-admin-layer-settings-form>
+  </ng-container>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-flat-button (click)="cancel()" i18n>Cancel</button>
-  <tm-admin-save-button [saving$]="saving$" [disabled]="!geoService" (save)="save()"></tm-admin-save-button>
+  <tm-admin-save-button [saving$]="saving$" [disabled]="!geoService && !updatedDefaultLayerSettings" (save)="save()"></tm-admin-save-button>
 </mat-dialog-actions>

@@ -1,8 +1,8 @@
 import { TreeHelper, TreeModel } from '@tailormap-viewer/shared';
-import { AppTreeLayerNodeModel, AppTreeLevelNodeModel, AppTreeNodeModel } from '@tailormap-admin/admin-api';
+import { AppLayerSettingsModel, AppTreeLayerNodeModel, AppTreeLevelNodeModel, AppTreeNodeModel } from '@tailormap-admin/admin-api';
 import { ApplicationModelHelper } from './application-model.helper';
-import { ExtendedGeoServiceLayerModel } from '../../catalog/models/extended-geo-service-layer.model';
 import { ApplicationService } from '../services/application.service';
+import { ExtendedGeoServiceLayerWithSettingsModel } from '../../catalog/models/extended-geo-service-layer-with-settings.model';
 
 export class ApplicationTreeHelper {
 
@@ -16,8 +16,9 @@ export class ApplicationTreeHelper {
 
   public static layerTreeNodeToTree(
     layerTreeNodes: AppTreeNodeModel[],
-    layers: ExtendedGeoServiceLayerModel[],
+    layers: ExtendedGeoServiceLayerWithSettingsModel[],
     expandedNodes: string[],
+    layerSettings: Record<string, AppLayerSettingsModel> | null,
     baseLayerTree?: boolean,
   ): TreeModel<AppTreeNodeModel>[] {
     const root = layerTreeNodes.find(l => ApplicationModelHelper.isLevelTreeNode(l) && l.root);
@@ -28,7 +29,7 @@ export class ApplicationTreeHelper {
       layerTreeNodes,
       root.id,
       (node, children) => ({
-        ...ApplicationTreeHelper.getTreeModelForLayerTreeNode(node, layers, baseLayerTree, expandedNodes),
+        ...ApplicationTreeHelper.getTreeModelForLayerTreeNode(node, layers, expandedNodes, layerSettings, baseLayerTree),
         children,
       }),
       node => ApplicationModelHelper.isLevelTreeNode(node) ? node.childrenIds : [],
@@ -42,34 +43,36 @@ export class ApplicationTreeHelper {
 
   public static getTreeModelForLayerTreeNode(
     node: AppTreeNodeModel,
-    layers: ExtendedGeoServiceLayerModel[],
+    layers: ExtendedGeoServiceLayerWithSettingsModel[],
+    expandedNodes: string[],
+    layerSettings: Record<string, AppLayerSettingsModel> | null,
     baseLayerTree?: boolean,
-    expandedNodes: string[] = [],
   ): TreeModel<AppTreeNodeModel> {
-    const isAppLayerNode = ApplicationModelHelper.isLayerTreeNode(node);
-    const isAppLevelNode = ApplicationModelHelper.isLevelTreeNode(node);
     const layer = ApplicationModelHelper.isLayerTreeNode(node)
       ? layers.find(l => l.name === node.layerName && l.serviceId === node.serviceId) || null
       : null;
     let label = '';
-    if (isAppLevelNode) {
+    if (ApplicationModelHelper.isLevelTreeNode(node)) {
       label = node.root
         ? (baseLayerTree ? ApplicationService.ROOT_BACKGROUND_NODE_TITLE : ApplicationService.ROOT_NODE_TITLE)
         : node.title;
     }
-    if (isAppLayerNode) {
-      label = layer?.title || node.layerName;
+    if (ApplicationModelHelper.isLayerTreeNode(node)) {
+      const layerSettingTitle = layerSettings?.[node.id]?.title;
+      label = layerSettingTitle
+        ? layerSettingTitle
+        : (layer?.settings?.title || layer?.title || node.layerName);
     }
     return {
       id: node.id,
       label,
-      type: isAppLayerNode ? 'layer' : 'level',
+      type: ApplicationModelHelper.isLayerTreeNode(node) ? 'layer' : 'level',
       metadata: node,
-      checked: isAppLayerNode
+      checked: ApplicationModelHelper.isLayerTreeNode(node)
         ? node.visible
         : true, // must be boolean but for levels this is determined by the checked status of the layers inside
       expanded: expandedNodes.includes(node.id),
-      expandable: isAppLevelNode,
+      expandable: ApplicationModelHelper.isLevelTreeNode(node),
     };
   }
 

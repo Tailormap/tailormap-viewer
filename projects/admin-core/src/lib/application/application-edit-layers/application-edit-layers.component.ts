@@ -5,7 +5,7 @@ import {
   isLoadingApplicationServices, selectAppLayerNodesForSelectedApplication,
   selectAppLayerTreeForSelectedApplication, selectBaseLayerNodesForSelectedApplication, selectBaseLayerTreeForSelectedApplication,
 } from '../state/application.selectors';
-import { BehaviorSubject, map, Observable, of, Subject, take, takeUntil } from 'rxjs';
+import { BehaviorSubject, map, Observable, of, Subject, switchMap, take, takeUntil } from 'rxjs';
 import {
   AppLayerSettingsModel, AppTreeLayerNodeModel, AppTreeLevelNodeModel, AppTreeNodeModel,
 } from '@tailormap-admin/admin-api';
@@ -19,6 +19,7 @@ import { nanoid } from 'nanoid';
 import { AddLayerEvent } from '../application-catalog-tree/application-catalog-tree.component';
 import { ApplicationTreeHelper } from '../helpers/application-tree.helper';
 import { ApplicationModelHelper } from '../helpers/application-model.helper';
+import { selectGeoServiceAndLayerByName } from '../../catalog/state/catalog.selectors';
 
 @Component({
   selector: 'tm-admin-application-edit-layers',
@@ -36,6 +37,14 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
   public selectedNode$ = this.selectedNodeIdSubject.asObservable();
   public selectedLayerNode$: Observable<TreeModel<AppTreeLayerNodeModel> | null> = this.selectedNode$.pipe(
     map(node => ApplicationTreeHelper.isLayerTreeNode(node) ? node : null),
+  );
+  public selectedServiceLayer$ = this.selectedLayerNode$.pipe(
+    switchMap(node => {
+      if (!node || !node.metadata || !node.metadata.serviceId || !node.metadata.layerName) {
+        return of(null);
+      }
+      return this.store$.select(selectGeoServiceAndLayerByName(node.metadata.serviceId, node.metadata.layerName));
+    }),
   );
 
   private destroyed = new Subject();

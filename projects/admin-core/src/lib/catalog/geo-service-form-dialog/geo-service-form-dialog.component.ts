@@ -4,7 +4,7 @@ import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { GeoServiceService } from '../services/geo-service.service';
 import { GeoServiceCreateModel } from '../models/geo-service-update.model';
-import { GeoServiceWithLayersModel } from '@tailormap-admin/admin-api';
+import { GeoServiceWithLayersModel, LayerSettingsModel } from '@tailormap-admin/admin-api';
 
 export interface GeoServiceFormDialogData {
   geoService: ExtendedGeoServiceModel | null;
@@ -19,10 +19,12 @@ export interface GeoServiceFormDialogData {
 })
 export class GeoServiceFormDialogComponent {
 
-  public geoService: GeoServiceCreateModel | null = null;
   private destroyed = new Subject();
   private savingSubject = new BehaviorSubject(false);
   public saving$ = this.savingSubject.asObservable();
+
+  public geoService: GeoServiceCreateModel | null = null;
+  public updatedDefaultLayerSettings: LayerSettingsModel | null = null;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: GeoServiceFormDialogData,
@@ -45,15 +47,32 @@ export class GeoServiceFormDialogComponent {
   }
 
   public save() {
+    if (!this.data.geoService) {
+      this.createGeoService();
+      return;
+    }
+    if (!this.geoService && !this.updatedDefaultLayerSettings) {
+      return;
+    }
+    this.savingSubject.next(true);
+    this.geoServiceService.updateGeoService$(
+        this.data.geoService.id,
+        () => this.geoService || {},
+        serviceSetting => ({ ...this.geoService?.settings, defaultLayerSettings: { ...serviceSetting.defaultLayerSettings, ...(this.updatedDefaultLayerSettings || {}) } }),
+    )
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(result => {
+        this.savingSubject.next(false);
+        this.dialogRef.close(result);
+      });
+  }
+
+  private createGeoService() {
     if (!this.geoService) {
       return;
     }
     this.savingSubject.next(true);
-    const saveObservable$ = (this.data.geoService === null
-        ? this.geoServiceService.createGeoService$(this.geoService, this.data.parentNode)
-        : this.geoServiceService.updateGeoService$(this.data.geoService.id, () => this.geoService || {})
-    );
-    saveObservable$
+    this.geoServiceService.createGeoService$(this.geoService, this.data.parentNode)
       .pipe(takeUntil(this.destroyed))
       .subscribe(result => {
         this.savingSubject.next(false);
@@ -64,4 +83,9 @@ export class GeoServiceFormDialogComponent {
   public updateGeoService($event: GeoServiceCreateModel) {
     this.geoService = $event;
   }
+
+  public updateDefaultLayerSettings($event: LayerSettingsModel) {
+    this.updatedDefaultLayerSettings = $event;
+  }
+
 }

@@ -13,6 +13,7 @@ import { SaveButtonComponent } from '../../shared/components/save-button/save-bu
 import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { AuthorizationEditComponent } from '../../shared/components/authorization-edit/authorization-edit.component';
+import { LayerSettingsFormComponent } from '../layer-settings-form/layer-settings-form.component';
 
 const setup = async (editMode = false) => {
   const dialogRefMock = { close: jest.fn() };
@@ -20,7 +21,7 @@ const setup = async (editMode = false) => {
   const { geoServiceService, updateGeoService$, updateGeoServiceDetails } = createGeoServiceMock(geoServiceModelMock);
   await render(GeoServiceFormDialogComponent, {
     imports: [ SharedModule, MatIconTestingModule ],
-    declarations: [ GeoServiceFormComponent, PasswordFieldComponent, SaveButtonComponent, AuthorizationEditComponent ],
+    declarations: [ GeoServiceFormComponent, LayerSettingsFormComponent, PasswordFieldComponent, SaveButtonComponent, AuthorizationEditComponent ],
     providers: [
       { provide: MatDialogRef, useValue: dialogRefMock },
       { provide: GeoServiceService, useValue: geoServiceService },
@@ -68,7 +69,7 @@ describe('GeoServiceFormDialogComponent', () => {
     expect(screen.getByText('Edit my service')).toBeInTheDocument();
     await userEvent.type(screen.getByLabelText('URL'), '?123');
     await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save');
-    expect(updateGeoService$).toHaveBeenCalledWith('2', expect.anything());
+    expect(updateGeoService$).toHaveBeenCalledWith('2', expect.anything(), expect.anything());
     expect(updateGeoServiceDetails).toHaveBeenCalledWith({
       url: 'http://test.service?123',
       authorizationRules: [],

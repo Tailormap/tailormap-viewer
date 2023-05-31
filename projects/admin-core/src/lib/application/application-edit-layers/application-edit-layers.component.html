@@ -26,6 +26,7 @@
   </div>
   <div class="application-layer-settings">
     <tm-admin-application-layer-settings [node]="selectedLayerNode$ | async"
+                                         [serviceLayer]="selectedServiceLayer$ | async"
                                          (layerSettingsChange)="layerSettingsChanged($event)"></tm-admin-application-layer-settings>
   </div>
 </div>

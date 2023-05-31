@@ -1,9 +1,9 @@
 import { ApplicationState, applicationStateKey } from './application.state';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { ApplicationTreeHelper } from '../helpers/application-tree.helper';
-import { selectGeoServiceLayers } from '../../catalog/state/catalog.selectors';
+import { selectGeoServiceLayersWithSettingsApplied } from '../../catalog/state/catalog.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
-import { AppTreeNodeModel } from '@tailormap-admin/admin-api';
+import { AppLayerSettingsModel, AppTreeNodeModel } from '@tailormap-admin/admin-api';
 
 const selectApplicationState = createFeatureSelector<ApplicationState>(applicationStateKey);
 
@@ -75,19 +75,20 @@ export const selectBaseLayerNodesForSelectedApplication = createSelector(
 
 export const selectAppLayerTreeForSelectedApplication = createSelector(
   selectAppLayerNodesForSelectedApplication,
-  selectGeoServiceLayers,
+  selectGeoServiceLayersWithSettingsApplied,
   selectExpandedAppLayerNodes,
-  (layerNodes, layers, expandedNodes: string[]) => {
-    return ApplicationTreeHelper.layerTreeNodeToTree(layerNodes, layers, expandedNodes);
+  selectSelectedApplicationLayerSettings,
+  (layerNodes, layers, expandedNodes: string[], layerSettings: Record<string, AppLayerSettingsModel>) => {
+    return ApplicationTreeHelper.layerTreeNodeToTree(layerNodes, layers, expandedNodes, layerSettings);
   },
 );
 
 export const selectBaseLayerTreeForSelectedApplication = createSelector(
   selectBaseLayerNodesForSelectedApplication,
-  selectGeoServiceLayers,
+  selectGeoServiceLayersWithSettingsApplied,
   selectExpandedBaseLayerNodes,
   (baseLayerNodes, layers, expandedNodes: string[]) => {
-    return ApplicationTreeHelper.layerTreeNodeToTree(baseLayerNodes, layers, expandedNodes, true);
+    return ApplicationTreeHelper.layerTreeNodeToTree(baseLayerNodes, layers, expandedNodes, {}, true);
   },
 );
 
