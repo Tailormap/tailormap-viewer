@@ -127,3 +127,8 @@ export const updateApplicationStylingConfig = createAction(
   `${applicationActionsPrefix} Update styling config`,
   props<{ styling: ViewerStylingModel }>(),
 );
+
+export const toggleApplicationNodeExpanded = createAction(
+  `${applicationActionsPrefix} Toggle Node Expanded`,
+  props<{ nodeId: string; tree: 'layer' | 'baseLayer' }>(),
+);

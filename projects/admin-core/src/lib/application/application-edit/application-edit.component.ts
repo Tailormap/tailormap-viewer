@@ -55,7 +55,7 @@ export class ApplicationEditComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.clearSelectedApplication();
+    this.store$.dispatch(clearSelectedApplication());
     this.destroyed.next(null);
     this.destroyed.complete();
   }
@@ -86,10 +86,6 @@ export class ApplicationEditComponent implements OnInit, OnDestroy {
         this.adminSnackbarService.showMessage($localize `Application ${title} removed`);
         this.router.navigateByUrl('/applications');
       });
-  }
-
-  public clearSelectedApplication() {
-    this.store$.dispatch(clearSelectedApplication());
   }
 
 }

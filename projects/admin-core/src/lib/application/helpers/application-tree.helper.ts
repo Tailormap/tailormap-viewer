@@ -17,6 +17,7 @@ export class ApplicationTreeHelper {
   public static layerTreeNodeToTree(
     layerTreeNodes: AppTreeNodeModel[],
     layers: ExtendedGeoServiceLayerModel[],
+    expandedNodes: string[],
     baseLayerTree?: boolean,
   ): TreeModel<AppTreeNodeModel>[] {
     const root = layerTreeNodes.find(l => ApplicationModelHelper.isLevelTreeNode(l) && l.root);
@@ -27,7 +28,7 @@ export class ApplicationTreeHelper {
       layerTreeNodes,
       root.id,
       (node, children) => ({
-        ...ApplicationTreeHelper.getTreeModelForLayerTreeNode(node, layers, baseLayerTree),
+        ...ApplicationTreeHelper.getTreeModelForLayerTreeNode(node, layers, baseLayerTree, expandedNodes),
         children,
       }),
       node => ApplicationModelHelper.isLevelTreeNode(node) ? node.childrenIds : [],
@@ -43,10 +44,11 @@ export class ApplicationTreeHelper {
     node: AppTreeNodeModel,
     layers: ExtendedGeoServiceLayerModel[],
     baseLayerTree?: boolean,
+    expandedNodes: string[] = [],
   ): TreeModel<AppTreeNodeModel> {
     const isAppLayerNode = ApplicationModelHelper.isLayerTreeNode(node);
     const isAppLevelNode = ApplicationModelHelper.isLevelTreeNode(node);
-    const layer = isAppLayerNode
+    const layer = ApplicationModelHelper.isLayerTreeNode(node)
       ? layers.find(l => l.name === node.layerName && l.serviceId === node.serviceId) || null
       : null;
     let label = '';
@@ -66,7 +68,7 @@ export class ApplicationTreeHelper {
       checked: isAppLayerNode
         ? node.visible
         : true, // must be boolean but for levels this is determined by the checked status of the layers inside
-      expanded: true,
+      expanded: expandedNodes.includes(node.id),
       expandable: isAppLevelNode,
     };
   }

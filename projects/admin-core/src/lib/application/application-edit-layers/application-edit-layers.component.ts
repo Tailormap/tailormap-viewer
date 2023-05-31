@@ -10,7 +10,8 @@ import {
   AppLayerSettingsModel, AppTreeLayerNodeModel, AppTreeLevelNodeModel, AppTreeNodeModel,
 } from '@tailormap-admin/admin-api';
 import {
-  addApplicationTreeNodes, removeApplicationTreeNode, updateApplicationNodeSettings, updateApplicationTreeNode,
+  addApplicationTreeNodes, removeApplicationTreeNode, toggleApplicationNodeExpanded, updateApplicationNodeSettings,
+  updateApplicationTreeNode,
   updateApplicationTreeNodeVisibility,
   updateApplicationTreeOrder,
 } from '../state/application.actions';
@@ -163,6 +164,10 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
       nodeId: $event.nodeId,
       settings: $event.settings,
     }));
+  }
+
+  public nodeExpandedToggled(nodeId: string) {
+    this.store$.dispatch(toggleApplicationNodeExpanded({ nodeId, tree: this.applicationStateTree }));
   }
 
 }
