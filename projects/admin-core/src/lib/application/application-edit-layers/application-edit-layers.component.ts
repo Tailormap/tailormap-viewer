@@ -2,10 +2,10 @@ import { Component, OnInit, ChangeDetectionStrategy, Input, OnDestroy } from '@a
 import { Store } from '@ngrx/store';
 import { TreeModel, TreeNodePosition, TreeService } from '@tailormap-viewer/shared';
 import {
-  isLoadingApplicationServices,
-  selectAppLayerTreeForSelectedApplication, selectBaseLayerTreeForSelectedApplication,
+  isLoadingApplicationServices, selectAppLayerNodesForSelectedApplication,
+  selectAppLayerTreeForSelectedApplication, selectBaseLayerNodesForSelectedApplication, selectBaseLayerTreeForSelectedApplication,
 } from '../state/application.selectors';
-import { BehaviorSubject, map, Observable, of, Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, map, Observable, of, Subject, take, takeUntil } from 'rxjs';
 import {
   AppLayerSettingsModel, AppTreeLayerNodeModel, AppTreeLevelNodeModel, AppTreeNodeModel,
 } from '@tailormap-admin/admin-api';
@@ -17,6 +17,7 @@ import {
 import { nanoid } from 'nanoid';
 import { AddLayerEvent } from '../application-catalog-tree/application-catalog-tree.component';
 import { ApplicationTreeHelper } from '../helpers/application-tree.helper';
+import { ApplicationModelHelper } from '../helpers/application-model.helper';
 
 @Component({
   selector: 'tm-admin-application-edit-layers',
@@ -55,6 +56,7 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
     this.treeNodes$ = this.applicationStateTree === 'baseLayer'
       ? this.store$.select(selectBaseLayerTreeForSelectedApplication)
       : this.store$.select(selectAppLayerTreeForSelectedApplication);
+
     this.loadingServices$ = this.store$.select(isLoadingApplicationServices);
 
     if (this.applicationStateTree === 'layer') {
@@ -91,15 +93,16 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
   }
 
   public addLayer($event: AddLayerEvent) {
-    const node: AppTreeLayerNodeModel = {
-      id: 'lyr_' + $event.layer.id,
-      description: '',
-      objectType: 'AppTreeLayerNode',
-      layerName: $event.layer.name,
-      serviceId: $event.layer.serviceId,
-      visible: true,
-    };
-    this.addNode(node, $event.toParent || undefined, $event.position, $event.sibling);
+    const layer = $event.layer;
+    const nodes$ = this.applicationStateTree === 'baseLayer'
+      ? this.store$.select(selectBaseLayerNodesForSelectedApplication)
+      : this.store$.select(selectAppLayerNodesForSelectedApplication);
+    nodes$
+      .pipe(take(1))
+      .subscribe(nodes => {
+        const node = ApplicationModelHelper.newApplicationTreeLayerNode(layer, nodes);
+        this.addNode(node, $event.toParent || undefined, $event.position, $event.sibling);
+      });
   }
 
   private addNode(
