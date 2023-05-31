@@ -27,10 +27,10 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
   public readonlyMode$ = this.readonlyMode.asObservable();
 
   // Streams triggered by tree, to be used in 'consuming' components
-  public checkStateChangedSource$ = this.checkStateChangedSource.asObservable();
-  public selectionStateChangedSource$ = this.selectionStateChangedSource.asObservable();
-  public nodeExpansionChangedSource$ = this.nodeExpansionChangedSource.asObservable();
-  public nodePositionChangedSource$ = this.nodePositionChangedSource.asObservable();
+  public checkStateChangedSource$: Observable<BaseTreeModel<T, TypeDef>[]> = this.checkStateChangedSource.asObservable();
+  public selectionStateChangedSource$: Observable<BaseTreeModel<T, TypeDef>> = this.selectionStateChangedSource.asObservable();
+  public nodeExpansionChangedSource$: Observable<{ expanded: boolean; node: BaseTreeModel<T, TypeDef> }> = this.nodeExpansionChangedSource.asObservable();
+  public nodePositionChangedSource$: Observable<NodePositionChangedEventModel> = this.nodePositionChangedSource.asObservable();
 
   private nodesMap = new Map<string, FlatTreeModel<T, TypeDef>>();
   public checkedMap = new Map<string, boolean>();
