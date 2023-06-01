@@ -3,7 +3,7 @@ import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model'
 import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-layer.model';
 import { CatalogTreeModel } from '../models/catalog-tree.model';
-import { CatalogItemKindEnum, CatalogItemModel } from '@tailormap-admin/admin-api';
+import { CatalogItemKindEnum, CatalogItemModel, LayerSettingsModel } from '@tailormap-admin/admin-api';
 import { CatalogTreeModelTypeEnum } from '../models/catalog-tree-model-type.enum';
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
@@ -126,23 +126,29 @@ export class CatalogTreeHelper {
       metadata: service,
       expanded: service.expanded,
       expandable: (service.layers || []).length > 0,
-      children: serviceRootLayers.map(l => CatalogTreeHelper.getTreeModelForLayer(l, allLayers)),
+      children: serviceRootLayers.map(l => CatalogTreeHelper.getTreeModelForLayer(l, allLayers, service.settings?.layerSettings)),
     };
   }
 
-  public static getTreeModelForLayer(layer: ExtendedGeoServiceLayerModel, allLayers: ExtendedGeoServiceLayerModel[]): CatalogTreeModel {
+  public static getTreeModelForLayer(
+    layer: ExtendedGeoServiceLayerModel,
+    allLayers: ExtendedGeoServiceLayerModel[],
+    layerSettings: Record<string, LayerSettingsModel> | undefined,
+  ): CatalogTreeModel {
     const layerChildren: CatalogTreeModel[] = (layer.children || [])
       .map(id => {
         const childLayer = allLayers.find(l => l.id === id && l.serviceId === layer.serviceId);
         if (!childLayer) {
           return null;
         }
-        return CatalogTreeHelper.getTreeModelForLayer(childLayer, allLayers);
+        return CatalogTreeHelper.getTreeModelForLayer(childLayer, allLayers, layerSettings);
       })
       .filter((l): l is CatalogTreeModel => !!l);
+    const layerSettingTitle = layerSettings?.[layer.name]?.title;
+    const title = layerSettingTitle || layer.title;
     return {
       id: CatalogTreeHelper.getIdForLayerNode(layer.id),
-      label: layer.title,
+      label: title,
       type: CatalogTreeModelTypeEnum.SERVICE_LAYER_TYPE,
       metadata: layer,
       checked: undefined,

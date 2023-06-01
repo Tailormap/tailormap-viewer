@@ -33,7 +33,7 @@ describe('CatalogTreeNodeComponent', () => {
 
   test('should render layer', async () => {
     const layer: ExtendedGeoServiceLayerModel = { ...getGeoServiceLayer({ name: 'my-layer', title: 'nice layer' }), serviceId: 'test', catalogNodeId: '1' };
-    const node = CatalogTreeHelper.getTreeModelForLayer(layer, []);
+    const node = CatalogTreeHelper.getTreeModelForLayer(layer, [], {});
     await setup(node);
     expect(await screen.findByText('nice layer')).toBeInTheDocument();
     expect(await screen.findByLabelText('Layer')).toBeInTheDocument();

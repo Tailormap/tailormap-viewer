@@ -5,3 +5,22 @@ h2 {
 .form-field__slider {
   width: 90%;
 }
+
+.layer-details {
+  margin-bottom: 16px;
+}
+
+.detail + .detail {
+  margin-top: 8px;
+}
+
+.detail a {
+  margin-left: 8px;
+}
+
+.detail a mat-icon {
+  width: 1.2em;
+  height: 1.2em;
+  margin-left: 4px;
+  vertical-align: bottom;
+}

@@ -1,0 +1,16 @@
+<ng-container *ngIf="geoServiceLayerSettings$ | async as geoServiceSettings">
+  <h2 mat-dialog-title>
+    <ng-container *ngIf="data.geoService" i18n>Edit settings for layer {{ geoServiceSettings.layerTitle }}</ng-container>
+  </h2>
+  <mat-dialog-content>
+    <tm-admin-layer-settings-form [layerSettings]="geoServiceSettings.settings"
+                                  [protocol]="geoServiceSettings.protocol"
+                                  [layerName]="geoServiceSettings.layerName"
+                                  [isLayerSpecific]="true"
+                                  (changed)="updateLayerSettings($event)"></tm-admin-layer-settings-form>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-flat-button (click)="cancel()" i18n>Cancel</button>
+    <tm-admin-save-button [saving$]="saving$" [disabled]="!updatedLayerSettings" (save)="save(geoServiceSettings.serviceId, geoServiceSettings.layerName)"></tm-admin-save-button>
+  </mat-dialog-actions>
+</ng-container>
