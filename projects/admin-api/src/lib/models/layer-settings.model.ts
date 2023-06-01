@@ -8,4 +8,5 @@ export interface LayerSettingsModel {
   hiDpiMode?: TileLayerHiDpiModeEnum;
   hiDpiSubstituteLayer?: string;
   featureType?: { featureSourceId: number; featureTypeName: string };
+  attribution?: string;
 }
