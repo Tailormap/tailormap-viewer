@@ -51,7 +51,7 @@ export class AuthorizationEditComponent implements OnDestroy, ControlValueAccess
       }
 
       const anonymousGroup = this.value.find(a => a.groupName === AuthorizationGroups.ANONYMOUS);
-      const loggedInGroup = this.value.find(a => a.groupName === AuthorizationGroups.APP_AUTHENTICATED);
+      const loggedInGroup = this.value.find(a => a.groupName === AuthorizationGroups.AUTHENTICATED);
 
       if (anonymousGroup?.decisions?.['read'] === AuthorizationRuleDecision.ALLOW) {
           this.selectedChip = 'anonymous';
@@ -84,10 +84,10 @@ export class AuthorizationEditComponent implements OnDestroy, ControlValueAccess
           this.updateValue([{ groupName: AuthorizationGroups.ANONYMOUS, decisions: { read: AuthorizationRuleDecision.ALLOW } }], true);
           break;
       case 'loggedIn':
-          this.updateValue([{ groupName: AuthorizationGroups.APP_AUTHENTICATED, decisions: { read: AuthorizationRuleDecision.ALLOW } }], true);
+          this.updateValue([{ groupName: AuthorizationGroups.AUTHENTICATED, decisions: { read: AuthorizationRuleDecision.ALLOW } }], true);
           break;
       case 'specificGroups':
-          this.updateValue(this.value.filter(a => a.groupName !== AuthorizationGroups.ANONYMOUS && a.groupName !== AuthorizationGroups.APP_AUTHENTICATED), true);
+          this.updateValue(this.value.filter(a => a.groupName !== AuthorizationGroups.ANONYMOUS && a.groupName !== AuthorizationGroups.AUTHENTICATED), true);
           break;
       }
   }
