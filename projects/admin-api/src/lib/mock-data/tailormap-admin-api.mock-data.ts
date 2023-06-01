@@ -64,7 +64,6 @@ export const getGeoServiceLayer = (overrides?: Partial<GeoServiceLayerModel>): G
   virtual: false,
   maxScale: undefined,
   minScale: undefined,
-  attribution: '',
   abstractText: 'Bestuurlijke Gebieden bestaan uit de gemeente-, provincie- en landgebieden. Deze worden sinds 2012 vervaardigd op basis van de kadastrale registratie (BRK).',
   ...overrides,
 });
