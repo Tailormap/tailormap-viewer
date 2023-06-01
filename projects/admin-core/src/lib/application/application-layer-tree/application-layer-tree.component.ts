@@ -34,6 +34,9 @@ export class ApplicationLayerTreeComponent implements OnInit, OnDestroy {
   @Output()
   public visibilityChanged = new EventEmitter<Array<{ nodeId: string; visible: boolean }>>();
 
+  @Output()
+  public nodeExpandedToggled = new EventEmitter<string>();
+
   constructor(
     private treeService: TreeService,
     private dialog: MatDialog,
@@ -45,6 +48,9 @@ export class ApplicationLayerTreeComponent implements OnInit, OnDestroy {
     this.treeService.checkStateChangedSource$
       .pipe(takeUntil(this.destroyed))
       .subscribe((evt) => this.visibilityChanged.emit(evt.map((e) => ({ nodeId: e.id, visible: !!e.checked }))));
+    this.treeService.nodeExpansionChangedSource$
+      .pipe(takeUntil(this.destroyed))
+      .subscribe((evt) => this.nodeExpandedToggled.emit(evt.node.id));
   }
 
   public ngOnInit(): void {

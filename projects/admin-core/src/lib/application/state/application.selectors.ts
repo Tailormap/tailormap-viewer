@@ -3,6 +3,7 @@ import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { ApplicationTreeHelper } from '../helpers/application-tree.helper';
 import { selectGeoServiceLayers } from '../../catalog/state/catalog.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
+import { AppTreeNodeModel } from '@tailormap-admin/admin-api';
 
 const selectApplicationState = createFeatureSelector<ApplicationState>(applicationStateKey);
 
@@ -14,6 +15,8 @@ export const selectDraftApplication = createSelector(selectApplicationState, sta
 export const selectSelectedApplicationId = createSelector(selectApplicationState, state => state.draftApplication?.id || null);
 export const selectApplicationServicesLoadStatus = createSelector(selectApplicationState, state => state.applicationServicesLoadStatus);
 export const selectDraftApplicationUpdated = createSelector(selectApplicationState, state => state.draftApplicationUpdated);
+export const selectExpandedBaseLayerNodes = createSelector(selectApplicationState, state => state.expandedBaseLayerNodes);
+export const selectExpandedAppLayerNodes = createSelector(selectApplicationState, state => state.expandedAppLayerNodes);
 
 export const isLoadingApplicationServices = createSelector(
   selectApplicationServicesLoadStatus,
@@ -50,25 +53,41 @@ export const selectSelectedApplicationLayerSettings = createSelector(
   },
 );
 
-export const selectAppLayerTreeForSelectedApplication = createSelector(
+export const selectAppLayerNodesForSelectedApplication = createSelector(
   selectDraftApplication,
-  selectGeoServiceLayers,
-  (application, layers) => {
+  (application): AppTreeNodeModel[] => {
     if (!application?.contentRoot?.layerNodes) {
       return [];
     }
-    return ApplicationTreeHelper.layerTreeNodeToTree(application.contentRoot.layerNodes, layers);
+    return application.contentRoot.layerNodes;
+  },
+);
+
+export const selectBaseLayerNodesForSelectedApplication = createSelector(
+  selectDraftApplication,
+  (application): AppTreeNodeModel[] => {
+    if (!application?.contentRoot?.baseLayerNodes) {
+      return [];
+    }
+    return application.contentRoot.baseLayerNodes;
+  },
+);
+
+export const selectAppLayerTreeForSelectedApplication = createSelector(
+  selectAppLayerNodesForSelectedApplication,
+  selectGeoServiceLayers,
+  selectExpandedAppLayerNodes,
+  (layerNodes, layers, expandedNodes: string[]) => {
+    return ApplicationTreeHelper.layerTreeNodeToTree(layerNodes, layers, expandedNodes);
   },
 );
 
 export const selectBaseLayerTreeForSelectedApplication = createSelector(
-  selectDraftApplication,
+  selectBaseLayerNodesForSelectedApplication,
   selectGeoServiceLayers,
-  (application, layers) => {
-    if (!application?.contentRoot?.baseLayerNodes) {
-      return [];
-    }
-    return ApplicationTreeHelper.layerTreeNodeToTree(application.contentRoot.baseLayerNodes, layers, true);
+  selectExpandedBaseLayerNodes,
+  (baseLayerNodes, layers, expandedNodes: string[]) => {
+    return ApplicationTreeHelper.layerTreeNodeToTree(baseLayerNodes, layers, expandedNodes, true);
   },
 );
 

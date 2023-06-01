@@ -15,6 +15,7 @@
       <tm-admin-application-layer-tree [treeNodes$]="treeNodes$"
                                        (nodePositionChanged)="nodePositionChanged($event)"
                                        (visibilityChanged)="visibilityChanged($event)"
+                                       (nodeExpandedToggled)="nodeExpandedToggled($event)"
                                        (addSubFolder)="addSubFolder($event)"
                                        (renameFolder)="renameFolder($event)"
                                        (removeNode)="removeNode($event)"></tm-admin-application-layer-tree>

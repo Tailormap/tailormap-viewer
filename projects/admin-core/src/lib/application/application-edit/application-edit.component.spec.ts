@@ -14,6 +14,8 @@ import { SaveButtonComponent } from '../../shared/components/save-button/save-bu
 import { TestSaveHelper } from '../../test-helpers/test-save.helper';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
+import { TestBed } from '@angular/core/testing';
+import { Router } from '@angular/router';
 
 const setup = async (hasApp: boolean, hasChanges?: boolean) => {
   const mockState: ApplicationState = {
@@ -42,7 +44,7 @@ const setup = async (hasApp: boolean, hasChanges?: boolean) => {
       { provide: ApplicationService, useValue: appService },
     ],
   });
-  return { dispatch: mockDispatch, appService };
+  return { dispatch: mockDispatch, appService, router: TestBed.inject(Router) };
 };
 
 describe('ApplicationEditComponent', () => {
@@ -61,9 +63,10 @@ describe('ApplicationEditComponent', () => {
   });
 
   test('should close selected app', async () => {
-    const { dispatch } = await setup(true);
+    const { router } = await setup(true);
+    expect(router.url).not.toBe('/applications');
     await userEvent.click(await screen.findByText('Close'));
-    expect(dispatch).toHaveBeenCalledWith(clearSelectedApplication());
+    expect(router.url).toBe('/applications');
   });
 
   test('should delete app - cancel action', async () => {

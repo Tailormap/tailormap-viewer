@@ -2,6 +2,7 @@ import {
   AppContentModel, ApplicationModel, AppTreeLayerNodeModel, AppTreeLevelNodeModel, AppTreeNodeModel,
 } from '@tailormap-admin/admin-api';
 import { ChangePositionHelper, TreeHelper, TreeNodePosition } from '@tailormap-viewer/shared';
+import { ExtendedGeoServiceLayerModel } from '../../catalog/models/extended-geo-service-layer.model';
 
 export class ApplicationModelHelper {
 
@@ -15,6 +16,33 @@ export class ApplicationModelHelper {
 
   public static getApplicationContentRoot(application: ApplicationModel): AppContentModel {
     return application.contentRoot || { layerNodes: [], baseLayerNodes: [] };
+  }
+
+  public static newApplicationTreeLayerNode(
+    layer: ExtendedGeoServiceLayerModel,
+    applicationNodes: AppTreeNodeModel[],
+  ): AppTreeLayerNodeModel {
+    const existingLayers = applicationNodes.filter(node => {
+      if (!ApplicationModelHelper.isLayerTreeNode(node)) {
+        return false;
+      }
+      return node.serviceId === layer.serviceId && node.layerName === layer.name;
+    });
+    const existingLayerIds = new Set(existingLayers.map(node => node.id));
+    const baseId = `lyr:${layer.serviceId}:${layer.name}`;
+    let idx = 0;
+    let id = baseId;
+    while (existingLayerIds.has(id)) {
+      id = `${baseId}_${++idx}`;
+    }
+    return {
+      id,
+      description: '',
+      objectType: 'AppTreeLayerNode',
+      layerName: layer.name,
+      serviceId: layer.serviceId,
+      visible: true,
+    };
   }
 
   public static addNodesToApplicationTree(
