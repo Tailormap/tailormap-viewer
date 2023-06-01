@@ -17,4 +17,5 @@ export interface AppLayerModel {
   hiDpiMode?: TileLayerHiDpiMode;
   hiDpiSubstituteLayer?: string;
   opacity: number;
+  attribution?: string;
 }
