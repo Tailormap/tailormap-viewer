@@ -109,7 +109,7 @@ export const getGroups = (): GroupModel[] => {
     getGroup({ name: 'admin-catalog', description: 'Users authorized to edit the catalog' }),
     getGroup({ name: 'admin-users', description: 'Users authorized to create and edit user accounts' }),
     getGroup({ name: 'admin-applications', description: 'Users authorized to edit applications' }),
-    getGroup({ name: 'app-authenticated', description: 'Users authorized for application with authentication required' }),
+    getGroup({ name: 'authenticated', description: 'Users authorized for application with authentication required' }),
     getGroup({ name: 'actuator', description: 'Users authorized for Spring Boot Actuator (monitoring and management)' }),
     getGroup({ name: 'test', description: 'Users that can test', systemGroup: false, notes: 'This is a test group' }),
   ];
