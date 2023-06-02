@@ -154,11 +154,13 @@ export class OlLayerHelper {
   public static createTMSLayer(layer: TMSLayerModel, projection: Projection): TileLayer<XYZ> {
     return new TileLayer({
       visible: layer.visible,
+
       source: new XYZ({
         ...layer.xyzOptions,
         crossOrigin: layer.crossOrigin,
         projection,
         tilePixelRatio: layer.tilePixelRatio,
+        attributions: layer.attribution ? [layer.attribution] : undefined,
       }),
     });
   }
@@ -186,6 +188,7 @@ export class OlLayerHelper {
       crossOrigin: layer.crossOrigin,
       serverType,
       hidpi,
+      attributions: layer.attribution ? [layer.attribution] : undefined,
     };
 
     if (layer.tilingDisabled) {
