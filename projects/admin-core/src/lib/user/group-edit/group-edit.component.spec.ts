@@ -64,7 +64,8 @@ describe('GroupEditComponent', () => {
   test('should delete group', async () => {
     const { groupService } = await setup(true);
     await userEvent.click(await screen.findByText('Delete'));
-    expect(await screen.findByText('Are you sure you want to delete the group with name secret-group? This action cannot be undone.')).toBeInTheDocument();
+    expect(await screen.findByText('Are you sure you want to delete the group with name secret-group? All users will be removed from this group. This action cannot be undone.'))
+      .toBeInTheDocument();
     await userEvent.click(await screen.findByText('Yes'));
     expect(groupService.deleteGroup$).toHaveBeenCalledWith('secret-group');
   });

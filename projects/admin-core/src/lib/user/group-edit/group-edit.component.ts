@@ -54,7 +54,7 @@ export class GroupEditComponent implements OnInit, OnDestroy {
   public delete(group: GroupModel) {
     this.confirmDelete.confirm$(
       `Delete group ${group.name}`,
-      `Are you sure you want to delete the group with name ${group.name}? This action cannot be undone.`,
+      `Are you sure you want to delete the group with name ${group.name}? All users will be removed from this group. This action cannot be undone.`,
       true,
     )
       .pipe(
