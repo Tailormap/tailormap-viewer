@@ -1,12 +1,13 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { map, Observable, of, Subject, takeUntil } from 'rxjs';
 import { Router, ActivatedRoute, UrlSegment } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { loadViewer } from '../../state/core.actions';
-import { selectViewerErrorMessage, selectViewerLoadingState } from '../../state/core.selectors';
+import { selectViewerErrorMessage, selectViewerLoadingState, selectViewerTitle } from '../../state/core.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { BookmarkService } from '../../bookmark/bookmark.service';
 import { ApplicationStyleService } from '../../services/application-style.service';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'tm-viewer-app',
@@ -15,7 +16,7 @@ import { ApplicationStyleService } from '../../services/application-style.servic
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ViewerAppComponent implements OnInit, OnDestroy {
-
+private static DEFAULT_TITLE = 'Tailormap';
   private destroyed = new Subject();
   public isLoading = false;
   public loadingFailed = false;
@@ -29,6 +30,7 @@ export class ViewerAppComponent implements OnInit, OnDestroy {
     private cdr: ChangeDetectorRef,
     private bookmarkService: BookmarkService,
     private appStyleService: ApplicationStyleService,
+    @Inject(DOCUMENT) private document: Document,
   ) { }
 
   public ngOnInit(): void {
@@ -71,6 +73,17 @@ export class ViewerAppComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyed))
       .subscribe(bookmark => {
           this.router.navigate([], { relativeTo: this.route, fragment: bookmark, replaceUrl: true });
+      });
+
+    this.store$.select(selectViewerTitle)
+      .pipe(takeUntil(this.destroyed))
+      .subscribe({
+        next: (title) => {
+          this.document.title = title || ViewerAppComponent.DEFAULT_TITLE;
+        },
+        complete: () => {
+          this.document.title = ViewerAppComponent.DEFAULT_TITLE;
+        },
       });
   }
 
