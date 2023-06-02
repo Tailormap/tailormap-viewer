@@ -6,7 +6,7 @@ import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
 import { firstValueFrom, of } from 'rxjs';
 import { TestBed } from '@angular/core/testing';
 import { ErrorMessageComponent, LoadingStateEnum } from '@tailormap-viewer/shared';
-import { selectViewerErrorMessage, selectViewerLoadingState } from '../../state/core.selectors';
+import { selectViewerErrorMessage, selectViewerLoadingState, selectViewerTitle } from '../../state/core.selectors';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 export const getActivatedRouteProvider = (segments: string[], fragment = '') => {
@@ -34,6 +34,7 @@ const setup = async (loadingState?: LoadingStateEnum, errorMessage?: string) => 
         selectors: [
           { selector: selectViewerErrorMessage, value: errorMessage || undefined },
           { selector: selectViewerLoadingState, value: loadingState || LoadingStateEnum.LOADED },
+          { selector: selectViewerTitle, value: 'my fancy title' },
         ],
       }),
     ],
@@ -49,6 +50,7 @@ describe('ViewerAppComponent', () => {
     const { container, store } = await setup();
     expect(container.querySelector('tm-base-layout')).toBeInTheDocument();
     expect(await firstValueFrom(store.scannedActions$)).toEqual({ type: '[Core] Load Viewer', id: 'app/default' });
+    expect(document.title).toEqual('my fancy title');
   });
 
   test('should render an error', async () => {

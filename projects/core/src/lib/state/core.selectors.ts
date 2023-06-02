@@ -7,6 +7,7 @@ const selectViewerState = createSelector(selectCoreState, state => state.viewer)
 export const selectViewerLoadingState = createSelector(selectCoreState, state => state.loadStatus);
 
 export const selectViewerId = createSelector(selectViewerState, state => state?.id || null);
+export const selectViewerTitle = createSelector(selectViewerState, state => state?.title || null);
 export const selectRouteBeforeLogin = createSelector(selectCoreState, state => state.routeBeforeLogin);
 export const selectViewerErrorMessage = createSelector(selectCoreState, (state) => state.error);
 
