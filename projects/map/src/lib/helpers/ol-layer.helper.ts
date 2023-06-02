@@ -144,6 +144,8 @@ export class OlLayerHelper {
       options.url = layer.url;
     }
 
+    options.attributions = layer.attribution ? [layer.attribution] : undefined;
+
     const source = new WMTS(options);
     return new TileLayer({
       visible: layer.visible,
