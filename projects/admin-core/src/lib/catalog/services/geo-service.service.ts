@@ -7,15 +7,21 @@ import {
   GeoServiceProtocolEnum, GeoServiceSettingsModel, GeoServiceWithLayersModel, TAILORMAP_ADMIN_API_V1_SERVICE,
   TailormapAdminApiV1ServiceModel,
 } from '@tailormap-admin/admin-api';
-import { catchError, concatMap, filter, map, MonoTypeOperatorFunction, Observable, of, pipe, take, tap } from 'rxjs';
-import { addGeoServices, deleteGeoService, updateGeoService } from '../state/catalog.actions';
+import { catchError, concatMap, filter, map, MonoTypeOperatorFunction, Observable, of, pipe, switchMap, take, tap } from 'rxjs';
+import { addGeoServices, deleteGeoService, loadAllGeoServices, updateGeoService } from '../state/catalog.actions';
 import { CatalogService } from './catalog.service';
 import { GeoServiceCreateModel, GeoServiceUpdateModel, GeoServiceWithIdUpdateModel } from '../models/geo-service-update.model';
-import { selectGeoServiceById } from '../state/catalog.selectors';
+import {
+  selectGeoServiceById, selectGeoServiceLayers, selectGeoServiceLayersWithSettingsApplied, selectGeoServices, selectGeoServicesLoadStatus,
+} from '../state/catalog.selectors';
 import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 import { ApplicationService } from '../../application/services/application.service';
 import { ApplicationModelHelper } from '../../application/helpers/application-model.helper';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
+import { selectApplicationList, selectApplicationsLoadStatus } from '../../application/state/application.selectors';
+import { LoadingStateEnum } from '@tailormap-viewer/shared';
+import { loadApplications } from '../../application/state/application.actions';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 export interface DeleteGeoServiceResponse {
   success: boolean;
@@ -34,6 +40,32 @@ export class GeoServiceService {
     private catalogService: CatalogService,
     private applicationService: ApplicationService,
   ) { }
+
+  public getGeoServices$() {
+    return this.store$.select(selectGeoServicesLoadStatus)
+      .pipe(
+        tap(loadStatus => {
+          if (loadStatus === LoadingStateEnum.INITIAL) {
+            this.store$.dispatch(loadAllGeoServices());
+          }
+        }),
+        filter(loadStatus => loadStatus === LoadingStateEnum.LOADED),
+        switchMap(() => this.store$.select(selectGeoServices)),
+      );
+  }
+
+  public getGeoServiceLayers$() {
+    return this.store$.select(selectGeoServicesLoadStatus)
+      .pipe(
+        tap(loadStatus => {
+          if (loadStatus === LoadingStateEnum.INITIAL) {
+            this.store$.dispatch(loadAllGeoServices());
+          }
+        }),
+        filter(loadStatus => loadStatus === LoadingStateEnum.LOADED),
+        switchMap(() => this.store$.select(selectGeoServiceLayersWithSettingsApplied)),
+      );
+  }
 
   public createGeoService$(geoService: GeoServiceCreateModel, catalogNodeId: string) {
     const geoServiceModel: Omit<GeoServiceModel, 'id' | 'type'> = {

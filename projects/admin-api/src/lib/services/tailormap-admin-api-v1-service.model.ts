@@ -8,6 +8,7 @@ export interface TailormapAdminApiV1ServiceModel {
   updateCatalog$(catalog: CatalogNodeModel[]): Observable<CatalogNodeModel[]>;
   getGeoService$(params: { id: string }): Observable<GeoServiceWithLayersModel>;
   getGeoServices$(params: { ids: string[] }): Observable<GeoServiceWithLayersModel[]>;
+  getAllGeoServices$(): Observable<GeoServiceWithLayersModel[]>;
   createGeoService$(params: { geoService: Omit<GeoServiceModel, 'id' | 'type'> }): Observable<GeoServiceWithLayersModel>;
   updateGeoService$(params: { id: string; geoService: Omit<Partial<GeoServiceModel>, 'type'> }): Observable<GeoServiceWithLayersModel>;
   deleteGeoService$(params: { id: string }): Observable<boolean>;

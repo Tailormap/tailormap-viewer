@@ -89,9 +89,11 @@ export class LayerSettingsFormComponent implements OnInit {
       settings.hiDpiSubstituteLayer = this.layerSettings?.hiDpiSubstituteLayer || undefined;
       if (TypesHelper.isDefined(value.featureSourceId) && TypesHelper.isDefined(value.featureTypeName)) {
         settings.featureType = {
-          featureSourceId: value?.featureSourceId,
-          featureTypeName: value?.featureTypeName,
+          featureSourceId: value.featureSourceId,
+          featureTypeName: value.featureTypeName,
         };
+      } else {
+        settings.featureType = undefined;
       }
     }
     return settings;
@@ -157,10 +159,17 @@ export class LayerSettingsFormComponent implements OnInit {
     return typeof value === 'boolean' ? !value : defaultValue;
   }
 
-  public updateFeatureTypeSelection($event: { featureSourceId: number; featureTypeName?: string }) {
+  public updateFeatureTypeSelection($event: { featureSourceId?: number; featureTypeName?: string }) {
+    if (TypesHelper.isDefined($event.featureSourceId) && TypesHelper.isDefined($event.featureTypeName)) {
+      this.layerSettingsForm.patchValue({
+        featureSourceId: $event.featureSourceId,
+        featureTypeName: $event.featureTypeName,
+      });
+      return;
+    }
     this.layerSettingsForm.patchValue({
-      featureSourceId: +($event.featureSourceId),
-      featureTypeName: $event.featureTypeName,
+      featureSourceId: null,
+      featureTypeName: null,
     });
   }
 

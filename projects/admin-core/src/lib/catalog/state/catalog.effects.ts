@@ -3,10 +3,10 @@ import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects';
 import * as CatalogActions from './catalog.actions';
 import { map, catchError, of, filter, switchMap, tap } from 'rxjs';
 import {
-  CatalogNodeModel, FeatureSourceModel, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel,
+  CatalogNodeModel, FeatureSourceModel, GeoServiceWithLayersModel, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel,
 } from '@tailormap-admin/admin-api';
 import { Store } from '@ngrx/store';
-import { selectCatalogLoadStatus, selectFeatureSourceLoadStatus } from './catalog.selectors';
+import { selectCatalogLoadStatus, selectFeatureSourceLoadStatus, selectGeoServicesLoadStatus } from './catalog.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 
 type ErrorResponse = { error: string };
@@ -60,6 +60,32 @@ export class CatalogEffects {
                 return CatalogActions.loadFeatureSourcesFailed({ error: response.error });
               }
               return CatalogActions.loadFeatureSourcesSuccess({ featureSources: response });
+            }),
+          );
+      }),
+    );
+  });
+
+  public loadGeoServices$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(CatalogActions.loadAllGeoServices),
+      concatLatestFrom(() => this.store$.select(selectGeoServicesLoadStatus)),
+      filter(([ _action, loadStatus ]) => loadStatus !== LoadingStateEnum.LOADED && loadStatus !== LoadingStateEnum.LOADING),
+      tap(() => this.store$.dispatch(CatalogActions.loadAllGeoServicesStart())),
+      switchMap(([ _action, _loadStatus ]) => {
+        return this.adminApiService.getAllGeoServices$()
+          .pipe(
+            catchError(() => {
+              return of({ error: $localize `Error while loading geo services` });
+            }),
+            map((response: GeoServiceWithLayersModel[] | ErrorResponse) => {
+              const isErrorResponse = (res: GeoServiceWithLayersModel[] | ErrorResponse): res is ErrorResponse => {
+                return typeof (res as ErrorResponse).error !== 'undefined';
+              };
+              if (isErrorResponse(response)) {
+                return CatalogActions.loadAllGeoServicesFailed({ error: response.error });
+              }
+              return CatalogActions.loadAllGeoServicesSuccess({ services: response });
             }),
           );
       }),

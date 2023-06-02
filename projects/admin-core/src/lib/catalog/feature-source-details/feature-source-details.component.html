@@ -9,5 +9,6 @@
                           label="Refresh feature source"
                           [saving$]="refreshing$"
                           (save)="refresh(featureSource.id)"></tm-admin-save-button>
+    <button mat-flat-button color="warn" (click)="deleteFeatureSource(featureSource)" i18n>Delete</button>
   </div>
 </ng-container>
