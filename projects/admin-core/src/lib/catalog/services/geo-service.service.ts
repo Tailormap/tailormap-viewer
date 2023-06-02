@@ -12,16 +12,13 @@ import { addGeoServices, deleteGeoService, loadAllGeoServices, updateGeoService 
 import { CatalogService } from './catalog.service';
 import { GeoServiceCreateModel, GeoServiceUpdateModel, GeoServiceWithIdUpdateModel } from '../models/geo-service-update.model';
 import {
-  selectGeoServiceById, selectGeoServiceLayers, selectGeoServiceLayersWithSettingsApplied, selectGeoServices, selectGeoServicesLoadStatus,
+  selectGeoServiceById, selectGeoServiceLayersWithSettingsApplied, selectGeoServices, selectGeoServicesLoadStatus,
 } from '../state/catalog.selectors';
 import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 import { ApplicationService } from '../../application/services/application.service';
 import { ApplicationModelHelper } from '../../application/helpers/application-model.helper';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
-import { selectApplicationList, selectApplicationsLoadStatus } from '../../application/state/application.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
-import { loadApplications } from '../../application/state/application.actions';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 export interface DeleteGeoServiceResponse {
   success: boolean;

@@ -5,13 +5,12 @@ import {
 } from '@tailormap-admin/admin-api';
 import { CatalogService } from './catalog.service';
 import { catchError, concatMap, filter, map, MonoTypeOperatorFunction, Observable, of, pipe, switchMap, take, tap } from 'rxjs';
-import { addFeatureSources, deleteFeatureSource, deleteGeoService, updateFeatureSource } from '../state/catalog.actions';
+import { addFeatureSources, deleteFeatureSource, updateFeatureSource } from '../state/catalog.actions';
 import { FeatureSourceCreateModel, FeatureSourceUpdateModel, FeatureTypeUpdateModel } from '../models/feature-source-update.model';
 import { selectFeatureSourceById, selectFeatureTypeById, selectFeatureTypesForSource } from '../state/catalog.selectors';
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
-import { ApplicationModelHelper } from '../../application/helpers/application-model.helper';
 import { GeoServiceService } from './geo-service.service';
 import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-layer.model';
 
