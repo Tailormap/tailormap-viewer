@@ -53,6 +53,7 @@ export class LayerSettingsFormComponent implements OnInit {
 
   public layerSettingsForm = new FormGroup({
     title: new FormControl('', { nonNullable: true }),
+    attribution: new FormControl<string | null>(null),
     featureSourceId: new FormControl<number | null>(null),
     featureTypeName: new FormControl<string | null>(null),
     hiDpiEnabled: new FormControl<boolean | null>(null),
@@ -80,6 +81,7 @@ export class LayerSettingsFormComponent implements OnInit {
       hiDpiDisabled: LayerSettingsFormComponent.getInverseBooleanOrDefault(value?.hiDpiEnabled, undefined),
       tilingDisabled: LayerSettingsFormComponent.getInverseBooleanOrDefault(value?.tilingEnabled, undefined),
       tilingGutter: value?.tilingGutter || undefined,
+      attribution: value?.attribution || undefined,
     };
     if (this.isLayerSpecific) {
       settings.title = value.title || undefined;
@@ -102,6 +104,7 @@ export class LayerSettingsFormComponent implements OnInit {
     const values = this.getUpdatedLayerSettings(this.layerSettingsForm.getRawValue());
     return FormHelper.someValuesChanged([
       [ values.title, this._layerSettings.title ],
+      [ values.attribution, this._layerSettings.attribution ],
       [ values.hiDpiDisabled, this._layerSettings.hiDpiDisabled ],
       [ values.tilingDisabled, this._layerSettings.tilingDisabled ],
       [ values.tilingGutter, this._layerSettings.tilingGutter ],
@@ -118,6 +121,7 @@ export class LayerSettingsFormComponent implements OnInit {
     }
     this.layerSettingsForm.patchValue({
       title: this.layerSettings?.title ? this.layerSettings.title : '',
+      attribution: this.layerSettings?.attribution || null,
       featureSourceId: this.layerSettings?.featureType?.featureSourceId || null,
       featureTypeName: this.layerSettings?.featureType?.featureTypeName || null,
       hiDpiEnabled,

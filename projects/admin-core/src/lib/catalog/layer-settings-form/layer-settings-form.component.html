@@ -3,6 +3,10 @@
     <mat-label i18n>Title</mat-label>
     <input matInput tmAutoFocus placeholder="Title" i18n-placeholder formControlName="title" />
   </mat-form-field>
+  <mat-form-field>
+    <mat-label>Attribution</mat-label>
+    <input matInput formControlName="attribution" />
+  </mat-form-field>
   <ng-container *ngIf="!isLayerSpecific">
     <mat-slide-toggle formControlName="hiDpiEnabled" i18n>High-DPI enabled</mat-slide-toggle>
     <mat-slide-toggle formControlName="tilingEnabled" i18n *ngIf="isWMS">Use tiling</mat-slide-toggle>

@@ -63,11 +63,11 @@
 }
 
 .ol-attribution {
-  bottom: var(--body-margin);
+  bottom: calc(3 * var(--body-margin));
   top: auto;
   border-radius: 3px;
   background-color: var(--map-overlay-background-0_8);
-  right: 15em;
+  right: calc(var(--body-margin) - 8px);
   margin: 8px;
 }
 
