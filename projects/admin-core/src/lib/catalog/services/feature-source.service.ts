@@ -4,13 +4,15 @@ import {
   CatalogItemKindEnum, FeatureSourceModel, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel,
 } from '@tailormap-admin/admin-api';
 import { CatalogService } from './catalog.service';
-import { catchError, concatMap, filter, map, MonoTypeOperatorFunction, Observable, of, pipe, take, tap } from 'rxjs';
-import { addFeatureSources, updateFeatureSource } from '../state/catalog.actions';
+import { catchError, concatMap, filter, map, MonoTypeOperatorFunction, Observable, of, pipe, switchMap, take, tap } from 'rxjs';
+import { addFeatureSources, deleteFeatureSource, updateFeatureSource } from '../state/catalog.actions';
 import { FeatureSourceCreateModel, FeatureSourceUpdateModel, FeatureTypeUpdateModel } from '../models/feature-source-update.model';
-import { selectFeatureSourceById, selectFeatureTypeById } from '../state/catalog.selectors';
+import { selectFeatureSourceById, selectFeatureTypeById, selectFeatureTypesForSource } from '../state/catalog.selectors';
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
+import { GeoServiceService } from './geo-service.service';
+import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-layer.model';
 
 @Injectable({
   providedIn: 'root',
@@ -22,6 +24,7 @@ export class FeatureSourceService {
     @Inject(TAILORMAP_ADMIN_API_V1_SERVICE) private adminApiService: TailormapAdminApiV1ServiceModel,
     private adminSnackbarService: AdminSnackbarService,
     private catalogService: CatalogService,
+    private geoServiceService: GeoServiceService,
   ) { }
 
   public createFeatureSource$(source: FeatureSourceCreateModel, catalogNodeId: string) {
@@ -74,6 +77,31 @@ export class FeatureSourceService {
       );
   }
 
+  public deleteFeatureSource$(featureSourceId: string, catalogNodeId: string) {
+    return this.adminApiService.deleteFeatureSource$({ id: featureSourceId }).pipe(
+      catchError(() => {
+        this.adminSnackbarService.showMessage($localize `Error while deleting source.`);
+        return of(null);
+      }),
+      tap(success => {
+        if (success) {
+          // Remove the service from the store
+          this.store$.dispatch(deleteFeatureSource({ id: featureSourceId }));
+        }
+      }),
+      concatMap(success => {
+        // Remove the service from the catalog
+        if (success) {
+          return this.catalogService.removeNodeFromCatalog$(catalogNodeId, featureSourceId, CatalogItemKindEnum.FEATURE_SOURCE)
+            .pipe(map(response => !!response && !!success));
+        }
+        return of(false);
+      }),
+      // Return whether everything was successful
+      map(success => ({ success: !!success })),
+    );
+  }
+
   public refreshFeatureSource$(featureSourceId: string): Observable<FeatureSourceModel | null> {
     return this.getFeatureSourceById$(featureSourceId)
       .pipe(
@@ -106,6 +134,28 @@ export class FeatureSourceService {
         }
       }),
     );
+  }
+
+  public getGeoServiceLayersUsingFeatureSource$(featureSourceId: string): Observable<ExtendedGeoServiceLayerModel[]> {
+    return this.store$.select(selectFeatureTypesForSource(featureSourceId))
+      .pipe(
+        take(1),
+        switchMap((featureTypes: ExtendedFeatureTypeModel[]) => {
+          const featureTypesSet = new Set(featureTypes.map(ft => ft.name));
+          return this.geoServiceService.getGeoServiceLayers$()
+            .pipe(
+              map(layers => {
+                return layers.filter(layer => {
+                  if (!layer.settings?.featureType) {
+                    return false;
+                  }
+                  return `${layer.settings.featureType.featureSourceId}` === featureSourceId
+                    && featureTypesSet.has(layer.settings.featureType.featureTypeName);
+                });
+              }),
+            );
+        }),
+      );
   }
 
 }

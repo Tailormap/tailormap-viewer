@@ -18,6 +18,20 @@ export const loadCatalogFailed = createAction(
   `${catalogActionsPrefix}  Load Catalog Failed`,
   props<{ error?: string }>(),
 );
+export const loadAllGeoServices = createAction(
+  `${catalogActionsPrefix} Load GeoServices`,
+);
+export const loadAllGeoServicesStart = createAction(
+  `${catalogActionsPrefix} Load GeoServices Start`,
+);
+export const loadAllGeoServicesSuccess = createAction(
+  `${catalogActionsPrefix}  Load GeoServices Success`,
+  props<{ services: GeoServiceWithLayersModel[] }>(),
+);
+export const loadAllGeoServicesFailed = createAction(
+  `${catalogActionsPrefix}  Load GeoServices Failed`,
+  props<{ error?: string }>(),
+);
 export const addGeoServices = createAction(
   `${catalogActionsPrefix} Add Geo Services`,
   props<{ services: GeoServiceWithLayersModel[]; parentNode: string }>(),

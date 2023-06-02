@@ -1,0 +1,24 @@
+.mat-mdc-dialog-title {
+  margin-bottom: 0;
+}
+
+.mat-mdc-dialog-title::before {
+  display: none;
+}
+
+.content {
+  padding-top: 16px;
+  white-space: pre-line;
+  margin-top: 0;
+}
+
+ul {
+  margin-bottom: 0;
+}
+
+a mat-icon {
+  width: 1.2em;
+  height: 1.2em;
+  margin-left: 4px;
+  vertical-align: bottom;
+}

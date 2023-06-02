@@ -12,6 +12,7 @@ export interface CatalogState {
   catalogLoadError?: string;
   catalog: ExtendedCatalogNodeModel[];
   geoServices: ExtendedGeoServiceModel[];
+  geoServicesLoadStatus: LoadingStateEnum;
   geoServiceLayers: ExtendedGeoServiceLayerModel[];
   featureSources: ExtendedFeatureSourceModel[];
   featureTypes: ExtendedFeatureTypeModel[];
@@ -22,6 +23,7 @@ export const initialCatalogState: CatalogState = {
   catalogLoadStatus: LoadingStateEnum.INITIAL,
   catalog: [],
   geoServices: [],
+  geoServicesLoadStatus: LoadingStateEnum.INITIAL,
   geoServiceLayers: [],
   featureSources: [],
   featureTypes: [],

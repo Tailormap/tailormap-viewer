@@ -29,6 +29,7 @@ import { CatalogHomeComponent } from './catalog-home/catalog-home.component';
 import { CatalogCreateButtonsComponent } from './catalog-create-buttons/catalog-create-buttons.component';
 import { GeoServiceUsedDialogComponent } from './geo-service-details/geo-service-used-dialog/geo-service-used-dialog.component';
 import { GeoServiceLayerFormDialogComponent } from './geo-service-layer-form-dialog/geo-service-layer-form-dialog.component';
+import { FeatureSourceUsedDialogComponent } from './feature-source-details/feature-source-used-dialog/feature-source-used-dialog.component';
 
 
 @NgModule({
@@ -54,6 +55,7 @@ import { GeoServiceLayerFormDialogComponent } from './geo-service-layer-form-dia
     CatalogCreateButtonsComponent,
     GeoServiceUsedDialogComponent,
     GeoServiceLayerFormDialogComponent,
+    FeatureSourceUsedDialogComponent,
   ],
   imports: [
     CommonModule,

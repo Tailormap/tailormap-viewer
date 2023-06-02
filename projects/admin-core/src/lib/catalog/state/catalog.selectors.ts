@@ -15,6 +15,7 @@ const selectCatalogState = createFeatureSelector<CatalogState>(catalogStateKey);
 
 export const selectCatalog = createSelector(selectCatalogState, state => state.catalog);
 export const selectGeoServices = createSelector(selectCatalogState, state => state.geoServices);
+export const selectGeoServicesLoadStatus = createSelector(selectCatalogState, state => state.geoServicesLoadStatus);
 export const selectGeoServiceLayers = createSelector(selectCatalogState, state => state.geoServiceLayers);
 export const selectFeatureSources = createSelector(selectCatalogState, state => state.featureSources);
 export const selectFeatureTypes = createSelector(selectCatalogState, state => state.featureTypes);

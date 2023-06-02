@@ -1,8 +1,10 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
-import { BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import {
+  BehaviorSubject, concatMap, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, takeUntil, tap,
+} from 'rxjs';
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 import { FeatureSourceUpdateModel } from '../models/feature-source-update.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectFeatureSourceById } from '../state/catalog.selectors';
 import { FeatureSourceService } from '../services/feature-source.service';
@@ -10,6 +12,8 @@ import { AdminSnackbarService } from '../../shared/services/admin-snackbar.servi
 import { FeatureSourceModel } from '@tailormap-admin/admin-api';
 import { FormHelper } from '../../helpers/form.helper';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
+import { FeatureSourceUsedDialogComponent } from './feature-source-used-dialog/feature-source-used-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'tm-admin-feature-source-details',
@@ -35,6 +39,8 @@ export class FeatureSourceDetailsComponent implements OnInit, OnDestroy {
     private featureSourceService: FeatureSourceService,
     private adminSnackbarService: AdminSnackbarService,
     private confirmDialog: ConfirmDialogService,
+    private dialog: MatDialog,
+    private router: Router,
   ) { }
 
   public ngOnInit(): void {
@@ -110,6 +116,48 @@ export class FeatureSourceDetailsComponent implements OnInit, OnDestroy {
           this.adminSnackbarService.showMessage($localize `Feature source refreshed`);
         }
         this.refreshingSubject.next(false);
+      });
+  }
+
+  public deleteFeatureSource(featureSource: ExtendedFeatureSourceModel) {
+    this.featureSourceService.getGeoServiceLayersUsingFeatureSource$(featureSource.id)
+      .pipe(
+        take(1),
+        concatMap(layers => {
+          if (layers.length > 0) {
+            return this.dialog.open(FeatureSourceUsedDialogComponent, { data: { featureSource, layers } })
+              .afterClosed().pipe(map((result: boolean | undefined | 'layer-updated') => {
+                if (result === 'layer-updated') {
+                  return 'layer-updated';
+                }
+                return false;
+              }));
+          }
+          return this.confirmDialog.confirm$(
+            `Delete source ${featureSource.title}`,
+            `Are you sure you want to delete feature source ${featureSource.title}? This action cannot be undone.`,
+            true,
+          );
+        }),
+        concatMap(confirmed => {
+          if (confirmed === 'layer-updated') {
+            return of({ success: false, restartFlow: true });
+          }
+          if (confirmed) {
+            return this.featureSourceService.deleteFeatureSource$(featureSource.id, featureSource.catalogNodeId);
+          }
+          return of({ success: false });
+        }),
+      )
+      .subscribe((response: { success: boolean; restartFlow?: boolean }) => {
+        if (!response.success) {
+          if (response.restartFlow) {
+            this.deleteFeatureSource(featureSource);
+          }
+          return;
+        }
+        this.adminSnackbarService.showMessage($localize `Source ${featureSource.title} removed`);
+        this.router.navigateByUrl('/catalog');
       });
   }
 

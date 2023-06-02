@@ -3,6 +3,7 @@
   <mat-form-field>
     <mat-label i18n>Feature Source</mat-label>
     <mat-select formControlName="featureSourceId">
+      <mat-option [value]="null" i18n>No feature source</mat-option>
       <mat-option *ngFor="let featureSource of featureSources$ | async" [value]="featureSource.id">
         {{ featureSource.title }}
       </mat-option>
@@ -12,6 +13,7 @@
   <mat-form-field>
     <mat-label i18n>Feature Type</mat-label>
     <mat-select formControlName="featureTypeName">
+      <mat-option [value]="null" i18n>No feature type</mat-option>
       <mat-option *ngFor="let featureType of featureTypes$ | async" [value]="featureType.name">
         {{ featureType.title || featureType.name }}
       </mat-option>

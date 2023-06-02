@@ -27,7 +27,7 @@ export class FeatureTypeSelectorComponent implements OnInit, OnDestroy {
   private _featureSourceId: string | null = null;
   private _featureTypeName: string | null | undefined;
 
-  private prevFeatureSourceId: string | null = null;
+  private prevFeatureSourceId: string | null | undefined = null;
   private prevFeatureTypeName: string | null | undefined = null;
 
   @Input()
@@ -49,7 +49,7 @@ export class FeatureTypeSelectorComponent implements OnInit, OnDestroy {
   public layerName: string | null | undefined;
 
   @Output()
-  public featureTypeSelected = new EventEmitter<{ featureSourceId: number; featureTypeName?: string }>();
+  public featureTypeSelected = new EventEmitter<{ featureSourceId?: number; featureTypeName?: string }>();
 
   public featureTypeSelectorForm = new FormGroup({
     featureSourceId: new FormControl<string | null>(null),
@@ -74,7 +74,14 @@ export class FeatureTypeSelectorComponent implements OnInit, OnDestroy {
     this.featureTypeSelectorForm.valueChanges
       .pipe(takeUntil(this.destroyed))
       .subscribe((value) => {
-        if (!TypesHelper.isDefined(value.featureSourceId) || !this.changedSinceLastEmit(value.featureSourceId, value.featureTypeName)) {
+        if (!this.changedSinceLastEmit(value.featureSourceId, value.featureTypeName)) {
+          return;
+        }
+        if (!TypesHelper.isDefined(value.featureSourceId)) {
+          this.featureTypeSelected.emit({
+            featureSourceId: undefined,
+            featureTypeName: undefined,
+          });
           return;
         }
         this.featureTypeSelected.emit({
@@ -87,7 +94,7 @@ export class FeatureTypeSelectorComponent implements OnInit, OnDestroy {
       featureSourceControl.valueChanges
         .pipe(takeUntil(this.destroyed))
         .subscribe((value) => {
-          if (!TypesHelper.isDefined(value)) {
+          if (!TypesHelper.isDefined(value) || this.prevFeatureSourceId === value) {
             return;
           }
           this.featureTypeSelectorForm.patchValue({ featureTypeName: null });
@@ -101,7 +108,7 @@ export class FeatureTypeSelectorComponent implements OnInit, OnDestroy {
     this.destroyed.complete();
   }
 
-  private changedSinceLastEmit(featureSourceId: string, featureTypeName: string | null | undefined) {
+  private changedSinceLastEmit(featureSourceId: string | null | undefined, featureTypeName: string | null | undefined) {
     if (this.prevFeatureSourceId !== featureSourceId || this.prevFeatureTypeName !== featureTypeName) {
       this.prevFeatureSourceId = featureSourceId;
       this.prevFeatureTypeName = featureTypeName;
