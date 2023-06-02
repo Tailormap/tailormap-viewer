@@ -12,4 +12,5 @@ export interface LayerModel {
   wfsFeatureTypeName?: string;
   wfsFeatureGeomName?: string;
   opacity?: number;
+  attribution?: string;
 }

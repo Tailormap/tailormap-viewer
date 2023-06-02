@@ -22,6 +22,7 @@ import { OpenLayersWmsGetFeatureInfoHelper } from './helpers/open-layers-wms-get
 import { HttpClient, HttpXsrfTokenExtractor } from '@angular/common/http';
 import { FeatureModel } from '@tailormap-viewer/api';
 import { OpenLayersMapImageExporter } from './openlayers-map-image-exporter';
+import { Attribution } from 'ol/control';
 
 export class OpenLayersMap implements MapViewerModel {
 
@@ -73,6 +74,10 @@ export class OpenLayersMap implements MapViewerModel {
       }),
       view,
     });
+    // always add the attribution control
+    olMap.addControl(new Attribution({
+      collapsed: false,
+    }));
 
     this.initialExtent = options.initialExtent && options.initialExtent.length > 0
       ? options.initialExtent
