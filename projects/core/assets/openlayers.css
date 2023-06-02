@@ -79,3 +79,7 @@
   font-size: 14px;
   color: var(--text-color);
 }
+
+.ol-attribution ul li:not(:last-child):after {
+  content: ", ";
+}
