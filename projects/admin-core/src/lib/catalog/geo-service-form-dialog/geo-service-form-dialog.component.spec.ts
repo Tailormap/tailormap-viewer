@@ -14,6 +14,7 @@ import { PasswordFieldComponent } from '../../shared/components/password-field/p
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { AuthorizationEditComponent } from '../../shared/components/authorization-edit/authorization-edit.component';
 import { LayerSettingsFormComponent } from '../layer-settings-form/layer-settings-form.component';
+import { provideMockStore } from '@ngrx/store/testing';
 
 const setup = async (editMode = false) => {
   const dialogRefMock = { close: jest.fn() };
@@ -23,6 +24,7 @@ const setup = async (editMode = false) => {
     imports: [ SharedModule, MatIconTestingModule ],
     declarations: [ GeoServiceFormComponent, LayerSettingsFormComponent, PasswordFieldComponent, SaveButtonComponent, AuthorizationEditComponent ],
     providers: [
+      provideMockStore(),
       { provide: MatDialogRef, useValue: dialogRefMock },
       { provide: GeoServiceService, useValue: geoServiceService },
       { provide: MAT_DIALOG_DATA, useValue: { geoService: editMode ? geoServiceModelMock : null, parentNode: '1' } },
