@@ -1,14 +1,15 @@
-import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, DestroyRef } from '@angular/core';
 import { TreeService } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
 import { selectCatalogTree } from '../state/catalog.selectors';
-import { BehaviorSubject, filter, map, Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, filter, map } from 'rxjs';
 import { CatalogTreeModelMetadataTypes } from '../models/catalog-tree.model';
 import { CatalogTreeHelper } from '../helpers/catalog-tree.helper';
-import { ActivatedRoute, Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { RoutesEnum } from '../../routes';
 import { CatalogTreeModelTypeEnum } from '../models/catalog-tree-model-type.enum';
 import { CatalogTreeService } from '../services/catalog-tree.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'tm-admin-catalog-tree',
@@ -17,9 +18,7 @@ import { CatalogTreeService } from '../services/catalog-tree.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [TreeService],
 })
-export class CatalogTreeComponent implements OnInit, OnDestroy {
-
-  private destroyed = new Subject();
+export class CatalogTreeComponent implements OnInit {
 
   private selectedNodeId = new BehaviorSubject<string>('');
 
@@ -28,7 +27,7 @@ export class CatalogTreeComponent implements OnInit, OnDestroy {
     private store$: Store,
     private catalogTreeService: CatalogTreeService,
     private router: Router,
-    private route: ActivatedRoute,
+    private destroyRef: DestroyRef,
   ) { }
 
   public ngOnInit(): void {
@@ -37,29 +36,28 @@ export class CatalogTreeComponent implements OnInit, OnDestroy {
         filter(tree => !!tree && tree.length > 0),
         map((tree, idx) => {
           if (idx === 0) {
-            this.expandTreeToSelectedItem();
+            this.expandTreeToSelectedItem(this.router.url);
           }
           return tree;
         }),
       );
     this.treeService.setDataSource(catalogTree$, () => true);
     this.treeService.setSelectedNode(this.selectedNodeId.asObservable());
-    this.route.url
-      .pipe(takeUntil(this.destroyed))
-      .subscribe(() => {
-        const deconstructedUrl = this.readNodesFromUrl();
+    this.router.events
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+      )
+      .subscribe((event: NavigationEnd) => {
+        console.log(event);
+        const deconstructedUrl = this.readNodesFromUrl(event.url);
         const lastItem = deconstructedUrl.pop();
         this.selectedNodeId.next(lastItem ? lastItem.treeNodeId : '');
       });
   }
 
-  public ngOnDestroy(): void {
-    this.destroyed.next(null);
-    this.destroyed.complete();
-  }
-
-  private readNodesFromUrl(): Array<{ type: CatalogTreeModelTypeEnum; treeNodeId: string; id: string }> {
-    const currentRoute = this.router.url
+  private readNodesFromUrl(url: string): Array<{ type: CatalogTreeModelTypeEnum; treeNodeId: string; id: string }> {
+    const currentRoute = url
       .replace(RoutesEnum.CATALOG, '')
       .split('/')
       .filter(part => !!part);
@@ -82,8 +80,8 @@ export class CatalogTreeComponent implements OnInit, OnDestroy {
     return parts;
   }
 
-  private expandTreeToSelectedItem() {
-    const urlParts = this.readNodesFromUrl();
+  private expandTreeToSelectedItem(url: string) {
+    const urlParts = this.readNodesFromUrl(url);
     if (urlParts.length === 0) {
       return;
     }
