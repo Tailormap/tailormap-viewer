@@ -39,19 +39,14 @@ export class GeoServiceService {
   ) { }
 
   public getGeoServices$() {
-    return this.store$.select(selectGeoServicesLoadStatus)
-      .pipe(
-        tap(loadStatus => {
-          if (loadStatus === LoadingStateEnum.INITIAL) {
-            this.store$.dispatch(loadAllGeoServices());
-          }
-        }),
-        filter(loadStatus => loadStatus === LoadingStateEnum.LOADED),
-        switchMap(() => this.store$.select(selectGeoServices)),
-      );
+    return this.getOrLoadServices$(this.store$.select(selectGeoServices));
   }
 
   public getGeoServiceLayers$() {
+    return this.getOrLoadServices$(this.store$.select(selectGeoServiceLayersWithSettingsApplied));
+  }
+
+  private getOrLoadServices$<T>(selector$: Observable<T>): Observable<T> {
     return this.store$.select(selectGeoServicesLoadStatus)
       .pipe(
         tap(loadStatus => {
@@ -60,7 +55,7 @@ export class GeoServiceService {
           }
         }),
         filter(loadStatus => loadStatus === LoadingStateEnum.LOADED),
-        switchMap(() => this.store$.select(selectGeoServiceLayersWithSettingsApplied)),
+        switchMap(() => selector$),
       );
   }
 
