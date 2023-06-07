@@ -57,6 +57,7 @@ export class LayerTreeNodeHelper {
         hasCheckedNodes = (child.type === 'layer' && child.checked) || hasCheckedNodes;
         (child.children || []).forEach(checkCheckedNodes);
       };
+      checkCheckedNodes(node);
       (node.children || []).forEach(checkCheckedNodes);
       if (hasCheckedNodes) {
         checkedNodes.add(node.id);
