@@ -18,4 +18,5 @@ export interface AppLayerModel {
   hiDpiSubstituteLayer?: string;
   opacity: number;
   attribution?: string;
+  description?: string;
 }
