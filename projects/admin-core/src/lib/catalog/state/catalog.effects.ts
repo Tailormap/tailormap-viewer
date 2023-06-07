@@ -6,7 +6,9 @@ import {
   CatalogNodeModel, FeatureSourceModel, GeoServiceWithLayersModel, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel,
 } from '@tailormap-admin/admin-api';
 import { Store } from '@ngrx/store';
-import { selectCatalogLoadStatus, selectFeatureSourceLoadStatus, selectGeoServicesLoadStatus } from './catalog.selectors';
+import {
+  selectCatalogLoadStatus, selectFeatureSourceLoadStatus, selectFeatureSources, selectGeoServices, selectGeoServicesLoadStatus,
+} from './catalog.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 
 type ErrorResponse = { error: string };
@@ -43,11 +45,11 @@ export class CatalogEffects {
   public loadFeatureSources$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(CatalogActions.loadFeatureSources),
-      concatLatestFrom(() => this.store$.select(selectFeatureSourceLoadStatus)),
+      concatLatestFrom(() => [ this.store$.select(selectFeatureSourceLoadStatus), this.store$.select(selectFeatureSources) ]),
       filter(([ _action, loadStatus ]) => loadStatus !== LoadingStateEnum.LOADED && loadStatus !== LoadingStateEnum.LOADING),
       tap(() => this.store$.dispatch(CatalogActions.loadFeatureSourcesStart())),
-      switchMap(([_action]) => {
-        return this.adminApiService.getAllFeatureSources$()
+      switchMap(([ _action, _loadStatus, currentFeatureSources ]) => {
+        return this.adminApiService.getAllFeatureSources$({ excludingIds: currentFeatureSources.map(f => f.id) })
           .pipe(
             catchError(() => {
               return of({ error: $localize `Error while loading feature sources` });
@@ -69,11 +71,11 @@ export class CatalogEffects {
   public loadGeoServices$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(CatalogActions.loadAllGeoServices),
-      concatLatestFrom(() => this.store$.select(selectGeoServicesLoadStatus)),
+      concatLatestFrom(() => [ this.store$.select(selectGeoServicesLoadStatus), this.store$.select(selectGeoServices) ]),
       filter(([ _action, loadStatus ]) => loadStatus !== LoadingStateEnum.LOADED && loadStatus !== LoadingStateEnum.LOADING),
       tap(() => this.store$.dispatch(CatalogActions.loadAllGeoServicesStart())),
-      switchMap(([ _action, _loadStatus ]) => {
-        return this.adminApiService.getAllGeoServices$()
+      switchMap(([ _action, _loadStatus, geoServices ]) => {
+        return this.adminApiService.getAllGeoServices$({ excludingIds: geoServices.map(s => s.id) })
           .pipe(
             catchError(() => {
               return of({ error: $localize `Error while loading geo services` });
