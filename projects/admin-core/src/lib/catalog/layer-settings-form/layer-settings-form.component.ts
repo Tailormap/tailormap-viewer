@@ -53,7 +53,7 @@ export class LayerSettingsFormComponent implements OnInit {
 
   public layerSettingsForm = new FormGroup({
     title: new FormControl('', { nonNullable: true }),
-    description: new FormControl('', { nonNullable: true }),
+    description: new FormControl<string | null>(null),
     attribution: new FormControl<string | null>(null),
     featureSourceId: new FormControl<number | null>(null),
     featureTypeName: new FormControl<string | null>(null),
@@ -87,7 +87,6 @@ export class LayerSettingsFormComponent implements OnInit {
     };
     if (this.isLayerSpecific) {
       settings.title = value.title || undefined;
-      settings.description = value.description || undefined;
       settings.hiDpiMode = value?.hiDpiMode || undefined;
       settings.hiDpiSubstituteLayer = this.layerSettings?.hiDpiSubstituteLayer || undefined;
       if (TypesHelper.isDefined(value.featureSourceId) && TypesHelper.isDefined(value.featureTypeName)) {
@@ -127,7 +126,7 @@ export class LayerSettingsFormComponent implements OnInit {
     }
     this.layerSettingsForm.patchValue({
       title: this.layerSettings?.title ? this.layerSettings.title : '',
-      description: this.layerSettings?.description ? this.layerSettings.description : '',
+      description: this.layerSettings?.description || null,
       attribution: this.layerSettings?.attribution || null,
       featureSourceId: this.layerSettings?.featureType?.featureSourceId || null,
       featureTypeName: this.layerSettings?.featureType?.featureTypeName || null,
