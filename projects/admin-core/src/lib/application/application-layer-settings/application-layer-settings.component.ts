@@ -44,6 +44,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     title: new FormControl<string | null>(null),
     opacity: new FormControl<number>(100, { nonNullable: true }),
     attribution: new FormControl<string | null>(null),
+    description: new FormControl<string | null>(null),
   });
 
   constructor(
@@ -70,7 +71,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
           return;
         }
         const settings = value
-          ? { title: value.title || undefined, opacity: value.opacity, attribution: value.attribution }
+          ? { title: value.title || undefined, opacity: value.opacity, attribution: value.attribution, description: value.description }
           : null;
         this.layerSettingsChange.emit({ nodeId: this.node.id, settings });
       });
@@ -91,6 +92,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
       title: nodeSettings.title || null,
       opacity: nodeSettings.opacity || 100,
       attribution: nodeSettings.attribution || null,
+      description: nodeSettings.description || null,
     }, { emitEvent: false });
   }
 
