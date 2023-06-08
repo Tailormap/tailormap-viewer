@@ -49,7 +49,6 @@ export class CatalogTreeComponent implements OnInit {
         filter((event): event is NavigationEnd => event instanceof NavigationEnd),
       )
       .subscribe((event: NavigationEnd) => {
-        console.log(event);
         const deconstructedUrl = this.readNodesFromUrl(event.url);
         const lastItem = deconstructedUrl.pop();
         this.selectedNodeId.next(lastItem ? lastItem.treeNodeId : '');
