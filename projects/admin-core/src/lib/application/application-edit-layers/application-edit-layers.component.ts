@@ -5,7 +5,7 @@ import {
   isLoadingApplicationServices, selectAppLayerNodesForSelectedApplication,
   selectAppLayerTreeForSelectedApplication, selectBaseLayerNodesForSelectedApplication, selectBaseLayerTreeForSelectedApplication,
 } from '../state/application.selectors';
-import { BehaviorSubject, map, Observable, of, Subject, switchMap, take, takeUntil } from 'rxjs';
+import { BehaviorSubject, combineLatest, map, Observable, of, Subject, switchMap, take, takeUntil } from 'rxjs';
 import {
   AppLayerSettingsModel, AppTreeLayerNodeModel, AppTreeLevelNodeModel, AppTreeNodeModel,
 } from '@tailormap-admin/admin-api';
@@ -104,13 +104,13 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
 
   public addLayer($event: AddLayerEvent) {
     const layer = $event.layer;
-    const nodes$ = this.applicationStateTree === 'baseLayer'
-      ? this.store$.select(selectBaseLayerNodesForSelectedApplication)
-      : this.store$.select(selectAppLayerNodesForSelectedApplication);
-    nodes$
+    combineLatest([
+        this.store$.select(selectBaseLayerNodesForSelectedApplication),
+        this.store$.select(selectAppLayerNodesForSelectedApplication),
+    ])
       .pipe(take(1))
-      .subscribe(nodes => {
-        const node = ApplicationModelHelper.newApplicationTreeLayerNode(layer, nodes);
+      .subscribe(([ backgroundNodes, layerNodes ]) => {
+        const node = ApplicationModelHelper.newApplicationTreeLayerNode(layer, [ ...backgroundNodes, ...layerNodes ]);
         this.addNode(node, $event.toParent || undefined, $event.position, $event.sibling);
       });
   }
