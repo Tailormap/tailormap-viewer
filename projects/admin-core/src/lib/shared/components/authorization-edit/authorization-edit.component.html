@@ -1,7 +1,7 @@
 <div>
   <div>
     <mat-label i18n>Allow access from:</mat-label>
-    <mat-chip-listbox [(ngModel)]="selectedChip" (change)="changeAuthenticationType($event.value)">
+    <mat-chip-listbox [value]="selectedChip" (change)="changeAuthenticationType($event.value)">
       <mat-chip-option i18n value="inherit" *ngIf="parentChip !== undefined && parentChip !== 'specificGroups'">Inherit from {{parentType}} ({parentChip, select, anonymous {Anyone} loggedIn {Logged in} specificGroups {Specific groups}})</mat-chip-option>
       <mat-chip-option i18n value="anonymous" *ngIf="parentChip === undefined">Anyone</mat-chip-option>
       <mat-chip-option i18n value="loggedIn" *ngIf="parentChip !== 'specificGroups'">Logged in</mat-chip-option>
