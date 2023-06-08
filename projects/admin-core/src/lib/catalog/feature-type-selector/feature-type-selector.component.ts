@@ -33,6 +33,7 @@ export class FeatureTypeSelectorComponent implements OnInit, OnDestroy {
   @Input()
   public set featureSourceId(featureSourceId: number | string | null | undefined) {
     this._featureSourceId = TypesHelper.isDefined(featureSourceId) ? `${featureSourceId}` : null;
+    this.prevFeatureSourceId = this._featureSourceId;
     this.featureTypeSelectorForm.patchValue({
       featureSourceId: this._featureSourceId,
     });
@@ -42,6 +43,7 @@ export class FeatureTypeSelectorComponent implements OnInit, OnDestroy {
   @Input()
   public set featureTypeName(featureTypeName: string | null | undefined) {
     this._featureTypeName = featureTypeName;
+    this.prevFeatureTypeName = this._featureTypeName;
     this.featureTypeSelectorForm.patchValue({ featureTypeName });
   }
 
