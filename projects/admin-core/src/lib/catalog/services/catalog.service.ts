@@ -15,6 +15,9 @@ import {
 } from '../state/catalog.actions';
 import { nanoid } from 'nanoid';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { AdminSseService, EventType } from '../../shared/services/admin-sse.service';
+import { DebounceHelper } from '../../helpers/debounce.helper';
 
 @Injectable({
   providedIn: 'root',
@@ -29,6 +32,7 @@ export class CatalogService implements OnDestroy {
     private store$: Store,
     @Inject(TAILORMAP_ADMIN_API_V1_SERVICE) private adminApiService: TailormapAdminApiV1ServiceModel,
     private adminSnackbarService: AdminSnackbarService,
+    private sseService: AdminSseService,
   ) {
     this.store$.select(selectGeoServiceIds)
       .pipe(takeUntil(this.destroyed))
@@ -41,6 +45,16 @@ export class CatalogService implements OnDestroy {
   public ngOnDestroy() {
     this.destroyed.next(null);
     this.destroyed.complete();
+  }
+
+  public listenForCatalogChanges() {
+    this.sseService.listenForEvents$<{ nodes: CatalogNodeModel[] }>('Catalog')
+      .pipe(takeUntilDestroyed())
+      .subscribe(event => {
+        if (event.eventType === EventType.ENTITY_UPDATED && event.details.object) {
+          this.updateCatalog(event.details.object.nodes);
+        }
+      });
   }
 
   public getServices$(
@@ -186,7 +200,7 @@ export class CatalogService implements OnDestroy {
         }),
         tap(updatedCatalog => {
           if (updatedCatalog) {
-            this.store$.dispatch(updateCatalog({ nodes: updatedCatalog }));
+            this.updateCatalog(updatedCatalog);
           }
         }),
         map(catalog => {
@@ -196,6 +210,12 @@ export class CatalogService implements OnDestroy {
           return null;
         }),
       );
+  }
+
+  private updateCatalog(nodes: CatalogNodeModel[]) {
+    DebounceHelper.debounce('update-catalog', () => {
+      this.store$.dispatch(updateCatalog({ nodes }));
+    }, 50);
   }
 
 }

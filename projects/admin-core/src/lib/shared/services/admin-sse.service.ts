@@ -32,6 +32,8 @@ export class AdminSseService implements OnDestroy {
   private retryCount = 0;
   private maxRetryCount = 5;
 
+  private logging = true;
+
   private supportedEvents = new Set([
     EventType.ENTITY_CREATED,
     EventType.ENTITY_UPDATED,
@@ -77,11 +79,13 @@ export class AdminSseService implements OnDestroy {
     this.ngZone.runOutsideAngular(() => {
       eventSource.onmessage = (e) => {
         const evt: SSEEvent = JSON.parse(e.data);
+        this.log('SSE event', evt);
         if (this.supportedEvents.has(evt.eventType)) {
           this.ngZone.run(() => this.events.next(evt));
         }
       };
       eventSource.onerror = (_error) => {
+        this.log('SSE error', _error);
         this.eventSource?.close();
         this.eventSource = null;
         if (this.retryTimeoutId) {
@@ -96,6 +100,12 @@ export class AdminSseService implements OnDestroy {
         }, this.retryTimeout);
       };
     });
+  }
+
+  private log(...args: any[]) {
+    if (this.logging) {
+      console.log(...args);
+    }
   }
 
 }

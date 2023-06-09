@@ -224,7 +224,7 @@ export class ApplicationService implements OnDestroy {
       if (type === 'update' && application) {
         this.store$.dispatch(updateApplication({ application }));
       }
-      if (type === 'remove' && application) {
+      if (type === 'remove') {
         this.store$.dispatch(deleteApplication({ applicationId: id }));
       }
     }, 50);
