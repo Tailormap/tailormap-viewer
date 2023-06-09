@@ -6,3 +6,8 @@ mat-card {
 .mat-column-read, .mat-column-button {
     width: 48px;
 }
+
+.subheader {
+    padding-left: 2em;
+    color: #555;
+}

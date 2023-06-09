@@ -1,4 +1,4 @@
-type ValueType = string | number | boolean | undefined | null;
+type ValueType = any[] | string | number | boolean | undefined | null;
 
 export class FormHelper {
 
