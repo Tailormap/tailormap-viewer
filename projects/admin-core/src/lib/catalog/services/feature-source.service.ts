@@ -1,12 +1,12 @@
 import { Store } from '@ngrx/store';
 import { Inject, Injectable } from '@angular/core';
 import {
-  CatalogItemKindEnum, FeatureSourceModel, GeoServiceWithLayersModel, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel,
+  CatalogItemKindEnum, FeatureSourceModel, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel,
 } from '@tailormap-admin/admin-api';
 import { CatalogService } from './catalog.service';
 import { catchError, concatMap, filter, map, MonoTypeOperatorFunction, Observable, of, pipe, switchMap, take, tap } from 'rxjs';
 import {
-  addFeatureSources, addGeoServices, deleteFeatureSource, deleteGeoService, updateFeatureSource, updateGeoService,
+  addFeatureSources, deleteFeatureSource, updateFeatureSource,
 } from '../state/catalog.actions';
 import { FeatureSourceCreateModel, FeatureSourceUpdateModel, FeatureTypeUpdateModel } from '../models/feature-source-update.model';
 import { selectFeatureSourceById, selectFeatureTypeById, selectFeatureTypesForSource } from '../state/catalog.selectors';
