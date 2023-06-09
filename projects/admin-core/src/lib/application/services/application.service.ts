@@ -3,18 +3,18 @@ import { Store } from '@ngrx/store';
 import {
   ApplicationModel, AppTreeLevelNodeModel, AppTreeNodeModel, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel,
 } from '@tailormap-admin/admin-api';
-import {
-  catchError, concatMap, distinctUntilChanged, map, of, Subject, takeUntil, tap, filter, switchMap,
-} from 'rxjs';
+import { catchError, concatMap, distinctUntilChanged, filter, map, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import {
-  addApplicationRootNodes,
-  addApplications, deleteApplication, loadApplications, loadApplicationServices, loadApplicationServicesSuccess, updateApplication,
+  addApplicationRootNodes, addApplication, deleteApplication, loadApplications, loadApplicationServices, loadApplicationServicesSuccess,
+  updateApplication,
 } from '../state/application.actions';
 import { selectApplicationList, selectApplicationsLoadStatus, selectDraftApplication } from '../state/application.selectors';
 import { CatalogService } from '../../catalog/services/catalog.service';
 import { ApplicationModelHelper } from '../helpers/application-model.helper';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
+import { AdminSseService, EventType } from '../../shared/services/admin-sse.service';
+import { DebounceHelper } from '../../helpers/debounce.helper';
 
 type ApplicationCreateModel = Omit<ApplicationModel, 'id'>;
 type ApplicationEditModel = Partial<ApplicationCreateModel>;
@@ -34,6 +34,7 @@ export class ApplicationService implements OnDestroy {
     @Inject(TAILORMAP_ADMIN_API_V1_SERVICE) private adminApiService: TailormapAdminApiV1ServiceModel,
     private adminSnackbarService: AdminSnackbarService,
     private catalogService: CatalogService,
+    private sseService: AdminSseService,
   ) {
     this.store$.select(selectDraftApplication)
       .pipe(
@@ -51,6 +52,22 @@ export class ApplicationService implements OnDestroy {
   public ngOnDestroy(): void {
     this.destroyed.next(null);
     this.destroyed.complete();
+  }
+
+  public listenForApplicationChanges() {
+    this.sseService.listenForEvents$<ApplicationModel>('Application')
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(event => {
+        if (event.eventType === EventType.ENTITY_CREATED && event.details.object) {
+          this.updateApplicationState(event.details.object.id, 'add', event.details.object);
+        }
+        if (event.eventType === EventType.ENTITY_UPDATED && event.details.object) {
+          this.updateApplicationState(event.details.object.id, 'update', event.details.object);
+        }
+        if (event.eventType === EventType.ENTITY_DELETED) {
+          this.updateApplicationState(event.details.id, 'remove');
+        }
+      });
   }
 
   public getApplications$() {
@@ -75,7 +92,7 @@ export class ApplicationService implements OnDestroy {
         }),
         map(createApplication => {
           if (createApplication) {
-            this.store$.dispatch(addApplications({ applications: [createApplication] }));
+            this.updateApplicationState(createApplication.id, 'add', createApplication);
             return createApplication;
           }
           return null;
@@ -122,7 +139,7 @@ export class ApplicationService implements OnDestroy {
         }),
         map(updatedApplication => {
           if (updatedApplication) {
-            this.store$.dispatch(updateApplication({ application: updatedApplication }));
+            this.updateApplicationState(updatedApplication.id, 'update', updatedApplication);
             return updatedApplication;
           }
           return null;
@@ -139,7 +156,7 @@ export class ApplicationService implements OnDestroy {
         }),
         map(success => {
           if (success) {
-            this.store$.dispatch(deleteApplication({ applicationId: id }));
+            this.updateApplicationState(id, 'remove');
             return success;
           }
           return null;
@@ -191,6 +208,26 @@ export class ApplicationService implements OnDestroy {
       objectType: 'AppTreeLevelNode',
       childrenIds: [],
     };
+  }
+
+  private updateApplicationState(
+    id: string,
+    type: 'add' | 'update' | 'remove',
+    application?: ApplicationModel | null,
+  ) {
+    // Add a small timeout to prevent most duplicate updates to prevent many state updates
+    // For data integrity, it should not matter if we update the state twice
+    DebounceHelper.debounce(`application-${type}-${id}`, () => {
+      if (type === 'add' && application) {
+        this.store$.dispatch(addApplication({ application }));
+      }
+      if (type === 'update' && application) {
+        this.store$.dispatch(updateApplication({ application }));
+      }
+      if (type === 'remove' && application) {
+        this.store$.dispatch(deleteApplication({ applicationId: id }));
+      }
+    }, 50);
   }
 
 }

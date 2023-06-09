@@ -37,9 +37,9 @@ export const clearSelectedApplication = createAction(
   `${applicationActionsPrefix} Clear Selected Application`,
 );
 
-export const addApplications = createAction(
+export const addApplication = createAction(
   `${applicationActionsPrefix} Add Applications`,
-  props<{ applications: ApplicationModel[] }>(),
+  props<{ application: ApplicationModel }>(),
 );
 
 export const updateApplication = createAction(

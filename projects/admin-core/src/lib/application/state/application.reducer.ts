@@ -119,16 +119,18 @@ const onClearSelectedApplication = (state: ApplicationState): ApplicationState =
   expandedBaseLayerNodes: [],
 });
 
-const onAddApplications = (
+const onAddApplication = (
   state: ApplicationState,
-  payload: ReturnType<typeof ApplicationActions.addApplications>,
-): ApplicationState => ({
-  ...state,
-  applications: [
-    ...state.applications,
-    ...payload.applications.map(getApplication),
-  ],
-});
+  payload: ReturnType<typeof ApplicationActions.addApplication>,
+): ApplicationState => {
+  if(state.applications.some(a => a.id === payload.application.id)) {
+    return state;
+  }
+  return {
+    ...state,
+    applications: [ ...state.applications, payload.application ],
+  };
+};
 
 const onUpdateApplication = (
   state: ApplicationState,
@@ -143,7 +145,7 @@ const onUpdateApplication = (
     ...state,
     applications: [
       ...state.applications.slice(0, idx),
-      updatedApplication,
+      { ...state.applications[idx], ...updatedApplication },
       ...state.applications.slice(idx + 1),
     ],
   };
@@ -155,6 +157,7 @@ const onDeleteApplication = (
 ): ApplicationState => ({
   ...state,
   applications: state.applications.filter(application => application.id !== payload.applicationId),
+  draftApplication: state.draftApplication?.id === payload.applicationId ? null : state.draftApplication,
 });
 
 const onUpdateDraftApplication = (
@@ -342,7 +345,7 @@ const applicationReducerImpl = createReducer<ApplicationState>(
   on(ApplicationActions.setApplicationListFilter, onSetApplicationListFilter),
   on(ApplicationActions.setSelectedApplication, onSetSelectedApplication),
   on(ApplicationActions.clearSelectedApplication, onClearSelectedApplication),
-  on(ApplicationActions.addApplications, onAddApplications),
+  on(ApplicationActions.addApplication, onAddApplication),
   on(ApplicationActions.updateApplication, onUpdateApplication),
   on(ApplicationActions.deleteApplication, onDeleteApplication),
   on(ApplicationActions.updateDraftApplication, onUpdateDraftApplication),
