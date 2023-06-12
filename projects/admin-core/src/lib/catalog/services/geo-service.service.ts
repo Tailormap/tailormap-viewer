@@ -19,6 +19,9 @@ import { ApplicationService } from '../../application/services/application.servi
 import { ApplicationModelHelper } from '../../application/helpers/application-model.helper';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
+import { AdminSseService, EventType } from '../../shared/services/admin-sse.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { DebounceHelper } from '../../helpers/debounce.helper';
 
 export interface DeleteGeoServiceResponse {
   success: boolean;
@@ -36,6 +39,7 @@ export class GeoServiceService {
     private adminSnackbarService: AdminSnackbarService,
     private catalogService: CatalogService,
     private applicationService: ApplicationService,
+    private sseService: AdminSseService,
   ) { }
 
   public getGeoServices$() {
@@ -44,6 +48,22 @@ export class GeoServiceService {
 
   public getGeoServiceLayers$() {
     return this.getOrLoadServices$(this.store$.select(selectGeoServiceLayersWithSettingsApplied));
+  }
+
+  public listenForGeoServiceChanges() {
+    this.sseService.listenForEvents$<GeoServiceWithLayersModel>('GeoService')
+      .pipe(takeUntilDestroyed())
+      .subscribe(event => {
+        if (event.eventType === EventType.ENTITY_CREATED && event.details.object) {
+          this.updateGeoServiceState(event.details.object.id, 'add', event.details.object);
+        }
+        if (event.eventType === EventType.ENTITY_UPDATED && event.details.object) {
+          this.updateGeoServiceState(event.details.object.id, 'update', event.details.object);
+        }
+        if (event.eventType === EventType.ENTITY_DELETED) {
+          this.updateGeoServiceState(event.details.id, 'remove');
+        }
+      });
   }
 
   private getOrLoadServices$<T>(selector$: Observable<T>): Observable<T> {
@@ -76,7 +96,7 @@ export class GeoServiceService {
       }),
       concatMap(createdService => {
         if (createdService) {
-          this.store$.dispatch(addGeoServices({ services: [createdService], parentNode: catalogNodeId }));
+          this.updateGeoServiceState(createdService.id, 'add', createdService, catalogNodeId);
           return this.catalogService.addNodeToCatalog$(catalogNodeId, createdService.id, CatalogItemKindEnum.GEO_SERVICE)
             .pipe(
               map(() => createdService),
@@ -129,7 +149,7 @@ export class GeoServiceService {
             tap(success => {
               if (success) {
                 // Remove the service from the store
-                this.store$.dispatch(deleteGeoService({ id: geoServiceId }));
+                this.updateGeoServiceState(geoServiceId, 'remove');
               }
             }),
             concatMap(success => {
@@ -192,12 +212,33 @@ export class GeoServiceService {
       }),
       map((updatedService: GeoServiceWithLayersModel | null) => {
         if (updatedService) {
-          this.store$.dispatch(updateGeoService({ service: updatedService, parentNode: catalogNodeId }));
+          this.updateGeoServiceState(updatedService.id, 'update', updatedService, catalogNodeId);
           return updatedService;
         }
         return null;
       }),
     );
+  }
+
+  private updateGeoServiceState(
+    id: string,
+    type: 'add' | 'update' | 'remove',
+    geoService?: GeoServiceWithLayersModel | null,
+    catalogNodeId?: string,
+  ) {
+    // Add a small timeout to prevent most duplicate updates to prevent many state updates
+    // For data integrity, it should not matter if we update the state twice
+    DebounceHelper.debounce(`geo-service-${type}-${id}`, () => {
+      if (type === 'add' && geoService) {
+        this.store$.dispatch(addGeoServices({ services: [geoService], parentNode: catalogNodeId || '' }));
+      }
+      if (type === 'update' && geoService) {
+        this.store$.dispatch(updateGeoService({ service: geoService, parentNode: catalogNodeId || '' }));
+      }
+      if (type === 'remove') {
+        this.store$.dispatch(deleteGeoService({ id }));
+      }
+    }, 50);
   }
 
 }

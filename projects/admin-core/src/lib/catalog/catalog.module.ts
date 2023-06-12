@@ -30,6 +30,9 @@ import { CatalogCreateButtonsComponent } from './catalog-create-buttons/catalog-
 import { GeoServiceUsedDialogComponent } from './geo-service-details/geo-service-used-dialog/geo-service-used-dialog.component';
 import { GeoServiceLayerFormDialogComponent } from './geo-service-layer-form-dialog/geo-service-layer-form-dialog.component';
 import { FeatureSourceUsedDialogComponent } from './feature-source-details/feature-source-used-dialog/feature-source-used-dialog.component';
+import { GeoServiceService } from './services/geo-service.service';
+import { FeatureSourceService } from './services/feature-source.service';
+import { CatalogService } from './services/catalog.service';
 
 
 @NgModule({
@@ -72,4 +75,13 @@ import { FeatureSourceUsedDialogComponent } from './feature-source-details/featu
   ],
 })
 export class CatalogModule {
+  constructor(
+    geoServiceService: GeoServiceService,
+    featureSourceService: FeatureSourceService,
+    catalogService: CatalogService,
+  ) {
+    geoServiceService.listenForGeoServiceChanges();
+    featureSourceService.listenForFeatureSourceChanges();
+    catalogService.listenForCatalogChanges();
+  }
 }

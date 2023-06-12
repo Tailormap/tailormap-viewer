@@ -13,10 +13,14 @@ import { Store } from '@ngrx/store';
 import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
 import { TestBed } from '@angular/core/testing';
 import { CatalogTreeHelper } from '../helpers/catalog-tree.helper';
+import { adminCoreStateKey, initialAdminCoreState } from '../../state/admin-core.state';
 
 const setup = async (state: Partial<CatalogState> = {}) => {
   const mockStore = createMockStore({
-    initialState: { [catalogStateKey]: { ...initialCatalogState, ...state } },
+    initialState: {
+      [catalogStateKey]: { ...initialCatalogState, ...state },
+      [adminCoreStateKey]: { ...initialAdminCoreState },
+    },
   });
   const mockDispatch = jest.fn();
   mockStore.dispatch = mockDispatch;

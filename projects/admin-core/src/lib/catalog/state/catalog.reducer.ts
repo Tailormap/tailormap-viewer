@@ -38,17 +38,14 @@ const expandNode = <T extends ExpandableNode>(list: T[], nodeId: string, forceEx
 const addFeatureSources = (
   state: CatalogState,
   featureSources: FeatureSourceModel[],
-  catalogNodeId: string,
-  filterExisting = false,
+  catalogNodeId?: string,
 ) => {
   const featureTypes: ExtendedFeatureTypeModel[] = [];
   const extendedFeatureSources: ExtendedFeatureSourceModel[] = [];
   const existingFeatureSources = new Set(state.featureSources.map(s => s.id));
-  const sources = filterExisting
-    ? featureSources.filter(source => !existingFeatureSources.has(`${source.id}`))
-    : featureSources;
+  const sources = featureSources.filter(source => !existingFeatureSources.has(`${source.id}`));
   sources.forEach(source => {
-    const [ extFeatureSource, sourceFeatureTypes ] = CatalogModelHelper.getExtendedFeatureSource(source, catalogNodeId);
+    const [ extFeatureSource, sourceFeatureTypes ] = CatalogModelHelper.getExtendedFeatureSource(source, catalogNodeId || '');
     extendedFeatureSources.push(extFeatureSource);
     featureTypes.push(...sourceFeatureTypes);
   });
@@ -62,18 +59,15 @@ const addFeatureSources = (
 const addGeoServices = (
   state: CatalogState,
   newServices: GeoServiceWithLayersModel[],
-  parentNode: string,
-  filterExisting = false,
+  parentNode?: string,
 ) => {
   const layerModels: ExtendedGeoServiceLayerModel[] = [];
   const services: ExtendedGeoServiceModel[] = [];
   const existingServices = new Set(state.geoServices.map(s => s.id));
-  const filteredServices = filterExisting
-    ? newServices.filter(s => !existingServices.has(s.id))
-    : newServices;
+  const filteredServices = newServices.filter(s => !existingServices.has(s.id));
   filteredServices
     .forEach(service => {
-      const [ extService, serviceLayers ] = CatalogModelHelper.getExtendedGeoService(service, parentNode);
+      const [ extService, serviceLayers ] = CatalogModelHelper.getExtendedGeoService(service, parentNode || '');
       services.push(extService);
       layerModels.push(...serviceLayers);
     });
@@ -124,7 +118,7 @@ const onLoadAllGeoServicesSuccess = (
   state: CatalogState,
   payload: ReturnType<typeof CatalogActions.loadAllGeoServicesSuccess>,
 ): CatalogState => {
-  const updatedState = addGeoServices(state, payload.services, '', true);
+  const updatedState = addGeoServices(state, payload.services);
   return {
     ...state,
     ...updatedState,
@@ -158,7 +152,7 @@ const onUpdateGeoService = (
     const currentLayer = currentLayers.find(l => l.id === layer.id);
     return { ...layer, expanded: currentLayer?.expanded || false };
   });
-  const updatedService = { ...extendedService, expanded: currentService?.expanded || false };
+  const updatedService = { ...currentService, ...extendedService, expanded: currentService?.expanded || false };
   return {
     ...state,
     geoServices: [ ...services, updatedService ],
@@ -197,7 +191,12 @@ const onUpdateFeatureSource = (
     ...state,
     featureSources: [
       ...state.featureSources.slice(0, idx),
-      { ...updatedFeatureSource, expanded: state.featureSources[idx]?.expanded ?? false, catalogNodeId: payload.parentNode },
+      {
+        ...(state.featureSources[idx] || {}),
+        ...updatedFeatureSource,
+        expanded: state.featureSources[idx]?.expanded ?? false,
+        catalogNodeId: payload.parentNode,
+      },
       ...state.featureSources.slice(idx + 1),
     ],
     featureTypes: [
@@ -268,6 +267,7 @@ const onUpdateCatalog = (
   return {
     ...state,
     catalog: payload.nodes.map<ExtendedCatalogNodeModel>(node => ({
+      ...(currentCatalog.get(node.id) || {}),
       ...node,
       expanded: currentCatalog.get(node.id)?.expanded || false,
       parentId: payload.nodes.find(n => (n.children || []).includes(node.id))?.id || null,
@@ -286,7 +286,7 @@ const onLoadFeatureSourcesSuccess = (
   state: CatalogState,
   payload: ReturnType<typeof CatalogActions.loadFeatureSourcesSuccess>,
 ): CatalogState => ({
-  ...addFeatureSources(state, payload.featureSources, '', true),
+  ...addFeatureSources(state, payload.featureSources),
   featureSourcesLoadStatus: LoadingStateEnum.LOADED,
 });
 

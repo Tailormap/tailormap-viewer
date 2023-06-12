@@ -15,10 +15,14 @@ import { CatalogTreeNodeComponent } from './catalog-tree-node/catalog-tree-node.
 import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
 import { CatalogBaseTreeComponent } from '../catalog-base-tree/catalog-base-tree.component';
 import { CatalogBaseTreeNodeComponent } from '../catalog-base-tree/catalog-base-tree-node/catalog-base-tree-node.component';
+import { adminCoreStateKey, initialAdminCoreState } from '../../state/admin-core.state';
 
 const setup = async (state: Partial<CatalogState> = {}) => {
   const mockStore = createMockStore({
-    initialState: { [catalogStateKey]: { ...initialCatalogState, ...state } },
+    initialState: {
+      [catalogStateKey]: { ...initialCatalogState, ...state },
+      [adminCoreStateKey]: { ...initialAdminCoreState },
+    },
   });
   const mockDispatch = jest.fn();
   mockStore.dispatch = mockDispatch;

@@ -28,6 +28,7 @@ import { ComponentsModule } from './components/components.module';
 import { ApplicationEditStylingComponent } from './application-edit-styling/application-edit-styling.component';
 import { ImageUploadFieldComponent } from './styling/image-upload-field/image-upload-field.component';
 import { ApplicationLayerSettingsComponent } from './application-layer-settings/application-layer-settings.component';
+import { ApplicationService } from './services/application.service';
 
 @NgModule({
   declarations: [
@@ -64,4 +65,8 @@ import { ApplicationLayerSettingsComponent } from './application-layer-settings/
     ApplicationListComponent,
   ],
 })
-export class ApplicationModule { }
+export class ApplicationModule {
+  constructor(applicationService: ApplicationService) {
+    applicationService.listenForApplicationChanges();
+  }
+}

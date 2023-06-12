@@ -71,7 +71,7 @@
 
 .content ::ng-deep .admin-tree {
   width: 300px;
-  overflow: hidden;
+  overflow: auto;
 }
 
 .content ::ng-deep .admin-content {
