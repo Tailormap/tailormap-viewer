@@ -10,7 +10,7 @@ import { CatalogTreeHelper } from '../helpers/catalog-tree.helper';
 import { CatalogModelHelper } from '../helpers/catalog-model.helper';
 import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
-import { FeatureSourceModel, GeoServiceWithLayersModel } from '@tailormap-admin/admin-api';
+import { CatalogItemKindEnum, FeatureSourceModel, GeoServiceWithLayersModel } from '@tailormap-admin/admin-api';
 
 type ExpandableNode = { id: string; children?: string[] | null; expanded?: boolean };
 
@@ -264,14 +264,34 @@ const onUpdateCatalog = (
   payload: ReturnType<typeof CatalogActions.updateCatalog>,
 ): CatalogState => {
   const currentCatalog: Map<string, ExtendedCatalogNodeModel> = new Map(state.catalog.map(node => [ node.id, node ]));
+  const updatedCatalog = payload.nodes.map<ExtendedCatalogNodeModel>(node => ({
+    ...(currentCatalog.get(node.id) || {}),
+    ...node,
+    expanded: currentCatalog.get(node.id)?.expanded || false,
+    parentId: payload.nodes.find(n => (n.children || []).includes(node.id))?.id || null,
+  }));
+  const geoServiceMap: Map<string, string> = new Map();
+  const featureSourceMap: Map<string, string> = new Map();
+  updatedCatalog.forEach(c => {
+    if (!c.items || c.items.length === 0) {
+      return;
+    }
+    c.items.forEach(item => {
+      if (item.kind === CatalogItemKindEnum.GEO_SERVICE) {
+        geoServiceMap.set(item.id, c.id);
+      }
+      if (item.kind === CatalogItemKindEnum.FEATURE_SOURCE) {
+        featureSourceMap.set(item.id, c.id);
+      }
+    });
+  });
   return {
     ...state,
-    catalog: payload.nodes.map<ExtendedCatalogNodeModel>(node => ({
-      ...(currentCatalog.get(node.id) || {}),
-      ...node,
-      expanded: currentCatalog.get(node.id)?.expanded || false,
-      parentId: payload.nodes.find(n => (n.children || []).includes(node.id))?.id || null,
-    })),
+    catalog: updatedCatalog,
+    geoServices: state.geoServices.map(s => ({ ...s, catalogNodeId: geoServiceMap.get(s.id) || s.catalogNodeId })),
+    geoServiceLayers: state.geoServiceLayers.map(l => ({ ...l, catalogNodeId: geoServiceMap.get(l.serviceId) || l.catalogNodeId })),
+    featureSources: state.featureSources.map(f => ({ ...f, catalogNodeId: geoServiceMap.get(f.id) || f.catalogNodeId })),
+    featureTypes: state.featureTypes.map(f => ({ ...f, catalogNodeId: geoServiceMap.get(f.featureSourceId) || f.catalogNodeId })),
   };
 };
 
