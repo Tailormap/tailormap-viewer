@@ -5,6 +5,7 @@ import { distinctUntilChanged, filter, Observable, Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectUserDetails } from '../../state/admin-core.selectors';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { environment } from '../../../../../admin-app/src/environments/environment';
 
 export interface SSEEvent<T = any> {
   details: {
@@ -32,7 +33,7 @@ export class AdminSseService implements OnDestroy {
   private retryCount = 0;
   private maxRetryCount = 5;
 
-  private logging = true;
+  private logging = !environment.production;
 
   private supportedEvents = new Set([
     EventType.ENTITY_CREATED,
@@ -80,6 +81,7 @@ export class AdminSseService implements OnDestroy {
       eventSource.onmessage = (e) => {
         const evt: SSEEvent = JSON.parse(e.data);
         this.log('SSE event', evt);
+        this.retryCount = 0;
         if (this.supportedEvents.has(evt.eventType)) {
           this.ngZone.run(() => this.events.next(evt));
         }
