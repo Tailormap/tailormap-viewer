@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/angular';
+import { render, screen, waitFor } from '@testing-library/angular';
 import { FeatureSourceFormDialogComponent } from './feature-source-form-dialog.component';
 import userEvent from '@testing-library/user-event';
 import { of } from 'rxjs';
@@ -54,13 +54,15 @@ describe('FeatureSourceFormDialogComponent', () => {
     expect(await screen.queryByPlaceholderText('Database')).not.toBeInTheDocument();
     await userEvent.type(await screen.findByPlaceholderText('URL'), 'http://localhost.test');
     await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save');
-    expect(featureServiceMock.createFeatureSource$).toHaveBeenCalledWith({
-      title: 'My WFS service',
-      protocol: 'WFS',
-      url: 'http://localhost.test',
-      jdbcConnection: undefined,
-      authentication: undefined,
-    }, '1');
+    await waitFor(() => {
+      expect(featureServiceMock.createFeatureSource$).toHaveBeenCalledWith({
+        title: 'My WFS service',
+        protocol: 'WFS',
+        url: 'http://localhost.test',
+        jdbcConnection: undefined,
+        authentication: undefined,
+      }, '1');
+    });
     expect(dialogRefMock.close).toHaveBeenCalled();
   });
 

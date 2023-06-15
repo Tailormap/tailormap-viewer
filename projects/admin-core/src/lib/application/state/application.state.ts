@@ -9,6 +9,7 @@ export interface ApplicationState {
   applicationServicesLoadStatus: LoadingStateEnum;
   applications: ApplicationModel[];
   applicationListFilter?: string | null;
+  draftApplicationId?: string | null;
   draftApplication?: ApplicationModel | null;
   draftApplicationUpdated: boolean;
   expandedBaseLayerNodes: string[];

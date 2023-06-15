@@ -1,7 +1,7 @@
 import { Store } from '@ngrx/store';
 import { Inject, Injectable } from '@angular/core';
 import {
-  CatalogItemKindEnum, FeatureSourceModel, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel,
+  CatalogItemKindEnum, CatalogModelHelper, FeatureSourceModel, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel,
 } from '@tailormap-admin/admin-api';
 import { CatalogService } from './catalog.service';
 import { catchError, concatMap, filter, map, MonoTypeOperatorFunction, Observable, of, pipe, switchMap, take, tap } from 'rxjs';
@@ -58,10 +58,10 @@ export class FeatureSourceService {
       .pipe(takeUntilDestroyed())
       .subscribe(event => {
         if (event.eventType === EventType.ENTITY_CREATED && event.details.object) {
-          this.updateFeatureSourceState(event.details.object.id, 'add', event.details.object);
+          this.updateFeatureSourceState(event.details.object.id, 'add', CatalogModelHelper.addTypeToFeatureSourceModel(event.details.object));
         }
         if (event.eventType === EventType.ENTITY_UPDATED && event.details.object) {
-          this.updateFeatureSourceState(event.details.object.id, 'update', event.details.object);
+          this.updateFeatureSourceState(event.details.object.id, 'update', CatalogModelHelper.addTypeToFeatureSourceModel(event.details.object));
         }
         if (event.eventType === EventType.ENTITY_DELETED) {
           this.updateFeatureSourceState(event.details.id, 'remove');

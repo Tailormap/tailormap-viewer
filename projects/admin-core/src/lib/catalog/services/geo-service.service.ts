@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
   ApplicationModel,
-  CatalogItemKindEnum,
+  CatalogItemKindEnum, CatalogModelHelper,
   GeoServiceModel,
   GeoServiceProtocolEnum, GeoServiceSettingsModel, GeoServiceWithLayersModel, TAILORMAP_ADMIN_API_V1_SERVICE,
   TailormapAdminApiV1ServiceModel,
@@ -55,10 +55,10 @@ export class GeoServiceService {
       .pipe(takeUntilDestroyed())
       .subscribe(event => {
         if (event.eventType === EventType.ENTITY_CREATED && event.details.object) {
-          this.updateGeoServiceState(event.details.object.id, 'add', event.details.object);
+          this.updateGeoServiceState(event.details.object.id, 'add', CatalogModelHelper.addTypeToGeoServiceModel(event.details.object));
         }
         if (event.eventType === EventType.ENTITY_UPDATED && event.details.object) {
-          this.updateGeoServiceState(event.details.object.id, 'update', event.details.object);
+          this.updateGeoServiceState(event.details.object.id, 'update', CatalogModelHelper.addTypeToGeoServiceModel(event.details.object));
         }
         if (event.eventType === EventType.ENTITY_DELETED) {
           this.updateGeoServiceState(event.details.id, 'remove');

@@ -13,6 +13,20 @@ const getApplication = (application: ApplicationModel) => ({
   id: `${application.id}`,
 });
 
+const setDraftApplication = (state: ApplicationState, applicationId: string | null) => {
+  const draftApplication = applicationId !== null
+    ? state.applications.find(a => a.id === applicationId)
+    : null;
+  return {
+    ...state,
+    draftApplicationId: applicationId,
+    draftApplication: draftApplication ? { ...draftApplication } : null,
+    expandedAppLayerNodes: draftApplication ? draftApplication.contentRoot?.layerNodes?.map(n => n.id) ?? [] : [],
+    expandedBaseLayerNodes: draftApplication ? draftApplication.contentRoot?.baseLayerNodes?.map(n => n.id) ?? [] : [],
+    draftApplicationUpdated: false,
+  };
+};
+
 const updateApplication = (
   state: ApplicationState,
   updateMethod: (application: ApplicationModel) => Partial<ApplicationModel>,
@@ -99,25 +113,12 @@ const onSetSelectedApplication = (
   state: ApplicationState,
   payload: ReturnType<typeof ApplicationActions.setSelectedApplication>,
 ): ApplicationState => {
-  const draftApplication = payload.applicationId !== null
-    ? state.applications.find(a => a.id === payload.applicationId)
-    : null;
-  return {
-    ...state,
-    draftApplication: draftApplication ? { ...draftApplication } : null,
-    expandedAppLayerNodes: draftApplication ? draftApplication.contentRoot?.layerNodes?.map(n => n.id) ?? [] : [],
-    expandedBaseLayerNodes: draftApplication ? draftApplication.contentRoot?.baseLayerNodes?.map(n => n.id) ?? [] : [],
-    draftApplicationUpdated: false,
-  };
+  return setDraftApplication(state, payload.applicationId);
 };
 
-const onClearSelectedApplication = (state: ApplicationState): ApplicationState => ({
-  ...state,
-  draftApplication: null,
-  draftApplicationUpdated: false,
-  expandedAppLayerNodes: [],
-  expandedBaseLayerNodes: [],
-});
+const onClearSelectedApplication = (state: ApplicationState): ApplicationState => {
+  return setDraftApplication(state, null);
+};
 
 const onAddApplication = (
   state: ApplicationState,
@@ -126,10 +127,15 @@ const onAddApplication = (
   if(state.applications.some(a => a.id === payload.application.id)) {
     return state;
   }
-  return {
+  const addedApplication = getApplication(payload.application);
+  const updatedState = {
     ...state,
-    applications: [ ...state.applications, payload.application ],
+    applications: [ ...state.applications, addedApplication ],
   };
+  if (addedApplication.id === state.draftApplicationId) {
+    return setDraftApplication(updatedState, addedApplication.id);
+  }
+  return updatedState;
 };
 
 const onUpdateApplication = (
@@ -154,11 +160,16 @@ const onUpdateApplication = (
 const onDeleteApplication = (
   state: ApplicationState,
   payload: ReturnType<typeof ApplicationActions.deleteApplication>,
-): ApplicationState => ({
-  ...state,
-  applications: state.applications.filter(application => application.id !== payload.applicationId),
-  draftApplication: state.draftApplication?.id === payload.applicationId ? null : state.draftApplication,
-});
+): ApplicationState => {
+  const updatedState = {
+    ...state,
+    applications: state.applications.filter(application => application.id !== payload.applicationId),
+  };
+  if (state.draftApplicationId === payload.applicationId) {
+    return setDraftApplication(updatedState, null);
+  }
+  return updatedState;
+};
 
 const onUpdateDraftApplication = (
   state: ApplicationState,
