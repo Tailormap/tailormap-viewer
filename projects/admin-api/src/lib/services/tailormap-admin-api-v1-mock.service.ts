@@ -5,7 +5,6 @@ import * as mockData from '../mock-data/tailormap-admin-api.mock-data';
 import {
   CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel, ConfigModel,
 } from '../models';
-import { nanoid } from 'nanoid';
 
 @Injectable()
 export class TailormapAdminApiV1MockService implements TailormapAdminApiV1ServiceModel {
@@ -143,7 +142,7 @@ export class TailormapAdminApiV1MockService implements TailormapAdminApiV1Servic
   }
 
   public createApplication$(params: { application: Omit<ApplicationModel, 'id'> }): Observable<ApplicationModel> {
-    return of({ ...params.application, id: nanoid() }).pipe(delay(this.delay));
+    return of({ ...params.application, id: '123' }).pipe(delay(this.delay));
   }
 
   public updateApplication$(params: { id: string; application: ApplicationModel }): Observable<ApplicationModel> {

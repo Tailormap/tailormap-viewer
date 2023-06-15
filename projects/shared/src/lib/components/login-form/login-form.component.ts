@@ -1,7 +1,12 @@
 import { Component, ChangeDetectionStrategy, Output, EventEmitter, Input } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { BehaviorSubject, Observable, take } from 'rxjs';
-import { UserResponseModel } from '@tailormap-viewer/api';
+
+interface LoginModel {
+  isAuthenticated: boolean;
+  username: string;
+  roles: string[];
+}
 
 @Component({
   selector: 'tm-login-form',
@@ -12,10 +17,10 @@ import { UserResponseModel } from '@tailormap-viewer/api';
 export class LoginFormComponent {
 
   @Input()
-  public login$: ((username: string, password: string) => Observable<UserResponseModel>) | null = null;
+  public login$: ((username: string, password: string) => Observable<LoginModel>) | null = null;
 
   @Output()
-  public loggedIn = new EventEmitter<UserResponseModel>();
+  public loggedIn = new EventEmitter<LoginModel>();
 
   public loginForm = this.formBuilder.group({
     username: [ '', [Validators.required]],
