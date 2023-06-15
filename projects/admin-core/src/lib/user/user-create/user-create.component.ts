@@ -1,9 +1,9 @@
 import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
-import { UserModel } from '@tailormap-admin/admin-api';
 import { Router } from '@angular/router';
-import { UserDetailsService } from '../services/user-details.service';
+import { UserService } from '../services/user.service';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
+import { UserAddUpdateModel } from '../models/user-add-update.model';
 
 @Component({
   selector: 'tm-admin-user-create',
@@ -17,10 +17,10 @@ export class UserCreateComponent implements OnDestroy {
   private destroyed = new Subject();
 
   public saving$ = this.savingSubject.asObservable();
-  public user: Omit<UserModel, 'id'> | null = null;
+  public user: UserAddUpdateModel | null = null;
 
   constructor(
-    private userDetailsService: UserDetailsService,
+    private userDetailsService: UserService,
     private router: Router,
     private adminSnackbarService: AdminSnackbarService,
   ) { }
@@ -30,7 +30,7 @@ export class UserCreateComponent implements OnDestroy {
     this.destroyed.complete();
   }
 
-  public updateUser($event: Omit<UserModel, 'id'>) {
+  public updateUser($event: UserAddUpdateModel) {
     this.user = $event;
   }
 

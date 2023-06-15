@@ -176,11 +176,11 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
     );
   }
 
-  public createUser$(params: { user: UserModel }): Observable<UserModel> {
+  public createUser$(params: { user: Omit<UserModel, 'groupNames'> & { groups: string[] } }): Observable<UserModel> {
     return this.httpClient.post<UserModel>(`${TailormapAdminApiV1Service.BASE_URL}/users`, params.user);
   }
 
-  public updateUser$(params: { username: string; user: Partial<UserModel> }): Observable<UserModel> {
+  public updateUser$(params: { username: string; user: Partial<Omit<UserModel, 'groupNames'> & { groups: string[] }> }): Observable<UserModel> {
     return this.httpClient.patch<UserModel>(`${TailormapAdminApiV1Service.BASE_URL}/users/${params.username}`, params.user);
   }
 

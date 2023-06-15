@@ -8,6 +8,9 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BoundsFieldComponent } from '../../shared/components/bounds-field/bounds-field.component';
 import { AuthorizationEditComponent } from '../../shared/components/authorization-edit/authorization-edit.component';
 import { of } from 'rxjs';
+import { provideMockStore } from '@ngrx/store/testing';
+import { initialUserState, userStateKey } from '../../user/state/user.state';
+import { adminCoreStateKey, initialAdminCoreState } from '../../state/admin-core.state';
 
 const setup = async (hasApp?: boolean) => {
   const onUpdate = jest.fn();
@@ -30,6 +33,7 @@ const setup = async (hasApp?: boolean) => {
     },
     providers: [
       { provide: TAILORMAP_ADMIN_API_V1_SERVICE, useValue: { getGroups$: jest.fn(() => of(null)) } },
+      provideMockStore({ initialState: { [userStateKey]: initialUserState, [adminCoreStateKey]: initialAdminCoreState } }),
     ],
   });
   return { application, onUpdate };

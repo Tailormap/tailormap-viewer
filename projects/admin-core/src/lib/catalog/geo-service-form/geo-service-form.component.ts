@@ -7,7 +7,7 @@ import { FormHelper } from '../../helpers/form.helper';
 import { GeoServiceCreateModel } from '../models/geo-service-update.model';
 import { StringHelper } from '@tailormap-viewer/shared';
 import { $localize } from '@angular/localize/init';
-import { GroupDetailsService } from '../../user/services/group-details.service';
+import { GroupService } from '../../user/services/group.service';
 
 @Component({
   selector: 'tm-admin-geo-service-form',
@@ -59,7 +59,7 @@ export class GeoServiceFormComponent implements OnInit {
   });
 
   public groups$: Observable<GroupModel[]>;
-  constructor(groupDetailsService: GroupDetailsService) {
+  constructor(groupDetailsService: GroupService) {
       this.groups$ = groupDetailsService.getGroups$();
   }
 

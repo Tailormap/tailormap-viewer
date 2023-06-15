@@ -33,8 +33,8 @@
 
   <div>
     <h4 i18n>User Groups</h4>
-    <mat-selection-list [compareWith]="compareGroup" formControlName="groups">
-      <mat-list-option *ngFor="let group of allGroups$ | async" [value]="group">
+    <mat-selection-list formControlName="groups">
+      <mat-list-option *ngFor="let group of allGroups$ | async" [value]="group.name">
         {{group.name}}
       </mat-list-option>
     </mat-selection-list>

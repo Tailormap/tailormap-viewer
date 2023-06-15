@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { UserModel } from '@tailormap-admin/admin-api';
 import { combineLatest, map, Observable, startWith } from 'rxjs';
 import { FormControl } from '@angular/forms';
-import { UserDetailsService } from '../services/user-details.service';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'tm-admin-user-list',
@@ -17,7 +17,7 @@ export class UserListComponent {
   public filterString$: Observable<string>;
 
   constructor(
-    private userDetailsService: UserDetailsService,
+    private userDetailsService: UserService,
   ) {
     this.userFilter = new FormControl('');
     this.filterString$ = this.userFilter.valueChanges.pipe(startWith(''));
@@ -32,7 +32,7 @@ export class UserListComponent {
           .filter(user => user.username.toLowerCase().indexOf(filterString.toLowerCase()) !== -1)
           .map(user => ({
             ...user,
-            selected: !!(selectedUser && user.username === selectedUser.username),
+            selected: !!(selectedUser && user.username === selectedUser),
           }));
       }),
     );

@@ -8,12 +8,14 @@ import { TAILORMAP_ADMIN_API_V1_SERVICE } from '@tailormap-admin/admin-api';
 import { of } from 'rxjs';
 import { provideMockStore } from '@ngrx/store/testing';
 import { AuthorizationEditComponent } from '../../shared/components/authorization-edit/authorization-edit.component';
+import { initialUserState, userStateKey } from '../../user/state/user.state';
+import { adminCoreStateKey, initialAdminCoreState } from '../../state/admin-core.state';
 
 describe('LayerSettingsFormComponent', () => {
 
   test('should render', async () => {
     const store = provideMockStore({
-      initialState: {},
+      initialState: { [userStateKey]: initialUserState, [adminCoreStateKey]: initialAdminCoreState },
       selectors: [
       ],
     });

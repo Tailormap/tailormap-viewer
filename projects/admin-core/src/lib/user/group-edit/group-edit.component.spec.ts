@@ -3,7 +3,7 @@ import { GroupEditComponent } from './group-edit.component';
 import { of } from 'rxjs';
 import { getGroup } from '@tailormap-admin/admin-api';
 import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
-import { GroupDetailsService } from '../services/group-details.service';
+import { GroupService } from '../services/group.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SharedImportsModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
@@ -17,7 +17,7 @@ const setup = async (hasGroup?: boolean) => {
   };
   const groupService = {
     selectGroup: jest.fn(),
-    selectedGroup$: hasGroup ? of(getGroup({ name: 'secret-group', description: 'some secret group' })) : of(null),
+    getGroupByName$: () => hasGroup ? of(getGroup({ name: 'secret-group', description: 'some secret group' })) : of(null),
     deleteGroup$: jest.fn(() => of(true)),
     addOrUpdateGroup$: jest.fn(() => of(true)),
   };
@@ -29,7 +29,7 @@ const setup = async (hasGroup?: boolean) => {
     imports: [ SharedImportsModule, MatIconTestingModule ],
     providers: [
       { provide: ActivatedRoute, useValue: activeRoute },
-      { provide: GroupDetailsService, useValue: groupService },
+      { provide: GroupService, useValue: groupService },
       { provide: Router, useValue: router },
     ],
   });

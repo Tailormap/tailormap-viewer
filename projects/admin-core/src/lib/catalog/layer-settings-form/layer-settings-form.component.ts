@@ -4,7 +4,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { AuthorizationRuleGroup, GeoServiceProtocolEnum, GroupModel, LayerSettingsModel, TileLayerHiDpiModeEnum } from '@tailormap-admin/admin-api';
 import { FormHelper } from '../../helpers/form.helper';
 import { TypesHelper } from '@tailormap-viewer/shared';
-import { GroupDetailsService } from '../../user/services/group-details.service';
+import { GroupService } from '../../user/services/group.service';
 import { Store } from '@ngrx/store';
 import { selectGeoServiceById } from '../state/catalog.selectors';
 
@@ -90,7 +90,7 @@ export class LayerSettingsFormComponent implements OnInit {
     authorizationRules: new FormControl<AuthorizationRuleGroup[]>([]),
   });
 
-  constructor(groupDetailsService: GroupDetailsService, private store$: Store) {
+  constructor(groupDetailsService: GroupService, private store$: Store) {
     this.groups$ = groupDetailsService.getGroups$();
   }
 

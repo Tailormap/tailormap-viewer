@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/angular';
 import { GeoServiceDetailsComponent } from './geo-service-details.component';
 import { of } from 'rxjs';
-import { createMockStore } from '@ngrx/store/testing';
+import { createMockStore, provideMockStore } from '@ngrx/store/testing';
 import { catalogStateKey, initialCatalogState } from '../state/catalog.state';
 import { TAILORMAP_ADMIN_API_V1_SERVICE, getGeoService } from '@tailormap-admin/admin-api';
 import { ActivatedRoute } from '@angular/router';
@@ -18,6 +18,8 @@ import { SaveButtonComponent } from '../../shared/components/save-button/save-bu
 import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { AuthorizationEditComponent } from '../../shared/components/authorization-edit/authorization-edit.component';
+import { initialUserState, userStateKey } from '../../user/state/user.state';
+import { adminCoreStateKey, initialAdminCoreState } from '../../state/admin-core.state';
 
 const setup = async () => {
   const activeRoute = {
@@ -26,7 +28,11 @@ const setup = async () => {
   const geoServiceModel = getGeoService({ id: '1', title: 'The Service' });
   const { geoServiceService, updateGeoService$, refreshGeoService$, updateGeoServiceDetails, updateGeoServiceSettings } = createGeoServiceMock(geoServiceModel);
   const store = createMockStore({
-    initialState: { [catalogStateKey]: { ...initialCatalogState, geoServices: [{ ...geoServiceModel, catalogNodeId: 'node-1' }] } },
+    initialState: {
+      [catalogStateKey]: { ...initialCatalogState, geoServices: [{ ...geoServiceModel, catalogNodeId: 'node-1' }] },
+      [userStateKey]: initialUserState,
+      [adminCoreStateKey]: initialAdminCoreState,
+    },
   });
   await render(GeoServiceDetailsComponent, {
     schemas: [CUSTOM_ELEMENTS_SCHEMA],

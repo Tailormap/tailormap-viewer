@@ -121,8 +121,8 @@ export class TailormapAdminApiV1MockService implements TailormapAdminApiV1Servic
     return of(mockData.getUsers()).pipe(delay(this.delay));
   }
 
-  public createUser$(params: { user: UserModel }): Observable<UserModel> {
-    return of({ ...params.user }).pipe(delay(this.delay));
+  public createUser$(params: { user: Omit<UserModel, 'groupNames'> & { groups: string[] } }): Observable<UserModel> {
+    return of({ ...params.user, groupNames: params.user.groups }).pipe(delay(this.delay));
   }
 
   public deleteUser$(_username: string): Observable<boolean> {
@@ -133,8 +133,8 @@ export class TailormapAdminApiV1MockService implements TailormapAdminApiV1Servic
     return of(true).pipe(delay(this.delay));
   }
 
-  public updateUser$(params: { username: string; user: UserModel }): Observable<UserModel> {
-    return of({ ...params.user }).pipe(delay(this.delay));
+  public updateUser$(params: { username: string; user: Omit<UserModel, 'groupNames'> & { groups: string[] } }): Observable<UserModel> {
+    return of({ ...params.user, groupNames: params.user.groups }).pipe(delay(this.delay));
   }
 
   public getApplications$(): Observable<ApplicationModel[]> {

@@ -7,6 +7,9 @@ import userEvent from '@testing-library/user-event';
 import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { TAILORMAP_ADMIN_API_V1_SERVICE } from '@tailormap-admin/admin-api';
+import { provideMockStore } from '@ngrx/store/testing';
+import { initialUserState, userStateKey } from '../../user/state/user.state';
+import { adminCoreStateKey, initialAdminCoreState } from '../../state/admin-core.state';
 
 describe('GeoServiceFormComponent', () => {
 
@@ -22,6 +25,7 @@ describe('GeoServiceFormComponent', () => {
       },
       providers: [
         { provide: TAILORMAP_ADMIN_API_V1_SERVICE, useValue: { getGroups$: jest.fn(() => of(null)) } },
+        provideMockStore({ initialState: { [userStateKey]: initialUserState, [adminCoreStateKey]: initialAdminCoreState } }),
       ],
     });
     await userEvent.type(await screen.findByPlaceholderText('URL'), 'http://localhost.test');

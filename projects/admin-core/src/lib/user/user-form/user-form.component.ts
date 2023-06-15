@@ -2,10 +2,11 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnI
 import { GroupModel, UserModel } from '@tailormap-admin/admin-api';
 import { AbstractControl, AsyncValidatorFn, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { debounceTime, filter, map, Observable, of, Subject, takeUntil } from 'rxjs';
-import { GroupDetailsService } from '../services/group-details.service';
+import { GroupService } from '../services/group.service';
 import { formatDate } from '@angular/common';
 import { NAME_REGEX } from '../constants';
-import { UserDetailsService } from '../services/user-details.service';
+import { UserService } from '../services/user.service';
+import { UserAddUpdateModel } from '../models/user-add-update.model';
 
 @Component({
   selector: 'tm-admin-user-form',
@@ -31,7 +32,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
     name: new FormControl<string>('', { nonNullable: false }),
     enabled: new FormControl<boolean>(true, { nonNullable: true }),
     validUntil: new FormControl<string>('', { nonNullable: false }),
-    groups: new FormControl<GroupModel[]>([], { nonNullable: false }),
+    groups: new FormControl<string[]>([], { nonNullable: false }),
   }, {
     validators: [
       this.passwordValidator('password', 'confirmedPassword'),
@@ -50,26 +51,31 @@ export class UserFormComponent implements OnInit, OnDestroy {
       enabled: user ? user.enabled : true,
       // HTML input expects 2023-10-27T01:22:00.000, it seems problematic to set a Date object
       validUntil: (user && user.validUntil) ? formatDate(user.validUntil, 'yyyy-MM-ddTHH:mm:ss', 'en') : null,
-      groups: user ? user.groups : [],
+      groups: user ? user.groupNames : [],
     });
     const defaultPasswordValidator = [Validators.minLength(8)];
     this.userForm.get('password')?.setValidators(user ? defaultPasswordValidator : [ Validators.required, ...defaultPasswordValidator ]);
     this.userForm.get('confirmedPassword')?.setValidators(user ? defaultPasswordValidator : [ Validators.required, ...defaultPasswordValidator ]);
+    if (user) {
+      this.userForm.get('username')?.disable();
+    } else {
+      this.userForm.get('username')?.enable();
+    }
   }
   public get user(): UserModel | null {
     return this._user;
   }
 
   @Output()
-  public userUpdated = new EventEmitter<UserModel>();
+  public userUpdated = new EventEmitter<UserAddUpdateModel>();
 
   public allGroups$: Observable<GroupModel[]> | undefined;
   private destroyed = new Subject();
   private _user: UserModel | null = null;
 
   constructor(
-    private groupDetailsService: GroupDetailsService,
-    private userDetailsService: UserDetailsService,
+    private groupDetailsService: GroupService,
+    private userDetailsService: UserService,
   ) {
     this.allGroups$ = this.groupDetailsService.getGroups$();
   }
@@ -90,21 +96,9 @@ export class UserFormComponent implements OnInit, OnDestroy {
     this.destroyed.complete();
   }
 
-  /**
-   * Compare two groups by name(the primary key).
-   *
-   * Used in the template to check if a group is to be selected.
-   *
-   * @param grpSrc
-   * @param grpTarget
-   */
-  public compareGroup(grpSrc: { name: string }, grpTarget: { name: string }) {
-    return grpSrc && grpTarget && grpSrc.name === grpTarget.name;
-  }
-
   private readForm() {
     const validUntilFromFormValue = this.userForm.get('validUntil')?.value || null;
-    const user: UserModel = {
+    const user: UserAddUpdateModel = {
       username: this.userForm.get('username')?.value || '',
       email: this.userForm.get('email')?.value || null,
       name: this.userForm.get('name')?.value || null,
@@ -118,7 +112,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
       user.password = passwd;
     }
     if(user.groups && user.groups.length > 0) {
-      user.groups = user.groups.map(g => g._links.self.href);
+      user.groups = user.groups.map(g => `/${g}`);
     }
     this.userUpdated.emit(user);
   }

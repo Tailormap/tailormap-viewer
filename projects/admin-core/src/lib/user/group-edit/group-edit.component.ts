@@ -1,8 +1,8 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
-import { BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, takeUntil } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, takeUntil, tap } from 'rxjs';
 import { GroupModel } from '@tailormap-admin/admin-api';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GroupDetailsService } from '../services/group-details.service';
+import { GroupService } from '../services/group.service';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 
@@ -23,22 +23,22 @@ export class GroupEditComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private groupService: GroupDetailsService,
+    private groupService: GroupService,
     private confirmDelete: ConfirmDialogService,
     private router: Router,
     private adminSnackbarService: AdminSnackbarService,
   ) { }
 
   public ngOnInit(): void {
-    this.route.paramMap
+    this.group$ = this.route.paramMap
       .pipe(
         takeUntil(this.destroyed),
         map(params => params.get('groupName')),
         distinctUntilChanged(),
         filter((name): name is string => !!name),
-      )
-      .subscribe(name => this.groupService.selectGroup(name));
-    this.group$ = this.groupService.selectedGroup$;
+        switchMap(groupName => this.groupService.getGroupByName$(groupName)),
+        tap(group => this.groupService.selectGroup(group?.name || null)),
+      );
   }
 
   public ngOnDestroy(): void {

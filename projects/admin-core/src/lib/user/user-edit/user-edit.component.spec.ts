@@ -5,8 +5,8 @@ import { getUser } from '@tailormap-admin/admin-api';
 import { UserFormComponent } from '../user-form/user-form.component';
 import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
 import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
-import { UserDetailsService } from '../services/user-details.service';
-import { GroupDetailsService } from '../services/group-details.service';
+import { UserService } from '../services/user.service';
+import { GroupService } from '../services/group.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SharedImportsModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
@@ -19,7 +19,7 @@ const setup = async (hasUser?: boolean) => {
   };
   const userService = {
     selectUser: jest.fn(),
-    selectedUser$: hasUser ? of(getUser({ username: 'user1', name: 'user 1', groups: [] })) : of(null),
+    getUserByName$: () => hasUser ? of(getUser({ username: 'user1', name: 'user 1', groupNames: [] })) : of(null),
     deleteUser$: jest.fn(() => of(true)),
     addOrUpdateUser$: jest.fn(() => of(true)),
   };
@@ -34,8 +34,8 @@ const setup = async (hasUser?: boolean) => {
     imports: [ SharedImportsModule, MatIconTestingModule ],
     providers: [
       { provide: ActivatedRoute, useValue: activeRoute },
-      { provide: UserDetailsService, useValue: userService },
-      { provide: GroupDetailsService, useValue: groupService },
+      { provide: UserService, useValue: userService },
+      { provide: GroupService, useValue: groupService },
       { provide: Router, useValue: router },
     ],
   });
@@ -59,7 +59,8 @@ describe('UserEditComponent', () => {
     const { userService } = await setup(true);
     await userEvent.type(screen.getByLabelText('Name'), '23');
     await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save');
-    expect(userService.addOrUpdateUser$).toHaveBeenCalledWith(false, getUser({ username: 'user1', name: 'user 123', groups: [] }));
+    const { groupNames, ...user } = getUser({ username: 'user1', name: 'user 123', groupNames: [] });
+    expect(userService.addOrUpdateUser$).toHaveBeenCalledWith(false, { ...user, groups: [] });
   });
 
   test('should delete user', async () => {
