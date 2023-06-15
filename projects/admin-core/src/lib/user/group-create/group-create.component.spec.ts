@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/angular';
 import { GroupCreateComponent } from './group-create.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { GroupDetailsService } from '../services/group-details.service';
+import { GroupService } from '../services/group.service';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 describe('GroupCreateComponent', () => {
@@ -11,7 +11,7 @@ describe('GroupCreateComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       imports: [MatSnackBarModule],
       providers: [
-        { provide: GroupDetailsService, useValue: {} },
+        { provide: GroupService, useValue: {} },
       ],
     });
     expect(await screen.findByText('Add group')).toBeInTheDocument();

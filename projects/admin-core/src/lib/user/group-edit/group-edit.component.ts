@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/
 import { BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, takeUntil } from 'rxjs';
 import { GroupModel } from '@tailormap-admin/admin-api';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GroupDetailsService } from '../services/group-details.service';
+import { GroupService } from '../services/group.service';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 
@@ -23,7 +23,7 @@ export class GroupEditComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private groupService: GroupDetailsService,
+    private groupService: GroupService,
     private confirmDelete: ConfirmDialogService,
     private router: Router,
     private adminSnackbarService: AdminSnackbarService,

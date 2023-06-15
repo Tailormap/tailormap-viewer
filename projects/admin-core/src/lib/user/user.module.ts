@@ -13,6 +13,13 @@ import { SharedAdminComponentsModule } from '../shared/components/shared-admin-c
 import { GroupHomeComponent } from './group-home/group-home.component';
 import { GroupEditComponent } from './group-edit/group-edit.component';
 import { GroupCreateComponent } from './group-create/group-create.component';
+import { StoreModule } from '@ngrx/store';
+import { userStateKey } from './state/user.state';
+import { userReducer } from './state/user.reducer';
+import { EffectsModule } from '@ngrx/effects';
+import { UserEffects } from './state/user.effects';
+import { UserService } from './services/user.service';
+import { GroupService } from './services/group.service';
 
 @NgModule({
   declarations: [
@@ -32,6 +39,8 @@ import { GroupCreateComponent } from './group-create/group-create.component';
     SharedModule,
     RouterModule,
     SharedAdminComponentsModule,
+    StoreModule.forFeature(userStateKey, userReducer),
+    EffectsModule.forFeature([UserEffects]),
   ],
   exports: [
     UserListComponent,
@@ -39,4 +48,11 @@ import { GroupCreateComponent } from './group-create/group-create.component';
   ],
 })
 export class UserModule {
+  constructor(
+    userService: UserService,
+    groupService: GroupService,
+  ) {
+    userService.listenForUserChanges();
+    groupService.listenForGroupChanges();
+  }
 }

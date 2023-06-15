@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UserDetailsService } from '../services/user-details.service';
+import { UserService } from '../services/user.service';
 import { BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, takeUntil } from 'rxjs';
 import { UserModel } from '@tailormap-admin/admin-api';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
@@ -23,7 +23,7 @@ export class UserEditComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private userService: UserDetailsService,
+    private userService: UserService,
     private confirmDelete: ConfirmDialogService,
     private router: Router,
     private adminSnackbarService: AdminSnackbarService,

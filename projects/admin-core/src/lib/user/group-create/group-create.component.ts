@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { GroupModel } from '@tailormap-admin/admin-api';
 import { Router } from '@angular/router';
-import { GroupDetailsService } from '../services/group-details.service';
+import { GroupService } from '../services/group.service';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 
 @Component({
@@ -20,7 +20,7 @@ export class GroupCreateComponent implements OnDestroy {
   public group: Omit<GroupModel, 'id'> | null = null;
 
   constructor(
-    private groupDetailsService: GroupDetailsService,
+    private groupDetailsService: GroupService,
     private router: Router,
     private adminSnackbarService: AdminSnackbarService,
   ) { }

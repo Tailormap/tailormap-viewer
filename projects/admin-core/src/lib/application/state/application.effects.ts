@@ -3,6 +3,7 @@ import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects';
 import * as ApplicationActions from './application.actions';
 import { map, catchError, of, filter, switchMap, tap } from 'rxjs';
 import {
+  ApiResponseHelper,
   ApplicationModel, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel,
 } from '@tailormap-admin/admin-api';
 import { Store } from '@ngrx/store';
@@ -27,10 +28,7 @@ export class ApplicationEffects {
               return of({ error: $localize `Error while loading list of applications` });
             }),
             map(response => {
-              const isErrorResponse = (res: ApplicationModel[] | ErrorResponse): res is ErrorResponse => {
-                return typeof (res as ErrorResponse).error !== 'undefined';
-              };
-              if (isErrorResponse(response)) {
+              if (ApiResponseHelper.isErrorResponse(response)) {
                 return ApplicationActions.loadApplicationsFailed({ error: response.error });
               }
               return ApplicationActions.loadApplicationsSuccess({ applications: response });

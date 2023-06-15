@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { UserModel } from '@tailormap-admin/admin-api';
 import { Router } from '@angular/router';
-import { UserDetailsService } from '../services/user-details.service';
+import { UserService } from '../services/user.service';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 
 @Component({
@@ -20,7 +20,7 @@ export class UserCreateComponent implements OnDestroy {
   public user: Omit<UserModel, 'id'> | null = null;
 
   constructor(
-    private userDetailsService: UserDetailsService,
+    private userDetailsService: UserService,
     private router: Router,
     private adminSnackbarService: AdminSnackbarService,
   ) { }

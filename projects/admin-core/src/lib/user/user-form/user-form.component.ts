@@ -2,10 +2,10 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnI
 import { GroupModel, UserModel } from '@tailormap-admin/admin-api';
 import { AbstractControl, AsyncValidatorFn, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { debounceTime, filter, map, Observable, of, Subject, takeUntil } from 'rxjs';
-import { GroupDetailsService } from '../services/group-details.service';
+import { GroupService } from '../services/group.service';
 import { formatDate } from '@angular/common';
 import { NAME_REGEX } from '../constants';
-import { UserDetailsService } from '../services/user-details.service';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'tm-admin-user-form',
@@ -68,8 +68,8 @@ export class UserFormComponent implements OnInit, OnDestroy {
   private _user: UserModel | null = null;
 
   constructor(
-    private groupDetailsService: GroupDetailsService,
-    private userDetailsService: UserDetailsService,
+    private groupDetailsService: GroupService,
+    private userDetailsService: UserService,
   ) {
     this.allGroups$ = this.groupDetailsService.getGroups$();
   }
@@ -118,7 +118,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
       user.password = passwd;
     }
     if(user.groups && user.groups.length > 0) {
-      user.groups = user.groups.map(g => g._links.self.href);
+      user.groups = user.groups.map<any>(g => `/${g.name}`);
     }
     this.userUpdated.emit(user);
   }

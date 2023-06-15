@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { GroupModel } from '@tailormap-admin/admin-api';
 import { combineLatest, map, Observable, startWith } from 'rxjs';
 import { FormControl } from '@angular/forms';
-import { GroupDetailsService } from '../services/group-details.service';
+import { GroupService } from '../services/group.service';
 
 @Component({
   selector: 'tm-admin-group-list',
@@ -16,7 +16,7 @@ export class GroupListComponent {
   public groupFilter: FormControl;
   public filterString$: Observable<string>;
 
-  constructor(private groupDetailsService: GroupDetailsService) {
+  constructor(private groupDetailsService: GroupService) {
     this.groupFilter = new FormControl('');
     this.filterString$ = this.groupFilter.valueChanges.pipe(startWith(''));
     this.filteredGroups$ = combineLatest([
