@@ -15,6 +15,8 @@ import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { AuthorizationEditComponent } from '../../shared/components/authorization-edit/authorization-edit.component';
 import { LayerSettingsFormComponent } from '../layer-settings-form/layer-settings-form.component';
 import { provideMockStore } from '@ngrx/store/testing';
+import { initialUserState, userStateKey } from '../../user/state/user.state';
+import { adminCoreStateKey, initialAdminCoreState } from '../../state/admin-core.state';
 
 const setup = async (editMode = false) => {
   const dialogRefMock = { close: jest.fn() };
@@ -29,6 +31,7 @@ const setup = async (editMode = false) => {
       { provide: GeoServiceService, useValue: geoServiceService },
       { provide: MAT_DIALOG_DATA, useValue: { geoService: editMode ? geoServiceModelMock : null, parentNode: '1' } },
       { provide: TAILORMAP_ADMIN_API_V1_SERVICE, useValue: { getGroups$: jest.fn(() => of(null)) } },
+      provideMockStore({ initialState: { [userStateKey]: initialUserState, [adminCoreStateKey]: initialAdminCoreState } }),
     ],
   });
   return {

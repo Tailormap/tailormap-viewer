@@ -20,6 +20,8 @@ import { SaveButtonComponent } from '../../shared/components/save-button/save-bu
 import { Router } from '@angular/router';
 import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
 import { AuthorizationEditComponent } from '../../shared/components/authorization-edit/authorization-edit.component';
+import { adminCoreStateKey, initialAdminCoreState } from '../../state/admin-core.state';
+import { initialUserState, userStateKey } from '../../user/state/user.state';
 
 const setup = async (hasNode = false) => {
   const createCatalogNodeMock = jest.fn(() => of(true));
@@ -32,7 +34,11 @@ const setup = async (hasNode = false) => {
   const rootModel = getCatalogNode({ id: 'root', title: 'Root', root: true });
   const catalogNodeModel = { ...getCatalogNode({ id: '1', title: 'Random services folder', root: false }), parentId: 'root' };
   const store = createMockStore({
-    initialState: { [catalogStateKey]: { ...initialCatalogState, catalog: [ rootModel, catalogNodeModel ] } },
+    initialState: {
+      [catalogStateKey]: { ...initialCatalogState, catalog: [ rootModel, catalogNodeModel ] },
+      [adminCoreStateKey]: initialAdminCoreState,
+      [userStateKey]: initialUserState,
+    },
   });
   await render(CatalogCreateButtonsComponent, {
     declarations: [
