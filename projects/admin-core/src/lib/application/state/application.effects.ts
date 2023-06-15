@@ -4,13 +4,11 @@ import * as ApplicationActions from './application.actions';
 import { map, catchError, of, filter, switchMap, tap } from 'rxjs';
 import {
   ApiResponseHelper,
-  ApplicationModel, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel,
+  TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel,
 } from '@tailormap-admin/admin-api';
 import { Store } from '@ngrx/store';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { selectApplicationsLoadStatus } from './application.selectors';
-
-type ErrorResponse = { error: string };
 
 @Injectable()
 export class ApplicationEffects {

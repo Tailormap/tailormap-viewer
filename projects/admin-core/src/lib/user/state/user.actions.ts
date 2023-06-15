@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { ApplicationModel, GroupModel, UserModel } from '@tailormap-admin/admin-api';
+import { GroupModel, UserModel } from '@tailormap-admin/admin-api';
 
 const userActionsPrefix = '[User]';
 

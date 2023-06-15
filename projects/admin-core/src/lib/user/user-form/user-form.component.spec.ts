@@ -5,6 +5,9 @@ import { TAILORMAP_ADMIN_API_V1_SERVICE } from '@tailormap-admin/admin-api';
 import { SharedImportsModule } from '@tailormap-viewer/shared';
 import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
 import userEvent from '@testing-library/user-event';
+import { provideMockStore } from '@ngrx/store/testing';
+import { initialUserState, userStateKey } from '../state/user.state';
+import { adminCoreStateKey, initialAdminCoreState } from '../../state/admin-core.state';
 
 
 const setup = async (isValidPassword: boolean) => {
@@ -24,6 +27,7 @@ const setup = async (isValidPassword: boolean) => {
     },
     providers: [
       { provide: TAILORMAP_ADMIN_API_V1_SERVICE, useValue: mockApiService },
+      provideMockStore({ initialState: { [userStateKey]: initialUserState, [adminCoreStateKey]: initialAdminCoreState } }),
     ],
   });
   return { userUpdated };

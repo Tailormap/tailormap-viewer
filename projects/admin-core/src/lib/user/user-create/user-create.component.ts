@@ -1,6 +1,5 @@
 import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
-import { UserModel } from '@tailormap-admin/admin-api';
 import { Router } from '@angular/router';
 import { UserService } from '../services/user.service';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';

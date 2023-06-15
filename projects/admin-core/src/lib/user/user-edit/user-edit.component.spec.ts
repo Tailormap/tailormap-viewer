@@ -19,7 +19,7 @@ const setup = async (hasUser?: boolean) => {
   };
   const userService = {
     selectUser: jest.fn(),
-    selectedUser$: hasUser ? of(getUser({ username: 'user1', name: 'user 1', groups: [] })) : of(null),
+    getUserByName$: () => hasUser ? of(getUser({ username: 'user1', name: 'user 1', groupNames: [] })) : of(null),
     deleteUser$: jest.fn(() => of(true)),
     addOrUpdateUser$: jest.fn(() => of(true)),
   };
@@ -59,7 +59,8 @@ describe('UserEditComponent', () => {
     const { userService } = await setup(true);
     await userEvent.type(screen.getByLabelText('Name'), '23');
     await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save');
-    expect(userService.addOrUpdateUser$).toHaveBeenCalledWith(false, getUser({ username: 'user1', name: 'user 123', groups: [] }));
+    const { groupNames, ...user } = getUser({ username: 'user1', name: 'user 123', groupNames: [] });
+    expect(userService.addOrUpdateUser$).toHaveBeenCalledWith(false, { ...user, groups: [] });
   });
 
   test('should delete user', async () => {

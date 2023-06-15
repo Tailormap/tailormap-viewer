@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../services/user.service';
-import { BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, takeUntil, tap } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, tap } from 'rxjs';
 import { UserModel } from '@tailormap-admin/admin-api';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';

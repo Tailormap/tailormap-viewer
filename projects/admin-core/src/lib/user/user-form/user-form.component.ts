@@ -7,7 +7,6 @@ import { formatDate } from '@angular/common';
 import { NAME_REGEX } from '../constants';
 import { UserService } from '../services/user.service';
 import { UserAddUpdateModel } from '../models/user-add-update.model';
-import { group } from '@angular/animations';
 
 @Component({
   selector: 'tm-admin-user-form',

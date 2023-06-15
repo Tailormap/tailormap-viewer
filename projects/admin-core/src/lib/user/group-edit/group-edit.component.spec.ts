@@ -17,7 +17,7 @@ const setup = async (hasGroup?: boolean) => {
   };
   const groupService = {
     selectGroup: jest.fn(),
-    selectedGroup$: hasGroup ? of(getGroup({ name: 'secret-group', description: 'some secret group' })) : of(null),
+    getGroupByName$: () => hasGroup ? of(getGroup({ name: 'secret-group', description: 'some secret group' })) : of(null),
     deleteGroup$: jest.fn(() => of(true)),
     addOrUpdateGroup$: jest.fn(() => of(true)),
   };

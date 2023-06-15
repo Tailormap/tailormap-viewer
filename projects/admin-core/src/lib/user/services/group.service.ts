@@ -1,5 +1,5 @@
 import { DestroyRef, Inject, Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, concatMap, filter, map, Observable, of, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, catchError, filter, map, Observable, of, switchMap, tap } from 'rxjs';
 import {
   GroupModel, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel,
 } from '@tailormap-admin/admin-api';

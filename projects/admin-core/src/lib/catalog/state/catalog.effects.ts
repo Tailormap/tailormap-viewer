@@ -3,16 +3,13 @@ import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects';
 import * as CatalogActions from './catalog.actions';
 import { map, catchError, of, filter, switchMap, tap } from 'rxjs';
 import {
-  ApiResponseHelper,
-  CatalogNodeModel, FeatureSourceModel, GeoServiceWithLayersModel, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel,
+  ApiResponseHelper, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel,
 } from '@tailormap-admin/admin-api';
 import { Store } from '@ngrx/store';
 import {
   selectCatalogLoadStatus, selectFeatureSourceLoadStatus, selectFeatureSources, selectGeoServices, selectGeoServicesLoadStatus,
 } from './catalog.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
-
-type ErrorResponse = { error: string };
 
 @Injectable()
 export class CatalogEffects {
@@ -75,7 +72,7 @@ export class CatalogEffects {
             catchError(() => {
               return of({ error: $localize `Error while loading geo services` });
             }),
-            map((response: GeoServiceWithLayersModel[] | ErrorResponse) => {
+            map(response => {
               if (ApiResponseHelper.isErrorResponse(response)) {
                 return CatalogActions.loadAllGeoServicesFailed({ error: response.error });
               }
