@@ -27,8 +27,8 @@ export interface TailormapAdminApiV1ServiceModel {
   deleteGroup$(name: string): Observable<boolean>;
   getUsers$(): Observable<UserModel[]>;
   getUser$(username: string, projection: string): Observable<UserModel>;
-  createUser$(params: { user: UserModel }): Observable<UserModel>;
-  updateUser$(params: { username: string; user: Partial<UserModel> }): Observable<UserModel>;
+  createUser$(params: { user: Omit<UserModel, 'groupNames'> & { groups: string[] } }): Observable<UserModel>;
+  updateUser$(params: { username: string; user: Partial<Omit<UserModel, 'groupNames'>> & { groups: string[] } }): Observable<UserModel>;
   deleteUser$(username: string): Observable<boolean>;
   validatePasswordStrength$(password: string): Observable<boolean>;
   getApplications$(): Observable<ApplicationModel[]>;

@@ -29,7 +29,7 @@ export class GroupListComponent {
           .filter(group => group.name.toLowerCase().indexOf(filterString.toLowerCase()) !== -1)
           .map(group => ({
             ...group,
-            selected: !!(selectedGroup && group.name === selectedGroup.name),
+            selected: !!(selectedGroup && group.name === selectedGroup),
           }));
       }));
   }

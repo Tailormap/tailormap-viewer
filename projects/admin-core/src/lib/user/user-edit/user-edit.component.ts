@@ -1,10 +1,11 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../services/user.service';
-import { BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, takeUntil } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, takeUntil, tap } from 'rxjs';
 import { UserModel } from '@tailormap-admin/admin-api';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
+import { UserAddUpdateModel } from '../models/user-add-update.model';
 
 @Component({
   selector: 'tm-admin-user-edit',
@@ -19,7 +20,7 @@ export class UserEditComponent implements OnInit, OnDestroy {
 
   private destroyed = new Subject();
   public user$: Observable<UserModel | null> = of(null);
-  public updatedUser: UserModel | null = null;
+  public updatedUser: UserAddUpdateModel | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -30,15 +31,14 @@ export class UserEditComponent implements OnInit, OnDestroy {
   ) { }
 
   public ngOnInit(): void {
-    this.route.paramMap
+    this.user$ = this.route.paramMap
       .pipe(
-        takeUntil(this.destroyed),
         map(params => params.get('userName')),
         distinctUntilChanged(),
         filter((userName): userName is string => !!userName),
-      )
-      .subscribe(userName => this.userService.selectUser(userName));
-    this.user$ = this.userService.selectedUser$;
+        switchMap(userName => this.userService.getUserByName$(userName)),
+        tap(user => this.userService.selectUser(user?.username || null)),
+      );
   }
 
   public ngOnDestroy(): void {
@@ -47,7 +47,7 @@ export class UserEditComponent implements OnInit, OnDestroy {
     this.destroyed.complete();
   }
 
-  public updateUser(updatedUser: UserModel) {
+  public updateUser(updatedUser: UserAddUpdateModel) {
     this.updatedUser = updatedUser;
   }
 

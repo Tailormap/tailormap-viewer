@@ -9,6 +9,7 @@ import { addUser, deleteUser, loadUsers, updateUser } from '../state/user.action
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { selectUsers, selectUsersLoadStatus } from '../state/user.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
+import { UserAddUpdateModel } from '../models/user-add-update.model';
 
 @Injectable({
   providedIn: 'root',
@@ -16,8 +17,7 @@ import { LoadingStateEnum } from '@tailormap-viewer/shared';
 export class UserService {
 
   private selectedUser: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
-  public selectedUser$: Observable<UserModel|null> = this.selectedUser.asObservable()
-    .pipe(concatMap(userName => this.getUsers$().pipe(map(users => users.find(u => u.name === userName) || null))));
+  public selectedUser$: Observable<string | null> = this.selectedUser.asObservable();
 
   public constructor(
     @Inject(TAILORMAP_ADMIN_API_V1_SERVICE) private adminApiService: TailormapAdminApiV1ServiceModel,
@@ -56,11 +56,16 @@ export class UserService {
       );
   }
 
+  public getUserByName$(username: string): Observable<UserModel | null> {
+    return this.getUsers$()
+      .pipe(map(users => users.find(u => u.username === username) || null));
+  }
+
   public selectUser(username: string | null): void {
     this.selectedUser.next(username);
   }
 
-  public addOrUpdateUser$(add: boolean, user: UserModel): Observable<UserModel | null> {
+  public addOrUpdateUser$(add: boolean, user: UserAddUpdateModel): Observable<UserModel | null> {
     if (user.validUntil) {
       user.validUntil.setSeconds(0, 0);
     }

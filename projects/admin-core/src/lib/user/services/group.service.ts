@@ -19,8 +19,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class GroupService {
 
   private selectedGroup: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
-  public selectedGroup$: Observable<GroupModel | null> = this.selectedGroup.asObservable()
-    .pipe(concatMap(groupName => this.getGroups$().pipe(map(groups => groups.find(g => g.name === groupName) || null))));
+  public selectedGroup$: Observable<string | null> = this.selectedGroup.asObservable();
 
   public constructor(
     @Inject(TAILORMAP_ADMIN_API_V1_SERVICE) private adminApiService: TailormapAdminApiV1ServiceModel,
@@ -57,6 +56,11 @@ export class GroupService {
         filter(loadStatus => loadStatus === LoadingStateEnum.LOADED),
         switchMap(() => this.store$.select(selectGroups)),
       );
+  }
+
+  public getGroupByName$(name: string): Observable<GroupModel | null> {
+    return this.getGroups$()
+      .pipe(map(groups => groups.find(u => u.name === name) || null));
   }
 
   public selectGroup(selectedName: string | null) {

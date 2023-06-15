@@ -74,7 +74,7 @@ const onUpdateUser = (
   state: UserState,
   payload: ReturnType<typeof UserActions.updateUser>,
 ): UserState => {
-  const idx = state.users.findIndex(u => u.name === payload.user.name);
+  const idx = state.users.findIndex(u => u.username === payload.user.username);
   if (idx === -1) {
     return state;
   }
@@ -92,7 +92,7 @@ const onDeleteUser = (
   state: UserState,
   payload: ReturnType<typeof UserActions.deleteUser>,
 ): UserState => {
-  const idx = state.users.findIndex(u => u.name === payload.userName);
+  const idx = state.users.findIndex(u => u.username === payload.userName);
   if (idx === -1) {
     return state;
   }

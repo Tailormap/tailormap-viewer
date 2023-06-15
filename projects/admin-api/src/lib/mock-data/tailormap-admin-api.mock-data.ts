@@ -120,7 +120,7 @@ export const getUser = (overrides?: Partial<UserModel>): UserModel => ({
   validUntil: null,
   email: null,
   enabled: true,
-  groups: [getGroup({ name: 'test', description: 'Users that can test', systemGroup: false, notes: 'This is a test group' })],
+  groupNames: ['test'],
   ...overrides,
 });
 

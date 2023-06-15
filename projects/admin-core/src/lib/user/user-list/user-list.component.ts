@@ -32,7 +32,7 @@ export class UserListComponent {
           .filter(user => user.username.toLowerCase().indexOf(filterString.toLowerCase()) !== -1)
           .map(user => ({
             ...user,
-            selected: !!(selectedUser && user.username === selectedUser.username),
+            selected: !!(selectedUser && user.username === selectedUser),
           }));
       }),
     );

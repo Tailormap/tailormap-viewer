@@ -1,5 +1,3 @@
-import { GroupModel } from './group.model';
-
 export interface UserModel {
   username: string;
   // should not be sent from the API
@@ -10,6 +8,6 @@ export interface UserModel {
   notes?: string | null;
   validUntil: Date | null;
   version?: number | null;
-  groups: GroupModel[] | null;
+  groupNames: string[] | null;
   additionalProperties?: Record<string, any> | null;
 }
