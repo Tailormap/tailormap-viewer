@@ -1,4 +1,4 @@
-import { FeatureSourceModel, GeoServiceModel } from '@tailormap-admin/admin-api';
+import { FeatureSourceModel, GeoServiceModel } from '../models';
 
 export class CatalogModelHelper {
 

@@ -1,7 +1,8 @@
 /*
  * Public API Surface of core
  */
-import "./typings.d.ts";
+// eslint-disable-next-line @typescript-eslint/triple-slash-reference
+/// <reference path="./typings.d.ts" />
 
 if (typeof window.$localize === 'undefined') {
   window.$localize = (messageParts: TemplateStringsArray) => messageParts.join('');

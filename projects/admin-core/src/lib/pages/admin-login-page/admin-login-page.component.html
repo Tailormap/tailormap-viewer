@@ -1,3 +1,6 @@
 <div class="login-page-wrapper">
-  <tm-login-form [login$]="login$" (loggedIn)="loggedIn($event)"></tm-login-form>
+  <tm-login-form [login$]="login$"
+                 (loggedIn)="loggedIn($event)"
+                 loginErrorMessage="Login failed, please try again"
+                 i18n-loginErrorMessage></tm-login-form>
 </div>

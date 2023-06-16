@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { ApplicationModel } from '@tailormap-admin/admin-api';
 import { distinctUntilChanged, map, Observable, of, Subject, take, takeUntil, combineLatest } from 'rxjs';
 import { FormControl } from '@angular/forms';
@@ -9,8 +9,9 @@ import {
 } from '../state/application.selectors';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
-import { environment } from '../../../../../admin-app/src/environments/environment';
 import { ConfigService } from '../../config/services/config.service';
+import { ADMIN_CORE_CONFIG } from '../../models/admin-core-config.injection-token';
+import { AdminCoreConfigModel } from '../../models/admin-core-config.model';
 
 @Component({
   selector: 'tm-admin-application-list',
@@ -25,7 +26,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
   public applicationsLoadStatus$: Observable<LoadingStateEnum> = of(LoadingStateEnum.INITIAL);
   public errorMessage$: Observable<string | undefined> = of(undefined);
 
-  public viewerBaseUrl = environment.viewerBaseUrl;
+  public viewerBaseUrl: string;
 
   private destroyed = new Subject();
 
@@ -34,7 +35,10 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private configService: ConfigService,
-  ) {}
+    @Inject(ADMIN_CORE_CONFIG) private config: AdminCoreConfigModel,
+  ) {
+    this.viewerBaseUrl = config.viewerBaseUrl;
+  }
 
   public ngOnInit(): void {
     this.filter.valueChanges
