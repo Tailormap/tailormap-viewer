@@ -1,4 +1,4 @@
-import { Inject, Injectable, NgZone, OnDestroy } from '@angular/core';
+import { Inject, Injectable, NgZone, OnDestroy, Optional } from '@angular/core';
 import { nanoid } from 'nanoid';
 import { TailormapApiConstants } from '@tailormap-viewer/api';
 import { distinctUntilChanged, filter, Observable, Subject } from 'rxjs';
@@ -48,7 +48,7 @@ export class AdminSseService implements OnDestroy {
   constructor(
     private ngZone: NgZone,
     private store$: Store,
-    @Inject(ADMIN_CORE_CONFIG) private config: AdminCoreConfigModel,
+    @Optional() @Inject(ADMIN_CORE_CONFIG) private config?: AdminCoreConfigModel,
   ) {
     this.store$.select(selectUserDetails)
       .pipe(takeUntilDestroyed(), distinctUntilChanged())
@@ -58,7 +58,7 @@ export class AdminSseService implements OnDestroy {
           this.ensureConnection();
         }
       });
-    this.logging = !config.production;
+    this.logging = config ? !config.production : false;
   }
 
   public ngOnDestroy() {
