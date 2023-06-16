@@ -61,7 +61,7 @@ const onAddUser = (
   state: UserState,
   payload: ReturnType<typeof UserActions.addUser>,
 ): UserState => {
-  if (state.users.some(u => u.name === payload.user.name)) {
+  if (state.users.some(u => u.username === payload.user.username)) {
     return state;
   }
   return {
