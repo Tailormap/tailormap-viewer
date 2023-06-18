@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { environment } from '../../../app/src/environments/environment';
+import { environment } from '../environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AdminCoreModule, AdminCoreRoutingModule } from '@tailormap-admin/admin-core';
 
@@ -15,7 +15,10 @@ import { AdminCoreModule, AdminCoreRoutingModule } from '@tailormap-admin/admin-
     BrowserModule,
     BrowserAnimationsModule,
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
-    AdminCoreModule,
+    AdminCoreModule.forRoot({
+      production: environment.production,
+      viewerBaseUrl: environment.viewerBaseUrl,
+    }),
     AdminCoreRoutingModule,
   ],
   providers: [],

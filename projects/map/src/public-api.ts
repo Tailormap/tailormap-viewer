@@ -1,7 +1,8 @@
 /*
  * Public API Surface of map
  */
-import "./typings.d.ts";
+// eslint-disable-next-line @typescript-eslint/triple-slash-reference
+/// <reference path="./typings.d.ts" />
 
 if (typeof window.$localize === 'undefined') {
   window.$localize = (messageParts: TemplateStringsArray) => messageParts.join('');
@@ -16,3 +17,4 @@ export * from './lib/helpers/map-size.helper';
 export * from './lib/helpers/scale.helper';
 export * from './lib/helpers/extent.helper';
 export * from './lib/helpers/coordinate.helper';
+export * from './lib/helpers/feature.helper';

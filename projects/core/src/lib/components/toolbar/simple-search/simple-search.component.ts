@@ -5,7 +5,7 @@ import { SearchResult, SearchResultModel, SimpleSearchService } from './simple-s
 import { debounceTime, filter, takeUntil, withLatestFrom, switchMap } from 'rxjs/operators';
 import { MapService } from '@tailormap-viewer/map';
 import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.helper';
-import { FeatureHelper } from '../../../../../../map/src/lib/helpers/feature.helper';
+import { FeatureHelper } from '@tailormap-viewer/map';
 import { FeatureModel } from '@tailormap-viewer/api';
 
 type SearchStatusType = 'empty' | 'no_results' | 'searching' | 'belowMinLength' | 'complete';

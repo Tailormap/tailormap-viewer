@@ -19,6 +19,9 @@ export class LoginFormComponent {
   @Input()
   public login$: ((username: string, password: string) => Observable<LoginModel>) | null = null;
 
+  @Input({ required: true })
+  public loginErrorMessage: string | undefined;
+
   @Output()
   public loggedIn = new EventEmitter<LoginModel>();
 
@@ -52,7 +55,7 @@ export class LoginFormComponent {
           this.errorMessageSubject.next('');
           this.loggedIn.emit(userResponse);
         } else {
-          this.errorMessageSubject.next($localize `Login failed, please try again`);
+          this.errorMessageSubject.next(this.loginErrorMessage || 'Login failed, please try again');
         }
       });
   }

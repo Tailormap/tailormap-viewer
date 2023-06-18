@@ -1,11 +1,12 @@
-import { Injectable, NgZone, OnDestroy } from '@angular/core';
+import { Inject, Injectable, NgZone, OnDestroy, Optional } from '@angular/core';
 import { nanoid } from 'nanoid';
 import { TailormapApiConstants } from '@tailormap-viewer/api';
 import { distinctUntilChanged, filter, Observable, Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectUserDetails } from '../../state/admin-core.selectors';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { environment } from '../../../../../admin-app/src/environments/environment';
+import { ADMIN_CORE_CONFIG } from '../../models/admin-core-config.injection-token';
+import { AdminCoreConfigModel } from '../../models/admin-core-config.model';
 
 export interface SSEEvent<T = any> {
   details: {
@@ -33,7 +34,7 @@ export class AdminSseService implements OnDestroy {
   private retryCount = 0;
   private maxRetryCount = 5;
 
-  private logging = !environment.production;
+  private logging = false;
 
   private supportedEvents = new Set([
     EventType.ENTITY_CREATED,
@@ -47,6 +48,7 @@ export class AdminSseService implements OnDestroy {
   constructor(
     private ngZone: NgZone,
     private store$: Store,
+    @Optional() @Inject(ADMIN_CORE_CONFIG) private config?: AdminCoreConfigModel,
   ) {
     this.store$.select(selectUserDetails)
       .pipe(takeUntilDestroyed(), distinctUntilChanged())
@@ -56,6 +58,7 @@ export class AdminSseService implements OnDestroy {
           this.ensureConnection();
         }
       });
+    this.logging = config ? !config.production : false;
   }
 
   public ngOnDestroy() {

@@ -4,7 +4,7 @@ const inquirer = require('inquirer');
 const fs = require("fs/promises");
 
 const scope = '@tailormap-viewer';
-const availableProjects = ['api', 'shared', 'map', 'core'];
+const availableProjects = ['api', 'shared', 'map', 'core', 'admin-api', 'admin-core'];
 
 const getCliArgument = (varName) => {
   const cliArgIdx = process.argv.findIndex(a => a.indexOf(varName) !== -1);

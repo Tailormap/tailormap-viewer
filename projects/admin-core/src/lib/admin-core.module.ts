@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { ModuleWithProviders, NgModule } from '@angular/core';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { ICON_SERVICE_ICON_LOCATION, IconService } from '@tailormap-viewer/shared';
@@ -19,6 +19,8 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { SecurityInterceptor } from './interceptors/security.interceptor';
 import { adminCoreStateKey } from './state/admin-core.state';
 import { adminCoreReducer } from './state/admin-core.reducer';
+import { AdminCoreConfigModel } from './models/admin-core-config.model';
+import { ADMIN_CORE_CONFIG } from './models/admin-core-config.injection-token';
 
 const getBaseHref = (platformLocation: PlatformLocation): string => {
   return platformLocation.getBaseHrefFromDOM();
@@ -72,4 +74,17 @@ export class AdminCoreModule {
     iconService.loadIconsToIconRegistry(matIconRegistry, domSanitizer);
     iconService.loadIconsToIconRegistry(matIconRegistry, domSanitizer, adminIcons);
   }
+
+  public static forRoot(config: AdminCoreConfigModel): ModuleWithProviders<AdminCoreModule> {
+    return {
+      ngModule: AdminCoreModule,
+      providers: [
+        {
+          provide: ADMIN_CORE_CONFIG,
+          useValue: config,
+        },
+      ],
+    };
+  }
+
 }
