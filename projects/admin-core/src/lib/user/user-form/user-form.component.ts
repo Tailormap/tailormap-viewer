@@ -25,6 +25,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
       nonNullable: true,
       validators: [ Validators.required, Validators.minLength(8) ],
       asyncValidators: [this.passwordStrengthValidator()],
+      updateOn: 'blur',
     }),
     confirmedPassword: new FormControl<string>('', { nonNullable: true, validators: [ Validators.required, Validators.minLength(8) ] }),
     email: new FormControl<string>('', { nonNullable: false, validators: [Validators.email] }),
@@ -136,16 +137,12 @@ export class UserFormComponent implements OnInit, OnDestroy {
 
   private passwordStrengthValidator(): AsyncValidatorFn {
     return (control: AbstractControl): Observable<ValidationErrors | null> => {
-      return timer(250).pipe(
-        switchMap(() => {
-          if (!control.value || control.value < 8) {
-            return of(null);
-          }
-          return this.userDetailsService.validatePasswordStrength$(control.value).pipe(
-            map((result: boolean) => {
-              return result ? null : { weakPassword: true };
-            }),
-          );
+      if (!control.value || control.value < 8) {
+        return of(null);
+      }
+      return this.userDetailsService.validatePasswordStrength$(control.value).pipe(
+        map((result: boolean) => {
+          return result ? null : { weakPassword: true };
         }),
       );
     };

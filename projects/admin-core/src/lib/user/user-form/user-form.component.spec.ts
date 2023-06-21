@@ -8,6 +8,7 @@ import userEvent from '@testing-library/user-event';
 import { provideMockStore } from '@ngrx/store/testing';
 import { initialUserState, userStateKey } from '../state/user.state';
 import { adminCoreStateKey, initialAdminCoreState } from '../../state/admin-core.state';
+import { MatIconTestingModule } from '@angular/material/icon/testing';
 
 
 const setup = async (isValidPassword: boolean) => {
@@ -18,7 +19,7 @@ const setup = async (isValidPassword: boolean) => {
   };
   const userUpdated = jest.fn();
   await render(UserFormComponent, {
-    imports: [SharedImportsModule],
+    imports: [ SharedImportsModule, MatIconTestingModule ],
     declarations: [PasswordFieldComponent],
     componentOutputs: {
       userUpdated: {
@@ -30,7 +31,7 @@ const setup = async (isValidPassword: boolean) => {
       provideMockStore({ initialState: { [userStateKey]: initialUserState, [adminCoreStateKey]: initialAdminCoreState } }),
     ],
   });
-  return { userUpdated };
+  return { userUpdated, mockApiService };
 };
 
 describe('UserFormComponent', () => {
@@ -56,10 +57,13 @@ describe('UserFormComponent', () => {
   });
 
   test('gives warning for weak password', async () => {
-    const { userUpdated } = await setup(false);
+    const { mockApiService } = await setup(false);
     await userEvent.type(screen.getByLabelText('Password'), 'secret-secret');
     await userEvent.tab();
-    expect(await screen.findByText('Password too short or too easily guessable')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(mockApiService.validatePasswordStrength$).toHaveBeenCalled();
+      expect(screen.getByText('Password too short or too easily guessable')).toBeInTheDocument();
+    });
   });
 
 });

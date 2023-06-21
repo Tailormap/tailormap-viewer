@@ -67,4 +67,10 @@ export class PasswordFieldComponent implements ControlValueAccessor {
     }
   }
 
+  public onBlur() {
+    if (this.onTouched) {
+      this.onTouched();
+    }
+  }
+
 }
