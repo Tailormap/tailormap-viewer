@@ -97,7 +97,7 @@ export class GeoServiceService {
       concatMap(createdService => {
         if (createdService) {
           this.updateGeoServiceState(createdService.id, 'add', createdService, catalogNodeId);
-          return this.catalogService.addNodeToCatalog$(catalogNodeId, createdService.id, CatalogItemKindEnum.GEO_SERVICE)
+          return this.catalogService.addItemToCatalog$(catalogNodeId, createdService.id, CatalogItemKindEnum.GEO_SERVICE)
             .pipe(
               map(() => createdService),
             );
@@ -155,7 +155,7 @@ export class GeoServiceService {
             concatMap(success => {
               // Remove the service from the catalog
               if (success) {
-                return this.catalogService.removeNodeFromCatalog$(catalogNodeId, geoServiceId, CatalogItemKindEnum.GEO_SERVICE)
+                return this.catalogService.removeItemFromCatalog$(catalogNodeId, geoServiceId, CatalogItemKindEnum.GEO_SERVICE)
                   .pipe(map(response => !!response && !!success));
               }
               return of(false);

@@ -5,10 +5,10 @@ import {
   TAILORMAP_ADMIN_API_V1_SERVICE,
   TailormapAdminApiV1ServiceModel,
 } from '@tailormap-admin/admin-api';
-import { catchError, concatMap, map, of, Subject, take, takeUntil, tap } from 'rxjs';
+import { catchError, combineLatest, concatMap, forkJoin, map, of, Subject, switchMap, take, takeUntil, tap } from 'rxjs';
 import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
 import {
-  selectCatalog, selectCatalogNodeById, selectFeatureSourceIds, selectGeoServiceIds,
+  selectCatalog, selectCatalogNodeById, selectFeatureSourceIds, selectFeatureSources, selectGeoServiceIds, selectGeoServices,
 } from '../state/catalog.selectors';
 import {
   addFeatureSources, addGeoServices, updateCatalog,
@@ -24,7 +24,7 @@ import { DebounceHelper } from '../../helpers/debounce.helper';
 })
 export class CatalogService implements OnDestroy {
 
-  private destroyed = new Subject();
+  private destroyed = new Subject<null>();
   private geoServicesIds: Set<string> = new Set();
   private featureSourcesIds: Set<string> = new Set();
 
@@ -126,7 +126,38 @@ export class CatalogService implements OnDestroy {
     return this.updateCatalog$(node, 'update');
   }
 
-  public addNodeToCatalog$(nodeId: string, itemId: string, itemKind: CatalogItemKindEnum) {
+  public removeNodeFromCatalog$(node: ExtendedCatalogNodeModel) {
+    return this.updateCatalog$(node, 'delete')
+      .pipe(map(result => ({ success: !!result })));
+  }
+
+  public getItemsForCatalogNode$(node: ExtendedCatalogNodeModel) {
+    const serviceItems = (node.items || [])
+      .filter(item => item.kind === CatalogItemKindEnum.GEO_SERVICE)
+      .map(item => item.id);
+    const featureSourceItems = (node.items || [])
+      .filter(item => item.kind === CatalogItemKindEnum.FEATURE_SOURCE)
+      .map(item => item.id);
+    const services$ = this.getServices$(serviceItems, this.destroyed, node.id);
+    const featureSources$ = this.getFeatureSources$(featureSourceItems, this.destroyed, node.id);
+    const serviceIds = new Set(serviceItems);
+    const featureSourceIds = new Set(featureSourceItems);
+    return forkJoin([ services$ || of(true), featureSources$ || of(true) ])
+      .pipe(
+        take(1),
+        switchMap(() => {
+          return combineLatest([
+            this.store$.select(selectGeoServices).pipe(map(services => services.filter(s => serviceIds.has(s.id)))),
+            this.store$.select(selectFeatureSources).pipe(map(fs => fs.filter(s => featureSourceIds.has(s.id)))),
+          ]).pipe(
+            take(1),
+            map(([ services, featureSources ]) => [ ...services, ...featureSources ]),
+          );
+        }),
+      );
+  }
+
+  public addItemToCatalog$(nodeId: string, itemId: string, itemKind: CatalogItemKindEnum) {
     return this.store$.select(selectCatalogNodeById(nodeId))
       .pipe(
         take(1),
@@ -143,7 +174,7 @@ export class CatalogService implements OnDestroy {
       );
   }
 
-  public removeNodeFromCatalog$(nodeId: string, itemId: string, itemKind: CatalogItemKindEnum) {
+  public removeItemFromCatalog$(nodeId: string, itemId: string, itemKind: CatalogItemKindEnum) {
     return this.store$.select(selectCatalogNodeById(nodeId))
       .pipe(
         take(1),
@@ -172,7 +203,7 @@ export class CatalogService implements OnDestroy {
           });
           if (action === 'create') {
             const parentIdx = updatedCatalog.findIndex(n => n.id === node.parentId);
-            if (!parent) {
+            if (parentIdx === -1) {
               return of(null);
             }
             updatedCatalog[parentIdx] = { ...updatedCatalog[parentIdx], children: [ ...(updatedCatalog[parentIdx].children || []), node.id ] };
@@ -187,6 +218,13 @@ export class CatalogService implements OnDestroy {
               updatedCatalog[nodeIdx] = { ...updatedCatalog[nodeIdx], ...node };
             }
             if (action === 'delete') {
+              const parentIdx = updatedCatalog.findIndex(n => n.id === node.parentId);
+              if (parentIdx !== -1) {
+                updatedCatalog[parentIdx] = {
+                  ...updatedCatalog[parentIdx],
+                  children: (updatedCatalog[parentIdx].children || []).filter(c => c !== node.id),
+                };
+              }
               updatedCatalog.splice(nodeIdx, 1);
             }
           }

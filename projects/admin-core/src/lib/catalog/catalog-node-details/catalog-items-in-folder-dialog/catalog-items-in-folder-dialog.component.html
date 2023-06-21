@@ -1,0 +1,15 @@
+<h1 mat-dialog-title>Folder is not empty</h1>
+
+<div mat-dialog-content>
+  <p class="content" i18n>This folder {{data.node.title}} is not empty and contains the following items.</p>
+  <ul>
+    <li *ngFor="let item of data.items">
+      <a [routerLink]="getUrl(item)" (click)="onConfirm()">{{getTitle(item)}}</a>
+    </li>
+  </ul>
+  <p class="content" i18n>Please remove these items first before removing the folder</p>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" (click)="onConfirm()" i18n>Ok</button>
+</div>
