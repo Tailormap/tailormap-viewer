@@ -4,18 +4,14 @@
       <mat-label i18n>Username</mat-label>
       <input formControlName="username" matInput>
     </mat-form-field>
-    <mat-form-field>
-      <mat-label i18n>Password</mat-label>
-      <input formControlName="password" matInput type="password" #passwordControl>
+    <tm-admin-password-field formControlName="password" label="Password" i18n-label>
       <mat-error *ngIf="!userForm.get('password')?.valid && userForm.get('password')?.errors?.['weakPassword']"
                  i18n>Password too short or too easily guessable</mat-error>
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label i18n>Confirm password</mat-label>
-      <input formControlName="confirmedPassword" matInput type="password">
+    </tm-admin-password-field>
+    <tm-admin-password-field formControlName="confirmedPassword" label="Confirm password" i18n-label>
       <mat-error *ngIf="!userForm.valid && userForm.errors?.['matching']"
                  i18n>Passwords need to match</mat-error>
-    </mat-form-field>
+    </tm-admin-password-field>
     <mat-form-field>
       <mat-label i18n>Email</mat-label>
       <input formControlName="email" matInput type="email">

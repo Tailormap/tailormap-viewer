@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { GroupModel, UserModel } from '@tailormap-admin/admin-api';
 import { AbstractControl, AsyncValidatorFn, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { debounceTime, filter, map, Observable, of, Subject, takeUntil } from 'rxjs';
+import { debounceTime, filter, map, Observable, of, Subject, switchMap, takeUntil, timer } from 'rxjs';
 import { GroupService } from '../services/group.service';
 import { formatDate } from '@angular/common';
 import { NAME_REGEX } from '../constants';
@@ -25,7 +25,6 @@ export class UserFormComponent implements OnInit, OnDestroy {
       nonNullable: true,
       validators: [ Validators.required, Validators.minLength(8) ],
       asyncValidators: [this.passwordStrengthValidator()],
-      updateOn: 'blur',
     }),
     confirmedPassword: new FormControl<string>('', { nonNullable: true, validators: [ Validators.required, Validators.minLength(8) ] }),
     email: new FormControl<string>('', { nonNullable: false, validators: [Validators.email] }),
@@ -137,12 +136,16 @@ export class UserFormComponent implements OnInit, OnDestroy {
 
   private passwordStrengthValidator(): AsyncValidatorFn {
     return (control: AbstractControl): Observable<ValidationErrors | null> => {
-      if (!control.value || control.value < 8) {
-        return of(null);
-      }
-      return this.userDetailsService.validatePasswordStrength$(control.value).pipe(
-        map((result: boolean) => {
-          return result ? null : { weakPassword: true };
+      return timer(500).pipe(
+        switchMap(() => {
+          if (!control.value || control.value < 8) {
+            return of(null);
+          }
+          return this.userDetailsService.validatePasswordStrength$(control.value).pipe(
+            map((result: boolean) => {
+              return result ? null : { weakPassword: true };
+            }),
+          );
         }),
       );
     };
