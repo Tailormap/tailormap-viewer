@@ -136,7 +136,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
 
   private passwordStrengthValidator(): AsyncValidatorFn {
     return (control: AbstractControl): Observable<ValidationErrors | null> => {
-      return timer(500).pipe(
+      return timer(250).pipe(
         switchMap(() => {
           if (!control.value || control.value < 8) {
             return of(null);

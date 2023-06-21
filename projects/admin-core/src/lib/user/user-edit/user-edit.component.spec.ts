@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/angular';
+import { render, screen, waitFor } from '@testing-library/angular';
 import { UserEditComponent } from './user-edit.component';
 import { of } from 'rxjs';
 import { getUser } from '@tailormap-admin/admin-api';
@@ -58,6 +58,9 @@ describe('UserEditComponent', () => {
   test('should update user', async () => {
     const { userService } = await setup(true);
     await userEvent.type(screen.getByLabelText('Name'), '23');
+    await waitFor(() => {
+      expect(screen.getByLabelText('Name')).toHaveValue('user 123');
+    });
     await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save');
     const { groupNames, ...user } = getUser({ username: 'user1', name: 'user 123', groupNames: [] });
     expect(userService.addOrUpdateUser$).toHaveBeenCalledWith(false, { ...user, groups: [] });
