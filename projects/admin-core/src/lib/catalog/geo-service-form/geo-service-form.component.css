@@ -2,3 +2,7 @@
     display: block;
     margin-top: 16px;
 }
+
+mat-expansion-panel {
+  margin-top: 16px;
+}

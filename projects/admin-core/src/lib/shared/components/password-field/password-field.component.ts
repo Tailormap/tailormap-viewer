@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy, forwardRef, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { nanoid } from 'nanoid';
 
 @Component({
   selector: 'tm-admin-password-field',
@@ -26,6 +27,8 @@ export class PasswordFieldComponent implements ControlValueAccessor {
   public changed = new EventEmitter<string | null>();
 
   public hide = true;
+
+  public randomName = nanoid();
 
   public disabled = false;
   private onChange: any | null = null;
@@ -61,6 +64,12 @@ export class PasswordFieldComponent implements ControlValueAccessor {
     this.changed.emit(value);
     if (this.onChange) {
       this.onChange(value);
+    }
+  }
+
+  public onBlur() {
+    if (this.onTouched) {
+      this.onTouched();
     }
   }
 
