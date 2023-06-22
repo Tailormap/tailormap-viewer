@@ -43,7 +43,7 @@ export class FeatureSourceService {
       concatMap(createdFeatureSource => {
         if (createdFeatureSource) {
           this.updateFeatureSourceState(createdFeatureSource.id, 'add', createdFeatureSource, catalogNodeId);
-          return this.catalogService.addNodeToCatalog$(catalogNodeId, createdFeatureSource.id, CatalogItemKindEnum.FEATURE_SOURCE)
+          return this.catalogService.addItemToCatalog$(catalogNodeId, createdFeatureSource.id, CatalogItemKindEnum.FEATURE_SOURCE)
             .pipe(
               map(() => createdFeatureSource),
             );
@@ -114,7 +114,7 @@ export class FeatureSourceService {
       concatMap(success => {
         // Remove the service from the catalog
         if (success) {
-          return this.catalogService.removeNodeFromCatalog$(catalogNodeId, featureSourceId, CatalogItemKindEnum.FEATURE_SOURCE)
+          return this.catalogService.removeItemFromCatalog$(catalogNodeId, featureSourceId, CatalogItemKindEnum.FEATURE_SOURCE)
             .pipe(map(response => !!response && !!success));
         }
         return of(false);

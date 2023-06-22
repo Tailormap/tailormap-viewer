@@ -33,6 +33,9 @@ import { FeatureSourceUsedDialogComponent } from './feature-source-details/featu
 import { GeoServiceService } from './services/geo-service.service';
 import { FeatureSourceService } from './services/feature-source.service';
 import { CatalogService } from './services/catalog.service';
+import {
+  CatalogItemsInFolderDialogComponent,
+} from './catalog-node-details/catalog-items-in-folder-dialog/catalog-items-in-folder-dialog.component';
 
 
 @NgModule({
@@ -59,6 +62,7 @@ import { CatalogService } from './services/catalog.service';
     GeoServiceUsedDialogComponent,
     GeoServiceLayerFormDialogComponent,
     FeatureSourceUsedDialogComponent,
+    CatalogItemsInFolderDialogComponent,
   ],
   imports: [
     CommonModule,
