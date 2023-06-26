@@ -3,20 +3,14 @@ import { AttributeType } from './attribute-type.enum';
 export interface AttributeModel {
     id: number;
     featureType: number;
-    name: string;
-    longname: string;
-    editAlias: string;
+    key: string;
     type: AttributeType;
-    visible: boolean;
-    selectable: boolean;
     filterable: boolean;
-    folder_label: string;
     editable: boolean;
-    defaultValue: string;
-    disallowNullValue: boolean;
-    disableUserEdit: boolean;
-    allowValueListOnly: boolean;
+    editAlias?: string;
+    defaultValue?:  string|number|boolean;
+    nullable: boolean;
     automaticValue: boolean;
-    valueList: string;
-    editValues: Array<string | boolean | number>;
+    valueList?: string|number|boolean
+    allowValueListOnly: boolean;
 }
