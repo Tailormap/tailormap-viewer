@@ -1,18 +1,19 @@
 export class ChangePositionHelper {
 
-  public static updateOrderInList(
-    list: string[],
-    movedNode: string,
+  public static updateOrderInList<T>(
+    list: T[],
+    movedNode: T,
     position: 'before' | 'after' | 'inside',
-    sibling?: string,
+    sibling?: T,
+    findIndex?: (searchNode: T, listNode: T) => boolean,
   ) {
     if (!sibling) {
       return [ ...list, movedNode ];
     }
     const updatedList = [...list];
     let toPosition = updatedList.length;
-    const siblingPosition = updatedList.indexOf(sibling);
-    const currentPosition = updatedList.indexOf(movedNode);
+    const siblingPosition = findIndex ? updatedList.findIndex(i => findIndex(i, sibling)) : updatedList.indexOf(sibling);
+    const currentPosition = findIndex ? updatedList.findIndex(i => findIndex(i, movedNode)) : updatedList.indexOf(movedNode);
     const movingUp = currentPosition === -1 || currentPosition > siblingPosition;
     if (position === 'before' && siblingPosition !== -1) {
       toPosition = siblingPosition - (movingUp ? 0 : 1);

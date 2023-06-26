@@ -1,6 +1,9 @@
 import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { filter, Observable, of, Subject, takeUntil } from 'rxjs';
-import { BaseTreeModel, BrowserHelper, NodePositionChangedEventModel, TreeDragDropService, TreeService } from '@tailormap-viewer/shared';
+import {
+  BaseTreeModel, BrowserHelper, DropZoneHelper, NodePositionChangedEventModel, TreeDragDropService,
+  TreeService,
+} from '@tailormap-viewer/shared';
 import { map } from 'rxjs/operators';
 import { MenubarService } from '../../menubar';
 import { TocMenuButtonComponent } from '../toc-menu-button/toc-menu-button.component';
@@ -79,6 +82,10 @@ export class TocComponent implements OnInit, OnDestroy {
       .subscribe((evt) => this.handleNodePositionChanged(evt));
 
     this.menubarService.registerComponent(TocMenuButtonComponent);
+  }
+
+  public getDropZoneConfig() {
+    return DropZoneHelper.getDefaultDropZones(this.treeService);
   }
 
   public ngOnDestroy() {

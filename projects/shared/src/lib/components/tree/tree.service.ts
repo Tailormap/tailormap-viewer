@@ -82,6 +82,7 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
     const node = this.nodesMap.get(nodeId);
     if (node) {
       this.treeControl.expand(node);
+      this.nodeExpansionChangedSource.next({ expanded: true, node });
     }
     return false;
   }

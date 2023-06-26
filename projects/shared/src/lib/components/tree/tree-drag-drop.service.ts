@@ -11,6 +11,7 @@ type MouseEventHandler = (e: MouseEvent) => void;
 export interface DropZoneOptions {
   dropInsideOnly?: boolean;
   getTargetElement(): HTMLDivElement | null;
+  dragAllowed?(nodeid: string): boolean;
   dropAllowed(nodeid: string): boolean;
   dropInsideAllowed(nodeid: string): boolean;
   isExpandable(nodeid: string): boolean;

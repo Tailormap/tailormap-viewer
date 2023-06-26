@@ -1,8 +1,7 @@
 import { Inject, Injectable, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
-  CatalogItemKindEnum, CatalogModelHelper, CatalogNodeModel, FeatureSourceModel, GeoServiceWithLayersModel,
-  TAILORMAP_ADMIN_API_V1_SERVICE,
+  CatalogItemKindEnum, CatalogModelHelper, CatalogNodeModel, FeatureSourceModel, GeoServiceWithLayersModel, TAILORMAP_ADMIN_API_V1_SERVICE,
   TailormapAdminApiV1ServiceModel,
 } from '@tailormap-admin/admin-api';
 import { catchError, combineLatest, concatMap, forkJoin, map, of, Subject, switchMap, take, takeUntil, tap } from 'rxjs';
@@ -10,14 +9,15 @@ import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model'
 import {
   selectCatalog, selectCatalogNodeById, selectFeatureSourceIds, selectFeatureSources, selectGeoServiceIds, selectGeoServices,
 } from '../state/catalog.selectors';
-import {
-  addFeatureSources, addGeoServices, updateCatalog,
-} from '../state/catalog.actions';
+import { addFeatureSources, addGeoServices, updateCatalog } from '../state/catalog.actions';
 import { nanoid } from 'nanoid';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AdminSseService, EventType } from '../../shared/services/admin-sse.service';
 import { DebounceHelper } from '../../helpers/debounce.helper';
+import { ChangePositionHelper } from '@tailormap-viewer/shared';
+import { MoveCatalogNodeModel } from '../models/move-catalog-node.model';
+import { CatalogTreeMoveHelper } from '../helpers/catalog-tree-move.helper';
 
 @Injectable({
   providedIn: 'root',
@@ -191,11 +191,23 @@ export class CatalogService implements OnDestroy {
       );
   }
 
-  private updateCatalog$(node: ExtendedCatalogNodeModel, action: 'create' | 'update' | 'delete') {
+  public moveCatalogNode$(param: MoveCatalogNodeModel) {
+    console.log('moveCatalogNode', param);
     return this.store$.select(selectCatalog)
       .pipe(
         take(1),
         concatMap(catalog => {
+          const updatedTree = CatalogTreeMoveHelper.moveNode(catalog, param);
+          return this.saveUpdatedCatalog$(updatedTree);
+        }),
+      );
+  }
+
+  private updateCatalog$(node: ExtendedCatalogNodeModel, action: 'create' | 'update' | 'delete') {
+    return this.store$.select(selectCatalog)
+      .pipe(
+        take(1),
+        map(catalog => {
           const updatedCatalog: Array<CatalogNodeModel> = [...catalog].map<CatalogNodeModel>(n => {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { parentId, expanded, ...rest } = n;
@@ -204,7 +216,7 @@ export class CatalogService implements OnDestroy {
           if (action === 'create') {
             const parentIdx = updatedCatalog.findIndex(n => n.id === node.parentId);
             if (parentIdx === -1) {
-              return of(null);
+              return null;
             }
             updatedCatalog[parentIdx] = { ...updatedCatalog[parentIdx], children: [ ...(updatedCatalog[parentIdx].children || []), node.id ] };
             updatedCatalog.push(node);
@@ -212,7 +224,7 @@ export class CatalogService implements OnDestroy {
           if (action === 'update' || action === 'delete') {
             const nodeIdx = updatedCatalog.findIndex(n => n.id === node.id);
             if (nodeIdx === -1) {
-              return of(null);
+              return null;
             }
             if (action === 'update') {
               updatedCatalog[nodeIdx] = { ...updatedCatalog[nodeIdx], ...node };
@@ -228,24 +240,32 @@ export class CatalogService implements OnDestroy {
               updatedCatalog.splice(nodeIdx, 1);
             }
           }
-          return this.adminApiService.updateCatalog$(updatedCatalog)
-            .pipe(
-              catchError(() => {
-                this.adminSnackbarService.showMessage($localize `Error while updating catalog.`);
-                return of(null);
-              }),
-            );
+          return updatedCatalog;
         }),
-        tap(updatedCatalog => {
-          if (updatedCatalog) {
-            this.updateCatalog(updatedCatalog);
-          }
-        }),
+        concatMap(updatedCatalog => this.saveUpdatedCatalog$(updatedCatalog)),
         map(catalog => {
           if (catalog) {
             return { catalog, node };
           }
           return null;
+        }),
+      );
+  }
+
+  private saveUpdatedCatalog$(updatedCatalog: CatalogNodeModel[] | null) {
+    if (!updatedCatalog) {
+      return of(null);
+    }
+    return this.adminApiService.updateCatalog$(updatedCatalog)
+      .pipe(
+        catchError(() => {
+          this.adminSnackbarService.showMessage($localize `Error while updating catalog.`);
+          return of(null);
+        }),
+        tap(catalog => {
+          if (catalog) {
+            this.updateCatalog(catalog);
+          }
         }),
       );
   }
