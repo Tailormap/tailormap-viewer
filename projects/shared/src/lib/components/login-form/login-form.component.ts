@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy, Output, EventEmitter, Input } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { LoginConfigurationModel } from '@tailormap-viewer/api';
 import { BehaviorSubject, Observable, take } from 'rxjs';
 
 interface LoginModel {
@@ -25,6 +26,9 @@ export class LoginFormComponent {
   @Output()
   public loggedIn = new EventEmitter<LoginModel>();
 
+  @Input()
+  public redirectUrl: string | null | undefined;
+
   public loginForm = this.formBuilder.group({
     username: [ '', [Validators.required]],
     password: [ '', [Validators.required]],
@@ -35,6 +39,9 @@ export class LoginFormComponent {
 
   private errorMessageSubject = new BehaviorSubject('');
   public errorMessage$ = this.errorMessageSubject.asObservable();
+
+  @Input()
+  public loginConfiguration: LoginConfigurationModel | null = null;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -58,5 +65,19 @@ export class LoginFormComponent {
           this.errorMessageSubject.next(this.loginErrorMessage || 'Login failed, please try again');
         }
       });
+  }
+
+  public loginSSO(ssoUrl: string) {
+    if (typeof this.redirectUrl === "string") {
+      if (ssoUrl.indexOf('?') < 0) {
+          ssoUrl += '?';
+      } else {
+          ssoUrl += '&';
+      }
+
+      ssoUrl += `redirectUrl=${encodeURIComponent(this.redirectUrl)}`;
+    }
+
+    window.location.href = ssoUrl;
   }
 }
