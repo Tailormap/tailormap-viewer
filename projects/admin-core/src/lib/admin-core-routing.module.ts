@@ -11,6 +11,7 @@ import { GroupsPageComponent } from './pages/groups-page/groups-page.component';
 import { FeatureSourceDetailsComponent } from './catalog/feature-source-details/feature-source-details.component';
 import { FeatureTypeDetailsComponent } from './catalog/feature-type-details/feature-type-details.component';
 import { ApplicationPageComponent } from './pages/application-page/application-page.component';
+import { OIDCConfigurationPageComponent } from './pages/oidc-configuration-page/oidc-configuration-page.component';
 import { ApplicationCreateComponent } from './application/application-create/application-create.component';
 import { ApplicationHomeComponent } from './application/application-home/application-home.component';
 import { ApplicationEditComponent } from './application/application-edit/application-edit.component';
@@ -19,6 +20,9 @@ import { ApplicationEditLayersComponent } from './application/application-edit-l
 import { ApplicationEditBaseLayersComponent } from './application/application-edit-base-layers/application-edit-base-layers.component';
 import { ApplicationEditComponentsComponent } from './application/application-edit-components/application-edit-components.component';
 import { ApplicationEditStylingComponent } from './application/application-edit-styling/application-edit-styling.component';
+import { OIDCConfigurationHomeComponent } from './oidc/oidc-configuration-home/oidc-configuration-home.component';
+import { OIDCConfigurationCreateComponent } from './oidc/oidc-configuration-create/oidc-configuration-create.component';
+import { OIDCConfigurationEditComponent } from './oidc/oidc-configuration-edit/oidc-configuration-edit.component';
 import { AdminLoginPageComponent } from './pages/admin-login-page/admin-login-page.component';
 import { CatalogHomeComponent } from './catalog/catalog-home/catalog-home.component';
 import { UserHomeComponent } from './user/user-home/user-home.component';
@@ -27,6 +31,7 @@ import { UserEditComponent } from './user/user-edit/user-edit.component';
 import { GroupHomeComponent } from './user/group-home/group-home.component';
 import { GroupCreateComponent } from './user/group-create/group-create.component';
 import { GroupEditComponent } from './user/group-edit/group-edit.component';
+import { OIDCConfigurationEditSettingsComponent } from './oidc/oidc-configuration-edit-settings/oidc-configuration-edit-settings.component';
 
 const routes: Routes = [
   {
@@ -95,6 +100,31 @@ const routes: Routes = [
           {
             path: RoutesEnum.APPLICATION_DETAILS_STYLING,
             component: ApplicationEditStylingComponent,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    path: RoutesEnum.OIDC_CONFIGURATION,
+    component: OIDCConfigurationPageComponent,
+    children: [
+      {
+        path: '',
+        component: OIDCConfigurationHomeComponent,
+      },
+      {
+        path: RoutesEnum.OIDC_CONFIGURATION_CREATE,
+        component: OIDCConfigurationCreateComponent,
+      },
+      {
+        path: RoutesEnum.OIDC_CONFIGURATION_DETAILS,
+        component: OIDCConfigurationEditComponent,
+        data: { className: 'full-screen-settings' },
+        children: [
+          {
+            path: '',
+            component: OIDCConfigurationEditSettingsComponent,
           },
         ],
       },

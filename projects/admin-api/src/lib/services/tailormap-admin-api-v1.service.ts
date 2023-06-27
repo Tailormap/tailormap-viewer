@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { TailormapAdminApiV1ServiceModel } from './tailormap-admin-api-v1-service.model';
 import { map, Observable } from 'rxjs';
 import {
-  CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel, ConfigModel,
+  CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel, ConfigModel, OIDCConfigurationModel,
 } from '../models';
 import { CatalogModelHelper } from '../helpers/catalog-model.helper';
 import { TailormapApiConstants } from '@tailormap-viewer/api';
@@ -236,4 +236,25 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
     return this.httpClient.patch<ConfigModel>(`${TailormapAdminApiV1Service.BASE_URL}/configs/${params.config.key}`, params.config);
   }
 
+
+  public getOIDCConfigurations$(): Observable<OIDCConfigurationModel[]> {
+    return this.httpClient.get<{ _embedded: { 'oidc-configurations': OIDCConfigurationModel[] }}>(`${TailormapAdminApiV1Service.BASE_URL}/oidc-configurations?size=1000&sort=id`)
+      .pipe(map(response => response._embedded['oidc-configurations']));
+  }
+
+  public createOIDCConfiguration$(params: { oidcConfiguration: OIDCConfigurationModel }): Observable<OIDCConfigurationModel> {
+    return this.httpClient.post<OIDCConfigurationModel>(`${TailormapAdminApiV1Service.BASE_URL}/oidc-configurations`, params.oidcConfiguration);
+  }
+
+  public updateOIDCConfiguration$(params: { id: number; oidcConfiguration: Partial<OIDCConfigurationModel> }): Observable<OIDCConfigurationModel> {
+    return this.httpClient.patch<OIDCConfigurationModel>(`${TailormapAdminApiV1Service.BASE_URL}/oidc-configurations/${params.id}`, params.oidcConfiguration);
+  }
+
+  public deleteOIDCConfiguration$(id: number): Observable<boolean> {
+    return this.httpClient.delete<boolean>(`${TailormapAdminApiV1Service.BASE_URL}/oidc-configurations/${id}`, {
+      observe: 'response',
+    }).pipe(
+      map(response => response.status === 204),
+    );
+  }
 }

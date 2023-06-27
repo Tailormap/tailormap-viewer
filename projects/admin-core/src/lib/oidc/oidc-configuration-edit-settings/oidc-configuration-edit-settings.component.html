@@ -1,0 +1,6 @@
+<ng-container *ngIf="oidcConfiguration$ | async as oidcConfiguration">
+  <div class="form-wrapper">
+    <tm-admin-oidc-configuration-form [oidcConfiguration]="oidcConfiguration"
+                               (updateOIDCConfiguration)="updateOIDCConfiguration($event)"></tm-admin-oidc-configuration-form>
+  </div>
+</ng-container>

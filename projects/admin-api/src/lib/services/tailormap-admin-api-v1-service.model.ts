@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 import {
-  CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel, ConfigModel,
+  CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel, ConfigModel, OIDCConfigurationModel,
 } from '../models';
 
 export interface TailormapAdminApiV1ServiceModel {
@@ -38,4 +38,9 @@ export interface TailormapAdminApiV1ServiceModel {
   getConfig$(params: { key: string }): Observable<ConfigModel>;
   createConfig$(params: { config: ConfigModel }): Observable<ConfigModel>;
   updateConfig$(params: { config: ConfigModel }): Observable<ConfigModel>;
+
+  getOIDCConfigurations$(): Observable<OIDCConfigurationModel[]>
+  createOIDCConfiguration$(params: { oidcConfiguration: Partial<Omit<OIDCConfigurationModel, 'id'>> }): Observable<OIDCConfigurationModel>
+  updateOIDCConfiguration$(params: { id: number, oidcConfiguration: Partial<OIDCConfigurationModel> }): Observable<OIDCConfigurationModel>
+  deleteOIDCConfiguration$(id: number): Observable<boolean>;
 }
