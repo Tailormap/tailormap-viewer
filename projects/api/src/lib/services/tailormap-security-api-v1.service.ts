@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {
   HttpClient, HttpErrorResponse, HttpEvent, HttpHandler, HttpParams, HttpRequest, HttpXsrfTokenExtractor,
 } from '@angular/common/http';
-import { UserResponseModel } from '../models';
+import { LoginConfigurationModel, UserResponseModel } from '../models';
 import { catchError, map, Observable, of, switchMap, throwError } from 'rxjs';
 import { TailormapSecurityApiV1ServiceModel } from './tailormap-security-api-v1.service.model';
 import { TailormapApiConstants } from './tailormap-api.constants';
@@ -37,6 +37,12 @@ export class TailormapSecurityApiV1Service implements TailormapSecurityApiV1Serv
           }),
         );
     };
+  }
+
+  public getLoginConfiguration$(): Observable<LoginConfigurationModel> {
+    return this.httpClient.get<LoginConfigurationModel>(
+      `${TailormapApiConstants.BASE_URL}/login/configuration`,
+    );
   }
 
   public getUser$(): Observable<UserResponseModel> {
