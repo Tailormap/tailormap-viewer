@@ -15,7 +15,6 @@ import { AdminSnackbarService } from '../../shared/services/admin-snackbar.servi
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AdminSseService, EventType } from '../../shared/services/admin-sse.service';
 import { DebounceHelper } from '../../helpers/debounce.helper';
-import { ChangePositionHelper } from '@tailormap-viewer/shared';
 import { MoveCatalogNodeModel } from '../models/move-catalog-node.model';
 import { CatalogTreeMoveHelper } from '../helpers/catalog-tree-move.helper';
 
