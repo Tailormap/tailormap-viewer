@@ -192,7 +192,6 @@ export class CatalogService implements OnDestroy {
   }
 
   public moveCatalogNode$(param: MoveCatalogNodeModel) {
-    console.log('moveCatalogNode', param);
     return this.store$.select(selectCatalog)
       .pipe(
         take(1),

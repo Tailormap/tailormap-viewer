@@ -102,7 +102,10 @@ export class CatalogTreeComponent implements OnInit {
       || CatalogTreeHelper.isFeatureSource(node);
   }
 
-  private getDraggableNodeType(node: CatalogTreeModel): 'node' | CatalogItemKindEnum | null {
+  private getDraggableNodeType(node?: CatalogTreeModel): 'node' | CatalogItemKindEnum | null {
+    if (!node) {
+      return null;
+    }
     if (CatalogTreeHelper.isCatalogNode(node)) {
       return 'node';
     }
@@ -135,32 +138,24 @@ export class CatalogTreeComponent implements OnInit {
         },
         getParent: (nodeId) => this.treeService?.getParent(nodeId) || null,
         nodePositionChanged: (evt) => this.ngZone.run(() => {
-          if (!evt.fromParent) {
-            return;
-          }
-          const fromParent = this.treeService.getNode(evt.fromParent);
-          let toParent = evt.toParent ? this.treeService.getNode(evt.toParent) : null;
-          if (evt.position === 'inside' && !toParent) {
-            toParent = this.treeService.getNode(evt.sibling);
-          }
+          const fromParent = evt.fromParent ? this.treeService.getNode(evt.fromParent) : null;
+          const toParent = evt.toParent ? this.treeService.getNode(evt.toParent) : null;
           const sibling = this.treeService.getNode(evt.sibling);
           const node = this.treeService.getNode(evt.nodeId);
-          if (!fromParent || !fromParent.metadata || !toParent || !toParent.metadata || !node || !node.metadata || !sibling || !sibling.metadata) {
-            return;
-          }
           const siblingType = this.getDraggableNodeType(sibling);
           const nodeType = this.getDraggableNodeType(node);
-          if (CatalogTreeHelper.isCatalogNode(fromParent) && CatalogTreeHelper.isCatalogNode(toParent) && siblingType && nodeType) {
-            this.catalogService.moveCatalogNode$({
-              fromParent: fromParent.metadata.id,
-              toParent: toParent.metadata.id,
-              sibling: sibling.metadata.id,
-              siblingType,
-              node: node.metadata.id,
-              nodeType,
-              position: evt.position,
-            }).subscribe();
+          if (!node || !node.metadata || !sibling || !sibling.metadata || !siblingType || !nodeType) {
+            return;
           }
+          this.catalogService.moveCatalogNode$({
+            fromParent: fromParent?.metadata?.id || null,
+            toParent: toParent?.metadata?.id || null,
+            sibling: sibling.metadata.id,
+            siblingType,
+            node: node.metadata.id,
+            nodeType,
+            position: evt.position,
+          }).subscribe();
         }),
       }];
   }

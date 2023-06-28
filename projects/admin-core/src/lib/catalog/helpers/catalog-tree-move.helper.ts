@@ -5,15 +5,27 @@ import { ChangePositionHelper } from '@tailormap-viewer/shared';
 
 export class CatalogTreeMoveHelper {
 
-  public static moveNode(catalog: ExtendedCatalogNodeModel[], param: MoveCatalogNodeModel): ExtendedCatalogNodeModel[] | null {
-    if (param.position === 'inside') {
-      return CatalogTreeMoveHelper.moveNodeInsideNode(catalog, param);
+  public static moveNode(
+    catalog: ExtendedCatalogNodeModel[],
+    param: MoveCatalogNodeModel,
+  ): ExtendedCatalogNodeModel[] {
+    const toParentId = param.toParent === null ? catalog.find(c => c.root)?.id : param.toParent;
+    const fromParentId = param.fromParent === null ? catalog.find(c => c.root)?.id : param.fromParent;
+    if (!toParentId || !fromParentId) {
+      return catalog;
     }
-    return CatalogTreeMoveHelper.moveNodeBetweenNodes(catalog, param);
+    if (param.position === 'inside') {
+      return CatalogTreeMoveHelper.moveNodeInsideNode(catalog, param, fromParentId);
+    }
+    return CatalogTreeMoveHelper.moveNodeBetweenNodes(catalog, param, fromParentId, toParentId);
   }
 
-  public static moveNodeInsideNode(catalog: ExtendedCatalogNodeModel[], param: MoveCatalogNodeModel): ExtendedCatalogNodeModel[] {
-    if (param.siblingType !== 'node' || param.sibling === param.fromParent) {
+  private static moveNodeInsideNode(
+    catalog: ExtendedCatalogNodeModel[],
+    param: MoveCatalogNodeModel,
+    fromParentId: string,
+  ): ExtendedCatalogNodeModel[] {
+    if (param.siblingType !== 'node' || param.sibling === fromParentId) {
       return catalog;
     }
     const isItemMethod = CatalogTreeMoveHelper.filterCatalogItem(param.node, param.nodeType);
@@ -26,7 +38,7 @@ export class CatalogTreeMoveHelper {
           return { ...node, items: [ ...(node.items || []), { id: param.node, kind: param.nodeType }] };
         }
       }
-      if (node.id === param.fromParent) {
+      if (node.id === fromParentId) {
         if (param.nodeType === 'node') {
           return { ...node, children: (node.children || []).filter(c => c !== param.node) };
         }
@@ -34,40 +46,51 @@ export class CatalogTreeMoveHelper {
           return { ...node, items: (node.items || []).filter(isItemMethod) };
         }
       }
+      if (node.id === param.node) {
+        return { ...node, parentId: param.sibling };
+      }
       return node;
     });
   }
 
-  public static moveNodeBetweenNodes(catalog: ExtendedCatalogNodeModel[], param: MoveCatalogNodeModel): ExtendedCatalogNodeModel[] | null {
+  private static moveNodeBetweenNodes(
+    catalog: ExtendedCatalogNodeModel[],
+    param: MoveCatalogNodeModel,
+    fromParentId: string,
+    toParentId: string,
+  ): ExtendedCatalogNodeModel[] {
     if (param.node === param.sibling) {
-      return null;
+      return catalog;
     }
     const isItemMethod = CatalogTreeMoveHelper.filterCatalogItem(param.node, param.nodeType);
     return catalog.map(node => {
-      if (node.id !== param.fromParent && node.id !== param.toParent) {
+      if (node.id === param.node) {
+        return { ...node, parentId: toParentId };
+      }
+      if (node.id !== fromParentId && node.id !== toParentId) {
         return node;
       }
       const updatedNode = { ...node };
       if (param.nodeType === 'node') {
-        if (node.id === param.fromParent) {
+        if (node.id === fromParentId) {
           updatedNode.children = (node.children || []).filter(c => c !== param.node);
         }
-        if (node.id === param.toParent) {
+        if (node.id === toParentId) {
           if (param.siblingType !== 'node') {
             // Folders can't be dragged between services/feature sources, move to last position
-            updatedNode.children = [ ...(node.children || []), param.node ];
+            updatedNode.children = [ ...(updatedNode.children || []), param.node ];
           } else {
             updatedNode.children = ChangePositionHelper.updateOrderInList(updatedNode.children || [], param.node, param.position, param.sibling);
           }
         }
       } else {
-        if (node.id === param.fromParent) {
+        if (node.id === fromParentId) {
           updatedNode.items = (node.items || []).filter(isItemMethod);
         }
-        if (node.id === param.toParent) {
+        if (node.id === toParentId) {
           if (param.siblingType === 'node') {
             // Services/feature dragged between folders, move to first position
-            updatedNode.items = [{ id: param.node, kind: param.nodeType }, ...(node.items || []) ];
+            updatedNode.items = [{ id: param.node, kind: param.nodeType }, ...(updatedNode.items || []) ];
           } else {
             const nodeItem: CatalogItemModel = { id: param.node, kind: param.nodeType };
             const siblingItem: CatalogItemModel = { id: param.sibling, kind: param.siblingType };
@@ -76,6 +99,9 @@ export class CatalogTreeMoveHelper {
             });
           }
         }
+      }
+      if (node.id === param.node) {
+        updatedNode.parentId = toParentId;
       }
       return updatedNode;
     });
