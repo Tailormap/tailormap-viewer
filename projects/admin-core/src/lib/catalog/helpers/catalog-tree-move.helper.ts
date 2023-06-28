@@ -25,7 +25,12 @@ export class CatalogTreeMoveHelper {
     param: MoveCatalogNodeModel,
     fromParentId: string,
   ): ExtendedCatalogNodeModel[] {
-    if (param.siblingType !== 'node' || param.sibling === fromParentId) {
+    const parentIds = new Set(CatalogTreeMoveHelper.getParentIds(catalog, param.sibling, param.siblingType));
+    if (param.siblingType !== 'node' // can only move inside nodes
+      || param.sibling === fromParentId // no use in moving inside the same parent
+      || param.sibling === param.node // can't move inside itself
+      || parentIds.has(param.node) // can't move inside a child
+    ) {
       return catalog;
     }
     const isItemMethod = CatalogTreeMoveHelper.filterCatalogItem(param.node, param.nodeType);
@@ -109,6 +114,24 @@ export class CatalogTreeMoveHelper {
 
   private static filterCatalogItem(id: string, kind: string | CatalogItemKindEnum) {
     return (item: CatalogItemModel) => item.id !== id || item.kind !== kind;
+  }
+
+  private static getParentIds(
+    catalog: ExtendedCatalogNodeModel[],
+    id: string,
+    type: 'node' | CatalogItemKindEnum,
+  ): string[] {
+    const isItemMethod = CatalogTreeMoveHelper.filterCatalogItem(id, type);
+    const currentParent = catalog.find(c => {
+      if (type === 'node') {
+        return (c.children || []).includes(id);
+      }
+      return (c.items || []).find(isItemMethod);
+    });
+    if (!currentParent) {
+      return [];
+    }
+    return [ currentParent.id, ...CatalogTreeMoveHelper.getParentIds(catalog, currentParent.id, 'node') ];
   }
 
 }

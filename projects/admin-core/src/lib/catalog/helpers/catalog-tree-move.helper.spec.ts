@@ -218,4 +218,18 @@ describe('CatalogTreeMoveHelper', () => {
     matchesTree(moveEvt, baseTree, changedItems);
   });
 
+  it('illegal move of node inside a child node should not change catalog', () => {
+    const changedItems: CatalogTestNode[] = [];
+    const moveEvt: MoveCatalogNodeModel = {
+      node: '1',
+      nodeType: 'node',
+      sibling: '1_1',
+      siblingType: 'node',
+      position: 'inside',
+      fromParent: '1',
+      toParent: '1_1',
+    };
+    matchesTree(moveEvt, baseTree, changedItems);
+  });
+
 });
