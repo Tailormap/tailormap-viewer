@@ -132,27 +132,34 @@ export class CatalogService implements OnDestroy {
   }
 
   public getItemsForCatalogNode$(node: ExtendedCatalogNodeModel) {
-    const serviceItems = (node.items || [])
-      .filter(item => item.kind === CatalogItemKindEnum.GEO_SERVICE)
-      .map(item => item.id);
-    const featureSourceItems = (node.items || [])
-      .filter(item => item.kind === CatalogItemKindEnum.FEATURE_SOURCE)
-      .map(item => item.id);
-    const services$ = this.getServices$(serviceItems, this.destroyed, node.id);
-    const featureSources$ = this.getFeatureSources$(featureSourceItems, this.destroyed, node.id);
-    const serviceIds = new Set(serviceItems);
-    const featureSourceIds = new Set(featureSourceItems);
-    return forkJoin([ services$ || of(true), featureSources$ || of(true) ])
+    return this.store$.select(selectCatalog)
       .pipe(
         take(1),
-        switchMap(() => {
-          return combineLatest([
-            this.store$.select(selectGeoServices).pipe(map(services => services.filter(s => serviceIds.has(s.id)))),
-            this.store$.select(selectFeatureSources).pipe(map(fs => fs.filter(s => featureSourceIds.has(s.id)))),
-          ]).pipe(
-            take(1),
-            map(([ services, featureSources ]) => [ ...services, ...featureSources ]),
-          );
+        switchMap(catalog => {
+          const items = this.findItemsForNodeRecursively(node, catalog);
+          const serviceItems = items
+            .filter(item => item.kind === CatalogItemKindEnum.GEO_SERVICE)
+            .map(item => item.id);
+          const featureSourceItems = items
+            .filter(item => item.kind === CatalogItemKindEnum.FEATURE_SOURCE)
+            .map(item => item.id);
+          const services$ = this.getServices$(serviceItems, this.destroyed, node.id);
+          const featureSources$ = this.getFeatureSources$(featureSourceItems, this.destroyed, node.id);
+          const serviceIds = new Set(serviceItems);
+          const featureSourceIds = new Set(featureSourceItems);
+          return forkJoin([ services$ || of(true), featureSources$ || of(true) ])
+            .pipe(
+              take(1),
+              switchMap(() => {
+                return combineLatest([
+                  this.store$.select(selectGeoServices).pipe(map(services => services.filter(s => serviceIds.has(s.id)))),
+                  this.store$.select(selectFeatureSources).pipe(map(fs => fs.filter(s => featureSourceIds.has(s.id)))),
+                ]).pipe(
+                  take(1),
+                  map(([ services, featureSources ]) => [ ...services, ...featureSources ]),
+                );
+              }),
+            );
         }),
       );
   }
@@ -254,6 +261,19 @@ export class CatalogService implements OnDestroy {
     DebounceHelper.debounce('update-catalog', () => {
       this.store$.dispatch(updateCatalog({ nodes }));
     }, 50);
+  }
+
+  private findItemsForNodeRecursively(node: CatalogNodeModel, catalog: CatalogNodeModel[]) {
+    const items = [...(node.items || [])];
+    if (node.children) {
+      node.children.forEach(childId => {
+        const child = catalog.find(c => c.id === childId);
+        if (child) {
+          items.push(...this.findItemsForNodeRecursively(child, catalog));
+        }
+      });
+    }
+    return items;
   }
 
 }
