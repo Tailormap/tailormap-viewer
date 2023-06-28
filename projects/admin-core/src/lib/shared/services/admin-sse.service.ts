@@ -10,11 +10,11 @@ import { AdminCoreConfigModel } from '../../models/admin-core-config.model';
 
 export interface SSEEvent<T = any> {
   details: {
-    entityName: string,
-    id: string,
-    object: T
-  },
-  eventType: EventType
+    entityName: string;
+    id: string;
+    object: T;
+  };
+  eventType: EventType;
 }
 
 export enum EventType {

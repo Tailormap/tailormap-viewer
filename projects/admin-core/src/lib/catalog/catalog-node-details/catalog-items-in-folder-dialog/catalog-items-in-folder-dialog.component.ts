@@ -16,7 +16,7 @@ export class CatalogItemsInFolderDialogComponent {
 
   constructor(
     private dialogRef: MatDialogRef<CatalogItemsInFolderDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { node: ExtendedCatalogNodeModel, items: Array<ExtendedGeoServiceModel | ExtendedFeatureTypeModel> },
+    @Inject(MAT_DIALOG_DATA) public data: { node: ExtendedCatalogNodeModel; items: Array<ExtendedGeoServiceModel | ExtendedFeatureTypeModel> },
   ) { }
 
   public onConfirm() {

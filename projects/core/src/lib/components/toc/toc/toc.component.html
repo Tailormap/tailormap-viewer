@@ -30,7 +30,10 @@
   <div *ngIf="filterEnabled$ | async" class="toc-search">
     <tm-toc-filter-input></tm-toc-filter-input>
   </div>
-  <tm-tree class="toc-tree" [treeNodeTemplate]="treeNode" [expandOnGroupClick]="true"></tm-tree>
+  <tm-tree class="toc-tree"
+           [treeNodeTemplate]="treeNode"
+           [expandOnGroupClick]="true"
+           [getDropZones]="getDropZoneConfig()"></tm-tree>
   <tm-toc-node-details *ngIf="infoTreeNodeId$ | async as selectedLayerDetail"
                     [nodeId]="selectedLayerDetail"
                     (closeDetails)="layerInfoClosed()"></tm-toc-node-details>

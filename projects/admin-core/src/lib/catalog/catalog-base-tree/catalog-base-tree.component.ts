@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnDestroy, Input, TemplateRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnDestroy, Input, TemplateRef, NgZone } from '@angular/core';
 import { DropZoneOptions, LoadingStateEnum, TreeService } from '@tailormap-viewer/shared';
 import { CatalogTreeModel, CatalogTreeModelMetadataTypes } from '../models/catalog-tree.model';
 import { CatalogTreeModelTypeEnum } from '../models/catalog-tree-model-type.enum';
@@ -25,12 +25,13 @@ export class CatalogBaseTreeComponent implements OnDestroy {
   public treeNodeTemplate?: TemplateRef<any>;
 
   @Input()
-  public additionalDropZones?: DropZoneOptions[];
+  public getDropZones?: (defaultTarget: HTMLDivElement) => DropZoneOptions[];
 
   constructor(
     private treeService: TreeService<CatalogTreeModelMetadataTypes, CatalogTreeModelTypeEnum>,
     private store$: Store,
     private catalogTreeService: CatalogTreeService,
+    private ngZone: NgZone,
   ) {
     this.isLoading$ = this.store$.select(selectCatalogLoadStatus)
       .pipe(map(loadStatus => loadStatus === LoadingStateEnum.LOADING));
@@ -38,7 +39,7 @@ export class CatalogBaseTreeComponent implements OnDestroy {
       .pipe(map(error => error || null));
     this.treeService.nodeExpansionChangedSource$
       .pipe(takeUntil(this.destroyed))
-      .subscribe(({ node, expanded }) => this.toggleExpansion(node, expanded));
+      .subscribe(({ node, expanded }) => this.ngZone.run(() => this.toggleExpansion(node, expanded)));
     this.store$.select(selectCatalogLoadStatus)
       .pipe(take(1))
       .subscribe(loadStatus => {

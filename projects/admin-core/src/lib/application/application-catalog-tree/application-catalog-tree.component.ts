@@ -32,18 +32,6 @@ export class ApplicationCatalogTreeComponent implements OnInit {
   @Output()
   public addLayer = new EventEmitter<AddLayerEvent>();
 
-  public additionalDropZones: DropZoneOptions[] = [{
-    dropInsideOnly: true,
-    getTargetElement: () => document.querySelector('.application-tree mat-tree'),
-    dropAllowed: () => true,
-    dropInsideAllowed: (nodeId) => !!this.applicationTreeService?.isExpandable(nodeId),
-    isExpandable: (nodeId) => !!this.applicationTreeService?.isExpandable(nodeId),
-    isExpanded: (nodeId) => !!this.applicationTreeService?.isExpanded(nodeId),
-    expandNode: (nodeId) => !!this.applicationTreeService?.expandNode(nodeId),
-    getParent: (nodeId) => this.applicationTreeService?.getParent(nodeId) || null,
-    nodePositionChanged: (evt) => this.onNodePositionChanged(evt),
-  }];
-
   constructor(
     private store$: Store,
     private treeService: TreeService<CatalogTreeModelMetadataTypes, CatalogTreeModelTypeEnum>,
@@ -56,6 +44,24 @@ export class ApplicationCatalogTreeComponent implements OnInit {
 
   public selectableNode(node: TreeModel<CatalogTreeModelMetadataTypes, CatalogTreeModelTypeEnum>): node is TreeModel<ExtendedGeoServiceLayerModel, CatalogTreeModelTypeEnum> {
     return CatalogTreeHelper.isLayerNode(node) && !!node.metadata && !node.metadata.virtual;
+  }
+
+  public getDropZones(): () => DropZoneOptions[] {
+    return () => [{
+      dropInsideOnly: true,
+      getTargetElement: () => document.querySelector('.application-tree mat-tree'),
+      dragAllowed: (nodeid: string) => {
+        const node = this.treeService.getNode(nodeid);
+        return !!node && this.selectableNode(node);
+      },
+      dropAllowed: () => true,
+      dropInsideAllowed: (nodeId) => !!this.applicationTreeService?.isExpandable(nodeId),
+      isExpandable: (nodeId) => !!this.applicationTreeService?.isExpandable(nodeId),
+      isExpanded: (nodeId) => !!this.applicationTreeService?.isExpanded(nodeId),
+      expandNode: (nodeId) => !!this.applicationTreeService?.expandNode(nodeId),
+      getParent: (nodeId) => this.applicationTreeService?.getParent(nodeId) || null,
+      nodePositionChanged: (evt) => this.onNodePositionChanged(evt),
+    }];
   }
 
   private onNodePositionChanged(evt: NodePositionChangedEventModel) {

@@ -19,7 +19,7 @@ export class TreeComponent implements OnInit, OnDestroy {
   public treeNodeTemplate?: TemplateRef<any>;
 
   @Input()
-  public additionalDropZones?: DropZoneOptions[];
+  public getDropZones?: (defaultTarget: HTMLDivElement, node: FlatTreeModel) => DropZoneOptions[];
 
   @Input()
   public useRadioInputs?: boolean;
@@ -147,22 +147,18 @@ export class TreeComponent implements OnInit, OnDestroy {
   }
 
   public handleDragStart(event: DragEvent, node: FlatTreeModel) {
-    if (!this.treeDragDropService || !this.treeElement) {
+    if (!this.treeDragDropService || !this.getDropZones || !this.treeElement) {
+      event.preventDefault();
       return;
     }
-    const dragElement = this.treeElement.nativeElement;
-    const dropZoneConfig: DropZoneOptions = {
-      getTargetElement: () => dragElement,
-      dropAllowed: (nodeId) => this.treeService.hasNode(nodeId) && !this.treeService.isNodeOrInsideOwnTree(nodeId, node),
-      dropInsideAllowed: (nodeId) => this.treeService.isExpandable(nodeId) && !this.treeService.isNodeOrInsideOwnTree(nodeId, node),
-      isExpandable: (nodeId) => this.treeService.isExpandable(nodeId),
-      isExpanded: (nodeId) => this.treeService.isExpanded(nodeId),
-      expandNode: (nodeId) => this.treeService.expandNode(nodeId),
-      getParent: (nodeId) => this.treeService.getParent(nodeId),
-      nodePositionChanged: evt => this.treeService.nodePositionChanged(evt),
-    };
+    const dropZoneConfig = this.getDropZones(this.treeElement.nativeElement, node);
+    const dragAllowed = dropZoneConfig.some(dz => dz.dragAllowed ? dz.dragAllowed(node.id) : true);
+    if (!dragAllowed) {
+      event.preventDefault();
+      return;
+    }
     this.ngZone.runOutsideAngular(() => {
-      this.treeDragDropService.handleDragStart(event, node, [ dropZoneConfig, ...(this.additionalDropZones || []) ]);
+      this.treeDragDropService.handleDragStart(event, node, dropZoneConfig);
     });
   }
 

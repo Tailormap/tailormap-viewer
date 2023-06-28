@@ -1,5 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, OnDestroy, NgZone } from '@angular/core';
-import { NodePositionChangedEventModel, TreeDragDropService, TreeModel, TreeNodePosition, TreeService } from '@tailormap-viewer/shared';
+import {
+  DropZoneHelper, NodePositionChangedEventModel, TreeDragDropService, TreeModel, TreeNodePosition, TreeService,
+} from '@tailormap-viewer/shared';
 import { Observable, of, Subject, take, takeUntil } from 'rxjs';
 import { AppTreeNodeModel } from '@tailormap-admin/admin-api';
 import { MatDialog } from '@angular/material/dialog';
@@ -95,6 +97,10 @@ export class ApplicationLayerTreeComponent implements OnInit, OnDestroy {
 
   public onDeleteNode(nodeId: string) {
     this.removeNode.emit({ nodeId });
+  }
+
+  public getDropZones() {
+    return DropZoneHelper.getDefaultDropZones(this.treeService);
   }
 
 }
