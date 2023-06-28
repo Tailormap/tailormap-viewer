@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/angular';
+import { render, screen, waitFor } from '@testing-library/angular';
 import { FeatureSourceDetailsComponent } from './feature-source-details.component';
 import { of } from 'rxjs';
 import { FeatureSourceProtocolEnum, getFeatureSource, JdbcDatabaseTypeEnum } from '@tailormap-admin/admin-api';
@@ -68,18 +68,20 @@ describe('FeatureSourceDetailsComponent', () => {
     await userEvent.type(await screen.findByPlaceholderText('Port'), '[Backspace]5432');
     await userEvent.type(await screen.findByPlaceholderText('Schema'), 'roads');
     await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save');
-    expect(featureServiceMock.updateFeatureSource$).toHaveBeenCalledWith('1', {
-      title: featureSourceModel.title + '___',
-      protocol: featureSourceModel.protocol,
-      url: featureSourceModel.url,
-      jdbcConnection: {
-        dbtype: featureSourceModel.jdbcConnection?.dbtype,
-        database: 'geo_db',
-        port: 5432,
-        host: 'localhost',
-        schema: 'roads',
-      },
-      authentication: undefined,
+    await waitFor(() => {
+      expect(featureServiceMock.updateFeatureSource$).toHaveBeenCalledWith('1', {
+        title: featureSourceModel.title + '___',
+        protocol: featureSourceModel.protocol,
+        url: featureSourceModel.url,
+        jdbcConnection: {
+          dbtype: featureSourceModel.jdbcConnection?.dbtype,
+          database: 'geo_db',
+          port: 5432,
+          host: 'localhost',
+          schema: 'roads',
+        },
+        authentication: undefined,
+      });
     });
     expect(await screen.findByText('Refresh feature source?')).toBeInTheDocument();
     await userEvent.click(await screen.findByText('Yes'));
@@ -90,12 +92,14 @@ describe('FeatureSourceDetailsComponent', () => {
     const { featureSourceModel, featureServiceMock } = await setup(FeatureSourceProtocolEnum.WFS);
     await userEvent.type(await screen.findByPlaceholderText('Title'), '___');
     await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save');
-    expect(featureServiceMock.updateFeatureSource$).toHaveBeenCalledWith('1', {
-      title: featureSourceModel.title + '___',
-      protocol: featureSourceModel.protocol,
-      url: featureSourceModel.url,
-      jdbcConnection: undefined,
-      authentication: undefined,
+    await waitFor(() => {
+      expect(featureServiceMock.updateFeatureSource$).toHaveBeenCalledWith('1', {
+        title: featureSourceModel.title + '___',
+        protocol: featureSourceModel.protocol,
+        url: featureSourceModel.url,
+        jdbcConnection: undefined,
+        authentication: undefined,
+      });
     });
     expect(await screen.queryByText('Refresh feature source?')).not.toBeInTheDocument();
   });
@@ -111,16 +115,18 @@ describe('FeatureSourceDetailsComponent', () => {
     expect(passwordField).toBeInTheDocument();
     await userEvent.type(passwordField, 'secret');
     await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save');
-    expect(featureServiceMock.updateFeatureSource$).toHaveBeenCalledWith('1', {
-      title: featureSourceModel.title,
-      protocol: featureSourceModel.protocol,
-      url: featureSourceModel.url + '/path',
-      jdbcConnection: undefined,
-      authentication: {
-        method: 'password',
-        username: 'some_user',
-        password: 'secret',
-      },
+    await waitFor(() => {
+      expect(featureServiceMock.updateFeatureSource$).toHaveBeenCalledWith('1', {
+        title: featureSourceModel.title,
+        protocol: featureSourceModel.protocol,
+        url: featureSourceModel.url + '/path',
+        jdbcConnection: undefined,
+        authentication: {
+          method: 'password',
+          username: 'some_user',
+          password: 'secret',
+        },
+      });
     });
     expect(await screen.findByText('Refresh feature source?')).toBeInTheDocument();
     await userEvent.click(await screen.findByText('No'));
