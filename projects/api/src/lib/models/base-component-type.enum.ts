@@ -15,4 +15,5 @@ export enum BaseComponentTypeEnum {
   FILTER = 'FILTER',
   GEOLOCATION = 'GEOLOCATION',
   STREETVIEW = 'STREETVIEW',
+  EDIT = 'EDIT',
 }

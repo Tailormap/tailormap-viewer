@@ -3,7 +3,9 @@ import { MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum } 
 import { concatMap, of, Subject, takeUntil, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { loadFeatureInfo } from '../state/feature-info.actions';
-import { selectCurrentlySelectedFeatureGeometry, selectFeatureInfoError$ } from '../state/feature-info.selectors';
+import {
+  selectCurrentlySelectedFeatureGeometry, selectFeatureInfoError$, selectLoadingFeatureInfo, selectMapCoordinates,
+} from '../state/feature-info.selectors';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 import { deregisterTool, registerTool } from '../../toolbar/state/toolbar.actions';
@@ -19,6 +21,9 @@ import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.he
 export class FeatureInfoComponent implements OnInit, OnDestroy {
 
   private destroyed = new Subject();
+
+  public loadingFeatureInfo$ = this.store$.select(selectLoadingFeatureInfo);
+  public featureInfoCoordinates$ = this.store$.select(selectMapCoordinates);
 
   private static DEFAULT_ERROR_MESSAGE = $localize `Something went wrong while getting feature info, please try again`;
   private static DEFAULT_NO_FEATURES_FOUND_MESSAGE = $localize `No features found`;

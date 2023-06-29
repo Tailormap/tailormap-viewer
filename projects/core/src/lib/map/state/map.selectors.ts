@@ -111,6 +111,11 @@ export const selectVisibleLayersWithAttributes = createSelector(
   layers => layers.filter(l => l.hasAttributes),
 );
 
+export const selectEditableLayers = createSelector(
+  selectOrderedVisibleLayersWithServices,
+  layers => layers.filter(l => l.editable),
+);
+
 export const selectVisibleWMSLayersWithoutAttributes = createSelector(
   selectOrderedVisibleLayersWithServices,
   layers => layers.filter(l => l.service?.protocol === ServiceProtocol.WMS && !l.hasAttributes),

@@ -1,28 +1,34 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
 import { combineLatest, map, Observable, of, switchMap } from 'rxjs';
-import { selectLoadingFeatureInfo, selectMapCoordinates } from '../state/feature-info.selectors';
 import { MapService } from '@tailormap-viewer/map';
 
 @Component({
-  selector: 'tm-feature-info-spinner',
-  templateUrl: './feature-info-spinner.component.html',
-  styleUrls: ['./feature-info-spinner.component.css'],
+  selector: 'tm-map-spinner',
+  templateUrl: './map-spinner.component.html',
+  styleUrls: ['./map-spinner.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FeatureInfoSpinnerComponent implements OnInit {
+export class MapSpinnerComponent implements OnInit {
+
+  @Input({ required: true })
+  public loading$: Observable<boolean> | undefined;
+
+  @Input({ required: true })
+  public coordinates$: Observable<[number, number] | undefined> | undefined;
 
   public spinnerStyle$: Observable<{ display: string } | { top: string; left: string }> | undefined;
 
   constructor(
-    private store$: Store,
     private mapService: MapService,
   ) { }
 
   public ngOnInit(): void {
+    if (!this.loading$ || !this.coordinates$) {
+      return;
+    }
     this.spinnerStyle$ = combineLatest([
-      this.store$.select(selectLoadingFeatureInfo),
-      this.store$.select(selectMapCoordinates)
+      this.loading$,
+      this.coordinates$
         .pipe(
           switchMap((coords) => {
             if (!coords) {

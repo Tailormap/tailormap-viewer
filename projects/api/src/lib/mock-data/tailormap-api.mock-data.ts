@@ -75,7 +75,7 @@ export const getLayerDetailsModel = (overrides?: Partial<LayerDetailsModel>): La
   geometryType: GeometryType.GEOMETRY,
   geometryAttributeIndex: 1,
   geometryAttribute: 'geom',
-  featuretypeName: 'test',
+  featureTypeName: 'test',
   editable: false,
   attributes: [],
   ...overrides,
