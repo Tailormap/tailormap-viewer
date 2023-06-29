@@ -111,7 +111,7 @@ describe('FeatureSourceDetailsComponent', () => {
     expect(await screen.queryByText('Database')).not.toBeInTheDocument();
     await userEvent.type(await screen.findByPlaceholderText('URL'), '/path');
     await userEvent.type(await screen.findByPlaceholderText('Username'), 'some_user');
-    const passwordField = (await screen.findByText('Password'))?.closest('div')?.querySelector('input') as Element;
+    const passwordField = await screen.findByLabelText('Password');
     expect(passwordField).toBeInTheDocument();
     await userEvent.type(passwordField, 'secret');
     await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save');
