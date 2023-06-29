@@ -5,12 +5,12 @@ export interface AttributeModel {
     featureType: number;
     key: string;
     type: AttributeType;
-    filterable: boolean;
     editable: boolean;
     editAlias?: string;
-    defaultValue?:  string|number|boolean;
+    // may need to be coerced to proper type
+    defaultValue?:  string;
     nullable: boolean;
-    automaticValue: boolean;
-    valueList?: string|number|boolean
+    // values may need to be coerced to proper type
+    valueList?: string;
     allowValueListOnly: boolean;
 }

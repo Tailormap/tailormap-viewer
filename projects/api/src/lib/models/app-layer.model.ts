@@ -8,6 +8,7 @@ export interface AppLayerModel {
   url?: string;
   visible: boolean;
   hasAttributes: boolean;
+  editable: boolean;
   minScale?: number;
   maxScale?: number;
   legendImageUrl?: string;

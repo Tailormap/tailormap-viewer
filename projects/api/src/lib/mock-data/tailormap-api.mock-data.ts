@@ -54,6 +54,7 @@ export const getAppLayerModel = (overrides?: Partial<AppLayerModel>): AppLayerMo
   serviceId: '1',
   visible: true,
   hasAttributes: false,
+  editable: false,
   title: 'Test',
   layerName: 'test',
   opacity: 100,
