@@ -72,11 +72,9 @@ export const getServiceModel = (overrides?: Partial<ServiceModel>): ServiceModel
 export const getLayerDetailsModel = (overrides?: Partial<LayerDetailsModel>): LayerDetailsModel => ({
   id: '1',
   serviceId: 1,
-  relations: [],
   geometryType: GeometryType.GEOMETRY,
   geometryAttributeIndex: 1,
   geometryAttribute: 'geom',
-  metadata: null,
   featuretypeName: 'test',
   editable: false,
   attributes: [],
