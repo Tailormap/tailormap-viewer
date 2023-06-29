@@ -65,6 +65,7 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
     sortBy?: string;
     sortOrder?: Sortorder;
     onlyGeometries?: boolean;
+    geometryInAttributes?: boolean;
   }): Observable<FeaturesResponseModel> {
     const queryParams = ApiHelper.getQueryParams({
       x: params.x,
@@ -77,6 +78,8 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
       sortBy: params.sortBy,
       sortOrder: params.sortOrder,
       onlyGeometries: params.onlyGeometries,
+      // NOTE that the API is smart enough to ignore this parameter if onlyGeometries is true
+      geometryInAttributes: params.geometryInAttributes,
     });
     return this.httpClient.post<FeaturesResponseModel>(
       `${TailormapApiConstants.BASE_URL}/${params.applicationId}/layer/${params.layerId}/features`,
