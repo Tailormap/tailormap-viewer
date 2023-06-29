@@ -1,6 +1,7 @@
 import { TailormapApiV1Service } from './tailormap-api-v1.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
+import { FeatureModel } from '@tailormap-viewer/api';
 
 describe('TailormapApiV1Service', () => {
 
@@ -75,6 +76,27 @@ describe('TailormapApiV1Service', () => {
   test('queries API for getLayerExportCapabilities$', () => {
     service.getLayerExportCapabilities$({ applicationId: 'app/default', layerId: '1' }).subscribe();
     const req = httpController.expectOne({ url: '/api/app/default/layer/1/export/capabilities', method: 'GET' });
+    req.flush(null);
+  });
+
+  test('queries API for deleteFeature$', () => {
+    const feat : FeatureModel = { __fid: '1', attributes: {} };
+    service.deleteFeature$({ applicationId: 'app/default', layerId: '1', feature: feat } ).subscribe();
+    const req = httpController.expectOne({ url: '/api/app/default/layer/1/feature/1', method: 'DELETE' });
+    req.flush(null);
+  });
+
+  test('queries API for createFeature$', () => {
+    const feat : FeatureModel = { __fid: "", attributes: { a:'a'} };
+    service.createFeature$({ applicationId: 'app/default', layerId: '1', feature: feat } ).subscribe();
+    const req = httpController.expectOne({ url: '/api/app/default/layer/1/feature', method: 'POST' });
+    req.flush(null);
+  });
+
+  test('queries API for updateFeature$', () => {
+    const feat : FeatureModel = { __fid: "1", attributes: { a:'a'} };
+    service.updateFeature$({ applicationId: 'app/default', layerId: '1', feature: feat } ).subscribe();
+    const req = httpController.expectOne({ url: '/api/app/default/layer/1/feature/1', method: 'PATCH' });
     req.flush(null);
   });
 

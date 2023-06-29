@@ -1,10 +1,10 @@
-import { ViewerResponseModel, LayerDetailsModel, MapResponseModel, Sortorder, VersionResponseModel } from '../models';
+import { ViewerResponseModel, LayerDetailsModel, MapResponseModel, Sortorder, VersionResponseModel, FeatureModel } from '../models';
 import { Observable } from 'rxjs';
 import { FeaturesResponseModel } from '../models/features-response.model';
 import { UniqueValuesResponseModel } from '../models/unique-values-response.model';
 import { UserResponseModel } from '../models/user-response.model';
 import { LayerExportCapabilitiesModel } from '../models/layer-export-capabilities.model';
-import { HttpResponse } from '@angular/common/http';
+import { HttpResponse, HttpStatusCode } from '@angular/common/http';
 
 export interface TailormapApiV1ServiceModel {
 
@@ -36,6 +36,24 @@ export interface TailormapApiV1ServiceModel {
     onlyGeometries?: boolean;
     geometryInAttributes?: boolean;
   }): Observable<FeaturesResponseModel>;
+
+  deleteFeature$(params: {
+    applicationId: string;
+    layerId: string;
+    feature: FeatureModel;
+  }): Observable<HttpStatusCode>;
+
+  updateFeature$(params: {
+    applicationId: string;
+    layerId: string;
+    feature: FeatureModel;
+  }): Observable<FeatureModel>;
+
+  createFeature$(params: {
+    applicationId: string;
+    layerId: string;
+    feature: FeatureModel;
+  }): Observable<FeatureModel>;
 
   getUniqueValues$(params: {
     applicationId: string;

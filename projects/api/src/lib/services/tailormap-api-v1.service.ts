@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams, HttpResponse, HttpStatusCode } from '@angular/common/http';
 import {
   ViewerResponseModel, FeaturesResponseModel, LayerDetailsModel, MapResponseModel, Sortorder, UserResponseModel, VersionResponseModel,
+  FeatureModel,
 } from '../models';
 import { Observable } from 'rxjs';
 import { TailormapApiV1ServiceModel } from './tailormap-api-v1.service.model';
@@ -88,6 +89,26 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
         headers: new HttpHeaders('Content-Type: application/x-www-form-urlencoded'),
         params: queryParams,
       });
+  }
+
+  public deleteFeature$(params: { applicationId: string; layerId: string; feature: FeatureModel }): Observable<HttpStatusCode> {
+    return this.httpClient.delete<HttpStatusCode>(
+      `${TailormapApiConstants.BASE_URL}/${params.applicationId}/layer/${params.layerId}/feature/${params.feature.__fid}`,
+    );
+  }
+
+  public createFeature$(params: { applicationId: string; layerId: string; feature: FeatureModel }): Observable<FeatureModel> {
+   return this.httpClient.post<FeatureModel>(
+      `${TailormapApiConstants.BASE_URL}/${params.applicationId}/layer/${params.layerId}/feature`,
+      params.feature,
+    );
+  }
+
+  public updateFeature$(params: { applicationId: string; layerId: string; feature: FeatureModel }): Observable<FeatureModel> {
+    return this.httpClient.patch<FeatureModel>(
+      `${TailormapApiConstants.BASE_URL}/${params.applicationId}/layer/${params.layerId}/feature/${params.feature.__fid}`,
+      params.feature,
+    );
   }
 
   public getUniqueValues$(params: {
