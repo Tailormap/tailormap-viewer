@@ -1,3 +1,4 @@
+import { LocationStrategy } from '@angular/common';
 import { Component, ChangeDetectionStrategy, Output, EventEmitter, Input } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { LoginConfigurationModel } from '@tailormap-viewer/api';
@@ -45,6 +46,7 @@ export class LoginFormComponent {
 
   constructor(
     private formBuilder: FormBuilder,
+    private locationStrategy: LocationStrategy,
   ) { }
 
   public login() {
@@ -68,14 +70,14 @@ export class LoginFormComponent {
   }
 
   public loginSSO(ssoUrl: string) {
-    if (typeof this.redirectUrl === "string") {
+    if (this.redirectUrl !== undefined && this.redirectUrl !== null) {
       if (ssoUrl.indexOf('?') < 0) {
           ssoUrl += '?';
       } else {
           ssoUrl += '&';
       }
 
-      ssoUrl += `redirectUrl=${encodeURIComponent(this.redirectUrl)}`;
+      ssoUrl += `redirectUrl=${encodeURIComponent(this.locationStrategy.prepareExternalUrl(this.redirectUrl))}`;
     }
 
     window.location.href = ssoUrl;
