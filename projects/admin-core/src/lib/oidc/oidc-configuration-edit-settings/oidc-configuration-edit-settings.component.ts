@@ -25,7 +25,7 @@ export class OIDCConfigurationEditSettingsComponent implements OnInit {
     this.oidcConfiguration$ = this.store$.select(selectDraftOIDCConfiguration)
       .pipe(
         distinctUntilChanged((a, b) => {
-          return a?.id === b?.id;
+          return a?.id === b?.id && a?.status === b?.status;
         }),
       );
   }

@@ -5,4 +5,5 @@ export interface OIDCConfigurationModel {
   clientSecret?: string;
   issuerUrl: string;
   userNameAttribute: string;
+  status?: string;
 }

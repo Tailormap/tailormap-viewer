@@ -100,8 +100,16 @@ const onUpdateOIDCConfiguration = (
   if (idx === -1) {
     return state;
   }
+
+  let newDraft = state.draftOIDCConfiguration;
+
+  if (newDraft?.id === updatedOIDCConfiguration.id) {
+      newDraft = { ...newDraft, status: updatedOIDCConfiguration.status };
+  }
+
   return {
     ...state,
+    draftOIDCConfiguration: newDraft,
     oidcConfigurations: [
       ...state.oidcConfigurations.slice(0, idx),
       { ...state.oidcConfigurations[idx], ...updatedOIDCConfiguration },
