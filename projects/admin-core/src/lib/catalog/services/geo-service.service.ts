@@ -22,6 +22,7 @@ import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { AdminSseService, EventType } from '../../shared/services/admin-sse.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DebounceHelper } from '../../helpers/debounce.helper';
+import { GeoServiceHelper } from '../helpers/geo-service.helper';
 
 export interface DeleteGeoServiceResponse {
   success: boolean;
@@ -89,9 +90,10 @@ export class GeoServiceService {
         },
       },
     };
-    return this.adminApiService.createGeoService$({ geoService: geoServiceModel }).pipe(
-      catchError(() => {
-        this.adminSnackbarService.showMessage($localize `Error while creating geo service.`);
+    return this.adminApiService.createGeoService$({ geoService: geoServiceModel }, true).pipe(
+      catchError((errorResponse) => {
+        const message = GeoServiceHelper.getApiErrorMessage(errorResponse);
+        this.adminSnackbarService.showMessage($localize `Error while creating geo service: ${message}`);
         return of(null);
       }),
       concatMap(createdService => {
@@ -121,7 +123,7 @@ export class GeoServiceService {
             id: service.id,
           };
           return this.adminApiService.updateGeoService$({ id: updatedGeoService.id, geoService: updatedGeoService }).pipe(
-            this.handleUpdateGeoService($localize `Error while updating geo service.`, service.catalogNodeId),
+            this.handleUpdateGeoService($localize `Error while updating geo service: `, service.catalogNodeId),
           );
         }),
       );
@@ -142,8 +144,9 @@ export class GeoServiceService {
           }
           // Delete the service
           return this.adminApiService.deleteGeoService$({ id: geoServiceId }).pipe(
-            catchError(() => {
-              this.adminSnackbarService.showMessage($localize `Error while deleting geo service.`);
+            catchError((errorResponse) => {
+              const message = GeoServiceHelper.getApiErrorMessage(errorResponse);
+              this.adminSnackbarService.showMessage($localize `Error while deleting geo service: ` + message);
               return of(null);
             }),
             tap(success => {
@@ -190,7 +193,7 @@ export class GeoServiceService {
         concatMap(service => {
           return this.adminApiService.refreshGeoService$({ id: service.id })
             .pipe(
-              this.handleUpdateGeoService($localize `Error while refreshing geo service.`, service.catalogNodeId),
+              this.handleUpdateGeoService($localize `Error while refreshing geo service: `, service.catalogNodeId),
             );
         }),
       );
@@ -206,8 +209,9 @@ export class GeoServiceService {
 
   private handleUpdateGeoService(errorMsg: string, catalogNodeId: string): MonoTypeOperatorFunction<GeoServiceWithLayersModel | null> {
     return pipe(
-      catchError(() => {
-        this.adminSnackbarService.showMessage(errorMsg);
+      catchError((errorResponse) => {
+        const message = GeoServiceHelper.getApiErrorMessage(errorResponse);
+        this.adminSnackbarService.showMessage(errorMsg + message);
         return of(null);
       }),
       map((updatedService: GeoServiceWithLayersModel | null) => {

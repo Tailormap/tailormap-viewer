@@ -9,7 +9,7 @@ export interface TailormapAdminApiV1ServiceModel {
   getGeoService$(params: { id: string }): Observable<GeoServiceWithLayersModel>;
   getGeoServices$(params: { ids: string[] }): Observable<GeoServiceWithLayersModel[]>;
   getAllGeoServices$(params: { excludingIds: string[] }): Observable<GeoServiceWithLayersModel[]>;
-  createGeoService$(params: { geoService: Omit<GeoServiceModel, 'id' | 'type'> }): Observable<GeoServiceWithLayersModel>;
+  createGeoService$(params: { geoService: Omit<GeoServiceModel, 'id' | 'type'> }, refreshCapabilities: boolean): Observable<GeoServiceWithLayersModel>;
   updateGeoService$(params: { id: string; geoService: Omit<Partial<GeoServiceModel>, 'type'> }): Observable<GeoServiceWithLayersModel>;
   deleteGeoService$(params: { id: string }): Observable<boolean>;
   refreshGeoService$(params: { id: string }): Observable<GeoServiceWithLayersModel>;
