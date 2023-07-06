@@ -33,6 +33,19 @@
         "bug",
         "maintenance"
       ]
+    },
+    {
+      "login": "geertplaisier",
+      "name": "Geert Plaisier",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4118121?v=4",
+      "profile": "http://www.gnamic.nl/",
+      "contributions": [
+        "code",
+        "infra",
+        "review",
+        "bug",
+        "maintenance"
+      ]
     }
   ],
   "commitConvention": "angular"
