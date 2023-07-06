@@ -75,6 +75,16 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "geertoff",
+      "name": "Geert Offenberg",
+      "avatar_url": "https://avatars.githubusercontent.com/u/102165826?v=4",
+      "profile": "https://github.com/geertoff",
+      "contributions": [
+        "code",
+        "bug"
+      ]
     }
   ],
   "commitConvention": "angular"
