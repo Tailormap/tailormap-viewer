@@ -37,7 +37,7 @@ export class TailormapAdminApiV1MockService implements TailormapAdminApiV1Servic
     return of(node).pipe(delay(this.delay));
   }
 
-  public createGeoService$(params: { geoService: GeoServiceModel }, _refreshCapabilities: boolean): Observable<GeoServiceWithLayersModel> {
+  public createGeoService$(params: { geoService: GeoServiceModel; refreshCapabilities: boolean }): Observable<GeoServiceWithLayersModel> {
     return of({ ...params.geoService, layers: [] }).pipe(delay(this.delay));
   }
 

@@ -90,7 +90,7 @@ export class GeoServiceService {
         },
       },
     };
-    return this.adminApiService.createGeoService$({ geoService: geoServiceModel }, true).pipe(
+    return this.adminApiService.createGeoService$({ geoService: geoServiceModel, refreshCapabilities: true }).pipe(
       catchError((errorResponse) => {
         const message = GeoServiceHelper.getApiErrorMessage(errorResponse);
         this.adminSnackbarService.showMessage($localize `Error while creating geo service: ${message}`);
@@ -146,7 +146,7 @@ export class GeoServiceService {
           return this.adminApiService.deleteGeoService$({ id: geoServiceId }).pipe(
             catchError((errorResponse) => {
               const message = GeoServiceHelper.getApiErrorMessage(errorResponse);
-              this.adminSnackbarService.showMessage($localize `Error while deleting geo service: ` + message);
+              this.adminSnackbarService.showMessage($localize `Error while deleting geo service: ${message}`);
               return of(null);
             }),
             tap(success => {
