@@ -70,7 +70,7 @@ export class FeatureInfoService {
             return of([]);
           }
           const featureRequests$ = layers
-              .map(layer => this.getFeatureInfoFromApi$(layer, coordinates, applicationId, resolutions, projection));
+              .map(layer => this.getFeatureInfoFromApi$({ layer, coordinates, applicationId, resolutions, projection, geometryInAttributes: true }));
           return forkJoin(featureRequests$);
         }),
       );
@@ -89,8 +89,9 @@ export class FeatureInfoService {
       x: coordinates[0],
       y: coordinates[1],
       // meters per pixel * fixed value
-      distance: resolutions.resolution * FeatureInfoService.DEFAULT_DISTANCE,
+      distance: params.resolutions.resolution * FeatureInfoService.DEFAULT_DISTANCE,
       simplify: false,
+      geometryInAttributes: params.geometryInAttributes,
     }).pipe(
       map((featureInfoResult: FeaturesResponseModel): FeatureInfoResponseModel => ({
         features: (featureInfoResult.features || []).map(feature => ({ ...feature, layerId })),

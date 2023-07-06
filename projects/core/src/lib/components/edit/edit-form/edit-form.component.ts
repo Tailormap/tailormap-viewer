@@ -1,10 +1,11 @@
-import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { FormHelper } from '../helpers/form.helper';
 import { FormGroup } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { debounceTime, map, merge, Subscription } from 'rxjs';
 import { ColumnMetadataModel, FeatureModel, LayerDetailsModel } from '@tailormap-viewer/api';
 import { EditModelHelper } from '../helpers/edit-model.helper';
 import { FormFieldModel } from '../models/form-field.model';
+import { DebounceHelper } from '@tailormap-viewer/shared';
 
 @Component({
   selector: 'tm-edit-form',
@@ -12,7 +13,7 @@ import { FormFieldModel } from '../models/form-field.model';
   styleUrls: ['./edit-form.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EditFormComponent {
+export class EditFormComponent implements OnDestroy {
 
   private _feature: FeatureModel | undefined;
   private _details: LayerDetailsModel | undefined;
@@ -24,7 +25,7 @@ export class EditFormComponent {
   @Input({ required: true })
   public set feature(feature: FeatureModel | undefined) {
     this._feature = feature;
-    this.createForm();
+    DebounceHelper.debounce('edit-form', () => this.createForm(), 10);
   }
   public get feature(): FeatureModel | undefined {
     return this._feature;
@@ -33,7 +34,7 @@ export class EditFormComponent {
   @Input({ required: true })
   public set details(details: LayerDetailsModel | undefined) {
     this._details = details;
-    this.createForm();
+    DebounceHelper.debounce('edit-form', () => this.createForm(), 10);
   }
   public get details(): LayerDetailsModel | undefined {
     return this._details;
@@ -42,16 +43,27 @@ export class EditFormComponent {
   @Input({ required: true })
   public set columnMetadata(columnMetadata: ColumnMetadataModel[]) {
     this._columnMetadata = columnMetadata;
-    this.createForm();
+    DebounceHelper.debounce('edit-form', () => this.createForm(), 10);
   }
   public get columnMetadata(): ColumnMetadataModel[] {
     return this._columnMetadata;
   }
 
   @Output()
-  public featureChanged = new EventEmitter<FeatureModel>();
+  public featureChanged = new EventEmitter<FeatureModel | null>();
 
   public form: FormGroup = new FormGroup({});
+
+  constructor(
+    private cdr: ChangeDetectorRef,
+  ) {
+  }
+
+  public ngOnDestroy() {
+    if (this.currentFormSubscription) {
+      this.currentFormSubscription.unsubscribe();
+    }
+  }
 
   private createForm() {
     if (this.currentFormSubscription) {
@@ -62,15 +74,30 @@ export class EditFormComponent {
     }
     this.formConfig = EditModelHelper.createEditModel(this.feature, this.details, this.columnMetadata);
     this.form = FormHelper.createForm(this.formConfig);
-    this.currentFormSubscription = this.form.valueChanges
-      .subscribe(value => {
+    const changes$ = Object.keys(this.form.controls)
+      .map(key => {
+        const control = this.form.get(key);
+        if (control) {
+          return control.valueChanges.pipe(map(value => [ key, value ]));
+        }
+        return null;
+      })
+      .filter((valueChanges$): valueChanges$ is FormGroup['valueChanges'] => !!valueChanges$);
+    this.currentFormSubscription = merge(...changes$)
+      .pipe(debounceTime(250))
+      .subscribe(([ changedKey, value ]) => {
+        if (!this.form.valid) {
+          this.featureChanged.emit(null);
+          return;
+        }
         const currentFeature = this.feature;
         if (!currentFeature) {
           return;
         }
-        const newFeature = EditModelHelper.updateFeature(currentFeature, value);
+        const newFeature = EditModelHelper.updateFeature(currentFeature, ({ [changedKey]: value }));
         this.featureChanged.emit(newFeature);
       });
+    this.cdr.detectChanges();
   }
 
 }

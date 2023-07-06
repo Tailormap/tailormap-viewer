@@ -79,7 +79,6 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
       sortBy: params.sortBy,
       sortOrder: params.sortOrder,
       onlyGeometries: params.onlyGeometries,
-      // NOTE that the API is smart enough to ignore this parameter if onlyGeometries is true
       geometryInAttributes: params.geometryInAttributes,
     });
     return this.httpClient.post<FeaturesResponseModel>(
@@ -93,20 +92,20 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
 
   public deleteFeature$(params: { applicationId: string; layerId: string; feature: FeatureModel }): Observable<HttpStatusCode> {
     return this.httpClient.delete<HttpStatusCode>(
-      `${TailormapApiConstants.BASE_URL}/${params.applicationId}/layer/${params.layerId}/feature/${params.feature.__fid}`,
+      `${TailormapApiConstants.BASE_URL}/${params.applicationId}/layer/${params.layerId}/edit/feature/${params.feature.__fid}`,
     );
   }
 
   public createFeature$(params: { applicationId: string; layerId: string; feature: FeatureModel }): Observable<FeatureModel> {
    return this.httpClient.post<FeatureModel>(
-      `${TailormapApiConstants.BASE_URL}/${params.applicationId}/layer/${params.layerId}/feature`,
+      `${TailormapApiConstants.BASE_URL}/${params.applicationId}/layer/${params.layerId}/edit/feature`,
       params.feature,
     );
   }
 
   public updateFeature$(params: { applicationId: string; layerId: string; feature: FeatureModel }): Observable<FeatureModel> {
     return this.httpClient.patch<FeatureModel>(
-      `${TailormapApiConstants.BASE_URL}/${params.applicationId}/layer/${params.layerId}/feature/${params.feature.__fid}`,
+      `${TailormapApiConstants.BASE_URL}/${params.applicationId}/layer/${params.layerId}/edit/feature/${params.feature.__fid}`,
       params.feature,
     );
   }

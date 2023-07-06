@@ -2,8 +2,9 @@ import { Inject, Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FeatureModel, TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel } from '@tailormap-viewer/api';
 import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
-import { Observable, tap } from 'rxjs';
+import { catchError, map, Observable, of, tap } from 'rxjs';
 import { HttpStatusCode } from '@angular/common/http';
+import { Feature } from 'ol';
 
 @Injectable({
   providedIn: 'root',
@@ -26,21 +27,46 @@ export class EditFeatureService {
     SnackBarMessageComponent.open$(this.snackBar, config).subscribe();
   }
 
-  public deleteFeature$(applicationId: string, layerId: string, feature: FeatureModel): Observable<HttpStatusCode> {
+  public deleteFeature$(applicationId: string, layerId: string, feature: FeatureModel): Observable<boolean> {
     return this.api.deleteFeature$({ applicationId, layerId, feature }).pipe(
-      tap(() => this.showSnackbarMessage('Feature deleted')),
+      catchError((_e) => {
+        this.showSnackbarMessage($localize `Delete feature failed`);
+        return of(HttpStatusCode.InternalServerError);
+      }),
+      map((result) => result === HttpStatusCode.Ok || result === HttpStatusCode.NoContent),
+      tap((result) => {
+        if (result) {
+          this.showSnackbarMessage($localize`Feature deleted`);
+        }
+      }),
     );
   }
 
-  public updateFeature$(applicationId: string, layerId: string, feature: FeatureModel): Observable<FeatureModel> {
+  public updateFeature$(applicationId: string, layerId: string, feature: FeatureModel): Observable<FeatureModel | null> {
     return this.api.updateFeature$({ applicationId, layerId, feature }).pipe(
-      tap(() => this.showSnackbarMessage('Feature updated')),
+      catchError((_e) => {
+        this.showSnackbarMessage($localize `Update feature failed`);
+        return of(null);
+      }),
+      tap(result => {
+        if (result) {
+          this.showSnackbarMessage($localize `Feature updated`);
+        }
+      }),
     );
   }
 
-  public createFeature$(applicationId: string, layerId: string, feature: FeatureModel): Observable<FeatureModel> {
+  public createFeature$(applicationId: string, layerId: string, feature: FeatureModel): Observable<FeatureModel | null> {
     return this.api.createFeature$({ applicationId, layerId, feature }).pipe(
-      tap(() => this.showSnackbarMessage('Feature created')),
+      catchError((_e) => {
+        this.showSnackbarMessage($localize `Create feature failed`);
+        return of(null);
+      }),
+      tap(result => {
+        if (result) {
+          this.showSnackbarMessage($localize `Feature created`);
+        }
+      }),
     );
   }
 }

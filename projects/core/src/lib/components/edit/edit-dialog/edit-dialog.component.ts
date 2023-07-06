@@ -4,11 +4,13 @@ import { CssHelper } from '@tailormap-viewer/shared';
 import {
   selectEditDialogCollapsed, selectEditDialogVisible, selectEditMapCoordinates, selectLoadingEditFeatures, selectSelectedEditFeature,
 } from '../state/edit.selectors';
-import { filter, Observable, of, switchMap } from 'rxjs';
-import { expandCollapseEditDialog, hideEditDialog } from '../state/edit.actions';
+import { concatMap, filter, Observable, of, switchMap, take } from 'rxjs';
+import { expandCollapseEditDialog, hideEditDialog, updateEditFeature } from '../state/edit.actions';
 import { AppLayerModel, FeatureModel, LayerDetailsModel } from '@tailormap-viewer/api';
 import { ApplicationLayerService } from '../../../map/services/application-layer.service';
 import { FeatureWithMetadataModel } from '../models/feature-with-metadata.model';
+import { EditFeatureService } from '../edit-feature.service';
+import { selectViewerId } from '../../../state/core.selectors';
 
 @Component({
   selector: 'tm-edit-dialog',
@@ -28,9 +30,12 @@ export class EditDialogComponent implements OnInit {
   public loadingEditFeatureInfo$ = this.store$.select(selectLoadingEditFeatures);
   public editCoordinates$ = this.store$.select(selectEditMapCoordinates);
 
+  public updatedFeature: FeatureModel | null = null;
+
   constructor(
     private store$: Store,
     private applicationLayerService: ApplicationLayerService,
+    private editFeatureService: EditFeatureService,
   ) {}
 
   public ngOnInit(): void {
@@ -54,12 +59,31 @@ export class EditDialogComponent implements OnInit {
     this.store$.dispatch(expandCollapseEditDialog());
   }
 
-  public save() {
-    console.log('Save');
+  public save(layerId: string) {
+    const updatedFeature = this.updatedFeature;
+    if (!updatedFeature) {
+      return;
+    }
+    this.store$.select(selectViewerId)
+      .pipe(
+        take(1),
+        concatMap(viewerId => {
+          if (!viewerId) {
+            return of(null);
+          }
+          return this.editFeatureService.updateFeature$(viewerId, layerId, updatedFeature);
+        }),
+      )
+      .subscribe(feature => {
+        if (feature) {
+          this.store$.dispatch(updateEditFeature({ feature, layerId }));
+          this.updatedFeature = null;
+        }
+      });
   }
 
-  public featureChanged($event: FeatureModel) {
-    console.log(`Feature changed: `, $event);
+  public featureChanged($event: FeatureModel | null) {
+    this.updatedFeature = $event;
   }
 
 }

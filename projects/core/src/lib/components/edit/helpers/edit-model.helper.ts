@@ -32,7 +32,7 @@ export class EditModelHelper {
         label: attribute.editAlias || metadata?.alias || attribute.key,
         value: attributeValue || attribute.defaultValue || '',
         name: attribute.key,
-        required: !attribute.nullable,
+        required: attribute.nullable === false,
         disabled: !attribute.editable,
         type: EditModelHelper.getFormFieldType(attribute),
         valueList: attribute.valueList?.split(',').map(val => {

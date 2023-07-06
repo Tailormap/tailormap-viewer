@@ -17,7 +17,7 @@ import { GeoServiceService } from './geo-service.service';
 import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-layer.model';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AdminSseService, EventType } from '../../shared/services/admin-sse.service';
-import { DebounceHelper } from '../../helpers/debounce.helper';
+import { DebounceHelper } from '@tailormap-viewer/shared';
 
 @Injectable({
   providedIn: 'root',

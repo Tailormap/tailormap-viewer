@@ -21,7 +21,7 @@
         <button mat-flat-button i18n (click)="closeDialog()">
           Close
         </button>
-        <button mat-flat-button i18n (click)="save()" color="primary">
+        <button mat-flat-button i18n (click)="save(layerDetails.layer.id)" [disabled]="!updatedFeature" color="primary">
           Save
         </button>
       </div>

@@ -4,11 +4,10 @@ import {
   GroupModel, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel,
 } from '@tailormap-admin/admin-api';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
-import { LoadingStateEnum } from '@tailormap-viewer/shared';
+import { DebounceHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
 import { selectGroups, selectGroupsLoadStatus } from '../state/user.selectors';
 import { addGroup, deleteGroup, loadGroups, updateGroup } from '../state/user.actions';
 import { Store } from '@ngrx/store';
-import { DebounceHelper } from '../../helpers/debounce.helper';
 import { AdminSseService, EventType } from '../../shared/services/admin-sse.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 

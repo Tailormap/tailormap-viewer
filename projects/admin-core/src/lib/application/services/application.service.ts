@@ -4,7 +4,7 @@ import {
   ApplicationModel, AppTreeLevelNodeModel, AppTreeNodeModel, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel,
 } from '@tailormap-admin/admin-api';
 import { catchError, concatMap, distinctUntilChanged, filter, map, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
-import { LoadingStateEnum } from '@tailormap-viewer/shared';
+import { DebounceHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
 import {
   addApplicationRootNodes, addApplication, deleteApplication, loadApplications, loadApplicationServices, loadApplicationServicesSuccess,
   updateApplication,
@@ -14,7 +14,6 @@ import { CatalogService } from '../../catalog/services/catalog.service';
 import { ApplicationModelHelper } from '../helpers/application-model.helper';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 import { AdminSseService, EventType } from '../../shared/services/admin-sse.service';
-import { DebounceHelper } from '../../helpers/debounce.helper';
 
 type ApplicationCreateModel = Omit<ApplicationModel, 'id'>;
 type ApplicationEditModel = Partial<ApplicationCreateModel>;

@@ -14,6 +14,7 @@ export class FormHelper {
       } else {
         control.enable();
       }
+      control.updateValueAndValidity({ onlySelf: true, emitEvent: false });
       form.addControl(field.name, control);
     });
     return form;

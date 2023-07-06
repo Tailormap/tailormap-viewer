@@ -32,3 +32,8 @@ export const loadEditFeaturesFailed = createAction(
 export const showEditDialog = createAction(`${editActionsPrefix} Show Edit Dialog`);
 export const hideEditDialog = createAction(`${editActionsPrefix} Hide Edit Dialog`);
 export const expandCollapseEditDialog = createAction(`${editActionsPrefix} Expand/Collapse Edit Dialog`);
+
+export const updateEditFeature = createAction(
+  `${editActionsPrefix} Update Feature`,
+  props<{ feature: FeatureModel; layerId: string }>(),
+);

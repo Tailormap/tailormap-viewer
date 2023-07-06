@@ -4,6 +4,7 @@ import { EditState, initialEditState } from './edit.state';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { FeatureInfoFeatureModel } from '../../feature-info/models/feature-info-feature.model';
 import { FeatureInfoColumnMetadataModel } from '../../feature-info/models/feature-info-column-metadata.model';
+import { updateEditFeature } from './edit.actions';
 
 const onSetIsActive = (
   state: EditState,
@@ -72,6 +73,23 @@ const onExpandCollapseEditDialog = (state: EditState): EditState => ({
   dialogCollapsed: !state.dialogCollapsed,
 });
 
+const onUpdateEditFeature = (
+  state: EditState,
+  payload: ReturnType<typeof EditActions.updateEditFeature>,
+): EditState => {
+  const featureIdx = state.features.findIndex(f => f.__fid === payload.feature.__fid && f.layerId === payload.layerId);
+  if (featureIdx === -1) {
+    return state;
+  }
+  return {
+    ...state,
+    features: [
+      ...state.features.slice(0, featureIdx),
+      { ...payload.feature, layerId: payload.layerId },
+      ...state.features.slice(featureIdx + 1),
+    ],
+  };
+};
 
 const editReducerImpl = createReducer<EditState>(
   initialEditState,
@@ -83,5 +101,6 @@ const editReducerImpl = createReducer<EditState>(
   on(EditActions.showEditDialog, onShowEditDialog),
   on(EditActions.hideEditDialog, onHideEditDialog),
   on(EditActions.expandCollapseEditDialog, onExpandCollapseEditDialog),
+  on(EditActions.updateEditFeature, onUpdateEditFeature),
 );
 export const editReducer = (state: EditState | undefined, action: Action) => editReducerImpl(state, action);
