@@ -2,26 +2,6 @@ import * as OIDCConfigurationActions from './oidc-configuration.actions';
 import { Action, createReducer, on } from '@ngrx/store';
 import { OIDCConfigurationState, initialOIDCConfigurationState } from './oidc-configuration.state';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
-import {
-    OIDCConfigurationModel,
-} from '@tailormap-admin/admin-api';
-
-const updateOIDCConfiguration = (
-  state: OIDCConfigurationState,
-  updateMethod: (oidcConfiguration: OIDCConfigurationModel) => Partial<OIDCConfigurationModel>,
-) => {
-  if (!state.draftOIDCConfiguration) {
-    return state;
-  }
-  return {
-    ...state,
-    draftOIDCConfiguration: {
-      ...state.draftOIDCConfiguration,
-      ...updateMethod(state.draftOIDCConfiguration),
-    },
-    draftOIDCConfigurationUpdated: true,
-  };
-};
 
 const onLoadOIDCConfigurationStart = (state: OIDCConfigurationState): OIDCConfigurationState => ({
   ...state,
@@ -131,10 +111,17 @@ const onUpdateDraftOIDCConfiguration = (
   state: OIDCConfigurationState,
   payload: ReturnType<typeof OIDCConfigurationActions.updateDraftOIDCConfiguration>,
 ): OIDCConfigurationState => {
-  return updateOIDCConfiguration(state, oidcConfiguration => ({
-    ...oidcConfiguration,
-    ...payload.oidcConfiguration,
-  }));
+  if (!state.draftOIDCConfiguration) {
+    return state;
+  }
+  return {
+    ...state,
+    draftOIDCConfiguration: {
+      ...state.draftOIDCConfiguration,
+      ...payload.oidcConfiguration,
+    },
+    draftOIDCConfigurationUpdated: true,
+  };
 };
 
 const oidcConfigurationReducerImpl = createReducer<OIDCConfigurationState>(

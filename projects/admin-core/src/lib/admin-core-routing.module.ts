@@ -31,7 +31,6 @@ import { UserEditComponent } from './user/user-edit/user-edit.component';
 import { GroupHomeComponent } from './user/group-home/group-home.component';
 import { GroupCreateComponent } from './user/group-create/group-create.component';
 import { GroupEditComponent } from './user/group-edit/group-edit.component';
-import { OIDCConfigurationEditSettingsComponent } from './oidc/oidc-configuration-edit-settings/oidc-configuration-edit-settings.component';
 
 const routes: Routes = [
   {
@@ -120,13 +119,6 @@ const routes: Routes = [
       {
         path: RoutesEnum.OIDC_CONFIGURATION_DETAILS,
         component: OIDCConfigurationEditComponent,
-        data: { className: 'full-screen-settings' },
-        children: [
-          {
-            path: '',
-            component: OIDCConfigurationEditSettingsComponent,
-          },
-        ],
       },
     ],
   },
