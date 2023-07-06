@@ -1,4 +1,6 @@
 import { createAction, props } from '@ngrx/store';
+import { FeatureInfoResponseModel } from '../../feature-info/models/feature-info-response.model';
+import { FeatureModel } from '@tailormap-viewer/api';
 
 const editActionsPrefix = '[Edit]';
 
@@ -11,3 +13,22 @@ export const setSelectedEditLayer = createAction(
   `${editActionsPrefix} Set Selected Layer`,
   props<{ layer: string | null }>(),
 );
+
+export const loadEditFeatures = createAction(
+  `${editActionsPrefix} Load Edit Features`,
+  props<{ coordinates: [number, number] }>(),
+);
+
+export const loadEditFeaturesSuccess = createAction(
+  `${editActionsPrefix} Load Edit Features Success`,
+  props<{ featureInfo: FeatureInfoResponseModel[] }>(),
+);
+
+export const loadEditFeaturesFailed = createAction(
+  `${editActionsPrefix} Load Edit Features Failed`,
+  props<{ errorMessage?: string }>(),
+);
+
+export const showEditDialog = createAction(`${editActionsPrefix} Show Edit Dialog`);
+export const hideEditDialog = createAction(`${editActionsPrefix} Hide Edit Dialog`);
+export const expandCollapseEditDialog = createAction(`${editActionsPrefix} Expand/Collapse Edit Dialog`);

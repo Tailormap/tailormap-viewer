@@ -1,0 +1,34 @@
+<tm-dialog [open]="dialogOpen$ | async"
+           [openFromRight]="true"
+           [widthMargin]="panelWidthMargin"
+           class="edit-dialog"
+           (closeDialog)="closeDialog()"
+           [allowCollapse]="true"
+           [collapsed]="dialogCollapsed$ | async"
+           (expandCollapseDialog)="expandCollapseDialog()"
+           dialogTitle="Edit"
+           i18n-dialogTitle>
+  <div class="edit-form" *ngIf="currentFeature$ | async as currentFeature">
+    <ng-container *ngIf="layerDetails$ | async as layerDetails">
+      <div class="content">
+        <h2>{{layerDetails.layer.title}}</h2>
+        <tm-edit-form [feature]="currentFeature.feature"
+                      [details]="layerDetails.details"
+                      [columnMetadata]="currentFeature.columnMetadata"
+                      (featureChanged)="featureChanged($event)"></tm-edit-form>
+      </div>
+      <div class="buttons">
+        <button mat-flat-button i18n (click)="closeDialog()">
+          Close
+        </button>
+        <button mat-flat-button i18n (click)="save()" color="primary">
+          Save
+        </button>
+      </div>
+    </ng-container>
+  </div>
+</tm-dialog>
+
+<tm-map-spinner [coordinates$]="editCoordinates$"
+                [loading$]="loadingEditFeatureInfo$"></tm-map-spinner>
+<tm-edit-tool></tm-edit-tool>

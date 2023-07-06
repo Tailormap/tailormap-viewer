@@ -4,7 +4,9 @@ import { Store } from '@ngrx/store';
 import { selectViewerId } from '../../state/core.selectors';
 import { catchError, combineLatest, concatMap, forkJoin, map, Observable, of, take } from 'rxjs';
 import { FeatureInfoResponseModel } from './models/feature-info-response.model';
-import { selectVisibleLayersWithAttributes, selectVisibleWMSLayersWithoutAttributes } from '../../map/state/map.selectors';
+import {
+  selectEditableLayers, selectVisibleLayersWithAttributes, selectVisibleWMSLayersWithoutAttributes,
+} from '../../map/state/map.selectors';
 import { MapService, MapViewDetailsModel } from '@tailormap-viewer/map';
 import { HttpClient } from '@angular/common/http';
 import { ExtendedAppLayerModel } from '../../map/models';
@@ -46,6 +48,29 @@ export class FeatureInfoService {
               map(features => this.featuresToFeatureInfoResponseModel(features, layer.id)),
             )),
           ];
+          return forkJoin(featureRequests$);
+        }),
+      );
+  }
+
+  public getEditableFeatures$(coordinates: [ number, number ], selectedLayer?: string | null): Observable<FeatureInfoResponseModel[]> {
+    return combineLatest([
+      this.store$.select(selectEditableLayers),
+      this.store$.select(selectViewerId),
+      this.mapService.getMapViewDetails$(),
+      this.mapService.getProjectionCode$(),
+    ])
+      .pipe(
+        take(1),
+        concatMap(([ editableLayers, applicationId, resolutions, projection ]) => {
+          const layers = editableLayers.filter(layer => {
+            return !selectedLayer || layer.id === selectedLayer;
+          });
+          if (!applicationId || layers.length === 0) {
+            return of([]);
+          }
+          const featureRequests$ = layers
+              .map(layer => this.getFeatureInfoFromApi$(layer, coordinates, applicationId, resolutions, projection));
           return forkJoin(featureRequests$);
         }),
       );

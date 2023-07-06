@@ -15,6 +15,7 @@
       </div>
       <div class="map">
         <tm-feature-info *ngIf="isComponentEnabled(config, componentTypes.FEATURE_INFO)"></tm-feature-info>
+        <tm-edit-dialog *ngIf="isComponentEnabled(config, componentTypes.EDIT)"></tm-edit-dialog>
         <tm-map></tm-map>
         <tm-map-controls></tm-map-controls>
         <tm-attribute-list *ngIf="isComponentEnabled(config, componentTypes.ATTRIBUTE_LIST)"></tm-attribute-list>

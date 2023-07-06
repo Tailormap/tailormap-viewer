@@ -6,6 +6,7 @@ import { ToolbarComponentEnum } from '../../toolbar/models/toolbar-component.enu
 import { Store } from '@ngrx/store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { selectEditActiveWithSelectedLayer } from '../state/edit.selectors';
+import { loadEditFeatures } from '../state/edit.actions';
 
 @Component({
   selector: 'tm-edit-tool',
@@ -50,7 +51,7 @@ export class EditToolComponent implements OnInit, OnDestroy {
   }
 
   private handleMapClick(evt: { mapCoordinates: [number, number]; mouseCoordinates: [number, number] }) {
-    console.log('map click', evt);
+    this.store$.dispatch(loadEditFeatures({ coordinates: evt.mapCoordinates }));
   }
 
 }

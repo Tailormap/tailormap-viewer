@@ -1,6 +1,6 @@
 import { MapSettingsModel, MapState, mapStateKey } from './map.state';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { AppLayerModel, LayerTreeNodeModel, ServerType, ServiceModel, ServiceProtocol } from '@tailormap-viewer/api';
+import { AppLayerModel, LayerDetailsModel, LayerTreeNodeModel, ServerType, ServiceModel, ServiceProtocol } from '@tailormap-viewer/api';
 import { ArrayHelper, TreeHelper, TreeModel } from '@tailormap-viewer/shared';
 import { LayerTreeNodeHelper } from '../helpers/layer-tree-node.helper';
 import { ExtendedAppLayerModel, ExtendedLayerTreeNodeModel, AppLayerWithInitialValuesModel } from '../models';
@@ -15,6 +15,7 @@ export const selectLayerTreeNodes = createSelector(selectMapState, state => stat
 export const selectBackgroundLayerTreeNodes = createSelector(selectMapState, state => state.baseLayerTreeNodes);
 export const selectSelectedBackgroundNodeId = createSelector(selectMapState, state => state.selectedBackgroundNode);
 export const selectLoadStatus = createSelector(selectMapState, state => state.loadStatus);
+export const selectLayerDetailsAll = createSelector(selectMapState, state => state.layerDetails);
 
 export const selectMapOptions = createSelector(
   selectMapSettings,
@@ -200,6 +201,11 @@ export const selectLayer = (layerId: string) => createSelector(
   (layers: AppLayerWithInitialValuesModel[]) => layers.find(l => l.id === layerId) || null,
 );
 
+export const selectLayerDetails = (layerId: string) => createSelector(
+  selectLayerDetailsAll,
+  (details: LayerDetailsModel[]) => details.find(l => l.id === layerId) || null,
+);
+
 export const selectLayerWithService = (layerId: string) => createSelector(
   selectLayersWithServices,
   (layers: ExtendedAppLayerModel[]) => layers.find(l => l.id === layerId) || null,
@@ -208,4 +214,18 @@ export const selectLayerWithService = (layerId: string) => createSelector(
 export const selectLayerOpacity = (layerId: string) => createSelector(
   selectLayer(layerId),
   (layer) => layer?.opacity || 100,
+);
+
+export const selectFullLayerDetails = (layerId: string) => createSelector(
+  selectLayer(layerId),
+  selectLayerDetails(layerId),
+  (layer, details) => {
+    if (!layer) {
+      return null;
+    }
+    return {
+      layer,
+      details,
+    };
+  },
 );

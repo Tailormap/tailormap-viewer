@@ -1,4 +1,4 @@
-import { BoundsModel, CoordinateReferenceSystemModel, ServiceModel } from '@tailormap-viewer/api';
+import { BoundsModel, CoordinateReferenceSystemModel, LayerDetailsModel, ServiceModel } from '@tailormap-viewer/api';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { AppLayerWithInitialValuesModel, ExtendedLayerTreeNodeModel } from '../models';
 
@@ -18,6 +18,7 @@ export interface MapState {
   layers: AppLayerWithInitialValuesModel[];
   baseLayerTreeNodes: ExtendedLayerTreeNodeModel[];
   layerTreeNodes: ExtendedLayerTreeNodeModel[];
+  layerDetails: LayerDetailsModel[];
   selectedLayer?: string;
   selectedBackgroundNode?: string;
 }
@@ -26,6 +27,7 @@ export const initialMapState: MapState = {
   loadStatus: LoadingStateEnum.INITIAL,
   services: [],
   layers: [],
+  layerDetails: [],
   baseLayerTreeNodes: [],
   layerTreeNodes: [],
 };

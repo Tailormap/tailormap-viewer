@@ -1,13 +1,20 @@
 <form [formGroup]="form">
   <div *ngFor="let item of formConfig">
-    <mat-form-field>
-      <input matInput [formControlName]="item.name" [placeholder]="item.placeholder || item.label" *ngIf="item.type === 'text'">
-      <input matInput [formControlName]="item.name" [placeholder]="item.placeholder || item.label" type="number" *ngIf="item.type === 'number'">
-      <textarea matInput [formControlName]="item.name" [placeholder]="item.placeholder || item.label" *ngIf="item.type === 'textarea'"></textarea>
-      <mat-select [formControlName]="item.name" [placeholder]="item.placeholder || item.label" *ngIf="item.type === 'select'">
+    {{ item.label }}
+    <mat-form-field *ngIf="item.type === 'text'">
+      <input matInput [formControlName]="item.name" [placeholder]="item.placeholder || item.label">
+    </mat-form-field>
+    <mat-form-field *ngIf="item.type === 'number'">
+      <input matInput [formControlName]="item.name" [placeholder]="item.placeholder || item.label" type="number">
+    </mat-form-field>
+    <mat-form-field *ngIf="item.type === 'textarea'">
+      <textarea matInput [formControlName]="item.name" [placeholder]="item.placeholder || item.label"></textarea>
+    </mat-form-field>
+    <mat-form-field *ngIf="item.type === 'select'">
+      <mat-select [formControlName]="item.name" [placeholder]="item.placeholder || item.label">
         <mat-option *ngFor="let item of item.valueList" [value]="item.value">{{item.label || item.value}}</mat-option>
       </mat-select>
-      <mat-checkbox [formControlName]="item.name" *ngIf="item.type === 'boolean'">{{item.label}}</mat-checkbox>
     </mat-form-field>
+    <mat-checkbox [formControlName]="item.name" *ngIf="item.type === 'boolean'">{{item.label}}</mat-checkbox>
   </div>
 </form>
