@@ -63,7 +63,9 @@ export class GeoServiceFormDialogComponent {
       .pipe(takeUntil(this.destroyed))
       .subscribe(result => {
         this.savingSubject.next(false);
-        this.dialogRef.close(result);
+        if (result) {
+          this.dialogRef.close(result);
+        }
       });
   }
 
@@ -76,7 +78,9 @@ export class GeoServiceFormDialogComponent {
       .pipe(takeUntil(this.destroyed))
       .subscribe(result => {
         this.savingSubject.next(false);
-        this.dialogRef.close(result);
+        if (result) {
+          this.dialogRef.close(result);
+        }
       });
   }
 

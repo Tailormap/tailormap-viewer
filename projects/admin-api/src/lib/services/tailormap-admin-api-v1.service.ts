@@ -55,9 +55,14 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
       .pipe(map(response => (response?._embedded?.['geo-services'] || []).map(CatalogModelHelper.addTypeToGeoServiceModel)));
   }
 
-  public createGeoService$(params: { geoService: Omit<GeoServiceModel, 'id'> }): Observable<GeoServiceWithLayersModel> {
-    return this.httpClient.post<GeoServiceWithLayersModel>(`${TailormapAdminApiV1Service.BASE_URL}/geo-services`, params.geoService)
-      .pipe(map(CatalogModelHelper.addTypeToGeoServiceModel));
+  public createGeoService$(params: { geoService: Omit<GeoServiceModel, 'id'>; refreshCapabilities: boolean}): Observable<GeoServiceWithLayersModel> {
+    return this.httpClient.post<GeoServiceWithLayersModel>(
+      `${TailormapAdminApiV1Service.BASE_URL}/geo-services`,
+      {
+        ...params.geoService,
+        refreshCapabilities: params.refreshCapabilities,
+      },
+    ).pipe(map(CatalogModelHelper.addTypeToGeoServiceModel));
   }
 
   public updateGeoService$(params: { id: string; geoService: GeoServiceModel }): Observable<GeoServiceWithLayersModel> {
