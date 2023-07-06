@@ -51,7 +51,7 @@ export class FeatureSourceFormComponent implements OnInit {
   }
 
   @Output()
-  public changed = new EventEmitter<FeatureSourceCreateModel>();
+  public changed = new EventEmitter<FeatureSourceCreateModel | null>();
 
   public featureSourceForm = new FormGroup({
     title: new FormControl('', { nonNullable: true }),
@@ -74,11 +74,14 @@ export class FeatureSourceFormComponent implements OnInit {
       .pipe(
         takeUntil(this.destroyed),
         debounceTime(250),
-        filter(() => this.isValidForm()),
       )
       .subscribe(value => {
         const protocol = this.featureSource ? this.featureSource.protocol : value.protocol;
         if (!protocol) {
+          return;
+        }
+        if (!this.isValidForm()) {
+          this.changed.emit(null);
           return;
         }
         this.changed.emit({

@@ -74,7 +74,7 @@ export class GeoServiceLayerFormDialogComponent {
       });
   }
 
-  public updateLayerSettings($event: LayerSettingsModel) {
+  public updateLayerSettings($event: LayerSettingsModel | null) {
     this.updatedLayerSettings = $event;
   }
 

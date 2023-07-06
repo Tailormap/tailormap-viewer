@@ -66,7 +66,7 @@ export class GeoServiceLayerDetailsComponent implements OnInit, OnDestroy {
     this.destroyed.complete();
   }
 
-  public updateSettings($event: LayerSettingsModel) {
+  public updateSettings($event: LayerSettingsModel | null) {
     this.updatedLayerSettings = $event;
   }
 

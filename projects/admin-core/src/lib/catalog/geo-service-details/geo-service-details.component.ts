@@ -63,11 +63,11 @@ export class GeoServiceDetailsComponent implements OnInit, OnDestroy {
     this.destroyed.complete();
   }
 
-  public updateGeoService($event: GeoServiceUpdateModel) {
+  public updateGeoService($event: GeoServiceUpdateModel | null) {
     this.updatedGeoService = $event;
   }
 
-  public updateDefaultLayerSettings($event: LayerSettingsModel) {
+  public updateDefaultLayerSettings($event: LayerSettingsModel | null) {
     this.updatedDefaultLayerSettings = $event;
   }
 

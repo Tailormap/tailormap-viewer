@@ -80,11 +80,11 @@ export class GeoServiceFormDialogComponent {
       });
   }
 
-  public updateGeoService($event: GeoServiceCreateModel) {
+  public updateGeoService($event: GeoServiceCreateModel | null) {
     this.geoService = $event;
   }
 
-  public updateDefaultLayerSettings($event: LayerSettingsModel) {
+  public updateDefaultLayerSettings($event: LayerSettingsModel | null) {
     this.updatedDefaultLayerSettings = $event;
   }
 

@@ -47,7 +47,7 @@ export class GroupEditComponent implements OnInit, OnDestroy {
     this.destroyed.complete();
   }
 
-  public updateGroup(updatedGroup: GroupModel) {
+  public updateGroup(updatedGroup: GroupModel | null) {
     this.updatedGroup = updatedGroup;
   }
 

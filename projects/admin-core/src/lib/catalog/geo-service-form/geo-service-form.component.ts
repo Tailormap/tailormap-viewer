@@ -46,7 +46,7 @@ export class GeoServiceFormComponent implements OnInit {
   }
 
   @Output()
-  public changed = new EventEmitter<GeoServiceCreateModel>();
+  public changed = new EventEmitter<GeoServiceCreateModel | null>();
 
   public geoServiceForm = new FormGroup({
     title: new FormControl('', { nonNullable: true }),
@@ -73,9 +73,12 @@ export class GeoServiceFormComponent implements OnInit {
       .pipe(
         takeUntil(this.destroyed),
         debounceTime(250),
-        filter(() => this.isValidForm()),
       )
       .subscribe(value => {
+        if (!this.isValidForm()) {
+          this.changed.emit(null);
+          return;
+        }
         this.changed.emit({
           title: value.title || '',
           url: value.url || '',

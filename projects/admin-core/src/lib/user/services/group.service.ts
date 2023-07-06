@@ -49,7 +49,7 @@ export class GroupService {
     return this.store$.select(selectGroupsLoadStatus)
       .pipe(
         tap(loadStatus => {
-          if (loadStatus === LoadingStateEnum.INITIAL) {
+          if (loadStatus === LoadingStateEnum.INITIAL || loadStatus === LoadingStateEnum.FAILED) {
             this.store$.dispatch(loadGroups());
           }
         }),

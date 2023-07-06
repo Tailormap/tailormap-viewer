@@ -67,7 +67,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
   }
 
   @Output()
-  public userUpdated = new EventEmitter<UserAddUpdateModel>();
+  public userUpdated = new EventEmitter<UserAddUpdateModel | null>();
 
   public allGroups$: Observable<GroupModel[]> | undefined;
   private destroyed = new Subject();
@@ -84,7 +84,6 @@ export class UserFormComponent implements OnInit, OnDestroy {
     this.userForm.valueChanges.pipe(
       takeUntil(this.destroyed),
       debounceTime(250),
-      filter(() => this.userForm.valid),
     )
     .subscribe(() => {
       this.readForm();
@@ -97,6 +96,10 @@ export class UserFormComponent implements OnInit, OnDestroy {
   }
 
   private readForm() {
+    if (!this.userForm.valid) {
+      this.userUpdated.emit(null);
+      return;
+    }
     const validUntilFromFormValue = this.userForm.get('validUntil')?.value || null;
     const user: UserAddUpdateModel = {
       username: this.userForm.get('username')?.value || '',

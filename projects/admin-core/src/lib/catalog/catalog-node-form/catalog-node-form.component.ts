@@ -27,7 +27,7 @@ export class CatalogNodeFormComponent implements OnInit, OnDestroy {
   public parentNode: string | null = null;
 
   @Output()
-  public changed = new EventEmitter<Omit<ExtendedCatalogNodeModel, 'id'>>();
+  public changed = new EventEmitter<Omit<ExtendedCatalogNodeModel, 'id'> | null>();
 
   public catalogNodeForm = new FormGroup({
     title: new FormControl('', { nonNullable: true }),
@@ -38,11 +38,14 @@ export class CatalogNodeFormComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.destroyed),
         debounceTime(250),
-        filter(() => this.isValidForm()),
       )
       .subscribe(value => {
         if (!this.parentNode) {
           // Parent node is required
+          return;
+        }
+        if (!this.isValidForm()) {
+          this.changed.emit(null);
           return;
         }
         this.changed.emit({

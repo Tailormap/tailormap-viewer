@@ -47,7 +47,7 @@ export class UserService {
     return this.store$.select(selectUsersLoadStatus)
       .pipe(
         tap(loadStatus => {
-          if (loadStatus === LoadingStateEnum.INITIAL) {
+          if (loadStatus === LoadingStateEnum.INITIAL || loadStatus === LoadingStateEnum.FAILED) {
             this.store$.dispatch(loadUsers());
           }
         }),
