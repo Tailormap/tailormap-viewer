@@ -1,17 +1,26 @@
 {
   "projectName": "tailormap-viewer",
   "projectOwner": "B3Partners",
+  "imageSize": 100,
+  "repoType": "github",
+  "commit": true,
   "files": [
     "CONTRIBUTORS.md"
   ],
-  "commit": true,
   "contributors": [
-    "mprins",
-    "matthijsln",
-    "geertplaisier",
-    "KJLammers",
-    "puckipedia",
-    "mvdstruijk",
-    "geertoff"
-  ]
+    {
+      "login": "mprins",
+      "name": "Mark Prins",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1165786?v=4",
+      "profile": "https://www.b3partners.nl/",
+      "contributions": [
+        "code",
+        "infra",
+        "review",
+        "bug",
+        "maintenance"
+      ]
+    }
+  ],
+  "commitConvention": "angular"
 }
