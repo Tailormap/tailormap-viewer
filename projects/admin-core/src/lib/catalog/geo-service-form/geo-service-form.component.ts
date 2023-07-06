@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Observable, debounceTime, filter, Subject, takeUntil } from 'rxjs';
+import { Observable, debounceTime, Subject, takeUntil } from 'rxjs';
 import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 import { FormControl, FormGroup } from '@angular/forms';
 import { GeoServiceProtocolEnum, GroupModel, AuthorizationRuleGroup, AUTHORIZATION_RULE_ANONYMOUS } from '@tailormap-admin/admin-api';

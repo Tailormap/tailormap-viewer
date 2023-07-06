@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { debounceTime, filter, Subject, takeUntil } from 'rxjs';
+import { debounceTime, Subject, takeUntil } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
 import {
   FeatureSourceProtocolEnum, JdbcConnectionPropertiesModel, JdbcDatabaseTypeEnum, ServiceAuthenticationModel,

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { debounceTime, filter, map, Observable, of, Subject, takeUntil, tap } from 'rxjs';
+import { debounceTime, map, Observable, of, Subject, takeUntil, tap } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
 import { AuthorizationRuleGroup, GeoServiceProtocolEnum, GroupModel, LayerSettingsModel, TileLayerHiDpiModeEnum } from '@tailormap-admin/admin-api';
 import { FormHelper } from '../../helpers/form.helper';

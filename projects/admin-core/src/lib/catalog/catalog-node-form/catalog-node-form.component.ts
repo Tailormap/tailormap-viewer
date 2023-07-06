@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
-import { debounceTime, filter, Subject, takeUntil } from 'rxjs';
+import { debounceTime, Subject, takeUntil } from 'rxjs';
 import { FormHelper } from '../../helpers/form.helper';
 
 @Component({
