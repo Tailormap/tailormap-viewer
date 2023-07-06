@@ -55,6 +55,16 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "puckipedia",
+      "name": "puckipedia",
+      "avatar_url": "https://avatars.githubusercontent.com/u/488734?v=4",
+      "profile": "https://github.com/puckipedia",
+      "contributions": [
+        "code",
+        "bug"
+      ]
     }
   ],
   "commitConvention": "angular"
