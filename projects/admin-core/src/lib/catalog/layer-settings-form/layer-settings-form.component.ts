@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { debounceTime, filter, map, Observable, of, Subject, takeUntil, tap } from 'rxjs';
+import { debounceTime, map, Observable, of, Subject, takeUntil, tap } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
 import { AuthorizationRuleGroup, GeoServiceProtocolEnum, GroupModel, LayerSettingsModel, TileLayerHiDpiModeEnum } from '@tailormap-admin/admin-api';
 import { FormHelper } from '../../helpers/form.helper';
@@ -66,7 +66,7 @@ export class LayerSettingsFormComponent implements OnInit {
   public layerName: string | null | undefined;
 
   @Output()
-  public changed = new EventEmitter<LayerSettingsModel>();
+  public changed = new EventEmitter<LayerSettingsModel | null>();
 
   public groups$: Observable<GroupModel[]>;
 
@@ -100,9 +100,12 @@ export class LayerSettingsFormComponent implements OnInit {
         takeUntil(this.destroyed),
         tap(() => this.updateDisabledState()),
         debounceTime(250),
-        filter(() => this.isValidForm()),
       )
       .subscribe(value => {
+        if (!this.isValidForm()) {
+          this.changed.emit(null);
+          return;
+        }
         this.changed.emit(this.getUpdatedLayerSettings(value));
       });
   }

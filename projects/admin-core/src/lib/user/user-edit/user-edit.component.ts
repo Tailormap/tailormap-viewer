@@ -47,7 +47,7 @@ export class UserEditComponent implements OnInit, OnDestroy {
     this.destroyed.complete();
   }
 
-  public updateUser(updatedUser: UserAddUpdateModel) {
+  public updateUser(updatedUser: UserAddUpdateModel | null) {
     this.updatedUser = updatedUser;
   }
 

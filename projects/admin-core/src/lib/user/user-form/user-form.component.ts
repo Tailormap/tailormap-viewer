@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { GroupModel, UserModel } from '@tailormap-admin/admin-api';
 import { AbstractControl, AsyncValidatorFn, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { debounceTime, filter, map, Observable, of, Subject, takeUntil } from 'rxjs';
+import { debounceTime, map, Observable, of, Subject, takeUntil } from 'rxjs';
 import { GroupService } from '../services/group.service';
 import { formatDate } from '@angular/common';
 import { NAME_REGEX } from '../constants';
@@ -67,7 +67,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
   }
 
   @Output()
-  public userUpdated = new EventEmitter<UserAddUpdateModel>();
+  public userUpdated = new EventEmitter<UserAddUpdateModel | null>();
 
   public allGroups$: Observable<GroupModel[]> | undefined;
   private destroyed = new Subject();
@@ -84,7 +84,6 @@ export class UserFormComponent implements OnInit, OnDestroy {
     this.userForm.valueChanges.pipe(
       takeUntil(this.destroyed),
       debounceTime(250),
-      filter(() => this.userForm.valid),
     )
     .subscribe(() => {
       this.readForm();
@@ -97,6 +96,10 @@ export class UserFormComponent implements OnInit, OnDestroy {
   }
 
   private readForm() {
+    if (!this.userForm.valid) {
+      this.userUpdated.emit(null);
+      return;
+    }
     const validUntilFromFormValue = this.userForm.get('validUntil')?.value || null;
     const user: UserAddUpdateModel = {
       username: this.userForm.get('username')?.value || '',

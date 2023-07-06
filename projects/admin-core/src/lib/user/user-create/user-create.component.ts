@@ -30,7 +30,7 @@ export class UserCreateComponent implements OnDestroy {
     this.destroyed.complete();
   }
 
-  public updateUser($event: UserAddUpdateModel) {
+  public updateUser($event: UserAddUpdateModel | null) {
     this.user = $event;
   }
 

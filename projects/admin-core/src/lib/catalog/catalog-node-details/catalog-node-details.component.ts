@@ -54,7 +54,7 @@ export class CatalogNodeDetailsComponent implements OnInit, OnDestroy {
     this.destroyed.complete();
   }
 
-  public updateNode($event: Omit<ExtendedCatalogNodeModel, 'id'>) {
+  public updateNode($event: Omit<ExtendedCatalogNodeModel, 'id'> | null) {
     this.updatedNode = $event;
   }
 

@@ -61,7 +61,7 @@ export class FeatureSourceFormDialogComponent {
       });
   }
 
-  public updateFeatureSource($event: FeatureSourceCreateModel) {
+  public updateFeatureSource($event: FeatureSourceCreateModel | null) {
     this.featureSource = $event;
   }
 }

@@ -5,6 +5,8 @@
       <input formControlName="username" matInput>
     </mat-form-field>
     <tm-admin-password-field formControlName="password" label="Password" i18n-label>
+      <mat-error *ngIf="!userForm.get('password')?.valid && userForm.get('password')?.errors?.['minlength']"
+                 i18n>Password shorter than {{userForm.get('password')?.errors?.['minlength'].requiredLength}}</mat-error>
       <mat-error *ngIf="!userForm.get('password')?.valid && userForm.get('password')?.errors?.['weakPassword']"
                  i18n>Password too short or too easily guessable</mat-error>
     </tm-admin-password-field>

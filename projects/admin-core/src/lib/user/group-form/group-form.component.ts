@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { debounceTime, filter, Subject, takeUntil } from 'rxjs';
+import { debounceTime, Subject, takeUntil } from 'rxjs';
 import { GroupModel } from '@tailormap-admin/admin-api';
 import { NAME_REGEX } from '../constants';
 
@@ -42,7 +42,7 @@ export class GroupFormComponent implements OnInit, OnDestroy {
   }
 
   @Output()
-  public groupUpdated = new EventEmitter<GroupModel>();
+  public groupUpdated = new EventEmitter<GroupModel | null>();
 
   private destroyed = new Subject();
   private _group: GroupModel | null = null;
@@ -52,7 +52,6 @@ export class GroupFormComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.destroyed),
         debounceTime(250),
-        filter(() => this.groupForm.valid),
       )
       .subscribe(() => {
         this.readForm();
@@ -65,6 +64,10 @@ export class GroupFormComponent implements OnInit, OnDestroy {
   }
 
   private readForm() {
+    if (!this.groupForm.valid) {
+      this.groupUpdated.emit(null);
+      return;
+    }
     this.groupUpdated.emit({
       name: this.groupForm.get('name')?.value || '',
       description: this.groupForm.get('description')?.value || null,

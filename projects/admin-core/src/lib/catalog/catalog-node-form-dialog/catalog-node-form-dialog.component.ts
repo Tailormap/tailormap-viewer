@@ -60,7 +60,7 @@ export class CatalogNodeFormDialogComponent {
       });
   }
 
-  public updateNode($event: Omit<ExtendedCatalogNodeModel, 'id'>) {
+  public updateNode($event: Omit<ExtendedCatalogNodeModel, 'id'> | null) {
     this.node = $event;
   }
 

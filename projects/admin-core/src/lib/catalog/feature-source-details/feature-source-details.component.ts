@@ -59,7 +59,7 @@ export class FeatureSourceDetailsComponent implements OnInit, OnDestroy {
     this.destroyed.complete();
   }
 
-  public updateFeatureSource($event: FeatureSourceUpdateModel) {
+  public updateFeatureSource($event: FeatureSourceUpdateModel | null) {
     this.updatedFeatureSource = $event;
   }
 

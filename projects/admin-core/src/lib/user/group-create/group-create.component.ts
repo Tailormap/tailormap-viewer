@@ -30,7 +30,7 @@ export class GroupCreateComponent implements OnDestroy {
     this.destroyed.complete();
   }
 
-  public updateGroup($event: Omit<GroupModel, 'id'>) {
+  public updateGroup($event: Omit<GroupModel, 'id'> | null) {
     this.group = $event;
   }
 
