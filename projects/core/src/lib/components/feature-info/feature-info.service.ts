@@ -36,12 +36,12 @@ export class FeatureInfoService {
     ])
       .pipe(
         take(1),
-        concatMap(([ layers, wmsLayers, applicationId, resolutions, projection ]) => {
+        concatMap(([ layers, wmsLayers, applicationId, resolutions ]) => {
           if (!applicationId || (layers.length === 0 && wmsLayers.length === 0)) {
             return of([]);
           }
           const featureRequests$ = [
-            ...layers.map(layer => this.getFeatureInfoFromApi$(layer, coordinates, applicationId, resolutions, projection)),
+            ...layers.map(layer => this.getFeatureInfoFromApi$(layer, coordinates, applicationId, resolutions)),
             ...wmsLayers.map(layer => this.mapService.getFeatureInfoForLayers$(layer.id, coordinates, this.httpService).pipe(
               map(features => this.featuresToFeatureInfoResponseModel(features, layer.id)),
             )),
@@ -56,7 +56,6 @@ export class FeatureInfoService {
     coordinates: [ number, number ],
     applicationId: string,
     resolutions: MapViewDetailsModel,
-    projection: string,
   ): Observable<FeatureInfoResponseModel> {
     const layerId = layer.id;
     return this.apiService.getFeatures$({
@@ -64,7 +63,6 @@ export class FeatureInfoService {
       applicationId,
       x: coordinates[0],
       y: coordinates[1],
-      crs: projection,
       // meters per pixel * fixed value
       distance: resolutions.resolution * FeatureInfoService.DEFAULT_DISTANCE,
       simplify: false,
