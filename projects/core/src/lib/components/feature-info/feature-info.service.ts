@@ -34,7 +34,6 @@ export class FeatureInfoService {
       this.store$.select(selectVisibleWMSLayersWithoutAttributes),
       this.store$.select(selectViewerId),
       this.mapService.getMapViewDetails$(),
-      this.mapService.getProjectionCode$(),
     ])
       .pipe(
         take(1),
@@ -69,7 +68,7 @@ export class FeatureInfoService {
             return of([]);
           }
           const featureRequests$ = layers
-              .map(layer => this.getFeatureInfoFromApi$({ layer, coordinates, applicationId, resolutions, geometryInAttributes: true }));
+              .map(layer => this.getFeatureInfoFromApi$( layer, coordinates, applicationId, resolutions,  true ));
           return forkJoin(featureRequests$);
         }),
       );

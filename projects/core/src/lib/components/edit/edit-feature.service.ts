@@ -4,7 +4,6 @@ import { FeatureModel, TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel } fr
 import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 import { catchError, map, Observable, of, tap } from 'rxjs';
 import { HttpStatusCode } from '@angular/common/http';
-import { Feature } from 'ol';
 
 @Injectable({
   providedIn: 'root',
