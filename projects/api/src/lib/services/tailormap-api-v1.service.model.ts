@@ -26,7 +26,6 @@ export interface TailormapApiV1ServiceModel {
     layerId: string;
     x?: number;
     y?: number;
-    crs?: string;
     distance?: number;
     __fid?: string;
     simplify?: boolean;

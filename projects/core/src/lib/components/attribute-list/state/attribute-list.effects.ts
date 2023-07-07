@@ -42,7 +42,7 @@ export class AttributeListEffects {
         this.mapService.getProjectionCode$(),
       ]),
       filter(([ _action, tab, row, applicationId ]) => !!tab && !!row && applicationId !== null),
-      mergeMap(([ _action, tab, row, applicationId, projection ]) => {
+      mergeMap(([ _action, tab, row, applicationId ]) => {
         if (!row || !row.__fid || !tab || !tab.layerId || applicationId === null) {
           return of({ type: 'noop' });
         }
@@ -50,7 +50,6 @@ export class AttributeListEffects {
           applicationId,
           layerId: tab.layerId,
           __fid: row.__fid,
-          crs: projection,
         }).pipe(
           map(result => {
             const feature = result.features && result.features.length > 0
