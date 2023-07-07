@@ -58,11 +58,10 @@ export class FeatureInfoService {
       this.store$.select(selectEditableLayers),
       this.store$.select(selectViewerId),
       this.mapService.getMapViewDetails$(),
-      this.mapService.getProjectionCode$(),
     ])
       .pipe(
         take(1),
-        concatMap(([ editableLayers, applicationId, resolutions, projection ]) => {
+        concatMap(([ editableLayers, applicationId, resolutions ]) => {
           const layers = editableLayers.filter(layer => {
             return !selectedLayer || layer.id === selectedLayer;
           });
@@ -70,7 +69,7 @@ export class FeatureInfoService {
             return of([]);
           }
           const featureRequests$ = layers
-              .map(layer => this.getFeatureInfoFromApi$({ layer, coordinates, applicationId, resolutions, projection, geometryInAttributes: true }));
+              .map(layer => this.getFeatureInfoFromApi$({ layer, coordinates, applicationId, resolutions, geometryInAttributes: true }));
           return forkJoin(featureRequests$);
         }),
       );
@@ -81,6 +80,7 @@ export class FeatureInfoService {
     coordinates: [ number, number ],
     applicationId: string,
     resolutions: MapViewDetailsModel,
+    geometryInAttributes=false,
   ): Observable<FeatureInfoResponseModel> {
     const layerId = layer.id;
     return this.apiService.getFeatures$({
@@ -89,9 +89,9 @@ export class FeatureInfoService {
       x: coordinates[0],
       y: coordinates[1],
       // meters per pixel * fixed value
-      distance: params.resolutions.resolution * FeatureInfoService.DEFAULT_DISTANCE,
+      distance: resolutions.resolution * FeatureInfoService.DEFAULT_DISTANCE,
       simplify: false,
-      geometryInAttributes: params.geometryInAttributes,
+      geometryInAttributes: geometryInAttributes,
     }).pipe(
       map((featureInfoResult: FeaturesResponseModel): FeatureInfoResponseModel => ({
         features: (featureInfoResult.features || []).map(feature => ({ ...feature, layerId })),

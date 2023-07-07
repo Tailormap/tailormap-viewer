@@ -87,14 +87,14 @@ describe('TailormapApiV1Service', () => {
   });
 
   test('queries API for createFeature$', () => {
-    const feat : FeatureModel = { __fid: "", attributes: { a:'a'} };
+    const feat : FeatureModel = { __fid: "", attributes: { a:'a' } };
     service.createFeature$({ applicationId: 'app/default', layerId: '1', feature: feat } ).subscribe();
     const req = httpController.expectOne({ url: '/api/app/default/layer/1/edit/feature', method: 'POST' });
     req.flush(null);
   });
 
   test('queries API for updateFeature$', () => {
-    const feat : FeatureModel = { __fid: "1", attributes: { a:'a'} };
+    const feat : FeatureModel = { __fid: "1", attributes: { a:'a' } };
     service.updateFeature$({ applicationId: 'app/default', layerId: '1', feature: feat } ).subscribe();
     const req = httpController.expectOne({ url: '/api/app/default/layer/1/edit/feature/1', method: 'PATCH' });
     req.flush(null);
