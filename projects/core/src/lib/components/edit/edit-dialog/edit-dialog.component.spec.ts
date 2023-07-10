@@ -1,15 +1,15 @@
 import { render, screen, waitFor } from '@testing-library/angular';
 import { EditDialogComponent } from './edit-dialog.component';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { featureInfoStateKey, initialFeatureInfoState } from '../state/feature-info.state';
+import { featureInfoStateKey, initialFeatureInfoState } from '../../feature-info/state/feature-info.state';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { selectCurrentlySelectedFeature, selectFeatureInfoCounts, selectFeatureInfoDialogVisible } from '../state/feature-info.selectors';
+import { selectCurrentlySelectedFeature, selectFeatureInfoCounts, selectFeatureInfoDialogVisible } from '../../feature-info/state/feature-info.selectors';
 import { getAppLayerModel } from '@tailormap-viewer/api';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { TestBed } from '@angular/core/testing';
-import { FeatureInfoModel } from '../models/feature-info.model';
-import { showNextFeatureInfoFeature, showPreviousFeatureInfoFeature } from '../state/feature-info.actions';
+import { FeatureInfoModel } from '../../feature-info/models/feature-info.model';
+import { showNextFeatureInfoFeature, showPreviousFeatureInfoFeature } from '../../feature-info/state/feature-info.actions';
 
 const getFeatureInfo = (updated?: boolean): FeatureInfoModel => {
   return {
