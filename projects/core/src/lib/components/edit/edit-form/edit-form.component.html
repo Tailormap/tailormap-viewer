@@ -1,20 +1,29 @@
 <form [formGroup]="form">
   <div *ngFor="let item of formConfig">
-    {{ item.label }}
     <mat-form-field *ngIf="item.type === 'text'">
+      <mat-label>{{ item.label }}</mat-label>
       <input matInput [formControlName]="item.name" [placeholder]="item.placeholder || item.label">
     </mat-form-field>
     <mat-form-field *ngIf="item.type === 'number'">
+      <mat-label>{{ item.label }}</mat-label>
       <input matInput [formControlName]="item.name" [placeholder]="item.placeholder || item.label" type="number">
     </mat-form-field>
+    <mat-form-field *ngIf="item.type === 'date'">
+      <mat-label>{{ item.label }}</mat-label>
+      <input matInput [formControlName]="item.name" [placeholder]="item.placeholder || item.label" type="date">
+    </mat-form-field>
     <mat-form-field *ngIf="item.type === 'textarea'">
+      <mat-label>{{ item.label }}</mat-label>
       <textarea matInput [formControlName]="item.name" [placeholder]="item.placeholder || item.label"></textarea>
     </mat-form-field>
     <mat-form-field *ngIf="item.type === 'select'">
+      <mat-label>{{ item.label }}</mat-label>
       <mat-select [formControlName]="item.name" [placeholder]="item.placeholder || item.label">
         <mat-option *ngFor="let item of item.valueList" [value]="item.value">{{item.label || item.value}}</mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-checkbox [formControlName]="item.name" *ngIf="item.type === 'boolean'">{{item.label}}</mat-checkbox>
+    <mat-checkbox [formControlName]="item.name" *ngIf="item.type === 'boolean'">
+      <mat-label>{{ item.label }}</mat-label>
+    </mat-checkbox>
   </div>
 </form>

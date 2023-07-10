@@ -51,6 +51,7 @@ export class EditModelHelper {
       case AttributeType.BOOLEAN:
         return 'boolean';
       case AttributeType.DATE:
+        return 'date';
       case AttributeType.TIMESTAMP:
         return 'text';
       case AttributeType.NUMBER:

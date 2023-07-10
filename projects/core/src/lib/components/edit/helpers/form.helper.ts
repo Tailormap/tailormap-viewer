@@ -8,6 +8,7 @@ export class FormHelper {
     fields.forEach(field => {
       const control = new FormControl(field.value, {
         validators: field.required ? [Validators.required] : [],
+        nonNullable: field.required,
       });
       if (field.disabled) {
         control.disable();

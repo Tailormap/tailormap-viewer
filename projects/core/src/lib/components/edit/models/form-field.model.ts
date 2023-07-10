@@ -1,7 +1,7 @@
 export interface FormFieldModel {
   name: string;
   label: string;
-  type: 'text' | 'number' | 'boolean' | 'select' | 'textarea';
+  type: 'text' | 'number' | 'boolean' | 'select' | 'textarea'| 'date';
   value: string | boolean | number | undefined;
   disabled: boolean;
   required: boolean;
