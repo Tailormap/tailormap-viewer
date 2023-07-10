@@ -4,9 +4,13 @@
   "imageSize": 100,
   "repoType": "github",
   "commit": true,
+  "contributorsPerLine": 6,
+  "linkToUsage": true,
   "files": [
     "CONTRIBUTORS.md"
   ],
+  "repoHost": "https://github.com",
+  "commitConvention": "angular",
   "contributors": [
     {
       "login": "mprins",
@@ -85,7 +89,16 @@
         "code",
         "bug"
       ]
+    },
+    {
+      "login": "dependabot",
+      "name": "Dependabot",
+      "avatar_url": "https://avatars.githubusercontent.com/u/27347476?v=4",
+      "profile": "https://github.com/features/security",
+      "contributions": [
+        "maintenance"
+      ]
     }
   ],
-  "commitConvention": "angular"
+  "commitType": "docs"
 }
