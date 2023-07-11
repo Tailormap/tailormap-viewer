@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
+  ApiResponseHelper,
   ApplicationModel,
   CatalogItemKindEnum, CatalogModelHelper,
   GeoServiceModel,
@@ -22,7 +23,6 @@ import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { AdminSseService, EventType } from '../../shared/services/admin-sse.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DebounceHelper } from '../../helpers/debounce.helper';
-import { GeoServiceHelper } from '../helpers/geo-service.helper';
 
 export interface DeleteGeoServiceResponse {
   success: boolean;
@@ -92,7 +92,7 @@ export class GeoServiceService {
     };
     return this.adminApiService.createGeoService$({ geoService: geoServiceModel, refreshCapabilities: true }).pipe(
       catchError((errorResponse) => {
-        const message = GeoServiceHelper.getApiErrorMessage(errorResponse);
+        const message = ApiResponseHelper.getAdminApiErrorMessage(errorResponse);
         this.adminSnackbarService.showMessage($localize `Error while creating geo service: ${message}`);
         return of(null);
       }),
@@ -145,7 +145,7 @@ export class GeoServiceService {
           // Delete the service
           return this.adminApiService.deleteGeoService$({ id: geoServiceId }).pipe(
             catchError((errorResponse) => {
-              const message = GeoServiceHelper.getApiErrorMessage(errorResponse);
+              const message = ApiResponseHelper.getAdminApiErrorMessage(errorResponse);
               this.adminSnackbarService.showMessage($localize `Error while deleting geo service: ${message}`);
               return of(null);
             }),
@@ -210,7 +210,7 @@ export class GeoServiceService {
   private handleUpdateGeoService(errorMsg: string, catalogNodeId: string): MonoTypeOperatorFunction<GeoServiceWithLayersModel | null> {
     return pipe(
       catchError((errorResponse) => {
-        const message = GeoServiceHelper.getApiErrorMessage(errorResponse);
+        const message = ApiResponseHelper.getAdminApiErrorMessage(errorResponse);
         this.adminSnackbarService.showMessage(errorMsg + message);
         return of(null);
       }),
