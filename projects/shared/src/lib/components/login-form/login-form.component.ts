@@ -24,6 +24,9 @@ export class LoginFormComponent {
   @Input({ required: true })
   public loginErrorMessage: string | undefined;
 
+  @Input()
+  public isViewer: boolean = false;
+
   @Output()
   public loggedIn = new EventEmitter<LoginModel>();
 
