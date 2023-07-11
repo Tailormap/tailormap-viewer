@@ -9,11 +9,20 @@ export class ApiResponseHelper {
 
   // For admin API (JSON produced by Spring Data REST RepositoryRestExceptionHandler) - get message for response with non-OK HTTP status
   public static getAdminApiErrorMessage(error: any) {
-    if (error.name === 'HttpErrorResponse' && Array.isArray(error.error?.errors)) {
-      return error.error.errors.map((e: { entity: string; property: string; invalidValue: string; message: string }) => e.message).join(", ");
-    } else {
-      return error + "";
+    if (error.name !== 'HttpErrorResponse') {
+      return error + '';
     }
+    const body = error.error;
+    if (body === null) {
+      return `HTTP status ${error.status}: ${error.statusText}`;
+    }
+    if (Array.isArray(body.errors)) {
+      return body.errors.map((e: { entity: string; property: string; invalidValue: string; message: string }) => e.message).join(", ");
+    }
+    if (typeof body.error === 'string' && body.message) {
+      return `${body.error}: ${body.message}`;
+    }
+    return typeof body === 'object' ? JSON.stringify(body) : body + '';
   }
 
 }
