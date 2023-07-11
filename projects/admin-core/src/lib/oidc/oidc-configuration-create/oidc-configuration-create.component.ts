@@ -44,7 +44,7 @@ export class OIDCConfigurationCreateComponent implements OnDestroy {
       .subscribe(createdOIDCConfiguration => {
         if (createdOIDCConfiguration) {
           this.adminSnackbarService.showMessage($localize `OIDCConfiguration ${createdOIDCConfiguration.name} created`);
-          this.router.navigateByUrl('/oidcConfigurations/oidcConfiguration/' + createdOIDCConfiguration.id);
+          this.router.navigateByUrl('/oidc-configurations/oidc-configuration/' + createdOIDCConfiguration.id);
         }
         this.savingSubject.next(false);
       });

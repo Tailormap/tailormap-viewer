@@ -74,8 +74,8 @@ export class OIDCConfigurationEditComponent implements OnInit, OnDestroy {
   public delete(oidcConfiguration: OIDCConfigurationModel) {
     const title = oidcConfiguration.name;
     this.confirmDelete.confirm$(
-      `Delete oidcConfiguration ${title}`,
-      `Are you sure you want to delete oidcConfiguration ${title}? This action cannot be undone.`,
+      `Delete OIDC configuration ${title}`,
+      `Are you sure you want to delete OIDC configuration ${title}? This action cannot be undone.`,
       true,
     )
       .pipe(
@@ -85,7 +85,7 @@ export class OIDCConfigurationEditComponent implements OnInit, OnDestroy {
       )
       .subscribe(() => {
         this.adminSnackbarService.showMessage($localize `OIDCConfiguration ${title} removed`);
-        this.router.navigateByUrl('/oidcConfigurations');
+        this.router.navigateByUrl('/oidc-configurations');
       });
   }
 
