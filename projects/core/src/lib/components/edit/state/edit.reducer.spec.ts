@@ -4,12 +4,12 @@ import { editReducer } from './edit.reducer';
 
 describe('EditReducer', () => {
 
-  test('sets some prop', () => {
+  test('sets edit active', () => {
     const initialState: EditState = { ...initialEditState };
     const action = EditActions.setEditActive({ active: true });
     expect(initialState.isActive).toEqual(false);
     const updatedState = editReducer(initialState, action);
-    expect(updatedState.someProp).toEqual(true);
+    expect(updatedState.isActive).toEqual(true);
   });
 
 });
