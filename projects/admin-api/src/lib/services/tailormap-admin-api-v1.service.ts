@@ -55,19 +55,24 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
       .pipe(map(response => (response?._embedded?.['geo-services'] || []).map(CatalogModelHelper.addTypeToGeoServiceModel)));
   }
 
-  public createGeoService$(params: { geoService: Omit<GeoServiceModel, 'id'>; refreshCapabilities: boolean}): Observable<GeoServiceWithLayersModel> {
+  public createGeoService$(params: { geoService: Omit<GeoServiceModel, 'id'>; refreshCapabilities?: boolean}): Observable<GeoServiceWithLayersModel> {
     return this.httpClient.post<GeoServiceWithLayersModel>(
       `${TailormapAdminApiV1Service.BASE_URL}/geo-services`,
       {
         ...params.geoService,
-        refreshCapabilities: params.refreshCapabilities,
+        refreshCapabilities: !!params.refreshCapabilities,
       },
     ).pipe(map(CatalogModelHelper.addTypeToGeoServiceModel));
   }
 
-  public updateGeoService$(params: { id: string; geoService: GeoServiceModel }): Observable<GeoServiceWithLayersModel> {
-    return this.httpClient.patch<GeoServiceWithLayersModel>(`${TailormapAdminApiV1Service.BASE_URL}/geo-services/${params.id}`, params.geoService)
-      .pipe(map(CatalogModelHelper.addTypeToGeoServiceModel));
+  public updateGeoService$(params: { id: string; geoService: GeoServiceModel; refreshCapabilities?: boolean }): Observable<GeoServiceWithLayersModel> {
+    return this.httpClient.patch<GeoServiceWithLayersModel>(
+      `${TailormapAdminApiV1Service.BASE_URL}/geo-services/${params.id}`,
+      {
+        ...params.geoService,
+        refreshCapabilities: !!params.refreshCapabilities,
+      },
+    ).pipe(map(CatalogModelHelper.addTypeToGeoServiceModel));
   }
 
   public deleteGeoService$(params: { id: string }): Observable<boolean> {
@@ -106,14 +111,24 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
       .pipe(map(response => (response?._embedded['feature-sources'] || []).map(CatalogModelHelper.addTypeToFeatureSourceModel)));
   }
 
-  public createFeatureSource$(params: { featureSource: Omit<FeatureSourceModel, 'id'> }): Observable<FeatureSourceModel> {
-    return this.httpClient.post<FeatureSourceModel>(`${TailormapAdminApiV1Service.BASE_URL}/feature-sources`, params.featureSource)
-      .pipe(map(CatalogModelHelper.addTypeToFeatureSourceModel));
+  public createFeatureSource$(params: { featureSource: Omit<FeatureSourceModel, 'id'>; refreshCapabilities?: boolean }): Observable<FeatureSourceModel> {
+    return this.httpClient.post<FeatureSourceModel>(
+      `${TailormapAdminApiV1Service.BASE_URL}/feature-sources`,
+      {
+        ...params.featureSource,
+        refreshCapabilities: !!params.refreshCapabilities,
+      },
+    ).pipe(map(CatalogModelHelper.addTypeToFeatureSourceModel));
   }
 
-  public updateFeatureSource$(params: { id: string; featureSource: FeatureSourceModel }): Observable<FeatureSourceModel> {
-    return this.httpClient.patch<FeatureSourceModel>(`${TailormapAdminApiV1Service.BASE_URL}/feature-sources/${params.id}`, params.featureSource)
-      .pipe(map(CatalogModelHelper.addTypeToFeatureSourceModel));
+  public updateFeatureSource$(params: { id: string; featureSource: FeatureSourceModel; refreshCapabilities?: boolean }): Observable<FeatureSourceModel> {
+    return this.httpClient.patch<FeatureSourceModel>(
+      `${TailormapAdminApiV1Service.BASE_URL}/feature-sources/${params.id}`,
+      {
+        ...params.featureSource,
+        refreshCapabilities: !!params.refreshCapabilities,
+      },
+    ).pipe(map(CatalogModelHelper.addTypeToFeatureSourceModel));
   }
 
   public deleteFeatureSource$(params: { id: string }): Observable<boolean> {
