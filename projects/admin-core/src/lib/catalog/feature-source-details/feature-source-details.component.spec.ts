@@ -65,6 +65,8 @@ describe('FeatureSourceDetailsComponent', () => {
     screen.debug(undefined, Infinity);
     await userEvent.type(await screen.findByPlaceholderText('Title'), '___');
     screen.debug(undefined, Infinity);
+    await waitFor(() => expect(screen.findByPlaceholderText('Database')).not.toBeNull());
+
     await userEvent.type(await screen.findByPlaceholderText('Database'), 'geo_db');
     await userEvent.type(await screen.findByPlaceholderText('Host'), 'localhost');
     await userEvent.type(await screen.findByPlaceholderText('Port'), '[Backspace]5432');
