@@ -58,17 +58,19 @@ const setup = async (protocol: FeatureSourceProtocolEnum) => {
 describe('FeatureSourceDetailsComponent', () => {
 
   test('should render and handle editing JDBC source', async () => {
-    screen.debug(undefined, Infinity);
     const { featureSourceModel, featureServiceMock } = await setup(FeatureSourceProtocolEnum.JDBC);
     expect(await screen.findByText('Edit Some JDBC source')).toBeInTheDocument();
     expect(await screen.findByLabelText('Save')).toBeDisabled();
     expect(await screen.queryByText('URL')).not.toBeInTheDocument();
+    screen.debug(undefined, Infinity);
     await userEvent.type(await screen.findByPlaceholderText('Title'), '___');
+    screen.debug(undefined, Infinity);
     await userEvent.type(await screen.findByPlaceholderText('Database'), 'geo_db');
     await userEvent.type(await screen.findByPlaceholderText('Host'), 'localhost');
     await userEvent.type(await screen.findByPlaceholderText('Port'), '[Backspace]5432');
     await userEvent.type(await screen.findByPlaceholderText('Schema'), 'roads');
     await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save');
+    screen.debug(undefined, Infinity);
     await waitFor(() => {
       expect(featureServiceMock.updateFeatureSource$).toHaveBeenCalledWith('1', {
         title: featureSourceModel.title + '___',

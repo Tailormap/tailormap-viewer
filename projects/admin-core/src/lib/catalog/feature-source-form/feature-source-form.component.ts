@@ -100,7 +100,6 @@ export class FeatureSourceFormComponent implements OnInit {
   }
 
   public isJDBCSource() {
-    console.log('isJDBCSource', this.featureSourceForm.get('protocol')?.value);
     return this.featureSourceForm.get('protocol')?.value === FeatureSourceProtocolEnum.JDBC;
   }
 
