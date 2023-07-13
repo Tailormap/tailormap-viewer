@@ -58,6 +58,7 @@ const setup = async (protocol: FeatureSourceProtocolEnum) => {
 describe('FeatureSourceDetailsComponent', () => {
 
   test('should render and handle editing JDBC source', async () => {
+    screen.debug(undefined, Infinity);
     const { featureSourceModel, featureServiceMock } = await setup(FeatureSourceProtocolEnum.JDBC);
     expect(await screen.findByText('Edit Some JDBC source')).toBeInTheDocument();
     expect(await screen.findByLabelText('Save')).toBeDisabled();
