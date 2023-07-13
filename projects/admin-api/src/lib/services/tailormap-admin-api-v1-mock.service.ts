@@ -3,7 +3,7 @@ import { delay, Observable, of } from 'rxjs';
 import { TailormapAdminApiV1ServiceModel } from './tailormap-admin-api-v1-service.model';
 import * as mockData from '../mock-data/tailormap-admin-api.mock-data';
 import {
-  CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel, ConfigModel,
+  CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel, ConfigModel, OIDCConfigurationModel,
 } from '../models';
 
 @Injectable()
@@ -164,5 +164,17 @@ export class TailormapAdminApiV1MockService implements TailormapAdminApiV1Servic
   public updateConfig$(params: { config: ConfigModel }): Observable<ConfigModel> {
     return of({ ...params.config }).pipe(delay(this.delay));
   }
+  public getOIDCConfigurations$(): Observable<OIDCConfigurationModel[]> { return of([]).pipe(delay(this.delay)) }
 
+  public createOIDCConfiguration$(params: { oidcConfiguration: Partial<Omit<OIDCConfigurationModel, 'id'>> }): Observable<OIDCConfigurationModel> {
+      return null as any;
+  }
+
+  public updateOIDCConfiguration$(params: { id: number, oidcConfiguration: Partial<OIDCConfigurationModel> }): Observable<OIDCConfigurationModel> {
+      return null as any;
+  }
+
+  public deleteOIDCConfiguration$(id: number): Observable<boolean> {
+      return of(true).pipe(delay(this.delay));
+  }
 }

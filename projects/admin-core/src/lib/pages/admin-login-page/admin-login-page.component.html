@@ -1,5 +1,7 @@
 <div class="login-page-wrapper">
   <tm-login-form [login$]="login$"
+                 [loginConfiguration]="loginConfiguration$ | async"
+                 [redirectUrl]="routeBeforeLogin$ | async"
                  (loggedIn)="loggedIn($event)"
                  loginErrorMessage="Login failed, please try again"
                  i18n-loginErrorMessage></tm-login-form>

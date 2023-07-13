@@ -10,8 +10,10 @@ import { GroupsPageComponent } from './groups-page/groups-page.component';
 import { ApplicationPageComponent } from './application-page/application-page.component';
 import { ApplicationModule } from '../application/application.module';
 import { AdminLoginPageComponent } from './admin-login-page/admin-login-page.component';
+import { OIDCConfigurationPageComponent } from './oidc-configuration-page/oidc-configuration-page.component';
 import { SharedComponentsModule, SharedImportsModule } from '@tailormap-viewer/shared';
 import { UserModule } from '../user/user.module';
+import { OIDCConfigurationModule } from '../oidc/oidc-configuration.module';
 
 
 @NgModule({
@@ -22,6 +24,7 @@ import { UserModule } from '../user/user.module';
     GroupsPageComponent,
     ApplicationPageComponent,
     AdminLoginPageComponent,
+    OIDCConfigurationPageComponent,
   ],
   imports: [
     CommonModule,
@@ -30,6 +33,7 @@ import { UserModule } from '../user/user.module';
     CatalogModule,
     UserModule,
     ApplicationModule,
+    OIDCConfigurationModule,
     SharedComponentsModule,
     SharedImportsModule,
   ],
@@ -40,6 +44,7 @@ import { UserModule } from '../user/user.module';
     GroupsPageComponent,
     ApplicationPageComponent,
     AdminLoginPageComponent,
+    OIDCConfigurationPageComponent,
   ],
 })
 export class PagesModule { }

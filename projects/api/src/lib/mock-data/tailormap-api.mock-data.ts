@@ -1,6 +1,6 @@
 import {
   AppLayerModel, ViewerResponseModel, BoundsModel, ComponentModel, CoordinateReferenceSystemModel, GeometryType, Language, LayerDetailsModel,
-  MapResponseModel, ServerType, ServiceModel, ServiceProtocol, UserResponseModel, VersionResponseModel,
+  MapResponseModel, ServerType, ServiceModel, ServiceProtocol, UserResponseModel, VersionResponseModel, LoginConfigurationModel,
 } from '../models';
 import { FeatureModel } from '../models/feature.model';
 import { ColumnMetadataModel } from '../models/column-metadata.model';
@@ -21,6 +21,12 @@ export const getUserResponseModel = (overrides?: Partial<UserResponseModel>): Us
   isAuthenticated: false,
   username: '',
   roles: [],
+  ...overrides,
+});
+
+export const getLoginConfigurationModel = (overrides?: Partial<LoginConfigurationModel>): LoginConfigurationModel => ({
+  hideLoginForm: false,
+  ssoLinks: [],
   ...overrides,
 });
 

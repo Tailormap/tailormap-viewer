@@ -22,6 +22,7 @@ const availableButtons: ButtonProps[] = [
   { label: $localize `Users`, matchExact: true, link: RoutesEnum.USER, icon: 'admin_user', requireAdmin: true },
   { label: $localize `Groups`, matchExact: true, link: RoutesEnum.GROUP, icon: 'admin_groups', requireAdmin: true },
   { label: $localize `Applications`, matchExact: false, link: RoutesEnum.APPLICATION, icon: 'admin_application', requireAdmin: true },
+  { label: $localize `Single-sign on`, matchExact: false, link: RoutesEnum.OIDC_CONFIGURATION, icon: 'key', requireAdmin: true },
 ];
 
 @Component({
