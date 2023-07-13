@@ -80,6 +80,7 @@ export class FeatureSourceFormComponent implements OnInit {
         if (!protocol) {
           return;
         }
+        console.log('emitting changed', this.isValidForm());
         if (!this.isValidForm()) {
           this.changed.emit(null);
           return;
@@ -114,6 +115,7 @@ export class FeatureSourceFormComponent implements OnInit {
     dbType: JdbcDatabaseTypeEnum | undefined | null,
     value: typeof this.featureSourceForm.value,
   ): JdbcConnectionPropertiesModel | undefined {
+    console.log('getJdbcConnection', protocol, dbType, value);
     if (
       protocol !== FeatureSourceProtocolEnum.JDBC
       || !dbType

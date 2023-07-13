@@ -50,7 +50,7 @@ export class FeatureSourceDetailsComponent implements OnInit, OnDestroy {
       distinctUntilChanged(),
       filter((featureSourceId): featureSourceId is string => !!featureSourceId),
       switchMap(featureSourceId => this.store$.select(selectFeatureSourceById(featureSourceId))),
-      tap(featureSource => { if (featureSource) { this.updatedFeatureSource = null; }}),
+      tap(featureSource => { console.log('selectFeatureSourceById', featureSource); if (featureSource) { this.updatedFeatureSource = null; }}),
     );
   }
 
@@ -60,10 +60,12 @@ export class FeatureSourceDetailsComponent implements OnInit, OnDestroy {
   }
 
   public updateFeatureSource($event: FeatureSourceUpdateModel | null) {
+    console.log('updateFeatureSource', $event);
     this.updatedFeatureSource = $event;
   }
 
   public save(featureSource: ExtendedFeatureSourceModel) {
+    console.log('save', featureSource, this.updatedFeatureSource);
     if (!this.updatedFeatureSource) {
       return;
     }
