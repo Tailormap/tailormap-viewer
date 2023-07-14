@@ -98,6 +98,7 @@ jobs:
       API_SENTRY_DSN: ${{ secrets.API_SENTRY_DSN }}
       VIEWER_SENTRY_DSN: ${{ secrets.VIEWER_SENTRY_DSN }}
       ADMIN_HASHED_PASSWORD: ${{ secrets.ADMIN_HASHED_PASSWORD }}
+      OIDC_CLIENT_SECRET: ${{ secrets.OIDC_CLIENT_SECRET }}
       BUILDX_NO_DEFAULT_ATTESTATIONS: 1
     needs: [ lint, test ]
     steps:
