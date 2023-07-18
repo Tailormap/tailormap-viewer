@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/angular';
 import { FeatureSourceDetailsComponent } from './feature-source-details.component';
 import { of } from 'rxjs';
-import { FeatureSourceProtocolEnum, getFeatureSource, JdbcDatabaseTypeEnum } from '@tailormap-admin/admin-api';
+import { FeatureSourceProtocolEnum, getFeatureSource, JdbcDatabaseType } from '@tailormap-admin/admin-api';
 import { createMockStore } from '@ngrx/store/testing';
 import { catalogStateKey, initialCatalogState } from '../state/catalog.state';
 import { SharedModule } from '@tailormap-viewer/shared';
@@ -24,7 +24,7 @@ const setup = async (protocol: FeatureSourceProtocolEnum) => {
     title: `Some ${protocol} source`,
     protocol,
     jdbcConnection: protocol === FeatureSourceProtocolEnum.JDBC ? {
-      dbtype: JdbcDatabaseTypeEnum.POSTGIS,
+      dbtype: JdbcDatabaseType.POSTGIS.type,
       host: '',
       port: 0,
       database: '',

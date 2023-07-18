@@ -20,7 +20,7 @@ export * from './feature-source.model';
 export * from './feature-type.model';
 export * from './feature-type-info.model';
 export * from './feature-source-protocol.enum';
-export * from './jdbc-database-type.enum';
+export * from './jdbc-database-type';
 export * from './jdbc-connection-properties.model';
 export * from './tile-layer-hi-dpi-mode.enum';
 export * from './service-authentication.model';

@@ -1,7 +1,7 @@
-import { JdbcDatabaseTypeEnum } from './jdbc-database-type.enum';
+import { JdbcDatabaseType } from './jdbc-database-type';
 
 export interface JdbcConnectionPropertiesModel {
-  dbtype: JdbcDatabaseTypeEnum;
+  dbtype: JdbcDatabaseType['type'];
   database: string;
   port: number;
   host: string;
