@@ -1,8 +1,10 @@
 import { LocationStrategy } from '@angular/common';
-import { Component, ChangeDetectionStrategy, Output, EventEmitter, Input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Output, EventEmitter, Input, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { LoginConfigurationModel } from '@tailormap-viewer/api';
 import { BehaviorSubject, Observable, take } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { selectUserDetails } from '../../../../../core/src/lib/state/core.selectors';
 
 interface LoginModel {
   isAuthenticated: boolean;
@@ -16,7 +18,7 @@ interface LoginModel {
   styleUrls: ['./login-form.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoginFormComponent {
+export class LoginFormComponent implements OnInit{
 
   @Input()
   public login$: ((username: string, password: string) => Observable<LoginModel>) | null = null;
@@ -50,8 +52,18 @@ export class LoginFormComponent {
   constructor(
     private formBuilder: FormBuilder,
     private locationStrategy: LocationStrategy,
+    private store$: Store,
   ) { }
 
+  public ngOnInit() {
+    this.store$.select(selectUserDetails)
+      .pipe(take(1))
+      .subscribe(secModel => {
+        if(secModel.isAuthenticated) {
+          this.errorMessageSubject.next(`You are logged in as ${secModel.username} but do not have proper roles to access the application. Please contact your administrator.`);
+        }
+      });
+  }
   public login() {
     const username = this.loginForm.get('username')?.value;
     const password = this.loginForm.get('password')?.value;
