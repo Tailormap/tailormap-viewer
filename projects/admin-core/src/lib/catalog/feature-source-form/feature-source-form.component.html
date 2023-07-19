@@ -32,7 +32,7 @@
       <mat-label i18n>Database type</mat-label>
       <mat-select formControlName="dbType" placeholder="Database type" i18n-placeholder>
         <mat-option *ngFor="let dbType of dbTypes" [value]="dbType" i18n>
-          {{ dbType }}
+          {{ dbType.type }}
         </mat-option>
       </mat-select>
     </mat-form-field>
@@ -51,6 +51,10 @@
     <mat-form-field>
       <mat-label i18n>Schema</mat-label>
       <input matInput type="text" formControlName="schema" placeholder="Schema" i18n-placeholder />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label i18n>Additional connection options</mat-label>
+      <input matInput type="text" formControlName="connectionOptions" placeholder="" />
     </mat-form-field>
   </ng-container>
   <ng-container *ngIf="isJDBCSource() || isWFSSource()">

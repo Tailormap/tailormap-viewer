@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output
 import { debounceTime, Subject, takeUntil } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
 import {
-  FeatureSourceProtocolEnum, JdbcConnectionPropertiesModel, JdbcDatabaseTypeEnum, ServiceAuthenticationModel,
+  FeatureSourceProtocolEnum, JdbcConnectionPropertiesModel, JdbcDatabaseType, ServiceAuthenticationModel,
 } from '@tailormap-admin/admin-api';
 import { FormHelper } from '../../helpers/form.helper';
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
@@ -20,7 +20,7 @@ export class FeatureSourceFormComponent implements OnInit {
   private _featureSource: ExtendedFeatureSourceModel | null = null;
 
   public protocols: FeatureSourceProtocolEnum[] = [ FeatureSourceProtocolEnum.JDBC, FeatureSourceProtocolEnum.WFS ];
-  public dbTypes: JdbcDatabaseTypeEnum[] = [ JdbcDatabaseTypeEnum.POSTGIS, JdbcDatabaseTypeEnum.SQLSERVER, JdbcDatabaseTypeEnum.ORACLE ];
+  public dbTypes: JdbcDatabaseType[]=[ JdbcDatabaseType.POSTGIS, JdbcDatabaseType.SQLSERVER, JdbcDatabaseType.ORACLE ];
 
   @Input()
   public set featureSource(featureSource: ExtendedFeatureSourceModel | null) {
@@ -28,11 +28,13 @@ export class FeatureSourceFormComponent implements OnInit {
       title: featureSource?.title || '',
       protocol: featureSource?.protocol || null,
       url: featureSource?.url || '',
-      dbType: featureSource?.jdbcConnection?.dbtype || null,
+      // find by type
+      dbType: this.dbTypes.find( type => type.type===featureSource?.jdbcConnection?.dbtype)  || null,
       database: featureSource?.jdbcConnection?.database || null,
       port: featureSource?.jdbcConnection?.port || null,
       host: featureSource?.jdbcConnection?.host || null,
       schema: featureSource?.jdbcConnection?.schema || null,
+      connectionOptions: featureSource?.jdbcConnection?.additionalProperties?.['connectionOptions'] || null,
       username: featureSource?.authentication?.username || null,
       password: featureSource?.authentication?.password || null,
     }, { emitEvent: false });
@@ -59,11 +61,12 @@ export class FeatureSourceFormComponent implements OnInit {
 
     url: new FormControl<string | null>(null),
 
-    dbType: new FormControl<JdbcDatabaseTypeEnum | null>(null),
+    dbType: new FormControl<JdbcDatabaseType | null>(null),
     database: new FormControl<string | null>(null),
     port: new FormControl<number | null>(null),
     host: new FormControl<string | null>(null),
     schema: new FormControl<string | null>(null),
+    connectionOptions: new FormControl<string | null>(null),
 
     username: new FormControl<string | null>(null),
     password: new FormControl<string | null>(null),
@@ -88,9 +91,20 @@ export class FeatureSourceFormComponent implements OnInit {
           title: value.title || '',
           protocol,
           url: value.url || '',
-          jdbcConnection: this.getJdbcConnection(protocol, this.featureSource?.jdbcConnection?.dbtype || value.dbType, value),
+          jdbcConnection: this.getJdbcConnection(protocol, this.featureSource?.jdbcConnection?.dbtype || value.dbType?.type, value),
           authentication: this.getAuthentication(value),
         });
+      });
+
+    this.featureSourceForm.get('dbType')?.valueChanges
+      .pipe(
+        takeUntil(this.destroyed),
+        debounceTime(250),
+      )
+      .subscribe(value => {
+        if (value) {
+          this.updateDefaults(value);
+        }
       });
   }
 
@@ -102,6 +116,14 @@ export class FeatureSourceFormComponent implements OnInit {
     return this.featureSourceForm.get('protocol')?.value === FeatureSourceProtocolEnum.JDBC;
   }
 
+  private updateDefaults( dbType: JdbcDatabaseType) {
+    this.featureSourceForm.patchValue({
+      port: dbType.port,
+      schema: dbType.defaultSchema,
+      connectionOptions: dbType.defaultConnectionOptions,
+    }, { emitEvent: false });
+  }
+
   private isValidForm() {
     const values = this.featureSourceForm.getRawValue();
     return FormHelper.isValidValue(values.protocol)
@@ -111,7 +133,7 @@ export class FeatureSourceFormComponent implements OnInit {
 
   private getJdbcConnection(
     protocol: FeatureSourceProtocolEnum,
-    dbType: JdbcDatabaseTypeEnum | undefined | null,
+    dbType: string | undefined | null,
     value: typeof this.featureSourceForm.value,
   ): JdbcConnectionPropertiesModel | undefined {
     if (
@@ -129,6 +151,7 @@ export class FeatureSourceFormComponent implements OnInit {
       host: value.host || 'localhost',
       database: value.database,
       schema: value.schema,
+      additionalProperties: { connectionOptions : value.connectionOptions || '' },
     };
   }
 
