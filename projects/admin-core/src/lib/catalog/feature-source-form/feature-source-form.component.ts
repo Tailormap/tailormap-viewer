@@ -73,7 +73,7 @@ export class FeatureSourceFormComponent implements OnInit {
     this.featureSourceForm.valueChanges
       .pipe(
         takeUntil(this.destroyed),
-        debounceTime(250),
+        debounceTime(2000),
       )
       .subscribe(value => {
         const protocol = this.featureSource ? this.featureSource.protocol : value.protocol;
