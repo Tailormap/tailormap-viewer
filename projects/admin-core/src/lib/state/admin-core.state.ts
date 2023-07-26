@@ -5,6 +5,7 @@ export const adminCoreStateKey = 'adminCore';
 export interface AdminCoreState {
   security: SecurityModel;
   routeBeforeLogin?: string;
+  hasInsufficientRights?: boolean;
 }
 
 export const initialAdminCoreState: AdminCoreState = {

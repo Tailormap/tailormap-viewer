@@ -23,6 +23,10 @@ export const setLoginDetails = createAction(
   `${prefix} Set Login Details`,
   props<{ isAuthenticated: boolean; username?: string; roles?: string[] }>(),
 );
+export const setInsufficientRights = createAction(
+  `${prefix} Set Insufficient Rights`,
+  props<{ hasInsufficientRights: boolean }>(),
+);
 export const updateViewerStyle = createAction(
   `${prefix} Update Viewer Style`,
   props<{ style: ViewerStylingModel }>(),

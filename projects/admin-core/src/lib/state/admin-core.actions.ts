@@ -11,3 +11,8 @@ export const setLoginDetails = createAction(
   `${adminCoreActionsPrefix} Set Login Details`,
   props<{ isAuthenticated: boolean; username?: string; roles?: string[] }>(),
 );
+
+export const setInsufficientRights = createAction(
+  `${adminCoreActionsPrefix} Set Insufficient Rights`,
+  props<{ hasInsufficientRights: boolean }>(),
+);

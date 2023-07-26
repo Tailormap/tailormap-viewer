@@ -15,6 +15,7 @@ const onSetLoginDetails = (
   payload: ReturnType<typeof AdminCoreActions.setLoginDetails>,
 ): AdminCoreState => ({
   ...state,
+  hasInsufficientRights: false,
   security: {
     ...state.security,
     isAuthenticated: payload.isAuthenticated,
@@ -23,9 +24,18 @@ const onSetLoginDetails = (
   },
 });
 
+const onSetInsufficientRights = (
+  state: AdminCoreState,
+  payload: ReturnType<typeof AdminCoreActions.setInsufficientRights>,
+): AdminCoreState => ({
+  ...state,
+  hasInsufficientRights: payload.hasInsufficientRights,
+});
+
 const adminCoreReducerImpl = createReducer<AdminCoreState>(
   initialAdminCoreState,
   on(AdminCoreActions.setRouteBeforeLogin, onSetRouteBeforeLogin),
   on(AdminCoreActions.setLoginDetails, onSetLoginDetails),
+  on(AdminCoreActions.setInsufficientRights, onSetInsufficientRights),
 );
 export const adminCoreReducer = (state: AdminCoreState | undefined, action: Action) => adminCoreReducerImpl(state, action);

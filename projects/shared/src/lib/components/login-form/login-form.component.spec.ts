@@ -5,8 +5,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { of } from 'rxjs';
 import { AutoFocusDirective } from '../../directives';
-import { provideMockStore } from '@ngrx/store/testing';
-import { selectUserDetails } from '../../../../../core/src/lib/state/core.selectors';
 
 describe('LoginFormComponent', () => {
 
@@ -41,13 +39,6 @@ describe('LoginFormComponent', () => {
       ],
       declarations: [
         AutoFocusDirective,
-      ],
-      providers: [
-        provideMockStore({
-          selectors: [
-            { selector: selectUserDetails, value: { isAuthenticated: false } },
-          ],
-        }),
       ],
     });
     const nameControl = await screen.getByLabelText('Username');

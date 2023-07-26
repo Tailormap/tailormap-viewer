@@ -12,6 +12,17 @@ export const selectRouteBeforeLogin = createSelector(selectCoreState, state => s
 export const selectViewerErrorMessage = createSelector(selectCoreState, (state) => state.error);
 
 export const selectUserDetails = createSelector(selectCoreState, state => state.security);
+export const selectHasInsufficientRights = createSelector(selectCoreState, state => state.hasInsufficientRights);
+
+export const selectUserWithInsufficientRights = createSelector(
+  selectUserDetails,
+  selectHasInsufficientRights,
+  (user, hasInsufficientRights) => {
+    if (user.isAuthenticated && hasInsufficientRights) {
+      return user.username;
+    }
+    return undefined;
+  });
 
 export const selectComponentsConfig = createSelector<CoreState, ViewerState | undefined, ComponentModel[]>(
   selectViewerState,
