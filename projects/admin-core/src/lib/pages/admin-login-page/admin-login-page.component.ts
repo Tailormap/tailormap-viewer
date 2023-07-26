@@ -29,7 +29,7 @@ export class AdminLoginPageComponent {
     this.insufficientRightsMessage$ = this.store$.select(selectUserWithInsufficientRights)
       .pipe(map(user => {
         if (user) {
-          return $localize `You are logged in as ${user} but do not have proper roles to access the application. Please contact your administrator.`;
+          return $localize `You are logged in as ${user} but do not have proper roles to access administration. Please contact your administrator.`;
         }
         return undefined;
       }));
