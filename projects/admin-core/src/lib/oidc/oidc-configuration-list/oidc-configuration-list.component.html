@@ -1,0 +1,33 @@
+<h2 i18n>Identity providers</h2>
+<ng-container *ngIf="oidcConfigurationsLoadStatus$ | async as oidcConfigurationsLoadStatus">
+  <mat-spinner *ngIf="oidcConfigurationsLoadStatus === 'LOADING'" diameter="20" mode="indeterminate"></mat-spinner>
+  <ng-container *ngIf="errorMessage$ | async as message">
+    <tm-error-message [message]="message"></tm-error-message>
+    <button mat-raised-button color="primary" (click)="onRetryClick()" i18n>Retry</button>
+  </ng-container>
+  <div *ngIf="oidcConfigurationsLoadStatus === 'LOADED'"
+       class="form-group has-search">
+    <mat-form-field appearance="outline">
+      <mat-label i18n>Filter identity providers</mat-label>
+      <input [formControl]="filter"
+             i18n-placeholder
+             matInput
+             placeholder="Filter..."
+             tmAutoFocus
+             type="text"
+      />
+      <button (click)="filter.setValue('')" *ngIf="filter.getRawValue()" aria-label="Clear" mat-icon-button matSuffix>
+        <mat-icon svgIcon="close"></mat-icon>
+      </button>
+    </mat-form-field>
+
+    <mat-selection-list>
+      <mat-list-item *ngFor="let oidcConfiguration of oidcConfigurations$ | async"
+                     [class.selected]="oidcConfiguration.selected"
+                     [routerLink]="'/oidc-configurations/oidc-configuration/'+oidcConfiguration.id">
+        <span class="detail">{{oidcConfiguration.name}}</span>
+      </mat-list-item>
+    </mat-selection-list>
+
+  </div>
+</ng-container>
