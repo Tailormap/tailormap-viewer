@@ -22,7 +22,6 @@ import { AdminSnackbarService } from '../../shared/services/admin-snackbar.servi
 import { DebounceHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
 import { AdminSseService, EventType } from '../../shared/services/admin-sse.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { GeoServiceHelper } from '../helpers/geo-service.helper';
 
 export interface DeleteGeoServiceResponse {
   success: boolean;
