@@ -20,4 +20,8 @@ export enum RoutesEnum {
   APPLICATION_DETAILS_BASE_LAYERS = 'base-layers',
   APPLICATION_DETAILS_COMPONENTS = 'components',
   APPLICATION_DETAILS_STYLING = 'styling',
+
+  OIDC_CONFIGURATION = 'oidc-configurations',
+  OIDC_CONFIGURATION_CREATE = 'create',
+  OIDC_CONFIGURATION_DETAILS = 'oidc-configuration/:oidcConfigurationId',
 }

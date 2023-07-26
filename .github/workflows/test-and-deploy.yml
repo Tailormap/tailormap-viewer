@@ -1,7 +1,7 @@
 name: 'Test and deploy'
 
 env: # Keep this in sync with Dockerfile version
-  NODE_VERSION: "18.16.1"
+  NODE_VERSION: "18.17.0"
 
 on:
   push:
@@ -98,6 +98,10 @@ jobs:
       API_SENTRY_DSN: ${{ secrets.API_SENTRY_DSN }}
       VIEWER_SENTRY_DSN: ${{ secrets.VIEWER_SENTRY_DSN }}
       ADMIN_HASHED_PASSWORD: ${{ secrets.ADMIN_HASHED_PASSWORD }}
+      OIDC_NAME: ${{ vars.OIDC_NAME }}
+      OIDC_ISSUER_URI: ${{ vars.OIDC_ISSUER_URI }}
+      OIDC_CLIENT_ID: ${{ vars.OIDC_CLIENT_ID }}
+      OIDC_CLIENT_SECRET: ${{ secrets.OIDC_CLIENT_SECRET }}
       BUILDX_NO_DEFAULT_ATTESTATIONS: 1
     needs: [ lint, test ]
     steps:

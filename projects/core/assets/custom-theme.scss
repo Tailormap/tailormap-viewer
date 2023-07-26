@@ -125,9 +125,9 @@ $app-theme: mat.define-light-theme((
   font-size: var(--mdc-typography-body1-font-size);
 }
 
-button.mat-mdc-button-base.mdc-button,
-button.mat-mdc-button-base.mdc-button--outlined,
-button.mat-mdc-button-base.mdc-button--unelevated {
+.mat-mdc-button-base.mdc-button,
+.mat-mdc-button-base.mdc-button--outlined,
+.mat-mdc-button-base.mdc-button--unelevated {
   --mdc-filled-button-container-shape: 0;
   height: var(--base-button-height);
 }
@@ -138,14 +138,14 @@ button.mat-mdc-button-base.mdc-button--unelevated {
   padding: 8px;
 }
 
-button.mat-mdc-raised-button.mat-primary,
-button.mdc-button--unelevated.mat-primary,
-button.mdc-button--unelevated.mat-accent {
+.mat-mdc-raised-button.mat-primary,
+.mdc-button--unelevated.mat-primary,
+.mdc-button--unelevated.mat-accent {
   --mdc-filled-button-label-text-color: var(--palette-primary-contrast-500);
   --mdc-protected-button-label-text-color: var(--palette-primary-contrast-500);
 }
 
-button.mdc-button--unelevated.mat-accent {
+.mdc-button--unelevated.mat-accent {
   --mdc-filled-button-label-text-color: var(--palette-accent-contrast-500);
   --mdc-protected-button-label-text-color: var(--palette-accent-contrast-500);
 }

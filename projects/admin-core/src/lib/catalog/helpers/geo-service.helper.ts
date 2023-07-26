@@ -18,12 +18,4 @@ export class GeoServiceHelper {
     }
     return layerName;
   }
-
-  public static getApiErrorMessage(error: any) {
-    if (error.name === 'HttpErrorResponse' && Array.isArray(error.error?.errors)) {
-      return error.error.errors.map((e: { entity: string; property: string; invalidValue: string; message: string }) => e.message).join(", ");
-    } else {
-      return error + "";
-    }
-  }
 }

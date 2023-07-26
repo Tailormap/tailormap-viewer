@@ -21,6 +21,7 @@ import { adminCoreStateKey } from './state/admin-core.state';
 import { adminCoreReducer } from './state/admin-core.reducer';
 import { AdminCoreConfigModel } from './models/admin-core-config.model';
 import { ADMIN_CORE_CONFIG } from './models/admin-core-config.injection-token';
+import { OIDCConfigurationModule } from './oidc/oidc-configuration.module';
 
 const getBaseHref = (platformLocation: PlatformLocation): string => {
   return platformLocation.getBaseHrefFromDOM();
@@ -45,6 +46,7 @@ const getBaseHref = (platformLocation: PlatformLocation): string => {
     TemplatesModule,
     CatalogModule,
     ApplicationModule,
+    OIDCConfigurationModule,
   ],
   providers: [
     { provide: ICON_SERVICE_ICON_LOCATION, useValue: 'icons/' },
