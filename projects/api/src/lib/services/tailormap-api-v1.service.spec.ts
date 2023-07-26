@@ -1,7 +1,7 @@
 import { TailormapApiV1Service } from './tailormap-api-v1.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { FeatureModel } from '@tailormap-viewer/api';
+import { FeatureModel } from '../models';
 
 describe('TailormapApiV1Service', () => {
 

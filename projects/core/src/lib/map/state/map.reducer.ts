@@ -3,7 +3,6 @@ import { Action, createReducer, on } from '@ngrx/store';
 import { MapState, initialMapState } from './map.state';
 import { ChangePositionHelper, LoadingStateEnum, StateHelper } from '@tailormap-viewer/shared';
 import { LayerTreeNodeHelper } from '../helpers/layer-tree-node.helper';
-import { addLayerDetails } from './map.actions';
 
 const onLoadMap = (state: MapState): MapState => ({
   ...state,

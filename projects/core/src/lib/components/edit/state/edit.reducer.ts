@@ -4,7 +4,6 @@ import { EditState, initialEditState } from './edit.state';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { FeatureInfoFeatureModel } from '../../feature-info/models/feature-info-feature.model';
 import { FeatureInfoColumnMetadataModel } from '../../feature-info/models/feature-info-column-metadata.model';
-import { updateEditFeature } from './edit.actions';
 
 const onSetIsActive = (
   state: EditState,
