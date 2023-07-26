@@ -4,7 +4,7 @@ import {
   OIDCConfigurationModel, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel,
 } from '@tailormap-admin/admin-api';
 import { catchError, concatMap, filter, map, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
-import { LoadingStateEnum } from '@tailormap-viewer/shared';
+import { DebounceHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
 import {
   addOIDCConfiguration, deleteOIDCConfiguration, loadOIDCConfigurations,
   updateOIDCConfiguration,
@@ -12,7 +12,6 @@ import {
 import { selectOIDCConfigurationList, selectOIDCConfigurationsLoadStatus, selectDraftOIDCConfiguration } from '../state/oidc-configuration.selectors';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 import { AdminSseService, EventType } from '../../shared/services/admin-sse.service';
-import { DebounceHelper } from '../../helpers/debounce.helper';
 
 type OIDCConfigurationCreateModel = Omit<OIDCConfigurationModel, 'id'>;
 type OIDCConfigurationEditModel = Partial<OIDCConfigurationCreateModel>;
