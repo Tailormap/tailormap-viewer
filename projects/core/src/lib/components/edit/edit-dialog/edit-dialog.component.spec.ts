@@ -1,49 +1,30 @@
-import { render, screen, waitFor } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
 import { EditDialogComponent } from './edit-dialog.component';
-import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { featureInfoStateKey, initialFeatureInfoState } from '../../feature-info/state/feature-info.state';
+import { provideMockStore } from '@ngrx/store/testing';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { selectCurrentlySelectedFeature, selectFeatureInfoCounts, selectFeatureInfoDialogVisible } from '../../feature-info/state/feature-info.selectors';
-import { getAppLayerModel } from '@tailormap-viewer/api';
+import { FeatureAttributeTypeEnum, getAppLayerModel, getFeatureModel } from '@tailormap-viewer/api';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { TestBed } from '@angular/core/testing';
-import { FeatureInfoModel } from '../../feature-info/models/feature-info.model';
-import { showNextFeatureInfoFeature, showPreviousFeatureInfoFeature } from '../../feature-info/state/feature-info.actions';
+import { editStateKey, initialEditState } from '../state/edit.state';
+import { ApplicationLayerService } from '../../../map/services/application-layer.service';
+import { EditFeatureService } from '../edit-feature.service';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { selectEditDialogVisible, selectSelectedEditFeature } from '../state/edit.selectors';
+import { FeatureWithMetadataModel } from '../models/feature-with-metadata.model';
+import { of } from 'rxjs';
 
-const getFeatureInfo = (updated?: boolean): FeatureInfoModel => {
+const getFeatureInfo = (): FeatureWithMetadataModel => {
   return {
-    geometry: null,
-    layer: getAppLayerModel(),
-    sortedAttributes: [
-      { key: 'prop', attributeValue: 'test', label: 'Property' },
-      { key: 'prop2', attributeValue: 'another test', label: 'Property 2' },
-      { key: 'fid', attributeValue: updated ? '6' : '1', label: 'fid' },
+    feature: { ...getFeatureModel(), layerId: '1' },
+    columnMetadata: [
+      { layerId: '1', key: 'prop', alias: 'Property', type: FeatureAttributeTypeEnum.STRING },
+      { layerId: '1', key: 'prop2', alias: 'Property 2', type: FeatureAttributeTypeEnum.STRING },
+      { layerId: '1', key: 'fid', alias: 'fid', type: FeatureAttributeTypeEnum.STRING },
     ],
   };
 };
 
-const renderWithState = async () => {
-  await render(EditDialogComponent, {
-    imports: [
-      SharedModule,
-      NoopAnimationsModule,
-      MatIconTestingModule,
-    ],
-    providers: [
-      provideMockStore({
-        initialState: { [featureInfoStateKey]: { ...initialFeatureInfoState } },
-        selectors: [
-          { selector: selectCurrentlySelectedFeature, value: getFeatureInfo() },
-          { selector: selectFeatureInfoDialogVisible, value: true },
-          { selector: selectFeatureInfoCounts, value: { total: 1, current: 0 } },
-        ],
-      }),
-    ],
-  });
-};
-
-describe('FeatureInfoDialogComponent', () => {
+describe('EditDialogComponent', () => {
 
   test('runs without feature info', async () => {
     const { container } = await render(EditDialogComponent, {
@@ -53,33 +34,38 @@ describe('FeatureInfoDialogComponent', () => {
         MatIconTestingModule,
       ],
       providers: [
-        provideMockStore({ initialState: { [featureInfoStateKey]: { ...initialFeatureInfoState } } }),
+        { provide: ApplicationLayerService, useValue: {} },
+        { provide: EditFeatureService, useValue: {} },
+        provideMockStore({ initialState: { [editStateKey]: { ...initialEditState } } }),
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    });
+    expect(container.querySelector('.edit-form')).toBeNull();
+  });
+
+  test('shows edit dialog', async () => {
+    await render(EditDialogComponent, {
+      imports: [
+        SharedModule,
+        NoopAnimationsModule,
+        MatIconTestingModule,
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      providers: [
+        { provide: ApplicationLayerService, useValue: { getLayerDetails$: () => of(({ layer: getAppLayerModel(), details: {} })) } },
+        { provide: EditFeatureService, useValue: {} },
+        provideMockStore({
+          initialState: { [editStateKey]: { ...initialEditState } },
+          selectors: [
+            { selector: selectSelectedEditFeature, value: getFeatureInfo() },
+            { selector: selectEditDialogVisible, value: true },
+          ],
+        }),
       ],
     });
-    expect(container.querySelector('.feature-info')).toBeNull();
-  });
-
-  test('shows feature info', async () => {
-    await renderWithState();
-    expect((await screen.findByText(/fid/)).nextSibling?.textContent?.trim()).toEqual('1');
-    expect((await screen.findByText(/Property 2/)).nextSibling?.textContent?.trim()).toEqual('another test');
-    const store = TestBed.inject(MockStore);
-    store.dispatch = jest.fn();
-    (await screen.findByText(/Next/)).click();
-    expect(store.dispatch).toHaveBeenCalledWith({ type: showNextFeatureInfoFeature.type });
-    (await screen.findByText(/Back/)).click();
-    expect(store.dispatch).toHaveBeenCalledWith({ type: showPreviousFeatureInfoFeature.type });
-  });
-
-  test('updates feature info when state changes', async () => {
-    await renderWithState();
-    expect((await screen.findByText(/fid/)).nextSibling?.textContent?.trim()).toEqual('1');
-    const store = TestBed.inject(MockStore);
-    store.overrideSelector(selectCurrentlySelectedFeature, getFeatureInfo(true));
-    store.refreshState();
-    await waitFor(() => {
-      expect((screen.getByText(/fid/)).nextSibling?.textContent?.trim()).toEqual('6');
-    });
+    expect(await screen.findByText('Edit')).toBeInTheDocument();
+    expect(await screen.findByText('Close')).toBeInTheDocument();
+    expect(await screen.findByText('Save')).toBeInTheDocument();
   });
 
 });

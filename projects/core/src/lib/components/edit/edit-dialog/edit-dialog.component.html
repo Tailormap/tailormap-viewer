@@ -15,13 +15,13 @@
         <tm-edit-form [feature]="currentFeature.feature"
                       [details]="layerDetails.details"
                       [columnMetadata]="currentFeature.columnMetadata"
-                      (featureChanged)="featureChanged($event)"></tm-edit-form>
+                      (featureAttributeChanged)="featureChanged($event)"></tm-edit-form>
       </div>
       <div class="buttons">
         <button mat-flat-button i18n (click)="closeDialog()">
           Close
         </button>
-        <button mat-flat-button i18n (click)="save(layerDetails.layer.id)" [disabled]="!updatedFeature" color="primary">
+        <button mat-flat-button i18n (click)="save(layerDetails.layer.id, currentFeature)" [disabled]="!updatedAttributes" color="primary">
           Save
         </button>
       </div>
