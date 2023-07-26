@@ -53,6 +53,14 @@ const onSetLoginDetails = (
   },
 });
 
+const onSetInsufficientRights = (
+  state: CoreState,
+  payload: ReturnType<typeof CoreActions.setInsufficientRights>,
+): CoreState => ({
+  ...state,
+  hasInsufficientRights: payload.hasInsufficientRights,
+});
+
 const onUpdateViewerStyle = (
   state: CoreState,
   payload: ReturnType<typeof CoreActions.updateViewerStyle>,
@@ -70,6 +78,7 @@ const coreReducerImpl = createReducer<CoreState>(
   on(CoreActions.loadViewerSuccess, onViewerLoadSuccess),
   on(CoreActions.loadViewerFailed, onViewerLoadFailed),
   on(CoreActions.setRouteBeforeLogin, onSetRouteBeforeLogin),
+  on(CoreActions.setInsufficientRights, onSetInsufficientRights),
   on(CoreActions.setLoginDetails, onSetLoginDetails),
   on(CoreActions.updateViewerStyle, onUpdateViewerStyle),
 );

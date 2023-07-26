@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, take } from 'rxjs';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
-import { setRouteBeforeLogin } from '../state/admin-core.actions';
+import { setInsufficientRights, setRouteBeforeLogin } from '../state/admin-core.actions';
 import { RoutesEnum } from '../routes';
 import { TailormapSecurityApiV1Service } from '@tailormap-viewer/api';
+import { selectUserDetails } from '../state/admin-core.selectors';
 
 @Injectable()
 export class SecurityInterceptor implements HttpInterceptor {
@@ -20,7 +21,15 @@ export class SecurityInterceptor implements HttpInterceptor {
   public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return TailormapSecurityApiV1Service.createSecurityInterceptor(TailormapAdminApiV1Service.BASE_URL, () => {
       this.store$.dispatch(setRouteBeforeLogin({ route: this.router.url }));
-      this.router.navigateByUrl(RoutesEnum.LOGIN);
+      this.store$.select(selectUserDetails)
+        .pipe(take(1))
+        .subscribe(userDetails => {
+          if (userDetails.isAuthenticated) {
+            // If the user is authenticated but gets a 401, it means that the user is not authorized to access the resource.
+            this.store$.dispatch(setInsufficientRights({ hasInsufficientRights: true }));
+          }
+          this.router.navigateByUrl(RoutesEnum.LOGIN);
+        });
     })(req, next);
   }
 

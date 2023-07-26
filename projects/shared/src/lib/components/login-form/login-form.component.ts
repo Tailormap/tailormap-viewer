@@ -25,6 +25,11 @@ export class LoginFormComponent {
   public loginErrorMessage: string | undefined;
 
   @Input()
+  public set insufficientRightsErrorMessage(insufficientRightsErrorMessage: string | null | undefined) {
+    this.errorMessageSubject.next(insufficientRightsErrorMessage || '');
+  }
+
+  @Input()
   public isViewer = false;
 
   @Output()

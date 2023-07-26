@@ -4,6 +4,7 @@
                  [redirectUrl]="routeBeforeLogin$ | async"
                  [isViewer]="true"
                  (loggedIn)="loggedIn($event)"
+                 [insufficientRightsErrorMessage]="insufficientRightsMessage$ | async"
                  loginErrorMessage="Login failed, please try again"
                  i18n-loginErrorMessage></tm-login-form>
 </div>
