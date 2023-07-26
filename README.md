@@ -100,6 +100,19 @@ the `/` path.
 If you're using a reverse proxy without Docker just reverse proxy 127.0.0.1:8080 (this port binding is added in
 `docker-compose.override.yml`). The ports can be changed in an `.env` file or by using another override file in `COMPOSE_FILE`.
 
+Example Apache configuration:
+```
+<VirtualHost *:443>
+    ServerName myhost.com
+...
+    RequestHeader set X-Forwarded-Proto https
+    ProxyPreserveHost On
+
+    # If you're also running other webapps such as geoserver, add ProxyPass lines before this line
+    ProxyPass /			    http://localhost:8080/
+</VirtualHost>
+```
+
 It's a good idea to use Traefik as a reverse proxy because it can be automatically configured by Docker labels and can automatically request
 Let's Encrypt certificates. Add `docker-compose.traefik.yml` to `COMPOSE_FILE` in the `.env` file. See the file for details.
 
