@@ -11,6 +11,8 @@ const onSetIsActive = (
 ): EditState => ({
   ...state,
   isActive: payload.active,
+  dialogVisible: false,
+  selectedFeature: null,
 });
 
 const onSetSelectedLayer = (

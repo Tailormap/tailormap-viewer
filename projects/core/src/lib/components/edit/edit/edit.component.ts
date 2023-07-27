@@ -8,6 +8,7 @@ import { selectEditableLayers } from '../../../map/state/map.selectors';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { withLatestFrom } from 'rxjs/operators';
 import { selectUserDetails } from "../../../state/core.selectors";
+import { hideFeatureInfoDialog } from "../../feature-info/state/feature-info.actions";
 
 @Component({
   selector: 'tm-edit',
@@ -87,7 +88,11 @@ export class EditComponent implements OnInit {
     this.store$.select(selectEditActive)
       .pipe(take(1))
       .subscribe(active => {
-        this.store$.dispatch(setEditActive({ active: !active }));
+        const editActive = !active; // toggle
+        this.store$.dispatch(setEditActive({ active: editActive }));
+        if (editActive) {
+          this.store$.dispatch(hideFeatureInfoDialog());
+        }
       });
   }
 
