@@ -58,6 +58,9 @@ export class EditComponent implements OnInit {
         if (active && editableLayers.length === 1 && !selectedLayer) {
           this.store$.dispatch(setSelectedEditLayer({ layer: editableLayers[0].id }));
         }
+        if (active && editableLayers.length === 0) {
+          this.toggle(true);
+        }
       });
   }
 
