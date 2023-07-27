@@ -4,7 +4,7 @@
       <mat-label>{{ item.label }}</mat-label>
       <input matInput [formControlName]="item.name" [placeholder]="item.placeholder || item.label">
     </mat-form-field>
-    <mat-form-field *ngIf="item.type === 'number'">
+    <mat-form-field *ngIf="item.type === 'number' || item.type === 'integer'">
       <mat-label>{{ item.label }}</mat-label>
       <input matInput [formControlName]="item.name" [placeholder]="item.placeholder || item.label" type="number">
     </mat-form-field>

@@ -54,6 +54,8 @@ export class EditModelHelper {
         return 'date';
       case AttributeType.TIMESTAMP:
         return 'text';
+      case AttributeType.INTEGER:
+        return 'integer';
       case AttributeType.NUMBER:
       case AttributeType.DOUBLE:
         return 'number';

@@ -35,7 +35,7 @@ export class EditFormComponent implements OnDestroy {
   }
 
   @Output()
-  public featureAttributeChanged = new EventEmitter<{ attribute: string; value: any }>();
+  public featureAttributeChanged = new EventEmitter<{ attribute: string; value: any; invalid?: boolean }>();
 
   public form: FormGroup = new FormGroup({});
 
@@ -71,11 +71,13 @@ export class EditFormComponent implements OnDestroy {
     this.currentFormSubscription = merge(...changes$)
       .pipe(debounceTime(250))
       .subscribe(([ changedKey, value ]) => {
-        if (!this.form.valid || !this.feature) {
+        if (!this.form.valid || !this.feature?.feature) {
+          this.featureAttributeChanged.emit({ attribute: changedKey, value: null, invalid: true });
           return;
         }
         this.featureAttributeChanged.emit({ attribute: changedKey, value });
       });
+    this.form.markAllAsTouched();
     this.cdr.detectChanges();
   }
 

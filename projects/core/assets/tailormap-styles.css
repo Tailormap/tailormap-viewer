@@ -190,6 +190,13 @@ button.toggle-button--active.mat-mdc-button-base.mdc-button--unelevated,
   font-size: 1rem;
 }
 
+.map-control-button.disabled,
+.map-control-button.mdc-button--unelevated.disabled {
+  cursor: default;
+  color: var(--mdc-filled-button-disabled-label-text-color, rgba(0, 0, 0, 0.38));
+  background-color: var(--mdc-filled-button-disabled-container-color, rgba(0, 0, 0, 0.12));
+}
+
 .mat-mdc-button-base.button--active,
 .button--active {
   background-color: var(--primary-color-0_1);

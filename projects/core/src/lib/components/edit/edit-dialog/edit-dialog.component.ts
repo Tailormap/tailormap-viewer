@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { CssHelper } from '@tailormap-viewer/shared';
 import {
@@ -11,6 +11,7 @@ import { ApplicationLayerService } from '../../../map/services/application-layer
 import { FeatureWithMetadataModel } from '../models/feature-with-metadata.model';
 import { EditFeatureService } from '../edit-feature.service';
 import { selectViewerId } from '../../../state/core.selectors';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'tm-edit-dialog',
@@ -36,6 +37,7 @@ export class EditDialogComponent implements OnInit {
     private store$: Store,
     private applicationLayerService: ApplicationLayerService,
     private editFeatureService: EditFeatureService,
+    private destroyRef: DestroyRef,
   ) {}
 
   public ngOnInit(): void {
@@ -49,6 +51,11 @@ export class EditDialogComponent implements OnInit {
           return this.applicationLayerService.getLayerDetails$(feature.feature.layerId);
         }),
       );
+    this.currentFeature$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.updatedAttributes = null;
+      });
   }
 
   public closeDialog() {
@@ -85,9 +92,16 @@ export class EditDialogComponent implements OnInit {
       });
   }
 
-  public featureChanged($event: { attribute: string; value: any }) {
+  public featureChanged($event: { attribute: string; value: any; invalid?: boolean }) {
     if (this.updatedAttributes === null) {
       this.updatedAttributes = {};
+    }
+    if ($event.invalid) {
+      delete this.updatedAttributes[$event.attribute];
+      if (Object.keys(this.updatedAttributes).length === 0) {
+        this.updatedAttributes = null;
+      }
+      return;
     }
     this.updatedAttributes[$event.attribute] = $event.value;
   }
