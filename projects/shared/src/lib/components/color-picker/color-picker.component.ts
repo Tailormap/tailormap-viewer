@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Optional, Output, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl, ValidatorFn, Validators } from '@angular/forms';
-import { debounceTime, filter } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { ColorHelper } from '../../helpers/color.helper';
 import { PopoverService } from '../../services/popover/popover.service';
@@ -114,7 +114,7 @@ export class ColorPickerComponent implements OnInit, OnDestroy {
     this.formControl.setValidators(validators);
     this.formControl.patchValue(this.color || '');
     const colorChange$ = this.formControl.valueChanges
-      .pipe(debounceTime(250), filter(val => val !== '' && ColorHelper.isValidColor(val, this.allowEmptyColor)))
+      .pipe(filter(val => val !== '' && ColorHelper.isValidColor(val, this.allowEmptyColor)))
       .subscribe((val: string) => this.colorChange.emit(val));
 
     this.subscription.add(colorChange$);

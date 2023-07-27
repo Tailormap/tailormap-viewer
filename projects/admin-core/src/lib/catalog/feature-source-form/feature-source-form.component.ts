@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { debounceTime, Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
 import {
   FeatureSourceProtocolEnum, JdbcConnectionPropertiesModel, JdbcDatabaseType, ServiceAuthenticationModel,
@@ -76,7 +76,6 @@ export class FeatureSourceFormComponent implements OnInit {
     this.featureSourceForm.valueChanges
       .pipe(
         takeUntil(this.destroyed),
-        debounceTime(250),
       )
       .subscribe(value => {
         const protocol = this.featureSource ? this.featureSource.protocol : value.protocol;
@@ -99,7 +98,6 @@ export class FeatureSourceFormComponent implements OnInit {
     this.featureSourceForm.get('dbType')?.valueChanges
       .pipe(
         takeUntil(this.destroyed),
-        debounceTime(250),
       )
       .subscribe(value => {
         if (value) {

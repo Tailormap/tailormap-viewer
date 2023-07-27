@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy, Input, OnDestroy, EventEmit
 import { AppLayerSettingsModel, AppTreeLayerNodeModel } from '@tailormap-admin/admin-api';
 import { Store } from '@ngrx/store';
 import { selectSelectedApplicationLayerSettings } from '../state/application.selectors';
-import { debounceTime, Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
 import { TreeModel } from '@tailormap-viewer/shared';
 import { ExtendedGeoServiceModel } from '../../catalog/models/extended-geo-service.model';
@@ -64,7 +64,6 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     this.layerSettingsForm.valueChanges
       .pipe(
         takeUntil(this.destroyed),
-        debounceTime(250),
       )
       .subscribe(value => {
         if (!this.node) {

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { debounceTime, Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { GroupModel } from '@tailormap-admin/admin-api';
 import { NAME_REGEX } from '../constants';
 
@@ -51,7 +51,6 @@ export class GroupFormComponent implements OnInit, OnDestroy {
     this.groupForm.valueChanges
       .pipe(
         takeUntil(this.destroyed),
-        debounceTime(250),
       )
       .subscribe(() => {
         this.readForm();

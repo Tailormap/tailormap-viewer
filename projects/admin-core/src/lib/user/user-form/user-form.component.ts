@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { GroupModel, UserModel } from '@tailormap-admin/admin-api';
 import { AbstractControl, AsyncValidatorFn, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { debounceTime, map, Observable, of, Subject, takeUntil } from 'rxjs';
+import { map, Observable, of, Subject, takeUntil } from 'rxjs';
 import { GroupService } from '../services/group.service';
 import { formatDate } from '@angular/common';
 import { NAME_REGEX } from '../constants';
@@ -83,7 +83,6 @@ export class UserFormComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this.userForm.valueChanges.pipe(
       takeUntil(this.destroyed),
-      debounceTime(250),
     )
     .subscribe(() => {
       this.readForm();

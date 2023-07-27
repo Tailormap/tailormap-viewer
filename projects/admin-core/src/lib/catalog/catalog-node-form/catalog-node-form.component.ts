@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
-import { debounceTime, Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { FormHelper } from '../../helpers/form.helper';
 
 @Component({
@@ -37,7 +37,6 @@ export class CatalogNodeFormComponent implements OnInit, OnDestroy {
     this.catalogNodeForm.valueChanges
       .pipe(
         takeUntil(this.destroyed),
-        debounceTime(250),
       )
       .subscribe(value => {
         if (!this.parentNode) {

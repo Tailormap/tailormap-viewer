@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { BoundsModel } from '@tailormap-viewer/api';
 import { ApplicationModel, GroupModel, AuthorizationRuleGroup, AUTHORIZATION_RULE_ANONYMOUS } from '@tailormap-admin/admin-api';
-import { Observable, debounceTime, filter, Subject, takeUntil } from 'rxjs';
+import { Observable, filter, Subject, takeUntil } from 'rxjs';
 import { FormHelper } from '../../helpers/form.helper';
 import { GroupService } from '../../user/services/group.service';
 
@@ -72,7 +72,6 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
     this.applicationForm.valueChanges
       .pipe(
         takeUntil(this.destroyed),
-        debounceTime(250),
         filter(() => this.isValidForm()),
       )
       .subscribe(value => {

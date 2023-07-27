@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { OIDCConfigurationModel } from '@tailormap-admin/admin-api';
-import { debounceTime, filter, Subject, takeUntil } from 'rxjs';
+import { filter, Subject, takeUntil } from 'rxjs';
 import { FormHelper } from '../../helpers/form.helper';
 
 @Component({
@@ -50,7 +50,6 @@ export class OIDCConfigurationFormComponent implements OnInit, OnDestroy {
     this.oidcConfigurationForm.valueChanges
       .pipe(
         takeUntil(this.destroyed),
-        debounceTime(250),
         filter(() => this.isValidForm()),
       )
       .subscribe(value => {
