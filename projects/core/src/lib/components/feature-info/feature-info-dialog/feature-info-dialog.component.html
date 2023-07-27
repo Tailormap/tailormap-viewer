@@ -6,7 +6,8 @@
            [allowCollapse]="true"
            [collapsed]="dialogCollapsed$ | async"
            (expandCollapseDialog)="expandCollapseDialog()"
-           i18n-title dialogTitle="Object Information">
+           dialogTitle="Object Information"
+           i18n-dialogTitle>
   <div class="feature-info" *ngIf="currentFeature$ | async as currentFeature">
     <div class="content">
       <h2>{{currentFeature.layer.title}}</h2>

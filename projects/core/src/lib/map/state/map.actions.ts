@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { AppLayerModel, LayerTreeNodeModel, MapResponseModel, ServiceModel } from '@tailormap-viewer/api';
+import { AppLayerModel, LayerDetailsModel, LayerTreeNodeModel, MapResponseModel, ServiceModel } from '@tailormap-viewer/api';
 
 const mapActionsPrefix = '[Map]';
 
@@ -57,4 +57,8 @@ export const setSelectedBackgroundNodeId = createAction(
 export const setLayerOpacity = createAction(
   `${mapActionsPrefix} Set Layer Opacity`,
   props<{ layerId: string; opacity: number }>(),
+);
+export const addLayerDetails = createAction(
+  `${mapActionsPrefix} Add Layer Details`,
+  props<{ layerDetails: LayerDetailsModel }>(),
 );

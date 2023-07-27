@@ -15,6 +15,7 @@
       </div>
       <div class="map">
         <tm-feature-info *ngIf="isComponentEnabled(config, componentTypes.FEATURE_INFO)"></tm-feature-info>
+        <tm-edit-dialog *ngIf="isComponentEnabled(config, componentTypes.EDIT)"></tm-edit-dialog>
         <tm-map></tm-map>
         <tm-map-controls></tm-map-controls>
         <tm-attribute-list *ngIf="isComponentEnabled(config, componentTypes.ATTRIBUTE_LIST)"></tm-attribute-list>
@@ -23,6 +24,7 @@
           <tm-clicked-coordinates *ngIf="isComponentEnabled(config, componentTypes.COORDINATE_PICKER)"></tm-clicked-coordinates>
           <tm-streetview *ngIf="isComponentEnabled(config, componentTypes.STREETVIEW)"></tm-streetview>
           <tm-simple-search *ngIf="isComponentEnabled(config, componentTypes.SIMPLE_SEARCH)"></tm-simple-search>
+          <tm-edit *ngIf="isComponentEnabled(config, componentTypes.EDIT)"></tm-edit>
         </div>
         <div class="map-controls-right">
           <tm-background-layer-toggle *ngIf="isComponentEnabled(config, componentTypes.BACKGROUND_LAYER_TOGGLE)"></tm-background-layer-toggle>

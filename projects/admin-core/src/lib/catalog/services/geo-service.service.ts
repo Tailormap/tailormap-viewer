@@ -19,10 +19,9 @@ import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 import { ApplicationService } from '../../application/services/application.service';
 import { ApplicationModelHelper } from '../../application/helpers/application-model.helper';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
-import { LoadingStateEnum } from '@tailormap-viewer/shared';
+import { DebounceHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
 import { AdminSseService, EventType } from '../../shared/services/admin-sse.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { DebounceHelper } from '../../helpers/debounce.helper';
 
 export interface DeleteGeoServiceResponse {
   success: boolean;

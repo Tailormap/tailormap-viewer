@@ -1,21 +1,21 @@
 import { render } from '@testing-library/angular';
-import { FeatureInfoSpinnerComponent } from './feature-info-spinner.component';
-import { provideMockStore } from '@ngrx/store/testing';
+import { MapSpinnerComponent } from './map-spinner.component';
 import { of } from 'rxjs';
 import { MapService } from '@tailormap-viewer/map';
-import { featureInfoStateKey } from '../state/feature-info.state';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { LoadingStateEnum } from '@tailormap-viewer/shared';
 
-describe('FeatureInfoSpinnerComponent', () => {
+describe('MapSpinnerComponent', () => {
 
   test('should render', async () => {
     const mapService = { getPixelForCoordinates$: jest.fn((coords: [number, number]) => of(coords)) };
-    const { container } = await render(FeatureInfoSpinnerComponent, {
+    const { container } = await render(MapSpinnerComponent, {
       providers: [
-        provideMockStore({ initialState: { [featureInfoStateKey]: { loadStatus: LoadingStateEnum.INITIAL, mapCoordinates: undefined } } }),
         { provide: MapService, useValue: mapService },
       ],
+      componentInputs: {
+        loading$: of(false),
+        coordinates$: of(undefined),
+      },
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     });
     const spinner = container.querySelector<HTMLDivElement>('.spinner');
@@ -26,11 +26,15 @@ describe('FeatureInfoSpinnerComponent', () => {
 
   test('should render on coordinates', async () => {
     const mapService = { getPixelForCoordinates$: jest.fn((coords: [number, number]) => of(coords)) };
-    const { container } = await render(FeatureInfoSpinnerComponent, {
+    const coords: [ number, number ] = [ 5, 5 ];
+    const { container } = await render(MapSpinnerComponent, {
       providers: [
-        provideMockStore({ initialState: { [featureInfoStateKey]: { loadStatus: LoadingStateEnum.LOADING, mapCoordinates: [ 5, 5 ] } } }),
         { provide: MapService, useValue: mapService },
       ],
+      componentInputs: {
+        loading$: of(true),
+        coordinates$: of(coords),
+      },
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     });
     const spinner = container.querySelector<HTMLDivElement>('.spinner');

@@ -1,0 +1,27 @@
+<div class="edit-container map-control-button-container"
+     *ngIf="editableLayers$ | async as editableLayers"
+     [class.edit-container--is-active]="active$ | async"
+     (keyup.escape)="toggle(true)">
+
+  <button mat-flat-button
+          class="map-control-button"
+          [class.disabled]="disabled"
+          [tmTooltip]="tooltip"
+          (click)="!disabled ? toggle() : null">
+    <mat-icon svgIcon="edit"></mat-icon>
+  </button>
+
+  <div class="edit-wrapper"
+       *ngIf="active$ | async">
+    <ng-container>
+      <mat-form-field *ngIf="editableLayers.length > 0">
+        <mat-select [formControl]="layer">
+          <mat-option *ngFor="let layer of editableLayers" [value]="layer.id">
+            {{layer.title || layer.layerName}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </ng-container>
+  </div>
+
+</div>

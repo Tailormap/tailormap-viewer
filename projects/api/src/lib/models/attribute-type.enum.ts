@@ -4,6 +4,7 @@ export enum AttributeType {
     STRING = 'string',
     DOUBLE = 'double',
     NUMBER = 'number',
+    INTEGER = 'integer',
     BOOLEAN = 'boolean',
     LINESTRING = 'linestring',
     MULTILINESTRING = 'multilinestring',

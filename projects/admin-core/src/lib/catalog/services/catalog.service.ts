@@ -14,9 +14,9 @@ import { nanoid } from 'nanoid';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AdminSseService, EventType } from '../../shared/services/admin-sse.service';
-import { DebounceHelper } from '../../helpers/debounce.helper';
 import { MoveCatalogNodeModel } from '../models/move-catalog-node.model';
 import { CatalogTreeMoveHelper } from '../helpers/catalog-tree-move.helper';
+import { DebounceHelper } from '@tailormap-viewer/shared';
 
 @Injectable({
   providedIn: 'root',

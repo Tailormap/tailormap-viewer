@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ViewerResponseModel, LayerDetailsModel, MapResponseModel, UserResponseModel, VersionResponseModel } from '../models';
+import { ViewerResponseModel, LayerDetailsModel, MapResponseModel, UserResponseModel, VersionResponseModel, FeatureModel } from '../models';
 import { delay, Observable, of } from 'rxjs';
 import { TailormapApiV1ServiceModel } from './tailormap-api-v1.service.model';
 import { FeaturesResponseModel } from '../models/features-response.model';
@@ -7,10 +7,10 @@ import { UniqueValuesResponseModel } from '../models/unique-values-response.mode
 import {
   getViewerResponseData, getFeaturesResponseModel, getLayerDetailsModel, getMapResponseData,
   getUniqueValuesResponseModel,
-  getVersionResponseModel, getUserResponseModel, getLayerExportCapabilitiesModel,
+  getVersionResponseModel, getUserResponseModel, getLayerExportCapabilitiesModel, getFeatureModel,
 } from '../mock-data';
 import { LayerExportCapabilitiesModel } from '../models/layer-export-capabilities.model';
-import { HttpResponse } from '@angular/common/http';
+import { HttpResponse, HttpStatusCode } from '@angular/common/http';
 
 @Injectable()
 export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
@@ -79,6 +79,18 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
     crs?: string;
   }): Observable<HttpResponse<Blob>> {
     return of(new HttpResponse<Blob>({ body: new Blob(['']) }));
+  }
+
+  public createFeature$(params: { applicationId: string; layerId: string; feature: FeatureModel }): Observable<FeatureModel> {
+    return of(getFeatureModel({ "__fid": params.feature.__fid }));
+  }
+
+  public deleteFeature$(_params: { applicationId: string; layerId: string; feature: FeatureModel }): Observable<HttpStatusCode> {
+    return of(HttpStatusCode.NoContent);
+  }
+
+  public updateFeature$(params: { applicationId: string; layerId: string; feature: FeatureModel }): Observable<FeatureModel> {
+    return of(getFeatureModel({ "__fid": params.feature.__fid }));
   }
 
 }

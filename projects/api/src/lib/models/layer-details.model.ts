@@ -3,7 +3,7 @@ import { AttributeModel } from './attribute.model';
 
 export interface LayerDetailsModel {
     id: string;
-    featuretypeName: string;
+    featureTypeName: string;
     serviceId: number;
     geometryAttribute: string;
     geometryAttributeIndex: number;

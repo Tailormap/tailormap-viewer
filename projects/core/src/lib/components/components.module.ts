@@ -11,6 +11,7 @@ import { DrawingModule } from './drawing/drawing.module';
 import { AttributeListModule } from './attribute-list/attribute-list.module';
 import { PrintModule } from './print/print.module';
 import { FilterComponentModule } from './filter/filter-component.module';
+import { EditComponentModule } from './edit/edit-component.module';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { FilterComponentModule } from './filter/filter-component.module';
     AttributeListModule,
     PrintModule,
     FilterComponentModule,
+    EditComponentModule,
   ],
 })
 export class ComponentsModule {}

@@ -182,6 +182,17 @@ const onSetLayerOpacity = (state: MapState, payload: ReturnType<typeof MapAction
   })),
 });
 
+const onAddLayerDetails = (
+  state: MapState,
+  payload: ReturnType<typeof MapActions.addLayerDetails>,
+): MapState => ({
+  ...state,
+  layerDetails: [
+    ...state.layerDetails,
+    payload.layerDetails,
+  ],
+});
+
 const mapReducerImpl = createReducer<MapState>(
   initialMapState,
   on(MapActions.loadMap, onLoadMap),
@@ -198,5 +209,6 @@ const mapReducerImpl = createReducer<MapState>(
   on(MapActions.setLayerTreeNodeChildren, onSetLayerTreeNodeChildren),
   on(MapActions.setSelectedBackgroundNodeId, onSetSelectedBackgroundNodeId),
   on(MapActions.setLayerOpacity, onSetLayerOpacity),
+  on(MapActions.addLayerDetails, onAddLayerDetails),
 );
 export const mapReducer = (state: MapState | undefined, action: Action) => mapReducerImpl(state, action);

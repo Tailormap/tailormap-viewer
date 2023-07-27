@@ -4,7 +4,9 @@ import { Store } from '@ngrx/store';
 import { selectViewerId } from '../../state/core.selectors';
 import { catchError, combineLatest, concatMap, forkJoin, map, Observable, of, take } from 'rxjs';
 import { FeatureInfoResponseModel } from './models/feature-info-response.model';
-import { selectVisibleLayersWithAttributes, selectVisibleWMSLayersWithoutAttributes } from '../../map/state/map.selectors';
+import {
+  selectEditableLayers, selectVisibleLayersWithAttributes, selectVisibleWMSLayersWithoutAttributes,
+} from '../../map/state/map.selectors';
 import { MapService, MapViewDetailsModel } from '@tailormap-viewer/map';
 import { HttpClient } from '@angular/common/http';
 import { ExtendedAppLayerModel } from '../../map/models';
@@ -32,7 +34,6 @@ export class FeatureInfoService {
       this.store$.select(selectVisibleWMSLayersWithoutAttributes),
       this.store$.select(selectViewerId),
       this.mapService.getMapViewDetails$(),
-      this.mapService.getProjectionCode$(),
     ])
       .pipe(
         take(1),
@@ -51,11 +52,34 @@ export class FeatureInfoService {
       );
   }
 
+  public getEditableFeatures$(coordinates: [ number, number ], selectedLayer?: string | null): Observable<FeatureInfoResponseModel[]> {
+    return combineLatest([
+      this.store$.select(selectEditableLayers),
+      this.store$.select(selectViewerId),
+      this.mapService.getMapViewDetails$(),
+    ])
+      .pipe(
+        take(1),
+        concatMap(([ editableLayers, applicationId, resolutions ]) => {
+          const layers = editableLayers.filter(layer => {
+            return !selectedLayer || layer.id === selectedLayer;
+          });
+          if (!applicationId || layers.length === 0) {
+            return of([]);
+          }
+          const featureRequests$ = layers
+              .map(layer => this.getFeatureInfoFromApi$( layer, coordinates, applicationId, resolutions,  true ));
+          return forkJoin(featureRequests$);
+        }),
+      );
+  }
+
   private getFeatureInfoFromApi$(
     layer: ExtendedAppLayerModel,
     coordinates: [ number, number ],
     applicationId: string,
     resolutions: MapViewDetailsModel,
+    geometryInAttributes=false,
   ): Observable<FeatureInfoResponseModel> {
     const layerId = layer.id;
     return this.apiService.getFeatures$({
@@ -66,6 +90,7 @@ export class FeatureInfoService {
       // meters per pixel * fixed value
       distance: resolutions.resolution * FeatureInfoService.DEFAULT_DISTANCE,
       simplify: false,
+      geometryInAttributes: geometryInAttributes,
     }).pipe(
       map((featureInfoResult: FeaturesResponseModel): FeatureInfoResponseModel => ({
         features: (featureInfoResult.features || []).map(feature => ({ ...feature, layerId })),

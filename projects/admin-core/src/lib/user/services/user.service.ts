@@ -4,11 +4,10 @@ import { TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel, UserMo
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 import { AdminSseService, EventType } from '../../shared/services/admin-sse.service';
 import { Store } from '@ngrx/store';
-import { DebounceHelper } from '../../helpers/debounce.helper';
 import { addUser, deleteUser, loadUsers, updateUser } from '../state/user.actions';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { selectUsers, selectUsersLoadStatus } from '../state/user.selectors';
-import { LoadingStateEnum } from '@tailormap-viewer/shared';
+import { DebounceHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
 import { UserAddUpdateModel } from '../models/user-add-update.model';
 
 @Injectable({

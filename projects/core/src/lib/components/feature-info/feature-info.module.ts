@@ -7,14 +7,13 @@ import { featureInfoStateKey } from './state/feature-info.state';
 import { featureInfoReducer } from './state/feature-info.reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { FeatureInfoEffects } from './state/feature-info.effects';
-import { FeatureInfoSpinnerComponent } from './feature-info-spinner/feature-info-spinner.component';
 import { FeatureInfoDialogComponent } from './feature-info-dialog/feature-info-dialog.component';
+import { ApplicationMapModule } from '../../map/application-map.module';
 
 
 @NgModule({
   declarations: [
     FeatureInfoComponent,
-    FeatureInfoSpinnerComponent,
     FeatureInfoDialogComponent,
   ],
   imports: [
@@ -22,6 +21,7 @@ import { FeatureInfoDialogComponent } from './feature-info-dialog/feature-info-d
     SharedModule,
     StoreModule.forFeature(featureInfoStateKey, featureInfoReducer),
     EffectsModule.forFeature([FeatureInfoEffects]),
+    ApplicationMapModule,
   ],
   exports: [
     FeatureInfoComponent,
