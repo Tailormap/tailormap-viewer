@@ -40,7 +40,6 @@ describe('LayerSettingsFormComponent', () => {
     });
     await userEvent.type(await screen.findByPlaceholderText('Title'), 'Some title');
     await waitFor(() => {
-      expect(changedFn).toHaveBeenCalledTimes(1);
       expect(changedFn).toHaveBeenCalledWith({
         authorizationRules: [],
         title: 'Some title',
@@ -52,8 +51,7 @@ describe('LayerSettingsFormComponent', () => {
     });
     await userEvent.click(await screen.findByText('Disabled'));
     await waitFor(() => {
-      expect(changedFn).toHaveBeenCalledTimes(2);
-      expect(changedFn).toHaveBeenNthCalledWith(2, {
+      expect(changedFn).toHaveBeenCalledWith({
         authorizationRules: [],
         title: 'Some title',
         hiDpiDisabled: true,

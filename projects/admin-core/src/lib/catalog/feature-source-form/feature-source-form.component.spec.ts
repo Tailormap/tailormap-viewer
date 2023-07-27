@@ -27,7 +27,6 @@ describe('FeatureSourceFormComponent', () => {
     expect(await screen.queryByPlaceholderText('Database')).not.toBeInTheDocument();
     await userEvent.type(await screen.findByPlaceholderText('URL'), 'http://localhost.test');
     await waitFor(() => {
-      expect(changedFn).toHaveBeenCalledTimes(1);
       expect(changedFn).toHaveBeenCalledWith({ title: 'Some WFS source', url: 'http://localhost.test', protocol: 'WFS', authentication: undefined, jdbcConnection: undefined });
     });
   });

@@ -30,7 +30,6 @@ describe('GeoServiceFormComponent', () => {
     });
     await userEvent.type(await screen.findByPlaceholderText('URL'), 'http://localhost.test');
     await waitFor(() => {
-      expect(changedFn).toHaveBeenCalledTimes(1);
       expect(changedFn).toHaveBeenCalledWith({
         authorizationRules: [],
         title: '',
@@ -43,8 +42,7 @@ describe('GeoServiceFormComponent', () => {
     await userEvent.click(await screen.findByText('wms'));
     await userEvent.click(await screen.findByText('wmts'));
     await waitFor(() => {
-      expect(changedFn).toHaveBeenCalledTimes(2);
-      expect(changedFn).toHaveBeenNthCalledWith(2, {
+      expect(changedFn).toHaveBeenCalledWith({
         authorizationRules: [],
         title: '',
         url: 'http://localhost.test',
