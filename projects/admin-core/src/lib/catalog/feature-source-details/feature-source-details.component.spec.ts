@@ -56,49 +56,29 @@ const setup = async (protocol: FeatureSourceProtocolEnum) => {
 };
 
 describe('FeatureSourceDetailsComponent', () => {
+  jest.useFakeTimers();
+  const ue = userEvent.setup({ advanceTimers: jest.advanceTimersByTimeAsync });
 
-  // XXX Fails when in GitHub Actions runner:
-  /* FAIL projects/admin-core/src/lib/catalog/feature-source-details/feature-source-details.component.spec.ts (9.401 s)
-  ● FeatureSourceDetailsComponent › should render and handle editing JDBC source
-
-    expect(jest.fn()).toHaveBeenCalledWith(...expected)
-
-    - Expected
-    + Received
-
-      "1",
-      Object {
-        "authentication": undefined,
-    -   "jdbcConnection": Object {
-    -     "database": "geo_db",
-    -     "dbtype": "postgis",
-    -     "host": "localhost",
-    -     "port": 5432,
-    -     "schema": "roads",
-    -   },
-    +   "jdbcConnection": undefined,
-        "protocol": "JDBC",
-        "title": "Some JDBC source___",
-        "url": "https://wfs-url",
-      },
-   */
-  test.skip('should render and handle editing JDBC source', async () => {
+  test('should render and handle editing JDBC source', async () => {
     const { featureSourceModel, featureServiceMock } = await setup(FeatureSourceProtocolEnum.JDBC);
     expect(await screen.findByText('Edit Some JDBC source')).toBeInTheDocument();
     expect(await screen.findByLabelText('Save')).toBeDisabled();
     expect(await screen.queryByText('URL')).not.toBeInTheDocument();
-    await userEvent.type(await screen.findByPlaceholderText('Title'), '___');
-    await userEvent.type(await screen.findByPlaceholderText('Database'), 'geo_db');
-    await userEvent.type(await screen.findByPlaceholderText('Host'), 'localhost');
-    await userEvent.type(await screen.findByPlaceholderText('Port'), '[Backspace]5432');
-    await userEvent.type(await screen.findByPlaceholderText('Schema'), 'roads');
-    await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save');
+    await ue.type(await screen.findByPlaceholderText('Title'), '___');
+    await ue.type(await screen.findByPlaceholderText('Database'), 'geo_db');
+    await ue.type(await screen.findByPlaceholderText('Host'), 'localhost');
+    await ue.type(await screen.findByPlaceholderText('Port'), '[Backspace]5432');
+    await ue.type(await screen.findByPlaceholderText('Schema'), 'roads');
+    await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save', undefined, ue);
     await waitFor(() => {
       expect(featureServiceMock.updateFeatureSource$).toHaveBeenCalledWith('1', {
         title: featureSourceModel.title + '___',
         protocol: featureSourceModel.protocol,
         url: featureSourceModel.url,
         jdbcConnection: {
+          additionalProperties: {
+            connectionOptions: "",
+          },
           dbtype: featureSourceModel.jdbcConnection?.dbtype,
           database: 'geo_db',
           port: 5432,
@@ -109,14 +89,14 @@ describe('FeatureSourceDetailsComponent', () => {
       });
     });
     expect(await screen.findByText('Refresh feature source?')).toBeInTheDocument();
-    await userEvent.click(await screen.findByText('Yes'));
+    await ue.click(await screen.findByText('Yes'));
     expect(featureServiceMock.refreshFeatureSource$).toHaveBeenCalled();
   });
 
   test('should not ask to refresh when just updating title', async () => {
     const { featureSourceModel, featureServiceMock } = await setup(FeatureSourceProtocolEnum.WFS);
-    await userEvent.type(await screen.findByPlaceholderText('Title'), '___');
-    await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save');
+    await ue.type(await screen.findByPlaceholderText('Title'), '___');
+    await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save', undefined, ue);
     await waitFor(() => {
       expect(featureServiceMock.updateFeatureSource$).toHaveBeenCalledWith('1', {
         title: featureSourceModel.title + '___',
@@ -134,12 +114,12 @@ describe('FeatureSourceDetailsComponent', () => {
     expect(await screen.findByText('Edit Some WFS source')).toBeInTheDocument();
     expect(await screen.findByLabelText('Save')).toBeDisabled();
     expect(await screen.queryByText('Database')).not.toBeInTheDocument();
-    await userEvent.type(await screen.findByPlaceholderText('URL'), '/path');
-    await userEvent.type(await screen.findByPlaceholderText('Username'), 'some_user');
+    await ue.type(await screen.findByPlaceholderText('URL'), '/path');
+    await ue.type(await screen.findByPlaceholderText('Username'), 'some_user');
     const passwordField = await screen.findByLabelText('Password');
     expect(passwordField).toBeInTheDocument();
-    await userEvent.type(passwordField, 'secret');
-    await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save');
+    await ue.type(passwordField, 'secret');
+    await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save', undefined, ue);
     await waitFor(() => {
       expect(featureServiceMock.updateFeatureSource$).toHaveBeenCalledWith('1', {
         title: featureSourceModel.title,
@@ -154,13 +134,13 @@ describe('FeatureSourceDetailsComponent', () => {
       });
     });
     expect(await screen.findByText('Refresh feature source?')).toBeInTheDocument();
-    await userEvent.click(await screen.findByText('No'));
+    await ue.click(await screen.findByText('No'));
     expect(featureServiceMock.refreshFeatureSource$).not.toHaveBeenCalled();
   });
 
   test('should refresh', async () => {
     const { featureServiceMock } = await setup(FeatureSourceProtocolEnum.JDBC);
-    await TestSaveHelper.waitForButtonToBeEnabledAndClick('Refresh feature source');
+    await TestSaveHelper.waitForButtonToBeEnabledAndClick('Refresh feature source', undefined, ue);
     expect(featureServiceMock.refreshFeatureSource$).toHaveBeenCalled();
   });
 
