@@ -1,0 +1,12 @@
+<div class="select-feature">
+    <h2 i18n>Select which feature to edit</h2>
+    <div i18n>Hover over the buttons to highlight the feature on the map</div>
+    <div *ngFor="let feature of features; let idx = index; trackBy: trackByFid" class="feature">
+        <a href="#"
+           (mouseenter)="highlightFeature(feature)"
+           (mouseleave)="hideHighlight()"
+           (click)="selectFeature($event, feature)">
+            <ng-container i18n>Feature</ng-container> {{idx + 1}}
+        </a>
+    </div>
+</div>
