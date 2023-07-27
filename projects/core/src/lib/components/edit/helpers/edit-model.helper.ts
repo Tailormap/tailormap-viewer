@@ -19,6 +19,7 @@ export class EditModelHelper {
     feature: FeatureModel,
     layerDetails: LayerDetailsModel,
     columnMetadata: ColumnMetadataModel[],
+    isNewFeature?: boolean,
   ): FormFieldModel[] {
     if (!layerDetails.editable) {
       return [];
@@ -30,7 +31,7 @@ export class EditModelHelper {
       const metadata = columnMetadata.find(c => c.key === attribute.key);
       return {
         label: attribute.editAlias || metadata?.alias || attribute.key,
-        value: attributeValue || attribute.defaultValue || '',
+        value: isNewFeature ? attributeValue || attribute.defaultValue || '' : attributeValue,
         name: attribute.key,
         required: attribute.nullable === false,
         disabled: !attribute.editable,

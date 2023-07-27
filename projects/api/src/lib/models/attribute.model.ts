@@ -8,7 +8,7 @@ export interface AttributeModel {
     editable: boolean;
     editAlias?: string;
     // may need to be coerced to proper type
-    defaultValue?:  string;
+    defaultValue?: string;
     nullable: boolean | null;
     // values may need to be coerced to proper type
     valueList?: string;
