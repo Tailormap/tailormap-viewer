@@ -35,25 +35,38 @@ const setup = async (editMode = false) => {
 
 describe('FeatureSourceFormDialogComponent', () => {
 
+  beforeEach(() => {
+    jest.useFakeTimers();
+  });
+
+  afterEach(() => {
+    jest.runOnlyPendingTimers();
+    jest.useRealTimers();
+  });
+
   test('should render and handle cancel', async () => {
+    const ue = userEvent.setup({ advanceTimers: jest.advanceTimersByTimeAsync });
     const { dialogRefMock } = await setup();
     expect(screen.getByText('Create new feature source')).toBeInTheDocument();
-    await userEvent.click(screen.getByText('Cancel'));
+    await ue.click(screen.getByText('Cancel'));
     expect(dialogRefMock.close).toHaveBeenCalled();
   });
 
   test('should save new node', async () => {
+    jest.useFakeTimers();
+    const ue = userEvent.setup({ advanceTimers: jest.advanceTimersByTimeAsync });
+
     const { featureServiceMock, dialogRefMock } = await setup();
     expect(screen.getByText('Create new feature source')).toBeInTheDocument();
     expect(await screen.queryByPlaceholderText('URL')).not.toBeInTheDocument();
     expect(await screen.queryByPlaceholderText('Database')).not.toBeInTheDocument();
-    await userEvent.type(await screen.findByPlaceholderText('Title'), 'My WFS service');
-    await userEvent.click(await screen.findByPlaceholderText('Protocol'));
-    await userEvent.click(await screen.findByText('WFS'));
+    await ue.type(await screen.findByPlaceholderText('Title'), 'My WFS service');
+    await ue.click(await screen.findByPlaceholderText('Protocol'));
+    await ue.click(await screen.findByText('WFS'));
     expect(await screen.queryByPlaceholderText('URL')).toBeInTheDocument();
     expect(await screen.queryByPlaceholderText('Database')).not.toBeInTheDocument();
-    await userEvent.type(await screen.findByPlaceholderText('URL'), 'http://localhost.test');
-    await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save');
+    await ue.type(await screen.findByPlaceholderText('URL'), 'http://localhost.test');
+    await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save', undefined, ue);
     await waitFor(() => {
       expect(featureServiceMock.createFeatureSource$).toHaveBeenCalledWith({
         title: 'My WFS service',
@@ -67,10 +80,11 @@ describe('FeatureSourceFormDialogComponent', () => {
   });
 
   test('should edit node', async () => {
+    const ue = userEvent.setup({ advanceTimers: jest.advanceTimersByTimeAsync });
     const { featureServiceMock, dialogRefMock } = await setup(true);
     expect(screen.getByText('Edit wfs source')).toBeInTheDocument();
-    await userEvent.type(await screen.findByPlaceholderText('URL'), '/path');
-    await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save');
+    await ue.type(await screen.findByPlaceholderText('URL'), '/path');
+    await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save', undefined, ue);
     expect(featureServiceMock.updateFeatureSource$).toHaveBeenCalledWith('2', {
       title: 'wfs source',
       protocol: 'WFS',

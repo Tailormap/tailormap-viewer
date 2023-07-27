@@ -7,7 +7,17 @@ import { MatIconTestingModule } from '@angular/material/icon/testing';
 
 describe('FeatureSourceFormComponent', () => {
 
+  beforeEach(() => {
+    jest.useFakeTimers();
+  });
+
+  afterEach(() => {
+    jest.runOnlyPendingTimers();
+    jest.useRealTimers();
+  });
+
   test('should render', async () => {
+    const ue = userEvent.setup({ advanceTimers: jest.advanceTimersByTimeAsync });
     const changedFn = jest.fn();
     await render(FeatureSourceFormComponent, {
       imports: [ SharedModule, MatIconTestingModule ],
@@ -20,12 +30,12 @@ describe('FeatureSourceFormComponent', () => {
     });
     expect(await screen.queryByPlaceholderText('URL')).not.toBeInTheDocument();
     expect(await screen.queryByPlaceholderText('Database')).not.toBeInTheDocument();
-    await userEvent.type(await screen.findByPlaceholderText('Title'), 'Some WFS source');
-    await userEvent.click(await screen.findByPlaceholderText('Protocol'));
-    await userEvent.click(await screen.findByText('WFS'));
+    await ue.type(await screen.findByPlaceholderText('Title'), 'Some WFS source');
+    await ue.click(await screen.findByPlaceholderText('Protocol'));
+    await ue.click(await screen.findByText('WFS'));
     expect(await screen.queryByPlaceholderText('URL')).toBeInTheDocument();
     expect(await screen.queryByPlaceholderText('Database')).not.toBeInTheDocument();
-    await userEvent.type(await screen.findByPlaceholderText('URL'), 'http://localhost.test');
+    await ue.type(await screen.findByPlaceholderText('URL'), 'http://localhost.test');
     await waitFor(() => {
       expect(changedFn).toHaveBeenCalledTimes(1);
       expect(changedFn).toHaveBeenCalledWith({ title: 'Some WFS source', url: 'http://localhost.test', protocol: 'WFS', authentication: undefined, jdbcConnection: undefined });
@@ -33,14 +43,15 @@ describe('FeatureSourceFormComponent', () => {
   });
 
   test('should show JDBC fields in case of JDBC protocol', async () => {
+    const ue = userEvent.setup({ advanceTimers: jest.advanceTimersByTimeAsync });
     await render(FeatureSourceFormComponent, {
       imports: [ SharedModule, MatIconTestingModule ],
       declarations: [PasswordFieldComponent],
     });
     expect(await screen.queryByPlaceholderText('URL')).not.toBeInTheDocument();
     expect(await screen.queryByPlaceholderText('Database')).not.toBeInTheDocument();
-    await userEvent.click(await screen.findByPlaceholderText('Protocol'));
-    await userEvent.click(await screen.findByText('JDBC'));
+    await ue.click(await screen.findByPlaceholderText('Protocol'));
+    await ue.click(await screen.findByText('JDBC'));
     expect(await screen.queryByPlaceholderText('URL')).not.toBeInTheDocument();
     expect(await screen.queryByPlaceholderText('Database')).toBeInTheDocument();
   });
