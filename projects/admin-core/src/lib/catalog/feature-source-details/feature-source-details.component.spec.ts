@@ -57,7 +57,7 @@ const setup = async (protocol: FeatureSourceProtocolEnum) => {
 
 describe('FeatureSourceDetailsComponent', () => {
   jest.useFakeTimers();
-  const ue = userEvent.setup({ advanceTimers: jest.advanceTimersByTimeAsync, });
+  const ue = userEvent.setup({ advanceTimers: jest.advanceTimersByTimeAsync });
 
   test('should render and handle editing JDBC source', async () => {
     const { featureSourceModel, featureServiceMock } = await setup(FeatureSourceProtocolEnum.JDBC);
