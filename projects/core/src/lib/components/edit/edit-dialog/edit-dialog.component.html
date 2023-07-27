@@ -25,6 +25,18 @@
       </div>
     </ng-container>
   </div>
+  <ng-container *ngIf="selectableFeature$ | async as selectableFeatures">
+    <ng-container *ngIf="selectableFeatures.length > 0">
+      <div class="content">
+        <tm-edit-select-feature [features]="selectableFeatures"></tm-edit-select-feature>
+      </div>
+      <div class="buttons">
+        <button mat-flat-button i18n (click)="closeDialog()">
+          Close
+        </button>
+      </div>
+    </ng-container>
+  </ng-container>
 </tm-dialog>
 
 <tm-map-spinner [coordinates$]="editCoordinates$"

@@ -30,6 +30,7 @@ const onLoadFeatureInfo = (
   ...state,
   mapCoordinates: payload.coordinates,
   loadStatus: LoadingStateEnum.LOADING,
+  features: [],
 });
 
 const onLoadEditFeaturesSuccess = (
@@ -37,14 +38,14 @@ const onLoadEditFeaturesSuccess = (
   payload: ReturnType<typeof EditActions.loadEditFeaturesSuccess>,
 ): EditState => {
   const features = payload.featureInfo.reduce<FeatureInfoFeatureModel[]>((allFeatures, featureInfoModel) => allFeatures.concat(featureInfoModel.features), []);
-  const selectedFeature = features.length > 0 ? features[0].__fid : null;
+  const selectedFeature = features.length === 0 ? features[0].__fid : null;
   return {
     ...state,
     features,
     columnMetadata: payload.featureInfo.reduce<FeatureInfoColumnMetadataModel[]>((allMetadata, featureInfoModel) => allMetadata.concat(featureInfoModel.columnMetadata), []),
     loadStatus: LoadingStateEnum.LOADED,
     selectedFeature,
-    dialogVisible: !!selectedFeature,
+    dialogVisible: true,
     dialogCollapsed: false,
   };
 };
@@ -55,7 +56,17 @@ const onLoadEditFeaturesFailed = (
 ): EditState => ({
   ...state,
   errorMessage: payload.errorMessage,
+  features: [],
+  selectedFeature: null,
   loadStatus: LoadingStateEnum.FAILED,
+});
+
+const onSetSelectedEditFeature = (
+  state: EditState,
+  payload: ReturnType<typeof EditActions.setSelectedEditFeature>,
+): EditState => ({
+  ...state,
+  selectedFeature: payload.fid,
 });
 
 const onShowEditDialog = (state: EditState): EditState => ({
@@ -99,6 +110,7 @@ const editReducerImpl = createReducer<EditState>(
   on(EditActions.loadEditFeatures, onLoadFeatureInfo),
   on(EditActions.loadEditFeaturesSuccess, onLoadEditFeaturesSuccess),
   on(EditActions.loadEditFeaturesFailed, onLoadEditFeaturesFailed),
+  on(EditActions.setSelectedEditFeature, onSetSelectedEditFeature),
   on(EditActions.showEditDialog, onShowEditDialog),
   on(EditActions.hideEditDialog, onHideEditDialog),
   on(EditActions.expandCollapseEditDialog, onExpandCollapseEditDialog),

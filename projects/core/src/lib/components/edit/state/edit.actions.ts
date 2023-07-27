@@ -29,6 +29,11 @@ export const loadEditFeaturesFailed = createAction(
   props<{ errorMessage?: string }>(),
 );
 
+export const setSelectedEditFeature = createAction(
+    `${editActionsPrefix} Set Selected Edit Feature`,
+    props<{ fid: string | null }>(),
+);
+
 export const showEditDialog = createAction(`${editActionsPrefix} Show Edit Dialog`);
 export const hideEditDialog = createAction(`${editActionsPrefix} Hide Edit Dialog`);
 export const expandCollapseEditDialog = createAction(`${editActionsPrefix} Expand/Collapse Edit Dialog`);

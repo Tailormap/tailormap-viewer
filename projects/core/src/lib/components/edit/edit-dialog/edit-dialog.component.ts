@@ -2,9 +2,14 @@ import { ChangeDetectionStrategy, Component, DestroyRef, OnInit } from '@angular
 import { Store } from '@ngrx/store';
 import { CssHelper } from '@tailormap-viewer/shared';
 import {
-  selectEditDialogCollapsed, selectEditDialogVisible, selectEditMapCoordinates, selectLoadingEditFeatures, selectSelectedEditFeature,
+  selectEditDialogCollapsed,
+  selectEditDialogVisible,
+  selectEditFeatures,
+  selectEditMapCoordinates,
+  selectLoadingEditFeatures,
+  selectSelectedEditFeature,
 } from '../state/edit.selectors';
-import { concatMap, filter, Observable, of, switchMap, take } from 'rxjs';
+import { combineLatest, concatMap, filter, map, Observable, of, switchMap, take } from 'rxjs';
 import { expandCollapseEditDialog, hideEditDialog, updateEditFeature } from '../state/edit.actions';
 import { AppLayerModel, FeatureModelAttributes, LayerDetailsModel } from '@tailormap-viewer/api';
 import { ApplicationLayerService } from '../../../map/services/application-layer.service';
@@ -12,6 +17,7 @@ import { FeatureWithMetadataModel } from '../models/feature-with-metadata.model'
 import { EditFeatureService } from '../edit-feature.service';
 import { selectViewerId } from '../../../state/core.selectors';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FeatureInfoFeatureModel } from "../../feature-info/models/feature-info-feature.model";
 
 @Component({
   selector: 'tm-edit-dialog',
@@ -32,6 +38,7 @@ export class EditDialogComponent implements OnInit {
   public editCoordinates$ = this.store$.select(selectEditMapCoordinates);
 
   public updatedAttributes: FeatureModelAttributes | null = null;
+  public selectableFeature$: Observable<FeatureInfoFeatureModel[]> = of([]);
 
   constructor(
     private store$: Store,
@@ -44,6 +51,17 @@ export class EditDialogComponent implements OnInit {
     this.dialogOpen$ = this.store$.select(selectEditDialogVisible);
     this.dialogCollapsed$ = this.store$.select(selectEditDialogCollapsed);
     this.currentFeature$ = this.store$.select(selectSelectedEditFeature);
+    this.selectableFeature$ = combineLatest([
+      this.store$.select(selectEditFeatures),
+      this.store$.select(selectSelectedEditFeature),
+    ]).pipe(
+        map(([ features, selectedFeature ]) => {
+          if (selectedFeature) {
+            return [];
+          }
+          return features;
+        }),
+    );
     this.layerDetails$ = this.currentFeature$
       .pipe(
         filter((feature): feature is FeatureWithMetadataModel => !!feature),
