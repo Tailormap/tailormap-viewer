@@ -56,10 +56,18 @@ const setup = async (protocol: FeatureSourceProtocolEnum) => {
 };
 
 describe('FeatureSourceDetailsComponent', () => {
-  jest.useFakeTimers();
-  const ue = userEvent.setup({ advanceTimers: jest.advanceTimersByTimeAsync });
+
+  beforeEach(() => {
+    jest.useFakeTimers();
+  });
+
+  afterEach(() => {
+    jest.runOnlyPendingTimers();
+    jest.useRealTimers();
+  });
 
   test('should render and handle editing JDBC source', async () => {
+    const ue = userEvent.setup({ advanceTimers: jest.advanceTimersByTimeAsync });
     const { featureSourceModel, featureServiceMock } = await setup(FeatureSourceProtocolEnum.JDBC);
     expect(await screen.findByText('Edit Some JDBC source')).toBeInTheDocument();
     expect(await screen.findByLabelText('Save')).toBeDisabled();
@@ -94,6 +102,7 @@ describe('FeatureSourceDetailsComponent', () => {
   });
 
   test('should not ask to refresh when just updating title', async () => {
+    const ue = userEvent.setup({ advanceTimers: jest.advanceTimersByTimeAsync });
     const { featureSourceModel, featureServiceMock } = await setup(FeatureSourceProtocolEnum.WFS);
     await ue.type(await screen.findByPlaceholderText('Title'), '___');
     await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save', undefined, ue);
@@ -110,6 +119,7 @@ describe('FeatureSourceDetailsComponent', () => {
   });
 
   test('should render and handle editing WFS source', async () => {
+    const ue = userEvent.setup({ advanceTimers: jest.advanceTimersByTimeAsync });
     const { featureSourceModel, featureServiceMock } = await setup(FeatureSourceProtocolEnum.WFS);
     expect(await screen.findByText('Edit Some WFS source')).toBeInTheDocument();
     expect(await screen.findByLabelText('Save')).toBeDisabled();
@@ -139,6 +149,7 @@ describe('FeatureSourceDetailsComponent', () => {
   });
 
   test('should refresh', async () => {
+    const ue = userEvent.setup({ advanceTimers: jest.advanceTimersByTimeAsync });
     const { featureServiceMock } = await setup(FeatureSourceProtocolEnum.JDBC);
     await TestSaveHelper.waitForButtonToBeEnabledAndClick('Refresh feature source', undefined, ue);
     expect(featureServiceMock.refreshFeatureSource$).toHaveBeenCalled();
