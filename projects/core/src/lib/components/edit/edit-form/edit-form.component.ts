@@ -5,7 +5,12 @@ import { debounceTime, map, merge, Subscription } from 'rxjs';
 import { ColumnMetadataModel, FeatureModel, LayerDetailsModel } from '@tailormap-viewer/api';
 import { EditModelHelper } from '../helpers/edit-model.helper';
 import { FormFieldModel } from '../models/form-field.model';
-import { DebounceHelper } from '@tailormap-viewer/shared';
+
+interface EditFormInput {
+  feature: FeatureModel | undefined;
+  details: LayerDetailsModel | undefined;
+  columnMetadata: ColumnMetadataModel[];
+}
 
 @Component({
   selector: 'tm-edit-form',
@@ -15,38 +20,18 @@ import { DebounceHelper } from '@tailormap-viewer/shared';
 })
 export class EditFormComponent implements OnDestroy {
 
-  private _feature: FeatureModel | undefined;
-  private _details: LayerDetailsModel | undefined;
-  private _columnMetadata: ColumnMetadataModel[] = [];
+  private _feature: EditFormInput | undefined;
 
   private currentFormSubscription: Subscription | undefined;
   public formConfig: FormFieldModel[] = [];
 
   @Input({ required: true })
-  public set feature(feature: FeatureModel | undefined) {
+  public set feature(feature: EditFormInput | undefined) {
     this._feature = feature;
-    DebounceHelper.debounce('edit-form', () => this.createForm(), 10);
+    this.createForm();
   }
-  public get feature(): FeatureModel | undefined {
+  public get feature(): EditFormInput | undefined {
     return this._feature;
-  }
-
-  @Input({ required: true })
-  public set details(details: LayerDetailsModel | undefined) {
-    this._details = details;
-    DebounceHelper.debounce('edit-form', () => this.createForm(), 10);
-  }
-  public get details(): LayerDetailsModel | undefined {
-    return this._details;
-  }
-
-  @Input({ required: true })
-  public set columnMetadata(columnMetadata: ColumnMetadataModel[]) {
-    this._columnMetadata = columnMetadata;
-    DebounceHelper.debounce('edit-form', () => this.createForm(), 10);
-  }
-  public get columnMetadata(): ColumnMetadataModel[] {
-    return this._columnMetadata;
   }
 
   @Output()
@@ -69,10 +54,10 @@ export class EditFormComponent implements OnDestroy {
     if (this.currentFormSubscription) {
       this.currentFormSubscription.unsubscribe();
     }
-    if (!this.details || !this.feature) {
+    if (!this.feature?.details || !this.feature?.feature) {
       return;
     }
-    this.formConfig = EditModelHelper.createEditModel(this.feature, this.details, this.columnMetadata);
+    this.formConfig = EditModelHelper.createEditModel(this.feature.feature, this.feature.details, this.feature.columnMetadata);
     this.form = FormHelper.createForm(this.formConfig);
     const changes$ = Object.keys(this.form.controls)
       .map(key => {

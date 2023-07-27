@@ -10,7 +10,7 @@ describe('EditFormComponent', () => {
     const featureAttributeChanged = jest.fn();
     await render(EditFormComponent, {
       imports: [SharedModule],
-      componentInputs: {
+      componentInputs: { feature: {
         feature: getFeatureModel(),
         columnMetadata: [
           { key: 'prop', alias: 'Property', type: FeatureAttributeTypeEnum.STRING },
@@ -24,7 +24,7 @@ describe('EditFormComponent', () => {
             { id: 2, type: AttributeType.STRING, featureType: 1, key: 'prop2', editable: true, nullable: null, allowValueListOnly: false },
           ],
         }),
-      },
+      } },
       componentOutputs: {
         featureAttributeChanged: {
           emit: featureAttributeChanged,
