@@ -29,7 +29,7 @@ export class TailormapSecurityApiV1Service implements TailormapSecurityApiV1Serv
             if (
               error instanceof HttpErrorResponse
               && (req.url.startsWith(baseUrl) && req.url !== TailormapApiConstants.LOGIN_URL)
-              && error.status === 401
+              && (error.status === 401 || error.status === 403)
             ) {
               shouldLogin();
             }
