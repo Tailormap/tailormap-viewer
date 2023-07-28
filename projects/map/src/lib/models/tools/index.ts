@@ -11,5 +11,3 @@ export * from './scale-bar-tool.model';
 export * from './scale-bar-tool-config.model';
 export * from './select-tool.model';
 export * from './select-tool-config.model';
-export * from './modify-tool.model';
-export * from './modify-tool-config.model';

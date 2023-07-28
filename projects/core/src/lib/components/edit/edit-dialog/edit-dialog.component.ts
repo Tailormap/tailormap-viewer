@@ -124,20 +124,4 @@ export class EditDialogComponent implements OnInit {
     this.updatedAttributes[$event.attribute] = $event.value;
   }
 
-  public geometryChanged($event: { __fid: string; geometry: string; geometryAttribute: string }) {
-    if (!this.currentFeature$) {
-      return;
-    }
-    this.currentFeature$
-      .pipe(take(1))
-      .subscribe(feature => {
-        if (feature?.feature.__fid !== $event.__fid) {
-          return;
-        }
-        if (this.updatedAttributes === null) {
-          this.updatedAttributes = {};
-        }
-        this.updatedAttributes[$event.geometryAttribute] = $event.geometry;
-      });
-  }
 }

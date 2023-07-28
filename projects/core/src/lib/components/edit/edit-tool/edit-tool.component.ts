@@ -5,10 +5,8 @@ import { activateTool, deactivateTool, deregisterTool, registerTool } from '../.
 import { ToolbarComponentEnum } from '../../toolbar/models/toolbar-component.enum';
 import { Store } from '@ngrx/store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { selectEditActiveWithSelectedLayer, selectEditError$ } from '../state/edit.selectors';
+import { selectEditActiveWithSelectedLayer } from '../state/edit.selectors';
 import { loadEditFeatures } from '../state/edit.actions';
-import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from "@tailormap-viewer/shared";
-import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: 'tm-edit-tool',
@@ -18,14 +16,10 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 })
 export class EditToolComponent implements OnInit, OnDestroy {
 
-  private static DEFAULT_ERROR_MESSAGE = $localize `Something went wrong while getting feature info, please try again`;
-  private static DEFAULT_NO_FEATURES_FOUND_MESSAGE = $localize `No features found`;
-
   constructor(
     private mapService: MapService,
     private store$: Store,
     private destroyRef: DestroyRef,
-    private snackBar: MatSnackBar,
   ) { }
 
   public ngOnInit(): void {
@@ -58,21 +52,6 @@ export class EditToolComponent implements OnInit, OnDestroy {
 
   private handleMapClick(evt: { mapCoordinates: [number, number]; mouseCoordinates: [number, number] }) {
     this.store$.dispatch(loadEditFeatures({ coordinates: evt.mapCoordinates }));
-    this.store$.pipe(selectEditError$)
-      .subscribe(error => {
-          if (!error || error.error === 'none') {
-              return;
-          }
-          const config: SnackBarMessageOptionsModel = {
-              message: error.error === 'error'
-                  ? error.errorMessage || EditToolComponent.DEFAULT_ERROR_MESSAGE
-                  : EditToolComponent.DEFAULT_NO_FEATURES_FOUND_MESSAGE,
-              duration: 5000,
-              showDuration: true,
-              showCloseButton: true,
-          };
-          SnackBarMessageComponent.open$(this.snackBar, config);
-      });
   }
 
 }
