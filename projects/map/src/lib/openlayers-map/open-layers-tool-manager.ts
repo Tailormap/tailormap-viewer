@@ -7,6 +7,7 @@ import { OpenLayersDrawingTool } from './tools/open-layers-drawing-tool';
 import { OpenLayersMousePositionTool } from './tools/open-layers-mouse-position-tool';
 import { OpenLayersScaleBarTool } from './tools/open-layers-scale-bar-tool';
 import { OpenLayersSelectTool } from './tools/open-layers-select-tool';
+import { OpenLayersModifyTool } from "./tools/open-layers-modify-tool";
 
 export class OpenLayersToolManager implements ToolManagerModel {
 
@@ -41,6 +42,9 @@ export class OpenLayersToolManager implements ToolManagerModel {
     }
     if (ToolTypeHelper.isSelectTool(tool)) {
       this.tools.set(toolId, new OpenLayersSelectTool(toolId, tool, this.olMap, this.ngZone));
+    }
+    if (ToolTypeHelper.isModifyTool(tool)) {
+      this.tools.set(toolId, new OpenLayersModifyTool(toolId, tool, this.olMap, this.ngZone));
     }
     if (tool.alwaysEnabled) {
       this.alwaysEnabledTools.add(toolId);
