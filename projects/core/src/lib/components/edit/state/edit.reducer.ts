@@ -31,6 +31,7 @@ const onLoadFeatureInfo = (
   mapCoordinates: payload.coordinates,
   loadStatus: LoadingStateEnum.LOADING,
   features: [],
+  dialogVisible: false,
 });
 
 const onLoadEditFeaturesSuccess = (
@@ -38,14 +39,14 @@ const onLoadEditFeaturesSuccess = (
   payload: ReturnType<typeof EditActions.loadEditFeaturesSuccess>,
 ): EditState => {
   const features = payload.featureInfo.reduce<FeatureInfoFeatureModel[]>((allFeatures, featureInfoModel) => allFeatures.concat(featureInfoModel.features), []);
-  const selectedFeature = features.length === 0 ? features[0].__fid : null;
+  const selectedFeature = features.length === 1 ? features[0].__fid : null;
   return {
     ...state,
     features,
     columnMetadata: payload.featureInfo.reduce<FeatureInfoColumnMetadataModel[]>((allMetadata, featureInfoModel) => allMetadata.concat(featureInfoModel.columnMetadata), []),
     loadStatus: LoadingStateEnum.LOADED,
     selectedFeature,
-    dialogVisible: true,
+    dialogVisible: features.length > 0,
     dialogCollapsed: false,
   };
 };
@@ -78,6 +79,7 @@ const onHideEditDialog = (state: EditState): EditState => ({
   ...state,
   dialogVisible: false,
   dialogCollapsed: false,
+  selectedFeature: null,
 });
 
 const onExpandCollapseEditDialog = (state: EditState): EditState => ({

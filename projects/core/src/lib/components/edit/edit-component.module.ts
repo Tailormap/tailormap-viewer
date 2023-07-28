@@ -12,6 +12,7 @@ import { EditEffects } from './state/edit.effects';
 import { EditDialogComponent } from './edit-dialog/edit-dialog.component';
 import { ApplicationMapModule } from '../../map/application-map.module';
 import { EditSelectFeatureComponent } from './edit-select-feature/edit-select-feature.component';
+import { EditGeometryToolComponent } from './edit-geometry-tool/edit-geometry-tool.component';
 
 
 @NgModule({
@@ -21,6 +22,7 @@ import { EditSelectFeatureComponent } from './edit-select-feature/edit-select-fe
     EditToolComponent,
     EditDialogComponent,
     EditSelectFeatureComponent,
+    EditGeometryToolComponent,
   ],
   imports: [
     CommonModule,
