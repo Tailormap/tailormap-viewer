@@ -9,6 +9,8 @@ services:
     image: ghcr.io/b3partners/tailormap:${VERSION:-snapshot}
     networks:
       - default
+    extra_hosts:
+      - host.docker.internal:host-gateway
     expose:
       - 8080
     environment:
