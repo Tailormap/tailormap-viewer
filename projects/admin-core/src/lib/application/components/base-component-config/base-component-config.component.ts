@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject, ChangeDetectorRef, Input, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subject, takeUntil } from 'rxjs';
-import { ComponentBaseConfigModel } from '@tailormap-viewer/api';
+import { BaseComponentTypeEnum, ComponentBaseConfigModel } from '@tailormap-viewer/api';
 import { selectComponentsConfigByType } from '../../state/application.selectors';
 import { ComponentConfigHelper } from '../../helpers/component-config.helper';
 import { updateApplicationComponentConfig } from '../../state/application.actions';
@@ -19,7 +19,7 @@ export class BaseComponentConfigComponent implements OnInit, OnDestroy {
   private destroyed = new Subject();
 
   @Input()
-  public type: string | undefined;
+  public type: BaseComponentTypeEnum | undefined;
 
   @Input()
   public label: string | undefined;
@@ -34,7 +34,7 @@ export class BaseComponentConfigComponent implements OnInit, OnDestroy {
     this.store$.select(selectComponentsConfigByType(type))
       .pipe(takeUntil(this.destroyed))
       .subscribe(config => {
-        this.config = config?.config || ComponentConfigHelper.getBaseConfig();
+        this.config = config?.config || ComponentConfigHelper.getBaseConfig(type);
         this.cdr.detectChanges();
       });
   }
