@@ -4,6 +4,7 @@ import BaseLayer from 'ol/layer/Base';
 import LayerGroup from 'ol/layer/Group';
 import VectorLayer from 'ol/layer/Vector';
 import ImageWMS from 'ol/source/ImageWMS';
+import TileWMS from 'ol/source/TileWMS';
 import WMTS from 'ol/source/WMTS';
 import XYZ from 'ol/source/XYZ';
 import { LayerManagerModel, LayerTypes } from '../models';
@@ -243,7 +244,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
       return;
     }
     const source = layer.getSource();
-    if (source instanceof ImageWMS) {
+    if (source instanceof ImageWMS || source instanceof TileWMS) {
       source.updateParams({ CACHE: Date.now() });
     }
     if (source instanceof WMTS || source instanceof XYZ) {

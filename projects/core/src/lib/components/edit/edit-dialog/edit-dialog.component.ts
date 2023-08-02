@@ -18,6 +18,7 @@ import { EditFeatureService } from '../edit-feature.service';
 import { selectViewerId } from '../../../state/core.selectors';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FeatureInfoFeatureModel } from "../../feature-info/models/feature-info-feature.model";
+import { MapService } from '@tailormap-viewer/map';
 
 @Component({
   selector: 'tm-edit-dialog',
@@ -39,12 +40,14 @@ export class EditDialogComponent implements OnInit {
 
   public updatedAttributes: FeatureModelAttributes | null = null;
   public selectableFeature$: Observable<FeatureInfoFeatureModel[]> = of([]);
+  private geometryEditedForLayer: string | null = null;
 
   constructor(
     private store$: Store,
     private applicationLayerService: ApplicationLayerService,
     private editFeatureService: EditFeatureService,
     private destroyRef: DestroyRef,
+    private mapService: MapService,
   ) {}
 
   public ngOnInit(): void {
@@ -106,6 +109,16 @@ export class EditDialogComponent implements OnInit {
         if (feature) {
           this.store$.dispatch(updateEditFeature({ feature, layerId }));
           this.updatedAttributes = null;
+          if (!this.geometryEditedForLayer) {
+            return;
+          }
+          const refreshLayerId = this.geometryEditedForLayer;
+          this.geometryEditedForLayer = null;
+          this.mapService.getLayerManager$()
+            .pipe(take(1))
+            .subscribe(manager => {
+              manager.refreshLayer(`${refreshLayerId}`);
+            });
         }
       });
   }
@@ -134,6 +147,7 @@ export class EditDialogComponent implements OnInit {
         if (feature?.feature.__fid !== $event.__fid) {
           return;
         }
+        this.geometryEditedForLayer = feature.feature.layerId;
         if (this.updatedAttributes === null) {
           this.updatedAttributes = {};
         }
