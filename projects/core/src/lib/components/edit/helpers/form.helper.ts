@@ -1,7 +1,12 @@
 import { FormFieldModel } from '../models/form-field.model';
-import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { DateTime } from 'luxon';
 
 export class FormHelper {
+
+  private static DATE_VALIDATOR_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
+  private static NUMBER_VALIDATOR_PATTERN = /^-?\d+$/;
+  private static INTEGER_VALIDATOR_PATTERN = /^-?[0-9]+$/;
 
   public static createForm(fields: FormFieldModel[]) {
     const form = new FormGroup({});
@@ -11,13 +16,13 @@ export class FormHelper {
         validators.push(Validators.required);
       }
       if (field.type === 'number') {
-        validators.push(Validators.pattern(/^-?\d+$/));
+        validators.push(Validators.pattern(FormHelper.NUMBER_VALIDATOR_PATTERN));
       }
       if (field.type === 'integer') {
-        validators.push(Validators.pattern(/^-?[0-9]+$/));
+        validators.push(Validators.pattern(FormHelper.INTEGER_VALIDATOR_PATTERN));
       }
       if (field.type === 'date') {
-        validators.push(Validators.pattern(/^\d{4}-\d{2}-\d{2}$/));
+        validators.push(FormHelper.dateValidator());
       }
       const control = new FormControl(field.value, {
         validators,
@@ -32,6 +37,25 @@ export class FormHelper {
       form.addControl(field.name, control);
     });
     return form;
+  }
+
+  public static dateValidator(): ValidatorFn {
+    return (control: AbstractControl) : ValidationErrors | null => {
+      if (control.value) {
+        const value = FormHelper.getFormValue(control.value);
+        const matches = FormHelper.DATE_VALIDATOR_PATTERN.test(`${value}`);
+        return matches ? null : { 'invalidDate': true };
+      } else {
+        return null;
+      }
+    };
+  }
+
+  public static getFormValue(value: string | number | boolean | DateTime) {
+    if (DateTime.isDateTime(value)) {
+      return value.toISODate();
+    }
+    return value;
   }
 
 }

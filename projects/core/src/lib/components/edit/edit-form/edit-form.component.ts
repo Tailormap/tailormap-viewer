@@ -5,6 +5,7 @@ import { debounceTime, map, merge, Subscription } from 'rxjs';
 import { ColumnMetadataModel, FeatureModel, LayerDetailsModel } from '@tailormap-viewer/api';
 import { EditModelHelper } from '../helpers/edit-model.helper';
 import { FormFieldModel } from '../models/form-field.model';
+import { DateTime } from 'luxon';
 
 interface EditFormInput {
   feature: FeatureModel | undefined;
@@ -75,7 +76,8 @@ export class EditFormComponent implements OnDestroy {
           this.featureAttributeChanged.emit({ attribute: changedKey, value: null, invalid: true });
           return;
         }
-        this.featureAttributeChanged.emit({ attribute: changedKey, value });
+        const val = FormHelper.getFormValue(value);
+        this.featureAttributeChanged.emit({ attribute: changedKey, value: val });
       });
     this.form.markAllAsTouched();
     this.cdr.detectChanges();
