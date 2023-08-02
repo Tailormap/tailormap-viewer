@@ -7,10 +7,7 @@ import { clearSelectedOIDCConfiguration, loadOIDCConfigurations, setOIDCConfigur
 import {
   selectOIDCConfigurationList, selectOIDCConfigurationsLoadError, selectOIDCConfigurationsLoadStatus, selectSelectedOIDCConfigurationId,
 } from '../state/oidc-configuration.selectors';
-import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
-import { environment } from '../../../../../admin-app/src/environments/environment';
-import { ConfigService } from '../../config/services/config.service';
 
 @Component({
   selector: 'tm-admin-oidc-configuration-list',
@@ -25,15 +22,10 @@ export class OIDCConfigurationListComponent implements OnInit, OnDestroy {
   public oidcConfigurationsLoadStatus$: Observable<LoadingStateEnum> = of(LoadingStateEnum.INITIAL);
   public errorMessage$: Observable<string | undefined> = of(undefined);
 
-  public viewerBaseUrl = environment.viewerBaseUrl;
-
   private destroyed = new Subject();
 
   constructor(
     private store$: Store,
-    private route: ActivatedRoute,
-    private router: Router,
-    private configService: ConfigService,
   ) {}
 
   public ngOnInit(): void {
@@ -77,10 +69,6 @@ export class OIDCConfigurationListComponent implements OnInit, OnDestroy {
 
   public onRetryClick() {
     this.store$.dispatch(loadOIDCConfigurations());
-  }
-
-  public stopPropagation(event: Event) {
-    event.stopPropagation();
   }
 
 }
