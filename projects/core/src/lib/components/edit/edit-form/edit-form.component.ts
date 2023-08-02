@@ -75,7 +75,8 @@ export class EditFormComponent implements OnDestroy {
           this.featureAttributeChanged.emit({ attribute: changedKey, value: null, invalid: true });
           return;
         }
-        this.featureAttributeChanged.emit({ attribute: changedKey, value });
+        const val = FormHelper.getFormValue(value);
+        this.featureAttributeChanged.emit({ attribute: changedKey, value: val });
       });
     this.form.markAllAsTouched();
     this.cdr.detectChanges();
