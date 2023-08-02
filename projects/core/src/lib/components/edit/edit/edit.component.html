@@ -6,6 +6,7 @@
   <button mat-flat-button
           class="map-control-button"
           [class.disabled]="disabled"
+          [class.toggle-button--active]="active$ | async"
           [tmTooltip]="tooltip"
           (click)="!disabled ? toggle() : null">
     <mat-icon svgIcon="edit"></mat-icon>
@@ -14,8 +15,9 @@
   <div class="edit-wrapper"
        *ngIf="active$ | async">
     <ng-container>
-      <mat-form-field *ngIf="editableLayers.length > 0">
-        <mat-select [formControl]="layer">
+      <mat-form-field *ngIf="editableLayers.length > 0" appearance="outline" color="primary">
+        <mat-label i18n>Select layer to edit</mat-label>
+        <mat-select [formControl]="layer" tmAutoFocus>
           <mat-option *ngFor="let layer of editableLayers" [value]="layer.id">
             {{layer.title || layer.layerName}}
           </mat-option>
