@@ -5,7 +5,6 @@ import { debounceTime, map, merge, Subscription } from 'rxjs';
 import { ColumnMetadataModel, FeatureModel, LayerDetailsModel } from '@tailormap-viewer/api';
 import { EditModelHelper } from '../helpers/edit-model.helper';
 import { FormFieldModel } from '../models/form-field.model';
-import { DateTime } from 'luxon';
 
 interface EditFormInput {
   feature: FeatureModel | undefined;
