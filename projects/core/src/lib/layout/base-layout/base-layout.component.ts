@@ -25,7 +25,7 @@ export class BaseLayoutComponent implements OnInit {
     if (!componentConfig
       || typeof componentConfig.config === 'undefined'
       || typeof componentConfig.config.enabled === 'undefined') {
-      return !BaseComponentConfigHelper.isComponentsDisabledByDefault(componentType);
+      return !BaseComponentConfigHelper.isComponentDisabledByDefault(componentType);
     }
     return componentConfig.config.enabled;
   }

@@ -6,7 +6,7 @@ export class BaseComponentConfigHelper {
     BaseComponentTypeEnum.EDIT,
   ]);
 
-  public static isComponentsDisabledByDefault(component: BaseComponentTypeEnum) {
+  public static isComponentDisabledByDefault(component: BaseComponentTypeEnum) {
     return BaseComponentConfigHelper.componentsDisabledByDefault.has(component);
   }
 

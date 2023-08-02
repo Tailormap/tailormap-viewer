@@ -3,7 +3,7 @@ import { BaseComponentConfigHelper, BaseComponentTypeEnum, ComponentBaseConfigMo
 export class ComponentConfigHelper {
 
   public static getBaseConfig(type: BaseComponentTypeEnum): ComponentBaseConfigModel {
-    const defaultDisabled = BaseComponentConfigHelper.isComponentsDisabledByDefault(type);
+    const defaultDisabled = BaseComponentConfigHelper.isComponentDisabledByDefault(type);
     return {
       enabled: !defaultDisabled,
     };
