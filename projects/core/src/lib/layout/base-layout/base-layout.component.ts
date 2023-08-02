@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectComponentsConfig } from '../../state/core.selectors';
-import { BaseComponentTypeEnum, ComponentModel } from '@tailormap-viewer/api';
+import { BaseComponentTypeEnum, BaseComponentConfigHelper, ComponentModel } from '@tailormap-viewer/api';
 import { Observable, of } from 'rxjs';
 
 @Component({
@@ -20,12 +20,12 @@ export class BaseLayoutComponent implements OnInit {
     this.componentsConfig$ = this.store$.select(selectComponentsConfig);
   }
 
-  public isComponentEnabled(config: ComponentModel[], componentType: string) {
+  public isComponentEnabled(config: ComponentModel[], componentType: BaseComponentTypeEnum) {
     const componentConfig = (config || []).find(c => c.type === componentType);
     if (!componentConfig
       || typeof componentConfig.config === 'undefined'
       || typeof componentConfig.config.enabled === 'undefined') {
-      return true;
+      return !BaseComponentConfigHelper.isComponentDisabledByDefault(componentType);
     }
     return componentConfig.config.enabled;
   }
