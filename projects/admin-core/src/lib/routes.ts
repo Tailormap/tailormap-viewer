@@ -11,9 +11,11 @@ export enum RoutesEnum {
   USER_CREATE = 'create',
   USER_DETAILS = 'user/:userName',
   GROUP = 'groups',
+  // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
   GROUP_CREATE = 'create',
   GROUP_DETAILS = 'group/:groupName',
   APPLICATION = 'applications',
+  // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
   APPLICATION_CREATE = 'create',
   APPLICATION_DETAILS = 'application/:applicationId',
   APPLICATION_DETAILS_LAYERS = 'layers',
@@ -22,6 +24,7 @@ export enum RoutesEnum {
   APPLICATION_DETAILS_STYLING = 'styling',
 
   OIDC_CONFIGURATION = 'oidc-configurations',
+  // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
   OIDC_CONFIGURATION_CREATE = 'create',
   OIDC_CONFIGURATION_DETAILS = 'oidc-configuration/:oidcConfigurationId',
 }

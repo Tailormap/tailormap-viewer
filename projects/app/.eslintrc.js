@@ -5,6 +5,7 @@ module.exports = {
   "extends": path.resolve(__dirname, "../../.eslintrc.json"),
   "ignorePatterns": [
     "!**/*",
+    "**/environment.prod.ts"
   ],
   "overrides": [
     {
