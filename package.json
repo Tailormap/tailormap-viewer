@@ -77,7 +77,7 @@
     "@types/geojson": "^7946.0.10",
     "@types/jest": "^29.4.4",
     "@types/luxon": "^3.2.2",
-    "@types/node": "^18.15.11",
+    "@types/node": "^18.17.5",
     "@types/proj4": "^2.5.2",
     "@typescript-eslint/eslint-plugin": "^5.59.7",
     "@typescript-eslint/parser": "^5.59.7",
