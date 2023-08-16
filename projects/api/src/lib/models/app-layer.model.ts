@@ -17,6 +17,8 @@ export interface AppLayerModel {
   hiDpiDisabled?: boolean;
   hiDpiMode?: TileLayerHiDpiMode;
   hiDpiSubstituteLayer?: string;
+  minZoom?: number;
+  maxZoom?: number;
   opacity: number;
   attribution?: string;
   description?: string;

@@ -10,9 +10,9 @@ describe('LayerTypesHelper', () => {
     expect(LayerTypesHelper.isWmsLayer(getLayer(LayerTypesEnum.WMTS))).toEqual(false);
   });
 
-  test('checks isTmsLayer', () => {
-    expect(LayerTypesHelper.isTmsLayer(getLayer(LayerTypesEnum.TMS))).toEqual(true);
-    expect(LayerTypesHelper.isTmsLayer(getLayer(LayerTypesEnum.WMS))).toEqual(false);
+  test('checks isXyzLayer', () => {
+    expect(LayerTypesHelper.isXyzLayer(getLayer(LayerTypesEnum.XYZ))).toEqual(true);
+    expect(LayerTypesHelper.isXyzLayer(getLayer(LayerTypesEnum.WMS))).toEqual(false);
   });
 
   test('checks isVectorLayer', () => {

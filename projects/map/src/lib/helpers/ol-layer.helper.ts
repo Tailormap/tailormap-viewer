@@ -3,7 +3,7 @@ import Projection from 'ol/proj/Projection';
 import TileLayer from 'ol/layer/Tile';
 import WMTS, { optionsFromCapabilities } from 'ol/source/WMTS';
 import XYZ from 'ol/source/XYZ';
-import { TMSLayerModel } from '../models/tms-layer.model';
+import { XyzLayerModel } from '../models/xyz-layer.model';
 import { LayerTypesHelper } from './layer-types.helper';
 import { OgcHelper } from './ogc.helper';
 import { LayerModel } from '../models/layer.model';
@@ -73,8 +73,8 @@ export class OlLayerHelper {
     ngZone?: NgZone,
     httpXsrfTokenExtractor?: HttpXsrfTokenExtractor,
   ): TileLayer<TileWMS> | ImageLayer<ImageWMS> | TileLayer<XYZ> | TileLayer<WMTS> | null {
-    if (LayerTypesHelper.isTmsLayer(layer)) {
-      return OlLayerHelper.createTMSLayer(layer, projection);
+    if (LayerTypesHelper.isXyzLayer(layer)) {
+      return OlLayerHelper.createXYZLayer(layer, projection);
     }
     if (LayerTypesHelper.isWmsLayer(layer)) {
       return OlLayerHelper.createWMSLayer(layer, projection, ngZone, httpXsrfTokenExtractor);
@@ -153,12 +153,13 @@ export class OlLayerHelper {
     });
   }
 
-  public static createTMSLayer(layer: TMSLayerModel, projection: Projection): TileLayer<XYZ> {
+  public static createXYZLayer(layer: XyzLayerModel, projection: Projection): TileLayer<XYZ> {
     return new TileLayer({
       visible: layer.visible,
-
       source: new XYZ({
-        ...layer.xyzOptions,
+        url: layer.url,
+        minZoom: layer.minZoom,
+        maxZoom: layer.maxZoom,
         crossOrigin: layer.crossOrigin,
         projection,
         tilePixelRatio: layer.tilePixelRatio,

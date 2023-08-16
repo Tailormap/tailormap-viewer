@@ -22,7 +22,6 @@ export * from './feature-type-info.model';
 export * from './feature-source-protocol.enum';
 export * from './jdbc-database-type';
 export * from './jdbc-connection-properties.model';
-export * from './tile-layer-hi-dpi-mode.enum';
 export * from './service-authentication.model';
 export * from './user.model';
 export * from './group.model';

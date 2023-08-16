@@ -16,6 +16,7 @@
            i18n-placeholder
            formControlName="url"
     />
+    <mat-hint *ngIf="isXyz()">Enter an URL template such as <span class="monospace">https://tile.openstreetmap.org/{{ "{" }}z}/{{ "{" }}x}/{{ "{" }}y}.png</span></mat-hint>
   </mat-form-field>
   <mat-form-field>
     <mat-select formControlName="protocol">

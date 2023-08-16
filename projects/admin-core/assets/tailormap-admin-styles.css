@@ -53,3 +53,7 @@ tm-tree .tree-node-wrapper--leaf {
 mat-hint.error {
   color: var(--error-color);
 }
+
+.monospace {
+  font-family: monospace;
+}

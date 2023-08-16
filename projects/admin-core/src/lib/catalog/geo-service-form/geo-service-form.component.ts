@@ -20,7 +20,7 @@ export class GeoServiceFormComponent implements OnInit {
   private destroyed = new Subject();
   private _geoService: ExtendedGeoServiceModel | null = null;
 
-  public protocols: GeoServiceProtocolEnum[] = [ GeoServiceProtocolEnum.WMS, GeoServiceProtocolEnum.WMTS ];
+  public protocols: GeoServiceProtocolEnum[] = [ GeoServiceProtocolEnum.WMS, GeoServiceProtocolEnum.WMTS, GeoServiceProtocolEnum.XYZ ];
 
   @Input()
   public set geoService(geoService: ExtendedGeoServiceModel | null) {
@@ -66,6 +66,10 @@ export class GeoServiceFormComponent implements OnInit {
   private formHasAuthentication() {
     const value = this.geoServiceForm.getRawValue();
     return StringHelper.isNotBlank(value.username) && StringHelper.isNotBlank(value.password);
+  }
+
+  public isXyz() {
+    return this.geoServiceForm.get('protocol')?.value === GeoServiceProtocolEnum.XYZ;
   }
 
   public ngOnInit(): void {

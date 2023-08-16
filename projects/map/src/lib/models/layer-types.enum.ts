@@ -1,6 +1,6 @@
 export enum LayerTypesEnum {
   Vector,
-  TMS,
+  XYZ,
   WMS,
   WMTS,
 }
