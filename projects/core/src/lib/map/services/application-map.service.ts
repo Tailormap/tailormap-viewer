@@ -105,6 +105,7 @@ export class ApplicationMapService implements OnDestroy {
             url: extendedAppLayer.url || service.url,
             crossOrigin: 'anonymous', // We don't want a 'tainted canvas' for features such as printing. TM requires CORS-enabled or proxied services.
             capabilities: capabilities || '',
+            hiDpiDisabled: extendedAppLayer.hiDpiDisabled,
             hiDpiMode: extendedAppLayer.hiDpiMode,
             hiDpiSubstituteLayer: extendedAppLayer.hiDpiSubstituteLayer,
             opacity: extendedAppLayer.opacity,
@@ -121,6 +122,7 @@ export class ApplicationMapService implements OnDestroy {
         visible: extendedAppLayer.visible,
         url: extendedAppLayer.url || service.url,
         crossOrigin: 'anonymous', // We don't want a 'tainted canvas' for features such as printing. TM requires CORS-enabled or proxied services.
+        hiDpiDisabled: extendedAppLayer.hiDpiDisabled,
         serverType: service.serverType,
         tilingDisabled: extendedAppLayer.tilingDisabled,
         tilingGutter: extendedAppLayer.tilingGutter,
