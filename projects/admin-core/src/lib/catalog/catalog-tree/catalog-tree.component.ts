@@ -6,7 +6,7 @@ import { BehaviorSubject, filter, map } from 'rxjs';
 import { CatalogTreeModel, CatalogTreeModelMetadataTypes } from '../models/catalog-tree.model';
 import { CatalogTreeHelper } from '../helpers/catalog-tree.helper';
 import { NavigationEnd, Router } from '@angular/router';
-import { RoutesEnum } from '../../routes';
+import { Routes } from '../../routes';
 import { CatalogTreeModelTypeEnum } from '../models/catalog-tree-model-type.enum';
 import { CatalogTreeService } from '../services/catalog-tree.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -62,7 +62,7 @@ export class CatalogTreeComponent implements OnInit {
 
   private readNodesFromUrl(url: string): Array<{ type: CatalogTreeModelTypeEnum; treeNodeId: string; id: string }> {
     const currentRoute = url
-      .replace(RoutesEnum.CATALOG, '')
+      .replace(Routes.CATALOG, '')
       .split('/')
       .filter(part => !!part);
     const parts: Array<{ type: CatalogTreeModelTypeEnum; treeNodeId: string; id: string }> = [];

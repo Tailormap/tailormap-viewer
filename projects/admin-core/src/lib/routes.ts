@@ -1,30 +1,31 @@
-export enum RoutesEnum {
-  ADMIN_HOME = '',
-  LOGIN = 'login',
-  CATALOG = 'catalog',
-  CATALOG_NODE_DETAILS = 'node/:nodeId',
-  CATALOG_SERVICE_DETAILS = 'node/:nodeId/service/:serviceId',
-  CATALOG_LAYER_DETAILS = 'node/:nodeId/service/:serviceId/layer/:layerId',
-  FEATURE_SOURCE_DETAILS = 'node/:nodeId/feature-source/:featureSourceId',
-  FEATURE_TYPE_DETAILS = 'node/:nodeId/feature-source/:featureSourceId/feature-type/:featureTypeId',
-  USER = 'users',
-  USER_CREATE = 'create',
-  USER_DETAILS = 'user/:userName',
-  GROUP = 'groups',
-  // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
-  GROUP_CREATE = 'create',
-  GROUP_DETAILS = 'group/:groupName',
-  APPLICATION = 'applications',
-  // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
-  APPLICATION_CREATE = 'create',
-  APPLICATION_DETAILS = 'application/:applicationId',
-  APPLICATION_DETAILS_LAYERS = 'layers',
-  APPLICATION_DETAILS_BASE_LAYERS = 'base-layers',
-  APPLICATION_DETAILS_COMPONENTS = 'components',
-  APPLICATION_DETAILS_STYLING = 'styling',
+export class Routes {
+  public static ADMIN_HOME = '';
+  public static LOGIN = 'login';
 
-  OIDC_CONFIGURATION = 'oidc-configurations',
-  // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
-  OIDC_CONFIGURATION_CREATE = 'create',
-  OIDC_CONFIGURATION_DETAILS = 'oidc-configuration/:oidcConfigurationId',
+  public static CATALOG = 'catalog';
+  public static CATALOG_NODE_DETAILS = 'node/:nodeId';
+  public static CATALOG_SERVICE_DETAILS = 'node/:nodeId/service/:serviceId';
+  public static CATALOG_LAYER_DETAILS = 'node/:nodeId/service/:serviceId/layer/:layerId';
+  public static FEATURE_SOURCE_DETAILS = 'node/:nodeId/feature-source/:featureSourceId';
+  public static FEATURE_TYPE_DETAILS = 'node/:nodeId/feature-source/:featureSourceId/feature-type/:featureTypeId';
+
+  public static USER = 'users';
+  public static USER_CREATE = 'create';
+  public static USER_DETAILS = 'user/:userName';
+
+  public static GROUP = 'groups';
+  public static GROUP_CREATE = 'create';
+  public static GROUP_DETAILS = 'group/:groupName';
+
+  public static APPLICATION = 'applications';
+  public static APPLICATION_CREATE = 'create';
+  public static APPLICATION_DETAILS = 'application/:applicationId';
+  public static APPLICATION_DETAILS_LAYERS = 'layers';
+  public static APPLICATION_DETAILS_BASE_LAYERS = 'base-layers';
+  public static APPLICATION_DETAILS_COMPONENTS = 'components';
+  public static APPLICATION_DETAILS_STYLING = 'styling';
+
+  public static OIDC_CONFIGURATION = 'oidc-configurations';
+  public static OIDC_CONFIGURATION_CREATE = 'create';
+  public static OIDC_CONFIGURATION_DETAILS = 'oidc-configuration/:oidcConfigurationId';
 }

@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectApplicationsLoadStatus, selectDraftApplication, selectDraftApplicationUpdated } from '../state/application.selectors';
 import { ApplicationModel } from '@tailormap-admin/admin-api';
-import { RoutesEnum } from '../../routes';
+import { Routes } from '../../routes';
 import { clearSelectedApplication, setSelectedApplication } from '../state/application.actions';
 import { ConfirmDialogService, LoadingStateEnum } from '@tailormap-viewer/shared';
 import { ApplicationService } from '../services/application.service';
@@ -27,7 +27,12 @@ export class ApplicationEditComponent implements OnInit, OnDestroy {
   public application$: Observable<ApplicationModel | null> = of(null);
   public draftApplicationPristine$: Observable<boolean> = of(false);
 
-  public readonly routes = RoutesEnum;
+  public readonly routes = {
+    APPLICATION_DETAILS_LAYERS: Routes.APPLICATION_DETAILS_LAYERS,
+    APPLICATION_DETAILS_BASE_LAYERS: Routes.APPLICATION_DETAILS_BASE_LAYERS,
+    APPLICATION_DETAILS_STYLING: Routes.APPLICATION_DETAILS_STYLING,
+    APPLICATION_DETAILS_COMPONENTS: Routes.APPLICATION_DETAILS_COMPONENTS,
+  };
 
   constructor(
     private route: ActivatedRoute,

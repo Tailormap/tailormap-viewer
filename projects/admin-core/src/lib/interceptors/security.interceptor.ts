@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 import { setInsufficientRights, setRouteBeforeLogin } from '../state/admin-core.actions';
-import { RoutesEnum } from '../routes';
+import { Routes } from '../routes';
 import { TailormapSecurityApiV1Service } from '@tailormap-viewer/api';
 import { selectUserDetails } from '../state/admin-core.selectors';
 
@@ -28,7 +28,7 @@ export class SecurityInterceptor implements HttpInterceptor {
             // If the user is authenticated but gets a 401, it means that the user is not authorized to access the resource.
             this.store$.dispatch(setInsufficientRights({ hasInsufficientRights: true }));
           }
-          this.router.navigateByUrl(RoutesEnum.LOGIN);
+          this.router.navigateByUrl(Routes.LOGIN);
         });
     })(req, next);
   }
