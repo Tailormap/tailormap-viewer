@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminHomePageComponent } from './pages/admin-home-page/admin-home-page.component';
 import { CatalogPageComponent } from './pages/catalog-page/catalog-page.component';
-import { Routes } from './routes';
+import { Routes as AdminRoutes } from './routes';
 import { GeoServiceDetailsComponent } from './catalog/geo-service-details/geo-service-details.component';
 import { GeoServiceLayerDetailsComponent } from './catalog/geo-service-layer-details/geo-service-layer-details.component';
 import { CatalogNodeDetailsComponent } from './catalog/catalog-node-details/catalog-node-details.component';
@@ -34,7 +34,7 @@ import { GroupEditComponent } from './user/group-edit/group-edit.component';
 
 const routes: Routes = [
   {
-    path: Routes.CATALOG,
+    path: AdminRoutes.CATALOG,
     component: CatalogPageComponent,
     children: [
       {
@@ -42,29 +42,29 @@ const routes: Routes = [
         component: CatalogHomeComponent,
       },
       {
-        path: Routes.CATALOG_LAYER_DETAILS,
+        path: AdminRoutes.CATALOG_LAYER_DETAILS,
         component: GeoServiceLayerDetailsComponent,
       },
       {
-        path: Routes.CATALOG_SERVICE_DETAILS,
+        path: AdminRoutes.CATALOG_SERVICE_DETAILS,
         component: GeoServiceDetailsComponent,
       },
       {
-        path: Routes.CATALOG_NODE_DETAILS,
+        path: AdminRoutes.CATALOG_NODE_DETAILS,
         component: CatalogNodeDetailsComponent,
       },
       {
-        path: Routes.FEATURE_SOURCE_DETAILS,
+        path: AdminRoutes.FEATURE_SOURCE_DETAILS,
         component: FeatureSourceDetailsComponent,
       },
       {
-        path: Routes.FEATURE_TYPE_DETAILS,
+        path: AdminRoutes.FEATURE_TYPE_DETAILS,
         component: FeatureTypeDetailsComponent,
       },
     ],
   },
   {
-    path: Routes.APPLICATION,
+    path: AdminRoutes.APPLICATION,
     component: ApplicationPageComponent,
     children: [
       {
@@ -72,11 +72,11 @@ const routes: Routes = [
         component: ApplicationHomeComponent,
       },
       {
-        path: Routes.APPLICATION_CREATE,
+        path: AdminRoutes.APPLICATION_CREATE,
         component: ApplicationCreateComponent,
       },
       {
-        path: Routes.APPLICATION_DETAILS,
+        path: AdminRoutes.APPLICATION_DETAILS,
         component: ApplicationEditComponent,
         data: { className: 'full-screen-settings' },
         children: [
@@ -85,19 +85,19 @@ const routes: Routes = [
             component: ApplicationEditSettingsComponent,
           },
           {
-            path: Routes.APPLICATION_DETAILS_LAYERS,
+            path: AdminRoutes.APPLICATION_DETAILS_LAYERS,
             component: ApplicationEditLayersComponent,
           },
           {
-            path: Routes.APPLICATION_DETAILS_BASE_LAYERS,
+            path: AdminRoutes.APPLICATION_DETAILS_BASE_LAYERS,
             component: ApplicationEditBaseLayersComponent,
           },
           {
-            path: Routes.APPLICATION_DETAILS_COMPONENTS,
+            path: AdminRoutes.APPLICATION_DETAILS_COMPONENTS,
             component: ApplicationEditComponentsComponent,
           },
           {
-            path: Routes.APPLICATION_DETAILS_STYLING,
+            path: AdminRoutes.APPLICATION_DETAILS_STYLING,
             component: ApplicationEditStylingComponent,
           },
         ],
@@ -105,7 +105,7 @@ const routes: Routes = [
     ],
   },
   {
-    path: Routes.OIDC_CONFIGURATION,
+    path: AdminRoutes.OIDC_CONFIGURATION,
     component: OIDCConfigurationPageComponent,
     children: [
       {
@@ -113,21 +113,21 @@ const routes: Routes = [
         component: OIDCConfigurationHomeComponent,
       },
       {
-        path: Routes.OIDC_CONFIGURATION_CREATE,
+        path: AdminRoutes.OIDC_CONFIGURATION_CREATE,
         component: OIDCConfigurationCreateComponent,
       },
       {
-        path: Routes.OIDC_CONFIGURATION_DETAILS,
+        path: AdminRoutes.OIDC_CONFIGURATION_DETAILS,
         component: OIDCConfigurationEditComponent,
       },
     ],
   },
   // IMPORTANT: When you add a route, also add it to the FrontController class of tailormap-api, otherwise a user will get a 404 when
   // pressing F5 in their browser on your route.
-  { path: Routes.ADMIN_HOME, component: AdminHomePageComponent },
-  { path: Routes.LOGIN, component: AdminLoginPageComponent },
+  { path: AdminRoutes.ADMIN_HOME, component: AdminHomePageComponent },
+  { path: AdminRoutes.LOGIN, component: AdminLoginPageComponent },
   {
-    path: Routes.USER,
+    path: AdminRoutes.USER,
     component: UserAdminPageComponent,
     children: [
       {
@@ -135,17 +135,17 @@ const routes: Routes = [
         component: UserHomeComponent,
       },
       {
-        path: Routes.USER_CREATE,
+        path: AdminRoutes.USER_CREATE,
         component: UserCreateComponent,
       },
       {
-        path: Routes.USER_DETAILS,
+        path: AdminRoutes.USER_DETAILS,
         component: UserEditComponent,
       },
     ],
   },
   {
-    path: Routes.GROUP,
+    path: AdminRoutes.GROUP,
     component: GroupsPageComponent,
     children: [
       {
@@ -153,11 +153,11 @@ const routes: Routes = [
         component: GroupHomeComponent,
       },
       {
-        path: Routes.GROUP_CREATE,
+        path: AdminRoutes.GROUP_CREATE,
         component: GroupCreateComponent,
       },
       {
-        path: Routes.GROUP_DETAILS,
+        path: AdminRoutes.GROUP_DETAILS,
         component: GroupEditComponent,
       },
     ],
