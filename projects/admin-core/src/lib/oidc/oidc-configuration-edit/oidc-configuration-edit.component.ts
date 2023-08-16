@@ -6,7 +6,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectOIDCConfigurationsLoadStatus, selectDraftOIDCConfiguration, selectDraftOIDCConfigurationUpdated } from '../state/oidc-configuration.selectors';
 import { OIDCConfigurationModel } from '@tailormap-admin/admin-api';
-import { RoutesEnum } from '../../routes';
 import { clearSelectedOIDCConfiguration, setSelectedOIDCConfiguration } from '../state/oidc-configuration.actions';
 import { ConfirmDialogService, LoadingStateEnum } from '@tailormap-viewer/shared';
 import { OIDCConfigurationService } from '../services/oidc-configuration.service';
@@ -26,8 +25,6 @@ export class OIDCConfigurationEditComponent implements OnInit, OnDestroy {
   private destroyed = new Subject();
   public oidcConfiguration$: Observable<OIDCConfigurationModel | null | undefined> = of(null);
   public draftOIDCConfigurationPristine$: Observable<boolean> = of(false);
-
-  public readonly routes = RoutesEnum;
 
   constructor(
     private route: ActivatedRoute,

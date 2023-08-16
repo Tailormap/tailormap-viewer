@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, Inject } from '@angular/core';
-import { RoutesEnum } from '../../../routes';
+import { Routes } from '../../../routes';
 import { Store } from '@ngrx/store';
 import { selectUserDetails } from '../../../state/admin-core.selectors';
 import { map, Observable, of, take } from 'rxjs';
@@ -17,12 +17,12 @@ interface ButtonProps {
 }
 
 const availableButtons: ButtonProps[] = [
-  { label: $localize `Home`, matchExact: true, link: RoutesEnum.ADMIN_HOME, icon: 'admin_home', requireAdmin: false },
-  { label: $localize `Catalog`, matchExact: false, link: RoutesEnum.CATALOG, icon: 'admin_catalog', requireAdmin: true },
-  { label: $localize `Users`, matchExact: true, link: RoutesEnum.USER, icon: 'admin_user', requireAdmin: true },
-  { label: $localize `Groups`, matchExact: true, link: RoutesEnum.GROUP, icon: 'admin_groups', requireAdmin: true },
-  { label: $localize `Applications`, matchExact: false, link: RoutesEnum.APPLICATION, icon: 'admin_application', requireAdmin: true },
-  { label: $localize `Single-sign on`, matchExact: false, link: RoutesEnum.OIDC_CONFIGURATION, icon: 'key', requireAdmin: true },
+  { label: $localize `Home`, matchExact: true, link: Routes.ADMIN_HOME, icon: 'admin_home', requireAdmin: false },
+  { label: $localize `Catalog`, matchExact: false, link: Routes.CATALOG, icon: 'admin_catalog', requireAdmin: true },
+  { label: $localize `Users`, matchExact: true, link: Routes.USER, icon: 'admin_user', requireAdmin: true },
+  { label: $localize `Groups`, matchExact: true, link: Routes.GROUP, icon: 'admin_groups', requireAdmin: true },
+  { label: $localize `Applications`, matchExact: false, link: Routes.APPLICATION, icon: 'admin_application', requireAdmin: true },
+  { label: $localize `Single-sign on`, matchExact: false, link: Routes.OIDC_CONFIGURATION, icon: 'key', requireAdmin: true },
 ];
 
 @Component({
