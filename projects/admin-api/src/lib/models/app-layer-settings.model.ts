@@ -3,4 +3,5 @@ export interface AppLayerSettingsModel {
   opacity?: number;
   attribution?: string | null;
   description?: string | null;
+  editable?: boolean;
 }
