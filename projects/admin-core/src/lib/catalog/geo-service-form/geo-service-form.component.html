@@ -25,7 +25,7 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
-  <mat-expansion-panel>
+  <mat-expansion-panel *ngIf="!isXyz()">
     <mat-expansion-panel-header>
       <mat-panel-title i18n style="flex-grow: 1">Authentication and proxy</mat-panel-title>
       <mat-panel-description style="flex-grow: 1">
