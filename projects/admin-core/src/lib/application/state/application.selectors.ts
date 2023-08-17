@@ -4,6 +4,7 @@ import { ApplicationTreeHelper } from '../helpers/application-tree.helper';
 import { selectGeoServiceLayersWithSettingsApplied } from '../../catalog/state/catalog.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { AppLayerSettingsModel, AppTreeNodeModel } from '@tailormap-admin/admin-api';
+import { BaseComponentConfigHelper } from '@tailormap-viewer/api';
 
 const selectApplicationState = createFeatureSelector<ApplicationState>(applicationStateKey);
 
@@ -107,12 +108,14 @@ export const selectComponentsConfigByType = (type: string) => createSelector(
 export const selectDisabledComponentsForSelectedApplication = createSelector(
   selectComponentsConfig,
   (config): string[] => {
+    const defaultDisabled = Array.from(BaseComponentConfigHelper.componentsDisabledByDefault);
     if (!config || !Array.isArray(config)) {
-      return [];
+      return defaultDisabled;
     }
-    return (config || [])
-      .filter(c => !c.config.enabled)
-      .map(c => c.type);
+    return [
+      ...defaultDisabled.filter(c => !config.find(cmp => cmp.type === c)?.config.enabled),
+      ...config.filter(c => !c.config.enabled).map(c => c.type),
+    ];
   });
 
 export const selectStylingConfig = createSelector(selectDraftApplication, application => application?.styling);
