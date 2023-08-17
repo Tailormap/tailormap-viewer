@@ -158,8 +158,8 @@ export class OlLayerHelper {
       visible: layer.visible,
       source: new XYZ({
         url: layer.url,
-        minZoom: layer.minZoom,
-        maxZoom: layer.maxZoom,
+        minZoom: layer.minZoom || undefined,
+        maxZoom: layer.maxZoom || undefined,
         crossOrigin: layer.crossOrigin,
         projection,
         tilePixelRatio: layer.tilePixelRatio,
