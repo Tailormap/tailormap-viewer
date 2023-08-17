@@ -69,20 +69,18 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
 
     this.loadingServices$ = this.store$.select(isLoadingApplicationServices);
 
-    if (this.applicationStateTree === 'layer') {
-      this.applicationTreeService.setSelectedNode(this.selectedNode$
-        .pipe(map(node => node?.id || '')),
-      );
-      this.applicationTreeService.selectionStateChangedSource$
-        .pipe(takeUntil(this.destroyed))
-        .subscribe(node => {
-          if (!node.metadata) {
-            this.selectedNodeIdSubject.next(null);
-            return;
-          }
-          this.selectedNodeIdSubject.next(node);
-        });
-    }
+    this.applicationTreeService.setSelectedNode(this.selectedNode$
+      .pipe(map(node => node?.id || '')),
+    );
+    this.applicationTreeService.selectionStateChangedSource$
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(node => {
+        if (!node.metadata) {
+          this.selectedNodeIdSubject.next(null);
+          return;
+        }
+        this.selectedNodeIdSubject.next(node);
+      });
   }
 
   public ngOnDestroy(): void {
