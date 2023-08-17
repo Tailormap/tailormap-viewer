@@ -3,7 +3,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { TailormapAdminApiV1ServiceModel } from './tailormap-admin-api-v1-service.model';
 import { map, Observable } from 'rxjs';
 import {
-  CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel, ConfigModel, OIDCConfigurationModel,
+  CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel, ConfigModel,
+  OIDCConfigurationModel, FeatureTypeModel,
 } from '../models';
 import { CatalogModelHelper } from '../helpers/catalog-model.helper';
 import { TailormapApiConstants } from '@tailormap-viewer/api';
@@ -90,7 +91,7 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
 
   public getFeatureSource$(params: { id: string }): Observable<FeatureSourceModel> {
     return this.httpClient.get<FeatureSourceModel>(`${TailormapAdminApiV1Service.BASE_URL}/feature-sources/${params.id}`)
-      .pipe(map(CatalogModelHelper.addTypeToFeatureSourceModel));
+      .pipe(map(CatalogModelHelper.addTypeAndFeatureTypesToFeatureSourceModel));
   }
 
   public getFeatureSources$(params: { ids: string[] }): Observable<FeatureSourceModel[]> {
@@ -98,7 +99,7 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
       params: {
         ids: params.ids.join(','),
       },
-    }).pipe(map(response => (response?._embedded['feature-sources'] || []).map(CatalogModelHelper.addTypeToFeatureSourceModel)));
+    }).pipe(map(response => (response?._embedded['feature-sources'] || []).map(CatalogModelHelper.addTypeAndFeatureTypesToFeatureSourceModel)));
   }
 
   public getAllFeatureSources$(params: { excludingIds: string[] }): Observable<FeatureSourceModel[]> {
@@ -108,7 +109,7 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
       })
       : this.httpClient.get<FeatureSourceListResponse>(`${TailormapAdminApiV1Service.BASE_URL}/feature-sources?size=1000&sort=title`);
     return request$
-      .pipe(map(response => (response?._embedded['feature-sources'] || []).map(CatalogModelHelper.addTypeToFeatureSourceModel)));
+      .pipe(map(response => (response?._embedded['feature-sources'] || []).map(CatalogModelHelper.addTypeAndFeatureTypesToFeatureSourceModel)));
   }
 
   public createFeatureSource$(params: { featureSource: Omit<FeatureSourceModel, 'id'>; refreshCapabilities?: boolean }): Observable<FeatureSourceModel> {
@@ -118,7 +119,7 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
         ...params.featureSource,
         refreshCapabilities: !!params.refreshCapabilities,
       },
-    ).pipe(map(CatalogModelHelper.addTypeToFeatureSourceModel));
+    ).pipe(map(CatalogModelHelper.addTypeAndFeatureTypesToFeatureSourceModel));
   }
 
   public updateFeatureSource$(params: { id: string; featureSource: FeatureSourceModel; refreshCapabilities?: boolean }): Observable<FeatureSourceModel> {
@@ -128,7 +129,7 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
         ...params.featureSource,
         refreshCapabilities: !!params.refreshCapabilities,
       },
-    ).pipe(map(CatalogModelHelper.addTypeToFeatureSourceModel));
+    ).pipe(map(CatalogModelHelper.addTypeAndFeatureTypesToFeatureSourceModel));
   }
 
   public deleteFeatureSource$(params: { id: string }): Observable<boolean> {
@@ -141,10 +142,17 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
 
   public refreshFeatureSource$(params: { id: string }): Observable<FeatureSourceModel> {
     return this.httpClient.post<FeatureSourceModel>(`${TailormapAdminApiV1Service.BASE_URL}/feature-sources/${params.id}/refresh-capabilities`, {})
-      .pipe(map(CatalogModelHelper.addTypeToFeatureSourceModel));
+      .pipe(map(CatalogModelHelper.addTypeAndFeatureTypesToFeatureSourceModel));
   }
 
-    public getGroups$(): Observable<GroupModel[]> {
+  public updateFeatureType$(params: { id: string; featureType: Pick<Partial<FeatureTypeModel>, 'title' | 'comment' | 'settings'> }): Observable<FeatureTypeModel> {
+    return this.httpClient.patch<FeatureTypeModel>(
+      `${TailormapAdminApiV1Service.BASE_URL}/feature-types/${params.id}`,
+      params.featureType,
+    );
+  }
+
+  public getGroups$(): Observable<GroupModel[]> {
     return this.httpClient.get<any>(`${TailormapAdminApiV1Service.BASE_URL}/groups?size=1000&sort=name`)
       .pipe(map(response => response._embedded.groups));
   }
