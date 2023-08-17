@@ -166,8 +166,20 @@ export const selectBackgroundLayerTree = createSelector(
   (layerTreeNodes, layers): TreeModel[] => LayerTreeNodeHelper.layerTreeNodeToTree(layerTreeNodes, layers),
 );
 
-export const selectBackgroundNodesList = createSelector(
+export const selectBackgroundNodesListWithTitle = createSelector(
   selectBackgroundLayerTreeNodes,
+  selectLayers,
+  (treeNodes: ExtendedLayerTreeNodeModel[], layers): ExtendedLayerTreeNodeModel[] => {
+    return treeNodes
+      .map(node => ({
+        ...node,
+        name: node.appLayerId ? layers.find(l => l.id === node.appLayerId)?.title || node.name : node.name,
+      }));
+  },
+);
+
+export const selectBackgroundNodesList = createSelector(
+  selectBackgroundNodesListWithTitle,
   (treeNodes: ExtendedLayerTreeNodeModel[]): ExtendedLayerTreeNodeModel[] => {
     const root = treeNodes.find(l => l.root);
     if (!root) {
@@ -180,7 +192,7 @@ export const selectBackgroundNodesList = createSelector(
 );
 
 export const selectInitiallySelectedBackgroundNodes = createSelector(
-  selectBackgroundLayerTreeNodes,
+  selectBackgroundNodesListWithTitle,
   selectLayers,
   (layerTreeNodes, layers): LayerTreeNodeModel[] => LayerTreeNodeHelper.getSelectedTreeNodes(layerTreeNodes, layers),
 );
