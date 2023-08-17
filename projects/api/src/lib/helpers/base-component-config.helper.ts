@@ -2,7 +2,7 @@ import { BaseComponentTypeEnum } from '../models';
 
 export class BaseComponentConfigHelper {
 
-  private static componentsDisabledByDefault = new Set([
+  public static componentsDisabledByDefault = new Set([
     BaseComponentTypeEnum.EDIT,
   ]);
 
