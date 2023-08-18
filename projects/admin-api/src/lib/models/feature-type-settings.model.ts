@@ -1,7 +1,7 @@
-import { AttributeDescriptorSettingModel } from './attribute-descriptor-setting.model';
+import { AttributeSettingsModel } from './attribute-settings.model';
 
 export interface FeatureTypeSettingsModel {
   attributeOrder?: string[];
   hiddenAttributes?: string[];
-  attributeSettings?: AttributeDescriptorSettingModel[];
+  attributeSettings?: AttributeSettingsModel[];
 }

@@ -29,7 +29,6 @@ const setup = async () => {
   const featureTypeModel: ExtendedFeatureTypeModel = {
     ...getFeatureType({ name: 'ft_1', title: 'some table' }),
     id: 'ft_1',
-    originalId: 'ft_1',
     featureSourceId: '1',
     catalogNodeId: 'node-1',
   };

@@ -60,10 +60,10 @@ export class FeatureSourceService {
       .pipe(takeUntilDestroyed())
       .subscribe(event => {
         if (event.eventType === EventType.ENTITY_CREATED && event.details.object) {
-          this.updateFeatureSourceState(event.details.object.id, 'add', CatalogModelHelper.addTypeToFeatureSourceModel(event.details.object));
+          this.updateFeatureSourceState(event.details.object.id, 'add', CatalogModelHelper.addTypeAndFeatureTypesToFeatureSourceModel(event.details.object));
         }
         if (event.eventType === EventType.ENTITY_UPDATED && event.details.object) {
-          this.updateFeatureSourceState(event.details.object.id, 'update', CatalogModelHelper.addTypeToFeatureSourceModel(event.details.object));
+          this.updateFeatureSourceState(event.details.object.id, 'update', CatalogModelHelper.addTypeAndFeatureTypesToFeatureSourceModel(event.details.object));
         }
         if (event.eventType === EventType.ENTITY_DELETED) {
           this.updateFeatureSourceState(event.details.id, 'remove');
