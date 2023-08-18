@@ -206,6 +206,27 @@ const onUpdateFeatureSource = (
   };
 };
 
+const onUpdateFeatureType = (
+  state: CatalogState,
+  payload: ReturnType<typeof CatalogActions.updateFeatureType>,
+): CatalogState => {
+  const idx = state.featureTypes.findIndex(f => f.id === payload.featureType.id);
+  if (idx === -1) {
+    return state;
+  }
+  return {
+    ...state,
+    featureTypes: [
+      ...state.featureTypes.slice(0, idx),
+      {
+        ...state.featureTypes[idx],
+        ...payload.featureType,
+      },
+      ...state.featureTypes.slice(idx + 1),
+    ],
+  };
+};
+
 const onDeleteFeatureSource = (
   state: CatalogState,
   payload: ReturnType<typeof CatalogActions.deleteFeatureSource>,
@@ -367,6 +388,7 @@ const catalogReducerImpl = createReducer<CatalogState>(
   on(CatalogActions.addFeatureSources, onAddFeatureSource),
   on(CatalogActions.updateFeatureSource, onUpdateFeatureSource),
   on(CatalogActions.deleteFeatureSource, onDeleteFeatureSource),
+  on(CatalogActions.updateFeatureType, onUpdateFeatureType),
   on(CatalogActions.expandTree, onExpandTree),
   on(CatalogActions.updateCatalog, onUpdateCatalog),
   on(CatalogActions.loadFeatureSourcesStart, onLoadFeatureSourceStart),
