@@ -1,0 +1,21 @@
+.attributes-wrapper {
+  display: flex;
+}
+
+.attributes-table {
+  flex: 1;
+}
+
+.geom-attributes {
+  margin-left: 20px;
+}
+
+.geom-attributes h3 {
+  white-space: nowrap;
+}
+
+.geom-attributes > div {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

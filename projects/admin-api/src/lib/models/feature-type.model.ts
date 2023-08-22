@@ -8,7 +8,7 @@ export interface FeatureTypeModel {
   title: string;
   comment?: string;
   owner?: string;
-  writable?: boolean;
+  writeable?: boolean;
   info?: FeatureTypeInfoModel;
   defaultGeometryAttribute?: string;
   primaryKeyAttribute?: string;

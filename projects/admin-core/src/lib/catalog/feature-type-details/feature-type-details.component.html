@@ -1,17 +1,12 @@
 <ng-container *ngIf="featureType$ | async as featureType">
   <h2 class="page-details-title" i18n>Details for feature type {{ featureType.title }}</h2>
   <div i18n>Technical name: {{ featureType.name }}</div>
-  <h3 i18n>Attributes</h3>
-  <table mat-table [dataSource]="featureType.attributes">
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef i18n>Name</th>
-      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-    </ng-container>
-    <ng-container matColumnDef="type">
-      <th mat-header-cell *matHeaderCellDef i18n>Type</th>
-      <td mat-cell *matCellDef="let element"> {{element.type}} </td>
-    </ng-container>
-    <tr mat-header-row *matHeaderRowDef="['name', 'type']"></tr>
-    <tr mat-row *matRowDef="let row; columns: ['name', 'type'];"></tr>
-  </table>
+  <tm-admin-feature-type-attributes [attributes]="featureType.attributes"
+                                    [featureTypeSettings]="featureTypeSettings$ | async"
+                                    (attributeEnabledChanged)="attributeEnabledChanged(featureType.settings, $event)"></tm-admin-feature-type-attributes>
+  <div class="page-details-actions">
+    <tm-admin-save-button [saving$]="saving$"
+                          [disabled]="(updatedFeatureType$ | async) === null"
+                          (save)="save(featureType.id)"></tm-admin-save-button>
+  </div>
 </ng-container>

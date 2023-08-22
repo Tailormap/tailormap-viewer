@@ -10,6 +10,8 @@ import { Store } from '@ngrx/store';
 import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 import { FeatureSourceService } from '../services/feature-source.service';
+import { FeatureTypeAttributesComponent } from '../feature-type-attributes/feature-type-attributes.component';
+import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
 
 const setup = async () => {
   const activeRoute = {
@@ -29,7 +31,6 @@ const setup = async () => {
   const featureTypeModel: ExtendedFeatureTypeModel = {
     ...getFeatureType({ name: 'ft_1', title: 'some table' }),
     id: 'ft_1',
-    originalId: 'ft_1',
     featureSourceId: '1',
     catalogNodeId: 'node-1',
   };
@@ -45,6 +46,7 @@ const setup = async () => {
   };
   const store = createMockStore({ initialState: { [catalogStateKey]: catalogState } });
   await render(FeatureTypeDetailsComponent, {
+    declarations: [ FeatureTypeAttributesComponent, SaveButtonComponent ],
     imports: [SharedModule],
     providers: [
       { provide: ActivatedRoute, useValue: activeRoute },

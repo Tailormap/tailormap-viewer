@@ -3,7 +3,8 @@ import { delay, Observable, of } from 'rxjs';
 import { TailormapAdminApiV1ServiceModel } from './tailormap-admin-api-v1-service.model';
 import * as mockData from '../mock-data/tailormap-admin-api.mock-data';
 import {
-  CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel, ConfigModel, OIDCConfigurationModel,
+  CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel, ConfigModel,
+  OIDCConfigurationModel, FeatureTypeModel,
 } from '../models';
 
 @Injectable()
@@ -91,6 +92,10 @@ export class TailormapAdminApiV1MockService implements TailormapAdminApiV1Servic
       id: params.id,
       title: 'Feature source ' + params.id,
     })).pipe(delay(this.delay));
+  }
+
+  public updateFeatureType$(params: { id: string; featureType: Pick<Partial<FeatureTypeModel>, 'title' | 'comment' | 'settings'> }): Observable<FeatureTypeModel> {
+    return of({ ...mockData.getFeatureType(params.featureType) }).pipe(delay(this.delay));
   }
 
   public getGroups$(): Observable<GroupModel[]> {

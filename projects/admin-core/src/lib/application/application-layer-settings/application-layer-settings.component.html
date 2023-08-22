@@ -17,19 +17,24 @@
     </div>
   </div>
   <mat-form-field>
-    <mat-label>Title</mat-label>
+    <mat-label i18n>Title</mat-label>
     <input matInput formControlName="title" />
   </mat-form-field>
   <div class="form-field form-field__slider">
-    <strong>Opacity</strong>
+    <strong i18n>Opacity</strong>
     <tm-slider formControlName="opacity"></tm-slider>
   </div>
   <mat-form-field>
-    <mat-label>Attribution</mat-label>
+    <mat-label i18n>Attribution</mat-label>
     <input matInput formControlName="attribution" />
   </mat-form-field>
   <mat-form-field>
-    <mat-label>Description</mat-label>
+    <mat-label i18n>Description</mat-label>
     <textarea matInput formControlName="description"></textarea>
   </mat-form-field>
+  <span [tmTooltip]="editableTooltip">
+    <mat-checkbox formControlName="editable">
+      <span i18n>Editable</span>
+    </mat-checkbox>
+  </span>
 </form>

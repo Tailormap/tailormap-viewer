@@ -1,6 +1,7 @@
 import { Observable } from 'rxjs';
 import {
-  CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel, ConfigModel, OIDCConfigurationModel,
+  CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel, ConfigModel,
+  OIDCConfigurationModel, FeatureTypeModel,
 } from '../models';
 
 export interface TailormapAdminApiV1ServiceModel {
@@ -24,6 +25,10 @@ export interface TailormapAdminApiV1ServiceModel {
   }): Observable<FeatureSourceModel>;
   deleteFeatureSource$(params: { id: string }): Observable<boolean>;
   refreshFeatureSource$(params: { id: string }): Observable<FeatureSourceModel>;
+  updateFeatureType$(params: {
+    id: string;
+    featureType: Pick<Partial<FeatureTypeModel>, 'title' | 'comment' | 'settings'>;
+  }): Observable<FeatureTypeModel>;
   getGroups$(): Observable<GroupModel[]>;
   getGroup$(name: string): Observable<GroupModel>;
   createGroup$(params: { group: GroupModel }): Observable<GroupModel>;
@@ -43,8 +48,8 @@ export interface TailormapAdminApiV1ServiceModel {
   createConfig$(params: { config: ConfigModel }): Observable<ConfigModel>;
   updateConfig$(params: { config: ConfigModel }): Observable<ConfigModel>;
 
-  getOIDCConfigurations$(): Observable<OIDCConfigurationModel[]>
-  createOIDCConfiguration$(params: { oidcConfiguration: Partial<Omit<OIDCConfigurationModel, 'id'>> }): Observable<OIDCConfigurationModel>
-  updateOIDCConfiguration$(params: { id: number, oidcConfiguration: Partial<OIDCConfigurationModel> }): Observable<OIDCConfigurationModel>
+  getOIDCConfigurations$(): Observable<OIDCConfigurationModel[]>;
+  createOIDCConfiguration$(params: { oidcConfiguration: Partial<Omit<OIDCConfigurationModel, 'id'>> }): Observable<OIDCConfigurationModel>;
+  updateOIDCConfiguration$(params: { id: number; oidcConfiguration: Partial<OIDCConfigurationModel> }): Observable<OIDCConfigurationModel>;
   deleteOIDCConfiguration$(id: number): Observable<boolean>;
 }

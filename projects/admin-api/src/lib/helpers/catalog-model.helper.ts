@@ -1,4 +1,4 @@
-import { FeatureSourceModel, GeoServiceModel } from '../models';
+import { FeatureSourceModel, FeatureTypeModel, GeoServiceModel } from '../models';
 
 export class CatalogModelHelper {
 
@@ -9,8 +9,12 @@ export class CatalogModelHelper {
     return { ...service, type: CatalogModelHelper.GEO_SERVICE_TYPE };
   }
 
-  public static addTypeToFeatureSourceModel<T extends FeatureSourceModel>(source: T): T {
-    return { ...source, type: CatalogModelHelper.FEATURE_SOURCE_TYPE };
+  public static addTypeAndFeatureTypesToFeatureSourceModel<T extends FeatureSourceModel & { allFeatureTypes?: FeatureTypeModel[] }>(source: T): T {
+    return {
+      ...source,
+      type: CatalogModelHelper.FEATURE_SOURCE_TYPE,
+      featureTypes: source.allFeatureTypes || source.featureTypes || [],
+    };
   }
 
   public static isGeoServiceModel(model: any): model is GeoServiceModel {

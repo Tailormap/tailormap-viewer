@@ -70,6 +70,20 @@ export const selectFeatureTypesForSource = (featureSourceId: string) => createSe
   (featureTypes): ExtendedFeatureTypeModel[] => featureTypes.filter(featureType => featureType.featureSourceId === featureSourceId),
 );
 
+export const selectFeatureSourceAndFeatureTypesById = (id: string) => createSelector(
+  selectFeatureSourceById(id),
+  selectFeatureTypesForSource(id),
+  (source, featureTypes): ExtendedFeatureSourceModel | null => {
+    if (!source) {
+      return null;
+    }
+    return {
+      ...source,
+      featureTypes,
+    };
+  },
+);
+
 export const selectGeoServiceAndLayerById = (serviceId: string, layerId: string) => createSelector(
   selectGeoServiceById(serviceId),
   selectGeoServiceLayers,

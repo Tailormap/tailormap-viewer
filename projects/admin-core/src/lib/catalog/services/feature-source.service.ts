@@ -2,12 +2,13 @@ import { Store } from '@ngrx/store';
 import { Inject, Injectable } from '@angular/core';
 import {
   ApiResponseHelper,
-  CatalogItemKindEnum, CatalogModelHelper, FeatureSourceModel, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel,
+  CatalogItemKindEnum, CatalogModelHelper, FeatureSourceModel, FeatureTypeModel, TAILORMAP_ADMIN_API_V1_SERVICE,
+  TailormapAdminApiV1ServiceModel,
 } from '@tailormap-admin/admin-api';
 import { CatalogService } from './catalog.service';
 import { catchError, concatMap, filter, map, MonoTypeOperatorFunction, Observable, of, pipe, switchMap, take, tap } from 'rxjs';
 import {
-  addFeatureSources, deleteFeatureSource, updateFeatureSource,
+  addFeatureSources, deleteFeatureSource, updateFeatureSource, updateFeatureType,
 } from '../state/catalog.actions';
 import { FeatureSourceCreateModel, FeatureSourceUpdateModel, FeatureTypeUpdateModel } from '../models/feature-source-update.model';
 import { selectFeatureSourceById, selectFeatureTypeById, selectFeatureTypesForSource } from '../state/catalog.selectors';
@@ -60,13 +61,20 @@ export class FeatureSourceService {
       .pipe(takeUntilDestroyed())
       .subscribe(event => {
         if (event.eventType === EventType.ENTITY_CREATED && event.details.object) {
-          this.updateFeatureSourceState(event.details.object.id, 'add', CatalogModelHelper.addTypeToFeatureSourceModel(event.details.object));
+          this.updateFeatureSourceState(event.details.object.id, 'add', CatalogModelHelper.addTypeAndFeatureTypesToFeatureSourceModel(event.details.object));
         }
         if (event.eventType === EventType.ENTITY_UPDATED && event.details.object) {
-          this.updateFeatureSourceState(event.details.object.id, 'update', CatalogModelHelper.addTypeToFeatureSourceModel(event.details.object));
+          this.updateFeatureSourceState(event.details.object.id, 'update', CatalogModelHelper.addTypeAndFeatureTypesToFeatureSourceModel(event.details.object));
         }
         if (event.eventType === EventType.ENTITY_DELETED) {
           this.updateFeatureSourceState(event.details.id, 'remove');
+        }
+      });
+    this.sseService.listenForEvents$<FeatureTypeModel>('TMFeatureType')
+      .pipe(takeUntilDestroyed())
+      .subscribe(event => {
+        if (event.eventType === EventType.ENTITY_UPDATED && event.details.object) {
+          this.updateFeatureTypeState(event.details.object);
         }
       });
   }
@@ -87,16 +95,27 @@ export class FeatureSourceService {
   }
 
   public updateFeatureType$(
-    featureSourceId: string,
     featureTypeId: string,
     updatedFeatureType: FeatureTypeUpdateModel,
-  ) {
+  ): Observable<FeatureTypeModel | null> {
     return this.store$.select(selectFeatureTypeById(featureTypeId))
       .pipe(
         take(1),
         filter((featureType): featureType is ExtendedFeatureTypeModel => !!featureType),
         concatMap(featureType => {
-          return of({ ...featureType, ...updatedFeatureType });
+          return this.adminApiService.updateFeatureType$({ id: featureType.id, featureType: updatedFeatureType })
+            .pipe(
+              catchError((errorResponse) => {
+                const message = ApiResponseHelper.getAdminApiErrorMessage(errorResponse);
+                this.adminSnackbarService.showMessage($localize `Error while updating feature type: ${message}`);
+                return of(null);
+              }),
+              tap((updateResult: FeatureTypeModel | null) => {
+                if (updateResult) {
+                  this.updateFeatureTypeState(updateResult, featureType.catalogNodeId);
+                }
+              }),
+            );
         }),
       );
   }
@@ -202,6 +221,14 @@ export class FeatureSourceService {
       if (type === 'remove') {
         this.store$.dispatch(deleteFeatureSource({ id }));
       }
+    }, 50);
+  }
+
+  private updateFeatureTypeState(featureType: FeatureTypeModel, catalogNodeId?: string) {
+    // Add a small timeout to prevent most duplicate updates to prevent many state updates
+    // For data integrity, it should not matter if we update the state twice
+    DebounceHelper.debounce(`feature-type-update-${featureType.id}`, () => {
+      this.store$.dispatch(updateFeatureType({ featureType, parentNode: catalogNodeId || '' }));
     }, 50);
   }
 

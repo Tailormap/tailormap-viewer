@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { CatalogNodeModel, FeatureSourceModel, GeoServiceWithLayersModel } from '@tailormap-admin/admin-api';
+import { CatalogNodeModel, FeatureSourceModel, FeatureTypeModel, GeoServiceWithLayersModel } from '@tailormap-admin/admin-api';
 import { CatalogTreeModelTypeEnum } from '../models/catalog-tree-model-type.enum';
 
 const catalogActionsPrefix = '[Catalog]';
@@ -55,6 +55,10 @@ export const updateFeatureSource = createAction(
 export const deleteFeatureSource = createAction(
   `${catalogActionsPrefix} Delete Feature Source`,
   props<{ id: string }>(),
+);
+export const updateFeatureType = createAction(
+  `${catalogActionsPrefix} Update Feature Type`,
+  props<{ featureType: FeatureTypeModel; parentNode: string }>(),
 );
 export const expandTree = createAction(
   `${catalogActionsPrefix} Expand Tree`,
