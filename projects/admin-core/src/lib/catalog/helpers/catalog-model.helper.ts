@@ -1,4 +1,4 @@
-import { FeatureSourceModel, GeoServiceWithLayersModel } from '@tailormap-admin/admin-api';
+import { FeatureSourceModel, FeatureTypeModel, GeoServiceWithLayersModel } from '@tailormap-admin/admin-api';
 import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-layer.model';
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
@@ -41,11 +41,12 @@ export class CatalogModelHelper {
       catalogNodeId,
       featureSourceId,
     }));
-    const featureSource: ExtendedFeatureSourceModel = {
+    const featureSource: ExtendedFeatureSourceModel & { allFeatureTypes?: FeatureTypeModel[] } = {
       ...source,
       id: featureSourceId,
       catalogNodeId,
       featureTypes: [],
+      allFeatureTypes: [],
       children: (featureTypes || []).map(ft => ft.id),
     };
     return [ featureSource, featureTypes ];
