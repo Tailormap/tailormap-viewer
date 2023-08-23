@@ -1,35 +1,46 @@
 <div class="attributes-wrapper">
 
-  <div class="attributes-table">
-    <h3 i18n>Attributes</h3>
+  <mat-card class="attributes-table">
+    <mat-card-title i18n>Attributes</mat-card-title>
+    <mat-card-content>
+      <mat-table
+             [dataSource]="dataAttributes"
+             cdkDropList
+             [cdkDropListData]="dataAttributes"
+             (cdkDropListDropped)="dropTable($event)">
+        <ng-container matColumnDef="enabled">
+          <mat-header-cell *matHeaderCellDef>
+            <mat-checkbox (change)="toggleAllAttributes()" [checked]="allAttributesEnabled" [indeterminate]="someAttributesDisabled"></mat-checkbox>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let att">
+            <mat-checkbox (change)="toggleAttribute(att.name)" [checked]="isAttributeEnabled(att.name)"></mat-checkbox>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="name">
+          <mat-header-cell *matHeaderCellDef i18n>Name</mat-header-cell>
+          <mat-cell *matCellDef="let att"> {{att.name}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="type">
+          <mat-header-cell *matHeaderCellDef i18n>Type</mat-header-cell>
+          <mat-cell *matCellDef="let att"> {{att.type}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="sort">
+          <mat-header-cell *matHeaderCellDef i18n>Sort</mat-header-cell>
+          <mat-cell *matCellDef="let att"><mat-icon cdkDragHandle svgIcon="reorder"></mat-icon></mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: columns;" cdkDrag [cdkDragData]="row"></mat-row>
+      </mat-table>
+    </mat-card-content>
+  </mat-card>
 
-    <table mat-table [dataSource]="dataAttributes">
-      <ng-container matColumnDef="enabled">
-        <th mat-header-cell *matHeaderCellDef>
-          <mat-checkbox (change)="toggleAllAttributes()" [checked]="allAttributesEnabled" [indeterminate]="someAttributesDisabled"></mat-checkbox>
-        </th>
-        <td mat-cell *matCellDef="let att">
-          <mat-checkbox (change)="toggleAttribute(att.name)" [checked]="isAttributeEnabled(att.name)"></mat-checkbox>
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef i18n>Name</th>
-        <td mat-cell *matCellDef="let att"> {{att.name}} </td>
-      </ng-container>
-      <ng-container matColumnDef="type">
-        <th mat-header-cell *matHeaderCellDef i18n>Type</th>
-        <td mat-cell *matCellDef="let att"> {{att.type}} </td>
-      </ng-container>
-      <tr mat-header-row *matHeaderRowDef="['enabled', 'name', 'type']"></tr>
-      <tr mat-row *matRowDef="let row; columns: ['enabled', 'name', 'type'];"></tr>
-    </table>
-  </div>
-
-  <div class="geom-attributes">
-    <h3 i18n>Geometry attributes</h3>
-    <div *ngFor="let attribute of geomAttributes">
-      {{attribute.name}} ({{attribute.type}})
-    </div>
-  </div>
+  <mat-card class="geom-attributes">
+    <mat-card-title i18n>Geometry attributes</mat-card-title>
+    <mat-card-content>
+      <div *ngFor="let attribute of geomAttributes">
+        {{attribute.name}} ({{attribute.type}})
+      </div>
+    </mat-card-content>
+  </mat-card>
 
 </div>

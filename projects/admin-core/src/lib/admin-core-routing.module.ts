@@ -60,6 +60,7 @@ const routes: Routes = [
       {
         path: AdminRoutes.FEATURE_TYPE_DETAILS,
         component: FeatureTypeDetailsComponent,
+        data: { className: 'full-screen-settings' },
       },
     ],
   },

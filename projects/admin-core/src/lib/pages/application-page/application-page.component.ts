@@ -1,6 +1,8 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { distinctUntilChanged, map, Observable } from 'rxjs';
+import { Component, ChangeDetectionStrategy, DestroyRef } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { ClassNameHelper } from '../helpers/class-name.helper';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'tm-admin-application-page',
@@ -13,15 +15,12 @@ export class ApplicationPageComponent {
   public className$: Observable<string>;
 
   constructor(
-    private route: ActivatedRoute,
+    route: ActivatedRoute,
+    router: Router,
+    destroyRef: DestroyRef,
   ) {
-    this.className$ = this.route.url
-      .pipe(
-        distinctUntilChanged(),
-        map(() => {
-          return this.route.snapshot.children.length > 0 ? this.route.snapshot.children[0].data['className'] : '';
-        }),
-      );
+    this.className$ = ClassNameHelper.getClassNameForRoute$(router, route)
+      .pipe(takeUntilDestroyed(destroyRef));
   }
 
 }

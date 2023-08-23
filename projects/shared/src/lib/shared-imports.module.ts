@@ -29,6 +29,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatListModule } from '@angular/material/list';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatChipsModule } from '@angular/material/chips';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   exports: [
@@ -63,6 +64,7 @@ import { MatChipsModule } from '@angular/material/chips';
     MatListModule,
     MatExpansionModule,
     MatChipsModule,
+    DragDropModule,
   ],
 })
 export class SharedImportsModule { }

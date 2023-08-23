@@ -1,6 +1,8 @@
 import { Component, ChangeDetectionStrategy, Input, OnChanges, Output, EventEmitter } from '@angular/core';
 import { AttributeDescriptorModel, FeatureTypeSettingsModel } from '@tailormap-admin/admin-api';
 import { FeatureTypeAttributeHelper } from '../helpers/feature-type-attribute.helper';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { ArrayHelper } from '@tailormap-viewer/shared';
 
 @Component({
   selector: 'tm-admin-feature-type-attributes',
@@ -10,6 +12,8 @@ import { FeatureTypeAttributeHelper } from '../helpers/feature-type-attribute.he
 })
 export class FeatureTypeAttributesComponent implements OnChanges {
 
+  public readonly columns = [ 'enabled', 'name', 'type', 'sort' ];
+
   @Input()
   public attributes: AttributeDescriptorModel[] = [];
 
@@ -18,6 +22,9 @@ export class FeatureTypeAttributesComponent implements OnChanges {
 
   @Output()
   public attributeEnabledChanged = new EventEmitter<Array<{ attribute: string; enabled: boolean }>>();
+
+  @Output()
+  public attributeOrderChanged = new EventEmitter<string[]>();
 
   public enabledAttributes = new Set<string>();
   public allAttributesEnabled = false;
@@ -29,8 +36,10 @@ export class FeatureTypeAttributesComponent implements OnChanges {
 
   public ngOnChanges(): void {
     if (this.attributes) {
-      this.dataAttributes = this.attributes.filter(a => !FeatureTypeAttributeHelper.isGeometryType(a.type));
-      this.geomAttributes = this.attributes.filter(a => FeatureTypeAttributeHelper.isGeometryType(a.type));
+      const attributeOrder = this.featureTypeSettings?.attributeOrder || [];
+      const sortedAttributes = [...this.attributes].sort(ArrayHelper.getArraySorter('name', attributeOrder));
+      this.dataAttributes = sortedAttributes.filter(a => !FeatureTypeAttributeHelper.isGeometryType(a.type));
+      this.geomAttributes = sortedAttributes.filter(a => FeatureTypeAttributeHelper.isGeometryType(a.type));
       const hideAttributes = new Set(this.featureTypeSettings?.hideAttributes || []);
       this.enabledAttributes = new Set(this.dataAttributes
         .map(a => a.name)
@@ -50,6 +59,12 @@ export class FeatureTypeAttributesComponent implements OnChanges {
 
   public isAttributeEnabled(attribute: string) {
     return this.enabledAttributes.has(attribute);
+  }
+
+  public dropTable($event: CdkDragDrop<AttributeDescriptorModel[], any>) {
+    const attributes = [...this.dataAttributes];
+    moveItemInArray(attributes, $event.previousIndex, $event.currentIndex);
+    this.attributeOrderChanged.emit(attributes.map(a => a.name));
   }
 
 }

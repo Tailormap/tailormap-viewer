@@ -1,5 +1,6 @@
 .attributes-wrapper {
   display: flex;
+  padding-top: 20px;
 }
 
 .attributes-table {
@@ -8,6 +9,7 @@
 
 .geom-attributes {
   margin-left: 20px;
+  margin-right: 20px;
 }
 
 .geom-attributes h3 {
@@ -18,4 +20,13 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+mat-header-cell {
+  font-weight: bold;
+}
+
+.mat-column-enabled,
+.mat-column-sort {
+  flex: 0 0 auto;
 }
