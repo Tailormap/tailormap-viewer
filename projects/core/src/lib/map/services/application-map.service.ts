@@ -137,6 +137,7 @@ export class ApplicationMapService implements OnDestroy {
       const layer: XyzLayerModel = {
         ...defaultLayerProps,
         layerType: LayerTypesEnum.XYZ,
+        hiDpiMode: extendedAppLayer.hiDpiMode,
         hiDpiSubstituteUrl: extendedAppLayer.hiDpiSubstituteLayer,
         minZoom: extendedAppLayer.minZoom,
         maxZoom: extendedAppLayer.maxZoom,
