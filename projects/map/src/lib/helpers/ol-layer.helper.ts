@@ -3,7 +3,7 @@ import Projection from 'ol/proj/Projection';
 import TileLayer from 'ol/layer/Tile';
 import WMTS, { optionsFromCapabilities } from 'ol/source/WMTS';
 import XYZ from 'ol/source/XYZ';
-import { TMSLayerModel } from '../models/tms-layer.model';
+import { XyzLayerModel } from '../models/xyz-layer.model';
 import { LayerTypesHelper } from './layer-types.helper';
 import { OgcHelper } from './ogc.helper';
 import { LayerModel } from '../models/layer.model';
@@ -20,8 +20,9 @@ import { ObjectHelper } from '@tailormap-viewer/shared';
 import { ImageTile } from 'ol';
 import { NgZone } from '@angular/core';
 import TileState from 'ol/TileState';
-import { createForProjection } from 'ol/tilegrid';
+import { createForProjection, createXYZ, extentFromProjection } from 'ol/tilegrid';
 import { HttpXsrfTokenExtractor } from '@angular/common/http';
+import TileGrid from 'ol/tilegrid/TileGrid';
 
 export interface LayerProperties {
   id: string;
@@ -73,8 +74,8 @@ export class OlLayerHelper {
     ngZone?: NgZone,
     httpXsrfTokenExtractor?: HttpXsrfTokenExtractor,
   ): TileLayer<TileWMS> | ImageLayer<ImageWMS> | TileLayer<XYZ> | TileLayer<WMTS> | null {
-    if (LayerTypesHelper.isTmsLayer(layer)) {
-      return OlLayerHelper.createTMSLayer(layer, projection);
+    if (LayerTypesHelper.isXyzLayer(layer)) {
+      return OlLayerHelper.createXYZLayer(layer, projection);
     }
     if (LayerTypesHelper.isWmsLayer(layer)) {
       return OlLayerHelper.createWMSLayer(layer, projection, ngZone, httpXsrfTokenExtractor);
@@ -85,6 +86,10 @@ export class OlLayerHelper {
     return null;
   }
 
+  private static layerHiDpi(layer: LayerModel, pixelRatio?: number) {
+    return (pixelRatio || window.devicePixelRatio) > 1 && !layer.hiDpiDisabled;
+  }
+
   /**
    * service is optional but can be passed to set the WMTSLayerModel properties from the WMTS Capabilities
    */
@@ -92,7 +97,7 @@ export class OlLayerHelper {
     const parser = new WMTSCapabilities();
     const capabilities = parser.read(layer.capabilities);
 
-    const hiDpi = (pixelRatio || window.devicePixelRatio) > 1 && !layer.hiDpiDisabled;
+    const hiDpi = OlLayerHelper.layerHiDpi(layer, pixelRatio);
     const hiDpiLayer = layer.hiDpiSubstituteLayer || layer.layers;
 
     const options = optionsFromCapabilities(capabilities, {
@@ -114,8 +119,8 @@ export class OlLayerHelper {
       // the tiles are DPI-independent (for instance an aero photo) or are rendered with high DPI (different layer name).
       if (hiDpiMode === 'showNextZoomLevel' || hiDpiMode === 'substituteLayerShowNextZoomLevel') {
         // To use with the OL tilePixelRatio option, we need to halve the tile width and height and double the resolutions to fake the
-        // capabilities to make the service look like it sends 2x the tile width/height and pick the tile for a deeper zoom level so we can
-        // show sharper details per intrinsic CSS pixel.
+        // capabilities to make the service look like it sends 2x the tile width/height and pick the tile for a deeper zoom level, so
+        // sharper details per intrinsic CSS pixel are displayed.
 
         let tileSize = options.tileGrid.getTileSize(0);
         if (Array.isArray(tileSize)) {
@@ -153,15 +158,50 @@ export class OlLayerHelper {
     });
   }
 
-  public static createTMSLayer(layer: TMSLayerModel, projection: Projection): TileLayer<XYZ> {
+  public static createXYZLayer(layer: XyzLayerModel, projection: Projection, pixelRatio?: number): TileLayer<XYZ> {
+    const hiDpi = OlLayerHelper.layerHiDpi(layer, pixelRatio);
+
+    let url = layer.url;
+    let tilePixelRatio = layer.tilePixelRatio;
+    let tileGrid = undefined;
+
+    const minZoom = layer.minZoom || undefined;
+    const maxZoom = layer.maxZoom || undefined;
+
+    if (hiDpi) {
+      if (layer.hiDpiMode === 'substituteLayerTilePixelRatioOnly' && layer.hiDpiSubstituteUrl) {
+        url = layer.hiDpiSubstituteUrl;
+        tilePixelRatio = 2;
+      } else if (layer.hiDpiMode === 'showNextZoomLevel' || (layer.hiDpiMode === 'substituteLayerShowNextZoomLevel' && layer.hiDpiSubstituteUrl)) {
+        tileGrid = createXYZ({
+          extent: extentFromProjection(projection),
+          maxZoom,
+          minZoom,
+        });
+        // Adjust tile grid to show next zoomlevel at hi DPI similar to WMTS
+        tileGrid = new TileGrid({
+          extent: tileGrid.getExtent(),
+          origin: tileGrid.getOrigin(0),
+          resolutions: tileGrid.getResolutions().map(value => value * 2),
+          tileSize: 256 / 2, // Only XYZ tile size we support is 256
+        });
+
+        if (layer.hiDpiMode === 'substituteLayerShowNextZoomLevel' && layer.hiDpiSubstituteUrl) {
+          url = layer.hiDpiSubstituteUrl;
+        }
+      }
+    }
+
     return new TileLayer({
       visible: layer.visible,
-
       source: new XYZ({
-        ...layer.xyzOptions,
+        url,
+        maxZoom,
+        minZoom,
         crossOrigin: layer.crossOrigin,
         projection,
-        tilePixelRatio: layer.tilePixelRatio,
+        tileGrid,
+        tilePixelRatio,
         attributions: layer.attribution ? [layer.attribution] : undefined,
       }),
     });

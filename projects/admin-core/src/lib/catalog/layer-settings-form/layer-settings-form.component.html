@@ -23,37 +23,85 @@
                                       [layerName]="layerName"
                                       (featureTypeSelected)="updateFeatureTypeSelection($event)"></tm-admin-feature-type-selector>
     </div>
+    <mat-expansion-panel *ngIf="isXYZ">
+      <mat-expansion-panel-header>
+        <mat-panel-title i18n style="flex-grow: 1">XYZ tile grid options</mat-panel-title>
+      </mat-expansion-panel-header>
+<!--
+      TODO: for XYZ layers we don't load capabilities so the projection should be entered by the user. But the admin does not restrict
+      layers to be used in an application by its' projection yet.
+      If that is added we'd need server side code to set the projection configured here from layer settings in the layer capabilities,
+      could be in GeoServiceValidator.setXyzCapabilities()
+-->
+<!--      <mat-form-field>
+        <mat-label i18n>Projection</mat-label>
+        <mat-select formControlName="xyzCrs" placeholder="Projection" i18n-placeholder>
+          <mat-option *ngFor="let projection of projections" [value]="projection.code">
+            {{ projection.label }}
+          </mat-option>
+        </mat-select>
+        <mat-hint>Default: EPSG:3857 (web mercator)</mat-hint>
+      </mat-form-field>-->
+      <mat-form-field>
+        <mat-label i18n>Maximum zoom level</mat-label>
+        <input matInput type="number" formControlName="maxZoom" autocomplete="off" />
+        <mat-hint i18n>Default: {{21}}</mat-hint>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label i18n>Minimum zoom level</mat-label>
+        <input matInput type="number" formControlName="minZoom" autocomplete="off" />
+        <mat-hint i18n>Default: {{0}}</mat-hint>
+      </mat-form-field>
+    </mat-expansion-panel>
     <div class="toggle-control">
       <strong i18n>High-DPI enabled</strong>
       <tm-admin-tri-state-boolean formControlName="hiDpiEnabled"></tm-admin-tri-state-boolean>
     </div>
-    <mat-form-field class="form-control" *ngIf="isWMTS">
-      <mat-label i18n>Hi-DPI mode</mat-label>
-      <mat-select formControlName="hiDpiMode" i18n-placeholder placeholder="High-DPI mode">
-        <mat-option [value]="hiDpiModes.SHOW_NEXT_ZOOM_LEVEL" i18n>Show next zoom level</mat-option>
-        <mat-option [value]="hiDpiModes.SUBSTITUTE_LAYER_SHOW_NEXT_ZOOM_LEVEL" i18n>Substitute layer, show next zoom level</mat-option>
-        <mat-option [value]="hiDpiModes.SUBSTITUTE_LAYER_TILE_PIXEL_RATIO_ONLY" i18n>Substitute layer, tile pixel ratio only</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field *ngIf="isWMTS">
-      <mat-label i18n>Hi-DPI substitute layer</mat-label>
-      <input matInput tmAutoFocus placeholder="Hi-DPI substitute layer" i18n-placeholder formControlName="hiDpiSubstituteLayer" />
-    </mat-form-field>
-    <div class="toggle-control" *ngIf="isWMS">
-      <strong i18n>Use tiling</strong>
-      <tm-admin-tri-state-boolean formControlName="tilingEnabled"></tm-admin-tri-state-boolean>
-    </div>
-
-    <tm-admin-authorization-edit class="authorization-edit"
-                                 formControlName="authorizationRules"
-                                 *ngIf="isLeaf || layerSettingsForm.get('authorizationRules')?.value?.length"
-                                 [groups]="(groups$ | async) ?? []"
-                                 [parentAuthorizations]="geoServiceAuthorizations$ | async"
-                                 parentType="GeoService"
-                                 selfType="Layer"></tm-admin-authorization-edit>
+    <ng-container *ngIf="isWMTS">
+      <mat-form-field class="form-control">
+        <mat-label i18n>Hi-DPI mode</mat-label>
+        <mat-select formControlName="hiDpiMode" i18n-placeholder placeholder="High-DPI mode">
+          <mat-option [value]="hiDpiModes.ShowNextZoomLevel" i18n>Show next zoom level</mat-option>
+          <mat-option [value]="hiDpiModes.SubstituteLayerShowNextZoomLevel" i18n>Substitute layer, show next zoom level</mat-option>
+          <mat-option [value]="hiDpiModes.SubstituteLayerTilePixelRatioOnly" i18n>Substitute layer, tile pixel ratio only</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label i18n>Hi-DPI substitute layer</mat-label>
+        <input matInput tmAutoFocus placeholder="Hi-DPI substitute layer" i18n-placeholder formControlName="hiDpiSubstituteLayer" />
+      </mat-form-field>
+    </ng-container>
+    <ng-container *ngIf="isXYZ">
+      <mat-form-field class="form-control">
+        <mat-label i18n>Hi-DPI mode</mat-label>
+        <mat-select formControlName="hiDpiMode" i18n-placeholder placeholder="High-DPI mode">
+          <mat-option [value]="hiDpiModes.ShowNextZoomLevel" i18n>Show next zoom level</mat-option>
+          <mat-option [value]="hiDpiModes.SubstituteLayerShowNextZoomLevel" i18n>Substitute URL template, show next zoom level</mat-option>
+          <mat-option [value]="hiDpiModes.SubstituteLayerTilePixelRatioOnly" i18n>Substitute URL template, tile pixel ratio only</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label i18n>Hi-DPI substitute URL template</mat-label>
+        <input matInput formControlName="hiDpiSubstituteLayer" autocomplete="off" />
+        <mat-hint><span i18n>For example:</span> <span class="monospace">https://my.tile.service/{{ "{" }}z}/{{ "{" }}x}/{{ "{" }}y}@2x.png</span></mat-hint>
+      </mat-form-field>
+    </ng-container>
+    <ng-container *ngIf="isWMS">
+      <div class="toggle-control">
+        <strong i18n>Use tiling</strong>
+        <tm-admin-tri-state-boolean formControlName="tilingEnabled"></tm-admin-tri-state-boolean>
+      </div>
+      <mat-form-field class="form-control number-control">
+        <mat-label i18n>Tiling gutter</mat-label>
+        <input matInput type="number" formControlName="tilingGutter" />
+      </mat-form-field>
+    </ng-container>
   </ng-container>
-  <mat-form-field class="form-control number-control" *ngIf="isWMS">
-    <mat-label i18n>Tiling gutter</mat-label>
-    <input matInput type="number" formControlName="tilingGutter" />
-  </mat-form-field>
+  <tm-admin-authorization-edit class="authorization-edit"
+                               formControlName="authorizationRules"
+                               *ngIf="isLeaf || layerSettingsForm.get('authorizationRules')?.value?.length"
+                               [groups]="(groups$ | async) ?? []"
+                               [parentAuthorizations]="geoServiceAuthorizations$ | async"
+                               parentType="GeoService"
+                               selfType="Layer"></tm-admin-authorization-edit>
 </form>

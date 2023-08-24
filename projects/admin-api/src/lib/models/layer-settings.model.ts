@@ -1,5 +1,5 @@
+import { TileLayerHiDpiModeEnum } from '@tailormap-viewer/api';
 import { AuthorizationRuleGroup } from './authorization-rules.model';
-import { TileLayerHiDpiModeEnum } from './tile-layer-hi-dpi-mode.enum';
 
 export interface LayerSettingsModel {
   title?: string;
@@ -9,6 +9,8 @@ export interface LayerSettingsModel {
   tilingGutter?: number;
   hiDpiMode?: TileLayerHiDpiModeEnum;
   hiDpiSubstituteLayer?: string;
+  minZoom?: number;
+  maxZoom?: number;
   featureType?: { featureSourceId: number; featureTypeName: string };
   attribution?: string;
   authorizationRules?: AuthorizationRuleGroup[];

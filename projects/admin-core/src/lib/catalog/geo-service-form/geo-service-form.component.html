@@ -16,6 +16,7 @@
            i18n-placeholder
            formControlName="url"
     />
+    <mat-hint *ngIf="isXyz()">Enter an URL template such as <span class="monospace">https://tile.openstreetmap.org/{{ "{" }}z}/{{ "{" }}x}/{{ "{" }}y}.png</span></mat-hint>
   </mat-form-field>
   <mat-form-field>
     <mat-select formControlName="protocol">
@@ -24,7 +25,7 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
-  <mat-expansion-panel>
+  <mat-expansion-panel *ngIf="!isXyz()">
     <mat-expansion-panel-header>
       <mat-panel-title i18n style="flex-grow: 1">Authentication and proxy</mat-panel-title>
       <mat-panel-description style="flex-grow: 1">

@@ -5,6 +5,7 @@ import { ApplicationModel, GroupModel, AuthorizationRuleGroup, AUTHORIZATION_RUL
 import { Observable, debounceTime, filter, Subject, takeUntil } from 'rxjs';
 import { FormHelper } from '../../helpers/form.helper';
 import { GroupService } from '../../user/services/group.service';
+import { AdminProjectionsHelper } from '../helpers/admin-projections-helper';
 
 @Component({
   selector: 'tm-admin-application-form',
@@ -28,10 +29,7 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
   @Output()
   public updateApplication = new EventEmitter<Omit<ApplicationModel, 'id'>>();
 
-  public projections = [
-    { code: 'EPSG:28992', label: 'EPSG:28992 (Amersfoort / RD New)' },
-    { code: 'EPSG:3857', label: 'EPSG:3857 (WGS 84 / Pseudo-Mercator)' },
-  ];
+  public projections = AdminProjectionsHelper.projections;
 
   public applicationForm = new FormGroup({
     name: new FormControl('', {

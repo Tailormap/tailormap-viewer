@@ -8,7 +8,7 @@ export * from './layer-types.enum';
 export * from './map-viewer-options.model';
 export * from './service-layer.model';
 export * from './tool-manager.model';
-export * from './tms-layer.model';
+export * from './xyz-layer.model';
 export * from './wms-layer.model';
 export * from './tools';
 export * from './map-view-details.model';

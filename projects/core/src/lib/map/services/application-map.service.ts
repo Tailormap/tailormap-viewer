@@ -1,6 +1,8 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { LayerModel, LayerTypesEnum, MapService, OgcHelper, WMSLayerModel, WMTSLayerModel } from '@tailormap-viewer/map';
+import {
+  LayerModel, LayerTypesEnum, MapService, OgcHelper, ServiceLayerModel, WMSLayerModel, WMTSLayerModel, XyzLayerModel,
+} from '@tailormap-viewer/map';
 import { combineLatest, concatMap, distinctUntilChanged, filter, forkJoin, map, Observable, of, Subject, take, takeUntil, tap } from 'rxjs';
 import { ServiceModel, ServiceProtocol } from '@tailormap-viewer/api';
 import { HttpClient, HttpParams } from '@angular/common/http';
@@ -92,43 +94,53 @@ export class ApplicationMapService implements OnDestroy {
     if (!extendedAppLayer.service) {
       return of(null);
     }
+
     const service = extendedAppLayer.service;
+    const defaultLayerProps: ServiceLayerModel = {
+      id: `${extendedAppLayer.id}`,
+      name: extendedAppLayer.layerName,
+      url: extendedAppLayer.url || service.url,
+      layerType: LayerTypesEnum.WMS,
+      visible: extendedAppLayer.visible,
+      // We don't want a 'tainted canvas' for features such as printing. TM requires CORS-enabled or proxied services.
+      crossOrigin: 'anonymous',
+      opacity: extendedAppLayer.opacity,
+      attribution: extendedAppLayer.attribution,
+      hiDpiDisabled: extendedAppLayer.hiDpiDisabled,
+    };
     if (service.protocol === ServiceProtocol.WMTS) {
       return this.getCapabilitiesForWMTS$(service)
         .pipe(
           map((capabilities: string): WMTSLayerModel => ({
-            id: `${extendedAppLayer.id}`,
-            layers: extendedAppLayer.layerName,
-            name: extendedAppLayer.layerName,
+            ...defaultLayerProps,
             layerType: LayerTypesEnum.WMTS,
-            visible: extendedAppLayer.visible,
-            url: extendedAppLayer.url || service.url,
-            crossOrigin: 'anonymous', // We don't want a 'tainted canvas' for features such as printing. TM requires CORS-enabled or proxied services.
+            layers: extendedAppLayer.layerName,
             capabilities: capabilities || '',
-            hiDpiDisabled: extendedAppLayer.hiDpiDisabled,
             hiDpiMode: extendedAppLayer.hiDpiMode,
             hiDpiSubstituteLayer: extendedAppLayer.hiDpiSubstituteLayer,
-            opacity: extendedAppLayer.opacity,
-            attribution: extendedAppLayer.attribution,
           })),
         );
     }
     if (service.protocol === ServiceProtocol.WMS) {
       const layer: WMSLayerModel = {
-        id: `${extendedAppLayer.id}`,
-        layers: extendedAppLayer.layerName,
-        name: extendedAppLayer.layerName,
+        ...defaultLayerProps,
         layerType: LayerTypesEnum.WMS,
-        visible: extendedAppLayer.visible,
-        url: extendedAppLayer.url || service.url,
-        crossOrigin: 'anonymous', // We don't want a 'tainted canvas' for features such as printing. TM requires CORS-enabled or proxied services.
-        hiDpiDisabled: extendedAppLayer.hiDpiDisabled,
+        layers: extendedAppLayer.layerName,
         serverType: service.serverType,
         tilingDisabled: extendedAppLayer.tilingDisabled,
         tilingGutter: extendedAppLayer.tilingGutter,
         filter: extendedAppLayer.filter,
-        opacity: extendedAppLayer.opacity,
-        attribution: extendedAppLayer.attribution,
+      };
+      return of(layer);
+    }
+    if (service.protocol === ServiceProtocol.XYZ) {
+      const layer: XyzLayerModel = {
+        ...defaultLayerProps,
+        layerType: LayerTypesEnum.XYZ,
+        hiDpiMode: extendedAppLayer.hiDpiMode,
+        hiDpiSubstituteUrl: extendedAppLayer.hiDpiSubstituteLayer,
+        minZoom: extendedAppLayer.minZoom,
+        maxZoom: extendedAppLayer.maxZoom,
       };
       return of(layer);
     }

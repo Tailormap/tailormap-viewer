@@ -54,6 +54,10 @@ mat-hint.error {
   color: var(--error-color);
 }
 
+.monospace {
+  font-family: monospace;
+}
+
 .cdk-drag-preview {
   box-sizing: border-box;
   border-radius: 4px;

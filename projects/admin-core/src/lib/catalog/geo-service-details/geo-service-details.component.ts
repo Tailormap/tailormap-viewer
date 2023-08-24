@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import {
   BehaviorSubject, concatMap, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, takeUntil, tap,
 } from 'rxjs';
@@ -8,7 +8,7 @@ import { Store } from '@ngrx/store';
 import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 import { GeoServiceService } from '../services/geo-service.service';
 import { GeoServiceUpdateModel } from '../models/geo-service-update.model';
-import { GeoServiceWithLayersModel, LayerSettingsModel } from '@tailormap-admin/admin-api';
+import { GeoServiceProtocolEnum, GeoServiceWithLayersModel, LayerSettingsModel } from '@tailormap-admin/admin-api';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
 import { MatDialog } from '@angular/material/dialog';
 import { GeoServiceUsedDialogComponent } from './geo-service-used-dialog/geo-service-used-dialog.component';
@@ -83,7 +83,7 @@ export class GeoServiceDetailsComponent implements OnInit, OnDestroy {
     )
       .pipe(takeUntil(this.destroyed))
       .subscribe(updatedGeoService => {
-        if (updatedGeoService) {
+        if (updatedGeoService && updatedGeoService.protocol !== GeoServiceProtocolEnum.XYZ) {
           this.checkToRefresh(geoService, updatedGeoService);
           this.adminSnackbarService.showMessage($localize `Service updated`);
           this.updatedGeoService = null;

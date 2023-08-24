@@ -2,7 +2,7 @@ import { LayerModel } from '../models/layer.model';
 import { WMSLayerModel } from '../models/wms-layer.model';
 import { LayerTypesEnum } from '../models/layer-types.enum';
 import { VectorLayerModel } from '../models/vector-layer.model';
-import { TMSLayerModel } from '../models/tms-layer.model';
+import { XyzLayerModel } from '../models/xyz-layer.model';
 import { WMTSLayerModel } from '../models/wmts-layer.model';
 import { ServiceLayerModel } from '../models/service-layer.model';
 
@@ -16,8 +16,8 @@ export class LayerTypesHelper {
     return layer.layerType === LayerTypesEnum.WMS;
   }
 
-  public static isTmsLayer(layer: LayerModel): layer is TMSLayerModel {
-    return layer.layerType === LayerTypesEnum.TMS;
+  public static isXyzLayer(layer: LayerModel): layer is XyzLayerModel {
+    return layer.layerType === LayerTypesEnum.XYZ;
   }
 
   public static isVectorLayer(layer: LayerModel): layer is VectorLayerModel {

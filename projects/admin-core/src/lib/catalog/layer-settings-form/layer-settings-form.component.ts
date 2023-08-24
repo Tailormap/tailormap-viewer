@@ -1,12 +1,14 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { debounceTime, map, Observable, of, Subject, takeUntil, tap } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
-import { AuthorizationRuleGroup, GeoServiceProtocolEnum, GroupModel, LayerSettingsModel, TileLayerHiDpiModeEnum } from '@tailormap-admin/admin-api';
+import { AuthorizationRuleGroup, GeoServiceProtocolEnum, GroupModel, LayerSettingsModel } from '@tailormap-admin/admin-api';
 import { FormHelper } from '../../helpers/form.helper';
 import { TypesHelper } from '@tailormap-viewer/shared';
 import { GroupService } from '../../user/services/group.service';
 import { Store } from '@ngrx/store';
 import { selectGeoServiceById } from '../state/catalog.selectors';
+import { AdminProjectionsHelper } from '../../application/helpers/admin-projections-helper';
+import { TileLayerHiDpiModeEnum } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-admin-layer-settings-form',
@@ -25,6 +27,7 @@ export class LayerSettingsFormComponent implements OnInit {
   public set protocol(protocol: GeoServiceProtocolEnum) {
     this.isWMS = protocol === GeoServiceProtocolEnum.WMS;
     this.isWMTS = protocol === GeoServiceProtocolEnum.WMTS;
+    this.isXYZ = protocol === GeoServiceProtocolEnum.XYZ;
   }
 
   @Input()
@@ -74,7 +77,9 @@ export class LayerSettingsFormComponent implements OnInit {
 
   public isWMS = false;
   public isWMTS = false;
+  public isXYZ = false;
   public hiDpiModes = TileLayerHiDpiModeEnum;
+  public projections = AdminProjectionsHelper.projections;
 
   public layerSettingsForm = new FormGroup({
     title: new FormControl('', { nonNullable: true }),
@@ -87,6 +92,8 @@ export class LayerSettingsFormComponent implements OnInit {
     tilingGutter: new FormControl<number | null>(null),
     hiDpiMode: new FormControl<TileLayerHiDpiModeEnum | null>(null),
     hiDpiSubstituteLayer: new FormControl<string | null>(null),
+    minZoom: new FormControl<number | null>(null),
+    maxZoom: new FormControl<number | null>(null),
     authorizationRules: new FormControl<AuthorizationRuleGroup[]>([]),
   });
 
@@ -112,16 +119,18 @@ export class LayerSettingsFormComponent implements OnInit {
 
   private getUpdatedLayerSettings(value: Partial<typeof this.layerSettingsForm.value>): LayerSettingsModel {
     const settings: LayerSettingsModel = {
-      hiDpiDisabled: LayerSettingsFormComponent.getInverseBooleanOrDefault(value?.hiDpiEnabled, undefined),
-      tilingDisabled: LayerSettingsFormComponent.getInverseBooleanOrDefault(value?.tilingEnabled, undefined),
-      tilingGutter: value?.tilingGutter || undefined,
-      attribution: value?.attribution || undefined,
-      description: value?.description || undefined,
+      hiDpiDisabled: LayerSettingsFormComponent.getInverseBooleanOrDefault(value.hiDpiEnabled, undefined),
+      tilingDisabled: LayerSettingsFormComponent.getInverseBooleanOrDefault(value.tilingEnabled, undefined),
+      tilingGutter: value.tilingGutter || undefined,
+      attribution: value.attribution || undefined,
+      description: value.description || undefined,
     };
     if (this.isLayerSpecific) {
       settings.title = value.title || undefined;
-      settings.hiDpiMode = value?.hiDpiMode || undefined;
-      settings.hiDpiSubstituteLayer = this.layerSettings?.hiDpiSubstituteLayer || undefined;
+      settings.hiDpiMode = value.hiDpiMode || undefined;
+      settings.hiDpiSubstituteLayer = value.hiDpiSubstituteLayer || undefined;
+      settings.minZoom = value.minZoom || undefined;
+      settings.maxZoom = value.maxZoom || undefined;
       settings.authorizationRules = value?.authorizationRules ?? [];
       if (TypesHelper.isDefined(value.featureSourceId) && TypesHelper.isDefined(value.featureTypeName)) {
         settings.featureType = {
@@ -149,6 +158,8 @@ export class LayerSettingsFormComponent implements OnInit {
       [ values.tilingGutter, this._layerSettings.tilingGutter ],
       [ values.hiDpiMode, this._layerSettings.hiDpiMode ],
       [ values.hiDpiSubstituteLayer, this._layerSettings.hiDpiSubstituteLayer ],
+      [ values.minZoom, this._layerSettings.minZoom ],
+      [ values.maxZoom, this._layerSettings.maxZoom ],
       [ values.authorizationRules, this._layerSettings.authorizationRules ],
     ]);
   }
@@ -157,7 +168,7 @@ export class LayerSettingsFormComponent implements OnInit {
     const hiDpiEnabled = LayerSettingsFormComponent.getInverseBooleanOrDefault(this.layerSettings?.hiDpiDisabled, this.isLayerSpecific ? null : true);
     let hiDpiMode = this.layerSettings?.hiDpiMode || null;
     if (this.isLayerSpecific && hiDpiEnabled !== false && !hiDpiMode) {
-      hiDpiMode = TileLayerHiDpiModeEnum.SHOW_NEXT_ZOOM_LEVEL;
+      hiDpiMode = TileLayerHiDpiModeEnum.ShowNextZoomLevel;
     }
     this.layerSettingsForm.patchValue({
       title: this.layerSettings?.title ? this.layerSettings.title : '',
@@ -170,6 +181,8 @@ export class LayerSettingsFormComponent implements OnInit {
       tilingGutter: this.layerSettings?.tilingGutter || null,
       hiDpiMode,
       hiDpiSubstituteLayer: this.layerSettings?.hiDpiSubstituteLayer || null,
+      minZoom: this.layerSettings?.minZoom || null,
+      maxZoom: this.layerSettings?.maxZoom || null,
       authorizationRules: this.layerSettings?.authorizationRules ?? [],
     }, { emitEvent: false, onlySelf: true });
     this.layerSettingsForm.markAsUntouched();
@@ -188,7 +201,7 @@ export class LayerSettingsFormComponent implements OnInit {
     } else {
       this.layerSettingsForm.get('hiDpiMode')?.disable({ emitEvent: false, onlySelf: true });
     }
-    if (!isHiDpiEnabled || this.layerSettingsForm.get('hiDpiMode')?.value === TileLayerHiDpiModeEnum.SHOW_NEXT_ZOOM_LEVEL) {
+    if (!isHiDpiEnabled || this.layerSettingsForm.get('hiDpiMode')?.value === TileLayerHiDpiModeEnum.ShowNextZoomLevel) {
       this.layerSettingsForm.get('hiDpiSubstituteLayer')?.disable({ emitEvent: false, onlySelf: true });
     } else {
       this.layerSettingsForm.get('hiDpiSubstituteLayer')?.enable({ emitEvent: false, onlySelf: true });

@@ -4,6 +4,7 @@ import {
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { BoundsModel } from '@tailormap-viewer/api';
 import { Subject, takeUntil } from 'rxjs';
+import { AdminProjectionsHelper } from '../../../application/helpers/admin-projections-helper';
 
 @Component({
   selector: 'tm-admin-bounds-form-field',
@@ -27,12 +28,9 @@ export class BoundsFieldComponent implements OnInit, OnDestroy, ControlValueAcce
   @Input()
   public set bounds(bounds: BoundsModel | null) {
     this._bounds = bounds;
-    this.boundsForm.patchValue({
-      minX: bounds ? bounds.minx : null,
-      minY: bounds ? bounds.miny : null,
-      maxX: bounds ? bounds.maxx : null,
-      maxY: bounds ? bounds.maxy : null,
-    }, { emitEvent: false });
+    if (bounds) {
+      this.boundsForm.patchValue(bounds, { emitEvent: false });
+    }
   }
 
   public get bounds(): BoundsModel | null {
@@ -59,10 +57,10 @@ export class BoundsFieldComponent implements OnInit, OnDestroy, ControlValueAcce
   private onTouched: any | null = null;
 
   public boundsForm = new FormGroup({
-    minX: new FormControl<number | null>(null),
-    minY: new FormControl<number | null>(null),
-    maxX: new FormControl<number | null>(null),
-    maxY: new FormControl<number | null>(null),
+    minx: new FormControl<number | null>(null),
+    miny: new FormControl<number | null>(null),
+    maxx: new FormControl<number | null>(null),
+    maxy: new FormControl<number | null>(null),
   });
 
   constructor(private cdr: ChangeDetectorRef) {
@@ -105,37 +103,25 @@ export class BoundsFieldComponent implements OnInit, OnDestroy, ControlValueAcce
     if (!projection) {
       return;
     }
-    if (projection === 'EPSG:28992') {
-      this.boundsForm.patchValue({
-        minX: 482,
-        minY: 306602,
-        maxX: 284182,
-        maxY: 637049,
-      }, { emitEvent: true });
-    }
-    if (projection === 'EPSG:3857') {
-      this.boundsForm.patchValue({
-        minX: -20037508,
-        minY: -20048966,
-        maxX: 20037508,
-        maxY: 20048966,
-      }, { emitEvent: true });
+    const bounds = AdminProjectionsHelper.find(projection)?.bounds;
+    if (bounds) {
+      this.boundsForm.patchValue(bounds, { emitEvent: true });
     }
   }
 
   private triggerChange(bounds: typeof this.boundsForm.value) {
-    if (typeof bounds.minX !== 'number'
-      || typeof bounds.minY !== 'number'
-      || typeof bounds.maxX !== 'number'
-      || typeof bounds.maxY !== 'number'
+    if (typeof bounds.minx !== 'number'
+      || typeof bounds.miny !== 'number'
+      || typeof bounds.maxx !== 'number'
+      || typeof bounds.maxy !== 'number'
     ) {
       return;
     }
     const boundsModel: BoundsModel = {
-      minx: bounds.minX,
-      miny: bounds.minY,
-      maxx: bounds.maxX,
-      maxy: bounds.maxY,
+      minx: bounds.minx,
+      miny: bounds.miny,
+      maxx: bounds.maxx,
+      maxy: bounds.maxy,
       crs: this.projection || undefined,
     };
     if (this.onChange) {
