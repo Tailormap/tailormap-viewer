@@ -7,7 +7,6 @@ import { FeatureSourceService } from '../services/feature-source.service';
 import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
 import { FeatureTypeUpdateModel } from '../models/feature-source-update.model';
 import { AttributeSettingsModel, FeatureTypeModel, FeatureTypeSettingsModel } from '@tailormap-admin/admin-api';
-import { ObjectHelper } from '@tailormap-viewer/shared';
 
 @Component({
   selector: 'tm-admin-feature-type-details',
