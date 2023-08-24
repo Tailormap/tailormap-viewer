@@ -1,5 +1,5 @@
 <tm-admin-template pageTitle="Catalog" i18n-pageTitle>
-  <div class="admin-page-wrapper">
+  <div class="admin-page-wrapper" [ngClass]="className$ | async">
     <div class="admin-tree"><tm-admin-catalog-tree></tm-admin-catalog-tree></div>
     <div class="admin-content">
       <div class="admin-content-wrapper"><router-outlet></router-outlet></div></div>

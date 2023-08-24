@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, DestroyRef, NgZone, OnInit } from '
 import { DropZoneOptions, TreeDragDropService, TreeService } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
 import { selectCatalogTree } from '../state/catalog.selectors';
-import { BehaviorSubject, filter, map } from 'rxjs';
+import { BehaviorSubject, filter, map, startWith } from 'rxjs';
 import { CatalogTreeModel, CatalogTreeModelMetadataTypes } from '../models/catalog-tree.model';
 import { CatalogTreeHelper } from '../helpers/catalog-tree.helper';
 import { NavigationEnd, Router } from '@angular/router';
@@ -51,6 +51,7 @@ export class CatalogTreeComponent implements OnInit {
     this.router.events
       .pipe(
         takeUntilDestroyed(this.destroyRef),
+        startWith(new NavigationEnd(-1, this.router.url, this.router.url)),
         filter((event): event is NavigationEnd => event instanceof NavigationEnd),
       )
       .subscribe((event: NavigationEnd) => {

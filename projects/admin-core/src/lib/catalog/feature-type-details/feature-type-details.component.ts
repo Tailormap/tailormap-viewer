@@ -18,8 +18,10 @@ export class FeatureTypeDetailsComponent implements OnInit, OnDestroy {
 
   public featureType$: Observable<ExtendedFeatureTypeModel | null> = of(null);
   private destroyed = new Subject();
+
   private savingSubject = new BehaviorSubject(false);
   public saving$ = this.savingSubject.asObservable();
+  public saveEnabled = false;
 
   public updatedFeatureTypeSubject = new BehaviorSubject<FeatureTypeUpdateModel | null>(null);
   public updatedFeatureType$ = this.updatedFeatureTypeSubject.asObservable();
@@ -65,8 +67,11 @@ export class FeatureTypeDetailsComponent implements OnInit, OnDestroy {
     const updatedFeatureType = { ...this.updatedFeatureTypeSubject.value };
     this.savingSubject.next(true);
     this.featureSourceService.updateFeatureType$(featureTypeId, updatedFeatureType)
-      .subscribe(() => {
+      .subscribe(result => {
         this.savingSubject.next(false);
+        if (result) {
+          this.saveEnabled = false;
+        }
       });
   }
 
@@ -90,6 +95,20 @@ export class FeatureTypeDetailsComponent implements OnInit, OnDestroy {
         hideAttributes: Array.from(hideAttributes),
       },
     });
+    this.saveEnabled = true;
+  }
+
+  public attributeOrderChanged(attributes: string[]) {
+    console.log(attributes);
+    const settings = this.updatedFeatureTypeSubject.value?.settings || {};
+    this.updatedFeatureTypeSubject.next({
+      ...this.updatedFeatureTypeSubject.value || {},
+      settings: {
+        ...settings,
+        attributeOrder: attributes,
+      },
+    });
+    this.saveEnabled = true;
   }
 
 }
