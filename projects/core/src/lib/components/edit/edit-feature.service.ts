@@ -33,13 +33,14 @@ export class EditFeatureService {
     return this.api.deleteFeature$({ applicationId, layerId, feature }).pipe(
       catchError((_e) => {
         this.showSnackbarMessage($localize `Delete feature failed`, _e);
-        return of(HttpStatusCode.InternalServerError);
+        return of(false);
       }),
-      map((result) => result === HttpStatusCode.Ok || result === HttpStatusCode.NoContent),
-      tap((result) => {
-        if (result) {
+      map((succes) => succes === HttpStatusCode.Ok || succes === HttpStatusCode.NoContent),
+      tap((succes) => {
+        if (succes) {
           this.showSnackbarMessage($localize`Feature deleted`);
         }
+        return of(true);
       }),
     );
   }

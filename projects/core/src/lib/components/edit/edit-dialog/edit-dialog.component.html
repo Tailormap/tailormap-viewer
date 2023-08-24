@@ -22,6 +22,9 @@
         <button mat-flat-button i18n (click)="save(layerDetails.layer.id, currentFeature)" [disabled]="!updatedAttributes" color="primary">
           Save
         </button>
+        <button mat-flat-button i18n (click)="delete(layerDetails.layer.id, currentFeature)" color="primary">
+          Delete
+        </button>
       </div>
     </ng-container>
   </div>

@@ -123,6 +123,32 @@ export class EditDialogComponent implements OnInit {
       });
   }
 
+  public delete(layerId: string, currentFeature: FeatureWithMetadataModel) {
+    this.store$.select(selectViewerId)
+      .pipe(
+        take(1),
+        concatMap(viewerId => {
+          if (!viewerId) {
+            return of(null);
+          }
+          return this.editFeatureService.deleteFeature$( viewerId, layerId, {
+            __fid: currentFeature.feature.__fid,
+            attributes: currentFeature.feature.attributes,
+          });
+        }),
+      )
+      .subscribe(succes => {
+        if (succes) {
+          this.closeDialog();
+          this.mapService.getLayerManager$()
+            .pipe(take(1))
+            .subscribe(manager => {
+              manager.refreshLayer(layerId);
+            });
+        }
+      });
+  }
+
   public featureChanged($event: { attribute: string; value: any; invalid?: boolean }) {
     if (this.updatedAttributes === null) {
       this.updatedAttributes = {};

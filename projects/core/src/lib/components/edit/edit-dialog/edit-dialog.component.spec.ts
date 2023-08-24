@@ -66,6 +66,7 @@ describe('EditDialogComponent', () => {
     expect(await screen.findByText('Edit')).toBeInTheDocument();
     expect(await screen.findByText('Close')).toBeInTheDocument();
     expect(await screen.findByText('Save')).toBeInTheDocument();
+    expect(await screen.findByText('Delete')).toBeInTheDocument();
   });
 
 });
