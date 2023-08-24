@@ -114,11 +114,7 @@ export class EditDialogComponent implements OnInit {
           }
           const refreshLayerId = this.geometryEditedForLayer;
           this.geometryEditedForLayer = null;
-          this.mapService.getLayerManager$()
-            .pipe(take(1))
-            .subscribe(manager => {
-              manager.refreshLayer(`${refreshLayerId}`);
-            });
+          this.mapService.refreshLayer(`${refreshLayerId}`);
         }
       });
   }
@@ -140,11 +136,7 @@ export class EditDialogComponent implements OnInit {
       .subscribe(succes => {
         if (succes) {
           this.closeDialog();
-          this.mapService.getLayerManager$()
-            .pipe(take(1))
-            .subscribe(manager => {
-              manager.refreshLayer(layerId);
-            });
+          this.mapService.refreshLayer(layerId);
         }
       });
   }

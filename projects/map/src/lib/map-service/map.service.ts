@@ -58,6 +58,13 @@ export class MapService {
     this.map.render(el);
   }
 
+  public refreshLayer(layerId: string) {
+    this.getLayerManager$().pipe(take(1))
+      .subscribe(manager => {
+        manager.refreshLayer(layerId);
+      });
+  }
+
   public getLayerManager$(): Observable<LayerManagerModel> {
     return this.map.getLayerManager$();
   }
