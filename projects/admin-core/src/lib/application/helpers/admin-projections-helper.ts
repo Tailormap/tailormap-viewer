@@ -18,7 +18,6 @@ export class AdminProjectionsHelper {
         miny: 306602,
         maxx: 284182,
         maxy: 637049,
-        crs: 'pietje',
       },
     },
     {
