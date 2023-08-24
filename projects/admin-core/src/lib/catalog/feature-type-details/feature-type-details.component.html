@@ -3,10 +3,12 @@
   <div i18n>Technical name: {{ featureType.name }}</div>
   <tm-admin-feature-type-attributes [attributes]="featureType.attributes"
                                     [featureTypeSettings]="featureTypeSettings$ | async"
-                                    (attributeEnabledChanged)="attributeEnabledChanged(featureType.settings, $event)"></tm-admin-feature-type-attributes>
+                                    (attributeEnabledChanged)="attributeEnabledChanged(featureType.settings, $event)"
+                                    (attributeOrderChanged)="attributeOrderChanged($event)"
+                                    (aliasesChanged)="aliasesChanged(featureType.settings, $event)"></tm-admin-feature-type-attributes>
   <div class="page-details-actions">
     <tm-admin-save-button [saving$]="saving$"
-                          [disabled]="(updatedFeatureType$ | async) === null"
-                          (save)="save(featureType.id)"></tm-admin-save-button>
+                          [disabled]="!saveEnabled"
+                          (save)="save(featureType)"></tm-admin-save-button>
   </div>
 </ng-container>

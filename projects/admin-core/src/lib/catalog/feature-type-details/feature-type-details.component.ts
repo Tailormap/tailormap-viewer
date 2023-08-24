@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { FeatureSourceService } from '../services/feature-source.service';
 import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
 import { FeatureTypeUpdateModel } from '../models/feature-source-update.model';
-import { FeatureTypeSettingsModel } from '@tailormap-admin/admin-api';
+import { AttributeSettingsModel, FeatureTypeModel, FeatureTypeSettingsModel } from '@tailormap-admin/admin-api';
 
 @Component({
   selector: 'tm-admin-feature-type-details',
@@ -18,8 +18,10 @@ export class FeatureTypeDetailsComponent implements OnInit, OnDestroy {
 
   public featureType$: Observable<ExtendedFeatureTypeModel | null> = of(null);
   private destroyed = new Subject();
+
   private savingSubject = new BehaviorSubject(false);
   public saving$ = this.savingSubject.asObservable();
+  public saveEnabled = false;
 
   public updatedFeatureTypeSubject = new BehaviorSubject<FeatureTypeUpdateModel | null>(null);
   public updatedFeatureType$ = this.updatedFeatureTypeSubject.asObservable();
@@ -58,15 +60,26 @@ export class FeatureTypeDetailsComponent implements OnInit, OnDestroy {
     this.destroyed.complete();
   }
 
-  public save(featureTypeId: string) {
+  public save(featureType: FeatureTypeModel) {
     if (!this.updatedFeatureTypeSubject.value) {
       return;
     }
-    const updatedFeatureType = { ...this.updatedFeatureTypeSubject.value };
+    const currentUpdatedValue = this.updatedFeatureTypeSubject.value;
+    const updatedFeatureType: FeatureTypeUpdateModel = {
+      ...currentUpdatedValue,
+      settings: {
+        attributeSettings: currentUpdatedValue?.settings?.attributeSettings || featureType.settings.attributeSettings || {},
+        hideAttributes: currentUpdatedValue?.settings?.hideAttributes || featureType.settings.hideAttributes || [],
+        attributeOrder: currentUpdatedValue?.settings?.attributeOrder || featureType.settings.attributeOrder || [],
+      },
+    };
     this.savingSubject.next(true);
-    this.featureSourceService.updateFeatureType$(featureTypeId, updatedFeatureType)
-      .subscribe(() => {
+    this.featureSourceService.updateFeatureType$(featureType.id, updatedFeatureType)
+      .subscribe(result => {
         this.savingSubject.next(false);
+        if (result) {
+          this.saveEnabled = false;
+        }
       });
   }
 
@@ -83,13 +96,35 @@ export class FeatureTypeDetailsComponent implements OnInit, OnDestroy {
         hideAttributes.add(change.attribute);
       }
     });
+    this.updateSettings('hideAttributes', Array.from(hideAttributes));
+  }
+
+  public attributeOrderChanged(attributes: string[]) {
+    this.updateSettings('attributeOrder', attributes);
+  }
+
+  public aliasesChanged(
+    originalSettings: FeatureTypeSettingsModel,
+    aliases: Array<{ attribute: string; alias: string | undefined }>,
+  ) {
+    const settings = this.updatedFeatureTypeSubject.value?.settings || {};
+    const attributeSettings: Record<string, AttributeSettingsModel> = { ...(settings?.attributeSettings || originalSettings.attributeSettings || {}) };
+    aliases.forEach(alias => {
+      attributeSettings[alias.attribute] = {
+        ...attributeSettings[alias.attribute],
+        title: alias.alias,
+      };
+    });
+    this.updateSettings('attributeSettings', attributeSettings);
+  }
+
+  private updateSettings(type: keyof FeatureTypeSettingsModel, value: any) {
+    const settings = this.updatedFeatureTypeSubject.value?.settings || {};
     this.updatedFeatureTypeSubject.next({
       ...this.updatedFeatureTypeSubject.value || {},
-      settings: {
-        ...settings,
-        hideAttributes: Array.from(hideAttributes),
-      },
+      settings: { ...settings, [type]: value },
     });
+    this.saveEnabled = true;
   }
 
 }
