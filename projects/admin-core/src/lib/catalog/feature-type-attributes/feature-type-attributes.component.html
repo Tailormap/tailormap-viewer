@@ -3,34 +3,44 @@
   <mat-card class="attributes-table">
     <mat-card-title i18n>Attributes</mat-card-title>
     <mat-card-content>
-      <mat-table
-             [dataSource]="dataAttributes"
-             cdkDropList
-             [cdkDropListData]="dataAttributes"
-             (cdkDropListDropped)="dropTable($event)">
-        <ng-container matColumnDef="enabled">
-          <mat-header-cell *matHeaderCellDef>
-            <mat-checkbox (change)="toggleAllAttributes()" [checked]="allAttributesEnabled" [indeterminate]="someAttributesDisabled"></mat-checkbox>
-          </mat-header-cell>
-          <mat-cell *matCellDef="let att">
-            <mat-checkbox (change)="toggleAttribute(att.name)" [checked]="isAttributeEnabled(att.name)"></mat-checkbox>
-          </mat-cell>
-        </ng-container>
-        <ng-container matColumnDef="name">
-          <mat-header-cell *matHeaderCellDef i18n>Name</mat-header-cell>
-          <mat-cell *matCellDef="let att"> {{att.name}} </mat-cell>
-        </ng-container>
-        <ng-container matColumnDef="type">
-          <mat-header-cell *matHeaderCellDef i18n>Type</mat-header-cell>
-          <mat-cell *matCellDef="let att"> {{att.type}} </mat-cell>
-        </ng-container>
-        <ng-container matColumnDef="sort">
-          <mat-header-cell *matHeaderCellDef i18n>Sort</mat-header-cell>
-          <mat-cell *matCellDef="let att"><mat-icon cdkDragHandle svgIcon="reorder"></mat-icon></mat-cell>
-        </ng-container>
-        <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: columns;" cdkDrag [cdkDragData]="row"></mat-row>
-      </mat-table>
+      <form [formGroup]="aliasForm">
+        <mat-table
+               [dataSource]="dataAttributes"
+               cdkDropList
+               [cdkDropListData]="dataAttributes"
+               (cdkDropListDropped)="dropTable($event)">
+          <ng-container matColumnDef="enabled">
+            <mat-header-cell *matHeaderCellDef>
+              <mat-checkbox (change)="toggleAllAttributes()" [checked]="allAttributesEnabled" [indeterminate]="someAttributesDisabled"></mat-checkbox>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let att">
+              <mat-checkbox (change)="toggleAttribute(att.name)" [checked]="isAttributeEnabled(att.name)"></mat-checkbox>
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef i18n>Name</mat-header-cell>
+            <mat-cell *matCellDef="let att"> {{att.name}} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="type">
+            <mat-header-cell *matHeaderCellDef i18n>Type</mat-header-cell>
+            <mat-cell *matCellDef="let att"> {{att.type}} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="alias">
+            <mat-header-cell *matHeaderCellDef i18n>Alias</mat-header-cell>
+            <mat-cell *matCellDef="let att">
+              <mat-form-field>
+                <input matInput [formControlName]="att.name" />
+              </mat-form-field>
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="sort">
+            <mat-header-cell *matHeaderCellDef i18n>Sort</mat-header-cell>
+            <mat-cell *matCellDef="let att"><mat-icon cdkDragHandle svgIcon="reorder"></mat-icon></mat-cell>
+          </ng-container>
+          <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: columns;" cdkDrag [cdkDragData]="row"></mat-row>
+        </mat-table>
+      </form>
     </mat-card-content>
   </mat-card>
 

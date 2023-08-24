@@ -30,3 +30,11 @@ mat-header-cell {
 .mat-column-sort {
   flex: 0 0 auto;
 }
+
+.mat-column-alias {
+  padding: 0 6px 0 0;
+}
+
+.mat-column-alias mat-form-field {
+  width: 100%;
+}
