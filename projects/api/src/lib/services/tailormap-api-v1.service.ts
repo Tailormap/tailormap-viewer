@@ -4,7 +4,7 @@ import {
   ViewerResponseModel, FeaturesResponseModel, LayerDetailsModel, MapResponseModel, Sortorder, UserResponseModel, VersionResponseModel,
   FeatureModel,
 } from '../models';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { TailormapApiV1ServiceModel } from './tailormap-api-v1.service.model';
 import { UniqueValuesResponseModel } from '../models/unique-values-response.model';
 import { LayerExportCapabilitiesModel } from '../models/layer-export-capabilities.model';
@@ -90,11 +90,17 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
       });
   }
 
-  public deleteFeature$(params: { applicationId: string; layerId: string; feature: FeatureModel }): Observable<HttpStatusCode> {
-    return this.httpClient.delete<HttpStatusCode>(
-      `${TailormapApiConstants.BASE_URL}/${params.applicationId}/layer/${params.layerId}/edit/feature/${params.feature.__fid}`,
-    );
-  }
+    public deleteFeature$(params: { applicationId: string; layerId: string; feature: FeatureModel }): Observable<HttpStatusCode> {
+        return this.httpClient.delete<HttpResponse<Response>>(
+            `${TailormapApiConstants.BASE_URL}/${params.applicationId}/layer/${params.layerId}/edit/feature/${params.feature.__fid}`,
+            { observe: 'response' },
+        ).pipe(
+            map(response => {
+                    return response.status as HttpStatusCode;
+                },
+            ),
+        );
+    }
 
   public createFeature$(params: { applicationId: string; layerId: string; feature: FeatureModel }): Observable<FeatureModel> {
    return this.httpClient.post<FeatureModel>(
