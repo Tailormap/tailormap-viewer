@@ -26,4 +26,12 @@
     </ng-container>
   </div>
 
+  <button (click)="this.layer.value !== null ? addFeature() : null"
+          [class.disabled]="this.layer.value === null"
+          [tmTooltip]="'Add new feature'"
+          class="map-control-button map-control-button--add-feature"
+          mat-flat-button>
+    <mat-icon svgIcon="new_object"></mat-icon>
+  </button>
+
 </div>

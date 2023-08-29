@@ -96,4 +96,7 @@ export class EditComponent implements OnInit {
       });
   }
 
+  public addFeature() {
+    console.log('addFeature', this.layer.value);
+  }
 }

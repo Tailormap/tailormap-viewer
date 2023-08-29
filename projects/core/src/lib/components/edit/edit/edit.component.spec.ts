@@ -29,23 +29,28 @@ const setup = async (hasLayers: boolean, authenticated: boolean) => {
 
 describe('EditButtonComponent', () => {
 
-  test('should render button', async () => {
+  test('should render buttons', async () => {
     await setup(true, true);
-    expect(screen.getByRole('button')).toBeVisible();
-    expect(screen.getByRole('button')).not.toHaveClass("disabled");
+    const buttons  = screen.getAllByRole('button');
+    expect(buttons[0]).toBeVisible();
+    expect(buttons[0]).not.toHaveClass("disabled");
+    expect(buttons[1]).toBeVisible();
+    expect(buttons[1]).toHaveClass("disabled");
   });
 
-  test('should disabled when user is not logged in button', async () => {
+  test('should be disabled when user is not logged in button', async () => {
     await setup(true, false);
-    expect(screen.getByRole('button')).toBeVisible();
-    expect(screen.getByRole('button')).toHaveClass("disabled");
+    const buttons  = screen.getAllByRole('button');
+    expect(buttons[0]).toBeVisible();
+    expect(buttons[0]).toHaveClass("disabled");
     expect(await screen.findByLabelText('You must be logged in to edit.'));
   });
 
-  test('should disabled when there are no visible layers button', async () => {
+  test('should be disabled when there are no visible layers button', async () => {
     await setup(false, true);
-    expect(screen.getByRole('button')).toBeVisible();
-    expect(screen.getByRole('button')).toHaveClass("disabled");
+    const buttons  = screen.getAllByRole('button');
+    expect(buttons[0]).toBeVisible();
+    expect(buttons[0]).toHaveClass("disabled");
     expect(await screen.findByLabelText('There are no editable layers. Enable a layer to start editing.'));
   });
 
