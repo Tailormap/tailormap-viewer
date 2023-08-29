@@ -178,6 +178,7 @@ export class OlLayerHelper {
     const source = new WMTS(options);
     return new (OlLayerHelper.isWebGLCapable() ? WebGLTileLayer : TileLayer)({
       visible: layer.visible,
+      cacheSize: 128,
       source,
     }) as CanvasOrWebGLTileLayer<WMTS>;
   }
@@ -278,6 +279,7 @@ export class OlLayerHelper {
       });
       return new (OlLayerHelper.isWebGLCapable() ? WebGLTileLayer : TileLayer)({
         visible: layer.visible,
+        cacheSize: 128,
         source,
       }) as CanvasOrWebGLTileLayer<TileWMS>;
     }
