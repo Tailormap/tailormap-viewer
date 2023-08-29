@@ -9,6 +9,7 @@ import { filter, pipe, take } from "rxjs";
 const selectEditState = createFeatureSelector<EditState>(editStateKey);
 
 export const selectEditActive = createSelector(selectEditState, state => state.isActive);
+export const selectEditCreateNewFeatureActive = createSelector(selectEditState, state => state.isCreateNewFeatureActive);
 export const selectSelectedEditLayer = createSelector(selectEditState, state => state.selectedLayer);
 export const selectEditMapCoordinates = createSelector(selectEditState, state => state.mapCoordinates);
 export const selectEditLoadStatus = createSelector(selectEditState, state => state.loadStatus);

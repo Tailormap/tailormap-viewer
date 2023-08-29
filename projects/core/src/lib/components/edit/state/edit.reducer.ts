@@ -15,6 +15,16 @@ const onSetIsActive = (
   selectedFeature: null,
 });
 
+const onSetCreateNewFeatureActive = (
+  state: EditState,
+  payload: ReturnType<typeof EditActions.setEditCreateNewFeatureActive>,
+): EditState => ({
+  ...state,
+  isCreateNewFeatureActive: payload.active,
+  dialogVisible: payload.active,
+  selectedFeature: null,
+});
+
 const onSetSelectedLayer = (
   state: EditState,
   payload: ReturnType<typeof EditActions.setSelectedEditLayer>,
@@ -108,6 +118,7 @@ const onUpdateEditFeature = (
 const editReducerImpl = createReducer<EditState>(
   initialEditState,
   on(EditActions.setEditActive, onSetIsActive),
+  on(EditActions.setEditCreateNewFeatureActive, onSetCreateNewFeatureActive),
   on(EditActions.setSelectedEditLayer, onSetSelectedLayer),
   on(EditActions.loadEditFeatures, onLoadFeatureInfo),
   on(EditActions.loadEditFeaturesSuccess, onLoadEditFeaturesSuccess),

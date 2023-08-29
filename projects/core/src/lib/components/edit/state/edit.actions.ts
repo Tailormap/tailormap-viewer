@@ -9,6 +9,11 @@ export const setEditActive = createAction(
   props<{ active: boolean }>(),
 );
 
+export const setEditCreateNewFeatureActive = createAction(
+  `${editActionsPrefix} Set Create New Feature Active`,
+  props<{ active: boolean }>(),
+);
+
 export const setSelectedEditLayer = createAction(
   `${editActionsPrefix} Set Selected Layer`,
   props<{ layer: string | null }>(),
