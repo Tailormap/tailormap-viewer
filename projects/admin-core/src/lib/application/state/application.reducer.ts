@@ -307,15 +307,20 @@ const onUpdateApplicationComponentConfig = (state: ApplicationState, payload: Re
   return updateApplication(state, application => {
     const components = application.components || [];
     const componentIdx = components.findIndex(component => component.type === payload.componentType);
-    const updatedComponents: ComponentModel[] = [
-      ...components.slice(0, componentIdx),
-      {
+    const componentConfig: ComponentModel = {
         type: payload.componentType,
         config: payload.config,
-      },
-      ...components.slice(componentIdx + 1),
-    ];
-    return { components: updatedComponents };
+    };
+    if (componentIdx === -1) {
+      return { components: [ ...components, componentConfig ] };
+    }
+    return {
+      components: [
+        ...components.slice(0, componentIdx),
+        componentConfig,
+        ...components.slice(componentIdx + 1),
+      ],
+    };
   });
 };
 
