@@ -26,7 +26,7 @@ checkCleanGitRepo();
     await runCommand('rm', ['-rf', 'dist'], path.resolve(__dirname, '../'));
     for (const project of availableProjects) {
       await publishRelease(project, version, dryRun);
-      await sleep(1000);
+      await sleep(5000);
     }
     const tagVersion = version.startsWith('v') ? version : `v${version}`;
     await runCommand('git', ['tag', tagVersion], path.resolve(__dirname, '../'));
