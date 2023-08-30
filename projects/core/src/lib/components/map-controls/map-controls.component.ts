@@ -1,5 +1,5 @@
 import {
-  Component, OnInit, ChangeDetectionStrategy, ComponentRef, ComponentFactoryResolver, ViewChild, ViewContainerRef, OnDestroy,
+  Component, OnInit, ChangeDetectionStrategy, ComponentRef, ViewChild, ViewContainerRef, OnDestroy,
 } from '@angular/core';
 import { MapControlsService } from './map-controls.service';
 import { Subject, takeUntil } from 'rxjs';
@@ -22,7 +22,6 @@ export class MapControlsComponent implements OnInit, OnDestroy {
 
   constructor(
     private mapControlsService: MapControlsService,
-    private componentFactoryResolver: ComponentFactoryResolver,
   ) { }
 
   public ngOnInit(): void {
@@ -35,7 +34,7 @@ export class MapControlsComponent implements OnInit, OnDestroy {
           return;
         }
         DynamicComponentsHelper.destroyComponents(this.injectedComponents);
-        this.injectedComponents = DynamicComponentsHelper.createComponents(components, this.mapControlsContainer, this.componentFactoryResolver);
+        this.injectedComponents = DynamicComponentsHelper.createComponents(components, this.mapControlsContainer);
       });
   }
 

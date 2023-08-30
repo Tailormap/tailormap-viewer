@@ -12,10 +12,12 @@ import { AttributeListModule } from './attribute-list/attribute-list.module';
 import { PrintModule } from './print/print.module';
 import { FilterComponentModule } from './filter/filter-component.module';
 import { EditComponentModule } from './edit/edit-component.module';
+import { PanelComponentsComponent } from './panel-components/panel-components.component';
 
 @NgModule({
   declarations: [
     MapControlsComponent,
+    PanelComponentsComponent,
   ],
   imports: [
     CommonModule,
@@ -24,6 +26,7 @@ import { EditComponentModule } from './edit/edit-component.module';
     FeatureInfoModule,
     MenubarModule,
     MapControlsComponent,
+    PanelComponentsComponent,
     TocModule,
     ToolbarModule,
     LegendModule,

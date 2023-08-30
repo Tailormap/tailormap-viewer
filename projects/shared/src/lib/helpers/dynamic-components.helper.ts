@@ -1,4 +1,4 @@
-import { ComponentFactoryResolver, ComponentRef, Type, ViewContainerRef } from '@angular/core';
+import { ComponentRef, Type, ViewContainerRef } from '@angular/core';
 
 export class DynamicComponentsHelper {
 
@@ -19,7 +19,6 @@ export class DynamicComponentsHelper {
   public static createComponents(
     components: Type<any>[],
     container: ViewContainerRef,
-    componentFactoryResolver: ComponentFactoryResolver,
     clearContainerBeforeAddingComponents = true,
   ): ComponentRef<any>[] {
     const injectedComponents: ComponentRef<any>[] = [];
