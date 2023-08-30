@@ -79,7 +79,6 @@ const runCommand = (command, args, cwd) => {
       cwd: workingDir,
     });
     cmd.on('error', err => {
-      console.error('-------------- AN ERROR OCCURRED ----------------');
       console.error(err);
       reject();
     });
@@ -126,12 +125,7 @@ const publishRelease = async (project, version, dryRun) => {
   const npmVersion = version.startsWith('v') ? version.substring(1) : version;
   const versionCommand = !!version ? ['version', npmVersion] : ['version', 'patch'];
   await runCommand('npm', versionCommand, path.resolve(__dirname, '../projects/', project));
-  try {
-    await runCommand('ng', ['build', project]);
-  } catch(e) {
-    console.error('Build error occurred, stopping job');
-    process.exit();
-  }
+  await runCommand('ng', ['build', project]);
   if (dryRun) {
     console.log('Would publish ' + project + ' to https://repo.b3p.nl/nexus/repository/npm-public, but running in dry-run mode');
   } else {
