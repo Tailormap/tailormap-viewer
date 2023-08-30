@@ -16,14 +16,14 @@
                       (featureAttributeChanged)="featureChanged($event)"></tm-edit-form>
       </div>
       <div class="buttons">
-        <button mat-flat-button i18n (click)="closeDialog()">
-          Close
-        </button>
         <button mat-flat-button i18n (click)="save(layerDetails.layer.id, currentFeature)" [disabled]="!updatedAttributes" color="primary">
           Save
         </button>
-        <button mat-flat-button i18n (click)="delete(layerDetails.layer.id, currentFeature)" color="primary">
+        <button mat-stroked-button i18n (click)="delete(layerDetails.layer.id, currentFeature)" color="warn">
           Delete
+        </button>
+        <button mat-flat-button i18n (click)="closeDialog()">
+          Close
         </button>
       </div>
     </ng-container>

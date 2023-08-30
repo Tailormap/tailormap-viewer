@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { CssHelper } from '@tailormap-viewer/shared';
+import { ConfirmDialogService, CssHelper } from '@tailormap-viewer/shared';
 import {
   selectEditDialogCollapsed,
   selectEditDialogVisible,
@@ -48,6 +48,7 @@ export class EditDialogComponent implements OnInit {
     private editFeatureService: EditFeatureService,
     private destroyRef: DestroyRef,
     private mapService: MapService,
+    private confirmService: ConfirmDialogService,
   ) {}
 
   public ngOnInit(): void {
@@ -127,10 +128,22 @@ export class EditDialogComponent implements OnInit {
           if (!viewerId) {
             return of(null);
           }
-          return this.editFeatureService.deleteFeature$( viewerId, layerId, {
-            __fid: currentFeature.feature.__fid,
-            attributes: currentFeature.feature.attributes,
-          });
+          return this.confirmService.confirm$(
+            $localize `Delete feature`,
+            $localize `Are you sure you want to delete this feature? This cannot be undone.`,
+            true,
+          ).pipe(
+            take(1),
+            concatMap(confirm => {
+              if (!confirm) {
+                return of(null);
+              }
+              return this.editFeatureService.deleteFeature$(viewerId, layerId, {
+                __fid: currentFeature.feature.__fid,
+                attributes: currentFeature.feature.attributes,
+              });
+            }),
+          );
         }),
       )
       .subscribe(succes => {

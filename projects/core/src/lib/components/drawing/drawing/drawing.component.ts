@@ -87,8 +87,8 @@ export class DrawingComponent implements OnInit, OnDestroy {
     }
     const removeId = this.selectedFeature.__fid;
     this.confirmService.confirm$(
-      $localize `Remove drawing object`,
-      $localize `Are you sure you want to remove this object?`,
+      $localize `Delete drawing object`,
+      $localize `Are you sure you want to delete this object?`,
       true,
     )
       .pipe(take(1), filter(answer => answer))
@@ -99,8 +99,8 @@ export class DrawingComponent implements OnInit, OnDestroy {
 
   public removeAllFeatures() {
     this.confirmService.confirm$(
-      $localize `Remove complete drawing`,
-      $localize `Are you sure you want to remove the complete drawing? All objects will be removed and this cannot be undone.`,
+      $localize `Delete complete drawing`,
+      $localize `Are you sure you want to delete the complete drawing? All objects will be deleted and this cannot be undone.`,
       true,
     )
       .pipe(take(1), filter(answer => answer))

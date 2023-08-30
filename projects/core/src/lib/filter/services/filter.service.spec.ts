@@ -19,7 +19,7 @@ describe('FilterService', () => {
     const service = TestBed.inject(FilterService);
     const store = TestBed.inject(MockStore);
 
-    const assertEqualMaps = (actual: Map<number, string | null>, expected: Map<number, string | null>) => {
+    const assertEqualMaps = (actual: Map<string, string | null>, expected: Map<string, string | null>) => {
       expect(actual.size).toEqual(expected.size);
       Array.from(actual.keys())
         .forEach((key) => expect(actual.get(key)).toEqual(expected.get(key)));
@@ -27,18 +27,18 @@ describe('FilterService', () => {
 
     // List of state updates where we add, modify and remove filters
     const stateUpdates = [
-      new Map([[ 1, 'some_filter' ]]),
-      new Map([[ 1, 'some_filter' ], [ 2, 'extra_filter' ]]),
-      new Map([[ 1, 'some_filter' ], [ 2, 'changed_filter' ]]),
-      new Map([[ 2, 'changed_filter' ]]),
+      new Map([[ '1', 'some_filter' ]]),
+      new Map([[ '1', 'some_filter' ], [ '2', 'extra_filter' ]]),
+      new Map([[ '1', 'some_filter' ], [ '2', 'changed_filter' ]]),
+      new Map([[ '2', 'changed_filter' ]]),
     ];
 
     // List of expected changed filters based on the state updates
     const expectedValues = [
-      new Map([[ 1, 'some_filter' ]]),
-      new Map([[ 2, 'extra_filter' ]]),
-      new Map([[ 2, 'changed_filter' ]]),
-      new Map([[ 1, null ]]),
+      new Map([[ '1', 'some_filter' ]]),
+      new Map([[ '2', 'extra_filter' ]]),
+      new Map([[ '2', 'changed_filter' ]]),
+      new Map([[ '1', null ]]),
     ];
 
     service.getChangedFilters$()
