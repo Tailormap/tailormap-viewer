@@ -79,6 +79,7 @@ const runCommand = (command, args, cwd) => {
       cwd: workingDir,
     });
     cmd.on('error', err => {
+      console.error('-------------- AN ERROR OCCURRED ----------------');
       console.error(err);
       reject();
     });
