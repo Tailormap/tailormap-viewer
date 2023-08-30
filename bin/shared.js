@@ -3,8 +3,21 @@ const path = require('path');
 const inquirer = require('inquirer');
 const fs = require("fs/promises");
 
-const scope = '@tailormap-viewer';
-const availableProjects = ['api', 'shared', 'map', 'core', 'admin-api', 'admin-core'];
+const scopedProjects = [
+  ['@tailormap-viewer', 'api'],
+  ['@tailormap-viewer', 'shared'],
+  ['@tailormap-viewer', 'map'],
+  ['@tailormap-viewer', 'core'],
+  ['@tailormap-admin', 'admin-api'],
+  ['@tailormap-admin', 'admin-core'],
+];
+const availableProjects = scopedProjects.map(scopedProject => scopedProject[1]);
+
+const getScopeForProject = (project) => {
+  return scopedProjects.find(scopedProject => {
+    return scopedProject[1] === project;
+  })[0];
+};
 
 const getCliArgument = (varName) => {
   const cliArgIdx = process.argv.findIndex(a => a.indexOf(varName) !== -1);
@@ -96,6 +109,7 @@ const updatePeerDependencies = async (project) => {
     let madeChanges = false;
     const keys = Object.keys(packageJson.peerDependencies);
     for (const key of keys) {
+      const scope = getScopeForProject(project);
       if (key === scope + '/' + project) {
         console.log('Updating peer dependency for ' + availableProject + ': ' + key + ' from ' + packageJson.peerDependencies[key] + ' to ' + currentVersion);
         packageJson.peerDependencies[key] = `^${currentVersion}`;
@@ -115,6 +129,7 @@ const publishRelease = async (project, version, dryRun) => {
   if (dryRun) {
     console.log('Would publish ' + project + ' to https://repo.b3p.nl/nexus/repository/npm-public, but running in dry-run mode');
   } else {
+    const scope = getScopeForProject(project);
     await runCommand('npm', ['publish', '--scope=' + scope, '--registry=https://repo.b3p.nl/nexus/repository/npm-public'], path.resolve(__dirname, '../dist/', project));
   }
   await updatePeerDependencies(project);
