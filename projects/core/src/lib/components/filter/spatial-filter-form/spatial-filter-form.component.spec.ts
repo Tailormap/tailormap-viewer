@@ -104,10 +104,10 @@ describe('SpatialFilterFormComponent', () => {
       selectedFilterGroup: group,
     });
     expect(await screen.findByText('Save')).toBeInTheDocument();
-    expect(await screen.findByText('Remove')).toBeInTheDocument();
+    expect(await screen.findByText('Delete')).toBeInTheDocument();
     await userEvent.click(await screen.findByText('Save'));
     expect(dispatch).toHaveBeenCalledWith(closeForm());
-    await userEvent.click(await screen.findByText('Remove'));
+    await userEvent.click(await screen.findByText('Delete'));
     expect(removeFilter$).toHaveBeenCalledWith(group.id);
   });
 

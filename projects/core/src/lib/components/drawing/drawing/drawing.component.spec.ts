@@ -105,13 +105,13 @@ describe('DrawingComponent', () => {
 
     expect(await screen.getByText(/Fill color/)).toBeInTheDocument();
 
-    await userEvent.click(await screen.getByText('Remove selected drawing object'));
+    await userEvent.click(await screen.getByText('Delete selected drawing object'));
     expect(confirmServiceMock.confirm$).toHaveBeenCalled();
     expect(mockDispatch).toHaveBeenCalledWith({ type: '[Drawing] Remove Drawing Feature', fid: '1' });
 
     mockDispatch.mockClear();
     confirmServiceMock.confirm$.mockClear();
-    await userEvent.click(await screen.getByText('Remove complete drawing'));
+    await userEvent.click(await screen.getByText('Delete complete drawing'));
     expect(confirmServiceMock.confirm$).toHaveBeenCalled();
     expect(mockDispatch).toHaveBeenCalledWith({ type: '[Drawing] Remove All Drawing Features' });
   });

@@ -14,8 +14,8 @@ export class RemoveFilterService {
 
   public removeFilter$(groupId: string): Observable<boolean> {
     return this.confirmService.confirm$(
-      $localize `Remove filter?`,
-      $localize `Are you sure you want to remove this filter?`,
+      $localize `Delete filter?`,
+      $localize `Are you sure you want to delete this filter?`,
       true,
     )
       .pipe(
