@@ -16,18 +16,24 @@
                       (featureAttributeChanged)="featureChanged($event)"></tm-edit-form>
       </div>
       <div class="buttons">
-        <button mat-flat-button i18n (click)="save(layerDetails.layer.id, currentFeature)" [disabled]="!updatedAttributes" color="primary">
+        <button (click)="save(layerDetails.layer.id, currentFeature)" *ngIf="!isCreateFeature$" [disabled]="!updatedAttributes"
+                color="primary" i18n mat-flat-button>
           Save
         </button>
-        <button mat-stroked-button i18n (click)="delete(layerDetails.layer.id, currentFeature)" color="warn">
+        <button (click)="add(layerDetails.layer.id)" *ngIf="isCreateFeature$" [disabled]="!updatedAttributes" color="primary" i18n
+                mat-flat-button>
+          Add
+        </button>
+        <button (click)="delete(layerDetails.layer.id, currentFeature)" *ngIf="!isCreateFeature$" color="warn" i18n mat-stroked-button>
           Delete
         </button>
-        <button mat-flat-button i18n (click)="closeDialog()">
+        <button (click)="closeDialog()" i18n mat-flat-button>
           Close
         </button>
       </div>
     </ng-container>
   </div>
+
   <ng-container *ngIf="selectableFeature$ | async as selectableFeatures">
     <ng-container *ngIf="selectableFeatures.length > 0">
       <div class="content">

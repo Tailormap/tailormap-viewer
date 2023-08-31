@@ -1,6 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { FeatureInfoResponseModel } from '../../feature-info/models/feature-info-response.model';
 import { FeatureModel } from '@tailormap-viewer/api';
+import { FeatureInfoColumnMetadataModel } from "../../feature-info/models/feature-info-column-metadata.model";
 
 const editActionsPrefix = '[Edit]';
 
@@ -11,7 +12,7 @@ export const setEditActive = createAction(
 
 export const setEditCreateNewFeatureActive = createAction(
   `${editActionsPrefix} Set Create New Feature Active`,
-  props<{ active: boolean }>(),
+  props<{ active: boolean; columnMetadata: FeatureInfoColumnMetadataModel[] }>(),
 );
 
 export const setSelectedEditLayer = createAction(

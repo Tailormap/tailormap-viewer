@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, DestroyRef, OnInit } from '@angular
 import { Store } from '@ngrx/store';
 import { ConfirmDialogService, CssHelper } from '@tailormap-viewer/shared';
 import {
+  selectEditCreateNewFeatureActive,
   selectEditDialogCollapsed,
   selectEditDialogVisible,
   selectEditFeatures,
@@ -9,7 +10,7 @@ import {
   selectLoadingEditFeatures,
   selectSelectedEditFeature,
 } from '../state/edit.selectors';
-import { combineLatest, concatMap, filter, map, Observable, of, switchMap, take } from 'rxjs';
+import { combineLatest, concatMap, filter, map, Observable, of, switchMap, take, tap } from 'rxjs';
 import { expandCollapseEditDialog, hideEditDialog, updateEditFeature } from '../state/edit.actions';
 import { AppLayerModel, FeatureModelAttributes, LayerDetailsModel } from '@tailormap-viewer/api';
 import { ApplicationLayerService } from '../../../map/services/application-layer.service';
@@ -30,7 +31,7 @@ export class EditDialogComponent implements OnInit {
 
   public dialogOpen$: Observable<boolean> = of(false);
   public dialogCollapsed$: Observable<boolean> = of(false);
-
+  public isCreateFeature$: Observable<boolean> = of(false);
   public currentFeature$: Observable<FeatureWithMetadataModel | null> | undefined;
   public panelWidthMargin = CssHelper.getCssVariableValueNumeric('--menubar-width') + (CssHelper.getCssVariableValueNumeric('--body-margin') * 2);
   public layerDetails$: Observable<{ layer: AppLayerModel; details: LayerDetailsModel }> | undefined;
@@ -55,6 +56,7 @@ export class EditDialogComponent implements OnInit {
     this.dialogOpen$ = this.store$.select(selectEditDialogVisible);
     this.dialogCollapsed$ = this.store$.select(selectEditDialogCollapsed);
     this.currentFeature$ = this.store$.select(selectSelectedEditFeature);
+    this.isCreateFeature$ = this.store$.select(selectEditCreateNewFeatureActive);
     this.selectableFeature$ = combineLatest([
       this.store$.select(selectEditFeatures),
       this.store$.select(selectSelectedEditFeature),
@@ -118,6 +120,44 @@ export class EditDialogComponent implements OnInit {
           this.mapService.refreshLayer(`${refreshLayerId}`);
         }
       });
+  }
+
+  public add(layerId: string) {
+    const updatedFeature = this.updatedAttributes;
+    if (!updatedFeature) {
+      return;
+    }
+    console.log('add', updatedFeature);
+    this.currentFeature$?.pipe(
+        tap(feature => console.log('feature tap', feature)),
+        take(1),
+    ).subscribe((feature) => { console.log('feature take', feature); });
+
+    this.store$.select(selectViewerId)
+        .pipe(
+            take(1),
+            concatMap(viewerId => {
+              if (!viewerId) {
+                return of(null);
+              }
+              return this.editFeatureService.createFeature$(viewerId, layerId, {
+                __fid: '',
+                attributes: updatedFeature,
+              });
+            }),
+        )
+        .subscribe(feature => {
+          if (feature) {
+            this.store$.dispatch(updateEditFeature({ feature, layerId }));
+            this.updatedAttributes = null;
+            if (!this.geometryEditedForLayer) {
+              return;
+            }
+            const refreshLayerId = this.geometryEditedForLayer;
+            this.geometryEditedForLayer = null;
+            this.mapService.refreshLayer(`${refreshLayerId}`);
+          }
+        });
   }
 
   public delete(layerId: string, currentFeature: FeatureWithMetadataModel) {

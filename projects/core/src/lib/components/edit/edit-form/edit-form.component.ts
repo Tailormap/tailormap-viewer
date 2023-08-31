@@ -10,6 +10,7 @@ interface EditFormInput {
   feature: FeatureModel | undefined;
   details: LayerDetailsModel | undefined;
   columnMetadata: ColumnMetadataModel[];
+  isNewFeature?: boolean;
 }
 
 @Component({
@@ -57,7 +58,7 @@ export class EditFormComponent implements OnDestroy {
     if (!this.feature?.details || !this.feature?.feature) {
       return;
     }
-    this.formConfig = EditModelHelper.createEditModel(this.feature.feature, this.feature.details, this.feature.columnMetadata);
+    this.formConfig = EditModelHelper.createEditModel(this.feature.feature, this.feature.details, this.feature.columnMetadata, this.feature.isNewFeature ?? false);
     this.form = FormHelper.createForm(this.formConfig);
     const changes$ = Object.keys(this.form.controls)
       .map(key => {

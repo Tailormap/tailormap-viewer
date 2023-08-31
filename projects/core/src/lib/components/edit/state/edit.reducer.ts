@@ -15,16 +15,6 @@ const onSetIsActive = (
   selectedFeature: null,
 });
 
-const onSetCreateNewFeatureActive = (
-  state: EditState,
-  payload: ReturnType<typeof EditActions.setEditCreateNewFeatureActive>,
-): EditState => ({
-  ...state,
-  isCreateNewFeatureActive: payload.active,
-  dialogVisible: payload.active,
-  selectedFeature: null,
-});
-
 const onSetSelectedLayer = (
   state: EditState,
   payload: ReturnType<typeof EditActions.setSelectedEditLayer>,
@@ -60,6 +50,21 @@ const onLoadEditFeaturesSuccess = (
     dialogCollapsed: false,
   };
 };
+
+const onSetCreateNewFeatureActive = (
+    state: EditState,
+    payload: ReturnType<typeof EditActions.setEditCreateNewFeatureActive>,
+): EditState => ({
+  ...state,
+  isCreateNewFeatureActive: payload.active,
+  dialogVisible: payload.active,
+  selectedFeature: 'new',
+  features: [{ layerId: payload.columnMetadata[0].layerId, __fid: 'new', attributes: {} }],
+  columnMetadata: payload.columnMetadata,
+  loadStatus: LoadingStateEnum.LOADED,
+  dialogCollapsed: false,
+});
+
 
 const onLoadEditFeaturesFailed = (
   state: EditState,
@@ -112,6 +117,7 @@ const onUpdateEditFeature = (
       { ...payload.feature, layerId: payload.layerId },
       ...state.features.slice(featureIdx + 1),
     ],
+    isCreateNewFeatureActive: false,
   };
 };
 
