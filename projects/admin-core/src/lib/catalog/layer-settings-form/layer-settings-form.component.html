@@ -5,7 +5,13 @@
   </mat-form-field>
   <mat-form-field>
     <mat-label i18n>Description</mat-label>
-    <input matInput placeholder="Description" i18n-placeholder formControlName="description" />
+    <textarea matInput
+              placeholder="Description"
+              i18n-placeholder
+              formControlName="description"
+              cdkTextareaAutosize
+              cdkAutosizeMinRows="4"
+              cdkAutosizeMaxRows="10"></textarea>
   </mat-form-field>
   <mat-form-field>
     <mat-label>Attribution</mat-label>

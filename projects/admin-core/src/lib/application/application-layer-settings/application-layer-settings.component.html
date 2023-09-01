@@ -30,7 +30,13 @@
   </mat-form-field>
   <mat-form-field>
     <mat-label i18n>Description</mat-label>
-    <textarea matInput formControlName="description"></textarea>
+    <textarea matInput
+              placeholder="Description"
+              i18n-placeholder
+              formControlName="description"
+              cdkTextareaAutosize
+              cdkAutosizeMinRows="4"
+              cdkAutosizeMaxRows="10"></textarea>
   </mat-form-field>
   <span [tmTooltip]="editableTooltip">
     <mat-checkbox formControlName="editable">
