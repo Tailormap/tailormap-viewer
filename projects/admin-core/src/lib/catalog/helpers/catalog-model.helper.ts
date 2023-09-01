@@ -35,9 +35,10 @@ export class CatalogModelHelper {
 
   public static getExtendedFeatureSource(source: FeatureSourceModel, catalogNodeId: string): [ ExtendedFeatureSourceModel, ExtendedFeatureTypeModel[] ] {
     const featureSourceId = `${source.id}`;
-    const featureTypes: ExtendedFeatureTypeModel[] = (source.featureTypes || []).map<ExtendedFeatureTypeModel>(ft => ({
+    const featureTypes: ExtendedFeatureTypeModel[] = source.featureTypes.map<ExtendedFeatureTypeModel>(ft => ({
       ...ft,
-      id: `${ft.id}`,
+      id: `${featureSourceId}_${ft.id}`,
+      originalId: ft.id,
       catalogNodeId,
       featureSourceId,
     }));
