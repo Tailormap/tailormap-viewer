@@ -1,11 +1,11 @@
 {
   "name": "@tailormap-admin/admin-api",
-  "version": "11.0.4",
+  "version": "11.0.5",
   "peerDependencies": {
     "@angular/common": "^16.1.0",
     "@angular/core": "^16.1.0",
     "rxjs": "^7.8.0",
-    "@tailormap-viewer/api": "^11.0.4"
+    "@tailormap-viewer/api": "^11.0.5"
   },
   "dependencies": {
     "tslib": "^2.4.0"

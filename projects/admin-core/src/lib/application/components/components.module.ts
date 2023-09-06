@@ -22,6 +22,7 @@ import { SharedModule } from '@tailormap-viewer/shared';
   exports: [
     ComponentsListComponent,
     ComponentConfigRendererComponent,
+    BaseComponentConfigComponent,
   ],
 })
 export class ComponentsModule {
