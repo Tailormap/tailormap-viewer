@@ -2,9 +2,9 @@ import {
   ChangeDetectorRef,
   Component, ComponentRef, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef,
 } from '@angular/core';
-import { debounce, delay, takeUntil } from 'rxjs/operators';
+import { debounceTime, takeUntil } from 'rxjs/operators';
 import { MenubarService } from './menubar.service';
-import { debounceTime, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { DynamicComponentsHelper } from '@tailormap-viewer/shared';
 import { ComponentModel } from '@tailormap-viewer/api';
 import { ComponentConfigHelper } from '../../shared/helpers/component-config.helper';

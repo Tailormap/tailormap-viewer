@@ -16,7 +16,6 @@ import { AttributeListMenuButtonComponent } from '../attribute-list-menu-button/
 import { selectVisibleLayersWithAttributes } from '../../../map/state/map.selectors';
 import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.helper';
 import { MapService } from '@tailormap-viewer/map';
-import { component } from '@tailormap-viewer/schematics/src/tailormap-schematics/component';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 
 @Component({
