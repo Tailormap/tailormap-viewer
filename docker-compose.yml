@@ -6,7 +6,7 @@ volumes:
 services:
   tailormap:
     container_name: ${COMPOSE_PROJECT_NAME}-server
-    image: ghcr.io/b3partners/tailormap:${VERSION:-snapshot}
+    image: ${TAILORMAP_IMAGE:-ghcr.io/b3partners/tailormap}:${VERSION:-snapshot}
     networks:
       - default
     extra_hosts:
