@@ -148,6 +148,12 @@ const publishRelease = async (project, version, dryRun) => {
   console.log(message);
 }
 
+const sleep = (ms) => {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
 exports.requestProject = requestProject;
 exports.requestVersion = requestVersion;
 exports.checkCleanGitRepo = checkCleanGitRepo;
@@ -156,3 +162,4 @@ exports.availableProjects = availableProjects;
 exports.getCliArgument = getCliArgument;
 exports.hasCliArgument = hasCliArgument;
 exports.publishRelease = publishRelease;
+exports.sleep = sleep;

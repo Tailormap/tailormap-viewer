@@ -1,4 +1,4 @@
-const {checkCleanGitRepo, publishRelease, requestVersion, runCommand, availableProjects, getCliArgument, hasCliArgument} = require("./shared");
+const {checkCleanGitRepo, publishRelease, requestVersion, runCommand, availableProjects, getCliArgument, hasCliArgument, sleep} = require("./shared");
 const path = require("path");
 
 checkCleanGitRepo();
@@ -16,17 +16,12 @@ checkCleanGitRepo();
     process.exit(1);
   }
 
-  function sleep(ms) {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  }
-
   try {
     await runCommand('rm', ['-rf', 'dist'], path.resolve(__dirname, '../'));
+    await runCommand('rm', ['-rf', '.angular'], path.resolve(__dirname, '../'));
     for (const project of availableProjects) {
       await publishRelease(project, version, dryRun);
-      await sleep(5000);
+      // await sleep(5000);
     }
     const tagVersion = version.startsWith('v') ? version : `v${version}`;
     await runCommand('git', ['tag', tagVersion], path.resolve(__dirname, '../'));
