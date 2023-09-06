@@ -42,7 +42,6 @@ export class MenubarComponent implements OnInit, OnDestroy {
           return;
         }
         DynamicComponentsHelper.destroyComponents(this.injectedComponents);
-        console.log(components);
         this.injectedComponents = DynamicComponentsHelper.createComponents(
           ComponentConfigHelper.filterDisabledComponents(components, this.config),
           this.menuButtonsContainer,
