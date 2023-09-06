@@ -1,13 +1,13 @@
-import { Type } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { RegisteredComponent } from '../models/registered-component.model';
 
 export abstract class BaseComponentRegistryService {
 
-  private registeredComponents: Type<any>[] = [];
-  private componentRegistry = new BehaviorSubject<Type<any>[]>([]);
+  private registeredComponents: RegisteredComponent[] = [];
+  private componentRegistry = new BehaviorSubject<RegisteredComponent[]>([]);
 
-  public registerComponent(component: Type<any>, singleton = true) {
-    const idx = this.registeredComponents.indexOf(component);
+  public registerComponent(component: RegisteredComponent, singleton = true) {
+    const idx = this.registeredComponents.findIndex(c => c.type === component.type);
     if (singleton && idx !== -1) {
       this.registeredComponents = [
         ...this.registeredComponents.slice(0, idx),
@@ -18,7 +18,7 @@ export abstract class BaseComponentRegistryService {
     this.componentRegistry.next([...this.registeredComponents]);
   }
 
-  public getRegisteredComponents$(): Observable<Type<any>[]> {
+  public getRegisteredComponents$(): Observable<RegisteredComponent[]> {
     return this.componentRegistry.asObservable();
   }
 

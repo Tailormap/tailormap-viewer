@@ -12,7 +12,7 @@ class TmTestingComponent {}
 
 const mockedControlsService = {
   getRegisteredComponents$: () => {
-    return of([TmTestingComponent]);
+    return of([{ type: 'TEST', component: TmTestingComponent }]);
   },
 };
 

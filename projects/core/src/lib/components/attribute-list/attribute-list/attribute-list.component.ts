@@ -16,6 +16,7 @@ import { AttributeListMenuButtonComponent } from '../attribute-list-menu-button/
 import { selectVisibleLayersWithAttributes } from '../../../map/state/map.selectors';
 import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.helper';
 import { MapService } from '@tailormap-viewer/map';
+import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-attribute-list',
@@ -59,7 +60,7 @@ export class AttributeListComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.menubarService.registerComponent(AttributeListMenuButtonComponent);
+    this.menubarService.registerComponent({ type: BaseComponentTypeEnum.ATTRIBUTE_LIST, component: AttributeListMenuButtonComponent });
 
     this.mapService.renderFeatures$(
       'attribute-list-highlight-layer',
