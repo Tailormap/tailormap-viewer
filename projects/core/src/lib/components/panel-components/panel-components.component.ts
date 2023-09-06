@@ -1,5 +1,5 @@
 import {
-  Component, OnInit, ChangeDetectionStrategy, ComponentRef, ViewChild, ViewContainerRef, DestroyRef, Input,
+  Component, OnInit, ChangeDetectionStrategy, ComponentRef, ViewChild, ViewContainerRef, DestroyRef, Input, NgZone,
 } from '@angular/core';
 import { PanelComponentsService } from './panel-components.service';
 import { DynamicComponentsHelper } from '@tailormap-viewer/shared';
@@ -26,6 +26,7 @@ export class PanelComponentsComponent implements OnInit {
 
   constructor(
     private panelComponentsService: PanelComponentsService,
+    private ngZone: NgZone,
     private destroyRef: DestroyRef,
   ) { }
 
@@ -33,14 +34,16 @@ export class PanelComponentsComponent implements OnInit {
     this.panelComponentsService.getRegisteredComponents$()
       .pipe(takeUntilDestroyed(this.destroyRef), debounceTime(10))
       .subscribe(components => {
-        if (!this.panelComponentsContainer) {
-          return;
-        }
-        DynamicComponentsHelper.destroyComponents(this.injectedComponents);
-        this.injectedComponents = DynamicComponentsHelper.createComponents(
-          ComponentConfigHelper.filterDisabledComponents(components, this.config),
-          this.panelComponentsContainer,
-        );
+        this.ngZone.run(() => {
+          if (!this.panelComponentsContainer) {
+            return;
+          }
+          DynamicComponentsHelper.destroyComponents(this.injectedComponents);
+          this.injectedComponents = DynamicComponentsHelper.createComponents(
+            ComponentConfigHelper.filterDisabledComponents(components, this.config),
+            this.panelComponentsContainer,
+          );
+        });
       });
   }
 
