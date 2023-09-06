@@ -1,9 +1,12 @@
 import {
-  Component, OnInit, ChangeDetectionStrategy, ComponentRef, ViewChild, ViewContainerRef, DestroyRef,
+  Component, OnInit, ChangeDetectionStrategy, ComponentRef, ViewChild, ViewContainerRef, DestroyRef, Input,
 } from '@angular/core';
 import { PanelComponentsService } from './panel-components.service';
 import { DynamicComponentsHelper } from '@tailormap-viewer/shared';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ComponentModel } from '@tailormap-viewer/api';
+import { ComponentConfigHelper } from '../../shared/helpers/component-config.helper';
+import { debounceTime } from 'rxjs';
 
 @Component({
   selector: 'tm-panel-components',
@@ -12,6 +15,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PanelComponentsComponent implements OnInit {
+
+  @Input({ required: true })
+  public config: ComponentModel[] = [];
 
   private injectedComponents: ComponentRef<any>[] = [];
 
@@ -25,13 +31,16 @@ export class PanelComponentsComponent implements OnInit {
 
   public ngOnInit(): void {
     this.panelComponentsService.getRegisteredComponents$()
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(takeUntilDestroyed(this.destroyRef), debounceTime(10))
       .subscribe(components => {
         if (!this.panelComponentsContainer) {
           return;
         }
         DynamicComponentsHelper.destroyComponents(this.injectedComponents);
-        this.injectedComponents = DynamicComponentsHelper.createComponents(components, this.panelComponentsContainer);
+        this.injectedComponents = DynamicComponentsHelper.createComponents(
+          ComponentConfigHelper.filterDisabledComponents(components, this.config),
+          this.panelComponentsContainer,
+        );
       });
   }
 

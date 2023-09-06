@@ -1,4 +1,5 @@
-import { ComponentRef, Type, ViewContainerRef } from '@angular/core';
+import { ComponentRef, ViewContainerRef } from '@angular/core';
+import { RegisteredComponent } from '../models/registered-component.model';
 
 export class DynamicComponentsHelper {
 
@@ -17,7 +18,7 @@ export class DynamicComponentsHelper {
   }
 
   public static createComponents(
-    components: Type<any>[],
+    components: RegisteredComponent[],
     container: ViewContainerRef,
     clearContainerBeforeAddingComponents = true,
   ): ComponentRef<any>[] {
@@ -26,7 +27,7 @@ export class DynamicComponentsHelper {
       container.clear();
     }
     components.forEach(component => {
-      const addedComponent = container.createComponent(component);
+      const addedComponent = container.createComponent(component.component);
       injectedComponents.push(addedComponent.instance);
     });
     return injectedComponents;

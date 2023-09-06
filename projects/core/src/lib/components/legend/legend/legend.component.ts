@@ -38,6 +38,6 @@ export class LegendComponent implements OnInit {
   }
 
   public ngOnInit() {
-    this.menubarService.registerComponent(LegendMenuButtonComponent);
+    this.menubarService.registerComponent({ type: BaseComponentTypeEnum.LEGEND, component: LegendMenuButtonComponent });
   }
 }

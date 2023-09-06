@@ -1,13 +1,23 @@
 import { LocationStrategy } from '@angular/common';
 import { Component, ChangeDetectionStrategy, Output, EventEmitter, Input } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { LoginConfigurationModel } from '@tailormap-viewer/api';
 import { BehaviorSubject, Observable, take } from 'rxjs';
 
 interface LoginModel {
   isAuthenticated: boolean;
   username: string;
   roles: string[];
+}
+
+interface SSOLinkModel {
+  name: string;
+  url: string;
+  showForViewer: boolean;
+}
+
+interface LoginConfigurationModel {
+  hideLoginForm: boolean;
+  ssoLinks: SSOLinkModel[];
 }
 
 @Component({

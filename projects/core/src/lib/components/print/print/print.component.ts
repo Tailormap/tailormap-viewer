@@ -97,7 +97,7 @@ export class PrintComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.visible$ = this.menubarService.isComponentVisible$(BaseComponentTypeEnum.PRINT);
-    this.menubarService.registerComponent(PrintMenuButtonComponent);
+    this.menubarService.registerComponent({ type: BaseComponentTypeEnum.PRINT, component: PrintMenuButtonComponent });
 
     this.printMapExtent$ = combineLatest([
       this.viewerLayoutService.getUIVisibleMapExtent$(),
