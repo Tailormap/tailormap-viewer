@@ -2,7 +2,7 @@ import {
   ChangeDetectorRef,
   Component, ComponentRef, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef,
 } from '@angular/core';
-import { debounceTime, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { MenubarService } from './menubar.service';
 import { Subject } from 'rxjs';
 import { DynamicComponentsHelper } from '@tailormap-viewer/shared';
@@ -35,7 +35,6 @@ export class MenubarComponent implements OnInit, OnDestroy {
     this.menubarService.getRegisteredComponents$()
       .pipe(
         takeUntil(this.destroyed),
-        debounceTime(10),
       )
       .subscribe(components => {
         if (!this.menuButtonsContainer) {

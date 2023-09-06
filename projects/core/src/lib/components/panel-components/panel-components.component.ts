@@ -1,12 +1,11 @@
 import {
-  Component, OnInit, ChangeDetectionStrategy, ComponentRef, ViewChild, ViewContainerRef, DestroyRef, Input, NgZone,
+  Component, OnInit, ChangeDetectionStrategy, ComponentRef, ViewChild, ViewContainerRef, DestroyRef, Input,
 } from '@angular/core';
 import { PanelComponentsService } from './panel-components.service';
 import { DynamicComponentsHelper } from '@tailormap-viewer/shared';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ComponentModel } from '@tailormap-viewer/api';
 import { ComponentConfigHelper } from '../../shared/helpers/component-config.helper';
-import { debounceTime } from 'rxjs';
 
 @Component({
   selector: 'tm-panel-components',
@@ -26,24 +25,21 @@ export class PanelComponentsComponent implements OnInit {
 
   constructor(
     private panelComponentsService: PanelComponentsService,
-    private ngZone: NgZone,
     private destroyRef: DestroyRef,
   ) { }
 
   public ngOnInit(): void {
     this.panelComponentsService.getRegisteredComponents$()
-      .pipe(takeUntilDestroyed(this.destroyRef), debounceTime(10))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(components => {
-        this.ngZone.run(() => {
-          if (!this.panelComponentsContainer) {
-            return;
-          }
-          DynamicComponentsHelper.destroyComponents(this.injectedComponents);
-          this.injectedComponents = DynamicComponentsHelper.createComponents(
-            ComponentConfigHelper.filterDisabledComponents(components, this.config),
-            this.panelComponentsContainer,
-          );
-        });
+        if (!this.panelComponentsContainer) {
+          return;
+        }
+        DynamicComponentsHelper.destroyComponents(this.injectedComponents);
+        this.injectedComponents = DynamicComponentsHelper.createComponents(
+          ComponentConfigHelper.filterDisabledComponents(components, this.config),
+          this.panelComponentsContainer,
+        );
       });
   }
 

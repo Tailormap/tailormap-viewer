@@ -2,7 +2,7 @@ import {
   Component, OnInit, ChangeDetectionStrategy, ComponentRef, ViewChild, ViewContainerRef, OnDestroy, Input,
 } from '@angular/core';
 import { MapControlsService } from './map-controls.service';
-import { debounceTime, Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { DynamicComponentsHelper } from '@tailormap-viewer/shared';
 import { ComponentModel } from '@tailormap-viewer/api';
 import { ComponentConfigHelper } from '../../shared/helpers/component-config.helper';
@@ -33,7 +33,6 @@ export class MapControlsComponent implements OnInit, OnDestroy {
     this.mapControlsService.getRegisteredComponents$()
       .pipe(
         takeUntil(this.destroyed),
-        debounceTime(10),
       )
       .subscribe(components => {
         if (!this.mapControlsContainer) {
