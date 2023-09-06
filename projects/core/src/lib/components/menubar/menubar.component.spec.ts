@@ -18,11 +18,11 @@ class TmTestingComponent {
 
 const mockedControlsService = {
   getRegisteredComponents$: () => {
-    return of([TmTestingComponent]);
+    return of([{ type: 'TEST', component: TmTestingComponent }]);
   },
 };
 
-describe('Menubarcomponent', () => {
+describe('MenubarComponent', () => {
 
   test('should render', async () => {
     await render(MenubarComponent, {
