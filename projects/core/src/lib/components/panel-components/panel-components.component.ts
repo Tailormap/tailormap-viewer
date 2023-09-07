@@ -1,5 +1,5 @@
 import {
-  Component, OnInit, ChangeDetectionStrategy, ViewChild, ViewContainerRef, DestroyRef, Input, Injector, ChangeDetectorRef,
+  Component, OnInit, ChangeDetectionStrategy, ViewChild, ViewContainerRef, DestroyRef, Input, ChangeDetectorRef,
 } from '@angular/core';
 import { PanelComponentsService } from './panel-components.service';
 import { DynamicComponentsHelper } from '@tailormap-viewer/shared';
