@@ -135,8 +135,8 @@ export class MapService {
           featureModels.forEach(feature => {
             vectorLayer.getSource()?.addFeature(feature);
           });
-          if (zoomToFeature && featureModels.length === 1) {
-            this.map.zoomToFeature(featureModels[0]);
+          if (zoomToFeature) {
+            this.map.zoomToFeatures(featureModels);
           }
         }),
         map(([vectorLayer]) => vectorLayer),
