@@ -62,7 +62,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
         this.cdr.detectChanges();
       });
 
-    this.menubarService.registerComponent(DrawingMenuButtonComponent);
+    this.menubarService.registerComponent({ type: BaseComponentTypeEnum.DRAWING, component: DrawingMenuButtonComponent });
   }
 
   public ngOnDestroy() {

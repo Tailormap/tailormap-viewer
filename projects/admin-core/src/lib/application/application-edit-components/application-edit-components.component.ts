@@ -1,6 +1,5 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-admin-application-edit-components',
@@ -10,10 +9,10 @@ import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 })
 export class ApplicationEditComponentsComponent {
 
-  private selectedComponentSubject = new BehaviorSubject<BaseComponentTypeEnum | null>(null);
+  private selectedComponentSubject = new BehaviorSubject<string | null>(null);
   public selectedComponent$ = this.selectedComponentSubject.asObservable();
 
-  public setSelectedComponent(value: BaseComponentTypeEnum | null) {
+  public setSelectedComponent(value: string | null) {
     this.selectedComponentSubject.next(value);
   }
 

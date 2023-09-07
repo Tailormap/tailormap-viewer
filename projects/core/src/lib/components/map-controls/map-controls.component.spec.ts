@@ -12,11 +12,11 @@ class TmTestingComponent {}
 
 const mockedControlsService = {
   getRegisteredComponents$: () => {
-    return of([TmTestingComponent]);
+    return of([{ type: 'TEST', component: TmTestingComponent }]);
   },
 };
 
-describe('MapComponent', () => {
+describe('MapControlsComponent', () => {
 
   test('should render', async () => {
     await render(MapControlsComponent, {

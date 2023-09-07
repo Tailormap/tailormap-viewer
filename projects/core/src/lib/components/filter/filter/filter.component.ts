@@ -25,7 +25,7 @@ export class FilterComponent implements OnInit {
   }
 
   public ngOnInit() {
-    this.menubarService.registerComponent(FilterMenuButtonComponent);
+    this.menubarService.registerComponent({ type: BaseComponentTypeEnum.FILTER, component: FilterMenuButtonComponent });
   }
 
 }

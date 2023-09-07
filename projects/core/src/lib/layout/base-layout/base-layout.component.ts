@@ -20,14 +20,8 @@ export class BaseLayoutComponent implements OnInit {
     this.componentsConfig$ = this.store$.select(selectComponentsConfig);
   }
 
-  public isComponentEnabled(config: ComponentModel[], componentType: BaseComponentTypeEnum) {
-    const componentConfig = (config || []).find(c => c.type === componentType);
-    if (!componentConfig
-      || typeof componentConfig.config === 'undefined'
-      || typeof componentConfig.config.enabled === 'undefined') {
-      return !BaseComponentConfigHelper.isComponentDisabledByDefault(componentType);
-    }
-    return componentConfig.config.enabled;
+  public isComponentEnabled(config: ComponentModel[], componentType: string) {
+    return BaseComponentConfigHelper.isComponentEnabled(config, componentType);
   }
 
 }

@@ -11,3 +11,4 @@ export * from './lib/pipes';
 export * from './lib/types';
 export * from './lib/shared.module';
 export * from './lib/shared-imports.module';
+export * from './lib/models/registered-component.model';

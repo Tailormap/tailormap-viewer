@@ -81,7 +81,7 @@ export class TocComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyed))
       .subscribe((evt) => this.handleNodePositionChanged(evt));
 
-    this.menubarService.registerComponent(TocMenuButtonComponent);
+    this.menubarService.registerComponent({ type: BaseComponentTypeEnum.TOC, component: TocMenuButtonComponent });
   }
 
   public getDropZoneConfig() {
