@@ -16,7 +16,6 @@
 
 services:
   tailormap:
-    image: ghcr.io/b3partners/tailormap:${VERSION}
     environment:
       - SPRING_PROFILES_ACTIVE=static-only
     healthcheck:
