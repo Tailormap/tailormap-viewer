@@ -1,4 +1,4 @@
-import { default as OlMap } from 'ol/Map';
+import { Map as OlMap } from 'ol';
 import { NgZone } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { default as MapEvent } from 'ol/MapEvent';

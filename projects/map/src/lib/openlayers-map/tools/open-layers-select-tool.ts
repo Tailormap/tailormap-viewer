@@ -1,11 +1,11 @@
 import { Subject } from 'rxjs';
-import OlMap from 'ol/Map';
+import { Map as OlMap } from 'ol';
 import { MapStyleHelper } from '../../helpers/map-style.helper';
 import { NgZone } from '@angular/core';
 import { EventsKey } from 'ol/events';
 import { unByKey } from 'ol/Observable';
 import { Select } from 'ol/interaction';
-import BaseLayer from 'ol/layer/Base';
+import { Layer as BaseLayer } from 'ol/layer';
 import { OlLayerHelper } from '../../helpers/ol-layer.helper';
 import { SelectEvent } from 'ol/interaction/Select';
 import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';

@@ -1,5 +1,5 @@
 import { MapUnitEnum } from '../models/map-unit.enum';
-import Geometry from 'ol/geom/Geometry';
+import { Geometry } from 'ol/geom';
 import { GeometryTypeHelper } from './geometry-type.helper';
 import { getArea, getLength } from 'ol/sphere';
 import { fromCircle } from 'ol/geom/Polygon';

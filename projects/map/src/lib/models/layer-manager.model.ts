@@ -1,13 +1,7 @@
 import { LayerModel } from './layer.model';
-import VectorLayer from 'ol/layer/Vector';
-import VectorSource from 'ol/source/Vector';
+import { Vector as VectorLayer, Image as ImageLayer, Tile as TileLayer } from 'ol/layer';
+import { Vector as VectorSource, ImageWMS, WMTS, XYZ, TileWMS } from 'ol/source';
 import { Geometry } from 'ol/geom';
-import ImageLayer from 'ol/layer/Image';
-import TileLayer from 'ol/layer/Tile';
-import ImageWMS from 'ol/source/ImageWMS';
-import WMTS from 'ol/source/WMTS';
-import XYZ from 'ol/source/XYZ';
-import { TileWMS } from 'ol/source';
 
 export type LayerTypes = VectorLayer<VectorSource<Geometry>> | TileLayer<TileWMS> | ImageLayer<ImageWMS> | TileLayer<XYZ> | TileLayer<WMTS> | null;
 

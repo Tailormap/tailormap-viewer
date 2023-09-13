@@ -7,9 +7,9 @@ import {
   VectorLayerModel,
 } from '../models';
 import { ToolManagerModel } from '../models/tool-manager.model';
-import VectorLayer from 'ol/layer/Vector';
-import Geometry from 'ol/geom/Geometry';
-import VectorSource from 'ol/source/Vector';
+import { Vector as VectorLayer } from 'ol/layer';
+import { Geometry } from 'ol/geom';
+import { Vector as VectorSource } from 'ol/source';
 import { MapStyleHelper } from '../helpers/map-style.helper';
 import { MapTooltipModel } from '../models/map-tooltip.model';
 import { OpenLayersMapTooltip } from '../openlayers-map/open-layers-map-tooltip';
@@ -20,7 +20,7 @@ import { MapSizeHelper } from '../helpers/map-size.helper';
 import { MapUnitEnum } from '../models/map-unit.enum';
 import { Layer } from 'ol/layer';
 import { Source } from 'ol/source';
-import LayerRenderer from 'ol/renderer/Layer';
+import { default as LayerRenderer } from 'ol/renderer/Layer';
 import { Coordinate } from 'ol/coordinate';
 import { HttpClient, HttpXsrfTokenExtractor } from '@angular/common/http';
 

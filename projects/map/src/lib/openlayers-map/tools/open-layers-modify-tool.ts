@@ -1,5 +1,5 @@
 import { Subject } from 'rxjs';
-import OlMap from 'ol/Map';
+import { Map as OlMap } from 'ol';
 import { EventsKey } from 'ol/events';
 import { unByKey } from 'ol/Observable';
 import { FeatureHelper } from '../../helpers/feature.helper';
@@ -9,10 +9,10 @@ import { Modify, Translate } from 'ol/interaction';
 import { TranslateEvent } from 'ol/interaction/Translate';
 import { ModifyEvent } from 'ol/interaction/Modify';
 import { NgZone } from "@angular/core";
-import VectorLayer from "ol/layer/Vector";
-import VectorSource from "ol/source/Vector";
+import { Vector as VectorLayer } from 'ol/layer';
+import { Geometry } from 'ol/geom';
+import { Vector as VectorSource } from 'ol/source';
 import { MapStyleHelper } from "../../helpers/map-style.helper";
-import Geometry from 'ol/geom/Geometry';
 
 export class OpenLayersModifyTool implements ModifyToolModel {
 

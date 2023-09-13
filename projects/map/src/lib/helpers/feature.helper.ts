@@ -1,9 +1,8 @@
 import { FeatureModelType } from '../models/feature-model.type';
-import Feature from 'ol/Feature';
-import Geometry from 'ol/geom/Geometry';
-import WKT from 'ol/format/WKT';
+import { Feature } from 'ol';
+import { WKT } from 'ol/format';
 import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
-import { Circle } from 'ol/geom';
+import { Circle, Geometry } from 'ol/geom';
 import { fromCircle } from 'ol/geom/Polygon';
 import { MapSizeHelper } from '../helpers/map-size.helper';
 import { MapUnitEnum } from '../models/map-unit.enum';

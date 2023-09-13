@@ -1,7 +1,7 @@
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { OpenLayersEventManager } from '../open-layers-event-manager';
 import { MouseMoveEvent, MousePositionToolModel, MousePositionToolConfigModel } from '../../models/tools';
-import OlMap from 'ol/Map';
+import { Map as OlMap } from 'ol';
 import { NgZone } from '@angular/core';
 
 export class OpenLayersMousePositionTool implements MousePositionToolModel {
