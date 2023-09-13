@@ -5,7 +5,9 @@ import { combineLatest, filter, Observable, of, Subject } from 'rxjs';
 import { AttributeListRowModel } from '../models/attribute-list-row.model';
 import { Store } from '@ngrx/store';
 import { selectAttributeListTab, selectAttributeListTabData, selectAttributeListTabs } from '../state/attribute-list.selectors';
-import { ColumnMetadataModel, FeatureModel, Sortorder, TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel } from '@tailormap-viewer/api';
+import {
+  ColumnMetadataModel, FeatureAttributeTypeEnum, FeatureModel, Sortorder, TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel,
+} from '@tailormap-viewer/api';
 import { LoadAttributeListDataResultModel } from '../models/load-attribute-list-data-result.model';
 import { AttributeListDataModel } from '../models/attribute-list-data.model';
 import { selectViewerId } from '../../../state/core.selectors';
@@ -22,6 +24,7 @@ export class AttributeListDataService implements OnDestroy {
   private destroyed = new Subject();
 
   public static DEFAULT_ERROR_MESSAGE = $localize `Failed to load attribute list data`;
+  private static FILTER_GEOMETRY_COLUMNS = true;
 
   constructor(
     @Inject(TAILORMAP_API_V1_SERVICE) private api: TailormapApiV1ServiceModel,
@@ -124,12 +127,19 @@ export class AttributeListDataService implements OnDestroy {
   }
 
   private static getColumns(columnMetadata: ColumnMetadataModel[]): AttributeListColumnModel[] {
-    return columnMetadata.map<AttributeListColumnModel>(column => ({
-      id: column.key,
-      visible: true,
-      type: column.type,
-      label: column.alias || column.key,
-    }));
+    return columnMetadata
+      .filter(column => {
+        if (!AttributeListDataService.FILTER_GEOMETRY_COLUMNS) {
+          return true;
+        }
+        return column.type !== FeatureAttributeTypeEnum.GEOMETRY;
+      })
+      .map<AttributeListColumnModel>(column => ({
+        id: column.key,
+        visible: true,
+        type: column.type,
+        label: column.alias || column.key,
+      }));
   }
 
   private static getErrorResult(id: string, message?: string): LoadAttributeListDataResultModel {
