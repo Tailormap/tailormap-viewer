@@ -6,9 +6,10 @@ import { FormHelper } from '../../helpers/form.helper';
 import { TypesHelper } from '@tailormap-viewer/shared';
 import { GroupService } from '../../user/services/group.service';
 import { Store } from '@ngrx/store';
-import { selectGeoServiceById } from '../state/catalog.selectors';
+import { selectGeoServiceById, selectGeoServiceLayersByGeoServiceId } from '../state/catalog.selectors';
 import { AdminProjectionsHelper } from '../../application/helpers/admin-projections-helper';
 import { TileLayerHiDpiModeEnum } from '@tailormap-viewer/api';
+import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-layer.model';
 
 @Component({
   selector: 'tm-admin-layer-settings-form',
@@ -45,8 +46,10 @@ export class LayerSettingsFormComponent implements OnInit {
 
     if (serviceId === undefined) {
         this.geoServiceAuthorizations$ = of([]);
+        this.layers$ = of([]);
     } else {
         this.geoServiceAuthorizations$ = this.store$.select(selectGeoServiceById(serviceId)).pipe(takeUntil(this.destroyed), map((settings) => settings?.authorizationRules ?? []));
+        this.layers$ = this.store$.select(selectGeoServiceLayersByGeoServiceId(serviceId)).pipe(takeUntil(this.destroyed));
     }
   }
   public get serviceId() {
@@ -74,6 +77,7 @@ export class LayerSettingsFormComponent implements OnInit {
   public groups$: Observable<GroupModel[]>;
 
   public geoServiceAuthorizations$: Observable<AuthorizationRuleGroup[]> = of([]);
+  public layers$: Observable<ExtendedGeoServiceLayerModel[]> = of([]);
 
   public isWMS = false;
   public isWMTS = false;

@@ -1,7 +1,9 @@
 <form [formGroup]="layerSettingsForm">
+  <div class="margin-btm" i18n>Layer name: <b>{{layerName}}</b></div>
   <mat-form-field *ngIf="isLayerSpecific">
     <mat-label i18n>Title</mat-label>
     <input matInput tmAutoFocus placeholder="Title" i18n-placeholder formControlName="title" />
+    <mat-hint i18n>Leave empty to use the title as provided by the service.</mat-hint>
   </mat-form-field>
   <mat-form-field>
     <mat-label i18n>Description</mat-label>
@@ -74,7 +76,12 @@
       </mat-form-field>
       <mat-form-field>
         <mat-label i18n>Hi-DPI substitute layer</mat-label>
-        <input matInput tmAutoFocus placeholder="Hi-DPI substitute layer" i18n-placeholder formControlName="hiDpiSubstituteLayer" />
+        <mat-select formControlName="hiDpiSubstituteLayer">
+          <mat-option [value]="null" i18n></mat-option>
+          <mat-option *ngFor="let layer of layers$ | async" [value]="layer.name">
+            {{ layer.name }} ({{layer.title}})
+          </mat-option>
+        </mat-select>
       </mat-form-field>
     </ng-container>
     <ng-container *ngIf="isXYZ">
