@@ -1,5 +1,5 @@
 import { OpenlayersExtent } from '../models/extent.type';
-import Geometry from 'ol/geom/Geometry';
+import { Geometry } from 'ol/geom';
 import { fromExtent } from 'ol/geom/Polygon';
 import { getHeight, getWidth, isEmpty, getCenter } from 'ol/extent';
 import { Coordinate } from 'ol/coordinate';

@@ -1,7 +1,7 @@
 /* eslint-disable rxjs/finnish */
-import { default as OlMap } from 'ol/Map';
-import Projection from 'ol/proj/Projection';
-import View from 'ol/View';
+import { Map as OlMap } from 'ol';
+import { Projection } from 'ol/proj';
+import { View } from 'ol';
 import { NgZone } from '@angular/core';
 import { defaults as defaultInteractions } from 'ol/interaction';
 import { LayerManagerModel, MapViewDetailsModel, MapViewerModel, MapViewerOptionsModel } from '../models';
@@ -14,10 +14,10 @@ import { ToolManagerModel } from '../models/tool-manager.model';
 import { OpenLayersToolManager } from './open-layers-tool-manager';
 import { OpenLayersEventManager } from './open-layers-event-manager';
 import { MapExportOptions } from '../map-service/map.service';
-import Feature from 'ol/Feature';
-import Geometry from 'ol/geom/Geometry';
+import { Feature } from 'ol';
+import { Geometry } from 'ol/geom';
 import { buffer, Extent, extend } from 'ol/extent';
-import BaseLayer from 'ol/layer/Base';
+import { Layer as BaseLayer } from 'ol/layer';
 import { OpenLayersWmsGetFeatureInfoHelper } from './helpers/open-layers-wms-get-feature-info.helper';
 import { HttpClient, HttpXsrfTokenExtractor } from '@angular/common/http';
 import { FeatureModel } from '@tailormap-viewer/api';

@@ -5,8 +5,8 @@ import { GeoJSON, WFS } from 'ol/format';
 import { Feature, FeatureCollection, GeoJsonProperties } from 'geojson';
 import { map, Observable, of } from 'rxjs';
 import { FeatureModel } from '@tailormap-viewer/api';
-import WKT from 'ol/format/WKT';
-import Geometry from 'ol/geom/Geometry';
+import { WKT } from 'ol/format';
+import { Geometry } from 'ol/geom';
 
 export class OpenLayersWmsGetFeatureInfoHelper {
 
