@@ -11,11 +11,6 @@ export const setAttributeListVisibility = createAction(
   props<{ visible?: boolean }>(),
 );
 
-export const updateAttributeListHeight = createAction(
-  `${attributeListActionsPrefix} Update Height`,
-  props<{ height: number }>(),
-);
-
 export const changeAttributeListTabs = createAction(
   `${attributeListActionsPrefix} Change Tabs`,
   props<{

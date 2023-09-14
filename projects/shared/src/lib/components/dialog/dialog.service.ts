@@ -34,7 +34,7 @@ export class DialogService {
     this.updateStyle();
   }
 
-  public updateVisibleStack(id: string, left: number, right: number) {
+  private updateVisibleStack(id: string, left: number, right: number) {
     const visible = left > 0 || right > 0;
     const idx = this.visibleStack.indexOf(id);
     if (visible && idx === -1) {
@@ -43,10 +43,6 @@ export class DialogService {
     if (!visible && idx !== -1) {
       this.visibleStack = [ ...this.visibleStack.slice(0, idx), ...this.visibleStack.slice(idx + 1) ];
     }
-  }
-
-  public getDialogZIndex(id: string) {
-    return this.visibleStack.indexOf(id);
   }
 
   private updateStyle() {

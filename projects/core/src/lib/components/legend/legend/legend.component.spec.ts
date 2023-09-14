@@ -15,6 +15,7 @@ const getMapService = () => {
   return {
     provide: MapService, useValue: {
       getLayerManager$: () => of({ getLegendUrl: (layerId: string) => `layer-${layerId}-url-from-service` }),
+      setPadding: () => {},
       getMapViewDetails$: (): Observable<MapViewDetailsModel> => of({
         zoomLevel: 0,
         resolution: 1,

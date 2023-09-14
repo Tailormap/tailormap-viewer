@@ -33,6 +33,7 @@ export class OpenLayersMap implements MapViewerModel {
   private readonly resizeObserver: ResizeObserver;
   private initialExtent: OpenlayersExtent = [];
   private initialCenterZoom?: [number[], number] = undefined;
+  private mapPadding: number[] | undefined;
 
   constructor(
     private ngZone: NgZone,
@@ -185,7 +186,7 @@ export class OpenLayersMap implements MapViewerModel {
 
   private zoomToExtent(extent: Extent) {
     this.executeMapAction(olMap => {
-      olMap.getView().fit(buffer(extent, 10), { duration: 1000 });
+      olMap.getView().fit(buffer(extent, 10), { duration: 1000, padding: this.mapPadding });
     });
   }
 
@@ -205,6 +206,10 @@ export class OpenLayersMap implements MapViewerModel {
         olMap.getView().animate({ duration: animationDuration, zoom: zoomLevel, center: [ x, y ] });
       }
     });
+  }
+
+  public setPadding(padding: number[]) {
+    this.mapPadding = padding;
   }
 
   public getMap$(): Observable<OlMap> {

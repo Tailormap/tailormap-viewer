@@ -14,14 +14,6 @@ const onSetAttributeListVisibility = (
   data: state.data.map(d => ({ ...d, selectedRowId: undefined })),
 });
 
-const onUpdateAttributeListHeight = (
-  state: AttributeListState,
-  payload: ReturnType<typeof AttributeListActions.updateAttributeListHeight>,
-): AttributeListState => ({
-  ...state,
-  height: payload.height,
-});
-
 const onChangeAttributeListTabs = (
   state: AttributeListState,
   payload: ReturnType<typeof AttributeListActions.changeAttributeListTabs>,
@@ -250,7 +242,6 @@ const onToggleColumnVisible = (
 const attributeListReducerImpl = createReducer<AttributeListState>(
   initialAttributeListState,
   on(AttributeListActions.setAttributeListVisibility, onSetAttributeListVisibility),
-  on(AttributeListActions.updateAttributeListHeight, onUpdateAttributeListHeight),
   on(AttributeListActions.changeAttributeListTabs, onChangeAttributeListTabs),
   on(AttributeListActions.setSelectedTab, onSetSelectedTab),
   on(AttributeListActions.loadData, onLoadData),

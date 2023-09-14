@@ -19,6 +19,7 @@ import { selectViewerId } from '../../../state/core.selectors';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FeatureInfoFeatureModel } from "../../feature-info/models/feature-info-feature.model";
 import { MapService } from '@tailormap-viewer/map';
+import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layout.service';
 
 @Component({
   selector: 'tm-edit-dialog',
@@ -32,7 +33,10 @@ export class EditDialogComponent implements OnInit {
   public dialogCollapsed$: Observable<boolean> = of(false);
 
   public currentFeature$: Observable<FeatureWithMetadataModel | null> | undefined;
-  public panelWidthMargin = CssHelper.getCssVariableValueNumeric('--menubar-width') + (CssHelper.getCssVariableValueNumeric('--body-margin') * 2);
+
+  public panelWidth = 300;
+  private bodyMargin = CssHelper.getCssVariableValueNumeric('--body-margin');
+  public panelWidthMargin = CssHelper.getCssVariableValueNumeric('--menubar-width') + (this.bodyMargin * 2);
   public layerDetails$: Observable<{ layer: AppLayerModel; details: LayerDetailsModel }> | undefined;
 
   public loadingEditFeatureInfo$ = this.store$.select(selectLoadingEditFeatures);
@@ -49,6 +53,7 @@ export class EditDialogComponent implements OnInit {
     private destroyRef: DestroyRef,
     private mapService: MapService,
     private confirmService: ConfirmDialogService,
+    private layoutService: ViewerLayoutService,
   ) {}
 
   public ngOnInit(): void {
@@ -77,6 +82,12 @@ export class EditDialogComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
         this.updatedAttributes = null;
+      });
+
+    this.dialogOpen$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(open => {
+        this.layoutService.setRightPadding(open ? this.panelWidth + this.bodyMargin : 0);
       });
   }
 

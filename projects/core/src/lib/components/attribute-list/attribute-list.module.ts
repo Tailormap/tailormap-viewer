@@ -18,6 +18,7 @@ import { AttributeListPagingDialogComponent } from './attribute-list-paging-dial
 import { AttributeListFilterComponent } from './attribute-list-filter/attribute-list-filter.component';
 import { FilterModule } from '../../filter/filter.module';
 import { AttributeListExportButtonComponent } from './attribute-list-export-button/attribute-list-export-button.component';
+import { CoreSharedModule } from '../../shared';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { AttributeListExportButtonComponent } from './attribute-list-export-butt
     StoreModule.forFeature(attributeListStateKey, attributeListReducer),
     EffectsModule.forFeature([AttributeListEffects]),
     FilterModule,
+    CoreSharedModule,
   ],
   exports: [
     AttributeListComponent,
