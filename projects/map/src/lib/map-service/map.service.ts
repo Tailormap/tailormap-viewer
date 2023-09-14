@@ -116,7 +116,7 @@ export class MapService {
     layerId: string,
     featureGeometry$: Observable<FeatureModelType<T> | Array<FeatureModelType<T>>>,
     vectorLayerStyle?: MapStyleModel | ((feature: FeatureModel<T>) => MapStyleModel),
-    zoomToFeature?: boolean,
+    zoomToFeature?: boolean | (() => boolean),
     updateWhileAnimating?: boolean,
   ): Observable<VectorLayer<VectorSource<Geometry>> | null> {
     return combineLatest([
@@ -135,7 +135,10 @@ export class MapService {
           featureModels.forEach(feature => {
             vectorLayer.getSource()?.addFeature(feature);
           });
-          if (zoomToFeature) {
+          const shouldZoom = typeof zoomToFeature === 'boolean'
+            ? zoomToFeature
+            : (typeof zoomToFeature === 'undefined' ? false : zoomToFeature());
+          if (shouldZoom) {
             this.map.zoomToFeatures(featureModels);
           }
         }),
@@ -231,6 +234,10 @@ export class MapService {
     httpService: HttpClient,
   ): Observable<FeatureModel[]> {
     return this.map.getFeatureInfoForLayers$(layerId, coordinates, httpService);
+  }
+
+  public setPadding(padding: number[]) {
+    this.map.setPadding(padding);
   }
 
 }

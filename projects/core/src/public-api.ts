@@ -12,3 +12,4 @@ export * from './lib/core.module';
 export * from './lib/core-routing.module';
 export * from './lib/pages';
 export * from './lib/components';
+export * from './lib/shared';

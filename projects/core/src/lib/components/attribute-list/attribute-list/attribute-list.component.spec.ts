@@ -29,6 +29,7 @@ import { AttributeListExportButtonComponent } from '../attribute-list-export-but
 import { coreStateKey } from '../../../state/core.state';
 import { coreReducer } from '../../../state/core.reducer';
 import { ExtendedAppLayerModel } from '../../../map/models';
+import { CoreSharedModule } from '../../../shared';
 
 const getStore = (
   attributeListStore: { [attributeListStateKey]: AttributeListState },
@@ -55,7 +56,7 @@ describe('AttributeList', () => {
   it('does not render for hidden attribute list', async () => {
     const store = getStore(getLoadingStore({ visible: false }));
     await render(AttributeListComponent, {
-      imports: [ MatIconModule, MatIconTestingModule, MatToolbarModule, HttpClientTestingModule ],
+      imports: [ MatIconModule, MatIconTestingModule, MatToolbarModule, HttpClientTestingModule, CoreSharedModule ],
       declarations: [ AttributeListComponent, PanelResizerComponent ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [
@@ -70,7 +71,7 @@ describe('AttributeList', () => {
   it('renders without tabs and layers', async () => {
     const store = getStore(getLoadedStoreNoRows({ tabs: [], data: [] }));
     await render(AttributeListComponent, {
-      imports: [ MatIconModule, MatIconTestingModule, MatToolbarModule, HttpClientTestingModule ],
+      imports: [ MatIconModule, MatIconTestingModule, MatToolbarModule, HttpClientTestingModule, CoreSharedModule ],
       declarations: [ AttributeListComponent, PanelResizerComponent ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [
@@ -94,7 +95,7 @@ describe('AttributeList', () => {
       ],
     );
     await render(AttributeListComponent, {
-      imports: [ MatProgressSpinnerModule, MatIconModule, MatIconTestingModule, MatToolbarModule, HttpClientTestingModule ],
+      imports: [ MatProgressSpinnerModule, MatIconModule, MatIconTestingModule, MatToolbarModule, HttpClientTestingModule, CoreSharedModule ],
       declarations: [ AttributeListComponent, PanelResizerComponent ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [
@@ -122,6 +123,7 @@ describe('AttributeList', () => {
     };
     await render(AttributeListComponent, {
       imports: [
+        CoreSharedModule,
         SharedImportsModule,
         NoopAnimationsModule,
         MatIconTestingModule,

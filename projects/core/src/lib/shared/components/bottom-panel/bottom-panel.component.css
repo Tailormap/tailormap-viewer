@@ -1,0 +1,61 @@
+.container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: calc(var(--overlay-panel-z-index) - 2);
+  transition: left ease-in-out 0.15s;
+}
+
+::ng-deep .body--has-dialog-left .bottom-panel-container {
+  left: var(--dialog-width-left);
+  border-left: 1px solid #e1e1e1;
+}
+
+.panel {
+  box-shadow: var(--box-shadow-top);
+  width: 100%;
+  height: 350px;
+  overflow: hidden;
+  display: flex;
+  flex-flow: column nowrap;
+  font-size: 15px;
+  background-color: #fff;
+  max-height: calc(var(--vh) * 100);
+}
+
+.panel--minimized {
+  height: auto !important;
+}
+
+.size-18 + .size-18 {
+  margin-left: 12px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.mat-toolbar {
+  height: 45px;
+  background: #fff;
+  padding: 10px 16px;
+  border-bottom: 1px solid #e1e1e1;
+}
+
+.mat-toolbar span {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.panel-content {
+  overflow: hidden;
+  display: flex;
+  flex: 1;
+  flex-flow: column nowrap;
+}
+
+.panel--minimized .panel-content {
+  display: none;
+}

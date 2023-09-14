@@ -1,69 +1,9 @@
-.container {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: calc(var(--overlay-panel-z-index) - 1);
-  transition: left ease-in-out 0.15s;
-}
-
-::ng-deep .body--has-dialog-left .attribute-list-container {
-  left: var(--dialog-width-left);
-  border-left: 1px solid #e1e1e1;
-}
-
-.panel {
-  box-shadow: var(--box-shadow-top);
-  width: 100%;
-  height: 350px;
-  overflow: hidden;
-  display: flex;
-  flex-flow: column nowrap;
-  font-size: 15px;
-  background-color: #fff;
-  max-height: calc(var(--vh) * 100);
-}
-
-.panel--minimized {
-  height: auto !important;
-}
-
-.panel--minimized .panel-content,
-.panel--minimized tm-attribute-list-tab {
-  display: none;
-}
-
 .no-tabs {
   margin: 16px;
 }
 
-.size-18 + .size-18 {
-  margin-left: 12px;
-}
-
-.spacer {
-  flex: 1 1 auto;
-}
-
-.mat-toolbar {
-  height: 45px;
-  background: #fff;
-  padding: 10px 16px;
-  border-bottom: 1px solid #e1e1e1;
-}
-
 mat-tab-group {
   border-bottom: 1px solid #e1e1e1;
-}
-
-.mat-toolbar span {
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 24px;
-}
-
-.mat-divider {
-  background: #e5e5e5;
 }
 
 .tab-group {
