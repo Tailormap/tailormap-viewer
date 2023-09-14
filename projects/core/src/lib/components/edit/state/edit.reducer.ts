@@ -11,6 +11,7 @@ const onSetIsActive = (
 ): EditState => ({
   ...state,
   isActive: payload.active,
+  isCreateNewFeatureActive: payload.active ? state.isCreateNewFeatureActive : false,
   dialogVisible: false,
   selectedFeature: null,
 });
