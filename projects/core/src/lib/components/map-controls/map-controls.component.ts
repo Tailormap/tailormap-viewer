@@ -1,9 +1,12 @@
 import {
-  Component, OnInit, ChangeDetectionStrategy, ComponentRef, ViewChild, ViewContainerRef, OnDestroy,
+  Component, OnInit, ChangeDetectionStrategy, ViewChild, ViewContainerRef, Input, ChangeDetectorRef, DestroyRef,
 } from '@angular/core';
 import { MapControlsService } from './map-controls.service';
-import { Subject, takeUntil } from 'rxjs';
+import { debounceTime } from 'rxjs';
 import { DynamicComponentsHelper } from '@tailormap-viewer/shared';
+import { ComponentModel } from '@tailormap-viewer/api';
+import { ComponentConfigHelper } from '../../shared/helpers/component-config.helper';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'tm-map-controls',
@@ -11,36 +14,36 @@ import { DynamicComponentsHelper } from '@tailormap-viewer/shared';
   styleUrls: ['./map-controls.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MapControlsComponent implements OnInit, OnDestroy {
+export class MapControlsComponent implements OnInit {
 
-  private destroyed = new Subject();
-
-  private injectedComponents: ComponentRef<any>[] = [];
+  @Input({ required: true })
+  public config: ComponentModel[] = [];
 
   @ViewChild('mapControlsContainer', { read: ViewContainerRef, static: true })
   private mapControlsContainer: ViewContainerRef | null = null;
 
   constructor(
     private mapControlsService: MapControlsService,
+    private cdr: ChangeDetectorRef,
+    private destroyRef: DestroyRef,
   ) { }
 
   public ngOnInit(): void {
     this.mapControlsService.getRegisteredComponents$()
       .pipe(
-        takeUntil(this.destroyed),
+        takeUntilDestroyed(this.destroyRef),
+        debounceTime(10),
       )
       .subscribe(components => {
         if (!this.mapControlsContainer) {
           return;
         }
-        DynamicComponentsHelper.destroyComponents(this.injectedComponents);
-        this.injectedComponents = DynamicComponentsHelper.createComponents(components, this.mapControlsContainer);
+        DynamicComponentsHelper.createComponents(
+          ComponentConfigHelper.filterDisabledComponents(components, this.config),
+          this.mapControlsContainer,
+        );
+        this.cdr.detectChanges();
       });
-  }
-
-  public ngOnDestroy() {
-    this.destroyed.next(null);
-    this.destroyed.complete();
   }
 
 }

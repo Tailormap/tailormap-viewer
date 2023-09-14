@@ -55,6 +55,11 @@ export const selectGeoServiceById = (id: string) => createSelector(
   (services): ExtendedGeoServiceModel | null => services.find(service => service.id === id) || null,
 );
 
+export const selectGeoServiceLayersByGeoServiceId = (serviceId: string) => createSelector(
+  selectGeoServiceLayers,
+  (geoServiceLayers): ExtendedGeoServiceLayerModel[] => geoServiceLayers.filter(l => l.serviceId == serviceId),
+);
+
 export const selectFeatureSourceById = (id: string) => createSelector(
   selectFeatureSources,
   (sources): ExtendedFeatureSourceModel | null => sources.find(source => source.id === id) || null,

@@ -1,8 +1,8 @@
-import BaseLayer from 'ol/layer/Base';
-import Projection from 'ol/proj/Projection';
-import TileLayer from 'ol/layer/Tile';
-import WMTS, { optionsFromCapabilities } from 'ol/source/WMTS';
-import XYZ from 'ol/source/XYZ';
+import { Layer as BaseLayer } from 'ol/layer';
+import { Projection } from 'ol/proj';
+import { Tile as TileLayer, Image as ImageLayer } from 'ol/layer';
+import { ImageWMS, WMTS, XYZ, TileWMS } from 'ol/source';
+import { optionsFromCapabilities } from 'ol/source/WMTS';
 import { XyzLayerModel } from '../models/xyz-layer.model';
 import { LayerTypesHelper } from './layer-types.helper';
 import { OgcHelper } from './ogc.helper';
@@ -10,19 +10,17 @@ import { LayerModel } from '../models/layer.model';
 import { WMSLayerModel } from '../models/wms-layer.model';
 import { WMTSLayerModel } from '../models/wmts-layer.model';
 import { WMTSCapabilities } from 'ol/format';
-import WMTSTileGrid from 'ol/tilegrid/WMTS';
-import { ImageWMS, TileWMS } from 'ol/source';
-import ImageLayer from 'ol/layer/Image';
+import { default as WMTSTileGrid } from 'ol/tilegrid/WMTS';
 import { Options } from 'ol/source/ImageWMS';
 import { ServerType } from 'ol/source/wms';
 import { ServerType as TMServerType } from '@tailormap-viewer/api';
 import { ObjectHelper } from '@tailormap-viewer/shared';
 import { ImageTile } from 'ol';
 import { NgZone } from '@angular/core';
-import TileState from 'ol/TileState';
+import { default as TileState } from 'ol/TileState';
 import { createForProjection, createXYZ, extentFromProjection } from 'ol/tilegrid';
 import { HttpXsrfTokenExtractor } from '@angular/common/http';
-import TileGrid from 'ol/tilegrid/TileGrid';
+import { default as TileGrid } from 'ol/tilegrid/TileGrid';
 
 export interface LayerProperties {
   id: string;

@@ -1,9 +1,9 @@
 import { MapExportOptions } from '../map-service/map.service';
 import { concatMap, from, map, Observable, Subject, take } from 'rxjs';
-import { default as OlMap } from 'ol/Map';
+import { Map as OlMap } from 'ol';
 import { OlLayerHelper } from '../helpers/ol-layer.helper';
-import BaseLayer from 'ol/layer/Base';
-import View from 'ol/View';
+import { Layer as BaseLayer } from 'ol/layer';
+import { View } from 'ol';
 import { Size } from 'ol/size';
 import { ScaleLine } from 'ol/control';
 import type html2canvas from 'html2canvas';

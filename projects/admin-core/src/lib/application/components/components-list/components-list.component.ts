@@ -3,7 +3,6 @@ import { ConfigurationComponentRegistryService } from '../../services/configurat
 import { map, Observable, Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectDisabledComponentsForSelectedApplication } from '../../state/application.selectors';
-import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-admin-components-list',
@@ -13,10 +12,10 @@ import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 })
 export class ComponentsListComponent implements OnInit, OnDestroy {
 
-  public listOfComponents$: Observable<Array<{ type: BaseComponentTypeEnum; label: string }>>;
+  public listOfComponents$: Observable<Array<{ type: string; label: string }>>;
 
   @Output()
-  public selectComponent = new EventEmitter<BaseComponentTypeEnum>();
+  public selectComponent = new EventEmitter<string>();
 
   public selectedComponent: string | null = null;
   private destroyed = new Subject();
@@ -30,7 +29,7 @@ export class ComponentsListComponent implements OnInit, OnDestroy {
     this.listOfComponents$ = this.configurationComponentRegistryService.getRegisteredConfigurationComponents$()
       .pipe(
         map((components) => {
-          const componentsList: Array<{ type: BaseComponentTypeEnum; label: string }> = [];
+          const componentsList: Array<{ type: string; label: string }> = [];
           components.forEach((value, key) => {
             componentsList.push({ type: key, label: value.label });
           });
@@ -53,7 +52,7 @@ export class ComponentsListComponent implements OnInit, OnDestroy {
     this.destroyed.complete();
   }
 
-  public setActiveComponent(component: BaseComponentTypeEnum) {
+  public setActiveComponent(component: string) {
     this.selectedComponent = component;
     this.selectComponent.emit(component);
   }

@@ -6,3 +6,5 @@
 
 export * from './lib/admin-core.module';
 export * from './lib/admin-core-routing.module';
+export * from './lib/application/services/configuration-component-registry.service';
+export * from './lib/application/components/base-component-config/base-component-config.component';

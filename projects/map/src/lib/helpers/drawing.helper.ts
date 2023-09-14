@@ -1,7 +1,6 @@
 import { createBox, createRegularPolygon, SketchCoordType } from 'ol/interaction/Draw';
-import SimpleGeometry from 'ol/geom/SimpleGeometry';
-import Polygon, { fromCircle } from 'ol/geom/Polygon';
-import { Circle } from 'ol/geom';
+import { Circle, Polygon, SimpleGeometry } from 'ol/geom';
+import { fromCircle } from 'ol/geom/Polygon';
 import { Coordinate } from 'ol/coordinate';
 
 export class DrawingHelper {

@@ -71,7 +71,7 @@ export class DrawingHelper {
       strokeWidth: 3,
       label: '',
       labelSize: 12,
-      labelColor: '#000000',
+      labelColor: 'rgb(0, 0, 0)',
     };
     return { ...defaultStyle, ...DrawingHelper.updatedDefaultStyle };
   }

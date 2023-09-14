@@ -1,13 +1,7 @@
-import BaseLayer from 'ol/layer/Base';
-import VectorLayer from 'ol/layer/Vector';
-import ImageLayer from 'ol/layer/Image';
-import TileLayer from 'ol/layer/Tile';
-import Geometry from 'ol/geom/Geometry';
-import VectorSource from 'ol/source/Vector';
-import ImageWMS from 'ol/source/ImageWMS';
-import WMTS from 'ol/source/WMTS';
-import XYZ from 'ol/source/XYZ';
-import TileWMS from 'ol/source/TileWMS';
+import { Layer as BaseLayer } from 'ol/layer';
+import { Vector as VectorLayer, Image as ImageLayer, Tile as TileLayer } from 'ol/layer';
+import { Geometry } from 'ol/geom';
+import { Vector as VectorSource, ImageWMS, WMTS, XYZ, TileWMS } from 'ol/source';
 
 export const isOpenLayersVectorLayer = (layer: BaseLayer): layer is VectorLayer<VectorSource<Geometry>> => {
   return layer instanceof VectorLayer;

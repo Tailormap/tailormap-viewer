@@ -23,6 +23,14 @@ tm-tree .tree-node-wrapper--leaf {
   padding-left: 18px;
 }
 
+.margin-btm {
+  margin-bottom: 8px;
+}
+
+.margin-top {
+  margin-top: 8px;
+}
+
 .wrapper .mdc-list-item,
 .wrapper .mdc-list-item.mdc-list-item--with-one-line {
   height: 34px;

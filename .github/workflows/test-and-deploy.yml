@@ -15,7 +15,7 @@ jobs:
     name: 'Lint'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v3
         with:
@@ -41,7 +41,7 @@ jobs:
     name: 'Test'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v3
         with:
@@ -106,7 +106,7 @@ jobs:
       BUILDX_NO_DEFAULT_ATTESTATIONS: 1
     needs: [ lint, test ]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           # If tags aren't fetched the bin/prebuild.js script will leave fields in generated/version.json empty
           # https://github.com/actions/checkout/issues/701
@@ -179,7 +179,7 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: actions/dependency-review-action@v3
         with:
@@ -193,7 +193,7 @@ jobs:
       contents: read
     if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event_name == 'schedule') }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v3
         with:

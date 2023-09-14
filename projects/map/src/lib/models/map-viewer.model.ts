@@ -2,8 +2,8 @@ import { OpenlayersExtent } from './extent.type';
 import { LayerManagerModel } from './layer-manager.model';
 import { MapViewerOptionsModel } from './map-viewer-options.model';
 import { Observable } from 'rxjs';
-import { default as OlMap } from 'ol/Map';
-import Projection from 'ol/proj/Projection';
+import { Map as OlMap } from 'ol';
+import { Projection } from 'ol/proj';
 
 export interface MapViewerModel {
   initMap(options: MapViewerOptionsModel): void;

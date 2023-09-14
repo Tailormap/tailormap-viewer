@@ -1,6 +1,6 @@
 {
   "name": "@tailormap-admin/admin-core",
-  "version": "11.0.4",
+  "version": "11.0.10",
   "peerDependencies": {
     "@angular/animations": "^16.1.0",
     "@angular/cdk": "^16.1.0",
@@ -14,9 +14,9 @@
     "@ngrx/effects": "^16.0.1",
     "@ngrx/store": "^16.0.1",
     "@ngrx/store-devtools": "^16.0.1",
-    "@tailormap-admin/admin-api": "^11.0.4",
-    "@tailormap-viewer/api": "^11.0.4",
-    "@tailormap-viewer/shared": "^11.0.4",
+    "@tailormap-admin/admin-api": "^11.0.10",
+    "@tailormap-viewer/api": "^11.0.10",
+    "@tailormap-viewer/shared": "^11.0.10",
     "nanoid": "^4.0.0",
     "rxjs": "^7.8.0"
   },

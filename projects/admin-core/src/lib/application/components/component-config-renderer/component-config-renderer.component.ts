@@ -5,7 +5,6 @@ import { ConfigurationComponentRegistryService } from '../../services/configurat
 import { Subject, takeUntil } from 'rxjs';
 import { DynamicComponentsHelper } from '@tailormap-viewer/shared';
 import { BaseComponentConfigComponent } from '../base-component-config/base-component-config.component';
-import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-admin-component-config-renderer',
@@ -15,10 +14,10 @@ import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 })
 export class ComponentConfigRendererComponent implements OnInit, OnDestroy {
 
-  private _selectedComponent: BaseComponentTypeEnum | null = null;
+  private _selectedComponent: string | null = null;
 
   @Input()
-  public set selectedComponent(value: BaseComponentTypeEnum | null) {
+  public set selectedComponent(value: string | null) {
     this._selectedComponent = value;
     if (this._selectedComponent) {
       this.renderActiveComponentConfiguration(this._selectedComponent);
@@ -35,7 +34,7 @@ export class ComponentConfigRendererComponent implements OnInit, OnDestroy {
   private configurationComponentRegistryService = inject(ConfigurationComponentRegistryService);
   private destroyed = new Subject();
   private renderedConfigurationComponent: ComponentRef<unknown> | undefined;
-  private availableComponents: Map<BaseComponentTypeEnum, { component: Type<any>; label: string }> = new Map();
+  private availableComponents: Map<string, { component: Type<any>; label: string }> = new Map();
 
   public ngOnInit() {
     this.configurationComponentRegistryService.getRegisteredConfigurationComponents$()
@@ -50,7 +49,7 @@ export class ComponentConfigRendererComponent implements OnInit, OnDestroy {
     this.destroyed.complete();
   }
 
-  private renderActiveComponentConfiguration(selectedComponent?: BaseComponentTypeEnum) {
+  private renderActiveComponentConfiguration(selectedComponent?: string) {
     if (!this.componentConfigContainer) {
       return;
     }

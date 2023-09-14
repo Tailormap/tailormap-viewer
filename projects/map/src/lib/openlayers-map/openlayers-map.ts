@@ -1,7 +1,7 @@
 /* eslint-disable rxjs/finnish */
-import { default as OlMap } from 'ol/Map';
-import Projection from 'ol/proj/Projection';
-import View from 'ol/View';
+import { Map as OlMap } from 'ol';
+import { Projection } from 'ol/proj';
+import { View } from 'ol';
 import { NgZone } from '@angular/core';
 import { defaults as defaultInteractions } from 'ol/interaction';
 import { LayerManagerModel, MapViewDetailsModel, MapViewerModel, MapViewerOptionsModel } from '../models';
@@ -14,10 +14,10 @@ import { ToolManagerModel } from '../models/tool-manager.model';
 import { OpenLayersToolManager } from './open-layers-tool-manager';
 import { OpenLayersEventManager } from './open-layers-event-manager';
 import { MapExportOptions } from '../map-service/map.service';
-import Feature from 'ol/Feature';
-import Geometry from 'ol/geom/Geometry';
-import { buffer } from 'ol/extent';
-import BaseLayer from 'ol/layer/Base';
+import { Feature } from 'ol';
+import { Geometry } from 'ol/geom';
+import { buffer, Extent, extend } from 'ol/extent';
+import { Layer as BaseLayer } from 'ol/layer';
 import { OpenLayersWmsGetFeatureInfoHelper } from './helpers/open-layers-wms-get-feature-info.helper';
 import { HttpClient, HttpXsrfTokenExtractor } from '@angular/common/http';
 import { FeatureModel } from '@tailormap-viewer/api';
@@ -161,17 +161,31 @@ export class OpenLayersMap implements MapViewerModel {
       });
   }
 
-  public zoomToFeature(olFeature: Feature<Geometry>) {
-    this.zoomToGeometry(olFeature.getGeometry());
+  public zoomToFeatures(olFeatures: Feature<Geometry>[]) {
+    if (olFeatures.length === 0) {
+      return;
+    }
+    const extents = olFeatures
+      .map(f => f.getGeometry()?.getExtent())
+      .filter((e): e is Extent => typeof e !== "undefined");
+    if (extents.length === 0) {
+      return;
+    }
+    const totalExtent = extents[0];
+    extents.slice(1).forEach(e => extend(totalExtent, e));
+    this.zoomToExtent(totalExtent);
   }
 
   public zoomToGeometry(geom?: Geometry) {
     if (!geom) {
       return;
     }
-    const geomExtent = geom.getExtent();
+    this.zoomToExtent(geom.getExtent());
+  }
+
+  private zoomToExtent(extent: Extent) {
     this.executeMapAction(olMap => {
-      olMap.getView().fit(buffer(geomExtent, 10), { duration: 1000 });
+      olMap.getView().fit(buffer(extent, 10), { duration: 1000 });
     });
   }
 

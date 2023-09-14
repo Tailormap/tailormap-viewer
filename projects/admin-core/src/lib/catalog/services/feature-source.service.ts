@@ -103,7 +103,7 @@ export class FeatureSourceService {
         take(1),
         filter((featureType): featureType is ExtendedFeatureTypeModel => !!featureType),
         concatMap(featureType => {
-          return this.adminApiService.updateFeatureType$({ id: featureType.id, featureType: updatedFeatureType })
+          return this.adminApiService.updateFeatureType$({ id: featureType.originalId, featureType: updatedFeatureType })
             .pipe(
               catchError((errorResponse) => {
                 const message = ApiResponseHelper.getAdminApiErrorMessage(errorResponse);

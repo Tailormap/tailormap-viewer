@@ -1,4 +1,4 @@
-import { default as OlMap } from 'ol/Map';
+import { Map as OlMap } from 'ol';
 import { ToolModel, ToolConfigModel, ToolManagerModel } from '../models';
 import { ToolTypeHelper } from '../helpers/tool-type.helper';
 import { OpenLayersMapClickTool } from './tools/open-layers-map-click-tool';
