@@ -39,9 +39,11 @@ export class EditDialogComponent implements OnInit {
   public loadingEditFeatureInfo$ = this.store$.select(selectLoadingEditFeatures);
   public editCoordinates$ = this.store$.select(selectEditMapCoordinates);
 
-  public updatedAttributes: FeatureModelAttributes | null = null;
+  public updatedAttributes: FeatureModelAttributes = {};
   public selectableFeature$: Observable<FeatureInfoFeatureModel[]> = of([]);
   private geometryEditedForLayer: string | null = null;
+
+  public formValid: boolean = false;
 
   constructor(
     private store$: Store,
@@ -78,8 +80,18 @@ export class EditDialogComponent implements OnInit {
     this.currentFeature$
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
-        this.updatedAttributes = null;
+        this.resetChanges();
       });
+  }
+
+  private resetChanges() {
+    this.updatedAttributes = {};
+    this.formValid = false;
+    if (this.geometryEditedForLayer) {
+      const refreshLayerId = this.geometryEditedForLayer;
+      this.mapService.refreshLayer(`${refreshLayerId}`);
+      this.geometryEditedForLayer = null;
+    }
   }
 
   public closeDialog() {
@@ -111,13 +123,7 @@ export class EditDialogComponent implements OnInit {
       .subscribe(feature => {
         if (feature) {
           this.store$.dispatch(updateEditFeature({ feature, layerId }));
-          this.updatedAttributes = null;
-          if (!this.geometryEditedForLayer) {
-            return;
-          }
-          const refreshLayerId = this.geometryEditedForLayer;
-          this.geometryEditedForLayer = null;
-          this.mapService.refreshLayer(`${refreshLayerId}`);
+          this.resetChanges();
         }
       });
   }
@@ -149,13 +155,7 @@ export class EditDialogComponent implements OnInit {
         .subscribe(feature => {
           if (feature) {
             this.store$.dispatch(updateEditFeature({ feature, layerId }));
-            this.updatedAttributes = null;
-            if (!this.geometryEditedForLayer) {
-              return;
-            }
-            const refreshLayerId = this.geometryEditedForLayer;
-            this.geometryEditedForLayer = null;
-            this.mapService.refreshLayer(`${refreshLayerId}`);
+            this.resetChanges();
           }
         });
   }
@@ -195,16 +195,7 @@ export class EditDialogComponent implements OnInit {
   }
 
   public featureChanged($event: { attribute: string; value: any; invalid?: boolean }) {
-    if (this.updatedAttributes === null) {
-      this.updatedAttributes = {};
-    }
-    if ($event.invalid) {
-      delete this.updatedAttributes[$event.attribute];
-      if (Object.keys(this.updatedAttributes).length === 0) {
-        this.updatedAttributes = null;
-      }
-      return;
-    }
+    this.formValid = !$event.invalid;
     this.updatedAttributes[$event.attribute] = $event.value;
   }
 
@@ -223,6 +214,25 @@ export class EditDialogComponent implements OnInit {
           this.updatedAttributes = {};
         }
         this.updatedAttributes[$event.geometryAttribute] = $event.geometry;
+      });
+  }
+
+  public geometryCreated($event: { geometry: string }) {
+    if (!this.currentFeature$) {
+      return;
+    }
+    this.currentFeature$.pipe(
+      take(1),
+      switchMap((feature: FeatureWithMetadataModel | null) => {
+        if (!feature) {
+          return of(null);
+        }
+        return this.applicationLayerService.getLayerDetails$(feature.feature.layerId);
+      }))
+      .subscribe(layerDetails => {
+        if (layerDetails) {
+          this.updatedAttributes[layerDetails.details.geometryAttribute] = $event.geometry;
+        }
       });
   }
 }

@@ -16,15 +16,15 @@
                       (featureAttributeChanged)="featureChanged($event)"></tm-edit-form>
       </div>
       <div class="buttons">
-        <button (click)="save(layerDetails.layer.id, currentFeature)" *ngIf="!isCreateFeature$" [disabled]="!updatedAttributes"
+        <button (click)="save(layerDetails.layer.id, currentFeature)" *ngIf="(isCreateFeature$ | async) === false" [disabled]="!formValid"
                 color="primary" i18n mat-flat-button>
           Save
         </button>
-        <button (click)="add(layerDetails.layer.id)" *ngIf="isCreateFeature$" [disabled]="!updatedAttributes" color="primary" i18n
+        <button (click)="add(layerDetails.layer.id)" *ngIf="isCreateFeature$ | async" [disabled]="!formValid" color="primary" i18n
                 mat-flat-button>
           Add
         </button>
-        <button (click)="delete(layerDetails.layer.id, currentFeature)" *ngIf="!isCreateFeature$" color="warn" i18n mat-stroked-button>
+        <button (click)="delete(layerDetails.layer.id, currentFeature)" *ngIf="(isCreateFeature$ | async) === false" color="warn" i18n mat-stroked-button>
           Delete
         </button>
         <button (click)="closeDialog()" i18n mat-flat-button>
@@ -51,4 +51,5 @@
 <tm-map-spinner [coordinates$]="editCoordinates$"
                 [loading$]="loadingEditFeatureInfo$"></tm-map-spinner>
 <tm-edit-tool></tm-edit-tool>
-<tm-edit-geometry-tool (geometryChanged)="geometryChanged($event)"></tm-edit-geometry-tool>
+<tm-edit-geometry-tool *ngIf="(isCreateFeature$ | async) === false" (geometryChanged)="geometryChanged($event)"></tm-edit-geometry-tool>
+<tm-create-geometry-tool *ngIf="isCreateFeature$ | async" (geometryCreated)="geometryCreated($event)"></tm-create-geometry-tool>
