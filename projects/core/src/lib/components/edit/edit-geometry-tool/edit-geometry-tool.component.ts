@@ -39,6 +39,29 @@ export class EditGeometryToolComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
+    this.mapService.createTool$<ModifyToolModel, ModifyToolConfigModel>({
+      type: ToolTypeEnum.Modify,
+      style: FeatureStylingHelper.getDefaultHighlightStyle('edit-geometry-style', {
+        fillColor: ApplicationStyleService.getPrimaryColor(),
+        fillOpacity: 10,
+      }),
+    })
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        tap(({ tool }) => this.tool = tool),
+        switchMap(({ tool }) => tool.featureModified$),
+      )
+      .subscribe(modifiedGeometry => {
+        if (!this.currentFeature || !this.layerDetails) {
+          return;
+        }
+        this.geometryChanged.emit({
+          __fid: this.currentFeature.__fid,
+          geometryAttribute: this.layerDetails.geometryAttribute,
+          geometry: modifiedGeometry,
+        });
+      });
+
     this.store$.select(selectSelectedEditFeature)
       .pipe(
         takeUntilDestroyed(this.destroyRef),
@@ -63,29 +86,6 @@ export class EditGeometryToolComponent implements OnInit {
         this.layerDetails = layerDetails.details;
         const geometry = selectedFeature.feature.attributes[layerDetails.details.geometryAttribute];
         this.tool.enable({ geometry });
-      });
-
-    this.mapService.createTool$<ModifyToolModel, ModifyToolConfigModel>({
-      type: ToolTypeEnum.Modify,
-      style: FeatureStylingHelper.getDefaultHighlightStyle('edit-geometry-style', {
-        fillColor: ApplicationStyleService.getPrimaryColor(),
-        fillOpacity: 10,
-      }),
-    })
-      .pipe(
-        takeUntilDestroyed(this.destroyRef),
-        tap(({ tool }) => this.tool = tool),
-        switchMap(({ tool }) => tool.featureModified$),
-      )
-      .subscribe(modifiedGeometry => {
-        if (!this.currentFeature || !this.layerDetails) {
-          return;
-        }
-        this.geometryChanged.emit({
-          __fid: this.currentFeature.__fid,
-          geometryAttribute: this.layerDetails.geometryAttribute,
-          geometry: modifiedGeometry,
-        });
       });
   }
 

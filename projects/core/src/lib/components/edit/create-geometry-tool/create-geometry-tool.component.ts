@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
   DrawingToolConfigModel,
   DrawingToolModel,
@@ -6,7 +6,7 @@ import {
   ToolTypeEnum,
 } from '@tailormap-viewer/map';
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { BehaviorSubject, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, switchMap, take, tap } from 'rxjs';
 import { ApplicationStyleService } from '../../../services/application-style.service';
 
 @Component({
@@ -21,6 +21,18 @@ export class CreateGeometryToolComponent implements OnInit {
   public geometryCreated = new EventEmitter<{ geometry: string }>();
   private createdGeometrySubject = new BehaviorSubject<string>('');
 
+  private _geometryType: string | null = null;
+
+  private toolId: string | null = null;
+
+  @Input()
+  public set geometryType(geometryType: string | null) {
+    this._geometryType = geometryType;
+    this.setGeometryType(geometryType);
+  }
+  public get geometryType() {
+    return this._geometryType;
+  }
 
   constructor(
     private mapService: MapService,
@@ -46,7 +58,8 @@ export class CreateGeometryToolComponent implements OnInit {
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         tap(({ tool, manager }) => {
-          manager.enableTool(tool?.id, true, { type: 'area' });
+          this.toolId = tool.id;
+          manager.enableTool(tool.id, true, { type: this.geometryType });
         }),
         switchMap(({ tool }) => tool.drawing$),
       )
@@ -55,6 +68,19 @@ export class CreateGeometryToolComponent implements OnInit {
           this.geometryCreated.emit({ geometry: drawEvent.geometry });
           this.createdGeometrySubject.next(drawEvent.geometry);
         }
+        if (drawEvent && drawEvent.type === 'start') {
+          this.createdGeometrySubject.next('');
+        }
       });
+  }
+
+  public setGeometryType(geometryType: string | null) {
+    this.mapService.getToolManager$().pipe(take(1)).subscribe((manager) => {
+      if (this.toolId) {
+        manager.disableTool(this.toolId);
+        manager.enableTool(this.toolId, true, { type: geometryType });
+        this.createdGeometrySubject.next('');
+      }
+    });
   }
 }

@@ -2,6 +2,7 @@ import { createAction, props } from '@ngrx/store';
 import { FeatureInfoResponseModel } from '../../feature-info/models/feature-info-response.model';
 import { FeatureModel } from '@tailormap-viewer/api';
 import { FeatureInfoColumnMetadataModel } from "../../feature-info/models/feature-info-column-metadata.model";
+import { FeatureInfoFeatureModel } from '../../feature-info/models/feature-info-feature.model';
 
 const editActionsPrefix = '[Edit]';
 
@@ -12,7 +13,7 @@ export const setEditActive = createAction(
 
 export const setEditCreateNewFeatureActive = createAction(
   `${editActionsPrefix} Set Create New Feature Active`,
-  props<{ active: boolean; columnMetadata: FeatureInfoColumnMetadataModel[] }>(),
+  props<{ active: boolean; geometryType: string; columnMetadata: FeatureInfoColumnMetadataModel[] }>(),
 );
 
 export const setSelectedEditLayer = createAction(
@@ -47,4 +48,9 @@ export const expandCollapseEditDialog = createAction(`${editActionsPrefix} Expan
 export const updateEditFeature = createAction(
   `${editActionsPrefix} Update Feature`,
   props<{ feature: FeatureModel; layerId: string }>(),
+);
+
+export const editNewlyCreatedFeature = createAction(
+  `${editActionsPrefix} Edit Newly Created Feature`,
+  props<{ feature: FeatureInfoFeatureModel }>(),
 );

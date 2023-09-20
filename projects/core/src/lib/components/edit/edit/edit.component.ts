@@ -103,17 +103,15 @@ export class EditComponent implements OnInit {
       });
   }
 
-  public createFeature() {
-    // TODO disable feature info call
+  public createFeature(geometryType: string) {
     // get layer attribute details for edit form
     this.applicationLayerService.getLayerDetails$(this.layer.value)
       .pipe()
       .subscribe(layerDetails => {
-        // TODO enable create geometry in native tool
-        console.log('geometry type', layerDetails.details.geometryType);
         // show edit dialog
         this.store$.dispatch(setEditCreateNewFeatureActive({
           active: true,
+          geometryType,
           columnMetadata: layerDetails.details.attributes.map(attribute => {
               return {
                 layerId: layerDetails.details.id,

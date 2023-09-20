@@ -58,6 +58,7 @@ const onSetCreateNewFeatureActive = (
 ): EditState => ({
   ...state,
   isCreateNewFeatureActive: payload.active,
+  newGeometryType: payload.geometryType,
   dialogVisible: payload.active,
   selectedFeature: 'new',
   features: [{ layerId: payload.columnMetadata[0].layerId, __fid: 'new', attributes: {} }],
@@ -84,6 +85,7 @@ const onSetSelectedEditFeature = (
 ): EditState => ({
   ...state,
   selectedFeature: payload.fid,
+  isCreateNewFeatureActive: false,
 });
 
 const onShowEditDialog = (state: EditState): EditState => ({
@@ -122,6 +124,19 @@ const onUpdateEditFeature = (
   };
 };
 
+const onEditNewlyCreatedFeature = (
+  state: EditState,
+  payload: ReturnType<typeof EditActions.editNewlyCreatedFeature>,
+): EditState => {
+  return {
+    ...state,
+    features: [payload.feature],
+    selectedFeature: payload.feature.__fid,
+    isCreateNewFeatureActive: false,
+  };
+
+};
+
 const editReducerImpl = createReducer<EditState>(
   initialEditState,
   on(EditActions.setEditActive, onSetIsActive),
@@ -135,5 +150,6 @@ const editReducerImpl = createReducer<EditState>(
   on(EditActions.hideEditDialog, onHideEditDialog),
   on(EditActions.expandCollapseEditDialog, onExpandCollapseEditDialog),
   on(EditActions.updateEditFeature, onUpdateEditFeature),
+  on(EditActions.editNewlyCreatedFeature, onEditNewlyCreatedFeature),
 );
 export const editReducer = (state: EditState | undefined, action: Action) => editReducerImpl(state, action);

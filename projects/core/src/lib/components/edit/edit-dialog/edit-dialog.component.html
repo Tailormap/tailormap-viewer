@@ -52,4 +52,4 @@
                 [loading$]="loadingEditFeatureInfo$"></tm-map-spinner>
 <tm-edit-tool></tm-edit-tool>
 <tm-edit-geometry-tool *ngIf="(isCreateFeature$ | async) === false" (geometryChanged)="geometryChanged($event)"></tm-edit-geometry-tool>
-<tm-create-geometry-tool *ngIf="isCreateFeature$ | async" (geometryCreated)="geometryCreated($event)"></tm-create-geometry-tool>
+<tm-create-geometry-tool *ngIf="isCreateFeature$ | async" [geometryType]="newGeometryType$ | async" (geometryCreated)="geometryCreated($event)"></tm-create-geometry-tool>

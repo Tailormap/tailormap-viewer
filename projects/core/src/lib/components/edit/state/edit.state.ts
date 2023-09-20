@@ -7,6 +7,7 @@ export const editStateKey = 'edit';
 export interface EditState {
   isActive: boolean;
   isCreateNewFeatureActive: boolean;
+  newGeometryType: string | null;
   selectedLayer: string | null;
   mapCoordinates?: [number, number];
   dialogVisible: boolean;
@@ -21,6 +22,7 @@ export interface EditState {
 export const initialEditState: EditState = {
   isActive: false,
   isCreateNewFeatureActive: false,
+  newGeometryType: null,
   selectedLayer: null,
   dialogVisible: false,
   dialogCollapsed: false,
