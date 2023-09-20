@@ -22,6 +22,7 @@ import { EditFeatureService } from '../edit-feature.service';
 import { selectViewerId } from '../../../state/core.selectors';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MapService } from '@tailormap-viewer/map';
+import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layout.service';
 
 @Component({
   selector: 'tm-edit-dialog',
@@ -39,7 +40,9 @@ export class EditDialogComponent {
   public layerDetails$;
   public selectableFeature$;
 
-  public panelWidthMargin = CssHelper.getCssVariableValueNumeric('--menubar-width') + (CssHelper.getCssVariableValueNumeric('--body-margin') * 2);
+  public panelWidth = 300;
+  private bodyMargin = CssHelper.getCssVariableValueNumeric('--body-margin');
+  public panelWidthMargin = CssHelper.getCssVariableValueNumeric('--menubar-width') + (this.bodyMargin * 2);
 
   public loadingEditFeatureInfo$;
   public editCoordinates$;
@@ -56,6 +59,7 @@ export class EditDialogComponent {
     private destroyRef: DestroyRef,
     private mapService: MapService,
     private confirmService: ConfirmDialogService,
+    private layoutService: ViewerLayoutService,
   ) {
     this.dialogOpen$ = this.store$.select(selectEditDialogVisible);
     this.dialogCollapsed$ = this.store$.select(selectEditDialogCollapsed);
@@ -86,6 +90,12 @@ export class EditDialogComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
         this.resetChanges();
+      });
+
+    this.dialogOpen$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(open => {
+        this.layoutService.setRightPadding(open ? this.panelWidth + this.bodyMargin : 0);
       });
   }
 

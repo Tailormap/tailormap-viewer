@@ -12,7 +12,6 @@ export const selectAttributeListVisible = createSelector(selectAttributeListStat
 export const selectAttributeListPanelTitle = createSelector(selectAttributeListState, state => state.panelTitle);
 export const selectAttributeListTabs = createSelector(selectAttributeListState, state => state.tabs);
 export const selectAttributeListData = createSelector(selectAttributeListState, state => state.data);
-export const selectAttributeListHeight = createSelector(selectAttributeListState, state => state.height);
 export const selectAttributeListSelectedTab = createSelector(selectAttributeListState, state => state.selectedTabId);
 export const selectCurrentlyHighlightedFeature = createSelector(selectAttributeListState, state => state.highlightedFeature);
 

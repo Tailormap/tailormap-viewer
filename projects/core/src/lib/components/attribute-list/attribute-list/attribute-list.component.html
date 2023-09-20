@@ -1,33 +1,13 @@
-<div class="container attribute-list-container" role="tabpanel" *ngIf="isVisible$ | async">
-  <tm-panel-resize (positionChanged)="sizeChanged($event)"></tm-panel-resize>
+<tm-bottom-panel [isVisible$]="isVisible$" [title$]="title$" (closed)="onCloseClick()">
 
-  <div class="panel"
-       [ngStyle]="{ 'height': getHeight() }"
-       [class.panel--minimized]="minimized"
-       [class.panel--maximized]="maximized">
-
-    <mat-toolbar>
-      <span>{{title$ | async}}</span>
-      <span class="spacer"></span>
-      <button mat-icon-button class="size-18" (click)="onMinimizeClick();">
-        <mat-icon svgIcon="minimize"></mat-icon>
-      </button>
-      <button mat-icon-button class="size-18 maximize-btn" (click)="onMaximizeClick();">
-        <mat-icon [svgIcon]="maximized ? 'chevron_bottom' : 'chevron_top'"></mat-icon>
-      </button>
-      <button mat-icon-button class="size-18" (click)="onCloseClick();">
-        <mat-icon svgIcon="close"></mat-icon>
-      </button>
-    </mat-toolbar>
-
-    <span class="panel-content no-tabs" *ngIf="tabs.length === 0">
+    <span class="no-tabs" *ngIf="tabs.length === 0">
       <ng-template #noLayersMsg><span i18n>No layers with administrative data found</span></ng-template>
       <span *ngIf="hasLayersWithAttributes$ | async; else: noLayersMsg">
         <mat-spinner color="primary" mode="indeterminate" diameter="20"></mat-spinner>
       </span>
     </span>
 
-    <mat-tab-group class="panel-content tab-group"
+    <mat-tab-group class="tab-group"
                    mat-stretch-tabs="false"
                    *ngIf="tabs.length > 0"
                    animationDuration="0ms"
@@ -40,5 +20,5 @@
       </mat-tab>
     </mat-tab-group>
     <tm-attribute-list-tab *ngIf="tabs.length > 0" [id]="selectedTab"></tm-attribute-list-tab>
-  </div>
-</div>
+
+</tm-bottom-panel>

@@ -2,13 +2,13 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AttributeListState } from '../state/attribute-list.state';
 import {
-  selectAttributeListHeight, selectAttributeListPanelTitle, selectAttributeListSelectedTab, selectAttributeListTabs,
+  selectAttributeListPanelTitle, selectAttributeListSelectedTab, selectAttributeListTabs,
   selectAttributeListVisible,
   selectCurrentlySelectedFeatureGeometry,
 } from '../state/attribute-list.selectors';
 import { map, Observable, of, Subject } from 'rxjs';
 import {  takeUntil } from 'rxjs/operators';
-import { setAttributeListVisibility, setSelectedTab, updateAttributeListHeight } from '../state/attribute-list.actions';
+import { setAttributeListVisibility, setSelectedTab } from '../state/attribute-list.actions';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { AttributeListTabModel } from '../models/attribute-list-tab.model';
 import { MenubarService } from '../../menubar';
@@ -30,9 +30,6 @@ export class AttributeListComponent implements OnInit, OnDestroy {
   public tabs: AttributeListTabModel[] = [];
   private destroyed = new Subject();
 
-  private height = 0;
-  public minimized = false;
-  public maximized = false;
   public selectedTab?: string;
   public hasLayersWithAttributes$: Observable<boolean>;
   public title$: Observable<string> = of('');
@@ -49,9 +46,6 @@ export class AttributeListComponent implements OnInit, OnDestroy {
       .subscribe(tabs => {
         this.tabs = tabs;
       });
-    this.store$.select(selectAttributeListHeight)
-      .pipe(takeUntil(this.destroyed))
-      .subscribe(height => this.height = height);
     this.store$.select(selectAttributeListSelectedTab)
       .pipe(takeUntil(this.destroyed))
       .subscribe(selectedTab => this.selectedTab = selectedTab);
@@ -78,20 +72,6 @@ export class AttributeListComponent implements OnInit, OnDestroy {
     this.destroyed.complete();
   }
 
-  public onMaximizeClick(): void {
-    this.maximized = !this.maximized;
-    if (this.maximized) {
-      this.minimized = false;
-    }
-  }
-
-  public onMinimizeClick(): void {
-    this.minimized = !this.minimized;
-    if (this.minimized) {
-      this.maximized = false;
-    }
-  }
-
   public onCloseClick(): void {
     this.store$.dispatch(setAttributeListVisibility({ visible: false }));
   }
@@ -102,26 +82,6 @@ export class AttributeListComponent implements OnInit, OnDestroy {
 
   public trackByTabId(idx: number, layer: AttributeListTabModel) {
     return layer.id;
-  }
-
-  public sizeChanged(changedHeight: number) {
-    let initialHeight = this.height;
-    if (this.minimized) {
-      initialHeight = 0;
-    }
-    if (this.maximized) {
-      initialHeight = window.innerHeight;
-    }
-    this.minimized = false;
-    this.maximized = false;
-    this.store$.dispatch(updateAttributeListHeight({ height: initialHeight - changedHeight }));
-  }
-
-  public getHeight() {
-    if (this.maximized) {
-      return '100vh';
-    }
-    return `${this.height}px`;
   }
 
 }

@@ -1,25 +1,60 @@
-import { Injectable } from '@angular/core';
-import { MenubarService } from '../../components/menubar';
-import { Store } from '@ngrx/store';
-import { combineLatest, map, Observable } from 'rxjs';
+import { DestroyRef, Injectable } from '@angular/core';
+import { BehaviorSubject, combineLatest, map, Observable } from 'rxjs';
 import { ExtentHelper, MapService, MapViewDetailsModel, OpenlayersExtent } from '@tailormap-viewer/map';
+import { CssHelper } from '@tailormap-viewer/shared';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ViewerLayoutService {
 
+  private defaultTopHeight = CssHelper.getCssVariableValueNumeric('--map-control-size') + CssHelper.getCssVariableValueNumeric('--body-margin');
+  private extraPadding = 10;
+
+  private paddingLeftSubject = new BehaviorSubject<number>(0);
+  private paddingRightSubject = new BehaviorSubject<number>(0);
+  private paddingTopSubject = new BehaviorSubject<number>(this.defaultTopHeight);
+  private paddingBottomSubject = new BehaviorSubject<number>(0);
+
   constructor(
-    private menuBarService: MenubarService,
-    private store$: Store,
     private mapService: MapService,
-  ) { }
+    private destroyRef: DestroyRef,
+  ) {
+    combineLatest([
+      this.paddingTopSubject.asObservable(),
+      this.paddingRightSubject.asObservable(),
+      this.paddingBottomSubject.asObservable(),
+      this.paddingLeftSubject.asObservable(),
+    ])
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      // top, right, bottom and left
+      .subscribe((padding) => {
+        this.mapService.setPadding(padding.map(p => p + this.extraPadding));
+      });
+  }
+
+  public setLeftPadding(padding: number) {
+    this.paddingLeftSubject.next(padding);
+  }
+
+  public setRightPadding(padding: number) {
+    this.paddingRightSubject.next(padding);
+  }
+
+  public setTopPadding(padding: number) {
+    this.paddingTopSubject.next(padding);
+  }
+
+  public setBottomPadding(padding: number) {
+    this.paddingBottomSubject.next(padding);
+  }
 
   /**
    * Add a property to the MapViewDetailsModel from MapService.getMapViewDetails$() with the map extent that is not covered by UI elements.
    */
   public getUIVisibleMapExtent$(): Observable<MapViewDetailsModel & { uiVisibleExtent: OpenlayersExtent | null }> {
-    return combineLatest([ this.mapService.getMapViewDetails$(), this.menuBarService.getPanelWidth$() ]).pipe(
+    return combineLatest([ this.mapService.getMapViewDetails$(), this.paddingLeftSubject.asObservable() ]).pipe(
       map(([ mapViewDetails, panelWidth ]) => {
 
         let uiVisibleExtent = null;
