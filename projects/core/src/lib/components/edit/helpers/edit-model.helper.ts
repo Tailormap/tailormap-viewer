@@ -1,7 +1,6 @@
-import {
-  AttributeModel, AttributeType, ColumnMetadataModel, FeatureModel, LayerDetailsModel,
-} from '@tailormap-viewer/api';
+import { AttributeModel, AttributeType, ColumnMetadataModel, FeatureModel, LayerDetailsModel } from '@tailormap-viewer/api';
 import { FormFieldModel } from '../models/form-field.model';
+import { $localize } from '@angular/localize/init';
 
 export class EditModelHelper {
 
@@ -29,14 +28,19 @@ export class EditModelHelper {
       .map<FormFieldModel>(attribute => {
       const attributeValue = feature.attributes[attribute.key];
       const metadata = columnMetadata.find(c => c.key === attribute.key);
+      // Do not display a required boolean as a checkbox but as a select, because a checkbox can't show whether it is null or false so
+      // a user must touch it to make the form valid. For nullable booleans just keep the checkbox and do not bother the user with the
+      // difference between a null and a false boolean.
+      const booleanValueList = (attribute.type === AttributeType.BOOLEAN && !attribute.nullable)  ?
+        [{ value: true, label: $localize `True` }, { value: false, label: $localize `False` }] : null;
       return {
         label: attribute.editAlias || metadata?.alias || attribute.key,
         value: isNewFeature ? attributeValue || attribute.defaultValue || '' : attributeValue,
         name: attribute.key,
         required: attribute.nullable === false,
         disabled: !attribute.editable,
-        type: EditModelHelper.getFormFieldType(attribute),
-        valueList: attribute.valueList?.split(',').map(val => {
+        type: booleanValueList ? 'select' : EditModelHelper.getFormFieldType(attribute),
+        valueList: booleanValueList ? booleanValueList : attribute.valueList?.split(',').map(val => {
           const value = val.trim();
           return { value, label: value };
         }),
