@@ -1,6 +1,5 @@
 import { AttributeModel, AttributeType, ColumnMetadataModel, FeatureModel, LayerDetailsModel } from '@tailormap-viewer/api';
 import { FormFieldModel } from '../models/form-field.model';
-import { $localize } from '@angular/localize/init';
 
 export class EditModelHelper {
 
