@@ -55,18 +55,32 @@ const onLoadEditFeaturesSuccess = (
 const onSetCreateNewFeatureActive = (
     state: EditState,
     payload: ReturnType<typeof EditActions.setEditCreateNewFeatureActive>,
-): EditState => ({
-  ...state,
-  isCreateNewFeatureActive: payload.active,
-  newGeometryType: payload.geometryType,
-  dialogVisible: payload.active,
-  selectedFeature: 'new',
-  features: [{ layerId: payload.columnMetadata[0].layerId, __fid: 'new', attributes: {} }],
-  columnMetadata: payload.columnMetadata,
-  loadStatus: LoadingStateEnum.LOADED,
-  dialogCollapsed: false,
-});
-
+): EditState => {
+  const onlyChangeGeometryType = state.isCreateNewFeatureActive && state.columnMetadata[0]?.layerId === payload.columnMetadata[0].layerId;
+  if (onlyChangeGeometryType) {
+    // Do not cause selectSelectedEditFeature selector to emit new event causing the form to reset
+    return {
+      ...state,
+      newGeometryType: payload.geometryType,
+    };
+  } else {
+    return {
+      ...state,
+      isCreateNewFeatureActive: payload.active,
+      newGeometryType: payload.geometryType,
+      dialogVisible: payload.active,
+      selectedFeature: 'new',
+      features: [{
+        layerId: payload.columnMetadata[0].layerId,
+        __fid: 'new',
+        attributes: {},
+      }],
+      columnMetadata: payload.columnMetadata,
+      loadStatus: LoadingStateEnum.LOADED,
+      dialogCollapsed: false,
+    };
+  }
+};
 
 const onLoadEditFeaturesFailed = (
   state: EditState,
