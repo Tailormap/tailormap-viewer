@@ -11,15 +11,17 @@ import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layo
 })
 export class BottomPanelComponent implements OnInit {
 
-  public heightSubject = new BehaviorSubject(350);
-  public minimized = false;
-  public maximized = false;
-
   @Input({ required: true })
   public isVisible$: Observable<boolean> = of(false);
 
   @Input({ required: true })
   public title$: Observable<string> = of('');
+
+  @Input()
+  public initialHeight = 350;
+
+  @Input()
+  public initiallyMaximized = false;
 
   @Output()
   public heightChanged = new EventEmitter<number>();
@@ -27,12 +29,18 @@ export class BottomPanelComponent implements OnInit {
   @Output()
   public closed = new EventEmitter();
 
+  public heightSubject = new BehaviorSubject(350);
+  public minimized = false;
+  public maximized = false;
+
   constructor(
     private layoutService: ViewerLayoutService,
     private destroyRef: DestroyRef,
   ) { }
 
   public ngOnInit(): void {
+    this.maximized = this.initiallyMaximized;
+    this.heightSubject.next(this.initialHeight || 350);
     combineLatest([
       this.isVisible$,
       this.heightSubject.asObservable(),
