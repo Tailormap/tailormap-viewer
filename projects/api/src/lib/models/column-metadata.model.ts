@@ -1,7 +1,7 @@
-import { FeatureAttributeTypeEnum } from './feature-attribute-type.enum';
+import { AttributeType } from './attribute-type.enum';
 
 export interface ColumnMetadataModel {
   key: string;
-  type: FeatureAttributeTypeEnum;
+  type: AttributeType;
   alias?: string;
 }

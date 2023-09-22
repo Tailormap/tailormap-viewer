@@ -3,9 +3,8 @@ import {
   CatalogItemKindEnum, CatalogNodeModel, ConfigModel, FeatureSourceModel, FeatureSourceProtocolEnum, FeatureTypeModel, GeoServiceLayerModel,
   GeoServiceProtocolEnum, GeoServiceWithLayersModel, GroupModel, ServiceCapsModel, UserModel,
 } from '../models';
-import { ServerType } from '@tailormap-viewer/api';
+import { AttributeType, ServerType } from '@tailormap-viewer/api';
 import { AttributeDescriptorModel } from '../models/attribute-descriptor.model';
-import { AttributeTypeEnum } from '../models/attribute-type.enum';
 
 export const getCatalogNode = (overrides?: Partial<CatalogNodeModel>): CatalogNodeModel => ({
   id: 'root',
@@ -135,7 +134,7 @@ export const getUsers = (): UserModel[] => {
 export const getAttributeDescriptor = (overrides?: Partial<AttributeDescriptorModel>): AttributeDescriptorModel => ({
   id: 'att1',
   name: 'att1',
-  type: AttributeTypeEnum.STRING,
+  type: AttributeType.STRING,
   ...overrides,
 });
 

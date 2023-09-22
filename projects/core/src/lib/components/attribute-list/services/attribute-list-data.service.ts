@@ -6,7 +6,7 @@ import { AttributeListRowModel } from '../models/attribute-list-row.model';
 import { Store } from '@ngrx/store';
 import { selectAttributeListTab, selectAttributeListTabData, selectAttributeListTabs } from '../state/attribute-list.selectors';
 import {
-  ColumnMetadataModel, FeatureAttributeTypeEnum, FeatureModel, Sortorder, TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel,
+  ColumnMetadataModel, FeatureModel, Sortorder, TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel, AttributeTypeHelper,
 } from '@tailormap-viewer/api';
 import { LoadAttributeListDataResultModel } from '../models/load-attribute-list-data-result.model';
 import { AttributeListDataModel } from '../models/attribute-list-data.model';
@@ -132,7 +132,7 @@ export class AttributeListDataService implements OnDestroy {
         if (!AttributeListDataService.FILTER_GEOMETRY_COLUMNS) {
           return true;
         }
-        return column.type !== FeatureAttributeTypeEnum.GEOMETRY;
+        return !AttributeTypeHelper.isGeometryType(column.type);
       })
       .map<AttributeListColumnModel>(column => ({
         id: column.key,

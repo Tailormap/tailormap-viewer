@@ -1,6 +1,6 @@
 import { FilterGroupModel } from '../models/filter-group.model';
 import { FilterTypeEnum } from '../models/filter-type.enum';
-import { FeatureAttributeTypeEnum } from '@tailormap-viewer/api';
+import { AttributeType } from '@tailormap-viewer/api';
 import { FilterConditionEnum } from '../models/filter-condition.enum';
 import { AttributeFilterHelper } from './attribute-filter.helper';
 import { BaseFilterModel } from '../models/base-filter.model';
@@ -17,7 +17,7 @@ export const getFilterGroup = <T extends BaseFilterModel = AttributeFilterModel>
     caseSensitive: false,
     invertCondition: false,
     attribute: 'attribute',
-    attributeType: FeatureAttributeTypeEnum.STRING,
+    attributeType: AttributeType.STRING,
     condition: FilterConditionEnum.STRING_LIKE_KEY,
     value: ['value'],
   };

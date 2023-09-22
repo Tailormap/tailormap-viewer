@@ -12,5 +12,6 @@ export enum AttributeType {
     MULTIPOINT = 'multipoint',
     POLYGON = 'polygon',
     MULTIPOLYGON = 'multipolygon',
-    GEOMETRY = 'geometry',
+    GEOMETRY = 'geometry', // Usage note: you probably want to use AttributeTypeHelper.isGeometryType() instead of just comparing to this value
+    GEOMETRY_COLLECTION = 'geometry_collection',
 }

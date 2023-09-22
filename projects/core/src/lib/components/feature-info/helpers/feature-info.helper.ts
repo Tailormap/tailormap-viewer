@@ -1,5 +1,5 @@
 import { FeatureInfoResponseModel } from '../models/feature-info-response.model';
-import { FeatureAttributeTypeEnum } from '@tailormap-viewer/api';
+import { AttributeTypeHelper } from '@tailormap-viewer/api';
 import { FeatureHelper } from '../../../shared/helpers/feature.helper';
 import { FeatureInfoFeatureModel } from '../models/feature-info-feature.model';
 import { FeatureInfoColumnMetadataModel } from '../models/feature-info-column-metadata.model';
@@ -17,7 +17,7 @@ export class FeatureInfoHelper {
     if (feature.geometry) {
       return feature.geometry;
     }
-    const geomAttribute = columnMetadata.find(c => c.type === FeatureAttributeTypeEnum.GEOMETRY);
+    const geomAttribute = columnMetadata.find(c => AttributeTypeHelper.isGeometryType(c.type));
     if (!geomAttribute) {
       return null;
     }

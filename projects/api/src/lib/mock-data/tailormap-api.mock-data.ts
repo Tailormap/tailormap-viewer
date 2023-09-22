@@ -1,10 +1,11 @@
 import {
-  AppLayerModel, ViewerResponseModel, BoundsModel, ComponentModel, CoordinateReferenceSystemModel, GeometryType, Language, LayerDetailsModel,
+  AppLayerModel, ViewerResponseModel, BoundsModel, ComponentModel, CoordinateReferenceSystemModel, GeometryType, Language,
+  LayerDetailsModel,
   MapResponseModel, ServerType, ServiceModel, ServiceProtocol, UserResponseModel, VersionResponseModel, LoginConfigurationModel,
+  AttributeType,
 } from '../models';
 import { FeatureModel } from '../models/feature.model';
 import { ColumnMetadataModel } from '../models/column-metadata.model';
-import { FeatureAttributeTypeEnum } from '../models/feature-attribute-type.enum';
 import { FeaturesResponseModel } from '../models/features-response.model';
 import { LayerTreeNodeModel } from '../models/layer-tree-node.model';
 import { UniqueValuesResponseModel } from '../models/unique-values-response.model';
@@ -105,7 +106,7 @@ export const getFeatureModel = (overrides?: Partial<FeatureModel>): FeatureModel
 });
 
 export const getColumnMetadataModel = (overrides?: Partial<ColumnMetadataModel>): ColumnMetadataModel => ({
-  type: FeatureAttributeTypeEnum.STRING,
+  type: AttributeType.STRING,
   key: 'prop1',
   alias: 'Property 1',
   ...overrides,
@@ -123,10 +124,10 @@ export const getFeaturesResponseModel = (overrides?: Partial<FeaturesResponseMod
     { __fid: '8', attributes: { object_id: '0622100000041690',  valid_from: '2015-05-20', year: 1700, status: 'Pand in gebruik' } },
   ];
   const columnMetadata: Partial<ColumnMetadataModel>[] = [
-    { key: 'object_id', alias: 'Pand', type: FeatureAttributeTypeEnum.STRING },
-    { key: 'valid_from', alias: 'Geldig vanaf', type: FeatureAttributeTypeEnum.DATE },
-    { key: 'year', alias: 'Bouwjaar', type: FeatureAttributeTypeEnum.INTEGER },
-    { key: 'status', alias: 'Status', type: FeatureAttributeTypeEnum.STRING },
+    { key: 'object_id', alias: 'Pand', type: AttributeType.STRING },
+    { key: 'valid_from', alias: 'Geldig vanaf', type: AttributeType.DATE },
+    { key: 'year', alias: 'Bouwjaar', type: AttributeType.INTEGER },
+    { key: 'status', alias: 'Status', type: AttributeType.STRING },
   ];
   return {
     features: features.map(featureOverride => getFeatureModel({ ...featureOverride })),

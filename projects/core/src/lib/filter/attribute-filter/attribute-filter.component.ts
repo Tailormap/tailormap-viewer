@@ -3,7 +3,7 @@ import { Observable, of, Subject } from 'rxjs';
 import { FormBuilder } from '@angular/forms';
 import { debounceTime, take, takeUntil, tap } from 'rxjs/operators';
 import { DateTime } from 'luxon';
-import { FeatureAttributeTypeEnum } from '@tailormap-viewer/api';
+import { AttributeType } from '@tailormap-viewer/api';
 import { FilterConditionEnum } from '../models/filter-condition.enum';
 import { FilterConditionModel } from '../models/filter-condition.model';
 import { AttributeFilterHelper } from '../helpers/attribute-filter.helper';
@@ -37,7 +37,7 @@ interface OutputFilterData {
 export class AttributeFilterComponent implements OnInit, OnDestroy {
 
   @Input()
-  public set attributeType(attributeType: FeatureAttributeTypeEnum) {
+  public set attributeType(attributeType: AttributeType) {
     this._attributeType = attributeType;
     this.setDisabledState();
     this.updateConditions();
@@ -115,7 +115,7 @@ export class AttributeFilterComponent implements OnInit, OnDestroy {
     invertCondition: false,
   });
 
-  private _attributeType: FeatureAttributeTypeEnum | null = null;
+  private _attributeType: AttributeType | null = null;
 
   private destroyed = new Subject();
 
@@ -219,20 +219,20 @@ export class AttributeFilterComponent implements OnInit, OnDestroy {
     return !this.showUniqueValuesInput()
       && this.formValues.condition !== FilterConditionEnum.NULL_KEY
       && (
-        this._attributeType === FeatureAttributeTypeEnum.STRING ||
-        this._attributeType === FeatureAttributeTypeEnum.INTEGER ||
-        this._attributeType === FeatureAttributeTypeEnum.DOUBLE
+        this._attributeType === AttributeType.STRING ||
+        this._attributeType === AttributeType.INTEGER ||
+        this._attributeType === AttributeType.DOUBLE
       );
   }
 
   public showCaseSensitiveInput() {
-    return this._attributeType === FeatureAttributeTypeEnum.STRING;
+    return this._attributeType === AttributeType.STRING;
   }
 
   public showInvertConditionInput() {
-    return this._attributeType === FeatureAttributeTypeEnum.STRING ||
-      this._attributeType === FeatureAttributeTypeEnum.INTEGER ||
-      this._attributeType === FeatureAttributeTypeEnum.DOUBLE ||
+    return this._attributeType === AttributeType.STRING ||
+      this._attributeType === AttributeType.INTEGER ||
+      this._attributeType === AttributeType.DOUBLE ||
       this.isDateLikeAttributeType();
   }
 
@@ -300,8 +300,8 @@ export class AttributeFilterComponent implements OnInit, OnDestroy {
   }
 
   private isDateLikeAttributeType() {
-    return this._attributeType === FeatureAttributeTypeEnum.DATE
-      || this._attributeType === FeatureAttributeTypeEnum.TIMESTAMP;
+    return this._attributeType === AttributeType.DATE
+      || this._attributeType === AttributeType.TIMESTAMP;
   }
 
   private toDateTime(input: string | DateTime) {

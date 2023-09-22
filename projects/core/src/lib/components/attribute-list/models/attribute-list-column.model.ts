@@ -1,8 +1,8 @@
-import { FeatureAttributeTypeEnum } from '@tailormap-viewer/api';
+import { AttributeType } from '@tailormap-viewer/api';
 
 export interface AttributeListColumnModel {
   id: string;
   label: string;
-  type: FeatureAttributeTypeEnum;
+  type: AttributeType;
   visible: boolean;
 }

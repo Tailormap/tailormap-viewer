@@ -3,7 +3,7 @@ import { EditDialogComponent } from './edit-dialog.component';
 import { provideMockStore } from '@ngrx/store/testing';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { FeatureAttributeTypeEnum, getAppLayerModel, getFeatureModel } from '@tailormap-viewer/api';
+import { AttributeType, getAppLayerModel, getFeatureModel } from '@tailormap-viewer/api';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { editStateKey, initialEditState } from '../state/edit.state';
 import { ApplicationLayerService } from '../../../map/services/application-layer.service';
@@ -17,9 +17,9 @@ const getFeatureInfo = (): FeatureWithMetadataModel => {
   return {
     feature: { ...getFeatureModel(), layerId: '1' },
     columnMetadata: [
-      { layerId: '1', key: 'prop', alias: 'Property', type: FeatureAttributeTypeEnum.STRING },
-      { layerId: '1', key: 'prop2', alias: 'Property 2', type: FeatureAttributeTypeEnum.STRING },
-      { layerId: '1', key: 'fid', alias: 'fid', type: FeatureAttributeTypeEnum.STRING },
+      { layerId: '1', key: 'prop', alias: 'Property', type: AttributeType.STRING },
+      { layerId: '1', key: 'prop2', alias: 'Property 2', type: AttributeType.STRING },
+      { layerId: '1', key: 'fid', alias: 'fid', type: AttributeType.STRING },
     ],
   };
 };

@@ -1,7 +1,7 @@
 import { FilterGroupModel } from '../models/filter-group.model';
 import { AttributeFilterModel } from '../models/attribute-filter.model';
 import { FilterConditionEnum } from '../models/filter-condition.enum';
-import { FeatureAttributeTypeEnum } from '@tailormap-viewer/api';
+import { AttributeType } from '@tailormap-viewer/api';
 import { TypesHelper } from '@tailormap-viewer/shared';
 import { FilterTypeHelper } from './filter-type.helper';
 import { BaseFilterModel } from '../models/base-filter.model';
@@ -77,13 +77,13 @@ export class CqlFilterHelper {
     if (CqlFilterHelper.isNumeric(filter.attributeType)) {
       return CqlFilterHelper.wrapFilter(`${filter.attribute} ${filter.condition} ${value}`);
     }
-    if (filter.attributeType === FeatureAttributeTypeEnum.STRING) {
+    if (filter.attributeType === AttributeType.STRING) {
       return CqlFilterHelper.wrapFilter(CqlFilterHelper.getQueryForString(filter));
     }
     if (CqlFilterHelper.isDate(filter.attributeType)) {
       return CqlFilterHelper.wrapFilter(CqlFilterHelper.getQueryForDate(filter));
     }
-    if (filter.attributeType === FeatureAttributeTypeEnum.BOOLEAN) {
+    if (filter.attributeType === AttributeType.BOOLEAN) {
       return CqlFilterHelper.wrapFilter(`${filter.attribute} = ${filter.condition === FilterConditionEnum.BOOLEAN_TRUE_KEY ? 'true' : 'false'}`);
     }
     return null;
@@ -110,23 +110,23 @@ export class CqlFilterHelper {
     }
     query.push(filter.caseSensitive ? 'LIKE' : 'ILIKE');
     if (filter.condition === FilterConditionEnum.STRING_EQUALS_KEY) {
-      query.push(CqlFilterHelper.getExpression(`${value}`, FeatureAttributeTypeEnum.STRING));
+      query.push(CqlFilterHelper.getExpression(`${value}`, AttributeType.STRING));
     }
     if (filter.condition === FilterConditionEnum.STRING_LIKE_KEY) {
-      query.push(CqlFilterHelper.getExpression(`%${value}%`, FeatureAttributeTypeEnum.STRING));
+      query.push(CqlFilterHelper.getExpression(`%${value}%`, AttributeType.STRING));
     }
     if (filter.condition === FilterConditionEnum.STRING_STARTS_WITH_KEY) {
-      query.push(CqlFilterHelper.getExpression(`${value}%`, FeatureAttributeTypeEnum.STRING));
+      query.push(CqlFilterHelper.getExpression(`${value}%`, AttributeType.STRING));
     }
     if (filter.condition === FilterConditionEnum.STRING_ENDS_WITH_KEY) {
-      query.push(CqlFilterHelper.getExpression(`%${value}`, FeatureAttributeTypeEnum.STRING));
+      query.push(CqlFilterHelper.getExpression(`%${value}`, AttributeType.STRING));
     }
     return `${query.join(' ')}`;
   }
 
   private static getQueryForDate(filter: AttributeFilterModel) {
     const query: string[] = [filter.attribute];
-    const isTimestampType = filter.attributeType === FeatureAttributeTypeEnum.TIMESTAMP;
+    const isTimestampType = filter.attributeType === AttributeType.TIMESTAMP;
     const isTimestampOnDate = isTimestampType && filter.condition === FilterConditionEnum.DATE_ON_KEY;
     if ((filter.condition === FilterConditionEnum.DATE_BETWEEN_KEY && filter.value.length > 1) || isTimestampOnDate) {
       const dateFrom = filter.value[0];
@@ -149,8 +149,8 @@ export class CqlFilterHelper {
     return query.join(' ');
   }
 
-  public static getExpression(value: string | number | boolean, attributeType: FeatureAttributeTypeEnum): string {
-    if (attributeType === FeatureAttributeTypeEnum.STRING || CqlFilterHelper.isDate(attributeType)) {
+  public static getExpression(value: string | number | boolean, attributeType: AttributeType): string {
+    if (attributeType === AttributeType.STRING || CqlFilterHelper.isDate(attributeType)) {
       if (typeof value === 'string') {
         value = value.replace(/'/g, '\'\'');
       }
@@ -159,12 +159,12 @@ export class CqlFilterHelper {
     return `${value}`;
   }
 
-  private static isNumeric(attributeType: FeatureAttributeTypeEnum) {
-    return attributeType === FeatureAttributeTypeEnum.DOUBLE || attributeType === FeatureAttributeTypeEnum.INTEGER;
+  private static isNumeric(attributeType: AttributeType) {
+    return attributeType === AttributeType.DOUBLE || attributeType === AttributeType.INTEGER;
   }
 
-  private static isDate(attributeType: FeatureAttributeTypeEnum) {
-    return attributeType === FeatureAttributeTypeEnum.DATE || attributeType === FeatureAttributeTypeEnum.TIMESTAMP;
+  private static isDate(attributeType: AttributeType) {
+    return attributeType === AttributeType.DATE || attributeType === AttributeType.TIMESTAMP;
   }
 
 }

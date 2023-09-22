@@ -5,7 +5,7 @@ import { filter, pipe, take } from 'rxjs';
 import { FeatureInfoModel } from '../models/feature-info.model';
 import { FeatureInfoHelper } from '../helpers/feature-info.helper';
 import { selectVisibleLayersWithServices } from '../../../map/state/map.selectors';
-import { FeatureAttributeTypeEnum } from '@tailormap-viewer/api';
+import { AttributeTypeHelper } from '@tailormap-viewer/api';
 
 const selectFeatureInfoState = createFeatureSelector<FeatureInfoState>(featureInfoStateKey);
 
@@ -35,7 +35,7 @@ export const selectFeatureInfoList = createSelector(
       const attributes: Array<{ label: string; attributeValue: any; key: string }> = [];
       Object.keys(feature.attributes).forEach(key => {
         const attMetadata = columnMetadataDict.get(key);
-        if (attMetadata?.type === FeatureAttributeTypeEnum.GEOMETRY) {
+        if (AttributeTypeHelper.isGeometryType(attMetadata?.type)) {
           return;
         }
         attributes.push({ label: attMetadata?.alias || key, attributeValue: feature.attributes[key], key });

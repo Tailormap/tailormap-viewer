@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/angular';
 import { EditFormComponent } from './edit-form.component';
-import { AttributeType, FeatureAttributeTypeEnum, getFeatureModel, getLayerDetailsModel } from '@tailormap-viewer/api';
+import { AttributeType, getFeatureModel, getLayerDetailsModel } from '@tailormap-viewer/api';
 import { SharedModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 
@@ -13,9 +13,9 @@ describe('EditFormComponent', () => {
       componentInputs: { feature: {
         feature: getFeatureModel(),
         columnMetadata: [
-          { key: 'prop', alias: 'Property', type: FeatureAttributeTypeEnum.STRING },
-          { key: 'prop2', alias: 'Property 2', type: FeatureAttributeTypeEnum.STRING },
-          { key: 'fid', alias: 'fid', type: FeatureAttributeTypeEnum.STRING },
+          { key: 'prop', alias: 'Property', type: AttributeType.STRING },
+          { key: 'prop2', alias: 'Property 2', type: AttributeType.STRING },
+          { key: 'fid', alias: 'fid', type: AttributeType.STRING },
         ],
         details: getLayerDetailsModel({
           editable: true,

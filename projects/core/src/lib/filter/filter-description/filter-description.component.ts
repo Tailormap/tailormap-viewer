@@ -5,7 +5,7 @@ import { ExtendedFilterGroupModel } from '../models/extended-filter-group.model'
 import { BaseFilterModel } from '../models/base-filter.model';
 import { FilterTypeHelper } from '../helpers/filter-type.helper';
 import { AttributeFilterModel } from '../models/attribute-filter.model';
-import { FeatureAttributeTypeEnum } from '@tailormap-viewer/api';
+import { AttributeType } from '@tailormap-viewer/api';
 import { DateTime } from 'luxon';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 
@@ -53,7 +53,7 @@ export class FilterDescriptionComponent {
 
   private convertAttributeFilterToDescription(filter: AttributeFilterModel) {
     let values = filter.value;
-    if (filter.attributeType === FeatureAttributeTypeEnum.DATE) {
+    if (filter.attributeType === AttributeType.DATE) {
       values = filter.value.map(v => DateTime.fromISO(v).setLocale(this.dateLocale).toLocaleString(DateTime.DATE_MED));
     }
     let value = values.join(',');

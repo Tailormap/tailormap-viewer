@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { map, Observable } from 'rxjs';
-import { BaseComponentTypeEnum, FeatureAttributeTypeEnum, UniqueValuesService } from '@tailormap-viewer/api';
+import { BaseComponentTypeEnum, AttributeType, UniqueValuesService } from '@tailormap-viewer/api';
 import { AttributeFilterModel } from '../../../filter/models/attribute-filter.model';
 import { FilterConditionEnum } from '../../../filter/models/filter-condition.enum';
 import { SimpleAttributeFilterService } from '../../../filter/services/simple-attribute-filter.service';
@@ -12,7 +12,7 @@ export interface FilterDialogData {
   columnName: string;
   layerId: string;
   filter: AttributeFilterModel | null;
-  columnType: FeatureAttributeTypeEnum;
+  columnType: AttributeType;
   cqlFilter?: string;
   applicationId: string;
 }

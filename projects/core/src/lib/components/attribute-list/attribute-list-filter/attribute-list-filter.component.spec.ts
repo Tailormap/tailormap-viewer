@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/angular';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AttributeListFilterComponent, FilterDialogData } from './attribute-list-filter.component';
 import { SimpleAttributeFilterService } from '../../../filter/services/simple-attribute-filter.service';
-import { FeatureAttributeTypeEnum, UniqueValuesService } from '@tailormap-viewer/api';
+import { AttributeType, UniqueValuesService } from '@tailormap-viewer/api';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { AttributeFilterComponent } from '../../../filter/attribute-filter/attribute-filter.component';
 import userEvent from '@testing-library/user-event';
@@ -17,7 +17,7 @@ describe('AttributeListFilterComponent', () => {
       columnName: 'col',
       filter: null,
       layerId: '1',
-      columnType: FeatureAttributeTypeEnum.STRING,
+      columnType: AttributeType.STRING,
       applicationId: '1',
     };
     const attributeFilterService = { setFilter: jest.fn(), removeFilter: jest.fn() };
@@ -43,7 +43,7 @@ describe('AttributeListFilterComponent', () => {
     await userEvent.click(await screen.findByRole('button', { name: 'Set' }));
     expect(attributeFilterService.setFilter).toHaveBeenCalledWith('ATTRIBUTE_LIST', '1', {
       attribute: 'col',
-      attributeType: FeatureAttributeTypeEnum.STRING,
+      attributeType: AttributeType.STRING,
       caseSensitive: false,
       condition: 'EQUALS',
       invertCondition: false,

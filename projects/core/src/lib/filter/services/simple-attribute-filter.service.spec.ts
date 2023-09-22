@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { SimpleAttributeFilterService } from './simple-attribute-filter.service';
-import { FeatureAttributeTypeEnum } from '@tailormap-viewer/api';
+import { AttributeType } from '@tailormap-viewer/api';
 import { FilterConditionEnum } from '../models/filter-condition.enum';
 import { filterStateKey } from '../state/filter.state';
 import { selectFilterGroups } from '../state/filter.selectors';
@@ -34,7 +34,7 @@ const createFilter = (attribute = 'attribute', value = 'value'): AttributeFilter
   id: '',
   type: FilterTypeEnum.ATTRIBUTE,
   value: [value],
-  attributeType: FeatureAttributeTypeEnum.STRING,
+  attributeType: AttributeType.STRING,
   caseSensitive: false,
   condition: FilterConditionEnum.STRING_LIKE_KEY,
   invertCondition: false,

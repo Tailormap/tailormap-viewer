@@ -1,6 +1,6 @@
 import { AttributeFilterComponent } from './attribute-filter.component';
 import { render, screen, waitFor } from '@testing-library/angular';
-import { FeatureAttributeTypeEnum } from '@tailormap-viewer/api';
+import { AttributeType } from '@tailormap-viewer/api';
 import userEvent from '@testing-library/user-event';
 import { FilterConditionEnum } from '../models/filter-condition.enum';
 import { MatSelectModule } from '@angular/material/select';
@@ -18,7 +18,7 @@ describe('AttributeFilterComponent', () => {
       imports: [ ReactiveFormsModule, MatInputModule, MatSelectModule, MatDatepickerModule, MatNativeDateModule, MatCheckboxModule ],
       componentProperties: {
         filter: {},
-        attributeType: FeatureAttributeTypeEnum.STRING,
+        attributeType: AttributeType.STRING,
         filterChanged: filterChangedFn as any,
       },
     });

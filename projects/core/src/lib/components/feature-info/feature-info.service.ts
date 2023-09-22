@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { FeatureAttributeTypeEnum, FeaturesResponseModel, TAILORMAP_API_V1_SERVICE, FeatureModel } from '@tailormap-viewer/api';
+import { AttributeType, FeaturesResponseModel, TAILORMAP_API_V1_SERVICE, FeatureModel } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { selectViewerId } from '../../state/core.selectors';
 import { catchError, combineLatest, concatMap, forkJoin, map, Observable, of, take } from 'rxjs';
@@ -111,7 +111,7 @@ export class FeatureInfoService {
   private featuresToFeatureInfoResponseModel(features: FeatureModel[], layerId: string): FeatureInfoResponseModel {
     const columnMetadata = Object.keys(features.length > 0 ? features[0].attributes : {}).map(key => ({
       layerId,
-      type: FeatureAttributeTypeEnum.STRING,
+      type: AttributeType.STRING,
       key,
       alias: key,
     }));

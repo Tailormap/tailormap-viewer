@@ -22,7 +22,6 @@ export * from './feature-type-settings.model';
 export * from './feature-type-info.model';
 export * from './attribute-descriptor.model';
 export * from './attribute-settings.model';
-export * from './attribute-type.enum';
 export * from './feature-source-protocol.enum';
 export * from './jdbc-database-type';
 export * from './jdbc-connection-properties.model';
