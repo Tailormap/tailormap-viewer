@@ -21,7 +21,14 @@ export class BottomPanelComponent implements OnInit {
   public initialHeight = 350;
 
   @Input()
-  public initiallyMaximized = false;
+  public set maximized(maximized: boolean) {
+    this.isMaximized = maximized;
+  }
+
+  @Input()
+  public set minimized(minimized: boolean) {
+    this.isMinimized = minimized;
+  }
 
   @Output()
   public heightChanged = new EventEmitter<number>();
@@ -29,9 +36,10 @@ export class BottomPanelComponent implements OnInit {
   @Output()
   public closed = new EventEmitter();
 
-  public heightSubject = new BehaviorSubject(350);
-  public minimized = false;
-  public maximized = false;
+  private heightSubject = new BehaviorSubject(350);
+
+  public isMinimized = false;
+  public isMaximized = false;
 
   constructor(
     private layoutService: ViewerLayoutService,
@@ -39,7 +47,6 @@ export class BottomPanelComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
-    this.maximized = this.initiallyMaximized;
     this.heightSubject.next(this.initialHeight || 350);
     combineLatest([
       this.isVisible$,
@@ -53,37 +60,37 @@ export class BottomPanelComponent implements OnInit {
 
   public sizeChanged(changedHeight: number) {
     let initialHeight = this.heightSubject.value;
-    if (this.minimized) {
+    if (this.isMinimized) {
       initialHeight = 0;
     }
-    if (this.maximized) {
+    if (this.isMaximized) {
       initialHeight = window.innerHeight;
     }
-    this.minimized = false;
-    this.maximized = false;
+    this.isMinimized = false;
+    this.isMaximized = false;
     const height = initialHeight - changedHeight;
     this.heightSubject.next(height);
     this.heightChanged.emit(height);
   }
 
   public getHeight() {
-    if (this.maximized) {
+    if (this.isMaximized) {
       return '100vh';
     }
     return `${this.heightSubject.value}px`;
   }
 
   public onMaximizeClick(): void {
-    this.maximized = !this.maximized;
-    if (this.maximized) {
-      this.minimized = false;
+    this.isMaximized = !this.isMaximized;
+    if (this.isMaximized) {
+      this.isMinimized = false;
     }
   }
 
   public onMinimizeClick(): void {
-    this.minimized = !this.minimized;
-    if (this.minimized) {
-      this.maximized = false;
+    this.isMinimized = !this.isMinimized;
+    if (this.isMinimized) {
+      this.isMaximized = false;
     }
   }
 
