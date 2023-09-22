@@ -2,11 +2,11 @@ import {
   Component, ChangeDetectionStrategy, Input, OnChanges, Output, EventEmitter, SimpleChanges, DestroyRef,
 } from '@angular/core';
 import { AttributeDescriptorModel, FeatureTypeSettingsModel } from '@tailormap-admin/admin-api';
-import { AttributeTypeHelper } from '../../../../../api/src/lib/helpers/attribute-type.helper';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ArrayHelper } from '@tailormap-viewer/shared';
 import { FormControl, FormGroup } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { AttributeTypeHelper } from "@tailormap-viewer/api";
 
 @Component({
   selector: 'tm-admin-feature-type-attributes',
