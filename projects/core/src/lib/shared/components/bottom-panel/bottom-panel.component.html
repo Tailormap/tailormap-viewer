@@ -2,8 +2,8 @@
   <tm-panel-resize (positionChanged)="sizeChanged($event)"></tm-panel-resize>
   <div class="panel"
        [ngStyle]="{ 'height': getHeight() }"
-       [class.panel--minimized]="minimized"
-       [class.panel--maximized]="maximized">
+       [class.panel--minimized]="isMinimized"
+       [class.panel--maximized]="isMaximized">
     <mat-toolbar>
       <span>{{title$ | async}}</span>
       <span class="spacer"></span>
@@ -11,7 +11,7 @@
         <mat-icon svgIcon="minimize"></mat-icon>
       </button>
       <button mat-icon-button class="size-18 maximize-btn" (click)="onMaximizeClick();">
-        <mat-icon [svgIcon]="maximized ? 'chevron_bottom' : 'chevron_top'"></mat-icon>
+        <mat-icon [svgIcon]="isMaximized ? 'chevron_bottom' : 'chevron_top'"></mat-icon>
       </button>
       <button mat-icon-button class="size-18" (click)="onCloseClick();">
         <mat-icon svgIcon="close"></mat-icon>
