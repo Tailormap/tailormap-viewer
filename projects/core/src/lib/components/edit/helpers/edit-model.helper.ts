@@ -1,17 +1,9 @@
-import { AttributeModel, AttributeType, ColumnMetadataModel, FeatureModel, LayerDetailsModel } from '@tailormap-viewer/api';
+import {
+  AttributeModel, AttributeType, AttributeTypeHelper, ColumnMetadataModel, FeatureModel, LayerDetailsModel,
+} from '@tailormap-viewer/api';
 import { FormFieldModel } from '../models/form-field.model';
 
 export class EditModelHelper {
-
-  private static geometryTypes: Set<AttributeType> = new Set([
-    AttributeType.GEOMETRY,
-    AttributeType.LINESTRING,
-    AttributeType.MULTILINESTRING,
-    AttributeType.POINT,
-    AttributeType.MULTIPOINT,
-    AttributeType.LINESTRING,
-    AttributeType.MULTILINESTRING,
-  ]);
 
   public static createEditModel(
     feature: FeatureModel,
@@ -23,7 +15,7 @@ export class EditModelHelper {
       return [];
     }
     return layerDetails.attributes
-      .filter(attribute => !EditModelHelper.isGeometryAttribute(attribute))
+      .filter(attribute => !AttributeTypeHelper.isGeometryType(attribute.type))
       .map<FormFieldModel>(attribute => {
       const attributeValue = feature.attributes[attribute.key];
       const metadata = columnMetadata.find(c => c.key === attribute.key);
@@ -68,10 +60,6 @@ export class EditModelHelper {
       default:
         return 'text';
     }
-  }
-
-  private static isGeometryAttribute(attribute: AttributeModel) {
-    return EditModelHelper.geometryTypes.has(attribute.type);
   }
 
   public static updateFeature(currentFeature: FeatureModel, values: Record<string, number | string | boolean>): FeatureModel {
