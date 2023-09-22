@@ -11,6 +11,7 @@ const onSetIsActive = (
 ): EditState => ({
   ...state,
   isActive: payload.active,
+  isCreateNewFeatureActive: payload.active ? state.isCreateNewFeatureActive : false,
   dialogVisible: false,
   selectedFeature: null,
 });
@@ -51,6 +52,36 @@ const onLoadEditFeaturesSuccess = (
   };
 };
 
+const onSetCreateNewFeatureActive = (
+    state: EditState,
+    payload: ReturnType<typeof EditActions.setEditCreateNewFeatureActive>,
+): EditState => {
+  const onlyChangeGeometryType = state.isCreateNewFeatureActive && state.columnMetadata[0]?.layerId === payload.columnMetadata[0].layerId;
+  if (onlyChangeGeometryType) {
+    // Do not cause selectSelectedEditFeature selector to emit new event causing the form to reset
+    return {
+      ...state,
+      newGeometryType: payload.geometryType,
+    };
+  } else {
+    return {
+      ...state,
+      isCreateNewFeatureActive: payload.active,
+      newGeometryType: payload.geometryType,
+      dialogVisible: payload.active,
+      selectedFeature: 'new',
+      features: [{
+        layerId: payload.columnMetadata[0].layerId,
+        __fid: 'new',
+        attributes: {},
+      }],
+      columnMetadata: payload.columnMetadata,
+      loadStatus: LoadingStateEnum.LOADED,
+      dialogCollapsed: false,
+    };
+  }
+};
+
 const onLoadEditFeaturesFailed = (
   state: EditState,
   payload: ReturnType<typeof EditActions.loadEditFeaturesFailed>,
@@ -68,6 +99,7 @@ const onSetSelectedEditFeature = (
 ): EditState => ({
   ...state,
   selectedFeature: payload.fid,
+  isCreateNewFeatureActive: false,
 });
 
 const onShowEditDialog = (state: EditState): EditState => ({
@@ -102,12 +134,27 @@ const onUpdateEditFeature = (
       { ...payload.feature, layerId: payload.layerId },
       ...state.features.slice(featureIdx + 1),
     ],
+    isCreateNewFeatureActive: false,
   };
+};
+
+const onEditNewlyCreatedFeature = (
+  state: EditState,
+  payload: ReturnType<typeof EditActions.editNewlyCreatedFeature>,
+): EditState => {
+  return {
+    ...state,
+    features: [payload.feature],
+    selectedFeature: payload.feature.__fid,
+    isCreateNewFeatureActive: false,
+  };
+
 };
 
 const editReducerImpl = createReducer<EditState>(
   initialEditState,
   on(EditActions.setEditActive, onSetIsActive),
+  on(EditActions.setEditCreateNewFeatureActive, onSetCreateNewFeatureActive),
   on(EditActions.setSelectedEditLayer, onSetSelectedLayer),
   on(EditActions.loadEditFeatures, onLoadFeatureInfo),
   on(EditActions.loadEditFeaturesSuccess, onLoadEditFeaturesSuccess),
@@ -117,5 +164,6 @@ const editReducerImpl = createReducer<EditState>(
   on(EditActions.hideEditDialog, onHideEditDialog),
   on(EditActions.expandCollapseEditDialog, onExpandCollapseEditDialog),
   on(EditActions.updateEditFeature, onUpdateEditFeature),
+  on(EditActions.editNewlyCreatedFeature, onEditNewlyCreatedFeature),
 );
 export const editReducer = (state: EditState | undefined, action: Action) => editReducerImpl(state, action);

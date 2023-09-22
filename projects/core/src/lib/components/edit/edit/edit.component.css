@@ -18,6 +18,10 @@
   border-radius: 3px;
 }
 
+.map-control-button--add-feature {
+  left: 3px;
+}
+
 .edit-wrapper {
   flex: 1;
 }

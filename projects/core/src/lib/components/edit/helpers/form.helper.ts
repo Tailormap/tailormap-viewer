@@ -5,7 +5,6 @@ import { DateTime } from 'luxon';
 export class FormHelper {
 
   private static DATE_VALIDATOR_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
-  private static NUMBER_VALIDATOR_PATTERN = /^-?\d+$/;
   private static INTEGER_VALIDATOR_PATTERN = /^-?[0-9]+$/;
 
   public static createForm(fields: FormFieldModel[]) {
@@ -16,7 +15,9 @@ export class FormHelper {
         validators.push(Validators.required);
       }
       if (field.type === 'number') {
-        validators.push(Validators.pattern(FormHelper.NUMBER_VALIDATOR_PATTERN));
+        validators.push(control=>
+          // XXX i18n - only supports point as decimal separator (form control does not allow comma's anyway)
+          (isNaN(control?.value) ? { number: true } : null));
       }
       if (field.type === 'integer') {
         validators.push(Validators.pattern(FormHelper.INTEGER_VALIDATOR_PATTERN));
@@ -39,6 +40,7 @@ export class FormHelper {
     return form;
   }
 
+  // XXX i18n
   public static dateValidator(): ValidatorFn {
     return (control: AbstractControl) : ValidationErrors | null => {
       if (control.value) {

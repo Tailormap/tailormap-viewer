@@ -1,23 +1,26 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ConfirmDialogService, CssHelper } from '@tailormap-viewer/shared';
 import {
+  selectEditCreateNewFeatureActive,
   selectEditDialogCollapsed,
   selectEditDialogVisible,
   selectEditFeatures,
   selectEditMapCoordinates,
-  selectLoadingEditFeatures,
+  selectLoadingEditFeatures, selectNewFeatureGeometryType,
   selectSelectedEditFeature,
 } from '../state/edit.selectors';
-import { combineLatest, concatMap, filter, map, Observable, of, switchMap, take } from 'rxjs';
-import { expandCollapseEditDialog, hideEditDialog, updateEditFeature } from '../state/edit.actions';
-import { AppLayerModel, FeatureModelAttributes, LayerDetailsModel } from '@tailormap-viewer/api';
+import { combineLatest, concatMap, filter, map, of, switchMap, take } from 'rxjs';
+import {
+  editNewlyCreatedFeature,
+  expandCollapseEditDialog, hideEditDialog, updateEditFeature,
+} from '../state/edit.actions';
+import { FeatureModelAttributes } from '@tailormap-viewer/api';
 import { ApplicationLayerService } from '../../../map/services/application-layer.service';
 import { FeatureWithMetadataModel } from '../models/feature-with-metadata.model';
 import { EditFeatureService } from '../edit-feature.service';
 import { selectViewerId } from '../../../state/core.selectors';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FeatureInfoFeatureModel } from "../../feature-info/models/feature-info-feature.model";
 import { MapService } from '@tailormap-viewer/map';
 import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layout.service';
 
@@ -27,24 +30,27 @@ import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layo
   styleUrls: ['./edit-dialog.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EditDialogComponent implements OnInit {
+export class EditDialogComponent {
 
-  public dialogOpen$: Observable<boolean> = of(false);
-  public dialogCollapsed$: Observable<boolean> = of(false);
-
-  public currentFeature$: Observable<FeatureWithMetadataModel | null> | undefined;
+  public dialogOpen$;
+  public dialogCollapsed$;
+  public isCreateFeature$;
+  public newGeometryType$;
+  public currentFeature$;
+  public layerDetails$;
+  public selectableFeature$;
 
   public panelWidth = 300;
   private bodyMargin = CssHelper.getCssVariableValueNumeric('--body-margin');
   public panelWidthMargin = CssHelper.getCssVariableValueNumeric('--menubar-width') + (this.bodyMargin * 2);
-  public layerDetails$: Observable<{ layer: AppLayerModel; details: LayerDetailsModel }> | undefined;
 
-  public loadingEditFeatureInfo$ = this.store$.select(selectLoadingEditFeatures);
-  public editCoordinates$ = this.store$.select(selectEditMapCoordinates);
+  public loadingEditFeatureInfo$;
+  public editCoordinates$;
 
   public updatedAttributes: FeatureModelAttributes | null = null;
-  public selectableFeature$: Observable<FeatureInfoFeatureModel[]> = of([]);
   private geometryEditedForLayer: string | null = null;
+
+  public formValid: boolean = false;
 
   constructor(
     private store$: Store,
@@ -54,12 +60,14 @@ export class EditDialogComponent implements OnInit {
     private mapService: MapService,
     private confirmService: ConfirmDialogService,
     private layoutService: ViewerLayoutService,
-  ) {}
-
-  public ngOnInit(): void {
+  ) {
     this.dialogOpen$ = this.store$.select(selectEditDialogVisible);
     this.dialogCollapsed$ = this.store$.select(selectEditDialogCollapsed);
+    this.loadingEditFeatureInfo$ = this.store$.select(selectLoadingEditFeatures);
+    this.editCoordinates$ = this.store$.select(selectEditMapCoordinates);
     this.currentFeature$ = this.store$.select(selectSelectedEditFeature);
+    this.isCreateFeature$ = this.store$.select(selectEditCreateNewFeatureActive);
+    this.newGeometryType$ = this.store$.select(selectNewFeatureGeometryType);
     this.selectableFeature$ = combineLatest([
       this.store$.select(selectEditFeatures),
       this.store$.select(selectSelectedEditFeature),
@@ -81,7 +89,7 @@ export class EditDialogComponent implements OnInit {
     this.currentFeature$
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
-        this.updatedAttributes = null;
+        this.resetChanges();
       });
 
     this.dialogOpen$
@@ -90,6 +98,23 @@ export class EditDialogComponent implements OnInit {
         this.layoutService.setRightPadding(open ? this.panelWidth + this.bodyMargin : 0);
       });
   }
+
+  private resetChanges() {
+    this.updatedAttributes = null;
+    this.formValid = false;
+    if (this.geometryEditedForLayer) {
+      const refreshLayerId = this.geometryEditedForLayer;
+      this.mapService.refreshLayer(`${refreshLayerId}`);
+      this.geometryEditedForLayer = null;
+    }
+  }
+
+  private setAttributeUpdated(attribute: string, value: any) {
+    if (this.updatedAttributes === null) {
+      this.updatedAttributes = {};
+    }
+    this.updatedAttributes[attribute] = value;
+}
 
   public closeDialog() {
     this.store$.dispatch(hideEditDialog());
@@ -120,15 +145,36 @@ export class EditDialogComponent implements OnInit {
       .subscribe(feature => {
         if (feature) {
           this.store$.dispatch(updateEditFeature({ feature, layerId }));
-          this.updatedAttributes = null;
-          if (!this.geometryEditedForLayer) {
-            return;
-          }
-          const refreshLayerId = this.geometryEditedForLayer;
-          this.geometryEditedForLayer = null;
-          this.mapService.refreshLayer(`${refreshLayerId}`);
+          this.resetChanges();
         }
       });
+  }
+
+  public add(layerId: string) {
+    const updatedFeature = this.updatedAttributes;
+    if (!updatedFeature) {
+      return;
+    }
+
+    this.store$.select(selectViewerId)
+        .pipe(
+            take(1),
+            concatMap(viewerId => {
+              if (!viewerId) {
+                return of(null);
+              }
+              return this.editFeatureService.createFeature$(viewerId, layerId, {
+                __fid: '',
+                attributes: updatedFeature,
+              });
+            }),
+        )
+        .subscribe(feature => {
+          if (feature) {
+            this.store$.dispatch(editNewlyCreatedFeature({ feature: { ...feature, layerId } }));
+            this.resetChanges();
+          }
+        });
   }
 
   public delete(layerId: string, currentFeature: FeatureWithMetadataModel) {
@@ -166,17 +212,8 @@ export class EditDialogComponent implements OnInit {
   }
 
   public featureChanged($event: { attribute: string; value: any; invalid?: boolean }) {
-    if (this.updatedAttributes === null) {
-      this.updatedAttributes = {};
-    }
-    if ($event.invalid) {
-      delete this.updatedAttributes[$event.attribute];
-      if (Object.keys(this.updatedAttributes).length === 0) {
-        this.updatedAttributes = null;
-      }
-      return;
-    }
-    this.updatedAttributes[$event.attribute] = $event.value;
+    this.formValid = !$event.invalid;
+    this.setAttributeUpdated($event.attribute, $event.value);
   }
 
   public geometryChanged($event: { __fid: string; geometry: string; geometryAttribute: string }) {
@@ -191,9 +228,30 @@ export class EditDialogComponent implements OnInit {
         }
         this.geometryEditedForLayer = feature.feature.layerId;
         if (this.updatedAttributes === null) {
-          this.updatedAttributes = {};
+          // Edited feature but only geometry edited, set this so Save button is enabled
+          this.formValid = true;
         }
-        this.updatedAttributes[$event.geometryAttribute] = $event.geometry;
+        this.setAttributeUpdated($event.geometryAttribute, $event.geometry);
+      });
+  }
+
+  public geometryCreated($event: { geometry: string }) {
+    if (!this.currentFeature$) {
+      return;
+    }
+    this.currentFeature$.pipe(
+      take(1),
+      switchMap((feature: FeatureWithMetadataModel | null) => {
+        if (!feature) {
+          return of(null);
+        }
+        return this.applicationLayerService.getLayerDetails$(feature.feature.layerId);
+      }))
+      .subscribe(layerDetails => {
+        if (layerDetails) {
+          this.setAttributeUpdated(layerDetails.details.geometryAttribute, $event.geometry);
+          this.geometryEditedForLayer = layerDetails.layer.id;
+        }
       });
   }
 }

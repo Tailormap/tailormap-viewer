@@ -26,4 +26,19 @@
     </ng-container>
   </div>
 
+  <button [matMenuTriggerFor]="geometryTypeMenu"
+          [class.disabled]="layer.value === null"
+          [tmTooltip]="'Add new feature'"
+          class="map-control-button map-control-button--add-feature"
+          mat-flat-button>
+    <mat-icon svgIcon="new_object"></mat-icon>
+  </button>
+
+  <mat-menu #geometryTypeMenu="matMenu" xPosition="after" yPosition="below">
+    <button mat-menu-item (click)="layer.value !== null ? createFeature('point') : null" i18n>Point</button>
+    <button mat-menu-item (click)="layer.value !== null ? createFeature('line') : null" i18n>Line</button>
+    <button mat-menu-item (click)="layer.value !== null ? createFeature('area') : null" i18n>Polygon</button>
+    <button mat-menu-item (click)="layer.value !== null ? createFeature('rectangle') : null" i18n>Rectangle</button>
+    <button mat-menu-item (click)="layer.value !== null ? createFeature('square') : null" i18n>Square</button>
+  </mat-menu>
 </div>

@@ -1,14 +1,20 @@
-import { Component, OnInit, ChangeDetectionStrategy, DestroyRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, OnInit } from '@angular/core';
 import { selectEditActive, selectSelectedEditLayer } from '../state/edit.selectors';
 import { Store } from '@ngrx/store';
 import { combineLatest, take } from 'rxjs';
-import { setEditActive, setSelectedEditLayer } from '../state/edit.actions';
+import {
+    setEditActive,
+    setEditCreateNewFeatureActive,
+    setSelectedEditLayer,
+} from '../state/edit.actions';
 import { FormControl } from '@angular/forms';
 import { selectEditableLayers } from '../../../map/state/map.selectors';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { withLatestFrom } from 'rxjs/operators';
-import { selectUserDetails } from "../../../state/core.selectors";
+import { selectUserDetails } from '../../../state/core.selectors';
 import { hideFeatureInfoDialog } from "../../feature-info/state/feature-info.actions";
+import { ApplicationLayerService } from '../../../map/services/application-layer.service';
+import { FeatureAttributeTypeEnum } from "@tailormap-viewer/api";
 
 @Component({
   selector: 'tm-edit',
@@ -32,6 +38,7 @@ export class EditComponent implements OnInit {
   constructor(
     private store$: Store,
     private destroyRef: DestroyRef,
+    private applicationLayerService: ApplicationLayerService,
   ) { }
 
   public ngOnInit(): void {
@@ -96,4 +103,25 @@ export class EditComponent implements OnInit {
       });
   }
 
+  public createFeature(geometryType: string) {
+    // get layer attribute details for edit form
+    this.applicationLayerService.getLayerDetails$(this.layer.value)
+      .pipe()
+      .subscribe(layerDetails => {
+        // show edit dialog
+        this.store$.dispatch(setEditCreateNewFeatureActive({
+          active: true,
+          geometryType,
+          columnMetadata: layerDetails.details.attributes.map(attribute => {
+              return {
+                layerId: layerDetails.details.id,
+                key: attribute.key,
+                type: attribute.type as unknown as FeatureAttributeTypeEnum,
+                alias: attribute.editAlias,
+              };
+            },
+          ),
+        }));
+      });
+  }
 }

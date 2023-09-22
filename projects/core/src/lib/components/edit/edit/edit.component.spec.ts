@@ -3,7 +3,7 @@ import { EditComponent } from './edit.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { provideMockStore } from "@ngrx/store/testing";
 import { selectEditableLayers } from "../../../map/state/map.selectors";
-import { getAppLayerModel } from "@tailormap-viewer/api";
+import { getAppLayerModel, TAILORMAP_API_V1_SERVICE, TailormapApiV1MockService } from '@tailormap-viewer/api';
 import { selectEditActive, selectSelectedEditLayer } from "../state/edit.selectors";
 import { selectUserDetails } from "../../../state/core.selectors";
 import { SharedModule } from "@tailormap-viewer/shared";
@@ -14,6 +14,7 @@ const setup = async (hasLayers: boolean, authenticated: boolean) => {
     imports: [ SharedModule, MatIconTestingModule ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     providers: [
+      { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1MockService },
       provideMockStore({
         initialState: {},
         selectors: [
@@ -27,25 +28,30 @@ const setup = async (hasLayers: boolean, authenticated: boolean) => {
   });
 };
 
-describe('EditButtonComponent', () => {
+describe('EditComponent', () => {
 
-  test('should render button', async () => {
+  test('should render buttons', async () => {
     await setup(true, true);
-    expect(screen.getByRole('button')).toBeVisible();
-    expect(screen.getByRole('button')).not.toHaveClass("disabled");
+    const buttons  = screen.getAllByRole('button');
+    expect(buttons[0]).toBeVisible();
+    expect(buttons[0]).not.toHaveClass("disabled");
+    expect(buttons[1]).toBeVisible();
+    expect(buttons[1]).toHaveClass("disabled");
   });
 
-  test('should disabled when user is not logged in button', async () => {
+  test('should be disabled when user is not logged in button', async () => {
     await setup(true, false);
-    expect(screen.getByRole('button')).toBeVisible();
-    expect(screen.getByRole('button')).toHaveClass("disabled");
+    const buttons  = screen.getAllByRole('button');
+    expect(buttons[0]).toBeVisible();
+    expect(buttons[0]).toHaveClass("disabled");
     expect(await screen.findByLabelText('You must be logged in to edit.'));
   });
 
-  test('should disabled when there are no visible layers button', async () => {
+  test('should be disabled when there are no visible layers button', async () => {
     await setup(false, true);
-    expect(screen.getByRole('button')).toBeVisible();
-    expect(screen.getByRole('button')).toHaveClass("disabled");
+    const buttons  = screen.getAllByRole('button');
+    expect(buttons[0]).toBeVisible();
+    expect(buttons[0]).toHaveClass("disabled");
     expect(await screen.findByLabelText('There are no editable layers. Enable a layer to start editing.'));
   });
 

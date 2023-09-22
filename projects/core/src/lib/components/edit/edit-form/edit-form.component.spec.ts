@@ -34,7 +34,7 @@ describe('EditFormComponent', () => {
     expect(await screen.findByText('Property')).toBeInTheDocument();
     expect(await screen.findByText('Property 2')).toBeInTheDocument();
     await userEvent.type(screen.getByPlaceholderText('Property'), '123');
-    await waitFor(() => expect(featureAttributeChanged).toHaveBeenCalledWith({ attribute: 'prop', value: '123' }));
+    await waitFor(() => expect(featureAttributeChanged).toHaveBeenCalledWith({ attribute: 'prop', value: '123', invalid: false }));
   });
 
 });
