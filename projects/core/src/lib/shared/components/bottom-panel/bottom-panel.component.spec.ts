@@ -29,4 +29,34 @@ describe('BottomPanelComponent', () => {
     expect(screen.queryByText('test panel')).toBeInTheDocument();
   });
 
+  test('starts with initial height', async () => {
+    await render(BottomPanelComponent, {
+      imports: [ SharedModule, MatIconTestingModule ],
+      componentInputs: {
+        isVisible$: of(true),
+        title$: of('test panel'),
+        initialHeight: 500,
+      },
+    });
+    expect(screen.queryByRole('tabpanel')).toBeInTheDocument();
+    const panel = screen.queryByRole('tabpanel')?.querySelector<HTMLDivElement>('.panel');
+    expect(panel).toBeInTheDocument();
+    expect(panel).toHaveStyle('height: 500px');
+  });
+
+  test('starts maximized', async () => {
+    await render(BottomPanelComponent, {
+      imports: [ SharedModule, MatIconTestingModule ],
+      componentInputs: {
+        isVisible$: of(true),
+        title$: of('test panel'),
+        initiallyMaximized: true,
+      },
+    });
+    expect(screen.queryByRole('tabpanel')).toBeInTheDocument();
+    const panel = screen.queryByRole('tabpanel')?.querySelector<HTMLDivElement>('.panel');
+    expect(panel).toBeInTheDocument();
+    expect(panel).toHaveStyle('height: 100vh');
+  });
+
 });
