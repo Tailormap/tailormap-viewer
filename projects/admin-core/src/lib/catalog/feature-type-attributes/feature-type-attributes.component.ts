@@ -2,7 +2,7 @@ import {
   Component, ChangeDetectionStrategy, Input, OnChanges, Output, EventEmitter, SimpleChanges, DestroyRef,
 } from '@angular/core';
 import { AttributeDescriptorModel, FeatureTypeSettingsModel } from '@tailormap-admin/admin-api';
-import { FeatureTypeAttributeHelper } from '../helpers/feature-type-attribute.helper';
+import { AttributeTypeHelper } from '../../../../../api/src/lib/helpers/attribute-type.helper';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ArrayHelper } from '@tailormap-viewer/shared';
 import { FormControl, FormGroup } from '@angular/forms';
@@ -58,8 +58,8 @@ export class FeatureTypeAttributesComponent implements OnChanges {
     if (this.attributes && (attributesChanged || this.changedSettings(changes, 'attributeOrder'))) {
       const attributeOrder = this.featureTypeSettings?.attributeOrder || [];
       const sortedAttributes = [...this.attributes].sort(ArrayHelper.getArraySorter('name', attributeOrder));
-      this.dataAttributes = sortedAttributes.filter(a => !FeatureTypeAttributeHelper.isGeometryType(a.type));
-      this.geomAttributes = sortedAttributes.filter(a => FeatureTypeAttributeHelper.isGeometryType(a.type));
+      this.dataAttributes = sortedAttributes.filter(a => !AttributeTypeHelper.isGeometryType(a.type));
+      this.geomAttributes = sortedAttributes.filter(a => AttributeTypeHelper.isGeometryType(a.type));
     }
     if (this.attributes && attributesChanged) {
       const aliases = this.featureTypeSettings?.attributeSettings || {};

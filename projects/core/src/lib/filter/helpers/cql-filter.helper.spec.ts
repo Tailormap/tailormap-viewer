@@ -1,5 +1,5 @@
 import { FilterGroupModel } from '../models/filter-group.model';
-import { FeatureAttributeTypeEnum } from '@tailormap-viewer/api';
+import { AttributeType } from '@tailormap-viewer/api';
 import { FilterConditionEnum } from '../models/filter-condition.enum';
 import { CqlFilterHelper } from './cql-filter.helper';
 import { AttributeFilterModel } from '../models/attribute-filter.model';
@@ -80,7 +80,7 @@ describe('CQLFilterHelper', () => {
         type: FilterTypeEnum.ATTRIBUTE,
         invertCondition: false,
         attribute: 'attribute',
-        attributeType: FeatureAttributeTypeEnum.STRING,
+        attributeType: AttributeType.STRING,
         condition: FilterConditionEnum.STRING_LIKE_KEY,
         value: ['value'],
       }, {
@@ -89,7 +89,7 @@ describe('CQLFilterHelper', () => {
         type: FilterTypeEnum.ATTRIBUTE,
         invertCondition: false,
         attribute: 'attribute2',
-        attributeType: FeatureAttributeTypeEnum.BOOLEAN,
+        attributeType: AttributeType.BOOLEAN,
         condition: FilterConditionEnum.BOOLEAN_TRUE_KEY,
         value: [],
       }, {
@@ -98,7 +98,7 @@ describe('CQLFilterHelper', () => {
         type: FilterTypeEnum.ATTRIBUTE,
         invertCondition: false,
         attribute: 'attribute3',
-        attributeType: FeatureAttributeTypeEnum.DATE,
+        attributeType: AttributeType.DATE,
         condition: FilterConditionEnum.DATE_ON_KEY,
         value: ['2020-01-01'],
       }, {
@@ -107,7 +107,7 @@ describe('CQLFilterHelper', () => {
         type: FilterTypeEnum.ATTRIBUTE,
         invertCondition: true,
         attribute: 'attribute4',
-        attributeType: FeatureAttributeTypeEnum.DATE,
+        attributeType: AttributeType.DATE,
         condition: FilterConditionEnum.NULL_KEY,
         value: [],
       }]);
@@ -126,7 +126,7 @@ describe('CQLFilterHelper', () => {
         type: FilterTypeEnum.ATTRIBUTE,
         invertCondition: false,
         attribute: 'attribute',
-        attributeType: FeatureAttributeTypeEnum.STRING,
+        attributeType: AttributeType.STRING,
         condition: FilterConditionEnum.STRING_LIKE_KEY,
         value: ['value'],
       }],
@@ -142,7 +142,7 @@ describe('CQLFilterHelper', () => {
         type: FilterTypeEnum.ATTRIBUTE,
         invertCondition: false,
         attribute: 'attribute2',
-        attributeType: FeatureAttributeTypeEnum.INTEGER,
+        attributeType: AttributeType.INTEGER,
         condition: FilterConditionEnum.NUMBER_LARGER_THAN_KEY,
         value: ['5'],
       }, {
@@ -151,7 +151,7 @@ describe('CQLFilterHelper', () => {
         type: FilterTypeEnum.ATTRIBUTE,
         invertCondition: false,
         attribute: 'attribute3',
-        attributeType: FeatureAttributeTypeEnum.INTEGER,
+        attributeType: AttributeType.INTEGER,
         condition: FilterConditionEnum.NUMBER_SMALLER_THAN_KEY,
         value: ['10'],
       }],
@@ -168,7 +168,7 @@ describe('CQLFilterHelper', () => {
         type: FilterTypeEnum.ATTRIBUTE,
         invertCondition: false,
         attribute: 'attribute4',
-        attributeType: FeatureAttributeTypeEnum.INTEGER,
+        attributeType: AttributeType.INTEGER,
         condition: FilterConditionEnum.NUMBER_BETWEEN_KEY,
         value: [ '5', '10' ],
       }],
@@ -185,7 +185,7 @@ describe('CQLFilterHelper', () => {
         type: FilterTypeEnum.ATTRIBUTE,
         invertCondition: false,
         attribute: 'attribute5',
-        attributeType: FeatureAttributeTypeEnum.STRING,
+        attributeType: AttributeType.STRING,
         condition: FilterConditionEnum.NULL_KEY,
         value: [],
       }],

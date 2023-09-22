@@ -1,7 +1,7 @@
 import { Component, Input, ChangeDetectionStrategy, EventEmitter, Output } from '@angular/core';
 import { AttributeListRowModel } from '../models/attribute-list-row.model';
 import { AttributeListColumnModel } from '../models/attribute-list-column.model';
-import { FeatureAttributeTypeEnum } from '@tailormap-viewer/api';
+import { AttributeType } from '@tailormap-viewer/api';
 import { AttributeFilterModel } from '../../../filter/models/attribute-filter.model';
 
 const DEFAULT_COLUMN_WIDTH = 170;
@@ -60,7 +60,7 @@ export class AttributeListTableComponent {
   public setSort = new EventEmitter<{ columnId: string; direction: 'asc' | 'desc' | '' }>();
 
   @Output()
-  public setFilter = new EventEmitter<{ columnId: string; attributeType: FeatureAttributeTypeEnum }>();
+  public setFilter = new EventEmitter<{ columnId: string; attributeType: AttributeType }>();
 
   private _rows: AttributeListRowModel[] = [];
   private _columns: AttributeListColumnModel[] = [];

@@ -4,7 +4,7 @@ import { selectAttributeListData, selectAttributeListTabs } from '../state/attri
 import { selectViewerId } from '../../../state/core.selectors';
 import { AttributeListDataService } from './attribute-list-data.service';
 import {
-  FeatureAttributeTypeEnum, FeaturesResponseModel, getColumnMetadataModel, getFeatureModel, Sortorder, TailormapApiV1ServiceModel,
+  AttributeType, FeaturesResponseModel, getColumnMetadataModel, getFeatureModel, TailormapApiV1ServiceModel,
 } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { FilterService } from '../../../filter/services/filter.service';
@@ -75,7 +75,7 @@ describe('AttributeListDataService', () => {
       columnMetadata: [
         getColumnMetadataModel(),
         getColumnMetadataModel({ key: 'prop2' }),
-        getColumnMetadataModel({ key: 'geom', type: FeatureAttributeTypeEnum.GEOMETRY }),
+        getColumnMetadataModel({ key: 'geom', type: AttributeType.GEOMETRY }),
       ],
       pageSize: 10,
       page: 0,

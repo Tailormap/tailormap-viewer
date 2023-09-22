@@ -14,7 +14,7 @@ import { withLatestFrom } from 'rxjs/operators';
 import { selectUserDetails } from '../../../state/core.selectors';
 import { hideFeatureInfoDialog } from "../../feature-info/state/feature-info.actions";
 import { ApplicationLayerService } from '../../../map/services/application-layer.service';
-import { FeatureAttributeTypeEnum } from "@tailormap-viewer/api";
+import { AttributeType } from "@tailormap-viewer/api";
 
 @Component({
   selector: 'tm-edit',
@@ -116,7 +116,7 @@ export class EditComponent implements OnInit {
               return {
                 layerId: layerDetails.details.id,
                 key: attribute.key,
-                type: attribute.type as unknown as FeatureAttributeTypeEnum,
+                type: attribute.type as unknown as AttributeType,
                 alias: attribute.editAlias,
               };
             },

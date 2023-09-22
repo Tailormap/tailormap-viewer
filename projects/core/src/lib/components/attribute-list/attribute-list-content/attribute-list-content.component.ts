@@ -11,7 +11,7 @@ import {
 } from '../state/attribute-list.selectors';
 import { loadData, updateRowSelected, updateSort } from '../state/attribute-list.actions';
 import { AttributeListStateService } from '../services/attribute-list-state.service';
-import { BaseComponentTypeEnum, FeatureAttributeTypeEnum } from '@tailormap-viewer/api';
+import { BaseComponentTypeEnum, AttributeType } from '@tailormap-viewer/api';
 import { SimpleAttributeFilterService } from '../../../filter/services/simple-attribute-filter.service';
 import { AttributeListFilterComponent, FilterDialogData } from '../attribute-list-filter/attribute-list-filter.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -81,7 +81,7 @@ export class AttributeListContentComponent implements OnInit {
     });
   }
 
-  public onSetFilter($event: { columnId: string; attributeType: FeatureAttributeTypeEnum }) {
+  public onSetFilter($event: { columnId: string; attributeType: AttributeType }) {
     combineLatest([
       this.store$.select(selectSelectedTab),
       this.store$.select(selectViewerId),

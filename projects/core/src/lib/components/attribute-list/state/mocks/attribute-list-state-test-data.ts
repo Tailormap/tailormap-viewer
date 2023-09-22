@@ -3,7 +3,7 @@ import { AttributeListRowModel } from '../../models/attribute-list-row.model';
 import { AttributeListTabModel } from '../../models/attribute-list-tab.model';
 import { AttributeListManagerService } from '../../services/attribute-list-manager.service';
 import { AttributeListDataModel } from '../../models/attribute-list-data.model';
-import { FeatureAttributeTypeEnum } from '@tailormap-viewer/api';
+import { AttributeType } from '@tailormap-viewer/api';
 
 export const createDummyAttributeListTab = (
   overrides?: Partial<AttributeListTabModel>,
@@ -101,11 +101,11 @@ export const getLoadedStoreWithRows = (overrides?: Partial<AttributeListState>) 
         tabId: '1',
         rows: createDummyRows(10),
         columns: [{
-          id: 'attribute1', label: 'Attribute 1', visible: true, type: FeatureAttributeTypeEnum.STRING,
+          id: 'attribute1', label: 'Attribute 1', visible: true, type: AttributeType.STRING,
         }, {
-          id: 'attribute2', label: 'Attribute 2', visible: true, type: FeatureAttributeTypeEnum.STRING,
+          id: 'attribute2', label: 'Attribute 2', visible: true, type: AttributeType.STRING,
         }, {
-          id: 'attribute3', label: 'Attribute 3', visible: true, type: FeatureAttributeTypeEnum.STRING,
+          id: 'attribute3', label: 'Attribute 3', visible: true, type: AttributeType.STRING,
         }],
       }),
     ],
@@ -126,11 +126,11 @@ export const getLoadedStoreWithMultipleTabs = (overrides?: Partial<AttributeList
         tabId: '1',
         rows: createDummyRows(10),
         columns: [{
-          id: 'attribute1', label: 'Attribute 1', visible: true, type: FeatureAttributeTypeEnum.STRING,
+          id: 'attribute1', label: 'Attribute 1', visible: true, type: AttributeType.STRING,
         }, {
-          id: 'attribute2', label: 'Attribute 2', visible: true, type: FeatureAttributeTypeEnum.STRING,
+          id: 'attribute2', label: 'Attribute 2', visible: true, type: AttributeType.STRING,
         }, {
-          id: 'attribute3', label: 'Attribute 3', visible: true, type: FeatureAttributeTypeEnum.STRING,
+          id: 'attribute3', label: 'Attribute 3', visible: true, type: AttributeType.STRING,
         }],
       }),
       createDummyAttributeListData({
@@ -144,11 +144,11 @@ export const getLoadedStoreWithMultipleTabs = (overrides?: Partial<AttributeList
           },
         })),
         columns: [{
-          id: 'attribute1', label: 'Country', visible: true, type: FeatureAttributeTypeEnum.STRING,
+          id: 'attribute1', label: 'Country', visible: true, type: AttributeType.STRING,
         }, {
-          id: 'attribute2', label: 'City', visible: true, type: FeatureAttributeTypeEnum.STRING,
+          id: 'attribute2', label: 'City', visible: true, type: AttributeType.STRING,
         }, {
-          id: 'attribute3', label: 'Street', visible: true, type: FeatureAttributeTypeEnum.STRING,
+          id: 'attribute3', label: 'Street', visible: true, type: AttributeType.STRING,
         }],
       }),
     ],
