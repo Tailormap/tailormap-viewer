@@ -79,12 +79,14 @@ export class EditGeometryToolComponent implements OnInit {
         if (!selectedFeature || !layerDetails || !this.tool) {
           this.currentFeature = null;
           this.layerDetails = null;
+          console.log('Edit geometry: disable');
           this.tool?.disable();
           return;
         }
         this.currentFeature = selectedFeature.feature;
         this.layerDetails = layerDetails.details;
         const geometry = selectedFeature.feature.attributes[layerDetails.details.geometryAttribute];
+        console.log('Edit geometry: enable');
         this.tool.enable({ geometry });
       });
   }

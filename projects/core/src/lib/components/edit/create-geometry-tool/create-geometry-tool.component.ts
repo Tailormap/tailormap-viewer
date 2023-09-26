@@ -59,6 +59,7 @@ export class CreateGeometryToolComponent implements OnInit {
         takeUntilDestroyed(this.destroyRef),
         tap(({ tool, manager }) => {
           this.toolId = tool.id;
+          console.log('Create geometry: enable with geometry type', this.geometryType);
           manager.enableTool(tool.id, true, { type: this.geometryType });
         }),
         switchMap(({ tool }) => tool.drawing$),
@@ -77,6 +78,7 @@ export class CreateGeometryToolComponent implements OnInit {
   public setGeometryType(geometryType: string | null) {
     this.mapService.getToolManager$().pipe(take(1)).subscribe((manager) => {
       if (this.toolId) {
+        console.log('Create geometry: re-enable with geometry type', geometryType);
         manager.disableTool(this.toolId);
         manager.enableTool(this.toolId, true, { type: geometryType });
         this.createdGeometrySubject.next('');

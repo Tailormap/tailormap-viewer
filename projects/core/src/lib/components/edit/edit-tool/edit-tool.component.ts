@@ -5,7 +5,7 @@ import { activateTool, deactivateTool, deregisterTool, registerTool } from '../.
 import { ToolbarComponentEnum } from '../../toolbar/models/toolbar-component.enum';
 import { Store } from '@ngrx/store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { selectEditActiveWithSelectedLayer, selectEditError$ } from '../state/edit.selectors';
+import { selectEditActiveForSelectingFeature, selectEditError$ } from '../state/edit.selectors';
 import { loadEditFeatures } from '../state/edit.actions';
 import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from "@tailormap-viewer/shared";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -41,12 +41,14 @@ export class EditToolComponent implements OnInit, OnDestroy {
         this.handleMapClick(mapClick);
       });
 
-    this.store$.select(selectEditActiveWithSelectedLayer)
+    this.store$.select(selectEditActiveForSelectingFeature)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(editActive => {
         if (editActive) {
-          this.store$.dispatch(activateTool({ tool: ToolbarComponentEnum.EDIT }));
+          console.log('Map click edit feature: activate');
+          this.store$.dispatch(activateTool({ tool: ToolbarComponentEnum.EDIT, enableArguments: {  } }));
         } else {
+          console.log('Map click edit feature: deactivate');
           this.store$.dispatch(deactivateTool({ tool: ToolbarComponentEnum.EDIT }));
         }
       });

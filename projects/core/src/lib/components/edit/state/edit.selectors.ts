@@ -9,6 +9,7 @@ import { filter, pipe, take } from "rxjs";
 const selectEditState = createFeatureSelector<EditState>(editStateKey);
 
 export const selectEditActive = createSelector(selectEditState, state => state.isActive);
+export const selectEditSelectedFeature = createSelector(selectEditState, state => state.selectedFeature);
 export const selectEditCreateNewFeatureActive = createSelector(selectEditState, state => state.isCreateNewFeatureActive);
 export const selectNewFeatureGeometryType = createSelector(selectEditState, state => state.newGeometryType);
 export const selectSelectedEditLayer = createSelector(selectEditState, state => state.selectedLayer);
@@ -22,11 +23,12 @@ export const selectEditFeatures = createSelector(selectEditState, (state): Featu
 export const selectEditFeatureColumnMetadata = createSelector(selectEditState, (state): FeatureInfoColumnMetadataModel[] => state.columnMetadata);
 export const selectSelectedEditFeatureId = createSelector(selectEditState, (state): string | null => state.selectedFeature);
 
-export const selectEditActiveWithSelectedLayer = createSelector(
+export const selectEditActiveForSelectingFeature = createSelector(
   selectEditActive,
   selectSelectedEditLayer,
-  (isActive, selectedLayer) => {
-    return isActive && !!selectedLayer;
+  selectEditCreateNewFeatureActive,
+  (isActive, selectedLayer, editCreateNewFeatureActive) => {
+    return isActive && !!selectedLayer && !editCreateNewFeatureActive;
   });
 
 export const selectSelectedEditFeature = createSelector(

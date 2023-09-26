@@ -83,6 +83,7 @@ export class OpenLayersToolManager implements ToolManagerModel {
     disableOtherTools?: boolean,
     enableArgs?: any,
   ): ToolManagerModel {
+    console.log(`enableTool ${toolId}, disable other tools ${disableOtherTools}, enable args ${JSON.stringify(enableArgs)}`);
     if (disableOtherTools) {
       this.disableAllTools();
     }
