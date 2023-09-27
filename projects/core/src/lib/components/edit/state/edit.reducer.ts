@@ -112,6 +112,7 @@ const onHideEditDialog = (state: EditState): EditState => ({
   dialogVisible: false,
   dialogCollapsed: false,
   selectedFeature: null,
+  isCreateNewFeatureActive: false,
 });
 
 const onExpandCollapseEditDialog = (state: EditState): EditState => ({

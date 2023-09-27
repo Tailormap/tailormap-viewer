@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as EditActions from './edit.actions';
-import { map, switchMap } from 'rxjs';
+import { filter, map, switchMap } from 'rxjs';
 import { FeatureInfoService } from '../../feature-info/feature-info.service';
 import { withLatestFrom } from 'rxjs/operators';
-import { selectSelectedEditLayer } from './edit.selectors';
+import { selectEditActive, selectSelectedEditLayer } from './edit.selectors';
 import { Store } from '@ngrx/store';
+import { activateTool } from '../../toolbar/state/toolbar.actions';
+import { ToolbarComponentEnum } from '../../toolbar/models/toolbar-component.enum';
+import { setEditActive } from './edit.actions';
 
 @Injectable()
 export class EditEffects {
@@ -26,6 +29,17 @@ export class EditEffects {
               );
           }),
       );
+  });
+
+  public activeTool$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(activateTool),
+      withLatestFrom(this.store$.select(selectEditActive)),
+      filter(([ action, editActive ]) => editActive && action.tool !== ToolbarComponentEnum.EDIT),
+      map(() => {
+        return setEditActive({ active: false });
+      }),
+    );
   });
 
   constructor(

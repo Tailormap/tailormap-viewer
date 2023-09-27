@@ -23,12 +23,29 @@ export const selectEditFeatures = createSelector(selectEditState, (state): Featu
 export const selectEditFeatureColumnMetadata = createSelector(selectEditState, (state): FeatureInfoColumnMetadataModel[] => state.columnMetadata);
 export const selectSelectedEditFeatureId = createSelector(selectEditState, (state): string | null => state.selectedFeature);
 
-export const selectEditActiveForSelectingFeature = createSelector(
+export const selectEditActiveWithSelectedLayer = createSelector(
   selectEditActive,
   selectSelectedEditLayer,
+//  selectEditCreateNewFeatureActive,
+  (isActive, selectedLayer/*, editCreateNewFeatureActive*/) => {
+    return isActive && !!selectedLayer;// && !editCreateNewFeatureActive;
+  });
+
+export const selectEditStatus = createSelector(
+  selectEditActiveWithSelectedLayer,
+  selectEditSelectedFeature,
   selectEditCreateNewFeatureActive,
-  (isActive, selectedLayer, editCreateNewFeatureActive) => {
-    return isActive && !!selectedLayer && !editCreateNewFeatureActive;
+  (editWithLayerActive, editSelectedFeatureActive, editCreateNewFeatureActive) => {
+    if (!editWithLayerActive) {
+      return 'inactive';
+    }
+    if (editCreateNewFeatureActive) {
+      return 'create_feature';
+    }
+    if (editSelectedFeatureActive) {
+      return 'edit_feature';
+    }
+    return 'active';
   });
 
 export const selectSelectedEditFeature = createSelector(

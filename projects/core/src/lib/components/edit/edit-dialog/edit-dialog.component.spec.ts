@@ -7,7 +7,7 @@ import { AttributeType, getAppLayerModel, getFeatureModel } from '@tailormap-vie
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { editStateKey, initialEditState } from '../state/edit.state';
 import { ApplicationLayerService } from '../../../map/services/application-layer.service';
-import { EditFeatureService } from '../edit-feature.service';
+import { EditFeatureService } from '../services/edit-feature.service';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { selectEditDialogVisible, selectSelectedEditFeature } from '../state/edit.selectors';
 import { FeatureWithMetadataModel } from '../models/feature-with-metadata.model';
