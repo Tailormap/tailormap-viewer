@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ConfirmDialogService, CssHelper } from '@tailormap-viewer/shared';
 import {
@@ -7,22 +7,23 @@ import {
   selectEditDialogVisible,
   selectEditFeatures,
   selectEditMapCoordinates,
-  selectLoadingEditFeatures, selectNewFeatureGeometryType,
+  selectLoadingEditFeatures,
   selectSelectedEditFeature,
 } from '../state/edit.selectors';
 import { combineLatest, concatMap, filter, map, of, switchMap, take } from 'rxjs';
 import {
   editNewlyCreatedFeature,
-  expandCollapseEditDialog, hideEditDialog, updateEditFeature,
+  expandCollapseEditDialog, hideEditDialog,  updateEditFeature,
 } from '../state/edit.actions';
 import { FeatureModelAttributes } from '@tailormap-viewer/api';
 import { ApplicationLayerService } from '../../../map/services/application-layer.service';
 import { FeatureWithMetadataModel } from '../models/feature-with-metadata.model';
-import { EditFeatureService } from '../edit-feature.service';
+import { EditFeatureService } from '../services/edit-feature.service';
 import { selectViewerId } from '../../../state/core.selectors';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MapService } from '@tailormap-viewer/map';
 import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layout.service';
+import { EditMapToolService } from '../services/edit-map-tool.service';
 
 @Component({
   selector: 'tm-edit-dialog',
@@ -35,7 +36,6 @@ export class EditDialogComponent {
   public dialogOpen$;
   public dialogCollapsed$;
   public isCreateFeature$;
-  public newGeometryType$;
   public currentFeature$;
   public layerDetails$;
   public selectableFeature$;
@@ -54,12 +54,14 @@ export class EditDialogComponent {
 
   constructor(
     private store$: Store,
+    private editMapToolService: EditMapToolService,
     private applicationLayerService: ApplicationLayerService,
     private editFeatureService: EditFeatureService,
     private destroyRef: DestroyRef,
     private mapService: MapService,
     private confirmService: ConfirmDialogService,
     private layoutService: ViewerLayoutService,
+    private cdr: ChangeDetectorRef,
   ) {
     this.dialogOpen$ = this.store$.select(selectEditDialogVisible);
     this.dialogCollapsed$ = this.store$.select(selectEditDialogCollapsed);
@@ -67,7 +69,6 @@ export class EditDialogComponent {
     this.editCoordinates$ = this.store$.select(selectEditMapCoordinates);
     this.currentFeature$ = this.store$.select(selectSelectedEditFeature);
     this.isCreateFeature$ = this.store$.select(selectEditCreateNewFeatureActive);
-    this.newGeometryType$ = this.store$.select(selectNewFeatureGeometryType);
     this.selectableFeature$ = combineLatest([
       this.store$.select(selectEditFeatures),
       this.store$.select(selectSelectedEditFeature),
@@ -97,6 +98,13 @@ export class EditDialogComponent {
       .subscribe(open => {
         this.layoutService.setRightPadding(open ? this.panelWidth + this.bodyMargin : 0);
       });
+
+    this.editMapToolService.editedGeometry$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(geometry => {
+      this.geometryChanged(geometry, false);
+    });
+    this.editMapToolService.createdGeometry$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(geometry => {
+      this.geometryChanged(geometry, true);
+    });
   }
 
   private resetChanges() {
@@ -216,27 +224,8 @@ export class EditDialogComponent {
     this.setAttributeUpdated($event.attribute, $event.value);
   }
 
-  public geometryChanged($event: { __fid: string; geometry: string; geometryAttribute: string }) {
-    if (!this.currentFeature$) {
-      return;
-    }
-    this.currentFeature$
-      .pipe(take(1))
-      .subscribe(feature => {
-        if (feature?.feature.__fid !== $event.__fid) {
-          return;
-        }
-        this.geometryEditedForLayer = feature.feature.layerId;
-        if (this.updatedAttributes === null) {
-          // Edited feature but only geometry edited, set this so Save button is enabled
-          this.formValid = true;
-        }
-        this.setAttributeUpdated($event.geometryAttribute, $event.geometry);
-      });
-  }
-
-  public geometryCreated($event: { geometry: string }) {
-    if (!this.currentFeature$) {
+  public geometryChanged(geometry: string | null, newFeature: boolean) {
+    if (!this.currentFeature$ || geometry === null) {
       return;
     }
     this.currentFeature$.pipe(
@@ -249,7 +238,12 @@ export class EditDialogComponent {
       }))
       .subscribe(layerDetails => {
         if (layerDetails) {
-          this.setAttributeUpdated(layerDetails.details.geometryAttribute, $event.geometry);
+          if (!newFeature && this.updatedAttributes === null) {
+            // Edited feature but only geometry edited, set this so Save button is enabled
+            this.formValid = true;
+            this.cdr.detectChanges();
+          }
+          this.setAttributeUpdated(layerDetails.details.geometryAttribute, geometry);
           this.geometryEditedForLayer = layerDetails.layer.id;
         }
       });

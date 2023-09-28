@@ -17,6 +17,8 @@ export class OpenLayersToolManager implements ToolManagerModel {
   private autoEnabledTools = new Set<string>();
   private alwaysEnabledTools = new Set<string>();
 
+  private switchedTool = false;
+
   constructor(private olMap: OlMap, private ngZone: NgZone) {}
 
   public destroy() {
@@ -72,7 +74,7 @@ export class OpenLayersToolManager implements ToolManagerModel {
 
   public disableTool(toolId: string, preventAutoEnableTools?: boolean): ToolManagerModel {
     this.tools.get(toolId)?.disable();
-    if (!preventAutoEnableTools) {
+    if (!preventAutoEnableTools && !this.switchedTool) {
       this.enableAutoEnabledTools();
     }
     return this;
@@ -89,6 +91,8 @@ export class OpenLayersToolManager implements ToolManagerModel {
     const tool = this.tools.get(toolId);
     if (tool && !tool.isActive) {
       tool.enable(enableArgs);
+      this.switchedTool = true;
+      window.setTimeout(() => this.switchedTool = false, 0);
     }
     return this;
   }

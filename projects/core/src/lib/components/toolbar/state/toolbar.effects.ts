@@ -34,7 +34,9 @@ export class ToolbarEffects {
           .pipe(
             take(1),
             tap(manager => {
-              manager.enableTool(tool.mapToolId, true, action.enableArguments);
+              if (tool.mapToolId) {
+                manager.enableTool(tool.mapToolId, true, action.enableArguments);
+              }
             }),
           );
       }),
@@ -53,7 +55,9 @@ export class ToolbarEffects {
           .pipe(
             take(1),
             tap(manager => {
-              manager.disableTool(tool.mapToolId);
+              if (tool.mapToolId) {
+                manager.disableTool(tool.mapToolId);
+              }
             }),
           );
       }),
