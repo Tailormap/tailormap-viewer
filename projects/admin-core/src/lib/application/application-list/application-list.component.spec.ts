@@ -11,7 +11,7 @@ import userEvent from '@testing-library/user-event';
 import { of } from 'rxjs';
 import { ConfigService } from '../../config/services/config.service';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { ADMIN_CORE_CONFIG } from '../../models/admin-core-config.injection-token';
+import { ENVIRONMENT_CONFIG } from '@tailormap-viewer/api';
 
 const setup = async (
   loadStatus: LoadingStateEnum = LoadingStateEnum.INITIAL,
@@ -39,7 +39,7 @@ const setup = async (
     providers: [
       { provide: Store, useValue: mockStore },
       { provide: ConfigService, useValue: configService },
-      { provide: ADMIN_CORE_CONFIG, useValue: { viewerBaseUrl: 'http://test.test' } },
+      { provide: ENVIRONMENT_CONFIG, useValue: { viewerBaseUrl: 'http://test.test' } },
     ],
   });
   return { mockStore, appModels };

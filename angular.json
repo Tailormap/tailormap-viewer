@@ -46,6 +46,11 @@
                 "glob": "**/*",
                 "input": "projects/core/assets/icons",
                 "output": "icons"
+              },
+              {
+                "glob": "**/*",
+                "input": "projects/admin-core/assets/icons",
+                "output": "icons"
               }
             ],
             "styles": [
@@ -65,7 +70,8 @@
               "dompurify",
               "rbush",
               "cssesc",
-              "font-family-papandreou"
+              "font-family-papandreou",
+              "earcut"
             ],
             "i18nMissingTranslation": "warning"
           },
@@ -275,120 +281,6 @@
             "lintFilePatterns": [
               "projects/map/**/*.ts",
               "projects/map/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "admin-app": {
-      "projectType": "application",
-      "schematics": {
-        "@schematics/angular:application": {
-          "strict": true
-        }
-      },
-      "root": "projects/admin-app",
-      "sourceRoot": "projects/admin-app/src",
-      "prefix": "app",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:browser",
-          "options": {
-            "outputPath": "dist/app/admin",
-            "index": "projects/admin-app/src/index.html",
-            "main": "projects/admin-app/src/main.ts",
-            "polyfills": "projects/admin-app/src/polyfills.ts",
-            "tsConfig": "projects/admin-app/tsconfig.app.json",
-            "assets": [
-              {
-                "glob": "**/*",
-                "input": "projects/admin-app/src/assets",
-                "output": "."
-              },
-              {
-                "glob": "**/*",
-                "input": "projects/core/assets/icons",
-                "output": "icons"
-              },
-              {
-                "glob": "**/*",
-                "input": "projects/admin-core/assets/icons",
-                "output": "icons"
-              }
-            ],
-            "styles": [
-              "projects/core/assets/custom-theme.scss",
-              "projects/core/assets/tailormap-styles.css",
-              "projects/admin-core/assets/tailormap-admin-styles.css"
-            ],
-            "scripts": []
-          },
-          "configurations": {
-            "production": {
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "1.5mb",
-                  "maximumError": "2mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
-                }
-              ],
-              "fileReplacements": [
-                {
-                  "replace": "projects/admin-app/src/environments/environment.ts",
-                  "with": "projects/admin-app/src/environments/environment.prod.ts"
-                }
-              ],
-              "outputHashing": "all",
-              "sourceMap": {
-                "styles": false,
-                "scripts": true,
-                "vendor": true,
-                "hidden": false
-              }
-            },
-            "development": {
-              "buildOptimizer": false,
-              "optimization": false,
-              "vendorChunk": true,
-              "extractLicenses": false,
-              "sourceMap": true,
-              "namedChunks": true
-            }
-          },
-          "defaultConfiguration": "production"
-        },
-        "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
-          "configurations": {
-            "production": {
-              "browserTarget": "admin-app:build:production"
-            },
-            "development": {
-              "browserTarget": "admin-app:build:development"
-            }
-          },
-          "options": {
-            "proxyConfig": "proxy.config.js"
-          },
-          "defaultConfiguration": "development"
-        },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "browserTarget": "admin-app:build"
-          }
-        },
-        "lint": {
-          "builder": "@angular-eslint/builder:lint",
-          "options": {
-            "lintFilePatterns": [
-              "projects/admin-app/**/*.ts",
-              "projects/admin-app/**/*.html"
             ]
           }
         }

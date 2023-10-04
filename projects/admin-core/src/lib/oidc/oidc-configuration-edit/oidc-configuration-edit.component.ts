@@ -82,7 +82,7 @@ export class OIDCConfigurationEditComponent implements OnInit, OnDestroy {
       )
       .subscribe(() => {
         this.adminSnackbarService.showMessage($localize `OIDCConfiguration ${title} removed`);
-        this.router.navigateByUrl('/oidc-configurations');
+        this.router.navigateByUrl('/admin/oidc-configurations');
       });
   }
 

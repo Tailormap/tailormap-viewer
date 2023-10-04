@@ -63,6 +63,7 @@ export class CatalogTreeComponent implements OnInit {
 
   private readNodesFromUrl(url: string): Array<{ type: CatalogTreeModelTypeEnum; treeNodeId: string; id: string }> {
     const currentRoute = url
+      .substring(url.indexOf('/admin') === 0 ? 6 : 0) // remove /admin from URL if url starts with /admin
       .replace(Routes.CATALOG, '')
       .split('/')
       .filter(part => !!part);

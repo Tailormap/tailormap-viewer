@@ -10,8 +10,7 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { ConfigService } from '../../config/services/config.service';
-import { ADMIN_CORE_CONFIG } from '../../models/admin-core-config.injection-token';
-import { AdminCoreConfigModel } from '../../models/admin-core-config.model';
+import { ENVIRONMENT_CONFIG, EnvironmentConfigModel } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-admin-application-list',
@@ -35,7 +34,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private configService: ConfigService,
-    @Inject(ADMIN_CORE_CONFIG) private config: AdminCoreConfigModel,
+    @Inject(ENVIRONMENT_CONFIG) config: EnvironmentConfigModel,
   ) {
     this.viewerBaseUrl = config.viewerBaseUrl;
   }

@@ -2,7 +2,7 @@
   <ng-container *ngIf="getButtonProps(buttonPropsInput) as buttonProps">
     <button mat-flat-button
             class="menu-button"
-            [routerLink]="'/' + buttonProps.link"
+            [routerLink]="buttonProps.link"
             routerLinkActive="active"
             [routerLinkActiveOptions]="{exact: buttonProps.matchExact}"
             [tmTooltip]="buttonProps.label"

@@ -19,6 +19,7 @@ import { AttributeListFilterComponent } from './attribute-list-filter/attribute-
 import { FilterModule } from '../../filter/filter.module';
 import { AttributeListExportButtonComponent } from './attribute-list-export-button/attribute-list-export-button.component';
 import { CoreSharedModule } from '../../shared';
+import { RouterLink } from "@angular/router";
 
 @NgModule({
   declarations: [
@@ -32,15 +33,16 @@ import { CoreSharedModule } from '../../shared';
     AttributeListFilterComponent,
     AttributeListExportButtonComponent,
   ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    MenubarModule,
-    StoreModule.forFeature(attributeListStateKey, attributeListReducer),
-    EffectsModule.forFeature([AttributeListEffects]),
-    FilterModule,
-    CoreSharedModule,
-  ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        MenubarModule,
+        StoreModule.forFeature(attributeListStateKey, attributeListReducer),
+        EffectsModule.forFeature([AttributeListEffects]),
+        FilterModule,
+        CoreSharedModule,
+        RouterLink,
+    ],
   exports: [
     AttributeListComponent,
   ],

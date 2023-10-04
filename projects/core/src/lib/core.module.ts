@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, InjectionToken, NgModule } from '@angular/core';
+import { APP_INITIALIZER, InjectionToken, ModuleWithProviders, NgModule } from '@angular/core';
 import { LoginComponent, ViewerAppComponent } from './pages';
 import { MapModule } from '@tailormap-viewer/map';
 import { StoreModule } from '@ngrx/store';
@@ -7,6 +7,8 @@ import { coreReducer } from './state/core.reducer';
 import { coreStateKey } from './state/core.state';
 import { CoreEffects } from './state/core.effects';
 import {
+  ENVIRONMENT_CONFIG,
+  EnvironmentConfigModel,
   TAILORMAP_API_V1_SERVICE, TAILORMAP_SECURITY_API_V1_SERVICE, TailormapApiV1Service, TailormapSecurityApiV1Service,
 } from '@tailormap-viewer/api';
 import { ICON_SERVICE_ICON_LOCATION, IconService, SharedModule } from '@tailormap-viewer/shared';
@@ -25,6 +27,7 @@ import { LayoutModule } from './layout/layout.module';
 import { ApplicationStyleService } from './services/application-style.service';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MAT_CHECKBOX_DEFAULT_OPTIONS } from '@angular/material/checkbox';
+import { TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 
 const getBaseHref = (platformLocation: PlatformLocation): string => {
   return platformLocation.getBaseHrefFromDOM();
@@ -80,6 +83,7 @@ const sentryProviders = SENTRY_DSN === '@SENTRY_DSN@' ? [] : [
     { provide: MAT_DATE_FORMATS, useValue: MAT_LUXON_DATE_FORMATS },
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { subscriptSizing: 'dynamic' } },
     { provide: MAT_CHECKBOX_DEFAULT_OPTIONS, useValue: { color: 'primary' } },
+    { provide: TAILORMAP_ADMIN_API_V1_SERVICE, useClass: TailormapAdminApiV1Service },
     ...sentryProviders,
   ],
 })
@@ -92,4 +96,17 @@ export class CoreModule {
   ) {
     iconService.loadIconsToIconRegistry(matIconRegistry, domSanitizer);
   }
+
+  public static forRoot(config: EnvironmentConfigModel): ModuleWithProviders<CoreModule> {
+    return {
+      ngModule: CoreModule,
+      providers: [
+        {
+          provide: ENVIRONMENT_CONFIG,
+          useValue: config,
+        },
+      ],
+    };
+  }
+
 }

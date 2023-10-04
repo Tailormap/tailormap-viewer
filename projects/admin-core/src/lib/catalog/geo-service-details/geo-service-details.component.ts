@@ -153,7 +153,7 @@ export class GeoServiceDetailsComponent implements OnInit, OnDestroy {
           return;
         }
         this.adminSnackbarService.showMessage($localize `Service ${geoService.title} removed`);
-        this.router.navigateByUrl('/catalog');
+        this.router.navigateByUrl('/admin/catalog');
       });
   }
 

@@ -29,7 +29,6 @@ import { LoginFormComponent } from './login-form/login-form.component';
   ],
   imports: [
     SharedImportsModule,
-    BrowserAnimationsModule,
   ],
   exports: [
     DialogComponent,
