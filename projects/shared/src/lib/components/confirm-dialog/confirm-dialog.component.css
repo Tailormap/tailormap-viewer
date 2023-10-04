@@ -6,7 +6,8 @@
   display: none;
 }
 
-.content {
-  padding-top: 16px;
+.dialog-content {
+  padding: 16px 0;
+  margin-top: 0;
   white-space: pre-line;
 }
