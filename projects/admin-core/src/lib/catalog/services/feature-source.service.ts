@@ -1,9 +1,8 @@
 import { Store } from '@ngrx/store';
-import { Inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import {
   ApiResponseHelper,
-  CatalogItemKindEnum, CatalogModelHelper, FeatureSourceModel, FeatureTypeModel, TAILORMAP_ADMIN_API_V1_SERVICE,
-  TailormapAdminApiV1ServiceModel,
+  CatalogItemKindEnum, CatalogModelHelper, FeatureSourceModel, FeatureTypeModel, TailormapAdminApiV1Service,
 } from '@tailormap-admin/admin-api';
 import { CatalogService } from './catalog.service';
 import { catchError, concatMap, filter, map, MonoTypeOperatorFunction, Observable, of, pipe, switchMap, take, tap } from 'rxjs';
@@ -28,7 +27,7 @@ export class FeatureSourceService {
 
   constructor(
     private store$: Store,
-    @Inject(TAILORMAP_ADMIN_API_V1_SERVICE) private adminApiService: TailormapAdminApiV1ServiceModel,
+    private adminApiService: TailormapAdminApiV1Service,
     private adminSnackbarService: AdminSnackbarService,
     private catalogService: CatalogService,
     private geoServiceService: GeoServiceService,

@@ -1,10 +1,10 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects';
 import * as UserActions from './user.actions';
 import { catchError, filter, map, of, switchMap, tap } from 'rxjs';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import {
-  ApiResponseHelper, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel,
+  ApiResponseHelper, TailormapAdminApiV1Service,
 } from '@tailormap-admin/admin-api';
 import { Store } from '@ngrx/store';
 import { selectGroupsLoadStatus, selectUsersLoadStatus } from './user.selectors';
@@ -61,7 +61,7 @@ export class UserEffects {
   constructor(
     private actions$: Actions,
     private store$: Store,
-    @Inject(TAILORMAP_ADMIN_API_V1_SERVICE) private adminApiService: TailormapAdminApiV1ServiceModel,
+    private adminApiService: TailormapAdminApiV1Service,
   ) {}
 
 }

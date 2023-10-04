@@ -1,7 +1,7 @@
-import { Inject, Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
-  ApplicationModel, AppTreeLevelNodeModel, AppTreeNodeModel, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel,
+  ApplicationModel, AppTreeLevelNodeModel, AppTreeNodeModel, TailormapAdminApiV1Service,
 } from '@tailormap-admin/admin-api';
 import { catchError, concatMap, distinctUntilChanged, filter, map, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { DebounceHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
@@ -30,7 +30,7 @@ export class ApplicationService implements OnDestroy {
 
   public constructor(
     private store$: Store,
-    @Inject(TAILORMAP_ADMIN_API_V1_SERVICE) private adminApiService: TailormapAdminApiV1ServiceModel,
+    private adminApiService: TailormapAdminApiV1Service,
     private adminSnackbarService: AdminSnackbarService,
     private catalogService: CatalogService,
     private sseService: AdminSseService,

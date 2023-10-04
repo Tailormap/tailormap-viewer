@@ -1,6 +1,8 @@
 import { BehaviorSubject, catchError, filter, map, Observable, of, switchMap, tap } from 'rxjs';
-import { DestroyRef, Inject, Injectable } from '@angular/core';
-import { TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel, UserModel } from '@tailormap-admin/admin-api';
+import { DestroyRef, Injectable } from '@angular/core';
+import {
+  TailormapAdminApiV1Service, UserModel,
+} from '@tailormap-admin/admin-api';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 import { AdminSseService, EventType } from '../../shared/services/admin-sse.service';
 import { Store } from '@ngrx/store';
@@ -19,7 +21,7 @@ export class UserService {
   public selectedUser$: Observable<string | null> = this.selectedUser.asObservable();
 
   public constructor(
-    @Inject(TAILORMAP_ADMIN_API_V1_SERVICE) private adminApiService: TailormapAdminApiV1ServiceModel,
+    private adminApiService: TailormapAdminApiV1Service,
     private store$: Store,
     private adminSnackbarService: AdminSnackbarService,
     private sseService: AdminSseService,

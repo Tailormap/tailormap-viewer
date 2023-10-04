@@ -1,9 +1,9 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects';
 import * as CatalogActions from './catalog.actions';
 import { map, catchError, of, filter, switchMap, tap } from 'rxjs';
 import {
-  ApiResponseHelper, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel,
+  ApiResponseHelper, TailormapAdminApiV1Service,
 } from '@tailormap-admin/admin-api';
 import { Store } from '@ngrx/store';
 import {
@@ -86,7 +86,7 @@ export class CatalogEffects {
   constructor(
     private actions$: Actions,
     private store$: Store,
-    @Inject(TAILORMAP_ADMIN_API_V1_SERVICE) private adminApiService: TailormapAdminApiV1ServiceModel,
+    private adminApiService: TailormapAdminApiV1Service,
   ) {}
 
 }

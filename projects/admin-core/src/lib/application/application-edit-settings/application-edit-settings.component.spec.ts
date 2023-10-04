@@ -4,7 +4,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { createMockStore } from '@ngrx/store/testing';
 import { ApplicationState, applicationStateKey, initialApplicationState } from '../state/application.state';
 import { Store } from '@ngrx/store';
-import { TAILORMAP_ADMIN_API_V1_SERVICE, getApplication } from '@tailormap-admin/admin-api';
+import { TailormapAdminApiV1Service, getApplication } from '@tailormap-admin/admin-api';
 import { SharedImportsModule } from '@tailormap-viewer/shared';
 import { ApplicationFormComponent } from '../application-form/application-form.component';
 import { BoundsFieldComponent } from '../../shared/components/bounds-field/bounds-field.component';
@@ -35,7 +35,7 @@ const setup = async (hasApplication: boolean, isDefaultApplication?: boolean) =>
     providers: [
       { provide: Store, useValue: store },
       { provide: ConfigService, useValue: configService },
-      { provide: TAILORMAP_ADMIN_API_V1_SERVICE, useValue: { getGroups$: jest.fn(() => of(null)) } },
+      { provide: TailormapAdminApiV1Service, useValue: { getGroups$: jest.fn(() => of(null)) } },
     ],
   });
   return { configService };

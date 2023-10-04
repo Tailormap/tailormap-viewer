@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/angular';
 import { GroupListComponent } from './group-list.component';
 import { of } from 'rxjs';
-import { TAILORMAP_ADMIN_API_V1_SERVICE } from '@tailormap-admin/admin-api';
+import { TailormapAdminApiV1Service, } from '@tailormap-admin/admin-api';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { MatListModule } from '@angular/material/list';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -16,7 +16,7 @@ const setup = async () => {
   await render(GroupListComponent, {
     imports: [ SharedModule, MatListModule ],
     providers: [
-      { provide: TAILORMAP_ADMIN_API_V1_SERVICE, useValue: mockApiService },
+      { provide: TailormapAdminApiV1Service, useValue: mockApiService },
       provideMockStore({ initialState: { [userStateKey]: initialUserState, [adminCoreStateKey]: initialAdminCoreState } }),
     ],
   });

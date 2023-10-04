@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/angular';
 import { ApplicationFormComponent } from './application-form.component';
-import { TAILORMAP_ADMIN_API_V1_SERVICE, getApplication, AUTHORIZATION_RULE_ANONYMOUS } from '@tailormap-admin/admin-api';
+import { TailormapAdminApiV1Service, getApplication, AUTHORIZATION_RULE_ANONYMOUS } from '@tailormap-admin/admin-api';
 import { SharedModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { getBoundsModel } from '@tailormap-viewer/api';
@@ -31,7 +31,7 @@ const setup = async (hasApp?: boolean) => {
       } as any,
     },
     providers: [
-      { provide: TAILORMAP_ADMIN_API_V1_SERVICE, useValue: { getGroups$: jest.fn(() => of(null)) } },
+      { provide: TailormapAdminApiV1Service, useValue: { getGroups$: jest.fn(() => of(null)) } },
       provideMockStore({ initialState: { [userStateKey]: initialUserState, [adminCoreStateKey]: initialAdminCoreState } }),
     ],
   });

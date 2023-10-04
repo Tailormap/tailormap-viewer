@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/angular';
 import { GeoServiceLayerDetailsComponent } from './geo-service-layer-details.component';
 import { of } from 'rxjs';
-import { getGeoService, getGeoServiceLayer, TAILORMAP_ADMIN_API_V1_SERVICE } from '@tailormap-admin/admin-api';
+import { getGeoService, getGeoServiceLayer, TailormapAdminApiV1Service, } from '@tailormap-admin/admin-api';
 import { createMockStore } from '@ngrx/store/testing';
 import { catalogStateKey, initialCatalogState } from '../state/catalog.state';
 import { SharedModule } from '@tailormap-viewer/shared';
@@ -46,7 +46,7 @@ const setup = async () => {
       { provide: ActivatedRoute, useValue: activeRoute },
       { provide: GeoServiceService, useValue: geoServiceService },
       { provide: Store, useValue: store },
-      { provide: TAILORMAP_ADMIN_API_V1_SERVICE, useValue: { getGroups$: jest.fn(() => of(null)) } },
+      { provide: TailormapAdminApiV1Service, useValue: { getGroups$: jest.fn(() => of(null)) } },
     ],
   });
   return { updateGeoService$, geoServiceModel };
