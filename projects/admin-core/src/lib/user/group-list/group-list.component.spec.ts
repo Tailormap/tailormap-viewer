@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/angular';
 import { GroupListComponent } from './group-list.component';
 import { of } from 'rxjs';
-import { TailormapAdminApiV1Service, } from '@tailormap-admin/admin-api';
+import { TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { MatListModule } from '@angular/material/list';
 import { provideMockStore } from '@ngrx/store/testing';

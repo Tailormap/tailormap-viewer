@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/angular';
 import { UserFormComponent } from './user-form.component';
 import { of } from 'rxjs';
-import { TailormapAdminApiV1Service, } from '@tailormap-admin/admin-api';
+import { TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 import { SharedImportsModule } from '@tailormap-viewer/shared';
 import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
 import userEvent from '@testing-library/user-event';

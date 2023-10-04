@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/angular';
 import { CatalogBaseTreeComponent } from './catalog-base-tree.component';
 import { LoadingStateEnum, SharedModule, TreeService } from '@tailormap-viewer/shared';
-import { CatalogNodeModel, getCatalogTree, getGeoService, TailormapAdminApiV1Service, } from '@tailormap-admin/admin-api';
+import { CatalogNodeModel, getCatalogTree, getGeoService, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 import { CatalogState, catalogStateKey, initialCatalogState } from '../state/catalog.state';
 import userEvent from '@testing-library/user-event';
 import { addGeoServices } from '../state/catalog.actions';

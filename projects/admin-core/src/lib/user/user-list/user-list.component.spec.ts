@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/angular';
 import { UserListComponent } from './user-list.component';
-import { getUsers, TailormapAdminApiV1Service, } from '@tailormap-admin/admin-api';
+import { getUsers, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 import { of } from 'rxjs';
 import { MatListModule } from '@angular/material/list';
 import { SharedModule } from '@tailormap-viewer/shared';

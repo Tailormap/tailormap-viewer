@@ -4,7 +4,7 @@ import { SharedModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { TriStateBooleanComponent } from '../../shared/components/tri-state-boolean/tri-state-boolean.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { TailormapAdminApiV1Service, } from '@tailormap-admin/admin-api';
+import { TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 import { of } from 'rxjs';
 import { provideMockStore } from '@ngrx/store/testing';
 import { AuthorizationEditComponent } from '../../shared/components/authorization-edit/authorization-edit.component';

@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/angular';
 import { GeoServiceLayerDetailsComponent } from './geo-service-layer-details.component';
 import { of } from 'rxjs';
-import { getGeoService, getGeoServiceLayer, TailormapAdminApiV1Service, } from '@tailormap-admin/admin-api';
+import { getGeoService, getGeoServiceLayer, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 import { createMockStore } from '@ngrx/store/testing';
 import { catalogStateKey, initialCatalogState } from '../state/catalog.state';
 import { SharedModule } from '@tailormap-viewer/shared';

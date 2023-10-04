@@ -6,7 +6,7 @@ import { SharedModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { TailormapAdminApiV1Service, } from '@tailormap-admin/admin-api';
+import { TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 import { provideMockStore } from '@ngrx/store/testing';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
 import { adminCoreStateKey, initialAdminCoreState } from '../../state/admin-core.state';
