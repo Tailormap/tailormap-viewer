@@ -13,7 +13,13 @@ export class ConfirmDialogService {
 
   public dialogRef: MatDialogRef<ConfirmDialogComponent> | undefined;
 
-  public confirm$(title: string, message?: string, removeConfirm?: boolean): Observable<boolean> {
+  public confirm$(
+    title: string,
+    message?: string,
+    removeConfirm?: boolean,
+    confirmButtonLabel?: string,
+    denyButtonLabel?: string,
+  ): Observable<boolean> {
     if (this.dialogRef) {
       this.dialogRef.close(false);
     }
@@ -21,6 +27,8 @@ export class ConfirmDialogService {
       title,
       message,
       removeConfirm,
+      confirmButtonLabel,
+      denyButtonLabel,
     };
     this.dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: '400px',

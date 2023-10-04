@@ -5,6 +5,8 @@ export interface ConfirmDialogData {
   title: string;
   message?: string;
   removeConfirm?: boolean;
+  confirmButtonLabel?: string;
+  denyButtonLabel?: string;
 }
 
 @Component({
