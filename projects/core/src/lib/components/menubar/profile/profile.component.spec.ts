@@ -58,7 +58,7 @@ describe('ProfileComponent', () => {
     fireEvent.click(button);
     const menuItem = await screen.findByText(/Login/);
     fireEvent.click(menuItem);
-    expect(navigateFn).toHaveBeenCalledWith('/login');
+    expect(navigateFn).toHaveBeenCalledWith('/login', { 'state': { 'routeBeforeLogin': undefined } });
   });
 
   test('should render when logged in', async () => {
