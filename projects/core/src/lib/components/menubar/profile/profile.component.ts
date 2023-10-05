@@ -55,4 +55,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl('/login', { state: { routeBeforeLogin: this.router.url } });
   }
 
+  public isAdmin(userDetails: SecurityModel) {
+    return userDetails?.roles?.includes('admin') ?? false;
+  }
+
 }

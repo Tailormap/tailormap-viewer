@@ -7,6 +7,9 @@
       <span i18n>Logged in as</span>
       <span>{{' '}}{{userDetails.username}}</span>
     </button>
+    <button mat-menu-item *ngIf="userDetails.isAuthenticated && isAdmin(userDetails)" routerLink="/admin">
+      <span i18n>Go to admin</span>
+    </button>
     <button mat-menu-item (click)="logout()" *ngIf="userDetails.isAuthenticated && userDetails.username">
       <span i18n>Logout</span>
     </button>

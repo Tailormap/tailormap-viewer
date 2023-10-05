@@ -12,7 +12,9 @@ import { TailormapApiConstants } from '@tailormap-viewer/api';
 type GeoServiceListResponse = { _embedded: { ['geo-services']: GeoServiceWithLayersModel[] }};
 type FeatureSourceListResponse = { _embedded: { ['feature-sources']: FeatureSourceModel[] }};
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceModel {
 
   public static BASE_URL = `${TailormapApiConstants.BASE_URL}/admin`;
