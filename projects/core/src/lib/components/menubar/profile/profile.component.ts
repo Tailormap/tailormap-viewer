@@ -6,7 +6,7 @@ import {
   SecurityModel, TAILORMAP_SECURITY_API_V1_SERVICE,
   TailormapSecurityApiV1ServiceModel,
 } from '@tailormap-viewer/api';
-import { setLoginDetails, setRouteBeforeLogin } from '../../../state/core.actions';
+import { setLoginDetails } from '../../../state/core.actions';
 import { Router } from '@angular/router';
 
 @Component({
@@ -52,8 +52,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   public login() {
-    this.store$.dispatch(setRouteBeforeLogin({ route: this.router.url }));
-    this.router.navigateByUrl('/login');
+    this.router.navigateByUrl('/login', { state: { routeBeforeLogin: this.router.url } });
+  }
+
+  public isAdmin(userDetails: SecurityModel) {
+    return userDetails?.roles?.includes('admin') ?? false;
   }
 
 }

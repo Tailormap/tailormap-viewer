@@ -14,8 +14,6 @@ export interface ViewerState {
 export interface CoreState {
   loadStatus: LoadingStateEnum;
   error?: string;
-  routeBeforeLogin?: string;
-  hasInsufficientRights?: boolean;
   security: SecurityModel;
   viewer?: ViewerState;
 }

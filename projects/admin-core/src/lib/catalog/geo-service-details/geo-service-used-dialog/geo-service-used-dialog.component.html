@@ -4,7 +4,7 @@
   <p class="content" i18n>The service {{data.service.title}} is used in the following applications.</p>
   <ul>
     <li *ngFor="let app of data.applications">
-      <a [routerLink]="'/applications/application/'+app.id"
+      <a [routerLink]="'/admin/applications/application/'+app.id"
          (click)="onConfirm()">{{app.title || app.name}}</a>
     </li>
   </ul>

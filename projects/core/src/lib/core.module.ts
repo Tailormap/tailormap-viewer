@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, InjectionToken, NgModule } from '@angular/core';
+import { APP_INITIALIZER, InjectionToken, ModuleWithProviders, NgModule } from '@angular/core';
 import { LoginComponent, ViewerAppComponent } from './pages';
 import { MapModule } from '@tailormap-viewer/map';
 import { StoreModule } from '@ngrx/store';
@@ -7,6 +7,8 @@ import { coreReducer } from './state/core.reducer';
 import { coreStateKey } from './state/core.state';
 import { CoreEffects } from './state/core.effects';
 import {
+  ENVIRONMENT_CONFIG,
+  EnvironmentConfigModel,
   TAILORMAP_API_V1_SERVICE, TAILORMAP_SECURITY_API_V1_SERVICE, TailormapApiV1Service, TailormapSecurityApiV1Service,
 } from '@tailormap-viewer/api';
 import { ICON_SERVICE_ICON_LOCATION, IconService, SharedModule } from '@tailormap-viewer/shared';
@@ -92,4 +94,17 @@ export class CoreModule {
   ) {
     iconService.loadIconsToIconRegistry(matIconRegistry, domSanitizer);
   }
+
+  public static forRoot(config: EnvironmentConfigModel): ModuleWithProviders<CoreModule> {
+    return {
+      ngModule: CoreModule,
+      providers: [
+        {
+          provide: ENVIRONMENT_CONFIG,
+          useValue: config,
+        },
+      ],
+    };
+  }
+
 }

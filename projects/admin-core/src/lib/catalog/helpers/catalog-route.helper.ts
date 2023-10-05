@@ -40,7 +40,7 @@ export class CatalogRouteHelper {
 
   private static getUrl(baseUrl: string, replacements: Array<[string, string]>) {
     const nodeUrl = replacements.reduce<string>((url, [ key, replacement ]) => url.replace(key, replacement), baseUrl);
-    return [ '', Routes.CATALOG, nodeUrl ].join('/');
+    return [ '/admin', Routes.CATALOG, nodeUrl ].join('/');
   }
 
 }

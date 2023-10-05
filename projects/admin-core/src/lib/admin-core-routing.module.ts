@@ -1,38 +1,37 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AdminHomePageComponent } from './pages/admin-home-page/admin-home-page.component';
-import { CatalogPageComponent } from './pages/catalog-page/catalog-page.component';
 import { Routes as AdminRoutes } from './routes';
-import { GeoServiceDetailsComponent } from './catalog/geo-service-details/geo-service-details.component';
+import { CatalogPageComponent } from './pages/catalog-page/catalog-page.component';
+import { CatalogHomeComponent } from './catalog/catalog-home/catalog-home.component';
 import { GeoServiceLayerDetailsComponent } from './catalog/geo-service-layer-details/geo-service-layer-details.component';
+import { GeoServiceDetailsComponent } from './catalog/geo-service-details/geo-service-details.component';
 import { CatalogNodeDetailsComponent } from './catalog/catalog-node-details/catalog-node-details.component';
-import { UserAdminPageComponent } from './pages/user-admin-page/user-admin-page.component';
-import { GroupsPageComponent } from './pages/groups-page/groups-page.component';
 import { FeatureSourceDetailsComponent } from './catalog/feature-source-details/feature-source-details.component';
 import { FeatureTypeDetailsComponent } from './catalog/feature-type-details/feature-type-details.component';
 import { ApplicationPageComponent } from './pages/application-page/application-page.component';
-import { OIDCConfigurationPageComponent } from './pages/oidc-configuration-page/oidc-configuration-page.component';
-import { ApplicationCreateComponent } from './application/application-create/application-create.component';
 import { ApplicationHomeComponent } from './application/application-home/application-home.component';
+import { ApplicationCreateComponent } from './application/application-create/application-create.component';
 import { ApplicationEditComponent } from './application/application-edit/application-edit.component';
 import { ApplicationEditSettingsComponent } from './application/application-edit-settings/application-edit-settings.component';
 import { ApplicationEditLayersComponent } from './application/application-edit-layers/application-edit-layers.component';
 import { ApplicationEditBaseLayersComponent } from './application/application-edit-base-layers/application-edit-base-layers.component';
 import { ApplicationEditComponentsComponent } from './application/application-edit-components/application-edit-components.component';
 import { ApplicationEditStylingComponent } from './application/application-edit-styling/application-edit-styling.component';
+import { OIDCConfigurationPageComponent } from './pages/oidc-configuration-page/oidc-configuration-page.component';
 import { OIDCConfigurationHomeComponent } from './oidc/oidc-configuration-home/oidc-configuration-home.component';
 import { OIDCConfigurationCreateComponent } from './oidc/oidc-configuration-create/oidc-configuration-create.component';
 import { OIDCConfigurationEditComponent } from './oidc/oidc-configuration-edit/oidc-configuration-edit.component';
-import { AdminLoginPageComponent } from './pages/admin-login-page/admin-login-page.component';
-import { CatalogHomeComponent } from './catalog/catalog-home/catalog-home.component';
+import { AdminHomePageComponent } from './pages/admin-home-page/admin-home-page.component';
+import { UserAdminPageComponent } from './pages/user-admin-page/user-admin-page.component';
 import { UserHomeComponent } from './user/user-home/user-home.component';
 import { UserCreateComponent } from './user/user-create/user-create.component';
 import { UserEditComponent } from './user/user-edit/user-edit.component';
+import { GroupsPageComponent } from './pages/groups-page/groups-page.component';
 import { GroupHomeComponent } from './user/group-home/group-home.component';
 import { GroupCreateComponent } from './user/group-create/group-create.component';
 import { GroupEditComponent } from './user/group-edit/group-edit.component';
 
-const routes: Routes = [
+export const adminRoutes: Routes = [
   {
     path: AdminRoutes.CATALOG,
     component: CatalogPageComponent,
@@ -126,7 +125,6 @@ const routes: Routes = [
   // IMPORTANT: When you add a route, also add it to the FrontController class of tailormap-api, otherwise a user will get a 404 when
   // pressing F5 in their browser on your route.
   { path: AdminRoutes.ADMIN_HOME, component: AdminHomePageComponent },
-  { path: AdminRoutes.LOGIN, component: AdminLoginPageComponent },
   {
     path: AdminRoutes.USER,
     component: UserAdminPageComponent,
@@ -167,7 +165,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forChild(adminRoutes)],
   exports: [RouterModule],
 })
 export class AdminCoreRoutingModule { }

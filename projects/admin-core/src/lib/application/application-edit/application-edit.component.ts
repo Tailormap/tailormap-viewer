@@ -89,7 +89,7 @@ export class ApplicationEditComponent implements OnInit, OnDestroy {
       )
       .subscribe(() => {
         this.adminSnackbarService.showMessage($localize `Application ${title} removed`);
-        this.router.navigateByUrl('/applications');
+        this.router.navigateByUrl('/admin/applications');
       });
   }
 

@@ -24,7 +24,7 @@
     <mat-selection-list>
       <mat-list-item *ngFor="let application of applications$ | async"
                      [class.selected]="application.selected"
-                     [routerLink]="'/applications/application/'+application.id">
+                     [routerLink]="['/admin/applications/application', application.id]">
         <span class="detail">{{application.title || application.name}}</span>
         <mat-icon *ngIf="application.defaultApplication"
                   matListItemMeta

@@ -28,3 +28,5 @@ export * from './version-response.model';
 export * from './sortorder.enum';
 export * from './user-response.model';
 export * from './login-configuration.model';
+export * from './environment-config.model';
+export * from './environment-config.injection-token';

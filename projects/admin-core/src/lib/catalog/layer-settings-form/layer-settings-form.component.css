@@ -17,3 +17,7 @@ mat-slide-toggle + mat-slide-toggle {
 .number-control {
   max-width: 250px;
 }
+
+.margin-btm {
+  margin-bottom: 8px;
+}

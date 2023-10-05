@@ -2,7 +2,7 @@
   <ng-container *ngIf="getButtonProps(buttonPropsInput) as buttonProps">
     <button mat-flat-button
             class="menu-button"
-            [routerLink]="'/' + buttonProps.link"
+            [routerLink]="buttonProps.link"
             routerLinkActive="active"
             [routerLinkActiveOptions]="{exact: buttonProps.matchExact}"
             [tmTooltip]="buttonProps.label"
@@ -37,6 +37,9 @@
         <span class="menu-button-label">{{userDetails.username}}</span>
       </button>
       <mat-menu #userMenu="matMenu" xPosition="before" yPosition="above">
+        <button mat-menu-item routerLink="/">
+          <span i18n>Go to viewer</span>
+        </button>
         <button mat-menu-item (click)="logout()" *ngIf="userDetails.isAuthenticated && userDetails.username">
           <span i18n>Logout</span>
         </button>

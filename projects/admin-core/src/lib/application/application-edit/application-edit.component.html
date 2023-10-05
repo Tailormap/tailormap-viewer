@@ -16,7 +16,7 @@
   <div class="page-details-actions application-edit-buttons">
     <tm-admin-save-button [saving$]="saving$" [disabled]="draftApplicationPristine$ | async" (save)="save()"></tm-admin-save-button>
     <button mat-flat-button color="warn" (click)="delete(application)" i18n>Delete</button>
-    <button mat-flat-button routerLink="/applications" i18n>Close</button>
+    <button mat-flat-button routerLink="/admin/applications" i18n>Close</button>
   </div>
 
 </ng-container>

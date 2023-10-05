@@ -44,7 +44,7 @@ export class GroupCreateComponent implements OnDestroy {
       .subscribe(createGroup => {
         if (createGroup) {
           this.adminSnackbarService.showMessage($localize `Group ${createGroup.name} created`);
-          this.router.navigateByUrl('/groups/group/' + createGroup.name);
+          this.router.navigateByUrl('/admin/groups/group/' + createGroup.name);
         }
         this.savingSubject.next(false);
       });

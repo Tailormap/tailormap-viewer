@@ -1,5 +1,7 @@
-import { Inject, Injectable } from '@angular/core';
-import { ConfigModel, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel } from '@tailormap-admin/admin-api';
+import { Injectable } from '@angular/core';
+import {
+  ConfigModel, TailormapAdminApiV1Service,
+} from '@tailormap-admin/admin-api';
 import { BehaviorSubject, catchError, map, Observable, of, tap } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 
@@ -13,7 +15,7 @@ export class ConfigService {
   private configSubject = new BehaviorSubject(new Map<string, ConfigModel>());
 
   constructor(
-    @Inject(TAILORMAP_ADMIN_API_V1_SERVICE) private adminApiService: TailormapAdminApiV1ServiceModel,
+    private adminApiService: TailormapAdminApiV1Service,
   ) {
   }
 

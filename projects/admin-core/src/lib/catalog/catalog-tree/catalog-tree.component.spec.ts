@@ -4,7 +4,7 @@ import { createMockStore } from '@ngrx/store/testing';
 import { LoadingStateEnum, SharedModule } from '@tailormap-viewer/shared';
 import { createSelector, Store } from '@ngrx/store';
 import {
-  CatalogNodeModel, getCatalogTree, getGeoService, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1MockService,
+  CatalogNodeModel, getCatalogTree, getGeoService, TailormapAdminApiV1Service, TailormapAdminApiV1MockService,
 } from '@tailormap-admin/admin-api';
 import { CatalogState, catalogStateKey, initialCatalogState } from '../state/catalog.state';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
@@ -36,7 +36,7 @@ const setup = async (state: Partial<CatalogState> = {}) => {
     declarations: [ CatalogTreeNodeComponent, CatalogBaseTreeComponent, CatalogBaseTreeNodeComponent ],
     providers: [
       { provide: Store, useValue: mockStore },
-      { provide: TAILORMAP_ADMIN_API_V1_SERVICE, useValue: mockApiService },
+      { provide: TailormapAdminApiV1Service, useValue: mockApiService },
     ],
   });
   return { mockStore, mockDispatch, mockApiService };

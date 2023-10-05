@@ -1,7 +1,7 @@
-import { DestroyRef, Inject, Injectable } from '@angular/core';
+import { DestroyRef, Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, filter, map, Observable, of, switchMap, tap } from 'rxjs';
 import {
-  GroupModel, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel,
+  GroupModel, TailormapAdminApiV1Service,
 } from '@tailormap-admin/admin-api';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 import { DebounceHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
@@ -21,7 +21,7 @@ export class GroupService {
   public selectedGroup$: Observable<string | null> = this.selectedGroup.asObservable();
 
   public constructor(
-    @Inject(TAILORMAP_ADMIN_API_V1_SERVICE) private adminApiService: TailormapAdminApiV1ServiceModel,
+    private adminApiService: TailormapAdminApiV1Service,
     private store$: Store,
     private adminSnackbarService: AdminSnackbarService,
     private sseService: AdminSseService,

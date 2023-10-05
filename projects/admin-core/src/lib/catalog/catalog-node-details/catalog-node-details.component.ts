@@ -98,7 +98,7 @@ export class CatalogNodeDetailsComponent implements OnInit, OnDestroy {
           return;
         }
         this.adminSnackbarService.showMessage($localize `Folder ${node.title} removed`);
-        this.router.navigateByUrl('/catalog');
+        this.router.navigateByUrl('/admin/catalog');
       });
   }
 

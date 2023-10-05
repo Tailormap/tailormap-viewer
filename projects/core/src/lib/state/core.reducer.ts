@@ -32,14 +32,6 @@ const onViewerLoadFailed = (
   error: payload.error,
 });
 
-const onSetRouteBeforeLogin = (
-  state: CoreState,
-  payload: ReturnType<typeof CoreActions.setRouteBeforeLogin>,
-): CoreState => ({
-  ...state,
-  routeBeforeLogin: payload.route || undefined,
-});
-
 const onSetLoginDetails = (
   state: CoreState,
   payload: ReturnType<typeof CoreActions.setLoginDetails>,
@@ -51,14 +43,6 @@ const onSetLoginDetails = (
     username: payload.username || undefined,
     roles: payload.roles || undefined,
   },
-});
-
-const onSetInsufficientRights = (
-  state: CoreState,
-  payload: ReturnType<typeof CoreActions.setInsufficientRights>,
-): CoreState => ({
-  ...state,
-  hasInsufficientRights: payload.hasInsufficientRights,
 });
 
 const onUpdateViewerStyle = (
@@ -77,8 +61,6 @@ const coreReducerImpl = createReducer<CoreState>(
   on(CoreActions.loadViewer, onLoadViewer),
   on(CoreActions.loadViewerSuccess, onViewerLoadSuccess),
   on(CoreActions.loadViewerFailed, onViewerLoadFailed),
-  on(CoreActions.setRouteBeforeLogin, onSetRouteBeforeLogin),
-  on(CoreActions.setInsufficientRights, onSetInsufficientRights),
   on(CoreActions.setLoginDetails, onSetLoginDetails),
   on(CoreActions.updateViewerStyle, onUpdateViewerStyle),
 );

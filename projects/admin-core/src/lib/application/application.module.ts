@@ -7,7 +7,7 @@ import { ApplicationEditSettingsComponent } from './application-edit-settings/ap
 import { ApplicationCreateComponent } from './application-create/application-create.component';
 import { ApplicationListComponent } from './application-list/application-list.component';
 import { SharedModule } from '@tailormap-viewer/shared';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 import { EffectsModule } from '@ngrx/effects';
 import { ApplicationEffects } from './state/application.effects';
 import { ApplicationFormComponent } from './application-form/application-form.component';
@@ -54,11 +54,9 @@ import { ApplicationService } from './services/application.service';
     SharedModule,
     StoreModule.forFeature(applicationStateKey, applicationReducer),
     EffectsModule.forFeature([ApplicationEffects]),
-    RouterLink,
     SharedAdminComponentsModule,
     RouterOutlet,
     CatalogModule,
-    RouterLinkActive,
     ComponentsModule,
  ],
   exports: [

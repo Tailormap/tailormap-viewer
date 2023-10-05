@@ -4,7 +4,6 @@ import { SnackBarMessageComponent } from './snackbar-message';
 import { SharedImportsModule } from '../shared-imports.module';
 import { ErrorMessageComponent } from './error-message/error-message.component';
 import { TreeComponent } from './tree';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SplitButtonComponent } from './split-button/split-button.component';
 import { ColorPickerComponent } from './color-picker/color-picker.component';
 import { IconPickerComponent } from './icon-picker/icon-picker.component';
@@ -29,7 +28,6 @@ import { LoginFormComponent } from './login-form/login-form.component';
   ],
   imports: [
     SharedImportsModule,
-    BrowserAnimationsModule,
   ],
   exports: [
     DialogComponent,

@@ -9,7 +9,6 @@ import { UserAdminPageComponent } from './user-admin-page/user-admin-page.compon
 import { GroupsPageComponent } from './groups-page/groups-page.component';
 import { ApplicationPageComponent } from './application-page/application-page.component';
 import { ApplicationModule } from '../application/application.module';
-import { AdminLoginPageComponent } from './admin-login-page/admin-login-page.component';
 import { OIDCConfigurationPageComponent } from './oidc-configuration-page/oidc-configuration-page.component';
 import { SharedComponentsModule, SharedImportsModule } from '@tailormap-viewer/shared';
 import { UserModule } from '../user/user.module';
@@ -23,7 +22,6 @@ import { OIDCConfigurationModule } from '../oidc/oidc-configuration.module';
     UserAdminPageComponent,
     GroupsPageComponent,
     ApplicationPageComponent,
-    AdminLoginPageComponent,
     OIDCConfigurationPageComponent,
   ],
   imports: [
@@ -43,7 +41,6 @@ import { OIDCConfigurationModule } from '../oidc/oidc-configuration.module';
     UserAdminPageComponent,
     GroupsPageComponent,
     ApplicationPageComponent,
-    AdminLoginPageComponent,
     OIDCConfigurationPageComponent,
   ],
 })

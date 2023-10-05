@@ -44,7 +44,7 @@ export class UserCreateComponent implements OnDestroy {
       .subscribe(createdUser => {
         if (createdUser) {
           this.adminSnackbarService.showMessage($localize `User ${createdUser.username} created`);
-          this.router.navigateByUrl('/users/user/' + createdUser.username);
+          this.router.navigateByUrl('/admin/users/user/' + createdUser.username);
         }
         this.savingSubject.next(false);
       });

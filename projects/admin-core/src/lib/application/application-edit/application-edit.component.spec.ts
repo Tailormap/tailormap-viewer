@@ -2,14 +2,13 @@ import { render, screen } from '@testing-library/angular';
 import { ApplicationEditComponent } from './application-edit.component';
 import { ApplicationState, applicationStateKey, initialApplicationState } from '../state/application.state';
 import { getApplication } from '@tailormap-admin/admin-api';
-import { createMockStore, provideMockStore } from '@ngrx/store/testing';
+import { createMockStore } from '@ngrx/store/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ApplicationService } from '../services/application.service';
-import { ConfirmDialogService, SharedModule } from '@tailormap-viewer/shared';
+import { SharedModule } from '@tailormap-viewer/shared';
 import { of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import userEvent from '@testing-library/user-event';
-import { clearSelectedApplication } from '../state/application.actions';
 import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
 import { TestSaveHelper } from '../../test-helpers/test-save.helper';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -35,7 +34,7 @@ const setup = async (hasApp: boolean, hasChanges?: boolean) => {
   mockStore.dispatch = mockDispatch;
   await render(ApplicationEditComponent, {
     imports: [ SharedModule, MatIconTestingModule, RouterTestingModule.withRoutes(
-      [{ path: 'applications', component: ApplicationEditComponent }],
+      [{ path: 'admin/applications', component: ApplicationEditComponent }],
     ) ],
     declarations: [SaveButtonComponent],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -66,7 +65,7 @@ describe('ApplicationEditComponent', () => {
     const { router } = await setup(true);
     expect(router.url).not.toBe('/applications');
     await userEvent.click(await screen.findByText('Close'));
-    expect(router.url).toBe('/applications');
+    expect(router.url).toBe('/admin/applications');
   });
 
   test('should delete app - cancel action', async () => {

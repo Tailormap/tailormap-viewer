@@ -102,3 +102,51 @@
 .content ::ng-deep .admin-content .page-details-actions button + button {
   margin-left: 16px;
 }
+
+.content ::ng-deep .has-search {
+  padding-top: 8px;
+}
+
+.content ::ng-deep mat-hint.error {
+  color: var(--error-color);
+}
+
+.content ::ng-deep .mdc-list-item,
+.content ::ng-deep .mdc-list-item.mdc-list-item--with-one-line {
+  height: 34px;
+}
+
+.content ::ng-deep .mdc-list-item.selected {
+  background-color: var(--primary-color-0_1);
+  color: var(--primary-color);
+}
+
+.content ::ng-deep .mdc-list-item.selected .mdc-list-item__primary-text {
+  color: var(--primary-color);
+}
+
+.content ::ng-deep .mdc-list-item.selected.mat-mdc-list-item-interactive:focus::before {
+  opacity: 0;
+}
+
+.content ::ng-deep .mat-mdc-slide-toggle + .mat-mdc-form-field,
+.content ::ng-deep .mat-mdc-form-field + .mat-mdc-slide-toggle,
+.content ::ng-deep tm-admin-password-field + .mat-mdc-form-field,
+.content ::ng-deep .mat-mdc-form-field + tm-admin-password-field,
+.content ::ng-deep tm-admin-password-field + tm-admin-password-field {
+  margin-top: 16px;
+}
+
+.content ::ng-deep mat-checkbox {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.content ::ng-deep .mat-expansion-panel {
+  margin-top: 8px;
+}
+
+.content ::ng-deep tm-tree .tree-node-wrapper--leaf {
+  padding-left: 18px;
+}
+

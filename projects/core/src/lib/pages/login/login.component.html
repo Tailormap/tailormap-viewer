@@ -1,10 +1,10 @@
 <div class="login-page-wrapper">
   <tm-login-form [login$]="login$"
                  [loginConfiguration]="loginConfiguration$ | async"
-                 [redirectUrl]="routeBeforeLogin$ | async"
+                 [redirectUrl]="routeBeforeLogin"
                  [isViewer]="true"
                  (loggedIn)="loggedIn($event)"
-                 [insufficientRightsErrorMessage]="insufficientRightsMessage$ | async"
+                 [insufficientRightsErrorMessage]="insufficientRightsMessage"
                  loginErrorMessage="Login failed, please try again"
                  i18n-loginErrorMessage></tm-login-form>
 </div>

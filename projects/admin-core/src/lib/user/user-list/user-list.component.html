@@ -18,7 +18,7 @@
   <mat-selection-list class="userlist">
     <mat-list-item *ngFor="let user of filteredUsers$ | async"
                    [class.selected]="user.selected"
-                   [routerLink]="'/users/user/'+user.username">
+                   [routerLink]="['/admin/users/user', user.username]">
       <span class="userdetail">{{user.username}}</span>
     </mat-list-item>
   </mat-selection-list>

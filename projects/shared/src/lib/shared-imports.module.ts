@@ -30,13 +30,20 @@ import { MatListModule } from '@angular/material/list';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatChipsModule } from '@angular/material/chips';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
 @NgModule({
+  imports: [
+    RouterLink,
+    RouterLinkActive,
+  ],
   exports: [
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
     HttpClientModule,
+    RouterLink,
+    RouterLinkActive,
     MatButtonModule,
     MatButtonToggleModule,
     MatProgressSpinnerModule,

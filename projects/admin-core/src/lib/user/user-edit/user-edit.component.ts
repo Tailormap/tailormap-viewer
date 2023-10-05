@@ -64,7 +64,7 @@ export class UserEditComponent implements OnInit, OnDestroy {
       )
       .subscribe(() => {
         this.adminSnackbarService.showMessage($localize `User ${user.username} removed`);
-        this.router.navigateByUrl('/users');
+        this.router.navigateByUrl('/admin/users');
       });
   }
 

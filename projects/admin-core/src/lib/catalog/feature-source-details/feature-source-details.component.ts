@@ -157,7 +157,7 @@ export class FeatureSourceDetailsComponent implements OnInit, OnDestroy {
           return;
         }
         this.adminSnackbarService.showMessage($localize `Source ${featureSource.title} removed`);
-        this.router.navigateByUrl('/catalog');
+        this.router.navigateByUrl('/admin/catalog');
       });
   }
 

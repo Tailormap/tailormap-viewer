@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { AdminTemplateComponent } from './admin-template/admin-template.component';
 import { NavigationComponent } from './admin-template/navigation/navigation.component';
 import { SharedModule } from '@tailormap-viewer/shared';
-import { RouterLink, RouterLinkActive } from '@angular/router';
 
 
 @NgModule({
@@ -14,8 +13,6 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   imports: [
     CommonModule,
     SharedModule,
-    RouterLink,
-    RouterLinkActive,
   ],
   exports: [
     AdminTemplateComponent,

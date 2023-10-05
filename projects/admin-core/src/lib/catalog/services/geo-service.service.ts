@@ -1,12 +1,11 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
   ApiResponseHelper,
   ApplicationModel,
   CatalogItemKindEnum, CatalogModelHelper,
   GeoServiceModel,
-  GeoServiceProtocolEnum, GeoServiceSettingsModel, GeoServiceWithLayersModel, TAILORMAP_ADMIN_API_V1_SERVICE,
-  TailormapAdminApiV1ServiceModel,
+  GeoServiceProtocolEnum, GeoServiceSettingsModel, GeoServiceWithLayersModel, TailormapAdminApiV1Service,
 } from '@tailormap-admin/admin-api';
 import { catchError, concatMap, filter, map, MonoTypeOperatorFunction, Observable, of, pipe, switchMap, take, tap } from 'rxjs';
 import { addGeoServices, deleteGeoService, loadAllGeoServices, updateGeoService } from '../state/catalog.actions';
@@ -35,7 +34,7 @@ export class GeoServiceService {
 
   constructor(
     private store$: Store,
-    @Inject(TAILORMAP_ADMIN_API_V1_SERVICE) private adminApiService: TailormapAdminApiV1ServiceModel,
+    private adminApiService: TailormapAdminApiV1Service,
     private adminSnackbarService: AdminSnackbarService,
     private catalogService: CatalogService,
     private applicationService: ApplicationService,

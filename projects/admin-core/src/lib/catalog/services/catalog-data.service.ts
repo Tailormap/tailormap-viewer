@@ -1,6 +1,8 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { FeatureSourceModel, TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1ServiceModel } from '@tailormap-admin/admin-api';
+import {
+  FeatureSourceModel, TailormapAdminApiV1Service,
+} from '@tailormap-admin/admin-api';
 import { selectFeatureSourceAndFeatureTypesById } from '../state/catalog.selectors';
 import { filter, Observable, of, switchMap, take, tap } from 'rxjs';
 import { addFeatureSources } from '../state/catalog.actions';
@@ -14,7 +16,7 @@ export class CatalogDataService {
 
   constructor(
     private store$: Store,
-    @Inject(TAILORMAP_ADMIN_API_V1_SERVICE) private adminApiService: TailormapAdminApiV1ServiceModel,
+    private adminApiService: TailormapAdminApiV1Service,
   ) {}
 
   public getFeatureSourceById$(featureSourceId: string) {

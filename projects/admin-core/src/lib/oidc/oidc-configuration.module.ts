@@ -7,7 +7,7 @@ import { OIDCConfigurationEditSettingsComponent } from './oidc-configuration-edi
 import { OIDCConfigurationCreateComponent } from './oidc-configuration-create/oidc-configuration-create.component';
 import { OIDCConfigurationListComponent } from './oidc-configuration-list/oidc-configuration-list.component';
 import { SharedModule } from '@tailormap-viewer/shared';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 import { EffectsModule } from '@ngrx/effects';
 import { OIDCConfigurationEffects } from './state/oidc-configuration.effects';
 import { OIDCConfigurationFormComponent } from './oidc-configuration-form/oidc-configuration-form.component';
@@ -31,11 +31,9 @@ import { OIDCConfigurationService } from './services/oidc-configuration.service'
     SharedModule,
     StoreModule.forFeature(oidcConfigurationStateKey, oidcConfigurationReducer),
     EffectsModule.forFeature([OIDCConfigurationEffects]),
-    RouterLink,
     SharedAdminComponentsModule,
     RouterOutlet,
     CatalogModule,
-    RouterLinkActive,
  ],
   exports: [
     OIDCConfigurationListComponent,

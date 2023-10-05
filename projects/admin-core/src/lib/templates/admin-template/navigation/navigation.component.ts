@@ -5,24 +5,24 @@ import { selectUserDetails } from '../../../state/admin-core.selectors';
 import { map, Observable, of, take } from 'rxjs';
 import { SecurityModel, TAILORMAP_SECURITY_API_V1_SERVICE, TailormapSecurityApiV1ServiceModel } from '@tailormap-viewer/api';
 import { Router } from '@angular/router';
-import { setLoginDetails, setRouteBeforeLogin } from '../../../state/admin-core.actions';
+import { setLoginDetails } from '../../../state/admin-core.actions';
 
 interface ButtonProps {
   icon?: string;
   label: string;
-  link: string;
+  link: string[];
   subMenu?: ButtonProps[];
   matchExact: boolean;
   requireAdmin: boolean;
 }
 
 const availableButtons: ButtonProps[] = [
-  { label: $localize `Home`, matchExact: true, link: Routes.ADMIN_HOME, icon: 'admin_home', requireAdmin: false },
-  { label: $localize `Catalog`, matchExact: false, link: Routes.CATALOG, icon: 'admin_catalog', requireAdmin: true },
-  { label: $localize `Users`, matchExact: true, link: Routes.USER, icon: 'admin_user', requireAdmin: true },
-  { label: $localize `Groups`, matchExact: true, link: Routes.GROUP, icon: 'admin_groups', requireAdmin: true },
-  { label: $localize `Applications`, matchExact: false, link: Routes.APPLICATION, icon: 'admin_application', requireAdmin: true },
-  { label: $localize `Single-sign on`, matchExact: false, link: Routes.OIDC_CONFIGURATION, icon: 'key', requireAdmin: true },
+  { label: $localize `Home`, matchExact: true, link: [ '/admin', Routes.ADMIN_HOME ], icon: 'admin_home', requireAdmin: false },
+  { label: $localize `Catalog`, matchExact: false, link: [ '/admin', Routes.CATALOG ], icon: 'admin_catalog', requireAdmin: true },
+  { label: $localize `Users`, matchExact: false, link: [ '/admin', Routes.USER ], icon: 'admin_user', requireAdmin: true },
+  { label: $localize `Groups`, matchExact: false, link: [ '/admin', Routes.GROUP ], icon: 'admin_groups', requireAdmin: true },
+  { label: $localize `Applications`, matchExact: false, link: [ '/admin', Routes.APPLICATION ], icon: 'admin_application', requireAdmin: true },
+  { label: $localize `Single-sign on`, matchExact: false, link: [ '/admin', Routes.OIDC_CONFIGURATION ], icon: 'key', requireAdmin: true },
 ];
 
 @Component({
@@ -68,7 +68,7 @@ export class NavigationComponent implements OnInit {
       .subscribe(loggedOut => {
         if (loggedOut) {
           this.store$.dispatch(setLoginDetails({ isAuthenticated: false }));
-          this.router.navigateByUrl('/').then(() => {
+          this.router.navigateByUrl('/admin').then(() => {
             window.location.reload();
           });
         }
@@ -76,8 +76,7 @@ export class NavigationComponent implements OnInit {
   }
 
   public login() {
-    this.store$.dispatch(setRouteBeforeLogin({ route: this.router.url }));
-    this.router.navigateByUrl('/login');
+    this.router.navigateByUrl('/login', { state: { routeBeforeLogin: this.router.url } });
   }
 
 }

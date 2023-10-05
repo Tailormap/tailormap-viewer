@@ -7,7 +7,6 @@ module.exports = {
     '<rootDir>/projects/shared',
   ],
   adminProjects: [
-    '<rootDir>/projects/admin-app',
     '<rootDir>/projects/admin-api',
     '<rootDir>/projects/admin-core',
   ],

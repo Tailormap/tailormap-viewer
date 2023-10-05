@@ -18,7 +18,7 @@
   <mat-selection-list class="grouplist">
     <mat-list-item *ngFor="let group of filteredGroups$ | async"
                    [class.selected]="group.selected"
-                   [routerLink]="'/groups/group/'+group.name">
+                   [routerLink]="['/admin/groups/group', group.name]">
       <span class="detail">{{group.name}}</span>
     </mat-list-item>
   </mat-selection-list>

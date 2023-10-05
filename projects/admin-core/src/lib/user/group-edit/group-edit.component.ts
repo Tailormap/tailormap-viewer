@@ -64,7 +64,7 @@ export class GroupEditComponent implements OnInit, OnDestroy {
       )
       .subscribe(() => {
         this.adminSnackbarService.showMessage($localize `Group ${group.name} removed`);
-        this.router.navigateByUrl('/groups');
+        this.router.navigateByUrl('/admin/groups');
       });
   }
 

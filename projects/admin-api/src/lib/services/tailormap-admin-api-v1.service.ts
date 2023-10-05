@@ -12,7 +12,9 @@ import { TailormapApiConstants } from '@tailormap-viewer/api';
 type GeoServiceListResponse = { _embedded: { ['geo-services']: GeoServiceWithLayersModel[] }};
 type FeatureSourceListResponse = { _embedded: { ['feature-sources']: FeatureSourceModel[] }};
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceModel {
 
   public static BASE_URL = `${TailormapApiConstants.BASE_URL}/admin`;
@@ -56,7 +58,7 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
       .pipe(map(response => (response?._embedded?.['geo-services'] || []).map(CatalogModelHelper.addTypeToGeoServiceModel)));
   }
 
-  public createGeoService$(params: { geoService: Omit<GeoServiceModel, 'id'>; refreshCapabilities?: boolean}): Observable<GeoServiceWithLayersModel> {
+  public createGeoService$(params: { geoService: Omit<GeoServiceModel, 'id' | 'type'>; refreshCapabilities?: boolean}): Observable<GeoServiceWithLayersModel> {
     return this.httpClient.post<GeoServiceWithLayersModel>(
       `${TailormapAdminApiV1Service.BASE_URL}/geo-services`,
       {
@@ -66,7 +68,7 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
     ).pipe(map(CatalogModelHelper.addTypeToGeoServiceModel));
   }
 
-  public updateGeoService$(params: { id: string; geoService: GeoServiceModel; refreshCapabilities?: boolean }): Observable<GeoServiceWithLayersModel> {
+  public updateGeoService$(params: { id: string; geoService: Omit<Partial<GeoServiceModel>, 'type'>; refreshCapabilities?: boolean }): Observable<GeoServiceWithLayersModel> {
     return this.httpClient.patch<GeoServiceWithLayersModel>(
       `${TailormapAdminApiV1Service.BASE_URL}/geo-services/${params.id}`,
       {
@@ -112,7 +114,7 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
       .pipe(map(response => (response?._embedded['feature-sources'] || []).map(CatalogModelHelper.addTypeAndFeatureTypesToFeatureSourceModel)));
   }
 
-  public createFeatureSource$(params: { featureSource: Omit<FeatureSourceModel, 'id'>; refreshCapabilities?: boolean }): Observable<FeatureSourceModel> {
+  public createFeatureSource$(params: { featureSource: Omit<FeatureSourceModel, 'id' | 'type' | 'featureTypes'>; refreshCapabilities?: boolean }): Observable<FeatureSourceModel> {
     return this.httpClient.post<FeatureSourceModel>(
       `${TailormapAdminApiV1Service.BASE_URL}/feature-sources`,
       {
@@ -122,7 +124,13 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
     ).pipe(map(CatalogModelHelper.addTypeAndFeatureTypesToFeatureSourceModel));
   }
 
-  public updateFeatureSource$(params: { id: string; featureSource: FeatureSourceModel; refreshCapabilities?: boolean }): Observable<FeatureSourceModel> {
+  public updateFeatureSource$(
+    params: {
+      id: string;
+      featureSource: Omit<Partial<FeatureSourceModel>, 'type' | 'featureTypes'>;
+      refreshCapabilities?: boolean;
+    },
+  ): Observable<FeatureSourceModel> {
     return this.httpClient.patch<FeatureSourceModel>(
       `${TailormapAdminApiV1Service.BASE_URL}/feature-sources/${params.id}`,
       {
@@ -231,7 +239,7 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
       .pipe(map(response => response._embedded.applications));
   }
 
-  public createApplication$(params: { application: ApplicationModel }): Observable<ApplicationModel> {
+  public createApplication$(params: { application: Partial<Omit<ApplicationModel, 'id'>> }): Observable<ApplicationModel> {
     return this.httpClient.post<ApplicationModel>(`${TailormapAdminApiV1Service.BASE_URL}/applications`, params.application);
   }
 
@@ -265,7 +273,7 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
       .pipe(map(response => response._embedded['oidc-configurations']));
   }
 
-  public createOIDCConfiguration$(params: { oidcConfiguration: OIDCConfigurationModel }): Observable<OIDCConfigurationModel> {
+  public createOIDCConfiguration$(params: { oidcConfiguration: Omit<OIDCConfigurationModel, 'id'> }): Observable<OIDCConfigurationModel> {
     return this.httpClient.post<OIDCConfigurationModel>(`${TailormapAdminApiV1Service.BASE_URL}/oidc-configurations`, params.oidcConfiguration);
   }
 

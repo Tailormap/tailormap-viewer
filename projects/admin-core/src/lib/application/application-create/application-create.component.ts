@@ -44,7 +44,7 @@ export class ApplicationCreateComponent implements OnDestroy {
       .subscribe(createdApplication => {
         if (createdApplication) {
           this.adminSnackbarService.showMessage($localize `Application ${createdApplication.title || createdApplication.name} created`);
-          this.router.navigateByUrl('/applications/application/' + createdApplication.id);
+          this.router.navigateByUrl('/admin/applications/application/' + createdApplication.id);
         }
         this.savingSubject.next(false);
       });

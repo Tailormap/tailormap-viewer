@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/angular';
 import { CatalogBaseTreeComponent } from './catalog-base-tree.component';
 import { LoadingStateEnum, SharedModule, TreeService } from '@tailormap-viewer/shared';
-import { CatalogNodeModel, getCatalogTree, getGeoService, TAILORMAP_ADMIN_API_V1_SERVICE } from '@tailormap-admin/admin-api';
+import { CatalogNodeModel, getCatalogTree, getGeoService, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 import { CatalogState, catalogStateKey, initialCatalogState } from '../state/catalog.state';
 import userEvent from '@testing-library/user-event';
 import { addGeoServices } from '../state/catalog.actions';
@@ -35,7 +35,7 @@ const setup = async (state: Partial<CatalogState> = {}) => {
     providers: [
       TreeService,
       { provide: Store, useValue: mockStore },
-      { provide: TAILORMAP_ADMIN_API_V1_SERVICE, useValue: mockApiService },
+      { provide: TailormapAdminApiV1Service, useValue: mockApiService },
     ],
   });
   const treeService = TestBed.inject(TreeService);

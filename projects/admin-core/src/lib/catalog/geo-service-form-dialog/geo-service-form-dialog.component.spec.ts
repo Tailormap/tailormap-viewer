@@ -3,7 +3,7 @@ import { GeoServiceFormDialogComponent } from './geo-service-form-dialog.compone
 import userEvent from '@testing-library/user-event';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { TAILORMAP_ADMIN_API_V1_SERVICE, getGeoService, AUTHORIZATION_RULE_ANONYMOUS } from '@tailormap-admin/admin-api';
+import { TailormapAdminApiV1Service, getGeoService, AUTHORIZATION_RULE_ANONYMOUS } from '@tailormap-admin/admin-api';
 import { of } from 'rxjs';
 import { GeoServiceFormComponent } from '../geo-service-form/geo-service-form.component';
 import { GeoServiceService } from '../services/geo-service.service';
@@ -30,7 +30,7 @@ const setup = async (editMode = false) => {
       { provide: MatDialogRef, useValue: dialogRefMock },
       { provide: GeoServiceService, useValue: geoServiceService },
       { provide: MAT_DIALOG_DATA, useValue: { geoService: editMode ? geoServiceModelMock : null, parentNode: '1' } },
-      { provide: TAILORMAP_ADMIN_API_V1_SERVICE, useValue: { getGroups$: jest.fn(() => of(null)) } },
+      { provide: TailormapAdminApiV1Service, useValue: { getGroups$: jest.fn(() => of(null)) } },
       provideMockStore({ initialState: { [userStateKey]: initialUserState, [adminCoreStateKey]: initialAdminCoreState } }),
     ],
   });
