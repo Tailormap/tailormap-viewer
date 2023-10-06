@@ -2,1230 +2,1393 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" datatype="plaintext" original="ng2.template">
     <body>
-      <trans-unit id="7803460230438661304" datatype="html">
-        <source> No rows found </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/attribute-list/attribute-list-content/attribute-list-content.component.html</context>
-          <context context-type="linenumber">4,5</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="9131892069991263437" datatype="html">
-        <source>Filter on</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/attribute-list/attribute-list-filter/attribute-list-filter.component.html</context>
-          <context context-type="linenumber">2</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="2671827835175438409" datatype="html">
-        <source> Set </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/attribute-list/attribute-list-filter/attribute-list-filter.component.html</context>
-          <context context-type="linenumber">17,19</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1238583382012712938" datatype="html">
-        <source> Clear </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/attribute-list/attribute-list-filter/attribute-list-filter.component.html</context>
-          <context context-type="linenumber">21,23</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="2330577642930707695" datatype="html">
-        <source> Cancel </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/attribute-list/attribute-list-filter/attribute-list-filter.component.html</context>
-          <context context-type="linenumber">25,27</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1286034572431173427" datatype="html">
-        <source>Go to page</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/attribute-list/attribute-list-paging-dialog/attribute-list-paging-dialog.component.html</context>
-          <context context-type="linenumber">3</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="6559246822757089203" datatype="html">
-        <source>Clear filters</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/attribute-list/attribute-list-tab-toolbar/attribute-list-tab-toolbar.component.html</context>
-          <context context-type="linenumber">4,5</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="174013150468601581" datatype="html">
-        <source>No layers with administrative data found</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/attribute-list/attribute-list/attribute-list.component.html</context>
-          <context context-type="linenumber">24</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="9058087986215108737" datatype="html">
-        <source>Failed to load attribute list data</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/attribute-list/services/attribute-list-data.service.ts</context>
-          <context context-type="linenumber">24</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="7251686705365735219" datatype="html">
-        <source>Attribute list</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/attribute-list/state/attribute-list.state.ts</context>
-          <context context-type="linenumber">22</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="8270919828485542598" datatype="html">
-        <source>No background</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/background-layer-toggle/background-layer-toggle.component.ts</context>
-          <context context-type="linenumber">55</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="5121320475401958995" datatype="html">
-        <source>Select shape</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="322394824231125404" datatype="html">
-        <source>Draw point</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
-          <context context-type="linenumber">5</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="7485144677537501434" datatype="html">
-        <source>Draw line</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
-          <context context-type="linenumber">11</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="7671991962349582901" datatype="html">
-        <source>Draw polygon</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
-          <context context-type="linenumber">17</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="2781833388478062784" datatype="html">
-        <source>Draw square</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
-          <context context-type="linenumber">23</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="4387313461891481332" datatype="html">
-        <source>Draw rectangle</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
-          <context context-type="linenumber">29</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="311011773985854729" datatype="html">
-        <source>Draw circle</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
-          <context context-type="linenumber">37</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="7227313553216215040" datatype="html">
-        <source>Draw ellipse</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
-          <context context-type="linenumber">43</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="5253475635167844493" datatype="html">
-        <source>Draw star</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
-          <context context-type="linenumber">49</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="2791229108029362448" datatype="html">
-        <source>Draw label</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/create-drawing-button/create-drawing-button.component.html</context>
-          <context context-type="linenumber">55</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1805761197959018001" datatype="html">
-        <source>Drawing</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-menu-button/drawing-menu-button.component.ts</context>
-          <context context-type="linenumber">15</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="4296791989248007051" datatype="html">
-        <source> Symbol </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">12,14</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="8106025670158480144" datatype="html">
-        <source>Symbol</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">17</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="5456294096164486435" datatype="html">
-        <source>Fill color</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">25</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="2622005448412870795" datatype="html">
-        <source>Line thickness</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">37</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="45739481977493163" datatype="html">
-        <source>Size</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">51</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">130</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="5201860154481115497" datatype="html">
-        <source>Rotation</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">65</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">157</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="6428648557710235460" datatype="html">
-        <source> Label </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">82,84</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="4077520913910941990" datatype="html">
-        <source>Label</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">87</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">88</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">89</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="9074196091111459629" datatype="html">
-        <source>Insert coordinates as label</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">93</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="2674630746570314789" datatype="html">
-        <source>Insert length as label</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">100</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="2364558040255593699" datatype="html">
-        <source>Insert area as label</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">107</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="7513076467032912668" datatype="html">
-        <source>Format</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">116</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="9011959596901584887" datatype="html">
-        <source>Color</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">144</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">179</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">246</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="2991656244957084973" datatype="html">
-        <source>Halo</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">150</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="8148890784302351493" datatype="html">
-        <source> Line </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">174,176</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="6907278263156340562" datatype="html">
-        <source>Thickness</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">185</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="8036200981586016464" datatype="html">
-        <source>Opacity</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">199</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">258</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1111168969063432267" datatype="html">
-        <source>Stroke type</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">214</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="6565791317520947983" datatype="html">
-        <source>Arrow</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">228</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="4507197510030624867" datatype="html">
-        <source> Fill </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">241,243</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="3278060427571346996" datatype="html">
-        <source>Striped fill</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing-style-form/drawing-style-form.component.html</context>
-          <context context-type="linenumber">254</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="4903782843340946337" datatype="html">
-        <source> Remove selected drawing object </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing/drawing.component.html</context>
-          <context context-type="linenumber">13,14</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="4914426843628055626" datatype="html">
-        <source> Remove complete drawing </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing/drawing.component.html</context>
-          <context context-type="linenumber">19,20</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="5649887357982744151" datatype="html">
-        <source>Remove drawing object</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing/drawing.component.ts</context>
-          <context context-type="linenumber">89,88</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="4608792437035636989" datatype="html">
-        <source>Are you sure you want to remove this object?</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing/drawing.component.ts</context>
-          <context context-type="linenumber">90,88</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1032811156591453807" datatype="html">
-        <source>Remove complete drawing</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing/drawing.component.ts</context>
-          <context context-type="linenumber">101,100</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="5372044582578370237" datatype="html">
-        <source>Are you sure you want to remove the complete drawing? All objects will be removed and this cannot be undone.</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/drawing/drawing.component.ts</context>
-          <context context-type="linenumber">102,100</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="6252070156626006029" datatype="html">
-        <source>None</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/helpers/drawing.helper.ts</context>
-          <context context-type="linenumber">43</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">99</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1701872860463509458" datatype="html">
-        <source>At the start</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/helpers/drawing.helper.ts</context>
-          <context context-type="linenumber">44</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="7141623799937028795" datatype="html">
-        <source>At the end</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/helpers/drawing.helper.ts</context>
-          <context context-type="linenumber">45</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="2194801884503605029" datatype="html">
-        <source>On both sides</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/helpers/drawing.helper.ts</context>
-          <context context-type="linenumber">46</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="665290780831643282" datatype="html">
-        <source>On every segment</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/drawing/helpers/drawing.helper.ts</context>
-          <context context-type="linenumber">47</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="8132424293432274889" datatype="html">
-        <source> Back </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/feature-info/feature-info-dialog/feature-info-dialog.component.html</context>
-          <context context-type="linenumber">20,21</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="3971100408152984961" datatype="html">
-        <source> Next </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/feature-info/feature-info-dialog/feature-info-dialog.component.html</context>
-          <context context-type="linenumber">23,24</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="846829935027482468" datatype="html">
-        <source>Could not load feature info</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/feature-info/feature-info.service.ts</context>
-          <context context-type="linenumber">17</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="447886253162748368" datatype="html">
-        <source>Something went wrong while getting feature info, please try again</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/feature-info/feature-info/feature-info.component.ts</context>
-          <context context-type="linenumber">23</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="2463987900933409187" datatype="html">
-        <source>No features found</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/feature-info/feature-info/feature-info.component.ts</context>
-          <context context-type="linenumber">24</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1671554457595569228" datatype="html">
-        <source>Failed to load legend for</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/legend/legend-layer/legend-layer.component.ts</context>
-          <context context-type="linenumber">21</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="7297822327994766046" datatype="html">
-        <source>Legend</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/legend/legend-menu-button/legend-menu-button.component.ts</context>
-          <context context-type="linenumber">14</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="8321457629272427993" datatype="html">
-        <source>Logged in as</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/menubar/profile/profile.component.html</context>
-          <context context-type="linenumber">6</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="3797778920049399855" datatype="html">
-        <source>Logout</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/menubar/profile/profile.component.html</context>
-          <context context-type="linenumber">10</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="2454050363478003966" datatype="html">
-        <source>Login</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/menubar/profile/profile.component.html</context>
-          <context context-type="linenumber">13</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/pages/login/login-form/login-form.component.html</context>
-          <context context-type="linenumber">3,4</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="7049887240439736400" datatype="html">
-        <source>Print</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/print/print-menu-button/print-menu-button.component.ts</context>
-          <context context-type="linenumber">15</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1062178673270167416" datatype="html">
-        <source> Export map </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">8,9</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1920957033639148722" datatype="html">
-        <source>PDF document</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">12</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="7982268423763340284" datatype="html">
-        <source>Map image</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">13</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1946328750043131240" datatype="html">
-        <source>Include drawing</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">17</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="4364462847409581262" datatype="html">
-        <source>Image size in millimeters:</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">22</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="2018922024247045709" datatype="html">
-        <source>Width</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">25</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="5281001311618507204" datatype="html">
-        <source>Range: 50 - 600</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">26</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">33</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="3033623772164647792" datatype="html">
-        <source>Height</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">32</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="3330040801415354394" datatype="html">
-        <source>DPI</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">39</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">90</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="3554648966284537052" datatype="html">
-        <source>Range: 90 - 600</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">40</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">91</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="3826728385291699828" datatype="html">
-        <source> Image size in pixels: <x id="INTERPOLATION" equiv-text="{{getImageResolution()}}"/> </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">48,49</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="6288365980016802803" datatype="html">
-        <source> Width/height ratio: <x id="INTERPOLATION" equiv-text="{{getImageRatio() | number: &apos;1.1-2&apos; }}"/> </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">51,52</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1431493389100814651" datatype="html">
-        <source>Download map image</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">55,56</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1403507799985368460" datatype="html">
-        <source>Landscape</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">64</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="9024440163320108713" datatype="html">
-        <source>Portrait</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">65</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="7438609089996892520" datatype="html">
-        <source>A4</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">70</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="4346630494193384330" datatype="html">
-        <source>A3</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">71</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="5701618810648052610" datatype="html">
-        <source>Title</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">76</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="4636291172448223646" datatype="html">
-        <source>Footer</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">83</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="4198293539412995628" datatype="html">
-        <source>Add legend for layer</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">97</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1605472530146889333" datatype="html">
-        <source>Automatically open print dialog</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">105</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="5715539409661008253" datatype="html">
-        <source>Download map PDF</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">108,109</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="7751500190109896263" datatype="html">
-        <source>No visible layers.</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">114</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="7498219936774990397" datatype="html">
-        <source>Creating map, this may take a while.</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">118,119</context>
-        </context-group>
+      <trans-unit id="6962822109887621034" datatype="html">
+        <source>Create application</source>
+      </trans-unit>
+      <trans-unit id="5674286808255988565" datatype="html">
+        <source>Create</source>
       </trans-unit>
       <trans-unit id="2159130950882492111" datatype="html">
         <source>Cancel</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/print/print/print.component.html</context>
-          <context context-type="linenumber">122,123</context>
-        </context-group>
       </trans-unit>
-      <trans-unit id="1414622339183492234" datatype="html">
-        <source>Available layers</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/toc/toc-menu-button/toc-menu-button.component.ts</context>
-          <context context-type="linenumber">15</context>
-        </context-group>
+      <trans-unit id="4588596325468716755" datatype="html">
+        <source>Application <x id="PH" equiv-text="createdApplication.title || createdApplication.name"/> created</source>
       </trans-unit>
-      <trans-unit id="9198130089685180173" datatype="html">
-        <source>Toggle all layers on</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/toc/toggle-all-layers-button/toggle-all-layers-button.component.html</context>
-          <context context-type="linenumber">3</context>
-        </context-group>
+      <trans-unit id="3222680854518085385" datatype="html">
+        <source>List of available components</source>
       </trans-unit>
-      <trans-unit id="4463867724650981374" datatype="html">
-        <source>Toggle all layers off</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/toc/toggle-all-layers-button/toggle-all-layers-button.component.html</context>
-          <context context-type="linenumber">6</context>
-        </context-group>
+      <trans-unit id="8637887575134514865" datatype="html">
+        <source>Set default application</source>
       </trans-unit>
-      <trans-unit id="5126955618430711976" datatype="html">
-        <source>Coordinate picker</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/toolbar/clicked-coordinates/clicked-coordinates.component.html</context>
-          <context context-type="linenumber">5,6</context>
-        </context-group>
+      <trans-unit id="4696017183730827905" datatype="html">
+        <source>Setting this application as default will overwrite the current default application</source>
       </trans-unit>
-      <trans-unit id="5170167478867715708" datatype="html">
-        <source>Selected coordinates: <x id="PH" equiv-text="coordinates"/></source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/toolbar/clicked-coordinates/clicked-coordinates.component.ts</context>
-          <context context-type="linenumber">53</context>
-        </context-group>
+      <trans-unit id="4001020896425342268" datatype="html">
+        <source>Primary color used in application</source>
       </trans-unit>
-      <trans-unit id="4323470180912194028" datatype="html">
-        <source>Copy</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/toolbar/clicked-coordinates/clicked-coordinates.component.ts</context>
-          <context context-type="linenumber">54</context>
-        </context-group>
+      <trans-unit id="6541504597432152387" datatype="html">
+        <source>Upload logo for application</source>
       </trans-unit>
-      <trans-unit id="4648900870671159218" datatype="html">
-        <source>Success</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/toolbar/clicked-coordinates/clicked-coordinates.component.ts</context>
-          <context context-type="linenumber">56</context>
-        </context-group>
+      <trans-unit id="3862497674553063473" datatype="html">
+        <source>Edit <x id="INTERPOLATION" equiv-text="{{ application.title }}"/></source>
       </trans-unit>
-      <trans-unit id="6366226732488883423" datatype="html">
-        <source>Failed to copy to clipboard</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/toolbar/clicked-coordinates/clicked-coordinates.component.ts</context>
-          <context context-type="linenumber">56</context>
-        </context-group>
+      <trans-unit id="4930506384627295710" datatype="html">
+        <source>Settings</source>
       </trans-unit>
-      <trans-unit id="3882439334368246349" datatype="html">
-        <source>Measure length</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/toolbar/measure/measure.component.html</context>
-          <context context-type="linenumber">5</context>
-        </context-group>
+      <trans-unit id="4991259427179720015" datatype="html">
+        <source>Layers</source>
       </trans-unit>
-      <trans-unit id="8569609011590722949" datatype="html">
-        <source>Measure area</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/toolbar/measure/measure.component.html</context>
-          <context context-type="linenumber">13</context>
-        </context-group>
+      <trans-unit id="8583478255466922511" datatype="html">
+        <source>Background layers</source>
       </trans-unit>
-      <trans-unit id="5381054561352410435" datatype="html">
-        <source>Search location</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/toolbar/simple-search/simple-search.component.html</context>
-          <context context-type="linenumber">8,9</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/toolbar/simple-search/simple-search.component.html</context>
-          <context context-type="linenumber">16</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/toolbar/simple-search/simple-search.component.html</context>
-          <context context-type="linenumber">21,22</context>
-        </context-group>
+      <trans-unit id="3871300736051960950" datatype="html">
+        <source>Styling</source>
       </trans-unit>
-      <trans-unit id="5377660698191427239" datatype="html">
-        <source> Type at least <x id="INTERPOLATION" equiv-text="{{ minLength }}"/> characters to start searching </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/toolbar/simple-search/simple-search.component.html</context>
-          <context context-type="linenumber">29,30</context>
-        </context-group>
+      <trans-unit id="1831139682192909712" datatype="html">
+        <source>Components</source>
       </trans-unit>
-      <trans-unit id="2236371857137398396" datatype="html">
-        <source> No results found </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/toolbar/simple-search/simple-search.component.html</context>
-          <context context-type="linenumber">32</context>
-        </context-group>
+      <trans-unit id="7022070615528435141" datatype="html">
+        <source>Delete</source>
       </trans-unit>
-      <trans-unit id="4922459598364532932" datatype="html">
-        <source>Data by [OpenStreetMap](https://www.openstreetmap.org/copyright)</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/toolbar/simple-search/simple-search.service.ts</context>
-          <context context-type="linenumber">58</context>
-        </context-group>
+      <trans-unit id="7819314041543176992" datatype="html">
+        <source>Close</source>
       </trans-unit>
-      <trans-unit id="2412260204074853227" datatype="html">
-        <source>Data by [PDOK](https://geodata.nationaalgeoregister.nl)</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/toolbar/simple-search/simple-search.service.ts</context>
-          <context context-type="linenumber">78</context>
-        </context-group>
+      <trans-unit id="1674597344942453665" datatype="html">
+        <source>Application updated</source>
       </trans-unit>
-      <trans-unit id="7260795646574446386" datatype="html">
-        <source>Zoom to initial extent</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/toolbar/zoom-buttons/zoom-buttons.component.html</context>
-          <context context-type="linenumber">6,7</context>
-        </context-group>
+      <trans-unit id="6788752028330452385" datatype="html">
+        <source>Application <x id="PH" equiv-text="title"/> removed</source>
       </trans-unit>
-      <trans-unit id="6500061599200357251" datatype="html">
-        <source>Zoom in</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/toolbar/zoom-buttons/zoom-buttons.component.html</context>
-          <context context-type="linenumber">16</context>
-        </context-group>
+      <trans-unit id="8953033926734869941" datatype="html">
+        <source>Name</source>
       </trans-unit>
-      <trans-unit id="944767796496567082" datatype="html">
-        <source>Zoom out</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/components/toolbar/zoom-buttons/zoom-buttons.component.html</context>
-          <context context-type="linenumber">24,25</context>
-        </context-group>
+      <trans-unit id="5879538324451774209" datatype="html">
+        <source>Name can only contain letters, numbers and dashes.</source>
       </trans-unit>
-      <trans-unit id="2838129566011107043" datatype="html">
-        <source>Condition</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/attribute-filter/attribute-filter.component.html</context>
-          <context context-type="linenumber">4</context>
-        </context-group>
+      <trans-unit id="5701618810648052610" datatype="html">
+        <source>Title</source>
       </trans-unit>
-      <trans-unit id="739336552178553107" datatype="html">
-        <source>Select condition</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/attribute-filter/attribute-filter.component.html</context>
-          <context context-type="linenumber">6</context>
-        </context-group>
+      <trans-unit id="3807699453257291879" datatype="html">
+        <source>Comments</source>
       </trans-unit>
-      <trans-unit id="6555318547274416232" datatype="html">
-        <source>Value</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/attribute-filter/attribute-filter.component.html</context>
-          <context context-type="linenumber">15</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/attribute-filter/attribute-filter.component.html</context>
-          <context context-type="linenumber">28</context>
-        </context-group>
+      <trans-unit id="3701145001290050013" datatype="html">
+        <source>Projection</source>
       </trans-unit>
-      <trans-unit id="5203279511751768967" datatype="html">
-        <source>From</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/attribute-filter/attribute-filter.component.html</context>
-          <context context-type="linenumber">16</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/attribute-filter/attribute-filter.component.html</context>
-          <context context-type="linenumber">29</context>
-        </context-group>
+      <trans-unit id="4855789114044218095" datatype="html">
+        <source>Initial extent</source>
       </trans-unit>
-      <trans-unit id="706270083777559326" datatype="html">
-        <source>Until</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/attribute-filter/attribute-filter.component.html</context>
-          <context context-type="linenumber">22</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/attribute-filter/attribute-filter.component.html</context>
-          <context context-type="linenumber">37</context>
-        </context-group>
+      <trans-unit id="6010046691016645343" datatype="html">
+        <source>Max extent</source>
       </trans-unit>
-      <trans-unit id="1601518217526203092" datatype="html">
-        <source> Case sensitive </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/attribute-filter/attribute-filter.component.html</context>
-          <context context-type="linenumber">44,46</context>
-        </context-group>
+      <trans-unit id="5188881899285829380" datatype="html">
+        <source>Add application</source>
       </trans-unit>
-      <trans-unit id="3550956596122180517" datatype="html">
-        <source> Invert condition </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/attribute-filter/attribute-filter.component.html</context>
-          <context context-type="linenumber">50,52</context>
-        </context-group>
+      <trans-unit id="8036200981586016464" datatype="html">
+        <source>Opacity</source>
       </trans-unit>
-      <trans-unit id="1648302799385755181" datatype="html">
-        <source>Deselect all values</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/attribute-filter/attribute-filter.component.html</context>
-          <context context-type="linenumber">60</context>
-        </context-group>
+      <trans-unit id="5674567698673280037" datatype="html">
+        <source>Attribution</source>
       </trans-unit>
-      <trans-unit id="7960697062777566925" datatype="html">
-        <source>Select all values</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/attribute-filter/attribute-filter.component.html</context>
-          <context context-type="linenumber">61</context>
-        </context-group>
+      <trans-unit id="4902817035128594900" datatype="html">
+        <source>Description</source>
       </trans-unit>
-      <trans-unit id="6424246633820870206" datatype="html">
-        <source>Equals</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
-          <context context-type="linenumber">33</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
-          <context context-type="linenumber">69</context>
-        </context-group>
+      <trans-unit id="4208877297843037352" datatype="html">
+        <source>Editable</source>
       </trans-unit>
-      <trans-unit id="6058990727665238036" datatype="html">
-        <source>equals to</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
-          <context context-type="linenumber">34</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
-          <context context-type="linenumber">70</context>
-        </context-group>
+      <trans-unit id="1579701175170031195" datatype="html">
+        <source>This layer cannot be edited because there is no writeable feature source / type configured for this layer</source>
       </trans-unit>
-      <trans-unit id="7732309408488818531" datatype="html">
-        <source>Greater than</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
-          <context context-type="linenumber">39</context>
-        </context-group>
+      <trans-unit id="4429656500656028822" datatype="html">
+        <source>Service <x id="PH" equiv-text="updatedService.title"/> updated</source>
       </trans-unit>
-      <trans-unit id="890702457876425132" datatype="html">
-        <source>is greater than</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
-          <context context-type="linenumber">40</context>
-        </context-group>
+      <trans-unit id="1236602648236408804" datatype="html">
+        <source>Layer settings updated</source>
       </trans-unit>
-      <trans-unit id="1781083671516331203" datatype="html">
-        <source>Small than</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
-          <context context-type="linenumber">45</context>
-        </context-group>
+      <trans-unit id="1976412017985703383" datatype="html">
+        <source>Create folder</source>
       </trans-unit>
-      <trans-unit id="1309979618532194127" datatype="html">
-        <source>is smaller than</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
-          <context context-type="linenumber">46</context>
-        </context-group>
+      <trans-unit id="1900363167726299837" datatype="html">
+        <source>Change folder name</source>
       </trans-unit>
-      <trans-unit id="9087788064443057357" datatype="html">
-        <source>Greater than or equal to</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
-          <context context-type="linenumber">51</context>
-        </context-group>
+      <trans-unit id="1791220611144857246" datatype="html">
+        <source>Folder name</source>
       </trans-unit>
-      <trans-unit id="7437056168294682826" datatype="html">
-        <source>is greater than or equal to</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
-          <context context-type="linenumber">52</context>
-        </context-group>
+      <trans-unit id="3768927257183755959" datatype="html">
+        <source>Save</source>
       </trans-unit>
-      <trans-unit id="8356978342856431342" datatype="html">
-        <source>Small than or equal to</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
-          <context context-type="linenumber">57</context>
-        </context-group>
+      <trans-unit id="4943641377279576546" datatype="html">
+        <source>Remove layer from application</source>
       </trans-unit>
-      <trans-unit id="4403693524033419513" datatype="html">
-        <source>is smaller than or equal to</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
-          <context context-type="linenumber">58</context>
-        </context-group>
+      <trans-unit id="5044745859516107821" datatype="html">
+        <source>Add sub folder</source>
       </trans-unit>
-      <trans-unit id="3890131054593067798" datatype="html">
-        <source>Between</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
-          <context context-type="linenumber">63</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
-          <context context-type="linenumber">111</context>
-        </context-group>
+      <trans-unit id="6658000829978978023" datatype="html">
+        <source>Applications</source>
       </trans-unit>
-      <trans-unit id="103862121239127059" datatype="html">
-        <source>is between</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
-          <context context-type="linenumber">64</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
-          <context context-type="linenumber">112</context>
-        </context-group>
+      <trans-unit id="7934833136974560675" datatype="html">
+        <source>Retry</source>
       </trans-unit>
-      <trans-unit id="6238291467288576076" datatype="html">
-        <source>Contains</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
-          <context context-type="linenumber">75</context>
-        </context-group>
+      <trans-unit id="8779794089111939115" datatype="html">
+        <source>Filter applications</source>
       </trans-unit>
-      <trans-unit id="326106955650253946" datatype="html">
-        <source>contains</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
-          <context context-type="linenumber">76</context>
-        </context-group>
+      <trans-unit id="9209781328340965816" datatype="html">
+        <source>Filter...</source>
       </trans-unit>
-      <trans-unit id="8863611568205528132" datatype="html">
-        <source>Starts with</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
-          <context context-type="linenumber">81</context>
-        </context-group>
+      <trans-unit id="8722660474357844751" datatype="html">
+        <source>Default application</source>
       </trans-unit>
-      <trans-unit id="5840053709154100532" datatype="html">
-        <source>starts with</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
-          <context context-type="linenumber">82</context>
-        </context-group>
+      <trans-unit id="4908310331976650378" datatype="html">
+        <source>Open application</source>
       </trans-unit>
-      <trans-unit id="7402672269023827698" datatype="html">
-        <source>Ends with</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
-          <context context-type="linenumber">87</context>
-        </context-group>
+      <trans-unit id="4816216590591222133" datatype="html">
+        <source>Enabled</source>
       </trans-unit>
-      <trans-unit id="6387705929814330940" datatype="html">
-        <source>ends with</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
-          <context context-type="linenumber">88</context>
-        </context-group>
+      <trans-unit id="3582579452908115906" datatype="html">
+        <source>Table of contents</source>
       </trans-unit>
-      <trans-unit id="8990769651805334695" datatype="html">
-        <source>On</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
-          <context context-type="linenumber">93</context>
-        </context-group>
+      <trans-unit id="7297822327994766046" datatype="html">
+        <source>Legend</source>
       </trans-unit>
-      <trans-unit id="1008100476778775555" datatype="html">
-        <source>is on</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
-          <context context-type="linenumber">94</context>
-        </context-group>
+      <trans-unit id="1805761197959018001" datatype="html">
+        <source>Drawing</source>
       </trans-unit>
-      <trans-unit id="6371576811194810854" datatype="html">
-        <source>After</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
-          <context context-type="linenumber">99</context>
-        </context-group>
+      <trans-unit id="7049887240439736400" datatype="html">
+        <source>Print</source>
       </trans-unit>
-      <trans-unit id="4557203537565915133" datatype="html">
-        <source>is after</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
-          <context context-type="linenumber">100</context>
-        </context-group>
+      <trans-unit id="8829497237648100098" datatype="html">
+        <source>Filter</source>
       </trans-unit>
-      <trans-unit id="1218334388194408974" datatype="html">
-        <source>Before</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
-          <context context-type="linenumber">105</context>
-        </context-group>
+      <trans-unit id="7251686705365735219" datatype="html">
+        <source>Attribute list</source>
       </trans-unit>
-      <trans-unit id="114923036829185897" datatype="html">
-        <source>is before</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
-          <context context-type="linenumber">106</context>
-        </context-group>
+      <trans-unit id="7585826646011739428" datatype="html">
+        <source>Edit</source>
       </trans-unit>
-      <trans-unit id="5215254897571607793" datatype="html">
-        <source>Is true</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
-          <context context-type="linenumber">117</context>
-        </context-group>
+      <trans-unit id="6666414176053743738" datatype="html">
+        <source>Measure tools</source>
       </trans-unit>
-      <trans-unit id="8366095040965494104" datatype="html">
-        <source>is true</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
-          <context context-type="linenumber">118</context>
-        </context-group>
+      <trans-unit id="2212136963008896527" datatype="html">
+        <source>Coordinate picker tool</source>
       </trans-unit>
-      <trans-unit id="3540525584759007757" datatype="html">
-        <source>Is false</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
-          <context context-type="linenumber">123</context>
-        </context-group>
+      <trans-unit id="7923632062610220715" datatype="html">
+        <source>Streetview tool</source>
       </trans-unit>
-      <trans-unit id="1767917250203365119" datatype="html">
-        <source>is false</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
-          <context context-type="linenumber">124</context>
-        </context-group>
+      <trans-unit id="9037504319931947645" datatype="html">
+        <source>Application layers</source>
       </trans-unit>
-      <trans-unit id="6504828068656625171" datatype="html">
-        <source>Is null</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
-          <context context-type="linenumber">129</context>
-        </context-group>
+      <trans-unit id="7206981378945299828" datatype="html">
+        <source>Error while creating application.</source>
       </trans-unit>
-      <trans-unit id="3453198530328338392" datatype="html">
-        <source>is null</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
-          <context context-type="linenumber">130</context>
-        </context-group>
+      <trans-unit id="1991580595466642423" datatype="html">
+        <source>Error while updating application.</source>
       </trans-unit>
-      <trans-unit id="5728801976868426890" datatype="html">
-        <source>Choose values</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
-          <context context-type="linenumber">137</context>
-        </context-group>
+      <trans-unit id="6152339035877131059" datatype="html">
+        <source>Error while deleting application.</source>
       </trans-unit>
-      <trans-unit id="4721871668005705294" datatype="html">
-        <source>contains one of the values</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/filter/helpers/attribute-filter.helper.ts</context>
-          <context context-type="linenumber">138</context>
-        </context-group>
+      <trans-unit id="4792780945396040827" datatype="html">
+        <source>Error while loading list of applications</source>
       </trans-unit>
-      <trans-unit id="5129304310134933955" datatype="html">
-        <source>Could not load map settings</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/map/state/map.effects.ts</context>
-          <context context-type="linenumber">13</context>
-        </context-group>
+      <trans-unit id="7650624232624154748" datatype="html">
+        <source>Current image</source>
+      </trans-unit>
+      <trans-unit id="2573143895292271000" datatype="html">
+        <source>Remove the image</source>
+      </trans-unit>
+      <trans-unit id="4588618843305891254" datatype="html">
+        <source>Catalog</source>
+      </trans-unit>
+      <trans-unit id="2218082343053095278" datatype="html">
+        <source>Service</source>
+      </trans-unit>
+      <trans-unit id="4742636721040454766" datatype="html">
+        <source>Layer</source>
+      </trans-unit>
+      <trans-unit id="3398723792866975183" datatype="html">
+        <source>Feature Source</source>
+      </trans-unit>
+      <trans-unit id="8153959623830320405" datatype="html">
+        <source>Feature Type</source>
+      </trans-unit>
+      <trans-unit id="7108663491600896992" datatype="html">
+        <source>Add folder</source>
+      </trans-unit>
+      <trans-unit id="8400469488778299459" datatype="html">
+        <source>Add service</source>
+      </trans-unit>
+      <trans-unit id="1028401301713064002" datatype="html">
+        <source>Add feature source</source>
+      </trans-unit>
+      <trans-unit id="3265330369443589443" datatype="html">
+        <source>Folder <x id="PH" equiv-text="node.title"/> created</source>
+      </trans-unit>
+      <trans-unit id="4816824730115920045" datatype="html">
+        <source>Service <x id="PH" equiv-text="createdService.title"/> created</source>
+      </trans-unit>
+      <trans-unit id="5765747446470568921" datatype="html">
+        <source>Feature source <x id="PH" equiv-text="featureSource.title"/> created</source>
+      </trans-unit>
+      <trans-unit id="3779407484061434230" datatype="html">
+        <source>This folder <x id="INTERPOLATION" equiv-text="{{data.node.title}}"/> is not empty and contains the following items.</source>
+      </trans-unit>
+      <trans-unit id="6222626766380123962" datatype="html">
+        <source>Please remove these items first before removing the folder</source>
+      </trans-unit>
+      <trans-unit id="8720977247725652816" datatype="html">
+        <source>Ok</source>
+      </trans-unit>
+      <trans-unit id="3835596608289229170" datatype="html">
+        <source>Node updated</source>
+      </trans-unit>
+      <trans-unit id="8250302836665699129" datatype="html">
+        <source>Folder <x id="PH" equiv-text="node.title"/> removed</source>
+      </trans-unit>
+      <trans-unit id="733390306799768951" datatype="html">
+        <source>Create new folder</source>
+      </trans-unit>
+      <trans-unit id="3631393389183921862" datatype="html">
+        <source>Refresh feature source</source>
+      </trans-unit>
+      <trans-unit id="7606280119874402165" datatype="html">
+        <source>Feature source updated</source>
+      </trans-unit>
+      <trans-unit id="8514486357760653217" datatype="html">
+        <source>Refresh feature source?</source>
+      </trans-unit>
+      <trans-unit id="7396450988248387092" datatype="html">
+        <source>The settings for the feature source are updated. Do you want to refresh the feature source to refresh the feature types?</source>
+      </trans-unit>
+      <trans-unit id="1496858210652985812" datatype="html">
+        <source>Feature source refreshed</source>
+      </trans-unit>
+      <trans-unit id="2636482525111939564" datatype="html">
+        <source>Source <x id="PH" equiv-text="featureSource.title"/> removed</source>
+      </trans-unit>
+      <trans-unit id="1607702743503954005" datatype="html">
+        <source>The feature source <x id="INTERPOLATION" equiv-text="{{data.featureSource.title}}"/> is used in the following layers.</source>
+      </trans-unit>
+      <trans-unit id="4328673560469303544" datatype="html">
+        <source>Please remove the feature source and type from these layers first</source>
+      </trans-unit>
+      <trans-unit id="8402994973162793160" datatype="html">
+        <source>Create new feature source</source>
+      </trans-unit>
+      <trans-unit id="3783562484965706612" datatype="html">
+        <source>Protocol</source>
+      </trans-unit>
+      <trans-unit id="7708270344948043036" datatype="html">
+        <source>
+          <x id="INTERPOLATION" equiv-text="{{ protocol }}"/>
+        </source>
+      </trans-unit>
+      <trans-unit id="2375260419993138758" datatype="html">
+        <source>URL</source>
+      </trans-unit>
+      <trans-unit id="6178211662186682005" datatype="html">
+        <source>Database type</source>
+      </trans-unit>
+      <trans-unit id="4198035112366277884" datatype="html">
+        <source>Database</source>
+      </trans-unit>
+      <trans-unit id="6641024648411549335" datatype="html">
+        <source>Host</source>
+      </trans-unit>
+      <trans-unit id="6117946241126833991" datatype="html">
+        <source>Port</source>
+      </trans-unit>
+      <trans-unit id="1721827980245086554" datatype="html">
+        <source>Schema</source>
+      </trans-unit>
+      <trans-unit id="1317692404475891213" datatype="html">
+        <source>Additional connection options</source>
       </trans-unit>
       <trans-unit id="5248717555542428023" datatype="html">
         <source>Username</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/pages/login/login-form/login-form.component.html</context>
-          <context context-type="linenumber">9,10</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="1431416938026210429" datatype="html">
         <source>Password</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/pages/login/login-form/login-form.component.html</context>
-          <context context-type="linenumber">18,19</context>
-        </context-group>
+      </trans-unit>
+      <trans-unit id="8008131619909556709" datatype="html">
+        <source>Attributes</source>
+      </trans-unit>
+      <trans-unit id="8650499415827640724" datatype="html">
+        <source>Type</source>
+      </trans-unit>
+      <trans-unit id="1965206604774400" datatype="html">
+        <source>Alias</source>
+      </trans-unit>
+      <trans-unit id="5146398958364876914" datatype="html">
+        <source>Sort</source>
+      </trans-unit>
+      <trans-unit id="5136899160195760681" datatype="html">
+        <source>Geometry attributes</source>
+      </trans-unit>
+      <trans-unit id="6888336733589315671" datatype="html">
+        <source>Details for feature type <x id="INTERPOLATION" equiv-text="{{ featureType.title }}"/></source>
+      </trans-unit>
+      <trans-unit id="4768097471671458266" datatype="html">
+        <source>Technical name: <x id="INTERPOLATION" equiv-text="{{ featureType.name }}"/></source>
+      </trans-unit>
+      <trans-unit id="8314843536792001640" datatype="html">
+        <source>No feature source</source>
+      </trans-unit>
+      <trans-unit id="2154599343446401954" datatype="html">
+        <source>No feature type</source>
+      </trans-unit>
+      <trans-unit id="1502385040245686306" datatype="html">
+        <source>Refresh service</source>
+      </trans-unit>
+      <trans-unit id="662481051285198890" datatype="html">
+        <source>Service updated</source>
+      </trans-unit>
+      <trans-unit id="2521132948629553140" datatype="html">
+        <source>Refresh service?</source>
+      </trans-unit>
+      <trans-unit id="5752551210920175214" datatype="html">
+        <source>The settings for the service are updated. Do you want to refresh the service to refresh the capabilities and layers?</source>
+      </trans-unit>
+      <trans-unit id="6628776085953565852" datatype="html">
+        <source>Service refreshed</source>
+      </trans-unit>
+      <trans-unit id="1502560370738205562" datatype="html">
+        <source>Service <x id="PH" equiv-text="geoService.title"/> removed</source>
+      </trans-unit>
+      <trans-unit id="4817365907137563846" datatype="html">
+        <source>The service <x id="INTERPOLATION" equiv-text="{{data.service.title}}"/> is used in the following applications.</source>
+      </trans-unit>
+      <trans-unit id="3584258772600608785" datatype="html">
+        <source>Please remove the layers from this service from the applications first</source>
+      </trans-unit>
+      <trans-unit id="5163935377838991757" datatype="html">
+        <source>Create new service</source>
+      </trans-unit>
+      <trans-unit id="1636712881170645659" datatype="html">
+        <source>Edit settings for layer <x id="INTERPOLATION" equiv-text="{{ geoServiceSettings.layerTitle }}"/></source>
+      </trans-unit>
+      <trans-unit id="3580701542049816588" datatype="html">
+        <source>Layer name: <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/><x id="INTERPOLATION" equiv-text="&lt;/b&gt;&lt;/d"/><x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/div&gt; &lt;mat-"/></source>
+      </trans-unit>
+      <trans-unit id="5850502095242867184" datatype="html">
+        <source>Leave empty to use the title as provided by the service.</source>
+      </trans-unit>
+      <trans-unit id="7639110624870556214" datatype="html">
+        <source>High-DPI enabled</source>
+      </trans-unit>
+      <trans-unit id="944349412793709576" datatype="html">
+        <source>Use tiling</source>
+      </trans-unit>
+      <trans-unit id="3056678110859212913" datatype="html">
+        <source>Connected feature source and type</source>
+      </trans-unit>
+      <trans-unit id="446180922786792740" datatype="html">
+        <source>XYZ tile grid options</source>
+      </trans-unit>
+      <trans-unit id="5499005554847809007" datatype="html">
+        <source>Maximum zoom level</source>
+      </trans-unit>
+      <trans-unit id="467362226380641539" datatype="html">
+        <source>Default: <x id="INTERPOLATION" equiv-text="{{21}}"/></source>
+      </trans-unit>
+      <trans-unit id="2367392186863619053" datatype="html">
+        <source>Minimum zoom level</source>
+      </trans-unit>
+      <trans-unit id="3555678076470041252" datatype="html">
+        <source>Hi-DPI mode</source>
+      </trans-unit>
+      <trans-unit id="1273222401817679385" datatype="html">
+        <source>High-DPI mode</source>
+      </trans-unit>
+      <trans-unit id="6438120501824718716" datatype="html">
+        <source>Show next zoom level</source>
+      </trans-unit>
+      <trans-unit id="7392177189731271442" datatype="html">
+        <source>Substitute layer, show next zoom level</source>
+      </trans-unit>
+      <trans-unit id="5831970179807065645" datatype="html">
+        <source>Substitute layer, tile pixel ratio only</source>
+      </trans-unit>
+      <trans-unit id="3247616680835885485" datatype="html">
+        <source>Hi-DPI substitute layer</source>
+      </trans-unit>
+      <trans-unit id="2080371461570921366" datatype="html">
+        <source>Substitute URL template, show next zoom level</source>
+      </trans-unit>
+      <trans-unit id="2424301865225299983" datatype="html">
+        <source>Substitute URL template, tile pixel ratio only</source>
+      </trans-unit>
+      <trans-unit id="582519677114777639" datatype="html">
+        <source>Hi-DPI substitute URL template</source>
+      </trans-unit>
+      <trans-unit id="2032749583415117290" datatype="html">
+        <source>For example:</source>
+      </trans-unit>
+      <trans-unit id="1928173182027290937" datatype="html">
+        <source>Tiling gutter</source>
+      </trans-unit>
+      <trans-unit id="99974204161255266" datatype="html">
+        <source>Error while loading service(s). Please collapse/expand the node again to try again.</source>
+      </trans-unit>
+      <trans-unit id="525470767395796234" datatype="html">
+        <source>Error while loading feature source(s). Please collapse/expand the node again to try again.</source>
+      </trans-unit>
+      <trans-unit id="7879841646128760754" datatype="html">
+        <source>Error while updating catalog.</source>
+      </trans-unit>
+      <trans-unit id="1574667323372661480" datatype="html">
+        <source>Error while creating feature source: <x id="PH" equiv-text="message"/></source>
+      </trans-unit>
+      <trans-unit id="3021546793857806514" datatype="html">
+        <source>Error while updating feature source: </source>
+      </trans-unit>
+      <trans-unit id="2159328788868114896" datatype="html">
+        <source>Error while updating feature type: <x id="PH" equiv-text="message"/></source>
+      </trans-unit>
+      <trans-unit id="7506179993384198595" datatype="html">
+        <source>Error while deleting source: <x id="PH" equiv-text="message"/></source>
+      </trans-unit>
+      <trans-unit id="854026257989998092" datatype="html">
+        <source>Error while refreshing feature source: </source>
+      </trans-unit>
+      <trans-unit id="4325083132302864950" datatype="html">
+        <source>Error while creating geo service: <x id="PH" equiv-text="message"/></source>
+      </trans-unit>
+      <trans-unit id="8296108602275368440" datatype="html">
+        <source>Error while updating geo service: </source>
+      </trans-unit>
+      <trans-unit id="8544110860612533119" datatype="html">
+        <source>Error while deleting geo service: <x id="PH" equiv-text="message"/></source>
+      </trans-unit>
+      <trans-unit id="2775117521832546488" datatype="html">
+        <source>Error while refreshing geo service: </source>
+      </trans-unit>
+      <trans-unit id="701538592997591584" datatype="html">
+        <source>Error while loading catalog</source>
+      </trans-unit>
+      <trans-unit id="2369549730360832915" datatype="html">
+        <source>Error while loading feature sources</source>
+      </trans-unit>
+      <trans-unit id="3181451418036004593" datatype="html">
+        <source>Error while loading geo services</source>
+      </trans-unit>
+      <trans-unit id="359406592384677279" datatype="html">
+        <source>Create OIDC configuration</source>
+      </trans-unit>
+      <trans-unit id="2762554829976254617" datatype="html">
+        <source>OIDCConfiguration <x id="PH" equiv-text="createdOIDCConfiguration.name"/> created</source>
+      </trans-unit>
+      <trans-unit id="2445501434555287217" datatype="html">
+        <source>OIDCConfiguration updated</source>
+      </trans-unit>
+      <trans-unit id="6156950784448692371" datatype="html">
+        <source>OIDCConfiguration <x id="PH" equiv-text="title"/> removed</source>
+      </trans-unit>
+      <trans-unit id="2455433211811709596" datatype="html">
+        <source>Issuer URL</source>
+      </trans-unit>
+      <trans-unit id="5273501066845923426" datatype="html">
+        <source>Client ID</source>
+      </trans-unit>
+      <trans-unit id="3858350041926042177" datatype="html">
+        <source>Client Secret</source>
+      </trans-unit>
+      <trans-unit id="9187024441651671301" datatype="html">
+        <source>User name attribute</source>
+      </trans-unit>
+      <trans-unit id="567111357247197771" datatype="html">
+        <source>(name, sub, email, etc)</source>
+      </trans-unit>
+      <trans-unit id="5611592591303869712" datatype="html">
+        <source>Status</source>
+      </trans-unit>
+      <trans-unit id="7042399627369863881" datatype="html">
+        <source>Add identity provider</source>
+      </trans-unit>
+      <trans-unit id="2562458031344274215" datatype="html">
+        <source>Identity providers</source>
+      </trans-unit>
+      <trans-unit id="8211050762002008631" datatype="html">
+        <source>Filter identity providers</source>
+      </trans-unit>
+      <trans-unit id="1039644285637847935" datatype="html">
+        <source>OIDCConfiguration layers</source>
+      </trans-unit>
+      <trans-unit id="2841799809995463546" datatype="html">
+        <source>Error while creating oidcConfiguration.</source>
+      </trans-unit>
+      <trans-unit id="2777913123225711333" datatype="html">
+        <source>Error while updating oidcConfiguration.</source>
+      </trans-unit>
+      <trans-unit id="3053986686896879855" datatype="html">
+        <source>Error while deleting oidcConfiguration.</source>
+      </trans-unit>
+      <trans-unit id="2516922056323787184" datatype="html">
+        <source>Error while loading list of OIDC configurations</source>
+      </trans-unit>
+      <trans-unit id="3765396110860896776" datatype="html">
+        <source>Tailormap Admin</source>
+      </trans-unit>
+      <trans-unit id="8766971442802772028" datatype="html">
+        <source>Group Administration</source>
+      </trans-unit>
+      <trans-unit id="3516476915385614230" datatype="html">
+        <source>Single-sign on</source>
+      </trans-unit>
+      <trans-unit id="904935420507604895" datatype="html">
+        <source>User Administration</source>
+      </trans-unit>
+      <trans-unit id="7082307609207554348" datatype="html">
+        <source>Allow access from:</source>
+      </trans-unit>
+      <trans-unit id="3751647511449704356" datatype="html">
+        <source>Inherit from <x id="INTERPOLATION" equiv-text="{{parentType}}"/> (<x id="ICU" equiv-text="{parentChip, select, anonymous {Anyone} loggedIn {Logged in} specificGroups {Specific groups}}" xid="3853054767740913162"/>)</source>
+      </trans-unit>
+      <trans-unit id="3853054767740913162" datatype="html">
+        <source>{VAR_SELECT, select, anonymous {Anyone} loggedIn {Logged in} specificGroups {Specific groups}}</source>
+      </trans-unit>
+      <trans-unit id="6451695144927621822" datatype="html">
+        <source>Anyone</source>
+      </trans-unit>
+      <trans-unit id="5647172090108571163" datatype="html">
+        <source>Logged in</source>
+      </trans-unit>
+      <trans-unit id="4180171243037366988" datatype="html">
+        <source>Specific groups <x id="ICU" equiv-text="{parentChip, select, specificGroups {(inherited)}}" xid="3121812025403879402"/></source>
+      </trans-unit>
+      <trans-unit id="3121812025403879402" datatype="html">
+        <source>{VAR_SELECT, select, specificGroups {(inherited)}}</source>
+      </trans-unit>
+      <trans-unit id="5278627882107105833" datatype="html">
+        <source>Access</source>
+      </trans-unit>
+      <trans-unit id="8863827735387602533" datatype="html">
+        <source>(overridden)</source>
+      </trans-unit>
+      <trans-unit id="2041629809382689328" datatype="html">
+        <source>Group name</source>
+      </trans-unit>
+      <trans-unit id="2327592562693301723" datatype="html">
+        <source>Read</source>
+      </trans-unit>
+      <trans-unit id="4745478270372519966" datatype="html">
+        <source>Inherited from <x id="PH" equiv-text="this.parentType"/></source>
+      </trans-unit>
+      <trans-unit id="7739323347038488466" datatype="html">
+        <source>Configured on <x id="PH" equiv-text="this.selfType"/></source>
+      </trans-unit>
+      <trans-unit id="250797935854157324" datatype="html">
+        <source>Bounds</source>
+      </trans-unit>
+      <trans-unit id="1710239303228138275" datatype="html">
+        <source>Min X</source>
+      </trans-unit>
+      <trans-unit id="7210082961311809270" datatype="html">
+        <source>Min Y</source>
+      </trans-unit>
+      <trans-unit id="8397655695319350630" datatype="html">
+        <source>Max X</source>
+      </trans-unit>
+      <trans-unit id="3732963883163087537" datatype="html">
+        <source>Max Y</source>
+      </trans-unit>
+      <trans-unit id="1446670643492611810" datatype="html">
+        <source>Hide password</source>
+      </trans-unit>
+      <trans-unit id="5607669932062416162" datatype="html">
+        <source>Default</source>
+      </trans-unit>
+      <trans-unit id="5769292297914455214" datatype="html">
+        <source>Disabled</source>
+      </trans-unit>
+      <trans-unit id="3813604829111795994" datatype="html">
+        <source>Go to viewer</source>
+      </trans-unit>
+      <trans-unit id="3797778920049399855" datatype="html">
+        <source>Logout</source>
+      </trans-unit>
+      <trans-unit id="2454050363478003966" datatype="html">
+        <source>Login</source>
+      </trans-unit>
+      <trans-unit id="2821179408673282599" datatype="html">
+        <source>Home</source>
+      </trans-unit>
+      <trans-unit id="4555457172864212828" datatype="html">
+        <source>Users</source>
+      </trans-unit>
+      <trans-unit id="5944812089887969249" datatype="html">
+        <source>Groups</source>
+      </trans-unit>
+      <trans-unit id="2765038467790743178" datatype="html">
+        <source>Add group</source>
+      </trans-unit>
+      <trans-unit id="2599894618059877299" datatype="html">
+        <source>Group <x id="PH" equiv-text="createGroup.name"/> created</source>
+      </trans-unit>
+      <trans-unit id="5396295448591148877" datatype="html">
+        <source>Group <x id="PH" equiv-text="group.name"/> removed</source>
+      </trans-unit>
+      <trans-unit id="1226294008216304339" datatype="html">
+        <source>Group updated</source>
+      </trans-unit>
+      <trans-unit id="8104421162933956065" datatype="html">
+        <source>Notes</source>
+      </trans-unit>
+      <trans-unit id="4493994218592824422" datatype="html">
+        <source>System Group</source>
+      </trans-unit>
+      <trans-unit id="1196729008918170847" datatype="html">
+        <source>Filter groups</source>
+      </trans-unit>
+      <trans-unit id="8686003942905181363" datatype="html">
+        <source>Error while creating group <x id="PH" equiv-text="group.name"/>. <x id="PH_1" equiv-text="response.error?.message"/></source>
+      </trans-unit>
+      <trans-unit id="8732707342016555095" datatype="html">
+        <source>Error while updating group <x id="PH" equiv-text="group.name"/>. <x id="PH_1" equiv-text="response.error?.message"/></source>
+      </trans-unit>
+      <trans-unit id="8328208182129304133" datatype="html">
+        <source>Error while deleting group <x id="PH" equiv-text="groupName"/>. <x id="PH_1" equiv-text="response.error?.message"/></source>
+      </trans-unit>
+      <trans-unit id="5838257943722418154" datatype="html">
+        <source>Error while creating user <x id="PH" equiv-text="user.username"/>. <x id="PH_1" equiv-text="response.error?.message"/></source>
+      </trans-unit>
+      <trans-unit id="6107431306338449765" datatype="html">
+        <source>Error while updating user <x id="PH" equiv-text="user.username"/>. <x id="PH_1" equiv-text="response.error?.message"/></source>
+      </trans-unit>
+      <trans-unit id="2019402511229873409" datatype="html">
+        <source>Error while deleting user <x id="PH" equiv-text="userName"/>. <x id="PH_1" equiv-text="response.error?.message"/></source>
+      </trans-unit>
+      <trans-unit id="8085091481916567074" datatype="html">
+        <source>Error while loading list of users</source>
+      </trans-unit>
+      <trans-unit id="2166919880411065041" datatype="html">
+        <source>Error while loading list of groups</source>
+      </trans-unit>
+      <trans-unit id="5918723526444903137" datatype="html">
+        <source>Add user</source>
+      </trans-unit>
+      <trans-unit id="8860660078680010767" datatype="html">
+        <source>User <x id="PH" equiv-text="createdUser.username"/> created</source>
+      </trans-unit>
+      <trans-unit id="1210210311315962196" datatype="html">
+        <source>User <x id="PH" equiv-text="user.username"/> removed</source>
+      </trans-unit>
+      <trans-unit id="1755386264837692034" datatype="html">
+        <source>User updated</source>
+      </trans-unit>
+      <trans-unit id="2862921525342985341" datatype="html">
+        <source>Password shorter than <x id="INTERPOLATION" equiv-text="{{userForm.get(&apos;password&apos;)?.errors?.[&apos;minlength&apos;].requiredLength}}"/></source>
+      </trans-unit>
+      <trans-unit id="3794051174889410019" datatype="html">
+        <source>Password too short or too easily guessable</source>
+      </trans-unit>
+      <trans-unit id="3782563238994348625" datatype="html">
+        <source>Confirm password</source>
+      </trans-unit>
+      <trans-unit id="5877311290931682309" datatype="html">
+        <source>Passwords need to match</source>
+      </trans-unit>
+      <trans-unit id="4768749765465246664" datatype="html">
+        <source>Email</source>
+      </trans-unit>
+      <trans-unit id="7801963783278586769" datatype="html">
+        <source>validUntil</source>
+      </trans-unit>
+      <trans-unit id="925296162381283642" datatype="html">
+        <source>User Groups</source>
+      </trans-unit>
+      <trans-unit id="3904814018597094143" datatype="html">
+        <source>Filter users</source>
+      </trans-unit>
+      <trans-unit id="4603846687770401227" datatype="html">
+        <source>No rows found</source>
+      </trans-unit>
+      <trans-unit id="7462301153729425254" datatype="html">
+        <source>Export</source>
+      </trans-unit>
+      <trans-unit id="8015226700019262980" datatype="html">
+        <source>GeoPackage</source>
+      </trans-unit>
+      <trans-unit id="6782744539751451451" datatype="html">
+        <source>GeoJSON</source>
+      </trans-unit>
+      <trans-unit id="7926143511350598250" datatype="html">
+        <source>CSV</source>
+      </trans-unit>
+      <trans-unit id="5323231108109170943" datatype="html">
+        <source>Excel</source>
+      </trans-unit>
+      <trans-unit id="2983701368848653420" datatype="html">
+        <source>Shapefile</source>
+      </trans-unit>
+      <trans-unit id="4476419327010113923" datatype="html">
+        <source>DXF</source>
+      </trans-unit>
+      <trans-unit id="4095272399580033351" datatype="html">
+        <source>Filter on <x id="INTERPOLATION" equiv-text="{{getColumnName()}}"/></source>
+      </trans-unit>
+      <trans-unit id="2671827835175438409" datatype="html">
+        <source> Set </source>
+      </trans-unit>
+      <trans-unit id="1238583382012712938" datatype="html">
+        <source> Clear </source>
+      </trans-unit>
+      <trans-unit id="2330577642930707695" datatype="html">
+        <source> Cancel </source>
+      </trans-unit>
+      <trans-unit id="1286034572431173427" datatype="html">
+        <source>Go to page</source>
+      </trans-unit>
+      <trans-unit id="6559246822757089203" datatype="html">
+        <source>Clear filters</source>
+      </trans-unit>
+      <trans-unit id="174013150468601581" datatype="html">
+        <source>No layers with administrative data found</source>
+      </trans-unit>
+      <trans-unit id="9058087986215108737" datatype="html">
+        <source>Failed to load attribute list data</source>
+      </trans-unit>
+      <trans-unit id="3996525197734191826" datatype="html">
+        <source>Failed to load attribute list data for <x id="PH" equiv-text="tab.label"/></source>
+      </trans-unit>
+      <trans-unit id="645956722418939979" datatype="html">
+        <source>Exporting data for layer <x id="PH" equiv-text="params.serviceLayerName"/> and format <x id="PH_1" equiv-text="params.format"/> failed</source>
+      </trans-unit>
+      <trans-unit id="8270919828485542598" datatype="html">
+        <source>No background</source>
+      </trans-unit>
+      <trans-unit id="5121320475401958995" datatype="html">
+        <source>Select shape</source>
+      </trans-unit>
+      <trans-unit id="4296791989248007051" datatype="html">
+        <source> Symbol </source>
+      </trans-unit>
+      <trans-unit id="8106025670158480144" datatype="html">
+        <source>Symbol</source>
+      </trans-unit>
+      <trans-unit id="5456294096164486435" datatype="html">
+        <source>Fill color</source>
+      </trans-unit>
+      <trans-unit id="2622005448412870795" datatype="html">
+        <source>Line thickness</source>
+      </trans-unit>
+      <trans-unit id="45739481977493163" datatype="html">
+        <source>Size</source>
+      </trans-unit>
+      <trans-unit id="5201860154481115497" datatype="html">
+        <source>Rotation</source>
+      </trans-unit>
+      <trans-unit id="6428648557710235460" datatype="html">
+        <source> Label </source>
+      </trans-unit>
+      <trans-unit id="4077520913910941990" datatype="html">
+        <source>Label</source>
+      </trans-unit>
+      <trans-unit id="9074196091111459629" datatype="html">
+        <source>Insert coordinates as label</source>
+      </trans-unit>
+      <trans-unit id="2674630746570314789" datatype="html">
+        <source>Insert length as label</source>
+      </trans-unit>
+      <trans-unit id="2364558040255593699" datatype="html">
+        <source>Insert area as label</source>
+      </trans-unit>
+      <trans-unit id="7513076467032912668" datatype="html">
+        <source>Format</source>
+      </trans-unit>
+      <trans-unit id="9011959596901584887" datatype="html">
+        <source>Color</source>
+      </trans-unit>
+      <trans-unit id="2991656244957084973" datatype="html">
+        <source>Halo</source>
+      </trans-unit>
+      <trans-unit id="8148890784302351493" datatype="html">
+        <source> Line </source>
+      </trans-unit>
+      <trans-unit id="6907278263156340562" datatype="html">
+        <source>Thickness</source>
+      </trans-unit>
+      <trans-unit id="1111168969063432267" datatype="html">
+        <source>Stroke type</source>
+      </trans-unit>
+      <trans-unit id="6565791317520947983" datatype="html">
+        <source>Arrow</source>
+      </trans-unit>
+      <trans-unit id="4507197510030624867" datatype="html">
+        <source> Fill </source>
+      </trans-unit>
+      <trans-unit id="3278060427571346996" datatype="html">
+        <source>Striped fill</source>
+      </trans-unit>
+      <trans-unit id="8739768379499082142" datatype="html">
+        <source> Delete selected drawing object </source>
+      </trans-unit>
+      <trans-unit id="1806849521749778062" datatype="html">
+        <source> Delete complete drawing </source>
+      </trans-unit>
+      <trans-unit id="3714951931284732185" datatype="html">
+        <source>Delete drawing object</source>
+      </trans-unit>
+      <trans-unit id="6653174637147992490" datatype="html">
+        <source>Are you sure you want to delete this object?</source>
+      </trans-unit>
+      <trans-unit id="4093751429234430214" datatype="html">
+        <source>Delete complete drawing</source>
+      </trans-unit>
+      <trans-unit id="199261696863542699" datatype="html">
+        <source>Are you sure you want to delete the complete drawing? All objects will be deleted and this cannot be undone.</source>
+      </trans-unit>
+      <trans-unit id="6252070156626006029" datatype="html">
+        <source>None</source>
+      </trans-unit>
+      <trans-unit id="1701872860463509458" datatype="html">
+        <source>At the start</source>
+      </trans-unit>
+      <trans-unit id="7141623799937028795" datatype="html">
+        <source>At the end</source>
+      </trans-unit>
+      <trans-unit id="2194801884503605029" datatype="html">
+        <source>On both sides</source>
+      </trans-unit>
+      <trans-unit id="665290780831643282" datatype="html">
+        <source>On every segment</source>
+      </trans-unit>
+      <trans-unit id="3620188369327429839" datatype="html">
+        <source> Save </source>
+      </trans-unit>
+      <trans-unit id="577038887888857351" datatype="html">
+        <source> Add </source>
+      </trans-unit>
+      <trans-unit id="6660925946511264619" datatype="html">
+        <source> Delete </source>
+      </trans-unit>
+      <trans-unit id="5547981558491672240" datatype="html">
+        <source> Close </source>
+      </trans-unit>
+      <trans-unit id="6484605713638228635" datatype="html">
+        <source>Delete feature</source>
+      </trans-unit>
+      <trans-unit id="2813234969554043860" datatype="html">
+        <source>Are you sure you want to delete this feature? This cannot be undone.</source>
+      </trans-unit>
+      <trans-unit id="5310382024370344033" datatype="html">
+        <source>Select which feature to edit</source>
+      </trans-unit>
+      <trans-unit id="1566740715104637856" datatype="html">
+        <source>Hover over the buttons to highlight the feature on the map</source>
+      </trans-unit>
+      <trans-unit id="1384194580053922814" datatype="html">
+        <source>Feature</source>
+      </trans-unit>
+      <trans-unit id="1470721535561196151" datatype="html">
+        <source>Select layer to edit</source>
+      </trans-unit>
+      <trans-unit id="1353298487927664176" datatype="html">
+        <source>Point</source>
+      </trans-unit>
+      <trans-unit id="8543119714580512727" datatype="html">
+        <source>Line</source>
+      </trans-unit>
+      <trans-unit id="5706304253742249873" datatype="html">
+        <source>Polygon</source>
+      </trans-unit>
+      <trans-unit id="6984675258712446825" datatype="html">
+        <source>Rectangle</source>
+      </trans-unit>
+      <trans-unit id="8336049305072615544" datatype="html">
+        <source>Square</source>
+      </trans-unit>
+      <trans-unit id="353609361322700410" datatype="html">
+        <source>Edit feature</source>
+      </trans-unit>
+      <trans-unit id="5967475328579691291" datatype="html">
+        <source>You must be logged in to edit.</source>
+      </trans-unit>
+      <trans-unit id="6631143813109164853" datatype="html">
+        <source>There are no editable layers. Enable a layer to start editing.</source>
+      </trans-unit>
+      <trans-unit id="4465085913683915434" datatype="html">
+        <source>True</source>
+      </trans-unit>
+      <trans-unit id="3800326155195149498" datatype="html">
+        <source>False</source>
+      </trans-unit>
+      <trans-unit id="635920359174757774" datatype="html">
+        <source>Delete feature failed</source>
+      </trans-unit>
+      <trans-unit id="4862039871289314474" datatype="html">
+        <source>Feature deleted</source>
+      </trans-unit>
+      <trans-unit id="8767568712658845997" datatype="html">
+        <source>Update feature failed</source>
+      </trans-unit>
+      <trans-unit id="7338551160640141622" datatype="html">
+        <source>Feature updated</source>
+      </trans-unit>
+      <trans-unit id="5991400353338107382" datatype="html">
+        <source>Create feature failed</source>
+      </trans-unit>
+      <trans-unit id="4391722313965995518" datatype="html">
+        <source>Feature created</source>
+      </trans-unit>
+      <trans-unit id="447886253162748368" datatype="html">
+        <source>Something went wrong while getting feature info, please try again</source>
+      </trans-unit>
+      <trans-unit id="2463987900933409187" datatype="html">
+        <source>No features found</source>
+      </trans-unit>
+      <trans-unit id="190391792203243214" datatype="html">
+        <source>Object Information</source>
+      </trans-unit>
+      <trans-unit id="8132424293432274889" datatype="html">
+        <source> Back </source>
+      </trans-unit>
+      <trans-unit id="3971100408152984961" datatype="html">
+        <source> Next </source>
+      </trans-unit>
+      <trans-unit id="846829935027482468" datatype="html">
+        <source>Could not load feature info</source>
+      </trans-unit>
+      <trans-unit id="4210786700443767591" datatype="html">
+        <source>Create new filter</source>
+      </trans-unit>
+      <trans-unit id="910026778839409110" datatype="html">
+        <source>Add filter</source>
+      </trans-unit>
+      <trans-unit id="3284064475686067678" datatype="html">
+        <source>Spatial</source>
+      </trans-unit>
+      <trans-unit id="5948500443676279563" datatype="html">
+        <source> Attribute filter </source>
+      </trans-unit>
+      <trans-unit id="1159896432313988227" datatype="html">
+        <source> Spatial filter </source>
+      </trans-unit>
+      <trans-unit id="6151416851572883297" datatype="html">
+        <source> Enabled </source>
+      </trans-unit>
+      <trans-unit id="7659095010913722212" datatype="html">
+        <source>Filtering</source>
+      </trans-unit>
+      <trans-unit id="1795253927126289834" datatype="html">
+        <source>Delete filter?</source>
+      </trans-unit>
+      <trans-unit id="2034013126574084259" datatype="html">
+        <source>Are you sure you want to delete this filter?</source>
+      </trans-unit>
+      <trans-unit id="2396023660169038101" datatype="html">
+        <source>Buffer in meters</source>
+      </trans-unit>
+      <trans-unit id="5840182235317608111" datatype="html">
+        <source>Select layer(s)</source>
+      </trans-unit>
+      <trans-unit id="6784300710399344870" datatype="html">
+        <source>Select layer to use as filter</source>
+      </trans-unit>
+      <trans-unit id="7166586286330236896" datatype="html">
+        <source>Add spatial filter</source>
+      </trans-unit>
+      <trans-unit id="3424403955336308" datatype="html">
+        <source>No layers available to filter on</source>
+      </trans-unit>
+      <trans-unit id="4500527005289816593" datatype="html">
+        <source>Select the layer(s) you want to filter</source>
+      </trans-unit>
+      <trans-unit id="9055458448871526906" datatype="html">
+        <source>Filtering the selected <x id="ICU" equiv-text="{layerCount, plural, =1 {layer} other {layers}}" xid="3211024763218655061"/> can be done by drawing geometry and/or selecting a reference layer.</source>
+      </trans-unit>
+      <trans-unit id="3211024763218655061" datatype="html">
+        <source>{VAR_PLURAL, plural, =1 {layer} other {layers}}</source>
+      </trans-unit>
+      <trans-unit id="3760107703056991345" datatype="html">
+        <source>The geometries from this reference layer will then be used to filter the selected <x id="ICU" equiv-text="{layerCount, plural, =1 {layer} other {layers}}" xid="3211024763218655061"/>.</source>
+      </trans-unit>
+      <trans-unit id="2157837076719069518" datatype="html">
+        <source>Draw filter geometry</source>
+      </trans-unit>
+      <trans-unit id="1721778463973049986" datatype="html">
+        <source>Select reference layer</source>
+      </trans-unit>
+      <trans-unit id="7082262526265713852" datatype="html">
+        <source>Loading reference geometry</source>
+      </trans-unit>
+      <trans-unit id="4234154880140764160" datatype="html">
+        <source>Optionally you can buffer the geometry</source>
+      </trans-unit>
+      <trans-unit id="3162705828617024801" datatype="html">
+        <source>Close filter form</source>
+      </trans-unit>
+      <trans-unit id="4950695399533007731" datatype="html">
+        <source>Delete this filter</source>
+      </trans-unit>
+      <trans-unit id="165959881574812660" datatype="html">
+        <source>Save filter</source>
+      </trans-unit>
+      <trans-unit id="1671554457595569228" datatype="html">
+        <source>Failed to load legend for</source>
+      </trans-unit>
+      <trans-unit id="8321457629272427993" datatype="html">
+        <source>Logged in as</source>
+      </trans-unit>
+      <trans-unit id="2288434170409520630" datatype="html">
+        <source>Go to admin</source>
+      </trans-unit>
+      <trans-unit id="1062178673270167416" datatype="html">
+        <source> Export map </source>
+      </trans-unit>
+      <trans-unit id="1920957033639148722" datatype="html">
+        <source>PDF document</source>
+      </trans-unit>
+      <trans-unit id="7982268423763340284" datatype="html">
+        <source>Map image</source>
+      </trans-unit>
+      <trans-unit id="1946328750043131240" datatype="html">
+        <source>Include drawing</source>
+      </trans-unit>
+      <trans-unit id="4364462847409581262" datatype="html">
+        <source>Image size in millimeters:</source>
+      </trans-unit>
+      <trans-unit id="2018922024247045709" datatype="html">
+        <source>Width</source>
+      </trans-unit>
+      <trans-unit id="5281001311618507204" datatype="html">
+        <source>Range: 50 - 600</source>
+      </trans-unit>
+      <trans-unit id="3033623772164647792" datatype="html">
+        <source>Height</source>
+      </trans-unit>
+      <trans-unit id="3330040801415354394" datatype="html">
+        <source>DPI</source>
+      </trans-unit>
+      <trans-unit id="3554648966284537052" datatype="html">
+        <source>Range: 90 - 600</source>
+      </trans-unit>
+      <trans-unit id="3826728385291699828" datatype="html">
+        <source> Image size in pixels: <x id="INTERPOLATION" equiv-text="{{getImageResolution()}}"/> </source>
+      </trans-unit>
+      <trans-unit id="6288365980016802803" datatype="html">
+        <source> Width/height ratio: <x id="INTERPOLATION" equiv-text="{{getImageRatio() | number: &apos;1.1-2&apos; }}"/> </source>
+      </trans-unit>
+      <trans-unit id="1431493389100814651" datatype="html">
+        <source>Download map image</source>
+      </trans-unit>
+      <trans-unit id="1403507799985368460" datatype="html">
+        <source>Landscape</source>
+      </trans-unit>
+      <trans-unit id="9024440163320108713" datatype="html">
+        <source>Portrait</source>
+      </trans-unit>
+      <trans-unit id="7438609089996892520" datatype="html">
+        <source>A4</source>
+      </trans-unit>
+      <trans-unit id="4346630494193384330" datatype="html">
+        <source>A3</source>
+      </trans-unit>
+      <trans-unit id="4636291172448223646" datatype="html">
+        <source>Footer</source>
+      </trans-unit>
+      <trans-unit id="4198293539412995628" datatype="html">
+        <source>Add legend for layer</source>
+      </trans-unit>
+      <trans-unit id="1605472530146889333" datatype="html">
+        <source>Automatically open print dialog</source>
+      </trans-unit>
+      <trans-unit id="5715539409661008253" datatype="html">
+        <source>Download map PDF</source>
+      </trans-unit>
+      <trans-unit id="7751500190109896263" datatype="html">
+        <source>No visible layers.</source>
+      </trans-unit>
+      <trans-unit id="7498219936774990397" datatype="html">
+        <source>Creating map, this may take a while.</source>
+      </trans-unit>
+      <trans-unit id="7646121507924012599" datatype="html">
+        <source>Filter by layer name...</source>
+      </trans-unit>
+      <trans-unit id="1414622339183492234" datatype="html">
+        <source>Available layers</source>
+      </trans-unit>
+      <trans-unit id="3753134266199638019" datatype="html">
+        <source>Reset opacity</source>
+      </trans-unit>
+      <trans-unit id="2847242713388756885" datatype="html">
+        <source>
+          <x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="t-icon svgIcon=&quot;reset&quot;&gt;"/>
+          <x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/button&gt;"/>
+        </source>
+      </trans-unit>
+      <trans-unit id="6293078117617468574" datatype="html">
+        <source>Details for <x id="INTERPOLATION" equiv-text="{{node.layer?.title || node.name}}"/></source>
+      </trans-unit>
+      <trans-unit id="9060173675400473919" datatype="html">
+        <source>Close details</source>
+      </trans-unit>
+      <trans-unit id="1454116029518113968" datatype="html">
+        <source>Filter layers</source>
+      </trans-unit>
+      <trans-unit id="9198130089685180173" datatype="html">
+        <source>Toggle all layers on</source>
+      </trans-unit>
+      <trans-unit id="4463867724650981374" datatype="html">
+        <source>Toggle all layers off</source>
+      </trans-unit>
+      <trans-unit id="5126955618430711976" datatype="html">
+        <source>Coordinate picker</source>
+      </trans-unit>
+      <trans-unit id="5170167478867715708" datatype="html">
+        <source>Selected coordinates: <x id="PH" equiv-text="coordinates"/></source>
+      </trans-unit>
+      <trans-unit id="4323470180912194028" datatype="html">
+        <source>Copy</source>
+      </trans-unit>
+      <trans-unit id="4648900870671159218" datatype="html">
+        <source>Success</source>
+      </trans-unit>
+      <trans-unit id="6366226732488883423" datatype="html">
+        <source>Failed to copy to clipboard</source>
+      </trans-unit>
+      <trans-unit id="3097580983754839114" datatype="html">
+        <source>Zoom to location</source>
+      </trans-unit>
+      <trans-unit id="2238336782658338996" datatype="html">
+        <source>Fetching location failed: permission denied</source>
+      </trans-unit>
+      <trans-unit id="1850931766141263546" datatype="html">
+        <source>Fetching location failed: location unavailable</source>
+      </trans-unit>
+      <trans-unit id="4443639379302859382" datatype="html">
+        <source>Fetching location failed: timeout</source>
+      </trans-unit>
+      <trans-unit id="3882439334368246349" datatype="html">
+        <source>Measure length</source>
+      </trans-unit>
+      <trans-unit id="8569609011590722949" datatype="html">
+        <source>Measure area</source>
+      </trans-unit>
+      <trans-unit id="5381054561352410435" datatype="html">
+        <source>Search location</source>
+      </trans-unit>
+      <trans-unit id="5377660698191427239" datatype="html">
+        <source> Type at least <x id="INTERPOLATION" equiv-text="{{ minLength }}"/> characters to start searching </source>
+      </trans-unit>
+      <trans-unit id="2236371857137398396" datatype="html">
+        <source> No results found </source>
+      </trans-unit>
+      <trans-unit id="4597603985344250124" datatype="html">
+        <source>Data by [PDOK](https://pdok.nl)</source>
+      </trans-unit>
+      <trans-unit id="4832201423302995881" datatype="html">
+        <source>Open Streetview</source>
+      </trans-unit>
+      <trans-unit id="7260795646574446386" datatype="html">
+        <source>Zoom to initial extent</source>
+      </trans-unit>
+      <trans-unit id="6500061599200357251" datatype="html">
+        <source>Zoom in</source>
+      </trans-unit>
+      <trans-unit id="944767796496567082" datatype="html">
+        <source>Zoom out</source>
+      </trans-unit>
+      <trans-unit id="2838129566011107043" datatype="html">
+        <source>Condition</source>
+      </trans-unit>
+      <trans-unit id="739336552178553107" datatype="html">
+        <source>Select condition</source>
+      </trans-unit>
+      <trans-unit id="6555318547274416232" datatype="html">
+        <source>Value</source>
+      </trans-unit>
+      <trans-unit id="5203279511751768967" datatype="html">
+        <source>From</source>
+      </trans-unit>
+      <trans-unit id="706270083777559326" datatype="html">
+        <source>Until</source>
+      </trans-unit>
+      <trans-unit id="1601518217526203092" datatype="html">
+        <source> Case sensitive </source>
+      </trans-unit>
+      <trans-unit id="3550956596122180517" datatype="html">
+        <source> Invert condition </source>
+      </trans-unit>
+      <trans-unit id="1648302799385755181" datatype="html">
+        <source>Deselect all values</source>
+      </trans-unit>
+      <trans-unit id="7960697062777566925" datatype="html">
+        <source>Select all values</source>
+      </trans-unit>
+      <trans-unit id="4739818603756173797" datatype="html">
+        <source>Summary</source>
+      </trans-unit>
+      <trans-unit id="3929281485914893910" datatype="html">
+        <source>and</source>
+      </trans-unit>
+      <trans-unit id="6627551976444260400" datatype="html">
+        <source>or</source>
+      </trans-unit>
+      <trans-unit id="6424246633820870206" datatype="html">
+        <source>Equals</source>
+      </trans-unit>
+      <trans-unit id="6058990727665238036" datatype="html">
+        <source>equals to</source>
+      </trans-unit>
+      <trans-unit id="7732309408488818531" datatype="html">
+        <source>Greater than</source>
+      </trans-unit>
+      <trans-unit id="890702457876425132" datatype="html">
+        <source>is greater than</source>
+      </trans-unit>
+      <trans-unit id="7155362017570031080" datatype="html">
+        <source>Smaller than</source>
+      </trans-unit>
+      <trans-unit id="1309979618532194127" datatype="html">
+        <source>is smaller than</source>
+      </trans-unit>
+      <trans-unit id="9087788064443057357" datatype="html">
+        <source>Greater than or equal to</source>
+      </trans-unit>
+      <trans-unit id="7437056168294682826" datatype="html">
+        <source>is greater than or equal to</source>
+      </trans-unit>
+      <trans-unit id="1039904949375449849" datatype="html">
+        <source>Smaller than or equal to</source>
+      </trans-unit>
+      <trans-unit id="4403693524033419513" datatype="html">
+        <source>is smaller than or equal to</source>
+      </trans-unit>
+      <trans-unit id="3890131054593067798" datatype="html">
+        <source>Between</source>
+      </trans-unit>
+      <trans-unit id="103862121239127059" datatype="html">
+        <source>is between</source>
+      </trans-unit>
+      <trans-unit id="6238291467288576076" datatype="html">
+        <source>Contains</source>
+      </trans-unit>
+      <trans-unit id="326106955650253946" datatype="html">
+        <source>contains</source>
+      </trans-unit>
+      <trans-unit id="8863611568205528132" datatype="html">
+        <source>Starts with</source>
+      </trans-unit>
+      <trans-unit id="5840053709154100532" datatype="html">
+        <source>starts with</source>
+      </trans-unit>
+      <trans-unit id="7402672269023827698" datatype="html">
+        <source>Ends with</source>
+      </trans-unit>
+      <trans-unit id="6387705929814330940" datatype="html">
+        <source>ends with</source>
+      </trans-unit>
+      <trans-unit id="8990769651805334695" datatype="html">
+        <source>On</source>
+      </trans-unit>
+      <trans-unit id="1008100476778775555" datatype="html">
+        <source>is on</source>
+      </trans-unit>
+      <trans-unit id="6371576811194810854" datatype="html">
+        <source>After</source>
+      </trans-unit>
+      <trans-unit id="4557203537565915133" datatype="html">
+        <source>is after</source>
+      </trans-unit>
+      <trans-unit id="1218334388194408974" datatype="html">
+        <source>Before</source>
+      </trans-unit>
+      <trans-unit id="114923036829185897" datatype="html">
+        <source>is before</source>
+      </trans-unit>
+      <trans-unit id="5215254897571607793" datatype="html">
+        <source>Is true</source>
+      </trans-unit>
+      <trans-unit id="8366095040965494104" datatype="html">
+        <source>is true</source>
+      </trans-unit>
+      <trans-unit id="3540525584759007757" datatype="html">
+        <source>Is false</source>
+      </trans-unit>
+      <trans-unit id="1767917250203365119" datatype="html">
+        <source>is false</source>
+      </trans-unit>
+      <trans-unit id="6504828068656625171" datatype="html">
+        <source>Is null</source>
+      </trans-unit>
+      <trans-unit id="3453198530328338392" datatype="html">
+        <source>is null</source>
+      </trans-unit>
+      <trans-unit id="5728801976868426890" datatype="html">
+        <source>Choose values</source>
+      </trans-unit>
+      <trans-unit id="4721871668005705294" datatype="html">
+        <source>contains one of the values</source>
+      </trans-unit>
+      <trans-unit id="2590576575818264125" datatype="html">
+        <source>Error loading reference layer geometries</source>
+      </trans-unit>
+      <trans-unit id="322394824231125404" datatype="html">
+        <source>Draw point</source>
+      </trans-unit>
+      <trans-unit id="7485144677537501434" datatype="html">
+        <source>Draw line</source>
+      </trans-unit>
+      <trans-unit id="7671991962349582901" datatype="html">
+        <source>Draw polygon</source>
+      </trans-unit>
+      <trans-unit id="2781833388478062784" datatype="html">
+        <source>Draw square</source>
+      </trans-unit>
+      <trans-unit id="4387313461891481332" datatype="html">
+        <source>Draw rectangle</source>
+      </trans-unit>
+      <trans-unit id="311011773985854729" datatype="html">
+        <source>Draw circle</source>
+      </trans-unit>
+      <trans-unit id="7227313553216215040" datatype="html">
+        <source>Draw ellipse</source>
+      </trans-unit>
+      <trans-unit id="5253475635167844493" datatype="html">
+        <source>Draw star</source>
+      </trans-unit>
+      <trans-unit id="2791229108029362448" datatype="html">
+        <source>Draw label</source>
+      </trans-unit>
+      <trans-unit id="8970593026551293672" datatype="html">
+        <source>Delete selected feature</source>
+      </trans-unit>
+      <trans-unit id="5129304310134933955" datatype="html">
+        <source>Could not load map settings</source>
       </trans-unit>
       <trans-unit id="447939075326988690" datatype="html">
         <source>Login failed, please try again</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/pages/login/login-form/login-form.component.ts</context>
-          <context context-type="linenumber">62</context>
-        </context-group>
+      </trans-unit>
+      <trans-unit id="993583968941800921" datatype="html">
+        <source>You are logged in <x id="PH" equiv-text="userLabel"/> but do not have proper roles to access the application. Please contact your administrator.</source>
       </trans-unit>
       <trans-unit id="3213171010465652016" datatype="html">
         <source>Something went wrong while loading the application. Please check if the URL is correct</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/pages/viewer-app/viewer-app.component.html</context>
-          <context context-type="linenumber">5</context>
-        </context-group>
       </trans-unit>
-      <trans-unit id="1716296864993085110" datatype="html">
-        <source>Could not find or load the requested application</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/services/load-application.service.ts</context>
-          <context context-type="linenumber">19</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1323168987955447534" datatype="html">
-        <source>Could not load list of components</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/services/load-application.service.ts</context>
-          <context context-type="linenumber">20</context>
-        </context-group>
+      <trans-unit id="4885612713105026262" datatype="html">
+        <source>Could not find or load the requested viewer</source>
       </trans-unit>
       <trans-unit id="4239116036101171588" datatype="html">
         <source>map.pdf</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/services/map-pdf/map-pdf.service.ts</context>
-          <context context-type="linenumber">101</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="7213937044758184634" datatype="html">
         <source>Created on </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/core/src/lib/services/map-pdf/map-pdf.service.ts</context>
-          <context context-type="linenumber">163</context>
-        </context-group>
+      </trans-unit>
+      <trans-unit id="8950682845693208811" datatype="html">
+        <source>Unable to export map canvas to image: <x id="PH" equiv-text="e"/></source>
       </trans-unit>
       <trans-unit id="1002760959716392484" datatype="html">
         <source>Color code</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/shared/src/lib/components/color-picker/color-picker.component.html</context>
-          <context context-type="linenumber">34</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="7518736402145395939" datatype="html">
         <source> Color is required </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/shared/src/lib/components/color-picker/color-picker.component.html</context>
-          <context context-type="linenumber">36,38</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="3542042671420335679" datatype="html">
         <source>No</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/shared/src/lib/components/confirm-dialog/confirm-dialog.component.html</context>
-          <context context-type="linenumber">10</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="2807800733729323332" datatype="html">
         <source>Yes</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/shared/src/lib/components/confirm-dialog/confirm-dialog.component.html</context>
-          <context context-type="linenumber">11</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="6563353603432420930" datatype="html">
         <source>Background layer selection</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/shared/src/lib/components/split-button/split-button.component.html</context>
-          <context context-type="linenumber">14</context>
-        </context-group>
       </trans-unit>
     </body>
   </file>
