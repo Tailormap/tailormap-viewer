@@ -91,6 +91,7 @@
     "jest-fail-on-console": "^3.1.1",
     "jest-junit": "^16.0.0",
     "jest-preset-angular": "^13.1.1",
+    "ng-extract-i18n-merge": "^2.7.1",
     "ng-packagr": "^16.2.0",
     "ts-jest": "^29.1.1",
     "tsutils-etc": "^1.4.2",
