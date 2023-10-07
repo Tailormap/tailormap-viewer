@@ -9,9 +9,8 @@
 
 <div class="map-control-button-container" *ngIf="small_screens_icon">
   <button mat-flat-button
-          i18n-tmTooltip
           class="map-control-button"
-          tmTooltip="Background layer selection"
+          [tmTooltip]="tooltip || ''"
           [matMenuTriggerFor]="dropdownMenu">
     <mat-icon [svgIcon]="small_screens_icon"></mat-icon>
   </button>

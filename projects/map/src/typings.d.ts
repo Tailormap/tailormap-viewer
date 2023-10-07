@@ -1,5 +1,3 @@
-declare function $localize(messageParts: TemplateStringsArray, ...expressions: readonly any[]): string;
-
 declare module 'jsts/org/locationtech/jts/io' {
   export class OL3Parser {
     constructor();

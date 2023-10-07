@@ -139,6 +139,38 @@
         },
         "extract-i18n": {
           "builder": "ng-extract-i18n-merge:ng-extract-i18n-merge",
+          "configurations": {
+            "shared": {
+              "removeIdsWithPrefix": [
+                "core.",
+                "admin-core."
+              ],
+              "sourceFile": "messages.shared.en-US.xlf",
+              "targetFiles": [
+                "messages.shared.nl.xlf"
+              ]
+            },
+            "core": {
+              "removeIdsWithPrefix": [
+                "shared.",
+                "admin-core."
+              ],
+              "sourceFile": "messages.core.en-US.xlf",
+              "targetFiles": [
+                "messages.core.nl.xlf"
+              ]
+            },
+            "admin-core": {
+              "removeIdsWithPrefix": [
+                "core.",
+                "shared."
+              ],
+              "sourceFile": "messages.admin-core.en-US.xlf",
+              "targetFiles": [
+                "messages.admin-core.nl.xlf"
+              ]
+            }
+          },
           "options": {
             "browserTarget": "app:build",
             "format": "xlf",

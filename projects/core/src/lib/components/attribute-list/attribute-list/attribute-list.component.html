@@ -1,7 +1,7 @@
 <tm-bottom-panel [isVisible$]="isVisible$" [title$]="title$" (closed)="onCloseClick()">
 
     <span class="no-tabs" *ngIf="tabs.length === 0">
-      <ng-template #noLayersMsg><span i18n>No layers with administrative data found</span></ng-template>
+      <ng-template #noLayersMsg><span i18n="@@core.attribute-list.no-data-found">No layers with administrative data found</span></ng-template>
       <span *ngIf="hasLayersWithAttributes$ | async; else: noLayersMsg">
         <mat-spinner color="primary" mode="indeterminate" diameter="20"></mat-spinner>
       </span>

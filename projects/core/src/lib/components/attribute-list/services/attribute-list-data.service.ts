@@ -23,7 +23,7 @@ export class AttributeListDataService implements OnDestroy {
 
   private destroyed = new Subject();
 
-  public static DEFAULT_ERROR_MESSAGE = $localize `Failed to load attribute list data`;
+  public static DEFAULT_ERROR_MESSAGE = $localize `:@@core.attribute-list.failed-loading-data:Failed to load attribute list data`;
   private static FILTER_GEOMETRY_COLUMNS = true;
 
   constructor(
@@ -99,7 +99,7 @@ export class AttributeListDataService implements OnDestroy {
       catchError(() => of(null)),
       map((response): LoadAttributeListDataResultModel => {
         if (response === null) {
-          return AttributeListDataService.getErrorResult(selectedData.id, $localize `Failed to load attribute list data for ${tab.label}`);
+          return AttributeListDataService.getErrorResult(selectedData.id, $localize `:@@core.attribute-list.failed-loading-data-for:Failed to load attribute list data for ${tab.label}`);
         }
         return {
           id: selectedData.id,

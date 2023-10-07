@@ -17,5 +17,5 @@ export const initialAttributeListState: AttributeListState = {
   visible: false,
   tabs: [],
   data: [],
-  panelTitle: $localize `Attribute list`,
+  panelTitle: $localize `:@@core.attribute-list.title:Attribute list`,
 };

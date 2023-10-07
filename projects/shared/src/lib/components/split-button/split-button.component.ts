@@ -35,6 +35,9 @@ export class SplitButtonComponent {
   @Input()
   public small_screens_icon: string | undefined;
 
+  @Input()
+  public tooltip: string | undefined;
+
   public selectedOptionId: string | null = null;
   public selectedOptionObject: SplitButtonOptionModel | null = null;
   public optionsList: SplitButtonOptionModel[] = [];

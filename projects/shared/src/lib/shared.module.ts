@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { SharedImportsModule } from './shared-imports.module';
 import { SharedComponentsModule } from './components';
-import { AutoFocusDirective, TooltipDirective } from './directives';
 import { OverlayComponent } from './services/overlay/overlay/overlay.component';
+import { SharedDirectivesModule } from './directives/shared-directives.module';
 import { HtmlifyPipe } from './pipes/htmlify.pipe';
 
 // Importing CSS helper to make sure the vh/vw CSS variables are available
@@ -13,18 +13,16 @@ import { CssHelper } from './helpers';
   imports: [
     SharedImportsModule,
     SharedComponentsModule,
+    SharedDirectivesModule,
   ],
   declarations: [
-    AutoFocusDirective,
-    TooltipDirective,
     HtmlifyPipe,
     OverlayComponent,
   ],
   exports: [
     SharedImportsModule,
     SharedComponentsModule,
-    AutoFocusDirective,
-    TooltipDirective,
+    SharedDirectivesModule,
     HtmlifyPipe,
     OverlayComponent,
   ],

@@ -4,10 +4,6 @@
 // eslint-disable-next-line @typescript-eslint/triple-slash-reference
 /// <reference path="./typings.d.ts" />
 
-if (typeof window.$localize === 'undefined') {
-  window.$localize = (messageParts: TemplateStringsArray) => messageParts.join('');
-}
-
 export * from './lib/models';
 export * from './lib/map-service/map.service';
 export * from './lib/map/map.component';
