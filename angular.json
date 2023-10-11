@@ -23,7 +23,11 @@
         "sourceLocale": "en",
         "locales": {
           "nl": {
-            "translation": "locale/messages.nl.xlf"
+            "translation": [
+              "projects/core/assets/locale/messages.core.nl.xlf",
+              "projects/shared/assets/locale/messages.shared.nl.xlf",
+              "projects/admin-core/assets/locale/messages.admin-core.nl.xlf"
+            ]
           }
         }
       },

@@ -3,31 +3,31 @@
     <body>
       <trans-unit id="shared.color-picker.color-code" datatype="html">
         <source>Color code</source>
-        <target state="new">Kleurcode</target>
+        <target">Kleurcode</target>
       </trans-unit>
       <trans-unit id="shared.color-picker.color-required" datatype="html">
         <source>Color is required</source>
-        <target state="new">Kleur is vereist</target>
+        <target">Kleur is vereist</target>
       </trans-unit>
       <trans-unit id="shared.common.no" datatype="html">
         <source>No</source>
-        <target state="new">Nee</target>
+        <target">Nee</target>
       </trans-unit>
       <trans-unit id="shared.common.yes" datatype="html">
         <source>Yes</source>
-        <target state="new">Ja</target>
+        <target">Ja</target>
       </trans-unit>
       <trans-unit id="shared.login-form.password" datatype="html">
         <source>Password</source>
-        <target state="new">Wachtwoord</target>
+        <target">Wachtwoord</target>
       </trans-unit>
       <trans-unit id="shared.login-form.title" datatype="html">
         <source>Login</source>
-        <target state="new">Inloggen</target>
+        <target">Inloggen</target>
       </trans-unit>
       <trans-unit id="shared.login-form.username" datatype="html">
         <source>Username</source>
-        <target state="new">Gebruikersnaam</target>
+        <target">Gebruikersnaam</target>
       </trans-unit>
     </body>
   </file>
