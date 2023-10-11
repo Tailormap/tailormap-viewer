@@ -99,6 +99,7 @@ export class AttributeListDataService implements OnDestroy {
       catchError(() => of(null)),
       map((response): LoadAttributeListDataResultModel => {
         if (response === null) {
+          // eslint-disable-next-line max-len
           return AttributeListDataService.getErrorResult(selectedData.id, $localize `:@@core.attribute-list.failed-loading-data-for:Failed to load attribute list data for ${tab.label}`);
         }
         return {
