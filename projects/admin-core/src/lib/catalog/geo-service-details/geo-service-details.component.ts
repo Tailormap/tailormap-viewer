@@ -85,7 +85,7 @@ export class GeoServiceDetailsComponent implements OnInit, OnDestroy {
       .subscribe(updatedGeoService => {
         if (updatedGeoService && updatedGeoService.protocol !== GeoServiceProtocolEnum.XYZ) {
           this.checkToRefresh(geoService, updatedGeoService);
-          this.adminSnackbarService.showMessage($localize `Service updated`);
+          this.adminSnackbarService.showMessage($localize `:@@admin-core.catalog.service-updated:Service updated`);
           this.updatedGeoService = null;
           this.updatedDefaultLayerSettings = null;
         }
@@ -102,8 +102,9 @@ export class GeoServiceDetailsComponent implements OnInit, OnDestroy {
       return;
     }
     this.confirmDialog.confirm$(
-      $localize `Refresh service?`,
-      $localize `The settings for the service are updated. Do you want to refresh the service to refresh the capabilities and layers?`,
+      $localize `:@@admin-core.catalog.refresh-service-confirm:Refresh service?`,
+      // eslint-disable-next-line max-len
+      $localize `:@@admin-core.catalog.refresh-service-confirm-message:The settings for the service are updated. Do you want to refresh the service to refresh the capabilities and layers?`,
     )
       .pipe(takeUntil(this.destroyed))
       .subscribe(result => {
@@ -119,7 +120,7 @@ export class GeoServiceDetailsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyed))
       .subscribe(success => {
         if (success) {
-          this.adminSnackbarService.showMessage($localize `Service refreshed`);
+          this.adminSnackbarService.showMessage($localize `:@@admin-core.catalog.service-refreshed:Service refreshed`);
         }
         this.refreshingSubject.next(false);
       });
@@ -136,8 +137,8 @@ export class GeoServiceDetailsComponent implements OnInit, OnDestroy {
             }).afterClosed().pipe(map(() => false));
           }
           return this.confirmDialog.confirm$(
-            `Delete service ${geoService.title}`,
-            `Are you sure you want to delete service ${geoService.title}? This action cannot be undone.`,
+            $localize `:@@admin-core.catalog.delete-service-confirm:Delete service ${geoService.title}`,
+            $localize `:@@admin-core.catalog.delete-service-confirm-message:Are you sure you want to delete service ${geoService.title}? This action cannot be undone.`,
             true,
           );
         }),
@@ -152,7 +153,7 @@ export class GeoServiceDetailsComponent implements OnInit, OnDestroy {
         if (!response.success) {
           return;
         }
-        this.adminSnackbarService.showMessage($localize `Service ${geoService.title} removed`);
+        this.adminSnackbarService.showMessage($localize `:@@admin-core.catalog.service-removed:Service ${geoService.title} removed`);
         this.router.navigateByUrl('/admin/catalog');
       });
   }

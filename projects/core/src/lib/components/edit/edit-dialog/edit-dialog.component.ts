@@ -194,8 +194,8 @@ export class EditDialogComponent {
             return of(null);
           }
           return this.confirmService.confirm$(
-            $localize `Delete feature`,
-            $localize `Are you sure you want to delete this feature? This cannot be undone.`,
+            $localize `:@@core.edit.delete-feature-confirm:Delete feature`,
+            $localize `:@@core.edit.delete-feature-confirm-message:Are you sure you want to delete this feature? This cannot be undone.`,
             true,
           ).pipe(
             take(1),

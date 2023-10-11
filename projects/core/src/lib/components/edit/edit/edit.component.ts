@@ -26,9 +26,9 @@ export class EditComponent implements OnInit {
   public editableLayers$ = this.store$.select(selectEditableLayers);
   public layer = new FormControl();
 
-  private defaultTooltip = $localize `Edit feature`;
-  private notLoggedInTooltip = $localize `You must be logged in to edit.`;
-  private noLayersTooltip = $localize `There are no editable layers. Enable a layer to start editing.`;
+  private defaultTooltip = $localize `:@@core.edit.edit-feature-tooltip:Edit feature`;
+  private notLoggedInTooltip = $localize `:@@core.edit.require-login-tooltip:You must be logged in to edit.`;
+  private noLayersTooltip = $localize `:@@core.edit.no-editable-layers-tooltip:There are no editable layers. Enable a layer to start editing.`;
 
   public tooltip = this.defaultTooltip;
   public disabled = false;

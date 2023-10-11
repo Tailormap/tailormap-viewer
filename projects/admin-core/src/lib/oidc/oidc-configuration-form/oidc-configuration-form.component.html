@@ -1,34 +1,34 @@
 <form [formGroup]="oidcConfigurationForm">
   <mat-form-field>
-    <mat-label i18n>Name</mat-label>
+    <mat-label i18n="@@admin-core.common.name">Name</mat-label>
     <input matInput
            tmAutoFocus
            placeholder="Name"
-           i18n-placeholder
+           i18n-placeholder="@@admin-core.common.name"
            formControlName="name"
     />
   </mat-form-field>
   <mat-form-field>
-    <mat-label i18n>Issuer URL</mat-label>
+    <mat-label i18n="@@admin-core.oidc.issuer-url">Issuer URL</mat-label>
     <input matInput formControlName="issuerUrl" />
   </mat-form-field>
   <mat-form-field>
-    <mat-label i18n>Client ID</mat-label>
+    <mat-label i18n="@@admin-core.oidc.client-id">Client ID</mat-label>
     <input matInput formControlName="clientId" />
   </mat-form-field>
   <mat-form-field>
-    <mat-label i18n>Client Secret</mat-label>
+    <mat-label i18n="@@admin-core.oidc.client-secret">Client Secret</mat-label>
     <input matInput formControlName="clientSecret" />
   </mat-form-field>
   <mat-form-field>
-    <mat-label i18n>User name attribute</mat-label>
-    <input matInput placeholder="(name, sub, email, etc)" i18n-placeholder formControlName="userNameAttribute" />
+    <mat-label i18n="@@admin-core.oidc.username-attribute">User name attribute</mat-label>
+    <input matInput placeholder="(name, sub, email, etc)" i18n-placeholder="@@admin-core.oidc.username-attribute-placeholder" formControlName="userNameAttribute" />
   </mat-form-field>
   <mat-form-field>
-    <mat-label i18n>Status</mat-label>
+    <mat-label i18n="@@admin-core.oidc.status">Status</mat-label>
     <textarea matNativeControl disabled [value]="oidcConfiguration?.status ?? ''"></textarea>
   </mat-form-field>
   <p>
-    <small>Use <code>{{redirectUrl}}</code> as redirect URL in your IdP.</small>
+    <small i18n="@@admin-core.oidc.use-redirect-url">Use <code>{{redirectUrl}}</code> as redirect URL in your IdP.</small>
   </p>
 </form>

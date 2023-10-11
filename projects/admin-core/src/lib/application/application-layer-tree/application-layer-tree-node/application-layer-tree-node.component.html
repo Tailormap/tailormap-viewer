@@ -11,14 +11,14 @@
     <button *ngIf="isLayer()"
             mat-icon-button
             matTooltip="Remove layer from application"
-            i18n-matTooltip
+            i18n-matTooltip="@@admin-core.application.remove-layer"
             (click)="removeNode(node.id)">
       <mat-icon svgIcon="close"></mat-icon>
     </button>
     <button *ngIf="!isNonRoot()"
             mat-icon-button
             matTooltip="Add sub folder"
-            i18n-matTooltip
+            i18n-matTooltip="@@admin-core.application.add-sub-folder"
             (click)="addFolder(node.id)">
       <mat-icon svgIcon="plus"></mat-icon>
     </button>

@@ -1,16 +1,16 @@
-<h2 i18n>Identity providers</h2>
+<h2 i18n="@@admin-core.oidc.identity-providers">Identity providers</h2>
 <ng-container *ngIf="oidcConfigurationsLoadStatus$ | async as oidcConfigurationsLoadStatus">
   <mat-spinner *ngIf="oidcConfigurationsLoadStatus === 'LOADING'" diameter="20" mode="indeterminate"></mat-spinner>
   <ng-container *ngIf="errorMessage$ | async as message">
     <tm-error-message [message]="message"></tm-error-message>
-    <button mat-raised-button color="primary" (click)="onRetryClick()" i18n>Retry</button>
+    <button mat-raised-button color="primary" (click)="onRetryClick()" i18n="@@admin-core.common.retry">Retry</button>
   </ng-container>
   <div *ngIf="oidcConfigurationsLoadStatus === 'LOADED'"
        class="form-group has-search">
     <mat-form-field appearance="outline">
-      <mat-label i18n>Filter identity providers</mat-label>
+      <mat-label i18n="@@admin-core.oidc.filter-identity-providers">Filter identity providers</mat-label>
       <input [formControl]="filter"
-             i18n-placeholder
+             i18n-placeholder="@@admin-core.common.filter-dots"
              matInput
              placeholder="Filter..."
              tmAutoFocus

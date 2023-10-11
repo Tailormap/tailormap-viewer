@@ -16,7 +16,7 @@
        *ngIf="active$ | async">
     <ng-container>
       <mat-form-field *ngIf="editableLayers.length > 0" appearance="outline" color="primary">
-        <mat-label i18n>Select layer to edit</mat-label>
+        <mat-label i18n="@@core.edit.select-layer">Select layer to edit</mat-label>
         <mat-select [formControl]="layer" tmAutoFocus>
           <mat-option *ngFor="let layer of editableLayers" [value]="layer.id">
             {{layer.title || layer.layerName}}
@@ -28,17 +28,18 @@
 
   <button [matMenuTriggerFor]="geometryTypeMenu"
           [class.disabled]="layer.value === null"
-          [tmTooltip]="'Add new feature'"
+          tmTooltip="Add new feature"
+          i18n-tmTooltip="@@core.edit.add-new-feature"
           class="map-control-button map-control-button--add-feature"
           mat-flat-button>
     <mat-icon svgIcon="new_object"></mat-icon>
   </button>
 
   <mat-menu #geometryTypeMenu="matMenu" xPosition="after" yPosition="below">
-    <button mat-menu-item (click)="layer.value !== null ? createFeature('point') : null" i18n>Point</button>
-    <button mat-menu-item (click)="layer.value !== null ? createFeature('line') : null" i18n>Line</button>
-    <button mat-menu-item (click)="layer.value !== null ? createFeature('area') : null" i18n>Polygon</button>
-    <button mat-menu-item (click)="layer.value !== null ? createFeature('rectangle') : null" i18n>Rectangle</button>
-    <button mat-menu-item (click)="layer.value !== null ? createFeature('square') : null" i18n>Square</button>
+    <button mat-menu-item (click)="layer.value !== null ? createFeature('point') : null" i18n="@@core.common.point">Point</button>
+    <button mat-menu-item (click)="layer.value !== null ? createFeature('line') : null" i18n="@@core.common.line">Line</button>
+    <button mat-menu-item (click)="layer.value !== null ? createFeature('area') : null" i18n="@@core.common.polygon">Polygon</button>
+    <button mat-menu-item (click)="layer.value !== null ? createFeature('rectangle') : null" i18n="@@core.common.rectangle">Rectangle</button>
+    <button mat-menu-item (click)="layer.value !== null ? createFeature('square') : null" i18n="@@core.common.square">Square</button>
   </mat-menu>
 </div>

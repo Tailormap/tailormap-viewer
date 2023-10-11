@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="shared.color-picker.color-code" datatype="html">
+        <source>Color code</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color-required" datatype="html">
+        <source>Color is required</source>
+      </trans-unit>
+      <trans-unit id="shared.common.no" datatype="html">
+        <source>No</source>
+      </trans-unit>
+      <trans-unit id="shared.common.yes" datatype="html">
+        <source>Yes</source>
+      </trans-unit>
+      <trans-unit id="shared.login-form.password" datatype="html">
+        <source>Password</source>
+      </trans-unit>
+      <trans-unit id="shared.login-form.title" datatype="html">
+        <source>Login</source>
+      </trans-unit>
+      <trans-unit id="shared.login-form.username" datatype="html">
+        <source>Username</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

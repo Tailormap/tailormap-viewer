@@ -8,7 +8,7 @@
            [collapsed]="dialogCollapsed$ | async"
            (expandCollapseDialog)="expandCollapseDialog()"
            dialogTitle="Edit"
-           i18n-dialogTitle>
+           i18n-dialogTitle="@@core.edit.edit">
   <div class="edit-form" *ngIf="currentFeature$ | async as currentFeature">
     <ng-container *ngIf="layerDetails$ | async as layerDetails">
       <div class="content">
@@ -17,20 +17,26 @@
                       (featureAttributeChanged)="featureChanged($event)"></tm-edit-form>
       </div>
       <div class="buttons">
-        <button (click)="save(layerDetails.layer.id, currentFeature)" *ngIf="(isCreateFeature$ | async) === false" [disabled]="!formValid"
-                color="primary" i18n mat-flat-button>
-          Save
-        </button>
-        <button (click)="add(layerDetails.layer.id)" *ngIf="isCreateFeature$ | async" [disabled]="!formValid" color="primary" i18n
-                mat-flat-button>
-          Add
-        </button>
-        <button (click)="delete(layerDetails.layer.id, currentFeature)" *ngIf="(isCreateFeature$ | async) === false" color="warn" i18n mat-stroked-button>
-          Delete
-        </button>
-        <button (click)="closeDialog()" i18n mat-flat-button>
-          Close
-        </button>
+        <button (click)="save(layerDetails.layer.id, currentFeature)"
+                *ngIf="(isCreateFeature$ | async) === false"
+                [disabled]="!formValid"
+                color="primary"
+                i18n="@@core.common.save"
+                mat-flat-button>Save</button>
+        <button (click)="add(layerDetails.layer.id)"
+                *ngIf="isCreateFeature$ | async"
+                [disabled]="!formValid"
+                color="primary"
+                i18n="@@core.common.add"
+                mat-flat-button>Add</button>
+        <button (click)="delete(layerDetails.layer.id, currentFeature)"
+                *ngIf="(isCreateFeature$ | async) === false"
+                color="warn"
+                i18n="@@core.common.delete"
+                mat-stroked-button>Delete</button>
+        <button (click)="closeDialog()"
+                i18n="@@core.common.close"
+                mat-flat-button>Close</button>
       </div>
     </ng-container>
   </div>
@@ -41,9 +47,7 @@
         <tm-edit-select-feature [features]="selectableFeatures"></tm-edit-select-feature>
       </div>
       <div class="buttons">
-        <button mat-flat-button i18n (click)="closeDialog()">
-          Close
-        </button>
+        <button mat-flat-button i18n="@@core.common.close" (click)="closeDialog()">Close</button>
       </div>
     </ng-container>
   </ng-container>

@@ -8,7 +8,7 @@
       <tm-toggle-all-layers-button></tm-toggle-all-layers-button>
       <button mat-icon-button
               color="primary"
-              i18n-tmTooltip
+              i18n-tmTooltip="@@core.toc.filter-layers"
               class="map-control-button"
               tmTooltip="Filter layers"
               (click)="toggleLayerFilter()">
@@ -19,7 +19,8 @@
     <div class="toc-header-right">
       <button *ngIf="isMobileDevice"
               mat-icon-button
-              matTooltip="Re-order layers"
+              tmTooltip="Re-order layers"
+              i18n-tmTooltip="@@core.toc.reorder-layers"
               color="primary"
               [class.button--active]="dragDropEnabled"
               (click)="toggleReordering()">

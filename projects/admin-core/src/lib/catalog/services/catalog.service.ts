@@ -70,7 +70,8 @@ export class CatalogService implements OnDestroy {
       .pipe(
         takeUntil(subscription),
         catchError(() => {
-          this.adminSnackbarService.showMessage($localize `Error while loading service(s). Please collapse/expand the node again to try again.`)
+          // eslint-disable-next-line max-len
+          this.adminSnackbarService.showMessage($localize `:@@admin-core.catalog.error-loading-services:Error while loading service(s). Please collapse/expand the node again to try again.`)
             .pipe(takeUntil(subscription)).subscribe();
           return of(null);
         }),
@@ -100,7 +101,8 @@ export class CatalogService implements OnDestroy {
       .pipe(
         takeUntil(subscription),
         catchError(() => {
-          this.adminSnackbarService.showMessage($localize `Error while loading feature source(s). Please collapse/expand the node again to try again.`)
+          // eslint-disable-next-line max-len
+          this.adminSnackbarService.showMessage($localize `:@@admin-core.catalog.error-loading-feature-sources:Error while loading feature source(s). Please collapse/expand the node again to try again.`)
             .pipe(takeUntil(subscription))
             .subscribe();
           return of(null);
@@ -264,7 +266,7 @@ export class CatalogService implements OnDestroy {
     return this.adminApiService.updateCatalog$(updatedCatalog)
       .pipe(
         catchError(() => {
-          this.adminSnackbarService.showMessage($localize `Error while updating catalog.`);
+          this.adminSnackbarService.showMessage($localize `:@@admin-core.catalog.error-updating-catalog:Error while updating catalog.`);
           return of(null);
         }),
         tap(catalog => {

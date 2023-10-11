@@ -1,0 +1,715 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="core.attribute-list.clear-filters" datatype="html">
+        <source>Clear filters</source>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.export" datatype="html">
+        <source>Export</source>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.export-failed" datatype="html">
+        <source>Exporting data for layer <x id="PH" equiv-text="params.serviceLayerName"/> and format <x id="PH_1" equiv-text="params.format"/> failed</source>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.failed-loading-data" datatype="html">
+        <source>Failed to load attribute list data</source>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.failed-loading-data-for" datatype="html">
+        <source>Failed to load attribute list data for <x id="PH" equiv-text="tab.label"/></source>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.filter-on" datatype="html">
+        <source>Filter on <x id="INTERPOLATION" equiv-text="{{getColumnName()}}"/></source>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.go-to-page" datatype="html">
+        <source>Go to page</source>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.no-data-found" datatype="html">
+        <source>No layers with administrative data found</source>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.no-rows-found" datatype="html">
+        <source>No rows found</source>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.title" datatype="html">
+        <source>Attribute list</source>
+      </trans-unit>
+      <trans-unit id="core.background-layer-toggle.layer-selection" datatype="html">
+        <source>Background layer selection</source>
+      </trans-unit>
+      <trans-unit id="core.background-layer-toggle.no-background" datatype="html">
+        <source>No background</source>
+      </trans-unit>
+      <trans-unit id="core.common.add" datatype="html">
+        <source>Add</source>
+      </trans-unit>
+      <trans-unit id="core.common.back" datatype="html">
+        <source>Back</source>
+      </trans-unit>
+      <trans-unit id="core.common.cancel" datatype="html">
+        <source>Cancel</source>
+      </trans-unit>
+      <trans-unit id="core.common.clear" datatype="html">
+        <source>Clear</source>
+      </trans-unit>
+      <trans-unit id="core.common.close" datatype="html">
+        <source>Close</source>
+      </trans-unit>
+      <trans-unit id="core.common.csv" datatype="html">
+        <source>CSV</source>
+      </trans-unit>
+      <trans-unit id="core.common.delete" datatype="html">
+        <source>Delete</source>
+      </trans-unit>
+      <trans-unit id="core.common.dxf" datatype="html">
+        <source>DXF</source>
+      </trans-unit>
+      <trans-unit id="core.common.enabled" datatype="html">
+        <source>Enabled</source>
+      </trans-unit>
+      <trans-unit id="core.common.error-loading-map" datatype="html">
+        <source>Could not load map settings</source>
+      </trans-unit>
+      <trans-unit id="core.common.error-loading-viewer" datatype="html">
+        <source>Could not find or load the requested viewer</source>
+      </trans-unit>
+      <trans-unit id="core.common.error-while-loading-app" datatype="html">
+        <source>Something went wrong while loading the application. Please check if the URL is correct</source>
+      </trans-unit>
+      <trans-unit id="core.common.excel" datatype="html">
+        <source>Excel</source>
+      </trans-unit>
+      <trans-unit id="core.common.feature" datatype="html">
+        <source>Feature</source>
+      </trans-unit>
+      <trans-unit id="core.common.geojson" datatype="html">
+        <source>GeoJSON</source>
+      </trans-unit>
+      <trans-unit id="core.common.geopackage" datatype="html">
+        <source>GeoPackage</source>
+      </trans-unit>
+      <trans-unit id="core.common.line" datatype="html">
+        <source>Line</source>
+      </trans-unit>
+      <trans-unit id="core.common.next" datatype="html">
+        <source>Next</source>
+      </trans-unit>
+      <trans-unit id="core.common.none" datatype="html">
+        <source>None</source>
+      </trans-unit>
+      <trans-unit id="core.common.point" datatype="html">
+        <source>Point</source>
+      </trans-unit>
+      <trans-unit id="core.common.polygon" datatype="html">
+        <source>Polygon</source>
+      </trans-unit>
+      <trans-unit id="core.common.rectangle" datatype="html">
+        <source>Rectangle</source>
+      </trans-unit>
+      <trans-unit id="core.common.retry" datatype="html">
+        <source>Retry</source>
+      </trans-unit>
+      <trans-unit id="core.common.save" datatype="html">
+        <source>Save</source>
+      </trans-unit>
+      <trans-unit id="core.common.set" datatype="html">
+        <source>Set</source>
+      </trans-unit>
+      <trans-unit id="core.common.shapefile" datatype="html">
+        <source>Shapefile</source>
+      </trans-unit>
+      <trans-unit id="core.common.square" datatype="html">
+        <source>Square</source>
+      </trans-unit>
+      <trans-unit id="core.draw.delete-selected-feature" datatype="html">
+        <source>Delete selected feature</source>
+      </trans-unit>
+      <trans-unit id="core.draw.draw-circle" datatype="html">
+        <source>Draw circle</source>
+      </trans-unit>
+      <trans-unit id="core.draw.draw-ellipse" datatype="html">
+        <source>Draw ellipse</source>
+      </trans-unit>
+      <trans-unit id="core.draw.draw-label" datatype="html">
+        <source>Draw label</source>
+      </trans-unit>
+      <trans-unit id="core.draw.draw-line" datatype="html">
+        <source>Draw line</source>
+      </trans-unit>
+      <trans-unit id="core.draw.draw-point" datatype="html">
+        <source>Draw point</source>
+      </trans-unit>
+      <trans-unit id="core.draw.draw-polygon" datatype="html">
+        <source>Draw polygon</source>
+      </trans-unit>
+      <trans-unit id="core.draw.draw-rectangle" datatype="html">
+        <source>Draw rectangle</source>
+      </trans-unit>
+      <trans-unit id="core.draw.draw-square" datatype="html">
+        <source>Draw square</source>
+      </trans-unit>
+      <trans-unit id="core.draw.draw-star" datatype="html">
+        <source>Draw star</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.arrow" datatype="html">
+        <source>Arrow</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.arrow-at-the-end" datatype="html">
+        <source>At the end</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.arrow-at-the-start" datatype="html">
+        <source>At the start</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.arrow-none" datatype="html">
+        <source>None</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.arrow-on-both-sides" datatype="html">
+        <source>On both sides</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.arrow-on-every-segment" datatype="html">
+        <source>On every segment</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.color" datatype="html">
+        <source>Color</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.delete-drawing" datatype="html">
+        <source>Delete complete drawing</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.delete-drawing-confirm" datatype="html">
+        <source>Delete complete drawing</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.delete-drawing-confirm-message" datatype="html">
+        <source>Are you sure you want to delete the complete drawing? All objects will be deleted and this cannot be undone.</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.delete-drawing-object-confirm" datatype="html">
+        <source>Delete drawing object</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.delete-drawing-object-confirm-message" datatype="html">
+        <source>Are you sure you want to delete this object?</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.delete-selected-drawing-object" datatype="html">
+        <source>Delete selected drawing object</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.drawing" datatype="html">
+        <source>Drawing</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.fill" datatype="html">
+        <source>Fill</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.fill-color" datatype="html">
+        <source>Fill color</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.format" datatype="html">
+        <source>Format</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.halo" datatype="html">
+        <source>Halo</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.insert-area-label" datatype="html">
+        <source>Insert area as label</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.insert-coordinates-label" datatype="html">
+        <source>Insert coordinates as label</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.insert-length-label" datatype="html">
+        <source>Insert length as label</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.label" datatype="html">
+        <source>Label</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.line" datatype="html">
+        <source>Line</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.line-color" datatype="html">
+        <source>Line color</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.line-thickness" datatype="html">
+        <source>Line thickness</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.opacity" datatype="html">
+        <source>Opacity</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.rotation" datatype="html">
+        <source>Rotation</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.select-shape" datatype="html">
+        <source>Select shape</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.size" datatype="html">
+        <source>Size</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.striped-fill" datatype="html">
+        <source>Striped fill</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.stroke-type" datatype="html">
+        <source>Stroke type</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.symbol" datatype="html">
+        <source>Symbol</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.thickness" datatype="html">
+        <source>Thickness</source>
+      </trans-unit>
+      <trans-unit id="core.edit.add-new-feature" datatype="html">
+        <source>Add new feature</source>
+      </trans-unit>
+      <trans-unit id="core.edit.create-feature-failed" datatype="html">
+        <source>Create feature failed</source>
+      </trans-unit>
+      <trans-unit id="core.edit.delete-feature-confirm" datatype="html">
+        <source>Delete feature</source>
+      </trans-unit>
+      <trans-unit id="core.edit.delete-feature-confirm-message" datatype="html">
+        <source>Are you sure you want to delete this feature? This cannot be undone.</source>
+      </trans-unit>
+      <trans-unit id="core.edit.delete-feature-failed" datatype="html">
+        <source>Delete feature failed</source>
+      </trans-unit>
+      <trans-unit id="core.edit.edit" datatype="html">
+        <source>Edit</source>
+      </trans-unit>
+      <trans-unit id="core.edit.edit-feature-tooltip" datatype="html">
+        <source>Edit feature</source>
+      </trans-unit>
+      <trans-unit id="core.edit.error-getting-features" datatype="html">
+        <source>Something went wrong while getting editable features, please try again</source>
+      </trans-unit>
+      <trans-unit id="core.edit.false" datatype="html">
+        <source>False</source>
+      </trans-unit>
+      <trans-unit id="core.edit.feature-created" datatype="html">
+        <source>Feature created</source>
+      </trans-unit>
+      <trans-unit id="core.edit.feature-deleted" datatype="html">
+        <source>Feature deleted</source>
+      </trans-unit>
+      <trans-unit id="core.edit.feature-updated" datatype="html">
+        <source>Feature updated</source>
+      </trans-unit>
+      <trans-unit id="core.edit.hover-to-highlight" datatype="html">
+        <source>Hover over the buttons to highlight the feature on the map</source>
+      </trans-unit>
+      <trans-unit id="core.edit.no-editable-layers-tooltip" datatype="html">
+        <source>There are no editable layers. Enable a layer to start editing.</source>
+      </trans-unit>
+      <trans-unit id="core.edit.no-features-found" datatype="html">
+        <source>No editable features found</source>
+      </trans-unit>
+      <trans-unit id="core.edit.require-login-tooltip" datatype="html">
+        <source>You must be logged in to edit.</source>
+      </trans-unit>
+      <trans-unit id="core.edit.select-feature-to-edit" datatype="html">
+        <source>Select which feature to edit</source>
+      </trans-unit>
+      <trans-unit id="core.edit.select-layer" datatype="html">
+        <source>Select layer to edit</source>
+      </trans-unit>
+      <trans-unit id="core.edit.true" datatype="html">
+        <source>True</source>
+      </trans-unit>
+      <trans-unit id="core.edit.update-feature-failed" datatype="html">
+        <source>Update feature failed</source>
+      </trans-unit>
+      <trans-unit id="core.feature-info.error-loading-feature-info" datatype="html">
+        <source>Something went wrong while getting feature info, please try again</source>
+      </trans-unit>
+      <trans-unit id="core.feature-info.error-loading-features" datatype="html">
+        <source>Could not load feature info</source>
+      </trans-unit>
+      <trans-unit id="core.feature-info.no-features-found" datatype="html">
+        <source>No features found</source>
+      </trans-unit>
+      <trans-unit id="core.feature-info.object-information" datatype="html">
+        <source>Object Information</source>
+      </trans-unit>
+      <trans-unit id="core.filter.add-filter" datatype="html">
+        <source>Add filter</source>
+      </trans-unit>
+      <trans-unit id="core.filter.add-spatial-filter" datatype="html">
+        <source>Add spatial filter</source>
+      </trans-unit>
+      <trans-unit id="core.filter.after" datatype="html">
+        <source>After</source>
+      </trans-unit>
+      <trans-unit id="core.filter.and" datatype="html">
+        <source>and</source>
+      </trans-unit>
+      <trans-unit id="core.filter.applies-to" datatype="html">
+        <source>Applies to</source>
+      </trans-unit>
+      <trans-unit id="core.filter.attribute-filter" datatype="html">
+        <source>Attribute filter</source>
+      </trans-unit>
+      <trans-unit id="core.filter.before" datatype="html">
+        <source>Before</source>
+      </trans-unit>
+      <trans-unit id="core.filter.between" datatype="html">
+        <source>Between</source>
+      </trans-unit>
+      <trans-unit id="core.filter.buffer-filter-geometry" datatype="html">
+        <source>Optionally you can buffer the geometry</source>
+      </trans-unit>
+      <trans-unit id="core.filter.buffer-in-meters" datatype="html">
+        <source>Buffer in meters</source>
+      </trans-unit>
+      <trans-unit id="core.filter.case-sensitive" datatype="html">
+        <source>Case sensitive</source>
+      </trans-unit>
+      <trans-unit id="core.filter.choose-values" datatype="html">
+        <source>Choose values</source>
+      </trans-unit>
+      <trans-unit id="core.filter.close-filter-form" datatype="html">
+        <source>Close filter form</source>
+      </trans-unit>
+      <trans-unit id="core.filter.condition" datatype="html">
+        <source>Condition</source>
+      </trans-unit>
+      <trans-unit id="core.filter.contains" datatype="html">
+        <source>Contains</source>
+      </trans-unit>
+      <trans-unit id="core.filter.contains-one-of-the-values" datatype="html">
+        <source>contains one of the values</source>
+      </trans-unit>
+      <trans-unit id="core.filter.create-new-filter" datatype="html">
+        <source>Create new filter</source>
+      </trans-unit>
+      <trans-unit id="core.filter.delete-filter-confirm" datatype="html">
+        <source>Delete filter?</source>
+      </trans-unit>
+      <trans-unit id="core.filter.delete-filter-confirm-message" datatype="html">
+        <source>Are you sure you want to delete this filter?</source>
+      </trans-unit>
+      <trans-unit id="core.filter.delete-this-filter" datatype="html">
+        <source>Delete this filter</source>
+      </trans-unit>
+      <trans-unit id="core.filter.deselect-all-values" datatype="html">
+        <source>Deselect all values</source>
+      </trans-unit>
+      <trans-unit id="core.filter.draw-filter-geometry" datatype="html">
+        <source>Draw filter geometry</source>
+      </trans-unit>
+      <trans-unit id="core.filter.ends-with" datatype="html">
+        <source>Ends with</source>
+      </trans-unit>
+      <trans-unit id="core.filter.equals" datatype="html">
+        <source>Equals</source>
+      </trans-unit>
+      <trans-unit id="core.filter.equals-to" datatype="html">
+        <source>equals to</source>
+      </trans-unit>
+      <trans-unit id="core.filter.error-loading-reference-layer-geometries" datatype="html">
+        <source>Error loading reference layer geometries</source>
+      </trans-unit>
+      <trans-unit id="core.filter.filtering" datatype="html">
+        <source>Filtering</source>
+      </trans-unit>
+      <trans-unit id="core.filter.filtering-layer-by-drawing-or-reference" datatype="html">
+        <source>Filtering the selected layer(s) can be done by drawing geometry and/or selecting a reference layer.</source>
+      </trans-unit>
+      <trans-unit id="core.filter.filtering-layer-by-drawing-or-reference-hint" datatype="html">
+        <source>The geometries from this reference layer will then be used to filter the selected layer(s).</source>
+      </trans-unit>
+      <trans-unit id="core.filter.from" datatype="html">
+        <source>From</source>
+      </trans-unit>
+      <trans-unit id="core.filter.greater-than" datatype="html">
+        <source>Greater than</source>
+      </trans-unit>
+      <trans-unit id="core.filter.greater-than-or-equal-to" datatype="html">
+        <source>Greater than or equal to</source>
+      </trans-unit>
+      <trans-unit id="core.filter.invert-condition" datatype="html">
+        <source>Invert condition</source>
+      </trans-unit>
+      <trans-unit id="core.filter.is-after" datatype="html">
+        <source>is after</source>
+      </trans-unit>
+      <trans-unit id="core.filter.is-before" datatype="html">
+        <source>is before</source>
+      </trans-unit>
+      <trans-unit id="core.filter.is-between" datatype="html">
+        <source>is between</source>
+      </trans-unit>
+      <trans-unit id="core.filter.is-false" datatype="html">
+        <source>Is false</source>
+      </trans-unit>
+      <trans-unit id="core.filter.is-greater-than" datatype="html">
+        <source>is greater than</source>
+      </trans-unit>
+      <trans-unit id="core.filter.is-greater-than-or-equal-to" datatype="html">
+        <source>is greater than or equal to</source>
+      </trans-unit>
+      <trans-unit id="core.filter.is-null" datatype="html">
+        <source>Is null</source>
+      </trans-unit>
+      <trans-unit id="core.filter.is-on" datatype="html">
+        <source>is on</source>
+      </trans-unit>
+      <trans-unit id="core.filter.is-smaller-than" datatype="html">
+        <source>is smaller than</source>
+      </trans-unit>
+      <trans-unit id="core.filter.is-smaller-than-or-equal-to" datatype="html">
+        <source>is smaller than or equal to</source>
+      </trans-unit>
+      <trans-unit id="core.filter.is-true" datatype="html">
+        <source>Is true</source>
+      </trans-unit>
+      <trans-unit id="core.filter.loading-reference-layer" datatype="html">
+        <source>Loading reference geometry</source>
+      </trans-unit>
+      <trans-unit id="core.filter.no-layers-available" datatype="html">
+        <source>No layers available to filter on</source>
+      </trans-unit>
+      <trans-unit id="core.filter.on" datatype="html">
+        <source>On</source>
+      </trans-unit>
+      <trans-unit id="core.filter.or" datatype="html">
+        <source>or</source>
+      </trans-unit>
+      <trans-unit id="core.filter.save-filter" datatype="html">
+        <source>Save filter</source>
+      </trans-unit>
+      <trans-unit id="core.filter.select-all-values" datatype="html">
+        <source>Select all values</source>
+      </trans-unit>
+      <trans-unit id="core.filter.select-condition" datatype="html">
+        <source>Select condition</source>
+      </trans-unit>
+      <trans-unit id="core.filter.select-layer" datatype="html">
+        <source>Select layer(s)</source>
+      </trans-unit>
+      <trans-unit id="core.filter.select-layer-to-filter" datatype="html">
+        <source>Select the layer(s) you want to filter</source>
+      </trans-unit>
+      <trans-unit id="core.filter.select-layer-to-use-as-filter" datatype="html">
+        <source>Select layer to use as filter</source>
+      </trans-unit>
+      <trans-unit id="core.filter.select-reference-layer" datatype="html">
+        <source>Select reference layer</source>
+      </trans-unit>
+      <trans-unit id="core.filter.smaller-than" datatype="html">
+        <source>Smaller than</source>
+      </trans-unit>
+      <trans-unit id="core.filter.smaller-than-or-equal-to" datatype="html">
+        <source>Smaller than or equal to</source>
+      </trans-unit>
+      <trans-unit id="core.filter.spatial" datatype="html">
+        <source>Spatial</source>
+      </trans-unit>
+      <trans-unit id="core.filter.spatial-filter" datatype="html">
+        <source>Spatial filter</source>
+      </trans-unit>
+      <trans-unit id="core.filter.starts-with" datatype="html">
+        <source>Starts with</source>
+      </trans-unit>
+      <trans-unit id="core.filter.summary" datatype="html">
+        <source>Summary</source>
+      </trans-unit>
+      <trans-unit id="core.filter.until" datatype="html">
+        <source>Until</source>
+      </trans-unit>
+      <trans-unit id="core.filter.value" datatype="html">
+        <source>Value</source>
+      </trans-unit>
+      <trans-unit id="core.legend.failed-loading-legend" datatype="html">
+        <source>Failed to load legend for</source>
+      </trans-unit>
+      <trans-unit id="core.legend.legend" datatype="html">
+        <source>Legend</source>
+      </trans-unit>
+      <trans-unit id="core.login.error" datatype="html">
+        <source>Login failed, please try again</source>
+      </trans-unit>
+      <trans-unit id="core.login.insufficient-rights-error" datatype="html">
+        <source>You are logged in <x id="PH" equiv-text="userLabel"/> but do not have proper roles to access the application. Please contact your administrator.</source>
+      </trans-unit>
+      <trans-unit id="core.print.a3" datatype="html">
+        <source>A3</source>
+      </trans-unit>
+      <trans-unit id="core.print.a4" datatype="html">
+        <source>A4</source>
+      </trans-unit>
+      <trans-unit id="core.print.add-legend-for-layer" datatype="html">
+        <source>Add legend for layer</source>
+      </trans-unit>
+      <trans-unit id="core.print.created-on" datatype="html">
+        <source>Created on</source>
+      </trans-unit>
+      <trans-unit id="core.print.creating-map" datatype="html">
+        <source>Creating map, this may take a while.</source>
+      </trans-unit>
+      <trans-unit id="core.print.default-pdf-filename" datatype="html">
+        <source>map.pdf</source>
+      </trans-unit>
+      <trans-unit id="core.print.download-map-image" datatype="html">
+        <source>Download map image</source>
+      </trans-unit>
+      <trans-unit id="core.print.download-map-pdf" datatype="html">
+        <source>Download map PDF</source>
+      </trans-unit>
+      <trans-unit id="core.print.dpi" datatype="html">
+        <source>DPI</source>
+      </trans-unit>
+      <trans-unit id="core.print.dpi-range" datatype="html">
+        <source>Range: 90 - 600</source>
+      </trans-unit>
+      <trans-unit id="core.print.export-map" datatype="html">
+        <source>Export map</source>
+      </trans-unit>
+      <trans-unit id="core.print.footer" datatype="html">
+        <source>Footer</source>
+      </trans-unit>
+      <trans-unit id="core.print.height" datatype="html">
+        <source>Height</source>
+      </trans-unit>
+      <trans-unit id="core.print.height-range" datatype="html">
+        <source>Range: 50 - 600</source>
+      </trans-unit>
+      <trans-unit id="core.print.image-size-in-px" datatype="html">
+        <source>Image size in pixels: <x id="INTERPOLATION" equiv-text="{{getImageResolution()}}"/></source>
+      </trans-unit>
+      <trans-unit id="core.print.image-size-mm" datatype="html">
+        <source>Image size in millimeters:</source>
+      </trans-unit>
+      <trans-unit id="core.print.include-drawing" datatype="html">
+        <source>Include drawing</source>
+      </trans-unit>
+      <trans-unit id="core.print.landscape" datatype="html">
+        <source>Landscape</source>
+      </trans-unit>
+      <trans-unit id="core.print.map-image" datatype="html">
+        <source>Map image</source>
+      </trans-unit>
+      <trans-unit id="core.print.no-visible-layers" datatype="html">
+        <source>No visible layers.</source>
+      </trans-unit>
+      <trans-unit id="core.print.open-print-dialog" datatype="html">
+        <source>Automatically open print dialog</source>
+      </trans-unit>
+      <trans-unit id="core.print.pdf-document" datatype="html">
+        <source>PDF document</source>
+      </trans-unit>
+      <trans-unit id="core.print.portrait" datatype="html">
+        <source>Portrait</source>
+      </trans-unit>
+      <trans-unit id="core.print.print" datatype="html">
+        <source>Print</source>
+      </trans-unit>
+      <trans-unit id="core.print.title" datatype="html">
+        <source>Title</source>
+      </trans-unit>
+      <trans-unit id="core.print.width" datatype="html">
+        <source>Width</source>
+      </trans-unit>
+      <trans-unit id="core.print.width-height-ratio" datatype="html">
+        <source>Width/height ratio: <x id="INTERPOLATION" equiv-text="{{getImageRatio() | number: &apos;1.1-2&apos; }}"/></source>
+      </trans-unit>
+      <trans-unit id="core.print.width-range" datatype="html">
+        <source>Range: 50 - 600</source>
+      </trans-unit>
+      <trans-unit id="core.profile.go-to-admin" datatype="html">
+        <source>Go to admin</source>
+      </trans-unit>
+      <trans-unit id="core.profile.logged-in-as" datatype="html">
+        <source>Logged in as</source>
+      </trans-unit>
+      <trans-unit id="core.profile.login" datatype="html">
+        <source>Login</source>
+      </trans-unit>
+      <trans-unit id="core.profile.logout" datatype="html">
+        <source>Logout</source>
+      </trans-unit>
+      <trans-unit id="core.toc.available-layers" datatype="html">
+        <source>Available layers</source>
+      </trans-unit>
+      <trans-unit id="core.toc.close-details" datatype="html">
+        <source>Close details</source>
+      </trans-unit>
+      <trans-unit id="core.toc.description" datatype="html">
+        <source>Description</source>
+      </trans-unit>
+      <trans-unit id="core.toc.details-for" datatype="html">
+        <source>Details for <x id="INTERPOLATION" equiv-text="{{node.layer?.title || node.name}}"/></source>
+      </trans-unit>
+      <trans-unit id="core.toc.filter-by-layer-name" datatype="html">
+        <source>Filter by layer name...</source>
+      </trans-unit>
+      <trans-unit id="core.toc.filter-layers" datatype="html">
+        <source>Filter layers</source>
+      </trans-unit>
+      <trans-unit id="core.toc.legend" datatype="html">
+        <source>Legend</source>
+      </trans-unit>
+      <trans-unit id="core.toc.opacity" datatype="html">
+        <source>Opacity</source>
+      </trans-unit>
+      <trans-unit id="core.toc.reorder-layers" datatype="html">
+        <source>Re-order layers</source>
+      </trans-unit>
+      <trans-unit id="core.toc.reset-opacity" datatype="html">
+        <source>Reset opacity</source>
+      </trans-unit>
+      <trans-unit id="core.toc.toggle-layers-off" datatype="html">
+        <source>Toggle all layers off</source>
+      </trans-unit>
+      <trans-unit id="core.toc.toggle-layers-on" datatype="html">
+        <source>Toggle all layers on</source>
+      </trans-unit>
+      <trans-unit id="core.toolbar.coordinate-picker" datatype="html">
+        <source>Coordinate picker</source>
+      </trans-unit>
+      <trans-unit id="core.toolbar.coordinate-picker-copy" datatype="html">
+        <source>Copy</source>
+      </trans-unit>
+      <trans-unit id="core.toolbar.coordinate-picker-failed-copy" datatype="html">
+        <source>Failed to copy to clipboard</source>
+      </trans-unit>
+      <trans-unit id="core.toolbar.coordinate-picker-selected-coordinates" datatype="html">
+        <source>Selected coordinates: <x id="PH" equiv-text="coordinates"/></source>
+      </trans-unit>
+      <trans-unit id="core.toolbar.coordinate-picker-success" datatype="html">
+        <source>Success</source>
+      </trans-unit>
+      <trans-unit id="core.toolbar.measure-area" datatype="html">
+        <source>Measure area</source>
+      </trans-unit>
+      <trans-unit id="core.toolbar.measure-length" datatype="html">
+        <source>Measure length</source>
+      </trans-unit>
+      <trans-unit id="core.toolbar.no-results-found" datatype="html">
+        <source>No results found</source>
+      </trans-unit>
+      <trans-unit id="core.toolbar.open-streetview" datatype="html">
+        <source>Open Streetview</source>
+      </trans-unit>
+      <trans-unit id="core.toolbar.search-location" datatype="html">
+        <source>Search location</source>
+      </trans-unit>
+      <trans-unit id="core.toolbar.search-location-pdok-attribution" datatype="html">
+        <source>Data by [PDOK](https://pdok.nl)</source>
+      </trans-unit>
+      <trans-unit id="core.toolbar.type-at-least" datatype="html">
+        <source>Type at least <x id="INTERPOLATION" equiv-text="{{ minLength }}"/> characters to start searching</source>
+      </trans-unit>
+      <trans-unit id="core.toolbar.zoom-in" datatype="html">
+        <source>Zoom in</source>
+      </trans-unit>
+      <trans-unit id="core.toolbar.zoom-out" datatype="html">
+        <source>Zoom out</source>
+      </trans-unit>
+      <trans-unit id="core.toolbar.zoom-to-initial-extent" datatype="html">
+        <source>Zoom to initial extent</source>
+      </trans-unit>
+      <trans-unit id="core.toolbar.zoom-to-location" datatype="html">
+        <source>Zoom to location</source>
+      </trans-unit>
+      <trans-unit id="core.toolbar.zoom-to-location-failed-location-unavailable" datatype="html">
+        <source>Fetching location failed: location unavailable</source>
+      </trans-unit>
+      <trans-unit id="core.toolbar.zoom-to-location-failed-permission-denied" datatype="html">
+        <source>Fetching location failed: permission denied</source>
+      </trans-unit>
+      <trans-unit id="core.toolbar.zoom-to-location-failed-timeout" datatype="html">
+        <source>Fetching location failed: timeout</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

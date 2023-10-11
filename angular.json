@@ -20,7 +20,7 @@
       "sourceRoot": "projects/app/src",
       "prefix": "app",
       "i18n": {
-        "sourceLocale": "en-US",
+        "sourceLocale": "en",
         "locales": {
           "nl": {
             "translation": "locale/messages.nl.xlf"
@@ -145,7 +145,7 @@
                 "core.",
                 "admin-core."
               ],
-              "sourceFile": "messages.shared.en-US.xlf",
+              "sourceFile": "messages.shared.en.xlf",
               "targetFiles": [
                 "messages.shared.nl.xlf"
               ]
@@ -155,7 +155,7 @@
                 "shared.",
                 "admin-core."
               ],
-              "sourceFile": "messages.core.en-US.xlf",
+              "sourceFile": "messages.core.en.xlf",
               "targetFiles": [
                 "messages.core.nl.xlf"
               ]
@@ -165,7 +165,7 @@
                 "core.",
                 "shared."
               ],
-              "sourceFile": "messages.admin-core.en-US.xlf",
+              "sourceFile": "messages.admin-core.en.xlf",
               "targetFiles": [
                 "messages.admin-core.nl.xlf"
               ]
@@ -175,8 +175,9 @@
             "browserTarget": "app:build",
             "format": "xlf",
             "outputPath": "locale",
-            "sourceFile": "messages.en-US.xlf",
+            "sourceFile": "messages.en.xlf",
             "verbose": true,
+            "sort": "idAsc",
             "targetFiles": [
               "messages.nl.xlf"
             ]

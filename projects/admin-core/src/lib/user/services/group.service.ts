@@ -71,7 +71,7 @@ export class GroupService {
       return this.adminApiService.createGroup$({ group })
         .pipe(
           catchError((response) => {
-            this.adminSnackbarService.showMessage($localize`Error while creating group ${group.name}. ${response.error?.message}`);
+            this.adminSnackbarService.showMessage($localize `:@@admin-core.groups.error-creating-group:Error while creating group ${group.name}. ${response.error?.message}`);
             return of(null);
           }),
           tap(createdGroup => {
@@ -84,7 +84,7 @@ export class GroupService {
     return this.adminApiService.updateGroup$({ name: group.name, group })
       .pipe(
         catchError((response) => {
-          this.adminSnackbarService.showMessage($localize`Error while updating group ${group.name}. ${response.error?.message}`);
+          this.adminSnackbarService.showMessage($localize `:@@admin-core.groups.error-updating-group:Error while updating group ${group.name}. ${response.error?.message}`);
           return of(null);
         }),
         tap(updatedGroup => {
@@ -99,7 +99,7 @@ export class GroupService {
     return this.adminApiService.deleteGroup$(groupName)
       .pipe(
         catchError((response) => {
-          this.adminSnackbarService.showMessage($localize`Error while deleting group ${groupName}. ${response.error?.message}`);
+          this.adminSnackbarService.showMessage($localize `:@@admin-core.groups.error-deleting-group:Error while deleting group ${groupName}. ${response.error?.message}`);
           return of(null);
         }),
         tap(response => {

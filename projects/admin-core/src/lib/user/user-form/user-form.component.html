@@ -1,36 +1,36 @@
 <form [formGroup]="userForm" class="userdetails-wrapper" autocomplete="off">
   <div>
     <mat-form-field>
-      <mat-label i18n>Username</mat-label>
+      <mat-label i18n="@@admin-core.common.username">Username</mat-label>
       <input formControlName="username" matInput>
     </mat-form-field>
-    <tm-admin-password-field formControlName="password" label="Password" i18n-label>
+    <tm-admin-password-field formControlName="password" label="Password" i18n-label="@@admin-core.common.password">
       <mat-error *ngIf="!userForm.get('password')?.valid && userForm.get('password')?.errors?.['minlength']"
-                 i18n>Password shorter than {{userForm.get('password')?.errors?.['minlength'].requiredLength}}</mat-error>
+                 i18n="@@admin-core.users.password-short-error">Password shorter than {{userForm.get('password')?.errors?.['minlength'].requiredLength}}</mat-error>
       <mat-error *ngIf="!userForm.get('password')?.valid && userForm.get('password')?.errors?.['weakPassword']"
-                 i18n>Password too short or too easily guessable</mat-error>
+                 i18n="@@admin-core.users.password-too-easy-error">Password too short or too easily guessable</mat-error>
     </tm-admin-password-field>
-    <tm-admin-password-field formControlName="confirmedPassword" label="Confirm password" i18n-label>
+    <tm-admin-password-field formControlName="confirmedPassword" label="Confirm password" i18n-label="@@admin-core.users.confirm-password">
       <mat-error *ngIf="!userForm.valid && userForm.errors?.['matching']"
-                 i18n>Passwords need to match</mat-error>
+                 i18n="@@admin-core.users.password-match-error">Passwords need to match</mat-error>
     </tm-admin-password-field>
     <mat-form-field>
-      <mat-label i18n>Email</mat-label>
+      <mat-label i18n="@@admin-core.common.email">Email</mat-label>
       <input formControlName="email" matInput type="email">
     </mat-form-field>
     <mat-form-field>
-      <mat-label i18n>Name</mat-label>
+      <mat-label i18n="@@admin-core.common.name">Name</mat-label>
       <input formControlName="name" matInput>
     </mat-form-field>
-    <mat-checkbox formControlName="enabled" i18n labelPosition="before">Enabled</mat-checkbox>
+    <mat-checkbox formControlName="enabled" i18n="@@admin-core.common.enabled" labelPosition="before">Enabled</mat-checkbox>
     <mat-form-field>
-      <mat-label i18n>validUntil</mat-label>
+      <mat-label i18n="@@admin-core.users.valid-until">Valid until</mat-label>
       <input formControlName="validUntil" matInput type="datetime-local">
     </mat-form-field>
   </div>
 
   <div>
-    <h4 i18n>User Groups</h4>
+    <h4 i18n="@@admin-core.users.user-groups">User Groups</h4>
     <mat-selection-list formControlName="groups">
       <mat-list-option *ngFor="let group of allGroups$ | async" [value]="group.name">
         {{group.name}}

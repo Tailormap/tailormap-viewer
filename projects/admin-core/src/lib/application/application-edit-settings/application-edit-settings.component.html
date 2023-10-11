@@ -6,9 +6,9 @@
                       (toggleChange)="toggleDefaultApplication(application.name)"
                       [checked]="isDefaultApplication$ | async"
                       [disabled]="isDefaultApplication$ | async"
-                      i18n>Set default application</mat-slide-toggle>
+                      i18n="@@admin-core.application.set-default-application">Set default application</mat-slide-toggle>
     <div *ngIf="(isDefaultApplication$ | async) === false"
          class="set-default-application-hint"
-         i18n>Setting this application as default will overwrite the current default application</div>
+         i18n="@@admin-core.application.set-default-application-hint">Setting this application as default will overwrite the current default application</div>
   </div>
 </ng-container>

@@ -52,7 +52,7 @@ export class BackgroundLayerToggleComponent {
     if (!this.allowEmptyBackground) {
       return [];
     }
-    return [{ id: 'EMPTY_BACKGROUND', label: $localize `No background` }];
+    return [{ id: 'EMPTY_BACKGROUND', label: $localize `:@@core.background-layer-toggle.no-background:No background` }];
   }
 
 }

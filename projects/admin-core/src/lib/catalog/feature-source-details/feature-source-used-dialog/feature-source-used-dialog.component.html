@@ -1,7 +1,7 @@
-<h1 mat-dialog-title>Feature source is used in layers</h1>
+<h1 mat-dialog-title i18n="@@admin-core.catalog.feature-source-used">Feature source is used in layers</h1>
 
 <div mat-dialog-content>
-  <p class="content" i18n>The feature source {{data.featureSource.title}} is used in the following layers.</p>
+  <p class="content" i18n="@@admin-core.catalog.feature-source-used-body">The feature source {{data.featureSource.title}} is used in the following layers.</p>
   <ul>
     <li *ngFor="let layer of data.layers">
       <a href="#" (click)="updateGeoServiceLayerSetting($event, layer)">
@@ -10,9 +10,9 @@
       </a>
     </li>
   </ul>
-  <p class="content" i18n>Please remove the feature source and type from these layers first</p>
+  <p class="content" i18n="@@admin-core.catalog.remove-feature-source-first">Please remove the feature source and type from these layers first</p>
 </div>
 
 <div mat-dialog-actions>
-  <button mat-raised-button color="primary" (click)="onConfirm()" i18n>Ok</button>
+  <button mat-raised-button color="primary" (click)="onConfirm()" i18n="@@admin-core.common.ok">Ok</button>
 </div>

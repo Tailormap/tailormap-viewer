@@ -1,21 +1,25 @@
 <div>
   <div>
-    <mat-label i18n>Allow access from:</mat-label>
+    <mat-label i18n="@@admin-core.authorizations.allow-access-from">Allow access from:</mat-label>
     <mat-chip-listbox [value]="selectedChip" (change)="changeAuthenticationType($event.value)">
-      <mat-chip-option i18n value="inherit" *ngIf="parentChip !== undefined && parentChip !== 'specificGroups'">Inherit from {{parentType}} ({parentChip, select, anonymous {Anyone} loggedIn {Logged in} specificGroups {Specific groups}})</mat-chip-option>
-      <mat-chip-option i18n value="anonymous" *ngIf="parentChip === undefined">Anyone</mat-chip-option>
-      <mat-chip-option i18n value="loggedIn" *ngIf="parentChip !== 'specificGroups'">Logged in</mat-chip-option>
-      <mat-chip-option i18n value="specificGroups">Specific groups {parentChip, select, specificGroups {(inherited)}}</mat-chip-option>
+      <mat-chip-option value="inherit" *ngIf="parentChip !== undefined && parentChip !== 'specificGroups'">
+        <ng-container i18n="@@admin-core.authorizations.inherit-from">Inherit from</ng-container> {{parentType}} (<ng-container i18n="@@admin-core.authorizations.inherit-from-hint">{parentChip, select, anonymous {Anyone} loggedIn {Logged in} specificGroups {Specific groups}}</ng-container>)</mat-chip-option>
+      <mat-chip-option i18n="@@admin-core.authorizations.inherit-from-anyone" value="anonymous" *ngIf="parentChip === undefined">Anyone</mat-chip-option>
+      <mat-chip-option i18n="@@admin-core.authorizations.inherit-from-logged-in" value="loggedIn" *ngIf="parentChip !== 'specificGroups'">Logged in</mat-chip-option>
+      <mat-chip-option value="specificGroups">
+        <ng-container i18n="@@admin-core.authorizations.inherit-from-specific-groups">Specific groups</ng-container>&nbsp;
+        <ng-container i18n="@@admin-core.authorizations.inherit-from-specific-groups-select">{parentChip, select, specificGroups {(inherited)}}</ng-container>
+      </mat-chip-option>
     </mat-chip-listbox>
   </div>
 
   <table mat-table *ngIf="selectedChip === 'specificGroups'" [dataSource]="decisions">
     <ng-container matColumnDef="groupName">
-      <th mat-header-cell i18n *matHeaderCellDef>Access</th>
-      <td mat-cell *matCellDef="let rule">{{rule.groupName}} <small *ngIf="rule.overridden" i18n>(overridden)</small></td>
+      <th mat-header-cell i18n="@@admin-core.authorizations.access" *matHeaderCellDef>Access</th>
+      <td mat-cell *matCellDef="let rule">{{rule.groupName}} <small *ngIf="rule.overridden" i18n="@@admin-core.authorizations.overridden">(overridden)</small></td>
       <td mat-footer-cell *matFooterCellDef>
         <mat-form-field>
-          <mat-label i18n>Group name</mat-label>
+          <mat-label i18n="@@admin-core.authorizations.group-name">Group name</mat-label>
           <mat-select (selectionChange)="addRule($event.value)" [compareWith]="compareValues">
             <mat-option *ngFor="let group of groupList" [value]="group.name" [disabled]="group.used">
               {{group.name}}
@@ -28,9 +32,9 @@
     <ng-container matColumnDef="header">
       <td class="subheader" mat-cell *matCellDef="let rule" colspan="3">{{rule.headerText}}</td>
     </ng-container>
-  
+
     <ng-container matColumnDef="read">
-      <th mat-header-cell i18n *matHeaderCellDef>Read</th>
+      <th mat-header-cell i18n="@@admin-core.authorizations.read" *matHeaderCellDef>Read</th>
       <td mat-cell *matCellDef="let rule">
         <mat-checkbox [checked]="rule.decisions.read === 'allow'" [disabled]="rule.decisions.read === 'deny' && rule.inherited" (change)="changeRule(rule.groupName, 'read', $event.checked)"></mat-checkbox>
       </td>
@@ -38,7 +42,7 @@
         <mat-checkbox [(ngModel)]="newRuleDecision"></mat-checkbox>
       </td>
     </ng-container>
-  
+
     <ng-container matColumnDef="button">
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let rule">
@@ -55,7 +59,7 @@
       <td mat-footer-cell *matFooterCellDef>
       </td>
     </ng-container>
-  
+
     <tr mat-header-row *matHeaderRowDef="['groupName', 'read', 'button']"></tr>
     <tr mat-row *matRowDef="let rule; columns: ['groupName', 'read', 'button']; when: isNormalRow"></tr>
     <tr mat-row *matRowDef="let rule; columns: ['header']; when: isHeaderRow"></tr>

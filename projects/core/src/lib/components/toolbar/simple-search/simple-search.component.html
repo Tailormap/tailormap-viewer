@@ -3,7 +3,7 @@
      (keyup.escape)="toggle(true)">
 
   <button mat-flat-button
-          i18n-tmTooltip
+          i18n-tmTooltip="@@core.toolbar.search-location"
           class="map-control-button"
           [class.toggle-button--active]="active"
           tmTooltip="Search location"
@@ -14,10 +14,10 @@
   <div class="simple-search-field-wrapper"
        *ngIf="active">
     <mat-form-field appearance="outline">
-      <mat-label i18n>Search location</mat-label>
+      <mat-label i18n="@@core.toolbar.search-location">Search location</mat-label>
       <input matInput
              type="text"
-             i18n-placeholder
+             i18n-placeholder="@@core.toolbar.search-location"
              tmAutoFocus
              placeholder="Search location"
              [formControl]="searchControl"
@@ -26,12 +26,11 @@
                         #auto="matAutocomplete"
                         [displayWith]="displayLabel">
         <ng-container *ngIf="searchStatus$ | async as searchStatus">
-          <mat-option disabled class="hint" *ngIf="searchStatus === 'belowMinLength'" i18n>
-            Type at least {{ minLength }} characters to start searching
-          </mat-option>
-          <mat-option disabled class="hint" *ngIf="searchStatus === 'no_results'" i18n>
-            No results found
-          </mat-option>
+          <mat-option disabled
+                      class="hint"
+                      *ngIf="searchStatus === 'belowMinLength'"
+                      i18n="@@core.toolbar.type-at-least">Type at least {{ minLength }} characters to start searching</mat-option>
+          <mat-option disabled class="hint" *ngIf="searchStatus === 'no_results'" i18n="@@core.toolbar.no-results-found">No results found</mat-option>
           <mat-option disabled class="hint" *ngIf="searchStatus === 'searching'">
             <mat-spinner color="primary" mode="indeterminate" diameter="20"></mat-spinner>
           </mat-option>

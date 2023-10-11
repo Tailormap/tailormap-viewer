@@ -2,8 +2,8 @@
         color="primary"
         [matMenuTriggerFor]="menu"
         tmTooltip="Create new filter"
-        i18n-tmTooltip
-        i18n>Add filter</button>
+        i18n-tmTooltip="@@core.filter.create-new-filter"
+        i18n="@@core.filter.add-filter">Add filter</button>
 <mat-menu #menu="matMenu">
-  <button mat-menu-item i18n (click)="createFilter(filterTypes.SPATIAL)">Spatial</button>
+  <button mat-menu-item i18n="@@core.filter.spatial" (click)="createFilter(filterTypes.SPATIAL)">Spatial</button>
 </mat-menu>

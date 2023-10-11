@@ -1,35 +1,35 @@
-<h2 i18n>Add spatial filter</h2>
+<h2 i18n="@@core.filter.add-spatial-filter">Add spatial filter</h2>
 
 <ng-template #formTemplate let-availableLayers>
 
   <ng-template #noLayers>
-    <div i18n>No layers available to filter on</div>
+    <div i18n="@@core.filter.no-layers-available">No layers available to filter on</div>
   </ng-template>
 
   <ng-container *ngIf="availableLayers.length > 0; else: noLayers">
 
     <div class="form-section form-section--with-form-field">
-      <div i18n class="form-section-label">Select the layer(s) you want to filter</div>
+      <div i18n="@@core.filter.select-layer-to-filter" class="form-section-label">Select the layer(s) you want to filter</div>
       <tm-spatial-filter-form-select-layers></tm-spatial-filter-form-select-layers>
     </div>
 
     <ng-container *ngIf="selectedLayersCount$ | async as layerCount">
       <ng-container *ngIf="layerCount > 0">
         <div class="form-section-label">
-          <p i18n>Filtering the selected {layerCount, plural, =1 {layer} other {layers}} can be done by drawing geometry and/or selecting a reference layer.</p>
-          <p i18n>The geometries from this reference layer will then be used to filter the selected {layerCount, plural, =1 {layer} other {layers}}.</p>
+          <p i18n="@@core.filter.filtering-layer-by-drawing-or-reference">Filtering the selected layer(s) can be done by drawing geometry and/or selecting a reference layer.</p>
+          <p i18n="@@core.filter.filtering-layer-by-drawing-or-reference-hint">The geometries from this reference layer will then be used to filter the selected layer(s).</p>
         </div>
 
         <div class="form-section">
-          <div i18n class="form-section-label">Draw filter geometry</div>
+          <div i18n="@@core.filter.draw-filter-geometry" class="form-section-label">Draw filter geometry</div>
           <tm-spatial-filter-form-draw-geometries [drawingLayerId]="drawingLayerId"></tm-spatial-filter-form-draw-geometries>
         </div>
 
         <div class="form-section">
-          <div i18n class="form-section-label">Select reference layer</div>
+          <div i18n="@@core.filter.select-reference-layer" class="form-section-label">Select reference layer</div>
           <tm-spatial-filter-form-select-reference-layer></tm-spatial-filter-form-select-reference-layer>
           <div *ngIf="isLoadingReferenceGeometry$ | async" class="loading-reference-geometry">
-            <div i18n>Loading reference geometry</div>
+            <div i18n="@@core.filter.loading-reference-layer">Loading reference geometry</div>
             <mat-spinner color="primary" [diameter]="20" mode="indeterminate"></mat-spinner>
           </div>
         </div>
@@ -41,7 +41,7 @@
                       [friendlyError]="true">{{currentGroup$}}</tm-error-message>
 
     <div class="form-section form-section--with-form-field" *ngIf="hasSelectedLayersAndGeometry$ | async">
-      <div i18n class="form-section-label">Optionally you can buffer the geometry</div>
+      <div i18n="@@core.filter.buffer-filter-geometry" class="form-section-label">Optionally you can buffer the geometry</div>
       <tm-spatial-filter-form-buffer></tm-spatial-filter-form-buffer>
     </div>
 
@@ -51,22 +51,22 @@
         <button mat-stroked-button
                 (click)="cancel()"
                 tmTooltip="Close filter form"
-                i18n-tmTooltip
-                i18n>Cancel</button>
+                i18n-tmTooltip="@@core.filter.close-filter-form"
+                i18n="@@core.common.cancel">Cancel</button>
       </ng-template>
       <ng-container *ngIf="currentGroup$ | async as currentGroup; else cancelButton">
         <button mat-stroked-button
                 color="warn"
                 (click)="remove(currentGroup)"
                 tmTooltip="Delete this filter"
-                i18n-tmTooltip
-                i18n>Delete</button>
+                i18n-tmTooltip="@@core.filter.delete-this-filter"
+                i18n="@@core.common.delete">Delete</button>
         <button mat-flat-button
                 color="primary"
                 (click)="save()"
                 tmTooltip="Save filter"
-                i18n-tmTooltip
-                i18n>Save</button>
+                i18n-tmTooltip="@@core.filter.save-filter"
+                i18n="@@core.common.save">Save</button>
       </ng-container>
     </div>
   </ng-container>

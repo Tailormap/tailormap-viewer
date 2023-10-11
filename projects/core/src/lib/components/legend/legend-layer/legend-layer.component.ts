@@ -21,7 +21,7 @@ export class LegendLayerComponent implements OnChanges {
 
   public srcset = '';
 
-  public failedToLoadMessage = $localize `Failed to load legend for`;
+  public failedToLoadMessage = $localize `:@@core.legend.failed-loading-legend:Failed to load legend for`;
 
   public ngOnChanges() {
     if (this.legendInfo === null) {

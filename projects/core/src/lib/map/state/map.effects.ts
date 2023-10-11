@@ -9,7 +9,7 @@ import * as CoreActions from '../../state/core.actions';
 @Injectable()
 export class MapEffects {
 
-  private static LOAD_MAP_ERROR = $localize `Could not load map settings`;
+  private static LOAD_MAP_ERROR = $localize `:@@core.common.error-loading-map:Could not load map settings`;
 
   public triggerLoadMap$ = createEffect(() => {
     return this.actions$.pipe(

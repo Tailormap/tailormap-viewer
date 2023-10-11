@@ -23,8 +23,8 @@ type ApplicationEditModel = Partial<ApplicationCreateModel>;
 })
 export class ApplicationService implements OnDestroy {
 
-  public static ROOT_NODE_TITLE = $localize `Application layers`;
-  public static ROOT_BACKGROUND_NODE_TITLE = $localize `Background layers`;
+  public static ROOT_NODE_TITLE = $localize `:@@admin-core.application.application-layers:Application layers`;
+  public static ROOT_BACKGROUND_NODE_TITLE = $localize `:@@admin-core.application.background-layers:Background layers`;
 
   private destroyed = new Subject<null>();
 
@@ -86,7 +86,7 @@ export class ApplicationService implements OnDestroy {
     return this.adminApiService.createApplication$({ application })
       .pipe(
         catchError(() => {
-          this.adminSnackbarService.showMessage($localize `Error while creating application.`);
+          this.adminSnackbarService.showMessage($localize `:@@admin-core.application.error-creating-application:Error while creating application.`);
           return of(null);
         }),
         map(createApplication => {
@@ -133,7 +133,7 @@ export class ApplicationService implements OnDestroy {
     return this.adminApiService.updateApplication$({ id, application })
       .pipe(
         catchError(() => {
-          this.adminSnackbarService.showMessage($localize `Error while updating application.`);
+          this.adminSnackbarService.showMessage($localize `:@@admin-core.application.error-updating-application:Error while updating application.`);
           return of(null);
         }),
         map(updatedApplication => {
@@ -150,7 +150,7 @@ export class ApplicationService implements OnDestroy {
     return this.adminApiService.deleteApplication$(id)
       .pipe(
         catchError(() => {
-          this.adminSnackbarService.showMessage($localize `Error while deleting application.`);
+          this.adminSnackbarService.showMessage($localize `:@@admin-core.application.error-deleting-application:Error while deleting application.`);
           return of(null);
         }),
         map(success => {

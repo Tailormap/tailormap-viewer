@@ -129,7 +129,7 @@ export class MapPdfService {
       concatMap(() => this.addLegendImages$(doc, size.width, size.height, legendLayers$)),
       concatMap(() => this.addSvg2PDF$(doc, this.iconService.getUrlForIcon('logo'), { x: size.width - 30, y, width: 20, height: 20 })),
       concatMap(() => this.addSvg2PDF$(doc, this.iconService.getUrlForIcon('north_arrow'), { x, y: y + 2, width: 20, height: 20 })),
-      map(() => doc.output('dataurlstring', { filename: printOptions.filename || $localize `map.pdf` })),
+      map(() => doc.output('dataurlstring', { filename: printOptions.filename || $localize `:@@core.print.default-pdf-filename:map.pdf` })),
     );
   }
 
@@ -191,8 +191,8 @@ export class MapPdfService {
   }
 
   private addDateTime(doc: jsPDF, width: number, height: number) {
-    const text = $localize `Created on `;
-    const date = text + new Intl.DateTimeFormat(this.locale, { dateStyle: 'full', timeStyle: 'medium' }).format(new Date());
+    const text = $localize `:@@core.print.created-on:Created on`;
+    const date = text + ' ' + new Intl.DateTimeFormat(this.locale, { dateStyle: 'full', timeStyle: 'medium' }).format(new Date());
     const dateFontSize = 8;
     doc.setFontSize(dateFontSize);
     // See http://raw.githack.com/MrRio/jsPDF/master/docs/module-split_text_to_size.html#~getStringUnitWidth

@@ -1,31 +1,31 @@
 <form [formGroup]="layerSettingsForm">
-  <div class="margin-btm" i18n>Layer name: <b>{{layerName}}</b></div>
+  <div class="margin-btm"><ng-container i18n="@@admin-core.catalog.layer-name">Layer name</ng-container>: <b>{{layerName}}</b></div>
   <mat-form-field *ngIf="isLayerSpecific">
-    <mat-label i18n>Title</mat-label>
-    <input matInput tmAutoFocus placeholder="Title" i18n-placeholder formControlName="title" />
-    <mat-hint i18n>Leave empty to use the title as provided by the service.</mat-hint>
+    <mat-label i18n="@@admin-core.common.title">Title</mat-label>
+    <input matInput tmAutoFocus placeholder="Title" i18n-placeholder="@@admin-core.common.title" formControlName="title" />
+    <mat-hint i18n="@@admin-core.catalog.title-hint">Leave empty to use the title as provided by the service.</mat-hint>
   </mat-form-field>
   <mat-form-field>
-    <mat-label i18n>Description</mat-label>
+    <mat-label i18n="@@admin-core.common.description">Description</mat-label>
     <textarea matInput
               placeholder="Description"
-              i18n-placeholder
+              i18n-placeholder="@@admin-core.common.description"
               formControlName="description"
               cdkTextareaAutosize
               cdkAutosizeMinRows="4"
               cdkAutosizeMaxRows="10"></textarea>
   </mat-form-field>
   <mat-form-field>
-    <mat-label>Attribution</mat-label>
+    <mat-label i18n="@@admin-core.common.attribution">Attribution</mat-label>
     <input matInput formControlName="attribution" />
   </mat-form-field>
   <ng-container *ngIf="!isLayerSpecific">
-    <mat-slide-toggle formControlName="hiDpiEnabled" i18n>High-DPI enabled</mat-slide-toggle>
-    <mat-slide-toggle formControlName="tilingEnabled" i18n *ngIf="isWMS">Use tiling</mat-slide-toggle>
+    <mat-slide-toggle formControlName="hiDpiEnabled" i18n="@@admin-core.catalog.hi-dpi-enabled">High-DPI enabled</mat-slide-toggle>
+    <mat-slide-toggle formControlName="tilingEnabled"  i18n="@@admin-core.catalog.use-tiling" *ngIf="isWMS">Use tiling</mat-slide-toggle>
   </ng-container>
   <ng-container *ngIf="isLayerSpecific">
     <div class="form-control">
-      <strong i18n>Connected feature source and type</strong>
+      <strong i18n="@@admin-core.catalog.connect-feature-source">Connected feature source and type</strong>
       <tm-admin-feature-type-selector [featureSourceId]="layerSettingsForm.get('featureSourceId')?.value"
                                       [featureTypeName]="layerSettingsForm.get('featureTypeName')?.value"
                                       [layerName]="layerName"
@@ -33,7 +33,7 @@
     </div>
     <mat-expansion-panel *ngIf="isXYZ">
       <mat-expansion-panel-header>
-        <mat-panel-title i18n style="flex-grow: 1">XYZ tile grid options</mat-panel-title>
+        <mat-panel-title i18n="@@admin-core.catalog.xyz-tile-grid-options" style="flex-grow: 1">XYZ tile grid options</mat-panel-title>
       </mat-expansion-panel-header>
 <!--
       TODO: for XYZ layers we don't load capabilities so the projection should be entered by the user. But the admin does not restrict
@@ -51,33 +51,26 @@
         <mat-hint>Default: EPSG:3857 (web mercator)</mat-hint>
       </mat-form-field>-->
       <mat-form-field>
-        <mat-label i18n>Maximum zoom level</mat-label>
+        <mat-label i18n="@@admin-core.catalog.max-zoom-level">Maximum zoom level</mat-label>
         <input matInput type="number" formControlName="maxZoom" autocomplete="off" />
-        <mat-hint i18n>Default: {{21}}</mat-hint>
+        <mat-hint i18n="@@admin-core.catalog.default-hint">Default: {{21}}</mat-hint>
       </mat-form-field>
       <mat-form-field>
-        <mat-label i18n>Minimum zoom level</mat-label>
+        <mat-label i18n="@@admin-core.catalog.min-zoom-level">Minimum zoom level</mat-label>
         <input matInput type="number" formControlName="minZoom" autocomplete="off" />
-        <mat-hint i18n>Default: {{0}}</mat-hint>
+        <mat-hint i18n="@@admin-core.catalog.default-hint">Default: {{0}}</mat-hint>
       </mat-form-field>
     </mat-expansion-panel>
     <div class="toggle-control">
-      <strong i18n>High-DPI enabled</strong>
+      <strong  i18n="@@admin-core.catalog.hi-dpi-enabled">High-DPI enabled</strong>
       <tm-admin-tri-state-boolean formControlName="hiDpiEnabled"></tm-admin-tri-state-boolean>
     </div>
     <ng-container *ngIf="isWMTS">
-      <mat-form-field class="form-control">
-        <mat-label i18n>Hi-DPI mode</mat-label>
-        <mat-select formControlName="hiDpiMode" i18n-placeholder placeholder="High-DPI mode">
-          <mat-option [value]="hiDpiModes.ShowNextZoomLevel" i18n>Show next zoom level</mat-option>
-          <mat-option [value]="hiDpiModes.SubstituteLayerShowNextZoomLevel" i18n>Substitute layer, show next zoom level</mat-option>
-          <mat-option [value]="hiDpiModes.SubstituteLayerTilePixelRatioOnly" i18n>Substitute layer, tile pixel ratio only</mat-option>
-        </mat-select>
-      </mat-form-field>
+      <ng-container *ngTemplateOutlet="hiDpiMode"></ng-container>
       <mat-form-field>
-        <mat-label i18n>Hi-DPI substitute layer</mat-label>
+        <mat-label i18n="@@admin-core.catalog.hi-dpi-substitute-layer">Hi-DPI substitute layer</mat-label>
         <mat-select formControlName="hiDpiSubstituteLayer">
-          <mat-option [value]="null" i18n></mat-option>
+          <mat-option [value]="null"></mat-option>
           <mat-option *ngFor="let layer of layers$ | async" [value]="layer.name">
             {{ layer.name }} ({{layer.title}})
           </mat-option>
@@ -85,27 +78,20 @@
       </mat-form-field>
     </ng-container>
     <ng-container *ngIf="isXYZ">
-      <mat-form-field class="form-control">
-        <mat-label i18n>Hi-DPI mode</mat-label>
-        <mat-select formControlName="hiDpiMode" i18n-placeholder placeholder="High-DPI mode">
-          <mat-option [value]="hiDpiModes.ShowNextZoomLevel" i18n>Show next zoom level</mat-option>
-          <mat-option [value]="hiDpiModes.SubstituteLayerShowNextZoomLevel" i18n>Substitute URL template, show next zoom level</mat-option>
-          <mat-option [value]="hiDpiModes.SubstituteLayerTilePixelRatioOnly" i18n>Substitute URL template, tile pixel ratio only</mat-option>
-        </mat-select>
-      </mat-form-field>
+      <ng-container *ngTemplateOutlet="hiDpiMode"></ng-container>
       <mat-form-field>
-        <mat-label i18n>Hi-DPI substitute URL template</mat-label>
+        <mat-label i18n="@@admin-core.catalog.substitute-layer-url-template">Hi-DPI substitute URL template</mat-label>
         <input matInput formControlName="hiDpiSubstituteLayer" autocomplete="off" />
-        <mat-hint><span i18n>For example:</span> <span class="monospace">https://my.tile.service/{{ "{" }}z}/{{ "{" }}x}/{{ "{" }}y}@2x.png</span></mat-hint>
+        <mat-hint><span i18n="@@admin-core.catalog.for-example">For example</span>: <span class="monospace">https://my.tile.service/{{ "{" }}z}/{{ "{" }}x}/{{ "{" }}y}@2x.png</span></mat-hint>
       </mat-form-field>
     </ng-container>
     <ng-container *ngIf="isWMS">
       <div class="toggle-control">
-        <strong i18n>Use tiling</strong>
+        <strong i18n="@@admin-core.catalog.use-tiling">Use tiling</strong>
         <tm-admin-tri-state-boolean formControlName="tilingEnabled"></tm-admin-tri-state-boolean>
       </div>
       <mat-form-field class="form-control number-control">
-        <mat-label i18n>Tiling gutter</mat-label>
+        <mat-label i18n="@@admin-core.catalog.tiling-gutter">Tiling gutter</mat-label>
         <input matInput type="number" formControlName="tilingGutter" />
       </mat-form-field>
     </ng-container>
@@ -118,3 +104,14 @@
                                parentType="GeoService"
                                selfType="Layer"></tm-admin-authorization-edit>
 </form>
+
+<ng-template #hiDpiMode>
+  <mat-form-field class="form-control">
+    <mat-label  i18n="@@admin-core.catalog.hi-dpi-mode">Hi-DPI mode</mat-label>
+    <mat-select formControlName="hiDpiMode" i18n-placeholder="@@admin-core.catalog.hi-dpi-mode" placeholder="High-DPI mode">
+      <mat-option [value]="hiDpiModes.ShowNextZoomLevel" i18n="@@admin-core.catalog.show-next-zoom-level">Show next zoom level</mat-option>
+      <mat-option [value]="hiDpiModes.SubstituteLayerShowNextZoomLevel" i18n="@@admin-core.catalog.substitute-layer">Substitute layer, show next zoom level</mat-option>
+      <mat-option [value]="hiDpiModes.SubstituteLayerTilePixelRatioOnly" i18n="@@admin-core.catalog.substitute-layer-pixel-ratio-only">Substitute layer, tile pixel ratio only</mat-option>
+    </mat-select>
+  </mat-form-field>
+</ng-template>

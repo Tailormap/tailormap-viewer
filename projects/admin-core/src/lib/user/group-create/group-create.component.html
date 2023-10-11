@@ -1,8 +1,8 @@
-<h2 class="page-details-title" i18n>Add group</h2>
+<h2 class="page-details-title" i18n="@@admin-core.groups.add-group">Add group</h2>
 <div class="form-wrapper">
   <tm-admin-group-form (groupUpdated)="updateGroup($event)"></tm-admin-group-form>
 </div>
 <div class="page-details-actions">
-  <tm-admin-save-button label="Create" i18n-label [saving$]="saving$" [disabled]="!group" (save)="save()"></tm-admin-save-button>
-  <button mat-flat-button routerLink="/admin/groups" i18n>Cancel</button>
+  <tm-admin-save-button label="Create" i18n-label="@@admin-core.common.create" [saving$]="saving$" [disabled]="!group" (save)="save()"></tm-admin-save-button>
+  <button mat-flat-button routerLink="/admin/groups" i18n="@@admin-core.common.cancel">Cancel</button>
 </div>

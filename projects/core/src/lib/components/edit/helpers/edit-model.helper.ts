@@ -23,7 +23,7 @@ export class EditModelHelper {
       // a user must touch it to make the form valid. For nullable booleans just keep the checkbox and do not bother the user with the
       // difference between a null and a false boolean.
       const booleanValueList = (attribute.type === AttributeType.BOOLEAN && !attribute.nullable)  ?
-        [{ value: true, label: $localize `True` }, { value: false, label: $localize `False` }] : null;
+        [{ value: true, label: $localize `:@@core.edit.true:True` }, { value: false, label: $localize `:@@core.edit.false:False` }] : null;
       return {
         label: attribute.editAlias || metadata?.alias || attribute.key,
         value: isNewFeature ? attributeValue || attribute.defaultValue || '' : attributeValue,

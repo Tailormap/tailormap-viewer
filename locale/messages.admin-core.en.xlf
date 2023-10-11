@@ -1,0 +1,793 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="admin-core.application.add-application" datatype="html">
+        <source>Add application</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.add-sub-folder" datatype="html">
+        <source>Add sub folder</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.application-created" datatype="html">
+        <source>Application <x id="PH" equiv-text="createdApplication.title || createdApplication.name"/> created</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.application-layers" datatype="html">
+        <source>Application layers</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.application-removed" datatype="html">
+        <source>Application <x id="PH" equiv-text="title"/> removed</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.application-updated" datatype="html">
+        <source>Application updated</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.applications" datatype="html">
+        <source>Applications</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.background-layers" datatype="html">
+        <source>Background layers</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.change-folder-name" datatype="html">
+        <source>Change folder name</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.component-attribute-list" datatype="html">
+        <source>Attribute list</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.component-coordinate-picker-tool" datatype="html">
+        <source>Coordinate picker tool</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.component-drawing" datatype="html">
+        <source>Drawing</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.component-edit" datatype="html">
+        <source>Edit</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.component-filter" datatype="html">
+        <source>Filter</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.component-legend" datatype="html">
+        <source>Legend</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.component-measure-tools" datatype="html">
+        <source>Measure tools</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.component-print" datatype="html">
+        <source>Print</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.component-streetview-tool" datatype="html">
+        <source>Streetview tool</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.component-table-of-contents" datatype="html">
+        <source>Table of contents</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.components" datatype="html">
+        <source>Components</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.create-application" datatype="html">
+        <source>Create application</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.create-folder" datatype="html">
+        <source>Create folder</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.current-image" datatype="html">
+        <source>Current image</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.default-application" datatype="html">
+        <source>Default application</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.delete-application" datatype="html">
+        <source>Delete application <x id="PH" equiv-text="title"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.delete-application-message" datatype="html">
+        <source>Are you sure you want to delete application <x id="PH" equiv-text="title"/>? This action cannot be undone.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.edit" datatype="html">
+        <source>Edit <x id="INTERPOLATION" equiv-text="{{ application.title }}"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.editable" datatype="html">
+        <source>Editable</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.error-creating-application" datatype="html">
+        <source>Error while creating application.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.error-deleting-application" datatype="html">
+        <source>Error while deleting application.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.error-loading-applications" datatype="html">
+        <source>Error while loading list of applications</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.error-updating-application" datatype="html">
+        <source>Error while updating application.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filter-applications" datatype="html">
+        <source>Filter applications</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.folder-name" datatype="html">
+        <source>Folder name</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.initial-extent" datatype="html">
+        <source>Initial extent</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.invalid-name-error" datatype="html">
+        <source>Name can only contain letters, numbers and dashes.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.layer-not-editable" datatype="html">
+        <source>This layer cannot be edited because there is no writeable feature source / type configured for this layer</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.layer-settings-updated" datatype="html">
+        <source>Layer settings updated</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.layers" datatype="html">
+        <source>Layers</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.list-of-components" datatype="html">
+        <source>List of available components</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.logo" datatype="html">
+        <source>Upload logo for application</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.max-extent" datatype="html">
+        <source>Max extent</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.opacity" datatype="html">
+        <source>Opacity</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.open-application" datatype="html">
+        <source>Open application</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.primary-color" datatype="html">
+        <source>Primary color used in application</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.projection" datatype="html">
+        <source>Projection</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.remove-image" datatype="html">
+        <source>Remove the image</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.remove-layer" datatype="html">
+        <source>Remove layer from application</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.service-updated" datatype="html">
+        <source>Service <x id="PH" equiv-text="updatedService.title"/> updated</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.set-default-application" datatype="html">
+        <source>Set default application</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.set-default-application-hint" datatype="html">
+        <source>Setting this application as default will overwrite the current default application</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.settings" datatype="html">
+        <source>Settings</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.styling" datatype="html">
+        <source>Styling</source>
+      </trans-unit>
+      <trans-unit id="admin-core.authorizations.access" datatype="html">
+        <source>Access</source>
+      </trans-unit>
+      <trans-unit id="admin-core.authorizations.allow-access-from" datatype="html">
+        <source>Allow access from:</source>
+      </trans-unit>
+      <trans-unit id="admin-core.authorizations.configured-on" datatype="html">
+        <source>Configured on <x id="PH" equiv-text="this.selfType"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.authorizations.group-name" datatype="html">
+        <source>Group name</source>
+      </trans-unit>
+      <trans-unit id="admin-core.authorizations.inherit-from" datatype="html">
+        <source>Inherit from</source>
+      </trans-unit>
+      <trans-unit id="admin-core.authorizations.inherit-from-anyone" datatype="html">
+        <source>Anyone</source>
+      </trans-unit>
+      <trans-unit id="admin-core.authorizations.inherit-from-hint" datatype="html">
+        <source>{VAR_SELECT, select, anonymous {Anyone} loggedIn {Logged in} specificGroups {Specific groups}}</source>
+      </trans-unit>
+      <trans-unit id="admin-core.authorizations.inherit-from-logged-in" datatype="html">
+        <source>Logged in</source>
+      </trans-unit>
+      <trans-unit id="admin-core.authorizations.inherit-from-specific-groups" datatype="html">
+        <source>Specific groups</source>
+      </trans-unit>
+      <trans-unit id="admin-core.authorizations.inherit-from-specific-groups-select" datatype="html">
+        <source>{VAR_SELECT, select, specificGroups {(inherited)}}</source>
+      </trans-unit>
+      <trans-unit id="admin-core.authorizations.inherited-from" datatype="html">
+        <source>Inherited from <x id="PH" equiv-text="this.parentType"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.authorizations.overridden" datatype="html">
+        <source>(overridden)</source>
+      </trans-unit>
+      <trans-unit id="admin-core.authorizations.read" datatype="html">
+        <source>Read</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.add-feature-source" datatype="html">
+        <source>Add feature source</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.add-folder" datatype="html">
+        <source>Add folder</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.add-service" datatype="html">
+        <source>Add service</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.attributes" datatype="html">
+        <source>Attributes</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.catalog" datatype="html">
+        <source>Catalog</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.common.cancel" datatype="html">
+        <source>Cancel</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.connect-feature-source" datatype="html">
+        <source>Connected feature source and type</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.connection-options" datatype="html">
+        <source>Additional connection options</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.create-feature-source" datatype="html">
+        <source>Create new feature source</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.create-new-folder" datatype="html">
+        <source>Create new folder</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.create-new-service" datatype="html">
+        <source>Create new service</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.database" datatype="html">
+        <source>Database</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.database-type" datatype="html">
+        <source>Database type</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.default-hint" datatype="html">
+        <source>Default: <x id="INTERPOLATION" equiv-text="{{21}}"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.default-layer-settings" datatype="html">
+        <source>Default layer settings</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.delete-feature-source" datatype="html">
+        <source>Delete source <x id="PH" equiv-text="featureSource.title"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.delete-feature-source-message" datatype="html">
+        <source>Are you sure you want to delete feature source <x id="PH" equiv-text="featureSource.title"/>? This action cannot be undone.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.delete-folder" datatype="html">
+        <source>Delete folder <x id="PH" equiv-text="node.title"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.delete-folder-message" datatype="html">
+        <source>Are you sure you want to the folder <x id="PH" equiv-text="node.title"/>? This action cannot be undone.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.delete-service-confirm" datatype="html">
+        <source>Delete service <x id="PH" equiv-text="geoService.title"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.delete-service-confirm-message" datatype="html">
+        <source>Are you sure you want to delete service <x id="PH" equiv-text="geoService.title"/>? This action cannot be undone.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.edit-feature-source" datatype="html">
+        <source>Edit <x id="INTERPOLATION" equiv-text="{{ featureSource.title }}"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.edit-geoservice" datatype="html">
+        <source>Edit <x id="INTERPOLATION" equiv-text="{{ geoService.title }}"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.edit-node" datatype="html">
+        <source>Edit <x id="INTERPOLATION" equiv-text="{{ node.title }}"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.edit-service" datatype="html">
+        <source>Edit <x id="INTERPOLATION" equiv-text="{{data.geoService.title}}"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.edit-settings-for-layer" datatype="html">
+        <source>Edit settings for layer <x id="INTERPOLATION" equiv-text="{{ geoServiceSettings.layerTitle }}"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.error-creating-feature-source" datatype="html">
+        <source>Error while creating feature source: <x id="PH" equiv-text="message"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.error-creating-service" datatype="html">
+        <source>Error while creating geo service: <x id="PH" equiv-text="message"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.error-deleting-feature-source" datatype="html">
+        <source>Error while deleting source: <x id="PH" equiv-text="message"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.error-deleting-service" datatype="html">
+        <source>Error while deleting geo service: <x id="PH" equiv-text="message"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.error-loading-catalog" datatype="html">
+        <source>Error while loading catalog</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.error-loading-feature-sources" datatype="html">
+        <source>Error while loading feature source(s). Please collapse/expand the node again to try again.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.error-loading-geo-services" datatype="html">
+        <source>Error while loading geo services</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.error-loading-services" datatype="html">
+        <source>Error while loading service(s). Please collapse/expand the node again to try again.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.error-refreshing-feature-source" datatype="html">
+        <source>Error while refreshing feature source: </source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.error-refreshing-service" datatype="html">
+        <source>Error while refreshing geo service: </source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.error-updating-catalog" datatype="html">
+        <source>Error while updating catalog.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.error-updating-feature-source" datatype="html">
+        <source>Error while updating feature source: </source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.error-updating-feature-type" datatype="html">
+        <source>Error while updating feature type: <x id="PH" equiv-text="message"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.error-updating-service" datatype="html">
+        <source>Error while updating geo service: </source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.feature-source" datatype="html">
+        <source>Feature Source</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.feature-source-created" datatype="html">
+        <source>Feature source <x id="PH" equiv-text="featureSource.title"/> created</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.feature-source-refreshed" datatype="html">
+        <source>Feature source refreshed</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.feature-source-removed" datatype="html">
+        <source>Source <x id="PH" equiv-text="featureSource.title"/> removed</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.feature-source-updated" datatype="html">
+        <source>Feature source updated</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.feature-source-used" datatype="html">
+        <source>Feature source is used in layers</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.feature-source-used-body" datatype="html">
+        <source>The feature source <x id="INTERPOLATION" equiv-text="{{data.featureSource.title}}"/> is used in the following layers.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.feature-type" datatype="html">
+        <source>Feature Type</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.feature-type-details" datatype="html">
+        <source>Details for feature type <x id="INTERPOLATION" equiv-text="{{ featureType.title }}"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.folder-created" datatype="html">
+        <source>Folder <x id="PH" equiv-text="node.title"/> created</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.folder-not-empty" datatype="html">
+        <source>Folder is not empty</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.folder-not-empty-body" datatype="html">
+        <source>This folder <x id="INTERPOLATION" equiv-text="{{data.node.title}}"/> is not empty and contains the following items.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.folder-removed" datatype="html">
+        <source>Folder <x id="PH" equiv-text="node.title"/> removed</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.folder-updated" datatype="html">
+        <source>Folder updated</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.for-example" datatype="html">
+        <source>For example</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.geometry-attributes" datatype="html">
+        <source>Geometry attributes</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.hi-dpi-enabled" datatype="html">
+        <source>High-DPI enabled</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.hi-dpi-mode" datatype="html">
+        <source>Hi-DPI mode</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.hi-dpi-substitute-layer" datatype="html">
+        <source>Hi-DPI substitute layer</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.host" datatype="html">
+        <source>Host</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.layer" datatype="html">
+        <source>Layer</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.layer-name" datatype="html">
+        <source>Layer name</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.layer-settings-updated" datatype="html">
+        <source>Layer settings updated</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.max-zoom-level" datatype="html">
+        <source>Maximum zoom level</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.min-zoom-level" datatype="html">
+        <source>Minimum zoom level</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.no-feature-source" datatype="html">
+        <source>No feature source</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.no-feature-type" datatype="html">
+        <source>No feature type</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.port" datatype="html">
+        <source>Port</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.protocol" datatype="html">
+        <source>Protocol</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.refresh-feature-source" datatype="html">
+        <source>Refresh feature source</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.refresh-feature-source-confirm" datatype="html">
+        <source>Refresh feature source?</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.refresh-feature-source-message" datatype="html">
+        <source>The settings for the feature source are updated. Do you want to refresh the feature source to refresh the feature types?</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.refresh-servhce" datatype="html">
+        <source>Refresh service</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.refresh-service-confirm" datatype="html">
+        <source>Refresh service?</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.refresh-service-confirm-message" datatype="html">
+        <source>The settings for the service are updated. Do you want to refresh the service to refresh the capabilities and layers?</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.remove-feature-source-first" datatype="html">
+        <source>Please remove the feature source and type from these layers first</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.remove-items-first" datatype="html">
+        <source>Please remove these items first before removing the folder</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.remove-layers-first" datatype="html">
+        <source>Please remove the layers from this service from the applications first</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.schema" datatype="html">
+        <source>Schema</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.service" datatype="html">
+        <source>Service</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.service-created" datatype="html">
+        <source>Service <x id="PH" equiv-text="createdService.title"/> created</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.service-refreshed" datatype="html">
+        <source>Service refreshed</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.service-removed" datatype="html">
+        <source>Service <x id="PH" equiv-text="geoService.title"/> removed</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.service-updated" datatype="html">
+        <source>Service updated</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.service-used" datatype="html">
+        <source>Service is used in applications</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.service-used-body" datatype="html">
+        <source>The service <x id="INTERPOLATION" equiv-text="{{data.service.title}}"/> is used in the following applications.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.show-next-zoom-level" datatype="html">
+        <source>Show next zoom level</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.substitute-layer" datatype="html">
+        <source>Substitute layer, show next zoom level</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.substitute-layer-pixel-ratio-only" datatype="html">
+        <source>Substitute layer, tile pixel ratio only</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.substitute-layer-url-template" datatype="html">
+        <source>Hi-DPI substitute URL template</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.technical-name" datatype="html">
+        <source>Technical name: <x id="INTERPOLATION" equiv-text="{{ featureType.name }}"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.tiling-gutter" datatype="html">
+        <source>Tiling gutter</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.title-hint" datatype="html">
+        <source>Leave empty to use the title as provided by the service.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.use-tiling" datatype="html">
+        <source>Use tiling</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.xyz-tile-grid-options" datatype="html">
+        <source>XYZ tile grid options</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.alias" datatype="html">
+        <source>Alias</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.applications-title" datatype="html">
+        <source>Applications</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.attribution" datatype="html">
+        <source>Attribution</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.bounds" datatype="html">
+        <source>Bounds</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.cancel" datatype="html">
+        <source>Cancel</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.catalog-title" datatype="html">
+        <source>Catalog</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.close" datatype="html">
+        <source>Close</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.comments" datatype="html">
+        <source>Comments</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.create" datatype="html">
+        <source>Create</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.default" datatype="html">
+        <source>Default</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.delete" datatype="html">
+        <source>Delete</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.description" datatype="html">
+        <source>Description</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.disabled" datatype="html">
+        <source>Disabled</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.email" datatype="html">
+        <source>Email</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.enabled" datatype="html">
+        <source>Enabled</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.filter-dots" datatype="html">
+        <source>Filter...</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.go-to-viewer" datatype="html">
+        <source>Go to viewer</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.groups-title" datatype="html">
+        <source>Group Administration</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.hide-password" datatype="html">
+        <source>Hide password</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.login" datatype="html">
+        <source>Login</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.logout" datatype="html">
+        <source>Logout</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.max-x" datatype="html">
+        <source>Max X</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.max-y" datatype="html">
+        <source>Max Y</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.min-x" datatype="html">
+        <source>Min X</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.min-y" datatype="html">
+        <source>Min Y</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.name" datatype="html">
+        <source>Name</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.notes" datatype="html">
+        <source>Notes</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.ok" datatype="html">
+        <source>Ok</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.password" datatype="html">
+        <source>Password</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.retry" datatype="html">
+        <source>Retry</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.save" datatype="html">
+        <source>Save</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.sort" datatype="html">
+        <source>Sort</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.sso-title" datatype="html">
+        <source>Single-sign on</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.tailormap-admin-title" datatype="html">
+        <source>Tailormap Admin</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.title" datatype="html">
+        <source>Title</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.type" datatype="html">
+        <source>Type</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.url" datatype="html">
+        <source>URL</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.username" datatype="html">
+        <source>Username</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.users-title" datatype="html">
+        <source>User Administration</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.welcome-to-tailormap" datatype="html">
+        <source>Welcome to Tailormap Admin</source>
+      </trans-unit>
+      <trans-unit id="admin-core.groups.add-group" datatype="html">
+        <source>Add group</source>
+      </trans-unit>
+      <trans-unit id="admin-core.groups.delete-group-confirm" datatype="html">
+        <source>Delete group <x id="PH" equiv-text="group.name"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.groups.delete-group-confirm-message" datatype="html">
+        <source>Are you sure you want to delete the group with name <x id="PH" equiv-text="group.name"/>? All users will be removed from this group. This action cannot be undone.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.groups.edit-group" datatype="html">
+        <source>Edit <x id="INTERPOLATION" equiv-text="{{ group.name }}"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.groups.error-creating-group" datatype="html">
+        <source>Error while creating group <x id="PH" equiv-text="group.name"/>. <x id="PH_1" equiv-text="response.error?.message"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.groups.error-deleting-group" datatype="html">
+        <source>Error while deleting group <x id="PH" equiv-text="groupName"/>. <x id="PH_1" equiv-text="response.error?.message"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.groups.error-loading-groups" datatype="html">
+        <source>Error while loading list of groups</source>
+      </trans-unit>
+      <trans-unit id="admin-core.groups.error-updating-group" datatype="html">
+        <source>Error while updating group <x id="PH" equiv-text="group.name"/>. <x id="PH_1" equiv-text="response.error?.message"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.groups.filter-groups" datatype="html">
+        <source>Filter groups</source>
+      </trans-unit>
+      <trans-unit id="admin-core.groups.group-created" datatype="html">
+        <source>Group <x id="PH" equiv-text="createGroup.name"/> created</source>
+      </trans-unit>
+      <trans-unit id="admin-core.groups.group-removed" datatype="html">
+        <source>Group <x id="PH" equiv-text="group.name"/> removed</source>
+      </trans-unit>
+      <trans-unit id="admin-core.groups.group-updated" datatype="html">
+        <source>Group updated</source>
+      </trans-unit>
+      <trans-unit id="admin-core.groups.groups" datatype="html">
+        <source>Groups</source>
+      </trans-unit>
+      <trans-unit id="admin-core.groups.system-group" datatype="html">
+        <source>System Group</source>
+      </trans-unit>
+      <trans-unit id="admin-core.navigation.applications" datatype="html">
+        <source>Applications</source>
+      </trans-unit>
+      <trans-unit id="admin-core.navigation.catalog" datatype="html">
+        <source>Catalog</source>
+      </trans-unit>
+      <trans-unit id="admin-core.navigation.groups" datatype="html">
+        <source>Groups</source>
+      </trans-unit>
+      <trans-unit id="admin-core.navigation.home" datatype="html">
+        <source>Home</source>
+      </trans-unit>
+      <trans-unit id="admin-core.navigation.single-sign-on" datatype="html">
+        <source>Single-sign on</source>
+      </trans-unit>
+      <trans-unit id="admin-core.navigation.users" datatype="html">
+        <source>Users</source>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.add-identity-provider" datatype="html">
+        <source>Add identity provider</source>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.client-id" datatype="html">
+        <source>Client ID</source>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.client-secret" datatype="html">
+        <source>Client Secret</source>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.configuration-created" datatype="html">
+        <source>OIDC Configuration <x id="PH" equiv-text="createdOIDCConfiguration.name"/> created</source>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.configuration-delete-confirm" datatype="html">
+        <source>Delete OIDC configuration <x id="PH" equiv-text="title"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.configuration-delete-confirm-message" datatype="html">
+        <source>Are you sure you want to delete OIDC configuration <x id="PH" equiv-text="title"/>? This action cannot be undone.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.configuration-removed" datatype="html">
+        <source>OIDC Configuration <x id="PH" equiv-text="title"/> removed</source>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.configuration-updated" datatype="html">
+        <source>OIDC Configuration updated</source>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.create-configuration" datatype="html">
+        <source>Create OIDC configuration</source>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.edit-configuration" datatype="html">
+        <source>Edit <x id="INTERPOLATION" equiv-text="{{ oidcConfiguration.name }}"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.error-creating-configuration" datatype="html">
+        <source>Error while creating OIDC Configuration.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.error-deleting-configuration" datatype="html">
+        <source>Error while deleting OIDC Configuration.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.error-loading-configurations" datatype="html">
+        <source>Error while loading list of OIDC configurations</source>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.error-updating-configuration" datatype="html">
+        <source>Error while updating OIDC Configuration.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.filter-identity-providers" datatype="html">
+        <source>Filter identity providers</source>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.identity-providers" datatype="html">
+        <source>Identity providers</source>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.issuer-url" datatype="html">
+        <source>Issuer URL</source>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.status" datatype="html">
+        <source>Status</source>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.use-redirect-url" datatype="html">
+        <source>Use <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/><x id="INTERPOLATION" equiv-text="{{redirectUrl}}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> as redirect URL in your IdP.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.username-attribute" datatype="html">
+        <source>User name attribute</source>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.username-attribute-placeholder" datatype="html">
+        <source>(name, sub, email, etc)</source>
+      </trans-unit>
+      <trans-unit id="admin-core.use-max-extent" datatype="html">
+        <source>Use max extent from projection <x id="INTERPOLATION" equiv-text="{{projection}}"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.users.add-user" datatype="html">
+        <source>Add user</source>
+      </trans-unit>
+      <trans-unit id="admin-core.users.confirm-password" datatype="html">
+        <source>Confirm password</source>
+      </trans-unit>
+      <trans-unit id="admin-core.users.delete-user-confirm" datatype="html">
+        <source>Delete user <x id="PH" equiv-text="user.username"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.users.delete-user-confirm-message" datatype="html">
+        <source>Are you sure you want to delete the user with username <x id="PH" equiv-text="user.username"/>? This action cannot be undone.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.users.edit-user" datatype="html">
+        <source>Edit <x id="INTERPOLATION" equiv-text="{{ user.username }}"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.users.error-creating-user" datatype="html">
+        <source>Error while creating user <x id="PH" equiv-text="user.username"/>. <x id="PH_1" equiv-text="response.error?.message"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.users.error-deleting-user" datatype="html">
+        <source>Error while deleting user <x id="PH" equiv-text="userName"/>. <x id="PH_1" equiv-text="response.error?.message"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.users.error-loading-users" datatype="html">
+        <source>Error while loading list of users</source>
+      </trans-unit>
+      <trans-unit id="admin-core.users.error-updating-user" datatype="html">
+        <source>Error while updating user <x id="PH" equiv-text="user.username"/>. <x id="PH_1" equiv-text="response.error?.message"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.users.filter-users" datatype="html">
+        <source>Filter users</source>
+      </trans-unit>
+      <trans-unit id="admin-core.users.password-match-error" datatype="html">
+        <source>Passwords need to match</source>
+      </trans-unit>
+      <trans-unit id="admin-core.users.password-short-error" datatype="html">
+        <source>Password shorter than <x id="INTERPOLATION" equiv-text="{{userForm.get(&apos;password&apos;)?.errors?.[&apos;minlength&apos;].requiredLength}}"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.users.password-too-easy-error" datatype="html">
+        <source>Password too short or too easily guessable</source>
+      </trans-unit>
+      <trans-unit id="admin-core.users.user-created" datatype="html">
+        <source>User <x id="PH" equiv-text="createdUser.username"/> created</source>
+      </trans-unit>
+      <trans-unit id="admin-core.users.user-groups" datatype="html">
+        <source>User Groups</source>
+      </trans-unit>
+      <trans-unit id="admin-core.users.user-removed" datatype="html">
+        <source>User <x id="PH" equiv-text="user.username"/> removed</source>
+      </trans-unit>
+      <trans-unit id="admin-core.users.user-updated" datatype="html">
+        <source>User updated</source>
+      </trans-unit>
+      <trans-unit id="admin-core.users.users" datatype="html">
+        <source>Users</source>
+      </trans-unit>
+      <trans-unit id="admin-core.users.valid-until" datatype="html">
+        <source>Valid until</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

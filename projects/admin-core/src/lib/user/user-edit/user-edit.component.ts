@@ -53,8 +53,8 @@ export class UserEditComponent implements OnInit, OnDestroy {
 
   public delete(user: UserModel) {
     this.confirmDelete.confirm$(
-      `Delete user ${user.username}`,
-      `Are you sure you want to delete the user with username ${user.username}? This action cannot be undone.`,
+      $localize `:@@admin-core.users.delete-user-confirm:Delete user ${user.username}`,
+      $localize `:@@admin-core.users.delete-user-confirm-message:Are you sure you want to delete the user with username ${user.username}? This action cannot be undone.`,
       true,
     )
       .pipe(
@@ -63,7 +63,7 @@ export class UserEditComponent implements OnInit, OnDestroy {
         switchMap(() => this.userService.deleteUser$(user.username)),
       )
       .subscribe(() => {
-        this.adminSnackbarService.showMessage($localize `User ${user.username} removed`);
+        this.adminSnackbarService.showMessage($localize `:@@admin-core.users.user-removed:User ${user.username} removed`);
         this.router.navigateByUrl('/admin/users');
       });
   }
@@ -77,7 +77,7 @@ export class UserEditComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(updatedUser => {
         if (updatedUser) {
-          this.adminSnackbarService.showMessage($localize `User updated`);
+          this.adminSnackbarService.showMessage($localize `:@@admin-core.users.user-updated:User updated`);
         }
         this.savingSubject.next(false);
       });

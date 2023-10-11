@@ -28,7 +28,8 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
   private destroyed = new Subject();
   private layerSettings: Record<string, AppLayerSettingsModel> = {};
 
-  private editingDisabledTooltip = $localize `This layer cannot be edited because there is no writeable feature source / type configured for this layer`;
+  // eslint-disable-next-line max-len
+  private editingDisabledTooltip = $localize `:@@admin-core.application.layer-not-editable:This layer cannot be edited because there is no writeable feature source / type configured for this layer`;
   public editableTooltip = this.editingDisabledTooltip;
 
   @Input()
@@ -122,7 +123,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
       parentNode: geoService.catalogNodeId,
     }).afterClosed().pipe(takeUntil(this.destroyed)).subscribe(updatedService => {
       if (updatedService) {
-        this.adminSnackbarService.showMessage($localize `Service ${updatedService.title} updated`);
+        this.adminSnackbarService.showMessage($localize `:@@admin-core.application.service-updated:Service ${updatedService.title} updated`);
       }
     });
   }
@@ -134,7 +135,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
       geoServiceLayer,
     }).afterClosed().pipe(takeUntil(this.destroyed)).subscribe(updatedSettings => {
       if (updatedSettings) {
-        this.adminSnackbarService.showMessage($localize `Layer settings updated`);
+        this.adminSnackbarService.showMessage($localize `:@@admin-core.application.layer-settings-updated:Layer settings updated`);
       }
     });
   }

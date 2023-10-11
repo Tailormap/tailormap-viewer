@@ -1,6 +1,6 @@
 <div *ngIf="stylingConfig$ | async as stylingConfig">
   <div class="form-row">
-    <strong i18n>Primary color used in application</strong>
+    <strong i18n="@@admin-core.application.primary-color">Primary color used in application</strong>
     <tm-color-picker
       [dropdownPosition]="dropdownPosition"
       [color]="stylingConfig.primaryColor || DEFAULT_PRIMARY_COLOR"
@@ -8,7 +8,7 @@
   </div>
 
   <div class="form-row">
-    <strong i18n>Upload logo for application</strong>
+    <strong i18n="@@admin-core.application.logo">Upload logo for application</strong>
     <tm-image-upload-field (imageChanged)="onImageChanged($event)"
                            [maxSize]="2"
                            [resizeSize]="600"

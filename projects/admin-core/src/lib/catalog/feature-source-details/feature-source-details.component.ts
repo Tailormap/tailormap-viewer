@@ -76,7 +76,7 @@ export class FeatureSourceDetailsComponent implements OnInit, OnDestroy {
       .subscribe(updatedSource => {
         if (updatedSource) {
           this.checkToRefresh(featureSource, updatedSource);
-          this.adminSnackbarService.showMessage($localize `Feature source updated`);
+          this.adminSnackbarService.showMessage($localize `:@@admin-core.catalog.feature-source-updated:Feature source updated`);
           this.updatedFeatureSource = null;
         }
         this.savingSubject.next(false);
@@ -96,8 +96,9 @@ export class FeatureSourceDetailsComponent implements OnInit, OnDestroy {
       return;
     }
     this.confirmDialog.confirm$(
-      $localize `Refresh feature source?`,
-      $localize `The settings for the feature source are updated. Do you want to refresh the feature source to refresh the feature types?`,
+      $localize `:@@admin-core.catalog.refresh-feature-source-confirm:Refresh feature source?`,
+      // eslint-disable-next-line max-len
+      $localize `:@@admin-core.catalog.refresh-feature-source-message:The settings for the feature source are updated. Do you want to refresh the feature source to refresh the feature types?`,
     )
       .pipe(takeUntil(this.destroyed))
       .subscribe(result => {
@@ -113,7 +114,7 @@ export class FeatureSourceDetailsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyed))
       .subscribe(success => {
         if (success) {
-          this.adminSnackbarService.showMessage($localize `Feature source refreshed`);
+          this.adminSnackbarService.showMessage($localize `:@@admin-core.catalog.feature-source-refreshed:Feature source refreshed`);
         }
         this.refreshingSubject.next(false);
       });
@@ -134,8 +135,8 @@ export class FeatureSourceDetailsComponent implements OnInit, OnDestroy {
               }));
           }
           return this.confirmDialog.confirm$(
-            `Delete source ${featureSource.title}`,
-            `Are you sure you want to delete feature source ${featureSource.title}? This action cannot be undone.`,
+            $localize `:@@admin-core.catalog.delete-feature-source:Delete source ${featureSource.title}`,
+            $localize `:@@admin-core.catalog.delete-feature-source-message:Are you sure you want to delete feature source ${featureSource.title}? This action cannot be undone.`,
             true,
           );
         }),
@@ -156,7 +157,7 @@ export class FeatureSourceDetailsComponent implements OnInit, OnDestroy {
           }
           return;
         }
-        this.adminSnackbarService.showMessage($localize `Source ${featureSource.title} removed`);
+        this.adminSnackbarService.showMessage($localize `:@@admin-core.catalog.feature-source-removed:Source ${featureSource.title} removed`);
         this.router.navigateByUrl('/admin/catalog');
       });
   }

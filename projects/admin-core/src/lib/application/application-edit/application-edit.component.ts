@@ -70,7 +70,7 @@ export class ApplicationEditComponent implements OnInit, OnDestroy {
     this.applicationService.saveDraftApplication$()
       .pipe(take(1))
       .subscribe(() => {
-        this.adminSnackbarService.showMessage($localize `Application updated`);
+        this.adminSnackbarService.showMessage($localize `:@@admin-core.application.application-updated:Application updated`);
         this.savingSubject.next(false);
       });
   }
@@ -78,8 +78,8 @@ export class ApplicationEditComponent implements OnInit, OnDestroy {
   public delete(application: ApplicationModel) {
     const title = application.title || application.name;
     this.confirmDelete.confirm$(
-      `Delete application ${title}`,
-      `Are you sure you want to delete application ${title}? This action cannot be undone.`,
+      $localize `:@@admin-core.application.delete-application:Delete application ${title}`,
+      $localize `:@@admin-core.application.delete-application-message:Are you sure you want to delete application ${title}? This action cannot be undone.`,
       true,
     )
       .pipe(
@@ -88,7 +88,7 @@ export class ApplicationEditComponent implements OnInit, OnDestroy {
         switchMap(() => this.applicationService.deleteApplication$(application.id)),
       )
       .subscribe(() => {
-        this.adminSnackbarService.showMessage($localize `Application ${title} removed`);
+        this.adminSnackbarService.showMessage($localize `:@@admin-core.application.application-removed:Application ${title} removed`);
         this.router.navigateByUrl('/admin/applications');
       });
   }

@@ -24,7 +24,7 @@ export class CatalogEffects {
         return this.adminApiService.getCatalog$()
           .pipe(
             catchError(() => {
-              return of({ error: $localize `Error while loading catalog` });
+              return of({ error: $localize `:@@admin-core.catalog.error-loading-catalog:Error while loading catalog` });
             }),
             map(response => {
               if (ApiResponseHelper.isErrorResponse(response)) {
@@ -47,7 +47,7 @@ export class CatalogEffects {
         return this.adminApiService.getAllFeatureSources$({ excludingIds: currentFeatureSources.map(f => f.id) })
           .pipe(
             catchError(() => {
-              return of({ error: $localize `Error while loading feature sources` });
+              return of({ error: $localize `:@@admin-core.catalog.error-loading-feature-sources:Error while loading feature sources` });
             }),
             map(response => {
               if (ApiResponseHelper.isErrorResponse(response)) {
@@ -70,7 +70,7 @@ export class CatalogEffects {
         return this.adminApiService.getAllGeoServices$({ excludingIds: geoServices.map(s => s.id) })
           .pipe(
             catchError(() => {
-              return of({ error: $localize `Error while loading geo services` });
+              return of({ error: $localize `:@@admin-core.catalog.error-loading-geo-services:Error while loading geo services` });
             }),
             map(response => {
               if (ApiResponseHelper.isErrorResponse(response)) {

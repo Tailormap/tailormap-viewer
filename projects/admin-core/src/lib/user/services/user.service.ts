@@ -73,7 +73,7 @@ export class UserService {
     if (add) {
       return this.adminApiService.createUser$({ user }).pipe(
         catchError((response) => {
-          this.adminSnackbarService.showMessage($localize`Error while creating user ${user.username}. ${response.error?.message}`);
+          this.adminSnackbarService.showMessage($localize `:@@admin-core.users.error-creating-user:Error while creating user ${user.username}. ${response.error?.message}`);
           return of(null);
         }),
         tap(response => {
@@ -85,7 +85,7 @@ export class UserService {
     }
     return this.adminApiService.updateUser$({ username: user.username, user }).pipe(
       catchError((response) => {
-        this.adminSnackbarService.showMessage($localize`Error while updating user ${user.username}. ${response.error?.message}`);
+        this.adminSnackbarService.showMessage($localize `:@@admin-core.users.error-updating-user:Error while updating user ${user.username}. ${response.error?.message}`);
         return of(null);
       }),
       tap(response => {
@@ -100,7 +100,7 @@ export class UserService {
     return this.adminApiService.deleteUser$(userName)
       .pipe(
         catchError((response) => {
-          this.adminSnackbarService.showMessage($localize`Error while deleting user ${userName}. ${response.error?.message}`);
+          this.adminSnackbarService.showMessage($localize `:@@admin-core.users.error-deleting-user:Error while deleting user ${userName}. ${response.error?.message}`);
           return of(false);
         }),
         tap(response => {

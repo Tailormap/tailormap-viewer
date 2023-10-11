@@ -76,7 +76,7 @@ export class SimpleSearchService {
     }).pipe(
       catchError(() => of({ response: { docs: [] } })),
       map(result => ({
-        attribution: $localize `Data by [PDOK](https://pdok.nl)`,
+        attribution: $localize `:@@core.toolbar.search-location-pdok-attribution:Data by [PDOK](https://pdok.nl)`,
         results: result.response.docs.slice(0, SimpleSearchService.MAX_RESULTS).map(doc => ({
           label: doc.weergavenaam,
           geometry: doc.geometrie_rd || doc.centroide_rd,

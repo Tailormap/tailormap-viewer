@@ -82,7 +82,7 @@ export class GeoServiceLayerDetailsComponent implements OnInit, OnDestroy {
       serviceSetting => ({ layerSettings: { ...(serviceSetting.layerSettings || {}), [layerName]: updatedLayerSettings } }),
     )
       .subscribe(() => {
-        this.adminSnackbarService.showMessage($localize `Layer settings updated`);
+        this.adminSnackbarService.showMessage($localize `:@@admin-core.catalog.layer-settings-updated:Layer settings updated`);
         this.savingSubject.next(false);
       });
   }

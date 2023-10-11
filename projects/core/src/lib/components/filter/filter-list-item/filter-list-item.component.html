@@ -1,22 +1,16 @@
 <mat-card appearance="outlined" *ngIf="filter">
   <mat-card-title>
-    <ng-container *ngIf="isAttributeFilter(filter.type)" i18n>
-      Attribute filter
-    </ng-container>
-    <ng-container *ngIf="isSpatialFilter(filter.type)" i18n>
-      Spatial filter
-    </ng-container>
+    <ng-container *ngIf="isAttributeFilter(filter.type)" i18n="@@core.filter.attribute-filter">Attribute filter</ng-container>
+    <ng-container *ngIf="isSpatialFilter(filter.type)" i18n="@@core.filter.spatial-filter">Spatial filter</ng-container>
   </mat-card-title>
   <mat-card-content>
-    Applies to {{ getLayerList(filter.layers) }}
+    <ng-container i18n="@@core.filter.applies-to">Applies to</ng-container> {{ getLayerList(filter.layers) }}
     <tm-filter-description [filterGroup]="filter"></tm-filter-description>
   </mat-card-content>
   <mat-card-actions align="end">
     <mat-checkbox [checked]="!filter.disabled"
                   (click)="toggleDisabled(filter.id)"
-                  i18n>
-      Enabled
-    </mat-checkbox>
+                  i18n="@@core.common.enabled">Enabled</mat-checkbox>
     <div class="spacer"></div>
     <button mat-icon-button
             color="primary"

@@ -39,7 +39,7 @@ export class FeatureSourceService {
     return this.adminApiService.createFeatureSource$({ featureSource, refreshCapabilities: true }).pipe(
       catchError((errorResponse) => {
         const message = ApiResponseHelper.getAdminApiErrorMessage(errorResponse);
-        this.adminSnackbarService.showMessage($localize `Error while creating feature source: ${message}`);
+        this.adminSnackbarService.showMessage($localize `:@@admin-core.catalog.error-creating-feature-source:Error while creating feature source: ${message}`);
         return of(null);
       }),
       concatMap(createdFeatureSource => {
@@ -87,7 +87,7 @@ export class FeatureSourceService {
         concatMap(featureSource => {
           return this.adminApiService.updateFeatureSource$({ id: featureSource.id, featureSource: { id: featureSource.id, ...updatedSource } })
             .pipe(
-              this.handleUpdateFeatureSource($localize `Error while updating feature source: `, featureSource.catalogNodeId),
+              this.handleUpdateFeatureSource($localize `:@@admin-core.catalog.error-updating-feature-source:Error while updating feature source: `, featureSource.catalogNodeId),
             );
         }),
       );
@@ -106,7 +106,7 @@ export class FeatureSourceService {
             .pipe(
               catchError((errorResponse) => {
                 const message = ApiResponseHelper.getAdminApiErrorMessage(errorResponse);
-                this.adminSnackbarService.showMessage($localize `Error while updating feature type: ${message}`);
+                this.adminSnackbarService.showMessage($localize `:@@admin-core.catalog.error-updating-feature-type:Error while updating feature type: ${message}`);
                 return of(null);
               }),
               tap((updateResult: FeatureTypeModel | null) => {
@@ -123,7 +123,7 @@ export class FeatureSourceService {
     return this.adminApiService.deleteFeatureSource$({ id: featureSourceId }).pipe(
       catchError((errorResponse) => {
         const message = ApiResponseHelper.getAdminApiErrorMessage(errorResponse);
-        this.adminSnackbarService.showMessage($localize `Error while deleting source: ${message}`);
+        this.adminSnackbarService.showMessage($localize `:@@admin-core.catalog.error-deleting-feature-source:Error while deleting source: ${message}`);
         return of(null);
       }),
       tap(success => {
@@ -151,7 +151,8 @@ export class FeatureSourceService {
         concatMap(featureSource => {
           return this.adminApiService.refreshFeatureSource$({ id: featureSource.id })
             .pipe(
-              this.handleUpdateFeatureSource($localize `Error while refreshing feature source: `, featureSource.catalogNodeId),
+              // eslint-disable-next-line max-len
+              this.handleUpdateFeatureSource($localize `:@@admin-core.catalog.error-refreshing-feature-source:Error while refreshing feature source: `, featureSource.catalogNodeId),
             );
         }),
       );

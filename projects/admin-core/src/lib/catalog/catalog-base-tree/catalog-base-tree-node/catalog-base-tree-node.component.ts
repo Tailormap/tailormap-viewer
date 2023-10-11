@@ -11,11 +11,11 @@ import { CatalogTreeModelTypeEnum } from '../../models/catalog-tree-model-type.e
 export class CatalogBaseTreeNodeComponent {
 
   private static readonly nodeLabel = {
-    [CatalogTreeModelTypeEnum.CATALOG_NODE_TYPE]: $localize `Catalog`,
-    [CatalogTreeModelTypeEnum.SERVICE_TYPE]: $localize `Service`,
-    [CatalogTreeModelTypeEnum.SERVICE_LAYER_TYPE]: $localize `Layer`,
-    [CatalogTreeModelTypeEnum.FEATURE_SOURCE_TYPE]: $localize `Feature Source`,
-    [CatalogTreeModelTypeEnum.FEATURE_TYPE_TYPE]: $localize `Feature Type`,
+    [CatalogTreeModelTypeEnum.CATALOG_NODE_TYPE]: $localize `:@@admin-core.catalog.catalog:Catalog`,
+    [CatalogTreeModelTypeEnum.SERVICE_TYPE]: $localize `:@@admin-core.catalog.service:Service`,
+    [CatalogTreeModelTypeEnum.SERVICE_LAYER_TYPE]: $localize `:@@admin-core.catalog.layer:Layer`,
+    [CatalogTreeModelTypeEnum.FEATURE_SOURCE_TYPE]: $localize `:@@admin-core.catalog.feature-source:Feature Source`,
+    [CatalogTreeModelTypeEnum.FEATURE_TYPE_TYPE]: $localize `:@@admin-core.catalog.feature-type:Feature Type`,
     unknown: '',
   };
 
