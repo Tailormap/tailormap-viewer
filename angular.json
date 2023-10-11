@@ -141,6 +141,7 @@
           "builder": "ng-extract-i18n-merge:ng-extract-i18n-merge",
           "configurations": {
             "shared": {
+              "outputPath": "projects/shared/assets/locale",
               "removeIdsWithPrefix": [
                 "core.",
                 "admin-core."
@@ -151,6 +152,7 @@
               ]
             },
             "core": {
+              "outputPath": "projects/core/assets/locale",
               "removeIdsWithPrefix": [
                 "shared.",
                 "admin-core."
@@ -161,6 +163,7 @@
               ]
             },
             "admin-core": {
+              "outputPath": "projects/admin-core/assets/locale",
               "removeIdsWithPrefix": [
                 "core.",
                 "shared."

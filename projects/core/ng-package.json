@@ -2,9 +2,7 @@
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../../dist/core",
   "assets": [
-    "assets/**/*",
-    "../../locale/messages.core.en.xlf",
-    "../../locale/messages.core.nl.xlf"
+    "assets/**/*"
   ],
   "lib": {
     "entryFile": "src/public-api.ts"
