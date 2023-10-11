@@ -7,9 +7,9 @@ const scopedProjects = [
   ['@tailormap-viewer', 'api'],
   ['@tailormap-viewer', 'shared'],
   ['@tailormap-viewer', 'map'],
-  ['@tailormap-viewer', 'core'],
   ['@tailormap-admin', 'admin-api'],
   ['@tailormap-admin', 'admin-core'],
+  ['@tailormap-viewer', 'core'],
 ];
 const availableProjects = scopedProjects.map(scopedProject => scopedProject[1]);
 
