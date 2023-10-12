@@ -1,4 +1,4 @@
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+<?xml version="1.0"?><xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" target-language="nl" datatype="plaintext" original="ng2.template">
     <body>
       <trans-unit id="admin-core.application.add-application" datatype="html">
@@ -147,7 +147,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.layer-not-editable" datatype="html">
         <source>This layer cannot be edited because there is no writeable feature source / type configured for this layer</source>
-        <target>Deze laag kan niet worden bewerkt omdat er geen beschrijfbare kenmerkbron / -type is geconfigureerd voor deze laag</target>
+        <target>Deze laag kan niet worden bewerkt omdat er geen beschrijfbare objectbron / -type is geconfigureerd voor deze laag</target>
       </trans-unit>
       <trans-unit id="admin-core.application.layer-settings-updated" datatype="html">
         <source>Layer settings updated</source>
@@ -239,7 +239,7 @@
       </trans-unit>
       <trans-unit id="admin-core.authorizations.inherit-from-hint" datatype="html">
         <source>{VAR_SELECT, select, anonymous {Anyone} loggedIn {Logged in} specificGroups {Specific groups}}</source>
-        <target>{VAR_SELECT, select, anonymous {Anyone} loggedIn {ingelogd} specificGroups {Specifieke groepen}}</target>
+        <target state="translated">{VAR_SELECT, select, anonymous {Iedereen} loggedIn {ingelogd} specificGroups {Specifieke groepen}}</target>
       </trans-unit>
       <trans-unit id="admin-core.authorizations.inherit-from-logged-in" datatype="html">
         <source>Logged in</source>
@@ -251,7 +251,7 @@
       </trans-unit>
       <trans-unit id="admin-core.authorizations.inherit-from-specific-groups-select" datatype="html">
         <source>{VAR_SELECT, select, specificGroups {(inherited)}}</source>
-        <target>{VAR_SELECT, select, specificGroups {(inherited)}}</target>
+        <target state="translated">{VAR_SELECT, select, specificGroups {(geërfd)}}</target>
       </trans-unit>
       <trans-unit id="admin-core.authorizations.inherited-from" datatype="html">
         <source>Inherited from <x id="PH" equiv-text="this.parentType"/></source>
@@ -267,7 +267,7 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.add-feature-source" datatype="html">
         <source>Add feature source</source>
-        <target>Functiebron toevoegen</target>
+        <target>Objectbron toevoegen</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.add-folder" datatype="html">
         <source>Add folder</source>
@@ -291,7 +291,7 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.connect-feature-source" datatype="html">
         <source>Connected feature source and type</source>
-        <target>Verbonden functiebron en -type</target>
+        <target>Verbonden objectbron en -type</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.connection-options" datatype="html">
         <source>Additional connection options</source>
@@ -299,7 +299,7 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.create-feature-source" datatype="html">
         <source>Create new feature source</source>
-        <target>Nieuwe functiebron maken</target>
+        <target>Nieuwe objectbron maken</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.create-new-folder" datatype="html">
         <source>Create new folder</source>
@@ -371,7 +371,7 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.error-creating-feature-source" datatype="html">
         <source>Error while creating feature source: <x id="PH" equiv-text="message"/></source>
-        <target>Fout bij het maken van functiebron: <x id="PH" equiv-text="message"/></target>
+        <target>Fout bij het maken van objectbron: <x id="PH" equiv-text="message"/></target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.error-creating-service" datatype="html">
         <source>Error while creating geo service: <x id="PH" equiv-text="message"/></source>
@@ -391,7 +391,7 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.error-loading-feature-sources" datatype="html">
         <source>Error while loading feature source(s). Please collapse/expand the node again to try again.</source>
-        <target>Fout bij het laden van functiebron(nen). Vouw de node opnieuw in of uit om het opnieuw te proberen.</target>
+        <target>Fout bij het laden van objectbron(nen). Vouw de node opnieuw in of uit om het opnieuw te proberen.</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.error-loading-geo-services" datatype="html">
         <source>Error while loading geo services</source>
@@ -403,7 +403,7 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.error-refreshing-feature-source" datatype="html">
         <source>Error while refreshing feature source: </source>
-        <target>Fout tijdens het verversen van de functiebron: </target>
+        <target>Fout tijdens het verversen van de objectbron: </target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.error-refreshing-service" datatype="html">
         <source>Error while refreshing geo service: </source>
@@ -415,11 +415,11 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.error-updating-feature-source" datatype="html">
         <source>Error while updating feature source: </source>
-        <target>Fout tijdens het bijwerken van kenmerkbron: </target>
+        <target>Fout tijdens het bijwerken van objectbron: </target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.error-updating-feature-type" datatype="html">
         <source>Error while updating feature type: <x id="PH" equiv-text="message"/></source>
-        <target>Fout bij het bijwerken van kenmerktype: <x id="PH" equiv-text="message"/></target>
+        <target>Fout bij het bijwerken van object type: <x id="PH" equiv-text="message"/></target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.error-updating-service" datatype="html">
         <source>Error while updating geo service: </source>
@@ -427,15 +427,15 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.feature-source" datatype="html">
         <source>Feature Source</source>
-        <target>Feature bron</target>
+        <target state="translated">Object bron</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.feature-source-created" datatype="html">
         <source>Feature source <x id="PH" equiv-text="featureSource.title"/> created</source>
-        <target>Feature bron <x id="PH" equiv-text="featureSource.title"/> aangemaakt</target>
+        <target state="translated">Object bron <x id="PH" equiv-text="featureSource.title"/> aangemaakt</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.feature-source-refreshed" datatype="html">
         <source>Feature source refreshed</source>
-        <target>Feature bron vernieuwd</target>
+        <target state="translated">Object bron vernieuwd</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.feature-source-removed" datatype="html">
         <source>Source <x id="PH" equiv-text="featureSource.title"/> removed</source>
@@ -443,23 +443,23 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.feature-source-updated" datatype="html">
         <source>Feature source updated</source>
-        <target>Feature bron bijgewerkt</target>
+        <target state="translated">Object bron bijgewerkt</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.feature-source-used" datatype="html">
         <source>Feature source is used in layers</source>
-        <target>Kenmerk bron wordt gebruikt in lagen</target>
+        <target>Object bron wordt gebruikt in lagen</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.feature-source-used-body" datatype="html">
         <source>The feature source <x id="INTERPOLATION" equiv-text="{{data.featureSource.title}}"/> is used in the following layers.</source>
-        <target>De kenmerkbron <x id="INTERPOLATION" equiv-text="{{data.featureSource.title}}"/> wordt gebruikt in de volgende lagen.</target>
+        <target>De objectbron <x id="INTERPOLATION" equiv-text="{{data.featureSource.title}}"/> wordt gebruikt in de volgende lagen.</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.feature-type" datatype="html">
         <source>Feature Type</source>
-        <target>Type kenmerk</target>
+        <target>Object type</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.feature-type-details" datatype="html">
         <source>Details for feature type <x id="INTERPOLATION" equiv-text="{{ featureType.title }}"/></source>
-        <target>Details voor kenmerktype <x id="INTERPOLATION" equiv-text="{{ featureType.title }}"/></target>
+        <target>Details voor object type <x id="INTERPOLATION" equiv-text="{{ featureType.title }}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.folder-created" datatype="html">
         <source>Folder <x id="PH" equiv-text="node.title"/> created</source>
@@ -527,11 +527,11 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.no-feature-source" datatype="html">
         <source>No feature source</source>
-        <target>Geen kenmerk bron</target>
+        <target>Geen object bron</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.no-feature-type" datatype="html">
         <source>No feature type</source>
-        <target>Geen kenmerktype</target>
+        <target>Geen object type</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.port" datatype="html">
         <source>Port</source>
@@ -543,15 +543,15 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.refresh-feature-source" datatype="html">
         <source>Refresh feature source</source>
-        <target>Vernieuwen kenmerk bron</target>
+        <target>Vernieuwen object bron</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.refresh-feature-source-confirm" datatype="html">
         <source>Refresh feature source?</source>
-        <target>Kenmerkbron vernieuwen?</target>
+        <target>Objectbron vernieuwen?</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.refresh-feature-source-message" datatype="html">
         <source>The settings for the feature source are updated. Do you want to refresh the feature source to refresh the feature types?</source>
-        <target>De instellingen voor de kenmerkbron worden bijgewerkt. Wilt u de kenmerkbron vernieuwen om de kenmerktypen te vernieuwen?</target>
+        <target>De instellingen voor de objectbron worden bijgewerkt. Wilt u de objectbron vernieuwen om de object typen te vernieuwen?</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.refresh-servhce" datatype="html">
         <source>Refresh service</source>
@@ -567,7 +567,7 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.remove-feature-source-first" datatype="html">
         <source>Please remove the feature source and type from these layers first</source>
-        <target>Verwijder eerst de functiebron en het type van deze lagen</target>
+        <target>Verwijder eerst de objectbron en het type van deze lagen</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.remove-items-first" datatype="html">
         <source>Please remove these items first before removing the folder</source>
@@ -958,8 +958,8 @@
         <target>Status</target>
       </trans-unit>
       <trans-unit id="admin-core.oidc.use-redirect-url" datatype="html">
-        <source>Use <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/><x id="INTERPOLATION" equiv-text="{{redirectUrl}}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> as redirect URL in your IdP.</source>
-        <target>Gebruik <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/><x id="INTERPOLATION" equiv-text="{{redirectUrl}}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> als redirect URL in je IdP.</target>
+        <source>Use <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code>"/><x id="INTERPOLATION" equiv-text="{{redirectUrl}}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code>"/> as redirect URL in your IdP.</source>
+        <target>Gebruik <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code>"/><x id="INTERPOLATION" equiv-text="{{redirectUrl}}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code>"/> als redirect URL in je IdP.</target>
       </trans-unit>
       <trans-unit id="admin-core.oidc.username-attribute" datatype="html">
         <source>User name attribute</source>
@@ -1018,8 +1018,8 @@
         <target>Wachtwoorden moeten overeenkomen</target>
       </trans-unit>
       <trans-unit id="admin-core.users.password-short-error" datatype="html">
-        <source>Password shorter than <x id="INTERPOLATION" equiv-text="{{userForm.get(&apos;password&apos;)?.errors?.[&apos;minlength&apos;].requiredLength}}"/></source>
-        <target>Wachtwoord korter dan <x id="INTERPOLATION" equiv-text="{{userForm.get(&apos;password&apos;)?.errors?.[&apos;minlength&apos;].requiredLength}"/></target>
+        <source>Password shorter than <x id="INTERPOLATION" equiv-text="{{userForm.get('password')?.errors?.['minlength'].requiredLength}}"/></source>
+        <target>Wachtwoord korter dan <x id="INTERPOLATION" equiv-text="{{userForm.get('password')?.errors?.['minlength'].requiredLength}}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.users.password-too-easy-error" datatype="html">
         <source>Password too short or too easily guessable</source>
