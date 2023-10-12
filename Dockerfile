@@ -15,7 +15,7 @@ RUN npm install
 
 COPY . /app
 
-RUN npm run build -- --base-href=${BASE_HREF}
+RUN npm run build-localized -- --base-href=${BASE_HREF}
 
 FROM --platform=$BUILDPLATFORM ghcr.io/b3partners/tailormap-api:${API_VERSION}
 
