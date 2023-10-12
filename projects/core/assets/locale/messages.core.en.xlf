@@ -363,10 +363,13 @@
         <source>Condition</source>
       </trans-unit>
       <trans-unit id="core.filter.contains" datatype="html">
-        <source>Contains</source>
+        <source>contains</source>
       </trans-unit>
       <trans-unit id="core.filter.contains-one-of-the-values" datatype="html">
         <source>contains one of the values</source>
+      </trans-unit>
+      <trans-unit id="core.filter.contains-upper" datatype="html">
+        <source>Contains</source>
       </trans-unit>
       <trans-unit id="core.filter.create-new-filter" datatype="html">
         <source>Create new filter</source>
@@ -387,6 +390,9 @@
         <source>Draw filter geometry</source>
       </trans-unit>
       <trans-unit id="core.filter.ends-with" datatype="html">
+        <source>ends with</source>
+      </trans-unit>
+      <trans-unit id="core.filter.ends-with-upper" datatype="html">
         <source>Ends with</source>
       </trans-unit>
       <trans-unit id="core.filter.equals" datatype="html">
@@ -402,10 +408,10 @@
         <source>Filtering</source>
       </trans-unit>
       <trans-unit id="core.filter.filtering-layer-by-drawing-or-reference" datatype="html">
-        <source>Filtering the selected layer(s) can be done by drawing geometry and/or selecting a reference layer.</source>
+        <source>Filtering the selected <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container [ngTemplateOutlet]=&quot;layerLabel&quot; /&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="metry and/or sele"/> can be done by drawing geometry and/or selecting a reference layer.</source>
       </trans-unit>
       <trans-unit id="core.filter.filtering-layer-by-drawing-or-reference-hint" datatype="html">
-        <source>The geometries from this reference layer will then be used to filter the selected layer(s).</source>
+        <source>The geometries from this reference layer will then be used to filter the selected <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container [ngTemplateOutlet]=&quot;layerLabel&quot; /&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;div class=&quot;fo"/>.</source>
       </trans-unit>
       <trans-unit id="core.filter.from" datatype="html">
         <source>From</source>
@@ -429,6 +435,9 @@
         <source>is between</source>
       </trans-unit>
       <trans-unit id="core.filter.is-false" datatype="html">
+        <source>is false</source>
+      </trans-unit>
+      <trans-unit id="core.filter.is-false-upper" datatype="html">
         <source>Is false</source>
       </trans-unit>
       <trans-unit id="core.filter.is-greater-than" datatype="html">
@@ -438,6 +447,9 @@
         <source>is greater than or equal to</source>
       </trans-unit>
       <trans-unit id="core.filter.is-null" datatype="html">
+        <source>is null</source>
+      </trans-unit>
+      <trans-unit id="core.filter.is-null-upper" datatype="html">
         <source>Is null</source>
       </trans-unit>
       <trans-unit id="core.filter.is-on" datatype="html">
@@ -450,7 +462,13 @@
         <source>is smaller than or equal to</source>
       </trans-unit>
       <trans-unit id="core.filter.is-true" datatype="html">
+        <source>is true</source>
+      </trans-unit>
+      <trans-unit id="core.filter.is-true-upper" datatype="html">
         <source>Is true</source>
+      </trans-unit>
+      <trans-unit id="core.filter.layerPlural" datatype="html">
+        <source>{VAR_PLURAL, plural, =1 {layer} other {layers}}</source>
       </trans-unit>
       <trans-unit id="core.filter.loading-reference-layer" datatype="html">
         <source>Loading reference geometry</source>
@@ -498,6 +516,9 @@
         <source>Spatial filter</source>
       </trans-unit>
       <trans-unit id="core.filter.starts-with" datatype="html">
+        <source>starts with</source>
+      </trans-unit>
+      <trans-unit id="core.filter.starts-with-upper" datatype="html">
         <source>Starts with</source>
       </trans-unit>
       <trans-unit id="core.filter.summary" datatype="html">

@@ -3,7 +3,7 @@
     <body>
       <trans-unit id="admin-core.application.add-application" datatype="html">
         <source>Add application</source>
-        <target>Toepassing toevoegen</target>
+        <target>Applicatie toevoegen</target>
       </trans-unit>
       <trans-unit id="admin-core.application.add-sub-folder" datatype="html">
         <source>Add sub folder</source>
@@ -11,23 +11,23 @@
       </trans-unit>
       <trans-unit id="admin-core.application.application-created" datatype="html">
         <source>Application <x id="PH" equiv-text="createdApplication.title || createdApplication.name"/> created</source>
-        <target>Toepassing <x id="PH" equiv-text="createdApplication.title || createdApplication.name"/> gemaakt</target>
+        <target>Applicatie <x id="PH" equiv-text="createdApplication.title || createdApplication.name"/> gemaakt</target>
       </trans-unit>
       <trans-unit id="admin-core.application.application-layers" datatype="html">
         <source>Application layers</source>
-        <target>Toepassing lagen</target>
+        <target>Applicatie lagen</target>
       </trans-unit>
       <trans-unit id="admin-core.application.application-removed" datatype="html">
         <source>Application <x id="PH" equiv-text="title"/> removed</source>
-        <target>Toepassing <x id="PH" equiv-text="title"/> verwijderd</target>
+        <target state="new">Applicatie <x id="PH" equiv-text="title"/> verwijderd</target>
       </trans-unit>
       <trans-unit id="admin-core.application.application-updated" datatype="html">
         <source>Application updated</source>
-        <target>Toepassing bijgewerkt</target>
+        <target>Applicatie bijgewerkt</target>
       </trans-unit>
       <trans-unit id="admin-core.application.applications" datatype="html">
         <source>Applications</source>
-        <target>Toepassingen</target>
+        <target>Applicaties</target>
       </trans-unit>
       <trans-unit id="admin-core.application.background-layers" datatype="html">
         <source>Background layers</source>
@@ -83,7 +83,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.create-application" datatype="html">
         <source>Create application</source>
-        <target>Toepassing maken</target>
+        <target>Applicatie maken</target>
       </trans-unit>
       <trans-unit id="admin-core.application.create-folder" datatype="html">
         <source>Create folder</source>
@@ -95,19 +95,19 @@
       </trans-unit>
       <trans-unit id="admin-core.application.default-application" datatype="html">
         <source>Default application</source>
-        <target>Standaard toepassing</target>
+        <target>Standaard applicatie</target>
       </trans-unit>
       <trans-unit id="admin-core.application.delete-application" datatype="html">
         <source>Delete application <x id="PH" equiv-text="title"/></source>
-        <target>Toepassing verwijderen <x id="PH" equiv-text="title"/></target>
+        <target state="translated">Applicatie <x id="PH" equiv-text="title"/> verwijderen</target>
       </trans-unit>
       <trans-unit id="admin-core.application.delete-application-message" datatype="html">
         <source>Are you sure you want to delete application <x id="PH" equiv-text="title"/>? This action cannot be undone.</source>
-        <target>Weet je zeker dat je applicatie <x id="PH" equiv-text="title"/> wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.</target>
+        <target state="new">Weet je zeker dat je applicatie <x id="PH" equiv-text="title"/> wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.</target>
       </trans-unit>
       <trans-unit id="admin-core.application.edit" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ application.title }}"/></source>
-        <target>Bewerken <x id="INTERPOLATION" equiv-text="{{ application.title }}"/></target>
+        <target state="translated">Bewerk <x id="INTERPOLATION" equiv-text="{{ application.title }}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.application.editable" datatype="html">
         <source>Editable</source>
@@ -115,7 +115,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.error-creating-application" datatype="html">
         <source>Error while creating application.</source>
-        <target>Fout bij het maken van toepassing.</target>
+        <target>Fout bij het maken van applicatie.</target>
       </trans-unit>
       <trans-unit id="admin-core.application.error-deleting-application" datatype="html">
         <source>Error while deleting application.</source>
@@ -123,7 +123,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.error-loading-applications" datatype="html">
         <source>Error while loading list of applications</source>
-        <target>Fout tijdens het laden van de lijst met applicaties.</target>
+        <target state="translated">Fout tijdens het laden van de lijst met applicaties</target>
       </trans-unit>
       <trans-unit id="admin-core.application.error-updating-application" datatype="html">
         <source>Error while updating application.</source>
@@ -131,7 +131,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.filter-applications" datatype="html">
         <source>Filter applications</source>
-        <target>Toepassingen filteren</target>
+        <target>Applicaties filteren</target>
       </trans-unit>
       <trans-unit id="admin-core.application.folder-name" datatype="html">
         <source>Folder name</source>
@@ -163,7 +163,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.logo" datatype="html">
         <source>Upload logo for application</source>
-        <target>Logo uploaden voor toepassing</target>
+        <target>Logo uploaden voor applicatie</target>
       </trans-unit>
       <trans-unit id="admin-core.application.max-extent" datatype="html">
         <source>Max extent</source>
@@ -175,11 +175,11 @@
       </trans-unit>
       <trans-unit id="admin-core.application.open-application" datatype="html">
         <source>Open application</source>
-        <target>Toepassing openen</target>
+        <target>Applicatie openen</target>
       </trans-unit>
       <trans-unit id="admin-core.application.primary-color" datatype="html">
         <source>Primary color used in application</source>
-        <target>Primaire kleur gebruikt in toepassing</target>
+        <target>Primaire kleur gebruikt in applicatie</target>
       </trans-unit>
       <trans-unit id="admin-core.application.projection" datatype="html">
         <source>Projection</source>
@@ -191,7 +191,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.remove-layer" datatype="html">
         <source>Remove layer from application</source>
-        <target>Laag verwijderen uit de toepassing</target>
+        <target>Laag verwijderen uit de applicatie</target>
       </trans-unit>
       <trans-unit id="admin-core.application.service-updated" datatype="html">
         <source>Service <x id="PH" equiv-text="updatedService.title"/> updated</source>
@@ -199,11 +199,11 @@
       </trans-unit>
       <trans-unit id="admin-core.application.set-default-application" datatype="html">
         <source>Set default application</source>
-        <target>Standaardtoepassing instellen</target>
+        <target>Standaardapplicatie instellen</target>
       </trans-unit>
       <trans-unit id="admin-core.application.set-default-application-hint" datatype="html">
         <source>Setting this application as default will overwrite the current default application</source>
-        <target>Door deze toepassing als standaard in te stellen, wordt de huidige standaardtoepassing overschreven</target>
+        <target>Door deze applicatie als standaard in te stellen, wordt de huidige standaardapplicatie overschreven</target>
       </trans-unit>
       <trans-unit id="admin-core.application.settings" datatype="html">
         <source>Settings</source>
@@ -223,7 +223,7 @@
       </trans-unit>
       <trans-unit id="admin-core.authorizations.configured-on" datatype="html">
         <source>Configured on <x id="PH" equiv-text="this.selfType"/></source>
-        <target>Geconfigureerd op <x id="PH" equiv-text="this.selfType"/></target>
+        <target state="new">Geconfigureerd op <x id="PH" equiv-text="this.selfType"/></target>
       </trans-unit>
       <trans-unit id="admin-core.authorizations.group-name" datatype="html">
         <source>Group name</source>
@@ -255,7 +255,7 @@
       </trans-unit>
       <trans-unit id="admin-core.authorizations.inherited-from" datatype="html">
         <source>Inherited from <x id="PH" equiv-text="this.parentType"/></source>
-        <target>Geërfd van <x id="PH" equiv-text="this.parentType"/></target>
+        <target state="new">Geërfd van <x id="PH" equiv-text="this.parentType"/></target>
       </trans-unit>
       <trans-unit id="admin-core.authorizations.overridden" datatype="html">
         <source>(overridden)</source>
@@ -319,7 +319,7 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.default-hint" datatype="html">
         <source>Default: <x id="INTERPOLATION" equiv-text="{{21}}"/></source>
-        <target>Standaard: <x id="INTERPOLATION" equiv-text="{{21}}"/></target>
+        <target state="new">Standaard: <x id="INTERPOLATION" equiv-text="{{21}}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.default-layer-settings" datatype="html">
         <source>Default layer settings</source>
@@ -331,7 +331,7 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.delete-feature-source-message" datatype="html">
         <source>Are you sure you want to delete feature source <x id="PH" equiv-text="featureSource.title"/>? This action cannot be undone.</source>
-        <target>Weet je zeker dat je de bron <x id="PH" equiv-text="featureSource.title"/> wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.</target>
+        <target state="new">Weet je zeker dat je de bron <x id="PH" equiv-text="featureSource.title"/> wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.delete-folder" datatype="html">
         <source>Delete folder <x id="PH" equiv-text="node.title"/></source>
@@ -339,7 +339,7 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.delete-folder-message" datatype="html">
         <source>Are you sure you want to the folder <x id="PH" equiv-text="node.title"/>? This action cannot be undone.</source>
-        <target>Weet je zeker dat je de map <x id="PH" equiv-text="node.title"/> wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.</target>
+        <target state="new">Weet je zeker dat je de map <x id="PH" equiv-text="node.title"/> wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.delete-service-confirm" datatype="html">
         <source>Delete service <x id="PH" equiv-text="geoService.title"/></source>
@@ -347,51 +347,55 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.delete-service-confirm-message" datatype="html">
         <source>Are you sure you want to delete service <x id="PH" equiv-text="geoService.title"/>? This action cannot be undone.</source>
-        <target>Weet je zeker dat je service <x id="PH" equiv-text="geoService.title"/> wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.</target>
+        <target state="new">Weet je zeker dat je service <x id="PH" equiv-text="geoService.title"/> wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.edit-feature-source" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ featureSource.title }}"/></source>
-        <target>Bewerken <x id="INTERPOLATION" equiv-text="{{ featureSource.title }}"/></target>
+        <target state="translated">Bewerk <x id="INTERPOLATION" equiv-text="{{ featureSource.title }}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.edit-geoservice" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ geoService.title }}"/></source>
-        <target>Bewerken <x id="INTERPOLATION" equiv-text="{{ geoService.title }}"/></target>
+        <target state="translated">Bewerk <x id="INTERPOLATION" equiv-text="{{ geoService.title }}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.edit-node" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ node.title }}"/></source>
-        <target>Bewerken <x id="INTERPOLATION" equiv-text="{{ node.title }}"/></target>
+        <target state="translated">Bewerk <x id="INTERPOLATION" equiv-text="{{ node.title }}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.edit-service" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{data.geoService.title}}"/></source>
-        <target>Bewerken <x id="INTERPOLATION" equiv-text="{{data.geoService.title}}"/></target>
+        <target state="translated">Bewerk <x id="INTERPOLATION" equiv-text="{{data.geoService.title}}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.edit-settings-for-layer" datatype="html">
         <source>Edit settings for layer <x id="INTERPOLATION" equiv-text="{{ geoServiceSettings.layerTitle }}"/></source>
-        <target>Bewerk instellingen voor laag <x id="INTERPOLATION" equiv-text="{{ geoServiceSettings.layerTitle }}"/></target>
+        <target state="new">Bewerk instellingen voor laag <x id="INTERPOLATION" equiv-text="{{ geoServiceSettings.layerTitle }}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.error-creating-feature-source" datatype="html">
         <source>Error while creating feature source: <x id="PH" equiv-text="message"/></source>
-        <target>Fout bij het maken van objectbron: <x id="PH" equiv-text="message"/></target>
+        <target state="new">Fout bij het maken van objectbron: <x id="PH" equiv-text="message"/></target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.error-creating-service" datatype="html">
         <source>Error while creating geo service: <x id="PH" equiv-text="message"/></source>
-        <target>Fout bij het maken van de geo-service: <x id="PH" equiv-text="message"/></target>
+        <target state="new">Fout bij het maken van de geo-service: <x id="PH" equiv-text="message"/></target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.error-deleting-feature-source" datatype="html">
         <source>Error while deleting source: <x id="PH" equiv-text="message"/></source>
-        <target>Fout bij verwijderen bron: <x id="PH" equiv-text="message"/></target>
+        <target state="new">Fout bij verwijderen bron: <x id="PH" equiv-text="message"/></target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.error-deleting-service" datatype="html">
         <source>Error while deleting geo service: <x id="PH" equiv-text="message"/></source>
-        <target>Fout bij verwijderen geo-service: <x id="PH" equiv-text="message"/></target>
+        <target state="new">Fout bij verwijderen geo-service: <x id="PH" equiv-text="message"/></target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.error-loading-catalog" datatype="html">
         <source>Error while loading catalog</source>
         <target>Fout bij laden catalogus</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.error-loading-feature-sources" datatype="html">
+        <source>Error while loading feature sources</source>
+        <target state="translated">Fout bij het laden van objectbron(nen)</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.error-loading-feature-sources-hint" datatype="html">
         <source>Error while loading feature source(s). Please collapse/expand the node again to try again.</source>
-        <target>Fout bij het laden van objectbron(nen). Vouw de node opnieuw in of uit om het opnieuw te proberen.</target>
+        <target state="translated">Fout bij het laden van objectbron(nen). Klap de map opnieuw in en uit om het opnieuw te proberen.</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.error-loading-geo-services" datatype="html">
         <source>Error while loading geo services</source>
@@ -419,7 +423,7 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.error-updating-feature-type" datatype="html">
         <source>Error while updating feature type: <x id="PH" equiv-text="message"/></source>
-        <target>Fout bij het bijwerken van object type: <x id="PH" equiv-text="message"/></target>
+        <target state="new">Fout bij het bijwerken van object type: <x id="PH" equiv-text="message"/></target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.error-updating-service" datatype="html">
         <source>Error while updating geo service: </source>
@@ -451,7 +455,7 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.feature-source-used-body" datatype="html">
         <source>The feature source <x id="INTERPOLATION" equiv-text="{{data.featureSource.title}}"/> is used in the following layers.</source>
-        <target>De objectbron <x id="INTERPOLATION" equiv-text="{{data.featureSource.title}}"/> wordt gebruikt in de volgende lagen.</target>
+        <target state="new">De objectbron <x id="INTERPOLATION" equiv-text="{{data.featureSource.title}}"/> wordt gebruikt in de volgende lagen.</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.feature-type" datatype="html">
         <source>Feature Type</source>
@@ -459,7 +463,7 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.feature-type-details" datatype="html">
         <source>Details for feature type <x id="INTERPOLATION" equiv-text="{{ featureType.title }}"/></source>
-        <target>Details voor object type <x id="INTERPOLATION" equiv-text="{{ featureType.title }}"/></target>
+        <target state="new">Details voor object type <x id="INTERPOLATION" equiv-text="{{ featureType.title }}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.folder-created" datatype="html">
         <source>Folder <x id="PH" equiv-text="node.title"/> created</source>
@@ -471,7 +475,7 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.folder-not-empty-body" datatype="html">
         <source>This folder <x id="INTERPOLATION" equiv-text="{{data.node.title}}"/> is not empty and contains the following items.</source>
-        <target>Deze map <x id="INTERPOLATION" equiv-text="{{data.node.title}}"/> is niet leeg en bevat de volgende items.</target>
+        <target state="new">Deze map <x id="INTERPOLATION" equiv-text="{{data.node.title}}"/> is niet leeg en bevat de volgende items.</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.folder-removed" datatype="html">
         <source>Folder <x id="PH" equiv-text="node.title"/> removed</source>
@@ -494,8 +498,8 @@
         <target>High-DPI ingeschakeld</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.hi-dpi-mode" datatype="html">
-        <source>Hi-DPI mode</source>
-        <target>Hi-DPI modus</target>
+        <source>High-DPI mode</source>
+        <target state="translated">High-DPI modus</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.hi-dpi-substitute-layer" datatype="html">
         <source>Hi-DPI substitute layer</source>
@@ -603,11 +607,11 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.service-used" datatype="html">
         <source>Service is used in applications</source>
-        <target>Service wordt gebruikt in toepassingen</target>
+        <target>Service wordt gebruikt in applicaties</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.service-used-body" datatype="html">
         <source>The service <x id="INTERPOLATION" equiv-text="{{data.service.title}}"/> is used in the following applications.</source>
-        <target>De service <x id="INTERPOLATION" equiv-text="{{data.service.title}}"/> wordt gebruikt in de volgende toepassingen.</target>
+        <target state="new">De service <x id="INTERPOLATION" equiv-text="{{data.service.title}}"/> wordt gebruikt in de volgende applicaties.</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.show-next-zoom-level" datatype="html">
         <source>Show next zoom level</source>
@@ -627,7 +631,7 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.technical-name" datatype="html">
         <source>Technical name: <x id="INTERPOLATION" equiv-text="{{ featureType.name }}"/></source>
-        <target>Technische naam: <x id="INTERPOLATION" equiv-text="{{ featureType.name }}"/></target>
+        <target state="new">Technische naam: <x id="INTERPOLATION" equiv-text="{{ featureType.name }}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.tiling-gutter" datatype="html">
         <source>Tiling gutter</source>
@@ -651,7 +655,7 @@
       </trans-unit>
       <trans-unit id="admin-core.common.applications-title" datatype="html">
         <source>Applications</source>
-        <target>Toepassingen</target>
+        <target>Applicaties</target>
       </trans-unit>
       <trans-unit id="admin-core.common.attribution" datatype="html">
         <source>Attribution</source>
@@ -811,15 +815,15 @@
       </trans-unit>
       <trans-unit id="admin-core.groups.delete-group-confirm" datatype="html">
         <source>Delete group <x id="PH" equiv-text="group.name"/></source>
-        <target>Groep verwijderen <x id="PH" equiv-text="group.name"/></target>
+        <target state="translated">Verwijder groep <x id="PH" equiv-text="group.name"/></target>
       </trans-unit>
       <trans-unit id="admin-core.groups.delete-group-confirm-message" datatype="html">
         <source>Are you sure you want to delete the group with name <x id="PH" equiv-text="group.name"/>? All users will be removed from this group. This action cannot be undone.</source>
-        <target>Weet u zeker dat u de groep met de naam <x id="PH" equiv-text="group.name"/> wilt verwijderen? Alle gebruikers worden uit deze groep verwijderd. Deze actie kan niet ongedaan worden gemaakt.</target>
+        <target state="translated">Weet u zeker dat u de groep met de naam <x id="PH" equiv-text="group.name"/> wilt verwijderen? Alle gebruikers worden uit deze groep verwijderd. Deze actie kan niet ongedaan worden gemaakt.</target>
       </trans-unit>
       <trans-unit id="admin-core.groups.edit-group" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ group.name }}"/></source>
-        <target>Bewerken <x id="INTERPOLATION" equiv-text="{{ group.name }}"/></target>
+        <target state="translated">Bewerk <x id="INTERPOLATION" equiv-text="{{ group.name }}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.groups.error-creating-group" datatype="html">
         <source>Error while creating group <x id="PH" equiv-text="group.name"/>. <x id="PH_1" equiv-text="response.error?.message"/></source>
@@ -863,7 +867,7 @@
       </trans-unit>
       <trans-unit id="admin-core.navigation.applications" datatype="html">
         <source>Applications</source>
-        <target>Toepassingen</target>
+        <target>Applicaties</target>
       </trans-unit>
       <trans-unit id="admin-core.navigation.catalog" datatype="html">
         <source>Catalog</source>
@@ -903,15 +907,15 @@
       </trans-unit>
       <trans-unit id="admin-core.oidc.configuration-delete-confirm" datatype="html">
         <source>Delete OIDC configuration <x id="PH" equiv-text="title"/></source>
-        <target>OIDC-configuratie verwijderen <x id="PH" equiv-text="title"/></target>
+        <target state="new">OIDC-configuratie verwijderen <x id="PH" equiv-text="title"/></target>
       </trans-unit>
       <trans-unit id="admin-core.oidc.configuration-delete-confirm-message" datatype="html">
         <source>Are you sure you want to delete OIDC configuration <x id="PH" equiv-text="title"/>? This action cannot be undone.</source>
-        <target>Weet je zeker dat je de OIDC-configuratie <x id="PH" equiv-text="title"/> wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.</target>
+        <target state="new">Weet je zeker dat je de OIDC-configuratie <x id="PH" equiv-text="title"/> wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.</target>
       </trans-unit>
       <trans-unit id="admin-core.oidc.configuration-removed" datatype="html">
         <source>OIDC Configuration <x id="PH" equiv-text="title"/> removed</source>
-        <target>OIDC Configuratie <x id="PH" equiv-text="title"/> verwijderd</target>
+        <target state="new">OIDC Configuratie <x id="PH" equiv-text="title"/> verwijderd</target>
       </trans-unit>
       <trans-unit id="admin-core.oidc.configuration-updated" datatype="html">
         <source>OIDC Configuration updated</source>
@@ -923,7 +927,7 @@
       </trans-unit>
       <trans-unit id="admin-core.oidc.edit-configuration" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ oidcConfiguration.name }}"/></source>
-        <target>Bewerken <x id="INTERPOLATION" equiv-text="{{ oidcConfiguration.name }}"/></target>
+        <target state="translated">Bewerk <x id="INTERPOLATION" equiv-text="{{ oidcConfiguration.name }}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.oidc.error-creating-configuration" datatype="html">
         <source>Error while creating OIDC Configuration.</source>
@@ -935,7 +939,7 @@
       </trans-unit>
       <trans-unit id="admin-core.oidc.error-loading-configurations" datatype="html">
         <source>Error while loading list of OIDC configurations</source>
-        <target>Fout bij het laden van de lijst met OIDC-configuraties.</target>
+        <target state="translated">Fout bij het laden van de lijst met OIDC-configuraties</target>
       </trans-unit>
       <trans-unit id="admin-core.oidc.error-updating-configuration" datatype="html">
         <source>Error while updating OIDC Configuration.</source>
@@ -959,7 +963,7 @@
       </trans-unit>
       <trans-unit id="admin-core.oidc.use-redirect-url" datatype="html">
         <source>Use <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code>"/><x id="INTERPOLATION" equiv-text="{{redirectUrl}}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code>"/> as redirect URL in your IdP.</source>
-        <target>Gebruik <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code>"/><x id="INTERPOLATION" equiv-text="{{redirectUrl}}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code>"/> als redirect URL in je IdP.</target>
+        <target state="new">Gebruik <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code>"/><x id="INTERPOLATION" equiv-text="{{redirectUrl}}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code>"/> als redirect URL in je IdP.</target>
       </trans-unit>
       <trans-unit id="admin-core.oidc.username-attribute" datatype="html">
         <source>User name attribute</source>
@@ -971,7 +975,7 @@
       </trans-unit>
       <trans-unit id="admin-core.use-max-extent" datatype="html">
         <source>Use max extent from projection <x id="INTERPOLATION" equiv-text="{{projection}}"/></source>
-        <target>Gebruik maximale omvang van projectie <x id="INTERPOLATION" equiv-text="{{projection}}"/></target>
+        <target state="new">Gebruik maximale omvang van projectie <x id="INTERPOLATION" equiv-text="{{projection}}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.users.add-user" datatype="html">
         <source>Add user</source>
@@ -983,7 +987,7 @@
       </trans-unit>
       <trans-unit id="admin-core.users.delete-user-confirm" datatype="html">
         <source>Delete user <x id="PH" equiv-text="user.username"/></source>
-        <target>Gebruiker verwijderen <x id="PH" equiv-text="user.username"/></target>
+        <target state="translated">Gebruiker <x id="PH" equiv-text="user.username"/> verwijderen</target>
       </trans-unit>
       <trans-unit id="admin-core.users.delete-user-confirm-message" datatype="html">
         <source>Are you sure you want to delete the user with username <x id="PH" equiv-text="user.username"/>? This action cannot be undone.</source>
@@ -991,7 +995,7 @@
       </trans-unit>
       <trans-unit id="admin-core.users.edit-user" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ user.username }}"/></source>
-        <target>Bewerken <x id="INTERPOLATION" equiv-text="{{ user.username }}"/></target>
+        <target state="translated">Bewerk <x id="INTERPOLATION" equiv-text="{{ user.username }}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.users.error-creating-user" datatype="html">
         <source>Error while creating user <x id="PH" equiv-text="user.username"/>. <x id="PH_1" equiv-text="response.error?.message"/></source>
@@ -1019,7 +1023,7 @@
       </trans-unit>
       <trans-unit id="admin-core.users.password-short-error" datatype="html">
         <source>Password shorter than <x id="INTERPOLATION" equiv-text="{{userForm.get('password')?.errors?.['minlength'].requiredLength}}"/></source>
-        <target>Wachtwoord korter dan <x id="INTERPOLATION" equiv-text="{{userForm.get('password')?.errors?.['minlength'].requiredLength}}"/></target>
+        <target state="new">Wachtwoord korter dan <x id="INTERPOLATION" equiv-text="{{userForm.get('password')?.errors?.['minlength'].requiredLength}}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.users.password-too-easy-error" datatype="html">
         <source>Password too short or too easily guessable</source>

@@ -482,12 +482,16 @@
         <target>Voorwaarde</target>
       </trans-unit>
       <trans-unit id="core.filter.contains" datatype="html">
-        <source>Contains</source>
-        <target>Bevat</target>
+        <source>contains</source>
+        <target state="translated">bevat</target>
       </trans-unit>
       <trans-unit id="core.filter.contains-one-of-the-values" datatype="html">
         <source>contains one of the values</source>
         <target>bevat een van de waarden</target>
+      </trans-unit>
+      <trans-unit id="core.filter.contains-upper" datatype="html">
+        <source>Contains</source>
+        <target state="translated">Bevat</target>
       </trans-unit>
       <trans-unit id="core.filter.create-new-filter" datatype="html">
         <source>Create new filter</source>
@@ -514,8 +518,12 @@
         <target>Filtergeometrie tekenen</target>
       </trans-unit>
       <trans-unit id="core.filter.ends-with" datatype="html">
+        <source>ends with</source>
+        <target state="translated">eindigt met</target>
+      </trans-unit>
+      <trans-unit id="core.filter.ends-with-upper" datatype="html">
         <source>Ends with</source>
-        <target>Eindigt met</target>
+        <target state="translated">Eindigt met</target>
       </trans-unit>
       <trans-unit id="core.filter.equals" datatype="html">
         <source>Equals</source>
@@ -534,12 +542,12 @@
         <target state="translated">Filteren</target>
       </trans-unit>
       <trans-unit id="core.filter.filtering-layer-by-drawing-or-reference" datatype="html">
-        <source>Filtering the selected layer(s) can be done by drawing geometry and/or selecting a reference layer.</source>
-        <target>U kunt de geselecteerde laag of lagen filteren door geometrieën te tekenen en/of een referentielaag te selecteren.</target>
+        <source>Filtering the selected <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container [ngTemplateOutlet]=&quot;layerLabel&quot; />"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="metry and/or sele"/> can be done by drawing geometry and/or selecting a reference layer.</source>
+        <target state="new">U kunt de geselecteerde <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container [ngTemplateOutlet]=&quot;layerLabel&quot; />"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="metry and/or sele"/> filteren door geometrieën te tekenen en/of een referentielaag te selecteren.</target>
       </trans-unit>
       <trans-unit id="core.filter.filtering-layer-by-drawing-or-reference-hint" datatype="html">
-        <source>The geometries from this reference layer will then be used to filter the selected layer(s).</source>
-        <target>De geometrieën van deze referentielaag worden dan gebruikt om de geselecteerde laag of lagen te filteren.</target>
+        <source>The geometries from this reference layer will then be used to filter the selected <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container [ngTemplateOutlet]=&quot;layerLabel&quot; />"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;div class=&quot;fo"/>.</source>
+        <target state="new">De geometrieën van deze referentielaag worden dan gebruikt om de geselecteerde <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container [ngTemplateOutlet]=&quot;layerLabel&quot; />"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;div class=&quot;fo"/> te filteren.</target>
       </trans-unit>
       <trans-unit id="core.filter.from" datatype="html">
         <source>From</source>
@@ -570,8 +578,12 @@
         <target>is tussen</target>
       </trans-unit>
       <trans-unit id="core.filter.is-false" datatype="html">
+        <source>is false</source>
+        <target state="translated">is onwaar</target>
+      </trans-unit>
+      <trans-unit id="core.filter.is-false-upper" datatype="html">
         <source>Is false</source>
-        <target>Is onwaar</target>
+        <target state="translated">Is niet waar</target>
       </trans-unit>
       <trans-unit id="core.filter.is-greater-than" datatype="html">
         <source>is greater than</source>
@@ -582,6 +594,10 @@
         <target>is groter dan of gelijk aan</target>
       </trans-unit>
       <trans-unit id="core.filter.is-null" datatype="html">
+        <source>is null</source>
+        <target state="translated">is leeg (nul)</target>
+      </trans-unit>
+      <trans-unit id="core.filter.is-null-upper" datatype="html">
         <source>Is null</source>
         <target state="translated">Is leeg (nul)</target>
       </trans-unit>
@@ -598,8 +614,16 @@
         <target>kleiner is dan of gelijk is aan</target>
       </trans-unit>
       <trans-unit id="core.filter.is-true" datatype="html">
+        <source>is true</source>
+        <target state="translated">is waar</target>
+      </trans-unit>
+      <trans-unit id="core.filter.is-true-upper" datatype="html">
         <source>Is true</source>
         <target state="translated">Is waar</target>
+      </trans-unit>
+      <trans-unit id="core.filter.layerPlural" datatype="html">
+        <source>{VAR_PLURAL, plural, =1 {layer} other {layers}}</source>
+        <target state="translated">{VAR_PLURAL, plural, =1 {laag} other {lagen}}</target>
       </trans-unit>
       <trans-unit id="core.filter.loading-reference-layer" datatype="html">
         <source>Loading reference geometry</source>
@@ -662,8 +686,12 @@
         <target>Ruimtelijk filter</target>
       </trans-unit>
       <trans-unit id="core.filter.starts-with" datatype="html">
+        <source>starts with</source>
+        <target state="translated">begint met</target>
+      </trans-unit>
+      <trans-unit id="core.filter.starts-with-upper" datatype="html">
         <source>Starts with</source>
-        <target>Begint met</target>
+        <target state="translated">Begint met</target>
       </trans-unit>
       <trans-unit id="core.filter.summary" datatype="html">
         <source>Summary</source>

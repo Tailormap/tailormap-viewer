@@ -102,7 +102,7 @@ export class CatalogService implements OnDestroy {
         takeUntil(subscription),
         catchError(() => {
           // eslint-disable-next-line max-len
-          this.adminSnackbarService.showMessage($localize `:@@admin-core.catalog.error-loading-feature-sources:Error while loading feature source(s). Please collapse/expand the node again to try again.`)
+          this.adminSnackbarService.showMessage($localize `:@@admin-core.catalog.error-loading-feature-sources-hint:Error while loading feature source(s). Please collapse/expand the node again to try again.`)
             .pipe(takeUntil(subscription))
             .subscribe();
           return of(null);

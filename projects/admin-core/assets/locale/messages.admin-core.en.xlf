@@ -294,6 +294,9 @@
         <source>Error while loading catalog</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.error-loading-feature-sources" datatype="html">
+        <source>Error while loading feature sources</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.error-loading-feature-sources-hint" datatype="html">
         <source>Error while loading feature source(s). Please collapse/expand the node again to try again.</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.error-loading-geo-services" datatype="html">
@@ -372,7 +375,7 @@
         <source>High-DPI enabled</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.hi-dpi-mode" datatype="html">
-        <source>Hi-DPI mode</source>
+        <source>High-DPI mode</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.hi-dpi-substitute-layer" datatype="html">
         <source>Hi-DPI substitute layer</source>

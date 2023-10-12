@@ -16,8 +16,9 @@
     <ng-container *ngIf="selectedLayersCount$ | async as layerCount">
       <ng-container *ngIf="layerCount > 0">
         <div class="form-section-label">
-          <p i18n="@@core.filter.filtering-layer-by-drawing-or-reference">Filtering the selected layer(s) can be done by drawing geometry and/or selecting a reference layer.</p>
-          <p i18n="@@core.filter.filtering-layer-by-drawing-or-reference-hint">The geometries from this reference layer will then be used to filter the selected layer(s).</p>
+          <ng-template #layerLabel><ng-container i18n="@@core.filter.layerPlural">{layerCount, plural, =1 {layer} other {layers}}</ng-container></ng-template>
+          <p i18n="@@core.filter.filtering-layer-by-drawing-or-reference">Filtering the selected <ng-container [ngTemplateOutlet]="layerLabel" /> can be done by drawing geometry and/or selecting a reference layer.</p>
+          <p i18n="@@core.filter.filtering-layer-by-drawing-or-reference-hint">The geometries from this reference layer will then be used to filter the selected <ng-container [ngTemplateOutlet]="layerLabel" />.</p>
         </div>
 
         <div class="form-section">
