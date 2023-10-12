@@ -183,7 +183,7 @@
             "format": "xlf",
             "outputPath": "locale",
             "sourceFile": "messages.en.xlf",
-            "verbose": true,
+            "verbose": false,
             "sort": "idAsc",
             "targetFiles": [
               "messages.nl.xlf"
