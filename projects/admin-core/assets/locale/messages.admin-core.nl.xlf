@@ -281,6 +281,10 @@
         <source>Attributes</source>
         <target>Attributen</target>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.authentication-and-proxy" datatype="html">
+        <source>Authentication and proxy</source>
+        <target>Authenticatie en proxy</target>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.catalog" datatype="html">
         <source>Catalog</source>
         <target>Catalogus</target>
@@ -297,6 +301,10 @@
         <source>Additional connection options</source>
         <target>Extra verbindingsopties</target>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.cors-layer-hint" datatype="html">
+        <source>Reverse proxying without authentication can be used to bypass missing CORS headers but check with the server administrator if it&apos;s allowed and whether CORS can be enabled so proxying isn&apos;t necessary.</source>
+        <target>Reverse proxying zonder authenticatie kan worden gebruikt om ontbrekende CORS headers te omzeilen, maar controleer bij de serverbeheerder of dit is toegestaan en of CORS kan worden ingeschakeld zodat proxying niet nodig is.</target>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.create-feature-source" datatype="html">
         <source>Create new feature source</source>
         <target>Nieuwe objectbron maken</target>
@@ -308,6 +316,14 @@
       <trans-unit id="admin-core.catalog.create-new-service" datatype="html">
         <source>Create new service</source>
         <target>Nieuwe service maken</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.credentials-set" datatype="html">
+        <source>Credentials set</source>
+        <target>Inloggegevens ingesteld</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.credentials-set-and-proxy-enabled" datatype="html">
+        <source>Credentials set and proxy enabled</source>
+        <target>Inloggegevens ingesteld en proxy ingeschakeld</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.database" datatype="html">
         <source>Database</source>
@@ -368,6 +384,10 @@
       <trans-unit id="admin-core.catalog.edit-settings-for-layer" datatype="html">
         <source>Edit settings for layer <x id="INTERPOLATION" equiv-text="{{ geoServiceSettings.layerTitle }}"/></source>
         <target state="new">Bewerk instellingen voor laag <x id="INTERPOLATION" equiv-text="{{ geoServiceSettings.layerTitle }}"/></target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.enter-url-template" datatype="html">
+        <source>Enter an URL template such as</source>
+        <target>Voer een URL-sjabloon in zoals</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.error-creating-feature-source" datatype="html">
         <source>Error while creating feature source: <x id="PH" equiv-text="message"/></source>
@@ -513,6 +533,10 @@
         <source>Layer</source>
         <target>Laag</target>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.layer-authentication-hint" datatype="html">
+        <source>Enter account details below if the service requires HTTP Basic authentication. Enable reverse proxying to allow a layer which requires authentication to be used in a viewer by having Tailormap do the WMS requests for the end user without sending the credentials to the users&apos; browser.</source>
+        <target>Voer hieronder accountgegevens in als de service HTTP Basic-verificatie vereist. Schakel reverse proxying in om een laag die authenticatie vereist te kunnen gebruiken in een viewer door Tailormap de WMS-verzoeken voor de eindgebruiker te laten doen zonder de referenties naar de gebruikers&apos; browser te sturen.</target>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.layer-name" datatype="html">
         <source>Layer name</source>
         <target>Naam laag</target>
@@ -537,6 +561,10 @@
         <source>No feature type</source>
         <target>Geen object type</target>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.not-set" datatype="html">
+        <source>Not set</source>
+        <target>Niet ingesteld</target>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.port" datatype="html">
         <source>Port</source>
         <target>Poort</target>
@@ -544,6 +572,10 @@
       <trans-unit id="admin-core.catalog.protocol" datatype="html">
         <source>Protocol</source>
         <target>Protocol</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.proxy-enabled" datatype="html">
+        <source>Proxy enabled</source>
+        <target>Proxy ingeschakeld</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.refresh-feature-source" datatype="html">
         <source>Refresh feature source</source>
@@ -580,6 +612,10 @@
       <trans-unit id="admin-core.catalog.remove-layers-first" datatype="html">
         <source>Please remove the layers from this service from the applications first</source>
         <target>Verwijder eerst de lagen van deze service uit de applicaties</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.reverse-proxy" datatype="html">
+        <source>Reverse proxy WMS requests for viewers</source>
+        <target>Reverse proxy WMS-verzoeken voor viewers</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.schema" datatype="html">
         <source>Schema</source>
@@ -773,6 +809,10 @@
         <source>Save</source>
         <target>Opslaan</target>
       </trans-unit>
+      <trans-unit id="admin-core.common.saved" datatype="html">
+        <source>Saved</source>
+        <target>Opgeslagen</target>
+      </trans-unit>
       <trans-unit id="admin-core.common.sort" datatype="html">
         <source>Sort</source>
         <target>Sorteren</target>
@@ -962,8 +1002,8 @@
         <target>Status</target>
       </trans-unit>
       <trans-unit id="admin-core.oidc.use-redirect-url" datatype="html">
-        <source>Use <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code>"/><x id="INTERPOLATION" equiv-text="{{redirectUrl}}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code>"/> as redirect URL in your IdP.</source>
-        <target state="new">Gebruik <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code>"/><x id="INTERPOLATION" equiv-text="{{redirectUrl}}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code>"/> als redirect URL in je IdP.</target>
+        <source>Use <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/><x id="INTERPOLATION" equiv-text="{{redirectUrl}}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> as redirect URL in your IdP.</source>
+        <target state="new">Gebruik <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/><x id="INTERPOLATION" equiv-text="{{redirectUrl}}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> als redirect URL in je IdP.</target>
       </trans-unit>
       <trans-unit id="admin-core.oidc.username-attribute" datatype="html">
         <source>User name attribute</source>
@@ -1022,8 +1062,8 @@
         <target>Wachtwoorden moeten overeenkomen</target>
       </trans-unit>
       <trans-unit id="admin-core.users.password-short-error" datatype="html">
-        <source>Password shorter than <x id="INTERPOLATION" equiv-text="{{userForm.get('password')?.errors?.['minlength'].requiredLength}}"/></source>
-        <target state="new">Wachtwoord korter dan <x id="INTERPOLATION" equiv-text="{{userForm.get('password')?.errors?.['minlength'].requiredLength}}"/></target>
+        <source>Password shorter than <x id="INTERPOLATION" equiv-text="{{userForm.get(&apos;password&apos;)?.errors?.[&apos;minlength&apos;].requiredLength}}"/></source>
+        <target state="new">Wachtwoord korter dan <x id="INTERPOLATION" equiv-text="{{userForm.get(&apos;password&apos;)?.errors?.[&apos;minlength&apos;].requiredLength}}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.users.password-too-easy-error" datatype="html">
         <source>Password too short or too easily guessable</source>

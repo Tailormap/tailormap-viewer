@@ -212,6 +212,9 @@
       <trans-unit id="admin-core.catalog.attributes" datatype="html">
         <source>Attributes</source>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.authentication-and-proxy" datatype="html">
+        <source>Authentication and proxy</source>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.catalog" datatype="html">
         <source>Catalog</source>
       </trans-unit>
@@ -224,6 +227,9 @@
       <trans-unit id="admin-core.catalog.connection-options" datatype="html">
         <source>Additional connection options</source>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.cors-layer-hint" datatype="html">
+        <source>Reverse proxying without authentication can be used to bypass missing CORS headers but check with the server administrator if it&apos;s allowed and whether CORS can be enabled so proxying isn&apos;t necessary.</source>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.create-feature-source" datatype="html">
         <source>Create new feature source</source>
       </trans-unit>
@@ -232,6 +238,12 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.create-new-service" datatype="html">
         <source>Create new service</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.credentials-set" datatype="html">
+        <source>Credentials set</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.credentials-set-and-proxy-enabled" datatype="html">
+        <source>Credentials set and proxy enabled</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.database" datatype="html">
         <source>Database</source>
@@ -277,6 +289,9 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.edit-settings-for-layer" datatype="html">
         <source>Edit settings for layer <x id="INTERPOLATION" equiv-text="{{ geoServiceSettings.layerTitle }}"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.enter-url-template" datatype="html">
+        <source>Enter an URL template such as</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.error-creating-feature-source" datatype="html">
         <source>Error while creating feature source: <x id="PH" equiv-text="message"/></source>
@@ -386,6 +401,9 @@
       <trans-unit id="admin-core.catalog.layer" datatype="html">
         <source>Layer</source>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.layer-authentication-hint" datatype="html">
+        <source>Enter account details below if the service requires HTTP Basic authentication. Enable reverse proxying to allow a layer which requires authentication to be used in a viewer by having Tailormap do the WMS requests for the end user without sending the credentials to the users&apos; browser.</source>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.layer-name" datatype="html">
         <source>Layer name</source>
       </trans-unit>
@@ -404,11 +422,17 @@
       <trans-unit id="admin-core.catalog.no-feature-type" datatype="html">
         <source>No feature type</source>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.not-set" datatype="html">
+        <source>Not set</source>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.port" datatype="html">
         <source>Port</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.protocol" datatype="html">
         <source>Protocol</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.proxy-enabled" datatype="html">
+        <source>Proxy enabled</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.refresh-feature-source" datatype="html">
         <source>Refresh feature source</source>
@@ -436,6 +460,9 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.remove-layers-first" datatype="html">
         <source>Please remove the layers from this service from the applications first</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.reverse-proxy" datatype="html">
+        <source>Reverse proxy WMS requests for viewers</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.schema" datatype="html">
         <source>Schema</source>
@@ -580,6 +607,9 @@
       </trans-unit>
       <trans-unit id="admin-core.common.save" datatype="html">
         <source>Save</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.saved" datatype="html">
+        <source>Saved</source>
       </trans-unit>
       <trans-unit id="admin-core.common.sort" datatype="html">
         <source>Sort</source>

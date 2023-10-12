@@ -19,7 +19,7 @@
     "lint-per-rule": "eslint --ext .ts,.html -f ./lint-formatter.js ./projects/**",
     "release-packages": "node bin/publish-all.js",
     "analyze-bundle": "ng build app --stats-json && npx webpack-bundle-analyzer --mode static --report reports/report-bundle-size-tailorm.html dist/app/stats.json",
-    "extract-locale": "npm run extract-locale-shared && npm run extract-locale-core && npm run extract-locale-admin-core",
+    "extract-locale": "node bin/extract-i18n.js",
     "extract-locale-shared": "ng extract-i18n --configuration=shared",
     "extract-locale-core": "ng extract-i18n --configuration=core",
     "extract-locale-admin-core": "ng extract-i18n --configuration=admin-core"

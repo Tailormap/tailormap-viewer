@@ -542,12 +542,12 @@
         <target state="translated">Filteren</target>
       </trans-unit>
       <trans-unit id="core.filter.filtering-layer-by-drawing-or-reference" datatype="html">
-        <source>Filtering the selected <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container [ngTemplateOutlet]=&quot;layerLabel&quot; />"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="metry and/or sele"/> can be done by drawing geometry and/or selecting a reference layer.</source>
-        <target state="new">U kunt de geselecteerde <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container [ngTemplateOutlet]=&quot;layerLabel&quot; />"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="metry and/or sele"/> filteren door geometrieën te tekenen en/of een referentielaag te selecteren.</target>
+        <source>Filtering the selected <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container [ngTemplateOutlet]=&quot;layerLabel&quot; /&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="metry and/or sele"/> can be done by drawing geometry and/or selecting a reference layer.</source>
+        <target state="new">U kunt de geselecteerde <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container [ngTemplateOutlet]=&quot;layerLabel&quot; /&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="metry and/or sele"/> filteren door geometrieën te tekenen en/of een referentielaag te selecteren.</target>
       </trans-unit>
       <trans-unit id="core.filter.filtering-layer-by-drawing-or-reference-hint" datatype="html">
-        <source>The geometries from this reference layer will then be used to filter the selected <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container [ngTemplateOutlet]=&quot;layerLabel&quot; />"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;div class=&quot;fo"/>.</source>
-        <target state="new">De geometrieën van deze referentielaag worden dan gebruikt om de geselecteerde <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container [ngTemplateOutlet]=&quot;layerLabel&quot; />"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;div class=&quot;fo"/> te filteren.</target>
+        <source>The geometries from this reference layer will then be used to filter the selected <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container [ngTemplateOutlet]=&quot;layerLabel&quot; /&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;div class=&quot;fo"/>.</source>
+        <target state="new">De geometrieën van deze referentielaag worden dan gebruikt om de geselecteerde <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container [ngTemplateOutlet]=&quot;layerLabel&quot; /&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;div class=&quot;fo"/> te filteren.</target>
       </trans-unit>
       <trans-unit id="core.filter.from" datatype="html">
         <source>From</source>
@@ -826,8 +826,8 @@
         <target>Breedte</target>
       </trans-unit>
       <trans-unit id="core.print.width-height-ratio" datatype="html">
-        <source>Width/height ratio: <x id="INTERPOLATION" equiv-text="{{getImageRatio() | number: '1.1-2' }}"/></source>
-        <target>Verhouding breedte/hoogte: <x id="INTERPOLATION" equiv-text="{{getImageRatio() | number: '1.1-2' }}"/></target>
+        <source>Width/height ratio: <x id="INTERPOLATION" equiv-text="{{getImageRatio() | number: &apos;1.1-2&apos; }}"/></source>
+        <target state="new">Verhouding breedte/hoogte: <x id="INTERPOLATION" equiv-text="{{getImageRatio() | number: &apos;1.1-2&apos; }}"/></target>
       </trans-unit>
       <trans-unit id="core.print.width-range" datatype="html">
         <source>Range: 50 - 600</source>

@@ -184,6 +184,7 @@
             "outputPath": "locale",
             "sourceFile": "messages.en.xlf",
             "verbose": false,
+            "resetTranslationState": false,
             "sort": "idAsc",
             "targetFiles": [
               "messages.nl.xlf"

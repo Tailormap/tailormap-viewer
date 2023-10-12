@@ -14,7 +14,7 @@ export class AdminSnackbarService {
 
   public showMessage(msg?: string) {
     return SnackBarMessageComponent.open$(this.snackBar, {
-      message: msg || 'Saved',
+      message: msg || $localize `:@@admin-core.common.saved:Saved`,
       duration: msg ? 8000 : 5000,
       showDuration: true,
       showCloseButton: true,

@@ -7,6 +7,10 @@ function getInvalidImportsRule(projectName, allowOpenLayers, allowAdmin) {
       {
         "group": [projectName],
         "message": "Invalid reference to own project"
+      },
+      {
+        "group": ["@angular/localize/init"],
+        "message": "Do not import $localize. This is provided by Angular and imported once in polyfills.ts"
       }
     ]
   };

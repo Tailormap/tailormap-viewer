@@ -6,7 +6,6 @@ import { GeoServiceProtocolEnum, GroupModel, AuthorizationRuleGroup, AUTHORIZATI
 import { FormHelper } from '../../helpers/form.helper';
 import { GeoServiceCreateModel } from '../models/geo-service-update.model';
 import { StringHelper } from '@tailormap-viewer/shared';
-import { $localize } from '@angular/localize/init';
 import { GroupService } from '../../user/services/group.service';
 
 @Component({
