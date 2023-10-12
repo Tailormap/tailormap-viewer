@@ -18,7 +18,7 @@
     "@sentry/angular-ivy": "^7.53.1",
     "@sentry/tracing": "^7.53.1",
     "@stardazed/zlib": "^1.0.1",
-    "@tailormap-viewer/shared": "^11.1.1",
+    "@tailormap-viewer/shared": "^11.1.2",
     "@tailormap-viewer/map": "^11.1.1",
     "@tailormap-viewer/api": "^11.1.2",
     "jspdf": "^2.5.1",
