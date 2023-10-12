@@ -43,7 +43,7 @@ export class GroupCreateComponent implements OnDestroy {
       .pipe(takeUntil(this.destroyed))
       .subscribe(createGroup => {
         if (createGroup) {
-          this.adminSnackbarService.showMessage($localize `Group ${createGroup.name} created`);
+          this.adminSnackbarService.showMessage($localize `:@@admin-core.groups.group-created:Group ${createGroup.name} created`);
           this.router.navigateByUrl('/admin/groups/group/' + createGroup.name);
         }
         this.savingSubject.next(false);

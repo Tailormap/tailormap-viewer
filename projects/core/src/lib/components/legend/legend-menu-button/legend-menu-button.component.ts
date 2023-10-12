@@ -7,6 +7,6 @@ import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
   styleUrls: ['./legend-menu-button.component.css'],
 })
 export class LegendMenuButtonComponent {
-  public panelTitle = $localize `Legend`;
+  public panelTitle = $localize `:@@core.legend.legend:Legend`;
   public componentType = BaseComponentTypeEnum.LEGEND;
 }

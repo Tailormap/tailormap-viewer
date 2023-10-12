@@ -23,7 +23,7 @@ export class ApplicationEffects {
         return this.adminApiService.getApplications$()
           .pipe(
             catchError(() => {
-              return of({ error: $localize `Error while loading list of applications` });
+              return of({ error: $localize `:@@admin-core.application.error-loading-applications:Error while loading list of applications` });
             }),
             map(response => {
               if (ApiResponseHelper.isErrorResponse(response)) {

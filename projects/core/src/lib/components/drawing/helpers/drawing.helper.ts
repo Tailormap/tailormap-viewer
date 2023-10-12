@@ -24,11 +24,11 @@ export class DrawingHelper {
   }
 
   public static arrowTypeValues = [
-    { value: ArrowTypeEnum.NONE, label: $localize `None` },
-    { value: ArrowTypeEnum.START, label: $localize `At the start` },
-    { value: ArrowTypeEnum.END, label: $localize `At the end` },
-    { value: ArrowTypeEnum.BOTH, label: $localize `On both sides` },
-    { value: ArrowTypeEnum.ALONG, label: $localize `On every segment` },
+    { value: ArrowTypeEnum.NONE, label: $localize `:@@core.drawing.arrow-none:None` },
+    { value: ArrowTypeEnum.START, label: $localize `:@@core.drawing.arrow-at-the-start:At the start` },
+    { value: ArrowTypeEnum.END, label: $localize `:@@core.drawing.arrow-at-the-end:At the end` },
+    { value: ArrowTypeEnum.BOTH, label: $localize `:@@core.drawing.arrow-on-both-sides:On both sides` },
+    { value: ArrowTypeEnum.ALONG, label: $localize `:@@core.drawing.arrow-on-every-segment:On every segment` },
   ];
 
   public static strokeTypeValues = [

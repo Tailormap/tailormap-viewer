@@ -1,12 +1,12 @@
 <h2 mat-dialog-title>
-  <ng-container *ngIf="!data.featureSource" i18n>Create new feature source</ng-container>
-  <ng-container *ngIf="data.featureSource" i18n>Edit {{data.featureSource.title}}</ng-container>
+  <ng-container *ngIf="!data.featureSource" i18n="@@admin-core.catalog.create-feature-source">Create new feature source</ng-container>
+  <ng-container *ngIf="data.featureSource" i18n="@@admin-core.catalog.edit-feature-source">Edit {{data.featureSource.title}}</ng-container>
 </h2>
 <mat-dialog-content>
   <tm-admin-feature-source-form [featureSource]="data.featureSource"
                                 (changed)="updateFeatureSource($event)"></tm-admin-feature-source-form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-flat-button (click)="cancel()" i18n>Cancel</button>
+  <button mat-flat-button (click)="cancel()" i18n="@@admin-core.common.cancel">Cancel</button>
   <tm-admin-save-button [saving$]="saving$" [disabled]="!featureSource" (save)="save()"></tm-admin-save-button>
 </mat-dialog-actions>

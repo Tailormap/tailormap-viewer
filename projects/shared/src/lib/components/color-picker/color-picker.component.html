@@ -31,11 +31,9 @@
     <div class="form-field-wrap">
 
       <mat-form-field appearance="outline" color="primary" subscriptSizing="fixed">
-        <mat-label i18n>Color code</mat-label>
+        <mat-label i18n="@@shared.color-picker.color-code">Color code</mat-label>
         <input matInput [formControl]="formControl">
-        <mat-error *ngIf="hasError() && isRequired()" i18n>
-          Color is required
-        </mat-error>
+        <mat-error *ngIf="hasError() && isRequired()" i18n="@@shared.color-picker.color-required">Color is required</mat-error>
         <mat-error *ngIf="hasInvalidColorError()">
           {{ getInvalidColorMessage() }}
         </mat-error>

@@ -8,6 +8,6 @@ import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FilterMenuButtonComponent {
-  public panelLabel = $localize `Filtering`;
+  public panelLabel = $localize `:@@core.filter.filtering:Filtering`;
   public componentType = BaseComponentTypeEnum.FILTER;
 }

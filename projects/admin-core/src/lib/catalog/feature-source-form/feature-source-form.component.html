@@ -1,67 +1,63 @@
 <form [formGroup]="featureSourceForm">
   <mat-form-field>
-    <mat-label i18n>Title</mat-label>
+    <mat-label i18n="@@admin-core.common.title">Title</mat-label>
     <input matInput
            [tmAutoFocus]="!!featureSource"
            type="text"
            placeholder="Title"
-           i18n-placeholder
+           i18n-placeholder="@@admin-core.common.title"
            formControlName="title"
     />
   </mat-form-field>
   <mat-form-field>
-    <mat-label i18n>Protocol</mat-label>
-    <mat-select formControlName="protocol" placeholder="Protocol" i18n-placeholder>
-      <mat-option *ngFor="let protocol of protocols" [value]="protocol" i18n>
-        {{ protocol }}
-      </mat-option>
+    <mat-label i18n="@@admin-core.catalog.protocol">Protocol</mat-label>
+    <mat-select formControlName="protocol" placeholder="Protocol" i18n-placeholder="@@admin-core.catalog.protocol">
+      <mat-option *ngFor="let protocol of protocols" [value]="protocol">{{ protocol }}</mat-option>
     </mat-select>
   </mat-form-field>
   <mat-form-field *ngIf="isWFSSource()">
-    <mat-label i18n>URL</mat-label>
+    <mat-label i18n="@@admin-core.common.url">URL</mat-label>
     <input matInput
            [tmAutoFocus]="!featureSource"
            placeholder="URL"
            type="text"
-           i18n-placeholder
+           i18n-placeholder="@@admin-core.common.url"
            formControlName="url"
     />
   </mat-form-field>
   <ng-container *ngIf="isJDBCSource()">
     <mat-form-field>
-      <mat-label i18n>Database type</mat-label>
-      <mat-select formControlName="dbType" placeholder="Database type" i18n-placeholder>
-        <mat-option *ngFor="let dbType of dbTypes" [value]="dbType" i18n>
-          {{ dbType.type }}
-        </mat-option>
+      <mat-label i18n="@@admin-core.catalog.database-type">Database type</mat-label>
+      <mat-select formControlName="dbType" placeholder="Database type" i18n-placeholder="@@admin-core.catalog.database-type">
+        <mat-option *ngFor="let dbType of dbTypes" [value]="dbType">{{ dbType.type }}</mat-option>
       </mat-select>
     </mat-form-field>
     <mat-form-field>
-      <mat-label i18n>Database</mat-label>
-      <input matInput type="text" formControlName="database" placeholder="Database" i18n-placeholder />
+      <mat-label i18n="@@admin-core.catalog.database">Database</mat-label>
+      <input matInput type="text" formControlName="database" placeholder="Database" i18n-placeholder="@@admin-core.catalog.database" />
     </mat-form-field>
     <mat-form-field>
-      <mat-label i18n>Host</mat-label>
-      <input matInput type="text" formControlName="host" placeholder="Host" i18n-placeholder />
+      <mat-label i18n="@@admin-core.catalog.host">Host</mat-label>
+      <input matInput type="text" formControlName="host" placeholder="Host" i18n-placeholder="@@admin-core.catalog.host" />
     </mat-form-field>
     <mat-form-field>
-      <mat-label i18n>Port</mat-label>
-      <input matInput type="number" formControlName="port" placeholder="Port" i18n-placeholder />
+      <mat-label i18n="@@admin-core.catalog.port">Port</mat-label>
+      <input matInput type="number" formControlName="port" placeholder="Port" i18n-placeholder="@@admin-core.catalog.port" />
     </mat-form-field>
     <mat-form-field>
-      <mat-label i18n>Schema</mat-label>
-      <input matInput type="text" formControlName="schema" placeholder="Schema" i18n-placeholder />
+      <mat-label i18n="@@admin-core.catalog.schema">Schema</mat-label>
+      <input matInput type="text" formControlName="schema" placeholder="Schema" i18n-placeholder="@@admin-core.catalog.schema" />
     </mat-form-field>
     <mat-form-field>
-      <mat-label i18n>Additional connection options</mat-label>
+      <mat-label i18n="@@admin-core.catalog.connection-options">Additional connection options</mat-label>
       <input matInput type="text" formControlName="connectionOptions" placeholder="" />
     </mat-form-field>
   </ng-container>
   <ng-container *ngIf="isJDBCSource() || isWFSSource()">
     <mat-form-field>
-      <mat-label i18n>Username</mat-label>
-      <input matInput type="text" formControlName="username" placeholder="Username" i18n-placeholder />
+      <mat-label i18n="@@admin-core.common.username">Username</mat-label>
+      <input matInput type="text" formControlName="username" placeholder="Username" i18n-placeholder="@@admin-core.common.username" />
     </mat-form-field>
-    <tm-admin-password-field formControlName="password" label="Password" i18n-label></tm-admin-password-field>
+    <tm-admin-password-field formControlName="password" label="Password" i18n-label="@@admin-core.common.password"></tm-admin-password-field>
   </ng-container>
 </form>

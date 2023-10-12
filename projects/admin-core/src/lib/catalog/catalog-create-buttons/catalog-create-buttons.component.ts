@@ -56,7 +56,7 @@ export class CatalogCreateButtonsComponent implements OnInit, OnDestroy {
       parentNode,
     }).afterClosed().pipe(takeUntil(this.destroyed)).subscribe(node => {
       if (node) {
-        this.adminSnackbarService.showMessage($localize `Folder ${node.title} created`);
+        this.adminSnackbarService.showMessage($localize `:@@admin-core.catalog.folder-created:Folder ${node.title} created`);
         this.router.navigateByUrl(CatalogRouteHelper.getCatalogNodeUrl({ id: node.id }));
         this.store$.dispatch(expandTree({ id: node.id, nodeType: CatalogTreeModelTypeEnum.CATALOG_NODE_TYPE }));
       }
@@ -73,7 +73,7 @@ export class CatalogCreateButtonsComponent implements OnInit, OnDestroy {
       parentNode,
     }).afterClosed().pipe(takeUntil(this.destroyed)).subscribe(createdService => {
       if (createdService) {
-        this.adminSnackbarService.showMessage($localize `Service ${createdService.title} created`);
+        this.adminSnackbarService.showMessage($localize `:@@admin-core.catalog.service-created:Service ${createdService.title} created`);
         this.router.navigateByUrl(CatalogRouteHelper.getGeoServiceUrl({ id: createdService.id, catalogNodeId: parentNode }));
         this.store$.dispatch(expandTree({ id: createdService.id, nodeType: CatalogTreeModelTypeEnum.SERVICE_TYPE }));
       }
@@ -90,7 +90,7 @@ export class CatalogCreateButtonsComponent implements OnInit, OnDestroy {
       parentNode,
     }).afterClosed().pipe(takeUntil(this.destroyed)).subscribe(featureSource => {
       if (featureSource) {
-        this.adminSnackbarService.showMessage($localize `Feature source ${featureSource.title} created`);
+        this.adminSnackbarService.showMessage($localize `:@@admin-core.catalog.feature-source-created:Feature source ${featureSource.title} created`);
         this.router.navigateByUrl(CatalogRouteHelper.getFeatureSourceUrl({ id: featureSource.id, catalogNodeId: parentNode }));
         this.store$.dispatch(expandTree({ id: featureSource.id, nodeType: CatalogTreeModelTypeEnum.FEATURE_SOURCE_TYPE }));
       }

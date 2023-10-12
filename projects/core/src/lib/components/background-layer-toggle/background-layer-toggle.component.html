@@ -1,4 +1,6 @@
 <tm-split-button small_screens_icon="layers_filled"
+                 tooltip="Background layer selection"
+                 i18n-tooltip="@@core.background-layer-toggle.layer-selection"
                  [options]="backgroundLayers$ | async"
                  [emptyLabel]="initiallyCheckedLabels$ | async"
                  [selectedOption]="selectedBackgroundNodeId$ | async"

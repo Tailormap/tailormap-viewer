@@ -1,12 +1,12 @@
 <ng-container *ngIf="application$ | async as application">
-  <h2 class="page-details-title" i18n>Edit {{ application.title }}</h2>
+  <h2 class="page-details-title" i18n="@@admin-core.application.edit">Edit {{ application.title }}</h2>
 
   <div class="secondary-navigation">
-    <a routerLink="." routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" i18n>Settings</a>
-    <a [routerLink]="routes.APPLICATION_DETAILS_LAYERS" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" i18n>Layers</a>
-    <a [routerLink]="routes.APPLICATION_DETAILS_BASE_LAYERS" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" i18n>Background layers</a>
-    <a [routerLink]="routes.APPLICATION_DETAILS_STYLING" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" i18n>Styling</a>
-    <a [routerLink]="routes.APPLICATION_DETAILS_COMPONENTS" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" i18n>Components</a>
+    <a routerLink="." routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" i18n="@@admin-core.application.settings">Settings</a>
+    <a [routerLink]="routes.APPLICATION_DETAILS_LAYERS" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" i18n="@@admin-core.application.layers">Layers</a>
+    <a [routerLink]="routes.APPLICATION_DETAILS_BASE_LAYERS" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" i18n="@@admin-core.application.background-layers">Background layers</a>
+    <a [routerLink]="routes.APPLICATION_DETAILS_STYLING" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" i18n="@@admin-core.application.styling">Styling</a>
+    <a [routerLink]="routes.APPLICATION_DETAILS_COMPONENTS" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" i18n="@@admin-core.application.components">Components</a>
   </div>
 
   <div class="application-edit-content">
@@ -15,8 +15,8 @@
 
   <div class="page-details-actions application-edit-buttons">
     <tm-admin-save-button [saving$]="saving$" [disabled]="draftApplicationPristine$ | async" (save)="save()"></tm-admin-save-button>
-    <button mat-flat-button color="warn" (click)="delete(application)" i18n>Delete</button>
-    <button mat-flat-button routerLink="/admin/applications" i18n>Close</button>
+    <button mat-flat-button color="warn" (click)="delete(application)" i18n="@@admin-core.common.delete">Delete</button>
+    <button mat-flat-button routerLink="/admin/applications" i18n="@@admin-core.common.close">Close</button>
   </div>
 
 </ng-container>

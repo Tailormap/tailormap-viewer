@@ -9,12 +9,10 @@
 
   <div class="point-settings settings-section" *ngIf="showPointSettings()">
 
-    <h2 class="section-label" i18n>
-      Symbol
-    </h2>
+    <h2 class="section-label" i18n="@@core.drawing.symbol">Symbol</h2>
 
     <div class="form-field form-field__columns">
-      <label i18n>Symbol</label>
+      <label i18n="@@core.drawing.symbol">Symbol</label>
       <tm-icon-picker [icons]="getMarkers()"
                       [selectedIcon]="getSelectedMarker()"
                       [iconColor]="iconColor"
@@ -22,19 +20,19 @@
     </div>
 
     <div class="form-field form-field__columns">
-      <label i18n>Fill color</label>
+      <label i18n="@@core.drawing.fill-color">Fill color</label>
       <tm-color-picker [color]="style.markerFillColor"
                        (colorChange)="changeMarkerFill($event)"></tm-color-picker>
     </div>
 
     <div class="form-field form-field__columns">
-      <label>Line color</label>
+      <label i18n="@@core.drawing.line-color">Line color</label>
       <tm-color-picker [color]="style.markerStrokeColor"
                        (colorChange)="changeMarkerStroke($event)"></tm-color-picker>
     </div>
 
     <div class="form-field form-field__columns">
-      <label i18n>Line thickness</label>
+      <label i18n="@@core.drawing.line-thickness">Line thickness</label>
       <span>{{style.markerStrokeWidth}}px</span>
     </div>
 
@@ -48,7 +46,7 @@
     </div>
 
     <div class="form-field form-field__columns">
-      <label i18n>Size</label>
+      <label i18n="@@core.drawing.size">Size</label>
       <span>{{style.markerSize}}px</span>
     </div>
 
@@ -62,7 +60,7 @@
     </div>
 
     <div class="form-field form-field__columns">
-      <label i18n>Rotation</label>
+      <label i18n="@@core.drawing.rotation">Rotation</label>
       <span>{{style.markerRotation}}&deg;</span>
     </div>
 
@@ -79,33 +77,31 @@
 
   <div class="label-settings settings-section" *ngIf="showLabelSettings()">
 
-    <h2 class="section-label" i18n>
-      Label
-    </h2>
+    <h2 class="section-label" i18n="@@core.drawing.label">Label</h2>
 
     <mat-form-field appearance="outline" color="primary">
-      <mat-label i18n>Label</mat-label>
-      <input matInput *ngIf="!isLabelType()" i18n-placeholder placeholder="Label" [formControl]="labelControl">
-      <textarea matInput *ngIf="isLabelType()" i18n-placeholder placeholder="Label" [formControl]="labelControl"></textarea>
+      <mat-label i18n="@@core.drawing.label">Label</mat-label>
+      <input matInput *ngIf="!isLabelType()" i18n-placeholder="@@core.drawing.label" placeholder="Label" [formControl]="labelControl">
+      <textarea matInput *ngIf="isLabelType()" i18n-placeholder="@@core.drawing.label" placeholder="Label" [formControl]="labelControl"></textarea>
       <div matSuffix>
         <button *ngIf="showInsertCoordinates()"
                 mat-icon-button
                 tmTooltip="Insert coordinates as label"
-                i18n-tmTooltip
+                i18n-tmTooltip="@@core.drawing.insert-coordinates-label"
                 (click)="insertCoordinates()">
           <mat-icon svgIcon="coordinates"></mat-icon>
         </button>
         <button *ngIf="showInsertLength()"
                 mat-icon-button
                 tmTooltip="Insert length as label"
-                i18n-tmTooltip
+                i18n-tmTooltip="@@core.drawing.insert-length-label"
                 (click)="insertLength()">
           <mat-icon svgIcon="tools_measure_length_outline"></mat-icon>
         </button>
         <button *ngIf="showInsertArea()"
                 mat-icon-button
                 tmTooltip="Insert area as label"
-                i18n-tmTooltip
+                i18n-tmTooltip="@@core.drawing.insert-area-label"
                 (click)="insertArea()">
           <mat-icon svgIcon="tools_measure_area_outline"></mat-icon>
         </button>
@@ -113,7 +109,7 @@
     </mat-form-field>
 
     <div class="form-field form-field__columns form-field__buttons">
-      <label i18n>Format</label>
+      <label i18n="@@core.drawing.format">Format</label>
       <mat-button-toggle-group multiple="true">
         <mat-button-toggle (click)="toggleStyle(labelStyleValues.bold)"
                            [checked]="hasLabelStyle(labelStyleValues.bold)">
@@ -127,7 +123,7 @@
     </div>
 
     <div class="form-field form-field__columns">
-      <label i18n>Size</label>
+      <label i18n="@@core.drawing.size">Size</label>
       <span>{{style.labelSize}}px</span>
     </div>
 
@@ -141,20 +137,20 @@
     </div>
 
     <div class="form-field form-field__columns">
-      <label i18n>Color</label>
+      <label i18n="@@core.drawing.color">Color</label>
       <tm-color-picker [color]="style.labelColor"
                        (colorChange)="changeLabelColor($event)"></tm-color-picker>
     </div>
 
     <div class="form-field form-field__columns">
-      <label i18n>Halo</label>
+      <label i18n="@@core.drawing.halo">Halo</label>
       <tm-color-picker [color]="style.labelOutlineColor"
                        [allowEmptyColor]="true"
                        (colorChange)="changeLabelOutlineColor($event)"></tm-color-picker>
     </div>
 
     <div class="form-field form-field__columns">
-      <label i18n>Rotation</label>
+      <label i18n="@@core.drawing.rotation">Rotation</label>
       <span>{{style.labelRotation}}&deg;</span>
     </div>
 
@@ -171,18 +167,16 @@
 
   <div class="line-settings settings-section" *ngIf="showLineSettings()">
 
-    <h2 class="section-label" i18n>
-      Line
-    </h2>
+    <h2 class="section-label" i18n="@@core.drawing.line">Line</h2>
 
     <div class="form-field form-field__columns">
-      <label i18n>Color</label>
+      <label i18n="@@core.drawing.color">Color</label>
       <tm-color-picker [color]="style.strokeColor"
                        (colorChange)="changeStrokeColor($event)"></tm-color-picker>
     </div>
 
     <div class="form-field form-field__columns">
-      <label i18n>Thickness</label>
+      <label i18n="@@core.drawing.thickness">Thickness</label>
       <span>{{style.strokeWidth}}px</span>
     </div>
 
@@ -196,7 +190,7 @@
     </div>
 
     <div class="form-field form-field__columns">
-      <label i18n>Opacity</label>
+      <label i18n="@@core.drawing.opacity">Opacity</label>
       <span>{{style.strokeOpacity}}%</span>
     </div>
 
@@ -211,7 +205,7 @@
     </div>
 
     <mat-form-field appearance="outline" color="primary">
-      <mat-label i18n>Stroke type</mat-label>
+      <mat-label i18n="@@core.drawing.stroke-type">Stroke type</mat-label>
       <mat-select [formControl]="strokeTypeControl"
                   panelClass="select-line-style"
                   class="select-line-style">
@@ -225,7 +219,7 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline" color="primary" *ngIf="showArrowSetting()">
-      <label i18n>Arrow</label>
+      <label i18n="@@core.drawing.arrow">Arrow</label>
       <mat-select [formControl]="arrowTypeControl">
         <mat-option *ngFor="let arrowTypeValue of arrowTypeValues"
                     [value]="arrowTypeValue.value">
@@ -238,24 +232,22 @@
 
   <div class="polygon-settings settings-section" *ngIf="showPolygonSettings()">
 
-    <h2 class="section-label" i18n>
-      Fill
-    </h2>
+    <h2 class="section-label" i18n="@@core.drawing.fill">Fill</h2>
 
     <div class="form-field form-field__columns">
-      <label i18n>Color</label>
+      <label i18n="@@core.drawing.color">Color</label>
       <tm-color-picker [color]="style.fillColor"
                        (colorChange)="changeFillColor($event)"></tm-color-picker>
     </div>
 
     <div class="form-field form-field__columns form-field__columns--right-aligned checkbox-field">
-      <mat-checkbox i18n
-                    [checked]="style.stripedFill"
+      <mat-checkbox i18n="@@core.drawing.striped-fill"
+                    [checked]="style.stripedFill ?? false"
                     (change)="changeStripedFill($event)">Striped fill</mat-checkbox>
     </div>
 
     <div class="form-field form-field__columns">
-      <label i18n>Opacity</label>
+      <label i18n="@@core.drawing.opacity">Opacity</label>
       <span>{{style.fillOpacity}}%</span>
     </div>
 

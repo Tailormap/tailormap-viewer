@@ -8,6 +8,6 @@ import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DrawingMenuButtonComponent {
-  public panelTitle = $localize `Drawing`;
+  public panelTitle = $localize `:@@core.drawing.drawing:Drawing`;
   public componentType = BaseComponentTypeEnum.DRAWING;
 }

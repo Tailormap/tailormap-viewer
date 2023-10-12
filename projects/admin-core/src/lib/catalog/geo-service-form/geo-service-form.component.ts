@@ -109,13 +109,13 @@ export class GeoServiceFormComponent implements OnInit {
     const formHasAuthentication = this.formHasAuthentication();
     const proxyEnabled = this.geoServiceForm.getRawValue().useProxy;
     if (formHasAuthentication && proxyEnabled) {
-      return $localize`Credentials set and proxy enabled`;
+      return $localize `:@@admin-core.catalog.credentials-set-and-proxy-enabled:Credentials set and proxy enabled`;
     } else if (formHasAuthentication) {
-      return $localize `Credentials set`;
+      return $localize `:@@admin-core.catalog.credentials-set:Credentials set`;
     } else if (proxyEnabled) {
-      return $localize `Proxy enabled`;
+      return $localize `:@@admin-core.catalog.proxy-enabled:Proxy enabled`;
     } else {
-      return $localize `Not set`;
+      return $localize `:@@admin-core.catalog.not-set:Not set`;
     }
   }
 }

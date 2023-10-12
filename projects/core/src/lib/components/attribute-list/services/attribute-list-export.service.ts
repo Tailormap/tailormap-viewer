@@ -83,7 +83,7 @@ export class AttributeListExportService {
     ]).pipe(
       take(1),
       switchMap(([ outputFormat, applicationId ]) => {
-        const defaultErrorMessage = $localize `Exporting data for layer ${params.serviceLayerName} and format ${params.format} failed`;
+        const defaultErrorMessage = $localize `:@@core.attribute-list.export-failed:Exporting data for layer ${params.serviceLayerName} and format ${params.format} failed`;
         if (applicationId === null || outputFormat === null) {
           this.showSnackbarMessage(defaultErrorMessage);
           return of(null);
@@ -108,7 +108,7 @@ export class AttributeListExportService {
           return;
         }
         const date = DateTime.now().setLocale(this.dateLocale).toLocaleString(DateTime.DATETIME_SHORT).replace(/,? /g, '_');
-        const defaultFilename = [ $localize `Export`, params.serviceLayerName, date ].join('_') + '.' + this.getExtensionForFormat(params.format);
+        const defaultFilename = [ $localize `:@@core.attribute-list.export:Export`, params.serviceLayerName, date ].join('_') + '.' + this.getExtensionForFormat(params.format);
         const fileName = FileHelper.extractFileNameFromContentDispositionHeader(response.headers.get('Content-Disposition') || '', defaultFilename);
         FileHelper.saveAsFile(response.body, fileName);
       }),

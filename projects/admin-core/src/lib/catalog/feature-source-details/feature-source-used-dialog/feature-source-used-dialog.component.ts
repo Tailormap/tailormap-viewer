@@ -55,7 +55,7 @@ export class FeatureSourceUsedDialogComponent {
       )
       .subscribe(updatedSettings => {
         if (updatedSettings) {
-          this.adminSnackbarService.showMessage($localize `Layer settings updated`);
+          this.adminSnackbarService.showMessage($localize `:@@admin-core.catalog.layer-settings-updated:Layer settings updated`);
         }
         this.dialogRef.close('layer-updated');
       });

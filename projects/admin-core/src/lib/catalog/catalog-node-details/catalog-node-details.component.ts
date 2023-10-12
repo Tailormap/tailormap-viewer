@@ -66,7 +66,7 @@ export class CatalogNodeDetailsComponent implements OnInit, OnDestroy {
     this.catalogService.updateCatalogNode$({ ...this.updatedNode, id: nodeId })
       .pipe(takeUntil(this.destroyed))
       .subscribe(() => {
-        this.adminSnackbarService.showMessage($localize `Node updated`);
+        this.adminSnackbarService.showMessage($localize `:@@admin-core.catalog.folder-updated:Folder updated`);
         this.savingSubject.next(false);
       });
   }
@@ -81,8 +81,8 @@ export class CatalogNodeDetailsComponent implements OnInit, OnDestroy {
               .afterClosed().pipe(map(() => false));
           }
           return this.confirmDialog.confirm$(
-            `Delete folder ${node.title}`,
-            `Are you sure you want to the folder ${node.title}? This action cannot be undone.`,
+            $localize `:@@admin-core.catalog.delete-folder:Delete folder ${node.title}`,
+            $localize `:@@admin-core.catalog.delete-folder-message:Are you sure you want to the folder ${node.title}? This action cannot be undone.`,
             true,
           );
         }),
@@ -97,7 +97,7 @@ export class CatalogNodeDetailsComponent implements OnInit, OnDestroy {
         if (!response.success) {
           return;
         }
-        this.adminSnackbarService.showMessage($localize `Folder ${node.title} removed`);
+        this.adminSnackbarService.showMessage($localize `:@@admin-core.catalog.folder-removed:Folder ${node.title} removed`);
         this.router.navigateByUrl('/admin/catalog');
       });
   }

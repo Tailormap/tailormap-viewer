@@ -8,6 +8,6 @@ import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PrintMenuButtonComponent {
-  public panelTitle = $localize `Print`;
+  public panelTitle = $localize `:@@core.print.print:Print`;
   public componentType = BaseComponentTypeEnum.PRINT;
 }

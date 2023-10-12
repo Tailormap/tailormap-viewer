@@ -43,7 +43,8 @@ export class ApplicationCreateComponent implements OnDestroy {
       .pipe(takeUntil(this.destroyed))
       .subscribe(createdApplication => {
         if (createdApplication) {
-          this.adminSnackbarService.showMessage($localize `Application ${createdApplication.title || createdApplication.name} created`);
+          // eslint-disable-next-line max-len
+          this.adminSnackbarService.showMessage($localize `:@@admin-core.application.application-created:Application ${createdApplication.title || createdApplication.name} created`);
           this.router.navigateByUrl('/admin/applications/application/' + createdApplication.id);
         }
         this.savingSubject.next(false);

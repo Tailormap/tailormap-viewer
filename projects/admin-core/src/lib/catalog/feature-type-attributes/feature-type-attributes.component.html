@@ -1,7 +1,7 @@
 <div class="attributes-wrapper">
 
   <mat-card class="attributes-table">
-    <mat-card-title i18n>Attributes</mat-card-title>
+    <mat-card-title i18n="@@admin-core.catalog.attributes">Attributes</mat-card-title>
     <mat-card-content>
       <form [formGroup]="aliasForm">
         <mat-table
@@ -18,15 +18,15 @@
             </mat-cell>
           </ng-container>
           <ng-container matColumnDef="name">
-            <mat-header-cell *matHeaderCellDef i18n>Name</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef i18n="@@admin-core.common.name">Name</mat-header-cell>
             <mat-cell *matCellDef="let att"> {{att.name}} </mat-cell>
           </ng-container>
           <ng-container matColumnDef="type">
-            <mat-header-cell *matHeaderCellDef i18n>Type</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef i18n="@@admin-core.common.type">Type</mat-header-cell>
             <mat-cell *matCellDef="let att"> {{att.type}} </mat-cell>
           </ng-container>
           <ng-container matColumnDef="alias">
-            <mat-header-cell *matHeaderCellDef i18n>Alias</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef i18n="@@admin-core.common.alias">Alias</mat-header-cell>
             <mat-cell *matCellDef="let att">
               <mat-form-field>
                 <input matInput [formControlName]="att.name" />
@@ -34,7 +34,7 @@
             </mat-cell>
           </ng-container>
           <ng-container matColumnDef="sort">
-            <mat-header-cell *matHeaderCellDef i18n>Sort</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef i18n="@@admin-core.common.sort">Sort</mat-header-cell>
             <mat-cell *matCellDef="let att"><mat-icon cdkDragHandle svgIcon="reorder"></mat-icon></mat-cell>
           </ng-container>
           <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
@@ -45,7 +45,7 @@
   </mat-card>
 
   <mat-card class="geom-attributes">
-    <mat-card-title i18n>Geometry attributes</mat-card-title>
+    <mat-card-title i18n="@@admin-core.catalog.geometry-attributes">Geometry attributes</mat-card-title>
     <mat-card-content>
       <div *ngFor="let attribute of geomAttributes">
         {{attribute.name}} ({{attribute.type}})

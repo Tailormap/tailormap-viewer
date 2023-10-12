@@ -7,6 +7,6 @@ import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
   styleUrls: ['./toc-menu-button.component.css'],
 })
 export class TocMenuButtonComponent {
-  public panelLabel = $localize `Available layers`;
+  public panelLabel = $localize `:@@core.toc.available-layers:Available layers`;
   public componentType = BaseComponentTypeEnum.TOC;
 }

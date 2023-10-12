@@ -78,10 +78,10 @@ export class AuthorizationEditComponent implements OnDestroy, ControlValueAccess
 
       if (this.parentChip === 'specificGroups') {
           if (parentDecisions.length > 0) {
-              prefix.push({ headerText: $localize `Inherited from ${this.parentType}` });
+              prefix.push({ headerText: $localize `:@@admin-core.authorizations.inherited-from:Inherited from ${this.parentType}` });
           }
           if (nonParentDecisions.length > 0) {
-              postParent.push({ headerText: $localize `Configured on ${this.selfType}` });
+              postParent.push({ headerText: $localize `:@@admin-core.authorizations.configured-on:Configured on ${this.selfType}` });
           }
       }
 
@@ -253,4 +253,6 @@ export class AuthorizationEditComponent implements OnDestroy, ControlValueAccess
   public isHeaderRow(_index: number, rowData: ExtendedAuthorizationRuleGroup): boolean {
       return rowData.headerText !== undefined;
   }
+
+  protected readonly undefined = undefined;
 }

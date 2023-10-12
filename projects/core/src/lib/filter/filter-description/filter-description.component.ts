@@ -19,8 +19,8 @@ export class FilterDescriptionComponent {
 
   private dateLocale = inject<string>(MAT_DATE_LOCALE);
   private sanitizer = inject(DomSanitizer);
-  private AND = $localize `and`;
-  private OR = $localize `or`;
+  private AND = $localize `:@@core.filter.and:and`;
+  private OR = $localize `:@@core.filter.or:or`;
 
   public description: SafeHtml | null = null;
 

@@ -32,13 +32,13 @@ export class EditFeatureService {
   public deleteFeature$(applicationId: string, layerId: string, feature: FeatureModel): Observable<boolean> {
     return this.api.deleteFeature$({ applicationId, layerId, feature }).pipe(
       catchError((_e) => {
-        this.showSnackbarMessage($localize `Delete feature failed`, _e);
+        this.showSnackbarMessage($localize `:@@core.edit.delete-feature-failed:Delete feature failed`, _e);
         return of(false);
       }),
       map((succes) => succes === HttpStatusCode.Ok || succes === HttpStatusCode.NoContent),
       tap((succes) => {
         if (succes) {
-          this.showSnackbarMessage($localize`Feature deleted`);
+          this.showSnackbarMessage($localize `:@@core.edit.feature-deleted:Feature deleted`);
         }
         return of(true);
       }),
@@ -48,12 +48,12 @@ export class EditFeatureService {
   public updateFeature$(applicationId: string, layerId: string, feature: FeatureModel): Observable<FeatureModel | null> {
     return this.api.updateFeature$({ applicationId, layerId, feature }).pipe(
       catchError((_e) => {
-        this.showSnackbarMessage($localize `Update feature failed`, _e);
+        this.showSnackbarMessage($localize `:@@core.edit.update-feature-failed:Update feature failed`, _e);
         return of(null);
       }),
       tap(result => {
         if (result) {
-          this.showSnackbarMessage($localize `Feature updated`);
+          this.showSnackbarMessage($localize `:@@core.edit.feature-updated:Feature updated`);
         }
       }),
     );
@@ -62,12 +62,12 @@ export class EditFeatureService {
   public createFeature$(applicationId: string, layerId: string, feature: FeatureModel): Observable<FeatureModel | null> {
     return this.api.createFeature$({ applicationId, layerId, feature }).pipe(
       catchError((_e) => {
-        this.showSnackbarMessage($localize `Create feature failed`, _e);
+        this.showSnackbarMessage($localize `:@@core.edit.create-feature-failed:Create feature failed`, _e);
         return of(null);
       }),
       tap(result => {
         if (result) {
-          this.showSnackbarMessage($localize `Feature created`);
+          this.showSnackbarMessage($localize `:@@core.edit.feature-created:Feature created`);
         }
       }),
     );

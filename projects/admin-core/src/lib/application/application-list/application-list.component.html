@@ -1,16 +1,16 @@
-<h2 i18n>Applications</h2>
+<h2 i18n="@@admin-core.application.applications">Applications</h2>
 <ng-container *ngIf="applicationsLoadStatus$ | async as applicationsLoadStatus">
   <mat-spinner *ngIf="applicationsLoadStatus === 'LOADING'" diameter="20" mode="indeterminate"></mat-spinner>
   <ng-container *ngIf="errorMessage$ | async as message">
     <tm-error-message [message]="message"></tm-error-message>
-    <button mat-raised-button color="primary" (click)="onRetryClick()" i18n>Retry</button>
+    <button mat-raised-button color="primary" (click)="onRetryClick()" i18n="@@admin-core.common.retry">Retry</button>
   </ng-container>
   <div *ngIf="applicationsLoadStatus === 'LOADED'"
        class="form-group has-search">
     <mat-form-field appearance="outline">
-      <mat-label i18n>Filter applications</mat-label>
+      <mat-label i18n="@@admin-core.application.filter-applications">Filter applications</mat-label>
       <input [formControl]="filter"
-             i18n-placeholder
+             i18n-placeholder="@@admin-core.common.filter-dots"
              matInput
              placeholder="Filter..."
              tmAutoFocus
@@ -30,7 +30,7 @@
                   matListItemMeta
                   color="primary"
                   tmTooltip="Default application"
-                  i18n-tmTooltip
+                  i18n-tmTooltip="@@admin-core.application.default-application"
                   svgIcon="admin_default_application"></mat-icon>
         <a class="icon"
            (click)="stopPropagation($event)"
@@ -38,7 +38,7 @@
            target="new"
            tmTooltip="Open application"
            matTooltipPosition="right"
-           i18n-tmTooltip
+           i18n-tmTooltip="@@admin-core.application.open-application"
            matListItemMeta>
           <mat-icon svgIcon="admin_link_new_window"></mat-icon>
         </a>

@@ -1,36 +1,36 @@
 <form [formGroup]="applicationForm">
   <mat-form-field>
-    <mat-label i18n>Name</mat-label>
+    <mat-label i18n="@@admin-core.common.name">Name</mat-label>
     <input matInput
            tmAutoFocus
            placeholder="Name"
-           i18n-placeholder
+           i18n-placeholder="@@admin-core.common.name"
            formControlName="name"
     />
-    <mat-hint *ngIf="applicationForm.get('name')?.hasError('pattern')" class="error" i18n>Name can only contain letters, numbers and dashes.</mat-hint>
+    <mat-hint *ngIf="applicationForm.get('name')?.hasError('pattern')" class="error" i18n="@@admin-core.application.invalid-name-error">Name can only contain letters, numbers and dashes.</mat-hint>
   </mat-form-field>
   <mat-form-field>
-    <mat-label i18n>Title</mat-label>
-    <input matInput placeholder="Title" i18n-placeholder formControlName="title" />
+    <mat-label i18n="@@admin-core.common.title">Title</mat-label>
+    <input matInput placeholder="Title" i18n-placeholder="@@admin-core.common.title" formControlName="title" />
   </mat-form-field>
   <mat-form-field>
-    <mat-label i18n>Comments</mat-label>
+    <mat-label i18n="@@admin-core.common.comments">Comments</mat-label>
     <textarea formControlName="adminComments" matInput></textarea>
   </mat-form-field>
   <mat-form-field>
-    <mat-label i18n>Projection</mat-label>
-    <mat-select formControlName="crs" placeholder="Projection" i18n-placeholder>
+    <mat-label i18n="@@admin-core.application.projection">Projection</mat-label>
+    <mat-select formControlName="crs" placeholder="Projection" i18n-placeholder="@@admin-core.application.projection">
       <mat-option *ngFor="let projection of projections" [value]="projection.code">
         {{ projection.label }}
       </mat-option>
     </mat-select>
   </mat-form-field>
   <tm-admin-bounds-form-field formControlName="initialExtent"
-                              i18n-label
+                              i18n-label="@@admin-core.application.initial-extent"
                               label="Initial extent"
                               [projection]="projection"></tm-admin-bounds-form-field>
   <tm-admin-bounds-form-field formControlName="maxExtent"
-                              i18n-label
+                              i18n-label="@@admin-core.application.max-extent"
                               label="Max extent"
                               [projection]="projection"></tm-admin-bounds-form-field>
 

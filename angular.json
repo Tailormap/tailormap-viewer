@@ -20,10 +20,14 @@
       "sourceRoot": "projects/app/src",
       "prefix": "app",
       "i18n": {
-        "sourceLocale": "en-US",
+        "sourceLocale": "en",
         "locales": {
           "nl": {
-            "translation": "locale/messages.nl.xlf"
+            "translation": [
+              "projects/core/assets/locale/messages.core.nl.xlf",
+              "projects/shared/assets/locale/messages.shared.nl.xlf",
+              "projects/admin-core/assets/locale/messages.admin-core.nl.xlf"
+            ]
           }
         }
       },
@@ -139,12 +143,48 @@
         },
         "extract-i18n": {
           "builder": "ng-extract-i18n-merge:ng-extract-i18n-merge",
+          "configurations": {
+            "shared": {
+              "outputPath": "projects/shared/assets/locale",
+              "removeIdsWithPrefix": [
+                "core.",
+                "admin-core."
+              ],
+              "sourceFile": "messages.shared.en.xlf",
+              "targetFiles": [
+                "messages.shared.nl.xlf"
+              ]
+            },
+            "core": {
+              "outputPath": "projects/core/assets/locale",
+              "removeIdsWithPrefix": [
+                "shared.",
+                "admin-core."
+              ],
+              "sourceFile": "messages.core.en.xlf",
+              "targetFiles": [
+                "messages.core.nl.xlf"
+              ]
+            },
+            "admin-core": {
+              "outputPath": "projects/admin-core/assets/locale",
+              "removeIdsWithPrefix": [
+                "core.",
+                "shared."
+              ],
+              "sourceFile": "messages.admin-core.en.xlf",
+              "targetFiles": [
+                "messages.admin-core.nl.xlf"
+              ]
+            }
+          },
           "options": {
             "browserTarget": "app:build",
             "format": "xlf",
             "outputPath": "locale",
-            "sourceFile": "messages.en-US.xlf",
-            "verbose": true,
+            "sourceFile": "messages.en.xlf",
+            "verbose": false,
+            "sort": "idAsc",
             "targetFiles": [
               "messages.nl.xlf"
             ]

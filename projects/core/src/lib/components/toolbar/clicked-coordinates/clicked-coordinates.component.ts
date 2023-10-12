@@ -51,15 +51,17 @@ export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
             .pipe(map(coordinates => coordinates.join(', ')));
         }),
         concatMap(coordinates => {
-          const coordinatesMsg = $localize`Selected coordinates: ${coordinates}`;
+          const coordinatesMsg = $localize `:@@core.toolbar.coordinate-picker-selected-coordinates:Selected coordinates: ${coordinates}`;
           return SnackBarMessageComponent.open$(this.snackBar, {
             message: coordinatesMsg,
             showCloseButton: true,
-            closeButtonText: $localize`Copy`,
+            closeButtonText: $localize `:@@core.toolbar.coordinate-picker-copy:Copy`,
           }).pipe(
             map((dismiss) => {
               if (dismiss.dismissedByAction) {
-                return this.clipboard.copy(coordinates) ? $localize`Success` : $localize`Failed to copy to clipboard`;
+                return this.clipboard.copy(coordinates)
+                  ? $localize `:@@core.toolbar.coordinate-picker-success:Success`
+                  : $localize `:@@core.toolbar.coordinate-picker-failed-copy:Failed to copy to clipboard`;
               }
               return '';
             }),

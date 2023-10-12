@@ -1,6 +1,8 @@
 /*
  * Public API Surface of shared
  */
+// eslint-disable-next-line @typescript-eslint/triple-slash-reference
+/// <reference path="./typings.d.ts" />
 
 export * from './lib/enums/loading-state.enum';
 export * from './lib/helpers';

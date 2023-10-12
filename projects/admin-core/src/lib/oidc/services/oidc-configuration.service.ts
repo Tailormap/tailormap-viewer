@@ -21,9 +21,6 @@ type OIDCConfigurationEditModel = Partial<OIDCConfigurationCreateModel>;
 })
 export class OIDCConfigurationService implements OnDestroy {
 
-  public static ROOT_NODE_TITLE = $localize `OIDCConfiguration layers`;
-  public static ROOT_BACKGROUND_NODE_TITLE = $localize `Background layers`;
-
   private destroyed = new Subject<null>();
 
   public constructor(
@@ -72,7 +69,7 @@ export class OIDCConfigurationService implements OnDestroy {
     return this.adminApiService.createOIDCConfiguration$({ oidcConfiguration })
       .pipe(
         catchError(() => {
-          this.adminSnackbarService.showMessage($localize `Error while creating oidcConfiguration.`);
+          this.adminSnackbarService.showMessage($localize `:@@admin-core.oidc.error-creating-configuration:Error while creating OIDC Configuration.`);
           return of(null);
         }),
         map(createOIDCConfiguration => {
@@ -112,7 +109,7 @@ export class OIDCConfigurationService implements OnDestroy {
     return this.adminApiService.updateOIDCConfiguration$({ id, oidcConfiguration })
       .pipe(
         catchError(() => {
-          this.adminSnackbarService.showMessage($localize `Error while updating oidcConfiguration.`);
+          this.adminSnackbarService.showMessage($localize `:@@admin-core.oidc.error-updating-configuration:Error while updating OIDC Configuration.`);
           return of(null);
         }),
         map(updatedOIDCConfiguration => {
@@ -129,7 +126,7 @@ export class OIDCConfigurationService implements OnDestroy {
     return this.adminApiService.deleteOIDCConfiguration$(id)
       .pipe(
         catchError(() => {
-          this.adminSnackbarService.showMessage($localize `Error while deleting oidcConfiguration.`);
+          this.adminSnackbarService.showMessage($localize `:@@admin-core.oidc.error-deleting-configuration:Error while deleting OIDC Configuration.`);
           return of(null);
         }),
         map(success => {

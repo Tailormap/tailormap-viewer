@@ -1,8 +1,8 @@
-<h2 class="page-details-title" i18n>Create application</h2>
+<h2 class="page-details-title" i18n="@@admin-core.application.create-application">Create application</h2>
 <div class="form-wrapper">
   <tm-admin-application-form (updateApplication)="updateApplication($event)"></tm-admin-application-form>
 </div>
 <div class="page-details-actions">
-  <tm-admin-save-button label="Create" i18n-label [saving$]="saving$" [disabled]="!application" (save)="save()"></tm-admin-save-button>
-  <button mat-flat-button routerLink="/admin/applications" i18n>Cancel</button>
+  <tm-admin-save-button label="Create" i18n-label="@@admin-core.common.create" [saving$]="saving$" [disabled]="!application" (save)="save()"></tm-admin-save-button>
+  <button mat-flat-button routerLink="/admin/applications" i18n="@@admin-core.common.cancel">Cancel</button>
 </div>

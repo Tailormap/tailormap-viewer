@@ -23,8 +23,10 @@ checkCleanGitRepo();
       await publishRelease(project, version, dryRun);
       // await sleep(5000);
     }
-    const tagVersion = version.startsWith('v') ? version : `v${version}`;
-    await runCommand('git', ['tag', tagVersion], path.resolve(__dirname, '../'));
+    if (!dryRun) {
+      const tagVersion = version.startsWith('v') ? version : `v${version}`;
+      await runCommand('git', ['tag', tagVersion], path.resolve(__dirname, '../'));
+    }
   } catch (e) {
     console.log('Error occurred: ', e);
   }

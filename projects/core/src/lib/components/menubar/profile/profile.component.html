@@ -4,17 +4,17 @@
 
   <mat-menu #userMenu="matMenu" xPosition="after" yPosition="above">
     <button mat-menu-item disabled *ngIf="userDetails.isAuthenticated && userDetails.username">
-      <span i18n>Logged in as</span>
+      <span i18n="@@core.profile.logged-in-as">Logged in as</span>
       <span>{{' '}}{{userDetails.username}}</span>
     </button>
     <button mat-menu-item *ngIf="userDetails.isAuthenticated && isAdmin(userDetails)" routerLink="/admin">
-      <span i18n>Go to admin</span>
+      <span i18n="@@core.profile.go-to-admin">Go to admin</span>
     </button>
     <button mat-menu-item (click)="logout()" *ngIf="userDetails.isAuthenticated && userDetails.username">
-      <span i18n>Logout</span>
+      <span i18n="@@core.profile.logout">Logout</span>
     </button>
     <button mat-menu-item (click)="login()" *ngIf="!userDetails.isAuthenticated">
-      <span i18n>Login</span>
+      <span i18n="@@core.profile.login">Login</span>
     </button>
   </mat-menu>
 </ng-container>

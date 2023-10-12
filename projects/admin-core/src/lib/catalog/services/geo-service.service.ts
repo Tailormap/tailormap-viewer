@@ -91,7 +91,7 @@ export class GeoServiceService {
     return this.adminApiService.createGeoService$({ geoService: geoServiceModel, refreshCapabilities: true }).pipe(
       catchError((errorResponse) => {
         const message = ApiResponseHelper.getAdminApiErrorMessage(errorResponse);
-        this.adminSnackbarService.showMessage($localize `Error while creating geo service: ${message}`);
+        this.adminSnackbarService.showMessage($localize `:@@admin-core.catalog.error-creating-service:Error while creating geo service: ${message}`);
         return of(null);
       }),
       concatMap(createdService => {
@@ -121,7 +121,7 @@ export class GeoServiceService {
             id: service.id,
           };
           return this.adminApiService.updateGeoService$({ id: updatedGeoService.id, geoService: updatedGeoService }).pipe(
-            this.handleUpdateGeoService($localize `Error while updating geo service: `, service.catalogNodeId),
+            this.handleUpdateGeoService($localize `:@@admin-core.catalog.error-updating-service:Error while updating geo service: `, service.catalogNodeId),
           );
         }),
       );
@@ -144,7 +144,7 @@ export class GeoServiceService {
           return this.adminApiService.deleteGeoService$({ id: geoServiceId }).pipe(
             catchError((errorResponse) => {
               const message = ApiResponseHelper.getAdminApiErrorMessage(errorResponse);
-              this.adminSnackbarService.showMessage($localize `Error while deleting geo service: ${message}`);
+              this.adminSnackbarService.showMessage($localize `:@@admin-core.catalog.error-deleting-service:Error while deleting geo service: ${message}`);
               return of(null);
             }),
             tap(success => {
@@ -191,7 +191,7 @@ export class GeoServiceService {
         concatMap(service => {
           return this.adminApiService.refreshGeoService$({ id: service.id })
             .pipe(
-              this.handleUpdateGeoService($localize `Error while refreshing geo service: `, service.catalogNodeId),
+              this.handleUpdateGeoService($localize `:@@admin-core.catalog.error-refreshing-service:Error while refreshing geo service: `, service.catalogNodeId),
             );
         }),
       );

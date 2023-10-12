@@ -24,7 +24,7 @@ export class OIDCConfigurationEffects {
         return this.adminApiService.getOIDCConfigurations$()
           .pipe(
             catchError(() => {
-              return of({ error: $localize `Error while loading list of OIDC configurations` });
+              return of({ error: $localize `:@@admin-core.oidc.error-loading-configurations:Error while loading list of OIDC configurations` });
             }),
             map(response => {
               const isErrorResponse = (res: OIDCConfigurationModel[] | ErrorResponse): res is ErrorResponse => {

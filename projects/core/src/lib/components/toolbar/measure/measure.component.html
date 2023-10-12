@@ -1,7 +1,7 @@
 <div class="measure-buttons map-control-button-container">
   <button mat-flat-button
           class="measure-length toggle-button map-control-button"
-          i18n-tmTooltip
+          i18n-tmTooltip="@@core.toolbar.measure-length"
           tmTooltip="Measure length"
           [class.toggle-button--active]="toolActive === 'length'"
           (click)="measure('length')">
@@ -9,7 +9,7 @@
   </button>
   <button mat-flat-button
           class="measure-area toggle-button map-control-button"
-          i18n-tmTooltip
+          i18n-tmTooltip="@@core.toolbar.measure-area"
           tmTooltip="Measure area"
           [class.toggle-button--active]="toolActive === 'area'"
           (click)="measure('area')">

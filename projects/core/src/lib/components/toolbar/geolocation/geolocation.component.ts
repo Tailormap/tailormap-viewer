@@ -105,13 +105,14 @@ export class GeolocationComponent implements OnInit, OnDestroy {
   private positionError(e: GeolocationPositionError) {
       switch (e.code) {
         case GeolocationPositionError.PERMISSION_DENIED:
-          this.snackBar.open($localize`Fetching location failed: permission denied`, undefined, { duration: 5000 });
+          this.snackBar.open($localize `:@@core.toolbar.zoom-to-location-failed-permission-denied:Fetching location failed: permission denied`, undefined, { duration: 5000 });
           break;
         case GeolocationPositionError.POSITION_UNAVAILABLE:
-          this.snackBar.open($localize`Fetching location failed: location unavailable`, undefined, { duration: 5000 });
+          // eslint-disable-next-line max-len
+          this.snackBar.open($localize `:@@core.toolbar.zoom-to-location-failed-location-unavailable:Fetching location failed: location unavailable`, undefined, { duration: 5000 });
           break;
         case GeolocationPositionError.TIMEOUT:
-          this.snackBar.open($localize`Fetching location failed: timeout`, undefined, { duration: 5000 });
+          this.snackBar.open($localize `:@@core.toolbar.zoom-to-location-failed-timeout:Fetching location failed: timeout`, undefined, { duration: 5000 });
           break;
       }
       this.cancelGeolocation();

@@ -11,6 +11,7 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
 import { PanelResizerComponent } from './panel-resizer';
 import { SliderComponent } from './slider/slider.component';
 import { LoginFormComponent } from './login-form/login-form.component';
+import { SharedDirectivesModule } from '../directives/shared-directives.module';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { LoginFormComponent } from './login-form/login-form.component';
   ],
   imports: [
     SharedImportsModule,
+    SharedDirectivesModule,
   ],
   exports: [
     DialogComponent,

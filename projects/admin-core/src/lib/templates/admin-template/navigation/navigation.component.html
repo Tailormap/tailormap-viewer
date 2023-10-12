@@ -38,10 +38,10 @@
       </button>
       <mat-menu #userMenu="matMenu" xPosition="before" yPosition="above">
         <button mat-menu-item routerLink="/">
-          <span i18n>Go to viewer</span>
+          <span i18n="@@admin-core.common.go-to-viewer">Go to viewer</span>
         </button>
         <button mat-menu-item (click)="logout()" *ngIf="userDetails.isAuthenticated && userDetails.username">
-          <span i18n>Logout</span>
+          <span i18n="@@admin-core.common.logout">Logout</span>
         </button>
       </mat-menu>
     </ng-container>
@@ -50,10 +50,10 @@
             class="menu-button"
             (click)="login()"
             tmTooltip="Login"
-            i18n-tmTooltip
+            i18n-tmTooltip="@@admin-core.common.login"
             matTooltipPosition="right">
       <mat-icon svgIcon="login"></mat-icon>
-      <span class="menu-button-label" i18n>Login</span>
+      <span class="menu-button-label" i18n="@@admin-core.common.login">Login</span>
     </button>
   </ng-container>
 

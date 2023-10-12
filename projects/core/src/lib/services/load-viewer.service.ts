@@ -15,7 +15,7 @@ interface LoadViewerResponse {
 })
 export class LoadViewerService {
 
-  private static LOAD_VIEWER_ERROR = $localize `Could not find or load the requested viewer`;
+  private static LOAD_VIEWER_ERROR = $localize `:@@core.common.error-loading-viewer:Could not find or load the requested viewer`;
 
   constructor(
     @Inject(TAILORMAP_API_V1_SERVICE) private apiService: TailormapApiV1ServiceModel,

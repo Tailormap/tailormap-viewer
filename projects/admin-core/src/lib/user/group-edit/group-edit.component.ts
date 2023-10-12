@@ -53,8 +53,9 @@ export class GroupEditComponent implements OnInit, OnDestroy {
 
   public delete(group: GroupModel) {
     this.confirmDelete.confirm$(
-      `Delete group ${group.name}`,
-      `Are you sure you want to delete the group with name ${group.name}? All users will be removed from this group. This action cannot be undone.`,
+      $localize `:@@admin-core.groups.delete-group-confirm:Delete group ${group.name}`,
+      // eslint-disable-next-line max-len
+      $localize `:@@admin-core.groups.delete-group-confirm-message:Are you sure you want to delete the group with name ${group.name}? All users will be removed from this group. This action cannot be undone.`,
       true,
     )
       .pipe(
@@ -63,7 +64,7 @@ export class GroupEditComponent implements OnInit, OnDestroy {
         switchMap(() => this.groupService.deleteGroup$(group.name)),
       )
       .subscribe(() => {
-        this.adminSnackbarService.showMessage($localize `Group ${group.name} removed`);
+        this.adminSnackbarService.showMessage($localize `:@@admin-core.groups.group-removed:Group ${group.name} removed`);
         this.router.navigateByUrl('/admin/groups');
       });
   }
@@ -77,7 +78,7 @@ export class GroupEditComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(updatedGroup => {
         if (updatedGroup) {
-          this.adminSnackbarService.showMessage($localize `Group updated`);
+          this.adminSnackbarService.showMessage($localize `:@@admin-core.groups.group-updated:Group updated`);
         }
         this.savingSubject.next(false);
       });

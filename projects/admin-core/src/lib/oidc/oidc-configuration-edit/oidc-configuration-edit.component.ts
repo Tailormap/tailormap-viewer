@@ -63,7 +63,7 @@ export class OIDCConfigurationEditComponent implements OnInit, OnDestroy {
     this.oidcConfigurationService.saveDraftOIDCConfiguration$()
       .pipe(take(1))
       .subscribe(() => {
-        this.adminSnackbarService.showMessage($localize `OIDCConfiguration updated`);
+        this.adminSnackbarService.showMessage($localize `:@@admin-core.oidc.configuration-updated:OIDC Configuration updated`);
         this.savingSubject.next(false);
       });
   }
@@ -71,8 +71,8 @@ export class OIDCConfigurationEditComponent implements OnInit, OnDestroy {
   public delete(oidcConfiguration: OIDCConfigurationModel) {
     const title = oidcConfiguration.name;
     this.confirmDelete.confirm$(
-      `Delete OIDC configuration ${title}`,
-      `Are you sure you want to delete OIDC configuration ${title}? This action cannot be undone.`,
+      $localize `:@@admin-core.oidc.configuration-delete-confirm:Delete OIDC configuration ${title}`,
+      $localize `:@@admin-core.oidc.configuration-delete-confirm-message:Are you sure you want to delete OIDC configuration ${title}? This action cannot be undone.`,
       true,
     )
       .pipe(
@@ -81,7 +81,7 @@ export class OIDCConfigurationEditComponent implements OnInit, OnDestroy {
         switchMap(() => this.oidcConfigurationService.deleteOIDCConfiguration$(oidcConfiguration.id)),
       )
       .subscribe(() => {
-        this.adminSnackbarService.showMessage($localize `OIDCConfiguration ${title} removed`);
+        this.adminSnackbarService.showMessage($localize `:@@admin-core.oidc.configuration-removed:OIDC Configuration ${title} removed`);
         this.router.navigateByUrl('/admin/oidc-configurations');
       });
   }

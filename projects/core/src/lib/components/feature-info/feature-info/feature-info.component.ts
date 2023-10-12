@@ -25,8 +25,8 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
   public loadingFeatureInfo$ = this.store$.select(selectLoadingFeatureInfo);
   public featureInfoCoordinates$ = this.store$.select(selectMapCoordinates);
 
-  private static DEFAULT_ERROR_MESSAGE = $localize `Something went wrong while getting feature info, please try again`;
-  private static DEFAULT_NO_FEATURES_FOUND_MESSAGE = $localize `No features found`;
+  private static DEFAULT_ERROR_MESSAGE = $localize `:@@core.feature-info.error-loading-feature-info:Something went wrong while getting feature info, please try again`;
+  private static DEFAULT_NO_FEATURES_FOUND_MESSAGE = $localize `:@@core.feature-info.no-features-found:No features found`;
 
   constructor(
     private mapService: MapService,

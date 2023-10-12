@@ -1,4 +1,4 @@
-<h3 mat-dialog-title i18n>Filter on {{getColumnName()}}</h3>
+<h3 mat-dialog-title i18n="@@core.attribute-list.filter-on">Filter on {{getColumnName()}}</h3>
 <div (keydown.enter)="onOk()">
 
   <tm-attribute-filter [attributeType]="getAttributeType()"
@@ -11,17 +11,11 @@
     <button mat-raised-button
             color="primary"
             [disabled]="!isValidFilter()"
-            (click)="onOk()" i18n>
-      Set
-    </button>
+            (click)="onOk()" i18n="@@core.common.set">Set</button>
     <button mat-raised-button color="primary"
-            (click)="onClear()" i18n>
-      Clear
-    </button>
+            (click)="onClear()" i18n="@@core.common.clear">Clear</button>
     <button mat-raised-button color="primary"
-            (click)="onCancel()" i18n>
-      Cancel
-    </button>
+            (click)="onCancel()" i18n="@@core.common.cancel">Cancel</button>
   </mat-dialog-actions>
 
 </div>

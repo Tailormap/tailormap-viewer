@@ -1,7 +1,7 @@
 <div class="geolocation-buttons map-control-button-container" *ngIf="hasGeolocation">
   <button mat-flat-button
           class="toggle-button map-control-button"
-          i18n-tmTooltip
+          i18n-tmTooltip="@@core.toolbar.zoom-to-location"
           tmTooltip="Zoom to location"
           [class.toggle-button--active]="isWatching"
           (click)="onClick()">

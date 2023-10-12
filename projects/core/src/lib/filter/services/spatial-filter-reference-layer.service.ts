@@ -90,7 +90,7 @@ export class SpatialFilterReferenceLayerService implements OnDestroy {
         }).filter(TypesHelper.isDefined);
         const updatedGroup: FilterGroupModel<SpatialFilterModel> = {
           ...group,
-          error: response.error ? $localize `Error loading reference layer geometries` : undefined,
+          error: response.error ? $localize `:@@core.filter.error-loading-reference-layer-geometries:Error loading reference layer geometries` : undefined,
           filters: group.filters.map(f => {
             const userDrawnGeometries = f.geometries.filter(g => typeof g.referenceLayerId === 'undefined');
             return {

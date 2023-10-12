@@ -2,10 +2,10 @@
 
   <div class="table-container-error-message" *ngIf="errorMessage$ | async as errorMessage">
     <tm-error-message [friendlyError]="true" [message]="errorMessage"></tm-error-message>
-    <div><button mat-flat-button color="primary" (click)="reloadData()" i18n>Retry</button></div>
+    <div><button mat-flat-button color="primary" (click)="reloadData()" i18n="@@core.common.retry">Retry</button></div>
   </div>
 
-  <div *ngIf="hasNoRows$ | async" i18n class="table-container-empty-message">No rows found</div>
+  <div *ngIf="hasNoRows$ | async" i18n="@@core.attribute-list.no-rows-found" class="table-container-empty-message">No rows found</div>
 
   <tm-attribute-list-table *ngIf="hasRows$ | async"
                            role="table"

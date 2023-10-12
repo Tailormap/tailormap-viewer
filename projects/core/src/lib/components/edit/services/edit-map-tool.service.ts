@@ -28,8 +28,9 @@ import { ApplicationLayerService } from '../../../map/services/application-layer
   providedIn: 'root',
 })
 export class EditMapToolService implements OnDestroy {
-  private static DEFAULT_ERROR_MESSAGE = $localize `Something went wrong while getting feature info, please try again`;
-  private static DEFAULT_NO_FEATURES_FOUND_MESSAGE = $localize `No features found`;
+
+  private static DEFAULT_ERROR_MESSAGE = $localize `:@@core.edit.error-getting-features:Something went wrong while getting editable features, please try again`;
+  private static DEFAULT_NO_FEATURES_FOUND_MESSAGE = $localize `:@@core.edit.no-features-found:No editable features found`;
 
   private editMapClickToolId = '';
   private editGeometryToolId = '';

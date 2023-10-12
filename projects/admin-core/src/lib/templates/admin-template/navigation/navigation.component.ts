@@ -17,12 +17,13 @@ interface ButtonProps {
 }
 
 const availableButtons: ButtonProps[] = [
-  { label: $localize `Home`, matchExact: true, link: [ '/admin', Routes.ADMIN_HOME ], icon: 'admin_home', requireAdmin: false },
-  { label: $localize `Catalog`, matchExact: false, link: [ '/admin', Routes.CATALOG ], icon: 'admin_catalog', requireAdmin: true },
-  { label: $localize `Users`, matchExact: false, link: [ '/admin', Routes.USER ], icon: 'admin_user', requireAdmin: true },
-  { label: $localize `Groups`, matchExact: false, link: [ '/admin', Routes.GROUP ], icon: 'admin_groups', requireAdmin: true },
-  { label: $localize `Applications`, matchExact: false, link: [ '/admin', Routes.APPLICATION ], icon: 'admin_application', requireAdmin: true },
-  { label: $localize `Single-sign on`, matchExact: false, link: [ '/admin', Routes.OIDC_CONFIGURATION ], icon: 'key', requireAdmin: true },
+  { label: $localize `:@@admin-core.navigation.home:Home`, matchExact: true, link: [ '/admin', Routes.ADMIN_HOME ], icon: 'admin_home', requireAdmin: false },
+  { label: $localize `:@@admin-core.navigation.catalog:Catalog`, matchExact: false, link: [ '/admin', Routes.CATALOG ], icon: 'admin_catalog', requireAdmin: true },
+  { label: $localize `:@@admin-core.navigation.users:Users`, matchExact: false, link: [ '/admin', Routes.USER ], icon: 'admin_user', requireAdmin: true },
+  { label: $localize `:@@admin-core.navigation.groups:Groups`, matchExact: false, link: [ '/admin', Routes.GROUP ], icon: 'admin_groups', requireAdmin: true },
+  // eslint-disable-next-line max-len
+  { label: $localize `:@@admin-core.navigation.applications:Applications`, matchExact: false, link: [ '/admin', Routes.APPLICATION ], icon: 'admin_application', requireAdmin: true },
+  { label: $localize `:@@admin-core.navigation.single-sign-on:Single-sign on`, matchExact: false, link: [ '/admin', Routes.OIDC_CONFIGURATION ], icon: 'key', requireAdmin: true },
 ];
 
 @Component({

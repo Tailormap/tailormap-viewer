@@ -1,15 +1,15 @@
-<h1 mat-dialog-title>Folder is not empty</h1>
+<h1 mat-dialog-title i18n="@@admin-core.catalog.folder-not-empty">Folder is not empty</h1>
 
 <div mat-dialog-content>
-  <p class="content" i18n>This folder {{data.node.title}} is not empty and contains the following items.</p>
+  <p class="content" i18n="@@admin-core.catalog.folder-not-empty-body">This folder {{data.node.title}} is not empty and contains the following items.</p>
   <ul>
     <li *ngFor="let item of data.items">
       <a [routerLink]="getUrl(item)" (click)="onConfirm()">{{getTitle(item)}}</a>
     </li>
   </ul>
-  <p class="content" i18n>Please remove these items first before removing the folder</p>
+  <p class="content" i18n="@@admin-core.catalog.remove-items-first">Please remove these items first before removing the folder</p>
 </div>
 
 <div mat-dialog-actions>
-  <button mat-raised-button color="primary" (click)="onConfirm()" i18n>Ok</button>
+  <button mat-raised-button color="primary" (click)="onConfirm()" i18n="@@admin-core.common.ok">Ok</button>
 </div>

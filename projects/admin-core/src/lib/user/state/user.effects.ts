@@ -22,7 +22,7 @@ export class UserEffects {
         return this.adminApiService.getUsers$()
           .pipe(
             catchError(() => {
-              return of({ error: $localize `Error while loading list of users` });
+              return of({ error: $localize `:@@admin-core.users.error-loading-users:Error while loading list of users` });
             }),
             map(response => {
               if (ApiResponseHelper.isErrorResponse(response)) {
@@ -45,7 +45,7 @@ export class UserEffects {
         return this.adminApiService.getGroups$()
           .pipe(
             catchError(() => {
-              return of({ error: $localize `Error while loading list of groups` });
+              return of({ error: $localize `:@@admin-core.groups.error-loading-groups:Error while loading list of groups` });
             }),
             map(response => {
               if (ApiResponseHelper.isErrorResponse(response)) {
