@@ -60,6 +60,8 @@ export class OpenLayersMap implements MapViewerModel {
 
     const view = new View({
       projection: options.projection,
+      extent: options.maxExtent,
+      showFullExtent: true,
       resolutions,
     });
 
