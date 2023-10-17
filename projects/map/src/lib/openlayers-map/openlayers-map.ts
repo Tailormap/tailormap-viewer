@@ -56,14 +56,10 @@ export class OpenLayersMap implements MapViewerModel {
     }
 
     ProjectionsHelper.initProjection(options.projection, options.projectionDefinition, options.projectionAliases);
-    const projection = new Projection({
-      code: options.projection,
-      extent: options.maxExtent,
-    });
     const resolutions = ProjectionsHelper.getResolutions(options.projection, options.maxExtent);
 
     const view = new View({
-      projection,
+      projection: options.projection,
       resolutions,
     });
 
