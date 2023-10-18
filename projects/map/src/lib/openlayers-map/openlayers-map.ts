@@ -56,13 +56,11 @@ export class OpenLayersMap implements MapViewerModel {
     }
 
     ProjectionsHelper.initProjection(options.projection, options.projectionDefinition, options.projectionAliases);
-    const resolutions = ProjectionsHelper.getResolutions(options.projection, options.maxExtent);
 
     const view = new View({
       projection: options.projection,
       extent: options.maxExtent,
       showFullExtent: true,
-      resolutions,
     });
 
     const olMap = new OlMap({
@@ -78,7 +76,7 @@ export class OpenLayersMap implements MapViewerModel {
       collapsed: false,
     }));
 
-    this.initialExtent = options.initialExtent && options.initialExtent.length > 0
+    this.initialExtent = options.initialExtent?.length === 4
       ? options.initialExtent
       : options.maxExtent;
 
