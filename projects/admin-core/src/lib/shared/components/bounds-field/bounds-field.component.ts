@@ -109,25 +109,33 @@ export class BoundsFieldComponent implements OnInit, OnDestroy, ControlValueAcce
     }
   }
 
-  private triggerChange(bounds: typeof this.boundsForm.value) {
-    if (typeof bounds.minx !== 'number'
-      || typeof bounds.miny !== 'number'
-      || typeof bounds.maxx !== 'number'
-      || typeof bounds.maxy !== 'number'
-    ) {
-      return;
-    }
-    const boundsModel: BoundsModel = {
-      minx: bounds.minx,
-      miny: bounds.miny,
-      maxx: bounds.maxx,
-      maxy: bounds.maxy,
-      crs: this.projection || undefined,
-    };
+  private valueChanged(value: BoundsModel | null) {
     if (this.onChange) {
-      this.onChange(boundsModel);
+      this.onChange(value);
     }
-    this.changed.emit(boundsModel);
+    this.changed.emit(value);
+  }
+  private triggerChange(bounds: typeof this.boundsForm.value) {
+    if (bounds.minx === null
+      && bounds.miny === null
+      && bounds.maxx === null
+      && bounds.maxy === null) {
+      this.valueChanged(null);
+    } else if (typeof bounds.minx === 'number'
+      && typeof bounds.miny === 'number'
+      && typeof bounds.maxx === 'number'
+      && typeof bounds.maxy === 'number') {
+      this.valueChanged({
+        minx: bounds.minx,
+        miny: bounds.miny,
+        maxx: bounds.maxx,
+        maxy: bounds.maxy,
+        crs: this.projection || undefined,
+      });
+    }
   }
 
+  public clear() {
+    this.boundsForm.patchValue({ minx: null, miny: null, maxx: null, maxy: null }, { emitEvent: true });
+  }
 }

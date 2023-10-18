@@ -762,7 +762,7 @@
         <source>(name, sub, email, etc)</source>
       </trans-unit>
       <trans-unit id="admin-core.use-max-extent" datatype="html">
-        <source>Use max extent from projection <x id="INTERPOLATION" equiv-text="{{projection}}"/></source>
+        <source>Use projection extent</source>
       </trans-unit>
       <trans-unit id="admin-core.users.add-user" datatype="html">
         <source>Add user</source>

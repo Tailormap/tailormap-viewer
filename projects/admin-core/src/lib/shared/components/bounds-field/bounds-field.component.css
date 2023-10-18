@@ -13,3 +13,7 @@ mat-form-field {
   text-decoration: underline;
   cursor: pointer;
 }
+
+button {
+  margin-left: 16px;
+}

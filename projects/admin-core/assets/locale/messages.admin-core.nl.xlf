@@ -139,7 +139,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.initial-extent" datatype="html">
         <source>Initial extent</source>
-        <target>Beginomvang</target>
+        <target>Beginextent</target>
       </trans-unit>
       <trans-unit id="admin-core.application.invalid-name-error" datatype="html">
         <source>Name can only contain letters, numbers and dashes.</source>
@@ -167,7 +167,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.max-extent" datatype="html">
         <source>Max extent</source>
-        <target>Max. omvang</target>
+        <target>Max extent</target>
       </trans-unit>
       <trans-unit id="admin-core.application.opacity" datatype="html">
         <source>Opacity</source>
@@ -1014,8 +1014,8 @@
         <target>(naam, sub, e-mail, enz.)</target>
       </trans-unit>
       <trans-unit id="admin-core.use-max-extent" datatype="html">
-        <source>Use max extent from projection <x id="INTERPOLATION" equiv-text="{{projection}}"/></source>
-        <target state="new">Gebruik maximale omvang van projectie <x id="INTERPOLATION" equiv-text="{{projection}}"/></target>
+        <source>Use projection extent</source>
+        <target state="new">Gebruik extent van projectie</target>
       </trans-unit>
       <trans-unit id="admin-core.users.add-user" datatype="html">
         <source>Add user</source>
