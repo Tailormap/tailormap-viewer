@@ -23,8 +23,8 @@
       <trans-unit id="admin-core.application.applications" datatype="html">
         <source>Applications</source>
       </trans-unit>
-      <trans-unit id="admin-core.application.background-layers" datatype="html">
-        <source>Background layers</source>
+      <trans-unit id="admin-core.application.base-maps" datatype="html">
+        <source>Base maps</source>
       </trans-unit>
       <trans-unit id="admin-core.application.change-folder-name" datatype="html">
         <source>Change folder name</source>
@@ -443,7 +443,7 @@
       <trans-unit id="admin-core.catalog.refresh-feature-source-message" datatype="html">
         <source>The settings for the feature source are updated. Do you want to refresh the feature source to refresh the feature types?</source>
       </trans-unit>
-      <trans-unit id="admin-core.catalog.refresh-servhce" datatype="html">
+      <trans-unit id="admin-core.catalog.refresh-service" datatype="html">
         <source>Refresh service</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.refresh-service-confirm" datatype="html">
@@ -498,7 +498,7 @@
         <source>Substitute layer, tile pixel ratio only</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.substitute-layer-url-template" datatype="html">
-        <source>Hi-DPI substitute URL template</source>
+        <source>High-DPI substitute URL template</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.technical-name" datatype="html">
         <source>Technical name: <x id="INTERPOLATION" equiv-text="{{ featureType.name }}"/></source>
@@ -639,7 +639,7 @@
         <source>User Administration</source>
       </trans-unit>
       <trans-unit id="admin-core.common.welcome-to-tailormap" datatype="html">
-        <source>Welcome to Tailormap Admin</source>
+        <source>Welcome to the Tailormap Admin</source>
       </trans-unit>
       <trans-unit id="admin-core.groups.add-group" datatype="html">
         <source>Add group</source>
@@ -681,7 +681,7 @@
         <source>Groups</source>
       </trans-unit>
       <trans-unit id="admin-core.groups.system-group" datatype="html">
-        <source>System Group</source>
+        <source>System group</source>
       </trans-unit>
       <trans-unit id="admin-core.navigation.applications" datatype="html">
         <source>Applications</source>
@@ -720,10 +720,10 @@
         <source>Are you sure you want to delete OIDC configuration <x id="PH" equiv-text="title"/>? This action cannot be undone.</source>
       </trans-unit>
       <trans-unit id="admin-core.oidc.configuration-removed" datatype="html">
-        <source>OIDC Configuration <x id="PH" equiv-text="title"/> removed</source>
+        <source>OIDC configuration <x id="PH" equiv-text="title"/> removed</source>
       </trans-unit>
       <trans-unit id="admin-core.oidc.configuration-updated" datatype="html">
-        <source>OIDC Configuration updated</source>
+        <source>OIDC configuration updated</source>
       </trans-unit>
       <trans-unit id="admin-core.oidc.create-configuration" datatype="html">
         <source>Create OIDC configuration</source>
@@ -732,16 +732,16 @@
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ oidcConfiguration.name }}"/></source>
       </trans-unit>
       <trans-unit id="admin-core.oidc.error-creating-configuration" datatype="html">
-        <source>Error while creating OIDC Configuration.</source>
+        <source>Error while creating OIDC configuration.</source>
       </trans-unit>
       <trans-unit id="admin-core.oidc.error-deleting-configuration" datatype="html">
-        <source>Error while deleting OIDC Configuration.</source>
+        <source>Error while deleting OIDC configuration.</source>
       </trans-unit>
       <trans-unit id="admin-core.oidc.error-loading-configurations" datatype="html">
         <source>Error while loading list of OIDC configurations</source>
       </trans-unit>
       <trans-unit id="admin-core.oidc.error-updating-configuration" datatype="html">
-        <source>Error while updating OIDC Configuration.</source>
+        <source>Error while updating OIDC configuration.</source>
       </trans-unit>
       <trans-unit id="admin-core.oidc.filter-identity-providers" datatype="html">
         <source>Filter identity providers</source>

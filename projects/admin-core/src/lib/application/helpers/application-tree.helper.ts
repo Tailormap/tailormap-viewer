@@ -54,7 +54,7 @@ export class ApplicationTreeHelper {
     let label = '';
     if (ApplicationModelHelper.isLevelTreeNode(node)) {
       label = node.root
-        ? (baseLayerTree ? ApplicationService.ROOT_BACKGROUND_NODE_TITLE : ApplicationService.ROOT_NODE_TITLE)
+        ? (baseLayerTree ? ApplicationService.ROOT_BASE_NODE_TITLE : ApplicationService.ROOT_NODE_TITLE)
         : node.title;
     }
     if (ApplicationModelHelper.isLayerTreeNode(node)) {
