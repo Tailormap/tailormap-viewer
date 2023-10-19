@@ -709,6 +709,10 @@
         <source>Catalog</source>
         <target>Catalogus</target>
       </trans-unit>
+      <trans-unit id="admin-core.common.clear" datatype="html">
+        <source>Clear</source>
+        <target>Wissen</target>
+      </trans-unit>
       <trans-unit id="admin-core.common.close" datatype="html">
         <source>Close</source>
         <target>Sluit</target>
