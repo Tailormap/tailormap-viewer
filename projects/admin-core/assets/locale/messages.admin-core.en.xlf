@@ -24,7 +24,7 @@
         <source>Applications</source>
       </trans-unit>
       <trans-unit id="admin-core.application.base-maps" datatype="html">
-        <source>Base maps</source>
+        <source>Basemaps</source>
       </trans-unit>
       <trans-unit id="admin-core.application.change-folder-name" datatype="html">
         <source>Change folder name</source>

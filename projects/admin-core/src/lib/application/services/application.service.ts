@@ -24,7 +24,7 @@ type ApplicationEditModel = Partial<ApplicationCreateModel>;
 export class ApplicationService implements OnDestroy {
 
   public static ROOT_NODE_TITLE = $localize `:@@admin-core.application.application-layers:Application layers`;
-  public static ROOT_BASE_NODE_TITLE = $localize `:@@admin-core.application.base-maps:Base maps`;
+  public static ROOT_BASE_NODE_TITLE = $localize `:@@admin-core.application.base-maps:Basemaps`;
 
   private destroyed = new Subject<null>();
 

@@ -30,7 +30,7 @@
         <target>Applicaties</target>
       </trans-unit>
       <trans-unit id="admin-core.application.base-maps" datatype="html">
-        <source>Base maps</source>
+        <source>Basemaps</source>
         <target>Basiskaarten</target>
       </trans-unit>
       <trans-unit id="admin-core.application.change-folder-name" datatype="html">
