@@ -536,6 +536,9 @@
       <trans-unit id="core.legend.legend" datatype="html">
         <source>Legend</source>
       </trans-unit>
+      <trans-unit id="core.login.as" datatype="html">
+        <source>as <x id="PH" equiv-text="state[&apos;userName&apos;]"/></source>
+      </trans-unit>
       <trans-unit id="core.login.error" datatype="html">
         <source>Login failed, please try again</source>
       </trans-unit>

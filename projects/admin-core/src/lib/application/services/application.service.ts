@@ -24,7 +24,7 @@ type ApplicationEditModel = Partial<ApplicationCreateModel>;
 export class ApplicationService implements OnDestroy {
 
   public static ROOT_NODE_TITLE = $localize `:@@admin-core.application.application-layers:Application layers`;
-  public static ROOT_BACKGROUND_NODE_TITLE = $localize `:@@admin-core.application.background-layers:Background layers`;
+  public static ROOT_BASE_NODE_TITLE = $localize `:@@admin-core.application.base-maps:Base maps`;
 
   private destroyed = new Subject<null>();
 
@@ -191,7 +191,7 @@ export class ApplicationService implements OnDestroy {
       this.addNodeToTree('layer', [this.createRootNode(ApplicationService.ROOT_NODE_TITLE)]);
     }
     if ((application.contentRoot?.baseLayerNodes || []).length === 0) {
-      this.addNodeToTree('baseLayer', [this.createRootNode(ApplicationService.ROOT_BACKGROUND_NODE_TITLE)]);
+      this.addNodeToTree('baseLayer', [this.createRootNode(ApplicationService.ROOT_BASE_NODE_TITLE)]);
     }
   }
 

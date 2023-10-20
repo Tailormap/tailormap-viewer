@@ -1,12 +1,12 @@
 <form [formGroup]="layerSettingsForm" *ngIf="node">
-  <h2>Settings for {{ node.label }}</h2>
+  <h2 i18n="@@admin-core.common.settings-for">Settings for {{ node.label }}</h2>
   <div class="layer-details" *ngIf="serviceLayer">
     <div class="detail">
-      <strong>Geo service:</strong>
+      <strong i18n="@@admin-core.common.geo-service">Geo service</strong>:
       <a href="#" (click)="updateGeoServiceSetting($event, serviceLayer.service)">{{ serviceLayer.service.title }}<mat-icon svgIcon="edit"></mat-icon></a>
     </div>
     <div class="detail">
-      <strong>Layer name:</strong>
+      <strong i18n="@@admin-core.catalog.layer-name">Layer name</strong>:
       <a href="#" (click)="updateGeoServiceLayerSetting($event, serviceLayer.service, serviceLayer.layer)">
         {{ serviceLayer.layer.title }}
         <ng-container *ngIf="serviceLayer.layer.title !== serviceLayer.layer.name">

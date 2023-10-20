@@ -713,6 +713,10 @@
         <source>Legend</source>
         <target>Legenda</target>
       </trans-unit>
+      <trans-unit id="core.login.as" datatype="html">
+        <source>as <x id="PH" equiv-text="state[&apos;userName&apos;]"/></source>
+        <target>als <x id="PH" equiv-text="state[&apos;userName&apos;]"/></target>
+      </trans-unit>
       <trans-unit id="core.login.error" datatype="html">
         <source>Login failed, please try again</source>
         <target>Inloggen mislukt, probeer het opnieuw</target>
@@ -839,7 +843,7 @@
       </trans-unit>
       <trans-unit id="core.profile.logged-in-as" datatype="html">
         <source>Logged in as</source>
-        <target>Aangemeld als</target>
+        <target>Ingelogd als</target>
       </trans-unit>
       <trans-unit id="core.profile.login" datatype="html">
         <source>Login</source>

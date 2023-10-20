@@ -26,7 +26,7 @@ export class LoginComponent {
     const state = this.router.getCurrentNavigation()?.extras.state;
     this.loginConfiguration$ = this.api.getLoginConfiguration$();
     this.routeBeforeLogin = state ? state['routeBeforeLogin'] : undefined;
-    const userLabel = state ? `as ${state['userName']}` : '';
+    const userLabel = state ? $localize `:@@core.login.as:as ${state['userName']}` : '';
     this.insufficientRightsMessage = state && state['hasInsufficientRights']
       // eslint-disable-next-line max-len
       ? $localize `:@@core.login.insufficient-rights-error:You are logged in ${userLabel} but do not have proper roles to access the application. Please contact your administrator.`

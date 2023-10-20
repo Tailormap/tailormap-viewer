@@ -68,7 +68,7 @@
     <ng-container *ngIf="isWMTS">
       <ng-container *ngTemplateOutlet="hiDpiMode"></ng-container>
       <mat-form-field>
-        <mat-label i18n="@@admin-core.catalog.hi-dpi-substitute-layer">Hi-DPI substitute layer</mat-label>
+        <mat-label i18n="@@admin-core.catalog.hi-dpi-substitute-layer">High-DPI substitute layer</mat-label>
         <mat-select formControlName="hiDpiSubstituteLayer">
           <mat-option [value]="null"></mat-option>
           <mat-option *ngFor="let layer of layers$ | async" [value]="layer.name">
