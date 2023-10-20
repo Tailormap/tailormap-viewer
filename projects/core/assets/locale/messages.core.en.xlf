@@ -32,11 +32,8 @@
       <trans-unit id="core.attribute-list.title" datatype="html">
         <source>Attribute list</source>
       </trans-unit>
-      <trans-unit id="core.background-layer-toggle.layer-selection" datatype="html">
-        <source>Background layer selection</source>
-      </trans-unit>
-      <trans-unit id="core.background-layer-toggle.no-background" datatype="html">
-        <source>No background</source>
+      <trans-unit id="core.background-layer-toggle.no-basemap" datatype="html">
+        <source>No basemap</source>
       </trans-unit>
       <trans-unit id="core.common.add" datatype="html">
         <source>Add</source>

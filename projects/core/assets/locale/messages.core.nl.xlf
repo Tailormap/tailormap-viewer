@@ -41,13 +41,9 @@
         <source>Attribute list</source>
         <target>Attributen lijst</target>
       </trans-unit>
-      <trans-unit id="core.background-layer-toggle.layer-selection" datatype="html">
-        <source>Background layer selection</source>
-        <target>Achtergrondlaag selectie</target>
-      </trans-unit>
-      <trans-unit id="core.background-layer-toggle.no-background" datatype="html">
-        <source>No background</source>
-        <target>Geen achtergrond</target>
+      <trans-unit id="core.background-layer-toggle.no-basemap" datatype="html">
+        <source>No basemap</source>
+        <target>Geen basiskaart</target>
       </trans-unit>
       <trans-unit id="core.common.add" datatype="html">
         <source>Add</source>
