@@ -515,6 +515,9 @@
       <trans-unit id="admin-core.catalog.xyz-tile-grid-options" datatype="html">
         <source>XYZ tile grid options</source>
       </trans-unit>
+      <trans-unit id="admin-core.common.about" datatype="html">
+        <source>About</source>
+      </trans-unit>
       <trans-unit id="admin-core.common.alias" datatype="html">
         <source>Alias</source>
       </trans-unit>

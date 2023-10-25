@@ -45,7 +45,6 @@
                 "input": "projects/app/src/assets",
                 "output": "."
               },
-              { "glob": "version.json", "input": "generated", "output": "." },
               {
                 "glob": "**/*",
                 "input": "projects/core/assets/icons",

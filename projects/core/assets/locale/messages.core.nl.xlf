@@ -833,6 +833,10 @@
         <source>Range: 50 - 600</source>
         <target>Bereik: 50 - 600</target>
       </trans-unit>
+      <trans-unit id="core.profile.about" datatype="html">
+        <source>About</source>
+        <target>Over</target>
+      </trans-unit>
       <trans-unit id="core.profile.go-to-admin" datatype="html">
         <source>Go to admin</source>
         <target>Ga naar admin</target>

@@ -689,6 +689,10 @@
         <source>XYZ tile grid options</source>
         <target>XYZ tile grid opties</target>
       </trans-unit>
+      <trans-unit id="admin-core.common.about" datatype="html">
+        <source>About</source>
+        <target>Over</target>
+      </trans-unit>
       <trans-unit id="admin-core.common.alias" datatype="html">
         <source>Alias</source>
         <target>Alias</target>
