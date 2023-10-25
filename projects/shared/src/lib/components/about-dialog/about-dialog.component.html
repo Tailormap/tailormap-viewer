@@ -1,8 +1,8 @@
 <h1 mat-dialog-title i18n="@@shared.about.title">About Tailormap</h1>
 
-<ng-template #infoOrUnknown let-info>
-  <ng-container *ngIf="info">{{info}}</ng-container>
-  <ng-container *ngIf="!info" i18n="@@shared.about.unknown">Unknown</ng-container>
+<ng-template #infoOrUnknown let-infoText>
+  <ng-container *ngIf="infoText">{{infoText}}</ng-container>
+  <ng-container *ngIf="!infoText" i18n="@@shared.about.unknown">Unknown</ng-container>
 </ng-template>
 
 <div class="dialog-content">

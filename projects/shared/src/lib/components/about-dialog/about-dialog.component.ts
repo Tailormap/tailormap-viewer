@@ -3,8 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, catchError, Observable, of, take, tap } from 'rxjs';
 import { VersionModel } from './version.model';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { info } from 'ng-packagr/lib/utils/log';
-import { info } from 'ng-packagr/lib/utils/log';
 
 @Component({
   selector: 'tm-about-dialog',
@@ -48,6 +46,4 @@ export class AboutDialogComponent {
     this.dialogRef.close();
   }
 
-  protected readonly info = info;
-  protected readonly info = info;
 }
