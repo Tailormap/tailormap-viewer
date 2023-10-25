@@ -12,6 +12,7 @@ import { PanelResizerComponent } from './panel-resizer';
 import { SliderComponent } from './slider/slider.component';
 import { LoginFormComponent } from './login-form/login-form.component';
 import { SharedDirectivesModule } from '../directives/shared-directives.module';
+import { AboutDialogComponent } from './about-dialog/about-dialog.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { SharedDirectivesModule } from '../directives/shared-directives.module';
     PanelResizerComponent,
     SliderComponent,
     LoginFormComponent,
+    AboutDialogComponent,
   ],
   imports: [
     SharedImportsModule,

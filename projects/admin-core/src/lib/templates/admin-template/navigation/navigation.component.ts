@@ -6,6 +6,8 @@ import { map, Observable, of, take } from 'rxjs';
 import { SecurityModel, TAILORMAP_SECURITY_API_V1_SERVICE, TailormapSecurityApiV1ServiceModel } from '@tailormap-viewer/api';
 import { Router } from '@angular/router';
 import { setLoginDetails } from '../../../state/admin-core.actions';
+import { AboutDialogComponent } from '@tailormap-viewer/shared';
+import { MatDialog } from '@angular/material/dialog';
 
 interface ButtonProps {
   icon?: string;
@@ -40,6 +42,7 @@ export class NavigationComponent implements OnInit {
   constructor(
     private store$: Store,
     private router: Router,
+    private dialog: MatDialog,
     @Inject(TAILORMAP_SECURITY_API_V1_SERVICE) private api: TailormapSecurityApiV1ServiceModel,
   ) {}
 
@@ -78,6 +81,10 @@ export class NavigationComponent implements OnInit {
 
   public login() {
     this.router.navigateByUrl('/login', { state: { routeBeforeLogin: this.router.url } });
+  }
+
+  public showAbout() {
+    AboutDialogComponent.open(this.dialog);
   }
 
 }

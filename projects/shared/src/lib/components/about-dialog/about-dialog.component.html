@@ -1,0 +1,34 @@
+<h1 mat-dialog-title i18n="@@shared.about.title">About Tailormap</h1>
+
+<ng-template #infoOrUnknown let-info>
+  <ng-container *ngIf="info">{{info}}</ng-container>
+  <ng-container *ngIf="!info" i18n="@@shared.about.unknown">Unknown</ng-container>
+</ng-template>
+
+<div class="dialog-content">
+  <mat-spinner *ngIf="loading$ | async" mode="indeterminate" diameter="20" color="primary"></mat-spinner>
+  <ng-container *ngIf="version$ | async as version">
+    <div class="row">
+      <div class="label" i18n="@@shared.about.version">Version</div>
+      <div><ng-container *ngTemplateOutlet="infoOrUnknown; context: {$implicit: version.version}"></ng-container></div>
+    </div>
+    <div class="row">
+      <div class="label" i18n="@@shared.about.build-date">Build date</div>
+      <div>
+        <ng-container *ngIf="version.buildDate">
+          <span>{{version.buildDate | date:"mediumDate" }}</span>&nbsp;
+          <span>{{version.buildDate | date:"mediumTime" }}</span>
+        </ng-container>
+        <ng-container *ngIf="!version.buildDate" i18n="@@shared.about.unknown">Unknown</ng-container>
+      </div>
+    </div>
+    <div class="row">
+      <div class="label" i18n="@@shared.about.git-version">Git version</div>
+      <div><ng-container *ngTemplateOutlet="infoOrUnknown; context: {$implicit: version.gitInfo?.raw}"></ng-container></div>
+    </div>
+  </ng-container>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-button color="primary" (click)="close()" i18n="@@shared.common.close">Close</button>
+</div>

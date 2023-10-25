@@ -8,6 +8,8 @@ import {
 } from '@tailormap-viewer/api';
 import { setLoginDetails } from '../../../state/core.actions';
 import { Router } from '@angular/router';
+import { AboutDialogComponent } from '@tailormap-viewer/shared';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'tm-profile',
@@ -23,6 +25,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   constructor(
     private store$: Store,
     private router: Router,
+    private dialog: MatDialog,
     private cdr: ChangeDetectorRef,
     @Inject(TAILORMAP_SECURITY_API_V1_SERVICE) private api: TailormapSecurityApiV1ServiceModel,
   ) {}
@@ -57,6 +60,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   public isAdmin(userDetails: SecurityModel) {
     return userDetails?.roles?.includes('admin') ?? false;
+  }
+
+  public showAbout() {
+    AboutDialogComponent.open(this.dialog);
   }
 
 }

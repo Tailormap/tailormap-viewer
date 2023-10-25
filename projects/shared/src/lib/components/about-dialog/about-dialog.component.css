@@ -1,0 +1,18 @@
+:host {
+  display: flex;
+  min-height: 100%;
+  flex-direction: column;
+}
+
+.dialog-content {
+  flex: 1;
+}
+
+.row + .row {
+  margin-top: 16px;
+}
+
+.label {
+  font-weight: bold;
+  padding-bottom: 3px;
+}

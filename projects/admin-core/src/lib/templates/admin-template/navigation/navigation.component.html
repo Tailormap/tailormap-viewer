@@ -37,6 +37,9 @@
         <span class="menu-button-label">{{userDetails.username}}</span>
       </button>
       <mat-menu #userMenu="matMenu" xPosition="before" yPosition="above">
+        <button mat-menu-item (click)="showAbout()">
+          <span i18n="@@admin-core.common.about">About</span>
+        </button>
         <button mat-menu-item routerLink="/">
           <span i18n="@@admin-core.common.go-to-viewer">Go to viewer</span>
         </button>
