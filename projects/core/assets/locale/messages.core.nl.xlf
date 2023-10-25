@@ -41,13 +41,9 @@
         <source>Attribute list</source>
         <target>Attributen lijst</target>
       </trans-unit>
-      <trans-unit id="core.background-layer-toggle.layer-selection" datatype="html">
-        <source>Background layer selection</source>
-        <target>Achtergrondlaag selectie</target>
-      </trans-unit>
-      <trans-unit id="core.background-layer-toggle.no-background" datatype="html">
-        <source>No background</source>
-        <target>Geen achtergrond</target>
+      <trans-unit id="core.background-layer-toggle.no-basemap" datatype="html">
+        <source>No basemap</source>
+        <target>Geen basiskaart</target>
       </trans-unit>
       <trans-unit id="core.common.add" datatype="html">
         <source>Add</source>
@@ -713,6 +709,10 @@
         <source>Legend</source>
         <target>Legenda</target>
       </trans-unit>
+      <trans-unit id="core.login.as" datatype="html">
+        <source>as <x id="PH" equiv-text="state[&apos;userName&apos;]"/></source>
+        <target>als <x id="PH" equiv-text="state[&apos;userName&apos;]"/></target>
+      </trans-unit>
       <trans-unit id="core.login.error" datatype="html">
         <source>Login failed, please try again</source>
         <target>Inloggen mislukt, probeer het opnieuw</target>
@@ -843,7 +843,7 @@
       </trans-unit>
       <trans-unit id="core.profile.logged-in-as" datatype="html">
         <source>Logged in as</source>
-        <target>Aangemeld als</target>
+        <target>Ingelogd als</target>
       </trans-unit>
       <trans-unit id="core.profile.login" datatype="html">
         <source>Login</source>
