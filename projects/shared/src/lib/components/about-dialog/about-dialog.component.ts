@@ -37,7 +37,7 @@ export class AboutDialogComponent {
 
   public static open(dialog: MatDialog) {
     return dialog.open(AboutDialogComponent, {
-      width: '300px',
+      width: '375px',
       height: '400px',
     });
   }
