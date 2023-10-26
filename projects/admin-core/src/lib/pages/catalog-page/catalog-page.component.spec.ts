@@ -9,6 +9,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { adminCoreStateKey, initialAdminCoreState } from '../../state/admin-core.state';
 import { TAILORMAP_SECURITY_API_V1_SERVICE } from '@tailormap-viewer/api';
 import { of } from 'rxjs';
+import { APP_BASE_HREF } from '@angular/common';
 
 describe('CatalogPageComponent', () => {
 
@@ -18,6 +19,7 @@ describe('CatalogPageComponent', () => {
       imports: [ SharedModule, MatIconTestingModule ],
       declarations: [ AdminTemplateComponent, NavigationComponent ],
       providers: [
+        { provide: APP_BASE_HREF, useValue: '' },
         { provide: TAILORMAP_SECURITY_API_V1_SERVICE, useValue: { getUser$: jest.fn(() => of({})) } },
         provideMockStore({
           initialState: {
