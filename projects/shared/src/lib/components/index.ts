@@ -11,3 +11,4 @@ export * from './icon-picker/icon-picker.component';
 export * from './slider/slider.component';
 export * from './login-form/login-form.component';
 export * from './about-dialog/about-dialog.component';
+export * from './language-toggle/language-toggle.component';

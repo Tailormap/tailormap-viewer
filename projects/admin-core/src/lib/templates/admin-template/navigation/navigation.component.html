@@ -40,6 +40,7 @@
         <button mat-menu-item (click)="showAbout()">
           <span i18n="@@admin-core.common.about">About</span>
         </button>
+        <tm-language-toggle></tm-language-toggle>
         <button mat-menu-item routerLink="/">
           <span i18n="@@admin-core.common.go-to-viewer">Go to viewer</span>
         </button>
@@ -48,6 +49,7 @@
         </button>
       </mat-menu>
     </ng-container>
+    <tm-language-toggle *ngIf="!userDetails.isAuthenticated || !userDetails.username" class="menu-button"></tm-language-toggle>
     <button mat-flat-button
             *ngIf="!userDetails.isAuthenticated || !userDetails.username"
             class="menu-button"
