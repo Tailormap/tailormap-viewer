@@ -11,6 +11,7 @@ import { of } from 'rxjs';
 import { TestBed } from '@angular/core/testing';
 import { Store } from '@ngrx/store';
 import { TAILORMAP_SECURITY_API_V1_SERVICE, TailormapSecurityApiV1MockService } from '@tailormap-viewer/api';
+import { APP_BASE_HREF } from '@angular/common';
 
 const createMockStore = (loggedIn: boolean) => {
   return provideMockStore({
@@ -43,6 +44,7 @@ describe('ProfileComponent', () => {
         MenubarButtonComponent,
       ],
       providers: [
+        { provide: APP_BASE_HREF, useValue: '' },
         createMockStore(false),
         { provide: Router, useValue: { navigateByUrl: navigateFn } },
         { provide: TAILORMAP_SECURITY_API_V1_SERVICE, useClass: TailormapSecurityApiV1MockService },
@@ -75,6 +77,7 @@ describe('ProfileComponent', () => {
         MenubarButtonComponent,
       ],
       providers: [
+        { provide: APP_BASE_HREF, useValue: '' },
         createMockStore(true),
         { provide: Router, useValue: { navigateByUrl: navigateFn } },
         { provide: TAILORMAP_SECURITY_API_V1_SERVICE, useValue: service },

@@ -11,11 +11,15 @@ module.exports = {
       "Host": "snapshot.tailormap.nl"
     },
     onProxyRes(proxyRes, req) {
-      const host = req.headers.host;
+      const defaultLocation = 'http://localhost:4200';
       if(proxyRes.headers['location']) {
         // Rewrite the Location response header for redirects on login/logout (like the Apache ProxyPassReverse directive)
-        const hostDestination = host.indexOf('localhost:4201') ? 'http://localhost:4201' : 'http://localhost:4200';
-        proxyRes.headers['location'] = proxyRes.headers['location'].replace('https://snapshot.tailormap.nl', hostDestination);
+        proxyRes.headers['location'] = proxyRes.headers['location'].replace('https://snapshot.tailormap.nl', defaultLocation);
+      }
+      const origin = req.headers.origin || '';
+      if (origin.indexOf(defaultLocation) === -1 && origin.indexOf('localhost') !== -1) {
+        proxyRes.headers["Access-Control-Allow-Origin"] = req.headers.origin;
+        proxyRes.headers["Access-Control-Allow-Credentials"] = "true";
       }
     },
   }

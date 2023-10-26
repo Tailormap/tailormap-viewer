@@ -6,6 +6,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { adminCoreStateKey, initialAdminCoreState } from '../../../state/admin-core.state';
 import { TAILORMAP_SECURITY_API_V1_SERVICE } from '@tailormap-viewer/api';
 import { of } from 'rxjs';
+import { APP_BASE_HREF } from '@angular/common';
 
 const setup = async (isAuthenticated: boolean, nonAdminUser?: boolean) => {
   const api = { getUser$: jest.fn(() => of({})) };
@@ -26,6 +27,7 @@ const setup = async (isAuthenticated: boolean, nonAdminUser?: boolean) => {
     providers: [
       store,
       { provide: TAILORMAP_SECURITY_API_V1_SERVICE, useValue: api },
+      { provide: APP_BASE_HREF, useValue: '' },
     ],
   });
   return { api };
