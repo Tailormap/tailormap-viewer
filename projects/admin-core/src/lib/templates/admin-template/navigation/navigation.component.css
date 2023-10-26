@@ -28,7 +28,8 @@
   margin-top: 8px;
 }
 
-.navigation-bar ::ng-deep .menu-button.mat-mdc-unelevated-button {
+.navigation-bar ::ng-deep .menu-button.mat-mdc-unelevated-button,
+.navigation-bar ::ng-deep .menu-button .mat-mdc-menu-item {
   --mdc-filled-button-container-color: transparent;
 
   color: var(--palette-primary-contrast-500);
