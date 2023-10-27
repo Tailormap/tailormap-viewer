@@ -4,8 +4,8 @@
       <ng-container *ngIf="label">{{ label }}</ng-container>
       <ng-container *ngIf="!label" i18n="@@admin-core.common.bounds">Bounds</ng-container>
     </mat-label>
-    <button *ngIf="projection" mat-raised-button color="primary" (click)="setBoundsForProjection(projection)" i18n="@@admin-core.use-max-extent">Use projection extent</button>
-    <button mat-raised-button color="primary" (click)="clear()" i18n="@@admin-core.common.clear">Clear</button>
+    <button *ngIf="projection" mat-stroked-button color="accent" (click)="setBoundsForProjection(projection)" i18n="@@admin-core.use-max-extent">Use projection extent</button>
+    <button mat-stroked-button color="accent" (click)="clear()" i18n="@@admin-core.common.clear">Clear</button>
   </div>
   <div class="fields">
     <mat-form-field>
