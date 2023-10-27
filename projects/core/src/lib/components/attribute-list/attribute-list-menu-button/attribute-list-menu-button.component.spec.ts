@@ -9,6 +9,7 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { getLoadedStoreNoRows } from '../state/mocks/attribute-list-state-test-data';
 import { TestBed } from '@angular/core/testing';
 import { setAttributeListVisibility } from '../state/attribute-list.actions';
+import { coreStateKey, initialCoreState } from '../../../state/core.state';
 
 describe('AttributeListMenuButtonComponent', () => {
 
@@ -21,7 +22,7 @@ describe('AttributeListMenuButtonComponent', () => {
       imports: [ SharedModule, MatIconTestingModule ],
       providers: [
         { provide: MenubarService, useValue: menubarService },
-        provideMockStore({ initialState: getLoadedStoreNoRows() }),
+        provideMockStore({ initialState: { ...getLoadedStoreNoRows(), [coreStateKey]: initialCoreState } }),
       ],
     });
     const store = TestBed.inject(MockStore);

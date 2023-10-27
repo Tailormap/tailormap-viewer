@@ -5,6 +5,8 @@ import { SharedModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { of } from 'rxjs';
 import userEvent from '@testing-library/user-event';
+import { provideMockStore } from '@ngrx/store/testing';
+import { coreStateKey, initialCoreState } from '../../../state/core.state';
 
 describe('PrintMenuButtonComponent', () => {
 
@@ -18,6 +20,7 @@ describe('PrintMenuButtonComponent', () => {
       declarations: [MenubarButtonComponent],
       imports: [ SharedModule, MatIconTestingModule ],
       providers: [
+        provideMockStore({ initialState: { [coreStateKey]: initialCoreState } }),
         { provide: MenubarService, useValue: menubarService },
       ],
     });

@@ -5,7 +5,7 @@ import { AttributeListDataModel } from '../models/attribute-list-data.model';
 import { AttributeListColumnModel } from '../models/attribute-list-column.model';
 import { AttributeListTabModel } from '../models/attribute-list-tab.model';
 import { AttributeListPagingDataType } from '../models/attribute-list-paging-data.type';
-import { selectComponentsConfigForType, selectComponentTitle } from '../../../state/core.selectors';
+import { selectComponentTitle } from '../../../state/core.selectors';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 
 const selectAttributeListState = createFeatureSelector<AttributeListState>(attributeListStateKey);
