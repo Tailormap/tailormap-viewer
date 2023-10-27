@@ -1,5 +1,7 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
+import { selectComponentTitle } from '../../../state/core.selectors';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'tm-print-menu-button',
@@ -8,6 +10,7 @@ import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PrintMenuButtonComponent {
-  public panelTitle = $localize `:@@core.print.print:Print`;
   public componentType = BaseComponentTypeEnum.PRINT;
+  public panelTitle$ = this.store$.select(selectComponentTitle(this.componentType, $localize `:@@core.print.print:Print`));
+  constructor(private store$: Store) {}
 }

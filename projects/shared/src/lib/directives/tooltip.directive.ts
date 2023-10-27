@@ -7,8 +7,10 @@ import { MatTooltip } from '@angular/material/tooltip';
 export class TooltipDirective extends MatTooltip {
 
   @Input('tmTooltip')
-  public set tooltip(tooltip: string) {
-    this.message = tooltip;
+  public set tooltip(tooltip: string | null) {
+    if (tooltip) {
+      this.message = tooltip;
+    }
   }
 
   @HostBinding('attr.aria-label')

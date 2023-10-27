@@ -1,5 +1,7 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
+import { selectComponentTitle } from '../../../state/core.selectors';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'tm-filter-menu-button',
@@ -8,6 +10,7 @@ import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FilterMenuButtonComponent {
-  public panelLabel = $localize `:@@core.filter.filtering:Filtering`;
   public componentType = BaseComponentTypeEnum.FILTER;
+  public panelTitle$ = this.store$.select(selectComponentTitle(this.componentType, $localize `:@@core.filter.filtering:Filtering`));
+  constructor(private store$: Store) {}
 }

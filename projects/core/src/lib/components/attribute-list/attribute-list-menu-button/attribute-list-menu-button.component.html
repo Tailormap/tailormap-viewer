@@ -1,4 +1,4 @@
 <tm-menubar-button [active$]="visible$"
                    (buttonClicked)="toggleAttributeList()"
-                   [tooltip$]="title$"
+                   [tooltip]="title$ | async"
                    icon="components_attribute_list"></tm-menubar-button>

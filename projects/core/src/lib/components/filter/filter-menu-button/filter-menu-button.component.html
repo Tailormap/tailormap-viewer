@@ -1,4 +1,4 @@
 <tm-menubar-button [component]="componentType"
-                   [tooltip]="panelLabel"
-                   [panelTitle]="panelLabel"
+                   [tooltip]="panelTitle$ | async"
+                   [panelTitle]="panelTitle$ | async"
                    icon="components_filter"></tm-menubar-button>
