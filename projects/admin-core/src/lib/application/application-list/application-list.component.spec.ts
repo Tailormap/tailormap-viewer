@@ -12,11 +12,14 @@ import { of } from 'rxjs';
 import { ConfigService } from '../../config/services/config.service';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { ENVIRONMENT_CONFIG } from '@tailormap-viewer/api';
+import { APP_BASE_HREF } from '@angular/common';
 
 const setup = async (
   loadStatus: LoadingStateEnum = LoadingStateEnum.INITIAL,
   listFilter = '',
   errorMessage?: string,
+  viewerUrl?: string,
+  baseHref?: string,
 ) => {
   const appModels = [
     getApplication({ title: 'Amazing application' }),
@@ -39,7 +42,8 @@ const setup = async (
     providers: [
       { provide: Store, useValue: mockStore },
       { provide: ConfigService, useValue: configService },
-      { provide: ENVIRONMENT_CONFIG, useValue: { viewerBaseUrl: 'http://test.test' } },
+      { provide: ENVIRONMENT_CONFIG, useValue: { viewerBaseUrl: viewerUrl || '' } },
+      { provide: APP_BASE_HREF, useValue: baseHref || '' },
     ],
   });
   return { mockStore, appModels };
@@ -82,6 +86,16 @@ describe('ApplicationListComponent', () => {
     await userEvent.click(await screen.findByText('Retry'));
     expect(mockStore.dispatch).toHaveBeenCalledTimes(2);
     expect(mockStore.dispatch).toHaveBeenCalledWith(loadApplications());
+  });
+
+  test('sets viewer url when on different base href', async () => {
+    await setup(LoadingStateEnum.LOADED, '', undefined, '/app/', '/en/some-pr/');
+    const openViewerBtns: HTMLAnchorElement[] = await screen.findAllByLabelText('Open application');
+    expect(openViewerBtns).toHaveLength(2);
+    expect(openViewerBtns.map(b => b.getAttribute('href'))).toEqual([
+      '/en/some-pr/app/app2',
+      '/en/some-pr/app/app1',
+    ]);
   });
 
 });
