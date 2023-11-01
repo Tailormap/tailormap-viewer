@@ -2,7 +2,6 @@
   <tm-login-form [login$]="login$"
                  [loginConfiguration]="loginConfiguration$ | async"
                  [redirectUrl]="routeBeforeLogin"
-                 [isViewer]="true"
                  (loggedIn)="loggedIn($event)"
                  [insufficientRightsErrorMessage]="insufficientRightsMessage"
                  loginErrorMessage="Login failed, please try again"

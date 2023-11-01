@@ -1,11 +1,10 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, NgZone, OnInit } from '@angular/core';
-import { DropZoneOptions, TreeDragDropService, TreeService } from '@tailormap-viewer/shared';
+import { DropZoneOptions, RouterHistoryService, TreeDragDropService, TreeService } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
 import { selectCatalogTree } from '../state/catalog.selectors';
-import { BehaviorSubject, filter, map, startWith } from 'rxjs';
+import { BehaviorSubject, filter, map } from 'rxjs';
 import { CatalogTreeModel, CatalogTreeModelMetadataTypes } from '../models/catalog-tree.model';
 import { CatalogTreeHelper } from '../helpers/catalog-tree.helper';
-import { NavigationEnd, Router } from '@angular/router';
 import { Routes } from '../../routes';
 import { CatalogTreeModelTypeEnum } from '../models/catalog-tree-model-type.enum';
 import { CatalogTreeService } from '../services/catalog-tree.service';
@@ -29,7 +28,7 @@ export class CatalogTreeComponent implements OnInit {
     private treeDragDropService: TreeDragDropService,
     private store$: Store,
     private catalogTreeService: CatalogTreeService,
-    private router: Router,
+    private history: RouterHistoryService,
     private destroyRef: DestroyRef,
     private catalogService: CatalogService,
     private ngZone: NgZone,
@@ -41,27 +40,28 @@ export class CatalogTreeComponent implements OnInit {
         filter(tree => !!tree && tree.length > 0),
         map((tree, idx) => {
           if (idx === 0) {
-            this.expandTreeToSelectedItem(this.router.url);
+            this.expandTreeToSelectedItem(this.history.getCurrentUrl());
           }
           return tree;
         }),
       );
     this.treeService.setDataSource(catalogTree$, () => true);
     this.treeService.setSelectedNode(this.selectedNodeId.asObservable());
-    this.router.events
+    this.history.getCurrentUrl$()
       .pipe(
         takeUntilDestroyed(this.destroyRef),
-        startWith(new NavigationEnd(-1, this.router.url, this.router.url)),
-        filter((event): event is NavigationEnd => event instanceof NavigationEnd),
       )
-      .subscribe((event: NavigationEnd) => {
-        const deconstructedUrl = this.readNodesFromUrl(event.url);
+      .subscribe((url: string | null) => {
+        const deconstructedUrl = this.readNodesFromUrl(url);
         const lastItem = deconstructedUrl.pop();
         this.selectedNodeId.next(lastItem ? lastItem.treeNodeId : '');
       });
   }
 
-  private readNodesFromUrl(url: string): Array<{ type: CatalogTreeModelTypeEnum; treeNodeId: string; id: string }> {
+  private readNodesFromUrl(url: string | null): Array<{ type: CatalogTreeModelTypeEnum; treeNodeId: string; id: string }> {
+    if (url === null) {
+      return [];
+    }
     const currentRoute = url
       .substring(url.indexOf('/admin') === 0 ? 6 : 0) // remove /admin from URL if url starts with /admin
       .replace(Routes.CATALOG, '')
@@ -86,7 +86,7 @@ export class CatalogTreeComponent implements OnInit {
     return parts;
   }
 
-  private expandTreeToSelectedItem(url: string) {
+  private expandTreeToSelectedItem(url: string | null) {
     const urlParts = this.readNodesFromUrl(url);
     if (urlParts.length === 0) {
       return;

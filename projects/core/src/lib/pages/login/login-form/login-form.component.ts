@@ -2,23 +2,9 @@ import { LocationStrategy } from '@angular/common';
 import { Component, ChangeDetectionStrategy, Output, EventEmitter, Input } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { BehaviorSubject, Observable, take } from 'rxjs';
-
-interface LoginModel {
-  isAuthenticated: boolean;
-  username: string;
-  roles: string[];
-}
-
-interface SSOLinkModel {
-  name: string;
-  url: string;
-  showForViewer: boolean;
-}
-
-interface LoginConfigurationModel {
-  hideLoginForm: boolean;
-  ssoLinks: SSOLinkModel[];
-}
+import { RouterHistoryService } from '../../../../../../shared/src/lib/services';
+import { map } from 'rxjs/operators';
+import { LoginConfigurationModel, UserResponseModel } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-login-form',
@@ -29,7 +15,7 @@ interface LoginConfigurationModel {
 export class LoginFormComponent {
 
   @Input()
-  public login$: ((username: string, password: string) => Observable<LoginModel>) | null = null;
+  public login$: ((username: string, password: string) => Observable<UserResponseModel>) | null = null;
 
   @Input({ required: true })
   public loginErrorMessage: string | undefined;
@@ -39,14 +25,13 @@ export class LoginFormComponent {
     this.errorMessageSubject.next(insufficientRightsErrorMessage || '');
   }
 
-  @Input()
-  public isViewer = false;
-
   @Output()
-  public loggedIn = new EventEmitter<LoginModel>();
+  public loggedIn = new EventEmitter<UserResponseModel>();
 
   @Input()
   public redirectUrl: string | null | undefined;
+
+  public isViewer$: Observable<boolean>;
 
   public loginForm = this.formBuilder.group({
     username: [ '', [Validators.required]],
@@ -65,7 +50,11 @@ export class LoginFormComponent {
   constructor(
     private formBuilder: FormBuilder,
     private locationStrategy: LocationStrategy,
-  ) { }
+    private history: RouterHistoryService,
+  ) {
+    this.isViewer$ = this.history.getPreviousUrl$()
+      .pipe(map(prevUrl => prevUrl?.indexOf('/admin') === -1));
+  }
 
   public login() {
     const username = this.loginForm.get('username')?.value;

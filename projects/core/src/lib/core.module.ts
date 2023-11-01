@@ -11,7 +11,7 @@ import {
   EnvironmentConfigModel,
   TAILORMAP_API_V1_SERVICE, TAILORMAP_SECURITY_API_V1_SERVICE, TailormapApiV1Service, TailormapSecurityApiV1Service,
 } from '@tailormap-viewer/api';
-import { ICON_SERVICE_ICON_LOCATION, IconService, SharedModule } from '@tailormap-viewer/shared';
+import { ICON_SERVICE_ICON_LOCATION, IconService, RouterHistoryService, SharedModule } from '@tailormap-viewer/shared';
 import { ComponentsModule } from './components/components.module';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -27,6 +27,7 @@ import { LayoutModule } from './layout/layout.module';
 import { ApplicationStyleService } from './services/application-style.service';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MAT_CHECKBOX_DEFAULT_OPTIONS } from '@angular/material/checkbox';
+import { LoginFormComponent } from './pages/login/login-form/login-form.component';
 
 const getBaseHref = (platformLocation: PlatformLocation): string => {
   return platformLocation.getBaseHrefFromDOM();
@@ -47,6 +48,7 @@ const sentryProviders = SENTRY_DSN === '@SENTRY_DSN@' ? [] : [
   declarations: [
     ViewerAppComponent,
     LoginComponent,
+    LoginFormComponent,
   ],
   imports: [
     StoreModule.forRoot({
@@ -91,6 +93,7 @@ export class CoreModule {
     domSanitizer: DomSanitizer,
     iconService: IconService,
     _appStyleService: ApplicationStyleService,
+    _routerHistoryService: RouterHistoryService,
   ) {
     iconService.loadIconsToIconRegistry(matIconRegistry, domSanitizer);
   }

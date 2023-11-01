@@ -10,7 +10,6 @@ import { IconPickerComponent } from './icon-picker/icon-picker.component';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { PanelResizerComponent } from './panel-resizer';
 import { SliderComponent } from './slider/slider.component';
-import { LoginFormComponent } from './login-form/login-form.component';
 import { SharedDirectivesModule } from '../directives/shared-directives.module';
 import { AboutDialogComponent } from './about-dialog/about-dialog.component';
 import { LanguageToggleComponent } from './language-toggle/language-toggle.component';
@@ -27,7 +26,6 @@ import { LanguageToggleComponent } from './language-toggle/language-toggle.compo
     ConfirmDialogComponent,
     PanelResizerComponent,
     SliderComponent,
-    LoginFormComponent,
     AboutDialogComponent,
     LanguageToggleComponent,
   ],
@@ -45,7 +43,6 @@ import { LanguageToggleComponent } from './language-toggle/language-toggle.compo
     IconPickerComponent,
     PanelResizerComponent,
     SliderComponent,
-    LoginFormComponent,
     LanguageToggleComponent,
   ],
 })

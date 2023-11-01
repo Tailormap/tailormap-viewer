@@ -4,7 +4,7 @@ import { LoginFormComponent } from './login-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { of } from 'rxjs';
-import { AutoFocusDirective } from '../../directives';
+import { AutoFocusDirective } from '../../../../../../shared/src/lib/directives';
 
 describe('LoginFormComponent', () => {
 

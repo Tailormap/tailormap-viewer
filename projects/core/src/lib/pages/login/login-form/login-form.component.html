@@ -3,7 +3,7 @@
     <div i18n="@@shared.login-form.title">Login</div>
     <mat-icon class="logo" svgIcon="logo"></mat-icon>
   </div>
-  <div class="login-form__body" *ngIf="loginConfiguration?.hideLoginForm !== true || isViewer">
+  <div class="login-form__body" *ngIf="loginConfiguration?.hideLoginForm !== true || (isViewer$ | async)">
     <tm-error-message [message]="(errorMessage$ | async) ?? ''"></tm-error-message>
     <div class="form-field">
       <label for="login_username" i18n="@@shared.login-form.username">Username</label>
@@ -26,7 +26,7 @@
   <div class="buttons">
     <ng-container *ngFor="let item of loginConfiguration?.ssoLinks ?? []">
       <button
-        *ngIf="item.showForViewer || !isViewer"
+        *ngIf="item.showForViewer || !isViewer$"
         mat-flat-button
         color="accent"
         (click)="loginSSO(item.url)">{{item.name}}</button>
@@ -34,7 +34,7 @@
     <button mat-flat-button
             name="login"
             color="primary"
-            [disabled]="loginForm.invalid || (loggingIn$ | async)"
+            [disabled]="loginForm.invalid || (loggingIn$ | async) === true"
             (click)="login()">
       <ng-template #loginLabel>Login</ng-template>
       <mat-spinner *ngIf="(loggingIn$ | async); else: loginLabel" diameter="20" color="primary" mode="indeterminate"></mat-spinner>
