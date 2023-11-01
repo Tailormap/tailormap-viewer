@@ -1,6 +1,6 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { ViewerState, CoreState, coreStateKey } from './core.state';
-import { ComponentModel } from '@tailormap-viewer/api';
+import { CoreState, coreStateKey } from './core.state';
+import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 
 const selectCoreState = createFeatureSelector<CoreState>(coreStateKey);
 const selectViewerState = createSelector(selectCoreState, state => state.viewer);
@@ -12,7 +12,7 @@ export const selectViewerErrorMessage = createSelector(selectCoreState, (state) 
 
 export const selectUserDetails = createSelector(selectCoreState, state => state.security);
 
-export const selectComponentsConfig = createSelector<CoreState, ViewerState | undefined, ComponentModel[]>(
+export const selectComponentsConfig = createSelector(
   selectViewerState,
   state => {
     if (!state?.components || !Array.isArray(state.components)) {
@@ -20,6 +20,18 @@ export const selectComponentsConfig = createSelector<CoreState, ViewerState | un
     }
     return state.components;
   },
+);
+
+export const selectComponentsConfigForType = (type: string | BaseComponentTypeEnum) => createSelector(
+  selectComponentsConfig,
+  components => {
+    return components.find(c => c.type === type) || null;
+  },
+);
+
+export const selectComponentTitle = (type: string, defaultTitle: string) => createSelector(
+  selectComponentsConfigForType(type),
+  config => config?.config.title || defaultTitle,
 );
 
 export const selectViewerStyling = createSelector(selectViewerState, state => state?.styling || null);

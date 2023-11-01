@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
+import { selectComponentTitle } from '../../../state/core.selectors';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'tm-legend-menu-button',
@@ -7,6 +9,7 @@ import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
   styleUrls: ['./legend-menu-button.component.css'],
 })
 export class LegendMenuButtonComponent {
-  public panelTitle = $localize `:@@core.legend.legend:Legend`;
   public componentType = BaseComponentTypeEnum.LEGEND;
+  public panelTitle$ = this.store$.select(selectComponentTitle(this.componentType, $localize `:@@core.legend.legend:Legend`));
+  constructor(private store$: Store) {}
 }

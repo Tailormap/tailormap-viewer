@@ -10,12 +10,10 @@ export interface AttributeListState {
   data: AttributeListDataModel[];
   selectedTabId?: string;
   highlightedFeature?: FeatureModel & { tabId: string } | null;
-  panelTitle: string;
 }
 
 export const initialAttributeListState: AttributeListState = {
   visible: false,
   tabs: [],
   data: [],
-  panelTitle: $localize `:@@core.attribute-list.title:Attribute list`,
 };

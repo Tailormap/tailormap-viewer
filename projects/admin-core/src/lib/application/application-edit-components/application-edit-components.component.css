@@ -1,3 +1,7 @@
 .components {
   display: flex;
 }
+
+.component-configuration {
+  flex: 1;
+}

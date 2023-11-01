@@ -17,16 +17,13 @@ export class MenubarButtonComponent implements OnInit {
   public menuTrigger: MatMenuPanel | null = null;
 
   @Input()
-  public tooltip: string | undefined;
+  public tooltip: string | undefined | null;
 
   @Input()
-  public panelTitle: string | undefined;
+  public panelTitle: string | undefined | null;
 
   @Input()
   public component: string | undefined;
-
-  @Input()
-  public tooltip$: Observable<string> | undefined;
 
   @Input()
   public active$: Observable<boolean> = of(false);

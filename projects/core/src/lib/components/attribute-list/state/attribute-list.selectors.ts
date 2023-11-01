@@ -5,11 +5,12 @@ import { AttributeListDataModel } from '../models/attribute-list-data.model';
 import { AttributeListColumnModel } from '../models/attribute-list-column.model';
 import { AttributeListTabModel } from '../models/attribute-list-tab.model';
 import { AttributeListPagingDataType } from '../models/attribute-list-paging-data.type';
+import { selectComponentTitle } from '../../../state/core.selectors';
+import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 
 const selectAttributeListState = createFeatureSelector<AttributeListState>(attributeListStateKey);
 
 export const selectAttributeListVisible = createSelector(selectAttributeListState, state => state.visible);
-export const selectAttributeListPanelTitle = createSelector(selectAttributeListState, state => state.panelTitle);
 export const selectAttributeListTabs = createSelector(selectAttributeListState, state => state.tabs);
 export const selectAttributeListData = createSelector(selectAttributeListState, state => state.data);
 export const selectAttributeListSelectedTab = createSelector(selectAttributeListState, state => state.selectedTabId);
@@ -152,4 +153,9 @@ export const selectCurrentlySelectedFeatureGeometry = createSelector(
     }
     return feature?.geometry || null;
   },
+);
+
+export const selectAttributeListPanelTitle = selectComponentTitle(
+  BaseComponentTypeEnum.ATTRIBUTE_LIST,
+  $localize `:@@core.attribute-list.title:Attribute list`,
 );

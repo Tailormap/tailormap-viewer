@@ -5,6 +5,7 @@ import { BaseComponentTypeEnum, ComponentBaseConfigModel } from '@tailormap-view
 import { selectComponentsConfigByType } from '../../state/application.selectors';
 import { ComponentConfigHelper } from '../../helpers/component-config.helper';
 import { updateApplicationComponentConfig } from '../../state/application.actions';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'tm-admin-base-component-config',
@@ -26,6 +27,10 @@ export class BaseComponentConfigComponent implements OnInit, OnDestroy {
 
   public config: ComponentBaseConfigModel | undefined = undefined;
 
+  public formGroup = new FormGroup({
+    title: new FormControl<string>(''),
+  });
+
   public ngOnInit(): void {
     if (!this.type) {
       throw new Error('No type given');
@@ -35,7 +40,15 @@ export class BaseComponentConfigComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyed))
       .subscribe(config => {
         this.config = config?.config || ComponentConfigHelper.getBaseConfig(type);
+        this.formGroup.patchValue({
+          title: this.config?.title || '',
+        }, { emitEvent: false, onlySelf: true });
         this.cdr.detectChanges();
+      });
+    this.formGroup.valueChanges
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(values => {
+        this.updateConfig('title', values.title);
       });
   }
 
@@ -55,12 +68,16 @@ export class BaseComponentConfigComponent implements OnInit, OnDestroy {
     if (!this.config || !this.type) {
       return;
     }
+    this.updateConfig('enabled', !this.config.enabled);
+  }
+
+  private updateConfig(key: keyof ComponentBaseConfigModel, value: string | number | boolean | undefined | null) {
+    if (!this.config || !this.type || this.config[key] === value) {
+      return;
+    }
     this.store$.dispatch(updateApplicationComponentConfig({
       componentType: this.type,
-      config: {
-        ...this.config,
-        enabled: !this.config.enabled,
-      },
+      config: { ...this.config, [key]: value },
     }));
   }
 

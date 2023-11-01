@@ -3,7 +3,7 @@
           mat-icon-button
           (click)="handleClick()"
           [matMenuTriggerFor]="menuTrigger"
-          [tmTooltip]="tooltip$ ? ((tooltip$ | async) ?? '') : (tooltip || '')"
+          [tmTooltip]="tooltip || ''"
           matTooltipPosition="right"
           [class.button--active]="(active$ | async) ?? false">
     <mat-icon *ngIf="icon" [svgIcon]="icon"></mat-icon>
@@ -13,7 +13,7 @@
 <ng-container *ngIf="!menuTrigger; else: buttonWithMenuTrigger">
   <button mat-icon-button
           (click)="handleClick()"
-          [tmTooltip]="tooltip$ ? ((tooltip$ | async) ?? '') : (tooltip || '')"
+          [tmTooltip]="tooltip || ''"
           matTooltipPosition="right"
           [class.button--active]="(active$ | async) ?? false">
     <mat-icon *ngIf="icon" [svgIcon]="icon"></mat-icon>

@@ -5,6 +5,8 @@ import { MenubarButtonComponent, MenubarService } from '../../menubar';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import userEvent from '@testing-library/user-event';
+import { provideMockStore } from '@ngrx/store/testing';
+import { coreStateKey, initialCoreState } from '../../../state/core.state';
 
 describe('FilterMenuButtonComponent', () => {
 
@@ -18,6 +20,7 @@ describe('FilterMenuButtonComponent', () => {
       declarations: [MenubarButtonComponent],
       imports: [ SharedModule, MatIconTestingModule ],
       providers: [
+        provideMockStore({ initialState: { [coreStateKey]: initialCoreState } }),
         { provide: MenubarService, useValue: menubarService },
       ],
     });
