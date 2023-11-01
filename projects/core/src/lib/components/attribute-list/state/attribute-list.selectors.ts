@@ -157,5 +157,5 @@ export const selectCurrentlySelectedFeatureGeometry = createSelector(
 
 export const selectAttributeListPanelTitle = selectComponentTitle(
   BaseComponentTypeEnum.ATTRIBUTE_LIST,
-  `:@@core.attribute-list.title:Attribute list`,
+  $localize `:@@core.attribute-list.title:Attribute list`,
 );
