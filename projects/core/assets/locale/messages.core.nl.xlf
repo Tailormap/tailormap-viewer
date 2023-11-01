@@ -15,11 +15,11 @@
       </trans-unit>
       <trans-unit id="core.attribute-list.failed-loading-data" datatype="html">
         <source>Failed to load attribute list data</source>
-        <target state="translated">Het is niet gelukt om de gegevens voor de attributen lijst te laden</target>
+        <target state="translated">Het is niet gelukt om de gegevens voor de attributenlijst te laden</target>
       </trans-unit>
       <trans-unit id="core.attribute-list.failed-loading-data-for" datatype="html">
         <source>Failed to load attribute list data for <x id="PH" equiv-text="tab.label"/></source>
-        <target state="translated">Het is niet gelukt om de gegevens voor de attributen lijst te laden voor <x id="PH" equiv-text="tab.label"/></target>
+        <target state="translated">Het is niet gelukt om de gegevens voor de attributenlijst te laden voor <x id="PH" equiv-text="tab.label"/></target>
       </trans-unit>
       <trans-unit id="core.attribute-list.filter-on" datatype="html">
         <source>Filter on <x id="INTERPOLATION" equiv-text="{{getColumnName()}}"/></source>
@@ -39,7 +39,7 @@
       </trans-unit>
       <trans-unit id="core.attribute-list.title" datatype="html">
         <source>Attribute list</source>
-        <target>Attributen lijst</target>
+        <target>Attributenlijst</target>
       </trans-unit>
       <trans-unit id="core.background-layer-toggle.no-basemap" datatype="html">
         <source>No basemap</source>
@@ -91,7 +91,7 @@
       </trans-unit>
       <trans-unit id="core.common.error-while-loading-app" datatype="html">
         <source>Something went wrong while loading the application. Please check if the URL is correct</source>
-        <target>Er is iets misgegaan tijdens het laden van de toepassing. Controleer of de URL correct is</target>
+        <target>Er is iets misgegaan tijdens het laden van de applicatie. Controleer of de URL correct is</target>
       </trans-unit>
       <trans-unit id="core.common.excel" datatype="html">
         <source>Excel</source>
@@ -107,7 +107,7 @@
       </trans-unit>
       <trans-unit id="core.common.geopackage" datatype="html">
         <source>GeoPackage</source>
-        <target>GeoPakket</target>
+        <target>GeoPackage</target>
       </trans-unit>
       <trans-unit id="core.common.line" datatype="html">
         <source>Line</source>
@@ -127,7 +127,7 @@
       </trans-unit>
       <trans-unit id="core.common.polygon" datatype="html">
         <source>Polygon</source>
-        <target>Veelhoek</target>
+        <target>Polygoon</target>
       </trans-unit>
       <trans-unit id="core.common.rectangle" datatype="html">
         <source>Rectangle</source>
@@ -355,7 +355,7 @@
       </trans-unit>
       <trans-unit id="core.edit.error-getting-features" datatype="html">
         <source>Something went wrong while getting editable features, please try again</source>
-        <target state="translated">Er is iets misgegaan bij het verkrijgen van bewerkbare functies, probeer het opnieuw</target>
+        <target state="translated">Er is iets misgegaan bij het verkrijgen van bewerkbare objecten, probeer het opnieuw</target>
       </trans-unit>
       <trans-unit id="core.edit.false" datatype="html">
         <source>False</source>
@@ -407,11 +407,11 @@
       </trans-unit>
       <trans-unit id="core.feature-info.error-loading-feature-info" datatype="html">
         <source>Something went wrong while getting feature info, please try again</source>
-        <target state="translated">Er is iets misgegaan bij het ophalen van de object informatie, probeer het opnieuw</target>
+        <target state="translated">Er is iets misgegaan bij het ophalen van de objectinformatie, probeer het opnieuw</target>
       </trans-unit>
       <trans-unit id="core.feature-info.error-loading-features" datatype="html">
         <source>Could not load feature info</source>
-        <target state="translated">Kon object informatie niet laden</target>
+        <target state="translated">Kon objectinformatie niet laden</target>
       </trans-unit>
       <trans-unit id="core.feature-info.no-features-found" datatype="html">
         <source>No features found</source>
@@ -419,7 +419,7 @@
       </trans-unit>
       <trans-unit id="core.feature-info.object-information" datatype="html">
         <source>Object Information</source>
-        <target>Object informatie</target>
+        <target>Objectinformatie</target>
       </trans-unit>
       <trans-unit id="core.filter.add-filter" datatype="html">
         <source>Add filter</source>
@@ -443,7 +443,7 @@
       </trans-unit>
       <trans-unit id="core.filter.attribute-filter" datatype="html">
         <source>Attribute filter</source>
-        <target>Attribuut filter</target>
+        <target>Attribuutfilter</target>
       </trans-unit>
       <trans-unit id="core.filter.before" datatype="html">
         <source>Before</source>
@@ -467,7 +467,7 @@
       </trans-unit>
       <trans-unit id="core.filter.choose-values" datatype="html">
         <source>Choose values</source>
-        <target>Kies waarden</target>
+	<target>Waardes kiezen</target>
       </trans-unit>
       <trans-unit id="core.filter.close-filter-form" datatype="html">
         <source>Close filter form</source>
@@ -483,7 +483,7 @@
       </trans-unit>
       <trans-unit id="core.filter.contains-one-of-the-values" datatype="html">
         <source>contains one of the values</source>
-        <target>bevat een van de waarden</target>
+        <target>bevat een van de waardes</target>
       </trans-unit>
       <trans-unit id="core.filter.contains-upper" datatype="html">
         <source>Contains</source>
@@ -507,7 +507,7 @@
       </trans-unit>
       <trans-unit id="core.filter.deselect-all-values" datatype="html">
         <source>Deselect all values</source>
-        <target>Alle waarden deselecteren</target>
+        <target>Alle waardes deselecteren</target>
       </trans-unit>
       <trans-unit id="core.filter.draw-filter-geometry" datatype="html">
         <source>Draw filter geometry</source>
@@ -559,7 +559,7 @@
       </trans-unit>
       <trans-unit id="core.filter.invert-condition" datatype="html">
         <source>Invert condition</source>
-        <target>Omgekeerde voorwaarde</target>
+        <target>Voorwaarde omkeren</target>
       </trans-unit>
       <trans-unit id="core.filter.is-after" datatype="html">
         <source>is after</source>
@@ -591,11 +591,11 @@
       </trans-unit>
       <trans-unit id="core.filter.is-null" datatype="html">
         <source>is null</source>
-        <target state="translated">is leeg (nul)</target>
+        <target state="translated">is leeg (null)</target>
       </trans-unit>
       <trans-unit id="core.filter.is-null-upper" datatype="html">
         <source>Is null</source>
-        <target state="translated">Is leeg (nul)</target>
+        <target state="translated">Is leeg (null)</target>
       </trans-unit>
       <trans-unit id="core.filter.is-on" datatype="html">
         <source>is on</source>
@@ -603,11 +603,11 @@
       </trans-unit>
       <trans-unit id="core.filter.is-smaller-than" datatype="html">
         <source>is smaller than</source>
-        <target>kleiner is dan</target>
+        <target>is kleiner dan</target>
       </trans-unit>
       <trans-unit id="core.filter.is-smaller-than-or-equal-to" datatype="html">
         <source>is smaller than or equal to</source>
-        <target>kleiner is dan of gelijk is aan</target>
+        <target>is kleiner dan of is gelijk aan</target>
       </trans-unit>
       <trans-unit id="core.filter.is-true" datatype="html">
         <source>is true</source>
@@ -643,7 +643,7 @@
       </trans-unit>
       <trans-unit id="core.filter.select-all-values" datatype="html">
         <source>Select all values</source>
-        <target>Selecteer alle waarden</target>
+        <target>Selecteer alle waardes</target>
       </trans-unit>
       <trans-unit id="core.filter.select-condition" datatype="html">
         <source>Select condition</source>
@@ -655,11 +655,11 @@
       </trans-unit>
       <trans-unit id="core.filter.select-layer-to-filter" datatype="html">
         <source>Select the layer(s) you want to filter</source>
-        <target>Selecteer de laag (lagen) die je wilt filteren</target>
+        <target>Selecteer de laag (lagen) die je wil filteren</target>
       </trans-unit>
       <trans-unit id="core.filter.select-layer-to-use-as-filter" datatype="html">
         <source>Select layer to use as filter</source>
-        <target>Selecteer de laag die je als filter wilt gebruiken</target>
+        <target>Selecteer de laag die je als filter wil gebruiken</target>
       </trans-unit>
       <trans-unit id="core.filter.select-reference-layer" datatype="html">
         <source>Select reference layer</source>
@@ -739,7 +739,7 @@
       </trans-unit>
       <trans-unit id="core.print.creating-map" datatype="html">
         <source>Creating map, this may take a while.</source>
-        <target>Kaart maken, dit kan even duren.</target>
+        <target>Kaart wordt gemaakt, dit kan even duren.</target>
       </trans-unit>
       <trans-unit id="core.print.default-pdf-filename" datatype="html">
         <source>map.pdf</source>
@@ -883,7 +883,7 @@
       </trans-unit>
       <trans-unit id="core.toc.opacity" datatype="html">
         <source>Opacity</source>
-        <target>Dekking</target>
+	<target>Ondoorzichtigheid</target>
       </trans-unit>
       <trans-unit id="core.toc.reorder-layers" datatype="html">
         <source>Re-order layers</source>
@@ -891,7 +891,7 @@
       </trans-unit>
       <trans-unit id="core.toc.reset-opacity" datatype="html">
         <source>Reset opacity</source>
-        <target>Dekking terugzetten</target>
+        <target>Ondoorzichtigheid terugzetten</target>
       </trans-unit>
       <trans-unit id="core.toc.toggle-layers-off" datatype="html">
         <source>Toggle all layers off</source>
@@ -943,7 +943,7 @@
       </trans-unit>
       <trans-unit id="core.toolbar.search-location-pdok-attribution" datatype="html">
         <source>Data by [PDOK](https://pdok.nl)</source>
-        <target>Gegevens door [PDOK] (https://pdok.nl)</target>
+        <target>Gegevens van [PDOK] (https://pdok.nl)</target>
       </trans-unit>
       <trans-unit id="core.toolbar.type-at-least" datatype="html">
         <source>Type at least <x id="INTERPOLATION" equiv-text="{{ minLength }}"/> characters to start searching</source>
