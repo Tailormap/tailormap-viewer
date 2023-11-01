@@ -7,10 +7,10 @@ import { clearSelectedApplication, loadApplications, setApplicationListFilter } 
 import {
   selectApplicationList, selectApplicationsLoadError, selectApplicationsLoadStatus, selectSelectedApplicationId,
 } from '../state/application.selectors';
-import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { ConfigService } from '../../config/services/config.service';
 import { ENVIRONMENT_CONFIG, EnvironmentConfigModel } from '@tailormap-viewer/api';
+import { APP_BASE_HREF } from '@angular/common';
 
 @Component({
   selector: 'tm-admin-application-list',
@@ -31,12 +31,15 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
 
   constructor(
     private store$: Store,
-    private route: ActivatedRoute,
-    private router: Router,
     private configService: ConfigService,
     @Inject(ENVIRONMENT_CONFIG) config: EnvironmentConfigModel,
+    @Inject(APP_BASE_HREF) baseHref: string,
   ) {
-    this.viewerBaseUrl = config.viewerBaseUrl;
+    const urlPrefix = config.viewerBaseUrl.startsWith('http') ? '' : baseHref;
+    const viewerBaseUrl = config.viewerBaseUrl.startsWith('/') && urlPrefix.endsWith('/')
+      ? config.viewerBaseUrl.substring(1)
+      : config.viewerBaseUrl;
+    this.viewerBaseUrl = urlPrefix + viewerBaseUrl;
   }
 
   public ngOnInit(): void {
