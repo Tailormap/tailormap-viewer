@@ -139,11 +139,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.initial-extent" datatype="html">
         <source>Initial extent</source>
-<<<<<<< HEAD
-        <target>Beginextent</target>
-=======
         <target>Start-extent</target>
->>>>>>> 260797f8 (Update translations)
       </trans-unit>
       <trans-unit id="admin-core.application.invalid-name-error" datatype="html">
         <source>Name can only contain letters, numbers and dashes.</source>
