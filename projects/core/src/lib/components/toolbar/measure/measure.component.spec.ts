@@ -3,7 +3,7 @@ import { MeasureComponent } from './measure.component';
 import { MapService } from '@tailormap-viewer/map';
 import { of, Subject } from 'rxjs';
 import userEvent from '@testing-library/user-event';
-import { provideMockStore } from '@ngrx/store/testing';
+import { createMockStore, provideMockStore } from '@ngrx/store/testing';
 import { selectActiveTool } from '../state/toolbar.selectors';
 import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
 import { SharedModule } from '@tailormap-viewer/shared';
@@ -11,6 +11,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { Store } from '@ngrx/store';
 import { activateTool, deactivateTool, registerTool } from '../state/toolbar.actions';
+import { selectComponentsConfig, selectComponentsConfigForType } from '../../../state/core.selectors';
 
 describe('MeasureComponent', () => {
 
@@ -31,6 +32,7 @@ describe('MeasureComponent', () => {
         provideMockStore({
           selectors: [
             { selector: selectActiveTool, value: ToolbarComponentEnum.MEASURE },
+            { selector: selectComponentsConfig, value: [] },
           ],
         }),
       ],
@@ -45,10 +47,13 @@ describe('MeasureComponent', () => {
   test('enables tool, acts on drawing, disables tool', async () => {
     const drawingSubject = new Subject<any>();
     const mockDispatch = jest.fn();
-    const mockStore = {
-      select: () => of('MEASURE'),
-      dispatch: mockDispatch,
-    };
+    const mockStore = createMockStore({
+      selectors: [
+        { selector: selectActiveTool, value: ToolbarComponentEnum.MEASURE },
+        { selector: selectComponentsConfig, value: [] },
+      ],
+    });
+    mockStore.dispatch = mockDispatch;
     const mockTool = {
       id: 'drawingTool',
       drawing$: drawingSubject.asObservable(),

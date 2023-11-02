@@ -6,12 +6,14 @@ import { ComponentsListComponent } from './components-list/components-list.compo
 import { ConfigurationComponentRegistryService } from '../services/configuration-component-registry.service';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { SharedModule } from '@tailormap-viewer/shared';
+import { MeasureComponentConfigComponent } from './measure-config/measure-component-config.component';
 
 @NgModule({
   declarations: [
     BaseComponentConfigComponent,
     ComponentConfigRendererComponent,
     ComponentsListComponent,
+    MeasureComponentConfigComponent,
   ],
   imports: [
     CommonModule,
@@ -35,7 +37,7 @@ export class ComponentsModule {
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.FILTER, $localize `:@@admin-core.application.component-filter:Filter`, BaseComponentConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.ATTRIBUTE_LIST, $localize `:@@admin-core.application.component-attribute-list:Attribute list`, BaseComponentConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.EDIT, $localize `:@@admin-core.application.component-edit:Edit`, BaseComponentConfigComponent);
-    configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.MEASURE, $localize `:@@admin-core.application.component-measure-tools:Measure tools`, BaseComponentConfigComponent);
+    configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.MEASURE, $localize `:@@admin-core.application.component-measure-tools:Measure tools`, MeasureComponentConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.COORDINATE_PICKER, $localize `:@@admin-core.application.component-coordinate-picker-tool:Coordinate picker tool`, BaseComponentConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.STREETVIEW, $localize `:@@admin-core.application.component-streetview-tool:Streetview tool`, BaseComponentConfigComponent);
   }

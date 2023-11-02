@@ -2,13 +2,15 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnIni
 import {
   DrawingToolConfigModel, DrawingToolModel, MapService, MapSizeHelper, MapTooltipModel, ToolTypeEnum,
 } from '@tailormap-viewer/map';
-import { Subject, switchMap, takeUntil, tap } from 'rxjs';
+import { map, Observable, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { HtmlHelper } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
 import { activateTool, deactivateTool, deregisterTool, registerTool } from '../state/toolbar.actions';
 import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
 import { selectActiveTool } from '../state/toolbar.selectors';
 import { ApplicationStyleService } from '../../../services/application-style.service';
+import { selectComponentsConfigForType } from '../../../state/core.selectors';
+import { BaseComponentTypeEnum, MeasureComponentConfigModel } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-measure',
@@ -23,11 +25,25 @@ export class MeasureComponent implements OnInit, OnDestroy {
   private featureGeom = new Subject<string>();
   private tooltip: MapTooltipModel | null = null;
 
+  private defaultLengthTooltip = $localize `:@@core.toolbar.measure-length:Measure length`;
+  private defaultAreaTooltip = $localize `:@@core.toolbar.measure-area:Measure area`;
+  public tooltips$: Observable<{ length: string; area: string }>;
+
   constructor(
     private store$: Store,
     private mapService: MapService,
     private cdr: ChangeDetectorRef,
-  ) { }
+  ) {
+    this.tooltips$ = this.store$.select(selectComponentsConfigForType<MeasureComponentConfigModel>(BaseComponentTypeEnum.MEASURE))
+      .pipe(
+        map(config => {
+          return {
+            length: config?.config?.title || this.defaultLengthTooltip,
+            area: config?.config?.titleMeasureArea || this.defaultAreaTooltip,
+          };
+        }),
+      );
+  }
 
   public ngOnInit(): void {
     this.store$.select(selectActiveTool)

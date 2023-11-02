@@ -30,3 +30,4 @@ export * from './user-response.model';
 export * from './login-configuration.model';
 export * from './environment-config.model';
 export * from './environment-config.injection-token';
+export * from './component-config';
