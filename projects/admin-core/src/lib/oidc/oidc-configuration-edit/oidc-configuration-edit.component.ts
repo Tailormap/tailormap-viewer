@@ -63,7 +63,7 @@ export class OIDCConfigurationEditComponent implements OnInit, OnDestroy {
     this.oidcConfigurationService.saveDraftOIDCConfiguration$()
       .pipe(take(1))
       .subscribe(() => {
-        this.adminSnackbarService.showMessage($localize `:@@admin-core.oidc.configuration-updated:OIDC Configuration updated`);
+        this.adminSnackbarService.showMessage($localize `:@@admin-core.oidc.configuration-updated:OIDC configuration updated`);
         this.savingSubject.next(false);
       });
   }
@@ -81,7 +81,7 @@ export class OIDCConfigurationEditComponent implements OnInit, OnDestroy {
         switchMap(() => this.oidcConfigurationService.deleteOIDCConfiguration$(oidcConfiguration.id)),
       )
       .subscribe(() => {
-        this.adminSnackbarService.showMessage($localize `:@@admin-core.oidc.configuration-removed:OIDC Configuration ${title} removed`);
+        this.adminSnackbarService.showMessage($localize `:@@admin-core.oidc.configuration-removed:OIDC configuration ${title} removed`);
         this.router.navigateByUrl('/admin/oidc-configurations');
       });
   }

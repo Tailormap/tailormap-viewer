@@ -926,8 +926,8 @@
         <target>Oppervlakte meten</target>
       </trans-unit>
       <trans-unit id="core.toolbar.measure-length" datatype="html">
-        <source>Measure length</source>
-        <target>Lengte meten</target>
+        <source>Measure distance</source>
+        <target>Afstand meten</target>
       </trans-unit>
       <trans-unit id="core.toolbar.no-results-found" datatype="html">
         <source>No results found</source>

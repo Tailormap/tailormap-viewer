@@ -37,7 +37,7 @@ describe('MeasureComponent', () => {
         }),
       ],
     });
-    expect(screen.getByLabelText('Measure length'));
+    expect(screen.getByLabelText('Measure distance'));
     expect(screen.getByLabelText('Measure area'));
     expect(mapServiceMock.createTooltip$).toHaveBeenCalled();
     expect(mapServiceMock.renderFeatures$).toHaveBeenCalled();
@@ -84,7 +84,7 @@ describe('MeasureComponent', () => {
     expect(mockDispatch).toHaveBeenCalledWith({ type: registerTool.type, tool: { id: ToolbarComponentEnum.MEASURE, mapToolId: 'drawingTool' } });
     mockDispatch.mockClear();
 
-    await userEvent.click(await screen.getByLabelText('Measure length'));
+    await userEvent.click(screen.getByLabelText('Measure distance'));
     expect(tooltipMock.hide).toHaveBeenCalled();
     expect(mockDispatch).toHaveBeenCalledWith({ type: activateTool.type, tool: ToolbarComponentEnum.MEASURE, enableArguments: { type: 'line' } });
     mockDispatch.mockClear();
@@ -108,7 +108,7 @@ describe('MeasureComponent', () => {
     expect(tooltipMock.move).toHaveBeenCalledWith([ 5, 3 ]);
     expect(tooltipMock.freeze).toHaveBeenCalled();
 
-    await userEvent.click(await screen.getByLabelText('Measure length'));
+    await userEvent.click(screen.getByLabelText('Measure distance'));
     expect(mockDispatch).toHaveBeenCalledWith({ type: deactivateTool.type, tool: ToolbarComponentEnum.MEASURE });
   });
 

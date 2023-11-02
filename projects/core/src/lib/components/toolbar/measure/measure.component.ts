@@ -25,7 +25,7 @@ export class MeasureComponent implements OnInit, OnDestroy {
   private featureGeom = new Subject<string>();
   private tooltip: MapTooltipModel | null = null;
 
-  private defaultLengthTooltip = $localize `:@@core.toolbar.measure-length:Measure length`;
+  private defaultLengthTooltip = $localize `:@@core.toolbar.measure-length:Measure distance`;
   private defaultAreaTooltip = $localize `:@@core.toolbar.measure-area:Measure area`;
   public tooltips$: Observable<{ length: string; area: string }>;
 
