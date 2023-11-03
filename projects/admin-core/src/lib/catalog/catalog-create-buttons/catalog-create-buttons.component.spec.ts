@@ -22,14 +22,16 @@ import { PasswordFieldComponent } from '../../shared/components/password-field/p
 import { AuthorizationEditComponent } from '../../shared/components/authorization-edit/authorization-edit.component';
 import { adminCoreStateKey, initialAdminCoreState } from '../../state/admin-core.state';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
+import { CatalogTreeService } from '../services/catalog-tree.service';
 
 const setup = async (hasNode = false) => {
-  const createCatalogNodeMock = jest.fn(() => of(true));
+  const createCatalogNodeMock = jest.fn(() => of({ node: { id: '3', title: 'New Folder Inside' } }));
   const updateCatalogNodeMock = jest.fn(() => of(true));
   const catalogService = {
     createCatalogNode$: createCatalogNodeMock,
     updateCatalogNode$: updateCatalogNodeMock,
   };
+  const loadCatalogNodeItemsMock = jest.fn(() => of(true));
   const { geoServiceService, createGeoService$ } = createGeoServiceMock();
   const rootModel = getCatalogNode({ id: 'root', title: 'Root', root: true });
   const catalogNodeModel = { ...getCatalogNode({ id: '1', title: 'Random services folder', root: false }), parentId: 'root' };
@@ -60,9 +62,10 @@ const setup = async (hasNode = false) => {
       { provide: Store, useValue: store },
       { provide: Router, useValue: { navigateToUrl: jest.fn() } },
       { provide: TailormapAdminApiV1Service, useValue: { getGroups$: jest.fn(() => of(null)) } },
+      { provide: CatalogTreeService, useValue: { loadCatalogNodeItems$: loadCatalogNodeItemsMock } },
     ],
   });
-  return { createCatalogNodeMock, updateCatalogNodeMock, createGeoService$ };
+  return { createCatalogNodeMock, updateCatalogNodeMock, createGeoService$, loadCatalogNodeItemsMock };
 };
 
 describe('CatalogCreateButtonsComponent', () => {
@@ -73,7 +76,7 @@ describe('CatalogCreateButtonsComponent', () => {
   });
 
   test('should open add folder popup', async () => {
-    const { createCatalogNodeMock } = await setup();
+    const { createCatalogNodeMock, loadCatalogNodeItemsMock } = await setup();
     await userEvent.click(await screen.findByText('Add folder'));
     expect(await screen.findByText('Create new folder')).toBeInTheDocument();
     await userEvent.type(await screen.findByPlaceholderText('Title'), 'New Folder Inside');
@@ -85,10 +88,11 @@ describe('CatalogCreateButtonsComponent', () => {
       children: null,
       items: null,
     });
+    expect(loadCatalogNodeItemsMock).toHaveBeenCalledWith('root');
   });
 
   test('should open add geo service', async () => {
-    const { createGeoService$ } = await setup(true);
+    const { createGeoService$, loadCatalogNodeItemsMock } = await setup(true);
     await userEvent.click(await screen.findByText('Add service'));
     expect(await screen.findByText('Create new service')).toBeInTheDocument();
     await userEvent.type(await screen.findByPlaceholderText('URL'), 'http://service.url');
@@ -103,6 +107,7 @@ describe('CatalogCreateButtonsComponent', () => {
         useProxy: false,
       },
     }, '1');
+    expect(loadCatalogNodeItemsMock).toHaveBeenCalledWith('1');
   });
 
 });
