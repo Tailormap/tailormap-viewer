@@ -1,6 +1,6 @@
 import { ComponentBaseConfigModel } from './component-base-config.model';
 
-export interface ComponentModel {
+export interface ComponentModel<ConfigModel extends ComponentBaseConfigModel = ComponentBaseConfigModel> {
     type: string;
-    config: ComponentBaseConfigModel;
+    config: ConfigModel;
 }

@@ -1,6 +1,6 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { CoreState, coreStateKey } from './core.state';
-import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
+import { BaseComponentTypeEnum, ComponentBaseConfigModel, ComponentModel } from '@tailormap-viewer/api';
 
 const selectCoreState = createFeatureSelector<CoreState>(coreStateKey);
 const selectViewerState = createSelector(selectCoreState, state => state.viewer);
@@ -22,10 +22,14 @@ export const selectComponentsConfig = createSelector(
   },
 );
 
-export const selectComponentsConfigForType = (type: string | BaseComponentTypeEnum) => createSelector(
+export const selectComponentsConfigForType = <ConfigType extends ComponentBaseConfigModel = ComponentBaseConfigModel>(type: string | BaseComponentTypeEnum) => createSelector(
   selectComponentsConfig,
   components => {
-    return components.find(c => c.type === type) || null;
+    const config = components.find(c => c.type === type);
+    if (!config) {
+      return null;
+    }
+    return config as ComponentModel<ConfigType>;
   },
 );
 

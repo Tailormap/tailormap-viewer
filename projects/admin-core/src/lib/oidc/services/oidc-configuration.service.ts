@@ -69,7 +69,7 @@ export class OIDCConfigurationService implements OnDestroy {
     return this.adminApiService.createOIDCConfiguration$({ oidcConfiguration })
       .pipe(
         catchError(() => {
-          this.adminSnackbarService.showMessage($localize `:@@admin-core.oidc.error-creating-configuration:Error while creating OIDC Configuration.`);
+          this.adminSnackbarService.showMessage($localize `:@@admin-core.oidc.error-creating-configuration:Error while creating OIDC configuration.`);
           return of(null);
         }),
         map(createOIDCConfiguration => {
@@ -109,7 +109,7 @@ export class OIDCConfigurationService implements OnDestroy {
     return this.adminApiService.updateOIDCConfiguration$({ id, oidcConfiguration })
       .pipe(
         catchError(() => {
-          this.adminSnackbarService.showMessage($localize `:@@admin-core.oidc.error-updating-configuration:Error while updating OIDC Configuration.`);
+          this.adminSnackbarService.showMessage($localize `:@@admin-core.oidc.error-updating-configuration:Error while updating OIDC configuration.`);
           return of(null);
         }),
         map(updatedOIDCConfiguration => {
@@ -126,7 +126,7 @@ export class OIDCConfigurationService implements OnDestroy {
     return this.adminApiService.deleteOIDCConfiguration$(id)
       .pipe(
         catchError(() => {
-          this.adminSnackbarService.showMessage($localize `:@@admin-core.oidc.error-deleting-configuration:Error while deleting OIDC Configuration.`);
+          this.adminSnackbarService.showMessage($localize `:@@admin-core.oidc.error-deleting-configuration:Error while deleting OIDC configuration.`);
           return of(null);
         }),
         map(success => {

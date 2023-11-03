@@ -1,16 +1,14 @@
-<div class="measure-buttons map-control-button-container">
+<div class="measure-buttons map-control-button-container" *ngIf="tooltips$ | async as tooltips">
   <button mat-flat-button
           class="measure-length toggle-button map-control-button"
-          i18n-tmTooltip="@@core.toolbar.measure-length"
-          tmTooltip="Measure length"
+          [tmTooltip]="tooltips.length"
           [class.toggle-button--active]="toolActive === 'length'"
           (click)="measure('length')">
     <mat-icon svgIcon="tools_measure_length"></mat-icon>
   </button>
   <button mat-flat-button
           class="measure-area toggle-button map-control-button"
-          i18n-tmTooltip="@@core.toolbar.measure-area"
-          tmTooltip="Measure area"
+          [tmTooltip]="tooltips.area"
           [class.toggle-button--active]="toolActive === 'area'"
           (click)="measure('area')">
     <mat-icon svgIcon="tools_measure_area"></mat-icon>

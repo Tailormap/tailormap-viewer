@@ -1,15 +1,18 @@
-<div *ngIf="config">
+<div>
   <strong>{{ label }}</strong><br />
   <div class="form" [formGroup]="formGroup">
-    <div class="row">
+    <div>
       <mat-checkbox [checked]="getEnabled()" (change)="toggleEnabled()" i18n="@@admin-core.common.enabled">Enabled</mat-checkbox>
     </div>
     <div class="row">
       <mat-form-field>
-        <mat-label i18n="@@admin-core.common.title">Title</mat-label>
+        <mat-label>
+          <ng-container *ngIf="!titleLabel" i18n="@@admin-core.common.title">Title</ng-container>
+          <ng-container *ngIf="titleLabel">{{titleLabel}}</ng-container>
+        </mat-label>
         <input matInput type="text" formControlName="title" />
       </mat-form-field>
     </div>
+    <ng-content></ng-content>
   </div>
-  <ng-content></ng-content>
 </div>

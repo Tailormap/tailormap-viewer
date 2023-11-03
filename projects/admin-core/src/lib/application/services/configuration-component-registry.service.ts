@@ -1,5 +1,5 @@
 import { Injectable, Type } from '@angular/core';
-import { BehaviorSubject, map, Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 export type ConfigurationComponents = Map<string, { component: Type<any>; label: string }>;
 
@@ -14,17 +14,6 @@ export class ConfigurationComponentRegistryService {
   public registerConfigurationComponents(type: string, label: string, component: Type<any>) {
     this.registeredComponents.set(type, { label, component });
     this.componentRegistry.next(this.registeredComponents);
-  }
-
-  public getAvailableConfigurationComponents$(): Observable<Array<{ type: string; label: string }>> {
-    return this.componentRegistry.asObservable().pipe(
-      map((components) => {
-        const availableComponents: Array<{ type: string; label: string }> = [];
-        components.forEach((value, key) => {
-          availableComponents.push({ type: key, label: value.label });
-        });
-        return availableComponents;
-      }));
   }
 
   public getRegisteredConfigurationComponents$(): Observable<ConfigurationComponents> {

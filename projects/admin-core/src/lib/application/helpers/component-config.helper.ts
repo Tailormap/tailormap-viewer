@@ -1,11 +1,10 @@
-import { BaseComponentConfigHelper, BaseComponentTypeEnum, ComponentBaseConfigModel } from '@tailormap-viewer/api';
+import { BaseComponentConfigHelper, ComponentBaseConfigModel } from '@tailormap-viewer/api';
 
 export class ComponentConfigHelper {
 
-  public static getBaseConfig(type: BaseComponentTypeEnum): ComponentBaseConfigModel {
-    const defaultDisabled = BaseComponentConfigHelper.isComponentDisabledByDefault(type);
+  public static getBaseConfig(type: string): ComponentBaseConfigModel {
     return {
-      enabled: !defaultDisabled,
+      enabled: !BaseComponentConfigHelper.isComponentDisabledByDefault(type),
     };
   }
 

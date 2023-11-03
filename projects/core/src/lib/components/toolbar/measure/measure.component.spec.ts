@@ -3,7 +3,7 @@ import { MeasureComponent } from './measure.component';
 import { MapService } from '@tailormap-viewer/map';
 import { of, Subject } from 'rxjs';
 import userEvent from '@testing-library/user-event';
-import { provideMockStore } from '@ngrx/store/testing';
+import { createMockStore, provideMockStore } from '@ngrx/store/testing';
 import { selectActiveTool } from '../state/toolbar.selectors';
 import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
 import { SharedModule } from '@tailormap-viewer/shared';
@@ -11,6 +11,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { Store } from '@ngrx/store';
 import { activateTool, deactivateTool, registerTool } from '../state/toolbar.actions';
+import { selectComponentsConfig, selectComponentsConfigForType } from '../../../state/core.selectors';
 
 describe('MeasureComponent', () => {
 
@@ -31,11 +32,12 @@ describe('MeasureComponent', () => {
         provideMockStore({
           selectors: [
             { selector: selectActiveTool, value: ToolbarComponentEnum.MEASURE },
+            { selector: selectComponentsConfig, value: [] },
           ],
         }),
       ],
     });
-    expect(screen.getByLabelText('Measure length'));
+    expect(screen.getByLabelText('Measure distance'));
     expect(screen.getByLabelText('Measure area'));
     expect(mapServiceMock.createTooltip$).toHaveBeenCalled();
     expect(mapServiceMock.renderFeatures$).toHaveBeenCalled();
@@ -45,10 +47,13 @@ describe('MeasureComponent', () => {
   test('enables tool, acts on drawing, disables tool', async () => {
     const drawingSubject = new Subject<any>();
     const mockDispatch = jest.fn();
-    const mockStore = {
-      select: () => of('MEASURE'),
-      dispatch: mockDispatch,
-    };
+    const mockStore = createMockStore({
+      selectors: [
+        { selector: selectActiveTool, value: ToolbarComponentEnum.MEASURE },
+        { selector: selectComponentsConfig, value: [] },
+      ],
+    });
+    mockStore.dispatch = mockDispatch;
     const mockTool = {
       id: 'drawingTool',
       drawing$: drawingSubject.asObservable(),
@@ -79,7 +84,7 @@ describe('MeasureComponent', () => {
     expect(mockDispatch).toHaveBeenCalledWith({ type: registerTool.type, tool: { id: ToolbarComponentEnum.MEASURE, mapToolId: 'drawingTool' } });
     mockDispatch.mockClear();
 
-    await userEvent.click(await screen.getByLabelText('Measure length'));
+    await userEvent.click(screen.getByLabelText('Measure distance'));
     expect(tooltipMock.hide).toHaveBeenCalled();
     expect(mockDispatch).toHaveBeenCalledWith({ type: activateTool.type, tool: ToolbarComponentEnum.MEASURE, enableArguments: { type: 'line' } });
     mockDispatch.mockClear();
@@ -103,7 +108,7 @@ describe('MeasureComponent', () => {
     expect(tooltipMock.move).toHaveBeenCalledWith([ 5, 3 ]);
     expect(tooltipMock.freeze).toHaveBeenCalled();
 
-    await userEvent.click(await screen.getByLabelText('Measure length'));
+    await userEvent.click(screen.getByLabelText('Measure distance'));
     expect(mockDispatch).toHaveBeenCalledWith({ type: deactivateTool.type, tool: ToolbarComponentEnum.MEASURE });
   });
 

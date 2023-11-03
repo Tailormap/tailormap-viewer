@@ -1,11 +1,9 @@
-import { Component, OnInit, ChangeDetectionStrategy, inject, ChangeDetectorRef, Input, OnDestroy } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { Subject, takeUntil } from 'rxjs';
-import { BaseComponentTypeEnum, ComponentBaseConfigModel } from '@tailormap-viewer/api';
-import { selectComponentsConfigByType } from '../../state/application.selectors';
-import { ComponentConfigHelper } from '../../helpers/component-config.helper';
-import { updateApplicationComponentConfig } from '../../state/application.actions';
+import { Component, ChangeDetectionStrategy, Input, DestroyRef } from '@angular/core';
+import { BaseComponentTypeEnum, ComponentBaseConfigModel, MeasureComponentConfigModel } from '@tailormap-viewer/api';
 import { FormControl, FormGroup } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ConfigurationComponentModel } from '../configuration-component.model';
+import { ComponentConfigurationService } from '../../services/component-configuration.service';
 
 @Component({
   selector: 'tm-admin-base-component-config',
@@ -13,11 +11,7 @@ import { FormControl, FormGroup } from '@angular/forms';
   styleUrls: ['./base-component-config.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BaseComponentConfigComponent implements OnInit, OnDestroy {
-
-  private store$ = inject(Store);
-  private cdr = inject(ChangeDetectorRef);
-  private destroyed = new Subject();
+export class BaseComponentConfigComponent implements ConfigurationComponentModel {
 
   @Input()
   public type: BaseComponentTypeEnum | undefined;
@@ -25,60 +19,49 @@ export class BaseComponentConfigComponent implements OnInit, OnDestroy {
   @Input()
   public label: string | undefined;
 
-  public config: ComponentBaseConfigModel | undefined = undefined;
+  @Input()
+  public titleLabel: string | undefined;
+
+  @Input()
+  public set config(config: ComponentBaseConfigModel | undefined) {
+    this._config = config;
+    this.formGroup.patchValue({
+      title: config?.title || '',
+    }, { emitEvent: false, onlySelf: true });
+  }
+  public get config() {
+    return this._config;
+  }
+  public _config: ComponentBaseConfigModel | undefined = undefined;
 
   public formGroup = new FormGroup({
     title: new FormControl<string>(''),
   });
 
-  public ngOnInit(): void {
-    if (!this.type) {
-      throw new Error('No type given');
-    }
-    const type = this.type;
-    this.store$.select(selectComponentsConfigByType(type))
-      .pipe(takeUntil(this.destroyed))
-      .subscribe(config => {
-        this.config = config?.config || ComponentConfigHelper.getBaseConfig(type);
-        this.formGroup.patchValue({
-          title: this.config?.title || '',
-        }, { emitEvent: false, onlySelf: true });
-        this.cdr.detectChanges();
-      });
+  public constructor(
+    private componentConfigService: ComponentConfigurationService,
+    private destroyRef: DestroyRef,
+  ) {
     this.formGroup.valueChanges
-      .pipe(takeUntil(this.destroyed))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(values => {
         this.updateConfig('title', values.title);
       });
   }
 
-  public ngOnDestroy() {
-    this.destroyed.next(null);
-    this.destroyed.complete();
-  }
-
   public getEnabled() {
     if (!this.config) {
-      return false;
+      return true;
     }
     return this.config.enabled;
   }
 
   public toggleEnabled() {
-    if (!this.config || !this.type) {
-      return;
-    }
-    this.updateConfig('enabled', !this.config.enabled);
+    this.updateConfig('enabled', !this.getEnabled());
   }
 
   private updateConfig(key: keyof ComponentBaseConfigModel, value: string | number | boolean | undefined | null) {
-    if (!this.config || !this.type || this.config[key] === value) {
-      return;
-    }
-    this.store$.dispatch(updateApplicationComponentConfig({
-      componentType: this.type,
-      config: { ...this.config, [key]: value },
-    }));
+    this.componentConfigService.updateConfig<MeasureComponentConfigModel>(this.type, key, value);
   }
 
 }

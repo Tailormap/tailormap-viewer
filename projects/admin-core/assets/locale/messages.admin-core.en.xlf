@@ -392,8 +392,11 @@
       <trans-unit id="admin-core.catalog.hi-dpi-mode" datatype="html">
         <source>High-DPI mode</source>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.hi-dpi-settings" datatype="html">
+        <source>High-DPI settings</source>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.hi-dpi-substitute-layer" datatype="html">
-        <source>Hi-DPI substitute layer</source>
+        <source>High-DPI substitute layer</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.host" datatype="html">
         <source>Host</source>
@@ -569,6 +572,9 @@
       <trans-unit id="admin-core.common.filter-dots" datatype="html">
         <source>Filter...</source>
       </trans-unit>
+      <trans-unit id="admin-core.common.geo-service" datatype="html">
+        <source>Geo service</source>
+      </trans-unit>
       <trans-unit id="admin-core.common.go-to-viewer" datatype="html">
         <source>Go to viewer</source>
       </trans-unit>
@@ -617,6 +623,9 @@
       <trans-unit id="admin-core.common.saved" datatype="html">
         <source>Saved</source>
       </trans-unit>
+      <trans-unit id="admin-core.common.settings-for" datatype="html">
+        <source>Settings for <x id="INTERPOLATION" equiv-text="{{ node.label }}"/></source>
+      </trans-unit>
       <trans-unit id="admin-core.common.sort" datatype="html">
         <source>Sort</source>
       </trans-unit>
@@ -642,7 +651,13 @@
         <source>User Administration</source>
       </trans-unit>
       <trans-unit id="admin-core.common.welcome-to-tailormap" datatype="html">
-        <source>Welcome to the Tailormap Admin</source>
+        <source>Welcome to Tailormap Admin</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.measure-area-title" datatype="html">
+        <source>Measure area title</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.measure-line-title" datatype="html">
+        <source>Measure distance title</source>
       </trans-unit>
       <trans-unit id="admin-core.groups.add-group" datatype="html">
         <source>Add group</source>
@@ -714,7 +729,7 @@
         <source>Client Secret</source>
       </trans-unit>
       <trans-unit id="admin-core.oidc.configuration-created" datatype="html">
-        <source>OIDC Configuration <x id="PH" equiv-text="createdOIDCConfiguration.name"/> created</source>
+        <source>OIDC configuration <x id="PH" equiv-text="createdOIDCConfiguration.name"/> created</source>
       </trans-unit>
       <trans-unit id="admin-core.oidc.configuration-delete-confirm" datatype="html">
         <source>Delete OIDC configuration <x id="PH" equiv-text="title"/></source>
