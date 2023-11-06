@@ -30,6 +30,8 @@ export class BoundsFieldComponent implements OnInit, OnDestroy, ControlValueAcce
     this._bounds = bounds;
     if (bounds) {
       this.boundsForm.patchValue(bounds, { emitEvent: false });
+    } else {
+      this.boundsForm.patchValue({ minx: null, miny: null, maxx: null, maxy: null }, { emitEvent: false });
     }
   }
 
