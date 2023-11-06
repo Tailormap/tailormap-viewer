@@ -10,8 +10,8 @@ export interface ApplicationModel {
   adminComments?: string;
   previewText?: string;
   crs?: string;
-  initialExtent?: BoundsModel;
-  maxExtent?: BoundsModel;
+  initialExtent: BoundsModel | null;
+  maxExtent: BoundsModel | null;
   contentRoot?: AppContentModel;
   settings?: AppSettingsModel;
   components?: ComponentModel[];

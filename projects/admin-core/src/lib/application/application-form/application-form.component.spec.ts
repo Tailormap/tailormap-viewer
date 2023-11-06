@@ -52,8 +52,8 @@ describe('ApplicationFormComponent', () => {
         title: 'Cool application',
         adminComments: '',
         crs: 'EPSG:28992',
-        initialExtent: undefined,
-        maxExtent: undefined,
+        initialExtent: null,
+        maxExtent: null,
       });
     });
   });

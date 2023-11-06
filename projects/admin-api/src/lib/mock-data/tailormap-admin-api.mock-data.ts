@@ -163,6 +163,8 @@ export const getApplication = (overrides?: Partial<ApplicationModel>): Applicati
   title: 'My application',
   components: [],
   authorizationRules: [],
+  initialExtent: null,
+  maxExtent: null,
   ...overrides,
 });
 
