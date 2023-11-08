@@ -8,6 +8,7 @@ import { CatalogTreeModelTypeEnum } from '../models/catalog-tree-model-type.enum
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
 import { CatalogRouteHelper } from './catalog-route.helper';
+import { Routes } from '../../routes';
 
 export class CatalogTreeHelper {
 
@@ -246,6 +247,34 @@ export class CatalogTreeHelper {
       return CatalogRouteHelper.getFeatureTypeUrl(node.metadata);
     }
     return null;
+  }
+
+  public static readNodesFromUrl(url: string | null): Array<{ type: CatalogTreeModelTypeEnum; treeNodeId: string; id: string }> {
+    if (url === null) {
+      return [];
+    }
+    const currentRoute = url
+      .substring(url.indexOf('/admin') === 0 ? 6 : 0) // remove /admin from URL if url starts with /admin
+      .replace(Routes.CATALOG, '')
+      .split('/')
+      .filter(part => !!part);
+    const parts: Array<{ type: CatalogTreeModelTypeEnum; treeNodeId: string; id: string }> = [];
+    if (currentRoute.length >= 2 && currentRoute[0] === 'node') {
+      parts.push({ type: CatalogTreeModelTypeEnum.CATALOG_NODE_TYPE, treeNodeId: CatalogTreeHelper.getIdForCatalogNode(currentRoute[1]), id: currentRoute[1] });
+    }
+    if (currentRoute.length >= 4 && currentRoute[2] === 'service') {
+      parts.push({ type: CatalogTreeModelTypeEnum.SERVICE_TYPE, treeNodeId: CatalogTreeHelper.getIdForServiceNode(currentRoute[3]), id: currentRoute[3] });
+    }
+    if (currentRoute.length >= 4 && currentRoute[2] === 'feature-source') {
+      parts.push({ type: CatalogTreeModelTypeEnum.FEATURE_SOURCE_TYPE, treeNodeId: CatalogTreeHelper.getIdForFeatureSourceNode(currentRoute[3]), id: currentRoute[3] });
+    }
+    if (currentRoute.length >= 6 && currentRoute[4] === 'feature-type') {
+      parts.push({ type: CatalogTreeModelTypeEnum.FEATURE_TYPE_TYPE, treeNodeId: CatalogTreeHelper.getIdForFeatureTypeNode(currentRoute[5]), id: currentRoute[5] });
+    }
+    if (currentRoute.length >= 6 && currentRoute[4] === 'layer') {
+      parts.push({ type: CatalogTreeModelTypeEnum.SERVICE_LAYER_TYPE, treeNodeId: CatalogTreeHelper.getIdForLayerNode(currentRoute[5]), id: currentRoute[5] });
+    }
+    return parts;
   }
 
 }

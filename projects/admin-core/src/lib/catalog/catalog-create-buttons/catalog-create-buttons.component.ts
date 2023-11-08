@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import { expandTree } from '../state/catalog.actions';
 import { CatalogTreeModelTypeEnum } from '../models/catalog-tree-model-type.enum';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
+import { CatalogTreeService } from '../services/catalog-tree.service';
 
 @Component({
   selector: 'tm-admin-catalog-create-buttons',
@@ -33,6 +34,7 @@ export class CatalogCreateButtonsComponent implements OnInit, OnDestroy {
     private store$: Store,
     private router: Router,
     private adminSnackbarService: AdminSnackbarService,
+    private catalogTreeService: CatalogTreeService,
   ) { }
 
   public ngOnInit(): void {
@@ -57,8 +59,9 @@ export class CatalogCreateButtonsComponent implements OnInit, OnDestroy {
     }).afterClosed().pipe(takeUntil(this.destroyed)).subscribe(node => {
       if (node) {
         this.adminSnackbarService.showMessage($localize `:@@admin-core.catalog.folder-created:Folder ${node.title} created`);
-        this.router.navigateByUrl(CatalogRouteHelper.getCatalogNodeUrl({ id: node.id }));
         this.store$.dispatch(expandTree({ id: node.id, nodeType: CatalogTreeModelTypeEnum.CATALOG_NODE_TYPE }));
+        this.catalogTreeService.loadCatalogNodeItems$(parentNode).subscribe();
+        this.router.navigateByUrl(CatalogRouteHelper.getCatalogNodeUrl({ id: node.id }));
       }
     });
   }
@@ -74,8 +77,9 @@ export class CatalogCreateButtonsComponent implements OnInit, OnDestroy {
     }).afterClosed().pipe(takeUntil(this.destroyed)).subscribe(createdService => {
       if (createdService) {
         this.adminSnackbarService.showMessage($localize `:@@admin-core.catalog.service-created:Service ${createdService.title} created`);
-        this.router.navigateByUrl(CatalogRouteHelper.getGeoServiceUrl({ id: createdService.id, catalogNodeId: parentNode }));
         this.store$.dispatch(expandTree({ id: createdService.id, nodeType: CatalogTreeModelTypeEnum.SERVICE_TYPE }));
+        this.catalogTreeService.loadCatalogNodeItems$(parentNode).subscribe();
+        this.router.navigateByUrl(CatalogRouteHelper.getGeoServiceUrl({ id: createdService.id, catalogNodeId: parentNode }));
       }
     });
   }
@@ -91,8 +95,9 @@ export class CatalogCreateButtonsComponent implements OnInit, OnDestroy {
     }).afterClosed().pipe(takeUntil(this.destroyed)).subscribe(featureSource => {
       if (featureSource) {
         this.adminSnackbarService.showMessage($localize `:@@admin-core.catalog.feature-source-created:Feature source ${featureSource.title} created`);
-        this.router.navigateByUrl(CatalogRouteHelper.getFeatureSourceUrl({ id: featureSource.id, catalogNodeId: parentNode }));
         this.store$.dispatch(expandTree({ id: featureSource.id, nodeType: CatalogTreeModelTypeEnum.FEATURE_SOURCE_TYPE }));
+        this.catalogTreeService.loadCatalogNodeItems$(parentNode).subscribe();
+        this.router.navigateByUrl(CatalogRouteHelper.getFeatureSourceUrl({ id: featureSource.id, catalogNodeId: parentNode }));
       }
     });
   }

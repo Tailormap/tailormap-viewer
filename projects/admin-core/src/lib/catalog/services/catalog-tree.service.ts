@@ -9,6 +9,7 @@ import {
 import { CatalogItemKindEnum, FeatureSourceModel, GeoServiceWithLayersModel } from '@tailormap-admin/admin-api';
 import { Store } from '@ngrx/store';
 import { CatalogService } from './catalog.service';
+import { CatalogTreeHelper } from '../helpers/catalog-tree.helper';
 
 @Injectable({
   providedIn: 'root',
@@ -33,6 +34,14 @@ export class CatalogTreeService {
           this.loadCatalogNodeItems$(root.id, true).subscribe();
         }
       });
+  }
+
+  public expandTreeToUrl(url: string | null) {
+    const urlParts = CatalogTreeHelper.readNodesFromUrl(url);
+    if (urlParts.length === 0) {
+      return;
+    }
+    this.expandTreeToSelectedItem(urlParts);
   }
 
   public expandTreeToSelectedItem(nodesList: Array<{ type: CatalogTreeModelTypeEnum; treeNodeId: string; id: string }>) {
