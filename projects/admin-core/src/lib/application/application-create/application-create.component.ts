@@ -1,9 +1,9 @@
 import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
-import { ApplicationModel } from '@tailormap-admin/admin-api';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { ApplicationService } from '../services/application.service';
 import { Router } from '@angular/router';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
+import { UpdateDraftApplicationModel } from '../models/update-draft-application.model';
 
 @Component({
   selector: 'tm-admin-application-create',
@@ -17,7 +17,7 @@ export class ApplicationCreateComponent implements OnDestroy {
   private destroyed = new Subject();
 
   public saving$ = this.savingSubject.asObservable();
-  public application: Omit<ApplicationModel, 'id'> | null = null;
+  public applicationCreateModel: UpdateDraftApplicationModel | null = null;
 
   constructor(
     private applicationService: ApplicationService,
@@ -30,16 +30,20 @@ export class ApplicationCreateComponent implements OnDestroy {
     this.destroyed.complete();
   }
 
-  public updateApplication($event: Omit<ApplicationModel, 'id'>) {
-    this.application = $event;
+  public updateApplication($event: UpdateDraftApplicationModel) {
+    this.applicationCreateModel = $event;
   }
 
   public save() {
-    if (!this.application) {
+    if (!this.applicationCreateModel) {
       return;
     }
     this.savingSubject.next(true);
-    this.applicationService.createApplication$(this.application)
+    const application = this.applicationCreateModel.application;
+    if (this.applicationCreateModel.i18nSettings) {
+      application.settings = { i1n8Settings: this.applicationCreateModel.i18nSettings, layerSettings: {} };
+    }
+    this.applicationService.createApplication$(application)
       .pipe(takeUntil(this.destroyed))
       .subscribe(createdApplication => {
         if (createdApplication) {

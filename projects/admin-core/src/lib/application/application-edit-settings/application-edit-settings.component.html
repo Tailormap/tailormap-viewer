@@ -4,8 +4,8 @@
                                (updateApplication)="updateApplication($event)"></tm-admin-application-form>
     <mat-slide-toggle class="set-default-application"
                       (toggleChange)="toggleDefaultApplication(application.name)"
-                      [checked]="isDefaultApplication$ | async"
-                      [disabled]="isDefaultApplication$ | async"
+                      [checked]="(isDefaultApplication$ | async) === true"
+                      [disabled]="(isDefaultApplication$ | async) === true"
                       i18n="@@admin-core.application.set-default-application">Set default application</mat-slide-toggle>
     <div *ngIf="(isDefaultApplication$ | async) === false"
          class="set-default-application-hint"

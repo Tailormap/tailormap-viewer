@@ -1,11 +1,13 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { BoundsModel } from '@tailormap-viewer/api';
+import { BoundsModel, I18nSettingsModel } from '@tailormap-viewer/api';
 import { ApplicationModel, GroupModel, AuthorizationRuleGroup, AUTHORIZATION_RULE_ANONYMOUS } from '@tailormap-admin/admin-api';
 import { Observable, debounceTime, filter, Subject, takeUntil } from 'rxjs';
 import { FormHelper } from '../../helpers/form.helper';
 import { GroupService } from '../../user/services/group.service';
 import { AdminProjectionsHelper } from '../helpers/admin-projections-helper';
+import { UpdateDraftApplicationModel } from '../models/update-draft-application.model';
+import { LanguageHelper } from '@tailormap-viewer/shared';
 
 @Component({
   selector: 'tm-admin-application-form',
@@ -17,6 +19,8 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
 
   private _application: ApplicationModel | null = null;
 
+  public availableLanguages = LanguageHelper.availableLanguages;
+
   @Input()
   public set application(application: ApplicationModel | null) {
     this._application = application;
@@ -27,7 +31,7 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
   }
 
   @Output()
-  public updateApplication = new EventEmitter<Omit<ApplicationModel, 'id'>>();
+  public updateApplication = new EventEmitter<UpdateDraftApplicationModel>();
 
   public projections = AdminProjectionsHelper.projections;
 
@@ -49,6 +53,8 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
         Validators.minLength(5),
       ],
     }),
+    defaultLanguage: new FormControl<string | null>(null),
+    hideLanguageSwitcher: new FormControl<boolean | null>(null),
     initialExtent: new FormControl<BoundsModel | null>(null),
     maxExtent: new FormControl<BoundsModel | null>(null),
     authorizationRules: new FormControl<AuthorizationRuleGroup[]>([AUTHORIZATION_RULE_ANONYMOUS]),
@@ -74,7 +80,7 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
         filter(() => this.isValidForm()),
       )
       .subscribe(value => {
-        this.updateApplication.emit({
+        const application: Omit<ApplicationModel, 'id'> = {
           name: value.name || '',
           title: value.title || '',
           adminComments: value.adminComments || '',
@@ -82,7 +88,12 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
           initialExtent: value.initialExtent || null,
           maxExtent: value.maxExtent || null,
           authorizationRules: value.authorizationRules || [],
-        });
+        };
+        const i18nSettings: I18nSettingsModel = {
+          defaultLanguage: value.defaultLanguage || null,
+          hideLanguageSwitcher: typeof value.hideLanguageSwitcher === 'boolean' ? value.hideLanguageSwitcher : false,
+        };
+        this.updateApplication.emit({ application, i18nSettings });
       });
   }
 
@@ -99,6 +110,12 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
       crs: application ? application.crs : this.projections[0].code,
       initialExtent: application ? application.initialExtent : null,
       maxExtent: application ? application.maxExtent : null,
+      defaultLanguage: typeof application?.settings?.i1n8Settings?.defaultLanguage !== "undefined"
+        ? application.settings.i1n8Settings.defaultLanguage
+        : null,
+      hideLanguageSwitcher: typeof application?.settings?.i1n8Settings?.hideLanguageSwitcher === "boolean"
+        ? application.settings.i1n8Settings.hideLanguageSwitcher
+        : null,
       authorizationRules: application ? application.authorizationRules : [AUTHORIZATION_RULE_ANONYMOUS],
     }, { emitEvent: false });
   }

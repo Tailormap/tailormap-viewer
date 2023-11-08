@@ -178,6 +178,10 @@ const onUpdateDraftApplication = (
   return updateApplication(state, application => ({
     ...application,
     ...payload.application,
+    settings: {
+      ...(application.settings || { layerSettings: {} }),
+      i1n8Settings: { ...payload.i18nSettings },
+    },
   }));
 };
 
