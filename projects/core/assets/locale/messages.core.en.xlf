@@ -696,7 +696,7 @@
         <source>Measure area</source>
       </trans-unit>
       <trans-unit id="core.toolbar.measure-length" datatype="html">
-        <source>Measure length</source>
+        <source>Measure distance</source>
       </trans-unit>
       <trans-unit id="core.toolbar.no-results-found" datatype="html">
         <source>No results found</source>

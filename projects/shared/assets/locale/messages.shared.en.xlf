@@ -32,6 +32,12 @@
       <trans-unit id="shared.common.yes" datatype="html">
         <source>Yes</source>
       </trans-unit>
+      <trans-unit id="shared.language.dutch" datatype="html">
+        <source>Dutch</source>
+      </trans-unit>
+      <trans-unit id="shared.language.english" datatype="html">
+        <source>English</source>
+      </trans-unit>
       <trans-unit id="shared.login-form.password" datatype="html">
         <source>Password</source>
       </trans-unit>

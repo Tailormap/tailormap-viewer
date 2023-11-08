@@ -41,6 +41,14 @@
         <source>Yes</source>
         <target>Ja</target>
       </trans-unit>
+      <trans-unit id="shared.language.dutch" datatype="html">
+        <source>Dutch</source>
+        <target>Nederlands</target>
+      </trans-unit>
+      <trans-unit id="shared.language.english" datatype="html">
+        <source>English</source>
+        <target>Engels</target>
+      </trans-unit>
       <trans-unit id="shared.login-form.password" datatype="html">
         <source>Password</source>
         <target>Wachtwoord</target>

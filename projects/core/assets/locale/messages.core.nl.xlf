@@ -467,7 +467,7 @@
       </trans-unit>
       <trans-unit id="core.filter.choose-values" datatype="html">
         <source>Choose values</source>
-	<target>Waardes kiezen</target>
+        <target>Waardes kiezen</target>
       </trans-unit>
       <trans-unit id="core.filter.close-filter-form" datatype="html">
         <source>Close filter form</source>
@@ -883,7 +883,7 @@
       </trans-unit>
       <trans-unit id="core.toc.opacity" datatype="html">
         <source>Opacity</source>
-	<target>Ondoorzichtigheid</target>
+        <target>Ondoorzichtigheid</target>
       </trans-unit>
       <trans-unit id="core.toc.reorder-layers" datatype="html">
         <source>Re-order layers</source>

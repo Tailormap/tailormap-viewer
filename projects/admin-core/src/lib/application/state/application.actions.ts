@@ -1,7 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { AppLayerSettingsModel, ApplicationModel, AppTreeNodeModel } from '@tailormap-admin/admin-api';
 import { TreeNodePosition } from '@tailormap-viewer/shared';
-import { ComponentBaseConfigModel, I18nSettingsModel, ViewerStylingModel } from '@tailormap-viewer/api';
+import { ComponentBaseConfigModel, ViewerStylingModel } from '@tailormap-viewer/api';
 import { UpdateDraftApplicationModel } from '../models/update-draft-application.model';
 
 const applicationActionsPrefix = '[Application]';

@@ -6,7 +6,6 @@ import { ApplicationModel } from '@tailormap-admin/admin-api';
 import { updateDraftApplication } from '../state/application.actions';
 import { ConfigService } from '../../config/services/config.service';
 import { UpdateDraftApplicationModel } from '../models/update-draft-application.model';
-import { I18nSettingsModel } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-admin-application-edit-settings',
