@@ -143,7 +143,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.hide-language-switcher" datatype="html">
         <source>Hide language switcher in viewer</source>
-        <target>Verberg taal keuze menu in viewer</target>
+        <target>Verberg taalkeuzemenu in viewer</target>
       </trans-unit>
       <trans-unit id="admin-core.application.initial-extent" datatype="html">
         <source>Initial extent</source>
