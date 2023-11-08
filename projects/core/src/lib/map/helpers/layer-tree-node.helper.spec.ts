@@ -1,5 +1,5 @@
 import { LayerTreeNodeHelper } from './layer-tree-node.helper';
-import { getAppLayerModel, getLayerTreeNode, LayerTreeNodeModel } from '@tailormap-viewer/api';
+import { AppLayerModel, getAppLayerModel, getLayerTreeNode, LayerTreeNodeModel } from '@tailormap-viewer/api';
 import { TreeHelper } from '@tailormap-viewer/shared';
 
 const layers = [
@@ -16,11 +16,13 @@ const getExtendedLayerTreeNode = (overrides?: Partial<LayerTreeNodeModel>) => {
 const nodes = [
   getExtendedLayerTreeNode({ root: true, childrenIds: ['lvl_1'] }),
   getExtendedLayerTreeNode({ id: 'lvl_1', childrenIds: [ 'lvl_2', 'lyr_1', 'lyr_2' ] }),
-  getLayerTreeNode({ id: 'lyr_1', appLayerId: '1' }),
-  getLayerTreeNode({ id: 'lyr_2', appLayerId: '2' }),
-  getLayerTreeNode({ id: 'lvl_2', childrenIds: ['lyr_3'] }),
-  getLayerTreeNode({ id: 'lyr_3', appLayerId: '3' }),
+  getExtendedLayerTreeNode({ id: 'lyr_1', appLayerId: '1' }),
+  getExtendedLayerTreeNode({ id: 'lyr_2', appLayerId: '2' }),
+  getExtendedLayerTreeNode({ id: 'lvl_2', childrenIds: ['lyr_3'] }),
+  getExtendedLayerTreeNode({ id: 'lyr_3', appLayerId: '3' }),
 ];
+
+const toLayersMap = (lrs: AppLayerModel[]) => new Map(lrs.map(l => [ l.id, l ]));
 
 describe('LayerTreeNodeHelper', () => {
 
@@ -37,11 +39,11 @@ describe('LayerTreeNodeHelper', () => {
   });
 
   test('gets TreeModel for LayerTreeNode', () => {
-    const treeModel1 = LayerTreeNodeHelper.getTreeModelForLayerTreeNode(getExtendedLayerTreeNode(), layers);
+    const treeModel1 = LayerTreeNodeHelper.getTreeModelForLayerTreeNode(getExtendedLayerTreeNode(), new Map(layers.map(l => [ l.id, l ])));
     expect(treeModel1.type).toEqual('level');
     expect(treeModel1.metadata).toEqual(null);
 
-    const treeModel2 = LayerTreeNodeHelper.getTreeModelForLayerTreeNode(getExtendedLayerTreeNode({ appLayerId: '1' }), layers);
+    const treeModel2 = LayerTreeNodeHelper.getTreeModelForLayerTreeNode(getExtendedLayerTreeNode({ appLayerId: '1' }), new Map(layers.map(l => [ l.id, l ])));
     expect(treeModel2.type).toEqual('layer');
     expect(treeModel2.metadata).toEqual(layers[0]);
   });
@@ -64,11 +66,11 @@ describe('LayerTreeNodeHelper', () => {
   });
 
   test('gets the selected tree nodes', () => {
-    const selectedNodes = LayerTreeNodeHelper.getSelectedTreeNodes(nodes, layers);
+    const selectedNodes = LayerTreeNodeHelper.getSelectedTreeNodes(nodes, toLayersMap(layers));
     expect(selectedNodes).toEqual([nodes[1]]);
-    const selectedNodes2 = LayerTreeNodeHelper.getSelectedTreeNodes(nodes, layers.map(l => ({ ...l, visible: false })));
+    const selectedNodes2 = LayerTreeNodeHelper.getSelectedTreeNodes(nodes, toLayersMap(layers.map(l => ({ ...l, visible: false }))));
     expect(selectedNodes2).toEqual([]);
-    const selectedNodes3 = LayerTreeNodeHelper.getSelectedTreeNodes(nodes, layers.map(l => ({ ...l, visible: l.id === '3' })));
+    const selectedNodes3 = LayerTreeNodeHelper.getSelectedTreeNodes(nodes, toLayersMap(layers.map(l => ({ ...l, visible: l.id === '3' }))));
     expect(selectedNodes3).toEqual([nodes[1]]);
   });
 
@@ -82,7 +84,7 @@ describe('LayerTreeNodeHelper', () => {
   });
 
   test('gets a tree for nodes', () => {
-    const tree = LayerTreeNodeHelper.layerTreeNodeToTree(nodes, layers);
+    const tree = LayerTreeNodeHelper.layerTreeNodeToTree(nodes, toLayersMap(layers));
     expect(tree.length).toEqual(1);
     expect(tree[0].children?.length).toEqual(3);
     expect((tree[0].children || [])[0].children?.length).toEqual(1);
