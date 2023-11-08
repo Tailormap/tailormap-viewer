@@ -97,6 +97,10 @@
         <source>Default application</source>
         <target>Standaardapplicatie</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.default-language" datatype="html">
+        <source>Default language</source>
+        <target>Standaardtaal</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.delete-application" datatype="html">
         <source>Delete application <x id="PH" equiv-text="title"/></source>
         <target state="translated">Applicatie <x id="PH" equiv-text="title"/> verwijderen</target>
@@ -137,6 +141,10 @@
         <source>Folder name</source>
         <target>Mapnaam</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.hide-language-switcher" datatype="html">
+        <source>Hide language switcher in viewer</source>
+        <target>Verberg taalkeuzemenu in viewer</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.initial-extent" datatype="html">
         <source>Initial extent</source>
         <target>Start-extent</target>
@@ -168,6 +176,10 @@
       <trans-unit id="admin-core.application.max-extent" datatype="html">
         <source>Max extent</source>
         <target>Max extent</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.no-default-language" datatype="html">
+        <source>No default language</source>
+        <target>Geen standaardtaal</target>
       </trans-unit>
       <trans-unit id="admin-core.application.opacity" datatype="html">
         <source>Opacity</source>

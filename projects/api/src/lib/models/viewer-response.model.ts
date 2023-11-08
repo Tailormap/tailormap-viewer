@@ -1,6 +1,6 @@
-import { Language } from './language.enum';
 import { ComponentModel } from './component.model';
 import { ViewerStylingModel } from './viewer-styling.model';
+import { I18nSettingsModel } from './i18n-settings.model';
 
 export interface ViewerResponseModel {
   id: string;
@@ -8,7 +8,7 @@ export interface ViewerResponseModel {
   name: string;
   title: string;
   baseViewers: string[];
-  languages: Language[];
+  i18nSettings?: I18nSettingsModel;
   projections: string[];
   styling?: ViewerStylingModel;
   components: ComponentModel[];

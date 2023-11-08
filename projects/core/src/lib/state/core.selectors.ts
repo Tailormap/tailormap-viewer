@@ -12,6 +12,11 @@ export const selectViewerErrorMessage = createSelector(selectCoreState, (state) 
 
 export const selectUserDetails = createSelector(selectCoreState, state => state.security);
 
+export const selectShowLanguageSwitcher = createSelector(
+  selectViewerState,
+  viewerState => viewerState?.i18nSettings?.hideLanguageSwitcher !== true,
+);
+
 export const selectComponentsConfig = createSelector(
   selectViewerState,
   state => {

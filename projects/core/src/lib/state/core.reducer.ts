@@ -17,7 +17,7 @@ const onViewerLoadSuccess = (
   viewer: {
     id: payload.viewer.id,
     title: payload.viewer.title,
-    languages: payload.viewer.languages,
+    i18nSettings: payload.viewer.i18nSettings,
     styling: payload.viewer.styling,
     components: payload.viewer.components,
   },

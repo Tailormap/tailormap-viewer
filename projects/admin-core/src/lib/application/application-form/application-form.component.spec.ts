@@ -10,6 +10,7 @@ import { of } from 'rxjs';
 import { provideMockStore } from '@ngrx/store/testing';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
 import { adminCoreStateKey, initialAdminCoreState } from '../../state/admin-core.state';
+import { MatIconTestingModule } from '@angular/material/icon/testing';
 
 const setup = async (hasApp?: boolean) => {
   const onUpdate = jest.fn();
@@ -20,7 +21,7 @@ const setup = async (hasApp?: boolean) => {
     maxExtent: getBoundsModel(),
   });
   await render(ApplicationFormComponent, {
-    imports: [SharedModule],
+    imports: [ SharedModule, MatIconTestingModule ],
     declarations: [ BoundsFieldComponent, AuthorizationEditComponent ],
     componentInputs: {
       application: hasApp ? application : undefined,
@@ -47,13 +48,19 @@ describe('ApplicationFormComponent', () => {
     await userEvent.type(await screen.findByPlaceholderText('Title'), 'Cool application');
     await waitFor(() => {
       expect(onUpdate).toHaveBeenCalledWith({
-        authorizationRules: [AUTHORIZATION_RULE_ANONYMOUS],
-        name: 'new-app',
-        title: 'Cool application',
-        adminComments: '',
-        crs: 'EPSG:28992',
-        initialExtent: null,
-        maxExtent: null,
+        application: {
+          authorizationRules: [AUTHORIZATION_RULE_ANONYMOUS],
+          name: 'new-app',
+          title: 'Cool application',
+          adminComments: '',
+          crs: 'EPSG:28992',
+          initialExtent: null,
+          maxExtent: null,
+        },
+        i18nSettings: {
+          defaultLanguage: null,
+          hideLanguageSwitcher: false,
+        },
       });
     });
   });
@@ -66,13 +73,19 @@ describe('ApplicationFormComponent', () => {
     await userEvent.click(await screen.findByText('EPSG:3857', { exact: false }));
     await waitFor(() => {
       expect(onUpdate).toHaveBeenCalledWith({
-        authorizationRules: [],
-        name: application.name,
-        title: application.title,
-        adminComments: '',
-        crs: 'EPSG:3857',
-        initialExtent: application.initialExtent,
-        maxExtent: application.maxExtent,
+        application: {
+          authorizationRules: [],
+          name: application.name,
+          title: application.title,
+          adminComments: '',
+          crs: 'EPSG:3857',
+          initialExtent: application.initialExtent,
+          maxExtent: application.maxExtent,
+        },
+        i18nSettings: {
+          defaultLanguage: null,
+          hideLanguageSwitcher: false,
+        },
       });
     });
   });

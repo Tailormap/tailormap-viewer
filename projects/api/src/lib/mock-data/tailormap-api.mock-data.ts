@@ -1,6 +1,5 @@
 import {
-  AppLayerModel, ViewerResponseModel, BoundsModel, ComponentModel, CoordinateReferenceSystemModel, GeometryType, Language,
-  LayerDetailsModel,
+  AppLayerModel, ViewerResponseModel, BoundsModel, ComponentModel, CoordinateReferenceSystemModel, GeometryType, LayerDetailsModel,
   MapResponseModel, ServerType, ServiceModel, ServiceProtocol, UserResponseModel, VersionResponseModel, LoginConfigurationModel,
   AttributeType,
 } from '../models';
@@ -151,7 +150,6 @@ export const getViewerResponseData = (overrides?: Partial<ViewerResponseModel>):
   name: 'default',
   title: 'My viewer',
   baseViewers: [],
-  languages: [Language.NL_NL],
   projections: ['EPSG:28992'],
   components: [],
   ...overrides,

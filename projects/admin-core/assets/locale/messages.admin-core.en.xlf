@@ -74,6 +74,9 @@
       <trans-unit id="admin-core.application.default-application" datatype="html">
         <source>Default application</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.default-language" datatype="html">
+        <source>Default language</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.delete-application" datatype="html">
         <source>Delete application <x id="PH" equiv-text="title"/></source>
       </trans-unit>
@@ -104,6 +107,9 @@
       <trans-unit id="admin-core.application.folder-name" datatype="html">
         <source>Folder name</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.hide-language-switcher" datatype="html">
+        <source>Hide language switcher in viewer</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.initial-extent" datatype="html">
         <source>Initial extent</source>
       </trans-unit>
@@ -127,6 +133,9 @@
       </trans-unit>
       <trans-unit id="admin-core.application.max-extent" datatype="html">
         <source>Max extent</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.no-default-language" datatype="html">
+        <source>No default language</source>
       </trans-unit>
       <trans-unit id="admin-core.application.opacity" datatype="html">
         <source>Opacity</source>

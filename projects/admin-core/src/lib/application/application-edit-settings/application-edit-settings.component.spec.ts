@@ -14,6 +14,7 @@ import userEvent from '@testing-library/user-event';
 import { AuthorizationEditComponent } from '../../shared/components/authorization-edit/authorization-edit.component';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
 import { adminCoreStateKey, initialAdminCoreState } from '../../state/admin-core.state';
+import { MatIconTestingModule } from '@angular/material/icon/testing';
 
 const setup = async (hasApplication: boolean, isDefaultApplication?: boolean) => {
   const appState: ApplicationState = {
@@ -30,7 +31,7 @@ const setup = async (hasApplication: boolean, isDefaultApplication?: boolean) =>
   };
   await render(ApplicationEditSettingsComponent, {
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    imports: [SharedImportsModule],
+    imports: [ SharedImportsModule, MatIconTestingModule ],
     declarations: [ ApplicationFormComponent, BoundsFieldComponent, AuthorizationEditComponent ],
     providers: [
       { provide: Store, useValue: store },

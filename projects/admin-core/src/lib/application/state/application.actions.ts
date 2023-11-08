@@ -2,6 +2,7 @@ import { createAction, props } from '@ngrx/store';
 import { AppLayerSettingsModel, ApplicationModel, AppTreeNodeModel } from '@tailormap-admin/admin-api';
 import { TreeNodePosition } from '@tailormap-viewer/shared';
 import { ComponentBaseConfigModel, ViewerStylingModel } from '@tailormap-viewer/api';
+import { UpdateDraftApplicationModel } from '../models/update-draft-application.model';
 
 const applicationActionsPrefix = '[Application]';
 
@@ -54,7 +55,7 @@ export const deleteApplication = createAction(
 
 export const updateDraftApplication = createAction(
   `${applicationActionsPrefix} Update Draft Application`,
-  props<{ application: Omit<ApplicationModel, 'id'> }>(),
+  props<UpdateDraftApplicationModel>(),
 );
 
 export const addApplicationTreeNodes = createAction(

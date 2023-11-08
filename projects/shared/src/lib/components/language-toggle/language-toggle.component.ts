@@ -1,11 +1,7 @@
 import { Component, ChangeDetectionStrategy, Inject, LOCALE_ID } from '@angular/core';
 import { APP_BASE_HREF } from '@angular/common';
-
-interface LanguageToggleLang {
-  label: string;
-  code: string;
-  icon: string;
-}
+import { LanguageDescriptionModel } from './language-description.model';
+import { LanguageHelper } from './language.helper';
 
 @Component({
   selector: 'tm-language-toggle',
@@ -15,12 +11,8 @@ interface LanguageToggleLang {
 })
 export class LanguageToggleComponent {
 
-  public availableLanguages: LanguageToggleLang[] = [
-    { label: 'English', code: 'en', icon: 'languages_gb' },
-    { label: 'Nederlands', code: 'nl', icon: 'languages_nl' },
-  ];
-
-  public selectedLanguage: LanguageToggleLang | undefined;
+  public availableLanguages = LanguageHelper.availableLanguages;
+  public selectedLanguage: LanguageDescriptionModel | undefined;
 
   public canChangeLanguage = false;
 

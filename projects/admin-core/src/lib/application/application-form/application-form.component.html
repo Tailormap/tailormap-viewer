@@ -34,5 +34,19 @@
                               label="Max extent"
                               [projection]="projection"></tm-admin-bounds-form-field>
 
+  <mat-form-field>
+    <mat-label i18n="@@admin-core.application.default-language">Default language</mat-label>
+    <mat-select formControlName="defaultLanguage" placeholder="Default language" i18n-placeholder="@@admin-core.application.default-language">
+      <mat-option value="" i18n="@@admin-core.application.no-default-language">No default language</mat-option>
+      <mat-option *ngFor="let language of availableLanguages" [value]="language.code">
+        <mat-icon [svgIcon]="language.icon"></mat-icon>
+        {{ language.localizedLabel }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-slide-toggle formControlName="hideLanguageSwitcher"
+                    i18n="@@admin-core.application.hide-language-switcher">Hide language switcher in viewer</mat-slide-toggle>
+
   <tm-admin-authorization-edit class="authorization-edit" formControlName="authorizationRules" [groups]="(groups$ | async) ?? []"></tm-admin-authorization-edit>
 </form>
