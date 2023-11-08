@@ -99,7 +99,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.default-language" datatype="html">
         <source>Default language</source>
-        <target>Standaard taal</target>
+        <target>Standaardtaal</target>
       </trans-unit>
       <trans-unit id="admin-core.application.delete-application" datatype="html">
         <source>Delete application <x id="PH" equiv-text="title"/></source>
