@@ -20,10 +20,10 @@ export class LayerTreeNodeHelper {
     };
   }
 
-  public static getTreeModelForLayerTreeNode(node: ExtendedLayerTreeNodeModel, layers?: AppLayerModel[]): TreeModel {
+  public static getTreeModelForLayerTreeNode(node: ExtendedLayerTreeNodeModel, layers: Map<string, AppLayerModel>): TreeModel<AppLayerModel | null> {
     const isAppLayerNode = LayerTreeNodeHelper.isAppLayerNode(node);
-    const layer = isAppLayerNode
-      ? (layers || []).find(l => l.id === node.appLayerId)
+    const layer = typeof node.appLayerId === 'string'
+      ? layers.get(node.appLayerId) || null
       : null;
     return {
       id: node.id,
@@ -48,12 +48,12 @@ export class LayerTreeNodeHelper {
     return LayerTreeNodeHelper.getChildNodes(layerTreeNodes, child).map(node => node.id);
   }
 
-  public static getSelectedTreeNodes(layerTreeNodes: ExtendedLayerTreeNodeModel[], layers: AppLayerModel[]) {
+  public static getSelectedTreeNodes(layerTreeNodes: ExtendedLayerTreeNodeModel[], layers: Map<string, AppLayerModel>) {
     const tree = LayerTreeNodeHelper.layerTreeNodeToTree(layerTreeNodes, layers);
     const checkedNodes: Set<string> = new Set();
     tree.forEach(node => {
       let hasCheckedNodes = false;
-      const checkCheckedNodes = (child: TreeModel<AppLayerModel>) => {
+      const checkCheckedNodes = (child: TreeModel<AppLayerModel | null>) => {
         hasCheckedNodes = (child.type === 'layer' && child.checked) || hasCheckedNodes;
         (child.children || []).forEach(checkCheckedNodes);
       };
@@ -75,12 +75,12 @@ export class LayerTreeNodeHelper {
     return findInChildren(root);
   }
 
-  public static layerTreeNodeToTree(layerTreeNodes: ExtendedLayerTreeNodeModel[], layers: AppLayerModel[]) {
+  public static layerTreeNodeToTree(layerTreeNodes: ExtendedLayerTreeNodeModel[], layers: Map<string, AppLayerModel>) {
     const root = layerTreeNodes.find(l => l.root);
     if (!root) {
       return [];
     }
-    const tree = TreeHelper.traverseTree<TreeModel<AppLayerModel>, ExtendedLayerTreeNodeModel>(
+    const tree = TreeHelper.traverseTree<TreeModel<AppLayerModel | null>, ExtendedLayerTreeNodeModel>(
       layerTreeNodes,
       root.id,
       (node, children) => ({

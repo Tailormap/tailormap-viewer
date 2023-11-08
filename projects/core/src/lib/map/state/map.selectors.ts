@@ -154,15 +154,20 @@ export const selectOrderedVisibleBackgroundLayers = createSelector(
   },
 );
 
+export const selectLayersMap = createSelector(
+  selectLayers,
+  (layers): Map<string, AppLayerWithInitialValuesModel> => new Map(layers.map(l => [ l.id, l ])),
+);
+
 export const selectLayerTree = createSelector(
   selectLayerTreeNodes,
-  selectLayers,
+  selectLayersMap,
   (layerTreeNodes, layers): TreeModel[] => LayerTreeNodeHelper.layerTreeNodeToTree(layerTreeNodes, layers),
 );
 
 export const selectBackgroundLayerTree = createSelector(
   selectBackgroundLayerTreeNodes,
-  selectLayers,
+  selectLayersMap,
   (layerTreeNodes, layers): TreeModel[] => LayerTreeNodeHelper.layerTreeNodeToTree(layerTreeNodes, layers),
 );
 
@@ -193,7 +198,7 @@ export const selectBackgroundNodesList = createSelector(
 
 export const selectInitiallySelectedBackgroundNodes = createSelector(
   selectBackgroundNodesListWithTitle,
-  selectLayers,
+  selectLayersMap,
   (layerTreeNodes, layers): LayerTreeNodeModel[] => LayerTreeNodeHelper.getSelectedTreeNodes(layerTreeNodes, layers),
 );
 

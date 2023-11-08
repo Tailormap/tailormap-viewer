@@ -1,6 +1,6 @@
 import { TocState, tocStateKey } from './toc.state';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { selectLayers, selectLayerTree, selectOrderedLayerNodes } from '../../../map/state/map.selectors';
+import { selectLayersMap, selectLayerTree, selectOrderedLayerNodes } from '../../../map/state/map.selectors';
 import { LayerTreeNodeHelper } from '../../../map/helpers/layer-tree-node.helper';
 import { TreeModel } from '@tailormap-viewer/shared';
 
@@ -16,7 +16,7 @@ export const selectFilteredLayerTree = createSelector(
   selectFilterEnabled,
   selectFilterTerm,
   selectOrderedLayerNodes,
-  selectLayers,
+  selectLayersMap,
   selectLayerTree,
   (filterEnabled, filterTerm, layerTreeNodes, layers, layerTree): TreeModel[] => {
     if (!filterEnabled || !filterTerm) {
@@ -24,7 +24,7 @@ export const selectFilteredLayerTree = createSelector(
     }
     const filterRegexes: RegExp[] = filterTerm.trim().split(' ').map(f => new RegExp(f, 'i'));
     return layerTreeNodes
-      .filter(layerNode => filterRegexes.every(f => f.test(layerNode.name)))
-      .map(layerNode => LayerTreeNodeHelper.getTreeModelForLayerTreeNode(layerNode, layers));
+      .map(layerNode => LayerTreeNodeHelper.getTreeModelForLayerTreeNode(layerNode, layers))
+      .filter(layerNode => filterRegexes.every(f => f.test(layerNode.label)));
   },
 );
