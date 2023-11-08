@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef, OnInit, Inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { selectUserDetails } from '../../../state/core.selectors';
-import { Observable, of, Subject, take } from 'rxjs';
+import { selectShowHideLanguageSwitcher, selectUserDetails } from '../../../state/core.selectors';
+import { Observable, Subject, take } from 'rxjs';
 import {
   SecurityModel, TAILORMAP_SECURITY_API_V1_SERVICE,
   TailormapSecurityApiV1ServiceModel,
@@ -19,7 +19,8 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class ProfileComponent implements OnInit, OnDestroy {
 
-  public userDetails$: Observable<SecurityModel | null> = of(null);
+  public showLanguageToggle$: Observable<boolean>;
+  public userDetails$: Observable<SecurityModel | null>;
   private destroyed = new Subject();
 
   constructor(
@@ -28,10 +29,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private cdr: ChangeDetectorRef,
     @Inject(TAILORMAP_SECURITY_API_V1_SERVICE) private api: TailormapSecurityApiV1ServiceModel,
-  ) {}
+  ) {
+    this.userDetails$ = this.store$.select(selectUserDetails);
+    this.showLanguageToggle$ = this.store$.select(selectShowHideLanguageSwitcher);
+  }
 
   public ngOnInit() {
-    this.userDetails$ = this.store$.select(selectUserDetails);
     this.api.getUser$()
       .pipe(take(1))
       .subscribe(userDetails => {

@@ -6,7 +6,7 @@
     <button mat-menu-item (click)="showAbout()">
       <span i18n="@@core.profile.about">About</span>
     </button>
-    <tm-language-toggle></tm-language-toggle>
+    <tm-language-toggle *ngIf="showLanguageToggle$ | async"></tm-language-toggle>
     <button mat-menu-item disabled *ngIf="userDetails.isAuthenticated && userDetails.username">
       <span i18n="@@core.profile.logged-in-as">Logged in as</span>
       <span>{{' '}}{{userDetails.username}}</span>

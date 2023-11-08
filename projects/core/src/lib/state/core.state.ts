@@ -1,4 +1,4 @@
-import { ViewerStylingModel, ComponentModel, Language, SecurityModel } from '@tailormap-viewer/api';
+import { ViewerStylingModel, ComponentModel, SecurityModel, I18nSettingsModel } from '@tailormap-viewer/api';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 
 export const coreStateKey = 'core';
@@ -6,7 +6,7 @@ export const coreStateKey = 'core';
 export interface ViewerState {
   id?: string;
   title?: string;
-  languages?: Language[];
+  i18nSettings?: I18nSettingsModel;
   styling?: ViewerStylingModel;
   components: ComponentModel[];
 }
