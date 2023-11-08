@@ -110,11 +110,11 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
       crs: application ? application.crs : this.projections[0].code,
       initialExtent: application ? application.initialExtent : null,
       maxExtent: application ? application.maxExtent : null,
-      defaultLanguage: typeof application?.settings?.i1n8Settings?.defaultLanguage !== "undefined"
-        ? application.settings.i1n8Settings.defaultLanguage
+      defaultLanguage: typeof application?.settings?.i18nSettings?.defaultLanguage !== "undefined"
+        ? application.settings.i18nSettings.defaultLanguage
         : null,
-      hideLanguageSwitcher: typeof application?.settings?.i1n8Settings?.hideLanguageSwitcher === "boolean"
-        ? application.settings.i1n8Settings.hideLanguageSwitcher
+      hideLanguageSwitcher: typeof application?.settings?.i18nSettings?.hideLanguageSwitcher === "boolean"
+        ? application.settings.i18nSettings.hideLanguageSwitcher
         : null,
       authorizationRules: application ? application.authorizationRules : [AUTHORIZATION_RULE_ANONYMOUS],
     }, { emitEvent: false });
