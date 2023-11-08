@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef, OnInit, Inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { selectShowHideLanguageSwitcher, selectUserDetails } from '../../../state/core.selectors';
+import { selectShowLanguageSwitcher, selectUserDetails } from '../../../state/core.selectors';
 import { Observable, Subject, take } from 'rxjs';
 import {
   SecurityModel, TAILORMAP_SECURITY_API_V1_SERVICE,
@@ -31,7 +31,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     @Inject(TAILORMAP_SECURITY_API_V1_SERVICE) private api: TailormapSecurityApiV1ServiceModel,
   ) {
     this.userDetails$ = this.store$.select(selectUserDetails);
-    this.showLanguageToggle$ = this.store$.select(selectShowHideLanguageSwitcher);
+    this.showLanguageToggle$ = this.store$.select(selectShowLanguageSwitcher);
   }
 
   public ngOnInit() {
