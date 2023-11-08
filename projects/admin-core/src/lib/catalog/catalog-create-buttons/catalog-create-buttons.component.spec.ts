@@ -60,7 +60,7 @@ const setup = async (hasNode = false) => {
       { provide: CatalogService, useValue: catalogService },
       { provide: GeoServiceService, useValue: geoServiceService },
       { provide: Store, useValue: store },
-      { provide: Router, useValue: { navigateToUrl: jest.fn() } },
+      { provide: Router, useValue: { navigateByUrl: jest.fn() } },
       { provide: TailormapAdminApiV1Service, useValue: { getGroups$: jest.fn(() => of(null)) } },
       { provide: CatalogTreeService, useValue: { loadCatalogNodeItems$: loadCatalogNodeItemsMock } },
     ],
