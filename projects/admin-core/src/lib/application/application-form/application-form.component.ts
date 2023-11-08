@@ -79,8 +79,8 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
           title: value.title || '',
           adminComments: value.adminComments || '',
           crs: value.crs || '',
-          initialExtent: value.initialExtent || undefined,
-          maxExtent: value.maxExtent || undefined,
+          initialExtent: value.initialExtent || null,
+          maxExtent: value.maxExtent || null,
           authorizationRules: value.authorizationRules || [],
         });
       });
