@@ -179,7 +179,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.no-default-language" datatype="html">
         <source>No default language</source>
-        <target>Geen standaard taal</target>
+        <target>Geen standaardtaal</target>
       </trans-unit>
       <trans-unit id="admin-core.application.opacity" datatype="html">
         <source>Opacity</source>
