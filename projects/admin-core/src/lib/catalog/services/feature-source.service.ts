@@ -19,6 +19,7 @@ import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-lay
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AdminSseService, EventType } from '../../shared/services/admin-sse.service';
 import { DebounceHelper } from '@tailormap-viewer/shared';
+import { ExtendedCatalogModelHelper } from '../helpers/extended-catalog-model.helper';
 
 @Injectable({
   providedIn: 'root',
@@ -96,7 +97,7 @@ export class FeatureSourceService {
   public updateFeatureType$(
     featureTypeId: string,
     updatedFeatureType: FeatureTypeUpdateModel,
-  ): Observable<FeatureTypeModel | null> {
+  ): Observable<ExtendedFeatureTypeModel | null> {
     return this.store$.select(selectFeatureTypeById(featureTypeId))
       .pipe(
         take(1),
@@ -113,6 +114,9 @@ export class FeatureSourceService {
                 if (updateResult) {
                   this.updateFeatureTypeState(updateResult, featureType.catalogNodeId);
                 }
+              }),
+              map((updateResult: FeatureTypeModel | null) => {
+                return updateResult ? ExtendedCatalogModelHelper.getExtendedFeatureType(updateResult, featureType.featureSourceId, featureType.catalogNodeId) : null;
               }),
             );
         }),

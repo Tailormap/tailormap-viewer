@@ -36,6 +36,8 @@ import {
   CatalogItemsInFolderDialogComponent,
 } from './catalog-node-details/catalog-items-in-folder-dialog/catalog-items-in-folder-dialog.component';
 import { FeatureTypeAttributesComponent } from './feature-type-attributes/feature-type-attributes.component';
+import { FeatureTypeFormComponent } from './feature-type-form/feature-type-form.component';
+import { FeatureTypeFormDialogComponent } from './feature-type-form-dialog/feature-type-form-dialog.component';
 
 
 @NgModule({
@@ -55,6 +57,8 @@ import { FeatureTypeAttributesComponent } from './feature-type-attributes/featur
     FeatureSourceFormDialogComponent,
     FeatureTypeDetailsComponent,
     FeatureTypeSelectorComponent,
+    FeatureTypeFormComponent,
+    FeatureTypeFormDialogComponent,
     CatalogBaseTreeComponent,
     CatalogBaseTreeNodeComponent,
     CatalogHomeComponent,

@@ -1,14 +1,3 @@
 <ng-container *ngIf="featureType$ | async as featureType">
-  <h2 class="page-details-title" i18n="@@admin-core.catalog.feature-type-details">Details for feature type {{ featureType.title }}</h2>
-  <div i18n="@@admin-core.catalog.technical-name">Technical name: {{ featureType.name }}</div>
-  <tm-admin-feature-type-attributes [attributes]="featureType.attributes"
-                                    [featureTypeSettings]="featureTypeSettings$ | async"
-                                    (attributeEnabledChanged)="attributeEnabledChanged(featureType.settings, $event)"
-                                    (attributeOrderChanged)="attributeOrderChanged($event)"
-                                    (aliasesChanged)="aliasesChanged(featureType.settings, $event)"></tm-admin-feature-type-attributes>
-  <div class="page-details-actions">
-    <tm-admin-save-button [saving$]="saving$"
-                          [disabled]="!saveEnabled"
-                          (save)="save(featureType)"></tm-admin-save-button>
-  </div>
+  <tm-admin-feature-type-form [featureType]="featureType"></tm-admin-feature-type-form>
 </ng-container>

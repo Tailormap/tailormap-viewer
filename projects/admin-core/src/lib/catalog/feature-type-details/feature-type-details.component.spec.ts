@@ -12,6 +12,7 @@ import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.mo
 import { FeatureSourceService } from '../services/feature-source.service';
 import { FeatureTypeAttributesComponent } from '../feature-type-attributes/feature-type-attributes.component';
 import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
+import { FeatureTypeFormComponent } from '../feature-type-form/feature-type-form.component';
 
 const setup = async () => {
   const activeRoute = {
@@ -39,6 +40,7 @@ const setup = async () => {
     ...getFeatureSource({ id: '1', title: 'JDBC source', protocol: FeatureSourceProtocolEnum.JDBC }),
     children: ['ft_1'],
     catalogNodeId: 'node-1',
+    featureTypes: [],
   };
   const catalogState: CatalogState = {
     ...initialCatalogState,
@@ -47,7 +49,7 @@ const setup = async () => {
   };
   const store = createMockStore({ initialState: { [catalogStateKey]: catalogState } });
   await render(FeatureTypeDetailsComponent, {
-    declarations: [ FeatureTypeAttributesComponent, SaveButtonComponent ],
+    declarations: [ FeatureTypeFormComponent, FeatureTypeAttributesComponent, SaveButtonComponent ],
     imports: [SharedModule],
     providers: [
       { provide: ActivatedRoute, useValue: activeRoute },

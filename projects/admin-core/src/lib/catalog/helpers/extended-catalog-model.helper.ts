@@ -4,7 +4,7 @@ import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-lay
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
 
-export class CatalogModelHelper {
+export class ExtendedCatalogModelHelper {
 
   public static getExtendedGeoServiceLayer(geoService: GeoServiceWithLayersModel, catalogNodeId: string): ExtendedGeoServiceLayerModel[] {
     const serviceLayers = geoService.layers.map(layer => ({
@@ -22,7 +22,7 @@ export class CatalogModelHelper {
   }
 
   public static getExtendedGeoService(geoService: GeoServiceWithLayersModel, catalogNodeId: string): [ ExtendedGeoServiceModel, ExtendedGeoServiceLayerModel[] ] {
-    const serviceLayers = CatalogModelHelper.getExtendedGeoServiceLayer(geoService, catalogNodeId);
+    const serviceLayers = ExtendedCatalogModelHelper.getExtendedGeoServiceLayer(geoService, catalogNodeId);
     const service = {
       ...geoService,
       id: `${geoService.id}`,
@@ -34,23 +34,28 @@ export class CatalogModelHelper {
   }
 
   public static getExtendedFeatureSource(source: FeatureSourceModel, catalogNodeId: string): [ ExtendedFeatureSourceModel, ExtendedFeatureTypeModel[] ] {
-    const featureSourceId = `${source.id}`;
-    const featureTypes: ExtendedFeatureTypeModel[] = source.featureTypes.map<ExtendedFeatureTypeModel>(ft => ({
-      ...ft,
-      id: `${featureSourceId}_${ft.id}`,
-      originalId: ft.id,
-      catalogNodeId,
-      featureSourceId,
-    }));
+    const featureTypes: ExtendedFeatureTypeModel[] = source.featureTypes.map<ExtendedFeatureTypeModel>(ft => {
+      return ExtendedCatalogModelHelper.getExtendedFeatureType(ft, source.id, catalogNodeId);
+    });
     const featureSource: ExtendedFeatureSourceModel & { allFeatureTypes?: FeatureTypeModel[] } = {
       ...source,
-      id: featureSourceId,
+      id: `${source.id}`,
       catalogNodeId,
       featureTypes: [],
       allFeatureTypes: [],
       children: (featureTypes || []).map(ft => ft.id),
     };
     return [ featureSource, featureTypes ];
+  }
+
+  public static getExtendedFeatureType(featureType: FeatureTypeModel, featureSourceId: string, catalogNodeId?: string): ExtendedFeatureTypeModel {
+    return {
+      ...featureType,
+      id: `${featureSourceId}_${featureType.id}`,
+      originalId: featureType.id,
+      catalogNodeId: catalogNodeId || '',
+      featureSourceId: `${featureSourceId}`,
+    };
   }
 
 }

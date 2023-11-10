@@ -6,7 +6,6 @@ import { GeoServiceService } from '../services/geo-service.service';
 import { GeoServiceCreateModel } from '../models/geo-service-update.model';
 import { GeoServiceWithLayersModel, LayerSettingsModel } from '@tailormap-admin/admin-api';
 import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-layer.model';
-import { updateGeoService } from '../state/catalog.actions';
 import { selectGeoServiceLayerSettingsById } from '../state/catalog.selectors';
 import { Store } from '@ngrx/store';
 import { GeoServiceLayerSettingsModel } from '../models/geo-service-layer-settings.model';
@@ -80,5 +79,4 @@ export class GeoServiceLayerFormDialogComponent {
     this.updatedLayerSettings = $event;
   }
 
-  protected readonly updateGeoService = updateGeoService;
 }
