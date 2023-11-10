@@ -14,7 +14,7 @@ export interface GeoServiceModel {
   authentication?: ServiceAuthenticationModel | null;
   capabilities?: Blob; // should not be sent by the API
   serviceCapabilities?: ServiceCapsModel;
-  authorizationRules: AuthorizationRuleGroup[],
+  authorizationRules: AuthorizationRuleGroup[];
   capabilitiesContentType?: string;
   capabilitiesFetched?: string;
   advertisedUrl?: string;

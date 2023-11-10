@@ -8,7 +8,7 @@ import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-lay
 import { GeoServiceLayerSettingsModel } from '../models/geo-service-layer-settings.model';
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
-import { CatalogItemKindEnum } from '@tailormap-admin/admin-api';
+import { CatalogItemKindEnum, LayerSettingsModel } from '@tailormap-admin/admin-api';
 import { ExtendedGeoServiceLayerWithSettingsModel } from '../models/extended-geo-service-layer-with-settings.model';
 
 const selectCatalogState = createFeatureSelector<CatalogState>(catalogStateKey);
@@ -177,7 +177,7 @@ export const selectGeoServiceLayersWithSettingsApplied = createSelector(
 export const selectGeoServiceAndLayerByName = (serviceId: string, layerName: string) => createSelector(
   selectGeoServiceById(serviceId),
   selectGeoServiceLayers,
-  (service, layers): { service: ExtendedGeoServiceModel; layer: ExtendedGeoServiceLayerModel } | null => {
+  (service, layers): { service: ExtendedGeoServiceModel; layer: ExtendedGeoServiceLayerModel; layerSettings: LayerSettingsModel | null } | null => {
     if (!service) {
       return null;
     }
@@ -185,6 +185,7 @@ export const selectGeoServiceAndLayerByName = (serviceId: string, layerName: str
     if (!layer) {
       return null;
     }
-    return { service, layer };
+    const layerSettings = (service.settings?.layerSettings || {})[layerName] || null;
+    return { service, layer, layerSettings };
   },
 );

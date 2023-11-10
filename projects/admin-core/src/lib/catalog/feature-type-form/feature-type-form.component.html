@@ -1,0 +1,28 @@
+<ng-container *ngIf="featureType">
+  <ng-template #title><ng-container i18n="@@admin-core.catalog.feature-type-details">Details for feature type {{ featureType.title }}</ng-container></ng-template>
+  <h2 *ngIf="dialogLayout" mat-dialog-title><ng-container *ngTemplateOutlet="title"></ng-container></h2>
+  <h2 *ngIf="!dialogLayout" class="page-details-title"><ng-container *ngTemplateOutlet="title"></ng-container></h2>
+
+  <ng-template #content>
+    <div i18n="@@admin-core.catalog.technical-name">Technical name: {{ featureType.name }}</div>
+    <tm-admin-feature-type-attributes [attributes]="featureType.attributes"
+                                      [featureTypeSettings]="featureTypeSettings$ | async"
+                                      (attributeEnabledChanged)="attributeEnabledChanged(featureType.settings, $event)"
+                                      (attributeOrderChanged)="attributeOrderChanged($event)"
+                                      (aliasesChanged)="aliasesChanged(featureType.settings, $event)"></tm-admin-feature-type-attributes>
+  </ng-template>
+  <mat-dialog-content *ngIf="dialogLayout"><ng-container *ngTemplateOutlet="content"></ng-container></mat-dialog-content>
+  <ng-container *ngIf="!dialogLayout"><ng-container *ngTemplateOutlet="content"></ng-container></ng-container>
+
+  <ng-template #saveButton>
+    <tm-admin-save-button [saving$]="saving$"
+                          [disabled]="!saveEnabled"
+                          (save)="save(featureType)"></tm-admin-save-button>
+  </ng-template>
+  <mat-dialog-actions *ngIf="dialogLayout" align="end">
+    <button mat-flat-button (click)="closeDialog()" i18n="@@admin-core.catalog.common.cancel">Cancel</button>
+    <ng-container *ngTemplateOutlet="saveButton"></ng-container>
+  </mat-dialog-actions>
+  <div *ngIf="!dialogLayout" class="page-details-actions"><ng-container *ngTemplateOutlet="saveButton"></ng-container></div>
+
+</ng-container>
