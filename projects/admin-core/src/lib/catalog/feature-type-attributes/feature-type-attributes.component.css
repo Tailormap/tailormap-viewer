@@ -27,8 +27,29 @@ mat-header-cell {
 }
 
 .mat-column-enabled,
-.mat-column-sort {
+.mat-column-editable,
+.mat-column-label-enabled,
+.mat-column-label-editable {
   flex: 0 0 auto;
+  width: 90px;
+}
+
+.mat-column-name,
+.mat-column-label-name {
+  flex: 0 0 auto;
+  width: 260px;
+}
+
+.mat-column-type,
+.mat-column-label-type {
+  flex: 0 0 auto;
+  width: 120px;
+}
+
+.mat-column-sort,
+.mat-column-label-sort {
+  flex: 0 0 auto;
+  width: 60px;
 }
 
 .mat-column-alias {
