@@ -369,7 +369,7 @@
         <source>The feature source <x id="INTERPOLATION" equiv-text="{{data.featureSource.title}}"/> is used in the following layers.</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.feature-type" datatype="html">
-        <source>Feature Type</source>
+        <source>Feature type</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.feature-type-details" datatype="html">
         <source>Details for feature type <x id="INTERPOLATION" equiv-text="{{ featureType.title }}"/></source>

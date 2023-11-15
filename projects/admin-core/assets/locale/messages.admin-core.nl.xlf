@@ -490,7 +490,7 @@
         <target state="new">De feature source <x id="INTERPOLATION" equiv-text="{{data.featureSource.title}}"/> wordt gebruikt in de volgende lagen.</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.feature-type" datatype="html">
-        <source>Feature Type</source>
+        <source>Feature type</source>
         <target>Feature type</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.feature-type-details" datatype="html">
