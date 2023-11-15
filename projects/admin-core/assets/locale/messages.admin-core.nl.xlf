@@ -889,6 +889,10 @@
         <source>Measure distance title</source>
         <target>Titel voor afstand meten</target>
       </trans-unit>
+      <trans-unit id="admin-core.feature-type-settings-updated" datatype="html">
+        <source>Feature type settings updated</source>
+        <target>Feature type instellingen aangepast</target>
+      </trans-unit>
       <trans-unit id="admin-core.groups.add-group" datatype="html">
         <source>Add group</source>
         <target>Groep toevoegen</target>

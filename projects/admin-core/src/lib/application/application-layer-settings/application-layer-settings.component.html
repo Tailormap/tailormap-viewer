@@ -17,7 +17,7 @@
     </div>
     <div class="detail" *ngIf="featureSourceAndType$ | async as featureSourceAndType">
       <ng-container *ngIf="featureSourceAndType.featureType">
-        <strong i18n="@@admin-core.catalog.feature-type">Feature type</strong>:
+        <strong i18n="@@admin-core.catalog.feature-type">Feature Type</strong>:
         <a href="#" (click)="updateFeatureTypeSetting($event, featureSourceAndType)">
           {{ featureSourceAndType.featureType.title || featureSourceAndType.featureType.name }}
           <mat-icon svgIcon="edit"></mat-icon>
