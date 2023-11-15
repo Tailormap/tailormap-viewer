@@ -24,7 +24,7 @@
             <mat-cell *matCellDef="let att">
               <mat-checkbox (change)="toggleAttribute('readonly', att.name)"
                             [disabled]="!isAttributeEnabled('hidden', att.name)"
-                            [checked]="isAttributeEnabled('readonly', att.name)"></mat-checkbox>
+                            [checked]="isAttributeEnabled('readonly', att.name) && isAttributeEnabled('hidden', att.name)"></mat-checkbox>
             </mat-cell>
           </ng-container>
           <ng-container matColumnDef="name">
