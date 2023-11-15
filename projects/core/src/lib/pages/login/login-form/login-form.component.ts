@@ -2,7 +2,7 @@ import { LocationStrategy } from '@angular/common';
 import { Component, ChangeDetectionStrategy, Output, EventEmitter, Input } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { BehaviorSubject, Observable, take } from 'rxjs';
-import { RouterHistoryService } from '../../../../../../shared/src/lib/services';
+import { RouterHistoryService } from '@tailormap-viewer/shared';
 import { map } from 'rxjs/operators';
 import { LoginConfigurationModel, UserResponseModel } from '@tailormap-viewer/api';
 
