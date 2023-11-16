@@ -7,7 +7,7 @@
     "generate-protobuf": "node bin/generate-protobuf.js",
     "build": "ng build app",
     "build-localized": "ng build app --localize",
-    "postbuild-localized": "node bin/prebuild.js",
+    "postbuild-localized": "node bin/post-build-localized.js",
     "watch": "ng build --watch --configuration development app",
     "test": "jest --max-workers=4",
     "test-viewer": "jest --max-workers=4 --config=jest.viewer.config.js",
