@@ -52,7 +52,6 @@ const sentryProviders = SENTRY_DSN === '@SENTRY_DSN@' ? [] : [
     LoginFormComponent,
   ],
   imports: [
-    RouterModule.forRoot([{ path: '', children: [] }]), // Allow all modules to add child routes
     CoreRoutingModule,
     StoreModule.forRoot({
       [coreStateKey]: coreReducer,
@@ -73,6 +72,7 @@ const sentryProviders = SENTRY_DSN === '@SENTRY_DSN@' ? [] : [
     SharedModule,
     ComponentsModule,
     LayoutModule,
+    RouterModule.forRoot([{ path: '', children: [] }]), // Allow all modules to add child routes
   ],
   exports: [
     ViewerAppComponent,

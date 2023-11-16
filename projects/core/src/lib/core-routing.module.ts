@@ -15,7 +15,6 @@ const routes: Routes = [
     title: 'Tailormap Admin',
   },
   { path: '', component: ViewerAppComponent },
-  { path: '**', redirectTo: '' },
 ];
 
 @NgModule({
