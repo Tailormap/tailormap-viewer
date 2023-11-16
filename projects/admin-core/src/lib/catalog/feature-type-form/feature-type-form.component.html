@@ -8,6 +8,7 @@
     <tm-admin-feature-type-attributes [attributes]="featureType.attributes"
                                       [featureTypeSettings]="featureTypeSettings$ | async"
                                       (attributeEnabledChanged)="attributeEnabledChanged(featureType.settings, $event)"
+                                      (attributeReadonlyChanged)="attributeReadonlyChanged(featureType.settings, $event)"
                                       (attributeOrderChanged)="attributeOrderChanged($event)"
                                       (aliasesChanged)="aliasesChanged(featureType.settings, $event)"></tm-admin-feature-type-attributes>
   </ng-template>

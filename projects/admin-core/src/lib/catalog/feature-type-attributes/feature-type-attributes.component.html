@@ -11,22 +11,32 @@
                (cdkDropListDropped)="dropTable($event)">
           <ng-container matColumnDef="enabled">
             <mat-header-cell *matHeaderCellDef>
-              <mat-checkbox (change)="toggleAllAttributes()" [checked]="allAttributesEnabled" [indeterminate]="someAttributesDisabled"></mat-checkbox>
+              <mat-checkbox (change)="toggleAllAttributes('hidden')" [checked]="allChecked['hidden']" [indeterminate]="someChecked['hidden']"></mat-checkbox>
             </mat-header-cell>
             <mat-cell *matCellDef="let att">
-              <mat-checkbox (change)="toggleAttribute(att.name)" [checked]="isAttributeEnabled(att.name)"></mat-checkbox>
+              <mat-checkbox (change)="toggleAttribute('hidden', att.name)" [checked]="isAttributeEnabled('hidden', att.name)"></mat-checkbox>
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="editable">
+            <mat-header-cell *matHeaderCellDef>
+              <mat-checkbox (change)="toggleAllAttributes('readonly')" [checked]="allChecked['readonly']" [indeterminate]="someChecked['readonly']"></mat-checkbox>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let att">
+              <mat-checkbox (change)="toggleAttribute('readonly', att.name)"
+                            [disabled]="!isAttributeEnabled('hidden', att.name)"
+                            [checked]="isAttributeEnabled('readonly', att.name) && isAttributeEnabled('hidden', att.name)"></mat-checkbox>
             </mat-cell>
           </ng-container>
           <ng-container matColumnDef="name">
-            <mat-header-cell *matHeaderCellDef i18n="@@admin-core.common.name">Name</mat-header-cell>
-            <mat-cell *matCellDef="let att"> {{att.name}} </mat-cell>
+            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+            <mat-cell *matCellDef="let att"><div class="wrap-text" [tmTooltip]="att.name">{{att.name}}</div></mat-cell>
           </ng-container>
           <ng-container matColumnDef="type">
-            <mat-header-cell *matHeaderCellDef i18n="@@admin-core.common.type">Type</mat-header-cell>
-            <mat-cell *matCellDef="let att"> {{att.type}} </mat-cell>
+            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+            <mat-cell *matCellDef="let att"><div class="wrap-text" [tmTooltip]="att.type">{{att.type}}</div></mat-cell>
           </ng-container>
           <ng-container matColumnDef="alias">
-            <mat-header-cell *matHeaderCellDef i18n="@@admin-core.common.alias">Alias</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef></mat-header-cell>
             <mat-cell *matCellDef="let att">
               <mat-form-field>
                 <input matInput [formControlName]="att.name" />
@@ -34,9 +44,30 @@
             </mat-cell>
           </ng-container>
           <ng-container matColumnDef="sort">
-            <mat-header-cell *matHeaderCellDef i18n="@@admin-core.common.sort">Sort</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef></mat-header-cell>
             <mat-cell *matCellDef="let att"><mat-icon cdkDragHandle svgIcon="reorder"></mat-icon></mat-cell>
           </ng-container>
+
+          <ng-container matColumnDef="label-enabled">
+            <mat-header-cell *matHeaderCellDef><div class="wrap-text" tmTooltip="Enabled" i18n-tmTooltip="@@admin-core.common.enabled" i18n="@@admin-core.common.enabled">Enabled</div></mat-header-cell>
+          </ng-container>
+          <ng-container matColumnDef="label-editable">
+            <mat-header-cell *matHeaderCellDef><div class="wrap-text" tmTooltip="Editable" i18n-tmTooltip="@@admin-core.application.editable" i18n="@@admin-core.application.editable">Editable</div></mat-header-cell>
+          </ng-container>
+          <ng-container matColumnDef="label-name">
+            <mat-header-cell *matHeaderCellDef><div class="wrap-text" tmTooltip="Name" i18n-tmTooltip="@@admin-core.common.name" i18n="@@admin-core.common.name">Name</div></mat-header-cell>
+          </ng-container>
+          <ng-container matColumnDef="label-type">
+            <mat-header-cell *matHeaderCellDef><div class="wrap-text" tmTooltip="Type" i18n-tmTooltip="@@admin-core.common.type" i18n="@@admin-core.common.type">Type</div></mat-header-cell>
+          </ng-container>
+          <ng-container matColumnDef="label-alias">
+            <mat-header-cell *matHeaderCellDef><div class="wrap-text" tmTooltip="Alias" i18n-tmTooltip="@@admin-core.common.alias" i18n="@@admin-core.common.alias">Alias</div></mat-header-cell>
+          </ng-container>
+          <ng-container matColumnDef="label-sort">
+            <mat-header-cell *matHeaderCellDef><div class="wrap-text" tmTooltip="Sort" i18n-tmTooltip="@@admin-core.common.sort" i18n="@@admin-core.common.sort">Sort</div></mat-header-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="columnLabels"></mat-header-row>
           <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
           <mat-row *matRowDef="let row; columns: columns;" cdkDrag [cdkDragData]="row"></mat-row>
         </mat-table>

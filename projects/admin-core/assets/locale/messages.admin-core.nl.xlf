@@ -490,7 +490,7 @@
         <target state="new">De feature source <x id="INTERPOLATION" equiv-text="{{data.featureSource.title}}"/> wordt gebruikt in de volgende lagen.</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.feature-type" datatype="html">
-        <source>Feature Type</source>
+        <source>Feature type</source>
         <target>Feature type</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.feature-type-details" datatype="html">
@@ -888,6 +888,10 @@
       <trans-unit id="admin-core.components.measure-line-title" datatype="html">
         <source>Measure distance title</source>
         <target>Titel voor afstand meten</target>
+      </trans-unit>
+      <trans-unit id="admin-core.feature-type-settings-updated" datatype="html">
+        <source>Feature type settings updated</source>
+        <target>Feature type instellingen aangepast</target>
       </trans-unit>
       <trans-unit id="admin-core.groups.add-group" datatype="html">
         <source>Add group</source>

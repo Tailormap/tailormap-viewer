@@ -2,6 +2,8 @@
   display: flex;
   gap: 16px;
   flex-wrap: wrap;
+  min-width: 600px;
+  flex-shrink: 0;
 }
 
 span {

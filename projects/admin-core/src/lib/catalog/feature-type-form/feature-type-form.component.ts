@@ -65,6 +65,7 @@ export class FeatureTypeFormComponent {
       settings: {
         attributeSettings: currentUpdatedValue?.settings?.attributeSettings || featureType.settings.attributeSettings || {},
         hideAttributes: currentUpdatedValue?.settings?.hideAttributes || featureType.settings.hideAttributes || [],
+        readOnlyAttributes: currentUpdatedValue?.settings?.readOnlyAttributes || featureType.settings.readOnlyAttributes || [],
         attributeOrder: currentUpdatedValue?.settings?.attributeOrder || featureType.settings.attributeOrder || [],
       },
     };
@@ -85,18 +86,33 @@ export class FeatureTypeFormComponent {
 
   public attributeEnabledChanged(
     originalSettings: FeatureTypeSettingsModel,
-    $event: Array<{ attribute: string; enabled: boolean }>,
+    $event: Array<{ attribute: string; checked: boolean }>,
+  ) {
+    this.updateAttributeChecked('hideAttributes', originalSettings, $event);
+  }
+
+  public attributeReadonlyChanged(
+    originalSettings: FeatureTypeSettingsModel,
+    $event: Array<{ attribute: string; checked: boolean }>,
+  ) {
+    this.updateAttributeChecked('readOnlyAttributes', originalSettings, $event);
+  }
+
+  private updateAttributeChecked(
+    type: 'readOnlyAttributes' | 'hideAttributes',
+    originalSettings: FeatureTypeSettingsModel,
+    $event: Array<{ attribute: string; checked: boolean }>,
   ) {
     const settings = this.updatedFeatureTypeSubject.value?.settings || {};
-    const hideAttributes = new Set(settings?.hideAttributes || originalSettings.hideAttributes || []);
+    const attributes = new Set(settings[type] || originalSettings[type] || []);
     $event.forEach(change => {
-      if (change.enabled) {
-        hideAttributes.delete(change.attribute);
+      if (change.checked) {
+        attributes.delete(change.attribute);
       } else {
-        hideAttributes.add(change.attribute);
+        attributes.add(change.attribute);
       }
     });
-    this.updateSettings('hideAttributes', Array.from(hideAttributes));
+    this.updateSettings(type, Array.from(attributes));
   }
 
   public attributeOrderChanged(attributes: string[]) {

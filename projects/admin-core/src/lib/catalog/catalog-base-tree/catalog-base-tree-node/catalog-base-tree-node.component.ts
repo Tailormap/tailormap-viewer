@@ -15,7 +15,7 @@ export class CatalogBaseTreeNodeComponent {
     [CatalogTreeModelTypeEnum.SERVICE_TYPE]: $localize `:@@admin-core.catalog.service:Service`,
     [CatalogTreeModelTypeEnum.SERVICE_LAYER_TYPE]: $localize `:@@admin-core.catalog.layer:Layer`,
     [CatalogTreeModelTypeEnum.FEATURE_SOURCE_TYPE]: $localize `:@@admin-core.catalog.feature-source:Feature Source`,
-    [CatalogTreeModelTypeEnum.FEATURE_TYPE_TYPE]: $localize `:@@admin-core.catalog.feature-type:Feature Type`,
+    [CatalogTreeModelTypeEnum.FEATURE_TYPE_TYPE]: $localize `:@@admin-core.catalog.feature-type:Feature type`,
     unknown: '',
   };
 

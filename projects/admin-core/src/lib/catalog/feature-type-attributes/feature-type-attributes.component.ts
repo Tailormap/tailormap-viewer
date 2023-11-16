@@ -8,6 +8,8 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AttributeTypeHelper } from "@tailormap-viewer/api";
 
+type CheckableAttribute =  'hidden' | 'readonly';
+
 @Component({
   selector: 'tm-admin-feature-type-attributes',
   templateUrl: './feature-type-attributes.component.html',
@@ -16,7 +18,8 @@ import { AttributeTypeHelper } from "@tailormap-viewer/api";
 })
 export class FeatureTypeAttributesComponent implements OnChanges {
 
-  public readonly columns = [ 'enabled', 'name', 'type', 'alias', 'sort' ];
+  public readonly columnLabels = [ 'label-enabled', 'label-editable', 'label-name', 'label-type', 'label-alias', 'label-sort' ];
+  public readonly columns = [ 'enabled', 'editable', 'name', 'type', 'alias', 'sort' ];
 
   @Input()
   public attributes: AttributeDescriptorModel[] = [];
@@ -25,7 +28,10 @@ export class FeatureTypeAttributesComponent implements OnChanges {
   public featureTypeSettings: FeatureTypeSettingsModel | null = null;
 
   @Output()
-  public attributeEnabledChanged = new EventEmitter<Array<{ attribute: string; enabled: boolean }>>();
+  public attributeEnabledChanged = new EventEmitter<Array<{ attribute: string; checked: boolean }>>();
+
+  @Output()
+  public attributeReadonlyChanged = new EventEmitter<Array<{ attribute: string; checked: boolean }>>();
 
   @Output()
   public attributeOrderChanged = new EventEmitter<string[]>();
@@ -35,9 +41,10 @@ export class FeatureTypeAttributesComponent implements OnChanges {
 
   public aliasForm: FormGroup = new FormGroup({});
 
-  public enabledAttributes = new Set<string>();
-  public allAttributesEnabled = false;
-  public someAttributesDisabled = false;
+  public someChecked: Record<CheckableAttribute, boolean> = { hidden: false, readonly: false };
+  public allChecked: Record<CheckableAttribute, boolean> = { hidden: false, readonly: false };
+  public checkedAttributes: Record<CheckableAttribute, Set<string>> = { hidden: new Set<string>(), readonly: new Set<string>() };
+
   public dataAttributes: AttributeDescriptorModel[] = [];
   public geomAttributes: AttributeDescriptorModel[] = [];
 
@@ -69,26 +76,44 @@ export class FeatureTypeAttributesComponent implements OnChanges {
         this.aliasForm.addControl(att.name, control, { emitEvent: false });
       });
     }
-    if (this.changedSettings(changes, 'hideAttributes')) {
-      const hideAttributes = new Set(this.featureTypeSettings?.hideAttributes || []);
-      this.enabledAttributes = new Set(this.dataAttributes
-        .map(a => a.name)
-        .filter(a => !hideAttributes.has(a)));
-      this.allAttributesEnabled = this.enabledAttributes.size === this.dataAttributes.length;
-      this.someAttributesDisabled = this.enabledAttributes.size !== 0 && !this.allAttributesEnabled;
+    this.updateChecked(changes, 'hidden');
+    this.updateChecked(changes, 'readonly');
+  }
+
+  public toggleAllAttributes(type: CheckableAttribute) {
+    const updatedAttributesChecked = this.dataAttributes.map(a => ({ attribute: a.name, checked: !this.allChecked[type] }));
+    if (type === 'hidden') {
+      this.attributeEnabledChanged.emit(updatedAttributesChecked);
+    }
+    if (type === 'readonly') {
+      this.attributeReadonlyChanged.emit(updatedAttributesChecked);
     }
   }
 
-  public toggleAllAttributes() {
-    this.attributeEnabledChanged.emit(this.dataAttributes.map(a => ({ attribute: a.name, enabled: !this.allAttributesEnabled })));
+  public toggleAttribute(type: CheckableAttribute, attribute: string) {
+    const updatedAttributeChecked = [{ attribute, checked: !this.isAttributeEnabled(type, attribute) }];
+    if (type === 'hidden') {
+      this.attributeEnabledChanged.emit(updatedAttributeChecked);
+    }
+    if (type === 'readonly') {
+      this.attributeReadonlyChanged.emit(updatedAttributeChecked);
+    }
   }
 
-  public toggleAttribute(attribute: string) {
-    this.attributeEnabledChanged.emit([{ attribute, enabled: !this.isAttributeEnabled(attribute) }]);
+  public isAttributeEnabled(type: CheckableAttribute, attribute: string) {
+    return this.checkedAttributes[type].has(attribute);
   }
 
-  public isAttributeEnabled(attribute: string) {
-    return this.enabledAttributes.has(attribute);
+  public updateChecked(changes: SimpleChanges, type: CheckableAttribute) {
+    const attribute = type === 'hidden' ? 'hideAttributes' : 'readOnlyAttributes';
+    if (this.changedSettings(changes, attribute)) {
+      const hideAttributes = new Set((this.featureTypeSettings ? this.featureTypeSettings[attribute] : []) || []);
+      this.checkedAttributes[type] = new Set(this.dataAttributes
+        .map(a => a.name)
+        .filter(a => !hideAttributes.has(a)));
+      this.allChecked[type] = this.checkedAttributes[type].size === this.dataAttributes.length;
+      this.someChecked[type] = this.checkedAttributes[type].size !== 0 && !this.allChecked[type];
+    }
   }
 
   public dropTable($event: CdkDragDrop<AttributeDescriptorModel[], any>) {
