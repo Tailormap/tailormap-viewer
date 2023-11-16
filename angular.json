@@ -76,7 +76,7 @@
               "font-family-papandreou",
               "earcut"
             ],
-            "i18nMissingTranslation": "warning"
+            "i18nMissingTranslation": "error"
           },
           "configurations": {
             "nl": {
