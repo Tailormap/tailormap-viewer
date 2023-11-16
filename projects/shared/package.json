@@ -1,6 +1,6 @@
 {
   "name": "@tailormap-viewer/shared",
-  "version": "11.1.4",
+  "version": "11.1.5",
   "peerDependencies": {
     "@angular/animations": "^16.2.0",
     "@angular/cdk": "^16.2.0",
