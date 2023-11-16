@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CoreModule, CoreRoutingModule } from '@tailormap-viewer/core';
+import { CoreModule } from '@tailormap-viewer/core';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 
@@ -13,7 +13,6 @@ import { environment } from '../environments/environment';
   ],
   imports: [
     BrowserModule,
-    CoreRoutingModule,
     CoreModule.forRoot({
       production: environment.production,
       viewerBaseUrl: environment.viewerBaseUrl,

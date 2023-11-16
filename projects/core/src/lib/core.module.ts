@@ -20,7 +20,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { SecurityInterceptor } from './interceptors/security.interceptor';
 import { ApplicationMapModule } from './map/application-map.module';
 import { FilterModule } from './filter/filter.module';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { LuxonDateAdapter, MAT_LUXON_DATE_FORMATS } from '@angular/material-luxon-adapter';
 import { LayoutModule } from './layout/layout.module';
@@ -28,6 +28,7 @@ import { ApplicationStyleService } from './services/application-style.service';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MAT_CHECKBOX_DEFAULT_OPTIONS } from '@angular/material/checkbox';
 import { LoginFormComponent } from './pages/login/login-form/login-form.component';
+import { CoreRoutingModule } from './core-routing.module';
 
 const getBaseHref = (platformLocation: PlatformLocation): string => {
   return platformLocation.getBaseHrefFromDOM();
@@ -51,6 +52,8 @@ const sentryProviders = SENTRY_DSN === '@SENTRY_DSN@' ? [] : [
     LoginFormComponent,
   ],
   imports: [
+    RouterModule.forRoot([{ path: '', children: [] }]), // Allow all modules to add child routes
+    CoreRoutingModule,
     StoreModule.forRoot({
       [coreStateKey]: coreReducer,
     }, {
@@ -73,6 +76,7 @@ const sentryProviders = SENTRY_DSN === '@SENTRY_DSN@' ? [] : [
   ],
   exports: [
     ViewerAppComponent,
+    RouterModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: SecurityInterceptor, multi: true },
