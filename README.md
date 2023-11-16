@@ -12,16 +12,15 @@ docker compose up -d
 ```
 
 This runs Tailormap on http://localhost:8080/ together with a PostgreSQL container to store configuration. The port (and other options) can
-be changed by copying `.env.template` to `.env` and changing the variables. Tailormap will only accept connections from the loopback
-interface.
+be changed by copying `.env.template` to `.env` and changing the variables (or use the `--env-file <file>` argument). Tailormap will only
+accept connections from the loopback interface.
 
 Remove the Tailormap stack using `docker compose down` (add `-v` to remove the volume with the database).
 
 By default, the latest development Docker image will be used (tagged with `snapshot`). This is published automatically by a GitHub Action on
-every change to the `main` branch, so this might be an unstable version. To use the latest (stable) released version, copy `.env.template`
-to `.env` and set the `VERSION` variable to `latest` before running. To update a running stack after a new version is released,
-run `docker compose` with the `pull` and `up` commands but _check the release notes beforehand_ because it may contain important information
-about upgrading to a new version.
+every change to the `main` branch, so this might be an unstable version. To use the latest (stable) released version, set the `VERSION`
+variable to `latest` before running. To update a running stack after a new version is released, run `docker compose` with the `pull` and
+`up` commands but _check the release notes beforehand_ because it may contain important information about upgrading to a new version.
 
 ## Running just the Tailormap container
 
@@ -122,6 +121,48 @@ pull a new image, stacks will only run with the updated version after recreating
 advisable to only set `VERSION` to a specific version and use a tool such
 as [renovatebot](https://www.mend.io/free-developer-tools/renovate/) to automatically update your configuration when a new version is
 released.
+
+## Adding extra functionality
+
+See the [tailormap-starter](https://github.com/B3Partners/tailormap-starter/) and [tailormap-hello-world](https://github.com/B3Partners/tailormap-hello-world/)
+repositories which demonstrate how you can add functionality to Tailormap by developing it in a separate repository.
+
+General GIS viewer functionality that fits in most viewers can be added in this repository by creating a pull request. If you add
+functionality that is very specific to your use case, or is not open source it is best to develop it in a separate repository and publish it as a NPM package with an Angular library.
+
+To build a Tailormap container image which includes extra functionality, you can build a Docker image in your own repository and use that
+with the Docker Compose stack in this repository by setting the `TAILORMAP_IMAGE` variable to the Docker image to use. If you want to easily
+build an image which includes multiple Angular libraries (for instance several extra libraries from different repositories), it is possible
+to specify Angular libraries to add when building by setting the `ADD_NG_LIBRARIES` variable (see the comments in `.env.template`). Set the
+`TAILORMAP_IMAGE` to a custom name and run `docker compose build`. It will use the Dockerfile and base Angular app from the
+`tailormap-starter` repository. For now this will use the published release version of tailormap-viewer that is referenced in the
+[package.json](https://github.com/B3Partners/tailormap-starter/blob/main/package.json) in the tailormap-starter repositories' `main`
+branch at build time. In the future we aim to have this also use the tailormap-viewer version in the `VERSION` variable by creating the base
+app in a schematic from a Dockerfile only.
+
+You can push the built custom Tailormap image to a registry or build it on the host to deploy.
+
+### Adding extra backend functionality
+
+For extra backend functionality it is recommended to create another Docker (micro)service instead of customizing tailormap-api. If needed,
+you can call the tailormap-api backend as a user proxying session cookie and XSRF tokens. If the service requires admin access (for instance
+to get feature source database details) we'd need to add an API authentication method for internal services so an extra service can call the
+Spring Data REST API just like the administration interface. It is not recommended to connect to the Tailormap configuration database
+directly from an additional service, although it might be ok to store data in a separate PostgreSQL schema or database in the same `db`
+PostgreSQL service to avoid an extra database service.
+
+### Closed source additions
+
+It is explicitly allowed to create a custom Tailormap with closed source (paid) additions.
+
+All used open source components (frontend and backend) have licenses that allow linking with closed source. There are no components licensed
+under the GPL or Affero GPL. See [3rdpartylicenses.txt](https://snapshot.tailormap.nl/en/3rdpartylicenses.txt) for all frontend licenses and
+[here](https://b3partners.github.io/tailormap-api/dependencies.html) for the licenses used in the backend dependencies.
+
+Note that even if you build a some closed source frontend functionality, the source will of course be delivered to clients' browsers, even
+before logging in. By default, even source maps with the unminified original source are generated and visible to all clients, although you
+can disable this in `angular.json`, but even minified source code can be "prettified". You can of course disallow redistribution, re-hosting
+or unpaid use of your extra functionality in a license and set your repository to private and use private NPM and Docker repositories.
 
 ## Database
 
@@ -231,6 +272,10 @@ the `node_modules` and `.angular` directories to reduce the Docker build context
 
 ```
 docker build -t ghcr.io/b3partners/tailormap:snapshot .
+```
+or
+```
+docker compose build
 ```
 
 The Dockerfile in this repository uses the `ghcr.io/b3partners/tailormap-api` base image with the webserver and backend and adds the Angular
