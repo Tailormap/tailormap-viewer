@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { NavigationError, Router, RouterModule, Routes } from '@angular/router';
 import { LoginComponent, ViewerAppComponent } from './pages';
+import { filter } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 const routes: Routes = [
   // IMPORTANT: When you add a route, also add it to the FrontController class of tailormap-api, otherwise a user will get a 404 when
@@ -20,4 +22,14 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forChild(routes)],
 })
-export class CoreRoutingModule { }
+export class CoreRoutingModule {
+  constructor(private router: Router) {
+    // Use an alternative catch-all route instead of '**', this allows libraries to add routes
+    router.events.pipe(
+      takeUntilDestroyed(),
+      filter(event => event instanceof NavigationError),
+    ).subscribe(() => {
+      this.router.navigate(['app']);
+    });
+  }
+}
