@@ -14,9 +14,7 @@ const setupSentryProviders = async () => {
   const tracing = await import('@sentry/browser');
   let version;
   try {
-    const baseHref: string = (document.querySelector<HTMLBaseElement>('base[href]')?.href) || '/';
-    version = await fetch(baseHref + 'version.json')
-      .then(response => response.json());
+    version = await fetch('/version.json').then(response => response.json());
   } catch (error) {/**/}
   sentry.init({
     dsn: SENTRY_DSN,
