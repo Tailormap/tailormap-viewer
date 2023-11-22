@@ -61,3 +61,7 @@ mat-header-cell {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+.disabled-cell {
+  background-color: var(--disabled-color);
+}

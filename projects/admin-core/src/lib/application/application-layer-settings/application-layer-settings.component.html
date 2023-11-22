@@ -52,4 +52,13 @@
       <span i18n="@@admin-core.application.editable">Editable</span>
     </mat-checkbox>
   </span>
+  <div *ngIf="featureSourceAndType$ | async as featureSourceAndType">
+    <button *ngIf="featureSourceAndType.featureType?.attributes"
+            mat-stroked-button
+            color="primary"
+            (click)="editAppLayerAttribute($event, featureSourceAndType)">
+      Edit attribute columns for application layer
+      <mat-icon svgIcon="edit"></mat-icon>
+    </button>
+  </div>
 </form>

@@ -80,6 +80,7 @@ import { FeatureTypeFormDialogComponent } from './feature-type-form-dialog/featu
     CatalogTreeComponent,
     CatalogBaseTreeComponent,
     CatalogBaseTreeNodeComponent,
+    FeatureTypeAttributesComponent,
   ],
 })
 export class CatalogModule {

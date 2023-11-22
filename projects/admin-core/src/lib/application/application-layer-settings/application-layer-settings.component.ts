@@ -16,6 +16,9 @@ import { CatalogDataService } from '../../catalog/services/catalog-data.service'
 import { FeatureTypeFormDialogComponent } from '../../catalog/feature-type-form-dialog/feature-type-form-dialog.component';
 import { ExtendedFeatureTypeModel } from '../../catalog/models/extended-feature-type.model';
 import { selectFeatureSourceAndFeatureTypesById } from '../../catalog/state/catalog.selectors';
+import {
+  ApplicationLayerAttributeSettingsComponent,
+} from '../application-layer-attribute-settings/application-layer-attribute-settings.component';
 
 type FeatureSourceAndType = { featureSource: FeatureSourceModel; featureType: ExtendedFeatureTypeModel | null };
 
@@ -202,6 +205,29 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     } else {
       this.layerSettingsForm.get('editable')?.disable({ emitEvent: false });
     }
+  }
+
+  public editAppLayerAttribute($event: MouseEvent, featureSourceAndType: FeatureSourceAndType | null) {
+    $event.preventDefault();
+    const nodeId = this.node?.id;
+    if (!nodeId || !featureSourceAndType?.featureType?.attributes) {
+      return;
+    }
+    ApplicationLayerAttributeSettingsComponent.open(this.dialog, {
+      attributes: featureSourceAndType?.featureType?.attributes,
+      appLayerSettings: this.layerSettings[nodeId] || {},
+      featureTypeSettings: featureSourceAndType.featureType.settings,
+    }).afterClosed()
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(result => {
+        if (!result) {
+          return;
+        }
+        this.layerSettingsChange.emit({
+          nodeId,
+          settings: { ...this.layerSettings[nodeId], ...result },
+        });
+      });
   }
 
 }

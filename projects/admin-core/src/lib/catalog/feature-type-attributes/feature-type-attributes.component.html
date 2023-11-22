@@ -21,10 +21,12 @@
             <mat-header-cell *matHeaderCellDef>
               <mat-checkbox (change)="toggleAllAttributes('readonly')" [checked]="allChecked['readonly']" [indeterminate]="someChecked['readonly']"></mat-checkbox>
             </mat-header-cell>
-            <mat-cell *matCellDef="let att">
-              <mat-checkbox (change)="toggleAttribute('readonly', att.name)"
-                            [disabled]="!isAttributeEnabled('hidden', att.name)"
-                            [checked]="isAttributeEnabled('readonly', att.name) && isAttributeEnabled('hidden', att.name)"></mat-checkbox>
+            <mat-cell *matCellDef="let att" [class.disabled-cell]="isReadonlyFieldDisabled(att.name)">
+              <span [tmTooltip]="getTooltip(att.name)">
+                <mat-checkbox (change)="toggleAttribute('readonly', att.name)"
+                              [disabled]="isReadonlyFieldDisabled(att.name)"
+                              [checked]="isReadonlyFieldChecked(att.name)"></mat-checkbox>
+              </span>
             </mat-cell>
           </ng-container>
           <ng-container matColumnDef="name">
