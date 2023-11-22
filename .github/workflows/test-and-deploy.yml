@@ -216,7 +216,7 @@ jobs:
         uses: CycloneDX/gh-node-module-generatebom@v1
 
       - name: 'Deploy SBOM'
-        uses: DependencyTrack/gh-upload-sbom@v2
+        uses: DependencyTrack/gh-upload-sbom@v3
         with:
           serverhostname: ${{ secrets.DEPENDENCY_TRACK_HOSTNAME }}
           apikey: ${{ secrets.DEPENDENCY_TRACK_APIKEY }}
