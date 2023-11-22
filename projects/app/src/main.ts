@@ -7,11 +7,11 @@ import { environment } from './environments/environment';
 const SENTRY_DSN: string = (window as any).SENTRY_DSN;
 
 const setupSentryProviders = async () => {
-  if (SENTRY_DSN === '@SENTRY_DSN@') {
+  if (SENTRY_DSN === '@SENTRY_DSN@' || SENTRY_DSN === '') {
     return [];
   }
   const sentry = await import('@sentry/angular-ivy');
-  const tracing = await import('@sentry/tracing');
+  const tracing = await import('@sentry/browser');
   let version;
   try {
     const baseHref: string = (document.querySelector<HTMLBaseElement>('base[href]')?.href) || '/';
@@ -24,7 +24,10 @@ const setupSentryProviders = async () => {
     environment: environment.production ? 'production' : 'development',
     integrations: [
       new tracing.BrowserTracing({
-        tracingOrigins: [/^\/api/],
+        shouldCreateSpanForRequest: (url) => {
+          // Do not create spans for outgoing requests to a `api` endpoint
+          return !/\/api\//.test(url);
+        },
         routingInstrumentation: sentry.routingInstrumentation,
       }),
     ],
