@@ -1,4 +1,4 @@
-@import '~ol/ol.css';
+@import 'ol/ol.css';
 
 .ol-unselectable {
   touch-action: none;

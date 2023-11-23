@@ -18,7 +18,7 @@ import { environment } from '../environments/environment';
       viewerBaseUrl: environment.viewerBaseUrl,
     }),
     BrowserAnimationsModule,
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production, connectInZone: true }),
   ],
   providers: [],
   bootstrap: [AppComponent],

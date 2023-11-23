@@ -2,7 +2,7 @@
 const useLocalhost = process.env.PROXY_USE_LOCALHOST === 'true';
 
 module.exports = {
-  "/api/*":{
+  "/api":{
     "target": useLocalhost ? "http://127.0.0.1:8080" : "https://snapshot.tailormap.nl",
     "secure": false,
     "logLevel": "info",

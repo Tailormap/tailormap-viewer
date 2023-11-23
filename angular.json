@@ -33,12 +33,12 @@
       },
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:browser-esbuild",
           "options": {
             "outputPath": "dist/app",
             "index": "projects/app/src/index.html",
             "main": "projects/app/src/main.ts",
-            "polyfills": "projects/app/src/polyfills.ts",
+            "polyfills": ["projects/app/src/polyfills.ts"],
             "assets": [
               {
                 "glob": "**/*",
@@ -112,9 +112,7 @@
             },
             "development": {
               "tsConfig": "projects/app/tsconfig.app.json",
-              "buildOptimizer": false,
               "optimization": false,
-              "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
@@ -126,13 +124,13 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "app:build:production"
+              "buildTarget": "app:build:production"
             },
             "development": {
-              "browserTarget": "app:build:development"
+              "buildTarget": "app:build:development"
             },
             "nl": {
-              "browserTarget": "app:build:development,nl"
+              "buildTarget": "app:build:development,nl"
             }
           },
           "options": {

@@ -82,7 +82,7 @@
       <mat-form-field>
         <mat-label i18n="@@admin-core.catalog.substitute-layer-url-template">High-DPI substitute URL template</mat-label>
         <input matInput formControlName="hiDpiSubstituteLayer" autocomplete="off" />
-        <mat-hint><span i18n="@@admin-core.catalog.for-example">For example</span>: <span class="monospace">https://my.tile.service/{{ "{" }}z}/{{ "{" }}x}/{{ "{" }}y}@2x.png</span></mat-hint>
+        <mat-hint><span i18n="@@admin-core.catalog.for-example">For example</span>: <span class="monospace">https://my.tile.service/{{ "{" }}z&#125;/{{ "{" }}x&#125;/{{ "{" }}y&#125;&#64;2x.png</span></mat-hint>
       </mat-form-field>
     </ng-container>
     <ng-container *ngIf="isWMS">
