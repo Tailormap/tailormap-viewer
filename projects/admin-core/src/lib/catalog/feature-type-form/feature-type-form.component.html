@@ -7,6 +7,7 @@
     <div i18n="@@admin-core.catalog.technical-name">Technical name: {{ featureType.name }}</div>
     <tm-admin-feature-type-attributes [attributes]="featureType.attributes"
                                       [featureTypeSettings]="featureTypeSettings$ | async"
+                                      [showFullSettings]="true"
                                       (attributeEnabledChanged)="attributeEnabledChanged(featureType.settings, $event)"
                                       (attributeReadonlyChanged)="attributeReadonlyChanged(featureType.settings, $event)"
                                       (attributeOrderChanged)="attributeOrderChanged($event)"

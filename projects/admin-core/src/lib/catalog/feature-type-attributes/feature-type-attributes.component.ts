@@ -10,6 +10,12 @@ import { AttributeTypeHelper } from "@tailormap-viewer/api";
 
 type CheckableAttribute =  'hidden' | 'readonly';
 
+const attributeColumnLabels = [ 'label-enabled', 'label-editable', 'label-name', 'label-type', 'label-alias' ];
+const attributeColumns = [ 'enabled', 'editable', 'name', 'type', 'alias' ];
+
+const attributeExtraColumnLabels = ['label-sort'];
+const attributeExtraColumns = ['sort'];
+
 @Component({
   selector: 'tm-admin-feature-type-attributes',
   templateUrl: './feature-type-attributes.component.html',
@@ -18,14 +24,27 @@ type CheckableAttribute =  'hidden' | 'readonly';
 })
 export class FeatureTypeAttributesComponent implements OnChanges {
 
-  public readonly columnLabels = [ 'label-enabled', 'label-editable', 'label-name', 'label-type', 'label-alias', 'label-sort' ];
-  public readonly columns = [ 'enabled', 'editable', 'name', 'type', 'alias', 'sort' ];
+  public columnLabels = attributeColumnLabels;
+  public columns = attributeColumns;
 
   @Input()
   public attributes: AttributeDescriptorModel[] = [];
 
   @Input()
   public featureTypeSettings: FeatureTypeSettingsModel | null = null;
+
+  @Input()
+  public catalogFeatureTypeSettings: FeatureTypeSettingsModel | null = null;
+
+  @Input()
+  public set showFullSettings(showFullSettings: boolean) {
+    this.columnLabels = showFullSettings
+      ? [ ...attributeColumnLabels, ...attributeExtraColumnLabels ]
+      : attributeColumnLabels;
+    this.columns = showFullSettings
+      ? [ ...attributeColumns, ...attributeExtraColumns ]
+      : attributeColumns;
+  }
 
   @Output()
   public attributeEnabledChanged = new EventEmitter<Array<{ attribute: string; checked: boolean }>>();
@@ -39,13 +58,15 @@ export class FeatureTypeAttributesComponent implements OnChanges {
   @Output()
   public aliasesChanged = new EventEmitter<Array<{ attribute: string; alias: string | undefined }>>();
 
+  public catalogFeatureTypeReadOnly: Set<string> = new Set();
+
   public aliasForm: FormGroup = new FormGroup({});
 
   public someChecked: Record<CheckableAttribute, boolean> = { hidden: false, readonly: false };
   public allChecked: Record<CheckableAttribute, boolean> = { hidden: false, readonly: false };
   public checkedAttributes: Record<CheckableAttribute, Set<string>> = { hidden: new Set<string>(), readonly: new Set<string>() };
 
-  public dataAttributes: AttributeDescriptorModel[] = [];
+  public dataAttributes: Array<AttributeDescriptorModel & { alias?: string }> = [];
   public geomAttributes: AttributeDescriptorModel[] = [];
 
   constructor(
@@ -73,11 +94,15 @@ export class FeatureTypeAttributesComponent implements OnChanges {
       Object.keys(this.aliasForm.controls).forEach(ctrl => this.aliasForm.removeControl(ctrl));
       this.dataAttributes.forEach(att => {
         const control = new FormControl<string>(aliases[att.name]?.title || '');
+        if (!this.showFullSettings) {
+          control.disable({ onlySelf: true, emitEvent: false });
+        }
         this.aliasForm.addControl(att.name, control, { emitEvent: false });
       });
     }
     this.updateChecked(changes, 'hidden');
     this.updateChecked(changes, 'readonly');
+    this.catalogFeatureTypeReadOnly = new Set(this.catalogFeatureTypeSettings?.readOnlyAttributes || []);
   }
 
   public toggleAllAttributes(type: CheckableAttribute) {
@@ -95,7 +120,7 @@ export class FeatureTypeAttributesComponent implements OnChanges {
     if (type === 'hidden') {
       this.attributeEnabledChanged.emit(updatedAttributeChecked);
     }
-    if (type === 'readonly') {
+    if (type === 'readonly' && !this.isReadonlyFieldDisabled(attribute)) {
       this.attributeReadonlyChanged.emit(updatedAttributeChecked);
     }
   }
@@ -127,6 +152,23 @@ export class FeatureTypeAttributesComponent implements OnChanges {
       return true;
     }
     return this.featureTypeSettings && this.featureTypeSettings[item] !== changes['featureTypeSettings'].previousValue[item];
+  }
+
+  public getTooltip(attributeName: string) {
+    return this.catalogFeatureTypeReadOnly.has(attributeName)
+      ? $localize `:@@admin-core.catalog.readonly-in-catalog:This attribute is set to not editable in the catalog and cannot be changed here`
+      : null;
+  }
+
+  public isReadonlyFieldDisabled(attributeName: string) {
+    return !this.isAttributeEnabled('hidden', attributeName)
+      || this.catalogFeatureTypeReadOnly.has(attributeName);
+  }
+
+  public isReadonlyFieldChecked(attributeName: string) {
+    return this.isAttributeEnabled('readonly', attributeName)
+      && this.isAttributeEnabled('hidden', attributeName)
+      && !this.catalogFeatureTypeReadOnly.has(attributeName);
   }
 
 }

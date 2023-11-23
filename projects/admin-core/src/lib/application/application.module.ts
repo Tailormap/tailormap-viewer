@@ -29,6 +29,9 @@ import { ApplicationEditStylingComponent } from './application-edit-styling/appl
 import { ImageUploadFieldComponent } from './styling/image-upload-field/image-upload-field.component';
 import { ApplicationLayerSettingsComponent } from './application-layer-settings/application-layer-settings.component';
 import { ApplicationService } from './services/application.service';
+import {
+  ApplicationLayerAttributeSettingsComponent,
+} from './application-layer-attribute-settings/application-layer-attribute-settings.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +51,7 @@ import { ApplicationService } from './services/application.service';
     ApplicationEditStylingComponent,
     ImageUploadFieldComponent,
     ApplicationLayerSettingsComponent,
+    ApplicationLayerAttributeSettingsComponent,
   ],
   imports: [
     CommonModule,

@@ -1,0 +1,15 @@
+<h2 mat-dialog-title i18n="@@admin-core.application.edit-application-layer-attributes">Edit application layer attribute settings</h2>
+<mat-dialog-content>
+  <p i18n="@@admin-core.application.edit-application-layer-attributes-hint1">This only shows the attributes that are enabled in the catalog. If an attribute is missing, check the catalog settings.</p>
+  <p i18n="@@admin-core.application.edit-application-layer-attributes-hint2">It is advised to use the catalog for global attribute settings and only use these application layer settings in specific cases.</p>
+  <tm-admin-feature-type-attributes [showFullSettings]="false"
+                                    [attributes]="attributes"
+                                    [catalogFeatureTypeSettings]="catalogFeatureTypeSettings"
+                                    (attributeEnabledChanged)="attributesEnabledChanged($event)"
+                                    (attributeReadonlyChanged)="attributesReadonlyChanged($event)"
+                                    [featureTypeSettings]="settings"></tm-admin-feature-type-attributes>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-flat-button (click)="close()" i18n="@@admin-core.catalog.common.cancel">Cancel</button>
+  <tm-admin-save-button (save)="save()"></tm-admin-save-button>
+</mat-dialog-actions>

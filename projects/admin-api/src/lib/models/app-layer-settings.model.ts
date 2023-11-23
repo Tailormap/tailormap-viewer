@@ -4,4 +4,6 @@ export interface AppLayerSettingsModel {
   attribution?: string | null;
   description?: string | null;
   editable?: boolean;
+  hideAttributes?: string[] | null;
+  readOnlyAttributes?: string[] | null;
 }
