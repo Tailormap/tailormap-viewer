@@ -33,12 +33,12 @@
       },
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:browser-esbuild",
           "options": {
             "outputPath": "dist/app",
             "index": "projects/app/src/index.html",
             "main": "projects/app/src/main.ts",
-            "polyfills": "projects/app/src/polyfills.ts",
+            "polyfills": ["projects/app/src/polyfills.ts"],
             "assets": [
               {
                 "glob": "**/*",
@@ -112,9 +112,7 @@
             },
             "development": {
               "tsConfig": "projects/app/tsconfig.app.json",
-              "buildOptimizer": false,
               "optimization": false,
-              "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
