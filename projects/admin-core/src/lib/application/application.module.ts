@@ -30,7 +30,7 @@ import { ImageUploadFieldComponent } from './styling/image-upload-field/image-up
 import { ApplicationLayerSettingsComponent } from './application-layer-settings/application-layer-settings.component';
 import { ApplicationService } from './services/application.service';
 import {
-  ApplicationLayerAttributeSettingsComponent
+  ApplicationLayerAttributeSettingsComponent,
 } from './application-layer-attribute-settings/application-layer-attribute-settings.component';
 
 @NgModule({
