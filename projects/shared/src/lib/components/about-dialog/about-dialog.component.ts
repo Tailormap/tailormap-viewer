@@ -30,6 +30,7 @@ export class AboutDialogComponent {
         catchError((): Observable<VersionModel> => of({
           version: "",
           buildDate: "",
+          addedPackages: [],
         })),
         tap(() => this.loadingSubject.next(false)),
       );
