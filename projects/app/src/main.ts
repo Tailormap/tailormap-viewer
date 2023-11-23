@@ -3,6 +3,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
+import { VersionModel } from '../../shared/src/lib/components/about-dialog/version.model';
 
 const SENTRY_DSN: string = (window as any).SENTRY_DSN;
 
@@ -12,13 +13,19 @@ const setupSentryProviders = async () => {
   }
   const sentry = await import('@sentry/angular-ivy');
   const tracing = await import('@sentry/browser');
-  let version;
-  try {
-    version = await fetch('/version.json').then(response => response.json());
-  } catch (error) {/**/}
+  let version: VersionModel | undefined;
+  fetch('/version.json')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('version.json could not be fetched');
+      }
+      return response.json();
+    })
+    .then(v => version = v)
+    .catch(() => {/* ignore error for now, unable to get version */});
   sentry.init({
     dsn: SENTRY_DSN,
-    release: version?.gitInfo.semverString,
+    release: version?.gitInfo?.semverString,
     environment: environment.production ? 'production' : 'development',
     integrations: [
       new tracing.BrowserTracing({
