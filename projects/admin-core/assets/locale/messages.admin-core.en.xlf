@@ -86,6 +86,15 @@
       <trans-unit id="admin-core.application.edit" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ application.title }}"/></source>
       </trans-unit>
+      <trans-unit id="admin-core.application.edit-application-layer-attributes" datatype="html">
+        <source>Edit application layer attribute settings</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.edit-application-layer-attributes-hint1" datatype="html">
+        <source>This only shows the attributes that are enabled in the catalog. If an attribute is missing, check the catalog settings.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.edit-application-layer-attributes-hint2" datatype="html">
+        <source>It is advised to use the catalog for global attribute settings and only use these application layer settings in specific cases.</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.editable" datatype="html">
         <source>Editable</source>
       </trans-unit>
@@ -445,6 +454,9 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.proxy-enabled" datatype="html">
         <source>Proxy enabled</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.readonly-in-catalog" datatype="html">
+        <source>This attribute is set to not editable in the catalog and cannot be changed here</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.refresh-feature-source" datatype="html">
         <source>Refresh feature source</source>

@@ -113,6 +113,18 @@
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ application.title }}"/></source>
         <target state="translated">Bewerken van <x id="INTERPOLATION" equiv-text="{{ application.title }}"/></target>
       </trans-unit>
+      <trans-unit id="admin-core.application.edit-application-layer-attributes" datatype="html">
+        <source>Edit application layer attribute settings</source>
+        <target state="new">Bewerk attribuut-instellingen voor applicatielaag</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.edit-application-layer-attributes-hint1" datatype="html">
+        <source>This only shows the attributes that are enabled in the catalog for this feature type. If an attribute is missing, check the catalog settings.</source>
+        <target state="new">Hier worden alleen de attributen getoond die ingeschakeld zijn in de catalog voor dit feature type. Als er een attribuut mist, controleer de instellingen in de catalog.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.edit-application-layer-attributes-hint2" datatype="html">
+        <source>It is advised to use the catalog for global attribute settings and only use these application layer settings in specific cases.</source>
+        <target state="new">Het is aan te raden om de catalog te gebruiken voor globale attribuut-instellingen en om de attribuut-instellingen voor de applicatielaag alleen in specifieke gevallen te gebruiken.</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.editable" datatype="html">
         <source>Editable</source>
         <target>Bewerkbaar</target>
@@ -592,6 +604,10 @@
       <trans-unit id="admin-core.catalog.proxy-enabled" datatype="html">
         <source>Proxy enabled</source>
         <target>Proxy ingeschakeld</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.readonly-in-catalog" datatype="html">
+        <source>This attribute is set to not editable in the catalog and cannot be changed here</source>
+        <target state="new">Dit attribuut is ingesteld als niet te bewerken in de catalog en kan hier niet aangepast worden</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.refresh-feature-source" datatype="html">
         <source>Refresh feature source</source>
