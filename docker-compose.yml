@@ -40,6 +40,8 @@ services:
       - "OIDC_CLIENT_SECRET=${OIDC_CLIENT_SECRET:-}"
       - "OIDC_CLIENT_USER_NAME_ATTRIBUTE=${OIDC_CLIENT_USER_NAME_ATTRIBUTE:-name}"
       - "OIDC_SHOW_FOR_VIEWER=${OIDC_SHOW_FOR_VIEWER:-false}"
+      - "SENTRY_DSN=${API_SENTRY_DSN:-}"
+      - "VIEWER_SENTRY_DSN=${VIEWER_SENTRY_DSN:-}"
     restart: unless-stopped
     depends_on:
       - db

@@ -2,6 +2,9 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en" datatype="plaintext" original="ng2.template">
     <body>
+      <trans-unit id="shared.about.added-packages" datatype="html">
+        <source>Extensions</source>
+      </trans-unit>
       <trans-unit id="shared.about.build-date" datatype="html">
         <source>Build date</source>
       </trans-unit>

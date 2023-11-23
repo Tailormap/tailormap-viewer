@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent, ViewerAppComponent } from './pages';
+import { NavigationErrorRouterService } from './services/navigation-error-router.service';
 
 const routes: Routes = [
   // IMPORTANT: When you add a route, also add it to the FrontController class of tailormap-api, otherwise a user will get a 404 when
@@ -20,4 +21,6 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forChild(routes)],
 })
-export class CoreRoutingModule { }
+export class CoreRoutingModule {
+  constructor(_navigationErrorRouter: NavigationErrorRouterService) {}
+}
