@@ -26,6 +26,14 @@
       <div class="label" i18n="@@shared.about.git-version">Git version</div>
       <div><ng-container *ngTemplateOutlet="infoOrUnknown; context: {$implicit: version.gitInfo?.raw}"></ng-container></div>
     </div>
+    <div class="row" *ngIf="version.addedPackages.length > 0">
+      <div class="label" i18n="@@shared.about.added-packages">Extensions</div>
+      <div>
+        <div *ngFor="let pkg of version.addedPackages">
+          {{pkg.name}} {{pkg.version}}
+        </div>
+      </div>
+    </div>
   </ng-container>
 </div>
 

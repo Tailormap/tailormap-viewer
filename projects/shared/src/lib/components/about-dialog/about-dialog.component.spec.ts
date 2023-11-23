@@ -20,6 +20,7 @@ describe('AboutDialogComponent', () => {
     mockReq.flush({
       "version": "11.1.2",
       "buildDate": "Wed Oct 25 2023 15:28:49 GMT+0200 (Central European Summer Time)",
+      "addedPackages": [],
     });
     expect(await screen.findByText('11.1.2')).toBeInTheDocument();
     expect(await screen.findByText('Oct 25, 2023')).toBeInTheDocument();
