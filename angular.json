@@ -126,13 +126,13 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "app:build:production"
+              "buildTarget": "app:build:production"
             },
             "development": {
-              "browserTarget": "app:build:development"
+              "buildTarget": "app:build:development"
             },
             "nl": {
-              "browserTarget": "app:build:development,nl"
+              "buildTarget": "app:build:development,nl"
             }
           },
           "options": {
