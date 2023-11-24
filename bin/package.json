@@ -1,0 +1,9 @@
+{
+  "name": "tailormap-viewer scripts",
+  "description": "some helper scripts to perform common tasks like i18n extraction and publishing libraries",
+  "scripts": {},
+  "private": true,
+  "dependencies": {
+    "inquirer": "^9.2.12"
+  }
+}

@@ -1,6 +1,6 @@
 const { spawn, execSync } = require('child_process');
 const path = require('path');
-const inquirer = require('inquirer');
+// const inquirer = require('inquirer');
 const fs = require("fs/promises");
 
 const scopedProjects = [
@@ -37,13 +37,14 @@ const checkCleanGitRepo = () => {
   }
 };
 
-const requestProject = (message, callback) => {
+const requestProject = async (message, callback) => {
+  const inquirer = await import('inquirer');
   inquirer.prompt([{
-    type: 'list',
-    name: 'project',
-    message: message,
-    choices: availableProjects,
-  }])
+      type: 'list',
+      name: 'project',
+      message: message,
+      choices: availableProjects,
+    }])
     .then(answers => {
       const project = answers.project;
       if (!project) {
@@ -55,6 +56,7 @@ const requestProject = (message, callback) => {
 };
 
 const requestVersion = async (message) => {
+  const inquirer = await import('inquirer');
   const answers = await inquirer.prompt([{
     type: 'input',
     name: 'version',
