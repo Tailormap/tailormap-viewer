@@ -39,7 +39,7 @@ const checkCleanGitRepo = () => {
 
 const requestProject = async (message, callback) => {
   const inquirer = await import('inquirer');
-  inquirer.prompt([{
+  inquirer.default.prompt([{
       type: 'list',
       name: 'project',
       message: message,
@@ -57,7 +57,7 @@ const requestProject = async (message, callback) => {
 
 const requestVersion = async (message) => {
   const inquirer = await import('inquirer');
-  const answers = await inquirer.prompt([{
+  const answers = await inquirer.default.prompt([{
     type: 'input',
     name: 'version',
     message: 'What version do you want to release (e.g. 10.0.0-rc2)',
