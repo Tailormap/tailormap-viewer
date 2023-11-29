@@ -13,6 +13,7 @@ import { PrintModule } from './print/print.module';
 import { FilterComponentModule } from './filter/filter-component.module';
 import { EditComponentModule } from './edit/edit-component.module';
 import { PanelComponentsComponent } from './panel-components/panel-components.component';
+import { RegisteredComponentsModule } from './registered-components-renderer/registered-components.module';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { PanelComponentsComponent } from './panel-components/panel-components.co
     PrintModule,
     FilterComponentModule,
     EditComponentModule,
+    RegisteredComponentsModule,
   ],
 })
 export class ComponentsModule {}

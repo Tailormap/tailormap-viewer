@@ -1,12 +1,13 @@
 import { render, screen } from '@testing-library/angular';
 import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { MenubarComponent } from './menubar.component';
-import { MenubarService } from './menubar.service';
 import { of } from 'rxjs';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MenubarButtonComponent } from './menubar-button/menubar-button.component';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { RegisteredComponentsRendererComponent } from '../registered-components-renderer/registered-components-renderer.component';
+import { ComponentRegistrationService } from '../../services/component-registration.service';
 
 @Component({
   selector: 'tm-menu-button-test',
@@ -29,6 +30,7 @@ describe('MenubarComponent', () => {
       declarations: [
         MenubarComponent,
         MenubarButtonComponent,
+        RegisteredComponentsRendererComponent,
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       imports: [
@@ -37,7 +39,7 @@ describe('MenubarComponent', () => {
         MatIconTestingModule,
       ],
       providers: [
-        { provide: MenubarService, useValue: mockedControlsService },
+        { provide: ComponentRegistrationService, useValue: mockedControlsService },
       ],
     });
     expect(await screen.findByText(/Click me/)).toBeInTheDocument();
