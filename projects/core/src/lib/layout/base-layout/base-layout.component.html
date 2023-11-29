@@ -11,14 +11,14 @@
           <tm-drawing *ngIf="isComponentEnabled(config, componentTypes.DRAWING)"></tm-drawing>
           <tm-print *ngIf="isComponentEnabled(config, componentTypes.PRINT)"></tm-print>
           <tm-filter *ngIf="isComponentEnabled(config, componentTypes.FILTER)"></tm-filter>
-          <tm-panel-components [config]="config"></tm-panel-components>
+          <tm-registered-components-renderer [config]="config" area="panel"></tm-registered-components-renderer>
         </tm-menubar-panel>
       </div>
       <div class="map">
         <tm-feature-info *ngIf="isComponentEnabled(config, componentTypes.FEATURE_INFO)"></tm-feature-info>
         <tm-edit-dialog *ngIf="isComponentEnabled(config, componentTypes.EDIT)"></tm-edit-dialog>
         <tm-map></tm-map>
-        <tm-map-controls [config]="config"></tm-map-controls>
+        <tm-registered-components-renderer [config]="config" area="map"></tm-registered-components-renderer>
         <tm-attribute-list *ngIf="isComponentEnabled(config, componentTypes.ATTRIBUTE_LIST)"></tm-attribute-list>
         <div class="map-controls-left">
           <tm-measure *ngIf="isComponentEnabled(config, componentTypes.MEASURE)"></tm-measure>
@@ -26,19 +26,23 @@
           <tm-streetview *ngIf="isComponentEnabled(config, componentTypes.STREETVIEW)"></tm-streetview>
           <tm-simple-search *ngIf="isComponentEnabled(config, componentTypes.SIMPLE_SEARCH)"></tm-simple-search>
           <tm-edit *ngIf="isComponentEnabled(config, componentTypes.EDIT)"></tm-edit>
+          <tm-registered-components-renderer [config]="config" area="map-controls-left"></tm-registered-components-renderer>
         </div>
         <div class="map-controls-right">
           <tm-background-layer-toggle *ngIf="isComponentEnabled(config, componentTypes.BACKGROUND_LAYER_TOGGLE)"></tm-background-layer-toggle>
           <div class="map-controls-column">
             <tm-zoom-buttons *ngIf="isComponentEnabled(config, componentTypes.ZOOM)"></tm-zoom-buttons>
             <tm-geolocation *ngIf="isComponentEnabled(config, componentTypes.GEOLOCATION)"></tm-geolocation>
+            <tm-registered-components-renderer [config]="config" area="map-controls-right"></tm-registered-components-renderer>
           </div>
         </div>
         <div class="map-controls-left map-controls-left--on-bottom">
           <tm-scale-bar *ngIf="isComponentEnabled(config, componentTypes.SCALE_BAR)"></tm-scale-bar>
+          <tm-registered-components-renderer [config]="config" area="map-controls-left-bottom"></tm-registered-components-renderer>
         </div>
         <div class="map-controls-right map-controls-right--on-bottom">
           <tm-mouse-coordinates *ngIf="isComponentEnabled(config, componentTypes.MOUSE_COORDINATES)"></tm-mouse-coordinates>
+          <tm-registered-components-renderer [config]="config" area="map-controls-right-bottom"></tm-registered-components-renderer>
         </div>
       </div>
     </div>

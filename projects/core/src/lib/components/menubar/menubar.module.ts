@@ -5,6 +5,7 @@ import { MenubarButtonComponent } from './menubar-button/menubar-button.componen
 import { ProfileComponent } from './profile/profile.component';
 import { MenubarPanelComponent } from './menubar-panel/menubar-panel.component';
 import { MenubarLogoComponent } from './menubar-logo/menubar-logo.component';
+import { RegisteredComponentsModule } from '../registered-components-renderer/registered-components.module';
 
 
 
@@ -18,6 +19,7 @@ import { MenubarLogoComponent } from './menubar-logo/menubar-logo.component';
   ],
   imports: [
     SharedModule,
+    RegisteredComponentsModule,
   ],
   exports: [
     MenubarComponent,

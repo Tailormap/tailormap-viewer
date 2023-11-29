@@ -1,4 +1,3 @@
-const chalk = require('chalk');
 const path = require('path');
 const fs = require('fs');
 
@@ -29,7 +28,7 @@ try {
     buildDate: Date(),
     addedPackages: getAddedPackagesWithVersion()}, null, 2);
   fs.writeFileSync(file, version, {encoding: 'utf-8'});
-  console.log(chalk.green(`Wrote version info ${appVersion} to ${path.relative(path.resolve(__dirname, '..'), file)}`));
+  console.log(`Wrote version info ${appVersion} to ${path.relative(path.resolve(__dirname, '..'), file)}`);
 } catch(e) {
-  console.log(chalk.red('Error writing version and git info'), e);
+  console.log('Error writing version and git info', e);
 }
