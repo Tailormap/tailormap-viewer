@@ -44,3 +44,9 @@
 .menu-buttons {
   flex: 1;
 }
+
+.menu-buttons tm-registered-components-renderer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
