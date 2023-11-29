@@ -11,7 +11,6 @@ import { ComponentConfigHelper } from '../../shared/helpers/component-config.hel
 @Component({
   selector: 'tm-registered-components-renderer',
   templateUrl: './registered-components-renderer.component.html',
-  styleUrls: ['./registered-components-renderer.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisteredComponentsRendererComponent implements OnInit {
