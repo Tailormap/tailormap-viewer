@@ -1,4 +1,4 @@
-export type MapStylePointType = 'label' | 'square' | 'triangle' | 'star' | 'cross' | 'circle' | 'arrow' | 'diamond';
+export type MapStylePointType = 'label' | 'square' | 'triangle' | 'star' | 'cross' | 'circle' | 'arrow' | 'diamond' | 'view_orientation';
 
 export interface MapStyleModel {
   styleKey: string;
