@@ -1,4 +1,4 @@
-import { Map as OlMap } from 'ol';
+import { Feature, Map as OlMap } from 'ol';
 import { Layer as BaseLayer, Vector as VectorLayer, Group as LayerGroup } from 'ol/layer';
 import { Geometry } from 'ol/geom';
 import { Vector as VectorSource, ImageWMS, WMTS, XYZ, TileWMS } from 'ol/source';
@@ -18,7 +18,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
 
   private layers: Map<string, BaseLayer> = new Map<string, BaseLayer>();
   private backgroundLayers: Map<string, BaseLayer> = new Map<string, BaseLayer>();
-  private vectorLayers: Map<string, VectorLayer<VectorSource<Geometry>>> = new Map<string, VectorLayer<VectorSource<Geometry>>>();
+  private vectorLayers: Map<string, VectorLayer<VectorSource<Feature<Geometry>>>> = new Map<string, VectorLayer<VectorSource<Feature<Geometry>>>>();
 
   private backgroundLayerGroup = new LayerGroup();
   private baseLayerGroup = new LayerGroup();
@@ -306,7 +306,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     layerMap.delete(layerId);
   }
 
-  private removeVectorLayer(layer: VectorLayer<VectorSource<Geometry>>, layerId: string) {
+  private removeVectorLayer(layer: VectorLayer<VectorSource<Feature<Geometry>>>, layerId: string) {
     const vectorLayer = this.vectorLayers.get(layerId);
     if (vectorLayer) {
       vectorLayer.getSource()?.clear();
@@ -332,7 +332,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     return olLayer;
   }
 
-  private createVectorLayer(layer: VectorLayerModel): VectorLayer<VectorSource<Geometry>> | null {
+  private createVectorLayer(layer: VectorLayerModel): VectorLayer<VectorSource<Feature<Geometry>>> | null {
     const updateWhileAnimating = layer.updateWhileAnimating ?? false;
     const source = new VectorSource({ wrapX: true });
     const vectorLayer = new VectorLayer({ source, visible: layer.visible, updateWhileAnimating, updateWhileInteracting: updateWhileAnimating });

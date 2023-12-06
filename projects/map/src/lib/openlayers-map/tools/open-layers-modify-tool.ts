@@ -1,5 +1,5 @@
 import { Subject } from 'rxjs';
-import { Map as OlMap } from 'ol';
+import { Feature, Map as OlMap } from 'ol';
 import { EventsKey } from 'ol/events';
 import { unByKey } from 'ol/Observable';
 import { FeatureHelper } from '../../helpers/feature.helper';
@@ -24,7 +24,7 @@ export class OpenLayersModifyTool implements ModifyToolModel {
   private geometryChangedSubject: Subject<string> = new Subject<string>();
   public featureModified$ = this.geometryChangedSubject.asObservable();
   private editLayer: VectorLayer<VectorSource> | null = null;
-  private source: VectorSource<Geometry> | null = null;
+  private source: VectorSource<Feature<Geometry>> | null = null;
 
   constructor(
     public id: string,

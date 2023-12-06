@@ -163,7 +163,7 @@ export class MapStyleHelper {
     if (showSelectionRectangle) {
       const outerSelectionRectangle = baseLabelStyle.clone();
       outerSelectionRectangle.setZIndex(styleConfig.zIndex - 1);
-      outerSelectionRectangle.getText().setBackgroundStroke(MapStyleHelper.getSelectionStroke(true));
+      outerSelectionRectangle.getText()?.setBackgroundStroke(MapStyleHelper.getSelectionStroke(true));
       return [ baseLabelStyle, outerSelectionRectangle ];
     }
     return [baseLabelStyle];
@@ -362,7 +362,7 @@ export class MapStyleHelper {
     return degrees / (180 / Math.PI);
   }
 
-  private static createArrowStyles(styleConfig: MapStyleModel, feature?: Feature<Geometry>, strokeStyle?: Stroke): Style[] {
+  private static createArrowStyles(styleConfig: MapStyleModel, feature?: Feature<Geometry>, strokeStyle?: Stroke | null): Style[] {
     if (!feature
       || !strokeStyle
       || !styleConfig.arrowType
