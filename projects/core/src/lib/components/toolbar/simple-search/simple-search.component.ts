@@ -100,7 +100,7 @@ export class SimpleSearchComponent implements OnInit, OnDestroy {
           feature.geometry = FeatureHelper.transformGeometry(feature.geometry, feature.crs, projectionCode);
           feature.crs = projectionCode;
         }
-        return this.mapService.renderFeatures$('search-result-highlight', of(feature), style, true, true);
+        return this.mapService.renderFeatures$('search-result-highlight', of(feature), style, { zoomToFeature: true, updateWhileAnimating: true });
       }),
       takeUntil(timer(5000))).subscribe();
   }

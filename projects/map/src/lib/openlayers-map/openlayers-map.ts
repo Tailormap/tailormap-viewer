@@ -16,7 +16,7 @@ import { OpenLayersEventManager } from './open-layers-event-manager';
 import { MapExportOptions } from '../map-service/map.service';
 import { Feature } from 'ol';
 import { Geometry } from 'ol/geom';
-import { buffer, Extent, extend } from 'ol/extent';
+import { buffer, Extent, extend, getCenter } from 'ol/extent';
 import { Layer as BaseLayer } from 'ol/layer';
 import { OpenLayersWmsGetFeatureInfoHelper } from './helpers/open-layers-wms-get-feature-info.helper';
 import { HttpClient, HttpXsrfTokenExtractor } from '@angular/common/http';
@@ -148,17 +148,7 @@ export class OpenLayersMap implements MapViewerModel {
     });
   }
 
-  public setCenterAndZoom(center: number[], zoom: number) {
-      this.initialCenterZoom = [ center, zoom ];
-
-      this.executeMapAction(olMap => {
-          const view = olMap.getView();
-          view.setCenter(center);
-          view.setZoom(zoom);
-      });
-  }
-
-  public zoomToFeatures(olFeatures: Feature<Geometry>[]) {
+  private getFeaturesExtent(olFeatures: Feature<Geometry>[]) {
     if (olFeatures.length === 0) {
       return;
     }
@@ -170,6 +160,34 @@ export class OpenLayersMap implements MapViewerModel {
     }
     const totalExtent = extents[0];
     extents.slice(1).forEach(e => extend(totalExtent, e));
+    return totalExtent;
+  }
+
+  public setCenterAndZoom(center: number[], zoom: number) {
+      this.initialCenterZoom = [ center, zoom ];
+
+      this.executeMapAction(olMap => {
+          const view = olMap.getView();
+          view.setCenter(center);
+          view.setZoom(zoom);
+      });
+  }
+
+  public centerFeatures(olFeatures: Feature<Geometry>[]) {
+    const totalExtent = this.getFeaturesExtent(olFeatures);
+    if (!totalExtent) {
+      return;
+    }
+    this.executeMapAction(olMap => {
+      olMap.getView().setCenter(getCenter(totalExtent));
+    });
+  }
+
+  public zoomToFeatures(olFeatures: Feature<Geometry>[]) {
+    const totalExtent = this.getFeaturesExtent(olFeatures);
+    if (!totalExtent) {
+      return;
+    }
     this.zoomToExtent(totalExtent);
   }
 

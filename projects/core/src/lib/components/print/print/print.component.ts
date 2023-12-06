@@ -136,7 +136,7 @@ export class PrintComponent implements OnInit, OnDestroy {
       zIndex: 9999,
       strokeColor: ApplicationStyleService.getPrimaryColor(),
       strokeWidth: 3,
-    }, undefined, true).pipe(takeUntil(this.destroyed)).subscribe();
+    }, { updateWhileAnimating: true }).pipe(takeUntil(this.destroyed)).subscribe();
 
     this.busy$.pipe(
       takeUntil(this.destroyed),

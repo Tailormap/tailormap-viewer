@@ -60,7 +60,7 @@ export class AttributeListComponent implements OnInit, OnDestroy {
       'attribute-list-highlight-layer',
       this.store$.select(selectCurrentlySelectedFeatureGeometry),
       FeatureStylingHelper.getDefaultHighlightStyle('attribute-list-highlight-style'),
-      true,
+      { zoomToFeature: true },
     )
       .pipe(takeUntil(this.destroyed))
       .subscribe();

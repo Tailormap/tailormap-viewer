@@ -117,11 +117,20 @@ export class MapService {
     layerId: string,
     featureGeometry$: Observable<FeatureModelType<T> | Array<FeatureModelType<T>>>,
     vectorLayerStyle?: MapStyleModel | ((feature: FeatureModel<T>) => MapStyleModel),
-    zoomToFeature?: boolean | (() => boolean),
-    updateWhileAnimating?: boolean,
+    config?: {
+      zoomToFeature?: boolean | (() => boolean);
+      centerFeature?: boolean | (() => boolean);
+      updateWhileAnimating?: boolean;
+    },
   ): Observable<VectorLayer<VectorSource<Feature<Geometry>>> | null> {
     return combineLatest([
-      this.createVectorLayer$({ id: layerId, name: `${layerId} layer`, layerType: LayerTypesEnum.Vector, visible: true, updateWhileAnimating }, vectorLayerStyle),
+      this.createVectorLayer$({
+        id: layerId,
+        name: `${layerId} layer`,
+        layerType: LayerTypesEnum.Vector,
+        visible: true,
+        updateWhileAnimating: config?.updateWhileAnimating,
+      }, vectorLayerStyle),
       featureGeometry$,
     ])
       .pipe(
@@ -136,15 +145,22 @@ export class MapService {
           featureModels.forEach(feature => {
             vectorLayer.getSource()?.addFeature(feature);
           });
-          const shouldZoom = typeof zoomToFeature === 'boolean'
-            ? zoomToFeature
-            : (typeof zoomToFeature === 'undefined' ? false : zoomToFeature());
+          const shouldZoom = this.getBoolean(config?.zoomToFeature);
+          const shouldCenter = this.getBoolean(config?.centerFeature);
           if (shouldZoom) {
             this.map.zoomToFeatures(featureModels);
+          } else if (shouldCenter) {
+            this.map.centerFeatures(featureModels);
           }
         }),
         map(([vectorLayer]) => vectorLayer),
       );
+  }
+
+  private getBoolean(bool?: boolean | (() => boolean)) {
+    return typeof bool === 'boolean'
+      ? bool
+      : (typeof bool === 'undefined' ? false : bool());
   }
 
   public createTooltip$(): Observable<MapTooltipModel> {
