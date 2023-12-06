@@ -127,6 +127,10 @@ body {
   user-select: none;
 }
 
+.resize-active .mat-mdc-dialog-surface {
+  overflow: visible;
+}
+
 [ng-version],
 .mat-mdc-dialog-container,
 .form-field textarea,
