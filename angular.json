@@ -74,7 +74,10 @@
               "rbush",
               "cssesc",
               "font-family-papandreou",
-              "earcut"
+              "earcut",
+              "svgpath",
+              "lerc",
+              "color-name"
             ],
             "i18nMissingTranslation": "error"
           },
