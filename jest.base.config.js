@@ -17,5 +17,5 @@ module.exports = {
       },
     ],
   },
-  transformIgnorePatterns: ['node_modules/(?!(.*\\.mjs$|ol|observable-fns|quick-lru|nanoid|@tinyhttp/|@stardazed/))'],
+  transformIgnorePatterns: ['node_modules/(?!(.*\\.mjs$|ol|observable-fns|quick-lru|nanoid|@tinyhttp/|@stardazed|color-(space|parse|rgba)/))'],
 };

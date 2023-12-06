@@ -23,6 +23,7 @@ import { Source } from 'ol/source';
 import { default as LayerRenderer } from 'ol/renderer/Layer';
 import { Coordinate } from 'ol/coordinate';
 import { HttpClient, HttpXsrfTokenExtractor } from '@angular/common/http';
+import { Feature } from 'ol';
 
 export type OlLayerFilter = (layer: Layer<Source, LayerRenderer<any>>) => boolean;
 
@@ -92,7 +93,7 @@ export class MapService {
   public createVectorLayer$<T extends FeatureModelAttributes = FeatureModelAttributes>(
     layer: VectorLayerModel,
     vectorLayerStyle?: MapStyleModel | ((feature: FeatureModel<T>) => MapStyleModel),
-  ): Observable<VectorLayer<VectorSource<Geometry>> | null> {
+  ): Observable<VectorLayer<VectorSource<Feature<Geometry>>> | null> {
     let layerManager: LayerManagerModel;
     return this.getLayerManager$()
       .pipe(
@@ -103,7 +104,7 @@ export class MapService {
           }
         }),
         map(manager => {
-          const vectorLayer = manager.addLayer<VectorLayer<VectorSource<Geometry>>>(layer);
+          const vectorLayer = manager.addLayer<VectorLayer<VectorSource<Feature<Geometry>>>>(layer);
           if (vectorLayer) {
             vectorLayer.setStyle(MapStyleHelper.getStyle(vectorLayerStyle));
           }
@@ -121,7 +122,7 @@ export class MapService {
       centerFeature?: boolean | (() => boolean);
       updateWhileAnimating?: boolean;
     },
-  ): Observable<VectorLayer<VectorSource<Geometry>> | null> {
+  ): Observable<VectorLayer<VectorSource<Feature<Geometry>>> | null> {
     return combineLatest([
       this.createVectorLayer$({
         id: layerId,
