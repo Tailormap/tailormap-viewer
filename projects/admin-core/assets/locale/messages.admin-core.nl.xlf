@@ -162,8 +162,8 @@
         <target>Start-extent</target>
       </trans-unit>
       <trans-unit id="admin-core.application.invalid-name-error" datatype="html">
-        <source>Name can only contain letters, numbers and dashes.</source>
-        <target>De naam mag alleen letters, cijfers en streepjes bevatten.</target>
+        <source>Name can only contain letters, numbers, underscores and dashes.</source>
+        <target>De naam mag alleen letters, cijfers en (liggende) streepjes bevatten.</target>
       </trans-unit>
       <trans-unit id="admin-core.application.layer-not-editable" datatype="html">
         <source>This layer cannot be edited because there is no writeable feature source / type configured for this layer</source>

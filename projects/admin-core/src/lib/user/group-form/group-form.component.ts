@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnI
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { debounceTime, Subject, takeUntil } from 'rxjs';
 import { GroupModel } from '@tailormap-admin/admin-api';
-import { NAME_REGEX } from '../constants';
+import { FormHelper } from '../../helpers/form.helper';
 
 @Component({
   selector: 'tm-admin-group-form',
@@ -15,7 +15,7 @@ export class GroupFormComponent implements OnInit, OnDestroy {
   public groupForm = new FormGroup({
     name: new FormControl<string>('', {
       nonNullable: true,
-      validators: [ Validators.required, Validators.pattern(NAME_REGEX) ],
+      validators: [ Validators.required, Validators.pattern(FormHelper.NAME_REGEX) ],
     }),
     description: new FormControl<string>('', { nonNullable: false }),
     notes: new FormControl<string>('', { nonNullable: false }),

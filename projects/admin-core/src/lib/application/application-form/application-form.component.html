@@ -7,7 +7,7 @@
            i18n-placeholder="@@admin-core.common.name"
            formControlName="name"
     />
-    <mat-hint *ngIf="applicationForm.get('name')?.hasError('pattern')" class="error" i18n="@@admin-core.application.invalid-name-error">Name can only contain letters, numbers and dashes.</mat-hint>
+    <mat-hint *ngIf="applicationForm.get('name')?.hasError('pattern')" class="error" i18n="@@admin-core.application.invalid-name-error">Name can only contain letters, numbers, underscores and dashes.</mat-hint>
   </mat-form-field>
   <mat-form-field>
     <mat-label i18n="@@admin-core.common.title">Title</mat-label>
