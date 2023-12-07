@@ -123,7 +123,7 @@
         <source>Initial extent</source>
       </trans-unit>
       <trans-unit id="admin-core.application.invalid-name-error" datatype="html">
-        <source>Name can only contain letters, numbers and dashes.</source>
+        <source>Name can only contain letters, numbers, underscores and dashes.</source>
       </trans-unit>
       <trans-unit id="admin-core.application.layer-not-editable" datatype="html">
         <source>This layer cannot be edited because there is no writeable feature source / type configured for this layer</source>

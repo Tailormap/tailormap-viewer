@@ -40,7 +40,7 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
       nonNullable: true,
       validators: [
         Validators.required,
-        Validators.pattern(/^[a-zA-Z0-9-]+$/),
+        Validators.pattern(FormHelper.NAME_REGEX),
       ],
     }),
     title: new FormControl('', { nonNullable: true, validators: [Validators.required] }),

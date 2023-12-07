@@ -4,9 +4,9 @@ import { AbstractControl, AsyncValidatorFn, FormControl, FormGroup, ValidationEr
 import { debounceTime, map, Observable, of, Subject, takeUntil } from 'rxjs';
 import { GroupService } from '../services/group.service';
 import { formatDate } from '@angular/common';
-import { NAME_REGEX } from '../constants';
 import { UserService } from '../services/user.service';
 import { UserAddUpdateModel } from '../models/user-add-update.model';
+import { FormHelper } from '../../helpers/form.helper';
 
 @Component({
   selector: 'tm-admin-user-form',
@@ -19,7 +19,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
   public userForm = new FormGroup({
     username: new FormControl<string>('', {
       nonNullable: true,
-      validators: [ Validators.required, Validators.pattern(NAME_REGEX) ],
+      validators: [ Validators.required, Validators.pattern(FormHelper.NAME_REGEX) ],
     }),
     password: new FormControl<string>('', {
       nonNullable: true,
