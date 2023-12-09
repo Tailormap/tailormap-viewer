@@ -42,6 +42,8 @@ services:
       - "OIDC_SHOW_FOR_VIEWER=${OIDC_SHOW_FOR_VIEWER:-false}"
       - "SENTRY_DSN=${API_SENTRY_DSN:-}"
       - "VIEWER_SENTRY_DSN=${VIEWER_SENTRY_DSN:-}"
+      # Session timeout can be changed. Default is 30 minutes. You can use values like "60m" or "4h".
+      - "SERVER_SERVLET_SESSION_TIMEOUT=${SERVER_SERVLET_SESSION_TIMEOUT:-}"
     restart: unless-stopped
     depends_on:
       - db
