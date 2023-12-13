@@ -24,7 +24,7 @@
     <mat-selection-list>
       <mat-list-item *ngFor="let oidcConfiguration of oidcConfigurations$ | async"
                      [class.selected]="oidcConfiguration.selected"
-                     [routerLink]="['/admin/oidc-configurations/oidc-configuration', oidcConfiguration.id]">
+                     [routerLink]="['/admin/settings/oidc-configurations/oidc-configuration', oidcConfiguration.id]">
         <span class="detail">{{oidcConfiguration.name}}</span>
       </mat-list-item>
     </mat-selection-list>

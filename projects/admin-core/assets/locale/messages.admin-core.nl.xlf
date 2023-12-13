@@ -118,7 +118,7 @@
         <target state="new">Bewerk attribuut-instellingen voor applicatielaag</target>
       </trans-unit>
       <trans-unit id="admin-core.application.edit-application-layer-attributes-hint1" datatype="html">
-        <source>This only shows the attributes that are enabled in the catalog for this feature type. If an attribute is missing, check the catalog settings.</source>
+        <source>This only shows the attributes that are enabled in the catalog. If an attribute is missing, check the catalog settings.</source>
         <target state="new">Hier worden alleen de attributen getoond die ingeschakeld zijn in de catalog voor dit feature type. Als er een attribuut mist, controleer de instellingen in de catalog.</target>
       </trans-unit>
       <trans-unit id="admin-core.application.edit-application-layer-attributes-hint2" datatype="html">
@@ -861,13 +861,13 @@
         <source>Settings for <x id="INTERPOLATION" equiv-text="{{ node.label }}"/></source>
         <target>Instellingen voor <x id="INTERPOLATION" equiv-text="{{ node.label }}"/></target>
       </trans-unit>
+      <trans-unit id="admin-core.common.settings-title" datatype="html">
+        <source>Settings</source>
+        <target>Instellingen</target>
+      </trans-unit>
       <trans-unit id="admin-core.common.sort" datatype="html">
         <source>Sort</source>
         <target>Sorteren</target>
-      </trans-unit>
-      <trans-unit id="admin-core.common.sso-title" datatype="html">
-        <source>Single-sign on</source>
-        <target>Single-sign on</target>
       </trans-unit>
       <trans-unit id="admin-core.common.tailormap-admin-title" datatype="html">
         <source>Tailormap Admin</source>
@@ -981,6 +981,10 @@
         <source>Home</source>
         <target>Home</target>
       </trans-unit>
+      <trans-unit id="admin-core.navigation.settings" datatype="html">
+        <source>Settings</source>
+        <target>Instellingen</target>
+      </trans-unit>
       <trans-unit id="admin-core.navigation.single-sign-on" datatype="html">
         <source>Single-sign on</source>
         <target>Single-sign on</target>
@@ -1072,6 +1076,10 @@
       <trans-unit id="admin-core.oidc.username-attribute-placeholder" datatype="html">
         <source>(name, sub, email, etc)</source>
         <target>(name, sub, email, enz.)</target>
+      </trans-unit>
+      <trans-unit id="admin-core.settings.home" datatype="html">
+        <source>Select settings from the left side</source>
+        <target state="new">Selecteer een instelling aan de linker kant</target>
       </trans-unit>
       <trans-unit id="admin-core.use-max-extent" datatype="html">
         <source>Use projection extent</source>

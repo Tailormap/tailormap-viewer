@@ -19,47 +19,50 @@
   </ng-container>
 </ng-template>
 
-<div class="navigation-bar">
-  <ng-container *ngFor="let menu of buttons$ | async">
-    <ng-container *ngTemplateOutlet="menuButton; context: {$implicit: menu}"></ng-container>
-  </ng-container>
-
+<div class="navigation-bar" *ngIf="userDetails$ | async as userDetails">
+  @for(menu of buttons; track menu.link) {
+    @if (isAdmin(userDetails) || !menu.requireAdmin) {
+      <ng-container *ngTemplateOutlet="menuButton; context: {$implicit: menu}"></ng-container>
+    }
+  }
   <div class="divider"></div>
-
-  <ng-container *ngIf="userDetails$ | async as userDetails">
-    <ng-container *ngIf="userDetails.isAuthenticated && userDetails.username">
-      <button mat-flat-button
-              class="menu-button"
-              [matMenuTriggerFor]="userMenu"
-              [tmTooltip]="userDetails.username"
-              matTooltipPosition="right">
-        <mat-icon svgIcon="user"></mat-icon>
-        <span class="menu-button-label">{{userDetails.username}}</span>
-      </button>
-      <mat-menu #userMenu="matMenu" xPosition="before" yPosition="above">
-        <button mat-menu-item (click)="showAbout()">
-          <span i18n="@@admin-core.common.about">About</span>
-        </button>
-        <tm-language-toggle></tm-language-toggle>
-        <button mat-menu-item routerLink="/">
-          <span i18n="@@admin-core.common.go-to-viewer">Go to viewer</span>
-        </button>
-        <button mat-menu-item (click)="logout()" *ngIf="userDetails.isAuthenticated && userDetails.username">
-          <span i18n="@@admin-core.common.logout">Logout</span>
-        </button>
-      </mat-menu>
-    </ng-container>
-    <tm-language-toggle *ngIf="!userDetails.isAuthenticated || !userDetails.username" class="menu-button"></tm-language-toggle>
+  @for(menu of bottomButtons; track menu.link) {
+    @if (isAdmin(userDetails) || !menu.requireAdmin) {
+      <ng-container *ngTemplateOutlet="menuButton; context: {$implicit: menu}"></ng-container>
+    }
+  }
+  <ng-container *ngIf="userDetails.isAuthenticated && userDetails.username">
     <button mat-flat-button
-            *ngIf="!userDetails.isAuthenticated || !userDetails.username"
             class="menu-button"
-            (click)="login()"
-            tmTooltip="Login"
-            i18n-tmTooltip="@@admin-core.common.login"
+            [matMenuTriggerFor]="userMenu"
+            [tmTooltip]="userDetails.username"
             matTooltipPosition="right">
-      <mat-icon svgIcon="login"></mat-icon>
-      <span class="menu-button-label" i18n="@@admin-core.common.login">Login</span>
+      <mat-icon svgIcon="user"></mat-icon>
+      <span class="menu-button-label">{{userDetails.username}}</span>
     </button>
+    <mat-menu #userMenu="matMenu" xPosition="before" yPosition="above">
+      <button mat-menu-item (click)="showAbout()">
+        <span i18n="@@admin-core.common.about">About</span>
+      </button>
+      <tm-language-toggle></tm-language-toggle>
+      <button mat-menu-item routerLink="/">
+        <span i18n="@@admin-core.common.go-to-viewer">Go to viewer</span>
+      </button>
+      <button mat-menu-item (click)="logout()" *ngIf="userDetails.isAuthenticated && userDetails.username">
+        <span i18n="@@admin-core.common.logout">Logout</span>
+      </button>
+    </mat-menu>
   </ng-container>
+  <tm-language-toggle *ngIf="!userDetails.isAuthenticated || !userDetails.username" class="menu-button"></tm-language-toggle>
+  <button mat-flat-button
+          *ngIf="!userDetails.isAuthenticated || !userDetails.username"
+          class="menu-button"
+          (click)="login()"
+          tmTooltip="Login"
+          i18n-tmTooltip="@@admin-core.common.login"
+          matTooltipPosition="right">
+    <mat-icon svgIcon="login"></mat-icon>
+    <span class="menu-button-label" i18n="@@admin-core.common.login">Login</span>
+  </button>
 
 </div>

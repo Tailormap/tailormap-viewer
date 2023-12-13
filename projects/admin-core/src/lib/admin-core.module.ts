@@ -11,6 +11,7 @@ import { OIDCConfigurationModule } from './oidc/oidc-configuration.module';
 import { adminCoreStateKey } from './state/admin-core.state';
 import { adminCoreReducer } from './state/admin-core.reducer';
 import { AdminCoreRoutingModule } from './admin-core-routing.module';
+import { SettingsModule } from './settings/settings.module';
 
 @NgModule({
   imports: [
@@ -20,6 +21,7 @@ import { AdminCoreRoutingModule } from './admin-core-routing.module';
     TemplatesModule,
     CatalogModule,
     ApplicationModule,
+    SettingsModule,
     OIDCConfigurationModule,
   ],
 })

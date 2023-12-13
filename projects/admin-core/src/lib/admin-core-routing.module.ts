@@ -17,10 +17,7 @@ import { ApplicationEditLayersComponent } from './application/application-edit-l
 import { ApplicationEditBaseLayersComponent } from './application/application-edit-base-layers/application-edit-base-layers.component';
 import { ApplicationEditComponentsComponent } from './application/application-edit-components/application-edit-components.component';
 import { ApplicationEditStylingComponent } from './application/application-edit-styling/application-edit-styling.component';
-import { OIDCConfigurationPageComponent } from './pages/oidc-configuration-page/oidc-configuration-page.component';
-import { OIDCConfigurationHomeComponent } from './oidc/oidc-configuration-home/oidc-configuration-home.component';
-import { OIDCConfigurationCreateComponent } from './oidc/oidc-configuration-create/oidc-configuration-create.component';
-import { OIDCConfigurationEditComponent } from './oidc/oidc-configuration-edit/oidc-configuration-edit.component';
+import { SettingsPageComponent } from './pages/settings-page/settings-page.component';
 import { AdminHomePageComponent } from './pages/admin-home-page/admin-home-page.component';
 import { UserAdminPageComponent } from './pages/user-admin-page/user-admin-page.component';
 import { UserHomeComponent } from './user/user-home/user-home.component';
@@ -30,6 +27,7 @@ import { GroupsPageComponent } from './pages/groups-page/groups-page.component';
 import { GroupHomeComponent } from './user/group-home/group-home.component';
 import { GroupCreateComponent } from './user/group-create/group-create.component';
 import { GroupEditComponent } from './user/group-edit/group-edit.component';
+import { SettingsHomePageComponent } from './settings/settings-home-page/settings-home-page.component';
 
 export const adminRoutes: Routes = [
   {
@@ -105,22 +103,12 @@ export const adminRoutes: Routes = [
     ],
   },
   {
-    path: AdminRoutes.OIDC_CONFIGURATION,
-    component: OIDCConfigurationPageComponent,
-    children: [
-      {
-        path: '',
-        component: OIDCConfigurationHomeComponent,
-      },
-      {
-        path: AdminRoutes.OIDC_CONFIGURATION_CREATE,
-        component: OIDCConfigurationCreateComponent,
-      },
-      {
-        path: AdminRoutes.OIDC_CONFIGURATION_DETAILS,
-        component: OIDCConfigurationEditComponent,
-      },
-    ],
+    component: SettingsPageComponent,
+    children: [{
+      path: '',
+      component: SettingsHomePageComponent,
+    }],
+    path: AdminRoutes.SETTINGS,
   },
   // IMPORTANT: When you add a route, also add it to the FrontController class of tailormap-api, otherwise a user will get a 404 when
   // pressing F5 in their browser on your route.
