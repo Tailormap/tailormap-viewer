@@ -12,6 +12,7 @@ import { filter } from 'rxjs';
  * we check if we are in the admin route yet and if so we register the routes as children of the Settings route.
  *
  * NOTE: Because the admin bundle is lazy loaded, for this to work we use an internal Angular api: _loadedRoutes
+ * See also https://github.com/angular/angular/issues/52416
  */
 
 @Injectable({
