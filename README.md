@@ -13,7 +13,7 @@ docker compose up -d
 
 This runs Tailormap on http://localhost:8080/ together with a PostgreSQL container to store configuration. The port (and other options) can
 be changed by copying `.env.template` to `.env` and changing the variables (or use the `--env-file <file>` argument). Tailormap will only
-accept connections from the loopback interface.
+accept connections from the loopback interface, unless you set `LISTEN_ADDRESS=0.0.0.0` in the env-file.
 
 Remove the Tailormap stack using `docker compose down` (add `-v` to remove the volume with the database).
 

@@ -2,6 +2,8 @@ name: tailormap
 
 volumes:
   db:
+  backup:
+    name: ${COMPOSE_PROJECT_NAME}-backup
 
 services:
   tailormap:
@@ -58,6 +60,22 @@ services:
       PGUSER: postgres # for pg_isready
     volumes:
       - db:/var/lib/postgresql/data
+#      - backup:/var/opt/backup/
     healthcheck:
       test: 'pg_isready -U tailormap'
     restart: unless-stopped
+#
+#  scheduler:
+#    image: mcuadros/ofelia:v0.3.7
+#    restart: unless-stopped
+#    entrypoint: []
+#    command: /bin/sh -c 'echo "$$OFELIA_CONFIG" > /etc/ofelia.ini && ofelia daemon --config=/etc/ofelia.ini'
+#    volumes:
+#      - /var/run/docker.sock:/var/run/docker.sock:ro
+#    environment:
+#      TZ: Europe/Amsterdam
+#      OFELIA_CONFIG: |-
+#        [job-exec]
+#        schedule=@every 30s
+#        container=${COMPOSE_PROJECT_NAME}-db
+#        command=/bin/bash -c 'cd /var/opt/backup && pg_dump -U tailormap tailormap | zstd -T0 > /tmp/tailormap.sql.tmp && mv /tmp/tailormap.sql.tmp tailormap.sql.zst'
