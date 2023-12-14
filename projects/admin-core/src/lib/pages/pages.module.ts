@@ -9,10 +9,9 @@ import { UserAdminPageComponent } from './user-admin-page/user-admin-page.compon
 import { GroupsPageComponent } from './groups-page/groups-page.component';
 import { ApplicationPageComponent } from './application-page/application-page.component';
 import { ApplicationModule } from '../application/application.module';
-import { OIDCConfigurationPageComponent } from './oidc-configuration-page/oidc-configuration-page.component';
-import { SharedComponentsModule, SharedImportsModule } from '@tailormap-viewer/shared';
+import { SettingsPageComponent } from './settings-page/settings-page.component';
+import { SharedComponentsModule, SharedImportsModule, SharedModule } from '@tailormap-viewer/shared';
 import { UserModule } from '../user/user.module';
-import { OIDCConfigurationModule } from '../oidc/oidc-configuration.module';
 
 
 @NgModule({
@@ -22,7 +21,7 @@ import { OIDCConfigurationModule } from '../oidc/oidc-configuration.module';
     UserAdminPageComponent,
     GroupsPageComponent,
     ApplicationPageComponent,
-    OIDCConfigurationPageComponent,
+    SettingsPageComponent,
   ],
   imports: [
     CommonModule,
@@ -31,9 +30,9 @@ import { OIDCConfigurationModule } from '../oidc/oidc-configuration.module';
     CatalogModule,
     UserModule,
     ApplicationModule,
-    OIDCConfigurationModule,
     SharedComponentsModule,
     SharedImportsModule,
+    SharedModule,
   ],
   exports: [
     AdminHomePageComponent,
@@ -41,7 +40,7 @@ import { OIDCConfigurationModule } from '../oidc/oidc-configuration.module';
     UserAdminPageComponent,
     GroupsPageComponent,
     ApplicationPageComponent,
-    OIDCConfigurationPageComponent,
+    SettingsPageComponent,
   ],
 })
 export class PagesModule { }

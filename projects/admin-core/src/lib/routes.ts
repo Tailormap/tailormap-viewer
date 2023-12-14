@@ -25,6 +25,9 @@ export class Routes {
   public static APPLICATION_DETAILS_COMPONENTS = 'components';
   public static APPLICATION_DETAILS_STYLING = 'styling';
 
+  public static SETTINGS = 'settings';
+  public static SETTINGS_GLOBAL = 'global';
+
   public static OIDC_CONFIGURATION = 'oidc-configurations';
   public static OIDC_CONFIGURATION_CREATE = 'create';
   public static OIDC_CONFIGURATION_DETAILS = 'oidc-configuration/:oidcConfigurationId';

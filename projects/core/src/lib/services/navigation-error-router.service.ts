@@ -14,6 +14,7 @@ export class NavigationErrorRouterService {
       takeUntilDestroyed(),
       filter((event): event is NavigationError => event instanceof NavigationError),
     ).subscribe((event: NavigationError) => {
+      console.error('Navigation error', event);
       router.navigateByUrl(NavigationErrorRouterService.getErrorNavigationUrl(event.url, baseHref, localeId)); // We could navigate to route showing 404
     });
   }

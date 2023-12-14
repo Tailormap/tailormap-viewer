@@ -9,4 +9,7 @@ import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 export class AdminTemplateComponent {
   @Input()
   public pageTitle = '';
+
+  @Input()
+  public cls = '';
 }
