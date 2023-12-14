@@ -1,4 +1,4 @@
-const {runCommand, getCliArgument} = require("./shared");
+const {runCommand, getCliArgument, clearCache} = require("./shared");
 const path = require("path");
 const fs = require("fs/promises");
 const {readdirSync} = require("fs");
@@ -49,8 +49,7 @@ const cleanupTemporaryConfiguration = async () => {
 
 (async function main() {
   try {
-    await runCommand('rm', ['-rf', 'dist'], path.resolve(__dirname, '../'));
-    await runCommand('rm', ['-rf', '.angular'], path.resolve(__dirname, '../'));
+    await clearCache();
     const projects = singleProject && availableProjects.includes(singleProject)
       ? [singleProject]
       : availableProjects;
