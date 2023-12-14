@@ -3,9 +3,9 @@
 # When running behind a Docker reverse proxy specify only COMPOSE_FILE=docker-compose.yml to disable this port binding.
 
 # When you want Tailormap to listen on all interfaces, do not set COMPOSE_FILE or keep docker-compose.override.yml in there and
-# specify LISTEN_ADDRESS=0.0.0.0 in the env-file.
+# specify SERVER_ADDRESS=0.0.0.0 in the env-file.
 
 services:
   tailormap:
     ports:
-      - ${LISTEN_ADDRESS:-127.0.0.1}:${LOCALHOST_PORT:-8080}:8080
+      - ${SERVER_ADDRESS:-127.0.0.1}:${LOCALHOST_PORT:-8080}:8080
