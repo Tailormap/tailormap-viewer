@@ -6,6 +6,7 @@ export * from './attribute.model';
 export * from './bounds.model';
 export * from './base-component-type.enum';
 export * from './column-metadata.model';
+export * from './config-response.model';
 export * from './component-base-config.model';
 export * from './component.model';
 export * from './coordinate-reference-system.model';

@@ -1,4 +1,6 @@
-import { ViewerResponseModel, LayerDetailsModel, MapResponseModel, Sortorder, VersionResponseModel, FeatureModel } from '../models';
+import {
+  ViewerResponseModel, LayerDetailsModel, MapResponseModel, Sortorder, VersionResponseModel, FeatureModel, ConfigResponseModel,
+} from '../models';
 import { Observable } from 'rxjs';
 import { FeaturesResponseModel } from '../models/features-response.model';
 import { UniqueValuesResponseModel } from '../models/unique-values-response.model';
@@ -76,5 +78,7 @@ export interface TailormapApiV1ServiceModel {
     attributes?: string[];
     crs?: string;
   }): Observable<HttpResponse<Blob>>;
+
+  getConfig$<T>(key: string): Observable<ConfigResponseModel<T>>;
 
 }

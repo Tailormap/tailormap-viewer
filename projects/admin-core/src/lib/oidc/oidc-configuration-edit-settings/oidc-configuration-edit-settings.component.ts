@@ -1,10 +1,9 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { distinctUntilChanged, Observable, of, take } from 'rxjs';
+import { distinctUntilChanged, Observable, of } from 'rxjs';
 import { selectDraftOIDCConfiguration } from '../state/oidc-configuration.selectors';
 import { OIDCConfigurationModel } from '@tailormap-admin/admin-api';
 import { updateDraftOIDCConfiguration } from '../state/oidc-configuration.actions';
-import { ConfigService } from '../../config/services/config.service';
 
 @Component({
   selector: 'tm-admin-oidc-configuration-edit-settings',
@@ -18,7 +17,6 @@ export class OIDCConfigurationEditSettingsComponent implements OnInit {
 
   constructor(
     private store$: Store,
-    private configService: ConfigService,
   ) { }
 
   public ngOnInit(): void {
@@ -32,14 +30,6 @@ export class OIDCConfigurationEditSettingsComponent implements OnInit {
 
   public updateOIDCConfiguration($event: Omit<OIDCConfigurationModel, 'id'>) {
     this.store$.dispatch(updateDraftOIDCConfiguration({ oidcConfiguration: $event }));
-  }
-
-  public toggleDefaultOIDCConfiguration(oidcConfigurationName: string) {
-    this.configService.saveConfig$({
-      key: ConfigService.DEFAULT_APPLICATION_KEY,
-      value: oidcConfigurationName,
-      jsonValue: null,
-    }).pipe(take(1)).subscribe();
   }
 
 }

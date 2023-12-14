@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
-import { ViewerResponseModel, LayerDetailsModel, MapResponseModel, UserResponseModel, VersionResponseModel, FeatureModel } from '../models';
+import {
+  ViewerResponseModel, LayerDetailsModel, MapResponseModel, UserResponseModel, VersionResponseModel, FeatureModel, ConfigResponseModel,
+} from '../models';
 import { delay, Observable, of } from 'rxjs';
 import { TailormapApiV1ServiceModel } from './tailormap-api-v1.service.model';
 import { FeaturesResponseModel } from '../models/features-response.model';
@@ -7,7 +9,7 @@ import { UniqueValuesResponseModel } from '../models/unique-values-response.mode
 import {
   getViewerResponseData, getFeaturesResponseModel, getLayerDetailsModel, getMapResponseData,
   getUniqueValuesResponseModel,
-  getVersionResponseModel, getUserResponseModel, getLayerExportCapabilitiesModel, getFeatureModel,
+  getVersionResponseModel, getUserResponseModel, getLayerExportCapabilitiesModel, getFeatureModel, getConfigModel,
 } from '../mock-data';
 import { LayerExportCapabilitiesModel } from '../models/layer-export-capabilities.model';
 import { HttpResponse, HttpStatusCode } from '@angular/common/http';
@@ -91,6 +93,10 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
 
   public updateFeature$(params: { applicationId: string; layerId: string; feature: FeatureModel }): Observable<FeatureModel> {
     return of(getFeatureModel({ "__fid": params.feature.__fid }));
+  }
+
+  public getConfig$<T>(key: string): Observable<ConfigResponseModel<T>> {
+    return of(getConfigModel<T>({ key }));
   }
 
 }

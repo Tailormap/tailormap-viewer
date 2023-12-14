@@ -1,7 +1,7 @@
 import {
   AppLayerModel, ViewerResponseModel, BoundsModel, ComponentModel, CoordinateReferenceSystemModel, GeometryType, LayerDetailsModel,
   MapResponseModel, ServerType, ServiceModel, ServiceProtocol, UserResponseModel, VersionResponseModel, LoginConfigurationModel,
-  AttributeType,
+  AttributeType, ConfigResponseModel,
 } from '../models';
 import { FeatureModel } from '../models/feature.model';
 import { ColumnMetadataModel } from '../models/column-metadata.model';
@@ -193,5 +193,12 @@ export const getMapResponseData = (overrides?: Partial<MapResponseModel>): MapRe
   maxExtent: overrides?.maxExtent === null
     ? getBoundsModel({ minx: -285401, miny: 22598, maxx: 595401, maxy: 903401 })
     : getBoundsModel(overrides?.maxExtent),
+  ...overrides,
+});
+
+export const getConfigModel = <T>(overrides?: Partial<ConfigResponseModel<T>>): ConfigResponseModel<T> => ({
+  key: 'global',
+  value: 'extra_value',
+  object: { setting1: 'some_setting' } as T,
   ...overrides,
 });

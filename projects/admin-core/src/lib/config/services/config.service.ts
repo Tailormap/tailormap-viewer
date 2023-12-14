@@ -52,6 +52,18 @@ export class ConfigService {
       );
   }
 
+  public getConfigObject$<T>(key: string): Observable<T | null> {
+    return this.getConfig$(key)
+      .pipe(
+        map(c => {
+          if (c?.jsonValue && c.jsonValue.length > 0) {
+            return JSON.parse(c.jsonValue);
+          }
+          return null;
+        }),
+      );
+  }
+
   public saveConfig$(config: ConfigModel): Observable<ConfigModel> {
     return this.adminApiService.updateConfig$({ config })
       .pipe(
@@ -73,7 +85,7 @@ export class ConfigService {
   }
 
   private getDefaultConfig(key: string): ConfigModel {
-    return { key, value: null, jsonValue: null };
+    return { key, value: null, jsonValue: null, availableForViewer: false };
   }
 
 }
