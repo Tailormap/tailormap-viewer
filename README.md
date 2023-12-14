@@ -13,7 +13,7 @@ docker compose up -d
 
 This runs Tailormap on http://localhost:8080/ together with a PostgreSQL container to store configuration. The port (and other options) can
 be changed by copying `.env.template` to `.env` and changing the variables (or use the `--env-file <file>` argument). Tailormap will only
-accept connections from the loopback interface, unless you set `LISTEN_ADDRESS=0.0.0.0` in the env-file.
+accept connections from the loopback interface, unless you set `SERVER_ADDRESS=0.0.0.0` in the env-file.
 
 Remove the Tailormap stack using `docker compose down` (add `-v` to remove the volume with the database).
 
@@ -39,6 +39,7 @@ Specify the following command line parameters with `docker run` to change the da
 - `-e SPRING_DATASOURCE_URL=jdbc:postgresql://host:port/database`
 - `-e SPRING_DATASOURCE_USERNAME=user`
 - `-e SPRING_DATASOURCE_PASSWORD=pass`
+- `-e SERVER_ADDRESS=0.0.0.0` if you want Tailormap to listen on all interfaces instead of localhost
 
 If your database is running on localhost using `--network=host` is recommended (you can try using the hostname `host.docker.internal` but
 that may not always work). If your database is on another host you can specify `--publish 8080:8080` instead of `--network=host`. Of course,
