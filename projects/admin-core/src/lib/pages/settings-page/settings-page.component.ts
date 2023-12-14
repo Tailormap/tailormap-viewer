@@ -1,6 +1,12 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { Routes } from '../../routes';
 import { AdminSettingsRouterService } from '../../settings/services/admin-settings-router.service';
+
+interface SubmenuLink {
+  label: string;
+  link: string[];
+  matchExact: boolean;
+}
 
 @Component({
   selector: 'tm-admin-settings-page',
@@ -8,17 +14,22 @@ import { AdminSettingsRouterService } from '../../settings/services/admin-settin
   styleUrls: ['./settings-page.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsPageComponent {
-  public submenuLinks = [
-    {
-      label: $localize `:@@admin-core.navigation.single-sign-on:Single-sign on`,
-      matchExact: false,
-      link: [ '/admin', Routes.SETTINGS, Routes.OIDC_CONFIGURATION ],
-    },
-  ];
+export class SettingsPageComponent implements OnInit {
+
+  public submenuLinks: SubmenuLink[] = [];
+
   constructor(
     private adminSettingsRouterService: AdminSettingsRouterService,
-  ) {
+  ) {}
+
+  public ngOnInit() {
     this.adminSettingsRouterService.activateRegisteredRoutes();
+    this.submenuLinks = this.adminSettingsRouterService.getRegisteredRoutes()
+      .map(route => ({
+        label: route.label,
+        matchExact: false,
+        link: [ '/admin', Routes.SETTINGS, (route.route.path || '') ],
+      }));
   }
+
 }

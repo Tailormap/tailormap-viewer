@@ -20,7 +20,7 @@ import { filter } from 'rxjs';
 })
 export class AdminSettingsRouterService {
 
-  private registeredRoutes: Routes = [];
+  private registeredRoutes: Array<{ label: string; route: Route }> = [];
   private hasRegisteredRoutes = false;
 
   constructor(
@@ -41,9 +41,13 @@ export class AdminSettingsRouterService {
       });
   }
 
-  public registerSettingsRoutes(routes: Routes) {
-    this.registeredRoutes.push(...routes);
+  public registerSettingsRoutes(label: string, route: Route) {
+    this.registeredRoutes.push({ label, route });
     this.hasRegisteredRoutes = true;
+  }
+
+  public getRegisteredRoutes() {
+    return this.registeredRoutes;
   }
 
   public activateRegisteredRoutes() {
@@ -60,7 +64,9 @@ export class AdminSettingsRouterService {
         const children = settingsRoute.children;
         const existingRoutes = new Set(children.map(c => c.path));
         // Filter routes so we don't add new once all the time
-        const newRoutes = this.registeredRoutes.filter(r => !existingRoutes.has(r.path));
+        const newRoutes = this.registeredRoutes
+          .map(r => r.route)
+          .filter(r => !existingRoutes.has(r.path));
         if (newRoutes.length) {
           // Add new routes to Settings -> children
           children.push(...newRoutes);

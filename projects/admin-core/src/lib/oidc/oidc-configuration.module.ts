@@ -7,7 +7,7 @@ import { OIDCConfigurationEditSettingsComponent } from './oidc-configuration-edi
 import { OIDCConfigurationCreateComponent } from './oidc-configuration-create/oidc-configuration-create.component';
 import { OIDCConfigurationListComponent } from './oidc-configuration-list/oidc-configuration-list.component';
 import { SharedModule } from '@tailormap-viewer/shared';
-import { RouterOutlet, Routes } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 import { EffectsModule } from '@ngrx/effects';
 import { OIDCConfigurationEffects } from './state/oidc-configuration.effects';
 import { OIDCConfigurationFormComponent } from './oidc-configuration-form/oidc-configuration-form.component';
@@ -16,27 +16,8 @@ import { OIDCConfigurationHomeComponent } from './oidc-configuration-home/oidc-c
 import { OIDCConfigurationEditComponent } from './oidc-configuration-edit/oidc-configuration-edit.component';
 import { OIDCConfigurationService } from './services/oidc-configuration.service';
 import { OIDCConfigurationPageComponent } from './oidc-configuration/oidc-configuration-page.component';
-import { Routes as AdminRoutes } from '../routes';
 import { AdminSettingsRouterService } from '../settings/services/admin-settings-router.service';
-
-const routes: Routes = [{
-  path: AdminRoutes.OIDC_CONFIGURATION,
-  component: OIDCConfigurationPageComponent,
-  children: [
-    {
-      path: '',
-      component: OIDCConfigurationHomeComponent,
-    },
-    {
-      path: AdminRoutes.OIDC_CONFIGURATION_CREATE,
-      component: OIDCConfigurationCreateComponent,
-    },
-    {
-      path: AdminRoutes.OIDC_CONFIGURATION_DETAILS,
-      component: OIDCConfigurationEditComponent,
-    },
-  ],
-}];
+import { Routes as AdminRoutes } from '../routes';
 
 @NgModule({
   declarations: [
@@ -67,6 +48,23 @@ export class OIDCConfigurationModule {
     adminSettingsRouterService: AdminSettingsRouterService,
   ) {
     oidcConfigurationService.listenForOIDCConfigurationChanges();
-    adminSettingsRouterService.registerSettingsRoutes(routes);
+    adminSettingsRouterService.registerSettingsRoutes($localize `:@@admin-core.navigation.single-sign-on:Single-sign on`, {
+      path: AdminRoutes.OIDC_CONFIGURATION,
+      component: OIDCConfigurationPageComponent,
+      children: [
+        {
+          path: '',
+          component: OIDCConfigurationHomeComponent,
+        },
+        {
+          path: AdminRoutes.OIDC_CONFIGURATION_CREATE,
+          component: OIDCConfigurationCreateComponent,
+        },
+        {
+          path: AdminRoutes.OIDC_CONFIGURATION_DETAILS,
+          component: OIDCConfigurationEditComponent,
+        },
+      ],
+    });
   }
 }
