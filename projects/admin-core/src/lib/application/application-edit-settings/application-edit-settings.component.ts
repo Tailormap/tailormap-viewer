@@ -50,6 +50,7 @@ export class ApplicationEditSettingsComponent implements OnInit {
       key: ConfigService.DEFAULT_APPLICATION_KEY,
       value: applicationName,
       jsonValue: null,
+      availableForViewer: false,
     }).pipe(take(1)).subscribe();
   }
 

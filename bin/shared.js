@@ -156,6 +156,12 @@ const sleep = (ms) => {
   });
 }
 
+const clearCache = async () => {
+  await runCommand('rm', ['-rf', 'dist'], path.resolve(__dirname, '../'));
+  await runCommand('rm', ['-rf', '.angular'], path.resolve(__dirname, '../'));
+  await runCommand('rm', ['-rf', '.nx'], path.resolve(__dirname, '../'));
+}
+
 exports.requestProject = requestProject;
 exports.requestVersion = requestVersion;
 exports.checkCleanGitRepo = checkCleanGitRepo;
@@ -165,3 +171,4 @@ exports.getCliArgument = getCliArgument;
 exports.hasCliArgument = hasCliArgument;
 exports.publishRelease = publishRelease;
 exports.sleep = sleep;
+exports.clearCache = clearCache;

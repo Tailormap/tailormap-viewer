@@ -172,5 +172,6 @@ export const getConfigModel = (overrides?: Partial<ConfigModel>): ConfigModel =>
   key: 'default-app',
   value: 'default',
   jsonValue: null,
+  availableForViewer: false,
   ...overrides,
 });
