@@ -1,4 +1,4 @@
-import { Route, Router, Routes, RoutesRecognized } from '@angular/router';
+import { Route, Router, RoutesRecognized } from '@angular/router';
 import { DestroyRef, Injectable } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter } from 'rxjs';

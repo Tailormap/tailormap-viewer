@@ -5,7 +5,7 @@ import {
   CatalogItemKindEnum, CatalogModelHelper, FeatureSourceModel, FeatureTypeModel, TailormapAdminApiV1Service,
 } from '@tailormap-admin/admin-api';
 import { CatalogService } from './catalog.service';
-import { catchError, concatMap, filter, map, MonoTypeOperatorFunction, Observable, of, pipe, switchMap, take, tap } from 'rxjs';
+import { catchError, concatMap, filter, map, MonoTypeOperatorFunction, Observable, of, pipe, switchMap, take, tap, timer } from 'rxjs';
 import {
   addFeatureSources, deleteFeatureSource, updateFeatureSource, updateFeatureType,
 } from '../state/catalog.actions';
@@ -17,7 +17,7 @@ import { AdminSnackbarService } from '../../shared/services/admin-snackbar.servi
 import { GeoServiceService } from './geo-service.service';
 import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-layer.model';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { AdminSseService, EventType } from '../../shared/services/admin-sse.service';
+import { AdminSseService, EventType, SSEEvent } from '../../shared/services/admin-sse.service';
 import { DebounceHelper } from '@tailormap-viewer/shared';
 import { ExtendedCatalogModelHelper } from '../helpers/extended-catalog-model.helper';
 
@@ -58,7 +58,15 @@ export class FeatureSourceService {
 
   public listenForFeatureSourceChanges() {
     this.sseService.listenForEvents$<FeatureSourceModel>('TMFeatureSource')
-      .pipe(takeUntilDestroyed())
+      .pipe(
+        takeUntilDestroyed(),
+        concatMap((event): Observable<SSEEvent<FeatureSourceModel>> => {
+          if (event.eventType === EventType.ENTITY_CREATED && event.details.object) {
+            return this.getFeatureSourceForCreateEvent$(event);
+          }
+          return of(event);
+        }),
+      )
       .subscribe(event => {
         if (event.eventType === EventType.ENTITY_CREATED && event.details.object) {
           this.updateFeatureSourceState(event.details.object.id, 'add', CatalogModelHelper.addTypeAndFeatureTypesToFeatureSourceModel(event.details.object));
@@ -204,6 +212,23 @@ export class FeatureSourceService {
               }),
             );
         }),
+      );
+  }
+
+  private getFeatureSourceForCreateEvent$(event: SSEEvent<FeatureSourceModel>): Observable<SSEEvent<FeatureSourceModel>> {
+    // When the event for new FeatureSource created is sent through SSE, the feature types do not yet have an id assigned.
+    // After this event is sent, we wait for 1 second and then fetch the feature source manually,
+    // so we are sure the feature source and the feature types are properly persisted. See issue HTM-966.
+    return timer(1000)
+      .pipe(
+        switchMap(()  => this.adminApiService.getFeatureSource$({ id: event.details.object.id })),
+        map((featureSource): SSEEvent<FeatureSourceModel> => ({
+          ...event,
+          details: {
+            ...event.details,
+            object: featureSource,
+          },
+        })),
       );
   }
 
