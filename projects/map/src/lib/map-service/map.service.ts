@@ -34,6 +34,7 @@ export interface MapExportOptions {
   extent?: OpenlayersExtent | null;
   center?: Coordinate;
   layers: LayerModel[];
+  backgroundLayers: LayerModel[];
   vectorLayerFilter?: OlLayerFilter;
 }
 

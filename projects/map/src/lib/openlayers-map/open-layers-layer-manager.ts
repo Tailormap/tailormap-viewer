@@ -322,7 +322,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     if (LayerTypesHelper.isVectorLayer(layer)) {
       return this.createVectorLayer(layer);
     }
-    const olLayer = OlLayerHelper.createLayer(layer, this.olMap.getView().getProjection(), undefined, this.ngZone, this.httpXsrfTokenExtractor);
+    const olLayer = OlLayerHelper.createLayer(layer, this.olMap.getView().getProjection(), this.ngZone, this.httpXsrfTokenExtractor);
     if (!olLayer) {
       return null;
     }

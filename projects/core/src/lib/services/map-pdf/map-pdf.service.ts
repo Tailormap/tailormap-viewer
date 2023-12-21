@@ -6,7 +6,6 @@ import { IconService } from '@tailormap-viewer/shared';
 import type { jsPDF } from 'jspdf';
 import type { Svg2pdfOptions } from 'svg2pdf.js';
 import { LegendService } from '../../components/legend/services/legend.service';
-import { ApplicationMapService } from '../../map/services/application-map.service';
 import { ExtendedAppLayerModel } from '../../map/models';
 import { ServerType } from '@tailormap-viewer/api';
 
@@ -48,17 +47,17 @@ export class MapPdfService {
     private httpClient: HttpClient,
     private iconService: IconService,
     private legendService: LegendService,
-    private applicationMapService: ApplicationMapService,
   ) { }
 
-  public create$(
-    printOptions: PrintOptions,
-    layers: Array<ExtendedAppLayerModel>,
-    legendLayers$: Observable<ExtendedAppLayerModel[]>,
-    vectorLayerFilter?: OlLayerFilter,
-  ): Observable<string> {
-    let size = printOptions.size === 'a3' ? a3Size : a4Size;
-    if (printOptions.orientation === 'portrait') {
+  public create$(options: {
+    printOptions: PrintOptions;
+    layers: LayerModel[];
+    backgroundLayers: LayerModel[];
+    legendLayers$: Observable<ExtendedAppLayerModel[]>;
+    vectorLayerFilter?: OlLayerFilter;
+  }): Observable<string> {
+    let size = options.printOptions.size === 'a3' ? a3Size : a4Size;
+    if (options.printOptions.orientation === 'portrait') {
       // noinspection JSSuspiciousNameCombination
       size = { width: size.height, height: size.width };
     }
@@ -69,7 +68,7 @@ export class MapPdfService {
       width: size.width - (2 * this.defaultMargin),
       height: size.height - (2 * this.defaultMargin),
     };
-    if (printOptions.title) {
+    if (options.printOptions.title) {
       mapSize.height -= 2;
     }
 
@@ -80,56 +79,69 @@ export class MapPdfService {
         concatMap(([jsPdfImport]) => {
           return this.createPdfDoc$(
             jsPdfImport,
-            printOptions,
-            size,
-            mapSize,
-            layers,
-            legendLayers$,
-            vectorLayerFilter,
+            {
+              printOptions: options.printOptions,
+              size,
+              mapSize,
+              layers: options.layers,
+              backgroundLayers: options.backgroundLayers,
+              legendLayers$: options.legendLayers$,
+              vectorLayerFilter: options.vectorLayerFilter,
+            },
           );
         }),
       );
   }
 
-  private createPdfDoc$(
-    pdfCreator: typeof jsPDF,
-    printOptions: PrintOptions,
-    size: Size,
-    mapSize: Size,
-    layers: Array<ExtendedAppLayerModel>,
-    legendLayers$: Observable<ExtendedAppLayerModel[]>,
-    vectorLayerFilter?: OlLayerFilter,
-  ) {
+  private createPdfDoc$(pdfCreator: typeof jsPDF, options: {
+    printOptions: PrintOptions;
+    size: Size;
+    mapSize: Size;
+    layers: LayerModel[];
+    backgroundLayers: LayerModel[];
+    legendLayers$: Observable<ExtendedAppLayerModel[]>;
+    vectorLayerFilter?: OlLayerFilter;
+  }) {
     const doc = new pdfCreator({
-      format: printOptions.size,
-      orientation: printOptions.orientation || 'landscape',
+      format: options.printOptions.size,
+      orientation: options.printOptions.orientation || 'landscape',
     });
     doc.setFontSize(this.defaultFontSize);
     doc.setFont('helvetica');
 
     const x = this.defaultMargin;
     let y = this.defaultMargin;
-    if (printOptions.title) {
+    if (options.printOptions.title) {
       doc.setFontSize(this.titleSize);
-      doc.text(printOptions.title, x, y);
+      doc.text(options.printOptions.title, x, y);
       doc.setFontSize(this.defaultFontSize);
       y += 2;
     }
-    if (printOptions.footer) {
+    if (options.printOptions.footer) {
       doc.setFontSize(8);
-      doc.text(printOptions.footer, x, size.height - 5);
+      doc.text(options.printOptions.footer, x, options.size.height - 5);
       doc.setFontSize(this.defaultFontSize);
     }
-    this.addDateTime(doc, size.width, size.height);
+    this.addDateTime(doc, options.size.width, options.size.height);
 
-    if (printOptions.autoPrint) {
+    if (options.printOptions.autoPrint) {
       doc.autoPrint();
     }
-    return this.addMapImage$(doc, x, y, mapSize, printOptions.mapExtent || null, printOptions.dpi || 72, layers, vectorLayerFilter).pipe(
-      concatMap(() => this.addLegendImages$(doc, size.width, size.height, legendLayers$)),
-      concatMap(() => this.addSvg2PDF$(doc, this.iconService.getUrlForIcon('logo'), { x: size.width - 30, y, width: 20, height: 20 })),
+    return this.addMapImage$({
+      doc,
+      x,
+      y,
+      mapSize: options.mapSize,
+      extent: options.printOptions.mapExtent || null,
+      dpi: options.printOptions.dpi || 72,
+      layers: options.layers,
+      backgroundLayers: options.backgroundLayers,
+      vectorLayerFilter: options.vectorLayerFilter,
+    }).pipe(
+      concatMap(() => this.addLegendImages$(doc, options.size.width, options.size.height, options.legendLayers$)),
+      concatMap(() => this.addSvg2PDF$(doc, this.iconService.getUrlForIcon('logo'), { x: options.size.width - 30, y, width: 20, height: 20 })),
       concatMap(() => this.addSvg2PDF$(doc, this.iconService.getUrlForIcon('north_arrow'), { x, y: y + 2, width: 20, height: 20 })),
-      map(() => doc.output('dataurlstring', { filename: printOptions.filename || $localize `:@@core.print.default-pdf-filename:map.pdf` })),
+      map(() => doc.output('dataurlstring', { filename: options.printOptions.filename || $localize `:@@core.print.default-pdf-filename:map.pdf` })),
     );
   }
 
@@ -177,15 +189,29 @@ export class MapPdfService {
     );
   }
 
-  private addMapImage$(doc: jsPDF, x: number, y: number, mapSize: Size, extent: OpenlayersExtent | null, dpi: number,
-                       layersWithService: Array<ExtendedAppLayerModel>, vectorLayerFilter?: OlLayerFilter): Observable<string> {
-    const isValidLayer = (layer: LayerModel | null): layer is LayerModel => layer !== null;
-    return forkJoin(layersWithService.map(layer => this.applicationMapService.convertAppLayerToMapLayer$(layer))).pipe(
-      map(layers => layers.filter(isValidLayer)),
-      concatMap(layers => this.mapService.exportMapImage$({ widthInMm: mapSize.width, heightInMm: mapSize.height, extent, dpi, layers, vectorLayerFilter })),
+  private addMapImage$(options: {
+    doc: jsPDF;
+    x: number;
+    y: number;
+    mapSize: Size;
+    extent: OpenlayersExtent | null;
+    dpi: number;
+    layers: LayerModel[];
+    backgroundLayers: LayerModel[];
+    vectorLayerFilter?: OlLayerFilter;
+  }): Observable<string> {
+    return this.mapService.exportMapImage$({
+      widthInMm: options.mapSize.width,
+      heightInMm: options.mapSize.height,
+      extent: options.extent,
+      dpi: options.dpi,
+      layers: options.layers,
+      backgroundLayers: options.backgroundLayers,
+      vectorLayerFilter: options.vectorLayerFilter,
+    }).pipe(
       tap(dataURL => {
         // Note: calling addImage() with a HTMLCanvasElement is actually slower than adding by PNG
-        doc.addImage(dataURL, 'PNG', x, y, mapSize.width, mapSize.height, '', 'FAST');
+        options.doc.addImage(dataURL, 'PNG', options.x, options.y, options.mapSize.width, options.mapSize.height, '', 'FAST');
       }),
     );
   }
@@ -200,4 +226,5 @@ export class MapPdfService {
     doc.text(date, width - dateWidthInMM - 8, height - 5);
     doc.setFontSize(this.defaultFontSize);
   }
+
 }

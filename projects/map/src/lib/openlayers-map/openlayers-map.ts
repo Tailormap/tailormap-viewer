@@ -295,7 +295,7 @@ export class OpenLayersMap implements MapViewerModel {
         const extraLayers: BaseLayer[] = olMap.getAllLayers().filter(l => options.vectorLayerFilter && options.vectorLayerFilter(l));
         return forkJoin([
           of(extraLayers),
-          OpenLayersMapImageExporter.exportMapImage$(olMap.getSize() as Size, olMap.getView(), options, extraLayers),
+          OpenLayersMapImageExporter.exportMapImage$(olMap.getSize() as Size, olMap.getView(), options, extraLayers, this.ngZone, this.httpXsrfTokenExtractor),
         ]);
       }),
       map(([ extraLayers, pdfExport ]) => {
