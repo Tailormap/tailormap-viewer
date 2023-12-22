@@ -2,7 +2,7 @@
 
   <ng-container *ngIf="(busy$ | async) === false; else busy" >
 
-    <ng-container *ngIf="((visibleLayers$ | async) || []).length > 0; else: noVisibleLayers">
+    <ng-container *ngIf="(hasVisibleLayers$ | async); else: noVisibleLayers">
 
       <h2 class="section-label" i18n="@@core.print.export-map">Export map</h2>
 

@@ -68,7 +68,6 @@ export class OlLayerHelper {
   public static createLayer(
     layer: LayerModel,
     projection: Projection,
-    pixelRatio?: number,
     ngZone?: NgZone,
     httpXsrfTokenExtractor?: HttpXsrfTokenExtractor,
   ): TileLayer<TileWMS> | ImageLayer<ImageWMS> | TileLayer<XYZ> | TileLayer<WMTS> | null {
@@ -79,23 +78,23 @@ export class OlLayerHelper {
       return OlLayerHelper.createWMSLayer(layer, projection, ngZone, httpXsrfTokenExtractor);
     }
     if (LayerTypesHelper.isWmtsLayer(layer)) {
-      return OlLayerHelper.createWMTSLayer(layer, projection, pixelRatio);
+      return OlLayerHelper.createWMTSLayer(layer, projection);
     }
     return null;
   }
 
-  private static layerHiDpi(layer: LayerModel, pixelRatio?: number) {
-    return (pixelRatio || window.devicePixelRatio) > 1 && !layer.hiDpiDisabled;
+  private static layerHiDpi(layer: LayerModel) {
+    return (layer.tilePixelRatio || window.devicePixelRatio) > 1 && !layer.hiDpiDisabled;
   }
 
   /**
    * service is optional but can be passed to set the WMTSLayerModel properties from the WMTS Capabilities
    */
-  public static createWMTSLayer(layer: WMTSLayerModel, projection: Projection, pixelRatio?: number): TileLayer<WMTS> | null {
+  public static createWMTSLayer(layer: WMTSLayerModel, projection: Projection): TileLayer<WMTS> | null {
     const parser = new WMTSCapabilities();
     const capabilities = parser.read(layer.capabilities);
 
-    const hiDpi = OlLayerHelper.layerHiDpi(layer, pixelRatio);
+    const hiDpi = OlLayerHelper.layerHiDpi(layer);
     const hiDpiLayer = layer.hiDpiSubstituteLayer || layer.layers;
 
     const options = optionsFromCapabilities(capabilities, {
@@ -156,11 +155,11 @@ export class OlLayerHelper {
     });
   }
 
-  public static createXYZLayer(layer: XyzLayerModel, projection: Projection, pixelRatio?: number): TileLayer<XYZ> {
-    const hiDpi = OlLayerHelper.layerHiDpi(layer, pixelRatio);
+  public static createXYZLayer(layer: XyzLayerModel, projection: Projection): TileLayer<XYZ> {
+    const hiDpi = OlLayerHelper.layerHiDpi(layer);
 
     let url = layer.url;
-    let tilePixelRatio = layer.tilePixelRatio;
+    let tilePixelRatio;
     let tileGrid = undefined;
 
     const minZoom = layer.minZoom || undefined;

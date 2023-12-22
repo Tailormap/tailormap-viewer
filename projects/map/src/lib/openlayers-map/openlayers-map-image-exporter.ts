@@ -1,7 +1,6 @@
 import { MapExportOptions } from '../map-service/map.service';
 import { concatMap, from, map, Observable, Subject, take } from 'rxjs';
 import { Map as OlMap } from 'ol';
-import { OlLayerHelper } from '../helpers/ol-layer.helper';
 import { Layer as BaseLayer } from 'ol/layer';
 import { View } from 'ol';
 import { Size } from 'ol/size';
@@ -9,6 +8,9 @@ import { ScaleLine } from 'ol/control';
 import type html2canvas from 'html2canvas';
 import { ExtentHelper } from '../helpers/extent.helper';
 import { OpenlayersExtent } from '../models';
+import { OpenLayersLayerManager } from './open-layers-layer-manager';
+import { NgZone } from '@angular/core';
+import { HttpXsrfTokenExtractor } from '@angular/common/http';
 
 export class OpenLayersMapImageExporter {
 
@@ -17,7 +19,14 @@ export class OpenLayersMapImageExporter {
    * instances are created and hidpi strategies for tiling layers used when the requested image resolution is high. For VectorLayers
    * use existing OpenLayers Layer instances in the options.olLayers.
    */
-  public static exportMapImage$(olSize: Size, olView: View, options: MapExportOptions, extraLayers: BaseLayer[]): Observable<string> {
+  public static exportMapImage$(
+    olSize: Size,
+    olView: View,
+    options: MapExportOptions,
+    extraLayers: BaseLayer[],
+    ngZone: NgZone,
+    httpXsrfTokenExtractor: HttpXsrfTokenExtractor,
+  ): Observable<string> {
     const viewResolution = olView.getResolution();
 
     if (!olSize || !viewResolution) {
@@ -63,10 +72,8 @@ export class OpenLayersMapImageExporter {
     target.style.zIndex = '-10000';
     document.body.append(target);
 
-    const layers = [
-      ...options.layers.map(layer => OlLayerHelper.createLayer(layer, olView.getProjection(), sizeRatio)) as BaseLayer[],
-        ...extraLayers,
-    ];
+    const layers = options.layers.map(layer => ({ ...layer, tilePixelRatio: sizeRatio }));
+    const backgroundLayers = options.backgroundLayers.map(layer => ({ ...layer, tilePixelRatio: sizeRatio }));
 
     const scaleLineControl = new ScaleLine({
       units: 'metric',
@@ -79,7 +86,6 @@ export class OpenLayersMapImageExporter {
       controls: [scaleLineControl],
       interactions: [],
       target,
-      layers,
       pixelRatio: sizeRatio,
       view: new View({
         projection: olView.getProjection(),
@@ -88,6 +94,12 @@ export class OpenLayersMapImageExporter {
         resolution: viewResolution,
       }),
     });
+
+    const manager = new OpenLayersLayerManager(imageExportOlMap, ngZone, httpXsrfTokenExtractor);
+    manager.init();
+    manager.setBackgroundLayers(backgroundLayers);
+    manager.setLayers(layers);
+    extraLayers.forEach(l => imageExportOlMap.addLayer(l));
 
     const renderedMapCanvasDataURL$ = new Subject<string>();
     imageExportOlMap.once('rendercomplete', () => {
@@ -130,6 +142,7 @@ export class OpenLayersMapImageExporter {
           .subscribe(() => {
             renderedMapCanvasDataURL$.next(imageExportCanvas.toDataURL());
             renderedMapCanvasDataURL$.complete();
+            manager.destroy();
             imageExportOlMap.dispose();
             document.body.removeChild(target);
           });
