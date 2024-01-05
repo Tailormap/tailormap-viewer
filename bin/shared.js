@@ -128,6 +128,7 @@ const publishRelease = async (project, version, dryRun) => {
   const versionCommand = !!version ? ['version', npmVersion] : ['version', 'patch'];
   await runCommand('npm', versionCommand, path.resolve(__dirname, '../projects/', project));
   await runCommand('ng', ['build', project]);
+  // note that the push url is not the same as the (anonymous) download url
   if (dryRun) {
     console.log('Would publish ' + project + ' to https://repo.b3p.nl/nexus/repository/npm-public, but running in dry-run mode');
   } else {
