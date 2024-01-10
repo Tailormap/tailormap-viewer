@@ -102,6 +102,7 @@ jobs:
       OIDC_ISSUER_URI: ${{ vars.OIDC_ISSUER_URI }}
       OIDC_CLIENT_ID: ${{ vars.OIDC_CLIENT_ID }}
       OIDC_CLIENT_SECRET: ${{ secrets.OIDC_CLIENT_SECRET }}
+      SOURCE_MAP_AUTH: ${{ secrets.SOURCE_MAP_AUTH }}
       MAP5_URL: ${{ vars.MAP5_URL }}
       BUILDX_NO_DEFAULT_ATTESTATIONS: 1
     needs: [ lint, test ]
