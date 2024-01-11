@@ -35,6 +35,14 @@ const expandNode = <T extends ExpandableNode>(list: T[], nodeId: string, forceEx
   });
 };
 
+const getParentNode = (state: CatalogState, type: CatalogItemKindEnum, id: string) => {
+  const parentNode = state.catalog.find(node => {
+    return (node.items || [])
+      .some(item => item.kind === type && item.id === `${id}`);
+  });
+  return parentNode?.id || '';
+};
+
 const addFeatureSources = (
   state: CatalogState,
   featureSources: FeatureSourceModel[],
@@ -45,7 +53,8 @@ const addFeatureSources = (
   const existingFeatureSources = new Set(state.featureSources.map(s => s.id));
   const sources = featureSources.filter(source => !existingFeatureSources.has(`${source.id}`));
   sources.forEach(source => {
-    const [ extFeatureSource, sourceFeatureTypes ] = ExtendedCatalogModelHelper.getExtendedFeatureSource(source, catalogNodeId || '');
+    const parentId = catalogNodeId || getParentNode(state, CatalogItemKindEnum.FEATURE_SOURCE, source.id);
+    const [ extFeatureSource, sourceFeatureTypes ] = ExtendedCatalogModelHelper.getExtendedFeatureSource(source, parentId);
     extendedFeatureSources.push(extFeatureSource);
     featureTypes.push(...sourceFeatureTypes);
   });
@@ -67,7 +76,8 @@ const addGeoServices = (
   const filteredServices = newServices.filter(s => !existingServices.has(s.id));
   filteredServices
     .forEach(service => {
-      const [ extService, serviceLayers ] = ExtendedCatalogModelHelper.getExtendedGeoService(service, parentNode || '');
+      const parentId = parentNode || getParentNode(state, CatalogItemKindEnum.GEO_SERVICE, service.id);
+      const [ extService, serviceLayers ] = ExtendedCatalogModelHelper.getExtendedGeoService(service, parentId);
       services.push(extService);
       layerModels.push(...serviceLayers);
     });
@@ -147,7 +157,8 @@ const onUpdateGeoService = (
   const currentService = state.geoServices.find(service => service.id === serviceId);
   const layers = state.geoServiceLayers.filter(layer => layer.serviceId !== serviceId);
   const services = state.geoServices.filter(service => service.id !== serviceId);
-  const [ extendedService, serviceLayers ] = ExtendedCatalogModelHelper.getExtendedGeoService(payload.service, payload.parentNode);
+  const parentId = payload.parentNode || getParentNode(state, CatalogItemKindEnum.GEO_SERVICE, payload.service.id);
+  const [ extendedService, serviceLayers ] = ExtendedCatalogModelHelper.getExtendedGeoService(payload.service, parentId);
   const updatedLayers = serviceLayers.map(layer => {
     const currentLayer = currentLayers.find(l => l.id === layer.id);
     return { ...layer, expanded: currentLayer?.expanded || false };
@@ -182,7 +193,8 @@ const onUpdateFeatureSource = (
   state: CatalogState,
   payload: ReturnType<typeof CatalogActions.updateFeatureSource>,
 ): CatalogState => {
-  const [ updatedFeatureSource, updatedFeatureTypes ] = ExtendedCatalogModelHelper.getExtendedFeatureSource(payload.featureSource, payload.parentNode);
+  const parentId = payload.parentNode || getParentNode(state, CatalogItemKindEnum.FEATURE_SOURCE, payload.featureSource.id);
+  const [ updatedFeatureSource, updatedFeatureTypes ] = ExtendedCatalogModelHelper.getExtendedFeatureSource(payload.featureSource, parentId);
   const idx = state.featureSources.findIndex(f => f.id === updatedFeatureSource.id);
   if (idx === -1) {
     return state;
@@ -195,7 +207,7 @@ const onUpdateFeatureSource = (
         ...(state.featureSources[idx] || {}),
         ...updatedFeatureSource,
         expanded: state.featureSources[idx]?.expanded ?? false,
-        catalogNodeId: payload.parentNode,
+        catalogNodeId: parentId,
       },
       ...state.featureSources.slice(idx + 1),
     ],
