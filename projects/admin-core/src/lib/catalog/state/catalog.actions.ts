@@ -58,7 +58,7 @@ export const deleteFeatureSource = createAction(
 );
 export const updateFeatureType = createAction(
   `${catalogActionsPrefix} Update Feature Type`,
-  props<{ featureType: FeatureTypeModel; parentNode: string }>(),
+  props<{ featureType: FeatureTypeModel }>(),
 );
 export const expandTree = createAction(
   `${catalogActionsPrefix} Expand Tree`,

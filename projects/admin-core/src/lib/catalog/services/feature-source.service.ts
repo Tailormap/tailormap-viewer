@@ -120,7 +120,7 @@ export class FeatureSourceService {
               }),
               tap((updateResult: FeatureTypeModel | null) => {
                 if (updateResult) {
-                  this.updateFeatureTypeState(updateResult, featureType.catalogNodeId);
+                  this.updateFeatureTypeState(updateResult);
                 }
               }),
               map((updateResult: FeatureTypeModel | null) => {
@@ -253,11 +253,11 @@ export class FeatureSourceService {
     }, 50);
   }
 
-  private updateFeatureTypeState(featureType: FeatureTypeModel, catalogNodeId?: string) {
+  private updateFeatureTypeState(featureType: FeatureTypeModel) {
     // Add a small timeout to prevent most duplicate updates to prevent many state updates
     // For data integrity, it should not matter if we update the state twice
     DebounceHelper.debounce(`feature-type-update-${featureType.id}`, () => {
-      this.store$.dispatch(updateFeatureType({ featureType, parentNode: catalogNodeId || '' }));
+      this.store$.dispatch(updateFeatureType({ featureType }));
     }, 50);
   }
 
