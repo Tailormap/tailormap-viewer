@@ -67,6 +67,7 @@ private static DEFAULT_TITLE = 'Tailormap';
       .pipe(
         takeUntil(this.destroyed),
         distinctUntilChanged(),
+      )
       .subscribe(fragment => {
           this.bookmarkService.setBookmark(fragment === null ? undefined : fragment);
       });
