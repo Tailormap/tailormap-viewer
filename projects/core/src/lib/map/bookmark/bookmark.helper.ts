@@ -2,14 +2,23 @@ import { ArrayHelper } from '@tailormap-viewer/shared';
 import { MapSizeHelper, MapViewDetailsModel, MapUnitEnum } from '@tailormap-viewer/map';
 import { TristateBoolean, LayerVisibilityBookmarkFragment, LayerInformation, LayerTreeOrderBookmarkFragment, LayerTreeOrderInformation } from './bookmark_pb';
 import { AppLayerWithInitialValuesModel, ExtendedLayerTreeNodeModel } from '../models';
+import { AppLayerModel, MapResponseModel } from '@tailormap-viewer/api';
+import { LayerModelHelper } from '../helpers/layer-model.helper';
+import { LayerTreeNodeHelper } from '../helpers/layer-tree-node.helper';
+import { ExtendedMapResponseModel } from '../models/extended-map-response.model';
 
 export interface MapBookmarkContents {
   visibilityChanges: { id: string; checked: boolean }[];
   opacityChanges: { layerId: string; opacity: number }[];
 }
 
+export type MapLocationBookmarkContents = [[number, number], number];
+
+export type LayerOrderBookmarkContents = Array<{ nodeId: string; children: string[] }>;
+
 export class MapBookmarkHelper {
-  public static locationAndZoomFromFragment(fragment: string, viewDetails: MapViewDetailsModel, unitsOfMeasure: MapUnitEnum): [[number, number], number] | undefined {
+
+  public static locationAndZoomFromFragment(fragment: string, viewDetails?: MapViewDetailsModel, unitsOfMeasure?: MapUnitEnum): MapLocationBookmarkContents | undefined {
     const parts = fragment.split(',');
     if (parts.length !== 3) {
       return undefined;
@@ -22,7 +31,7 @@ export class MapBookmarkHelper {
       return undefined;
     }
 
-    if (viewDetails.center !== undefined) {
+    if (viewDetails && unitsOfMeasure && viewDetails.center !== undefined) {
       const precision = MapSizeHelper.getCoordinatePrecision(unitsOfMeasure);
       const maxDiff = Math.pow(10, -precision);
 
@@ -142,7 +151,7 @@ export class MapBookmarkHelper {
   public static layerTreeOrderFromFragment(
     fragment: LayerTreeOrderBookmarkFragment,
     layers: ExtendedLayerTreeNodeModel[],
-  ): { nodeId: string; children: string[] }[] {
+  ): LayerOrderBookmarkContents {
     const output = [];
     const outMap = new Map<string, { nodeId: string; children: string[] }>();
     const missingChildren = new Set(layers.map(a => a.id));
@@ -176,6 +185,42 @@ export class MapBookmarkHelper {
     }
 
     return output;
+  }
+
+  public static mergeMapResponseWithBookmarkData(
+    mapResponse: MapResponseModel,
+    opacityVisibility: LayerVisibilityBookmarkFragment,
+    layerOrder: LayerTreeOrderBookmarkFragment,
+  ): ExtendedMapResponseModel {
+    const extendedAppLayers = mapResponse.appLayers.map(LayerModelHelper.getLayerWithInitialValues);
+    const extendedTreeNodes = LayerTreeNodeHelper.getExtendedLayerTreeNodes(mapResponse.layerTreeNodes, mapResponse.appLayers);
+    const bookmarkOpacityVisibility = MapBookmarkHelper.visibilityDataFromFragment(opacityVisibility, extendedAppLayers);
+    const bookmarkLayerOrder = MapBookmarkHelper.layerTreeOrderFromFragment(layerOrder, extendedTreeNodes);
+    const appLayers = extendedAppLayers.map<AppLayerModel>(layer => {
+      const updated = bookmarkOpacityVisibility.visibilityChanges.find(v => v.id === layer.id);
+      const visible = updated ? updated.checked : layer.visible;
+      const opacityUpdated = bookmarkOpacityVisibility.opacityChanges.find(o => o.layerId === layer.id);
+      const opacity = opacityUpdated ? opacityUpdated.opacity : layer.opacity;
+      return {
+        ...layer,
+        visible,
+        opacity,
+      };
+    });
+    return {
+      ...mapResponse,
+      layerTreeNodes: LayerTreeNodeHelper.getExtendedLayerTreeNodes(extendedTreeNodes, appLayers).map(node => {
+        const matches = bookmarkLayerOrder.find(a => a.nodeId === node.id);
+        if (matches !== undefined) {
+          return {
+            ...node,
+            childrenIds: matches.children,
+          };
+        }
+        return node;
+      }),
+      appLayers,
+    };
   }
 
 }

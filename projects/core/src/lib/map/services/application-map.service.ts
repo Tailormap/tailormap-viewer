@@ -11,6 +11,9 @@ import { selectMapOptions, selectOrderedVisibleBackgroundLayers, selectOrderedVi
 import { ExtendedAppLayerModel } from '../models';
 import { selectCQLFilters } from '../../filter/state/filter.selectors';
 import { ApplicationMapBookmarkService } from './application-map-bookmark.service';
+import { withLatestFrom } from 'rxjs/operators';
+import { BookmarkService } from '../../bookmark/bookmark.service';
+import { MapBookmarkHelper } from '../bookmark/bookmark.helper';
 
 @Injectable({
    providedIn: 'root',
@@ -23,6 +26,7 @@ export class ApplicationMapService implements OnDestroy {
     private store$: Store,
     private mapService: MapService,
     private httpClient: HttpClient,
+    private bookmarkService: BookmarkService,
     private applicationMapBookmarkService: ApplicationMapBookmarkService,
   ) {
     const isValidLayer = (layer: LayerModel | null): layer is LayerModel => layer !== null;
@@ -38,12 +42,15 @@ export class ApplicationMapService implements OnDestroy {
             ArrayHelper.arrayEquals(prev.initialExtent, curr.initialExtent) &&
             ArrayHelper.arrayEquals(prev.maxExtent, curr.maxExtent);
         }),
+        withLatestFrom(this.bookmarkService.registerFragment$(ApplicationMapBookmarkService.LOCATION_BOOKMARK_DESCRIPTOR)),
       )
-      .subscribe(mapOptions => {
+      .subscribe(([ mapOptions, locationBookmark ]) => {
         if (mapOptions === null) {
           return;
         }
-        this.mapService.initMap(mapOptions);
+        const bookmark = MapBookmarkHelper.locationAndZoomFromFragment(locationBookmark);
+        const initialOptions = bookmark ? { initialCenter: bookmark[0], initialZoom: bookmark[1] } : undefined;
+        this.mapService.initMap(mapOptions, initialOptions);
       });
 
     this.store$.select(selectOrderedVisibleBackgroundLayers)

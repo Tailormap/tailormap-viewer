@@ -17,6 +17,7 @@ type BookmarkFragmentValueObservable = BehaviorSubject<any>;
   providedIn: 'root',
 })
 export class BookmarkService {
+
   private pendingFragments: Map<BookmarkID, any> = new Map();
   private fragments: Map<BookmarkFragmentDescriptor, BookmarkFragmentValueObservable> = new Map();
   private joinedBookmark: Subject<string | undefined> = new Subject();
@@ -162,7 +163,7 @@ export class BookmarkService {
           if (split > 0) {
             // Fragment with type === 'string'
             bookmarkComponents.set(component.substring(0, split), decodeURIComponent(component.substring(split + 1)));
-          } else if (split === -1) {
+          } else if (split === -1 && component) {
             // Binary fragments are at the end with no identifier and ':' after '!'
             const binaryFragments = BookmarkService.decodeBinaryFragments(component);
             for (const fragment of binaryFragments.fragments) {

@@ -42,7 +42,7 @@ export class OpenLayersMap implements MapViewerModel {
     this.resizeObserver = new ResizeObserver(() => this.updateMapSize());
   }
 
-  public initMap(options: MapViewerOptionsModel) {
+  public initMap(options: MapViewerOptionsModel, initialOptions?: { initialCenter?: [number, number]; initialZoom?: number }) {
     if (this.map.value && this.map.value.getView().getProjection().getCode() === options.projection) {
       // Do not re-create the map if the projection is the same as previous
       this.map.value.getView().getProjection().setExtent(options.maxExtent);
@@ -55,11 +55,17 @@ export class OpenLayersMap implements MapViewerModel {
       return;
     }
 
+    if (typeof initialOptions?.initialCenter !== 'undefined' && typeof initialOptions?.initialZoom !== 'undefined') {
+      this.initialCenterZoom = [ initialOptions.initialCenter, initialOptions.initialZoom ];
+    }
+
     ProjectionsHelper.initProjection(options.projection, options.projectionDefinition, options.projectionAliases);
 
     const view = new View({
       projection: options.projection,
       extent: options.maxExtent,
+      center: initialOptions?.initialCenter,
+      zoom: initialOptions?.initialZoom,
       showFullExtent: true,
     });
 

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { map, Observable, of, Subject, takeUntil } from 'rxjs';
+import { distinctUntilChanged, map, Observable, of, Subject, takeUntil } from 'rxjs';
 import { Router, ActivatedRoute, UrlSegment } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { loadViewer } from '../../state/core.actions';
@@ -64,7 +64,9 @@ private static DEFAULT_TITLE = 'Tailormap';
       });
 
     this.route.fragment
-      .pipe(takeUntil(this.destroyed))
+      .pipe(
+        takeUntil(this.destroyed),
+        distinctUntilChanged(),
       .subscribe(fragment => {
           this.bookmarkService.setBookmark(fragment === null ? undefined : fragment);
       });

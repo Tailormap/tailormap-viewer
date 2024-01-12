@@ -1,10 +1,13 @@
 import { Inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as MapActions from './map.actions';
-import { catchError, concatMap, map, of } from 'rxjs';
+import { combineLatest, catchError, concatMap, map, of, take } from 'rxjs';
 import { TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel } from '@tailormap-viewer/api';
 
 import * as CoreActions from '../../state/core.actions';
+import { ApplicationMapBookmarkService } from '../services/application-map-bookmark.service';
+import { BookmarkService } from '../../bookmark/bookmark.service';
+import { MapBookmarkHelper } from '../bookmark/bookmark.helper';
 
 @Injectable()
 export class MapEffects {
@@ -25,13 +28,21 @@ export class MapEffects {
         return this.apiService.getMap$(action.id)
           .pipe(
             catchError(() => of(MapEffects.LOAD_MAP_ERROR)),
-            map(response => {
+            concatMap(response => {
               if (typeof response === 'string') {
-                return MapActions.loadMapFailed({ error: response });
+                return of(MapActions.loadMapFailed({ error: response }));
               }
-              return MapActions.loadMapSuccess({
-                ...response,
-              });
+              return combineLatest([
+                this.bookmarkService.registerFragment$(ApplicationMapBookmarkService.VISIBILITY_BOOKMARK_DESCRIPTOR),
+                this.bookmarkService.registerFragment$(ApplicationMapBookmarkService.ORDERING_BOOKMARK_DESCRIPTOR),
+              ])
+                .pipe(
+                  take(1),
+                  map(([ opacityVisibilityFragment, layerOrderFragment ]) => {
+                    const extendedMapResponse = MapBookmarkHelper.mergeMapResponseWithBookmarkData(response, opacityVisibilityFragment, layerOrderFragment);
+                    return MapActions.loadMapSuccess(extendedMapResponse);
+                  }),
+                );
             }),
           );
       }),
@@ -41,6 +52,7 @@ export class MapEffects {
   constructor(
     private actions$: Actions,
     @Inject(TAILORMAP_API_V1_SERVICE) private apiService: TailormapApiV1ServiceModel,
+    private bookmarkService: BookmarkService,
   ) {}
 
 }

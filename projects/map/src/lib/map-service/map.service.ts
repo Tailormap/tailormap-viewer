@@ -52,8 +52,8 @@ export class MapService {
     this.map = new OpenLayersMap(this.ngZone, this.httpXsrfTokenExtractor);
   }
 
-  public initMap(options: MapViewerOptionsModel) {
-    this.map.initMap(options);
+  public initMap(options: MapViewerOptionsModel, initialOptions?: { initialCenter?: [number, number]; initialZoom?: number }) {
+    this.map.initMap(options, initialOptions);
   }
 
   public render(el: HTMLElement) {

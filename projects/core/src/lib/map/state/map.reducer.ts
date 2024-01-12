@@ -3,6 +3,7 @@ import { Action, createReducer, on } from '@ngrx/store';
 import { MapState, initialMapState } from './map.state';
 import { ChangePositionHelper, LoadingStateEnum, StateHelper } from '@tailormap-viewer/shared';
 import { LayerTreeNodeHelper } from '../helpers/layer-tree-node.helper';
+import { LayerModelHelper } from '../helpers/layer-model.helper';
 
 const onLoadMap = (state: MapState): MapState => ({
   ...state,
@@ -20,10 +21,10 @@ const onLoadMapSuccess = (
     maxExtent: payload.maxExtent || undefined,
     crs: payload.crs,
   },
-  layers: payload.appLayers.map(a => ({ ...a, initialValues: { visible: a.visible, opacity: a.opacity } })),
+  layers: payload.appLayers,
   services: payload.services,
-  baseLayerTreeNodes: payload.baseLayerTreeNodes.map(LayerTreeNodeHelper.getExtendedLayerTreeNode),
-  layerTreeNodes: payload.layerTreeNodes.map(LayerTreeNodeHelper.getExtendedLayerTreeNode),
+  baseLayerTreeNodes: payload.baseLayerTreeNodes.map(node => LayerTreeNodeHelper.getExtendedLayerTreeNode(node, false)),
+  layerTreeNodes: payload.layerTreeNodes,
 });
 
 const onLoadMapFailed = (
@@ -96,14 +97,14 @@ const onAddServices = (state: MapState, payload: ReturnType<typeof MapActions.ad
 
 const onAddAppLayers = (state: MapState, payload: ReturnType<typeof MapActions.addAppLayers>): MapState => ({
   ...state,
-  layers: [ ...state.layers, ...payload.appLayers.map(a => ({ ...a, initialValues: { visible: a.visible, opacity: a.opacity } })) ],
+  layers: [ ...state.layers, ...payload.appLayers.map(LayerModelHelper.getLayerWithInitialValues) ],
 });
 
 const onAddLayerTreeNodes = (state: MapState, payload: ReturnType<typeof MapActions.addLayerTreeNodes>): MapState => {
   const tree: keyof MapState = payload.isBaseLayerTree ? 'baseLayerTreeNodes' : 'layerTreeNodes';
   return {
     ...state,
-    [tree]: [ ...state[tree], ...payload.layerTreeNodes.map(LayerTreeNodeHelper.getExtendedLayerTreeNode) ],
+    [tree]: [ ...state[tree], ...payload.layerTreeNodes.map(node => LayerTreeNodeHelper.getExtendedLayerTreeNode(node, false)) ],
   };
 };
 
