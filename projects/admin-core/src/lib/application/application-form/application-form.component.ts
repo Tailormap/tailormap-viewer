@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { BoundsModel, I18nSettingsModel } from '@tailormap-viewer/api';
+import { BoundsModel, I18nSettingsModel, UiSettingsModel } from '@tailormap-viewer/api';
 import { ApplicationModel, GroupModel, AuthorizationRuleGroup, AUTHORIZATION_RULE_ANONYMOUS } from '@tailormap-admin/admin-api';
 import { Observable, debounceTime, filter, Subject, takeUntil } from 'rxjs';
 import { FormHelper } from '../../helpers/form.helper';
@@ -54,6 +54,7 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
       ],
     }),
     defaultLanguage: new FormControl<string | null>(null),
+    hideLoginButton: new FormControl<boolean | null>(null),
     hideLanguageSwitcher: new FormControl<boolean | null>(null),
     initialExtent: new FormControl<BoundsModel | null>(null),
     maxExtent: new FormControl<BoundsModel | null>(null),
@@ -93,7 +94,10 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
           defaultLanguage: value.defaultLanguage || null,
           hideLanguageSwitcher: typeof value.hideLanguageSwitcher === 'boolean' ? value.hideLanguageSwitcher : false,
         };
-        this.updateApplication.emit({ application, i18nSettings });
+        const uiSettings: UiSettingsModel = {
+          hideLoginButton: typeof value.hideLoginButton === 'boolean' ? value.hideLoginButton : false,
+        };
+        this.updateApplication.emit({ application, i18nSettings, uiSettings });
       });
   }
 
@@ -115,6 +119,9 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
         : null,
       hideLanguageSwitcher: typeof application?.settings?.i18nSettings?.hideLanguageSwitcher === "boolean"
         ? application.settings.i18nSettings.hideLanguageSwitcher
+        : null,
+      hideLoginButton: typeof application?.settings?.uiSettings?.hideLoginButton === "boolean"
+        ? application.settings.uiSettings.hideLoginButton
         : null,
       authorizationRules: application ? application.authorizationRules : [AUTHORIZATION_RULE_ANONYMOUS],
     }, { emitEvent: false });
