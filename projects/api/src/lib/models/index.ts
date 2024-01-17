@@ -15,6 +15,7 @@ export * from './feature.model';
 export * from './features-response.model';
 export * from './geometry-type.enum';
 export * from './i18n-settings.model';
+export * from './ui-settings.model';
 export * from './layer-details.model';
 export * from './map-response.model';
 export * from './redirect-response.model';

@@ -1,6 +1,6 @@
 <ng-container *ngIf="userDetails$ | async as userDetails">
   <tm-menubar-button [menuTrigger]="userMenu"
-                     [icon]="userDetails.isAuthenticated ? 'user' : 'login'"></tm-menubar-button>
+                     [icon]="(icon$ | async) ?? ''"></tm-menubar-button>
 
   <mat-menu #userMenu="matMenu" xPosition="after" yPosition="above">
     <button mat-menu-item (click)="showAbout()">
@@ -17,8 +17,10 @@
     <button mat-menu-item (click)="logout()" *ngIf="userDetails.isAuthenticated && userDetails.username">
       <span i18n="@@core.profile.logout">Logout</span>
     </button>
-    <button mat-menu-item (click)="login()" *ngIf="!userDetails.isAuthenticated">
-      <span i18n="@@core.profile.login">Login</span>
-    </button>
+    <ng-container *ngIf="showLoginButton$ | async">
+      <button mat-menu-item (click)="login()" *ngIf="!userDetails.isAuthenticated">
+        <span i18n="@@core.profile.login">Login</span>
+      </button>
+    </ng-container>
   </mat-menu>
 </ng-container>

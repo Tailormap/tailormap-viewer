@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef, OnInit, Inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { selectShowLanguageSwitcher, selectUserDetails } from '../../../state/core.selectors';
-import { Observable, Subject, take } from 'rxjs';
+import { selectShowLanguageSwitcher, selectShowLoginButton, selectUserDetails } from '../../../state/core.selectors';
+import { combineLatest, map, Observable, Subject, take } from 'rxjs';
 import {
   SecurityModel, TAILORMAP_SECURITY_API_V1_SERVICE,
   TailormapSecurityApiV1ServiceModel,
@@ -21,6 +21,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   public showLanguageToggle$: Observable<boolean>;
   public userDetails$: Observable<SecurityModel | null>;
+  public showLoginButton$: Observable<boolean>;
+  public icon$: Observable<string>;
+
   private destroyed = new Subject();
 
   constructor(
@@ -32,6 +35,16 @@ export class ProfileComponent implements OnInit, OnDestroy {
   ) {
     this.userDetails$ = this.store$.select(selectUserDetails);
     this.showLanguageToggle$ = this.store$.select(selectShowLanguageSwitcher);
+    this.showLoginButton$ = this.store$.select(selectShowLoginButton);
+    this.icon$ = combineLatest([
+      this.userDetails$,
+      this.showLoginButton$,
+    ]).pipe(map(([ userDetails, showLoginButton ]) => {
+      if (userDetails?.isAuthenticated) {
+        return 'user';
+      }
+      return showLoginButton ? 'login' : 'settings';
+    }));
   }
 
   public ngOnInit() {

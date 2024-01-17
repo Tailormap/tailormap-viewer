@@ -17,6 +17,11 @@ export const selectShowLanguageSwitcher = createSelector(
   viewerState => viewerState?.i18nSettings?.hideLanguageSwitcher !== true,
 );
 
+export const selectShowLoginButton = createSelector(
+  selectViewerState,
+  viewerState => viewerState?.uiSettings?.hideLoginButton !== true,
+);
+
 export const selectComponentsConfig = createSelector(
   selectViewerState,
   state => {
