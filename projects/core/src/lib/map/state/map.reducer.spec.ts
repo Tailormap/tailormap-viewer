@@ -19,7 +19,7 @@ describe('MapReducer', () => {
 
   test('handles MapActions.loadMap', () => {
     const initialState: MapState = { ...initialMapState };
-    const action = MapActions.loadMap({ id: 1 });
+    const action = MapActions.loadMap({ id: "1" });
     const updatedState = mapReducer(initialState, action);
     expect(updatedState.loadStatus).toEqual(LoadingStateEnum.LOADING);
   });
@@ -45,7 +45,7 @@ describe('MapReducer', () => {
     expect(updatedState.loadStatus).toEqual(LoadingStateEnum.LOADED);
     expect(updatedState.mapSettings?.crs).toEqual(crs);
     expect(updatedState.mapSettings?.initialExtent).toEqual(initialExtent);
-    expect(updatedState.layers).toEqual(appLayers.map(a => ({ ...a, initialValues: { visible: a.visible, opacity: a.opacity } })));
+    expect(updatedState.layers).toEqual(appLayers);
   });
 
   test('handles MapActions.loadMapFailed', () => {

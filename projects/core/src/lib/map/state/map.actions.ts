@@ -1,5 +1,6 @@
 import { createAction, props } from '@ngrx/store';
-import { AppLayerModel, LayerDetailsModel, LayerTreeNodeModel, MapResponseModel, ServiceModel } from '@tailormap-viewer/api';
+import { AppLayerModel, LayerDetailsModel, LayerTreeNodeModel, ServiceModel } from '@tailormap-viewer/api';
+import { ExtendedMapResponseModel } from '../models/extended-map-response.model';
 
 const mapActionsPrefix = '[Map]';
 
@@ -9,7 +10,7 @@ export const loadMap = createAction(
 );
 export const loadMapSuccess = createAction(
   `${mapActionsPrefix} Map Load Success`,
-  props<MapResponseModel>(),
+  props<ExtendedMapResponseModel>(),
 );
 export const loadMapFailed = createAction(
   `${mapActionsPrefix} Map Load Failed`,

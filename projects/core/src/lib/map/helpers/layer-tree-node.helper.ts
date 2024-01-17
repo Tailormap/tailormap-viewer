@@ -12,10 +12,37 @@ export class LayerTreeNodeHelper {
     return typeof node.appLayerId === 'undefined' || node.appLayerId === null;
   }
 
-  public static getExtendedLayerTreeNode(node: LayerTreeNodeModel): ExtendedLayerTreeNodeModel {
+  public static getExtendedLayerTreeNodes(nodes: LayerTreeNodeModel[], appLayers: AppLayerModel[]): ExtendedLayerTreeNodeModel[] {
+    const checkedLayers = new Set(appLayers.filter(a => a.visible).map(a => a.id));
+    const checkedNodes = nodes.filter(node => {
+      if (LayerTreeNodeHelper.isAppLayerNode(node)) {
+        return false;
+      }
+      return LayerTreeNodeHelper.hasCheckedChildren(node, nodes, checkedLayers);
+    });
+    const checkedNodeIds = new Set(checkedNodes.map(c => c.id));
+    return nodes.map(node => {
+      return LayerTreeNodeHelper.getExtendedLayerTreeNode(node, checkedNodeIds.has(node.id));
+    });
+  }
+
+  private static hasCheckedChildren(node: LayerTreeNodeModel, nodes: LayerTreeNodeModel[], checkedLayers: Set<string>): boolean {
+    return (node.childrenIds || []).some(c => {
+      const child = nodes.find(n => n.id === c);
+      if (child && typeof child.appLayerId === 'string' && checkedLayers.has(child.appLayerId)) {
+        return true;
+      }
+      if (child && child.childrenIds) {
+        return LayerTreeNodeHelper.hasCheckedChildren(child, nodes, checkedLayers);
+      }
+      return false;
+    });
+  }
+
+  public static getExtendedLayerTreeNode(node: LayerTreeNodeModel, expanded: boolean): ExtendedLayerTreeNodeModel {
     return {
       ...node,
-      expanded: LayerTreeNodeHelper.isAppLayerNode(node) ? undefined : true,
+      expanded,
       initialChildren: node.childrenIds ?? [],
     };
   }
