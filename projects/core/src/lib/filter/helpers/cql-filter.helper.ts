@@ -9,6 +9,14 @@ import { CqlSpatialFilterHelper } from './cql-spatial-filter.helper';
 
 export class CqlFilterHelper {
 
+  private static INVERSE_NUMBER_CONDITIONS: Map<FilterConditionEnum, FilterConditionEnum> = new Map([
+    [ FilterConditionEnum.NUMBER_EQUALS_KEY, FilterConditionEnum.NUMBER_NOT_EQUALS_KEY ],
+    [ FilterConditionEnum.NUMBER_LARGER_THAN_KEY, FilterConditionEnum.NUMBER_SMALLER_EQUALS_THAN_KEY ],
+    [ FilterConditionEnum.NUMBER_SMALLER_THAN_KEY, FilterConditionEnum.NUMBER_LARGER_EQUALS_THAN_KEY ],
+    [ FilterConditionEnum.NUMBER_LARGER_EQUALS_THAN_KEY, FilterConditionEnum.NUMBER_SMALLER_THAN_KEY ],
+    [ FilterConditionEnum.NUMBER_SMALLER_EQUALS_THAN_KEY, FilterConditionEnum.NUMBER_LARGER_THAN_KEY ],
+  ]);
+
   public static getFilters(filterGroups: FilterGroupModel[]): Map<string, string> {
     const cqlDict = new Map<string, string>();
     const layerIdList = filterGroups.reduce<string[]>((ids, f) => {
@@ -68,14 +76,13 @@ export class CqlFilterHelper {
     if (filter.condition === FilterConditionEnum.NULL_KEY) {
       return CqlFilterHelper.wrapFilter(`${filter.attribute} IS${filter.invertCondition ? ' NOT' : ''} NULL`);
     }
-    const value = filter.value[0];
     if (CqlFilterHelper.isNumeric(filter.attributeType)
       && filter.condition === FilterConditionEnum.NUMBER_BETWEEN_KEY
       && filter.value.length > 1) {
-      return CqlFilterHelper.wrapFilter(`${filter.attribute} BETWEEN ${filter.value[0]} AND ${filter.value[1]}`);
+      return CqlFilterHelper.wrapFilter(`${filter.attribute}${filter.invertCondition ? ' NOT' : ''} BETWEEN ${filter.value[0]} AND ${filter.value[1]}`);
     }
     if (CqlFilterHelper.isNumeric(filter.attributeType)) {
-      return CqlFilterHelper.wrapFilter(`${filter.attribute} ${filter.condition} ${value}`);
+      return CqlFilterHelper.wrapFilter(CqlFilterHelper.getQueryForNumber(filter));
     }
     if (filter.attributeType === AttributeType.STRING) {
       return CqlFilterHelper.wrapFilter(CqlFilterHelper.getQueryForString(filter));
@@ -149,6 +156,13 @@ export class CqlFilterHelper {
     return query.join(' ');
   }
 
+  private static getQueryForNumber(filter: AttributeFilterModel) {
+    if (filter.invertCondition && CqlFilterHelper.INVERSE_NUMBER_CONDITIONS.get(filter.condition)) {
+      return `${filter.attribute} ${CqlFilterHelper.INVERSE_NUMBER_CONDITIONS.get(filter.condition)} ${filter.value[0]}`;
+    }
+    return `${filter.attribute} ${filter.condition} ${filter.value[0]}`;
+  }
+
   public static getExpression(value: string | number | boolean, attributeType: AttributeType): string {
     if (attributeType === AttributeType.STRING || CqlFilterHelper.isDate(attributeType)) {
       if (typeof value === 'string') {
@@ -160,7 +174,7 @@ export class CqlFilterHelper {
   }
 
   private static isNumeric(attributeType: AttributeType) {
-    return attributeType === AttributeType.DOUBLE || attributeType === AttributeType.INTEGER;
+    return attributeType === AttributeType.DOUBLE || attributeType === AttributeType.INTEGER || attributeType === AttributeType.NUMBER;
   }
 
   private static isDate(attributeType: AttributeType) {
