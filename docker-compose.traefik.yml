@@ -11,9 +11,13 @@ services:
     networks:
       - reverse-proxy
     labels:
+      - "traefik.http.services.${COMPOSE_PROJECT_NAME:-tailormap}.loadbalancer.server.port=8080"
       - "traefik.http.routers.${COMPOSE_PROJECT_NAME:-tailormap}.rule=Host(`${HOST:-localhost}`)"
       - "traefik.http.routers.${COMPOSE_PROJECT_NAME:-tailormap}.tls=true"
       - "traefik.http.routers.${COMPOSE_PROJECT_NAME:-tailormap}.tls.certresolver=letsencrypt"
-      - "traefik.http.services.${COMPOSE_PROJECT_NAME:-tailormap}.loadbalancer.server.port=8080"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME:-tailormap}.middlewares=${COMPOSE_PROJECT_NAME:-tailormap}-hsts"
+      - "traefik.http.middlewares.${COMPOSE_PROJECT_NAME:-tailormap}-hsts.headers.STSSeconds=31536000" # set to a year
+      - "traefik.http.middlewares.${COMPOSE_PROJECT_NAME:-tailormap}-hsts.headers.STSIncludeSubdomains=true" 
+      - "traefik.http.middlewares.${COMPOSE_PROJECT_NAME:-tailormap}-hsts.headers.STSPreload=true" # activate headers
       - "traefik.docker.network=${PROXY_NETWORK:-traefik}"
       - "traefik.enable=true"
