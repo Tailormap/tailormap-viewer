@@ -52,7 +52,7 @@ export class AttributeFilterComponent implements OnInit, OnDestroy {
     } else if (filter.value && filter.value.length === 2 && this.isDateLikeAttributeType()) {
       value = this.toDateTime(filter.value[0]);
       value2 = this.toDateTime(filter.value[1]);
-    } else if (filter.value && filter.value.length === 2 && this.showValueBetweenInput(filter.condition)) {
+    } else if (filter.value && filter.value.length === 2 && filter.condition === FilterConditionEnum.NUMBER_BETWEEN_KEY) {
       value = filter.value[0];
       value2 = filter.value[1];
     } else if (filter.value && filter.value.length === 1) {
@@ -239,8 +239,8 @@ export class AttributeFilterComponent implements OnInit, OnDestroy {
       this.isDateLikeAttributeType();
   }
 
-  public showValueBetweenInput(condition?: FilterConditionEnum) {
-    return this.showValueInput() && (condition || this.formValues.condition) === FilterConditionEnum.NUMBER_BETWEEN_KEY;
+  public showValueBetweenInput() {
+    return this.showValueInput() && this.formValues.condition === FilterConditionEnum.NUMBER_BETWEEN_KEY;
   }
 
   public showDateInput() {
