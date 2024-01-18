@@ -21,12 +21,36 @@ export const getSpatialFilterGroup = (geoms: string[], columns?: Array<{ layerId
   return group;
 };
 
+const simpleNumberFilter = (condition?: FilterConditionEnum, value?: string[], invertCondition = false) => {
+  const filterGroup = getFilterGroup();
+  filterGroup.filters[0].attributeType = AttributeType.INTEGER;
+  filterGroup.filters[0].condition = condition || FilterConditionEnum.NUMBER_SMALLER_THAN_KEY;
+  filterGroup.filters[0].value = value || ['1'];
+  filterGroup.filters[0].invertCondition = invertCondition;
+  const filters = CqlFilterHelper.getFilters([filterGroup]);
+  return filters.get('1');
+};
+
 describe('CQLFilterHelper', () => {
 
   test('should create a basic CQL filter', () => {
     const filterGroup = getFilterGroup();
     const filters = CqlFilterHelper.getFilters([filterGroup]);
     expect(filters.get('1')).toBe('(attribute ILIKE \'%value%\')');
+  });
+
+  test('should create a basic number CQL filter', () => {
+    expect(simpleNumberFilter(FilterConditionEnum.NUMBER_SMALLER_THAN_KEY)).toBe('(attribute < 1)');
+    expect(simpleNumberFilter(FilterConditionEnum.NUMBER_LARGER_EQUALS_THAN_KEY)).toBe('(attribute >= 1)');
+    expect(simpleNumberFilter(FilterConditionEnum.NUMBER_BETWEEN_KEY, [ '0', '1' ])).toBe('(attribute BETWEEN 0 AND 1)');
+    expect(simpleNumberFilter(FilterConditionEnum.NUMBER_EQUALS_KEY)).toBe('(attribute = 1)');
+  });
+
+  test('should create a basic number CQL filter with inverse condition true', () => {
+    expect(simpleNumberFilter(FilterConditionEnum.NUMBER_SMALLER_THAN_KEY, ['1'], true)).toBe('(attribute >= 1)');
+    expect(simpleNumberFilter(FilterConditionEnum.NUMBER_LARGER_EQUALS_THAN_KEY, ['1'], true)).toBe('(attribute < 1)');
+    expect(simpleNumberFilter(FilterConditionEnum.NUMBER_BETWEEN_KEY, [ '0', '1' ], true)).toBe('(attribute NOT BETWEEN 0 AND 1)');
+    expect(simpleNumberFilter(FilterConditionEnum.NUMBER_EQUALS_KEY, ['1'], true)).toBe('(attribute <> 1)');
   });
 
   test('should create a spatial filter', () => {
