@@ -143,7 +143,7 @@ export class ApplicationModelHelper {
     return ApplicationModelHelper.getChildNodes(tree, draggedNode).map(node => node.id);
   }
 
-  private static getChildNodes(layerTreeNodes: AppTreeNodeModel[], child?: AppTreeNodeModel): AppTreeNodeModel[] {
+  public static getChildNodes(layerTreeNodes: AppTreeNodeModel[], child?: AppTreeNodeModel): AppTreeNodeModel[] {
     if (!child) {
       return [];
     }
