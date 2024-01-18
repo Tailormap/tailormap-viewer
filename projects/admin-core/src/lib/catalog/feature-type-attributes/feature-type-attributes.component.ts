@@ -38,6 +38,7 @@ export class FeatureTypeAttributesComponent implements OnChanges {
 
   @Input()
   public set showFullSettings(showFullSettings: boolean) {
+    this._showFullSettings = showFullSettings;
     this.columnLabels = showFullSettings
       ? [ ...attributeColumnLabels, ...attributeExtraColumnLabels ]
       : attributeColumnLabels;
@@ -45,6 +46,10 @@ export class FeatureTypeAttributesComponent implements OnChanges {
       ? [ ...attributeColumns, ...attributeExtraColumns ]
       : attributeColumns;
   }
+  public get showFullSettings() {
+    return this._showFullSettings;
+  }
+  private _showFullSettings = false;
 
   @Output()
   public attributeEnabledChanged = new EventEmitter<Array<{ attribute: string; checked: boolean }>>();
