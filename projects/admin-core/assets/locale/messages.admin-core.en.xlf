@@ -119,6 +119,9 @@
       <trans-unit id="admin-core.application.hide-language-switcher" datatype="html">
         <source>Hide language switcher in viewer</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.hide-login-button" datatype="html">
+        <source>Hide login button in viewer</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.initial-extent" datatype="html">
         <source>Initial extent</source>
       </trans-unit>
