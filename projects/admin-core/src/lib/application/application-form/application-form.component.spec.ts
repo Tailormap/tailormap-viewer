@@ -61,6 +61,9 @@ describe('ApplicationFormComponent', () => {
           defaultLanguage: null,
           hideLanguageSwitcher: false,
         },
+        uiSettings: {
+          hideLoginButton: false,
+        },
       });
     });
   });
@@ -85,6 +88,9 @@ describe('ApplicationFormComponent', () => {
         i18nSettings: {
           defaultLanguage: null,
           hideLanguageSwitcher: false,
+        },
+        uiSettings: {
+          hideLoginButton: false,
         },
       });
     });

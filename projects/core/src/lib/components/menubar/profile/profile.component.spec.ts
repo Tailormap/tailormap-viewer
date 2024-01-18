@@ -3,8 +3,8 @@ import { ProfileComponent } from './profile.component';
 import { MenubarButtonComponent } from '../menubar-button/menubar-button.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { SharedModule } from '@tailormap-viewer/shared';
-import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { selectUserDetails } from '../../../state/core.selectors';
+import { createMockStore, MockStore, provideMockStore } from '@ngrx/store/testing';
+import { selectShowLoginButton, selectUserDetails } from '../../../state/core.selectors';
 import { Router } from '@angular/router';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { of } from 'rxjs';
@@ -13,12 +13,36 @@ import { Store } from '@ngrx/store';
 import { TAILORMAP_SECURITY_API_V1_SERVICE, TailormapSecurityApiV1MockService } from '@tailormap-viewer/api';
 import { APP_BASE_HREF } from '@angular/common';
 
-const createMockStore = (loggedIn: boolean) => {
-  return provideMockStore({
+const setup = async (loggedIn: boolean, showLoginButton = true) => {
+  const navigateFn = jest.fn();
+  const store = provideMockStore({
     selectors: [
       { selector: selectUserDetails, value: { isAuthenticated: loggedIn, username: loggedIn ? 'testusername' : undefined, roles: [] } },
+      { selector: selectShowLoginButton, value: showLoginButton },
     ],
   });
+  const service = {
+    getUser$: jest.fn(() => of({})),
+    login$: jest.fn(() => of({})),
+    logout$: jest.fn(() => of(true)),
+  };
+  await render(ProfileComponent, {
+    declarations: [
+      MenubarButtonComponent,
+    ],
+    providers: [
+      { provide: APP_BASE_HREF, useValue: '' },
+      store,
+      { provide: Router, useValue: { navigateByUrl: navigateFn } },
+      { provide: TAILORMAP_SECURITY_API_V1_SERVICE, useValue: service },
+    ],
+    imports: [
+      MatIconTestingModule,
+      SharedModule,
+      NoopAnimationsModule,
+    ],
+  });
+  return { navigateFn, securityService: service };
 };
 
 describe('ProfileComponent', () => {
@@ -37,24 +61,7 @@ describe('ProfileComponent', () => {
   });
 
   test('should render without login', async () => {
-    const navigateFn = jest.fn();
-    const logoutFn = jest.fn(() => of(true));
-    await render(ProfileComponent, {
-      declarations: [
-        MenubarButtonComponent,
-      ],
-      providers: [
-        { provide: APP_BASE_HREF, useValue: '' },
-        createMockStore(false),
-        { provide: Router, useValue: { navigateByUrl: navigateFn } },
-        { provide: TAILORMAP_SECURITY_API_V1_SERVICE, useClass: TailormapSecurityApiV1MockService },
-      ],
-      imports: [
-        MatIconTestingModule,
-        SharedModule,
-        NoopAnimationsModule,
-      ],
-    });
+    const { navigateFn } = await setup(false);
     const button = await screen.getByRole('button');
     expect(button).toBeInTheDocument();
     fireEvent.click(button);
@@ -64,30 +71,8 @@ describe('ProfileComponent', () => {
   });
 
   test('should render when logged in', async () => {
-    const navigateFn = jest.fn();
-    const reloadFn = jest.fn();
-    const service = {
-      getUser$: jest.fn(() => of({})),
-      login$: jest.fn(() => of({})),
-      logout$: jest.fn(() => of(true)),
-    };
+    const { securityService } = await setup(true);
     jest.spyOn(window.location, 'reload');
-    const { fixture } = await render(ProfileComponent, {
-      declarations: [
-        MenubarButtonComponent,
-      ],
-      providers: [
-        { provide: APP_BASE_HREF, useValue: '' },
-        createMockStore(true),
-        { provide: Router, useValue: { navigateByUrl: navigateFn } },
-        { provide: TAILORMAP_SECURITY_API_V1_SERVICE, useValue: service },
-      ],
-      imports: [
-        MatIconTestingModule,
-        SharedModule,
-        NoopAnimationsModule,
-      ],
-    });
     const button = await screen.getByRole('button');
     expect(button).toBeInTheDocument();
     fireEvent.click(button);
@@ -95,13 +80,18 @@ describe('ProfileComponent', () => {
     expect(await screen.findByText(/testusername/)).toBeInTheDocument();
     const menuItem = await screen.findByText(/Logout/);
     fireEvent.click(menuItem);
-    expect(service.logout$).toHaveBeenCalled();
+    expect(securityService.logout$).toHaveBeenCalled();
     expect(window.location.reload).toHaveBeenCalled();
     const store = (TestBed.inject(Store) as MockStore);
     store.overrideSelector(selectUserDetails, { isAuthenticated: false });
     store.refreshState();
     fireEvent.click(button);
     expect(await screen.findByText('Login')).toBeInTheDocument();
+  });
+
+  test('should render without login button if configured to hide login button', async () => {
+    await setup(false, false);
+    expect(screen.queryByText(/Login/)).not.toBeInTheDocument();
   });
 
 });

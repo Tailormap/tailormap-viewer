@@ -40,8 +40,12 @@ export class ApplicationCreateComponent implements OnDestroy {
     }
     this.savingSubject.next(true);
     const application = this.applicationCreateModel.application;
+    application.settings = { layerSettings: {} };
     if (this.applicationCreateModel.i18nSettings) {
-      application.settings = { i18nSettings: this.applicationCreateModel.i18nSettings, layerSettings: {} };
+      application.settings.i18nSettings = this.applicationCreateModel.i18nSettings;
+    }
+    if (this.applicationCreateModel.uiSettings) {
+      application.settings.uiSettings = this.applicationCreateModel.uiSettings;
     }
     this.applicationService.createApplication$(application)
       .pipe(takeUntil(this.destroyed))

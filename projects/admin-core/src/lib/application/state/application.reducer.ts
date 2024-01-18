@@ -181,6 +181,7 @@ const onUpdateDraftApplication = (
     settings: {
       ...(application.settings || { layerSettings: {} }),
       i18nSettings: { ...payload.i18nSettings },
+      uiSettings: { ...payload.uiSettings },
     },
   }));
 };
