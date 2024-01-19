@@ -229,14 +229,13 @@ const onRemoveApplicationTreeNode = (
   payload: ReturnType<typeof ApplicationActions.removeApplicationTreeNode>,
 ): ApplicationState => {
   return updateApplicationTree(state, payload.tree, (application, tree) => {
-    const idx = tree.findIndex(node => node.id === payload.nodeId);
-    if (idx === -1) {
+    const node = tree.find(n => n.id === payload.nodeId);
+    if (!node) {
       return tree;
     }
-    const updatedTree = [
-      ...tree.slice(0, idx),
-      ...tree.slice(idx + 1),
-    ];
+    const nodesToRemove = new Set(ApplicationModelHelper.getChildNodes(tree, node).map(n => n.id));
+    nodesToRemove.add(node.id);
+    const updatedTree = tree.filter(n => !nodesToRemove.has(n.id));
     const [ parent, parentIdx ] = ApplicationModelHelper.getParent(updatedTree, payload.parentId);
     if (!parent) {
       return updatedTree;
