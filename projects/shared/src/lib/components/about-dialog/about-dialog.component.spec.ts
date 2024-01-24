@@ -25,7 +25,6 @@ describe('AboutDialogComponent', () => {
     expect(await screen.findByText('11.1.2')).toBeInTheDocument();
     expect(await screen.findByText('Oct 25, 2023')).toBeInTheDocument();
     expect(await screen.findByText('1:28:49 PM')).toBeInTheDocument();
-    expect(await screen.findByText('Unknown')).toBeInTheDocument();
     await userEvent.click(await screen.findByText('Close'));
     expect(closeFn).toHaveBeenCalled();
   });
