@@ -99,7 +99,7 @@ export class OlLayerHelper {
 
     const options = optionsFromCapabilities(capabilities, {
       layer: hiDpi ? hiDpiLayer : layer.layers,
-      matrixSet: projection.getCode(),
+      projection: projection.getCode(),
     });
     if (options === null) {
       return null;
