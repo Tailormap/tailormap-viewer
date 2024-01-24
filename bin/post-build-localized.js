@@ -1,14 +1,6 @@
 const path = require('path');
 const fs = require('fs');
 
-function getPackageVersion(subFolder, packageName) {
-  try {
-    return ;
-  } catch(error) {
-    return undefined;
-  }
-}
-
 try {
   const file = path.resolve(__dirname, '../dist/app/', 'version.json');
   const appVersion = require(path.resolve(__dirname, '../projects/core', 'package.json')).version
