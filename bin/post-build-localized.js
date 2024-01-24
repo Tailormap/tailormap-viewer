@@ -1,32 +1,23 @@
 const path = require('path');
 const fs = require('fs');
 
-function getPackageVersion(packageName) {
+function getPackageVersion(subFolder, packageName) {
   try {
-    return require('../node_modules/' + packageName + '/package.json').version;
+    return ;
   } catch(error) {
     return undefined;
   }
 }
 
-function getAddedPackagesWithVersion() {
-  try {
-    const packages = require('../added-packages.json');
-    return packages.map(packageName => {
-      return { name: packageName, version: getPackageVersion(packageName) };
-    });
-  } catch(error) {
-    return [];
-  }
-}
-
 try {
   const file = path.resolve(__dirname, '../dist/app/', 'version.json');
-  const appVersion = getPackageVersion('@tailormap-viewer/core');
-  const version = JSON.stringify({
+  const appVersion = require(path.resolve(__dirname, '../projects/core', 'package.json')).version
+  const versionInfo = {
     version: appVersion,
     buildDate: Date(),
-    addedPackages: getAddedPackagesWithVersion()}, null, 2);
+    addedPackages: []
+  };
+  const version = JSON.stringify(versionInfo, null, 2);
   fs.writeFileSync(file, version, {encoding: 'utf-8'});
   console.log(`Wrote version info ${appVersion} to ${path.relative(path.resolve(__dirname, '..'), file)}`);
 } catch(e) {

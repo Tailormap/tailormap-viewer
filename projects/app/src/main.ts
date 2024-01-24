@@ -25,7 +25,7 @@ const setupSentryProviders = async () => {
     .catch(() => {/* ignore error for now, unable to get version */});
   sentry.init({
     dsn: SENTRY_DSN,
-    release: version?.gitInfo?.semverString,
+    release: version?.version,
     environment: environment.production ? 'production' : 'development',
     integrations: [
       new tracing.BrowserTracing({
