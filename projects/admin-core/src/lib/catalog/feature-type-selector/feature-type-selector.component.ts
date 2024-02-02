@@ -1,10 +1,9 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, EventEmitter, Output, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { selectFeatureSourceLoadStatus, selectFeatureSources, selectFeatureTypesForSource } from '../state/catalog.selectors';
-import { map, Observable, of, Subject, take, takeUntil, tap } from 'rxjs';
+import { selectFeatureSources, selectFeatureTypesForSource } from '../state/catalog.selectors';
+import { Observable, of, Subject, takeUntil, tap } from 'rxjs';
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
-import { LoadingStateEnum, TypesHelper } from '@tailormap-viewer/shared';
-import { loadFeatureSources } from '../state/catalog.actions';
+import { TypesHelper } from '@tailormap-viewer/shared';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
 import { GeoServiceHelper } from '../helpers/geo-service.helper';
@@ -17,9 +16,7 @@ import { GeoServiceHelper } from '../helpers/geo-service.helper';
 })
 export class FeatureTypeSelectorComponent implements OnInit, OnDestroy {
 
-  private featureSourceLoadStatus$: Observable<LoadingStateEnum> = of(LoadingStateEnum.INITIAL);
   private destroyed = new Subject();
-  public isLoading$: Observable<boolean> = of(false);
 
   public featureSources$: Observable<ExtendedFeatureSourceModel[]> = of([]);
   public featureTypes$: Observable<ExtendedFeatureTypeModel[]> = of([]);
@@ -64,15 +61,6 @@ export class FeatureTypeSelectorComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.featureSources$ = this.store$.select(selectFeatureSources);
-    this.featureSourceLoadStatus$ = this.store$.select(selectFeatureSourceLoadStatus);
-    this.isLoading$ = this.featureSourceLoadStatus$.pipe(map(status => status === LoadingStateEnum.LOADING));
-    this.featureSourceLoadStatus$
-      .pipe(take(1))
-      .subscribe((status) => {
-        if (status !== LoadingStateEnum.LOADED && status !== LoadingStateEnum.LOADING) {
-          this.store$.dispatch(loadFeatureSources());
-        }
-      });
     this.featureTypeSelectorForm.valueChanges
       .pipe(takeUntil(this.destroyed))
       .subscribe((value) => {

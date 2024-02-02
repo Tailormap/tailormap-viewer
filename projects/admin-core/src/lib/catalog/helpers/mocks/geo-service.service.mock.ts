@@ -5,6 +5,7 @@ export const createGeoServiceMock = (geoServiceModelMock?: GeoServiceWithLayersM
   const updateGeoServiceDetails = jest.fn((_details) => ({}));
   const updateGeoServiceSettings = jest.fn((_settings) => ({}));
   const geoServiceService = {
+    getDraftGeoService$: jest.fn(() => of(geoServiceModelMock)),
     createGeoService$: jest.fn(() => of(true)),
     updateGeoService$: jest.fn((id, serviceCallback, settingsCallback) => {
       const result = serviceCallback(geoServiceModelMock || {});

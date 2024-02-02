@@ -4,10 +4,10 @@ export class Routes {
 
   public static CATALOG = 'catalog';
   public static CATALOG_NODE_DETAILS = 'node/:nodeId';
-  public static CATALOG_SERVICE_DETAILS = 'node/:nodeId/service/:serviceId';
-  public static CATALOG_LAYER_DETAILS = 'node/:nodeId/service/:serviceId/layer/:layerId';
-  public static FEATURE_SOURCE_DETAILS = 'node/:nodeId/feature-source/:featureSourceId';
-  public static FEATURE_TYPE_DETAILS = 'node/:nodeId/feature-source/:featureSourceId/feature-type/:featureTypeId';
+  public static CATALOG_SERVICE_DETAILS = 'service/:serviceId';
+  public static CATALOG_LAYER_DETAILS = 'layer/:layerId';
+  public static FEATURE_SOURCE_DETAILS = 'feature-source/:featureSourceId';
+  public static FEATURE_TYPE_DETAILS = 'feature-type/:featureTypeId';
 
   public static USER = 'users';
   public static USER_CREATE = 'create';

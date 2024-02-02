@@ -56,10 +56,10 @@ export class AdminSettingsRouterService {
     }
     // Using the internal Angular _loadedRoutes property we find the admin route and the children of the admin route
     const currentConfig: Array<Route & { _loadedRoutes?: Route[] }> = this.router.config;
-    const adminRoute = currentConfig.find(r => r.path === 'admin');
-    if (adminRoute && adminRoute._loadedRoutes) {
+    const adminRoute = (currentConfig.find(r => r.path === 'admin')?._loadedRoutes || [])[0];
+    if (adminRoute && adminRoute.children) {
       // Find settings route
-      const settingsRoute = adminRoute._loadedRoutes.find(c => c.path === 'settings');
+      const settingsRoute = adminRoute.children.find(c => c.path === 'settings');
       if (settingsRoute && settingsRoute.children) {
         const children = settingsRoute.children;
         const existingRoutes = new Set(children.map(c => c.path));

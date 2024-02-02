@@ -114,6 +114,7 @@ $app-theme: mat.define-light-theme((
   --mdc-filled-button-label-text-tracking: 0.0714285712;
   --mdc-outlined-button-label-text-tracking: 0.0714285712;
   --mdc-outlined-text-field-label-text-tracking: 0.0714285712;
+  --mdc-protected-button-label-text-tracking: 0.0714285712;
   --mdc-typography-body1-letter-spacing: 0.0714285712;
   --mat-menu-item-label-text-tracking: 0.0714285712;
   --mdc-typography-subtitle1-font-size: 14px;
@@ -124,6 +125,10 @@ $app-theme: mat.define-light-theme((
 .mat-mdc-tab-header {
   --mat-tab-header-label-text-letter-spacing: 0.0714285712;
   --mat-tab-header-label-text-tracking: 0.0714285712;
+}
+
+.mat-mdc-raised-button {
+  --mdc-protected-button-label-text-tracking: 0.0714285712;
 }
 
 .mat-mdc-form-field .mdc-text-field--outlined .mdc-notched-outline--upgraded .mdc-floating-label--float-above {

@@ -1,11 +1,12 @@
 import {
+  AfterViewChecked,
   ChangeDetectorRef, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, Optional, TemplateRef, ViewChild,
 } from '@angular/core';
 import { TreeService } from './tree.service';
 import { takeUntil } from 'rxjs/operators';
 import { FlatTreeHelper } from './helpers/flat-tree.helper';
 import { FlatTreeModel } from './models';
-import { Subject } from 'rxjs';
+import { distinctUntilChanged, Subject } from 'rxjs';
 import { DropZoneOptions, TreeDragDropService, treeNodeBaseClass } from './tree-drag-drop.service';
 
 @Component({
@@ -13,7 +14,7 @@ import { DropZoneOptions, TreeDragDropService, treeNodeBaseClass } from './tree-
   templateUrl: './tree.component.html',
   styleUrls: ['./tree.component.css'],
 })
-export class TreeComponent implements OnInit, OnDestroy {
+export class TreeComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   @Input()
   public treeNodeTemplate?: TemplateRef<any>;
@@ -39,6 +40,7 @@ export class TreeComponent implements OnInit, OnDestroy {
   private checkedRadioNode: FlatTreeModel | undefined;
 
   private destroyed = new Subject();
+  private selectedItemChanged = false;
 
   constructor(
     private treeService: TreeService,
@@ -49,9 +51,13 @@ export class TreeComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.treeService.selectedNode$
-      .pipe(takeUntil(this.destroyed))
+      .pipe(
+        takeUntil(this.destroyed),
+        distinctUntilChanged(),
+      )
       .subscribe(selectedNodeId => {
         this.selectedNodeId = selectedNodeId;
+        this.selectedItemChanged = true;
         this.cdr.detectChanges();
       });
     this.treeService.readonlyMode$
@@ -66,6 +72,10 @@ export class TreeComponent implements OnInit, OnDestroy {
         .subscribe(enabled => this.treeDragDropServiceEnabled = enabled);
     }
     this.checkedRadioNode = this.getTreeControl().dataNodes.find(node => node.checked);
+  }
+
+  public ngAfterViewChecked() {
+    this.scrollIntoView();
   }
 
   public getDataSource() {
@@ -184,6 +194,26 @@ export class TreeComponent implements OnInit, OnDestroy {
       return;
     }
     ($event.target as HTMLElement).closest(`.${treeNodeBaseClass}`)?.setAttribute('draggable', 'false');
+  }
+
+  private scrollIntoView() {
+    if (!this.selectedItemChanged) {
+      return;
+    }
+    const selectedEl = document.querySelector('.tree-node--selected');
+    if (selectedEl) {
+      this.selectedItemChanged = false;
+      const rect = selectedEl.getBoundingClientRect();
+      if (
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <= (document.documentElement.clientHeight) &&
+        rect.right <= (document.documentElement.clientWidth)
+      ) {
+        return;
+      }
+      selectedEl.scrollIntoView();
+    }
   }
 
 }

@@ -1,6 +1,6 @@
-import { FeatureTypeModel } from '@tailormap-admin/admin-api';
+import { FeatureTypeSummaryModel } from '@tailormap-admin/admin-api';
 
-export interface ExtendedFeatureTypeModel extends FeatureTypeModel {
+export interface ExtendedFeatureTypeModel extends FeatureTypeSummaryModel {
   catalogNodeId: string;
   originalId: string;
   featureSourceId: string;

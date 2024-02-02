@@ -297,16 +297,6 @@ const onUpdateApplicationNodeSettings = (
   });
 };
 
-const onLoadApplicationServices = (state: ApplicationState): ApplicationState => ({
-  ...state,
-  applicationServicesLoadStatus: LoadingStateEnum.LOADING,
-});
-
-const onLoadApplicationServicesSuccess = (state: ApplicationState): ApplicationState => ({
-  ...state,
-  applicationServicesLoadStatus: LoadingStateEnum.LOADED,
-});
-
 const onUpdateApplicationComponentConfig = (state: ApplicationState, payload: ReturnType<typeof ApplicationActions.updateApplicationComponentConfig>): ApplicationState => {
   return updateApplication(state, application => {
     const components = application.components || [];
@@ -376,8 +366,6 @@ const applicationReducerImpl = createReducer<ApplicationState>(
   on(ApplicationActions.updateApplicationTreeOrder, onUpdateApplicationTreeOrder),
   on(ApplicationActions.updateApplicationTreeNodeVisibility, onUpdateApplicationTreeNodeVisibility),
   on(ApplicationActions.updateApplicationNodeSettings, onUpdateApplicationNodeSettings),
-  on(ApplicationActions.loadApplicationServices, onLoadApplicationServices),
-  on(ApplicationActions.loadApplicationServicesSuccess, onLoadApplicationServicesSuccess),
   on(ApplicationActions.updateApplicationComponentConfig, onUpdateApplicationComponentConfig),
   on(ApplicationActions.updateApplicationStylingConfig, onUpdateApplicationStylingConfig),
   on(ApplicationActions.toggleApplicationNodeExpanded, onToggleNodeExpanded),

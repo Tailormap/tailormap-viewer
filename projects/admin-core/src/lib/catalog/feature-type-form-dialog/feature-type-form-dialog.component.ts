@@ -1,9 +1,9 @@
 import { Component, ChangeDetectionStrategy, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
+import { FeatureTypeModel } from '@tailormap-admin/admin-api';
 
 export interface FeatureTypeFormDialogData {
-  featureType: ExtendedFeatureTypeModel;
+  featureType: FeatureTypeModel;
 }
 
 @Component({
@@ -16,13 +16,13 @@ export class FeatureTypeFormDialogComponent {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: FeatureTypeFormDialogData,
-    private dialogRef: MatDialogRef<FeatureTypeFormDialogComponent, ExtendedFeatureTypeModel | null>,
+    private dialogRef: MatDialogRef<FeatureTypeFormDialogComponent, FeatureTypeModel | null>,
   ) {}
 
   public static open(
     dialog: MatDialog,
     data: FeatureTypeFormDialogData,
-  ): MatDialogRef<FeatureTypeFormDialogComponent, ExtendedFeatureTypeModel | null> {
+  ): MatDialogRef<FeatureTypeFormDialogComponent, FeatureTypeModel | null> {
     return dialog.open(FeatureTypeFormDialogComponent, {
       data,
       width: '90vw',
@@ -33,7 +33,7 @@ export class FeatureTypeFormDialogComponent {
     this.dialogRef.close();
   }
 
-  public saved(featureType: ExtendedFeatureTypeModel | null) {
+  public saved(featureType: FeatureTypeModel | null) {
     this.dialogRef.close(featureType);
   }
 

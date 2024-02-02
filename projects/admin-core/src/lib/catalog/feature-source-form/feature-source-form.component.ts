@@ -2,10 +2,10 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output
 import { debounceTime, Subject, takeUntil } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
 import {
+  FeatureSourceModel,
   FeatureSourceProtocolEnum, JdbcConnectionPropertiesModel, JdbcDatabaseType, ServiceAuthenticationModel,
 } from '@tailormap-admin/admin-api';
 import { FormHelper } from '../../helpers/form.helper';
-import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 import { FeatureSourceCreateModel } from '../models/feature-source-update.model';
 
 @Component({
@@ -17,13 +17,13 @@ import { FeatureSourceCreateModel } from '../models/feature-source-update.model'
 export class FeatureSourceFormComponent implements OnInit {
 
   private destroyed = new Subject();
-  private _featureSource: ExtendedFeatureSourceModel | null = null;
+  private _featureSource: FeatureSourceModel | null = null;
 
   public protocols: FeatureSourceProtocolEnum[] = [ FeatureSourceProtocolEnum.JDBC, FeatureSourceProtocolEnum.WFS ];
   public dbTypes: JdbcDatabaseType[]=[ JdbcDatabaseType.POSTGIS, JdbcDatabaseType.SQLSERVER, JdbcDatabaseType.ORACLE ];
 
   @Input()
-  public set featureSource(featureSource: ExtendedFeatureSourceModel | null) {
+  public set featureSource(featureSource: FeatureSourceModel | null) {
     this.featureSourceForm.patchValue({
       title: featureSource?.title || '',
       protocol: featureSource?.protocol || null,
@@ -48,7 +48,7 @@ export class FeatureSourceFormComponent implements OnInit {
     this._featureSource = featureSource;
   }
 
-  public get featureSource(): ExtendedFeatureSourceModel | null {
+  public get featureSource(): FeatureSourceModel | null {
     return this._featureSource;
   }
 

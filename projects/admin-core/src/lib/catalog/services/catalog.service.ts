@@ -1,15 +1,12 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import {
-  CatalogItemKindEnum, CatalogModelHelper, CatalogNodeModel, FeatureSourceModel, GeoServiceWithLayersModel,
-  TailormapAdminApiV1Service,
-} from '@tailormap-admin/admin-api';
-import { catchError, combineLatest, concatMap, forkJoin, map, of, Subject, switchMap, take, takeUntil, tap } from 'rxjs';
+import { CatalogItemKindEnum, CatalogNodeModel, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
+import { catchError, combineLatest, concatMap, map, of, Subject, switchMap, take, tap } from 'rxjs';
 import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
 import {
-  selectCatalog, selectCatalogNodeById, selectFeatureSourceIds, selectFeatureSources, selectGeoServiceIds, selectGeoServices,
+  selectCatalog, selectCatalogNodeById, selectFeatureSources, selectGeoServices,
 } from '../state/catalog.selectors';
-import { addFeatureSources, addGeoServices, updateCatalog } from '../state/catalog.actions';
+import { updateCatalog } from '../state/catalog.actions';
 import { nanoid } from 'nanoid';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -24,22 +21,13 @@ import { DebounceHelper } from '@tailormap-viewer/shared';
 export class CatalogService implements OnDestroy {
 
   private destroyed = new Subject<null>();
-  private geoServicesIds: Set<string> = new Set();
-  private featureSourcesIds: Set<string> = new Set();
 
   constructor(
     private store$: Store,
     private adminApiService: TailormapAdminApiV1Service,
     private adminSnackbarService: AdminSnackbarService,
     private sseService: AdminSseService,
-  ) {
-    this.store$.select(selectGeoServiceIds)
-      .pipe(takeUntil(this.destroyed))
-      .subscribe(services => this.geoServicesIds = services);
-    this.store$.select(selectFeatureSourceIds)
-      .pipe(takeUntil(this.destroyed))
-      .subscribe(featureSources => this.featureSourcesIds = featureSources);
-  }
+  ) {}
 
   public ngOnDestroy() {
     this.destroyed.next(null);
@@ -54,69 +42,6 @@ export class CatalogService implements OnDestroy {
           this.updateCatalog(event.details.object.nodes);
         }
       });
-  }
-
-  public getServices$(
-    serviceIds: string[],
-    subscription: Subject<null>,
-    parentNodeId?: string,
-  ) {
-    const unloadedServices = serviceIds
-      .filter(id => !this.geoServicesIds.has(id));
-    if (unloadedServices.length === 0) {
-      return null;
-    }
-    return this.adminApiService.getGeoServices$({ ids: unloadedServices })
-      .pipe(
-        takeUntil(subscription),
-        catchError(() => {
-          // eslint-disable-next-line max-len
-          this.adminSnackbarService.showMessage($localize `:@@admin-core.catalog.error-loading-services:Error while loading service(s). Please collapse/expand the node again to try again.`)
-            .pipe(takeUntil(subscription)).subscribe();
-          return of(null);
-        }),
-        map(responses => responses || []),
-        tap(responses => {
-          const services = responses.filter((response): response is GeoServiceWithLayersModel => {
-            return CatalogModelHelper.isGeoServiceModel(response);
-          });
-          if (services.length > 0) {
-            this.store$.dispatch(addGeoServices({ services, parentNode: parentNodeId || '' }));
-          }
-        }),
-      );
-  }
-
-  public getFeatureSources$(
-    featureSourceIds: string[],
-    subscription: Subject<null>,
-    parentNodeId?: string,
-  ){
-    const notLoadedFeatureSources = featureSourceIds
-      .filter(id => !this.featureSourcesIds.has(id));
-    if (notLoadedFeatureSources.length === 0) {
-      return null;
-    }
-    return this.adminApiService.getFeatureSources$({ ids: notLoadedFeatureSources })
-      .pipe(
-        takeUntil(subscription),
-        catchError(() => {
-          // eslint-disable-next-line max-len
-          this.adminSnackbarService.showMessage($localize `:@@admin-core.catalog.error-loading-feature-sources-hint:Error while loading feature source(s). Please collapse/expand the node again to try again.`)
-            .pipe(takeUntil(subscription))
-            .subscribe();
-          return of(null);
-        }),
-        map(responses => responses || []),
-        tap(responses => {
-          const featureSources = responses.filter((response): response is FeatureSourceModel => {
-            return CatalogModelHelper.isFeatureSourceModel(response);
-          });
-          if (featureSources.length > 0) {
-            this.store$.dispatch(addFeatureSources({ featureSources, parentNode: parentNodeId || '' }));
-          }
-        }),
-      );
   }
 
   public createCatalogNode$(node: Omit<ExtendedCatalogNodeModel, 'id'>) {
@@ -144,23 +69,15 @@ export class CatalogService implements OnDestroy {
           const featureSourceItems = items
             .filter(item => item.kind === CatalogItemKindEnum.FEATURE_SOURCE)
             .map(item => item.id);
-          const services$ = this.getServices$(serviceItems, this.destroyed, node.id);
-          const featureSources$ = this.getFeatureSources$(featureSourceItems, this.destroyed, node.id);
           const serviceIds = new Set(serviceItems);
           const featureSourceIds = new Set(featureSourceItems);
-          return forkJoin([ services$ || of(true), featureSources$ || of(true) ])
-            .pipe(
-              take(1),
-              switchMap(() => {
-                return combineLatest([
-                  this.store$.select(selectGeoServices).pipe(map(services => services.filter(s => serviceIds.has(s.id)))),
-                  this.store$.select(selectFeatureSources).pipe(map(fs => fs.filter(s => featureSourceIds.has(s.id)))),
-                ]).pipe(
-                  take(1),
-                  map(([ services, featureSources ]) => [ ...services, ...featureSources ]),
-                );
-              }),
-            );
+          return combineLatest([
+            this.store$.select(selectGeoServices).pipe(map(services => services.filter(s => serviceIds.has(s.id)))),
+            this.store$.select(selectFeatureSources).pipe(map(fs => fs.filter(s => featureSourceIds.has(s.id)))),
+          ]).pipe(
+            take(1),
+            map(([ services, featureSources ]) => [ ...services, ...featureSources ]),
+          );
         }),
       );
   }

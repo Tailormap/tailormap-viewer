@@ -1,5 +1,4 @@
-<mat-spinner mode="indeterminate" diameter="20" color="primary" *ngIf="isLoading$ | async"></mat-spinner>
-<ng-container *ngIf="(isLoading$ | async) === false" [formGroup]="featureTypeSelectorForm">
+<ng-container [formGroup]="featureTypeSelectorForm">
   <mat-form-field>
     <mat-label i18n="@@admin-core.catalog.feature-source">Feature Source</mat-label>
     <mat-select formControlName="featureSourceId">

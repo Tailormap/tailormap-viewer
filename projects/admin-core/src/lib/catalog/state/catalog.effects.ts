@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects';
 import * as CatalogActions from './catalog.actions';
-import { map, catchError, of, filter, switchMap, tap } from 'rxjs';
+import { map, catchError, of, filter, switchMap, tap, forkJoin } from 'rxjs';
 import {
   ApiResponseHelper, TailormapAdminApiV1Service,
 } from '@tailormap-admin/admin-api';
 import { Store } from '@ngrx/store';
 import {
-  selectCatalogLoadStatus, selectFeatureSourceLoadStatus, selectFeatureSources, selectGeoServices, selectGeoServicesLoadStatus,
+  selectCatalogLoadStatus, selectDraftFeatureSource, selectDraftFeatureSourceId, selectDraftFeatureSourceLoadStatus, selectDraftGeoService,
+  selectDraftGeoServiceId,
+  selectDraftGeoServiceLoadStatus,
 } from './catalog.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 
@@ -21,62 +23,120 @@ export class CatalogEffects {
       filter(([ _action, loadStatus ]) => loadStatus !== LoadingStateEnum.LOADED && loadStatus !== LoadingStateEnum.LOADING),
       tap(() => this.store$.dispatch(CatalogActions.loadCatalogStart())),
       switchMap(([_action]) => {
-        return this.adminApiService.getCatalog$()
-          .pipe(
+        return forkJoin([
+          this.adminApiService.getCatalog$().pipe(
             catchError(() => {
               return of({ error: $localize `:@@admin-core.catalog.error-loading-catalog:Error while loading catalog` });
             }),
-            map(response => {
-              if (ApiResponseHelper.isErrorResponse(response)) {
-                return CatalogActions.loadCatalogFailed({ error: response.error });
-              }
-              return CatalogActions.loadCatalogSuccess({ nodes: response });
+          ),
+          this.adminApiService.getGeoServiceSummaries$().pipe(
+            catchError(() => {
+              return of({ error: $localize `:@@admin-core.catalog.error-loading-geo-services:Error while loading geo services` });
             }),
-          );
-      }),
-    );
-  });
-
-  public loadFeatureSources$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(CatalogActions.loadFeatureSources),
-      concatLatestFrom(() => [ this.store$.select(selectFeatureSourceLoadStatus), this.store$.select(selectFeatureSources) ]),
-      filter(([ _action, loadStatus ]) => loadStatus !== LoadingStateEnum.LOADED && loadStatus !== LoadingStateEnum.LOADING),
-      tap(() => this.store$.dispatch(CatalogActions.loadFeatureSourcesStart())),
-      switchMap(([ _action, _loadStatus, currentFeatureSources ]) => {
-        return this.adminApiService.getAllFeatureSources$({ excludingIds: currentFeatureSources.map(f => f.id) })
-          .pipe(
+          ),
+          this.adminApiService.getFeatureSourceSummaries$().pipe(
             catchError(() => {
               return of({ error: $localize `:@@admin-core.catalog.error-loading-feature-sources:Error while loading feature sources` });
             }),
-            map(response => {
-              if (ApiResponseHelper.isErrorResponse(response)) {
-                return CatalogActions.loadFeatureSourcesFailed({ error: response.error });
+          ),
+        ])
+          .pipe(
+            map(([ catalogResponse, geoServiceResponse, featureSourceResponse ]) => {
+              if (
+                ApiResponseHelper.isErrorResponse(catalogResponse) ||
+                ApiResponseHelper.isErrorResponse(geoServiceResponse) ||
+                ApiResponseHelper.isErrorResponse(featureSourceResponse)
+              ) {
+                return CatalogActions.loadCatalogFailed({
+                  catalogError: ApiResponseHelper.isErrorResponse(catalogResponse) ? catalogResponse.error : '',
+                  geoServiceError: ApiResponseHelper.isErrorResponse(geoServiceResponse) ? geoServiceResponse.error : '',
+                  featureSourceError: ApiResponseHelper.isErrorResponse(featureSourceResponse) ? featureSourceResponse.error : '',
+                });
               }
-              return CatalogActions.loadFeatureSourcesSuccess({ featureSources: response });
+              return CatalogActions.loadCatalogSuccess({
+                nodes: catalogResponse,
+                geoServices: geoServiceResponse,
+                featureSources: featureSourceResponse,
+              });
             }),
           );
       }),
     );
   });
 
-  public loadGeoServices$ = createEffect(() => {
+  public loadDraftGeoService$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(CatalogActions.loadAllGeoServices),
-      concatLatestFrom(() => [ this.store$.select(selectGeoServicesLoadStatus), this.store$.select(selectGeoServices) ]),
-      filter(([ _action, loadStatus ]) => loadStatus !== LoadingStateEnum.LOADED && loadStatus !== LoadingStateEnum.LOADING),
-      tap(() => this.store$.dispatch(CatalogActions.loadAllGeoServicesStart())),
-      switchMap(([ _action, _loadStatus, geoServices ]) => {
-        return this.adminApiService.getAllGeoServices$({ excludingIds: geoServices.map(s => s.id) })
+      ofType(CatalogActions.loadDraftGeoService),
+      concatLatestFrom(() => [
+        this.store$.select(selectDraftGeoService),
+        this.store$.select(selectDraftGeoServiceId),
+        this.store$.select(selectDraftGeoServiceLoadStatus),
+      ]),
+      filter(([ action, currentDraft, draftLoadingId, draftLoadingStatus ]) => {
+        if (currentDraft?.id === action.id) {
+          return false;
+        }
+        if (draftLoadingId === action.id && draftLoadingStatus === LoadingStateEnum.LOADING) {
+          return false;
+        }
+        return true;
+      }),
+      tap(() => this.store$.dispatch(CatalogActions.loadDraftGeoServiceStart())),
+      switchMap(([action]) => {
+        return this.adminApiService.getGeoService$({ id: action.id })
           .pipe(
             catchError(() => {
               return of({ error: $localize `:@@admin-core.catalog.error-loading-geo-services:Error while loading geo services` });
             }),
-            map(response => {
-              if (ApiResponseHelper.isErrorResponse(response)) {
-                return CatalogActions.loadAllGeoServicesFailed({ error: response.error });
+            map(geoServiceResponse => {
+              if (ApiResponseHelper.isErrorResponse(geoServiceResponse)) {
+                return CatalogActions.loadDraftGeoServiceFailed({
+                  error: geoServiceResponse.error,
+                });
               }
-              return CatalogActions.loadAllGeoServicesSuccess({ services: response });
+              return CatalogActions.loadDraftGeoServiceSuccess({
+                geoService: geoServiceResponse,
+              });
+            }),
+          );
+      }),
+    );
+  });
+
+  public loadDraftFeatureSource$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(CatalogActions.loadDraftFeatureSource),
+      concatLatestFrom(() => [
+        this.store$.select(selectDraftFeatureSource),
+        this.store$.select(selectDraftFeatureSourceId),
+        this.store$.select(selectDraftFeatureSourceLoadStatus),
+      ]),
+      filter(([ action, currentDraft, draftLoadingId, draftLoadingStatus ]) => {
+        if (`${currentDraft?.id}` === action.id) {
+          return false;
+        }
+        if (draftLoadingId === action.id && draftLoadingStatus === LoadingStateEnum.LOADING) {
+          return false;
+        }
+        return true;
+      }),
+      tap(() => this.store$.dispatch(CatalogActions.loadDraftFeatureSourceStart())),
+      filter(([ action, currentDraft ]) => currentDraft?.id !== action.id),
+      switchMap(([action]) => {
+        return this.adminApiService.getFeatureSource$({ id: action.id })
+          .pipe(
+            catchError(() => {
+              return of({ error: $localize `:@@admin-core.catalog.error-loading-feature-sources:Error while loading feature sources` });
+            }),
+            map(featureSourceResponse => {
+              if (ApiResponseHelper.isErrorResponse(featureSourceResponse)) {
+                return CatalogActions.loadDraftFeatureSourceFailed({
+                  error: featureSourceResponse.error,
+                });
+              }
+              return CatalogActions.loadDraftFeatureSourceSuccess({
+                featureSource: featureSourceResponse,
+              });
             }),
           );
       }),

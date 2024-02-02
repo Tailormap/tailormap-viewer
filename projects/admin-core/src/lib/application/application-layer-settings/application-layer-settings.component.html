@@ -43,7 +43,7 @@
               placeholder="Description"
               i18n-placeholder="@@admin-core.common.description"
               formControlName="description"
-              cdkTextareaAutosize
+              [cdkTextareaAutosize]="true"
               cdkAutosizeMinRows="4"
               cdkAutosizeMaxRows="10"></textarea>
   </mat-form-field>
@@ -53,7 +53,7 @@
     </mat-checkbox>
   </span>
   <div *ngIf="featureSourceAndType$ | async as featureSourceAndType">
-    <button *ngIf="featureSourceAndType.featureType?.attributes"
+    <button *ngIf="featureSourceAndType.featureType?.hasAttributes"
             mat-stroked-button
             color="primary"
             (click)="editAppLayerAttribute($event, featureSourceAndType)">

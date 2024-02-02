@@ -1,7 +1,8 @@
 import {
   ApplicationModel,
-  CatalogItemKindEnum, CatalogNodeModel, ConfigModel, FeatureSourceModel, FeatureSourceProtocolEnum, FeatureTypeModel, GeoServiceLayerModel,
-  GeoServiceProtocolEnum, GeoServiceWithLayersModel, GroupModel, ServiceCapsModel, UserModel,
+  CatalogItemKindEnum, CatalogNodeModel, ConfigModel, FeatureSourceModel, FeatureSourceProtocolEnum, FeatureTypeModel,
+  FeatureTypeSummaryModel, GeoServiceLayerModel,
+  GeoServiceProtocolEnum, GeoServiceSummaryModel, GeoServiceWithLayersModel, GroupModel, ServiceCapsModel, UserModel,
 } from '../models';
 import { AttributeType, ServerType } from '@tailormap-viewer/api';
 import { AttributeDescriptorModel } from '../models/attribute-descriptor.model';
@@ -63,6 +64,7 @@ export const getGeoServiceLayer = (overrides?: Partial<GeoServiceLayerModel>): G
   virtual: false,
   maxScale: undefined,
   minScale: undefined,
+  crs: [],
   abstractText: 'Bestuurlijke Gebieden bestaan uit de gemeente-, provincie- en landgebieden. Deze worden sinds 2012 vervaardigd op basis van de kadastrale registratie (BRK).',
   ...overrides,
 });
@@ -85,6 +87,20 @@ export const getGeoService = (overrides?: Partial<GeoServiceWithLayersModel>): G
     getGeoServiceLayer({ id: '2', title: 'Provinciegebied', name: 'Provinciegebied' }),
     getGeoServiceLayer({ id: '3', title: 'Landgebied', name: 'Landgebied' }),
   ],
+  settings: {
+    serverType: ServerType.GEOSERVER,
+    layerSettings: {},
+    defaultLayerSettings: {},
+  },
+  ...overrides,
+});
+
+export const getGeoServiceSummary = (overrides?: Partial<GeoServiceSummaryModel>): GeoServiceSummaryModel => ({
+  id: '1',
+  type: 'geo-service',
+  title: 'Bestuurlijke Gebieden View Service',
+  protocol: GeoServiceProtocolEnum.WMS,
+  authorizationRules: [],
   settings: {
     serverType: ServerType.GEOSERVER,
     layerSettings: {},
@@ -144,6 +160,16 @@ export const getFeatureType = (overrides?: Partial<FeatureTypeModel>): FeatureTy
   name: 'table1',
   settings: {},
   attributes: [],
+  ...overrides,
+});
+
+export const getFeatureTypeSummary = (overrides?: Partial<FeatureTypeSummaryModel>): FeatureTypeSummaryModel => ({
+  id: '1',
+  title: 'table1',
+  name: 'table1',
+  hasAttributes: false,
+  writeable: false,
+  type: 'feature-type',
   ...overrides,
 });
 

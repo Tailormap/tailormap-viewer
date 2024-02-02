@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { AppLayerSettingsModel, AppTreeLayerNodeModel, FeatureSourceModel } from '@tailormap-admin/admin-api';
+import { AppLayerSettingsModel, AppTreeLayerNodeModel } from '@tailormap-admin/admin-api';
 import { Store } from '@ngrx/store';
 import { selectSelectedApplicationLayerSettings } from '../state/application.selectors';
-import { debounceTime, map, Observable, of, Subject, switchMap, take, takeUntil } from 'rxjs';
+import { concatMap, debounceTime, map, Observable, of, Subject, switchMap, take, takeUntil } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
 import { TreeModel } from '@tailormap-viewer/shared';
 import { ExtendedGeoServiceModel } from '../../catalog/models/extended-geo-service.model';
@@ -12,15 +12,22 @@ import { GeoServiceFormDialogComponent } from '../../catalog/geo-service-form-di
 import { MatDialog } from '@angular/material/dialog';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 import { GeoServiceLayerFormDialogComponent } from '../../catalog/geo-service-layer-form-dialog/geo-service-layer-form-dialog.component';
-import { CatalogDataService } from '../../catalog/services/catalog-data.service';
 import { FeatureTypeFormDialogComponent } from '../../catalog/feature-type-form-dialog/feature-type-form-dialog.component';
 import { ExtendedFeatureTypeModel } from '../../catalog/models/extended-feature-type.model';
-import { selectFeatureSourceAndFeatureTypesById } from '../../catalog/state/catalog.selectors';
+import {
+  selectFeatureSourceAndFeatureTypesById,
+} from '../../catalog/state/catalog.selectors';
 import {
   ApplicationLayerAttributeSettingsComponent,
 } from '../application-layer-attribute-settings/application-layer-attribute-settings.component';
+import { ExtendedFeatureSourceModel } from '../../catalog/models/extended-feature-source.model';
+import { FeatureSourceService } from '../../catalog/services/feature-source.service';
+import { GeoServiceService } from '../../catalog/services/geo-service.service';
 
-type FeatureSourceAndType = { featureSource: FeatureSourceModel; featureType: ExtendedFeatureTypeModel | null };
+type FeatureSourceAndType = {
+  featureSource: ExtendedFeatureSourceModel;
+  featureType: ExtendedFeatureTypeModel | null;
+};
 
 @Component({
   selector: 'tm-admin-application-layer-settings',
@@ -75,7 +82,8 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     private store$: Store,
     private dialog: MatDialog,
     private adminSnackbarService: AdminSnackbarService,
-    private catalogDataService: CatalogDataService,
+    private geoServiceService: GeoServiceService,
+    private featureSourceService: FeatureSourceService,
   ) { }
 
   public ngOnInit(): void {
@@ -128,14 +136,25 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
 
   public updateGeoServiceSetting($event: MouseEvent, geoService: ExtendedGeoServiceModel) {
     $event.preventDefault();
-    GeoServiceFormDialogComponent.open(this.dialog, {
-      geoService,
-      parentNode: geoService.catalogNodeId,
-    }).afterClosed().pipe(takeUntil(this.destroyed)).subscribe(updatedService => {
-      if (updatedService) {
-        this.adminSnackbarService.showMessage($localize `:@@admin-core.application.service-updated:Service ${updatedService.title} updated`);
-      }
-    });
+    this.geoServiceService.getDraftGeoService$(geoService.id)
+      .pipe(
+        take(1),
+        concatMap(service => {
+          if (!service) {
+            return of(null);
+          }
+          return GeoServiceFormDialogComponent.open(this.dialog, {
+            geoService: service,
+            parentNode: geoService.catalogNodeId,
+          }).afterClosed();
+        }),
+        takeUntil(this.destroyed),
+      )
+      .subscribe(updatedService => {
+        if (updatedService) {
+          this.adminSnackbarService.showMessage($localize `:@@admin-core.application.service-updated:Service ${updatedService.title} updated`);
+        }
+      });
   }
 
   public updateGeoServiceLayerSetting($event: MouseEvent, geoService: ExtendedGeoServiceModel, geoServiceLayer: ExtendedGeoServiceLayerModel) {
@@ -155,8 +174,18 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     if (!featureSource || !featureSource.featureType) {
       return;
     }
-    FeatureTypeFormDialogComponent.open(this.dialog, { featureType: featureSource.featureType }).afterClosed()
-      .pipe(takeUntil(this.destroyed)).subscribe(updatedFeatureType => {
+    this.featureSourceService.getDraftFeatureType$(featureSource.featureType.originalId, featureSource.featureSource.id)
+      .pipe(
+        take(1),
+        concatMap(featureType => {
+          if (!featureType) {
+            return of(null);
+          }
+          return FeatureTypeFormDialogComponent.open(this.dialog, { featureType }).afterClosed();
+        }),
+        takeUntil(this.destroyed),
+      )
+      .subscribe(updatedFeatureType => {
         if (updatedFeatureType) {
           this.adminSnackbarService.showMessage($localize `:@@admin-core.feature-type-settings-updated:Feature type settings updated`);
         }
@@ -169,11 +198,8 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
       return;
     }
     const featureSourceId = `${serviceLayer.layerSettings?.featureType?.featureSourceId}`;
-    this.featureSourceAndType$ = this.catalogDataService.getFeatureSourceById$(featureSourceId)
+    this.featureSourceAndType$ = this.store$.select(selectFeatureSourceAndFeatureTypesById(featureSourceId))
       .pipe(
-        switchMap(() => {
-          return this.store$.select(selectFeatureSourceAndFeatureTypesById(featureSourceId));
-        }),
         map(featureSource => {
           if (!featureSource) {
             return null;
@@ -210,15 +236,24 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
   public editAppLayerAttribute($event: MouseEvent, featureSourceAndType: FeatureSourceAndType | null) {
     $event.preventDefault();
     const nodeId = this.node?.id;
-    if (!nodeId || !featureSourceAndType?.featureType?.attributes) {
+    if (!nodeId || !featureSourceAndType?.featureType?.hasAttributes) {
       return;
     }
-    ApplicationLayerAttributeSettingsComponent.open(this.dialog, {
-      attributes: featureSourceAndType?.featureType?.attributes,
-      appLayerSettings: this.layerSettings[nodeId] || {},
-      featureTypeSettings: featureSourceAndType.featureType.settings,
-    }).afterClosed()
-      .pipe(takeUntil(this.destroyed))
+    this.featureSourceService.getDraftFeatureType$(featureSourceAndType.featureType.originalId, featureSourceAndType.featureSource.id)
+      .pipe(
+        take(1),
+        switchMap(featureType => {
+          if (!featureType) {
+            return of(null);
+          }
+          return ApplicationLayerAttributeSettingsComponent.open(this.dialog, {
+            attributes: featureType.attributes,
+            appLayerSettings: this.layerSettings[nodeId] || {},
+            featureTypeSettings: featureType.settings,
+          }).afterClosed();
+        }),
+        takeUntil(this.destroyed),
+      )
       .subscribe(result => {
         if (!result) {
           return;

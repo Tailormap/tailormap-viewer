@@ -5,12 +5,13 @@ import { map, Observable } from 'rxjs';
 import {
   CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel, ConfigModel,
   OIDCConfigurationModel, FeatureTypeModel,
+  GeoServiceSummaryWithLayersModel, FeatureSourceSummaryWithFeatureTypesModel,
 } from '../models';
 import { CatalogModelHelper } from '../helpers/catalog-model.helper';
 import { TailormapApiConstants } from '@tailormap-viewer/api';
 
-type GeoServiceListResponse = { _embedded: { ['geo-services']: GeoServiceWithLayersModel[] }};
-type FeatureSourceListResponse = { _embedded: { ['feature-sources']: FeatureSourceModel[] }};
+type GeoServiceListResponse = { _embedded: { ['geo-services']: GeoServiceSummaryWithLayersModel[] }};
+type FeatureSourceListResponse = { _embedded: { ['feature-sources']: FeatureSourceSummaryWithFeatureTypesModel[] }};
 
 @Injectable({
   providedIn: 'root',
@@ -35,27 +36,14 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
     }).pipe(map(response => response.nodes));
   }
 
+  public getGeoServiceSummaries$(): Observable<GeoServiceSummaryWithLayersModel[]> {
+    return this.httpClient.get<GeoServiceListResponse>(`${TailormapAdminApiV1Service.BASE_URL}/geo-services?projection=summary`)
+      .pipe(map(response => (response?._embedded['geo-services'] || []).map(CatalogModelHelper.addTypeToGeoServiceSummaryModel)));
+  }
+
   public getGeoService$(params: { id: string }): Observable<GeoServiceWithLayersModel> {
     return this.httpClient.get<GeoServiceWithLayersModel>(`${TailormapAdminApiV1Service.BASE_URL}/geo-services/${params.id}`)
       .pipe(map(CatalogModelHelper.addTypeToGeoServiceModel));
-  }
-
-  public getGeoServices$(params: { ids: string[] }): Observable<GeoServiceWithLayersModel[]> {
-    return this.httpClient.get<GeoServiceListResponse>(`${TailormapAdminApiV1Service.BASE_URL}/geo-services/search/findByIds`, {
-      params: {
-        ids: params.ids.join(','),
-      },
-    }).pipe(map(response => (response?._embedded?.['geo-services'] || []).map(CatalogModelHelper.addTypeToGeoServiceModel)));
-  }
-
-  public getAllGeoServices$(params: { excludingIds: string[] }): Observable<GeoServiceWithLayersModel[]> {
-    const request$ = params.excludingIds.length > 0
-      ? this.httpClient.get<GeoServiceListResponse>(`${TailormapAdminApiV1Service.BASE_URL}/geo-services/search/getAllExcludingIds`, {
-        params: { ids: params.excludingIds.join(',') },
-      })
-      : this.httpClient.get<GeoServiceListResponse>(`${TailormapAdminApiV1Service.BASE_URL}/geo-services`);
-    return request$
-      .pipe(map(response => (response?._embedded?.['geo-services'] || []).map(CatalogModelHelper.addTypeToGeoServiceModel)));
   }
 
   public createGeoService$(params: { geoService: Omit<GeoServiceModel, 'id' | 'type'>; refreshCapabilities?: boolean}): Observable<GeoServiceWithLayersModel> {
@@ -91,27 +79,16 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
       .pipe(map(CatalogModelHelper.addTypeToGeoServiceModel));
   }
 
+  public getFeatureSourceSummaries$(): Observable<FeatureSourceSummaryWithFeatureTypesModel[]> {
+    return this.httpClient.get<FeatureSourceListResponse>(
+      `${TailormapAdminApiV1Service.BASE_URL}/feature-sources?projection=summary`,
+    )
+      .pipe(map(response => (response?._embedded['feature-sources'] || []).map(CatalogModelHelper.addTypeAndFeatureTypesToFeatureSourceSummaryModel)));
+  }
+
   public getFeatureSource$(params: { id: string }): Observable<FeatureSourceModel> {
     return this.httpClient.get<FeatureSourceModel>(`${TailormapAdminApiV1Service.BASE_URL}/feature-sources/${params.id}`)
       .pipe(map(CatalogModelHelper.addTypeAndFeatureTypesToFeatureSourceModel));
-  }
-
-  public getFeatureSources$(params: { ids: string[] }): Observable<FeatureSourceModel[]> {
-    return this.httpClient.get<FeatureSourceListResponse>(`${TailormapAdminApiV1Service.BASE_URL}/feature-sources/search/findByIds`, {
-      params: {
-        ids: params.ids.join(','),
-      },
-    }).pipe(map(response => (response?._embedded['feature-sources'] || []).map(CatalogModelHelper.addTypeAndFeatureTypesToFeatureSourceModel)));
-  }
-
-  public getAllFeatureSources$(params: { excludingIds: string[] }): Observable<FeatureSourceModel[]> {
-    const request$ = params.excludingIds.length > 0
-      ? this.httpClient.get<FeatureSourceListResponse>(`${TailormapAdminApiV1Service.BASE_URL}/feature-sources/search/getAllExcludingIds`, {
-        params: { ids: params.excludingIds.join(',') },
-      })
-      : this.httpClient.get<FeatureSourceListResponse>(`${TailormapAdminApiV1Service.BASE_URL}/feature-sources?size=1000&sort=title`);
-    return request$
-      .pipe(map(response => (response?._embedded['feature-sources'] || []).map(CatalogModelHelper.addTypeAndFeatureTypesToFeatureSourceModel)));
   }
 
   public createFeatureSource$(params: { featureSource: Omit<FeatureSourceModel, 'id' | 'type' | 'featureTypes'>; refreshCapabilities?: boolean }): Observable<FeatureSourceModel> {
@@ -151,6 +128,10 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
   public refreshFeatureSource$(params: { id: string }): Observable<FeatureSourceModel> {
     return this.httpClient.post<FeatureSourceModel>(`${TailormapAdminApiV1Service.BASE_URL}/feature-sources/${params.id}/refresh-capabilities`, {})
       .pipe(map(CatalogModelHelper.addTypeAndFeatureTypesToFeatureSourceModel));
+  }
+
+  public getFeatureType$(params: { id: string }): Observable<FeatureTypeModel> {
+    return this.httpClient.get<FeatureTypeModel>(`${TailormapAdminApiV1Service.BASE_URL}/feature-types/${params.id}`);
   }
 
   public updateFeatureType$(params: { id: string; featureType: Pick<Partial<FeatureTypeModel>, 'title' | 'comment' | 'settings'> }): Observable<FeatureTypeModel> {
@@ -288,4 +269,5 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
       map(response => response.status === 204),
     );
   }
+
 }

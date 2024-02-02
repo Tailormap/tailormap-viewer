@@ -2,11 +2,9 @@ import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/
 import {
   BehaviorSubject, concatMap, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, takeUntil, tap,
 } from 'rxjs';
-import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 import { FeatureSourceUpdateModel } from '../models/feature-source-update.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { selectFeatureSourceById } from '../state/catalog.selectors';
 import { FeatureSourceService } from '../services/feature-source.service';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 import { FeatureSourceModel } from '@tailormap-admin/admin-api';
@@ -14,6 +12,7 @@ import { FormHelper } from '../../helpers/form.helper';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
 import { FeatureSourceUsedDialogComponent } from './feature-source-used-dialog/feature-source-used-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { selectFeatureSourceById } from '../state/catalog.selectors';
 
 @Component({
   selector: 'tm-admin-feature-source-details',
@@ -23,7 +22,7 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class FeatureSourceDetailsComponent implements OnInit, OnDestroy {
 
-  public featureSource$: Observable<ExtendedFeatureSourceModel | null> = of(null);
+  public featureSource$: Observable<FeatureSourceModel | null> = of(null);
   private destroyed = new Subject();
   public updatedFeatureSource: FeatureSourceUpdateModel | null = null;
 
@@ -49,7 +48,7 @@ export class FeatureSourceDetailsComponent implements OnInit, OnDestroy {
       map(params => params.get('featureSourceId')),
       distinctUntilChanged(),
       filter((featureSourceId): featureSourceId is string => !!featureSourceId),
-      switchMap(featureSourceId => this.store$.select(selectFeatureSourceById(featureSourceId))),
+      switchMap(featureSourceId => this.featureSourceService.getDraftFeatureSource$(featureSourceId)),
       tap(featureSource => { if (featureSource) { this.updatedFeatureSource = null; }}),
     );
   }
@@ -63,7 +62,7 @@ export class FeatureSourceDetailsComponent implements OnInit, OnDestroy {
     this.updatedFeatureSource = $event;
   }
 
-  public save(featureSource: ExtendedFeatureSourceModel) {
+  public save(featureSource: FeatureSourceModel) {
     if (!this.updatedFeatureSource) {
       return;
     }
@@ -83,7 +82,7 @@ export class FeatureSourceDetailsComponent implements OnInit, OnDestroy {
       });
   }
 
-  private checkToRefresh(featureSource: ExtendedFeatureSourceModel, updatedFeatureSource?: FeatureSourceModel) {
+  private checkToRefresh(featureSource: FeatureSourceModel, updatedFeatureSource?: FeatureSourceModel) {
     if (!updatedFeatureSource || !FormHelper.someValuesChanged([
       [ featureSource.url, updatedFeatureSource.url ],
       [ featureSource.jdbcConnection?.host, updatedFeatureSource.jdbcConnection?.host ],
@@ -120,34 +119,42 @@ export class FeatureSourceDetailsComponent implements OnInit, OnDestroy {
       });
   }
 
-  public deleteFeatureSource(featureSource: ExtendedFeatureSourceModel) {
-    this.featureSourceService.getGeoServiceLayersUsingFeatureSource$(featureSource.id)
+  public deleteFeatureSource(featureSource: FeatureSourceModel) {
+    this.store$.select(selectFeatureSourceById(featureSource.id))
       .pipe(
         take(1),
-        concatMap(layers => {
-          if (layers.length > 0) {
-            return this.dialog.open(FeatureSourceUsedDialogComponent, { data: { featureSource, layers } })
-              .afterClosed().pipe(map((result: boolean | undefined | 'layer-updated') => {
-                if (result === 'layer-updated') {
-                  return 'layer-updated';
+        map(s => s?.catalogNodeId || ''),
+        concatMap(catalogNodeId => {
+          return this.featureSourceService.getGeoServiceLayersUsingFeatureSource$(featureSource.id)
+            .pipe(
+              take(1),
+              concatMap(layers => {
+                if (layers.length > 0) {
+                  return this.dialog.open(FeatureSourceUsedDialogComponent, { data: { featureSource, layers } })
+                    .afterClosed().pipe(map((result: boolean | undefined | 'layer-updated') => {
+                      if (result === 'layer-updated') {
+                        return 'layer-updated';
+                      }
+                      return false;
+                    }));
                 }
-                return false;
-              }));
-          }
-          return this.confirmDialog.confirm$(
-            $localize `:@@admin-core.catalog.delete-feature-source:Delete source ${featureSource.title}`,
-            $localize `:@@admin-core.catalog.delete-feature-source-message:Are you sure you want to delete feature source ${featureSource.title}? This action cannot be undone.`,
-            true,
-          );
-        }),
-        concatMap(confirmed => {
-          if (confirmed === 'layer-updated') {
-            return of({ success: false, restartFlow: true });
-          }
-          if (confirmed) {
-            return this.featureSourceService.deleteFeatureSource$(featureSource.id, featureSource.catalogNodeId);
-          }
-          return of({ success: false });
+                return this.confirmDialog.confirm$(
+                  $localize `:@@admin-core.catalog.delete-feature-source:Delete source ${featureSource.title}`,
+                  // eslint-disable-next-line max-len
+                  $localize `:@@admin-core.catalog.delete-feature-source-message:Are you sure you want to delete feature source ${featureSource.title}? This action cannot be undone.`,
+                  true,
+                );
+              }),
+              concatMap(confirmed => {
+                if (confirmed === 'layer-updated') {
+                  return of({ success: false, restartFlow: true });
+                }
+                if (confirmed) {
+                  return this.featureSourceService.deleteFeatureSource$(featureSource.id, catalogNodeId);
+                }
+                return of({ success: false });
+              }),
+            );
         }),
       )
       .subscribe((response: { success: boolean; restartFlow?: boolean }) => {

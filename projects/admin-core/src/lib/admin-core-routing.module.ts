@@ -28,124 +28,138 @@ import { GroupHomeComponent } from './user/group-home/group-home.component';
 import { GroupCreateComponent } from './user/group-create/group-create.component';
 import { GroupEditComponent } from './user/group-edit/group-edit.component';
 import { SettingsHomePageComponent } from './settings/settings-home-page/settings-home-page.component';
+import { AdminTemplateComponent } from './templates/admin-template/admin-template.component';
 
 export const adminRoutes: Routes = [
   {
-    path: AdminRoutes.CATALOG,
-    component: CatalogPageComponent,
+    path: '',
+    component: AdminTemplateComponent,
     children: [
       {
-        path: '',
-        component: CatalogHomeComponent,
-      },
-      {
-        path: AdminRoutes.CATALOG_LAYER_DETAILS,
-        component: GeoServiceLayerDetailsComponent,
-      },
-      {
-        path: AdminRoutes.CATALOG_SERVICE_DETAILS,
-        component: GeoServiceDetailsComponent,
-      },
-      {
-        path: AdminRoutes.CATALOG_NODE_DETAILS,
-        component: CatalogNodeDetailsComponent,
-      },
-      {
-        path: AdminRoutes.FEATURE_SOURCE_DETAILS,
-        component: FeatureSourceDetailsComponent,
-      },
-      {
-        path: AdminRoutes.FEATURE_TYPE_DETAILS,
-        component: FeatureTypeDetailsComponent,
-        data: { className: 'full-screen-settings' },
-      },
-    ],
-  },
-  {
-    path: AdminRoutes.APPLICATION,
-    component: ApplicationPageComponent,
-    children: [
-      {
-        path: '',
-        component: ApplicationHomeComponent,
-      },
-      {
-        path: AdminRoutes.APPLICATION_CREATE,
-        component: ApplicationCreateComponent,
-      },
-      {
-        path: AdminRoutes.APPLICATION_DETAILS,
-        component: ApplicationEditComponent,
-        data: { className: 'full-screen-settings' },
+        path: AdminRoutes.CATALOG,
+        component: CatalogPageComponent,
+        data: { pageTitle: $localize `:@@admin-core.common.catalog-title:Catalog` },
         children: [
           {
             path: '',
-            component: ApplicationEditSettingsComponent,
+            component: CatalogHomeComponent,
           },
           {
-            path: AdminRoutes.APPLICATION_DETAILS_LAYERS,
-            component: ApplicationEditLayersComponent,
+            path: AdminRoutes.CATALOG_LAYER_DETAILS,
+            component: GeoServiceLayerDetailsComponent,
           },
           {
-            path: AdminRoutes.APPLICATION_DETAILS_BASE_LAYERS,
-            component: ApplicationEditBaseLayersComponent,
+            path: AdminRoutes.CATALOG_SERVICE_DETAILS,
+            component: GeoServiceDetailsComponent,
           },
           {
-            path: AdminRoutes.APPLICATION_DETAILS_COMPONENTS,
-            component: ApplicationEditComponentsComponent,
+            path: AdminRoutes.CATALOG_NODE_DETAILS,
+            component: CatalogNodeDetailsComponent,
           },
           {
-            path: AdminRoutes.APPLICATION_DETAILS_STYLING,
-            component: ApplicationEditStylingComponent,
+            path: AdminRoutes.FEATURE_SOURCE_DETAILS,
+            component: FeatureSourceDetailsComponent,
+          },
+          {
+            path: AdminRoutes.FEATURE_TYPE_DETAILS,
+            component: FeatureTypeDetailsComponent,
+            data: { className: 'full-screen-settings' },
           },
         ],
       },
-    ],
-  },
-  {
-    component: SettingsPageComponent,
-    children: [{
-      path: '',
-      component: SettingsHomePageComponent,
-    }],
-    path: AdminRoutes.SETTINGS,
-  },
-  // IMPORTANT: When you add a route, also add it to the FrontController class of tailormap-api, otherwise a user will get a 404 when
-  // pressing F5 in their browser on your route.
-  { path: AdminRoutes.ADMIN_HOME, component: AdminHomePageComponent },
-  {
-    path: AdminRoutes.USER,
-    component: UserAdminPageComponent,
-    children: [
       {
-        path: '',
-        component: UserHomeComponent,
+        path: AdminRoutes.APPLICATION,
+        component: ApplicationPageComponent,
+        data: { pageTitle: $localize `:@@admin-core.common.applications-title:Applications` },
+        children: [
+          {
+            path: '',
+            component: ApplicationHomeComponent,
+          },
+          {
+            path: AdminRoutes.APPLICATION_CREATE,
+            component: ApplicationCreateComponent,
+          },
+          {
+            path: AdminRoutes.APPLICATION_DETAILS,
+            component: ApplicationEditComponent,
+            data: { className: 'full-screen-settings' },
+            children: [
+              {
+                path: '',
+                component: ApplicationEditSettingsComponent,
+              },
+              {
+                path: AdminRoutes.APPLICATION_DETAILS_LAYERS,
+                component: ApplicationEditLayersComponent,
+              },
+              {
+                path: AdminRoutes.APPLICATION_DETAILS_BASE_LAYERS,
+                component: ApplicationEditBaseLayersComponent,
+              },
+              {
+                path: AdminRoutes.APPLICATION_DETAILS_COMPONENTS,
+                component: ApplicationEditComponentsComponent,
+              },
+              {
+                path: AdminRoutes.APPLICATION_DETAILS_STYLING,
+                component: ApplicationEditStylingComponent,
+              },
+            ],
+          },
+        ],
       },
       {
-        path: AdminRoutes.USER_CREATE,
-        component: UserCreateComponent,
+        component: SettingsPageComponent,
+        children: [{
+          path: '',
+          component: SettingsHomePageComponent,
+        }],
+        path: AdminRoutes.SETTINGS,
+        data: { pageTitle: $localize `:@@admin-core.common.settings-title:Settings`, templateCls: 'content--no-padding' },
       },
       {
-        path: AdminRoutes.USER_DETAILS,
-        component: UserEditComponent,
-      },
-    ],
-  },
-  {
-    path: AdminRoutes.GROUP,
-    component: GroupsPageComponent,
-    children: [
-      {
-        path: '',
-        component: GroupHomeComponent,
+        path: AdminRoutes.ADMIN_HOME,
+        component: AdminHomePageComponent,
+        data: { pageTitle: $localize `:@@admin-core.common.tailormap-admin-title:Tailormap Admin` },
       },
       {
-        path: AdminRoutes.GROUP_CREATE,
-        component: GroupCreateComponent,
+        path: AdminRoutes.USER,
+        component: UserAdminPageComponent,
+        data: { pageTitle: $localize `:@@admin-core.common.users-title:User Administration` },
+        children: [
+          {
+            path: '',
+            component: UserHomeComponent,
+          },
+          {
+            path: AdminRoutes.USER_CREATE,
+            component: UserCreateComponent,
+          },
+          {
+            path: AdminRoutes.USER_DETAILS,
+            component: UserEditComponent,
+          },
+        ],
       },
       {
-        path: AdminRoutes.GROUP_DETAILS,
-        component: GroupEditComponent,
+        path: AdminRoutes.GROUP,
+        component: GroupsPageComponent,
+        data: { pageTitle: $localize `:@@admin-core.common.groups-title:Group Administration` },
+        children: [
+          {
+            path: '',
+            component: GroupHomeComponent,
+          },
+          {
+            path: AdminRoutes.GROUP_CREATE,
+            component: GroupCreateComponent,
+          },
+          {
+            path: AdminRoutes.GROUP_DETAILS,
+            component: GroupEditComponent,
+          },
+        ],
       },
     ],
   },

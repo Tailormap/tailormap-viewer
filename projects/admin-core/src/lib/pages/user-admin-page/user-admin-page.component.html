@@ -1,10 +1,8 @@
-<tm-admin-template i18n-pageTitle="@@admin-core.common.users-title" pageTitle="User Administration">
-  <div class="admin-page-wrapper">
-    <div class="admin-tree">
-      <tm-admin-user-list></tm-admin-user-list>
-    </div>
-    <div class="admin-content">
-      <router-outlet></router-outlet>
-    </div>
+<div class="admin-page-wrapper">
+  <div class="admin-tree">
+    <tm-admin-user-list></tm-admin-user-list>
   </div>
-</tm-admin-template>
+  <div class="admin-content">
+    <div class="admin-content-wrapper"><router-outlet></router-outlet></div>
+  </div>
+</div>

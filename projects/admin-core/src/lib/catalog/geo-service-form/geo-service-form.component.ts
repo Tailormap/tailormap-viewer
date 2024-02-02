@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Observable, debounceTime, Subject, takeUntil } from 'rxjs';
-import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 import { FormControl, FormGroup } from '@angular/forms';
-import { GeoServiceProtocolEnum, GroupModel, AuthorizationRuleGroup, AUTHORIZATION_RULE_ANONYMOUS } from '@tailormap-admin/admin-api';
+import {
+  GeoServiceProtocolEnum, GroupModel, AuthorizationRuleGroup, AUTHORIZATION_RULE_ANONYMOUS, GeoServiceModel,
+} from '@tailormap-admin/admin-api';
 import { FormHelper } from '../../helpers/form.helper';
 import { GeoServiceCreateModel } from '../models/geo-service-update.model';
 import { StringHelper } from '@tailormap-viewer/shared';
@@ -17,12 +18,12 @@ import { GroupService } from '../../user/services/group.service';
 export class GeoServiceFormComponent implements OnInit {
 
   private destroyed = new Subject();
-  private _geoService: ExtendedGeoServiceModel | null = null;
+  private _geoService: GeoServiceModel | null = null;
 
   public protocols: GeoServiceProtocolEnum[] = [ GeoServiceProtocolEnum.WMS, GeoServiceProtocolEnum.WMTS, GeoServiceProtocolEnum.XYZ ];
 
   @Input()
-  public set geoService(geoService: ExtendedGeoServiceModel | null) {
+  public set geoService(geoService: GeoServiceModel | null) {
     this.geoServiceForm.patchValue({
       title: geoService ? geoService.title : '',
       protocol: geoService ? geoService.protocol : GeoServiceProtocolEnum.WMS,
@@ -40,7 +41,7 @@ export class GeoServiceFormComponent implements OnInit {
     this._geoService = geoService;
   }
 
-  public get geoService(): ExtendedGeoServiceModel | null {
+  public get geoService(): GeoServiceModel | null {
     return this._geoService;
   }
 

@@ -15,9 +15,6 @@ describe('AdminTemplateComponent', () => {
     await render(AdminTemplateComponent, {
       imports: [ SharedModule, MatIconTestingModule ],
       declarations: [NavigationComponent],
-      componentInputs: {
-        pageTitle: 'admin works!',
-      },
       providers: [
         { provide: APP_BASE_HREF, useValue: '' },
         { provide: TAILORMAP_SECURITY_API_V1_SERVICE, useValue: { getUser$: jest.fn(() => of({})) } },
@@ -28,7 +25,6 @@ describe('AdminTemplateComponent', () => {
         }),
       ],
     });
-    expect(await screen.findByText('admin works!'));
     expect(await screen.findByText('Home')).toBeInTheDocument();
     expect(await screen.findByText('Catalog')).toBeInTheDocument();
   });

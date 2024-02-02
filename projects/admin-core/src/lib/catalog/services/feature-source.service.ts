@@ -2,24 +2,26 @@ import { Store } from '@ngrx/store';
 import { Injectable } from '@angular/core';
 import {
   ApiResponseHelper,
-  CatalogItemKindEnum, CatalogModelHelper, FeatureSourceModel, FeatureTypeModel, TailormapAdminApiV1Service,
+  CatalogItemKindEnum, CatalogModelHelper, FeatureSourceModel, FeatureTypeModel,
+  TailormapAdminApiV1Service,
 } from '@tailormap-admin/admin-api';
 import { CatalogService } from './catalog.service';
 import { catchError, concatMap, filter, map, MonoTypeOperatorFunction, Observable, of, pipe, switchMap, take, tap, timer } from 'rxjs';
 import {
-  addFeatureSources, deleteFeatureSource, updateFeatureSource, updateFeatureType,
+  addFeatureSources, deleteFeatureSource, loadDraftFeatureSource, updateFeatureSource, updateFeatureType,
 } from '../state/catalog.actions';
 import { FeatureSourceCreateModel, FeatureSourceUpdateModel, FeatureTypeUpdateModel } from '../models/feature-source-update.model';
-import { selectFeatureSourceById, selectFeatureTypeById, selectFeatureTypesForSource } from '../state/catalog.selectors';
+import {
+  selectDraftFeatureSource, selectDraftFeatureSourceLoadStatus,
+  selectFeatureSourceById, selectFeatureTypesForSource, selectGeoServiceLayersWithSettingsApplied,
+} from '../state/catalog.selectors';
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
-import { GeoServiceService } from './geo-service.service';
 import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-layer.model';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AdminSseService, EventType, SSEEvent } from '../../shared/services/admin-sse.service';
-import { DebounceHelper } from '@tailormap-viewer/shared';
-import { ExtendedCatalogModelHelper } from '../helpers/extended-catalog-model.helper';
+import { DebounceHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
 
 @Injectable({
   providedIn: 'root',
@@ -31,9 +33,29 @@ export class FeatureSourceService {
     private adminApiService: TailormapAdminApiV1Service,
     private adminSnackbarService: AdminSnackbarService,
     private catalogService: CatalogService,
-    private geoServiceService: GeoServiceService,
     private sseService: AdminSseService,
   ) { }
+
+  public getDraftFeatureSource$(id: string) {
+      return this.store$.select(selectDraftFeatureSource)
+        .pipe(
+          tap(draftFeatureSource => {
+            if (draftFeatureSource?.id !== id) {
+              this.store$.dispatch(loadDraftFeatureSource({ id }));
+            }
+          }),
+          switchMap(() => this.store$.select(selectDraftFeatureSourceLoadStatus)),
+          filter(loadStatus => loadStatus === LoadingStateEnum.LOADED),
+          switchMap(() => this.store$.select(selectDraftFeatureSource)),
+        );
+  }
+
+  public getDraftFeatureType$(id: string, featureSourceId: string) {
+    return this.getDraftFeatureSource$(featureSourceId)
+      .pipe(
+        map(featureSource => featureSource?.featureTypes.find(f => `${f.id}` === `${id}`) || null),
+      );
+  }
 
   public createFeatureSource$(source: FeatureSourceCreateModel, catalogNodeId: string) {
     const featureSource: Omit<FeatureSourceModel, 'id' | 'type' | 'featureTypes'> = { ...source };
@@ -45,7 +67,7 @@ export class FeatureSourceService {
       }),
       concatMap(createdFeatureSource => {
         if (createdFeatureSource) {
-          this.updateFeatureSourceState(createdFeatureSource.id, 'add', createdFeatureSource, catalogNodeId);
+          this.updateFeatureSourceState(createdFeatureSource.id, 'add', createdFeatureSource);
           return this.catalogService.addItemToCatalog$(catalogNodeId, createdFeatureSource.id, CatalogItemKindEnum.FEATURE_SOURCE)
             .pipe(
               map(() => createdFeatureSource),
@@ -91,42 +113,27 @@ export class FeatureSourceService {
     featureSourceId: string,
     updatedSource: FeatureSourceUpdateModel,
   ) {
-    return this.getFeatureSourceById$(featureSourceId)
+    return this.adminApiService.updateFeatureSource$({ id: featureSourceId, featureSource: { id: featureSourceId, ...updatedSource } })
       .pipe(
-        concatMap(featureSource => {
-          return this.adminApiService.updateFeatureSource$({ id: featureSource.id, featureSource: { id: featureSource.id, ...updatedSource } })
-            .pipe(
-              this.handleUpdateFeatureSource($localize `:@@admin-core.catalog.error-updating-feature-source:Error while updating feature source: `, featureSource.catalogNodeId),
-            );
-        }),
+        this.handleUpdateFeatureSource($localize `:@@admin-core.catalog.error-updating-feature-source:Error while updating feature source: `),
       );
   }
 
   public updateFeatureType$(
     featureTypeId: string,
     updatedFeatureType: FeatureTypeUpdateModel,
-  ): Observable<ExtendedFeatureTypeModel | null> {
-    return this.store$.select(selectFeatureTypeById(featureTypeId))
+  ): Observable<FeatureTypeModel | null> {
+    return this.adminApiService.updateFeatureType$({ id: featureTypeId, featureType: updatedFeatureType })
       .pipe(
-        take(1),
-        filter((featureType): featureType is ExtendedFeatureTypeModel => !!featureType),
-        concatMap(featureType => {
-          return this.adminApiService.updateFeatureType$({ id: featureType.originalId, featureType: updatedFeatureType })
-            .pipe(
-              catchError((errorResponse) => {
-                const message = ApiResponseHelper.getAdminApiErrorMessage(errorResponse);
-                this.adminSnackbarService.showMessage($localize `:@@admin-core.catalog.error-updating-feature-type:Error while updating feature type: ${message}`);
-                return of(null);
-              }),
-              tap((updateResult: FeatureTypeModel | null) => {
-                if (updateResult) {
-                  this.updateFeatureTypeState(updateResult);
-                }
-              }),
-              map((updateResult: FeatureTypeModel | null) => {
-                return updateResult ? ExtendedCatalogModelHelper.getExtendedFeatureType(updateResult, featureType.featureSourceId, featureType.catalogNodeId) : null;
-              }),
-            );
+        catchError((errorResponse) => {
+          const message = ApiResponseHelper.getAdminApiErrorMessage(errorResponse);
+          this.adminSnackbarService.showMessage($localize `:@@admin-core.catalog.error-updating-feature-type:Error while updating feature type: ${message}`);
+          return of(null);
+        }),
+        tap((updateResult: FeatureTypeModel | null) => {
+          if (updateResult) {
+            this.updateFeatureTypeState(updateResult);
+          }
         }),
       );
   }
@@ -164,7 +171,7 @@ export class FeatureSourceService {
           return this.adminApiService.refreshFeatureSource$({ id: featureSource.id })
             .pipe(
               // eslint-disable-next-line max-len
-              this.handleUpdateFeatureSource($localize `:@@admin-core.catalog.error-refreshing-feature-source:Error while refreshing feature source: `, featureSource.catalogNodeId),
+              this.handleUpdateFeatureSource($localize `:@@admin-core.catalog.error-refreshing-feature-source:Error while refreshing feature source: `),
             );
         }),
       );
@@ -178,7 +185,7 @@ export class FeatureSourceService {
       );
   }
 
-  private handleUpdateFeatureSource(errorMsg: string, catalogNodeId: string): MonoTypeOperatorFunction<FeatureSourceModel | null> {
+  private handleUpdateFeatureSource(errorMsg: string): MonoTypeOperatorFunction<FeatureSourceModel | null> {
     return pipe(
       catchError((errorResponse) => {
         const message = ApiResponseHelper.getAdminApiErrorMessage(errorResponse);
@@ -187,7 +194,7 @@ export class FeatureSourceService {
       }),
       tap((updatedFeatureSource: FeatureSourceModel | null) => {
         if (updatedFeatureSource) {
-          this.updateFeatureSourceState(updatedFeatureSource.id, 'update', updatedFeatureSource, catalogNodeId);
+          this.updateFeatureSourceState(updatedFeatureSource.id, 'update', updatedFeatureSource);
         }
       }),
     );
@@ -199,7 +206,7 @@ export class FeatureSourceService {
         take(1),
         switchMap((featureTypes: ExtendedFeatureTypeModel[]) => {
           const featureTypesSet = new Set(featureTypes.map(ft => ft.name));
-          return this.geoServiceService.getGeoServiceLayers$()
+          return this.store$.select(selectGeoServiceLayersWithSettingsApplied)
             .pipe(
               map(layers => {
                 return layers.filter(layer => {
@@ -236,16 +243,15 @@ export class FeatureSourceService {
     id: string,
     type: 'add' | 'update' | 'remove',
     featureSource?: FeatureSourceModel | null,
-    catalogNodeId?: string,
   ) {
     // Add a small timeout to prevent most duplicate updates to prevent many state updates
     // For data integrity, it should not matter if we update the state twice
     DebounceHelper.debounce(`feature-source-${type}-${id}`, () => {
       if (type === 'add' && featureSource) {
-        this.store$.dispatch(addFeatureSources({ featureSources: [featureSource], parentNode: catalogNodeId || '' }));
+        this.store$.dispatch(addFeatureSources({ featureSource: CatalogModelHelper.addTypeAndFeatureTypesToFeatureSourceModel(featureSource) }));
       }
       if (type === 'update' && featureSource) {
-        this.store$.dispatch(updateFeatureSource({ featureSource: featureSource, parentNode: catalogNodeId || '' }));
+        this.store$.dispatch(updateFeatureSource({ featureSource: CatalogModelHelper.addTypeAndFeatureTypesToFeatureSourceModel(featureSource) }));
       }
       if (type === 'remove') {
         this.store$.dispatch(deleteFeatureSource({ id }));

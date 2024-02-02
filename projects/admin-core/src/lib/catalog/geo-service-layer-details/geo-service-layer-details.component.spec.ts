@@ -34,7 +34,7 @@ const setup = async () => {
   const store = createMockStore({
     initialState: { [catalogStateKey]: {
       ...initialCatalogState,
-      geoServices: [{ ...geoServiceModel, catalogNodeId: 'node-1', layers: ['2'] }],
+      geoServices: [{ ...geoServiceModel, catalogNodeId: 'node-1', layerIds: ['2'] }],
       geoServiceLayers: [{ ...layerModel, catalogNodeId: 'node-1', id: '2', serviceId: '1' }],
     } },
   });

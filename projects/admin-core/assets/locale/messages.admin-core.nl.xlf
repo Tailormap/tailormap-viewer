@@ -441,17 +441,9 @@
         <source>Error while loading feature sources</source>
         <target state="translated">Fout bij het laden van de feature sources</target>
       </trans-unit>
-      <trans-unit id="admin-core.catalog.error-loading-feature-sources-hint" datatype="html">
-        <source>Error while loading feature source(s). Please collapse/expand the node again to try again.</source>
-        <target state="translated">Fout bij het laden van de feature source(s). Klap de map opnieuw in en uit om het opnieuw te proberen.</target>
-      </trans-unit>
       <trans-unit id="admin-core.catalog.error-loading-geo-services" datatype="html">
         <source>Error while loading geo services</source>
         <target>Fout bij het laden van de geo-services</target>
-      </trans-unit>
-      <trans-unit id="admin-core.catalog.error-loading-services" datatype="html">
-        <source>Error while loading service(s). Please collapse/expand the node again to try again.</source>
-        <target>Fout tijdens laden van de service(s). Klap opnieuw in en uit om het opnieuw te proberen.</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.error-refreshing-feature-source" datatype="html">
         <source>Error while refreshing feature source: </source>

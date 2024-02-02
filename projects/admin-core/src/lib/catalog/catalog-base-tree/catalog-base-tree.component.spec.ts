@@ -1,10 +1,12 @@
 import { render, screen, waitFor } from '@testing-library/angular';
 import { CatalogBaseTreeComponent } from './catalog-base-tree.component';
 import { LoadingStateEnum, SharedModule, TreeService } from '@tailormap-viewer/shared';
-import { CatalogNodeModel, getCatalogTree, getGeoService, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
+import {
+  CatalogNodeModel, getCatalogTree, getGeoService, getGeoServiceSummary, TailormapAdminApiV1Service,
+} from '@tailormap-admin/admin-api';
 import { CatalogState, catalogStateKey, initialCatalogState } from '../state/catalog.state';
 import userEvent from '@testing-library/user-event';
-import { addGeoServices } from '../state/catalog.actions';
+import { addGeoService } from '../state/catalog.actions';
 import { createMockStore } from '@ngrx/store/testing';
 import { of } from 'rxjs';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
@@ -14,6 +16,7 @@ import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model'
 import { TestBed } from '@angular/core/testing';
 import { CatalogTreeHelper } from '../helpers/catalog-tree.helper';
 import { adminCoreStateKey, initialAdminCoreState } from '../../state/admin-core.state';
+import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 
 const setup = async (state: Partial<CatalogState> = {}) => {
   const mockStore = createMockStore({
@@ -72,16 +75,14 @@ describe('CatalogBaseTreeComponent', () => {
 
     await userEvent.click(await screen.findByLabelText(`expand Background services`));
     await userEvent.click(await screen.findByLabelText(`expand Background services - aerial`));
-    await waitFor(() => {
-      expect(mockApiService.getGeoServices$).toHaveBeenCalledTimes(1);
-    });
-    expect(mockDispatch).toHaveBeenCalledTimes(3); // expand, expand, add services
-    expect(mockDispatch.mock.calls[2][0].type).toEqual(addGeoServices.type);
   });
 
   test('should render tree for nodes and not load service for already loaded services', async () => {
     const catalogNodes = getExtendedCatalogNodes(getCatalogTree());
-    const geoServices = [{ ...getGeoService({ id: '1' }), layers: [], catalogNodeId: 'child1.1' }, { ...getGeoService({ id: '2' }), layers: [], catalogNodeId: 'child1.1' }];
+    const geoServices: ExtendedGeoServiceModel[] = [
+      { ...getGeoServiceSummary({ id: '1' }), layerIds: [], catalogNodeId: 'child1.1' },
+      { ...getGeoServiceSummary({ id: '2' }), layerIds: [], catalogNodeId: 'child1.1' },
+    ];
     const state: Partial<CatalogState> = {
       catalogLoadStatus: LoadingStateEnum.LOADED,
       catalog: catalogNodes,

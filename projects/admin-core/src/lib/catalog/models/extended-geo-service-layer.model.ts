@@ -1,8 +1,9 @@
 import { GeoServiceLayerModel } from '@tailormap-admin/admin-api';
 
 export interface ExtendedGeoServiceLayerModel extends GeoServiceLayerModel {
-  id: string;
+  originalId: string;
   catalogNodeId: string;
   serviceId: string;
   expanded?: boolean;
+  parentId?: string;
 }

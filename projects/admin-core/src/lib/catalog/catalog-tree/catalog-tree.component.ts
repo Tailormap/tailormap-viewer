@@ -6,10 +6,10 @@ import { BehaviorSubject, filter, map } from 'rxjs';
 import { CatalogTreeModel, CatalogTreeModelMetadataTypes } from '../models/catalog-tree.model';
 import { CatalogTreeHelper } from '../helpers/catalog-tree.helper';
 import { CatalogTreeModelTypeEnum } from '../models/catalog-tree-model-type.enum';
-import { CatalogTreeService } from '../services/catalog-tree.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CatalogItemKindEnum } from '@tailormap-admin/admin-api';
 import { CatalogService } from '../services/catalog.service';
+import { expandTree } from '../state/catalog.actions';
 
 @Component({
   selector: 'tm-admin-catalog-tree',
@@ -26,7 +26,6 @@ export class CatalogTreeComponent implements OnInit {
     private treeService: TreeService<CatalogTreeModelMetadataTypes, CatalogTreeModelTypeEnum>,
     private treeDragDropService: TreeDragDropService,
     private store$: Store,
-    private catalogTreeService: CatalogTreeService,
     private history: RouterHistoryService,
     private destroyRef: DestroyRef,
     private catalogService: CatalogService,
@@ -39,7 +38,11 @@ export class CatalogTreeComponent implements OnInit {
         filter(tree => !!tree && tree.length > 0),
         map((tree, idx) => {
           if (idx === 0) {
-            this.catalogTreeService.expandTreeToUrl(this.history.getCurrentUrl());
+            // First time expand current node based on URL
+            const node = CatalogTreeHelper.readNodeFromUrl(this.history.getCurrentUrl());
+            if (node !== null) {
+              this.store$.dispatch(expandTree({ id: node.id, nodeType: node.type }));
+            }
           }
           return tree;
         }),
@@ -51,9 +54,8 @@ export class CatalogTreeComponent implements OnInit {
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe((url: string | null) => {
-        const deconstructedUrl = CatalogTreeHelper.readNodesFromUrl(url);
-        const lastItem = deconstructedUrl.pop();
-        this.selectedNodeId.next(lastItem ? lastItem.treeNodeId : '');
+        const node = CatalogTreeHelper.readNodeFromUrl(url);
+        this.selectedNodeId.next(node ? node.treeNodeId : '');
       });
   }
 

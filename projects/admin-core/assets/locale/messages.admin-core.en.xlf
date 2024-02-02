@@ -332,14 +332,8 @@
       <trans-unit id="admin-core.catalog.error-loading-feature-sources" datatype="html">
         <source>Error while loading feature sources</source>
       </trans-unit>
-      <trans-unit id="admin-core.catalog.error-loading-feature-sources-hint" datatype="html">
-        <source>Error while loading feature source(s). Please collapse/expand the node again to try again.</source>
-      </trans-unit>
       <trans-unit id="admin-core.catalog.error-loading-geo-services" datatype="html">
         <source>Error while loading geo services</source>
-      </trans-unit>
-      <trans-unit id="admin-core.catalog.error-loading-services" datatype="html">
-        <source>Error while loading service(s). Please collapse/expand the node again to try again.</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.error-refreshing-feature-source" datatype="html">
         <source>Error while refreshing feature source: </source>

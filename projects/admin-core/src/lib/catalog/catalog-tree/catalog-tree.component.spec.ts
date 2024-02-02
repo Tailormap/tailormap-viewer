@@ -10,7 +10,7 @@ import { CatalogState, catalogStateKey, initialCatalogState } from '../state/cat
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { of } from 'rxjs';
 import userEvent from '@testing-library/user-event';
-import { addGeoServices } from '../state/catalog.actions';
+import { addGeoService } from '../state/catalog.actions';
 import { CatalogTreeNodeComponent } from './catalog-tree-node/catalog-tree-node.component';
 import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
 import { CatalogBaseTreeComponent } from '../catalog-base-tree/catalog-base-tree.component';
@@ -64,17 +64,12 @@ describe('CatalogTreeComponent', () => {
       catalogLoadStatus: LoadingStateEnum.LOADED,
       catalog: getExtendedCatalogNodes(catalogNodes),
     };
-    const { mockDispatch, mockApiService } = await setup(state);
+    await setup(state);
     expect(await screen.queryByRole('progressbar')).not.toBeInTheDocument();
     expect(await screen.findByText(`Background services`)).toBeInTheDocument();
 
     await userEvent.click(await screen.findByLabelText(`expand Background services`));
     await userEvent.click(await screen.findByLabelText(`expand Background services - aerial`));
-    await waitFor(() => {
-      expect(mockApiService.getGeoServices$).toHaveBeenCalledTimes(1);
-    });
-    expect(mockDispatch).toHaveBeenCalledTimes(3); // expand, expand, add services
-    expect(mockDispatch.mock.calls[2][0].type).toEqual(addGeoServices.type);
   });
 
   test('should render tree for nodes and not load service for already loaded services', async () => {
@@ -82,7 +77,7 @@ describe('CatalogTreeComponent', () => {
     const state: Partial<CatalogState> = {
       catalogLoadStatus: LoadingStateEnum.LOADED,
       catalog: getExtendedCatalogNodes(catalogNodes),
-      geoServices: [{ ...getGeoService({ id: '1' }), layers: [], catalogNodeId: 'child1.1' }, { ...getGeoService({ id: '2' }), layers: [], catalogNodeId: 'child1.1' }],
+      geoServices: [{ ...getGeoService({ id: '1' }), layerIds: [], catalogNodeId: 'child1.1' }, { ...getGeoService({ id: '2' }), layerIds: [], catalogNodeId: 'child1.1' }],
     };
     const { mockDispatch, mockApiService } = await setup(state);
     expect(await screen.queryByRole('progressbar')).not.toBeInTheDocument();

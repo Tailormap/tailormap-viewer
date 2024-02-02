@@ -5,10 +5,9 @@ import {
 import { selectGeoServiceById } from '../state/catalog.selectors';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 import { GeoServiceService } from '../services/geo-service.service';
 import { GeoServiceUpdateModel } from '../models/geo-service-update.model';
-import { GeoServiceProtocolEnum, GeoServiceWithLayersModel, LayerSettingsModel } from '@tailormap-admin/admin-api';
+import { GeoServiceModel, GeoServiceProtocolEnum, GeoServiceWithLayersModel, LayerSettingsModel } from '@tailormap-admin/admin-api';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
 import { MatDialog } from '@angular/material/dialog';
 import { GeoServiceUsedDialogComponent } from './geo-service-used-dialog/geo-service-used-dialog.component';
@@ -23,7 +22,7 @@ import { FormHelper } from '../../helpers/form.helper';
 })
 export class GeoServiceDetailsComponent implements OnInit, OnDestroy {
 
-  public geoService$: Observable<ExtendedGeoServiceModel | null> = of(null);
+  public geoService$: Observable<GeoServiceModel | null> = of(null);
   private destroyed = new Subject();
   public updatedGeoService: GeoServiceUpdateModel | null = null;
   public updatedDefaultLayerSettings: LayerSettingsModel | null = null;
@@ -50,7 +49,7 @@ export class GeoServiceDetailsComponent implements OnInit, OnDestroy {
       map(params => params.get('serviceId')),
       distinctUntilChanged(),
       filter((serviceId): serviceId is string => !!serviceId),
-      switchMap(serviceId => this.store$.select(selectGeoServiceById(serviceId))),
+      switchMap(serviceId => this.geoServiceService.getDraftGeoService$(serviceId)),
       tap(geoService => { if (geoService) {
         this.updatedGeoService = null;
         this.updatedDefaultLayerSettings = null;
@@ -71,7 +70,7 @@ export class GeoServiceDetailsComponent implements OnInit, OnDestroy {
     this.updatedDefaultLayerSettings = $event;
   }
 
-  public save(geoService: ExtendedGeoServiceModel) {
+  public save(geoService: GeoServiceModel) {
     if (!this.updatedGeoService && !this.updatedDefaultLayerSettings) {
       return;
     }
@@ -93,7 +92,7 @@ export class GeoServiceDetailsComponent implements OnInit, OnDestroy {
       });
   }
 
-  private checkToRefresh(service: ExtendedGeoServiceModel, updatedService: GeoServiceWithLayersModel | null) {
+  private checkToRefresh(service: GeoServiceModel, updatedService: GeoServiceWithLayersModel | null) {
     if (!updatedService || !FormHelper.someValuesChanged([
       [ service.url, updatedService.url ],
       [ service.authentication?.username, updatedService.authentication?.username ],
@@ -126,27 +125,34 @@ export class GeoServiceDetailsComponent implements OnInit, OnDestroy {
       });
   }
 
-  public deleteService(geoService: ExtendedGeoServiceModel) {
-    this.geoServiceService.getApplicationsUsingService$(geoService.id)
+  public deleteService(geoService: GeoServiceModel) {
+    this.store$.select(selectGeoServiceById(geoService.id))
       .pipe(
         take(1),
-        concatMap(applications => {
-          if (applications.length > 0) {
-            return this.dialog.open(GeoServiceUsedDialogComponent, {
-              data: { applications, service: geoService },
-            }).afterClosed().pipe(map(() => false));
-          }
-          return this.confirmDialog.confirm$(
-            $localize `:@@admin-core.catalog.delete-service-confirm:Delete service ${geoService.title}`,
-            $localize `:@@admin-core.catalog.delete-service-confirm-message:Are you sure you want to delete service ${geoService.title}? This action cannot be undone.`,
-            true,
-          );
-        }),
-        concatMap(confirmed => {
-          if (confirmed) {
-            return this.geoServiceService.deleteGeoService$(geoService.id, geoService.catalogNodeId);
-          }
-          return of({ success: false });
+        map(s => s?.catalogNodeId || ''),
+        concatMap(catalogNodeId => {
+          return this.geoServiceService.getApplicationsUsingService$(geoService.id)
+            .pipe(
+              take(1),
+              concatMap(applications => {
+                if (applications.length > 0) {
+                  return this.dialog.open(GeoServiceUsedDialogComponent, {
+                    data: { applications, service: geoService },
+                  }).afterClosed().pipe(map(() => false));
+                }
+                return this.confirmDialog.confirm$(
+                  $localize `:@@admin-core.catalog.delete-service-confirm:Delete service ${geoService.title}`,
+                  $localize `:@@admin-core.catalog.delete-service-confirm-message:Are you sure you want to delete service ${geoService.title}? This action cannot be undone.`,
+                  true,
+                );
+              }),
+              concatMap(confirmed => {
+                if (confirmed) {
+                  return this.geoServiceService.deleteGeoService$(geoService.id, catalogNodeId);
+                }
+                return of({ success: false });
+              }),
+            );
         }),
       )
       .subscribe(response => {

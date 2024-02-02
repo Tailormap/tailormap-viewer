@@ -11,7 +11,7 @@
               placeholder="Description"
               i18n-placeholder="@@admin-core.common.description"
               formControlName="description"
-              cdkTextareaAutosize
+              [cdkTextareaAutosize]="true"
               cdkAutosizeMinRows="4"
               cdkAutosizeMaxRows="10"></textarea>
   </mat-form-field>
@@ -66,7 +66,14 @@
       <tm-admin-tri-state-boolean formControlName="hiDpiEnabled"></tm-admin-tri-state-boolean>
     </div>
     <ng-container *ngIf="isWMTS">
-      <ng-container *ngTemplateOutlet="hiDpiMode"></ng-container>
+      <mat-form-field class="form-control">
+        <mat-label i18n="@@admin-core.catalog.hi-dpi-mode">High-DPI mode</mat-label>
+        <mat-select formControlName="hiDpiMode" i18n-placeholder="@@admin-core.catalog.hi-dpi-mode" placeholder="High-DPI mode">
+          <mat-option [value]="hiDpiModes.ShowNextZoomLevel" i18n="@@admin-core.catalog.show-next-zoom-level">Show next zoom level</mat-option>
+          <mat-option [value]="hiDpiModes.SubstituteLayerShowNextZoomLevel" i18n="@@admin-core.catalog.substitute-layer">Substitute layer, show next zoom level</mat-option>
+          <mat-option [value]="hiDpiModes.SubstituteLayerTilePixelRatioOnly" i18n="@@admin-core.catalog.substitute-layer-pixel-ratio-only">Substitute layer, tile pixel ratio only</mat-option>
+        </mat-select>
+      </mat-form-field>
       <mat-form-field>
         <mat-label i18n="@@admin-core.catalog.hi-dpi-substitute-layer">High-DPI substitute layer</mat-label>
         <mat-select formControlName="hiDpiSubstituteLayer">
@@ -78,7 +85,14 @@
       </mat-form-field>
     </ng-container>
     <ng-container *ngIf="isXYZ">
-      <ng-container *ngTemplateOutlet="hiDpiMode"></ng-container>
+      <mat-form-field class="form-control">
+        <mat-label i18n="@@admin-core.catalog.hi-dpi-mode">High-DPI mode</mat-label>
+        <mat-select formControlName="hiDpiMode" i18n-placeholder="@@admin-core.catalog.hi-dpi-mode" placeholder="High-DPI mode">
+          <mat-option [value]="hiDpiModes.ShowNextZoomLevel" i18n="@@admin-core.catalog.show-next-zoom-level">Show next zoom level</mat-option>
+          <mat-option [value]="hiDpiModes.SubstituteLayerShowNextZoomLevel" i18n="@@admin-core.catalog.substitute-layer">Substitute layer, show next zoom level</mat-option>
+          <mat-option [value]="hiDpiModes.SubstituteLayerTilePixelRatioOnly" i18n="@@admin-core.catalog.substitute-layer-pixel-ratio-only">Substitute layer, tile pixel ratio only</mat-option>
+        </mat-select>
+      </mat-form-field>
       <mat-form-field>
         <mat-label i18n="@@admin-core.catalog.substitute-layer-url-template">High-DPI substitute URL template</mat-label>
         <input matInput formControlName="hiDpiSubstituteLayer" autocomplete="off" />
@@ -104,14 +118,3 @@
                                parentType="GeoService"
                                selfType="Layer"></tm-admin-authorization-edit>
 </form>
-
-<ng-template #hiDpiMode>
-  <mat-form-field class="form-control">
-    <mat-label  i18n="@@admin-core.catalog.hi-dpi-mode">High-DPI mode</mat-label>
-    <mat-select formControlName="hiDpiMode" i18n-placeholder="@@admin-core.catalog.hi-dpi-mode" placeholder="High-DPI mode">
-      <mat-option [value]="hiDpiModes.ShowNextZoomLevel" i18n="@@admin-core.catalog.show-next-zoom-level">Show next zoom level</mat-option>
-      <mat-option [value]="hiDpiModes.SubstituteLayerShowNextZoomLevel" i18n="@@admin-core.catalog.substitute-layer">Substitute layer, show next zoom level</mat-option>
-      <mat-option [value]="hiDpiModes.SubstituteLayerTilePixelRatioOnly" i18n="@@admin-core.catalog.substitute-layer-pixel-ratio-only">Substitute layer, tile pixel ratio only</mat-option>
-    </mat-select>
-  </mat-form-field>
-</ng-template>

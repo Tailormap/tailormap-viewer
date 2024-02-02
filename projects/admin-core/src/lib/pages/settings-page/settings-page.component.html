@@ -1,21 +1,19 @@
 <router-outlet name="settings"></router-outlet>
-<tm-admin-template pageTitle="Settings" i18n-pageTitle="@@admin-core.common.settings-title" cls="content--no-padding">
-  <div class="admin-page-wrapper">
-    <div class="admin-submenu">
-      @for (item of submenuLinks; track item.link) {
-        <button mat-menu-item
-                class="menu-button"
-                [routerLink]="item.link"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{exact: item.matchExact}"
-                [tmTooltip]="item.label"
-                matTooltipPosition="right">
-          {{ item.label }}
-        </button>
-      }
-    </div>
-    <div class="admin-content">
-      <router-outlet></router-outlet>
-    </div>
+<div class="admin-page-wrapper">
+  <div class="admin-submenu">
+    @for (item of submenuLinks; track item.link) {
+      <button mat-menu-item
+              class="menu-button"
+              [routerLink]="item.link"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{exact: item.matchExact}"
+              [tmTooltip]="item.label"
+              matTooltipPosition="right">
+        {{ item.label }}
+      </button>
+    }
   </div>
-</tm-admin-template>
+  <div class="admin-content">
+    <router-outlet></router-outlet>
+  </div>
+</div>
