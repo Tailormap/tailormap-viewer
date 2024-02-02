@@ -161,11 +161,11 @@ All used open source components (frontend and backend) have licenses that allow 
 under the GPL or Affero GPL. See [3rdpartylicenses.txt](https://snapshot.tailormap.nl/en/3rdpartylicenses.txt) for all frontend licenses and
 [here](https://b3partners.github.io/tailormap-api/dependencies.html) for the licenses used in the backend dependencies.
 
-Note that if you extend the Tailormap frontend with closed source frontend functionality, the minified source will of course be delivered to
-clients' browsers, even before logging in. By default, source maps (which provide the original source code to developer tools included in 
-browsers) are generated but are not served to clients, unless you set the SOURCE_MAP_AUTH environment variable with a username:password. When
-opening DevTools in Chrome, you will get a HTTP Basic popup for this account in order to load source maps. At the moment the developer tools
-in Firefox does not support HTTP Basic authentication for source maps. Not that minified (or even obfuscated) sources are not security. 
+If you extend the Tailormap frontend with closed source frontend functionality, the minified source will of course be delivered to clients'
+browsers, even before logging in. By default, source maps (which provide the original source code to developer tools included in browsers)
+are generated but are not served to clients, unless you set the SOURCE_MAP_AUTH environment variable with a username:password. When opening
+DevTools in Chrome, you will get a HTTP Basic popup for this account in order to load source maps. At the moment the developer tools in
+Firefox do not support HTTP Basic authentication for source maps. Note that minified (or even obfuscated) sources are not security. 
 Confidential algorithms should be implemented server-side, and copying of frontend code is prevented by copyright and licensing.
 
 ## Database
