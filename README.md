@@ -107,6 +107,7 @@ Example Apache configuration:
 ...
     RequestHeader set X-Forwarded-Proto https
     ProxyPreserveHost On
+    ProxyTimeout 600
 
     # If you're also running other webapps such as geoserver, add ProxyPass lines before this line
     ProxyPass /			    http://localhost:8080/
@@ -160,10 +161,12 @@ All used open source components (frontend and backend) have licenses that allow 
 under the GPL or Affero GPL. See [3rdpartylicenses.txt](https://snapshot.tailormap.nl/en/3rdpartylicenses.txt) for all frontend licenses and
 [here](https://b3partners.github.io/tailormap-api/dependencies.html) for the licenses used in the backend dependencies.
 
-Note that even if you build a some closed source frontend functionality, the source will of course be delivered to clients' browsers, even
-before logging in. By default, even source maps with the unminified original source are generated and visible to all clients, although you
-can disable this in `angular.json`, but even minified source code can be "prettified". You can of course disallow redistribution, re-hosting
-or unpaid use of your extra functionality in a license and set your repository to private and use private NPM and Docker repositories.
+If you extend the Tailormap frontend with closed source frontend functionality, the minified source will of course be delivered to clients'
+browsers, even before logging in. By default, source maps (which provide the original source code to developer tools included in browsers)
+are generated but are not served to clients, unless you set the SOURCE_MAP_AUTH environment variable with a username:password. When opening
+DevTools in Chrome, you will get a HTTP Basic popup for this account in order to load source maps. At the moment the developer tools in
+Firefox do not support HTTP Basic authentication for source maps. Note that minified (or even obfuscated) sources are not security. 
+Confidential algorithms should be implemented server-side, and copying of frontend code is prevented by copyright and licensing.
 
 ## Database
 
