@@ -107,6 +107,7 @@ Example Apache configuration:
 ...
     RequestHeader set X-Forwarded-Proto https
     ProxyPreserveHost On
+    ProxyTimeout 600
 
     # If you're also running other webapps such as geoserver, add ProxyPass lines before this line
     ProxyPass /			    http://localhost:8080/
