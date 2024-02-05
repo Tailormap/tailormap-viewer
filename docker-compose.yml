@@ -15,7 +15,7 @@ services:
       # dependencies
       context: https://github.com/B3Partners/tailormap-starter.git
       args:
-        VERSION: ${VERSION}
+        API_VERSION: ${VERSION}
         ADD_NG_LIBRARIES: ${ADD_NG_LIBRARIES:-}
         APPEND_NPMRC: ${APPEND_NPMRC:-}
     networks:
