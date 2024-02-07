@@ -1,6 +1,6 @@
 import {
   AfterViewChecked,
-  ChangeDetectorRef, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, Optional, TemplateRef, TrackByFunction, ViewChild,
+  ChangeDetectorRef, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, Optional, TemplateRef, ViewChild,
 } from '@angular/core';
 import { TreeService } from './tree.service';
 import { takeUntil } from 'rxjs/operators';

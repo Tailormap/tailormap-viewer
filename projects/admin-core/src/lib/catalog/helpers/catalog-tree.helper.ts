@@ -23,6 +23,10 @@ export class CatalogTreeHelper {
     if (!root) {
       return [];
     }
+    const servicesMap = new Map(services.map(s => [ s.id, s ]));
+    const serviceLayersMap = new Map(serviceLayers.map(s => [ s.id, s ]));
+    const featureSourcesMap = new Map(featureSources.map(s => [ s.id, s ]));
+    const featureTypesMap = new Map(featureTypes.map(s => [ s.id, s ]));
     const tree = TreeHelper.traverseTree<CatalogTreeModel, ExtendedCatalogNodeModel>(
       catalogNodes,
       root.id,
@@ -30,7 +34,7 @@ export class CatalogTreeHelper {
         const nodeModel = CatalogTreeHelper.getTreeModelForCatalogNode(node);
         return {
           ...nodeModel,
-          children: node.id === root.id || node.expanded ? [ ...children, ...CatalogTreeHelper.getItems(node, services, serviceLayers, featureSources, featureTypes) ] : [],
+          children: [ ...children, ...CatalogTreeHelper.getItems(node, servicesMap, serviceLayersMap, featureSourcesMap, featureTypesMap) ],
         };
       },
       (node) => node.children || [],
@@ -44,10 +48,10 @@ export class CatalogTreeHelper {
 
   private static getItems(
     node: ExtendedCatalogNodeModel,
-    services: ExtendedGeoServiceModel[],
-    layers: ExtendedGeoServiceLayerModel[],
-    featureSources: ExtendedFeatureSourceModel[],
-    featureTypes: ExtendedFeatureTypeModel[],
+    services: Map<string, ExtendedGeoServiceModel>,
+    layers: Map<string, ExtendedGeoServiceLayerModel>,
+    featureSources: Map<string, ExtendedFeatureSourceModel>,
+    featureTypes: Map<string, ExtendedFeatureTypeModel>,
   ): CatalogTreeModel[] {
     const items: CatalogItemModel[] = node.items || [];
     return items.map(item => {
@@ -74,17 +78,17 @@ export class CatalogTreeHelper {
   }
 
   public static getTreeModelForFeatureSource(
-    featureSources: ExtendedFeatureSourceModel[],
-    featureTypes: ExtendedFeatureTypeModel[],
+    featureSources: Map<string, ExtendedFeatureSourceModel>,
+    featureTypes: Map<string, ExtendedFeatureTypeModel>,
     featureSourceId: string,
   ): CatalogTreeModel | null {
-    const featureSource = featureSources.find(s => s.id === featureSourceId);
+    const featureSource = featureSources.get(featureSourceId);
     if (!featureSource) {
       return null;
     }
     const featureTypeIds = featureSource.featureTypesIds || [];
     const sourceFeatureTypes = featureTypeIds
-      .map(id => featureTypes.find(l => l.id === id) || null)
+      .map(id => featureTypes.get(id) || null)
       .filter((l): l is ExtendedFeatureTypeModel => l !== null);
     return {
       id: CatalogTreeHelper.getIdForFeatureSourceNode(featureSource.id),
@@ -93,7 +97,7 @@ export class CatalogTreeHelper {
       metadata: featureSource,
       expanded: featureSource.expanded,
       expandable: (featureSource.featureTypesIds || []).length > 0,
-      children: featureSource.expanded ? sourceFeatureTypes.map(CatalogTreeHelper.getTreeModelForFeatureType) : [],
+      children: sourceFeatureTypes.map(CatalogTreeHelper.getTreeModelForFeatureType),
     };
   }
 
@@ -106,14 +110,18 @@ export class CatalogTreeHelper {
     };
   }
 
-  public static getTreeModelForService(services: ExtendedGeoServiceModel[], allLayers: ExtendedGeoServiceLayerModel[], serviceId: string): CatalogTreeModel | null {
-    const service = services.find(s => s.id === serviceId);
+  public static getTreeModelForService(
+    services: Map<string, ExtendedGeoServiceModel>,
+    allLayers: Map<string, ExtendedGeoServiceLayerModel>,
+    serviceId: string,
+  ): CatalogTreeModel | null {
+    const service = services.get(serviceId);
     if (!service) {
       return null;
     }
     const serviceLayers = service.layerIds || [];
     const serviceRootLayers = serviceLayers
-      .map(id => allLayers.find(l => l.id === id) || null)
+      .map(id => allLayers.get(id) || null)
       .filter((l): l is ExtendedGeoServiceLayerModel => l !== null && l.root);
     return {
       id: CatalogTreeHelper.getIdForServiceNode(service.id),
@@ -123,18 +131,18 @@ export class CatalogTreeHelper {
       metadata: service,
       expanded: service.expanded,
       expandable: (service.layerIds || []).length > 0,
-      children: service.expanded ? serviceRootLayers.map(l => CatalogTreeHelper.getTreeModelForLayer(l, allLayers, service.settings?.layerSettings)) : [],
+      children: serviceRootLayers.map(l => CatalogTreeHelper.getTreeModelForLayer(l, allLayers, service.settings?.layerSettings)),
     };
   }
 
   public static getTreeModelForLayer(
     layer: ExtendedGeoServiceLayerModel,
-    allLayers: ExtendedGeoServiceLayerModel[],
+    allLayers: Map<string, ExtendedGeoServiceLayerModel>,
     layerSettings: Record<string, LayerSettingsModel> | undefined,
   ): CatalogTreeModel {
     const layerChildren: CatalogTreeModel[] = (layer.children || [])
       .map(id => {
-        const childLayer = allLayers.find(l => l.id === id && l.serviceId === layer.serviceId);
+        const childLayer = allLayers.get(id);
         if (!childLayer) {
           return null;
         }
@@ -151,7 +159,7 @@ export class CatalogTreeHelper {
       checked: undefined,
       expanded: layer.expanded,
       expandable: layerChildren.length > 0,
-      children: layer.expanded && layerChildren.length > 0 ? layerChildren : undefined,
+      children: layerChildren.length > 0 ? layerChildren : undefined,
     };
   }
 
