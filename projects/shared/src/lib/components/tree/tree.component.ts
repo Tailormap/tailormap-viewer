@@ -1,6 +1,6 @@
 import {
   AfterViewChecked,
-  ChangeDetectorRef, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, Optional, TemplateRef, ViewChild,
+  ChangeDetectorRef, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, Optional, TemplateRef, TrackByFunction, ViewChild,
 } from '@angular/core';
 import { TreeService } from './tree.service';
 import { takeUntil } from 'rxjs/operators';
@@ -194,6 +194,10 @@ export class TreeComponent implements OnInit, OnDestroy, AfterViewChecked {
       return;
     }
     ($event.target as HTMLElement).closest(`.${treeNodeBaseClass}`)?.setAttribute('draggable', 'false');
+  }
+
+  public treeTrackBy(idx: number, node: FlatTreeModel) {
+    return node.id;
   }
 
   private scrollIntoView() {

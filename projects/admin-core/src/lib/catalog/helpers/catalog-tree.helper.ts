@@ -30,7 +30,7 @@ export class CatalogTreeHelper {
         const nodeModel = CatalogTreeHelper.getTreeModelForCatalogNode(node);
         return {
           ...nodeModel,
-          children: [ ...children, ...CatalogTreeHelper.getItems(node, services, serviceLayers, featureSources, featureTypes) ],
+          children: node.id === root.id || node.expanded ? [ ...children, ...CatalogTreeHelper.getItems(node, services, serviceLayers, featureSources, featureTypes) ] : [],
         };
       },
       (node) => node.children || [],
@@ -50,7 +50,7 @@ export class CatalogTreeHelper {
     featureTypes: ExtendedFeatureTypeModel[],
   ): CatalogTreeModel[] {
     const items: CatalogItemModel[] = node.items || [];
-    const itemChildren: CatalogTreeModel[] = items.map(item => {
+    return items.map(item => {
       if (item.kind === CatalogItemKindEnum.GEO_SERVICE) {
         return CatalogTreeHelper.getTreeModelForService(services, layers, item.id);
       }
@@ -59,10 +59,6 @@ export class CatalogTreeHelper {
       }
       return null;
     }).filter((n): n is CatalogTreeModel => !!n);
-    if (items.length > 0 && itemChildren.length === 0) {
-      return [{ id: `placeholder-node-${node.id}`, label: 'Loading...', loadingPlaceholder: true }];
-    }
-    return itemChildren;
   }
 
   public static getTreeModelForCatalogNode(node: ExtendedCatalogNodeModel): CatalogTreeModel {
@@ -97,7 +93,7 @@ export class CatalogTreeHelper {
       metadata: featureSource,
       expanded: featureSource.expanded,
       expandable: (featureSource.featureTypesIds || []).length > 0,
-      children: sourceFeatureTypes.map(CatalogTreeHelper.getTreeModelForFeatureType),
+      children: featureSource.expanded ? sourceFeatureTypes.map(CatalogTreeHelper.getTreeModelForFeatureType) : [],
     };
   }
 
@@ -127,7 +123,7 @@ export class CatalogTreeHelper {
       metadata: service,
       expanded: service.expanded,
       expandable: (service.layerIds || []).length > 0,
-      children: serviceRootLayers.map(l => CatalogTreeHelper.getTreeModelForLayer(l, allLayers, service.settings?.layerSettings)),
+      children: service.expanded ? serviceRootLayers.map(l => CatalogTreeHelper.getTreeModelForLayer(l, allLayers, service.settings?.layerSettings)) : [],
     };
   }
 
@@ -155,7 +151,7 @@ export class CatalogTreeHelper {
       checked: undefined,
       expanded: layer.expanded,
       expandable: layerChildren.length > 0,
-      children: layerChildren.length > 0 ? layerChildren : undefined,
+      children: layer.expanded && layerChildren.length > 0 ? layerChildren : undefined,
     };
   }
 

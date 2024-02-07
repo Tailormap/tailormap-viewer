@@ -4,6 +4,7 @@
 
 <div class="tree-wrapper">
   <mat-tree #treeElement
+            [trackBy]="treeTrackBy"
             [dataSource]="getDataSource()"
             [treeControl]="getTreeControl()">
 

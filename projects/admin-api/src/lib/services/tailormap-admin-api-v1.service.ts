@@ -37,7 +37,7 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
   }
 
   public getGeoServiceSummaries$(): Observable<GeoServiceSummaryWithLayersModel[]> {
-    return this.httpClient.get<GeoServiceListResponse>(`${TailormapAdminApiV1Service.BASE_URL}/geo-services?projection=summary`)
+    return this.httpClient.get<GeoServiceListResponse>(`${TailormapAdminApiV1Service.BASE_URL}/geo-services?projection=summary&size=1000`)
       .pipe(map(response => (response?._embedded['geo-services'] || []).map(CatalogModelHelper.addTypeToGeoServiceSummaryModel)));
   }
 
@@ -81,7 +81,7 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
 
   public getFeatureSourceSummaries$(): Observable<FeatureSourceSummaryWithFeatureTypesModel[]> {
     return this.httpClient.get<FeatureSourceListResponse>(
-      `${TailormapAdminApiV1Service.BASE_URL}/feature-sources?projection=summary`,
+      `${TailormapAdminApiV1Service.BASE_URL}/feature-sources?projection=summary&size=1000`,
     )
       .pipe(map(response => (response?._embedded['feature-sources'] || []).map(CatalogModelHelper.addTypeAndFeatureTypesToFeatureSourceSummaryModel)));
   }
