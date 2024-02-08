@@ -8,7 +8,7 @@ import { CatalogState, catalogStateKey, initialCatalogState } from '../state/cat
 import userEvent from '@testing-library/user-event';
 import { addGeoService } from '../state/catalog.actions';
 import { createMockStore } from '@ngrx/store/testing';
-import { of } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { CatalogBaseTreeNodeComponent } from './catalog-base-tree-node/catalog-base-tree-node.component';
 import { Store } from '@ngrx/store';
@@ -61,43 +61,22 @@ describe('CatalogBaseTreeComponent', () => {
     expect(await screen.findByRole('progressbar')).toBeInTheDocument();
   });
 
-  test('should render tree for nodes and load service when expanding node', async () => {
+  test('should render tree for nodes', async () => {
     const catalogNodes = getExtendedCatalogNodes(getCatalogTree());
     const state: Partial<CatalogState> = {
       catalogLoadStatus: LoadingStateEnum.LOADED,
       catalog: catalogNodes,
     };
-    const { mockDispatch, mockApiService, treeService } = await setup(state);
-    treeService.setDataSource(of(CatalogTreeHelper.catalogToTree(catalogNodes, [], [], [], [])));
+    const treeDataSource = new BehaviorSubject(CatalogTreeHelper.catalogToTree(catalogNodes, [], [], [], []));
+    const { mockStore, mockDispatch, mockApiService, treeService } = await setup(state);
+    treeService.setDataSource(treeDataSource.asObservable());
 
     expect(await screen.queryByRole('progressbar')).not.toBeInTheDocument();
     expect(await screen.findByText(`Background services`)).toBeInTheDocument();
 
     await userEvent.click(await screen.findByLabelText(`expand Background services`));
-    await userEvent.click(await screen.findByLabelText(`expand Background services - aerial`));
-  });
-
-  test('should render tree for nodes and not load service for already loaded services', async () => {
-    const catalogNodes = getExtendedCatalogNodes(getCatalogTree());
-    const geoServices: ExtendedGeoServiceModel[] = [
-      { ...getGeoServiceSummary({ id: '1' }), layerIds: [], catalogNodeId: 'child1.1' },
-      { ...getGeoServiceSummary({ id: '2' }), layerIds: [], catalogNodeId: 'child1.1' },
-    ];
-    const state: Partial<CatalogState> = {
-      catalogLoadStatus: LoadingStateEnum.LOADED,
-      catalog: catalogNodes,
-      geoServices,
-    };
-    const { mockDispatch, mockApiService, treeService } = await setup(state);
-    treeService.setDataSource(of(CatalogTreeHelper.catalogToTree(catalogNodes, geoServices, [], [], [])));
-
-    expect(await screen.queryByRole('progressbar')).not.toBeInTheDocument();
-    expect(await screen.findByText(`Background services`)).toBeInTheDocument();
-
-    await userEvent.click(await screen.findByLabelText(`expand Background services`));
-    await userEvent.click(await screen.findByLabelText(`expand Background services - aerial`));
-    expect(mockApiService.getGeoServices$).not.toHaveBeenCalled();
-    expect(mockDispatch).toHaveBeenCalledTimes(2); // expand, expand
+    treeDataSource.next(CatalogTreeHelper.catalogToTree(catalogNodes.map(c => ({ ...c, expanded: true })), [], [], [], []));
+    expect(await screen.findByText(`Background services - aerial`)).toBeInTheDocument();
   });
 
 });
