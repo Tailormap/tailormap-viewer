@@ -8,14 +8,20 @@ import { filter } from 'rxjs';
   providedIn: 'root',
 })
 export class NavigationErrorRouterService {
+  private urlNavigatedToAfterError: string | null = null;
+
   constructor(router: Router, @Inject(APP_BASE_HREF) baseHref: string, @Inject(LOCALE_ID) localeId: string) {
     // Use an alternative catch-all route instead of '**', this allows libraries to add routes
     router.events.pipe(
       takeUntilDestroyed(),
       filter((event): event is NavigationError => event instanceof NavigationError),
-    ).subscribe((event: NavigationError) => {
+    ).subscribe((event) => {
       console.error('Navigation error', event);
-      router.navigateByUrl(NavigationErrorRouterService.getErrorNavigationUrl(event.url, baseHref, localeId)); // We could navigate to route showing 404
+      const urlToNavigateTo = NavigationErrorRouterService.getErrorNavigationUrl(event.url, baseHref, localeId);
+      if (urlToNavigateTo !== this.urlNavigatedToAfterError) {
+        this.urlNavigatedToAfterError = urlToNavigateTo;
+        router.navigateByUrl(this.urlNavigatedToAfterError); // We could navigate to route showing 404
+      }
     });
   }
 
@@ -23,9 +29,9 @@ export class NavigationErrorRouterService {
     const localeSuffix = `/${localeId}/`;
     // If the error URL starts with the base href but without the locale suffix, navigate to the part after that
     // Example: /some-base/app/myapp, but the base href is /some-base/en/, navigate to /app/myapp
-    if(baseHref.endsWith(localeSuffix)) {
+    if (baseHref.endsWith(localeSuffix)) {
       const baseHrefWithoutLocaleSuffix = baseHref.substring(0, baseHref.length - localeSuffix.length);
-      if (url.startsWith(baseHrefWithoutLocaleSuffix)) {
+      if (baseHrefWithoutLocaleSuffix.length > 0 && url.startsWith(baseHrefWithoutLocaleSuffix)) {
         return url.substring(baseHrefWithoutLocaleSuffix.length);
       }
     }
