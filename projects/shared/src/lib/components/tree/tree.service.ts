@@ -3,7 +3,7 @@ import { BehaviorSubject, distinctUntilChanged, filter, Observable, Subject } fr
 
 import { FlatTreeHelper } from './helpers/flat-tree.helper';
 import { TreeModel, FlatTreeModel, NodePositionChangedEventModel } from './models';
-import { takeUntil } from 'rxjs/operators';
+import { map, takeUntil } from 'rxjs/operators';
 import { BaseTreeModel } from './models/base-tree.model';
 import { ArrayHelper } from '../../helpers';
 
@@ -34,13 +34,16 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
   public checkedMap = new Map<string, boolean>();
   public indeterminateMap = new Map<string, boolean>();
 
-  private readonly dataSource = new BehaviorSubject<FlatTreeModel<T, TypeDef>[]>([]);
+  private readonly dataSource = new BehaviorSubject<{
+    tree: FlatTreeModel<T, TypeDef>[];
+    nodes: FlatTreeModel<T, TypeDef>[];
+  }>({ tree: [], nodes:  [] });
 
   public constructor() {
   }
 
   public getTreeDataSource$() {
-    return this.dataSource.asObservable();
+    return this.dataSource.asObservable().pipe(map(source => source.tree));
   }
 
   public hasNode(nodeId: string) {
@@ -76,7 +79,7 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
     if (!node) {
       return null;
     }
-    const parent = FlatTreeHelper.getParentNode(node, this.dataSource.value);
+    const parent = FlatTreeHelper.getParentNode(node, this.dataSource.value.nodes);
     if (parent) {
       return parent.id;
     }
@@ -106,8 +109,11 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
         const treeFlattener = FlatTreeHelper.getTreeFlattener<T, TypeDef>();
         const flatTree = treeFlattener.flattenNodes(data);
         const expandedNodes = this.expandFlattenedNodes(flatTree);
-        this.dataSource.next(expandedNodes);
-        this.updateCaches(expandedNodes);
+        this.dataSource.next({
+          tree: expandedNodes,
+          nodes: flatTree,
+        });
+        this.updateCaches(flatTree);
       });
   }
 
@@ -134,7 +140,7 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
 
   // Method borrowed from https://github.com/angular/components/blob/main/src/cdk/tree/control/flat-tree-control.ts
   public getDescendants(node: FlatTreeModel<T, TypeDef>): FlatTreeModel<T, TypeDef>[] {
-    const nodes = this.dataSource.value;
+    const nodes = this.dataSource.value.nodes;
     const startIndex = nodes.indexOf(node);
     const results: FlatTreeModel<T, TypeDef>[] = [];
 
