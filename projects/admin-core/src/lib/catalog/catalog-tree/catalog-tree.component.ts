@@ -2,14 +2,15 @@ import { ChangeDetectionStrategy, Component, DestroyRef, NgZone, OnInit } from '
 import { DropZoneOptions, RouterHistoryService, TreeDragDropService, TreeService } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
 import { selectCatalogTree } from '../state/catalog.selectors';
-import { BehaviorSubject, combineLatest, filter } from 'rxjs';
+import { BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, filter } from 'rxjs';
 import { CatalogTreeModel, CatalogTreeModelMetadataTypes } from '../models/catalog-tree.model';
 import { CatalogTreeHelper } from '../helpers/catalog-tree.helper';
 import { CatalogTreeModelTypeEnum } from '../models/catalog-tree-model-type.enum';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CatalogItemKindEnum } from '@tailormap-admin/admin-api';
 import { CatalogService } from '../services/catalog.service';
-import { expandTree } from '../state/catalog.actions';
+import { expandTree, setCatalogFilterTerm } from '../state/catalog.actions';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'tm-admin-catalog-tree',
@@ -22,6 +23,8 @@ export class CatalogTreeComponent implements OnInit {
 
   private selectedNodeId = new BehaviorSubject<string>('');
 
+  public catalogFilter = new FormControl('');
+
   constructor(
     private treeService: TreeService<CatalogTreeModelMetadataTypes, CatalogTreeModelTypeEnum>,
     private treeDragDropService: TreeDragDropService,
@@ -33,14 +36,13 @@ export class CatalogTreeComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
-    const catalogTree$ = this.store$.select(selectCatalogTree)
-      .pipe(filter(tree => !!tree && tree.length > 0));
+    const catalogTree$ = this.store$.select(selectCatalogTree);
     this.treeService.setDataSource(catalogTree$);
     this.treeService.setSelectedNode(this.selectedNodeId.asObservable());
 
     let firstRun = true;
     combineLatest([
-      catalogTree$,
+      catalogTree$.pipe(filter(tree => !!tree && tree.length > 0)),
       this.history.getCurrentUrl$(),
     ])
       .pipe(takeUntilDestroyed(this.destroyRef), filter(([tree]) => tree.length > 0))
@@ -52,6 +54,12 @@ export class CatalogTreeComponent implements OnInit {
           firstRun = false;
         }
         this.selectedNodeId.next(node ? node.treeNodeId : '');
+      });
+
+    this.catalogFilter.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef), distinctUntilChanged(), debounceTime(250))
+      .subscribe(filterTerm => {
+        this.store$.dispatch(setCatalogFilterTerm({ filterTerm }));
       });
   }
 

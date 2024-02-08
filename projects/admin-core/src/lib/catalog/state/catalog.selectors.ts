@@ -10,10 +10,12 @@ import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.mo
 import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
 import { CatalogItemKindEnum, LayerSettingsModel } from '@tailormap-admin/admin-api';
 import { ExtendedGeoServiceLayerWithSettingsModel } from '../models/extended-geo-service-layer-with-settings.model';
+import { CatalogFilterHelper } from '../helpers/catalog-filter.helper';
 
 const selectCatalogState = createFeatureSelector<CatalogState>(catalogStateKey);
 
 export const selectCatalog = createSelector(selectCatalogState, state => state.catalog);
+export const selectFilterTerm = createSelector(selectCatalogState, state => state.filterTerm);
 export const selectGeoServices = createSelector(selectCatalogState, state => state.geoServices);
 export const selectGeoServiceLayers = createSelector(selectCatalogState, state => state.geoServiceLayers);
 export const selectFeatureSources = createSelector(selectCatalogState, state => state.featureSources);
@@ -124,8 +126,9 @@ export const selectCatalogTree = createSelector(
   selectGeoServiceLayers,
   selectFeatureSources,
   selectFeatureTypes,
-  (catalog, services, layers, featureSources, featureTypes): CatalogTreeModel[] => {
-    return CatalogTreeHelper.catalogToTree(catalog, services, layers, featureSources, featureTypes);
+  selectFilterTerm,
+  (catalog, services, layers, featureSources, featureTypes, filterTerm): CatalogTreeModel[] => {
+    return CatalogFilterHelper.getFilteredTree(catalog, services, layers, featureSources, featureTypes, filterTerm);
   },
 );
 

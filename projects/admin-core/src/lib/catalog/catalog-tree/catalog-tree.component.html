@@ -1,6 +1,24 @@
 <ng-template #treeNode let-node>
   <tm-admin-catalog-tree-node [node]="node"></tm-admin-catalog-tree-node>
 </ng-template>
+
+<div class="catalog-tree-wrapper">
+<mat-form-field appearance="outline" class="catalog-filter">
+  <mat-label i18n="@@admin-core.catalog.filter-catalog">Filter Catalog</mat-label>
+  <input [formControl]="catalogFilter"
+         i18n-placeholder="@@admin-core.common.filter-dots"
+         matInput
+         placeholder="Filter..."
+         tmAutoFocus
+         type="text"
+  />
+  <button (click)="catalogFilter.setValue('')" *ngIf="catalogFilter.getRawValue()" aria-label="Clear" mat-icon-button matSuffix>
+    <mat-icon svgIcon="close"></mat-icon>
+  </button>
+</mat-form-field>
+
 <tm-admin-catalog-base-tree [treeNodeTemplate]="treeNode"
                             [scrollToSelectedItem]="true"
                             [getDropZones]="getDropZones()"></tm-admin-catalog-base-tree>
+
+</div>

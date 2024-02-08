@@ -95,3 +95,7 @@ export const loadDraftFeatureSourceFailed = createAction(
   `${catalogActionsPrefix} Load Draft Feature Source Failed`,
   props<{ error?: string }>(),
 );
+export const setCatalogFilterTerm = createAction(
+  `${catalogActionsPrefix} Set Filter Term`,
+  props<{ filterTerm?: string | null }>(),
+);

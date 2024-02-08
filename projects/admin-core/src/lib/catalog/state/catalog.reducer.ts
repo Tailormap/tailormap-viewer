@@ -13,6 +13,7 @@ import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.mo
 import {
   CatalogItemKindEnum, FeatureSourceSummaryWithFeatureTypesModel, GeoServiceSummaryWithLayersModel,
 } from '@tailormap-admin/admin-api';
+import { setCatalogFilterTerm } from './catalog.actions';
 
 type ExpandableNode = { id: string; children?: string[] | null; expanded?: boolean };
 
@@ -418,6 +419,11 @@ const onLoadDraftFeatureSourceFailed = (state: CatalogState): CatalogState => ({
   draftFeatureSource: null,
 });
 
+const onSetCatalogFilterTerm = (state: CatalogState, payload: ReturnType<typeof CatalogActions.setCatalogFilterTerm>): CatalogState => ({
+  ...state,
+  filterTerm: payload.filterTerm || undefined,
+});
+
 const catalogReducerImpl = createReducer<CatalogState>(
   initialCatalogState,
   on(CatalogActions.loadCatalogStart, onLoadCatalogStart),
@@ -440,6 +446,7 @@ const catalogReducerImpl = createReducer<CatalogState>(
   on(CatalogActions.loadDraftFeatureSourceStart, onLoadDraftFeatureSourceStart),
   on(CatalogActions.loadDraftFeatureSourceSuccess, onLoadDraftFeatureSourceSuccess),
   on(CatalogActions.loadDraftFeatureSourceFailed, onLoadDraftFeatureSourceFailed),
+  on(CatalogActions.setCatalogFilterTerm, onSetCatalogFilterTerm),
 );
 export const catalogReducer = (state: CatalogState | undefined, action: Action) => catalogReducerImpl(state, action);
 

@@ -12,6 +12,7 @@ export interface CatalogState {
   catalogLoadStatus: LoadingStateEnum;
   catalogLoadError?: string;
   catalog: ExtendedCatalogNodeModel[];
+  filterTerm?: string;
   geoServices: ExtendedGeoServiceModel[];
   geoServiceLayers: ExtendedGeoServiceLayerModel[];
   draftGeoServiceId: string | null;
