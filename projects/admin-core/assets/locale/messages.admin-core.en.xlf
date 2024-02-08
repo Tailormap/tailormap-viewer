@@ -380,6 +380,9 @@
       <trans-unit id="admin-core.catalog.feature-type-details" datatype="html">
         <source>Details for feature type <x id="INTERPOLATION" equiv-text="{{ featureType.title }}"/></source>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.filter-catalog" datatype="html">
+        <source>Filter Catalog</source>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.folder-created" datatype="html">
         <source>Folder <x id="PH" equiv-text="node.title"/> created</source>
       </trans-unit>
