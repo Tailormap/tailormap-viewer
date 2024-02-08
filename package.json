@@ -9,7 +9,7 @@
     "build": "ng build app",
     "prebuild-localized": "node bin/clear-cache.js",
     "build-localized": "ng build app --localize",
-    "postbuild-localized": "node bin/post-build-localized.js",
+    "postbuild-localized": "node bin/post-build-localized.js && node bin/post-build-compress.js",
     "watch": "ng build --watch --configuration development app",
     "test": "jest --max-workers=4",
     "test-viewer": "jest --max-workers=4 --config=jest.viewer.config.js",
