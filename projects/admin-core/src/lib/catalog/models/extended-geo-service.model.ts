@@ -1,7 +1,7 @@
-import { GeoServiceModel } from '@tailormap-admin/admin-api';
+import { GeoServiceSummaryModel } from '@tailormap-admin/admin-api';
 
-export interface ExtendedGeoServiceModel extends GeoServiceModel {
+export interface ExtendedGeoServiceModel extends GeoServiceSummaryModel {
   expanded?: boolean;
-  layers: string[];
+  layerIds: string[];
   catalogNodeId: string;
 }

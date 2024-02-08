@@ -1,8 +1,6 @@
-<tm-admin-template pageTitle="Applications" i18n-pageTitle="@@admin-core.common.applications-title">
-  <div class="admin-page-wrapper" [ngClass]="className$ | async">
-    <div class="admin-tree">
-      <tm-admin-application-list></tm-admin-application-list>
-    </div>
-    <div class="admin-content" [ngClass]=><router-outlet></router-outlet></div>
+<div class="admin-page-wrapper" [ngClass]="className$ | async">
+  <div class="admin-tree">
+    <tm-admin-application-list></tm-admin-application-list>
   </div>
-</tm-admin-template>
+  <div class="admin-content" [ngClass]=><router-outlet></router-outlet></div>
+</div>

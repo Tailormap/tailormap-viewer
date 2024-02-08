@@ -32,6 +32,7 @@ const setup = async (protocol: FeatureSourceProtocolEnum) => {
     } : undefined,
   });
   const featureServiceMock = {
+    getDraftFeatureSource$: jest.fn(() => of(featureSourceModel)),
     updateFeatureSource$: jest.fn((_id, updatedSource) => of({
       ...featureSourceModel,
       ...updatedSource,
@@ -41,7 +42,7 @@ const setup = async (protocol: FeatureSourceProtocolEnum) => {
     })),
   };
   const store = createMockStore({
-    initialState: { [catalogStateKey]: { ...initialCatalogState, featureSources: [{ ...featureSourceModel, catalogNodeId: 'node-1' }] } },
+    initialState: { [catalogStateKey]: { ...initialCatalogState } },
   });
   await render(FeatureSourceDetailsComponent, {
     declarations: [ FeatureSourceFormComponent, PasswordFieldComponent, SaveButtonComponent ],

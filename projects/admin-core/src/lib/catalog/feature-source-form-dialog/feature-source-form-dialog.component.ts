@@ -2,12 +2,11 @@ import { Component, ChangeDetectionStrategy, Inject } from '@angular/core';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FeatureSourceCreateModel } from '../models/feature-source-update.model';
-import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 import { FeatureSourceService } from '../services/feature-source.service';
 import { FeatureSourceModel } from '@tailormap-admin/admin-api';
 
 export interface FeatureSourceFormDialogData {
-  featureSource: ExtendedFeatureSourceModel | null;
+  featureSource: FeatureSourceModel | null;
   parentNode: string;
 }
 

@@ -1,8 +1,8 @@
-import { FeatureTypeModel } from '@tailormap-admin/admin-api';
+import { FeatureTypeSummaryModel } from '@tailormap-admin/admin-api';
 
 export class GeoServiceHelper {
 
-  public static findPossibleFeatureType(layerName: string, featureTypes: FeatureTypeModel[]): FeatureTypeModel | null {
+  public static findPossibleFeatureType(layerName: string, featureTypes: FeatureTypeSummaryModel[]): FeatureTypeSummaryModel | null {
     const layerBaseName = GeoServiceHelper.getLayerBaseName(layerName);
     const featureType = featureTypes.find((ft) => ft.name === layerName) || null;
     if (featureType !== null) {

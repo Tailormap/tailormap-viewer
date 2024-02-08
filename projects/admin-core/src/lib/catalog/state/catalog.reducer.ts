@@ -10,7 +10,9 @@ import { CatalogTreeHelper } from '../helpers/catalog-tree.helper';
 import { ExtendedCatalogModelHelper } from '../helpers/extended-catalog-model.helper';
 import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
-import { CatalogItemKindEnum, FeatureSourceModel, GeoServiceWithLayersModel } from '@tailormap-admin/admin-api';
+import {
+  CatalogItemKindEnum, FeatureSourceSummaryWithFeatureTypesModel, GeoServiceSummaryWithLayersModel,
+} from '@tailormap-admin/admin-api';
 
 type ExpandableNode = { id: string; children?: string[] | null; expanded?: boolean };
 
@@ -22,11 +24,15 @@ const findParentsForExpansion = (list: ExpandableNode[], nodeId: string) => {
   return CatalogTreeHelper.findParentsForNode(list, nodeId);
 };
 
-const expandNode = <T extends ExpandableNode>(list: T[], nodeId: string, forceExpand?: boolean): T[] => {
+const expandNode = <T extends ExpandableNode>(
+  list: T[],
+  nodeId: string,
+  toggle?: boolean,
+): T[] => {
   const parentIds = findParentsForExpansion(list, nodeId);
   return list.map<T>(node => {
     let expanded = node.id === nodeId
-      ? (typeof forceExpand === 'boolean' ? forceExpand : !node.expanded)
+      ? (typeof toggle === 'boolean' && toggle ? !node.expanded : true)
       : node.expanded;
     if (parentIds.includes(node.id)) {
       expanded = true;
@@ -35,31 +41,37 @@ const expandNode = <T extends ExpandableNode>(list: T[], nodeId: string, forceEx
   });
 };
 
-const getParentNode = (state: CatalogState, type: CatalogItemKindEnum, id: string) => {
-  const parentNode = state.catalog.find(node => {
-    return (node.items || [])
-      .some(item => item.kind === type && item.id === `${id}`);
+const getParentNodeList = (catalog: ExtendedCatalogNodeModel[]) => {
+  const nodesList = new Map<string, string>();
+  catalog.forEach(c => {
+    c.items?.forEach(i => {
+      nodesList.set(`${i.kind}_${i.id}`, c.id);
+    });
   });
-  return parentNode?.id || '';
+  return nodesList;
+};
+
+const getParentNode = (nodeList: Map<string, string>, type: CatalogItemKindEnum, id: string) => {
+  return nodeList.get(`${type}_${id}`) || '';
 };
 
 const addFeatureSources = (
   state: CatalogState,
-  featureSources: FeatureSourceModel[],
-  catalogNodeId?: string,
+  catalog: ExtendedCatalogNodeModel[],
+  featureSources: FeatureSourceSummaryWithFeatureTypesModel[],
 ) => {
   const featureTypes: ExtendedFeatureTypeModel[] = [];
   const extendedFeatureSources: ExtendedFeatureSourceModel[] = [];
   const existingFeatureSources = new Set(state.featureSources.map(s => s.id));
   const sources = featureSources.filter(source => !existingFeatureSources.has(`${source.id}`));
+  const parentNodeList = getParentNodeList(catalog);
   sources.forEach(source => {
-    const parentId = catalogNodeId || getParentNode(state, CatalogItemKindEnum.FEATURE_SOURCE, source.id);
+    const parentId = getParentNode(parentNodeList, CatalogItemKindEnum.FEATURE_SOURCE, source.id);
     const [ extFeatureSource, sourceFeatureTypes ] = ExtendedCatalogModelHelper.getExtendedFeatureSource(source, parentId);
     extendedFeatureSources.push(extFeatureSource);
     featureTypes.push(...sourceFeatureTypes);
   });
   return {
-    ...state,
     featureSources: [ ...state.featureSources, ...extendedFeatureSources ],
     featureTypes: [ ...state.featureTypes, ...featureTypes ],
   };
@@ -67,22 +79,22 @@ const addFeatureSources = (
 
 const addGeoServices = (
   state: CatalogState,
-  newServices: GeoServiceWithLayersModel[],
-  parentNode?: string,
+  catalog: ExtendedCatalogNodeModel[],
+  newServices: GeoServiceSummaryWithLayersModel[],
 ) => {
   const layerModels: ExtendedGeoServiceLayerModel[] = [];
   const services: ExtendedGeoServiceModel[] = [];
   const existingServices = new Set(state.geoServices.map(s => s.id));
   const filteredServices = newServices.filter(s => !existingServices.has(s.id));
+  const parentNodeList = getParentNodeList(catalog);
   filteredServices
     .forEach(service => {
-      const parentId = parentNode || getParentNode(state, CatalogItemKindEnum.GEO_SERVICE, service.id);
+      const parentId = getParentNode(parentNodeList, CatalogItemKindEnum.GEO_SERVICE, service.id);
       const [ extService, serviceLayers ] = ExtendedCatalogModelHelper.getExtendedGeoService(service, parentId);
       services.push(extService);
       layerModels.push(...serviceLayers);
     });
   return {
-    ...state,
     geoServices: [ ...state.geoServices, ...services ],
     geoServiceLayers: [ ...state.geoServiceLayers, ...layerModels ],
   };
@@ -99,15 +111,20 @@ const onLoadCatalogStart = (state: CatalogState): CatalogState => ({
 const onLoadCatalogsSuccess = (
   state: CatalogState,
   payload: ReturnType<typeof CatalogActions.loadCatalogSuccess>,
-): CatalogState => ({
-  ...state,
-  catalogLoadStatus: LoadingStateEnum.LOADED,
-  catalogLoadError: undefined,
-  catalog: payload.nodes.map(node => ({
+): CatalogState => {
+  const catalog: ExtendedCatalogNodeModel[] = payload.nodes.map(node => ({
     ...node,
     parentId: payload.nodes.find(n => (n.children || []).includes(node.id))?.id || null,
-  })),
-});
+  }));
+  return {
+    ...state,
+    catalogLoadStatus: LoadingStateEnum.LOADED,
+    catalogLoadError: undefined,
+    catalog,
+    ...addGeoServices(state, catalog, payload.geoServices),
+    ...addFeatureSources(state, catalog, payload.featureSources),
+  };
+};
 
 const onLoadCatalogsFailed = (
   state: CatalogState,
@@ -115,37 +132,18 @@ const onLoadCatalogsFailed = (
 ): CatalogState => ({
   ...state,
   catalogLoadStatus: LoadingStateEnum.FAILED,
-  catalogLoadError: payload.error,
+  catalogLoadError: [ payload.catalogError, payload.geoServiceError, payload.featureSourceError ].filter(Boolean).join(' - '),
   catalog: [],
 });
 
-const onLoadAllGeoServicesStart = (state: CatalogState): CatalogState => ({
-  ...state,
-  geoServicesLoadStatus: LoadingStateEnum.LOADING,
-});
-
-const onLoadAllGeoServicesSuccess = (
+const onAddGeoService = (
   state: CatalogState,
-  payload: ReturnType<typeof CatalogActions.loadAllGeoServicesSuccess>,
+  payload: ReturnType<typeof CatalogActions.addGeoService>,
 ): CatalogState => {
-  const updatedState = addGeoServices(state, payload.services);
   return {
     ...state,
-    ...updatedState,
-    geoServicesLoadStatus: LoadingStateEnum.LOADED,
+    ...addGeoServices(state, state.catalog, [ExtendedCatalogModelHelper.getGeoServiceSummaryModel(payload.service)]),
   };
-};
-
-const onLoadAllGeoServicesFailed = (state: CatalogState): CatalogState => ({
-  ...state,
-  geoServicesLoadStatus: LoadingStateEnum.FAILED,
-});
-
-const onAddGeoServices = (
-  state: CatalogState,
-  payload: ReturnType<typeof CatalogActions.addGeoServices>,
-): CatalogState => {
-  return addGeoServices(state, payload.services, payload.parentNode);
 };
 
 const onUpdateGeoService = (
@@ -157,17 +155,21 @@ const onUpdateGeoService = (
   const currentService = state.geoServices.find(service => service.id === serviceId);
   const layers = state.geoServiceLayers.filter(layer => layer.serviceId !== serviceId);
   const services = state.geoServices.filter(service => service.id !== serviceId);
-  const parentId = payload.parentNode || getParentNode(state, CatalogItemKindEnum.GEO_SERVICE, payload.service.id);
-  const [ extendedService, serviceLayers ] = ExtendedCatalogModelHelper.getExtendedGeoService(payload.service, parentId);
+  const parentId = getParentNode(getParentNodeList(state.catalog), CatalogItemKindEnum.GEO_SERVICE, payload.service.id);
+  const geoServiceLayerSummary = ExtendedCatalogModelHelper.getGeoServiceSummaryModel(payload.service);
+  const [ extendedService, serviceLayers ] = ExtendedCatalogModelHelper.getExtendedGeoService(geoServiceLayerSummary, parentId);
   const updatedLayers = serviceLayers.map(layer => {
     const currentLayer = currentLayers.find(l => l.id === layer.id);
-    return { ...layer, expanded: currentLayer?.expanded || false };
+    return { ...layer, expanded: currentLayer?.expanded };
   });
-  const updatedService = { ...currentService, ...extendedService, expanded: currentService?.expanded || false };
+  const updatedService = { ...currentService, ...extendedService, expanded: currentService?.expanded };
   return {
     ...state,
     geoServices: [ ...services, updatedService ],
     geoServiceLayers: [ ...layers, ...updatedLayers ],
+    draftGeoService: state.draftGeoService?.id === payload.service.id
+      ? payload.service
+      : state.draftGeoService,
   };
 };
 
@@ -181,20 +183,29 @@ const onDeleteGeoService = (
     ...state,
     geoServices: services,
     geoServiceLayers: layers,
+    draftGeoService: state.draftGeoService?.id === payload.id
+      ? null
+      : state.draftGeoService,
   };
 };
 
 const onAddFeatureSource = (
   state: CatalogState,
   payload: ReturnType<typeof CatalogActions.addFeatureSources>,
-): CatalogState => addFeatureSources(state, payload.featureSources, payload.parentNode);
+): CatalogState => {
+  return {
+    ...state,
+    ...addFeatureSources(state, state.catalog, [ExtendedCatalogModelHelper.getFeatureSourceSummaryModel(payload.featureSource)]),
+  };
+};
 
 const onUpdateFeatureSource = (
   state: CatalogState,
   payload: ReturnType<typeof CatalogActions.updateFeatureSource>,
 ): CatalogState => {
-  const parentId = payload.parentNode || getParentNode(state, CatalogItemKindEnum.FEATURE_SOURCE, payload.featureSource.id);
-  const [ updatedFeatureSource, updatedFeatureTypes ] = ExtendedCatalogModelHelper.getExtendedFeatureSource(payload.featureSource, parentId);
+  const parentId = getParentNode(getParentNodeList(state.catalog), CatalogItemKindEnum.FEATURE_SOURCE, payload.featureSource.id);
+  const featureSourceSummary = ExtendedCatalogModelHelper.getFeatureSourceSummaryModel(payload.featureSource);
+  const [ updatedFeatureSource, updatedFeatureTypes ] = ExtendedCatalogModelHelper.getExtendedFeatureSource(featureSourceSummary, parentId);
   const idx = state.featureSources.findIndex(f => f.id === updatedFeatureSource.id);
   if (idx === -1) {
     return state;
@@ -206,7 +217,7 @@ const onUpdateFeatureSource = (
       {
         ...(state.featureSources[idx] || {}),
         ...updatedFeatureSource,
-        expanded: state.featureSources[idx]?.expanded ?? false,
+        expanded: state.featureSources[idx]?.expanded,
         catalogNodeId: parentId,
       },
       ...state.featureSources.slice(idx + 1),
@@ -215,6 +226,9 @@ const onUpdateFeatureSource = (
       ...state.featureTypes.filter(f => f.featureSourceId !== updatedFeatureSource.id),
       ...updatedFeatureTypes,
     ],
+    draftFeatureSource: `${state.draftFeatureSource?.id}` === `${payload.featureSource.id}`
+      ? payload.featureSource
+      : state.draftFeatureSource,
   };
 };
 
@@ -226,17 +240,30 @@ const onUpdateFeatureType = (
   if (idx === -1) {
     return state;
   }
+  const summary = ExtendedCatalogModelHelper.getFeatureTypeSummaryModel(payload.featureType);
+  const draftFeatureSource = state.draftFeatureSource ? { ...state.draftFeatureSource } : null;
+  if (draftFeatureSource) {
+    const ftIndex = draftFeatureSource.featureTypes.findIndex(ft => ft.id === payload.featureType.id);
+    if (ftIndex !== -1) {
+      draftFeatureSource.featureTypes = [
+        ...draftFeatureSource.featureTypes.slice(0, ftIndex),
+        payload.featureType,
+        ...draftFeatureSource.featureTypes.slice(ftIndex + 1),
+      ];
+    }
+  }
   return {
     ...state,
     featureTypes: [
       ...state.featureTypes.slice(0, idx),
       {
         ...state.featureTypes[idx],
-        ...payload.featureType,
+        ...summary,
         id: state.featureTypes[idx].id,
       },
       ...state.featureTypes.slice(idx + 1),
     ],
+    draftFeatureSource,
   };
 };
 
@@ -255,6 +282,9 @@ const onDeleteFeatureSource = (
       ...state.featureSources.slice(idx + 1),
     ],
     featureTypes: state.featureTypes.filter(f => f.featureSourceId !== payload.id),
+    draftFeatureSource: state.draftFeatureSource?.id === payload.id
+      ? null
+      : state.draftFeatureSource,
   };
 };
 
@@ -263,31 +293,44 @@ const onExpandTree = (
   payload: ReturnType<typeof CatalogActions.expandTree>,
 ): CatalogState => {
   if (payload.nodeType === CatalogTreeModelTypeEnum.CATALOG_NODE_TYPE) {
-    return { ...state, catalog: expandNode(state.catalog, payload.id) };
+    return { ...state, catalog: expandNode(state.catalog, payload.id, payload.toggle) };
   }
   if (payload.nodeType === CatalogTreeModelTypeEnum.SERVICE_TYPE) {
     const service = state.geoServices.find(s => s.id === payload.id);
     return {
       ...state,
-      geoServices: expandNode(state.geoServices, payload.id),
-      catalog: service && !service.expanded ? expandNode(state.catalog, service.catalogNodeId, true) : state.catalog,
+      geoServices: expandNode(state.geoServices, payload.id, payload.toggle),
+      catalog: service && !service.expanded
+        ? expandNode(state.catalog, service.catalogNodeId, false)
+        : state.catalog,
     };
   }
   if (payload.nodeType === CatalogTreeModelTypeEnum.SERVICE_LAYER_TYPE) {
     const layer = state.geoServiceLayers.find(l => l.id === payload.id);
     return {
       ...state,
-      geoServiceLayers: expandNode(state.geoServiceLayers, payload.id),
-      geoServices: layer && !layer.expanded ? expandNode(state.geoServices, layer.serviceId, true) : state.geoServices,
-      catalog: layer && !layer.expanded ? expandNode(state.catalog, layer.catalogNodeId, true) : state.catalog,
+      geoServiceLayers: expandNode(state.geoServiceLayers, payload.id, payload.toggle),
+      geoServices: layer && !layer.expanded
+        ? expandNode(state.geoServices, layer.serviceId, false)
+        : state.geoServices,
+      catalog: layer && !layer.expanded
+        ? expandNode(state.catalog, layer.catalogNodeId, false)
+        : state.catalog,
     };
   }
-  if (payload.nodeType === CatalogTreeModelTypeEnum.FEATURE_SOURCE_TYPE) {
-    const featureSource = state.featureSources.find(f => f.id === payload.id);
+  if (payload.nodeType === CatalogTreeModelTypeEnum.FEATURE_SOURCE_TYPE || payload.nodeType === CatalogTreeModelTypeEnum.FEATURE_TYPE_TYPE) {
+    let featureSourceId = payload.id;
+    if (payload.nodeType === CatalogTreeModelTypeEnum.FEATURE_TYPE_TYPE) {
+      const featureType = state.featureTypes.find(f => f.id === payload.id);
+      featureSourceId = featureType ? featureType.featureSourceId : featureSourceId;
+    }
+    const featureSource = state.featureSources.find(f => f.id === featureSourceId);
     return {
       ...state,
-      featureSources: expandNode(state.featureSources, payload.id),
-      catalog: featureSource && !featureSource.expanded ? expandNode(state.catalog, featureSource.catalogNodeId, true) : state.catalog,
+      featureSources: expandNode(state.featureSources, featureSourceId, payload.toggle),
+      catalog: featureSource && !featureSource.expanded
+        ? expandNode(state.catalog, featureSource.catalogNodeId, false)
+        : state.catalog,
     };
   }
   return state;
@@ -301,101 +344,86 @@ const onUpdateCatalog = (
   const updatedCatalog = payload.nodes.map<ExtendedCatalogNodeModel>(node => ({
     ...(currentCatalog.get(node.id) || {}),
     ...node,
-    expanded: currentCatalog.get(node.id)?.expanded || false,
+    expanded: currentCatalog.get(node.id)?.expanded,
     parentId: payload.nodes.find(n => (n.children || []).includes(node.id))?.id || null,
   }));
-  const geoServiceMap: Map<string, string> = new Map();
-  const featureSourceMap: Map<string, string> = new Map();
-  updatedCatalog.forEach(c => {
-    if (!c.items || c.items.length === 0) {
-      return;
-    }
-    c.items.forEach(item => {
-      if (item.kind === CatalogItemKindEnum.GEO_SERVICE) {
-        geoServiceMap.set(item.id, c.id);
-      }
-      if (item.kind === CatalogItemKindEnum.FEATURE_SOURCE) {
-        featureSourceMap.set(item.id, c.id);
-      }
-    });
-  });
+  const parentNodeList = getParentNodeList(updatedCatalog);
   return {
     ...state,
     catalog: updatedCatalog,
-    geoServices: state.geoServices.map(s => ({ ...s, catalogNodeId: geoServiceMap.get(s.id) || s.catalogNodeId })),
-    geoServiceLayers: state.geoServiceLayers.map(l => ({ ...l, catalogNodeId: geoServiceMap.get(l.serviceId) || l.catalogNodeId })),
-    featureSources: state.featureSources.map(f => ({ ...f, catalogNodeId: geoServiceMap.get(f.id) || f.catalogNodeId })),
-    featureTypes: state.featureTypes.map(f => ({ ...f, catalogNodeId: geoServiceMap.get(f.featureSourceId) || f.catalogNodeId })),
+    geoServices: state.geoServices.map(s => ({
+      ...s,
+      catalogNodeId: getParentNode(parentNodeList, CatalogItemKindEnum.GEO_SERVICE, s.id) || s.catalogNodeId,
+    })),
+    geoServiceLayers: state.geoServiceLayers.map(l => ({
+      ...l,
+      catalogNodeId: getParentNode(parentNodeList, CatalogItemKindEnum.GEO_SERVICE, l.serviceId) || l.catalogNodeId,
+    })),
+    featureSources: state.featureSources.map(f => ({
+      ...f,
+      catalogNodeId: getParentNode(parentNodeList, CatalogItemKindEnum.FEATURE_SOURCE, f.id) || f.catalogNodeId,
+    })),
+    featureTypes: state.featureTypes.map(f => ({
+      ...f,
+      catalogNodeId: getParentNode(parentNodeList, CatalogItemKindEnum.FEATURE_SOURCE, f.featureSourceId) || f.catalogNodeId,
+    })),
   };
 };
 
-const onLoadFeatureSourceStart = (
-  state: CatalogState,
-): CatalogState => ({
+const onLoadDraftGeoService = (state: CatalogState, payload: ReturnType<typeof CatalogActions.loadDraftGeoService>): CatalogState => ({
   ...state,
-  featureSourcesLoadStatus: LoadingStateEnum.LOADING,
+  draftGeoServiceId: payload.id,
 });
 
-const onLoadFeatureSourcesSuccess = (
-  state: CatalogState,
-  payload: ReturnType<typeof CatalogActions.loadFeatureSourcesSuccess>,
-): CatalogState => ({
-  ...addFeatureSources(state, payload.featureSources),
-  featureSourcesLoadStatus: LoadingStateEnum.LOADED,
-});
-
-const onLoadFeatureSourcesFailed = (
-  state: CatalogState,
-): CatalogState => ({
+const onLoadDraftGeoServiceStart = (state: CatalogState): CatalogState => ({
   ...state,
-  featureSourcesLoadStatus: LoadingStateEnum.FAILED,
+  draftGeoServiceLoadStatus: LoadingStateEnum.LOADING,
+  draftGeoService: null,
 });
 
-const onUpdateFeatureSourceNodeIds = (
-  state: CatalogState,
-  payload: ReturnType<typeof CatalogActions.updateFeatureSourceNodeIds>,
-): CatalogState => {
-  const featureSourceIds = new Set(payload.featureSources);
-  return {
-    ...state,
-    featureSources: state.featureSources.map(source => ({
-      ...source,
-      catalogNodeId: featureSourceIds.has(source.id) ? payload.nodeId : source.catalogNodeId,
-    })),
-    featureTypes: state.featureTypes.map(type => ({
-      ...type,
-      catalogNodeId: featureSourceIds.has(type.featureSourceId) ? payload.nodeId : type.catalogNodeId,
-    })),
-  };
-};
+const onLoadDraftGeoServiceSuccess = (state: CatalogState, payload: ReturnType<typeof CatalogActions.loadDraftGeoServiceSuccess>): CatalogState => ({
+  ...state,
+  draftGeoServiceLoadStatus: LoadingStateEnum.LOADED,
+  draftGeoService: payload.geoService,
+});
 
-const onUpdateGeoServiceNodeIds = (
-  state: CatalogState,
-  payload: ReturnType<typeof CatalogActions.updateGeoServiceNodeIds>,
-): CatalogState => {
-  const geoServiceIds = new Set(payload.geoServices);
-  return {
-    ...state,
-    geoServices: state.geoServices.map(source => ({
-      ...source,
-      catalogNodeId: geoServiceIds.has(source.id) ? payload.nodeId : source.catalogNodeId,
-    })),
-    geoServiceLayers: state.geoServiceLayers.map(layer => ({
-      ...layer,
-      catalogNodeId: geoServiceIds.has(layer.serviceId) ? payload.nodeId : layer.catalogNodeId,
-    })),
-  };
-};
+const onLoadDraftGeoServiceFailed = (state: CatalogState): CatalogState => ({
+  ...state,
+  draftGeoServiceId: null,
+  draftGeoServiceLoadStatus: LoadingStateEnum.FAILED,
+  draftGeoService: null,
+});
+
+const onLoadDraftFeatureSource = (state: CatalogState, payload: ReturnType<typeof CatalogActions.loadDraftFeatureSource>): CatalogState => ({
+  ...state,
+  draftFeatureSourceId: payload.id,
+});
+
+const onLoadDraftFeatureSourceStart = (state: CatalogState): CatalogState => ({
+  ...state,
+  draftFeatureSourceLoadStatus: LoadingStateEnum.LOADING,
+  draftFeatureSource: null,
+});
+
+const onLoadDraftFeatureSourceSuccess = (state: CatalogState, payload: ReturnType<typeof CatalogActions.loadDraftFeatureSourceSuccess>): CatalogState => ({
+  ...state,
+  draftFeatureSourceLoadStatus: LoadingStateEnum.LOADED,
+  draftFeatureSource: payload.featureSource,
+});
+
+const onLoadDraftFeatureSourceFailed = (state: CatalogState): CatalogState => ({
+  ...state,
+  draftFeatureSourceId: null,
+  draftFeatureSourceLoadStatus: LoadingStateEnum.FAILED,
+  draftFeatureSource: null,
+});
 
 const catalogReducerImpl = createReducer<CatalogState>(
   initialCatalogState,
   on(CatalogActions.loadCatalogStart, onLoadCatalogStart),
   on(CatalogActions.loadCatalogSuccess, onLoadCatalogsSuccess),
   on(CatalogActions.loadCatalogFailed, onLoadCatalogsFailed),
-  on(CatalogActions.loadAllGeoServicesStart, onLoadAllGeoServicesStart),
-  on(CatalogActions.loadAllGeoServicesSuccess, onLoadAllGeoServicesSuccess),
-  on(CatalogActions.loadAllGeoServicesFailed, onLoadAllGeoServicesFailed),
-  on(CatalogActions.addGeoServices, onAddGeoServices),
+  on(CatalogActions.addGeoService, onAddGeoService),
   on(CatalogActions.updateGeoService, onUpdateGeoService),
   on(CatalogActions.deleteGeoService, onDeleteGeoService),
   on(CatalogActions.addFeatureSources, onAddFeatureSource),
@@ -404,11 +432,14 @@ const catalogReducerImpl = createReducer<CatalogState>(
   on(CatalogActions.updateFeatureType, onUpdateFeatureType),
   on(CatalogActions.expandTree, onExpandTree),
   on(CatalogActions.updateCatalog, onUpdateCatalog),
-  on(CatalogActions.loadFeatureSourcesStart, onLoadFeatureSourceStart),
-  on(CatalogActions.loadFeatureSourcesSuccess, onLoadFeatureSourcesSuccess),
-  on(CatalogActions.loadFeatureSourcesFailed, onLoadFeatureSourcesFailed),
-  on(CatalogActions.updateFeatureSourceNodeIds, onUpdateFeatureSourceNodeIds),
-  on(CatalogActions.updateGeoServiceNodeIds, onUpdateGeoServiceNodeIds),
+  on(CatalogActions.loadDraftGeoService, onLoadDraftGeoService),
+  on(CatalogActions.loadDraftGeoServiceStart, onLoadDraftGeoServiceStart),
+  on(CatalogActions.loadDraftGeoServiceSuccess, onLoadDraftGeoServiceSuccess),
+  on(CatalogActions.loadDraftGeoServiceFailed, onLoadDraftGeoServiceFailed),
+  on(CatalogActions.loadDraftFeatureSource, onLoadDraftFeatureSource),
+  on(CatalogActions.loadDraftFeatureSourceStart, onLoadDraftFeatureSourceStart),
+  on(CatalogActions.loadDraftFeatureSourceSuccess, onLoadDraftFeatureSourceSuccess),
+  on(CatalogActions.loadDraftFeatureSourceFailed, onLoadDraftFeatureSourceFailed),
 );
 export const catalogReducer = (state: CatalogState | undefined, action: Action) => catalogReducerImpl(state, action);
 

@@ -13,6 +13,7 @@ import { SliderComponent } from './slider/slider.component';
 import { SharedDirectivesModule } from '../directives/shared-directives.module';
 import { AboutDialogComponent } from './about-dialog/about-dialog.component';
 import { LanguageToggleComponent } from './language-toggle/language-toggle.component';
+import { CdkFixedSizeVirtualScroll, CdkVirtualForOf, CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,9 @@ import { LanguageToggleComponent } from './language-toggle/language-toggle.compo
   imports: [
     SharedImportsModule,
     SharedDirectivesModule,
+    CdkVirtualScrollViewport,
+    CdkFixedSizeVirtualScroll,
+    CdkVirtualForOf,
   ],
   exports: [
     DialogComponent,

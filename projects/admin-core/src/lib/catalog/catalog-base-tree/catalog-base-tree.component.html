@@ -3,4 +3,6 @@
   <tm-error-message [message]="message"></tm-error-message>
   <button mat-raised-button color="primary" (click)="onRetryClick()" i18n="@@admin-core.common.retry">Retry</button>
 </ng-container>
-<tm-tree [treeNodeTemplate]="treeNodeTemplate" [getDropZones]="getDropZones"></tm-tree>
+<tm-tree [treeNodeTemplate]="treeNodeTemplate"
+         [scrollToSelectedItem]="scrollToSelectedItem"
+         [getDropZones]="getDropZones"></tm-tree>

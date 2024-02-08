@@ -1,9 +1,11 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { distinctUntilChanged, map, Observable, of, switchMap } from 'rxjs';
-import { selectFeatureTypeById } from '../state/catalog.selectors';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { concatMap, distinctUntilChanged, map, Observable, of, switchMap } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+import { FeatureTypeModel } from '@tailormap-admin/admin-api';
+import { FeatureSourceService } from '../services/feature-source.service';
+import { ExtendedCatalogModelHelper } from '../helpers/extended-catalog-model.helper';
 import { Store } from '@ngrx/store';
-import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
+import { selectFeatureSourceByFeatureTypeId } from '../state/catalog.selectors';
 
 @Component({
   selector: 'tm-admin-feature-type-details',
@@ -13,24 +15,35 @@ import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model'
 })
 export class FeatureTypeDetailsComponent implements OnInit {
 
-  public featureType$: Observable<ExtendedFeatureTypeModel | null> = of(null);
+  public featureType$: Observable<FeatureTypeModel | null> = of(null);
 
   constructor(
     private route: ActivatedRoute,
     private store$: Store,
+    private featureSourceService: FeatureSourceService,
   ) { }
 
   public ngOnInit(): void {
     this.featureType$ = this.route.paramMap.pipe(
-      distinctUntilChanged((prev: ParamMap, curr: ParamMap) => {
-        return prev.get('featureSourceId') === curr.get('featureSourceId') && prev.get('featureTypeId') === curr.get('featureTypeId');
-      }),
-      map(params => ({ featureSourceId: params.get('featureSourceId'), featureTypeId: params.get('featureTypeId') })),
-      switchMap(({ featureSourceId, featureTypeId }) => {
-        if (typeof featureSourceId !== 'string' || typeof featureTypeId !== 'string') {
+      map(params => params.get('featureTypeId')),
+      distinctUntilChanged(),
+
+      switchMap(featureTypeId => {
+        if (typeof featureTypeId !== 'string') {
           return of(null);
         }
-        return this.store$.select(selectFeatureTypeById(featureTypeId));
+        return this.store$.select(selectFeatureSourceByFeatureTypeId(featureTypeId))
+          .pipe(
+            concatMap(featureSource => {
+              if (!featureSource) {
+                return of(null);
+              }
+              return this.featureSourceService.getDraftFeatureType$(
+                ExtendedCatalogModelHelper.getFeatureTypeId(featureTypeId, featureSource.id),
+                featureSource.id,
+              );
+            }),
+          );
       }),
     );
   }

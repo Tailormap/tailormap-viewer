@@ -15,11 +15,20 @@ mat-checkbox {
   --tree-node-size: 34px;
 }
 
+.mat-tree {
+  display: block;
+  background-color: var(--mat-tree-container-background-color);
+}
+
 .mat-tree-node {
   overflow: visible;
   height: var(--tree-node-size);
   min-height: initial;
   position: relative;
+  color: var(--mat-tree-node-text-color);
+  font-family: var(--mat-tree-node-text-font);
+  font-size: var(--mat-tree-node-text-size);
+  font-weight: var(--mat-tree-node-text-weight);
 }
 
 .tree-node--selected {

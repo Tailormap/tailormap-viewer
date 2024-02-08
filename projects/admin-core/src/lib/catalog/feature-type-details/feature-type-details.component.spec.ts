@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/angular';
 import { FeatureTypeDetailsComponent } from './feature-type-details.component';
 import { of } from 'rxjs';
-import { FeatureSourceProtocolEnum, getFeatureSource, getFeatureType } from '@tailormap-admin/admin-api';
+import { FeatureSourceProtocolEnum, getFeatureSource, getFeatureType, getFeatureTypeSummary } from '@tailormap-admin/admin-api';
 import { createMockStore } from '@ngrx/store/testing';
 import { CatalogState, catalogStateKey, initialCatalogState } from '../state/catalog.state';
 import { SharedModule } from '@tailormap-viewer/shared';
@@ -28,24 +28,30 @@ const setup = async () => {
       },
     }),
   };
-  const featureSourceService = { updateFeatureSource$: jest.fn(() => of({})) };
   const featureTypeModel: ExtendedFeatureTypeModel = {
-    ...getFeatureType({ name: 'ft_1', title: 'some table' }),
-    id: 'ft_1',
+    ...getFeatureTypeSummary({ name: 'ft_1', title: 'some table' }),
+    id: '1_ft_1',
     originalId: 'ft_1',
     featureSourceId: '1',
     catalogNodeId: 'node-1',
   };
   const featureSourceModel: ExtendedFeatureSourceModel = {
     ...getFeatureSource({ id: '1', title: 'JDBC source', protocol: FeatureSourceProtocolEnum.JDBC }),
-    children: ['ft_1'],
+    featureTypesIds: ['ft_1'],
     catalogNodeId: 'node-1',
-    featureTypes: [],
   };
   const catalogState: CatalogState = {
     ...initialCatalogState,
     featureTypes: [featureTypeModel],
     featureSources: [featureSourceModel],
+  };
+  const featureType = getFeatureType({ name: 'ft_1', title: 'some table' });
+  const featureSourceService = {
+    updateFeatureSource$: jest.fn(() => of({})),
+    getDraftFeatureSource$: jest.fn(() => of({
+      ...getFeatureSource({ id: '1', title: 'JDBC source', protocol: FeatureSourceProtocolEnum.JDBC, featureTypes: [featureType] }),
+    })),
+    getDraftFeatureType$: jest.fn(() => of({ ...featureType })),
   };
   const store = createMockStore({ initialState: { [catalogStateKey]: catalogState } });
   await render(FeatureTypeDetailsComponent, {

@@ -23,6 +23,10 @@ export class CatalogTreeHelper {
     if (!root) {
       return [];
     }
+    const servicesMap = new Map(services.map(s => [ s.id, s ]));
+    const serviceLayersMap = new Map(serviceLayers.map(s => [ s.id, s ]));
+    const featureSourcesMap = new Map(featureSources.map(s => [ s.id, s ]));
+    const featureTypesMap = new Map(featureTypes.map(s => [ s.id, s ]));
     const tree = TreeHelper.traverseTree<CatalogTreeModel, ExtendedCatalogNodeModel>(
       catalogNodes,
       root.id,
@@ -30,7 +34,7 @@ export class CatalogTreeHelper {
         const nodeModel = CatalogTreeHelper.getTreeModelForCatalogNode(node);
         return {
           ...nodeModel,
-          children: [ ...children, ...CatalogTreeHelper.getItems(node, services, serviceLayers, featureSources, featureTypes) ],
+          children: [ ...children, ...CatalogTreeHelper.getItems(node, servicesMap, serviceLayersMap, featureSourcesMap, featureTypesMap) ],
         };
       },
       (node) => node.children || [],
@@ -44,13 +48,13 @@ export class CatalogTreeHelper {
 
   private static getItems(
     node: ExtendedCatalogNodeModel,
-    services: ExtendedGeoServiceModel[],
-    layers: ExtendedGeoServiceLayerModel[],
-    featureSources: ExtendedFeatureSourceModel[],
-    featureTypes: ExtendedFeatureTypeModel[],
+    services: Map<string, ExtendedGeoServiceModel>,
+    layers: Map<string, ExtendedGeoServiceLayerModel>,
+    featureSources: Map<string, ExtendedFeatureSourceModel>,
+    featureTypes: Map<string, ExtendedFeatureTypeModel>,
   ): CatalogTreeModel[] {
     const items: CatalogItemModel[] = node.items || [];
-    const itemChildren: CatalogTreeModel[] = items.map(item => {
+    return items.map(item => {
       if (item.kind === CatalogItemKindEnum.GEO_SERVICE) {
         return CatalogTreeHelper.getTreeModelForService(services, layers, item.id);
       }
@@ -59,10 +63,6 @@ export class CatalogTreeHelper {
       }
       return null;
     }).filter((n): n is CatalogTreeModel => !!n);
-    if (items.length > 0 && itemChildren.length === 0) {
-      return [{ id: `placeholder-node-${node.id}`, label: 'Loading...', loadingPlaceholder: true }];
-    }
-    return itemChildren;
   }
 
   public static getTreeModelForCatalogNode(node: ExtendedCatalogNodeModel): CatalogTreeModel {
@@ -78,17 +78,17 @@ export class CatalogTreeHelper {
   }
 
   public static getTreeModelForFeatureSource(
-    featureSources: ExtendedFeatureSourceModel[],
-    featureTypes: ExtendedFeatureTypeModel[],
+    featureSources: Map<string, ExtendedFeatureSourceModel>,
+    featureTypes: Map<string, ExtendedFeatureTypeModel>,
     featureSourceId: string,
   ): CatalogTreeModel | null {
-    const featureSource = featureSources.find(s => s.id === featureSourceId);
+    const featureSource = featureSources.get(featureSourceId);
     if (!featureSource) {
       return null;
     }
-    const featureTypeIds = featureSource.children || [];
+    const featureTypeIds = featureSource.featureTypesIds || [];
     const sourceFeatureTypes = featureTypeIds
-      .map(id => featureTypes.find(l => l.id === id) || null)
+      .map(id => featureTypes.get(id) || null)
       .filter((l): l is ExtendedFeatureTypeModel => l !== null);
     return {
       id: CatalogTreeHelper.getIdForFeatureSourceNode(featureSource.id),
@@ -96,7 +96,7 @@ export class CatalogTreeHelper {
       type: CatalogTreeModelTypeEnum.FEATURE_SOURCE_TYPE,
       metadata: featureSource,
       expanded: featureSource.expanded,
-      expandable: (featureSource.children || []).length > 0,
+      expandable: (featureSource.featureTypesIds || []).length > 0,
       children: sourceFeatureTypes.map(CatalogTreeHelper.getTreeModelForFeatureType),
     };
   }
@@ -110,14 +110,18 @@ export class CatalogTreeHelper {
     };
   }
 
-  public static getTreeModelForService(services: ExtendedGeoServiceModel[], allLayers: ExtendedGeoServiceLayerModel[], serviceId: string): CatalogTreeModel | null {
-    const service = services.find(s => s.id === serviceId);
+  public static getTreeModelForService(
+    services: Map<string, ExtendedGeoServiceModel>,
+    allLayers: Map<string, ExtendedGeoServiceLayerModel>,
+    serviceId: string,
+  ): CatalogTreeModel | null {
+    const service = services.get(serviceId);
     if (!service) {
       return null;
     }
-    const serviceLayers = service.layers || [];
+    const serviceLayers = service.layerIds || [];
     const serviceRootLayers = serviceLayers
-      .map(id => allLayers.find(l => l.id === id) || null)
+      .map(id => allLayers.get(id) || null)
       .filter((l): l is ExtendedGeoServiceLayerModel => l !== null && l.root);
     return {
       id: CatalogTreeHelper.getIdForServiceNode(service.id),
@@ -126,19 +130,19 @@ export class CatalogTreeHelper {
       checked: undefined,
       metadata: service,
       expanded: service.expanded,
-      expandable: (service.layers || []).length > 0,
+      expandable: (service.layerIds || []).length > 0,
       children: serviceRootLayers.map(l => CatalogTreeHelper.getTreeModelForLayer(l, allLayers, service.settings?.layerSettings)),
     };
   }
 
   public static getTreeModelForLayer(
     layer: ExtendedGeoServiceLayerModel,
-    allLayers: ExtendedGeoServiceLayerModel[],
+    allLayers: Map<string, ExtendedGeoServiceLayerModel>,
     layerSettings: Record<string, LayerSettingsModel> | undefined,
   ): CatalogTreeModel {
     const layerChildren: CatalogTreeModel[] = (layer.children || [])
       .map(id => {
-        const childLayer = allLayers.find(l => l.id === id && l.serviceId === layer.serviceId);
+        const childLayer = allLayers.get(id);
         if (!childLayer) {
           return null;
         }
@@ -249,32 +253,36 @@ export class CatalogTreeHelper {
     return null;
   }
 
-  public static readNodesFromUrl(url: string | null): Array<{ type: CatalogTreeModelTypeEnum; treeNodeId: string; id: string }> {
+  public static readNodeFromUrl(url: string | null): { type: CatalogTreeModelTypeEnum; treeNodeId: string; id: string } | null {
     if (url === null) {
-      return [];
+      return null;
     }
     const currentRoute = url
       .substring(url.indexOf('/admin') === 0 ? 6 : 0) // remove /admin from URL if url starts with /admin
       .replace(Routes.CATALOG, '')
       .split('/')
       .filter(part => !!part);
-    const parts: Array<{ type: CatalogTreeModelTypeEnum; treeNodeId: string; id: string }> = [];
-    if (currentRoute.length >= 2 && currentRoute[0] === 'node') {
-      parts.push({ type: CatalogTreeModelTypeEnum.CATALOG_NODE_TYPE, treeNodeId: CatalogTreeHelper.getIdForCatalogNode(currentRoute[1]), id: currentRoute[1] });
+    if (currentRoute.length < 2) {
+      return null;
     }
-    if (currentRoute.length >= 4 && currentRoute[2] === 'service') {
-      parts.push({ type: CatalogTreeModelTypeEnum.SERVICE_TYPE, treeNodeId: CatalogTreeHelper.getIdForServiceNode(currentRoute[3]), id: currentRoute[3] });
+    const nodeType = currentRoute[0];
+    const nodeId = currentRoute[1];
+    if (nodeType === 'node') {
+      return { type: CatalogTreeModelTypeEnum.CATALOG_NODE_TYPE, treeNodeId: CatalogTreeHelper.getIdForCatalogNode(nodeId), id: nodeId };
     }
-    if (currentRoute.length >= 4 && currentRoute[2] === 'feature-source') {
-      parts.push({ type: CatalogTreeModelTypeEnum.FEATURE_SOURCE_TYPE, treeNodeId: CatalogTreeHelper.getIdForFeatureSourceNode(currentRoute[3]), id: currentRoute[3] });
+    if (nodeType === 'service') {
+      return { type: CatalogTreeModelTypeEnum.SERVICE_TYPE, treeNodeId: CatalogTreeHelper.getIdForServiceNode(nodeId), id: nodeId };
     }
-    if (currentRoute.length >= 6 && currentRoute[4] === 'feature-type') {
-      parts.push({ type: CatalogTreeModelTypeEnum.FEATURE_TYPE_TYPE, treeNodeId: CatalogTreeHelper.getIdForFeatureTypeNode(currentRoute[5]), id: currentRoute[5] });
+    if (nodeType === 'feature-source') {
+      return { type: CatalogTreeModelTypeEnum.FEATURE_SOURCE_TYPE, treeNodeId: CatalogTreeHelper.getIdForFeatureSourceNode(nodeId), id: nodeId };
     }
-    if (currentRoute.length >= 6 && currentRoute[4] === 'layer') {
-      parts.push({ type: CatalogTreeModelTypeEnum.SERVICE_LAYER_TYPE, treeNodeId: CatalogTreeHelper.getIdForLayerNode(currentRoute[5]), id: currentRoute[5] });
+    if (nodeType === 'feature-type') {
+      return { type: CatalogTreeModelTypeEnum.FEATURE_TYPE_TYPE, treeNodeId: CatalogTreeHelper.getIdForFeatureTypeNode(nodeId), id: nodeId };
     }
-    return parts;
+    if (nodeType === 'layer') {
+      return { type: CatalogTreeModelTypeEnum.SERVICE_LAYER_TYPE, treeNodeId: CatalogTreeHelper.getIdForLayerNode(nodeId), id: nodeId };
+    }
+    return null;
   }
 
 }

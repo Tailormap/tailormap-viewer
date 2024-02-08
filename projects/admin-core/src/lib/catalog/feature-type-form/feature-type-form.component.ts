@@ -2,8 +2,7 @@ import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter } from 
 import { BehaviorSubject, map, Observable, of } from 'rxjs';
 import { FeatureSourceService } from '../services/feature-source.service';
 import { FeatureTypeUpdateModel } from '../models/feature-source-update.model';
-import { AttributeSettingsModel, FeatureTypeSettingsModel } from '@tailormap-admin/admin-api';
-import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
+import { AttributeSettingsModel, FeatureTypeModel, FeatureTypeSettingsModel } from '@tailormap-admin/admin-api';
 
 @Component({
   selector: 'tm-admin-feature-type-form',
@@ -14,7 +13,7 @@ import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model'
 export class FeatureTypeFormComponent {
 
   @Input()
-  public set featureType(featureType: ExtendedFeatureTypeModel | null) {
+  public set featureType(featureType: FeatureTypeModel | null) {
     this._featureType = featureType;
     this.initFeatureTypeSettings(featureType);
   }
@@ -26,12 +25,12 @@ export class FeatureTypeFormComponent {
   public dialogLayout: boolean = false;
 
   @Output()
-  public featureTypeUpdated = new EventEmitter<ExtendedFeatureTypeModel | null>;
+  public featureTypeUpdated = new EventEmitter<FeatureTypeModel | null>;
 
   @Output()
   public cancel = new EventEmitter();
 
-  private _featureType: ExtendedFeatureTypeModel | null = null;
+  private _featureType: FeatureTypeModel | null = null;
 
   private savingSubject = new BehaviorSubject(false);
   public saving$ = this.savingSubject.asObservable();
@@ -45,7 +44,7 @@ export class FeatureTypeFormComponent {
     private featureSourceService: FeatureSourceService,
   ) { }
 
-  public initFeatureTypeSettings(featureType: ExtendedFeatureTypeModel | null) {
+  public initFeatureTypeSettings(featureType: FeatureTypeModel | null) {
     if (featureType) {
       this.updatedFeatureTypeSubject.next(null);
     }
@@ -55,7 +54,7 @@ export class FeatureTypeFormComponent {
       }));
   }
 
-  public save(featureType: ExtendedFeatureTypeModel) {
+  public save(featureType: FeatureTypeModel) {
     if (!this.updatedFeatureTypeSubject.value) {
       return;
     }

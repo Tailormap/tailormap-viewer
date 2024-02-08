@@ -1,12 +1,13 @@
 import {
-  ChangeDetectorRef, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, Optional, TemplateRef, ViewChild,
+  ChangeDetectorRef, Component, Input, NgZone, OnDestroy, OnInit, Optional, TemplateRef, ViewChild,
 } from '@angular/core';
 import { TreeService } from './tree.service';
-import { takeUntil } from 'rxjs/operators';
+import { debounceTime, takeUntil } from 'rxjs/operators';
 import { FlatTreeHelper } from './helpers/flat-tree.helper';
 import { FlatTreeModel } from './models';
-import { Subject } from 'rxjs';
+import { distinctUntilChanged, filter, Subject, take } from 'rxjs';
 import { DropZoneOptions, TreeDragDropService, treeNodeBaseClass } from './tree-drag-drop.service';
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 @Component({
   selector: 'tm-tree',
@@ -19,7 +20,10 @@ export class TreeComponent implements OnInit, OnDestroy {
   public treeNodeTemplate?: TemplateRef<any>;
 
   @Input()
-  public getDropZones?: (defaultTarget: HTMLDivElement, node: FlatTreeModel) => DropZoneOptions[];
+  public getDropZones?: (defaultTarget: HTMLElement, node?: FlatTreeModel) => DropZoneOptions[];
+
+  @Input()
+  public scrollToSelectedItem?: boolean;
 
   @Input()
   public useRadioInputs?: boolean;
@@ -27,8 +31,8 @@ export class TreeComponent implements OnInit, OnDestroy {
   @Input()
   public expandOnGroupClick?: boolean;
 
-  @ViewChild('treeElement', { static: false, read: ElementRef })
-  private treeElement: ElementRef<HTMLDivElement> | undefined;
+  @ViewChild('treeElement', { static: false, read: CdkVirtualScrollViewport })
+  private treeElement: CdkVirtualScrollViewport | undefined;
 
   public selectedNodeId: string | undefined;
 
@@ -49,7 +53,10 @@ export class TreeComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.treeService.selectedNode$
-      .pipe(takeUntil(this.destroyed))
+      .pipe(
+        takeUntil(this.destroyed),
+        distinctUntilChanged(),
+      )
       .subscribe(selectedNodeId => {
         this.selectedNodeId = selectedNodeId;
         this.cdr.detectChanges();
@@ -64,31 +71,46 @@ export class TreeComponent implements OnInit, OnDestroy {
       this.treeDragDropService.treeDragDropEnabled$
         .pipe(takeUntil(this.destroyed))
         .subscribe(enabled => this.treeDragDropServiceEnabled = enabled);
+      this.treeService.getTreeDataSource$()
+        .pipe(takeUntil(this.destroyed), filter(dataSource => !!dataSource && dataSource.length > 0))
+        .subscribe(() => {
+          const el = this.treeElement?.elementRef.nativeElement;
+          if (!el || !this.getDropZones) {
+            return;
+          }
+          this.treeDragDropService.dataSourceChanged(this.getDropZones(el));
+        });
     }
-    this.checkedRadioNode = this.getTreeControl().dataNodes.find(node => node.checked);
+    if (this.scrollToSelectedItem) {
+      this.treeService.getTreeDataSource$()
+        .pipe(
+          filter(dataSource => !!dataSource && dataSource.length > 0),
+          debounceTime(50),
+          take(1),
+        )
+        .subscribe(dataSource => {
+          this.scrollIntoView(dataSource);
+        });
+    }
   }
 
   public getDataSource() {
-    return this.treeService.getTreeDataSource();
+    return this.treeService.getTreeDataSource$();
   }
 
-  public getTreeControl() {
-    return this.treeService.getTreeControl();
-  }
-
-  public hasChild(idx: number, nodeData: FlatTreeModel) {
+  public hasChild(nodeData: FlatTreeModel) {
     return FlatTreeHelper.isExpandable(nodeData);
   }
 
   public isExpanded(node: FlatTreeModel) {
-    return this.treeService.getTreeControl().isExpanded(node);
+    return node.expanded;
   }
 
   public toggleGroupChecked(node: FlatTreeModel): void {
     if (this.readOnlyMode) {
       return;
     }
-    this.toggleNodeChecked(node, this.treeService.getTreeControl().getDescendants(node));
+    this.toggleNodeChecked(node, this.treeService.getDescendants(node));
   }
 
   public toggleLeafChecked(node: FlatTreeModel): void {
@@ -151,7 +173,7 @@ export class TreeComponent implements OnInit, OnDestroy {
       event.preventDefault();
       return;
     }
-    const dropZoneConfig = this.getDropZones(this.treeElement.nativeElement, node);
+    const dropZoneConfig = this.getDropZones(this.treeElement.elementRef.nativeElement, node);
     const dragAllowed = dropZoneConfig.some(dz => dz.dragAllowed ? dz.dragAllowed(node.id) : true);
     if (!dragAllowed) {
       event.preventDefault();
@@ -186,4 +208,16 @@ export class TreeComponent implements OnInit, OnDestroy {
     ($event.target as HTMLElement).closest(`.${treeNodeBaseClass}`)?.setAttribute('draggable', 'false');
   }
 
+  public treeTrackBy(idx: number, node: FlatTreeModel) {
+    return node.id;
+  }
+
+  private scrollIntoView(treeModels: FlatTreeModel[]) {
+    const idx = treeModels.findIndex(n => n.id === this.selectedNodeId);
+    this.treeElement?.scrollToIndex(idx, 'smooth');
+  }
+
+  public depth(node: FlatTreeModel) {
+    return node.level;
+  }
 }

@@ -1,6 +1,6 @@
 import { TocComponent } from './toc.component';
 import { render, screen, waitFor } from '@testing-library/angular';
-import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { createMockStore, MockStore, provideMockStore } from '@ngrx/store/testing';
 import { MenubarService } from '../../menubar';
 import { of } from 'rxjs';
 import { SharedModule } from '@tailormap-viewer/shared';
@@ -15,8 +15,9 @@ import { getAppLayerModel, getLayerTreeNode } from '@tailormap-viewer/api';
 import { TocFilterInputComponent } from '../toc-filter-input/toc-filter-input.component';
 import { toggleFilterEnabled } from '../state/toc.actions';
 import { selectFilterEnabled, selectFilterTerm, selectInfoTreeNodeId } from '../state/toc.selectors';
+import { Store } from '@ngrx/store';
 
-const createMockStore = (selectedLayer = '') => {
+const buildMockStore = (selectedLayer = '') => {
   const layers = [
     getAppLayerModel({ title: 'Disaster map', visible: false }),
     getAppLayerModel({ id: '2', title: 'Some other map', visible: false }),
@@ -26,7 +27,7 @@ const createMockStore = (selectedLayer = '') => {
     getLayerTreeNode({ id: '1', name: 'Disaster map', appLayerId: '1' }),
     getLayerTreeNode({ id: '2', name: 'Some other map', appLayerId: '2' }),
   ];
-  return provideMockStore({
+  return createMockStore({
     selectors: [
       { selector: selectFilterEnabled, value: false },
       { selector: selectFilterTerm, value: null },
@@ -42,74 +43,54 @@ const getMenubarService = (visible: boolean, registerComponentFn: jest.Mock) => 
   return { provide: MenubarService, useValue: { isComponentVisible$: () => of(visible), registerComponent: registerComponentFn } };
 };
 
+const setup = async (visible: boolean, selectedLayer = '') => {
+  const registerComponentFn = jest.fn();
+  const mockStore = buildMockStore(selectedLayer);
+  const mockDispatch = jest.fn();
+  mockStore.dispatch = mockDispatch;
+  await render(TocComponent, {
+    imports: [ SharedModule, MatIconTestingModule ],
+    declarations: [ TocNodeLayerComponent, ToggleAllLayersButtonComponent, TocFilterInputComponent ],
+    providers: [
+      { provide: Store, useValue: mockStore },
+      getMenubarService(visible, registerComponentFn),
+    ],
+  });
+  return { registerComponentFn, mockStore, mockDispatch };
+};
+
 describe('TocComponent', () => {
 
   test('renders TOC with visible false', async () => {
-    const registerComponentFn = jest.fn();
-    await render(TocComponent, {
-      imports: [ SharedModule, MatIconTestingModule ],
-      declarations: [ TocNodeLayerComponent, ToggleAllLayersButtonComponent ],
-      providers: [
-        createMockStore(),
-        getMenubarService(false, registerComponentFn),
-      ],
-    });
+    const { registerComponentFn } = await setup(false);
     expect(registerComponentFn).toHaveBeenCalled();
   });
 
   test('renders TOC with visible true', async () => {
-    const registerComponentFn = jest.fn();
-    await render(TocComponent, {
-      imports: [ SharedModule, MatIconTestingModule ],
-      declarations: [ TocNodeLayerComponent, ToggleAllLayersButtonComponent, TocFilterInputComponent ],
-      providers: [
-        createMockStore(),
-        getMenubarService(true, registerComponentFn),
-      ],
-    });
+    await setup(true);
     expect(await screen.findByText('Disaster map')).toBeInTheDocument();
     expect(await screen.findByText('Some other map')).toBeInTheDocument();
   });
 
   test('renders TOC with filter term', async () => {
-    const registerComponentFn = jest.fn();
-    await render(TocComponent, {
-      imports: [ SharedModule, MatIconTestingModule ],
-      declarations: [ TocNodeLayerComponent, ToggleAllLayersButtonComponent, TocFilterInputComponent ],
-      providers: [
-        createMockStore(),
-        getMenubarService(true, registerComponentFn),
-      ],
-    });
-    const store = TestBed.inject(MockStore);
-    store.dispatch = jest.fn();
+    const { mockStore, mockDispatch } = await setup(true);
     await userEvent.click(await screen.findByLabelText('Filter layers'));
-    expect(store.dispatch).toHaveBeenCalledWith({ type: toggleFilterEnabled.type });
-    store.overrideSelector(selectFilterEnabled, true);
-    store.overrideSelector(selectFilterTerm, 'dis');
-    store.refreshState();
+    expect(mockDispatch).toHaveBeenCalledWith({ type: toggleFilterEnabled.type });
+    mockStore.overrideSelector(selectFilterEnabled, true);
+    mockStore.overrideSelector(selectFilterTerm, 'dis');
+    mockStore.refreshState();
     expect(await screen.findByPlaceholderText('Filter by layer name...')).toBeInTheDocument();
     expect(await screen.findByText('Disaster map')).toBeInTheDocument();
     expect(await screen.queryByText('Some other map')).not.toBeInTheDocument();
   });
 
   test('handles layer selection', async () => {
-    const registerComponentFn = jest.fn();
-    await render(TocComponent, {
-      imports: [ SharedModule, MatIconTestingModule ],
-      declarations: [ TocNodeLayerComponent, ToggleAllLayersButtonComponent, TocFilterInputComponent ],
-      providers: [
-        createMockStore('1'),
-        getMenubarService(true, registerComponentFn),
-      ],
-    });
-    const store = TestBed.inject(MockStore);
-    store.dispatch = jest.fn();
+    const { mockStore, mockDispatch } = await setup(true, '1');
     expect((await screen.findByText('Disaster map')).closest('.mat-tree-node')).toHaveClass('tree-node--selected');
     await userEvent.click(await screen.findByText('Some other map'));
-    expect(store.dispatch).toHaveBeenCalledWith({ type: setSelectedLayerId.type, layerId: '2' });
-    store.overrideSelector(selectSelectedNode, '2');
-    store.refreshState();
+    expect(mockDispatch).toHaveBeenCalledWith({ type: setSelectedLayerId.type, layerId: '2' });
+    mockStore.overrideSelector(selectSelectedNode, '2');
+    mockStore.refreshState();
     await waitFor(() => {
       expect((screen.getByText('Disaster map')).closest('.mat-tree-node')).not.toHaveClass('tree-node--selected');
       expect((screen.getByText('Some other map')).closest('.mat-tree-node')).toHaveClass('tree-node--selected');
@@ -117,19 +98,11 @@ describe('TocComponent', () => {
   });
 
   test('handles checking layer', async () => {
-    const registerComponentFn = jest.fn();
-    await render(TocComponent, {
-      imports: [ SharedModule, MatIconTestingModule ],
-      declarations: [ TocNodeLayerComponent, ToggleAllLayersButtonComponent, TocFilterInputComponent ],
-      providers: [
-        createMockStore('1'),
-        getMenubarService(true, registerComponentFn),
-      ],
-    });
-    const store = TestBed.inject(MockStore);
-    store.dispatch = jest.fn();
+    const { mockDispatch } = await setup(true, '1');
+    expect(await screen.findByText('Disaster map')).toBeInTheDocument();
+    expect(await screen.getByLabelText('toggle Disaster map')).toBeInTheDocument();
     await userEvent.click(await screen.getByLabelText('toggle Disaster map'));
-    expect(store.dispatch).toHaveBeenCalledWith({ type: setLayerVisibility.type, visibility: [{ id: '1', checked: true }] });
+    expect(mockDispatch).toHaveBeenCalledWith({ type: setLayerVisibility.type, visibility: [{ id: '1', checked: true }] });
   });
 
 });

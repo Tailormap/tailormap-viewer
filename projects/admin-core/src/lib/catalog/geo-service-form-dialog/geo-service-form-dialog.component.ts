@@ -1,13 +1,12 @@
 import { Component, ChangeDetectionStrategy, Inject } from '@angular/core';
-import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { GeoServiceService } from '../services/geo-service.service';
 import { GeoServiceCreateModel } from '../models/geo-service-update.model';
-import { GeoServiceWithLayersModel, LayerSettingsModel } from '@tailormap-admin/admin-api';
+import { GeoServiceModel, GeoServiceWithLayersModel, LayerSettingsModel } from '@tailormap-admin/admin-api';
 
 export interface GeoServiceFormDialogData {
-  geoService: ExtendedGeoServiceModel | null;
+  geoService: GeoServiceModel | null;
   parentNode: string;
 }
 

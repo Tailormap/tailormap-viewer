@@ -1,4 +1,6 @@
 <ng-template #treeNode let-node>
   <tm-admin-catalog-tree-node [node]="node"></tm-admin-catalog-tree-node>
 </ng-template>
-<tm-admin-catalog-base-tree [treeNodeTemplate]="treeNode" [getDropZones]="getDropZones()"></tm-admin-catalog-base-tree>
+<tm-admin-catalog-base-tree [treeNodeTemplate]="treeNode"
+                            [scrollToSelectedItem]="true"
+                            [getDropZones]="getDropZones()"></tm-admin-catalog-base-tree>

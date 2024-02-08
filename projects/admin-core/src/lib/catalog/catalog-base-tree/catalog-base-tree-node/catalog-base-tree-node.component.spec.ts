@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/angular';
 import { CatalogBaseTreeNodeComponent } from './catalog-base-tree-node.component';
-import { getCatalogNode, getGeoService, getGeoServiceLayer } from '@tailormap-admin/admin-api';
+import { getCatalogNode, getGeoService, getGeoServiceLayer, getGeoServiceSummary } from '@tailormap-admin/admin-api';
 import { CatalogTreeHelper } from '../../helpers/catalog-tree.helper';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MatIconModule } from '@angular/material/icon';
@@ -15,7 +15,7 @@ const setup = async (node: CatalogTreeModel | null) => {
   });
 };
 
-describe('CatalogTreeNodeComponent', () => {
+describe('CatalogBaseTreeNodeComponent', () => {
 
   test('should render', async () => {
     await setup(CatalogTreeHelper.getTreeModelForCatalogNode({ parentId: '', ...getCatalogNode({ title: 'catalog-tree-node works!' }) }));
@@ -24,16 +24,16 @@ describe('CatalogTreeNodeComponent', () => {
   });
 
   test('should render service', async () => {
-    const service: ExtendedGeoServiceModel = { ...getGeoService({ id: 'this-one', title: 'my wonderful service' }), layers: [], catalogNodeId: '1' };
-    const node = CatalogTreeHelper.getTreeModelForService([service], [], 'this-one');
+    const service: ExtendedGeoServiceModel = { ...getGeoServiceSummary({ id: 'this-one', title: 'my wonderful service' }), layerIds: [], catalogNodeId: '1' };
+    const node = CatalogTreeHelper.getTreeModelForService(new Map([[ service.id, service ]]), new Map(), 'this-one');
     await setup(node);
     expect(await screen.findByText('my wonderful service')).toBeInTheDocument();
     expect(await screen.findByLabelText('Service')).toBeInTheDocument();
   });
 
   test('should render layer', async () => {
-    const layer: ExtendedGeoServiceLayerModel = { ...getGeoServiceLayer({ name: 'my-layer', title: 'nice layer' }), serviceId: 'test', catalogNodeId: '1' };
-    const node = CatalogTreeHelper.getTreeModelForLayer(layer, [], {});
+    const layer: ExtendedGeoServiceLayerModel = { ...getGeoServiceLayer({ name: 'my-layer', title: 'nice layer' }), originalId: 'my-layer', serviceId: 'test', catalogNodeId: '1' };
+    const node = CatalogTreeHelper.getTreeModelForLayer(layer, new Map(), {});
     await setup(node);
     expect(await screen.findByText('nice layer')).toBeInTheDocument();
     expect(await screen.findByLabelText('Layer')).toBeInTheDocument();

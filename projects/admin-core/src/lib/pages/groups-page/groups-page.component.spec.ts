@@ -3,16 +3,17 @@ import { GroupsPageComponent } from './groups-page.component';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { MatListModule } from '@angular/material/list';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { AdminTemplateComponent } from '../../templates/admin-template/admin-template.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { GroupListComponent } from '../../user/group-list/group-list.component';
+import { provideMockStore } from '@ngrx/store/testing';
 
 
 const setup = async () => {
   await render(GroupsPageComponent, {
     imports: [ SharedModule, MatListModule, MatIconTestingModule ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    declarations: [AdminTemplateComponent],
-    providers: [],
+    declarations: [GroupListComponent],
+    providers: [provideMockStore()],
   });
 };
 
@@ -20,7 +21,7 @@ describe('GroupsPageComponent', () => {
 
   test('should render', async () => {
     await setup();
-    expect(await screen.findAllByText('Group Administration')).toHaveLength(1);
+    expect(await screen.findAllByText('Groups')).toHaveLength(1);
   });
 
 });

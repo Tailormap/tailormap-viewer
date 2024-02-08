@@ -2,87 +2,65 @@
   {{node.label}}
 </ng-template>
 
-<div class="tree-wrapper">
-  <mat-tree #treeElement
-            [dataSource]="getDataSource()"
-            [treeControl]="getTreeControl()">
-
-    <mat-tree-node *matTreeNodeDef="let node"
-                   matTreeNodeToggle
-                   matTreeNodePadding
-                   [class.tree-node--selected]="selectedNodeId === node.id"
-                   matTreeNodePaddingIndent="20"
-                   (click)="setNodeSelected(node)">
-      <div [className]="getNodeClassName(node)"
-           [attr.data-nodeid]="node.id"
-           (dragstart)="treeDragDropServiceEnabled ? handleDragStart($event, node) : null">
-        <mat-checkbox *ngIf="node.checkbox && !useRadioInputs"
-                      class="checklist-leaf-node"
-                      [aria-label]="'toggle ' + node.label"
-                      [checked]="isChecked(node)"
-                      [disabled]="readOnlyMode"
-                      (click)="$event.stopPropagation()"
-                      (change)="toggleLeafChecked(node)"></mat-checkbox>
-        <mat-radio-button *ngIf="useRadioInputs"
-                          class="checklist-leaf-node"
-                          [disabled]="readOnlyMode"
-                          [checked]="isChecked(node)"
+  <cdk-virtual-scroll-viewport #treeElement
+                               [itemSize]="30"
+                               [minBufferPx]="200"
+                               [maxBufferPx]="400"
+                               class="mat-tree tree-wrapper">
+    <ng-container *cdkVirtualFor="let node of getDataSource(); trackBy: treeTrackBy">
+      <div [class.tree-node--selected]="selectedNodeId === node.id"
+           class="mat-tree-node"
+           [class.mat-tree-node--folder]="hasChild(node)"
+           [style.padding-left]="depth(node) * 20 + 'px'"
+           (click)="setNodeSelected(node)">
+        <div [className]="getNodeClassName(node)"
+             [attr.data-nodeid]="node.id"
+             (dragstart)="treeDragDropServiceEnabled ? handleDragStart($event, node) : null">
+          <ng-container *ngIf="!hasChild(node)">
+            <mat-checkbox *ngIf="node.checkbox && !useRadioInputs"
                           [aria-label]="'toggle ' + node.label"
-                          (change)="handleRadioChange(node)"
+                          [checked]="isChecked(node)"
+                          [disabled]="readOnlyMode"
                           (click)="$event.stopPropagation()"
-                          [value]="node"></mat-radio-button>
-        <div class="tree-node__drag-container"
-             (mousedown)="enableDrag($event)"
-             (mouseup)="stopDrag($event)"
-             (touchstart)="enableDrag($event)"
-             (touchend)="stopDrag($event)">
-          <ng-container *ngIf="node.loadingPlaceholder">
-            <mat-spinner diameter="20"></mat-spinner>
+                          (change)="toggleLeafChecked(node)"></mat-checkbox>
+            <mat-radio-button *ngIf="useRadioInputs && !hasChild(node)"
+                              [disabled]="readOnlyMode"
+                              [checked]="isChecked(node)"
+                              [aria-label]="'toggle ' + node.label"
+                              (change)="handleRadioChange(node)"
+                              (click)="$event.stopPropagation()"
+                              [value]="node"></mat-radio-button>
           </ng-container>
-          <ng-container *ngIf="!node.loadingPlaceholder">
-            <ng-container *ngTemplateOutlet="treeNodeTemplate ? treeNodeTemplate : defaultTreeNodeTemplate; context: {$implicit: node}"></ng-container>
+          <ng-container *ngIf="hasChild(node)">
+            <button mat-icon-button
+                    class="size-18"
+                    *ngIf="hasChild(node)"
+                    (click)="toggleNodeExpansion($event, node)"
+                    [attr.aria-label]="(isExpanded(node) ? 'collapse ' : 'expand ') + node.label">
+              <mat-icon [svgIcon]="isExpanded(node) ? 'chevron_bottom' : 'chevron_right'"></mat-icon>
+            </button>
+            <mat-checkbox *ngIf="node.checkbox && !useRadioInputs && hasChild(node)"
+                          [disabled]="readOnlyMode"
+                          [aria-label]="'toggle ' + node.label"
+                          (click)="$event.stopPropagation()"
+                          (change)="toggleGroupChecked(node)"
+                          [checked]="isChecked(node)"
+                          [indeterminate]="isIndeterminate(node)"
+            ></mat-checkbox>
           </ng-container>
+          <div class="tree-node__drag-container"
+               (mousedown)="enableDrag($event)"
+               (mouseup)="stopDrag($event)"
+               (touchstart)="enableDrag($event)"
+               (touchend)="stopDrag($event)">
+            <ng-container *ngIf="node.loadingPlaceholder">
+              <mat-spinner diameter="20"></mat-spinner>
+            </ng-container>
+            <ng-container *ngIf="!node.loadingPlaceholder">
+              <ng-container *ngTemplateOutlet="treeNodeTemplate ? treeNodeTemplate : defaultTreeNodeTemplate; context: {$implicit: node}"></ng-container>
+            </ng-container>
+          </div>
         </div>
       </div>
-    </mat-tree-node>
-
-    <mat-tree-node *matTreeNodeDef="let node; when: hasChild"
-                   matTreeNodePadding
-                   matTreeNodePaddingIndent="20"
-                   class="mat-tree-node--folder"
-                   [class.tree-node--selected]="selectedNodeId === node.id"
-                   (click)="setNodeSelected(node)">
-      <div [className]="getNodeClassName(node)"
-           [attr.data-nodeid]="node.id"
-           (dragstart)="treeDragDropServiceEnabled ? handleDragStart($event, node) : null">
-        <button mat-icon-button
-                class="size-18"
-                (click)="toggleNodeExpansion($event, node)"
-                [attr.aria-label]="(isExpanded(node) ? 'collapse ' : 'expand ') + node.label">
-          <mat-icon [svgIcon]="isExpanded(node) ? 'chevron_bottom' : 'chevron_right'"></mat-icon>
-        </button>
-        <mat-checkbox *ngIf="node.checkbox && !useRadioInputs"
-                      [disabled]="readOnlyMode"
-                      [aria-label]="'toggle ' + node.label"
-                      (click)="$event.stopPropagation()"
-                      (change)="toggleGroupChecked(node)"
-                      [checked]="isChecked(node)"
-                      [indeterminate]="isIndeterminate(node)"
-        ></mat-checkbox>
-        <div class="tree-node__drag-container"
-             (mousedown)="enableDrag($event)"
-             (mouseup)="stopDrag($event)"
-             (touchstart)="enableDrag($event)"
-             (touchend)="stopDrag($event)">
-          <ng-container *ngIf="node.loadingPlaceholder">
-            <mat-spinner diameter="20"></mat-spinner>
-          </ng-container>
-          <ng-container *ngIf="!node.loadingPlaceholder">
-            <ng-container *ngTemplateOutlet="treeNodeTemplate ? treeNodeTemplate : defaultTreeNodeTemplate; context: {$implicit: node}"></ng-container>
-          </ng-container>
-        </div>
-      </div>
-    </mat-tree-node>
-
-  </mat-tree>
-</div>
+    </ng-container>
+  </cdk-virtual-scroll-viewport>

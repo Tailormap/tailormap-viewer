@@ -1,5 +1,8 @@
 import { createAction, props } from '@ngrx/store';
-import { CatalogNodeModel, FeatureSourceModel, FeatureTypeModel, GeoServiceWithLayersModel } from '@tailormap-admin/admin-api';
+import {
+  CatalogNodeModel, FeatureSourceModel, FeatureSourceSummaryWithFeatureTypesModel, FeatureTypeModel,
+  GeoServiceSummaryWithLayersModel, GeoServiceWithLayersModel,
+} from '@tailormap-admin/admin-api';
 import { CatalogTreeModelTypeEnum } from '../models/catalog-tree-model-type.enum';
 
 const catalogActionsPrefix = '[Catalog]';
@@ -12,33 +15,27 @@ export const loadCatalogStart = createAction(
 );
 export const loadCatalogSuccess = createAction(
   `${catalogActionsPrefix}  Load Catalog Success`,
-  props<{ nodes: CatalogNodeModel[] }>(),
+  props<{
+    nodes: CatalogNodeModel[];
+    geoServices: GeoServiceSummaryWithLayersModel[];
+    featureSources: FeatureSourceSummaryWithFeatureTypesModel[];
+  }>(),
 );
 export const loadCatalogFailed = createAction(
   `${catalogActionsPrefix}  Load Catalog Failed`,
-  props<{ error?: string }>(),
+  props<{
+    catalogError?: string;
+    geoServiceError?: string;
+    featureSourceError?: string;
+  }>(),
 );
-export const loadAllGeoServices = createAction(
-  `${catalogActionsPrefix} Load GeoServices`,
-);
-export const loadAllGeoServicesStart = createAction(
-  `${catalogActionsPrefix} Load GeoServices Start`,
-);
-export const loadAllGeoServicesSuccess = createAction(
-  `${catalogActionsPrefix}  Load GeoServices Success`,
-  props<{ services: GeoServiceWithLayersModel[] }>(),
-);
-export const loadAllGeoServicesFailed = createAction(
-  `${catalogActionsPrefix}  Load GeoServices Failed`,
-  props<{ error?: string }>(),
-);
-export const addGeoServices = createAction(
+export const addGeoService = createAction(
   `${catalogActionsPrefix} Add Geo Services`,
-  props<{ services: GeoServiceWithLayersModel[]; parentNode: string }>(),
+  props<{ service: GeoServiceWithLayersModel }>(),
 );
 export const updateGeoService = createAction(
   `${catalogActionsPrefix} Update Geo Service`,
-  props<{ service: GeoServiceWithLayersModel; parentNode: string }>(),
+  props<{ service: GeoServiceWithLayersModel }>(),
 );
 export const deleteGeoService = createAction(
   `${catalogActionsPrefix} Delete Geo Service`,
@@ -46,11 +43,11 @@ export const deleteGeoService = createAction(
 );
 export const addFeatureSources = createAction(
   `${catalogActionsPrefix} Add Feature Source`,
-  props<{ featureSources: FeatureSourceModel[]; parentNode: string }>(),
+  props<{ featureSource: FeatureSourceModel }>(),
 );
 export const updateFeatureSource = createAction(
   `${catalogActionsPrefix} Update Feature Source`,
-  props<{ featureSource: FeatureSourceModel; parentNode: string }>(),
+  props<{ featureSource: FeatureSourceModel }>(),
 );
 export const deleteFeatureSource = createAction(
   `${catalogActionsPrefix} Delete Feature Source`,
@@ -62,31 +59,39 @@ export const updateFeatureType = createAction(
 );
 export const expandTree = createAction(
   `${catalogActionsPrefix} Expand Tree`,
-  props<{ id: string; nodeType: CatalogTreeModelTypeEnum }>(),
+  props<{ id: string; nodeType: CatalogTreeModelTypeEnum; toggle?: boolean }>(),
 );
 export const updateCatalog = createAction(
   `${catalogActionsPrefix}  Update Catalog`,
   props<{ nodes: CatalogNodeModel[] }>(),
 );
-export const loadFeatureSources = createAction(
-  `${catalogActionsPrefix} Load FeatureSources`,
+export const loadDraftGeoService = createAction(
+  `${catalogActionsPrefix} Load Draft Geo Service`,
+  props<{ id: string }>(),
 );
-export const loadFeatureSourcesStart = createAction(
-  `${catalogActionsPrefix} Load Feature Sources Start`,
+export const loadDraftGeoServiceStart = createAction(
+  `${catalogActionsPrefix} Load Draft Geo Service Start`,
 );
-export const loadFeatureSourcesSuccess = createAction(
-  `${catalogActionsPrefix}  Load Feature Sources Success`,
-  props<{ featureSources: FeatureSourceModel[] }>(),
+export const loadDraftGeoServiceSuccess = createAction(
+  `${catalogActionsPrefix} Load Draft Geo Service Success`,
+  props<{ geoService: GeoServiceWithLayersModel }>(),
 );
-export const loadFeatureSourcesFailed = createAction(
-  `${catalogActionsPrefix}  Load Feature Sources Failed`,
+export const loadDraftGeoServiceFailed = createAction(
+  `${catalogActionsPrefix} Load Draft Geo Service Failed`,
   props<{ error?: string }>(),
 );
-export const updateFeatureSourceNodeIds = createAction(
-  `${catalogActionsPrefix} Update Feature Source Node Ids`,
-  props<{ featureSources: string[]; nodeId: string }>(),
+export const loadDraftFeatureSource = createAction(
+  `${catalogActionsPrefix} Load Draft Feature Source`,
+  props<{ id: string }>(),
 );
-export const updateGeoServiceNodeIds = createAction(
-  `${catalogActionsPrefix} Update Geo Service Node Ids`,
-  props<{ geoServices: string[]; nodeId: string }>(),
+export const loadDraftFeatureSourceStart = createAction(
+  `${catalogActionsPrefix} Load Draft Feature Source Start`,
+);
+export const loadDraftFeatureSourceSuccess = createAction(
+  `${catalogActionsPrefix} Load Draft Feature Source Success`,
+  props<{ featureSource: FeatureSourceModel }>(),
+);
+export const loadDraftFeatureSourceFailed = createAction(
+  `${catalogActionsPrefix} Load Draft Feature Source Failed`,
+  props<{ error?: string }>(),
 );

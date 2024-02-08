@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/angular';
 import { FeatureTypeFormComponent } from './feature-type-form.component';
 import { of } from 'rxjs';
-import { getFeatureType } from '@tailormap-admin/admin-api';
+import { getFeatureType, getFeatureTypeSummary } from '@tailormap-admin/admin-api';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
 import { FeatureSourceService } from '../services/feature-source.service';
@@ -11,8 +11,8 @@ import { SaveButtonComponent } from '../../shared/components/save-button/save-bu
 const setup = async () => {
   const featureSourceService = { updateFeatureSource$: jest.fn(() => of({})) };
   const featureTypeModel: ExtendedFeatureTypeModel = {
-    ...getFeatureType({ name: 'ft_1', title: 'some table' }),
-    id: 'ft_1',
+    ...getFeatureTypeSummary({ name: 'ft_1', title: 'some table' }),
+    id: '1_ft_1',
     originalId: 'ft_1',
     featureSourceId: '1',
     catalogNodeId: 'node-1',

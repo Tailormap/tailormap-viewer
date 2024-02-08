@@ -1,4 +1,12 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, DestroyRef } from '@angular/core';
+import { RoutePropertyHelper } from '../../pages/helpers/route-property.helper';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Observable } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+
+// Little hack to prevent child components being initialized twice. Angular for some reason creates the component twice, first on loading,
+// then after the first route change again. See https://github.com/angular/angular/issues/18374
+let firstRun = true;
 
 @Component({
   selector: 'tm-admin-template',
@@ -7,9 +15,23 @@ import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminTemplateComponent {
-  @Input()
-  public pageTitle = '';
 
-  @Input()
-  public cls = '';
+  public className$: Observable<string>;
+  public pageTitle$: Observable<string>;
+
+  constructor(
+    route: ActivatedRoute,
+    router: Router,
+    destroyRef: DestroyRef,
+  ) {
+    this.className$ = RoutePropertyHelper.getPropForRoute$(router, route, 'templateCls')
+      .pipe(takeUntilDestroyed(destroyRef));
+    this.pageTitle$ = RoutePropertyHelper.getPropForRoute$(router, route, 'pageTitle')
+      .pipe(takeUntilDestroyed(destroyRef));
+    if (firstRun) {
+      router.navigateByUrl(document.location.pathname);
+      firstRun = false;
+    }
+  }
+
 }

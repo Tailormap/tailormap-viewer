@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, DestroyRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { ClassNameHelper } from '../helpers/class-name.helper';
+import { RoutePropertyHelper } from '../helpers/route-property.helper';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
@@ -19,7 +19,7 @@ export class ApplicationPageComponent {
     router: Router,
     destroyRef: DestroyRef,
   ) {
-    this.className$ = ClassNameHelper.getClassNameForRoute$(router, route)
+    this.className$ = RoutePropertyHelper.getPropForRoute$(router, route, 'className')
       .pipe(takeUntilDestroyed(destroyRef));
   }
 

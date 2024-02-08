@@ -7,7 +7,6 @@ import { selectCatalogLoadError, selectCatalogLoadStatus } from '../state/catalo
 import { map, Observable, of, Subject, take, takeUntil } from 'rxjs';
 import { expandTree, loadCatalog } from '../state/catalog.actions';
 import { CatalogTreeHelper } from '../helpers/catalog-tree.helper';
-import { CatalogTreeService } from '../services/catalog-tree.service';
 
 @Component({
   selector: 'tm-admin-catalog-base-tree',
@@ -25,12 +24,14 @@ export class CatalogBaseTreeComponent implements OnDestroy {
   public treeNodeTemplate?: TemplateRef<any>;
 
   @Input()
-  public getDropZones?: (defaultTarget: HTMLDivElement) => DropZoneOptions[];
+  public getDropZones?: (defaultTarget: HTMLElement) => DropZoneOptions[];
+
+  @Input()
+  public scrollToSelectedItem?: boolean;
 
   constructor(
     private treeService: TreeService<CatalogTreeModelMetadataTypes, CatalogTreeModelTypeEnum>,
     private store$: Store,
-    private catalogTreeService: CatalogTreeService,
     private ngZone: NgZone,
   ) {
     this.isLoading$ = this.store$.select(selectCatalogLoadStatus)
@@ -39,7 +40,7 @@ export class CatalogBaseTreeComponent implements OnDestroy {
       .pipe(map(error => error || null));
     this.treeService.nodeExpansionChangedSource$
       .pipe(takeUntil(this.destroyed))
-      .subscribe(({ node, expanded }) => this.ngZone.run(() => this.toggleExpansion(node, expanded)));
+      .subscribe(({ node }) => this.ngZone.run(() => this.toggleExpansion(node)));
     this.store$.select(selectCatalogLoadStatus)
       .pipe(take(1))
       .subscribe(loadStatus => {
@@ -49,12 +50,9 @@ export class CatalogBaseTreeComponent implements OnDestroy {
       });
   }
 
-  private toggleExpansion(node: CatalogTreeModel, expanded: boolean) {
+  private toggleExpansion(node: CatalogTreeModel) {
     if (CatalogTreeHelper.isExpandableNode(node) && node.metadata && node.type) {
-      this.store$.dispatch(expandTree({ id: node.metadata.id, nodeType: node.type }));
-    }
-    if (expanded && CatalogTreeHelper.isCatalogNode(node) && !!node.metadata) {
-      this.catalogTreeService.loadCatalogNodeItems$(node.metadata.id).subscribe();
+      this.store$.dispatch(expandTree({ id: node.metadata.id, nodeType: node.type, toggle: true }));
     }
   }
 

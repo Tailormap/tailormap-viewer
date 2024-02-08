@@ -19,6 +19,8 @@ window.ResizeObserver =
     unobserve: jest.fn(),
   }));
 
+Element.prototype.scrollTo = Element.prototype.scrollTo || (() => {});
+
 jest.mock('jsts/org/locationtech/jts/io', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   OL3Parser: class MockedParser {

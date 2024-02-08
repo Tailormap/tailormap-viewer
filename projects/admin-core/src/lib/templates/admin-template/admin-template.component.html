@@ -1,14 +1,14 @@
 <div class="wrapper">
   <div class="page-title">
     <div class="logo"><mat-icon svgIcon="logo"></mat-icon></div>
-    <div class="title">{{ pageTitle }}</div>
+    <div class="title">{{ pageTitle$ | async }}</div>
   </div>
   <div class="body">
     <div class="navigation">
       <tm-admin-navigation></tm-admin-navigation>
     </div>
-    <div class="content" [ngClass]="cls">
-      <ng-content></ng-content>
+    <div class="content" [ngClass]="className$ | async">
+      <router-outlet></router-outlet>
     </div>
   </div>
 </div>

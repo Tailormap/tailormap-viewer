@@ -1,3 +1,8 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
 .edit-application-tree {
   --other-content-height: calc(var(--header-height) + 200px);
   --app-tree-list-width: 300px;
@@ -5,7 +10,8 @@
   display: flex;
   overflow-x: auto;
   flex-wrap: wrap;
-  max-width: calc(var(--100vw) - var(--navigation-size) - var(--app-tree-list-width) - calc(3 * 16px))
+  max-width: calc(var(--100vw) - var(--navigation-size) - var(--app-tree-list-width) - calc(3 * 16px));
+  height: 100%;
 }
 
 .edit-application-tree ::ng-deep .tree-wrapper {

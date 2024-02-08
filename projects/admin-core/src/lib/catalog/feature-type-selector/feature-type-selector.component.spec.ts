@@ -4,30 +4,28 @@ import { CatalogState, catalogStateKey, initialCatalogState } from '../state/cat
 import { createMockStore } from '@ngrx/store/testing';
 import { LoadingStateEnum, SharedImportsModule } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
-import { loadFeatureSources } from '../state/catalog.actions';
 import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
-import { FeatureSourceProtocolEnum, getFeatureSource, getFeatureType } from '@tailormap-admin/admin-api';
+import { FeatureSourceProtocolEnum, getFeatureSource, getFeatureTypeSummary } from '@tailormap-admin/admin-api';
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 import userEvent from '@testing-library/user-event';
 
 const setup = async (status: LoadingStateEnum, layerName?: string) => {
   const featureTypeModel: ExtendedFeatureTypeModel = {
-    ...getFeatureType({ name: 'ft_1', title: 'some table' }),
-    id: 'ft_1',
+    ...getFeatureTypeSummary({ name: 'ft_1', title: 'some table' }),
+    id: '1_ft_1',
     originalId: 'ft_1',
     featureSourceId: '1',
     catalogNodeId: '',
   };
   const featureSourceModel: ExtendedFeatureSourceModel = {
     ...getFeatureSource({ id: '1', title: 'JDBC source', protocol: FeatureSourceProtocolEnum.JDBC }),
-    children: ['ft_1'],
+    featureTypesIds: ['ft_1'],
     catalogNodeId: '',
   };
   const catalogState: CatalogState = {
     ...initialCatalogState,
     featureTypes: [featureTypeModel],
     featureSources: [featureSourceModel],
-    featureSourcesLoadStatus: status,
   };
   const store = createMockStore({ initialState: { [catalogStateKey]: catalogState } });
   const dispatch = jest.fn();
@@ -49,20 +47,6 @@ const setup = async (status: LoadingStateEnum, layerName?: string) => {
 };
 
 describe('FeatureTypeSelectorComponent', () => {
-
-  test('should render and trigger load', async () => {
-    const { dispatch } = await setup(LoadingStateEnum.INITIAL);
-    expect(dispatch).toHaveBeenCalledWith(loadFeatureSources());
-    expect(await screen.queryByRole('progressbar')).not.toBeInTheDocument();
-    expect(await screen.queryAllByRole('combobox')).toHaveLength(2);
-  });
-
-  test('should render spinner while loading', async () => {
-    const { dispatch } = await setup(LoadingStateEnum.LOADING);
-    expect(dispatch).not.toHaveBeenCalled();
-    expect(await screen.queryByRole('progressbar')).toBeInTheDocument();
-    expect(await screen.queryAllByRole('combobox')).toHaveLength(0);
-  });
 
   test('should trigger change when selecting source & feature type', async () => {
     const { dispatch, featureTypeSelected } = await setup(LoadingStateEnum.LOADED);

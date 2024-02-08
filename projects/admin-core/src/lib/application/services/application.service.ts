@@ -6,12 +6,10 @@ import {
 import { catchError, concatMap, distinctUntilChanged, filter, map, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { DebounceHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
 import {
-  addApplicationRootNodes, addApplication, deleteApplication, loadApplications, loadApplicationServices, loadApplicationServicesSuccess,
+  addApplicationRootNodes, addApplication, deleteApplication, loadApplications,
   updateApplication,
 } from '../state/application.actions';
 import { selectApplicationList, selectApplicationsLoadStatus, selectDraftApplication } from '../state/application.selectors';
-import { CatalogService } from '../../catalog/services/catalog.service';
-import { ApplicationModelHelper } from '../helpers/application-model.helper';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 import { AdminSseService, EventType } from '../../shared/services/admin-sse.service';
 
@@ -32,7 +30,6 @@ export class ApplicationService implements OnDestroy {
     private store$: Store,
     private adminApiService: TailormapAdminApiV1Service,
     private adminSnackbarService: AdminSnackbarService,
-    private catalogService: CatalogService,
     private sseService: AdminSseService,
   ) {
     this.store$.select(selectDraftApplication)
@@ -44,7 +41,6 @@ export class ApplicationService implements OnDestroy {
       )
       .subscribe(application => {
         this.ensureApplicationHasRootNodes(application);
-        this.loadServicesForApplication(application);
       });
   }
 
@@ -161,26 +157,6 @@ export class ApplicationService implements OnDestroy {
           return null;
         }),
       );
-  }
-
-  private loadServicesForApplication(application?: ApplicationModel | null) {
-    if (!application) {
-      return;
-    }
-    const serviceIds = [
-      ...(application.contentRoot?.layerNodes || []),
-      ...(application.contentRoot?.baseLayerNodes || []),
-    ]
-      .filter(ApplicationModelHelper.isLayerTreeNode)
-      .map(node => node.serviceId);
-    const applicationServiceIds = Array.from(new Set(serviceIds));
-    const serviceRequests$ = this.catalogService.getServices$(applicationServiceIds, this.destroyed);
-    if (serviceRequests$) {
-      this.store$.dispatch(loadApplicationServices());
-      serviceRequests$.subscribe(() => {
-        this.store$.dispatch(loadApplicationServicesSuccess());
-      });
-    }
   }
 
   private ensureApplicationHasRootNodes(application?: ApplicationModel | null) {

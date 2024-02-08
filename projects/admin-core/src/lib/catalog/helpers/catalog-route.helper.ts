@@ -10,30 +10,24 @@ export class CatalogRouteHelper {
 
   public static getGeoServiceUrl(geoService: { id: string; catalogNodeId: string }): string {
     return CatalogRouteHelper.getUrl(Routes.CATALOG_SERVICE_DETAILS, [
-      [ ':nodeId', geoService.catalogNodeId ],
       [ ':serviceId', geoService.id ],
     ]);
   }
 
   public static getGeoServiceLayerUrl(layer: { id: string; serviceId: string; catalogNodeId: string }): string {
     return CatalogRouteHelper.getUrl(Routes.CATALOG_LAYER_DETAILS, [
-      [ ':nodeId', layer.catalogNodeId ],
-      [ ':serviceId', layer.serviceId ],
       [ ':layerId', layer.id ],
     ]);
   }
 
   public static getFeatureSourceUrl(featureSource: { id: string; catalogNodeId: string }): string {
     return CatalogRouteHelper.getUrl(Routes.FEATURE_SOURCE_DETAILS, [
-      [ ':nodeId', featureSource.catalogNodeId ],
       [ ':featureSourceId', featureSource.id ],
     ]);
   }
 
   public static getFeatureTypeUrl(featureType: { id: string; catalogNodeId: string; featureSourceId: string }): string {
     return CatalogRouteHelper.getUrl(Routes.FEATURE_TYPE_DETAILS, [
-      [ ':nodeId', featureType.catalogNodeId ],
-      [ ':featureSourceId', featureType.featureSourceId ],
       [ ':featureTypeId', featureType.id ],
     ]);
   }

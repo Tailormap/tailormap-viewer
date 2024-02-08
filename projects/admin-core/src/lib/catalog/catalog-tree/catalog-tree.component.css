@@ -1,8 +1,13 @@
+tm-admin-catalog-base-tree {
+  display: block;
+  height: 100%;
+}
+
 :host ::ng-deep .tree-wrapper {
   max-height: var(--content-height);
 }
 
-:host ::ng-deep mat-tree {
+:host ::ng-deep .mat-tree {
   min-width: min-content;
   max-width: 100%;
 }
