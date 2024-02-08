@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, DestroyRef, NgZone, OnInit } from '
 import { DropZoneOptions, RouterHistoryService, TreeDragDropService, TreeService } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
 import { selectCatalogTree } from '../state/catalog.selectors';
-import { BehaviorSubject, filter, map } from 'rxjs';
+import { BehaviorSubject, combineLatest, filter } from 'rxjs';
 import { CatalogTreeModel, CatalogTreeModelMetadataTypes } from '../models/catalog-tree.model';
 import { CatalogTreeHelper } from '../helpers/catalog-tree.helper';
 import { CatalogTreeModelTypeEnum } from '../models/catalog-tree-model-type.enum';
@@ -34,27 +34,23 @@ export class CatalogTreeComponent implements OnInit {
 
   public ngOnInit(): void {
     const catalogTree$ = this.store$.select(selectCatalogTree)
-      .pipe(
-        filter(tree => !!tree && tree.length > 0),
-        map((tree, idx) => {
-          if (idx === 0) {
-            // First time expand current node based on URL
-            const node = CatalogTreeHelper.readNodeFromUrl(this.history.getCurrentUrl());
-            if (node !== null) {
-              this.store$.dispatch(expandTree({ id: node.id, nodeType: node.type }));
-            }
-          }
-          return tree;
-        }),
-      );
-    this.treeService.setDataSource(catalogTree$, () => true);
+      .pipe(filter(tree => !!tree && tree.length > 0));
+    this.treeService.setDataSource(catalogTree$);
     this.treeService.setSelectedNode(this.selectedNodeId.asObservable());
-    this.history.getCurrentUrl$()
-      .pipe(
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe((url: string | null) => {
+
+    let firstRun = true;
+    combineLatest([
+      catalogTree$,
+      this.history.getCurrentUrl$(),
+    ])
+      .pipe(takeUntilDestroyed(this.destroyRef), filter(([tree]) => tree.length > 0))
+      .subscribe(([ _tree, url ]) => {
         const node = CatalogTreeHelper.readNodeFromUrl(url);
+        if (firstRun && node !== null) {
+          // First time expand current node based on URL
+          this.store$.dispatch(expandTree({ id: node.id, nodeType: node.type }));
+          firstRun = false;
+        }
         this.selectedNodeId.next(node ? node.treeNodeId : '');
       });
   }
@@ -86,7 +82,7 @@ export class CatalogTreeComponent implements OnInit {
   }
 
   public getDropZones() {
-      return (target: HTMLDivElement): DropZoneOptions[] => [{
+      return (target: HTMLElement): DropZoneOptions[] => [{
         getTargetElement: () => target,
         dragAllowed: (nodeId: string): boolean => this.isDraggableNode(nodeId),
         dropAllowed: (nodeId: string): boolean => this.isDraggableNode(nodeId),
@@ -99,9 +95,11 @@ export class CatalogTreeComponent implements OnInit {
         },
         isExpandable: (nodeId) => !!this.treeService?.isExpandable(nodeId),
         isExpanded: (nodeId) => !!this.treeService?.isExpanded(nodeId),
-        expandNode: () => {
-          // No automatic expansion because of lazy loading
-          return;
+        expandNode: (nodeId) => {
+          const node = this.treeService?.getNode(nodeId);
+          if (node && CatalogTreeHelper.isCatalogNode(node)) {
+            this.treeService.expandNode(nodeId);
+          }
         },
         getParent: (nodeId) => this.treeService?.getParent(nodeId) || null,
         nodePositionChanged: (evt) => this.ngZone.run(() => {

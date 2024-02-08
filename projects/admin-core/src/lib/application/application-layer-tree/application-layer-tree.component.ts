@@ -56,7 +56,7 @@ export class ApplicationLayerTreeComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.treeService.setDataSource(this.treeNodes$, () => true);
+    this.treeService.setDataSource(this.treeNodes$);
   }
 
   public ngOnDestroy() {

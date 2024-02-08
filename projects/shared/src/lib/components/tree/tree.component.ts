@@ -1,26 +1,29 @@
 import {
-  AfterViewChecked,
-  ChangeDetectorRef, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, Optional, TemplateRef, ViewChild,
+  ChangeDetectorRef, Component, Input, NgZone, OnDestroy, OnInit, Optional, TemplateRef, ViewChild,
 } from '@angular/core';
 import { TreeService } from './tree.service';
-import { takeUntil } from 'rxjs/operators';
+import { debounceTime, takeUntil } from 'rxjs/operators';
 import { FlatTreeHelper } from './helpers/flat-tree.helper';
 import { FlatTreeModel } from './models';
-import { distinctUntilChanged, Subject } from 'rxjs';
+import { distinctUntilChanged, filter, Subject, take } from 'rxjs';
 import { DropZoneOptions, TreeDragDropService, treeNodeBaseClass } from './tree-drag-drop.service';
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 @Component({
   selector: 'tm-tree',
   templateUrl: './tree.component.html',
   styleUrls: ['./tree.component.css'],
 })
-export class TreeComponent implements OnInit, OnDestroy, AfterViewChecked {
+export class TreeComponent implements OnInit, OnDestroy {
 
   @Input()
   public treeNodeTemplate?: TemplateRef<any>;
 
   @Input()
-  public getDropZones?: (defaultTarget: HTMLDivElement, node: FlatTreeModel) => DropZoneOptions[];
+  public getDropZones?: (defaultTarget: HTMLElement, node?: FlatTreeModel) => DropZoneOptions[];
+
+  @Input()
+  public scrollToSelectedItem?: boolean;
 
   @Input()
   public useRadioInputs?: boolean;
@@ -28,8 +31,8 @@ export class TreeComponent implements OnInit, OnDestroy, AfterViewChecked {
   @Input()
   public expandOnGroupClick?: boolean;
 
-  @ViewChild('treeElement', { static: false, read: ElementRef })
-  private treeElement: ElementRef<HTMLDivElement> | undefined;
+  @ViewChild('treeElement', { static: false, read: CdkVirtualScrollViewport })
+  private treeElement: CdkVirtualScrollViewport | undefined;
 
   public selectedNodeId: string | undefined;
 
@@ -40,7 +43,6 @@ export class TreeComponent implements OnInit, OnDestroy, AfterViewChecked {
   private checkedRadioNode: FlatTreeModel | undefined;
 
   private destroyed = new Subject();
-  private selectedItemChanged = false;
 
   constructor(
     private treeService: TreeService,
@@ -57,7 +59,6 @@ export class TreeComponent implements OnInit, OnDestroy, AfterViewChecked {
       )
       .subscribe(selectedNodeId => {
         this.selectedNodeId = selectedNodeId;
-        this.selectedItemChanged = true;
         this.cdr.detectChanges();
       });
     this.treeService.readonlyMode$
@@ -70,35 +71,46 @@ export class TreeComponent implements OnInit, OnDestroy, AfterViewChecked {
       this.treeDragDropService.treeDragDropEnabled$
         .pipe(takeUntil(this.destroyed))
         .subscribe(enabled => this.treeDragDropServiceEnabled = enabled);
+      this.treeService.getTreeDataSource$()
+        .pipe(takeUntil(this.destroyed), filter(dataSource => !!dataSource && dataSource.length > 0))
+        .subscribe(() => {
+          const el = this.treeElement?.elementRef.nativeElement;
+          if (!el || !this.getDropZones) {
+            return;
+          }
+          this.treeDragDropService.dataSourceChanged(this.getDropZones(el));
+        });
     }
-    this.checkedRadioNode = this.getTreeControl().dataNodes.find(node => node.checked);
-  }
-
-  public ngAfterViewChecked() {
-    this.scrollIntoView();
+    if (this.scrollToSelectedItem) {
+      this.treeService.getTreeDataSource$()
+        .pipe(
+          filter(dataSource => !!dataSource && dataSource.length > 0),
+          debounceTime(50),
+          take(1),
+        )
+        .subscribe(dataSource => {
+          this.scrollIntoView(dataSource);
+        });
+    }
   }
 
   public getDataSource() {
-    return this.treeService.getTreeDataSource();
+    return this.treeService.getTreeDataSource$();
   }
 
-  public getTreeControl() {
-    return this.treeService.getTreeControl();
-  }
-
-  public hasChild(idx: number, nodeData: FlatTreeModel) {
+  public hasChild(nodeData: FlatTreeModel) {
     return FlatTreeHelper.isExpandable(nodeData);
   }
 
   public isExpanded(node: FlatTreeModel) {
-    return this.treeService.getTreeControl().isExpanded(node);
+    return node.expanded;
   }
 
   public toggleGroupChecked(node: FlatTreeModel): void {
     if (this.readOnlyMode) {
       return;
     }
-    this.toggleNodeChecked(node, this.treeService.getTreeControl().getDescendants(node));
+    this.toggleNodeChecked(node, this.treeService.getDescendants(node));
   }
 
   public toggleLeafChecked(node: FlatTreeModel): void {
@@ -161,7 +173,7 @@ export class TreeComponent implements OnInit, OnDestroy, AfterViewChecked {
       event.preventDefault();
       return;
     }
-    const dropZoneConfig = this.getDropZones(this.treeElement.nativeElement, node);
+    const dropZoneConfig = this.getDropZones(this.treeElement.elementRef.nativeElement, node);
     const dragAllowed = dropZoneConfig.some(dz => dz.dragAllowed ? dz.dragAllowed(node.id) : true);
     if (!dragAllowed) {
       event.preventDefault();
@@ -200,24 +212,12 @@ export class TreeComponent implements OnInit, OnDestroy, AfterViewChecked {
     return node.id;
   }
 
-  private scrollIntoView() {
-    if (!this.selectedItemChanged) {
-      return;
-    }
-    const selectedEl = document.querySelector('.tree-node--selected');
-    if (selectedEl) {
-      this.selectedItemChanged = false;
-      const rect = selectedEl.getBoundingClientRect();
-      if (
-        rect.top >= 0 &&
-        rect.left >= 0 &&
-        rect.bottom <= (document.documentElement.clientHeight) &&
-        rect.right <= (document.documentElement.clientWidth)
-      ) {
-        return;
-      }
-      selectedEl.scrollIntoView();
-    }
+  private scrollIntoView(treeModels: FlatTreeModel[]) {
+    const idx = treeModels.findIndex(n => n.id === this.selectedNodeId);
+    this.treeElement?.scrollToIndex(idx, 'smooth');
   }
 
+  public depth(node: FlatTreeModel) {
+    return node.level;
+  }
 }

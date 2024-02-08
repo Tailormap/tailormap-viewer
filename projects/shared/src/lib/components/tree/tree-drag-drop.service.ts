@@ -10,7 +10,7 @@ type MouseEventHandler = (e: MouseEvent) => void;
 
 export interface DropZoneOptions {
   dropInsideOnly?: boolean;
-  getTargetElement(): HTMLDivElement | null;
+  getTargetElement(): HTMLElement | null;
   dragAllowed?(nodeid: string): boolean;
   dropAllowed(nodeid: string): boolean;
   dropInsideAllowed(nodeid: string): boolean;
@@ -46,22 +46,22 @@ export class TreeDragDropService implements OnDestroy {
 
   private dropZones: DropZoneOptions[] = [];
 
-  private static getDragTarget(e: DragEvent): HTMLDivElement | null {
+  private static getDragTarget(e: DragEvent): HTMLElement | null {
     if (!e.target) {
       return null;
     }
     return (e.target as HTMLElement).closest(`.${treeNodeBaseClass}`);
   }
 
-  private static getNodeId(treeNode: HTMLDivElement): string {
+  private static getNodeId(treeNode: HTMLElement): string {
     return treeNode.getAttribute('data-nodeid') || '';
   }
 
-  private static loopNodes(treeElement: HTMLDivElement, callback: (treeNode: HTMLDivElement) => void) {
+  private static loopNodes(treeElement: HTMLElement, callback: (treeNode: HTMLElement) => void) {
     const nodes = treeElement.querySelectorAll(`.${treeNodeBaseClass}`);
     // eslint-disable-next-line @typescript-eslint/prefer-for-of
     for (let i = 0; i < nodes.length; i++) {
-      callback(nodes[i] as HTMLDivElement);
+      callback(nodes[i] as HTMLElement);
     }
   }
 
@@ -96,25 +96,29 @@ export class TreeDragDropService implements OnDestroy {
     dropZones.forEach(dz => this.initDropZone(dz));
   }
 
+  public dataSourceChanged(dropZones: DropZoneOptions[]) {
+    dropZones.forEach(dropZone => {
+      const treeElement = dropZone.getTargetElement();
+      if (!treeElement || !treeElement.classList.contains(`mat-tree--drag-active`)) {
+        return;
+      }
+      this.attachEventListenersToNodes(treeElement);
+    });
+  }
+
   private initDropZone(dropZone: DropZoneOptions) {
     const treeElement = dropZone.getTargetElement();
     if (!treeElement) {
       return;
     }
-    const scrollContainer = treeElement.closest('.tree-wrapper') as HTMLDivElement;
+    const scrollContainer = treeElement.closest('.tree-wrapper') as HTMLElement;
     treeElement.classList.add(`mat-tree--drag-active`);
     scrollContainer.addEventListener('dragover', this.handleMouseMove);
-
-    TreeDragDropService.loopNodes(treeElement, treeNode => {
-      treeNode.addEventListener('dragover', this.handleDragOverListener);
-      treeNode.addEventListener('dragleave', this.handleDragLeaveListener);
-      treeNode.addEventListener('dragend', this.handleDragEndListener);
-      treeNode.addEventListener('drop', this.handleDropListener);
-    });
+    this.attachEventListenersToNodes(treeElement);
   }
 
   private handleMouseMove = (e: MouseEvent) => {
-    const scrollContainer = e.currentTarget as HTMLDivElement;
+    const scrollContainer = e.currentTarget as HTMLElement;
     const scrollContainerRect = scrollContainer.getBoundingClientRect();
     const offsetY = e.clientY - scrollContainerRect.top;
     const percentageY = offsetY / scrollContainerRect.height;
@@ -247,18 +251,37 @@ export class TreeDragDropService implements OnDestroy {
       }
       treeElement.classList.remove(`mat-tree--drag-active`);
       treeElement.querySelector('.tree-node__drag-image')?.remove();
-      const scrollContainer = treeElement.closest('.tree-wrapper') as HTMLDivElement;
+      const scrollContainer = treeElement.closest('.tree-wrapper') as HTMLElement;
       scrollContainer.removeEventListener('dragover', this.handleMouseMoveListener);
-      TreeDragDropService.loopNodes(treeElement, treeNode => {
-        treeNode.removeEventListener('dragover', this.handleDragOverListener);
-        treeNode.removeEventListener('dragleave', this.handleDragLeaveListener);
-        treeNode.removeEventListener('dragend', this.handleDragEndListener);
-        treeNode.removeEventListener('drop', this.handleDropListener);
-        treeNode.classList.remove(this.beforeCls);
-        treeNode.classList.remove(this.afterCls);
-        treeNode.classList.remove(this.insideCls);
-      });
+      this.removeEventListenersFromNodes(treeElement);
     });
   };
+
+  private attachEventListenersToNodes(treeElement: HTMLElement) {
+    TreeDragDropService.loopNodes(treeElement, treeNode => {
+      if (treeNode.hasAttribute('tree-listener-added')) {
+        return;
+      }
+      treeNode.setAttribute('tree-listener-added', 'true');
+      treeNode.addEventListener('dragover', this.handleDragOverListener);
+      treeNode.addEventListener('dragleave', this.handleDragLeaveListener);
+      treeNode.addEventListener('dragend', this.handleDragEndListener);
+      treeNode.addEventListener('drop', this.handleDropListener);
+    });
+  }
+
+  private removeEventListenersFromNodes(treeElement: HTMLElement) {
+    TreeDragDropService.loopNodes(treeElement, treeNode => {
+      treeNode.removeEventListener('dragover', this.handleDragOverListener);
+      treeNode.removeEventListener('dragleave', this.handleDragLeaveListener);
+      treeNode.removeEventListener('dragend', this.handleDragEndListener);
+      treeNode.removeEventListener('drop', this.handleDropListener);
+      treeNode.classList.remove(this.beforeCls);
+      treeNode.classList.remove(this.afterCls);
+      treeNode.classList.remove(this.insideCls);
+      treeNode.removeAttribute('tree-listener-added');
+    });
+
+  }
 
 }

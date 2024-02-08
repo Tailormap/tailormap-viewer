@@ -5,7 +5,7 @@
 }
 
 ::ng-deep .tree-wrapper {
-  padding: 6px var(--toc-side-padding) 0 var(--toc-side-padding);
+  padding-right: var(--toc-side-padding);
 }
 
 ::ng-deep .mat-tree {
@@ -40,6 +40,7 @@
 .toc-tree {
   flex: 1;
   overflow: hidden;
+  padding: 6px 0 0 var(--toc-side-padding);
 }
 
 tm-toc-filter-input {

@@ -1,9 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, distinctUntilChanged, filter, Observable, Subject } from 'rxjs';
 
-import { FlatTreeControl } from '@angular/cdk/tree';
 import { FlatTreeHelper } from './helpers/flat-tree.helper';
-import { MatTreeFlatDataSource } from '@angular/material/tree';
 import { TreeModel, FlatTreeModel, NodePositionChangedEventModel } from './models';
 import { takeUntil } from 'rxjs/operators';
 import { BaseTreeModel } from './models/base-tree.model';
@@ -36,26 +34,13 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
   public checkedMap = new Map<string, boolean>();
   public indeterminateMap = new Map<string, boolean>();
 
-  private readonly treeControl: FlatTreeControl<FlatTreeModel<T, TypeDef>>;
-  private readonly dataSource: MatTreeFlatDataSource<TreeModel<T, TypeDef>, FlatTreeModel<T, TypeDef>>;
+  private readonly dataSource = new BehaviorSubject<FlatTreeModel<T, TypeDef>[]>([]);
 
   public constructor() {
-    this.treeControl = new FlatTreeControl<FlatTreeModel<T, TypeDef>>(FlatTreeHelper.getLevel, FlatTreeHelper.isExpandable);
-    this.dataSource = new MatTreeFlatDataSource(this.treeControl, FlatTreeHelper.getTreeFlattener<T, TypeDef>());
-    this.dataSource.data = [];
-    this.treeControl.dataNodes = [];
   }
 
-  public getTreeControl() {
-    return this.treeControl;
-  }
-
-  public getDataNodes() {
-    return this.treeControl.dataNodes;
-  }
-
-  public getTreeDataSource() {
-    return this.dataSource;
+  public getTreeDataSource$() {
+    return this.dataSource.asObservable();
   }
 
   public hasNode(nodeId: string) {
@@ -65,7 +50,7 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
   public isExpandable(nodeId: string) {
     const node = this.nodesMap.get(nodeId);
     if (node) {
-      return this.treeControl.isExpandable(node);
+      return node.expandable;
     }
     return false;
   }
@@ -73,7 +58,7 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
   public isExpanded(nodeId: string) {
     const node = this.nodesMap.get(nodeId);
     if (node) {
-      return this.treeControl.isExpanded(node);
+      return node.expanded;
     }
     return false;
   }
@@ -81,7 +66,6 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
   public expandNode(nodeId: string) {
     const node = this.nodesMap.get(nodeId);
     if (node) {
-      this.treeControl.expand(node);
       this.nodeExpansionChangedSource.next({ expanded: true, node });
     }
     return false;
@@ -92,7 +76,7 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
     if (!node) {
       return null;
     }
-    const parent = FlatTreeHelper.getParentNode(node, this.treeControl.dataNodes);
+    const parent = FlatTreeHelper.getParentNode(node, this.dataSource.value);
     if (parent) {
       return parent.id;
     }
@@ -106,15 +90,12 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
     if (!dragNode.expandable) {
       return false;
     }
-    const children = this.getTreeControl().getDescendants(dragNode).map(node => node.id);
+    const children = this.getDescendants(dragNode).map(node => node.id);
     return children.includes(nodeId);
   }
 
   // Service message commands
-  public setDataSource(
-    dataSource$: Observable<TreeModel<T, TypeDef>[]>,
-    dataChangedCompareFn: (oldTree: FlatTreeModel<T, TypeDef>[], newTree: FlatTreeModel<T, TypeDef>[]) => boolean = TreeService.dataChanged,
-  ) {
+  public setDataSource(dataSource$: Observable<TreeModel<T, TypeDef>[]>) {
     dataSource$
       .pipe(
         takeUntil(this.destroyed),
@@ -122,13 +103,55 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
         filter(data => !!data),
       )
       .subscribe(data => {
-        const flatTree = FlatTreeHelper.getTreeFlattener<T, TypeDef>().flattenNodes(data);
-        if (dataChangedCompareFn(this.treeControl.dataNodes, flatTree)) {
-          this.dataSource.data = data;
-        }
-        this.updateCaches(flatTree);
-        this.expandNodes(flatTree);
+        const treeFlattener = FlatTreeHelper.getTreeFlattener<T, TypeDef>();
+        const flatTree = treeFlattener.flattenNodes(data);
+        const expandedNodes = this.expandFlattenedNodes(flatTree);
+        this.dataSource.next(expandedNodes);
+        this.updateCaches(expandedNodes);
       });
+  }
+
+  // Method borrowed from https://github.com/angular/components/blob/main/src/material/tree/data-source/flat-data-source.ts
+  private expandFlattenedNodes(tree: FlatTreeModel<T, TypeDef>[]) {
+    const results: FlatTreeModel<T, TypeDef>[] = [];
+    const currentExpand: boolean[] = [];
+    currentExpand[0] = true;
+
+    tree.forEach(node => {
+      let expand = true;
+      for (let i = 0; i <= node.level; i++) {
+        expand = expand && currentExpand[i];
+      }
+      if (expand) {
+        results.push(node);
+      }
+      if (node.expandable) {
+        currentExpand[node.level + 1] = node.expanded;
+      }
+    });
+    return results;
+  }
+
+  // Method borrowed from https://github.com/angular/components/blob/main/src/cdk/tree/control/flat-tree-control.ts
+  public getDescendants(node: FlatTreeModel<T, TypeDef>): FlatTreeModel<T, TypeDef>[] {
+    const nodes = this.dataSource.value;
+    const startIndex = nodes.indexOf(node);
+    const results: FlatTreeModel<T, TypeDef>[] = [];
+
+    // Goes through flattened tree nodes in the `dataNodes` array, and get all descendants.
+    // The level of descendants of a tree node must be greater than the level of the given
+    // tree node.
+    // If we reach a node whose level is equal to the level of the tree node, we hit a sibling.
+    // If we reach a node whose level is greater than the level of the tree node, we hit a
+    // sibling of an ancestor.
+    for (
+      let i = startIndex + 1;
+      i < nodes.length && node.level < nodes[i].level;
+      i++
+    ) {
+      results.push(nodes[i]);
+    }
+    return results;
   }
 
   private static dataChanged<T = any, TypeDef extends string = string>(oldTree: FlatTreeModel<T, TypeDef>[], newTreeNodes: FlatTreeModel<T, TypeDef>[]) {
@@ -149,7 +172,7 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
 
   public checkStateChanged(changedNodes: FlatTreeModel<T, TypeDef>[]) {
     changedNodes.forEach(node => this.checkedMap.set(node.id, node.checked));
-    this.updateLevelCheckedCache();
+    this.updateLevelCheckedCache(changedNodes);
     this.checkStateChangedSource.next(changedNodes);
   }
 
@@ -158,8 +181,8 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
   }
 
   public toggleNodeExpanded(node: FlatTreeModel<T, TypeDef>) {
-    this.treeControl.toggle(node);
-    this.nodeExpansionChangedSource.next({ expanded: this.treeControl.isExpanded(node), node });
+    // this.treeControl.toggle(node);
+    this.nodeExpansionChangedSource.next({ expanded: node.expanded, node });
   }
 
   public nodePositionChanged(evt: NodePositionChangedEventModel) {
@@ -171,33 +194,21 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
     this.destroyed.complete();
   }
 
-  private expandNodes(flatNodes: FlatTreeModel<T, TypeDef>[]) {
-    (flatNodes || []).forEach((flatNode) => {
-      const node = this.getNode(flatNode.id);
-      if (node && flatNode.expandable && flatNode.expanded) {
-        this.treeControl.expand(node);
-      } else if(node && flatNode.expandable && !flatNode.expanded) {
-        this.treeControl.collapse(node);
-      }
-    });
-  }
-
   private updateCaches(data: FlatTreeModel<T, TypeDef>[]) {
     this.checkedMap.clear();
     this.indeterminateMap.clear();
     this.nodesMap.clear();
-    this.treeControl.dataNodes.forEach(node => {
+    data.forEach(node => {
       this.nodesMap.set(node.id, node);
-      if (!FlatTreeHelper.isExpandable(node)) {
-        const updated = (data || []).find(c => c.id === node.id);
-        this.checkedMap.set(node.id, (updated || node).checked);
+      if (!node.expandable) {
+        this.checkedMap.set(node.id, node.checked);
       }
     });
-    this.updateLevelCheckedCache();
+    this.updateLevelCheckedCache(data);
   }
 
-  private updateLevelCheckedCache() {
-    this.treeControl.dataNodes.forEach(node => {
+  private updateLevelCheckedCache(data: FlatTreeModel<T, TypeDef>[]) {
+    data.forEach(node => {
       if (FlatTreeHelper.isExpandable(node)) {
         this.checkedMap.set(node.id, this.descendantsAllSelected(node));
         this.indeterminateMap.set(node.id, this.descendantsPartiallySelected(node));
@@ -213,7 +224,7 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
   }
 
   public descendantsAllSelected(node: FlatTreeModel<T, TypeDef>): boolean {
-    const descendants = this.treeControl.getDescendants(node);
+    const descendants = this.getDescendants(node);
     if (descendants.length === 0) {
       return false;
     }
@@ -221,7 +232,7 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
   }
 
   public descendantsPartiallySelected(node: FlatTreeModel<T, TypeDef>): boolean {
-    const descendants = this.treeControl.getDescendants(node);
+    const descendants = this.getDescendants(node);
     const someChecked = descendants.some(child => this.getCheckedState(child));
     return someChecked && !this.checkedMap.get(node.id);
   }

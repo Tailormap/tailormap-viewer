@@ -24,7 +24,10 @@ export class CatalogBaseTreeComponent implements OnDestroy {
   public treeNodeTemplate?: TemplateRef<any>;
 
   @Input()
-  public getDropZones?: (defaultTarget: HTMLDivElement) => DropZoneOptions[];
+  public getDropZones?: (defaultTarget: HTMLElement) => DropZoneOptions[];
+
+  @Input()
+  public scrollToSelectedItem?: boolean;
 
   constructor(
     private treeService: TreeService<CatalogTreeModelMetadataTypes, CatalogTreeModelTypeEnum>,
