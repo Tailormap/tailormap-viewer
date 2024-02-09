@@ -2,3 +2,7 @@ tm-admin-catalog-tree {
   display: block;
   height: 100%;
 }
+
+.admin-page-wrapper .admin-tree {
+  overflow: visible;
+}

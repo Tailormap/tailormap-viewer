@@ -18,6 +18,7 @@ export class CatalogTreeHelper {
     serviceLayers: ExtendedGeoServiceLayerModel[],
     featureSources: ExtendedFeatureSourceModel[],
     featureTypes: ExtendedFeatureTypeModel[],
+    forceExpandAll = false,
   ): CatalogTreeModel[] {
     const root = catalogNodes.find(l => l.root);
     if (!root) {
@@ -34,7 +35,8 @@ export class CatalogTreeHelper {
         const nodeModel = CatalogTreeHelper.getTreeModelForCatalogNode(node);
         return {
           ...nodeModel,
-          children: [ ...children, ...CatalogTreeHelper.getItems(node, servicesMap, serviceLayersMap, featureSourcesMap, featureTypesMap) ],
+          expanded: forceExpandAll || nodeModel.expanded,
+          children: [ ...children, ...CatalogTreeHelper.getItems(node, servicesMap, serviceLayersMap, featureSourcesMap, featureTypesMap, forceExpandAll) ],
         };
       },
       (node) => node.children || [],
@@ -52,14 +54,15 @@ export class CatalogTreeHelper {
     layers: Map<string, ExtendedGeoServiceLayerModel>,
     featureSources: Map<string, ExtendedFeatureSourceModel>,
     featureTypes: Map<string, ExtendedFeatureTypeModel>,
+    forceExpandAll: boolean,
   ): CatalogTreeModel[] {
     const items: CatalogItemModel[] = node.items || [];
     return items.map(item => {
       if (item.kind === CatalogItemKindEnum.GEO_SERVICE) {
-        return CatalogTreeHelper.getTreeModelForService(services, layers, item.id);
+        return CatalogTreeHelper.getTreeModelForService(services, layers, item.id, forceExpandAll);
       }
       if (item.kind === CatalogItemKindEnum.FEATURE_SOURCE) {
-        return CatalogTreeHelper.getTreeModelForFeatureSource(featureSources, featureTypes, item.id);
+        return CatalogTreeHelper.getTreeModelForFeatureSource(featureSources, featureTypes, item.id, forceExpandAll);
       }
       return null;
     }).filter((n): n is CatalogTreeModel => !!n);
@@ -81,6 +84,7 @@ export class CatalogTreeHelper {
     featureSources: Map<string, ExtendedFeatureSourceModel>,
     featureTypes: Map<string, ExtendedFeatureTypeModel>,
     featureSourceId: string,
+    forceExpandAll: boolean,
   ): CatalogTreeModel | null {
     const featureSource = featureSources.get(featureSourceId);
     if (!featureSource) {
@@ -95,7 +99,7 @@ export class CatalogTreeHelper {
       label: featureSource.title,
       type: CatalogTreeModelTypeEnum.FEATURE_SOURCE_TYPE,
       metadata: featureSource,
-      expanded: featureSource.expanded,
+      expanded: forceExpandAll || featureSource.expanded,
       expandable: (featureSource.featureTypesIds || []).length > 0,
       children: sourceFeatureTypes.map(CatalogTreeHelper.getTreeModelForFeatureType),
     };
@@ -114,6 +118,7 @@ export class CatalogTreeHelper {
     services: Map<string, ExtendedGeoServiceModel>,
     allLayers: Map<string, ExtendedGeoServiceLayerModel>,
     serviceId: string,
+    forceExpandAll: boolean,
   ): CatalogTreeModel | null {
     const service = services.get(serviceId);
     if (!service) {
@@ -129,9 +134,9 @@ export class CatalogTreeHelper {
       type: CatalogTreeModelTypeEnum.SERVICE_TYPE,
       checked: undefined,
       metadata: service,
-      expanded: service.expanded,
+      expanded: forceExpandAll || service.expanded,
       expandable: (service.layerIds || []).length > 0,
-      children: serviceRootLayers.map(l => CatalogTreeHelper.getTreeModelForLayer(l, allLayers, service.settings?.layerSettings)),
+      children: serviceRootLayers.map(l => CatalogTreeHelper.getTreeModelForLayer(l, allLayers, service.settings?.layerSettings, forceExpandAll)),
     };
   }
 
@@ -139,6 +144,7 @@ export class CatalogTreeHelper {
     layer: ExtendedGeoServiceLayerModel,
     allLayers: Map<string, ExtendedGeoServiceLayerModel>,
     layerSettings: Record<string, LayerSettingsModel> | undefined,
+    forceExpandAll: boolean,
   ): CatalogTreeModel {
     const layerChildren: CatalogTreeModel[] = (layer.children || [])
       .map(id => {
@@ -146,7 +152,7 @@ export class CatalogTreeHelper {
         if (!childLayer) {
           return null;
         }
-        return CatalogTreeHelper.getTreeModelForLayer(childLayer, allLayers, layerSettings);
+        return CatalogTreeHelper.getTreeModelForLayer(childLayer, allLayers, layerSettings, forceExpandAll);
       })
       .filter((l): l is CatalogTreeModel => !!l);
     const layerSettingTitle = layerSettings?.[layer.name]?.title;
@@ -157,7 +163,7 @@ export class CatalogTreeHelper {
       type: CatalogTreeModelTypeEnum.SERVICE_LAYER_TYPE,
       metadata: layer,
       checked: undefined,
-      expanded: layer.expanded,
+      expanded: forceExpandAll || layer.expanded,
       expandable: layerChildren.length > 0,
       children: layerChildren.length > 0 ? layerChildren : undefined,
     };

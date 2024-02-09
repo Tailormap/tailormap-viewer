@@ -80,6 +80,7 @@ describe('CatalogCreateButtonsComponent', () => {
     await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save', 0);
     expect(createCatalogNodeMock).toHaveBeenCalledWith({
       title: 'New Folder Inside',
+      type: 'catalog-node',
       root: false,
       parentId: 'root',
       children: null,

@@ -1,10 +1,26 @@
-tm-admin-catalog-base-tree {
+:host,
+.catalog-tree-wrapper {
   display: block;
   height: 100%;
 }
 
+.catalog-tree-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.catalog-filter {
+  margin-bottom: 8px;
+}
+
+tm-admin-catalog-base-tree {
+  display: block;
+  flex: 1;
+  position: relative;
+}
+
 :host ::ng-deep .tree-wrapper {
-  max-height: var(--content-height);
+  max-height: calc(var(--content-height) - 52px - 8px);
 }
 
 :host ::ng-deep .mat-tree {

@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { BehaviorSubject, distinctUntilChanged, filter, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, Observable, Subject } from 'rxjs';
 
 import { FlatTreeHelper } from './helpers/flat-tree.helper';
 import { TreeModel, FlatTreeModel, NodePositionChangedEventModel } from './models';
@@ -103,7 +103,6 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
       .pipe(
         takeUntil(this.destroyed),
         distinctUntilChanged(),
-        filter(data => !!data),
       )
       .subscribe(data => {
         const treeFlattener = FlatTreeHelper.getTreeFlattener<T, TypeDef>();

@@ -13,6 +13,7 @@ import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.mo
 import {
   CatalogItemKindEnum, FeatureSourceSummaryWithFeatureTypesModel, GeoServiceSummaryWithLayersModel,
 } from '@tailormap-admin/admin-api';
+import { CatalogExtendedTypeEnum } from '../models/catalog-extended.model';
 
 type ExpandableNode = { id: string; children?: string[] | null; expanded?: boolean };
 
@@ -114,6 +115,7 @@ const onLoadCatalogsSuccess = (
 ): CatalogState => {
   const catalog: ExtendedCatalogNodeModel[] = payload.nodes.map(node => ({
     ...node,
+    type: CatalogExtendedTypeEnum.CATALOG_NODE_TYPE,
     parentId: payload.nodes.find(n => (n.children || []).includes(node.id))?.id || null,
   }));
   return {
@@ -259,6 +261,7 @@ const onUpdateFeatureType = (
       {
         ...state.featureTypes[idx],
         ...summary,
+        type: CatalogExtendedTypeEnum.FEATURE_TYPE_TYPE,
         id: state.featureTypes[idx].id,
       },
       ...state.featureTypes.slice(idx + 1),
@@ -344,6 +347,7 @@ const onUpdateCatalog = (
   const updatedCatalog = payload.nodes.map<ExtendedCatalogNodeModel>(node => ({
     ...(currentCatalog.get(node.id) || {}),
     ...node,
+    type: CatalogExtendedTypeEnum.CATALOG_NODE_TYPE,
     expanded: currentCatalog.get(node.id)?.expanded,
     parentId: payload.nodes.find(n => (n.children || []).includes(node.id))?.id || null,
   }));
@@ -418,6 +422,11 @@ const onLoadDraftFeatureSourceFailed = (state: CatalogState): CatalogState => ({
   draftFeatureSource: null,
 });
 
+const onSetCatalogFilterTerm = (state: CatalogState, payload: ReturnType<typeof CatalogActions.setCatalogFilterTerm>): CatalogState => ({
+  ...state,
+  filterTerm: payload.filterTerm || undefined,
+});
+
 const catalogReducerImpl = createReducer<CatalogState>(
   initialCatalogState,
   on(CatalogActions.loadCatalogStart, onLoadCatalogStart),
@@ -440,6 +449,7 @@ const catalogReducerImpl = createReducer<CatalogState>(
   on(CatalogActions.loadDraftFeatureSourceStart, onLoadDraftFeatureSourceStart),
   on(CatalogActions.loadDraftFeatureSourceSuccess, onLoadDraftFeatureSourceSuccess),
   on(CatalogActions.loadDraftFeatureSourceFailed, onLoadDraftFeatureSourceFailed),
+  on(CatalogActions.setCatalogFilterTerm, onSetCatalogFilterTerm),
 );
 export const catalogReducer = (state: CatalogState | undefined, action: Action) => catalogReducerImpl(state, action);
 

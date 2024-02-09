@@ -10,6 +10,7 @@ export class RouterHistoryService {
 
   private previousUrl = new BehaviorSubject<string | null>(null);
   private currentUrl = new BehaviorSubject<string | null>(null);
+  private historySize = 0;
 
   constructor(
     private router: Router,
@@ -24,6 +25,7 @@ export class RouterHistoryService {
         if (event instanceof NavigationStart) {
           this.previousUrl.next(this.currentUrl.value);
           this.currentUrl.next(event.url);
+          this.historySize++;
         }
       });
   }
@@ -38,6 +40,15 @@ export class RouterHistoryService {
 
   public getPreviousUrl() {
     return this.previousUrl.value;
+  }
+
+  public isFirstNavigation(url: string | null) {
+    if (this.historySize >= 3) {
+      return false;
+    }
+    // Since we are redirecting directly the first navigation will have happened before reaching this method,
+    // so we check also for size = 2 and equal url. See admin-template.component.ts:32
+    return this.historySize <= 1 || (this.historySize === 2 && this.getPreviousUrl() === url);
   }
 
   public getCurrentUrl() {

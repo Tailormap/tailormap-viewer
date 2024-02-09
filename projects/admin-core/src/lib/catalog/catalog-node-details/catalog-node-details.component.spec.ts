@@ -57,6 +57,7 @@ describe('CatalogNodeDetailsComponent', () => {
     expect(updateCatalogNodeMock).toHaveBeenCalledWith({
       id: '1',
       title: 'Random services folder premium',
+      type: 'catalog-node',
       root: false,
       parentId: 'root',
       children: null,
