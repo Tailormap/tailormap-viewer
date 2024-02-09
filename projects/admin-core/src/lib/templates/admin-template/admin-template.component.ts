@@ -29,7 +29,7 @@ export class AdminTemplateComponent {
     this.pageTitle$ = RoutePropertyHelper.getPropForRoute$(router, route, 'pageTitle')
       .pipe(takeUntilDestroyed(destroyRef));
     if (firstRun) {
-      router.navigateByUrl(document.location.pathname);
+      router.navigateByUrl(router.routerState.snapshot.url);
       firstRun = false;
     }
   }
