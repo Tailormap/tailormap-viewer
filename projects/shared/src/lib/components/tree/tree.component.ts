@@ -23,7 +23,21 @@ export class TreeComponent implements OnInit, OnDestroy {
   public getDropZones?: (defaultTarget: HTMLElement, node?: FlatTreeModel) => DropZoneOptions[];
 
   @Input()
-  public scrollToSelectedItem?: boolean;
+  public set scrollToItem(scrollToItem: string | undefined | null) {
+    if (!scrollToItem) {
+      return;
+    }
+    this.treeService.getTreeDataSource$()
+      .pipe(
+        filter(dataSource => !!dataSource && dataSource.length > 0),
+        debounceTime(50),
+        take(1),
+      )
+      .subscribe(dataSource => {
+        const idx = dataSource.findIndex(n => n.id === scrollToItem);
+        this.treeElement?.scrollToIndex(idx, 'smooth');
+      });
+  }
 
   @Input()
   public useRadioInputs?: boolean;
@@ -79,17 +93,6 @@ export class TreeComponent implements OnInit, OnDestroy {
             return;
           }
           this.treeDragDropService.dataSourceChanged(this.getDropZones(el));
-        });
-    }
-    if (this.scrollToSelectedItem) {
-      this.treeService.getTreeDataSource$()
-        .pipe(
-          filter(dataSource => !!dataSource && dataSource.length > 0),
-          debounceTime(50),
-          take(1),
-        )
-        .subscribe(dataSource => {
-          this.scrollIntoView(dataSource);
         });
     }
   }
@@ -210,11 +213,6 @@ export class TreeComponent implements OnInit, OnDestroy {
 
   public treeTrackBy(idx: number, node: FlatTreeModel) {
     return node.id;
-  }
-
-  private scrollIntoView(treeModels: FlatTreeModel[]) {
-    const idx = treeModels.findIndex(n => n.id === this.selectedNodeId);
-    this.treeElement?.scrollToIndex(idx, 'smooth');
   }
 
   public depth(node: FlatTreeModel) {

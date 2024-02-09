@@ -25,6 +25,11 @@ export class CatalogTreeComponent implements OnInit {
 
   public catalogFilter = new FormControl('');
 
+  private scrollToItem = new BehaviorSubject<string | undefined>(undefined);
+  public scrollToItem$ = this.scrollToItem.asObservable();
+
+  private hasFilter= false;
+
   constructor(
     private treeService: TreeService<CatalogTreeModelMetadataTypes, CatalogTreeModelTypeEnum>,
     private treeDragDropService: TreeDragDropService,
@@ -48,9 +53,10 @@ export class CatalogTreeComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef), filter(([tree]) => tree.length > 0))
       .subscribe(([ _tree, url ]) => {
         const node = CatalogTreeHelper.readNodeFromUrl(url);
-        if (firstRun && node !== null) {
+        if (firstRun && this.history.isFirstNavigation(url) && node !== null) {
           // First time expand current node based on URL
           this.store$.dispatch(expandTree({ id: node.id, nodeType: node.type }));
+          this.scrollToItem.next(node.treeNodeId);
           firstRun = false;
         }
         this.selectedNodeId.next(node ? node.treeNodeId : '');
@@ -59,7 +65,12 @@ export class CatalogTreeComponent implements OnInit {
     this.catalogFilter.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef), distinctUntilChanged(), debounceTime(250))
       .subscribe(filterTerm => {
+        // We had a filter, not anymore, scroll to selected item
+        if (this.hasFilter && !filterTerm) {
+          this.scrollToItem.next(this.selectedNodeId.value);
+        }
         this.store$.dispatch(setCatalogFilterTerm({ filterTerm }));
+        this.hasFilter = !!filterTerm;
       });
   }
 

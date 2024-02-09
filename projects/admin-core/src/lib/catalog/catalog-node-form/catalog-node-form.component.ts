@@ -1,8 +1,9 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
 import { debounceTime, Subject, takeUntil } from 'rxjs';
 import { FormHelper } from '../../helpers/form.helper';
+import { CatalogExtendedTypeEnum } from '../models/catalog-extended.model';
 
 @Component({
   selector: 'tm-admin-catalog-node-form',
@@ -49,6 +50,7 @@ export class CatalogNodeFormComponent implements OnInit, OnDestroy {
           return;
         }
         this.changed.emit({
+          type: CatalogExtendedTypeEnum.CATALOG_NODE_TYPE,
           title: value.title || '',
           parentId: this.parentNode,
           root: false,

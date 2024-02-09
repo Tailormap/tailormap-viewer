@@ -1,21 +1,20 @@
 import {
-  CatalogModelHelper, FeatureSourceModel,
-  FeatureSourceSummaryWithFeatureTypesModel, FeatureTypeModel, FeatureTypeSummaryModel,
-  GeoServiceLayerModel,
-  GeoServiceSummaryWithLayersModel,
-  GeoServiceWithLayersModel,
+  FeatureSourceModel, FeatureSourceSummaryWithFeatureTypesModel, FeatureTypeModel, FeatureTypeSummaryModel,
+  GeoServiceLayerModel, GeoServiceSummaryWithLayersModel, GeoServiceWithLayersModel, LayerSettingsModel,
 } from '@tailormap-admin/admin-api';
 import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-layer.model';
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
+import { CatalogExtendedModel, CatalogExtendedTypeEnum } from '../models/catalog-extended.model';
+import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
 
 export class ExtendedCatalogModelHelper {
 
   public static getGeoServiceSummaryModel(service: GeoServiceWithLayersModel): GeoServiceSummaryWithLayersModel {
     return {
       id: service.id,
-      type: 'geo-service',
+      type: CatalogExtendedTypeEnum.SERVICE_TYPE,
       protocol: service.protocol,
       settings: service.settings,
       authorizationRules: service.authorizationRules,
@@ -27,7 +26,7 @@ export class ExtendedCatalogModelHelper {
   public static getFeatureSourceSummaryModel(featureSource: FeatureSourceModel): FeatureSourceSummaryWithFeatureTypesModel {
     return {
       id: featureSource.id,
-      type: 'feature-source',
+      type: CatalogExtendedTypeEnum.FEATURE_SOURCE_TYPE,
       protocol: featureSource.protocol,
       title: featureSource.title,
       featureTypes: featureSource.featureTypes.map(ExtendedCatalogModelHelper.getFeatureTypeSummaryModel),
@@ -37,7 +36,7 @@ export class ExtendedCatalogModelHelper {
   public static getFeatureTypeSummaryModel(featureType: FeatureTypeModel): FeatureTypeSummaryModel {
     return {
       id: featureType.id,
-      type: 'feature-type',
+      type: CatalogExtendedTypeEnum.FEATURE_TYPE_TYPE,
       title: featureType.title,
       name: featureType.name,
       hasAttributes: (featureType.attributes || []).length > 0,
@@ -45,11 +44,17 @@ export class ExtendedCatalogModelHelper {
     };
   }
 
-  public static getExtendedGeoServiceLayer(layers: GeoServiceLayerModel[], geoServiceId: string, catalogNodeId: string): ExtendedGeoServiceLayerModel[] {
+  public static getExtendedGeoServiceLayer(
+    layers: GeoServiceLayerModel[],
+    geoServiceId: string,
+    catalogNodeId: string,
+    layerSettings: Record<string, LayerSettingsModel> | undefined,
+  ): ExtendedGeoServiceLayerModel[] {
     return layers.map<ExtendedGeoServiceLayerModel>(layer => {
       const parent = ExtendedCatalogModelHelper.findLayerParent(`${layer.id}`, layers);
       return {
         id: `${geoServiceId}_${layer.id}`,
+        type: CatalogExtendedTypeEnum.SERVICE_LAYER_TYPE,
         name: layer.name,
         root: layer.root,
         title: layer.title,
@@ -65,6 +70,7 @@ export class ExtendedCatalogModelHelper {
           ? layer.children.map<string>(id => `${geoServiceId}_${id}`)
           : null,
         parentId: parent ? `${geoServiceId}_${parent.id}` : undefined,
+        layerSettings: layerSettings?.[layer.name],
       };
     });
   }
@@ -75,11 +81,16 @@ export class ExtendedCatalogModelHelper {
 
   public static getExtendedGeoService(geoServiceWithLayers: GeoServiceSummaryWithLayersModel, catalogNodeId: string): [ ExtendedGeoServiceModel, ExtendedGeoServiceLayerModel[] ] {
     const serviceId = `${geoServiceWithLayers.id}`;
-    const serviceLayers = ExtendedCatalogModelHelper.getExtendedGeoServiceLayer(geoServiceWithLayers.layers, serviceId, catalogNodeId);
+    const serviceLayers = ExtendedCatalogModelHelper.getExtendedGeoServiceLayer(
+      geoServiceWithLayers.layers,
+      serviceId,
+      catalogNodeId,
+      geoServiceWithLayers.settings?.layerSettings,
+    );
     const service: ExtendedGeoServiceModel = {
       id: serviceId,
       title: geoServiceWithLayers.title,
-      type: 'geo-service',
+      type: CatalogExtendedTypeEnum.SERVICE_TYPE,
       protocol: geoServiceWithLayers.protocol,
       settings: geoServiceWithLayers.settings,
       authorizationRules: geoServiceWithLayers.authorizationRules,
@@ -96,7 +107,7 @@ export class ExtendedCatalogModelHelper {
     });
     const featureSource: ExtendedFeatureSourceModel = {
       id: sourceId,
-      type: 'feature-source',
+      type: CatalogExtendedTypeEnum.FEATURE_SOURCE_TYPE,
       title: source.title,
       protocol: source.protocol,
       catalogNodeId,
@@ -108,7 +119,7 @@ export class ExtendedCatalogModelHelper {
   public static getExtendedFeatureType(featureType: FeatureTypeSummaryModel, featureSourceId: string, catalogNodeId?: string): ExtendedFeatureTypeModel {
     return {
       id: `${featureSourceId}_${featureType.id}`,
-      type: 'feature-type',
+      type: CatalogExtendedTypeEnum.FEATURE_TYPE_TYPE,
       name: featureType.name,
       title: featureType.title,
       writeable: featureType.writeable,
@@ -123,12 +134,24 @@ export class ExtendedCatalogModelHelper {
     return ExtendedCatalogModelHelper.getOriginalId(extendedId, featureSourceId);
   }
 
-  public static isGeoServiceModel(model: any): model is ExtendedGeoServiceModel {
-    return !!model && model.type && model.type === CatalogModelHelper.GEO_SERVICE_TYPE;
+  public static isCatalogTypeModel(model: CatalogExtendedModel): model is ExtendedCatalogNodeModel {
+    return !!model && model.type && model.type === CatalogExtendedTypeEnum.CATALOG_NODE_TYPE;
   }
 
-  public static isFeatureSourceModel(model: any): model is ExtendedFeatureSourceModel {
-    return !!model && model.type && model.type === CatalogModelHelper.FEATURE_SOURCE_TYPE;
+  public static isGeoServiceModel(model: CatalogExtendedModel): model is ExtendedGeoServiceModel {
+    return !!model && model.type && model.type === CatalogExtendedTypeEnum.SERVICE_TYPE;
+  }
+
+  public static isGeoServiceLayerModel(model: CatalogExtendedModel): model is ExtendedGeoServiceLayerModel {
+    return !!model && model.type && model.type === CatalogExtendedTypeEnum.SERVICE_LAYER_TYPE;
+  }
+
+  public static isFeatureSourceModel(model: CatalogExtendedModel): model is ExtendedFeatureSourceModel {
+    return !!model && model.type && model.type === CatalogExtendedTypeEnum.FEATURE_SOURCE_TYPE;
+  }
+
+  public static isFeatureTypeModel(model: CatalogExtendedModel): model is ExtendedFeatureTypeModel {
+    return !!model && model.type && model.type === CatalogExtendedTypeEnum.FEATURE_TYPE_TYPE;
   }
 
   private static getOriginalId(extendedId: string, sourceId: string): string {

@@ -128,7 +128,7 @@ export const selectCatalogTree = createSelector(
   selectFeatureTypes,
   selectFilterTerm,
   (catalog, services, layers, featureSources, featureTypes, filterTerm): CatalogTreeModel[] => {
-    return CatalogFilterHelper.getFilteredTree(catalog, services, layers, featureSources, featureTypes, filterTerm);
+    return CatalogFilterHelper.filterTreeByFilterTerm(catalog, services, layers, featureSources, featureTypes, filterTerm);
   },
 );
 
