@@ -13,7 +13,6 @@ import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.mo
 import {
   CatalogItemKindEnum, FeatureSourceSummaryWithFeatureTypesModel, GeoServiceSummaryWithLayersModel,
 } from '@tailormap-admin/admin-api';
-import { setCatalogFilterTerm } from './catalog.actions';
 
 type ExpandableNode = { id: string; children?: string[] | null; expanded?: boolean };
 

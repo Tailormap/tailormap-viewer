@@ -5,7 +5,6 @@ import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.mo
 import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
 import { CatalogTreeHelper } from './catalog-tree.helper';
 import { CatalogItemKindEnum } from '@tailormap-admin/admin-api';
-import { join } from '@angular/compiler-cli';
 
 interface NodeWithChildren {
   id: string;
