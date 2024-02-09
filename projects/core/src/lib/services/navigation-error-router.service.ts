@@ -15,7 +15,7 @@ export class NavigationErrorRouterService {
     router.events.pipe(
       takeUntilDestroyed(),
       filter((event): event is NavigationError => event instanceof NavigationError),
-    ).subscribe((event) => {
+    ).subscribe((event: NavigationError) => {
       console.error('Navigation error', event);
       const urlToNavigateTo = NavigationErrorRouterService.getErrorNavigationUrl(event.url, baseHref, localeId);
       if (urlToNavigateTo !== this.urlNavigatedToAfterError) {
