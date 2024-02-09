@@ -47,6 +47,7 @@ describe('CatalogNodeFormDialogComponent', () => {
     await userEvent.click(screen.getByText('Save'));
     expect(catalogServiceMock.createCatalogNode$).toHaveBeenCalledWith({
       title: 'The new folder',
+      type: 'catalog-node',
       root: false,
       parentId: '1',
       children: null,
@@ -64,6 +65,7 @@ describe('CatalogNodeFormDialogComponent', () => {
     expect(catalogServiceMock.updateCatalogNode$).toHaveBeenCalledWith({
       id: '2',
       title: 'The editable folder_edited',
+      type: 'catalog-node',
       root: false,
       parentId: '1',
       children: null,
