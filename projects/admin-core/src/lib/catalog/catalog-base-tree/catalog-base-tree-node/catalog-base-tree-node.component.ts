@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CatalogTreeModel } from '../../models/catalog-tree.model';
 import { CatalogTreeModelTypeEnum } from '../../models/catalog-tree-model-type.enum';
+import { CatalogTreeHelper } from '../../helpers/catalog-tree.helper';
 
 @Component({
   selector: 'tm-admin-catalog-base-tree-node',
@@ -25,7 +26,6 @@ export class CatalogBaseTreeNodeComponent {
     [CatalogTreeModelTypeEnum.SERVICE_LAYER_TYPE]: 'admin_catalog',
     [CatalogTreeModelTypeEnum.FEATURE_SOURCE_TYPE]: 'admin_feature_source',
     [CatalogTreeModelTypeEnum.FEATURE_TYPE_TYPE]: 'admin_feature_type',
-    unknown: '',
   };
 
   private _node: CatalogTreeModel | null = null;
@@ -35,7 +35,7 @@ export class CatalogBaseTreeNodeComponent {
   public set node(node: CatalogTreeModel | null) {
     this._node = node;
     this.nodeSettings.label = CatalogBaseTreeNodeComponent.nodeLabel[node?.type || 'unknown'] || '';
-    this.nodeSettings.icon = CatalogBaseTreeNodeComponent.nodeIcon[node?.type || 'unknown'] || '';
+    this.nodeSettings.icon = CatalogBaseTreeNodeComponent.getNodeIcon(node);
   }
   public get node(): CatalogTreeModel | null {
     return this._node;
@@ -46,5 +46,15 @@ export class CatalogBaseTreeNodeComponent {
 
   @Input()
   public link: string | null = null;
+
+  private static getNodeIcon(node: CatalogTreeModel | null) {
+    if (!node || !node.metadata || !node.type) {
+      return '';
+    }
+    if (CatalogTreeHelper.isFeatureSource(node)) {
+      return node.metadata.protocol === 'WFS' ? 'admin_wfs' : 'admin_jdbc';
+    }
+    return CatalogBaseTreeNodeComponent.nodeIcon[node.type];
+  }
 
 }
