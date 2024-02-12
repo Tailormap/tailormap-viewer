@@ -4,6 +4,7 @@ import { TreeModel, TreeNodePosition, TreeService } from '@tailormap-viewer/shar
 import {
   isLoadingApplicationServices, selectAppLayerNodesForSelectedApplication,
   selectAppLayerTreeForSelectedApplication, selectBaseLayerNodesForSelectedApplication, selectBaseLayerTreeForSelectedApplication,
+  selectDraftApplicationCrs,
 } from '../state/application.selectors';
 import { BehaviorSubject, combineLatest, map, Observable, of, Subject, switchMap, take, takeUntil } from 'rxjs';
 import {
@@ -56,6 +57,7 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
 
   public loadingServices$: Observable<boolean> = of(false);
   public catalogTreeOpened = true;
+  public draftApplicationCrs$: Observable<string | undefined> = of(undefined);
 
   constructor(
     private store$: Store,
@@ -81,6 +83,8 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
         }
         this.selectedNodeIdSubject.next(node);
       });
+
+    this.draftApplicationCrs$ = this.store$.select(selectDraftApplicationCrs);
   }
 
   public ngOnDestroy(): void {

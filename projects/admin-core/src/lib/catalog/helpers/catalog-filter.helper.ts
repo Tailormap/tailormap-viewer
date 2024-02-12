@@ -37,6 +37,33 @@ export class CatalogFilterHelper {
     });
   }
 
+  public static filterTreeByCrs(
+    catalogNodes: ExtendedCatalogNodeModel[],
+    services: ExtendedGeoServiceModel[],
+    serviceLayers: ExtendedGeoServiceLayerModel[],
+    crs: string | undefined,
+  ) {
+    if (!crs) {
+      return CatalogTreeHelper.catalogToTree(catalogNodes, services, serviceLayers, [], []);
+    }
+    const allLayersMap = new Map(serviceLayers.map(l => [ l.id, l ]));
+    return CatalogFilterHelper.getFilteredTree(catalogNodes, services, serviceLayers, [], [], item => {
+      if (ExtendedCatalogModelHelper.isGeoServiceLayerModel(item)) {
+        if (item.crs.includes(crs)) {
+          return true;
+        }
+        let parent = item.parentId ? allLayersMap.get(item.parentId) : null;
+        while (parent) {
+          if (parent.crs.includes(crs)) {
+            return true;
+          }
+          parent = parent.parentId ? allLayersMap.get(parent.parentId) : null;
+        }
+      }
+      return false;
+    });
+  }
+
   private static getFilteredTree(
     catalogNodes: ExtendedCatalogNodeModel[],
     services: ExtendedGeoServiceModel[],

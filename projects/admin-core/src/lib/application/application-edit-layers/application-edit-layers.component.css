@@ -18,7 +18,7 @@
   max-height: calc(var(--100vh) - var(--other-content-height));
 }
 
-.catalog-tree,
+.catalog-tree-wrapper,
 .application-layer-settings {
   display: none;
   position: relative;
@@ -28,10 +28,21 @@
   display: block;
 }
 
-.has-catalog-tree-visible .catalog-tree {
-  display: block;
+.has-catalog-tree-visible .catalog-tree-wrapper {
   flex: 1;
   max-width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.catalog-tree {
+  flex: 1;
+}
+
+.tree-hint {
+  color: #999;
+  font-size: 12px;
+  padding-top: 8px;
 }
 
 .has-catalog-tree-visible .toggle-tree-icon {

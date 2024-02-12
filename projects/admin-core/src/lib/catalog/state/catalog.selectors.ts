@@ -132,23 +132,6 @@ export const selectCatalogTree = createSelector(
   },
 );
 
-export const selectServiceLayerTree = createSelector(
-  selectCatalog,
-  selectGeoServices,
-  selectGeoServiceLayers,
-  (catalog, services, layers): CatalogTreeModel[] => {
-    const filteredNodes = catalog
-      .map(node => ({
-        ...node,
-        items: node.items ? node.items.filter(item => item.kind ===  CatalogItemKindEnum.GEO_SERVICE) : node.items,
-      }))
-      .filter(node => {
-        return (node.children || []).length > 0 || (node.items || []).length > 0;
-      });
-    return CatalogTreeHelper.catalogToTree(filteredNodes, services, layers, [], []);
-  },
-);
-
 export const selectGeoServiceLayersWithSettingsApplied = createSelector(
   selectGeoServiceLayers,
   selectGeoServices,
