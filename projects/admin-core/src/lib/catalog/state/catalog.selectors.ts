@@ -1,6 +1,5 @@
 import { CatalogState, catalogStateKey } from './catalog.state';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { CatalogTreeHelper } from '../helpers/catalog-tree.helper';
 import { CatalogTreeModel } from '../models/catalog-tree.model';
 import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
 import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
@@ -8,7 +7,7 @@ import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-lay
 import { GeoServiceLayerSettingsModel } from '../models/geo-service-layer-settings.model';
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
-import { CatalogItemKindEnum, LayerSettingsModel } from '@tailormap-admin/admin-api';
+import { LayerSettingsModel } from '@tailormap-admin/admin-api';
 import { ExtendedGeoServiceLayerWithSettingsModel } from '../models/extended-geo-service-layer-with-settings.model';
 import { CatalogFilterHelper } from '../helpers/catalog-filter.helper';
 
