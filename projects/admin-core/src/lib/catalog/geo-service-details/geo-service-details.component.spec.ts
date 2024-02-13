@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/angular';
 import { GeoServiceDetailsComponent } from './geo-service-details.component';
 import { of } from 'rxjs';
-import { createMockStore, provideMockStore } from '@ngrx/store/testing';
+import { createMockStore } from '@ngrx/store/testing';
 import { catalogStateKey, initialCatalogState } from '../state/catalog.state';
 import { TailormapAdminApiV1Service, getGeoService } from '@tailormap-admin/admin-api';
 import { ActivatedRoute } from '@angular/router';
@@ -70,11 +70,12 @@ describe('GeoServiceDetailsComponent', () => {
       url: geoServiceModel.url,
       protocol: geoServiceModel.protocol,
       authentication: null,
-      settings: { useProxy: false },
+      settings: { useProxy: false, xyzCrs: null },
     });
     expect(updateGeoServiceSettings).toHaveBeenNthCalledWith(1, {
       defaultLayerSettings: {},
       useProxy: false,
+      xyzCrs: null,
     });
     expect(await screen.queryByText('Refresh service?')).not.toBeInTheDocument();
     TestSaveHelper.waitForButtonToBeDisabled('Save');
@@ -100,7 +101,7 @@ describe('GeoServiceDetailsComponent', () => {
       url: geoServiceModel.url + '?test=test',
       protocol: geoServiceModel.protocol,
       authentication: null,
-      settings: { useProxy: false },
+      settings: { useProxy: false, xyzCrs: null },
     });
     expect(await screen.queryByText('Refresh service?')).toBeInTheDocument();
     await userEvent.click(await screen.findByText('Yes'));

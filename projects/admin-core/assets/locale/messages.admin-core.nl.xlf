@@ -421,6 +421,10 @@
         <source>Enter an URL template such as</source>
         <target>Voer een URL-sjabloon in zoals</target>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.enter-xyz-crs" datatype="html">
+        <source>CRS for this XYZ layer</source>
+        <target state="new">Projectie voor deze XYZ-laag</target>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.error-creating-feature-source" datatype="html">
         <source>Error while creating feature source: <x id="PH" equiv-text="message"/></source>
         <target state="new">Fout bij het maken van de feature source: <x id="PH" equiv-text="message"/></target>

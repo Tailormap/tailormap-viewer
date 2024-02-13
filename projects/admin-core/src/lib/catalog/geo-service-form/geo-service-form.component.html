@@ -26,6 +26,10 @@
       <mat-option *ngFor="let protocol of protocols" [value]="protocol">{{ protocol }}</mat-option>
     </mat-select>
   </mat-form-field>
+  <mat-form-field *ngIf="isXyz()">
+    <mat-label i18n="@@admin-core.catalog.enter-xyz-crs">CRS for this XYZ layer</mat-label>
+    <input matInput type="text" formControlName="xyzCrs"/>
+  </mat-form-field>
   <mat-expansion-panel *ngIf="!isXyz()">
     <mat-expansion-panel-header>
       <mat-panel-title i18n="@@admin-core.catalog.authentication-and-proxy" style="flex-grow: 1">Authentication and proxy</mat-panel-title>
