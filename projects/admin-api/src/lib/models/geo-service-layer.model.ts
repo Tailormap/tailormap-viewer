@@ -4,7 +4,7 @@ export interface GeoServiceLayerModel {
   root: boolean;
   title: string;
   virtual: boolean;
-  crs: string[];
+  crs: null | string[];
   maxScale?: number;
   minScale?: number;
   abstractText: string;
