@@ -359,7 +359,7 @@
       </trans-unit>
       <trans-unit id="core.edit.false" datatype="html">
         <source>False</source>
-        <target>Fout</target>
+        <target>Onwaar</target>
       </trans-unit>
       <trans-unit id="core.edit.feature-created" datatype="html">
         <source>Feature created</source>
