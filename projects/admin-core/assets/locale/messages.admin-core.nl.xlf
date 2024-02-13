@@ -301,9 +301,9 @@
         <source>Add folder</source>
         <target>Map toevoegen</target>
       </trans-unit>
-      <trans-unit id="admin-core.catalog.add-service" datatype="html">
-        <source>Add service</source>
-        <target>Service toevoegen</target>
+      <trans-unit id="admin-core.catalog.add-map-service" datatype="html">
+        <source>Add map service</source>
+        <target>Kaartservice toevoegen</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.attributes" datatype="html">
         <source>Attributes</source>
