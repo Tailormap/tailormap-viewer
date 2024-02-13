@@ -90,7 +90,7 @@ describe('CatalogCreateButtonsComponent', () => {
 
   test('should open add geo service', async () => {
     const { createGeoService$ } = await setup(true);
-    await userEvent.click(await screen.findByText('Add service'));
+    await userEvent.click(await screen.findByText('Add map service'));
     expect(await screen.findByText('Create new service')).toBeInTheDocument();
     await userEvent.type(await screen.findByPlaceholderText('URL'), 'http://service.url');
     await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save', 0);

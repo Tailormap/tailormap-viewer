@@ -56,7 +56,7 @@ export class FeatureSourceFormComponent implements OnInit {
   public changed = new EventEmitter<FeatureSourceCreateModel | null>();
 
   public featureSourceForm = new FormGroup({
-    title: new FormControl('', { nonNullable: true }),
+    title: new FormControl<string | null>(null),
     protocol: new FormControl<FeatureSourceProtocolEnum | null>(null, { nonNullable: true }),
 
     url: new FormControl<string | null>(null),
@@ -127,7 +127,6 @@ export class FeatureSourceFormComponent implements OnInit {
   private isValidForm() {
     const values = this.featureSourceForm.getRawValue();
     return FormHelper.isValidValue(values.protocol)
-      && FormHelper.isValidValue(values.title)
       && this.featureSourceForm.dirty;
   }
 
