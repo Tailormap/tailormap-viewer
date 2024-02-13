@@ -37,7 +37,7 @@ describe('GeoServiceFormComponent', () => {
         url: 'http://localhost.test',
         protocol: 'wms',
         authentication: null,
-        settings: { useProxy: false },
+        settings: { useProxy: false, xyzCrs: null },
       });
     });
     await userEvent.click(await screen.findByText('wms'));
@@ -50,7 +50,7 @@ describe('GeoServiceFormComponent', () => {
         url: 'http://localhost.test',
         protocol: 'wmts',
         authentication: null,
-        settings: { useProxy: false },
+        settings: { useProxy: false, xyzCrs: null },
       });
     });
   });

@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Observable, debounceTime, Subject, takeUntil } from 'rxjs';
+import { debounceTime, Observable, Subject, takeUntil } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
 import {
-  GeoServiceProtocolEnum, GroupModel, AuthorizationRuleGroup, AUTHORIZATION_RULE_ANONYMOUS, GeoServiceModel,
+  AUTHORIZATION_RULE_ANONYMOUS, AuthorizationRuleGroup, GeoServiceModel, GeoServiceProtocolEnum, GroupModel,
 } from '@tailormap-admin/admin-api';
 import { FormHelper } from '../../helpers/form.helper';
 import { GeoServiceCreateModel } from '../models/geo-service-update.model';
@@ -21,6 +21,7 @@ export class GeoServiceFormComponent implements OnInit {
   private _geoService: GeoServiceModel | null = null;
 
   public protocols: GeoServiceProtocolEnum[] = [ GeoServiceProtocolEnum.WMS, GeoServiceProtocolEnum.WMTS, GeoServiceProtocolEnum.XYZ ];
+  private readonly XYZ_CRS_DEFAULT = 'EPSG:3857';
 
   @Input()
   public set geoService(geoService: GeoServiceModel | null) {
@@ -28,6 +29,7 @@ export class GeoServiceFormComponent implements OnInit {
       title: geoService ? geoService.title : '',
       protocol: geoService ? geoService.protocol : GeoServiceProtocolEnum.WMS,
       url: geoService ? geoService.url : '',
+      xyzCrs: (geoService?.protocol === GeoServiceProtocolEnum.XYZ ? geoService.settings?.xyzCrs : null) || this.XYZ_CRS_DEFAULT,
       useProxy: geoService?.settings?.useProxy || false,
       username: geoService?.authentication?.username || '',
       password: geoService?.authentication?.password || '',
@@ -52,6 +54,7 @@ export class GeoServiceFormComponent implements OnInit {
     title: new FormControl('', { nonNullable: true }),
     protocol: new FormControl<GeoServiceProtocolEnum>(GeoServiceProtocolEnum.WMS, { nonNullable: true }),
     url: new FormControl('', { nonNullable: true }),
+    xyzCrs: new FormControl(''),
     useProxy: new FormControl(false, { nonNullable: true }),
     username: new FormControl(''),
     password: new FormControl(''),
@@ -83,11 +86,15 @@ export class GeoServiceFormComponent implements OnInit {
           this.changed.emit(null);
           return;
         }
+        const protocol = this.geoService ? this.geoService.protocol : (value.protocol || GeoServiceProtocolEnum.WMS);
         this.changed.emit({
           title: value.title || '',
           url: value.url || '',
-          protocol: this.geoService ? this.geoService.protocol : (value.protocol || GeoServiceProtocolEnum.WMS),
-          settings: { useProxy: value.useProxy },
+          protocol,
+          settings: {
+            useProxy: value.useProxy,
+            xyzCrs: protocol === GeoServiceProtocolEnum.XYZ ? value.xyzCrs || this.XYZ_CRS_DEFAULT : null,
+          },
           authentication: !this.formHasAuthentication() ? null : {
             method: 'password',
             username: value.username as string,

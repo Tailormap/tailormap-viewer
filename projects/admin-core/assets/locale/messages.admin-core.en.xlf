@@ -317,6 +317,9 @@
       <trans-unit id="admin-core.catalog.enter-url-template" datatype="html">
         <source>Enter an URL template such as</source>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.enter-xyz-crs" datatype="html">
+        <source>CRS for this XYZ layer</source>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.error-creating-feature-source" datatype="html">
         <source>Error while creating feature source: <x id="PH" equiv-text="message"/></source>
       </trans-unit>

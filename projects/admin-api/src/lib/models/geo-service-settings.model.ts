@@ -6,4 +6,5 @@ export interface GeoServiceSettingsModel {
   useProxy?: boolean;
   defaultLayerSettings?: LayerSettingsModel;
   layerSettings?: Record<string, LayerSettingsModel>;
+  xyzCrs?: string | null;
 }

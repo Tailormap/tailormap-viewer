@@ -102,6 +102,7 @@ describe('CatalogCreateButtonsComponent', () => {
       authentication: null,
       settings: {
         useProxy: false,
+        xyzCrs: null,
       },
     }, '1');
   });

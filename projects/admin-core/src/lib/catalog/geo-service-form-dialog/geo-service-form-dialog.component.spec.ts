@@ -64,6 +64,7 @@ describe('GeoServiceFormDialogComponent', () => {
       authentication: null,
       settings: {
         useProxy: false,
+        xyzCrs: null,
       },
     }, '1');
     expect(dialogRefMock.close).toHaveBeenCalled();
@@ -83,6 +84,7 @@ describe('GeoServiceFormDialogComponent', () => {
       authentication: null,
       settings: {
         useProxy: false,
+        xyzCrs: null,
       },
     });
     expect(dialogRefMock.close).toHaveBeenCalled();
