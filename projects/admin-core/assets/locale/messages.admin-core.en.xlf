@@ -113,6 +113,9 @@
       <trans-unit id="admin-core.application.filter-applications" datatype="html">
         <source>Filter applications</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.filtered-layers" datatype="html">
+        <source>The tree above shows only layers matching the application CRS (<x id="INTERPOLATION" equiv-text="{{draftApplicationCrs$ | async}}"/>)</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.folder-name" datatype="html">
         <source>Folder name</source>
       </trans-unit>

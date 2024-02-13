@@ -1,6 +1,5 @@
 import { CatalogState, catalogStateKey } from './catalog.state';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { CatalogTreeHelper } from '../helpers/catalog-tree.helper';
 import { CatalogTreeModel } from '../models/catalog-tree.model';
 import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
 import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
@@ -8,7 +7,7 @@ import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-lay
 import { GeoServiceLayerSettingsModel } from '../models/geo-service-layer-settings.model';
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
-import { CatalogItemKindEnum, LayerSettingsModel } from '@tailormap-admin/admin-api';
+import { LayerSettingsModel } from '@tailormap-admin/admin-api';
 import { ExtendedGeoServiceLayerWithSettingsModel } from '../models/extended-geo-service-layer-with-settings.model';
 import { CatalogFilterHelper } from '../helpers/catalog-filter.helper';
 
@@ -129,23 +128,6 @@ export const selectCatalogTree = createSelector(
   selectFilterTerm,
   (catalog, services, layers, featureSources, featureTypes, filterTerm): CatalogTreeModel[] => {
     return CatalogFilterHelper.filterTreeByFilterTerm(catalog, services, layers, featureSources, featureTypes, filterTerm);
-  },
-);
-
-export const selectServiceLayerTree = createSelector(
-  selectCatalog,
-  selectGeoServices,
-  selectGeoServiceLayers,
-  (catalog, services, layers): CatalogTreeModel[] => {
-    const filteredNodes = catalog
-      .map(node => ({
-        ...node,
-        items: node.items ? node.items.filter(item => item.kind ===  CatalogItemKindEnum.GEO_SERVICE) : node.items,
-      }))
-      .filter(node => {
-        return (node.children || []).length > 0 || (node.items || []).length > 0;
-      });
-    return CatalogTreeHelper.catalogToTree(filteredNodes, services, layers, [], []);
   },
 );
 

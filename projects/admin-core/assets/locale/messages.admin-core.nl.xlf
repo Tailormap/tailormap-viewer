@@ -149,6 +149,10 @@
         <source>Filter applications</source>
         <target>Applicaties filteren</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filtered-layers" datatype="html">
+        <source>The catalog above shows only layers matching the application projection (<x id="INTERPOLATION" equiv-text="{{draftApplicationCrs$ | async}}"/>)</source>
+        <target state="new">De catalogus hierboven bevat alleen lagen die de applicatie projectie (<x id="INTERPOLATION" equiv-text="{{draftApplicationCrs$ | async}}"/>) ondersteunen</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.folder-name" datatype="html">
         <source>Folder name</source>
         <target>Mapnaam</target>

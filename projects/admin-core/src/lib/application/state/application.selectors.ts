@@ -1,10 +1,14 @@
 import { ApplicationState, applicationStateKey } from './application.state';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { ApplicationTreeHelper } from '../helpers/application-tree.helper';
-import { selectGeoServiceLayersWithSettingsApplied } from '../../catalog/state/catalog.selectors';
+import {
+  selectCatalog, selectGeoServiceLayers, selectGeoServiceLayersWithSettingsApplied, selectGeoServices,
+} from '../../catalog/state/catalog.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { AppLayerSettingsModel, AppTreeNodeModel } from '@tailormap-admin/admin-api';
 import { BaseComponentConfigHelper } from '@tailormap-viewer/api';
+import { CatalogTreeModel } from '../../catalog/models/catalog-tree.model';
+import { CatalogFilterHelper } from '../../catalog/helpers/catalog-filter.helper';
 
 const selectApplicationState = createFeatureSelector<ApplicationState>(applicationStateKey);
 
@@ -116,6 +120,20 @@ export const selectDisabledComponentsForSelectedApplication = createSelector(
       ...defaultDisabled.filter(c => !config.find(cmp => cmp.type === c)?.config.enabled),
       ...config.filter(c => !c.config.enabled).map(c => c.type),
     ];
+  });
+
+export const selectDraftApplicationCrs = createSelector(
+  selectDraftApplication,
+  draftApplication => draftApplication?.crs,
+);
+
+export const selectServiceLayerTreeForApplication = createSelector(
+  selectDraftApplicationCrs,
+  selectCatalog,
+  selectGeoServices,
+  selectGeoServiceLayers,
+  (draftApplicationCrs, catalog, services, layers): CatalogTreeModel[] => {
+    return CatalogFilterHelper.filterTreeByCrs(catalog, services, layers, draftApplicationCrs);
   });
 
 export const selectStylingConfig = createSelector(selectDraftApplication, application => application?.styling);

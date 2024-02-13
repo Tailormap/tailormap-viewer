@@ -2,9 +2,13 @@
      [class.has-catalog-tree-visible]="catalogTreeOpened"
      [class.has-selected-layer]="selectedLayerNode$ | async">
   <div class="application-catalog">
-    <div class="catalog-tree">
-      <tm-admin-application-catalog-tree [applicationTreeService]="applicationTreeService"
-                                         (addLayer)="addLayer($event)"></tm-admin-application-catalog-tree>
+    <div class="catalog-tree-wrapper">
+      <div class="catalog-tree">
+        <tm-admin-application-catalog-tree [applicationTreeService]="applicationTreeService"
+                                           (addLayer)="addLayer($event)"></tm-admin-application-catalog-tree>
+      </div>
+      <div class="tree-hint"
+        i18n="@@admin-core.application.filtered-layers">The catalog above shows only layers matching the application projection ({{draftApplicationCrs$ | async}})</div>
     </div>
     <button mat-icon-button (click)="toggleCatalogTree()" class="toggle-tree-icon">
       <mat-icon [svgIcon]="catalogTreeOpened ? 'chevron_left' : 'chevron_right'"></mat-icon>
