@@ -22,7 +22,7 @@ export class ApiResponseHelper {
     if (typeof body.error === 'string' && body.message) {
       return `${body.error}: ${body.message}`;
     }
-    return typeof body === 'object' ? JSON.stringify(body) : body + '';
+    return typeof body === 'object' ? JSON.stringify(body) : `${body}`;
   }
 
 }
