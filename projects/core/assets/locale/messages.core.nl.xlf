@@ -579,7 +579,7 @@
       </trans-unit>
       <trans-unit id="core.filter.is-false-upper" datatype="html">
         <source>Is false</source>
-        <target state="translated">Is niet waar</target>
+        <target state="translated">Is onwaar</target>
       </trans-unit>
       <trans-unit id="core.filter.is-greater-than" datatype="html">
         <source>is greater than</source>
