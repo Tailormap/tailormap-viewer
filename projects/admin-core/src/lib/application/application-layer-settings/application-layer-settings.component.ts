@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output, signal } from '@angular/core';
 import { AppLayerSettingsModel, AppTreeLayerNodeModel } from '@tailormap-admin/admin-api';
 import { Store } from '@ngrx/store';
 import { selectSelectedApplicationLayerSettings } from '../state/application.selectors';
@@ -47,10 +47,13 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
   private editingDisabledTooltip = $localize `:@@admin-core.application.layer-not-editable:This layer cannot be edited because there is no writeable feature source / type configured for this layer`;
   public editableTooltip = this.editingDisabledTooltip;
 
+  public layerTitle = '';
+
   @Input()
   public set node(node: TreeModel<AppTreeLayerNodeModel> | null) {
     this._node = node;
     this.initForm(this._node);
+    this.setTitle();
   }
   public get node(): TreeModel<AppTreeLayerNodeModel> | null {
     return this._node;
@@ -60,6 +63,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
   public set serviceLayer(serviceLayer: ExtendedGeoServiceAndLayerModel | null) {
     this._serviceLayer = serviceLayer;
     this.initFeatureSource(serviceLayer);
+    this.setTitle();
   }
   public get serviceLayer(): ExtendedGeoServiceAndLayerModel | null {
     return this._serviceLayer;
@@ -263,6 +267,16 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
           settings: { ...this.layerSettings[nodeId], ...result },
         });
       });
+  }
+
+  private setTitle() {
+    if (this.serviceLayer) {
+      this.layerTitle =  this.serviceLayer.layer.layerSettings?.title ||  this.serviceLayer.layer.title;
+    } else if (this.node) {
+      this.layerTitle = this.node.label;
+    } else {
+      this.layerTitle = '';
+    }
   }
 
 }

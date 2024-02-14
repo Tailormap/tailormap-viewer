@@ -2,7 +2,7 @@ import { ApplicationState, applicationStateKey } from './application.state';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { ApplicationTreeHelper } from '../helpers/application-tree.helper';
 import {
-  selectCatalog, selectGeoServiceLayers, selectGeoServiceLayersWithSettingsApplied, selectGeoServices,
+  selectCatalog, selectFeatureTypes, selectGeoServiceLayers, selectGeoServices,
 } from '../../catalog/state/catalog.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { AppLayerSettingsModel, AppTreeNodeModel } from '@tailormap-admin/admin-api';
@@ -80,7 +80,7 @@ export const selectBaseLayerNodesForSelectedApplication = createSelector(
 
 export const selectAppLayerTreeForSelectedApplication = createSelector(
   selectAppLayerNodesForSelectedApplication,
-  selectGeoServiceLayersWithSettingsApplied,
+  selectGeoServiceLayers,
   selectExpandedAppLayerNodes,
   selectSelectedApplicationLayerSettings,
   (layerNodes, layers, expandedNodes: string[], layerSettings: Record<string, AppLayerSettingsModel>) => {
@@ -90,7 +90,7 @@ export const selectAppLayerTreeForSelectedApplication = createSelector(
 
 export const selectBaseLayerTreeForSelectedApplication = createSelector(
   selectBaseLayerNodesForSelectedApplication,
-  selectGeoServiceLayersWithSettingsApplied,
+  selectGeoServiceLayers,
   selectExpandedBaseLayerNodes,
   (baseLayerNodes, layers, expandedNodes: string[]) => {
     return ApplicationTreeHelper.layerTreeNodeToTree(baseLayerNodes, layers, expandedNodes, {}, true);
@@ -132,8 +132,9 @@ export const selectServiceLayerTreeForApplication = createSelector(
   selectCatalog,
   selectGeoServices,
   selectGeoServiceLayers,
-  (draftApplicationCrs, catalog, services, layers): CatalogTreeModel[] => {
-    return CatalogFilterHelper.filterTreeByCrs(catalog, services, layers, draftApplicationCrs);
+  selectFeatureTypes,
+  (draftApplicationCrs, catalog, services, layers, featureTypes): CatalogTreeModel[] => {
+    return CatalogFilterHelper.filterTreeByCrs(catalog, services, layers, featureTypes, draftApplicationCrs);
   });
 
 export const selectStylingConfig = createSelector(selectDraftApplication, application => application?.styling);

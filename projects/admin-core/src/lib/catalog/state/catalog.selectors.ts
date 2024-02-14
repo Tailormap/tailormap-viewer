@@ -131,24 +131,6 @@ export const selectCatalogTree = createSelector(
   },
 );
 
-export const selectGeoServiceLayersWithSettingsApplied = createSelector(
-  selectGeoServiceLayers,
-  selectGeoServices,
-  (layers, services): ExtendedGeoServiceLayerWithSettingsModel[] => {
-    return layers.map((layer): ExtendedGeoServiceLayerWithSettingsModel => {
-      const service = services.find(s => s.id === layer.serviceId);
-      if (!service) {
-        return layer;
-      }
-      const layerSettings = service.settings?.layerSettings || {};
-      const settings = layerSettings[layer.name] || {};
-      return {
-        ...layer,
-        settings,
-      };
-    });
-  });
-
 export const selectGeoServiceAndLayerByName = (serviceId: string, layerName: string) => createSelector(
   selectGeoServiceById(serviceId),
   selectGeoServiceLayers,

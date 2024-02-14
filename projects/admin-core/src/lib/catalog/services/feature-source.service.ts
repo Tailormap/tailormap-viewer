@@ -13,7 +13,7 @@ import {
 import { FeatureSourceCreateModel, FeatureSourceUpdateModel, FeatureTypeUpdateModel } from '../models/feature-source-update.model';
 import {
   selectDraftFeatureSource, selectDraftFeatureSourceLoadStatus,
-  selectFeatureSourceById, selectFeatureTypesForSource, selectGeoServiceLayersWithSettingsApplied,
+  selectFeatureSourceById, selectFeatureTypesForSource, selectGeoServiceLayers,
 } from '../state/catalog.selectors';
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
@@ -206,15 +206,15 @@ export class FeatureSourceService {
         take(1),
         switchMap((featureTypes: ExtendedFeatureTypeModel[]) => {
           const featureTypesSet = new Set(featureTypes.map(ft => ft.name));
-          return this.store$.select(selectGeoServiceLayersWithSettingsApplied)
+          return this.store$.select(selectGeoServiceLayers)
             .pipe(
               map(layers => {
                 return layers.filter(layer => {
-                  if (!layer.settings?.featureType) {
+                  if (!layer.layerSettings?.featureType) {
                     return false;
                   }
-                  return `${layer.settings.featureType.featureSourceId}` === featureSourceId
-                    && featureTypesSet.has(layer.settings.featureType.featureTypeName);
+                  return `${layer.layerSettings.featureType.featureSourceId}` === featureSourceId
+                    && featureTypesSet.has(layer.layerSettings.featureType.featureTypeName);
                 });
               }),
             );

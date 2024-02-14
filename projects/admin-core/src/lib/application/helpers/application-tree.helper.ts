@@ -2,7 +2,7 @@ import { TreeHelper, TreeModel } from '@tailormap-viewer/shared';
 import { AppLayerSettingsModel, AppTreeLayerNodeModel, AppTreeLevelNodeModel, AppTreeNodeModel } from '@tailormap-admin/admin-api';
 import { ApplicationModelHelper } from './application-model.helper';
 import { ApplicationService } from '../services/application.service';
-import { ExtendedGeoServiceLayerWithSettingsModel } from '../../catalog/models/extended-geo-service-layer-with-settings.model';
+import { ExtendedGeoServiceLayerModel } from '../../catalog/models/extended-geo-service-layer.model';
 
 export class ApplicationTreeHelper {
 
@@ -16,7 +16,7 @@ export class ApplicationTreeHelper {
 
   public static layerTreeNodeToTree(
     layerTreeNodes: AppTreeNodeModel[],
-    layers: ExtendedGeoServiceLayerWithSettingsModel[],
+    layers: ExtendedGeoServiceLayerModel[],
     expandedNodes: string[],
     layerSettings: Record<string, AppLayerSettingsModel> | null,
     baseLayerTree?: boolean,
@@ -43,7 +43,7 @@ export class ApplicationTreeHelper {
 
   public static getTreeModelForLayerTreeNode(
     node: AppTreeNodeModel,
-    layers: ExtendedGeoServiceLayerWithSettingsModel[],
+    layers: ExtendedGeoServiceLayerModel[],
     expandedNodes: string[],
     layerSettings: Record<string, AppLayerSettingsModel> | null,
     baseLayerTree?: boolean,
@@ -59,9 +59,7 @@ export class ApplicationTreeHelper {
     }
     if (ApplicationModelHelper.isLayerTreeNode(node)) {
       const layerSettingTitle = layerSettings?.[node.id]?.title;
-      label = layerSettingTitle
-        ? layerSettingTitle
-        : (layer?.settings?.title || layer?.title || node.layerName);
+      label = layerSettingTitle || layer?.layerSettings?.title || layer?.title || node.layerName;
     }
     return {
       id: node.id,

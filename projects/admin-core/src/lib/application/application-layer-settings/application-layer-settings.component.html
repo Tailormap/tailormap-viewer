@@ -1,5 +1,5 @@
 <form [formGroup]="layerSettingsForm" *ngIf="node">
-  <h2 i18n="@@admin-core.common.settings-for">Settings for {{ node.label }}</h2>
+  <h2 i18n="@@admin-core.common.settings-for">Settings for {{ layerTitle }}</h2>
   <fieldset class="layer-details" *ngIf="serviceLayer">
     <legend i18n="@@admin-core.catalog.catalog-shortcuts">Catalog shortcuts</legend>
     <ng-container>
