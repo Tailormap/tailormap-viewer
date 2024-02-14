@@ -142,6 +142,17 @@ $app-theme: mat.define-light-theme((
   height: var(--base-button-height);
 }
 
+.mat-mdc-button-base.mdc-button--outlined {
+  --mat-outlined-button-ripple-color: var(--palette-accent-100);
+}
+
+.mat-mdc-button .mat-icon,
+.mat-mdc-unelevated-button .mat-icon,
+.mat-mdc-raised-button .mat-icon,
+.mat-mdc-outlined-button .mat-icon {
+  z-index: 1;
+}
+
 .mat-mdc-icon-button.mat-mdc-button-base {
   width: 40px;
   height: 40px;

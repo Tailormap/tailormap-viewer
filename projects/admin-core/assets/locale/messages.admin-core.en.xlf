@@ -242,6 +242,9 @@
       <trans-unit id="admin-core.catalog.catalog" datatype="html">
         <source>Catalog</source>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.catalog-shortcuts" datatype="html">
+        <source>Catalog shortcuts</source>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.common.cancel" datatype="html">
         <source>Cancel</source>
       </trans-unit>
