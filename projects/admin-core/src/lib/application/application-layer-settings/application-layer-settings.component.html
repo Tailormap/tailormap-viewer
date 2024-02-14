@@ -5,36 +5,30 @@
     <ng-container>
       <mat-icon svgIcon="admin_service"></mat-icon>
       <strong i18n="@@admin-core.common.geo-service">Geo service</strong>
-      <div>
-        <button mat-stroked-button (click)="updateGeoServiceSetting($event, serviceLayer.service)">
-          {{ serviceLayer.service.title }}
-          <mat-icon svgIcon="edit_square" iconPositionEnd></mat-icon>
-        </button>
-      </div>
+      <button mat-stroked-button (click)="updateGeoServiceSetting($event, serviceLayer.service)">
+        {{ serviceLayer.service.title }}
+        <mat-icon svgIcon="edit_square" iconPositionEnd></mat-icon>
+      </button>
     </ng-container>
     <ng-container>
       <mat-icon svgIcon="layers_filled"></mat-icon>
       <strong i18n="@@admin-core.catalog.layer-name">Layer name</strong>
-      <div>
-        <button mat-stroked-button (click)="updateGeoServiceLayerSetting($event, serviceLayer.service, serviceLayer.layer)">
+      <button mat-stroked-button (click)="updateGeoServiceLayerSetting($event, serviceLayer.service, serviceLayer.layer)">
         {{ serviceLayer.layer.title }}
         <ng-container *ngIf="serviceLayer.layer.title !== serviceLayer.layer.name">
           ({{ serviceLayer.layer.name }})
         </ng-container>
         <mat-icon svgIcon="edit_square" iconPositionEnd></mat-icon>
       </button>
-      </div>
     </ng-container>
     <ng-container *ngIf="featureSourceAndType$ | async as featureSourceAndType">
       <ng-container *ngIf="featureSourceAndType.featureType">
         <mat-icon svgIcon="admin_feature_type"></mat-icon>
         <strong i18n="@@admin-core.catalog.feature-type">Feature type</strong>
-        <div>
-          <button mat-stroked-button (click)="updateFeatureTypeSetting($event, featureSourceAndType)">
+        <button mat-stroked-button (click)="updateFeatureTypeSetting($event, featureSourceAndType)">
           {{ featureSourceAndType.featureType.title || featureSourceAndType.featureType.name }}
           <mat-icon svgIcon="edit_square" iconPositionEnd></mat-icon>
         </button>
-        </div>
       </ng-container>
     </ng-container>
   </fieldset>

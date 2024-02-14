@@ -19,6 +19,11 @@ h2 {
   padding-right: 8px;
 }
 
+.layer-details button ::ng-deep .mdc-button__label {
+  flex: 1;
+  text-align: left;
+}
+
 .edit-layer-attributes {
   margin-top: 16px;
 }
