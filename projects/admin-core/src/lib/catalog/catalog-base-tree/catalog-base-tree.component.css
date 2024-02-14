@@ -2,3 +2,7 @@ tm-tree {
   display: block;
   height: 100%;
 }
+
+tm-tree ::ng-deep .connected-item mat-icon {
+  color: var(--primary-color);
+}

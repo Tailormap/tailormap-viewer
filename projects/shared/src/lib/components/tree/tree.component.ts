@@ -145,6 +145,9 @@ export class TreeComponent implements OnInit, OnDestroy {
       `${treeNodeBaseClass}--level-${FlatTreeHelper.getLevel(node)}`,
       `${treeNodeBaseClass}--${!node.checkbox ? 'no-' : ''}checkbox`,
     ];
+    if (node.className) {
+      cls.push(node.className);
+    }
     return cls.join(' ');
   }
 
