@@ -8,7 +8,6 @@ import { GeoServiceLayerSettingsModel } from '../models/geo-service-layer-settin
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
 import { LayerSettingsModel } from '@tailormap-admin/admin-api';
-import { ExtendedGeoServiceLayerWithSettingsModel } from '../models/extended-geo-service-layer-with-settings.model';
 import { CatalogFilterHelper } from '../helpers/catalog-filter.helper';
 
 const selectCatalogState = createFeatureSelector<CatalogState>(catalogStateKey);
