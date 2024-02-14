@@ -9,10 +9,6 @@
         <source>Build date</source>
         <target>Bouwdatum</target>
       </trans-unit>
-      <trans-unit id="shared.about.git-version" datatype="html">
-        <source>Git version</source>
-        <target>Git versie</target>
-      </trans-unit>
       <trans-unit id="shared.about.title" datatype="html">
         <source>About Tailormap</source>
         <target>Over Tailormap</target>

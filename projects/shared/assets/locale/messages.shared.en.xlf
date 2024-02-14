@@ -8,9 +8,6 @@
       <trans-unit id="shared.about.build-date" datatype="html">
         <source>Build date</source>
       </trans-unit>
-      <trans-unit id="shared.about.git-version" datatype="html">
-        <source>Git version</source>
-      </trans-unit>
       <trans-unit id="shared.about.title" datatype="html">
         <source>About Tailormap</source>
       </trans-unit>
