@@ -1,10 +1,11 @@
-.icon {
-  line-height: 16px;
-  height: 16px;
+.icon-link {
+  line-height: 1em;
+  margin-bottom: 4px;
 }
 
-mat-icon {
+.list-icon {
   width: 16px;
+  line-height: 16px;
   height: 16px;
   vertical-align: bottom;
 }
