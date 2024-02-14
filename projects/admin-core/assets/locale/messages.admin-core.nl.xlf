@@ -321,6 +321,10 @@
         <source>Catalog</source>
         <target>Catalogus</target>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.catalog-shortcuts" datatype="html">
+        <source>Catalog shortcuts</source>
+        <target state="new">Catalogus snelkoppelingen</target>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.common.cancel" datatype="html">
         <source>Cancel</source>
         <target>Annuleren</target>
