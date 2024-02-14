@@ -228,7 +228,7 @@ const onUpdateFeatureSource = (
       ...state.featureTypes.filter(f => f.featureSourceId !== updatedFeatureSource.id),
       ...updatedFeatureTypes,
     ],
-    draftFeatureSource: `${state.draftFeatureSource?.id}` === `${payload.featureSource.id}`
+    draftFeatureSource: state.draftFeatureSource?.id === payload.featureSource.id
       ? payload.featureSource
       : state.draftFeatureSource,
   };
