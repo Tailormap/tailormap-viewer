@@ -1,5 +1,5 @@
 export class JdbcDatabaseType {
-  public static readonly POSTGIS = { type: 'postgis', port: 5432, defaultSchema: 'public' };
+  public static readonly POSTGIS = { type: 'postgis', port: 5432, defaultSchema: 'public', defaultConnectionOptions:'?ApplicationName=tailormap-api' };
   public static readonly ORACLE = { type: 'oracle', port: 1521, defaultConnectionOptions: '?oracle.jdbc.J2EE13Compliant=true' };
   public static readonly SQLSERVER = { type: 'sqlserver', port: 1433, defaultConnectionOptions: ';encrypt=false', defaultSchema: 'dbo' };
 
