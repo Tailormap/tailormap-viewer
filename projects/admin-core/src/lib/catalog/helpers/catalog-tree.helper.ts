@@ -3,7 +3,7 @@ import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model'
 import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-layer.model';
 import { CatalogTreeModel } from '../models/catalog-tree.model';
-import { CatalogItemKindEnum, CatalogItemModel, LayerSettingsModel } from '@tailormap-admin/admin-api';
+import { CatalogItemKindEnum, CatalogItemModel } from '@tailormap-admin/admin-api';
 import { CatalogTreeModelTypeEnum } from '../models/catalog-tree-model-type.enum';
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
@@ -59,15 +59,21 @@ export class CatalogTreeHelper {
     const serviceLayersMap = new Map(layers.map(s => [ s.id, s ]));
     const featureSourcesMap = new Map(featureSources.map(s => [ s.id, s ]));
     const featureTypesMap = new Map(featureTypes.map(s => [ s.id, s ]));
+    const featureSourcesAndTypes = new Set(featureTypes.map(s => {
+      return CatalogTreeHelper.getFeatureSourceTypeKey(s.featureSourceId, s.name);
+    }));
     const connectedFeatureTypes = new Set(layers.map(l => {
       if (l.layerSettings?.featureType) {
-        return `${l.layerSettings.featureType.featureSourceId}_${l.layerSettings.featureType.featureTypeName}`;
+        const key = CatalogTreeHelper.getFeatureSourceTypeKey(l.layerSettings.featureType.featureSourceId, l.layerSettings.featureType.featureTypeName);
+        if (key && featureSourcesAndTypes.has(key)) {
+          return key;
+        }
       }
       return '';
-    }));
+    }).filter(s => s !== ''));
     return items.map(item => {
       if (item.kind === CatalogItemKindEnum.GEO_SERVICE) {
-        return CatalogTreeHelper.getTreeModelForService(servicesMap, serviceLayersMap, item.id, forceExpandAll);
+        return CatalogTreeHelper.getTreeModelForService(servicesMap, serviceLayersMap, connectedFeatureTypes, item.id, forceExpandAll);
       }
       if (item.kind === CatalogItemKindEnum.FEATURE_SOURCE) {
         return CatalogTreeHelper.getTreeModelForFeatureSource(featureSourcesMap, featureTypesMap, connectedFeatureTypes, item.id, forceExpandAll);
@@ -105,7 +111,7 @@ export class CatalogTreeHelper {
       .filter((l): l is ExtendedFeatureTypeModel => l !== null);
     let hasConnectedChildren = false;
     const featureTypeChildren = sourceFeatureTypes.map(ft => {
-      const isConnected = connectedFeatureTypes.has(`${ft.featureSourceId}_${ft.name}`);
+      const isConnected = connectedFeatureTypes.has(CatalogTreeHelper.getFeatureSourceTypeKey(ft.featureSourceId, ft.name));
       if (isConnected) {
         hasConnectedChildren = true;
       }
@@ -136,6 +142,7 @@ export class CatalogTreeHelper {
   public static getTreeModelForService(
     services: Map<string, ExtendedGeoServiceModel>,
     allLayers: Map<string, ExtendedGeoServiceLayerModel>,
+    connectedFeatureTypes: Set<string>,
     serviceId: string,
     forceExpandAll: boolean,
   ): CatalogTreeModel | null {
@@ -147,6 +154,9 @@ export class CatalogTreeHelper {
     const serviceRootLayers = serviceLayers
       .map(id => allLayers.get(id) || null)
       .filter((l): l is ExtendedGeoServiceLayerModel => l !== null && l.root);
+    const layerChildren = serviceRootLayers.map(l => {
+      return CatalogTreeHelper.getTreeModelForLayer(l, allLayers, connectedFeatureTypes, forceExpandAll);
+    });
     return {
       id: CatalogTreeHelper.getIdForServiceNode(service.id),
       label: service.title,
@@ -155,14 +165,14 @@ export class CatalogTreeHelper {
       metadata: service,
       expanded: forceExpandAll || service.expanded,
       expandable: (service.layerIds || []).length > 0,
-      children: serviceRootLayers.map(l => CatalogTreeHelper.getTreeModelForLayer(l, allLayers, service.settings?.layerSettings, forceExpandAll)),
+      children: layerChildren,
     };
   }
 
   public static getTreeModelForLayer(
     layer: ExtendedGeoServiceLayerModel,
     allLayers: Map<string, ExtendedGeoServiceLayerModel>,
-    layerSettings: Record<string, LayerSettingsModel> | undefined,
+    connectedFeatureTypes: Set<string>,
     forceExpandAll: boolean,
   ): CatalogTreeModel {
     const layerChildren: CatalogTreeModel[] = (layer.children || [])
@@ -171,11 +181,13 @@ export class CatalogTreeHelper {
         if (!childLayer) {
           return null;
         }
-        return CatalogTreeHelper.getTreeModelForLayer(childLayer, allLayers, layerSettings, forceExpandAll);
+        return CatalogTreeHelper.getTreeModelForLayer(childLayer, allLayers, connectedFeatureTypes, forceExpandAll);
       })
       .filter((l): l is CatalogTreeModel => !!l);
-    const layerSettingTitle = layerSettings?.[layer.name]?.title;
-    const title = layerSettingTitle || layer.title;
+    const title = layer.layerSettings?.title || layer.title;
+    const featureSourceKey = CatalogTreeHelper.getFeatureSourceTypeKey(layer.layerSettings?.featureType?.featureSourceId, layer.layerSettings?.featureType?.featureTypeName);
+    const hasConnectedFeatureSource = featureSourceKey && connectedFeatureTypes.has(featureSourceKey);
+    const className = hasConnectedFeatureSource ? CatalogTreeHelper.CONNECTED_ITEM_CLASS : '';
     return {
       id: CatalogTreeHelper.getIdForLayerNode(layer.id),
       label: title,
@@ -185,6 +197,7 @@ export class CatalogTreeHelper {
       expanded: forceExpandAll || layer.expanded,
       expandable: layerChildren.length > 0,
       children: layerChildren.length > 0 ? layerChildren : undefined,
+      className,
     };
   }
 
@@ -206,6 +219,13 @@ export class CatalogTreeHelper {
 
   public static getIdForFeatureTypeNode(id: string) {
     return `feature-type-${id}`;
+  }
+
+  private static getFeatureSourceTypeKey(featureSourceId?: string | number, featureTypeName?: string) {
+    if (typeof featureSourceId === "undefined" || typeof featureTypeName === "undefined") {
+      return '';
+    }
+    return `${featureSourceId}_${featureTypeName}`;
   }
 
   public static isCatalogNode(node: CatalogTreeModel): node is TreeModel<ExtendedCatalogNodeModel, CatalogTreeModelTypeEnum> {
