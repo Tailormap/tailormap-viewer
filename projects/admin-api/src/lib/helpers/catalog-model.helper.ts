@@ -18,6 +18,7 @@ export class CatalogModelHelper {
   public static addTypeAndFeatureTypesToFeatureSourceSummaryModel<T extends FeatureSourceSummaryModel>(source: T): T {
     return {
       ...source,
+      id: `${source.id}`,
       type: CatalogModelHelper.FEATURE_SOURCE_TYPE,
     };
   }
@@ -25,9 +26,10 @@ export class CatalogModelHelper {
   public static addTypeAndFeatureTypesToFeatureSourceModel<T extends FeatureSourceModel & { allFeatureTypes?: FeatureTypeModel[] }>(source: T): T {
     return {
       ...source,
+      id: `${source.id}`,
       type: CatalogModelHelper.FEATURE_SOURCE_TYPE,
       allFeatureTypes: undefined,
-      featureTypes: source.allFeatureTypes || source.featureTypes || [],
+      featureTypes: (source.allFeatureTypes || source.featureTypes || []).map(ft => ({ ...ft, id: `${ft.id}` })),
     };
   }
 

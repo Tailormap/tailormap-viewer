@@ -254,7 +254,7 @@ export class FeatureSourceService {
         this.store$.dispatch(updateFeatureSource({ featureSource: CatalogModelHelper.addTypeAndFeatureTypesToFeatureSourceModel(featureSource) }));
       }
       if (type === 'remove') {
-        this.store$.dispatch(deleteFeatureSource({ id }));
+        this.store$.dispatch(deleteFeatureSource({ id: `${id}` }));
       }
     }, 50);
   }
@@ -263,7 +263,7 @@ export class FeatureSourceService {
     // Add a small timeout to prevent most duplicate updates to prevent many state updates
     // For data integrity, it should not matter if we update the state twice
     DebounceHelper.debounce(`feature-type-update-${featureType.id}`, () => {
-      this.store$.dispatch(updateFeatureType({ featureType }));
+      this.store$.dispatch(updateFeatureType({ featureType: { ...featureType, id: `${featureType.id}` } }));
     }, 50);
   }
 

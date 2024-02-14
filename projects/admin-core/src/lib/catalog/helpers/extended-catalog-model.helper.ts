@@ -25,7 +25,7 @@ export class ExtendedCatalogModelHelper {
 
   public static getFeatureSourceSummaryModel(featureSource: FeatureSourceModel): FeatureSourceSummaryWithFeatureTypesModel {
     return {
-      id: featureSource.id,
+      id: `${featureSource.id}`,
       type: CatalogExtendedTypeEnum.FEATURE_SOURCE_TYPE,
       protocol: featureSource.protocol,
       title: featureSource.title,
@@ -35,7 +35,7 @@ export class ExtendedCatalogModelHelper {
 
   public static getFeatureTypeSummaryModel(featureType: FeatureTypeModel): FeatureTypeSummaryModel {
     return {
-      id: featureType.id,
+      id: `${featureType.id}`,
       type: CatalogExtendedTypeEnum.FEATURE_TYPE_TYPE,
       title: featureType.title,
       name: featureType.name,
