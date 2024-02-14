@@ -11,3 +11,7 @@ services:
   tailormap:
     networks:
       - geodata
+
+  solr:
+    networks:
+      - geodata

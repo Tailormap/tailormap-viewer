@@ -21,3 +21,6 @@ services:
       - "traefik.http.middlewares.${COMPOSE_PROJECT_NAME:-tailormap}-hsts.headers.STSPreload=true" # activate headers
       - "traefik.docker.network=${PROXY_NETWORK:-traefik}"
       - "traefik.enable=true"
+  solr:
+    labels:
+      - "traefik.enable=false"
