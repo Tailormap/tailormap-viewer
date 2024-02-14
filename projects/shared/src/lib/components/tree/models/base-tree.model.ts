@@ -7,4 +7,5 @@ export interface BaseTreeModel<T = any, TypeDef extends string = string> {
   type?: TypeDef;
   metadata?: T;
   loadingPlaceholder?: boolean;
+  className?: string;
 }

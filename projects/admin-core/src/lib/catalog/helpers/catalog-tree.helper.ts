@@ -12,6 +12,8 @@ import { Routes } from '../../routes';
 
 export class CatalogTreeHelper {
 
+  public static CONNECTED_ITEM_CLASS = 'connected-item';
+
   public static catalogToTree(
     catalogNodes: ExtendedCatalogNodeModel[],
     services: ExtendedGeoServiceModel[],
@@ -24,10 +26,6 @@ export class CatalogTreeHelper {
     if (!root) {
       return [];
     }
-    const servicesMap = new Map(services.map(s => [ s.id, s ]));
-    const serviceLayersMap = new Map(serviceLayers.map(s => [ s.id, s ]));
-    const featureSourcesMap = new Map(featureSources.map(s => [ s.id, s ]));
-    const featureTypesMap = new Map(featureTypes.map(s => [ s.id, s ]));
     const tree = TreeHelper.traverseTree<CatalogTreeModel, ExtendedCatalogNodeModel>(
       catalogNodes,
       root.id,
@@ -36,7 +34,7 @@ export class CatalogTreeHelper {
         return {
           ...nodeModel,
           expanded: forceExpandAll || nodeModel.expanded,
-          children: [ ...children, ...CatalogTreeHelper.getItems(node, servicesMap, serviceLayersMap, featureSourcesMap, featureTypesMap, forceExpandAll) ],
+          children: [ ...children, ...CatalogTreeHelper.getItems(node, services, serviceLayers, featureSources, featureTypes, forceExpandAll) ],
         };
       },
       (node) => node.children || [],
@@ -50,19 +48,29 @@ export class CatalogTreeHelper {
 
   private static getItems(
     node: ExtendedCatalogNodeModel,
-    services: Map<string, ExtendedGeoServiceModel>,
-    layers: Map<string, ExtendedGeoServiceLayerModel>,
-    featureSources: Map<string, ExtendedFeatureSourceModel>,
-    featureTypes: Map<string, ExtendedFeatureTypeModel>,
+    services: ExtendedGeoServiceModel[],
+    layers: ExtendedGeoServiceLayerModel[],
+    featureSources: ExtendedFeatureSourceModel[],
+    featureTypes: ExtendedFeatureTypeModel[],
     forceExpandAll: boolean,
   ): CatalogTreeModel[] {
     const items: CatalogItemModel[] = node.items || [];
+    const servicesMap = new Map(services.map(s => [ s.id, s ]));
+    const serviceLayersMap = new Map(layers.map(s => [ s.id, s ]));
+    const featureSourcesMap = new Map(featureSources.map(s => [ s.id, s ]));
+    const featureTypesMap = new Map(featureTypes.map(s => [ s.id, s ]));
+    const connectedFeatureTypes = new Set(layers.map(l => {
+      if (l.layerSettings?.featureType) {
+        return `${l.layerSettings.featureType.featureSourceId}_${l.layerSettings.featureType.featureTypeName}`;
+      }
+      return '';
+    }));
     return items.map(item => {
       if (item.kind === CatalogItemKindEnum.GEO_SERVICE) {
-        return CatalogTreeHelper.getTreeModelForService(services, layers, item.id, forceExpandAll);
+        return CatalogTreeHelper.getTreeModelForService(servicesMap, serviceLayersMap, item.id, forceExpandAll);
       }
       if (item.kind === CatalogItemKindEnum.FEATURE_SOURCE) {
-        return CatalogTreeHelper.getTreeModelForFeatureSource(featureSources, featureTypes, item.id, forceExpandAll);
+        return CatalogTreeHelper.getTreeModelForFeatureSource(featureSourcesMap, featureTypesMap, connectedFeatureTypes, item.id, forceExpandAll);
       }
       return null;
     }).filter((n): n is CatalogTreeModel => !!n);
@@ -83,6 +91,7 @@ export class CatalogTreeHelper {
   public static getTreeModelForFeatureSource(
     featureSources: Map<string, ExtendedFeatureSourceModel>,
     featureTypes: Map<string, ExtendedFeatureTypeModel>,
+    connectedFeatureTypes: Set<string>,
     featureSourceId: string,
     forceExpandAll: boolean,
   ): CatalogTreeModel | null {
@@ -94,6 +103,14 @@ export class CatalogTreeHelper {
     const sourceFeatureTypes = featureTypeIds
       .map(id => featureTypes.get(id) || null)
       .filter((l): l is ExtendedFeatureTypeModel => l !== null);
+    let hasConnectedChildren = false;
+    const featureTypeChildren = sourceFeatureTypes.map(ft => {
+      const isConnected = connectedFeatureTypes.has(`${ft.featureSourceId}_${ft.name}`);
+      if (isConnected) {
+        hasConnectedChildren = true;
+      }
+      return CatalogTreeHelper.getTreeModelForFeatureType(ft, isConnected);
+    });
     return {
       id: CatalogTreeHelper.getIdForFeatureSourceNode(featureSource.id),
       label: featureSource.title,
@@ -101,16 +118,18 @@ export class CatalogTreeHelper {
       metadata: featureSource,
       expanded: forceExpandAll || featureSource.expanded,
       expandable: (featureSource.featureTypesIds || []).length > 0,
-      children: sourceFeatureTypes.map(CatalogTreeHelper.getTreeModelForFeatureType),
+      children: featureTypeChildren,
+      className: hasConnectedChildren ? CatalogTreeHelper.CONNECTED_ITEM_CLASS : '',
     };
   }
 
-  public static getTreeModelForFeatureType(featureType: ExtendedFeatureTypeModel): CatalogTreeModel {
+  public static getTreeModelForFeatureType(featureType: ExtendedFeatureTypeModel, isConnected: boolean): CatalogTreeModel {
     return {
       id: CatalogTreeHelper.getIdForFeatureTypeNode(featureType.id),
       label: featureType.title,
       type: CatalogTreeModelTypeEnum.FEATURE_TYPE_TYPE,
       metadata: featureType,
+      className: isConnected ? CatalogTreeHelper.CONNECTED_ITEM_CLASS : '',
     };
   }
 

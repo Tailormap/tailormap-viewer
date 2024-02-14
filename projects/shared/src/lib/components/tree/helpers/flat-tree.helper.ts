@@ -29,6 +29,7 @@ export class FlatTreeHelper {
       type: node.type,
       metadata: node.metadata,
       loadingPlaceholder: node.loadingPlaceholder,
+      className: node.className,
     };
   }
 
