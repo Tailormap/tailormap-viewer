@@ -24,7 +24,7 @@ export class CatalogFilterHelper {
     filterTerm: string | undefined,
   ) {
     if (!filterTerm) {
-      return CatalogTreeHelper.catalogToTree(catalogNodes, services, serviceLayers, featureSources, featureTypes);
+      return CatalogTreeHelper.catalogToTree(catalogNodes, services, serviceLayers, featureSources, featureTypes, featureTypes);
     }
     // Create regexes to filter
     const filterRegexes = CatalogFilterHelper.createFilterRegexes(filterTerm);
@@ -41,13 +41,14 @@ export class CatalogFilterHelper {
     catalogNodes: ExtendedCatalogNodeModel[],
     services: ExtendedGeoServiceModel[],
     serviceLayers: ExtendedGeoServiceLayerModel[],
+    featureTypes: ExtendedFeatureTypeModel[],
     crs: string | undefined,
   ) {
     if (!crs) {
-      return CatalogTreeHelper.catalogToTree(catalogNodes, services, serviceLayers, [], []);
+      return CatalogTreeHelper.catalogToTree(catalogNodes, services, serviceLayers, [], [], featureTypes);
     }
     const allLayersMap = new Map(serviceLayers.map(l => [ l.id, l ]));
-    return CatalogFilterHelper.getFilteredTree(catalogNodes, services, serviceLayers, [], [], item => {
+    return CatalogFilterHelper.getFilteredTree(catalogNodes, services, serviceLayers, [], featureTypes, item => {
       if (ExtendedCatalogModelHelper.isGeoServiceLayerModel(item)) {
         if (item.crs?.includes(crs)) {
           return true;
@@ -120,7 +121,8 @@ export class CatalogFilterHelper {
       filteredLayersAndParents,
       filteredFeatureSources,
       filteredFeatureTypes,
-      treeSize <= 30,
+      featureTypes,
+      treeSize <= 30 ? true : undefined,
     );
   }
 

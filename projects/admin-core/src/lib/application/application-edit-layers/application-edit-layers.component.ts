@@ -1,26 +1,26 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { TreeModel, TreeNodePosition, TreeService } from '@tailormap-viewer/shared';
 import {
-  isLoadingApplicationServices, selectAppLayerNodesForSelectedApplication,
-  selectAppLayerTreeForSelectedApplication, selectBaseLayerNodesForSelectedApplication, selectBaseLayerTreeForSelectedApplication,
-  selectDraftApplicationCrs,
+  isLoadingApplicationServices, selectAppLayerNodesForSelectedApplication, selectAppLayerTreeForSelectedApplication,
+  selectBaseLayerNodesForSelectedApplication, selectBaseLayerTreeForSelectedApplication, selectDraftApplicationCrs,
 } from '../state/application.selectors';
-import { BehaviorSubject, combineLatest, map, Observable, of, Subject, switchMap, take, takeUntil } from 'rxjs';
 import {
-  AppLayerSettingsModel, AppTreeLayerNodeModel, AppTreeLevelNodeModel, AppTreeNodeModel,
-} from '@tailormap-admin/admin-api';
+  BehaviorSubject, combineLatest, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, takeUntil,
+} from 'rxjs';
+import { AppLayerSettingsModel, AppTreeLayerNodeModel, AppTreeLevelNodeModel, AppTreeNodeModel } from '@tailormap-admin/admin-api';
 import {
   addApplicationTreeNodes, removeApplicationTreeNode, toggleApplicationNodeExpanded, updateApplicationNodeSettings,
-  updateApplicationTreeNode,
-  updateApplicationTreeNodeVisibility,
-  updateApplicationTreeOrder,
+  updateApplicationTreeNode, updateApplicationTreeNodeVisibility, updateApplicationTreeOrder,
 } from '../state/application.actions';
 import { nanoid } from 'nanoid';
 import { AddLayerEvent } from '../application-catalog-tree/application-catalog-tree.component';
 import { ApplicationTreeHelper } from '../helpers/application-tree.helper';
 import { ApplicationModelHelper } from '../helpers/application-model.helper';
 import { selectGeoServiceAndLayerByName } from '../../catalog/state/catalog.selectors';
+import { expandTree } from '../../catalog/state/catalog.actions';
+import { CatalogTreeModelTypeEnum } from '../../catalog/models/catalog-tree-model-type.enum';
+import { CatalogTreeHelper } from '../../catalog/helpers/catalog-tree.helper';
 
 @Component({
   selector: 'tm-admin-application-edit-layers',
@@ -59,6 +59,9 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
   public catalogTreeOpened = true;
   public draftApplicationCrs$: Observable<string | undefined> = of(undefined);
 
+  private selectedCatalogItemSubject = new BehaviorSubject<string | null>(null);
+  public selectedCatalogItem$ = this.selectedCatalogItemSubject.asObservable();
+
   constructor(
     private store$: Store,
     public applicationTreeService: TreeService<AppTreeNodeModel>,
@@ -82,6 +85,21 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
           return;
         }
         this.selectedNodeIdSubject.next(node);
+      });
+
+    this.selectedServiceLayer$
+      .pipe(
+        takeUntil(this.destroyed),
+        map(s => s?.layer.id),
+        filter(layerId => !!layerId),
+        distinctUntilChanged(),
+      )
+      .subscribe(layerId => {
+        if (!layerId) {
+          return;
+        }
+        this.store$.dispatch(expandTree({ id: layerId, nodeType: CatalogTreeModelTypeEnum.SERVICE_LAYER_TYPE }));
+        this.selectedCatalogItemSubject.next(CatalogTreeHelper.getIdForLayerNode(layerId));
       });
 
     this.draftApplicationCrs$ = this.store$.select(selectDraftApplicationCrs);

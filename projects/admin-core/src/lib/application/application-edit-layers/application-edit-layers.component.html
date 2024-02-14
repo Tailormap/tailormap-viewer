@@ -5,6 +5,7 @@
     <div class="catalog-tree-wrapper">
       <div class="catalog-tree">
         <tm-admin-application-catalog-tree [applicationTreeService]="applicationTreeService"
+                                           [selectedLayerId$]="selectedCatalogItem$"
                                            (addLayer)="addLayer($event)"></tm-admin-application-catalog-tree>
       </div>
       <div class="tree-hint"

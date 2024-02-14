@@ -9,6 +9,7 @@ import { CatalogTreeHelper } from '../../catalog/helpers/catalog-tree.helper';
 import { ExtendedGeoServiceLayerModel } from '../../catalog/models/extended-geo-service-layer.model';
 import { AppTreeNodeModel } from '@tailormap-admin/admin-api';
 import { selectServiceLayerTreeForApplication } from '../state/application.selectors';
+import { map, Observable, of } from 'rxjs';
 
 export interface AddLayerEvent {
   layer: ExtendedGeoServiceLayerModel;
@@ -32,6 +33,9 @@ export class ApplicationCatalogTreeComponent implements OnInit {
   @Output()
   public addLayer = new EventEmitter<AddLayerEvent>();
 
+  @Input()
+  public selectedLayerId$: Observable<string | null> = of(null);
+
   constructor(
     private store$: Store,
     private treeService: TreeService<CatalogTreeModelMetadataTypes, CatalogTreeModelTypeEnum>,
@@ -40,6 +44,7 @@ export class ApplicationCatalogTreeComponent implements OnInit {
 
   public ngOnInit(): void {
     this.treeService.setDataSource(this.store$.select(selectServiceLayerTreeForApplication));
+    this.treeService.setSelectedNode(this.selectedLayerId$.pipe(map(l => l || '')));
   }
 
   public selectableNode(node: TreeModel<CatalogTreeModelMetadataTypes, CatalogTreeModelTypeEnum>): node is TreeModel<ExtendedGeoServiceLayerModel, CatalogTreeModelTypeEnum> {

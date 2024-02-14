@@ -20,12 +20,16 @@ export class CatalogTreeHelper {
     serviceLayers: ExtendedGeoServiceLayerModel[],
     featureSources: ExtendedFeatureSourceModel[],
     featureTypes: ExtendedFeatureTypeModel[],
+    allFeatureTypes: ExtendedFeatureTypeModel[],
     forceExpandAll = false,
   ): CatalogTreeModel[] {
     const root = catalogNodes.find(l => l.root);
     if (!root) {
       return [];
     }
+    const featureSourcesAndTypes = new Set(allFeatureTypes.map(s => {
+      return CatalogTreeHelper.getFeatureSourceTypeKey(s.featureSourceId, s.name);
+    }));
     const tree = TreeHelper.traverseTree<CatalogTreeModel, ExtendedCatalogNodeModel>(
       catalogNodes,
       root.id,
@@ -34,7 +38,7 @@ export class CatalogTreeHelper {
         return {
           ...nodeModel,
           expanded: forceExpandAll || nodeModel.expanded,
-          children: [ ...children, ...CatalogTreeHelper.getItems(node, services, serviceLayers, featureSources, featureTypes, forceExpandAll) ],
+          children: [ ...children, ...CatalogTreeHelper.getItems(node, services, serviceLayers, featureSources, featureTypes, featureSourcesAndTypes, forceExpandAll) ],
         };
       },
       (node) => node.children || [],
@@ -52,6 +56,7 @@ export class CatalogTreeHelper {
     layers: ExtendedGeoServiceLayerModel[],
     featureSources: ExtendedFeatureSourceModel[],
     featureTypes: ExtendedFeatureTypeModel[],
+    featureSourcesAndTypes: Set<string>,
     forceExpandAll: boolean,
   ): CatalogTreeModel[] {
     const items: CatalogItemModel[] = node.items || [];
@@ -59,9 +64,6 @@ export class CatalogTreeHelper {
     const serviceLayersMap = new Map(layers.map(s => [ s.id, s ]));
     const featureSourcesMap = new Map(featureSources.map(s => [ s.id, s ]));
     const featureTypesMap = new Map(featureTypes.map(s => [ s.id, s ]));
-    const featureSourcesAndTypes = new Set(featureTypes.map(s => {
-      return CatalogTreeHelper.getFeatureSourceTypeKey(s.featureSourceId, s.name);
-    }));
     const connectedFeatureTypes = new Set(layers.map(l => {
       if (l.layerSettings?.featureType) {
         const key = CatalogTreeHelper.getFeatureSourceTypeKey(l.layerSettings.featureType.featureSourceId, l.layerSettings.featureType.featureTypeName);
