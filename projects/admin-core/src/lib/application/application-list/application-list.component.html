@@ -30,17 +30,18 @@
                   matListItemMeta
                   color="primary"
                   tmTooltip="Default application"
+                  class="list-icon"
                   i18n-tmTooltip="@@admin-core.application.default-application"
                   svgIcon="admin_default_application"></mat-icon>
-        <a class="icon"
-           (click)="stopPropagation($event)"
+        <a (click)="stopPropagation($event)"
+           class="icon-link"
            [href]="viewerBaseUrl + application.name"
            target="new"
            tmTooltip="Open application"
            matTooltipPosition="right"
            i18n-tmTooltip="@@admin-core.application.open-application"
            matListItemMeta>
-          <mat-icon svgIcon="admin_link_new_window"></mat-icon>
+          <mat-icon class="list-icon" svgIcon="admin_link_new_window"></mat-icon>
         </a>
       </mat-list-item>
     </mat-selection-list>
