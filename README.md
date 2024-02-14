@@ -166,7 +166,9 @@ browsers, even before logging in. By default, source maps (which provide the ori
 are generated but are not served to clients, unless you set the SOURCE_MAP_AUTH environment variable with a username:password. When opening
 DevTools in Chrome, you will get a HTTP Basic popup for this account in order to load source maps. At the moment the developer tools in
 Firefox do not support HTTP Basic authentication for source maps. Note that minified (or even obfuscated) sources are not security. 
-Confidential algorithms should be implemented server-side, and copying of frontend code is prevented by copyright and licensing.
+Confidential algorithms should be implemented server-side, and copying of frontend code is prevented by copyright and licensing. 
+
+To allow public access to source maps without authentication for ease of debugging, set the `SOURCE_MAP_AUTH` environment variable to `public`.
 
 ## Database
 
