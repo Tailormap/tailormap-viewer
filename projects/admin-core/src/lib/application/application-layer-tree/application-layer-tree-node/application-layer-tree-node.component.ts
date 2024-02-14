@@ -30,15 +30,18 @@ export class ApplicationLayerTreeNodeComponent {
     return this.node?.type === 'layer';
   }
 
-  public addFolder(nodeId: string) {
+  public addFolder($event: MouseEvent, nodeId: string) {
+    $event.stopPropagation();
     this.addSubFolder.emit(nodeId);
   }
 
-  public renameFolder(nodeId: string, title: string) {
+  public renameFolder($event: MouseEvent, nodeId: string, title: string) {
+    $event.stopPropagation();
     this.renameSubFolder.emit({ nodeId, title });
   }
 
-  public removeNode(nodeId: string) {
+  public removeNode($event: MouseEvent, nodeId: string) {
+    $event.stopPropagation();
     this.deleteNode.emit(nodeId);
   }
 

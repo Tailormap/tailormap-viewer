@@ -49,7 +49,7 @@ export class ApplicationCatalogTreeComponent implements OnInit {
   public getDropZones(): () => DropZoneOptions[] {
     return () => [{
       dropInsideOnly: true,
-      getTargetElement: () => document.querySelector('.application-tree mat-tree'),
+      getTargetElement: () => document.querySelector('.application-tree .mat-tree'),
       dragAllowed: (nodeid: string) => {
         const node = this.treeService.getNode(nodeid);
         return !!node && this.selectableNode(node);

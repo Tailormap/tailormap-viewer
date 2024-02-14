@@ -12,14 +12,14 @@
             mat-icon-button
             matTooltip="Remove layer from application"
             i18n-matTooltip="@@admin-core.application.remove-layer"
-            (click)="removeNode(node.id)">
+            (click)="removeNode($event, node.id)">
       <mat-icon svgIcon="close"></mat-icon>
     </button>
     <button *ngIf="!isNonRoot()"
             mat-icon-button
             matTooltip="Add sub folder"
             i18n-matTooltip="@@admin-core.application.add-sub-folder"
-            (click)="addFolder(node.id)">
+            (click)="addFolder($event, node.id)">
       <mat-icon svgIcon="plus"></mat-icon>
     </button>
     <button *ngIf="isLevel() && isNonRoot()"
@@ -30,17 +30,17 @@
     </button>
     <mat-menu #menu="matMenu">
       <button mat-menu-item
-              (click)="addFolder(node.id)">
+              (click)="addFolder($event, node.id)">
         <mat-icon svgIcon="plus"></mat-icon>
         <span>Add sub folder</span>
       </button>
       <button mat-menu-item
-              (click)="renameFolder(node.id, node.label)">
+              (click)="renameFolder($event, node.id, node.label)">
         <mat-icon svgIcon="edit"></mat-icon>
         <span>Rename</span>
       </button>
       <button mat-menu-item
-              (click)="removeNode(node.id)">
+              (click)="removeNode($event, node.id)">
         <mat-icon svgIcon="close"></mat-icon>
         <span>Remove</span>
       </button>
