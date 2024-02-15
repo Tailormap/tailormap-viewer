@@ -111,7 +111,7 @@
       </trans-unit>
       <trans-unit id="core.common.line" datatype="html">
         <source>Line</source>
-        <target>Regel</target>
+        <target>Lijn</target>
       </trans-unit>
       <trans-unit id="core.common.next" datatype="html">
         <source>Next</source>
