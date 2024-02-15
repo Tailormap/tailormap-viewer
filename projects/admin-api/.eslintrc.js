@@ -20,7 +20,7 @@ module.exports = {
         "tsconfigRootDir": __dirname
       },
       "rules": {
-        "no-restricted-imports": ["error", getInvalidImportsRule("@tailormap-viewer/admin-api", false, true)]
+        "no-restricted-imports": ["error", getInvalidImportsRule("@tailormap-admin/admin-api", false, true)]
       }
     },
     {
