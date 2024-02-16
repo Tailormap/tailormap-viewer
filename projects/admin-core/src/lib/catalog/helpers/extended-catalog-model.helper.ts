@@ -124,7 +124,7 @@ export class ExtendedCatalogModelHelper {
       title: featureType.title,
       writeable: featureType.writeable,
       hasAttributes: featureType.hasAttributes,
-      originalId: featureType.id,
+      originalId: `${featureType.id}`,
       catalogNodeId: catalogNodeId || '',
       featureSourceId,
     };
