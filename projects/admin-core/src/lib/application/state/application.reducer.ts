@@ -24,6 +24,7 @@ const setDraftApplication = (state: ApplicationState, applicationId: string | nu
     expandedAppLayerNodes: draftApplication ? draftApplication.contentRoot?.layerNodes?.map(n => n.id) ?? [] : [],
     expandedBaseLayerNodes: draftApplication ? draftApplication.contentRoot?.baseLayerNodes?.map(n => n.id) ?? [] : [],
     draftApplicationUpdated: false,
+    draftApplicationValid: true,
   };
 };
 
@@ -184,6 +185,16 @@ const onUpdateDraftApplication = (
       uiSettings: { ...payload.uiSettings },
     },
   }));
+};
+
+const onUpdateDraftApplicationValid = (
+  state: ApplicationState,
+  payload: ReturnType<typeof ApplicationActions.updateDraftApplicationValid>,
+): ApplicationState => {
+  return {
+    ...state,
+    draftApplicationValid: payload.isValid,
+  };
 };
 
 const onAddApplicationTreeNodes = (
@@ -359,6 +370,7 @@ const applicationReducerImpl = createReducer<ApplicationState>(
   on(ApplicationActions.updateApplication, onUpdateApplication),
   on(ApplicationActions.deleteApplication, onDeleteApplication),
   on(ApplicationActions.updateDraftApplication, onUpdateDraftApplication),
+  on(ApplicationActions.updateDraftApplicationValid, onUpdateDraftApplicationValid),
   on(ApplicationActions.addApplicationTreeNodes, onAddApplicationTreeNodes),
   on(ApplicationActions.addApplicationRootNodes, onAddApplicationRootNodes),
   on(ApplicationActions.updateApplicationTreeNode, onUpdateApplicationTreeNode),

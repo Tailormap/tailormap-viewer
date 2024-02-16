@@ -11,8 +11,9 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
 import { adminCoreStateKey, initialAdminCoreState } from '../../state/admin-core.state';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
+import { applicationStateKey, initialApplicationState } from '../state/application.state';
 
-const setup = async (hasApp?: boolean) => {
+const setup = async (hasApp?: boolean, addAppToState?: boolean) => {
   const onUpdate = jest.fn();
   const application = getApplication({
     id: '1',
@@ -33,7 +34,14 @@ const setup = async (hasApp?: boolean) => {
     },
     providers: [
       { provide: TailormapAdminApiV1Service, useValue: { getGroups$: jest.fn(() => of(null)) } },
-      provideMockStore({ initialState: { [userStateKey]: initialUserState, [adminCoreStateKey]: initialAdminCoreState } }),
+      provideMockStore({ initialState: {
+        [userStateKey]: initialUserState,
+          [adminCoreStateKey]: initialAdminCoreState,
+          [applicationStateKey]: {
+            ...initialApplicationState,
+            applications: addAppToState ? [application] : [],
+          },
+      } }),
     ],
   });
   return { application, onUpdate };
@@ -94,6 +102,13 @@ describe('ApplicationFormComponent', () => {
         },
       });
     });
+  });
+
+  test('should render name should be unique error', async () => {
+    const { application } = await setup(false, true);
+    expect(await screen.findByPlaceholderText('Name')).toHaveValue('');
+    await userEvent.type(await screen.findByPlaceholderText('Name'), application.name);
+    expect(await screen.findByText('Name should be unique.')).toBeInTheDocument();
   });
 
 });

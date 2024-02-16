@@ -58,6 +58,11 @@ export const updateDraftApplication = createAction(
   props<UpdateDraftApplicationModel>(),
 );
 
+export const updateDraftApplicationValid = createAction(
+  `${applicationActionsPrefix} Update Draft Application Valid`,
+  props<{ isValid: boolean }>(),
+);
+
 export const addApplicationTreeNodes = createAction(
   `${applicationActionsPrefix} Add Application Tree Nodes`,
   props<{

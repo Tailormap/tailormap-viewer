@@ -19,6 +19,8 @@ export class ApplicationCreateComponent implements OnDestroy {
   public saving$ = this.savingSubject.asObservable();
   public applicationCreateModel: UpdateDraftApplicationModel | null = null;
 
+  public formValid: boolean = true;
+
   constructor(
     private applicationService: ApplicationService,
     private router: Router,
@@ -58,4 +60,9 @@ export class ApplicationCreateComponent implements OnDestroy {
         this.savingSubject.next(false);
       });
   }
+
+  public validApplicationChanged($event: boolean) {
+    this.formValid = $event;
+  }
+
 }

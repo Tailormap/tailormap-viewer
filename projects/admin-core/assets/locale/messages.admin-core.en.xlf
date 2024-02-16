@@ -114,7 +114,7 @@
         <source>Filter applications</source>
       </trans-unit>
       <trans-unit id="admin-core.application.filtered-layers" datatype="html">
-        <source>The tree above shows only layers matching the application CRS (<x id="INTERPOLATION" equiv-text="{{draftApplicationCrs$ | async}}"/>)</source>
+        <source>The catalog above shows only layers matching the application projection (<x id="INTERPOLATION" equiv-text="{{draftApplicationCrs$ | async}}"/>)</source>
       </trans-unit>
       <trans-unit id="admin-core.application.folder-name" datatype="html">
         <source>Folder name</source>
@@ -151,6 +151,9 @@
       </trans-unit>
       <trans-unit id="admin-core.application.no-default-language" datatype="html">
         <source>No default language</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.non-unique-name-error" datatype="html">
+        <source>Name should be unique.</source>
       </trans-unit>
       <trans-unit id="admin-core.application.opacity" datatype="html">
         <source>Opacity</source>
@@ -654,7 +657,7 @@
         <source>Saved</source>
       </trans-unit>
       <trans-unit id="admin-core.common.settings-for" datatype="html">
-        <source>Settings for <x id="INTERPOLATION" equiv-text="{{ node.label }}"/></source>
+        <source>Settings for <x id="INTERPOLATION" equiv-text="{{ layerTitle }}"/></source>
       </trans-unit>
       <trans-unit id="admin-core.common.settings-title" datatype="html">
         <source>Settings</source>
