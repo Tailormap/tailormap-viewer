@@ -2,8 +2,6 @@ import { LocationStrategy } from '@angular/common';
 import { Component, ChangeDetectionStrategy, Output, EventEmitter, Input } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { BehaviorSubject, Observable, take } from 'rxjs';
-import { RouterHistoryService } from '@tailormap-viewer/shared';
-import { map } from 'rxjs/operators';
 import { LoginConfigurationModel, UserResponseModel } from '@tailormap-viewer/api';
 
 @Component({
@@ -31,8 +29,6 @@ export class LoginFormComponent {
   @Input()
   public redirectUrl: string | null | undefined;
 
-  public isViewer$: Observable<boolean>;
-
   public loginForm = this.formBuilder.group({
     username: [ '', [Validators.required]],
     password: [ '', [Validators.required]],
@@ -50,11 +46,7 @@ export class LoginFormComponent {
   constructor(
     private formBuilder: FormBuilder,
     private locationStrategy: LocationStrategy,
-    private history: RouterHistoryService,
-  ) {
-    this.isViewer$ = this.history.getPreviousUrl$()
-      .pipe(map(prevUrl => prevUrl?.indexOf('/admin') === -1));
-  }
+  ) {}
 
   public login() {
     const username = this.loginForm.get('username')?.value;
