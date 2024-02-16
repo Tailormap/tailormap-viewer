@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { distinctUntilChanged, map, Observable, of, switchMap, take } from 'rxjs';
 import { selectDraftApplication } from '../state/application.selectors';
 import { ApplicationModel } from '@tailormap-admin/admin-api';
-import { updateDraftApplication } from '../state/application.actions';
+import { updateDraftApplication, updateDraftApplicationValid } from '../state/application.actions';
 import { ConfigService } from '../../config/services/config.service';
 import { UpdateDraftApplicationModel } from '../models/update-draft-application.model';
 
@@ -52,6 +52,10 @@ export class ApplicationEditSettingsComponent implements OnInit {
       jsonValue: null,
       availableForViewer: false,
     }).pipe(take(1)).subscribe();
+  }
+
+  public validApplicationChanged($event: boolean) {
+    this.store$.dispatch(updateDraftApplicationValid({ isValid: $event }));
   }
 
 }

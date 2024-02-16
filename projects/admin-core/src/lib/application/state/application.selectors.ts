@@ -20,6 +20,7 @@ export const selectDraftApplication = createSelector(selectApplicationState, sta
 export const selectSelectedApplicationId = createSelector(selectApplicationState, state => state.draftApplication?.id || null);
 export const selectApplicationServicesLoadStatus = createSelector(selectApplicationState, state => state.applicationServicesLoadStatus);
 export const selectDraftApplicationUpdated = createSelector(selectApplicationState, state => state.draftApplicationUpdated);
+export const selectDraftApplicationValid = createSelector(selectApplicationState, state => state.draftApplicationValid);
 export const selectExpandedBaseLayerNodes = createSelector(selectApplicationState, state => state.expandedBaseLayerNodes);
 export const selectExpandedAppLayerNodes = createSelector(selectApplicationState, state => state.expandedAppLayerNodes);
 

@@ -1,13 +1,15 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { BoundsModel, I18nSettingsModel, UiSettingsModel } from '@tailormap-viewer/api';
 import { ApplicationModel, GroupModel, AuthorizationRuleGroup, AUTHORIZATION_RULE_ANONYMOUS } from '@tailormap-admin/admin-api';
-import { Observable, debounceTime, filter, Subject, takeUntil } from 'rxjs';
+import { Observable, debounceTime, filter, Subject, takeUntil, map, distinctUntilChanged } from 'rxjs';
 import { FormHelper } from '../../helpers/form.helper';
 import { GroupService } from '../../user/services/group.service';
 import { AdminProjectionsHelper } from '../helpers/admin-projections-helper';
 import { UpdateDraftApplicationModel } from '../models/update-draft-application.model';
 import { LanguageHelper } from '@tailormap-viewer/shared';
+import { selectApplications } from '../state/application.selectors';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'tm-admin-application-form',
@@ -33,6 +35,9 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
   @Output()
   public updateApplication = new EventEmitter<UpdateDraftApplicationModel>();
 
+  @Output()
+  public validApplicationChanged = new EventEmitter<boolean>();
+
   public projections = AdminProjectionsHelper.projections;
 
   public applicationForm = new FormGroup({
@@ -41,6 +46,7 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
       validators: [
         Validators.required,
         Validators.pattern(FormHelper.NAME_REGEX),
+        this.isUniqueApplicationName(),
       ],
     }),
     title: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
@@ -63,17 +69,34 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
 
 
   private destroyed = new Subject();
+  private applications: ApplicationModel[] = [];
 
   public get projection(): string | null {
     return this.applicationForm.get('crs')?.value || null;
   }
 
   public groups$: Observable<GroupModel[]>;
-  constructor(groupDetailsService: GroupService) {
+  constructor(
+    groupDetailsService: GroupService,
+    private store$: Store,
+  ) {
       this.groups$ = groupDetailsService.getGroups$();
   }
 
   public ngOnInit(): void {
+    this.store$.select(selectApplications)
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(applications => this.applications = applications);
+    this.applicationForm.valueChanges
+      .pipe(
+        takeUntil(this.destroyed),
+        debounceTime(250),
+        map(() => this.isValidForm()),
+        distinctUntilChanged(),
+      )
+      .subscribe(validForm => {
+        this.validApplicationChanged.emit(validForm);
+      });
     this.applicationForm.valueChanges
       .pipe(
         takeUntil(this.destroyed),
@@ -104,6 +127,14 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this.destroyed.next(null);
     this.destroyed.complete();
+  }
+
+  public isUniqueApplicationName(): ValidatorFn {
+    return (control: AbstractControl<string>): ValidationErrors | null => {
+      return (this.applications || []).some(a => a.name === control.value && a.id !== this.application?.id)
+        ? { 'nonUniqueName': true }
+        : null;
+    };
   }
 
   private initForm(application: ApplicationModel | null) {

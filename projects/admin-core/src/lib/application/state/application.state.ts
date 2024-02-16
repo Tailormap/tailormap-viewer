@@ -12,6 +12,7 @@ export interface ApplicationState {
   draftApplicationId?: string | null;
   draftApplication?: ApplicationModel | null;
   draftApplicationUpdated: boolean;
+  draftApplicationValid: boolean;
   expandedBaseLayerNodes: string[];
   expandedAppLayerNodes: string[];
 }
@@ -21,6 +22,7 @@ export const initialApplicationState: ApplicationState = {
   applications: [],
   applicationServicesLoadStatus: LoadingStateEnum.INITIAL,
   draftApplicationUpdated: false,
+  draftApplicationValid: true,
   expandedBaseLayerNodes: [],
   expandedAppLayerNodes: [],
 };

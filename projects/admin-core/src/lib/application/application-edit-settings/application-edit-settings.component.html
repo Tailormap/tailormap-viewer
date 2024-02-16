@@ -1,7 +1,8 @@
 <ng-container *ngIf="application$ | async as application">
   <div class="form-wrapper">
     <tm-admin-application-form [application]="application"
-                               (updateApplication)="updateApplication($event)"></tm-admin-application-form>
+                               (updateApplication)="updateApplication($event)"
+                               (validApplicationChanged)="validApplicationChanged($event)"></tm-admin-application-form>
     <mat-slide-toggle class="set-default-application"
                       (toggleChange)="toggleDefaultApplication(application.name)"
                       [checked]="(isDefaultApplication$ | async) === true"

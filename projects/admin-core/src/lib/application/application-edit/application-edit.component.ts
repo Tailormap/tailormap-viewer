@@ -1,10 +1,12 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import {
-  BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, takeUntil,
+  BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, takeUntil, combineLatest,
 } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { selectApplicationsLoadStatus, selectDraftApplication, selectDraftApplicationUpdated } from '../state/application.selectors';
+import {
+  selectApplicationsLoadStatus, selectDraftApplication, selectDraftApplicationUpdated, selectDraftApplicationValid,
+} from '../state/application.selectors';
 import { ApplicationModel } from '@tailormap-admin/admin-api';
 import { Routes } from '../../routes';
 import { clearSelectedApplication, setSelectedApplication } from '../state/application.actions';
@@ -25,7 +27,7 @@ export class ApplicationEditComponent implements OnInit, OnDestroy {
 
   private destroyed = new Subject();
   public application$: Observable<ApplicationModel | null> = of(null);
-  public draftApplicationPristine$: Observable<boolean> = of(false);
+  public canSave$: Observable<boolean> = of(false);
 
   public readonly routes = {
     APPLICATION_DETAILS_LAYERS: Routes.APPLICATION_DETAILS_LAYERS,
@@ -56,7 +58,10 @@ export class ApplicationEditComponent implements OnInit, OnDestroy {
       this.store$.dispatch(setSelectedApplication({ applicationId }));
     });
     this.application$ = this.store$.select(selectDraftApplication);
-    this.draftApplicationPristine$ = this.store$.select(selectDraftApplicationUpdated).pipe(map(updated => !updated));
+    this.canSave$ = combineLatest([
+      this.store$.select(selectDraftApplicationUpdated),
+      this.store$.select(selectDraftApplicationValid),
+    ]).pipe(map(([ updated, valid ]) => updated && valid));
   }
 
   public ngOnDestroy(): void {
