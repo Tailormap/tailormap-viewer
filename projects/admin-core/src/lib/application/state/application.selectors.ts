@@ -92,8 +92,9 @@ export const selectBaseLayerTreeForSelectedApplication = createSelector(
   selectBaseLayerNodesForSelectedApplication,
   selectGeoServiceLayers,
   selectExpandedBaseLayerNodes,
-  (baseLayerNodes, layers, expandedNodes: string[]) => {
-    return ApplicationTreeHelper.layerTreeNodeToTree(baseLayerNodes, layers, expandedNodes, {}, true);
+  selectSelectedApplicationLayerSettings,
+  (baseLayerNodes, layers, expandedNodes: string[], layerSettings: Record<string, AppLayerSettingsModel>) => {
+    return ApplicationTreeHelper.layerTreeNodeToTree(baseLayerNodes, layers, expandedNodes, layerSettings, true);
   },
 );
 
