@@ -1,6 +1,6 @@
 {
   "name": "@tailormap-viewer/map",
-  "version": "11.2.2",
+  "version": "11.2.3",
   "peerDependencies": {
     "@angular/common": "^17.0.0",
     "@angular/core": "^17.0.0",
@@ -9,8 +9,8 @@
     "html2canvas": "^1.4.1",
     "jsts": "^2.11.0",
     "rxjs": "^7.8.0",
-    "@tailormap-viewer/shared": "^11.2.2",
-    "@tailormap-viewer/api": "^11.2.2"
+    "@tailormap-viewer/shared": "^11.2.3",
+    "@tailormap-viewer/api": "^11.2.3"
   },
   "dependencies": {
     "tslib": "^2.4.0"
