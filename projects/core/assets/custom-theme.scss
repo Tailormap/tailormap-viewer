@@ -243,3 +243,11 @@ $app-theme: mat.define-light-theme((
 .mat-mdc-progress-bar .mdc-linear-progress__buffer-bar {
   background-color: var(--palette-primary-100);
 }
+
+.cdk-overlay-pane:has(>.wide-select) {
+  min-width: fit-content;
+}
+
+.cdk-overlay-pane:has(>.wide-select) .mdc-list-item__primary-text {
+  white-space: nowrap;
+}

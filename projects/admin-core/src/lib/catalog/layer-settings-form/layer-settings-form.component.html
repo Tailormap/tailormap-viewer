@@ -76,9 +76,9 @@
       </mat-form-field>
       <mat-form-field>
         <mat-label i18n="@@admin-core.catalog.hi-dpi-substitute-layer">High-DPI substitute layer</mat-label>
-        <mat-select formControlName="hiDpiSubstituteLayer">
+        <mat-select formControlName="hiDpiSubstituteLayer" panelClass="wide-select">
           <mat-option [value]="null"></mat-option>
-          <mat-option *ngFor="let layer of layers$ | async" [value]="layer.name">
+          <mat-option *ngFor="let layer of layers$ | async" [value]="layer.name" [tmTooltip]="layer.title">
             {{ layer.name }} ({{layer.title}})
           </mat-option>
         </mat-select>
