@@ -7,7 +7,6 @@ import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-lay
 import { GeoServiceLayerSettingsModel } from '../models/geo-service-layer-settings.model';
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
-import { LayerSettingsModel } from '@tailormap-admin/admin-api';
 import { CatalogFilterHelper } from '../helpers/catalog-filter.helper';
 import { ExtendedGeoServiceAndLayerModel } from '../models/extended-geo-service-and-layer.model';
 
