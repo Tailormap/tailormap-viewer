@@ -4,6 +4,7 @@ import { LayerSettingsModel } from '@tailormap-admin/admin-api';
 
 export interface ExtendedGeoServiceAndLayerModel {
   service: ExtendedGeoServiceModel;
+  fullLayerName: string;
   layer: ExtendedGeoServiceLayerModel;
   layerSettings: LayerSettingsModel | null;
 }

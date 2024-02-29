@@ -9,6 +9,7 @@ import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.mo
 import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
 import { LayerSettingsModel } from '@tailormap-admin/admin-api';
 import { CatalogFilterHelper } from '../helpers/catalog-filter.helper';
+import { ExtendedGeoServiceAndLayerModel } from '../models/extended-geo-service-and-layer.model';
 
 const selectCatalogState = createFeatureSelector<CatalogState>(catalogStateKey);
 
@@ -133,7 +134,7 @@ export const selectCatalogTree = createSelector(
 export const selectGeoServiceAndLayerByName = (serviceId: string, layerName: string) => createSelector(
   selectGeoServiceById(serviceId),
   selectGeoServiceLayers,
-  (service, layers): { service: ExtendedGeoServiceModel; layer: ExtendedGeoServiceLayerModel; layerSettings: LayerSettingsModel | null } | null => {
+  (service, layers): ExtendedGeoServiceAndLayerModel | null => {
     if (!service) {
       return null;
     }
@@ -142,6 +143,10 @@ export const selectGeoServiceAndLayerByName = (serviceId: string, layerName: str
       return null;
     }
     const layerSettings = (service.settings?.layerSettings || {})[layerName] || null;
-    return { service, layer, layerSettings };
+    const fullTitle = [layer.title];
+    if (layer.title !== layer.name) {
+      fullTitle.push(`(${layer.name})`);
+    }
+    return { service, fullLayerName: fullTitle.join(' '), layer, layerSettings };
   },
 );
