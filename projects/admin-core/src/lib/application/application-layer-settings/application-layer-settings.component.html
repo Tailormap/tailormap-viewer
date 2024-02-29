@@ -1,11 +1,11 @@
 <form [formGroup]="layerSettingsForm" *ngIf="node">
-  <h2 i18n="@@admin-core.common.settings-for">Settings for {{ layerTitle }}</h2>
+  <div class="title" i18n="@@admin-core.common.settings-for">Settings for {{ layerTitle }}</div>
   <fieldset class="layer-details" *ngIf="serviceLayer">
     <legend i18n="@@admin-core.catalog.catalog-shortcuts">Catalog shortcuts</legend>
     <ng-container>
       <mat-icon svgIcon="admin_service"></mat-icon>
       <strong i18n="@@admin-core.common.geo-service">Geo service</strong>
-      <button mat-stroked-button (click)="updateGeoServiceSetting($event, serviceLayer.service)">
+      <button mat-stroked-button [tmTooltip]="serviceLayer.service.title" (click)="updateGeoServiceSetting($event, serviceLayer.service)">
         {{ serviceLayer.service.title }}
         <mat-icon svgIcon="edit_square" iconPositionEnd></mat-icon>
       </button>
@@ -13,11 +13,8 @@
     <ng-container>
       <mat-icon svgIcon="admin_catalog"></mat-icon>
       <strong i18n="@@admin-core.catalog.layer-name">Layer name</strong>
-      <button mat-stroked-button (click)="updateGeoServiceLayerSetting($event, serviceLayer.service, serviceLayer.layer)">
-        {{ serviceLayer.layer.title }}
-        <ng-container *ngIf="serviceLayer.layer.title !== serviceLayer.layer.name">
-          ({{ serviceLayer.layer.name }})
-        </ng-container>
+      <button mat-stroked-button [tmTooltip]="serviceLayer.fullLayerName" (click)="updateGeoServiceLayerSetting($event, serviceLayer.service, serviceLayer.layer)">
+        {{ serviceLayer.fullLayerName }}
         <mat-icon svgIcon="edit_square" iconPositionEnd></mat-icon>
       </button>
     </ng-container>
@@ -25,7 +22,7 @@
       <ng-container *ngIf="featureSourceAndType.featureType">
         <mat-icon svgIcon="admin_feature_type"></mat-icon>
         <strong i18n="@@admin-core.catalog.feature-type">Feature type</strong>
-        <button mat-stroked-button (click)="updateFeatureTypeSetting($event, featureSourceAndType)">
+        <button mat-stroked-button [tmTooltip]="featureSourceAndType.featureType.title || featureSourceAndType.featureType.name" (click)="updateFeatureTypeSetting($event, featureSourceAndType)">
           {{ featureSourceAndType.featureType.title || featureSourceAndType.featureType.name }}
           <mat-icon svgIcon="edit_square" iconPositionEnd></mat-icon>
         </button>

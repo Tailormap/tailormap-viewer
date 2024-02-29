@@ -1,5 +1,8 @@
-h2 {
-  margin-bottom: 16px;
+.title {
+  font-weight: bold;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 8px;
+  margin-bottom: 8px;
 }
 
 .form-field__slider {
@@ -22,6 +25,9 @@ h2 {
 .layer-details button ::ng-deep .mdc-button__label {
   flex: 1;
   text-align: left;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .edit-layer-attributes {

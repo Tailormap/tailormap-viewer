@@ -8,6 +8,9 @@
       <trans-unit id="admin-core.application.add-sub-folder" datatype="html">
         <source>Add sub folder</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.application" datatype="html">
+        <source>Application</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.application-created" datatype="html">
         <source>Application <x id="PH" equiv-text="createdApplication.title || createdApplication.name"/> created</source>
       </trans-unit>

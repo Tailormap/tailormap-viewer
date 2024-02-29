@@ -9,6 +9,10 @@
         <source>Add sub folder</source>
         <target>Submap toevoegen</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.application" datatype="html">
+        <source>Application</source>
+        <target state="new">Applicatie</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.application-created" datatype="html">
         <source>Application <x id="PH" equiv-text="createdApplication.title || createdApplication.name"/> created</source>
         <target>Applicatie <x id="PH" equiv-text="createdApplication.title || createdApplication.name"/> is gemaakt</target>

@@ -3,6 +3,7 @@
      [class.has-selected-layer]="selectedLayerNode$ | async">
   <div class="application-catalog">
     <div class="catalog-tree-wrapper">
+      <div class="tree-title" i18n="@@admin-core.catalog.catalog">Catalog</div>
       <div class="catalog-tree">
         <tm-admin-application-catalog-tree [applicationTreeService]="applicationTreeService"
                                            [selectedLayerId$]="selectedCatalogItem$"
@@ -16,6 +17,7 @@
     </button>
   </div>
   <div class="application-tree">
+    <div class="tree-title" i18n="@@admin-core.application.application">Application</div>
     <ng-template #applicationTree>
       <tm-admin-application-layer-tree [treeNodes$]="treeNodes$"
                                        (nodePositionChanged)="nodePositionChanged($event)"
