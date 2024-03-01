@@ -31,7 +31,7 @@ export class IconService {
       ],
     },
     { folder: 'style', icons: [ 'bold', 'italic' ] },
-    { folder: 'languages', icons: [ 'gb', 'nl' ] },
+    { folder: 'languages', icons: [ 'gb', 'nl', 'de' ] },
   ];
 
   constructor(

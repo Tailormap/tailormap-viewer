@@ -4,6 +4,7 @@
     "ng": "ng",
     "start": "ng serve app",
     "start-nl": "ng serve app --configuration=nl",
+    "start-de": "ng serve app --configuration=de",
     "generate-protobuf": "node bin/generate-protobuf.js",
     "prebuild": "node bin/clear-cache.js",
     "build": "ng build app",
