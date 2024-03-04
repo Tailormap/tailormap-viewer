@@ -1,5 +1,5 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-    <file source-language="en-US" target-language="nl" datatype="plaintext" original="ng2.template">
+    <file source-language="en-US" target-language="de" datatype="plaintext" original="ng2.template">
         <body>
             <trans-unit id="shared.about.git-version" datatype="html">
                 <source>Git version</source>
