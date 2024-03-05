@@ -148,6 +148,8 @@ export class ApplicationMapService implements OnDestroy {
         hiDpiSubstituteUrl: extendedAppLayer.hiDpiSubstituteLayer,
         minZoom: extendedAppLayer.minZoom,
         maxZoom: extendedAppLayer.maxZoom,
+        tileSize: extendedAppLayer.tileSize,
+        tileGridExtent: extendedAppLayer.tileGridExtent,
       };
       return of(layer);
     }

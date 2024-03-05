@@ -15,6 +15,8 @@ export * from './geo-service-layer.model';
 export * from './geo-service-protocol.enum';
 export * from './geo-service-settings.model';
 export * from './layer-settings.model';
+export * from './layer-settings-wms.model';
+export * from './layer-settings-xyz.model';
 export * from './service-caps.model';
 export * from './catalog-item.model';
 export * from './catalog-item-kind.enum';
