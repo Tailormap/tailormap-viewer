@@ -23,6 +23,7 @@ import { HttpClient, HttpXsrfTokenExtractor } from '@angular/common/http';
 import { FeatureModel } from '@tailormap-viewer/api';
 import { OpenLayersMapImageExporter } from './openlayers-map-image-exporter';
 import { Attribution } from 'ol/control';
+import OLCesium from 'olcs';
 
 export class OpenLayersMap implements MapViewerModel {
 
@@ -367,5 +368,15 @@ export class OpenLayersMap implements MapViewerModel {
     this.executeMapAction(olMap => {
       olMap.updateSize();
     });
+  }
+
+  public make3D$(){
+    this.executeMapAction(olMap => {
+      const ol3d = new OLCesium({
+          map: olMap,
+        });
+      const scene = ol3d.getCesiumScene();
+      ol3d.setEnabled(true);
+    })
   }
 }
