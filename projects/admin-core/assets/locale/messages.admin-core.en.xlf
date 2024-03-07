@@ -542,6 +542,9 @@
       <trans-unit id="admin-core.catalog.technical-name" datatype="html">
         <source>Technical name: <x id="INTERPOLATION" equiv-text="{{ featureType.name }}"/></source>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.tileSize" datatype="html">
+        <source>Tile size</source>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.tiling-gutter" datatype="html">
         <source>Tiling gutter</source>
       </trans-unit>
@@ -550,6 +553,9 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.use-tiling" datatype="html">
         <source>Use tiling</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.xyz-tile-grid-extent" datatype="html">
+        <source>XYZ tile grid extent</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.xyz-tile-grid-options" datatype="html">
         <source>XYZ tile grid options</source>

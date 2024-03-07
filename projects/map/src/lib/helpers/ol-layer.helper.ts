@@ -162,27 +162,32 @@ export class OlLayerHelper {
     let tilePixelRatio;
     let tileGrid = undefined;
 
-    const minZoom = layer.minZoom || undefined;
-    const maxZoom = layer.maxZoom || undefined;
+    const minZoom = layer.minZoom || 0;
+    const maxZoom = layer.maxZoom || 21;
+    const tileSize = layer.tileSize || 256;
+    const extent = layer.tileGridExtent
+      ? [ layer.tileGridExtent.minx,  layer.tileGridExtent.miny,  layer.tileGridExtent.maxx,  layer.tileGridExtent.maxy ]
+      : extentFromProjection(projection);
+
+    tileGrid = createXYZ({
+      extent,
+      tileSize,
+      maxZoom,
+      minZoom,
+    });
 
     if (hiDpi) {
       if (layer.hiDpiMode === 'substituteLayerTilePixelRatioOnly' && layer.hiDpiSubstituteUrl) {
         url = layer.hiDpiSubstituteUrl;
         tilePixelRatio = 2;
       } else if (layer.hiDpiMode === 'showNextZoomLevel' || (layer.hiDpiMode === 'substituteLayerShowNextZoomLevel' && layer.hiDpiSubstituteUrl)) {
-        tileGrid = createXYZ({
-          extent: extentFromProjection(projection),
-          maxZoom,
-          minZoom,
-        });
         // Adjust tile grid to show next zoomlevel at hi DPI similar to WMTS
         tileGrid = new TileGrid({
           extent: tileGrid.getExtent(),
           origin: tileGrid.getOrigin(0),
           resolutions: tileGrid.getResolutions().map(value => value * 2),
-          tileSize: 256 / 2, // Only XYZ tile size we support is 256
+          tileSize: tileSize / 2,
         });
-
         if (layer.hiDpiMode === 'substituteLayerShowNextZoomLevel' && layer.hiDpiSubstituteUrl) {
           url = layer.hiDpiSubstituteUrl;
         }

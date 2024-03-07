@@ -1,4 +1,5 @@
 import { TileLayerHiDpiMode } from './layer-hi-dpi-mode.enum';
+import { BoundsModel } from './bounds.model';
 
 export interface AppLayerModel {
   id: string;
@@ -19,6 +20,8 @@ export interface AppLayerModel {
   hiDpiSubstituteLayer?: string;
   minZoom?: number;
   maxZoom?: number;
+  tileSize?: number;
+  tileGridExtent?: BoundsModel;
   opacity: number;
   attribution?: string;
   description?: string;
