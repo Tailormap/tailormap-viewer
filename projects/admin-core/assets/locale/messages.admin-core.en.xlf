@@ -575,6 +575,9 @@
       <trans-unit id="admin-core.common.bounds" datatype="html">
         <source>Bounds</source>
       </trans-unit>
+      <trans-unit id="admin-core.common.bounds-hint" datatype="html">
+        <source>You can paste a comma-separated list or &lt;BoundingBox minx=&quot;&quot; miny=&quot;&quot;... /&gt; string from capabilities in one of the fields for setting the extent</source>
+      </trans-unit>
       <trans-unit id="admin-core.common.cancel" datatype="html">
         <source>Cancel</source>
       </trans-unit>
