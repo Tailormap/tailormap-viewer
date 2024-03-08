@@ -1,41 +1,41 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-  <file source-language="en-US" target-language="nl" datatype="plaintext" original="ng2.template">
+  <file source-language="en-US" target-language="de" datatype="plaintext" original="ng2.template">
     <body>
       <trans-unit id="shared.about.added-packages" datatype="html">
         <source>Extensions</source>
-        <target>Extensies</target>
+        <target state="new">Extensions</target>
       </trans-unit>
       <trans-unit id="shared.about.build-date" datatype="html">
         <source>Build date</source>
-        <target>Bouwdatum</target>
+        <target state="new">Build date</target>
       </trans-unit>
       <trans-unit id="shared.about.title" datatype="html">
         <source>About Tailormap</source>
-        <target>Over Tailormap</target>
+        <target>Über Tailormap</target>
       </trans-unit>
       <trans-unit id="shared.about.unknown" datatype="html">
         <source>Unknown</source>
-        <target>Onbekend</target>
+        <target>Unbekannt</target>
       </trans-unit>
       <trans-unit id="shared.about.version" datatype="html">
         <source>Version</source>
-        <target>Versie</target>
+        <target>Version</target>
       </trans-unit>
       <trans-unit id="shared.color-picker.color-code" datatype="html">
         <source>Color code</source>
-        <target>Kleurcode</target>
+        <target>Farbcode</target>
       </trans-unit>
       <trans-unit id="shared.color-picker.color-required" datatype="html">
         <source>Color is required</source>
-        <target>Kleur is vereist</target>
+        <target>Farbe ist erforderlich</target>
       </trans-unit>
       <trans-unit id="shared.common.close" datatype="html">
         <source>Close</source>
-        <target>Sluiten</target>
+        <target>Schließen</target>
       </trans-unit>
       <trans-unit id="shared.common.no" datatype="html">
         <source>No</source>
-        <target>Nee</target>
+        <target>Nein</target>
       </trans-unit>
       <trans-unit id="shared.common.yes" datatype="html">
         <source>Yes</source>
@@ -43,27 +43,27 @@
       </trans-unit>
       <trans-unit id="shared.language.dutch" datatype="html">
         <source>Dutch</source>
-        <target>Nederlands</target>
+        <target>Niederländisch</target>
       </trans-unit>
       <trans-unit id="shared.language.english" datatype="html">
         <source>English</source>
-        <target>Engels</target>
+        <target>Englisch</target>
       </trans-unit>
       <trans-unit id="shared.language.german" datatype="html">
         <source>German</source>
-        <target>Duits</target>
+        <target>Deutsch</target>
       </trans-unit>
       <trans-unit id="shared.login-form.password" datatype="html">
         <source>Password</source>
-        <target>Wachtwoord</target>
+        <target>Passwort</target>
       </trans-unit>
       <trans-unit id="shared.login-form.title" datatype="html">
         <source>Login</source>
-        <target>Inloggen</target>
+        <target>Anmeldung</target>
       </trans-unit>
       <trans-unit id="shared.login-form.username" datatype="html">
         <source>Username</source>
-        <target>Gebruikersnaam</target>
+        <target>Benutzername</target>
       </trans-unit>
     </body>
   </file>

@@ -18,7 +18,10 @@ const addTemporaryConfiguration = async (project) => {
     "outputPath": `projects/${project}/assets/locale`,
     "includeIdsWithPrefix": [project],
     "sourceFile": `messages.${project}.en.xlf`,
-    "targetFiles": [`messages.${project}.nl.xlf`]
+    "targetFiles": [
+      `messages.${project}.nl.xlf`,
+      `messages.${project}.de.xlf`,
+    ]
   };
   try {
     const angularJsonContents = JSON.parse((await fs.readFile(angularJsonPath)).toString());

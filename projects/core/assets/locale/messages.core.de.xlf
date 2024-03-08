@@ -1,0 +1,982 @@
+<?xml version="1.0"?><xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en-US" target-language="de" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="core.attribute-list.clear-filters" datatype="html">
+        <source>Clear filters</source>
+        <target>Filter löschen</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.export" datatype="html">
+        <source>Export</source>
+        <target>Exportieren</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.export-failed" datatype="html">
+        <source>Exporting data for layer <x id="PH" equiv-text="params.serviceLayerName"/> and format <x id="PH_1" equiv-text="params.format"/> failed</source>
+        <target>Daten für Layer <x id="PH" equiv-text="params.serviceLayerName"/> und Format <x id="PH_1" equiv-text="params.format"/> konnten nicht exportiert werden</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.failed-loading-data" datatype="html">
+        <source>Failed to load attribute list data</source>
+        <target state="translated">Fehler beim Laden der Attributlisten-Daten</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.failed-loading-data-for" datatype="html">
+        <source>Failed to load attribute list data for <x id="PH" equiv-text="tab.label"/></source>
+        <target state="translated">Fehler beim Laden der Attributlisten-Daten für <x id="PH" equiv-text="tab.label"/></target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.filter-on" datatype="html">
+        <source>Filter on <x id="INTERPOLATION" equiv-text="{{getColumnName()}}"/></source>
+        <target>Filtern nach <x id="INTERPOLATION" equiv-text="{{getColumnName()}}"/></target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.go-to-page" datatype="html">
+        <source>Go to page</source>
+        <target>Zur Seite gehen</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.no-data-found" datatype="html">
+        <source>No layers with administrative data found</source>
+        <target>Keine Layer mit administrativen Daten gefunden</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.no-rows-found" datatype="html">
+        <source>No rows found</source>
+        <target>Keine Zeilen gefunden</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.title" datatype="html">
+        <source>Attribute list</source>
+        <target>Attributenlijst</target>
+      </trans-unit>
+      <trans-unit id="core.background-layer-toggle.no-basemap" datatype="html">
+        <source>No basemap</source>
+        <target>Keine Grundkarte</target>
+      </trans-unit>
+      <trans-unit id="core.common.add" datatype="html">
+        <source>Add</source>
+        <target>Hinzufügen</target>
+      </trans-unit>
+      <trans-unit id="core.common.back" datatype="html">
+        <source>Back</source>
+        <target>Zurück</target>
+      </trans-unit>
+      <trans-unit id="core.common.cancel" datatype="html">
+        <source>Cancel</source>
+        <target>Abbrechen</target>
+      </trans-unit>
+      <trans-unit id="core.common.clear" datatype="html">
+        <source>Clear</source>
+        <target>Löschen</target>
+      </trans-unit>
+      <trans-unit id="core.common.close" datatype="html">
+        <source>Close</source>
+        <target>Schließen</target>
+      </trans-unit>
+      <trans-unit id="core.common.csv" datatype="html">
+        <source>CSV</source>
+        <target>CSV</target>
+      </trans-unit>
+      <trans-unit id="core.common.delete" datatype="html">
+        <source>Delete</source>
+        <target>Löschen</target>
+      </trans-unit>
+      <trans-unit id="core.common.dxf" datatype="html">
+        <source>DXF</source>
+        <target>DXF</target>
+      </trans-unit>
+      <trans-unit id="core.common.enabled" datatype="html">
+        <source>Enabled</source>
+        <target>Aktiviert</target>
+      </trans-unit>
+      <trans-unit id="core.common.error-loading-map" datatype="html">
+        <source>Could not load map settings</source>
+        <target>Konnte die Karteneinstellungen nicht laden</target>
+      </trans-unit>
+      <trans-unit id="core.common.error-loading-viewer" datatype="html">
+        <source>Could not find or load the requested viewer</source>
+        <target>Kon de gevraagde viewer niet vinden of laden</target>
+      </trans-unit>
+      <trans-unit id="core.common.error-while-loading-app" datatype="html">
+        <source>Something went wrong while loading the application. Please check if the URL is correct</source>
+        <target>Er is iets misgegaan tijdens het laden van de applicatie. Controleer of de URL correct is</target>
+      </trans-unit>
+      <trans-unit id="core.common.excel" datatype="html">
+        <source>Excel</source>
+        <target>Excel</target>
+      </trans-unit>
+      <trans-unit id="core.common.feature" datatype="html">
+        <source>Feature</source>
+        <target state="translated">Objekt</target>
+      </trans-unit>
+      <trans-unit id="core.common.geojson" datatype="html">
+        <source>GeoJSON</source>
+        <target>GeoJSON</target>
+      </trans-unit>
+      <trans-unit id="core.common.geopackage" datatype="html">
+        <source>GeoPackage</source>
+        <target>GeoPackage</target>
+      </trans-unit>
+      <trans-unit id="core.common.line" datatype="html">
+        <source>Line</source>
+        <target>Linie</target>
+      </trans-unit>
+      <trans-unit id="core.common.next" datatype="html">
+        <source>Next</source>
+        <target>Weiter</target>
+      </trans-unit>
+      <trans-unit id="core.common.none" datatype="html">
+        <source>None</source>
+        <target>Keine</target>
+      </trans-unit>
+      <trans-unit id="core.common.point" datatype="html">
+        <source>Point</source>
+        <target>Punkt</target>
+      </trans-unit>
+      <trans-unit id="core.common.polygon" datatype="html">
+        <source>Polygon</source>
+        <target>Polygon</target>
+      </trans-unit>
+      <trans-unit id="core.common.rectangle" datatype="html">
+        <source>Rectangle</source>
+        <target>Rechteck</target>
+      </trans-unit>
+      <trans-unit id="core.common.retry" datatype="html">
+        <source>Retry</source>
+        <target>Wiederholen</target>
+      </trans-unit>
+      <trans-unit id="core.common.save" datatype="html">
+        <source>Save</source>
+        <target>Speichern</target>
+      </trans-unit>
+      <trans-unit id="core.common.set" datatype="html">
+        <source>Set</source>
+        <target>Einstellen</target>
+      </trans-unit>
+      <trans-unit id="core.common.shapefile" datatype="html">
+        <source>Shapefile</source>
+        <target>Shapefile</target>
+      </trans-unit>
+      <trans-unit id="core.common.square" datatype="html">
+        <source>Square</source>
+        <target>Quadrat</target>
+      </trans-unit>
+      <trans-unit id="core.draw.delete-selected-feature" datatype="html">
+        <source>Delete selected feature</source>
+        <target state="translated">Ausgewähltes Objekt löschen</target>
+      </trans-unit>
+      <trans-unit id="core.draw.draw-circle" datatype="html">
+        <source>Draw circle</source>
+        <target>Kreis zeichnen</target>
+      </trans-unit>
+      <trans-unit id="core.draw.draw-ellipse" datatype="html">
+        <source>Draw ellipse</source>
+        <target>Ellipse zeichnen</target>
+      </trans-unit>
+      <trans-unit id="core.draw.draw-label" datatype="html">
+        <source>Draw label</source>
+        <target>Etikett zeichnen</target>
+      </trans-unit>
+      <trans-unit id="core.draw.draw-line" datatype="html">
+        <source>Draw line</source>
+        <target>Linie einzeichnen</target>
+      </trans-unit>
+      <trans-unit id="core.draw.draw-point" datatype="html">
+        <source>Draw point</source>
+        <target>Punkt zeichnen</target>
+      </trans-unit>
+      <trans-unit id="core.draw.draw-polygon" datatype="html">
+        <source>Draw polygon</source>
+        <target>Polygon zeichnen</target>
+      </trans-unit>
+      <trans-unit id="core.draw.draw-rectangle" datatype="html">
+        <source>Draw rectangle</source>
+        <target>Rechteck zeichnen</target>
+      </trans-unit>
+      <trans-unit id="core.draw.draw-square" datatype="html">
+        <source>Draw square</source>
+        <target>Quadrat zeichnen</target>
+      </trans-unit>
+      <trans-unit id="core.draw.draw-star" datatype="html">
+        <source>Draw star</source>
+        <target>Stern zeichnen</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.arrow" datatype="html">
+        <source>Arrow</source>
+        <target>Pfeil</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.arrow-at-the-end" datatype="html">
+        <source>At the end</source>
+        <target>Am Ende</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.arrow-at-the-start" datatype="html">
+        <source>At the start</source>
+        <target>Am Anfang</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.arrow-none" datatype="html">
+        <source>None</source>
+        <target>Keine</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.arrow-on-both-sides" datatype="html">
+        <source>On both sides</source>
+        <target>Auf beiden Seiten</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.arrow-on-every-segment" datatype="html">
+        <source>On every segment</source>
+        <target>Auf jedem Segment</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.color" datatype="html">
+        <source>Color</source>
+        <target>Farbe</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.delete-drawing" datatype="html">
+        <source>Delete complete drawing</source>
+        <target>Gesamte Zeichnung löschen</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.delete-drawing-confirm" datatype="html">
+        <source>Delete complete drawing</source>
+        <target>Gesamte Zeichnung löschen</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.delete-drawing-confirm-message" datatype="html">
+        <source>Are you sure you want to delete the complete drawing? All objects will be deleted and this cannot be undone.</source>
+        <target>Bist du sicher, dass du die gesamte Zeichnung löschen möchtest? Alle Objekte werden gelöscht und dies kann nicht rückgängig gemacht werden.</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.delete-drawing-object-confirm" datatype="html">
+        <source>Delete drawing object</source>
+        <target>Zeichnungobjeckt löschen</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.delete-drawing-object-confirm-message" datatype="html">
+        <source>Are you sure you want to delete this object?</source>
+        <target>Bist du sicher, dass du dieses Objekt löschen möchtest?</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.delete-selected-drawing-object" datatype="html">
+        <source>Delete selected drawing object</source>
+        <target>Ausgewähltes Zeichenobjekt löschen</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.drawing" datatype="html">
+        <source>Drawing</source>
+        <target>Zeichnen</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.fill" datatype="html">
+        <source>Fill</source>
+        <target>Füllen</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.fill-color" datatype="html">
+        <source>Fill color</source>
+        <target>Farbe ausfüllen</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.format" datatype="html">
+        <source>Format</source>
+        <target>Format</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.halo" datatype="html">
+        <source>Halo</source>
+        <target>Halo</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.insert-area-label" datatype="html">
+        <source>Insert area as label</source>
+        <target>Bereich als Beschriftung einfügen</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.insert-coordinates-label" datatype="html">
+        <source>Insert coordinates as label</source>
+        <target>Koordinaten als Beschriftung einfügen</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.insert-length-label" datatype="html">
+        <source>Insert length as label</source>
+        <target>Länge als Bezeichnung einfügen</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.label" datatype="html">
+        <source>Label</source>
+        <target>Etikett</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.line" datatype="html">
+        <source>Line</source>
+        <target>Linie</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.line-color" datatype="html">
+        <source>Line color</source>
+        <target>Farbe linie</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.line-thickness" datatype="html">
+        <source>Line thickness</source>
+        <target>Dicke der Linie</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.opacity" datatype="html">
+        <source>Opacity</source>
+        <target>Deckkraft</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.rotation" datatype="html">
+        <source>Rotation</source>
+        <target>Drehung</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.select-shape" datatype="html">
+        <source>Select shape</source>
+        <target>Form auswählen</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.size" datatype="html">
+        <source>Size</source>
+        <target>Größe</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.striped-fill" datatype="html">
+        <source>Striped fill</source>
+        <target>Gestreifte Füllung</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.stroke-type" datatype="html">
+        <source>Stroke type</source>
+        <target>Strichart</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.symbol" datatype="html">
+        <source>Symbol</source>
+        <target>Symbol</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.thickness" datatype="html">
+        <source>Thickness</source>
+        <target>Stärke</target>
+      </trans-unit>
+      <trans-unit id="core.edit.add-new-feature" datatype="html">
+        <source>Add new feature</source>
+        <target state="translated">Neues Feature hinzufügen</target>
+      </trans-unit>
+      <trans-unit id="core.edit.create-feature-failed" datatype="html">
+        <source>Create feature failed</source>
+        <target state="translated">Feature-Erstellung fehlgeschlagen</target>
+      </trans-unit>
+      <trans-unit id="core.edit.delete-feature-confirm" datatype="html">
+        <source>Delete feature</source>
+        <target state="translated">Feature löschen</target>
+      </trans-unit>
+      <trans-unit id="core.edit.delete-feature-confirm-message" datatype="html">
+        <source>Are you sure you want to delete this feature? This cannot be undone.</source>
+        <target state="translated">Bist du sicher, dass du dieses Feature löschen möchtest? Dies kann nicht rückgängig gemacht werden.</target>
+      </trans-unit>
+      <trans-unit id="core.edit.delete-feature-failed" datatype="html">
+        <source>Delete feature failed</source>
+        <target state="translated">Löschen des Features fehlgeschlagen</target>
+      </trans-unit>
+      <trans-unit id="core.edit.edit" datatype="html">
+        <source>Edit</source>
+        <target>Bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="core.edit.edit-feature-tooltip" datatype="html">
+        <source>Edit feature</source>
+        <target state="translated">Objekt bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="core.edit.error-getting-features" datatype="html">
+        <source>Something went wrong while getting editable features, please try again</source>
+        <target state="translated">Beim Abrufen der bearbeitbaren Objekte ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut</target>
+      </trans-unit>
+      <trans-unit id="core.edit.false" datatype="html">
+        <source>False</source>
+        <target>Falsch</target>
+      </trans-unit>
+      <trans-unit id="core.edit.feature-created" datatype="html">
+        <source>Feature created</source>
+        <target state="translated">Objekt erstellt</target>
+      </trans-unit>
+      <trans-unit id="core.edit.feature-deleted" datatype="html">
+        <source>Feature deleted</source>
+        <target state="translated">Objekt gelöscht</target>
+      </trans-unit>
+      <trans-unit id="core.edit.feature-updated" datatype="html">
+        <source>Feature updated</source>
+        <target state="translated">Objekt aktualisiert</target>
+      </trans-unit>
+      <trans-unit id="core.edit.hover-to-highlight" datatype="html">
+        <source>Hover over the buttons to highlight the feature on the map</source>
+        <target state="translated">Bewege den Mauszeiger über die Schaltflächen, um das Objekt auf der Karte hervorzuheben</target>
+      </trans-unit>
+      <trans-unit id="core.edit.no-editable-layers-tooltip" datatype="html">
+        <source>There are no editable layers. Enable a layer to start editing.</source>
+        <target>Es gibt keine bearbeitbaren Ebenen. Aktiviere eine Ebene, um mit der Bearbeitung zu beginnen.</target>
+      </trans-unit>
+      <trans-unit id="core.edit.no-features-found" datatype="html">
+        <source>No editable features found</source>
+        <target state="translated">Keine bearbeitbaren Objekte gefunden</target>
+      </trans-unit>
+      <trans-unit id="core.edit.require-login-tooltip" datatype="html">
+        <source>You must be logged in to edit.</source>
+        <target>Du musst angemeldet sein, um zu bearbeiten.</target>
+      </trans-unit>
+      <trans-unit id="core.edit.select-feature-to-edit" datatype="html">
+        <source>Select which feature to edit</source>
+        <target state="translated">Wähle das zu bearbeitende Objekt aus</target>
+      </trans-unit>
+      <trans-unit id="core.edit.select-layer" datatype="html">
+        <source>Select layer to edit</source>
+        <target>Wähle die zu bearbeitende Ebene aus</target>
+      </trans-unit>
+      <trans-unit id="core.edit.true" datatype="html">
+        <source>True</source>
+        <target>Wahr</target>
+      </trans-unit>
+      <trans-unit id="core.edit.update-feature-failed" datatype="html">
+        <source>Update feature failed</source>
+        <target state="translated">Objektaktualisierung fehlgeschlagen</target>
+      </trans-unit>
+      <trans-unit id="core.feature-info.error-loading-feature-info" datatype="html">
+        <source>Something went wrong while getting feature info, please try again</source>
+        <target state="translated">Beim Abrufen der Objektinformationen ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut</target>
+      </trans-unit>
+      <trans-unit id="core.feature-info.error-loading-features" datatype="html">
+        <source>Could not load feature info</source>
+        <target state="translated">Objektinformationen konnten nicht geladen werden</target>
+      </trans-unit>
+      <trans-unit id="core.feature-info.no-features-found" datatype="html">
+        <source>No features found</source>
+        <target>Keine Objekte gefunden</target>
+      </trans-unit>
+      <trans-unit id="core.feature-info.object-information" datatype="html">
+        <source>Object Information</source>
+        <target>Objektinformationen</target>
+      </trans-unit>
+      <trans-unit id="core.filter.add-filter" datatype="html">
+        <source>Add filter</source>
+        <target>Filter hinzufügen</target>
+      </trans-unit>
+      <trans-unit id="core.filter.add-spatial-filter" datatype="html">
+        <source>Add spatial filter</source>
+        <target>Räumlichen Filter hinzufügen</target>
+      </trans-unit>
+      <trans-unit id="core.filter.after" datatype="html">
+        <source>After</source>
+        <target>Nach</target>
+      </trans-unit>
+      <trans-unit id="core.filter.and" datatype="html">
+        <source>and</source>
+        <target>und</target>
+      </trans-unit>
+      <trans-unit id="core.filter.applies-to" datatype="html">
+        <source>Applies to</source>
+        <target>Gilt für</target>
+      </trans-unit>
+      <trans-unit id="core.filter.attribute-filter" datatype="html">
+        <source>Attribute filter</source>
+        <target>Attributfilter</target>
+      </trans-unit>
+      <trans-unit id="core.filter.before" datatype="html">
+        <source>Before</source>
+        <target>Vor</target>
+      </trans-unit>
+      <trans-unit id="core.filter.between" datatype="html">
+        <source>Between</source>
+        <target>Zwischen</target>
+      </trans-unit>
+      <trans-unit id="core.filter.buffer-filter-geometry" datatype="html">
+        <source>Optionally you can buffer the geometry</source>
+        <target>Optional können Sie die Geometrie puffern</target>
+      </trans-unit>
+      <trans-unit id="core.filter.buffer-in-meters" datatype="html">
+        <source>Buffer in meters</source>
+        <target>Puffer in Metern</target>
+      </trans-unit>
+      <trans-unit id="core.filter.case-sensitive" datatype="html">
+        <source>Case sensitive</source>
+        <target>Unterscheidung zwischen Groß- und Kleinschreibung</target>
+      </trans-unit>
+      <trans-unit id="core.filter.choose-values" datatype="html">
+        <source>Choose values</source>
+        <target>Werte auswählen</target>
+      </trans-unit>
+      <trans-unit id="core.filter.close-filter-form" datatype="html">
+        <source>Close filter form</source>
+        <target>Filterformular schließen</target>
+      </trans-unit>
+      <trans-unit id="core.filter.condition" datatype="html">
+        <source>Condition</source>
+        <target>Bedingung</target>
+      </trans-unit>
+      <trans-unit id="core.filter.contains" datatype="html">
+        <source>contains</source>
+        <target state="translated">enthält</target>
+      </trans-unit>
+      <trans-unit id="core.filter.contains-one-of-the-values" datatype="html">
+        <source>contains one of the values</source>
+        <target>enthält einen der Werte</target>
+      </trans-unit>
+      <trans-unit id="core.filter.contains-upper" datatype="html">
+        <source>Contains</source>
+        <target state="translated">enthält</target>
+      </trans-unit>
+      <trans-unit id="core.filter.create-new-filter" datatype="html">
+        <source>Create new filter</source>
+        <target>Neuen Filter erstellen</target>
+      </trans-unit>
+      <trans-unit id="core.filter.delete-filter-confirm" datatype="html">
+        <source>Delete filter?</source>
+        <target>Filter löschen?</target>
+      </trans-unit>
+      <trans-unit id="core.filter.delete-filter-confirm-message" datatype="html">
+        <source>Are you sure you want to delete this filter?</source>
+        <target>Sind Sie sicher, dass Sie diesen Filter löschen möchten?</target>
+      </trans-unit>
+      <trans-unit id="core.filter.delete-this-filter" datatype="html">
+        <source>Delete this filter</source>
+        <target>Diesen Filter löschen</target>
+      </trans-unit>
+      <trans-unit id="core.filter.deselect-all-values" datatype="html">
+        <source>Deselect all values</source>
+        <target>Alle Werte abwählen</target>
+      </trans-unit>
+      <trans-unit id="core.filter.draw-filter-geometry" datatype="html">
+        <source>Draw filter geometry</source>
+        <target>Filtergeometrie zeichnen</target>
+      </trans-unit>
+      <trans-unit id="core.filter.ends-with" datatype="html">
+        <source>ends with</source>
+        <target state="translated">endet mit</target>
+      </trans-unit>
+      <trans-unit id="core.filter.ends-with-upper" datatype="html">
+        <source>Ends with</source>
+        <target state="translated">Endet mit</target>
+      </trans-unit>
+      <trans-unit id="core.filter.equals" datatype="html">
+        <source>Equals</source>
+        <target>Gleich</target>
+      </trans-unit>
+      <trans-unit id="core.filter.equals-to" datatype="html">
+        <source>equals to</source>
+        <target>ist gleich</target>
+      </trans-unit>
+      <trans-unit id="core.filter.error-loading-reference-layer-geometries" datatype="html">
+        <source>Error loading reference layer geometries</source>
+        <target>Fehler beim Laden der Geometrien der Referenzschicht</target>
+      </trans-unit>
+      <trans-unit id="core.filter.filtering" datatype="html">
+        <source>Filtering</source>
+        <target state="translated">Filtern</target>
+      </trans-unit>
+      <trans-unit id="core.filter.filtering-layer-by-drawing-or-reference" datatype="html">
+        <source>Filtering the selected <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container [ngTemplateOutlet]=&quot;layerLabel&quot; /&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container"/> can be done by drawing geometry and/or selecting a reference layer.</source>
+        <target state="new">Das Filtern der ausgewählten <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container [ngTemplateOutlet]=&quot;layerLabel&quot; /&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="Geometrie und/oder durch Auswahl einer Referenzschicht erfolgen."/></target>
+      </trans-unit>
+      <trans-unit id="core.filter.filtering-layer-by-drawing-or-reference-hint" datatype="html">
+        <source>The geometries from this reference layer will then be used to filter the selected <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container [ngTemplateOutlet]=&quot;layerLabel&quot; /&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container"/>.</source>
+        <target state="new">Die Geometrien dieser Referenzschicht werden dann verwendet, um die ausgewählten <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container [ngTemplateOutlet]=&quot;layerLabel&quot; /&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;div class=&quot;fo"/> zu filtern.</target>
+      </trans-unit>
+      <trans-unit id="core.filter.from" datatype="html">
+        <source>From</source>
+        <target>Von</target>
+      </trans-unit>
+      <trans-unit id="core.filter.greater-than" datatype="html">
+        <source>Greater than</source>
+        <target>Größer als</target>
+      </trans-unit>
+      <trans-unit id="core.filter.greater-than-or-equal-to" datatype="html">
+        <source>Greater than or equal to</source>
+        <target>Größer als oder gleich</target>
+      </trans-unit>
+      <trans-unit id="core.filter.invert-condition" datatype="html">
+        <source>Invert condition</source>
+        <target>Bedingung umkehren</target>
+      </trans-unit>
+      <trans-unit id="core.filter.is-after" datatype="html">
+        <source>is after</source>
+        <target>ist nach</target>
+      </trans-unit>
+      <trans-unit id="core.filter.is-before" datatype="html">
+        <source>is before</source>
+        <target>ist vor</target>
+      </trans-unit>
+      <trans-unit id="core.filter.is-between" datatype="html">
+        <source>is between</source>
+        <target>ist zwischen</target>
+      </trans-unit>
+      <trans-unit id="core.filter.is-false" datatype="html">
+        <source>is false</source>
+        <target state="translated">ist falsch</target>
+      </trans-unit>
+      <trans-unit id="core.filter.is-false-upper" datatype="html">
+        <source>Is false</source>
+        <target state="translated">Ist falsch</target>
+      </trans-unit>
+      <trans-unit id="core.filter.is-greater-than" datatype="html">
+        <source>is greater than</source>
+        <target>ist größer als</target>
+      </trans-unit>
+      <trans-unit id="core.filter.is-greater-than-or-equal-to" datatype="html">
+        <source>is greater than or equal to</source>
+        <target>ist größer als oder gleich</target>
+      </trans-unit>
+      <trans-unit id="core.filter.is-null" datatype="html">
+        <source>is null</source>
+        <target state="translated">ist null</target>
+      </trans-unit>
+      <trans-unit id="core.filter.is-null-upper" datatype="html">
+        <source>Is null</source>
+        <target state="translated">Ist leer (null)</target>
+      </trans-unit>
+      <trans-unit id="core.filter.is-on" datatype="html">
+        <source>is on</source>
+        <target>ist auf</target>
+      </trans-unit>
+      <trans-unit id="core.filter.is-smaller-than" datatype="html">
+        <source>is smaller than</source>
+        <target>ist kleiner als</target>
+      </trans-unit>
+      <trans-unit id="core.filter.is-smaller-than-or-equal-to" datatype="html">
+        <source>is smaller than or equal to</source>
+        <target>ist kleiner als oder gleich</target>
+      </trans-unit>
+      <trans-unit id="core.filter.is-true" datatype="html">
+        <source>is true</source>
+        <target state="translated">ist wahr</target>
+      </trans-unit>
+      <trans-unit id="core.filter.is-true-upper" datatype="html">
+        <source>Is true</source>
+        <target state="translated">Ist wahr</target>
+      </trans-unit>
+      <trans-unit id="core.filter.layerPlural" datatype="html">
+        <source>{VAR_PLURAL, plural, =1 {layer} other {layers}}</source>
+        <target state="translated">{VAR_PLURAL, plural, =1 {Schicht} other {Schichten}}</target>
+      </trans-unit>
+      <trans-unit id="core.filter.loading-reference-layer" datatype="html">
+        <source>Loading reference geometry</source>
+        <target>Referenzgeometrie laden</target>
+      </trans-unit>
+      <trans-unit id="core.filter.no-layers-available" datatype="html">
+        <source>No layers available to filter on</source>
+        <target>Keine verfügbaren Ebenen zum Filtern</target>
+      </trans-unit>
+      <trans-unit id="core.filter.on" datatype="html">
+        <source>On</source>
+        <target>Auf</target>
+      </trans-unit>
+      <trans-unit id="core.filter.or" datatype="html">
+        <source>or</source>
+        <target>oder</target>
+      </trans-unit>
+      <trans-unit id="core.filter.save-filter" datatype="html">
+        <source>Save filter</source>
+        <target>Filter speichern</target>
+      </trans-unit>
+      <trans-unit id="core.filter.select-all-values" datatype="html">
+        <source>Select all values</source>
+        <target>Alle Werte auswählen</target>
+      </trans-unit>
+      <trans-unit id="core.filter.select-condition" datatype="html">
+        <source>Select condition</source>
+        <target>Bedingung auswählen</target>
+      </trans-unit>
+      <trans-unit id="core.filter.select-layer" datatype="html">
+        <source>Select layer(s)</source>
+        <target>Layer auswählen</target>
+      </trans-unit>
+      <trans-unit id="core.filter.select-layer-to-filter" datatype="html">
+        <source>Select the layer(s) you want to filter</source>
+        <target>Wählen Sie die Layer aus, die Sie filtern möchten</target>
+      </trans-unit>
+      <trans-unit id="core.filter.select-layer-to-use-as-filter" datatype="html">
+        <source>Select layer to use as filter</source>
+        <target>Layer als Filter auswählen</target>
+      </trans-unit>
+      <trans-unit id="core.filter.select-reference-layer" datatype="html">
+        <source>Select reference layer</source>
+        <target>Referenzlayer auswählen</target>
+      </trans-unit>
+      <trans-unit id="core.filter.smaller-than" datatype="html">
+        <source>Smaller than</source>
+        <target>Kleiner als</target>
+      </trans-unit>
+      <trans-unit id="core.filter.smaller-than-or-equal-to" datatype="html">
+        <source>Smaller than or equal to</source>
+        <target>Kleiner als oder gleich</target>
+      </trans-unit>
+      <trans-unit id="core.filter.spatial" datatype="html">
+        <source>Spatial</source>
+        <target>Räumlich</target>
+      </trans-unit>
+      <trans-unit id="core.filter.spatial-filter" datatype="html">
+        <source>Spatial filter</source>
+        <target>Räumlicher Filter</target>
+      </trans-unit>
+      <trans-unit id="core.filter.starts-with" datatype="html">
+        <source>starts with</source>
+        <target>beginnt mit</target>
+      </trans-unit>
+      <trans-unit id="core.filter.starts-with-upper" datatype="html">
+        <source>Starts with</source>
+        <target>Beginnt mit</target>
+      </trans-unit>
+      <trans-unit id="core.filter.summary" datatype="html">
+        <source>Summary</source>
+        <target>Zusammenfassung</target>
+      </trans-unit>
+      <trans-unit id="core.filter.until" datatype="html">
+        <source>Until</source>
+        <target>Bis</target>
+      </trans-unit>
+      <trans-unit id="core.filter.value" datatype="html">
+        <source>Value</source>
+        <target>Wert</target>
+      </trans-unit>
+      <trans-unit id="core.legend.failed-loading-legend" datatype="html">
+        <source>Failed to load legend for</source>
+        <target>Fehler beim Laden der Legende für</target>
+      </trans-unit>
+      <trans-unit id="core.legend.legend" datatype="html">
+        <source>Legend</source>
+        <target>Legende</target>
+      </trans-unit>
+      <trans-unit id="core.login.as" datatype="html">
+        <source>as <x id="PH" equiv-text="state[&apos;userName&apos;]"/></source>
+        <target>als <x id="PH" equiv-text="state[&apos;userName&apos;]"/></target>
+      </trans-unit>
+      <trans-unit id="core.login.error" datatype="html">
+        <source>Login failed, please try again</source>
+        <target>Anmeldung fehlgeschlagen, bitte versuchen Sie es erneut</target>
+      </trans-unit>
+      <trans-unit id="core.login.insufficient-rights-error" datatype="html">
+        <source>You are logged in <x id="PH" equiv-text="userLabel"/> but do not have proper roles to access the application. Please contact your administrator.</source>
+        <target>Sie sind als <x id="PH" equiv-text="userLabel"/> angemeldet, haben jedoch nicht die erforderlichen Rollen, um auf die Anwendung zuzugreifen. Bitte kontaktieren Sie Ihren Administrator.</target>
+      </trans-unit>
+      <trans-unit id="core.print.a3" datatype="html">
+        <source>A3</source>
+        <target>A3</target>
+      </trans-unit>
+      <trans-unit id="core.print.a4" datatype="html">
+        <source>A4</source>
+        <target>A4</target>
+      </trans-unit>
+      <trans-unit id="core.print.add-legend-for-layer" datatype="html">
+        <source>Add legend for layer</source>
+        <target>Legende für Layer hinzufügen</target>
+      </trans-unit>
+      <trans-unit id="core.print.created-on" datatype="html">
+        <source>Created on</source>
+        <target>Erstellt am</target>
+      </trans-unit>
+      <trans-unit id="core.print.creating-map" datatype="html">
+        <source>Creating map, this may take a while.</source>
+        <target>Karte wird erstellt, dies kann eine Weile dauern.</target>
+      </trans-unit>
+      <trans-unit id="core.print.default-pdf-filename" datatype="html">
+        <source>map.pdf</source>
+        <target>karte.pdf</target>
+      </trans-unit>
+      <trans-unit id="core.print.download-map-image" datatype="html">
+        <source>Download map image</source>
+        <target>Karte herunterladen</target>
+      </trans-unit>
+      <trans-unit id="core.print.download-map-pdf" datatype="html">
+        <source>Download map PDF</source>
+        <target>Karte PDF herunterladen</target>
+      </trans-unit>
+      <trans-unit id="core.print.dpi" datatype="html">
+        <source>DPI</source>
+        <target>DPI</target>
+      </trans-unit>
+      <trans-unit id="core.print.dpi-range" datatype="html">
+        <source>Range: 90 - 600</source>
+        <target>Bereik: 90 - 600</target>
+      </trans-unit>
+      <trans-unit id="core.print.export-map" datatype="html">
+        <source>Export map</source>
+        <target>Karte exportieren</target>
+      </trans-unit>
+      <trans-unit id="core.print.footer" datatype="html">
+        <source>Footer</source>
+        <target>Fußzeile</target>
+      </trans-unit>
+      <trans-unit id="core.print.height" datatype="html">
+        <source>Height</source>
+        <target>Höhe</target>
+      </trans-unit>
+      <trans-unit id="core.print.height-range" datatype="html">
+        <source>Range: 50 - 600</source>
+        <target>Bereich: 50 - 600</target>
+      </trans-unit>
+      <trans-unit id="core.print.image-size-in-px" datatype="html">
+        <source>Image size in pixels: <x id="INTERPOLATION" equiv-text="{{getImageResolution()}}"/></source>
+        <target>Bildgröße in Pixel: <x id="INTERPOLATION" equiv-text="{{getImageResolution()}}"/></target>
+      </trans-unit>
+      <trans-unit id="core.print.image-size-mm" datatype="html">
+        <source>Image size in millimeters:</source>
+        <target>Bildgröße in Millimetern:</target>
+      </trans-unit>
+      <trans-unit id="core.print.include-drawing" datatype="html">
+        <source>Include drawing</source>
+        <target>Zeichnung einbeziehen</target>
+      </trans-unit>
+      <trans-unit id="core.print.landscape" datatype="html">
+        <source>Landscape</source>
+        <target>Querformat</target>
+      </trans-unit>
+      <trans-unit id="core.print.map-image" datatype="html">
+        <source>Map image</source>
+        <target>Kartenbild</target>
+      </trans-unit>
+      <trans-unit id="core.print.no-visible-layers" datatype="html">
+        <source>No visible layers.</source>
+        <target>Keine sichtbaren Ebenen.</target>
+      </trans-unit>
+      <trans-unit id="core.print.open-print-dialog" datatype="html">
+        <source>Automatically open print dialog</source>
+        <target>Druckdialog automatisch öffnen</target>
+      </trans-unit>
+      <trans-unit id="core.print.pdf-document" datatype="html">
+        <source>PDF document</source>
+        <target>PDF-Dokument</target>
+      </trans-unit>
+      <trans-unit id="core.print.portrait" datatype="html">
+        <source>Portrait</source>
+        <target>Hochformat</target>
+      </trans-unit>
+      <trans-unit id="core.print.print" datatype="html">
+        <source>Print</source>
+        <target>Drucken</target>
+      </trans-unit>
+      <trans-unit id="core.print.title" datatype="html">
+        <source>Title</source>
+        <target>Titel</target>
+      </trans-unit>
+      <trans-unit id="core.print.width" datatype="html">
+        <source>Width</source>
+        <target>Breite</target>
+      </trans-unit>
+      <trans-unit id="core.print.width-height-ratio" datatype="html">
+        <source>Width/height ratio: <x id="INTERPOLATION" equiv-text="{{getImageRatio() | number: &apos;1.1-2&apos; }}"/></source>
+        <target>Breite/Höhe-Verhältnis: <x id="INTERPOLATION" equiv-text="{{getImageRatio() | number: &apos;1.1-2&apos; }}"/></target>
+      </trans-unit>
+      <trans-unit id="core.print.width-range" datatype="html">
+        <source>Range: 50 - 600</source>
+        <target>Bereich: 50 - 600</target>
+      </trans-unit>
+      <trans-unit id="core.profile.about" datatype="html">
+        <source>About</source>
+        <target>Über</target>
+      </trans-unit>
+      <trans-unit id="core.profile.go-to-admin" datatype="html">
+        <source>Go to admin</source>
+        <target>Zum Admin-Bereich</target>
+      </trans-unit>
+      <trans-unit id="core.profile.logged-in-as" datatype="html">
+        <source>Logged in as</source>
+        <target>Eingeloggt als</target>
+      </trans-unit>
+      <trans-unit id="core.profile.login" datatype="html">
+        <source>Login</source>
+        <target>Anmelden</target>
+      </trans-unit>
+      <trans-unit id="core.profile.logout" datatype="html">
+        <source>Logout</source>
+        <target>Abmelden</target>
+      </trans-unit>
+      <trans-unit id="core.toc.available-layers" datatype="html">
+        <source>Available layers</source>
+        <target>Verfügbare Ebenen</target>
+      </trans-unit>
+      <trans-unit id="core.toc.close-details" datatype="html">
+        <source>Close details</source>
+        <target>Details schließen</target>
+      </trans-unit>
+      <trans-unit id="core.toc.description" datatype="html">
+        <source>Description</source>
+        <target>Beschreibung</target>
+      </trans-unit>
+      <trans-unit id="core.toc.details-for" datatype="html">
+        <source>Details for <x id="INTERPOLATION" equiv-text="{{node.layer?.title || node.name}}"/></source>
+        <target>Details für <x id="INTERPOLATION" equiv-text="{{node.layer?.title || node.name}}"/></target>
+      </trans-unit>
+      <trans-unit id="core.toc.filter-by-layer-name" datatype="html">
+        <source>Filter by layer name...</source>
+        <target>Nach Ebenennamen filtern...</target>
+      </trans-unit>
+      <trans-unit id="core.toc.filter-layers" datatype="html">
+        <source>Filter layers</source>
+        <target>Ebenen filtern</target>
+      </trans-unit>
+      <trans-unit id="core.toc.legend" datatype="html">
+        <source>Legend</source>
+        <target>Legende</target>
+      </trans-unit>
+      <trans-unit id="core.toc.opacity" datatype="html">
+        <source>Opacity</source>
+        <target>Deckkraft</target>
+      </trans-unit>
+      <trans-unit id="core.toc.reorder-layers" datatype="html">
+        <source>Re-order layers</source>
+        <target>Ebenen neu anordnen</target>
+      </trans-unit>
+      <trans-unit id="core.toc.reset-opacity" datatype="html">
+        <source>Reset opacity</source>
+        <target>Deckkraft zurücksetzen</target>
+      </trans-unit>
+      <trans-unit id="core.toc.toggle-layers-off" datatype="html">
+        <source>Toggle all layers off</source>
+        <target>Alle Ebenen ausschalten</target>
+      </trans-unit>
+      <trans-unit id="core.toc.toggle-layers-on" datatype="html">
+        <source>Toggle all layers on</source>
+        <target>Alle Ebenen einschalten</target>
+      </trans-unit>
+      <trans-unit id="core.toolbar.coordinate-picker" datatype="html">
+        <source>Coordinate picker</source>
+        <target>Koordinatenauswahl</target>
+      </trans-unit>
+      <trans-unit id="core.toolbar.coordinate-picker-copy" datatype="html">
+        <source>Copy</source>
+        <target>Kopieren</target>
+      </trans-unit>
+      <trans-unit id="core.toolbar.coordinate-picker-failed-copy" datatype="html">
+        <source>Failed to copy to clipboard</source>
+        <target>Kopieren in die Zwischenablage fehlgeschlagen</target>
+      </trans-unit>
+      <trans-unit id="core.toolbar.coordinate-picker-selected-coordinates" datatype="html">
+        <source>Selected coordinates: <x id="PH" equiv-text="coordinates"/></source>
+        <target state="translated">Ausgewählte Koordinaten: <x id="PH" equiv-text="coordinates"/></target>
+      </trans-unit>
+      <trans-unit id="core.toolbar.coordinate-picker-success" datatype="html">
+        <source>Success</source>
+        <target>Erfolg</target>
+      </trans-unit>
+      <trans-unit id="core.toolbar.measure-area" datatype="html">
+        <source>Measure area</source>
+        <target>Fläche messen</target>
+      </trans-unit>
+      <trans-unit id="core.toolbar.measure-length" datatype="html">
+        <source>Measure distance</source>
+        <target>Entfernung messen</target>
+      </trans-unit>
+      <trans-unit id="core.toolbar.no-results-found" datatype="html">
+        <source>No results found</source>
+        <target>Keine Ergebnisse gefunden</target>
+      </trans-unit>
+      <trans-unit id="core.toolbar.open-streetview" datatype="html">
+        <source>Open Streetview</source>
+        <target>Streetview öffnen</target>
+      </trans-unit>
+      <trans-unit id="core.toolbar.search-location" datatype="html">
+        <source>Search location</source>
+        <target>Standort suchen</target>
+      </trans-unit>
+      <trans-unit id="core.toolbar.search-location-pdok-attribution" datatype="html">
+        <source>Data by [PDOK](https://pdok.nl)</source>
+        <target>Daten von [PDOK] (https://pdok.nl)</target>
+      </trans-unit>
+      <trans-unit id="core.toolbar.type-at-least" datatype="html">
+        <source>Type at least <x id="INTERPOLATION" equiv-text="{{ minLength }}"/> characters to start searching</source>
+        <target>Geben Sie mindestens <x id="INTERPOLATION" equiv-text="{{ minLength }}"/> Zeichen ein, um mit der Suche zu beginnen</target>
+      </trans-unit>
+      <trans-unit id="core.toolbar.zoom-in" datatype="html">
+        <source>Zoom in</source>
+        <target>Vergrößern</target>
+      </trans-unit>
+      <trans-unit id="core.toolbar.zoom-out" datatype="html">
+        <source>Zoom out</source>
+        <target>Verkleinern</target>
+      </trans-unit>
+      <trans-unit id="core.toolbar.zoom-to-initial-extent" datatype="html">
+        <source>Zoom to initial extent</source>
+        <target>Zurück zur ursprünglichen Ansicht</target>
+      </trans-unit>
+      <trans-unit id="core.toolbar.zoom-to-location" datatype="html">
+        <source>Zoom to location</source>
+        <target>Zum Standort zoomen</target>
+      </trans-unit>
+      <trans-unit id="core.toolbar.zoom-to-location-failed-location-unavailable" datatype="html">
+        <source>Fetching location failed: location unavailable</source>
+        <target>Standort abrufen fehlgeschlagen: Standort nicht verfügbar</target>
+      </trans-unit>
+      <trans-unit id="core.toolbar.zoom-to-location-failed-permission-denied" datatype="html">
+        <source>Fetching location failed: permission denied</source>
+        <target>Standort abrufen fehlgeschlagen: Berechtigung verweigert</target>
+      </trans-unit>
+      <trans-unit id="core.toolbar.zoom-to-location-failed-timeout" datatype="html">
+        <source>Fetching location failed: timeout</source>
+        <target>Standort abrufen fehlgeschlagen: Zeitüberschreitung</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
