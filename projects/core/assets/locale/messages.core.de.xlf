@@ -1,90 +1,90 @@
 <?xml version="1.0"?><xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" target-language="de" datatype="plaintext" original="ng2.template">
     <body>
-    <trans-unit id="core.attribute-list.clear-filters" datatype="html">
+      <trans-unit id="core.attribute-list.clear-filters" datatype="html">
         <source>Clear filters</source>
         <target>Filter löschen</target>
-    </trans-unit>
-    <trans-unit id="core.attribute-list.export" datatype="html">
+      </trans-unit>
+      <trans-unit id="core.attribute-list.export" datatype="html">
         <source>Export</source>
         <target>Exportieren</target>
-    </trans-unit>
-    <trans-unit id="core.attribute-list.export-failed" datatype="html">
+      </trans-unit>
+      <trans-unit id="core.attribute-list.export-failed" datatype="html">
         <source>Exporting data for layer <x id="PH" equiv-text="params.serviceLayerName"/> and format <x id="PH_1" equiv-text="params.format"/> failed</source>
         <target>Daten für Layer <x id="PH" equiv-text="params.serviceLayerName"/> und Format <x id="PH_1" equiv-text="params.format"/> konnten nicht exportiert werden</target>
-    </trans-unit>
-    <trans-unit id="core.attribute-list.failed-loading-data" datatype="html">
+      </trans-unit>
+      <trans-unit id="core.attribute-list.failed-loading-data" datatype="html">
         <source>Failed to load attribute list data</source>
         <target state="translated">Fehler beim Laden der Attributlisten-Daten</target>
-    </trans-unit>
-    <trans-unit id="core.attribute-list.failed-loading-data-for" datatype="html">
+      </trans-unit>
+      <trans-unit id="core.attribute-list.failed-loading-data-for" datatype="html">
         <source>Failed to load attribute list data for <x id="PH" equiv-text="tab.label"/></source>
         <target state="translated">Fehler beim Laden der Attributlisten-Daten für <x id="PH" equiv-text="tab.label"/></target>
-    </trans-unit>
-    <trans-unit id="core.attribute-list.filter-on" datatype="html">
+      </trans-unit>
+      <trans-unit id="core.attribute-list.filter-on" datatype="html">
         <source>Filter on <x id="INTERPOLATION" equiv-text="{{getColumnName()}}"/></source>
         <target>Filtern nach <x id="INTERPOLATION" equiv-text="{{getColumnName()}}"/></target>
-    </trans-unit>
-    <trans-unit id="core.attribute-list.go-to-page" datatype="html">
+      </trans-unit>
+      <trans-unit id="core.attribute-list.go-to-page" datatype="html">
         <source>Go to page</source>
         <target>Zur Seite gehen</target>
-    </trans-unit>
-    <trans-unit id="core.attribute-list.no-data-found" datatype="html">
+      </trans-unit>
+      <trans-unit id="core.attribute-list.no-data-found" datatype="html">
         <source>No layers with administrative data found</source>
         <target>Keine Layer mit administrativen Daten gefunden</target>
-    </trans-unit>
-    <trans-unit id="core.attribute-list.no-rows-found" datatype="html">
+      </trans-unit>
+      <trans-unit id="core.attribute-list.no-rows-found" datatype="html">
         <source>No rows found</source>
         <target>Keine Zeilen gefunden</target>
-    </trans-unit>
-    <trans-unit id="core.attribute-list.title" datatype="html">
+      </trans-unit>
+      <trans-unit id="core.attribute-list.title" datatype="html">
         <source>Attribute list</source>
         <target>Attributenlijst</target>
-    </trans-unit>
-    <trans-unit id="core.background-layer-toggle.no-basemap" datatype="html">
+      </trans-unit>
+      <trans-unit id="core.background-layer-toggle.no-basemap" datatype="html">
         <source>No basemap</source>
         <target>Keine Grundkarte</target>
-    </trans-unit>
-    <trans-unit id="core.common.add" datatype="html">
+      </trans-unit>
+      <trans-unit id="core.common.add" datatype="html">
         <source>Add</source>
         <target>Hinzufügen</target>
-    </trans-unit>
-    <trans-unit id="core.common.back" datatype="html">
+      </trans-unit>
+      <trans-unit id="core.common.back" datatype="html">
         <source>Back</source>
         <target>Zurück</target>
-    </trans-unit>
-    <trans-unit id="core.common.cancel" datatype="html">
+      </trans-unit>
+      <trans-unit id="core.common.cancel" datatype="html">
         <source>Cancel</source>
         <target>Abbrechen</target>
-    </trans-unit>
-    <trans-unit id="core.common.clear" datatype="html">
+      </trans-unit>
+      <trans-unit id="core.common.clear" datatype="html">
         <source>Clear</source>
         <target>Löschen</target>
-    </trans-unit>
-    <trans-unit id="core.common.close" datatype="html">
+      </trans-unit>
+      <trans-unit id="core.common.close" datatype="html">
         <source>Close</source>
         <target>Schließen</target>
-    </trans-unit>
-    <trans-unit id="core.common.csv" datatype="html">
+      </trans-unit>
+      <trans-unit id="core.common.csv" datatype="html">
         <source>CSV</source>
         <target>CSV</target>
-    </trans-unit>
-    <trans-unit id="core.common.delete" datatype="html">
+      </trans-unit>
+      <trans-unit id="core.common.delete" datatype="html">
         <source>Delete</source>
         <target>Löschen</target>
-    </trans-unit>
-    <trans-unit id="core.common.dxf" datatype="html">
+      </trans-unit>
+      <trans-unit id="core.common.dxf" datatype="html">
         <source>DXF</source>
         <target>DXF</target>
-    </trans-unit>
-    <trans-unit id="core.common.enabled" datatype="html">
+      </trans-unit>
+      <trans-unit id="core.common.enabled" datatype="html">
         <source>Enabled</source>
         <target>Aktiviert</target>
-    </trans-unit>
-    <trans-unit id="core.common.error-loading-map" datatype="html">
+      </trans-unit>
+      <trans-unit id="core.common.error-loading-map" datatype="html">
         <source>Could not load map settings</source>
         <target>Konnte die Karteneinstellungen nicht laden</target>
-    </trans-unit>
+      </trans-unit>
       <trans-unit id="core.common.error-loading-viewer" datatype="html">
         <source>Could not find or load the requested viewer</source>
         <target>Kon de gevraagde viewer niet vinden of laden</target>
@@ -108,40 +108,40 @@
       <trans-unit id="core.common.geopackage" datatype="html">
         <source>GeoPackage</source>
         <target>GeoPackage</target>
-    </trans-unit>
-    <trans-unit id="core.common.line" datatype="html">
+      </trans-unit>
+      <trans-unit id="core.common.line" datatype="html">
         <source>Line</source>
         <target>Linie</target>
-    </trans-unit>
-    <trans-unit id="core.common.next" datatype="html">
+      </trans-unit>
+      <trans-unit id="core.common.next" datatype="html">
         <source>Next</source>
         <target>Weiter</target>
-    </trans-unit>
-    <trans-unit id="core.common.none" datatype="html">
+      </trans-unit>
+      <trans-unit id="core.common.none" datatype="html">
         <source>None</source>
         <target>Keine</target>
-    </trans-unit>
-    <trans-unit id="core.common.point" datatype="html">
+      </trans-unit>
+      <trans-unit id="core.common.point" datatype="html">
         <source>Point</source>
         <target>Punkt</target>
-    </trans-unit>
-    <trans-unit id="core.common.polygon" datatype="html">
-            <source>Polygon</source>
-            <target>Polygon</target>
-        </trans-unit>
-        <trans-unit id="core.common.rectangle" datatype="html">
-            <source>Rectangle</source>
-            <target>Rechteck</target>
-        </trans-unit>
-        <trans-unit id="core.common.retry" datatype="html">
-            <source>Retry</source>
-            <target>Wiederholen</target>
       </trans-unit>
-    <trans-unit id="core.common.save" datatype="html">
+      <trans-unit id="core.common.polygon" datatype="html">
+        <source>Polygon</source>
+        <target>Polygon</target>
+      </trans-unit>
+      <trans-unit id="core.common.rectangle" datatype="html">
+        <source>Rectangle</source>
+        <target>Rechteck</target>
+      </trans-unit>
+      <trans-unit id="core.common.retry" datatype="html">
+        <source>Retry</source>
+        <target>Wiederholen</target>
+      </trans-unit>
+      <trans-unit id="core.common.save" datatype="html">
         <source>Save</source>
         <target>Speichern</target>
       </trans-unit>
-    <trans-unit id="core.common.set" datatype="html">
+      <trans-unit id="core.common.set" datatype="html">
         <source>Set</source>
         <target>Einstellen</target>
       </trans-unit>
@@ -221,39 +221,39 @@
         <source>Color</source>
         <target>Farbe</target>
       </trans-unit>
-    <trans-unit id="core.drawing.delete-drawing" datatype="html">
-        <source>Delete complete drawing</source>
-        <target>Gesamte Zeichnung löschen</target>
-    </trans-unit>
-    <trans-unit id="core.drawing.delete-drawing-confirm" datatype="html">
+      <trans-unit id="core.drawing.delete-drawing" datatype="html">
         <source>Delete complete drawing</source>
         <target>Gesamte Zeichnung löschen</target>
       </trans-unit>
-    <trans-unit id="core.drawing.delete-drawing-confirm-message" datatype="html">
+      <trans-unit id="core.drawing.delete-drawing-confirm" datatype="html">
+        <source>Delete complete drawing</source>
+        <target>Gesamte Zeichnung löschen</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.delete-drawing-confirm-message" datatype="html">
         <source>Are you sure you want to delete the complete drawing? All objects will be deleted and this cannot be undone.</source>
         <target>Bist du sicher, dass du die gesamte Zeichnung löschen möchtest? Alle Objekte werden gelöscht und dies kann nicht rückgängig gemacht werden.</target>
       </trans-unit>
-    <trans-unit id="core.drawing.delete-drawing-object-confirm" datatype="html">
+      <trans-unit id="core.drawing.delete-drawing-object-confirm" datatype="html">
         <source>Delete drawing object</source>
         <target>Zeichnungobjeckt löschen</target>
-    </trans-unit>
-    <trans-unit id="core.drawing.delete-drawing-object-confirm-message" datatype="html">
-      <source>Are you sure you want to delete this object?</source>
-      <target>Bist du sicher, dass du dieses Objekt löschen möchtest?</target>
-    </trans-unit>
-    <trans-unit id="core.drawing.delete-selected-drawing-object" datatype="html">
-      <source>Delete selected drawing object</source>
-      <target>Ausgewähltes Zeichenobjekt löschen</target>
-    </trans-unit>
-    <trans-unit id="core.drawing.drawing" datatype="html">
+      </trans-unit>
+      <trans-unit id="core.drawing.delete-drawing-object-confirm-message" datatype="html">
+        <source>Are you sure you want to delete this object?</source>
+        <target>Bist du sicher, dass du dieses Objekt löschen möchtest?</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.delete-selected-drawing-object" datatype="html">
+        <source>Delete selected drawing object</source>
+        <target>Ausgewähltes Zeichenobjekt löschen</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.drawing" datatype="html">
         <source>Drawing</source>
         <target>Zeichnen</target>
-    </trans-unit>
-    <trans-unit id="core.drawing.fill" datatype="html">
+      </trans-unit>
+      <trans-unit id="core.drawing.fill" datatype="html">
         <source>Fill</source>
         <target>Füllen</target>
-    </trans-unit>
-    <trans-unit id="core.drawing.fill-color" datatype="html">
+      </trans-unit>
+      <trans-unit id="core.drawing.fill-color" datatype="html">
         <source>Fill color</source>
         <target>Farbe ausfüllen</target>
       </trans-unit>

@@ -527,7 +527,7 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.filter-catalog" datatype="html">
         <source>Filter Catalog</source>
-        <target state="new">Filter Catalogus</target>
+        <target state="new">Catalogus filteren</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.folder-created" datatype="html">
         <source>Folder <x id="PH" equiv-text="node.title"/> created</source>
@@ -739,7 +739,7 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.xyz-tile-grid-extent" datatype="html">
         <source>XYZ tile grid extent</source>
-        <target state="new">XYZ tile grid extent</target>
+        <target state="new">Omvang van het XYZ tegelraster</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.xyz-tile-grid-options" datatype="html">
         <source>XYZ tile grid options</source>

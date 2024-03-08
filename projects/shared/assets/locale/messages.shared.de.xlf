@@ -1,66 +1,70 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-    <file source-language="en-US" target-language="de" datatype="plaintext" original="ng2.template">
-        <body>
-            <trans-unit id="shared.about.git-version" datatype="html">
-                <source>Git version</source>
-                <target>Git-Version</target>
-            </trans-unit>
-            <trans-unit id="shared.about.title" datatype="html">
-                <source>About Tailormap</source>
-                <target>Über Tailormap</target>
-            </trans-unit>
-            <trans-unit id="shared.about.unknown" datatype="html">
-                <source>Unknown</source>
-                <target>Unbekannt</target>
-            </trans-unit>
-            <trans-unit id="shared.about.version" datatype="html">
-                <source>Version</source>
-                <target>Version</target>
-            </trans-unit>
-            <trans-unit id="shared.color-picker.color-code" datatype="html">
-                <source>Color code</source>
-                <target>Farbcode</target>
-            </trans-unit>
-            <trans-unit id="shared.color-picker.color-required" datatype="html">
-                <source>Color is required</source>
-                <target>Farbe ist erforderlich</target>
-            </trans-unit>
-            <trans-unit id="shared.common.close" datatype="html">
-                <source>Close</source>
-                <target>Schließen</target>
-            </trans-unit>
-            <trans-unit id="shared.common.no" datatype="html">
-                <source>No</source>
-                <target>Nein</target>
-            </trans-unit>
-            <trans-unit id="shared.common.yes" datatype="html">
-                <source>Yes</source>
-                <target>Ja</target>
-            </trans-unit>
-            <trans-unit id="shared.language.dutch" datatype="html">
-                <source>Dutch</source>
-                <target>Niederländisch</target>
-            </trans-unit>
-            <trans-unit id="shared.language.english" datatype="html">
-                <source>English</source>
-                <target>Englisch</target>
-            </trans-unit>
-          <trans-unit id="shared.language.german" datatype="html">
-            <source>German</source>
-            <target>Deutsch</target>
-          </trans-unit>
-            <trans-unit id="shared.login-form.password" datatype="html">
-                <source>Password</source>
-                <target>Passwort</target>
-            </trans-unit>
-            <trans-unit id="shared.login-form.title" datatype="html">
-                <source>Login</source>
-                <target>Anmeldung</target>
-            </trans-unit>
-            <trans-unit id="shared.login-form.username" datatype="html">
-                <source>Username</source>
-                <target>Benutzername</target>
-            </trans-unit>
-        </body>
-    </file>
+  <file source-language="en-US" target-language="de" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="shared.about.added-packages" datatype="html">
+        <source>Extensions</source>
+        <target state="new">Extensions</target>
+      </trans-unit>
+      <trans-unit id="shared.about.build-date" datatype="html">
+        <source>Build date</source>
+        <target state="new">Build date</target>
+      </trans-unit>
+      <trans-unit id="shared.about.title" datatype="html">
+        <source>About Tailormap</source>
+        <target>Über Tailormap</target>
+      </trans-unit>
+      <trans-unit id="shared.about.unknown" datatype="html">
+        <source>Unknown</source>
+        <target>Unbekannt</target>
+      </trans-unit>
+      <trans-unit id="shared.about.version" datatype="html">
+        <source>Version</source>
+        <target>Version</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color-code" datatype="html">
+        <source>Color code</source>
+        <target>Farbcode</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color-required" datatype="html">
+        <source>Color is required</source>
+        <target>Farbe ist erforderlich</target>
+      </trans-unit>
+      <trans-unit id="shared.common.close" datatype="html">
+        <source>Close</source>
+        <target>Schließen</target>
+      </trans-unit>
+      <trans-unit id="shared.common.no" datatype="html">
+        <source>No</source>
+        <target>Nein</target>
+      </trans-unit>
+      <trans-unit id="shared.common.yes" datatype="html">
+        <source>Yes</source>
+        <target>Ja</target>
+      </trans-unit>
+      <trans-unit id="shared.language.dutch" datatype="html">
+        <source>Dutch</source>
+        <target>Niederländisch</target>
+      </trans-unit>
+      <trans-unit id="shared.language.english" datatype="html">
+        <source>English</source>
+        <target>Englisch</target>
+      </trans-unit>
+      <trans-unit id="shared.language.german" datatype="html">
+        <source>German</source>
+        <target>Deutsch</target>
+      </trans-unit>
+      <trans-unit id="shared.login-form.password" datatype="html">
+        <source>Password</source>
+        <target>Passwort</target>
+      </trans-unit>
+      <trans-unit id="shared.login-form.title" datatype="html">
+        <source>Login</source>
+        <target>Anmeldung</target>
+      </trans-unit>
+      <trans-unit id="shared.login-form.username" datatype="html">
+        <source>Username</source>
+        <target>Benutzername</target>
+      </trans-unit>
+    </body>
+  </file>
 </xliff>
