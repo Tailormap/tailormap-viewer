@@ -15,3 +15,4 @@ export * from './file.helper';
 export * from './tree.helper';
 export * from './string.helper';
 export * from './debounce.helper';
+export * from './clipboard.helper';

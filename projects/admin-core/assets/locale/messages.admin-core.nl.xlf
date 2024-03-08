@@ -765,6 +765,10 @@
         <source>Bounds</source>
         <target>Grenzen</target>
       </trans-unit>
+      <trans-unit id="admin-core.common.bounds-hint" datatype="html">
+        <source>You can paste a comma-separated list or &lt;BoundingBox minx=&quot;&quot; miny=.../&gt; string from capabilities in one of the fields for setting the extent</source>
+        <target state="new">U kunt hier een komma gescheiden lijst of &lt;BoundingBox minx=&quot;&quot; miny=.../&gt; vanuit de capabilities in één van de velden plakken om de extent te zetten</target>
+      </trans-unit>
       <trans-unit id="admin-core.common.cancel" datatype="html">
         <source>Cancel</source>
         <target>Annuleren</target>

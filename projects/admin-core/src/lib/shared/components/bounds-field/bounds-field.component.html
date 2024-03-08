@@ -10,19 +10,20 @@
   <div class="fields">
     <mat-form-field>
       <mat-label i18n="@@admin-core.common.min-x">Min X</mat-label>
-      <input matInput type="number" formControlName="minx" />
+      <input matInput type="number" (paste)="parseInput($event)" formControlName="minx" />
     </mat-form-field>
     <mat-form-field>
       <mat-label i18n="@@admin-core.common.min-y">Min Y</mat-label>
-      <input matInput type="number" formControlName="miny" />
+      <input matInput type="number" (paste)="parseInput($event)" formControlName="miny" />
     </mat-form-field>
     <mat-form-field>
       <mat-label i18n="@@admin-core.common.max-x">Max X</mat-label>
-      <input matInput type="number" formControlName="maxx" />
+      <input matInput type="number" (paste)="parseInput($event)" formControlName="maxx" />
     </mat-form-field>
     <mat-form-field>
       <mat-label i18n="@@admin-core.common.max-y">Max Y</mat-label>
-      <input matInput type="number" formControlName="maxy" />
+      <input matInput type="number" (paste)="parseInput($event)" formControlName="maxy" />
     </mat-form-field>
   </div>
+  <div class="hint" i18n="@@admin-core.common.bounds-hint">You can paste a comma-separated list or &lt;BoundingBox minx="" miny=.../&gt; string from capabilities in one of the fields for setting the extent</div>
 </div>
