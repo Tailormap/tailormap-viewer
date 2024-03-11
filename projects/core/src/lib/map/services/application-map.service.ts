@@ -14,6 +14,7 @@ import { ApplicationMapBookmarkService } from './application-map-bookmark.servic
 import { withLatestFrom } from 'rxjs/operators';
 import { BookmarkService } from '../../bookmark/bookmark.service';
 import { MapBookmarkHelper } from '../bookmark/bookmark.helper';
+import { EmbedService } from '../../services/embed.service';
 
 @Injectable({
    providedIn: 'root',
@@ -27,6 +28,7 @@ export class ApplicationMapService implements OnDestroy {
     private mapService: MapService,
     private httpClient: HttpClient,
     private bookmarkService: BookmarkService,
+    private _embedService: EmbedService,
     private applicationMapBookmarkService: ApplicationMapBookmarkService,
   ) {
     const isValidLayer = (layer: LayerModel | null): layer is LayerModel => layer !== null;

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject, BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Message } from '@bufbuild/protobuf';
 import {
   BookmarkProtoFragmentDescriptor, BookmarkFragmentDescriptor, BookmarkID, BookmarkStringFragmentDescriptor,
@@ -20,7 +20,7 @@ export class BookmarkService {
 
   private pendingFragments: Map<BookmarkID, any> = new Map();
   private fragments: Map<BookmarkFragmentDescriptor, BookmarkFragmentValueObservable> = new Map();
-  private joinedBookmark: Subject<string | undefined> = new Subject();
+  private joinedBookmark = new BehaviorSubject<string | undefined>(undefined);
   private binaryFragmentsBase64: string | null = null;
 
   private getFragmentById(identifier: string): [BookmarkFragmentDescriptor, BookmarkFragmentValueObservable] | undefined {
@@ -77,18 +77,47 @@ export class BookmarkService {
     }
 
     fragment$.next(message);
-    this._serializeBookmark();
+
+    const [ outputs, binaryFragmentsBase64 ] = this._createSerializedBookmark(this.fragments, this.binaryFragmentsBase64);
+    if (binaryFragmentsBase64) {
+      this.binaryFragmentsBase64 = binaryFragmentsBase64;
+    }
+    if (outputs.length === 0) {
+      this.joinedBookmark.next(undefined);
+    } else {
+      this.joinedBookmark.next(outputs.join(''));
+    }
   }
 
-  private _serializeBookmark() {
-    const outputs = [];
+  public getBookmark<T extends Message<T>>(descriptor: BookmarkProtoFragmentDescriptor<T>, message: T): string;
+  public getBookmark(descriptor: BookmarkStringFragmentDescriptor, message: string): string;
+  public getBookmark(descriptor: BookmarkFragmentDescriptor, message: any): string {
+    if (isBookmarkProtoFragmentDescriptor(descriptor)) {
+      // Clear cached bookmark value of compressed binary fragments, so it gets updated
+      this.binaryFragmentsBase64 = null;
+    }
+    const fragment$ = new BehaviorSubject(message);
+    const fragments = new Map(this.fragments);
+    fragments.set(descriptor, fragment$);
+    const [outputs] = this._createSerializedBookmark(
+      fragments,
+      this.binaryFragmentsBase64,
+    );
+    return outputs.join('');
+  }
+
+  private _createSerializedBookmark(
+    fragments: Map<BookmarkFragmentDescriptor, BookmarkFragmentValueObservable>,
+    binaryFragmentsBase64: string | null,
+  ): [ string[], string | null ] {
+    const outputs: string[] = [];
 
     // Binary fragments are appended at the end and compressed together, so that string ids used in multiple fragments can be efficiently
     // compressed
     const binaryFragments = new BinaryBookmarkFragments();
 
     const fragmentById = new Map<string, [BookmarkFragmentDescriptor, BookmarkFragmentValueObservable]>();
-    for (const [ key, fragment ] of this.fragments) {
+    for (const [ key, fragment ] of fragments) {
       fragmentById.set(key.identifier, [ key, fragment ]);
     }
 
@@ -113,7 +142,7 @@ export class BookmarkService {
         outputs.push(`!${descriptor.identifier}:`, encodeURIComponent(value));
       } else if (isBookmarkProtoFragmentDescriptor(descriptor)) {
         // Only if binary value was changed
-        if (this.binaryFragmentsBase64 === null) {
+        if (binaryFragmentsBase64 === null) {
           const bytes = descriptor.serialize(value) as Uint8Array;
           if (bytes.length > 0) {
             binaryFragments.fragments.push(new BookmarkFragment({
@@ -125,22 +154,18 @@ export class BookmarkService {
       }
     }
 
-    if (this.binaryFragmentsBase64 !== null) {
+    if (binaryFragmentsBase64 !== null) {
       // Use cached value because only string fragments were updated
-      outputs.push('!', this.binaryFragmentsBase64);
+      outputs.push('!', binaryFragmentsBase64);
     } else if (binaryFragments.fragments.length > 0) {
       const protobuf = binaryFragments.toBinary();
       const compressed = deflate(protobuf, { format: 'deflate', level: 9 });
       const base64 = UrlHelper.bytesToUrlBase64(compressed);
       outputs.push('!', base64);
-      this.binaryFragmentsBase64 = base64;
+      binaryFragmentsBase64 = base64;
     }
 
-    if (outputs.length === 0) {
-      this.joinedBookmark.next(undefined);
-    } else {
-      this.joinedBookmark.next(outputs.join(''));
-    }
+    return [ outputs, binaryFragmentsBase64 ];
   }
 
   private static decodeBinaryFragments(s: string): BinaryBookmarkFragments {

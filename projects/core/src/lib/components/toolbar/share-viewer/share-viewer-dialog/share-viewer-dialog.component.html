@@ -1,0 +1,18 @@
+<h1 mat-dialog-title>Share viewer</h1>
+
+<div class="dialog-content">
+
+  <mat-form-field>
+    <mat-label>URL</mat-label>
+    <input matInput (click)="selectInput($event)" [formControl]="urlControl" />
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Embed URL</mat-label>
+    <input matInput (click)="selectInput($event)" [formControl]="embedControl" />
+  </mat-form-field>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-flat-button i18n="@@core.common.close" (click)="closeDialog()">Close</button>
+</div>

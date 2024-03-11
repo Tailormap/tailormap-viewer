@@ -8,6 +8,7 @@ import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { BookmarkService } from '../../bookmark/bookmark.service';
 import { ApplicationStyleService } from '../../services/application-style.service';
 import { DOCUMENT } from '@angular/common';
+import { EmbedService } from '../../services/embed.service';
 
 @Component({
   selector: 'tm-viewer-app',
@@ -22,6 +23,7 @@ private static DEFAULT_TITLE = 'Tailormap';
   public loadingFailed = false;
   public isLoaded = false;
   public errorMessage$: Observable<string | undefined> = of(undefined);
+  public isEmbedded: boolean = false;
 
   constructor(
     private store$: Store,
@@ -29,6 +31,7 @@ private static DEFAULT_TITLE = 'Tailormap';
     private router: Router,
     private cdr: ChangeDetectorRef,
     private bookmarkService: BookmarkService,
+    private embedService: EmbedService,
     private appStyleService: ApplicationStyleService,
     @Inject(DOCUMENT) private document: Document,
   ) { }
@@ -60,6 +63,7 @@ private static DEFAULT_TITLE = 'Tailormap';
         this.isLoaded = loadingState === LoadingStateEnum.LOADED;
         this.isLoading = loadingState === LoadingStateEnum.LOADING;
         this.loadingFailed = loadingState === LoadingStateEnum.FAILED;
+        this.isEmbedded = this.embedService.isEmbeddedApplication();
         this.cdr.detectChanges();
       });
 
