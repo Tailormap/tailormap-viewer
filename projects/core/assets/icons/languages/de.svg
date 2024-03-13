@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- from https://github.com/lipis/flag-icons -->
+
+<svg
+   id="flag-icons-de"
+   viewBox="0 0 640 480"
+   version="1.1"
+   sodipodi:docname="de.svg"
+   inkscape:version="1.3.2 (091e20ef0f, 2023-11-25)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs3" />
+  <sodipodi:namedview
+     id="namedview3"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="0.86591676"
+     inkscape:cx="66.981034"
+     inkscape:cy="17.900104"
+     inkscape:window-width="1568"
+     inkscape:window-height="1237"
+     inkscape:window-x="146"
+     inkscape:window-y="71"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="flag-icons-nl" />
+  <path
+     fill="#21468b"
+     d="M0 0h640v480H0z"
+     id="path1"
+     style="fill:#ffcc00" />
+  <path
+     fill="#fff"
+     d="M0 0h640v320H0z"
+     id="path2"
+     style="fill:#ff0000" />
+  <path
+     fill="#ae1c28"
+     d="M0 0h640v160H0z"
+     id="path3"
+     style="fill:#000000" />
+</svg>

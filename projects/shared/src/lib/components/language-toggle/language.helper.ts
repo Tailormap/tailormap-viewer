@@ -10,6 +10,12 @@ export class LanguageHelper {
       icon: 'languages_gb',
     },
     {
+      nativeLabel: 'Deutsch',
+      localizedLabel: $localize `:@@shared.language.german:German`,
+      code: 'de',
+      icon: 'languages_de',
+    },
+    {
       nativeLabel: 'Nederlands',
       localizedLabel: $localize `:@@shared.language.dutch:Dutch`,
       code: 'nl',
