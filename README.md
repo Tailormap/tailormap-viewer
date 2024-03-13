@@ -1,6 +1,6 @@
 # Tailormap viewer
 
-The Angular frontend for Tailormap.
+The Angular frontend for Tailormap.  
 
 ## Running using Docker Compose
 
