@@ -1,8 +1,6 @@
-import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { selectComponentsConfig } from '../../state/core.selectors';
-import { BaseComponentTypeEnum, BaseComponentConfigHelper, ComponentModel } from '@tailormap-viewer/api';
-import { Observable, of } from 'rxjs';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
+import { LayoutService } from '../layout.service';
 
 @Component({
   selector: 'tm-base-layout',
@@ -10,18 +8,7 @@ import { Observable, of } from 'rxjs';
   styleUrls: ['./base-layout.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BaseLayoutComponent implements OnInit {
-
-  private store$ = inject(Store);
-  public componentsConfig$: Observable<ComponentModel[]> = of([]);
+export class BaseLayoutComponent {
   public componentTypes = BaseComponentTypeEnum;
-
-  public ngOnInit(): void {
-    this.componentsConfig$ = this.store$.select(selectComponentsConfig);
-  }
-
-  public isComponentEnabled(config: ComponentModel[], componentType: string) {
-    return BaseComponentConfigHelper.isComponentEnabled(config, componentType);
-  }
-
+  constructor(public layoutService: LayoutService) {}
 }

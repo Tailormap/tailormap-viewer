@@ -1,30 +1,27 @@
-<ng-container *ngIf="(componentsConfig$ | async) as config">
+<ng-container *ngIf="(layoutService.componentsConfig$ | async) as config">
   <div class="content">
     <div class="center">
       <div class="map">
-        <tm-feature-info *ngIf="isComponentEnabled(config, componentTypes.FEATURE_INFO)"></tm-feature-info>
+        <tm-feature-info *ngIf="layoutService.isComponentEnabled(config, componentTypes.FEATURE_INFO)"></tm-feature-info>
         <tm-map></tm-map>
         <div class="map-controls-left">
-          <tm-measure *ngIf="isComponentEnabled(config, componentTypes.MEASURE)"></tm-measure>
-          <tm-clicked-coordinates *ngIf="isComponentEnabled(config, componentTypes.COORDINATE_PICKER)"></tm-clicked-coordinates>
-          <tm-streetview *ngIf="isComponentEnabled(config, componentTypes.STREETVIEW)"></tm-streetview>
-          <tm-simple-search *ngIf="isComponentEnabled(config, componentTypes.SIMPLE_SEARCH)"></tm-simple-search>
+          <tm-measure *ngIf="layoutService.isComponentEnabled(config, componentTypes.MEASURE)"></tm-measure>
+          <tm-clicked-coordinates *ngIf="layoutService.isComponentEnabled(config, componentTypes.COORDINATE_PICKER)"></tm-clicked-coordinates>
+          <tm-streetview *ngIf="layoutService.isComponentEnabled(config, componentTypes.STREETVIEW)"></tm-streetview>
+          <tm-simple-search *ngIf="layoutService.isComponentEnabled(config, componentTypes.SIMPLE_SEARCH)"></tm-simple-search>
         </div>
         <div class="map-controls-right">
-          <tm-background-layer-toggle *ngIf="isComponentEnabled(config, componentTypes.BACKGROUND_LAYER_TOGGLE)"></tm-background-layer-toggle>
+          <tm-background-layer-toggle *ngIf="layoutService.isComponentEnabled(config, componentTypes.BACKGROUND_LAYER_TOGGLE)"></tm-background-layer-toggle>
           <div class="map-controls-column">
-            <tm-zoom-buttons *ngIf="isComponentEnabled(config, componentTypes.ZOOM)"></tm-zoom-buttons>
-            <tm-geolocation *ngIf="isComponentEnabled(config, componentTypes.GEOLOCATION)"></tm-geolocation>
-            <tm-registered-components-renderer [config]="config" area="map-controls-right"></tm-registered-components-renderer>
+            <tm-zoom-buttons *ngIf="layoutService.isComponentEnabled(config, componentTypes.ZOOM)"></tm-zoom-buttons>
+            <tm-geolocation *ngIf="layoutService.isComponentEnabled(config, componentTypes.GEOLOCATION)"></tm-geolocation>
           </div>
         </div>
         <div class="map-controls-left map-controls-left--on-bottom">
-          <tm-scale-bar *ngIf="isComponentEnabled(config, componentTypes.SCALE_BAR)"></tm-scale-bar>
-          <tm-registered-components-renderer [config]="config" area="map-controls-left-bottom"></tm-registered-components-renderer>
+          <tm-scale-bar *ngIf="layoutService.isComponentEnabled(config, componentTypes.SCALE_BAR)"></tm-scale-bar>
         </div>
         <div class="map-controls-right map-controls-right--on-bottom">
-          <tm-mouse-coordinates *ngIf="isComponentEnabled(config, componentTypes.MOUSE_COORDINATES)"></tm-mouse-coordinates>
-          <tm-registered-components-renderer [config]="config" area="map-controls-right-bottom"></tm-registered-components-renderer>
+          <tm-mouse-coordinates *ngIf="layoutService.isComponentEnabled(config, componentTypes.MOUSE_COORDINATES)"></tm-mouse-coordinates>
         </div>
       </div>
     </div>

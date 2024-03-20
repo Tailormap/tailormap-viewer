@@ -116,6 +116,9 @@
       <trans-unit id="core.common.square" datatype="html">
         <source>Square</source>
       </trans-unit>
+      <trans-unit id="core.common.url" datatype="html">
+        <source>URL</source>
+      </trans-unit>
       <trans-unit id="core.draw.delete-selected-feature" datatype="html">
         <source>Delete selected feature</source>
       </trans-unit>
@@ -709,6 +712,12 @@
       </trans-unit>
       <trans-unit id="core.toolbar.search-location-pdok-attribution" datatype="html">
         <source>Data by [PDOK](https://pdok.nl)</source>
+      </trans-unit>
+      <trans-unit id="core.toolbar.share-viewer" datatype="html">
+        <source>Share viewer</source>
+      </trans-unit>
+      <trans-unit id="core.toolbar.share-viewer-embed-url" datatype="html">
+        <source>Embed URL</source>
       </trans-unit>
       <trans-unit id="core.toolbar.type-at-least" datatype="html">
         <source>Type at least <x id="INTERPOLATION" equiv-text="{{ minLength }}"/> characters to start searching</source>

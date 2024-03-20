@@ -56,6 +56,9 @@
       <trans-unit id="admin-core.application.component-print" datatype="html">
         <source>Print</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.component-share-viewer" datatype="html">
+        <source>Share viewer</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.component-streetview-tool" datatype="html">
         <source>Streetview tool</source>
       </trans-unit>
@@ -576,7 +579,7 @@
         <source>Bounds</source>
       </trans-unit>
       <trans-unit id="admin-core.common.bounds-hint" datatype="html">
-        <source>You can paste a comma-separated list or &lt;BoundingBox minx=&quot;&quot; miny=&quot;&quot;... /&gt; string from capabilities in one of the fields for setting the extent</source>
+        <source>You can paste a comma-separated list or &lt;BoundingBox minx=&quot;&quot; miny=.../&gt; string from capabilities in one of the fields for setting the extent</source>
       </trans-unit>
       <trans-unit id="admin-core.common.cancel" datatype="html">
         <source>Cancel</source>

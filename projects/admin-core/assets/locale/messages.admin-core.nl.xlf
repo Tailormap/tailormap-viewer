@@ -73,6 +73,10 @@
         <source>Print</source>
         <target>Afdrukken</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.component-share-viewer" datatype="html">
+        <source>Share viewer</source>
+        <target state="new">Viewer delen</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.component-streetview-tool" datatype="html">
         <source>Streetview tool</source>
         <target>Streetview</target>

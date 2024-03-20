@@ -5,7 +5,7 @@ import { selectComponentsConfig } from '../../state/core.selectors';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
-describe('BaseLayoutComponent', () => {
+describe('EmbeddedLayoutComponent', () => {
 
   const setup = async (disabledComponents?: BaseComponentTypeEnum[]) => {
     const store = provideMockStore({
@@ -27,13 +27,13 @@ describe('BaseLayoutComponent', () => {
   test('should render', async () => {
     const container = await setup();
     expect(container.querySelector('tm-map')).toBeInTheDocument();
-    expect(container.querySelector('tm-drawing')).toBeInTheDocument();
+    expect(container.querySelector('tm-simple-search')).toBeInTheDocument();
   });
 
   test('does not render disabled components', async () => {
-    const container = await setup([BaseComponentTypeEnum.DRAWING]);
+    const container = await setup([BaseComponentTypeEnum.SIMPLE_SEARCH]);
     expect(container.querySelector('tm-map')).toBeInTheDocument();
-    expect(container.querySelector('tm-drawing')).not.toBeInTheDocument();
+    expect(container.querySelector('tm-simple-search')).not.toBeInTheDocument();
   });
 
 });

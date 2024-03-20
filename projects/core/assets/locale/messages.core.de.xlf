@@ -153,6 +153,10 @@
         <source>Square</source>
         <target>Quadrat</target>
       </trans-unit>
+      <trans-unit id="core.common.url" datatype="html">
+        <source>URL</source>
+        <target state="new">URL</target>
+      </trans-unit>
       <trans-unit id="core.draw.delete-selected-feature" datatype="html">
         <source>Delete selected feature</source>
         <target state="translated">Ausgewähltes Objekt löschen</target>
@@ -944,6 +948,14 @@
       <trans-unit id="core.toolbar.search-location-pdok-attribution" datatype="html">
         <source>Data by [PDOK](https://pdok.nl)</source>
         <target>Daten von [PDOK] (https://pdok.nl)</target>
+      </trans-unit>
+      <trans-unit id="core.toolbar.share-viewer" datatype="html">
+        <source>Share viewer</source>
+        <target state="new">Share viewer</target>
+      </trans-unit>
+      <trans-unit id="core.toolbar.share-viewer-embed-url" datatype="html">
+        <source>Embed URL</source>
+        <target state="new">Embed URL</target>
       </trans-unit>
       <trans-unit id="core.toolbar.type-at-least" datatype="html">
         <source>Type at least <x id="INTERPOLATION" equiv-text="{{ minLength }}"/> characters to start searching</source>

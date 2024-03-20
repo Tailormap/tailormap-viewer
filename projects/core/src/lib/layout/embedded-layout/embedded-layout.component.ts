@@ -1,27 +1,14 @@
-import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { selectComponentsConfig } from '../../state/core.selectors';
-import { BaseComponentTypeEnum, BaseComponentConfigHelper, ComponentModel } from '@tailormap-viewer/api';
-import { Observable, of } from 'rxjs';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
+import { LayoutService } from '../layout.service';
 
 @Component({
   selector: 'tm-embedded-layout',
   templateUrl: './embedded-layout.component.html',
-  styleUrls: ['./embedded-layout.component.css'],
+  styleUrls: [ '../base-layout/base-layout.component.css', './embedded-layout.component.css' ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EmbeddedLayoutComponent implements OnInit {
-
-  private store$ = inject(Store);
-  public componentsConfig$: Observable<ComponentModel[]> = of([]);
+export class EmbeddedLayoutComponent {
   public componentTypes = BaseComponentTypeEnum;
-
-  public ngOnInit(): void {
-    this.componentsConfig$ = this.store$.select(selectComponentsConfig);
-  }
-
-  public isComponentEnabled(config: ComponentModel[], componentType: string) {
-    return BaseComponentConfigHelper.isComponentEnabled(config, componentType);
-  }
-
+  constructor(public layoutService: LayoutService) {}
 }
