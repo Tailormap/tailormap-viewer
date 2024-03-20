@@ -9,7 +9,7 @@ import { ExtendedMapResponseModel } from '../../map/models/extended-map-response
 
 export interface MapBookmarkContents {
   visibilityChanges: { id: string; checked: boolean }[];
-  opacityChanges: { layerId: string; opacity: number }[];
+  opacityChanges: { id: string; opacity: number }[];
 }
 
 export type MapLocationBookmarkContents = [[number, number], number];
@@ -65,6 +65,7 @@ export class MapBookmarkHelper {
   public static visibilityDataFromFragment(
     fragment: LayerVisibilityBookmarkFragment,
     layers: AppLayerWithInitialValuesModel[],
+    checkInitialValues = true,
   ): MapBookmarkContents {
     const checkedVisibilityValues = new Set();
     const checkedOpacityValues = new Set();
@@ -80,32 +81,44 @@ export class MapBookmarkHelper {
         continue;
       }
 
-      if (layer.visible !== TristateBoolean.UNSET) {
+      const isLayerVisible = layer.visible === TristateBoolean.TRUE;
+      if (layer.visible !== TristateBoolean.UNSET || (!checkInitialValues && isLayerVisible !== currentLayer.visible)) {
         checkedVisibilityValues.add(id);
-        const isLayerVisible = layer.visible === TristateBoolean.TRUE;
         if (isLayerVisible !== currentLayer.visible) {
           visibilityData.push({ id, checked: isLayerVisible });
         }
       }
 
-      if (layer.opacity !== 0) {
-        const opacity = layer.opacity - 1;
+      const opacity = layer.opacity === 0 ? 100 : layer.opacity - 1;
+      if (layer.opacity !== 0 || (!checkInitialValues && opacity !== currentLayer.opacity)) {
         checkedOpacityValues.add(id);
         if (opacity !== currentLayer.opacity) {
-          opacityData.push({ layerId: id, opacity });
+          opacityData.push({ id, opacity });
         }
       }
     }
 
-    // Add all layers which have visibility or opacity different from their initial values but which were not in the bookmark, so we have a
-    // complete set of values different from the initial values
-    for (const layer of layers) {
-      if (!checkedVisibilityValues.has(layer.id) && layer.initialValues?.visible !== layer.visible) {
-        visibilityData.push({ id: layer.id, checked: layer.initialValues?.visible ?? true });
-      }
+    if (!checkInitialValues) {
+      layers.forEach(currentLayer => {
+        const id = currentLayer.id;
+        const layer = fragment.layers.find(l => l.appLayerId === id);
+        if (!layer && currentLayer.visible) {
+          visibilityData.push({ id, checked: false });
+        }
+      });
+    }
 
-      if (!checkedOpacityValues.has(layer.id) && layer.initialValues?.opacity !== layer.opacity) {
-        opacityData.push({ layerId: layer.id, opacity: layer.initialValues?.opacity ?? 100 });
+    // Add all layers which have visibility or[ opacity different from their initial values but which were not in the bookmark, so we have a
+    // complete set of values different from the initial values
+    if (checkInitialValues) {
+      for (const layer of layers) {
+        if (!checkedVisibilityValues.has(layer.id) && layer.initialValues?.visible !== layer.visible) {
+          visibilityData.push({ id: layer.id, checked: layer.initialValues?.visible ?? true });
+        }
+
+        if (!checkedOpacityValues.has(layer.id) && layer.initialValues?.opacity !== layer.opacity) {
+          opacityData.push({ id: layer.id, opacity: layer.initialValues?.opacity ?? 100 });
+        }
       }
     }
 
@@ -199,7 +212,7 @@ export class MapBookmarkHelper {
     const appLayers = extendedAppLayers.map<AppLayerModel>(layer => {
       const updated = bookmarkOpacityVisibility.visibilityChanges.find(v => v.id === layer.id);
       const visible = updated ? updated.checked : layer.visible;
-      const opacityUpdated = bookmarkOpacityVisibility.opacityChanges.find(o => o.layerId === layer.id);
+      const opacityUpdated = bookmarkOpacityVisibility.opacityChanges.find(o => o.id === layer.id);
       const opacity = opacityUpdated ? opacityUpdated.opacity : layer.opacity;
       return {
         ...layer,

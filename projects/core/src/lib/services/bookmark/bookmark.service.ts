@@ -121,6 +121,9 @@ export class BookmarkService {
   If there are fragments registered but not found in the bookmark, it resets the value to initial for those bookmarks
    */
   public setBookmark(bookmark?: string) {
+    if (bookmark && bookmark === this.joinedBookmark.value) {
+      return;
+    }
     const missingIdentifiers = new Set<BookmarkID>([...this.fragments.keys()].map(a => a.identifier));
     const bookmarkComponents = this.readBookmarkComponentsFromBookmark(bookmark);
 
