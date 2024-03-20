@@ -5,9 +5,10 @@ import { combineLatest, catchError, concatMap, map, of, take } from 'rxjs';
 import { TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel } from '@tailormap-viewer/api';
 
 import * as CoreActions from '../../state/core.actions';
-import { ApplicationMapBookmarkService } from '../services/application-map-bookmark.service';
-import { BookmarkService } from '../../bookmark/bookmark.service';
-import { MapBookmarkHelper } from '../bookmark/bookmark.helper';
+import { ApplicationBookmarkService } from '../../services/application-bookmark/application-bookmark.service';
+import { BookmarkService } from '../../services/bookmark/bookmark.service';
+import { MapBookmarkHelper } from '../../services/application-bookmark/bookmark.helper';
+import { ApplicationBookmarkFragments } from '../../services/application-bookmark/application-bookmark-fragments';
 
 @Injectable()
 export class MapEffects {
@@ -33,8 +34,8 @@ export class MapEffects {
                 return of(MapActions.loadMapFailed({ error: response }));
               }
               return combineLatest([
-                this.bookmarkService.registerFragment$(ApplicationMapBookmarkService.VISIBILITY_BOOKMARK_DESCRIPTOR),
-                this.bookmarkService.registerFragment$(ApplicationMapBookmarkService.ORDERING_BOOKMARK_DESCRIPTOR),
+                this.bookmarkService.registerFragment$(ApplicationBookmarkFragments.VISIBILITY_BOOKMARK_DESCRIPTOR),
+                this.bookmarkService.registerFragment$(ApplicationBookmarkFragments.ORDERING_BOOKMARK_DESCRIPTOR),
               ])
                 .pipe(
                   take(1),

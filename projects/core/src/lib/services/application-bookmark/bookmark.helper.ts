@@ -1,11 +1,11 @@
 import { ArrayHelper } from '@tailormap-viewer/shared';
 import { MapSizeHelper, MapViewDetailsModel, MapUnitEnum } from '@tailormap-viewer/map';
 import { TristateBoolean, LayerVisibilityBookmarkFragment, LayerInformation, LayerTreeOrderBookmarkFragment, LayerTreeOrderInformation } from './bookmark_pb';
-import { AppLayerWithInitialValuesModel, ExtendedLayerTreeNodeModel } from '../models';
+import { AppLayerWithInitialValuesModel, ExtendedLayerTreeNodeModel } from '../../map/models';
 import { AppLayerModel, MapResponseModel } from '@tailormap-viewer/api';
-import { LayerModelHelper } from '../helpers/layer-model.helper';
-import { LayerTreeNodeHelper } from '../helpers/layer-tree-node.helper';
-import { ExtendedMapResponseModel } from '../models/extended-map-response.model';
+import { LayerModelHelper } from '../../map/helpers/layer-model.helper';
+import { LayerTreeNodeHelper } from '../../map/helpers/layer-tree-node.helper';
+import { ExtendedMapResponseModel } from '../../map/models/extended-map-response.model';
 
 export interface MapBookmarkContents {
   visibilityChanges: { id: string; checked: boolean }[];

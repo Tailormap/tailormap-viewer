@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, OnInit } from '@angular/core';
-import { BookmarkService } from '../../../../bookmark/bookmark.service';
-import { EmbedService } from '../../../../services/embed.service';
+import { BookmarkService } from '../../../../services/bookmark/bookmark.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FormControl } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ApplicationBookmarkFragments } from '../../../../services/application-bookmark/application-bookmark-fragments';
 
 @Component({
   selector: 'tm-share-viewer-dialog',
@@ -18,12 +18,9 @@ export class ShareViewerDialogComponent implements OnInit {
 
   constructor(
     private bookmarkService: BookmarkService,
-    private embedService: EmbedService,
     private dialogRef: MatDialogRef<ShareViewerDialogComponent>,
     private destroyRef: DestroyRef,
-  ) {
-
-  }
+  ) {}
 
   public ngOnInit() {
     this.bookmarkService.getBookmarkValue$()
@@ -31,8 +28,12 @@ export class ShareViewerDialogComponent implements OnInit {
       .subscribe(bookmark => {
         const baseUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
         this.urlControl.patchValue(`${baseUrl}#${bookmark || ''}`);
-        this.embedControl.patchValue(`${baseUrl}#${this.embedService.getEmbedLink()}`);
+        this.embedControl.patchValue(`${baseUrl}#${this.getEmbedLink()}`);
       });
+  }
+
+  private getEmbedLink() {
+    return this.bookmarkService.getBookmark(ApplicationBookmarkFragments.EMBED_BOOKMARK_DESCRIPTOR, "1");
   }
 
   public closeDialog() {
@@ -42,7 +43,6 @@ export class ShareViewerDialogComponent implements OnInit {
   public selectInput($event: MouseEvent) {
     const target = $event.target;
     if (target instanceof HTMLInputElement) {
-      target
       target.select();
     }
   }
