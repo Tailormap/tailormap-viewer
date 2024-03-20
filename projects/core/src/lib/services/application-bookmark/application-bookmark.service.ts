@@ -1,14 +1,13 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { MapService } from '@tailormap-viewer/map';
-import { combineLatest, distinctUntilChanged, filter, map, skip, Subject, take, takeUntil } from 'rxjs';
+import { combineLatest, filter, map, skip, Subject, take, takeUntil } from 'rxjs';
 import { selectLoadStatus, selectLayers, selectLayerTreeNodes } from '../../map/state/map.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { BookmarkService } from '../bookmark/bookmark.service';
 import { MapBookmarkHelper } from './bookmark.helper';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApplicationBookmarkFragments } from './application-bookmark-fragments';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Injectable({
   providedIn: 'root',
