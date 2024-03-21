@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { MapService } from '@tailormap-viewer/map';
-import { BehaviorSubject, combineLatest, filter, map, skip, Subject, switchMap, take, takeUntil, timer } from 'rxjs';
+import { combineLatest, filter, map, skip, Subject, takeUntil } from 'rxjs';
 import { selectLoadStatus, selectLayers, selectLayerTreeNodes } from '../../map/state/map.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { BookmarkService } from '../bookmark/bookmark.service';
@@ -11,7 +11,6 @@ import { ApplicationBookmarkFragments } from './application-bookmark-fragments';
 import { LayerTreeOrderBookmarkFragment, LayerVisibilityBookmarkFragment } from './bookmark_pb';
 import { withLatestFrom } from 'rxjs/operators';
 import { setLayerOpacity, setLayerVisibility, updateLayerTreeNodes } from '../../map/state/map.actions';
-import { LayerTreeNodeHelper } from '../../map/helpers/layer-tree-node.helper';
 
 @Injectable({
   providedIn: 'root',
@@ -37,7 +36,7 @@ export class ApplicationBookmarkService implements OnDestroy {
         this.bookmarkService.setBookmark(fragment === null ? undefined : fragment);
         if (initialRun) {
           this.updateBookmarkOnChanges();
-          this.respondToExternalUrlChanges();
+          this.updateMapOnUrlChanges();
         }
         initialRun = false;
       });
@@ -80,7 +79,7 @@ export class ApplicationBookmarkService implements OnDestroy {
       });
   }
 
-  private respondToExternalUrlChanges() {
+  private updateMapOnUrlChanges() {
     this.bookmarkService.registerFragment$(ApplicationBookmarkFragments.LOCATION_BOOKMARK_DESCRIPTOR)
       .pipe(
         skip(1),

@@ -1,10 +1,9 @@
 import * as MapActions from './map.actions';
 import { Action, createReducer, on } from '@ngrx/store';
 import { MapState, initialMapState } from './map.state';
-import { ChangePositionHelper, LoadingStateEnum, StateHelper } from '@tailormap-viewer/shared';
+import { ChangePositionHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
 import { LayerTreeNodeHelper } from '../helpers/layer-tree-node.helper';
 import { LayerModelHelper } from '../helpers/layer-model.helper';
-import { updateLayerTreeNodes } from './map.actions';
 
 const onLoadMap = (state: MapState): MapState => ({
   ...state,
