@@ -11,7 +11,7 @@ run:
 docker compose up -d
 ```
 
-This runs Tailormap on http://localhost:8080/ together with a PostgreSQL container to store configuration. The port (and other options) can
+This runs Tailormap on http://localhost:8080/ together with a PostgreSQL container to store configuration and a Solr container for full text search indexing. The port (and other options) can
 be changed by copying `.env.template` to `.env` and changing the variables (or use the `--env-file <file>` argument). Tailormap will only
 accept connections from the loopback interface, unless you set `SERVER_ADDRESS=0.0.0.0` in the env-file.
 
@@ -165,8 +165,8 @@ If you extend the Tailormap frontend with closed source frontend functionality, 
 browsers, even before logging in. By default, source maps (which provide the original source code to developer tools included in browsers)
 are generated but are not served to clients, unless you set the SOURCE_MAP_AUTH environment variable with a username:password. When opening
 DevTools in Chrome, you will get a HTTP Basic popup for this account in order to load source maps. At the moment the developer tools in
-Firefox do not support HTTP Basic authentication for source maps. Note that minified (or even obfuscated) sources are not security. 
-Confidential algorithms should be implemented server-side, and copying of frontend code is prevented by copyright and licensing. 
+Firefox do not support HTTP Basic authentication for source maps. Note that minified (or even obfuscated) sources are not security.
+Confidential algorithms should be implemented server-side, and copying of frontend code is prevented by copyright and licensing.
 
 To allow public access to source maps without authentication for ease of debugging, set the `SOURCE_MAP_AUTH` environment variable to `public`.
 

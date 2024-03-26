@@ -15,3 +15,7 @@ services:
   solr:
     networks:
       - geodata
+
+  solr-metrics:
+    networks:
+      - geodata
