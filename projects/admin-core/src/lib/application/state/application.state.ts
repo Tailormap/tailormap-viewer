@@ -1,7 +1,7 @@
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { ApplicationModel } from '@tailormap-admin/admin-api';
 
-export const applicationStateKey = 'application';
+export const applicationStateKey = 'admin-application';
 
 export interface ApplicationState {
   applicationsLoadStatus: LoadingStateEnum;

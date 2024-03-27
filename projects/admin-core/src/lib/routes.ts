@@ -25,6 +25,8 @@ export class Routes {
   public static APPLICATION_DETAILS_COMPONENTS = 'components';
   public static APPLICATION_DETAILS_STYLING = 'styling';
 
+  public static FORMS = 'forms';
+
   public static SETTINGS = 'settings';
   public static SETTINGS_GLOBAL = 'global';
 
