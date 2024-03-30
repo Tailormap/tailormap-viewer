@@ -8,7 +8,7 @@ import {
 } from '@tailormap-admin/admin-api';
 import { Store } from '@ngrx/store';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
-import { selectFormsLoadStatus } from './form.selectors';
+import { selectDraftForm, selectDraftFormId, selectDraftFormLoadStatus, selectFormsLoadStatus } from './form.selectors';
 
 @Injectable()
 export class FormEffects {
@@ -30,6 +30,45 @@ export class FormEffects {
                 return FormsActions.loadFormsFailed({ error: response.error });
               }
               return FormsActions.loadFormsSuccess({ forms: response });
+            }),
+          );
+      }),
+    );
+  });
+
+  public loadDraftForm$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(FormsActions.loadDraftForm),
+      concatLatestFrom(() => [
+        this.store$.select(selectDraftForm),
+        this.store$.select(selectDraftFormId),
+        this.store$.select(selectDraftFormLoadStatus),
+      ]),
+      filter(([ action, currentDraft, draftLoadingId, draftLoadingStatus ]) => {
+        if (currentDraft?.id === action.id) {
+          return false;
+        }
+        if (draftLoadingId === action.id && draftLoadingStatus === LoadingStateEnum.LOADING) {
+          return false;
+        }
+        return true;
+      }),
+      tap(() => this.store$.dispatch(FormsActions.loadDraftFormStart())),
+      switchMap(([action]) => {
+        return this.adminApiService.getForm$(action.id)
+          .pipe(
+            catchError(() => {
+              return of({ error: $localize `:@@admin-core.form.error-loading-form:Error while loading form` });
+            }),
+            map(formResponse => {
+              if (ApiResponseHelper.isErrorResponse(formResponse)) {
+                return FormsActions.loadDraftFormFailed({
+                  error: formResponse.error,
+                });
+              }
+              return FormsActions.loadDraftFormSuccess({
+                form: formResponse,
+              });
             }),
           );
       }),

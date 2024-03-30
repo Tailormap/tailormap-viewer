@@ -9,7 +9,8 @@ import { loadForms, setFormListFilter } from '../state/form.actions';
 import {
   selectFilteredFormsList, selectFormsLoadError, selectFormsLoadStatus,
 } from '../state/form.selectors';
-import { stopPropagation } from 'ol/events/Event';
+import { selectCatalogLoadStatus } from '../../catalog/state/catalog.selectors';
+import { loadCatalog } from '../../catalog/state/catalog.actions';
 
 @Component({
   selector: 'tm-admin-form-list',
@@ -46,11 +47,17 @@ export class FormListComponent implements OnInit {
           this.store$.dispatch(loadForms());
         }
       });
+    this.store$.select(selectCatalogLoadStatus)
+      .pipe(take(1))
+      .subscribe(loadStatus => {
+        if (loadStatus === LoadingStateEnum.INITIAL || loadStatus === LoadingStateEnum.FAILED) {
+          this.store$.dispatch(loadCatalog());
+        }
+      });
   }
 
   public onRetryClick() {
     this.store$.dispatch(loadForms());
   }
 
-  protected readonly stopPropagation = stopPropagation;
 }

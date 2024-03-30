@@ -1,5 +1,6 @@
 import { createAction, props } from '@ngrx/store';
-import { FormModel, FormSummaryModel } from '@tailormap-admin/admin-api';
+import { FormFieldModel, FormModel, FormSummaryModel, GeoServiceWithLayersModel } from '@tailormap-admin/admin-api';
+import { FormUpdateModel } from '../services/form-update.model';
 
 const formActionsPrefix = '[Admin/Form]';
 
@@ -26,13 +27,27 @@ export const setFormListFilter = createAction(
   props<{ filter: string | null | undefined }>(),
 );
 
-export const setSelectedForm = createAction(
-  `${formActionsPrefix} Set Selected Form`,
-  props<{ formId: number | null }>(),
-);
-
 export const clearSelectedForm = createAction(
   `${formActionsPrefix} Clear Selected Form`,
+);
+
+export const loadDraftForm = createAction(
+  `${formActionsPrefix} Load Draft Form`,
+  props<{ id: number }>(),
+);
+
+export const loadDraftFormStart = createAction(
+  `${formActionsPrefix} Load Draft Form Start`,
+);
+
+export const loadDraftFormSuccess = createAction(
+  `${formActionsPrefix} Load Draft Form Success`,
+  props<{ form: FormModel }>(),
+);
+
+export const loadDraftFormFailed = createAction(
+  `${formActionsPrefix} Load Draft Form Failed`,
+  props<{ error?: string }>(),
 );
 
 export const addForm = createAction(
@@ -52,7 +67,22 @@ export const deleteForm = createAction(
 
 export const updateDraftForm = createAction(
   `${formActionsPrefix} Update Draft Form`,
-  props<{ form: Omit<FormModel, 'id'> }>(),
+  props<{ form: FormUpdateModel }>(),
+);
+
+export const draftFormAddField = createAction(
+  `${formActionsPrefix} Draft Form Add Field`,
+  props<{ name: string }>(),
+);
+
+export const draftFormSetSelectedField = createAction(
+  `${formActionsPrefix} Draft Form Set Selected Field`,
+  props<{ name: string }>(),
+);
+
+export const draftFormUpdateField = createAction(
+  `${formActionsPrefix} Draft Form Update Field`,
+  props<{ field: FormFieldModel }>(),
 );
 
 export const updateDraftFormValid = createAction(

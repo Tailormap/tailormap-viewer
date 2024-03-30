@@ -1,0 +1,19 @@
+<ng-container *ngIf="form$ | async as form">
+  <h2 class="page-details-title" i18n="@@admin-core.form.edit">Edit {{ form.name }}</h2>
+
+  <div class="form-wrapper">
+    <tm-admin-form-form [form]="form" (updateForm)="updateForm($event)" (validFormChanged)="validFormChanged($event)"></tm-admin-form-form>
+  </div>
+
+  <div class="form-field-wrapper">
+    <tm-admin-form-attribute-list [featureSourceId]="form.featureSourceId" [featureTypeName]="form.featureTypeName"></tm-admin-form-attribute-list>
+    <tm-admin-form-field-list></tm-admin-form-field-list>
+    <tm-admin-edit-field></tm-admin-edit-field>
+  </div>
+
+  <div class="page-details-actions application-edit-buttons">
+    <tm-admin-save-button [saving$]="saving$" [disabled]="(canSave$ | async) === false" (save)="save()"></tm-admin-save-button>
+    <button mat-flat-button color="warn" (click)="delete(form)" i18n="@@admin-core.common.delete">Delete</button>
+    <button mat-flat-button routerLink="/admin/forms" i18n="@@admin-core.common.close">Close</button>
+  </div>
+</ng-container>

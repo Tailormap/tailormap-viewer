@@ -1,0 +1,61 @@
+<form [formGroup]="fieldForm" *ngIf="field">
+  <h2 i18n="@@admin-core.forms.edit-form-field">Edit form field {{field.name}}</h2>
+  <mat-form-field>
+    <mat-label i18n="@@admin-core.common.label">Label</mat-label>
+    <input matInput
+           tmAutoFocus
+           placeholder="Label"
+           i18n-placeholder="@@admin-core.common.label"
+           formControlName="label"
+    />
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label i18n="@@admin-core.common.type">Type</mat-label>
+    <mat-select formControlName="type" placeholder="Type" i18n-placeholder="@@admin-core.common.type">
+      <mat-option *ngFor="let fieldType of fieldTypes" [value]="fieldType.value">
+        {{ fieldType.label }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <div class="form-control">
+    <mat-checkbox color="primary" formControlName="disabled" i18n="@@admin-core.common.disabled">Disabled</mat-checkbox>
+  </div>
+  @if(fieldForm.get('type')?.value === 'select') {
+    <div class="form-control">
+      <mat-checkbox color="primary" formControlName="uniqueValuesAsOptions" i18n="@@admin-core.form.unique-values-as-options">Use unique values from this column as options</mat-checkbox>
+    </div>
+    <div class="form-control">
+      <ng-container formArrayName="valueList">
+        <ng-container *ngFor="let valueForm of getValueListFormArray().controls; let i = index">
+          <div class="value-form-row" [formGroup]="valueForm">
+            <mat-form-field>
+              <mat-label i18n="@@admin-core.form.value-list-value">Value</mat-label>
+              <input matInput
+                     tmAutoFocus
+                     placeholder="Value"
+                     i18n-placeholder="@@admin-core.form.value-list-value"
+                     formControlName="value"
+              />
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label i18n="@@admin-core.form.value-list-label">Label</mat-label>
+              <input matInput
+                     tmAutoFocus
+                     placeholder="Label"
+                     i18n-placeholder="@@admin-core.form.label-list-label"
+                     formControlName="label"
+              />
+            </mat-form-field>
+            <mat-icon class="delete-btn" (click)="removeValue(i)">delete_forever</mat-icon>
+          </div>
+        </ng-container>
+      </ng-container>
+      <button mat-mini-fab (click)="addValue()">
+        <mat-icon class="add-course-btn">add</mat-icon>
+      </button>
+    </div>
+    <div class="form-control">
+      <mat-checkbox color="primary" formControlName="allowFreeInput" i18n="@@admin-core.form.allow-free-input">Allow the user to enter input</mat-checkbox>
+    </div>
+  }
+</form>

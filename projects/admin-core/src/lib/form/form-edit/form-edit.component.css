@@ -1,0 +1,12 @@
+.form-wrapper {
+  max-width: 500px;
+}
+
+.form-field-wrapper {
+  display: flex;
+  margin-top: 16px;
+}
+
+.form-field-wrapper > * + * {
+  margin-left: 16px;
+}

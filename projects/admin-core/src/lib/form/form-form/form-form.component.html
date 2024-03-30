@@ -1,0 +1,21 @@
+<form [formGroup]="formForm">
+  <mat-form-field>
+    <mat-label i18n="@@admin-core.common.name">Name</mat-label>
+    <input matInput
+           tmAutoFocus
+           placeholder="Name"
+           i18n-placeholder="@@admin-core.common.name"
+           formControlName="name"
+    />
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label i18n="@@admin-core.common.description">Description</mat-label>
+    <textarea formControlName="description" matInput></textarea>
+  </mat-form-field>
+  <div class="form-control">
+    <strong i18n="@@admin-core.catalog.connect-feature-source">Feature source and type</strong>
+    <tm-admin-feature-type-selector [featureSourceId]="formForm.get('featureSourceId')?.value"
+                                    [featureTypeName]="formForm.get('featureTypeName')?.value"
+                                    (featureTypeSelected)="updateFeatureTypeSelection($event)"></tm-admin-feature-type-selector>
+  </div>
+</form>

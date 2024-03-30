@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'tm-admin-form-home',
@@ -6,11 +6,5 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
   styleUrls: ['./form-home.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FormHomeComponent implements OnInit {
-
-  constructor() { }
-
-  public ngOnInit(): void {
-  }
-
+export class FormHomeComponent {
 }

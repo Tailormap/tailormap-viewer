@@ -26,6 +26,8 @@ export class Routes {
   public static APPLICATION_DETAILS_STYLING = 'styling';
 
   public static FORMS = 'forms';
+  public static FORMS_CREATE = 'create';
+  public static FORMS_DETAILS = 'form/:formId';
 
   public static SETTINGS = 'settings';
   public static SETTINGS_GLOBAL = 'global';

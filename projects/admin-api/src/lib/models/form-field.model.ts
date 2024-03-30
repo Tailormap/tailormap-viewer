@@ -1,14 +1,13 @@
 import { FormFieldTypeEnum } from './form-field-type.enum';
 
 export interface FormFieldModel {
-  id: string;
   name: string;
   label: string;
   type: FormFieldTypeEnum;
   tab?: string;
   column?: string;
   uniqueValuesAsOptions?: boolean;
-  valueList?: Array<{ value: string | boolean | number; label?: string }>;
+  valueList?: Array<{ value: string; label?: string }>;
   allowValueListOnly?: boolean;
   disabled?: boolean;
   required?: boolean;

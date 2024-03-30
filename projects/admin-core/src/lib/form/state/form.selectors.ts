@@ -12,6 +12,7 @@ export const selectFormsListFilter = createSelector(selectFormState, state => st
 export const selectDraftFormId = createSelector(selectFormState, state => state.draftFormId);
 export const selectDraftForm = createSelector(selectFormState, state => state.draftForm);
 export const selectDraftFormLoadStatus = createSelector(selectFormState, state => state.draftFormLoadStatus);
+export const selectDraftFormSelectedAttribute = createSelector(selectFormState, state => state.draftFormSelectedAttribute);
 export const selectDraftFormUpdated = createSelector(selectFormState, state => state.draftFormUpdated);
 export const selectDraftFormValid = createSelector(selectFormState, state => state.draftFormValid);
 
@@ -28,5 +29,24 @@ export const selectFilteredFormsList = createSelector(
       .sort((a, b) => {
         return a.name.toLocaleLowerCase().localeCompare(b.name.toLocaleLowerCase());
       });
+  },
+);
+
+export const selectDraftFormField = createSelector(
+  selectDraftForm,
+  draftForm => draftForm?.fields || [],
+);
+
+export const selectDraftFormAttributes = createSelector(
+  selectDraftForm,
+  draftForm => (draftForm?.fields || []).map(f => f.name),
+);
+
+export const selectDraftFormSelectedField = createSelector(
+  selectDraftFormField,
+  selectDraftFormSelectedAttribute,
+  (fields, selectedAttribute) => {
+    console.log(fields, selectedAttribute);
+    return fields.find(f => f.name === selectedAttribute) || null;
   },
 );
