@@ -144,7 +144,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     this.featureSourceAndType$
       .pipe(
         takeUntil(this.destroyed),
-        concatMap(fs => {
+        switchMap(fs => {
           return !fs
             ? of([])
             : this.store$.select(selectFormsForFeatureType(fs.featureSource.id, fs.featureType?.name));
