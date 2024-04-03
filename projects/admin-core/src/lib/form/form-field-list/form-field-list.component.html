@@ -1,22 +1,24 @@
-<h2 i18n="@@admin-core.forms.form-fields">Form fields</h2>
-<div class="form-group has-search">
-  <mat-form-field appearance="outline">
-    <mat-label i18n="@@admin-core.form.filter-fields">Filter fields</mat-label>
-    <input [formControl]="filter"
-           i18n-placeholder="@@admin-core.common.filter-dots"
-           matInput
-           placeholder="Filter..."
-           tmAutoFocus
-           type="text"
-    />
-    <button (click)="filter.setValue('')" *ngIf="filter.getRawValue()" aria-label="Clear" mat-icon-button matSuffix>
-      <mat-icon svgIcon="close"></mat-icon>
-    </button>
-  </mat-form-field>
+@if (featureTypeName) {
+  <h2 i18n="@@admin-core.forms.form-fields">Form fields</h2>
+  <div class="form-group has-search flex">
+    <mat-form-field appearance="outline">
+      <mat-label i18n="@@admin-core.form.filter-fields">Filter fields</mat-label>
+      <input [formControl]="filter"
+             i18n-placeholder="@@admin-core.common.filter-dots"
+             matInput
+             placeholder="Filter..."
+             tmAutoFocus
+             type="text"
+      />
+      <button (click)="filter.setValue('')" *ngIf="filter.getRawValue()" aria-label="Clear" mat-icon-button matSuffix>
+        <mat-icon svgIcon="close"></mat-icon>
+      </button>
+    </mat-form-field>
 
-  <mat-selection-list>
-    <mat-list-item *ngFor="let field of fields$ | async" (click)="selectAttribute(field.name)">
-      <span class="detail">{{field.name}}</span>
-    </mat-list-item>
-  </mat-selection-list>
-</div>
+    <mat-selection-list>
+      <mat-list-item *ngFor="let field of fields$ | async" (click)="selectAttribute(field.name)">
+        <span class="detail">{{field.name}}</span>
+      </mat-list-item>
+    </mat-selection-list>
+  </div>
+}

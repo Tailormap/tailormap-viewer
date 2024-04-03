@@ -61,8 +61,10 @@ export class FormEditComponent implements OnInit, OnDestroy {
     this.savingSubject.next(true);
     this.formService.saveDraftForm$()
       .pipe(take(1))
-      .subscribe(() => {
-        this.adminSnackbarService.showMessage($localize `:@@admin-core.form.form-updated:Form updated`);
+      .subscribe(form => {
+        if (form) {
+          this.adminSnackbarService.showMessage($localize`:@@admin-core.form.form-updated:Form updated`);
+        }
         this.savingSubject.next(false);
       });
   }

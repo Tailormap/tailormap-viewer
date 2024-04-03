@@ -1,3 +1,21 @@
 .value-form-row {
   display: flex;
 }
+
+.value-form-row mat-form-field + mat-form-field {
+  margin-top: 0;
+  margin-left: 8px;
+}
+
+.value-form-row .delete-btn {
+  margin-top: 8px;
+}
+
+.form-wrapper {
+  max-width: 500px;
+}
+
+.value-form-row + .value-form-row,
+.value-form-row + .add-btn {
+  margin-top: 8px;
+}

@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { FormFieldModel, FormModel, FormSummaryModel, GeoServiceWithLayersModel } from '@tailormap-admin/admin-api';
+import { FormFieldModel, FormModel, FormSummaryModel } from '@tailormap-admin/admin-api';
 import { FormUpdateModel } from '../services/form-update.model';
 
 const formActionsPrefix = '[Admin/Form]';

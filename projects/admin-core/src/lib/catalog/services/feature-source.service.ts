@@ -57,6 +57,17 @@ export class FeatureSourceService {
       );
   }
 
+  public loadFeatureType$(featureTypeName: string, featureSourceId: string): Observable<FeatureTypeModel | null> {
+    return this.adminApiService.getFeatureSource$({ id: featureSourceId })
+      .pipe(
+        take(1),
+        catchError(() => of(null)),
+        map(featureSource => {
+          return featureSource?.featureTypes.find(f => f.name === featureTypeName) || null;
+        }),
+      );
+  }
+
   public createFeatureSource$(source: FeatureSourceCreateModel, catalogNodeId: string) {
     const featureSource: Omit<FeatureSourceModel, 'id' | 'type' | 'featureTypes'> = { ...source };
     return this.adminApiService.createFeatureSource$({ featureSource, refreshCapabilities: true }).pipe(

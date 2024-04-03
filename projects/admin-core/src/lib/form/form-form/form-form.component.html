@@ -16,6 +16,7 @@
     <strong i18n="@@admin-core.catalog.connect-feature-source">Feature source and type</strong>
     <tm-admin-feature-type-selector [featureSourceId]="formForm.get('featureSourceId')?.value"
                                     [featureTypeName]="formForm.get('featureTypeName')?.value"
+                                    [disabled]="!!form"
                                     (featureTypeSelected)="updateFeatureTypeSelection($event)"></tm-admin-feature-type-selector>
   </div>
 </form>

@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, ChangeDetectorRef, Input } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { FormFieldModel, FormFieldTypeEnum } from '@tailormap-admin/admin-api';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
@@ -17,6 +17,9 @@ type ValueListFormType = FormGroup<{ value: FormControl<string>; label: FormCont
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FormEditFieldComponent implements OnInit {
+
+  @Input({ required: true })
+  public featureTypeName: string = '';
 
   public field: FormFieldModel | null = null;
 
@@ -121,7 +124,7 @@ export class FormEditFieldComponent implements OnInit {
       type: form.type,
       disabled: form.disabled,
       uniqueValuesAsOptions: form.uniqueValuesAsOptions,
-      allowFreeInput: !form.allowValueListOnly,
+      allowFreeInput: form.allowValueListOnly === false,
     }, { emitEvent: false });
     const valueList = this.getValueListFormArray();
     valueList.clear();

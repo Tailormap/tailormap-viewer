@@ -57,7 +57,6 @@ export class ApplicationLayerAttributeSettingsComponent {
 
 
   public save() {
-    console.log(this.hideAttributes, this.readOnlyAttributes);
     this.dialogRef.close({
       hideAttributes: [...this.hideAttributes || []],
       readOnlyAttributes: [...this.readOnlyAttributes || []],

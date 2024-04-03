@@ -79,7 +79,6 @@ export class FormService {
           if (form) {
             // Save specific properties only.
             // By default, the API adds properties like _links etc., we don't want to patch those
-            console.log(form.fields);
             const draftForm: FormModel = {
               id: form.id,
               name: form.name,

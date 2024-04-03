@@ -1,23 +1,28 @@
-<h2 i18n="@@admin-core.forms.available-attributes">Available attributes</h2>
-<div class="form-group has-search">
-  <mat-form-field appearance="outline">
-    <mat-label i18n="@@admin-core.form.filter-attributes">Filter attributes</mat-label>
-    <input [formControl]="filter"
-           i18n-placeholder="@@admin-core.common.filter-dots"
-           matInput
-           placeholder="Filter..."
-           tmAutoFocus
-           type="text"
-    />
-    <button (click)="filter.setValue('')" *ngIf="filter.getRawValue()" aria-label="Clear" mat-icon-button matSuffix>
-      <mat-icon svgIcon="close"></mat-icon>
-    </button>
-  </mat-form-field>
+@if(featureTypeName) {
+  <h2 i18n="@@admin-core.forms.available-attributes">Available attributes</h2>
+  <div class="form-group has-search flex">
+    <mat-form-field appearance="outline">
+      <mat-label i18n="@@admin-core.form.filter-attributes">Filter attributes</mat-label>
+      <input [formControl]="filter"
+             i18n-placeholder="@@admin-core.common.filter-dots"
+             matInput
+             placeholder="Filter..."
+             tmAutoFocus
+             type="text"
+      />
+      <button (click)="filter.setValue('')" *ngIf="filter.getRawValue()" aria-label="Clear" mat-icon-button matSuffix>
+        <mat-icon svgIcon="close"></mat-icon>
+      </button>
+    </mat-form-field>
 
-  <mat-selection-list>
-    <mat-list-item *ngFor="let attribute of attributes$ | async" (click)="addAttribute(attribute)">
-      <span class="detail">{{attribute.name}}</span>
-    </mat-list-item>
-  </mat-selection-list>
-
-</div>
+    @if(loadingFeatureType$ | async) {
+      <mat-spinner mode="indeterminate" diameter="20" color="primary"></mat-spinner>
+    } @else {
+      <mat-selection-list>
+        <mat-list-item *ngFor="let attribute of attributes$ | async" (click)="addAttribute(attribute)">
+          <span class="detail">{{attribute.name}}</span>
+        </mat-list-item>
+      </mat-selection-list>
+    }
+  </div>
+}

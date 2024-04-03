@@ -7,8 +7,8 @@
 
   <div class="form-field-wrapper">
     <tm-admin-form-attribute-list [featureSourceId]="form.featureSourceId" [featureTypeName]="form.featureTypeName"></tm-admin-form-attribute-list>
-    <tm-admin-form-field-list></tm-admin-form-field-list>
-    <tm-admin-edit-field></tm-admin-edit-field>
+    <tm-admin-form-field-list [featureTypeName]="form.featureTypeName"></tm-admin-form-field-list>
+    <tm-admin-edit-field [featureTypeName]="form.featureTypeName"></tm-admin-edit-field>
   </div>
 
   <div class="page-details-actions application-edit-buttons">

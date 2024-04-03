@@ -23,7 +23,7 @@ export class FormEffects {
         return this.adminApiService.getForms$()
           .pipe(
             catchError(() => {
-              return of({ error: $localize `:@@admin-core.application.error-loading-applications:Error while loading list of applications` });
+              return of({ error: $localize `:@@admin-core.form.error-loading-forms:Error while loading list of forms` });
             }),
             map(response => {
               if (ApiResponseHelper.isErrorResponse(response)) {

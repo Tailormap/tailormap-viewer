@@ -47,6 +47,17 @@ export class FeatureTypeSelectorComponent implements OnInit, OnDestroy {
   @Input()
   public layerName: string | null | undefined;
 
+  @Input()
+  public set disabled(disabled: boolean) {
+    if (disabled) {
+      this.featureTypeSelectorForm.get('featureSourceId')?.disable({ emitEvent: false });
+      this.featureTypeSelectorForm.get('featureTypeName')?.disable({ emitEvent: false });
+    } else {
+      this.featureTypeSelectorForm.get('featureSourceId')?.enable({ emitEvent: false });
+      this.featureTypeSelectorForm.get('featureTypeName')?.enable({ emitEvent: false });
+    }
+  }
+
   @Output()
   public featureTypeSelected = new EventEmitter<{ featureSourceId?: number; featureTypeName?: string }>();
 

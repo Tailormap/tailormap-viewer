@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, DestroyRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, map, Observable, of } from 'rxjs';
 import { FormFieldModel } from '@tailormap-admin/admin-api';
@@ -15,6 +15,9 @@ import { selectDraftFormField } from '../state/form.selectors';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FormFieldListComponent implements OnInit {
+
+  @Input({ required: true })
+  public featureTypeName: string = '';
 
   public filter = new FormControl('');
 

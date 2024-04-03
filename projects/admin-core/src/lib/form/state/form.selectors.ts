@@ -16,6 +16,17 @@ export const selectDraftFormSelectedAttribute = createSelector(selectFormState, 
 export const selectDraftFormUpdated = createSelector(selectFormState, state => state.draftFormUpdated);
 export const selectDraftFormValid = createSelector(selectFormState, state => state.draftFormValid);
 
+export const selectFormsForFeatureType = (featureSourceId: string, featureTypeName?: string) => createSelector(
+  selectForms,
+  forms => {
+    if (!featureTypeName) {
+      return [];
+    }
+    const fsId = +(featureSourceId);
+    return forms.filter(f => f.featureSourceId === fsId && f.featureTypeName === featureTypeName);
+  },
+);
+
 export const selectFilteredFormsList = createSelector(
   selectForms,
   selectDraftFormId,
@@ -46,7 +57,6 @@ export const selectDraftFormSelectedField = createSelector(
   selectDraftFormField,
   selectDraftFormSelectedAttribute,
   (fields, selectedAttribute) => {
-    console.log(fields, selectedAttribute);
     return fields.find(f => f.name === selectedAttribute) || null;
   },
 );

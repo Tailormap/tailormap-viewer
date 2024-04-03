@@ -72,6 +72,8 @@ const onLoadDraftFormSuccess = (state: FormState, payload: ReturnType<typeof For
   draftFormLoadStatus: LoadingStateEnum.LOADED,
   draftFormSelectedAttribute: null,
   draftForm: payload.form,
+  draftFormValid: true,
+  draftFormUpdated: false,
 });
 
 const onLoadDraftFormFailed = (state: FormState): FormState => ({
