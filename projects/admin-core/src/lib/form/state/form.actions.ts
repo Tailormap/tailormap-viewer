@@ -1,6 +1,7 @@
 import { createAction, props } from '@ngrx/store';
-import { FormFieldModel, FormModel, FormSummaryModel } from '@tailormap-admin/admin-api';
+import { FormModel, FormSummaryModel } from '@tailormap-admin/admin-api';
 import { FormUpdateModel } from '../services/form-update.model';
+import { FormFieldModel } from '@tailormap-viewer/api';
 
 const formActionsPrefix = '[Admin/Form]';
 

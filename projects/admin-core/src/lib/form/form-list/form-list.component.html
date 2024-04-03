@@ -22,11 +22,15 @@
     </mat-form-field>
 
     <mat-selection-list>
-      <mat-list-item *ngFor="let form of forms$ | async"
-                     [class.selected]="form.selected"
-                     [routerLink]="['/admin/forms/form', form.id]">
-        <span class="detail">{{form.name}}</span>
-      </mat-list-item>
+      @for (form of forms$ | async; track form.id) {
+        <mat-list-item [class.selected]="form.selected"
+                       [routerLink]="['/admin/forms/form', form.id]">
+          <span class="detail">{{form.name}}</span>
+          @if (form.featureType) {
+            <span class="subtitle"> - {{form.featureType.name}}</span>
+          }
+        </mat-list-item>
+      }
     </mat-selection-list>
 
   </div>

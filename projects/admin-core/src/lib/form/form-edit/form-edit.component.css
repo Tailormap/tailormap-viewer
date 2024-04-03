@@ -2,7 +2,6 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
 }
 
 .form-wrapper {
@@ -14,6 +13,7 @@
   margin-top: 16px;
   flex: 1;
   overflow: hidden;
+  min-height: 300px;
 }
 
 .form-field-wrapper > * + * {
@@ -27,4 +27,5 @@ tm-admin-form-field-list {
 
 tm-admin-edit-field {
   flex: 1;
+  overflow: auto;
 }

@@ -1,5 +1,4 @@
-import { FormOptionsModel } from './form-options.model';
-import { FormFieldModel } from './form-field.model';
+import { FormFieldModel, FormOptionsModel } from '@tailormap-viewer/api';
 
 export interface FormModel {
   id: number;

@@ -1,4 +1,4 @@
-@if(featureTypeName) {
+@if(featureType$ | async) {
   <h2 i18n="@@admin-core.forms.available-attributes">Available attributes</h2>
   <div class="form-group has-search flex">
     <mat-form-field appearance="outline">
@@ -15,7 +15,7 @@
       </button>
     </mat-form-field>
 
-    @if(loadingFeatureType$ | async) {
+    @if(loadingFeatureType) {
       <mat-spinner mode="indeterminate" diameter="20" color="primary"></mat-spinner>
     } @else {
       <mat-selection-list>

@@ -4,13 +4,14 @@ import {
 } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { FormModel } from '@tailormap-admin/admin-api';
+import { AttributeDescriptorModel, FeatureTypeModel, FormModel } from '@tailormap-admin/admin-api';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 import { selectDraftFormUpdated, selectDraftFormValid } from '../state/form.selectors';
 import { FormService } from '../services/form.service';
 import { clearSelectedForm, updateDraftForm, updateDraftFormValid } from '../state/form.actions';
 import { FormUpdateModel } from '../services/form-update.model';
+import { FeatureSourceService } from '../../catalog/services/feature-source.service';
 
 @Component({
   selector: 'tm-admin-form-edit',
@@ -27,12 +28,19 @@ export class FormEditComponent implements OnInit, OnDestroy {
   public form$: Observable<FormModel | null> = of(null);
   public canSave$: Observable<boolean> = of(false);
 
+  private featureTypeSubject$ = new BehaviorSubject<FeatureTypeModel | null>(null);
+  public featureType$ = this.featureTypeSubject$.asObservable();
+
+  private loadingFeatureTypeSubject$ = new BehaviorSubject(false);
+  public loadingFeatureType$ = this.loadingFeatureTypeSubject$.asObservable();
+
   constructor(
     private route: ActivatedRoute,
     private store$: Store,
     private confirmDelete: ConfirmDialogService,
     private router: Router,
     private formService: FormService,
+    private featureSourceService: FeatureSourceService,
     private adminSnackbarService: AdminSnackbarService,
   ) {
   }
@@ -49,6 +57,26 @@ export class FormEditComponent implements OnInit, OnDestroy {
       this.store$.select(selectDraftFormUpdated),
       this.store$.select(selectDraftFormValid),
     ]).pipe(map(([ updated, valid ]) => updated && valid));
+    this.form$
+      .pipe(
+        takeUntil(this.destroyed),
+        distinctUntilChanged((f1, f2) => {
+          return f1?.featureTypeName === f2?.featureTypeName && f1?.featureSourceId === f2?.featureSourceId;
+        }),
+      )
+      .subscribe(form => {
+        if (!form?.featureTypeName) {
+          this.featureTypeSubject$.next(null);
+          return;
+        }
+        this.loadingFeatureTypeSubject$.next(true);
+        this.featureSourceService.loadFeatureType$(form.featureTypeName, `${form.featureSourceId}`)
+          .pipe(take(1))
+          .subscribe(featureType => {
+            this.featureTypeSubject$.next(featureType);
+            this.loadingFeatureTypeSubject$.next(false);
+          });
+      });
   }
 
   public ngOnDestroy(): void {

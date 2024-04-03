@@ -16,9 +16,11 @@
     </mat-form-field>
 
     <mat-selection-list>
-      <mat-list-item *ngFor="let field of fields$ | async" (click)="selectAttribute(field.name)">
-        <span class="detail">{{field.name}}</span>
-      </mat-list-item>
+      @for (field of fields$ | async; track field.name) {
+        <mat-list-item (click)="selectAttribute(field.name)" [class.selected]="field.selected">
+          <span class="detail">{{field.name}}</span>
+        </mat-list-item>
+      }
     </mat-selection-list>
   </div>
 }

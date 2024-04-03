@@ -7,7 +7,7 @@ export interface FormFieldModel {
   tab?: string;
   column?: string;
   uniqueValuesAsOptions?: boolean;
-  valueList?: Array<{ value: string; label?: string }>;
+  valueList?: Array<{ value: string | number | boolean; label?: string }>;
   allowValueListOnly?: boolean;
   disabled?: boolean;
   required?: boolean;

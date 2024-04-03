@@ -1,12 +1,12 @@
 import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, map, Observable, of } from 'rxjs';
-import { FormFieldModel } from '@tailormap-admin/admin-api';
 import { FilterHelper } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { draftFormSetSelectedField } from '../state/form.actions';
-import { selectDraftFormField } from '../state/form.selectors';
+import { selectDraftFormFieldsWithSelected } from '../state/form.selectors';
+import { FormFieldModel } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-admin-form-field-list',
@@ -22,7 +22,7 @@ export class FormFieldListComponent implements OnInit {
   public filter = new FormControl('');
 
   private attributeFilter = new BehaviorSubject<string | null>(null);
-  public fields$: Observable<FormFieldModel[]> = of([]);
+  public fields$: Observable<Array<FormFieldModel & { selected?: boolean }>> = of([]);
 
   constructor(
     private store$: Store,
@@ -37,15 +37,15 @@ export class FormFieldListComponent implements OnInit {
         this.attributeFilter.next(value);
       });
     this.fields$ = combineLatest([
-      this.store$.select(selectDraftFormField),
+      this.store$.select(selectDraftFormFieldsWithSelected),
       this.attributeFilter.asObservable().pipe(distinctUntilChanged()),
     ])
       .pipe(
-        map(([ selectedAttributes, filterStr ]) => {
+        map(([ selectedFields, filterStr ]) => {
           if (filterStr) {
-            return FilterHelper.filterByTerm(selectedAttributes, filterStr, a => a.name);
+            return FilterHelper.filterByTerm(selectedFields, filterStr, a => a.name);
           }
-          return selectedAttributes;
+          return selectedFields;
         }),
       );
   }

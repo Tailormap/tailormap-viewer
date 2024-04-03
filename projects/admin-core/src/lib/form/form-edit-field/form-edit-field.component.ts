@@ -1,12 +1,14 @@
 import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, ChangeDetectorRef, Input } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { FormFieldModel, FormFieldTypeEnum } from '@tailormap-admin/admin-api';
+import { FormFieldModel, FormFieldTypeEnum } from '@tailormap-viewer/api';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
 import { FormHelper } from '../../helpers/form.helper';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
 import { draftFormUpdateField } from '../state/form.actions';
 import { selectDraftFormSelectedField } from '../state/form.selectors';
+import { FeatureTypeModel } from '@tailormap-admin/admin-api';
+import { EditFormFieldHelper } from '../helpers/edit-form-field.helper';
 
 type ValueListFormType = FormGroup<{ value: FormControl<string>; label: FormControl<string> }>;
 
@@ -19,7 +21,14 @@ type ValueListFormType = FormGroup<{ value: FormControl<string>; label: FormCont
 export class FormEditFieldComponent implements OnInit {
 
   @Input({ required: true })
-  public featureTypeName: string = '';
+  public set featureType(featureType: FeatureTypeModel | null) {
+    this._featureType = featureType;
+  }
+  public get featureType() {
+    return this._featureType;
+  }
+
+  private _featureType: FeatureTypeModel | null = null;
 
   public field: FormFieldModel | null = null;
 
@@ -30,15 +39,7 @@ export class FormEditFieldComponent implements OnInit {
   ) {
   }
 
-  public fieldTypes = [
-    { label: $localize `:@@admin-core.form.field-type-text:Text field`, value: FormFieldTypeEnum.TEXT },
-    { label: $localize `:@@admin-core.form.field-type-number:Number field`, value: FormFieldTypeEnum.NUMBER },
-    { label: $localize `:@@admin-core.form.field-type-select:Choice list`, value: FormFieldTypeEnum.SELECT },
-    { label: $localize `:@@admin-core.form.field-type-textarea:Textarea field`, value: FormFieldTypeEnum.TEXTAREA },
-    { label: $localize `:@@admin-core.form.field-type-integer:Integer field`, value: FormFieldTypeEnum.INTEGER },
-    { label: $localize `:@@admin-core.form.field-type-boolean:Checkbox field`, value: FormFieldTypeEnum.BOOLEAN },
-    { label: $localize `:@@admin-core.form.field-type-date:Date field`, value: FormFieldTypeEnum.DATE },
-  ];
+  public filteredFieldTypes = EditFormFieldHelper.getFilteredFieldTypes();
 
   public fieldForm = new FormGroup({
     label: new FormControl('', {
@@ -72,7 +73,7 @@ export class FormEditFieldComponent implements OnInit {
           name: this.field.name,
           label: value.label || this.field.name,
           disabled: typeof value.disabled === 'undefined' ? false : value.disabled,
-          type: this.getFieldType(value.type),
+          type: EditFormFieldHelper.getFormFieldType(value.type),
           valueList,
           uniqueValuesAsOptions: value.uniqueValuesAsOptions,
           allowValueListOnly: !value.allowFreeInput,
@@ -92,30 +93,9 @@ export class FormEditFieldComponent implements OnInit {
         } else {
           this.clearForm();
         }
+        this.filteredFieldTypes = EditFormFieldHelper.getFilteredFieldTypes(field?.name, this.featureType);
         this.cdr.detectChanges();
       });
-  }
-
-  private getFieldType(fieldType: string | undefined) {
-    if (fieldType === 'number') {
-      return FormFieldTypeEnum.NUMBER;
-    }
-    if (fieldType === 'integer') {
-      return FormFieldTypeEnum.INTEGER;
-    }
-    if (fieldType === 'boolean') {
-      return FormFieldTypeEnum.BOOLEAN;
-    }
-    if (fieldType === 'select') {
-      return FormFieldTypeEnum.SELECT;
-    }
-    if (fieldType === 'textarea') {
-      return FormFieldTypeEnum.TEXTAREA;
-    }
-    if (fieldType === 'date') {
-      return FormFieldTypeEnum.DATE;
-    }
-    return FormFieldTypeEnum.TEXT;
   }
 
   private initForm(form: FormFieldModel) {
@@ -132,7 +112,7 @@ export class FormEditFieldComponent implements OnInit {
       (form.valueList || []).forEach(v => {
         const valueForm = new FormGroup({
           label: new FormControl<string>(v.label || '', { nonNullable: true }),
-          value: new FormControl<string>(v.value || '', { nonNullable: true }),
+          value: new FormControl<string>(typeof v.value === 'undefined' ? '' : `${v.value}`, { nonNullable: true }),
         });
         valueList.push(valueForm, { emitEvent: false });
       });

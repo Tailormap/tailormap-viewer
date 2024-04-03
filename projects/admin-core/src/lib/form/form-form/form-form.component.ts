@@ -1,10 +1,11 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, DestroyRef } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { FormModel, FormOptionsModel } from '@tailormap-admin/admin-api';
+import { FormModel } from '@tailormap-admin/admin-api';
 import { debounceTime, filter, map, distinctUntilChanged } from 'rxjs';
 import { FormHelper } from '../../helpers/form.helper';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TypesHelper } from '@tailormap-viewer/shared';
+import { FormOptionsModel } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-admin-form-form',

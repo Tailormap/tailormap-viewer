@@ -2,6 +2,11 @@ import { FormState, formStateKey } from './form.state';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { FormSummaryModel } from '@tailormap-admin/admin-api';
 import { FilterHelper } from '@tailormap-viewer/shared';
+import { FormFieldModel } from '@tailormap-viewer/api';
+import { selectFeatureTypes } from '../../catalog/state/catalog.selectors';
+import { ExtendedFeatureTypeModel } from '../../catalog/models/extended-feature-type.model';
+
+export type FormList = Array<FormSummaryModel & { selected: boolean; featureType?: ExtendedFeatureTypeModel }>;
 
 const selectFormState = createFeatureSelector<FormState>(formStateKey);
 
@@ -31,10 +36,12 @@ export const selectFilteredFormsList = createSelector(
   selectForms,
   selectDraftFormId,
   selectFormsListFilter,
-  (forms, draftFormId, filter): Array<FormSummaryModel & { selected: boolean }> => {
+  selectFeatureTypes,
+  (forms, draftFormId, filter, featureTypes): FormList => {
     return FilterHelper.filterByTerm(forms, filter, form => form.name)
       .map(a => ({
         ...a,
+        featureType: featureTypes.find(ft => ft.name === a.featureTypeName && ft.featureSourceId === `${a.featureSourceId}`),
         selected: a.id === draftFormId,
       }))
       .sort((a, b) => {
@@ -51,6 +58,20 @@ export const selectDraftFormField = createSelector(
 export const selectDraftFormAttributes = createSelector(
   selectDraftForm,
   draftForm => (draftForm?.fields || []).map(f => f.name),
+);
+
+export const selectDraftFormFieldsWithSelected = createSelector(
+  selectDraftFormField,
+  selectDraftFormSelectedAttribute,
+  (fields, selectedField): Array<FormFieldModel & { selected?: boolean }> => {
+    if (!selectedField) {
+      return fields;
+    }
+    return fields.map(f => ({
+      ...f,
+      selected: f.name === selectedField,
+    }));
+  },
 );
 
 export const selectDraftFormSelectedField = createSelector(

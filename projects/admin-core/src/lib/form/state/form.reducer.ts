@@ -2,7 +2,8 @@ import * as FormActions from './form.actions';
 import { Action, createReducer, on } from '@ngrx/store';
 import { FormState, initialFormState } from './form.state';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
-import { FormFieldTypeEnum, FormModel, FormSummaryModel } from '@tailormap-admin/admin-api';
+import { FormModel, FormSummaryModel } from '@tailormap-admin/admin-api';
+import { FormFieldTypeEnum } from '@tailormap-viewer/api';
 
 const summaryFromForm = (form: FormModel): FormSummaryModel => ({
   id: form.id,

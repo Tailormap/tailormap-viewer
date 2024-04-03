@@ -1,12 +1,12 @@
 import { Component, OnInit, ChangeDetectionStrategy, DestroyRef } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable, of, take } from 'rxjs';
-import { FormSummaryModel } from '@tailormap-admin/admin-api';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { loadForms, setFormListFilter } from '../state/form.actions';
 import {
+  FormList,
   selectFilteredFormsList, selectFormsLoadError, selectFormsLoadStatus,
 } from '../state/form.selectors';
 import { selectCatalogLoadStatus } from '../../catalog/state/catalog.selectors';
@@ -21,7 +21,7 @@ import { loadCatalog } from '../../catalog/state/catalog.actions';
 export class FormListComponent implements OnInit {
 
   public filter = new FormControl('');
-  public forms$: Observable<Array<FormSummaryModel & { selected: boolean }>> = of([]);
+  public forms$: Observable<FormList> = of([]);
   public formsLoadStatus$: Observable<LoadingStateEnum> = of(LoadingStateEnum.INITIAL);
   public errorMessage$: Observable<string | undefined> = of(undefined);
 
