@@ -1,13 +1,13 @@
-import { FormFieldModel } from '../models/form-field.model';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { DateTime } from 'luxon';
+import { ViewerEditFormFieldModel } from '../models/viewer-edit-form-field.model';
 
 export class FormHelper {
 
   private static DATE_VALIDATOR_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
   private static INTEGER_VALIDATOR_PATTERN = /^-?[0-9]+$/;
 
-  public static createForm(fields: FormFieldModel[]) {
+  public static createForm(fields: ViewerEditFormFieldModel[]) {
     const form = new FormGroup({});
     fields.forEach(field => {
       const validators: ValidatorFn[] = [];

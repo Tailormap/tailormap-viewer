@@ -1,7 +1,8 @@
 import {
-  AttributeModel, AttributeType, AttributeTypeHelper, ColumnMetadataModel, FeatureModel, LayerDetailsModel,
+  AttributeModel, AttributeType, AttributeTypeHelper, ColumnMetadataModel, FeatureModel, FormFieldModel, FormFieldTypeEnum,
+  LayerDetailsModel,
 } from '@tailormap-viewer/api';
-import { FormFieldModel } from '../models/form-field.model';
+import { ViewerEditFormFieldModel } from '../models/viewer-edit-form-field.model';
 
 export class EditModelHelper {
 
@@ -10,68 +11,90 @@ export class EditModelHelper {
     layerDetails: LayerDetailsModel,
     columnMetadata: ColumnMetadataModel[],
     isNewFeature?: boolean,
-  ): FormFieldModel[] {
+  ): ViewerEditFormFieldModel[] {
     if (!layerDetails.editable) {
       return [];
     }
-    return layerDetails.attributes
+    const formFields: Map<string, FormFieldModel> | null = layerDetails.form
+      ? new Map(layerDetails.form.fields.map(f => [ f.name, f ]))
+      : null;
+    const attributes = formFields
+      ? layerDetails.attributes.filter(a => formFields.has(a.key))
+      : [...layerDetails.attributes];
+    return attributes
       .filter(attribute => !AttributeTypeHelper.isGeometryType(attribute.type))
-      .map<FormFieldModel>(attribute => {
-      const attributeValue = feature.attributes[attribute.key];
-      const metadata = columnMetadata.find(c => c.key === attribute.key);
-      // Do not display a required boolean as a checkbox but as a select, because a checkbox can't show whether it is null or false so
-      // a user must touch it to make the form valid. For nullable booleans just keep the checkbox and do not bother the user with the
-      // difference between a null and a false boolean.
-      const booleanValueList = (attribute.type === AttributeType.BOOLEAN && !attribute.nullable)  ?
-        [{ value: true, label: $localize `:@@core.edit.true:True` }, { value: false, label: $localize `:@@core.edit.false:False` }] : null;
-      return {
-        label: attribute.editAlias || metadata?.alias || attribute.key,
-        value: isNewFeature ? attributeValue || attribute.defaultValue || '' : attributeValue,
-        name: attribute.key,
-        required: attribute.nullable === false,
-        disabled: !attribute.editable,
-        type: booleanValueList ? 'select' : EditModelHelper.getFormFieldType(attribute),
-        valueList: booleanValueList ? booleanValueList : attribute.valueList?.split(',').map(val => {
-          const value = val.trim();
-          return { value, label: value };
-        }),
-      };
+      .map<ViewerEditFormFieldModel>(attribute => {
+        const attributeValue = feature.attributes[attribute.key];
+        const formField = formFields?.get(attribute.key);
+        const fieldValue = isNewFeature ? attributeValue || attribute.defaultValue || '' : attributeValue;
+        if (formField) {
+          return {
+            ...formField,
+            valueList: EditModelHelper.parseValueList(attribute.type, formField.valueList),
+            value: fieldValue,
+          };
+        }
+        const metadata = columnMetadata.find(c => c.key === attribute.key);
+        // Do not display a required boolean as a checkbox but as a select, because a checkbox can't show whether it is null or false so
+        // a user must touch it to make the form valid. For nullable booleans just keep the checkbox and do not bother the user with the
+        // difference between a null and a false boolean.
+        const booleanValueList = (attribute.type === AttributeType.BOOLEAN && !attribute.nullable)  ?
+          [{ value: true, label: $localize `:@@core.edit.true:True` }, { value: false, label: $localize `:@@core.edit.false:False` }] : null;
+        return {
+          label: attribute.editAlias || metadata?.alias || attribute.key,
+          value: fieldValue,
+          name: attribute.key,
+          required: attribute.nullable === false,
+          disabled: !attribute.editable,
+          type: booleanValueList ? FormFieldTypeEnum.SELECT : EditModelHelper.getFormFieldType(attribute),
+          valueList: booleanValueList ? booleanValueList : attribute.valueList?.split(',').map(val => {
+            const value = val.trim();
+            return { value, label: value };
+          }),
+        };
     });
   }
 
-  private static getFormFieldType(attribute: AttributeModel): FormFieldModel['type'] {
+  private static getFormFieldType(attribute: AttributeModel): FormFieldTypeEnum {
     if (attribute.valueList) {
-      return 'select';
+      return FormFieldTypeEnum.SELECT;
     }
     switch (attribute.type) {
       case AttributeType.BOOLEAN:
-        return 'boolean';
+        return FormFieldTypeEnum.BOOLEAN;
       case AttributeType.DATE:
-        return 'date';
+        return FormFieldTypeEnum.DATE;
       case AttributeType.TIMESTAMP:
-        return 'text';
+        return FormFieldTypeEnum.TIMESTAMP;
       case AttributeType.INTEGER:
-        return 'integer';
+        return FormFieldTypeEnum.INTEGER;
       case AttributeType.NUMBER:
       case AttributeType.DOUBLE:
-        return 'number';
+        return FormFieldTypeEnum.NUMBER;
       case AttributeType.STRING:
-        return 'text';
+        return FormFieldTypeEnum.TEXT;
       default:
-        return 'text';
+        return FormFieldTypeEnum.TEXT;
     }
   }
 
-  public static updateFeature(currentFeature: FeatureModel, values: Record<string, number | string | boolean>): FeatureModel {
-    const feature: FeatureModel = {
-      ...currentFeature,
-       attributes: {
-        ...currentFeature.attributes,
-       },
-    };
-    for (const [ key, value ] of Object.entries(values)) {
-      feature.attributes[key] = value;
+  private static parseValueList(
+    type: AttributeType,
+    valueList?: Array<{ value: string | number | boolean; label?: string }>,
+  ): Array<{ value: string | number | boolean; label: string }> | undefined {
+    if (!valueList) {
+      return undefined;
     }
-    return feature;
+    return valueList.map(item => {
+      let value = item.value;
+      const label = item.label || `${item.value}`;
+      if (type === AttributeType.BOOLEAN && typeof value === 'string') {
+        value = value === 'true';
+      }
+      if ((type === AttributeType.INTEGER || type === AttributeType.NUMBER) && typeof value === 'string') {
+        value = +(value);
+      }
+      return { value: value, label };
+    });
   }
 }

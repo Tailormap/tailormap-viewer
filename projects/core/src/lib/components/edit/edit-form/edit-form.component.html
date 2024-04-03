@@ -14,6 +14,10 @@
       <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
       <mat-datepicker #dp></mat-datepicker>
     </mat-form-field>
+    <mat-form-field *ngIf="item.type === 'timestamp'">
+      <mat-label>{{ item.label }}</mat-label>
+      <input matInput type="text" [formControlName]="item.name" [placeholder]="item.placeholder || item.label">
+    </mat-form-field>
     <mat-form-field *ngIf="item.type === 'textarea'">
       <mat-label>{{ item.label }}</mat-label>
       <textarea matInput [formControlName]="item.name" [placeholder]="item.placeholder || item.label"></textarea>
