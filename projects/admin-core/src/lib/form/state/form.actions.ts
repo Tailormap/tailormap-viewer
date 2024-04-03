@@ -71,6 +71,11 @@ export const updateDraftForm = createAction(
   props<{ form: FormUpdateModel }>(),
 );
 
+export const draftFormUpdateFields = createAction(
+  `${formActionsPrefix} Draft Form Update Fields`,
+  props<{ fields: FormFieldModel[] }>(),
+);
+
 export const draftFormAddField = createAction(
   `${formActionsPrefix} Draft Form Add Field`,
   props<{ name: string }>(),

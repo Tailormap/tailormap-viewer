@@ -13,3 +13,7 @@ mat-selection-list {
   flex: 1;
   overflow: auto;
 }
+
+.drag-handle {
+  float: right;
+}

@@ -1,12 +1,13 @@
 import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { BehaviorSubject, combineLatest, distinctUntilChanged, map, Observable, of } from 'rxjs';
+import { BehaviorSubject, combineLatest, distinctUntilChanged, map, Observable, of, take } from 'rxjs';
 import { FilterHelper } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { draftFormSetSelectedField } from '../state/form.actions';
+import { draftFormSetSelectedField, draftFormUpdateFields } from '../state/form.actions';
 import { selectDraftFormFieldsWithSelected } from '../state/form.selectors';
 import { FormFieldModel } from '@tailormap-viewer/api';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'tm-admin-form-field-list',
@@ -52,6 +53,16 @@ export class FormFieldListComponent implements OnInit {
 
   public selectAttribute(attribute: string) {
     this.store$.dispatch(draftFormSetSelectedField({ name: attribute }));
+  }
+
+  public updateListOrder($event: CdkDragDrop<Array<FormFieldModel & { selected?: boolean }> | null, any>) {
+    this.fields$
+      .pipe(take(1))
+      .subscribe(fields => {
+        const updatedFields = [...fields];
+        moveItemInArray(updatedFields, $event.previousIndex, $event.currentIndex);
+        this.store$.dispatch(draftFormUpdateFields({ fields: updatedFields }));
+      });
   }
 
 }

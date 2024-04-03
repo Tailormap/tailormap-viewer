@@ -38,7 +38,7 @@ export const selectFilteredFormsList = createSelector(
   selectFormsListFilter,
   selectFeatureTypes,
   (forms, draftFormId, filter, featureTypes): FormList => {
-    return FilterHelper.filterByTerm(forms, filter, form => form.name)
+    return FilterHelper.filterByTerm(forms, filter, form => [ form.name, form.featureTypeName ].join(''))
       .map(a => ({
         ...a,
         featureType: featureTypes.find(ft => ft.name === a.featureTypeName && ft.featureSourceId === `${a.featureSourceId}`),
