@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, DestroyRef } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 import { FormModel } from '@tailormap-admin/admin-api';

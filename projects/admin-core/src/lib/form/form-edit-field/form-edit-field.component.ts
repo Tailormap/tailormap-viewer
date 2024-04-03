@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, ChangeDetectorRef, Input } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { FormFieldModel, FormFieldTypeEnum } from '@tailormap-viewer/api';
+import { FormFieldModel } from '@tailormap-viewer/api';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
 import { FormHelper } from '../../helpers/form.helper';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';

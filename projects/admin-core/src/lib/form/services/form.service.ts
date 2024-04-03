@@ -1,12 +1,12 @@
 import { DestroyRef, Injectable } from '@angular/core';
-import { catchError, concatMap, filter, map, of, switchMap, take, takeUntil, tap } from 'rxjs';
+import { catchError, concatMap, filter, map, of, switchMap, take, tap } from 'rxjs';
 import { DebounceHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
 import { selectDraftForm, selectDraftFormLoadStatus } from '../state/form.selectors';
 import { Store } from '@ngrx/store';
 import { addForm, deleteForm, loadDraftForm, updateForm } from '../state/form.actions';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
-import { ApplicationModel, FormModel, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
+import { FormModel, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 import { AdminSseService, EventType } from '../../shared/services/admin-sse.service';
 
 @Injectable({
