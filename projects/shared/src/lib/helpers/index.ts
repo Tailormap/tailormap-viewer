@@ -16,3 +16,4 @@ export * from './tree.helper';
 export * from './string.helper';
 export * from './debounce.helper';
 export * from './clipboard.helper';
+export * from './filter.helper';

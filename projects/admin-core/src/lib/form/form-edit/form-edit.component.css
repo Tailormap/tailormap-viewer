@@ -1,0 +1,31 @@
+:host {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-wrapper {
+  max-width: 500px;
+}
+
+.form-field-wrapper {
+  display: flex;
+  margin-top: 16px;
+  flex: 1;
+  overflow: hidden;
+  min-height: 300px;
+}
+
+.form-field-wrapper > * + * {
+  margin-left: 16px;
+}
+
+tm-admin-form-attribute-list,
+tm-admin-form-field-list {
+  width: 250px;
+}
+
+tm-admin-edit-field {
+  flex: 1;
+  overflow: auto;
+}

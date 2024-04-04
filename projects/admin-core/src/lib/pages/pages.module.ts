@@ -12,6 +12,8 @@ import { ApplicationModule } from '../application/application.module';
 import { SettingsPageComponent } from './settings-page/settings-page.component';
 import { SharedComponentsModule, SharedImportsModule, SharedModule } from '@tailormap-viewer/shared';
 import { UserModule } from '../user/user.module';
+import { FormPageComponent } from './form-page/form-page.component';
+import { FormModule } from '../form/form.module';
 
 
 @NgModule({
@@ -22,6 +24,7 @@ import { UserModule } from '../user/user.module';
     GroupsPageComponent,
     ApplicationPageComponent,
     SettingsPageComponent,
+    FormPageComponent,
   ],
   imports: [
     CommonModule,
@@ -33,6 +36,7 @@ import { UserModule } from '../user/user.module';
     SharedComponentsModule,
     SharedImportsModule,
     SharedModule,
+    FormModule,
   ],
   exports: [
     AdminHomePageComponent,
@@ -41,6 +45,7 @@ import { UserModule } from '../user/user.module';
     GroupsPageComponent,
     ApplicationPageComponent,
     SettingsPageComponent,
+    FormPageComponent,
   ],
 })
 export class PagesModule { }

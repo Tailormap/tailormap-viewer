@@ -1,5 +1,7 @@
 import { GeometryType } from './geometry-type.enum';
 import { AttributeModel } from './attribute.model';
+import { FormOptionsModel } from './form-options.model';
+import { FormFieldModel } from './form-field.model';
 
 export interface LayerDetailsModel {
     id: string;
@@ -9,5 +11,6 @@ export interface LayerDetailsModel {
     geometryAttributeIndex: number;
     geometryType: GeometryType;
     editable: boolean;
+    form?: { options: FormOptionsModel; fields: FormFieldModel[] } | null;
     attributes: AttributeModel[];
 }

@@ -5,7 +5,7 @@ import {
 } from '@tailormap-admin/admin-api';
 import { CatalogTreeModelTypeEnum } from '../models/catalog-tree-model-type.enum';
 
-const catalogActionsPrefix = '[Catalog]';
+const catalogActionsPrefix = '[Admin/Catalog]';
 
 export const loadCatalog = createAction(
   `${catalogActionsPrefix} Load Catalog`,

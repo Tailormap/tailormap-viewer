@@ -1,7 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { OIDCConfigurationModel } from '@tailormap-admin/admin-api';
 
-const oidcConfigurationActionsPrefix = '[OIDCConfiguration]';
+const oidcConfigurationActionsPrefix = '[Admin/OIDCConfiguration]';
 
 export const loadOIDCConfigurations = createAction(
   `${oidcConfigurationActionsPrefix} Load configurations`,

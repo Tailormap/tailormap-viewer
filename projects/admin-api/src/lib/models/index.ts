@@ -38,3 +38,5 @@ export * from './user.model';
 export * from './group.model';
 export * from './config.model';
 export * from './oidc-configuration.model';
+export * from './form.model';
+export * from './form-summary.model';

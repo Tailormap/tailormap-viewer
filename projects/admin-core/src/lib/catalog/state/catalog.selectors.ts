@@ -57,6 +57,15 @@ export const selectFeatureTypeById = (id: string) => createSelector(
   (featureTypes): ExtendedFeatureTypeModel | null => featureTypes.find(featureType => featureType.id === id) || null,
 );
 
+export const selectFeatureTypeBySourceIdAndName = (featureSourceId: string, featureTypeName: string) => createSelector(
+  selectFeatureTypes,
+  (featureTypes): ExtendedFeatureTypeModel | null => {
+    return featureTypes.find(featureType => {
+      return featureType.featureSourceId === featureSourceId && featureType.name === featureTypeName;
+    }) || null;
+  },
+);
+
 export const selectFeatureTypesForSource = (featureSourceId: string) => createSelector(
   selectFeatureTypes,
   (featureTypes): ExtendedFeatureTypeModel[] => featureTypes.filter(featureType => featureType.featureSourceId === featureSourceId),

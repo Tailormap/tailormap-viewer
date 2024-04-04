@@ -29,6 +29,10 @@ import { GroupCreateComponent } from './user/group-create/group-create.component
 import { GroupEditComponent } from './user/group-edit/group-edit.component';
 import { SettingsHomePageComponent } from './settings/settings-home-page/settings-home-page.component';
 import { AdminTemplateComponent } from './templates/admin-template/admin-template.component';
+import { FormPageComponent } from './pages/form-page/form-page.component';
+import { FormHomeComponent } from './form/form-home/form-home.component';
+import { FormCreateComponent } from './form/form-create/form-create.component';
+import { FormEditComponent } from './form/form-edit/form-edit.component';
 
 export const adminRoutes: Routes = [
   {
@@ -117,6 +121,23 @@ export const adminRoutes: Routes = [
         }],
         path: AdminRoutes.SETTINGS,
         data: { pageTitle: $localize `:@@admin-core.common.settings-title:Settings`, templateCls: 'content--no-padding' },
+      },
+      {
+        component: FormPageComponent,
+        children: [{
+          path: '',
+          component: FormHomeComponent,
+        }, {
+          path: AdminRoutes.FORMS_CREATE,
+          component: FormCreateComponent,
+        },
+        {
+          path: AdminRoutes.FORMS_DETAILS,
+          component: FormEditComponent,
+          data: { className: 'full-screen-settings' },
+        }],
+        path: AdminRoutes.FORMS,
+        data: { pageTitle: $localize `:@@admin-core.common.forms-title:Forms` },
       },
       {
         path: AdminRoutes.ADMIN_HOME,

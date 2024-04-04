@@ -34,7 +34,7 @@ export class AdminCoreModule {
     const adminIcons = [{
       folder: 'admin',
       icons: [
-        'home', 'catalog', 'service', 'user', 'groups', 'feature_source', 'wfs', 'jdbc',
+        'home', 'catalog', 'service', 'user', 'groups', 'feature_source', 'wfs', 'jdbc', 'form',
         'feature_type', 'application', 'more', 'link_new_window', 'default_application',
       ],
     }];

@@ -76,12 +76,13 @@ import { FeatureTypeFormDialogComponent } from './feature-type-form-dialog/featu
     EffectsModule.forFeature([CatalogEffects]),
     SharedAdminComponentsModule,
   ],
-  exports: [
-    CatalogTreeComponent,
-    CatalogBaseTreeComponent,
-    CatalogBaseTreeNodeComponent,
-    FeatureTypeAttributesComponent,
-  ],
+    exports: [
+        CatalogTreeComponent,
+        CatalogBaseTreeComponent,
+        CatalogBaseTreeNodeComponent,
+        FeatureTypeAttributesComponent,
+        FeatureTypeSelectorComponent,
+    ],
 })
 export class CatalogModule {
   constructor(

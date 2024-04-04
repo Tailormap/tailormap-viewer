@@ -33,3 +33,6 @@ export * from './login-configuration.model';
 export * from './environment-config.model';
 export * from './environment-config.injection-token';
 export * from './component-config';
+export * from './form-field.model';
+export * from './form-field-type.enum';
+export * from './form-options.model';

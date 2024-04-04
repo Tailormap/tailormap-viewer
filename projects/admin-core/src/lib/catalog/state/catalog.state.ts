@@ -6,7 +6,7 @@ import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.mo
 import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
 import { FeatureSourceModel, GeoServiceWithLayersModel } from '@tailormap-admin/admin-api';
 
-export const catalogStateKey = 'catalog';
+export const catalogStateKey = 'admin-catalog';
 
 export interface CatalogState {
   catalogLoadStatus: LoadingStateEnum;
