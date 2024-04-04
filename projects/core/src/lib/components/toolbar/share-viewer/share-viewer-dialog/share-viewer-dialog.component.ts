@@ -4,6 +4,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { FormControl } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ApplicationBookmarkFragments } from '../../../../services/application-bookmark/application-bookmark-fragments';
+import { startWith } from 'rxjs';
 
 @Component({
   selector: 'tm-share-viewer-dialog',
@@ -20,11 +21,16 @@ export class ShareViewerDialogComponent implements OnInit {
     private bookmarkService: BookmarkService,
     private dialogRef: MatDialogRef<ShareViewerDialogComponent>,
     private destroyRef: DestroyRef,
-  ) {}
+  ) {
+  }
 
   public ngOnInit() {
+
     this.bookmarkService.getBookmarkValue$()
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(
+        startWith(''),
+        takeUntilDestroyed(this.destroyRef),
+      )
       .subscribe(bookmark => {
         const baseUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
         this.urlControl.patchValue(`${baseUrl}#${bookmark || ''}`);
@@ -33,7 +39,7 @@ export class ShareViewerDialogComponent implements OnInit {
   }
 
   private getEmbedLink() {
-    return this.bookmarkService.getBookmark(ApplicationBookmarkFragments.EMBED_BOOKMARK_DESCRIPTOR, "1");
+    return this.bookmarkService.getBookmark(ApplicationBookmarkFragments.EMBED_BOOKMARK_DESCRIPTOR, '1');
   }
 
   public closeDialog() {
