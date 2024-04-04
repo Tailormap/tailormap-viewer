@@ -149,6 +149,18 @@ const onUpdateDraftForm = (
   } : null,
 });
 
+const onDraftFormUpdateFields = (
+  state: FormState,
+  payload: ReturnType<typeof FormActions.draftFormUpdateFields>,
+): FormState => ({
+  ...state,
+  draftFormUpdated: true,
+  draftForm: state.draftForm ? {
+    ...state.draftForm,
+    fields: payload.fields,
+  } : null,
+});
+
 const onDraftFormAddField = (
   state: FormState,
   payload: ReturnType<typeof FormActions.draftFormAddField>,
@@ -239,6 +251,7 @@ const formReducerImpl = createReducer<FormState>(
   on(FormActions.updateForm, onUpdateForm),
   on(FormActions.deleteForm, onDeleteForm),
   on(FormActions.updateDraftForm, onUpdateDraftForm),
+  on(FormActions.draftFormUpdateFields, onDraftFormUpdateFields),
   on(FormActions.draftFormAddField, onDraftFormAddField),
   on(FormActions.draftFormSetSelectedField, onDraftFormSetSelectedField),
   on(FormActions.draftFormUpdateField, onDraftFormUpdateField),

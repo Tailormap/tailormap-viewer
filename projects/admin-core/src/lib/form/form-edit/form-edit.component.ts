@@ -4,7 +4,7 @@ import {
 } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { AttributeDescriptorModel, FeatureTypeModel, FormModel } from '@tailormap-admin/admin-api';
+import { FeatureTypeModel, FormModel } from '@tailormap-admin/admin-api';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 import { selectDraftFormUpdated, selectDraftFormValid } from '../state/form.selectors';
