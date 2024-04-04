@@ -1,0 +1,37 @@
+<h2 i18n="@@admin-core.forms.forms">Forms</h2>
+<ng-container *ngIf="formsLoadStatus$ | async as formsLoadStatus">
+  <mat-spinner *ngIf="formsLoadStatus === 'LOADING'" diameter="20" mode="indeterminate"></mat-spinner>
+  <ng-container *ngIf="errorMessage$ | async as message">
+    <tm-error-message [message]="message"></tm-error-message>
+    <button mat-raised-button color="primary" (click)="onRetryClick()" i18n="@@admin-core.common.retry">Retry</button>
+  </ng-container>
+  <div *ngIf="formsLoadStatus === 'LOADED'"
+       class="form-group has-search">
+    <mat-form-field appearance="outline">
+      <mat-label i18n="@@admin-core.form.filter-forms">Filter forms</mat-label>
+      <input [formControl]="filter"
+             i18n-placeholder="@@admin-core.common.filter-dots"
+             matInput
+             placeholder="Filter..."
+             tmAutoFocus
+             type="text"
+      />
+      <button (click)="filter.setValue('')" *ngIf="filter.getRawValue()" aria-label="Clear" mat-icon-button matSuffix>
+        <mat-icon svgIcon="close"></mat-icon>
+      </button>
+    </mat-form-field>
+
+    <mat-selection-list>
+      @for (form of forms$ | async; track form.id) {
+        <mat-list-item [class.selected]="form.selected"
+                       [routerLink]="['/admin/forms/form', form.id]">
+          <span class="detail">{{form.name}}</span>
+          @if (form.featureType) {
+            <span class="subtitle"> - {{form.featureType.name}}</span>
+          }
+        </mat-list-item>
+      }
+    </mat-selection-list>
+
+  </div>
+</ng-container>

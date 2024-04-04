@@ -1,7 +1,7 @@
 import { GroupModel, UserModel } from '@tailormap-admin/admin-api';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 
-export const userStateKey = 'user';
+export const userStateKey = 'admin-user';
 
 export interface UserState {
   users: UserModel[];

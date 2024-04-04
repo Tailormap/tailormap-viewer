@@ -1,7 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { GroupModel, UserModel } from '@tailormap-admin/admin-api';
 
-const userActionsPrefix = '[User]';
+const userActionsPrefix = '[Admin/User]';
 
 export const loadUsers = createAction(
   `${userActionsPrefix} Load Users`,

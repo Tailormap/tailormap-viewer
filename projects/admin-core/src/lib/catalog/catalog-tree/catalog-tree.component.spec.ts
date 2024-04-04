@@ -51,7 +51,7 @@ describe('CatalogTreeComponent', () => {
 
   test('should trigger loading catalog', async () => {
     const { mockDispatch } = await setup();
-    expect(mockDispatch).toHaveBeenCalledWith({ type: '[Catalog] Load Catalog' });
+    expect(mockDispatch).toHaveBeenCalledWith({ type: '[Admin/Catalog] Load Catalog' });
   });
 
   test('should render spinner when loading', async () => {

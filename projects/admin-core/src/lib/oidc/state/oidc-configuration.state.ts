@@ -1,7 +1,7 @@
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { OIDCConfigurationModel } from '@tailormap-admin/admin-api';
 
-export const oidcConfigurationStateKey = 'oidc-configuration';
+export const oidcConfigurationStateKey = 'admin-oidc-configuration';
 
 export interface OIDCConfigurationState {
   oidcConfigurationsLoadStatus: LoadingStateEnum;
