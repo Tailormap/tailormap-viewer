@@ -1071,11 +1071,11 @@
       </trans-unit>
       <trans-unit id="admin-core.form.form-fields-unavailable" datatype="html">
         <source>The following fields are disabled / disabled for editing in the feature type. These will not be visible in the viewer. First enable them for editing to make sure they are visible in the viewer.</source>
-        <target state="new">De volgende velden zijn uitgeschakeld / uitgeschakeld voor bewerken in het feature type. Deze zullen niet zichtbaar zijn in de viewer. Schakel deze attributen in voor bewerken om er zeker van te zijn dat ze zichtbaar zijn in de viewer.</target>
+        <target state="new">De volgende velden zijn uitgeschakeld / uitgeschakeld voor bewerken in het feature type. Deze zullen niet zichtbaar zijn in de viewer. Schakel deze attributen in voor bewerken om ze zichtbaar te maken in de viewer.</target>
       </trans-unit>
       <trans-unit id="admin-core.form.form-fields-unavailable-application" datatype="html">
         <source>In the selected form the following fields are disabled / disabled for editing in the feature type or application layer settings. These will not be visible in the viewer. First enable them for editing to make sure they are visible in the viewer.</source>
-        <target state="new">In het geselecteerde formulier zijn de volgende velden uitgeschakeld / uitgeschakeld voor bewerken in het feature type of de applicatielaag instellingen. Deze zullen niet zichtbaar zijn in de viewer. Schakel deze attributen in voor bewerken om er zeker van te zijn dat ze zichtbaar zijn in de viewer.</target>
+        <target state="new">In het geselecteerde formulier zijn de volgende velden uitgeschakeld / uitgeschakeld voor bewerken in het feature type of de applicatielaag-instellingen. Deze zullen niet zichtbaar zijn in de viewer. Schakel deze attributen in voor bewerken om ze zichtbaar te maken in de viewer.</target>
       </trans-unit>
       <trans-unit id="admin-core.form.form-removed" datatype="html">
         <source>Form <x id="PH" equiv-text="title"/> removed</source>
