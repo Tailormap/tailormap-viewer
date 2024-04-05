@@ -1035,7 +1035,7 @@
       </trans-unit>
       <trans-unit id="admin-core.form.field-type-number" datatype="html">
         <source>Number field</source>
-        <target state="new">Nummeriek veld</target>
+        <target state="new">Numeriek veld</target>
       </trans-unit>
       <trans-unit id="admin-core.form.field-type-select" datatype="html">
         <source>Choice list</source>
