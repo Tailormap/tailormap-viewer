@@ -34,11 +34,7 @@ export class LayerTransparencyComponent {
   }
 
   public updateOpacity($event: number | null) {
-    if (!this.layerId) {
-      return;
-    }
-    const opacity = $event === null ? 100 : $event;
-    this.store$.dispatch(setLayerOpacity({ layerId: this.layerId, opacity }));
+    this.dispatchChange($event === null ? 100 : $event);
   }
 
   public resetOpacity() {
@@ -49,11 +45,14 @@ export class LayerTransparencyComponent {
     this.store$.select(selectLayer(this.layerId))
       .pipe(take(1))
       .subscribe(layer => {
-        if (!this.layerId) {
-          return;
-        }
-
-        this.store$.dispatch(setLayerOpacity({ layerId: this.layerId, opacity: layer?.initialValues?.opacity ?? 100 }));
+        this.dispatchChange(layer?.initialValues?.opacity ?? 100);
       });
+  }
+
+  private dispatchChange(opacity: number) {
+    if (!this.layerId) {
+      return;
+    }
+    this.store$.dispatch(setLayerOpacity({ opacity: [{ id: this.layerId, opacity }] }));
   }
 }

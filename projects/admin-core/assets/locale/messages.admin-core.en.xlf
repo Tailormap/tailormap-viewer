@@ -56,6 +56,9 @@
       <trans-unit id="admin-core.application.component-print" datatype="html">
         <source>Print</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.component-share-viewer" datatype="html">
+        <source>Share viewer</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.component-streetview-tool" datatype="html">
         <source>Streetview tool</source>
       </trans-unit>

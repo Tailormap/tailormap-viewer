@@ -1,6 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { AppLayerModel, LayerDetailsModel, LayerTreeNodeModel, ServiceModel } from '@tailormap-viewer/api';
 import { ExtendedMapResponseModel } from '../models/extended-map-response.model';
+import { ExtendedLayerTreeNodeModel } from '../models';
 
 const mapActionsPrefix = '[Map]';
 
@@ -57,9 +58,13 @@ export const setSelectedBackgroundNodeId = createAction(
 );
 export const setLayerOpacity = createAction(
   `${mapActionsPrefix} Set Layer Opacity`,
-  props<{ layerId: string; opacity: number }>(),
+  props<{ opacity: Array<{ id: string; opacity: number }> }>(),
 );
 export const addLayerDetails = createAction(
   `${mapActionsPrefix} Add Layer Details`,
   props<{ layerDetails: LayerDetailsModel }>(),
+);
+export const updateLayerTreeNodes = createAction(
+  `${mapActionsPrefix} Update Layer Tree`,
+  props<{ layerTreeNodes: ExtendedLayerTreeNodeModel[] }>(),
 );

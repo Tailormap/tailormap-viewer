@@ -3,12 +3,12 @@ import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { LayoutService } from '../layout.service';
 
 @Component({
-  selector: 'tm-base-layout',
-  templateUrl: './base-layout.component.html',
-  styleUrls: ['./base-layout.component.css'],
+  selector: 'tm-embedded-layout',
+  templateUrl: './embedded-layout.component.html',
+  styleUrls: [ '../base-layout/base-layout.component.css', './embedded-layout.component.css' ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BaseLayoutComponent {
+export class EmbeddedLayoutComponent {
   public componentTypes = BaseComponentTypeEnum;
   constructor(public layoutService: LayoutService) {}
 }

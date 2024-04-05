@@ -35,7 +35,7 @@ describe('LayerTransparencyComponent', () => {
     });
 
     await userEvent.click(screen.getByLabelText('Reset opacity'));
-    expect(dispatch).toHaveBeenCalledWith(setLayerOpacity({ layerId: '1', opacity: 100 }));
+    expect(dispatch).toHaveBeenCalledWith(setLayerOpacity({ opacity: [{ id: '1', opacity: 100 }] } ));
   });
 
 });

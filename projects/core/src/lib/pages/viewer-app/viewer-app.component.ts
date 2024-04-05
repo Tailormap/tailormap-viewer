@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { distinctUntilChanged, map, Observable, of, Subject, takeUntil } from 'rxjs';
-import { Router, ActivatedRoute, UrlSegment } from '@angular/router';
+import { ActivatedRoute, UrlSegment } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { loadViewer } from '../../state/core.actions';
 import { selectViewerErrorMessage, selectViewerLoadingState, selectViewerTitle } from '../../state/core.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
-import { BookmarkService } from '../../bookmark/bookmark.service';
 import { ApplicationStyleService } from '../../services/application-style.service';
 import { DOCUMENT } from '@angular/common';
+import { ApplicationBookmarkService } from '../../services/application-bookmark/application-bookmark.service';
 
 @Component({
   selector: 'tm-viewer-app',
@@ -16,19 +16,20 @@ import { DOCUMENT } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ViewerAppComponent implements OnInit, OnDestroy {
-private static DEFAULT_TITLE = 'Tailormap';
+
+  private static DEFAULT_TITLE = 'Tailormap';
   private destroyed = new Subject();
   public isLoading = false;
   public loadingFailed = false;
   public isLoaded = false;
   public errorMessage$: Observable<string | undefined> = of(undefined);
+  public isEmbedded$: Observable<boolean> = of(false);
 
   constructor(
     private store$: Store,
     private route: ActivatedRoute,
-    private router: Router,
     private cdr: ChangeDetectorRef,
-    private bookmarkService: BookmarkService,
+    private applicationBookmarkService: ApplicationBookmarkService,
     private appStyleService: ApplicationStyleService,
     @Inject(DOCUMENT) private document: Document,
   ) { }
@@ -47,6 +48,7 @@ private static DEFAULT_TITLE = 'Tailormap';
           }
           return undefined;
         }),
+        distinctUntilChanged((v1, v2) => v1 === v2 || v1?.id === v2?.id),
       )
       .subscribe(loadViewerParams => {
         this.appStyleService.resetStyling();
@@ -60,22 +62,8 @@ private static DEFAULT_TITLE = 'Tailormap';
         this.isLoaded = loadingState === LoadingStateEnum.LOADED;
         this.isLoading = loadingState === LoadingStateEnum.LOADING;
         this.loadingFailed = loadingState === LoadingStateEnum.FAILED;
+        this.isEmbedded$ = this.applicationBookmarkService.isEmbeddedApplication$();
         this.cdr.detectChanges();
-      });
-
-    this.route.fragment
-      .pipe(
-        takeUntil(this.destroyed),
-        distinctUntilChanged(),
-      )
-      .subscribe(fragment => {
-          this.bookmarkService.setBookmark(fragment === null ? undefined : fragment);
-      });
-
-    this.bookmarkService.getBookmarkValue$()
-      .pipe(takeUntil(this.destroyed))
-      .subscribe(bookmark => {
-          this.router.navigate([], { relativeTo: this.route, fragment: bookmark, replaceUrl: true });
       });
 
     this.store$.select(selectViewerTitle)

@@ -11,5 +11,9 @@
 </div>
 
 <div class="viewer" *ngIf="isLoaded" aria-label="Tailormap viewer page">
-  <tm-base-layout></tm-base-layout>
+  @if(isEmbedded$ | async) {
+    <tm-embedded-layout></tm-embedded-layout>
+  } @else {
+    <tm-base-layout></tm-base-layout>
+  }
 </div>

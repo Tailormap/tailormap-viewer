@@ -2,7 +2,7 @@ import { MapBookmarkHelper } from './bookmark.helper';
 import { AppLayerModel, getAppLayerModel } from '@tailormap-viewer/api';
 import { MapViewDetailsModel, MapUnitEnum } from '@tailormap-viewer/map';
 import { TristateBoolean, LayerVisibilityBookmarkFragment } from './bookmark_pb';
-import { AppLayerWithInitialValuesModel } from '../models';
+import { AppLayerWithInitialValuesModel } from '../../map/models';
 
 const getAppLayerWithInitialValuesModel =
   (partial: Partial<AppLayerModel>, initialVisibility?: boolean, initialOpacity?: number): AppLayerWithInitialValuesModel => {
