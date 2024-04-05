@@ -809,6 +809,9 @@
       <trans-unit id="admin-core.form.label-list-label" datatype="html">
         <source>Label</source>
       </trans-unit>
+      <trans-unit id="admin-core.form.required-field" datatype="html">
+        <source>Required field</source>
+      </trans-unit>
       <trans-unit id="admin-core.form.unique-values-as-options" datatype="html">
         <source>Use unique values from this column as options</source>
       </trans-unit>

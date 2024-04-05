@@ -50,6 +50,7 @@ export class FormEditFieldComponent implements OnInit {
       nonNullable: true,
       validators: [Validators.required],
     }),
+    required: new FormControl<boolean>(false, { nonNullable: true }),
     disabled: new FormControl<boolean>(false, { nonNullable: true }),
     uniqueValuesAsOptions: new FormControl<boolean>(false, { nonNullable: true }),
     valueList: new FormArray<ValueListFormType>([]),
@@ -72,6 +73,7 @@ export class FormEditFieldComponent implements OnInit {
         const fieldModel: FormFieldModel = {
           name: this.field.name,
           label: value.label || this.field.name,
+          required: typeof value.required === 'undefined' ? false : value.required,
           disabled: typeof value.disabled === 'undefined' ? false : value.disabled,
           type: EditFormFieldHelper.getFormFieldType(value.type),
           valueList,
@@ -102,6 +104,7 @@ export class FormEditFieldComponent implements OnInit {
     this.fieldForm.patchValue({
       label: form.label,
       type: form.type,
+      required: form.required,
       disabled: form.disabled,
       uniqueValuesAsOptions: form.uniqueValuesAsOptions,
       allowFreeInput: form.allowValueListOnly === false,
@@ -123,6 +126,7 @@ export class FormEditFieldComponent implements OnInit {
     this.fieldForm.patchValue({
       label: '',
       type: '',
+      required: false,
       disabled: false,
       uniqueValuesAsOptions: false,
       allowFreeInput: false,

@@ -1078,6 +1078,10 @@
         <source>Label</source>
         <target state="new">Label</target>
       </trans-unit>
+      <trans-unit id="admin-core.form.required-field" datatype="html">
+        <source>Required field</source>
+        <target state="new">Required field</target>
+      </trans-unit>
       <trans-unit id="admin-core.form.unique-values-as-options" datatype="html">
         <source>Use unique values from this column as options</source>
         <target state="new">Use unique values from this column as options</target>
