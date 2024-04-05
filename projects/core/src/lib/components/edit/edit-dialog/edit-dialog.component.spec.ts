@@ -3,7 +3,7 @@ import { EditDialogComponent } from './edit-dialog.component';
 import { provideMockStore } from '@ngrx/store/testing';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { AttributeType, getAppLayerModel, getFeatureModel } from '@tailormap-viewer/api';
+import { AttributeType, getAppLayerModel, getFeatureModel, UniqueValuesService } from '@tailormap-viewer/api';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { editStateKey, initialEditState } from '../state/edit.state';
 import { ApplicationLayerService } from '../../../map/services/application-layer.service';
@@ -37,6 +37,7 @@ describe('EditDialogComponent', () => {
         { provide: ApplicationLayerService, useValue: {} },
         { provide: EditFeatureService, useValue: {} },
         provideMockStore({ initialState: { [editStateKey]: { ...initialEditState } } }),
+        { provide: UniqueValuesService, useValue: { clearCaches: jest.fn() } },
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     });
@@ -54,6 +55,7 @@ describe('EditDialogComponent', () => {
       providers: [
         { provide: ApplicationLayerService, useValue: { getLayerDetails$: () => of(({ layer: getAppLayerModel(), details: {} })) } },
         { provide: EditFeatureService, useValue: {} },
+        { provide: UniqueValuesService, useValue: { clearCaches: jest.fn() } },
         provideMockStore({
           initialState: { [editStateKey]: { ...initialEditState } },
           selectors: [

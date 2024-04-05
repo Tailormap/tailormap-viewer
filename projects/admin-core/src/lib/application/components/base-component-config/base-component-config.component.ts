@@ -1,5 +1,7 @@
 import { Component, ChangeDetectionStrategy, Input, DestroyRef } from '@angular/core';
-import { BaseComponentTypeEnum, ComponentBaseConfigModel, MeasureComponentConfigModel } from '@tailormap-viewer/api';
+import {
+  BaseComponentConfigHelper, BaseComponentTypeEnum, ComponentBaseConfigModel, MeasureComponentConfigModel,
+} from '@tailormap-viewer/api';
 import { FormControl, FormGroup } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ConfigurationComponentModel } from '../configuration-component.model';
@@ -51,7 +53,7 @@ export class BaseComponentConfigComponent implements ConfigurationComponentModel
 
   public getEnabled() {
     if (!this.config) {
-      return true;
+      return !BaseComponentConfigHelper.isComponentDisabledByDefault(this.type || '');
     }
     return this.config.enabled;
   }

@@ -20,6 +20,9 @@
         </mat-select>
       </mat-form-field>
       <div class="form-control">
+        <mat-checkbox color="primary" formControlName="required" i18n="@@admin-core.form.required-field">Required field</mat-checkbox>
+      </div>
+      <div class="form-control">
         <mat-checkbox color="primary" formControlName="disabled" i18n="@@admin-core.common.disabled">Disabled</mat-checkbox>
       </div>
     </div>
@@ -63,5 +66,8 @@
         <mat-checkbox color="primary" formControlName="allowFreeInput" i18n="@@admin-core.form.allow-free-input">Allow the user to enter custom input</mat-checkbox>
       </div>
     }
+
+    <button mat-flat-button color="warn" (click)="delete(field)" i18n="@@admin-core.form.delete-field">Delete field</button>
   </form>
+
 }

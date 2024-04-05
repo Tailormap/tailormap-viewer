@@ -981,6 +981,10 @@
         <source>Create form</source>
         <target state="new">Formulier maken</target>
       </trans-unit>
+      <trans-unit id="admin-core.form.delete-field" datatype="html">
+        <source>Delete field</source>
+        <target state="new">Verwijder veld</target>
+      </trans-unit>
       <trans-unit id="admin-core.form.delete-form" datatype="html">
         <source>Delete form <x id="PH" equiv-text="title"/></source>
         <target state="new">Verwijder formulier <x id="PH" equiv-text="title"/></target>
@@ -1080,6 +1084,10 @@
       <trans-unit id="admin-core.form.label-list-label" datatype="html">
         <source>Label</source>
         <target state="new">Label</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.required-field" datatype="html">
+        <source>Required field</source>
+        <target state="new">Verplicht veld</target>
       </trans-unit>
       <trans-unit id="admin-core.form.unique-values-as-options" datatype="html">
         <source>Use unique values from this column as options</source>

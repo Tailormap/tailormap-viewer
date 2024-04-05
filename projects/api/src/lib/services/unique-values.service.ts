@@ -42,12 +42,19 @@ export class UniqueValuesService {
       );
   }
 
-  private createKey(params: UniqueValueParams): string {
+  public createKey(params: UniqueValueParams): string {
     const key = [ params.applicationId, params.layerId, params.attribute ];
     if (params.filter) {
       key.push(params.filter);
     }
     return key.join('-');
+  }
+
+  public clearCaches(cacheKeys: string[]) {
+    cacheKeys.forEach(key => {
+      this.cachedResponses.delete(key);
+    });
+    console.log(this.cachedResponses);
   }
 
 }

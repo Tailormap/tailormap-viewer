@@ -91,6 +91,11 @@ export const draftFormUpdateField = createAction(
   props<{ field: FormFieldModel }>(),
 );
 
+export const draftFormRemoveField = createAction(
+  `${formActionsPrefix} Draft Form Remove Field`,
+  props<{ field: string }>(),
+);
+
 export const updateDraftFormValid = createAction(
   `${formActionsPrefix} Update Draft Form Valid`,
   props<{ isValid: boolean }>(),

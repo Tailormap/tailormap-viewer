@@ -5,7 +5,7 @@ import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
 import { FormHelper } from '../../helpers/form.helper';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
-import { draftFormUpdateField } from '../state/form.actions';
+import { draftFormRemoveField, draftFormUpdateField } from '../state/form.actions';
 import { selectDraftFormSelectedField } from '../state/form.selectors';
 import { FeatureTypeModel } from '@tailormap-admin/admin-api';
 import { EditFormFieldHelper } from '../helpers/edit-form-field.helper';
@@ -50,6 +50,7 @@ export class FormEditFieldComponent implements OnInit {
       nonNullable: true,
       validators: [Validators.required],
     }),
+    required: new FormControl<boolean>(false, { nonNullable: true }),
     disabled: new FormControl<boolean>(false, { nonNullable: true }),
     uniqueValuesAsOptions: new FormControl<boolean>(false, { nonNullable: true }),
     valueList: new FormArray<ValueListFormType>([]),
@@ -72,6 +73,7 @@ export class FormEditFieldComponent implements OnInit {
         const fieldModel: FormFieldModel = {
           name: this.field.name,
           label: value.label || this.field.name,
+          required: typeof value.required === 'undefined' ? false : value.required,
           disabled: typeof value.disabled === 'undefined' ? false : value.disabled,
           type: EditFormFieldHelper.getFormFieldType(value.type),
           valueList,
@@ -102,6 +104,7 @@ export class FormEditFieldComponent implements OnInit {
     this.fieldForm.patchValue({
       label: form.label,
       type: form.type,
+      required: form.required,
       disabled: form.disabled,
       uniqueValuesAsOptions: form.uniqueValuesAsOptions,
       allowFreeInput: form.allowValueListOnly === false,
@@ -123,6 +126,7 @@ export class FormEditFieldComponent implements OnInit {
     this.fieldForm.patchValue({
       label: '',
       type: '',
+      required: false,
       disabled: false,
       uniqueValuesAsOptions: false,
       allowFreeInput: false,
@@ -153,6 +157,13 @@ export class FormEditFieldComponent implements OnInit {
 
   public removeValue(valueIdx: number) {
     this.getValueListFormArray().removeAt(valueIdx);
+  }
+
+  public delete(field: FormFieldModel | null) {
+    if (!field) {
+      return;
+    }
+    this.store$.dispatch(draftFormRemoveField({ field: field.name }));
   }
 
 }

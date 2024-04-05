@@ -1,10 +1,10 @@
-import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { FormHelper } from '../helpers/form.helper';
-import { FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, map, merge, Subscription } from 'rxjs';
 import { ColumnMetadataModel, FeatureModel, LayerDetailsModel } from '@tailormap-viewer/api';
 import { EditModelHelper } from '../helpers/edit-model.helper';
-import { FormFieldModel } from '../models/form-field.model';
+import { ViewerEditFormFieldModel } from '../models/viewer-edit-form-field.model';
 
 interface EditFormInput {
   feature: FeatureModel | undefined;
@@ -24,11 +24,12 @@ export class EditFormComponent implements OnDestroy {
   private _feature: EditFormInput | undefined;
 
   private currentFormSubscription: Subscription | undefined;
-  public formConfig: FormFieldModel[] = [];
+  public formConfig: ViewerEditFormFieldModel[] = [];
 
   @Input({ required: true })
   public set feature(feature: EditFormInput | undefined) {
     this._feature = feature;
+    this.layerId = feature?.details?.id || '';
     this.createForm();
   }
   public get feature(): EditFormInput | undefined {
@@ -38,7 +39,12 @@ export class EditFormComponent implements OnDestroy {
   @Output()
   public featureAttributeChanged = new EventEmitter<{ attribute: string; value: any; invalid?: boolean }>();
 
+  @Output()
+  public clearUniqueValueCacheAfterSave = new EventEmitter<string>();
+
   public form: FormGroup = new FormGroup({});
+
+  public layerId: string = '';
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -58,7 +64,12 @@ export class EditFormComponent implements OnDestroy {
     if (!this.feature?.details || !this.feature?.feature) {
       return;
     }
-    this.formConfig = EditModelHelper.createEditModel(this.feature.feature, this.feature.details, this.feature.columnMetadata, this.feature.isNewFeature ?? false);
+    this.formConfig = EditModelHelper.createEditModel(
+      this.feature.feature,
+      this.feature.details,
+      this.feature.columnMetadata,
+      this.feature.isNewFeature ?? false,
+    );
     this.form = FormHelper.createForm(this.formConfig);
     const changes$ = Object.keys(this.form.controls)
       .map(key => {
@@ -77,6 +88,14 @@ export class EditFormComponent implements OnDestroy {
       });
     this.form.markAllAsTouched();
     this.cdr.detectChanges();
+  }
+
+  public getControl(name: string): FormControl {
+    const control = this.form.get(name);
+    if (!control) {
+      throw new Error(`Control with name ${name} not found`);
+    }
+    return control as FormControl;
   }
 
 }

@@ -737,6 +737,9 @@
       <trans-unit id="admin-core.form.create-form" datatype="html">
         <source>Create form</source>
       </trans-unit>
+      <trans-unit id="admin-core.form.delete-field" datatype="html">
+        <source>Delete field</source>
+      </trans-unit>
       <trans-unit id="admin-core.form.delete-form" datatype="html">
         <source>Delete form <x id="PH" equiv-text="title"/></source>
       </trans-unit>
@@ -811,6 +814,9 @@
       </trans-unit>
       <trans-unit id="admin-core.form.label-list-label" datatype="html">
         <source>Label</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.required-field" datatype="html">
+        <source>Required field</source>
       </trans-unit>
       <trans-unit id="admin-core.form.unique-values-as-options" datatype="html">
         <source>Use unique values from this column as options</source>

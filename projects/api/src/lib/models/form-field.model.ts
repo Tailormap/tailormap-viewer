@@ -1,4 +1,5 @@
 import { FormFieldTypeEnum } from './form-field-type.enum';
+import { FormFieldValueListItemModel } from './form-field-value-list-item.model';
 
 export interface FormFieldModel {
   name: string;
@@ -7,7 +8,7 @@ export interface FormFieldModel {
   tab?: string;
   column?: string;
   uniqueValuesAsOptions?: boolean;
-  valueList?: Array<{ value: string | number | boolean; label?: string }>;
+  valueList?: FormFieldValueListItemModel[];
   allowValueListOnly?: boolean;
   disabled?: boolean;
   required?: boolean;
