@@ -3,6 +3,7 @@ import {
   LayerDetailsModel,
 } from '@tailormap-viewer/api';
 import { ViewerEditFormFieldModel } from '../models/viewer-edit-form-field.model';
+import { ArrayHelper } from '@tailormap-viewer/shared';
 
 export class EditModelHelper {
 
@@ -18,8 +19,11 @@ export class EditModelHelper {
     const formFields: Map<string, FormFieldModel> | null = layerDetails.form
       ? new Map(layerDetails.form.fields.map(f => [ f.name, f ]))
       : null;
+    const orderedFormFields = layerDetails.form ? layerDetails.form.fields.map(f => f.name) : [];
     const attributes = formFields
-      ? layerDetails.attributes.filter(a => formFields.has(a.key))
+      ? layerDetails.attributes
+        .filter(a => formFields.has(a.key))
+        .sort(ArrayHelper.getArraySorter('key', orderedFormFields))
       : [...layerDetails.attributes];
     return attributes
       .filter(attribute => !AttributeTypeHelper.isGeometryType(attribute.type))
