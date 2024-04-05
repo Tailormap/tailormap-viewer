@@ -18,7 +18,7 @@ export class FormWarningMessageComponent implements OnChanges {
   @Input()
   public form: FormModel | null = null;
 
-  public unAvailableFields: string[] = [];
+  public unavailableFields: string[] = [];
 
   public ngOnChanges() {
     const hiddenFeatureTypeAttributes: string[] = [
@@ -33,7 +33,7 @@ export class FormWarningMessageComponent implements OnChanges {
       ...hiddenFeatureTypeAttributes,
       ...appLayerHiddenAttributes,
     ]);
-    this.unAvailableFields = (this.form?.fields || [])
+    this.unavailableFields = (this.form?.fields || [])
       .filter(field => {
         return hiddenAttributes.has(field.name);
       })

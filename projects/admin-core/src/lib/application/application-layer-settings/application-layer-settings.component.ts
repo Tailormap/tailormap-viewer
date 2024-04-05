@@ -166,7 +166,6 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
 
     const formIdControl = this.layerSettingsForm.get('formId');
     if (formIdControl) {
-      console.log(this.layerSettings);
       const selectedForm$ = formIdControl.valueChanges.pipe(
         startWith(''),
         distinctUntilChanged(),
