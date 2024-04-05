@@ -1,7 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { ShareViewerDialogComponent } from './share-viewer-dialog/share-viewer-dialog.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { take } from 'rxjs';
+import { Observable, take } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { selectUserIsAdmin } from '../../../state/core.selectors';
 
 @Component({
   selector: 'tm-share-viewer',
@@ -14,10 +16,14 @@ export class ShareViewerComponent {
   public toolActive = false;
   private dialogRef: MatDialogRef<ShareViewerDialogComponent, any> | undefined;
 
+  public userIsAdmin$: Observable<boolean>;
+
   constructor(
+    private store$: Store,
     private dialog: MatDialog,
     private cdr: ChangeDetectorRef,
   ) {
+    this.userIsAdmin$ = this.store$.select(selectUserIsAdmin);
   }
 
   public toggle() {
