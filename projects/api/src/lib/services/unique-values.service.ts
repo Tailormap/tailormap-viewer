@@ -54,7 +54,6 @@ export class UniqueValuesService {
     cacheKeys.forEach(key => {
       this.cachedResponses.delete(key);
     });
-    console.log(this.cachedResponses);
   }
 
 }

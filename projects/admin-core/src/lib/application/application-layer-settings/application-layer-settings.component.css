@@ -33,3 +33,8 @@
 .edit-layer-attributes {
   margin-top: 16px;
 }
+
+tm-admin-form-warning-message {
+  display: block;
+  margin-top: 16px;
+}

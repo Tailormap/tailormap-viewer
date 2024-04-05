@@ -1070,6 +1070,14 @@
         <source>Form <x id="PH" equiv-text="createdForm.name"/> created</source>
         <target state="new">Form <x id="PH" equiv-text="createdForm.name"/> created</target>
       </trans-unit>
+      <trans-unit id="admin-core.form.form-fields-unavailable" datatype="html">
+        <source>The following fields are disabled / disabled for editing in the feature type. These will not be visible in the viewer. First enable them for editing to make sure they are visible in the viewer.</source>
+        <target state="new">The following fields are disabled / disabled for editing in the feature type. These will not be visible in the viewer. First enable them for editing to make sure they are visible in the viewer.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.form-fields-unavailable-application" datatype="html">
+        <source>In the selected form the following fields are disabled / disabled for editing in the feature type or application layer settings. These will not be visible in the viewer. First enable them for editing to make sure they are visible in the viewer.</source>
+        <target state="new">In the selected form the following fields are disabled / disabled for editing in the feature type or application layer settings. These will not be visible in the viewer. First enable them for editing to make sure they are visible in the viewer.</target>
+      </trans-unit>
       <trans-unit id="admin-core.form.form-removed" datatype="html">
         <source>Form <x id="PH" equiv-text="title"/> removed</source>
         <target state="new">Form <x id="PH" equiv-text="title"/> removed</target>

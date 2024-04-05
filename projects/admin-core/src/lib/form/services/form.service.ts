@@ -54,6 +54,10 @@ export class FormService {
       );
   }
 
+  public getForm$(formId: number) {
+    return this.adminApiService.getForm$(formId).pipe(catchError(() => of(null)));
+  }
+
   public createForm$(form: Omit<FormModel, 'id'>) {
     return this.adminApiService.createForm$({ form })
       .pipe(

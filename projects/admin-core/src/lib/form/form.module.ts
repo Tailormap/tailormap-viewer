@@ -17,6 +17,7 @@ import { FormEditFieldComponent } from './form-edit-field/form-edit-field.compon
 import { FormAttributeListComponent } from './form-attribute-list/form-attribute-list.component';
 import { FormFieldListComponent } from './form-field-list/form-field-list.component';
 import { FormService } from './services/form.service';
+import { FormWarningMessageComponent } from './form-warning-message/form-warning-message.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { FormService } from './services/form.service';
     FormEditFieldComponent,
     FormAttributeListComponent,
     FormFieldListComponent,
+    FormWarningMessageComponent,
   ],
   imports: [
     CommonModule,
@@ -42,6 +44,7 @@ import { FormService } from './services/form.service';
     FormHomeComponent,
     FormEditComponent,
     FormCreateComponent,
+    FormWarningMessageComponent,
   ],
 })
 export class FormModule {

@@ -4,8 +4,14 @@
   flex-direction: column;
 }
 
+.flex-wrapper {
+  display: flex;
+}
+
 .form-wrapper {
+  min-width: 300px;
   max-width: 500px;
+  flex: 1;
 }
 
 .form-field-wrapper {
@@ -18,6 +24,33 @@
 
 .form-field-wrapper > * + * {
   margin-left: 16px;
+}
+
+.info-wrapper {
+  display: block;
+  flex: 1;
+  margin-left: 16px;
+}
+
+.edit-buttons {
+  display: grid;
+  grid-template-columns: 24px min-content auto;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 32px;
+}
+
+.edit-buttons strong {
+  white-space: nowrap;
+  padding-right: 8px;
+}
+
+.edit-buttons button ::ng-deep .mdc-button__label {
+  flex: 1;
+  text-align: left;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 tm-admin-form-attribute-list,
