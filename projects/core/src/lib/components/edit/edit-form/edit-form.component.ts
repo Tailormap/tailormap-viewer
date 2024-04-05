@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, In
 import { FormHelper } from '../helpers/form.helper';
 import { FormGroup } from '@angular/forms';
 import { debounceTime, map, merge, Subscription } from 'rxjs';
-import { ColumnMetadataModel, FeatureModel, FormFieldTypeEnum, LayerDetailsModel, UniqueValuesService } from '@tailormap-viewer/api';
+import { ColumnMetadataModel, FeatureModel, LayerDetailsModel } from '@tailormap-viewer/api';
 import { EditModelHelper } from '../helpers/edit-model.helper';
 import { ViewerEditFormFieldModel } from '../models/viewer-edit-form-field.model';
 
@@ -29,6 +29,7 @@ export class EditFormComponent implements OnDestroy {
   @Input({ required: true })
   public set feature(feature: EditFormInput | undefined) {
     this._feature = feature;
+    this.layerId = feature?.details?.id || '';
     this.createForm();
   }
   public get feature(): EditFormInput | undefined {
@@ -40,8 +41,9 @@ export class EditFormComponent implements OnDestroy {
 
   public form: FormGroup = new FormGroup({});
 
+  public layerId: string = '';
+
   constructor(
-    private uniqueValueService: UniqueValuesService,
     private cdr: ChangeDetectorRef,
   ) {
   }
@@ -49,17 +51,6 @@ export class EditFormComponent implements OnDestroy {
   public ngOnDestroy() {
     if (this.currentFormSubscription) {
       this.currentFormSubscription.unsubscribe();
-    }
-  }
-
-  private getUniqueValues() {
-    if (!this.feature?.details || !this.feature?.feature || !this.feature.details.form) {
-      return;
-    }
-    const form = this.feature.details.form;
-    const uniqueFields = form.fields.filter(f => f.type === FormFieldTypeEnum.SELECT && f.uniqueValuesAsOptions);
-    if (uniqueFields.length === 0) {
-      return;
     }
   }
 

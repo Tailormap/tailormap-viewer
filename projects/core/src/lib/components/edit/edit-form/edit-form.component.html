@@ -22,12 +22,10 @@
       <mat-label>{{ item.label }}</mat-label>
       <textarea matInput [formControlName]="item.name" [placeholder]="item.placeholder || item.label"></textarea>
     </mat-form-field>
-    <mat-form-field *ngIf="item.type === 'select'">
-      <mat-label>{{ item.label }}</mat-label>
-      <mat-select [formControlName]="item.name" [placeholder]="item.placeholder || item.label">
-        <mat-option *ngFor="let item of item.valueList" [value]="item.value">{{item.label || item.value}}</mat-option>
-      </mat-select>
-    </mat-form-field>
+    <tm-select-field *ngIf="item.type === 'select'"
+                             [formControlName]="item.name"
+                             [item]="item"
+                             [layerId]="layerId"></tm-select-field>
     <mat-checkbox [formControlName]="item.name" *ngIf="item.type === 'boolean'">
       <mat-label>{{ item.label }}</mat-label>
     </mat-checkbox>

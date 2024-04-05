@@ -36,3 +36,4 @@ export * from './component-config';
 export * from './form-field.model';
 export * from './form-field-type.enum';
 export * from './form-options.model';
+export * from './form-field-value-list-item.model';

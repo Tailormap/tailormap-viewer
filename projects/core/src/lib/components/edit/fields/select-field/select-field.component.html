@@ -1,0 +1,30 @@
+@if (item) {
+  <mat-form-field (click)="loadUniqueValues()">
+    <mat-label>{{ item.label }}</mat-label>
+    <input type="text"
+           [placeholder]="item.placeholder || item.label"
+           matInput
+           [formControl]="formControl"
+           [matAutocomplete]="auto">
+    <mat-autocomplete requireSelection
+                      [displayWith]="displayLabel"
+                      #auto="matAutocomplete">
+        @if (loading) {
+          <mat-option><mat-spinner color="primary" diameter="20"></mat-spinner></mat-option>
+        } @else {
+          @for (option of options; track $index) {
+            <mat-option [value]="option.value">{{option.label || option.value}}</mat-option>
+          }
+        }
+    </mat-autocomplete>
+<!--    <mat-select [formControl]="formControl" [placeholder]="item.placeholder || item.label">-->
+<!--      @if (loading) {-->
+<!--        <mat-option><mat-spinner color="primary" diameter="20"></mat-spinner></mat-option>-->
+<!--      } @else {-->
+<!--        @for (item of options; track $index) {-->
+<!--          <mat-option [value]="item.value">{{item.label || item.value}}</mat-option>-->
+<!--        }-->
+<!--      }-->
+<!--    </mat-select>-->
+  </mat-form-field>
+}
