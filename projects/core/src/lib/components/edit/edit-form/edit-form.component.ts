@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { FormHelper } from '../helpers/form.helper';
-import { FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, map, merge, Subscription } from 'rxjs';
 import { ColumnMetadataModel, FeatureModel, LayerDetailsModel } from '@tailormap-viewer/api';
 import { EditModelHelper } from '../helpers/edit-model.helper';
@@ -38,6 +38,9 @@ export class EditFormComponent implements OnDestroy {
 
   @Output()
   public featureAttributeChanged = new EventEmitter<{ attribute: string; value: any; invalid?: boolean }>();
+
+  @Output()
+  public clearUniqueValueCacheAfterSave = new EventEmitter<string>();
 
   public form: FormGroup = new FormGroup({});
 
@@ -85,6 +88,14 @@ export class EditFormComponent implements OnDestroy {
       });
     this.form.markAllAsTouched();
     this.cdr.detectChanges();
+  }
+
+  public getControl(name: string): FormControl {
+    const control = this.form.get(name);
+    if (!control) {
+      throw new Error(`Control with name ${name} not found`);
+    }
+    return control as FormControl;
   }
 
 }

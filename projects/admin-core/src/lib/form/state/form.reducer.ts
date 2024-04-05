@@ -228,6 +228,30 @@ const onDraftFormUpdateField = (
   };
 };
 
+const onDraftFormRemoveField = (
+  state: FormState,
+  payload: ReturnType<typeof FormActions.draftFormRemoveField>,
+): FormState => {
+  if (!state.draftForm) {
+    return state;
+  }
+  const fieldIdx = state.draftForm.fields.findIndex(f => f.name === payload.field);
+  if (fieldIdx === -1) {
+    return state;
+  }
+  return {
+    ...state,
+    draftForm: {
+      ...state.draftForm,
+      fields: [
+        ...state.draftForm.fields.slice(0, fieldIdx),
+        ...state.draftForm.fields.slice(fieldIdx + 1),
+      ],
+    },
+    draftFormUpdated: true,
+  };
+};
+
 const onUpdateDraftFormValid = (
   state: FormState,
   payload: ReturnType<typeof FormActions.updateDraftFormValid>,
@@ -255,6 +279,7 @@ const formReducerImpl = createReducer<FormState>(
   on(FormActions.draftFormAddField, onDraftFormAddField),
   on(FormActions.draftFormSetSelectedField, onDraftFormSetSelectedField),
   on(FormActions.draftFormUpdateField, onDraftFormUpdateField),
+  on(FormActions.draftFormRemoveField, onDraftFormRemoveField),
   on(FormActions.updateDraftFormValid, onUpdateDraftFormValid),
 );
 export const formReducer = (state: FormState | undefined, action: Action) => formReducerImpl(state, action);

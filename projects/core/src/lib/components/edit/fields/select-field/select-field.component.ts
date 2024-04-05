@@ -8,7 +8,7 @@ import { selectViewerId } from '../../../../state/core.selectors';
 import { filter, take } from 'rxjs';
 import { TypesHelper } from '@tailormap-viewer/shared';
 import { concatMap } from 'rxjs/operators';
-import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
@@ -35,6 +35,9 @@ export class SelectFieldComponent implements OnInit, ControlValueAccessor {
   @Output()
   public changed = new EventEmitter<string | number | boolean | null>();
 
+  @Output()
+  public clearUniqueValueCacheAfterSave = new EventEmitter<string>();
+
   public loading = false;
   public options: FormFieldValueListItemModel[] = [];
   private optionsLoaded = false;
@@ -53,15 +56,20 @@ export class SelectFieldComponent implements OnInit, ControlValueAccessor {
   ) { }
 
   public ngOnInit() {
-    this.options = [{ value: this.item?.value || '' }];
+    const value = this.item?.value || '';
+    this.options = [{ value }];
     if (!this.item?.uniqueValuesAsOptions) {
       this.options = this.item?.valueList || [];
       this.optionsLoaded = true;
     }
+    if (this.item?.required) {
+      this.formControl.setValidators([Validators.required]);
+    }
+    this.formControl.setValue(value);
     this.formControl.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(value => {
-        this.valueChanged(value);
+      .subscribe(formValue => {
+        this.valueChanged(formValue);
       });
   }
 
@@ -84,13 +92,29 @@ export class SelectFieldComponent implements OnInit, ControlValueAccessor {
 
   public setDisabledState?(isDisabled: boolean): void {
       this.disabled = isDisabled;
+      if (isDisabled) {
+        this.formControl.disable({ emitEvent: false });
+      } else {
+        this.formControl.enable({ emitEvent: false });
+      }
   }
 
   private valueChanged(value: string | number | boolean | null) {
+    if (!this.item) {
+      return;
+    }
+    const isOption = this.options.findIndex(o => o.value === value) !== -1;
+    const allowToChangeOptions = !this.item.allowValueListOnly;
+    if (!allowToChangeOptions && !isOption && typeof this.item.value !== 'undefined') {
+      value = this.item.value;
+      this.formControl.patchValue(value, { emitEvent: false });
+      return;
+    }
     if (this.onChange) {
       this.onChange(value);
     }
     this.changed.emit(value);
+    this.checkUniqueValueCache(isOption, allowToChangeOptions);
   }
 
   public loadUniqueValues() {
@@ -118,5 +142,22 @@ export class SelectFieldComponent implements OnInit, ControlValueAccessor {
       });
   }
 
-  protected readonly filter = filter;
+  private checkUniqueValueCache(isOption: boolean, allowToChangeOptions: boolean) {
+    if (isOption || !allowToChangeOptions || !this.item?.uniqueValuesAsOptions) {
+      return;
+    }
+    this.store$.select(selectViewerId)
+      .pipe(
+        filter(TypesHelper.isDefined),
+        take(1),
+      )
+      .subscribe(applicationId => {
+        this.clearUniqueValueCacheAfterSave.emit(this.uniqueValueService.createKey({
+          attribute: this.item?.name || '',
+          layerId: this.layerId,
+          applicationId,
+        }));
+      });
+  }
+
 }

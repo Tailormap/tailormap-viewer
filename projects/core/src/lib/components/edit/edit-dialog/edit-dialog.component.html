@@ -14,7 +14,8 @@
       <div class="content">
         <h2>{{layerDetails.layer.title}}</h2>
         <tm-edit-form [feature]="{ feature: currentFeature.feature, details: layerDetails.details, columnMetadata: currentFeature.columnMetadata }"
-                      (featureAttributeChanged)="featureChanged($event)"></tm-edit-form>
+                      (featureAttributeChanged)="featureChanged($event)"
+                      (clearUniqueValueCacheAfterSave)="clearUniqueValuesCacheAfterSave($event)"></tm-edit-form>
       </div>
       <div class="buttons">
         <button (click)="save(layerDetails.layer.id, currentFeature)"

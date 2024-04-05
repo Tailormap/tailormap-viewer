@@ -5,7 +5,7 @@ import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
 import { FormHelper } from '../../helpers/form.helper';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
-import { draftFormUpdateField } from '../state/form.actions';
+import { draftFormRemoveField, draftFormUpdateField } from '../state/form.actions';
 import { selectDraftFormSelectedField } from '../state/form.selectors';
 import { FeatureTypeModel } from '@tailormap-admin/admin-api';
 import { EditFormFieldHelper } from '../helpers/edit-form-field.helper';
@@ -157,6 +157,13 @@ export class FormEditFieldComponent implements OnInit {
 
   public removeValue(valueIdx: number) {
     this.getValueListFormArray().removeAt(valueIdx);
+  }
+
+  public delete(field: FormFieldModel | null) {
+    if (!field) {
+      return;
+    }
+    this.store$.dispatch(draftFormRemoveField({ field: field.name }));
   }
 
 }
