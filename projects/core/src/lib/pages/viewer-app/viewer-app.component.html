@@ -1,6 +1,6 @@
 <div class="viewer viewer--has-error" *ngIf="loadingFailed">
   <mat-icon class="logo" svgIcon="logo"></mat-icon>
-  <tm-error-message [message$]="errorMessage$"
+  <tm-error-message [message]="errorMessage$ | async"
                     i18n-emptyText="@@core.common.error-while-loading-app"
                     emptyText="Something went wrong while loading the application. Please check if the URL is correct"></tm-error-message>
 </div>

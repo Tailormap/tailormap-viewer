@@ -1,8 +1,25 @@
 <ng-container *ngIf="form$ | async as form">
   <h2 class="page-details-title" i18n="@@admin-core.form.edit">Edit {{ form.name }}</h2>
 
-  <div class="form-wrapper">
-    <tm-admin-form-form [form]="form" (updateForm)="updateForm($event)" (validFormChanged)="validFormChanged($event)"></tm-admin-form-form>
+  <div class="flex-wrapper">
+    <div class="form-wrapper">
+      <tm-admin-form-form [form]="form" (updateForm)="updateForm($event)" (validFormChanged)="validFormChanged($event)"></tm-admin-form-form>
+    </div>
+    <div class="info-wrapper">
+
+      <div class="edit-buttons">
+        <ng-container *ngIf="featureType$ | async as featureType">
+          <mat-icon svgIcon="admin_feature_type"></mat-icon>
+          <strong i18n="@@admin-core.catalog.feature-type">Feature type</strong>
+          <button mat-stroked-button [tmTooltip]="featureType.title || featureType.name" (click)="updateFeatureTypeSetting($event, featureType, form.featureSourceId)">
+            {{ featureType.title || featureType.name }}
+            <mat-icon svgIcon="edit_square" iconPositionEnd></mat-icon>
+          </button>
+        </ng-container>
+      </div>
+
+      <tm-admin-form-warning-message [featureType]="featureType$ | async" [form]="form"></tm-admin-form-warning-message>
+    </div>
   </div>
 
   <div class="form-field-wrapper">

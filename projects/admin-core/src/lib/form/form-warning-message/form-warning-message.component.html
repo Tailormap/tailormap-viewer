@@ -1,0 +1,11 @@
+<tm-error-message [friendlyError]="true" [message]="unAvailableFields.length > 0 ? ' ' : ''">
+  <div class="msg">
+    <ng-container *ngIf="!applicationLayerSetting"
+                  i18n="@@admin-core.form.form-fields-unavailable">The following fields are disabled / disabled for editing in the feature type. These will not be visible in the viewer. First enable them for editing to make sure they are visible in the viewer.</ng-container>
+    <ng-container *ngIf="applicationLayerSetting"
+                  i18n="@@admin-core.form.form-fields-unavailable-application">In the selected form the following fields are disabled / disabled for editing in the feature type or application layer settings. These will not be visible in the viewer. First enable them for editing to make sure they are visible in the viewer.</ng-container>
+  </div>
+  @for (field of unAvailableFields; track $index) {
+    <div>- {{field}}</div>
+  }
+</tm-error-message>

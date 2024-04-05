@@ -39,7 +39,7 @@
 
     <tm-error-message *ngIf="currentGroupError$ | async as currentGroupError"
                       [message]="currentGroupError"
-                      [friendlyError]="true">{{currentGroup$}}</tm-error-message>
+                      [friendlyError]="true"></tm-error-message>
 
     <div class="form-section form-section--with-form-field" *ngIf="hasSelectedLayersAndGeometry$ | async">
       <div i18n="@@core.filter.buffer-filter-geometry" class="form-section-label">Optionally you can buffer the geometry</div>

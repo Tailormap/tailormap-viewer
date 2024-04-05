@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import {
-  BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, takeUntil, combineLatest,
+  BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, takeUntil, combineLatest, concatMap,
 } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -12,6 +12,8 @@ import { FormService } from '../services/form.service';
 import { clearSelectedForm, updateDraftForm, updateDraftFormValid } from '../state/form.actions';
 import { FormUpdateModel } from '../services/form-update.model';
 import { FeatureSourceService } from '../../catalog/services/feature-source.service';
+import { FeatureTypeFormDialogComponent } from '../../catalog/feature-type-form-dialog/feature-type-form-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'tm-admin-form-edit',
@@ -42,6 +44,7 @@ export class FormEditComponent implements OnInit, OnDestroy {
     private formService: FormService,
     private featureSourceService: FeatureSourceService,
     private adminSnackbarService: AdminSnackbarService,
+    private dialog: MatDialog,
   ) {
   }
 
@@ -125,6 +128,30 @@ export class FormEditComponent implements OnInit, OnDestroy {
 
   public validFormChanged($event: boolean) {
     this.store$.dispatch(updateDraftFormValid({ isValid: $event }));
+  }
+
+  public updateFeatureTypeSetting($event: MouseEvent, featureType: FeatureTypeModel, featureSourceId: number) {
+    $event.preventDefault();
+    if (!featureType) {
+      return;
+    }
+    this.featureSourceService.getDraftFeatureType$(featureType.id, `${featureSourceId}`)
+      .pipe(
+        take(1),
+        concatMap(draftFeatureType => {
+          if (!draftFeatureType) {
+            return of(null);
+          }
+          return FeatureTypeFormDialogComponent.open(this.dialog, { featureType: draftFeatureType }).afterClosed();
+        }),
+        takeUntil(this.destroyed),
+      )
+      .subscribe(updatedFeatureType => {
+        if (updatedFeatureType) {
+          this.featureTypeSubject$.next(updatedFeatureType);
+          this.adminSnackbarService.showMessage($localize `:@@admin-core.feature-type-settings-updated:Feature type settings updated`);
+        }
+      });
   }
 
 }

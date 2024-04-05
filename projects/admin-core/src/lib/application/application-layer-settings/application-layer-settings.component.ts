@@ -1,8 +1,11 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { AppLayerSettingsModel, AppTreeLayerNodeModel, FormSummaryModel } from '@tailormap-admin/admin-api';
+import { AppLayerSettingsModel, AppTreeLayerNodeModel, FeatureTypeModel, FormModel, FormSummaryModel } from '@tailormap-admin/admin-api';
 import { Store } from '@ngrx/store';
 import { selectSelectedApplicationLayerSettings } from '../state/application.selectors';
-import { BehaviorSubject, concatMap, debounceTime, map, of, Subject, switchMap, take, takeUntil } from 'rxjs';
+import {
+  BehaviorSubject, combineLatest, concatMap, debounceTime, distinctUntilChanged, map, Observable, of, startWith, Subject, switchMap, take,
+  takeUntil,
+} from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
 import { LoadingStateEnum, TreeModel } from '@tailormap-viewer/shared';
 import { ExtendedGeoServiceModel } from '../../catalog/models/extended-geo-service.model';
@@ -25,6 +28,7 @@ import { FeatureSourceService } from '../../catalog/services/feature-source.serv
 import { GeoServiceService } from '../../catalog/services/geo-service.service';
 import { selectFormsForFeatureType, selectFormsLoadStatus } from '../../form/state/form.selectors';
 import { loadForms } from '../../form/state/form.actions';
+import { FormService } from '../../form/services/form.service';
 
 type FeatureSourceAndType = {
   featureSource: ExtendedFeatureSourceModel;
@@ -43,6 +47,8 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
   private _serviceLayer: ExtendedGeoServiceAndLayerModel | null = null;
 
   private destroyed = new Subject();
+
+  private layerSettingsSubject = new BehaviorSubject<Record<string, AppLayerSettingsModel>>({});
   private layerSettings: Record<string, AppLayerSettingsModel> = {};
 
   // eslint-disable-next-line max-len
@@ -91,12 +97,15 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     formId: new FormControl<number | null>(null),
   });
 
+  public formWarningMessageData$: Observable<{ featureType: FeatureTypeModel; layerSetting: AppLayerSettingsModel; form: FormModel } | null> = of(null);
+
   constructor(
     private store$: Store,
     private dialog: MatDialog,
     private adminSnackbarService: AdminSnackbarService,
     private geoServiceService: GeoServiceService,
     private featureSourceService: FeatureSourceService,
+    private formService: FormService,
   ) { }
 
   public ngOnInit(): void {
@@ -104,6 +113,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyed))
       .subscribe(layerSettings => {
         this.layerSettings = layerSettings;
+        this.layerSettingsSubject.next(layerSettings);
         this.initForm(this.node);
       });
 
@@ -153,6 +163,48 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
       .subscribe(forms => {
         this.selectableFormsSubject$.next(forms);
       });
+
+    const formIdControl = this.layerSettingsForm.get('formId');
+    if (formIdControl) {
+      console.log(this.layerSettings);
+      const selectedForm$ = formIdControl.valueChanges.pipe(
+        startWith(''),
+        distinctUntilChanged(),
+        switchMap(formId => {
+          const id = formId || this.layerSettings[this.node?.id || '']?.formId;
+          if (!id) {
+            return of(null);
+          }
+          return this.formService.getForm$(+id);
+        }),
+      );
+      this.formWarningMessageData$ = combineLatest([
+        selectedForm$,
+        this.layerSettingsSubject.asObservable(),
+        this.featureSourceAndType$,
+      ])
+        .pipe(
+          switchMap(([ form, layerSettings, featureSourceType ]) => {
+            const layerSetting = layerSettings[this.node?.id || ''];
+            if (!form || !layerSetting || !featureSourceType?.featureType) {
+              return of(null);
+            }
+            return this.featureSourceService.loadFeatureType$(featureSourceType.featureType.name, featureSourceType.featureSource.id)
+              .pipe(
+                map((featureType) => {
+                  if (!featureType) {
+                    return null;
+                  }
+                  return {
+                    featureType,
+                    layerSetting,
+                    form,
+                  };
+                }),
+              );
+          }),
+        );
+    }
   }
 
   public ngOnDestroy() {

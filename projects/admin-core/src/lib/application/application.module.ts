@@ -32,6 +32,7 @@ import { ApplicationService } from './services/application.service';
 import {
   ApplicationLayerAttributeSettingsComponent,
 } from './application-layer-attribute-settings/application-layer-attribute-settings.component';
+import { FormModule } from "../form/form.module";
 
 @NgModule({
   declarations: [
@@ -53,16 +54,17 @@ import {
     ApplicationLayerSettingsComponent,
     ApplicationLayerAttributeSettingsComponent,
   ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    StoreModule.forFeature(applicationStateKey, applicationReducer),
-    EffectsModule.forFeature([ApplicationEffects]),
-    SharedAdminComponentsModule,
-    RouterOutlet,
-    CatalogModule,
-    ComponentsModule,
- ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        StoreModule.forFeature(applicationStateKey, applicationReducer),
+        EffectsModule.forFeature([ApplicationEffects]),
+        SharedAdminComponentsModule,
+        RouterOutlet,
+        CatalogModule,
+        ComponentsModule,
+        FormModule,
+    ],
   exports: [
     ApplicationListComponent,
   ],
