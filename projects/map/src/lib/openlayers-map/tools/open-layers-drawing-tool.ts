@@ -91,7 +91,6 @@ export class OpenLayersDrawingTool implements DrawingToolModel {
       style: this.getMeasureDrawingStyle(),
       geometryFunction: OpenLayersDrawingTool.getGeometryFunction(drawingType),
     });
-    document.body.classList.add('body--is-drawing');
     this.olMap.addInteraction(this.drawInteraction);
     this.listeners.push(this.drawInteraction.on('drawstart', (e: DrawEvent) => this.drawStarted(e)));
     this.listeners.push(this.drawInteraction.on('drawend', (e: DrawEvent) => {
@@ -100,7 +99,6 @@ export class OpenLayersDrawingTool implements DrawingToolModel {
   }
 
   private stopDrawing() {
-    document.body.classList.remove('body--is-drawing');
     if (!this.drawInteraction) {
       return;
     }

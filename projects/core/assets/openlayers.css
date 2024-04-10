@@ -1,9 +1,5 @@
 @import 'ol/ol.css';
 
-.body--is-drawing .ol-unselectable {
-  touch-action: none;
-}
-
 .ol-tooltip {
   position: relative;
   background: rgba(0, 0, 0, 0.5);
