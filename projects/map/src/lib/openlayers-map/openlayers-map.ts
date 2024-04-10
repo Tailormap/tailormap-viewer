@@ -24,7 +24,6 @@ import { FeatureModel } from '@tailormap-viewer/api';
 import { OpenLayersMapImageExporter } from './openlayers-map-image-exporter';
 import { Attribution } from 'ol/control';
 import { platformModifierKeyOnly } from 'ol/events/condition';
-import { OpenLayersIframeHelper } from './helpers/openlayers-iframe.helper';
 
 export class OpenLayersMap implements MapViewerModel {
 
