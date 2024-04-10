@@ -3,7 +3,7 @@ import { Map as OlMap } from 'ol';
 import { Projection } from 'ol/proj';
 import { View } from 'ol';
 import { NgZone } from '@angular/core';
-import { defaults as defaultInteractions } from 'ol/interaction';
+import { defaults as defaultInteractions, DragPan, MouseWheelZoom } from 'ol/interaction';
 import { LayerManagerModel, MapViewDetailsModel, MapViewerModel, MapViewerOptionsModel } from '../models';
 import { ProjectionsHelper } from '../helpers/projections.helper';
 import { OpenlayersExtent } from '../models/extent.type';
@@ -23,6 +23,8 @@ import { HttpClient, HttpXsrfTokenExtractor } from '@angular/common/http';
 import { FeatureModel } from '@tailormap-viewer/api';
 import { OpenLayersMapImageExporter } from './openlayers-map-image-exporter';
 import { Attribution } from 'ol/control';
+import { platformModifierKeyOnly } from 'ol/events/condition';
+import { OpenLayersIframeHelper } from './helpers/openlayers-iframe.helper';
 
 export class OpenLayersMap implements MapViewerModel {
 
@@ -69,12 +71,22 @@ export class OpenLayersMap implements MapViewerModel {
       showFullExtent: true,
     });
 
+    const isInIframe = window.self !== window.top;
     const olMap = new OlMap({
       controls: [],
       interactions: defaultInteractions({
         altShiftDragRotate: false,
         pinchRotate: false,
-      }),
+        mouseWheelZoom: !isInIframe,
+        dragPan: !isInIframe,
+      }).extend(isInIframe ? [
+        new DragPan({
+          condition: function (event) {
+            return event.activePointers?.length === 2 || platformModifierKeyOnly(event);
+          },
+        }),
+        new MouseWheelZoom({ condition: platformModifierKeyOnly }),
+      ] : []),
       view,
     });
     // always add the attribution control

@@ -1,6 +1,6 @@
 @import 'ol/ol.css';
 
-.ol-unselectable {
+.body--is-drawing .ol-unselectable {
   touch-action: none;
 }
 
