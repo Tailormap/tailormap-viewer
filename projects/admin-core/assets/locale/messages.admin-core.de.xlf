@@ -58,6 +58,10 @@
         <source>Edit</source>
         <target>Bearbeiten</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.component-feature-info" datatype="html">
+        <source>Feature info</source>
+        <target state="new">Feature info</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.component-filter" datatype="html">
         <source>Filter</source>
         <target>Filtern</target>
