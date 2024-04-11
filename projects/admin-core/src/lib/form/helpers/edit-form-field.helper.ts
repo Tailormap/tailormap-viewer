@@ -27,6 +27,7 @@ export class EditFormFieldHelper {
         AttributeType.STRING,
         AttributeType.NUMBER,
         AttributeType.DOUBLE,
+        AttributeType.INTEGER,
         AttributeType.BOOLEAN,
         AttributeType.DATE,
       ],
