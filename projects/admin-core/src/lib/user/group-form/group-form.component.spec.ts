@@ -2,12 +2,13 @@ import { render, screen, waitFor } from '@testing-library/angular';
 import { GroupFormComponent } from './group-form.component';
 import { SharedImportsModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
+import { SharedAdminComponentsModule } from '../../shared/components/shared-admin-components.module';
 
 
 const setup = async () => {
   const groupUpdated = jest.fn();
   await render(GroupFormComponent, {
-    imports: [SharedImportsModule],
+    imports: [ SharedImportsModule, SharedAdminComponentsModule ],
     componentOutputs: {
       groupUpdated: {
         emit: groupUpdated,
@@ -29,6 +30,7 @@ describe('GroupFormComponent', () => {
         description: 'A very secret group',
         notes: null,
         systemGroup: false,
+        attributes: {},
       });
     });
   });

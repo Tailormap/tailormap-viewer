@@ -13,5 +13,6 @@
       <textarea formControlName="notes" matInput type="text"></textarea>
     </mat-form-field>
     <mat-checkbox formControlName="systemGroup" i18n="@@admin-core.groups.system-group" labelPosition="before">System group</mat-checkbox>
+    <tm-admin-fields-renderer [fields]="registeredFields" [data]="groupAttributes" (changed)="attributesChanged($event)"></tm-admin-fields-renderer>
   </div>
 </form>

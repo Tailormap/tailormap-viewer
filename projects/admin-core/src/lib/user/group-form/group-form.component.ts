@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { debounceTime, Subject, takeUntil } from 'rxjs';
 import { GroupModel } from '@tailormap-admin/admin-api';
 import { FormHelper } from '../../helpers/form.helper';
+import { AdminFieldLocation, AdminFieldModel, AdminFieldRegistrationService } from '../../shared/services/admin-field-registration.service';
 
 @Component({
   selector: 'tm-admin-group-form',
@@ -22,6 +23,8 @@ export class GroupFormComponent implements OnInit, OnDestroy {
     systemGroup: new FormControl<boolean>(false, { nonNullable: true }),
   });
 
+  public registeredFields: AdminFieldModel[] = [];
+
   @Input()
   public set group(group: GroupModel | null) {
     this._group = group;
@@ -31,6 +34,7 @@ export class GroupFormComponent implements OnInit, OnDestroy {
       notes: group ? group.notes : null,
       systemGroup: group ? group.systemGroup : false,
     });
+    this.groupAttributes = group?.attributes || {};
     if (group) {
       this.groupForm.get('name')?.disable();
     } else {
@@ -46,8 +50,15 @@ export class GroupFormComponent implements OnInit, OnDestroy {
 
   private destroyed = new Subject();
   private _group: GroupModel | null = null;
+  public groupAttributes: Record<string, string | number | boolean> = {};
+
+  constructor(
+    private adminFieldRegistryService: AdminFieldRegistrationService,
+  ) {
+  }
 
   public ngOnInit(): void {
+    this.registeredFields = this.adminFieldRegistryService.getRegisteredFields(AdminFieldLocation.GROUP);
     this.groupForm.valueChanges
       .pipe(
         takeUntil(this.destroyed),
@@ -73,7 +84,13 @@ export class GroupFormComponent implements OnInit, OnDestroy {
       description: this.groupForm.get('description')?.value || null,
       notes: this.groupForm.get('notes')?.value || null,
       systemGroup: this.groupForm.get('systemGroup')?.value || false,
+      attributes: this.groupAttributes,
     });
+  }
+
+  public attributesChanged($event: Record<string, string | number | boolean>) {
+    this.groupAttributes = $event;
+    this.readForm();
   }
 
 }
