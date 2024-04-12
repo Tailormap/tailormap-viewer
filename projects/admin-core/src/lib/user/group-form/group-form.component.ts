@@ -34,7 +34,7 @@ export class GroupFormComponent implements OnInit, OnDestroy {
       notes: group ? group.notes : null,
       systemGroup: group ? group.systemGroup : false,
     });
-    this.groupAttributes = group?.attributes || {};
+    this.additionalProperties = group?.additionalProperties || {};
     if (group) {
       this.groupForm.get('name')?.disable();
     } else {
@@ -50,7 +50,7 @@ export class GroupFormComponent implements OnInit, OnDestroy {
 
   private destroyed = new Subject();
   private _group: GroupModel | null = null;
-  public groupAttributes: Record<string, string | number | boolean> = {};
+  public additionalProperties: Record<string, string | number | boolean> = {};
 
   constructor(
     private adminFieldRegistryService: AdminFieldRegistrationService,
@@ -84,12 +84,12 @@ export class GroupFormComponent implements OnInit, OnDestroy {
       description: this.groupForm.get('description')?.value || null,
       notes: this.groupForm.get('notes')?.value || null,
       systemGroup: this.groupForm.get('systemGroup')?.value || false,
-      attributes: this.groupAttributes,
+      additionalProperties: this.additionalProperties,
     });
   }
 
   public attributesChanged($event: Record<string, string | number | boolean>) {
-    this.groupAttributes = $event;
+    this.additionalProperties = $event;
     this.readForm();
   }
 

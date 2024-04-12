@@ -11,11 +11,26 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 })
 export class AdminFieldsRendererComponent implements OnInit {
 
+  private _data: Record<string, string | number | boolean> | null = null;
+
   @Input({ required: true })
   public fields: AdminFieldModel[] = [];
 
   @Input()
-  public data: Record<string, string | number | boolean> = {};
+  public set data(data: Record<string, string | number | boolean> | null) {
+    this._data = data;
+    const controlKeys = Object.keys(this.formGroup.controls);
+    if (controlKeys.length === 0) {
+      return;
+    }
+    controlKeys.forEach(key => {
+      const value = data && Object.prototype.hasOwnProperty.call(data, key) ? data[key] : '';
+      this.getControl(key).setValue(value);
+    });
+  }
+  public get data(): Record<string, string | number | boolean> | null {
+    return this._data;
+  }
 
   @Output()
   public changed = new EventEmitter<Record<string, string | number | boolean>>();
