@@ -6,6 +6,7 @@ import { PasswordFieldComponent } from './password-field/password-field.componen
 import { SaveButtonComponent } from './save-button/save-button.component';
 import { BoundsFieldComponent } from './bounds-field/bounds-field.component';
 import { AuthorizationEditComponent } from './authorization-edit/authorization-edit.component';
+import { AdminFieldsRendererComponent } from './admin-fields-renderer/admin-fields-renderer.component';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import { AuthorizationEditComponent } from './authorization-edit/authorization-e
     SaveButtonComponent,
     BoundsFieldComponent,
     AuthorizationEditComponent,
+    AdminFieldsRendererComponent,
   ],
   imports: [
     CommonModule,
@@ -25,6 +27,7 @@ import { AuthorizationEditComponent } from './authorization-edit/authorization-e
     SaveButtonComponent,
     BoundsFieldComponent,
     AuthorizationEditComponent,
+    AdminFieldsRendererComponent,
   ],
 })
 export class SharedAdminComponentsModule {

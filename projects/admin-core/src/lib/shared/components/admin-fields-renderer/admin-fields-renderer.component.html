@@ -1,0 +1,14 @@
+<div class="admin-fields">
+  @for (field of fields; track field.name) {
+    <mat-form-field>
+      <mat-label>{{field.label}}</mat-label>
+      <input *ngIf="field.type === 'text'" matInput [formControl]="getControl(field.name)" />
+      <mat-checkbox *ngIf="field.type === 'checkbox'" [formControl]="getControl(field.name)" />
+      <mat-select *ngIf="field.type === 'choice'" [formControl]="getControl(field.name)">
+        @for (value of field.values; track $index) {
+          <mat-option [value]="value">{{value}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  }
+</div>
