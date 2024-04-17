@@ -1,6 +1,6 @@
 {
   "name": "@tailormap-admin/admin-core",
-  "version": "11.3.0",
+  "version": "11.3.1",
   "peerDependencies": {
     "@angular/animations": "^17.0.0",
     "@angular/cdk": "^17.0.0",
