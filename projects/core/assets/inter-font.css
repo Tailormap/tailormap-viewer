@@ -1,5 +1,5 @@
 @font-face {
-  font-family: 'Inter';
+  font-family: Inter;
   font-style: normal;
   font-weight: 400;
   font-display: swap;
@@ -9,7 +9,7 @@
 }
 
 @font-face {
-  font-family: 'Inter';
+  font-family: Inter;
   font-style: italic;
   font-weight: 400;
   font-display: swap;
@@ -19,7 +19,7 @@
 }
 
 @font-face {
-  font-family: 'Inter';
+  font-family: Inter;
   font-style: normal;
   font-weight: 600;
   font-display: swap;
@@ -29,7 +29,7 @@
 }
 
 @font-face {
-  font-family: 'Inter';
+  font-family: Inter;
   font-style: italic;
   font-weight: 600;
   font-display: swap;

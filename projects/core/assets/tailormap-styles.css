@@ -135,7 +135,7 @@ body {
 .mat-mdc-dialog-container,
 .form-field textarea,
 .cdk-overlay-container {
-  font-family: Inter, sans-serif;
+  font-family: Inter, "Lucida Sans Unicode", "Lucida Grande", sans-serif;
   font-weight: 400;
   color: var(--text-color);
   font-size: 14px;
