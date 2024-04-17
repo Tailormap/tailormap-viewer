@@ -159,6 +159,17 @@ jobs:
         run: |
           ssh-keyscan -H ${{ secrets.DOCKER_HOSTNAME }} > $HOME/.ssh/known_hosts
 
+      # Latest Docker Compose version neededed for ci/docker-compose.pr.yml to use !reset to remove
+      # a service when merging Compose files
+      - name: Install latest Docker Compose
+        env:
+          COMPOSE_VERSION: "2.26.1"
+        run: |
+          DOCKER_CONFIG=/usr/local/lib/docker
+          sudo mkdir -p $DOCKER_CONFIG/cli-plugins
+          sudo curl -sSL https://github.com/docker/compose/releases/download/v${COMPOSE_VERSION}/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
+          sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
+          docker compose version
       - name: 'Update deployment using Docker Compose'
         run: |
           docker compose up -d --pull=always --quiet-pull

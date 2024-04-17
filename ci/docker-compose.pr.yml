@@ -29,9 +29,7 @@ services:
       - "traefik.http.services.${COMPOSE_PROJECT_NAME:-tailormap}.loadbalancer.server.port=8080"
       - "traefik.http.middlewares.${COMPOSE_PROJECT_NAME:-tailormap}-stripprefix.stripprefix.prefixes=${BASE_HREF}"
     restart: unless-stopped
+    depends_on: !reset []
 
-  db:
-    image: rwgrim/docker-noop
-    healthcheck:
-      disable: true
-    restart: no
+  # See https://docs.docker.com/compose/compose-file/13-merge/#reset-value
+  db: !reset
