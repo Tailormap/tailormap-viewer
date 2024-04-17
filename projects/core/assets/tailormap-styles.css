@@ -132,8 +132,8 @@ body {
   overflow: visible;
 }
 
-body,
 [ng-version],
+[ng-version] button,
 .mat-mdc-dialog-container,
 .form-field textarea,
 .cdk-overlay-container {
