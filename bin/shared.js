@@ -99,13 +99,20 @@ const getPackageJson = async (project) => {
   return JSON.parse(packageJson.toString());
 };
 
+const getMainPackageJson = async () => {
+  const packageJson = await fs.readFile(path.resolve(__dirname, 'package.json'));
+  return JSON.parse(packageJson.toString());
+}
+
 const getCurrentVersion = async (project) => {
   return (await getPackageJson(project)).version;
 };
 
 const updatePeerDependencies = async (project) => {
-  console.log('Updating peer dependencies of ' + project);
+  console.log('Updating peer dependencies of other projects');
   const currentVersion = await getCurrentVersion(project);
+  const mainPackageJson = await getMainPackageJson();
+  const mainDependencies = mainPackageJson.dependencies || {};
   for (const availableProject of availableProjects) {
     const packageJson = await getPackageJson(availableProject);
     let madeChanges = false;
@@ -116,10 +123,29 @@ const updatePeerDependencies = async (project) => {
         console.log('Updating peer dependency for ' + availableProject + ': ' + key + ' from ' + packageJson.peerDependencies[key] + ' to ' + currentVersion);
         packageJson.peerDependencies[key] = `^${currentVersion}`;
         madeChanges = true;
+      } else if (mainDependencies.hasOwnProperty(key) && packageJson.peerDependencies[key] !== mainDependencies[key]) {
+        packageJson.peerDependencies[key] = mainDependencies[key];
+        madeChanges = true;
       }
     }
     await fs.writeFile(getPackageJsonPath(availableProject), JSON.stringify(packageJson, null, 2));
   }
+}
+
+const updateProjectPeerDependencies = async (project) => {
+  console.log('Updating peer dependencies of ' + project);
+  const mainPackageJson = await getMainPackageJson();
+  const mainDependencies = mainPackageJson.dependencies || {};
+  const packageJson = await getPackageJson(project);
+  let madeChanges = false;
+  const keys = Object.keys(packageJson.peerDependencies);
+  for (const key of keys) {
+    if (mainDependencies.hasOwnProperty(key) && packageJson.peerDependencies[key] !== mainDependencies[key]) {
+      packageJson.peerDependencies[key] = mainDependencies[key];
+      madeChanges = true;
+    }
+  }
+  await fs.writeFile(getPackageJsonPath(project), JSON.stringify(packageJson, null, 2));
 }
 
 const publishRelease = async (project, version, dryRun) => {
@@ -135,7 +161,7 @@ const publishRelease = async (project, version, dryRun) => {
     const scope = getScopeForProject(project);
     await runCommand('npm', ['publish', '--scope=' + scope, '--registry=https://repo.b3p.nl/nexus/repository/npm-public'], path.resolve(__dirname, '../dist/', project));
   }
-  await updatePeerDependencies(project);
+  await updateProjectPeerDependencies(project);
   if (dryRun) {
     console.log('Would add all changed files to Git, but running in dry-run mode');
   } else {
