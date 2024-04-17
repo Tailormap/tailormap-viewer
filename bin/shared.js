@@ -100,7 +100,7 @@ const getPackageJson = async (project) => {
 };
 
 const getMainPackageJson = async () => {
-  const packageJson = await fs.readFile(path.resolve(__dirname, 'package.json'));
+  const packageJson = await fs.readFile(path.resolve(__dirname, '../', 'package.json'));
   return JSON.parse(packageJson.toString());
 }
 
@@ -111,8 +111,6 @@ const getCurrentVersion = async (project) => {
 const updatePeerDependencies = async (project) => {
   console.log('Updating peer dependencies of other projects');
   const currentVersion = await getCurrentVersion(project);
-  const mainPackageJson = await getMainPackageJson();
-  const mainDependencies = mainPackageJson.dependencies || {};
   for (const availableProject of availableProjects) {
     const packageJson = await getPackageJson(availableProject);
     let madeChanges = false;
@@ -122,9 +120,6 @@ const updatePeerDependencies = async (project) => {
       if (key === scope + '/' + project) {
         console.log('Updating peer dependency for ' + availableProject + ': ' + key + ' from ' + packageJson.peerDependencies[key] + ' to ' + currentVersion);
         packageJson.peerDependencies[key] = `^${currentVersion}`;
-        madeChanges = true;
-      } else if (mainDependencies.hasOwnProperty(key) && packageJson.peerDependencies[key] !== mainDependencies[key]) {
-        packageJson.peerDependencies[key] = mainDependencies[key];
         madeChanges = true;
       }
     }
@@ -141,6 +136,7 @@ const updateProjectPeerDependencies = async (project) => {
   const keys = Object.keys(packageJson.peerDependencies);
   for (const key of keys) {
     if (mainDependencies.hasOwnProperty(key) && packageJson.peerDependencies[key] !== mainDependencies[key]) {
+      console.log('Updating peer dependency for ' + key + ' from ' + packageJson.peerDependencies[key] + ' to ' + mainDependencies[key]);
       packageJson.peerDependencies[key] = mainDependencies[key];
       madeChanges = true;
     }
@@ -152,6 +148,7 @@ const publishRelease = async (project, version, dryRun) => {
   console.log(`Publishing release for ${project}. Supplied version: ${version}. Dry-run: ${dryRun ? 'true' : 'false'}`);
   const npmVersion = version.startsWith('v') ? version.substring(1) : version;
   const versionCommand = !!version ? ['version', npmVersion] : ['version', 'patch'];
+  await updateProjectPeerDependencies(project);
   await runCommand('npm', versionCommand, path.resolve(__dirname, '../projects/', project));
   await runCommand('ng', ['build', project]);
   // note that the push url is not the same as the (anonymous) download url
@@ -161,7 +158,7 @@ const publishRelease = async (project, version, dryRun) => {
     const scope = getScopeForProject(project);
     await runCommand('npm', ['publish', '--scope=' + scope, '--registry=https://repo.b3p.nl/nexus/repository/npm-public'], path.resolve(__dirname, '../dist/', project));
   }
-  await updateProjectPeerDependencies(project);
+  await updatePeerDependencies(project);
   if (dryRun) {
     console.log('Would add all changed files to Git, but running in dry-run mode');
   } else {
