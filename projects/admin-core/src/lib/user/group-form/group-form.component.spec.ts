@@ -30,7 +30,7 @@ describe('GroupFormComponent', () => {
         description: 'A very secret group',
         notes: null,
         systemGroup: false,
-        attributes: {},
+        additionalProperties: {},
       });
     });
   });

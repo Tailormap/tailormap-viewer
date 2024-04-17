@@ -59,7 +59,7 @@ describe('GroupEditComponent', () => {
       description: 'some secret group',
       notes: 'some extra notes',
       systemGroup: true,
-      attributes: {},
+      additionalProperties: {},
     });
   });
 
