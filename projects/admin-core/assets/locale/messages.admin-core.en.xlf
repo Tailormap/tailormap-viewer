@@ -909,7 +909,7 @@
         <source>Settings</source>
       </trans-unit>
       <trans-unit id="admin-core.navigation.single-sign-on" datatype="html">
-        <source>Single-sign on</source>
+        <source>Single sign-on</source>
       </trans-unit>
       <trans-unit id="admin-core.navigation.users" datatype="html">
         <source>Users</source>

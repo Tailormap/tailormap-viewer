@@ -1211,8 +1211,8 @@
         <target>Einstellungen</target>
       </trans-unit>
       <trans-unit id="admin-core.navigation.single-sign-on" datatype="html">
-        <source>Single-sign on</source>
-        <target>Single-Sign-On</target>
+        <source>Single sign-on</source>
+        <target>Einmalanmeldung</target>
       </trans-unit>
       <trans-unit id="admin-core.navigation.users" datatype="html">
         <source>Users</source>

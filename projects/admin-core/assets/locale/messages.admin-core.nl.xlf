@@ -1210,8 +1210,8 @@
         <target>Instellingen</target>
       </trans-unit>
       <trans-unit id="admin-core.navigation.single-sign-on" datatype="html">
-        <source>Single-sign on</source>
-        <target>Single-sign on</target>
+        <source>Single sign-on</source>
+        <target>Single sign-on</target>
       </trans-unit>
       <trans-unit id="admin-core.navigation.users" datatype="html">
         <source>Users</source>
