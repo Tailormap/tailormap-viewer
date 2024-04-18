@@ -1,12 +1,18 @@
 <div *ngIf="open"
      [@inOutAnimation]="{ value: true, params: { translate: openFromRight ? actualWidth + 'px' : (-1 * actualWidth) + 'px' }}"
      class="dialog mat-elevation-z4"
+     (keyup.escape)="toggleFullscreen(false)"
      [style.width]="actualWidth + 'px'"
      [class.dialog--hidden]="hidden"
+     [class.dialog--fullscreen]="fullscreen"
      [class.dialog--collapsed]="collapsed">
 
   <div class="dialog-header">
     <h1>{{dialogTitle || ''}}</h1>
+    <button *ngIf="allowFullscreen" mat-icon-button class="toggle-button" (click)="toggleFullscreen()">
+      <mat-icon *ngIf="!fullscreen" svgIcon="fullscreen"></mat-icon>
+      <mat-icon *ngIf="fullscreen" svgIcon="fullscreen_exit"></mat-icon>
+    </button>
     <button *ngIf="allowCollapse" mat-icon-button class="toggle-button" (click)="expandCollapse()">
       <mat-icon *ngIf="!collapsed" svgIcon="chevron_top"></mat-icon>
       <mat-icon *ngIf="collapsed" svgIcon="chevron_bottom"></mat-icon>
