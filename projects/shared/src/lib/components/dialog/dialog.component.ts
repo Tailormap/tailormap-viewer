@@ -53,11 +53,19 @@ export class DialogComponent implements OnInit, OnChanges, OnDestroy {
   @Input()
   public widthMargin = 0;
 
+  @Input()
+  public allowFullscreen = false;
+
   @Output()
   public closeDialog = new EventEmitter();
 
   @Output()
   public expandCollapseDialog = new EventEmitter();
+
+  @Output()
+  public toggleFullscreenDialog = new EventEmitter<boolean>();
+
+  public fullscreen = false;
 
   @HostBinding('class')
   public get dialogAsClass() {
@@ -120,6 +128,11 @@ export class DialogComponent implements OnInit, OnChanges, OnDestroy {
 
   public expandCollapse() {
     this.expandCollapseDialog.emit();
+  }
+
+  public toggleFullscreen(force?: boolean) {
+    this.fullscreen = typeof force === 'boolean' ? force : !this.fullscreen;
+    this.toggleFullscreenDialog.emit(this.fullscreen);
   }
 
 }

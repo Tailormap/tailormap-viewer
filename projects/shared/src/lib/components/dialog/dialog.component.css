@@ -55,6 +55,15 @@
   min-height: auto !important;
 }
 
+.dialog--fullscreen {
+  left: 0 !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  right: 0 !important;
+  width: auto !important;
+  max-height: none !important;
+}
+
 .dialog--collapsed .dialog-content {
   display: none;
 }
