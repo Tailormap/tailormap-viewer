@@ -23,4 +23,4 @@ updates:
     ignore:
       - dependency-name: node
         versions:
-          - '>= 19'
+          - '>= 21'
