@@ -36,9 +36,9 @@ export class CesiumLayerManager {
     this.map3D.next(ol3d);
     this.scene3D.next(scene);
 
-    this.executeScene3DAction(scene3D => {
-      CesiumTerrainProvider.fromUrl('https://download.swissgeol.ch/cli_terrain/ch-2m/').then(tp => scene3D.terrainProvider = tp);
-    });
+    // this.executeScene3DAction(scene3D => {
+    //   CesiumTerrainProvider.fromUrl('https://download.swissgeol.ch/cli_terrain/ch-2m/').then(tp => scene3D.terrainProvider = tp);
+    // });
     // CesiumTerrainProvider.fromUrl('https://download.swissgeol.ch/cli_terrain/ch-2m/').then(tp => scene.terrainProvider = tp);
     // scene.primitives.add(Cesium3DTileset.fromUrl('https://3dtilesnederland.nl/tiles/1.0/implicit/nederland/599.json'));
 

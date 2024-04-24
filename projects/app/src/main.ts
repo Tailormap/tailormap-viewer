@@ -7,8 +7,6 @@ import { VersionModel } from '../../shared/src/lib/components/about-dialog/versi
 
 const SENTRY_DSN: string = (window as any).SENTRY_DSN;
 
-window['Cesium'] = Cesium;
-
 const setupSentryProviders = async () => {
   if (SENTRY_DSN === '@SENTRY_DSN@' || SENTRY_DSN === '') {
     return [];
