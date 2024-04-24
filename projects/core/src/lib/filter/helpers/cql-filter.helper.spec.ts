@@ -136,7 +136,10 @@ describe('CQLFilterHelper', () => {
         value: [],
       }]);
     const filters = CqlFilterHelper.getFilters([filterGroup]);
-    expect(filters.get('1')).toBe('((attribute ILIKE \'%value%\') AND (attribute2 = true) AND (attribute3 = 2020-01-01) AND (attribute4 IS NOT NULL))');
+    expect(filters.get('1')).toBe('((attribute ILIKE \'%value%\') ' +
+      'AND (attribute2 = true) ' +
+      'AND (attribute3 BETWEEN 2020-01-01T00:00:00Z AND 2020-01-01T23:59:59Z) ' +
+      'AND (attribute4 IS NOT NULL))');
   });
 
   test('should create a CQL filter for a tree of filters', () => {
