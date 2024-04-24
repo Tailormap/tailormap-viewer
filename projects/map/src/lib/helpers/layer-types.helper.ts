@@ -4,6 +4,7 @@ import { LayerTypesEnum } from '../models/layer-types.enum';
 import { VectorLayerModel } from '../models/vector-layer.model';
 import { XyzLayerModel } from '../models/xyz-layer.model';
 import { WMTSLayerModel } from '../models/wmts-layer.model';
+import { Tileset3DLayerModel } from '../models/tileset3D-layer.model';
 import { ServiceLayerModel } from '../models/service-layer.model';
 
 export class LayerTypesHelper {
@@ -26,6 +27,10 @@ export class LayerTypesHelper {
 
   public static isWmtsLayer(layer: LayerModel): layer is WMTSLayerModel {
     return layer.layerType === LayerTypesEnum.WMTS;
+  }
+
+  public static isTileset3DLayer(layer: LayerModel): layer is Tileset3DLayerModel {
+    return layer.layerType === LayerTypesEnum.TILESET3D;
   }
 
 }

@@ -8,7 +8,7 @@ import { LayerManagerModel, MapViewDetailsModel, MapViewerModel, MapViewerOption
 import { ProjectionsHelper } from '../helpers/projections.helper';
 import { OpenlayersExtent } from '../models/extent.type';
 import { OpenLayersLayerManager } from './open-layers-layer-manager';
-import { BehaviorSubject, concatMap, filter, forkJoin, map, merge, Observable, of, take } from 'rxjs';
+import { BehaviorSubject, concatMap, filter, forkJoin, map, merge, Observable, of, take, Subject } from 'rxjs';
 import { Size } from 'ol/size';
 import { ToolManagerModel } from '../models/tool-manager.model';
 import { OpenLayersToolManager } from './open-layers-tool-manager';
@@ -24,6 +24,8 @@ import { FeatureModel } from '@tailormap-viewer/api';
 import { OpenLayersMapImageExporter } from './openlayers-map-image-exporter';
 import { Attribution } from 'ol/control';
 import OLCesium from 'olcs';
+import { Scene, CesiumTerrainProvider, Cesium3DTileset, Ion } from 'cesium';
+
 
 export class OpenLayersMap implements MapViewerModel {
 
@@ -31,10 +33,14 @@ export class OpenLayersMap implements MapViewerModel {
   private layerManager: BehaviorSubject<OpenLayersLayerManager | null> = new BehaviorSubject<OpenLayersLayerManager | null>(null);
   private toolManager: BehaviorSubject<ToolManagerModel | null> = new BehaviorSubject<ToolManagerModel | null>(null);
 
+  private map3D: BehaviorSubject<OLCesium | null> = new BehaviorSubject<OLCesium | null>(null);
+  private scene3D: BehaviorSubject<Scene | null> = new BehaviorSubject<Scene | null>(null);
+
   private readonly resizeObserver: ResizeObserver;
   private initialExtent: OpenlayersExtent = [];
   private initialCenterZoom?: [number[], number] = undefined;
   private mapPadding: number[] | undefined;
+
 
   constructor(
     private ngZone: NgZone,
@@ -83,6 +89,14 @@ export class OpenLayersMap implements MapViewerModel {
       collapsed: false,
     }));
 
+    // Initialize 3D map
+    // const ol3d = new OLCesium({
+    //   map: olMap,
+    // });
+    // const scene = ol3d.getCesiumScene();
+    // CesiumTerrainProvider.fromUrl('https://download.swissgeol.ch/cli_terrain/ch-2m/').then(tp => scene.terrainProvider = tp);
+    // Cesium3DTileset.fromIonAssetId(96188).then(ts => scene.primitives.add(ts));
+
     this.initialExtent = options.initialExtent?.length === 4
       ? options.initialExtent
       : options.maxExtent;
@@ -104,9 +118,12 @@ export class OpenLayersMap implements MapViewerModel {
     const toolManager = new OpenLayersToolManager(olMap, this.ngZone);
     OpenLayersEventManager.initEvents(olMap, this.ngZone);
 
+    console.log(olMap);
     this.map.next(olMap);
     this.layerManager.next(layerManager);
     this.toolManager.next(toolManager);
+    // this.map3D.next(ol3d);
+    // this.scene3D.next(scene);
   }
 
   public render(container: HTMLElement) {
@@ -244,6 +261,22 @@ export class OpenLayersMap implements MapViewerModel {
       .subscribe(olMap => fn(olMap));
   }
 
+  // public getMap3D$(): Observable<OLCesium> {
+  //   const isNotNullMap3D = (item: OLCesium | null): item is OLCesium => item !== null;
+  //   return this.map3D.asObservable().pipe(filter(isNotNullMap3D));
+  // }
+  //
+  // public executeMap3DAction(fn: (olMap3D: OLCesium) => void) {
+  //   this.getMap3D$()
+  //     .pipe(take(1))
+  //     .subscribe(olMap3D => fn(olMap3D));
+  // }
+
+  // public getScene3D$(): Observable<Scene> {
+  //   const isNotNullScene3D = (item: Scene | null): item is Scene => item !== null;
+  //   return this.scene3D.asObservable().pipe(filter(isNotNullScene3D));
+  // }
+
   public getProjection$(): Observable<Projection> {
     return this.getMap$().pipe(map(olMap => olMap.getView().getProjection()));
   }
@@ -370,13 +403,9 @@ export class OpenLayersMap implements MapViewerModel {
     });
   }
 
-  public make3D$(){
-    this.executeMapAction(olMap => {
-      const ol3d = new OLCesium({
-          map: olMap,
-        });
-      const scene = ol3d.getCesiumScene();
-      ol3d.setEnabled(true);
-    })
-  }
+  // public switch3D$(){
+  //   this.executeMap3DAction(olMap3D => {
+  //     olMap3D.setEnabled(!olMap3D.getEnabled());
+  //   });
+  // }
 }

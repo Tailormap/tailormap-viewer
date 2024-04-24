@@ -50,6 +50,11 @@ export class CatalogFilterHelper {
     const allLayersMap = new Map(serviceLayers.map(l => [ l.id, l ]));
     return CatalogFilterHelper.getFilteredTree(catalogNodes, services, serviceLayers, [], featureTypes, item => {
       if (ExtendedCatalogModelHelper.isGeoServiceLayerModel(item)) {
+        // Temporary
+        if (item.crs == null || item.crs?.length === 0) {
+          return true;
+        }
+        //
         if (item.crs?.includes(crs)) {
           return true;
         }

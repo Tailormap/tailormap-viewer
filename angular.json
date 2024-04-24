@@ -54,13 +54,21 @@
                 "glob": "**/*",
                 "input": "projects/admin-core/assets/icons",
                 "output": "icons"
+              },
+              {
+                "glob": "**/*",
+                "input": "./node_modules/cesium/Build/Cesium",
+                "output": "projects/shared/assets/cesium"
               }
             ],
             "styles": [
               "projects/core/assets/custom-theme.scss",
-              "projects/core/assets/tailormap-styles.css"
+              "projects/core/assets/tailormap-styles.css",
+              "./node_modules/cesium/Build/Cesium/Widgets/widgets.css"
             ],
-            "scripts": [],
+            "scripts": [
+              "./node_modules/cesium/Build/CesiumUnminified/Cesium.js"
+            ],
             "allowedCommonJsDependencies": [
               "xml-utils",
               "pbf",

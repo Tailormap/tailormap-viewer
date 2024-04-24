@@ -10,6 +10,7 @@ export * from './service-layer.model';
 export * from './tool-manager.model';
 export * from './xyz-layer.model';
 export * from './wms-layer.model';
+export * from './tileset3D-layer.model';
 export * from './tools';
 export * from './map-view-details.model';
 export * from './map-style.model';

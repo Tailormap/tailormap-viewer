@@ -27,6 +27,7 @@
           <tm-simple-search *ngIf="isComponentEnabled(config, componentTypes.SIMPLE_SEARCH)"></tm-simple-search>
           <tm-edit *ngIf="isComponentEnabled(config, componentTypes.EDIT)"></tm-edit>
           <tm-registered-components-renderer [config]="config" area="map-controls-left"></tm-registered-components-renderer>
+          <tm-switch3D></tm-switch3D>
         </div>
         <div class="map-controls-right">
           <tm-background-layer-toggle *ngIf="isComponentEnabled(config, componentTypes.BACKGROUND_LAYER_TOGGLE)"></tm-background-layer-toggle>
