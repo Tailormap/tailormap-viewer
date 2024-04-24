@@ -4,7 +4,7 @@ import { TreeNodePosition } from '@tailormap-viewer/shared';
 import { ComponentBaseConfigModel, ViewerStylingModel } from '@tailormap-viewer/api';
 import { UpdateDraftApplicationModel } from '../models/update-draft-application.model';
 
-const applicationActionsPrefix = '[Application]';
+const applicationActionsPrefix = '[Admin/Application]';
 
 export const loadApplications = createAction(
   `${applicationActionsPrefix} Load Applications`,

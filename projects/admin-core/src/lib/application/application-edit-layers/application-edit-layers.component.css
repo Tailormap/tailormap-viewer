@@ -48,6 +48,7 @@
 .has-catalog-tree-visible .toggle-tree-icon {
   position: absolute;
   right: 20px;
+  top: -2px;
 }
 
 .application-catalog {
@@ -65,6 +66,22 @@
   padding: 10px;
 }
 
+.tree-title {
+  font-weight: bold;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+}
+
+.application-tree {
+  display: flex;
+  flex-direction: column;
+}
+
+tm-admin-application-layer-tree {
+  flex: 1;
+}
+
 .edit-application-tree > div + div {
   margin-left: 16px;
 }
@@ -74,16 +91,21 @@ tm-admin-application-layer-settings {
 }
 
 @media screen and (max-width: 1460px) {
-  .edit-application-tree > div + .application-layer-settings,
-  .application-layer-settings {
-    margin-left: 0;
-    margin-top: 16px;
-    flex-basis: 100%;
-    max-height: calc(var(--vh) * 30);
+  .edit-application-tree {
+    height: calc((100 * var(--vh)) - var(--other-content-height))
   }
 
-  .edit-application-tree ::ng-deep .tree-wrapper {
-    max-height: calc((70 * var(--vh)) - var(--other-content-height));
+  .application-layer-settings {
+    margin-left: 0 !important;
+    margin-top: 16px;
+    flex-basis: 100%;
+    max-height: none;
+    overflow: auto;
+  }
+
+  .edit-application-tree .application-catalog,
+  .edit-application-tree .application-tree {
+    height: calc((70 * var(--vh)) - var(--other-content-height) - 16px);
   }
 }
 
@@ -94,7 +116,8 @@ tm-admin-application-layer-settings {
     flex-basis: 100%;
   }
 
-  .edit-application-tree ::ng-deep .tree-wrapper {
+  .edit-application-tree .application-catalog,
+  .edit-application-tree .application-tree {
     max-height: calc(30 * var(--vh));
   }
 }
@@ -106,7 +129,8 @@ tm-admin-application-layer-settings {
     flex-basis: 100%;
   }
 
-  .edit-application-tree ::ng-deep .tree-wrapper {
+  .edit-application-tree .application-catalog,
+  .edit-application-tree .application-tree {
     max-height: calc(30 * var(--vh));
   }
 }

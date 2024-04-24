@@ -31,6 +31,7 @@ export class NavigationComponent implements OnInit {
   public buttons: ButtonProps[] =  [
     { label: $localize `:@@admin-core.navigation.home:Home`, matchExact: true, link: [ '/admin', Routes.ADMIN_HOME ], icon: 'admin_home', requireAdmin: false },
     { label: $localize `:@@admin-core.navigation.catalog:Catalog`, matchExact: false, link: [ '/admin', Routes.CATALOG ], icon: 'admin_catalog', requireAdmin: true },
+    { label: $localize `:@@admin-core.navigation.forms:Forms`, matchExact: false, link: [ '/admin', Routes.FORMS ], icon: 'admin_form', requireAdmin: true },
     { label: $localize `:@@admin-core.navigation.users:Users`, matchExact: false, link: [ '/admin', Routes.USER ], icon: 'admin_user', requireAdmin: true },
     { label: $localize `:@@admin-core.navigation.groups:Groups`, matchExact: false, link: [ '/admin', Routes.GROUP ], icon: 'admin_groups', requireAdmin: true },
     // eslint-disable-next-line max-len

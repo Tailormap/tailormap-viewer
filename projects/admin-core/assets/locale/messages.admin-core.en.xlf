@@ -8,6 +8,9 @@
       <trans-unit id="admin-core.application.add-sub-folder" datatype="html">
         <source>Add sub folder</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.application" datatype="html">
+        <source>Application</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.application-created" datatype="html">
         <source>Application <x id="PH" equiv-text="createdApplication.title || createdApplication.name"/> created</source>
       </trans-unit>
@@ -41,6 +44,9 @@
       <trans-unit id="admin-core.application.component-edit" datatype="html">
         <source>Edit</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.component-feature-info" datatype="html">
+        <source>Feature info</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.component-filter" datatype="html">
         <source>Filter</source>
       </trans-unit>
@@ -52,6 +58,9 @@
       </trans-unit>
       <trans-unit id="admin-core.application.component-print" datatype="html">
         <source>Print</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.component-share-viewer" datatype="html">
+        <source>Share viewer</source>
       </trans-unit>
       <trans-unit id="admin-core.application.component-streetview-tool" datatype="html">
         <source>Streetview tool</source>
@@ -152,6 +161,12 @@
       <trans-unit id="admin-core.application.no-default-language" datatype="html">
         <source>No default language</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.no-form" datatype="html">
+        <source>No form</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.no-forms-for-feature-type" datatype="html">
+        <source>There are no forms for this feature type</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.non-unique-name-error" datatype="html">
         <source>Name should be unique.</source>
       </trans-unit>
@@ -172,6 +187,9 @@
       </trans-unit>
       <trans-unit id="admin-core.application.remove-layer" datatype="html">
         <source>Remove layer from application</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.select-form" datatype="html">
+        <source>Select (optional) form</source>
       </trans-unit>
       <trans-unit id="admin-core.application.service-updated" datatype="html">
         <source>Service <x id="PH" equiv-text="updatedService.title"/> updated</source>
@@ -539,6 +557,9 @@
       <trans-unit id="admin-core.catalog.technical-name" datatype="html">
         <source>Technical name: <x id="INTERPOLATION" equiv-text="{{ featureType.name }}"/></source>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.tileSize" datatype="html">
+        <source>Tile size</source>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.tiling-gutter" datatype="html">
         <source>Tiling gutter</source>
       </trans-unit>
@@ -547,6 +568,9 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.use-tiling" datatype="html">
         <source>Use tiling</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.xyz-tile-grid-extent" datatype="html">
+        <source>XYZ tile grid extent</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.xyz-tile-grid-options" datatype="html">
         <source>XYZ tile grid options</source>
@@ -565,6 +589,9 @@
       </trans-unit>
       <trans-unit id="admin-core.common.bounds" datatype="html">
         <source>Bounds</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.bounds-hint" datatype="html">
+        <source>You can paste a comma-separated list or &lt;BoundingBox minx=&quot;&quot; miny=.../&gt; string from capabilities in one of the fields for setting the extent</source>
       </trans-unit>
       <trans-unit id="admin-core.common.cancel" datatype="html">
         <source>Cancel</source>
@@ -605,6 +632,9 @@
       <trans-unit id="admin-core.common.filter-dots" datatype="html">
         <source>Filter...</source>
       </trans-unit>
+      <trans-unit id="admin-core.common.forms-title" datatype="html">
+        <source>Forms</source>
+      </trans-unit>
       <trans-unit id="admin-core.common.geo-service" datatype="html">
         <source>Geo service</source>
       </trans-unit>
@@ -616,6 +646,9 @@
       </trans-unit>
       <trans-unit id="admin-core.common.hide-password" datatype="html">
         <source>Hide password</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.label" datatype="html">
+        <source>Label</source>
       </trans-unit>
       <trans-unit id="admin-core.common.login" datatype="html">
         <source>Login</source>
@@ -695,6 +728,126 @@
       <trans-unit id="admin-core.feature-type-settings-updated" datatype="html">
         <source>Feature type settings updated</source>
       </trans-unit>
+      <trans-unit id="admin-core.form.add-choice" datatype="html">
+        <source>Add choice</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.add-form" datatype="html">
+        <source>Add form</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.allow-free-input" datatype="html">
+        <source>Allow the user to enter custom input</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.create-form" datatype="html">
+        <source>Create form</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.delete-field" datatype="html">
+        <source>Delete field</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.delete-form" datatype="html">
+        <source>Delete form <x id="PH" equiv-text="title"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.delete-form-message" datatype="html">
+        <source>Are you sure you want to delete form <x id="PH" equiv-text="title"/>? This action cannot be undone.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.edit" datatype="html">
+        <source>Edit <x id="INTERPOLATION" equiv-text="{{ form.name }}"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.error-creating-form" datatype="html">
+        <source>Error while creating form.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.error-deleting-form" datatype="html">
+        <source>Error while deleting form.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.error-loading-form" datatype="html">
+        <source>Error while loading form</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.error-loading-forms" datatype="html">
+        <source>Error while loading list of forms</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.error-updating-form" datatype="html">
+        <source>Error while updating form.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.feature-source" datatype="html">
+        <source>Feature source and type</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.field-type-boolean" datatype="html">
+        <source>Checkbox field</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.field-type-date" datatype="html">
+        <source>Date field</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.field-type-integer" datatype="html">
+        <source>Integer field</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.field-type-number" datatype="html">
+        <source>Number field</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.field-type-select" datatype="html">
+        <source>Choice list</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.field-type-text" datatype="html">
+        <source>Text field</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.field-type-textarea" datatype="html">
+        <source>Textarea field</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.field-type-timestamp" datatype="html">
+        <source>Timestamp field</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.filter-attributes" datatype="html">
+        <source>Filter attributes</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.filter-fields" datatype="html">
+        <source>Filter fields</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.filter-forms" datatype="html">
+        <source>Filter forms</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.form-created" datatype="html">
+        <source>Form <x id="PH" equiv-text="createdForm.name"/> created</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.form-fields-unavailable" datatype="html">
+        <source>The following fields are disabled / disabled for editing in the feature type. These will not be visible in the viewer. First enable them for editing to make sure they are visible in the viewer.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.form-fields-unavailable-application" datatype="html">
+        <source>In the selected form the following fields are disabled / disabled for editing in the feature type or application layer settings. These will not be visible in the viewer. First enable them for editing to make sure they are visible in the viewer.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.form-removed" datatype="html">
+        <source>Form <x id="PH" equiv-text="title"/> removed</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.form-updated" datatype="html">
+        <source>Form updated</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.forms" datatype="html">
+        <source>Forms</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.label-list-label" datatype="html">
+        <source>Label</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.required-field" datatype="html">
+        <source>Required field</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.unique-values-as-options" datatype="html">
+        <source>Use unique values from this column as options</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.value-list-label" datatype="html">
+        <source>Label</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.value-list-value" datatype="html">
+        <source>Value</source>
+      </trans-unit>
+      <trans-unit id="admin-core.forms.available-attributes" datatype="html">
+        <source>Available attributes</source>
+      </trans-unit>
+      <trans-unit id="admin-core.forms.edit-form-field" datatype="html">
+        <source>Edit form field <x id="INTERPOLATION" equiv-text="{{field.name}}"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.forms.form-fields" datatype="html">
+        <source>Form fields</source>
+      </trans-unit>
+      <trans-unit id="admin-core.forms.forms" datatype="html">
+        <source>Forms</source>
+      </trans-unit>
       <trans-unit id="admin-core.groups.add-group" datatype="html">
         <source>Add group</source>
       </trans-unit>
@@ -743,6 +896,9 @@
       <trans-unit id="admin-core.navigation.catalog" datatype="html">
         <source>Catalog</source>
       </trans-unit>
+      <trans-unit id="admin-core.navigation.forms" datatype="html">
+        <source>Forms</source>
+      </trans-unit>
       <trans-unit id="admin-core.navigation.groups" datatype="html">
         <source>Groups</source>
       </trans-unit>
@@ -753,7 +909,7 @@
         <source>Settings</source>
       </trans-unit>
       <trans-unit id="admin-core.navigation.single-sign-on" datatype="html">
-        <source>Single-sign on</source>
+        <source>Single sign-on</source>
       </trans-unit>
       <trans-unit id="admin-core.navigation.users" datatype="html">
         <source>Users</source>

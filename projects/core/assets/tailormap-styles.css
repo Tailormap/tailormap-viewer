@@ -3,6 +3,7 @@
 @import "openlayers.css";
 
 :root {
+  --font-family: Inter, "Lucida Sans Unicode", "Lucida Grande", sans-serif;
   --dialog-width-left: 0;
   --dialog-width-right: 0;
   --dialog-z-index: 998;
@@ -132,10 +133,11 @@ body {
 }
 
 [ng-version],
+[ng-version] button,
 .mat-mdc-dialog-container,
 .form-field textarea,
 .cdk-overlay-container {
-  font-family: Inter, sans-serif;
+  font-family: var(--font-family);
   font-weight: 400;
   color: var(--text-color);
   font-size: 14px;

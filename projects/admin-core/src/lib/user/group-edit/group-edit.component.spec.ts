@@ -10,6 +10,7 @@ import userEvent from '@testing-library/user-event';
 import { TestSaveHelper } from '../../test-helpers/test-save.helper';
 import { GroupFormComponent } from '../group-form/group-form.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
+import { SharedAdminComponentsModule } from '../../shared/components/shared-admin-components.module';
 
 const setup = async (hasGroup?: boolean) => {
   const activeRoute = {
@@ -26,7 +27,7 @@ const setup = async (hasGroup?: boolean) => {
   };
   await render(GroupEditComponent, {
     declarations: [ GroupFormComponent, SaveButtonComponent ],
-    imports: [ SharedImportsModule, MatIconTestingModule ],
+    imports: [ SharedImportsModule, MatIconTestingModule, SharedAdminComponentsModule ],
     providers: [
       { provide: ActivatedRoute, useValue: activeRoute },
       { provide: GroupService, useValue: groupService },
@@ -58,6 +59,7 @@ describe('GroupEditComponent', () => {
       description: 'some secret group',
       notes: 'some extra notes',
       systemGroup: true,
+      additionalProperties: {},
     });
   });
 

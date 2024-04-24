@@ -5,6 +5,7 @@ import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR } from 
 import { BoundsModel } from '@tailormap-viewer/api';
 import { Subject, takeUntil } from 'rxjs';
 import { AdminProjectionsHelper } from '../../../application/helpers/admin-projections-helper';
+import { ClipboardHelper } from '@tailormap-viewer/shared';
 
 @Component({
   selector: 'tm-admin-bounds-form-field',
@@ -137,7 +138,17 @@ export class BoundsFieldComponent implements OnInit, OnDestroy, ControlValueAcce
     }
   }
 
+  public parseInput($event: ClipboardEvent) {
+    const bboxRegex = /minx="([-0-9.e+]+)" miny="([-0-9.e+]+)" maxx="([-0-9.e+]+)" maxy="([-0-9.e+]+)"/;
+    const commaListRegex = /([-0-9.e+]+)\s*,\s*([-0-9.e+]+)\s*,\s*([-0-9.e+]+)\s*,\s*([-0-9.e+]+)/;
+    const values = ClipboardHelper.parsePasteEvent($event, [ bboxRegex, commaListRegex ]);
+    if (values && values.length === 5) {
+      this.boundsForm.patchValue({ minx: +values[1],  miny: +values[2],  maxx: +values[3],  maxy: +values[4] });
+    }
+  }
+
   public clear() {
     this.boundsForm.patchValue({ minx: null, miny: null, maxx: null, maxy: null }, { emitEvent: true });
   }
+
 }

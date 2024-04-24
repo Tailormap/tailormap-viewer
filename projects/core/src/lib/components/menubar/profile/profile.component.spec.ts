@@ -4,7 +4,7 @@ import { MenubarButtonComponent } from '../menubar-button/menubar-button.compone
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { createMockStore, MockStore, provideMockStore } from '@ngrx/store/testing';
-import { selectShowLoginButton, selectUserDetails } from '../../../state/core.selectors';
+import { selectShowLoginButton, selectUserDetails, selectUserIsAdmin } from '../../../state/core.selectors';
 import { Router } from '@angular/router';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { of } from 'rxjs';
@@ -18,6 +18,7 @@ const setup = async (loggedIn: boolean, showLoginButton = true) => {
   const store = provideMockStore({
     selectors: [
       { selector: selectUserDetails, value: { isAuthenticated: loggedIn, username: loggedIn ? 'testusername' : undefined, roles: [] } },
+      { selector: selectUserIsAdmin, value: false },
       { selector: selectShowLoginButton, value: showLoginButton },
     ],
   });

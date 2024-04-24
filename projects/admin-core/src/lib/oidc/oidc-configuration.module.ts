@@ -48,7 +48,7 @@ export class OIDCConfigurationModule {
     adminSettingsRouterService: AdminSettingsRouterService,
   ) {
     oidcConfigurationService.listenForOIDCConfigurationChanges();
-    adminSettingsRouterService.registerSettingsRoutes($localize `:@@admin-core.navigation.single-sign-on:Single-sign on`, {
+    adminSettingsRouterService.registerSettingsRoutes($localize `:@@admin-core.navigation.single-sign-on:Single sign-on`, {
       path: AdminRoutes.OIDC_CONFIGURATION,
       component: OIDCConfigurationPageComponent,
       children: [

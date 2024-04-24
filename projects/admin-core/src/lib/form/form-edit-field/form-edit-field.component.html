@@ -1,0 +1,73 @@
+@if (featureType) {
+  <form [formGroup]="fieldForm" *ngIf="field">
+    <h2 i18n="@@admin-core.forms.edit-form-field">Edit form field {{field.name}}</h2>
+    <div class="form-wrapper">
+      <mat-form-field>
+        <mat-label i18n="@@admin-core.common.label">Label</mat-label>
+        <input matInput
+               tmAutoFocus
+               placeholder="Label"
+               i18n-placeholder="@@admin-core.common.label"
+               formControlName="label"
+        />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label i18n="@@admin-core.common.type">Type</mat-label>
+        <mat-select formControlName="type" placeholder="Type" i18n-placeholder="@@admin-core.common.type">
+          <mat-option *ngFor="let fieldType of filteredFieldTypes" [value]="fieldType.value">
+            {{ fieldType.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div class="form-control">
+        <mat-checkbox color="primary" formControlName="required" i18n="@@admin-core.form.required-field">Required field</mat-checkbox>
+      </div>
+      <div class="form-control">
+        <mat-checkbox color="primary" formControlName="disabled" i18n="@@admin-core.common.disabled">Disabled</mat-checkbox>
+      </div>
+    </div>
+    @if(fieldForm.get('type')?.value === 'select') {
+      <div class="form-control">
+        <ng-container formArrayName="valueList">
+          @for(valueForm of getValueListFormArray().controls; track valueForm; let i = $index) {
+            <div class="value-form-row" [formGroup]="valueForm">
+              <mat-form-field>
+                <mat-label i18n="@@admin-core.form.value-list-value">Value</mat-label>
+                <input matInput
+                       tmAutoFocus
+                       placeholder="Value"
+                       i18n-placeholder="@@admin-core.form.value-list-value"
+                       formControlName="value"
+                />
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label i18n="@@admin-core.form.value-list-label">Label</mat-label>
+                <input matInput
+                       placeholder="Label"
+                       i18n-placeholder="@@admin-core.form.label-list-label"
+                       formControlName="label"
+                />
+              </mat-form-field>
+              <button mat-icon-button class="delete-btn" (click)="removeValue(i)">
+                <mat-icon svgIcon="trash_filled"></mat-icon>
+              </button>
+            </div>
+          }
+        </ng-container>
+        <button mat-flat-button color="primary" class="add-btn" (click)="addValue()">
+          <mat-icon svgIcon="plus"></mat-icon>
+          <ng-container i18n="@@admin-core.form.add-choice">Add choice</ng-container>
+        </button>
+      </div>
+      <div class="form-control">
+        <mat-checkbox color="primary" formControlName="uniqueValuesAsOptions" i18n="@@admin-core.form.unique-values-as-options">Use unique values from this column as options</mat-checkbox>
+      </div>
+      <div class="form-control">
+        <mat-checkbox color="primary" formControlName="allowFreeInput" i18n="@@admin-core.form.allow-free-input">Allow the user to enter custom input</mat-checkbox>
+      </div>
+    }
+
+    <button mat-flat-button color="warn" (click)="delete(field)" i18n="@@admin-core.form.delete-field">Delete field</button>
+  </form>
+
+}

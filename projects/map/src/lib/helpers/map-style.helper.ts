@@ -130,7 +130,7 @@ export class MapStyleHelper {
       italic ? 'italic' : undefined,
       bold ? 'bold' : undefined,
       '8px',
-      'Inter, sans-serif',
+      'Inter, "Lucida Sans Unicode", "Lucida Grande", sans-serif',
     ].filter(Boolean).join(' ');
 
     const showSelectionRectangle = styleConfig.isSelected && !!styleConfig.pointType;

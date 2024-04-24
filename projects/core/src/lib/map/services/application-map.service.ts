@@ -10,10 +10,10 @@ import { ArrayHelper } from '@tailormap-viewer/shared';
 import { selectMapOptions, selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersWithServices, select3Dlayers } from '../state/map.selectors';
 import { ExtendedAppLayerModel } from '../models';
 import { selectCQLFilters } from '../../filter/state/filter.selectors';
-import { ApplicationMapBookmarkService } from './application-map-bookmark.service';
 import { withLatestFrom } from 'rxjs/operators';
-import { BookmarkService } from '../../bookmark/bookmark.service';
-import { MapBookmarkHelper } from '../bookmark/bookmark.helper';
+import { BookmarkService } from '../../services/bookmark/bookmark.service';
+import { MapBookmarkHelper } from '../../services/application-bookmark/bookmark.helper';
+import { ApplicationBookmarkFragments } from '../../services/application-bookmark/application-bookmark-fragments';
 import { selectEnable3D } from '../../state/core.selectors';
 
 @Injectable({
@@ -28,7 +28,6 @@ export class ApplicationMapService implements OnDestroy {
     private mapService: MapService,
     private httpClient: HttpClient,
     private bookmarkService: BookmarkService,
-    private applicationMapBookmarkService: ApplicationMapBookmarkService,
   ) {
     const isValidLayer = (layer: LayerModel | null): layer is LayerModel => layer !== null;
     this.store$.select(selectMapOptions)
@@ -43,7 +42,7 @@ export class ApplicationMapService implements OnDestroy {
             ArrayHelper.arrayEquals(prev.initialExtent, curr.initialExtent) &&
             ArrayHelper.arrayEquals(prev.maxExtent, curr.maxExtent);
         }),
-        withLatestFrom(this.bookmarkService.registerFragment$(ApplicationMapBookmarkService.LOCATION_BOOKMARK_DESCRIPTOR)),
+        withLatestFrom(this.bookmarkService.registerFragment$(ApplicationBookmarkFragments.LOCATION_BOOKMARK_DESCRIPTOR)),
       )
       .subscribe(([ mapOptions, locationBookmark ]) => {
         if (mapOptions === null) {
@@ -173,6 +172,8 @@ export class ApplicationMapService implements OnDestroy {
         hiDpiSubstituteUrl: extendedAppLayer.hiDpiSubstituteLayer,
         minZoom: extendedAppLayer.minZoom,
         maxZoom: extendedAppLayer.maxZoom,
+        tileSize: extendedAppLayer.tileSize,
+        tileGridExtent: extendedAppLayer.tileGridExtent,
       };
       return of(layer);
     }

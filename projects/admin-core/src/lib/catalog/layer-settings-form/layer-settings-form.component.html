@@ -31,25 +31,8 @@
                                       [layerName]="layerName"
                                       (featureTypeSelected)="updateFeatureTypeSelection($event)"></tm-admin-feature-type-selector>
     </div>
-    <mat-expansion-panel *ngIf="isXYZ">
-      <mat-expansion-panel-header>
-        <mat-panel-title i18n="@@admin-core.catalog.xyz-tile-grid-options" style="flex-grow: 1">XYZ tile grid options</mat-panel-title>
-      </mat-expansion-panel-header>
-<!--
-      TODO: for XYZ layers we don't load capabilities so the projection should be entered by the user. But the admin does not restrict
-      layers to be used in an application by its' projection yet.
-      If that is added we'd need server side code to set the projection configured here from layer settings in the layer capabilities,
-      could be in GeoServiceValidator.setXyzCapabilities()
--->
-<!--      <mat-form-field>
-        <mat-label i18n>Projection</mat-label>
-        <mat-select formControlName="xyzCrs" placeholder="Projection" i18n-placeholder>
-          <mat-option *ngFor="let projection of projections" [value]="projection.code">
-            {{ projection.label }}
-          </mat-option>
-        </mat-select>
-        <mat-hint>Default: EPSG:3857 (web mercator)</mat-hint>
-      </mat-form-field>-->
+    <div class="form-control" *ngIf="isXYZ">
+      <strong i18n="@@admin-core.catalog.xyz-tile-grid-options">XYZ tile grid options</strong>
       <mat-form-field>
         <mat-label i18n="@@admin-core.catalog.max-zoom-level">Maximum zoom level</mat-label>
         <input matInput type="number" formControlName="maxZoom" autocomplete="off" />
@@ -60,7 +43,18 @@
         <input matInput type="number" formControlName="minZoom" autocomplete="off" />
         <mat-hint i18n="@@admin-core.catalog.default-hint">Default: {{0}}</mat-hint>
       </mat-form-field>
-    </mat-expansion-panel>
+      <mat-form-field>
+        <mat-label i18n="@@admin-core.catalog.tileSize">Tile size</mat-label>
+        <input matInput type="number" formControlName="tileSize" autocomplete="off" />
+        <mat-hint i18n="@@admin-core.catalog.default-hint">Default: {{256}}</mat-hint>
+      </mat-form-field>
+      <div class="bounds-control">
+        <tm-admin-bounds-form-field formControlName="tileGridExtent"
+                                    i18n-label="@@admin-core.catalog.xyz-tile-grid-extent"
+                                    [projection]="xyzProjection$ | async"
+                                    label="XYZ tile grid extent"></tm-admin-bounds-form-field>
+      </div>
+    </div>
     <div class="toggle-control">
       <strong  i18n="@@admin-core.catalog.hi-dpi-settings">High-DPI settings</strong>
       <tm-admin-tri-state-boolean formControlName="hiDpiEnabled"></tm-admin-tri-state-boolean>
@@ -76,9 +70,9 @@
       </mat-form-field>
       <mat-form-field>
         <mat-label i18n="@@admin-core.catalog.hi-dpi-substitute-layer">High-DPI substitute layer</mat-label>
-        <mat-select formControlName="hiDpiSubstituteLayer">
+        <mat-select formControlName="hiDpiSubstituteLayer" panelClass="wide-select">
           <mat-option [value]="null"></mat-option>
-          <mat-option *ngFor="let layer of layers$ | async" [value]="layer.name">
+          <mat-option *ngFor="let layer of layers$ | async" [value]="layer.name" [tmTooltip]="layer.title">
             {{ layer.name }} ({{layer.title}})
           </mat-option>
         </mat-select>

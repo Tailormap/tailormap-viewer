@@ -1,7 +1,7 @@
 import * as MapActions from './map.actions';
 import { Action, createReducer, on } from '@ngrx/store';
 import { MapState, initialMapState } from './map.state';
-import { ChangePositionHelper, LoadingStateEnum, StateHelper } from '@tailormap-viewer/shared';
+import { ChangePositionHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
 import { LayerTreeNodeHelper } from '../helpers/layer-tree-node.helper';
 import { LayerModelHelper } from '../helpers/layer-model.helper';
 
@@ -40,12 +40,12 @@ const onSetLayerVisibility = (state: MapState, payload: ReturnType<typeof MapAct
   ...state,
   layers: state.layers.map(layer => {
     const updated = payload.visibility.find(v => v.id === layer.id);
-    const visible = updated
-      ? updated.checked
-      : layer.visible;
+    if (!updated) {
+      return layer;
+    }
     return {
       ...layer,
-      visible,
+      visible: updated.checked,
     };
   }),
 });
@@ -177,10 +177,16 @@ const onSetSelectedBackgroundNodeId = (state: MapState, payload: ReturnType<type
 
 const onSetLayerOpacity = (state: MapState, payload: ReturnType<typeof MapActions.setLayerOpacity>): MapState => ({
   ...state,
-  layers: StateHelper.updateArrayItemInState(state.layers, l => l.id === payload.layerId, layer => ({
-    ...layer,
-    opacity: payload.opacity,
-  })),
+  layers: state.layers.map(layer => {
+    const updated = payload.opacity.find(v => v.id === layer.id);
+    if (!updated) {
+      return layer;
+    }
+    return {
+      ...layer,
+      opacity: updated.opacity,
+    };
+  }),
 });
 
 const onAddLayerDetails = (
@@ -192,6 +198,14 @@ const onAddLayerDetails = (
     ...state.layerDetails,
     payload.layerDetails,
   ],
+});
+
+const onUpdateLayerTreeNodes = (
+  state: MapState,
+  payload: ReturnType<typeof MapActions.updateLayerTreeNodes>,
+): MapState => ({
+  ...state,
+  layerTreeNodes: payload.layerTreeNodes,
 });
 
 const mapReducerImpl = createReducer<MapState>(
@@ -211,5 +225,6 @@ const mapReducerImpl = createReducer<MapState>(
   on(MapActions.setSelectedBackgroundNodeId, onSetSelectedBackgroundNodeId),
   on(MapActions.setLayerOpacity, onSetLayerOpacity),
   on(MapActions.addLayerDetails, onAddLayerDetails),
+  on(MapActions.updateLayerTreeNodes, onUpdateLayerTreeNodes),
 );
 export const mapReducer = (state: MapState | undefined, action: Action) => mapReducerImpl(state, action);

@@ -7,8 +7,8 @@ import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-lay
 import { GeoServiceLayerSettingsModel } from '../models/geo-service-layer-settings.model';
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
-import { LayerSettingsModel } from '@tailormap-admin/admin-api';
 import { CatalogFilterHelper } from '../helpers/catalog-filter.helper';
+import { ExtendedGeoServiceAndLayerModel } from '../models/extended-geo-service-and-layer.model';
 
 const selectCatalogState = createFeatureSelector<CatalogState>(catalogStateKey);
 
@@ -55,6 +55,15 @@ export const selectFeatureSourceById = (id: string) => createSelector(
 export const selectFeatureTypeById = (id: string) => createSelector(
   selectFeatureTypes,
   (featureTypes): ExtendedFeatureTypeModel | null => featureTypes.find(featureType => featureType.id === id) || null,
+);
+
+export const selectFeatureTypeBySourceIdAndName = (featureSourceId: string, featureTypeName: string) => createSelector(
+  selectFeatureTypes,
+  (featureTypes): ExtendedFeatureTypeModel | null => {
+    return featureTypes.find(featureType => {
+      return featureType.featureSourceId === featureSourceId && featureType.name === featureTypeName;
+    }) || null;
+  },
 );
 
 export const selectFeatureTypesForSource = (featureSourceId: string) => createSelector(
@@ -133,7 +142,7 @@ export const selectCatalogTree = createSelector(
 export const selectGeoServiceAndLayerByName = (serviceId: string, layerName: string) => createSelector(
   selectGeoServiceById(serviceId),
   selectGeoServiceLayers,
-  (service, layers): { service: ExtendedGeoServiceModel; layer: ExtendedGeoServiceLayerModel; layerSettings: LayerSettingsModel | null } | null => {
+  (service, layers): ExtendedGeoServiceAndLayerModel | null => {
     if (!service) {
       return null;
     }
@@ -142,6 +151,10 @@ export const selectGeoServiceAndLayerByName = (serviceId: string, layerName: str
       return null;
     }
     const layerSettings = (service.settings?.layerSettings || {})[layerName] || null;
-    return { service, layer, layerSettings };
+    const fullTitle = [layer.title];
+    if (layer.title !== layer.name) {
+      fullTitle.push(`(${layer.name})`);
+    }
+    return { service, fullLayerName: fullTitle.join(' '), layer, layerSettings };
   },
 );

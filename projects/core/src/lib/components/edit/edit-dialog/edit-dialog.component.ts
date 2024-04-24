@@ -15,7 +15,7 @@ import {
   editNewlyCreatedFeature,
   expandCollapseEditDialog, hideEditDialog,  updateEditFeature,
 } from '../state/edit.actions';
-import { FeatureModelAttributes } from '@tailormap-viewer/api';
+import { FeatureModelAttributes, UniqueValuesService } from '@tailormap-viewer/api';
 import { ApplicationLayerService } from '../../../map/services/application-layer.service';
 import { FeatureWithMetadataModel } from '../models/feature-with-metadata.model';
 import { EditFeatureService } from '../services/edit-feature.service';
@@ -52,6 +52,8 @@ export class EditDialogComponent {
 
   public formValid: boolean = false;
 
+  private clearCacheValuesAfterSave = new Set<string>();
+
   constructor(
     private store$: Store,
     private editMapToolService: EditMapToolService,
@@ -61,6 +63,7 @@ export class EditDialogComponent {
     private mapService: MapService,
     private confirmService: ConfirmDialogService,
     private layoutService: ViewerLayoutService,
+    private uniqueValuesService: UniqueValuesService,
     private cdr: ChangeDetectorRef,
   ) {
     this.dialogOpen$ = this.store$.select(selectEditDialogVisible);
@@ -115,6 +118,7 @@ export class EditDialogComponent {
       this.mapService.refreshLayer(`${refreshLayerId}`);
       this.geometryEditedForLayer = null;
     }
+    this.clearCacheValuesAfterSave = new Set();
   }
 
   private setAttributeUpdated(attribute: string, value: any) {
@@ -137,6 +141,7 @@ export class EditDialogComponent {
     if (!updatedFeature) {
       return;
     }
+    this.uniqueValuesService.clearCaches(Array.from(this.clearCacheValuesAfterSave));
     this.store$.select(selectViewerId)
       .pipe(
         take(1),
@@ -248,4 +253,9 @@ export class EditDialogComponent {
         }
       });
   }
+
+  public clearUniqueValuesCacheAfterSave(uniqueValueCacheKey: string) {
+    this.clearCacheValuesAfterSave.add(uniqueValueCacheKey);
+  }
+
 }

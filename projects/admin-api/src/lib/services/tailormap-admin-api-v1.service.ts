@@ -5,7 +5,7 @@ import { map, Observable } from 'rxjs';
 import {
   CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel, ConfigModel,
   OIDCConfigurationModel, FeatureTypeModel,
-  GeoServiceSummaryWithLayersModel, FeatureSourceSummaryWithFeatureTypesModel,
+  GeoServiceSummaryWithLayersModel, FeatureSourceSummaryWithFeatureTypesModel, FormSummaryModel, FormModel,
 } from '../models';
 import { CatalogModelHelper } from '../helpers/catalog-model.helper';
 import { TailormapApiConstants } from '@tailormap-viewer/api';
@@ -248,7 +248,6 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
     return this.httpClient.patch<ConfigModel>(`${TailormapAdminApiV1Service.BASE_URL}/configs/${params.config.key}`, params.config);
   }
 
-
   public getOIDCConfigurations$(): Observable<OIDCConfigurationModel[]> {
     return this.httpClient.get<{ _embedded: { 'oidc-configurations': OIDCConfigurationModel[] }}>(`${TailormapAdminApiV1Service.BASE_URL}/oidc-configurations?size=1000&sort=id`)
       .pipe(map(response => response._embedded['oidc-configurations']));
@@ -264,6 +263,31 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
 
   public deleteOIDCConfiguration$(id: number): Observable<boolean> {
     return this.httpClient.delete<boolean>(`${TailormapAdminApiV1Service.BASE_URL}/oidc-configurations/${id}`, {
+      observe: 'response',
+    }).pipe(
+      map(response => response.status === 204),
+    );
+  }
+
+  public getForms$(): Observable<FormSummaryModel[]> {
+    return this.httpClient.get<{ _embedded: { 'forms': FormSummaryModel[] }}>(`${TailormapAdminApiV1Service.BASE_URL}/forms?projection=summary&size=1000`)
+      .pipe(map(response => response._embedded['forms']));
+  }
+
+  public getForm$(id: number): Observable<FormModel> {
+    return this.httpClient.get<FormModel>(`${TailormapAdminApiV1Service.BASE_URL}/forms/${id}`);
+  }
+
+  public createForm$(params: { form: Omit<FormModel, 'id'> }): Observable<FormModel> {
+    return this.httpClient.post<FormModel>(`${TailormapAdminApiV1Service.BASE_URL}/forms`, params.form);
+  }
+
+  public updateForm$(params: { id: number; form: Partial<FormModel> }): Observable<FormModel> {
+    return this.httpClient.patch<FormModel>(`${TailormapAdminApiV1Service.BASE_URL}/forms/${params.id}`, params.form);
+  }
+
+  public deleteForm$(id: number): Observable<boolean> {
+    return this.httpClient.delete<boolean>(`${TailormapAdminApiV1Service.BASE_URL}/forms/${id}`, {
       observe: 'response',
     }).pipe(
       map(response => response.status === 204),

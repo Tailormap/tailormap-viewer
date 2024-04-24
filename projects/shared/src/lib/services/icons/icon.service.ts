@@ -27,11 +27,11 @@ export class IconService {
       icons: [
         'cursor', 'measure_area', 'measure_length', 'position', 'push_pin', 'measure_length_outline', 'measure_area_outline',
         'draw_point', 'draw_line', 'draw_polygon', 'draw_circle', 'draw_label', 'draw_ellipse', 'draw_rectangle', 'draw_square', 'draw_star',
-        'streetview',
+        'streetview', 'share',
       ],
     },
     { folder: 'style', icons: [ 'bold', 'italic' ] },
-    { folder: 'languages', icons: [ 'gb', 'nl' ] },
+    { folder: 'languages', icons: [ 'gb', 'nl', 'de' ] },
   ];
 
   constructor(

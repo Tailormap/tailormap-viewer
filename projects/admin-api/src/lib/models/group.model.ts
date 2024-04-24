@@ -4,4 +4,5 @@ export interface GroupModel {
   notes?: string | null;
   systemGroup?: boolean;
   version?: number | null;
+  additionalProperties?: Record<string, string | number | boolean> | null;
 }

@@ -21,3 +21,8 @@ mat-slide-toggle + mat-slide-toggle {
 .margin-btm {
   margin-bottom: 8px;
 }
+
+.bounds-control ::ng-deep .label {
+  font-weight: bold;
+  margin-top: 16px;
+}

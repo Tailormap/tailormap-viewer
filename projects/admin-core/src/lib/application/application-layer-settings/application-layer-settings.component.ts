@@ -1,10 +1,13 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { AppLayerSettingsModel, AppTreeLayerNodeModel } from '@tailormap-admin/admin-api';
+import { AppLayerSettingsModel, AppTreeLayerNodeModel, FeatureTypeModel, FormModel, FormSummaryModel } from '@tailormap-admin/admin-api';
 import { Store } from '@ngrx/store';
 import { selectSelectedApplicationLayerSettings } from '../state/application.selectors';
-import { concatMap, debounceTime, map, Observable, of, Subject, switchMap, take, takeUntil } from 'rxjs';
+import {
+  BehaviorSubject, combineLatest, concatMap, debounceTime, distinctUntilChanged, map, Observable, of, startWith, Subject, switchMap, take,
+  takeUntil,
+} from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
-import { TreeModel } from '@tailormap-viewer/shared';
+import { LoadingStateEnum, TreeModel } from '@tailormap-viewer/shared';
 import { ExtendedGeoServiceModel } from '../../catalog/models/extended-geo-service.model';
 import { ExtendedGeoServiceLayerModel } from '../../catalog/models/extended-geo-service-layer.model';
 import { ExtendedGeoServiceAndLayerModel } from '../../catalog/models/extended-geo-service-and-layer.model';
@@ -23,6 +26,9 @@ import {
 import { ExtendedFeatureSourceModel } from '../../catalog/models/extended-feature-source.model';
 import { FeatureSourceService } from '../../catalog/services/feature-source.service';
 import { GeoServiceService } from '../../catalog/services/geo-service.service';
+import { selectFormsForFeatureType, selectFormsLoadStatus } from '../../form/state/form.selectors';
+import { loadForms } from '../../form/state/form.actions';
+import { FormService } from '../../form/services/form.service';
 
 type FeatureSourceAndType = {
   featureSource: ExtendedFeatureSourceModel;
@@ -41,11 +47,12 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
   private _serviceLayer: ExtendedGeoServiceAndLayerModel | null = null;
 
   private destroyed = new Subject();
+
+  private layerSettingsSubject = new BehaviorSubject<Record<string, AppLayerSettingsModel>>({});
   private layerSettings: Record<string, AppLayerSettingsModel> = {};
 
   // eslint-disable-next-line max-len
   private editingDisabledTooltip = $localize `:@@admin-core.application.layer-not-editable:This layer cannot be edited because there is no writeable feature source / type configured for this layer`;
-  public editableTooltip = this.editingDisabledTooltip;
 
   public layerTitle = '';
 
@@ -69,7 +76,14 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     return this._serviceLayer;
   }
 
-  public featureSourceAndType$: Observable<FeatureSourceAndType | null> = of(null);
+  private featureSourceAndTypeSubject$ = new BehaviorSubject<FeatureSourceAndType | null>(null);
+  public featureSourceAndType$ = this.featureSourceAndTypeSubject$.asObservable();
+
+  private selectableFormsSubject$ = new BehaviorSubject<FormSummaryModel[]>([]);
+  public selectableForms$ = this.selectableFormsSubject$.asObservable();
+
+  public editableTooltipSubject$ = new BehaviorSubject(this.editingDisabledTooltip);
+  public editableTooltip$ = this.editableTooltipSubject$.asObservable();
 
   @Output()
   public layerSettingsChange = new EventEmitter<{ nodeId: string; settings: AppLayerSettingsModel | null }>();
@@ -80,7 +94,10 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     attribution: new FormControl<string | null>(null),
     description: new FormControl<string | null>(null),
     editable: new FormControl<boolean>(false),
+    formId: new FormControl<number | null>(null),
   });
+
+  public formWarningMessageData$: Observable<{ featureType: FeatureTypeModel; layerSetting: AppLayerSettingsModel; form: FormModel } | null> = of(null);
 
   constructor(
     private store$: Store,
@@ -88,6 +105,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     private adminSnackbarService: AdminSnackbarService,
     private geoServiceService: GeoServiceService,
     private featureSourceService: FeatureSourceService,
+    private formService: FormService,
   ) { }
 
   public ngOnInit(): void {
@@ -95,6 +113,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyed))
       .subscribe(layerSettings => {
         this.layerSettings = layerSettings;
+        this.layerSettingsSubject.next(layerSettings);
         this.initForm(this.node);
       });
 
@@ -113,9 +132,78 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
           attribution: value.attribution,
           description: value.description,
           editable: value.editable ?? undefined,
+          formId: value.formId ?? null,
         };
         this.layerSettingsChange.emit({ nodeId: this.node.id, settings });
       });
+
+    this.store$.select(selectFormsLoadStatus)
+      .pipe(take(1))
+      .subscribe(loadStatus => {
+        if (loadStatus === LoadingStateEnum.INITIAL || loadStatus === LoadingStateEnum.FAILED) {
+          this.store$.dispatch(loadForms());
+        }
+      });
+
+    this.featureSourceAndType$
+      .pipe(takeUntil(this.destroyed))
+      .subscribe((fs) => {
+        this.toggleEditableEnabled(fs?.featureType?.writeable);
+      });
+
+    this.featureSourceAndType$
+      .pipe(
+        takeUntil(this.destroyed),
+        switchMap(fs => {
+          return !fs
+            ? of([])
+            : this.store$.select(selectFormsForFeatureType(fs.featureSource.id, fs.featureType?.name));
+        }),
+      )
+      .subscribe(forms => {
+        this.selectableFormsSubject$.next(forms);
+      });
+
+    const formIdControl = this.layerSettingsForm.get('formId');
+    if (formIdControl) {
+      const selectedForm$ = formIdControl.valueChanges.pipe(
+        startWith(''),
+        distinctUntilChanged(),
+        switchMap(formId => {
+          const id = formId || this.layerSettings[this.node?.id || '']?.formId;
+          if (!id) {
+            return of(null);
+          }
+          return this.formService.getForm$(+id);
+        }),
+      );
+      this.formWarningMessageData$ = combineLatest([
+        selectedForm$,
+        this.layerSettingsSubject.asObservable(),
+        this.featureSourceAndType$,
+      ])
+        .pipe(
+          switchMap(([ form, layerSettings, featureSourceType ]) => {
+            const layerSetting = layerSettings[this.node?.id || ''];
+            if (!form || !layerSetting || !featureSourceType?.featureType) {
+              return of(null);
+            }
+            return this.featureSourceService.loadFeatureType$(featureSourceType.featureType.name, featureSourceType.featureSource.id)
+              .pipe(
+                map((featureType) => {
+                  if (!featureType) {
+                    return null;
+                  }
+                  return {
+                    featureType,
+                    layerSetting,
+                    form,
+                  };
+                }),
+              );
+          }),
+        );
+    }
   }
 
   public ngOnDestroy() {
@@ -135,6 +223,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
       attribution: nodeSettings.attribution || null,
       description: nodeSettings.description || null,
       editable: nodeSettings.editable ?? false,
+      formId: nodeSettings.formId || null,
     }, { emitEvent: false });
   }
 
@@ -198,12 +287,13 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
 
   private initFeatureSource(serviceLayer: ExtendedGeoServiceAndLayerModel | null) {
     if (!serviceLayer || typeof serviceLayer.layerSettings?.featureType?.featureSourceId === "undefined") {
-      this.featureSourceAndType$ = of(null);
+      this.featureSourceAndTypeSubject$.next(null);
       return;
     }
     const featureSourceId = `${serviceLayer.layerSettings?.featureType?.featureSourceId}`;
-    this.featureSourceAndType$ = this.store$.select(selectFeatureSourceAndFeatureTypesById(featureSourceId))
+    this.store$.select(selectFeatureSourceAndFeatureTypesById(featureSourceId))
       .pipe(
+        take(1),
         map(featureSource => {
           if (!featureSource) {
             return null;
@@ -213,27 +303,20 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
             featureType: featureSource.featureTypes.find(ft => ft.name === serviceLayer.layerSettings?.featureType?.featureTypeName) || null,
           };
         }),
-      );
-    this.updateIsEditable();
-  }
-
-  private updateIsEditable() {
-    this.featureSourceAndType$
-      .pipe(take(1))
-      .subscribe((fs) => {
-        if (!fs) {
-          return;
-        }
-        this.toggleEditableEnabled(fs.featureType?.writeable);
+      )
+      .subscribe(fs => {
+        this.featureSourceAndTypeSubject$.next(fs);
       });
   }
 
   private toggleEditableEnabled(enabled?: boolean) {
-    this.editableTooltip = enabled ? '' : this.editingDisabledTooltip;
+    this.editableTooltipSubject$.next(enabled ? ' ' : this.editingDisabledTooltip);
     if (enabled) {
       this.layerSettingsForm.get('editable')?.enable({ emitEvent: false });
+      this.layerSettingsForm.get('formId')?.enable({ emitEvent: false });
     } else {
       this.layerSettingsForm.get('editable')?.disable({ emitEvent: false });
+      this.layerSettingsForm.get('formId')?.disable({ emitEvent: false });
     }
   }
 
@@ -243,7 +326,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     if (!nodeId || !featureSourceAndType?.featureType?.hasAttributes) {
       return;
     }
-    this.featureSourceService.getDraftFeatureType$(featureSourceAndType.featureType.originalId, featureSourceAndType.featureSource.id)
+    this.featureSourceService.loadFeatureType$(featureSourceAndType.featureType.name, featureSourceAndType.featureSource.id)
       .pipe(
         take(1),
         switchMap(featureType => {

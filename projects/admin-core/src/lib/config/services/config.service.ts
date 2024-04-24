@@ -55,12 +55,7 @@ export class ConfigService {
   public getConfigObject$<T>(key: string): Observable<T | null> {
     return this.getConfig$(key)
       .pipe(
-        map(c => {
-          if (c?.jsonValue && c.jsonValue.length > 0) {
-            return JSON.parse(c.jsonValue);
-          }
-          return null;
-        }),
+        map(c => c?.jsonValue as T || null),
       );
   }
 

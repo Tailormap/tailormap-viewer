@@ -1,6 +1,6 @@
 import { SecurityModel } from '@tailormap-viewer/api';
 
-export const adminCoreStateKey = 'adminCore';
+export const adminCoreStateKey = 'admin-core';
 
 export interface AdminCoreState {
   security: SecurityModel;

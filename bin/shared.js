@@ -99,12 +99,17 @@ const getPackageJson = async (project) => {
   return JSON.parse(packageJson.toString());
 };
 
+const getMainPackageJson = async () => {
+  const packageJson = await fs.readFile(path.resolve(__dirname, '../', 'package.json'));
+  return JSON.parse(packageJson.toString());
+}
+
 const getCurrentVersion = async (project) => {
   return (await getPackageJson(project)).version;
 };
 
 const updatePeerDependencies = async (project) => {
-  console.log('Updating peer dependencies of ' + project);
+  console.log('Updating peer dependencies of other projects');
   const currentVersion = await getCurrentVersion(project);
   for (const availableProject of availableProjects) {
     const packageJson = await getPackageJson(availableProject);
@@ -122,10 +127,28 @@ const updatePeerDependencies = async (project) => {
   }
 }
 
+const updateProjectPeerDependencies = async (project) => {
+  console.log('Updating peer dependencies of ' + project);
+  const mainPackageJson = await getMainPackageJson();
+  const mainDependencies = mainPackageJson.dependencies || {};
+  const packageJson = await getPackageJson(project);
+  let madeChanges = false;
+  const keys = Object.keys(packageJson.peerDependencies);
+  for (const key of keys) {
+    if (mainDependencies.hasOwnProperty(key) && packageJson.peerDependencies[key] !== mainDependencies[key]) {
+      console.log('Updating peer dependency for ' + key + ' from ' + packageJson.peerDependencies[key] + ' to ' + mainDependencies[key]);
+      packageJson.peerDependencies[key] = mainDependencies[key];
+      madeChanges = true;
+    }
+  }
+  await fs.writeFile(getPackageJsonPath(project), JSON.stringify(packageJson, null, 2));
+}
+
 const publishRelease = async (project, version, dryRun) => {
   console.log(`Publishing release for ${project}. Supplied version: ${version}. Dry-run: ${dryRun ? 'true' : 'false'}`);
   const npmVersion = version.startsWith('v') ? version.substring(1) : version;
   const versionCommand = !!version ? ['version', npmVersion] : ['version', 'patch'];
+  await updateProjectPeerDependencies(project);
   await runCommand('npm', versionCommand, path.resolve(__dirname, '../projects/', project));
   await runCommand('ng', ['build', project]);
   // note that the push url is not the same as the (anonymous) download url

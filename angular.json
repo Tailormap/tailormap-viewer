@@ -28,6 +28,13 @@
               "projects/shared/assets/locale/messages.shared.nl.xlf",
               "projects/admin-core/assets/locale/messages.admin-core.nl.xlf"
             ]
+          },
+          "de": {
+            "translation": [
+              "projects/core/assets/locale/messages.core.de.xlf",
+              "projects/shared/assets/locale/messages.shared.de.xlf",
+              "projects/admin-core/assets/locale/messages.admin-core.de.xlf"
+            ]
           }
         }
       },
@@ -91,7 +98,7 @@
           },
           "configurations": {
             "nl": {
-              "localize": ["nl"]
+              "localize": ["nl", "de"]
             },
             "production": {
               "tsConfig": "projects/app/tsconfig.prod.json",
@@ -142,6 +149,9 @@
             },
             "nl": {
               "buildTarget": "app:build:development,nl"
+            },
+            "de": {
+              "buildTarget": "app:build:development,de"
             }
           },
           "options": {

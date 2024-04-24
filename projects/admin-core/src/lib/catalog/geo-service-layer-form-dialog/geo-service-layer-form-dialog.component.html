@@ -6,6 +6,7 @@
     <tm-admin-layer-settings-form [layerSettings]="geoServiceSettings.settings"
                                   [protocol]="geoServiceSettings.protocol"
                                   [layerName]="geoServiceSettings.layerName"
+                                  [serviceId]="geoServiceSettings.serviceId"
                                   [isLayerSpecific]="true"
                                   (changed)="updateLayerSettings($event)"></tm-admin-layer-settings-form>
   </mat-dialog-content>

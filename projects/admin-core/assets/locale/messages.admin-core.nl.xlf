@@ -9,6 +9,10 @@
         <source>Add sub folder</source>
         <target>Submap toevoegen</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.application" datatype="html">
+        <source>Application</source>
+        <target state="new">Applicatie</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.application-created" datatype="html">
         <source>Application <x id="PH" equiv-text="createdApplication.title || createdApplication.name"/> created</source>
         <target>Applicatie <x id="PH" equiv-text="createdApplication.title || createdApplication.name"/> is gemaakt</target>
@@ -53,6 +57,10 @@
         <source>Edit</source>
         <target>Objecten-editor</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.component-feature-info" datatype="html">
+        <source>Feature info</source>
+        <target state="new">Objectinformatie</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.component-filter" datatype="html">
         <source>Filter</source>
         <target>Filter</target>
@@ -68,6 +76,10 @@
       <trans-unit id="admin-core.application.component-print" datatype="html">
         <source>Print</source>
         <target>Afdrukken</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.component-share-viewer" datatype="html">
+        <source>Share viewer</source>
+        <target state="new">Viewer delen</target>
       </trans-unit>
       <trans-unit id="admin-core.application.component-streetview-tool" datatype="html">
         <source>Streetview tool</source>
@@ -201,6 +213,14 @@
         <source>No default language</source>
         <target>Geen standaardtaal</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.no-form" datatype="html">
+        <source>No form</source>
+        <target state="new">Geen formulier</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.no-forms-for-feature-type" datatype="html">
+        <source>There are no forms for this feature type</source>
+        <target state="new">Er zijn geen formulieren voor dit feature type</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.non-unique-name-error" datatype="html">
         <source>Name should be unique.</source>
         <target state="new">Naam moet uniek zijn.</target>
@@ -228,6 +248,10 @@
       <trans-unit id="admin-core.application.remove-layer" datatype="html">
         <source>Remove layer from application</source>
         <target>Laag verwijderen uit de applicatie</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.select-form" datatype="html">
+        <source>Select (optional) form</source>
+        <target state="new">Select (optional) form</target>
       </trans-unit>
       <trans-unit id="admin-core.application.service-updated" datatype="html">
         <source>Service <x id="PH" equiv-text="updatedService.title"/> updated</source>
@@ -523,7 +547,7 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.filter-catalog" datatype="html">
         <source>Filter Catalog</source>
-        <target state="new">Filter Catalogus</target>
+        <target state="new">Catalogus filteren</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.folder-created" datatype="html">
         <source>Folder <x id="PH" equiv-text="node.title"/> created</source>
@@ -717,6 +741,10 @@
         <source>Technical name: <x id="INTERPOLATION" equiv-text="{{ featureType.name }}"/></source>
         <target state="new">Technische naam: <x id="INTERPOLATION" equiv-text="{{ featureType.name }}"/></target>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.tileSize" datatype="html">
+        <source>Tile size</source>
+        <target state="new">Tile grootte</target>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.tiling-gutter" datatype="html">
         <source>Tiling gutter</source>
         <target>Tiling gutter</target>
@@ -728,6 +756,10 @@
       <trans-unit id="admin-core.catalog.use-tiling" datatype="html">
         <source>Use tiling</source>
         <target>Gebruik tiling</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.xyz-tile-grid-extent" datatype="html">
+        <source>XYZ tile grid extent</source>
+        <target state="new">Omvang van het XYZ tegelraster</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.xyz-tile-grid-options" datatype="html">
         <source>XYZ tile grid options</source>
@@ -752,6 +784,10 @@
       <trans-unit id="admin-core.common.bounds" datatype="html">
         <source>Bounds</source>
         <target>Grenzen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.common.bounds-hint" datatype="html">
+        <source>You can paste a comma-separated list or &lt;BoundingBox minx=&quot;&quot; miny=.../&gt; string from capabilities in one of the fields for setting the extent</source>
+        <target state="new">U kunt hier een komma gescheiden lijst of &lt;BoundingBox minx=&quot;&quot; miny=.../&gt; vanuit de capabilities in één van de velden plakken om de extent te zetten</target>
       </trans-unit>
       <trans-unit id="admin-core.common.cancel" datatype="html">
         <source>Cancel</source>
@@ -805,6 +841,10 @@
         <source>Filter...</source>
         <target>Filteren...</target>
       </trans-unit>
+      <trans-unit id="admin-core.common.forms-title" datatype="html">
+        <source>Forms</source>
+        <target state="new">Formulieren</target>
+      </trans-unit>
       <trans-unit id="admin-core.common.geo-service" datatype="html">
         <source>Geo service</source>
         <target>Geo service</target>
@@ -820,6 +860,10 @@
       <trans-unit id="admin-core.common.hide-password" datatype="html">
         <source>Hide password</source>
         <target>Wachtwoord verbergen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.common.label" datatype="html">
+        <source>Label</source>
+        <target state="new">Label</target>
       </trans-unit>
       <trans-unit id="admin-core.common.login" datatype="html">
         <source>Login</source>
@@ -925,6 +969,166 @@
         <source>Feature type settings updated</source>
         <target>Feature type instellingen aangepast</target>
       </trans-unit>
+      <trans-unit id="admin-core.form.add-choice" datatype="html">
+        <source>Add choice</source>
+        <target state="new">Keuze toevoegen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.add-form" datatype="html">
+        <source>Add form</source>
+        <target state="new">Formulier toevoegen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.allow-free-input" datatype="html">
+        <source>Allow the user to enter custom input</source>
+        <target state="new">Laat de gebruiker ook eigen tekst invullen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.create-form" datatype="html">
+        <source>Create form</source>
+        <target state="new">Formulier maken</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.delete-field" datatype="html">
+        <source>Delete field</source>
+        <target state="new">Verwijder veld</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.delete-form" datatype="html">
+        <source>Delete form <x id="PH" equiv-text="title"/></source>
+        <target state="new">Verwijder formulier <x id="PH" equiv-text="title"/></target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.delete-form-message" datatype="html">
+        <source>Are you sure you want to delete form <x id="PH" equiv-text="title"/>? This action cannot be undone.</source>
+        <target state="new">Weet u zeker dat u formulier <x id="PH" equiv-text="title"/> wilt verwijderen? Dit kan niet ongedaan worden gemaakt.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.edit" datatype="html">
+        <source>Edit <x id="INTERPOLATION" equiv-text="{{ form.name }}"/></source>
+        <target state="new">Bewerk <x id="INTERPOLATION" equiv-text="{{ form.name }}"/></target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.error-creating-form" datatype="html">
+        <source>Error while creating form.</source>
+        <target state="new">Fout bij het aanmaken van het formulier.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.error-deleting-form" datatype="html">
+        <source>Error while deleting form.</source>
+        <target state="new">Fout bij het verwijderen van het formulier.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.error-loading-form" datatype="html">
+        <source>Error while loading form</source>
+        <target state="new">Fout bij het laden van het formulier</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.error-loading-forms" datatype="html">
+        <source>Error while loading list of forms</source>
+        <target state="new">Fout bij het laden van de lijst met formulieren</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.error-updating-form" datatype="html">
+        <source>Error while updating form.</source>
+        <target state="new">Fout bij het aanpassen van het formulier.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.feature-source" datatype="html">
+        <source>Feature source and type</source>
+        <target state="new">Feature source and type</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.field-type-boolean" datatype="html">
+        <source>Checkbox field</source>
+        <target state="new">Vinkvak</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.field-type-date" datatype="html">
+        <source>Date field</source>
+        <target state="new">Datum veld</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.field-type-integer" datatype="html">
+        <source>Integer field</source>
+        <target state="new">Integer veld</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.field-type-number" datatype="html">
+        <source>Number field</source>
+        <target state="new">Numeriek veld</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.field-type-select" datatype="html">
+        <source>Choice list</source>
+        <target state="new">Keuzelijst</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.field-type-text" datatype="html">
+        <source>Text field</source>
+        <target state="new">Tekstveld</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.field-type-textarea" datatype="html">
+        <source>Textarea field</source>
+        <target state="new">Tekstvlak veld</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.field-type-timestamp" datatype="html">
+        <source>Timestamp field</source>
+        <target state="new">Timestamp veld</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.filter-attributes" datatype="html">
+        <source>Filter attributes</source>
+        <target state="new">Filter attributen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.filter-fields" datatype="html">
+        <source>Filter fields</source>
+        <target state="new">Filter velden</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.filter-forms" datatype="html">
+        <source>Filter forms</source>
+        <target state="new">Filter formulieren</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.form-created" datatype="html">
+        <source>Form <x id="PH" equiv-text="createdForm.name"/> created</source>
+        <target state="new">Form <x id="PH" equiv-text="createdForm.name"/> aangemaakt</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.form-fields-unavailable" datatype="html">
+        <source>The following fields are disabled / disabled for editing in the feature type. These will not be visible in the viewer. First enable them for editing to make sure they are visible in the viewer.</source>
+        <target state="new">De volgende velden zijn uitgeschakeld / uitgeschakeld voor bewerken in het feature type. Deze zullen niet zichtbaar zijn in de viewer. Schakel deze attributen in voor bewerken om ze zichtbaar te maken in de viewer.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.form-fields-unavailable-application" datatype="html">
+        <source>In the selected form the following fields are disabled / disabled for editing in the feature type or application layer settings. These will not be visible in the viewer. First enable them for editing to make sure they are visible in the viewer.</source>
+        <target state="new">In het geselecteerde formulier zijn de volgende velden uitgeschakeld / uitgeschakeld voor bewerken in het feature type of de applicatielaag-instellingen. Deze zullen niet zichtbaar zijn in de viewer. Schakel deze attributen in voor bewerken om ze zichtbaar te maken in de viewer.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.form-removed" datatype="html">
+        <source>Form <x id="PH" equiv-text="title"/> removed</source>
+        <target state="new">Form <x id="PH" equiv-text="title"/> verwijderd</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.form-updated" datatype="html">
+        <source>Form updated</source>
+        <target state="new">Form aangepast</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.forms" datatype="html">
+        <source>Forms</source>
+        <target state="new">Formulieren</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.label-list-label" datatype="html">
+        <source>Label</source>
+        <target state="new">Label</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.required-field" datatype="html">
+        <source>Required field</source>
+        <target state="new">Verplicht veld</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.unique-values-as-options" datatype="html">
+        <source>Use unique values from this column as options</source>
+        <target state="new">Gebruik de unieke waarden uit deze kolom als opties</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.value-list-label" datatype="html">
+        <source>Label</source>
+        <target state="new">Label</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.value-list-value" datatype="html">
+        <source>Value</source>
+        <target state="new">Waarde</target>
+      </trans-unit>
+      <trans-unit id="admin-core.forms.available-attributes" datatype="html">
+        <source>Available attributes</source>
+        <target state="new">Beschikbare attributen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.forms.edit-form-field" datatype="html">
+        <source>Edit form field <x id="INTERPOLATION" equiv-text="{{field.name}}"/></source>
+        <target state="new">Bewerk formulier veld <x id="INTERPOLATION" equiv-text="{{field.name}}"/></target>
+      </trans-unit>
+      <trans-unit id="admin-core.forms.form-fields" datatype="html">
+        <source>Form fields</source>
+        <target state="new">Formulier velden</target>
+      </trans-unit>
+      <trans-unit id="admin-core.forms.forms" datatype="html">
+        <source>Forms</source>
+        <target state="new">Formulieren</target>
+      </trans-unit>
       <trans-unit id="admin-core.groups.add-group" datatype="html">
         <source>Add group</source>
         <target>Groep toevoegen</target>
@@ -989,6 +1193,10 @@
         <source>Catalog</source>
         <target>Catalogus</target>
       </trans-unit>
+      <trans-unit id="admin-core.navigation.forms" datatype="html">
+        <source>Forms</source>
+        <target state="new">Formulieren</target>
+      </trans-unit>
       <trans-unit id="admin-core.navigation.groups" datatype="html">
         <source>Groups</source>
         <target>Groepen</target>
@@ -1002,8 +1210,8 @@
         <target>Instellingen</target>
       </trans-unit>
       <trans-unit id="admin-core.navigation.single-sign-on" datatype="html">
-        <source>Single-sign on</source>
-        <target>Single-sign on</target>
+        <source>Single sign-on</source>
+        <target>Single sign-on</target>
       </trans-unit>
       <trans-unit id="admin-core.navigation.users" datatype="html">
         <source>Users</source>

@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef, OnInit, Inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { selectShowLanguageSwitcher, selectShowLoginButton, selectUserDetails } from '../../../state/core.selectors';
+import { selectShowLanguageSwitcher, selectShowLoginButton, selectUserDetails, selectUserIsAdmin } from '../../../state/core.selectors';
 import { combineLatest, map, Observable, Subject, take } from 'rxjs';
 import {
   SecurityModel, TAILORMAP_SECURITY_API_V1_SERVICE,
@@ -21,6 +21,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   public showLanguageToggle$: Observable<boolean>;
   public userDetails$: Observable<SecurityModel | null>;
+  public userIsAdmin$: Observable<boolean>;
   public showLoginButton$: Observable<boolean>;
   public icon$: Observable<string>;
 
@@ -34,6 +35,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     @Inject(TAILORMAP_SECURITY_API_V1_SERVICE) private api: TailormapSecurityApiV1ServiceModel,
   ) {
     this.userDetails$ = this.store$.select(selectUserDetails);
+    this.userIsAdmin$ = this.store$.select(selectUserIsAdmin);
     this.showLanguageToggle$ = this.store$.select(selectShowLanguageSwitcher);
     this.showLoginButton$ = this.store$.select(selectShowLoginButton);
     this.icon$ = combineLatest([
@@ -72,10 +74,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   public login() {
     this.router.navigateByUrl('/login', { state: { routeBeforeLogin: this.router.url } });
-  }
-
-  public isAdmin(userDetails: SecurityModel) {
-    return userDetails?.roles?.includes('admin') ?? false;
   }
 
   public showAbout() {

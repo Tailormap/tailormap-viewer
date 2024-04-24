@@ -1,0 +1,19 @@
+:host,
+.flex {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.form-group {
+  flex: 1;
+}
+
+mat-selection-list {
+  flex: 1;
+  overflow: auto;
+}
+
+.drag-handle {
+  float: right;
+}

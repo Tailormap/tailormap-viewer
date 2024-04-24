@@ -1,14 +1,15 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { debounceTime, map, Observable, of, Subject, takeUntil, tap } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
-import { AuthorizationRuleGroup, GeoServiceProtocolEnum, GroupModel, LayerSettingsModel } from '@tailormap-admin/admin-api';
-import { FormHelper } from '../../helpers/form.helper';
+import {
+  AuthorizationRuleGroup, GeoServiceProtocolEnum, GroupModel, LayerSettingsModel, LayerSettingsWmsModel, LayerSettingsXyzModel,
+} from '@tailormap-admin/admin-api';
+import { ComparableValuesArray, FormHelper } from '../../helpers/form.helper';
 import { TypesHelper } from '@tailormap-viewer/shared';
 import { GroupService } from '../../user/services/group.service';
 import { Store } from '@ngrx/store';
 import { selectGeoServiceById, selectGeoServiceLayersByGeoServiceId } from '../state/catalog.selectors';
-import { AdminProjectionsHelper } from '../../application/helpers/admin-projections-helper';
-import { TileLayerHiDpiModeEnum } from '@tailormap-viewer/api';
+import { BoundsModel, TileLayerHiDpiModeEnum } from '@tailormap-viewer/api';
 import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-layer.model';
 
 @Component({
@@ -46,11 +47,13 @@ export class LayerSettingsFormComponent implements OnInit {
     this._serviceId = serviceId;
 
     if (serviceId === undefined) {
-        this.geoServiceAuthorizations$ = of([]);
-        this.layers$ = of([]);
+      this.geoServiceAuthorizations$ = of([]);
+      this.layers$ = of([]);
+      this.xyzProjection$ = of('');
     } else {
-        this.geoServiceAuthorizations$ = this.store$.select(selectGeoServiceById(serviceId)).pipe(takeUntil(this.destroyed), map((settings) => settings?.authorizationRules ?? []));
-        this.layers$ = this.store$.select(selectGeoServiceLayersByGeoServiceId(serviceId)).pipe(takeUntil(this.destroyed));
+      this.geoServiceAuthorizations$ = this.store$.select(selectGeoServiceById(serviceId)).pipe(takeUntil(this.destroyed), map((settings) => settings?.authorizationRules ?? []));
+      this.layers$ = this.store$.select(selectGeoServiceLayersByGeoServiceId(serviceId)).pipe(takeUntil(this.destroyed));
+      this.xyzProjection$ = this.store$.select(selectGeoServiceById(serviceId)).pipe(takeUntil(this.destroyed), map((settings) => settings?.settings?.xyzCrs ?? ''));
     }
   }
   public get serviceId() {
@@ -79,13 +82,14 @@ export class LayerSettingsFormComponent implements OnInit {
 
   public geoServiceAuthorizations$: Observable<AuthorizationRuleGroup[]> = of([]);
   public layers$: Observable<ExtendedGeoServiceLayerModel[]> = of([]);
+  public xyzProjection$: Observable<string> = of('');
 
   public isWMS = false;
   public isWMTS = false;
   public isXYZ = false;
   public isTILESET3D = false;
   public hiDpiModes = TileLayerHiDpiModeEnum;
-  public projections = AdminProjectionsHelper.projections;
+
 
   public layerSettingsForm = new FormGroup({
     title: new FormControl('', { nonNullable: true }),
@@ -100,6 +104,8 @@ export class LayerSettingsFormComponent implements OnInit {
     hiDpiSubstituteLayer: new FormControl<string | null>(null),
     minZoom: new FormControl<number | null>(null),
     maxZoom: new FormControl<number | null>(null),
+    tileGridExtent: new FormControl<BoundsModel | null>(null),
+    tileSize: new FormControl<number | null>(null),
     authorizationRules: new FormControl<AuthorizationRuleGroup[]>([]),
   });
 
@@ -126,8 +132,6 @@ export class LayerSettingsFormComponent implements OnInit {
   private getUpdatedLayerSettings(value: Partial<typeof this.layerSettingsForm.value>): LayerSettingsModel {
     const settings: LayerSettingsModel = {
       hiDpiDisabled: LayerSettingsFormComponent.getInverseBooleanOrDefault(value.hiDpiEnabled, undefined),
-      tilingDisabled: LayerSettingsFormComponent.getInverseBooleanOrDefault(value.tilingEnabled, undefined),
-      tilingGutter: value.tilingGutter || undefined,
       attribution: value.attribution || undefined,
       description: value.description || undefined,
     };
@@ -135,8 +139,6 @@ export class LayerSettingsFormComponent implements OnInit {
       settings.title = value.title || undefined;
       settings.hiDpiMode = value.hiDpiMode || undefined;
       settings.hiDpiSubstituteLayer = value.hiDpiSubstituteLayer || undefined;
-      settings.minZoom = value.minZoom || undefined;
-      settings.maxZoom = value.maxZoom || undefined;
       settings.authorizationRules = value?.authorizationRules ?? [];
       if (TypesHelper.isDefined(value.featureSourceId) && TypesHelper.isDefined(value.featureTypeName)) {
         settings.featureType = {
@@ -147,6 +149,24 @@ export class LayerSettingsFormComponent implements OnInit {
         settings.featureType = undefined;
       }
     }
+    if (this.isWMS) {
+      const wmsSettings: LayerSettingsWmsModel = {
+        ...settings,
+        tilingDisabled: LayerSettingsFormComponent.getInverseBooleanOrDefault(value.tilingEnabled, undefined),
+        tilingGutter: value.tilingGutter || undefined,
+      };
+      return wmsSettings;
+    }
+    if (this.isXYZ && this.isLayerSpecific) {
+      const xyzSettings: LayerSettingsXyzModel = {
+        ...settings,
+        minZoom: value.minZoom || undefined,
+        maxZoom: value.maxZoom || undefined,
+        tileGridExtent: value.tileGridExtent || undefined,
+        tileSize: value.tileSize || undefined,
+      };
+      return xyzSettings;
+    }
     return settings;
   }
 
@@ -155,19 +175,30 @@ export class LayerSettingsFormComponent implements OnInit {
       return this.layerSettingsForm.dirty;
     }
     const values = this.getUpdatedLayerSettings(this.layerSettingsForm.getRawValue());
-    return FormHelper.someValuesChanged([
+    const comparableValues: ComparableValuesArray = [
       [ values.title, this._layerSettings.title ],
       [ values.description, this._layerSettings.description ],
       [ values.attribution, this._layerSettings.attribution ],
       [ values.hiDpiDisabled, this._layerSettings.hiDpiDisabled ],
-      [ values.tilingDisabled, this._layerSettings.tilingDisabled ],
-      [ values.tilingGutter, this._layerSettings.tilingGutter ],
       [ values.hiDpiMode, this._layerSettings.hiDpiMode ],
       [ values.hiDpiSubstituteLayer, this._layerSettings.hiDpiSubstituteLayer ],
-      [ values.minZoom, this._layerSettings.minZoom ],
-      [ values.maxZoom, this._layerSettings.maxZoom ],
       [ values.authorizationRules, this._layerSettings.authorizationRules ],
-    ]);
+    ];
+    if (this.isWmsSettingsModel(values) && this.isWmsSettingsModel(this._layerSettings)) {
+      comparableValues.push(
+        [ values.tilingDisabled, this._layerSettings.tilingDisabled ],
+        [ values.tilingGutter, this._layerSettings.tilingGutter ],
+      );
+    }
+    if (this.isXyzSettingsModel(values) && this.isXyzSettingsModel(this._layerSettings)) {
+      comparableValues.push(
+        [ values.minZoom, this._layerSettings.minZoom ],
+        [ values.maxZoom, this._layerSettings.maxZoom ],
+        [ FormHelper.getComparableValueBounds(values.tileGridExtent), FormHelper.getComparableValueBounds(this._layerSettings.tileGridExtent) ],
+        [ values.tileSize, this._layerSettings.tileSize ],
+      );
+    }
+    return FormHelper.someValuesChanged(comparableValues);
   }
 
   private patchForm() {
@@ -176,21 +207,28 @@ export class LayerSettingsFormComponent implements OnInit {
     if (this.isLayerSpecific && hiDpiEnabled !== false && !hiDpiMode) {
       hiDpiMode = TileLayerHiDpiModeEnum.ShowNextZoomLevel;
     }
-    this.layerSettingsForm.patchValue({
+    const patchValue: typeof this.layerSettingsForm.value = {
       title: this.layerSettings?.title ? this.layerSettings.title : '',
       description: this.layerSettings?.description || null,
       attribution: this.layerSettings?.attribution || null,
       featureSourceId: this.layerSettings?.featureType?.featureSourceId || null,
       featureTypeName: this.layerSettings?.featureType?.featureTypeName || null,
       hiDpiEnabled,
-      tilingEnabled: LayerSettingsFormComponent.getInverseBooleanOrDefault(this.layerSettings?.tilingDisabled, this.isLayerSpecific ? null : true),
-      tilingGutter: this.layerSettings?.tilingGutter || null,
       hiDpiMode,
       hiDpiSubstituteLayer: this.layerSettings?.hiDpiSubstituteLayer || null,
-      minZoom: this.layerSettings?.minZoom || null,
-      maxZoom: this.layerSettings?.maxZoom || null,
       authorizationRules: this.layerSettings?.authorizationRules ?? [],
-    }, { emitEvent: false, onlySelf: true });
+    };
+    if (this.isWmsSettingsModel(this.layerSettings)) {
+      patchValue.tilingEnabled = LayerSettingsFormComponent.getInverseBooleanOrDefault(this.layerSettings?.tilingDisabled, this.isLayerSpecific ? null : true);
+      patchValue.tilingGutter = this.layerSettings?.tilingGutter || null;
+    }
+    if (this.isXyzSettingsModel(this.layerSettings)) {
+      patchValue.minZoom = this.layerSettings?.minZoom || null;
+      patchValue.maxZoom = this.layerSettings?.maxZoom || null;
+      patchValue.tileGridExtent = this.layerSettings?.tileGridExtent || null;
+      patchValue.tileSize = this.layerSettings?.tileSize || null;
+    }
+    this.layerSettingsForm.patchValue(patchValue, { emitEvent: false, onlySelf: true });
     this.layerSettingsForm.markAsUntouched();
     this.updateDisabledState();
   }
@@ -230,6 +268,14 @@ export class LayerSettingsFormComponent implements OnInit {
       featureSourceId: null,
       featureTypeName: null,
     });
+  }
+
+  private isWmsSettingsModel(settings?: LayerSettingsModel | null): settings is LayerSettingsWmsModel {
+    return !!settings && this.isWMS;
+  }
+
+  private isXyzSettingsModel(settings?: LayerSettingsModel | null): settings is LayerSettingsXyzModel {
+    return !!settings && this.isXYZ;
   }
 
 }
