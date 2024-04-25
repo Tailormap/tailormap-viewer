@@ -93,6 +93,7 @@ jobs:
       VERSION: snapshot
       COMPOSE_PROJECT_NAME: tailormap-snapshot
       COMPOSE_FILE: docker-compose.yml:docker-compose.traefik.yml:ci/docker-compose.snapshot.yml
+      COMPOSE_PROFILE: monitoring-enabled
       BASE_HREF: /
       HOST: ${{ secrets.DEPLOY_HOST_SNAPSHOT }}
       API_SENTRY_DSN: ${{ vars.API_SENTRY_DSN }}
@@ -131,6 +132,7 @@ jobs:
           echo "COMPOSE_PROJECT_NAME=tailormap-pr-${PR}" >> $GITHUB_ENV
           echo "COMPOSE_FILE=docker-compose.yml:docker-compose.traefik.yml:ci/docker-compose.pr.yml" >> $GITHUB_ENV
           echo "BASE_HREF=/pull-request/${PR}/${GITHUB_REF_NAME_SLUG_URL}/" >> $GITHUB_ENV
+          echo "COMPOSE_PROFILE=" >> $GITHUB_ENV
 
       - name: 'Log in to GitHub container registry'
         uses: docker/login-action@v3

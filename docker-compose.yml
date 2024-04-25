@@ -2,6 +2,7 @@ name: tailormap
 
 volumes:
   db:
+  solr-data:
   backup:
     name: ${COMPOSE_PROJECT_NAME}-backup
 
@@ -64,3 +65,38 @@ services:
     healthcheck:
       test: 'pg_isready -U tailormap'
     restart: unless-stopped
+
+
+  solr:
+    container_name: solr
+    image: solr:9.5.0-slim
+    environment:
+      TZ: Europe/Amsterdam
+      SOLR_HEAP: 1g
+    volumes:
+      - solr-data:/var/solr
+    labels:
+      traefik.enable: false
+    restart: unless-stopped
+    command:
+      - solr-precreate
+      - tailormap
+
+
+  solr-metrics:
+    container_name: solr-status
+    depends_on:
+      - solr
+    image: solr:9.5.0-slim
+    profiles:
+      # use a profile "monitoring-enabled" to activate the solr-exporter
+      - monitoring-enabled
+    environment:
+      TZ: Europe/Amsterdam
+      PORT: 9854
+      SCRAPE_INTERVAL: 15
+      SOLR_URL: http://solr:8983/solr/
+    command:
+      # this script should be in the path for the current user
+      # /opt/solr-9.5.0/prometheus-exporter/bin/solr-exporter
+      - solr-exporter
