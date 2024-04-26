@@ -33,3 +33,5 @@ services:
 
   # See https://docs.docker.com/compose/compose-file/13-merge/#reset-value
   db: !reset
+
+  solr: !reset
