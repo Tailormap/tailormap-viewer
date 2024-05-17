@@ -651,7 +651,7 @@
       </trans-unit>
       <trans-unit id="core.filter.not-contains-one-of-the-values" datatype="html">
         <source>does not contain one of the values</source>
-        <target state="new">enthält nicht einen der Werte</target>
+        <target state="new">enthält keine der Werte</target>
       </trans-unit>
       <trans-unit id="core.filter.not-ends-with" datatype="html">
         <source>does not end with</source>
