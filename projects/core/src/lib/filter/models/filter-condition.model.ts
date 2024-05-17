@@ -6,4 +6,5 @@ export interface FilterConditionModel {
   label: string;
   attributeType: AttributeType[];
   readableLabel: string;
+  inverseReadableLabel: string;
 }

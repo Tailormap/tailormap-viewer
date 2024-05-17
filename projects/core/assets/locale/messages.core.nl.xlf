@@ -487,7 +487,7 @@
       </trans-unit>
       <trans-unit id="core.filter.contains-one-of-the-values" datatype="html">
         <source>contains one of the values</source>
-        <target>bevat een van de waardes</target>
+        <target>bevat één van de waardes</target>
       </trans-unit>
       <trans-unit id="core.filter.contains-upper" datatype="html">
         <source>Contains</source>
@@ -542,11 +542,11 @@
         <target state="translated">Filteren</target>
       </trans-unit>
       <trans-unit id="core.filter.filtering-layer-by-drawing-or-reference" datatype="html">
-        <source>Filtering the selected <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container [ngTemplateOutlet]=&quot;layerLabel&quot; /&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container"/> can be done by drawing geometry and/or selecting a reference layer.</source>
+        <source>Filtering the selected <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container [ngTemplateOutlet]=&quot;layerLabel&quot; /&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container [ngTemplateOutlet]=&quot;layerLabel&quot; /&gt;"/> can be done by drawing geometry and/or selecting a reference layer.</source>
         <target state="new">U kunt de geselecteerde <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container [ngTemplateOutlet]=&quot;layerLabel&quot; /&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="metry and/or sele"/> filteren door geometrieën te tekenen en/of een referentielaag te selecteren.</target>
       </trans-unit>
       <trans-unit id="core.filter.filtering-layer-by-drawing-or-reference-hint" datatype="html">
-        <source>The geometries from this reference layer will then be used to filter the selected <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container [ngTemplateOutlet]=&quot;layerLabel&quot; /&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container"/>.</source>
+        <source>The geometries from this reference layer will then be used to filter the selected <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container [ngTemplateOutlet]=&quot;layerLabel&quot; /&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container [ngTemplateOutlet]=&quot;layerLabel&quot; /&gt;"/>.</source>
         <target state="new">De geometrieën van deze referentielaag worden dan gebruikt om de geselecteerde <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container [ngTemplateOutlet]=&quot;layerLabel&quot; /&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;div class=&quot;fo"/> te filteren.</target>
       </trans-unit>
       <trans-unit id="core.filter.from" datatype="html">
@@ -593,6 +593,18 @@
         <source>is greater than or equal to</source>
         <target>is groter dan of gelijk aan</target>
       </trans-unit>
+      <trans-unit id="core.filter.is-not-between" datatype="html">
+        <source>is not between</source>
+        <target state="new">is niet tussen</target>
+      </trans-unit>
+      <trans-unit id="core.filter.is-not-null" datatype="html">
+        <source>is not null</source>
+        <target state="new">is niet null</target>
+      </trans-unit>
+      <trans-unit id="core.filter.is-not-on" datatype="html">
+        <source>is not on</source>
+        <target state="new">is niet op</target>
+      </trans-unit>
       <trans-unit id="core.filter.is-null" datatype="html">
         <source>is null</source>
         <target state="translated">is leeg (null)</target>
@@ -632,6 +644,26 @@
       <trans-unit id="core.filter.no-layers-available" datatype="html">
         <source>No layers available to filter on</source>
         <target>Geen lagen beschikbaar om op te filteren</target>
+      </trans-unit>
+      <trans-unit id="core.filter.not-contains" datatype="html">
+        <source>does not contain</source>
+        <target state="new">bevat niet</target>
+      </trans-unit>
+      <trans-unit id="core.filter.not-contains-one-of-the-values" datatype="html">
+        <source>does not contain one of the values</source>
+        <target state="new">bevat niet één van de waardes</target>
+      </trans-unit>
+      <trans-unit id="core.filter.not-ends-with" datatype="html">
+        <source>does not end with</source>
+        <target state="new">eindigt niet met</target>
+      </trans-unit>
+      <trans-unit id="core.filter.not-equals-to" datatype="html">
+        <source>not equals to</source>
+        <target state="new">is niet gelijk aan</target>
+      </trans-unit>
+      <trans-unit id="core.filter.not-starts-with" datatype="html">
+        <source>does not start with</source>
+        <target state="new">begint niet met</target>
       </trans-unit>
       <trans-unit id="core.filter.on" datatype="html">
         <source>On</source>

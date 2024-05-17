@@ -408,10 +408,10 @@
         <source>Filtering</source>
       </trans-unit>
       <trans-unit id="core.filter.filtering-layer-by-drawing-or-reference" datatype="html">
-        <source>Filtering the selected <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container [ngTemplateOutlet]=&quot;layerLabel&quot; /&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container"/> can be done by drawing geometry and/or selecting a reference layer.</source>
+        <source>Filtering the selected <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container [ngTemplateOutlet]=&quot;layerLabel&quot; /&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container [ngTemplateOutlet]=&quot;layerLabel&quot; /&gt;"/> can be done by drawing geometry and/or selecting a reference layer.</source>
       </trans-unit>
       <trans-unit id="core.filter.filtering-layer-by-drawing-or-reference-hint" datatype="html">
-        <source>The geometries from this reference layer will then be used to filter the selected <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container [ngTemplateOutlet]=&quot;layerLabel&quot; /&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container"/>.</source>
+        <source>The geometries from this reference layer will then be used to filter the selected <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container [ngTemplateOutlet]=&quot;layerLabel&quot; /&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container [ngTemplateOutlet]=&quot;layerLabel&quot; /&gt;"/>.</source>
       </trans-unit>
       <trans-unit id="core.filter.from" datatype="html">
         <source>From</source>
@@ -446,6 +446,15 @@
       <trans-unit id="core.filter.is-greater-than-or-equal-to" datatype="html">
         <source>is greater than or equal to</source>
       </trans-unit>
+      <trans-unit id="core.filter.is-not-between" datatype="html">
+        <source>is not between</source>
+      </trans-unit>
+      <trans-unit id="core.filter.is-not-null" datatype="html">
+        <source>is not null</source>
+      </trans-unit>
+      <trans-unit id="core.filter.is-not-on" datatype="html">
+        <source>is not on</source>
+      </trans-unit>
       <trans-unit id="core.filter.is-null" datatype="html">
         <source>is null</source>
       </trans-unit>
@@ -475,6 +484,21 @@
       </trans-unit>
       <trans-unit id="core.filter.no-layers-available" datatype="html">
         <source>No layers available to filter on</source>
+      </trans-unit>
+      <trans-unit id="core.filter.not-contains" datatype="html">
+        <source>does not contain</source>
+      </trans-unit>
+      <trans-unit id="core.filter.not-contains-one-of-the-values" datatype="html">
+        <source>does not contain one of the values</source>
+      </trans-unit>
+      <trans-unit id="core.filter.not-ends-with" datatype="html">
+        <source>does not end with</source>
+      </trans-unit>
+      <trans-unit id="core.filter.not-equals-to" datatype="html">
+        <source>not equals to</source>
+      </trans-unit>
+      <trans-unit id="core.filter.not-starts-with" datatype="html">
+        <source>does not start with</source>
       </trans-unit>
       <trans-unit id="core.filter.on" datatype="html">
         <source>On</source>
