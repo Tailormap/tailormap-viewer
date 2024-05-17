@@ -14,6 +14,8 @@ import { SharedComponentsModule, SharedImportsModule, SharedModule } from '@tail
 import { UserModule } from '../user/user.module';
 import { FormPageComponent } from './form-page/form-page.component';
 import { FormModule } from '../form/form.module';
+import { SearchIndexPageComponent } from './search-index-page/search-index-page.component';
+import { SearchIndexModule } from '../search-index/search-index.module';
 
 
 @NgModule({
@@ -25,6 +27,7 @@ import { FormModule } from '../form/form.module';
     ApplicationPageComponent,
     SettingsPageComponent,
     FormPageComponent,
+    SearchIndexPageComponent,
   ],
   imports: [
     CommonModule,
@@ -37,6 +40,7 @@ import { FormModule } from '../form/form.module';
     SharedImportsModule,
     SharedModule,
     FormModule,
+    SearchIndexModule,
   ],
   exports: [
     AdminHomePageComponent,
@@ -46,6 +50,7 @@ import { FormModule } from '../form/form.module';
     ApplicationPageComponent,
     SettingsPageComponent,
     FormPageComponent,
+    SearchIndexPageComponent,
   ],
 })
 export class PagesModule { }

@@ -14,6 +14,7 @@ import { FormUpdateModel } from '../services/form-update.model';
 import { FeatureSourceService } from '../../catalog/services/feature-source.service';
 import { FeatureTypeFormDialogComponent } from '../../catalog/feature-type-form-dialog/feature-type-form-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { FeatureTypeUpdateService } from '../../catalog/services/feature-type-update.service';
 
 @Component({
   selector: 'tm-admin-form-edit',
@@ -43,8 +44,8 @@ export class FormEditComponent implements OnInit, OnDestroy {
     private router: Router,
     private formService: FormService,
     private featureSourceService: FeatureSourceService,
+    private featureTypeUpdateService: FeatureTypeUpdateService,
     private adminSnackbarService: AdminSnackbarService,
-    private dialog: MatDialog,
   ) {
   }
 
@@ -135,21 +136,11 @@ export class FormEditComponent implements OnInit, OnDestroy {
     if (!featureType) {
       return;
     }
-    this.featureSourceService.getDraftFeatureType$(featureType.id, `${featureSourceId}`)
-      .pipe(
-        take(1),
-        concatMap(draftFeatureType => {
-          if (!draftFeatureType) {
-            return of(null);
-          }
-          return FeatureTypeFormDialogComponent.open(this.dialog, { featureType: draftFeatureType }).afterClosed();
-        }),
-        takeUntil(this.destroyed),
-      )
+    this.featureTypeUpdateService.updateFeatureTypeSetting$(featureType.id, featureSourceId)
+      .pipe(takeUntil(this.destroyed))
       .subscribe(updatedFeatureType => {
         if (updatedFeatureType) {
           this.featureTypeSubject$.next(updatedFeatureType);
-          this.adminSnackbarService.showMessage($localize `:@@admin-core.feature-type-settings-updated:Feature type settings updated`);
         }
       });
   }

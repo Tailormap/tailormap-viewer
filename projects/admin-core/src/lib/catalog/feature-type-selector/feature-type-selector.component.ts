@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, EventEmitter, Output, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectFeatureSources, selectFeatureTypesForSource } from '../state/catalog.selectors';
-import { Observable, of, Subject, takeUntil, tap } from 'rxjs';
+import { Observable, of, Subject, takeUntil, tap, withLatestFrom } from 'rxjs';
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 import { TypesHelper } from '@tailormap-viewer/shared';
 import { FormControl, FormGroup } from '@angular/forms';
@@ -59,7 +59,7 @@ export class FeatureTypeSelectorComponent implements OnInit, OnDestroy {
   }
 
   @Output()
-  public featureTypeSelected = new EventEmitter<{ featureSourceId?: number; featureTypeName?: string }>();
+  public featureTypeSelected = new EventEmitter<{ featureSourceId?: number; featureTypeName?: string; featureTypeId?: string }>();
 
   public featureTypeSelectorForm = new FormGroup({
     featureSourceId: new FormControl<string | null>(null),
@@ -73,8 +73,11 @@ export class FeatureTypeSelectorComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this.featureSources$ = this.store$.select(selectFeatureSources);
     this.featureTypeSelectorForm.valueChanges
-      .pipe(takeUntil(this.destroyed))
-      .subscribe((value) => {
+      .pipe(
+        takeUntil(this.destroyed),
+        withLatestFrom(this.featureTypes$),
+      )
+      .subscribe(([ value, featureTypes ]) => {
         if (!this.changedSinceLastEmit(value.featureSourceId, value.featureTypeName)) {
           return;
         }
@@ -88,6 +91,9 @@ export class FeatureTypeSelectorComponent implements OnInit, OnDestroy {
         this.featureTypeSelected.emit({
           featureSourceId: +(value.featureSourceId),
           featureTypeName: TypesHelper.isDefined(value.featureTypeName) ? value.featureTypeName : undefined,
+          featureTypeId: TypesHelper.isDefined(value.featureTypeName)
+            ? featureTypes.find(f => f.name === value.featureTypeName)?.originalId
+            : undefined,
         });
       });
     const featureSourceControl = this.featureTypeSelectorForm.get('featureSourceId');

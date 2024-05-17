@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { concatLatestFrom } from '@ngrx/operators';
 import * as UserActions from './user.actions';
 import { catchError, filter, map, of, switchMap, tap } from 'rxjs';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';

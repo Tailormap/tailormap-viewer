@@ -1,0 +1,64 @@
+:host {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-wrapper {
+  display: flex;
+}
+
+.form-wrapper {
+  min-width: 300px;
+  max-width: 500px;
+  flex: 1;
+}
+
+.form-field-wrapper {
+  display: flex;
+  margin-top: 16px;
+  flex: 1;
+  overflow: hidden;
+  min-height: 300px;
+}
+
+.form-field-wrapper > * + * {
+  margin-left: 16px;
+}
+
+.info-wrapper {
+  display: block;
+  flex: 1;
+  margin-left: 16px;
+}
+
+.edit-buttons {
+  display: grid;
+  grid-template-columns: 24px min-content auto;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 32px;
+}
+
+.edit-buttons strong {
+  white-space: nowrap;
+  padding-right: 8px;
+}
+
+.edit-buttons button ::ng-deep .mdc-button__label {
+  flex: 1;
+  text-align: left;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+tm-admin-form-attribute-list,
+tm-admin-form-field-list {
+  width: 250px;
+}
+
+tm-admin-edit-field {
+  flex: 1;
+  overflow: auto;
+}

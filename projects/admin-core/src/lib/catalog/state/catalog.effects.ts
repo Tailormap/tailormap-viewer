@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { concatLatestFrom } from '@ngrx/operators';
 import * as CatalogActions from './catalog.actions';
 import { map, catchError, of, filter, switchMap, tap, forkJoin } from 'rxjs';
 import {

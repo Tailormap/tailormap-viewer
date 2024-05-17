@@ -33,6 +33,10 @@ import { FormPageComponent } from './pages/form-page/form-page.component';
 import { FormHomeComponent } from './form/form-home/form-home.component';
 import { FormCreateComponent } from './form/form-create/form-create.component';
 import { FormEditComponent } from './form/form-edit/form-edit.component';
+import { SearchIndexPageComponent } from './pages/search-index-page/search-index-page.component';
+import { SearchIndexHomeComponent } from './search-index/search-index-home/search-index-home.component';
+import { SearchIndexEditComponent } from './search-index/search-index-edit/search-index-edit.component';
+import { SearchIndexCreateComponent } from './search-index/search-index-create/search-index-create.component';
 
 export const adminRoutes: Routes = [
   {
@@ -138,6 +142,23 @@ export const adminRoutes: Routes = [
         }],
         path: AdminRoutes.FORMS,
         data: { pageTitle: $localize `:@@admin-core.common.forms-title:Forms` },
+      },
+      {
+        component: SearchIndexPageComponent,
+        children: [{
+          path: '',
+          component: SearchIndexHomeComponent,
+        }, {
+          path: AdminRoutes.SEARCH_INDEXES_CREATE,
+          component: SearchIndexCreateComponent,
+        },
+        {
+          path: AdminRoutes.SEARCH_INDEXES_DETAILS,
+          component: SearchIndexEditComponent,
+          data: { className: 'full-screen-settings' },
+        }],
+        path: AdminRoutes.SEARCH_INDEXES,
+        data: { pageTitle: $localize `:@@admin-core.common.search-indexes-title:Search Indexes` },
       },
       {
         path: AdminRoutes.ADMIN_HOME,

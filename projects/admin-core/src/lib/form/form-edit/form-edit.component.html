@@ -6,7 +6,6 @@
       <tm-admin-form-form [form]="form" (updateForm)="updateForm($event)" (validFormChanged)="validFormChanged($event)"></tm-admin-form-form>
     </div>
     <div class="info-wrapper">
-
       <div class="edit-buttons">
         <ng-container *ngIf="featureType$ | async as featureType">
           <mat-icon svgIcon="admin_feature_type"></mat-icon>
