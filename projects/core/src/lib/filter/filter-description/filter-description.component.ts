@@ -56,19 +56,24 @@ export class FilterDescriptionComponent {
     if (filter.attributeType === AttributeType.DATE) {
       values = filter.value.map(v => DateTime.fromISO(v).setLocale(this.dateLocale).toLocaleString(DateTime.DATE_MED));
     }
-    let value = values.join(',');
+    let value = values.join(', ');
     if (values.length === 2) {
       value = `${values[0]} ${this.AND} ${values[1]}`;
     }
-    return `<strong>${filter.attribute}</strong> ${this.convertCondition(filter.condition)} <strong>${value}</strong>`;
+    return `<strong>${filter.attribute}</strong> ${this.convertCondition(filter.condition, filter.invertCondition)} <strong>${value}</strong>`;
   }
 
   private convertOperator(operator: 'AND' | 'OR') {
     return `<em>${operator === 'AND' ? this.AND : this.OR}</em>`;
   }
 
-  private convertCondition(condition: string) {
-    return AttributeFilterHelper.getConditionTypes(true).find(c => c.condition === condition)?.readableLabel || '';
+  private convertCondition(condition: string, invertedCondition: boolean) {
+    const conditionType = AttributeFilterHelper.getConditionTypes(true)
+      .find(c => c.condition === condition);
+    if (conditionType) {
+      return invertedCondition ? conditionType.inverseReadableLabel : conditionType.readableLabel;
+    }
+    return '';
   }
 
 }
