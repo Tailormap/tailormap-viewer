@@ -57,7 +57,7 @@ export class GeoServiceLayerDetailsComponent implements OnInit, OnDestroy {
         }
         return this.store$.select(selectGeoServiceAndLayerByLayerId(layerId));
       }),
-      map(info => { if (info) { return info.layer.children?.length == 0 ?? true; } else { return true; } }),
+      map(info => info ? info.layer.children?.length === 0 : true),
     );
   }
 

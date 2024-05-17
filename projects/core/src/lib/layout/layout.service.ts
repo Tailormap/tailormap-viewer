@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { BaseComponentConfigHelper, ComponentModel } from '@tailormap-viewer/api';
 import { selectComponentsConfig } from '../state/core.selectors';
 import { Store } from '@ngrx/store';
@@ -17,6 +17,12 @@ export class LayoutService {
 
   public isComponentEnabled(config: ComponentModel[], componentType: string) {
     return BaseComponentConfigHelper.isComponentEnabled(config, componentType);
+  }
+
+  public isComponentEnabled$(componentType: string) {
+    return this.componentsConfig$.pipe(
+      map(config => BaseComponentConfigHelper.isComponentEnabled(config, componentType)),
+    );
   }
 
 }
