@@ -56,7 +56,7 @@ export class FilterDescriptionComponent {
     if (filter.attributeType === AttributeType.DATE) {
       values = filter.value.map(v => DateTime.fromISO(v).setLocale(this.dateLocale).toLocaleString(DateTime.DATE_MED));
     }
-    let value = values.join(',');
+    let value = values.join(', ');
     if (values.length === 2) {
       value = `${values[0]} ${this.AND} ${values[1]}`;
     }

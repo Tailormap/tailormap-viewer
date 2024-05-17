@@ -489,7 +489,7 @@
         <source>does not contain</source>
       </trans-unit>
       <trans-unit id="core.filter.not-contains-one-of-the-values" datatype="html">
-        <source>does not contain one of the values</source>
+        <source>contains none of the values</source>
       </trans-unit>
       <trans-unit id="core.filter.not-ends-with" datatype="html">
         <source>does not end with</source>
