@@ -93,7 +93,7 @@ jobs:
       VERSION: snapshot
       COMPOSE_PROJECT_NAME: tailormap-snapshot
       COMPOSE_FILE: docker-compose.yml:docker-compose.traefik.yml:ci/docker-compose.snapshot.yml
-      COMPOSE_PROFILE: monitoring-enabled
+      COMPOSE_PROFILE: solr,solr-monitoring
       BASE_HREF: /
       HOST: ${{ secrets.DEPLOY_HOST_SNAPSHOT }}
       API_SENTRY_DSN: ${{ vars.API_SENTRY_DSN }}
