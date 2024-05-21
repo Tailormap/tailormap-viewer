@@ -174,7 +174,7 @@ jobs:
           docker compose version
       - name: 'Update deployment using Docker Compose'
         run: |
-          docker compose up -d --pull=always --quiet-pull
+          docker compose up -d --pull=always --quiet-pull --remove-orphans
 
       - name: 'Create GitHub deployment'
         if: success()
