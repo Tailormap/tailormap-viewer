@@ -10,8 +10,8 @@ const setup = async (data?: AdditionalPropertyModel[]) => {
     imports: [SharedImportsModule],
     componentProperties: {
       fields: [
-        { name: 'test', dataType: 'string', label: 'Test value', type: 'text', isPublic: false },
-        { name: 'test2', dataType: 'string', label: 'Test choice', type: 'choice', values: [ 'test1', 'test2', 'test3' ], isPublic: true },
+        { key: 'test', dataType: 'string', label: 'Test value', type: 'text', isPublic: false },
+        { key: 'test2', dataType: 'string', label: 'Test choice', type: 'choice', values: [ 'test1', 'test2', 'test3' ], isPublic: true },
       ],
       data,
       changed: {
