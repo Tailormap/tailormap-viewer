@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 
 export enum AdminFieldLocation {
   GROUP = 'GROUP',
+  USER = 'USER',
 }
 
 export interface AdminFieldModel {
