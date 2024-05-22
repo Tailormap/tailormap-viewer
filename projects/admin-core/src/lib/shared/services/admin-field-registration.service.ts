@@ -11,6 +11,7 @@ export interface AdminFieldModel {
   dataType: 'string' | 'boolean' | 'number';
   values?: string[];
   isPublic?: boolean;
+  hint?: string;
 }
 
 @Injectable({

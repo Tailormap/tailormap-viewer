@@ -9,6 +9,7 @@
           <mat-option [value]="value">{{value}}</mat-option>
         }
       </mat-select>
+      <mat-hint *ngIf="field.hint">{{field.hint}}</mat-hint>
     </mat-form-field>
   }
 </div>
