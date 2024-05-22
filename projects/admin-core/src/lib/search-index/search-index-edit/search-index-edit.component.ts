@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { setDraftSearchIndexId } from '../state/search-index.actions';
 import { selectDraftSearchIndex } from '../state/search-index.selectors';
-import { FeatureTypeModel, SearchIndexModel } from '@tailormap-admin/admin-api';
+import { SearchIndexModel } from '@tailormap-admin/admin-api';
 import { FeatureSourceService } from '../../catalog/services/feature-source.service';
 import { FeatureTypeUpdateService } from '../../catalog/services/feature-type-update.service';
 import { ExtendedFeatureTypeModel } from '../../catalog/models/extended-feature-type.model';
