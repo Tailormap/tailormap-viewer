@@ -45,11 +45,11 @@ export class AdminFieldsRendererComponent implements OnInit {
 
   public ngOnInit(): void {
     this.fields.forEach(field => {
-      const property = (this.data || []).find(d => d.key === field.name);
+      const property = (this.data || []).find(d => d.key === field.key);
       const value = property ? property.value : '';
       const control = new FormControl(value);
       control.updateValueAndValidity({ onlySelf: true, emitEvent: false });
-      this.formGroup.addControl(field.name, control);
+      this.formGroup.addControl(field.key, control);
     });
     this.formGroup.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -57,7 +57,7 @@ export class AdminFieldsRendererComponent implements OnInit {
         const values: Record<string, string | number | boolean> = this.formGroup.value;
         const additionalProperties: AdditionalPropertyModel[] = [];
         Object.keys(values).forEach(key => {
-          const field = this.fields.find(f => f.name === key);
+          const field = this.fields.find(f => f.key === key);
           const value = values[key];
           if (!field) {
             return;

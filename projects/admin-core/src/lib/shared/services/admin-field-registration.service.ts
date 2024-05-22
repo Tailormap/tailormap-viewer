@@ -5,7 +5,7 @@ export enum AdminFieldLocation {
 }
 
 export interface AdminFieldModel {
-  name: string;
+  key: string;
   label: string;
   type: 'text' | 'choice' | 'checkbox';
   dataType: 'string' | 'boolean' | 'number';
