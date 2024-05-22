@@ -84,7 +84,9 @@
               "earcut",
               "svgpath",
               "lerc",
-              "color-name"
+              "color-name",
+              "localforage",
+              "fastpriorityqueue"
             ],
             "i18nMissingTranslation": "error"
           },
