@@ -55,8 +55,10 @@ export class AdminFieldsRendererComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
         const values: Record<string, string | number | boolean> = this.formGroup.value;
-        const additionalProperties: AdditionalPropertyModel[] = [];
-        Object.keys(values).forEach(key => {
+        const formKeys = Object.keys(values);
+        const propertiesNotInForm = (this.data || []).filter(d => !formKeys.includes(d.key));
+        const additionalProperties: AdditionalPropertyModel[] = [...propertiesNotInForm];
+        formKeys.forEach(key => {
           const field = this.fields.find(f => f.key === key);
           const value = values[key];
           if (!field) {
