@@ -16,10 +16,7 @@
     <mat-label i18n="@@admin-core.oidc.client-id">Client ID</mat-label>
     <input matInput formControlName="clientId" />
   </mat-form-field>
-  <mat-form-field>
-    <mat-label i18n="@@admin-core.oidc.client-secret">Client Secret</mat-label>
-    <input matInput formControlName="clientSecret" />
-  </mat-form-field>
+  <tm-admin-password-field formControlName="clientSecret" label="Client Secret" i18n-label="@@admin-core.oidc.client-secret"/>
   <mat-form-field>
     <mat-label i18n="@@admin-core.oidc.username-attribute">User name attribute</mat-label>
     <input matInput placeholder="(name, sub, email, etc)" i18n-placeholder="@@admin-core.oidc.username-attribute-placeholder" formControlName="userNameAttribute" />
