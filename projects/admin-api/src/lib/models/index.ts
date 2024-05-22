@@ -36,6 +36,7 @@ export * from './jdbc-connection-properties.model';
 export * from './service-authentication.model';
 export * from './user.model';
 export * from './group.model';
+export * from './additional-property.model';
 export * from './config.model';
 export * from './oidc-configuration.model';
 export * from './form.model';

@@ -1,3 +1,5 @@
+import { AdditionalPropertyModel } from './additional-property.model';
+
 export interface UserModel {
   username: string;
   // should not be sent from the API
@@ -9,5 +11,5 @@ export interface UserModel {
   validUntil: Date | null;
   version?: number | null;
   groupNames: string[] | null;
-  additionalProperties?: Record<string, any> | null;
+  additionalProperties?: AdditionalPropertyModel[] | null;
 }

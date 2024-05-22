@@ -6,3 +6,7 @@ see: https://stackoverflow.com/questions/75066261/angular-material-15-does-not-h
 :host ::ng-deep .mdc-text-field__input::-webkit-calendar-picker-indicator {
   display: block;
 }
+
+tm-admin-fields-renderer ::ng-deep .admin-fields {
+  margin-top: 16px;
+}

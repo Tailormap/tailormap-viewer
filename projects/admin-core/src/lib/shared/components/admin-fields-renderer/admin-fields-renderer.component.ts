@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter
 import { AdminFieldModel } from '../../services/admin-field-registration.service';
 import { FormControl, FormGroup } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { AdditionalPropertyModel } from '@tailormap-admin/admin-api';
 
 @Component({
   selector: 'tm-admin-fields-renderer',
@@ -11,29 +12,30 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 })
 export class AdminFieldsRendererComponent implements OnInit {
 
-  private _data: Record<string, string | number | boolean> | null = null;
+  private _data: AdditionalPropertyModel[] | null = null;
 
   @Input({ required: true })
   public fields: AdminFieldModel[] = [];
 
   @Input()
-  public set data(data: Record<string, string | number | boolean> | null) {
+  public set data(data: AdditionalPropertyModel[] | null) {
     this._data = data;
     const controlKeys = Object.keys(this.formGroup.controls);
     if (controlKeys.length === 0) {
       return;
     }
     controlKeys.forEach(key => {
-      const value = data && Object.prototype.hasOwnProperty.call(data, key) ? data[key] : '';
+      const property = (data || [])?.find(d => d.key === key);
+      const value = property ? property.value : '';
       this.getControl(key).setValue(value);
     });
   }
-  public get data(): Record<string, string | number | boolean> | null {
+  public get data(): AdditionalPropertyModel[] | null {
     return this._data;
   }
 
   @Output()
-  public changed = new EventEmitter<Record<string, string | number | boolean>>();
+  public changed = new EventEmitter<AdditionalPropertyModel[]>();
 
   public formGroup = new FormGroup({});
 
@@ -43,31 +45,36 @@ export class AdminFieldsRendererComponent implements OnInit {
 
   public ngOnInit(): void {
     this.fields.forEach(field => {
-      const value = this.data && Object.prototype.hasOwnProperty.call(this.data, field.name) ? this.data[field.name] : '';
+      const property = (this.data || []).find(d => d.key === field.key);
+      const value = property ? property.value : '';
       const control = new FormControl(value);
       control.updateValueAndValidity({ onlySelf: true, emitEvent: false });
-      this.formGroup.addControl(field.name, control);
+      this.formGroup.addControl(field.key, control);
     });
     this.formGroup.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
         const values: Record<string, string | number | boolean> = this.formGroup.value;
-        const parsedValues: Record<string, string | number | boolean> = {};
-        Object.keys(values).forEach(key => {
-          const field = this.fields.find(f => f.name === key);
+        const formKeys = Object.keys(values);
+        const propertiesNotInForm = (this.data || []).filter(d => !formKeys.includes(d.key));
+        const additionalProperties: AdditionalPropertyModel[] = [...propertiesNotInForm];
+        formKeys.forEach(key => {
+          const field = this.fields.find(f => f.key === key);
           const value = values[key];
           if (!field) {
             return;
           }
+          let parsedValue: number | string | boolean;
           if (field.dataType === 'number' && typeof value === 'string') {
-            parsedValues[key] = +(value);
+            parsedValue = +(value);
           } else if (field.dataType === 'boolean' && typeof value === 'string') {
-            parsedValues[key] = value === 'true';
+            parsedValue = value === 'true';
           } else {
-            parsedValues[key] = value;
+            parsedValue = value;
           }
+          additionalProperties.push({ key, value: parsedValue, isPublic: field.isPublic ?? false });
         });
-        this.changed.emit(parsedValues);
+        this.changed.emit(additionalProperties);
       });
   }
 

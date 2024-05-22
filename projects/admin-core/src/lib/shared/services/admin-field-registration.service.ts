@@ -2,14 +2,17 @@ import { Injectable } from '@angular/core';
 
 export enum AdminFieldLocation {
   GROUP = 'GROUP',
+  USER = 'USER',
 }
 
 export interface AdminFieldModel {
-  name: string;
+  key: string;
   label: string;
   type: 'text' | 'choice' | 'checkbox';
   dataType: 'string' | 'boolean' | 'number';
   values?: string[];
+  isPublic?: boolean;
+  hint?: string;
 }
 
 @Injectable({

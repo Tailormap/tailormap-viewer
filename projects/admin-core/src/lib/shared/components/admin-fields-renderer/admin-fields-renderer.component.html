@@ -1,14 +1,15 @@
 <div class="admin-fields">
-  @for (field of fields; track field.name) {
+  @for (field of fields; track field.key) {
     <mat-form-field>
       <mat-label>{{field.label}}</mat-label>
-      <input *ngIf="field.type === 'text'" matInput [formControl]="getControl(field.name)" />
-      <mat-checkbox *ngIf="field.type === 'checkbox'" [formControl]="getControl(field.name)" />
-      <mat-select *ngIf="field.type === 'choice'" [formControl]="getControl(field.name)">
+      <input *ngIf="field.type === 'text'" matInput [formControl]="getControl(field.key)" />
+      <mat-checkbox *ngIf="field.type === 'checkbox'" [formControl]="getControl(field.key)" />
+      <mat-select *ngIf="field.type === 'choice'" [formControl]="getControl(field.key)">
         @for (value of field.values; track $index) {
           <mat-option [value]="value">{{value}}</mat-option>
         }
       </mat-select>
+      <mat-hint *ngIf="field.hint">{{field.hint}}</mat-hint>
     </mat-form-field>
   }
 </div>

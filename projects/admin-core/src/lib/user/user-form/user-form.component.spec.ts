@@ -9,6 +9,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { initialUserState, userStateKey } from '../state/user.state';
 import { adminCoreStateKey, initialAdminCoreState } from '../../state/admin-core.state';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
+import { SharedAdminComponentsModule } from '../../shared/components/shared-admin-components.module';
 
 
 const setup = async (isValidPassword: boolean) => {
@@ -19,7 +20,7 @@ const setup = async (isValidPassword: boolean) => {
   };
   const userUpdated = jest.fn();
   await render(UserFormComponent, {
-    imports: [ SharedImportsModule, MatIconTestingModule ],
+    imports: [ SharedImportsModule, MatIconTestingModule, SharedAdminComponentsModule ],
     declarations: [PasswordFieldComponent],
     componentOutputs: {
       userUpdated: {
@@ -52,6 +53,7 @@ describe('UserFormComponent', () => {
         validUntil: null,
         groups: [],
         password: 'secret-secret',
+        additionalProperties: [],
       });
     });
   });
