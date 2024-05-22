@@ -14,6 +14,9 @@ export const selectUserDetails = createSelector(selectCoreState, state => state.
 export const selectUserIsAdmin = createSelector(selectUserDetails, state =>
   state?.roles?.includes('admin') ?? false);
 
+export const selectUserProperties = createSelector(selectUserDetails, state => state?.properties || []);
+export const selectUserGroupProperties = createSelector(selectUserDetails, state => state?.groupProperties || []);
+
 export const selectShowLanguageSwitcher = createSelector(
   selectViewerState,
   viewerState => viewerState?.i18nSettings?.hideLanguageSwitcher !== true,

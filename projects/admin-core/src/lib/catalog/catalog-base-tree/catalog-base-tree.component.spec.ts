@@ -12,14 +12,13 @@ import { Store } from '@ngrx/store';
 import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
 import { TestBed } from '@angular/core/testing';
 import { CatalogTreeHelper } from '../helpers/catalog-tree.helper';
-import { adminCoreStateKey, initialAdminCoreState } from '../../state/admin-core.state';
 import { CatalogExtendedTypeEnum } from '../models/catalog-extended.model';
+import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper';
 
 const setup = async (state: Partial<CatalogState> = {}) => {
   const mockStore = createMockStore({
     initialState: {
       [catalogStateKey]: { ...initialCatalogState, ...state },
-      [adminCoreStateKey]: { ...initialAdminCoreState },
     },
   });
   const mockDispatch = jest.fn();
@@ -36,6 +35,7 @@ const setup = async (state: Partial<CatalogState> = {}) => {
       TreeService,
       { provide: Store, useValue: mockStore },
       { provide: TailormapAdminApiV1Service, useValue: mockApiService },
+      AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser(),
     ],
   });
   const treeService = TestBed.inject(TreeService);

@@ -13,8 +13,8 @@ import { ConfigService } from '../../config/services/config.service';
 import userEvent from '@testing-library/user-event';
 import { AuthorizationEditComponent } from '../../shared/components/authorization-edit/authorization-edit.component';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
-import { adminCoreStateKey, initialAdminCoreState } from '../../state/admin-core.state';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
+import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper';
 
 const setup = async (hasApplication: boolean, isDefaultApplication?: boolean) => {
   const appState: ApplicationState = {
@@ -23,7 +23,7 @@ const setup = async (hasApplication: boolean, isDefaultApplication?: boolean) =>
     draftApplication: hasApplication ? getApplication({ id: '1', title: 'Test application' }) : null,
   };
   const store = createMockStore({
-    initialState: { [applicationStateKey]: appState, [userStateKey]: initialUserState, [adminCoreStateKey]: initialAdminCoreState },
+    initialState: { [applicationStateKey]: appState, [userStateKey]: initialUserState },
   });
   const configService = {
     getConfigValue$: jest.fn(() => of(isDefaultApplication ? 'app1' : '')),
@@ -37,6 +37,7 @@ const setup = async (hasApplication: boolean, isDefaultApplication?: boolean) =>
       { provide: Store, useValue: store },
       { provide: ConfigService, useValue: configService },
       { provide: TailormapAdminApiV1Service, useValue: { getGroups$: jest.fn(() => of(null)) } },
+      AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser(),
     ],
   });
   return { configService };

@@ -21,6 +21,8 @@ export const getUserResponseModel = (overrides?: Partial<UserResponseModel>): Us
   isAuthenticated: false,
   username: '',
   roles: [],
+  properties: [],
+  groupProperties: [],
   ...overrides,
 });
 

@@ -9,9 +9,9 @@ import { AuthorizationEditComponent } from '../../shared/components/authorizatio
 import { of } from 'rxjs';
 import { provideMockStore } from '@ngrx/store/testing';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
-import { adminCoreStateKey, initialAdminCoreState } from '../../state/admin-core.state';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { applicationStateKey, initialApplicationState } from '../state/application.state';
+import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper';
 
 const setup = async (hasApp?: boolean, addAppToState?: boolean) => {
   const onUpdate = jest.fn();
@@ -34,13 +34,13 @@ const setup = async (hasApp?: boolean, addAppToState?: boolean) => {
     },
     providers: [
       { provide: TailormapAdminApiV1Service, useValue: { getGroups$: jest.fn(() => of(null)) } },
+      AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser(),
       provideMockStore({ initialState: {
         [userStateKey]: initialUserState,
-          [adminCoreStateKey]: initialAdminCoreState,
-          [applicationStateKey]: {
-            ...initialApplicationState,
-            applications: addAppToState ? [application] : [],
-          },
+        [applicationStateKey]: {
+          ...initialApplicationState,
+          applications: addAppToState ? [application] : [],
+        },
       } }),
     ],
   });

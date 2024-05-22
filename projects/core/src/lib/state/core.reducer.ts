@@ -43,6 +43,8 @@ const onSetLoginDetails = (
     isAuthenticated: payload.isAuthenticated,
     username: payload.username || undefined,
     roles: payload.roles || undefined,
+    properties: payload.properties || undefined,
+    groupProperties: payload.groupProperties || undefined,
   },
 });
 
