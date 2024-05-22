@@ -10,6 +10,7 @@ export interface AdminFieldModel {
   type: 'text' | 'choice' | 'checkbox';
   dataType: 'string' | 'boolean' | 'number';
   values?: string[];
+  isPublic?: boolean;
 }
 
 @Injectable({

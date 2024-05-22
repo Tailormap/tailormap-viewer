@@ -9,8 +9,8 @@ const setup = async (data?: Record<string, any>) => {
     imports: [SharedImportsModule],
     componentProperties: {
       fields: [
-        { name: 'test', dataType: 'string', label: 'Test value', type: 'text' },
-        { name: 'test2', dataType: 'string', label: 'Test choice', type: 'choice', values: [ 'test1', 'test2', 'test3' ] },
+        { name: 'test', dataType: 'string', label: 'Test value', type: 'text', isPublic: false },
+        { name: 'test2', dataType: 'string', label: 'Test choice', type: 'choice', values: [ 'test1', 'test2', 'test3' ], isPublic: true },
       ],
       data,
       changed: {
@@ -28,10 +28,10 @@ describe('RegisteredFieldsRendererComponent', () => {
     expect(await screen.findByText('Test value')).toBeInTheDocument();
     expect(await screen.findByText('Test choice')).toBeInTheDocument();
     await userEvent.type(await screen.findByRole('textbox'), 'bla');
-    expect(changedFn).toHaveBeenCalledWith({
-      test: 'bla',
-      test2: '',
-    });
+    expect(changedFn).toHaveBeenCalledWith([
+      { key: 'test', value: 'bla', isPublic: false },
+      { key: 'test2', value: '', isPublic: true },
+    ]);
   });
 
   test('should render existing data', async () => {
