@@ -25,7 +25,7 @@ export class AdminFieldsRendererComponent implements OnInit {
       return;
     }
     controlKeys.forEach(key => {
-      const property = data?.find(d => d.key === key);
+      const property = (data || [])?.find(d => d.key === key);
       const value = property ? property.value : '';
       this.getControl(key).setValue(value);
     });
@@ -45,7 +45,7 @@ export class AdminFieldsRendererComponent implements OnInit {
 
   public ngOnInit(): void {
     this.fields.forEach(field => {
-      const property = this.data?.find(d => d.key === field.name);
+      const property = (this.data || []).find(d => d.key === field.name);
       const value = property ? property.value : '';
       const control = new FormControl(value);
       control.updateValueAndValidity({ onlySelf: true, emitEvent: false });

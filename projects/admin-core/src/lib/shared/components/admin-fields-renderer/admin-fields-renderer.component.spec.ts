@@ -2,8 +2,9 @@ import { render, screen } from '@testing-library/angular';
 import { AdminFieldsRendererComponent } from './admin-fields-renderer.component';
 import { SharedImportsModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
+import { AdditionalPropertyModel } from '@tailormap-admin/admin-api';
 
-const setup = async (data?: Record<string, any>) => {
+const setup = async (data?: AdditionalPropertyModel[]) => {
   const changedFn = jest.fn();
   await render(AdminFieldsRendererComponent, {
     imports: [SharedImportsModule],
@@ -21,7 +22,7 @@ const setup = async (data?: Record<string, any>) => {
   return { changedFn };
 };
 
-describe('RegisteredFieldsRendererComponent', () => {
+describe('AdminFieldsRendererComponent', () => {
 
   test('should render', async () => {
     const { changedFn } = await setup();
@@ -35,7 +36,7 @@ describe('RegisteredFieldsRendererComponent', () => {
   });
 
   test('should render existing data', async () => {
-    await setup({ test2: 'test3' });
+    await setup([{ key: 'test2', value: 'test3', isPublic: true }]);
     expect(await screen.findByText('Test value')).toBeInTheDocument();
     expect(await screen.findByText('Test choice')).toBeInTheDocument();
     expect(await screen.findByText('test3')).toBeInTheDocument();
