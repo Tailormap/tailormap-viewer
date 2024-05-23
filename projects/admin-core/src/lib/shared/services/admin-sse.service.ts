@@ -3,7 +3,7 @@ import { nanoid } from 'nanoid';
 import { ENVIRONMENT_CONFIG, EnvironmentConfigModel, TailormapApiConstants } from '@tailormap-viewer/api';
 import { distinctUntilChanged, filter, Observable, Subject } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { AuthenticatedUserService } from '@tailormap-viewer/core';
+import { AuthenticatedUserService } from '@tailormap-viewer/api';
 
 export interface SSEEvent<T = any> {
   details: {

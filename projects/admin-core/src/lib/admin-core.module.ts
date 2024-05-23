@@ -9,6 +9,7 @@ import { ApplicationModule } from './application/application.module';
 import { OIDCConfigurationModule } from './oidc/oidc-configuration.module';
 import { AdminCoreRoutingModule } from './admin-core-routing.module';
 import { SettingsModule } from './settings/settings.module';
+import { AuthenticatedUserService } from '@tailormap-viewer/api';
 
 @NgModule({
   imports: [
@@ -26,6 +27,7 @@ export class AdminCoreModule {
     matIconRegistry: MatIconRegistry,
     domSanitizer: DomSanitizer,
     iconService: IconService,
+    authenticatedUserService: AuthenticatedUserService,
   ) {
     const adminIcons = [{
       folder: 'admin',
@@ -35,5 +37,6 @@ export class AdminCoreModule {
       ],
     }];
     iconService.loadIconsToIconRegistry(matIconRegistry, domSanitizer, adminIcons);
+    authenticatedUserService.fetchUserDetails();
   }
 }
