@@ -3,30 +3,23 @@ import { ProfileComponent } from './profile.component';
 import { MenubarButtonComponent } from '../menubar-button/menubar-button.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { SharedModule } from '@tailormap-viewer/shared';
-import { createMockStore, MockStore, provideMockStore } from '@ngrx/store/testing';
-import { selectShowLoginButton, selectUserDetails, selectUserIsAdmin } from '../../../state/core.selectors';
+import { provideMockStore } from '@ngrx/store/testing';
+import { selectShowLanguageSwitcher, selectShowLoginButton } from '../../../state/core.selectors';
 import { Router } from '@angular/router';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { of } from 'rxjs';
-import { TestBed } from '@angular/core/testing';
-import { Store } from '@ngrx/store';
-import { TAILORMAP_SECURITY_API_V1_SERVICE, TailormapSecurityApiV1MockService } from '@tailormap-viewer/api';
+import { AuthenticatedUserService } from '@tailormap-viewer/api';
 import { APP_BASE_HREF } from '@angular/common';
+import { AuthenticatedUserTestHelper } from '../../../test-helpers/authenticated-user-test.helper';
 
 const setup = async (loggedIn: boolean, showLoginButton = true) => {
   const navigateFn = jest.fn();
   const store = provideMockStore({
     selectors: [
-      { selector: selectUserDetails, value: { isAuthenticated: loggedIn, username: loggedIn ? 'testusername' : undefined, roles: [] } },
-      { selector: selectUserIsAdmin, value: false },
       { selector: selectShowLoginButton, value: showLoginButton },
+      { selector: selectShowLanguageSwitcher, value: false },
     ],
   });
-  const service = {
-    getUser$: jest.fn(() => of({})),
-    login$: jest.fn(() => of({})),
-    logout$: jest.fn(() => of(true)),
-  };
+  const userService = AuthenticatedUserTestHelper.getAuthenticatedUserService(loggedIn, [], loggedIn ? 'testusername' : undefined);
   await render(ProfileComponent, {
     declarations: [
       MenubarButtonComponent,
@@ -34,8 +27,8 @@ const setup = async (loggedIn: boolean, showLoginButton = true) => {
     providers: [
       { provide: APP_BASE_HREF, useValue: '' },
       store,
+      { provide: AuthenticatedUserService, useValue: userService },
       { provide: Router, useValue: { navigateByUrl: navigateFn } },
-      { provide: TAILORMAP_SECURITY_API_V1_SERVICE, useValue: service },
     ],
     imports: [
       MatIconTestingModule,
@@ -43,7 +36,7 @@ const setup = async (loggedIn: boolean, showLoginButton = true) => {
       NoopAnimationsModule,
     ],
   });
-  return { navigateFn, securityService: service };
+  return { navigateFn, userService };
 };
 
 describe('ProfileComponent', () => {
@@ -72,7 +65,7 @@ describe('ProfileComponent', () => {
   });
 
   test('should render when logged in', async () => {
-    const { securityService } = await setup(true);
+    const { userService } = await setup(true);
     jest.spyOn(window.location, 'reload');
     const button = await screen.getByRole('button');
     expect(button).toBeInTheDocument();
@@ -81,11 +74,9 @@ describe('ProfileComponent', () => {
     expect(await screen.findByText(/testusername/)).toBeInTheDocument();
     const menuItem = await screen.findByText(/Logout/);
     fireEvent.click(menuItem);
-    expect(securityService.logout$).toHaveBeenCalled();
+    expect(userService.logout$).toHaveBeenCalled();
     expect(window.location.reload).toHaveBeenCalled();
-    const store = (TestBed.inject(Store) as MockStore);
-    store.overrideSelector(selectUserDetails, { isAuthenticated: false });
-    store.refreshState();
+    userService.getUserDetailsMock.next({ isAuthenticated: false, roles: [], username: undefined });
     fireEvent.click(button);
     expect(await screen.findByText('Login')).toBeInTheDocument();
   });

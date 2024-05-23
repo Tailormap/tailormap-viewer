@@ -1,12 +1,12 @@
 import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { selectShowLanguageSwitcher, selectShowLoginButton, selectUserDetails, selectUserIsAdmin } from '../../../state/core.selectors';
+import { selectShowLanguageSwitcher, selectShowLoginButton } from '../../../state/core.selectors';
 import { combineLatest, map, Observable, Subject } from 'rxjs';
 import { SecurityModel } from '@tailormap-viewer/api';
 import { Router } from '@angular/router';
 import { AboutDialogComponent } from '@tailormap-viewer/shared';
 import { MatDialog } from '@angular/material/dialog';
-import { AuthenticatedUserService } from '../../../services/authenticated-user.service';
+import { AuthenticatedUserService } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-profile',
@@ -30,8 +30,8 @@ export class ProfileComponent implements OnDestroy {
     private dialog: MatDialog,
     private authenticatedUserService: AuthenticatedUserService,
   ) {
-    this.userDetails$ = this.store$.select(selectUserDetails);
-    this.userIsAdmin$ = this.store$.select(selectUserIsAdmin);
+    this.userDetails$ = this.authenticatedUserService.getUserDetails$();
+    this.userIsAdmin$ = this.authenticatedUserService.isAdminUser$();
     this.showLanguageToggle$ = this.store$.select(selectShowLanguageSwitcher);
     this.showLoginButton$ = this.store$.select(selectShowLoginButton);
     this.icon$ = combineLatest([

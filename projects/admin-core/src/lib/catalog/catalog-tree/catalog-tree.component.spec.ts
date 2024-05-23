@@ -10,8 +10,8 @@ import { CatalogTreeNodeComponent } from './catalog-tree-node/catalog-tree-node.
 import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
 import { CatalogBaseTreeComponent } from '../catalog-base-tree/catalog-base-tree.component';
 import { CatalogBaseTreeNodeComponent } from '../catalog-base-tree/catalog-base-tree-node/catalog-base-tree-node.component';
-import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper';
 import { CatalogExtendedTypeEnum } from '../models/catalog-extended.model';
+import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper';
 
 const setup = async (state: Partial<CatalogState> = {}) => {
   const mockStore = createMockStore({

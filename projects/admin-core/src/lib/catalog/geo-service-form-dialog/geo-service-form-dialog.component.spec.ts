@@ -18,7 +18,6 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper';
 
-
 const setup = async (editMode = false) => {
   const dialogRefMock = { close: jest.fn() };
   const geoServiceModelMock = getGeoService({ id: '2', title: 'my service', url: 'http://test.service' });

@@ -7,10 +7,9 @@ import { FormControl } from '@angular/forms';
 import { selectEditableLayers } from '../../../map/state/map.selectors';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { withLatestFrom } from 'rxjs/operators';
-import { selectUserDetails } from '../../../state/core.selectors';
 import { hideFeatureInfoDialog } from '../../feature-info/state/feature-info.actions';
 import { ApplicationLayerService } from '../../../map/services/application-layer.service';
-import { AttributeType } from '@tailormap-viewer/api';
+import { AttributeType, AuthenticatedUserService } from '@tailormap-viewer/api';
 import { activateTool } from '../../toolbar/state/toolbar.actions';
 import { ToolbarComponentEnum } from '../../toolbar/models/toolbar-component.enum';
 
@@ -37,6 +36,7 @@ export class EditComponent implements OnInit {
     private store$: Store,
     private destroyRef: DestroyRef,
     private applicationLayerService: ApplicationLayerService,
+    private authenticatedUserService: AuthenticatedUserService,
   ) { }
 
   public ngOnInit(): void {
@@ -53,7 +53,7 @@ export class EditComponent implements OnInit {
     combineLatest([
       this.active$,
       this.editableLayers$,
-      this.store$.select(selectUserDetails),
+      this.authenticatedUserService.getUserDetails$(),
     ])
       .pipe(
         takeUntilDestroyed(this.destroyRef),

@@ -1,4 +1,4 @@
-import { AuthenticatedUserService } from '@tailormap-viewer/core';
+import { AuthenticatedUserService } from '@tailormap-viewer/api';
 import { of } from 'rxjs';
 
 export class AuthenticatedUserTestHelper {

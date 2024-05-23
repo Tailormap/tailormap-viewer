@@ -5,7 +5,7 @@ import { SecurityModel } from '@tailormap-viewer/api';
 import { Router } from '@angular/router';
 import { AboutDialogComponent } from '@tailormap-viewer/shared';
 import { MatDialog } from '@angular/material/dialog';
-import { AuthenticatedUserService } from '@tailormap-viewer/core';
+import { AuthenticatedUserService } from '@tailormap-viewer/api';
 
 interface ButtonProps {
   icon?: string;

@@ -29,7 +29,7 @@ import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MAT_CHECKBOX_DEFAULT_OPTIONS } from '@angular/material/checkbox';
 import { LoginFormComponent } from './pages/login/login-form/login-form.component';
 import { CoreRoutingModule } from './core-routing.module';
-import { AuthenticatedUserService } from './services/authenticated-user.service';
+import { AuthenticatedUserService } from '@tailormap-viewer/api';
 
 const getBaseHref = (platformLocation: PlatformLocation): string => {
   return platformLocation.getBaseHrefFromDOM();
@@ -97,11 +97,12 @@ export class CoreModule {
     matIconRegistry: MatIconRegistry,
     domSanitizer: DomSanitizer,
     iconService: IconService,
+    authenticatedUserService: AuthenticatedUserService,
     _appStyleService: ApplicationStyleService,
     _routerHistoryService: RouterHistoryService,
-    _authenticatedUserService: AuthenticatedUserService,
   ) {
     iconService.loadIconsToIconRegistry(matIconRegistry, domSanitizer);
+    authenticatedUserService.fetchUserDetails();
   }
 
   public static forRoot(config: EnvironmentConfigModel): ModuleWithProviders<CoreModule> {

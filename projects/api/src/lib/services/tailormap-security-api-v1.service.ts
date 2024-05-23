@@ -3,7 +3,7 @@ import {
   HttpClient, HttpErrorResponse, HttpEvent, HttpHandler, HttpParams, HttpRequest, HttpXsrfTokenExtractor,
 } from '@angular/common/http';
 import { LoginConfigurationModel, UserResponseModel } from '../models';
-import { catchError, map, Observable, of, switchMap, throwError } from 'rxjs';
+import { catchError, map, Observable, of, switchMap, take, throwError } from 'rxjs';
 import { TailormapSecurityApiV1ServiceModel } from './tailormap-security-api-v1.service.model';
 import { TailormapApiConstants } from './tailormap-api.constants';
 
@@ -14,29 +14,6 @@ export class TailormapSecurityApiV1Service implements TailormapSecurityApiV1Serv
     private httpClient: HttpClient,
     private httpXsrfTokenExtractor: HttpXsrfTokenExtractor,
   ) {
-  }
-
-  public static createSecurityInterceptor(baseUrl: string, shouldLogin: () => void) {
-    return (req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> => {
-      const authReq = req.clone({
-        withCredentials: req.url.startsWith(baseUrl)
-          ? true
-          : req.withCredentials,
-      });
-      return next.handle(authReq)
-        .pipe(
-          catchError(error => {
-            if (
-              error instanceof HttpErrorResponse
-              && (req.url.startsWith(baseUrl) && req.url !== TailormapApiConstants.LOGIN_URL)
-              && (error.status === 401 || error.status === 403)
-            ) {
-              shouldLogin();
-            }
-            return throwError(error);
-          }),
-        );
-    };
   }
 
   public getLoginConfiguration$(): Observable<LoginConfigurationModel> {

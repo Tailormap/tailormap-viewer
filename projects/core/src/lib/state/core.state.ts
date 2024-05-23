@@ -1,4 +1,4 @@
-import { ViewerStylingModel, ComponentModel, SecurityModel, I18nSettingsModel, UiSettingsModel } from '@tailormap-viewer/api';
+import { ViewerStylingModel, ComponentModel, I18nSettingsModel, UiSettingsModel } from '@tailormap-viewer/api';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 
 export const coreStateKey = 'core';
@@ -15,11 +15,9 @@ export interface ViewerState {
 export interface CoreState {
   loadStatus: LoadingStateEnum;
   error?: string;
-  security: SecurityModel;
   viewer?: ViewerState;
 }
 
 export const initialCoreState: CoreState = {
   loadStatus: LoadingStateEnum.INITIAL,
-  security: { isAuthenticated: false },
 };

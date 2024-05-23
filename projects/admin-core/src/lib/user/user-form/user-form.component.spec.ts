@@ -11,7 +11,6 @@ import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { SharedAdminComponentsModule } from '../../shared/components/shared-admin-components.module';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper';
 
-
 const setup = async (isValidPassword: boolean) => {
   const mockApiService = {
     getGroups$: jest.fn(() => of([])),

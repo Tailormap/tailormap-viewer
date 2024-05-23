@@ -2,8 +2,10 @@ import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { setLoginDetails } from '../../state/core.actions';
-import { LoginConfigurationModel, TAILORMAP_SECURITY_API_V1_SERVICE, TailormapSecurityApiV1ServiceModel, UserResponseModel } from '@tailormap-viewer/api';
+import {
+  AuthenticatedUserService, LoginConfigurationModel, TAILORMAP_SECURITY_API_V1_SERVICE, TailormapSecurityApiV1ServiceModel,
+  UserResponseModel,
+} from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-login',
@@ -22,6 +24,7 @@ export class LoginComponent {
     private store$: Store,
     private router: Router,
     @Inject(TAILORMAP_SECURITY_API_V1_SERVICE) private api: TailormapSecurityApiV1ServiceModel,
+    private authenticatedUserService: AuthenticatedUserService,
   ) {
     const state = this.router.getCurrentNavigation()?.extras.state;
     this.loginConfiguration$ = this.api.getLoginConfiguration$();
@@ -35,7 +38,7 @@ export class LoginComponent {
 
   public loggedIn($event: UserResponseModel) {
     this.router.navigateByUrl(this.routeBeforeLogin || '/');
-    this.store$.dispatch(setLoginDetails($event));
+    this.authenticatedUserService.setUserDetails($event);
   }
 
 }
