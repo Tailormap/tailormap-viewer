@@ -9,15 +9,13 @@ import { of } from 'rxjs';
 import { provideMockStore } from '@ngrx/store/testing';
 import { AuthorizationEditComponent } from '../../shared/components/authorization-edit/authorization-edit.component';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
-import { adminCoreStateKey, initialAdminCoreState } from '../../state/admin-core.state';
+import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper';
 
 describe('LayerSettingsFormComponent', () => {
 
   test('should render', async () => {
     const store = provideMockStore({
-      initialState: { [userStateKey]: initialUserState, [adminCoreStateKey]: initialAdminCoreState },
-      selectors: [
-      ],
+      initialState: { [userStateKey]: initialUserState },
     });
 
     const changedFn = jest.fn();
@@ -28,6 +26,7 @@ describe('LayerSettingsFormComponent', () => {
       providers: [
         store,
         { provide: TailormapAdminApiV1Service, useValue: { getGroups$: jest.fn(() => of(null)) } },
+        AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser(),
       ],
       componentInputs: {
         isLayerSpecific: true,

@@ -2,9 +2,8 @@ import { Inject, Injectable, NgZone, OnDestroy, Optional } from '@angular/core';
 import { nanoid } from 'nanoid';
 import { ENVIRONMENT_CONFIG, EnvironmentConfigModel, TailormapApiConstants } from '@tailormap-viewer/api';
 import { distinctUntilChanged, filter, Observable, Subject } from 'rxjs';
-import { Store } from '@ngrx/store';
-import { selectUserDetails } from '../../state/admin-core.selectors';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { AuthenticatedUserService } from '@tailormap-viewer/core';
 
 export interface SSEEvent<T = any> {
   details: {
@@ -45,10 +44,10 @@ export class AdminSseService implements OnDestroy {
 
   constructor(
     private ngZone: NgZone,
-    private store$: Store,
+    private authenticatedUserService: AuthenticatedUserService,
     @Optional() @Inject(ENVIRONMENT_CONFIG) config?: EnvironmentConfigModel,
   ) {
-    this.store$.select(selectUserDetails)
+    this.authenticatedUserService.getUserDetails$()
       .pipe(takeUntilDestroyed(), distinctUntilChanged())
       .subscribe(userDetails => {
         if (userDetails.isAuthenticated) {

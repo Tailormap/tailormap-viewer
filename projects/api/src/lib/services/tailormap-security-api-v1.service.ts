@@ -49,7 +49,7 @@ export class TailormapSecurityApiV1Service implements TailormapSecurityApiV1Serv
     return this.httpClient.get<UserResponseModel>(
       `${TailormapApiConstants.BASE_URL}/user`,
     ).pipe(
-      catchError((): Observable<UserResponseModel> => of({ isAuthenticated: false, username: '', roles: [] })),
+      catchError((): Observable<UserResponseModel> => of({ isAuthenticated: false, username: '', roles: [], properties: [], groupProperties: [] })),
     );
   }
 
@@ -76,7 +76,7 @@ export class TailormapSecurityApiV1Service implements TailormapSecurityApiV1Serv
         if (success) {
           return this.getUser$();
         }
-        return of({ isAuthenticated: false, username: '', roles: [] });
+        return of({ isAuthenticated: false, username: '', roles: [], properties: [], groupProperties: [] });
       }),
     );
   }

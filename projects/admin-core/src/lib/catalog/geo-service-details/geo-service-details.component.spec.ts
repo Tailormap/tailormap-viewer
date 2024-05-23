@@ -19,7 +19,7 @@ import { PasswordFieldComponent } from '../../shared/components/password-field/p
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { AuthorizationEditComponent } from '../../shared/components/authorization-edit/authorization-edit.component';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
-import { adminCoreStateKey, initialAdminCoreState } from '../../state/admin-core.state';
+import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper';
 
 const setup = async () => {
   const activeRoute = {
@@ -31,7 +31,6 @@ const setup = async () => {
     initialState: {
       [catalogStateKey]: { ...initialCatalogState, geoServices: [{ ...geoServiceModel, catalogNodeId: 'node-1' }] },
       [userStateKey]: initialUserState,
-      [adminCoreStateKey]: initialAdminCoreState,
     },
   });
   await render(GeoServiceDetailsComponent, {
@@ -43,6 +42,7 @@ const setup = async () => {
       { provide: GeoServiceService, useValue: geoServiceService },
       { provide: Store, useValue: store },
       { provide: TailormapAdminApiV1Service, useValue: { getGroups$: jest.fn(() => of(null)) } },
+      AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser(),
     ],
   });
   return { updateGeoServiceDetails, updateGeoServiceSettings, updateGeoService$, refreshGeoService$, geoServiceModel };

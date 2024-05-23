@@ -1,15 +1,12 @@
-import { Component, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef, OnInit, Inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectShowLanguageSwitcher, selectShowLoginButton, selectUserDetails, selectUserIsAdmin } from '../../../state/core.selectors';
-import { combineLatest, map, Observable, Subject, take } from 'rxjs';
-import {
-  SecurityModel, TAILORMAP_SECURITY_API_V1_SERVICE,
-  TailormapSecurityApiV1ServiceModel,
-} from '@tailormap-viewer/api';
-import { setLoginDetails } from '../../../state/core.actions';
+import { combineLatest, map, Observable, Subject } from 'rxjs';
+import { SecurityModel } from '@tailormap-viewer/api';
 import { Router } from '@angular/router';
 import { AboutDialogComponent } from '@tailormap-viewer/shared';
 import { MatDialog } from '@angular/material/dialog';
+import { AuthenticatedUserService } from '../../../services/authenticated-user.service';
 
 @Component({
   selector: 'tm-profile',
@@ -17,7 +14,7 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./profile.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProfileComponent implements OnInit, OnDestroy {
+export class ProfileComponent implements OnDestroy {
 
   public showLanguageToggle$: Observable<boolean>;
   public userDetails$: Observable<SecurityModel | null>;
@@ -31,8 +28,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private store$: Store,
     private router: Router,
     private dialog: MatDialog,
-    private cdr: ChangeDetectorRef,
-    @Inject(TAILORMAP_SECURITY_API_V1_SERVICE) private api: TailormapSecurityApiV1ServiceModel,
+    private authenticatedUserService: AuthenticatedUserService,
   ) {
     this.userDetails$ = this.store$.select(selectUserDetails);
     this.userIsAdmin$ = this.store$.select(selectUserIsAdmin);
@@ -49,24 +45,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }));
   }
 
-  public ngOnInit() {
-    this.api.getUser$()
-      .pipe(take(1))
-      .subscribe(userDetails => {
-        this.store$.dispatch(setLoginDetails(userDetails));
-      });
-  }
-
   public ngOnDestroy() {
     this.destroyed.next(null);
     this.destroyed.complete();
   }
 
   public logout() {
-    this.api.logout$()
+    this.authenticatedUserService.logout$()
       .subscribe(loggedOut => {
         if (loggedOut) {
-          this.store$.dispatch(setLoginDetails({ isAuthenticated: false }));
           window.location.reload();
         }
       });

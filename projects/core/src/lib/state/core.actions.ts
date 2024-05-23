@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { ViewerResponseModel, ViewerStylingModel } from '@tailormap-viewer/api';
+import { SecurityPropertyModel, ViewerResponseModel, ViewerStylingModel } from '@tailormap-viewer/api';
 
 const prefix = '[Core]';
 
@@ -17,7 +17,13 @@ export const loadViewerFailed = createAction(
 );
 export const setLoginDetails = createAction(
   `${prefix} Set Login Details`,
-  props<{ isAuthenticated: boolean; username?: string; roles?: string[] }>(),
+  props<{
+    isAuthenticated: boolean;
+    username?: string;
+    roles?: string[];
+    properties?: SecurityPropertyModel[];
+    groupProperties?: SecurityPropertyModel[];
+  }>(),
 );
 export const updateViewerStyle = createAction(
   `${prefix} Update Viewer Style`,

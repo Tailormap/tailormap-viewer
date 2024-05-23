@@ -7,9 +7,9 @@ import { PasswordFieldComponent } from '../../shared/components/password-field/p
 import userEvent from '@testing-library/user-event';
 import { provideMockStore } from '@ngrx/store/testing';
 import { initialUserState, userStateKey } from '../state/user.state';
-import { adminCoreStateKey, initialAdminCoreState } from '../../state/admin-core.state';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { SharedAdminComponentsModule } from '../../shared/components/shared-admin-components.module';
+import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper';
 
 
 const setup = async (isValidPassword: boolean) => {
@@ -29,7 +29,8 @@ const setup = async (isValidPassword: boolean) => {
     },
     providers: [
       { provide: TailormapAdminApiV1Service, useValue: mockApiService },
-      provideMockStore({ initialState: { [userStateKey]: initialUserState, [adminCoreStateKey]: initialAdminCoreState } }),
+      provideMockStore({ initialState: { [userStateKey]: initialUserState } }),
+      AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser(),
     ],
   });
   return { userUpdated, mockApiService };
