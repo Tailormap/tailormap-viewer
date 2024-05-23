@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
-import {
-  HttpClient, HttpErrorResponse, HttpEvent, HttpHandler, HttpParams, HttpRequest, HttpXsrfTokenExtractor,
-} from '@angular/common/http';
+import { HttpClient, HttpParams, HttpXsrfTokenExtractor } from '@angular/common/http';
 import { LoginConfigurationModel, UserResponseModel } from '../models';
-import { catchError, map, Observable, of, switchMap, take, throwError } from 'rxjs';
+import { catchError, map, Observable, of, switchMap } from 'rxjs';
 import { TailormapSecurityApiV1ServiceModel } from './tailormap-security-api-v1.service.model';
 import { TailormapApiConstants } from './tailormap-api.constants';
 

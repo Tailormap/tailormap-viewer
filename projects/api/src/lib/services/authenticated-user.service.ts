@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, map, Observable, of, take, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, take, throwError } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { TAILORMAP_SECURITY_API_V1_SERVICE } from './tailormap-security-api-v1.service.injection-token';
 import { TailormapSecurityApiV1ServiceModel } from './tailormap-security-api-v1.service.model';
