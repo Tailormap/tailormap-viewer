@@ -25,4 +25,5 @@ export interface AppLayerModel {
   opacity: number;
   attribution?: string;
   description?: string;
+  autoRefreshInSeconds?: number | null;
 }

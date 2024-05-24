@@ -7,4 +7,5 @@ export interface AppLayerSettingsModel {
   formId?: number | null;
   hideAttributes?: string[] | null;
   readOnlyAttributes?: string[] | null;
+  autoRefreshInSeconds?: number | null;
 }

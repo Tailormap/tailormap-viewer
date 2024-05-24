@@ -26,6 +26,9 @@
       <trans-unit id="admin-core.application.applications" datatype="html">
         <source>Applications</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.autoRefreshInSeconds" datatype="html">
+        <source>Auto refresh the layer (seconds)</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.base-maps" datatype="html">
         <source>Basemaps</source>
       </trans-unit>

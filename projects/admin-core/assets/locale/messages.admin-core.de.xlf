@@ -34,6 +34,10 @@
         <source>Applications</source>
         <target>Anwendungen</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.autoRefreshInSeconds" datatype="html">
+        <source>Auto refresh the layer (seconds)</source>
+        <target state="new">Auto refresh the layer (seconds)</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.base-maps" datatype="html">
         <source>Basemaps</source>
         <target>Grundkarten</target>

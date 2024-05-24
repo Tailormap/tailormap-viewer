@@ -14,6 +14,7 @@ import { withLatestFrom } from 'rxjs/operators';
 import { BookmarkService } from '../../services/bookmark/bookmark.service';
 import { MapBookmarkHelper } from '../../services/application-bookmark/bookmark.helper';
 import { ApplicationBookmarkFragments } from '../../services/application-bookmark/application-bookmark-fragments';
+import { ApplicationLayerRefreshService } from './application-layer-refresh.service';
 
 @Injectable({
    providedIn: 'root',
@@ -27,6 +28,7 @@ export class ApplicationMapService implements OnDestroy {
     private mapService: MapService,
     private httpClient: HttpClient,
     private bookmarkService: BookmarkService,
+    _applicationRefreshService: ApplicationLayerRefreshService,
   ) {
     const isValidLayer = (layer: LayerModel | null): layer is LayerModel => layer !== null;
     this.store$.select(selectMapOptions)

@@ -213,6 +213,11 @@ export const selectSelectedNode = createSelector(
     return layerTreeNode ? layerTreeNode.id : '';
   });
 
+export const selectAutoRefreshableLayers = createSelector(
+  selectOrderedVisibleLayersWithServices,
+  layers => layers.filter(layer => typeof layer.autoRefreshInSeconds === 'number' && layer.autoRefreshInSeconds > 0),
+);
+
 export const selectLayer = (layerId: string) => createSelector(
   selectLayers,
   (layers: AppLayerWithInitialValuesModel[]) => layers.find(l => l.id === layerId) || null,
