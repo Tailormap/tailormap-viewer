@@ -95,6 +95,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     description: new FormControl<string | null>(null),
     editable: new FormControl<boolean>(false),
     formId: new FormControl<number | null>(null),
+    autoRefreshInSeconds: new FormControl<number | null>(null),
   });
 
   public formWarningMessageData$: Observable<{ featureType: FeatureTypeModel; layerSetting: AppLayerSettingsModel; form: FormModel } | null> = of(null);
@@ -133,6 +134,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
           description: value.description,
           editable: value.editable ?? undefined,
           formId: value.formId ?? null,
+          autoRefreshInSeconds: value.autoRefreshInSeconds ?? null,
         };
         this.layerSettingsChange.emit({ nodeId: this.node.id, settings });
       });
@@ -224,6 +226,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
       description: nodeSettings.description || null,
       editable: nodeSettings.editable ?? false,
       formId: nodeSettings.formId || null,
+      autoRefreshInSeconds: nodeSettings.autoRefreshInSeconds || null,
     }, { emitEvent: false });
   }
 
