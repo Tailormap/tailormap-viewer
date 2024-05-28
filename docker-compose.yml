@@ -69,7 +69,7 @@ services:
 
   solr:
     container_name: ${COMPOSE_PROJECT_NAME}-solr
-    image: solr:9.5.0-slim
+    image: solr:9.6.0-slim
     profiles:
       - solr
     environment:
@@ -89,7 +89,7 @@ services:
     container_name: ${COMPOSE_PROJECT_NAME}-solr-status
     depends_on:
       - solr
-    image: solr:9.5.0-slim
+    image: solr:9.6.0-slim
     profiles:
       - solr-monitoring
     environment:
