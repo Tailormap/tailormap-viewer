@@ -1,6 +1,6 @@
 {
   "name": "@tailormap-admin/admin-api",
-  "version": "11.3.2",
+  "version": "11.3.3",
   "peerDependencies": {
     "@angular/common": "^17.3.9",
     "@angular/core": "^17.3.9",
