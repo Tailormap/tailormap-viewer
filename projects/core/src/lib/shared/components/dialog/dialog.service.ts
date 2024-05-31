@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { CssHelper } from '../../helpers';
+import { CssHelper } from '../../../../../../shared/src/lib/helpers';
+import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layout.service';
 
 @Injectable({
   providedIn: 'root',
@@ -9,6 +10,11 @@ export class DialogService {
   private dialogCount = 0;
   private dialogs: Array<{ id: string; left: number; right: number }> = [];
   private visibleStack: string[] = [];
+
+  constructor(
+    private layoutService: ViewerLayoutService,
+  ) {
+  }
 
   public registerDialog(left: number, right: number) {
     const id = `dialog-${++this.dialogCount}`;
@@ -58,6 +64,8 @@ export class DialogService {
       }
       CssHelper.setCssVariableValue('--dialog-stack-index', `${idx}`, document.querySelector<HTMLDivElement>(`.${id}`));
     });
+    this.layoutService.setLeftPadding(maxDialogLeftWidth);
+    this.layoutService.setRightPadding(maxDialogRightWidth);
   }
 
 }

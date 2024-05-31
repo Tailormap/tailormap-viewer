@@ -9,6 +9,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { FeatureInfoEffects } from './state/feature-info.effects';
 import { FeatureInfoDialogComponent } from './feature-info-dialog/feature-info-dialog.component';
 import { ApplicationMapModule } from '../../map/application-map.module';
+import { CoreSharedModule } from '../../shared';
 
 
 @NgModule({
@@ -22,6 +23,7 @@ import { ApplicationMapModule } from '../../map/application-map.module';
     StoreModule.forFeature(featureInfoStateKey, featureInfoReducer),
     EffectsModule.forFeature([FeatureInfoEffects]),
     ApplicationMapModule,
+    CoreSharedModule,
   ],
   exports: [
     FeatureInfoComponent,

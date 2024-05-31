@@ -12,6 +12,7 @@ import { EditDialogComponent } from './edit-dialog/edit-dialog.component';
 import { ApplicationMapModule } from '../../map/application-map.module';
 import { EditSelectFeatureComponent } from './edit-select-feature/edit-select-feature.component';
 import { SelectFieldComponent } from './fields/select-field/select-field.component';
+import { CoreSharedModule } from '../../shared';
 
 
 @NgModule({
@@ -28,11 +29,12 @@ import { SelectFieldComponent } from './fields/select-field/select-field.compone
     StoreModule.forFeature(editStateKey, editReducer),
     EffectsModule.forFeature([EditEffects]),
     ApplicationMapModule,
+    CoreSharedModule,
   ],
-    exports: [
-        EditComponent,
-        EditDialogComponent,
-    ],
+  exports: [
+    EditComponent,
+    EditDialogComponent,
+  ],
 })
 export class EditComponentModule {
 }
