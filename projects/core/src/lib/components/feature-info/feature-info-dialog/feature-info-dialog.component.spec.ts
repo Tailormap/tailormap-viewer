@@ -10,6 +10,8 @@ import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { TestBed } from '@angular/core/testing';
 import { FeatureInfoModel } from '../models/feature-info.model';
 import { showNextFeatureInfoFeature, showPreviousFeatureInfoFeature } from '../state/feature-info.actions';
+import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layout.service';
+import { CoreSharedModule } from '../../../shared';
 
 const getFeatureInfo = (updated?: boolean): FeatureInfoModel => {
   return {
@@ -27,10 +29,12 @@ const renderWithState = async () => {
   await render(FeatureInfoDialogComponent, {
     imports: [
       SharedModule,
+      CoreSharedModule,
       NoopAnimationsModule,
       MatIconTestingModule,
     ],
     providers: [
+      { provide: ViewerLayoutService, useValue: { setLeftPadding: jest.fn(), setRightPadding: jest.fn() } },
       provideMockStore({
         initialState: { [featureInfoStateKey]: { ...initialFeatureInfoState } },
         selectors: [
@@ -49,11 +53,13 @@ describe('FeatureInfoDialogComponent', () => {
     const { container } = await render(FeatureInfoDialogComponent, {
       imports: [
         SharedModule,
+        CoreSharedModule,
         NoopAnimationsModule,
         MatIconTestingModule,
       ],
       providers: [
         provideMockStore({ initialState: { [featureInfoStateKey]: { ...initialFeatureInfoState } } }),
+        { provide: ViewerLayoutService, useValue: { setLeftPadding: jest.fn(), setRightPadding: jest.fn() } },
       ],
     });
     expect(container.querySelector('.feature-info')).toBeNull();
