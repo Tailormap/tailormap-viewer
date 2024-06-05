@@ -40,7 +40,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
     ],
   });
 
-  public registeredFields: AdminFieldModel[] = [];
+  public registeredFields$: Observable<AdminFieldModel[]> = of([]);
 
   @Input()
   public set user(user: UserModel | null) {
@@ -87,7 +87,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.registeredFields = this.adminFieldRegistryService.getRegisteredFields(AdminFieldLocation.USER);
+    this.registeredFields$ = this.adminFieldRegistryService.getRegisteredFields$(AdminFieldLocation.USER);
     this.userForm.valueChanges.pipe(
       takeUntil(this.destroyed),
       debounceTime(250),

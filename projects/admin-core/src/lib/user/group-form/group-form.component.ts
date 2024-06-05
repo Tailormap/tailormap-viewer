@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { debounceTime, Subject, takeUntil } from 'rxjs';
+import { debounceTime, Observable, of, Subject, takeUntil } from 'rxjs';
 import { AdditionalPropertyModel, GroupModel } from '@tailormap-admin/admin-api';
 import { FormHelper } from '../../helpers/form.helper';
 import { AdminFieldLocation, AdminFieldModel, AdminFieldRegistrationService } from '../../shared/services/admin-field-registration.service';
@@ -23,7 +23,7 @@ export class GroupFormComponent implements OnInit, OnDestroy {
     systemGroup: new FormControl<boolean>(false, { nonNullable: true }),
   });
 
-  public registeredFields: AdminFieldModel[] = [];
+  public registeredFields$: Observable<AdminFieldModel[]> = of([]);
 
   @Input()
   public set group(group: GroupModel | null) {
@@ -58,7 +58,7 @@ export class GroupFormComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.registeredFields = this.adminFieldRegistryService.getRegisteredFields(AdminFieldLocation.GROUP);
+    this.registeredFields$ = this.adminFieldRegistryService.getRegisteredFields$(AdminFieldLocation.GROUP);
     this.groupForm.valueChanges
       .pipe(
         takeUntil(this.destroyed),

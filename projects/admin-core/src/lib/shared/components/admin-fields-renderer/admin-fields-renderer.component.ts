@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, DestroyRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, DestroyRef, ChangeDetectorRef } from '@angular/core';
 import { AdminFieldModel } from '../../services/admin-field-registration.service';
 import { FormControl, FormGroup } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -14,8 +14,16 @@ export class AdminFieldsRendererComponent implements OnInit {
 
   private _data: AdditionalPropertyModel[] | null = null;
 
+  private _fields: AdminFieldModel[] = [];
+
   @Input({ required: true })
-  public fields: AdminFieldModel[] = [];
+  public set fields(fields: AdminFieldModel[]) {
+    this._fields = fields;
+    this.initForm(fields);
+  }
+  public get fields(): AdminFieldModel[] {
+    return this._fields;
+  }
 
   @Input()
   public set data(data: AdditionalPropertyModel[] | null) {
@@ -41,16 +49,10 @@ export class AdminFieldsRendererComponent implements OnInit {
 
   constructor(
     private destroyRef: DestroyRef,
+    private changeDetectorRef: ChangeDetectorRef,
   ) { }
 
   public ngOnInit(): void {
-    this.fields.forEach(field => {
-      const property = (this.data || []).find(d => d.key === field.key);
-      const value = property ? property.value : '';
-      const control = new FormControl(value);
-      control.updateValueAndValidity({ onlySelf: true, emitEvent: false });
-      this.formGroup.addControl(field.key, control);
-    });
     this.formGroup.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
@@ -76,6 +78,21 @@ export class AdminFieldsRendererComponent implements OnInit {
         });
         this.changed.emit(additionalProperties);
       });
+  }
+
+  public initForm(fields: AdminFieldModel[]): void {
+    const currentControls = Object.keys(this.formGroup.controls);
+    if (currentControls.length > 0) {
+      currentControls.forEach(control => this.formGroup.removeControl(control));
+    }
+    fields.forEach(field => {
+      const property = (this.data || []).find(d => d.key === field.key);
+      const value = property ? property.value : '';
+      const control = new FormControl(value);
+      control.updateValueAndValidity({ onlySelf: true, emitEvent: false });
+      this.formGroup.addControl(field.key, control);
+    });
+    this.changeDetectorRef.detectChanges();
   }
 
   public getControl(name: string) {
