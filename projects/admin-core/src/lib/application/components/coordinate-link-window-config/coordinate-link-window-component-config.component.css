@@ -1,0 +1,24 @@
+.url-form {
+  overflow: hidden;
+}
+
+.url-form-row {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.url-form-row mat-form-field {
+  margin-top: 0;
+  margin-left: 8px;
+  width: 200px;
+}
+
+.url-form-row mat-form-field:first-child {
+  flex: 1;
+}
+
+.add-url-button {
+  margin-top: 8px;
+  margin-left: 8px;
+}

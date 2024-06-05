@@ -7,6 +7,7 @@ import { ConfigurationComponentRegistryService } from '../services/configuration
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { MeasureComponentConfigComponent } from './measure-config/measure-component-config.component';
+import { CoordinateLinkWindowComponentConfigComponent } from './coordinate-link-window-config/coordinate-link-window-component-config.component';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import { MeasureComponentConfigComponent } from './measure-config/measure-compon
     ComponentConfigRendererComponent,
     ComponentsListComponent,
     MeasureComponentConfigComponent,
+    CoordinateLinkWindowComponentConfigComponent,
   ],
   imports: [
     CommonModule,
@@ -42,5 +44,6 @@ export class ComponentsModule {
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.COORDINATE_PICKER, $localize `:@@admin-core.application.component-coordinate-picker-tool:Coordinate picker tool`, BaseComponentConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.STREETVIEW, $localize `:@@admin-core.application.component-streetview-tool:Streetview tool`, BaseComponentConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.SHARE_VIEWER, $localize `:@@admin-core.application.component-share-viewer:Share viewer`, BaseComponentConfigComponent);
+    configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.COORDINATE_LINK_WINDOW, $localize `:@@admin-core.application.component-coordinate-link-window:Coordinate link window`, CoordinateLinkWindowComponentConfigComponent);
   }
 }

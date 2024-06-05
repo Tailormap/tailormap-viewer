@@ -1,0 +1,31 @@
+@if (urls$ | async; as urls) {
+  @if (urls.length > 0) {
+    <div class="clw-container map-control-button-container"
+         [class.clw-container--is-active]="active()"
+         (keyup.escape)="toggle(true)">
+
+      <button mat-flat-button
+              class="map-control-button"
+              [class.toggle-button--active]="active()"
+              [tmTooltip]="title$ | async"
+              (click)="toggle()">
+        <mat-icon svgIcon="edit"></mat-icon>
+      </button>
+
+      @if (active()) {
+        <div class="clw-wrapper">
+          <ng-container>
+            <mat-form-field appearance="outline" color="primary">
+              <mat-label i18n="@@core.edit.select-layer">Select link to open</mat-label>
+              <mat-select [formControl]="urlControl" tmAutoFocus>
+                <mat-option *ngFor="let url of urls" [value]="url.url">
+                  {{url.alias}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </ng-container>
+        </div>
+      }
+    </div>
+  }
+}
