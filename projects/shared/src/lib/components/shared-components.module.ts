@@ -13,11 +13,13 @@ import { SharedDirectivesModule } from '../directives/shared-directives.module';
 import { AboutDialogComponent } from './about-dialog/about-dialog.component';
 import { LanguageToggleComponent } from './language-toggle/language-toggle.component';
 import { CdkFixedSizeVirtualScroll, CdkVirtualForOf, CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { InfoMessageComponent } from './info-message';
 
 @NgModule({
   declarations: [
     SnackBarMessageComponent,
     ErrorMessageComponent,
+    InfoMessageComponent,
     TreeComponent,
     SplitButtonComponent,
     ColorPickerComponent,
@@ -45,6 +47,7 @@ import { CdkFixedSizeVirtualScroll, CdkVirtualForOf, CdkVirtualScrollViewport } 
     PanelResizerComponent,
     SliderComponent,
     LanguageToggleComponent,
+    InfoMessageComponent,
   ],
 })
 export class SharedComponentsModule {

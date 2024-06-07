@@ -1,18 +1,16 @@
-import { Component, OnInit, ChangeDetectionStrategy, signal, DestroyRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, signal, DestroyRef, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { CoordinateHelper, MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
-import { selectComponentsConfigForType } from '../../state/core.selectors';
+import { selectComponentsConfigForType } from '../../../state/core.selectors';
 import {
   BaseComponentTypeEnum, CoordinateLinkWindowConfigModel, CoordinateLinkWindowConfigUrlModel,
 } from '@tailormap-viewer/api';
-import { concatMap, filter, map, Observable, pipe, switchMap, takeUntil, tap } from 'rxjs';
+import { concatMap, filter, map, Observable, of, switchMap, tap } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { take } from 'rxjs/operators';
-import { activateTool, deactivateTool, deregisterTool, registerTool, toggleTool } from '../toolbar/state/toolbar.actions';
-import { ToolbarComponentEnum } from '../toolbar/models/toolbar-component.enum';
-import { SnackBarMessageComponent } from '@tailormap-viewer/shared';
+import { activateTool, deactivateTool, deregisterTool, registerTool } from '../state/toolbar.actions';
+import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { coordinates } from 'ol/geom/flat/reverse';
 
 @Component({
   selector: 'tm-coordinate-link-window',
@@ -20,13 +18,13 @@ import { coordinates } from 'ol/geom/flat/reverse';
   styleUrls: ['./coordinate-link-window.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CoordinateLinkWindowComponent implements OnInit {
+export class CoordinateLinkWindowComponent implements OnInit, OnDestroy {
 
   public active = signal(false);
   public urls$: Observable<CoordinateLinkWindowConfigUrlModel[]>;
   public title$: Observable<string>;
 
-  public urlControl = new FormControl<string>('');
+  public urlControl = new FormControl<CoordinateLinkWindowConfigUrlModel | null>(null);
 
   constructor(
     private store$: Store,
@@ -36,8 +34,7 @@ export class CoordinateLinkWindowComponent implements OnInit {
     const config$ = this.store$.select(selectComponentsConfigForType<CoordinateLinkWindowConfigModel>(BaseComponentTypeEnum.COORDINATE_LINK_WINDOW))
       .pipe(map(config => config?.config));
     this.urls$ = config$.pipe(map(conf => conf?.urls || []));
-    this.title$ = config$.pipe(map(conf => conf?.title || 'Coordinate Link Window'));
-
+    this.title$ = config$.pipe(map(conf => conf?.title || $localize `:@@core.coordinate-link-window.title:Coordinate Link Window`));
   }
 
   public ngOnInit(): void {
@@ -48,10 +45,10 @@ export class CoordinateLinkWindowComponent implements OnInit {
       )
       .subscribe(urls => {
         if (urls && urls.length > 0) {
-          this.urlControl.patchValue(urls[0].url);
+          this.urlControl.patchValue(urls[0]);
+          this.createMapClickTool();
         }
       });
-    this.createMapClickTool();
   }
 
   public ngOnDestroy() {
@@ -78,17 +75,25 @@ export class CoordinateLinkWindowComponent implements OnInit {
           this.store$.dispatch(registerTool({ tool: { id: ToolbarComponentEnum.COORDINATE_LINK_WINDOW, mapToolId: tool.id } }));
         }),
         concatMap(({ tool }) => tool.mapClick$),
-        // this.mapService.getProjectionCode$()
-        // get map projection
-        // project to target
-      ).subscribe(mapClick => {
+        switchMap(({ mapCoordinates }) => {
+          const currentUrl = this.urlControl.value;
+          if (!currentUrl || !currentUrl.projection) {
+            return of(mapCoordinates);
+          }
+          return this.mapService.getProjectionCode$()
+            .pipe(take(1), map(mapProjection => {
+              return CoordinateHelper.projectCoordinates(mapCoordinates, mapProjection, currentUrl.projection);
+            }));
+        }),
+      ).subscribe(coordinates => {
         const currentUrl = this.urlControl.value;
-        if (!currentUrl) {
+        if (!this.active() || !currentUrl || !currentUrl.url || !coordinates || coordinates.length < 2) {
           return;
         }
-        CoordinateHelper.projectCoordinates(mapClick.mapCoordinates, )
-        const replaced = currentUrl.replace('[X]', coordinates[0]).replace('[Y]', coordinates[1]);
-        window.open(replaced, '_blank');
+        const replaced = currentUrl.url
+          .replace(/\[(x|lon)]/i, "" + coordinates[0])
+          .replace(/\[(y|lat)]/i, "" + coordinates[1]);
+        window.open(replaced, '_blank', 'popup=1, noopener, noreferrer');
       },
     );
   }

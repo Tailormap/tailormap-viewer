@@ -12,7 +12,7 @@ import { PrintModule } from './print/print.module';
 import { FilterComponentModule } from './filter/filter-component.module';
 import { EditComponentModule } from './edit/edit-component.module';
 import { RegisteredComponentsModule } from './registered-components-renderer/registered-components.module';
-import { CoordinateLinkWindowModule } from './coordinate-link-window/coordinate-link-window.module';
+
 
 @NgModule({
   declarations: [],
@@ -32,7 +32,6 @@ import { CoordinateLinkWindowModule } from './coordinate-link-window/coordinate-
     FilterComponentModule,
     EditComponentModule,
     RegisteredComponentsModule,
-    CoordinateLinkWindowModule,
   ],
 })
 export class ComponentsModule {}

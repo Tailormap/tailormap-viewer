@@ -3,6 +3,12 @@
                                 [config]="config"
                                 i18n-titleLabel="@@admin-core.components.coordinate-link-window-title"
                                 titleLabel="Coordinate link window title">
+  <tm-info-message class="clw-help">
+    <div i18n="@@admin-core.components.coordinate-link-window-help1">Add one or more URL's to configure the Coordinate Link Window component.</div>
+    <div i18n="@@admin-core.components.coordinate-link-window-help2">For each URL you can use <code>[X]</code> or <code>[lat]</code> and <code>[Y]</code> or <code>[lon]</code> placeholders in the URL.</div>
+    <div i18n="@@admin-core.components.coordinate-link-window-help3">Those will be replaced by the location on which the user clicks.</div>
+    <div i18n="@@admin-core.components.coordinate-link-window-help4">For example: <code>https://www.google.com/maps/&#64;[lat],[lon],18z</code> or <code>https://demo.tailormap.com/#&#64;[X],[Y],18</code></div>
+  </tm-info-message>
   <div class="url-form" [formGroup]="formGroup">
     @for(urlForm of urlList.controls; track urlForm; let i = $index) {
       <div class="url-form-row" [formGroup]="urlForm">

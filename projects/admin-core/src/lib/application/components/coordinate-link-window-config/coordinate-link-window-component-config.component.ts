@@ -4,7 +4,6 @@ import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ComponentConfigurationService } from '../../services/component-configuration.service';
 import { ConfigurationComponentModel } from '../configuration-component.model';
-import { ProjectionCodesEnum } from '@tailormap-viewer/map';
 import { debounceTime } from 'rxjs';
 import { AdminProjectionsHelper } from '../../helpers/admin-projections-helper';
 import { nanoid } from 'nanoid';
@@ -14,7 +13,7 @@ type UrlFormType = FormGroup<{
   id: FormControl<string>;
   url: FormControl<string>;
   alias: FormControl<string>;
-  projection: FormControl<ProjectionCodesEnum>;
+  projection: FormControl<string>;
 }>;
 
 @Component({
@@ -49,7 +48,10 @@ export class CoordinateLinkWindowComponentConfigComponent implements Configurati
     return this.formGroup.get('urls') as FormArray<UrlFormType>;
   }
 
-  public projections = AdminProjectionsHelper.projections;
+  public projections = [
+    { code: 'EPSG:4326', label: 'EPSG:4326 (WGS84)' },
+    ...AdminProjectionsHelper.projections.map(p => ({ code: p.code, label: p.label })),
+  ];
 
   constructor(
     private componentConfigService: ComponentConfigurationService,
@@ -103,11 +105,16 @@ export class CoordinateLinkWindowComponentConfigComponent implements Configurati
     const values = this.formGroup.value;
     const urls: CoordinateLinkWindowConfigUrlModel[] = (values.urls || [])
       .map<CoordinateLinkWindowConfigUrlModel>(u => {
+        const url = u.url ?? '';
+        let projection = u.projection ?? '';
+        if (!projection && /\[lat]/i.test(url) && /\[lon]/i.test(url)) {
+          projection = 'EPSG:4326';
+        }
         return {
           id: u.id ?? nanoid(),
-          url: u.url ?? '',
+          url,
           alias: u.alias ?? '',
-          projection: u.projection ?? ProjectionCodesEnum.RD,
+          projection,
         };
       });
     this.componentConfigService.updateConfig<CoordinateLinkWindowConfigModel>(this.type, 'urls', urls);
@@ -118,7 +125,7 @@ export class CoordinateLinkWindowComponentConfigComponent implements Configurati
       id: new FormControl<string>(url?.id || nanoid(), { nonNullable: true }),
       url: new FormControl<string>(url ? url.url : '', { nonNullable: true }),
       alias: new FormControl<string>(url ? url.alias : '', { nonNullable: true }),
-      projection: new FormControl<ProjectionCodesEnum>(url ? url.projection : ProjectionCodesEnum.RD, { nonNullable: true }),
+      projection: new FormControl<string>(url ? url.projection : '', { nonNullable: true }),
     });
   }
 

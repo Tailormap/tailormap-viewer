@@ -1,3 +1,9 @@
+.clw-help {
+  display: block;
+  margin-left: 8px;
+  margin-top: 16px;
+}
+
 .url-form {
   overflow: hidden;
 }
