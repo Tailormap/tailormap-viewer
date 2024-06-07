@@ -5,7 +5,7 @@ import { map, Observable } from 'rxjs';
 import {
   CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel, ConfigModel,
   OIDCConfigurationModel, FeatureTypeModel,
-  GeoServiceSummaryWithLayersModel, FeatureSourceSummaryWithFeatureTypesModel, FormSummaryModel, FormModel,
+  GeoServiceSummaryWithLayersModel, FeatureSourceSummaryWithFeatureTypesModel, FormSummaryModel, FormModel, UploadModel,
 } from '../models';
 import { CatalogModelHelper } from '../helpers/catalog-model.helper';
 import { TailormapApiConstants } from '@tailormap-viewer/api';
@@ -291,6 +291,24 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
       observe: 'response',
     }).pipe(
       map(response => response.status === 204),
+    );
+  }
+
+  public getUploads$(category?: string): Observable<UploadModel[]> {
+    let url = `${TailormapAdminApiV1Service.BASE_URL}/uploads`;
+    const params: { category?: string } = {};
+    if (category) {
+      url = `${url}/search/findByCategory`;
+      params.category = category;
+    }
+    return this.httpClient.get<{ _embedded: { uploads: UploadModel[] }}>(url, { params }).pipe(
+      map(response => response._embedded.uploads),
+    );
+  }
+
+  public createUpload$(upload: Pick<UploadModel, 'content' | 'filename' | 'category' | 'mimeType'>): Observable<UploadModel> {
+    return this.httpClient.post<UploadModel>(`${TailormapAdminApiV1Service.BASE_URL}/uploads`, upload).pipe(
+      map(response => response),
     );
   }
 

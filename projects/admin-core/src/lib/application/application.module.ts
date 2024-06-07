@@ -26,7 +26,6 @@ import { ApplicationFolderNodeNameComponent } from './application-layer-tree/app
 import { ApplicationEditComponentsComponent } from './application-edit-components/application-edit-components.component';
 import { ComponentsModule } from './components/components.module';
 import { ApplicationEditStylingComponent } from './application-edit-styling/application-edit-styling.component';
-import { ImageUploadFieldComponent } from './styling/image-upload-field/image-upload-field.component';
 import { ApplicationLayerSettingsComponent } from './application-layer-settings/application-layer-settings.component';
 import { ApplicationService } from './services/application.service';
 import {
@@ -50,7 +49,6 @@ import { FormModule } from "../form/form.module";
     ApplicationLayerTreeNodeComponent,
     ApplicationFolderNodeNameComponent,
     ApplicationEditStylingComponent,
-    ImageUploadFieldComponent,
     ApplicationLayerSettingsComponent,
     ApplicationLayerAttributeSettingsComponent,
   ],
@@ -65,9 +63,9 @@ import { FormModule } from "../form/form.module";
         ComponentsModule,
         FormModule,
     ],
-  exports: [
-    ApplicationListComponent,
-  ],
+    exports: [
+        ApplicationListComponent,
+    ],
 })
 export class ApplicationModule {
   constructor(applicationService: ApplicationService) {

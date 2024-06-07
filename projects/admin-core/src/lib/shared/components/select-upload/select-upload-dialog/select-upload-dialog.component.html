@@ -1,0 +1,32 @@
+<h1 mat-dialog-title>Select file</h1>
+
+<div class="dialog-content">
+  @if (loading()) {
+    <mat-spinner [diameter]="20" mode="indeterminate" color="primary"></mat-spinner>
+  }
+  @if (existingUploads$ | async; as existingUploads) {
+    @if (existingUploads.length > 0) {
+      <div class="uploads-section">
+        <h2>Select existing file</h2>
+        <div class="file-list">
+          @for (upload of existingUploads; track upload.id) {
+            <div class="file-image" (click)="selectFile(upload)">
+              <img [src]="getImg(upload)" [alt]="upload.filename" /><br />
+              {{upload.filename}}
+            </div>
+          }
+        </div>
+      </div>
+    }
+  }
+
+  <div class="uploads-section">
+    <h2>Upload a new file</h2>
+    <tm-image-upload-field (imageChanged)="imageSelected($event)"></tm-image-upload-field>
+  </div>
+
+</div>
+
+<div mat-dialog-actions>
+  <button mat-button (click)="dismiss()" i18n="@@admin-core.common.cancel">Cancel</button>
+</div>
