@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 
 export enum AdminFieldLocation {
   GROUP = 'GROUP',
@@ -20,15 +21,18 @@ export interface AdminFieldModel {
 })
 export class AdminFieldRegistrationService {
 
-  private registeredFields = new Map<AdminFieldLocation, AdminFieldModel[]>();
+  private registeredFieldsSubject = new BehaviorSubject<Map<AdminFieldLocation, AdminFieldModel[]>>(new Map());
 
   public registerFields(location: AdminFieldLocation, fields: AdminFieldModel[]) {
-    const currentFields = this.registeredFields.get(location) || [];
-    this.registeredFields.set(location, [ ...currentFields, ...fields ]);
+    const currentMap = this.registeredFieldsSubject.value;
+    const currentFields = currentMap.get(location) || [];
+    const updatedMap = new Map(currentMap).set(location, [ ...currentFields, ...fields ]);
+    this.registeredFieldsSubject.next(updatedMap);
   }
 
-  public getRegisteredFields(location: AdminFieldLocation) {
-    return this.registeredFields.get(location) || [];
+  public getRegisteredFields$(location: AdminFieldLocation): Observable<AdminFieldModel[]> {
+    return this.registeredFieldsSubject.asObservable()
+      .pipe(map(fields => fields.get(location) || []));
   }
 
 }

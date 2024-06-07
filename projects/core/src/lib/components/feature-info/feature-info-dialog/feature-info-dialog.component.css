@@ -35,7 +35,8 @@
   line-height: 24px;
   border-bottom: 1px solid #D8D8D8;
   padding: 15px 14px;
-  word-break: break-all;
+  word-break: normal;
+  overflow-wrap: break-word;
 }
 
 .row:last-of-type {
