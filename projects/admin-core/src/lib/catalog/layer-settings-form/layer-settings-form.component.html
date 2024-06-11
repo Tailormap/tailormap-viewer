@@ -19,6 +19,10 @@
     <mat-label i18n="@@admin-core.common.attribution">Attribution</mat-label>
     <input matInput formControlName="attribution" />
   </mat-form-field>
+  <strong>Override service default legend</strong>
+  <tm-admin-select-upload category="legend"
+                          (fileSelected)="onLegendImageChanged($event)"
+                          [selectedFile]="layerSettingsForm.get('legendImageId')?.value || undefined"></tm-admin-select-upload>
   <ng-container *ngIf="!isLayerSpecific">
     <mat-slide-toggle formControlName="hiDpiEnabled" i18n="@@admin-core.catalog.hi-dpi-enabled">High-DPI enabled</mat-slide-toggle>
     <mat-slide-toggle formControlName="tilingEnabled"  i18n="@@admin-core.catalog.use-tiling" *ngIf="isWMS">Use tiling</mat-slide-toggle>
