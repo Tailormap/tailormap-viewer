@@ -78,7 +78,7 @@
         <source>Components</source>
       </trans-unit>
       <trans-unit id="admin-core.application.copy-application" datatype="html">
-        <source>Copy application <x id="INTERPOLATION" equiv-text="{{application.title}}"/></source>
+        <source>Copy application <x id="INTERPOLATION" equiv-text="{{data.application.title}}"/></source>
       </trans-unit>
       <trans-unit id="admin-core.application.create-application" datatype="html">
         <source>Create application</source>
@@ -163,6 +163,9 @@
       </trans-unit>
       <trans-unit id="admin-core.application.logo" datatype="html">
         <source>Upload logo for application</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.make-copy" datatype="html">
+        <source>Copy</source>
       </trans-unit>
       <trans-unit id="admin-core.application.max-extent" datatype="html">
         <source>Max extent</source>

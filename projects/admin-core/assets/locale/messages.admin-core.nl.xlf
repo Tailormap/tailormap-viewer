@@ -102,8 +102,8 @@
         <target>Componenten</target>
       </trans-unit>
       <trans-unit id="admin-core.application.copy-application" datatype="html">
-        <source>Copy application <x id="INTERPOLATION" equiv-text="{{application.title}}"/></source>
-        <target state="new">Kopieer applicatie <x id="INTERPOLATION" equiv-text="{{application.title}}"/></target>
+        <source>Copy application <x id="INTERPOLATION" equiv-text="{{data.application.title}}"/></source>
+        <target state="new">Kopieer applicatie <x id="INTERPOLATION" equiv-text="{{data.application.title}}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.application.create-application" datatype="html">
         <source>Create application</source>
@@ -216,6 +216,10 @@
       <trans-unit id="admin-core.application.logo" datatype="html">
         <source>Upload logo for application</source>
         <target>Logo uploaden voor de applicatie</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.make-copy" datatype="html">
+        <source>Copy</source>
+        <target state="new">Kopiëren</target>
       </trans-unit>
       <trans-unit id="admin-core.application.max-extent" datatype="html">
         <source>Max extent</source>
@@ -823,7 +827,7 @@
       </trans-unit>
       <trans-unit id="admin-core.common.copy" datatype="html">
         <source>Copy</source>
-        <target state="new">Kopiëren</target>
+        <target state="new">Kopie</target>
       </trans-unit>
       <trans-unit id="admin-core.common.create" datatype="html">
         <source>Create</source>
