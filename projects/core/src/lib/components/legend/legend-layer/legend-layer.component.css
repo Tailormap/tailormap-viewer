@@ -10,5 +10,5 @@ strong {
 }
 
 .hi-dpi {
-  transform: scale(0.5);
+  zoom: 50%;
 }
