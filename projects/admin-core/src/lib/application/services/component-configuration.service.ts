@@ -19,7 +19,7 @@ export class ComponentConfigurationService {
   public updateConfig<C extends ComponentBaseConfigModel>(
     type: string | undefined,
     key: keyof C,
-    value: string | number | boolean | undefined | null,
+    value: any,
   ) {
     if (!type) {
       return;

@@ -1,0 +1,53 @@
+.clw-container {
+  justify-content: stretch;
+  overflow: hidden;
+  background-color: #fff;
+  width: 40px;
+  height: 40px;
+  transition: all 0.2s ease-in-out;
+}
+
+.clw-container--is-active {
+  padding: 5px 6px 5px 0;
+  width: 300px;
+  height: 70px;
+  max-width: var(--max-control-width);
+}
+
+.clw-container button {
+  border-radius: 3px;
+}
+
+.clw-wrapper {
+  flex: 1;
+}
+
+.clw-container mat-form-field {
+  width: 100%;
+  padding-top: 6px;
+}
+
+@media screen and (max-width: 730px) {
+  .clw-container--is-active {
+    padding: 0;
+    width: var(--map-control-size);
+    height: var(--map-control-size);
+  }
+
+  .clw-wrapper {
+    position: absolute;
+    top: calc(var(--map-control-size) + 9px);
+    left: 0;
+    background: #fff;
+    width: 260px;
+    max-width: var(--max-control-width);
+    z-index: 20;
+    padding: 9px;
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .clw-wrapper {
+    width: var(--max-control-width);
+  }
+}
