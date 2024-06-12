@@ -1,18 +1,18 @@
 @if (urls$ | async; as urls) {
   @if (urls.length > 0) {
     <div class="clw-container map-control-button-container"
-         [class.clw-container--is-active]="active()"
+         [class.clw-container--is-active]="toolActive$ | async"
          (keyup.escape)="toggle(true)">
 
       <button mat-flat-button
               class="map-control-button"
-              [class.toggle-button--active]="active()"
+              [class.toggle-button--active]="toolActive$ | async"
               [tmTooltip]="title$ | async"
               (click)="toggle()">
         <mat-icon svgIcon="components_coordinate_link_window"></mat-icon>
       </button>
 
-      @if (active()) {
+      @if (toolActive$ | async) {
         <div class="clw-wrapper">
           <ng-container>
             <mat-form-field appearance="outline" color="primary">

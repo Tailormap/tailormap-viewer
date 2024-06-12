@@ -8,9 +8,10 @@ import {
 import { concatMap, filter, map, Observable, of, switchMap, tap } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { take } from 'rxjs/operators';
-import { activateTool, deactivateTool, deregisterTool, registerTool } from '../state/toolbar.actions';
+import { activateTool, deactivateTool, deregisterTool, registerTool, toggleTool } from '../state/toolbar.actions';
 import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { isActiveToolbarTool } from '../state/toolbar.selectors';
 
 @Component({
   selector: 'tm-coordinate-link-window',
@@ -20,7 +21,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 })
 export class CoordinateLinkWindowComponent implements OnInit, OnDestroy {
 
-  public active = signal(false);
+  public toolActive$: Observable<boolean>;
   public urls$: Observable<CoordinateLinkWindowConfigUrlModel[]>;
   public title$: Observable<string>;
 
@@ -35,6 +36,7 @@ export class CoordinateLinkWindowComponent implements OnInit, OnDestroy {
       .pipe(map(config => config?.config));
     this.urls$ = config$.pipe(map(conf => conf?.urls || []));
     this.title$ = config$.pipe(map(conf => conf?.title || $localize `:@@core.coordinate-link-window.title:Coordinate Link Window`));
+    this.toolActive$ = this.store$.select(isActiveToolbarTool(ToolbarComponentEnum.COORDINATE_LINK_WINDOW));
   }
 
   public ngOnInit(): void {
@@ -56,13 +58,11 @@ export class CoordinateLinkWindowComponent implements OnInit, OnDestroy {
   }
 
   public toggle(close?: boolean) {
-    const active = close ? false : !this.active();
-    this.active.set(active);
-    if (active) {
-      this.store$.dispatch(activateTool({ tool: ToolbarComponentEnum.COORDINATE_LINK_WINDOW }));
-    } else {
+    if (close === true) {
       this.store$.dispatch(deactivateTool({ tool: ToolbarComponentEnum.COORDINATE_LINK_WINDOW }));
+      return;
     }
+    this.store$.dispatch(toggleTool({ tool: ToolbarComponentEnum.COORDINATE_LINK_WINDOW }));
   }
 
   private createMapClickTool() {
@@ -87,7 +87,7 @@ export class CoordinateLinkWindowComponent implements OnInit, OnDestroy {
         }),
       ).subscribe(coordinates => {
         const currentUrl = this.urlControl.value;
-        if (!this.active() || !currentUrl || !currentUrl.url || !coordinates || coordinates.length < 2) {
+        if (!currentUrl || !currentUrl.url || !coordinates || coordinates.length < 2) {
           return;
         }
         const replaced = currentUrl.url
