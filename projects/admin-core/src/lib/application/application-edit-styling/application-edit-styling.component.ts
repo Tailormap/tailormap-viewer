@@ -33,7 +33,7 @@ export class ApplicationEditStylingComponent {
     this.updateStyling({ primaryColor: $event });
   }
 
-  public onImageChanged($event: string) {
+  public onImageChanged($event: string | null) {
     this.updateStyling({ logo: $event });
   }
 

@@ -1,3 +1,5 @@
 <button mat-flat-button
         (click)="selectFile()"
         i18n="@@admin-core.common.select-file">Select file</button>
+
+<button mat-flat-button (click)="clear()" *ngIf="selectedFile !== null"  i18n="@@admin-core.common.clear">Clear</button>

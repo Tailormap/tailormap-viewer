@@ -11,7 +11,7 @@
     <strong i18n="@@admin-core.application.logo">Upload logo for application</strong>
     <tm-admin-select-upload category="app-logo"
                             (fileSelected)="onImageChanged($event)"
-                            [selectedFile]="stylingConfig.logo"></tm-admin-select-upload>
+                            [selectedFile]="stylingConfig.logo || null"></tm-admin-select-upload>
 <!--    <tm-image-upload-field (imageChanged)="onImageChanged($event)"-->
 <!--                           [maxSize]="2"-->
 <!--                           [resizeSize]="600"-->

@@ -4,7 +4,7 @@ import { TailormapAdminApiV1Service, UploadModel } from '@tailormap-admin/admin-
 import { BehaviorSubject, catchError, of, take } from 'rxjs';
 
 export interface SelectUploadData {
-  uploadId?: string;
+  uploadId: string | null;
   category: string;
 }
 

@@ -280,7 +280,7 @@ export class LayerSettingsFormComponent implements OnInit {
     return !!settings && this.isXYZ;
   }
 
-  public onLegendImageChanged($event: string) {
+  public onLegendImageChanged($event: string | null) {
     this.layerSettingsForm.patchValue({ legendImageId: $event });
   }
 }

@@ -16,10 +16,10 @@ export class SelectUploadComponent {
   public category: string = '';
 
   @Input()
-  public selectedFile: string | undefined;
+  public selectedFile: string | null = null;
 
   @Output()
-  public fileSelected = new EventEmitter<string>();
+  public fileSelected = new EventEmitter<string | null>();
 
   constructor(
     private dialog: MatDialog,
@@ -39,4 +39,7 @@ export class SelectUploadComponent {
       });
   }
 
+  public clear() {
+    this.fileSelected.emit(null);
+  }
 }
