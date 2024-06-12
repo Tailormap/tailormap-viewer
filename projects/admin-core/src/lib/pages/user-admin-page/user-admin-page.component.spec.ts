@@ -6,7 +6,7 @@ import { MatListModule } from '@angular/material/list';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { UserListComponent } from '../../user/user-list/user-list.component';
 import { provideMockStore } from '@ngrx/store/testing';
-import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper';
+import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
 
 const setup = async () => {
   await render(UserAdminPageComponent, {

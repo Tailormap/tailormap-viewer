@@ -10,7 +10,7 @@ import { of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import userEvent from '@testing-library/user-event';
 import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
-import { TestSaveHelper } from '../../test-helpers/test-save.helper';
+import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { TestBed } from '@angular/core/testing';

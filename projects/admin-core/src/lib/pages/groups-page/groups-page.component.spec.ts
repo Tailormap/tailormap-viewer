@@ -6,7 +6,7 @@ import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { GroupListComponent } from '../../user/group-list/group-list.component';
 import { provideMockStore } from '@ngrx/store/testing';
-import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper';
+import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
 
 
 const setup = async () => {
