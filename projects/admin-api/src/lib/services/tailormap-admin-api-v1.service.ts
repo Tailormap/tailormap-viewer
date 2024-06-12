@@ -301,6 +301,7 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
       url = `${url}/search/findByCategory`;
       params.category = category;
     }
+    url = `${url}?projection=summary`;
     return this.httpClient.get<{ _embedded: { uploads: UploadModel[] }}>(url, { params }).pipe(
       map(response => response._embedded.uploads),
     );

@@ -20,7 +20,7 @@
     <input matInput formControlName="attribution" />
   </mat-form-field>
   <strong>Override service default legend</strong>
-  <tm-admin-select-upload category="legend"
+  <tm-admin-select-upload [category]="legendCategory"
                           (fileSelected)="onLegendImageChanged($event)"
                           [selectedFile]="layerSettingsForm.get('legendImageId')?.value || null"></tm-admin-select-upload>
   <ng-container *ngIf="!isLayerSpecific">

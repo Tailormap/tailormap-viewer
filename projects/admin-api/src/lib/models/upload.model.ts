@@ -9,4 +9,6 @@ export interface UploadModel {
   imageAltText: string | undefined | null;
   lastModified: string | Date;
   content?: string;
+  contentLength: number | null;
+  contentSize?: string;
 }

@@ -11,6 +11,7 @@ import { Store } from '@ngrx/store';
 import { selectGeoServiceById, selectGeoServiceLayersByGeoServiceId } from '../state/catalog.selectors';
 import { BoundsModel, TileLayerHiDpiModeEnum } from '@tailormap-viewer/api';
 import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-layer.model';
+import { UploadCategoryEnum } from '../../shared/components/select-upload/models/upload-category.enum';
 
 @Component({
   selector: 'tm-admin-layer-settings-form',
@@ -88,6 +89,7 @@ export class LayerSettingsFormComponent implements OnInit {
   public isXYZ = false;
   public hiDpiModes = TileLayerHiDpiModeEnum;
 
+  public legendCategory = UploadCategoryEnum.LEGEND;
 
   public layerSettingsForm = new FormGroup({
     title: new FormControl('', { nonNullable: true }),

@@ -5,6 +5,7 @@ import { PopoverPositionEnum } from '@tailormap-viewer/shared';
 import { ViewerStylingModel } from '@tailormap-viewer/api';
 import { selectStylingConfig } from '../state/application.selectors';
 import { updateApplicationStylingConfig } from '../state/application.actions';
+import { UploadCategoryEnum } from '../../shared/components/select-upload/models/upload-category.enum';
 
 @Component({
   selector: 'tm-admin-application-edit-styling',
@@ -18,6 +19,7 @@ export class ApplicationEditStylingComponent {
 
   public DEFAULT_PRIMARY_COLOR = 'rgb(98, 54, 255)';
   public dropdownPosition = PopoverPositionEnum.BOTTOM_LEFT_DOWN;
+  public appLogoCategory = UploadCategoryEnum.APPLICATION_LOGO;
 
   constructor(
     private store$: Store,
