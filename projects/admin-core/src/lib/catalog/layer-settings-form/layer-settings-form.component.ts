@@ -281,6 +281,6 @@ export class LayerSettingsFormComponent implements OnInit {
   }
 
   public onLegendImageChanged($event: string) {
-    this.layerSettingsForm.patchValue({ legendImageId: $event});
+    this.layerSettingsForm.patchValue({ legendImageId: $event });
   }
 }
