@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
 import { FeatureTypeSelectorComponent } from './feature-type-selector.component';
 import { CatalogState, catalogStateKey, initialCatalogState } from '../state/catalog.state';
 import { createMockStore } from '@ngrx/store/testing';
@@ -8,6 +8,7 @@ import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model'
 import { FeatureSourceProtocolEnum, getFeatureSource, getFeatureTypeSummary } from '@tailormap-admin/admin-api';
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 import userEvent from '@testing-library/user-event';
+import { CatalogExtendedTypeEnum } from '../models/catalog-extended.model';
 
 const setup = async (status: LoadingStateEnum, layerName?: string) => {
   const featureTypeModel: ExtendedFeatureTypeModel = {
@@ -16,11 +17,13 @@ const setup = async (status: LoadingStateEnum, layerName?: string) => {
     originalId: 'ft_1',
     featureSourceId: '1',
     catalogNodeId: '',
+    type: CatalogExtendedTypeEnum.FEATURE_TYPE_TYPE,
   };
   const featureSourceModel: ExtendedFeatureSourceModel = {
     ...getFeatureSource({ id: '1', title: 'JDBC source', protocol: FeatureSourceProtocolEnum.JDBC }),
     featureTypesIds: ['ft_1'],
     catalogNodeId: '',
+    type: CatalogExtendedTypeEnum.FEATURE_SOURCE_TYPE,
   };
   const catalogState: CatalogState = {
     ...initialCatalogState,

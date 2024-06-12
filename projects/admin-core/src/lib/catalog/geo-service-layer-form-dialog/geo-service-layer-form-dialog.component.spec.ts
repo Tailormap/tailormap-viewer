@@ -10,10 +10,10 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-layer.model';
 import { provideMockStore } from '@ngrx/store/testing';
-import { selectGeoServiceLayerSettingsByLayerId } from '../state/catalog.selectors';
 import { createGeoServiceMock } from '../helpers/mocks/geo-service.service.mock';
 import { GeoServiceLayerFormDialogComponent } from './geo-service-layer-form-dialog.component';
 import { catalogStateKey } from '../state/catalog.state';
+import { CatalogExtendedTypeEnum } from '../models/catalog-extended.model';
 
 const setup = async () => {
   const dialogRefMock = { close: jest.fn() };
@@ -21,6 +21,7 @@ const setup = async () => {
     ...getGeoService({ id: 'test', title: 'my service', url: 'http://test.service' }),
     layerIds: ['my-layer'],
     catalogNodeId: '1',
+    type: CatalogExtendedTypeEnum.SERVICE_TYPE,
   };
   const geoServiceLayerMock: ExtendedGeoServiceLayerModel = {
     ...getGeoServiceLayer({ name: 'my-layer', title: 'nice layer' }),
@@ -28,6 +29,7 @@ const setup = async () => {
     serviceId: 'test',
     catalogNodeId: '1',
     originalId: 'my-layer',
+    type: CatalogExtendedTypeEnum.SERVICE_LAYER_TYPE,
   };
   const { geoServiceService, updateGeoService$ } = createGeoServiceMock();
   await render(GeoServiceLayerFormDialogComponent, {

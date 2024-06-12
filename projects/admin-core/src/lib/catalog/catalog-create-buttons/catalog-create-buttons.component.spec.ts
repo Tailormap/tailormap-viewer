@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/angular';
 import { CatalogCreateButtonsComponent } from './catalog-create-buttons.component';
 import userEvent from '@testing-library/user-event';
-import { TestSaveHelper } from '../../test-helpers/test-save.helper';
+import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
 import { of } from 'rxjs';
 import { createGeoServiceMock } from '../helpers/mocks/geo-service.service.mock';
 import { TailormapAdminApiV1Service, getCatalogNode, AUTHORIZATION_RULE_ANONYMOUS } from '@tailormap-admin/admin-api';
@@ -21,7 +21,7 @@ import { Router } from '@angular/router';
 import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
 import { AuthorizationEditComponent } from '../../shared/components/authorization-edit/authorization-edit.component';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
-import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper';
+import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
 
 const setup = async (hasNode = false) => {
   const createCatalogNodeMock = jest.fn(() => of({ node: { id: '3', title: 'New Folder Inside' } }));
