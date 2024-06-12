@@ -20,6 +20,7 @@ import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { AuthorizationEditComponent } from '../../shared/components/authorization-edit/authorization-edit.component';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper';
+import { SpinnerButtonComponent } from '../../shared/components/spinner-button/spinner-button.component';
 
 const setup = async () => {
   const activeRoute = {
@@ -35,7 +36,7 @@ const setup = async () => {
   });
   await render(GeoServiceDetailsComponent, {
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    declarations: [ GeoServiceFormComponent, PasswordFieldComponent, LayerSettingsFormComponent, SaveButtonComponent, AuthorizationEditComponent ],
+    declarations: [ GeoServiceFormComponent, PasswordFieldComponent, LayerSettingsFormComponent, SaveButtonComponent, SpinnerButtonComponent, AuthorizationEditComponent ],
     imports: [ SharedModule, MatIconTestingModule ],
     providers: [
       { provide: ActivatedRoute, useValue: activeRoute },

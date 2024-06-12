@@ -15,6 +15,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
+import { SpinnerButtonComponent } from '../../shared/components/spinner-button/spinner-button.component';
 
 const setup = async (hasApp: boolean, hasChanges?: boolean) => {
   const mockState: ApplicationState = {
@@ -36,7 +37,7 @@ const setup = async (hasApp: boolean, hasChanges?: boolean) => {
     imports: [ SharedModule, MatIconTestingModule, RouterTestingModule.withRoutes(
       [{ path: 'admin/applications', component: ApplicationEditComponent }],
     ) ],
-    declarations: [SaveButtonComponent],
+    declarations: [ SaveButtonComponent, SpinnerButtonComponent ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     providers: [
       { provide: Store, useValue: mockStore },

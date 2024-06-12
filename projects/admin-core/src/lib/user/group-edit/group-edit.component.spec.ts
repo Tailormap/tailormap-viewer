@@ -11,6 +11,7 @@ import { TestSaveHelper } from '../../test-helpers/test-save.helper';
 import { GroupFormComponent } from '../group-form/group-form.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { SharedAdminComponentsModule } from '../../shared/components/shared-admin-components.module';
+import { SpinnerButtonComponent } from '../../shared/components/spinner-button/spinner-button.component';
 
 const setup = async (hasGroup?: boolean) => {
   const activeRoute = {
@@ -26,7 +27,7 @@ const setup = async (hasGroup?: boolean) => {
     navigateByUrl: jest.fn(),
   };
   await render(GroupEditComponent, {
-    declarations: [ GroupFormComponent, SaveButtonComponent ],
+    declarations: [ GroupFormComponent, SaveButtonComponent, SpinnerButtonComponent ],
     imports: [ SharedImportsModule, MatIconTestingModule, SharedAdminComponentsModule ],
     providers: [
       { provide: ActivatedRoute, useValue: activeRoute },

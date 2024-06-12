@@ -32,6 +32,9 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
     return this._application;
   }
 
+  @Input()
+  public nameFieldOnly: boolean = false;
+
   @Output()
   public updateApplication = new EventEmitter<UpdateDraftApplicationModel>();
 

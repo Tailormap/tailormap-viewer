@@ -7,6 +7,7 @@ import { SaveButtonComponent } from './save-button/save-button.component';
 import { BoundsFieldComponent } from './bounds-field/bounds-field.component';
 import { AuthorizationEditComponent } from './authorization-edit/authorization-edit.component';
 import { AdminFieldsRendererComponent } from './admin-fields-renderer/admin-fields-renderer.component';
+import { SpinnerButtonComponent } from './spinner-button/spinner-button.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { AdminFieldsRendererComponent } from './admin-fields-renderer/admin-fiel
     BoundsFieldComponent,
     AuthorizationEditComponent,
     AdminFieldsRendererComponent,
+    SpinnerButtonComponent,
   ],
   imports: [
     CommonModule,
@@ -28,6 +30,7 @@ import { AdminFieldsRendererComponent } from './admin-fields-renderer/admin-fiel
     BoundsFieldComponent,
     AuthorizationEditComponent,
     AdminFieldsRendererComponent,
+    SpinnerButtonComponent,
   ],
 })
 export class SharedAdminComponentsModule {

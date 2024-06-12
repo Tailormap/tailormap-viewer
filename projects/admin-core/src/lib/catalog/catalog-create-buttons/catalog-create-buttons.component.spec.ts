@@ -22,6 +22,7 @@ import { PasswordFieldComponent } from '../../shared/components/password-field/p
 import { AuthorizationEditComponent } from '../../shared/components/authorization-edit/authorization-edit.component';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper';
+import { SpinnerButtonComponent } from '../../shared/components/spinner-button/spinner-button.component';
 
 const setup = async (hasNode = false) => {
   const createCatalogNodeMock = jest.fn(() => of({ node: { id: '3', title: 'New Folder Inside' } }));
@@ -46,6 +47,7 @@ const setup = async (hasNode = false) => {
       CatalogNodeFormComponent,
       GeoServiceFormComponent,
       SaveButtonComponent,
+      SpinnerButtonComponent,
       PasswordFieldComponent,
       AuthorizationEditComponent,
     ],
