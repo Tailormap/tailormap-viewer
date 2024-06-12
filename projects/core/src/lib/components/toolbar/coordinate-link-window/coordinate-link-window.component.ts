@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, signal, DestroyRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { CoordinateHelper, MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
 import { selectComponentsConfigForType } from '../../../state/core.selectors';
@@ -8,7 +8,7 @@ import {
 import { concatMap, filter, map, Observable, of, switchMap, tap } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { take } from 'rxjs/operators';
-import { activateTool, deactivateTool, deregisterTool, registerTool, toggleTool } from '../state/toolbar.actions';
+import { deactivateTool, deregisterTool, registerTool, toggleTool } from '../state/toolbar.actions';
 import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { isActiveToolbarTool } from '../state/toolbar.selectors';
