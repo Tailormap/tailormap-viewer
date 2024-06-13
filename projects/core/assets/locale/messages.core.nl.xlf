@@ -157,6 +157,14 @@
         <source>URL</source>
         <target state="new">URL</target>
       </trans-unit>
+      <trans-unit id="core.coordinate-link-window.select-layer" datatype="html">
+        <source>Select link to open</source>
+        <target state="new">Selecteer een link</target>
+      </trans-unit>
+      <trans-unit id="core.coordinate-link-window.title" datatype="html">
+        <source>Coordinate Link Window</source>
+        <target state="new">Coordinate Link Window</target>
+      </trans-unit>
       <trans-unit id="core.draw.delete-selected-feature" datatype="html">
         <source>Delete selected feature</source>
         <target state="translated">Verwijder geselecteerd object</target>

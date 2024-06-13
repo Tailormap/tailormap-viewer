@@ -38,6 +38,9 @@
       <trans-unit id="admin-core.application.component-attribute-list" datatype="html">
         <source>Attribute list</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.component-coordinate-link-window" datatype="html">
+        <source>Coordinate Link Window</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.component-coordinate-picker-tool" datatype="html">
         <source>Coordinate picker tool</source>
       </trans-unit>
@@ -724,6 +727,24 @@
       </trans-unit>
       <trans-unit id="admin-core.common.welcome-to-tailormap" datatype="html">
         <source>Welcome to Tailormap Admin</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.clw-add-url" datatype="html">
+        <source>Add URL</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.coordinate-link-window-help1" datatype="html">
+        <source>Add one or more URL&apos;s to configure the Coordinate Link Window component.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.coordinate-link-window-help2" datatype="html">
+        <source>For each URL you can use <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[X]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> or <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[lat]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> and <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[Y]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> or <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[lon]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> placeholders in the URL.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.coordinate-link-window-help3" datatype="html">
+        <source>Those will be replaced by the location on which the user clicks.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.coordinate-link-window-help4" datatype="html">
+        <source>For example: <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>https://www.google.com/maps/@[lat],[lon],18z<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> or <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>https://demo.tailormap.com/#@[X],[Y],18<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.coordinate-link-window-title" datatype="html">
+        <source>Coordinate link window title</source>
       </trans-unit>
       <trans-unit id="admin-core.components.measure-area-title" datatype="html">
         <source>Measure area title</source>

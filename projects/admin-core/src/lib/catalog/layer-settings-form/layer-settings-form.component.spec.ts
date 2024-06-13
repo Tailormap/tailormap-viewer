@@ -9,7 +9,7 @@ import { of } from 'rxjs';
 import { provideMockStore } from '@ngrx/store/testing';
 import { AuthorizationEditComponent } from '../../shared/components/authorization-edit/authorization-edit.component';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
-import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper';
+import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
 
 describe('LayerSettingsFormComponent', () => {
 

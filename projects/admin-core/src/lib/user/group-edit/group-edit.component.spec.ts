@@ -7,7 +7,7 @@ import { GroupService } from '../services/group.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SharedImportsModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
-import { TestSaveHelper } from '../../test-helpers/test-save.helper';
+import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
 import { GroupFormComponent } from '../group-form/group-form.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { SharedAdminComponentsModule } from '../../shared/components/shared-admin-components.module';

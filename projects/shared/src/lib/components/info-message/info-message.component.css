@@ -1,0 +1,17 @@
+.info-message {
+  background-color: var(--info-background-color);
+  border: 1px solid var(--info-border-color);
+  color: var(--info-color);
+  padding: 16px;
+  border-radius: 2px;
+  margin-bottom: 16px;
+  line-height: 1.5em;
+}
+
+.info-message ::ng-deep code {
+  display: inline-block;
+  padding: 2px 6px;
+  background-color: #B9E1F2;
+}
+
+

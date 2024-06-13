@@ -92,7 +92,7 @@
           },
           "configurations": {
             "nl": {
-              "localize": ["nl", "de"]
+              "localize": ["nl"]
             },
             "production": {
               "tsConfig": "projects/app/tsconfig.prod.json",

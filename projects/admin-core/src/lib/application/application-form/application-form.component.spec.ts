@@ -11,7 +11,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { applicationStateKey, initialApplicationState } from '../state/application.state';
-import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper';
+import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
 
 const setup = async (hasApp?: boolean, addAppToState?: boolean) => {
   const onUpdate = jest.fn();
