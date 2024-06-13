@@ -1,9 +1,17 @@
-import { Component, OnInit, ChangeDetectionStrategy, Inject, signal } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Inject, signal, ViewContainerRef } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { TailormapAdminApiV1Service, UploadModel } from '@tailormap-admin/admin-api';
-import { BehaviorSubject, catchError, of, take } from 'rxjs';
+import { BehaviorSubject, catchError, concatMap, map, of, take, tap } from 'rxjs';
 import { UploadCategoryEnum } from '../models/upload-category.enum';
 import { UploadHelper } from '../helpers/upload.helper';
+import { UPLOAD_REMOVE_SERVICE } from '../models/upload-remove-service.injection-token';
+import { UploadRemoveServiceModel } from '../models/upload-remove-service.model';
+import {
+  CatalogItemsInFolderDialogComponent
+} from '../../../../catalog/catalog-node-details/catalog-items-in-folder-dialog/catalog-items-in-folder-dialog.component';
+import { UploadInUseDialogComponent } from '../upload-in-use-dialog/upload-in-use-dialog.component';
+import { ConfirmDialogService } from '@tailormap-viewer/shared';
+import { AdminSnackbarService } from '../../../services/admin-snackbar.service';
 
 export interface SelectUploadData {
   uploadId: string | null;
@@ -14,6 +22,26 @@ export interface SelectUploadResult {
   uploadId?: string;
   cancelled: boolean;
 }
+
+interface DialogProps {
+  maxImageSize: number;
+  label: string;
+}
+
+const CATEGORY_PROPS: Record<UploadCategoryEnum | string | 'defaultProps', DialogProps> = {
+  [UploadCategoryEnum.LEGEND]: {
+    maxImageSize: Infinity,
+    label: $localize `:@@admin-core.common.legend:legend`,
+  },
+  [UploadCategoryEnum.APPLICATION_LOGO]: {
+    maxImageSize: 600,
+    label: $localize `:@@admin-core.common.logo:logo`,
+  },
+  defaultProps: {
+    maxImageSize: Infinity,
+    label: $localize `:@@admin-core.common.file:file`,
+  },
+};
 
 @Component({
   selector: 'tm-admin-select-upload-dialog',
@@ -29,24 +57,27 @@ export class SelectUploadDialogComponent implements OnInit {
   public label: string;
 
   constructor(
-    public dialogRef: MatDialogRef<SelectUploadDialogComponent, SelectUploadResult>,
+    private dialogRef: MatDialogRef<SelectUploadDialogComponent, SelectUploadResult>,
     @Inject(MAT_DIALOG_DATA) public data: SelectUploadData,
+    @Inject(UPLOAD_REMOVE_SERVICE) private uploadRemoveService: UploadRemoveServiceModel,
     private adminApiService: TailormapAdminApiV1Service,
+    private dialog: MatDialog,
+    private confirmDialogService: ConfirmDialogService,
+    private adminSnackbarService: AdminSnackbarService,
   ) {
-    this.label = $localize `:@@admin-core.common.file:file`;
-    if (this.data.category === UploadCategoryEnum.APPLICATION_LOGO) {
-      this.label = $localize `:@@admin-core.common.logo:logo`;
-    }
-    if (this.data.category === UploadCategoryEnum.LEGEND) {
-      this.label = $localize `:@@admin-core.common.legend:legend`;
-    }
-    this.resizeSize = this.data.category === UploadCategoryEnum.APPLICATION_LOGO
-      ? 600
-      : Infinity;
+    const props: DialogProps = CATEGORY_PROPS[this.data.category]
+      ? CATEGORY_PROPS[this.data.category]
+      : CATEGORY_PROPS['defaultProps'];
+    this.label = props.label;
+    this.resizeSize = props.maxImageSize;
   }
 
-  public static open(dialog: MatDialog, data: SelectUploadData): MatDialogRef<SelectUploadDialogComponent, SelectUploadResult> {
-    return dialog.open(SelectUploadDialogComponent, { data, width: '680px' });
+  public static open(
+    dialog: MatDialog,
+    data: SelectUploadData,
+    viewContainerRef: ViewContainerRef,
+  ): MatDialogRef<SelectUploadDialogComponent, SelectUploadResult> {
+    return dialog.open(SelectUploadDialogComponent, { data, width: '680px', viewContainerRef });
   }
 
   public ngOnInit(): void {
@@ -122,7 +153,45 @@ export class SelectUploadDialogComponent implements OnInit {
 
   public removeUpload($event: MouseEvent, upload: UploadModel) {
     $event.stopPropagation();
-    // check in provided service if this image is used somewhere
+    const uploadId = upload.id;
+    const uploadName = upload.filename;
+    this.uploadRemoveService.isImageInUse$(uploadId)
+      .pipe(
+        take(1),
+        concatMap(items => {
+          if (items.length > 0) {
+            return this.dialog.open(UploadInUseDialogComponent, { data: { items } })
+              .afterClosed().pipe(map(() => false));
+          }
+          return this.confirmDialogService.confirm$(
+            $localize `:@@admin-core.upload-select.delete-file:Delete file?`,
+            $localize `:@@admin-core.upload-select.delete-file-message:Are you sure you want to the file ${uploadName}? This action cannot be undone.`,
+            true,
+          );
+        }),
+        concatMap(confirmed => {
+          if (confirmed) {
+            return this.adminApiService.deleteUpload$(uploadId)
+              .pipe(
+                catchError(() => of(false)),
+                map(success => ({ success: !!success })),
+                tap(({ success }) => {
+                  if (!success) {
+                    this.adminSnackbarService.showMessage($localize `:@@admin-core.upload-select.file-deleted:Error removing file ${uploadName}. Please try again.`);
+                  }
+                }),
+              );
+          }
+          return of({ success: false });
+        }),
+      )
+      .subscribe(response => {
+        if (!response.success) {
+          return;
+        }
+        this.existingUploads$.next((this.existingUploads$.value || []).filter(u => u.id !== uploadId));
+        this.adminSnackbarService.showMessage($localize `:@@admin-core.upload-select.file-deleted:File ${uploadName} removed`);
+      });
   }
 
 }

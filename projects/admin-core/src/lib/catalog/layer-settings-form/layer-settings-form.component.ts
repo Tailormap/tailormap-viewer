@@ -12,12 +12,17 @@ import { selectGeoServiceById, selectGeoServiceLayersByGeoServiceId } from '../s
 import { BoundsModel, TileLayerHiDpiModeEnum } from '@tailormap-viewer/api';
 import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-layer.model';
 import { UploadCategoryEnum } from '../../shared/components/select-upload/models/upload-category.enum';
+import { UPLOAD_REMOVE_SERVICE } from '../../shared/components/select-upload/models/upload-remove-service.injection-token';
+import { LegendImageRemoveService } from '../services/legend-image-remove.service';
 
 @Component({
   selector: 'tm-admin-layer-settings-form',
   templateUrl: './layer-settings-form.component.html',
   styleUrls: ['./layer-settings-form.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    { provide: UPLOAD_REMOVE_SERVICE, useClass: LegendImageRemoveService },
+  ],
 })
 export class LayerSettingsFormComponent implements OnInit {
 

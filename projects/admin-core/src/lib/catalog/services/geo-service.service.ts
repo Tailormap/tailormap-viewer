@@ -8,12 +8,13 @@ import {
   GeoServiceProtocolEnum, GeoServiceSettingsModel, GeoServiceWithLayersModel, TailormapAdminApiV1Service,
 } from '@tailormap-admin/admin-api';
 import { catchError, concatMap, filter, map, MonoTypeOperatorFunction, Observable, of, pipe, switchMap, take, tap } from 'rxjs';
-import { addGeoService, deleteGeoService, loadDraftGeoService, updateGeoService } from '../state/catalog.actions';
+import { addGeoService, deleteGeoService, loadCatalog, loadDraftGeoService, updateGeoService } from '../state/catalog.actions';
 import { CatalogService } from './catalog.service';
 import { GeoServiceCreateModel, GeoServiceUpdateModel, GeoServiceWithIdUpdateModel } from '../models/geo-service-update.model';
 import {
+  selectCatalogLoadStatus,
   selectDraftGeoService, selectDraftGeoServiceLoadStatus,
-  selectGeoServiceById,
+  selectGeoServiceById, selectGeoServiceLayers, selectGeoServices, selectGeoServicesAndLayers,
 } from '../state/catalog.selectors';
 import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 import { ApplicationService } from '../../application/services/application.service';
@@ -22,6 +23,7 @@ import { AdminSnackbarService } from '../../shared/services/admin-snackbar.servi
 import { DebounceHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
 import { AdminSseService, EventType } from '../../shared/services/admin-sse.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-layer.model';
 
 export interface DeleteGeoServiceResponse {
   success: boolean;
@@ -188,6 +190,19 @@ export class GeoServiceService {
               this.handleUpdateGeoService($localize `:@@admin-core.catalog.error-refreshing-service:Error while refreshing geo service: `),
             );
         }),
+      );
+  }
+
+  public getGeoServicesAndLayers$(): Observable<{ services: ExtendedGeoServiceModel[]; layers: ExtendedGeoServiceLayerModel[] }> {
+    return this.store$.select(selectCatalogLoadStatus)
+      .pipe(
+        tap(loadStatus => {
+            if (loadStatus === LoadingStateEnum.INITIAL || loadStatus === LoadingStateEnum.FAILED) {
+              this.store$.dispatch(loadCatalog());
+            }
+        }),
+        filter(loadStatus => loadStatus === LoadingStateEnum.LOADED),
+        switchMap(() => this.store$.select(selectGeoServicesAndLayers)),
       );
   }
 

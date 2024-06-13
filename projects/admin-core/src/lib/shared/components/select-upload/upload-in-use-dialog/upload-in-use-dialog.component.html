@@ -1,0 +1,16 @@
+<h1 mat-dialog-title i18n="@@admin-core.select-upload.file-in-use">File is still in use</h1>
+
+<div mat-dialog-content>
+  <p class="content" i18n="@@admin-core.catalog.file-in-use-body">This file cannot be removed because it is still used in the following places.</p>
+  <ul>
+    @for (item of data.items; track $index) {
+      <li>
+        <a [routerLink]="item.url" (click)="onConfirm()">{{item.name}}</a>
+      </li>
+    }
+  </ul>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" (click)="onConfirm()" i18n="@@admin-core.common.ok">Ok</button>
+</div>

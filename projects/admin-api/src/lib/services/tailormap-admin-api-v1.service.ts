@@ -313,4 +313,12 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
     );
   }
 
+  public deleteUpload$(uploadId: string): Observable<boolean> {
+    return this.httpClient.delete(`${TailormapAdminApiV1Service.BASE_URL}/uploads/${uploadId}`, {
+      observe: 'response',
+    }).pipe(
+      map(response => response.status === 204),
+    );
+  }
+
 }

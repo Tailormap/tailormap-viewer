@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Output, EventEmitter, Input, DestroyRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Output, EventEmitter, Input, DestroyRef, ViewContainerRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { SelectUploadDialogComponent } from '../select-upload-dialog/select-upload-dialog.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -26,15 +26,16 @@ export class SelectUploadComponent {
   constructor(
     private dialog: MatDialog,
     private destroyRef: DestroyRef,
+    private viewContainerRef: ViewContainerRef,
   ) {
-    setTimeout(() => {
-      document.querySelector<HTMLButtonElement>('tm-admin-select-upload button')?.click();
-    }, 0);
   }
 
   public selectFile() {
-    SelectUploadDialogComponent
-      .open(this.dialog, { category: this.category, uploadId: this.selectedFile })
+    SelectUploadDialogComponent.open(
+      this.dialog,
+      { category: this.category, uploadId: this.selectedFile },
+      this.viewContainerRef,
+    )
       .afterClosed()
       .pipe(takeUntilDestroyed(this.destroyRef), take(1))
       .subscribe(selectResult => {
