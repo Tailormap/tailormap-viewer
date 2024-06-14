@@ -14,7 +14,7 @@ import { GeoServiceCreateModel, GeoServiceUpdateModel, GeoServiceWithIdUpdateMod
 import {
   selectCatalogLoadStatus,
   selectDraftGeoService, selectDraftGeoServiceLoadStatus,
-  selectGeoServiceById, selectGeoServiceLayers, selectGeoServices, selectGeoServicesAndLayers,
+  selectGeoServiceById, selectGeoServicesAndLayers,
 } from '../state/catalog.selectors';
 import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 import { ApplicationService } from '../../application/services/application.service';

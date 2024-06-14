@@ -6,9 +6,6 @@ import { UploadCategoryEnum } from '../models/upload-category.enum';
 import { UploadHelper } from '../helpers/upload.helper';
 import { UPLOAD_REMOVE_SERVICE } from '../models/upload-remove-service.injection-token';
 import { UploadRemoveServiceModel } from '../models/upload-remove-service.model';
-import {
-  CatalogItemsInFolderDialogComponent
-} from '../../../../catalog/catalog-node-details/catalog-items-in-folder-dialog/catalog-items-in-folder-dialog.component';
 import { UploadInUseDialogComponent } from '../upload-in-use-dialog/upload-in-use-dialog.component';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
 import { AdminSnackbarService } from '../../../services/admin-snackbar.service';
