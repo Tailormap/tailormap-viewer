@@ -26,6 +26,7 @@
           <tm-streetview *ngIf="layoutService.isComponentEnabled(config, componentTypes.STREETVIEW)"></tm-streetview>
           <tm-simple-search *ngIf="layoutService.isComponentEnabled(config, componentTypes.SIMPLE_SEARCH)"></tm-simple-search>
           <tm-edit *ngIf="layoutService.isComponentEnabled(config, componentTypes.EDIT)"></tm-edit>
+          <tm-coordinate-link-window *ngIf="layoutService.isComponentEnabled(config, componentTypes.COORDINATE_LINK_WINDOW)"></tm-coordinate-link-window>
           <tm-share-viewer *ngIf="layoutService.isComponentEnabled(config, componentTypes.SHARE_VIEWER)"></tm-share-viewer>
           <tm-registered-components-renderer [config]="config" area="map-controls-left"></tm-registered-components-renderer>
         </div>

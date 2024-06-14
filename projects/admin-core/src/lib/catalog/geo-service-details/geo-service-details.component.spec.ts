@@ -12,14 +12,14 @@ import { SharedModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { createGeoServiceMock } from '../helpers/mocks/geo-service.service.mock';
 import { LayerSettingsFormComponent } from '../layer-settings-form/layer-settings-form.component';
-import { TestSaveHelper } from '../../test-helpers/test-save.helper';
+import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
 import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { AuthorizationEditComponent } from '../../shared/components/authorization-edit/authorization-edit.component';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
-import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper';
+import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
 import { SpinnerButtonComponent } from '../../shared/components/spinner-button/spinner-button.component';
 
 const setup = async () => {

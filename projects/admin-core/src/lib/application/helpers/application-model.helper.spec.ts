@@ -1,6 +1,7 @@
-import { AppTreeLayerNodeModel, getGeoServiceLayer } from '@tailormap-admin/admin-api';
+import { AppTreeLayerNodeModel, AppTreeNodeModel, getGeoServiceLayer } from '@tailormap-admin/admin-api';
 import { ExtendedGeoServiceLayerModel } from '../../catalog/models/extended-geo-service-layer.model';
 import { ApplicationModelHelper } from './application-model.helper';
+import { CatalogExtendedTypeEnum } from '../../catalog/models/catalog-extended.model';
 
 describe('ApplicationModelHelper', () => {
 
@@ -10,8 +11,10 @@ describe('ApplicationModelHelper', () => {
       name: 'layer1',
       serviceId: '1',
       catalogNodeId: '1',
+      type: CatalogExtendedTypeEnum.SERVICE_LAYER_TYPE,
+      originalId: '1',
     };
-    const appLayerNodes = [];
+    const appLayerNodes: AppTreeNodeModel[] = [];
     const layerNode = ApplicationModelHelper.newApplicationTreeLayerNode(extendedLayer, appLayerNodes);
     expect(layerNode).toEqual({
       id: 'lyr:1:layer1',
@@ -29,6 +32,8 @@ describe('ApplicationModelHelper', () => {
       name: 'layer1',
       serviceId: '1',
       catalogNodeId: '1',
+      type: CatalogExtendedTypeEnum.SERVICE_LAYER_TYPE,
+      originalId: '1',
     };
     const appLayerNodes: AppTreeLayerNodeModel[] = [
       { id: 'lyr:1:layer1', serviceId: '1', layerName: 'layer1', objectType: 'AppTreeLayerNode', visible: true },

@@ -14,7 +14,7 @@ import userEvent from '@testing-library/user-event';
 import { AuthorizationEditComponent } from '../../shared/components/authorization-edit/authorization-edit.component';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper';
+import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
 
 const setup = async (hasApplication: boolean, isDefaultApplication?: boolean) => {
   const appState: ApplicationState = {

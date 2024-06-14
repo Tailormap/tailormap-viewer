@@ -13,6 +13,7 @@ import { MouseCoordinatesModule } from './mouse-coordinates/mouse-coordinates.mo
 import { ScaleBarModule } from './scale-bar/scale-bar.module';
 import { SimpleSearchModule } from './simple-search';
 import { StreetviewModule } from './streetview/streetview.module';
+import { CoordinateLinkWindowModule } from './coordinate-link-window/coordinate-link-window.module';
 
 @NgModule({
   declarations: [],
@@ -30,6 +31,7 @@ import { StreetviewModule } from './streetview/streetview.module';
     SimpleSearchModule,
     GeolocationModule,
     StreetviewModule,
+    CoordinateLinkWindowModule,
   ],
 })
 export class ToolbarModule { }

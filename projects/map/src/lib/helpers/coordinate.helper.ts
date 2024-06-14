@@ -4,7 +4,7 @@ import { FeatureHelper } from './feature.helper';
 import { Proj4Helper } from './proj4.helper';
 
 export class CoordinateHelper {
-  public static projectCoordinates(coords: number[], fromProjection: string, toProjection: string): number[] {
+  public static projectCoordinates(coords: [number, number], fromProjection: string, toProjection: string): [number, number] {
     return Proj4Helper.proj4(fromProjection, toProjection, coords);
   }
 

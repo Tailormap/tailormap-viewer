@@ -9,7 +9,7 @@ import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 import { provideMockStore } from '@ngrx/store/testing';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
-import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper';
+import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
 
 describe('GeoServiceFormComponent', () => {
 

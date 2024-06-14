@@ -5,7 +5,7 @@ import { of } from 'rxjs';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FeatureSourceProtocolEnum, getFeatureSource } from '@tailormap-admin/admin-api';
-import { TestSaveHelper } from '../../test-helpers/test-save.helper';
+import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
 import { FeatureSourceService } from '../services/feature-source.service';
 import { FeatureSourceFormComponent } from '../feature-source-form/feature-source-form.component';
 import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';

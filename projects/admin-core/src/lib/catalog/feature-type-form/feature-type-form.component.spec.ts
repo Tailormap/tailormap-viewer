@@ -1,13 +1,14 @@
 import { render, screen } from '@testing-library/angular';
 import { FeatureTypeFormComponent } from './feature-type-form.component';
 import { of } from 'rxjs';
-import { getFeatureType, getFeatureTypeSummary } from '@tailormap-admin/admin-api';
+import { getFeatureTypeSummary } from '@tailormap-admin/admin-api';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
 import { FeatureSourceService } from '../services/feature-source.service';
 import { FeatureTypeAttributesComponent } from '../feature-type-attributes/feature-type-attributes.component';
 import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
 import { SpinnerButtonComponent } from '../../shared/components/spinner-button/spinner-button.component';
+import { CatalogExtendedTypeEnum } from '../models/catalog-extended.model';
 
 const setup = async () => {
   const featureSourceService = { updateFeatureSource$: jest.fn(() => of({})) };
@@ -17,6 +18,7 @@ const setup = async () => {
     originalId: 'ft_1',
     featureSourceId: '1',
     catalogNodeId: 'node-1',
+    type: CatalogExtendedTypeEnum.FEATURE_TYPE_TYPE,
   };
   await render(FeatureTypeFormComponent, {
     declarations: [ FeatureTypeAttributesComponent, SaveButtonComponent, SpinnerButtonComponent ],

@@ -4,4 +4,5 @@ export enum ToolbarComponentEnum {
   MEASURE = 'MEASURE',
   STREETVIEW = 'STREETVIEW',
   EDIT = 'EDIT',
+  COORDINATE_LINK_WINDOW = 'COORDINATE_LINK_WINDOW',
 }

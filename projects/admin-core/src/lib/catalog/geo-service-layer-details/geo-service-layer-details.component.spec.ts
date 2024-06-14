@@ -13,7 +13,7 @@ import { createGeoServiceMock } from '../helpers/mocks/geo-service.service.mock'
 import { TriStateBooleanComponent } from '../../shared/components/tri-state-boolean/tri-state-boolean.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { AuthorizationEditComponent } from '../../shared/components/authorization-edit/authorization-edit.component';
-import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper';
+import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
 
 const setup = async () => {
   const activeRoute = {
