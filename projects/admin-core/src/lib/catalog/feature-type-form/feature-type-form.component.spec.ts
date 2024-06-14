@@ -7,6 +7,7 @@ import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model'
 import { FeatureSourceService } from '../services/feature-source.service';
 import { FeatureTypeAttributesComponent } from '../feature-type-attributes/feature-type-attributes.component';
 import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
+import { SpinnerButtonComponent } from '../../shared/components/spinner-button/spinner-button.component';
 import { CatalogExtendedTypeEnum } from '../models/catalog-extended.model';
 
 const setup = async () => {
@@ -20,7 +21,7 @@ const setup = async () => {
     type: CatalogExtendedTypeEnum.FEATURE_TYPE_TYPE,
   };
   await render(FeatureTypeFormComponent, {
-    declarations: [ FeatureTypeAttributesComponent, SaveButtonComponent ],
+    declarations: [ FeatureTypeAttributesComponent, SaveButtonComponent, SpinnerButtonComponent ],
     imports: [SharedModule],
     componentInputs: {
       featureType: featureTypeModel,

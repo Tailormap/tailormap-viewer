@@ -13,6 +13,8 @@ import { clearSelectedApplication, setSelectedApplication } from '../state/appli
 import { ConfirmDialogService, LoadingStateEnum } from '@tailormap-viewer/shared';
 import { ApplicationService } from '../services/application.service';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
+import { ApplicationCopyDialogComponent } from '../application-copy-dialog/application-copy-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'tm-admin-application-edit',
@@ -24,6 +26,9 @@ export class ApplicationEditComponent implements OnInit, OnDestroy {
 
   private savingSubject = new BehaviorSubject(false);
   public saving$ = this.savingSubject.asObservable();
+
+  private makingCopySubject = new BehaviorSubject(false);
+  public makingCopy$ = this.makingCopySubject.asObservable();
 
   private destroyed = new Subject();
   public application$: Observable<ApplicationModel | null> = of(null);
@@ -43,6 +48,7 @@ export class ApplicationEditComponent implements OnInit, OnDestroy {
     private confirmDelete: ConfirmDialogService,
     private router: Router,
     private adminSnackbarService: AdminSnackbarService,
+    private dialog: MatDialog,
   ) {
   }
 
@@ -95,6 +101,20 @@ export class ApplicationEditComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.adminSnackbarService.showMessage($localize `:@@admin-core.application.application-removed:Application ${title} removed`);
         this.router.navigateByUrl('/admin/applications');
+      });
+  }
+
+  public copy(application: ApplicationModel) {
+    this.makingCopySubject.next(true);
+    ApplicationCopyDialogComponent.open(this.dialog, { application }).afterClosed()
+      .pipe(take(1))
+      .subscribe(copiedApplication => {
+        if (copiedApplication) {
+          // eslint-disable-next-line max-len
+          this.adminSnackbarService.showMessage($localize `:@@admin-core.application.application-copied:Application ${copiedApplication.title || copiedApplication.name} copied`);
+          this.router.navigateByUrl('/admin/applications/application/' + copiedApplication.id);
+        }
+        this.makingCopySubject.next(false);
       });
   }
 

@@ -13,6 +13,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { createGeoServiceMock } from '../helpers/mocks/geo-service.service.mock';
 import { GeoServiceLayerFormDialogComponent } from './geo-service-layer-form-dialog.component';
 import { catalogStateKey } from '../state/catalog.state';
+import { SpinnerButtonComponent } from '../../shared/components/spinner-button/spinner-button.component';
 import { CatalogExtendedTypeEnum } from '../models/catalog-extended.model';
 
 const setup = async () => {
@@ -34,7 +35,7 @@ const setup = async () => {
   const { geoServiceService, updateGeoService$ } = createGeoServiceMock();
   await render(GeoServiceLayerFormDialogComponent, {
     imports: [ SharedModule, MatIconTestingModule ],
-    declarations: [SaveButtonComponent],
+    declarations: [ SaveButtonComponent, SpinnerButtonComponent ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     providers: [
       { provide: MatDialogRef, useValue: dialogRefMock },

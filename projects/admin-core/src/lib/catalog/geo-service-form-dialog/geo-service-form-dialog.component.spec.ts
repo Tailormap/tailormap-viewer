@@ -17,7 +17,7 @@ import { LayerSettingsFormComponent } from '../layer-settings-form/layer-setting
 import { provideMockStore } from '@ngrx/store/testing';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
-import { SharedAdminComponentsModule } from '../../shared/components/shared-admin-components.module';
+import { SpinnerButtonComponent } from '../../shared/components/spinner-button/spinner-button.component';
 
 const setup = async (editMode = false) => {
   const dialogRefMock = { close: jest.fn() };
@@ -25,7 +25,7 @@ const setup = async (editMode = false) => {
   const { geoServiceService, updateGeoService$, updateGeoServiceDetails } = createGeoServiceMock(geoServiceModelMock);
   await render(GeoServiceFormDialogComponent, {
     imports: [ SharedModule, MatIconTestingModule ],
-    declarations: [ GeoServiceFormComponent, LayerSettingsFormComponent, PasswordFieldComponent, SaveButtonComponent, AuthorizationEditComponent ],
+    declarations: [ GeoServiceFormComponent, LayerSettingsFormComponent, PasswordFieldComponent, SaveButtonComponent, SpinnerButtonComponent, AuthorizationEditComponent ],
     providers: [
       provideMockStore(),
       { provide: MatDialogRef, useValue: dialogRefMock },
