@@ -1,4 +1,8 @@
-<div class="legend-layer" *ngIf="legendInfo">
-  <strong *ngIf="showTitle" [class.out-of-scale]="!legendInfo.isInScale">{{legendInfo.layer.title}}</strong>
-  <img *ngIf="urlWithOptions" [class.hi-dpi]="scaleHiDpiImage" [alt]="failedToLoadMessage + ' ' + legendInfo.layer.title" [src]="urlWithOptions" [srcset]="srcset" />
-</div>
+@if (legendInfo) {
+  <div class="legend-layer">
+    @if (showTitle) {
+      <strong [class.out-of-scale]="!legendInfo.isInScale">{{legendInfo.layer.title}}</strong>
+    }
+    <tm-legend-image [legend]="getLegend(legendInfo)" />
+  </div>
+}

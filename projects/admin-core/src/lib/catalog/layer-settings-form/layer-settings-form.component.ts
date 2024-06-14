@@ -20,9 +20,6 @@ import { LegendImageRemoveService } from '../services/legend-image-remove.servic
   templateUrl: './layer-settings-form.component.html',
   styleUrls: ['./layer-settings-form.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    { provide: UPLOAD_REMOVE_SERVICE, useClass: LegendImageRemoveService },
-  ],
 })
 export class LayerSettingsFormComponent implements OnInit {
 
@@ -93,8 +90,6 @@ export class LayerSettingsFormComponent implements OnInit {
   public isWMTS = false;
   public isXYZ = false;
   public hiDpiModes = TileLayerHiDpiModeEnum;
-
-  public legendCategory = UploadCategoryEnum.LEGEND;
 
   public layerSettingsForm = new FormGroup({
     title: new FormControl('', { nonNullable: true }),

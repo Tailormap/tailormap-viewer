@@ -34,19 +34,9 @@ export interface GeoServerLegendOptions {
 })
 export class LegendService {
 
-  private visibleSubject$ = new BehaviorSubject(false);
-
   constructor(
     private mapService: MapService,
   ) {
-  }
-
-  public toggleVisible() {
-    this.visibleSubject$.next(!this.visibleSubject$.value);
-  }
-
-  public isVisible$(): Observable<boolean> {
-    return this.visibleSubject$.asObservable();
   }
 
   public getLegendInfo$(appLayers$: Observable<Array<ExtendedAppLayerModel | null> | ExtendedAppLayerModel | null>, mapResolution$?: Observable<MapViewDetailsModel>):
@@ -107,23 +97,5 @@ export class LegendService {
     );
   }
 
-  public static isGetLegendGraphicRequest(url: string): boolean {
-    try {
-      const request = UrlHelper.getParamCaseInsensitive(new URL(url), 'REQUEST');
-      return request?.toLowerCase() === 'getlegendgraphic';
-    } catch(e) {
-      return false;
-    }
-  }
-
-  public static addGeoServerLegendOptions(url: string, legendOptions: GeoServerLegendOptions): string {
-    try {
-      const u = new URL(url);
-      u.searchParams.set('LEGEND_OPTIONS', Object.entries(legendOptions).map(entry => entry.join(':')).join(';'));
-      return u.toString();
-    } catch(e) {
-      return url;
-    }
-  }
 }
 

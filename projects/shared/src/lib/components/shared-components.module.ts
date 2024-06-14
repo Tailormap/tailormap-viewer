@@ -14,6 +14,7 @@ import { AboutDialogComponent } from './about-dialog/about-dialog.component';
 import { LanguageToggleComponent } from './language-toggle/language-toggle.component';
 import { CdkFixedSizeVirtualScroll, CdkVirtualForOf, CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { InfoMessageComponent } from './info-message';
+import { LegendImageComponent } from './legend-image/legend-image.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { InfoMessageComponent } from './info-message';
     SliderComponent,
     AboutDialogComponent,
     LanguageToggleComponent,
+    LegendImageComponent,
   ],
   imports: [
     SharedImportsModule,
@@ -48,6 +50,7 @@ import { InfoMessageComponent } from './info-message';
     SliderComponent,
     LanguageToggleComponent,
     InfoMessageComponent,
+    LegendImageComponent,
   ],
 })
 export class SharedComponentsModule {

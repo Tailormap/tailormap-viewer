@@ -482,6 +482,9 @@
       <trans-unit id="admin-core.catalog.not-set" datatype="html">
         <source>Not set</source>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.override-legend" datatype="html">
+        <source>Override service default legend</source>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.port" datatype="html">
         <source>Port</source>
       </trans-unit>

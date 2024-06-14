@@ -642,6 +642,10 @@
         <source>Not set</source>
         <target>Nicht festgelegt</target>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.override-legend" datatype="html">
+        <source>Override service default legend</source>
+        <target state="new">Override service default legend</target>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.port" datatype="html">
         <source>Port</source>
         <target>Port</target>
