@@ -32,6 +32,7 @@ import {
   ApplicationLayerAttributeSettingsComponent,
 } from './application-layer-attribute-settings/application-layer-attribute-settings.component';
 import { FormModule } from "../form/form.module";
+import { ApplicationCopyDialogComponent } from './application-copy-dialog/application-copy-dialog.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { FormModule } from "../form/form.module";
     ApplicationEditStylingComponent,
     ApplicationLayerSettingsComponent,
     ApplicationLayerAttributeSettingsComponent,
+    ApplicationCopyDialogComponent,
   ],
     imports: [
         CommonModule,

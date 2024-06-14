@@ -13,6 +13,10 @@
         <source>Application</source>
         <target state="new">Applicatie</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.application-copied" datatype="html">
+        <source>Application <x id="PH" equiv-text="copiedApplication.title || copiedApplication.name"/> copied</source>
+        <target state="new">Applicatie <x id="PH" equiv-text="copiedApplication.title || copiedApplication.name"/> is gekopieerd</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.application-created" datatype="html">
         <source>Application <x id="PH" equiv-text="createdApplication.title || createdApplication.name"/> created</source>
         <target>Applicatie <x id="PH" equiv-text="createdApplication.title || createdApplication.name"/> is gemaakt</target>
@@ -100,6 +104,10 @@
       <trans-unit id="admin-core.application.components" datatype="html">
         <source>Components</source>
         <target>Componenten</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.copy-application" datatype="html">
+        <source>Copy application <x id="INTERPOLATION" equiv-text="{{data.application.title}}"/></source>
+        <target state="new">Kopieer applicatie <x id="INTERPOLATION" equiv-text="{{data.application.title}}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.application.create-application" datatype="html">
         <source>Create application</source>
@@ -212,6 +220,10 @@
       <trans-unit id="admin-core.application.logo" datatype="html">
         <source>Upload logo for application</source>
         <target>Logo uploaden voor de applicatie</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.make-copy" datatype="html">
+        <source>Copy</source>
+        <target state="new">Kopiëren</target>
       </trans-unit>
       <trans-unit id="admin-core.application.max-extent" datatype="html">
         <source>Max extent</source>
@@ -820,6 +832,10 @@
       <trans-unit id="admin-core.common.comments" datatype="html">
         <source>Comments</source>
         <target>Opmerkingen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.common.copy" datatype="html">
+        <source>Copy</source>
+        <target state="new">Kopie</target>
       </trans-unit>
       <trans-unit id="admin-core.common.create" datatype="html">
         <source>Create</source>

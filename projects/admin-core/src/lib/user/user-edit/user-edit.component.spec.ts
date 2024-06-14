@@ -13,6 +13,7 @@ import userEvent from '@testing-library/user-event';
 import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { SharedAdminComponentsModule } from '../../shared/components/shared-admin-components.module';
+import { SpinnerButtonComponent } from '../../shared/components/spinner-button/spinner-button.component';
 
 const setup = async (hasUser?: boolean) => {
   const activeRoute = {
@@ -31,7 +32,7 @@ const setup = async (hasUser?: boolean) => {
     navigateByUrl: jest.fn(),
   };
   await render(UserEditComponent, {
-    declarations: [ UserFormComponent, SaveButtonComponent, PasswordFieldComponent ],
+    declarations: [ UserFormComponent, SaveButtonComponent, SpinnerButtonComponent, PasswordFieldComponent ],
     imports: [ SharedImportsModule, MatIconTestingModule, SharedAdminComponentsModule ],
     providers: [
       { provide: ActivatedRoute, useValue: activeRoute },

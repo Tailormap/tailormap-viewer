@@ -14,6 +14,10 @@
         <source>Application</source>
         <target>Anwendung</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.application-copied" datatype="html">
+        <source>Application <x id="PH" equiv-text="copiedApplication.title || copiedApplication.name"/> copied</source>
+        <target state="new">Application <x id="PH" equiv-text="copiedApplication.title || copiedApplication.name"/> copied</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.application-created" datatype="html">
         <source>Application <x id="PH" equiv-text="createdApplication.title || createdApplication.name"/> created</source>
         <target>Anwendung <x id="PH" equiv-text="createdApplication.title || createdApplication.name"/> erstellt</target>
@@ -101,6 +105,10 @@
       <trans-unit id="admin-core.application.components" datatype="html">
         <source>Components</source>
         <target>Komponenten</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.copy-application" datatype="html">
+        <source>Copy application <x id="INTERPOLATION" equiv-text="{{data.application.title}}"/></source>
+        <target state="new">Copy application <x id="INTERPOLATION" equiv-text="{{data.application.title}}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.application.create-application" datatype="html">
         <source>Create application</source>
@@ -213,6 +221,10 @@
       <trans-unit id="admin-core.application.logo" datatype="html">
         <source>Upload logo for application</source>
         <target>Logo für die Anwendung hochladen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.make-copy" datatype="html">
+        <source>Copy</source>
+        <target state="new">Copy</target>
       </trans-unit>
       <trans-unit id="admin-core.application.max-extent" datatype="html">
         <source>Max extent</source>
@@ -821,6 +833,10 @@
       <trans-unit id="admin-core.common.comments" datatype="html">
         <source>Comments</source>
         <target>Kommentare</target>
+      </trans-unit>
+      <trans-unit id="admin-core.common.copy" datatype="html">
+        <source>Copy</source>
+        <target state="new">Copy</target>
       </trans-unit>
       <trans-unit id="admin-core.common.create" datatype="html">
         <source>Create</source>

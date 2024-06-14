@@ -9,6 +9,7 @@ import { AuthorizationEditComponent } from './authorization-edit/authorization-e
 import { AdminFieldsRendererComponent } from './admin-fields-renderer/admin-fields-renderer.component';
 import { SelectUploadModule } from './select-upload/select-upload.module';
 
+import { SpinnerButtonComponent } from './spinner-button/spinner-button.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { SelectUploadModule } from './select-upload/select-upload.module';
     BoundsFieldComponent,
     AuthorizationEditComponent,
     AdminFieldsRendererComponent,
+    SpinnerButtonComponent,
   ],
   imports: [
     CommonModule,
@@ -31,6 +33,7 @@ import { SelectUploadModule } from './select-upload/select-upload.module';
     AuthorizationEditComponent,
     AdminFieldsRendererComponent,
     SelectUploadModule,
+    SpinnerButtonComponent,
   ],
 })
 export class SharedAdminComponentsModule {
