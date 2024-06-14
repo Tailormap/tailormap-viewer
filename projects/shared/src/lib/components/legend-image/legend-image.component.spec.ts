@@ -9,11 +9,11 @@ describe('LegendImageComponent', () => {
 
   test('should render', async () => {
     await render(LegendImageComponent, {
-      componentProperties: {
+      componentProperties: { legend: {
         title: 'Layer title',
         url: 'some-url',
         serverType: 'generic',
-      },
+      } },
     });
     const img = await screen.getByRole('img');
     expect(img).toBeInTheDocument();
@@ -24,11 +24,11 @@ describe('LegendImageComponent', () => {
   test('should render high dpi legend for GeoServer', async () => {
     jest.spyOn(global, 'window', 'get').mockImplementation(windowMock);
     await render(LegendImageComponent, {
-      componentProperties: {
+      componentProperties: { legend: {
         title: 'Layer title',
         url: 'http://some-url/geoserver/wms?REQUEST=GetLegendGraphic',
         serverType: 'geoserver',
-      },
+      } },
     });
     const img = await screen.getByRole('img');
     expect(img).toBeInTheDocument();

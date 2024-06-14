@@ -560,9 +560,6 @@
       <trans-unit id="core.filter.value" datatype="html">
         <source>Value</source>
       </trans-unit>
-      <trans-unit id="core.legend.failed-loading-legend" datatype="html">
-        <source>Failed to load legend for</source>
-      </trans-unit>
       <trans-unit id="core.legend.legend" datatype="html">
         <source>Legend</source>
       </trans-unit>

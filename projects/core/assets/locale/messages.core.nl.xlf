@@ -745,10 +745,6 @@
         <source>Value</source>
         <target>Waarde</target>
       </trans-unit>
-      <trans-unit id="core.legend.failed-loading-legend" datatype="html">
-        <source>Failed to load legend for</source>
-        <target>Legenda niet geladen voor</target>
-      </trans-unit>
       <trans-unit id="core.legend.legend" datatype="html">
         <source>Legend</source>
         <target>Legenda</target>

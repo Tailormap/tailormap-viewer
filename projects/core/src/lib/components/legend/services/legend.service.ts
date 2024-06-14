@@ -1,33 +1,10 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, combineLatest, concatMap, forkJoin, map, Observable, of, switchMap } from 'rxjs';
+import { catchError, combineLatest, concatMap, forkJoin, map, Observable, of, switchMap } from 'rxjs';
 import { MapService, MapViewDetailsModel, ScaleHelper } from '@tailormap-viewer/map';
 import { ExtendedAppLayerModel } from '../../../map/models';
 import { ImageHelper } from '../../../shared/helpers/image.helper';
-import { TypesHelper, UrlHelper } from '@tailormap-viewer/shared';
+import { TypesHelper } from '@tailormap-viewer/shared';
 import { LegendInfoModel } from '../models/legend-info.model';
-
-export interface GeoServerLegendOptions {
-  fontName?: string;
-  fontStyle?: 'italic' | 'bold';
-  fontSize?: number;
-  fontColor?: string;
-  fontAntiAliasing?: boolean;
-  bgColor?: string;
-  dpi?: number;
-  forceLabels?: 'on' | 'off';
-  forceTitles?: 'on' | 'off';
-  labelMargin?: number;
-  layout?: 'vertical' | 'horizontal';
-  columnheight?: number;
-  rowwidth?: number;
-  columns?: number;
-  rows?: number;
-  grouplayout?: 'vertical' | 'horizontal';
-  countMatched?: boolean;
-  hideEmptyRules?: boolean;
-  wrap?: boolean;
-  wrap_limit?: number;
-}
 
 @Injectable({
   providedIn: 'root',
