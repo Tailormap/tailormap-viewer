@@ -51,7 +51,7 @@
         <target>Attributliste</target>
       </trans-unit>
       <trans-unit id="admin-core.application.component-coordinate-link-window" datatype="html">
-        <source>Coordinate link window</source>
+        <source>Coordinate Link Window</source>
         <target state="new">Coordinate Link Window</target>
       </trans-unit>
       <trans-unit id="admin-core.application.component-coordinate-picker-tool" datatype="html">
@@ -938,6 +938,10 @@
         <source>Settings</source>
         <target>Einstellungen</target>
       </trans-unit>
+      <trans-unit id="admin-core.common.size" datatype="html">
+        <source>Size</source>
+        <target state="new">Size</target>
+      </trans-unit>
       <trans-unit id="admin-core.common.sort" datatype="html">
         <source>Sort</source>
         <target>Sortieren</target>
@@ -1338,9 +1342,69 @@
         <source>(name, sub, email, etc)</source>
         <target>(Name, Sub, E-Mail, usw.)</target>
       </trans-unit>
+      <trans-unit id="admin-core.select-upload.file-in-use" datatype="html">
+        <source>File is still in use</source>
+        <target state="new">File is still in use</target>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.file-in-use-body" datatype="html">
+        <source>This file cannot be removed because it is still used in the following places.</source>
+        <target state="new">This file cannot be removed because it is still used in the following places.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.select-existing-file" datatype="html">
+        <source>Select existing file</source>
+        <target state="new">Select existing file</target>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.select-existing-legend" datatype="html">
+        <source>Select existing legend</source>
+        <target state="new">Select existing legend</target>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.select-existing-logo" datatype="html">
+        <source>Select existing logo</source>
+        <target state="new">Select existing logo</target>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.select-file" datatype="html">
+        <source>Select file</source>
+        <target state="new">Select file</target>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.select-legend" datatype="html">
+        <source>Select legend</source>
+        <target state="new">Select legend</target>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.select-logo" datatype="html">
+        <source>Select logo</source>
+        <target state="new">Select logo</target>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.upload-new-file" datatype="html">
+        <source>Upload a new file</source>
+        <target state="new">Upload a new file</target>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.upload-new-legend" datatype="html">
+        <source>Upload a new legend</source>
+        <target state="new">Upload a new legend</target>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.upload-new-logo" datatype="html">
+        <source>Upload a new logo</source>
+        <target state="new">Upload a new logo</target>
+      </trans-unit>
       <trans-unit id="admin-core.settings.home" datatype="html">
         <source>Select settings from the left side</source>
         <target state="translated">Wählen Sie Einstellungen auf der linken Seite aus</target>
+      </trans-unit>
+      <trans-unit id="admin-core.upload-select.delete-file" datatype="html">
+        <source>Delete file?</source>
+        <target state="new">Delete file?</target>
+      </trans-unit>
+      <trans-unit id="admin-core.upload-select.delete-file-message" datatype="html">
+        <source>Are you sure you want delete to the file <x id="PH" equiv-text="uploadName"/>? This action cannot be undone.</source>
+        <target state="new">Are you sure you want delete to the file <x id="PH" equiv-text="uploadName"/>? This action cannot be undone.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.upload-select.error-deleting-file" datatype="html">
+        <source>Error removing file <x id="PH" equiv-text="uploadName"/>. Please try again.</source>
+        <target state="new">Error removing file <x id="PH" equiv-text="uploadName"/>. Please try again.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.upload-select.file-deleted" datatype="html">
+        <source>File <x id="PH" equiv-text="uploadName"/> removed</source>
+        <target state="new">File <x id="PH" equiv-text="uploadName"/> removed</target>
       </trans-unit>
       <trans-unit id="admin-core.use-max-extent" datatype="html">
         <source>Use projection extent</source>

@@ -1,4 +1,4 @@
-<h1 mat-dialog-title i18n="@@admin-core.select-upload.title">Select {{ label }}</h1>
+<h1 mat-dialog-title>{{dialogProps.title}}</h1>
 
 <div class="dialog-content">
   @if (loading()) {
@@ -7,7 +7,7 @@
   @if (existingUploads$ | async; as existingUploads) {
     @if (existingUploads.length > 0) {
       <div class="uploads-section">
-        <h2 i18n="@@admin-core.select-upload.select-existing" class="no-margin">Select existing {{ label }}</h2>
+        <h2 class="no-margin">{{dialogProps.selectExistingTitle}}</h2>
         <div class="file-list">
           @for (upload of existingUploads; track upload.id) {
             <div class="file-image" (click)="selectFile(upload)">
@@ -30,9 +30,9 @@
   }
 
   <div class="uploads-section">
-    <h2 i18n="@@admin-core.select-upload.upload-new">Upload a new {{ label }}</h2>
+    <h2>{{ dialogProps.uploadNewTitle }}</h2>
     <tm-image-upload-field (imageChanged)="imageSelected($event)"
-                           [resizeSize]="resizeSize"></tm-image-upload-field>
+                           [resizeSize]="dialogProps.maxImageSize"></tm-image-upload-field>
   </div>
 
 </div>

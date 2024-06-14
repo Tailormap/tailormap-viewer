@@ -50,7 +50,7 @@
         <target>Attributenlijst</target>
       </trans-unit>
       <trans-unit id="admin-core.application.component-coordinate-link-window" datatype="html">
-        <source>Coordinate link window</source>
+        <source>Coordinate Link Window</source>
         <target state="new">Coordinate Link Window</target>
       </trans-unit>
       <trans-unit id="admin-core.application.component-coordinate-picker-tool" datatype="html">
@@ -937,6 +937,10 @@
         <source>Settings</source>
         <target>Instellingen</target>
       </trans-unit>
+      <trans-unit id="admin-core.common.size" datatype="html">
+        <source>Size</source>
+        <target state="new">Omvang</target>
+      </trans-unit>
       <trans-unit id="admin-core.common.sort" datatype="html">
         <source>Sort</source>
         <target>Sorteren</target>
@@ -975,7 +979,7 @@
       </trans-unit>
       <trans-unit id="admin-core.components.coordinate-link-window-help1" datatype="html">
         <source>Add one or more URL&apos;s to configure the Coordinate Link Window component.</source>
-        <target state="new">Voeg één of meerdere URL's toe om het Coordinate Link Window component te configureren.</target>
+        <target state="new">Voeg één of meerdere URL&apos;s toe om het Coordinate Link Window component te configureren.</target>
       </trans-unit>
       <trans-unit id="admin-core.components.coordinate-link-window-help2" datatype="html">
         <source>For each URL you can use <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[X]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> or <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[lat]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> and <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[Y]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> or <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[lon]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> placeholders in the URL.</source>
@@ -1031,7 +1035,7 @@
       </trans-unit>
       <trans-unit id="admin-core.form.delete-form-message" datatype="html">
         <source>Are you sure you want to delete form <x id="PH" equiv-text="title"/>? This action cannot be undone.</source>
-        <target state="new">Weet u zeker dat u formulier <x id="PH" equiv-text="title"/> wilt verwijderen? Dit kan niet ongedaan worden gemaakt.</target>
+        <target state="new">Weet u zeker dat u formulier <x id="PH" equiv-text="title"/> wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.</target>
       </trans-unit>
       <trans-unit id="admin-core.form.edit" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ form.name }}"/></source>
@@ -1337,9 +1341,69 @@
         <source>(name, sub, email, etc)</source>
         <target>(name, sub, email, enz.)</target>
       </trans-unit>
+      <trans-unit id="admin-core.select-upload.file-in-use" datatype="html">
+        <source>File is still in use</source>
+        <target state="new">Bestand wordt gebruikt</target>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.file-in-use-body" datatype="html">
+        <source>This file cannot be removed because it is still used in the following places.</source>
+        <target state="new">Dit bestand kan niet verwijderd worden omdat het op de volgende plaatsen nog gebruikt wordt.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.select-existing-file" datatype="html">
+        <source>Select existing file</source>
+        <target state="new">Selecteer bestaand bestand</target>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.select-existing-legend" datatype="html">
+        <source>Select existing legend</source>
+        <target state="new">Selecteer bestaande legenda</target>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.select-existing-logo" datatype="html">
+        <source>Select existing logo</source>
+        <target state="new">Selecteer bestaand logo</target>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.select-file" datatype="html">
+        <source>Select file</source>
+        <target state="new">Selecteer bestand</target>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.select-legend" datatype="html">
+        <source>Select legend</source>
+        <target state="new">Selecteer legenda</target>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.select-logo" datatype="html">
+        <source>Select logo</source>
+        <target state="new">Selecteer logo</target>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.upload-new-file" datatype="html">
+        <source>Upload a new file</source>
+        <target state="new">Upload een nieuw bestand</target>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.upload-new-legend" datatype="html">
+        <source>Upload a new legend</source>
+        <target state="new">Upload een nieuwe legenda</target>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.upload-new-logo" datatype="html">
+        <source>Upload a new logo</source>
+        <target state="new">Upload een nieuw logo</target>
+      </trans-unit>
       <trans-unit id="admin-core.settings.home" datatype="html">
         <source>Select settings from the left side</source>
         <target state="new">Selecteer een instelling aan de linker kant</target>
+      </trans-unit>
+      <trans-unit id="admin-core.upload-select.delete-file" datatype="html">
+        <source>Delete file?</source>
+        <target state="new">Verwijder bestand?</target>
+      </trans-unit>
+      <trans-unit id="admin-core.upload-select.delete-file-message" datatype="html">
+        <source>Are you sure you want delete to the file <x id="PH" equiv-text="uploadName"/>? This action cannot be undone.</source>
+        <target state="new">Weet u zeker dat u het bestand <x id="PH" equiv-text="uploadName"/> wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.upload-select.error-deleting-file" datatype="html">
+        <source>Error removing file <x id="PH" equiv-text="uploadName"/>. Please try again.</source>
+        <target state="new">Fout bij het verwijderen van bestand <x id="PH" equiv-text="uploadName"/>. Probeer opnieuw.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.upload-select.file-deleted" datatype="html">
+        <source>File <x id="PH" equiv-text="uploadName"/> removed</source>
+        <target state="new">Bestand <x id="PH" equiv-text="uploadName"/> verwijderd</target>
       </trans-unit>
       <trans-unit id="admin-core.use-max-extent" datatype="html">
         <source>Use projection extent</source>

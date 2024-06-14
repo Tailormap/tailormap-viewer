@@ -22,21 +22,29 @@ export interface SelectUploadResult {
 
 interface DialogProps {
   maxImageSize: number;
-  label: string;
+  title: string;
+  selectExistingTitle: string;
+  uploadNewTitle: string;
 }
 
 const CATEGORY_PROPS: Record<UploadCategoryEnum | string | 'defaultProps', DialogProps> = {
   [UploadCategoryEnum.LEGEND]: {
     maxImageSize: Infinity,
-    label: $localize `:@@admin-core.common.legend:legend`,
+    title: $localize `:@@admin-core.select-upload.select-legend:Select legend`,
+    selectExistingTitle: $localize `:@@admin-core.select-upload.select-existing-legend:Select existing legend`,
+    uploadNewTitle: $localize `:@@admin-core.select-upload.upload-new-legend:Upload a new legend`,
   },
   [UploadCategoryEnum.APPLICATION_LOGO]: {
     maxImageSize: 600,
-    label: $localize `:@@admin-core.common.logo:logo`,
+    title: $localize `:@@admin-core.select-upload.select-logo:Select logo`,
+    selectExistingTitle: $localize `:@@admin-core.select-upload.select-existing-logo:Select existing logo`,
+    uploadNewTitle: $localize `:@@admin-core.select-upload.upload-new-logo:Upload a new logo`,
   },
   defaultProps: {
     maxImageSize: Infinity,
-    label: $localize `:@@admin-core.common.file:file`,
+    title: $localize `:@@admin-core.select-upload.select-file:Select file`,
+    selectExistingTitle: $localize `:@@admin-core.select-upload.select-existing-file:Select existing file`,
+    uploadNewTitle: $localize `:@@admin-core.select-upload.upload-new-file:Upload a new file`,
   },
 };
 
@@ -50,8 +58,7 @@ export class SelectUploadDialogComponent implements OnInit {
 
   public existingUploads$ = new BehaviorSubject<UploadModel[] | null>(null);
   public loading = signal(false);
-  public resizeSize: number;
-  public label: string;
+  public dialogProps: DialogProps;
 
   constructor(
     private dialogRef: MatDialogRef<SelectUploadDialogComponent, SelectUploadResult>,
@@ -62,11 +69,9 @@ export class SelectUploadDialogComponent implements OnInit {
     private confirmDialogService: ConfirmDialogService,
     private adminSnackbarService: AdminSnackbarService,
   ) {
-    const props: DialogProps = CATEGORY_PROPS[this.data.category]
+    this.dialogProps = CATEGORY_PROPS[this.data.category]
       ? CATEGORY_PROPS[this.data.category]
       : CATEGORY_PROPS['defaultProps'];
-    this.label = props.label;
-    this.resizeSize = props.maxImageSize;
   }
 
   public static open(
@@ -162,7 +167,7 @@ export class SelectUploadDialogComponent implements OnInit {
           }
           return this.confirmDialogService.confirm$(
             $localize `:@@admin-core.upload-select.delete-file:Delete file?`,
-            $localize `:@@admin-core.upload-select.delete-file-message:Are you sure you want to the file ${uploadName}? This action cannot be undone.`,
+            $localize `:@@admin-core.upload-select.delete-file-message:Are you sure you want delete to the file ${uploadName}? This action cannot be undone.`,
             true,
           );
         }),
@@ -174,7 +179,7 @@ export class SelectUploadDialogComponent implements OnInit {
                 map(success => ({ success: !!success })),
                 tap(({ success }) => {
                   if (!success) {
-                    this.adminSnackbarService.showMessage($localize `:@@admin-core.upload-select.file-deleted:Error removing file ${uploadName}. Please try again.`);
+                    this.adminSnackbarService.showMessage($localize `:@@admin-core.upload-select.error-deleting-file:Error removing file ${uploadName}. Please try again.`);
                   }
                 }),
               );
