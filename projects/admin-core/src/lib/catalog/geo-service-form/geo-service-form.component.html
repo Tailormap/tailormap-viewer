@@ -30,6 +30,16 @@
     <mat-label i18n="@@admin-core.catalog.enter-xyz-crs">CRS for this XYZ layer</mat-label>
     <input matInput type="text" formControlName="xyzCrs"/>
   </mat-form-field>
+  @if (isWms()) {
+    <p style="margin: 8px 0 8px 0">
+      CORS allowed origins:
+      @if (getCorsAllowOrigin() === null) {
+        <span i18n="@@admin-core.catalog.no-cors">Same origin only</span>
+      } @else {
+        <span style="font-family: monospace">{{ getCorsAllowOrigin() }}</span>
+      }
+    </p>
+  }
   <mat-expansion-panel *ngIf="!isXyz()">
     <mat-expansion-panel-header>
       <mat-panel-title i18n="@@admin-core.catalog.authentication-and-proxy" style="flex-grow: 1">Authentication and proxy</mat-panel-title>

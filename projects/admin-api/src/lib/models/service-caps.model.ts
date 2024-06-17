@@ -21,4 +21,5 @@ export interface ServiceCapsModel {
       'describe-layer'?: boolean;
     };
   };
+  corsAllowOrigin: string | null;
 }

@@ -53,6 +53,7 @@ export const getServiceCaps = (): ServiceCapsModel => ({
       'describe-layer': false,
     },
   },
+  corsAllowOrigin: '*',
 });
 
 export const getGeoServiceLayer = (overrides?: Partial<GeoServiceLayerModel>): GeoServiceLayerModel => ({

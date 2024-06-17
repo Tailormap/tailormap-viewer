@@ -75,6 +75,10 @@ export class GeoServiceFormComponent implements OnInit {
     return this.geoServiceForm.get('protocol')?.value === GeoServiceProtocolEnum.XYZ;
   }
 
+  public isWms() {
+    return this.geoServiceForm.get('protocol')?.value === GeoServiceProtocolEnum.WMS;
+  }
+
   public ngOnInit(): void {
     this.geoServiceForm.valueChanges
       .pipe(
@@ -124,5 +128,9 @@ export class GeoServiceFormComponent implements OnInit {
     } else {
       return $localize `:@@admin-core.catalog.not-set:Not set`;
     }
+  }
+
+  public getCorsAllowOrigin() {
+    return this._geoService?.serviceCapabilities?.corsAllowOrigin;
   }
 }
