@@ -1,4 +1,4 @@
 export interface ViewerStylingModel {
-  logo?: string;
+  logo?: string | null;
   primaryColor?: string;
 }

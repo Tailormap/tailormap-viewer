@@ -491,6 +491,9 @@
       <trans-unit id="admin-core.catalog.not-set" datatype="html">
         <source>Not set</source>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.override-legend" datatype="html">
+        <source>Override service default legend</source>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.port" datatype="html">
         <source>Port</source>
       </trans-unit>
@@ -707,11 +710,17 @@
       <trans-unit id="admin-core.common.saved" datatype="html">
         <source>Saved</source>
       </trans-unit>
+      <trans-unit id="admin-core.common.select-file" datatype="html">
+        <source>Select file</source>
+      </trans-unit>
       <trans-unit id="admin-core.common.settings-for" datatype="html">
         <source>Settings for <x id="INTERPOLATION" equiv-text="{{ layerTitle }}"/></source>
       </trans-unit>
       <trans-unit id="admin-core.common.settings-title" datatype="html">
         <source>Settings</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.size" datatype="html">
+        <source>Size</source>
       </trans-unit>
       <trans-unit id="admin-core.common.sort" datatype="html">
         <source>Sort</source>
@@ -1013,8 +1022,53 @@
       <trans-unit id="admin-core.oidc.username-attribute-placeholder" datatype="html">
         <source>(name, sub, email, etc)</source>
       </trans-unit>
+      <trans-unit id="admin-core.select-upload.file-in-use" datatype="html">
+        <source>File is still in use</source>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.file-in-use-body" datatype="html">
+        <source>This file cannot be removed because it is still used in the following places.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.select-existing-file" datatype="html">
+        <source>Select existing file</source>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.select-existing-legend" datatype="html">
+        <source>Select existing legend</source>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.select-existing-logo" datatype="html">
+        <source>Select existing logo</source>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.select-file" datatype="html">
+        <source>Select file</source>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.select-legend" datatype="html">
+        <source>Select legend</source>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.select-logo" datatype="html">
+        <source>Select logo</source>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.upload-new-file" datatype="html">
+        <source>Upload a new file</source>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.upload-new-legend" datatype="html">
+        <source>Upload a new legend</source>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.upload-new-logo" datatype="html">
+        <source>Upload a new logo</source>
+      </trans-unit>
       <trans-unit id="admin-core.settings.home" datatype="html">
         <source>Select settings from the left side</source>
+      </trans-unit>
+      <trans-unit id="admin-core.upload-select.delete-file" datatype="html">
+        <source>Delete file?</source>
+      </trans-unit>
+      <trans-unit id="admin-core.upload-select.delete-file-message" datatype="html">
+        <source>Are you sure you want delete to the file <x id="PH" equiv-text="uploadName"/>? This action cannot be undone.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.upload-select.error-deleting-file" datatype="html">
+        <source>Error removing file <x id="PH" equiv-text="uploadName"/>. Please try again.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.upload-select.file-deleted" datatype="html">
+        <source>File <x id="PH" equiv-text="uploadName"/> removed</source>
       </trans-unit>
       <trans-unit id="admin-core.use-max-extent" datatype="html">
         <source>Use projection extent</source>

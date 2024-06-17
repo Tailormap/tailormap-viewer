@@ -51,6 +51,7 @@ export const adminRoutes: Routes = [
           {
             path: AdminRoutes.CATALOG_LAYER_DETAILS,
             component: GeoServiceLayerDetailsComponent,
+            data: { className: 'full-screen-settings' },
           },
           {
             path: AdminRoutes.CATALOG_SERVICE_DETAILS,

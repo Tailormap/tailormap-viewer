@@ -7,6 +7,8 @@ import { SaveButtonComponent } from './save-button/save-button.component';
 import { BoundsFieldComponent } from './bounds-field/bounds-field.component';
 import { AuthorizationEditComponent } from './authorization-edit/authorization-edit.component';
 import { AdminFieldsRendererComponent } from './admin-fields-renderer/admin-fields-renderer.component';
+import { SelectUploadModule } from './select-upload/select-upload.module';
+
 import { SpinnerButtonComponent } from './spinner-button/spinner-button.component';
 
 @NgModule({
@@ -30,6 +32,7 @@ import { SpinnerButtonComponent } from './spinner-button/spinner-button.componen
     BoundsFieldComponent,
     AuthorizationEditComponent,
     AdminFieldsRendererComponent,
+    SelectUploadModule,
     SpinnerButtonComponent,
   ],
 })

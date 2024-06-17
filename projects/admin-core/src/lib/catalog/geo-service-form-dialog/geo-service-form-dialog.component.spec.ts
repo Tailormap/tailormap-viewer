@@ -18,14 +18,15 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
 import { SpinnerButtonComponent } from '../../shared/components/spinner-button/spinner-button.component';
+import { SharedAdminComponentsModule } from '../../shared/components/shared-admin-components.module';
 
 const setup = async (editMode = false) => {
   const dialogRefMock = { close: jest.fn() };
   const geoServiceModelMock = getGeoService({ id: '2', title: 'my service', url: 'http://test.service' });
   const { geoServiceService, updateGeoService$, updateGeoServiceDetails } = createGeoServiceMock(geoServiceModelMock);
   await render(GeoServiceFormDialogComponent, {
-    imports: [ SharedModule, MatIconTestingModule ],
-    declarations: [ GeoServiceFormComponent, LayerSettingsFormComponent, PasswordFieldComponent, SaveButtonComponent, SpinnerButtonComponent, AuthorizationEditComponent ],
+    imports: [ SharedModule, MatIconTestingModule, SharedAdminComponentsModule ],
+    declarations: [ GeoServiceFormComponent, LayerSettingsFormComponent, PasswordFieldComponent, SaveButtonComponent, AuthorizationEditComponent ],
     providers: [
       provideMockStore(),
       { provide: MatDialogRef, useValue: dialogRefMock },

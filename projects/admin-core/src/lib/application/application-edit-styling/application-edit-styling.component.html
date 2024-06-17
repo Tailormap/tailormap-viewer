@@ -9,9 +9,8 @@
 
   <div class="form-row">
     <strong i18n="@@admin-core.application.logo">Upload logo for application</strong>
-    <tm-image-upload-field (imageChanged)="onImageChanged($event)"
-                           [maxSize]="2"
-                           [resizeSize]="600"
-                           [currentImage]="stylingConfig.logo"></tm-image-upload-field>
+    <tm-admin-select-upload [category]="appLogoCategory"
+                            (fileSelected)="onImageChanged($event)"
+                            [selectedFile]="stylingConfig.logo || null"></tm-admin-select-upload>
   </div>
 </div>

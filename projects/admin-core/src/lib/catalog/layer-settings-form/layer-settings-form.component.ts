@@ -88,11 +88,11 @@ export class LayerSettingsFormComponent implements OnInit {
   public isXYZ = false;
   public hiDpiModes = TileLayerHiDpiModeEnum;
 
-
   public layerSettingsForm = new FormGroup({
     title: new FormControl('', { nonNullable: true }),
     description: new FormControl<string | null>(null),
     attribution: new FormControl<string | null>(null),
+    legendImageId: new FormControl<string | null>(null),
     featureSourceId: new FormControl<number | null>(null),
     featureTypeName: new FormControl<string | null>(null),
     hiDpiEnabled: new FormControl<boolean | null>(null),
@@ -131,6 +131,7 @@ export class LayerSettingsFormComponent implements OnInit {
     const settings: LayerSettingsModel = {
       hiDpiDisabled: LayerSettingsFormComponent.getInverseBooleanOrDefault(value.hiDpiEnabled, undefined),
       attribution: value.attribution || undefined,
+      legendImageId: value.legendImageId || undefined,
       description: value.description || undefined,
     };
     if (this.isLayerSpecific) {
@@ -177,6 +178,7 @@ export class LayerSettingsFormComponent implements OnInit {
       [ values.title, this._layerSettings.title ],
       [ values.description, this._layerSettings.description ],
       [ values.attribution, this._layerSettings.attribution ],
+      [ values.legendImageId, this._layerSettings.legendImageId ],
       [ values.hiDpiDisabled, this._layerSettings.hiDpiDisabled ],
       [ values.hiDpiMode, this._layerSettings.hiDpiMode ],
       [ values.hiDpiSubstituteLayer, this._layerSettings.hiDpiSubstituteLayer ],
@@ -209,6 +211,7 @@ export class LayerSettingsFormComponent implements OnInit {
       title: this.layerSettings?.title ? this.layerSettings.title : '',
       description: this.layerSettings?.description || null,
       attribution: this.layerSettings?.attribution || null,
+      legendImageId: this.layerSettings?.legendImageId || null,
       featureSourceId: this.layerSettings?.featureType?.featureSourceId || null,
       featureTypeName: this.layerSettings?.featureType?.featureTypeName || null,
       hiDpiEnabled,
@@ -276,4 +279,7 @@ export class LayerSettingsFormComponent implements OnInit {
     return !!settings && this.isXYZ;
   }
 
+  public onLegendImageChanged($event: string | null) {
+    this.layerSettingsForm.patchValue({ legendImageId: $event });
+  }
 }

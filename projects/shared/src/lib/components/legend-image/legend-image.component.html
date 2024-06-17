@@ -1,0 +1,6 @@
+@if (legendSettings) {
+  <img [class.hi-dpi]="legendSettings.scaleHiDpiImage"
+       [alt]="legendSettings.failedToLoadMessage"
+       [src]="legendSettings.url"
+       [srcset]="legendSettings.srcset" />
+}
