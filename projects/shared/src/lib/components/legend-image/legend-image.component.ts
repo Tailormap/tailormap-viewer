@@ -52,16 +52,22 @@ export class LegendImageComponent {
       scaleHiDpiImage: legend.url.includes('/uploads/legend/') && !legend.url.endsWith(".svg"),
       failedToLoadMessage: `${FAILED_TO_LOAD_MESSAGE} ${legend.title}`,
     };
-    if (legend.serverType === 'geoserver' && LegendHelper.isGetLegendGraphicRequest(legend.url)) {
-      const legendOptions: GeoServerLegendOptions = {
-        fontAntiAliasing: true,
-        labelMargin: 0,
-        forceLabels: 'on',
-      };
-      legendSettings.url = LegendHelper.addGeoServerLegendOptions(legend.url, legendOptions);
-      if (window.devicePixelRatio > 1) {
-        legendOptions.dpi = 180;
-        legendSettings.srcset = LegendHelper.addGeoServerLegendOptions(legend.url, legendOptions) + ' 2x';
+    if (LegendHelper.isGetLegendGraphicRequest(legend.url)) {
+      if (legend.serverType === 'geoserver') {
+        const legendOptions: GeoServerLegendOptions = {
+          fontAntiAliasing: true,
+          labelMargin: 0,
+          forceLabels: 'on',
+        };
+        legendSettings.url = LegendHelper.addGeoServerLegendOptions(legend.url, legendOptions);
+        if (window.devicePixelRatio > 1) {
+          legendOptions.dpi = 180;
+          legendSettings.srcset = LegendHelper.addGeoServerLegendOptions(legend.url, legendOptions) + ' 2x';
+        }
+      } else if (legend.serverType === 'mapserver') {
+        const u = new URL(legend.url);
+        u.searchParams.set('MAP_RESOLUTION', '144');
+        legendSettings.srcset = u.toString() + ' 2x';
       }
     }
     this.legendSettings = legendSettings;
