@@ -2,7 +2,6 @@ import { Feature, Map as OlMap } from 'ol';
 import { Layer as BaseLayer, Vector as VectorLayer, Group as LayerGroup } from 'ol/layer';
 import { Geometry } from 'ol/geom';
 import { Vector as VectorSource, ImageWMS, WMTS, XYZ, TileWMS } from 'ol/source';
-import {  } from 'ol/layer';
 import { LayerManagerModel, LayerTypes } from '../models';
 import { OlLayerHelper } from '../helpers/ol-layer.helper';
 import { LayerModel } from '../models/layer.model';
@@ -260,6 +259,8 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     if (isOpenLayersWMSLayer(layer)) {
       return layer.getSource()?.getLegendUrl(
         undefined, {
+          // Use WMS version 1.1.0 for higher GetLegendGraphic compatibility
+          VERSION: '1.1.0',
           SLD_VERSION: '1.1.0',
         },
       ) || '';
