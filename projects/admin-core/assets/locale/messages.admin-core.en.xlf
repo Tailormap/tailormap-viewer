@@ -290,6 +290,9 @@
       <trans-unit id="admin-core.catalog.connection-options" datatype="html">
         <source>Additional connection options</source>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.cors-allowed-origins" datatype="html">
+        <source>CORS allowed origins</source>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.cors-layer-hint" datatype="html">
         <source>Reverse proxying without authentication can be used to bypass missing CORS headers but check with the server administrator if it&apos;s allowed and whether CORS can be enabled so proxying isn&apos;t necessary.</source>
       </trans-unit>
@@ -481,6 +484,9 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.min-zoom-level" datatype="html">
         <source>Minimum zoom level</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.no-cors" datatype="html">
+        <source>Same origin only</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.no-feature-source" datatype="html">
         <source>No feature source</source>

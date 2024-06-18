@@ -386,6 +386,10 @@
         <source>Additional connection options</source>
         <target>Zusätzliche Verbindungsoptionen</target>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.cors-allowed-origins" datatype="html">
+        <source>CORS allowed origins</source>
+        <target state="new">CORS erlaubte Ursprünge</target>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.cors-layer-hint" datatype="html">
         <source>Reverse proxying without authentication can be used to bypass missing CORS headers but check with the server administrator if it&apos;s allowed and whether CORS can be enabled so proxying isn&apos;t necessary.</source>
         <target state="translated">Rückwärts-Proxying ohne Authentifizierung kann verwendet werden, um fehlende CORS-Header zu umgehen, aber prüfen Sie beim Serveradministrator, ob dies erlaubt ist und ob CORS aktiviert werden kann, damit kein Proxying erforderlich ist.</target>
@@ -641,6 +645,10 @@
       <trans-unit id="admin-core.catalog.min-zoom-level" datatype="html">
         <source>Minimum zoom level</source>
         <target>Minimales Zoomniveau</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.no-cors" datatype="html">
+        <source>Same origin only</source>
+        <target state="new">Nur gleicher Ursprung</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.no-feature-source" datatype="html">
         <source>No feature source</source>
