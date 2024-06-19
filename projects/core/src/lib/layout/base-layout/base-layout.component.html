@@ -28,7 +28,7 @@
           <tm-edit *ngIf="layoutService.isComponentEnabled(config, componentTypes.EDIT)"></tm-edit>
           <tm-share-viewer *ngIf="layoutService.isComponentEnabled(config, componentTypes.SHARE_VIEWER)"></tm-share-viewer>
           <tm-registered-components-renderer [config]="config" area="map-controls-left"></tm-registered-components-renderer>
-          <tm-switch3D></tm-switch3D>
+          <tm-switch3-d></tm-switch3-d>
         </div>
         <div class="map-controls-right">
           <tm-background-layer-toggle *ngIf="layoutService.isComponentEnabled(config, componentTypes.BACKGROUND_LAYER_TOGGLE)"></tm-background-layer-toggle>

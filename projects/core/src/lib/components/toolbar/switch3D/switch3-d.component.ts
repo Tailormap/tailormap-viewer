@@ -6,12 +6,12 @@ import { selectEnable3D } from '../../../state/core.selectors';
 
 
 @Component({
-  selector: 'tm-switch3D',
+  selector: 'tm-switch3-d',
   templateUrl: './switch3-d.component.html',
   styleUrls: ['./switch3-d.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Switch3DComponent implements OnInit, OnDestroy {
+export class Switch3DComponent implements OnDestroy {
 
   private destroyed = new Subject();
   public enable$: Observable<boolean>;
@@ -23,17 +23,12 @@ export class Switch3DComponent implements OnInit, OnDestroy {
     this.enable$ = this.store$.select(selectEnable3D);
   }
 
-  public ngOnInit(): void {
-
-  }
-
   public ngOnDestroy() {
     this.destroyed.next(null);
     this.destroyed.complete();
   }
 
   public toggle() {
-    this.mapService.switch3D$()
-
+    this.mapService.switch3D$();
   }
 }

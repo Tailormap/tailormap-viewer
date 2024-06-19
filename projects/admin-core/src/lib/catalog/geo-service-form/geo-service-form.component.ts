@@ -21,7 +21,7 @@ export class GeoServiceFormComponent implements OnInit {
   private _geoService: GeoServiceModel | null = null;
 
   public protocols: GeoServiceProtocolEnum[] = [
-    GeoServiceProtocolEnum.WMS, GeoServiceProtocolEnum.WMTS, GeoServiceProtocolEnum.XYZ, GeoServiceProtocolEnum.TILESET3D
+    GeoServiceProtocolEnum.WMS, GeoServiceProtocolEnum.WMTS, GeoServiceProtocolEnum.XYZ, GeoServiceProtocolEnum.TILESET3D,
   ];
   private readonly XYZ_CRS_DEFAULT = 'EPSG:3857';
 

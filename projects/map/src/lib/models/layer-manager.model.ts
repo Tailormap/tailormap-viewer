@@ -3,7 +3,7 @@ import { Vector as VectorLayer, Image as ImageLayer, Tile as TileLayer } from 'o
 import { Vector as VectorSource, ImageWMS, WMTS, XYZ, TileWMS } from 'ol/source';
 import { Geometry } from 'ol/geom';
 import { Feature } from 'ol';
-import {Cesium3DTileset } from 'cesium';
+import { Cesium3DTileset } from 'cesium';
 
 export type LayerTypes = VectorLayer<VectorSource<Feature<Geometry>>> | TileLayer<TileWMS> | ImageLayer<ImageWMS> | TileLayer<XYZ> | TileLayer<WMTS> | null;
 export type LayerTypes3D = Promise<Cesium3DTileset>  | null;

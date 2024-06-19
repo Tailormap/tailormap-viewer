@@ -18,7 +18,7 @@ export class CesiumLayerHelper {
   public static async createTileset3DLayer(
     layer: Tileset3DLayerModel,
   ): Promise<Cesium3DTileset> {
-    let url = layer.url;
+    const url = layer.url;
     return await Cesium.Cesium3DTileset.fromUrl(url);
   }
 }

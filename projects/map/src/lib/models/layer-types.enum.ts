@@ -3,5 +3,5 @@ export enum LayerTypesEnum {
   XYZ,
   WMS,
   WMTS,
-  TILESET3D
+  TILESET3D,
 }
