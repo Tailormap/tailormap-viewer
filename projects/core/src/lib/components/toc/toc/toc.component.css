@@ -12,6 +12,18 @@
   min-width: min-content;
 }
 
+.toc ::ng-deep .tree-node-wrapper .tree-node__actions {
+  display: none;
+}
+
+.toc ::ng-deep .tree-node-wrapper:hover .tree-node__actions {
+  display: flex;
+}
+
+.toc ::ng-deep .mat-tree--drag-active .tree-node-wrapper .tree-node__actions {
+  display: none;
+}
+
 .toc {
   display: flex;
   flex-direction: column;

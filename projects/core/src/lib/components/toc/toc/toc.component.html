@@ -1,5 +1,5 @@
 <ng-template #treeNode let-node>
-  <tm-toc-node-layer [node]="node" [scale]="scale" (showTreeNodeInfo)="showTreeNodeInfo($event)"></tm-toc-node-layer>
+  <tm-toc-node-layer [node]="node" [scale]="scale" [dragDropEnabled]="dragDropEnabled"></tm-toc-node-layer>
 </ng-template>
 
 <div class="toc" *ngIf="visible$ | async">
@@ -32,10 +32,13 @@
     <tm-toc-filter-input></tm-toc-filter-input>
   </div>
   <tm-tree class="toc-tree"
+           dragHandleSelector=".tree-drag-handle"
            [treeNodeTemplate]="treeNode"
            [expandOnGroupClick]="true"
            [getDropZones]="getDropZoneConfig()"></tm-tree>
-  <tm-toc-node-details *ngIf="infoTreeNodeId$ | async as selectedLayerDetail"
-                    [nodeId]="selectedLayerDetail"
-                    (closeDetails)="layerInfoClosed()"></tm-toc-node-details>
+  @if (infoTreeNode$ | async; as infoTreeNode) {
+    @if (infoVisible()) {
+      <tm-toc-node-details [node]="infoTreeNode" (closeDetails)="layerInfoClosed()"></tm-toc-node-details>
+    }
+  }
 </div>

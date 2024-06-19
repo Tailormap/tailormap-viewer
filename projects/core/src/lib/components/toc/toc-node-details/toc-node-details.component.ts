@@ -1,9 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, ViewChild, ElementRef, inject } from '@angular/core';
 import { BrowserHelper } from '@tailormap-viewer/shared';
-import { BehaviorSubject, map, mergeMap, Observable, of } from 'rxjs';
+import { BehaviorSubject, map } from 'rxjs';
 import { AppLayerModel, LayerTreeNodeModel } from '@tailormap-viewer/api';
-import { Store } from '@ngrx/store';
-import { selectLayer, selectLayerTreeNode } from '../../../map/state/map.selectors';
 
 interface NodeWithLayer extends LayerTreeNodeModel {
   layer?: AppLayerModel;
@@ -17,34 +15,8 @@ interface NodeWithLayer extends LayerTreeNodeModel {
 })
 export class TocNodeDetailsComponent implements OnInit {
 
-  private store$ = inject(Store);
-
-  private nodeIdSubject = new BehaviorSubject<string | null>(null);
-  public node$: Observable<NodeWithLayer | null> = this.nodeIdSubject.asObservable().pipe(
-    mergeMap(nodeId => {
-      if (nodeId === null) {
-        return of(null);
-      }
-      return this.store$.select(selectLayerTreeNode(nodeId))
-        .pipe(
-          mergeMap(node => {
-            if (node?.appLayerId) {
-              return this.store$.select(selectLayer(node.appLayerId)).pipe(map(layer => ({ ...node, layer })));
-            }
-            return of(node);
-          }),
-        );
-    }),
-  );
-
   @Input()
-  public set nodeId(nodeId: string | null) {
-    this.nodeIdSubject.next(nodeId);
-  }
-
-  public get nodeId(): string | null {
-    return this.nodeIdSubject.value;
-  }
+  public node: NodeWithLayer | null | undefined = null;
 
   @Output()
   public closeDetails = new EventEmitter<void>();

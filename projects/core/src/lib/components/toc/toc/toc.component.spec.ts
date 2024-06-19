@@ -7,7 +7,7 @@ import { SharedModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { TestBed } from '@angular/core/testing';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { selectLayers, selectLayerTreeNodes, selectSelectedNode } from '../../../map/state/map.selectors';
+import { selectLayers, selectLayerTreeNodes, selectSelectedNodeId } from '../../../map/state/map.selectors';
 import { setLayerVisibility, setSelectedLayerId } from '../../../map/state/map.actions';
 import { TocNodeLayerComponent } from '../toc-node-layer/toc-node-layer.component';
 import { ToggleAllLayersButtonComponent } from '../toggle-all-layers-button/toggle-all-layers-button.component';
@@ -34,7 +34,7 @@ const buildMockStore = (selectedLayer = '') => {
       { selector: selectInfoTreeNodeId, value: null },
       { selector: selectLayers, value: layers },
       { selector: selectLayerTreeNodes, value: tree },
-      { selector: selectSelectedNode, value: selectedLayer },
+      { selector: selectSelectedNodeId, value: selectedLayer },
     ],
   });
 };
@@ -89,7 +89,7 @@ describe('TocComponent', () => {
     expect((await screen.findByText('Disaster map')).closest('.mat-tree-node')).toHaveClass('tree-node--selected');
     await userEvent.click(await screen.findByText('Some other map'));
     expect(mockDispatch).toHaveBeenCalledWith({ type: setSelectedLayerId.type, layerId: '2' });
-    mockStore.overrideSelector(selectSelectedNode, '2');
+    mockStore.overrideSelector(selectSelectedNodeId, '2');
     mockStore.refreshState();
     await waitFor(() => {
       expect((screen.getByText('Disaster map')).closest('.mat-tree-node')).not.toHaveClass('tree-node--selected');

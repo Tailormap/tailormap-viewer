@@ -42,6 +42,7 @@ mat-checkbox {
   height: var(--tree-node-size);
   min-height: initial;
   flex: 1;
+  cursor: pointer;
 }
 
 /* the ::ng-deep above will be removed after compilation so this selector is actually more specific */
