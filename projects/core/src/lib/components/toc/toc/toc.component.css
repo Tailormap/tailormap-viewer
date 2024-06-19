@@ -16,6 +16,7 @@
   display: none;
 }
 
+.toc.drag-drop-visible ::ng-deep .tree-node-wrapper .tree-node__actions,
 .toc ::ng-deep .tree-node-wrapper:hover .tree-node__actions {
   display: flex;
 }

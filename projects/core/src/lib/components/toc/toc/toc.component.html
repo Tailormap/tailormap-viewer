@@ -2,7 +2,7 @@
   <tm-toc-node-layer [node]="node" [scale]="scale" [dragDropEnabled]="dragDropEnabled"></tm-toc-node-layer>
 </ng-template>
 
-<div class="toc" *ngIf="visible$ | async">
+<div class="toc" *ngIf="visible$ | async" [class.drag-drop-visible]="isMobileDevice && dragDropEnabled">
   <div class="toc-header">
     <div class="toc-header-left">
       <tm-toggle-all-layers-button></tm-toggle-all-layers-button>
