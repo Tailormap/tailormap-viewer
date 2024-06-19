@@ -25,9 +25,6 @@ import { default as LayerRenderer } from 'ol/renderer/Layer';
 import { Coordinate } from 'ol/coordinate';
 import { HttpClient, HttpXsrfTokenExtractor } from '@angular/common/http';
 import { Feature } from 'ol';
-import { Map as OlMap } from 'ol';
-import { OpenLayersLayerManager } from '../openlayers-map/open-layers-layer-manager';
-import OLCesium from 'olcs';
 
 export type OlLayerFilter = (layer: Layer<Source, LayerRenderer<any>>) => boolean;
 
@@ -280,7 +277,7 @@ export class MapService {
     if (!this.made3D) {
       this.map.executeMapAction(olMap => {
         console.log(this.map3D);
-        this.map3D.next(new CesiumLayerManager(olMap, this.ngZone, this.httpXsrfTokenExtractor));
+        this.map3D.next(new CesiumLayerManager(olMap, this.ngZone));
       });
       this.executeCLMAction(cesiumLayerManager => {
         console.log('clm:',  cesiumLayerManager);
@@ -299,5 +296,4 @@ export class MapService {
   public getMap3D$(){
     return this.map3D;
   }
-
 }

@@ -1,13 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
-import { concatMap, map, Observable, Subject, switchMap, takeUntil, tap } from 'rxjs';
-import { MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Clipboard } from '@angular/cdk/clipboard';
+import { Observable, Subject } from 'rxjs';
+import { MapService } from '@tailormap-viewer/map';
 import { Store } from '@ngrx/store';
-import { isActiveToolbarTool } from '../state/toolbar.selectors';
-import { deregisterTool, registerTool, toggleTool } from '../state/toolbar.actions';
-import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
-import { SnackBarMessageComponent } from '@tailormap-viewer/shared';
 import { selectEnable3D } from '../../../state/core.selectors';
 
 

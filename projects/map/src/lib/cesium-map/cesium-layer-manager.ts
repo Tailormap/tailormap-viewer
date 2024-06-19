@@ -1,31 +1,22 @@
-import { Feature, Map as OlMap } from 'ol';
-import { Layer as BaseLayer, Vector as VectorLayer, Group as LayerGroup } from 'ol/layer';
-import { Geometry } from 'ol/geom';
-import { Vector as VectorSource, ImageWMS, WMTS, XYZ, TileWMS } from 'ol/source';
-import {  } from 'ol/layer';
-import { LayerManagerModel, LayerTypes, LayerTypes3D } from '../models';
-import { OlLayerHelper } from '../helpers/ol-layer.helper';
+import { Map as OlMap } from 'ol';
+import { Layer as BaseLayer} from 'ol/layer';
 import { LayerModel } from '../models/layer.model';
-import { VectorLayerModel } from '../models/vector-layer.model';
-import { isOpenLayersVectorLayer, isOpenLayersWMSLayer, isPossibleRealtimeLayer } from '../helpers/ol-layer-types.helper';
 import { LayerTypesHelper } from '../helpers/layer-types.helper';
-import { ArrayHelper } from '@tailormap-viewer/shared';
 import { NgZone } from '@angular/core';
 import { HttpXsrfTokenExtractor } from '@angular/common/http';
-import { ServerType } from '@tailormap-viewer/api';
 import { CesiumLayerHelper } from '../helpers/cesium-layer.helper';
 import OLCesium from 'olcs';
 import { BehaviorSubject, filter, Observable, take } from 'rxjs';
-import { Scene, CesiumTerrainProvider, Cesium3DTileset, Ion } from 'cesium';
+import { Scene, Cesium3DTileset} from 'cesium';
 
 export class CesiumLayerManager {
 
-  private layers: Map<string, BaseLayer> = new Map<string, BaseLayer>();
+  // private layers: Map<string, BaseLayer> = new Map<string, BaseLayer>();
 
   private map3D: BehaviorSubject<OLCesium | null> = new BehaviorSubject<OLCesium | null>(null);
   private scene3D: BehaviorSubject<Scene | null> = new BehaviorSubject<Scene | null>(null);
 
-  constructor(private olMap: OlMap, private ngZone: NgZone, private httpXsrfTokenExtractor: HttpXsrfTokenExtractor) {}
+  constructor(private olMap: OlMap, private ngZone: NgZone) {}
 
   public init() {
     const ol3d = new OLCesium({
@@ -36,12 +27,15 @@ export class CesiumLayerManager {
     this.map3D.next(ol3d);
     this.scene3D.next(scene);
 
-    // this.executeScene3DAction(scene3D => {
-    //   CesiumTerrainProvider.fromUrl('https://download.swissgeol.ch/cli_terrain/ch-2m/').then(tp => scene3D.terrainProvider = tp);
-    // });
-    // CesiumTerrainProvider.fromUrl('https://download.swissgeol.ch/cli_terrain/ch-2m/').then(tp => scene.terrainProvider = tp);
-    // scene.primitives.add(Cesium3DTileset.fromUrl('https://3dtilesnederland.nl/tiles/1.0/implicit/nederland/599.json'));
-
+    this.executeScene3DAction(scene3D => {
+      const OLCS_ION_TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2YjQ4MDkzYi02ZjJjLTQ5YTgtYjAyZC1lN2IxZGZlMDFlMDkiLCJpZCI6MTk3Mzk5LCJpYXQiOjE3MDg2Nzg4ODh9.DQT_DNkF7XS8vtMtIde2oeZsJoQTqm4K3qFahQ1-tR8'
+      Cesium.Ion.defaultAccessToken = OLCS_ION_TOKEN;
+      scene3D.setTerrain(
+        new Cesium.Terrain(
+          Cesium.CesiumTerrainProvider.fromIonAssetId(1),
+        ),
+      );
+    });
   }
 
   public getMap3D$(): Observable<OLCesium> {

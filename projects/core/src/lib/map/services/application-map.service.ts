@@ -77,8 +77,6 @@ export class ApplicationMapService implements OnDestroy {
         .pipe(
           takeUntil(this.destroyed),
           concatMap(layers => this.get3DLayersAndLayerManager$(layers)),
-          // filter(([layers])=>layers.length > 0),
-          // take(1),
         )
         .subscribe(([layers, layerManager]) => {
           layerManager.addLayers(layers.filter(isValidLayer));

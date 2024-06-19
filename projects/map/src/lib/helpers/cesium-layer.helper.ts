@@ -1,10 +1,8 @@
 import { LayerTypesHelper } from './layer-types.helper';
 import { LayerModel } from '../models/layer.model';
-import { Cesium3DTileset } from 'cesium';
+import { Cesium3DTileset} from 'cesium';
 import { Tileset3DLayerModel } from '../models/tileset3D-layer.model';
-
-
-const MAX_URL_LENGTH_BEFORE_POST = 4096;
+import { HttpXsrfTokenExtractor } from '@angular/common/http';
 
 export class CesiumLayerHelper {
 
@@ -17,10 +15,10 @@ export class CesiumLayerHelper {
     return null;
   }
 
-  public static async createTileset3DLayer(layer: Tileset3DLayerModel): Promise<Cesium3DTileset> {
+  public static async createTileset3DLayer(
+    layer: Tileset3DLayerModel,
+  ): Promise<Cesium3DTileset> {
     let url = layer.url;
-
     return await Cesium.Cesium3DTileset.fromUrl(url);
-
   }
 }
