@@ -13,7 +13,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { createGeoServiceMock } from '../helpers/mocks/geo-service.service.mock';
 import { GeoServiceLayerFormDialogComponent } from './geo-service-layer-form-dialog.component';
 import { catalogStateKey } from '../state/catalog.state';
-import { SpinnerButtonComponent } from '../../shared/components/spinner-button/spinner-button.component';
+import { SpinnerButtonComponent } from '@tailormap-viewer/shared';
 import { CatalogExtendedTypeEnum } from '../models/catalog-extended.model';
 
 const setup = async () => {

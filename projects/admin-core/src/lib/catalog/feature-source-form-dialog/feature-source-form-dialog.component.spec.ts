@@ -11,7 +11,7 @@ import { FeatureSourceFormComponent } from '../feature-source-form/feature-sourc
 import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
-import { SpinnerButtonComponent } from '../../shared/components/spinner-button/spinner-button.component';
+import { SpinnerButtonComponent } from '@tailormap-viewer/shared';
 
 const setup = async (editMode = false) => {
   const dialogRefMock = { close: jest.fn() };
