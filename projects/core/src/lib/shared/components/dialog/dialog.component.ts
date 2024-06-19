@@ -3,7 +3,7 @@ import {
 } from '@angular/core';
 import { style, transition, trigger, animate } from '@angular/animations';
 import { DialogService } from './dialog.service';
-import { BrowserHelper } from '../../helpers';
+import { BrowserHelper } from '../../../../../../shared/src/lib/helpers';
 
 const DEFAULT_WIDTH = 300;
 

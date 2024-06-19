@@ -119,6 +119,12 @@
       <trans-unit id="core.common.url" datatype="html">
         <source>URL</source>
       </trans-unit>
+      <trans-unit id="core.coordinate-link-window.select-layer" datatype="html">
+        <source>Select link to open</source>
+      </trans-unit>
+      <trans-unit id="core.coordinate-link-window.title" datatype="html">
+        <source>Coordinate Link Window</source>
+      </trans-unit>
       <trans-unit id="core.draw.delete-selected-feature" datatype="html">
         <source>Delete selected feature</source>
       </trans-unit>
@@ -489,7 +495,7 @@
         <source>does not contain</source>
       </trans-unit>
       <trans-unit id="core.filter.not-contains-one-of-the-values" datatype="html">
-        <source>contains none of the values</source>
+        <source>does not contain one of the values</source>
       </trans-unit>
       <trans-unit id="core.filter.not-ends-with" datatype="html">
         <source>does not end with</source>
@@ -553,9 +559,6 @@
       </trans-unit>
       <trans-unit id="core.filter.value" datatype="html">
         <source>Value</source>
-      </trans-unit>
-      <trans-unit id="core.legend.failed-loading-legend" datatype="html">
-        <source>Failed to load legend for</source>
       </trans-unit>
       <trans-unit id="core.legend.legend" datatype="html">
         <source>Legend</source>

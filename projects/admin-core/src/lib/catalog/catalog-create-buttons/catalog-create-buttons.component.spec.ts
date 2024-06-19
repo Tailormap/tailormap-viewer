@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/angular';
 import { CatalogCreateButtonsComponent } from './catalog-create-buttons.component';
 import userEvent from '@testing-library/user-event';
-import { TestSaveHelper } from '../../test-helpers/test-save.helper';
+import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
 import { of } from 'rxjs';
 import { createGeoServiceMock } from '../helpers/mocks/geo-service.service.mock';
 import { TailormapAdminApiV1Service, getCatalogNode, AUTHORIZATION_RULE_ANONYMOUS } from '@tailormap-admin/admin-api';
@@ -20,8 +20,9 @@ import { SaveButtonComponent } from '../../shared/components/save-button/save-bu
 import { Router } from '@angular/router';
 import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
 import { AuthorizationEditComponent } from '../../shared/components/authorization-edit/authorization-edit.component';
-import { adminCoreStateKey, initialAdminCoreState } from '../../state/admin-core.state';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
+import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
+import { SpinnerButtonComponent } from '../../shared/components/spinner-button/spinner-button.component';
 
 const setup = async (hasNode = false) => {
   const createCatalogNodeMock = jest.fn(() => of({ node: { id: '3', title: 'New Folder Inside' } }));
@@ -36,7 +37,6 @@ const setup = async (hasNode = false) => {
   const store = createMockStore({
     initialState: {
       [catalogStateKey]: { ...initialCatalogState, catalog: [ rootModel, catalogNodeModel ] },
-      [adminCoreStateKey]: initialAdminCoreState,
       [userStateKey]: initialUserState,
     },
   });
@@ -47,6 +47,7 @@ const setup = async (hasNode = false) => {
       CatalogNodeFormComponent,
       GeoServiceFormComponent,
       SaveButtonComponent,
+      SpinnerButtonComponent,
       PasswordFieldComponent,
       AuthorizationEditComponent,
     ],
@@ -60,6 +61,7 @@ const setup = async (hasNode = false) => {
       { provide: Store, useValue: store },
       { provide: Router, useValue: { navigateByUrl: jest.fn() } },
       { provide: TailormapAdminApiV1Service, useValue: { getGroups$: jest.fn(() => of(null)) } },
+      AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser(),
     ],
   });
   return { createCatalogNodeMock, updateCatalogNodeMock, createGeoService$ };

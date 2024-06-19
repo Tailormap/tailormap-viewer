@@ -1,0 +1,42 @@
+<h1 mat-dialog-title>{{dialogProps.title}}</h1>
+
+<div class="dialog-content">
+  @if (loading()) {
+    <mat-spinner [diameter]="20" mode="indeterminate" color="primary"></mat-spinner>
+  }
+  @if (existingUploads$ | async; as existingUploads) {
+    @if (existingUploads.length > 0) {
+      <div class="uploads-section">
+        <h2 class="no-margin">{{dialogProps.selectExistingTitle}}</h2>
+        <div class="file-list">
+          @for (upload of existingUploads; track upload.id) {
+            <div class="file-image" (click)="selectFile(upload)">
+              <div class="image"><img [src]="getImg(upload)" [alt]="upload.filename" /></div>
+              <div class="file-info">
+                <div class="file-name">
+                  <span [title]="upload.filename">{{upload.filename}}</span><br />
+                  <span i18n="@@admin-core.common.size">Size</span>: {{upload.contentSize}}
+                </div>
+                <button mat-icon-button
+                        color="warn"
+                        (click)="removeUpload($event, upload)">
+                  <mat-icon svgIcon="trash_filled"></mat-icon></button>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  }
+
+  <div class="uploads-section">
+    <h2>{{ dialogProps.uploadNewTitle }}</h2>
+    <tm-image-upload-field (imageChanged)="imageSelected($event)"
+                           [resizeSize]="dialogProps.maxImageSize"></tm-image-upload-field>
+  </div>
+
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-flat-button (click)="dismiss()" i18n="@@admin-core.common.cancel">Cancel</button>
+</div>

@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { DialogComponent } from './dialog';
 import { SnackBarMessageComponent } from './snackbar-message';
 import { SharedImportsModule } from '../shared-imports.module';
 import { ErrorMessageComponent } from './error-message/error-message.component';
@@ -14,12 +13,14 @@ import { SharedDirectivesModule } from '../directives/shared-directives.module';
 import { AboutDialogComponent } from './about-dialog/about-dialog.component';
 import { LanguageToggleComponent } from './language-toggle/language-toggle.component';
 import { CdkFixedSizeVirtualScroll, CdkVirtualForOf, CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { InfoMessageComponent } from './info-message';
+import { LegendImageComponent } from './legend-image/legend-image.component';
 
 @NgModule({
   declarations: [
-    DialogComponent,
     SnackBarMessageComponent,
     ErrorMessageComponent,
+    InfoMessageComponent,
     TreeComponent,
     SplitButtonComponent,
     ColorPickerComponent,
@@ -29,6 +30,7 @@ import { CdkFixedSizeVirtualScroll, CdkVirtualForOf, CdkVirtualScrollViewport } 
     SliderComponent,
     AboutDialogComponent,
     LanguageToggleComponent,
+    LegendImageComponent,
   ],
   imports: [
     SharedImportsModule,
@@ -38,7 +40,6 @@ import { CdkFixedSizeVirtualScroll, CdkVirtualForOf, CdkVirtualScrollViewport } 
     CdkVirtualForOf,
   ],
   exports: [
-    DialogComponent,
     SnackBarMessageComponent,
     ErrorMessageComponent,
     TreeComponent,
@@ -48,6 +49,8 @@ import { CdkFixedSizeVirtualScroll, CdkVirtualForOf, CdkVirtualScrollViewport } 
     PanelResizerComponent,
     SliderComponent,
     LanguageToggleComponent,
+    InfoMessageComponent,
+    LegendImageComponent,
   ],
 })
 export class SharedComponentsModule {

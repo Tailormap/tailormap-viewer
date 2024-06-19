@@ -1,7 +1,7 @@
 name: 'Test and deploy'
 
 env: # Keep this in sync with Dockerfile version
-  NODE_VERSION: "20.12.2"
+  NODE_VERSION: "20.14.0"
 
 on:
   push:
@@ -93,7 +93,7 @@ jobs:
       VERSION: snapshot
       COMPOSE_PROJECT_NAME: tailormap-snapshot
       COMPOSE_FILE: docker-compose.yml:docker-compose.traefik.yml:ci/docker-compose.snapshot.yml
-      COMPOSE_PROFILE: monitoring-enabled
+      COMPOSE_PROFILE: solr,solr-monitoring
       BASE_HREF: /
       HOST: ${{ secrets.DEPLOY_HOST_SNAPSHOT }}
       API_SENTRY_DSN: ${{ vars.API_SENTRY_DSN }}
@@ -174,7 +174,7 @@ jobs:
           docker compose version
       - name: 'Update deployment using Docker Compose'
         run: |
-          docker compose up -d --pull=always --quiet-pull
+          docker compose up -d --pull=always --quiet-pull --remove-orphans
 
       - name: 'Create GitHub deployment'
         if: success()

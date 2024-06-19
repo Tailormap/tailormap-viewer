@@ -1,52 +1,19 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, combineLatest, concatMap, forkJoin, map, Observable, of, switchMap } from 'rxjs';
+import { catchError, combineLatest, concatMap, forkJoin, map, Observable, of, switchMap } from 'rxjs';
 import { MapService, MapViewDetailsModel, ScaleHelper } from '@tailormap-viewer/map';
 import { ExtendedAppLayerModel } from '../../../map/models';
 import { ImageHelper } from '../../../shared/helpers/image.helper';
-import { TypesHelper, UrlHelper } from '@tailormap-viewer/shared';
+import { TypesHelper } from '@tailormap-viewer/shared';
 import { LegendInfoModel } from '../models/legend-info.model';
-
-export interface GeoServerLegendOptions {
-  fontName?: string;
-  fontStyle?: 'italic' | 'bold';
-  fontSize?: number;
-  fontColor?: string;
-  fontAntiAliasing?: boolean;
-  bgColor?: string;
-  dpi?: number;
-  forceLabels?: 'on' | 'off';
-  forceTitles?: 'on' | 'off';
-  labelMargin?: number;
-  layout?: 'vertical' | 'horizontal';
-  columnheight?: number;
-  rowwidth?: number;
-  columns?: number;
-  rows?: number;
-  grouplayout?: 'vertical' | 'horizontal';
-  countMatched?: boolean;
-  hideEmptyRules?: boolean;
-  wrap?: boolean;
-  wrap_limit?: number;
-}
 
 @Injectable({
   providedIn: 'root',
 })
 export class LegendService {
 
-  private visibleSubject$ = new BehaviorSubject(false);
-
   constructor(
     private mapService: MapService,
   ) {
-  }
-
-  public toggleVisible() {
-    this.visibleSubject$.next(!this.visibleSubject$.value);
-  }
-
-  public isVisible$(): Observable<boolean> {
-    return this.visibleSubject$.asObservable();
   }
 
   public getLegendInfo$(appLayers$: Observable<Array<ExtendedAppLayerModel | null> | ExtendedAppLayerModel | null>, mapResolution$?: Observable<MapViewDetailsModel>):
@@ -107,23 +74,5 @@ export class LegendService {
     );
   }
 
-  public static isGetLegendGraphicRequest(url: string): boolean {
-    try {
-      const request = UrlHelper.getParamCaseInsensitive(new URL(url), 'REQUEST');
-      return request?.toLowerCase() === 'getlegendgraphic';
-    } catch(e) {
-      return false;
-    }
-  }
-
-  public static addGeoServerLegendOptions(url: string, legendOptions: GeoServerLegendOptions): string {
-    try {
-      const u = new URL(url);
-      u.searchParams.set('LEGEND_OPTIONS', Object.entries(legendOptions).map(entry => entry.join(':')).join(';'));
-      return u.toString();
-    } catch(e) {
-      return url;
-    }
-  }
 }
 

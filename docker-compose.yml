@@ -54,7 +54,7 @@ services:
 
   db:
     container_name: ${COMPOSE_PROJECT_NAME}-db
-    image: postgres:15.6-alpine3.18
+    image: postgres:15.7-alpine3.18
     environment:
       POSTGRES_PASSWORD: ${TAILORMAP_DB_PASSWORD:-tailormap}
       POSTGRES_USER: tailormap
@@ -69,7 +69,9 @@ services:
 
   solr:
     container_name: ${COMPOSE_PROJECT_NAME}-solr
-    image: solr:9.5.0-slim
+    image: solr:9.6.1-slim
+    profiles:
+      - solr
     environment:
       TZ: Europe/Amsterdam
       SOLR_HEAP: 1g
@@ -87,10 +89,9 @@ services:
     container_name: ${COMPOSE_PROJECT_NAME}-solr-status
     depends_on:
       - solr
-    image: solr:9.5.0-slim
+    image: solr:9.6.1-slim
     profiles:
-      # use a profile "monitoring-enabled" to activate the solr-exporter
-      - monitoring-enabled
+      - solr-monitoring
     environment:
       TZ: Europe/Amsterdam
       PORT: 9854

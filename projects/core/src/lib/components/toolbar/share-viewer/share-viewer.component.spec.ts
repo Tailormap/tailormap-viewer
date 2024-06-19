@@ -2,8 +2,7 @@ import { render, screen } from '@testing-library/angular';
 import { ShareViewerComponent } from './share-viewer.component';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { provideMockStore } from '@ngrx/store/testing';
-import { selectShowLoginButton, selectUserDetails, selectUserIsAdmin } from '../../../state/core.selectors';
+import { AuthenticatedUserTestHelper } from '../../../test-helpers/authenticated-user-test.helper';
 
 describe('ShareViewerComponent', () => {
 
@@ -11,11 +10,7 @@ describe('ShareViewerComponent', () => {
     await render(ShareViewerComponent, {
       imports: [ SharedModule, MatIconTestingModule ],
       providers: [
-        provideMockStore({
-          selectors: [
-            { selector: selectUserIsAdmin, value: true },
-          ],
-        }),
+        AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser(),
       ],
     });
     expect(screen.getByLabelText('Share viewer'));

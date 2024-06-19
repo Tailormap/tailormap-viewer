@@ -1,0 +1,8 @@
+img {
+  max-width: 200px;
+  max-height: 200px;
+}
+
+.buttons button + button {
+  margin-left: 8px;
+}

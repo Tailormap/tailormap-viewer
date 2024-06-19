@@ -158,3 +158,9 @@ export const selectGeoServiceAndLayerByName = (serviceId: string, layerName: str
     return { service, fullLayerName: fullTitle.join(' '), layer, layerSettings };
   },
 );
+
+export const selectGeoServicesAndLayers = createSelector(
+  selectGeoServices,
+  selectGeoServiceLayers,
+  (services, layers) => ({ services, layers }),
+);

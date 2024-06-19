@@ -1,7 +1,5 @@
-import { DestroyRef, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { BehaviorSubject, map } from 'rxjs';
-import { ViewerLayoutService } from '../../services/viewer-layout/viewer-layout.service';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ComponentRegistrationService } from '../../services/component-registration.service';
 import { RegisteredComponent } from '@tailormap-viewer/shared';
 
@@ -15,15 +13,8 @@ export class MenubarService {
   public panelWidth = 300;
 
   constructor(
-    private viewerLayoutService: ViewerLayoutService,
     private componentRegistrationService: ComponentRegistrationService,
-    private destroyRef: DestroyRef,
   ) {
-    this.activeComponent$.asObservable()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(component => {
-        this.viewerLayoutService.setLeftPadding(component !== null ? this.panelWidth : 0);
-      });
   }
 
   public toggleActiveComponent(componentId: string, dialogTitle: string) {

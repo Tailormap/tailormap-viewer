@@ -12,6 +12,8 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { selectEditDialogVisible, selectSelectedEditFeature } from '../state/edit.selectors';
 import { FeatureWithMetadataModel } from '../models/feature-with-metadata.model';
 import { of } from 'rxjs';
+import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layout.service';
+import { CoreSharedModule } from '../../../shared';
 
 const getFeatureInfo = (): FeatureWithMetadataModel => {
   return {
@@ -32,12 +34,14 @@ describe('EditDialogComponent', () => {
         SharedModule,
         NoopAnimationsModule,
         MatIconTestingModule,
+        CoreSharedModule,
       ],
       providers: [
         { provide: ApplicationLayerService, useValue: {} },
         { provide: EditFeatureService, useValue: {} },
         provideMockStore({ initialState: { [editStateKey]: { ...initialEditState } } }),
         { provide: UniqueValuesService, useValue: { clearCaches: jest.fn() } },
+        { provide: ViewerLayoutService, useValue: { setLeftPadding: jest.fn(), setRightPadding: jest.fn() } },
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     });
@@ -50,12 +54,14 @@ describe('EditDialogComponent', () => {
         SharedModule,
         NoopAnimationsModule,
         MatIconTestingModule,
+        CoreSharedModule,
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [
         { provide: ApplicationLayerService, useValue: { getLayerDetails$: () => of(({ layer: getAppLayerModel(), details: {} })) } },
         { provide: EditFeatureService, useValue: {} },
         { provide: UniqueValuesService, useValue: { clearCaches: jest.fn() } },
+        { provide: ViewerLayoutService, useValue: { setLeftPadding: jest.fn(), setRightPadding: jest.fn() } },
         provideMockStore({
           initialState: { [editStateKey]: { ...initialEditState } },
           selectors: [

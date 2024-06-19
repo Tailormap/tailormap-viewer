@@ -11,9 +11,10 @@ import { CatalogService } from '../services/catalog.service';
 import { CatalogNodeFormComponent } from '../catalog-node-form/catalog-node-form.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import userEvent from '@testing-library/user-event';
-import { TestSaveHelper } from '../../test-helpers/test-save.helper';
+import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
 import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
 import { CatalogCreateButtonsComponent } from '../catalog-create-buttons/catalog-create-buttons.component';
+import { SpinnerButtonComponent } from '../../shared/components/spinner-button/spinner-button.component';
 
 const setup = async () => {
   const updateCatalogNodeMock = jest.fn(() => of(true));
@@ -31,6 +32,7 @@ const setup = async () => {
     declarations: [
       CatalogNodeFormComponent,
       SaveButtonComponent,
+      SpinnerButtonComponent,
       CatalogCreateButtonsComponent,
     ],
     imports: [ SharedModule, MatIconTestingModule ],

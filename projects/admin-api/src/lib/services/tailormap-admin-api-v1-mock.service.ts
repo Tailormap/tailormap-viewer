@@ -182,4 +182,9 @@ export class TailormapAdminApiV1MockService implements TailormapAdminApiV1Servic
   public deleteOIDCConfiguration$(id: number): Observable<boolean> {
       return of(true).pipe(delay(this.delay));
   }
+
+  public getUploads$() {
+    return of([]);
+  }
+
 }

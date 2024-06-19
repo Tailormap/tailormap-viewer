@@ -1,0 +1,16 @@
+@if (selectedFile !== null) {
+  <div class="current-image">
+    <img [src]="getUrl(selectedFile)" [alt]="selectedFile" />
+  </div>
+}
+
+<div class="buttons">
+  <button mat-flat-button
+          color="primary"
+          (click)="selectFile()"
+          i18n="@@admin-core.common.select-file">Select file</button>
+
+  @if (selectedFile !== null) {
+    <button mat-flat-button (click)="clear()" i18n="@@admin-core.common.clear">Clear</button>
+  }
+</div>

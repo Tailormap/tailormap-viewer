@@ -1,5 +1,6 @@
 import { screen, waitFor } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
+import { AuthenticatedUserTestHelper } from './authenticated-user-test.helper.spec';
 
 export class TestSaveHelper {
 
@@ -8,7 +9,6 @@ export class TestSaveHelper {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     await waitFor(async () => {
-      // eslint-disable-next-line no-undef
       expect((await screen.findAllByLabelText(labelText))[btnIdx]).toBeEnabled();
     });
     await (ue || userEvent).click((await screen.findAllByLabelText(labelText))[btnIdx]);
@@ -19,9 +19,16 @@ export class TestSaveHelper {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     await waitFor(async () => {
-      // eslint-disable-next-line no-undef
       expect((await screen.findAllByLabelText(labelText))[btnIdx]).toBeDisabled();
     });
   }
 
 }
+
+// Dummy test to prevent "Your test suite must contain at least one test." error
+describe('TestSaveHelper', () => {
+  test('TestSaveHelper', () => {
+    expect(1).toEqual(1);
+  });
+});
+

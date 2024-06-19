@@ -9,11 +9,12 @@ import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { FeatureSourceService } from '../services/feature-source.service';
 import userEvent from '@testing-library/user-event';
-import { TestSaveHelper } from '../../test-helpers/test-save.helper';
+import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
 import { FeatureSourceFormComponent } from '../feature-source-form/feature-source-form.component';
 import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
+import { SpinnerButtonComponent } from '../../shared/components/spinner-button/spinner-button.component';
 
 const setup = async (protocol: FeatureSourceProtocolEnum) => {
   const activeRoute = {
@@ -45,7 +46,7 @@ const setup = async (protocol: FeatureSourceProtocolEnum) => {
     initialState: { [catalogStateKey]: { ...initialCatalogState } },
   });
   await render(FeatureSourceDetailsComponent, {
-    declarations: [ FeatureSourceFormComponent, PasswordFieldComponent, SaveButtonComponent ],
+    declarations: [ FeatureSourceFormComponent, PasswordFieldComponent, SaveButtonComponent, SpinnerButtonComponent ],
     imports: [ SharedModule, MatIconTestingModule ],
     providers: [
       { provide: ActivatedRoute, useValue: activeRoute },

@@ -6,7 +6,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { MenubarPanelComponent } from './menubar-panel/menubar-panel.component';
 import { MenubarLogoComponent } from './menubar-logo/menubar-logo.component';
 import { RegisteredComponentsModule } from '../registered-components-renderer/registered-components.module';
-
+import { CoreSharedModule } from '../../shared';
 
 
 @NgModule({
@@ -20,6 +20,7 @@ import { RegisteredComponentsModule } from '../registered-components-renderer/re
   imports: [
     SharedModule,
     RegisteredComponentsModule,
+    CoreSharedModule,
   ],
   exports: [
     MenubarComponent,

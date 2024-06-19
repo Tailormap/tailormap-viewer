@@ -22,7 +22,6 @@ import { EditFeatureService } from '../services/edit-feature.service';
 import { selectViewerId } from '../../../state/core.selectors';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MapService } from '@tailormap-viewer/map';
-import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layout.service';
 import { EditMapToolService } from '../services/edit-map-tool.service';
 
 @Component({
@@ -62,7 +61,6 @@ export class EditDialogComponent {
     private destroyRef: DestroyRef,
     private mapService: MapService,
     private confirmService: ConfirmDialogService,
-    private layoutService: ViewerLayoutService,
     private uniqueValuesService: UniqueValuesService,
     private cdr: ChangeDetectorRef,
   ) {
@@ -94,12 +92,6 @@ export class EditDialogComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
         this.resetChanges();
-      });
-
-    this.dialogOpen$
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(open => {
-        this.layoutService.setRightPadding(open ? this.panelWidth + this.bodyMargin : 0);
       });
 
     this.editMapToolService.editedGeometry$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(geometry => {

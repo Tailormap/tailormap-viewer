@@ -84,13 +84,15 @@
               "earcut",
               "svgpath",
               "lerc",
-              "color-name"
+              "color-name",
+              "localforage",
+              "fastpriorityqueue"
             ],
             "i18nMissingTranslation": "error"
           },
           "configurations": {
             "nl": {
-              "localize": ["nl", "de"]
+              "localize": ["nl"]
             },
             "production": {
               "tsConfig": "projects/app/tsconfig.prod.json",

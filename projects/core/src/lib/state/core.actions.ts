@@ -15,10 +15,6 @@ export const loadViewerFailed = createAction(
   `${prefix} Viewer Load Failed`,
   props<{ error?: string }>(),
 );
-export const setLoginDetails = createAction(
-  `${prefix} Set Login Details`,
-  props<{ isAuthenticated: boolean; username?: string; roles?: string[] }>(),
-);
 export const updateViewerStyle = createAction(
   `${prefix} Update Viewer Style`,
   props<{ style: ViewerStylingModel }>(),

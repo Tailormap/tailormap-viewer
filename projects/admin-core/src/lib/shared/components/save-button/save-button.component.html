@@ -1,9 +1,5 @@
-<button mat-flat-button color="primary" [attr.aria-label]="label || 'Save'" (click)="saveClicked()" [disabled]="disabled || (saving$ | async)">
-  <ng-template #saveLabel>
-    <ng-container *ngIf="label">{{label}}</ng-container>
-    <ng-container *ngIf="!label" i18n="@@admin-core.common.save">Save</ng-container>
-  </ng-template>
-  <ng-container *ngIf="saving$ | async; else: saveLabel">
-    <mat-spinner diameter="20"></mat-spinner>
-  </ng-container>
-</button>
+<tm-admin-spinner-button color="primary"
+                         [label]="label"
+                         [disabled]="disabled"
+                         (buttonClick)="saveClicked()"
+                         [showSpinner$]="saving$"></tm-admin-spinner-button>

@@ -8,3 +8,7 @@ strong {
 .out-of-scale {
   color: var(--disabled-text-color);
 }
+
+.hi-dpi {
+  zoom: 50%;
+}

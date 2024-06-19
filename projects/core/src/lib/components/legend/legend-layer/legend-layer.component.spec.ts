@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/angular';
 import { LegendLayerComponent } from './legend-layer.component';
 import { getAppLayerModel, getServiceModel } from '@tailormap-viewer/api';
+import { LegendImageComponent } from '@tailormap-viewer/shared';
 
 const windowMock = () => Object.defineProperty({}, 'devicePixelRatio', {
   get: jest.fn().mockReturnValue(2),
@@ -10,6 +11,7 @@ describe('LegendLayerComponent', () => {
 
   test('should render', async () => {
     await render(LegendLayerComponent, {
+      declarations: [LegendImageComponent],
       componentProperties: {
         legendInfo: {
           layer: getAppLayerModel({ title: 'Layer title' }),
@@ -29,6 +31,7 @@ describe('LegendLayerComponent', () => {
     jest.spyOn(global, 'window', 'get').mockImplementation(windowMock);
 
     await render(LegendLayerComponent, {
+      declarations: [LegendImageComponent],
       componentProperties: {
         legendInfo: {
           layer: { ...getAppLayerModel({ title: 'Layer title' }), service: getServiceModel() },

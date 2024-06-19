@@ -41,6 +41,9 @@
       <trans-unit id="shared.language.german" datatype="html">
         <source>German</source>
       </trans-unit>
+      <trans-unit id="shared.legend-image.failed-loading-legend" datatype="html">
+        <source>Failed to load legend for</source>
+      </trans-unit>
       <trans-unit id="shared.login-form.password" datatype="html">
         <source>Password</source>
       </trans-unit>

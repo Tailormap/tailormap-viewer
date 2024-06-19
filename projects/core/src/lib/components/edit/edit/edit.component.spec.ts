@@ -5,9 +5,9 @@ import { provideMockStore } from "@ngrx/store/testing";
 import { selectEditableLayers } from "../../../map/state/map.selectors";
 import { getAppLayerModel, TAILORMAP_API_V1_SERVICE, TailormapApiV1MockService } from '@tailormap-viewer/api';
 import { selectEditActive, selectSelectedEditLayer } from "../state/edit.selectors";
-import { selectUserDetails } from "../../../state/core.selectors";
 import { SharedModule } from "@tailormap-viewer/shared";
 import { MatIconTestingModule } from "@angular/material/icon/testing";
+import { AuthenticatedUserTestHelper } from '../../../test-helpers/authenticated-user-test.helper';
 
 const setup = async (hasLayers: boolean, authenticated: boolean) => {
   await render(EditComponent, {
@@ -15,12 +15,12 @@ const setup = async (hasLayers: boolean, authenticated: boolean) => {
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     providers: [
       { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1MockService },
+      AuthenticatedUserTestHelper.provideAuthenticatedUserService(authenticated, []),
       provideMockStore({
         initialState: {},
         selectors: [
           { selector: selectEditableLayers, value: hasLayers ? [getAppLayerModel()] : [] },
           { selector: selectSelectedEditLayer, value: null },
-          { selector: selectUserDetails, value: { isAuthenticated: authenticated } },
           { selector: selectEditActive, value: false },
         ],
       }),

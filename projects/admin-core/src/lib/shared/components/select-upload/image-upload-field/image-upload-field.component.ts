@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
-import { ImageHelper } from '../../helpers/image.helper';
+import { ImageHelper } from '../../../../helpers/image.helper';
 
 @Component({
   selector: 'tm-image-upload-field',
@@ -24,7 +24,7 @@ export class ImageUploadFieldComponent {
   public resizeSize = 600;
 
   @Output()
-  public imageChanged = new EventEmitter<string>();
+  public imageChanged = new EventEmitter<{ image: string; fileName: string }>();
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -44,24 +44,25 @@ export class ImageUploadFieldComponent {
       this.imageError = errorMsg.join('. ');
       return;
     }
+    const fileName = fileInput.files[0].name;
     ImageHelper.readUploadAsImage$(fileInput.files[0], this.resizeSize)
       .subscribe(image => {
         if (image !== null) {
-          this.updateValue(image);
+          this.updateValue(image, fileName);
         }
       });
   }
 
-  private updateValue(img: string) {
-    this.imageContent = img ? img : null;
-    this.isImageSaved = !!img;
-    this.isImageRemoved = !img;
-    this.imageChanged.emit(img);
+  private updateValue(image: string, fileName: string) {
+    this.imageContent = image ? image : null;
+    this.isImageSaved = !!image;
+    this.isImageRemoved = !image;
+    this.imageChanged.emit({ image, fileName });
     this.cdr.detectChanges();
   }
 
   public clearImage() {
-    this.updateValue('');
+    this.updateValue('', '');
   }
 
 }

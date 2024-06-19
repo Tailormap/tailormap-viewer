@@ -9,5 +9,6 @@ export interface LayerSettingsModel {
   hiDpiSubstituteLayer?: string;
   featureType?: { featureSourceId: number; featureTypeName: string };
   attribution?: string;
+  legendImageId?: string | null;
   authorizationRules?: AuthorizationRuleGroup[];
 }

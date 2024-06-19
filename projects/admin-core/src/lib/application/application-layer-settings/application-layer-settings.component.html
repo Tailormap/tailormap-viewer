@@ -51,6 +51,10 @@
               cdkAutosizeMinRows="4"
               cdkAutosizeMaxRows="10"></textarea>
   </mat-form-field>
+  <mat-form-field>
+    <mat-label i18n="@@admin-core.application.autoRefreshInSeconds">Auto refresh the layer (seconds)</mat-label>
+    <input type="number" matInput formControlName="autoRefreshInSeconds" />
+  </mat-form-field>
   <div *ngIf="featureSourceAndType$ | async as featureSourceAndType" class="edit-layer-attributes">
     <button *ngIf="featureSourceAndType.featureType?.hasAttributes"
             mat-stroked-button

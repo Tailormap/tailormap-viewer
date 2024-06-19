@@ -2,7 +2,7 @@ import { Inject, Injectable, LOCALE_ID } from '@angular/core';
 import { concatMap, forkJoin, from, map, Observable, of, tap } from 'rxjs';
 import { LayerModel, MapService, OlLayerFilter, OpenlayersExtent } from '@tailormap-viewer/map';
 import { HttpClient } from '@angular/common/http';
-import { IconService } from '@tailormap-viewer/shared';
+import { IconService, LegendHelper } from '@tailormap-viewer/shared';
 import type { jsPDF } from 'jspdf';
 import type { Svg2pdfOptions } from 'svg2pdf.js';
 import { LegendService } from '../../components/legend/services/legend.service';
@@ -151,7 +151,7 @@ export class MapPdfService {
     const legendURLCallback = (layer: ExtendedAppLayerModel, url: URL) => {
       legendDpiByLayer.set(layer, 90);
 
-      if (layer.service?.serverType === ServerType.GEOSERVER && LegendService.isGetLegendGraphicRequest(url.toString())) {
+      if (layer.service?.serverType === ServerType.GEOSERVER && LegendHelper.isGetLegendGraphicRequest(url.toString())) {
         // Use LEGEND_OPTIONS vendor specific Geoserver parameter, see https://docs.geoserver.org/stable/en/user/services/wms/get_legend_graphic/index.html
         const dpi = 180;
         legendDpiByLayer.set(layer, dpi);
