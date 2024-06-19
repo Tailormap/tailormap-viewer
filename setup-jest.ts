@@ -19,6 +19,10 @@ window.ResizeObserver =
     unobserve: jest.fn(),
   }));
 
+window.EventSource = window.EventSource || jest.fn().mockImplementation(() => ({
+  close: jest.fn(),
+}));
+
 Element.prototype.scrollTo = Element.prototype.scrollTo || (() => {});
 
 jest.mock('jsts/org/locationtech/jts/io', () => ({

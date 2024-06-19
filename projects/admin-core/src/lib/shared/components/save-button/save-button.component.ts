@@ -16,7 +16,7 @@ export class SaveButtonComponent {
   public disabled: boolean | null = false;
 
   @Input()
-  public label?: string;
+  public label: string = $localize `:@@admin-core.common.save:Save`;
 
   @Output()
   public save = new EventEmitter();

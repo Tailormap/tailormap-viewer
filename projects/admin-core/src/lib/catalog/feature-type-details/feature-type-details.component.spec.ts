@@ -13,6 +13,8 @@ import { FeatureSourceService } from '../services/feature-source.service';
 import { FeatureTypeAttributesComponent } from '../feature-type-attributes/feature-type-attributes.component';
 import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
 import { FeatureTypeFormComponent } from '../feature-type-form/feature-type-form.component';
+import { SpinnerButtonComponent } from '../../shared/components/spinner-button/spinner-button.component';
+import { CatalogExtendedTypeEnum } from '../models/catalog-extended.model';
 
 const setup = async () => {
   const activeRoute = {
@@ -31,6 +33,7 @@ const setup = async () => {
   const featureTypeModel: ExtendedFeatureTypeModel = {
     ...getFeatureTypeSummary({ name: 'ft_1', title: 'some table' }),
     id: '1_ft_1',
+    type: CatalogExtendedTypeEnum.FEATURE_TYPE_TYPE,
     originalId: 'ft_1',
     featureSourceId: '1',
     catalogNodeId: 'node-1',
@@ -39,6 +42,7 @@ const setup = async () => {
     ...getFeatureSource({ id: '1', title: 'JDBC source', protocol: FeatureSourceProtocolEnum.JDBC }),
     featureTypesIds: ['ft_1'],
     catalogNodeId: 'node-1',
+    type: CatalogExtendedTypeEnum.FEATURE_SOURCE_TYPE,
   };
   const catalogState: CatalogState = {
     ...initialCatalogState,
@@ -55,7 +59,7 @@ const setup = async () => {
   };
   const store = createMockStore({ initialState: { [catalogStateKey]: catalogState } });
   await render(FeatureTypeDetailsComponent, {
-    declarations: [ FeatureTypeFormComponent, FeatureTypeAttributesComponent, SaveButtonComponent ],
+    declarations: [ FeatureTypeFormComponent, FeatureTypeAttributesComponent, SaveButtonComponent, SpinnerButtonComponent ],
     imports: [SharedModule],
     providers: [
       { provide: ActivatedRoute, useValue: activeRoute },

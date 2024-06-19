@@ -53,6 +53,10 @@
         <source>German</source>
         <target>Deutsch</target>
       </trans-unit>
+      <trans-unit id="shared.legend-image.failed-loading-legend" datatype="html">
+        <source>Failed to load legend for</source>
+        <target state="new">Failed to load legend for</target>
+      </trans-unit>
       <trans-unit id="shared.login-form.password" datatype="html">
         <source>Password</source>
         <target>Passwort</target>

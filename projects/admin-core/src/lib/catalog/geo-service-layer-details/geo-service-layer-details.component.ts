@@ -7,12 +7,18 @@ import { GeoServiceService } from '../services/geo-service.service';
 import { LayerSettingsModel } from '@tailormap-admin/admin-api';
 import { GeoServiceLayerSettingsModel } from '../models/geo-service-layer-settings.model';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
+import { UploadCategoryEnum } from '../../shared/components/select-upload/models/upload-category.enum';
+import { UPLOAD_REMOVE_SERVICE } from '../../shared/components/select-upload/models/upload-remove-service.injection-token';
+import { LegendImageRemoveService } from '../services/legend-image-remove.service';
 
 @Component({
   selector: 'tm-admin-geo-service-layer-details',
   templateUrl: './geo-service-layer-details.component.html',
   styleUrls: ['./geo-service-layer-details.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    { provide: UPLOAD_REMOVE_SERVICE, useClass: LegendImageRemoveService },
+  ],
 })
 export class GeoServiceLayerDetailsComponent implements OnInit, OnDestroy {
 
@@ -21,7 +27,10 @@ export class GeoServiceLayerDetailsComponent implements OnInit, OnDestroy {
   private savingSubject = new BehaviorSubject(false);
   public saving$ = this.savingSubject.asObservable();
 
-  public updatedLayerSettings: LayerSettingsModel | null = null;
+  public legendCategory = UploadCategoryEnum.LEGEND;
+
+  public updatedLayerSettings: Partial<LayerSettingsModel> | null = null;
+  public legendImageId: string | null | undefined = null;
 
   public isLeaf$: Observable<boolean | null> = of(true);
 
@@ -46,7 +55,10 @@ export class GeoServiceLayerDetailsComponent implements OnInit, OnDestroy {
         return this.store$.select(selectGeoServiceLayerSettingsByLayerId(layerId));
       }),
       tap(layerSettings => {
-        if (layerSettings) { this.updatedLayerSettings = null; }
+        if (layerSettings) {
+          this.updatedLayerSettings = null;
+          this.legendImageId = layerSettings.settings.legendImageId;
+        }
       }),
     );
 
@@ -57,7 +69,7 @@ export class GeoServiceLayerDetailsComponent implements OnInit, OnDestroy {
         }
         return this.store$.select(selectGeoServiceAndLayerByLayerId(layerId));
       }),
-      map(info => { if (info) { return info.layer.children?.length == 0 ?? true; } else { return true; } }),
+      map(info => info ? info.layer.children?.length === 0 : true),
     );
   }
 
@@ -70,6 +82,15 @@ export class GeoServiceLayerDetailsComponent implements OnInit, OnDestroy {
     this.updatedLayerSettings = $event;
   }
 
+  public onLegendImageChanged(uploadId: string | null) {
+    if (this.updatedLayerSettings) {
+      this.updatedLayerSettings.legendImageId = uploadId;
+    } else {
+      this.updatedLayerSettings = { legendImageId: uploadId };
+    }
+    this.legendImageId = uploadId;
+  }
+
   public save(serviceId: string, layerName: string) {
     if (!this.updatedLayerSettings) {
       return;
@@ -79,7 +100,15 @@ export class GeoServiceLayerDetailsComponent implements OnInit, OnDestroy {
     this.geoServiceService.updateGeoService$(
       serviceId,
       () => ({}),
-      serviceSetting => ({ layerSettings: { ...(serviceSetting.layerSettings || {}), [layerName]: updatedLayerSettings } }),
+      serviceSetting => {
+        const layerSettings = serviceSetting.layerSettings || {};
+        return {
+          layerSettings: {
+            ...layerSettings,
+            [layerName]: { ...layerSettings[layerName], ...updatedLayerSettings },
+          },
+        };
+      },
     )
       .subscribe(() => {
         this.adminSnackbarService.showMessage($localize `:@@admin-core.catalog.layer-settings-updated:Layer settings updated`);

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { debounceTime, Subject, takeUntil } from 'rxjs';
-import { GroupModel } from '@tailormap-admin/admin-api';
+import { debounceTime, Observable, of, Subject, takeUntil } from 'rxjs';
+import { AdditionalPropertyModel, GroupModel } from '@tailormap-admin/admin-api';
 import { FormHelper } from '../../helpers/form.helper';
 import { AdminFieldLocation, AdminFieldModel, AdminFieldRegistrationService } from '../../shared/services/admin-field-registration.service';
 
@@ -23,7 +23,7 @@ export class GroupFormComponent implements OnInit, OnDestroy {
     systemGroup: new FormControl<boolean>(false, { nonNullable: true }),
   });
 
-  public registeredFields: AdminFieldModel[] = [];
+  public registeredFields$: Observable<AdminFieldModel[]> = of([]);
 
   @Input()
   public set group(group: GroupModel | null) {
@@ -34,7 +34,7 @@ export class GroupFormComponent implements OnInit, OnDestroy {
       notes: group ? group.notes : null,
       systemGroup: group ? group.systemGroup : false,
     });
-    this.additionalProperties = group?.additionalProperties || {};
+    this.additionalProperties = group?.additionalProperties || [];
     if (group) {
       this.groupForm.get('name')?.disable();
     } else {
@@ -50,7 +50,7 @@ export class GroupFormComponent implements OnInit, OnDestroy {
 
   private destroyed = new Subject();
   private _group: GroupModel | null = null;
-  public additionalProperties: Record<string, string | number | boolean> = {};
+  public additionalProperties: AdditionalPropertyModel[] = [];
 
   constructor(
     private adminFieldRegistryService: AdminFieldRegistrationService,
@@ -58,7 +58,7 @@ export class GroupFormComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.registeredFields = this.adminFieldRegistryService.getRegisteredFields(AdminFieldLocation.GROUP);
+    this.registeredFields$ = this.adminFieldRegistryService.getRegisteredFields$(AdminFieldLocation.GROUP);
     this.groupForm.valueChanges
       .pipe(
         takeUntil(this.destroyed),
@@ -88,7 +88,7 @@ export class GroupFormComponent implements OnInit, OnDestroy {
     });
   }
 
-  public attributesChanged($event: Record<string, string | number | boolean>) {
+  public attributesChanged($event: AdditionalPropertyModel[]) {
     this.additionalProperties = $event;
     this.readForm();
   }

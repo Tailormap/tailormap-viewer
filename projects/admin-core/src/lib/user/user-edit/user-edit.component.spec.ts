@@ -10,8 +10,10 @@ import { GroupService } from '../services/group.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SharedImportsModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
-import { TestSaveHelper } from '../../test-helpers/test-save.helper';
+import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
+import { SharedAdminComponentsModule } from '../../shared/components/shared-admin-components.module';
+import { SpinnerButtonComponent } from '../../shared/components/spinner-button/spinner-button.component';
 
 const setup = async (hasUser?: boolean) => {
   const activeRoute = {
@@ -30,8 +32,8 @@ const setup = async (hasUser?: boolean) => {
     navigateByUrl: jest.fn(),
   };
   await render(UserEditComponent, {
-    declarations: [ UserFormComponent, SaveButtonComponent, PasswordFieldComponent ],
-    imports: [ SharedImportsModule, MatIconTestingModule ],
+    declarations: [ UserFormComponent, SaveButtonComponent, SpinnerButtonComponent, PasswordFieldComponent ],
+    imports: [ SharedImportsModule, MatIconTestingModule, SharedAdminComponentsModule ],
     providers: [
       { provide: ActivatedRoute, useValue: activeRoute },
       { provide: UserService, useValue: userService },
@@ -62,7 +64,7 @@ describe('UserEditComponent', () => {
       expect(screen.getByLabelText('Name')).toHaveValue('user 123');
     });
     await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save');
-    const { groupNames, ...user } = getUser({ username: 'user1', name: 'user 123', groupNames: [] });
+    const { groupNames, ...user } = getUser({ username: 'user1', name: 'user 123', groupNames: [], additionalProperties: [] });
     expect(userService.addOrUpdateUser$).toHaveBeenCalledWith(false, { ...user, groups: [] });
   });
 

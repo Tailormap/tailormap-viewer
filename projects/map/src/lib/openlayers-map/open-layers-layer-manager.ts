@@ -2,7 +2,6 @@ import { Feature, Map as OlMap } from 'ol';
 import { Layer as BaseLayer, Vector as VectorLayer, Group as LayerGroup } from 'ol/layer';
 import { Geometry } from 'ol/geom';
 import { Vector as VectorSource, ImageWMS, WMTS, XYZ, TileWMS } from 'ol/source';
-import {  } from 'ol/layer';
 import { LayerManagerModel, LayerTypes } from '../models';
 import { OlLayerHelper } from '../helpers/ol-layer.helper';
 import { LayerModel } from '../models/layer.model';
@@ -18,7 +17,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
 
   private layers: Map<string, BaseLayer> = new Map<string, BaseLayer>();
   private backgroundLayers: Map<string, BaseLayer> = new Map<string, BaseLayer>();
-  private vectorLayers: Map<string, VectorLayer<VectorSource<Feature<Geometry>>>> = new Map<string, VectorLayer<VectorSource<Feature<Geometry>>>>();
+  private vectorLayers: Map<string, VectorLayer<Feature<Geometry>>> = new Map<string, VectorLayer<Feature<Geometry>>>();
 
   private backgroundLayerGroup = new LayerGroup();
   private baseLayerGroup = new LayerGroup();
@@ -260,6 +259,8 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     if (isOpenLayersWMSLayer(layer)) {
       return layer.getSource()?.getLegendUrl(
         undefined, {
+          // Use WMS version 1.1.0 for higher GetLegendGraphic compatibility
+          VERSION: '1.1.0',
           SLD_VERSION: '1.1.0',
         },
       ) || '';
@@ -306,7 +307,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     layerMap.delete(layerId);
   }
 
-  private removeVectorLayer(layer: VectorLayer<VectorSource<Feature<Geometry>>>, layerId: string) {
+  private removeVectorLayer(layer: VectorLayer<Feature<Geometry>>, layerId: string) {
     const vectorLayer = this.vectorLayers.get(layerId);
     if (vectorLayer) {
       vectorLayer.getSource()?.clear();
@@ -332,7 +333,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     return olLayer;
   }
 
-  private createVectorLayer(layer: VectorLayerModel): VectorLayer<VectorSource<Feature<Geometry>>> | null {
+  private createVectorLayer(layer: VectorLayerModel): VectorLayer<Feature<Geometry>> | null {
     const updateWhileAnimating = layer.updateWhileAnimating ?? false;
     const source = new VectorSource({ wrapX: true });
     const vectorLayer = new VectorLayer({ source, visible: layer.visible, updateWhileAnimating, updateWhileInteracting: updateWhileAnimating });

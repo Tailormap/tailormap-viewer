@@ -11,3 +11,11 @@ services:
   tailormap:
     networks:
       - geodata
+
+  solr:
+    networks:
+      - geodata
+
+  solr-metrics:
+    networks:
+      - geodata

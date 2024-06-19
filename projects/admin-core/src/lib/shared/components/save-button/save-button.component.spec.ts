@@ -2,12 +2,15 @@ import { render, screen } from '@testing-library/angular';
 import { SaveButtonComponent } from './save-button.component';
 import { of } from 'rxjs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import userEvent from '@testing-library/user-event';
+import userEvent, { PointerEventsCheckLevel } from '@testing-library/user-event';
+import { SpinnerButtonComponent } from '../spinner-button/spinner-button.component';
+import { SharedImportsModule } from '@tailormap-viewer/shared';
 
 const setup = async (isSaving: boolean, disabled: boolean) => {
   const saveFn = jest.fn();
   await render(SaveButtonComponent, {
-    imports: [MatProgressSpinnerModule],
+    imports: [ MatProgressSpinnerModule, SharedImportsModule ],
+    declarations: [SpinnerButtonComponent],
     componentInputs: {
       saving$: of(isSaving),
       disabled,
@@ -36,7 +39,7 @@ describe('SaveButtonComponent', () => {
     expect(await screen.queryByText('Save')).not.toBeInTheDocument();
     expect(await screen.findByRole('progressbar')).toBeInTheDocument();
     expect(await screen.findByRole('button')).toBeDisabled();
-    await userEvent.click(await screen.findByRole('button'));
+    await userEvent.click(await screen.findByRole('button'), { pointerEventsCheck: PointerEventsCheckLevel.Never });
     expect(onSave).not.toHaveBeenCalled();
   });
 
@@ -45,7 +48,7 @@ describe('SaveButtonComponent', () => {
     expect(await screen.findByText('Save')).toBeInTheDocument();
     expect(await screen.queryByRole('progressbar')).not.toBeInTheDocument();
     expect(await screen.findByRole('button')).toBeDisabled();
-    await userEvent.click(await screen.findByRole('button'));
+    await userEvent.click(await screen.findByRole('button'), { pointerEventsCheck: PointerEventsCheckLevel.Never });
     expect(onSave).not.toHaveBeenCalled();
   });
 

@@ -33,19 +33,6 @@ const onViewerLoadFailed = (
   error: payload.error,
 });
 
-const onSetLoginDetails = (
-  state: CoreState,
-  payload: ReturnType<typeof CoreActions.setLoginDetails>,
-): CoreState => ({
-  ...state,
-  security: {
-    ...state.security,
-    isAuthenticated: payload.isAuthenticated,
-    username: payload.username || undefined,
-    roles: payload.roles || undefined,
-  },
-});
-
 const onUpdateViewerStyle = (
   state: CoreState,
   payload: ReturnType<typeof CoreActions.updateViewerStyle>,
@@ -62,7 +49,6 @@ const coreReducerImpl = createReducer<CoreState>(
   on(CoreActions.loadViewer, onLoadViewer),
   on(CoreActions.loadViewerSuccess, onViewerLoadSuccess),
   on(CoreActions.loadViewerFailed, onViewerLoadFailed),
-  on(CoreActions.setLoginDetails, onSetLoginDetails),
   on(CoreActions.updateViewerStyle, onUpdateViewerStyle),
 );
 export const coreReducer = (state: CoreState | undefined, action: Action) => coreReducerImpl(state, action);

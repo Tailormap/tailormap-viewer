@@ -33,3 +33,9 @@ services:
 
   # See https://docs.docker.com/compose/compose-file/13-merge/#reset-value
   db: !reset
+
+  # Disable Solr containers for PR deployment (even though currently only enabled with a profile by default, this might be changed again)
+  solr: !reset
+
+  solr-metrics: !reset
+

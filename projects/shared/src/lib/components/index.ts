@@ -1,8 +1,8 @@
 export * from './shared-components.module';
-export * from './dialog';
 export * from './tree';
 export * from './snackbar-message';
 export * from './error-message';
+export * from './info-message';
 export * from './split-button';
 export * from './confirm-dialog';
 export * from './panel-resizer';
@@ -13,3 +13,5 @@ export * from './about-dialog/about-dialog.component';
 export * from './language-toggle/language-toggle.component';
 export * from './language-toggle/language.helper';
 export * from './language-toggle/language-description.model';
+export * from './legend-image/legend-image.component';
+export * from './legend-image/legend.helper';

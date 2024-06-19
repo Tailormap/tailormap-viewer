@@ -1,0 +1,11 @@
+<h2 mat-dialog-title i18n="@@admin-core.application.copy-application">Copy application {{data.application.title}}</h2>
+<mat-dialog-content>
+  <tm-admin-application-form [application]="application"
+                             [nameFieldOnly]="true"
+                             (validApplicationChanged)="applicationValidChanged($event)"
+                             (updateApplication)="updateApplication($event)"></tm-admin-application-form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-flat-button (click)="cancel()" i18n="@@admin-core.catalog.common.cancel">Cancel</button>
+  <tm-admin-save-button [saving$]="saving$" [disabled]="!valid()" (save)="save()"></tm-admin-save-button>
+</mat-dialog-actions>

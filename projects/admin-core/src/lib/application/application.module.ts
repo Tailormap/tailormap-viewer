@@ -26,13 +26,13 @@ import { ApplicationFolderNodeNameComponent } from './application-layer-tree/app
 import { ApplicationEditComponentsComponent } from './application-edit-components/application-edit-components.component';
 import { ComponentsModule } from './components/components.module';
 import { ApplicationEditStylingComponent } from './application-edit-styling/application-edit-styling.component';
-import { ImageUploadFieldComponent } from './styling/image-upload-field/image-upload-field.component';
 import { ApplicationLayerSettingsComponent } from './application-layer-settings/application-layer-settings.component';
 import { ApplicationService } from './services/application.service';
 import {
   ApplicationLayerAttributeSettingsComponent,
 } from './application-layer-attribute-settings/application-layer-attribute-settings.component';
 import { FormModule } from "../form/form.module";
+import { ApplicationCopyDialogComponent } from './application-copy-dialog/application-copy-dialog.component';
 
 @NgModule({
   declarations: [
@@ -50,9 +50,9 @@ import { FormModule } from "../form/form.module";
     ApplicationLayerTreeNodeComponent,
     ApplicationFolderNodeNameComponent,
     ApplicationEditStylingComponent,
-    ImageUploadFieldComponent,
     ApplicationLayerSettingsComponent,
     ApplicationLayerAttributeSettingsComponent,
+    ApplicationCopyDialogComponent,
   ],
     imports: [
         CommonModule,
@@ -65,9 +65,9 @@ import { FormModule } from "../form/form.module";
         ComponentsModule,
         FormModule,
     ],
-  exports: [
-    ApplicationListComponent,
-  ],
+    exports: [
+        ApplicationListComponent,
+    ],
 })
 export class ApplicationModule {
   constructor(applicationService: ApplicationService) {

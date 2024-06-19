@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
-import {
-  HttpClient, HttpErrorResponse, HttpEvent, HttpHandler, HttpParams, HttpRequest, HttpXsrfTokenExtractor,
-} from '@angular/common/http';
+import { HttpClient, HttpParams, HttpXsrfTokenExtractor } from '@angular/common/http';
 import { LoginConfigurationModel, UserResponseModel } from '../models';
-import { catchError, map, Observable, of, switchMap, throwError } from 'rxjs';
+import { catchError, map, Observable, of, switchMap } from 'rxjs';
 import { TailormapSecurityApiV1ServiceModel } from './tailormap-security-api-v1.service.model';
 import { TailormapApiConstants } from './tailormap-api.constants';
 
@@ -16,29 +14,6 @@ export class TailormapSecurityApiV1Service implements TailormapSecurityApiV1Serv
   ) {
   }
 
-  public static createSecurityInterceptor(baseUrl: string, shouldLogin: () => void) {
-    return (req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> => {
-      const authReq = req.clone({
-        withCredentials: req.url.startsWith(baseUrl)
-          ? true
-          : req.withCredentials,
-      });
-      return next.handle(authReq)
-        .pipe(
-          catchError(error => {
-            if (
-              error instanceof HttpErrorResponse
-              && (req.url.startsWith(baseUrl) && req.url !== TailormapApiConstants.LOGIN_URL)
-              && (error.status === 401 || error.status === 403)
-            ) {
-              shouldLogin();
-            }
-            return throwError(error);
-          }),
-        );
-    };
-  }
-
   public getLoginConfiguration$(): Observable<LoginConfigurationModel> {
     return this.httpClient.get<LoginConfigurationModel>(
       `${TailormapApiConstants.BASE_URL}/login/configuration`,
@@ -49,7 +24,7 @@ export class TailormapSecurityApiV1Service implements TailormapSecurityApiV1Serv
     return this.httpClient.get<UserResponseModel>(
       `${TailormapApiConstants.BASE_URL}/user`,
     ).pipe(
-      catchError((): Observable<UserResponseModel> => of({ isAuthenticated: false, username: '', roles: [] })),
+      catchError((): Observable<UserResponseModel> => of({ isAuthenticated: false, username: '', roles: [], properties: [], groupProperties: [] })),
     );
   }
 
@@ -76,7 +51,7 @@ export class TailormapSecurityApiV1Service implements TailormapSecurityApiV1Serv
         if (success) {
           return this.getUser$();
         }
-        return of({ isAuthenticated: false, username: '', roles: [] });
+        return of({ isAuthenticated: false, username: '', roles: [], properties: [], groupProperties: [] });
       }),
     );
   }

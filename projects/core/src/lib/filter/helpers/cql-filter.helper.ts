@@ -91,7 +91,9 @@ export class CqlFilterHelper {
       return CqlFilterHelper.wrapFilter(CqlFilterHelper.getQueryForDate(filter));
     }
     if (filter.attributeType === AttributeType.BOOLEAN) {
-      return CqlFilterHelper.wrapFilter(`${filter.attribute} = ${filter.condition === FilterConditionEnum.BOOLEAN_TRUE_KEY ? 'true' : 'false'}`);
+      const isTrue = filter.condition === FilterConditionEnum.BOOLEAN_TRUE_KEY ||
+        (filter.condition === FilterConditionEnum.BOOLEAN_FALSE_KEY && filter.invertCondition);
+      return CqlFilterHelper.wrapFilter(`${filter.attribute} = ${isTrue ? 'true' : 'false'}`);
     }
     return null;
   }

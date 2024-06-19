@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { GroupModel, UserModel } from '@tailormap-admin/admin-api';
+import { AdditionalPropertyModel, GroupModel, UserModel } from '@tailormap-admin/admin-api';
 import { AbstractControl, AsyncValidatorFn, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { debounceTime, map, Observable, of, Subject, takeUntil } from 'rxjs';
 import { GroupService } from '../services/group.service';
@@ -7,6 +7,7 @@ import { formatDate } from '@angular/common';
 import { UserService } from '../services/user.service';
 import { UserAddUpdateModel } from '../models/user-add-update.model';
 import { FormHelper } from '../../helpers/form.helper';
+import { AdminFieldLocation, AdminFieldModel, AdminFieldRegistrationService } from '../../shared/services/admin-field-registration.service';
 
 @Component({
   selector: 'tm-admin-user-form',
@@ -39,6 +40,8 @@ export class UserFormComponent implements OnInit, OnDestroy {
     ],
   });
 
+  public registeredFields$: Observable<AdminFieldModel[]> = of([]);
+
   @Input()
   public set user(user: UserModel | null) {
     this._user = user;
@@ -56,6 +59,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
     const defaultPasswordValidator = [Validators.minLength(8)];
     this.userForm.get('password')?.setValidators(user ? defaultPasswordValidator : [ Validators.required, ...defaultPasswordValidator ]);
     this.userForm.get('confirmedPassword')?.setValidators(user ? defaultPasswordValidator : [ Validators.required, ...defaultPasswordValidator ]);
+    this.additionalProperties = user?.additionalProperties || [];
     if (user) {
       this.userForm.get('username')?.disable();
     } else {
@@ -72,15 +76,18 @@ export class UserFormComponent implements OnInit, OnDestroy {
   public allGroups$: Observable<GroupModel[]> | undefined;
   private destroyed = new Subject();
   private _user: UserModel | null = null;
+  public additionalProperties: AdditionalPropertyModel[] = [];
 
   constructor(
     private groupDetailsService: GroupService,
     private userDetailsService: UserService,
+    private adminFieldRegistryService: AdminFieldRegistrationService,
   ) {
     this.allGroups$ = this.groupDetailsService.getGroups$();
   }
 
   public ngOnInit(): void {
+    this.registeredFields$ = this.adminFieldRegistryService.getRegisteredFields$(AdminFieldLocation.USER);
     this.userForm.valueChanges.pipe(
       takeUntil(this.destroyed),
       debounceTime(250),
@@ -117,6 +124,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
     if(user.groups && user.groups.length > 0) {
       user.groups = user.groups.map(g => `/${g}`);
     }
+    user.additionalProperties = this.additionalProperties;
     this.userUpdated.emit(user);
   }
 
@@ -149,6 +157,11 @@ export class UserFormComponent implements OnInit, OnDestroy {
         }),
       );
     };
+  }
+
+  public attributesChanged($event: AdditionalPropertyModel[]) {
+    this.additionalProperties = $event;
+    this.readForm();
   }
 
 }

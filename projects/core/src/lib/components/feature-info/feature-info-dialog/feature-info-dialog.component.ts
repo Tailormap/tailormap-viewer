@@ -9,7 +9,6 @@ import {
 } from '../state/feature-info.actions';
 import { FeatureInfoModel } from '../models/feature-info.model';
 import { CssHelper } from '@tailormap-viewer/shared';
-import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layout.service';
 
 @Component({
   selector: 'tm-feature-info-dialog',
@@ -33,7 +32,6 @@ export class FeatureInfoDialogComponent implements OnInit, OnDestroy {
 
   constructor(
     private store$: Store,
-    private layoutService: ViewerLayoutService,
     private cdr: ChangeDetectorRef,
   ) {}
 
@@ -47,12 +45,6 @@ export class FeatureInfoDialogComponent implements OnInit, OnDestroy {
         this.currentSelected = counts.current;
         this.totalFeatures = counts.total;
         this.cdr.detectChanges();
-      });
-
-    this.dialogOpen$
-      .pipe(takeUntil(this.destroyed))
-      .subscribe(open => {
-        this.layoutService.setRightPadding(open ? this.panelWidth + this.bodyMargin : 0);
       });
   }
 

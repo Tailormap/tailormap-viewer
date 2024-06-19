@@ -7,10 +7,11 @@ import { GroupService } from '../services/group.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SharedImportsModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
-import { TestSaveHelper } from '../../test-helpers/test-save.helper';
+import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
 import { GroupFormComponent } from '../group-form/group-form.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { SharedAdminComponentsModule } from '../../shared/components/shared-admin-components.module';
+import { SpinnerButtonComponent } from '../../shared/components/spinner-button/spinner-button.component';
 
 const setup = async (hasGroup?: boolean) => {
   const activeRoute = {
@@ -26,7 +27,7 @@ const setup = async (hasGroup?: boolean) => {
     navigateByUrl: jest.fn(),
   };
   await render(GroupEditComponent, {
-    declarations: [ GroupFormComponent, SaveButtonComponent ],
+    declarations: [ GroupFormComponent, SaveButtonComponent, SpinnerButtonComponent ],
     imports: [ SharedImportsModule, MatIconTestingModule, SharedAdminComponentsModule ],
     providers: [
       { provide: ActivatedRoute, useValue: activeRoute },
@@ -59,7 +60,7 @@ describe('GroupEditComponent', () => {
       description: 'some secret group',
       notes: 'some extra notes',
       systemGroup: true,
-      additionalProperties: {},
+      additionalProperties: [],
     });
   });
 

@@ -1,0 +1,13 @@
+.geo-service-layer-settings {
+  display: flex;
+}
+
+.settings {
+  width: 500px;
+  margin-right: 16px;
+}
+
+.legend-settings strong {
+  display: block;
+  margin-bottom: 8px;
+}

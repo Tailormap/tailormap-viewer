@@ -6,6 +6,9 @@ networks:
     external: true
     name: ${PROXY_NETWORK:-traefik}
 
+  tailormap-monitoring:
+    name: tailormap-monitoring
+
 services:
   tailormap:
     networks:
@@ -17,7 +20,15 @@ services:
       - "traefik.http.routers.${COMPOSE_PROJECT_NAME:-tailormap}.tls.certresolver=letsencrypt"
       - "traefik.http.routers.${COMPOSE_PROJECT_NAME:-tailormap}.middlewares=${COMPOSE_PROJECT_NAME:-tailormap}-hsts"
       - "traefik.http.middlewares.${COMPOSE_PROJECT_NAME:-tailormap}-hsts.headers.STSSeconds=31536000" # set to a year
-      - "traefik.http.middlewares.${COMPOSE_PROJECT_NAME:-tailormap}-hsts.headers.STSIncludeSubdomains=true" 
+      - "traefik.http.middlewares.${COMPOSE_PROJECT_NAME:-tailormap}-hsts.headers.STSIncludeSubdomains=true"
       - "traefik.http.middlewares.${COMPOSE_PROJECT_NAME:-tailormap}-hsts.headers.STSPreload=true" # activate headers
       - "traefik.docker.network=${PROXY_NETWORK:-traefik}"
       - "traefik.enable=true"
+
+  solr:
+    labels:
+      - "traefik.enable=false"
+
+  solr-metrics:
+    labels:
+      - "traefik.enable=false"

@@ -10,6 +10,7 @@ import {
 import { MapService, MapViewDetailsModel } from '@tailormap-viewer/map';
 import { HttpClient } from '@angular/common/http';
 import { ExtendedAppLayerModel } from '../../map/models';
+import { FilterService } from '../../filter/services/filter.service';
 
 @Injectable({
   providedIn: 'root',
@@ -27,6 +28,7 @@ export class FeatureInfoService {
   private mapService = inject(MapService);
   private httpService = inject(HttpClient);
   private apiService = inject(TAILORMAP_API_V1_SERVICE);
+  private filterService = inject(FilterService);
 
   public getFeatures$(coordinates: [ number, number ]): Observable<FeatureInfoResponseModel[]> {
     return combineLatest([
@@ -82,6 +84,7 @@ export class FeatureInfoService {
     geometryInAttributes=false,
   ): Observable<FeatureInfoResponseModel> {
     const layerId = layer.id;
+    const layerFilter = this.filterService.getFilterForLayer(layerId);
     return this.apiService.getFeatures$({
       layerId,
       applicationId,
@@ -91,6 +94,7 @@ export class FeatureInfoService {
       distance: resolutions.resolution * FeatureInfoService.DEFAULT_DISTANCE,
       simplify: false,
       geometryInAttributes: geometryInAttributes,
+      filter: layerFilter,
     }).pipe(
       map((featureInfoResult: FeaturesResponseModel): FeatureInfoResponseModel => ({
         features: (featureInfoResult.features || []).map(feature => ({ ...feature, layerId })),

@@ -13,6 +13,7 @@ import { FilterComponentModule } from './filter/filter-component.module';
 import { EditComponentModule } from './edit/edit-component.module';
 import { RegisteredComponentsModule } from './registered-components-renderer/registered-components.module';
 
+
 @NgModule({
   declarations: [],
   imports: [

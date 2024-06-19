@@ -23,7 +23,7 @@ export class OpenLayersModifyTool implements ModifyToolModel {
 
   private geometryChangedSubject: Subject<string> = new Subject<string>();
   public featureModified$ = this.geometryChangedSubject.asObservable();
-  private editLayer: VectorLayer<VectorSource> | null = null;
+  private editLayer: VectorLayer<Feature<Geometry>> | null = null;
   private source: VectorSource<Feature<Geometry>> | null = null;
 
   constructor(

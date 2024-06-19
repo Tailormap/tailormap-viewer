@@ -17,6 +17,11 @@
     <tm-admin-save-button [saving$]="saving$" [disabled]="(canSave$ | async) === false" (save)="save()"></tm-admin-save-button>
     <button mat-flat-button color="warn" (click)="delete(application)" i18n="@@admin-core.common.delete">Delete</button>
     <button mat-flat-button routerLink="/admin/applications" i18n="@@admin-core.common.close">Close</button>
+    <tm-admin-spinner-button [showSpinner$]="makingCopy$"
+                             label="Copy"
+                             color="accent"
+                             i18n-label="@@admin-core.application.make-copy"
+                             (buttonClick)="copy(application)"></tm-admin-spinner-button>
   </div>
 
 </ng-container>

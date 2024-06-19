@@ -11,6 +11,9 @@
       <trans-unit id="admin-core.application.application" datatype="html">
         <source>Application</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.application-copied" datatype="html">
+        <source>Application <x id="PH" equiv-text="copiedApplication.title || copiedApplication.name"/> copied</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.application-created" datatype="html">
         <source>Application <x id="PH" equiv-text="createdApplication.title || createdApplication.name"/> created</source>
       </trans-unit>
@@ -26,6 +29,9 @@
       <trans-unit id="admin-core.application.applications" datatype="html">
         <source>Applications</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.autoRefreshInSeconds" datatype="html">
+        <source>Auto refresh the layer (seconds)</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.base-maps" datatype="html">
         <source>Basemaps</source>
       </trans-unit>
@@ -34,6 +40,9 @@
       </trans-unit>
       <trans-unit id="admin-core.application.component-attribute-list" datatype="html">
         <source>Attribute list</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.component-coordinate-link-window" datatype="html">
+        <source>Coordinate Link Window</source>
       </trans-unit>
       <trans-unit id="admin-core.application.component-coordinate-picker-tool" datatype="html">
         <source>Coordinate picker tool</source>
@@ -70,6 +79,9 @@
       </trans-unit>
       <trans-unit id="admin-core.application.components" datatype="html">
         <source>Components</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.copy-application" datatype="html">
+        <source>Copy application <x id="INTERPOLATION" equiv-text="{{data.application.title}}"/></source>
       </trans-unit>
       <trans-unit id="admin-core.application.create-application" datatype="html">
         <source>Create application</source>
@@ -154,6 +166,9 @@
       </trans-unit>
       <trans-unit id="admin-core.application.logo" datatype="html">
         <source>Upload logo for application</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.make-copy" datatype="html">
+        <source>Copy</source>
       </trans-unit>
       <trans-unit id="admin-core.application.max-extent" datatype="html">
         <source>Max extent</source>
@@ -476,6 +491,9 @@
       <trans-unit id="admin-core.catalog.not-set" datatype="html">
         <source>Not set</source>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.override-legend" datatype="html">
+        <source>Override service default legend</source>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.port" datatype="html">
         <source>Port</source>
       </trans-unit>
@@ -608,6 +626,9 @@
       <trans-unit id="admin-core.common.comments" datatype="html">
         <source>Comments</source>
       </trans-unit>
+      <trans-unit id="admin-core.common.copy" datatype="html">
+        <source>Copy</source>
+      </trans-unit>
       <trans-unit id="admin-core.common.create" datatype="html">
         <source>Create</source>
       </trans-unit>
@@ -689,11 +710,17 @@
       <trans-unit id="admin-core.common.saved" datatype="html">
         <source>Saved</source>
       </trans-unit>
+      <trans-unit id="admin-core.common.select-file" datatype="html">
+        <source>Select file</source>
+      </trans-unit>
       <trans-unit id="admin-core.common.settings-for" datatype="html">
         <source>Settings for <x id="INTERPOLATION" equiv-text="{{ layerTitle }}"/></source>
       </trans-unit>
       <trans-unit id="admin-core.common.settings-title" datatype="html">
         <source>Settings</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.size" datatype="html">
+        <source>Size</source>
       </trans-unit>
       <trans-unit id="admin-core.common.sort" datatype="html">
         <source>Sort</source>
@@ -718,6 +745,24 @@
       </trans-unit>
       <trans-unit id="admin-core.common.welcome-to-tailormap" datatype="html">
         <source>Welcome to Tailormap Admin</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.clw-add-url" datatype="html">
+        <source>Add URL</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.coordinate-link-window-help1" datatype="html">
+        <source>Add one or more URL&apos;s to configure the Coordinate Link Window component.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.coordinate-link-window-help2" datatype="html">
+        <source>For each URL you can use <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[X]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> or <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[lat]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> and <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[Y]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> or <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[lon]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> placeholders in the URL.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.coordinate-link-window-help3" datatype="html">
+        <source>Those will be replaced by the location on which the user clicks.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.coordinate-link-window-help4" datatype="html">
+        <source>For example: <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>https://www.google.com/maps/@[lat],[lon],18z<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> or <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>https://demo.tailormap.com/#@[X],[Y],18<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.coordinate-link-window-title" datatype="html">
+        <source>Coordinate link window title</source>
       </trans-unit>
       <trans-unit id="admin-core.components.measure-area-title" datatype="html">
         <source>Measure area title</source>
@@ -977,8 +1022,53 @@
       <trans-unit id="admin-core.oidc.username-attribute-placeholder" datatype="html">
         <source>(name, sub, email, etc)</source>
       </trans-unit>
+      <trans-unit id="admin-core.select-upload.file-in-use" datatype="html">
+        <source>File is still in use</source>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.file-in-use-body" datatype="html">
+        <source>This file cannot be removed because it is still used in the following places.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.select-existing-file" datatype="html">
+        <source>Select existing file</source>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.select-existing-legend" datatype="html">
+        <source>Select existing legend</source>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.select-existing-logo" datatype="html">
+        <source>Select existing logo</source>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.select-file" datatype="html">
+        <source>Select file</source>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.select-legend" datatype="html">
+        <source>Select legend</source>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.select-logo" datatype="html">
+        <source>Select logo</source>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.upload-new-file" datatype="html">
+        <source>Upload a new file</source>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.upload-new-legend" datatype="html">
+        <source>Upload a new legend</source>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.upload-new-logo" datatype="html">
+        <source>Upload a new logo</source>
+      </trans-unit>
       <trans-unit id="admin-core.settings.home" datatype="html">
         <source>Select settings from the left side</source>
+      </trans-unit>
+      <trans-unit id="admin-core.upload-select.delete-file" datatype="html">
+        <source>Delete file?</source>
+      </trans-unit>
+      <trans-unit id="admin-core.upload-select.delete-file-message" datatype="html">
+        <source>Are you sure you want delete to the file <x id="PH" equiv-text="uploadName"/>? This action cannot be undone.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.upload-select.error-deleting-file" datatype="html">
+        <source>Error removing file <x id="PH" equiv-text="uploadName"/>. Please try again.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.upload-select.file-deleted" datatype="html">
+        <source>File <x id="PH" equiv-text="uploadName"/> removed</source>
       </trans-unit>
       <trans-unit id="admin-core.use-max-extent" datatype="html">
         <source>Use projection extent</source>

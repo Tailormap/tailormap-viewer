@@ -37,4 +37,7 @@
       </mat-list-option>
     </mat-selection-list>
   </div>
+
+  <tm-admin-fields-renderer [fields]="(registeredFields$ | async) || []" [data]="additionalProperties" (changed)="attributesChanged($event)"></tm-admin-fields-renderer>
+
 </form>

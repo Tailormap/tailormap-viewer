@@ -20,7 +20,7 @@ const setup = async () => {
 
 describe('GroupFormComponent', () => {
 
-  test('should trigger user updated for a valid form', async () => {
+  test('should trigger group updated for a valid form', async () => {
     const { groupUpdated } = await setup();
     await userEvent.type(screen.getByLabelText('Name'), 'secret-group');
     await userEvent.type(screen.getByLabelText('Description'), 'A very secret group');
@@ -30,7 +30,7 @@ describe('GroupFormComponent', () => {
         description: 'A very secret group',
         notes: null,
         systemGroup: false,
-        additionalProperties: {},
+        additionalProperties: [],
       });
     });
   });

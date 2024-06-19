@@ -32,6 +32,9 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
     return this._application;
   }
 
+  @Input()
+  public nameFieldOnly: boolean = false;
+
   @Output()
   public updateApplication = new EventEmitter<UpdateDraftApplicationModel>();
 
@@ -124,6 +127,9 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
         };
         this.updateApplication.emit({ application, i18nSettings, uiSettings });
       });
+    if (this.nameFieldOnly) {
+      this.applicationForm.updateValueAndValidity();
+    }
   }
 
   public ngOnDestroy() {
@@ -164,11 +170,12 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
   }
 
   private isValidForm(): boolean {
+    console.log('isValidForm', this.nameFieldOnly, this.applicationForm.dirty, this.applicationForm.valid);
     const values = this.applicationForm.getRawValue();
     return FormHelper.isValidValue(values.name)
       && FormHelper.isValidValue(values.title)
       && FormHelper.isValidValue(values.crs)
-      && this.applicationForm.dirty
+      && (this.nameFieldOnly || this.applicationForm.dirty)
       && this.applicationForm.valid;
   }
 

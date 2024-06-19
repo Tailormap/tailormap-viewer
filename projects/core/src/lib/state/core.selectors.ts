@@ -10,10 +10,6 @@ export const selectViewerId = createSelector(selectViewerState, state => state?.
 export const selectViewerTitle = createSelector(selectViewerState, state => state?.title || null);
 export const selectViewerErrorMessage = createSelector(selectCoreState, (state) => state.error);
 
-export const selectUserDetails = createSelector(selectCoreState, state => state.security);
-export const selectUserIsAdmin = createSelector(selectUserDetails, state =>
-  state?.roles?.includes('admin') ?? false);
-
 export const selectShowLanguageSwitcher = createSelector(
   selectViewerState,
   viewerState => viewerState?.i18nSettings?.hideLanguageSwitcher !== true,

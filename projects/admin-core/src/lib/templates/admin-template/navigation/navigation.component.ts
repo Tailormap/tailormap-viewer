@@ -1,13 +1,11 @@
-import { Component, OnInit, ChangeDetectionStrategy, Inject } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Routes } from '../../../routes';
-import { Store } from '@ngrx/store';
-import { selectUserDetails } from '../../../state/admin-core.selectors';
 import { Observable, of, take } from 'rxjs';
-import { SecurityModel, TAILORMAP_SECURITY_API_V1_SERVICE, TailormapSecurityApiV1ServiceModel } from '@tailormap-viewer/api';
+import { SecurityModel } from '@tailormap-viewer/api';
 import { Router } from '@angular/router';
-import { setLoginDetails } from '../../../state/admin-core.actions';
 import { AboutDialogComponent } from '@tailormap-viewer/shared';
 import { MatDialog } from '@angular/material/dialog';
+import { AuthenticatedUserService } from '@tailormap-viewer/api';
 
 interface ButtonProps {
   icon?: string;
@@ -43,19 +41,13 @@ export class NavigationComponent implements OnInit {
   ];
 
   constructor(
-    private store$: Store,
     private router: Router,
     private dialog: MatDialog,
-    @Inject(TAILORMAP_SECURITY_API_V1_SERVICE) private api: TailormapSecurityApiV1ServiceModel,
+    private authenticatedUserService: AuthenticatedUserService,
   ) {}
 
   public ngOnInit(): void {
-    this.userDetails$ = this.store$.select(selectUserDetails);
-    this.api.getUser$()
-      .pipe(take(1))
-      .subscribe(userDetails => {
-        this.store$.dispatch(setLoginDetails(userDetails));
-      });
+    this.userDetails$ = this.authenticatedUserService.getUserDetails$();
   }
 
   public getButtonProps(button: ButtonProps): ButtonProps {
@@ -63,11 +55,10 @@ export class NavigationComponent implements OnInit {
   }
 
   public logout() {
-    this.api.logout$()
+    this.authenticatedUserService.logout$()
       .pipe(take(1))
       .subscribe(loggedOut => {
         if (loggedOut) {
-          this.store$.dispatch(setLoginDetails({ isAuthenticated: false }));
           this.router.navigateByUrl('/admin').then(() => {
             window.location.reload();
           });

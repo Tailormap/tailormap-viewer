@@ -1,10 +1,10 @@
 import { Layer as BaseLayer } from 'ol/layer';
 import { Vector as VectorLayer, Image as ImageLayer, Tile as TileLayer } from 'ol/layer';
 import { Geometry } from 'ol/geom';
-import { Vector as VectorSource, ImageWMS, WMTS, XYZ, TileWMS } from 'ol/source';
+import { ImageWMS, WMTS, XYZ, TileWMS } from 'ol/source';
 import { Feature } from 'ol';
 
-export const isOpenLayersVectorLayer = (layer: BaseLayer): layer is VectorLayer<VectorSource<Feature<Geometry>>> => {
+export const isOpenLayersVectorLayer = (layer: BaseLayer): layer is VectorLayer<Feature<Geometry>> => {
   return layer instanceof VectorLayer;
 };
 
