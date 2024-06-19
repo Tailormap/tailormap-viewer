@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, Output, EventEmitter, Input } from 
 import { Observable, of } from 'rxjs';
 
 @Component({
-  selector: 'tm-admin-spinner-button',
+  selector: 'tm-spinner-button',
   templateUrl: './spinner-button.component.html',
   styleUrls: ['./spinner-button.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
