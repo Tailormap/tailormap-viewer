@@ -65,7 +65,7 @@
               {
                 "glob": "**/*",
                 "input": "./node_modules/cesium/Build/Cesium",
-                "output": "projects/shared/assets/cesium"
+                "output": "cesium"
               }
             ],
             "styles": [

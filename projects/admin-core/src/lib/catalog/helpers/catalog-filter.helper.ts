@@ -4,7 +4,7 @@ import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-lay
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
 import { CatalogTreeHelper } from './catalog-tree.helper';
-import { CatalogItemKindEnum } from '@tailormap-admin/admin-api';
+import { CatalogItemKindEnum, GeoServiceProtocolEnum } from '@tailormap-admin/admin-api';
 import { CatalogExtendedModel } from '../models/catalog-extended.model';
 import { ExtendedCatalogModelHelper } from './extended-catalog-model.helper';
 
@@ -48,10 +48,11 @@ export class CatalogFilterHelper {
       return CatalogTreeHelper.catalogToTree(catalogNodes, services, serviceLayers, [], [], featureTypes);
     }
     const allLayersMap = new Map(serviceLayers.map(l => [ l.id, l ]));
+    const allServicesMap = new Map(services.map(s => [ s.id, s ]));
     return CatalogFilterHelper.getFilteredTree(catalogNodes, services, serviceLayers, [], featureTypes, item => {
       if (ExtendedCatalogModelHelper.isGeoServiceLayerModel(item)) {
-        // Temporary
-        if (item.crs == null || item.crs?.length === 0) {
+        const service = allServicesMap.get(item.serviceId);
+        if (service && service.protocol === GeoServiceProtocolEnum.TILESET3D) {
           return true;
         }
         //

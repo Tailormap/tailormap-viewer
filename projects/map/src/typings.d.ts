@@ -22,3 +22,4 @@ declare module 'jsts/org/locationtech/jts/geom' {
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 declare const Cesium;
+declare const CESIUM_BASE_URL;
