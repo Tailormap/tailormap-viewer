@@ -80,7 +80,7 @@ export class ApplicationMapService implements OnDestroy {
           takeUntil(this.destroyed),
           concatMap(layers => this.get3DLayersAndLayerManager$(layers)),
         )
-        .subscribe(([layers, layerManager]) => {
+        .subscribe(([ layers, layerManager ]) => {
           layerManager.addLayers(layers.filter(isValidLayer));
           console.log(layerManager.getScene3D$());
         });

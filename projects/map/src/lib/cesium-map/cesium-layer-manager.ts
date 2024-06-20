@@ -1,13 +1,11 @@
 import { Map as OlMap } from 'ol';
-import { Layer as BaseLayer} from 'ol/layer';
 import { LayerModel } from '../models/layer.model';
 import { LayerTypesHelper } from '../helpers/layer-types.helper';
 import { NgZone } from '@angular/core';
-import { HttpXsrfTokenExtractor } from '@angular/common/http';
 import { CesiumLayerHelper } from '../helpers/cesium-layer.helper';
 import OLCesium from 'olcs';
 import { BehaviorSubject, filter, Observable, take } from 'rxjs';
-import { Scene, Cesium3DTileset} from 'cesium';
+import { Scene, Cesium3DTileset } from 'cesium';
 
 export class CesiumLayerManager {
 
@@ -28,7 +26,8 @@ export class CesiumLayerManager {
     this.scene3D.next(scene);
 
     this.executeScene3DAction(scene3D => {
-      const OLCS_ION_TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2YjQ4MDkzYi02ZjJjLTQ5YTgtYjAyZC1lN2IxZGZlMDFlMDkiLCJpZCI6MTk3Mzk5LCJpYXQiOjE3MDg2Nzg4ODh9.DQT_DNkF7XS8vtMtIde2oeZsJoQTqm4K3qFahQ1-tR8'
+      const OLCS_ION_TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2YjQ4MDkzYi02ZjJjLTQ5YTgtY' +
+        'jAyZC1lN2IxZGZlMDFlMDkiLCJpZCI6MTk3Mzk5LCJpYXQiOjE3MDg2Nzg4ODh9.DQT_DNkF7XS8vtMtIde2oeZsJoQTqm4K3qFahQ1-tR8';
       Cesium.Ion.defaultAccessToken = OLCS_ION_TOKEN;
       scene3D.setTerrain(
         new Cesium.Terrain(
