@@ -35,3 +35,19 @@ export const setDraftSearchIndexId = createAction(
   props<{ id: number }>(),
 );
 
+export const addSearchIndex = createAction(
+  `${searchIndexActionsPrefix} Add Search Index`,
+  props<{ searchIndex: SearchIndexModel }>(),
+);
+
+export const updateSearchIndex = createAction(
+  `${searchIndexActionsPrefix} Update Search Index`,
+  props<{ searchIndex: SearchIndexModel }>(),
+);
+
+export const deleteSearchIndex = createAction(
+  `${searchIndexActionsPrefix} Delete Search Index`,
+  props<{ searchIndexId: number }>(),
+);
+
+

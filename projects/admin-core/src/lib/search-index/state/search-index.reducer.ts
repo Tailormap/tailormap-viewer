@@ -3,6 +3,20 @@ import { Action, createReducer, on } from '@ngrx/store';
 import { initialSearchIndexState, SearchIndexState } from './search-index.state';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 
+const setDraftSearchIndexId = (
+  state: SearchIndexState,
+  draftIndexId: number | null,
+): SearchIndexState => {
+  const searchIndex = state.searchIndexes.find(s => s.id === draftIndexId);
+  return {
+    ...state,
+    draftSearchIndexId: draftIndexId,
+    draftSearchIndex: searchIndex ? { ...searchIndex } : undefined,
+    draftSearchUpdated: false,
+    draftSearchValid: true,
+  };
+};
+
 const onLoadSearchIndexesStart = (state: SearchIndexState): SearchIndexState => ({
   ...state,
   searchIndexesLoadStatus: LoadingStateEnum.LOADING,
@@ -55,15 +69,59 @@ const onClearSelectedSearchIndex = (
 const onSetDraftSearchIndexId = (
   state: SearchIndexState,
   payload: ReturnType<typeof SearchIndexActions.setDraftSearchIndexId>,
+): SearchIndexState => setDraftSearchIndexId(state, payload.id);
+
+const onAddSearchIndex = (
+  state: SearchIndexState,
+  payload: ReturnType<typeof SearchIndexActions.addSearchIndex>,
 ): SearchIndexState => {
-  const searchIndex = state.searchIndexes.find(s => s.id === payload.id);
-  return {
+  if(state.searchIndexes.some(a => a.id === payload.searchIndex.id)) {
+    return state;
+  }
+  const updatedState = {
     ...state,
-    draftSearchIndexId: payload.id,
-    draftSearchIndex: searchIndex ? { ...searchIndex } : undefined,
-    draftSearchUpdated: false,
-    draftSearchValid: true,
+    searchIndexes: [ ...state.searchIndexes, payload.searchIndex ],
   };
+  if (payload.searchIndex.id === state.draftSearchIndexId) {
+    return setDraftSearchIndexId(updatedState, payload.searchIndex.id);
+  }
+  return updatedState;
+};
+
+const onUpdateSearchIndex = (
+  state: SearchIndexState,
+  payload: ReturnType<typeof SearchIndexActions.updateSearchIndex>,
+): SearchIndexState => {
+  const idx = state.searchIndexes.findIndex(searchIndex => searchIndex.id === payload.searchIndex.id);
+  if (idx === -1) {
+    return state;
+  }
+  const updatedState = {
+    ...state,
+    searchIndexes: [
+      ...state.searchIndexes.slice(0, idx),
+      { ...state.searchIndexes[idx], ...payload.searchIndex },
+      ...state.searchIndexes.slice(idx + 1),
+    ],
+  };
+  if (payload.searchIndex.id === state.draftSearchIndexId) {
+    return setDraftSearchIndexId(updatedState, payload.searchIndex.id);
+  }
+  return updatedState;
+};
+
+const onDeleteSearchIndex = (
+  state: SearchIndexState,
+  payload: ReturnType<typeof SearchIndexActions.deleteSearchIndex>,
+): SearchIndexState => {
+  const updatedState = {
+    ...state,
+    searchIndexes: state.searchIndexes.filter(searchIndex => searchIndex.id !== payload.searchIndexId),
+  };
+  if (state.draftSearchIndexId === payload.searchIndexId) {
+    return setDraftSearchIndexId(updatedState, null);
+  }
+  return updatedState;
 };
 
 const searchIndexReducerImpl = createReducer<SearchIndexState>(
@@ -74,5 +132,8 @@ const searchIndexReducerImpl = createReducer<SearchIndexState>(
   on(SearchIndexActions.setSearchIndexListFilter, onSetSearchIndexListFilter),
   on(SearchIndexActions.clearSelectedSearchIndex, onClearSelectedSearchIndex),
   on(SearchIndexActions.setDraftSearchIndexId, onSetDraftSearchIndexId),
+  on(SearchIndexActions.addSearchIndex, onAddSearchIndex),
+  on(SearchIndexActions.updateSearchIndex, onUpdateSearchIndex),
+  on(SearchIndexActions.deleteSearchIndex, onDeleteSearchIndex),
 );
 export const searchIndexReducer = (state: SearchIndexState | undefined, action: Action) => searchIndexReducerImpl(state, action);

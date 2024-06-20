@@ -5,7 +5,7 @@ import { debounceTime, filter, map, distinctUntilChanged, concatMap, forkJoin, o
 import { FormHelper } from '../../helpers/form.helper';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TypesHelper } from '@tailormap-viewer/shared';
-import { selectFeatureTypeBySourceIdAndName, selectFeatureTypes } from '../../catalog/state/catalog.selectors';
+import { selectFeatureTypeBySourceIdAndName } from '../../catalog/state/catalog.selectors';
 import { Store } from '@ngrx/store';
 import { FeatureSourceService } from '../../catalog/services/feature-source.service';
 
@@ -101,7 +101,7 @@ export class SearchIndexFormComponent implements OnInit {
 
   private initForm(form: SearchIndexModel | null) {
     if (!form) {
-      this.searchIndexForm.patchValue({ name: '', comment: '', featureSourceId: null, featureTypeName: ''}, { emitEvent: false });
+      this.searchIndexForm.patchValue({ name: '', comment: '', featureSourceId: null, featureTypeName: '' }, { emitEvent: false });
       return;
     }
     const featureTypeId = form.featureTypeId;

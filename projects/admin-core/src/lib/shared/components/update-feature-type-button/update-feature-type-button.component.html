@@ -1,8 +1,10 @@
-<ng-container *ngIf="featureType$ | async as featureType">
+@if (featureType) {
   <mat-icon svgIcon="admin_feature_type"></mat-icon>
   <strong i18n="@@admin-core.catalog.feature-type">Feature type</strong>
-  <button mat-stroked-button [tmTooltip]="featureType.title || featureType.name" (click)="updateFeatureTypeSetting($event, featureType, form.featureSourceId)">
+  <button mat-stroked-button
+          [tmTooltip]="featureType.title || featureType.name"
+          (click)="updateFeatureTypeSetting($event, featureType)">
     {{ featureType.title || featureType.name }}
     <mat-icon svgIcon="edit_square" iconPositionEnd></mat-icon>
   </button>
-</ng-container>
+}

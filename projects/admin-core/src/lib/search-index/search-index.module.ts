@@ -14,6 +14,8 @@ import { SearchIndexListComponent } from './search-index-list/search-index-list.
 import { SearchIndexFormComponent } from './search-index-form/search-index-form.component';
 import { CatalogModule } from '../catalog/catalog.module';
 import { FormModule } from '../form/form.module';
+import { SearchIndexService } from './services/search-index.service';
+import { SearchIndexFieldListComponent } from './search-index-field-list/search-index-field-list.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +24,7 @@ import { FormModule } from '../form/form.module';
     SearchIndexEditComponent,
     SearchIndexCreateComponent,
     SearchIndexFormComponent,
+    SearchIndexFieldListComponent,
   ],
   imports: [
     CommonModule,
@@ -37,4 +40,7 @@ import { FormModule } from '../form/form.module';
   ],
 })
 export class SearchIndexModule {
+  constructor(searchIndexService: SearchIndexService) {
+    searchIndexService.listenForSearchIndexChanges();
+  }
 }

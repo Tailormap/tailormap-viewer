@@ -3,20 +3,29 @@
   <div class="flex-wrapper">
     <div class="form-wrapper">
       <tm-admin-search-index-form [searchIndex]="searchIndex" (updateSearchIndex)="updateSearchIndex($event)" (validFormChanged)="validFormChanged($event)"></tm-admin-search-index-form>
+      @if (featureType$ | async; as featureType) {
+        <tm-admin-search-index-field-list [featureTypeName]="featureType.name"></tm-admin-search-index-field-list>
+      }
     </div>
     <div class="info-wrapper">
       <div class="edit-buttons">
-        <ng-container *ngIf="featureType$ | async as featureType">
-          <mat-icon svgIcon="admin_feature_type"></mat-icon>
-          <strong i18n="@@admin-core.catalog.feature-type">Feature type</strong>
-          <button mat-stroked-button [tmTooltip]="featureType.title || featureType.name" (click)="updateFeatureTypeSetting($event, featureType)">
-            {{ featureType.title || featureType.name }}
-            <mat-icon svgIcon="edit_square" iconPositionEnd></mat-icon>
-          </button>
-        </ng-container>
+        @if (featureType$ | async; as featureType) {
+          <tm-admin-update-feature-type-button [featureType]="featureType"
+                                               (featureTypeUpdated)="updateFeatureTypeSetting($event)"></tm-admin-update-feature-type-button>
+        }
       </div>
     </div>
   </div>
   <div class="page-details-actions">
+    <tm-admin-save-button [saving$]="saving$"
+                          [disabled]="!saveEnabled()"
+                          (save)="save(searchIndex)"></tm-admin-save-button>
+    <button mat-flat-button
+            color="warn"
+            (click)="delete(searchIndex)"
+            i18n="@@admin-core.common.delete">Delete</button>
+    <button mat-flat-button
+            routerLink="/admin/search-indexes"
+            i18n="@@admin-core.common.close">Close</button>
   </div>
 }

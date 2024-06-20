@@ -265,27 +265,10 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     });
   }
 
-  public updateFeatureTypeSetting($event: MouseEvent, featureSource: FeatureSourceAndType | null) {
-    $event.preventDefault();
-    if (!featureSource || !featureSource.featureType) {
-      return;
+  public updateFeatureTypeSetting(updatedFeatureType: FeatureTypeModel) {
+    if (updatedFeatureType) {
+      this.adminSnackbarService.showMessage($localize `:@@admin-core.feature-type-settings-updated:Feature type settings updated`);
     }
-    this.featureSourceService.getDraftFeatureType$(featureSource.featureType.originalId, featureSource.featureSource.id)
-      .pipe(
-        take(1),
-        concatMap(featureType => {
-          if (!featureType) {
-            return of(null);
-          }
-          return FeatureTypeFormDialogComponent.open(this.dialog, { featureType }).afterClosed();
-        }),
-        takeUntil(this.destroyed),
-      )
-      .subscribe(updatedFeatureType => {
-        if (updatedFeatureType) {
-          this.adminSnackbarService.showMessage($localize `:@@admin-core.feature-type-settings-updated:Feature type settings updated`);
-        }
-      });
   }
 
   private initFeatureSource(serviceLayer: ExtendedGeoServiceAndLayerModel | null) {

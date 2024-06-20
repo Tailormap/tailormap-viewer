@@ -315,6 +315,12 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
 
   public deleteUpload$(uploadId: string): Observable<boolean> {
     return this.httpClient.delete(`${TailormapAdminApiV1Service.BASE_URL}/uploads/${uploadId}`, {
+      observe: 'response',
+    }).pipe(
+      map(response => response.status === 204),
+    );
+  }
+
   public getSearchIndexes$(): Observable<SearchIndexModel[]> {
     return this.httpClient.get<{ _embedded: { 'search-indexes': SearchIndexModel[] }}>(`${TailormapAdminApiV1Service.BASE_URL}/search-indexes?size=1000`)
       .pipe(map(response => response._embedded['search-indexes']));

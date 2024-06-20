@@ -1,5 +1,9 @@
 <h2 class="page-details-title" i18n="@@admin-core.search-index.create-search-index">Create search index</h2>
 <div class="form-wrapper">
+  <tm-admin-search-index-form (updateSearchIndex)="updateSearchIndex($event)"
+                              (validFormChanged)="validFormChanged($event)"></tm-admin-search-index-form>
 </div>
 <div class="page-details-actions">
+  <tm-admin-save-button [saving$]="saving$" [disabled]="!saveEnabled()" (save)="save()"></tm-admin-save-button>
+  <button mat-flat-button routerLink="/admin/search-indexes" i18n="@@admin-core.common.cancel">Cancel</button>
 </div>

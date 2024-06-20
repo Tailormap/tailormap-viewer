@@ -40,3 +40,13 @@ export const selectFilteredSearchIndexesList = createSelector(
       });
   },
 );
+
+export const selectDraftSearchIndexFields = createSelector(
+  selectDraftSearchIndex,
+  draftSearchIndex  => {
+    if (!draftSearchIndex) {
+      return [];
+    }
+    return draftSearchIndex.searchFieldsUsed;
+  },
+);

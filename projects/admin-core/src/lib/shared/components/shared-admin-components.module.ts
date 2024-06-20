@@ -36,6 +36,7 @@ import { SpinnerButtonComponent } from './spinner-button/spinner-button.componen
     AdminFieldsRendererComponent,
     SelectUploadModule,
     SpinnerButtonComponent,
+    UpdateFeatureTypeButtonComponent,
   ],
 })
 export class SharedAdminComponentsModule {
