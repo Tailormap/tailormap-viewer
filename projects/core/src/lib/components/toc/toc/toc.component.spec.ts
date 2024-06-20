@@ -1,13 +1,12 @@
 import { TocComponent } from './toc.component';
 import { render, screen, waitFor } from '@testing-library/angular';
-import { createMockStore, MockStore, provideMockStore } from '@ngrx/store/testing';
+import { createMockStore } from '@ngrx/store/testing';
 import { MenubarService } from '../../menubar';
 import { of } from 'rxjs';
 import { SharedModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
-import { TestBed } from '@angular/core/testing';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { selectLayers, selectLayerTreeNodes, selectSelectedNodeId } from '../../../map/state/map.selectors';
+import { selectLayers, selectLayerTreeNodes, selectSelectedNode, selectSelectedNodeId } from '../../../map/state/map.selectors';
 import { setLayerVisibility, setSelectedLayerId } from '../../../map/state/map.actions';
 import { TocNodeLayerComponent } from '../toc-node-layer/toc-node-layer.component';
 import { ToggleAllLayersButtonComponent } from '../toggle-all-layers-button/toggle-all-layers-button.component';
@@ -16,6 +15,7 @@ import { TocFilterInputComponent } from '../toc-filter-input/toc-filter-input.co
 import { toggleFilterEnabled } from '../state/toc.actions';
 import { selectFilterEnabled, selectFilterTerm, selectInfoTreeNodeId } from '../state/toc.selectors';
 import { Store } from '@ngrx/store';
+import { TocNodeDetailsComponent } from '../toc-node-details/toc-node-details.component';
 
 const buildMockStore = (selectedLayer = '') => {
   const layers = [
@@ -34,7 +34,7 @@ const buildMockStore = (selectedLayer = '') => {
       { selector: selectInfoTreeNodeId, value: null },
       { selector: selectLayers, value: layers },
       { selector: selectLayerTreeNodes, value: tree },
-      { selector: selectSelectedNodeId, value: selectedLayer },
+      { selector: selectSelectedNode, value: selectedLayer ? layers.find(layer => layer.id === selectedLayer) : null },
     ],
   });
 };
@@ -50,7 +50,7 @@ const setup = async (visible: boolean, selectedLayer = '') => {
   mockStore.dispatch = mockDispatch;
   await render(TocComponent, {
     imports: [ SharedModule, MatIconTestingModule ],
-    declarations: [ TocNodeLayerComponent, ToggleAllLayersButtonComponent, TocFilterInputComponent ],
+    declarations: [ TocNodeLayerComponent, ToggleAllLayersButtonComponent, TocFilterInputComponent, TocNodeDetailsComponent ],
     providers: [
       { provide: Store, useValue: mockStore },
       getMenubarService(visible, registerComponentFn),

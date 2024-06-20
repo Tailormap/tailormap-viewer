@@ -44,7 +44,7 @@ const setup = async (withLayer: boolean) => {
       }),
     ],
     componentProperties: {
-      nodeId: withLayer ? node.id : undefined,
+      node: withLayer ? node : undefined,
       closeDetails: { emit: closeMock } as any,
     },
   });

@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, ViewChild, ElementRef, inject } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { BrowserHelper } from '@tailormap-viewer/shared';
 import { BehaviorSubject, map } from 'rxjs';
 import { AppLayerModel, LayerTreeNodeModel } from '@tailormap-viewer/api';
