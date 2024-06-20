@@ -1,4 +1,4 @@
-<mat-button-toggle-group [class.hide-on-small-screens]="!!small_screens_icon">
+<mat-button-toggle-group [class.hide-on-small-screens]="!!small_screens_icon" [hideSingleSelectionIndicator]="true">
   <mat-button-toggle (click)="cycleNextOption()">
     {{getLabel()}}
   </mat-button-toggle>
