@@ -73,9 +73,6 @@
               "projects/core/assets/tailormap-styles.css",
               "./node_modules/cesium/Build/Cesium/Widgets/widgets.css"
             ],
-            "scripts": [
-              "./node_modules/cesium/Build/CesiumUnminified/Cesium.js"
-            ],
             "allowedCommonJsDependencies": [
               "xml-utils",
               "pbf",
