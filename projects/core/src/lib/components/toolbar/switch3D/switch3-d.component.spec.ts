@@ -2,33 +2,43 @@ import { render, screen } from '@testing-library/angular';
 import { Switch3DComponent } from './switch3-d.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { MapService } from '@tailormap-viewer/map';
-import { of } from 'rxjs';
 import { provideMockStore } from '@ngrx/store/testing';
-import { isActiveToolbarTool } from '../state/toolbar.selectors';
-import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
+import { selectEnable3D } from '../../../state/core.selectors';
 
-describe('ClickedCoordinatesComponent', () => {
+describe('Switch3DComponent', () => {
 
   test('should render', async () => {
-    const createTool = jest.fn(() => of('1'));
     await render(Switch3DComponent, {
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       imports: [ SharedModule, MatIconTestingModule ],
       providers: [
         { provide: MatSnackBar, useValue: { dismiss: jest.fn() } },
-        { provide: MapService, useValue: { createTool$: createTool } },
         provideMockStore({
           selectors: [
-            { selector: isActiveToolbarTool(ToolbarComponentEnum.SELECT_COORDINATES), value: true },
+            { selector: selectEnable3D, value: true },
           ],
         }),
       ],
     });
-    expect(createTool).toHaveBeenCalled();
-    expect(screen.getByLabelText('Coordinate picker'));
+    expect(screen.getByLabelText('Switch to 3D')).toBeInTheDocument();
+  });
+
+  test('should not render', async () => {
+    await render(Switch3DComponent, {
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      imports: [ SharedModule, MatIconTestingModule ],
+      providers: [
+        { provide: MatSnackBar, useValue: { dismiss: jest.fn() } },
+        provideMockStore({
+          selectors: [
+            { selector: selectEnable3D, value: false },
+          ],
+        }),
+      ],
+    });
+    expect(screen.queryByLabelText('Switch to 3D')).not.toBeInTheDocument();
   });
 
 });

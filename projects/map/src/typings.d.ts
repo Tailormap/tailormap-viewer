@@ -19,3 +19,6 @@ declare module 'jsts/org/locationtech/jts/geom' {
     public difference(geom: any): any;
   }
 }
+
+// eslint-disable-next-line @typescript-eslint/naming-convention
+declare const Cesium;

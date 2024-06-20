@@ -1,8 +1,7 @@
 import { LayerTypesHelper } from './layer-types.helper';
 import { LayerModel } from '../models/layer.model';
-import { Cesium3DTileset} from 'cesium';
+import { Cesium3DTileset } from 'cesium';
 import { Tileset3DLayerModel } from '../models/tileset3D-layer.model';
-import { HttpXsrfTokenExtractor } from '@angular/common/http';
 
 export class CesiumLayerHelper {
 
