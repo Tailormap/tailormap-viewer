@@ -14,7 +14,7 @@
   flex: 1;
 }
 
-.form-field-wrapper {
+.field-wrapper {
   display: flex;
   margin-top: 16px;
   flex: 1;
@@ -22,7 +22,7 @@
   min-height: 300px;
 }
 
-.form-field-wrapper > * + * {
+.field-wrapper > * + * {
   margin-left: 16px;
 }
 
@@ -40,12 +40,6 @@
   margin-bottom: 32px;
 }
 
-tm-admin-form-attribute-list,
-tm-admin-form-field-list {
+tm-admin-search-index-attribute-list {
   width: 250px;
-}
-
-tm-admin-edit-field {
-  flex: 1;
-  overflow: auto;
 }

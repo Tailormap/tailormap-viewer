@@ -1,15 +1,15 @@
 import { Component, ChangeDetectionStrategy, OnInit, DestroyRef, signal } from '@angular/core';
-import { BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, pipe, switchMap, take } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, switchMap, take } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { setDraftSearchIndexId } from '../state/search-index.actions';
+import { setDraftSearchIndexId, updateDraftSearchIndex } from '../state/search-index.actions';
 import { selectDraftSearchIndex } from '../state/search-index.selectors';
-import { FeatureTypeModel, SearchIndexModel } from '@tailormap-admin/admin-api';
+import { AttributeDescriptorModel, FeatureTypeModel, SearchIndexModel } from '@tailormap-admin/admin-api';
 import { FeatureSourceService } from '../../catalog/services/feature-source.service';
-import { ExtendedFeatureTypeModel } from '../../catalog/models/extended-feature-type.model';
 import { SearchIndexService } from '../services/search-index.service';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
+import { ExtendedFeatureTypeModel } from '../../catalog/models/extended-feature-type.model';
 
 @Component({
   selector: 'tm-admin-search-index-edit',
@@ -21,10 +21,14 @@ export class SearchIndexEditComponent implements OnInit {
 
   public searchIndex$: Observable<SearchIndexModel | undefined> = of(undefined);
 
-  private featureTypeSubject$ = new BehaviorSubject<ExtendedFeatureTypeModel | null>(null);
+  public loadingFeatureType = signal(false);
+
+  private featureTypeSubject$ = new BehaviorSubject<FeatureTypeModel | null>(null);
   public featureType$ = this.featureTypeSubject$.asObservable();
 
-  private updatedSearch: Pick<SearchIndexModel, 'name' | 'featureTypeId' | 'comment'> | undefined;
+  private extendedFeatureTypeSubject$ = new BehaviorSubject<ExtendedFeatureTypeModel | null>(null);
+  public extendedFeatureType$ = this.extendedFeatureTypeSubject$.asObservable();
+
   public saveEnabled = signal(false);
 
   private savingSubject = new BehaviorSubject(false);
@@ -63,36 +67,19 @@ export class SearchIndexEditComponent implements OnInit {
     this.saveEnabled.set($event);
   }
 
-  public updateSearchIndex($event: { searchIndex: Pick<SearchIndexModel, 'name' | 'featureTypeId' | 'comment'> }) {
-    this.updatedSearch = $event.searchIndex;
+  public updateSearchIndex(id: number, $event: { searchIndex: Pick<SearchIndexModel, 'name' | 'featureTypeId' | 'comment'> }) {
+    this.store$.dispatch(updateDraftSearchIndex({ id, searchIndex: $event.searchIndex }));
   }
 
   public updateFeatureTypeSetting(updatedFeatureType: FeatureTypeModel) {
     this.setFeatureType(+updatedFeatureType.id);
   }
 
-  private setFeatureType(featureTypeId: number | undefined) {
-    if (typeof featureTypeId === 'undefined') {
-      this.featureTypeSubject$.next(null);
-      return;
-    }
-    this.featureSourceService.getFeatureTypes$()
-      .pipe(take(1))
-      .subscribe(featureTypes => {
-        this.featureTypeSubject$.next(featureTypes.find(f => +f.originalId === featureTypeId) || null);
-      });
-  }
-
-  public save(searchIndex: SearchIndexModel) {
-    if (!this.updatedSearch) {
-      return;
-    }
+  public save() {
     this.savingSubject.next(true);
-    this.searchIndexService.updateSearchIndex$(searchIndex.id, this.updatedSearch)
+    this.searchIndexService.saveDraftSearchIndex$()
       .pipe(take(1))
-      .subscribe(() => {
-        this.savingSubject.next(false);
-      });
+      .subscribe(() => this.savingSubject.next(false));
   }
 
   public delete(searchIndex: SearchIndexModel) {
@@ -110,6 +97,47 @@ export class SearchIndexEditComponent implements OnInit {
         if (success) {
           this.router.navigateByUrl('/admin/search-indexes');
         }
+      });
+  }
+
+  public toggleAttribute(
+    attribute: AttributeDescriptorModel,
+    searchIndex: SearchIndexModel,
+    field: keyof Pick<SearchIndexModel, 'searchFieldsUsed' | 'searchDisplayFieldsUsed'>,
+  ) {
+    const currentSelection = searchIndex[field];
+    const idx = currentSelection.findIndex(a => a === attribute.name);
+    const updatedSelection = idx === -1
+      ? [ ...currentSelection, attribute.name ]
+      : [ ...currentSelection.slice(0, idx), ...currentSelection.slice(idx + 1) ];
+    this.store$.dispatch(updateDraftSearchIndex({ id: searchIndex.id, searchIndex: { [field]: updatedSelection } }));
+    this.saveEnabled.set(true);
+  }
+
+  private setFeatureType(featureTypeId: number | undefined) {
+    if (typeof featureTypeId === 'undefined') {
+      this.featureTypeSubject$.next(null);
+      return;
+    }
+    this.loadFeatureType(featureTypeId);
+    this.loadExtendedFeatureType(featureTypeId);
+  }
+
+  private loadFeatureType(featureTypeId: number) {
+    this.loadingFeatureType.set(true);
+    this.featureSourceService.loadFeatureTypeById$(`${featureTypeId}`)
+      .pipe(take(1))
+      .subscribe(featureType => {
+        this.featureTypeSubject$.next(featureType);
+        this.loadingFeatureType.set(false);
+      });
+  }
+
+  private loadExtendedFeatureType(featureTypeId: number) {
+    this.featureSourceService.getFeatureTypes$()
+      .pipe(take(1))
+      .subscribe(featureTypes => {
+        this.extendedFeatureTypeSubject$.next(featureTypes.find(f => +f.originalId === featureTypeId) || null);
       });
   }
 

@@ -35,6 +35,14 @@ export const setDraftSearchIndexId = createAction(
   props<{ id: number }>(),
 );
 
+export const updateDraftSearchIndex = createAction(
+  `${searchIndexActionsPrefix} Update Draft Search Index`,
+  props<{
+    id: number;
+    searchIndex: Partial<Pick<SearchIndexModel, 'name' | 'comment' | 'featureTypeId' | 'searchFieldsUsed' | 'searchDisplayFieldsUsed'>>;
+  }>(),
+);
+
 export const addSearchIndex = createAction(
   `${searchIndexActionsPrefix} Add Search Index`,
   props<{ searchIndex: SearchIndexModel }>(),

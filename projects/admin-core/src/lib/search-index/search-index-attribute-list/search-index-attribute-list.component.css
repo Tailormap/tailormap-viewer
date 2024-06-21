@@ -14,6 +14,6 @@ mat-selection-list {
   overflow: auto;
 }
 
-.drag-handle {
-  float: right;
+mat-spinner {
+  margin-top: 16px;
 }

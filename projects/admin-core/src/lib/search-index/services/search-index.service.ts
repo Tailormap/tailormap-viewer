@@ -6,7 +6,8 @@ import { AdminSnackbarService } from '../../shared/services/admin-snackbar.servi
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DebounceHelper } from '@tailormap-viewer/shared';
 import { addSearchIndex, deleteSearchIndex, updateSearchIndex } from '../state/search-index.actions';
-import { catchError, map, of } from 'rxjs';
+import { catchError, concatMap, map, of } from 'rxjs';
+import { selectDraftSearchIndex } from '../state/search-index.selectors';
 
 @Injectable({
   providedIn: 'root',
@@ -35,6 +36,19 @@ export class SearchIndexService {
           this.updateSearchIndexState(event.details.id, 'remove');
         }
       });
+  }
+
+  public saveDraftSearchIndex$() {
+    return this.store$.select(selectDraftSearchIndex)
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        concatMap(searchIndex => {
+          if (searchIndex) {
+            return this.updateSearchIndex$(searchIndex.id, searchIndex);
+          }
+          return of(null);
+        }),
+      );
   }
 
   public createSearchIndex$(searchIndex: Omit<SearchIndexModel, 'id'>) {

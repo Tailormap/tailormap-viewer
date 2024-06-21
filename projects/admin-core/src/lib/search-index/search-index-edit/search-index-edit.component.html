@@ -2,24 +2,40 @@
   <h2 class="page-details-title" i18n="@@admin-core.search-index.edit-search-index">Edit search index {{searchIndex.name}}</h2>
   <div class="flex-wrapper">
     <div class="form-wrapper">
-      <tm-admin-search-index-form [searchIndex]="searchIndex" (updateSearchIndex)="updateSearchIndex($event)" (validFormChanged)="validFormChanged($event)"></tm-admin-search-index-form>
-      @if (featureType$ | async; as featureType) {
-        <tm-admin-search-index-field-list [featureTypeName]="featureType.name"></tm-admin-search-index-field-list>
-      }
+      <tm-admin-search-index-form [searchIndex]="searchIndex"
+                                  (updateSearchIndex)="updateSearchIndex(searchIndex.id, $event)"
+                                  (validFormChanged)="validFormChanged($event)"></tm-admin-search-index-form>
     </div>
     <div class="info-wrapper">
       <div class="edit-buttons">
-        @if (featureType$ | async; as featureType) {
-          <tm-admin-update-feature-type-button [featureType]="featureType"
+        @if (extendedFeatureType$ | async; as extendedFeatureType) {
+          <tm-admin-update-feature-type-button [featureType]="extendedFeatureType"
                                                (featureTypeUpdated)="updateFeatureTypeSetting($event)"></tm-admin-update-feature-type-button>
         }
       </div>
     </div>
   </div>
+
+  <div class="field-wrapper">
+    <tm-admin-search-index-attribute-list [featureType]="featureType$ | async"
+                                          title="Selected attributes used to index"
+                                          i18n-title="@@admin-core.search-index.selected-attributes-to-index"
+                                          [selected]="searchIndex.searchFieldsUsed"
+                                          [loadingFeatureType]="loadingFeatureType()"
+                                          (toggleAttribute)="toggleAttribute($event, searchIndex, 'searchFieldsUsed')"></tm-admin-search-index-attribute-list>
+
+    <tm-admin-search-index-attribute-list [featureType]="featureType$ | async"
+                                          title="Selected attributes used to display"
+                                          i18n-title="@@admin-core.search-index.selected-attributes-to-display"
+                                          [selected]="searchIndex.searchDisplayFieldsUsed"
+                                          [loadingFeatureType]="loadingFeatureType()"
+                                          (toggleAttribute)="toggleAttribute($event, searchIndex, 'searchDisplayFieldsUsed')"></tm-admin-search-index-attribute-list>
+  </div>
+
   <div class="page-details-actions">
     <tm-admin-save-button [saving$]="saving$"
                           [disabled]="!saveEnabled()"
-                          (save)="save(searchIndex)"></tm-admin-save-button>
+                          (save)="save()"></tm-admin-save-button>
     <button mat-flat-button
             color="warn"
             (click)="delete(searchIndex)"

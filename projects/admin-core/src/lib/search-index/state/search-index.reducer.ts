@@ -71,6 +71,22 @@ const onSetDraftSearchIndexId = (
   payload: ReturnType<typeof SearchIndexActions.setDraftSearchIndexId>,
 ): SearchIndexState => setDraftSearchIndexId(state, payload.id);
 
+const onUpdateDraftSearchIndex = (
+  state: SearchIndexState,
+  payload: ReturnType<typeof SearchIndexActions.updateDraftSearchIndex>,
+): SearchIndexState => {
+  if (state.draftSearchIndexId !== payload.id) {
+    return state;
+  }
+  return {
+    ...state,
+    draftSearchIndex: state.draftSearchIndex ? {
+      ...state.draftSearchIndex,
+      ...payload.searchIndex,
+    } : undefined,
+  };
+};
+
 const onAddSearchIndex = (
   state: SearchIndexState,
   payload: ReturnType<typeof SearchIndexActions.addSearchIndex>,
@@ -132,6 +148,7 @@ const searchIndexReducerImpl = createReducer<SearchIndexState>(
   on(SearchIndexActions.setSearchIndexListFilter, onSetSearchIndexListFilter),
   on(SearchIndexActions.clearSelectedSearchIndex, onClearSelectedSearchIndex),
   on(SearchIndexActions.setDraftSearchIndexId, onSetDraftSearchIndexId),
+  on(SearchIndexActions.updateDraftSearchIndex, onUpdateDraftSearchIndex),
   on(SearchIndexActions.addSearchIndex, onAddSearchIndex),
   on(SearchIndexActions.updateSearchIndex, onUpdateSearchIndex),
   on(SearchIndexActions.deleteSearchIndex, onDeleteSearchIndex),

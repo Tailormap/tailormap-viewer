@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import {
-  BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, takeUntil, combineLatest, concatMap,
+  BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, takeUntil, combineLatest,
 } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -12,8 +12,6 @@ import { FormService } from '../services/form.service';
 import { clearSelectedForm, updateDraftForm, updateDraftFormValid } from '../state/form.actions';
 import { FormUpdateModel } from '../services/form-update.model';
 import { FeatureSourceService } from '../../catalog/services/feature-source.service';
-import { FeatureTypeFormDialogComponent } from '../../catalog/feature-type-form-dialog/feature-type-form-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
 import { FeatureTypeUpdateService } from '../../catalog/services/feature-type-update.service';
 
 @Component({

@@ -15,7 +15,6 @@ import { GeoServiceFormDialogComponent } from '../../catalog/geo-service-form-di
 import { MatDialog } from '@angular/material/dialog';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 import { GeoServiceLayerFormDialogComponent } from '../../catalog/geo-service-layer-form-dialog/geo-service-layer-form-dialog.component';
-import { FeatureTypeFormDialogComponent } from '../../catalog/feature-type-form-dialog/feature-type-form-dialog.component';
 import { ExtendedFeatureTypeModel } from '../../catalog/models/extended-feature-type.model';
 import {
   selectFeatureSourceAndFeatureTypesById,
