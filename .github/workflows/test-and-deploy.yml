@@ -165,7 +165,7 @@ jobs:
       # a service when merging Compose files
       - name: Install latest Docker Compose
         env:
-          COMPOSE_VERSION: "2.26.1"
+          COMPOSE_VERSION: "2.27.2"
         run: |
           DOCKER_CONFIG=/usr/local/lib/docker
           sudo mkdir -p $DOCKER_CONFIG/cli-plugins
