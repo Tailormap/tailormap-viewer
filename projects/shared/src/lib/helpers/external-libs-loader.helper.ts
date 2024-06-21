@@ -2,9 +2,15 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 
 export class ExternalLibsLoaderHelper {
 
+  private static baseHref: string = '';
   private static loadedScripts = new Map<string, BehaviorSubject<boolean>>();
 
+  public static setBaseHref(baseHref: string) {
+    ExternalLibsLoaderHelper.baseHref = baseHref;
+  }
+
   public static loadScript$(url: string): Observable<boolean> {
+    const scriptUrl = ExternalLibsLoaderHelper.baseHref + url;
     const current = ExternalLibsLoaderHelper.loadedScripts.get(url);
     if (current) {
       return current.asObservable();
@@ -14,7 +20,7 @@ export class ExternalLibsLoaderHelper {
       return of(false);
     }
     const loaderSubject = new BehaviorSubject(false);
-    ExternalLibsLoaderHelper.loadedScripts.set(url, ExternalLibsLoaderHelper.addTag(ext, url, loaderSubject));
+    ExternalLibsLoaderHelper.loadedScripts.set(scriptUrl, ExternalLibsLoaderHelper.addTag(ext, scriptUrl, loaderSubject));
     return loaderSubject.asObservable();
   }
 

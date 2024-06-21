@@ -18,7 +18,7 @@ export class CesiumLayerManager {
   }
 
   public init() {
-    ExternalLibsLoaderHelper.loadScript$('/cesium/Cesium.js')
+    ExternalLibsLoaderHelper.loadScript$('cesium/Cesium.js')
       .pipe(filter(loaded => loaded), take(1))
       .subscribe(() => {
         this.setupOlCesium();
