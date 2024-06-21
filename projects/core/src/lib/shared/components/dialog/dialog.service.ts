@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CssHelper } from '../../../../../../shared/src/lib/helpers';
+import { CssHelper } from '@tailormap-viewer/shared';
 import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layout.service';
 
 @Injectable({
