@@ -9,7 +9,6 @@ import { AuthorizationEditComponent } from './authorization-edit/authorization-e
 import { AdminFieldsRendererComponent } from './admin-fields-renderer/admin-fields-renderer.component';
 import { UpdateFeatureTypeButtonComponent } from './update-feature-type-button/update-feature-type-button.component';
 import { SelectUploadModule } from './select-upload/select-upload.module';
-import { UpdateFeatureTypeButtonComponent } from './update-feature-type-button/update-feature-type-button.component';
 
 @NgModule({
   declarations: [
