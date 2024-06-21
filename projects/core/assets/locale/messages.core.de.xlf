@@ -993,6 +993,10 @@
         <source>Embed URL</source>
         <target state="new">Embed URL</target>
       </trans-unit>
+      <trans-unit id="core.toolbar.switch-3d" datatype="html">
+        <source>Switch to 3D</source>
+        <target state="new">Switch to 3D</target>
+      </trans-unit>
       <trans-unit id="core.toolbar.type-at-least" datatype="html">
         <source>Type at least <x id="INTERPOLATION" equiv-text="{{ minLength }}"/> characters to start searching</source>
         <target>Geben Sie mindestens <x id="INTERPOLATION" equiv-text="{{ minLength }}"/> Zeichen ein, um mit der Suche zu beginnen</target>
