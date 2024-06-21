@@ -80,8 +80,10 @@ export class ApplicationEditComponent implements OnInit, OnDestroy {
     this.savingSubject.next(true);
     this.applicationService.saveDraftApplication$()
       .pipe(take(1))
-      .subscribe(() => {
-        this.adminSnackbarService.showMessage($localize `:@@admin-core.application.application-updated:Application updated`);
+      .subscribe(result => {
+        if (result) {
+          this.adminSnackbarService.showMessage($localize `:@@admin-core.application.application-updated:Application updated`);
+          }
         this.savingSubject.next(false);
       });
   }
