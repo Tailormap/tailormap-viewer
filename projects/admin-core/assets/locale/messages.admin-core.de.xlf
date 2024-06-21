@@ -158,6 +158,10 @@
         <source>Editable</source>
         <target state="translated">Bearbeitbar</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.enable-3D" datatype="html">
+        <source>Enable 3D viewing</source>
+        <target state="new">Enable 3D viewing</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.error-creating-application" datatype="html">
         <source>Error while creating application.</source>
         <target>Fehler beim Erstellen der Anwendung.</target>
