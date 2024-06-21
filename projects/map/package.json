@@ -1,10 +1,10 @@
 {
   "name": "@tailormap-viewer/map",
-  "version": "11.3.3",
+  "version": "11.3.4",
   "peerDependencies": {
     "@angular/common": "^17.3.9",
     "@angular/core": "^17.3.9",
-    "ol": "^9.2.2",
+    "ol": "^9.2.4",
     "proj4": "^2.11.0",
     "html2canvas": "^1.4.1",
     "jsts": "^2.11.3",
