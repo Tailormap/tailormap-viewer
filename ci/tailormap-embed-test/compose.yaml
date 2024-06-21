@@ -1,4 +1,3 @@
-
 networks:
   reverse-proxy:
     external: true
@@ -17,7 +16,7 @@ services:
       - reverse-proxy
     labels:
       - "traefik.http.services.${COMPOSE_PROJECT_NAME}.loadbalancer.server.port=80"
-      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}.rule=Host(${HOST:-`embed.tailormap.nl`, `embed.tailormap.com`})"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}.rule=Host(${HOST:-`embed.tailormap.nl`}) || Host(`embed.tailormap.com`)"
       - "traefik.http.routers.${COMPOSE_PROJECT_NAME}.tls=true"
       - "traefik.http.routers.${COMPOSE_PROJECT_NAME}.tls.certresolver=letsencrypt"
       - "traefik.docker.network=${PROXY_NETWORK:-traefik}"

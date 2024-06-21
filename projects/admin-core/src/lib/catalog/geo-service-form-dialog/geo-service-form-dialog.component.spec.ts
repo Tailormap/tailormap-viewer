@@ -17,7 +17,7 @@ import { LayerSettingsFormComponent } from '../layer-settings-form/layer-setting
 import { provideMockStore } from '@ngrx/store/testing';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
-import { SpinnerButtonComponent } from '../../shared/components/spinner-button/spinner-button.component';
+import { SpinnerButtonComponent } from '@tailormap-viewer/shared';
 import { SharedAdminComponentsModule } from '../../shared/components/shared-admin-components.module';
 
 const setup = async (editMode = false) => {

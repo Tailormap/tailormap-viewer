@@ -8,7 +8,7 @@ import { CatalogNodeFormComponent } from '../catalog-node-form/catalog-node-form
 import userEvent from '@testing-library/user-event';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
-import { SpinnerButtonComponent } from '../../shared/components/spinner-button/spinner-button.component';
+import { SpinnerButtonComponent } from '@tailormap-viewer/shared';
 
 const setup = async (editMode = false) => {
   const dialogRefMock = { close: jest.fn() };

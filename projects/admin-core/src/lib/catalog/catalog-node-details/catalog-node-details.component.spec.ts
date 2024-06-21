@@ -14,7 +14,7 @@ import userEvent from '@testing-library/user-event';
 import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
 import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
 import { CatalogCreateButtonsComponent } from '../catalog-create-buttons/catalog-create-buttons.component';
-import { SpinnerButtonComponent } from '../../shared/components/spinner-button/spinner-button.component';
+import { SpinnerButtonComponent } from '@tailormap-viewer/shared';
 
 const setup = async () => {
   const updateCatalogNodeMock = jest.fn(() => of(true));
