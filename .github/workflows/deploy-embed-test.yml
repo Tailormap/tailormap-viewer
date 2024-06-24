@@ -7,6 +7,7 @@
         - HTM-1140
       paths:
         - 'ci/tailormap-embed-test/**'
+        - '.github/workflows/deploy-embed-test.yml'
 
   jobs:
     deploy:
