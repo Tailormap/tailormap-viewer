@@ -36,4 +36,4 @@
 
         - name: 'Update deployment using Docker Compose'
           run: |
-            docker compose up -d --pull=always --quiet-pull --remove-orphans
+            docker compose up -d --pull=always --quiet-pull --remove-orphans --build
