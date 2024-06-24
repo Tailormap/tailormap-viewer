@@ -9,6 +9,10 @@ on:
   schedule:
     - cron: '42 6 * * FRI'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ ( github.ref == 'refs/heads/main' || github.ref == 'refs/heads/release' ) && format('ci-main-{0}', github.sha) || format('ci-main-{0}', github.ref) }}
+  cancel-in-progress: true
+
 jobs:
   analyze:
     name: 'Analyze'

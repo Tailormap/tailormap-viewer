@@ -91,7 +91,7 @@ services:
       - solr
     image: solr:9.6.1-slim
     profiles:
-      - solr-monitoring
+      - solr
     environment:
       TZ: Europe/Amsterdam
       PORT: 9854
@@ -99,5 +99,4 @@ services:
       SOLR_URL: http://solr:8983/solr/
     command:
       # this script should be in the path for the current user
-      # /opt/solr-9.5.0/prometheus-exporter/bin/solr-exporter
       - solr-exporter

@@ -3,6 +3,10 @@ name: 'Test and deploy'
 env: # Keep this in sync with Dockerfile version
   NODE_VERSION: "20.14.0"
 
+concurrency:
+  group: ${{ github.workflow }}-${{ ( github.ref == 'refs/heads/main' || github.ref == 'refs/heads/release' ) && format('ci-main-{0}', github.sha) || format('ci-main-{0}', github.ref) }}
+  cancel-in-progress: true
+
 on:
   push:
     branches: [ main ]
@@ -93,7 +97,7 @@ jobs:
       VERSION: snapshot
       COMPOSE_PROJECT_NAME: tailormap-snapshot
       COMPOSE_FILE: docker-compose.yml:docker-compose.traefik.yml:ci/docker-compose.snapshot.yml
-      COMPOSE_PROFILE: solr,solr-monitoring
+      COMPOSE_PROFILE: solr
       BASE_HREF: /
       HOST: ${{ secrets.DEPLOY_HOST_SNAPSHOT }}
       API_SENTRY_DSN: ${{ vars.API_SENTRY_DSN }}
@@ -110,8 +114,7 @@ jobs:
     needs: [ lint, test ]
     steps:
       - uses: actions/checkout@v4
-        with:
-          # If tags aren't fetched the bin/post-build-localized.js script will leave fields in generated/version.json empty
+        with: # If tags aren't fetched the bin/post-build-localized.js script will leave fields in generated/version.json empty
           # https://github.com/actions/checkout/issues/701
           fetch-depth: 0
       - name: 'GitHub Slug Action'
