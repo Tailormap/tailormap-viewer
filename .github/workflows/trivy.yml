@@ -1,10 +1,13 @@
 name: Trivy Security Scan
-on:
-  # use pull request so this workflow dos not fail when triggered by dependabot PR's
+on: # use pull request so this workflow dos not fail when triggered by dependabot PR's
   pull_request:
   schedule:
     - cron: '17 23 * * MON'
   workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ ( github.ref == 'refs/heads/main' || github.ref == 'refs/heads/release' ) && format('ci-main-{0}', github.sha) || format('ci-main-{0}', github.ref) }}
+  cancel-in-progress: true
 
 jobs:
   build:
