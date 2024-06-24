@@ -1,6 +1,6 @@
 {
   "name": "@tailormap-viewer/core",
-  "version": "11.3.3",
+  "version": "11.3.4",
   "peerDependencies": {
     "@angular/animations": "^17.3.9",
     "@angular/cdk": "^17.3.9",
@@ -18,9 +18,9 @@
     "@sentry/angular-ivy": "^7.114.0",
     "@sentry/browser": "^7.116.0",
     "@stardazed/zlib": "^1.0.1",
-    "@tailormap-viewer/shared": "^11.3.3",
-    "@tailormap-viewer/map": "^11.3.3",
-    "@tailormap-viewer/api": "^11.3.3",
+    "@tailormap-viewer/shared": "^11.3.4",
+    "@tailormap-viewer/map": "^11.3.4",
+    "@tailormap-viewer/api": "^11.3.4",
     "jspdf": "^2.5.1",
     "luxon": "^3.4.4",
     "nanoid": "^5.0.7",
