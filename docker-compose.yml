@@ -77,12 +77,20 @@ services:
       SOLR_HEAP: 1g
     volumes:
       - solr-data:/var/solr
+    depends_on:
+      - db
     labels:
       traefik.enable: false
     restart: unless-stopped
     command:
       - solr-precreate
       - tailormap
+    healthcheck:
+      test: 'curl -s http://localhost:8983/solr/tailormap/admin/ping | grep -q "OK" || exit 1'
+      start_period: 15s
+      interval: 15s
+      timeout: 5s
+      retries: 3
 
 
   solr-metrics:
