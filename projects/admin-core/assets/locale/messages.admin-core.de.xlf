@@ -16,7 +16,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.application-copied" datatype="html">
         <source>Application <x id="PH" equiv-text="copiedApplication.title || copiedApplication.name"/> copied</source>
-        <target state="new">Application <x id="PH" equiv-text="copiedApplication.title || copiedApplication.name"/> copied</target>
+        <target>Anwendung <x id="PH" equiv-text="copiedApplication.title || copiedApplication.name"/> kopiert</target>
       </trans-unit>
       <trans-unit id="admin-core.application.application-created" datatype="html">
         <source>Application <x id="PH" equiv-text="createdApplication.title || createdApplication.name"/> created</source>
@@ -40,7 +40,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.autoRefreshInSeconds" datatype="html">
         <source>Auto refresh the layer (seconds)</source>
-        <target state="new">Auto refresh the layer (seconds)</target>
+        <target>Automatisches Aktualisieren der Ebene (Sekunden)</target>
       </trans-unit>
       <trans-unit id="admin-core.application.base-maps" datatype="html">
         <source>Basemaps</source>
@@ -56,7 +56,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.component-coordinate-link-window" datatype="html">
         <source>Coordinate Link Window</source>
-        <target state="new">Coordinate Link Window</target>
+        <target>Koordinaten-Link-Fenster</target>
       </trans-unit>
       <trans-unit id="admin-core.application.component-coordinate-picker-tool" datatype="html">
         <source>Coordinate picker tool</source>
@@ -72,7 +72,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.component-feature-info" datatype="html">
         <source>Feature info</source>
-        <target state="new">Feature info</target>
+        <target>Feature-Informationen</target>
       </trans-unit>
       <trans-unit id="admin-core.application.component-filter" datatype="html">
         <source>Filter</source>
@@ -92,7 +92,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.component-share-viewer" datatype="html">
         <source>Share viewer</source>
-        <target state="new">Share viewer</target>
+        <target>Viewer teilen</target>
       </trans-unit>
       <trans-unit id="admin-core.application.component-streetview-tool" datatype="html">
         <source>Streetview tool</source>
@@ -108,7 +108,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.copy-application" datatype="html">
         <source>Copy application <x id="INTERPOLATION" equiv-text="{{data.application.title}}"/></source>
-        <target state="new">Copy application <x id="INTERPOLATION" equiv-text="{{data.application.title}}"/></target>
+        <target>Anwendung kopieren <x id="INTERPOLATION" equiv-text="{{data.application.title}}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.application.create-application" datatype="html">
         <source>Create application</source>
@@ -224,7 +224,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.make-copy" datatype="html">
         <source>Copy</source>
-        <target state="new">Copy</target>
+        <target>Kopieren</target>
       </trans-unit>
       <trans-unit id="admin-core.application.max-extent" datatype="html">
         <source>Max extent</source>
@@ -236,15 +236,15 @@
       </trans-unit>
       <trans-unit id="admin-core.application.no-form" datatype="html">
         <source>No form</source>
-        <target state="new">No form</target>
+        <target>Kein Formular</target>
       </trans-unit>
       <trans-unit id="admin-core.application.no-forms-for-feature-type" datatype="html">
         <source>There are no forms for this feature type</source>
-        <target state="new">There are no forms for this feature type</target>
+        <target>Es gibt keine Formulare für diesen Feature-Typ</target>
       </trans-unit>
       <trans-unit id="admin-core.application.non-unique-name-error" datatype="html">
         <source>Name should be unique.</source>
-        <target state="translated">Der Name sollte eindeutig sein.</target>
+        <target>Der Name sollte eindeutig sein.</target>
       </trans-unit>
       <trans-unit id="admin-core.application.opacity" datatype="html">
         <source>Opacity</source>
@@ -272,7 +272,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.select-form" datatype="html">
         <source>Select (optional) form</source>
-        <target state="new">Select (optional) form</target>
+        <target>Auswählen (optional) Formular</target>
       </trans-unit>
       <trans-unit id="admin-core.application.service-updated" datatype="html">
         <source>Service <x id="PH" equiv-text="updatedService.title"/> updated</source>
@@ -544,7 +544,7 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.feature-source-removed" datatype="html">
         <source>Source <x id="PH" equiv-text="featureSource.title"/> removed</source>
-        <target>Quelle <x id="PH" equiv-text="featureSource.title"/> entfernt </target>
+        <target>Quelle <x id="PH" equiv-text="featureSource.title"/> entfernt</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.feature-source-updated" datatype="html">
         <source>Feature source updated</source>
@@ -656,7 +656,7 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.override-legend" datatype="html">
         <source>Override service default legend</source>
-        <target state="new">Override service default legend</target>
+        <target>Standard-Legende des Dienstes überschreiben</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.port" datatype="html">
         <source>Port</source>
@@ -836,7 +836,7 @@
       </trans-unit>
       <trans-unit id="admin-core.common.copy" datatype="html">
         <source>Copy</source>
-        <target state="new">Copy</target>
+        <target>Kopieren</target>
       </trans-unit>
       <trans-unit id="admin-core.common.create" datatype="html">
         <source>Create</source>
@@ -872,7 +872,7 @@
       </trans-unit>
       <trans-unit id="admin-core.common.forms-title" datatype="html">
         <source>Forms</source>
-        <target state="new">Forms</target>
+        <target>Formulare</target>
       </trans-unit>
       <trans-unit id="admin-core.common.geo-service" datatype="html">
         <source>Geo service</source>
@@ -892,7 +892,7 @@
       </trans-unit>
       <trans-unit id="admin-core.common.label" datatype="html">
         <source>Label</source>
-        <target state="new">Label</target>
+        <target>Bezeichnung</target>
       </trans-unit>
       <trans-unit id="admin-core.common.login" datatype="html">
         <source>Login</source>
@@ -948,7 +948,7 @@
       </trans-unit>
       <trans-unit id="admin-core.common.select-file" datatype="html">
         <source>Select file</source>
-        <target state="new">Datei aussuchen</target>
+        <target>Datei aussuchen</target>
       </trans-unit>
       <trans-unit id="admin-core.common.settings-for" datatype="html">
         <source>Settings for <x id="INTERPOLATION" equiv-text="{{ layerTitle }}"/></source>
@@ -960,7 +960,7 @@
       </trans-unit>
       <trans-unit id="admin-core.common.size" datatype="html">
         <source>Size</source>
-        <target state="new">Size</target>
+        <target>Größe</target>
       </trans-unit>
       <trans-unit id="admin-core.common.sort" datatype="html">
         <source>Sort</source>
@@ -996,27 +996,27 @@
       </trans-unit>
       <trans-unit id="admin-core.components.clw-add-url" datatype="html">
         <source>Add URL</source>
-        <target state="new">Add URL</target>
+        <target>URL hinzufügen</target>
       </trans-unit>
       <trans-unit id="admin-core.components.coordinate-link-window-help1" datatype="html">
         <source>Add one or more URL&apos;s to configure the Coordinate Link Window component.</source>
-        <target state="new">Add one or more URL&apos;s to configure the Coordinate Link Window component.</target>
+        <target>Fügen Sie eine oder mehrere URLs hinzu, um das Komponente "Koordinaten-Link-Fenster" zu konfigurieren.</target>
       </trans-unit>
       <trans-unit id="admin-core.components.coordinate-link-window-help2" datatype="html">
         <source>For each URL you can use <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[X]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> or <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[lat]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> and <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[Y]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> or <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[lon]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> placeholders in the URL.</source>
-        <target state="new">For each URL you can use <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[X]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> or <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[lat]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> and <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[Y]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> or <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[lon]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> placeholders in the URL.</target>
+        <target>Für jede URL können Sie die Platzhalter <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[X]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> oder <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[lat]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> und <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[Y]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> oder <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[lon]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> in der URL verwenden.</target>
       </trans-unit>
       <trans-unit id="admin-core.components.coordinate-link-window-help3" datatype="html">
         <source>Those will be replaced by the location on which the user clicks.</source>
-        <target state="new">Those will be replaced by the location on which the user clicks.</target>
+        <target>Diese werden durch den Ort ersetzt, auf den der Benutzer klickt.</target>
       </trans-unit>
       <trans-unit id="admin-core.components.coordinate-link-window-help4" datatype="html">
         <source>For example: <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>https://www.google.com/maps/@[lat],[lon],18z<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> or <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>https://demo.tailormap.com/#@[X],[Y],18<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/></source>
-        <target state="new">For example: <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>https://www.google.com/maps/@[lat],[lon],18z<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> or <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>https://demo.tailormap.com/#@[X],[Y],18<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/></target>
+        <target>Zum Beispiel: <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>https://www.google.com/maps/@[lat],[lon],18z<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> oder <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>https://demo.tailormap.com/#@[X],[Y],18<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/></target>
       </trans-unit>
       <trans-unit id="admin-core.components.coordinate-link-window-title" datatype="html">
         <source>Coordinate link window title</source>
-        <target state="new">Coordinate link window title</target>
+        <target>Titel für Koordinaten-Link-Fenster</target>
       </trans-unit>
       <trans-unit id="admin-core.components.measure-area-title" datatype="html">
         <source>Measure area title</source>
@@ -1032,163 +1032,163 @@
       </trans-unit>
       <trans-unit id="admin-core.form.add-choice" datatype="html">
         <source>Add choice</source>
-        <target state="new">Add choice</target>
+        <target>Auswahl hinzufügen</target>
       </trans-unit>
       <trans-unit id="admin-core.form.add-form" datatype="html">
         <source>Add form</source>
-        <target state="new">Add form</target>
+        <target>Formular hinzufügen</target>
       </trans-unit>
       <trans-unit id="admin-core.form.allow-free-input" datatype="html">
         <source>Allow the user to enter custom input</source>
-        <target state="new">Allow the user to enter custom input</target>
+        <target>Dem Benutzer erlauben, benutzerdefinierte Eingaben zu machen</target>
       </trans-unit>
       <trans-unit id="admin-core.form.create-form" datatype="html">
         <source>Create form</source>
-        <target state="new">Create form</target>
+        <target>Formular erstellen</target>
       </trans-unit>
       <trans-unit id="admin-core.form.delete-field" datatype="html">
         <source>Delete field</source>
-        <target state="new">Delete field</target>
+        <target>Feld löschen</target>
       </trans-unit>
       <trans-unit id="admin-core.form.delete-form" datatype="html">
         <source>Delete form <x id="PH" equiv-text="title"/></source>
-        <target state="new">Delete form <x id="PH" equiv-text="title"/></target>
+        <target>Formular <x id="PH" equiv-text="title"/> löschen</target>
       </trans-unit>
       <trans-unit id="admin-core.form.delete-form-message" datatype="html">
         <source>Are you sure you want to delete form <x id="PH" equiv-text="title"/>? This action cannot be undone.</source>
-        <target state="new">Are you sure you want to delete form <x id="PH" equiv-text="title"/>? This action cannot be undone.</target>
+        <target>Sind Sie sicher, dass Sie das Formular <x id="PH" equiv-text="title"/> löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.</target>
       </trans-unit>
       <trans-unit id="admin-core.form.edit" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ form.name }}"/></source>
-        <target state="new">Edit <x id="INTERPOLATION" equiv-text="{{ form.name }}"/></target>
+        <target>Bearbeiten <x id="INTERPOLATION" equiv-text="{{ form.name }}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.form.error-creating-form" datatype="html">
         <source>Error while creating form.</source>
-        <target state="new">Error while creating form.</target>
+        <target>Fehler beim Erstellen des Formulars.</target>
       </trans-unit>
       <trans-unit id="admin-core.form.error-deleting-form" datatype="html">
         <source>Error while deleting form.</source>
-        <target state="new">Error while deleting form.</target>
+        <target>Fehler beim Löschen des Formulars.</target>
       </trans-unit>
       <trans-unit id="admin-core.form.error-loading-form" datatype="html">
         <source>Error while loading form</source>
-        <target state="new">Error while loading form</target>
+        <target>Fehler beim Laden des Formulars</target>
       </trans-unit>
       <trans-unit id="admin-core.form.error-loading-forms" datatype="html">
         <source>Error while loading list of forms</source>
-        <target state="new">Error while loading list of forms</target>
+        <target>Fehler beim Laden der Liste der Formulare</target>
       </trans-unit>
       <trans-unit id="admin-core.form.error-updating-form" datatype="html">
         <source>Error while updating form.</source>
-        <target state="new">Error while updating form.</target>
+        <target>Fehler beim Aktualisieren des Formulars.</target>
       </trans-unit>
       <trans-unit id="admin-core.form.feature-source" datatype="html">
         <source>Feature source and type</source>
-        <target state="new">Feature source and type</target>
+        <target>Feature-Quelle und Typ</target>
       </trans-unit>
       <trans-unit id="admin-core.form.field-type-boolean" datatype="html">
         <source>Checkbox field</source>
-        <target state="new">Checkbox field</target>
+        <target>Checkbox-Feld</target>
       </trans-unit>
       <trans-unit id="admin-core.form.field-type-date" datatype="html">
         <source>Date field</source>
-        <target state="new">Date field</target>
+        <target>Datum-Feld</target>
       </trans-unit>
       <trans-unit id="admin-core.form.field-type-integer" datatype="html">
         <source>Integer field</source>
-        <target state="new">Integer field</target>
+        <target>Ganzzahl-Feld</target>
       </trans-unit>
       <trans-unit id="admin-core.form.field-type-number" datatype="html">
         <source>Number field</source>
-        <target state="new">Number field</target>
+        <target>Zahlenfeld</target>
       </trans-unit>
       <trans-unit id="admin-core.form.field-type-select" datatype="html">
         <source>Choice list</source>
-        <target state="new">Choice list</target>
+        <target>Auswahlliste</target>
       </trans-unit>
       <trans-unit id="admin-core.form.field-type-text" datatype="html">
         <source>Text field</source>
-        <target state="new">Text field</target>
+        <target>Textfeld</target>
       </trans-unit>
       <trans-unit id="admin-core.form.field-type-textarea" datatype="html">
         <source>Textarea field</source>
-        <target state="new">Textarea field</target>
+        <target>Textarea-Feld</target>
       </trans-unit>
       <trans-unit id="admin-core.form.field-type-timestamp" datatype="html">
         <source>Timestamp field</source>
-        <target state="new">Timestamp field</target>
+        <target>Zeitstempel-Feld</target>
       </trans-unit>
       <trans-unit id="admin-core.form.filter-attributes" datatype="html">
         <source>Filter attributes</source>
-        <target state="new">Filter attributes</target>
+        <target>Attribute filtern</target>
       </trans-unit>
       <trans-unit id="admin-core.form.filter-fields" datatype="html">
         <source>Filter fields</source>
-        <target state="new">Filter fields</target>
+        <target>Felder filtern</target>
       </trans-unit>
       <trans-unit id="admin-core.form.filter-forms" datatype="html">
         <source>Filter forms</source>
-        <target state="new">Filter forms</target>
+        <target>Formulare filtern</target>
       </trans-unit>
       <trans-unit id="admin-core.form.form-created" datatype="html">
         <source>Form <x id="PH" equiv-text="createdForm.name"/> created</source>
-        <target state="new">Form <x id="PH" equiv-text="createdForm.name"/> created</target>
+        <target>Formular <x id="PH" equiv-text="createdForm.name"/> erstellt</target>
       </trans-unit>
       <trans-unit id="admin-core.form.form-fields-unavailable" datatype="html">
         <source>The following fields are disabled / disabled for editing in the feature type. These will not be visible in the viewer. First enable them for editing to make sure they are visible in the viewer.</source>
-        <target state="new">The following fields are disabled / disabled for editing in the feature type. These will not be visible in the viewer. First enable them for editing to make sure they are visible in the viewer.</target>
+        <target>Die folgenden Felder sind im Feature-Typ deaktiviert / deaktiviert für die Bearbeitung. Diese werden im Viewer nicht sichtbar sein. Aktivieren Sie sie zuerst für die Bearbeitung, um sicherzustellen, dass sie im Viewer sichtbar sind.</target>
       </trans-unit>
       <trans-unit id="admin-core.form.form-fields-unavailable-application" datatype="html">
         <source>In the selected form the following fields are disabled / disabled for editing in the feature type or application layer settings. These will not be visible in the viewer. First enable them for editing to make sure they are visible in the viewer.</source>
-        <target state="new">In the selected form the following fields are disabled / disabled for editing in the feature type or application layer settings. These will not be visible in the viewer. First enable them for editing to make sure they are visible in the viewer.</target>
+        <target>In dem ausgewählten Formular sind die folgenden Felder im Feature-Typ oder in den Einstellungen der Anwendungsebene deaktiviert / deaktiviert für die Bearbeitung. Diese werden im Viewer nicht sichtbar sein. Aktivieren Sie sie zuerst für die Bearbeitung, um sicherzustellen, dass sie im Viewer sichtbar sind.</target>
       </trans-unit>
       <trans-unit id="admin-core.form.form-removed" datatype="html">
         <source>Form <x id="PH" equiv-text="title"/> removed</source>
-        <target state="new">Form <x id="PH" equiv-text="title"/> removed</target>
+        <target>Formular <x id="PH" equiv-text="title"/> entfernt</target>
       </trans-unit>
       <trans-unit id="admin-core.form.form-updated" datatype="html">
         <source>Form updated</source>
-        <target state="new">Form updated</target>
+        <target>Formular aktualisiert</target>
       </trans-unit>
       <trans-unit id="admin-core.form.forms" datatype="html">
         <source>Forms</source>
-        <target state="new">Forms</target>
+        <target>Formulare</target>
       </trans-unit>
       <trans-unit id="admin-core.form.label-list-label" datatype="html">
         <source>Label</source>
-        <target state="new">Label</target>
+        <target>Bezeichnung</target>
       </trans-unit>
       <trans-unit id="admin-core.form.required-field" datatype="html">
         <source>Required field</source>
-        <target state="new">Required field</target>
+        <target>Pflichtfeld</target>
       </trans-unit>
       <trans-unit id="admin-core.form.unique-values-as-options" datatype="html">
         <source>Use unique values from this column as options</source>
-        <target state="new">Use unique values from this column as options</target>
+        <target>Eindeutige Werte aus dieser Spalte als Optionen verwenden</target>
       </trans-unit>
       <trans-unit id="admin-core.form.value-list-label" datatype="html">
         <source>Label</source>
-        <target state="new">Label</target>
+        <target>Bezeichnung</target>
       </trans-unit>
       <trans-unit id="admin-core.form.value-list-value" datatype="html">
         <source>Value</source>
-        <target state="new">Value</target>
+        <target>Wert</target>
       </trans-unit>
       <trans-unit id="admin-core.forms.available-attributes" datatype="html">
         <source>Available attributes</source>
-        <target state="new">Available attributes</target>
+        <target>Verfügbare Attribute</target>
       </trans-unit>
       <trans-unit id="admin-core.forms.edit-form-field" datatype="html">
         <source>Edit form field <x id="INTERPOLATION" equiv-text="{{field.name}}"/></source>
-        <target state="new">Edit form field <x id="INTERPOLATION" equiv-text="{{field.name}}"/></target>
+        <target>Feld <x id="INTERPOLATION" equiv-text="{{field.name}}"/> bearbeiten</target>
       </trans-unit>
       <trans-unit id="admin-core.forms.form-fields" datatype="html">
         <source>Form fields</source>
-        <target state="new">Form fields</target>
+        <target>Formularfelder</target>
       </trans-unit>
       <trans-unit id="admin-core.forms.forms" datatype="html">
         <source>Forms</source>
-        <target state="new">Forms</target>
+        <target>Formulare</target>
       </trans-unit>
       <trans-unit id="admin-core.groups.add-group" datatype="html">
         <source>Add group</source>
@@ -1256,7 +1256,7 @@
       </trans-unit>
       <trans-unit id="admin-core.navigation.forms" datatype="html">
         <source>Forms</source>
-        <target state="new">Forms</target>
+        <target>Formulare</target>
       </trans-unit>
       <trans-unit id="admin-core.navigation.groups" datatype="html">
         <source>Groups</source>
@@ -1364,47 +1364,47 @@
       </trans-unit>
       <trans-unit id="admin-core.select-upload.file-in-use" datatype="html">
         <source>File is still in use</source>
-        <target state="new">File is still in use</target>
+        <target>Datei wird noch verwendet</target>
       </trans-unit>
       <trans-unit id="admin-core.select-upload.file-in-use-body" datatype="html">
         <source>This file cannot be removed because it is still used in the following places.</source>
-        <target state="new">This file cannot be removed because it is still used in the following places.</target>
+        <target>Diese Datei kann nicht entfernt werden, da sie noch an den folgenden Stellen verwendet wird.</target>
       </trans-unit>
       <trans-unit id="admin-core.select-upload.select-existing-file" datatype="html">
         <source>Select existing file</source>
-        <target state="new">Select existing file</target>
+        <target>Existierende Datei auswählen</target>
       </trans-unit>
       <trans-unit id="admin-core.select-upload.select-existing-legend" datatype="html">
         <source>Select existing legend</source>
-        <target state="new">Select existing legend</target>
+        <target>Existierende Legende auswählen</target>
       </trans-unit>
       <trans-unit id="admin-core.select-upload.select-existing-logo" datatype="html">
         <source>Select existing logo</source>
-        <target state="new">Select existing logo</target>
+        <target>Existierendes Logo auswählen</target>
       </trans-unit>
       <trans-unit id="admin-core.select-upload.select-file" datatype="html">
         <source>Select file</source>
-        <target state="new">Select file</target>
+        <target>Datei auswählen</target>
       </trans-unit>
       <trans-unit id="admin-core.select-upload.select-legend" datatype="html">
         <source>Select legend</source>
-        <target state="new">Select legend</target>
+        <target>Legende auswählen</target>
       </trans-unit>
       <trans-unit id="admin-core.select-upload.select-logo" datatype="html">
         <source>Select logo</source>
-        <target state="new">Select logo</target>
+        <target>Logo auswählen</target>
       </trans-unit>
       <trans-unit id="admin-core.select-upload.upload-new-file" datatype="html">
         <source>Upload a new file</source>
-        <target state="new">Upload a new file</target>
+        <target>Neue Datei hochladen</target>
       </trans-unit>
       <trans-unit id="admin-core.select-upload.upload-new-legend" datatype="html">
         <source>Upload a new legend</source>
-        <target state="new">Upload a new legend</target>
+        <target>Neue Legende hochladen</target>
       </trans-unit>
       <trans-unit id="admin-core.select-upload.upload-new-logo" datatype="html">
         <source>Upload a new logo</source>
-        <target state="new">Upload a new logo</target>
+        <target>Neues Logo hochladen</target>
       </trans-unit>
       <trans-unit id="admin-core.settings.home" datatype="html">
         <source>Select settings from the left side</source>
@@ -1412,19 +1412,19 @@
       </trans-unit>
       <trans-unit id="admin-core.upload-select.delete-file" datatype="html">
         <source>Delete file?</source>
-        <target state="new">Delete file?</target>
+        <target>Datei löschen?</target>
       </trans-unit>
       <trans-unit id="admin-core.upload-select.delete-file-message" datatype="html">
         <source>Are you sure you want delete to the file <x id="PH" equiv-text="uploadName"/>? This action cannot be undone.</source>
-        <target state="new">Are you sure you want delete to the file <x id="PH" equiv-text="uploadName"/>? This action cannot be undone.</target>
+        <target>Sind Sie sicher, dass Sie die Datei <x id="PH" equiv-text="uploadName"/> löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.</target>
       </trans-unit>
       <trans-unit id="admin-core.upload-select.error-deleting-file" datatype="html">
         <source>Error removing file <x id="PH" equiv-text="uploadName"/>. Please try again.</source>
-        <target state="new">Error removing file <x id="PH" equiv-text="uploadName"/>. Please try again.</target>
+        <target>Fehler beim Entfernen der Datei <x id="PH" equiv-text="uploadName"/>. Bitte versuchen Sie es erneut.</target>
       </trans-unit>
       <trans-unit id="admin-core.upload-select.file-deleted" datatype="html">
         <source>File <x id="PH" equiv-text="uploadName"/> removed</source>
-        <target state="new">File <x id="PH" equiv-text="uploadName"/> removed</target>
+        <target>Datei <x id="PH" equiv-text="uploadName"/> entfernt</target>
       </trans-unit>
       <trans-unit id="admin-core.use-max-extent" datatype="html">
         <source>Use projection extent</source>
