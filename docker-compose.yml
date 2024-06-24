@@ -69,12 +69,11 @@ services:
 
   solr:
     container_name: ${COMPOSE_PROJECT_NAME}-solr
-    image: solr:9.6.1-slim
+    image: solr:9.6.1
     profiles:
       - solr
     environment:
       TZ: Europe/Amsterdam
-      SOLR_HEAP: 1g
     volumes:
       - solr-data:/var/solr
     depends_on:
@@ -87,7 +86,7 @@ services:
       - tailormap
     healthcheck:
       test: 'curl -s http://localhost:8983/solr/tailormap/admin/ping | grep -q "OK" || exit 1'
-      start_period: 15s
+      start_period: 60s
       interval: 15s
       timeout: 5s
       retries: 3
@@ -97,7 +96,7 @@ services:
     container_name: ${COMPOSE_PROJECT_NAME}-solr-status
     depends_on:
       - solr
-    image: solr:9.6.1-slim
+    image: solr:9.6.1
     profiles:
       - solr
     environment:
