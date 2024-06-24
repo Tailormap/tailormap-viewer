@@ -16,6 +16,7 @@
       env:
         COMPOSE_PROJECT_NAME: tailormap-embed-test
         COMPOSE_FILE: ci/tailormap-embed-test/compose.yaml
+        HOST: ${{ secrets.DEPLOY_HOST_SNAPSHOT }}
 
       steps:
         - uses: actions/checkout@v4
