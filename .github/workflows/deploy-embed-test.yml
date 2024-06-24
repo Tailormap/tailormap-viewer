@@ -14,7 +14,7 @@
       runs-on: ubuntu-latest
       env:
         COMPOSE_PROJECT_NAME: tailormap-embed-test
-        COMPOSE_FILE: ci/tailormap-embed-test/compose.yml
+        COMPOSE_FILE: ci/tailormap-embed-test/compose.yaml
 
       steps:
         - uses: actions/checkout@v4
