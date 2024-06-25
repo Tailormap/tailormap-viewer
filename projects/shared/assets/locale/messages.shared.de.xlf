@@ -3,11 +3,11 @@
     <body>
       <trans-unit id="shared.about.added-packages" datatype="html">
         <source>Extensions</source>
-        <target state="new">Extensions</target>
+        <target>Erweiterungen</target>
       </trans-unit>
       <trans-unit id="shared.about.build-date" datatype="html">
         <source>Build date</source>
-        <target state="new">Build date</target>
+        <target>Erstellungsdatum</target>
       </trans-unit>
       <trans-unit id="shared.about.title" datatype="html">
         <source>About Tailormap</source>
@@ -55,7 +55,7 @@
       </trans-unit>
       <trans-unit id="shared.legend-image.failed-loading-legend" datatype="html">
         <source>Failed to load legend for</source>
-        <target state="new">Failed to load legend for</target>
+        <target>Legende konnte nicht geladen werden für</target>
       </trans-unit>
       <trans-unit id="shared.login-form.password" datatype="html">
         <source>Password</source>
