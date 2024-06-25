@@ -15,11 +15,11 @@
       </trans-unit>
       <trans-unit id="core.attribute-list.failed-loading-data" datatype="html">
         <source>Failed to load attribute list data</source>
-        <target state="translated">Het is niet gelukt om de gegevens voor de attributenlijst te laden</target>
+        <target>Het is niet gelukt om de gegevens voor de attributenlijst te laden</target>
       </trans-unit>
       <trans-unit id="core.attribute-list.failed-loading-data-for" datatype="html">
         <source>Failed to load attribute list data for <x id="PH" equiv-text="tab.label"/></source>
-        <target state="translated">Het is niet gelukt om de gegevens voor de attributenlijst te laden voor <x id="PH" equiv-text="tab.label"/></target>
+        <target>Het is niet gelukt om de gegevens voor de attributenlijst te laden voor <x id="PH" equiv-text="tab.label"/></target>
       </trans-unit>
       <trans-unit id="core.attribute-list.filter-on" datatype="html">
         <source>Filter on <x id="INTERPOLATION" equiv-text="{{getColumnName()}}"/></source>
@@ -99,7 +99,7 @@
       </trans-unit>
       <trans-unit id="core.common.feature" datatype="html">
         <source>Feature</source>
-        <target state="translated">Object</target>
+        <target>Object</target>
       </trans-unit>
       <trans-unit id="core.common.geojson" datatype="html">
         <source>GeoJSON</source>
@@ -155,19 +155,19 @@
       </trans-unit>
       <trans-unit id="core.common.url" datatype="html">
         <source>URL</source>
-        <target state="new">URL</target>
+        <target>URL</target>
       </trans-unit>
       <trans-unit id="core.coordinate-link-window.select-layer" datatype="html">
         <source>Select link to open</source>
-        <target state="new">Selecteer een link</target>
+        <target>Selecteer een link</target>
       </trans-unit>
       <trans-unit id="core.coordinate-link-window.title" datatype="html">
         <source>Coordinate Link Window</source>
-        <target state="new">Coordinate Link Window</target>
+        <target>Coordinate Link Window</target>
       </trans-unit>
       <trans-unit id="core.draw.delete-selected-feature" datatype="html">
         <source>Delete selected feature</source>
-        <target state="translated">Verwijder geselecteerd object</target>
+        <target>Verwijder geselecteerd object</target>
       </trans-unit>
       <trans-unit id="core.draw.draw-circle" datatype="html">
         <source>Draw circle</source>
@@ -339,23 +339,23 @@
       </trans-unit>
       <trans-unit id="core.edit.add-new-feature" datatype="html">
         <source>Add new feature</source>
-        <target state="translated">Nieuw object toevoegen</target>
+        <target>Nieuw object toevoegen</target>
       </trans-unit>
       <trans-unit id="core.edit.create-feature-failed" datatype="html">
         <source>Create feature failed</source>
-        <target state="translated">Aanmaken van object mislukt</target>
+        <target>Aanmaken van object mislukt</target>
       </trans-unit>
       <trans-unit id="core.edit.delete-feature-confirm" datatype="html">
         <source>Delete feature</source>
-        <target state="translated">Object verwijderen</target>
+        <target>Object verwijderen</target>
       </trans-unit>
       <trans-unit id="core.edit.delete-feature-confirm-message" datatype="html">
         <source>Are you sure you want to delete this feature? This cannot be undone.</source>
-        <target state="translated">Weet je zeker dat je dit object wilt verwijderen? Dit kan niet ongedaan worden gemaakt.</target>
+        <target>Weet je zeker dat je dit object wilt verwijderen? Dit kan niet ongedaan worden gemaakt.</target>
       </trans-unit>
       <trans-unit id="core.edit.delete-feature-failed" datatype="html">
         <source>Delete feature failed</source>
-        <target state="translated">Object verwijderen mislukt</target>
+        <target>Object verwijderen mislukt</target>
       </trans-unit>
       <trans-unit id="core.edit.edit" datatype="html">
         <source>Edit</source>
@@ -363,11 +363,11 @@
       </trans-unit>
       <trans-unit id="core.edit.edit-feature-tooltip" datatype="html">
         <source>Edit feature</source>
-        <target state="translated">Object bewerken</target>
+        <target>Object bewerken</target>
       </trans-unit>
       <trans-unit id="core.edit.error-getting-features" datatype="html">
         <source>Something went wrong while getting editable features, please try again</source>
-        <target state="translated">Er is iets misgegaan bij het verkrijgen van bewerkbare objecten, probeer het opnieuw</target>
+        <target>Er is iets misgegaan bij het verkrijgen van bewerkbare objecten, probeer het opnieuw</target>
       </trans-unit>
       <trans-unit id="core.edit.false" datatype="html">
         <source>False</source>
@@ -375,19 +375,19 @@
       </trans-unit>
       <trans-unit id="core.edit.feature-created" datatype="html">
         <source>Feature created</source>
-        <target state="translated">Object aangemaakt</target>
+        <target>Object aangemaakt</target>
       </trans-unit>
       <trans-unit id="core.edit.feature-deleted" datatype="html">
         <source>Feature deleted</source>
-        <target state="translated">Object verwijderd</target>
+        <target>Object verwijderd</target>
       </trans-unit>
       <trans-unit id="core.edit.feature-updated" datatype="html">
         <source>Feature updated</source>
-        <target state="translated">Object bijgewerkt</target>
+        <target>Object bijgewerkt</target>
       </trans-unit>
       <trans-unit id="core.edit.hover-to-highlight" datatype="html">
         <source>Hover over the buttons to highlight the feature on the map</source>
-        <target state="translated">Beweeg de muis over de knoppen om het object op de kaart te markeren</target>
+        <target>Beweeg de muis over de knoppen om het object op de kaart te markeren</target>
       </trans-unit>
       <trans-unit id="core.edit.no-editable-layers-tooltip" datatype="html">
         <source>There are no editable layers. Enable a layer to start editing.</source>
@@ -395,7 +395,7 @@
       </trans-unit>
       <trans-unit id="core.edit.no-features-found" datatype="html">
         <source>No editable features found</source>
-        <target state="translated">Geen bewerkbare objecten gevonden</target>
+        <target>Geen bewerkbare objecten gevonden</target>
       </trans-unit>
       <trans-unit id="core.edit.require-login-tooltip" datatype="html">
         <source>You must be logged in to edit.</source>
@@ -403,7 +403,7 @@
       </trans-unit>
       <trans-unit id="core.edit.select-feature-to-edit" datatype="html">
         <source>Select which feature to edit</source>
-        <target state="translated">Selecteer een object om te bewerken</target>
+        <target>Selecteer een object om te bewerken</target>
       </trans-unit>
       <trans-unit id="core.edit.select-layer" datatype="html">
         <source>Select layer to edit</source>
@@ -415,15 +415,15 @@
       </trans-unit>
       <trans-unit id="core.edit.update-feature-failed" datatype="html">
         <source>Update feature failed</source>
-        <target state="translated">Object bijwerken mislukt</target>
+        <target>Object bijwerken mislukt</target>
       </trans-unit>
       <trans-unit id="core.feature-info.error-loading-feature-info" datatype="html">
         <source>Something went wrong while getting feature info, please try again</source>
-        <target state="translated">Er is iets misgegaan bij het ophalen van de objectinformatie, probeer het opnieuw</target>
+        <target>Er is iets misgegaan bij het ophalen van de objectinformatie, probeer het opnieuw</target>
       </trans-unit>
       <trans-unit id="core.feature-info.error-loading-features" datatype="html">
         <source>Could not load feature info</source>
-        <target state="translated">Kon objectinformatie niet laden</target>
+        <target>Kon objectinformatie niet laden</target>
       </trans-unit>
       <trans-unit id="core.feature-info.no-features-found" datatype="html">
         <source>No features found</source>
@@ -491,7 +491,7 @@
       </trans-unit>
       <trans-unit id="core.filter.contains" datatype="html">
         <source>contains</source>
-        <target state="translated">bevat</target>
+        <target>bevat</target>
       </trans-unit>
       <trans-unit id="core.filter.contains-one-of-the-values" datatype="html">
         <source>contains one of the values</source>
@@ -499,7 +499,7 @@
       </trans-unit>
       <trans-unit id="core.filter.contains-upper" datatype="html">
         <source>Contains</source>
-        <target state="translated">Bevat</target>
+        <target>Bevat</target>
       </trans-unit>
       <trans-unit id="core.filter.create-new-filter" datatype="html">
         <source>Create new filter</source>
@@ -527,11 +527,11 @@
       </trans-unit>
       <trans-unit id="core.filter.ends-with" datatype="html">
         <source>ends with</source>
-        <target state="translated">eindigt met</target>
+        <target>eindigt met</target>
       </trans-unit>
       <trans-unit id="core.filter.ends-with-upper" datatype="html">
         <source>Ends with</source>
-        <target state="translated">Eindigt met</target>
+        <target>Eindigt met</target>
       </trans-unit>
       <trans-unit id="core.filter.equals" datatype="html">
         <source>Equals</source>
@@ -547,15 +547,15 @@
       </trans-unit>
       <trans-unit id="core.filter.filtering" datatype="html">
         <source>Filtering</source>
-        <target state="translated">Filteren</target>
+        <target>Filteren</target>
       </trans-unit>
       <trans-unit id="core.filter.filtering-layer-by-drawing-or-reference" datatype="html">
         <source>Filtering the selected <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container [ngTemplateOutlet]=&quot;layerLabel&quot; /&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container [ngTemplateOutlet]=&quot;layerLabel&quot; /&gt;"/> can be done by drawing geometry and/or selecting a reference layer.</source>
-        <target state="new">U kunt de geselecteerde <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container [ngTemplateOutlet]=&quot;layerLabel&quot; /&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="metry and/or sele"/> filteren door geometrieën te tekenen en/of een referentielaag te selecteren.</target>
+        <target>U kunt de geselecteerde <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container [ngTemplateOutlet]=&quot;layerLabel&quot; /&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="metry and/or sele"/> filteren door geometrieën te tekenen en/of een referentielaag te selecteren.</target>
       </trans-unit>
       <trans-unit id="core.filter.filtering-layer-by-drawing-or-reference-hint" datatype="html">
         <source>The geometries from this reference layer will then be used to filter the selected <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container [ngTemplateOutlet]=&quot;layerLabel&quot; /&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container [ngTemplateOutlet]=&quot;layerLabel&quot; /&gt;"/>.</source>
-        <target state="new">De geometrieën van deze referentielaag worden dan gebruikt om de geselecteerde <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container [ngTemplateOutlet]=&quot;layerLabel&quot; /&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;div class=&quot;fo"/> te filteren.</target>
+        <target>De geometrieën van deze referentielaag worden dan gebruikt om de geselecteerde <x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container [ngTemplateOutlet]=&quot;layerLabel&quot; /&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;div class=&quot;fo"/> te filteren.</target>
       </trans-unit>
       <trans-unit id="core.filter.from" datatype="html">
         <source>From</source>
@@ -587,11 +587,11 @@
       </trans-unit>
       <trans-unit id="core.filter.is-false" datatype="html">
         <source>is false</source>
-        <target state="translated">is onwaar</target>
+        <target>is onwaar</target>
       </trans-unit>
       <trans-unit id="core.filter.is-false-upper" datatype="html">
         <source>Is false</source>
-        <target state="translated">Is onwaar</target>
+        <target>Is onwaar</target>
       </trans-unit>
       <trans-unit id="core.filter.is-greater-than" datatype="html">
         <source>is greater than</source>
@@ -603,23 +603,23 @@
       </trans-unit>
       <trans-unit id="core.filter.is-not-between" datatype="html">
         <source>is not between</source>
-        <target state="new">is niet tussen</target>
+        <target>is niet tussen</target>
       </trans-unit>
       <trans-unit id="core.filter.is-not-null" datatype="html">
         <source>is not null</source>
-        <target state="new">is niet null</target>
+        <target>is niet null</target>
       </trans-unit>
       <trans-unit id="core.filter.is-not-on" datatype="html">
         <source>is not on</source>
-        <target state="new">is niet op</target>
+        <target>is niet op</target>
       </trans-unit>
       <trans-unit id="core.filter.is-null" datatype="html">
         <source>is null</source>
-        <target state="translated">is leeg (null)</target>
+        <target>is leeg (null)</target>
       </trans-unit>
       <trans-unit id="core.filter.is-null-upper" datatype="html">
         <source>Is null</source>
-        <target state="translated">Is leeg (null)</target>
+        <target>Is leeg (null)</target>
       </trans-unit>
       <trans-unit id="core.filter.is-on" datatype="html">
         <source>is on</source>
@@ -635,15 +635,15 @@
       </trans-unit>
       <trans-unit id="core.filter.is-true" datatype="html">
         <source>is true</source>
-        <target state="translated">is waar</target>
+        <target>is waar</target>
       </trans-unit>
       <trans-unit id="core.filter.is-true-upper" datatype="html">
         <source>Is true</source>
-        <target state="translated">Is waar</target>
+        <target>Is waar</target>
       </trans-unit>
       <trans-unit id="core.filter.layerPlural" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {layer} other {layers}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {laag} other {lagen}}</target>
+        <target>{VAR_PLURAL, plural, =1 {laag} other {lagen}}</target>
       </trans-unit>
       <trans-unit id="core.filter.loading-reference-layer" datatype="html">
         <source>Loading reference geometry</source>
@@ -655,23 +655,23 @@
       </trans-unit>
       <trans-unit id="core.filter.not-contains" datatype="html">
         <source>does not contain</source>
-        <target state="new">bevat niet</target>
+        <target>bevat niet</target>
       </trans-unit>
       <trans-unit id="core.filter.not-contains-one-of-the-values" datatype="html">
         <source>does not contain one of the values</source>
-        <target state="new">bevat geen van de waardes</target>
+        <target>bevat geen van de waardes</target>
       </trans-unit>
       <trans-unit id="core.filter.not-ends-with" datatype="html">
         <source>does not end with</source>
-        <target state="new">eindigt niet met</target>
+        <target>eindigt niet met</target>
       </trans-unit>
       <trans-unit id="core.filter.not-equals-to" datatype="html">
         <source>not equals to</source>
-        <target state="new">is niet gelijk aan</target>
+        <target>is niet gelijk aan</target>
       </trans-unit>
       <trans-unit id="core.filter.not-starts-with" datatype="html">
         <source>does not start with</source>
-        <target state="new">begint niet met</target>
+        <target>begint niet met</target>
       </trans-unit>
       <trans-unit id="core.filter.on" datatype="html">
         <source>On</source>
@@ -727,11 +727,11 @@
       </trans-unit>
       <trans-unit id="core.filter.starts-with" datatype="html">
         <source>starts with</source>
-        <target state="translated">begint met</target>
+        <target>begint met</target>
       </trans-unit>
       <trans-unit id="core.filter.starts-with-upper" datatype="html">
         <source>Starts with</source>
-        <target state="translated">Begint met</target>
+        <target>Begint met</target>
       </trans-unit>
       <trans-unit id="core.filter.summary" datatype="html">
         <source>Summary</source>
@@ -867,7 +867,7 @@
       </trans-unit>
       <trans-unit id="core.print.width-height-ratio" datatype="html">
         <source>Width/height ratio: <x id="INTERPOLATION" equiv-text="{{getImageRatio() | number: &apos;1.1-2&apos; }}"/></source>
-        <target state="new">Verhouding breedte/hoogte: <x id="INTERPOLATION" equiv-text="{{getImageRatio() | number: &apos;1.1-2&apos; }}"/></target>
+        <target>Verhouding breedte/hoogte: <x id="INTERPOLATION" equiv-text="{{getImageRatio() | number: &apos;1.1-2&apos; }}"/></target>
       </trans-unit>
       <trans-unit id="core.print.width-range" datatype="html">
         <source>Range: 50 - 600</source>
@@ -955,7 +955,7 @@
       </trans-unit>
       <trans-unit id="core.toolbar.coordinate-picker-selected-coordinates" datatype="html">
         <source>Selected coordinates: <x id="PH" equiv-text="coordinates"/></source>
-        <target state="translated">Geselecteerde coördinaten: <x id="PH" equiv-text="coordinates"/></target>
+        <target>Geselecteerde coördinaten: <x id="PH" equiv-text="coordinates"/></target>
       </trans-unit>
       <trans-unit id="core.toolbar.coordinate-picker-success" datatype="html">
         <source>Success</source>
@@ -987,11 +987,11 @@
       </trans-unit>
       <trans-unit id="core.toolbar.share-viewer" datatype="html">
         <source>Share viewer</source>
-        <target state="new">Viewer delen</target>
+        <target>Viewer delen</target>
       </trans-unit>
       <trans-unit id="core.toolbar.share-viewer-embed-url" datatype="html">
         <source>Embed URL</source>
-        <target state="new">Embed URL</target>
+        <target>URL insluiten</target>
       </trans-unit>
       <trans-unit id="core.toolbar.type-at-least" datatype="html">
         <source>Type at least <x id="INTERPOLATION" equiv-text="{{ minLength }}"/> characters to start searching</source>
