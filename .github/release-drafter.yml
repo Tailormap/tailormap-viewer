@@ -9,10 +9,6 @@ template: |
   $CHANGES
 
 categories:
-#  - title: 🚨 Removed
-#    label: removed
-#  - title: ⚠️ Deprecated
-#    label: deprecated
   - title: 🚀 New features and improvements
     labels:
       - enhancement
@@ -25,12 +21,16 @@ categories:
       - regression
   - title: 📖 Documentation updates
     label: documentation
-  - title: 🔨 Dependency updates
-    label: dependencies
+  - title: 🚨 Removed / ⚠️ Deprecated
+    labels: 
+      - removed
+      - deprecated
   - title: 🚦 Tests and Infrastructure
     labels:
       - tests
       - infrastructure
+  - title: 🔨 Dependency updates
+    label: dependencies
 
 replacers:
   - search: '/CVE-(\d{4})-(\d+)/g'

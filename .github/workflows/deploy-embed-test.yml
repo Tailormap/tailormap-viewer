@@ -1,9 +1,10 @@
   name: 'Deploy embed test'
 
   on:
+    workflow_dispatch:
     push:
       branches:
-        - master
+        - main
       paths:
         - 'ci/tailormap-embed-test/**'
         - '.github/workflows/deploy-embed-test.yml'
