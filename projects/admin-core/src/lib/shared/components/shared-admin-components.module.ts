@@ -7,7 +7,6 @@ import { SaveButtonComponent } from './save-button/save-button.component';
 import { BoundsFieldComponent } from './bounds-field/bounds-field.component';
 import { AuthorizationEditComponent } from './authorization-edit/authorization-edit.component';
 import { AdminFieldsRendererComponent } from './admin-fields-renderer/admin-fields-renderer.component';
-import { UpdateFeatureTypeButtonComponent } from './update-feature-type-button/update-feature-type-button.component';
 import { SelectUploadModule } from './select-upload/select-upload.module';
 
 @NgModule({
@@ -18,7 +17,6 @@ import { SelectUploadModule } from './select-upload/select-upload.module';
     BoundsFieldComponent,
     AuthorizationEditComponent,
     AdminFieldsRendererComponent,
-    UpdateFeatureTypeButtonComponent,
   ],
   imports: [
     CommonModule,
@@ -32,7 +30,6 @@ import { SelectUploadModule } from './select-upload/select-upload.module';
     AuthorizationEditComponent,
     AdminFieldsRendererComponent,
     SelectUploadModule,
-    UpdateFeatureTypeButtonComponent,
   ],
 })
 export class SharedAdminComponentsModule {

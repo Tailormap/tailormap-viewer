@@ -118,7 +118,7 @@ export class ExtendedCatalogModelHelper {
 
   public static getExtendedFeatureType(featureType: FeatureTypeSummaryModel, featureSourceId: string, catalogNodeId?: string): ExtendedFeatureTypeModel {
     return {
-      id: `${featureSourceId}_${featureType.id}`,
+      id: ExtendedCatalogModelHelper.getExtendedFeatureTypeId(featureType.id, featureSourceId),
       type: CatalogExtendedTypeEnum.FEATURE_TYPE_TYPE,
       name: featureType.name,
       title: featureType.title,
@@ -128,6 +128,10 @@ export class ExtendedCatalogModelHelper {
       catalogNodeId: catalogNodeId || '',
       featureSourceId,
     };
+  }
+
+  public static getExtendedFeatureTypeId(featureTypeId: string, featureSourceId: string): string {
+    return `${featureSourceId}_${featureTypeId}`;
   }
 
   public static getFeatureTypeId(extendedId: string, featureSourceId: string): string {

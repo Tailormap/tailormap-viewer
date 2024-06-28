@@ -7,12 +7,7 @@
                                   (validFormChanged)="validFormChanged($event)"></tm-admin-search-index-form>
     </div>
     <div class="info-wrapper">
-      <div class="edit-buttons">
-        @if (extendedFeatureType$ | async; as extendedFeatureType) {
-          <tm-admin-update-feature-type-button [featureType]="extendedFeatureType"
-                                               (featureTypeUpdated)="updateFeatureTypeSetting($event)"></tm-admin-update-feature-type-button>
-        }
-      </div>
+      <tm-admin-catalog-shortcut-buttons [featureTypeId]="(extendedFeatureType$ | async)?.id ?? null"></tm-admin-catalog-shortcut-buttons>
     </div>
   </div>
 

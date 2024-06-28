@@ -12,7 +12,7 @@ import { FormService } from '../services/form.service';
 import { clearSelectedForm, updateDraftForm, updateDraftFormValid } from '../state/form.actions';
 import { FormUpdateModel } from '../services/form-update.model';
 import { FeatureSourceService } from '../../catalog/services/feature-source.service';
-import { FeatureTypeUpdateService } from '../../catalog/services/feature-type-update.service';
+import { ExtendedCatalogModelHelper } from '../../catalog/helpers/extended-catalog-model.helper';
 
 @Component({
   selector: 'tm-admin-form-edit',
@@ -32,6 +32,9 @@ export class FormEditComponent implements OnInit, OnDestroy {
   private featureTypeSubject$ = new BehaviorSubject<FeatureTypeModel | null>(null);
   public featureType$ = this.featureTypeSubject$.asObservable();
 
+  private extendedFeatureTypeSubject$ = new BehaviorSubject<string | null>(null);
+  public extendedFeatureType$ = this.extendedFeatureTypeSubject$.asObservable();
+
   private loadingFeatureTypeSubject$ = new BehaviorSubject(false);
   public loadingFeatureType$ = this.loadingFeatureTypeSubject$.asObservable();
 
@@ -42,7 +45,6 @@ export class FormEditComponent implements OnInit, OnDestroy {
     private router: Router,
     private formService: FormService,
     private featureSourceService: FeatureSourceService,
-    private featureTypeUpdateService: FeatureTypeUpdateService,
     private adminSnackbarService: AdminSnackbarService,
   ) {
   }
@@ -76,6 +78,7 @@ export class FormEditComponent implements OnInit, OnDestroy {
           .pipe(take(1))
           .subscribe(featureType => {
             this.featureTypeSubject$.next(featureType);
+            this.extendedFeatureTypeSubject$.next(featureType ? ExtendedCatalogModelHelper.getExtendedFeatureTypeId(featureType.id, `${form.featureSourceId}`) : null);
             this.loadingFeatureTypeSubject$.next(false);
           });
       });
@@ -127,20 +130,6 @@ export class FormEditComponent implements OnInit, OnDestroy {
 
   public validFormChanged($event: boolean) {
     this.store$.dispatch(updateDraftFormValid({ isValid: $event }));
-  }
-
-  public updateFeatureTypeSetting($event: MouseEvent, featureType: FeatureTypeModel, featureSourceId: number) {
-    $event.preventDefault();
-    if (!featureType) {
-      return;
-    }
-    this.featureTypeUpdateService.updateFeatureTypeSetting$(featureType.id, featureSourceId)
-      .pipe(takeUntil(this.destroyed))
-      .subscribe(updatedFeatureType => {
-        if (updatedFeatureType) {
-          this.featureTypeSubject$.next(updatedFeatureType);
-        }
-      });
   }
 
 }
