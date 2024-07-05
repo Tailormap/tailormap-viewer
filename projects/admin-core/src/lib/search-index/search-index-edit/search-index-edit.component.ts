@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, OnInit, DestroyRef, signal } from '@angular/core';
-import { BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, pipe, switchMap, take, tap } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, switchMap, take, tap } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
