@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, OnInit, DestroyRef, signal } from '@angular/core';
-import { BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, switchMap, take } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, pipe, switchMap, take, tap } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -33,6 +33,9 @@ export class SearchIndexEditComponent implements OnInit {
 
   private savingSubject = new BehaviorSubject(false);
   public saving$ = this.savingSubject.asObservable();
+
+  private indexingSubject = new BehaviorSubject(false);
+  public indexing$ = this.indexingSubject.asObservable();
 
   constructor(
     private route: ActivatedRoute,
@@ -76,10 +79,7 @@ export class SearchIndexEditComponent implements OnInit {
   }
 
   public save() {
-    this.savingSubject.next(true);
-    this.searchIndexService.saveDraftSearchIndex$()
-      .pipe(take(1))
-      .subscribe(() => this.savingSubject.next(false));
+    this.save$().subscribe();
   }
 
   public delete(searchIndex: SearchIndexModel) {
@@ -139,6 +139,26 @@ export class SearchIndexEditComponent implements OnInit {
       .subscribe(featureTypes => {
         this.extendedFeatureTypeSubject$.next(featureTypes.find(f => +f.originalId === featureTypeId) || null);
       });
+  }
+
+  public reindex(searchIndex: SearchIndexModel) {
+    const saveFirst$ = (this.saveEnabled() ? this.save$() : of(true));
+    saveFirst$
+      .pipe(
+        tap(() => this.indexingSubject.next(true)),
+        switchMap(() => this.searchIndexService.reIndexSearchIndex$(searchIndex.id)),
+      )
+      .subscribe(() => this.indexingSubject.next(false));
+  }
+
+  private save$() {
+    return this.searchIndexService.saveDraftSearchIndex$()
+      .pipe(
+        tap(() => this.savingSubject.next(true)),
+        take(1),
+        tap(() => this.savingSubject.next(false)),
+        map(result => !!result),
+      );
   }
 
 }

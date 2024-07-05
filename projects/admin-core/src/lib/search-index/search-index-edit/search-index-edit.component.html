@@ -38,5 +38,9 @@
     <button mat-flat-button
             routerLink="/admin/search-indexes"
             i18n="@@admin-core.common.close">Close</button>
+    <tm-spinner-button label="Re-index"
+                       i18n-label="@@admin-core.search-index.reindex"
+                       [showSpinner$]="indexing$"
+                       (buttonClick)="reindex(searchIndex)"></tm-spinner-button>
   </div>
 }

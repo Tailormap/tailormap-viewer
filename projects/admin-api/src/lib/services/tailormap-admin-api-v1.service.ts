@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { TailormapAdminApiV1ServiceModel } from './tailormap-admin-api-v1-service.model';
-import { map, Observable } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 import {
   CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel, ConfigModel,
   OIDCConfigurationModel, FeatureTypeModel,
@@ -339,6 +339,28 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
       observe: 'response',
     }).pipe(
       map(response => response.status === 204),
+    );
+  }
+
+  public reindexSearchIndex$(id: number): Observable<boolean> {
+    return this.httpClient.put(`${TailormapAdminApiV1Service.BASE_URL}/index/${id}`, {}, {
+      observe: 'response',
+    }).pipe(
+      map(response => {
+        return response.status === 201 || response.status === 202;
+      }),
+      catchError(() => of(false)),
+    );
+  }
+
+  public clearSearchIndex$(id: number): Observable<boolean> {
+    return this.httpClient.delete(`${TailormapAdminApiV1Service.BASE_URL}/index/${id}`, {
+      observe: 'response',
+    }).pipe(
+      map(response => {
+        return response.status === 204;
+      }),
+      catchError(() => of(false)),
     );
   }
 

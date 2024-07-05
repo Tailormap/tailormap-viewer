@@ -4,7 +4,7 @@ import { TailormapAdminApiV1ServiceModel } from './tailormap-admin-api-v1-servic
 import * as mockData from '../mock-data/tailormap-admin-api.mock-data';
 import {
   CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel, ConfigModel,
-  OIDCConfigurationModel, FeatureTypeModel,
+  OIDCConfigurationModel, FeatureTypeModel, FormSummaryModel, FormModel, UploadModel, SearchIndexModel,
 } from '../models';
 
 @Injectable()
@@ -169,22 +169,65 @@ export class TailormapAdminApiV1MockService implements TailormapAdminApiV1Servic
   public updateConfig$(params: { config: ConfigModel }): Observable<ConfigModel> {
     return of({ ...params.config }).pipe(delay(this.delay));
   }
-  public getOIDCConfigurations$(): Observable<OIDCConfigurationModel[]> { return of([]).pipe(delay(this.delay)) }
+  public getOIDCConfigurations$(): Observable<OIDCConfigurationModel[]> {
+    return of([]).pipe(delay(this.delay));
+  }
 
   public createOIDCConfiguration$(params: { oidcConfiguration: Partial<Omit<OIDCConfigurationModel, 'id'>> }): Observable<OIDCConfigurationModel> {
-      return null as any;
+      return of({ ...params.oidcConfiguration } as OIDCConfigurationModel);
   }
 
-  public updateOIDCConfiguration$(params: { id: number, oidcConfiguration: Partial<OIDCConfigurationModel> }): Observable<OIDCConfigurationModel> {
-      return null as any;
+  public updateOIDCConfiguration$(params: { id: number; oidcConfiguration: Partial<OIDCConfigurationModel> }): Observable<OIDCConfigurationModel> {
+      return of({ ...params.oidcConfiguration } as OIDCConfigurationModel);
   }
 
-  public deleteOIDCConfiguration$(id: number): Observable<boolean> {
+  public deleteOIDCConfiguration$(_id: number): Observable<boolean> {
       return of(true).pipe(delay(this.delay));
   }
 
-  public getUploads$() {
+  public getForms$(): Observable<FormSummaryModel[]> {
     return of([]);
+  }
+  public getForm$(id: number): Observable<FormModel> {
+    return of({ id } as FormModel);
+  }
+  public createForm$(params: { form: Omit<FormModel, 'id'> }): Observable<FormModel> {
+    return of({ ...params.form } as FormModel);
+  }
+  public updateForm$(params: { id: number; form: Partial<FormModel> }): Observable<FormModel> {
+    return of({ ...params.form } as FormModel);
+  }
+  public deleteForm$(): Observable<boolean> {
+    return of(true);
+  }
+
+  public getUploads$(): Observable<UploadModel[]> {
+    return of([]);
+  }
+  public createUpload$(upload: Pick<UploadModel, 'content' | 'filename' | 'category' | 'mimeType'>): Observable<UploadModel> {
+    return of({ id: '1', ...upload } as UploadModel);
+  }
+  public deleteUpload$(): Observable<boolean> {
+    return of(true);
+  }
+
+  public getSearchIndexes$(): Observable<SearchIndexModel[]> {
+    return of([]);
+  }
+  public createSearchIndex$(params: { searchIndex: Omit<SearchIndexModel, 'id'> }): Observable<SearchIndexModel> {
+    return of({ id: 1, ...params.searchIndex });
+  }
+  public updateSearchIndex$(params: { id: number; searchIndex: Partial<SearchIndexModel> }): Observable<SearchIndexModel> {
+    return of({ id: params.id, ...params.searchIndex } as SearchIndexModel);
+  }
+  public deleteSearchIndex$(): Observable<boolean> {
+    return of(true);
+  }
+  public reindexSearchIndex$(): Observable<boolean> {
+    return of(true);
+  }
+  public clearSearchIndex$(): Observable<boolean> {
+    return of(true);
   }
 
 }
