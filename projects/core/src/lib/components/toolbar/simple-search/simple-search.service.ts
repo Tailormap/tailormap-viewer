@@ -1,53 +1,82 @@
-import { inject, Injectable } from '@angular/core';
-import { catchError, map, Observable, of } from 'rxjs';
+import { Inject, Injectable } from '@angular/core';
+import { catchError, combineLatest, filter, forkJoin, map, Observable, of, switchMap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ProjectionCodesEnum } from '@tailormap-viewer/map';
-
-export interface SearchResultModel {
-  results: SearchResult[];
-  attribution: string;
-}
-
-export interface SearchResult {
-  label: string;
-  geometry: string;
-  projectionCode: string;
-}
-
-interface LocationServerResponse {
-  response: {
-    docs: Array<{
-      weergavenaam: string;
-      geometrie_rd: string;
-      centroide_rd: string;
-    }>;
-  };
-}
-
-interface NominatimResponse {
-  display_name: string;
-  geotext: string;
-  licence: string;
-}
+import { Store } from '@ngrx/store';
+import { SearchResultModel, NominatimResponseModel, LocationServerResponseModel, SearchResultItemModel } from './models';
+import { SearchResponseModel, TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel } from '@tailormap-viewer/api';
+import { ExtendedAppLayerModel } from '../../../map/models';
+import { selectViewerId } from '../../../state/core.selectors';
+import { take } from 'rxjs/operators';
+import { selectSearchableLayers } from '../../../map/state/map.selectors';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SimpleSearchService {
 
+  private static readonly LOCATION_LABEL = $localize `:@@core.search.location:Location`;
   private static readonly MAX_RESULTS = 5;
 
-  private httpClient = inject(HttpClient);
+  constructor(
+    private httpClient: HttpClient,
+    private store$: Store,
+    @Inject(TAILORMAP_API_V1_SERVICE) private api: TailormapApiV1ServiceModel,
+  ) {}
 
-  public search$(projection: string, searchTerm: string): Observable<SearchResultModel> {
-    if (projection === ProjectionCodesEnum.RD) {
-      return this.searchRd$(searchTerm);
+  public search$(projection: string, searchTerm: string): Observable<SearchResultModel[]> {
+    return combineLatest([
+      this.store$.select(selectViewerId),
+      this.store$.select(selectSearchableLayers),
+    ])
+      .pipe(
+        take(1),
+        switchMap(([ viewerId, searchableLayers ]) => {
+          if (viewerId === null) {
+            return of([]);
+          }
+          const locationSearch$ = projection === ProjectionCodesEnum.RD
+            ? this.searchRd$(searchTerm)
+            : this.searchOSMNominatim$(searchTerm);
+          const searches$: Array<Observable<SearchResultModel | null>> = [locationSearch$];
+          searchableLayers.forEach(layer => {
+            searches$.push(this.searchLayer$(viewerId, layer, searchTerm));
+          });
+          return forkJoin(searches$);
+        }),
+        map(results => results.filter((r): r is SearchResultModel => r !== null)),
+      );
+  }
+
+  private searchLayer$(applicationId: string, layer: ExtendedAppLayerModel, searchTerm: string): Observable<SearchResultModel | null> {
+    if (!layer) {
+      return of(null);
     }
-    return this.searchOSMNominatim$(searchTerm);
+    return this.api.search$({
+      applicationId,
+      layerId: layer.id,
+      query: searchTerm,
+    }).pipe(
+      map<SearchResponseModel, SearchResultModel | null>(searchResponse => {
+        if (!searchResponse) {
+          return null;
+        }
+        return {
+          id: `${layer.searchIndex?.id ?? layer.id}`,
+          attribution: '',
+          name: layer.searchIndex?.name ?? layer.layerName,
+          results: searchResponse.documents.map<SearchResultItemModel>(doc => ({
+            id: doc.fid,
+            geometry: doc.geometry,
+            label: (doc.displayValues || []).join(', '),
+          })),
+        };
+      }),
+    );
   }
 
   private searchOSMNominatim$(searchTerm: string): Observable<SearchResultModel> {
-    return this.httpClient.get<NominatimResponse[]>(`https://nominatim.openstreetmap.org/search`, {
+    return this.httpClient.get<NominatimResponseModel[]>(`https://nominatim.openstreetmap.org/search`, {
       params: {
         q: searchTerm,
         format: 'jsonv2',
@@ -56,8 +85,11 @@ export class SimpleSearchService {
     }).pipe(
       catchError(() => of([])),
       map(result => ({
+        id: 'osm-nominatim',
+        name: SimpleSearchService.LOCATION_LABEL,
         attribution: result.length > 0 ? result[0].licence : '',
         results: result.slice(0, SimpleSearchService.MAX_RESULTS).map(res => ({
+          id: `${res.place_id}`,
           label: res.display_name,
           geometry: res.geotext,
           projectionCode: ProjectionCodesEnum.WGS84,
@@ -67,17 +99,20 @@ export class SimpleSearchService {
   }
 
   private searchRd$(searchTerm: string): Observable<SearchResultModel> {
-    return this.httpClient.get<LocationServerResponse>(`https://api.pdok.nl/bzk/locatieserver/search/v3_1/suggest`, {
+    return this.httpClient.get<LocationServerResponseModel>(`https://api.pdok.nl/bzk/locatieserver/search/v3_1/suggest`, {
       params: {
         q: searchTerm,
         rows: SimpleSearchService.MAX_RESULTS.toString(),
-        fl: 'weergavenaam,centroide_rd,geometrie_rd',
+        fl: 'weergavenaam,centroide_rd,geometrie_rd,id',
       },
     }).pipe(
       catchError(() => of({ response: { docs: [] } })),
       map(result => ({
+        id: 'pdok-locatie-server',
+        name: SimpleSearchService.LOCATION_LABEL,
         attribution: $localize `:@@core.toolbar.search-location-pdok-attribution:Data by [PDOK](https://pdok.nl)`,
         results: result.response.docs.slice(0, SimpleSearchService.MAX_RESULTS).map(doc => ({
+          id: doc.id,
           label: doc.weergavenaam,
           geometry: doc.geometrie_rd || doc.centroide_rd,
           projectionCode: ProjectionCodesEnum.RD,

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams, HttpResponse, HttpStatusCode } from '@angular/common/http';
 import {
   ViewerResponseModel, FeaturesResponseModel, LayerDetailsModel, MapResponseModel, Sortorder, UserResponseModel, VersionResponseModel,
-  FeatureModel, ConfigResponseModel,
+  FeatureModel, ConfigResponseModel, SearchResponseModel,
 } from '../models';
 import { map, Observable } from 'rxjs';
 import { TailormapApiV1ServiceModel } from './tailormap-api-v1.service.model';
@@ -168,6 +168,21 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
 
   public getConfig$<T>(key: string): Observable<ConfigResponseModel<T>> {
     return this.httpClient.get<ConfigResponseModel<T>>(`${TailormapApiConstants.BASE_URL}/config/${key}`);
+  }
+
+  public search$(params: {
+    applicationId: string;
+    layerId: string;
+    query: string;
+    start?: number;
+  }): Observable<SearchResponseModel> {
+    const queryParams = ApiHelper.getQueryParams({
+      q: params.query,
+      start: params.start,
+    });
+    return this.httpClient.get<SearchResponseModel>(`${TailormapApiConstants.BASE_URL}/${params.applicationId}/layer/${params.layerId}/search`, {
+      params: queryParams,
+    });
   }
 
   private getQueryParams(params: Record<string, string | number | boolean | undefined>): HttpParams {

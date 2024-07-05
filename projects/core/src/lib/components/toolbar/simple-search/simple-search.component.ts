@@ -1,12 +1,15 @@
-import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, signal } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { concatMap, Observable, of, startWith, Subject, tap, timer } from 'rxjs';
-import { SearchResult, SearchResultModel, SimpleSearchService } from './simple-search.service';
+import { SimpleSearchService } from './simple-search.service';
 import { debounceTime, filter, takeUntil, withLatestFrom, switchMap } from 'rxjs/operators';
 import { MapService } from '@tailormap-viewer/map';
 import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.helper';
 import { FeatureHelper } from '@tailormap-viewer/map';
 import { FeatureModel } from '@tailormap-viewer/api';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { SearchResultModel } from './models/search-result.model';
+import { SearchResultItemModel } from './models/search-result-item.model';
 
 type SearchStatusType = 'empty' | 'no_results' | 'searching' | 'belowMinLength' | 'complete';
 
@@ -16,29 +19,37 @@ type SearchStatusType = 'empty' | 'no_results' | 'searching' | 'belowMinLength' 
   styleUrls: ['./simple-search.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SimpleSearchComponent implements OnInit, OnDestroy {
+export class SimpleSearchComponent implements OnInit {
 
   private static readonly SEARCH_DEBOUNCE_TIME = 1000;
-  public active = false;
+
+  public active = signal(false);
   public minLength = 4;
-  public searchControl = new FormControl<string | SearchResult>('');
-  private searchResultsSubject = new Subject<SearchResultModel | null>();
-  public searchResults$: Observable<SearchResultModel | null> = this.searchResultsSubject.asObservable();
+
+  public searchControl = new FormControl<string | SearchResultItemModel>('');
+
+  private searchResultsSubject = new Subject<SearchResultModel[] | null>();
+  public searchResults$: Observable<SearchResultModel[] | null> = this.searchResultsSubject.asObservable();
+
   private searchStatusSubject = new Subject<SearchStatusType>();
   public searchStatus$: Observable<SearchStatusType> = this.searchStatusSubject.asObservable();
-  private destroyed = new Subject();
-  private searchService = inject(SimpleSearchService);
-  private mapService = inject(MapService);
+
+  constructor(
+    private searchService: SimpleSearchService,
+    private mapService: MapService,
+    private destroyRef: DestroyRef,
+  ) {
+  }
 
   public ngOnInit(): void {
     const searchTerm$ = this.searchControl.valueChanges.pipe(
       startWith(''),
-      filter(() => this.active),
+      filter(() => this.active()),
       filter((value): value is string => typeof value === 'string'));
 
     this.searchStatusSubject.next('empty');
     searchTerm$.pipe(
-      takeUntil(this.destroyed),
+      takeUntilDestroyed(this.destroyRef),
       tap(searchStr => {
         if (searchStr.length < this.minLength) {
           this.searchResultsSubject.next(null);
@@ -54,33 +65,28 @@ export class SimpleSearchComponent implements OnInit, OnDestroy {
       concatMap(([ searchStr, projectionCode ]) => this.searchService.search$(projectionCode, searchStr)),
     ).subscribe(searchResult => {
       this.searchResultsSubject.next(searchResult);
-      this.searchStatusSubject.next(searchResult.results.length === 0 ? 'no_results' : 'complete');
+      this.searchStatusSubject.next(searchResult.every(r => r.results.length === 0) ? 'no_results' : 'complete');
     });
 
     this.searchControl.valueChanges
       .pipe(
-        takeUntil(this.destroyed),
-        filter((value): value is SearchResult => {
-          return typeof value !== 'string' && !!value && !!(value as SearchResult).geometry;
+        takeUntilDestroyed(this.destroyRef),
+        filter((value): value is SearchResultItemModel => {
+          return typeof value !== 'string' && !!value && !!(value as SearchResultItemModel).geometry;
         }),
       )
       .subscribe(searchResult => this.showResult(searchResult));
   }
 
-  public ngOnDestroy() {
-    this.destroyed.next(null);
-    this.destroyed.complete();
-  }
-
   public toggle(close?: boolean) {
-    this.active = close ? false : !this.active;
+    this.active.set(close ? false : !this.active());
   }
 
-  public displayLabel(result: SearchResult): string {
+  public displayLabel(result: SearchResultItemModel): string {
     return result && result.label ? result.label : '';
   }
 
-  private showResult(searchResult: SearchResult) {
+  private showResult(searchResult: SearchResultItemModel) {
     const style = FeatureStylingHelper.getDefaultHighlightStyle('search-result-highlight-style', {
       pointSize: 10,
       pointType: 'circle',

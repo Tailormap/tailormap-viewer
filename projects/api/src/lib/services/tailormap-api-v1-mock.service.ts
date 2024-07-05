@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
   ViewerResponseModel, LayerDetailsModel, MapResponseModel, UserResponseModel, VersionResponseModel, FeatureModel, ConfigResponseModel,
+  SearchResponseModel,
 } from '../models';
 import { delay, Observable, of } from 'rxjs';
 import { TailormapApiV1ServiceModel } from './tailormap-api-v1.service.model';
@@ -97,6 +98,10 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
 
   public getConfig$<T>(key: string): Observable<ConfigResponseModel<T>> {
     return of(getConfigModel<T>({ key }));
+  }
+
+  public search$(_params: { applicationId: string; layerId: string; query: string; start?: number }): Observable<SearchResponseModel> {
+    return of({ start: 0, documents: [], maxScore: 0, total: 0 });
   }
 
 }
