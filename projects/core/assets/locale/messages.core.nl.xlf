@@ -893,6 +893,10 @@
         <source>Logout</source>
         <target>Uitloggen</target>
       </trans-unit>
+      <trans-unit id="core.search.location" datatype="html">
+        <source>Location</source>
+        <target>Locatie</target>
+      </trans-unit>
       <trans-unit id="core.toc.available-layers" datatype="html">
         <source>Available layers</source>
         <target>Beschikbare lagen</target>
