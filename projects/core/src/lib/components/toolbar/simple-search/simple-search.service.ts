@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { catchError, combineLatest, filter, forkJoin, map, Observable, of, switchMap } from 'rxjs';
+import { catchError, combineLatest, forkJoin, map, Observable, of, switchMap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ProjectionCodesEnum } from '@tailormap-viewer/map';
 import { Store } from '@ngrx/store';
@@ -65,7 +65,7 @@ export class SimpleSearchService {
           id: `${layer.searchIndex?.id ?? layer.id}`,
           attribution: '',
           name: layer.searchIndex?.name ?? layer.layerName,
-          results: searchResponse.documents.map<SearchResultItemModel>(doc => ({
+          results: searchResponse.documents.slice(0, SimpleSearchService.MAX_RESULTS).map<SearchResultItemModel>(doc => ({
             id: doc.fid,
             geometry: doc.geometry,
             label: (doc.displayValues || []).join(', '),
