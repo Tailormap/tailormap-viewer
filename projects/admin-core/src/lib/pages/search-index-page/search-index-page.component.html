@@ -1,0 +1,6 @@
+<div class="admin-page-wrapper" [ngClass]="className$ | async">
+  <div class="admin-tree">
+    <tm-admin-search-index-list></tm-admin-search-index-list>
+  </div>
+  <div class="admin-content" [ngClass]=><router-outlet></router-outlet></div>
+</div>

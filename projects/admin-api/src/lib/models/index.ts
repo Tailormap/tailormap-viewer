@@ -42,3 +42,5 @@ export * from './oidc-configuration.model';
 export * from './form.model';
 export * from './form-summary.model';
 export * from './upload.model';
+export * from './search-index.model';
+export * from './search-index-status.enum';

@@ -1,0 +1,35 @@
+@if (hasShortcuts$ | async) {
+  <fieldset class="catalog-shortcuts" aria-label="catalog shortcuts">
+    <legend i18n="@@admin-core.catalog.catalog-shortcuts">Catalog shortcuts</legend>
+    @if (geoService$ | async; as geoService) {
+      <mat-icon svgIcon="admin_service"></mat-icon>
+      <strong i18n="@@admin-core.common.geo-service">Geo service</strong>
+      <button mat-stroked-button
+              [tmTooltip]="geoService.title"
+              (click)="updateGeoServiceSetting($event, geoService)">
+        {{ geoService.title }}
+        <mat-icon svgIcon="edit_square" iconPositionEnd></mat-icon>
+      </button>
+    }
+    @if (geoServiceLayer$ | async; as serviceLayer) {
+      <mat-icon svgIcon="admin_catalog"></mat-icon>
+      <strong i18n="@@admin-core.catalog.layer-name">Layer name</strong>
+      <button mat-stroked-button
+              [tmTooltip]="serviceLayer.fullLayerName"
+              (click)="updateGeoServiceLayerSetting($event, serviceLayer.service, serviceLayer.layer)">
+        {{ serviceLayer.fullLayerName }}
+        <mat-icon svgIcon="edit_square" iconPositionEnd></mat-icon>
+      </button>
+    }
+    @if (featureType$ | async; as featureType) {
+      <mat-icon svgIcon="admin_feature_type"></mat-icon>
+      <strong i18n="@@admin-core.catalog.feature-type">Feature type</strong>
+      <button mat-stroked-button
+              [tmTooltip]="featureType.title || featureType.name"
+              (click)="updateFeatureTypeSetting($event, featureType)">
+        {{ featureType.title || featureType.name }}
+        <mat-icon svgIcon="edit_square" iconPositionEnd></mat-icon>
+      </button>
+    }
+  </fieldset>
+}

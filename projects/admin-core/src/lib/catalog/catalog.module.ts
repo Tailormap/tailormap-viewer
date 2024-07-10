@@ -38,6 +38,7 @@ import {
 import { FeatureTypeAttributesComponent } from './feature-type-attributes/feature-type-attributes.component';
 import { FeatureTypeFormComponent } from './feature-type-form/feature-type-form.component';
 import { FeatureTypeFormDialogComponent } from './feature-type-form-dialog/feature-type-form-dialog.component';
+import { CatalogShortcutButtonsComponent } from './catalog-shortcut-buttons/catalog-shortcut-buttons.component';
 
 
 @NgModule({
@@ -68,6 +69,7 @@ import { FeatureTypeFormDialogComponent } from './feature-type-form-dialog/featu
     FeatureSourceUsedDialogComponent,
     CatalogItemsInFolderDialogComponent,
     FeatureTypeAttributesComponent,
+    CatalogShortcutButtonsComponent,
   ],
   imports: [
     CommonModule,
@@ -82,6 +84,7 @@ import { FeatureTypeFormDialogComponent } from './feature-type-form-dialog/featu
     CatalogBaseTreeNodeComponent,
     FeatureTypeAttributesComponent,
     FeatureTypeSelectorComponent,
+    CatalogShortcutButtonsComponent,
   ],
 })
 export class CatalogModule {

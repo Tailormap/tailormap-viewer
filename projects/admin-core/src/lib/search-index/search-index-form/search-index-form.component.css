@@ -1,0 +1,8 @@
+.form-control {
+  margin-top: 16px;
+}
+
+.form-control > strong {
+  display: block;
+  margin-bottom: 8px;
+}

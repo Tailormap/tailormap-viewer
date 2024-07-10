@@ -5,7 +5,7 @@ import { map, Observable } from 'rxjs';
 import {
   CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel, ConfigModel,
   OIDCConfigurationModel, FeatureTypeModel,
-  GeoServiceSummaryWithLayersModel, FeatureSourceSummaryWithFeatureTypesModel, FormSummaryModel, FormModel, UploadModel,
+  GeoServiceSummaryWithLayersModel, FeatureSourceSummaryWithFeatureTypesModel, FormSummaryModel, FormModel, UploadModel, SearchIndexModel,
 } from '../models';
 import { CatalogModelHelper } from '../helpers/catalog-model.helper';
 import { TailormapApiConstants } from '@tailormap-viewer/api';
@@ -320,5 +320,27 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
       map(response => response.status === 204),
     );
   }
+
+  public getSearchIndexes$(): Observable<SearchIndexModel[]> {
+    return this.httpClient.get<{ _embedded: { 'search-indexes': SearchIndexModel[] }}>(`${TailormapAdminApiV1Service.BASE_URL}/search-indexes?size=1000`)
+      .pipe(map(response => response._embedded['search-indexes']));
+  }
+
+  public createSearchIndex$(params: { searchIndex: Omit<SearchIndexModel, 'id'> }): Observable<SearchIndexModel> {
+    return this.httpClient.post<SearchIndexModel>(`${TailormapAdminApiV1Service.BASE_URL}/search-indexes`, params.searchIndex);
+  }
+
+  public updateSearchIndex$(params: { id: number; searchIndex: Partial<SearchIndexModel> }): Observable<SearchIndexModel> {
+    return this.httpClient.patch<SearchIndexModel>(`${TailormapAdminApiV1Service.BASE_URL}/search-indexes/${params.id}`, params.searchIndex);
+  }
+
+  public deleteSearchIndex$(id: number): Observable<boolean> {
+    return this.httpClient.delete<boolean>(`${TailormapAdminApiV1Service.BASE_URL}/search-indexes/${id}`, {
+      observe: 'response',
+    }).pipe(
+      map(response => response.status === 204),
+    );
+  }
+
 
 }

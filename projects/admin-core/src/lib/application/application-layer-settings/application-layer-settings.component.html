@@ -1,34 +1,10 @@
 <form [formGroup]="layerSettingsForm" *ngIf="node">
   <div class="title" i18n="@@admin-core.common.settings-for">Settings for {{ layerTitle }}</div>
-  <fieldset class="layer-details" *ngIf="serviceLayer">
-    <legend i18n="@@admin-core.catalog.catalog-shortcuts">Catalog shortcuts</legend>
-    <ng-container>
-      <mat-icon svgIcon="admin_service"></mat-icon>
-      <strong i18n="@@admin-core.common.geo-service">Geo service</strong>
-      <button mat-stroked-button [tmTooltip]="serviceLayer.service.title" (click)="updateGeoServiceSetting($event, serviceLayer.service)">
-        {{ serviceLayer.service.title }}
-        <mat-icon svgIcon="edit_square" iconPositionEnd></mat-icon>
-      </button>
-    </ng-container>
-    <ng-container>
-      <mat-icon svgIcon="admin_catalog"></mat-icon>
-      <strong i18n="@@admin-core.catalog.layer-name">Layer name</strong>
-      <button mat-stroked-button [tmTooltip]="serviceLayer.fullLayerName" (click)="updateGeoServiceLayerSetting($event, serviceLayer.service, serviceLayer.layer)">
-        {{ serviceLayer.fullLayerName }}
-        <mat-icon svgIcon="edit_square" iconPositionEnd></mat-icon>
-      </button>
-    </ng-container>
-    <ng-container *ngIf="featureSourceAndType$ | async as featureSourceAndType">
-      <ng-container *ngIf="featureSourceAndType.featureType">
-        <mat-icon svgIcon="admin_feature_type"></mat-icon>
-        <strong i18n="@@admin-core.catalog.feature-type">Feature type</strong>
-        <button mat-stroked-button [tmTooltip]="featureSourceAndType.featureType.title || featureSourceAndType.featureType.name" (click)="updateFeatureTypeSetting($event, featureSourceAndType)">
-          {{ featureSourceAndType.featureType.title || featureSourceAndType.featureType.name }}
-          <mat-icon svgIcon="edit_square" iconPositionEnd></mat-icon>
-        </button>
-      </ng-container>
-    </ng-container>
-  </fieldset>
+  @if (serviceLayer) {
+    <tm-admin-catalog-shortcut-buttons [geoServiceId]="serviceLayer.service.id"
+                                       [geoServiceLayerId]="serviceLayer.layer.id"
+                                       [featureTypeId]="(featureSourceAndType$ | async)?.featureType?.id ?? null"></tm-admin-catalog-shortcut-buttons>
+  }
   <mat-form-field>
     <mat-label i18n="@@admin-core.common.title">Title</mat-label>
     <input matInput formControlName="title" />
