@@ -241,6 +241,14 @@
         <source>There are no forms for this feature type</source>
         <target>Er zijn geen formulieren voor dit feature type</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.no-search-index" datatype="html">
+        <source>No search index</source>
+        <target>Geen zoekindex</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.no-search-indexes-for-feature-type" datatype="html">
+        <source>There are no search indexes for this feature type</source>
+        <target>Er zijn geen zoekindexen voor dit feature type</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.non-unique-name-error" datatype="html">
         <source>Name should be unique.</source>
         <target>Naam moet uniek zijn.</target>
@@ -272,6 +280,10 @@
       <trans-unit id="admin-core.application.select-form" datatype="html">
         <source>Select (optional) form</source>
         <target>Selecteer (optioneel) formulier</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.select-search-index" datatype="html">
+        <source>Select search index</source>
+        <target state="new">Select search index</target>
       </trans-unit>
       <trans-unit id="admin-core.application.service-updated" datatype="html">
         <source>Service <x id="PH" equiv-text="updatedService.title"/> updated</source>
@@ -829,6 +841,10 @@
         <source>Close</source>
         <target>Sluiten</target>
       </trans-unit>
+      <trans-unit id="admin-core.common.comment" datatype="html">
+        <source>Comment</source>
+        <target>Opmerking</target>
+      </trans-unit>
       <trans-unit id="admin-core.common.comments" datatype="html">
         <source>Comments</source>
         <target>Opmerkingen</target>
@@ -864,6 +880,22 @@
       <trans-unit id="admin-core.common.enabled" datatype="html">
         <source>Enabled</source>
         <target>Ingeschakeld</target>
+      </trans-unit>
+      <trans-unit id="admin-core.common.feature-source" datatype="html">
+        <source>Feature source and type</source>
+        <target>Feature source en type</target>
+      </trans-unit>
+      <trans-unit id="admin-core.common.feature-source" datatype="html">
+        <source>Feature source and type</source>
+        <target>Feature source en type</target>
+      </trans-unit>
+      <trans-unit id="admin-core.common.filter-attributes" datatype="html">
+        <source>Filter attributes</source>
+        <target>Filter attributen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.common.filter-attributes" datatype="html">
+        <source>Filter attributes</source>
+        <target>Filter attributen</target>
       </trans-unit>
       <trans-unit id="admin-core.common.filter-dots" datatype="html">
         <source>Filter...</source>
@@ -944,6 +976,10 @@
       <trans-unit id="admin-core.common.saved" datatype="html">
         <source>Saved</source>
         <target>Opgeslagen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.common.search-indexes-title" datatype="html">
+        <source>Search Indexes</source>
+        <target>Zoekindexen</target>
       </trans-unit>
       <trans-unit id="admin-core.common.select-file" datatype="html">
         <source>Select file</source>
@@ -1169,10 +1205,6 @@
         <source>Error while updating form.</source>
         <target>Fout bij het aanpassen van het formulier.</target>
       </trans-unit>
-      <trans-unit id="admin-core.form.feature-source" datatype="html">
-        <source>Feature source and type</source>
-        <target>Feature source en type</target>
-      </trans-unit>
       <trans-unit id="admin-core.form.field-type-boolean" datatype="html">
         <source>Checkbox field</source>
         <target>Vinkvak</target>
@@ -1204,10 +1236,6 @@
       <trans-unit id="admin-core.form.field-type-timestamp" datatype="html">
         <source>Timestamp field</source>
         <target>Tijdsaanduiding veld</target>
-      </trans-unit>
-      <trans-unit id="admin-core.form.filter-attributes" datatype="html">
-        <source>Filter attributes</source>
-        <target>Filter attributen</target>
       </trans-unit>
       <trans-unit id="admin-core.form.filter-fields" datatype="html">
         <source>Filter fields</source>
@@ -1353,6 +1381,10 @@
         <source>Home</source>
         <target>Home</target>
       </trans-unit>
+      <trans-unit id="admin-core.navigation.search-indexes" datatype="html">
+        <source>Search indexes</source>
+        <target>Zoekindexen</target>
+      </trans-unit>
       <trans-unit id="admin-core.navigation.settings" datatype="html">
         <source>Settings</source>
         <target>Instellingen</target>
@@ -1452,6 +1484,70 @@
       <trans-unit id="admin-core.oidc.username-attribute-placeholder" datatype="html">
         <source>(name, sub, email, etc)</source>
         <target>(naam, sub, email, etc)</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.add-search-index" datatype="html">
+        <source>Add search index</source>
+        <target>Zoekindex toevoegen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.create-search-index" datatype="html">
+        <source>Create search index</source>
+        <target>Zoekindex aanmaken</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.delete-search-index" datatype="html">
+        <source>Delete search index <x id="PH" equiv-text="searchIndex.name"/></source>
+        <target>Zoekindex {$PH} verwijderen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.delete-search-index-message" datatype="html">
+        <source>Are you sure you want to delete search index <x id="PH" equiv-text="searchIndex.name"/>? This action cannot be undone.</source>
+        <target>Weet u zeker dat u de zoekindex {$PH} wilt verwijderen? Deze actie kan niet ongedaan gemaakt worden.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.edit-search-index" datatype="html">
+        <source>Edit search index <x id="INTERPOLATION" equiv-text="{{searchIndex.name}}"/></source>
+        <target>Zoekindex {$INTERPOLATION} bewerken</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.error-creating-search-index" datatype="html">
+        <source>Error while creating search index.</source>
+        <target>Fout bij het aanmaken van de zoekindex.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.error-deleting-search-index" datatype="html">
+        <source>Error while deleting search index.</source>
+        <target>Fout bij het verwijderen van de zoekindex.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.error-loading-search-indexes" datatype="html">
+        <source>Error while loading list of search indexes</source>
+        <target>Fout bij het laden van de lijst met zoekindexen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.error-updating-search-index" datatype="html">
+        <source>Error while updating search index.</source>
+        <target>Fout bij het bijwerken van de zoekindex.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.filter-search-indexes" datatype="html">
+        <source>Filter search indexes</source>
+        <target>Zoekindexen filteren</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.search-index-created" datatype="html">
+        <source>Search index created</source>
+        <target>Zoekindex aangemaakt</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.search-index-removed" datatype="html">
+        <source>Search index removed</source>
+        <target>Zoekindex verwijderd</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.search-index-updated" datatype="html">
+        <source>Search index updated</source>
+        <target>Zoekindex bijgewerkt</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.search-indexes" datatype="html">
+        <source>Search Indexes</source>
+        <target>Zoekindexen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.selected-attributes-to-display" datatype="html">
+        <source>Selected attributes used to display</source>
+        <target>Geselecteerde attributen die worden weergegeven</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.selected-attributes-to-index" datatype="html">
+        <source>Selected attributes used to index</source>
+        <target>Geselecteerde attributen die worden geïndexeerd</target>
       </trans-unit>
       <trans-unit id="admin-core.select-upload.file-in-use" datatype="html">
         <source>File is still in use</source>

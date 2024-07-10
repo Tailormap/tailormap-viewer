@@ -242,6 +242,14 @@
         <source>There are no forms for this feature type</source>
         <target>Es gibt keine Formulare für diesen Feature-Typ</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.no-search-index" datatype="html">
+        <source>No search index</source>
+        <target>Kein Suchindex</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.no-search-indexes-for-feature-type" datatype="html">
+        <source>There are no search indexes for this feature type</source>
+        <target>Es gibt keine Suchindexen für diesen Feature-Typ</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.non-unique-name-error" datatype="html">
         <source>Name should be unique.</source>
         <target>Der Name sollte eindeutig sein.</target>
@@ -273,6 +281,10 @@
       <trans-unit id="admin-core.application.select-form" datatype="html">
         <source>Select (optional) form</source>
         <target>Auswählen (optional) Formular</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.select-search-index" datatype="html">
+        <source>Select search index</source>
+        <target>Auswählen Suchindex</target>
       </trans-unit>
       <trans-unit id="admin-core.application.service-updated" datatype="html">
         <source>Service <x id="PH" equiv-text="updatedService.title"/> updated</source>
@@ -830,6 +842,10 @@
         <source>Close</source>
         <target>Schließen</target>
       </trans-unit>
+      <trans-unit id="admin-core.common.comment" datatype="html">
+        <source>Comment</source>
+        <target>Kommentar</target>
+      </trans-unit>
       <trans-unit id="admin-core.common.comments" datatype="html">
         <source>Comments</source>
         <target>Kommentare</target>
@@ -865,6 +881,22 @@
       <trans-unit id="admin-core.common.enabled" datatype="html">
         <source>Enabled</source>
         <target>Aktiviert</target>
+      </trans-unit>
+      <trans-unit id="admin-core.common.feature-source" datatype="html">
+        <source>Feature source and type</source>
+        <target>Feature-Quelle und Typ</target>
+      </trans-unit>
+      <trans-unit id="admin-core.common.feature-source" datatype="html">
+        <source>Feature source and type</source>
+        <target>Feature-Quelle und Typ</target>
+      </trans-unit>
+      <trans-unit id="admin-core.common.filter-attributes" datatype="html">
+        <source>Filter attributes</source>
+        <target>Filterattribute</target>
+      </trans-unit>
+      <trans-unit id="admin-core.common.filter-attributes" datatype="html">
+        <source>Filter attributes</source>
+        <target>Filterattribute</target>
       </trans-unit>
       <trans-unit id="admin-core.common.filter-dots" datatype="html">
         <source>Filter...</source>
@@ -945,6 +977,10 @@
       <trans-unit id="admin-core.common.saved" datatype="html">
         <source>Saved</source>
         <target>Gespeichert</target>
+      </trans-unit>
+      <trans-unit id="admin-core.common.search-indexes-title" datatype="html">
+        <source>Search Indexes</source>
+        <target>Suchindizes</target>
       </trans-unit>
       <trans-unit id="admin-core.common.select-file" datatype="html">
         <source>Select file</source>
@@ -1087,7 +1123,7 @@
       </trans-unit>
       <trans-unit id="admin-core.components.coordinate-link-window-help1" datatype="html">
         <source>Add one or more URL&apos;s to configure the Coordinate Link Window component.</source>
-        <target>Fügen Sie eine oder mehrere URLs hinzu, um das Komponente "Koordinaten-Link-Fenster" zu konfigurieren.</target>
+        <target>Fügen Sie eine oder mehrere URLs hinzu, um das Komponente &quot;Koordinaten-Link-Fenster&quot; zu konfigurieren.</target>
       </trans-unit>
       <trans-unit id="admin-core.components.coordinate-link-window-help2" datatype="html">
         <source>For each URL you can use <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[X]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> or <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[lat]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> and <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[Y]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> or <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[lon]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> placeholders in the URL.</source>
@@ -1169,10 +1205,6 @@
         <source>Error while updating form.</source>
         <target>Fehler beim Aktualisieren des Formulars.</target>
       </trans-unit>
-      <trans-unit id="admin-core.form.feature-source" datatype="html">
-        <source>Feature source and type</source>
-        <target>Feature-Quelle und Typ</target>
-      </trans-unit>
       <trans-unit id="admin-core.form.field-type-boolean" datatype="html">
         <source>Checkbox field</source>
         <target>Checkbox-Feld</target>
@@ -1204,10 +1236,6 @@
       <trans-unit id="admin-core.form.field-type-timestamp" datatype="html">
         <source>Timestamp field</source>
         <target>Zeitstempel-Feld</target>
-      </trans-unit>
-      <trans-unit id="admin-core.form.filter-attributes" datatype="html">
-        <source>Filter attributes</source>
-        <target>Attribute filtern</target>
       </trans-unit>
       <trans-unit id="admin-core.form.filter-fields" datatype="html">
         <source>Filter fields</source>
@@ -1353,6 +1381,10 @@
         <source>Home</source>
         <target>Startseite</target>
       </trans-unit>
+      <trans-unit id="admin-core.navigation.search-indexes" datatype="html">
+        <source>Search indexes</source>
+        <target>Suchindizes</target>
+      </trans-unit>
       <trans-unit id="admin-core.navigation.settings" datatype="html">
         <source>Settings</source>
         <target>Einstellungen</target>
@@ -1452,6 +1484,69 @@
       <trans-unit id="admin-core.oidc.username-attribute-placeholder" datatype="html">
         <source>(name, sub, email, etc)</source>
         <target>(Name, Sub, E-Mail, usw.)</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.add-search-index" datatype="html">
+        <source>Add search index</source>
+        <target>Suchindex hinzufügen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.create-search-index" datatype="html">
+        <source>Create search index</source>
+        <target>Suchindex erstellen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.delete-search-index" datatype="html">
+        <source>Delete search index <x id="PH" equiv-text="searchIndex.name"/></source>
+        <target state="new">Suchindex {$PH} löschen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.delete-search-index-message" datatype="html">
+        <source>Are you sure you want to delete search index <x id="PH" equiv-text="searchIndex.name"/>? This action cannot be undone.</source>
+        <target state="new">Sind Sie sicher, dass Sie den Suchindex {$PH} löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.edit-search-index" datatype="html">
+        <source>Edit search index <x id="INTERPOLATION" equiv-text="{{searchIndex.name}}"/></source>
+        <target state="new">Suchindex {$INTERPOLATION} bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.error-creating-search-index" datatype="html">
+        <source>Error while creating search index.</source>
+        <target>Fehler beim Erstellen des Suchindex.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.error-deleting-search-index" datatype="html">
+        <source>Error while deleting search index.</source>
+        <target>Fehler beim Löschen des Suchindex.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.error-loading-search-indexes" datatype="html">
+        <source>Error while loading list of search indexes</source>
+        <target>Fehler beim Laden der Liste der Suchindizes</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.error-updating-search-index" datatype="html">
+        <source>Error while updating search index.</source>
+        <target>Fehler beim Aktualisieren des Suchindex.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.filter-search-indexes" datatype="html">
+        <source>Filter search indexes</source>
+        <target>Suchindizes filtern</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.search-index-created" datatype="html">
+        <source>Search index created</source>
+        <target>Suchindex erstellt</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.search-index-removed" datatype="html">
+        <source>Search index removed</source>
+        <target>Suchindex entfernt</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.search-index-updated" datatype="html">
+        <source>Search index updated</source>
+        <target>Suchindex aktualisiert</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.search-indexes" datatype="html">
+        <source>Search Indexes</source>
+        <target>Suchindizes</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.selected-attributes-to-display" datatype="html">
+        <source>Selected attributes used to display</source>
+        <target>Selektierte Attribute zur Anzeige</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.selected-attributes-to-index" datatype="html">
+        <source>Selected attributes used to index</source>
       </trans-unit>
       <trans-unit id="admin-core.select-upload.file-in-use" datatype="html">
         <source>File is still in use</source>
