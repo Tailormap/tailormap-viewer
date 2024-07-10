@@ -27,10 +27,23 @@
   padding-top: 6px;
 }
 
+.mat-mdc-option.mdc-list-item--disabled {
+  pointer-events: auto;
+}
+
 .attribution,
-.hint {
+.attribution.mat-mdc-option.mdc-list-item--disabled  ::ng-deep > .mdc-list-item__primary-text,
+.hint,
+.hint.mat-mdc-option.mdc-list-item--disabled  ::ng-deep > .mdc-list-item__primary-text,
+.section-label,
+.section-label.mat-mdc-option.mdc-list-item--disabled  ::ng-deep > .mdc-list-item__primary-text {
   font-size: 11px;
   color: var(--disabled-text-color);
+  opacity: 1;
+}
+
+.section-label {
+  font-size: 11px;
 }
 
 .attribution ::ng-deep a {

@@ -38,3 +38,5 @@ export * from './form-field-type.enum';
 export * from './form-options.model';
 export * from './form-field-value-list-item.model';
 export * from './layer-search-index.model';
+export * from './search-response.model';
+export * from './search-document.model';
