@@ -55,7 +55,7 @@ export class SimpleSearchService {
     return this.api.search$({
       applicationId,
       layerId: layer.id,
-      query: searchTerm,
+      query: `*${searchTerm}*`,
     }).pipe(
       map<SearchResponseModel, SearchResultModel | null>(searchResponse => {
         if (!searchResponse) {
