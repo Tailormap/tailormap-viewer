@@ -105,6 +105,24 @@ export class SearchIndexService {
       );
   }
 
+  public reIndexSearchIndex$(id: number) {
+
+    return this.adminApiService.reindexSearchIndex$(id)
+      .pipe(
+        catchError(() => {
+          this.adminSnackbarService.showMessage($localize `:@@admin-core.search-index.reindex-error:Error while re-indexing search index.`);
+          return of(false);
+        }),
+        map(success => {
+          if (success) {
+            this.adminSnackbarService.showMessage($localize `:@@admin-core.search-index.search-reindex-success:Re-indexing success`);
+            return success;
+          }
+          return false;
+        }),
+      );
+  }
+
   private updateSearchIndexState(
     id: string | number,
     type: 'add' | 'update' | 'remove',

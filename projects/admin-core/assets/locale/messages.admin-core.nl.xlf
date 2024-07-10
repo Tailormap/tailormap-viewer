@@ -1525,6 +1525,14 @@
         <source>Filter search indexes</source>
         <target>Zoekindexen filteren</target>
       </trans-unit>
+      <trans-unit id="admin-core.search-index.reindex" datatype="html">
+        <source>Re-index</source>
+        <target>Herindexeren</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.reindex-error" datatype="html">
+        <source>Error while re-indexing search index.</source>
+        <target>Fout bij het herindexeren van de zoekindex.</target>
+      </trans-unit>
       <trans-unit id="admin-core.search-index.search-index-created" datatype="html">
         <source>Search index created</source>
         <target>Zoekindex aangemaakt</target>
@@ -1540,6 +1548,10 @@
       <trans-unit id="admin-core.search-index.search-indexes" datatype="html">
         <source>Search Indexes</source>
         <target>Zoekindexen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.search-reindex-success" datatype="html">
+        <source>Re-indexing success</source>
+        <target>Herindexeren gelukt</target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.selected-attributes-to-display" datatype="html">
         <source>Selected attributes used to display</source>
