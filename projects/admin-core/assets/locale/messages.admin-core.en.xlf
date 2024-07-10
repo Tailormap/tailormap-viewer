@@ -1070,6 +1070,12 @@
       <trans-unit id="admin-core.search-index.filter-search-indexes" datatype="html">
         <source>Filter search indexes</source>
       </trans-unit>
+      <trans-unit id="admin-core.search-index.reindex" datatype="html">
+        <source>Re-index</source>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.reindex-error" datatype="html">
+        <source>Error while re-indexing search index.</source>
+      </trans-unit>
       <trans-unit id="admin-core.search-index.search-index-created" datatype="html">
         <source>Search index created</source>
       </trans-unit>
@@ -1081,6 +1087,9 @@
       </trans-unit>
       <trans-unit id="admin-core.search-index.search-indexes" datatype="html">
         <source>Search Indexes</source>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.search-reindex-success" datatype="html">
+        <source>Re-indexing success</source>
       </trans-unit>
       <trans-unit id="admin-core.search-index.selected-attributes-to-display" datatype="html">
         <source>Selected attributes used to display</source>

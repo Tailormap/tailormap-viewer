@@ -1434,6 +1434,14 @@
         <source>Filter search indexes</source>
         <target>Suchindizes filtern</target>
       </trans-unit>
+      <trans-unit id="admin-core.search-index.reindex" datatype="html">
+        <source>Re-index</source>
+        <target>Neuindexierung</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.reindex-error" datatype="html">
+        <source>Error while re-indexing search index.</source>
+        <target>Fehler bei der Neuindexierung des Suchindex.</target>
+      </trans-unit>
       <trans-unit id="admin-core.search-index.search-index-created" datatype="html">
         <source>Search index created</source>
         <target>Suchindex erstellt</target>
@@ -1449,6 +1457,10 @@
       <trans-unit id="admin-core.search-index.search-indexes" datatype="html">
         <source>Search Indexes</source>
         <target>Suchindizes</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.search-reindex-success" datatype="html">
+        <source>Re-indexing success</source>
+        <target>Erfolgreiche Neuindexierung</target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.selected-attributes-to-display" datatype="html">
         <source>Selected attributes used to display</source>
