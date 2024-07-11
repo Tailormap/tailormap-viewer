@@ -9,6 +9,14 @@
         <source>Add sub folder</source>
         <target>Submap toevoegen</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.remove" datatype="html">
+        <source>Remove</source>
+        <target>Verwijderen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.rename" datatype="html">
+        <source>Rename</source>
+        <target>Hernoemen</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.application" datatype="html">
         <source>Application</source>
         <target>Applicatie</target>

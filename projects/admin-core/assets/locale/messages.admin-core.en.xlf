@@ -8,6 +8,12 @@
       <trans-unit id="admin-core.application.add-sub-folder" datatype="html">
         <source>Add sub folder</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.remove" datatype="html">
+        <source>Remove</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.rename" datatype="html">
+        <source>Rename</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.application" datatype="html">
         <source>Application</source>
       </trans-unit>

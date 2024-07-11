@@ -10,6 +10,14 @@
         <source>Add sub folder</source>
         <target>Unterordner hinzufügen</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.remove" datatype="html">
+        <source>Remove</source>
+        <target>Entfernen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.rename" datatype="html">
+        <source>Rename</source>
+        <target>Umbenennen</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.application" datatype="html">
         <source>Application</source>
         <target>Anwendung</target>
