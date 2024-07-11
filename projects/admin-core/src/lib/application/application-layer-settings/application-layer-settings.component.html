@@ -65,17 +65,19 @@
       <div i18n="@@admin-core.application.no-forms-for-feature-type">There are no forms for this feature type</div>
     }
   }
-  @if ((selectableSearchIndexes$ | async)?.length) {
-    <mat-form-field>
-      <mat-label i18n="@@admin-core.application.select-search-index">Select search index</mat-label>
-      <mat-select formControlName="searchIndexId">
-        <mat-option [value]="null" i18n="@@admin-core.application.no-search-index">No search index</mat-option>
-        @for (searchIndex of (selectableSearchIndexes$ | async); track searchIndex.id) {
-          <mat-option [value]="searchIndex.id">{{ searchIndex.name }}</mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
-  } @else {
-    <div i18n="@@admin-core.application.no-search-indexes-for-feature-type">There are no search indexes for this feature type</div>
+  @if (searchIndexEnabled$ | async) {
+    @if ((selectableSearchIndexes$ | async)?.length) {
+      <mat-form-field>
+        <mat-label i18n="@@admin-core.application.select-search-index">Select search index</mat-label>
+        <mat-select formControlName="searchIndexId">
+          <mat-option [value]="null" i18n="@@admin-core.application.no-search-index">No search index</mat-option>
+          @for (searchIndex of (selectableSearchIndexes$ | async); track searchIndex.id) {
+            <mat-option [value]="searchIndex.id">{{ searchIndex.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    } @else {
+      <div i18n="@@admin-core.application.no-search-indexes-for-feature-type">There are no search indexes for this feature type</div>
+    }
   }
 </form>

@@ -13,9 +13,7 @@ import { LoadingStateEnum, TreeModel } from '@tailormap-viewer/shared';
 import { ExtendedGeoServiceAndLayerModel } from '../../catalog/models/extended-geo-service-and-layer.model';
 import { MatDialog } from '@angular/material/dialog';
 import { ExtendedFeatureTypeModel } from '../../catalog/models/extended-feature-type.model';
-import {
-  selectFeatureSourceAndFeatureTypesById,
-} from '../../catalog/state/catalog.selectors';
+import { selectFeatureSourceAndFeatureTypesById } from '../../catalog/state/catalog.selectors';
 import {
   ApplicationLayerAttributeSettingsComponent,
 } from '../application-layer-attribute-settings/application-layer-attribute-settings.component';
@@ -26,6 +24,7 @@ import { loadForms } from '../../form/state/form.actions';
 import { FormService } from '../../form/services/form.service';
 import { selectSearchIndexesForFeatureType, selectSearchIndexesLoadStatus } from '../../search-index/state/search-index.selectors';
 import { loadSearchIndexes } from '../../search-index/state/search-index.actions';
+import { ApplicationFeature, ApplicationFeatureSwitchService } from '@tailormap-viewer/api';
 
 type FeatureSourceAndType = {
   featureSource: ExtendedFeatureSourceModel;
@@ -52,6 +51,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
   private editingDisabledTooltip = $localize `:@@admin-core.application.layer-not-editable:This layer cannot be edited because there is no writeable feature source / type configured for this layer`;
 
   public layerTitle = '';
+  public searchIndexEnabled$: Observable<boolean>;
 
   @Input()
   public set node(node: TreeModel<AppTreeLayerNodeModel> | null) {
@@ -106,7 +106,10 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private featureSourceService: FeatureSourceService,
     private formService: FormService,
-  ) { }
+    private applicationFeatureSwitchService: ApplicationFeatureSwitchService,
+  ) {
+    this.searchIndexEnabled$ = this.applicationFeatureSwitchService.isFeatureEnabled$(ApplicationFeature.SEARCH_INDEX);
+  }
 
   public ngOnInit(): void {
     this.store$.select(selectSelectedApplicationLayerSettings)
@@ -147,8 +150,11 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.store$.select(selectSearchIndexesLoadStatus)
-      .pipe(take(1))
+    this.searchIndexEnabled$
+      .pipe(
+        switchMap(enabled => enabled ? this.store$.select(selectSearchIndexesLoadStatus) : of(null)),
+        take(1),
+      )
       .subscribe(loadStatus => {
         if (loadStatus === LoadingStateEnum.INITIAL || loadStatus === LoadingStateEnum.FAILED) {
           this.store$.dispatch(loadSearchIndexes());
@@ -165,11 +171,17 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.destroyed),
         switchMap(fs => {
-          return !fs || !fs.featureType
-            ? of([ null, null ])
-            : combineLatest([
+          if (!fs || !fs.featureType) {
+            return of([ null, null ]);
+          }
+          const featureTypeId = fs.featureType.originalId;
+          return combineLatest([
               this.store$.select(selectFormsForFeatureType(fs.featureSource.id, fs.featureType.name)),
-              this.store$.select(selectSearchIndexesForFeatureType(fs.featureType.originalId)),
+              this.searchIndexEnabled$
+                .pipe(switchMap(enabled => enabled
+                  ? this.store$.select(selectSearchIndexesForFeatureType(featureTypeId))
+                  : of(null)),
+                ),
             ]);
         }),
       )
