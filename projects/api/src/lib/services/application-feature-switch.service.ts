@@ -12,7 +12,7 @@ export class ApplicationFeatureSwitchService {
 
   // static array now, could be based on an API call in the future to dynamically enable/disable features
   private featuresEnabled = new BehaviorSubject<{ feature: ApplicationFeature; enabled: boolean }[]>([
-    { feature: ApplicationFeature.SEARCH_INDEX, enabled: false },
+    { feature: ApplicationFeature.SEARCH_INDEX, enabled: true },
   ]);
 
   public isFeatureEnabled$(feature: ApplicationFeature): Observable<boolean> {
