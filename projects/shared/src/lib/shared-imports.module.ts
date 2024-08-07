@@ -40,7 +40,6 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
-    HttpClientModule,
     RouterLink,
     RouterLinkActive,
     MatButtonModule,

@@ -4,7 +4,7 @@ import { ImageWMS, WMTS, XYZ, TileWMS } from 'ol/source';
 import { Geometry } from 'ol/geom';
 import { Feature } from 'ol';
 
-export type LayerTypes = VectorLayer<Feature<Geometry>> | TileLayer<TileWMS> | ImageLayer<ImageWMS> | TileLayer<XYZ> | TileLayer<WMTS> | null;
+export type LayerTypes = VectorLayer | TileLayer<TileWMS> | ImageLayer<ImageWMS> | TileLayer<XYZ> | TileLayer<WMTS> | null;
 
 export interface LayerManagerModel {
   setBackgroundLayers(layers: LayerModel[]): void;

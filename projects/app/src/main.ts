@@ -12,7 +12,6 @@ const setupSentryProviders = async () => {
     return [];
   }
   const sentry = await import('@sentry/angular');
-  const tracing = await import('@sentry/browser');
   let version: VersionModel | undefined;
   fetch('/version.json')
     .then(response => {
@@ -28,12 +27,11 @@ const setupSentryProviders = async () => {
     release: version?.version,
     environment: environment.production ? 'production' : 'development',
     integrations: [
-      new tracing.BrowserTracing({
+      sentry.browserTracingIntegration({
         shouldCreateSpanForRequest: (url) => {
           // Do not create spans for outgoing requests to a `api` endpoint
           return !/\/api\//.test(url);
         },
-        routingInstrumentation: sentry.routingInstrumentation,
       }),
     ],
     // Capture 1% of traces in production
