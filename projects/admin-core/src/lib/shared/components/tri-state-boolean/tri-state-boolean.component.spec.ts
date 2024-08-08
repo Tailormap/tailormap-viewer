@@ -28,7 +28,7 @@ describe('TriStateBooleanComponent', () => {
         changed: { emit: changed } as any,
       },
     });
-    const toggle = await screen.findByRole('button', { name: 'Disabled' });
+    const toggle = await screen.findByRole('radio', { name: 'Disabled' });
     toggle.click();
     expect(changed).toHaveBeenCalledWith(false);
   });

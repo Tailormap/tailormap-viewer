@@ -45,7 +45,7 @@
             "outputPath": "dist/app",
             "index": "projects/app/src/index.html",
             "main": "projects/app/src/main.ts",
-            "polyfills": ["projects/app/src/polyfills.ts"],
+            "polyfills": ["projects/app/src/polyfills.ts", "@angular/localize/init"],
             "assets": [
               {
                 "glob": "**/*",

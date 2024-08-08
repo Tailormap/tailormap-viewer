@@ -1,7 +1,9 @@
 import { TailormapApiV1Service } from './tailormap-api-v1.service';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { FeatureModel } from '../models';
+import { provideHttpClient, withXsrfConfiguration } from '@angular/common/http';
+import { TailormapApiConstants } from './tailormap-api.constants';
 
 describe('TailormapApiV1Service', () => {
 
@@ -10,8 +12,16 @@ describe('TailormapApiV1Service', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [TailormapApiV1Service],
+      providers: [
+        provideHttpClient(
+          withXsrfConfiguration({
+            cookieName: TailormapApiConstants.XSRF_COOKIE_NAME,
+            headerName: TailormapApiConstants.XSRF_HEADER_NAME,
+          }),
+        ),
+        provideHttpClientTesting(),
+        TailormapApiV1Service,
+      ],
     });
     service = TestBed.inject(TailormapApiV1Service);
     httpController = TestBed.inject(HttpTestingController);

@@ -15,6 +15,9 @@ import { AuthorizationEditComponent } from '../../shared/components/authorizatio
 import { initialUserState, userStateKey } from '../../user/state/user.state';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClient, withXsrfConfiguration } from '@angular/common/http';
+import { TailormapApiConstants } from '@tailormap-viewer/api';
 
 const setup = async (hasApplication: boolean, isDefaultApplication?: boolean) => {
   const appState: ApplicationState = {
@@ -34,6 +37,13 @@ const setup = async (hasApplication: boolean, isDefaultApplication?: boolean) =>
     imports: [ SharedImportsModule, MatIconTestingModule ],
     declarations: [ ApplicationFormComponent, BoundsFieldComponent, AuthorizationEditComponent ],
     providers: [
+      provideHttpClient(
+        withXsrfConfiguration({
+          cookieName: TailormapApiConstants.XSRF_COOKIE_NAME,
+          headerName: TailormapApiConstants.XSRF_HEADER_NAME,
+        }),
+      ),
+      provideHttpClientTesting(),
       { provide: Store, useValue: store },
       { provide: ConfigService, useValue: configService },
       { provide: TailormapAdminApiV1Service, useValue: { getGroups$: jest.fn(() => of(null)) } },

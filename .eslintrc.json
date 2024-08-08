@@ -13,7 +13,8 @@
       ],
       "plugins": [
         "rxjs",
-        "import"
+        "import",
+        "@stylistic/ts"
       ],
       "extends": [
         "eslint:recommended",
@@ -39,6 +40,7 @@
           }
         ],
         "@typescript-eslint/no-explicit-any": "off",
+        "@stylistic/ts/no-explicit-any": "off",
         "@angular-eslint/directive-selector": [
           "error",
           {
@@ -70,7 +72,7 @@
           "always"
         ],
         "comma-dangle": "off",
-        "@typescript-eslint/comma-dangle": [
+        "@stylistic/ts/comma-dangle": [
           "error",
           "always-multiline"
         ],
@@ -81,8 +83,8 @@
         "import/order": "off",
         "arrow-body-style": "off",
         "semi": "off",
-        "@typescript-eslint/semi": "error",
-        "@typescript-eslint/member-ordering": "off",
+        "@stylistic/ts/semi": "error",
+        "@stylistic/ts/member-ordering": "off",
         "@typescript-eslint/naming-convention": [
           "error",
           {
@@ -106,7 +108,7 @@
           }
         ],
         "space-before-function-paren": "off",
-        "@typescript-eslint/space-before-function-paren": [
+        "@stylistic/ts/space-before-function-paren": [
           "error",
           {
             "anonymous": "always",
@@ -160,7 +162,7 @@
             "variables": true
           }
         ],
-        "@typescript-eslint/member-delimiter-style": [
+        "@stylistic/ts/member-delimiter-style": [
           "error",
           {
             "multiline": {
@@ -187,8 +189,8 @@
         "no-unused-vars": "off",
         "@typescript-eslint/no-unused-vars": "off",
         "rxjs/finnish": "off",
-        "@typescript-eslint/ban-ts-comment": "off",
-        "@typescript-eslint/no-empty-function": "off"
+        "@stylistic/ts/ban-ts-comment": "off",
+        "@stylistic/ts/no-empty-function": "off"
       }
     },
     {

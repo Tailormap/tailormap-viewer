@@ -7,6 +7,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { GroupListComponent } from '../../user/group-list/group-list.component';
 import { provideMockStore } from '@ngrx/store/testing';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
+import { provideHttpClient } from '@angular/common/http';
 
 
 const setup = async () => {
@@ -14,7 +15,7 @@ const setup = async () => {
     imports: [ SharedModule, MatListModule, MatIconTestingModule ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     declarations: [GroupListComponent],
-    providers: [ provideMockStore(), AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser() ],
+    providers: [ provideMockStore(), provideHttpClient(), AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser() ],
   });
 };
 

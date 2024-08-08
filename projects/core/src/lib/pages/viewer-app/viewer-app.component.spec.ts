@@ -8,7 +8,7 @@ import { TestBed } from '@angular/core/testing';
 import { ErrorMessageComponent, LoadingStateEnum } from '@tailormap-viewer/shared';
 import { selectViewerErrorMessage, selectViewerLoadingState, selectViewerTitle } from '../../state/core.selectors';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MapService } from '@tailormap-viewer/map';
+import { getMapServiceMock } from '../../test-helpers/map-service.mock.spec';
 
 export const getActivatedRouteProvider = (segments: string[], fragment = '') => {
   return { provide: ActivatedRoute, useValue: {
@@ -30,13 +30,7 @@ const setup = async (loadingState?: LoadingStateEnum, errorMessage?: string) => 
     providers: [
       getActivatedRouteProvider([ 'app', 'default' ]),
       getMockedRouterProvider(),
-      {
-        provide: MapService,
-        useValue: {
-          getMapViewDetails$: jest.fn(() => ({ center: undefined })),
-          getUnitsOfMeasure$: jest.fn(() => 'm'),
-        },
-      },
+      getMapServiceMock().provider,
       provideMockStore({
         initialState: {},
         selectors: [

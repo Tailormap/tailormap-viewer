@@ -1,13 +1,15 @@
 import { FeatureInfoService } from './feature-info.service';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { getAppLayerModel, getFeaturesResponseModel, getServiceModel, TAILORMAP_API_V1_SERVICE } from '@tailormap-viewer/api';
+import {
+  getAppLayerModel, getFeaturesResponseModel, getServiceModel, TAILORMAP_API_V1_SERVICE, TailormapApiConstants,
+} from '@tailormap-viewer/api';
 import { of } from 'rxjs';
 import { selectViewerId } from '../../state/core.selectors';
 import { selectVisibleLayersWithAttributes, selectVisibleWMSLayersWithoutAttributes } from '../../map/state/map.selectors';
 import { TestBed } from '@angular/core/testing';
-import { MapService } from '@tailormap-viewer/map';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { HttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { HttpClient, provideHttpClient, withXsrfConfiguration } from '@angular/common/http';
+import { getMapServiceMock } from '../../test-helpers/map-service.mock.spec';
 
 describe('FeatureInfoService', () => {
 
@@ -22,24 +24,23 @@ describe('FeatureInfoService', () => {
 
   let store: MockStore;
   let service: FeatureInfoService;
-  const mapService = {
-    provide: MapService,
-    useValue: {
-      getMapViewDetails$: () => of({ resolution: 1 }),
-      getProjectionCode$: () => of('EPSG:4326'),
-      getFeatureInfoForLayers$,
-    },
-  };
+  const mapServiceMock = getMapServiceMock(undefined, null, { getFeatureInfoForLayers$ });
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
+        provideHttpClient(
+          withXsrfConfiguration({
+            cookieName: TailormapApiConstants.XSRF_COOKIE_NAME,
+            headerName: TailormapApiConstants.XSRF_HEADER_NAME,
+          }),
+        ),
+        provideHttpClientTesting(),
         FeatureInfoService,
-        mapService,
+        mapServiceMock.provider,
         provideMockStore({ initialState: {} }),
         { provide: TAILORMAP_API_V1_SERVICE, useValue: { getFeatures$ } },
       ],
-      imports: [HttpClientTestingModule],
     });
     service = TestBed.inject(FeatureInfoService);
     store = TestBed.inject(MockStore);
@@ -50,7 +51,6 @@ describe('FeatureInfoService', () => {
     store.overrideSelector(selectVisibleWMSLayersWithoutAttributes, []);
     store.overrideSelector(selectViewerId, '1');
     expect(service).toBeTruthy();
-    expect(mapService).toBeTruthy();
     service.getFeatures$([ 1, 2 ])
       .subscribe(featureInfo => {
         expect(featureInfo.length).toEqual(1);

@@ -16,7 +16,7 @@ describe('OpenLayersToolManager', () => {
   });
 
   test('enables and disables a tool', done => {
-    // @ts-ignore
+    // @ts-expect-error overwriting this prop in test is allowed
     OpenLayersEventManager.onMapClick$ = jest.fn(() => of({ coordinate: [ 1, 2 ], pixel: [ 2, 3 ] }));
     const tool = { type: ToolTypeEnum.MapClick };
     const manager = new OpenLayersToolManager({} as any, mockNgZone);
@@ -36,7 +36,7 @@ describe('OpenLayersToolManager', () => {
 
   test('handles destroy', () => {
     const onMapClickFn = jest.fn(() => of({ coordinate: [ 1, 2 ], pixel: [ 2, 3 ] }));
-    // @ts-ignore
+    // @ts-expect-error overwriting this prop in test is allowed
     OpenLayersEventManager.onMapClick$ = onMapClickFn;
     const tool = { type: ToolTypeEnum.MapClick };
     const manager = new OpenLayersToolManager({} as any, mockNgZone);

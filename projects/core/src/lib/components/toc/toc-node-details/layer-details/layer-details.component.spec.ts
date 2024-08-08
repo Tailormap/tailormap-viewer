@@ -6,15 +6,12 @@ import { SharedModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { LegendLayerComponent } from '../../../legend/legend-layer/legend-layer.component';
 import { LayerTransparencyComponent } from '../layer-transparency/layer-transparency.component';
-import { MapService } from '@tailormap-viewer/map';
 import { LegendService } from '../../../legend/services/legend.service';
 import { provideMockStore } from '@ngrx/store/testing';
+import { getMapServiceMock } from '../../../../test-helpers/map-service.mock.spec';
 
 const setup = async () => {
   const appLayer = getAppLayerModel({ title: 'The Layer' });
-  const mapServiceMock = {
-    getMapViewDetails$: jest.fn(),
-  };
   const legendServiceMock = {
     getLegendInfo$: jest.fn(() => of([
       {
@@ -28,7 +25,7 @@ const setup = async () => {
     imports: [ SharedModule, MatIconTestingModule ],
     declarations: [ LegendLayerComponent, LayerTransparencyComponent ],
     providers: [
-      { provide: MapService, useValue: mapServiceMock },
+      getMapServiceMock().provider,
       { provide: LegendService, useValue: legendServiceMock },
       provideMockStore({
         initialState: { map: { layers: [appLayer] } },

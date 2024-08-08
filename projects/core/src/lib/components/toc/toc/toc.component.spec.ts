@@ -1,11 +1,10 @@
 import { TocComponent } from './toc.component';
 import { render, screen, waitFor } from '@testing-library/angular';
-import { createMockStore, MockStore, provideMockStore } from '@ngrx/store/testing';
+import { createMockStore } from '@ngrx/store/testing';
 import { MenubarService } from '../../menubar';
 import { of } from 'rxjs';
 import { SharedModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
-import { TestBed } from '@angular/core/testing';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { selectLayers, selectLayerTreeNodes, selectSelectedNode } from '../../../map/state/map.selectors';
 import { setLayerVisibility, setSelectedLayerId } from '../../../map/state/map.actions';
@@ -16,6 +15,7 @@ import { TocFilterInputComponent } from '../toc-filter-input/toc-filter-input.co
 import { toggleFilterEnabled } from '../state/toc.actions';
 import { selectFilterEnabled, selectFilterTerm, selectInfoTreeNodeId } from '../state/toc.selectors';
 import { Store } from '@ngrx/store';
+import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
 
 const buildMockStore = (selectedLayer = '') => {
   const layers = [
@@ -52,6 +52,7 @@ const setup = async (visible: boolean, selectedLayer = '') => {
     imports: [ SharedModule, MatIconTestingModule ],
     declarations: [ TocNodeLayerComponent, ToggleAllLayersButtonComponent, TocFilterInputComponent ],
     providers: [
+      getMapServiceMock().provider,
       { provide: Store, useValue: mockStore },
       getMenubarService(visible, registerComponentFn),
     ],

@@ -1,17 +1,15 @@
 import { render } from '@testing-library/angular';
 import { MapSpinnerComponent } from './map-spinner.component';
 import { of } from 'rxjs';
-import { MapService } from '@tailormap-viewer/map';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
 
 describe('MapSpinnerComponent', () => {
 
   test('should render', async () => {
-    const mapService = { getPixelForCoordinates$: jest.fn((coords: [number, number]) => of(coords)) };
+    const mapServiceMock = getMapServiceMock();
     const { container } = await render(MapSpinnerComponent, {
-      providers: [
-        { provide: MapService, useValue: mapService },
-      ],
+      providers: [mapServiceMock.provider],
       componentInputs: {
         loading$: of(false),
         coordinates$: of(undefined),
@@ -21,16 +19,14 @@ describe('MapSpinnerComponent', () => {
     const spinner = container.querySelector<HTMLDivElement>('.spinner');
     expect(spinner).not.toBeNull();
     expect(spinner?.style.display).toEqual('none');
-    expect(mapService.getPixelForCoordinates$).not.toHaveBeenCalled();
+    expect(mapServiceMock.mapService.getPixelForCoordinates$).not.toHaveBeenCalled();
   });
 
   test('should render on coordinates', async () => {
-    const mapService = { getPixelForCoordinates$: jest.fn((coords: [number, number]) => of(coords)) };
+    const mapServiceMock = getMapServiceMock();
     const coords: [ number, number ] = [ 5, 5 ];
     const { container } = await render(MapSpinnerComponent, {
-      providers: [
-        { provide: MapService, useValue: mapService },
-      ],
+      providers: [mapServiceMock.provider],
       componentInputs: {
         loading$: of(true),
         coordinates$: of(coords),
@@ -41,7 +37,7 @@ describe('MapSpinnerComponent', () => {
     expect(spinner).not.toBeNull();
     expect(spinner?.style.left).toEqual('5px');
     expect(spinner?.style.top).toEqual('5px');
-    expect(mapService.getPixelForCoordinates$).toHaveBeenCalledWith([ 5, 5 ]);
+    expect(mapServiceMock.mapService.getPixelForCoordinates$).toHaveBeenCalledWith([ 5, 5 ]);
   });
 
 });
