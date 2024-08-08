@@ -3,7 +3,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { TestBed } from '@angular/core/testing';
 import { FeatureModel } from '../models';
 import { provideHttpClient, withXsrfConfiguration } from '@angular/common/http';
-import { TailormapApiConstants } from '@tailormap-viewer/api';
+import { TailormapApiConstants } from './tailormap-api.constants';
 
 describe('TailormapApiV1Service', () => {
 
