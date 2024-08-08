@@ -14,7 +14,7 @@ describe('SplitButtonComponent', () => {
         selectedOption: '1',
       },
     });
-    const buttons = screen.getAllByRole('button');
+    const buttons = screen.getAllByRole('radio');
     expect(buttons.length).toEqual(2);
     await userEvent.click(buttons[1]);
     const labels = await screen.findAllByText('Test 1');
@@ -36,7 +36,7 @@ describe('SplitButtonComponent', () => {
         } as any,
       },
     });
-    const buttons = screen.getAllByRole('button');
+    const buttons = screen.getAllByRole('radio');
     expect(await screen.getByText('Test 1'));
     await userEvent.click(buttons[0]);
     expect(optionSelectedMock).toHaveBeenCalledWith('2');

@@ -3,34 +3,13 @@ import { LegendComponent } from './legend.component';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MenubarService } from '../../menubar';
-import { Observable, of } from 'rxjs';
+import { of } from 'rxjs';
 import { provideMockStore } from '@ngrx/store/testing';
 import { selectOrderedVisibleLayersWithServices } from '../../../map/state/map.selectors';
 import { BaseComponentTypeEnum, getAppLayerModel, getServiceModel } from '@tailormap-viewer/api';
-import { MapViewDetailsModel, MapService } from '@tailormap-viewer/map';
 import { TestBed } from '@angular/core/testing';
 import { LegendLayerComponent } from '../legend-layer/legend-layer.component';
-
-const getMapService = () => {
-  return {
-    provide: MapService, useValue: {
-      getLayerManager$: () => of({ getLegendUrl: (layerId: string) => `layer-${layerId}-url-from-service` }),
-      setPadding: () => {},
-      getMapViewDetails$: (): Observable<MapViewDetailsModel> => of({
-        zoomLevel: 0,
-        resolution: 1,
-        maxResolution: 100,
-        minResolution: 0.001,
-        maxZoomLevel: 20,
-        minZoomLevel: 0,
-        scale: 1000,
-        size: undefined,
-        extent: null,
-        center: undefined,
-      }),
-    },
-  };
-};
+import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
 
 const createMockStore = () => {
   const layersAndServices = [
@@ -56,7 +35,7 @@ describe('LegendComponent', () => {
       declarations: [ LegendComponent, LegendLayerComponent ],
       imports: [ SharedModule, MatIconTestingModule ],
       providers: [
-        getMapService(),
+        getMapServiceMock().provider,
         createMockStore(),
         { provide: MenubarService, useValue: { registerComponent: registerComponentFn, isComponentVisible$: () => of(false) } },
       ],
@@ -70,7 +49,7 @@ describe('LegendComponent', () => {
       declarations: [ LegendComponent, LegendLayerComponent ],
       imports: [ SharedModule, MatIconTestingModule ],
       providers: [
-        getMapService(),
+        getMapServiceMock().provider,
         createMockStore(),
       ],
     });

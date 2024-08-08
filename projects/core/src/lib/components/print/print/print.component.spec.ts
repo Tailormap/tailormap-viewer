@@ -6,9 +6,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { of } from 'rxjs';
 import { MenubarService } from '../../menubar';
 import { ApplicationMapService } from '../../../map/services/application-map.service';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ICON_SERVICE_ICON_LOCATION, SharedImportsModule } from '@tailormap-viewer/shared';
 import { APP_BASE_HREF } from '@angular/common';
+import { provideHttpClient, withXsrfConfiguration } from '@angular/common/http';
+import { TailormapApiConstants } from '@tailormap-viewer/api';
 
 describe('PrintComponent', () => {
 
@@ -20,11 +22,17 @@ describe('PrintComponent', () => {
     };
     await render(PrintComponent, {
       imports: [
-        HttpClientTestingModule,
         SharedImportsModule,
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-        providers: [
+      providers: [
+        provideHttpClient(
+          withXsrfConfiguration({
+            cookieName: TailormapApiConstants.XSRF_COOKIE_NAME,
+            headerName: TailormapApiConstants.XSRF_HEADER_NAME,
+          }),
+        ),
+        provideHttpClientTesting(),
         provideMockStore(),
       ],
       componentProviders: [

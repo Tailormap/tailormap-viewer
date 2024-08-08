@@ -39,6 +39,7 @@
             "style": "kebab-case"
           }
         ],
+        "@typescript-eslint/no-explicit-any": "off",
         "@stylistic/ts/no-explicit-any": "off",
         "@angular-eslint/directive-selector": [
           "error",
@@ -186,7 +187,7 @@
       },
       "rules": {
         "no-unused-vars": "off",
-        "@stylistic/ts/no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": "off",
         "rxjs/finnish": "off",
         "@stylistic/ts/ban-ts-comment": "off",
         "@stylistic/ts/no-empty-function": "off"

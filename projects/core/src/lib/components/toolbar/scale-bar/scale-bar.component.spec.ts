@@ -1,7 +1,6 @@
 import { render, screen } from '@testing-library/angular';
 import { ScaleBarComponent } from './scale-bar.component';
-import { MapService } from '@tailormap-viewer/map';
-import { of } from 'rxjs';
+import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
 
 describe('ScaleBarComponent', () => {
 
@@ -11,13 +10,9 @@ describe('ScaleBarComponent', () => {
         el.innerHTML = 'TEST COMPLETED';
       }),
     };
-    const mapServiceMock = {
-      createTool$: jest.fn(() => of({ tool: mockTool })),
-    };
+    const mapServiceMock = getMapServiceMock(() => mockTool);
     await render(ScaleBarComponent, {
-      providers: [
-        { provide: MapService, useValue: mapServiceMock },
-      ],
+      providers: [mapServiceMock.provider],
     });
     expect(mapServiceMock.createTool$).toHaveBeenCalled();
     expect(mockTool.setTarget).toHaveBeenCalled();

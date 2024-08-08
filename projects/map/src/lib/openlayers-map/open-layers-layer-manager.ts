@@ -1,6 +1,5 @@
-import { Feature, Map as OlMap } from 'ol';
+import { Map as OlMap } from 'ol';
 import { Layer as BaseLayer, Vector as VectorLayer, Group as LayerGroup } from 'ol/layer';
-import { Geometry } from 'ol/geom';
 import { Vector as VectorSource, ImageWMS, WMTS, XYZ, TileWMS } from 'ol/source';
 import { LayerManagerModel, LayerTypes } from '../models';
 import { OlLayerHelper } from '../helpers/ol-layer.helper';

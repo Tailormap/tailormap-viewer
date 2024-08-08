@@ -7,6 +7,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { ApplicationListComponent } from '../../application/application-list/application-list.component';
 import { ENVIRONMENT_CONFIG } from '@tailormap-viewer/api';
 import { APP_BASE_HREF } from '@angular/common';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('ApplicationPageComponent', () => {
 
@@ -17,6 +18,7 @@ describe('ApplicationPageComponent', () => {
       declarations: [ApplicationListComponent],
       providers: [
         provideMockStore(),
+        provideHttpClient(),
         { provide: ENVIRONMENT_CONFIG, useValue: { viewerBaseUrl: '' } },
         { provide: APP_BASE_HREF, useValue: '' },
       ],

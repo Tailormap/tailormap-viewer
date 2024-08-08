@@ -1,8 +1,6 @@
 import { LayerModel } from './layer.model';
 import { Vector as VectorLayer, Image as ImageLayer, Tile as TileLayer } from 'ol/layer';
 import { ImageWMS, WMTS, XYZ, TileWMS } from 'ol/source';
-import { Geometry } from 'ol/geom';
-import { Feature } from 'ol';
 
 export type LayerTypes = VectorLayer | TileLayer<TileWMS> | ImageLayer<ImageWMS> | TileLayer<XYZ> | TileLayer<WMTS> | null;
 
