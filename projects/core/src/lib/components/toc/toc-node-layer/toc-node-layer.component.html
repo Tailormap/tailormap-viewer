@@ -1,13 +1,10 @@
-<div *ngIf="node"
-     class="tree-node"
-     [class.out-of-scale]="isLayerOutOfScale()"
-     [class.level]="isLevel()">
-  <div class="tree-node__label">
-    <span class="tree-node__label-content">{{node.label}}</span>
+@if (node) {
+  <div class="tree-node"
+       [class.out-of-scale]="isLayerOutOfScale()"
+       [class.level]="isLevel()">
+    <div class="tree-node__label">
+      <span class="tree-node__label-content">{{node.label}}</span>
+    </div>
+    <div class="tree-node__actions"></div>
   </div>
-  <div class="tree-node__actions">
-    @if (isLayer() && dragDropEnabled) {
-      <div class="tree-drag-handle"><mat-icon svgIcon="reorder"></mat-icon></div>
-    }
-  </div>
-</div>
+}

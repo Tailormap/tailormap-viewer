@@ -1,8 +1,8 @@
 <ng-template #treeNode let-node>
-  <tm-toc-node-layer [node]="node" [scale]="scale" [dragDropEnabled]="dragDropEnabled"></tm-toc-node-layer>
+  <tm-toc-node-layer [node]="node" [scale]="scale"></tm-toc-node-layer>
 </ng-template>
 
-<div class="toc" *ngIf="visible$ | async" [class.drag-drop-visible]="isMobileDevice && dragDropEnabled">
+<div class="toc" *ngIf="visible$ | async">
   <div class="toc-header">
     <div class="toc-header-left">
       <tm-toggle-all-layers-button></tm-toggle-all-layers-button>
@@ -32,7 +32,6 @@
     <tm-toc-filter-input></tm-toc-filter-input>
   </div>
   <tm-tree class="toc-tree"
-           dragHandleSelector=".tree-drag-handle"
            [treeNodeTemplate]="treeNode"
            [expandOnGroupClick]="true"
            [getDropZones]="getDropZoneConfig()"></tm-tree>

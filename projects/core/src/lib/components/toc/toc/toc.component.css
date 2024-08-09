@@ -8,21 +8,12 @@
   padding-right: var(--toc-side-padding);
 }
 
+::ng-deep .tree-node-wrapper {
+    cursor: pointer;
+}
+
 ::ng-deep .mat-tree {
   min-width: min-content;
-}
-
-.toc ::ng-deep .tree-node-wrapper .tree-node__actions {
-  display: none;
-}
-
-.toc.drag-drop-visible ::ng-deep .tree-node-wrapper .tree-node__actions,
-.toc ::ng-deep .tree-node-wrapper:hover .tree-node__actions {
-  display: flex;
-}
-
-.toc ::ng-deep .mat-tree--drag-active .tree-node-wrapper .tree-node__actions {
-  display: none;
 }
 
 .toc {

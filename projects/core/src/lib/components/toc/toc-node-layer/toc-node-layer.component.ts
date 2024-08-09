@@ -16,15 +16,8 @@ export class TocNodeLayerComponent {
   @Input()
   public scale: number | null = null;
 
-  @Input()
-  public dragDropEnabled: boolean = false;
-
   public isLevel() {
     return this.node?.type === 'level';
-  }
-
-  public isLayer() {
-    return this.node?.type === 'layer';
   }
 
   public isLayerOutOfScale() {

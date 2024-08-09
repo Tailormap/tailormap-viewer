@@ -67,8 +67,3 @@
 .out-of-scale {
   color: var(--disabled-text-color);
 }
-
-.tree-drag-handle {
-  cursor: grab;
-  padding: 6px;
-}

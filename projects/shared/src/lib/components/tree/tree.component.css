@@ -71,6 +71,7 @@ mat-checkbox {
 
 .mat-tree--drag-active .tree-node-wrapper {
   position: relative;
+  cursor: move;
 }
 
 .mat-tree--drag-active ::ng-deep .tree-node__actions {
