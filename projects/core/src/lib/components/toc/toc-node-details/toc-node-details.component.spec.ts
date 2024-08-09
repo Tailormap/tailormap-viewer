@@ -58,7 +58,7 @@ describe('LayerDetailsComponent', () => {
   test('should render layer name', async () => {
     await setup(true);
     expect(screen.getByText('Details for The Layer')).toBeInTheDocument();
-    expect(screen.getByRole('img')).toBeInTheDocument();
+    expect(screen.getAllByRole('img')).toHaveLength(2);
   });
 
   test('should trigger close', async () => {

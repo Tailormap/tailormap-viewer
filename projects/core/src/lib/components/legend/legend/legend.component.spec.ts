@@ -58,14 +58,14 @@ describe('LegendComponent', () => {
     expect(await screen.findByText('Layer 2')).toBeInTheDocument();
     expect(await screen.findByText('Layer 3')).toBeInTheDocument();
     const images = await screen.findAllByRole('img');
-    expect(images.length).toEqual(4);
+    expect(images.length).toEqual(8);
     expect(images[0].getAttribute('src')).toEqual('layer-1-url-from-service');
-    expect(images[1].getAttribute('src')).toEqual('layer-2-url-from-service');
-    const url3 = new URL(images[2].getAttribute('src') || '');
+    expect(images[2].getAttribute('src')).toEqual('layer-2-url-from-service');
+    const url3 = new URL(images[4].getAttribute('src') || '');
     expect(url3.host).toEqual('layer-3-url');
     expect(url3.searchParams.get('SCALE')).toEqual('1000');
     expect(url3.searchParams.get('LEGEND_OPTIONS')).toBeTruthy();
-    const url4 = new URL(images[3].getAttribute('src') || '');
+    const url4 = new URL(images[6].getAttribute('src') || '');
     expect(url4.host).toEqual('layer-4-weird-case-url');
     expect(url4.searchParams.get('SCALE')).toEqual('1000');
     expect(url4.searchParams.get('LEGEND_OPTIONS')).toBeTruthy(); // Should be case-insensitive to REQUEST=GetLegendGrapic URL param

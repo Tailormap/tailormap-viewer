@@ -42,7 +42,7 @@ describe('LayerDetailsComponent', () => {
   test('should render', async () => {
     await setup();
     expect(screen.getByText('Legend')).toBeInTheDocument();
-    expect(screen.getByRole('img')).toBeInTheDocument();
+    expect(screen.getAllByRole('img')).toHaveLength(2);
     expect(screen.getByRole('slider')).toBeInTheDocument();
   });
 
