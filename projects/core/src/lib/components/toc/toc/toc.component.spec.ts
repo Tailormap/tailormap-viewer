@@ -6,7 +6,7 @@ import { of } from 'rxjs';
 import { SharedModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { selectLayers, selectLayerTreeNodes, selectSelectedNode } from '../../../map/state/map.selectors';
+import { selectLayers, selectLayerTreeNodes, selectSelectedNode, selectSelectedNodeId } from '../../../map/state/map.selectors';
 import { setLayerVisibility, setSelectedLayerId } from '../../../map/state/map.actions';
 import { TocNodeLayerComponent } from '../toc-node-layer/toc-node-layer.component';
 import { ToggleAllLayersButtonComponent } from '../toggle-all-layers-button/toggle-all-layers-button.component';
@@ -15,6 +15,7 @@ import { TocFilterInputComponent } from '../toc-filter-input/toc-filter-input.co
 import { toggleFilterEnabled } from '../state/toc.actions';
 import { selectFilterEnabled, selectFilterTerm, selectInfoTreeNodeId } from '../state/toc.selectors';
 import { Store } from '@ngrx/store';
+import { TocNodeDetailsComponent } from '../toc-node-details/toc-node-details.component';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
 
 const buildMockStore = (selectedLayer = '') => {
@@ -34,7 +35,7 @@ const buildMockStore = (selectedLayer = '') => {
       { selector: selectInfoTreeNodeId, value: null },
       { selector: selectLayers, value: layers },
       { selector: selectLayerTreeNodes, value: tree },
-      { selector: selectSelectedNode, value: selectedLayer },
+      { selector: selectSelectedNode, value: selectedLayer ? layers.find(layer => layer.id === selectedLayer) : null },
     ],
   });
 };
@@ -50,7 +51,7 @@ const setup = async (visible: boolean, selectedLayer = '') => {
   mockStore.dispatch = mockDispatch;
   await render(TocComponent, {
     imports: [ SharedModule, MatIconTestingModule ],
-    declarations: [ TocNodeLayerComponent, ToggleAllLayersButtonComponent, TocFilterInputComponent ],
+    declarations: [ TocNodeLayerComponent, ToggleAllLayersButtonComponent, TocFilterInputComponent, TocNodeDetailsComponent ],
     providers: [
       getMapServiceMock().provider,
       { provide: Store, useValue: mockStore },
@@ -90,7 +91,7 @@ describe('TocComponent', () => {
     expect((await screen.findByText('Disaster map')).closest('.mat-tree-node')).toHaveClass('tree-node--selected');
     await userEvent.click(await screen.findByText('Some other map'));
     expect(mockDispatch).toHaveBeenCalledWith({ type: setSelectedLayerId.type, layerId: '2' });
-    mockStore.overrideSelector(selectSelectedNode, '2');
+    mockStore.overrideSelector(selectSelectedNodeId, '2');
     mockStore.refreshState();
     await waitFor(() => {
       expect((screen.getByText('Disaster map')).closest('.mat-tree-node')).not.toHaveClass('tree-node--selected');

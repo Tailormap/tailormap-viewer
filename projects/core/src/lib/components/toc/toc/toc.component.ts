@@ -1,18 +1,18 @@
-import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
-import { filter, Observable, of, Subject, takeUntil } from 'rxjs';
+import { Component, NgZone, OnDestroy, OnInit, signal } from '@angular/core';
+import { distinctUntilChanged, filter, Observable, of, Subject, takeUntil } from 'rxjs';
 import {
   BaseTreeModel, BrowserHelper, DropZoneHelper, NodePositionChangedEventModel, TreeDragDropService,
   TreeService,
 } from '@tailormap-viewer/shared';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { MenubarService } from '../../menubar';
 import { TocMenuButtonComponent } from '../toc-menu-button/toc-menu-button.component';
 import { Store } from '@ngrx/store';
 import { AppLayerModel, BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { MapService } from '@tailormap-viewer/map';
-import { selectFilteredLayerTree, selectFilterEnabled, selectInfoTreeNodeId } from '../state/toc.selectors';
-import { setInfoTreeNodeId, toggleFilterEnabled } from '../state/toc.actions';
-import { selectSelectedNode } from '../../../map/state/map.selectors';
+import { selectFilteredLayerTree, selectFilterEnabled } from '../state/toc.selectors';
+import { toggleFilterEnabled } from '../state/toc.actions';
+import { selectSelectedNode, selectSelectedNodeId } from '../../../map/state/map.selectors';
 import { moveLayerTreeNode, setLayerVisibility, setSelectedLayerId, toggleLevelExpansion } from '../../../map/state/map.actions';
 
 interface AppLayerTreeModel extends BaseTreeModel {
@@ -32,7 +32,8 @@ export class TocComponent implements OnInit, OnDestroy {
   public visible$: Observable<boolean> = of(false);
   public scale: number | null = null;
 
-  public infoTreeNodeId$ = this.store$.select(selectInfoTreeNodeId);
+  public infoVisible = signal(false);
+  public infoTreeNode$ = this.store$.select(selectSelectedNode);
 
   public filterEnabled$ = this.store$.select(selectFilterEnabled);
   public isMobileDevice = BrowserHelper.isTouchDevice;
@@ -56,7 +57,7 @@ export class TocComponent implements OnInit, OnDestroy {
     this.treeService.setDataSource(
       this.store$.select(selectFilteredLayerTree),
     );
-    this.treeService.setSelectedNode(this.store$.select(selectSelectedNode));
+    this.treeService.setSelectedNode(this.store$.select(selectSelectedNodeId));
     this.treeDragDropService.setDragDropEnabled(!this.isMobileDevice);
     this.treeService.checkStateChangedSource$
       .pipe(
@@ -74,8 +75,12 @@ export class TocComponent implements OnInit, OnDestroy {
         takeUntil(this.destroyed),
         filter(isAppLayerTreeModel),
         map(node => node.metadata.id),
+        tap(() => this.infoVisible.set(true)),
+        distinctUntilChanged(),
       )
-      .subscribe(layerId => this.store$.dispatch(setSelectedLayerId({ layerId })));
+      .subscribe(layerId => {
+        this.store$.dispatch(setSelectedLayerId({ layerId }));
+      });
 
     this.treeService.nodePositionChangedSource$
       .pipe(takeUntil(this.destroyed))
@@ -93,13 +98,10 @@ export class TocComponent implements OnInit, OnDestroy {
     this.destroyed.complete();
   }
 
-  public showTreeNodeInfo(infoTreeNodeId: string) {
-    this.store$.dispatch(setInfoTreeNodeId({ infoTreeNodeId }));
+  public layerInfoClosed() {
+    this.infoVisible.set(false);
   }
 
-  public layerInfoClosed() {
-    this.store$.dispatch(setInfoTreeNodeId({ infoTreeNodeId: undefined }));
-  }
   public toggleLayerFilter() {
     this.store$.dispatch(toggleFilterEnabled());
   }

@@ -42,6 +42,7 @@ mat-checkbox {
   height: var(--tree-node-size);
   min-height: initial;
   flex: 1;
+  cursor: pointer;
 }
 
 /* the ::ng-deep above will be removed after compilation so this selector is actually more specific */
@@ -70,6 +71,7 @@ mat-checkbox {
 
 .mat-tree--drag-active .tree-node-wrapper {
   position: relative;
+  cursor: move;
 }
 
 .mat-tree--drag-active ::ng-deep .tree-node__actions {

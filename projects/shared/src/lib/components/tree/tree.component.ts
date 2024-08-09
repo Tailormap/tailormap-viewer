@@ -45,6 +45,9 @@ export class TreeComponent implements OnInit, OnDestroy {
   @Input()
   public expandOnGroupClick?: boolean;
 
+  @Input()
+  public dragHandleSelector?: string;
+
   @ViewChild('treeElement', { static: false, read: CdkVirtualScrollViewport })
   private treeElement: CdkVirtualScrollViewport | undefined;
 
@@ -203,6 +206,13 @@ export class TreeComponent implements OnInit, OnDestroy {
   public enableDrag($event: MouseEvent | TouchEvent) {
     if (!$event.target || !this.treeDragDropServiceEnabled) {
       return;
+    }
+    const treeNode = ($event.target as HTMLElement).closest(`.${treeNodeBaseClass}`);
+    if (this.dragHandleSelector && treeNode) {
+      const dragHandle = ($event.target as HTMLElement).closest(this.dragHandleSelector);
+      if (!dragHandle || !treeNode.contains(dragHandle)) {
+        return;
+      }
     }
     ($event.target as HTMLElement).closest(`.${treeNodeBaseClass}`)?.setAttribute('draggable', 'true');
   }

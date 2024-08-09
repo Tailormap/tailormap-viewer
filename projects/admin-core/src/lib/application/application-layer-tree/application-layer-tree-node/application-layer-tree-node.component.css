@@ -9,10 +9,6 @@
   line-height: 18px;
 }
 
-.tree-node {
-  cursor: pointer;
-}
-
 .tree-node__label {
   padding-right: 8px;
   display: flex;
