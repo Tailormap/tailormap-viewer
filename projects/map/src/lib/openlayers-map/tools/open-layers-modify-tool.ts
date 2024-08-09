@@ -1,5 +1,5 @@
 import { Subject } from 'rxjs';
-import { Feature, Map as OlMap } from 'ol';
+import { Map as OlMap } from 'ol';
 import { EventsKey } from 'ol/events';
 import { unByKey } from 'ol/Observable';
 import { FeatureHelper } from '../../helpers/feature.helper';
@@ -10,7 +10,6 @@ import { TranslateEvent } from 'ol/interaction/Translate';
 import { ModifyEvent } from 'ol/interaction/Modify';
 import { NgZone } from "@angular/core";
 import { Vector as VectorLayer } from 'ol/layer';
-import { Geometry } from 'ol/geom';
 import { Vector as VectorSource } from 'ol/source';
 import { MapStyleHelper } from "../../helpers/map-style.helper";
 
@@ -23,8 +22,8 @@ export class OpenLayersModifyTool implements ModifyToolModel {
 
   private geometryChangedSubject: Subject<string> = new Subject<string>();
   public featureModified$ = this.geometryChangedSubject.asObservable();
-  private editLayer: VectorLayer<Feature<Geometry>> | null = null;
-  private source: VectorSource<Feature<Geometry>> | null = null;
+  private editLayer: VectorLayer | null = null;
+  private source: VectorSource | null = null;
 
   constructor(
     public id: string,

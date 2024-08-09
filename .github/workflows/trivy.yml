@@ -1,10 +1,13 @@
 name: Trivy Security Scan
-on:
-  # use pull request so this workflow dos not fail when triggered by dependabot PR's
+on: # use pull request so this workflow dos not fail when triggered by dependabot PR's
   pull_request:
   schedule:
     - cron: '17 23 * * MON'
   workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ ( github.ref == 'refs/heads/main' || github.ref == 'refs/heads/release' ) && format('ci-main-{0}', github.sha) || format('ci-main-{0}', github.ref) }}
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -22,7 +25,7 @@ jobs:
           docker buildx build --pull --build-arg VERSION=snapshot --build-arg BASE_HREF=/ -t ghcr.io/b3partners/tailormap:snapshot . --load
 
       - name: Run Trivy vulnerability scanner on tailormap-viewer
-        uses: 'aquasecurity/trivy-action@0.23.0'
+        uses: 'aquasecurity/trivy-action@0.24.0'
         # docker run --rm -v trivy_cache:/root/.cache/ aquasec/trivy image ghcr.io/b3partners/tailormap:snapshot
         with:
           image-ref: 'ghcr.io/b3partners/tailormap:snapshot'

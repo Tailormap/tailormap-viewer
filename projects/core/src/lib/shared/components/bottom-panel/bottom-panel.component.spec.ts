@@ -3,10 +3,12 @@ import { BottomPanelComponent } from './bottom-panel.component';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { of } from 'rxjs';
+import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
 
 const setup = async (componentInputs: Partial<BottomPanelComponent>) => {
   await render(BottomPanelComponent, {
     imports: [ SharedModule, MatIconTestingModule ],
+    providers: [getMapServiceMock().provider],
     componentInputs,
   });
 };

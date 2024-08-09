@@ -1,6 +1,6 @@
 {
   "name": "@tailormap-viewer/api",
-  "version": "11.3.3",
+  "version": "11.3.5",
   "peerDependencies": {
     "@angular/common": "^17.3.9",
     "@angular/core": "^17.3.9",

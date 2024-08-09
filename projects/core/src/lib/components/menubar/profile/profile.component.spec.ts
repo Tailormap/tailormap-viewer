@@ -44,9 +44,9 @@ describe('ProfileComponent', () => {
   const { location } = window;
 
   beforeAll(() => {
-    // @ts-ignore
+    // @ts-expect-error deleting location is allowed in testing env, restored after tests
     delete window.location;
-    // @ts-ignore
+    // @ts-expect-error overwriting location is allowed in testing env, restored after tests
     window.location = { reload: jest.fn() };
   });
 

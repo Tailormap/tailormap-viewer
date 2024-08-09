@@ -1,7 +1,6 @@
 import { render, screen } from '@testing-library/angular';
 import { DrawingComponent } from './drawing.component';
 import { of } from 'rxjs';
-import { MapService } from '@tailormap-viewer/map';
 import { MenubarService } from '../../menubar';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import {
@@ -16,89 +15,56 @@ import { ConfirmDialogService, SharedImportsModule } from '@tailormap-viewer/sha
 import userEvent from '@testing-library/user-event';
 import { TestBed } from '@angular/core/testing';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
+import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
+
+const setup = async (isComponentVisible = true, selectors: any[] = []) => {
+  const mapServiceMock = getMapServiceMock();
+  const menubarServiceMock = {
+    isComponentVisible$: jest.fn(() => of(isComponentVisible)),
+    registerComponent: jest.fn(),
+  };
+  const confirmServiceMock = {
+    confirm$: jest.fn(() => of(true)),
+  };
+  const { container } = await render(DrawingComponent, {
+    imports: [ SharedImportsModule, MatIconTestingModule ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    declarations: [DrawingStyleFormComponent],
+    providers: [
+      provideMockStore({ selectors: [{ selector: selectDrawingFeaturesIncludingSelected, value: [] }, ...selectors ] }),
+      mapServiceMock.provider,
+      { provide: MenubarService, useValue: menubarServiceMock },
+      { provide: ConfirmDialogService, useValue: confirmServiceMock },
+    ],
+  });
+  return { container, mapServiceMock, menubarServiceMock, confirmServiceMock };
+};
 
 describe('DrawingComponent', () => {
 
   test('renders and registers', async () => {
-    const mapServiceMock = {
-      renderFeatures$: jest.fn(() => of(true)),
-    };
-    const menubarServiceMock = {
-      isComponentVisible$: jest.fn(() => of(true)),
-      registerComponent: jest.fn(),
-    };
-    const confirmServiceMock = {
-      confirm$: jest.fn(() => of(true)),
-    };
-    const { container } = await render(DrawingComponent, {
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      providers: [
-        provideMockStore({ selectors: [{ selector: selectDrawingFeaturesIncludingSelected, value: [] }] }),
-        { provide: MapService, useValue: mapServiceMock },
-        { provide: MenubarService, useValue: menubarServiceMock },
-        { provide: ConfirmDialogService, useValue: confirmServiceMock },
-      ],
-    });
+    const { container, mapServiceMock, menubarServiceMock } = await setup();
     expect(container.querySelector('tm-create-drawing-button')).not.toBeNull();
-    expect(mapServiceMock.renderFeatures$).toHaveBeenCalled();
+    expect(mapServiceMock.mapService.renderFeatures$).toHaveBeenCalled();
     expect(menubarServiceMock.isComponentVisible$).toHaveBeenCalled();
     expect(menubarServiceMock.registerComponent).toHaveBeenCalled();
   });
 
   test('should not render contents if component is not active', async () => {
-    const mapServiceMock = {
-      renderFeatures$: jest.fn(() => of(true)),
-    };
-    const menubarServiceMock = {
-      isComponentVisible$: jest.fn(() => of(false)),
-      registerComponent: jest.fn(),
-    };
-    const confirmServiceMock = {
-      confirm$: jest.fn(() => of(true)),
-    };
-    const { container } = await render(DrawingComponent, {
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      providers: [
-        provideMockStore({ selectors: [{ selector: selectDrawingFeaturesIncludingSelected, value: [] }] }),
-        { provide: MapService, useValue: mapServiceMock },
-        { provide: MenubarService, useValue: menubarServiceMock },
-        { provide: ConfirmDialogService, useValue: confirmServiceMock },
-      ],
-    });
+    const { container, mapServiceMock, menubarServiceMock } = await setup(false);
     expect(container.querySelector('tm-create-drawing-button')).toBeNull();
-    expect(mapServiceMock.renderFeatures$).toHaveBeenCalled();
+    expect(mapServiceMock.mapService.renderFeatures$).toHaveBeenCalled();
     expect(menubarServiceMock.isComponentVisible$).toHaveBeenCalled();
     expect(menubarServiceMock.registerComponent).toHaveBeenCalled();
   });
 
   test('removes all / selected features', async () => {
-    const mapServiceMock = {
-      renderFeatures$: jest.fn(() => of(true)),
-    };
-    const menubarServiceMock = {
-      isComponentVisible$: jest.fn(() => of(true)),
-      registerComponent: jest.fn(),
-    };
-    const confirmServiceMock = {
-      confirm$: jest.fn(() => of(true)),
-    };
     const selectedFeature: DrawingFeatureModel = { __fid: '1', geometry: '', attributes: { type: DrawingFeatureTypeEnum.POINT, style: DrawingHelper.getDefaultStyle() } };
-    await render(DrawingComponent, {
-      imports: [ SharedImportsModule, MatIconTestingModule ],
-      declarations: [DrawingStyleFormComponent],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      providers: [
-        provideMockStore({ selectors: [
-            { selector: selectDrawingFeaturesIncludingSelected, value: [] },
-            { selector: selectSelectedDrawingStyle, value: null },
-            { selector: selectSelectedDrawingFeature, value: selectedFeature },
-            { selector: selectHasDrawingFeatures, value: true },
-          ] }),
-        { provide: MapService, useValue: mapServiceMock },
-        { provide: MenubarService, useValue: menubarServiceMock },
-        { provide: ConfirmDialogService, useValue: confirmServiceMock },
-      ],
-    });
+    const { confirmServiceMock } = await setup(true, [
+      { selector: selectSelectedDrawingStyle, value: null },
+      { selector: selectSelectedDrawingFeature, value: selectedFeature },
+      { selector: selectHasDrawingFeatures, value: true },
+    ]);
     const store = TestBed.inject(MockStore);
     const mockDispatch = jest.fn();
     store.dispatch = mockDispatch;

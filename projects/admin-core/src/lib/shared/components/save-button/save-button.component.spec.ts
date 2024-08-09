@@ -3,8 +3,7 @@ import { SaveButtonComponent } from './save-button.component';
 import { of } from 'rxjs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import userEvent, { PointerEventsCheckLevel } from '@testing-library/user-event';
-import { SpinnerButtonComponent } from '../spinner-button/spinner-button.component';
-import { SharedImportsModule } from '@tailormap-viewer/shared';
+import { SharedImportsModule, SpinnerButtonComponent } from '@tailormap-viewer/shared';
 
 const setup = async (isSaving: boolean, disabled: boolean) => {
   const saveFn = jest.fn();

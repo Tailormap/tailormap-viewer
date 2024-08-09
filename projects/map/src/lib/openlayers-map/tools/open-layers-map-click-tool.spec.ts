@@ -6,7 +6,7 @@ import { of } from 'rxjs';
 describe('OpenLayersMapClickTool', () => {
 
   test('creates and enables map click tool', done => {
-    // @ts-ignore
+    // @ts-expect-error overwriting this prop in test is allowed
     OpenLayersEventManager.onMapClick$ = jest.fn(() => of({ coordinate: [ 1, 2 ], pixel: [ 2, 3 ] }));
     const tool = new OpenLayersMapClickTool('tool-123', { type: ToolTypeEnum.MapClick });
     tool.mapClick$.subscribe(clickEvt => {

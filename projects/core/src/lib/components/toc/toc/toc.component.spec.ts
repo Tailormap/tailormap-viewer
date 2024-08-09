@@ -16,6 +16,7 @@ import { toggleFilterEnabled } from '../state/toc.actions';
 import { selectFilterEnabled, selectFilterTerm, selectInfoTreeNodeId } from '../state/toc.selectors';
 import { Store } from '@ngrx/store';
 import { TocNodeDetailsComponent } from '../toc-node-details/toc-node-details.component';
+import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
 
 const buildMockStore = (selectedLayer = '') => {
   const layers = [
@@ -52,6 +53,7 @@ const setup = async (visible: boolean, selectedLayer = '') => {
     imports: [ SharedModule, MatIconTestingModule ],
     declarations: [ TocNodeLayerComponent, ToggleAllLayersButtonComponent, TocFilterInputComponent, TocNodeDetailsComponent ],
     providers: [
+      getMapServiceMock().provider,
       { provide: Store, useValue: mockStore },
       getMenubarService(visible, registerComponentFn),
     ],

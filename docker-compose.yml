@@ -69,29 +69,36 @@ services:
 
   solr:
     container_name: ${COMPOSE_PROJECT_NAME}-solr
-    image: solr:9.6.1-slim
+    image: solr:9.6.1
     profiles:
       - solr
     environment:
       TZ: Europe/Amsterdam
-      SOLR_HEAP: 1g
     volumes:
       - solr-data:/var/solr
+    depends_on:
+      - db
     labels:
       traefik.enable: false
     restart: unless-stopped
     command:
       - solr-precreate
       - tailormap
+    healthcheck:
+      test: 'curl -s http://localhost:8983/solr/tailormap/admin/ping | grep -q "OK" || exit 1'
+      start_period: 60s
+      interval: 15s
+      timeout: 5s
+      retries: 3
 
 
   solr-metrics:
     container_name: ${COMPOSE_PROJECT_NAME}-solr-status
     depends_on:
       - solr
-    image: solr:9.6.1-slim
+    image: solr:9.6.1
     profiles:
-      - solr-monitoring
+      - solr
     environment:
       TZ: Europe/Amsterdam
       PORT: 9854
@@ -99,5 +106,4 @@ services:
       SOLR_URL: http://solr:8983/solr/
     command:
       # this script should be in the path for the current user
-      # /opt/solr-9.5.0/prometheus-exporter/bin/solr-exporter
       - solr-exporter

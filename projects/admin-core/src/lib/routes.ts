@@ -29,6 +29,10 @@ export class Routes {
   public static FORMS_CREATE = 'create';
   public static FORMS_DETAILS = 'form/:formId';
 
+  public static SEARCH_INDEXES = 'search-indexes';
+  public static SEARCH_INDEXES_CREATE = 'create';
+  public static SEARCH_INDEXES_DETAILS = 'search-index/:searchIndexId';
+
   public static SETTINGS = 'settings';
   public static SETTINGS_GLOBAL = 'global';
 

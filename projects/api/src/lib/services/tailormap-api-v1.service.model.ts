@@ -1,5 +1,6 @@
 import {
   ViewerResponseModel, LayerDetailsModel, MapResponseModel, Sortorder, VersionResponseModel, FeatureModel, ConfigResponseModel,
+  SearchResponseModel,
 } from '../models';
 import { Observable } from 'rxjs';
 import { FeaturesResponseModel } from '../models/features-response.model';
@@ -80,5 +81,12 @@ export interface TailormapApiV1ServiceModel {
   }): Observable<HttpResponse<Blob>>;
 
   getConfig$<T>(key: string): Observable<ConfigResponseModel<T>>;
+
+  search$(params: {
+    applicationId: string;
+    layerId: string;
+    query: string;
+    start?: number;
+  }): Observable<SearchResponseModel>;
 
 }

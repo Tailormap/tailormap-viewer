@@ -11,7 +11,7 @@ import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
 import { GroupFormComponent } from '../group-form/group-form.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { SharedAdminComponentsModule } from '../../shared/components/shared-admin-components.module';
-import { SpinnerButtonComponent } from '../../shared/components/spinner-button/spinner-button.component';
+import { SpinnerButtonComponent } from '@tailormap-viewer/shared';
 
 const setup = async (hasGroup?: boolean) => {
   const activeRoute = {

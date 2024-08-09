@@ -38,7 +38,7 @@ const getBaseHref = (platformLocation: PlatformLocation): string => {
 const TRACE_SERVICE = new InjectionToken('SENTRY_TRACE_SERVICE');
 const SENTRY_DSN: string = (window as any).SENTRY_DSN;
 const sentryTraceServiceFactory = async (router: Router) => {
-  const sentry = await import('@sentry/angular-ivy');
+  const sentry = await import('@sentry/angular');
   return new sentry.TraceService(router);
 };
 const sentryProviders = SENTRY_DSN === '@SENTRY_DSN@' ? [] : [

@@ -1,0 +1,37 @@
+<h2 i18n="@@admin-core.search-index.search-indexes">Search Indexes</h2>
+<ng-container *ngIf="searchIndexesLoadStatus$ | async as searchIndexesLoadStatus">
+  <mat-spinner *ngIf="searchIndexesLoadStatus === 'LOADING'" diameter="20" mode="indeterminate"></mat-spinner>
+  <ng-container *ngIf="errorMessage$ | async as message">
+    <tm-error-message [message]="message"></tm-error-message>
+    <button mat-raised-button color="primary" (click)="onRetryClick()" i18n="@@admin-core.common.retry">Retry</button>
+  </ng-container>
+  <div *ngIf="searchIndexesLoadStatus === 'LOADED'"
+       class="form-group has-search">
+    <mat-form-field appearance="outline">
+      <mat-label i18n="@@admin-core.search-index.filter-search-indexes">Filter search indexes</mat-label>
+      <input [formControl]="filter"
+             i18n-placeholder="@@admin-core.common.filter-dots"
+             matInput
+             placeholder="Filter..."
+             tmAutoFocus
+             type="text"
+      />
+      <button (click)="filter.setValue('')" *ngIf="filter.getRawValue()" aria-label="Clear" mat-icon-button matSuffix>
+        <mat-icon svgIcon="close"></mat-icon>
+      </button>
+    </mat-form-field>
+
+    <mat-selection-list>
+      @for (searchIndex of searchIndexes$ | async; track searchIndex.id) {
+        <mat-list-item [class.selected]="searchIndex.selected"
+                       [routerLink]="['/admin/search-indexes/search-index', searchIndex.id]">
+          <span class="detail">{{searchIndex.name}}</span>
+          @if (searchIndex.featureType) {
+            <span class="subtitle"> - {{searchIndex.featureType.name}}</span>
+          }
+        </mat-list-item>
+      }
+    </mat-selection-list>
+
+  </div>
+</ng-container>

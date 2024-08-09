@@ -33,7 +33,7 @@ export class ComponentsListComponent implements OnInit, OnDestroy {
           components.forEach((value, key) => {
             componentsList.push({ type: key, label: value.label });
           });
-          return componentsList;
+          return componentsList.sort((a, b) => a.label.localeCompare(b.label));
         }),
       );
   }

@@ -1,5 +1,6 @@
 import { TileLayerHiDpiMode } from './layer-hi-dpi-mode.enum';
 import { BoundsModel } from './bounds.model';
+import { LayerSearchIndexModel } from './layer-search-index.model';
 
 export interface AppLayerModel {
   id: string;
@@ -26,4 +27,5 @@ export interface AppLayerModel {
   attribution?: string;
   description?: string;
   autoRefreshInSeconds?: number | null;
+  searchIndex: LayerSearchIndexModel | null;
 }

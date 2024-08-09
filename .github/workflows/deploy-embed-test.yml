@@ -1,0 +1,39 @@
+  name: 'Deploy embed test'
+
+  on:
+    workflow_dispatch:
+    push:
+      branches:
+        - main
+      paths:
+        - 'ci/tailormap-embed-test/**'
+        - '.github/workflows/deploy-embed-test.yml'
+
+  jobs:
+    deploy:
+      name: 'Deploy embed test'
+      runs-on: ubuntu-latest
+      env:
+        COMPOSE_PROJECT_NAME: tailormap-embed-test
+        COMPOSE_FILE: ci/tailormap-embed-test/compose.yaml
+        HOST: ${{ secrets.DEPLOY_HOST_SNAPSHOT }}
+
+      steps:
+        - uses: actions/checkout@v4
+
+        - name: 'Set Docker context for deployment'
+          uses: arwynfr/actions-docker-context@v2
+          with:
+            docker_host: ${{ secrets.DOCKER_HOST_SNAPSHOT }}
+            context_name: 'dev-server'
+            ssh_cert: ${{ secrets.DOCKER_HOST_SNAPSHOT_SSH_CERT }}
+            ssh_key: ${{ secrets.DOCKER_HOST_SNAPSHOT_SSH_KEY }}
+            use_context: true
+
+        - name: 'Add known hosts'
+          run: |
+            ssh-keyscan -H ${{ secrets.DOCKER_HOSTNAME }} > $HOME/.ssh/known_hosts
+
+        - name: 'Update deployment using Docker Compose'
+          run: |
+            docker compose up -d --pull=always --quiet-pull --remove-orphans --build

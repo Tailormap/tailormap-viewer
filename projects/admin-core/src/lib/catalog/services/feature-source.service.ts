@@ -8,12 +8,13 @@ import {
 import { CatalogService } from './catalog.service';
 import { catchError, concatMap, filter, map, MonoTypeOperatorFunction, Observable, of, pipe, switchMap, take, tap, timer } from 'rxjs';
 import {
-  addFeatureSources, deleteFeatureSource, loadDraftFeatureSource, updateFeatureSource, updateFeatureType,
+  addFeatureSources, deleteFeatureSource, loadCatalog, loadDraftFeatureSource, updateFeatureSource, updateFeatureType,
 } from '../state/catalog.actions';
 import { FeatureSourceCreateModel, FeatureSourceUpdateModel, FeatureTypeUpdateModel } from '../models/feature-source-update.model';
 import {
+  selectCatalogLoadStatus,
   selectDraftFeatureSource, selectDraftFeatureSourceLoadStatus,
-  selectFeatureSourceById, selectFeatureTypesForSource, selectGeoServiceLayers,
+  selectFeatureSourceById, selectFeatureTypes, selectFeatureTypesForSource, selectGeoServiceLayers,
 } from '../state/catalog.selectors';
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
@@ -35,6 +36,19 @@ export class FeatureSourceService {
     private catalogService: CatalogService,
     private sseService: AdminSseService,
   ) { }
+
+  public getFeatureTypes$(): Observable<ExtendedFeatureTypeModel[]> {
+    return this.store$.select(selectCatalogLoadStatus)
+      .pipe(
+        tap(loadStatus => {
+          if (loadStatus === LoadingStateEnum.INITIAL) {
+            this.store$.dispatch(loadCatalog());
+          }
+        }),
+        filter(loadStatus => loadStatus === LoadingStateEnum.LOADED),
+        switchMap(() => this.store$.select(selectFeatureTypes)),
+      );
+  }
 
   public getDraftFeatureSource$(id: string) {
       return this.store$.select(selectDraftFeatureSource)
@@ -66,6 +80,11 @@ export class FeatureSourceService {
           return featureSource?.featureTypes.find(f => f.name === featureTypeName) || null;
         }),
       );
+  }
+
+  public loadFeatureTypeById$(featureTypeId: string): Observable<FeatureTypeModel | null> {
+    return this.adminApiService.getFeatureType$({ id: featureTypeId })
+      .pipe(take(1), catchError(() => of(null)));
   }
 
   public createFeatureSource$(source: FeatureSourceCreateModel, catalogNodeId: string) {

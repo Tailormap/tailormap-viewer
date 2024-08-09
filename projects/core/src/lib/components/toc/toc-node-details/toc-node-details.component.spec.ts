@@ -5,20 +5,17 @@ import userEvent from '@testing-library/user-event';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { of } from 'rxjs';
-import { MapService } from '@tailormap-viewer/map';
 import { LegendService } from '../../legend/services/legend.service';
 import { LegendLayerComponent } from '../../legend/legend-layer/legend-layer.component';
 import { provideMockStore } from '@ngrx/store/testing';
 import { LayerDetailsComponent } from './layer-details/layer-details.component';
 import { LayerTransparencyComponent } from './layer-transparency/layer-transparency.component';
+import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
 
 const setup = async (withLayer: boolean) => {
   const closeMock = jest.fn();
   const node = getLayerTreeNode({ id: 'applayer-1', appLayerId: '1', name: 'The Layer', root: false });
   const appLayer = getAppLayerModel({ title: 'The Layer' });
-  const mapServiceMock = {
-    getMapViewDetails$: jest.fn(),
-  };
   const legendServiceMock = {
     getLegendInfo$: jest.fn(() => of([
       {
@@ -32,7 +29,7 @@ const setup = async (withLayer: boolean) => {
     imports: [ SharedModule, MatIconTestingModule ],
     declarations: [ LegendLayerComponent, LayerDetailsComponent, LayerTransparencyComponent ],
     providers: [
-      { provide: MapService, useValue: mapServiceMock },
+      getMapServiceMock().provider,
       { provide: LegendService, useValue: legendServiceMock },
       provideMockStore({
         initialState: {
