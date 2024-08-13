@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, signal } from '@angular/core';
 import { GeoServerLegendOptions, LegendHelper } from './legend.helper';
 
 export interface LegendImageModel {
@@ -24,12 +24,25 @@ const FAILED_TO_LOAD_MESSAGE = $localize `:@@shared.legend-image.failed-loading-
 })
 export class LegendImageComponent {
 
+  public loading = signal(false);
+  private prevLegend: LegendImageModel | null = null;
+
   @Input({ required: true })
   public set legend(legend: LegendImageModel | null) {
-    this.createSettings(legend);
+    if (
+      !this.prevLegend ||
+      !legend
+      || this.prevLegend.url !== legend.url
+      || this.prevLegend.title !== legend.title
+      || this.prevLegend.serverType !== legend.serverType
+    ) {
+      this.createSettings(legend);
+      this.prevLegend = legend;
+    }
   }
 
   public legendSettings: LegendImageSettingsModel | null = null;
+  public cloneLegendSettings: LegendImageSettingsModel | null = null;
 
   public constructor(
     private cdr: ChangeDetectorRef,
@@ -42,6 +55,7 @@ export class LegendImageComponent {
     // Sometimes the zoom for hi-dpi images would otherwise not be applied correctly
     // resulting in too large or too small images
     this.legendSettings = null;
+    this.loading.set(true);
     this.cdr.detectChanges();
     if (legend === null) {
       return;
@@ -70,8 +84,14 @@ export class LegendImageComponent {
         legendSettings.srcset = u.toString() + ' 2x';
       }
     }
+    this.loading.set(true);
     this.legendSettings = legendSettings;
+    this.cloneLegendSettings = legendSettings;
     this.cdr.detectChanges();
+  }
+
+  public legendImageLoaded() {
+    this.loading.set(false);
   }
 
 }

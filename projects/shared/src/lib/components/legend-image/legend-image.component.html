@@ -1,6 +1,15 @@
 @if (legendSettings) {
-  <img [class.hi-dpi]="legendSettings.scaleHiDpiImage"
+  <img (load)="legendImageLoaded()"
+       [class.hide]="loading()"
+       [class.hi-dpi]="legendSettings.scaleHiDpiImage"
        [alt]="legendSettings.failedToLoadMessage"
        [src]="legendSettings.url"
        [srcset]="legendSettings.srcset" />
+}
+@if (cloneLegendSettings) {
+  <img [class.hide]="!loading()"
+       [class.hi-dpi]="cloneLegendSettings.scaleHiDpiImage"
+       [alt]="cloneLegendSettings.failedToLoadMessage"
+       [src]="cloneLegendSettings.url"
+       [srcset]="cloneLegendSettings.srcset" />
 }

@@ -1,3 +1,7 @@
 .hi-dpi {
   zoom: 50%;
 }
+
+.hide {
+  display: none;
+}

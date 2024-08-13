@@ -15,7 +15,7 @@ describe('LegendImageComponent', () => {
         serverType: 'generic',
       } },
     });
-    const img = await screen.getByRole('img');
+    const img = await screen.getAllByRole('img')[0];
     expect(img).toBeInTheDocument();
     expect(img.getAttribute('src')).toEqual('some-url');
     expect(img.getAttribute('alt')).toEqual('Failed to load legend for Layer title');
@@ -30,7 +30,7 @@ describe('LegendImageComponent', () => {
         serverType: 'geoserver',
       } },
     });
-    const img = await screen.getByRole('img');
+    const img = await screen.getAllByRole('img')[0];
     expect(img).toBeInTheDocument();
     expect(img.getAttribute('src')).toContain('http://some-url/geoserver/wms');
     expect(img.getAttribute('src')).toContain('LEGEND_OPTIONS=');
