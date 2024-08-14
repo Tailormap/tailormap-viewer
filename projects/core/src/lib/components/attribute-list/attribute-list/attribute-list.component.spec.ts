@@ -25,11 +25,11 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { filterStateKey, initialFilterState } from '../../../filter/state/filter.state';
 import { filterReducer } from '../../../filter/state/filter.reducer';
 import { AttributeListExportButtonComponent } from '../attribute-list-export-button/attribute-list-export-button.component';
-import { coreStateKey } from '../../../state/core.state';
+import { coreStateKey, initialCoreState } from '../../../state/core.state';
 import { coreReducer } from '../../../state/core.reducer';
 import { ExtendedAppLayerModel } from '../../../map/models';
 import { CoreSharedModule } from '../../../shared';
-import { HttpClientTestingModule, provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient, withXsrfConfiguration } from '@angular/common/http';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
 
@@ -47,9 +47,8 @@ const getStore = (
         ...layers.map(l => getLayerTreeNode({ id: `lyr_${l.id}`, appLayerId: l.id })),
       ] : []).map(l => ({ ...l, initialChildren: l.childrenIds || [] })),
     },
-    [filterStateKey]: {
-      ...initialFilterState,
-    },
+    [coreStateKey]: { ...initialCoreState },
+    [filterStateKey]: { ...initialFilterState },
   };
 };
 

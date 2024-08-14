@@ -16,6 +16,7 @@ import userEvent from '@testing-library/user-event';
 import { TestBed } from '@angular/core/testing';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
+import { drawingStateKey, initialDrawingState } from '../state/drawing.state';
 
 const setup = async (isComponentVisible = true, selectors: any[] = []) => {
   const mapServiceMock = getMapServiceMock();
@@ -31,7 +32,10 @@ const setup = async (isComponentVisible = true, selectors: any[] = []) => {
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     declarations: [DrawingStyleFormComponent],
     providers: [
-      provideMockStore({ selectors: [{ selector: selectDrawingFeaturesIncludingSelected, value: [] }, ...selectors ] }),
+      provideMockStore({
+        initialState: { [drawingStateKey]: { ...initialDrawingState } },
+        selectors: [{ selector: selectDrawingFeaturesIncludingSelected, value: [] }, ...selectors ]
+      }),
       mapServiceMock.provider,
       { provide: MenubarService, useValue: menubarServiceMock },
       { provide: ConfirmDialogService, useValue: confirmServiceMock },

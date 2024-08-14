@@ -1,6 +1,5 @@
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { FlatTreeModel } from './models';
-import { fakeAsync, tick } from '@angular/core/testing';
 import { TreeDragDropService } from './tree-drag-drop.service';
 
 describe('Tree Drag Drop Service', () => {
@@ -49,7 +48,7 @@ describe('Tree Drag Drop Service', () => {
     createNodes(4),
   ];
 
-  it ('handles drag drop', fakeAsync(() => {
+  it ('handles drag drop', async () => {
     const positionChangedFn = jest.fn();
     const dragStartEvent = new Event('dragstart') as DragEvent;
     service.handleDragStart(dragStartEvent, treeControl.dataNodes[0], [{
@@ -76,7 +75,6 @@ describe('Tree Drag Drop Service', () => {
       },
       nodePositionChanged: positionChangedFn,
     }]);
-    tick(10);
     treeWrapper.dispatchEvent(new Event('dragover', {
       // @ts-expect-error property does exist on a drag event
       clientY: 0,
@@ -103,6 +101,6 @@ describe('Tree Drag Drop Service', () => {
       },
     );
     expect(treeEl.classList).not.toContain('mat-tree--drag-active');
-  }));
+  });
 
 });
