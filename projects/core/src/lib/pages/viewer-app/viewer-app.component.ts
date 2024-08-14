@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { distinctUntilChanged, map, Observable, of, Subject, takeUntil } from 'rxjs';
 import { ActivatedRoute, UrlSegment } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -19,16 +19,16 @@ export class ViewerAppComponent implements OnInit, OnDestroy {
 
   private static DEFAULT_TITLE = 'Tailormap';
   private destroyed = new Subject();
-  public isLoading = false;
-  public loadingFailed = false;
-  public isLoaded = false;
+  public isLoading = signal(false);
+  public loadingFailed = signal(false);
+  public isLoaded = signal(false);
   public errorMessage$: Observable<string | undefined> = of(undefined);
   public isEmbedded$: Observable<boolean> = of(false);
 
   constructor(
     private store$: Store,
     private route: ActivatedRoute,
-    private cdr: ChangeDetectorRef,
+    // private cdr: ChangeDetectorRef,
     private applicationBookmarkService: ApplicationBookmarkService,
     private appStyleService: ApplicationStyleService,
     @Inject(DOCUMENT) private document: Document,
@@ -59,11 +59,11 @@ export class ViewerAppComponent implements OnInit, OnDestroy {
     this.store$.select(selectViewerLoadingState)
       .pipe(takeUntil(this.destroyed))
       .subscribe(loadingState => {
-        this.isLoaded = loadingState === LoadingStateEnum.LOADED;
-        this.isLoading = loadingState === LoadingStateEnum.LOADING;
-        this.loadingFailed = loadingState === LoadingStateEnum.FAILED;
+        this.isLoaded.set(loadingState === LoadingStateEnum.LOADED);
+        this.isLoading.set(loadingState === LoadingStateEnum.LOADING);
+        this.loadingFailed.set(loadingState === LoadingStateEnum.FAILED);
         this.isEmbedded$ = this.applicationBookmarkService.isEmbeddedApplication$();
-        this.cdr.detectChanges();
+        // this.cdr.detectChanges();
       });
 
     this.store$.select(selectViewerTitle)

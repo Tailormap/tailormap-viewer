@@ -12,6 +12,7 @@ import { FeatureInfoModel } from '../models/feature-info.model';
 import { showNextFeatureInfoFeature, showPreviousFeatureInfoFeature } from '../state/feature-info.actions';
 import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layout.service';
 import { CoreSharedModule } from '../../../shared';
+import { initialMapState, mapStateKey } from '../../../map/state/map.state';
 
 const getFeatureInfo = (updated?: boolean): FeatureInfoModel => {
   return {
@@ -25,8 +26,8 @@ const getFeatureInfo = (updated?: boolean): FeatureInfoModel => {
   };
 };
 
-const renderWithState = async () => {
-  await render(FeatureInfoDialogComponent, {
+const renderWithState = async (withSelectors = true) => {
+  const { container } = await render(FeatureInfoDialogComponent, {
     imports: [
       SharedModule,
       CoreSharedModule,
@@ -36,32 +37,25 @@ const renderWithState = async () => {
     providers: [
       { provide: ViewerLayoutService, useValue: { setLeftPadding: jest.fn(), setRightPadding: jest.fn() } },
       provideMockStore({
-        initialState: { [featureInfoStateKey]: { ...initialFeatureInfoState } },
-        selectors: [
+        initialState: {
+          [featureInfoStateKey]: { ...initialFeatureInfoState },
+          [mapStateKey]: { ...initialMapState },
+        },
+        selectors: withSelectors ? [
           { selector: selectCurrentlySelectedFeature, value: getFeatureInfo() },
           { selector: selectFeatureInfoDialogVisible, value: true },
           { selector: selectFeatureInfoCounts, value: { total: 1, current: 0 } },
-        ],
+        ] : [],
       }),
     ],
   });
+  return { container };
 };
 
 describe('FeatureInfoDialogComponent', () => {
 
   test('runs without feature info', async () => {
-    const { container } = await render(FeatureInfoDialogComponent, {
-      imports: [
-        SharedModule,
-        CoreSharedModule,
-        NoopAnimationsModule,
-        MatIconTestingModule,
-      ],
-      providers: [
-        provideMockStore({ initialState: { [featureInfoStateKey]: { ...initialFeatureInfoState } } }),
-        { provide: ViewerLayoutService, useValue: { setLeftPadding: jest.fn(), setRightPadding: jest.fn() } },
-      ],
-    });
+    const { container } = await renderWithState(false);
     expect(container.querySelector('.feature-info')).toBeNull();
   });
 
