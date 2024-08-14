@@ -6,17 +6,16 @@ import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MatMenuModule } from '@angular/material/menu';
 import { AppTreeLayerNodeModel, AppTreeLevelNodeModel, AppTreeNodeModel } from '@tailormap-admin/admin-api';
 
+const setup = async (node: TreeModel<AppTreeNodeModel> | null) => {
+  await render(ApplicationLayerTreeNodeComponent, {
+    imports: [ MatIconModule, MatIconTestingModule, MatMenuModule ],
+    inputs: { node },
+  });
+};
+
 describe('ApplicationLayerTreeNodeComponent', () => {
   test('renders', async () => {
-    await render(ApplicationLayerTreeNodeComponent, {
-      imports: [ MatIconModule, MatIconTestingModule, MatMenuModule ],
-      componentProperties: {
-        node: {
-          id: '1',
-          label: 'Item 1',
-        },
-      },
-    });
+    await setup({ id: '1', label: 'Item 1' });
     expect(await screen.findByText('Item 1')).toBeInTheDocument();
   });
 
@@ -34,12 +33,7 @@ describe('ApplicationLayerTreeNodeComponent', () => {
       type: '',
       metadata: appLayer,
     };
-    await render(ApplicationLayerTreeNodeComponent, {
-      imports: [ MatIconModule, MatIconTestingModule, MatMenuModule ],
-      componentProperties: {
-        node: layer,
-      },
-    });
+    await setup(layer);
     expect(await screen.findByText(appLayer.layerName)).toBeInTheDocument();
     expect((await screen.findByText(appLayer.layerName)).closest('.tree-node')).toBeInTheDocument();
     expect((await screen.findByText(appLayer.layerName)).closest('.level')).not.toBeInTheDocument();
@@ -59,12 +53,7 @@ describe('ApplicationLayerTreeNodeComponent', () => {
       type: 'level',
       metadata: appLevel,
     };
-    await render(ApplicationLayerTreeNodeComponent, {
-      imports: [ MatIconModule, MatIconTestingModule, MatMenuModule ],
-      componentProperties: {
-        node: layer,
-      },
-    });
+    await setup(layer);
     expect(await screen.findByText('Level 1')).toBeInTheDocument();
     expect((await screen.findByText('Level 1')).closest('.tree-node')).toBeInTheDocument();
     expect((await screen.findByText('Level 1')).closest('.level')).toBeInTheDocument();

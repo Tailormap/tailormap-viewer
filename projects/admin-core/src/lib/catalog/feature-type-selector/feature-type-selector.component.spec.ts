@@ -39,12 +39,8 @@ const setup = async (status: LoadingStateEnum, layerName?: string) => {
     providers: [
       { provide: Store, useValue: store },
     ],
-    componentInputs: { layerName },
-    componentProperties: {
-      featureTypeSelected: {
-        emit: featureTypeSelected,
-      } as any,
-    },
+    inputs: { layerName },
+    on: { featureTypeSelected: featureTypeSelected },
   });
   return { dispatch, featureTypeSelected };
 };

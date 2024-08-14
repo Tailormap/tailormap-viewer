@@ -18,11 +18,7 @@ describe('GeoServiceFormComponent', () => {
     await render(GeoServiceFormComponent, {
       imports: [ SharedModule, MatIconTestingModule ],
       declarations: [ PasswordFieldComponent, AuthorizationEditComponent ],
-      componentProperties: {
-        changed: {
-          emit: changedFn,
-        } as any,
-      },
+      on: { changed: changedFn },
       providers: [
         { provide: TailormapAdminApiV1Service, useValue: { getGroups$: jest.fn(() => of(null)) } },
         provideMockStore({ initialState: { [userStateKey]: initialUserState } }),

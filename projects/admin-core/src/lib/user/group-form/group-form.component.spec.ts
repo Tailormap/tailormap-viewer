@@ -9,11 +9,7 @@ const setup = async () => {
   const groupUpdated = jest.fn();
   await render(GroupFormComponent, {
     imports: [ SharedImportsModule, SharedAdminComponentsModule ],
-    componentOutputs: {
-      groupUpdated: {
-        emit: groupUpdated,
-      } as any,
-    },
+    on: { groupUpdated: groupUpdated },
   });
   return { groupUpdated };
 };

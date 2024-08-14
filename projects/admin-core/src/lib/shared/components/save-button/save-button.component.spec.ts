@@ -10,15 +10,11 @@ const setup = async (isSaving: boolean, disabled: boolean) => {
   await render(SaveButtonComponent, {
     imports: [ MatProgressSpinnerModule, SharedImportsModule ],
     declarations: [SpinnerButtonComponent],
-    componentInputs: {
+    inputs: {
       saving$: of(isSaving),
       disabled,
     },
-    componentProperties: {
-      save: {
-        emit: saveFn,
-      } as any,
-    },
+    on: { save: saveFn },
   });
   return { onSave: saveFn };
 };

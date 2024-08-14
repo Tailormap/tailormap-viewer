@@ -8,16 +8,14 @@ const setup = async (data?: AdditionalPropertyModel[]) => {
   const changedFn = jest.fn();
   await render(AdminFieldsRendererComponent, {
     imports: [SharedImportsModule],
-    componentProperties: {
+    inputs: {
       fields: [
         { key: 'test', dataType: 'string', label: 'Test value', type: 'text', isPublic: false },
         { key: 'test2', dataType: 'string', label: 'Test choice', type: 'choice', values: [ 'test1', 'test2', 'test3' ], isPublic: true },
       ],
       data,
-      changed: {
-        emit: changedFn,
-      } as any,
     },
+    on: { changed: changedFn },
   });
   return { changedFn };
 };

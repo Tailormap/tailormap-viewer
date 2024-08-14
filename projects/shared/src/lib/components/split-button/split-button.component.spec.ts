@@ -4,16 +4,23 @@ import { SharedImportsModule } from '../../shared-imports.module';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import userEvent from '@testing-library/user-event';
 
+const setup = async () => {
+  const optionSelectedMock = jest.fn();
+  await render(SplitButtonComponent, {
+    imports: [ SharedImportsModule, MatIconTestingModule ],
+    inputs: {
+      options: [{ id: '1', label: 'Test 1' }, { id: '2', label: 'Test 2' }],
+      selectedOption: '1',
+    },
+    on: { optionSelected: optionSelectedMock },
+  });
+  return { optionSelectedMock };
+};
+
 describe('SplitButtonComponent', () => {
 
   test('should render', async () => {
-    await render(SplitButtonComponent, {
-      imports: [ SharedImportsModule, MatIconTestingModule ],
-      componentProperties: {
-        options: [{ id: '1', label: 'Test 1' }, { id: '2', label: 'Test 2' }],
-        selectedOption: '1',
-      },
-    });
+    await setup();
     const buttons = screen.getAllByRole('radio');
     expect(buttons.length).toEqual(2);
     await userEvent.click(buttons[1]);
@@ -25,17 +32,7 @@ describe('SplitButtonComponent', () => {
   });
 
   test('cycles through options', async () => {
-    const optionSelectedMock = jest.fn();
-    await render(SplitButtonComponent, {
-      imports: [ SharedImportsModule, MatIconTestingModule ],
-      componentProperties: {
-        options: [{ id: '1', label: 'Test 1' }, { id: '2', label: 'Test 2' }],
-        selectedOption: '1',
-        optionSelected: {
-          emit: optionSelectedMock,
-        } as any,
-      },
-    });
+    const { optionSelectedMock } = await setup();
     const buttons = screen.getAllByRole('radio');
     expect(await screen.getByText('Test 1'));
     await userEvent.click(buttons[0]);

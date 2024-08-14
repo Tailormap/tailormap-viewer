@@ -51,7 +51,7 @@ const setup = async (hasNode = false) => {
       PasswordFieldComponent,
       AuthorizationEditComponent,
     ],
-    componentInputs: {
+    inputs: {
       node: hasNode ? catalogNodeModel : null,
     },
     imports: [ SharedModule, MatIconTestingModule ],

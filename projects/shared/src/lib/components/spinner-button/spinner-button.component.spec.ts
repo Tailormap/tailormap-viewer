@@ -9,17 +9,13 @@ const setup = async (isSpinning: boolean, disabled: boolean) => {
   const btnClick = jest.fn();
   await render(SpinnerButtonComponent, {
     imports: [ MatProgressSpinnerModule, SharedImportsModule ],
-    componentInputs: {
+    inputs: {
       showSpinner$: of(isSpinning),
       label: 'My Button',
       disabled,
       color: 'primary',
     },
-    componentProperties: {
-      buttonClick: {
-        emit: btnClick,
-      } as any,
-    },
+    on: { buttonClick: btnClick },
   });
   return { btnClick: btnClick };
 };

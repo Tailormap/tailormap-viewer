@@ -31,7 +31,7 @@ const setup = async () => {
         initialState: { map: { layers: [appLayer] } },
       }),
     ],
-    componentProperties: {
+    inputs: {
       layerId: appLayer.id,
     },
   });

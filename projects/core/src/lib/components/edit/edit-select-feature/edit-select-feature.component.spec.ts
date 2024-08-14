@@ -22,7 +22,7 @@ describe('EditSelectFeatureComponent', () => {
         getMapServiceMock().provider,
         { provide: Store, useValue: { dispatch: dispatchMock } },
       ],
-      componentInputs: {
+      inputs: {
         features,
       },
     });

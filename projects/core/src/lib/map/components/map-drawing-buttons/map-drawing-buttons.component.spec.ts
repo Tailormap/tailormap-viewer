@@ -33,10 +33,10 @@ const setup = async (allowedDrawingShapes?: DrawingFeatureTypeEnum[]) => {
     providers: [
       mapServiceMock.provider,
     ],
-    componentProperties: {
-      allowedShapes: allowedDrawingShapes,
-      activeToolChanged: { emit: toolChanged } as any,
-      drawingAdded: { emit: drawingAdded } as any,
+    inputs: { allowedShapes: allowedDrawingShapes },
+    on: {
+      activeToolChanged: toolChanged,
+      drawingAdded: drawingAdded,
     },
   });
 

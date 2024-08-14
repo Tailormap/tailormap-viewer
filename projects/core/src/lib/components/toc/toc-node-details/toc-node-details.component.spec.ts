@@ -40,10 +40,8 @@ const setup = async (withLayer: boolean) => {
         },
       }),
     ],
-    componentProperties: {
-      node: withLayer ? node : undefined,
-      closeDetails: { emit: closeMock } as any,
-    },
+    inputs: { node: withLayer ? node : undefined },
+    on: { closeDetails: closeMock },
   });
   return { close: closeMock };
 };

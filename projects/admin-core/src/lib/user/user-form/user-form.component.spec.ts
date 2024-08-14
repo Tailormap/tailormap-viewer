@@ -21,11 +21,7 @@ const setup = async (isValidPassword: boolean) => {
   await render(UserFormComponent, {
     imports: [ SharedImportsModule, MatIconTestingModule, SharedAdminComponentsModule ],
     declarations: [PasswordFieldComponent],
-    componentOutputs: {
-      userUpdated: {
-        emit: userUpdated,
-      } as any,
-    },
+    on: { userUpdated },
     providers: [
       { provide: TailormapAdminApiV1Service, useValue: mockApiService },
       provideMockStore({ initialState: { [userStateKey]: initialUserState } }),

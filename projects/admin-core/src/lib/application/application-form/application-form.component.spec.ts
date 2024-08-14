@@ -24,13 +24,11 @@ const setup = async (hasApp?: boolean, addAppToState?: boolean) => {
   await render(ApplicationFormComponent, {
     imports: [ SharedModule, MatIconTestingModule ],
     declarations: [ BoundsFieldComponent, AuthorizationEditComponent ],
-    componentInputs: {
+    inputs: {
       application: hasApp ? application : undefined,
     },
-    componentProperties: {
-      updateApplication: {
-        emit: onUpdate,
-      } as any,
+    on: {
+      updateApplication: onUpdate,
     },
     providers: [
       { provide: TailormapAdminApiV1Service, useValue: { getGroups$: jest.fn(() => of(null)) } },
