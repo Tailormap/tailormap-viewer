@@ -34,7 +34,7 @@ const setup = async (isComponentVisible = true, selectors: any[] = []) => {
     providers: [
       provideMockStore({
         initialState: { [drawingStateKey]: { ...initialDrawingState } },
-        selectors: [{ selector: selectDrawingFeaturesIncludingSelected, value: [] }, ...selectors ]
+        selectors: [{ selector: selectDrawingFeaturesIncludingSelected, value: [] }, ...selectors ],
       }),
       mapServiceMock.provider,
       { provide: MenubarService, useValue: menubarServiceMock },
