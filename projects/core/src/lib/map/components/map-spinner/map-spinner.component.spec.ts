@@ -4,18 +4,23 @@ import { of } from 'rxjs';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
 
+const setup = async (loading: boolean, coordinates?: [ number, number ]) => {
+  const mapServiceMock = getMapServiceMock();
+  const { container } = await render(MapSpinnerComponent, {
+    providers: [mapServiceMock.provider],
+    inputs: {
+      loading$: of(loading),
+      coordinates$: of(coordinates),
+    },
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  });
+  return { container, mapServiceMock };
+};
+
 describe('MapSpinnerComponent', () => {
 
   test('should render', async () => {
-    const mapServiceMock = getMapServiceMock();
-    const { container } = await render(MapSpinnerComponent, {
-      providers: [mapServiceMock.provider],
-      componentInputs: {
-        loading$: of(false),
-        coordinates$: of(undefined),
-      },
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    });
+    const { container, mapServiceMock } = await setup(false);
     const spinner = container.querySelector<HTMLDivElement>('.spinner');
     expect(spinner).not.toBeNull();
     expect(spinner?.style.display).toEqual('none');
@@ -23,16 +28,7 @@ describe('MapSpinnerComponent', () => {
   });
 
   test('should render on coordinates', async () => {
-    const mapServiceMock = getMapServiceMock();
-    const coords: [ number, number ] = [ 5, 5 ];
-    const { container } = await render(MapSpinnerComponent, {
-      providers: [mapServiceMock.provider],
-      componentInputs: {
-        loading$: of(true),
-        coordinates$: of(coords),
-      },
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    });
+    const { container, mapServiceMock } = await setup(true, [ 5, 5 ]);
     const spinner = container.querySelector<HTMLDivElement>('.spinner');
     expect(spinner).not.toBeNull();
     expect(spinner?.style.left).toEqual('5px');

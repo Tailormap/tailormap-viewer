@@ -12,7 +12,7 @@ describe('LayerTransparencyComponent', () => {
   test('should render', async () => {
     await render(LayerTransparencyComponent, {
       imports: [ SharedModule, MatIconTestingModule ],
-      componentProperties: {
+      inputs: {
         layer: '1',
       },
       providers: [

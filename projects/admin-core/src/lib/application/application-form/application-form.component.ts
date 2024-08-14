@@ -165,7 +165,6 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
   }
 
   private isValidForm(): boolean {
-    console.log('isValidForm', this.nameFieldOnly, this.applicationForm.dirty, this.applicationForm.valid);
     const values = this.applicationForm.getRawValue();
     return FormHelper.isValidValue(values.name)
       && FormHelper.isValidValue(values.title)

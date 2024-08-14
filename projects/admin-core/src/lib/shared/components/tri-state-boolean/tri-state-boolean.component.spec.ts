@@ -7,7 +7,7 @@ describe('TriStateBooleanComponent', () => {
   test('should render', async () => {
     await render(TriStateBooleanComponent, {
       imports: [MatButtonToggleModule],
-      componentProperties: {
+      inputs: {
         value: true,
         labelDefault: 'Default',
         labelEnabled: 'True',
@@ -23,10 +23,8 @@ describe('TriStateBooleanComponent', () => {
     const changed = jest.fn();
     await render(TriStateBooleanComponent, {
       imports: [MatButtonToggleModule],
-      componentProperties: {
-        value: true,
-        changed: { emit: changed } as any,
-      },
+      inputs: { value: true },
+      on: { changed: changed },
     });
     const toggle = await screen.findByRole('radio', { name: 'Disabled' });
     toggle.click();

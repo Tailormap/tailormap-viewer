@@ -11,11 +11,11 @@ describe('PasswordFieldComponent', () => {
     const changed = jest.fn();
     await render(PasswordFieldComponent, {
       imports: [ SharedImportsModule, MatIconTestingModule ],
-      componentProperties: {
+      inputs: {
         value: 'secret',
         label: 'Password',
-        changed: { emit: changed } as any,
       },
+      on: { changed: changed },
     });
     expect(await screen.findByText('Password')).toBeInTheDocument();
     expect(await screen.findByRole('button')).toBeInTheDocument();

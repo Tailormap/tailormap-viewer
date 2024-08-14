@@ -10,7 +10,7 @@ describe('EditFormComponent', () => {
     const featureAttributeChanged = jest.fn();
     await render(EditFormComponent, {
       imports: [SharedModule],
-      componentInputs: { feature: {
+      inputs: { feature: {
         feature: getFeatureModel(),
         columnMetadata: [
           { key: 'prop', alias: 'Property', type: AttributeType.STRING },
@@ -25,11 +25,7 @@ describe('EditFormComponent', () => {
           ],
         }),
       } },
-      componentOutputs: {
-        featureAttributeChanged: {
-          emit: featureAttributeChanged,
-        } as any,
-      },
+      on: { featureAttributeChanged: featureAttributeChanged },
     });
     expect(await screen.findByText('Property')).toBeInTheDocument();
     expect(await screen.findByText('Property 2')).toBeInTheDocument();

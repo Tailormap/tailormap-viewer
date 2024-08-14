@@ -14,7 +14,7 @@ const setup = async (node: CatalogTreeModel | null) => {
   await render(CatalogTreeNodeComponent, {
     imports: [ MatIconModule, MatIconTestingModule ],
     declarations: [CatalogBaseTreeNodeComponent],
-    componentProperties: { node },
+    inputs: { node },
   });
 };
 

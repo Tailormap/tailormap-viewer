@@ -2,23 +2,26 @@ import { render, screen } from '@testing-library/angular';
 import { LegendLayerComponent } from './legend-layer.component';
 import { getAppLayerModel, getServiceModel } from '@tailormap-viewer/api';
 import { LegendImageComponent } from '@tailormap-viewer/shared';
+import { LegendInfoModel } from '../models/legend-info.model';
 
 const windowMock = () => Object.defineProperty({}, 'devicePixelRatio', {
   get: jest.fn().mockReturnValue(2),
 }) as any;
 
+const setup = async (legendInfo: LegendInfoModel) => {
+  await render(LegendLayerComponent, {
+    declarations: [LegendImageComponent],
+    inputs: { legendInfo },
+  });
+};
+
 describe('LegendLayerComponent', () => {
 
   test('should render', async () => {
-    await render(LegendLayerComponent, {
-      declarations: [LegendImageComponent],
-      componentProperties: {
-        legendInfo: {
-          layer: getAppLayerModel({ title: 'Layer title' }),
-          url: 'some-url',
-          isInScale: true,
-        },
-      },
+    await setup({
+      layer: getAppLayerModel({ title: 'Layer title' }),
+      url: 'some-url',
+      isInScale: true,
     });
     expect(await screen.getByText('Layer title')).toBeInTheDocument();
     const img = await screen.getAllByRole('img')[0];
@@ -29,16 +32,10 @@ describe('LegendLayerComponent', () => {
 
   test('should render high dpi legend for GeoServer', async () => {
     jest.spyOn(global, 'window', 'get').mockImplementation(windowMock);
-
-    await render(LegendLayerComponent, {
-      declarations: [LegendImageComponent],
-      componentProperties: {
-        legendInfo: {
-          layer: { ...getAppLayerModel({ title: 'Layer title' }), service: getServiceModel() },
-          url: 'http://some-url/geoserver/wms?REQUEST=GetLegendGraphic',
-          isInScale: true,
-        },
-      },
+    await setup({
+      layer: { ...getAppLayerModel({ title: 'Layer title' }), service: getServiceModel() },
+      url: 'http://some-url/geoserver/wms?REQUEST=GetLegendGraphic',
+      isInScale: true,
     });
     const img = await screen.getAllByRole('img')[0];
     expect(img).toBeInTheDocument();

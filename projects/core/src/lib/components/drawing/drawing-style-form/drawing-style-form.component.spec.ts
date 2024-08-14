@@ -4,12 +4,17 @@ import { SharedModule } from '@tailormap-viewer/shared';
 import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type.enum';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 
+const setup = async (type?: DrawingFeatureTypeEnum) => {
+  await render(DrawingStyleFormComponent, {
+    imports: [ SharedModule, MatIconTestingModule ],
+    inputs: type ? { type } : {},
+  });
+};
+
 describe('DrawingStyleFormComponent', () => {
 
   test('should render empty without type', async () => {
-    await render(DrawingStyleFormComponent, {
-      imports: [SharedModule],
-    });
+    await setup();
     expect(screen.queryByText('Symbol')).not.toBeInTheDocument();
     expect(screen.queryByText('Line')).not.toBeInTheDocument();
     expect(screen.queryByText('Fill')).not.toBeInTheDocument();
@@ -17,12 +22,7 @@ describe('DrawingStyleFormComponent', () => {
   });
 
   test('should render point settings', async () => {
-    await render(DrawingStyleFormComponent, {
-      imports: [ SharedModule, MatIconTestingModule ],
-      componentProperties: {
-        type: DrawingFeatureTypeEnum.POINT,
-      },
-    });
+    await setup(DrawingFeatureTypeEnum.POINT);
     expect((await screen.getAllByText('Symbol')).length).toEqual(2);
     expect(screen.queryByText('Line')).not.toBeInTheDocument();
     expect(screen.queryByText('Fill')).not.toBeInTheDocument();
@@ -30,12 +30,7 @@ describe('DrawingStyleFormComponent', () => {
   });
 
   test('should render line settings', async () => {
-    await render(DrawingStyleFormComponent, {
-      imports: [ SharedModule, MatIconTestingModule ],
-      componentProperties: {
-        type: DrawingFeatureTypeEnum.LINE,
-      },
-    });
+    await setup(DrawingFeatureTypeEnum.LINE);
     expect(screen.queryByText('Symbol')).not.toBeInTheDocument();
     expect(screen.getByText('Line')).toBeInTheDocument();
     expect(screen.queryByText('Fill')).not.toBeInTheDocument();
@@ -43,12 +38,7 @@ describe('DrawingStyleFormComponent', () => {
   });
 
   test('should render polygon settings', async () => {
-    await render(DrawingStyleFormComponent, {
-      imports: [ SharedModule, MatIconTestingModule ],
-      componentProperties: {
-        type: DrawingFeatureTypeEnum.POLYGON,
-      },
-    });
+    await setup(DrawingFeatureTypeEnum.POLYGON);
     expect(screen.queryByText('Symbol')).not.toBeInTheDocument();
     expect(screen.getByText('Line')).toBeInTheDocument();
     expect(screen.getByText('Fill')).toBeInTheDocument();

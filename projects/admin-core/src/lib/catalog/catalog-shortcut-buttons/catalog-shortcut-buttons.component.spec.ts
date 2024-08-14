@@ -49,7 +49,7 @@ const setup = async (geoServiceId?: string, geoServiceLayerId?: string, featureT
   const geoServiceLayers = [geoServiceLayer];
   await render(CatalogShortcutButtonsComponent, {
     imports: [ SharedModule, MatIconTestingModule ],
-    componentInputs: {
+    inputs: {
       featureTypeId: featureTypeId || null,
       geoServiceId: geoServiceId || null,
       geoServiceLayerId: geoServiceLayerId || null,

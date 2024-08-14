@@ -12,7 +12,7 @@ describe('FilterDescriptionComponent', () => {
       ...getFilterGroup(),
       layers: [getAppLayerModel({ id: '1', title: 'layer1' })],
     };
-    await render(FilterDescriptionComponent, { componentProperties: { filterGroup } });
+    await render(FilterDescriptionComponent, { inputs: { filterGroup } });
     expect(await screen.findByText('attribute')).toBeInTheDocument();
     expect(await screen.findByText('contains')).toBeInTheDocument();
     expect(await screen.findByText('value')).toBeInTheDocument();

@@ -12,7 +12,7 @@ import { CatalogExtendedTypeEnum } from '../../models/catalog-extended.model';
 const setup = async (node: CatalogTreeModel | null) => {
   await render(CatalogBaseTreeNodeComponent, {
     imports: [ MatIconModule, MatIconTestingModule ],
-    componentProperties: { node },
+    inputs: { node },
   });
 };
 
