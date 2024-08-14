@@ -46,7 +46,7 @@ const setupSentryProviders = async () => {
 const main = async () => {
   try {
     const sentryProviders = await setupSentryProviders();
-    await platformBrowserDynamic(sentryProviders).bootstrapModule(AppModule);
+    await platformBrowserDynamic(sentryProviders).bootstrapModule(AppModule, { ngZone: "noop" });
   } catch (error) {
     console.error(error);
   }

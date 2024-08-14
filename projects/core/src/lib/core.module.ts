@@ -60,7 +60,7 @@ const sentryProviders = SENTRY_DSN === '@SENTRY_DSN@' ? [] : [
       runtimeChecks: {
         strictActionImmutability: true,
         strictActionSerializability: true,
-        strictActionWithinNgZone: true,
+        strictActionWithinNgZone: false,
         strictStateImmutability: true,
         strictStateSerializability: true,
         strictActionTypeUniqueness: true,

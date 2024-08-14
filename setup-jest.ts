@@ -4,8 +4,12 @@ import './projects/app/src/polyfills';
 import '@testing-library/jest-dom';
 import { TextEncoder, TextDecoder } from 'util';
 import * as failOnConsole from 'jest-fail-on-console';
+import { TestBed } from '@angular/core/testing';
+import { provideExperimentalZonelessChangeDetection } from '@angular/core';
 
 failOnConsole();
+
+TestBed.configureTestingModule({  providers: [provideExperimentalZonelessChangeDetection()] });
 
 global.TextEncoder = TextEncoder;
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment

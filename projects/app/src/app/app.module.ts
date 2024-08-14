@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, provideExperimentalZonelessChangeDetection } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
@@ -22,6 +22,7 @@ import { TailormapApiConstants } from '@tailormap-viewer/api';
     ...environment.imports,
   ],
   providers: [
+    provideExperimentalZonelessChangeDetection(),
     provideHttpClient(
       withXsrfConfiguration({
         cookieName: TailormapApiConstants.XSRF_COOKIE_NAME,
