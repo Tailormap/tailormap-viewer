@@ -1,26 +1,7 @@
-import { CatalogItemKindEnum, CatalogItemModel, getCatalogNode } from '@tailormap-admin/admin-api';
+import { CatalogItemKindEnum } from '@tailormap-admin/admin-api';
 import { MoveCatalogNodeModel } from '../models/move-catalog-node.model';
+import { baseTree, CatalogTestNode, getCatalogTree } from './mocks/catalog-tree.mock';
 import { CatalogTreeMoveHelper } from './catalog-tree-move.helper';
-import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
-
-type CatalogTestNode = { id: string; children?: string[]; items?: CatalogItemModel[] };
-
-const getFolderNode = (id: string, parentId?: string, children?: string[], items?: CatalogItemModel[]): ExtendedCatalogNodeModel => {
-  return {
-    ...getCatalogNode({ root: id === 'root', title: `Folder ${id}`, id, children, items }),
-    expanded: false,
-    parentId: parentId || null,
-  };
-};
-
-const getCatalogTree = (tree: CatalogTestNode[]): ExtendedCatalogNodeModel[] => {
-  const catalog: ExtendedCatalogNodeModel[] = [];
-  tree.forEach(node => {
-    const parentId = tree.find(n => n.children?.includes(node.id))?.id;
-    catalog.push(getFolderNode(node.id, parentId, node.children, node.items));
-  });
-  return catalog;
-};
 
 const matchesTree = (move: MoveCatalogNodeModel, tree: CatalogTestNode[], changedItems: CatalogTestNode[]) => {
   const catalogTree = getCatalogTree(tree);
@@ -32,29 +13,6 @@ const matchesTree = (move: MoveCatalogNodeModel, tree: CatalogTestNode[], change
   const result = CatalogTreeMoveHelper.moveNode(catalogTree, move);
   expect(result).toEqual(expectedCatalogTree);
 };
-
-const baseTree: CatalogTestNode[] = [
-  { id: 'root', children: [ '1', '2', '3' ], items: [] },
-  { id: '1', children: [ '1_1', '1_2' ], items: [] },
-  {
-    id: '1_1',
-    items: [
-      { id: 's1', kind: CatalogItemKindEnum.GEO_SERVICE },
-      { id: 's2', kind: CatalogItemKindEnum.GEO_SERVICE },
-      { id: 's3', kind: CatalogItemKindEnum.GEO_SERVICE },
-    ],
-  },
-  {
-    id: '1_2',
-    items: [
-      { id: 'f1', kind: CatalogItemKindEnum.FEATURE_SOURCE },
-      { id: 'f2', kind: CatalogItemKindEnum.FEATURE_SOURCE },
-      { id: 'f3', kind: CatalogItemKindEnum.FEATURE_SOURCE },
-    ],
-  },
-  { id: '2' },
-  { id: '3' },
-];
 
 describe('CatalogTreeMoveHelper', () => {
 
