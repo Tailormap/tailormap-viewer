@@ -154,7 +154,7 @@ jobs:
         run: |
           docker buildx create --use --name tailormap-builder
           docker run --privileged --rm tonistiigi/binfmt --install all
-          docker buildx build --progress plain --pull --build-arg VERSION=${VERSION} --build-arg API_VERSION=snapshot --build-arg BASE_HREF=${BASE_HREF} --platform linux/amd64,linux/arm64 -t ghcr.io/b3partners/tailormap:${VERSION} . --push
+          docker buildx build --progress plain --pull --build-arg VERSION=${VERSION} --build-arg API_VERSION=snapshot --build-arg BASE_HREF=${BASE_HREF} --platform linux/amd64,linux/arm64 -t ghcr.io/tailormap/tailormap:${VERSION} . --push
 
       - name: 'Set Docker context for deployment'
         uses: arwynfr/actions-docker-context@v2
