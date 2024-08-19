@@ -22,13 +22,13 @@ jobs:
 
       - name: Build images
         run: |
-          docker buildx build --pull --build-arg VERSION=snapshot --build-arg BASE_HREF=/ -t ghcr.io/b3partners/tailormap:snapshot . --load
+          docker buildx build --pull --build-arg VERSION=snapshot --build-arg BASE_HREF=/ -t ghcr.io/tailormap/tailormap:snapshot . --load
 
       - name: Run Trivy vulnerability scanner on tailormap-viewer
         uses: 'aquasecurity/trivy-action@0.24.0'
-        # docker run --rm -v trivy_cache:/root/.cache/ aquasec/trivy image ghcr.io/b3partners/tailormap:snapshot
+        # docker run --rm -v trivy_cache:/root/.cache/ aquasec/trivy image ghcr.io/tailormap/tailormap:snapshot
         with:
-          image-ref: 'ghcr.io/b3partners/tailormap:snapshot'
+          image-ref: 'ghcr.io/tailormap/tailormap:snapshot'
           format: 'sarif'
           output: 'tailormap-trivy-results.sarif'
           severity: 'HIGH,CRITICAL'

@@ -31,7 +31,7 @@ database. The default database name, user and password are all `tailormap`:
 createuser tailormap
 createdb tailormap --owner=tailormap
 psql tailormap -c "alter role tailormap password 'tailormap'"
-docker run -it --rm --network=host --name tailormap ghcr.io/b3partners/tailormap:snapshot
+docker run -it --rm --network=host --name tailormap ghcr.io/tailormap/tailormap:snapshot
 ```
 
 Specify the following command line parameters with `docker run` to change the database connection settings:
@@ -126,7 +126,7 @@ released.
 
 ## Adding extra functionality
 
-See the [tailormap-starter](https://github.com/B3Partners/tailormap-starter/) and [tailormap-hello-world](https://github.com/B3Partners/tailormap-hello-world/)
+See the [tailormap-starter](https://github.com/Tailormap/tailormap-starter/) and [tailormap-hello-world](https://github.com/Tailormap/tailormap-hello-world/)
 repositories which demonstrate how you can add functionality to Tailormap by developing it in a separate repository.
 
 General GIS viewer functionality that fits in most viewers can be added in this repository by creating a pull request. If you add
@@ -138,7 +138,7 @@ build an image which includes multiple Angular libraries (for instance several e
 to specify Angular libraries to add when building by setting the `ADD_NG_LIBRARIES` variable (see the comments in `.env.template`). Set the
 `TAILORMAP_IMAGE` to a custom name and run `docker compose build`. It will use the Dockerfile and base Angular app from the
 `tailormap-starter` repository. For now this will use the published release version of tailormap-viewer that is referenced in the
-[package.json](https://github.com/B3Partners/tailormap-starter/blob/main/package.json) in the tailormap-starter repositories' `main`
+[package.json](https://github.com/Tailormap/tailormap-starter/blob/main/package.json) in the tailormap-starter repositories' `main`
 branch at build time. In the future we aim to have this also use the tailormap-viewer version in the `VERSION` variable by creating the base
 app in a schematic from a Dockerfile only.
 
@@ -159,7 +159,7 @@ It is explicitly allowed to create a custom Tailormap with closed source (paid) 
 
 All used open source components (frontend and backend) have licenses that allow linking with closed source. There are no components licensed
 under the GPL or Affero GPL. See [3rdpartylicenses.txt](https://snapshot.tailormap.nl/en/3rdpartylicenses.txt) for all frontend licenses and
-[here](https://b3partners.github.io/tailormap-api/dependencies.html) for the licenses used in the backend dependencies.
+[here](https://tailormap.github.io/tailormap-api/dependencies.html) for the licenses used in the backend dependencies.
 
 If you extend the Tailormap frontend with closed source frontend functionality, the minified source will of course be delivered to clients'
 browsers, even before logging in. By default, source maps (which provide the original source code to developer tools included in browsers)
@@ -234,7 +234,7 @@ The port PostgreSQL listens on can be customized using the `DB_PORT` variable in
 
 ### Using a local Tailormap backend
 
-The Spring Boot backend middleware is developed in a separate [tailormap-api](https://www.github.com/B3Partners/tailormap-api) repository.
+The Spring Boot backend middleware is developed in a separate [tailormap-api](https://www.github.com/Tailormap/tailormap-api) repository.
 
 When running a dev server, the tailormap-api is reverse proxied on the `http://localhost:4200/api` path from `https://snapshot.tailormap.nl/api`
 which runs the latest `snapshot`, so you don't even need to run the backend and database locally.
@@ -248,7 +248,7 @@ PROXY_USE_LOCALHOST=true npm run start
 
 There is a Swagger UI for the API on http://localhost:8080/swagger-ui/.
 
-If you want to make some changes to the backend source code, only start the `db` container from this stack and run the backend from the [tailormap-api](https://www.github.com/B3Partners/tailormap-api)
+If you want to make some changes to the backend source code, only start the `db` container from this stack and run the backend from the [tailormap-api](https://www.github.com/Tailormap/tailormap-api)
 repository as described in the README in that project.
 
 ### Code scaffolding
@@ -277,18 +277,18 @@ After you've made your some changes to the source you can build your own Docker 
 the `node_modules` and `.angular` directories to reduce the Docker build context size.
 
 ```
-docker build -t ghcr.io/b3partners/tailormap:snapshot .
+docker build -t ghcr.io/tailormap/tailormap:snapshot .
 ```
 or
 ```
 docker compose build
 ```
 
-The Dockerfile in this repository uses the `ghcr.io/b3partners/tailormap-api` base image with the webserver and backend and adds the Angular
-frontend bundles to it. To use your own base image with modifications, run `mvn install` in the [tailormap-api](https://www.github.com/B3Partners/tailormap-api)
+The Dockerfile in this repository uses the `ghcr.io/tailormap/tailormap-api` base image with the webserver and backend and adds the Angular
+frontend bundles to it. To use your own base image with modifications, run `mvn install` in the [tailormap-api](https://www.github.com/Tailormap/tailormap-api)
 repository to build the base image before building the `tailormap` image.
 
-You can also add the argument `--build-arg API_VERSION=snapshot` to set the tag of the `ghcr.io/b3partners/tailormap-api` base image to use.
+You can also add the argument `--build-arg API_VERSION=snapshot` to set the tag of the `ghcr.io/tailormap/tailormap-api` base image to use.
 
 ### Multi-arch build with Docker buildx
 
@@ -312,7 +312,7 @@ export BASE_HREF=/
 # for pushing to the GitHub container registry, you need to be logged in with docker login
 docker buildx build --pull --build-arg VERSION=${VERSION} --build-arg API_VERSION=${VERSION} --build-arg BASE_HREF=${BASE_HREF} \
       --platform linux/amd64,linux/arm64 \
-      -t ghcr.io/b3partners/tailormap:${VERSION} . \
+      -t ghcr.io/tailormap/tailormap:${VERSION} . \
       --push
 # leave the buildx context
 docker buildx use default

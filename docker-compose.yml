@@ -9,12 +9,12 @@ volumes:
 services:
   tailormap:
     container_name: ${COMPOSE_PROJECT_NAME}-server
-    image: ${TAILORMAP_IMAGE:-ghcr.io/b3partners/tailormap}:${VERSION:-snapshot}
+    image: ${TAILORMAP_IMAGE:-ghcr.io/tailormap/tailormap}:${VERSION:-snapshot}
     # Building is optional, only when adding extra Angular libraries with additional components
     build:
       # This GitHub repository contains an empty Angular project with the NPM packages from tailormap as
       # dependencies
-      context: https://github.com/B3Partners/tailormap-starter.git
+      context: https://github.com/tailormap/tailormap-starter.git
       args:
         API_VERSION: ${VERSION}
         ADD_NG_LIBRARIES: ${ADD_NG_LIBRARIES:-}
