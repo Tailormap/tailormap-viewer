@@ -1,4 +1,4 @@
-name: "Release Drafter"
+name: 'Release Drafter & Contributors'
 
 on:
   push:
@@ -20,6 +20,8 @@ jobs:
   contributors:
     runs-on: ubuntu-latest
     name: 'Update Contributors'
+    permissions:
+      pull-requests: write
     steps:
       - uses: actions/checkout@v4
       - uses: JoshuaKGoldberg/all-contributors-auto-action@v0.5.0
