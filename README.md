@@ -214,8 +214,8 @@ container to the previous major version and backup the database as normal and re
 
 The following is required for successfully building Tailormap:
 
-- NodeJS 18.x (https://nodejs.org/en/); the current LTS
-- npm 8 (included with NodeJS)
+- NodeJS 20.x (https://nodejs.org/en/); the current LTS
+- npm 10 (included with NodeJS)
 
 ### Dev server
 

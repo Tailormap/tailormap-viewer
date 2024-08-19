@@ -8,12 +8,18 @@ on:
 jobs:
   update_release_draft:
     runs-on: ubuntu-latest
-    permissions:
-      # write permission is required to create a github release
+    permissions: # write permission is required to create a github release
       contents: write
     name: Update release Draft
-    steps:
-      # Drafts next Release notes as Pull Requests are merged into "main"
+    steps: # Drafts next Release notes as Pull Requests are merged into "main"
       - uses: 'release-drafter/release-drafter@v6'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+  contributors:
+    runs-on: ubuntu-latest
+    name: 'Update Contributors'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: JoshuaKGoldberg/all-contributors-auto-action@v0.5.0
