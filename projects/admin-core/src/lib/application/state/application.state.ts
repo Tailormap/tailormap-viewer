@@ -15,6 +15,7 @@ export interface ApplicationState {
   draftApplicationValid: boolean;
   expandedBaseLayerNodes: string[];
   expandedAppLayerNodes: string[];
+  applicationCatalogFilterTerm?: string;
 }
 
 export const initialApplicationState: ApplicationState = {

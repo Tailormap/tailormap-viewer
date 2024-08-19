@@ -358,6 +358,14 @@ const onToggleNodeExpanded = (
   };
 };
 
+const onSetApplicationCatalogFilterTerm = (
+  state: ApplicationState,
+  payload: ReturnType<typeof ApplicationActions.setApplicationCatalogFilterTerm>,
+): ApplicationState  => ({
+  ...state,
+  applicationCatalogFilterTerm: payload.filterTerm || undefined,
+});
+
 const applicationReducerImpl = createReducer<ApplicationState>(
   initialApplicationState,
   on(ApplicationActions.loadApplicationsStart, onLoadApplicationStart),
@@ -381,5 +389,6 @@ const applicationReducerImpl = createReducer<ApplicationState>(
   on(ApplicationActions.updateApplicationComponentConfig, onUpdateApplicationComponentConfig),
   on(ApplicationActions.updateApplicationStylingConfig, onUpdateApplicationStylingConfig),
   on(ApplicationActions.toggleApplicationNodeExpanded, onToggleNodeExpanded),
+  on(ApplicationActions.setApplicationCatalogFilterTerm, onSetApplicationCatalogFilterTerm),
 );
 export const applicationReducer = (state: ApplicationState | undefined, action: Action) => applicationReducerImpl(state, action);

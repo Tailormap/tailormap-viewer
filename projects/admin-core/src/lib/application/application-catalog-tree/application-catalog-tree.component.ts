@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, NgZone } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, NgZone, DestroyRef } from '@angular/core';
 import {
   DropZoneOptions, NodePositionChangedEventModel, TreeDragDropService, TreeModel, TreeNodePosition, TreeService,
 } from '@tailormap-viewer/shared';
@@ -9,7 +9,10 @@ import { CatalogTreeHelper } from '../../catalog/helpers/catalog-tree.helper';
 import { ExtendedGeoServiceLayerModel } from '../../catalog/models/extended-geo-service-layer.model';
 import { AppTreeNodeModel } from '@tailormap-admin/admin-api';
 import { selectServiceLayerTreeForApplication } from '../state/application.selectors';
-import { map, Observable, of } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map, Observable, of } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormControl } from '@angular/forms';
+import { setApplicationCatalogFilterTerm } from '../state/application.actions';
 
 export interface AddLayerEvent {
   layer: ExtendedGeoServiceLayerModel;
@@ -36,15 +39,24 @@ export class ApplicationCatalogTreeComponent implements OnInit {
   @Input()
   public selectedLayerId$: Observable<string | null> = of(null);
 
+  public catalogFilter = new FormControl('');
+
   constructor(
     private store$: Store,
     private treeService: TreeService<CatalogTreeModelMetadataTypes, CatalogTreeModelTypeEnum>,
     private ngZone: NgZone,
+    private destroyRef: DestroyRef,
   ) {}
 
   public ngOnInit(): void {
     this.treeService.setDataSource(this.store$.select(selectServiceLayerTreeForApplication));
     this.treeService.setSelectedNode(this.selectedLayerId$.pipe(map(l => l || '')));
+
+    this.catalogFilter.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef), distinctUntilChanged(), debounceTime(250))
+      .subscribe(filterTerm => {
+        this.store$.dispatch(setApplicationCatalogFilterTerm({ filterTerm }));
+      });
   }
 
   public selectableNode(node: TreeModel<CatalogTreeModelMetadataTypes, CatalogTreeModelTypeEnum>): node is TreeModel<ExtendedGeoServiceLayerModel, CatalogTreeModelTypeEnum> {

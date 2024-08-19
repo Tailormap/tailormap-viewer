@@ -1,3 +1,20 @@
+:host,
+.catalog-tree-wrapper {
+  display: block;
+  height: 100%;
+}
+
+.catalog-tree-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+tm-admin-catalog-base-tree {
+  display: block;
+  flex: 1;
+  position: relative;
+}
+
 tm-admin-catalog-base-tree ::ng-deep mat-tree {
   min-width: min-content;
   max-width: 100%;
