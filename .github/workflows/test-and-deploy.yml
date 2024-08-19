@@ -95,6 +95,11 @@ jobs:
 
   build:
     name: 'Build and deploy'
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
     runs-on: ubuntu-22.04
     env:
       VERSION: snapshot
@@ -146,7 +151,7 @@ jobs:
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
-          username: ${{ secrets.GITHUB_ACTOR }}
+          username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 'Build, tag and push image to registry'
