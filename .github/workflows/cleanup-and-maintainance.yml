@@ -6,48 +6,6 @@ on:
     - cron: '19 17 * * MON'
 
 jobs:
-#  dockercleanup:
-#    runs-on: ubuntu-latest
-#    name: "Pruning Untagged Images of ${{ matrix.containers }}"
-#    strategy:
-#      matrix:
-#        containers: [ 'tailormap-viewer', 'tailormap-config-db', 'tailormap']
-#    steps:
-#      - name: 'Untagged older than 1 week, keeping last 2'
-#        # https://github.com/marketplace/actions/ghcr-pruning
-#        uses: 'vlaurin/action-ghcr-prune@v0.5.0'
-#        with:
-#          token: ${{ secrets.GHCR_CLEANUP_PAT }}
-#          organization: Tailormap
-#          container: ${{ matrix.containers }}
-#          dry-run: false
-#          keep-younger-than: 7
-#          keep-last: 2
-#          prune-untagged: true
-#
-#      - name: 'All untagged older than 4 weeks'
-#        uses: 'vlaurin/action-ghcr-prune@v0.5.0'
-#        with:
-#          token: ${{ secrets.GHCR_CLEANUP_PAT }}
-#          organization: Tailormap
-#          container: ${{ matrix.containers }}
-#          dry-run: false
-#          keep-younger-than: 28
-#          keep-last: 0
-#          prune-untagged: true
-#
-#      - name: 'Tagged PRs older than 4 weeks'
-#        uses: 'vlaurin/action-ghcr-prune@v0.5.0'
-#        with:
-#          token: ${{ secrets.GHCR_CLEANUP_PAT }}
-#          organization: Tailormap
-#          container: ${{ matrix.containers }}
-#          dry-run: false
-#          keep-younger-than: 28
-#          keep-last: 0
-#          prune-tags-regexes: ^pr-
-
-
   stale:
     runs-on: ubuntu-latest
     name: 'Close Stale PRs'

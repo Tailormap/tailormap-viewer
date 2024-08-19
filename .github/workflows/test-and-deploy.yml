@@ -111,7 +111,7 @@ jobs:
       OIDC_CLIENT_ID: ${{ vars.OIDC_CLIENT_ID }}
       OIDC_CLIENT_SECRET: ${{ secrets.OIDC_CLIENT_SECRET }}
       OIDC_SHOW_FOR_VIEWER: true
-      SOURCE_MAP_AUTH: ${{ secrets.SOURCE_MAP_AUTH }}
+      SOURCE_MAP_AUTH: ${{ vars.SOURCE_MAP_AUTH }}
       MAP5_URL: ${{ vars.MAP5_URL }}
       BUILDX_NO_DEFAULT_ATTESTATIONS: 1
     needs: [ lint, test ]
@@ -171,15 +171,15 @@ jobs:
 
       # Latest Docker Compose version needed for ci/docker-compose.pr.yml to use !reset to remove
       # a service when merging Compose files
-      - name: Install latest Docker Compose
-        env:
-          COMPOSE_VERSION: "2.27.2"
-        run: |
-          DOCKER_CONFIG=/usr/local/lib/docker
-          sudo mkdir -p $DOCKER_CONFIG/cli-plugins
-          sudo curl -sSL https://github.com/docker/compose/releases/download/v${COMPOSE_VERSION}/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
-          sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
-          docker compose version
+      #      - name: Install latest Docker Compose
+      #        env:
+      #          COMPOSE_VERSION: "2.27.2"
+      #        run: |
+      #          DOCKER_CONFIG=/usr/local/lib/docker
+      #          sudo mkdir -p $DOCKER_CONFIG/cli-plugins
+      #          sudo curl -sSL https://github.com/docker/compose/releases/download/v${COMPOSE_VERSION}/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
+      #          sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
+      #          docker compose version
       - name: 'Update deployment using Docker Compose'
         run: |
           docker compose up -d --pull=always --quiet-pull --remove-orphans

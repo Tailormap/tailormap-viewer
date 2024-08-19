@@ -1,4 +1,4 @@
-name: Trivy Security Scan
+name: 'Trivy Security Scan'
 on: # use pull request so this workflow dos not fail when triggered by dependabot PR's
   pull_request:
   schedule:
@@ -11,7 +11,7 @@ concurrency:
 
 jobs:
   build:
-    name: Trivy Scan
+    name: 'Trivy Scan'
     runs-on: ubuntu-latest
     permissions:
       actions: read
@@ -20,11 +20,11 @@ jobs:
     steps:
       - uses: 'actions/checkout@v4'
 
-      - name: Build images
+      - name: 'Build images'
         run: |
           docker buildx build --pull --build-arg VERSION=snapshot --build-arg BASE_HREF=/ -t ghcr.io/tailormap/tailormap:snapshot . --load
 
-      - name: Run Trivy vulnerability scanner on tailormap-viewer
+      - name: 'Run Trivy vulnerability scanner on tailormap-viewer'
         uses: 'aquasecurity/trivy-action@0.24.0'
         # docker run --rm -v trivy_cache:/root/.cache/ aquasec/trivy image ghcr.io/tailormap/tailormap:snapshot
         with:
@@ -33,7 +33,7 @@ jobs:
           output: 'tailormap-trivy-results.sarif'
           severity: 'HIGH,CRITICAL'
 
-      - name: Upload tailormap-viewer Trivy scan results to GitHub Security tab
+      - name: 'Upload tailormap-viewer Trivy scan results to GitHub Security tab'
         uses: 'github/codeql-action/upload-sarif@v3'
         if: always()
         with:
