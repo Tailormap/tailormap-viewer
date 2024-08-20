@@ -30,7 +30,9 @@ categories:
       - tests
       - infrastructure
   - title: 🔨 Dependency updates
-    label: dependencies
+    labels: 
+      - dependencies
+      - dependency
 
 replacers:
   - search: '/CVE-(\d{4})-(\d+)/g'
