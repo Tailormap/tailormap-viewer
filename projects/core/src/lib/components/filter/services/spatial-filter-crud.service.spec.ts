@@ -28,6 +28,7 @@ const setup = (
   hasSelectedLayers?: boolean,
   overrideGroup?: FilterGroupModel<SpatialFilterModel>,
 ) => {
+  idCount = 0;
   const mockStore = provideMockStore({
     initialState: {},
     selectors: [

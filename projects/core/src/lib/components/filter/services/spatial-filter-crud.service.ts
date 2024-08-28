@@ -85,6 +85,9 @@ export class SpatialFilterCrudService {
   ): Observable<FilterGroupModel> {
     return this.getLayerDetails$(layers).pipe(
       map(layerDetails => {
+        if (layerDetails.length === 0) {
+          return group;
+        }
         return {
           ...group,
           layerIds: layerDetails.map(layer => layer.id),
@@ -146,8 +149,16 @@ export class SpatialFilterCrudService {
     referenceLayer?: string,
   ): void {
     this.getLayerDetails$(layers)
-      .pipe(map(layerDetails => this.createFilterForLayers(layerDetails, geometries, referenceLayer)))
+      .pipe(map(layerDetails => {
+        if (layerDetails.length === 0) {
+          return null;
+        }
+        return this.createFilterForLayers(layerDetails, geometries, referenceLayer);
+      }))
       .subscribe(filterGroup => {
+        if (filterGroup === null) {
+          return;
+        }
         this.store$.dispatch(addFilterGroup({ filterGroup }));
         this.store$.dispatch(setSelectedFilterGroup({ filterGroup }));
       });
