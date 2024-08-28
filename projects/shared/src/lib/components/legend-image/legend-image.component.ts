@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, signal } from '@angular/core';
 import { GeoServerLegendOptions, LegendHelper } from './legend.helper';
 
 export interface LegendImageModel {
@@ -41,22 +41,15 @@ export class LegendImageComponent {
     }
   }
 
-  public legendSettings: LegendImageSettingsModel | null = null;
-  public cloneLegendSettings: LegendImageSettingsModel | null = null;
-
-  public constructor(
-    private cdr: ChangeDetectorRef,
-  ) {
-  }
+  public legendSettings = signal<LegendImageSettingsModel | null>(null);
 
   public createSettings(legend: LegendImageModel | null) {
     // Always set legend settings to null first and detect changes
     // This forces the <img> tag to re-render in case of changing input
     // Sometimes the zoom for hi-dpi images would otherwise not be applied correctly
     // resulting in too large or too small images
-    this.legendSettings = null;
-    this.loading.set(true);
-    this.cdr.detectChanges();
+    this.legendSettings.set(null);
+    // this.toggleClone(true);
     if (legend === null) {
       return;
     }
@@ -84,14 +77,7 @@ export class LegendImageComponent {
         legendSettings.srcset = u.toString() + ' 2x';
       }
     }
-    this.loading.set(true);
-    this.legendSettings = legendSettings;
-    this.cloneLegendSettings = legendSettings;
-    this.cdr.detectChanges();
-  }
-
-  public legendImageLoaded() {
-    this.loading.set(false);
+    this.legendSettings.set(legendSettings);
   }
 
 }

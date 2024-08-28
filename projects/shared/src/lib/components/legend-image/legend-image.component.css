@@ -5,3 +5,11 @@
 .hide {
   display: none;
 }
+
+/*:host():not(.show-clone) .clone {*/
+/*  display: none;*/
+/*}*/
+
+/*:host().show-clone .legend-image {*/
+/*  display: none;*/
+/*}*/
