@@ -49,7 +49,6 @@ export class LegendImageComponent {
     // Sometimes the zoom for hi-dpi images would otherwise not be applied correctly
     // resulting in too large or too small images
     this.legendSettings.set(null);
-    // this.toggleClone(true);
     if (legend === null) {
       return;
     }
