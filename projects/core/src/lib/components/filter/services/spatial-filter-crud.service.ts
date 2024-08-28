@@ -156,6 +156,9 @@ export class SpatialFilterCrudService {
   private getLayerDetails$(
     layers: string[],
   ): Observable<LayerDetailsModel[]> {
+    if (layers.length === 0) {
+      return of([]);
+    }
     return this.store$.select(selectViewerId).pipe(
       concatMap(applicationId =>
         forkJoin(layers.map(layer => this.describeAppLayerService.getDescribeAppLayer$(applicationId as string, layer))),
