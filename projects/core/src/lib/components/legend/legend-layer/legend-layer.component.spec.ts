@@ -24,7 +24,7 @@ describe('LegendLayerComponent', () => {
       isInScale: true,
     });
     expect(await screen.getByText('Layer title')).toBeInTheDocument();
-    const img = await screen.getAllByRole('img')[0];
+    const img = await screen.getByRole('img');
     expect(img).toBeInTheDocument();
     expect(img.getAttribute('src')).toEqual('some-url');
     expect(img.getAttribute('alt')).toEqual('Failed to load legend for Layer title');
@@ -37,7 +37,7 @@ describe('LegendLayerComponent', () => {
       url: 'http://some-url/geoserver/wms?REQUEST=GetLegendGraphic',
       isInScale: true,
     });
-    const img = await screen.getAllByRole('img')[0];
+    const img = await screen.getByRole('img');
     expect(img).toBeInTheDocument();
     expect(img.getAttribute('src')).toContain('http://some-url/geoserver/wms');
     expect(img.getAttribute('src')).toContain('LEGEND_OPTIONS=');
