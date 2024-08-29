@@ -13,8 +13,9 @@ export class ImageHelper {
       img.crossOrigin = 'anonymous';
       img.addEventListener('load', () => {
         try {
-          const width = img.width;
-          const height = img.height;
+          // some svg images do not have width/height specified
+          const width = img.width === 0 && imageUrl.endsWith('.svg') ? 500 : img.width;
+          const height = img.height === 0 && imageUrl.endsWith('.svg') ? 500 : img.height;
           canvas.width = width;
           canvas.height = height;
           ctx.drawImage(img, 0, 0, width, height);
