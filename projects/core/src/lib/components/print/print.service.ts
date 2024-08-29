@@ -251,7 +251,12 @@ export class PrintService implements OnDestroy {
     const isValidLayer = (layer: LayerModel | null): layer is LayerModel => layer !== null;
     return pipe(
       take(1),
-      concatMap((layers: ExtendedAppLayerModel[]) => forkJoin(layers.map(layer => this.applicationMapService.convertAppLayerToMapLayer$(layer)))),
+      concatMap((layers: ExtendedAppLayerModel[]) => {
+        if (layers.length === 0) {
+          return of([]);
+        }
+        return forkJoin(layers.map(layer => this.applicationMapService.convertAppLayerToMapLayer$(layer)));
+      }),
       map(lyr => lyr.filter(isValidLayer)),
     );
   }
