@@ -9,17 +9,23 @@
            (expandCollapseDialog)="expandCollapseDialog()"
            dialogTitle="Object Information"
            i18n-dialogTitle="@@core.feature-info.object-information">
-  <div class="feature-info" *ngIf="currentFeature$ | async as currentFeature">
-    <div class="content">
-      <h2>{{currentFeature.layer.title}}</h2>
-      <div *ngFor="let att of currentFeature.sortedAttributes" class="row">
-        <strong>{{att.label}}</strong>
-        <div [innerHTML]="att.attributeValue | htmlify"></div>
+  <div class="layer-list">
+    <tm-feature-info-layer-list></tm-feature-info-layer-list>
+  </div>
+  <div class="feature-list">
+    @if(currentFeature$ | async; as feature) {
+      <div class="feature-info">
+        <div class="content">
+          <div *ngFor="let att of feature.sortedAttributes" class="row">
+            <strong>{{att.label}}</strong>
+            <div [innerHTML]="att.attributeValue | htmlify"></div>
+          </div>
+        </div>
+        <div class="buttons">
+          <button mat-flat-button i18n="@@core.common.back" (click)="back()" color="primary" [disabled]="isPrevButtonDisabled$ | async">Back</button>
+          <button mat-flat-button i18n="@@core.common.next" (click)="next()" color="primary" [disabled]="isNextButtonDisabled$ | async">Next</button>
+        </div>
       </div>
-    </div>
-    <div class="buttons">
-      <button mat-flat-button i18n="@@core.common.back" (click)="back()" color="primary" [disabled]="isBackDisabled()">Back</button>
-      <button mat-flat-button i18n="@@core.common.next" (click)="next()" color="primary" [disabled]="isNextDisabled()">Next</button>
-    </div>
+    }
   </div>
 </tm-dialog>

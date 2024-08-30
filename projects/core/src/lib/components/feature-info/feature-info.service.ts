@@ -9,7 +9,6 @@ import {
 } from '../../map/state/map.selectors';
 import { MapService, MapViewDetailsModel } from '@tailormap-viewer/map';
 import { HttpClient } from '@angular/common/http';
-import { ExtendedAppLayerModel } from '../../map/models';
 import { FilterService } from '../../filter/services/filter.service';
 
 @Injectable({
@@ -44,10 +43,8 @@ export class FeatureInfoService {
             return of([]);
           }
           const featureRequests$ = [
-            ...layers.map(layer => this.getFeatureInfoFromApi$(layer, coordinates, applicationId, resolutions)),
-            ...wmsLayers.map(layer => this.mapService.getFeatureInfoForLayers$(layer.id, coordinates, this.httpService).pipe(
-              map(features => this.featuresToFeatureInfoResponseModel(features, layer.id)),
-            )),
+            ...layers.map(layer => this.getFeatureInfoFromApi$(layer.id, coordinates, applicationId, resolutions)),
+            ...wmsLayers.map(layer => this.getWmsGetFeatureInfo$(layer.id, coordinates)),
           ];
           return forkJoin(featureRequests$);
         }),
@@ -70,20 +67,27 @@ export class FeatureInfoService {
             return of([]);
           }
           const featureRequests$ = layers
-              .map(layer => this.getFeatureInfoFromApi$( layer, coordinates, applicationId, resolutions,  true ));
+              .map(layer => this.getFeatureInfoFromApi$( layer.id, coordinates, applicationId, resolutions,  true ));
           return forkJoin(featureRequests$);
         }),
       );
   }
 
-  private getFeatureInfoFromApi$(
-    layer: ExtendedAppLayerModel,
+  public getWmsGetFeatureInfo$(
+    layerId: string,
+    coordinates: [ number, number ],
+  ) {
+    return this.mapService.getFeatureInfoForLayers$(layerId, coordinates, this.httpService)
+      .pipe(map(features => this.featuresToFeatureInfoResponseModel(features, layerId)));
+  }
+
+  public getFeatureInfoFromApi$(
+    layerId: string,
     coordinates: [ number, number ],
     applicationId: string,
     resolutions: MapViewDetailsModel,
     geometryInAttributes=false,
   ): Observable<FeatureInfoResponseModel> {
-    const layerId = layer.id;
     const layerFilter = this.filterService.getFilterForLayer(layerId);
     return this.apiService.getFeatures$({
       layerId,

@@ -9,7 +9,17 @@
 
 .feature-info-dialog ::ng-deep .dialog-content {
   display: flex;
-  flex-direction: column;
+}
+
+.layer-list {
+  flex: 1;
+  overflow: auto;
+  border-right: 1px solid var(--border-color);
+}
+
+.feature-list {
+  flex: 1;
+  overflow: auto;
 }
 
 .feature-info {
