@@ -47,5 +47,5 @@ jobs:
           delete-untagged: true
           delete-ghost-images: true
           delete-partial-images: true
-          older-than: 5
+          older-than: '5 days'
           log-level: debug
