@@ -42,6 +42,7 @@ jobs:
       - name: 'Older than 5 days'
         uses: dataaxiom/ghcr-cleanup-action@v1.0.10
         with:
+          package: 'tailormap'
           token: ${{ secrets.GITHUB_TOKEN }}
           delete-untagged: true
           delete-ghost-images: true
