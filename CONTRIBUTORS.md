@@ -18,6 +18,7 @@ _In chronological order_
     <tr>
       <td align="center" valign="top" width="16.66%"><a href="https://github.com/geertoff"><img src="https://avatars.githubusercontent.com/u/102165826?v=4?s=100" width="100px;" alt="Geert Offenberg"/><br /><sub><b>Geert Offenberg</b></sub></a><br /><a href="https://github.com/Tailormap/tailormap-viewer/commits?author=geertoff" title="Code">💻</a> <a href="https://github.com/Tailormap/tailormap-viewer/issues?q=author%3Ageertoff" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="16.66%"><a href="https://github.com/features/security"><img src="https://avatars.githubusercontent.com/u/27347476?v=4?s=100" width="100px;" alt="Dependabot"/><br /><sub><b>Dependabot</b></sub></a><br /><a href="#maintenance-dependabot" title="Maintenance">🚧</a></td>
+      <td align="center" valign="top" width="16.66%"><a href="https://github.com/oscarporsius"><img src="https://avatars.githubusercontent.com/u/149582283?v=4?s=100" width="100px;" alt="Oscar P."/><br /><sub><b>Oscar P.</b></sub></a><br /><a href="https://github.com/Tailormap/tailormap-viewer/commits?author=oscarporsius" title="Code">💻</a></td>
     </tr>
   </tbody>
   <tfoot>
