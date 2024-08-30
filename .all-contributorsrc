@@ -98,6 +98,15 @@
       "contributions": [
         "maintenance"
       ]
+    },
+    {
+      "login": "oscarporsius",
+      "name": "Oscar P.",
+      "avatar_url": "https://avatars.githubusercontent.com/u/149582283?v=4",
+      "profile": "https://github.com/oscarporsius",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "commitType": "docs"
