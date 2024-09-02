@@ -125,6 +125,9 @@
       <trans-unit id="admin-core.application.editable" datatype="html">
         <source>Editable</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.enable-3D" datatype="html">
+        <source>Enable 3D viewing</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.error-creating-application" datatype="html">
         <source>Error while creating application.</source>
       </trans-unit>

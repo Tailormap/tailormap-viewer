@@ -74,7 +74,6 @@ export class ApplicationMapService implements OnDestroy {
       });
 
     if (this.store$.select(selectEnable3D)) {
-      this.mapService.make3D$();
       this.store$.select(select3Dlayers)
         .pipe(
           takeUntil(this.destroyed),
@@ -82,7 +81,6 @@ export class ApplicationMapService implements OnDestroy {
         )
         .subscribe(([ layers, layerManager ]) => {
           layerManager.addLayers(layers.filter(isValidLayer));
-          console.log(layerManager.getScene3D$());
         });
     }
   }

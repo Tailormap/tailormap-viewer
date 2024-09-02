@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, InjectionToken, ModuleWithProviders, NgModule } from '@angular/core';
+import { APP_INITIALIZER, Inject, InjectionToken, ModuleWithProviders, NgModule } from '@angular/core';
 import { LoginComponent, ViewerAppComponent } from './pages';
 import { MapModule } from '@tailormap-viewer/map';
 import { StoreModule } from '@ngrx/store';
@@ -11,7 +11,9 @@ import {
   EnvironmentConfigModel,
   TAILORMAP_API_V1_SERVICE, TAILORMAP_SECURITY_API_V1_SERVICE, TailormapApiV1Service, TailormapSecurityApiV1Service,
 } from '@tailormap-viewer/api';
-import { ICON_SERVICE_ICON_LOCATION, IconService, RouterHistoryService, SharedModule } from '@tailormap-viewer/shared';
+import {
+  ExternalLibsLoaderHelper, ICON_SERVICE_ICON_LOCATION, IconService, RouterHistoryService, SharedModule,
+} from '@tailormap-viewer/shared';
 import { ComponentsModule } from './components/components.module';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -98,11 +100,13 @@ export class CoreModule {
     domSanitizer: DomSanitizer,
     iconService: IconService,
     authenticatedUserService: AuthenticatedUserService,
+    @Inject(APP_BASE_HREF) baseHref: string,
     _appStyleService: ApplicationStyleService,
     _routerHistoryService: RouterHistoryService,
   ) {
     iconService.loadIconsToIconRegistry(matIconRegistry, domSanitizer);
     authenticatedUserService.fetchUserDetails();
+    ExternalLibsLoaderHelper.setBaseHref(baseHref);
   }
 
   public static forRoot(config: EnvironmentConfigModel): ModuleWithProviders<CoreModule> {

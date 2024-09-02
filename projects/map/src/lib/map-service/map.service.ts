@@ -275,11 +275,9 @@ export class MapService {
   public make3D$(){
     if (!this.made3D) {
       this.map.executeMapAction(olMap => {
-        console.log(this.map3D);
         this.map3D.next(new CesiumLayerManager(olMap, this.ngZone));
       });
       this.executeCLMAction(cesiumLayerManager => {
-        console.log('clm:',  cesiumLayerManager);
         cesiumLayerManager.init();
       });
       this.made3D = true;
@@ -287,12 +285,10 @@ export class MapService {
   }
 
   public switch3D$(){
+    this.make3D$();
     this.executeCLMAction(cesiumLayerManager => {
       cesiumLayerManager.switch3D$();
     });
   }
 
-  public getMap3D$(){
-    return this.map3D;
-  }
 }
