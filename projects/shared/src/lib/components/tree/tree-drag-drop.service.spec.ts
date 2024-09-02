@@ -78,17 +78,17 @@ describe('Tree Drag Drop Service', () => {
     }]);
     tick(10);
     treeWrapper.dispatchEvent(new Event('dragover', {
-      // @ts-ignore
+      // @ts-expect-error property does exist on a drag event
       clientY: 0,
     }));
     expect(treeEl.classList).toContain('mat-tree--drag-active');
     treeNode2.dispatchEvent(new Event('dragover', {
-      // @ts-ignore
+      // @ts-expect-error property does exist on a drag event
       clientY: 0,
     }));
     treeNode2.dispatchEvent(new Event('dragleave'));
     treeNode3.dispatchEvent(new Event('dragover', {
-      // @ts-ignore
+      // @ts-expect-error property does exist on a drag event
       clientY: 20,
     }));
     treeNode3.dispatchEvent(new Event('drop'));

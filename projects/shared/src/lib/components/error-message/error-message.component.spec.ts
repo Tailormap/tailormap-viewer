@@ -5,7 +5,7 @@ describe('ErrorMessageComponent', () => {
 
   test('should render', async () => {
     await render(ErrorMessageComponent, {
-      componentProperties: { message: 'Some error message' },
+      inputs: { message: 'Some error message' },
     });
     expect(screen.getByText('Some error message'));
   });

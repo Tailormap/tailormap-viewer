@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { of } from 'rxjs';
 import { AutoFocusDirective } from '../../../../../../shared/src/lib/directives';
+import { UserResponseModel } from '@tailormap-viewer/api';
 
 describe('LoginFormComponent', () => {
 
@@ -24,14 +25,18 @@ describe('LoginFormComponent', () => {
   });
 
   test('triggers login method', async () => {
-    const loginFn = jest.fn(() => of({ isAuthenticated: true, username: 'user', roles: [] }));
-    const loggedIn = { emit: jest.fn() } as any;
+    const loginFn = jest.fn(() => of<UserResponseModel>({
+      isAuthenticated: true,
+      username: 'user',
+      roles: [],
+      groupProperties: [],
+      properties: [],
+    }));
+    const loggedIn = jest.fn();
     await render(LoginFormComponent, {
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      componentOutputs: {
-        loggedIn,
-      },
-      componentInputs: {
+      on: { loggedIn },
+      inputs: {
         login$: loginFn,
       },
       imports: [
@@ -47,7 +52,7 @@ describe('LoginFormComponent', () => {
     await userEvent.type(passwordControl, 'p@ssw0rd');
     await userEvent.click(await screen.findByRole('button', { name: /login/i }));
     expect(loginFn).toHaveBeenCalledWith('my_username', 'p@ssw0rd');
-    expect(loggedIn.emit).toHaveBeenCalledWith({ isAuthenticated: true, username: 'user', roles: [] });
+    expect(loggedIn).toHaveBeenCalledWith({ isAuthenticated: true, username: 'user', roles: [], groupProperties: [], properties: [] });
   });
 
 });

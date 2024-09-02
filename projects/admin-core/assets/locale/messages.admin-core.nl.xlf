@@ -9,13 +9,21 @@
         <source>Add sub folder</source>
         <target>Submap toevoegen</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.remove" datatype="html">
+        <source>Remove</source>
+        <target>Verwijderen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.rename" datatype="html">
+        <source>Rename</source>
+        <target>Hernoemen</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.application" datatype="html">
         <source>Application</source>
-        <target state="new">Applicatie</target>
+        <target>Applicatie</target>
       </trans-unit>
       <trans-unit id="admin-core.application.application-copied" datatype="html">
         <source>Application <x id="PH" equiv-text="copiedApplication.title || copiedApplication.name"/> copied</source>
-        <target state="new">Applicatie <x id="PH" equiv-text="copiedApplication.title || copiedApplication.name"/> is gekopieerd</target>
+        <target>Applicatie <x id="PH" equiv-text="copiedApplication.title || copiedApplication.name"/> is gekopieerd</target>
       </trans-unit>
       <trans-unit id="admin-core.application.application-created" datatype="html">
         <source>Application <x id="PH" equiv-text="createdApplication.title || createdApplication.name"/> created</source>
@@ -27,7 +35,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.application-removed" datatype="html">
         <source>Application <x id="PH" equiv-text="title"/> removed</source>
-        <target state="new">Applicatie <x id="PH" equiv-text="title"/> verwijderd</target>
+        <target>Applicatie <x id="PH" equiv-text="title"/> verwijderd</target>
       </trans-unit>
       <trans-unit id="admin-core.application.application-updated" datatype="html">
         <source>Application updated</source>
@@ -39,7 +47,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.autoRefreshInSeconds" datatype="html">
         <source>Auto refresh the layer (seconds)</source>
-        <target state="new">Laag automatisch verversen (in seconden)</target>
+        <target>Laag automatisch verversen (in seconden)</target>
       </trans-unit>
       <trans-unit id="admin-core.application.base-maps" datatype="html">
         <source>Basemaps</source>
@@ -55,7 +63,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.component-coordinate-link-window" datatype="html">
         <source>Coordinate Link Window</source>
-        <target state="new">Coordinate Link Window</target>
+        <target>Coördinatenlinkvenster</target>
       </trans-unit>
       <trans-unit id="admin-core.application.component-coordinate-picker-tool" datatype="html">
         <source>Coordinate picker tool</source>
@@ -71,7 +79,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.component-feature-info" datatype="html">
         <source>Feature info</source>
-        <target state="new">Objectinformatie</target>
+        <target>Objectinformatie</target>
       </trans-unit>
       <trans-unit id="admin-core.application.component-filter" datatype="html">
         <source>Filter</source>
@@ -91,7 +99,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.component-share-viewer" datatype="html">
         <source>Share viewer</source>
-        <target state="new">Viewer delen</target>
+        <target>Viewer delen</target>
       </trans-unit>
       <trans-unit id="admin-core.application.component-streetview-tool" datatype="html">
         <source>Streetview tool</source>
@@ -107,7 +115,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.copy-application" datatype="html">
         <source>Copy application <x id="INTERPOLATION" equiv-text="{{data.application.title}}"/></source>
-        <target state="new">Kopieer applicatie <x id="INTERPOLATION" equiv-text="{{data.application.title}}"/></target>
+        <target>Kopieer applicatie <x id="INTERPOLATION" equiv-text="{{data.application.title}}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.application.create-application" datatype="html">
         <source>Create application</source>
@@ -131,27 +139,27 @@
       </trans-unit>
       <trans-unit id="admin-core.application.delete-application" datatype="html">
         <source>Delete application <x id="PH" equiv-text="title"/></source>
-        <target state="translated">Applicatie <x id="PH" equiv-text="title"/> verwijderen</target>
+        <target>Applicatie <x id="PH" equiv-text="title"/> verwijderen</target>
       </trans-unit>
       <trans-unit id="admin-core.application.delete-application-message" datatype="html">
         <source>Are you sure you want to delete application <x id="PH" equiv-text="title"/>? This action cannot be undone.</source>
-        <target state="new">Weet je zeker dat je de applicatie <x id="PH" equiv-text="title"/> wil verwijderen? Deze actie kan niet ongedaan worden gemaakt.</target>
+        <target>Weet je zeker dat je de applicatie <x id="PH" equiv-text="title"/> wil verwijderen? Deze actie kan niet ongedaan worden gemaakt.</target>
       </trans-unit>
       <trans-unit id="admin-core.application.edit" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ application.title }}"/></source>
-        <target state="translated">Bewerken van <x id="INTERPOLATION" equiv-text="{{ application.title }}"/></target>
+        <target>Bewerken van <x id="INTERPOLATION" equiv-text="{{ application.title }}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.application.edit-application-layer-attributes" datatype="html">
         <source>Edit application layer attribute settings</source>
-        <target state="new">Bewerk attribuut-instellingen voor applicatielaag</target>
+        <target>Bewerk attribuut-instellingen voor applicatielaag</target>
       </trans-unit>
       <trans-unit id="admin-core.application.edit-application-layer-attributes-hint1" datatype="html">
         <source>This only shows the attributes that are enabled in the catalog. If an attribute is missing, check the catalog settings.</source>
-        <target state="new">Hier worden alleen de attributen getoond die ingeschakeld zijn in de catalog voor dit feature type. Als er een attribuut mist, controleer de instellingen in de catalog.</target>
+        <target>Hier worden alleen de attributen getoond die ingeschakeld zijn in de catalog voor dit feature type. Als er een attribuut mist, controleer de instellingen in de catalog.</target>
       </trans-unit>
       <trans-unit id="admin-core.application.edit-application-layer-attributes-hint2" datatype="html">
         <source>It is advised to use the catalog for global attribute settings and only use these application layer settings in specific cases.</source>
-        <target state="new">Het is aan te raden om de catalog te gebruiken voor globale attribuut-instellingen en om de attribuut-instellingen voor de applicatielaag alleen in specifieke gevallen te gebruiken.</target>
+        <target>Het is aan te raden om de catalogus te gebruiken voor globale attribuut-instellingen en om de attribuut-instellingen voor de applicatielaag alleen in specifieke gevallen te gebruiken.</target>
       </trans-unit>
       <trans-unit id="admin-core.application.editable" datatype="html">
         <source>Editable</source>
@@ -167,7 +175,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.error-loading-applications" datatype="html">
         <source>Error while loading list of applications</source>
-        <target state="translated">Fout tijdens het laden van de lijst met applicaties</target>
+        <target>Fout tijdens het laden van de lijst met applicaties</target>
       </trans-unit>
       <trans-unit id="admin-core.application.error-updating-application" datatype="html">
         <source>Error while updating application.</source>
@@ -179,7 +187,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.filtered-layers" datatype="html">
         <source>The catalog above shows only layers matching the application projection (<x id="INTERPOLATION" equiv-text="{{draftApplicationCrs$ | async}}"/>)</source>
-        <target state="new">De catalogus hierboven bevat alleen lagen die de applicatie projectie (<x id="INTERPOLATION" equiv-text="{{draftApplicationCrs$ | async}}"/>) ondersteunen</target>
+        <target>De catalogus hierboven bevat alleen lagen die de applicatie projectie (<x id="INTERPOLATION" equiv-text="{{draftApplicationCrs$ | async}}"/>) ondersteunen</target>
       </trans-unit>
       <trans-unit id="admin-core.application.folder-name" datatype="html">
         <source>Folder name</source>
@@ -191,11 +199,11 @@
       </trans-unit>
       <trans-unit id="admin-core.application.hide-login-button" datatype="html">
         <source>Hide login button in viewer</source>
-        <target state="new">Verberg login knop in viewer</target>
+        <target>Verberg login knop in viewer</target>
       </trans-unit>
       <trans-unit id="admin-core.application.initial-extent" datatype="html">
         <source>Initial extent</source>
-        <target>Start-extent</target>
+        <target>Start-begrenzingsrechthoek</target>
       </trans-unit>
       <trans-unit id="admin-core.application.invalid-name-error" datatype="html">
         <source>Name can only contain letters, numbers, underscores and dashes.</source>
@@ -223,11 +231,11 @@
       </trans-unit>
       <trans-unit id="admin-core.application.make-copy" datatype="html">
         <source>Copy</source>
-        <target state="new">Kopiëren</target>
+        <target>Kopiëren</target>
       </trans-unit>
       <trans-unit id="admin-core.application.max-extent" datatype="html">
         <source>Max extent</source>
-        <target>Max extent</target>
+        <target>Max begrenzingsrechthoek</target>
       </trans-unit>
       <trans-unit id="admin-core.application.no-default-language" datatype="html">
         <source>No default language</source>
@@ -235,15 +243,23 @@
       </trans-unit>
       <trans-unit id="admin-core.application.no-form" datatype="html">
         <source>No form</source>
-        <target state="new">Geen formulier</target>
+        <target>Geen formulier</target>
       </trans-unit>
       <trans-unit id="admin-core.application.no-forms-for-feature-type" datatype="html">
         <source>There are no forms for this feature type</source>
-        <target state="new">Er zijn geen formulieren voor dit feature type</target>
+        <target>Er zijn geen formulieren voor dit feature type</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.no-search-index" datatype="html">
+        <source>No search index</source>
+        <target>Geen zoekindex</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.no-search-indexes-for-feature-type" datatype="html">
+        <source>There are no search indexes for this feature type</source>
+        <target>Er zijn geen zoekindexen voor dit feature type</target>
       </trans-unit>
       <trans-unit id="admin-core.application.non-unique-name-error" datatype="html">
         <source>Name should be unique.</source>
-        <target state="new">Naam moet uniek zijn.</target>
+        <target>Naam moet uniek zijn.</target>
       </trans-unit>
       <trans-unit id="admin-core.application.opacity" datatype="html">
         <source>Opacity</source>
@@ -271,7 +287,11 @@
       </trans-unit>
       <trans-unit id="admin-core.application.select-form" datatype="html">
         <source>Select (optional) form</source>
-        <target state="new">Select (optional) form</target>
+        <target>Selecteer (optioneel) formulier</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.select-search-index" datatype="html">
+        <source>Select search index</source>
+        <target state="new">Select search index</target>
       </trans-unit>
       <trans-unit id="admin-core.application.service-updated" datatype="html">
         <source>Service <x id="PH" equiv-text="updatedService.title"/> updated</source>
@@ -303,7 +323,7 @@
       </trans-unit>
       <trans-unit id="admin-core.authorizations.configured-on" datatype="html">
         <source>Configured on <x id="PH" equiv-text="this.selfType"/></source>
-        <target state="new">Geconfigureerd op <x id="PH" equiv-text="this.selfType"/></target>
+        <target>Geconfigureerd op <x id="PH" equiv-text="this.selfType"/></target>
       </trans-unit>
       <trans-unit id="admin-core.authorizations.group-name" datatype="html">
         <source>Group name</source>
@@ -319,7 +339,7 @@
       </trans-unit>
       <trans-unit id="admin-core.authorizations.inherit-from-hint" datatype="html">
         <source>{VAR_SELECT, select, anonymous {Anyone} loggedIn {Logged in} specificGroups {Specific groups}}</source>
-        <target state="translated">{VAR_SELECT, select, anonymous {Iedereen} loggedIn {Ingelogd} specificGroups {Specifieke groepen}}</target>
+        <target>{VAR_SELECT, select, anonymous {Iedereen} loggedIn {Ingelogd} specificGroups {Specifieke groepen}}</target>
       </trans-unit>
       <trans-unit id="admin-core.authorizations.inherit-from-logged-in" datatype="html">
         <source>Logged in</source>
@@ -331,11 +351,11 @@
       </trans-unit>
       <trans-unit id="admin-core.authorizations.inherit-from-specific-groups-select" datatype="html">
         <source>{VAR_SELECT, select, specificGroups {(inherited)}}</source>
-        <target state="translated">{VAR_SELECT, select, specificGroups {(geërfd)}}</target>
+        <target>{VAR_SELECT, select, specificGroups {(geërfd)}}</target>
       </trans-unit>
       <trans-unit id="admin-core.authorizations.inherited-from" datatype="html">
         <source>Inherited from <x id="PH" equiv-text="this.parentType"/></source>
-        <target state="new">Geërfd van <x id="PH" equiv-text="this.parentType"/></target>
+        <target>Overgeërfd van <x id="PH" equiv-text="this.parentType"/></target>
       </trans-unit>
       <trans-unit id="admin-core.authorizations.overridden" datatype="html">
         <source>(overridden)</source>
@@ -371,7 +391,7 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.catalog-shortcuts" datatype="html">
         <source>Catalog shortcuts</source>
-        <target state="new">Catalogus snelkoppelingen</target>
+        <target>Catalogus snelkoppelingen</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.common.cancel" datatype="html">
         <source>Cancel</source>
@@ -419,7 +439,7 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.default-hint" datatype="html">
         <source>Default: <x id="INTERPOLATION" equiv-text="{{21}}"/></source>
-        <target state="new">Standaard: <x id="INTERPOLATION" equiv-text="{{21}}"/></target>
+        <target>Standaard: <x id="INTERPOLATION" equiv-text="{{21}}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.default-layer-settings" datatype="html">
         <source>Default layer settings</source>
@@ -431,7 +451,7 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.delete-feature-source-message" datatype="html">
         <source>Are you sure you want to delete feature source <x id="PH" equiv-text="featureSource.title"/>? This action cannot be undone.</source>
-        <target state="new">Weet je zeker dat je de bron <x id="PH" equiv-text="featureSource.title"/> wil verwijderen? Deze actie kan niet ongedaan worden gemaakt.</target>
+        <target>Weet je zeker dat je de bron <x id="PH" equiv-text="featureSource.title"/> wil verwijderen? Deze actie kan niet ongedaan worden gemaakt.</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.delete-folder" datatype="html">
         <source>Delete folder <x id="PH" equiv-text="node.title"/></source>
@@ -439,7 +459,7 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.delete-folder-message" datatype="html">
         <source>Are you sure you want to the folder <x id="PH" equiv-text="node.title"/>? This action cannot be undone.</source>
-        <target state="new">Weet je zeker dat je de map <x id="PH" equiv-text="node.title"/> wil verwijderen? Deze actie kan niet ongedaan worden gemaakt.</target>
+        <target>Weet je zeker dat je de map <x id="PH" equiv-text="node.title"/> wil verwijderen? Deze actie kan niet ongedaan worden gemaakt.</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.delete-service-confirm" datatype="html">
         <source>Delete service <x id="PH" equiv-text="geoService.title"/></source>
@@ -447,27 +467,27 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.delete-service-confirm-message" datatype="html">
         <source>Are you sure you want to delete service <x id="PH" equiv-text="geoService.title"/>? This action cannot be undone.</source>
-        <target state="new">Weet je zeker dat je service <x id="PH" equiv-text="geoService.title"/> wil verwijderen? Deze actie kan niet ongedaan worden gemaakt.</target>
+        <target>Weet je zeker dat je service <x id="PH" equiv-text="geoService.title"/> wil verwijderen? Deze actie kan niet ongedaan worden gemaakt.</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.edit-feature-source" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ featureSource.title }}"/></source>
-        <target state="translated">Bewerken van <x id="INTERPOLATION" equiv-text="{{ featureSource.title }}"/></target>
+        <target>Bewerken van <x id="INTERPOLATION" equiv-text="{{ featureSource.title }}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.edit-geoservice" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ geoService.title }}"/></source>
-        <target state="translated">Bewerken van <x id="INTERPOLATION" equiv-text="{{ geoService.title }}"/></target>
+        <target>Bewerken van <x id="INTERPOLATION" equiv-text="{{ geoService.title }}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.edit-node" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ node.title }}"/></source>
-        <target state="translated">Bewerken van <x id="INTERPOLATION" equiv-text="{{ node.title }}"/></target>
+        <target>Bewerken van <x id="INTERPOLATION" equiv-text="{{ node.title }}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.edit-service" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{data.geoService.title}}"/></source>
-        <target state="translated">Bewerken van <x id="INTERPOLATION" equiv-text="{{data.geoService.title}}"/></target>
+        <target>Bewerken van <x id="INTERPOLATION" equiv-text="{{data.geoService.title}}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.edit-settings-for-layer" datatype="html">
         <source>Edit settings for layer <x id="INTERPOLATION" equiv-text="{{ geoServiceSettings.layerTitle }}"/></source>
-        <target state="new">Bewerken van instellingen voor laag <x id="INTERPOLATION" equiv-text="{{ geoServiceSettings.layerTitle }}"/></target>
+        <target>Bewerken van instellingen voor laag <x id="INTERPOLATION" equiv-text="{{ geoServiceSettings.layerTitle }}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.enter-url-template" datatype="html">
         <source>Enter an URL template such as</source>
@@ -475,23 +495,23 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.enter-xyz-crs" datatype="html">
         <source>CRS for this XYZ layer</source>
-        <target state="new">Projectie voor deze XYZ-laag</target>
+        <target>Projectie voor deze XYZ-laag</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.error-creating-feature-source" datatype="html">
         <source>Error while creating feature source: <x id="PH" equiv-text="message"/></source>
-        <target state="new">Fout bij het maken van de feature source: <x id="PH" equiv-text="message"/></target>
+        <target>Fout bij het maken van de feature source: <x id="PH" equiv-text="message"/></target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.error-creating-service" datatype="html">
         <source>Error while creating geo service: <x id="PH" equiv-text="message"/></source>
-        <target state="new">Fout bij het maken van de geo-service: <x id="PH" equiv-text="message"/></target>
+        <target>Fout bij het maken van de geo-service: <x id="PH" equiv-text="message"/></target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.error-deleting-feature-source" datatype="html">
         <source>Error while deleting source: <x id="PH" equiv-text="message"/></source>
-        <target state="new">Fout bij het verwijderen van de feature source: <x id="PH" equiv-text="message"/></target>
+        <target>Fout bij het verwijderen van de feature source: <x id="PH" equiv-text="message"/></target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.error-deleting-service" datatype="html">
         <source>Error while deleting geo service: <x id="PH" equiv-text="message"/></source>
-        <target state="new">Fout bij het verwijderen van de geo-service: <x id="PH" equiv-text="message"/></target>
+        <target>Fout bij het verwijderen van de geo-service: <x id="PH" equiv-text="message"/></target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.error-loading-catalog" datatype="html">
         <source>Error while loading catalog</source>
@@ -499,7 +519,7 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.error-loading-feature-sources" datatype="html">
         <source>Error while loading feature sources</source>
-        <target state="translated">Fout bij het laden van de feature sources</target>
+        <target>Fout bij het laden van de feature sources</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.error-loading-geo-services" datatype="html">
         <source>Error while loading geo services</source>
@@ -523,7 +543,7 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.error-updating-feature-type" datatype="html">
         <source>Error while updating feature type: <x id="PH" equiv-text="message"/></source>
-        <target state="new">Fout bij het bijwerken van het feature type: <x id="PH" equiv-text="message"/></target>
+        <target>Fout bij het bijwerken van het feature type: <x id="PH" equiv-text="message"/></target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.error-updating-service" datatype="html">
         <source>Error while updating geo service: </source>
@@ -531,15 +551,15 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.feature-source" datatype="html">
         <source>Feature Source</source>
-        <target state="translated">Feature source</target>
+        <target>Feature source</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.feature-source-created" datatype="html">
         <source>Feature source <x id="PH" equiv-text="featureSource.title"/> created</source>
-        <target state="translated">Feature source <x id="PH" equiv-text="featureSource.title"/> aangemaakt</target>
+        <target>Feature source <x id="PH" equiv-text="featureSource.title"/> aangemaakt</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.feature-source-refreshed" datatype="html">
         <source>Feature source refreshed</source>
-        <target state="translated">Feature source vernieuwd</target>
+        <target>Feature source vernieuwd</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.feature-source-removed" datatype="html">
         <source>Source <x id="PH" equiv-text="featureSource.title"/> removed</source>
@@ -547,7 +567,7 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.feature-source-updated" datatype="html">
         <source>Feature source updated</source>
-        <target state="translated">Feature source bijgewerkt</target>
+        <target>Feature source bijgewerkt</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.feature-source-used" datatype="html">
         <source>Feature source is used in layers</source>
@@ -555,7 +575,7 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.feature-source-used-body" datatype="html">
         <source>The feature source <x id="INTERPOLATION" equiv-text="{{data.featureSource.title}}"/> is used in the following layers.</source>
-        <target state="new">De feature source <x id="INTERPOLATION" equiv-text="{{data.featureSource.title}}"/> wordt gebruikt in de volgende lagen.</target>
+        <target>De feature source <x id="INTERPOLATION" equiv-text="{{data.featureSource.title}}"/> wordt gebruikt in de volgende lagen.</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.feature-type" datatype="html">
         <source>Feature type</source>
@@ -563,11 +583,11 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.feature-type-details" datatype="html">
         <source>Details for feature type <x id="INTERPOLATION" equiv-text="{{ featureType.title }}"/></source>
-        <target state="new">Details voor feature type <x id="INTERPOLATION" equiv-text="{{ featureType.title }}"/></target>
+        <target>Details voor feature type <x id="INTERPOLATION" equiv-text="{{ featureType.title }}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.filter-catalog" datatype="html">
         <source>Filter Catalog</source>
-        <target state="new">Catalogus filteren</target>
+        <target>Catalogus filteren</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.folder-created" datatype="html">
         <source>Folder <x id="PH" equiv-text="node.title"/> created</source>
@@ -579,7 +599,7 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.folder-not-empty-body" datatype="html">
         <source>This folder <x id="INTERPOLATION" equiv-text="{{data.node.title}}"/> is not empty and contains the following items.</source>
-        <target state="new">Deze map <x id="INTERPOLATION" equiv-text="{{data.node.title}}"/> is niet leeg en bevat de volgende items.</target>
+        <target>Deze map <x id="INTERPOLATION" equiv-text="{{data.node.title}}"/> is niet leeg en bevat de volgende items.</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.folder-removed" datatype="html">
         <source>Folder <x id="PH" equiv-text="node.title"/> removed</source>
@@ -603,7 +623,7 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.hi-dpi-mode" datatype="html">
         <source>High-DPI mode</source>
-        <target state="translated">High-DPI modus</target>
+        <target>High-DPI modus</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.hi-dpi-settings" datatype="html">
         <source>High-DPI settings</source>
@@ -655,7 +675,7 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.override-legend" datatype="html">
         <source>Override service default legend</source>
-        <target state="new">Alternatieve legenda selecteren</target>
+        <target>Alternatieve legenda selecteren</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.port" datatype="html">
         <source>Port</source>
@@ -671,7 +691,7 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.readonly-in-catalog" datatype="html">
         <source>This attribute is set to not editable in the catalog and cannot be changed here</source>
-        <target state="new">Dit attribuut is ingesteld als niet te bewerken in de catalog en kan hier niet aangepast worden</target>
+        <target>Dit attribuut is ingesteld als niet te bewerken in de catalogus en kan hier niet aangepast worden</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.refresh-feature-source" datatype="html">
         <source>Refresh feature source</source>
@@ -743,7 +763,7 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.service-used-body" datatype="html">
         <source>The service <x id="INTERPOLATION" equiv-text="{{data.service.title}}"/> is used in the following applications.</source>
-        <target state="new">De service <x id="INTERPOLATION" equiv-text="{{data.service.title}}"/> wordt gebruikt in de volgende applicaties.</target>
+        <target>De service <x id="INTERPOLATION" equiv-text="{{data.service.title}}"/> wordt gebruikt in de volgende applicaties.</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.show-next-zoom-level" datatype="html">
         <source>Show next zoom level</source>
@@ -763,15 +783,15 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.technical-name" datatype="html">
         <source>Technical name: <x id="INTERPOLATION" equiv-text="{{ featureType.name }}"/></source>
-        <target state="new">Technische naam: <x id="INTERPOLATION" equiv-text="{{ featureType.name }}"/></target>
+        <target>Technische naam: <x id="INTERPOLATION" equiv-text="{{ featureType.name }}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.tileSize" datatype="html">
         <source>Tile size</source>
-        <target state="new">Tile grootte</target>
+        <target>Tegel grootte</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.tiling-gutter" datatype="html">
         <source>Tiling gutter</source>
-        <target>Tiling gutter</target>
+        <target>Tegelraster overlap</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.title-hint" datatype="html">
         <source>Leave empty to use the title as provided by the service.</source>
@@ -779,15 +799,15 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.use-tiling" datatype="html">
         <source>Use tiling</source>
-        <target>Gebruik tiling</target>
+        <target>Gebruik tegelraster</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.xyz-tile-grid-extent" datatype="html">
         <source>XYZ tile grid extent</source>
-        <target state="new">Omvang van het XYZ tegelraster</target>
+        <target>Begrenzingsrechthoek van het XYZ tegelraster</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.xyz-tile-grid-options" datatype="html">
         <source>XYZ tile grid options</source>
-        <target>XYZ tile grid opties</target>
+        <target>XYZ tegelraster opties</target>
       </trans-unit>
       <trans-unit id="admin-core.common.about" datatype="html">
         <source>About</source>
@@ -811,7 +831,7 @@
       </trans-unit>
       <trans-unit id="admin-core.common.bounds-hint" datatype="html">
         <source>You can paste a comma-separated list or &lt;BoundingBox minx=&quot;&quot; miny=.../&gt; string from capabilities in one of the fields for setting the extent</source>
-        <target state="new">U kunt hier een komma gescheiden lijst of &lt;BoundingBox minx=&quot;&quot; miny=.../&gt; vanuit de capabilities in één van de velden plakken om de extent te zetten</target>
+        <target>U kunt hier een komma gescheiden lijst of &lt;BoundingBox minx=&quot;&quot; miny=.../&gt; vanuit de capabilities in één van de velden plakken om de begrenzingsrechthoek te zetten</target>
       </trans-unit>
       <trans-unit id="admin-core.common.cancel" datatype="html">
         <source>Cancel</source>
@@ -829,13 +849,17 @@
         <source>Close</source>
         <target>Sluiten</target>
       </trans-unit>
+      <trans-unit id="admin-core.common.comment" datatype="html">
+        <source>Comment</source>
+        <target>Opmerking</target>
+      </trans-unit>
       <trans-unit id="admin-core.common.comments" datatype="html">
         <source>Comments</source>
         <target>Opmerkingen</target>
       </trans-unit>
       <trans-unit id="admin-core.common.copy" datatype="html">
         <source>Copy</source>
-        <target state="new">Kopie</target>
+        <target>Kopie</target>
       </trans-unit>
       <trans-unit id="admin-core.common.create" datatype="html">
         <source>Create</source>
@@ -865,13 +889,29 @@
         <source>Enabled</source>
         <target>Ingeschakeld</target>
       </trans-unit>
+      <trans-unit id="admin-core.common.feature-source" datatype="html">
+        <source>Feature source and type</source>
+        <target>Feature source en type</target>
+      </trans-unit>
+      <trans-unit id="admin-core.common.feature-source" datatype="html">
+        <source>Feature source and type</source>
+        <target>Feature source en type</target>
+      </trans-unit>
+      <trans-unit id="admin-core.common.filter-attributes" datatype="html">
+        <source>Filter attributes</source>
+        <target>Filter attributen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.common.filter-attributes" datatype="html">
+        <source>Filter attributes</source>
+        <target>Filter attributen</target>
+      </trans-unit>
       <trans-unit id="admin-core.common.filter-dots" datatype="html">
         <source>Filter...</source>
         <target>Filteren...</target>
       </trans-unit>
       <trans-unit id="admin-core.common.forms-title" datatype="html">
         <source>Forms</source>
-        <target state="new">Formulieren</target>
+        <target>Formulieren</target>
       </trans-unit>
       <trans-unit id="admin-core.common.geo-service" datatype="html">
         <source>Geo service</source>
@@ -891,7 +931,7 @@
       </trans-unit>
       <trans-unit id="admin-core.common.label" datatype="html">
         <source>Label</source>
-        <target state="new">Label</target>
+        <target>Label</target>
       </trans-unit>
       <trans-unit id="admin-core.common.login" datatype="html">
         <source>Login</source>
@@ -945,13 +985,17 @@
         <source>Saved</source>
         <target>Opgeslagen</target>
       </trans-unit>
+      <trans-unit id="admin-core.common.search-indexes-title" datatype="html">
+        <source>Search Indexes</source>
+        <target>Zoekindexen</target>
+      </trans-unit>
       <trans-unit id="admin-core.common.select-file" datatype="html">
         <source>Select file</source>
-        <target state="new">Selecteer bestand</target>
+        <target>Selecteer bestand</target>
       </trans-unit>
       <trans-unit id="admin-core.common.settings-for" datatype="html">
         <source>Settings for <x id="INTERPOLATION" equiv-text="{{ layerTitle }}"/></source>
-        <target state="new">Instellingen voor <x id="INTERPOLATION" equiv-text="{{ node.label }}"/></target>
+        <target>Instellingen voor <x id="INTERPOLATION" equiv-text="{{ node.label }}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.common.settings-title" datatype="html">
         <source>Settings</source>
@@ -959,7 +1003,7 @@
       </trans-unit>
       <trans-unit id="admin-core.common.size" datatype="html">
         <source>Size</source>
-        <target state="new">Omvang</target>
+        <target>Omvang</target>
       </trans-unit>
       <trans-unit id="admin-core.common.sort" datatype="html">
         <source>Sort</source>
@@ -993,29 +1037,117 @@
         <source>Welcome to Tailormap Admin</source>
         <target>Welkom bij de Tailormap Admin</target>
       </trans-unit>
+      <trans-unit id="admin-core.common.feature-source" datatype="html">
+        <source>Feature source and type</source>
+        <target>Feature source en type</target>
+      </trans-unit>
+      <trans-unit id="admin-core.common.filter-attributes" datatype="html">
+        <source>Filter attributes</source>
+        <target>Filter attributen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.search-indexes" datatype="html">
+        <source>Search Indexes</source>
+        <target>Zoekindexen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.error-deleting-search-index" datatype="html">
+        <source>Error while deleting search index.</source>
+        <target>Fout bij het verwijderen van de zoekindex.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.search-index-removed" datatype="html">
+        <source>Search index removed</source>
+        <target>Zoekindex verwijderd</target>
+      </trans-unit>
+      <trans-unit id="admin-core.common.comment" datatype="html">
+        <source>Comment</source>
+        <target>Opmerking</target>
+      </trans-unit>
+      <trans-unit id="admin-core.common.feature-source" datatype="html">
+        <source>Feature source and type</source>
+        <target>Feature source en type</target>
+      </trans-unit>
+      <trans-unit id="admin-core.common.filter-attributes" datatype="html">
+        <source>Filter attributes</source>
+        <target>Filter attributen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.delete-search-index" datatype="html">
+        <source>Delete search index {$PH}</source>
+        <target>Zoekindex {$PH} verwijderen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.delete-search-index-message" datatype="html">
+        <source>Are you sure you want to delete search index {$PH}? This action cannot be undone.</source>
+        <target>Weet u zeker dat u de zoekindex {$PH} wilt verwijderen? Deze actie kan niet ongedaan gemaakt worden.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.selected-attributes-to-index" datatype="html">
+        <source>Selected attributes used to index</source>
+        <target>Geselecteerde attributen die worden geïndexeerd</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.selected-attributes-to-display" datatype="html">
+        <source>Selected attributes used to display</source>
+        <target>Geselecteerde attributen die worden weergegeven</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.edit-search-index" datatype="html">
+        <source>Edit search index {$INTERPOLATION}</source>
+        <target>Zoekindex {$INTERPOLATION} bewerken</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.create-search-index" datatype="html">
+        <source>Create search index</source>
+        <target>Zoekindex aanmaken</target>
+      </trans-unit>
+      <trans-unit id="admin-core.common.search-indexes-title" datatype="html">
+        <source>Search Indexes</source>
+        <target>Zoekindexen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.filter-search-indexes" datatype="html">
+        <source>Filter search indexes</source>
+        <target>Zoekindexen filteren</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.error-loading-search-indexes" datatype="html">
+        <source>Error while loading list of search indexes</source>
+        <target>Fout bij het laden van de lijst met zoekindexen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.add-search-index" datatype="html">
+        <source>Add search index</source>
+        <target>Zoekindex toevoegen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.error-creating-search-index" datatype="html">
+        <source>Error while creating search index.</source>
+        <target>Fout bij het aanmaken van de zoekindex.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.search-index-created" datatype="html">
+        <source>Search index created</source>
+        <target>Zoekindex aangemaakt</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.error-updating-search-index" datatype="html">
+        <source>Error while updating search index.</source>
+        <target>Fout bij het bijwerken van de zoekindex.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.search-index-updated" datatype="html">
+        <source>Search index updated</source>
+        <target>Zoekindex bijgewerkt</target>
+      </trans-unit>
       <trans-unit id="admin-core.components.clw-add-url" datatype="html">
         <source>Add URL</source>
-        <target state="new">URL toevoegen</target>
+        <target>URL toevoegen</target>
       </trans-unit>
       <trans-unit id="admin-core.components.coordinate-link-window-help1" datatype="html">
         <source>Add one or more URL&apos;s to configure the Coordinate Link Window component.</source>
-        <target state="new">Voeg één of meerdere URL&apos;s toe om het Coordinate Link Window component te configureren.</target>
+        <target>Voeg één of meerdere URL&apos;s toe om het Coördinatenlinkvenster component te configureren.</target>
       </trans-unit>
       <trans-unit id="admin-core.components.coordinate-link-window-help2" datatype="html">
         <source>For each URL you can use <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[X]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> or <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[lat]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> and <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[Y]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> or <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[lon]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> placeholders in the URL.</source>
-        <target state="new">Voor iedere URL kunt u <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[X]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> or <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[lat]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> and <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[Y]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> or <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[lon]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> als placeholder gebruiken in de URL.</target>
+        <target>Voor iedere URL kunt u <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[X]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> or <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[lat]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> and <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[Y]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> or <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[lon]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> als placeholder gebruiken in de URL.</target>
       </trans-unit>
       <trans-unit id="admin-core.components.coordinate-link-window-help3" datatype="html">
         <source>Those will be replaced by the location on which the user clicks.</source>
-        <target state="new">Deze placeholders zullen worden vervangen door de coördinaten van de klik op de kaart.</target>
+        <target>Deze zullen worden vervangen door de coördinaten van de klik op de kaart.</target>
       </trans-unit>
       <trans-unit id="admin-core.components.coordinate-link-window-help4" datatype="html">
         <source>For example: <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>https://www.google.com/maps/@[lat],[lon],18z<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> or <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>https://demo.tailormap.com/#@[X],[Y],18<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/></source>
-        <target state="new">Bijvoorbeeld: <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>https://www.google.com/maps/@[lat],[lon],18z<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> of <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>https://demo.tailormap.com/#@[X],[Y],18<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/></target>
+        <target>Bijvoorbeeld: <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>https://www.google.com/maps/@[lat],[lon],18z<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> of <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>https://demo.tailormap.com/#@[X],[Y],18<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/></target>
       </trans-unit>
       <trans-unit id="admin-core.components.coordinate-link-window-title" datatype="html">
         <source>Coordinate link window title</source>
-        <target state="new">Coordinate link window title</target>
+        <target>Coördinatenlinkvenster titel</target>
       </trans-unit>
       <trans-unit id="admin-core.components.measure-area-title" datatype="html">
         <source>Measure area title</source>
@@ -1031,163 +1163,155 @@
       </trans-unit>
       <trans-unit id="admin-core.form.add-choice" datatype="html">
         <source>Add choice</source>
-        <target state="new">Keuze toevoegen</target>
+        <target>Keuze toevoegen</target>
       </trans-unit>
       <trans-unit id="admin-core.form.add-form" datatype="html">
         <source>Add form</source>
-        <target state="new">Formulier toevoegen</target>
+        <target>Formulier toevoegen</target>
       </trans-unit>
       <trans-unit id="admin-core.form.allow-free-input" datatype="html">
         <source>Allow the user to enter custom input</source>
-        <target state="new">Laat de gebruiker ook eigen tekst invullen</target>
+        <target>Laat de gebruiker ook eigen tekst invullen</target>
       </trans-unit>
       <trans-unit id="admin-core.form.create-form" datatype="html">
         <source>Create form</source>
-        <target state="new">Formulier maken</target>
+        <target>Formulier maken</target>
       </trans-unit>
       <trans-unit id="admin-core.form.delete-field" datatype="html">
         <source>Delete field</source>
-        <target state="new">Verwijder veld</target>
+        <target>Verwijder veld</target>
       </trans-unit>
       <trans-unit id="admin-core.form.delete-form" datatype="html">
         <source>Delete form <x id="PH" equiv-text="title"/></source>
-        <target state="new">Verwijder formulier <x id="PH" equiv-text="title"/></target>
+        <target>Verwijder formulier <x id="PH" equiv-text="title"/></target>
       </trans-unit>
       <trans-unit id="admin-core.form.delete-form-message" datatype="html">
         <source>Are you sure you want to delete form <x id="PH" equiv-text="title"/>? This action cannot be undone.</source>
-        <target state="new">Weet u zeker dat u formulier <x id="PH" equiv-text="title"/> wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.</target>
+        <target>Weet u zeker dat u formulier <x id="PH" equiv-text="title"/> wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.</target>
       </trans-unit>
       <trans-unit id="admin-core.form.edit" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ form.name }}"/></source>
-        <target state="new">Bewerk <x id="INTERPOLATION" equiv-text="{{ form.name }}"/></target>
+        <target>Bewerk <x id="INTERPOLATION" equiv-text="{{ form.name }}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.form.error-creating-form" datatype="html">
         <source>Error while creating form.</source>
-        <target state="new">Fout bij het aanmaken van het formulier.</target>
+        <target>Fout bij het aanmaken van het formulier.</target>
       </trans-unit>
       <trans-unit id="admin-core.form.error-deleting-form" datatype="html">
         <source>Error while deleting form.</source>
-        <target state="new">Fout bij het verwijderen van het formulier.</target>
+        <target>Fout bij het verwijderen van het formulier.</target>
       </trans-unit>
       <trans-unit id="admin-core.form.error-loading-form" datatype="html">
         <source>Error while loading form</source>
-        <target state="new">Fout bij het laden van het formulier</target>
+        <target>Fout bij het laden van het formulier</target>
       </trans-unit>
       <trans-unit id="admin-core.form.error-loading-forms" datatype="html">
         <source>Error while loading list of forms</source>
-        <target state="new">Fout bij het laden van de lijst met formulieren</target>
+        <target>Fout bij het laden van de lijst met formulieren</target>
       </trans-unit>
       <trans-unit id="admin-core.form.error-updating-form" datatype="html">
         <source>Error while updating form.</source>
-        <target state="new">Fout bij het aanpassen van het formulier.</target>
-      </trans-unit>
-      <trans-unit id="admin-core.form.feature-source" datatype="html">
-        <source>Feature source and type</source>
-        <target state="new">Feature source and type</target>
+        <target>Fout bij het aanpassen van het formulier.</target>
       </trans-unit>
       <trans-unit id="admin-core.form.field-type-boolean" datatype="html">
         <source>Checkbox field</source>
-        <target state="new">Vinkvak</target>
+        <target>Vinkvak</target>
       </trans-unit>
       <trans-unit id="admin-core.form.field-type-date" datatype="html">
         <source>Date field</source>
-        <target state="new">Datum veld</target>
+        <target>Datum veld</target>
       </trans-unit>
       <trans-unit id="admin-core.form.field-type-integer" datatype="html">
         <source>Integer field</source>
-        <target state="new">Integer veld</target>
+        <target>Geheel getal veld</target>
       </trans-unit>
       <trans-unit id="admin-core.form.field-type-number" datatype="html">
         <source>Number field</source>
-        <target state="new">Numeriek veld</target>
+        <target>Numeriek veld</target>
       </trans-unit>
       <trans-unit id="admin-core.form.field-type-select" datatype="html">
         <source>Choice list</source>
-        <target state="new">Keuzelijst</target>
+        <target>Keuzelijst</target>
       </trans-unit>
       <trans-unit id="admin-core.form.field-type-text" datatype="html">
         <source>Text field</source>
-        <target state="new">Tekstveld</target>
+        <target>Tekstveld</target>
       </trans-unit>
       <trans-unit id="admin-core.form.field-type-textarea" datatype="html">
         <source>Textarea field</source>
-        <target state="new">Tekstvlak veld</target>
+        <target>Tekstvlak veld</target>
       </trans-unit>
       <trans-unit id="admin-core.form.field-type-timestamp" datatype="html">
         <source>Timestamp field</source>
-        <target state="new">Timestamp veld</target>
-      </trans-unit>
-      <trans-unit id="admin-core.form.filter-attributes" datatype="html">
-        <source>Filter attributes</source>
-        <target state="new">Filter attributen</target>
+        <target>Tijdsaanduiding veld</target>
       </trans-unit>
       <trans-unit id="admin-core.form.filter-fields" datatype="html">
         <source>Filter fields</source>
-        <target state="new">Filter velden</target>
+        <target>Filter velden</target>
       </trans-unit>
       <trans-unit id="admin-core.form.filter-forms" datatype="html">
         <source>Filter forms</source>
-        <target state="new">Filter formulieren</target>
+        <target>Filter formulieren</target>
       </trans-unit>
       <trans-unit id="admin-core.form.form-created" datatype="html">
         <source>Form <x id="PH" equiv-text="createdForm.name"/> created</source>
-        <target state="new">Form <x id="PH" equiv-text="createdForm.name"/> aangemaakt</target>
+        <target>Formulier <x id="PH" equiv-text="createdForm.name"/> aangemaakt</target>
       </trans-unit>
       <trans-unit id="admin-core.form.form-fields-unavailable" datatype="html">
         <source>The following fields are disabled / disabled for editing in the feature type. These will not be visible in the viewer. First enable them for editing to make sure they are visible in the viewer.</source>
-        <target state="new">De volgende velden zijn uitgeschakeld / uitgeschakeld voor bewerken in het feature type. Deze zullen niet zichtbaar zijn in de viewer. Schakel deze attributen in voor bewerken om ze zichtbaar te maken in de viewer.</target>
+        <target>De volgende velden zijn uitgeschakeld / uitgeschakeld voor bewerken in het feature type. Deze zullen niet zichtbaar zijn in de viewer. Schakel deze attributen in voor bewerken om ze zichtbaar te maken in de viewer.</target>
       </trans-unit>
       <trans-unit id="admin-core.form.form-fields-unavailable-application" datatype="html">
         <source>In the selected form the following fields are disabled / disabled for editing in the feature type or application layer settings. These will not be visible in the viewer. First enable them for editing to make sure they are visible in the viewer.</source>
-        <target state="new">In het geselecteerde formulier zijn de volgende velden uitgeschakeld / uitgeschakeld voor bewerken in het feature type of de applicatielaag-instellingen. Deze zullen niet zichtbaar zijn in de viewer. Schakel deze attributen in voor bewerken om ze zichtbaar te maken in de viewer.</target>
+        <target>In het geselecteerde formulier zijn de volgende velden uitgeschakeld / uitgeschakeld voor bewerken in het feature type of de applicatielaag-instellingen. Deze zullen niet zichtbaar zijn in de viewer. Schakel deze attributen in voor bewerken om ze zichtbaar te maken in de viewer.</target>
       </trans-unit>
       <trans-unit id="admin-core.form.form-removed" datatype="html">
         <source>Form <x id="PH" equiv-text="title"/> removed</source>
-        <target state="new">Form <x id="PH" equiv-text="title"/> verwijderd</target>
+        <target>Formulier <x id="PH" equiv-text="title"/> verwijderd</target>
       </trans-unit>
       <trans-unit id="admin-core.form.form-updated" datatype="html">
         <source>Form updated</source>
-        <target state="new">Form aangepast</target>
+        <target>Formulier aangepast</target>
       </trans-unit>
       <trans-unit id="admin-core.form.forms" datatype="html">
         <source>Forms</source>
-        <target state="new">Formulieren</target>
+        <target>Formulieren</target>
       </trans-unit>
       <trans-unit id="admin-core.form.label-list-label" datatype="html">
         <source>Label</source>
-        <target state="new">Label</target>
+        <target>Label</target>
       </trans-unit>
       <trans-unit id="admin-core.form.required-field" datatype="html">
         <source>Required field</source>
-        <target state="new">Verplicht veld</target>
+        <target>Verplicht veld</target>
       </trans-unit>
       <trans-unit id="admin-core.form.unique-values-as-options" datatype="html">
         <source>Use unique values from this column as options</source>
-        <target state="new">Gebruik de unieke waarden uit deze kolom als opties</target>
+        <target>Gebruik de unieke waarden uit deze kolom als opties</target>
       </trans-unit>
       <trans-unit id="admin-core.form.value-list-label" datatype="html">
         <source>Label</source>
-        <target state="new">Label</target>
+        <target>Label</target>
       </trans-unit>
       <trans-unit id="admin-core.form.value-list-value" datatype="html">
         <source>Value</source>
-        <target state="new">Waarde</target>
+        <target>Waarde</target>
       </trans-unit>
       <trans-unit id="admin-core.forms.available-attributes" datatype="html">
         <source>Available attributes</source>
-        <target state="new">Beschikbare attributen</target>
+        <target>Beschikbare attributen</target>
       </trans-unit>
       <trans-unit id="admin-core.forms.edit-form-field" datatype="html">
         <source>Edit form field <x id="INTERPOLATION" equiv-text="{{field.name}}"/></source>
-        <target state="new">Bewerk formulier veld <x id="INTERPOLATION" equiv-text="{{field.name}}"/></target>
+        <target>Bewerk formulier veld <x id="INTERPOLATION" equiv-text="{{field.name}}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.forms.form-fields" datatype="html">
         <source>Form fields</source>
-        <target state="new">Formulier velden</target>
+        <target>Formulier velden</target>
       </trans-unit>
       <trans-unit id="admin-core.forms.forms" datatype="html">
         <source>Forms</source>
-        <target state="new">Formulieren</target>
+        <target>Formulieren</target>
       </trans-unit>
       <trans-unit id="admin-core.groups.add-group" datatype="html">
         <source>Add group</source>
@@ -1195,15 +1319,15 @@
       </trans-unit>
       <trans-unit id="admin-core.groups.delete-group-confirm" datatype="html">
         <source>Delete group <x id="PH" equiv-text="group.name"/></source>
-        <target state="translated">Verwijder groep <x id="PH" equiv-text="group.name"/></target>
+        <target>Verwijder groep <x id="PH" equiv-text="group.name"/></target>
       </trans-unit>
       <trans-unit id="admin-core.groups.delete-group-confirm-message" datatype="html">
         <source>Are you sure you want to delete the group with name <x id="PH" equiv-text="group.name"/>? All users will be removed from this group. This action cannot be undone.</source>
-        <target state="translated">Weet u zeker dat u de groep met de naam <x id="PH" equiv-text="group.name"/> wil verwijderen? Alle gebruikers worden uit deze groep verwijderd. Deze actie kan niet ongedaan worden gemaakt.</target>
+        <target>Weet u zeker dat u de groep met de naam <x id="PH" equiv-text="group.name"/> wil verwijderen? Alle gebruikers worden uit deze groep verwijderd. Deze actie kan niet ongedaan worden gemaakt.</target>
       </trans-unit>
       <trans-unit id="admin-core.groups.edit-group" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ group.name }}"/></source>
-        <target state="translated">Bewerken van <x id="INTERPOLATION" equiv-text="{{ group.name }}"/></target>
+        <target>Bewerken van <x id="INTERPOLATION" equiv-text="{{ group.name }}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.groups.error-creating-group" datatype="html">
         <source>Error while creating group <x id="PH" equiv-text="group.name"/>. <x id="PH_1" equiv-text="response.error?.message"/></source>
@@ -1255,7 +1379,7 @@
       </trans-unit>
       <trans-unit id="admin-core.navigation.forms" datatype="html">
         <source>Forms</source>
-        <target state="new">Formulieren</target>
+        <target>Formulieren</target>
       </trans-unit>
       <trans-unit id="admin-core.navigation.groups" datatype="html">
         <source>Groups</source>
@@ -1264,6 +1388,10 @@
       <trans-unit id="admin-core.navigation.home" datatype="html">
         <source>Home</source>
         <target>Home</target>
+      </trans-unit>
+      <trans-unit id="admin-core.navigation.search-indexes" datatype="html">
+        <source>Search indexes</source>
+        <target>Zoekindexen</target>
       </trans-unit>
       <trans-unit id="admin-core.navigation.settings" datatype="html">
         <source>Settings</source>
@@ -1276,6 +1404,10 @@
       <trans-unit id="admin-core.navigation.users" datatype="html">
         <source>Users</source>
         <target>Gebruikers</target>
+      </trans-unit>
+      <trans-unit id="admin-core.navigation.search-indexes" datatype="html">
+        <source>Search indexes</source>
+        <target>Zoekindexen</target>
       </trans-unit>
       <trans-unit id="admin-core.oidc.add-identity-provider" datatype="html">
         <source>Add identity provider</source>
@@ -1295,15 +1427,15 @@
       </trans-unit>
       <trans-unit id="admin-core.oidc.configuration-delete-confirm" datatype="html">
         <source>Delete OIDC configuration <x id="PH" equiv-text="title"/></source>
-        <target state="new">OIDC-configuratie verwijderen <x id="PH" equiv-text="title"/></target>
+        <target>OIDC-configuratie verwijderen <x id="PH" equiv-text="title"/></target>
       </trans-unit>
       <trans-unit id="admin-core.oidc.configuration-delete-confirm-message" datatype="html">
         <source>Are you sure you want to delete OIDC configuration <x id="PH" equiv-text="title"/>? This action cannot be undone.</source>
-        <target state="new">Weet je zeker dat je de OIDC-configuratie <x id="PH" equiv-text="title"/> wil verwijderen? Deze actie kan niet ongedaan worden gemaakt.</target>
+        <target>Weet je zeker dat je de OIDC-configuratie <x id="PH" equiv-text="title"/> wil verwijderen? Deze actie kan niet ongedaan worden gemaakt.</target>
       </trans-unit>
       <trans-unit id="admin-core.oidc.configuration-removed" datatype="html">
         <source>OIDC configuration <x id="PH" equiv-text="title"/> removed</source>
-        <target state="new">OIDC configuratie <x id="PH" equiv-text="title"/> verwijderd</target>
+        <target>OIDC configuratie <x id="PH" equiv-text="title"/> verwijderd</target>
       </trans-unit>
       <trans-unit id="admin-core.oidc.configuration-updated" datatype="html">
         <source>OIDC configuration updated</source>
@@ -1315,7 +1447,7 @@
       </trans-unit>
       <trans-unit id="admin-core.oidc.edit-configuration" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ oidcConfiguration.name }}"/></source>
-        <target state="translated">Bewerken van <x id="INTERPOLATION" equiv-text="{{ oidcConfiguration.name }}"/></target>
+        <target>Bewerken van <x id="INTERPOLATION" equiv-text="{{ oidcConfiguration.name }}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.oidc.error-creating-configuration" datatype="html">
         <source>Error while creating OIDC configuration.</source>
@@ -1327,7 +1459,7 @@
       </trans-unit>
       <trans-unit id="admin-core.oidc.error-loading-configurations" datatype="html">
         <source>Error while loading list of OIDC configurations</source>
-        <target state="translated">Fout bij het laden van de lijst met OIDC-configuraties</target>
+        <target>Fout bij het laden van de lijst met OIDC-configuraties</target>
       </trans-unit>
       <trans-unit id="admin-core.oidc.error-updating-configuration" datatype="html">
         <source>Error while updating OIDC configuration.</source>
@@ -1351,7 +1483,7 @@
       </trans-unit>
       <trans-unit id="admin-core.oidc.use-redirect-url" datatype="html">
         <source>Use <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/><x id="INTERPOLATION" equiv-text="{{redirectUrl}}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> as redirect URL in your IdP.</source>
-        <target state="new">Gebruik <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/><x id="INTERPOLATION" equiv-text="{{redirectUrl}}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> als redirect URL in je IdP.</target>
+        <target>Gebruik <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/><x id="INTERPOLATION" equiv-text="{{redirectUrl}}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> als redirect URL in je IdP.</target>
       </trans-unit>
       <trans-unit id="admin-core.oidc.username-attribute" datatype="html">
         <source>User name attribute</source>
@@ -1359,75 +1491,151 @@
       </trans-unit>
       <trans-unit id="admin-core.oidc.username-attribute-placeholder" datatype="html">
         <source>(name, sub, email, etc)</source>
-        <target>(name, sub, email, enz.)</target>
+        <target>(naam, sub, email, etc)</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.add-search-index" datatype="html">
+        <source>Add search index</source>
+        <target>Zoekindex toevoegen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.create-search-index" datatype="html">
+        <source>Create search index</source>
+        <target>Zoekindex aanmaken</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.delete-search-index" datatype="html">
+        <source>Delete search index <x id="PH" equiv-text="searchIndex.name"/></source>
+        <target>Zoekindex {$PH} verwijderen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.delete-search-index-message" datatype="html">
+        <source>Are you sure you want to delete search index <x id="PH" equiv-text="searchIndex.name"/>? This action cannot be undone.</source>
+        <target>Weet u zeker dat u de zoekindex {$PH} wilt verwijderen? Deze actie kan niet ongedaan gemaakt worden.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.edit-search-index" datatype="html">
+        <source>Edit search index <x id="INTERPOLATION" equiv-text="{{searchIndex.name}}"/></source>
+        <target>Zoekindex {$INTERPOLATION} bewerken</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.error-creating-search-index" datatype="html">
+        <source>Error while creating search index.</source>
+        <target>Fout bij het aanmaken van de zoekindex.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.error-deleting-search-index" datatype="html">
+        <source>Error while deleting search index.</source>
+        <target>Fout bij het verwijderen van de zoekindex.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.error-loading-search-indexes" datatype="html">
+        <source>Error while loading list of search indexes</source>
+        <target>Fout bij het laden van de lijst met zoekindexen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.error-updating-search-index" datatype="html">
+        <source>Error while updating search index.</source>
+        <target>Fout bij het bijwerken van de zoekindex.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.filter-search-indexes" datatype="html">
+        <source>Filter search indexes</source>
+        <target>Zoekindexen filteren</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.reindex" datatype="html">
+        <source>Re-index</source>
+        <target>Herindexeren</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.reindex-error" datatype="html">
+        <source>Error while re-indexing search index.</source>
+        <target>Fout bij het herindexeren van de zoekindex.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.search-index-created" datatype="html">
+        <source>Search index created</source>
+        <target>Zoekindex aangemaakt</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.search-index-removed" datatype="html">
+        <source>Search index removed</source>
+        <target>Zoekindex verwijderd</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.search-index-updated" datatype="html">
+        <source>Search index updated</source>
+        <target>Zoekindex bijgewerkt</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.search-indexes" datatype="html">
+        <source>Search Indexes</source>
+        <target>Zoekindexen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.search-reindex-success" datatype="html">
+        <source>Re-indexing success</source>
+        <target>Herindexeren gelukt</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.selected-attributes-to-display" datatype="html">
+        <source>Selected attributes used to display</source>
+        <target>Geselecteerde attributen die worden weergegeven</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.selected-attributes-to-index" datatype="html">
+        <source>Selected attributes used to index</source>
+        <target>Geselecteerde attributen die worden geïndexeerd</target>
       </trans-unit>
       <trans-unit id="admin-core.select-upload.file-in-use" datatype="html">
         <source>File is still in use</source>
-        <target state="new">Bestand wordt gebruikt</target>
+        <target>Bestand wordt gebruikt</target>
       </trans-unit>
       <trans-unit id="admin-core.select-upload.file-in-use-body" datatype="html">
         <source>This file cannot be removed because it is still used in the following places.</source>
-        <target state="new">Dit bestand kan niet verwijderd worden omdat het op de volgende plaatsen nog gebruikt wordt.</target>
+        <target>Dit bestand kan niet verwijderd worden omdat het op de volgende plaatsen nog gebruikt wordt.</target>
       </trans-unit>
       <trans-unit id="admin-core.select-upload.select-existing-file" datatype="html">
         <source>Select existing file</source>
-        <target state="new">Selecteer bestaand bestand</target>
+        <target>Selecteer bestaand bestand</target>
       </trans-unit>
       <trans-unit id="admin-core.select-upload.select-existing-legend" datatype="html">
         <source>Select existing legend</source>
-        <target state="new">Selecteer bestaande legenda</target>
+        <target>Selecteer bestaande legenda</target>
       </trans-unit>
       <trans-unit id="admin-core.select-upload.select-existing-logo" datatype="html">
         <source>Select existing logo</source>
-        <target state="new">Selecteer bestaand logo</target>
+        <target>Selecteer bestaand logo</target>
       </trans-unit>
       <trans-unit id="admin-core.select-upload.select-file" datatype="html">
         <source>Select file</source>
-        <target state="new">Selecteer bestand</target>
+        <target>Selecteer bestand</target>
       </trans-unit>
       <trans-unit id="admin-core.select-upload.select-legend" datatype="html">
         <source>Select legend</source>
-        <target state="new">Selecteer legenda</target>
+        <target>Selecteer legenda</target>
       </trans-unit>
       <trans-unit id="admin-core.select-upload.select-logo" datatype="html">
         <source>Select logo</source>
-        <target state="new">Selecteer logo</target>
+        <target>Selecteer logo</target>
       </trans-unit>
       <trans-unit id="admin-core.select-upload.upload-new-file" datatype="html">
         <source>Upload a new file</source>
-        <target state="new">Upload een nieuw bestand</target>
+        <target>Upload een nieuw bestand</target>
       </trans-unit>
       <trans-unit id="admin-core.select-upload.upload-new-legend" datatype="html">
         <source>Upload a new legend</source>
-        <target state="new">Upload een nieuwe legenda</target>
+        <target>Upload een nieuwe legenda</target>
       </trans-unit>
       <trans-unit id="admin-core.select-upload.upload-new-logo" datatype="html">
         <source>Upload a new logo</source>
-        <target state="new">Upload een nieuw logo</target>
+        <target>Upload een nieuw logo</target>
       </trans-unit>
       <trans-unit id="admin-core.settings.home" datatype="html">
         <source>Select settings from the left side</source>
-        <target state="new">Selecteer een instelling aan de linker kant</target>
+        <target>Selecteer een instelling aan de linker kant</target>
       </trans-unit>
       <trans-unit id="admin-core.upload-select.delete-file" datatype="html">
         <source>Delete file?</source>
-        <target state="new">Verwijder bestand?</target>
+        <target>Bestand verwijderen?</target>
       </trans-unit>
       <trans-unit id="admin-core.upload-select.delete-file-message" datatype="html">
         <source>Are you sure you want delete to the file <x id="PH" equiv-text="uploadName"/>? This action cannot be undone.</source>
-        <target state="new">Weet u zeker dat u het bestand <x id="PH" equiv-text="uploadName"/> wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.</target>
+        <target>Weet u zeker dat u het bestand <x id="PH" equiv-text="uploadName"/> wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.</target>
       </trans-unit>
       <trans-unit id="admin-core.upload-select.error-deleting-file" datatype="html">
         <source>Error removing file <x id="PH" equiv-text="uploadName"/>. Please try again.</source>
-        <target state="new">Fout bij het verwijderen van bestand <x id="PH" equiv-text="uploadName"/>. Probeer opnieuw.</target>
+        <target>Fout bij het verwijderen van bestand <x id="PH" equiv-text="uploadName"/>. Probeer opnieuw.</target>
       </trans-unit>
       <trans-unit id="admin-core.upload-select.file-deleted" datatype="html">
         <source>File <x id="PH" equiv-text="uploadName"/> removed</source>
-        <target state="new">Bestand <x id="PH" equiv-text="uploadName"/> verwijderd</target>
+        <target>Bestand <x id="PH" equiv-text="uploadName"/> verwijderd</target>
       </trans-unit>
       <trans-unit id="admin-core.use-max-extent" datatype="html">
         <source>Use projection extent</source>
-        <target state="new">Gebruik extent van projectie</target>
+        <target>Gebruik begrenzingsrechthoek van de projectie</target>
       </trans-unit>
       <trans-unit id="admin-core.users.add-user" datatype="html">
         <source>Add user</source>
@@ -1439,7 +1647,7 @@
       </trans-unit>
       <trans-unit id="admin-core.users.delete-user-confirm" datatype="html">
         <source>Delete user <x id="PH" equiv-text="user.username"/></source>
-        <target state="translated">Gebruiker <x id="PH" equiv-text="user.username"/> verwijderen</target>
+        <target>Gebruiker <x id="PH" equiv-text="user.username"/> verwijderen</target>
       </trans-unit>
       <trans-unit id="admin-core.users.delete-user-confirm-message" datatype="html">
         <source>Are you sure you want to delete the user with username <x id="PH" equiv-text="user.username"/>? This action cannot be undone.</source>
@@ -1447,7 +1655,7 @@
       </trans-unit>
       <trans-unit id="admin-core.users.edit-user" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ user.username }}"/></source>
-        <target state="translated">Bewerken van <x id="INTERPOLATION" equiv-text="{{ user.username }}"/></target>
+        <target>Bewerken van <x id="INTERPOLATION" equiv-text="{{ user.username }}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.users.error-creating-user" datatype="html">
         <source>Error while creating user <x id="PH" equiv-text="user.username"/>. <x id="PH_1" equiv-text="response.error?.message"/></source>
@@ -1475,11 +1683,11 @@
       </trans-unit>
       <trans-unit id="admin-core.users.password-short-error" datatype="html">
         <source>Password shorter than <x id="INTERPOLATION" equiv-text="{{userForm.get(&apos;password&apos;)?.errors?.[&apos;minlength&apos;].requiredLength}}"/></source>
-        <target state="new">Wachtwoord korter dan <x id="INTERPOLATION" equiv-text="{{userForm.get(&apos;password&apos;)?.errors?.[&apos;minlength&apos;].requiredLength}}"/></target>
+        <target>Wachtwoord korter dan <x id="INTERPOLATION" equiv-text="{{userForm.get(&apos;password&apos;)?.errors?.[&apos;minlength&apos;].requiredLength}}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.users.password-too-easy-error" datatype="html">
         <source>Password too short or too easily guessable</source>
-        <target>Wachtwoord te kort of te makkelijk te raden</target>
+        <target>Wachtwoord te kort of te gemakkelijk te raden</target>
       </trans-unit>
       <trans-unit id="admin-core.users.user-created" datatype="html">
         <source>User <x id="PH" equiv-text="createdUser.username"/> created</source>

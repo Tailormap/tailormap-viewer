@@ -1,0 +1,45 @@
+:host {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-wrapper {
+  display: flex;
+}
+
+.form-wrapper {
+  min-width: 300px;
+  max-width: 500px;
+  flex: 1;
+}
+
+.field-wrapper {
+  display: flex;
+  margin-top: 16px;
+  flex: 1;
+  overflow: hidden;
+  min-height: 300px;
+}
+
+.field-wrapper > * + * {
+  margin-left: 16px;
+}
+
+.info-wrapper {
+  display: block;
+  flex: 1;
+  margin-left: 16px;
+}
+
+.edit-buttons {
+  display: grid;
+  grid-template-columns: 24px min-content auto;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 32px;
+}
+
+tm-admin-search-index-attribute-list {
+  width: 250px;
+}

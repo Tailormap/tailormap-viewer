@@ -1,5 +1,5 @@
 import { Inject, Injectable, LOCALE_ID } from '@angular/core';
-import { concatMap, forkJoin, from, map, Observable, of, tap } from 'rxjs';
+import { concatMap, forkJoin, from, map, Observable, of, tap, take } from 'rxjs';
 import { LayerModel, MapService, OlLayerFilter, OpenlayersExtent } from '@tailormap-viewer/map';
 import { HttpClient } from '@angular/common/http';
 import { IconService, LegendHelper } from '@tailormap-viewer/shared';
@@ -8,6 +8,7 @@ import type { Svg2pdfOptions } from 'svg2pdf.js';
 import { LegendService } from '../../components/legend/services/legend.service';
 import { ExtendedAppLayerModel } from '../../map/models';
 import { ServerType } from '@tailormap-viewer/api';
+import { ImageHelper } from '../../shared/helpers/image.helper';
 
 interface Size {
   width: number;
@@ -18,7 +19,7 @@ interface Size {
 const a4Size: Size = { width: 297, height: 210 };
 const a3Size: Size = { width: 420, height: 297 };
 
-interface PrintOptions {
+export interface MapPdfPrintOptions {
   title?: string;
   footer?: string;
   showLegend?: boolean;
@@ -30,6 +31,7 @@ interface PrintOptions {
   dpi?: number;
   filename?: string;
   autoPrint?: boolean;
+  logo?: string | null;
 }
 
 @Injectable({
@@ -50,7 +52,7 @@ export class MapPdfService {
   ) { }
 
   public create$(options: {
-    printOptions: PrintOptions;
+    printOptions: MapPdfPrintOptions;
     layers: LayerModel[];
     backgroundLayers: LayerModel[];
     legendLayers$: Observable<ExtendedAppLayerModel[]>;
@@ -94,7 +96,7 @@ export class MapPdfService {
   }
 
   private createPdfDoc$(pdfCreator: typeof jsPDF, options: {
-    printOptions: PrintOptions;
+    printOptions: MapPdfPrintOptions;
     size: Size;
     mapSize: Size;
     layers: LayerModel[];
@@ -139,7 +141,12 @@ export class MapPdfService {
       vectorLayerFilter: options.vectorLayerFilter,
     }).pipe(
       concatMap(() => this.addLegendImages$(doc, options.size.width, options.size.height, options.legendLayers$)),
-      concatMap(() => this.addSvg2PDF$(doc, this.iconService.getUrlForIcon('logo'), { x: options.size.width - 30, y, width: 20, height: 20 })),
+      concatMap(() => {
+        if (options.printOptions.logo) {
+          return this.addImage2PDF$(doc, options.printOptions.logo, options.size.width - 30, y);
+        }
+        return this.addSvg2PDF$(doc, this.iconService.getUrlForIcon('logo'), { x: options.size.width - 30, y, width: 20, height: 20 });
+      }),
       concatMap(() => this.addSvg2PDF$(doc, this.iconService.getUrlForIcon('north_arrow'), { x, y: y + 2, width: 20, height: 20 })),
       map(() => doc.output('dataurlstring', { filename: options.printOptions.filename || $localize `:@@core.print.default-pdf-filename:map.pdf` })),
     );
@@ -184,9 +191,20 @@ export class MapPdfService {
       concatMap(svg => {
         const element = document.createElement('div');
         element.innerHTML = svg;
-        return doc.svg(element.firstChild as HTMLElement, options);
+        const svgEl = Array.from(element.children).find(c => c.nodeName.toLowerCase() === 'svg');
+        if (!svgEl) {
+          return of(doc);
+        }
+        return doc.svg(svgEl, options);
       }),
     );
+  }
+
+  private addImage2PDF$(doc: jsPDF, url: string, x: number, y: number): Observable<jsPDF> {
+    return ImageHelper.imageUrlToPng$(url)
+      .pipe(take(1), map(img => {
+        return doc.addImage(img.imageData, 'PNG', x, y, 20, 20, '', 'FAST');
+      }));
   }
 
   private addMapImage$(options: {

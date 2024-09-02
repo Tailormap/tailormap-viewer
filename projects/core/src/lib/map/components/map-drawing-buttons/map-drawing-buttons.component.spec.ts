@@ -1,34 +1,25 @@
 import { render, screen } from '@testing-library/angular';
 import { MapDrawingButtonsComponent } from './map-drawing-buttons.component';
-import { MapService, ToolTypeEnum } from '@tailormap-viewer/map';
+import { ToolTypeEnum } from '@tailormap-viewer/map';
 import { BehaviorSubject, of, Subject } from 'rxjs';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import userEvent from '@testing-library/user-event';
 import { DrawingFeatureTypeEnum } from '../../models/drawing-feature-type.enum';
+import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
 
 export const createMapServiceMock = () => {
-  const toolManagerMock = {
-    enableTool: jest.fn(),
-    disableTool: jest.fn(),
-  };
   const drawingSubject = new BehaviorSubject<{ type: string; geometry?: string }>({ type: 'start' });
   const selectedFeaturesSubject = new Subject();
-  const mapServiceMock = {
-    createTool$: jest.fn(({ type }) => {
-      const tool = type === ToolTypeEnum.Draw
-        ? { id: 'draw-1', drawing$: drawingSubject.asObservable() }
-        : { id: 'select-1', selectedFeatures$: selectedFeaturesSubject.asObservable() };
-      return of({ tool, manager: toolManagerMock });
-    }),
-    getToolManager$: jest.fn(() => of(toolManagerMock)),
-    renderFeatures$: jest.fn(() => of([])),
-  };
-
+  const mapServiceMock = getMapServiceMock(
+    type => type === ToolTypeEnum.Draw
+      ? { id: 'draw-1', drawing$: drawingSubject.asObservable() }
+      : { id: 'select-1', selectedFeatures$: selectedFeaturesSubject.asObservable() },
+  );
   return {
-    provider: { provide: MapService, useValue: mapServiceMock },
+    provider: mapServiceMock.provider,
     addDrawingEvent: (event: { type: string; geometry?: string }) => drawingSubject.next(event),
-    toolManager: toolManagerMock,
+    toolManager: mapServiceMock.toolManager,
     createTool$: mapServiceMock.createTool$,
   };
 };
@@ -42,10 +33,10 @@ const setup = async (allowedDrawingShapes?: DrawingFeatureTypeEnum[]) => {
     providers: [
       mapServiceMock.provider,
     ],
-    componentProperties: {
-      allowedShapes: allowedDrawingShapes,
-      activeToolChanged: { emit: toolChanged } as any,
-      drawingAdded: { emit: drawingAdded } as any,
+    inputs: { allowedShapes: allowedDrawingShapes },
+    on: {
+      activeToolChanged: toolChanged,
+      drawingAdded: drawingAdded,
     },
   });
 

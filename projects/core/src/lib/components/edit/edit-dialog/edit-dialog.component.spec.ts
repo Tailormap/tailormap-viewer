@@ -14,6 +14,7 @@ import { FeatureWithMetadataModel } from '../models/feature-with-metadata.model'
 import { of } from 'rxjs';
 import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layout.service';
 import { CoreSharedModule } from '../../../shared';
+import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
 
 const getFeatureInfo = (): FeatureWithMetadataModel => {
   return {
@@ -26,51 +27,42 @@ const getFeatureInfo = (): FeatureWithMetadataModel => {
   };
 };
 
+const setup = async (getLayerDetails = false, selectors: any[] = []) => {
+  const { container } = await render(EditDialogComponent, {
+    imports: [
+      SharedModule,
+      NoopAnimationsModule,
+      MatIconTestingModule,
+      CoreSharedModule,
+    ],
+    providers: [
+      {
+        provide: ApplicationLayerService,
+        useValue: getLayerDetails ? { getLayerDetails$: () => of(({ layer: getAppLayerModel(), details: {} })) } : {},
+      },
+      { provide: EditFeatureService, useValue: {} },
+      getMapServiceMock().provider,
+      provideMockStore({ initialState: { [editStateKey]: { ...initialEditState } }, selectors }),
+      { provide: UniqueValuesService, useValue: { clearCaches: jest.fn() } },
+      { provide: ViewerLayoutService, useValue: { setLeftPadding: jest.fn(), setRightPadding: jest.fn() } },
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  });
+  return { container };
+};
+
 describe('EditDialogComponent', () => {
 
   test('runs without feature info', async () => {
-    const { container } = await render(EditDialogComponent, {
-      imports: [
-        SharedModule,
-        NoopAnimationsModule,
-        MatIconTestingModule,
-        CoreSharedModule,
-      ],
-      providers: [
-        { provide: ApplicationLayerService, useValue: {} },
-        { provide: EditFeatureService, useValue: {} },
-        provideMockStore({ initialState: { [editStateKey]: { ...initialEditState } } }),
-        { provide: UniqueValuesService, useValue: { clearCaches: jest.fn() } },
-        { provide: ViewerLayoutService, useValue: { setLeftPadding: jest.fn(), setRightPadding: jest.fn() } },
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    });
+    const { container } = await setup();
     expect(container.querySelector('.edit-form')).toBeNull();
   });
 
   test('shows edit dialog', async () => {
-    await render(EditDialogComponent, {
-      imports: [
-        SharedModule,
-        NoopAnimationsModule,
-        MatIconTestingModule,
-        CoreSharedModule,
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      providers: [
-        { provide: ApplicationLayerService, useValue: { getLayerDetails$: () => of(({ layer: getAppLayerModel(), details: {} })) } },
-        { provide: EditFeatureService, useValue: {} },
-        { provide: UniqueValuesService, useValue: { clearCaches: jest.fn() } },
-        { provide: ViewerLayoutService, useValue: { setLeftPadding: jest.fn(), setRightPadding: jest.fn() } },
-        provideMockStore({
-          initialState: { [editStateKey]: { ...initialEditState } },
-          selectors: [
-            { selector: selectSelectedEditFeature, value: getFeatureInfo() },
-            { selector: selectEditDialogVisible, value: true },
-          ],
-        }),
-      ],
-    });
+    await setup(true, [
+      { selector: selectSelectedEditFeature, value: getFeatureInfo() },
+      { selector: selectEditDialogVisible, value: true },
+    ]);
     expect(await screen.findByText('Edit')).toBeInTheDocument();
     expect(await screen.findByText('Close')).toBeInTheDocument();
     expect(await screen.findByText('Save')).toBeInTheDocument();

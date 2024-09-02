@@ -23,7 +23,7 @@ const setup = async () => {
   await render(FeatureTypeFormComponent, {
     declarations: [ FeatureTypeAttributesComponent, SaveButtonComponent, SpinnerButtonComponent ],
     imports: [SharedModule],
-    componentInputs: {
+    inputs: {
       featureType: featureTypeModel,
     },
     providers: [

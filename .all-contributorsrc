@@ -1,6 +1,6 @@
 {
   "projectName": "tailormap-viewer",
-  "projectOwner": "B3Partners",
+  "projectOwner": "Tailormap",
   "imageSize": 100,
   "repoType": "github",
   "commit": true,
@@ -77,7 +77,8 @@
       "profile": "https://github.com/mvdstruijk",
       "contributions": [
         "code",
-        "doc"
+        "doc",
+        "maintenance"
       ]
     },
     {
@@ -97,6 +98,15 @@
       "profile": "https://github.com/features/security",
       "contributions": [
         "maintenance"
+      ]
+    },
+    {
+      "login": "oscarporsius",
+      "name": "Oscar P.",
+      "avatar_url": "https://avatars.githubusercontent.com/u/149582283?v=4",
+      "profile": "https://github.com/oscarporsius",
+      "contributions": [
+        "code"
       ]
     }
   ],

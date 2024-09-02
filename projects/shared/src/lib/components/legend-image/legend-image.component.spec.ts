@@ -1,19 +1,23 @@
 import { render, screen } from '@testing-library/angular';
-import { LegendImageComponent } from './legend-image.component';
+import { LegendImageComponent, LegendImageModel } from './legend-image.component';
 
 const windowMock = () => Object.defineProperty({}, 'devicePixelRatio', {
   get: jest.fn().mockReturnValue(2),
 }) as any;
 
+const setup = async (legend: LegendImageModel) => {
+  await render(LegendImageComponent, {
+    inputs: { legend },
+  });
+};
+
 describe('LegendImageComponent', () => {
 
   test('should render', async () => {
-    await render(LegendImageComponent, {
-      componentProperties: { legend: {
-        title: 'Layer title',
-        url: 'some-url',
-        serverType: 'generic',
-      } },
+    await setup({
+      title: 'Layer title',
+      url: 'some-url',
+      serverType: 'generic',
     });
     const img = await screen.getByRole('img');
     expect(img).toBeInTheDocument();
@@ -23,12 +27,10 @@ describe('LegendImageComponent', () => {
 
   test('should render high dpi legend for GeoServer', async () => {
     jest.spyOn(global, 'window', 'get').mockImplementation(windowMock);
-    await render(LegendImageComponent, {
-      componentProperties: { legend: {
-        title: 'Layer title',
-        url: 'http://some-url/geoserver/wms?REQUEST=GetLegendGraphic',
-        serverType: 'geoserver',
-      } },
+    await setup({
+      title: 'Layer title',
+      url: 'http://some-url/geoserver/wms?REQUEST=GetLegendGraphic',
+      serverType: 'geoserver',
     });
     const img = await screen.getByRole('img');
     expect(img).toBeInTheDocument();

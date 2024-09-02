@@ -22,11 +22,7 @@ describe('FeatureSourceFormComponent', () => {
     await render(FeatureSourceFormComponent, {
       imports: [ SharedModule, MatIconTestingModule ],
       declarations: [PasswordFieldComponent],
-      componentProperties: {
-        changed: {
-          emit: changedFn,
-        } as any,
-      },
+      on: { changed: changedFn },
     });
     expect(await screen.queryByPlaceholderText('URL')).not.toBeInTheDocument();
     expect(await screen.queryByPlaceholderText('Database')).not.toBeInTheDocument();

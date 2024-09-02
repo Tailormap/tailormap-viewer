@@ -9,9 +9,10 @@ import { Store } from '@ngrx/store';
 import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 import { ViewerLayoutService } from '../../services/viewer-layout/viewer-layout.service';
 import { ApplicationMapService } from '../../map/services/application-map.service';
-import { MapPdfService } from '../../services/map-pdf/map-pdf.service';
+import { MapPdfPrintOptions, MapPdfService } from '../../services/map-pdf/map-pdf.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { withLatestFrom } from 'rxjs/operators';
+import { selectViewerLogo } from '../../state/core.selectors';
 
 export interface PrintableLayers {
   layers: LayerModel[];
@@ -95,9 +96,9 @@ export class PrintService implements OnDestroy {
     return this.getMapExtent$(options)
       .pipe(
         take(1),
-        withLatestFrom(this.getLayers$()),
-        concatMap(([ printMapExtent, layers ]) => {
-          const printOptions = {
+        withLatestFrom(this.getLayers$(), this.store$.select(selectViewerLogo)),
+        concatMap(([ printMapExtent, layers, logo ]) => {
+          const printOptions: MapPdfPrintOptions = {
             orientation: options.orientation,
             size: options.paperSize,
             mapExtent: printMapExtent,
@@ -106,6 +107,7 @@ export class PrintService implements OnDestroy {
             footer: options.footer,
             autoPrint: options.autoPrint,
             filename,
+            logo,
           };
           return this.mapPdfService.create$({
             printOptions,
@@ -251,7 +253,12 @@ export class PrintService implements OnDestroy {
     const isValidLayer = (layer: LayerModel | null): layer is LayerModel => layer !== null;
     return pipe(
       take(1),
-      concatMap((layers: ExtendedAppLayerModel[]) => forkJoin(layers.map(layer => this.applicationMapService.convertAppLayerToMapLayer$(layer)))),
+      concatMap((layers: ExtendedAppLayerModel[]) => {
+        if (layers.length === 0) {
+          return of([]);
+        }
+        return forkJoin(layers.map(layer => this.applicationMapService.convertAppLayerToMapLayer$(layer)));
+      }),
       map(lyr => lyr.filter(isValidLayer)),
     );
   }

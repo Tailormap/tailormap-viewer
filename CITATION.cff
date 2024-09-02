@@ -1,0 +1,51 @@
+$schema: https://raw.githubusercontent.com/citation-file-format/citation-file-format/main/schema.json
+cff-version: 1.2.0
+title: Tailormap
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - name: B3Partners B.V.
+    address: Atoomweg 50
+    city: Utrecht
+    country: NL
+    post-code: 3542 AB
+    alias: B3Partners
+    email: info@b3partners.nl
+    website: 'https://www.b3partners.nl'
+  - given-names: Mark
+    family-names: Prins
+    orcid: 'https://orcid.org/0009-0006-1942-7903'
+    email: mark@b3partners.nl
+    affiliation: B3Partners B.V.
+  - given-names: Geert
+    family-names: Plaisier
+    email: geert@b3partners.nl
+    affiliation: B3Partners B.V.
+  - given-names: Matthijs
+    family-names: Laan
+    email: matthijslaan@b3partners.nl
+    affiliation: B3Partners B.V.
+repository-code: 'https://github.com/Tailormap/tailormap-viewer'
+url: 'https://github.com/Tailormap'
+repository-artifact: >-
+  https://github.com/Tailormap/tailormap-viewer/pkgs/container/tailormap
+abstract: >-
+  An online map, tailor-made by you. With your information.
+  Published by you.
+
+  You have your own idea of looking at maps. You are the
+  professional who knows what the map should be about. Maybe
+  you are interested in public space, in parks,
+  environmental data or in the intricate networks of
+  electricity and water. Probably you want to combine
+  different features. But most of all, you are interested in
+  showing the information that you need in your work. No
+  more, and definitely no less. You can do this with your
+  Tailormap GIS-viewer.
+keywords:
+  - Tailormap
+  - webmapping
+  - ogc-services
+license: MIT

@@ -8,7 +8,7 @@ updates:
       time: '21:00'
       timezone: 'Europe/Amsterdam'
     labels:
-      - infrastucture
+      - infrastructure
 
   - package-ecosystem: docker
     directory: '/'
@@ -19,7 +19,7 @@ updates:
       timezone: 'Europe/Amsterdam'
     target-branch: main
     labels:
-      - infrastucture
+      - infrastructure
     ignore:
       - dependency-name: node
         versions:

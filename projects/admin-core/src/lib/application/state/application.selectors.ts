@@ -16,6 +16,7 @@ export const selectApplications = createSelector(selectApplicationState, state =
 export const selectApplicationsLoadStatus = createSelector(selectApplicationState, state => state.applicationsLoadStatus);
 export const selectApplicationsLoadError = createSelector(selectApplicationState, state => state.applicationsLoadError);
 export const selectApplicationListFilter = createSelector(selectApplicationState, state => state.applicationListFilter);
+export const selectApplicationCatalogFilterTerm = createSelector(selectApplicationState, state => state.applicationCatalogFilterTerm);
 export const selectDraftApplication = createSelector(selectApplicationState, state => state.draftApplication || null);
 export const selectSelectedApplicationId = createSelector(selectApplicationState, state => state.draftApplication?.id || null);
 export const selectApplicationServicesLoadStatus = createSelector(selectApplicationState, state => state.applicationServicesLoadStatus);
@@ -135,8 +136,9 @@ export const selectServiceLayerTreeForApplication = createSelector(
   selectGeoServices,
   selectGeoServiceLayers,
   selectFeatureTypes,
-  (draftApplicationCrs, catalog, services, layers, featureTypes): CatalogTreeModel[] => {
-    return CatalogFilterHelper.filterTreeByCrs(catalog, services, layers, featureTypes, draftApplicationCrs);
+  selectApplicationCatalogFilterTerm,
+  (draftApplicationCrs, catalog, services, layers, featureTypes, filterTerm): CatalogTreeModel[] => {
+    return CatalogFilterHelper.filterTreeByCrs(catalog, services, layers, featureTypes, draftApplicationCrs, filterTerm);
   });
 
 export const selectStylingConfig = createSelector(selectDraftApplication, application => application?.styling);

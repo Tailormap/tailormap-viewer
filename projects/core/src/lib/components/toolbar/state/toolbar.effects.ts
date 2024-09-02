@@ -1,4 +1,5 @@
-import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { concatLatestFrom } from '@ngrx/operators';
 import * as ToolbarActions from './toolbar.actions';
 import { map, of, switchMap, take, tap } from 'rxjs';
 import { MapService } from '@tailormap-viewer/map';

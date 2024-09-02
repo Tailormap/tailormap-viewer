@@ -9,7 +9,6 @@ import {
 } from '../models';
 import { ToolManagerModel } from '../models/tool-manager.model';
 import { Vector as VectorLayer } from 'ol/layer';
-import { Geometry } from 'ol/geom';
 import { MapStyleHelper } from '../helpers/map-style.helper';
 import { MapTooltipModel } from '../models/map-tooltip.model';
 import { OpenLayersMapTooltip } from '../openlayers-map/open-layers-map-tooltip';
@@ -22,8 +21,9 @@ import { Layer } from 'ol/layer';
 import { Source } from 'ol/source';
 import { default as LayerRenderer } from 'ol/renderer/Layer';
 import { Coordinate } from 'ol/coordinate';
-import { HttpClient, HttpXsrfTokenExtractor } from '@angular/common/http';
+import { Geometry } from 'ol/geom';
 import { Feature } from 'ol';
+import { HttpClient, HttpXsrfTokenExtractor } from '@angular/common/http';
 
 export type OlLayerFilter = (layer: Layer<Source, LayerRenderer<any>>) => boolean;
 

@@ -2,32 +2,24 @@ import { TestBed } from '@angular/core/testing';
 import { EditMapToolService } from './edit-map-tool.service';
 import { provideMockStore } from "@ngrx/store/testing";
 import { selectEditStatus, selectNewFeatureGeometryType, selectSelectedEditFeature } from "../state/edit.selectors";
-import { MapService, ToolTypeEnum } from "@tailormap-viewer/map";
+import { ToolTypeEnum } from "@tailormap-viewer/map";
 import { of } from "rxjs";
 import { ApplicationLayerService } from "../../../map/services/application-layer.service";
 import { SharedImportsModule } from "@tailormap-viewer/shared";
+import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
 
 describe('EditMapToolService', () => {
 
   const setup = (editStatus: string) => {
-    const enableTool = jest.fn();
-    const disableTool = jest.fn();
-    const mockMapService = {
-      createTool$: (tool: { type: ToolTypeEnum} ) => of({ tool: { id: tool.type } }),
-      renderFeatures$: () => of(null),
-      getToolManager$: () => of({
-        enableTool,
-        disableTool,
-      }),
-    };
     const mockApplicationLayerService = {
       getLayerDetails$: () => of( { details: { geometryAttribute: 'geom' } }),
     };
+    const mapServiceMock = getMapServiceMock();
     TestBed.configureTestingModule({
       imports: [SharedImportsModule],
       providers: [
         EditMapToolService,
-        { provide: MapService, useValue: mockMapService },
+        mapServiceMock.provider,
         { provide: ApplicationLayerService, useValue: mockApplicationLayerService },
         provideMockStore({
           initialState: {},
@@ -41,10 +33,10 @@ describe('EditMapToolService', () => {
     });
     return {
       service: TestBed.inject(EditMapToolService),
-      mockMapService,
+      mockMapService: mapServiceMock.mapService,
       mockApplicationLayerService,
-      enableTool,
-      disableTool,
+      enableTool: mapServiceMock.toolManager.enableTool,
+      disableTool: mapServiceMock.toolManager.disableTool,
     };
   };
 

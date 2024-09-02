@@ -671,6 +671,9 @@
       <trans-unit id="core.profile.logout" datatype="html">
         <source>Logout</source>
       </trans-unit>
+      <trans-unit id="core.search.location" datatype="html">
+        <source>Location</source>
+      </trans-unit>
       <trans-unit id="core.toc.available-layers" datatype="html">
         <source>Available layers</source>
       </trans-unit>

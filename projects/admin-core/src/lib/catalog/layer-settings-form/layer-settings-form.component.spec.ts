@@ -28,14 +28,8 @@ describe('LayerSettingsFormComponent', () => {
         { provide: TailormapAdminApiV1Service, useValue: { getGroups$: jest.fn(() => of(null)) } },
         AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser(),
       ],
-      componentInputs: {
-        isLayerSpecific: true,
-      },
-      componentProperties: {
-        changed: {
-          emit: changedFn,
-        } as any,
-      },
+      inputs: { isLayerSpecific: true },
+      on: { changed: changedFn },
     });
     await userEvent.type(await screen.findByPlaceholderText('Title'), 'Some title');
     await waitFor(() => {

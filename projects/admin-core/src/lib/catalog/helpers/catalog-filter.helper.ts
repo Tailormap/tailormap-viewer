@@ -13,6 +13,14 @@ interface NodeWithChildren {
   children: string[] | null;
 }
 
+interface FilteredItems {
+  filteredCatalogNodes: ExtendedCatalogNodeModel[];
+  filteredServices: ExtendedGeoServiceModel[];
+  filteredLayersAndParents: ExtendedGeoServiceLayerModel[];
+  filteredFeatureSources: ExtendedFeatureSourceModel[];
+  filteredFeatureTypes: ExtendedFeatureTypeModel[];
+}
+
 export class CatalogFilterHelper {
 
   public static filterTreeByFilterTerm(
@@ -28,13 +36,14 @@ export class CatalogFilterHelper {
     }
     // Create regexes to filter
     const filterRegexes = CatalogFilterHelper.createFilterRegexes(filterTerm);
-    return CatalogFilterHelper.getFilteredTree(catalogNodes, services, serviceLayers, featureSources, featureTypes, item => {
+    const filteredItems = CatalogFilterHelper.getFilteredItems(catalogNodes, services, serviceLayers, featureSources, featureTypes, item => {
       if (ExtendedCatalogModelHelper.isGeoServiceLayerModel(item)) {
         const title = item.layerSettings?.title || item.title;
         return CatalogFilterHelper.testRegexes(filterRegexes, title);
       }
       return CatalogFilterHelper.testRegexes(filterRegexes, item.title);
     });
+    return CatalogFilterHelper.createFilteredTree(filteredItems, featureTypes);
   }
 
   public static filterTreeByCrs(
@@ -43,13 +52,14 @@ export class CatalogFilterHelper {
     serviceLayers: ExtendedGeoServiceLayerModel[],
     featureTypes: ExtendedFeatureTypeModel[],
     crs: string | undefined,
+    filterTerm: string | undefined,
   ) {
     if (!crs) {
       return CatalogTreeHelper.catalogToTree(catalogNodes, services, serviceLayers, [], [], featureTypes);
     }
     const allLayersMap = new Map(serviceLayers.map(l => [ l.id, l ]));
     const allServicesMap = new Map(services.map(s => [ s.id, s ]));
-    return CatalogFilterHelper.getFilteredTree(catalogNodes, services, serviceLayers, [], featureTypes, item => {
+    const filteredItems = CatalogFilterHelper.getFilteredItems(catalogNodes, services, serviceLayers, [], featureTypes, item => {
       if (ExtendedCatalogModelHelper.isGeoServiceLayerModel(item)) {
         const service = allServicesMap.get(item.serviceId);
         if (service && service.protocol === GeoServiceProtocolEnum.TILESET3D) {
@@ -69,19 +79,38 @@ export class CatalogFilterHelper {
       }
       return false;
     });
+    if (filterTerm && filteredItems) {
+      const filterRegexes = CatalogFilterHelper.createFilterRegexes(filterTerm);
+      const filteredItemsBySearchTerm = CatalogFilterHelper.getFilteredItems(
+        filteredItems.filteredCatalogNodes,
+        filteredItems.filteredServices,
+        filteredItems.filteredLayersAndParents,
+        filteredItems.filteredFeatureSources,
+        filteredItems.filteredFeatureTypes,
+        item => {
+          if (ExtendedCatalogModelHelper.isGeoServiceLayerModel(item)) {
+            const title = item.layerSettings?.title || item.title;
+            return CatalogFilterHelper.testRegexes(filterRegexes, title);
+          }
+          return CatalogFilterHelper.testRegexes(filterRegexes, item.title);
+        },
+      );
+      return CatalogFilterHelper.createFilteredTree(filteredItemsBySearchTerm, featureTypes);
+    }
+    return CatalogFilterHelper.createFilteredTree(filteredItems, featureTypes);
   }
 
-  private static getFilteredTree(
+  private static getFilteredItems(
     catalogNodes: ExtendedCatalogNodeModel[],
     services: ExtendedGeoServiceModel[],
     serviceLayers: ExtendedGeoServiceLayerModel[],
     featureSources: ExtendedFeatureSourceModel[],
     featureTypes: ExtendedFeatureTypeModel[],
     filterMethod: (item: CatalogExtendedModel) => boolean,
-  ) {
+  ): FilteredItems | null {
     const root = catalogNodes.find(c => c.root);
     if (!root) {
-      return [];
+      return null;
     }
     // Filter layers
     const filteredLayers = serviceLayers.filter(filterMethod);
@@ -111,25 +140,51 @@ export class CatalogFilterHelper {
       // Keep only nodes with items or nodes matching the filter itself
       .filter(node => node.items.length > 0 || filterMethod(node));
     // Get list of catalog nodes including also parents of matching catalog nodes
-    const catalogTree = [
+    const filteredCatalogNodes = [
       root,
       ...CatalogFilterHelper.getFilteredItemsAndParents(catalogNodes, filteredNodes),
     ];
     // Get list layers including also the parents of matching layers
     const filteredLayersAndParents = CatalogFilterHelper.getFilteredItemsAndParents(serviceLayers, filteredLayers);
-    // Get the size of the tree, so we can decide whether to expand all the items
-    const treeSize = (catalogTree.length - 1/*root level*/) + filteredServices.length + filteredLayersAndParents.length
-      + filteredFeatureSources.length + filteredFeatureTypes.length;
-    // Return tree
-    return CatalogTreeHelper.catalogToTree(
-      catalogTree,
+    // Return items
+    return {
+      filteredCatalogNodes,
       filteredServices,
       filteredLayersAndParents,
       filteredFeatureSources,
       filteredFeatureTypes,
-      featureTypes,
+    };
+  }
+
+  private static createFilteredTree(
+    filteredItems: FilteredItems | null,
+    allFeatureTypes: ExtendedFeatureTypeModel[],
+  ) {
+    if (!filteredItems) {
+      return [];
+    }
+    // Get the size of the tree, so we can decide whether to expand all the items
+    const treeSize = (filteredItems.filteredCatalogNodes.length - 1/*root level*/)
+      + filteredItems.filteredServices.length
+      + filteredItems.filteredLayersAndParents.length
+      + filteredItems.filteredFeatureSources.length
+      + filteredItems.filteredFeatureTypes.length;
+    return CatalogTreeHelper.catalogToTree(
+      filteredItems.filteredCatalogNodes,
+      filteredItems.filteredServices,
+      filteredItems.filteredLayersAndParents,
+      filteredItems.filteredFeatureSources,
+      filteredItems.filteredFeatureTypes,
+      allFeatureTypes,
       treeSize <= 30 ? true : undefined,
     );
+  }
+
+  private static testRegexesOrEmpty(filterRegexes: RegExp[], text: string) {
+    if (filterRegexes.length === 0) {
+      return true;
+    }
+    return filterRegexes.every(f => f.test(text));
   }
 
   private static testRegexes(filterRegexes: RegExp[], text: string) {

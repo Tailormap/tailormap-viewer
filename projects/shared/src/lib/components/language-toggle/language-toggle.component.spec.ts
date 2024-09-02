@@ -26,9 +26,9 @@ const setup = async (baseHref: string, locale: string, currentHref?: string) => 
 describe('LanguageToggleComponent', () => {
 
   beforeAll(() => {
-    // @ts-ignore
+    // @ts-expect-error deleting location is allowed in testing env, restored after tests
     delete window.location;
-    // @ts-ignore
+    // @ts-expect-error overwriting location is allowed in testing env, restored after tests
     window.location = Object.defineProperty({}, 'href', {
       get: hrefGetMock,
       set: hrefSetMock,

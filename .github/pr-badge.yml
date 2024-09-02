@@ -1,0 +1,6 @@
+- label: "JIRA"
+  message: "$issuePrefix"
+  icon: "jira"
+  color: "pink"
+  url: "https://b3partners.atlassian.net/browse/$issuePrefix"
+  when: "$issuePrefix"

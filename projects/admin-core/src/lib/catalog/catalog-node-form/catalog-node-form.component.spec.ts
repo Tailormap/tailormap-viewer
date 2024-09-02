@@ -9,12 +9,8 @@ describe('CatalogNodeFormComponent', () => {
     const changedFn = jest.fn();
     await render(CatalogNodeFormComponent, {
       imports: [SharedModule],
-      componentProperties: {
-        parentNode: '1',
-        changed: {
-          emit: changedFn,
-        } as any,
-      },
+      inputs: { parentNode: '1' },
+      on: { changed: changedFn },
     });
     await userEvent.type(await screen.findByPlaceholderText('Title'), 'Some title');
     await waitFor(() => {

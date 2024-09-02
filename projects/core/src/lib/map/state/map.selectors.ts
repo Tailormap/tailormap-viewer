@@ -205,13 +205,20 @@ export const selectInitiallySelectedBackgroundNodes = createSelector(
 export const selectSelectedNode = createSelector(
   selectSelectedLayerId,
   selectLayerTreeNodes,
-  (selectedLayerId, treeNodes) => {
+  selectLayers,
+  (selectedLayerId, treeNodes, layers): LayerTreeNodeModel & { layer?: AppLayerModel } | null => {
     if (!selectedLayerId) {
-      return '';
+      return null;
     }
     const layerTreeNode = treeNodes.find(node => !!node.appLayerId && node.appLayerId === selectedLayerId);
-    return layerTreeNode ? layerTreeNode.id : '';
+    const layer = layerTreeNode && layerTreeNode.appLayerId ? layers.find(l => l.id === layerTreeNode.appLayerId) : undefined;
+    return layerTreeNode ? { ...layerTreeNode, layer } : null;
   });
+
+export const selectSelectedNodeId = createSelector(
+  selectSelectedNode,
+  selectedNode => selectedNode ? selectedNode.id : '',
+);
 
 export const selectAutoRefreshableLayers = createSelector(
   selectOrderedVisibleLayersWithServices,
@@ -250,6 +257,11 @@ export const selectFullLayerDetails = (layerId: string) => createSelector(
       details,
     };
   },
+);
+
+export const selectSearchableLayers = createSelector(
+  selectOrderedVisibleLayersWithServices,
+  layers => layers.filter(l => l.searchIndex !== null),
 );
 
 export const select3Dlayers = createSelector(

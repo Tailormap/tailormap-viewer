@@ -9,27 +9,6 @@
   width: 90%;
 }
 
-.layer-details {
-  display: grid;
-  grid-template-columns: 24px min-content auto;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 32px;
-}
-
-.layer-details strong {
-  white-space: nowrap;
-  padding-right: 8px;
-}
-
-.layer-details button ::ng-deep .mdc-button__label {
-  flex: 1;
-  text-align: left;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
-
 .edit-layer-attributes {
   margin-top: 16px;
 }

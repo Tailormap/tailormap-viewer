@@ -5,17 +5,16 @@ import { AppLayerModel, getAppLayerModel } from '@tailormap-viewer/api';
 import { MatIconModule } from '@angular/material/icon';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 
+const setup = async (node: TreeModel, scale?: number ) => {
+  await render(TocNodeLayerComponent, {
+    imports: [ MatIconModule, MatIconTestingModule ],
+    inputs: { node, scale },
+  });
+};
+
 describe('TocNodeLayerComponent', () => {
   test('renders', async () => {
-    await render(TocNodeLayerComponent, {
-      imports: [ MatIconModule, MatIconTestingModule ],
-      componentProperties: {
-        node: {
-          id: '1',
-          label: 'Item 1',
-        },
-      },
-    });
+    await setup({ id: '1', label: 'Item 1' });
     expect(await screen.findByText('Item 1')).toBeInTheDocument();
   });
 
@@ -27,13 +26,7 @@ describe('TocNodeLayerComponent', () => {
       type: 'layer',
       metadata: appLayer,
     };
-    await render(TocNodeLayerComponent, {
-      imports: [ MatIconModule, MatIconTestingModule ],
-      componentProperties: {
-        node: layer,
-        scale: 1000000,
-      },
-    });
+    await setup(layer, 1000000);
     expect(await screen.findByText(appLayer.title)).toBeInTheDocument();
     expect((await screen.findByText(appLayer.title)).closest('.tree-node')).toBeInTheDocument();
     expect((await screen.findByText(appLayer.title)).closest('.level')).not.toBeInTheDocument();
@@ -47,12 +40,7 @@ describe('TocNodeLayerComponent', () => {
       type: 'level',
       metadata: undefined,
     };
-    await render(TocNodeLayerComponent, {
-      imports: [ MatIconModule, MatIconTestingModule ],
-      componentProperties: {
-        node: layer,
-      },
-    });
+    await setup(layer);
     expect(await screen.findByText('Level 1')).toBeInTheDocument();
     expect((await screen.findByText('Level 1')).closest('.tree-node')).toBeInTheDocument();
     expect((await screen.findByText('Level 1')).closest('.level')).toBeInTheDocument();
@@ -66,13 +54,7 @@ describe('TocNodeLayerComponent', () => {
       type: 'layer',
       metadata: appLayer,
     };
-    await render(TocNodeLayerComponent, {
-      imports: [ MatIconModule, MatIconTestingModule ],
-      componentProperties: {
-        node: layer,
-        scale: 2000,
-      },
-    });
+    await setup(layer, 2000);
     expect((await screen.findByText(appLayer.title)).closest('.out-of-scale')).toBeInTheDocument();
   });
 

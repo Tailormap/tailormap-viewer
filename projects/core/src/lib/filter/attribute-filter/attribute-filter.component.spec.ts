@@ -13,20 +13,20 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 describe('AttributeFilterComponent', () => {
 
   test('should create a filter', async () => {
-    const filterChangedFn = { emit: jest.fn(() => {}) };
+    const filterChangedFn = jest.fn(() => {});
     await render(AttributeFilterComponent, {
       imports: [ ReactiveFormsModule, MatInputModule, MatSelectModule, MatDatepickerModule, MatNativeDateModule, MatCheckboxModule ],
-      componentProperties: {
+      inputs: {
         filter: {},
         attributeType: AttributeType.STRING,
-        filterChanged: filterChangedFn as any,
       },
+      on: { filterChanged: filterChangedFn },
     });
     await userEvent.click(screen.getByLabelText('Select condition'));
     await userEvent.click(await screen.findByText('Contains'));
     await userEvent.type(screen.getByRole('textbox'), 'test');
     await waitFor(() => {
-      expect(filterChangedFn.emit).toHaveBeenCalledWith({
+      expect(filterChangedFn).toHaveBeenCalledWith({
         condition: FilterConditionEnum.STRING_LIKE_KEY,
         value: ['test'],
         caseSensitive: false,

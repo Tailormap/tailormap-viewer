@@ -2,11 +2,10 @@ import { render, screen } from '@testing-library/angular';
 import { EditSelectFeatureComponent } from './edit-select-feature.component';
 import { getFeatureModel } from "@tailormap-viewer/api";
 import { FeatureInfoFeatureModel } from "../../feature-info/models/feature-info-feature.model";
-import { MapService } from "@tailormap-viewer/map";
-import { of } from "rxjs";
 import { Store } from "@ngrx/store";
 import userEvent from "@testing-library/user-event";
 import { setSelectedEditFeature } from "../state/edit.actions";
+import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
 
 const features: FeatureInfoFeatureModel[] = [
   { layerId: '1', ...getFeatureModel(), __fid: 'feature-1' },
@@ -17,14 +16,13 @@ const features: FeatureInfoFeatureModel[] = [
 describe('EditSelectFeatureComponent', () => {
 
   test('should render', async () => {
-    const renderFeatureMock = jest.fn(() => of(true));
     const dispatchMock = jest.fn();
     await render(EditSelectFeatureComponent, {
       providers: [
-        { provide: MapService, useValue: { renderFeatures$: renderFeatureMock } },
+        getMapServiceMock().provider,
         { provide: Store, useValue: { dispatch: dispatchMock } },
       ],
-      componentInputs: {
+      inputs: {
         features,
       },
     });

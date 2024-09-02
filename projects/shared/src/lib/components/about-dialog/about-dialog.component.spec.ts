@@ -1,18 +1,29 @@
 import { render, screen } from '@testing-library/angular';
 import { AboutDialogComponent } from './about-dialog.component';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { MatDialogRef } from '@angular/material/dialog';
 import { TestBed } from '@angular/core/testing';
 import userEvent from '@testing-library/user-event';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { provideHttpClient, withXsrfConfiguration } from '@angular/common/http';
+import { TailormapApiConstants } from '@tailormap-viewer/api';
 
 describe('AboutDialogComponent', () => {
 
   test('should render', async () => {
     const closeFn = jest.fn();
     await render(AboutDialogComponent, {
-      imports: [ HttpClientTestingModule, MatProgressSpinnerModule ],
-      providers: [{ provide: MatDialogRef, useValue: { close: closeFn } }],
+      imports: [MatProgressSpinnerModule],
+      providers: [
+        provideHttpClient(
+          withXsrfConfiguration({
+            cookieName: TailormapApiConstants.XSRF_COOKIE_NAME,
+            headerName: TailormapApiConstants.XSRF_HEADER_NAME,
+          }),
+        ),
+        provideHttpClientTesting(),
+        { provide: MatDialogRef, useValue: { close: closeFn } },
+      ],
     });
     const httpClientMock = TestBed.inject(HttpTestingController);
     const mockReq = httpClientMock.expectOne('/version.json');

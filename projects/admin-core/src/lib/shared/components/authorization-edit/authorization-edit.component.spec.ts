@@ -6,7 +6,7 @@ import { MatIconTestingModule } from '@angular/material/icon/testing';
 
 const renderComponent = async (parentType?: string, parentAuthorizations?: AuthorizationRuleGroup[]) => {
     const component = await render(AuthorizationEditComponent, {
-      componentInputs: {
+      inputs: {
         selfType: 'Test object',
         groups: [
             getGroup({ name: 'foo' }),

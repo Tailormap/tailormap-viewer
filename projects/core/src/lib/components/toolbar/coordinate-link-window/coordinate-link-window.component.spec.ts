@@ -5,10 +5,11 @@ import { SharedModule } from '@tailormap-viewer/shared';
 import { of, Subject } from 'rxjs';
 import { CoordinateLinkWindowConfigModel } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
-import { CoordinateHelper, MapService } from '@tailormap-viewer/map';
+import { CoordinateHelper } from '@tailormap-viewer/map';
 import { registerTool } from '../state/toolbar.actions';
 import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
 import userEvent from '@testing-library/user-event';
+import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
 
 const setup = async (withConfig?: boolean) => {
   const config: CoordinateLinkWindowConfigModel | undefined = withConfig ? {
@@ -24,24 +25,22 @@ const setup = async (withConfig?: boolean) => {
     dispatch: jest.fn(),
   };
   const mapClickSubject = new Subject();
-  const createToolMock = jest.fn(() => of({ tool: {
+  const mapServiceMock = getMapServiceMock(tool => ({
     id: 'map-click',
     mapClick$: mapClickSubject.asObservable(),
-  } }));
-  const mapServiceMock = {
-    createTool$: createToolMock,
+  }), {
     getProjectionCode$: () => of('EPSG:28992'),
-  };
+  });
   await render(CoordinateLinkWindowComponent, {
     imports: [ MatIconTestingModule, SharedModule ],
     providers: [
       { provide: Store, useValue: storeMock },
-      { provide: MapService, useValue: mapServiceMock },
+      mapServiceMock.provider,
     ],
   });
   return {
     store: storeMock,
-    mapService: mapServiceMock,
+    mapService: mapServiceMock.mapService,
     simulateMapClick: () => {
       mapClickSubject.next({ mapCoordinates: [ 130781, 459200 ] });
     },

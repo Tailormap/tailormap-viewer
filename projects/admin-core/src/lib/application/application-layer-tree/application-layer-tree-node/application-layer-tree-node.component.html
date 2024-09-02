@@ -32,17 +32,17 @@
       <button mat-menu-item
               (click)="addFolder($event, node.id)">
         <mat-icon svgIcon="plus"></mat-icon>
-        <span>Add sub folder</span>
+        <span i18n="@@admin-core.application.add-sub-folder">Add sub folder</span>
       </button>
       <button mat-menu-item
               (click)="renameFolder($event, node.id, node.label)">
         <mat-icon svgIcon="edit"></mat-icon>
-        <span>Rename</span>
+        <span i18n="@@admin-core.application.rename">Rename</span>
       </button>
       <button mat-menu-item
               (click)="removeNode($event, node.id)">
         <mat-icon svgIcon="close"></mat-icon>
-        <span>Remove</span>
+        <span i18n="@@admin-core.application.remove">Remove</span>
       </button>
     </mat-menu>
   </div>

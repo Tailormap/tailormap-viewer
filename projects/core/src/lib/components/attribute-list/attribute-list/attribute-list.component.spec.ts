@@ -6,7 +6,7 @@ import { AttributeListComponent } from './attribute-list.component';
 import { AttributeListState, attributeListStateKey } from '../state/attribute-list.state';
 import { initialMapState, mapStateKey } from '../../../map/state/map.state';
 import {
-  AppLayerModel, getAppLayerModel, getLayerTreeNode, TAILORMAP_API_V1_SERVICE, TailormapApiV1MockService,
+  AppLayerModel, getAppLayerModel, getLayerTreeNode, TAILORMAP_API_V1_SERVICE, TailormapApiConstants, TailormapApiV1MockService,
 } from '@tailormap-viewer/api';
 import { MatIconModule } from '@angular/material/icon';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
@@ -24,12 +24,14 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { filterStateKey, initialFilterState } from '../../../filter/state/filter.state';
 import { filterReducer } from '../../../filter/state/filter.reducer';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { AttributeListExportButtonComponent } from '../attribute-list-export-button/attribute-list-export-button.component';
 import { coreStateKey } from '../../../state/core.state';
 import { coreReducer } from '../../../state/core.reducer';
 import { ExtendedAppLayerModel } from '../../../map/models';
 import { CoreSharedModule } from '../../../shared';
+import { HttpClientTestingModule, provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClient, withXsrfConfiguration } from '@angular/common/http';
+import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
 
 const getStore = (
   attributeListStore: { [attributeListStateKey]: AttributeListState },
@@ -51,35 +53,32 @@ const getStore = (
   };
 };
 
+const setup = async (store: any) => {
+  await render(AttributeListComponent, {
+    imports: [ MatProgressSpinnerModule, MatIconModule, MatIconTestingModule, MatToolbarModule, CoreSharedModule ],
+    declarations: [ AttributeListComponent, PanelResizerComponent ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    providers: [
+      getMapServiceMock().provider,
+      provideHttpClientTesting(),
+      provideMockStore({
+        initialState: store,
+      }),
+    ],
+  });
+};
+
 describe('AttributeList', () => {
 
   it('does not render for hidden attribute list', async () => {
     const store = getStore(getLoadingStore({ visible: false }));
-    await render(AttributeListComponent, {
-      imports: [ MatIconModule, MatIconTestingModule, MatToolbarModule, HttpClientTestingModule, CoreSharedModule ],
-      declarations: [ AttributeListComponent, PanelResizerComponent ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      providers: [
-        provideMockStore({
-          initialState: store,
-        }),
-      ],
-    });
+    await setup(store);
     expect(await screen.queryByRole('tabpanel')).not.toBeInTheDocument();
   });
 
   it('renders without tabs and layers', async () => {
     const store = getStore(getLoadedStoreNoRows({ tabs: [], data: [] }));
-    await render(AttributeListComponent, {
-      imports: [ MatIconModule, MatIconTestingModule, MatToolbarModule, HttpClientTestingModule, CoreSharedModule ],
-      declarations: [ AttributeListComponent, PanelResizerComponent ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      providers: [
-        provideMockStore({
-          initialState: store,
-        }),
-      ],
-    });
+    await setup(store);
     expect(await screen.queryByRole('tabpanel')).toBeInTheDocument();
     expect(await screen.getByText('No layers with administrative data found')).toBeInTheDocument();
   });
@@ -94,17 +93,8 @@ describe('AttributeList', () => {
         }),
       ],
     );
-    await render(AttributeListComponent, {
-      imports: [ MatProgressSpinnerModule, MatIconModule, MatIconTestingModule, MatToolbarModule, HttpClientTestingModule, CoreSharedModule ],
-      declarations: [ AttributeListComponent, PanelResizerComponent ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      providers: [
-        provideMockStore({
-          initialState: store,
-        }),
-      ],
-    });
-    expect(await screen.queryByRole('progressbar')).toBeInTheDocument();
+    await setup(store);
+    expect(screen.queryByRole('progressbar')).toBeInTheDocument();
   });
 
   it('renders attribute list with multiple tabs and switches content after clicking tab', async () => {
@@ -130,6 +120,12 @@ describe('AttributeList', () => {
         StoreModule.forRoot(reducers, { initialState: store }),
       ],
       providers: [
+        provideHttpClient(
+          withXsrfConfiguration({
+            cookieName: TailormapApiConstants.XSRF_COOKIE_NAME,
+            headerName: TailormapApiConstants.XSRF_HEADER_NAME,
+          }),
+        ),
         { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1MockService },
       ],
       declarations: [
