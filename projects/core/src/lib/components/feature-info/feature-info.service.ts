@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import {
-  AttributeType, FeaturesResponseModel, TAILORMAP_API_V1_SERVICE, FeatureModel, ErrorResponseModel, ApiHelper,
+  AttributeType, FeaturesResponseModel, TAILORMAP_API_V1_SERVICE, FeatureModel, ApiHelper,
 } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { selectViewerId } from '../../state/core.selectors';
