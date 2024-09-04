@@ -240,7 +240,7 @@ export class LayerSettingsFormComponent implements OnInit {
     } else {
       this.layerSettingsForm.get('tilingGutter')?.disable({ emitEvent: false, onlySelf: true });
     }
-    const isHiDpiEnabled = this.layerSettingsForm.get('hiDpiEnabled')?.value !== false;
+    const isHiDpiEnabled = this.layerSettingsForm.get('hiDpiEnabled')?.value === true;
     if (isHiDpiEnabled) {
       this.layerSettingsForm.get('hiDpiMode')?.enable({ emitEvent: false, onlySelf: true });
     } else {
