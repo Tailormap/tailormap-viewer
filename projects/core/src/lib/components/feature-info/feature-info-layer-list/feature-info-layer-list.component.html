@@ -1,15 +1,42 @@
-@for (layer of layers$ | async; track layer.id; let index = $index) {
+<ng-template #layerItem let-layer>
   <div class="layer-item" [class.disabled]="layer.disabled" [class.selected]="layer.selected" (click)="selectLayer(layer)">
     @if (layer.loading === 'LOADING') {
       <mat-spinner [attr.aria-label]="'Loading feature info for layer ' + layer.title" diameter="15" color="primary"></mat-spinner>
     } @else if(layer.loading === 'LOADED') {
       <mat-icon [attr.aria-label]="'Feature info loaded for layer ' + layer.title" svgIcon="check"></mat-icon>
+    } @else if(layer.loading === 'FAILED') {
+      <mat-icon [tmTooltip]="layer.error ?? defaultErrorMessage"
+                svgIcon="warning"
+                class="error"></mat-icon>
     }
     <div [tmTooltip]="layer.title" class="title">
-        {{ layer.title }}
-        @if (layer.loading === 'LOADED') {
-            ({{layer.totalCount}})
-        }
+      {{ layer.title }}
+      @if (layer.loading === 'LOADED') {
+        ({{layer.totalCount}})
+      }
     </div>
   </div>
+</ng-template>
+
+@if (isSmallScreen$ | async) {
+  <mat-form-field appearance="outline" color="primary">
+    <mat-select [formControl]="layerSelector"
+                [hideSingleSelectionIndicator]="true"
+                class="layer-selector"
+                placeholder="Select layer"
+                i18n-placeholder="@@core.feature-info.select-layer">
+    @for (layer of layers$ | async; track layer.id; let index = $index) {
+      <mat-option [value]="layer.id"
+                  class="layer-selector-item"
+                  [disabled]="layer.disabled"
+                  [class.selected]="layer.selected">
+        <ng-container *ngTemplateOutlet="layerItem; context: {$implicit: layer}"></ng-container>
+      </mat-option>
+    }
+    </mat-select>
+  </mat-form-field>
+} @else {
+  @for (layer of layers$ | async; track layer.id; let index = $index) {
+    <ng-container *ngTemplateOutlet="layerItem; context: {$implicit: layer}"></ng-container>
+  }
 }

@@ -16,7 +16,7 @@ import { FilterService } from '../../filter/services/filter.service';
 })
 export class FeatureInfoService {
 
-  private static LOAD_FEATURE_INFO_ERROR = $localize `:@@core.feature-info.error-loading-features:Could not load feature info`;
+  public static LOAD_FEATURE_INFO_ERROR = $localize `:@@core.feature-info.error-loading-features:Could not load feature info`;
 
   /**
    * default buffer distance for feature info requests in pixels.
