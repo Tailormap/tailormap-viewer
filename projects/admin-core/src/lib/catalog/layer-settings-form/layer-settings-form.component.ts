@@ -24,12 +24,14 @@ export class LayerSettingsFormComponent implements OnInit {
   private _layerSettings: LayerSettingsModel | null | undefined;
   private _isLayerSpecific = false;
   private _serviceId: string | undefined = undefined;
+  private _protocol: GeoServiceProtocolEnum | undefined;
 
   @Input()
   public set protocol(protocol: GeoServiceProtocolEnum) {
     this.isWMS = protocol === GeoServiceProtocolEnum.WMS;
     this.isWMTS = protocol === GeoServiceProtocolEnum.WMTS;
     this.isXYZ = protocol === GeoServiceProtocolEnum.XYZ;
+    this._protocol = protocol;
   }
 
   @Input()
@@ -112,6 +114,7 @@ export class LayerSettingsFormComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    this.patchForm();
     this.layerSettingsForm.valueChanges
       .pipe(
         takeUntil(this.destroyed),
@@ -202,7 +205,10 @@ export class LayerSettingsFormComponent implements OnInit {
   }
 
   private patchForm() {
-    const hiDpiEnabled = LayerSettingsFormComponent.getInverseBooleanOrDefault(this.layerSettings?.hiDpiDisabled, this.isLayerSpecific ? null : true);
+    if (!this._protocol) {
+      return;
+    }
+    const hiDpiEnabled = LayerSettingsFormComponent.getInverseBooleanOrDefault(this.layerSettings?.hiDpiDisabled, this.isLayerSpecific ? null : false);
     let hiDpiMode = this.layerSettings?.hiDpiMode || null;
     if (this.isLayerSpecific && hiDpiEnabled !== false && !hiDpiMode) {
       hiDpiMode = TileLayerHiDpiModeEnum.ShowNextZoomLevel;
