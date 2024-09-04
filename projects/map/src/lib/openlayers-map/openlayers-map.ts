@@ -20,7 +20,7 @@ import { buffer, Extent, extend, getCenter } from 'ol/extent';
 import { Layer as BaseLayer } from 'ol/layer';
 import { OpenLayersWmsGetFeatureInfoHelper } from './helpers/open-layers-wms-get-feature-info.helper';
 import { HttpClient, HttpXsrfTokenExtractor } from '@angular/common/http';
-import { FeatureModel } from '@tailormap-viewer/api';
+import { ErrorResponseModel, FeatureModel } from '@tailormap-viewer/api';
 import { OpenLayersMapImageExporter } from './openlayers-map-image-exporter';
 import { Attribution } from 'ol/control';
 import { platformModifierKeyOnly } from 'ol/events/condition';
@@ -327,7 +327,7 @@ export class OpenLayersMap implements MapViewerModel {
     layerId: string,
     coordinates: [number, number],
     httpClient: HttpClient,
-  ): Observable<FeatureModel[]> {
+  ): Observable<FeatureModel[] | ErrorResponseModel> {
     return forkJoin([
       this.layerManager.asObservable().pipe(
         filter((layerManager: OpenLayersLayerManager | null): layerManager is OpenLayersLayerManager => layerManager !== null),

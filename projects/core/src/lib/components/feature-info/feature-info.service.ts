@@ -1,5 +1,7 @@
 import { inject, Injectable } from '@angular/core';
-import { AttributeType, FeaturesResponseModel, TAILORMAP_API_V1_SERVICE, FeatureModel } from '@tailormap-viewer/api';
+import {
+  AttributeType, FeaturesResponseModel, TAILORMAP_API_V1_SERVICE, FeatureModel, ErrorResponseModel, ApiHelper,
+} from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { selectViewerId } from '../../state/core.selectors';
 import { catchError, combineLatest, concatMap, forkJoin, map, Observable, of, take } from 'rxjs';
@@ -8,7 +10,7 @@ import {
   selectEditableLayers, selectVisibleLayersWithAttributes, selectVisibleWMSLayersWithoutAttributes,
 } from '../../map/state/map.selectors';
 import { MapService, MapViewDetailsModel } from '@tailormap-viewer/map';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { FilterService } from '../../filter/services/filter.service';
 
 @Injectable({
@@ -76,9 +78,19 @@ export class FeatureInfoService {
   public getWmsGetFeatureInfo$(
     layerId: string,
     coordinates: [ number, number ],
-  ) {
+  ): Observable<FeatureInfoResponseModel> {
     return this.mapService.getFeatureInfoForLayers$(layerId, coordinates, this.httpService)
-      .pipe(map(features => this.featuresToFeatureInfoResponseModel(features, layerId)));
+      .pipe(map(response => {
+        if (ApiHelper.isApiErrorResponse(response)) {
+          return {
+            features: [],
+            error: response.message,
+            layerId,
+            columnMetadata: [],
+          };
+        }
+        return this.featuresToFeatureInfoResponseModel(response, layerId);
+      }));
   }
 
   public getFeatureInfoFromApi$(
@@ -105,12 +117,13 @@ export class FeatureInfoService {
         columnMetadata: (featureInfoResult.columnMetadata || []).map(metadata => ({ ...metadata, layerId })),
         layerId,
       })),
-      catchError((): Observable<FeatureInfoResponseModel> => {
+      catchError((response: HttpErrorResponse): Observable<FeatureInfoResponseModel> => {
+        const error = response.error?.message ? response.error.message : null;
         return of({
           features: [],
           columnMetadata: [],
           layerId,
-          error: FeatureInfoService.LOAD_FEATURE_INFO_ERROR,
+          error: error || FeatureInfoService.LOAD_FEATURE_INFO_ERROR,
         });
       }),
     );

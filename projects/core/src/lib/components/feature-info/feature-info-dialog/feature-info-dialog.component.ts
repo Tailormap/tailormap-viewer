@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
-  selectCurrentlySelectedFeature,
+  selectCurrentlySelectedFeature, selectCurrentlySelectedLayerError,
   selectFeatureInfoDialogCollapsed,
   selectFeatureInfoDialogVisible,
   selectIsNextButtonDisabled,
@@ -25,6 +25,7 @@ export class FeatureInfoDialogComponent {
   public dialogOpen$: Observable<boolean>;
   public dialogCollapsed$: Observable<boolean>;
   public currentFeature$: Observable<FeatureInfoModel | null>;
+  public layerError$: Observable<string | null>;
   public isPrevButtonDisabled$: Observable<boolean>;
   public isNextButtonDisabled$: Observable<boolean>;
 
@@ -38,6 +39,7 @@ export class FeatureInfoDialogComponent {
     this.dialogOpen$ = this.store$.select(selectFeatureInfoDialogVisible);
     this.dialogCollapsed$ = this.store$.select(selectFeatureInfoDialogCollapsed);
     this.currentFeature$ = this.store$.select(selectCurrentlySelectedFeature);
+    this.layerError$ = this.store$.select(selectCurrentlySelectedLayerError);
     this.isPrevButtonDisabled$ = this.store$.select(selectIsPrevButtonDisabled);
     this.isNextButtonDisabled$ = this.store$.select(selectIsNextButtonDisabled);
   }

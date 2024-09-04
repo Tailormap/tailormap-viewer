@@ -43,6 +43,10 @@
   overflow: hidden;
 }
 
+tm-error-message {
+  margin: 16px;
+}
+
 .content {
   flex: 1;
   overflow: auto;

@@ -13,6 +13,9 @@
     <tm-feature-info-layer-list></tm-feature-info-layer-list>
   </div>
   <div class="feature-list">
+    @if(layerError$ | async; as error) {
+      <tm-error-message [friendlyError]="true" [message]="error"></tm-error-message>
+    }
     @if(currentFeature$ | async; as feature) {
       <div class="feature-info">
         <div class="content">

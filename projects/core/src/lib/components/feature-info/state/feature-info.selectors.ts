@@ -80,6 +80,16 @@ export const selectCurrentlySelectedFeature = createSelector(
   },
 );
 
+export const selectCurrentlySelectedLayerError = createSelector(
+  selectSelectedLayer,
+  (selectedLayer) => {
+    if (!selectedLayer) {
+      return null;
+    }
+    return selectedLayer.error ?? null;
+  },
+);
+
 const selectSelectedIndexAndTotal = createSelector(
     selectSelectedLayer,
     selectFeaturesForSelectedLayer,

@@ -65,7 +65,7 @@ export class FeatureInfoLayerListComponent {
   }
 
   private isDisabled(layer: FeatureInfoLayerModel) {
-    if (layer.loading === LoadingStateEnum.LOADED || layer.loading === LoadingStateEnum.FAILED) {
+    if (layer.loading === LoadingStateEnum.LOADED) {
       return layer.totalCount === 0;
     }
     return false;

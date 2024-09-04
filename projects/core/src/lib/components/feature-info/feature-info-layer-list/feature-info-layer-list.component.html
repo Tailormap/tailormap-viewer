@@ -5,8 +5,8 @@
     } @else if(layer.loading === 'LOADED') {
       <mat-icon [attr.aria-label]="'Feature info loaded for layer ' + layer.title" svgIcon="check"></mat-icon>
     } @else if(layer.loading === 'FAILED') {
-      <mat-icon [tmTooltip]="layer.error ?? defaultErrorMessage"
-                svgIcon="warning"
+      <mat-icon [tmTooltip]="defaultErrorMessage"
+                svgIcon="error"
                 class="error"></mat-icon>
     }
     <div [tmTooltip]="layer.title" class="title">

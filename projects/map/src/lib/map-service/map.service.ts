@@ -13,7 +13,7 @@ import { MapTooltipModel } from '../models/map-tooltip.model';
 import { OpenLayersMapTooltip } from '../openlayers-map/open-layers-map-tooltip';
 import { FeatureModelType } from '../models/feature-model.type';
 import { FeatureHelper } from '../helpers/feature.helper';
-import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
+import { ErrorResponseModel, FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
 import { MapSizeHelper } from '../helpers/map-size.helper';
 import { MapUnitEnum } from '../models/map-unit.enum';
 import { Layer } from 'ol/layer';
@@ -247,7 +247,7 @@ export class MapService {
     layerId: string,
     coordinates: [number, number],
     httpService: HttpClient,
-  ): Observable<FeatureModel[]> {
+  ): Observable<FeatureModel[] | ErrorResponseModel> {
     return this.map.getFeatureInfoForLayers$(layerId, coordinates, httpService);
   }
 
