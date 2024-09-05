@@ -433,6 +433,10 @@
         <source>Object Information</source>
         <target>Objectinformatie</target>
       </trans-unit>
+      <trans-unit id="core.feature-info.select-layer" datatype="html">
+        <source>Select layer</source>
+        <target>Selecteer laag</target>
+      </trans-unit>
       <trans-unit id="core.filter.add-filter" datatype="html">
         <source>Add filter</source>
         <target>Filter toevoegen</target>

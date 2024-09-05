@@ -9,6 +9,30 @@
 
 .feature-info-dialog ::ng-deep .dialog-content {
   display: flex;
+}
+
+.layer-list {
+  flex: 1;
+  overflow: auto;
+  border-right: 1px solid var(--border-color);
+}
+
+@media screen and (max-width: 600px) {
+  .feature-info-dialog ::ng-deep .dialog-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .layer-list {
+    flex: 0 0 auto;
+    border-right: 0 none;
+  }
+}
+
+.feature-list {
+  flex: 1;
+  overflow: auto;
+  display: flex;
   flex-direction: column;
 }
 
@@ -17,6 +41,10 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+}
+
+tm-error-message {
+  margin: 16px;
 }
 
 .content {

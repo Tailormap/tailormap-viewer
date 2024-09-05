@@ -1,9 +1,13 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
-  selectCurrentlySelectedFeature, selectFeatureInfoCounts, selectFeatureInfoDialogCollapsed, selectFeatureInfoDialogVisible,
+  selectCurrentlySelectedFeature, selectCurrentlySelectedLayerError,
+  selectFeatureInfoDialogCollapsed,
+  selectFeatureInfoDialogVisible,
+  selectIsNextButtonDisabled,
+  selectIsPrevButtonDisabled,
 } from '../state/feature-info.selectors';
-import { Observable, of, Subject, takeUntil } from 'rxjs';
+import { Observable } from 'rxjs';
 import {
   expandCollapseFeatureInfoDialog, hideFeatureInfoDialog, showNextFeatureInfoFeature, showPreviousFeatureInfoFeature,
 } from '../state/feature-info.actions';
@@ -16,36 +20,28 @@ import { CssHelper } from '@tailormap-viewer/shared';
   styleUrls: ['./feature-info-dialog.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FeatureInfoDialogComponent implements OnInit, OnDestroy {
+export class FeatureInfoDialogComponent {
 
-  private destroyed = new Subject();
-  public dialogOpen$: Observable<boolean> = of(false);
-  public dialogCollapsed$: Observable<boolean> = of(false);
+  public dialogOpen$: Observable<boolean>;
+  public dialogCollapsed$: Observable<boolean>;
+  public currentFeature$: Observable<FeatureInfoModel | null>;
+  public layerError$: Observable<string | null>;
+  public isPrevButtonDisabled$: Observable<boolean>;
+  public isNextButtonDisabled$: Observable<boolean>;
 
-  public currentSelected = 0;
-  public currentFeature$: Observable<FeatureInfoModel> | undefined;
-  public totalFeatures = 0;
-
-  public panelWidth = 300;
+  public panelWidth = 600;
   private bodyMargin = CssHelper.getCssVariableValueNumeric('--body-margin');
   public panelWidthMargin = CssHelper.getCssVariableValueNumeric('--menubar-width') + (this.bodyMargin * 2);
 
   constructor(
     private store$: Store,
-    private cdr: ChangeDetectorRef,
-  ) {}
-
-  public ngOnInit(): void {
+  ) {
     this.dialogOpen$ = this.store$.select(selectFeatureInfoDialogVisible);
     this.dialogCollapsed$ = this.store$.select(selectFeatureInfoDialogCollapsed);
     this.currentFeature$ = this.store$.select(selectCurrentlySelectedFeature);
-    this.store$.select(selectFeatureInfoCounts)
-      .pipe(takeUntil(this.destroyed))
-      .subscribe(counts => {
-        this.currentSelected = counts.current;
-        this.totalFeatures = counts.total;
-        this.cdr.detectChanges();
-      });
+    this.layerError$ = this.store$.select(selectCurrentlySelectedLayerError);
+    this.isPrevButtonDisabled$ = this.store$.select(selectIsPrevButtonDisabled);
+    this.isNextButtonDisabled$ = this.store$.select(selectIsNextButtonDisabled);
   }
 
   public next() {
@@ -62,19 +58,6 @@ export class FeatureInfoDialogComponent implements OnInit, OnDestroy {
 
   public expandCollapseDialog() {
     this.store$.dispatch(expandCollapseFeatureInfoDialog());
-  }
-
-  public ngOnDestroy() {
-    this.destroyed.next(null);
-    this.destroyed.complete();
-  }
-
-  public isBackDisabled() {
-    return this.totalFeatures <= 1 || this.currentSelected === 0;
-  }
-
-  public isNextDisabled() {
-    return this.totalFeatures <= 1 || this.currentSelected === this.totalFeatures - 1;
   }
 
 }

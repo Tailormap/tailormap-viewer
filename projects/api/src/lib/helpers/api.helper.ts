@@ -1,4 +1,5 @@
 import { HttpParams } from '@angular/common/http';
+import { ErrorResponseModel } from '../models';
 
 export class ApiHelper {
 
@@ -11,6 +12,11 @@ export class ApiHelper {
       }
     });
     return queryParams;
+  }
+
+  public static isApiErrorResponse(response: any): response is ErrorResponseModel {
+    return typeof (response as ErrorResponseModel).message !== "undefined"
+      && typeof (response as ErrorResponseModel).code !== "undefined";
   }
 
 }

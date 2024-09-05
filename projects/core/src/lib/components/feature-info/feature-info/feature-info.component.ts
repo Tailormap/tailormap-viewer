@@ -1,16 +1,18 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
-import { concatMap, of, Subject, takeUntil, tap } from 'rxjs';
+import { combineLatest, concatMap, mergeMap, of, Subject, takeUntil, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { loadFeatureInfo } from '../state/feature-info.actions';
-import {
-  selectCurrentlySelectedFeatureGeometry, selectFeatureInfoError$, selectLoadingFeatureInfo, selectMapCoordinates,
-} from '../state/feature-info.selectors';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
+import { loadFeatureInfo, featureInfoLoaded } from '../state/feature-info.actions';
+import { selectCurrentlySelectedFeatureGeometry, selectLoadingFeatureInfo, selectMapCoordinates } from '../state/feature-info.selectors';
+import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { deregisterTool, registerTool } from '../../toolbar/state/toolbar.actions';
 import { ToolbarComponentEnum } from '../../toolbar/models/toolbar-component.enum';
 import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.helper';
+import { selectVisibleLayersWithAttributes, selectVisibleWMSLayersWithoutAttributes } from '../../../map/state/map.selectors';
+import { take } from 'rxjs/operators';
+import { FeatureInfoLayerModel } from '../models/feature-info-layer.model';
+import { FeatureInfoService } from '../feature-info.service';
+import { selectViewerId } from '../../../state/core.selectors';
 
 @Component({
   selector: 'tm-feature-info',
@@ -30,8 +32,8 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
 
   constructor(
     private mapService: MapService,
+    private featureInfoService: FeatureInfoService,
     private store$: Store,
-    private snackBar: MatSnackBar,
   ) { }
 
   public ngOnInit(): void {
@@ -63,21 +65,37 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
   }
 
   private handleMapClick(evt: { mapCoordinates: [number, number]; mouseCoordinates: [number, number] }) {
-    this.store$.dispatch(loadFeatureInfo({ mapCoordinates: evt.mapCoordinates, mouseCoordinates: evt.mouseCoordinates }));
-    this.store$.pipe(selectFeatureInfoError$)
-      .subscribe(error => {
-        if (!error || error.error === 'none') {
-          return;
-        }
-        const config: SnackBarMessageOptionsModel = {
-          message: error.error === 'error'
-            ? error.errorMessage || FeatureInfoComponent.DEFAULT_ERROR_MESSAGE
-            : FeatureInfoComponent.DEFAULT_NO_FEATURES_FOUND_MESSAGE,
-          duration: 5000,
-          showDuration: true,
-          showCloseButton: true,
-        };
-        SnackBarMessageComponent.open$(this.snackBar, config);
+    combineLatest([
+      this.store$.select(selectVisibleLayersWithAttributes),
+      this.store$.select(selectVisibleWMSLayersWithoutAttributes),
+      this.store$.select(selectViewerId),
+      this.mapService.getMapViewDetails$(),
+    ])
+      .pipe(
+        take(1),
+        tap(([ layers, wmsLayers ]) => {
+          const featureInfoLayers = [ ...layers, ...wmsLayers ]
+            .sort((l1, l2) => l1.title.localeCompare(l2.title))
+            .map<FeatureInfoLayerModel>(l => ({
+              id: l.id,
+              title: l.title,
+              loading: LoadingStateEnum.LOADING,
+            }));
+          this.store$.dispatch(loadFeatureInfo({ mapCoordinates: evt.mapCoordinates, mouseCoordinates: evt.mouseCoordinates, layers: featureInfoLayers }));
+        }),
+        mergeMap(([ layers, wmsLayers, viewerId, mapViewDetails ]) => {
+          if (!viewerId) {
+            return [];
+          }
+          return [
+            ...layers.map(l => this.featureInfoService.getFeatureInfoFromApi$(l.id, evt.mapCoordinates, viewerId, mapViewDetails)),
+            ...wmsLayers.map(l => this.featureInfoService.getWmsGetFeatureInfo$(l.id, evt.mapCoordinates)),
+          ];
+        }),
+        mergeMap(featureInfoRequests$ => featureInfoRequests$),
+      )
+      .subscribe(response => {
+        this.store$.dispatch(featureInfoLoaded({ featureInfo: response }));
       });
   }
 
