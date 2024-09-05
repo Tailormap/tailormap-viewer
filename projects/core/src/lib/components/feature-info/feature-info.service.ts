@@ -1,5 +1,7 @@
 import { inject, Injectable } from '@angular/core';
-import { AttributeType, FeaturesResponseModel, TAILORMAP_API_V1_SERVICE, FeatureModel } from '@tailormap-viewer/api';
+import {
+  AttributeType, FeaturesResponseModel, TAILORMAP_API_V1_SERVICE, FeatureModel, ApiHelper,
+} from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { selectViewerId } from '../../state/core.selectors';
 import { catchError, combineLatest, concatMap, forkJoin, map, Observable, of, take } from 'rxjs';
@@ -8,8 +10,7 @@ import {
   selectEditableLayers, selectVisibleLayersWithAttributes, selectVisibleWMSLayersWithoutAttributes,
 } from '../../map/state/map.selectors';
 import { MapService, MapViewDetailsModel } from '@tailormap-viewer/map';
-import { HttpClient } from '@angular/common/http';
-import { ExtendedAppLayerModel } from '../../map/models';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { FilterService } from '../../filter/services/filter.service';
 
 @Injectable({
@@ -17,7 +18,7 @@ import { FilterService } from '../../filter/services/filter.service';
 })
 export class FeatureInfoService {
 
-  private static LOAD_FEATURE_INFO_ERROR = $localize `:@@core.feature-info.error-loading-features:Could not load feature info`;
+  public static LOAD_FEATURE_INFO_ERROR = $localize `:@@core.feature-info.error-loading-features:Could not load feature info`;
 
   /**
    * default buffer distance for feature info requests in pixels.
@@ -44,10 +45,8 @@ export class FeatureInfoService {
             return of([]);
           }
           const featureRequests$ = [
-            ...layers.map(layer => this.getFeatureInfoFromApi$(layer, coordinates, applicationId, resolutions)),
-            ...wmsLayers.map(layer => this.mapService.getFeatureInfoForLayers$(layer.id, coordinates, this.httpService).pipe(
-              map(features => this.featuresToFeatureInfoResponseModel(features, layer.id)),
-            )),
+            ...layers.map(layer => this.getFeatureInfoFromApi$(layer.id, coordinates, applicationId, resolutions)),
+            ...wmsLayers.map(layer => this.getWmsGetFeatureInfo$(layer.id, coordinates)),
           ];
           return forkJoin(featureRequests$);
         }),
@@ -70,20 +69,37 @@ export class FeatureInfoService {
             return of([]);
           }
           const featureRequests$ = layers
-              .map(layer => this.getFeatureInfoFromApi$( layer, coordinates, applicationId, resolutions,  true ));
+              .map(layer => this.getFeatureInfoFromApi$( layer.id, coordinates, applicationId, resolutions,  true ));
           return forkJoin(featureRequests$);
         }),
       );
   }
 
-  private getFeatureInfoFromApi$(
-    layer: ExtendedAppLayerModel,
+  public getWmsGetFeatureInfo$(
+    layerId: string,
+    coordinates: [ number, number ],
+  ): Observable<FeatureInfoResponseModel> {
+    return this.mapService.getFeatureInfoForLayers$(layerId, coordinates, this.httpService)
+      .pipe(map(response => {
+        if (ApiHelper.isApiErrorResponse(response)) {
+          return {
+            features: [],
+            error: response.message,
+            layerId,
+            columnMetadata: [],
+          };
+        }
+        return this.featuresToFeatureInfoResponseModel(response, layerId);
+      }));
+  }
+
+  public getFeatureInfoFromApi$(
+    layerId: string,
     coordinates: [ number, number ],
     applicationId: string,
     resolutions: MapViewDetailsModel,
     geometryInAttributes=false,
   ): Observable<FeatureInfoResponseModel> {
-    const layerId = layer.id;
     const layerFilter = this.filterService.getFilterForLayer(layerId);
     return this.apiService.getFeatures$({
       layerId,
@@ -101,12 +117,13 @@ export class FeatureInfoService {
         columnMetadata: (featureInfoResult.columnMetadata || []).map(metadata => ({ ...metadata, layerId })),
         layerId,
       })),
-      catchError((): Observable<FeatureInfoResponseModel> => {
+      catchError((response: HttpErrorResponse): Observable<FeatureInfoResponseModel> => {
+        const error = response.error?.message ? response.error.message : null;
         return of({
           features: [],
           columnMetadata: [],
           layerId,
-          error: FeatureInfoService.LOAD_FEATURE_INFO_ERROR,
+          error: error || FeatureInfoService.LOAD_FEATURE_INFO_ERROR,
         });
       }),
     );

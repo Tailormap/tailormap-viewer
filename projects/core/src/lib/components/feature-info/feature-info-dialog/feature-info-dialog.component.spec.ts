@@ -4,7 +4,10 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { featureInfoStateKey, initialFeatureInfoState } from '../state/feature-info.state';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { selectCurrentlySelectedFeature, selectFeatureInfoCounts, selectFeatureInfoDialogVisible } from '../state/feature-info.selectors';
+import {
+  selectCurrentlySelectedFeature, selectFeatureInfoDialogVisible, selectIsNextButtonDisabled,
+  selectIsPrevButtonDisabled,
+} from '../state/feature-info.selectors';
 import { getAppLayerModel } from '@tailormap-viewer/api';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { TestBed } from '@angular/core/testing';
@@ -12,9 +15,11 @@ import { FeatureInfoModel } from '../models/feature-info.model';
 import { showNextFeatureInfoFeature, showPreviousFeatureInfoFeature } from '../state/feature-info.actions';
 import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layout.service';
 import { CoreSharedModule } from '../../../shared';
+import { FeatureInfoLayerListComponent } from '../feature-info-layer-list/feature-info-layer-list.component';
 
 const getFeatureInfo = (updated?: boolean): FeatureInfoModel => {
   return {
+    __fid: '1',
     geometry: null,
     layer: getAppLayerModel(),
     sortedAttributes: [
@@ -25,23 +30,25 @@ const getFeatureInfo = (updated?: boolean): FeatureInfoModel => {
   };
 };
 
-const renderWithState = async () => {
-  await render(FeatureInfoDialogComponent, {
+const setup = async (withState = false) => {
+  return await render(FeatureInfoDialogComponent, {
     imports: [
       SharedModule,
       CoreSharedModule,
       NoopAnimationsModule,
       MatIconTestingModule,
     ],
+    declarations: [FeatureInfoLayerListComponent],
     providers: [
       { provide: ViewerLayoutService, useValue: { setLeftPadding: jest.fn(), setRightPadding: jest.fn() } },
       provideMockStore({
         initialState: { [featureInfoStateKey]: { ...initialFeatureInfoState } },
-        selectors: [
+        selectors: withState ? [
           { selector: selectCurrentlySelectedFeature, value: getFeatureInfo() },
           { selector: selectFeatureInfoDialogVisible, value: true },
-          { selector: selectFeatureInfoCounts, value: { total: 1, current: 0 } },
-        ],
+          { selector: selectIsPrevButtonDisabled, value: true },
+          { selector: selectIsNextButtonDisabled, value: true },
+        ] : [],
       }),
     ],
   });
@@ -50,23 +57,12 @@ const renderWithState = async () => {
 describe('FeatureInfoDialogComponent', () => {
 
   test('runs without feature info', async () => {
-    const { container } = await render(FeatureInfoDialogComponent, {
-      imports: [
-        SharedModule,
-        CoreSharedModule,
-        NoopAnimationsModule,
-        MatIconTestingModule,
-      ],
-      providers: [
-        provideMockStore({ initialState: { [featureInfoStateKey]: { ...initialFeatureInfoState } } }),
-        { provide: ViewerLayoutService, useValue: { setLeftPadding: jest.fn(), setRightPadding: jest.fn() } },
-      ],
-    });
+    const { container } = await setup();
     expect(container.querySelector('.feature-info')).toBeNull();
   });
 
   test('shows feature info', async () => {
-    await renderWithState();
+    await setup(true);
     expect((await screen.findByText(/fid/)).nextSibling?.textContent?.trim()).toEqual('1');
     expect((await screen.findByText(/Property 2/)).nextSibling?.textContent?.trim()).toEqual('another test');
     const store = TestBed.inject(MockStore);
@@ -78,7 +74,7 @@ describe('FeatureInfoDialogComponent', () => {
   });
 
   test('updates feature info when state changes', async () => {
-    await renderWithState();
+    await setup(true);
     expect((await screen.findByText(/fid/)).nextSibling?.textContent?.trim()).toEqual('1');
     const store = TestBed.inject(MockStore);
     store.overrideSelector(selectCurrentlySelectedFeature, getFeatureInfo(true));

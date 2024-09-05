@@ -1,24 +1,24 @@
 import { createAction, props } from '@ngrx/store';
 import { FeatureInfoResponseModel } from '../models/feature-info-response.model';
+import { FeatureInfoLayerModel } from '../models/feature-info-layer.model';
 
 const featureInfoActionsPrefix = '[Feature Info]';
 
 export const loadFeatureInfo = createAction(
   `${featureInfoActionsPrefix} Load Feature Info`,
-  props<{ mouseCoordinates: [number, number]; mapCoordinates: [number, number] }>(),
+  props<{ mouseCoordinates: [number, number]; mapCoordinates: [number, number]; layers: FeatureInfoLayerModel[] }>(),
 );
 
-export const loadFeatureInfoSuccess = createAction(
+export const featureInfoLoaded = createAction(
   `${featureInfoActionsPrefix} Load Feature Info Success`,
-  props<{ featureInfo: FeatureInfoResponseModel[] }>(),
+  props<{ featureInfo: FeatureInfoResponseModel }>(),
 );
 
-export const loadFeatureInfoFailed = createAction(
-  `${featureInfoActionsPrefix} Load Feature Info Failed`,
-  props<{ errorMessage?: string }>(),
+export const setSelectedFeatureInfoLayer = createAction(
+  `${featureInfoActionsPrefix} Set Selected Layer`,
+  props<{ layer: string }>(),
 );
 
-export const showFeatureInfoDialog = createAction(`${featureInfoActionsPrefix} Show Feature Info Dialog`);
 export const hideFeatureInfoDialog = createAction(`${featureInfoActionsPrefix} Hide Feature Info Dialog`);
 export const expandCollapseFeatureInfoDialog = createAction(`${featureInfoActionsPrefix} Expand/Collapse Feature Info Dialog`);
 export const showNextFeatureInfoFeature = createAction(`${featureInfoActionsPrefix} Show Next Feature Info Feature`);

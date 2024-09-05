@@ -4,11 +4,11 @@ import { Store } from '@ngrx/store';
 import { loadFeatureInfo } from '../state/feature-info.actions';
 import { of } from 'rxjs';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackBarMessageComponent } from '@tailormap-viewer/shared';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
-
-jest.useFakeTimers();
+import { FeatureInfoService } from '../feature-info.service';
+import { registerTool } from '../../toolbar/state/toolbar.actions';
+import { ToolbarComponentEnum } from '../../toolbar/models/toolbar-component.enum';
 
 const setup = async (returnError = false) => {
   const mapServiceMock = getMapServiceMock(tool => ({
@@ -35,8 +35,11 @@ const setup = async (returnError = false) => {
         },
       },
       {
-        provide: MatSnackBar,
-        useValue: {},
+        provide: FeatureInfoService,
+        useValue: {
+          getFeatureInfoFromApi$: jest.fn(() => []),
+          getWmsGetFeatureInfo$: jest.fn(() => []),
+        },
       },
     ],
   });
@@ -45,6 +48,9 @@ const setup = async (returnError = false) => {
 
 describe('FeatureInfoComponent', () => {
 
+  beforeEach(() => { jest.useFakeTimers(); });
+  afterEach(() => { jest.useRealTimers(); });
+
   test('should render', async () => {
     const { mapServiceMock, mockDispatch, mockSelect } = await setup();
     expect(mapServiceMock.mapService.createTool$).toHaveBeenCalled();
@@ -52,16 +58,8 @@ describe('FeatureInfoComponent', () => {
     expect(highlightArgs.length).toEqual(3);
     expect(highlightArgs[0]).toEqual('feature-info-highlight-layer');
 
-    expect(mockDispatch).toHaveBeenCalledWith(loadFeatureInfo({ mapCoordinates: [ 1, 2 ], mouseCoordinates: [ 2, 3 ] }));
+    expect(mockDispatch).toHaveBeenCalledWith(registerTool({ tool: { id: ToolbarComponentEnum.FEATURE_INFO, mapToolId: 'MapClick' } }));
     expect(mockSelect).toHaveBeenCalled();
-  });
-
-  test('renders error message', async () => {
-    const mockOpen = jest.fn();
-    SnackBarMessageComponent.open$ = mockOpen;
-    await setup(true);
-    expect(mockOpen).toHaveBeenCalled();
-    expect(mockOpen.mock.calls[0][1].message).toEqual('Test error');
   });
 
 });

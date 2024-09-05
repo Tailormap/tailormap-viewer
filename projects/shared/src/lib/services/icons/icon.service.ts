@@ -12,7 +12,7 @@ type IconDefinition = string | { folder: string; icons: string[] };
 export class IconService {
 
   public icons: IconDefinition[] = [
-    'draw_polygon', 'draw_line', 'draw_point', 'split', 'new_object', 'merge',
+    'draw_polygon', 'draw_line', 'draw_point', 'split', 'new_object', 'merge', 'error',
     'drag', 'resize', 'chevron_bottom', 'chevron_left', 'chevron_right', 'chevron_top',
     'close', 'minimize', 'drop_down', 'drop_top', 'search', 'copy_filled', 'copy_outline',
     'expand_close', 'expand_open', 'table_filled', 'selection_outline', 'selection_filled',
