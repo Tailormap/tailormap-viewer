@@ -1,0 +1,10 @@
+
+.admin-content {
+  padding: 16px;
+}
+
+.log {
+  font-family: monospace;
+  white-space: pre;
+  overflow: scroll;
+}
