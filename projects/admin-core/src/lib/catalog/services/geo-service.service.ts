@@ -5,7 +5,7 @@ import {
   ApplicationModel,
   CatalogItemKindEnum, CatalogModelHelper,
   GeoServiceModel,
-  GeoServiceProtocolEnum, GeoServiceSettingsModel, GeoServiceWithLayersModel, TailormapAdminApiV1Service,
+  GeoServiceSettingsModel, GeoServiceWithLayersModel, TailormapAdminApiV1Service,
 } from '@tailormap-admin/admin-api';
 import { catchError, concatMap, filter, map, MonoTypeOperatorFunction, Observable, of, pipe, switchMap, take, tap } from 'rxjs';
 import { addGeoService, deleteGeoService, loadCatalog, loadDraftGeoService, updateGeoService } from '../state/catalog.actions';
@@ -80,7 +80,7 @@ export class GeoServiceService {
       settings: {
         ...geoService.settings,
         defaultLayerSettings: {
-          hiDpiDisabled: geoService.protocol === GeoServiceProtocolEnum.WMTS,
+          hiDpiDisabled: true,
         },
       },
     };

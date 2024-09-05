@@ -219,7 +219,7 @@ export class OlLayerHelper {
     let hidpi = true;
 
     // If explicitly disabled or no server type known do not use serverType for hidpi
-    if (layer.hiDpiDisabled || layer.serverType === TMServerType.GENERIC) {
+    if (layer.hiDpiDisabled !== false || layer.serverType === TMServerType.GENERIC) {
       serverType = undefined;
       hidpi = false;
     } else {
