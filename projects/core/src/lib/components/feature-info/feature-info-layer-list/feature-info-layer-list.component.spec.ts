@@ -7,11 +7,12 @@ import { LoadingStateEnum, TooltipDirective } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
+import { FeatureInfoLayerItemComponent } from '../feature-info-layer-item/feature-info-layer-item.component';
 
 const setup = async (layers: FeatureInfoLayerModel[] = []) => {
   return await render(FeatureInfoLayerListComponent, {
     imports: [ MatIconModule, MatProgressSpinnerModule, MatIconTestingModule ],
-    declarations: [TooltipDirective],
+    declarations: [ TooltipDirective, FeatureInfoLayerItemComponent ],
     providers: [
       provideMockStore({
         initialState: {

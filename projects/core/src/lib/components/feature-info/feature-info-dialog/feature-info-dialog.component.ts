@@ -1,18 +1,21 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
-  selectCurrentlySelectedFeature, selectCurrentlySelectedLayerError,
+  selectCurrentlySelectedFeature,
   selectFeatureInfoDialogCollapsed,
-  selectFeatureInfoDialogVisible,
+  selectFeatureInfoDialogVisible, selectFeatureInfoLayers,
   selectIsNextButtonDisabled,
-  selectIsPrevButtonDisabled,
+  selectIsPrevButtonDisabled, selectSelectedFeatureInfoLayer,
 } from '../state/feature-info.selectors';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import {
   expandCollapseFeatureInfoDialog, hideFeatureInfoDialog, showNextFeatureInfoFeature, showPreviousFeatureInfoFeature,
 } from '../state/feature-info.actions';
 import { FeatureInfoModel } from '../models/feature-info.model';
 import { CssHelper } from '@tailormap-viewer/shared';
+import { FeatureInfoLayerModel } from '../models/feature-info-layer.model';
+import { FeatureInfoLayerListItemModel } from '../models/feature-info-layer-list-item.model';
+import { FeatureInfoHelper } from '../helpers/feature-info.helper';
 
 @Component({
   selector: 'tm-feature-info-dialog',
@@ -25,11 +28,14 @@ export class FeatureInfoDialogComponent {
   public dialogOpen$: Observable<boolean>;
   public dialogCollapsed$: Observable<boolean>;
   public currentFeature$: Observable<FeatureInfoModel | null>;
-  public layerError$: Observable<string | null>;
+  public selectedLayer$: Observable<FeatureInfoLayerModel | null>;
+  public singleLayer$: Observable<boolean>;
   public isPrevButtonDisabled$: Observable<boolean>;
   public isNextButtonDisabled$: Observable<boolean>;
 
   public panelWidth = 600;
+  public panelWidthCollapsed = 300;
+
   private bodyMargin = CssHelper.getCssVariableValueNumeric('--body-margin');
   public panelWidthMargin = CssHelper.getCssVariableValueNumeric('--menubar-width') + (this.bodyMargin * 2);
 
@@ -39,7 +45,8 @@ export class FeatureInfoDialogComponent {
     this.dialogOpen$ = this.store$.select(selectFeatureInfoDialogVisible);
     this.dialogCollapsed$ = this.store$.select(selectFeatureInfoDialogCollapsed);
     this.currentFeature$ = this.store$.select(selectCurrentlySelectedFeature);
-    this.layerError$ = this.store$.select(selectCurrentlySelectedLayerError);
+    this.selectedLayer$ = this.store$.select(selectSelectedFeatureInfoLayer);
+    this.singleLayer$ = this.store$.select(selectFeatureInfoLayers).pipe(map(l => l.length === 1));
     this.isPrevButtonDisabled$ = this.store$.select(selectIsPrevButtonDisabled);
     this.isNextButtonDisabled$ = this.store$.select(selectIsNextButtonDisabled);
   }
@@ -58,6 +65,10 @@ export class FeatureInfoDialogComponent {
 
   public expandCollapseDialog() {
     this.store$.dispatch(expandCollapseFeatureInfoDialog());
+  }
+
+  public getLayerListItem(layer: FeatureInfoLayerModel): FeatureInfoLayerListItemModel {
+    return { ...layer, selected: false, disabled: FeatureInfoHelper.isLayerDisabled(layer) };
   }
 
 }

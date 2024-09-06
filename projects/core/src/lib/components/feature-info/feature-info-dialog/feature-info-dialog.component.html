@@ -1,7 +1,7 @@
 <tm-dialog [open]="dialogOpen$ | async"
            [openFromRight]="true"
            [widthMargin]="panelWidthMargin"
-           [width]="panelWidth"
+           [width]="(singleLayer$ | async) ? panelWidthCollapsed : panelWidth"
            class="feature-info-dialog"
            (closeDialog)="closeDialog()"
            [allowCollapse]="true"
@@ -9,12 +9,19 @@
            (expandCollapseDialog)="expandCollapseDialog()"
            dialogTitle="Object Information"
            i18n-dialogTitle="@@core.feature-info.object-information">
-  <div class="layer-list">
-    <tm-feature-info-layer-list></tm-feature-info-layer-list>
-  </div>
+  @if ((singleLayer$ | async) === false) {
+    <div class="layer-list">
+      <tm-feature-info-layer-list></tm-feature-info-layer-list>
+    </div>
+  }
   <div class="feature-list">
-    @if(layerError$ | async; as error) {
-      <tm-error-message [friendlyError]="true" [message]="error"></tm-error-message>
+    @if(selectedLayer$ | async; as layer) {
+      @if (layer.error) {
+        <tm-error-message [friendlyError]="true" [message]="layer.error"></tm-error-message>
+      }
+      @if (singleLayer$ | async) {
+        <tm-feature-info-layer-item [layer]="getLayerListItem(layer)"></tm-feature-info-layer-item>
+      }
     }
     @if(currentFeature$ | async; as feature) {
       <div class="feature-info">

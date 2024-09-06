@@ -1,48 +1,17 @@
-.layer-item {
-  padding: 16px;
-  border-bottom: 1px solid var(--border-color);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-}
-
-.layer-item .title {
-  flex: 1;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-  padding-left: 6px;
-}
-
-.layer-item mat-icon {
-  width: 15px;
-  height: 15px;
-  line-height: 15px;
-}
-
-.disabled {
-  opacity: 0.5;
-}
-
-.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled):not(.mat-mdc-option-multiple).selected,
-.selected {
+.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled):not(.mat-mdc-option-multiple).selected {
   background-color: var(--primary-color-0_1);
   color: var(--primary-color);
 }
 
-.layer-selector-item .layer-item {
+.layer-selector-item ::ng-deep .layer-item {
   padding: 0;
   border: 0 none;
 }
 
-.layer-selector-item mat-spinner {
+.layer-selector-item ::ng-deep mat-spinner {
   margin-right: 16px;
 }
 
-.layer-selector-item .layer-item.selected {
+.layer-selector-item ::ng-deep .layer-item.selected {
   background-color: transparent;
-}
-
-.error {
-  color: var(--error-color);
 }

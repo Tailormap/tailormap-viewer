@@ -10,6 +10,7 @@ import { ApplicationMapModule } from '../../map/application-map.module';
 import { CoreSharedModule } from '../../shared';
 import { CdkAccordion, CdkAccordionItem } from '@angular/cdk/accordion';
 import { FeatureInfoLayerListComponent } from './feature-info-layer-list/feature-info-layer-list.component';
+import { FeatureInfoLayerItemComponent } from './feature-info-layer-item/feature-info-layer-item.component';
 
 
 @NgModule({
@@ -17,6 +18,7 @@ import { FeatureInfoLayerListComponent } from './feature-info-layer-list/feature
     FeatureInfoComponent,
     FeatureInfoDialogComponent,
     FeatureInfoLayerListComponent,
+    FeatureInfoLayerItemComponent,
   ],
   imports: [
     CommonModule,
