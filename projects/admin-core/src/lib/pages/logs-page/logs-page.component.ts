@@ -1,5 +1,4 @@
-import { Component, ChangeDetectionStrategy, DestroyRef, ChangeDetectorRef, OnInit } from '@angular/core';
-import { timer } from 'rxjs';
+import { Component, ChangeDetectionStrategy, DestroyRef, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HttpClient } from '@angular/common/http';
 import { TailormapApiConstants } from '@tailormap-viewer/api';
@@ -11,11 +10,10 @@ import { TailormapApiConstants } from '@tailormap-viewer/api';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LogsPageComponent implements OnInit {
-  public log = '';
+  public log = signal('');
 
   constructor(
     private destroyRef: DestroyRef,
-    private changeDetectorRef: ChangeDetectorRef,
     private httpClient: HttpClient,
   ) {
   }
@@ -24,8 +22,7 @@ export class LogsPageComponent implements OnInit {
     this.httpClient.get(`${TailormapApiConstants.BASE_URL}/actuator/logfile`, { responseType: 'text' }).pipe(
      takeUntilDestroyed(this.destroyRef),
     ).subscribe(logfile => {
-     this.log = logfile;
-     this.changeDetectorRef.detectChanges();
+     this.log.set(logfile);
     });
   }
 }
