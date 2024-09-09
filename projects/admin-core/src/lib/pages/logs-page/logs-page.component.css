@@ -1,0 +1,11 @@
+.admin-content {
+  padding: 16px;
+}
+
+.log {
+  font-family: monospace;
+  white-space: pre;
+  overflow: auto;
+  max-width: calc(var(--100vw) - var(--navigation-size) - calc(3 * 16px));
+  max-height: calc(var(--content-height) - calc(2 * 16px));
+}

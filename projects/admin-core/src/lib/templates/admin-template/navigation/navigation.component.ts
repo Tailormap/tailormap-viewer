@@ -83,6 +83,13 @@ export class NavigationComponent implements OnInit {
 
   public bottomButtons: ButtonProps[] =  [
     {
+      label: $localize`:@@admin-core.navigation.logs:Logs`,
+      matchExact: true,
+      link: [ '/admin', Routes.LOGS ],
+      icon: 'admin_logs',
+      requireAdmin: true,
+    },
+    {
       label: $localize`:@@admin-core.navigation.settings:Settings`,
       matchExact: false,
       link: [ '/admin', Routes.SETTINGS ],
