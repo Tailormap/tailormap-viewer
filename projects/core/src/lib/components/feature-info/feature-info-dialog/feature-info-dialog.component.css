@@ -18,7 +18,7 @@
   width: 300px;
   border-right: 1px solid var(--border-color);
   top: 64px;
-  max-height: 100%;
+  max-height: calc(100% - 64px);
   background-color: #fff;
   box-shadow: var(--mat-app-elevation-shadow-level-4, none);
   z-index: 1;
