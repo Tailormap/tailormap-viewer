@@ -9,6 +9,7 @@ export interface FeatureInfoState {
   mapCoordinates?: [number, number];
   dialogVisible: boolean;
   dialogCollapsed: boolean;
+  layerListCollapsed: boolean;
   layers: FeatureInfoLayerModel[];
   features: FeatureInfoFeatureModel[];
   columnMetadata: FeatureInfoColumnMetadataModel[];
@@ -18,6 +19,7 @@ export interface FeatureInfoState {
 export const initialFeatureInfoState: FeatureInfoState = {
   dialogVisible: false,
   dialogCollapsed: false,
+  layerListCollapsed: false,
   layers: [],
   features: [],
   columnMetadata: [],

@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { FeatureInfoComponent } from './feature-info/feature-info.component';
-import { StoreModule } from '@ngrx/store';
+import { Store, StoreModule } from '@ngrx/store';
 import { featureInfoStateKey } from './state/feature-info.state';
 import { featureInfoReducer } from './state/feature-info.reducer';
 import { FeatureInfoDialogComponent } from './feature-info-dialog/feature-info-dialog.component';
@@ -11,6 +11,10 @@ import { CoreSharedModule } from '../../shared';
 import { CdkAccordion, CdkAccordionItem } from '@angular/cdk/accordion';
 import { FeatureInfoLayerListComponent } from './feature-info-layer-list/feature-info-layer-list.component';
 import { FeatureInfoLayerItemComponent } from './feature-info-layer-item/feature-info-layer-item.component';
+import { FeatureInfoLayerDropdownComponent } from './feature-info-layer-dropdown/feature-info-layer-dropdown.component';
+import { BaseComponentTypeEnum, FeatureInfoConfigModel } from '@tailormap-viewer/api';
+import { ComponentConfigHelper } from '../../shared/helpers/component-config.helper';
+import { expandCollapseFeatureInfoLayerList } from './state/feature-info.actions';
 
 
 @NgModule({
@@ -19,6 +23,7 @@ import { FeatureInfoLayerItemComponent } from './feature-info-layer-item/feature
     FeatureInfoDialogComponent,
     FeatureInfoLayerListComponent,
     FeatureInfoLayerItemComponent,
+    FeatureInfoLayerDropdownComponent,
   ],
   imports: [
     CommonModule,
@@ -33,4 +38,17 @@ import { FeatureInfoLayerItemComponent } from './feature-info-layer-item/feature
     FeatureInfoComponent,
   ],
 })
-export class FeatureInfoModule { }
+export class FeatureInfoModule {
+  constructor(store$: Store) {
+    ComponentConfigHelper.useInitialConfigForComponent<FeatureInfoConfigModel>(
+      store$,
+      BaseComponentTypeEnum.FEATURE_INFO,
+      config => {
+        console.log(config);
+        if (config.defaultShowDropdown) {
+          store$.dispatch(expandCollapseFeatureInfoLayerList());
+        }
+      },
+    );
+  }
+}

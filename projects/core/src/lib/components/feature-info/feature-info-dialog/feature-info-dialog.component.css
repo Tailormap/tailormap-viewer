@@ -11,21 +11,28 @@
   display: flex;
 }
 
+.layer-list-wrapper {
+  flex: 1;
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+}
+
+.toggle {
+  display: flex;
+  justify-content: flex-end;
+  border-bottom: 1px solid var(--border-color);
+}
+
 .layer-list {
   flex: 1;
   overflow: auto;
-  border-right: 1px solid var(--border-color);
 }
 
 @media screen and (max-width: 600px) {
   .feature-info-dialog ::ng-deep .dialog-content {
     display: flex;
     flex-direction: column;
-  }
-
-  .layer-list {
-    flex: 0 0 auto;
-    border-right: 0 none;
   }
 }
 
@@ -47,6 +54,18 @@ tm-error-message {
   margin: 16px;
 }
 
+.layer-list-dropdown-wrapper {
+  display: flex;
+  align-items: center;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+tm-feature-info-layer-dropdown {
+  display: block;
+  flex: 1;
+}
+
 .content {
   flex: 1;
   overflow: auto;
@@ -62,7 +81,7 @@ tm-error-message {
   font-weight: normal;
   line-height: 24px;
   border-bottom: 1px solid #D8D8D8;
-  padding: 15px 14px;
+  padding: 10px 14px;
   word-break: normal;
   overflow-wrap: break-word;
 }

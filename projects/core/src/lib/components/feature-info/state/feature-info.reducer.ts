@@ -73,6 +73,11 @@ const onExpandCollapseFeatureInfoDialog = (state: FeatureInfoState): FeatureInfo
   dialogCollapsed: !state.dialogCollapsed,
 });
 
+const onExpandCollapseFeatureInfoLayerList = (state: FeatureInfoState): FeatureInfoState => ({
+  ...state,
+  layerListCollapsed: !state.layerListCollapsed,
+});
+
 const onSetSelectedFeatureInfoLayer = (
   state: FeatureInfoState,
   payload: ReturnType<typeof FeatureInfoActions.setSelectedFeatureInfoLayer>,
@@ -119,6 +124,7 @@ const featureInfoReducerImpl = createReducer<FeatureInfoState>(
   on(FeatureInfoActions.featureInfoLoaded, onFeatureInfoLoaded),
   on(FeatureInfoActions.hideFeatureInfoDialog, onHideFeatureInfoDialog),
   on(FeatureInfoActions.expandCollapseFeatureInfoDialog, onExpandCollapseFeatureInfoDialog),
+  on(FeatureInfoActions.expandCollapseFeatureInfoLayerList, onExpandCollapseFeatureInfoLayerList),
   on(FeatureInfoActions.setSelectedFeatureInfoLayer, onSetSelectedFeatureInfoLayer),
   on(FeatureInfoActions.showNextFeatureInfoFeature, onShowNextFeatureInfoFeature),
   on(FeatureInfoActions.showPreviousFeatureInfoFeature, onShowPreviousFeatureInfoFeature),

@@ -1,7 +1,7 @@
 <tm-dialog [open]="dialogOpen$ | async"
            [openFromRight]="true"
            [widthMargin]="panelWidthMargin"
-           [width]="(singleLayer$ | async) ? panelWidthCollapsed : panelWidth"
+           [width]="expandedList() ? panelWidth : panelWidthCollapsed"
            class="feature-info-dialog"
            (closeDialog)="closeDialog()"
            [allowCollapse]="true"
@@ -9,22 +9,32 @@
            (expandCollapseDialog)="expandCollapseDialog()"
            dialogTitle="Object Information"
            i18n-dialogTitle="@@core.feature-info.object-information">
-  @if ((singleLayer$ | async) === false) {
-    <div class="layer-list">
-      <tm-feature-info-layer-list></tm-feature-info-layer-list>
+  @if (expandedList()) {
+    <div class="layer-list-wrapper">
+      <div class="toggle"><button mat-icon-button (click)="toggleListExpanded()"><mat-icon svgIcon="chevron_right"></mat-icon></button></div>
+      <div class="layer-list">
+        <tm-feature-info-layer-list></tm-feature-info-layer-list>
+      </div>
     </div>
   }
   <div class="feature-list">
+    @if (selectedSingleLayer$ | async; as layer) {
+      <tm-feature-info-layer-item [layer]="getLayerListItem(layer)"></tm-feature-info-layer-item>
+    } @else if(!expandedList()) {
+      <div class="layer-list-dropdown-wrapper">
+        @if (isWideScreen()) {
+          <button mat-icon-button (click)="toggleListExpanded()"><mat-icon svgIcon="chevron_left"></mat-icon></button>
+        }
+        <tm-feature-info-layer-dropdown></tm-feature-info-layer-dropdown>
+      </div>
+    }
     @if(selectedLayer$ | async; as layer) {
       @if (layer.error) {
         <tm-error-message [friendlyError]="true" [message]="layer.error"></tm-error-message>
       }
-      @if (singleLayer$ | async) {
-        <tm-feature-info-layer-item [layer]="getLayerListItem(layer)"></tm-feature-info-layer-item>
-      }
     }
     @if(currentFeature$ | async; as feature) {
-      <div class="feature-info">
+      <div class="feature-info" (swipeleft)="back()" (swiperight)="next()">
         <div class="content">
           <div *ngFor="let att of feature.sortedAttributes" class="row">
             <strong>{{att.label}}</strong>

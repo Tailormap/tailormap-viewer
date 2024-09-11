@@ -13,6 +13,7 @@ export const selectMapCoordinates = createSelector(selectFeatureInfoState, state
 export const selectMouseCoordinates = createSelector(selectFeatureInfoState, state => state.mouseCoordinates);
 export const selectFeatureInfoDialogVisible = createSelector(selectFeatureInfoState, (state): boolean => state.dialogVisible);
 export const selectFeatureInfoDialogCollapsed = createSelector(selectFeatureInfoState, (state): boolean => state.dialogCollapsed);
+export const selectFeatureInfoLayerListCollapsed = createSelector(selectFeatureInfoState, (state): boolean => state.layerListCollapsed);
 
 export const selectFeatureInfoFeatures = createSelector(selectFeatureInfoState, state => state.features);
 export const selectFeatureInfoMetadata = createSelector(selectFeatureInfoState, state => state.columnMetadata);

@@ -46,8 +46,8 @@ const setup = async (withState = false) => {
         selectors: withState ? [
           { selector: selectCurrentlySelectedFeature, value: getFeatureInfo() },
           { selector: selectFeatureInfoDialogVisible, value: true },
-          { selector: selectIsPrevButtonDisabled, value: true },
-          { selector: selectIsNextButtonDisabled, value: true },
+          { selector: selectIsPrevButtonDisabled, value: false },
+          { selector: selectIsNextButtonDisabled, value: false },
         ] : [],
       }),
     ],
