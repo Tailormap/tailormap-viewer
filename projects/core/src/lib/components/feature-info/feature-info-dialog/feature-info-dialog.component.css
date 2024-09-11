@@ -5,7 +5,6 @@
   bottom: auto;
   min-height: 40vh;
   max-height: var(--max-control-height);
-  width: 300px !important;
 }
 
 .feature-info-dialog ::ng-deep .dialog-content {
@@ -13,35 +12,20 @@
 }
 
 .layer-list {
-  position: absolute;
-  left: -300px;
-  width: 300px;
-  border-right: 1px solid var(--border-color);
-  top: 64px;
-  max-height: calc(100% - 64px);
-  background-color: #fff;
-  box-shadow: var(--mat-app-elevation-shadow-level-4, none);
-  z-index: 1;
+  flex: 1;
   overflow: auto;
+  border-right: 1px solid var(--border-color);
 }
 
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 600px) {
   .feature-info-dialog ::ng-deep .dialog-content {
     display: flex;
     flex-direction: column;
   }
 
   .layer-list {
-    position: static;
-    width: auto;
     flex: 0 0 auto;
     border-right: 0 none;
-    padding-top: 0;
-    overflow: initial;
-  }
-
-  .layer-list-wrapper {
-    box-shadow: none;
   }
 }
 
@@ -50,8 +34,6 @@
   overflow: auto;
   display: flex;
   flex-direction: column;
-  z-index: 2;
-  background: white;
 }
 
 .feature-info {

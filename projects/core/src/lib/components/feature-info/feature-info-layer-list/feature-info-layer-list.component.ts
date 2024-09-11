@@ -38,7 +38,7 @@ export class FeatureInfoLayerListComponent {
           this.store$.dispatch(setSelectedFeatureInfoLayer({ layer }));
         }
       });
-    this.isSmallScreen$ = this.breakpointObserver.observe('(max-width: 700px)')
+    this.isSmallScreen$ = this.breakpointObserver.observe('(max-width: 600px)')
       .pipe(map(match => match.matches));
   }
 
