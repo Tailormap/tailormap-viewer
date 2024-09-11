@@ -701,6 +701,9 @@
       <trans-unit id="admin-core.common.logout" datatype="html">
         <source>Logout</source>
       </trans-unit>
+      <trans-unit id="admin-core.common.logs-title" datatype="html">
+        <source>Logs</source>
+      </trans-unit>
       <trans-unit id="admin-core.common.max-x" datatype="html">
         <source>Max X</source>
       </trans-unit>
@@ -976,6 +979,9 @@
       </trans-unit>
       <trans-unit id="admin-core.navigation.home" datatype="html">
         <source>Home</source>
+      </trans-unit>
+      <trans-unit id="admin-core.navigation.logs" datatype="html">
+        <source>Logs</source>
       </trans-unit>
       <trans-unit id="admin-core.navigation.search-indexes" datatype="html">
         <source>Search indexes</source>

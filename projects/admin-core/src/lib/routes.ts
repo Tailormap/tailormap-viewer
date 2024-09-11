@@ -34,7 +34,8 @@ export class Routes {
   public static SEARCH_INDEXES_DETAILS = 'search-index/:searchIndexId';
 
   public static SETTINGS = 'settings';
-  public static SETTINGS_GLOBAL = 'global';
+
+  public static LOGS = 'logs';
 
   public static OIDC_CONFIGURATION = 'oidc-configurations';
   public static OIDC_CONFIGURATION_CREATE = 'create';

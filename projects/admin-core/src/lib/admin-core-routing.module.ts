@@ -37,6 +37,7 @@ import { SearchIndexPageComponent } from './pages/search-index-page/search-index
 import { SearchIndexHomeComponent } from './search-index/search-index-home/search-index-home.component';
 import { SearchIndexEditComponent } from './search-index/search-index-edit/search-index-edit.component';
 import { SearchIndexCreateComponent } from './search-index/search-index-create/search-index-create.component';
+import { LogsPageComponent } from './pages/logs-page/logs-page.component';
 
 export const adminRoutes: Routes = [
   {
@@ -126,6 +127,11 @@ export const adminRoutes: Routes = [
         }],
         path: AdminRoutes.SETTINGS,
         data: { pageTitle: $localize `:@@admin-core.common.settings-title:Settings`, templateCls: 'content--no-padding' },
+      },
+      {
+        component: LogsPageComponent,
+        path: AdminRoutes.LOGS,
+        data: { pageTitle: $localize `:@@admin-core.common.logs-title:Logs`, templateCls: 'content--no-padding' },
       },
       {
         component: FormPageComponent,
