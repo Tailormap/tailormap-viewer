@@ -1,18 +1,15 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
-import { combineLatest, concatMap, mergeMap, of, Subject, takeUntil, tap } from 'rxjs';
+import { concatMap, of, Subject, takeUntil, tap, combineLatest, filter } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { loadFeatureInfo, featureInfoLoaded } from '../state/feature-info.actions';
+import { featureInfoLoaded } from '../state/feature-info.actions';
 import { selectCurrentlySelectedFeatureGeometry, selectLoadingFeatureInfo, selectMapCoordinates } from '../state/feature-info.selectors';
-import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { deregisterTool, registerTool } from '../../toolbar/state/toolbar.actions';
 import { ToolbarComponentEnum } from '../../toolbar/models/toolbar-component.enum';
 import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.helper';
+import { FeatureInfoService } from '../feature-info.service';
 import { selectVisibleLayersWithAttributes, selectVisibleWMSLayersWithoutAttributes } from '../../../map/state/map.selectors';
 import { take } from 'rxjs/operators';
-import { FeatureInfoLayerModel } from '../models/feature-info-layer.model';
-import { FeatureInfoService } from '../feature-info.service';
-import { selectViewerId } from '../../../state/core.selectors';
 
 @Component({
   selector: 'tm-feature-info',
@@ -68,33 +65,20 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
     combineLatest([
       this.store$.select(selectVisibleLayersWithAttributes),
       this.store$.select(selectVisibleWMSLayersWithoutAttributes),
-      this.store$.select(selectViewerId),
-      this.mapService.getMapViewDetails$(),
     ])
       .pipe(
         take(1),
-        tap(([ layers, wmsLayers ]) => {
-          const featureInfoLayers = [ ...layers, ...wmsLayers ]
-            .sort((l1, l2) => l1.title.localeCompare(l2.title))
-            .map<FeatureInfoLayerModel>(l => ({
-              id: l.id,
-              title: l.title,
-              loading: LoadingStateEnum.LOADING,
-            }));
-          this.store$.dispatch(loadFeatureInfo({ mapCoordinates: evt.mapCoordinates, mouseCoordinates: evt.mouseCoordinates, layers: featureInfoLayers }));
+        filter(([ layers, wmsLayers ]) => {
+          return layers.length > 0 || wmsLayers.length > 0;
         }),
-        mergeMap(([ layers, wmsLayers, viewerId, mapViewDetails ]) => {
-          if (!viewerId) {
-            return [];
-          }
-          return [
-            ...layers.map(l => this.featureInfoService.getFeatureInfoFromApi$(l.id, evt.mapCoordinates, viewerId, mapViewDetails)),
-            ...wmsLayers.map(l => this.featureInfoService.getWmsGetFeatureInfo$(l.id, evt.mapCoordinates)),
-          ];
+        concatMap(() => {
+          return this.featureInfoService.fetchFeatures$(evt.mapCoordinates, evt.mouseCoordinates);
         }),
-        mergeMap(featureInfoRequests$ => featureInfoRequests$),
       )
       .subscribe(response => {
+        if (response === null) {
+          return;
+        }
         this.store$.dispatch(featureInfoLoaded({ featureInfo: response }));
       });
   }

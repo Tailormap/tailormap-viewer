@@ -3,6 +3,7 @@ import { featureInfoReducer } from './feature-info.reducer';
 import { FeatureInfoState, initialFeatureInfoState } from './feature-info.state';
 import { FeatureInfoResponseModel } from '../models/feature-info-response.model';
 import { getColumnMetadataModel, getFeatureModel } from '@tailormap-viewer/api';
+import { LoadingStateEnum } from '@tailormap-viewer/shared';
 
 describe('FeatureInfoReducer', () => {
 
@@ -16,7 +17,7 @@ describe('FeatureInfoReducer', () => {
   });
 
   test('handles LoadFeatureInfoSuccess', () => {
-    const state = { ...initialFeatureInfoState };
+    const state: FeatureInfoState = { ...initialFeatureInfoState, layers: [{ id: '1', title: 'Layer', loading: LoadingStateEnum.LOADED }] };
     const featureInfo: FeatureInfoResponseModel = {
       features: [{ ...getFeatureModel(), layerId: '1' }],
       columnMetadata: [{ ...getColumnMetadataModel(), layerId: '1' }],

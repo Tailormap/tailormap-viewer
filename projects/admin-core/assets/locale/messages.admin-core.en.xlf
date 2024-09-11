@@ -794,6 +794,12 @@
       <trans-unit id="admin-core.components.coordinate-link-window-title" datatype="html">
         <source>Coordinate link window title</source>
       </trans-unit>
+      <trans-unit id="admin-core.components.feature-info-defaultShowDropdown" datatype="html">
+        <source>Use dropdown to select feature info layers by default</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.feature-info-title" datatype="html">
+        <source>Feature info</source>
+      </trans-unit>
       <trans-unit id="admin-core.components.measure-area-title" datatype="html">
         <source>Measure area title</source>
       </trans-unit>

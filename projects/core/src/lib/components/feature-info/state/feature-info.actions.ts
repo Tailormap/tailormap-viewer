@@ -21,5 +21,6 @@ export const setSelectedFeatureInfoLayer = createAction(
 
 export const hideFeatureInfoDialog = createAction(`${featureInfoActionsPrefix} Hide Feature Info Dialog`);
 export const expandCollapseFeatureInfoDialog = createAction(`${featureInfoActionsPrefix} Expand/Collapse Feature Info Dialog`);
+export const expandCollapseFeatureInfoLayerList = createAction(`${featureInfoActionsPrefix} Expand/Collapse Feature Info Layer List`);
 export const showNextFeatureInfoFeature = createAction(`${featureInfoActionsPrefix} Show Next Feature Info Feature`);
 export const showPreviousFeatureInfoFeature = createAction(`${featureInfoActionsPrefix} Show Previous Feature Info Feature`);

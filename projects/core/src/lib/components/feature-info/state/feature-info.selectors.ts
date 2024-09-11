@@ -3,8 +3,9 @@ import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { ArrayHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
 import { FeatureInfoModel } from '../models/feature-info.model';
 import { FeatureInfoHelper } from '../helpers/feature-info.helper';
-import { selectVisibleLayersWithServices } from '../../../map/state/map.selectors';
+import { selectLayersWithServices } from '../../../map/state/map.selectors';
 import { AttributeTypeHelper } from '@tailormap-viewer/api';
+import { FeatureInfoLayerListItemModel } from '../models/feature-info-layer-list-item.model';
 
 const selectFeatureInfoState = createFeatureSelector<FeatureInfoState>(featureInfoStateKey);
 
@@ -12,6 +13,7 @@ export const selectMapCoordinates = createSelector(selectFeatureInfoState, state
 export const selectMouseCoordinates = createSelector(selectFeatureInfoState, state => state.mouseCoordinates);
 export const selectFeatureInfoDialogVisible = createSelector(selectFeatureInfoState, (state): boolean => state.dialogVisible);
 export const selectFeatureInfoDialogCollapsed = createSelector(selectFeatureInfoState, (state): boolean => state.dialogCollapsed);
+export const selectFeatureInfoLayerListCollapsed = createSelector(selectFeatureInfoState, (state): boolean => state.layerListCollapsed);
 
 export const selectFeatureInfoFeatures = createSelector(selectFeatureInfoState, state => state.features);
 export const selectFeatureInfoMetadata = createSelector(selectFeatureInfoState, state => state.columnMetadata);
@@ -20,7 +22,7 @@ export const selectFeatureInfoLayers = createSelector(selectFeatureInfoState, st
 export const selectFeatureInfoList = createSelector(
   selectFeatureInfoFeatures,
   selectFeatureInfoMetadata,
-  selectVisibleLayersWithServices,
+  selectLayersWithServices,
   (features, metadata, layers): FeatureInfoModel[] => {
     const featureInfoModels: FeatureInfoModel[] = [];
     features.forEach(feature => {
@@ -57,10 +59,10 @@ export const selectLoadingFeatureInfo = createSelector(
 
 export const selectSelectedLayerId = createSelector(selectFeatureInfoState, state => state.selectedLayerId);
 
-export const selectSelectedLayer = createSelector(
+export const selectSelectedFeatureInfoLayer = createSelector(
   selectFeatureInfoLayers,
   selectSelectedLayerId,
-  (layers, selectedLayerId) => layers.find(l => l.id === selectedLayerId),
+  (layers, selectedLayerId) => layers.find(l => l.id === selectedLayerId) || null,
 );
 
 export const selectFeaturesForSelectedLayer = createSelector(
@@ -71,7 +73,7 @@ export const selectFeaturesForSelectedLayer = createSelector(
 
 export const selectCurrentlySelectedFeature = createSelector(
   selectFeatureInfoList,
-  selectSelectedLayer,
+  selectSelectedFeatureInfoLayer,
   (features, selectedLayer) => {
     if (!selectedLayer || !selectedLayer.selectedFeatureId) {
       return null;
@@ -81,7 +83,7 @@ export const selectCurrentlySelectedFeature = createSelector(
 );
 
 export const selectCurrentlySelectedLayerError = createSelector(
-  selectSelectedLayer,
+  selectSelectedFeatureInfoLayer,
   (selectedLayer) => {
     if (!selectedLayer) {
       return null;
@@ -91,7 +93,7 @@ export const selectCurrentlySelectedLayerError = createSelector(
 );
 
 const selectSelectedIndexAndTotal = createSelector(
-    selectSelectedLayer,
+    selectSelectedFeatureInfoLayer,
     selectFeaturesForSelectedLayer,
     (layer, features) => {
         if (!layer) {
@@ -119,5 +121,17 @@ export const selectCurrentlySelectedFeatureGeometry = createSelector(
       return null;
     }
     return feature.geometry;
+  },
+);
+
+export const selectFeatureInfoLayerListItems = createSelector(
+  selectFeatureInfoLayers,
+  selectSelectedLayerId,
+  (layers, selectedLayerId): FeatureInfoLayerListItemModel[] => {
+    return layers.map(l => ({
+      ...l,
+      selected: l.id === selectedLayerId,
+      disabled: FeatureInfoHelper.isLayerDisabled(l),
+    }));
   },
 );
