@@ -1345,14 +1345,6 @@
         <source>Search indexes</source>
         <target>Zoekindexen</target>
       </trans-unit>
-      <trans-unit id="admin-core.navigation.search-indexes" datatype="html">
-        <source>Search indexes</source>
-        <target>Zoekindexen</target>
-      </trans-unit>
-      <trans-unit id="admin-core.navigation.search-indexes" datatype="html">
-        <source>Search indexes</source>
-        <target>Zoekindexen</target>
-      </trans-unit>
       <trans-unit id="admin-core.navigation.settings" datatype="html">
         <source>Settings</source>
         <target>Instellingen</target>
