@@ -8,6 +8,7 @@ import { TypesHelper } from '@tailormap-viewer/shared';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
 import { GeoServiceHelper } from '../helpers/geo-service.helper';
+import { FeatureSourceProtocolEnum } from '@tailormap-admin/admin-api';
 
 @Component({
   selector: 'tm-admin-feature-type-selector',
@@ -59,8 +60,16 @@ export class FeatureTypeSelectorComponent implements OnInit, OnDestroy {
     }
   }
 
-  @Input()
-  public excludedFeatureSourceProtocols: Array<string> | null | undefined;
+  @Input({transform: (inputValues: string[] | null | undefined) => {
+    if (inputValues instanceof Array){
+      return inputValues.map(
+        excludedFeatureSourceProtocol => FeatureSourceProtocolEnum[excludedFeatureSourceProtocol as keyof typeof FeatureSourceProtocolEnum]
+      );
+    } else {
+      return inputValues;
+    }
+  }})
+  public excludedFeatureSourceProtocols: FeatureSourceProtocolEnum[] | null | undefined;
 
   @Output()
   public featureTypeSelected = new EventEmitter<{ featureSourceId?: number; featureTypeName?: string; featureTypeId?: string }>();
