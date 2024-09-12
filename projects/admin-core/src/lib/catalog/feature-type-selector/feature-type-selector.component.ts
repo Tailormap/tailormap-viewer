@@ -78,8 +78,8 @@ export class FeatureTypeSelectorComponent implements OnInit, OnDestroy {
     this.featureSources$ = this.store$.select(selectFeatureSources)
       .pipe(
         map(sources => sources.filter(
-          source => !this.excludedFeatureSourceProtocols?.some(excludedType => excludedType === source.protocol)
-        ))
+          source => !this.excludedFeatureSourceProtocols?.some(excludedType => excludedType === source.protocol),
+        )),
       );
     this.featureTypeSelectorForm.valueChanges
       .pipe(
