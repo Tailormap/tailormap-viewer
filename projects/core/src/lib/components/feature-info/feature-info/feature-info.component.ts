@@ -1,16 +1,15 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
-import { concatMap, of, Subject, takeUntil, tap } from 'rxjs';
+import { concatMap, of, Subject, takeUntil, tap, combineLatest, filter } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { loadFeatureInfo } from '../state/feature-info.actions';
-import {
-  selectCurrentlySelectedFeatureGeometry, selectFeatureInfoError$, selectLoadingFeatureInfo, selectMapCoordinates,
-} from '../state/feature-info.selectors';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
+import { featureInfoLoaded } from '../state/feature-info.actions';
+import { selectCurrentlySelectedFeatureGeometry, selectLoadingFeatureInfo, selectMapCoordinates } from '../state/feature-info.selectors';
 import { deregisterTool, registerTool } from '../../toolbar/state/toolbar.actions';
 import { ToolbarComponentEnum } from '../../toolbar/models/toolbar-component.enum';
 import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.helper';
+import { FeatureInfoService } from '../feature-info.service';
+import { selectVisibleLayersWithAttributes, selectVisibleWMSLayersWithoutAttributes } from '../../../map/state/map.selectors';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'tm-feature-info',
@@ -30,8 +29,8 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
 
   constructor(
     private mapService: MapService,
+    private featureInfoService: FeatureInfoService,
     private store$: Store,
-    private snackBar: MatSnackBar,
   ) { }
 
   public ngOnInit(): void {
@@ -63,21 +62,24 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
   }
 
   private handleMapClick(evt: { mapCoordinates: [number, number]; mouseCoordinates: [number, number] }) {
-    this.store$.dispatch(loadFeatureInfo({ mapCoordinates: evt.mapCoordinates, mouseCoordinates: evt.mouseCoordinates }));
-    this.store$.pipe(selectFeatureInfoError$)
-      .subscribe(error => {
-        if (!error || error.error === 'none') {
+    combineLatest([
+      this.store$.select(selectVisibleLayersWithAttributes),
+      this.store$.select(selectVisibleWMSLayersWithoutAttributes),
+    ])
+      .pipe(
+        take(1),
+        filter(([ layers, wmsLayers ]) => {
+          return layers.length > 0 || wmsLayers.length > 0;
+        }),
+        concatMap(() => {
+          return this.featureInfoService.fetchFeatures$(evt.mapCoordinates, evt.mouseCoordinates);
+        }),
+      )
+      .subscribe(response => {
+        if (response === null) {
           return;
         }
-        const config: SnackBarMessageOptionsModel = {
-          message: error.error === 'error'
-            ? error.errorMessage || FeatureInfoComponent.DEFAULT_ERROR_MESSAGE
-            : FeatureInfoComponent.DEFAULT_NO_FEATURES_FOUND_MESSAGE,
-          duration: 5000,
-          showDuration: true,
-          showCloseButton: true,
-        };
-        SnackBarMessageComponent.open$(this.snackBar, config);
+        this.store$.dispatch(featureInfoLoaded({ featureInfo: response }));
       });
   }
 

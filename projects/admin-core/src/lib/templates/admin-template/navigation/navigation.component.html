@@ -22,6 +22,10 @@
 </ng-template>
 
 <div class="navigation-bar" *ngIf="userDetails$ | async as userDetails">
+
+
+
+
   @for(menu of buttons; track menu.link) {
     @if (isAdmin(userDetails) || !menu.requireAdmin) {
       <ng-container *ngTemplateOutlet="menuButton; context: {$implicit: menu}"></ng-container>

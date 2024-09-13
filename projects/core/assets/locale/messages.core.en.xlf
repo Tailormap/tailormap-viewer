@@ -326,6 +326,9 @@
       <trans-unit id="core.feature-info.object-information" datatype="html">
         <source>Object Information</source>
       </trans-unit>
+      <trans-unit id="core.feature-info.select-layer" datatype="html">
+        <source>Select layer</source>
+      </trans-unit>
       <trans-unit id="core.filter.add-filter" datatype="html">
         <source>Add filter</source>
       </trans-unit>

@@ -19,6 +19,7 @@ export class ConfirmDialogService {
     removeConfirm?: boolean,
     confirmButtonLabel?: string,
     denyButtonLabel?: string,
+    hideDenyButton?: boolean,
   ): Observable<boolean> {
     if (this.dialogRef) {
       this.dialogRef.close(false);
@@ -29,6 +30,7 @@ export class ConfirmDialogService {
       removeConfirm,
       confirmButtonLabel,
       denyButtonLabel,
+      hideDenyButton,
     };
     this.dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: '400px',

@@ -1,16 +1,10 @@
-<h1 mat-dialog-title>
-  {{data.title}}
-</h1>
-
+<h1 mat-dialog-title>{{data.title}}</h1>
 <div class="dialog-content">{{data.message}}</div>
-
 <div mat-dialog-actions>
-  <button mat-button (click)="onDismiss()">
-    <ng-container *ngIf="!data.denyButtonLabel" i18n="@@shared.common.no">No</ng-container>
-    <ng-container *ngIf="data.denyButtonLabel">{{data.denyButtonLabel}}</ng-container>
-  </button>
-  <button mat-raised-button [color]="data.removeConfirm ? 'warn' : 'primary'" (click)="onConfirm()">
-    <ng-container *ngIf="!data.confirmButtonLabel" i18n="@@shared.common.yes">Yes</ng-container>
-    <ng-container *ngIf="data.confirmButtonLabel">{{data.confirmButtonLabel}}</ng-container>
-  </button>
+  @if (!data.hideDenyButton) {
+    <button mat-button (click)="onDismiss()">{{data.denyButtonLabel || defaultDenyButtonLabel}}</button>
+  }
+  <button mat-raised-button
+          [color]="data.removeConfirm ? 'warn' : 'primary'"
+          (click)="onConfirm()">{{data.confirmButtonLabel || defaultConfirmButtonLabel}}</button>
 </div>

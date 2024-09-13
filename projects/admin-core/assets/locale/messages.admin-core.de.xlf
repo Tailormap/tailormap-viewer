@@ -10,14 +10,6 @@
         <source>Add sub folder</source>
         <target>Unterordner hinzufügen</target>
       </trans-unit>
-      <trans-unit id="admin-core.application.remove" datatype="html">
-        <source>Remove</source>
-        <target>Entfernen</target>
-      </trans-unit>
-      <trans-unit id="admin-core.application.rename" datatype="html">
-        <source>Rename</source>
-        <target>Umbenennen</target>
-      </trans-unit>
       <trans-unit id="admin-core.application.application" datatype="html">
         <source>Application</source>
         <target>Anwendung</target>
@@ -282,6 +274,10 @@
         <source>Projection</source>
         <target>Projektion</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.remove" datatype="html">
+        <source>Remove</source>
+        <target>Entfernen</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.remove-image" datatype="html">
         <source>Remove the image</source>
         <target>Bild entfernen</target>
@@ -289,6 +285,10 @@
       <trans-unit id="admin-core.application.remove-layer" datatype="html">
         <source>Remove layer from application</source>
         <target>Ebene aus der Anwendung entfernen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.rename" datatype="html">
+        <source>Rename</source>
+        <target>Umbenennen</target>
       </trans-unit>
       <trans-unit id="admin-core.application.select-form" datatype="html">
         <source>Select (optional) form</source>
@@ -858,6 +858,10 @@
         <source>Comment</source>
         <target>Kommentar</target>
       </trans-unit>
+      <trans-unit id="admin-core.common.comment" datatype="html">
+        <source>Comment</source>
+        <target>Kommentar</target>
+      </trans-unit>
       <trans-unit id="admin-core.common.comments" datatype="html">
         <source>Comments</source>
         <target>Kommentare</target>
@@ -901,6 +905,22 @@
       <trans-unit id="admin-core.common.feature-source" datatype="html">
         <source>Feature source and type</source>
         <target>Feature-Quelle und Typ</target>
+      </trans-unit>
+      <trans-unit id="admin-core.common.feature-source" datatype="html">
+        <source>Feature source and type</source>
+        <target>Feature-Quelle und Typ</target>
+      </trans-unit>
+      <trans-unit id="admin-core.common.feature-source" datatype="html">
+        <source>Feature source and type</source>
+        <target>Feature-Quelle und Typ</target>
+      </trans-unit>
+      <trans-unit id="admin-core.common.filter-attributes" datatype="html">
+        <source>Filter attributes</source>
+        <target>Filterattribute</target>
+      </trans-unit>
+      <trans-unit id="admin-core.common.filter-attributes" datatype="html">
+        <source>Filter attributes</source>
+        <target>Filterattribute</target>
       </trans-unit>
       <trans-unit id="admin-core.common.filter-attributes" datatype="html">
         <source>Filter attributes</source>
@@ -946,6 +966,10 @@
         <source>Logout</source>
         <target>Abmelden</target>
       </trans-unit>
+      <trans-unit id="admin-core.common.logs-title" datatype="html">
+        <source>Logs</source>
+        <target state="new">Logs</target>
+      </trans-unit>
       <trans-unit id="admin-core.common.max-x" datatype="html">
         <source>Max X</source>
         <target>Max X</target>
@@ -989,6 +1013,10 @@
       <trans-unit id="admin-core.common.saved" datatype="html">
         <source>Saved</source>
         <target>Gespeichert</target>
+      </trans-unit>
+      <trans-unit id="admin-core.common.search-indexes-title" datatype="html">
+        <source>Search Indexes</source>
+        <target>Suchindizes</target>
       </trans-unit>
       <trans-unit id="admin-core.common.search-indexes-title" datatype="html">
         <source>Search Indexes</source>
@@ -1042,93 +1070,6 @@
         <source>Welcome to Tailormap Admin</source>
         <target>Willkommen bei der Tailormap-Verwaltung</target>
       </trans-unit>
-      <trans-unit id="admin-core.common.feature-source" datatype="html">
-        <source>Feature source and type</source>
-        <target>Feature-Quelle und Typ</target>
-      </trans-unit>
-      <trans-unit id="admin-core.common.filter-attributes" datatype="html">
-        <source>Filter attributes</source>
-        <target>Filterattribute</target>
-      </trans-unit>
-      <trans-unit id="admin-core.search-index.search-indexes" datatype="html">
-        <source>Search Indexes</source>
-        <target>Suchindizes</target>
-      </trans-unit>
-      <trans-unit id="admin-core.search-index.error-deleting-search-index" datatype="html">
-        <source>Error while deleting search index.</source>
-        <target>Fehler beim Löschen des Suchindex.</target>
-      </trans-unit>
-      <trans-unit id="admin-core.search-index.search-index-removed" datatype="html">
-        <source>Search index removed</source>
-        <target>Suchindex entfernt</target>
-      </trans-unit>
-      <trans-unit id="admin-core.common.comment" datatype="html">
-        <source>Comment</source>
-        <target>Kommentar</target>
-      </trans-unit>
-      <trans-unit id="admin-core.common.feature-source" datatype="html">
-        <source>Feature source and type</source>
-        <target>Feature-Quelle und Typ</target>
-      </trans-unit>
-      <trans-unit id="admin-core.common.filter-attributes" datatype="html">
-        <source>Filter attributes</source>
-        <target>Filterattribute</target>
-      </trans-unit>
-      <trans-unit id="admin-core.search-index.delete-search-index" datatype="html">
-        <source>Delete search index {$PH}</source>
-        <target>Suchindex {$PH} löschen</target>
-      </trans-unit>
-      <trans-unit id="admin-core.search-index.delete-search-index-message" datatype="html">
-        <source>Are you sure you want to delete search index {$PH}? This action cannot be undone.</source>
-        <target>Sind Sie sicher, dass Sie den Suchindex {$PH} löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.</target>
-      </trans-unit>
-      <trans-unit id="admin-core.search-index.selected-attributes-to-index" datatype="html">
-        <source>Selected attributes used to index</source>
-      </trans-unit>
-      <trans-unit id="admin-core.search-index.selected-attributes-to-display" datatype="html">
-        <source>Selected attributes used to display</source>
-        <target>Selektierte Attribute zur Anzeige</target>
-      </trans-unit>
-      <trans-unit id="admin-core.search-index.edit-search-index" datatype="html">
-        <source>Edit search index {$INTERPOLATION}</source>
-        <target>Suchindex {$INTERPOLATION} bearbeiten</target>
-      </trans-unit>
-      <trans-unit id="admin-core.search-index.create-search-index" datatype="html">
-        <source>Create search index</source>
-        <target>Suchindex erstellen</target>
-      </trans-unit>
-      <trans-unit id="admin-core.common.search-indexes-title" datatype="html">
-        <source>Search Indexes</source>
-        <target>Suchindizes</target>
-      </trans-unit>
-      <trans-unit id="admin-core.search-index.error-loading-search-indexes" datatype="html">
-        <source>Error while loading list of search indexes</source>
-        <target>Fehler beim Laden der Liste der Suchindizes</target>
-      </trans-unit>
-      <trans-unit id="admin-core.search-index.add-search-index" datatype="html">
-        <source>Add search index</source>
-        <target>Suchindex hinzufügen</target>
-      </trans-unit>
-      <trans-unit id="admin-core.search-index.error-creating-search-index" datatype="html">
-        <source>Error while creating search index.</source>
-        <target>Fehler beim Erstellen des Suchindex.</target>
-      </trans-unit>
-      <trans-unit id="admin-core.search-index.search-index-created" datatype="html">
-        <source>Search index created</source>
-        <target>Suchindex erstellt</target>
-      </trans-unit>
-      <trans-unit id="admin-core.search-index.error-updating-search-index" datatype="html">
-        <source>Error while updating search index.</source>
-        <target>Fehler beim Aktualisieren des Suchindex.</target>
-      </trans-unit>
-      <trans-unit id="admin-core.search-index.search-index-updated" datatype="html">
-        <source>Search index updated</source>
-        <target>Suchindex aktualisiert</target>
-      </trans-unit>
-      <trans-unit id="admin-core.search-index.filter-search-indexes" datatype="html">
-        <source>Filter search indexes</source>
-        <target>Suchindizes filtern</target>
-      </trans-unit>
       <trans-unit id="admin-core.components.clw-add-url" datatype="html">
         <source>Add URL</source>
         <target>URL hinzufügen</target>
@@ -1152,6 +1093,14 @@
       <trans-unit id="admin-core.components.coordinate-link-window-title" datatype="html">
         <source>Coordinate link window title</source>
         <target>Titel für Koordinaten-Link-Fenster</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.feature-info-defaultShowDropdown" datatype="html">
+        <source>Use dropdown to select feature info layers by default</source>
+        <target>Verwenden die Dropdown-Liste, um Feature-Info-Layer auszuwählen.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.feature-info-title" datatype="html">
+        <source>Feature info</source>
+        <target>Feature-Informationen</target>
       </trans-unit>
       <trans-unit id="admin-core.components.measure-area-title" datatype="html">
         <source>Measure area title</source>
@@ -1393,6 +1342,10 @@
         <source>Home</source>
         <target>Startseite</target>
       </trans-unit>
+      <trans-unit id="admin-core.navigation.logs" datatype="html">
+        <source>Logs</source>
+        <target>Logs</target>
+      </trans-unit>
       <trans-unit id="admin-core.navigation.search-indexes" datatype="html">
         <source>Search indexes</source>
         <target>Suchindizes</target>
@@ -1408,10 +1361,6 @@
       <trans-unit id="admin-core.navigation.users" datatype="html">
         <source>Users</source>
         <target>Benutzer</target>
-      </trans-unit>
-      <trans-unit id="admin-core.navigation.search-indexes" datatype="html">
-        <source>Search indexes</source>
-        <target>Suchindizes</target>
       </trans-unit>
       <trans-unit id="admin-core.oidc.add-identity-provider" datatype="html">
         <source>Add identity provider</source>
@@ -1501,21 +1450,25 @@
         <source>Add search index</source>
         <target>Suchindex hinzufügen</target>
       </trans-unit>
+      <trans-unit id="admin-core.search-index.add-search-index" datatype="html">
+        <source>Add search index</source>
+        <target>Suchindex hinzufügen</target>
+      </trans-unit>
       <trans-unit id="admin-core.search-index.create-search-index" datatype="html">
         <source>Create search index</source>
         <target>Suchindex erstellen</target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.delete-search-index" datatype="html">
         <source>Delete search index <x id="PH" equiv-text="searchIndex.name"/></source>
-        <target state="new">Suchindex {$PH} löschen</target>
+        <target>Suchindex {$PH} löschen</target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.delete-search-index-message" datatype="html">
         <source>Are you sure you want to delete search index <x id="PH" equiv-text="searchIndex.name"/>? This action cannot be undone.</source>
-        <target state="new">Sind Sie sicher, dass Sie den Suchindex {$PH} löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.</target>
+        <target>Sind Sie sicher, dass Sie den Suchindex {$PH} löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.</target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.edit-search-index" datatype="html">
         <source>Edit search index <x id="INTERPOLATION" equiv-text="{{searchIndex.name}}"/></source>
-        <target state="new">Suchindex {$INTERPOLATION} bearbeiten</target>
+        <target>Suchindex {$INTERPOLATION} bearbeiten</target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.error-creating-search-index" datatype="html">
         <source>Error while creating search index.</source>
@@ -1524,6 +1477,22 @@
       <trans-unit id="admin-core.search-index.error-deleting-search-index" datatype="html">
         <source>Error while deleting search index.</source>
         <target>Fehler beim Löschen des Suchindex.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.error-deleting-search-index" datatype="html">
+        <source>Error while deleting search index.</source>
+        <target>Fehler beim Löschen des Suchindex.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.error-deleting-search-index" datatype="html">
+        <source>Error while deleting search index.</source>
+        <target>Fehler beim Löschen des Suchindex.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.error-loading-search-indexes" datatype="html">
+        <source>Error while loading list of search indexes</source>
+        <target>Fehler beim Laden der Liste der Suchindizes</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.error-loading-search-indexes" datatype="html">
+        <source>Error while loading list of search indexes</source>
+        <target>Fehler beim Laden der Liste der Suchindizes</target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.error-loading-search-indexes" datatype="html">
         <source>Error while loading list of search indexes</source>

@@ -37,7 +37,7 @@ describe('LayerSettingsFormComponent', () => {
       expect(changedFn).toHaveBeenCalledWith({
         authorizationRules: [],
         title: 'Some title',
-        hiDpiMode: 'showNextZoomLevel',
+        hiDpiMode: undefined,
         hiDpiDisabled: undefined,
         tilingDisabled: undefined,
         tilingGutter: undefined,
@@ -50,7 +50,7 @@ describe('LayerSettingsFormComponent', () => {
         authorizationRules: [],
         title: 'Some title',
         hiDpiDisabled: true,
-        hiDpiMode: 'showNextZoomLevel',
+        hiDpiMode: undefined,
         tilingDisabled: undefined,
         tilingGutter: undefined,
       });

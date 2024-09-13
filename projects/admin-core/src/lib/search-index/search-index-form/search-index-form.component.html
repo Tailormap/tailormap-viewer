@@ -14,7 +14,8 @@
   </mat-form-field>
   <div class="form-control">
     <strong i18n="@@admin-core.common.feature-source">Feature source and type</strong>
-    <tm-admin-feature-type-selector [featureSourceId]="searchIndexForm.get('featureSourceId')?.value"
+    <tm-admin-feature-type-selector [excludedFeatureSourceProtocols]="nonSearchableFeatureSourceProtocols"
+                                    [featureSourceId]="searchIndexForm.get('featureSourceId')?.value"
                                     [featureTypeName]="searchIndexForm.get('featureTypeName')?.value"
                                     [disabled]="!!searchIndex"
                                     (featureTypeSelected)="updateFeatureTypeSelection($event)"></tm-admin-feature-type-selector>

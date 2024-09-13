@@ -79,7 +79,7 @@ export class AuthenticatedUserService {
             if (
               error instanceof HttpErrorResponse
               && (req.url.startsWith(TailormapApiConstants.BASE_URL) && req.url !== TailormapApiConstants.LOGIN_URL)
-              && (error.status === 401 || error.status === 403)
+              && (error.status === 401 || error.status === 403 || AuthenticatedUserService.isUnauthorizedMethod(error))
             ) {
               this.getUserDetails$()
                 .pipe(take(1))
@@ -91,6 +91,10 @@ export class AuthenticatedUserService {
           }),
         );
     };
+  }
+
+  private static isUnauthorizedMethod(error: HttpErrorResponse) {
+    return error.url?.includes(TailormapApiConstants.UNAUTHORIZED_URL) && error.status === 405;
   }
 
 }

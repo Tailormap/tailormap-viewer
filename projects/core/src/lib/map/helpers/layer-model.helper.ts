@@ -1,5 +1,5 @@
-import { AppLayerWithInitialValuesModel } from '../models';
-import { AppLayerModel } from '@tailormap-viewer/api';
+import { AppLayerWithInitialValuesModel, ExtendedAppLayerModel } from '../models';
+import { AppLayerModel, ServiceProtocol } from '@tailormap-viewer/api';
 
 export class LayerModelHelper {
 
@@ -11,6 +11,10 @@ export class LayerModelHelper {
         opacity: layer.opacity,
       },
     };
+  }
+
+  public static shouldUseWmsFeatureInfo(l: ExtendedAppLayerModel) {
+    return l.service?.protocol === ServiceProtocol.WMS && !l.hasAttributes;
   }
 
 }

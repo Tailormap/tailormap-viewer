@@ -7,6 +7,7 @@ export interface ConfirmDialogData {
   removeConfirm?: boolean;
   confirmButtonLabel?: string;
   denyButtonLabel?: string;
+  hideDenyButton?: boolean;
 }
 
 @Component({
@@ -15,6 +16,9 @@ export interface ConfirmDialogData {
   styleUrls: ['./confirm-dialog.component.css'],
 })
 export class ConfirmDialogComponent {
+
+  public defaultDenyButtonLabel = $localize `:@@shared.common.no:No`;
+  public defaultConfirmButtonLabel = $localize `:@@shared.common.yes:Yes`;
 
   constructor(
     public dialogRef: MatDialogRef<ConfirmDialogComponent>,

@@ -1,7 +1,7 @@
 <tm-dialog [open]="dialogOpen$ | async"
            [openFromRight]="true"
            [widthMargin]="panelWidthMargin"
-           [width]="panelWidth"
+           [width]="expandedList() ? panelWidth : panelWidthCollapsed"
            class="feature-info-dialog"
            (closeDialog)="closeDialog()"
            [allowCollapse]="true"
@@ -9,17 +9,43 @@
            (expandCollapseDialog)="expandCollapseDialog()"
            dialogTitle="Object Information"
            i18n-dialogTitle="@@core.feature-info.object-information">
-  <div class="feature-info" *ngIf="currentFeature$ | async as currentFeature">
-    <div class="content">
-      <h2>{{currentFeature.layer.title}}</h2>
-      <div *ngFor="let att of currentFeature.sortedAttributes" class="row">
-        <strong>{{att.label}}</strong>
-        <div [innerHTML]="att.attributeValue | htmlify"></div>
+  @if (expandedList()) {
+    <div class="layer-list-wrapper">
+      <div class="toggle"><button mat-icon-button (click)="toggleListExpanded()"><mat-icon svgIcon="chevron_right"></mat-icon></button></div>
+      <div class="layer-list">
+        <tm-feature-info-layer-list></tm-feature-info-layer-list>
       </div>
     </div>
-    <div class="buttons">
-      <button mat-flat-button i18n="@@core.common.back" (click)="back()" color="primary" [disabled]="isBackDisabled()">Back</button>
-      <button mat-flat-button i18n="@@core.common.next" (click)="next()" color="primary" [disabled]="isNextDisabled()">Next</button>
-    </div>
+  }
+  <div class="feature-list">
+    @if (selectedSingleLayer$ | async; as layer) {
+      <tm-feature-info-layer-item [layer]="getLayerListItem(layer)"></tm-feature-info-layer-item>
+    } @else if(!expandedList()) {
+      <div class="layer-list-dropdown-wrapper">
+        @if (isWideScreen()) {
+          <button mat-icon-button (click)="toggleListExpanded()"><mat-icon svgIcon="chevron_left"></mat-icon></button>
+        }
+        <tm-feature-info-layer-dropdown></tm-feature-info-layer-dropdown>
+      </div>
+    }
+    @if(selectedLayer$ | async; as layer) {
+      @if (layer.error) {
+        <tm-error-message [friendlyError]="true" [message]="layer.error"></tm-error-message>
+      }
+    }
+    @if(currentFeature$ | async; as feature) {
+      <div class="feature-info" (swipeleft)="back()" (swiperight)="next()">
+        <div class="content">
+          <div *ngFor="let att of feature.sortedAttributes" class="row">
+            <strong>{{att.label}}</strong>
+            <div [innerHTML]="att.attributeValue | htmlify"></div>
+          </div>
+        </div>
+        <div class="buttons">
+          <button mat-flat-button i18n="@@core.common.back" (click)="back()" color="primary" [disabled]="isPrevButtonDisabled$ | async">Back</button>
+          <button mat-flat-button i18n="@@core.common.next" (click)="next()" color="primary" [disabled]="isNextButtonDisabled$ | async">Next</button>
+        </div>
+      </div>
+    }
   </div>
 </tm-dialog>
