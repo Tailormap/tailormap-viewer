@@ -60,15 +60,7 @@ export class FeatureTypeSelectorComponent implements OnInit, OnDestroy {
     }
   }
 
-  @Input({ transform: (inputValues: string[] | null | undefined) => {
-    if (inputValues instanceof Array){
-      return inputValues.map(
-        excludedFeatureSourceProtocol => FeatureSourceProtocolEnum[excludedFeatureSourceProtocol as keyof typeof FeatureSourceProtocolEnum],
-      );
-    } else {
-      return inputValues;
-    }
-  } })
+  @Input()
   public excludedFeatureSourceProtocols: FeatureSourceProtocolEnum[] | null | undefined;
 
   @Output()
