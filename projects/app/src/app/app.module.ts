@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CoreModule } from '@tailormap-viewer/core';
 import { environment } from '../environments/environment';
-import { provideHttpClient, withXsrfConfiguration } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXsrfConfiguration } from '@angular/common/http';
 import { TailormapApiConstants } from '@tailormap-viewer/api';
 
 @NgModule({
@@ -23,6 +23,7 @@ import { TailormapApiConstants } from '@tailormap-viewer/api';
   ],
   providers: [
     provideHttpClient(
+      withInterceptorsFromDi(),
       withXsrfConfiguration({
         cookieName: TailormapApiConstants.XSRF_COOKIE_NAME,
         headerName: TailormapApiConstants.XSRF_HEADER_NAME,
