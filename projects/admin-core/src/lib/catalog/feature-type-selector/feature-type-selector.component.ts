@@ -2,11 +2,13 @@ import { Component, OnInit, ChangeDetectionStrategy, Input, EventEmitter, Output
 import { Store } from '@ngrx/store';
 import { selectFeatureSources, selectFeatureTypesForSource } from '../state/catalog.selectors';
 import { Observable, of, Subject, takeUntil, tap, withLatestFrom } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 import { TypesHelper } from '@tailormap-viewer/shared';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
 import { GeoServiceHelper } from '../helpers/geo-service.helper';
+import { FeatureSourceProtocolEnum } from '@tailormap-admin/admin-api';
 
 @Component({
   selector: 'tm-admin-feature-type-selector',
@@ -58,6 +60,9 @@ export class FeatureTypeSelectorComponent implements OnInit, OnDestroy {
     }
   }
 
+  @Input()
+  public excludedFeatureSourceProtocols: FeatureSourceProtocolEnum[] | null | undefined;
+
   @Output()
   public featureTypeSelected = new EventEmitter<{ featureSourceId?: number; featureTypeName?: string; featureTypeId?: string }>();
 
@@ -71,7 +76,12 @@ export class FeatureTypeSelectorComponent implements OnInit, OnDestroy {
   ) { }
 
   public ngOnInit(): void {
-    this.featureSources$ = this.store$.select(selectFeatureSources);
+    this.featureSources$ = this.store$.select(selectFeatureSources)
+      .pipe(
+        map(sources => sources.filter(
+          source => !this.excludedFeatureSourceProtocols?.some(excludedType => excludedType === source.protocol),
+        )),
+      );
     this.featureTypeSelectorForm.valueChanges
       .pipe(
         takeUntil(this.destroyed),

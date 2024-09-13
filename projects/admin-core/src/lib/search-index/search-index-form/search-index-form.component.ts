@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, DestroyRef } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { SearchIndexModel } from '@tailormap-admin/admin-api';
+import { FeatureSourceProtocolEnum, SearchIndexModel } from '@tailormap-admin/admin-api';
 import { debounceTime, filter, map, distinctUntilChanged, concatMap, forkJoin, of, take } from 'rxjs';
 import { FormHelper } from '../../helpers/form.helper';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -18,6 +18,8 @@ import { FeatureSourceService } from '../../catalog/services/feature-source.serv
 export class SearchIndexFormComponent implements OnInit {
 
   private _searchIndex: SearchIndexModel | null = null;
+
+  public nonSearchableFeatureSourceProtocols: FeatureSourceProtocolEnum[] = [FeatureSourceProtocolEnum.WFS];
 
   @Input()
   public set searchIndex(form: SearchIndexModel | null) {
