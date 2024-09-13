@@ -264,7 +264,7 @@ export class LayerSettingsFormComponent implements OnInit {
   }
 
   public updateFeatureTypeSelection($event: { featureSourceId?: number; featureTypeName?: string }) {
-    if (TypesHelper.isDefined($event.featureSourceId) && TypesHelper.isDefined($event.featureTypeName)) {
+    if (TypesHelper.isDefined($event.featureSourceId)) {
       this.layerSettingsForm.patchValue({
         featureSourceId: $event.featureSourceId,
         featureTypeName: $event.featureTypeName,
