@@ -10,6 +10,7 @@ import { ExternalLibsLoaderHelper } from '@tailormap-viewer/shared';
 export class CesiumLayerManager {
 
   private map3D: BehaviorSubject<OLCesium | null> = new BehaviorSubject<OLCesium | null>(null);
+  private layers3D: Map<string, number> = new Map<string, number>();
 
   constructor(
     private olMap: OlMap,
@@ -77,18 +78,37 @@ export class CesiumLayerManager {
   public addLayers(layers: LayerModel[]){
     this.ngZone.runOutsideAngular(() => {
       layers.forEach(layer => {
+        if (layer.visible) {
           this.addLayer(layer);
-        });
+        } else {
+          this.removeLayer(layer);
+        }
+      });
     });
   }
 
   private addLayer(layer: LayerModel) {
     this.executeScene3DAction(async scene3D => {
-      this.create3DLayer(layer)?.then(cesiumLayer => {
-        if (cesiumLayer) {
-          scene3D.primitives.add(cesiumLayer);
-        }
-      });
+      if (this.layers3D.has(layer.id)) {
+        const primitive = scene3D.primitives.get(this.layers3D.get(layer.id) ?? 0);
+        primitive.show = true;
+      } else {
+        this.create3DLayer(layer)?.then(cesiumLayer => {
+          if (cesiumLayer) {
+            scene3D.primitives.add(cesiumLayer, this.layers3D.size);
+            this.layers3D.set(layer.id, this.layers3D.size);
+          }
+        });
+      }
+    });
+  }
+
+  private removeLayer(layer: LayerModel) {
+    this.executeScene3DAction(async scene3D => {
+      if (this.layers3D.has(layer.id)) {
+        const primitive = scene3D.primitives.get(this.layers3D.get(layer.id) ?? 0);
+        primitive.show = false;
+      }
     });
   }
 
