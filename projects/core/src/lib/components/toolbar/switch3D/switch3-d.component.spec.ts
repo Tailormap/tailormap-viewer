@@ -6,15 +6,18 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { selectEnable3D } from '../../../state/core.selectors';
+import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
 
 describe('Switch3DComponent', () => {
 
   test('should render', async () => {
+    const mapServiceMock = getMapServiceMock();
     await render(Switch3DComponent, {
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       imports: [ SharedModule, MatIconTestingModule ],
       providers: [
         { provide: MatSnackBar, useValue: { dismiss: jest.fn() } },
+        mapServiceMock.provider,
         provideMockStore({
           selectors: [
             { selector: selectEnable3D, value: true },
@@ -26,11 +29,13 @@ describe('Switch3DComponent', () => {
   });
 
   test('should not render', async () => {
+    const mapServiceMock = getMapServiceMock();
     await render(Switch3DComponent, {
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       imports: [ SharedModule, MatIconTestingModule ],
       providers: [
         { provide: MatSnackBar, useValue: { dismiss: jest.fn() } },
+        mapServiceMock.provider,
         provideMockStore({
           selectors: [
             { selector: selectEnable3D, value: false },
