@@ -407,7 +407,7 @@
       </trans-unit>
       <trans-unit id="core.edit.select-layer" datatype="html">
         <source>Select layer to edit</source>
-        <target>Wähle die zu bearbeitende Ebene aus</target>
+        <target>Wähle die zu bearbeitende Layer aus</target>
       </trans-unit>
       <trans-unit id="core.edit.true" datatype="html">
         <source>True</source>
@@ -432,6 +432,10 @@
       <trans-unit id="core.feature-info.object-information" datatype="html">
         <source>Object Information</source>
         <target>Objektinformationen</target>
+      </trans-unit>
+      <trans-unit id="core.feature-info.select-layer" datatype="html">
+        <source>Select layer</source>
+        <target>Layer auswählen</target>
       </trans-unit>
       <trans-unit id="core.filter.add-filter" datatype="html">
         <source>Add filter</source>

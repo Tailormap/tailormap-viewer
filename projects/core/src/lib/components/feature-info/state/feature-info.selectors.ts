@@ -1,28 +1,28 @@
 import { FeatureInfoState, featureInfoStateKey } from './feature-info.state';
-import { createFeatureSelector, createSelector, select } from '@ngrx/store';
+import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { ArrayHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
-import { filter, pipe, take } from 'rxjs';
 import { FeatureInfoModel } from '../models/feature-info.model';
 import { FeatureInfoHelper } from '../helpers/feature-info.helper';
-import { selectVisibleLayersWithServices } from '../../../map/state/map.selectors';
+import { selectLayersWithServices } from '../../../map/state/map.selectors';
 import { AttributeTypeHelper } from '@tailormap-viewer/api';
+import { FeatureInfoLayerListItemModel } from '../models/feature-info-layer-list-item.model';
 
 const selectFeatureInfoState = createFeatureSelector<FeatureInfoState>(featureInfoStateKey);
 
 export const selectMapCoordinates = createSelector(selectFeatureInfoState, state => state.mapCoordinates);
 export const selectMouseCoordinates = createSelector(selectFeatureInfoState, state => state.mouseCoordinates);
-export const selectFeatureInfoLoadStatus = createSelector(selectFeatureInfoState, state => state.loadStatus);
-export const selectLoadingFeatureInfo = createSelector(selectFeatureInfoLoadStatus, loadStatus => loadStatus === LoadingStateEnum.LOADING);
 export const selectFeatureInfoDialogVisible = createSelector(selectFeatureInfoState, (state): boolean => state.dialogVisible);
 export const selectFeatureInfoDialogCollapsed = createSelector(selectFeatureInfoState, (state): boolean => state.dialogCollapsed);
-export const selectFeatureInfoErrorMessage = createSelector(selectFeatureInfoState, state => state.errorMessage);
+export const selectFeatureInfoLayerListCollapsed = createSelector(selectFeatureInfoState, (state): boolean => state.layerListCollapsed);
 
 export const selectFeatureInfoFeatures = createSelector(selectFeatureInfoState, state => state.features);
 export const selectFeatureInfoMetadata = createSelector(selectFeatureInfoState, state => state.columnMetadata);
+export const selectFeatureInfoLayers = createSelector(selectFeatureInfoState, state => state.layers);
+
 export const selectFeatureInfoList = createSelector(
   selectFeatureInfoFeatures,
   selectFeatureInfoMetadata,
-  selectVisibleLayersWithServices,
+  selectLayersWithServices,
   (features, metadata, layers): FeatureInfoModel[] => {
     const featureInfoModels: FeatureInfoModel[] = [];
     features.forEach(feature => {
@@ -42,6 +42,7 @@ export const selectFeatureInfoList = createSelector(
       });
       const attributeOrder = columnMetadata.map(c => c.key);
       featureInfoModels.push({
+        __fid: feature.__fid,
         layer,
         sortedAttributes: attributes.sort(ArrayHelper.getArraySorter('key', attributeOrder)),
         geometry: FeatureInfoHelper.getGeometryForFeatureInfoFeature(feature, columnMetadata) || null,
@@ -50,23 +51,68 @@ export const selectFeatureInfoList = createSelector(
     return featureInfoModels;
   },
 );
-export const selectCurrentFeatureIndex = createSelector(selectFeatureInfoState, state => state.currentFeatureIndex);
-export const selectTotalFeatureCount = createSelector(selectFeatureInfoList, features => features.length);
-export const selectFeatureInfoCounts = createSelector(
-  selectCurrentFeatureIndex,
-  selectTotalFeatureCount,
-  (current, total) => ({ current, total }),
+
+export const selectLoadingFeatureInfo = createSelector(
+  selectFeatureInfoLayers,
+  layers => layers.some(l => l.loading === LoadingStateEnum.LOADING),
 );
+
+export const selectSelectedLayerId = createSelector(selectFeatureInfoState, state => state.selectedLayerId);
+
+export const selectSelectedFeatureInfoLayer = createSelector(
+  selectFeatureInfoLayers,
+  selectSelectedLayerId,
+  (layers, selectedLayerId) => layers.find(l => l.id === selectedLayerId) || null,
+);
+
+export const selectFeaturesForSelectedLayer = createSelector(
+  selectFeatureInfoList,
+  selectSelectedLayerId,
+  (features, selectedLayerId) => features.filter(f => f.layer.id === selectedLayerId),
+);
+
 export const selectCurrentlySelectedFeature = createSelector(
   selectFeatureInfoList,
-  selectCurrentFeatureIndex,
-  (features, idx) => {
-    if (idx === features.length) {
-      return features[features.length - 1];
+  selectSelectedFeatureInfoLayer,
+  (features, selectedLayer) => {
+    if (!selectedLayer || !selectedLayer.selectedFeatureId) {
+      return null;
     }
-    return features[idx];
+    return features.find(f => f.__fid === selectedLayer.selectedFeatureId) || null;
   },
 );
+
+export const selectCurrentlySelectedLayerError = createSelector(
+  selectSelectedFeatureInfoLayer,
+  (selectedLayer) => {
+    if (!selectedLayer) {
+      return null;
+    }
+    return selectedLayer.error ?? null;
+  },
+);
+
+const selectSelectedIndexAndTotal = createSelector(
+    selectSelectedFeatureInfoLayer,
+    selectFeaturesForSelectedLayer,
+    (layer, features) => {
+        if (!layer) {
+            return { idx: 0, total: 0 };
+        }
+        return { idx: features.findIndex(f => f.__fid === layer.selectedFeatureId ), total: features.length };
+    },
+);
+
+export const selectIsPrevButtonDisabled = createSelector(
+    selectSelectedIndexAndTotal,
+    ({ idx, total }) => idx <= 0 || total <= 1,
+);
+
+export const selectIsNextButtonDisabled = createSelector(
+    selectSelectedIndexAndTotal,
+    ({ idx, total }) => idx >= total - 1 || total <= 1,
+);
+
 export const selectCurrentlySelectedFeatureGeometry = createSelector(
   selectFeatureInfoDialogVisible,
   selectCurrentlySelectedFeature,
@@ -78,27 +124,14 @@ export const selectCurrentlySelectedFeatureGeometry = createSelector(
   },
 );
 
-export const selectFeatureInfoError = createSelector(
-  selectTotalFeatureCount,
-  selectFeatureInfoLoadStatus,
-  selectFeatureInfoErrorMessage,
-  (featureInfoCount, loadStatus, errorMessage): { error: 'error' | 'no_records' | 'none'; errorMessage?: string } | null => {
-    if (loadStatus === LoadingStateEnum.FAILED) {
-      return { error: 'error', errorMessage };
-    }
-    if (loadStatus === LoadingStateEnum.LOADED && featureInfoCount === 0) {
-      return { error: 'no_records'  };
-    }
-    if (loadStatus === LoadingStateEnum.LOADED) {
-      return { error: 'none' };
-    }
-    return null;
+export const selectFeatureInfoLayerListItems = createSelector(
+  selectFeatureInfoLayers,
+  selectSelectedLayerId,
+  (layers, selectedLayerId): FeatureInfoLayerListItemModel[] => {
+    return layers.map(l => ({
+      ...l,
+      selected: l.id === selectedLayerId,
+      disabled: FeatureInfoHelper.isLayerDisabled(l),
+    }));
   },
 );
-
-export const selectFeatureInfoError$ = pipe(
-  select(selectFeatureInfoError),
-  filter(error => error !== null),
-  take(1),
-);
-

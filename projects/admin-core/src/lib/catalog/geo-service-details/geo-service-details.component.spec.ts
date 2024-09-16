@@ -87,7 +87,14 @@ describe('GeoServiceDetailsComponent', () => {
     expect(updateGeoService$).toHaveBeenNthCalledWith(2, '1', expect.anything(), expect.anything());
     expect(updateGeoServiceDetails).toHaveBeenNthCalledWith(2, {});
     expect(updateGeoServiceSettings).toHaveBeenNthCalledWith(2, {
-      defaultLayerSettings: { hiDpiDisabled: true },
+      defaultLayerSettings: {
+        attribution: undefined,
+        description: undefined,
+        hiDpiDisabled: false,
+        legendImageId: undefined,
+        tilingDisabled: false,
+        tilingGutter: undefined,
+      },
     });
     expect(await screen.queryByText('Refresh service?')).not.toBeInTheDocument();
     TestSaveHelper.waitForButtonToBeDisabled('Save');

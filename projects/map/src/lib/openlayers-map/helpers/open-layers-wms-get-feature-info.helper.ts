@@ -1,10 +1,10 @@
 import { OpenLayersLayerManager } from '../open-layers-layer-manager';
 import { isOpenLayersWMSLayer } from '../../helpers/ol-layer-types.helper';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { GeoJSON, WFS } from 'ol/format';
 import { Feature, FeatureCollection, GeoJsonProperties } from 'geojson';
-import { map, Observable, of } from 'rxjs';
-import { FeatureModel } from '@tailormap-viewer/api';
+import { catchError, map, Observable, of } from 'rxjs';
+import { ErrorResponseModel, FeatureModel } from '@tailormap-viewer/api';
 import { WKT } from 'ol/format';
 import { Geometry } from 'ol/geom';
 
@@ -23,7 +23,7 @@ export class OpenLayersWmsGetFeatureInfoHelper {
     resolution: number,
     projection: string,
     layerManager: OpenLayersLayerManager,
-  ): Observable<FeatureModel[]> {
+  ): Observable<FeatureModel[] | ErrorResponseModel> {
     const layer = layerManager.getLayer(layerId);
     if (!layer || !isOpenLayersWMSLayer(layer)) {
       return of([]);
@@ -44,6 +44,10 @@ export class OpenLayersWmsGetFeatureInfoHelper {
     return httpClient.get(url, { responseType: 'text', observe: 'response' })
       .pipe(
         map(response => OpenLayersWmsGetFeatureInfoHelper.parseFeatureInfoResponse(response)),
+        catchError((error: HttpErrorResponse | Error): Observable<ErrorResponseModel> => {
+          const code = error instanceof HttpErrorResponse ? error.status : 0;
+          return of({ message: error.message, code });
+        }),
       );
   }
 
@@ -60,6 +64,10 @@ export class OpenLayersWmsGetFeatureInfoHelper {
     }
     if (contentType.indexOf('text/plain') !== -1) {
       return OpenLayersWmsGetFeatureInfoHelper.parsePlainTextResponse(response.body);
+    }
+    if (contentType.indexOf('application/vnd.ogc.se_xml') !== -1) {
+      const error = OpenLayersWmsGetFeatureInfoHelper.parseServerExceptionResponse(response.body);
+      throw new Error(`${error} - ${response.url}`);
     }
     return [];
   }
@@ -109,6 +117,23 @@ export class OpenLayersWmsGetFeatureInfoHelper {
     });
     return [OpenLayersWmsGetFeatureInfoHelper.getFeatureModel(properties)]
       .filter(OpenLayersWmsGetFeatureInfoHelper.isValidFeature);
+  }
+
+  private static parseServerExceptionResponse(responseBody: string) {
+    try {
+      const parsedXml = new window.DOMParser().parseFromString(responseBody, "text/xml");
+      if (parsedXml.children[0]?.nodeName === 'ServiceExceptionReport'
+        && parsedXml.children[0].children[0]?.nodeName === 'ServiceException') {
+        const err = [
+          parsedXml.children[0].children[0].getAttribute("code"),
+          (parsedXml.children[0].children[0].textContent || "").trim(),
+        ];
+        return err.filter(Boolean).join(" - ");
+      }
+    } catch(e) {
+      return "Unknown error";
+    }
+    return "Unknown error";
   }
 
   private static getFeatureModel(properties: GeoJsonProperties, geometry?: Geometry): FeatureModel | null {

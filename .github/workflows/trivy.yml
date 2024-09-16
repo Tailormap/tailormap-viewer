@@ -24,7 +24,12 @@ jobs:
         run: |
           docker buildx build --pull --build-arg VERSION=snapshot --build-arg BASE_HREF=/ -t ghcr.io/tailormap/tailormap:snapshot . --load
 
-      - name: 'Run Trivy vulnerability scanner on tailormap-viewer'
+      - name: Trivy Cache
+        uses: yogeshlonkar/trivy-cache-action@v0
+        with:
+          gh-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 'Run Trivy vulnerability scanner on tailormap'
         uses: 'aquasecurity/trivy-action@0.24.0'
         # docker run --rm -v trivy_cache:/root/.cache/ aquasec/trivy image ghcr.io/tailormap/tailormap:snapshot
         with:
@@ -32,6 +37,7 @@ jobs:
           format: 'sarif'
           output: 'tailormap-trivy-results.sarif'
           severity: 'HIGH,CRITICAL'
+          cache-dir: .trivy
 
       - name: 'Upload tailormap-viewer Trivy scan results to GitHub Security tab'
         uses: 'github/codeql-action/upload-sarif@v3'

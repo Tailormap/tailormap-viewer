@@ -51,12 +51,11 @@ describe('FeatureInfoService', () => {
     store.overrideSelector(selectVisibleWMSLayersWithoutAttributes, []);
     store.overrideSelector(selectViewerId, '1');
     expect(service).toBeTruthy();
-    service.getFeatures$([ 1, 2 ])
+    service.fetchFeatures$([ 1, 2 ], [ 1, 2 ])
       .subscribe(featureInfo => {
-        expect(featureInfo.length).toEqual(1);
-        expect(featureInfo[0].features).toEqual(response.features.map(f => ({ ...f, layerId: appLayer.id })));
-        expect(featureInfo[0].layerId).toEqual(appLayer.id);
-        expect(featureInfo[0].columnMetadata).toEqual(response.columnMetadata.map(m => ({ ...m, layerId: appLayer.id })));
+        expect(featureInfo?.features).toEqual(response.features.map(f => ({ ...f, layerId: appLayer.id })));
+        expect(featureInfo?.layerId).toEqual(appLayer.id);
+        expect(featureInfo?.columnMetadata).toEqual(response.columnMetadata.map(m => ({ ...m, layerId: appLayer.id })));
         done();
       });
   });
@@ -66,9 +65,9 @@ describe('FeatureInfoService', () => {
     store.overrideSelector(selectVisibleWMSLayersWithoutAttributes, []);
     store.overrideSelector(selectViewerId, '1');
     expect(service).toBeTruthy();
-    service.getFeatures$([ 1, 2 ])
+    service.fetchFeatures$([ 1, 2 ], [ 1, 2 ])
       .subscribe(featureInfo => {
-        expect(featureInfo.length).toBe(0);
+        expect(featureInfo).toBe(null);
         done();
       });
   });
@@ -78,9 +77,9 @@ describe('FeatureInfoService', () => {
     store.overrideSelector(selectVisibleWMSLayersWithoutAttributes, []);
     store.overrideSelector(selectViewerId, '0');
     expect(service).toBeTruthy();
-    service.getFeatures$([ 1, 2 ])
+    service.fetchFeatures$([ 1, 2 ], [ 1, 2 ])
       .subscribe(featureInfo => {
-        expect(featureInfo.length).toEqual(0);
+        expect(featureInfo).toBe(null);
         done();
       });
   });
@@ -91,9 +90,9 @@ describe('FeatureInfoService', () => {
     store.overrideSelector(selectVisibleWMSLayersWithoutAttributes, [appLayer]);
     store.overrideSelector(selectViewerId, '1');
     expect(service).toBeTruthy();
-    service.getFeatures$([ 1, 2 ])
+    service.fetchFeatures$([ 1, 2 ], [ 1, 2 ])
       .subscribe(featureInfo => {
-        expect(featureInfo.length).toEqual(1);
+        expect(featureInfo?.layerId).toEqual(appLayer.id);
         expect(getFeatureInfoForLayers$).toHaveBeenCalledWith('1', [ 1, 2 ], httpClient);
         done();
       });

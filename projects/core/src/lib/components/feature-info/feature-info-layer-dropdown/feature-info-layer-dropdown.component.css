@@ -1,0 +1,17 @@
+.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled):not(.mat-mdc-option-multiple).selected {
+  background-color: var(--primary-color-0_1);
+  color: var(--primary-color);
+}
+
+.layer-selector-item ::ng-deep .layer-item {
+  padding: 0;
+  border: 0 none;
+}
+
+.layer-selector-item ::ng-deep mat-spinner {
+  margin-right: 16px;
+}
+
+.layer-selector-item ::ng-deep .layer-item.selected {
+  background-color: transparent;
+}

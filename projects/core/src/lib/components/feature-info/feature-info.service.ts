@@ -1,23 +1,27 @@
 import { inject, Injectable } from '@angular/core';
-import { AttributeType, FeaturesResponseModel, TAILORMAP_API_V1_SERVICE, FeatureModel } from '@tailormap-viewer/api';
+import {
+  AttributeType, FeaturesResponseModel, TAILORMAP_API_V1_SERVICE, FeatureModel, ApiHelper,
+} from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { selectViewerId } from '../../state/core.selectors';
-import { catchError, combineLatest, concatMap, forkJoin, map, Observable, of, take } from 'rxjs';
+import { catchError, combineLatest, concatMap, forkJoin, map, mergeMap, Observable, of, take, tap } from 'rxjs';
 import { FeatureInfoResponseModel } from './models/feature-info-response.model';
 import {
   selectEditableLayers, selectVisibleLayersWithAttributes, selectVisibleWMSLayersWithoutAttributes,
 } from '../../map/state/map.selectors';
 import { MapService, MapViewDetailsModel } from '@tailormap-viewer/map';
-import { HttpClient } from '@angular/common/http';
-import { ExtendedAppLayerModel } from '../../map/models';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { FilterService } from '../../filter/services/filter.service';
+import { FeatureInfoLayerModel } from './models/feature-info-layer.model';
+import { LoadingStateEnum } from '@tailormap-viewer/shared';
+import { loadFeatureInfo } from './state/feature-info.actions';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FeatureInfoService {
 
-  private static LOAD_FEATURE_INFO_ERROR = $localize `:@@core.feature-info.error-loading-features:Could not load feature info`;
+  public static LOAD_FEATURE_INFO_ERROR = $localize `:@@core.feature-info.error-loading-features:Could not load feature info`;
 
   /**
    * default buffer distance for feature info requests in pixels.
@@ -30,7 +34,7 @@ export class FeatureInfoService {
   private apiService = inject(TAILORMAP_API_V1_SERVICE);
   private filterService = inject(FilterService);
 
-  public getFeatures$(coordinates: [ number, number ]): Observable<FeatureInfoResponseModel[]> {
+  public fetchFeatures$(mapCoordinates: [number, number], mouseCoordinates: [number, number]): Observable<FeatureInfoResponseModel | null> {
     return combineLatest([
       this.store$.select(selectVisibleLayersWithAttributes),
       this.store$.select(selectVisibleWMSLayersWithoutAttributes),
@@ -39,18 +43,30 @@ export class FeatureInfoService {
     ])
       .pipe(
         take(1),
-        concatMap(([ layers, wmsLayers, applicationId, resolutions ]) => {
-          if (!applicationId || (layers.length === 0 && wmsLayers.length === 0)) {
-            return of([]);
-          }
-          const featureRequests$ = [
-            ...layers.map(layer => this.getFeatureInfoFromApi$(layer, coordinates, applicationId, resolutions)),
-            ...wmsLayers.map(layer => this.mapService.getFeatureInfoForLayers$(layer.id, coordinates, this.httpService).pipe(
-              map(features => this.featuresToFeatureInfoResponseModel(features, layer.id)),
-            )),
-          ];
-          return forkJoin(featureRequests$);
+        tap(([ layers, wmsLayers ]) => {
+          const featureInfoLayers = [ ...layers, ...wmsLayers ]
+            .sort((l1, l2) => l1.title.localeCompare(l2.title))
+            .map<FeatureInfoLayerModel>(l => ({
+              id: l.id,
+              title: l.title,
+              loading: LoadingStateEnum.LOADING,
+            }));
+          this.store$.dispatch(loadFeatureInfo({ mapCoordinates, mouseCoordinates, layers: featureInfoLayers }));
         }),
+        mergeMap(([ layers, wmsLayers, viewerId, mapViewDetails ]) => {
+          if (!viewerId) {
+            return [];
+          }
+          const requests$ = [
+            ...layers.map(l => this.getFeatureInfoFromApi$(l.id, mapCoordinates, viewerId, mapViewDetails)),
+            ...wmsLayers.map(l => this.getWmsGetFeatureInfo$(l.id, mapCoordinates)),
+          ];
+          if (requests$.length === 0) {
+            return [of(null)];
+          }
+          return requests$;
+        }),
+        mergeMap(featureInfoRequests$ => featureInfoRequests$),
       );
   }
 
@@ -70,20 +86,37 @@ export class FeatureInfoService {
             return of([]);
           }
           const featureRequests$ = layers
-              .map(layer => this.getFeatureInfoFromApi$( layer, coordinates, applicationId, resolutions,  true ));
+              .map(layer => this.getFeatureInfoFromApi$( layer.id, coordinates, applicationId, resolutions,  true ));
           return forkJoin(featureRequests$);
         }),
       );
   }
 
-  private getFeatureInfoFromApi$(
-    layer: ExtendedAppLayerModel,
+  public getWmsGetFeatureInfo$(
+    layerId: string,
+    coordinates: [ number, number ],
+  ): Observable<FeatureInfoResponseModel> {
+    return this.mapService.getFeatureInfoForLayers$(layerId, coordinates, this.httpService)
+      .pipe(map(response => {
+        if (ApiHelper.isApiErrorResponse(response)) {
+          return {
+            features: [],
+            error: response.message,
+            layerId,
+            columnMetadata: [],
+          };
+        }
+        return this.featuresToFeatureInfoResponseModel(response, layerId);
+      }));
+  }
+
+  public getFeatureInfoFromApi$(
+    layerId: string,
     coordinates: [ number, number ],
     applicationId: string,
     resolutions: MapViewDetailsModel,
     geometryInAttributes=false,
   ): Observable<FeatureInfoResponseModel> {
-    const layerId = layer.id;
     const layerFilter = this.filterService.getFilterForLayer(layerId);
     return this.apiService.getFeatures$({
       layerId,
@@ -101,12 +134,13 @@ export class FeatureInfoService {
         columnMetadata: (featureInfoResult.columnMetadata || []).map(metadata => ({ ...metadata, layerId })),
         layerId,
       })),
-      catchError((): Observable<FeatureInfoResponseModel> => {
+      catchError((response: HttpErrorResponse): Observable<FeatureInfoResponseModel> => {
+        const error = response.error?.message ? response.error.message : null;
         return of({
           features: [],
           columnMetadata: [],
           layerId,
-          error: FeatureInfoService.LOAD_FEATURE_INFO_ERROR,
+          error: error || FeatureInfoService.LOAD_FEATURE_INFO_ERROR,
         });
       }),
     );

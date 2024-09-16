@@ -4,6 +4,7 @@ import { AppLayerModel, LayerDetailsModel, LayerTreeNodeModel, ServerType, Servi
 import { ArrayHelper, TreeHelper, TreeModel } from '@tailormap-viewer/shared';
 import { LayerTreeNodeHelper } from '../helpers/layer-tree-node.helper';
 import { ExtendedAppLayerModel, ExtendedLayerTreeNodeModel, AppLayerWithInitialValuesModel } from '../models';
+import { LayerModelHelper } from '../helpers/layer-model.helper';
 
 const selectMapState = createFeatureSelector<MapState>(mapStateKey);
 
@@ -119,7 +120,7 @@ export const selectEditableLayers = createSelector(
 
 export const selectVisibleWMSLayersWithoutAttributes = createSelector(
   selectOrderedVisibleLayersWithServices,
-  layers => layers.filter(l => l.service?.protocol === ServiceProtocol.WMS && !l.hasAttributes),
+  layers => layers.filter(l => LayerModelHelper.shouldUseWmsFeatureInfo(l)),
 );
 
 export const selectFilterableLayers = createSelector(

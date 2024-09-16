@@ -22,6 +22,46 @@ describe('ConfirmDialogComponent', () => {
       },
     );
     expect(await screen.findByText("hoi")).toBeInTheDocument();
+    expect(await screen.findByText("Yes")).toBeInTheDocument();
+    expect(await screen.findByText("No")).toBeInTheDocument();
+  });
+
+  it('should create with custom labels', async () => {
+    await render(ConfirmDialogComponent, {
+        imports: [
+          NoopAnimationsModule,
+          MatCommonModule,
+          MatDialogModule,
+          MatButtonModule,
+        ],
+        providers: [
+          { provide: MatDialogRef, useValue: {} },
+          { provide: MAT_DIALOG_DATA, useValue: { title: 'hoi', message: '', confirmButtonLabel: 'Confirm', denyButtonLabel: 'Deny' } },
+        ],
+      },
+    );
+    expect(await screen.findByText("hoi")).toBeInTheDocument();
+    expect(await screen.findByText("Confirm")).toBeInTheDocument();
+    expect(await screen.findByText("Deny")).toBeInTheDocument();
+  });
+
+  it('should create with hidden deny button', async () => {
+    await render(ConfirmDialogComponent, {
+        imports: [
+          NoopAnimationsModule,
+          MatCommonModule,
+          MatDialogModule,
+          MatButtonModule,
+        ],
+        providers: [
+          { provide: MatDialogRef, useValue: {} },
+          { provide: MAT_DIALOG_DATA, useValue: { title: 'hoi', message: '', hideDenyButton: true, confirmButtonLabel: 'Confirm', denyButtonLabel: 'Deny' } },
+        ],
+      },
+    );
+    expect(await screen.findByText("hoi")).toBeInTheDocument();
+    expect(await screen.findByText("Confirm")).toBeInTheDocument();
+    expect(screen.queryByText("Deny")).not.toBeInTheDocument();
   });
 
 });

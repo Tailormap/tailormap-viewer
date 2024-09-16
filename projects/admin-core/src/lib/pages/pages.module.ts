@@ -16,6 +16,7 @@ import { FormPageComponent } from './form-page/form-page.component';
 import { FormModule } from '../form/form.module';
 import { SearchIndexPageComponent } from './search-index-page/search-index-page.component';
 import { SearchIndexModule } from '../search-index/search-index.module';
+import { LogsPageComponent } from './logs-page/logs-page.component';
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import { SearchIndexModule } from '../search-index/search-index.module';
     SettingsPageComponent,
     FormPageComponent,
     SearchIndexPageComponent,
+    LogsPageComponent,
   ],
   imports: [
     CommonModule,
@@ -51,6 +53,7 @@ import { SearchIndexModule } from '../search-index/search-index.module';
     SettingsPageComponent,
     FormPageComponent,
     SearchIndexPageComponent,
+    LogsPageComponent,
   ],
 })
 export class PagesModule { }

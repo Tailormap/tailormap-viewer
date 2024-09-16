@@ -5,6 +5,7 @@
   padding: 16px;
   border-radius: 2px;
   margin-bottom: 16px;
+  word-break: break-word;
 }
 
 .error-message--friendly {

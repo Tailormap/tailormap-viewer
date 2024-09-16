@@ -1,0 +1,3 @@
+@for (layer of layers$ | async; track layer.id; let index = $index) {
+  <tm-feature-info-layer-item [layer]="layer"></tm-feature-info-layer-item>
+}
