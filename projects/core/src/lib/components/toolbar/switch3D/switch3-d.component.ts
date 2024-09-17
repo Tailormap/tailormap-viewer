@@ -3,6 +3,7 @@ import { Observable, Subject } from 'rxjs';
 import { MapService } from '@tailormap-viewer/map';
 import { Store } from '@ngrx/store';
 import { selectEnable3D } from '../../../state/core.selectors';
+import { toggleIn3DView } from '../../../map/state/map.actions';
 
 
 @Component({
@@ -30,5 +31,6 @@ export class Switch3DComponent implements OnDestroy {
 
   public toggle() {
     this.mapService.switch3D$();
+    this.store$.dispatch(toggleIn3DView());
   }
 }

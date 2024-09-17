@@ -68,3 +68,6 @@ export const updateLayerTreeNodes = createAction(
   `${mapActionsPrefix} Update Layer Tree`,
   props<{ layerTreeNodes: ExtendedLayerTreeNodeModel[] }>(),
 );
+export const toggleIn3DView = createAction(
+  `${mapActionsPrefix} Toggle In3DView`,
+);
