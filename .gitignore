@@ -58,3 +58,5 @@ lcov.info
 
 # generated from package.json
 /generated
+
+tailormap-bundle-stats.json

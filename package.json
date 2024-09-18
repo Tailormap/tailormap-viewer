@@ -21,7 +21,7 @@
     "lint-fix": "ng lint --fix",
     "lint-per-rule": "eslint --ext .ts,.html -f ./lint-formatter.js ./projects/**",
     "release-packages": "node bin/publish-all.js",
-    "analyze-bundle": "ng build app --stats-json && cd dist/app && npx vite-bundle-visualizer",
+    "analyze-bundle": "ng build app --stats-json && mv dist/app/stats.json ./tailormap-bundle-stats.json && echo \"Open https://esbuild.github.io/analyze/ and use tailormap-bundle-stats.json to analyze\"",
     "extract-locale": "npm run extract-locale-shared && npm run extract-locale-core && npm run extract-locale-admin-core",
     "extract-locale-shared": "node bin/extract-i18n.js --project=shared",
     "extract-locale-core": "node bin/extract-i18n.js --project=core",
