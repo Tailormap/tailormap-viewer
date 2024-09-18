@@ -75,17 +75,6 @@ export const selectGeometries = createSelector(
   },
 );
 
-export const selectFilterFeatures = createSelector(
-  selectGeometries,
-  selectBuffer,
-  (geometries, buffer) => {
-    return geometries.map<FeatureModel>(geom => ({
-      __fid: geom.id,
-      geometry: geom.geometry,
-      attributes: { buffer },
-    }));
-  });
-
 export const hasSelectedLayersAndGeometry = createSelector(
   selectSelectedLayers,
   selectGeometries,

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectFilterableLayers } from '../../../map/state/map.selectors';
 import { ExtendedAppLayerModel } from '../../../map/models';
@@ -6,7 +6,7 @@ import { Observable, of, Subject, switchMap, takeUntil } from 'rxjs';
 import { MapService } from '@tailormap-viewer/map';
 import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.helper';
 import {
-  hasSelectedLayersAndGeometry, selectFilterFeatures, selectSelectedFilterGroupError, selectSelectedFilterGroupId, selectSelectedLayersCount,
+  hasSelectedLayersAndGeometry, selectSelectedFilterGroupError, selectSelectedFilterGroupId, selectSelectedLayersCount,
 } from '../state/filter-component.selectors';
 import { closeForm } from '../state/filter-component.actions';
 import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
@@ -15,6 +15,7 @@ import { SpatialFilterReferenceLayerService } from '../../../filter/services/spa
 import { filter } from 'rxjs/operators';
 import { TypesHelper } from '@tailormap-viewer/shared';
 import { ApplicationStyleService } from '../../../services/application-style.service';
+import { FilterFeaturesService } from '../services/filter-features.service';
 
 @Component({
   selector: 'tm-spatial-filter-form',
@@ -32,11 +33,6 @@ export class SpatialFilterFormComponent implements OnInit, OnDestroy {
     buffer: feature.attributes?.buffer,
   });
 
-  private store$ = inject(Store);
-  private mapService = inject(MapService);
-  private removeFilterService = inject(RemoveFilterService);
-  private spatialFilterReferenceLayerService = inject(SpatialFilterReferenceLayerService);
-
   private destroyed = new Subject();
 
   public drawingLayerId = 'filter-drawing-layer';
@@ -47,6 +43,15 @@ export class SpatialFilterFormComponent implements OnInit, OnDestroy {
   public hasSelectedLayersAndGeometry$: Observable<boolean> = of(false);
   public isLoadingReferenceGeometry$: Observable<boolean> = of(false);
   public currentGroupError$: Observable<string | undefined> = of(undefined);
+
+  constructor(
+    private store$: Store,
+    private mapService: MapService,
+    private removeFilterService: RemoveFilterService,
+    private spatialFilterReferenceLayerService: SpatialFilterReferenceLayerService,
+    private filterFeaturesService: FilterFeaturesService,
+  ) {
+  }
 
   public ngOnInit(): void {
     this.availableLayers$ = this.store$.select(selectFilterableLayers);
@@ -62,7 +67,7 @@ export class SpatialFilterFormComponent implements OnInit, OnDestroy {
 
     this.mapService.renderFeatures$<FeatureModelAttributes>(
       this.drawingLayerId,
-      this.store$.select(selectFilterFeatures),
+      this.filterFeaturesService.getFilterFeatures$(),
       this.DEFAULT_STYLE,
     ).pipe(takeUntil(this.destroyed)).subscribe();
   }

@@ -2,7 +2,7 @@ import { Options as RegularShapeOptions } from 'ol/style/RegularShape';
 import { MapStyleModel, MapStylePointType, OlMapStyleType } from '../models';
 import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
 import { Feature } from 'ol';
-import { Circle, Geometry, LinearRing, LineString, MultiLineString, MultiPoint, MultiPolygon, Point, Polygon } from 'ol/geom';
+import { Geometry, Point, Polygon } from 'ol/geom';
 import { forEach as forEachSegments } from 'ol/geom/flat/segments';
 import { buffer as bufferExtent } from 'ol/extent';
 import { default as RenderFeature } from 'ol/render/Feature';
@@ -11,11 +11,11 @@ import { ColorHelper, StyleHelper } from '@tailormap-viewer/shared';
 import { RegularShape, Style, Icon, Fill, Stroke, Text } from 'ol/style';
 import { GeometryTypeHelper } from './geometry-type.helper';
 import { MapSizeHelper } from '../helpers/map-size.helper';
-import { OL3Parser } from 'jsts/org/locationtech/jts/io';
-import { BufferOp } from 'jsts/org/locationtech/jts/operation/buffer';
-import { fromCircle } from 'ol/geom/Polygon';
+import { WKT } from 'ol/format';
 
 export class MapStyleHelper {
+
+  private static wktParser = new WKT();
 
   private static DEFAULT_COLOR = '#cc0000';
   private static DEFAULT_SYMBOL_SIZE = 5;
@@ -81,8 +81,8 @@ export class MapStyleHelper {
     if (styleConfig.isSelected && (!styleConfig.pointType || (!!styleConfig.pointType && !styleConfig.label)) && typeof feature !== 'undefined') {
       styles.push(...MapStyleHelper.createOutlinedSelectionRectangle(feature, 1.3 * (resolution || 0)));
     }
-    if (typeof styleConfig.buffer !== 'undefined' && styleConfig.buffer > 0 && typeof feature !== 'undefined') {
-      styles.push(...MapStyleHelper.createBuffer(feature, styleConfig.buffer, styleConfig));
+    if (typeof styleConfig.buffer !== 'undefined' && styleConfig.buffer && typeof feature !== 'undefined') {
+      styles.push(...MapStyleHelper.createBuffer(styleConfig.buffer, styleConfig));
     }
     return styles;
   }
@@ -263,28 +263,9 @@ export class MapStyleHelper {
     return [new Style({ image: MapStyleHelper.getRegularShape({ type, strokeColor, strokeWidth, fillColor, rotation, symbolSize }) })];
   }
 
-  private static createBuffer(feature: Feature<Geometry>, buffer: number, config: MapStyleModel) {
-    const geometry = feature.getGeometry();
-    if (!geometry) {
-      return [];
-    }
-    const parser = new OL3Parser();
-    parser.inject(
-      Point,
-      LineString,
-      LinearRing,
-      Polygon,
-      MultiPoint,
-      MultiLineString,
-      MultiPolygon,
-      Circle,
-    );
-    const jstsGeom = parser.read(GeometryTypeHelper.isCircleGeometry(geometry) ? fromCircle(geometry, 50) : geometry);
-    const buffered = BufferOp.bufferOp(jstsGeom, buffer);
-    const bufferedGeometry: Geometry = parser.write(buffered);
-
+  private static createBuffer(buffer: string, config: MapStyleModel) {
     const bufferStyle = new Style({
-      geometry: bufferedGeometry,
+      geometry: MapStyleHelper.wktParser.readGeometry(buffer),
     });
     const fill = MapStyleHelper.createFill(config, MapStyleHelper.getOpacity(config.fillOpacity, true));
     if (fill) {
