@@ -1,4 +1,6 @@
-<tm-menubar-button [component]="componentType"
-                   [panelTitle]="panelTitle$ | async"
-                   [tooltip]="panelTitle$ | async"
-                   icon="components_print"></tm-menubar-button>
+@if ((in3DView$|async) === false){
+  <tm-menubar-button [component]="componentType"
+                     [panelTitle]="panelTitle$ | async"
+                     [tooltip]="panelTitle$ | async"
+                     icon="components_print"></tm-menubar-button>
+}
