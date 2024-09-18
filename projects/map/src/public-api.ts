@@ -14,3 +14,4 @@ export * from './lib/helpers/scale.helper';
 export * from './lib/helpers/extent.helper';
 export * from './lib/helpers/coordinate.helper';
 export * from './lib/helpers/feature.helper';
+export * from './lib/helpers/buffer.helper';
