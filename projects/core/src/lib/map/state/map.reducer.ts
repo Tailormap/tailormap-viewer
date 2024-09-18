@@ -4,7 +4,6 @@ import { MapState, initialMapState } from './map.state';
 import { ChangePositionHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
 import { LayerTreeNodeHelper } from '../helpers/layer-tree-node.helper';
 import { LayerModelHelper } from '../helpers/layer-model.helper';
-import { toggleIn3DView } from './map.actions';
 
 const onLoadMap = (state: MapState): MapState => ({
   ...state,
@@ -209,7 +208,7 @@ const onUpdateLayerTreeNodes = (
   layerTreeNodes: payload.layerTreeNodes,
 });
 
-const onToggleIn3DView = (state: MapState, payload: ReturnType<typeof MapActions.toggleIn3DView>): MapState => ({
+const onToggleIn3DView = (state: MapState): MapState => ({
   ...state,
   in3DView: !state.in3DView,
 });

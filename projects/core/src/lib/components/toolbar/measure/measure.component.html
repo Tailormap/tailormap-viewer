@@ -1,4 +1,4 @@
-@if (!(in3DView$|async)){
+@if ((in3DView$|async) === false){
 <div class="measure-buttons map-control-button-container" *ngIf="tooltips$ | async as tooltips">
   <button mat-flat-button
           class="measure-length toggle-button map-control-button"
