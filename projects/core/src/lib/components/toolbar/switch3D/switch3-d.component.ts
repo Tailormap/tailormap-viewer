@@ -19,7 +19,7 @@ export class Switch3DComponent implements OnDestroy {
   private destroyed = new Subject();
   public enable$: Observable<boolean>;
   public allowSwitch$: Observable<boolean>;
-  private disallowingComponents = [BaseComponentTypeEnum.PRINT, BaseComponentTypeEnum.DRAWING];
+  private disallowingComponents = [ BaseComponentTypeEnum.PRINT, BaseComponentTypeEnum.DRAWING ];
 
   constructor(
     private store$: Store,
@@ -29,7 +29,7 @@ export class Switch3DComponent implements OnDestroy {
     this.enable$ = this.store$.select(selectEnable3D);
     this.allowSwitch$ = this.menubarService.getActiveComponent$().pipe(
       map(
-        component => !this.disallowingComponents.some(disallowingComponent => disallowingComponent === component?.componentId)
+        component => !this.disallowingComponents.some(disallowingComponent => disallowingComponent === component?.componentId),
       ),
     );
   }
