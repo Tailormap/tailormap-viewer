@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -6,6 +6,7 @@ import {
   AuthenticatedUserService, LoginConfigurationModel, TAILORMAP_SECURITY_API_V1_SERVICE, TailormapSecurityApiV1ServiceModel,
   UserResponseModel,
 } from '@tailormap-viewer/api';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'tm-login',
@@ -13,7 +14,7 @@ import {
   styleUrls: ['./login.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
 
   public login$ = (username: string, password: string) => this.api.login$(username, password);
   public loginConfiguration$: Observable<LoginConfigurationModel>;
@@ -25,6 +26,7 @@ export class LoginComponent {
     private router: Router,
     @Inject(TAILORMAP_SECURITY_API_V1_SERVICE) private api: TailormapSecurityApiV1ServiceModel,
     private authenticatedUserService: AuthenticatedUserService,
+    private dialog: MatDialog,
   ) {
     const state = this.router.getCurrentNavigation()?.extras.state;
     this.loginConfiguration$ = this.api.getLoginConfiguration$();
@@ -34,6 +36,10 @@ export class LoginComponent {
       // eslint-disable-next-line max-len
       ? $localize `:@@core.login.insufficient-rights-error:You are logged in ${userLabel} but do not have proper roles to access the application. Please contact your administrator.`
       : undefined;
+  }
+
+  public ngOnInit() {
+    this.dialog.closeAll();
   }
 
   public loggedIn($event: UserResponseModel) {
