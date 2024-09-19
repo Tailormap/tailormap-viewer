@@ -7,6 +7,7 @@ import { SharedModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { selectEnable3D } from '../../../state/core.selectors';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
+import { selectActiveTool } from '../state/toolbar.selectors';
 
 describe('Switch3DComponent', () => {
 
@@ -21,6 +22,7 @@ describe('Switch3DComponent', () => {
         provideMockStore({
           selectors: [
             { selector: selectEnable3D, value: true },
+            { selector: selectActiveTool, value: null },
           ],
         }),
       ],
@@ -39,6 +41,7 @@ describe('Switch3DComponent', () => {
         provideMockStore({
           selectors: [
             { selector: selectEnable3D, value: false },
+            { selector: selectActiveTool, value: null },
           ],
         }),
       ],

@@ -8,6 +8,7 @@ import { SharedModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { StreetviewComponent } from './streetview.component';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
+import { selectIn3DView } from '../../../map/state/map.selectors';
 
 describe('StreetviewComponent', () => {
 
@@ -21,6 +22,7 @@ describe('StreetviewComponent', () => {
         provideMockStore({
           selectors: [
             { selector: isActiveToolbarTool(ToolbarComponentEnum.STREETVIEW), value: true },
+            { selector: selectIn3DView, value: false },
           ],
         }),
       ],

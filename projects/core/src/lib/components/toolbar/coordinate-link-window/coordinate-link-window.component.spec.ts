@@ -10,6 +10,7 @@ import { registerTool } from '../state/toolbar.actions';
 import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
 import userEvent from '@testing-library/user-event';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
+import { selectIn3DView } from '../../../map/state/map.selectors';
 
 const setup = async (withConfig?: boolean) => {
   const config: CoordinateLinkWindowConfigModel | undefined = withConfig ? {
@@ -23,6 +24,7 @@ const setup = async (withConfig?: boolean) => {
   const storeMock = {
     select: jest.fn(() => of(({ config }))),
     dispatch: jest.fn(),
+    selectors: [{ selector: selectIn3DView, value: false }],
   };
   const mapClickSubject = new Subject();
   const mapServiceMock = getMapServiceMock(tool => ({

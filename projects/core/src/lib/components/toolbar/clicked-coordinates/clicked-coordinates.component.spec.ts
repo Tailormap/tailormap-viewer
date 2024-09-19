@@ -8,6 +8,7 @@ import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
+import { selectIn3DView } from '../../../map/state/map.selectors';
 
 describe('ClickedCoordinatesComponent', () => {
 
@@ -22,6 +23,7 @@ describe('ClickedCoordinatesComponent', () => {
         provideMockStore({
           selectors: [
             { selector: isActiveToolbarTool(ToolbarComponentEnum.SELECT_COORDINATES), value: true },
+            { selector: selectIn3DView, value: false },
           ],
         }),
       ],
