@@ -132,6 +132,7 @@ export class FeatureInfoService {
       map((featureInfoResult: FeaturesResponseModel): FeatureInfoResponseModel => ({
         features: (featureInfoResult.features || []).map(feature => ({ ...feature, layerId })),
         columnMetadata: (featureInfoResult.columnMetadata || []).map(metadata => ({ ...metadata, layerId })),
+        template: featureInfoResult.template,
         layerId,
       })),
       catchError((response: HttpErrorResponse): Observable<FeatureInfoResponseModel> => {
@@ -139,6 +140,7 @@ export class FeatureInfoService {
         return of({
           features: [],
           columnMetadata: [],
+          template: null,
           layerId,
           error: error || FeatureInfoService.LOAD_FEATURE_INFO_ERROR,
         });

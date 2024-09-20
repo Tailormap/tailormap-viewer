@@ -16,3 +16,4 @@ export * from './language-toggle/language-description.model';
 export * from './legend-image/legend-image.component';
 export * from './legend-image/legend.helper';
 export * from './spinner-button/spinner-button.component';
+export * from './ckeditor';

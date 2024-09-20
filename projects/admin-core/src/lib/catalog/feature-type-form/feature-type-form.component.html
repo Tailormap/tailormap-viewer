@@ -5,6 +5,12 @@
 
   <ng-template #content>
     <div i18n="@@admin-core.catalog.technical-name">Technical name: {{ featureType.name }}</div>
+    @defer {
+      <tm-admin-feature-type-template [attributes]="featureType.attributes"
+                                      [featureTypeSettings]="featureTypeSettings$ | async"
+                                      [template]="featureType.settings.template"
+                                      (templateUpdated)="templateUpdated($event)"></tm-admin-feature-type-template>
+    }
     <tm-admin-feature-type-attributes [attributes]="featureType.attributes"
                                       [featureTypeSettings]="featureTypeSettings$ | async"
                                       [showFullSettings]="true"

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SharedModule } from '@tailormap-viewer/shared';
+import { CKEditorComponent, SharedModule } from '@tailormap-viewer/shared';
 import { catalogReducer } from './state/catalog.reducer';
 import { catalogStateKey } from './state/catalog.state';
 import { StoreModule } from '@ngrx/store';
@@ -39,6 +39,7 @@ import { FeatureTypeAttributesComponent } from './feature-type-attributes/featur
 import { FeatureTypeFormComponent } from './feature-type-form/feature-type-form.component';
 import { FeatureTypeFormDialogComponent } from './feature-type-form-dialog/feature-type-form-dialog.component';
 import { CatalogShortcutButtonsComponent } from './catalog-shortcut-buttons/catalog-shortcut-buttons.component';
+import { FeatureTypeTemplateComponent } from './feature-type-template/feature-type-template.component';
 
 
 @NgModule({
@@ -70,6 +71,7 @@ import { CatalogShortcutButtonsComponent } from './catalog-shortcut-buttons/cata
     CatalogItemsInFolderDialogComponent,
     FeatureTypeAttributesComponent,
     CatalogShortcutButtonsComponent,
+    FeatureTypeTemplateComponent,
   ],
   imports: [
     CommonModule,
@@ -77,6 +79,7 @@ import { CatalogShortcutButtonsComponent } from './catalog-shortcut-buttons/cata
     StoreModule.forFeature(catalogStateKey, catalogReducer),
     EffectsModule.forFeature([CatalogEffects]),
     SharedAdminComponentsModule,
+    CKEditorComponent,
   ],
   exports: [
     CatalogTreeComponent,

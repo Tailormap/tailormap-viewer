@@ -134,6 +134,7 @@ export const getFeaturesResponseModel = (overrides?: Partial<FeaturesResponseMod
   return {
     features: features.map(featureOverride => getFeatureModel({ ...featureOverride })),
     columnMetadata: columnMetadata.map(columnMetadataOverride => getColumnMetadataModel({ ...columnMetadataOverride })),
+    template: null,
     page: null,
     pageSize: null,
     total: 8,

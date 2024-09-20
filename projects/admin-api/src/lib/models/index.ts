@@ -27,6 +27,7 @@ export * from './feature-source-summary-with-feature-types.model';
 export * from './feature-type.model';
 export * from './feature-type-summary.model';
 export * from './feature-type-settings.model';
+export * from './feature-type-template.model';
 export * from './feature-type-info.model';
 export * from './attribute-descriptor.model';
 export * from './attribute-settings.model';
