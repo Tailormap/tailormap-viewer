@@ -1,6 +1,6 @@
 .attributes-wrapper {
   display: flex;
-  padding-top: 20px;
+  padding: 20px 1px 1px 1px;
 }
 
 .attributes-table {

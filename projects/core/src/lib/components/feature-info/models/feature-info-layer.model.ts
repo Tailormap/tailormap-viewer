@@ -7,4 +7,5 @@ export interface FeatureInfoLayerModel {
   error?: string;
   totalCount?: number;
   selectedFeatureId?: string;
+  template?: string | null;
 }

@@ -32,20 +32,25 @@
       @if (layer.error) {
         <tm-error-message [friendlyError]="true" [message]="layer.error"></tm-error-message>
       }
-    }
-    @if(currentFeature$ | async; as feature) {
-      <div class="feature-info" (swipeleft)="back()" (swiperight)="next()">
-        <div class="content">
-          <div *ngFor="let att of feature.sortedAttributes" class="row">
-            <strong>{{att.label}}</strong>
-            <div [innerHTML]="att.attributeValue | htmlify"></div>
+      @if(currentFeature$ | async; as feature) {
+        <div class="feature-info">
+          @if (layer.template) {
+            <div class="row template-row">
+              <tm-feature-info-template-renderer [template]="layer.template" [feature]="feature"></tm-feature-info-template-renderer>
+            </div>
+          }
+          <div class="content">
+            <div *ngFor="let att of feature.sortedAttributes" class="row">
+              <strong>{{att.label}}</strong>
+              <div [innerHTML]="att.attributeValue | htmlify"></div>
+            </div>
+          </div>
+          <div class="buttons">
+            <button mat-flat-button i18n="@@core.common.back" (click)="back()" color="primary" [disabled]="isPrevButtonDisabled$ | async">Back</button>
+            <button mat-flat-button i18n="@@core.common.next" (click)="next()" color="primary" [disabled]="isNextButtonDisabled$ | async">Next</button>
           </div>
         </div>
-        <div class="buttons">
-          <button mat-flat-button i18n="@@core.common.back" (click)="back()" color="primary" [disabled]="isPrevButtonDisabled$ | async">Back</button>
-          <button mat-flat-button i18n="@@core.common.next" (click)="next()" color="primary" [disabled]="isNextButtonDisabled$ | async">Next</button>
-        </div>
-      </div>
+      }
     }
   </div>
 </tm-dialog>
