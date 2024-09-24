@@ -1,9 +1,0 @@
-@import "ckeditor5/ckeditor5.css";
-
-.ck.ck-balloon-panel.ck-powered-by-balloon {
-  display: none;
-}
-
-.ck-editor__editable_inline {
-  min-height: 150px;
-}
