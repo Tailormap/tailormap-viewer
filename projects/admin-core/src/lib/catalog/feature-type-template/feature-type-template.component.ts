@@ -31,7 +31,10 @@ export class FeatureTypeTemplateComponent implements OnInit {
   public ngOnInit() {
     const attributeLabels = new Map(Object.entries(this.featureTypeSettings?.attributeSettings || {})
       .map(([ key, setting ]) => [ key, setting.title || "" ]));
-    const sortedAttributes = [...this.attributes].sort(ArrayHelper.getArraySorter('name', this.featureTypeSettings?.attributeOrder || []));
+    const hiddenAttributes = new Set(this.featureTypeSettings?.hideAttributes || []);
+    const sortedAttributes = [...this.attributes]
+      .filter(a => !hiddenAttributes.has(a.name))
+      .sort(ArrayHelper.getArraySorter('name', this.featureTypeSettings?.attributeOrder || []));
     const attributes = sortedAttributes.map(a => ({
       label: attributeLabels.get(a.name) || a.name,
       value: a.name,
