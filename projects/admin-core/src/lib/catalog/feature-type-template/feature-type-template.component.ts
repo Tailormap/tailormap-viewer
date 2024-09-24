@@ -1,6 +1,7 @@
 import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { AttributeDescriptorModel, FeatureTypeSettingsModel, FeatureTypeTemplateModel } from '@tailormap-admin/admin-api';
 import { ArrayHelper, TemplatePicklistConfig } from '@tailormap-viewer/shared';
+import { AttributeTypeHelper } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-admin-feature-type-template',
@@ -33,7 +34,7 @@ export class FeatureTypeTemplateComponent implements OnInit {
       .map(([ key, setting ]) => [ key, setting.title || "" ]));
     const hiddenAttributes = new Set(this.featureTypeSettings?.hideAttributes || []);
     const sortedAttributes = [...this.attributes]
-      .filter(a => !hiddenAttributes.has(a.name))
+      .filter(a => !hiddenAttributes.has(a.name) && !AttributeTypeHelper.isGeometryType(a.type))
       .sort(ArrayHelper.getArraySorter('name', this.featureTypeSettings?.attributeOrder || []));
     const attributes = sortedAttributes.map(a => ({
       label: attributeLabels.get(a.name) || a.name,
