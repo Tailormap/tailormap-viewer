@@ -7,6 +7,10 @@ mat-button-toggle-group {
   border-radius: 3px;
 }
 
+.cycle-button {
+  max-width: calc(var(--100vw) - 580px);
+}
+
 mat-button-toggle ::ng-deep .mat-button-toggle-label-content {
   line-height: 38px;
 }
@@ -28,6 +32,14 @@ mat-button-toggle ::ng-deep .mat-button-toggle-label-content {
   display: none;
 }
 
+.split-button-menu-item ::ng-deep .mat-mdc-menu-item-text {
+  flex: 1;
+  text-align: left;
+  white-space: nowrap !important;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
 .split-button-menu-item mat-icon {
   width: 16px;
   height: 16px;
@@ -36,7 +48,7 @@ mat-button-toggle ::ng-deep .mat-button-toggle-label-content {
 }
 
 
-@media screen and (max-width: 625px) {
+@media screen and (max-width: 750px) {
   .hide-on-small-screens {
     display: none;
   }

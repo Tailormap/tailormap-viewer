@@ -1,5 +1,5 @@
 <mat-button-toggle-group [class.hide-on-small-screens]="!!small_screens_icon" [hideSingleSelectionIndicator]="true">
-  <mat-button-toggle (click)="cycleNextOption()">
+  <mat-button-toggle (click)="cycleNextOption()" class="cycle-button">
     {{getLabel()}}
   </mat-button-toggle>
   <mat-button-toggle class="drop-down-button" [matMenuTriggerFor]="dropdownMenu">
@@ -16,7 +16,7 @@
   </button>
 </div>
 
-<mat-menu #dropdownMenu="matMenu">
+<mat-menu #dropdownMenu="matMenu" class="options-dropdown">
   <button mat-menu-item
           class="split-button-menu-item"
           *ngFor="let option of optionsList"
