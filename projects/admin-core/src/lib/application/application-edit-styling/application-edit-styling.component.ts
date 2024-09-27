@@ -5,7 +5,7 @@ import { PopoverPositionEnum } from '@tailormap-viewer/shared';
 import { ViewerStylingModel } from '@tailormap-viewer/api';
 import { selectStylingConfig } from '../state/application.selectors';
 import { updateApplicationStylingConfig } from '../state/application.actions';
-import { UploadCategoryEnum } from '../../shared/components/select-upload/models/upload-category.enum';
+import { UploadCategoryEnum } from '@tailormap-admin/admin-api';
 import { UPLOAD_REMOVE_SERVICE } from '../../shared/components/select-upload/models/upload-remove-service.injection-token';
 import { ApplicationImageRemoveService } from '../services/application-image-remove.service';
 

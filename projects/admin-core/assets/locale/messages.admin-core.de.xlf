@@ -378,6 +378,10 @@
         <source>Add map service</source>
         <target>Kartendienst hinzufügen</target>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.attribute" datatype="html">
+        <source>Attribute</source>
+        <target>Attribute</target>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.attributes" datatype="html">
         <source>Attributes</source>
         <target>Attribute</target>

@@ -42,6 +42,7 @@ export class FeatureTypeTemplateComponent implements OnInit {
     }));
     this.templatePicklistConfig = {
       label: $localize `:@@admin-core.catalog.insert-feature-type-attribute:Insert feature type attribute`,
+      shortLabel: $localize `:@@admin-core.catalog.attribute:Attribute`,
       variables: attributes,
     };
   }
