@@ -39,7 +39,7 @@ mat-button-toggle ::ng-deep .mat-button-toggle-label-content {
 }
 
 ::ng-deep .mat-mdc-menu-panel.options-menu {
-  max-width: 360px !important;
+  max-width: 360px;
 }
 
 .split-button-menu-item ::ng-deep .mat-mdc-menu-item-text {
