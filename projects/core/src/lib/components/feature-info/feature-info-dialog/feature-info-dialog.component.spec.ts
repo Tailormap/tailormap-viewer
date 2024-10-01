@@ -2,11 +2,11 @@ import { render, screen, waitFor } from '@testing-library/angular';
 import { FeatureInfoDialogComponent } from './feature-info-dialog.component';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { featureInfoStateKey, initialFeatureInfoState } from '../state/feature-info.state';
-import { SharedModule } from '@tailormap-viewer/shared';
+import { LoadingStateEnum, SharedModule } from '@tailormap-viewer/shared';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
   selectCurrentlySelectedFeature, selectFeatureInfoDialogVisible, selectIsNextButtonDisabled,
-  selectIsPrevButtonDisabled,
+  selectIsPrevButtonDisabled, selectSelectedFeatureInfoLayer,
 } from '../state/feature-info.selectors';
 import { getAppLayerModel } from '@tailormap-viewer/api';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
@@ -44,6 +44,8 @@ const setup = async (withState = false) => {
       provideMockStore({
         initialState: { [featureInfoStateKey]: { ...initialFeatureInfoState } },
         selectors: withState ? [
+          { selector: selectSelectedFeatureInfoLayer, value: { id: '1', title: 'test', loading: LoadingStateEnum.LOADED } },
+          { selector: selectCurrentlySelectedFeature, value: getFeatureInfo() },
           { selector: selectCurrentlySelectedFeature, value: getFeatureInfo() },
           { selector: selectFeatureInfoDialogVisible, value: true },
           { selector: selectIsPrevButtonDisabled, value: false },

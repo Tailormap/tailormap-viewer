@@ -1,0 +1,18 @@
+.select-wrapper {
+  max-width: 300px;
+  margin-bottom: 16px;
+}
+
+.markdown-wrap {
+  display: flex;
+}
+
+.textarea-wrap,
+.markdown-preview {
+  flex: 1;
+}
+
+.markdown-preview {
+  padding: 16px;
+  background-color: #f9f9f9;
+}

@@ -1,0 +1,7 @@
+.template ::ng-deep p {
+  margin: 0;
+}
+
+.template ::ng-deep p + p {
+  margin-top: 1em;
+}

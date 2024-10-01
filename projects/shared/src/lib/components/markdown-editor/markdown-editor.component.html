@@ -1,0 +1,21 @@
+@if (templatePicklistConfig) {
+  <div class="select-wrapper">
+    <mat-form-field>
+      <mat-label>{{templatePicklistConfig.label}}</mat-label>
+      <mat-select>
+        @for (v of templatePicklistConfig.variables; track $index) {
+          <mat-option (click)="insertVariable(v.value)">{{v.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+}
+<p i18n="@@shared.markdown-editor.explanation"><a href="https://commonmark.org/help/" target="_blank">Markdown</a> is used for layout. On the left you can enter markdown text, on the right there is a preview how it will be rendered</p>
+<div class="markdown-wrap">
+  <div class="textarea-wrap">
+    <mat-form-field>
+      <textarea matInput [formControl]="editorControl" cdkTextareaAutosize cdkAutosizeMinRows="6" cdkAutosizeMaxRows="25" #editor></textarea>
+    </mat-form-field>
+  </div>
+  <div class="markdown-preview" [innerHTML]="markdownPreview()"></div>
+</div>

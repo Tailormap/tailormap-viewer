@@ -33,6 +33,7 @@ const onFeatureInfoLoaded = (
       loading: payload.featureInfo.error ? LoadingStateEnum.FAILED : LoadingStateEnum.LOADED,
       totalCount: payload.featureInfo.features.length,
       error: payload.featureInfo.error,
+      template: payload.featureInfo.template,
       selectedFeatureId: payload.featureInfo.features.length > 0
         ? payload.featureInfo.features[0].__fid
         : undefined,
