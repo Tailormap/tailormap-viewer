@@ -38,6 +38,10 @@ mat-button-toggle ::ng-deep .mat-button-toggle-label-content {
   display: none;
 }
 
+::ng-deep .mat-mdc-menu-panel.options-menu {
+  max-width: 360px !important;
+}
+
 .split-button-menu-item ::ng-deep .mat-mdc-menu-item-text {
   white-space: nowrap !important;
   text-overflow: ellipsis;
