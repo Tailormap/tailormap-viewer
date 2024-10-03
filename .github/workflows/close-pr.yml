@@ -31,6 +31,7 @@ jobs:
           ssh_cert: ${{ secrets.DOCKER_HOST_SNAPSHOT_SSH_CERT }}
           ssh_key: ${{ secrets.DOCKER_HOST_SNAPSHOT_SSH_KEY }}
           use_context: true
+
       - name: 'Add known hosts'
         run: |
           ssh-keyscan -H ${{ secrets.DOCKER_HOSTNAME }} > $HOME/.ssh/known_hosts
@@ -41,16 +42,7 @@ jobs:
           COMPOSE_PROJECT_NAME: tailormap-${{ env.VERSION_TAG }}
           VERSION: ${{ env.VERSION_TAG }}
         run: |
-          docker compose down --rmi all --remove-orphans
-
-      - name: 'Remove image from registry'
-        if: ${{ always() }}
-        uses: bots-house/ghcr-delete-image-action@v1.1.0
-        with:
-          token: "${{ secrets.GHCR_CLEANUP_PAT }}"
-          owner: ${{ github.repository_owner }}
-          name: tailormap
-          tag: "${{ env.VERSION_TAG }}"
+          docker compose down --rmi all --volumes --remove-orphans
 
       - name: 'Remove GitHub deployment and environment'
         if: ${{ always() }}
