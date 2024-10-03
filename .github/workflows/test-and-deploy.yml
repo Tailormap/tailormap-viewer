@@ -154,19 +154,11 @@ jobs:
           # also skip deploying any profiles, eg. solr
           echo "COMPOSE_PROFILES=" >> $GITHUB_ENV
 
-      - name: 'Log in to GitHub container registry'
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: 'Build, tag and push image to registry'
+      - name: 'Build image'
         # Always uses the 'snapshot' tag of the tailormap-api base image by setting the API_VERSION build arg
         run: |
-          docker buildx create --use --name tailormap-builder
-          docker run --privileged --rm tonistiigi/binfmt --install arm64
-          docker buildx build --progress plain --pull --build-arg VERSION=${VERSION} --build-arg API_VERSION=snapshot --build-arg BASE_HREF=${BASE_HREF} --platform linux/amd64,linux/arm64 -t ghcr.io/tailormap/tailormap:${VERSION} . --push
+          docker build --progress plain --build-arg BASE_HREF=${BASE_HREF} --build-arg VERSION=${VERSION} --build-arg API_VERSION=snapshot -t ghcr.io/tailormap/tailormap:${VERSION} .
+          docker save ghcr.io/tailormap/tailormap:${VERSION} > image.tar
 
       - name: 'Set Docker context for deployment'
         uses: arwynfr/actions-docker-context@v2
@@ -181,6 +173,10 @@ jobs:
         run: |
           ssh-keyscan -H ${{ secrets.DOCKER_HOSTNAME }} > $HOME/.ssh/known_hosts
 
+      - name: 'Load Docker image'
+        run: |
+          cat image.tar | docker load
+
       # Latest Docker Compose version needed for ci/docker-compose.pr.yml to use !reset to remove
       # a service when merging Compose files
       #      - name: Install latest Docker Compose
@@ -194,7 +190,7 @@ jobs:
       #          docker compose version
       - name: 'Update deployment using Docker Compose'
         run: |
-          docker compose up -d --pull=always --quiet-pull --remove-orphans
+          docker compose up -d --remove-orphans
 
       - name: 'Create GitHub deployment'
         if: success()
