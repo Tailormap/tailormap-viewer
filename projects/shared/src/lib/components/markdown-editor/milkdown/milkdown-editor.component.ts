@@ -15,6 +15,7 @@ import { SnackBarMessageComponent } from '../../snackbar-message';
 import { map } from 'rxjs/operators';
 import { MilkdownHelper } from './milkdown.helper';
 
+
 @Component({
   selector: 'tm-milkdown-editor',
   templateUrl: './milkdown-editor.component.html',

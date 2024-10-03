@@ -31,23 +31,16 @@ export class FeatureInfoTemplateRendererComponent implements OnChanges {
       this.rendererTemplate.set(null);
       return;
     }
-    const replacements: string[] = [];
     const replacementMap = new Map<string, string>();
     this.feature?.sortedAttributes.forEach(a => {
-      replacements.push(FeatureInfoTemplateRendererComponent.escapeRegExp(a.key));
-      replacementMap.set(a.key, a.attributeValue);
+      const value = MarkdownHelper.markdownEscape(a.attributeValue);
+      replacementMap.set(a.key, value);
+      replacementMap.set(MarkdownHelper.markdownEscape(a.key), value);
     });
-    const regex = new RegExp('{{\\s*(' + replacements.join('|') + ')\\s*}}', 'gi');
-    const replaced = this.template?.replace(regex, (fullMatch, match) => {
-      return replacementMap.get(match) || "";
-    });
+    const replaced = MarkdownHelper.templateParser(this.template, replacementMap);
     MarkdownHelper.getSafeHtmlForMarkdown$(replaced ?? '', this.sanitizer)
       .pipe(take(1))
       .subscribe(html => this.rendererTemplate.set(html));
-  }
-
-  private static escapeRegExp(str: string) {
-    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
 
 }

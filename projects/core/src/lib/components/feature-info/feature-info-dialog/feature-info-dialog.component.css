@@ -101,6 +101,11 @@ tm-feature-info-layer-dropdown {
   max-height: 200px;
 }
 
+.template-row {
+  max-height: 50%;
+  overflow: auto;
+}
+
 .buttons {
   display: flex;
   box-shadow: 0 -1px 4px 0 rgba(0, 0, 0, 0.09);

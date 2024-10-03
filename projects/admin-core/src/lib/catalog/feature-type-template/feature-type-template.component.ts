@@ -1,7 +1,10 @@
 import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, OnInit } from '@angular/core';
-import { AttributeDescriptorModel, FeatureTypeSettingsModel, FeatureTypeTemplateModel } from '@tailormap-admin/admin-api';
+import {
+  AttributeDescriptorModel, FeatureTypeSettingsModel, FeatureTypeTemplateModel, ImageUploadResult, TailormapAdminUploadService,
+} from '@tailormap-admin/admin-api';
 import { ArrayHelper, TemplatePicklistConfig } from '@tailormap-viewer/shared';
 import { AttributeTypeHelper } from '@tailormap-viewer/api';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'tm-admin-feature-type-template',
@@ -26,8 +29,13 @@ export class FeatureTypeTemplateComponent implements OnInit {
   public templatePicklistConfig: TemplatePicklistConfig | undefined;
 
   constructor(
+    private uploadService: TailormapAdminUploadService,
   ) {
   }
+
+  public uploadImage$ = (file: File): Observable<ImageUploadResult | null> => {
+    return this.uploadService.uploadImage$(file);
+  };
 
   public ngOnInit() {
     const attributeLabels = new Map(Object.entries(this.featureTypeSettings?.attributeSettings || {})
