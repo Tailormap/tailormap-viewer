@@ -1,33 +1,31 @@
-@if ((in3DView$|async) === false){
-  @if (urls$ | async; as urls) {
-    @if (urls.length > 0) {
-      <div class="clw-container map-control-button-container"
-           [class.clw-container--is-active]="toolActive$ | async"
-           (keyup.escape)="toggle(true)">
+@if (urls$ | async; as urls) {
+  @if (urls.length > 0) {
+    <div class="clw-container map-control-button-container"
+         [class.clw-container--is-active]="toolActive$ | async"
+         (keyup.escape)="toggle(true)">
 
-        <button mat-flat-button
-                class="map-control-button"
-                [class.toggle-button--active]="toolActive$ | async"
-                [tmTooltip]="title$ | async"
-                (click)="toggle()">
-          <mat-icon svgIcon="components_coordinate_link_window"></mat-icon>
-        </button>
+      <button mat-flat-button
+              class="map-control-button"
+              [class.toggle-button--active]="toolActive$ | async"
+              [tmTooltip]="title$ | async"
+              (click)="toggle()">
+        <mat-icon svgIcon="components_coordinate_link_window"></mat-icon>
+      </button>
 
-        @if (toolActive$ | async) {
-          <div class="clw-wrapper">
-            <ng-container>
-              <mat-form-field appearance="outline" color="primary">
-                <mat-label i18n="@@core.coordinate-link-window.select-layer">Select link to open</mat-label>
-                <mat-select [formControl]="urlControl" tmAutoFocus>
-                  <mat-option *ngFor="let url of urls" [value]="url">
-                    {{url.alias || url.url}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </ng-container>
-          </div>
-        }
-      </div>
-    }
+      @if (toolActive$ | async) {
+        <div class="clw-wrapper">
+          <ng-container>
+            <mat-form-field appearance="outline" color="primary">
+              <mat-label i18n="@@core.coordinate-link-window.select-layer">Select link to open</mat-label>
+              <mat-select [formControl]="urlControl" tmAutoFocus>
+                <mat-option *ngFor="let url of urls" [value]="url">
+                  {{url.alias || url.url}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </ng-container>
+        </div>
+      }
+    </div>
   }
 }

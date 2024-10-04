@@ -10,7 +10,6 @@ import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
 import { map, take } from 'rxjs/operators';
 import { ApplicationStyleService } from '../../../services/application-style.service';
 import { FeatureModel } from '@tailormap-viewer/api';
-import { selectIn3DView } from '../../../map/state/map.selectors';
 
 @Component({
   selector: 'tm-streetview',
@@ -20,7 +19,6 @@ import { selectIn3DView } from '../../../map/state/map.selectors';
 })
 export class StreetviewComponent implements OnInit, OnDestroy {
   public toolActive$: Observable<boolean>;
-  public in3DView$: Observable<boolean>;
   private destroyed = new Subject();
   private mapCRS = '';
   private streetviewLocation = new Subject<FeatureModel[]>();
@@ -36,7 +34,6 @@ export class StreetviewComponent implements OnInit, OnDestroy {
       .pipe().subscribe(projectionCode => {
       this.mapCRS = projectionCode;
     });
-    this.in3DView$ = this.store$.select(selectIn3DView);
   }
 
   public ngOnInit(): void {

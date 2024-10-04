@@ -1,14 +1,12 @@
-@if ((in3DView$|async) === false){
-  <div class="mouse-coordinates"
-       (pointerenter)="isOverCoordinates(true)"
-       (pointerout)="isOverCoordinates(false)"
-       (mouseenter)="isOverCoordinates(true)"
-       (mouseout)="isOverCoordinates(false)"
-       *ngIf="coordinates$ | async as coordinates">
-    <span class="mouse-coordinates__coordinate"
-         *ngIf="coordinates[0]">{{coordinates[0]}}</span>
-    <span *ngIf="coordinates[0] && coordinates[1]">|</span>
-    <span class="mouse-coordinates__coordinate"
-         *ngIf="coordinates[1]">{{coordinates[1]}}</span>
-  </div>
-}
+<div class="mouse-coordinates"
+     (pointerenter)="isOverCoordinates(true)"
+     (pointerout)="isOverCoordinates(false)"
+     (mouseenter)="isOverCoordinates(true)"
+     (mouseout)="isOverCoordinates(false)"
+     *ngIf="coordinates$ | async as coordinates">
+  <span class="mouse-coordinates__coordinate"
+       *ngIf="coordinates[0]">{{coordinates[0]}}</span>
+  <span *ngIf="coordinates[0] && coordinates[1]">|</span>
+  <span class="mouse-coordinates__coordinate"
+       *ngIf="coordinates[1]">{{coordinates[1]}}</span>
+</div>

@@ -4,6 +4,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { selectComponentsConfig } from '../../state/core.selectors';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { selectIn3DView } from '../../map/state/map.selectors';
 
 describe('BaseLayoutComponent', () => {
 
@@ -15,6 +16,7 @@ describe('BaseLayoutComponent', () => {
           selector: selectComponentsConfig,
           value: (disabledComponents || []).map(type => ({ type, config: { enabled: false } } )),
         },
+        { selector: selectIn3DView, value: false },
       ],
     });
     const { container } = await render(BaseLayoutComponent, {

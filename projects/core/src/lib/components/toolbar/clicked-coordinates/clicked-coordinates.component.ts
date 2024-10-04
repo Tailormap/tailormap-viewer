@@ -8,7 +8,6 @@ import { isActiveToolbarTool } from '../state/toolbar.selectors';
 import { deregisterTool, registerTool, toggleTool } from '../state/toolbar.actions';
 import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
 import { SnackBarMessageComponent } from '@tailormap-viewer/shared';
-import { selectIn3DView } from '../../../map/state/map.selectors';
 
 @Component({
   selector: 'tm-clicked-coordinates',
@@ -20,7 +19,6 @@ export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
 
   public toolActive$: Observable<boolean>;
   private destroyed = new Subject();
-  public in3DView$: Observable<boolean>;
 
   constructor(
     private store$: Store,
@@ -35,7 +33,6 @@ export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
         this.snackBar.dismiss();
       }
     });
-    this.in3DView$ = this.store$.select(selectIn3DView);
   }
 
   public ngOnInit(): void {

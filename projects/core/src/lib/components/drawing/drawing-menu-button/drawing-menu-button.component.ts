@@ -2,7 +2,6 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { selectComponentTitle } from '../../../state/core.selectors';
-import { selectIn3DView } from '../../../map/state/map.selectors';
 
 @Component({
   selector: 'tm-drawing-menu-button',
@@ -13,6 +12,5 @@ import { selectIn3DView } from '../../../map/state/map.selectors';
 export class DrawingMenuButtonComponent {
   public componentType = BaseComponentTypeEnum.DRAWING;
   public panelTitle$ = this.store$.select(selectComponentTitle(this.componentType, $localize `:@@core.drawing.drawing:Drawing`));
-  public in3DView$ = this.store$.select(selectIn3DView);
   constructor(private store$: Store) {}
 }

@@ -8,7 +8,6 @@ import { Store } from '@ngrx/store';
 import { activateTool, deactivateTool, deregisterTool, registerTool } from '../state/toolbar.actions';
 import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
 import { selectActiveTool } from '../state/toolbar.selectors';
-import { selectIn3DView } from '../../../map/state/map.selectors';
 import { ApplicationStyleService } from '../../../services/application-style.service';
 import { selectComponentsConfigForType } from '../../../state/core.selectors';
 import { BaseComponentTypeEnum, MeasureComponentConfigModel } from '@tailormap-viewer/api';
@@ -25,7 +24,6 @@ export class MeasureComponent implements OnInit, OnDestroy {
   public toolActive: 'length' | 'area' | null = null;
   private featureGeom = new Subject<string>();
   private tooltip: MapTooltipModel | null = null;
-  public in3DView$: Observable<boolean>;
 
   private defaultLengthTooltip = $localize `:@@core.toolbar.measure-length:Measure distance`;
   private defaultAreaTooltip = $localize `:@@core.toolbar.measure-area:Measure area`;
@@ -45,7 +43,6 @@ export class MeasureComponent implements OnInit, OnDestroy {
           };
         }),
       );
-    this.in3DView$ = this.store$.select(selectIn3DView);
   }
 
   public ngOnInit(): void {

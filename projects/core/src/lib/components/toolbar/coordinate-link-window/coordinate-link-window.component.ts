@@ -12,7 +12,6 @@ import { deactivateTool, deregisterTool, registerTool, toggleTool } from '../sta
 import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { isActiveToolbarTool } from '../state/toolbar.selectors';
-import { selectIn3DView } from '../../../map/state/map.selectors';
 
 @Component({
   selector: 'tm-coordinate-link-window',
@@ -25,7 +24,6 @@ export class CoordinateLinkWindowComponent implements OnInit, OnDestroy {
   public toolActive$: Observable<boolean>;
   public urls$: Observable<CoordinateLinkWindowConfigUrlModel[]>;
   public title$: Observable<string>;
-  public in3DView$: Observable<boolean>;
 
   public urlControl = new FormControl<CoordinateLinkWindowConfigUrlModel | null>(null);
 
@@ -39,7 +37,6 @@ export class CoordinateLinkWindowComponent implements OnInit, OnDestroy {
     this.urls$ = config$.pipe(map(conf => conf?.urls || []));
     this.title$ = config$.pipe(map(conf => conf?.title || $localize `:@@core.coordinate-link-window.title:Coordinate Link Window`));
     this.toolActive$ = this.store$.select(isActiveToolbarTool(ToolbarComponentEnum.COORDINATE_LINK_WINDOW));
-    this.in3DView$ = this.store$.select(selectIn3DView);
   }
 
   public ngOnInit(): void {
