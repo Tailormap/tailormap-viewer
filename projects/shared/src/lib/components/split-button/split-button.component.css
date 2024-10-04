@@ -7,10 +7,6 @@ mat-button-toggle-group {
   border-radius: 3px;
 }
 
-.cycle-button {
-  max-width: calc(var(--100vw) - 580px);
-}
-
 .cycle-button ::ng-deep .mat-button-toggle-label-content {
   max-width: calc(var(--100vw) - 580px);
   text-overflow: ellipsis;
@@ -42,8 +38,8 @@ mat-button-toggle ::ng-deep .mat-button-toggle-label-content {
   max-width: 360px;
 }
 
-.split-button-menu-item ::ng-deep .mat-mdc-menu-item-text {
-  white-space: nowrap !important;
+.split-button-menu-item.mat-mdc-menu-item ::ng-deep .mat-mdc-menu-item-text {
+  white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
 }
