@@ -33,13 +33,14 @@
         <tm-error-message [friendlyError]="true" [message]="layer.error"></tm-error-message>
       }
       @if(currentFeature$ | async; as feature) {
-        <div class="feature-info">
+        <div class="feature-info" [class.attributes-collapsed]="attributesCollapsed() && !!layer.template">
           @if (layer.template) {
             <div class="row template-row">
               <tm-feature-info-template-renderer [template]="layer.template" [feature]="feature"></tm-feature-info-template-renderer>
             </div>
+            <div class="toggle attributes-toggle" (click)="toggleAttributes()"><mat-icon [svgIcon]="toggleIcon()"></mat-icon></div>
           }
-          <div class="content">
+          <div class="content attributes-list">
             <div *ngFor="let att of feature.sortedAttributes" class="row">
               <strong>{{att.label}}</strong>
               <div [innerHTML]="att.attributeValue | htmlify"></div>
