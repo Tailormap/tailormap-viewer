@@ -398,6 +398,9 @@
       <trans-unit id="core.filter.draw-filter-geometry" datatype="html">
         <source>Draw filter geometry</source>
       </trans-unit>
+      <trans-unit id="core.filter.draw-message-3D" datatype="html">
+        <source>Switch to 2D to draw</source>
+      </trans-unit>
       <trans-unit id="core.filter.ends-with" datatype="html">
         <source>ends with</source>
       </trans-unit>

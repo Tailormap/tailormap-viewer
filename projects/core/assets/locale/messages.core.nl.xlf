@@ -529,6 +529,10 @@
         <source>Draw filter geometry</source>
         <target>Filtergeometrie tekenen</target>
       </trans-unit>
+      <trans-unit id="core.filter.draw-message-3D" datatype="html">
+        <source>Switch to 2D to draw</source>
+        <target>Switch naar 2D om te tekenen</target>
+      </trans-unit>
       <trans-unit id="core.filter.ends-with" datatype="html">
         <source>ends with</source>
         <target>eindigt met</target>
