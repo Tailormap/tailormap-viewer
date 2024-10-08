@@ -34,7 +34,7 @@ const setup = async (conf: {
       { selector: hasSelectedLayersAndGeometry, value: conf.selectedLayersAndGeometry || false },
       { selector: selectSelectedFilterGroupId, value: conf.selectedFilterGroup?.id || null },
       { selector: selectSelectedFilterGroupError, value: conf.selectedFilterGroup?.error || undefined },
-      { selector: selectIn3DView, value: false }
+      { selector: selectIn3DView, value: false },
     ],
   });
   const mapServiceMock = createMapServiceMock();
