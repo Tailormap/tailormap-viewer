@@ -91,7 +91,8 @@
               "lerc",
               "color-name",
               "localforage",
-              "fastpriorityqueue"
+              "fastpriorityqueue",
+              "color-convert"
             ],
             "i18nMissingTranslation": "error"
           },
@@ -109,8 +110,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "4kb",
-                  "maximumError": "6kb"
+                  "maximumWarning": "250kb",
+                  "maximumError": "300kb"
                 }
               ],
               "fileReplacements": [

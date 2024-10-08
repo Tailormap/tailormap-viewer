@@ -15,6 +15,7 @@ import { FeatureInfoLayerDropdownComponent } from './feature-info-layer-dropdown
 import { BaseComponentTypeEnum, FeatureInfoConfigModel } from '@tailormap-viewer/api';
 import { ComponentConfigHelper } from '../../shared/helpers/component-config.helper';
 import { expandCollapseFeatureInfoLayerList } from './state/feature-info.actions';
+import { FeatureInfoTemplateRendererComponent } from './feature-info-template-renderer/feature-info-template-renderer.component';
 
 
 @NgModule({
@@ -33,6 +34,7 @@ import { expandCollapseFeatureInfoLayerList } from './state/feature-info.actions
     CoreSharedModule,
     CdkAccordion,
     CdkAccordionItem,
+    FeatureInfoTemplateRendererComponent,
   ],
   exports: [
     FeatureInfoComponent,

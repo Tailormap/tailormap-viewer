@@ -1,9 +1,11 @@
 declare module 'jsts/org/locationtech/jts/io' {
-  export class OL3Parser {
+  export class WKTReader {
     constructor();
-    public inject(...geometryFactory: any): void;
     public read(geometry: any): any;
-    public write(geometry: any): any;
+  }
+  export class WKTWriter {
+    constructor();
+    public write(geometry: any): string;
   }
 }
 

@@ -11,6 +11,7 @@ import { ConfirmDialogService } from '@tailormap-viewer/shared';
 export class AdminAuthService {
 
   private isAuthenticated = false;
+  private confirmOpen = false;
 
   constructor(
     @Inject(TAILORMAP_SECURITY_API_V1_SERVICE) private api: TailormapSecurityApiV1ServiceModel,
@@ -27,7 +28,12 @@ export class AdminAuthService {
         if (!this.isAuthenticated && userDetails.isAuthenticated) {
           this.isAuthenticated = true;
         }
-        if (this.isAuthenticated && !userDetails.isAuthenticated) {
+        if (this.isAuthenticated && !userDetails.isAuthenticated && !this.confirmOpen) {
+          if (this.router.url.includes('/login')) {
+            this.isAuthenticated = false;
+            return;
+          }
+          this.confirmOpen = true;
           this.dialogService.confirm$(
             `You are logged out`,
             `You are logged out and need to log in first before continuing`,
@@ -38,6 +44,8 @@ export class AdminAuthService {
           )
             .pipe(take(1))
             .subscribe(() => {
+              this.isAuthenticated = false;
+              this.confirmOpen = false;
               this.router.navigateByUrl('/login', {
                 state: {
                   hasInsufficientRights: false,

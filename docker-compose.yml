@@ -3,8 +3,6 @@ name: tailormap
 volumes:
   db:
   solr-data:
-  backup:
-    name: ${COMPOSE_PROJECT_NAME}-backup
 
 services:
   tailormap:

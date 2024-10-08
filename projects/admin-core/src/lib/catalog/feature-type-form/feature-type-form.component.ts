@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter } from 
 import { BehaviorSubject, map, Observable, of } from 'rxjs';
 import { FeatureSourceService } from '../services/feature-source.service';
 import { FeatureTypeUpdateModel } from '../models/feature-source-update.model';
-import { AttributeSettingsModel, FeatureTypeModel, FeatureTypeSettingsModel } from '@tailormap-admin/admin-api';
+import { AttributeSettingsModel, FeatureTypeModel, FeatureTypeSettingsModel, FeatureTypeTemplateModel } from '@tailormap-admin/admin-api';
 
 @Component({
   selector: 'tm-admin-feature-type-form',
@@ -66,6 +66,7 @@ export class FeatureTypeFormComponent {
         hideAttributes: currentUpdatedValue?.settings?.hideAttributes || featureType.settings.hideAttributes || [],
         readOnlyAttributes: currentUpdatedValue?.settings?.readOnlyAttributes || featureType.settings.readOnlyAttributes || [],
         attributeOrder: currentUpdatedValue?.settings?.attributeOrder || featureType.settings.attributeOrder || [],
+        template: currentUpdatedValue?.settings?.template || featureType.settings.template || undefined,
       },
     };
     this.savingSubject.next(true);
@@ -140,6 +141,10 @@ export class FeatureTypeFormComponent {
       settings: { ...settings, [type]: value },
     });
     this.saveEnabled = true;
+  }
+
+  public templateUpdated($event: FeatureTypeTemplateModel) {
+    this.updateSettings('template', $event);
   }
 
 }

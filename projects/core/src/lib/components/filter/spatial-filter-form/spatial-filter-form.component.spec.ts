@@ -3,7 +3,7 @@ import { SpatialFilterFormComponent } from './spatial-filter-form.component';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { selectFilterableLayers } from '../../../map/state/map.selectors';
 import {
-  hasSelectedLayersAndGeometry, selectFilterFeatures, selectSelectedFilterGroupError, selectSelectedFilterGroupId,
+  hasSelectedLayersAndGeometry, selectSelectedFilterGroupError, selectSelectedFilterGroupId,
   selectSelectedLayersCount,
 } from '../state/filter-component.selectors';
 import { getFilterGroup } from '../../../filter/helpers/attribute-filter.helper.spec';
@@ -18,6 +18,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { closeForm } from '../state/filter-component.actions';
 import { of } from 'rxjs';
 import { SpatialFilterReferenceLayerService } from '../../../filter/services/spatial-filter-reference-layer.service';
+import { FilterFeaturesService } from '../services/filter-features.service';
 
 const setup = async (conf: {
   layers?: AppLayerModel[];
@@ -32,7 +33,6 @@ const setup = async (conf: {
       { selector: selectSelectedLayersCount, value: conf.selectedLayers ? 1 : 0 },
       { selector: hasSelectedLayersAndGeometry, value: conf.selectedLayersAndGeometry || false },
       { selector: selectSelectedFilterGroupId, value: conf.selectedFilterGroup?.id || null },
-      { selector: selectFilterFeatures, value: [] },
       { selector: selectSelectedFilterGroupError, value: conf.selectedFilterGroup?.error || undefined },
     ],
   });
@@ -46,6 +46,7 @@ const setup = async (conf: {
       mapServiceMock.provider,
       { provide: RemoveFilterService, useValue: removeFilterServiceMock },
       { provide: SpatialFilterReferenceLayerService, useValue: { isLoadingGeometryForGroup$: () => of(false) } },
+      { provide: FilterFeaturesService, useValue: { getFilterFeatures$: () => of([]) } },
     ],
   });
   const injectedStore = TestBed.inject(MockStore);

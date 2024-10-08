@@ -443,6 +443,9 @@
       <trans-unit id="admin-core.catalog.feature-type-details" datatype="html">
         <source>Details for feature type <x id="INTERPOLATION" equiv-text="{{ featureType.title }}"/></source>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.feature-type-template" datatype="html">
+        <source>Feature info template</source>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.filter-catalog" datatype="html">
         <source>Filter Catalog</source>
       </trans-unit>
@@ -481,6 +484,9 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.host" datatype="html">
         <source>Host</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.insert-feature-type-attribute" datatype="html">
+        <source>Insert feature type attribute</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.layer" datatype="html">
         <source>Layer</source>

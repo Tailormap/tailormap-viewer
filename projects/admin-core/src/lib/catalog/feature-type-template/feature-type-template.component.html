@@ -1,0 +1,12 @@
+<div class="edit-template-wrapper">
+  <mat-card>
+    <mat-card-title i18n="@@admin-core.catalog.feature-type-template">Feature info template</mat-card-title>
+    <mat-card-content>
+      @defer {
+        <tm-markdown-editor [content]="template?.template"
+                            (contentChanged)="templateChanged($event)"
+                            [templatePicklistConfig]="templatePicklistConfig"></tm-markdown-editor>
+      }
+    </mat-card-content>
+  </mat-card>
+</div>

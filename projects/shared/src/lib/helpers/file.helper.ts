@@ -15,7 +15,14 @@ export class FileHelper {
   }
 
   public static extractFileNameFromContentDispositionHeader(contentDispositionHeader: string, defaultName = 'file') {
-    return parse(contentDispositionHeader).parameters['filename'] as string || defaultName;
+    if(contentDispositionHeader === null) {
+      return defaultName;
+    }
+    try {
+      return parse(contentDispositionHeader).parameters['filename'] as string || defaultName;
+    } catch(_ignored) {
+      return defaultName;
+    }
   }
 
   private static getData(data: object | Blob) {
