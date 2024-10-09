@@ -2,12 +2,13 @@ import { render, screen } from '@testing-library/angular';
 import { SplitButtonComponent } from './split-button.component';
 import { SharedImportsModule } from '../../shared-imports.module';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
+import { SharedModule } from '../../shared.module';
 import userEvent from '@testing-library/user-event';
 
 const setup = async () => {
   const optionSelectedMock = jest.fn();
   await render(SplitButtonComponent, {
-    imports: [ SharedImportsModule, MatIconTestingModule ],
+    imports: [ SharedImportsModule, MatIconTestingModule, SharedModule ],
     inputs: {
       options: [{ id: '1', label: 'Test 1' }, { id: '2', label: 'Test 2' }],
       selectedOption: '1',
