@@ -1,12 +1,8 @@
 import {
-  ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild,
+  ChangeDetectionStrategy, Component, DestroyRef, ElementRef, Input, OnDestroy, OnInit, ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
 import { TemplatePicklistConfig } from '../template-picklist.model';
-import { ReactiveFormsModule } from '@angular/forms';
-import { MatFormField, MatLabel, MatOption, MatSelect } from '@angular/material/select';
-import { MatInput } from '@angular/material/input';
-import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { combineLatest, concatMap, from, lastValueFrom, Observable, take, tap } from 'rxjs';
 import type { Editor as MilkdownEditor } from '@milkdown/core';
 import type { ImageBlockFeatureConfig } from '@milkdown/crepe/src/feature/image-block';
@@ -14,6 +10,8 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { SnackBarMessageComponent } from '../../snackbar-message';
 import { map } from 'rxjs/operators';
 import { MilkdownHelper } from './milkdown.helper';
+import { MarkdownEditorService } from '../markdown-editor.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 
 @Component({
@@ -23,7 +21,7 @@ import { MilkdownHelper } from './milkdown.helper';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   encapsulation: ViewEncapsulation.None,
-  imports: [ ReactiveFormsModule, MatSelect, MatLabel, MatOption, MatFormField, MatInput, CdkTextareaAutosize, MatSnackBarModule ],
+  imports: [MatSnackBarModule],
 })
 export class MilkdownEditorComponent implements OnInit, OnDestroy {
 
@@ -31,21 +29,17 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
   public editorEl: ElementRef<HTMLDivElement> | undefined;
 
   @Input()
-  public content: string | undefined;
-
-  @Input()
   public templatePicklistConfig: TemplatePicklistConfig | undefined;
 
   @Input()
   public uploadService$?: (file: File) => Observable<{ error?: string; url?: string } | null>;
 
-  @Output()
-  public contentChanged = new EventEmitter<string>();
-
   private milkdownEditor: MilkdownEditor | undefined;
 
   constructor(
     private snackBar: MatSnackBar,
+    private destroyRef: DestroyRef,
+    private mdEditorService: MarkdownEditorService,
   ) {
   }
 
@@ -67,7 +61,7 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
           };
           const crepe = new crepeModule.Crepe({
             root: el,
-            defaultValue: this.content || '',
+            defaultValue: this.mdEditorService.getCurrentContent() || '',
             features: {
               [crepeModule.Crepe.Feature.CodeMirror]: false,
             },
@@ -83,7 +77,7 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
               const listener = ctx.get(listenerModule.listenerCtx);
               listener.markdownUpdated((_ctx, markdown, prevMarkdown) => {
                 if (markdown !== prevMarkdown) {
-                  this.contentChanged.emit(markdown);
+                  this.mdEditorService.contentChanged(markdown);
                 }
               });
             });
@@ -93,6 +87,9 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
       .subscribe(milkdownEditor => {
         this.milkdownEditor = milkdownEditor;
       });
+    this.mdEditorService.getInsertedVariables$()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(value => this.insertVariable(value));
   }
 
   public ngOnDestroy() {

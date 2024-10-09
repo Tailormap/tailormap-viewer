@@ -129,6 +129,10 @@
         <source>Quote</source>
         <target>Zitat</target>
       </trans-unit>
+      <trans-unit id="shared.markdown-editor.source-editor" datatype="html">
+        <source>Source</source>
+        <target>Code</target>
+      </trans-unit>
       <trans-unit id="shared.markdown-editor.table" datatype="html">
         <source>Table</source>
         <target>Tabelle</target>
@@ -140,6 +144,10 @@
       <trans-unit id="shared.markdown-editor.textgroup" datatype="html">
         <source>Text</source>
         <target>Text</target>
+      </trans-unit>
+      <trans-unit id="shared.markdown-editor.visual-editor" datatype="html">
+        <source>Visual editor</source>
+        <target>Visueller Editor</target>
       </trans-unit>
     </body>
   </file>

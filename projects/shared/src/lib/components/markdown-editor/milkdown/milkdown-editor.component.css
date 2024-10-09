@@ -1,14 +1,11 @@
 @import "@milkdown/crepe/theme/common/style.css";
 @import "@milkdown/crepe/theme/frame.css";
 
-.select-wrapper {
-  max-width: 300px;
-  margin-bottom: 16px;
-  max-height: 550px;
-  overflow: auto;
-}
-
 .markdown-wrap .milkdown .editor {
   --crepe-font-title: var(--font-family);
   --crepe-font-default: var(--font-family);
+}
+
+.markdown-wrap .milkdown milkdown-slash-menu {
+  z-index: 1;
 }

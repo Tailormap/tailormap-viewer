@@ -1,15 +1,3 @@
-@if (templatePicklistConfig) {
-  <div class="select-wrapper">
-    <mat-form-field>
-      <mat-label>{{templatePicklistConfig.label}}</mat-label>
-      <mat-select>
-        @for (v of templatePicklistConfig.variables; track $index) {
-          <mat-option (click)="insertVariable(v.value)">{{v.label}}</mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
-  </div>
-}
 <div class="markdown-wrap">
   <div #editor></div>
 </div>
