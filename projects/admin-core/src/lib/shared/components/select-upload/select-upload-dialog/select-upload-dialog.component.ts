@@ -2,8 +2,8 @@ import { Component, OnInit, ChangeDetectionStrategy, Inject, signal, ViewContain
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { TailormapAdminApiV1Service, UploadModel } from '@tailormap-admin/admin-api';
 import { BehaviorSubject, catchError, concatMap, map, of, take, tap } from 'rxjs';
-import { UploadCategoryEnum } from '../models/upload-category.enum';
-import { UploadHelper } from '../helpers/upload.helper';
+import { UploadCategoryEnum } from '@tailormap-admin/admin-api';
+import { UploadHelper } from '@tailormap-admin/admin-api';
 import { UPLOAD_REMOVE_SERVICE } from '../models/upload-remove-service.injection-token';
 import { UploadRemoveServiceModel } from '../models/upload-remove-service.model';
 import { UploadInUseDialogComponent } from '../upload-in-use-dialog/upload-in-use-dialog.component';
@@ -122,7 +122,7 @@ export class SelectUploadDialogComponent implements OnInit {
 
   public imageSelected($event: { image: string; fileName: string }) {
     this.loading.set(true);
-    const { image, mimeType } = this.prepareBase64($event.image);
+    const { image, mimeType } = UploadHelper.prepareBase64($event.image);
     this.adminApiService.createUpload$({
       content: image,
       filename: $event.fileName,
@@ -140,17 +140,6 @@ export class SelectUploadDialogComponent implements OnInit {
 
   public getImg(upload: UploadModel) {
     return UploadHelper.getUrlForFile(upload.id, upload.category, upload.filename);
-  }
-
-  private prepareBase64(image: string) {
-    const dataIdx = image.indexOf('data:');
-    const base64Idx = image.indexOf(';base64,');
-    let mimeType: string | undefined = undefined;
-    if (dataIdx === 0 && base64Idx !== -1) {
-      mimeType = image.substring(dataIdx + 5, base64Idx);
-      image = image.substring(base64Idx + 8);
-    }
-    return { image, mimeType };
   }
 
   public removeUpload($event: MouseEvent, upload: UploadModel) {

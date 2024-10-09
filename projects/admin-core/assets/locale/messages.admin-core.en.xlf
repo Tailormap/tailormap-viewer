@@ -284,6 +284,9 @@
       <trans-unit id="admin-core.catalog.add-map-service" datatype="html">
         <source>Add map service</source>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.attribute" datatype="html">
+        <source>Attribute</source>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.attributes" datatype="html">
         <source>Attributes</source>
       </trans-unit>

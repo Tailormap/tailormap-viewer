@@ -5,5 +5,6 @@ export interface TemplateVariable {
 
 export interface TemplatePicklistConfig {
   label: string;
+  shortLabel: string;
   variables: TemplateVariable[];
 }

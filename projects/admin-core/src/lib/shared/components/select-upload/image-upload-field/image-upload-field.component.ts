@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
-import { ImageHelper } from '../../../../helpers/image.helper';
+import { ImageHelper } from '@tailormap-admin/admin-api';
 
 @Component({
   selector: 'tm-image-upload-field',
@@ -39,16 +39,13 @@ export class ImageUploadFieldComponent {
     if (!fileInput.files || fileInput.files.length === 0) {
       return;
     }
-    const errorMsg = ImageHelper.checkSizeAndType(fileInput.files[0], this.maxSize);
-    if (errorMsg.length > 0) {
-      this.imageError = errorMsg.join('. ');
-      return;
-    }
-    const fileName = fileInput.files[0].name;
-    ImageHelper.readUploadAsImage$(fileInput.files[0], this.resizeSize)
-      .subscribe(image => {
-        if (image !== null) {
-          this.updateValue(image, fileName);
+    ImageHelper.readFileAsImage$(fileInput.files[0], this.maxSize, this.resizeSize)
+      .subscribe(result => {
+        if (result?.error) {
+          this.imageError = result.error;
+        }
+        if (result?.image && result?.fileName) {
+          this.updateValue(result.image, result.fileName);
         }
       });
   }

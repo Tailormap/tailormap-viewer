@@ -3,8 +3,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { SelectUploadDialogComponent } from '../select-upload-dialog/select-upload-dialog.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { take } from 'rxjs';
-import { UploadCategoryEnum } from '../models/upload-category.enum';
-import { UploadHelper } from '../helpers/upload.helper';
+import { UploadCategoryEnum } from '@tailormap-admin/admin-api';
+import { UploadHelper } from '@tailormap-admin/admin-api';
 
 @Component({
   selector: 'tm-admin-select-upload',

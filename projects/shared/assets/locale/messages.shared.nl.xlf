@@ -69,9 +69,85 @@
         <source>Username</source>
         <target>Gebruikersnaam</target>
       </trans-unit>
+      <trans-unit id="shared.markdown-editor.advancedgroup" datatype="html">
+        <source>Advanced</source>
+        <target>Geavanceerd</target>
+      </trans-unit>
+      <trans-unit id="shared.markdown-editor.bulletlist" datatype="html">
+        <source>Bullet List</source>
+        <target>Lijst</target>
+      </trans-unit>
+      <trans-unit id="shared.markdown-editor.codeblock" datatype="html">
+        <source>Code Block</source>
+        <target>Code</target>
+      </trans-unit>
+      <trans-unit id="shared.markdown-editor.divider" datatype="html">
+        <source>Divider</source>
+        <target>Lijn</target>
+      </trans-unit>
       <trans-unit id="shared.markdown-editor.explanation" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://commonmark.org/help/&quot; target=&quot;_blank&quot;&gt;"/>Markdown<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> is used for layout. On the left you can enter markdown text, on the right there is a preview how it will be rendered</source>
         <target><x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://commonmark.org/help/&quot; target=&quot;_blank&quot;&gt;"/>Markdown<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> wordt gebruikt voor de opmaak. Aan de linkerkant kun je markdown-tekst invoeren, aan de rechterkant zie je een voorbeeld van hoe de tekst wordt weergegeven.</target>
+      </trans-unit>
+      <trans-unit id="shared.markdown-editor.h1" datatype="html">
+        <source>H1</source>
+        <target>H1</target>
+      </trans-unit>
+      <trans-unit id="shared.markdown-editor.h2" datatype="html">
+        <source>H2</source>
+        <target>H2</target>
+      </trans-unit>
+      <trans-unit id="shared.markdown-editor.h3" datatype="html">
+        <source>H3</source>
+        <target>H3</target>
+      </trans-unit>
+      <trans-unit id="shared.markdown-editor.h4" datatype="html">
+        <source>H4</source>
+        <target>H4</target>
+      </trans-unit>
+      <trans-unit id="shared.markdown-editor.h5" datatype="html">
+        <source>H5</source>
+        <target>H5</target>
+      </trans-unit>
+      <trans-unit id="shared.markdown-editor.h6" datatype="html">
+        <source>H6</source>
+        <target>H6</target>
+      </trans-unit>
+      <trans-unit id="shared.markdown-editor.image" datatype="html">
+        <source>Image</source>
+        <target>Afbeelding</target>
+      </trans-unit>
+      <trans-unit id="shared.markdown-editor.listgroup" datatype="html">
+        <source>List</source>
+        <target>Lijst</target>
+      </trans-unit>
+      <trans-unit id="shared.markdown-editor.orderedlist" datatype="html">
+        <source>Ordered List</source>
+        <target>Genummerde lijst</target>
+      </trans-unit>
+      <trans-unit id="shared.markdown-editor.quote" datatype="html">
+        <source>Quote</source>
+        <target>Quote</target>
+      </trans-unit>
+      <trans-unit id="shared.markdown-editor.source-editor" datatype="html">
+        <source>Source</source>
+        <target>Bron</target>
+      </trans-unit>
+      <trans-unit id="shared.markdown-editor.table" datatype="html">
+        <source>Table</source>
+        <target>Tabel</target>
+      </trans-unit>
+      <trans-unit id="shared.markdown-editor.text" datatype="html">
+        <source>Text</source>
+        <target>Tekst</target>
+      </trans-unit>
+      <trans-unit id="shared.markdown-editor.textgroup" datatype="html">
+        <source>Text</source>
+        <target>Tekst</target>
+      </trans-unit>
+      <trans-unit id="shared.markdown-editor.visual-editor" datatype="html">
+        <source>Visual editor</source>
+        <target>Visuele editor</target>
       </trans-unit>
     </body>
   </file>

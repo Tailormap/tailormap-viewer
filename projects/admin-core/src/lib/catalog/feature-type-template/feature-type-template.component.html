@@ -4,6 +4,7 @@
     <mat-card-content>
       @defer {
         <tm-markdown-editor [content]="template?.template"
+                            [uploadService$]="uploadImage$"
                             (contentChanged)="templateChanged($event)"
                             [templatePicklistConfig]="templatePicklistConfig"></tm-markdown-editor>
       }
