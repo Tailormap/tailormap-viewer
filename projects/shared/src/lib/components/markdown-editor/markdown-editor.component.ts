@@ -19,7 +19,7 @@ const LOCALSTORAGE_EDITOR_KEY = 'tm-markdown-editor-pick';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   encapsulation: ViewEncapsulation.None,
-  imports: [MilkdownEditorComponent, MarkdownSourceEditorComponent, MatFormField, MatLabel, MatSelect, MatOption, MatButtonToggleGroup, MatButtonToggle],
+  imports: [ MilkdownEditorComponent, MarkdownSourceEditorComponent, MatFormField, MatLabel, MatSelect, MatOption, MatButtonToggleGroup, MatButtonToggle ],
   providers: [MarkdownEditorService],
 })
 export class MarkdownEditorComponent implements OnInit {

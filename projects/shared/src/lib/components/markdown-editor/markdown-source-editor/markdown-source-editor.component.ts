@@ -1,5 +1,5 @@
 import {
-  ChangeDetectionStrategy, Component, DestroyRef, ElementRef, OnInit, signal, ViewChild, ViewEncapsulation,
+  ChangeDetectionStrategy, Component, DestroyRef, ElementRef, OnInit, signal, ViewChild,
 } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
