@@ -28,7 +28,7 @@ export class BookmarkService {
   private binaryFragmentsBase64: string | null = null;
 
   public getBookmarkValue$(): Observable<string> {
-    return this.joinedBookmark.asObservable().pipe(filter((v): v is string => !!v));
+    return this.joinedBookmark.asObservable().pipe(filter((v): v is string => typeof v === 'string'));
   }
 
   /*
@@ -90,7 +90,7 @@ export class BookmarkService {
       this.binaryFragmentsBase64 = binaryFragmentsBase64;
     }
     if (outputs.length === 0) {
-      this.joinedBookmark.next(undefined);
+      this.joinedBookmark.next('');
     } else {
       this.joinedBookmark.next(outputs.join(''));
     }
