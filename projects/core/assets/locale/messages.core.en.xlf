@@ -35,6 +35,9 @@
       <trans-unit id="core.background-layer-toggle.no-basemap" datatype="html">
         <source>No basemap</source>
       </trans-unit>
+      <trans-unit id="core.bookmark.layer-not-found" datatype="html">
+        <source>Layer is not available</source>
+      </trans-unit>
       <trans-unit id="core.common.add" datatype="html">
         <source>Add</source>
       </trans-unit>
