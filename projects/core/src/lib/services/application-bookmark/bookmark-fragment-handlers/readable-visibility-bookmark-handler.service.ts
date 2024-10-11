@@ -77,7 +77,9 @@ export class ReadableVisibilityBookmarkHandlerService implements BookmarkFragmen
         }
         // If we extend this visible layers bookmark fragment to also contain changed layers (see future idea on top)
         // then we should only remove the only= part and not the rest
-        this.bookmarkService.updateFragment(ApplicationBookmarkFragments.READABLE_VISIBILITY_BOOKMARK_DESCRIPTOR, '');
+        if (bookmark) {
+          this.bookmarkService.updateFragment(ApplicationBookmarkFragments.READABLE_VISIBILITY_BOOKMARK_DESCRIPTOR, '');
+        }
       });
   }
 

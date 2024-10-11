@@ -105,6 +105,9 @@ export class ApplicationBookmarkService implements OnDestroy {
         withLatestFrom(this.store$.select(selectLayers)),
       )
       .subscribe(([ visBookmark, extendedAppLayers ]) => {
+        if (visBookmark.layers.length === 0) {
+          return;
+        }
         const visibilityChanges = MapBookmarkHelper.visibilityDataFromFragment(visBookmark, extendedAppLayers, false);
         this.store$.dispatch(setLayerVisibility({ visibility: visibilityChanges.visibilityChanges }));
         this.store$.dispatch(setLayerOpacity({ opacity: visibilityChanges.opacityChanges }));
