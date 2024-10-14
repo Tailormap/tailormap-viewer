@@ -30,7 +30,7 @@ jobs:
           gh-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 'Run Trivy vulnerability scanner on tailormap'
-        uses: 'aquasecurity/trivy-action@0.24.0'
+        uses: 'aquasecurity/trivy-action@0.27.0'
         # docker run --rm -v trivy_cache:/root/.cache/ aquasec/trivy image ghcr.io/tailormap/tailormap:snapshot
         with:
           image-ref: 'ghcr.io/tailormap/tailormap:snapshot'
