@@ -46,7 +46,6 @@ export class FeatureInfoModule {
       store$,
       BaseComponentTypeEnum.FEATURE_INFO,
       config => {
-        console.log(config);
         if (config.defaultShowDropdown) {
           store$.dispatch(expandCollapseFeatureInfoLayerList());
         }

@@ -11,6 +11,7 @@ import { ApplicationBookmarkFragments } from './application-bookmark-fragments';
 import { LayerTreeOrderBookmarkFragment, LayerVisibilityBookmarkFragment } from './bookmark_pb';
 import { withLatestFrom } from 'rxjs/operators';
 import { setLayerOpacity, setLayerVisibility, updateLayerTreeNodes } from '../../map/state/map.actions';
+import { ReadableVisibilityBookmarkHandlerService } from './bookmark-fragment-handlers/readable-visibility-bookmark-handler.service';
 
 @Injectable({
   providedIn: 'root',
@@ -28,6 +29,7 @@ export class ApplicationBookmarkService implements OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private bookmarkService: BookmarkService,
+    private readableVisibilityBookmarkHandler: ReadableVisibilityBookmarkHandlerService,
   ) {
     let initialRun = true;
     this.route.fragment
@@ -36,7 +38,9 @@ export class ApplicationBookmarkService implements OnDestroy {
         this.bookmarkService.setBookmark(fragment === null ? undefined : fragment);
         if (initialRun) {
           this.updateBookmarkOnChanges();
+          this.readableVisibilityBookmarkHandler.updateBookmarkOnMapChanges();
           this.updateMapOnUrlChanges();
+          this.readableVisibilityBookmarkHandler.updateMapOnBookmarkChanges();
         }
         initialRun = false;
       });
@@ -101,6 +105,9 @@ export class ApplicationBookmarkService implements OnDestroy {
         withLatestFrom(this.store$.select(selectLayers)),
       )
       .subscribe(([ visBookmark, extendedAppLayers ]) => {
+        if (visBookmark.layers.length === 0) {
+          return;
+        }
         const visibilityChanges = MapBookmarkHelper.visibilityDataFromFragment(visBookmark, extendedAppLayers, false);
         this.store$.dispatch(setLayerVisibility({ visibility: visibilityChanges.visibilityChanges }));
         this.store$.dispatch(setLayerOpacity({ opacity: visibilityChanges.opacityChanges }));

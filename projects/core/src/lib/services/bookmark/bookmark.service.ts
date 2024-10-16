@@ -28,7 +28,7 @@ export class BookmarkService {
   private binaryFragmentsBase64: string | null = null;
 
   public getBookmarkValue$(): Observable<string> {
-    return this.joinedBookmark.asObservable().pipe(filter((v): v is string => !!v));
+    return this.joinedBookmark.asObservable().pipe(filter((v): v is string => typeof v === 'string'));
   }
 
   /*
@@ -90,7 +90,7 @@ export class BookmarkService {
       this.binaryFragmentsBase64 = binaryFragmentsBase64;
     }
     if (outputs.length === 0) {
-      this.joinedBookmark.next(undefined);
+      this.joinedBookmark.next('');
     } else {
       this.joinedBookmark.next(outputs.join(''));
     }
@@ -184,6 +184,9 @@ export class BookmarkService {
         }
         // Binary fragments are at the end with no identifier and ':' after '!'
         const binaryFragments = BookmarkService.decodeBinaryFragments(component);
+        if (!binaryFragments) {
+          return [];
+        }
         return binaryFragments.fragments.map(fragment => [ fragment.identifier, fragment.bytes ]);
       });
     return new Map(components.flat());
@@ -262,10 +265,14 @@ export class BookmarkService {
     return [ outputs, binaryFragmentsBase64 ];
   }
 
-  private static decodeBinaryFragments(s: string): BinaryBookmarkFragments {
-    const bytes = UrlHelper.urlBase64ToBytes(s);
-    const decompressed = inflate(bytes);
-    return BinaryBookmarkFragments.fromBinary(decompressed);
+  private static decodeBinaryFragments(s: string): BinaryBookmarkFragments | null {
+    try {
+      const bytes = UrlHelper.urlBase64ToBytes(s);
+      const decompressed = inflate(bytes);
+      return BinaryBookmarkFragments.fromBinary(decompressed);
+    } catch (_e) {
+      return null;
+    }
   }
 
   private static sortBookmarkIdentifiers(k1: string, k2: string) {
