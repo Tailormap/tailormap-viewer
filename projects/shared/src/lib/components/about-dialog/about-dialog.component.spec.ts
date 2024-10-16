@@ -6,7 +6,6 @@ import { TestBed } from '@angular/core/testing';
 import userEvent from '@testing-library/user-event';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { provideHttpClient, withXsrfConfiguration } from '@angular/common/http';
-import { TailormapApiConstants } from '@tailormap-viewer/api';
 
 describe('AboutDialogComponent', () => {
 
@@ -17,8 +16,8 @@ describe('AboutDialogComponent', () => {
       providers: [
         provideHttpClient(
           withXsrfConfiguration({
-            cookieName: TailormapApiConstants.XSRF_COOKIE_NAME,
-            headerName: TailormapApiConstants.XSRF_HEADER_NAME,
+            cookieName: 'XSRF-TOKEN',
+            headerName: 'X-XSRF-TOKEN',
           }),
         ),
         provideHttpClientTesting(),
