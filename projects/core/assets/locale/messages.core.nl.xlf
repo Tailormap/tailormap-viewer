@@ -45,6 +45,10 @@
         <source>No basemap</source>
         <target>Geen basiskaart</target>
       </trans-unit>
+      <trans-unit id="core.common" datatype="html">
+        <source>Login</source>
+        <target>Login</target>
+      </trans-unit>
       <trans-unit id="core.common.add" datatype="html">
         <source>Add</source>
         <target>Toevoegen</target>
@@ -1032,6 +1036,18 @@
       <trans-unit id="core.toolbar.zoom-to-location-failed-timeout" datatype="html">
         <source>Fetching location failed: timeout</source>
         <target>Locatie ophalen mislukt: time-out</target>
+      </trans-unit>
+      <trans-unit id="core.user-login-check-admin-message" datatype="html">
+        <source>You are logged out and need to log in first before continuing</source>
+        <target>U bent uitgelogd en moet opnieuw inloggen om verder te gaan</target>
+      </trans-unit>
+      <trans-unit id="core.user-login-check-title" datatype="html">
+        <source>You are logged out</source>
+        <target>U bent uitgelogd</target>
+      </trans-unit>
+      <trans-unit id="core.user-login-check-viewer-message" datatype="html">
+        <source>You are logged out and might need to login again</source>
+        <target>U bent uitgelogd en moet wellicht opnieuw inloggen</target>
       </trans-unit>
     </body>
   </file>
