@@ -16,6 +16,7 @@
   border-right: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
+  max-width: 50%;
 }
 
 .toggle {
