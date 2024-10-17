@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { TailormapAdminApiV1ServiceModel } from './tailormap-admin-api-v1-service.model';
 import { catchError, map, Observable, of } from 'rxjs';
 import {
   CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel, ConfigModel,
   OIDCConfigurationModel, FeatureTypeModel,
   GeoServiceSummaryWithLayersModel, FeatureSourceSummaryWithFeatureTypesModel, FormSummaryModel, FormModel, UploadModel, SearchIndexModel,
+  SearchIndexPingResponseModel,
 } from '../models';
 import { CatalogModelHelper } from '../helpers/catalog-model.helper';
 import { TailormapApiConstants } from '@tailormap-viewer/api';
@@ -318,6 +319,19 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
       observe: 'response',
     }).pipe(
       map(response => response.status === 204),
+    );
+  }
+
+  public pingSearchIndexEngine$(): Observable<SearchIndexPingResponseModel> {
+    return this.httpClient.get<{ status: string }>(`${TailormapAdminApiV1Service.BASE_URL}/index/ping`).pipe(
+      map(response => ({ success: true, ...response })),
+      catchError((err: HttpErrorResponse) => {
+        if (err.status === 500 && err.error.code !== undefined && err.error.message !== undefined) {
+          return of({ success: false, code: err.error.code, message: err.error.message });
+        } else {
+          return of({ success: false, code: err.status, message: err.statusText });
+        }
+      }),
     );
   }
 
