@@ -2,6 +2,14 @@ import { HtmlifyHelper } from './htmlify.helper';
 
 describe('HtmlifyHelper', () => {
 
+  it('prevents XSS/HTML injection', async () => {
+    expect(HtmlifyHelper.htmlifyContents('<script>alert("test");</script>')).toEqual('&lt;script&gt;alert(&quot;test&quot;);&lt;/script&gt;');
+    expect(HtmlifyHelper.htmlifyContents('https://test.nl"onClick="alert(\'test\')'))
+      .toEqual('<a href="https://test.nl&quot;onClick=&quot;alert(&#x27;test&#x27;)" target="_blank">https://test.nl&quot;onClick=&quot;alert(&#x27;test&#x27;)</a>');
+    expect(HtmlifyHelper.htmlifyContents('https://javascript:alert(\'test\')'))
+      .toEqual('<a href="https://alert(&#x27;test&#x27;)" target="_blank">https://alert(&#x27;test&#x27;)</a>');
+  });
+
   it('renders back normal text', async () => {
     expect(HtmlifyHelper.htmlifyContents('Some text')).toEqual('Some text');
   });
