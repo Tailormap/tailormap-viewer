@@ -79,6 +79,13 @@ export class NavigationComponent implements OnInit {
       icon: 'admin_application',
       requireAdmin: true,
     },
+    {
+      label: $localize`:@@admin-core.navigation.tasks:Tasks`,
+      matchExact: false,
+      link: [ '/admin', Routes.TASKS ],
+      icon: 'admin_user',
+      requireAdmin: true,
+    },
   ];
 
   public bottomButtons: ButtonProps[] =  [

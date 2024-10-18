@@ -38,6 +38,8 @@ import { SearchIndexHomeComponent } from './search-index/search-index-home/searc
 import { SearchIndexEditComponent } from './search-index/search-index-edit/search-index-edit.component';
 import { SearchIndexCreateComponent } from './search-index/search-index-create/search-index-create.component';
 import { LogsPageComponent } from './pages/logs-page/logs-page.component';
+import { TasksHomeComponent } from './tasks/tasks-home/tasks-home.component';
+import { TasksPageComponent } from './pages/tasks-page/tasks-page.component';
 
 export const adminRoutes: Routes = [
   {
@@ -188,6 +190,17 @@ export const adminRoutes: Routes = [
           {
             path: AdminRoutes.USER_DETAILS,
             component: UserEditComponent,
+          },
+        ],
+      },
+      {
+        path: AdminRoutes.TASKS,
+        component: TasksPageComponent,
+        data: { pageTitle: $localize `:@@admin-core.common.tasks-title:Tasks` },
+        children: [
+          {
+            path: '',
+            component: TasksHomeComponent,
           },
         ],
       },
