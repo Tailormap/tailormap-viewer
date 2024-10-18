@@ -9,7 +9,7 @@ import {
   SearchIndexPingResponseModel,
 } from '../models';
 import { CatalogModelHelper } from '../helpers/catalog-model.helper';
-import { TailormapApiConstants } from '@tailormap-viewer/api';
+import { ApiHelper, TailormapApiConstants } from '@tailormap-viewer/api';
 
 type GeoServiceListResponse = { _embedded: { ['geo-services']: GeoServiceSummaryWithLayersModel[] }};
 type FeatureSourceListResponse = { _embedded: { ['feature-sources']: FeatureSourceSummaryWithFeatureTypesModel[] }};
@@ -326,7 +326,7 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
     return this.httpClient.get<{ status: string }>(`${TailormapAdminApiV1Service.BASE_URL}/index/ping`).pipe(
       map(response => ({ success: true, ...response })),
       catchError((err: HttpErrorResponse) => {
-        if (err.status === 500 && err.error.code !== undefined && err.error.message !== undefined) {
+        if (err.status === 500 && ApiHelper.isApiErrorResponse(err.error)) {
           return of({ success: false, code: err.error.code, message: err.error.message });
         } else {
           return of({ success: false, code: err.status, message: err.statusText });
