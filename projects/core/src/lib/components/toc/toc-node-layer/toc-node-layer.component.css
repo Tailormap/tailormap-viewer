@@ -15,6 +15,10 @@
   align-items: center;
 }
 
+.tree-node__label-content {
+  white-space: wrap;
+}
+
 .tree-node__label.modified {
   font-weight: bold;
 }
