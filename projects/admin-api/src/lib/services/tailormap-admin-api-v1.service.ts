@@ -327,7 +327,7 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
       map(response => ({ success: true, ...response })),
       catchError((err: HttpErrorResponse) => {
         if (err.status === 500 && ApiHelper.isApiErrorResponse(err.error)) {
-          return of({ success: false, code: err.error.code, message: err.error.message });
+          return of({ success: false, ...err.error });
         } else {
           return of({ success: false, code: err.status, message: err.statusText });
         }
