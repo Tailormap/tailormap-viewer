@@ -1533,6 +1533,14 @@
         <source>Selected attributes used to index</source>
         <target>Geselecteerde attributen die worden geïndexeerd</target>
       </trans-unit>
+      <trans-unit id="admin-core.search-index.unavailable" datatype="html">
+        <source>Search indexes are not available. This may be because Solr is not deployed or not operating correctly.</source>
+        <target>Zoekindexen zijn niet beschikbaar. Dit kan zijn omdat Solr niet is gedeployed of niet correct functioneert.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.unavailable.message" datatype="html">
+        <source>Error code <x id="INTERPOLATION" equiv-text="{{ pingResponse.code }}"/>, message: <x id="INTERPOLATION_1" equiv-text="{{ pingResponse.message }}"/></source>
+        <target>Foutcode <x id="INTERPOLATION" equiv-text="{{ pingResponse.code }}"/>, melding: <x id="INTERPOLATION_1" equiv-text="{{ pingResponse.message }}"/></target>
+      </trans-unit>
       <trans-unit id="admin-core.select-upload.file-in-use" datatype="html">
         <source>File is still in use</source>
         <target>Bestand wordt gebruikt</target>
