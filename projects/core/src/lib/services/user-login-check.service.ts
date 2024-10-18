@@ -8,10 +8,15 @@ import { ConfirmDialogService } from '@tailormap-viewer/shared';
 @Injectable({
   providedIn: 'root',
 })
-export class AdminAuthService {
+export class UserLoginCheckService {
 
   private isAuthenticated = false;
   private confirmOpen = false;
+
+  private loginButtonLabel = $localize `:@@core.common:Login`;
+  private messageTitle = $localize `:@@core.user-login-check-title:You are logged out`;
+  private viewerMessageBody = $localize `:@@core.user-login-check-viewer-message:You are logged out and might need to login again`;
+  private adminMessageBody = $localize `:@@core.user-login-check-admin-message:You are logged out and need to log in first before continuing`;
 
   constructor(
     @Inject(TAILORMAP_SECURITY_API_V1_SERVICE) private api: TailormapSecurityApiV1ServiceModel,
@@ -34,11 +39,12 @@ export class AdminAuthService {
             return;
           }
           this.confirmOpen = true;
+          const inAdmin = this.router.url.includes('/admin');
           this.dialogService.confirm$(
-            `You are logged out`,
-            `You are logged out and need to log in first before continuing`,
+            this.messageTitle,
+            inAdmin ? this.adminMessageBody : this.viewerMessageBody,
             false,
-            `Login`,
+            this.loginButtonLabel,
             '',
             true,
           )

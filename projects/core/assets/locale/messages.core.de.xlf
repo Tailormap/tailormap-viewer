@@ -49,6 +49,10 @@
         <source>Layer is not available</source>
         <target>Ebene ist nicht verfügbar</target>
       </trans-unit>
+      <trans-unit id="core.common" datatype="html">
+        <source>Login</source>
+        <target>Login</target>
+      </trans-unit>
       <trans-unit id="core.common.add" datatype="html">
         <source>Add</source>
         <target>Hinzufügen</target>
@@ -1036,6 +1040,18 @@
       <trans-unit id="core.toolbar.zoom-to-location-failed-timeout" datatype="html">
         <source>Fetching location failed: timeout</source>
         <target>Standort abrufen fehlgeschlagen: Zeitüberschreitung</target>
+      </trans-unit>
+      <trans-unit id="core.user-login-check-admin-message" datatype="html">
+        <source>You are logged out and need to log in first before continuing</source>
+        <target>Sie sind abgemeldet und müssen sich erst anmelden, bevor Sie fortfahren können</target>
+      </trans-unit>
+      <trans-unit id="core.user-login-check-title" datatype="html">
+        <source>You are logged out</source>
+        <target>Sie sind abgemeldet</target>
+      </trans-unit>
+      <trans-unit id="core.user-login-check-viewer-message" datatype="html">
+        <source>You are logged out and might need to login again</source>
+        <target>Sie sind abgemeldet und müssen sich möglicherweise erneut anmelden</target>
       </trans-unit>
     </body>
   </file>

@@ -47,6 +47,10 @@ describe('HtmlifyHelper', () => {
   it('transforms MD-links into hyperlinks', async () => {
     expect(HtmlifyHelper.htmlifyContents('Some text with some [link](https://www.test.nl) in it'))
       .toEqual('Some text with some <a href="https://www.test.nl" target="_blank">link</a> in it');
+    expect(HtmlifyHelper.htmlifyContents('Some text with some [link description](https://www.test.nl) in it'))
+      .toEqual('Some text with some <a href="https://www.test.nl" target="_blank">link description</a> in it');
+    expect(HtmlifyHelper.htmlifyContents('Some text with some [link / description + 123](https://www.test.nl) in it'))
+      .toEqual('Some text with some <a href="https://www.test.nl" target="_blank">link / description + 123</a> in it');
   });
 
   it('transforms multiple links with whitespace', async () => {

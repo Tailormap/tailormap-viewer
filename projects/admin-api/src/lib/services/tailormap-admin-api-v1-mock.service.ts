@@ -5,6 +5,7 @@ import * as mockData from '../mock-data/tailormap-admin-api.mock-data';
 import {
   CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel, ConfigModel,
   OIDCConfigurationModel, FeatureTypeModel, FormSummaryModel, FormModel, UploadModel, SearchIndexModel,
+  SearchIndexPingResponseModel,
 } from '../models';
 
 @Injectable()
@@ -211,6 +212,9 @@ export class TailormapAdminApiV1MockService implements TailormapAdminApiV1Servic
     return of(true);
   }
 
+  public pingSearchIndexEngine$(): Observable<SearchIndexPingResponseModel> {
+    return of({ success: true, status: 'OK' });
+  }
   public getSearchIndexes$(): Observable<SearchIndexModel[]> {
     return of([]);
   }
