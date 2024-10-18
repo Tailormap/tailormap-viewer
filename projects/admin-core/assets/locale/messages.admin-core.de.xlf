@@ -1549,6 +1549,14 @@
       <trans-unit id="admin-core.search-index.selected-attributes-to-index" datatype="html">
         <source>Selected attributes used to index</source>
       </trans-unit>
+      <trans-unit id="admin-core.search-index.unavailable" datatype="html">
+        <source>Search indexes are not available. This may be because Solr is not deployed or not operating correctly.</source>
+        <target>Suchindizes sind nicht verfügbar. Dies kann daran liegen, dass Solr nicht bereitgestellt ist oder nicht richtig funktioniert.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.unavailable.message" datatype="html">
+        <source>Error code <x id="INTERPOLATION" equiv-text="{{ pingResponse.code }}"/>, message: <x id="INTERPOLATION_1" equiv-text="{{ pingResponse.message }}"/></source>
+        <target>Fehlercode <x id="INTERPOLATION" equiv-text="{{ pingResponse.code }}"/>, meldung: <x id="INTERPOLATION_1" equiv-text="{{ pingResponse.message }}"/></target>
+      </trans-unit>
       <trans-unit id="admin-core.select-upload.file-in-use" datatype="html">
         <source>File is still in use</source>
         <target>Datei wird noch verwendet</target>

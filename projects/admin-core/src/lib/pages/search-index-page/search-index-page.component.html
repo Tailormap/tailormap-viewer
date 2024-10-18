@@ -8,9 +8,11 @@
       <div class="admin-content" [ngClass]=><router-outlet></router-outlet></div>
     </div>
   } @else {
-    <p>Search indexes are not available. This may be because Solr is not deployed or not operating correctly.
-    <br>
-    <br>
-    Error code {{ pingResponse.code }}, message: {{ pingResponse.message }}</p>
+    <div class="admin-page-wrapper">
+      <div class="admin-content">
+        <tm-error-message i18n-message="@@admin-core.search-index.unavailable" message="Search indexes are not available. This may be because Solr is not deployed or not operating correctly." [friendlyError]="true"></tm-error-message>
+        <tm-error-message i18n-message="@@admin-core.search-index.unavailable.message" message="Error code {{ pingResponse.code }}, message: {{ pingResponse.message }}" [friendlyError]="true"></tm-error-message>
+      </div>
+    </div>
   }
 }
