@@ -9,11 +9,11 @@
 }
 
 .toc-tree ::ng-deep .mat-tree-node {
-  height: fit-content !important;
+  height: fit-content;
 }
 
 .toc-tree ::ng-deep .tree-node-wrapper {
-  height: fit-content !important;
+  height: fit-content;
 }
 
 ::ng-deep .tree-node-wrapper {
