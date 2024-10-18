@@ -9,10 +9,19 @@
   line-height: 18px;
 }
 
+.tree-node {
+  padding: 5px 0;
+}
+
 .tree-node__label {
   padding-right: 16px;
   display: flex;
   align-items: center;
+}
+
+.tree-node__label-content {
+  white-space: wrap;
+  overflow-wrap: break-word;
 }
 
 .tree-node__label.modified {
@@ -33,35 +42,6 @@
   position: relative;
   display: inline-block;
   vertical-align: middle;
-}
-
-.tree-node__actions {
-  position: sticky;
-  right: 0;
-  display: flex;
-  padding-left: 5px;
-  align-items: center;
-  justify-content: center;
-  height: var(--tree-node-size);
-  background-image: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 20%, rgba(255, 255, 255, 1) 100%);
-}
-
-.tree-node__actions::after {
-  /* mask to cover text behind the icon */
-  content: " ";
-  position: absolute;
-  right: calc(-1 * var(--toc-side-padding));
-  width: var(--toc-side-padding);
-  height: 100%;
-  background-color: #fff;
-}
-
-.tree-node__actions mat-icon {
-  --mdc-icon-button-icon-size: 18px;
-  width: var(--mdc-icon-button-icon-size);
-  height: var(--mdc-icon-button-icon-size);
-  overflow: visible;
-  vertical-align: top;
 }
 
 .out-of-scale {
