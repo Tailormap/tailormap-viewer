@@ -22,4 +22,8 @@ export class ApplicationBookmarkFragments {
     'embed',
   );
 
+  public static READABLE_VISIBILITY_BOOKMARK_DESCRIPTOR = new BookmarkStringFragmentDescriptor(
+    'layers',
+  );
+
 }

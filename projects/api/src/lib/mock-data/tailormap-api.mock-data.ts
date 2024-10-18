@@ -73,6 +73,7 @@ export const getAppLayerModel = (overrides?: Partial<AppLayerModel>): AppLayerMo
 export const getServiceModel = (overrides?: Partial<ServiceModel>): ServiceModel => ({
   id: 'myservice',
   url: 'https://test.nl',
+  title: 'Service',
   protocol: ServiceProtocol.WMS,
   serverType: ServerType.GEOSERVER,
   ...overrides,
