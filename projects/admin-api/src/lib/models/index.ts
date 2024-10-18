@@ -47,3 +47,4 @@ export * from './upload-category.enum';
 export * from './search-index.model';
 export * from './search-index-status.enum';
 export * from './search-index-ping-response.model';
+export * from './taskschedule.model';

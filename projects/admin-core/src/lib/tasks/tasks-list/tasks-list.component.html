@@ -1,0 +1,8 @@
+<mat-selection-list>
+  @for (task of tasks$ | async; track task.uuid) {
+    <mat-list-item [routerLink]="['/admin/tasks/task', task.uuid]">
+      <div>{{ task.description }}</div>
+    </mat-list-item>
+  }
+</mat-selection-list>
+

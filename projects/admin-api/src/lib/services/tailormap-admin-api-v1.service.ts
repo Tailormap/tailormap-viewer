@@ -10,6 +10,7 @@ import {
 } from '../models';
 import { CatalogModelHelper } from '../helpers/catalog-model.helper';
 import { ApiHelper, TailormapApiConstants } from '@tailormap-viewer/api';
+import { TaskSchedule } from '../models/taskschedule.model';
 
 type GeoServiceListResponse = { _embedded: { ['geo-services']: GeoServiceSummaryWithLayersModel[] }};
 type FeatureSourceListResponse = { _embedded: { ['feature-sources']: FeatureSourceSummaryWithFeatureTypesModel[] }};
@@ -376,6 +377,15 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
       }),
       catchError(() => of(false)),
     );
+  }
+
+  public getTasks$(): Observable<TaskSchedule[]> {
+    return this.httpClient.get<{ 'tasks': TaskSchedule[] }>(`${TailormapAdminApiV1Service.BASE_URL}/tasks`)
+      .pipe(map(response => response.tasks));
+  }
+
+  public createTask$(params: { task: Omit<TaskSchedule, 'uuid'> }): Observable<TaskSchedule> {
+    return this.httpClient.post<TaskSchedule>(`${TailormapAdminApiV1Service.BASE_URL}/tasks`, params.task);
   }
 
 
