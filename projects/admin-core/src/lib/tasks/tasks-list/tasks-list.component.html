@@ -1,0 +1,4 @@
+
+  @for (task of tasks$ | async; track task.uuid) {
+    <div>{{ task.description }}</div>
+  }

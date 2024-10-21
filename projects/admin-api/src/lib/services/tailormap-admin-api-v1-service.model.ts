@@ -4,6 +4,7 @@ import {
   OIDCConfigurationModel, FeatureTypeModel, UploadModel, FormSummaryModel, FormModel, SearchIndexModel,
   SearchIndexPingResponseModel,
 } from '../models';
+import { TaskSchedule } from '../models/taskschedule.model';
 
 export interface TailormapAdminApiV1ServiceModel {
   getCatalog$(): Observable<CatalogNodeModel[]>;
@@ -67,4 +68,5 @@ export interface TailormapAdminApiV1ServiceModel {
   deleteSearchIndex$(id: number): Observable<boolean>;
   reindexSearchIndex$(id: number): Observable<boolean>;
   clearSearchIndex$(id: number): Observable<boolean>;
+  getTasks$(): Observable<TaskSchedule[]>;
 }

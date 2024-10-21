@@ -18,6 +18,7 @@ import { SearchIndexPageComponent } from './search-index-page/search-index-page.
 import { SearchIndexModule } from '../search-index/search-index.module';
 import { LogsPageComponent } from './logs-page/logs-page.component';
 import { TasksPageComponent } from './tasks-page/tasks-page.component';
+import { TasksModule } from '../tasks/tasks.module';
 
 
 @NgModule({
@@ -45,6 +46,7 @@ import { TasksPageComponent } from './tasks-page/tasks-page.component';
     SharedModule,
     FormModule,
     SearchIndexModule,
+    TasksModule,
   ],
   exports: [
     AdminHomePageComponent,
