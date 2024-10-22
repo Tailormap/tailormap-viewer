@@ -15,6 +15,7 @@ const onLoadTasksSuccess = (
   const tasks = payload.tasks;
   return {
     ...state,
+    tasksLoadStatus: LoadingStateEnum.LOADED,
     tasks,
   };
 };

@@ -40,6 +40,7 @@ import { SearchIndexCreateComponent } from './search-index/search-index-create/s
 import { LogsPageComponent } from './pages/logs-page/logs-page.component';
 import { TasksHomeComponent } from './tasks/tasks-home/tasks-home.component';
 import { TasksPageComponent } from './pages/tasks-page/tasks-page.component';
+import { TaskDetailsComponent } from './tasks/task-details/task-details.component';
 
 export const adminRoutes: Routes = [
   {
@@ -201,6 +202,10 @@ export const adminRoutes: Routes = [
           {
             path: '',
             component: TasksHomeComponent,
+          },
+          {
+            path: AdminRoutes.TASK_DETAILS,
+            component: TaskDetailsComponent,
           },
         ],
       },

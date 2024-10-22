@@ -10,11 +10,13 @@ import { EffectsModule } from '@ngrx/effects';
 import { tasksStateKey } from './state/tasks.state';
 import { tasksReducer } from './state/tasks.reducer';
 import { TasksEffects } from './state/tasks.effects';
+import { TaskDetailsComponent } from './task-details/task-details.component';
 
 @NgModule({
   declarations: [
     TasksHomeComponent,
     TasksListComponent,
+    TaskDetailsComponent,
   ],
   imports: [
     CommonModule,
