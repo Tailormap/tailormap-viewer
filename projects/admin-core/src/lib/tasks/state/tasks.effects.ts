@@ -32,6 +32,26 @@ export class TasksEffects {
     );
   });
 
+  public loadTaskDetails$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(TasksActions.loadTaskDetails),
+      switchMap( _action => {
+        return this.adminApiService.getTaskDetails$(_action.taskUuid, _action.taskType)
+          .pipe(
+            catchError(() => {
+              return of({ error: $localize `:@@admin-core.tasks.error-loading-task-details:Error while loading task details` });
+            }),
+            map(response => {
+              if (ApiResponseHelper.isErrorResponse(response)) {
+                return TasksActions.loadTaskDetailsFailed({ error: response.error });
+              }
+              return TasksActions.loadTaskDetailsSuccess({ taskDetails: response });
+            }),
+          );
+      }),
+    );
+  });
+
   constructor(
     private actions$: Actions,
     private store$: Store,

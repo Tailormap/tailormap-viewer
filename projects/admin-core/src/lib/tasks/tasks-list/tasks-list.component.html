@@ -1,3 +1,5 @@
+<h2 i18n="@@admin-core.tasks.tasks">Tasks</h2>
+
 <mat-selection-list>
   @for (task of tasks$ | async; track task.uuid) {
     <mat-list-item [routerLink]="['/admin/tasks/task', task.uuid]">

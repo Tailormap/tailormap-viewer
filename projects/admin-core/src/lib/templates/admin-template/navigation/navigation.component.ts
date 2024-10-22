@@ -83,7 +83,7 @@ export class NavigationComponent implements OnInit {
       label: $localize`:@@admin-core.navigation.tasks:Tasks`,
       matchExact: false,
       link: [ '/admin', Routes.TASKS ],
-      icon: 'admin_user',
+      icon: 'admin_tasks',
       requireAdmin: true,
     },
   ];

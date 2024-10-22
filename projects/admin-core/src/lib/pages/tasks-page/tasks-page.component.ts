@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'tm-admin-tasks-page',
@@ -6,11 +6,8 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
   styleUrls: ['./tasks-page.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TasksPageComponent implements OnInit {
+export class TasksPageComponent {
 
   constructor() { }
-
-  public ngOnInit(): void {
-  }
 
 }

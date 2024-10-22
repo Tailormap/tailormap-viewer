@@ -6,11 +6,10 @@ import {
   CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel, ConfigModel,
   OIDCConfigurationModel, FeatureTypeModel,
   GeoServiceSummaryWithLayersModel, FeatureSourceSummaryWithFeatureTypesModel, FormSummaryModel, FormModel, UploadModel, SearchIndexModel,
-  SearchIndexPingResponseModel,
+  SearchIndexPingResponseModel, TaskModel, TaskDetailsModel,
 } from '../models';
 import { CatalogModelHelper } from '../helpers/catalog-model.helper';
 import { ApiHelper, TailormapApiConstants } from '@tailormap-viewer/api';
-import { TaskSchedule } from '../models/taskschedule.model';
 
 type GeoServiceListResponse = { _embedded: { ['geo-services']: GeoServiceSummaryWithLayersModel[] }};
 type FeatureSourceListResponse = { _embedded: { ['feature-sources']: FeatureSourceSummaryWithFeatureTypesModel[] }};
@@ -379,14 +378,13 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
     );
   }
 
-  public getTasks$(): Observable<TaskSchedule[]> {
-    return this.httpClient.get<{ 'tasks': TaskSchedule[] }>(`${TailormapAdminApiV1Service.BASE_URL}/tasks`)
+  public getTasks$(): Observable<TaskModel[]> {
+    return this.httpClient.get<{ 'tasks': TaskModel[] }>(`${TailormapAdminApiV1Service.BASE_URL}/tasks`)
       .pipe(map(response => response.tasks));
   }
 
-  public createTask$(params: { task: Omit<TaskSchedule, 'uuid'> }): Observable<TaskSchedule> {
-    return this.httpClient.post<TaskSchedule>(`${TailormapAdminApiV1Service.BASE_URL}/tasks`, params.task);
+  public getTaskDetails$(uuid: string, type: string): Observable<TaskDetailsModel> {
+    return this.httpClient.get<TaskDetailsModel>(`${TailormapAdminApiV1Service.BASE_URL}/tasks/${type}/${uuid}`);
   }
-
 
 }
