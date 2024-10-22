@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { TaskSchedule } from '@tailormap-admin/admin-api';
+import { TaskModel } from '@tailormap-admin/admin-api';
 import { Store } from '@ngrx/store';
 import { loadTasks } from '../state/tasks.actions';
 import { selectTasks } from '../state/tasks.selectors';
@@ -13,7 +13,7 @@ import { selectTasks } from '../state/tasks.selectors';
 })
 export class TasksListComponent implements OnInit {
 
-  public tasks$: Observable<TaskSchedule[]> = of([]);
+  public tasks$: Observable<TaskModel[]> = of([]);
 
   constructor(
     private store$: Store,

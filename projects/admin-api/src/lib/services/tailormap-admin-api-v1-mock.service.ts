@@ -5,9 +5,8 @@ import * as mockData from '../mock-data/tailormap-admin-api.mock-data';
 import {
   CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel, ConfigModel,
   OIDCConfigurationModel, FeatureTypeModel, FormSummaryModel, FormModel, UploadModel, SearchIndexModel,
-  SearchIndexPingResponseModel,
+  SearchIndexPingResponseModel, TaskModel, TaskDetailsModel,
 } from '../models';
-import { TaskSchedule } from '../models/taskschedule.model';
 
 @Injectable()
 export class TailormapAdminApiV1MockService implements TailormapAdminApiV1ServiceModel {
@@ -235,8 +234,12 @@ export class TailormapAdminApiV1MockService implements TailormapAdminApiV1Servic
     return of(true);
   }
 
-  public getTasks$(): Observable<TaskSchedule[]> {
+  public getTasks$(): Observable<TaskModel[]> {
     return of([]);
+  }
+
+  public getTaskDetails$(uuid: string, type: string): Observable<TaskDetailsModel> {
+    return of(mockData.getTaskDetails())
   }
 
 

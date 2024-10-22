@@ -30,6 +30,16 @@ const onLoadTasksFailed = (
   tasks: [],
 });
 
+const onLoadTaskDetailsSuccess = (
+  state: TasksState,
+  payload: ReturnType<typeof TasksActions.loadTaskDetailsSuccess>,
+): TasksState => {
+  return {
+    ...state,
+    tasksDetails: [...state.tasksDetails, payload.taskDetails],
+  };
+}
+
 const tasksReducerImpl = createReducer<TasksState>(
   initialTasksState,
   on(TasksActions.loadTasksStart, onLoadTasksStart),

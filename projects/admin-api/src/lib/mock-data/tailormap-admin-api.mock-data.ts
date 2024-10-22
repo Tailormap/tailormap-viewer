@@ -2,7 +2,7 @@ import {
   ApplicationModel,
   CatalogItemKindEnum, CatalogNodeModel, ConfigModel, FeatureSourceModel, FeatureSourceProtocolEnum, FeatureTypeModel,
   FeatureTypeSummaryModel, GeoServiceLayerModel,
-  GeoServiceProtocolEnum, GeoServiceSummaryModel, GeoServiceWithLayersModel, GroupModel, ServiceCapsModel, UserModel,
+  GeoServiceProtocolEnum, GeoServiceSummaryModel, GeoServiceWithLayersModel, GroupModel, ServiceCapsModel, TaskDetailsModel, UserModel,
 } from '../models';
 import { AttributeType, ServerType } from '@tailormap-viewer/api';
 import { AttributeDescriptorModel } from '../models/attribute-descriptor.model';
@@ -200,4 +200,11 @@ export const getConfigModel = (overrides?: Partial<ConfigModel>): ConfigModel =>
   jsonValue: null,
   availableForViewer: false,
   ...overrides,
+});
+
+export const getTaskDetails = (): TaskDetailsModel => ({
+  uuid: "fc890ca2-f0cb-4eac-86c7-35797d09b0af",
+  type: "poc",
+  description: "POC task that runs every hour",
+  cronExpression: "0 0 0/1 1/1 * ? *",
 });

@@ -2,9 +2,8 @@ import { Observable } from 'rxjs';
 import {
   CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel, ConfigModel,
   OIDCConfigurationModel, FeatureTypeModel, UploadModel, FormSummaryModel, FormModel, SearchIndexModel,
-  SearchIndexPingResponseModel,
+  SearchIndexPingResponseModel, TaskModel, TaskDetailsModel,
 } from '../models';
-import { TaskSchedule } from '../models/taskschedule.model';
 
 export interface TailormapAdminApiV1ServiceModel {
   getCatalog$(): Observable<CatalogNodeModel[]>;
@@ -68,5 +67,6 @@ export interface TailormapAdminApiV1ServiceModel {
   deleteSearchIndex$(id: number): Observable<boolean>;
   reindexSearchIndex$(id: number): Observable<boolean>;
   clearSearchIndex$(id: number): Observable<boolean>;
-  getTasks$(): Observable<TaskSchedule[]>;
+  getTasks$(): Observable<TaskModel[]>;
+  getTaskDetails$(uuid: string, type: string): Observable<TaskDetailsModel>;
 }

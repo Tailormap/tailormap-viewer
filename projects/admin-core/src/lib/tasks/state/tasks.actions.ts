@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { TaskSchedule } from '@tailormap-admin/admin-api';
+import { TaskDetailsModel, TaskModel } from '@tailormap-admin/admin-api';
 
 const tasksActionsPrefix = '[Admin/Tasks]';
 
@@ -13,10 +13,22 @@ export const loadTasksStart = createAction(
 
 export const loadTasksSuccess = createAction(
   `${tasksActionsPrefix}  Load Tasks Success`,
-  props<{ tasks: TaskSchedule[] }>(),
+  props<{ tasks: TaskModel[] }>(),
 );
 
 export const loadTasksFailed = createAction(
   `${tasksActionsPrefix}  Load Tasks Failed`,
   props<{ error?: string }>(),
 );
+
+export const loadTaskDetails = createAction(
+  `${tasksActionsPrefix} Load Task Details`,
+  props<{ taskUuid: string }>(),
+);
+
+export const loadTaskDetailsSuccess = createAction(
+  `${tasksActionsPrefix} Load Task Details Success`,
+  props<{ taskDetails: TaskDetailsModel }>(),
+);
+
+
