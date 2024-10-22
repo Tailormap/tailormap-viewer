@@ -45,5 +45,6 @@ const tasksReducerImpl = createReducer<TasksState>(
   on(TasksActions.loadTasksStart, onLoadTasksStart),
   on(TasksActions.loadTasksSuccess, onLoadTasksSuccess),
   on(TasksActions.loadTasksFailed, onLoadTasksFailed),
+  on(TasksActions.loadTaskDetailsSuccess, onLoadTaskDetailsSuccess),
 );
 export const tasksReducer = (state: TasksState | undefined, action: Action) => tasksReducerImpl(state, action);
