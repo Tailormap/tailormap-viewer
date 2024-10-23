@@ -34,6 +34,12 @@
   transition: opacity ease-in 0.5s;
 }
 
+.embedded-overlay-hiding {
+  opacity: 0;
+  z-index: 2;
+  transition: opacity ease-in 0.5s;
+}
+
 @media screen and (max-width: 500px) {
   .embedded-overlay {
     font-size: 1.2em;

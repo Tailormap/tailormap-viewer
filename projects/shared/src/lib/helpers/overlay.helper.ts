@@ -21,6 +21,7 @@ export class OverlayHelper {
     private hostEl: HTMLElement,
     private embeddedElementClass = 'embedded-overlay',
     private embeddedElementVisibleClass = 'embedded-overlay-visible',
+    private embeddedElementHidingClass = 'embedded-overlay-hiding',
   ) {
     this.addEmbeddedHandlers();
   }
@@ -104,6 +105,12 @@ export class OverlayHelper {
       return;
     }
     this.overlayVisible = false;
+    const removeHidingCls = () => {
+      this.embeddedElement?.classList.remove(this.embeddedElementHidingClass);
+      this.embeddedElement?.removeEventListener('transitionend', removeHidingCls);
+    };
+    this.embeddedElement?.addEventListener('transitionend', removeHidingCls);
+    this.embeddedElement?.classList.add(this.embeddedElementHidingClass);
     this.embeddedElement?.classList.remove(this.embeddedElementVisibleClass);
   }
 
