@@ -34,7 +34,7 @@ export class MapSizeHelper {
     if (!size) {
       return '';
     }
-    if (size > 100) {
+    if (size > 1000) {
       return (Math.round(size / 1000 * 100) / 100) + ' ' + 'km';
     } else {
       return (Math.round(size * 100) / 100) + ' ' + 'm';
@@ -45,7 +45,7 @@ export class MapSizeHelper {
     if (!size) {
       return '';
     }
-    if (size > 10000) {
+    if (size > 100000) {
       return (Math.round(size / 1000000 * 100) / 100) + ' ' + 'km';
     } else {
       return (Math.round(size * 100) / 100) + ' ' + 'm';
