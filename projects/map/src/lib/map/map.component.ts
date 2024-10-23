@@ -1,29 +1,40 @@
-import { AfterViewInit, Component, ElementRef } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy } from '@angular/core';
 import { MapService } from '../map-service/map.service';
+import { OverlayHelper } from '@tailormap-viewer/shared';
 
 @Component({
   selector: 'tm-map',
-  template: `<div class="map-container"></div>`,
-  styles: [`
-    :host,
-    .map-container {
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: 0;
-      bottom: 0;
-    }
-  `],
+  templateUrl: 'map.component.html',
+  styleUrl: 'map.component.css',
 })
-export class MapComponent implements AfterViewInit {
+export class MapComponent implements AfterViewInit, OnDestroy {
+
+  public inIframe = window.self !== window.top;
+  private overlayHelper: OverlayHelper | undefined;
 
   constructor(
     private el: ElementRef,
     private mapService: MapService,
-  ) { }
+  ) {
+  }
 
   public ngAfterViewInit() {
-    this.mapService.render(this.el.nativeElement.querySelector('.map-container'));
+    const nativeEl: HTMLElement | undefined = this.el.nativeElement;
+    const mapContainer: HTMLElement | null | undefined = nativeEl?.querySelector('.map-container');
+    if (!mapContainer) {
+      return;
+    }
+    this.mapService.render(mapContainer);
+    if (this.inIframe && nativeEl) {
+      this.overlayHelper = new OverlayHelper(nativeEl);
+    }
   }
+
+  public ngOnDestroy() {
+    if (this.overlayHelper) {
+      this.overlayHelper.destroy();
+    }
+  }
+
 
 }
