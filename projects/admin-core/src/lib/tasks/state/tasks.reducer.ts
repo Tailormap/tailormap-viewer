@@ -34,11 +34,12 @@ const onLoadTaskDetailsSuccess = (
   state: TasksState,
   payload: ReturnType<typeof TasksActions.loadTaskDetailsSuccess>,
 ): TasksState => {
+  const taskDetails = payload.taskDetails;
   return {
     ...state,
-    tasksDetails: [...state.tasksDetails, payload.taskDetails],
+    taskDetails,
   };
-}
+};
 
 const tasksReducerImpl = createReducer<TasksState>(
   initialTasksState,

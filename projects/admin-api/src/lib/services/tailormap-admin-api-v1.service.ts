@@ -384,8 +384,7 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
   }
 
   public getTaskDetails$(uuid: string, type: string): Observable<TaskDetailsModel> {
-    return this.httpClient.get<{ 'taskDetails': TaskDetailsModel }>(`${TailormapAdminApiV1Service.BASE_URL}/tasks/${type}/${uuid}`)
-      .pipe(map(response => response.taskDetails));
+    return this.httpClient.get<TaskDetailsModel>(`${TailormapAdminApiV1Service.BASE_URL}/tasks/${type}/${uuid}`);
   }
 
 }

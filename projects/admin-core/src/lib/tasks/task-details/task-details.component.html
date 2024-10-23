@@ -1,2 +1,3 @@
 <p>task-details works! {{ uuid$ | async }}</p>
 <div>description: {{ (task$ | async)?.description }}</div>
+<div>cron expression: {{ (taskDetails$ | async)?.cronExpression }}</div>
