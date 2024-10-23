@@ -23,7 +23,7 @@ import { HttpClient, HttpXsrfTokenExtractor } from '@angular/common/http';
 import { ErrorResponseModel, FeatureModel } from '@tailormap-viewer/api';
 import { OpenLayersMapImageExporter } from './openlayers-map-image-exporter';
 import { Attribution } from 'ol/control';
-import { platformModifierKeyOnly } from 'ol/events/condition';
+import { mouseOnly, platformModifierKeyOnly } from 'ol/events/condition';
 
 export class OpenLayersMap implements MapViewerModel {
 
@@ -81,7 +81,7 @@ export class OpenLayersMap implements MapViewerModel {
       }).extend(isInIframe ? [
         new DragPan({
           condition: function (event) {
-            return event.activePointers?.length === 2 || platformModifierKeyOnly(event);
+            return event.activePointers?.length === 2 || mouseOnly(event);
           },
         }),
         new MouseWheelZoom({ condition: platformModifierKeyOnly }),

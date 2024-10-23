@@ -5,10 +5,12 @@ export class OverlayHelper {
   private static WINDOWS_MESSAGE = $localize `:@@shared.overlay-helper.windows:Use ctrl + scroll to zoom the map`;
   private static MAC_MESSAGE = $localize `:@@shared.overlay-helper.mac:Use cmd (⌘) + scroll to zoom the map`;
   private static TOUCH_MESSAGE = $localize `:@@shared.overlay-helper.touch:Use two fingers to move the map`;
+  private static AUTO_HIDE_TIME = 3000;
 
   private embeddedElement: HTMLElement | undefined;
   private overlayVisible = false;
   private elSize = { left: 0, right: 0, top: 0, bottom: 0 };
+  private autoHideTimer: number | undefined;
 
   private mouseWheelHandler = this.handleMouseWheel.bind(this);
   private touchEventHandler = this.handleTouchStart.bind(this);
@@ -35,6 +37,7 @@ export class OverlayHelper {
     this.hostEl.addEventListener("touchstart", this.touchEventHandler);
     this.hostEl.addEventListener("touchend", this.hideOverlayHandler);
     this.hostEl.addEventListener('mouseleave', this.hideOverlayHandler);
+    this.hostEl.addEventListener('mousedown', this.hideOverlayHandler);
   }
 
   public destroy() {
@@ -43,6 +46,7 @@ export class OverlayHelper {
     this.hostEl.removeEventListener("touchstart", this.touchEventHandler);
     this.hostEl.removeEventListener("touchend", this.hideOverlayHandler);
     this.hostEl.removeEventListener('mouseleave', this.hideOverlayHandler);
+    this.hostEl.removeEventListener('mousedown', this.hideOverlayHandler);
   }
 
   private setElementSize() {
@@ -78,6 +82,12 @@ export class OverlayHelper {
   }
 
   private showOverlay(message: string) {
+    if (this.autoHideTimer) {
+      window.clearTimeout(this.autoHideTimer);
+    }
+    this.autoHideTimer = window.setTimeout(() => {
+      this.hideOverlay();
+    }, OverlayHelper.AUTO_HIDE_TIME);
     if (this.overlayVisible) {
       return;
     }
