@@ -113,6 +113,15 @@
       <trans-unit id="shared.markdown-editor.visual-editor" datatype="html">
         <source>Visual editor</source>
       </trans-unit>
+      <trans-unit id="shared.overlay-helper.mac" datatype="html">
+        <source>Use cmd (⌘) + scroll to zoom the map</source>
+      </trans-unit>
+      <trans-unit id="shared.overlay-helper.touch" datatype="html">
+        <source>Use two fingers to move the map</source>
+      </trans-unit>
+      <trans-unit id="shared.overlay-helper.windows" datatype="html">
+        <source>Use ctrl + scroll to zoom the map</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>

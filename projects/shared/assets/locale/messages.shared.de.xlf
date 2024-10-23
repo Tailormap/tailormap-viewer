@@ -149,6 +149,18 @@
         <source>Visual editor</source>
         <target>Visueller Editor</target>
       </trans-unit>
+      <trans-unit id="shared.overlay-helper.mac" datatype="html">
+        <source>Use cmd (⌘) + scroll to zoom the map</source>
+        <target>Verwende cmd (⌘) + Scrollen, um die Karte zu vergrößern.</target>
+      </trans-unit>
+      <trans-unit id="shared.overlay-helper.touch" datatype="html">
+        <source>Use two fingers to move the map</source>
+        <target>Benutze zwei Finger, um die Karte zu bewegen.</target>
+      </trans-unit>
+      <trans-unit id="shared.overlay-helper.windows" datatype="html">
+        <source>Use ctrl + scroll to zoom the map</source>
+        <target>Verwende ctrl + Scrollen, um die Karte zu vergrößern.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
