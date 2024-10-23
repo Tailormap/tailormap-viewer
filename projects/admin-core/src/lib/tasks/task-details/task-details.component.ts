@@ -1,9 +1,10 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { map, Observable, of } from 'rxjs';
-import { TaskModel } from '@tailormap-admin/admin-api';
+import { TaskDetailsModel, TaskModel } from '@tailormap-admin/admin-api';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { loadTaskDetails } from '../state/tasks.actions';
+import { selectTask, selectTaskDetails } from '../state/tasks.selectors';
 
 @Component({
   selector: 'tm-admin-task-details',
@@ -14,8 +15,9 @@ import { loadTaskDetails } from '../state/tasks.actions';
 export class TaskDetailsComponent implements OnInit {
 
   public task$: Observable<TaskModel | null> = of(null);
-
   public uuid$: Observable<string | null> = of(null);
+  public taskDetails$: Observable<TaskDetailsModel | null> = of(null);
+
 
   constructor(
     private route: ActivatedRoute,
@@ -26,6 +28,16 @@ export class TaskDetailsComponent implements OnInit {
     this.uuid$ = this.route.paramMap.pipe(
       map(params => params.get('taskId'))
     );
+
+    this.uuid$.subscribe(
+      uuid => {
+        this.task$ = this.store$.select(selectTask(uuid));
+        this.taskDetails$ = this.store$.select(selectTaskDetails(uuid));
+      }
+    )
+
+
+
   }
 
 }

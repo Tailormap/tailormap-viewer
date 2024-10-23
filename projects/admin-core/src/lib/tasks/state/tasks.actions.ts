@@ -23,7 +23,7 @@ export const loadTasksFailed = createAction(
 
 export const loadTaskDetails = createAction(
   `${tasksActionsPrefix} Load Task Details`,
-  props<{ taskUuid: string, taskType: string }>(),
+  props<{ taskUuid: string | null, taskType: string | null }>(),
 );
 
 export const loadTaskDetailsFailed = createAction(
