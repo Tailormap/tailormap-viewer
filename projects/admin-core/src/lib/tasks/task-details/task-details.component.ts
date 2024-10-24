@@ -49,7 +49,7 @@ export class TaskDetailsComponent implements OnInit {
   }
 
   public delete(): void {
-    console.log("delete")
+    console.log("delete");
   }
 
 }
