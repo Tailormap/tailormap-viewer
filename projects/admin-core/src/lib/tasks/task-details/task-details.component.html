@@ -1,3 +1,19 @@
-<p>task-details works! {{ uuid$ | async }}</p>
-<div>description: {{ (task$ | async)?.description }}</div>
-<div>cron expression: {{ (taskDetails$ | async)?.cronExpression }}</div>
+<h2 i18n="@@admin-core.tasks.task.information">Task Information</h2>
+
+<div class="information">
+  <strong>Description</strong>
+  <div>{{ (task$ | async)?.description }}</div>
+
+  <strong>Uuid</strong>
+  <div>{{ uuid$ | async }}</div>
+
+  <strong>Type</strong>
+  <div>{{ (taskDetails$ | async)?.type }}</div>
+
+  <strong>Status</strong>
+  <div>{{ (taskDetails$ | async)?.status }}</div>
+</div>
+
+<div class="controls-buttons">
+  <button mat-flat-button color="warn" (click)="delete()" i18n="@@admin-core.common.delete">Delete</button>
+</div>
