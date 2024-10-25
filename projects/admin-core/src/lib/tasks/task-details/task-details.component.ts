@@ -36,7 +36,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     this.uuid$.subscribe(
       uuid => {
         this.task$ = this.store$.select(selectTask(uuid));
-        if (uuid) { this.taskMonitoringService.startMonitoring(uuid) }
+        if (uuid) { this.taskMonitoringService.startMonitoring(uuid); }
         this.taskDetails$ = this.store$.select(selectTaskDetails);
       },
     );
@@ -47,7 +47,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     console.log("delete");
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     this.taskMonitoringService.stopMonitoring();
   }
 

@@ -8,7 +8,7 @@ describe('TaskMonitoringService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ TaskMonitoringService ],
+      providers: [TaskMonitoringService],
     });
     service = TestBed.inject(TaskMonitoringService);
   });

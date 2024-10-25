@@ -8,6 +8,8 @@ export interface TasksState {
   tasksLoadStatus: LoadingStateEnum;
   tasksLoadError?: string;
   tasks: TaskModel[];
+  taskDetailsLoadStatus: LoadingStateEnum;
+  taskDetailsLoadError?: string;
   taskDetails?: TaskDetailsModel;
   monitoring: boolean;
 }
@@ -15,5 +17,6 @@ export interface TasksState {
 export const initialTasksState: TasksState = {
   tasksLoadStatus: LoadingStateEnum.INITIAL,
   tasks: [],
+  taskDetailsLoadStatus: LoadingStateEnum.INITIAL,
   monitoring: false,
 };

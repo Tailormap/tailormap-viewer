@@ -22,30 +22,33 @@ export class TaskMonitoringService {
       this.monitoring$,
       this.type$,
     ]).subscribe(
-      ([uuid, monitoring, type]) => {
+      ([ uuid, monitoring, type ]) => {
         console.log(uuid, monitoring, type);
         if (uuid && monitoring && type) {
           clearInterval(this.monitor);
           this.monitor = setInterval(
             () => this.store$.dispatch(loadTaskDetails({ taskUuid: uuid, taskType: type })),
             1000,
-          )
+          );
         } else {
           clearInterval(this.monitor);
         }
 
-      }
-    )
+      },
+    );
   }
 
   public startMonitoring(uuid: string) {
     this.uuid$.next(uuid);
     this.monitoring$.next(true);
     this.store$.select(selectTask(uuid)).pipe(
-      map(task => task.type)
+      map(task => task.type),
     ).subscribe(
-      type => this.type$.next(type)
-    )
+      type => {
+        this.type$.next(type);
+        this.store$.dispatch(loadTaskDetails({ taskUuid: uuid, taskType: type }));
+      },
+    );
     this.store$.dispatch(startMonitoringTask());
   }
 

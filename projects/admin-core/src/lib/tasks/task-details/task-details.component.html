@@ -16,7 +16,7 @@
   <div class="standard-information">
     <ng-container
       [ngTemplateOutlet]="infoString"
-      [ngTemplateOutletContext]="{infoType: 'Description', infoValue: (taskDetails$ | async)?.description }"/>
+      [ngTemplateOutletContext]="{infoType: 'Description', infoValue: (task$ | async)?.description }"/>
 
     <ng-container
       [ngTemplateOutlet]="infoString"
@@ -26,52 +26,63 @@
       [ngTemplateOutlet]="infoString"
       [ngTemplateOutletContext]="{infoType: 'Type', infoValue: (task$ | async)?.type }"/>
 
-    <ng-container
-      [ngTemplateOutlet]="infoString"
-      [ngTemplateOutletContext]="{infoType: 'Status', infoValue: (taskDetails$ | async)?.status }"/>
-
-    <ng-container
-      [ngTemplateOutlet]="infoString"
-      [ngTemplateOutletContext]="{infoType: 'Last result', infoValue: (taskDetails$ | async)?.lastResult }"/>
-
-    <ng-container
-      [ngTemplateOutlet]="infoString"
-      [ngTemplateOutletContext]="{infoType: 'Progress', infoValue: (taskDetails$ | async)?.progress }"/>
-
-    <ng-container
-      [ngTemplateOutlet]="infoString"
-      [ngTemplateOutletContext]="{infoType: 'Last time the task was started', infoValue: ((taskDetails$ | async)?.lastTime | date: 'medium') }"/>
-
-    <ng-container
-      [ngTemplateOutlet]="infoString"
-      [ngTemplateOutletContext]="{infoType: 'Start time', infoValue: ((taskDetails$ | async)?.startTime | date: 'medium') }"/>
   </div>
 
-  <div class="job-data">
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>Additional job data</mat-panel-title>
-      </mat-expansion-panel-header>
-      @for (item of (taskDetails$ | async)?.jobData | keyvalue; track $index) {
-        <ng-container
-          [ngTemplateOutlet]="infoString"
-          [ngTemplateOutletContext]="{infoType: item.key, infoValue: item.value }"/>
-      }
-    </mat-expansion-panel>
-  </div>
+  @if (taskDetails$ | async) {
+    <div class="detailed-information">
+      <ng-container
+        [ngTemplateOutlet]="infoString"
+        [ngTemplateOutletContext]="{infoType: 'Status', infoValue: (taskDetails$ | async)?.status }"/>
 
-  <div class="schedule">
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>Scheduled fire times</mat-panel-title>
-      </mat-expansion-panel-header>
-      @for (time of (taskDetails$ | async)?.nextFireTimes; track $index) {
-        <ng-container
-          [ngTemplateOutlet]="infoString"
-          [ngTemplateOutletContext]="{infoType: '', infoValue: time | date: 'medium' }"/>
-      }
-    </mat-expansion-panel>
-  </div>
+      <ng-container
+        [ngTemplateOutlet]="infoString"
+        [ngTemplateOutletContext]="{infoType: 'Last result', infoValue: (taskDetails$ | async)?.lastResult }"/>
+
+      <ng-container
+        [ngTemplateOutlet]="infoString"
+        [ngTemplateOutletContext]="{infoType: 'Progress', infoValue: (taskDetails$ | async)?.progress }"/>
+
+      <ng-container
+        [ngTemplateOutlet]="infoString"
+        [ngTemplateOutletContext]="{infoType: 'Last time the task was started', infoValue: ((taskDetails$ | async)?.lastTime | date: 'medium') }"/>
+
+      <ng-container
+        [ngTemplateOutlet]="infoString"
+        [ngTemplateOutletContext]="{infoType: 'Start time', infoValue: ((taskDetails$ | async)?.startTime | date: 'medium') }"/>
+
+      <div class="job-data">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>Additional job data</mat-panel-title>
+          </mat-expansion-panel-header>
+          @for (item of (taskDetails$ | async)?.jobData | keyvalue; track $index) {
+            <ng-container
+              [ngTemplateOutlet]="infoString"
+              [ngTemplateOutletContext]="{infoType: item.key, infoValue: item.value }"/>
+          }
+        </mat-expansion-panel>
+      </div>
+
+      <div class="schedule">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>Scheduled fire times</mat-panel-title>
+          </mat-expansion-panel-header>
+          @for (time of (taskDetails$ | async)?.nextFireTimes; track $index) {
+            <ng-container
+              [ngTemplateOutlet]="infoString"
+              [ngTemplateOutletContext]="{infoType: '', infoValue: time | date: 'medium' }"/>
+          }
+        </mat-expansion-panel>
+      </div>
+
+    </div>
+  } @else {
+    <div class="row">
+      <tm-error-message [message]="'Could not find task'"></tm-error-message>
+    </div>
+  }
+
 
 </div>
 
