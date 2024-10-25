@@ -1,5 +1,5 @@
 <div class="container bottom-panel-container" role="tabpanel" *ngIf="isVisible$ | async">
-  <tm-panel-resize (positionChanged)="sizeChanged($event)"></tm-panel-resize>
+  <tm-panel-resize (positionChanged)="sizeChanged($event)" orientation="horizontal"></tm-panel-resize>
   <div class="panel"
        [ngStyle]="{ 'height': getHeight() }"
        [class.panel--minimized]="isMinimized"

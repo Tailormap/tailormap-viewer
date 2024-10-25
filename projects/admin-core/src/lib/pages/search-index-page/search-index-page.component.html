@@ -1,12 +1,9 @@
 
 @if(searchIndexPingResponse$ | async; as pingResponse) {
   @if (pingResponse.success) {
-    <div class="admin-page-wrapper" [ngClass]="className$ | async">
-      <div class="admin-tree">
-        <tm-admin-search-index-list></tm-admin-search-index-list>
-      </div>
-      <div class="admin-content" [ngClass]=><router-outlet></router-outlet></div>
-    </div>
+    <tm-admin-admin-page-template [pageClassName]="className$ | async">
+      <tm-admin-search-index-list></tm-admin-search-index-list>
+    </tm-admin-admin-page-template>
   } @else {
     <div class="admin-page-wrapper">
       <div class="admin-content">

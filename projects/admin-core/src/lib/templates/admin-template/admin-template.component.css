@@ -73,44 +73,6 @@
   white-space: nowrap;
 }
 
-.content ::ng-deep .admin-page-wrapper {
-  flex: 1;
-  display: flex;
-  flex-direction: row;
-  justify-content: stretch;
-  max-height: var(--content-height);
-}
-
-.content ::ng-deep .admin-tree {
-  width: 300px;
-  overflow: auto;
-}
-
-.content ::ng-deep .admin-content {
-  flex: 1;
-  margin-left: 16px;
-  overflow: auto;
-}
-
-.content ::ng-deep .admin-content-wrapper {
-  max-width: 500px;
-}
-
-.content ::ng-deep .full-screen-settings .admin-content-wrapper {
-  max-width: none;
-}
-
-.content ::ng-deep .admin-content .page-details-title {
-  margin-bottom: 1em;
-}
-
-.content ::ng-deep .admin-content .page-details-actions {
-  margin: 1em 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-}
-
 .content ::ng-deep .has-search {
   padding-top: 8px;
 }

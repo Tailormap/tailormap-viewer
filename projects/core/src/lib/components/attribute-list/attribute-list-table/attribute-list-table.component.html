@@ -23,7 +23,7 @@
       <tm-panel-resize class="resizer"
                        (mousedown)="stopEvent($event)"
                        (positionChanged)="columnWidthChanged($event, col)"
-                       orientation="horizontal"></tm-panel-resize>
+                       orientation="vertical"></tm-panel-resize>
     </mat-header-cell>
 
     <mat-cell *matCellDef="let currRow" [style.flexBasis]="getColumnWidth(col)">

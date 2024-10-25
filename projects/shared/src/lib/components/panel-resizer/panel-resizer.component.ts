@@ -14,7 +14,7 @@ export class PanelResizerComponent implements OnInit {
   public resizer: ElementRef<HTMLDivElement> | null = null;
 
   @Input()
-  public orientation: 'horizontal' | 'vertical' = 'vertical';
+  public orientation: 'vertical' | 'horizontal' = 'horizontal';
 
   @Output()
   public positionChanged: EventEmitter<number> = new EventEmitter<number>();
@@ -40,7 +40,7 @@ export class PanelResizerComponent implements OnInit {
       .pipe(
         tap(event => event.preventDefault()),
         map((event: MouseEvent | TouchEvent) => {
-          if (this.orientation === 'horizontal') {
+          if (this.orientation === 'vertical') {
             return this.getPageXY(event, 'pageX');
           }
           return this.getPageXY(event, 'pageY');
@@ -50,7 +50,7 @@ export class PanelResizerComponent implements OnInit {
           return fromEvent<MouseEvent | TouchEvent>(document, events[1])
             .pipe(
               map((event: MouseEvent | TouchEvent) => {
-                if (this.orientation === 'horizontal') {
+                if (this.orientation === 'vertical') {
                   return this.getPageXY(event, 'pageX') - initialPosition;
                 }
                 return this.getPageXY(event, 'pageY') - initialPosition;
