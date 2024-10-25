@@ -1,10 +1,10 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { map, Observable, of } from 'rxjs';
 import { TaskDetailsModel, TaskModel } from '@tailormap-admin/admin-api';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectTask, selectTaskDetails } from '../state/tasks.selectors';
-import { loadTaskDetails } from '../state/tasks.actions';
+import { TaskMonitoringService } from '../services/task-monitoring.service';
 
 @Component({
   selector: 'tm-admin-task-details',
@@ -12,7 +12,7 @@ import { loadTaskDetails } from '../state/tasks.actions';
   styleUrls: ['./task-details.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TaskDetailsComponent implements OnInit {
+export class TaskDetailsComponent implements OnInit, OnDestroy {
 
   public task$: Observable<TaskModel | null> = of(null);
   public uuid$: Observable<string | null> = of(null);
@@ -22,6 +22,7 @@ export class TaskDetailsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private store$: Store,
+    private taskMonitoringService: TaskMonitoringService,
   ) {
 
   }
@@ -35,13 +36,7 @@ export class TaskDetailsComponent implements OnInit {
     this.uuid$.subscribe(
       uuid => {
         this.task$ = this.store$.select(selectTask(uuid));
-        this.task$.subscribe(
-          task => {
-            if (task) {
-              this.store$.dispatch(loadTaskDetails({ taskUuid: task?.uuid, taskType: task?.type }));
-            }
-          },
-        );
+        if (uuid) { this.taskMonitoringService.startMonitoring(uuid) }
         this.taskDetails$ = this.store$.select(selectTaskDetails);
       },
     );
@@ -50,6 +45,10 @@ export class TaskDetailsComponent implements OnInit {
 
   public delete(): void {
     console.log("delete");
+  }
+
+  ngOnDestroy(): void {
+    this.taskMonitoringService.stopMonitoring();
   }
 
 }

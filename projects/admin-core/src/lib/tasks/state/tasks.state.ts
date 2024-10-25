@@ -9,9 +9,11 @@ export interface TasksState {
   tasksLoadError?: string;
   tasks: TaskModel[];
   taskDetails?: TaskDetailsModel;
+  monitoring: boolean;
 }
 
 export const initialTasksState: TasksState = {
   tasksLoadStatus: LoadingStateEnum.INITIAL,
   tasks: [],
+  monitoring: false,
 };

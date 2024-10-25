@@ -36,4 +36,11 @@ export const loadTaskDetailsSuccess = createAction(
   props<{ taskDetails: TaskDetailsModel }>(),
 );
 
+export const startMonitoringTask = createAction(
+  `${tasksActionsPrefix} Start Monitoring Task`,
+);
+
+export const stopMonitoringTask = createAction(
+  `${tasksActionsPrefix} Stop Monitoring Task`,
+);
 

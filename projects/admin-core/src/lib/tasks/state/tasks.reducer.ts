@@ -41,11 +41,23 @@ const onLoadTaskDetailsSuccess = (
   };
 };
 
+const onStartMonitoringTask = (state: TasksState): TasksState => ({
+  ...state,
+  monitoring: true,
+});
+
+const onStopMonitoringTask = (state: TasksState): TasksState => ({
+  ...state,
+  monitoring: false,
+});
+
 const tasksReducerImpl = createReducer<TasksState>(
   initialTasksState,
   on(TasksActions.loadTasksStart, onLoadTasksStart),
   on(TasksActions.loadTasksSuccess, onLoadTasksSuccess),
   on(TasksActions.loadTasksFailed, onLoadTasksFailed),
   on(TasksActions.loadTaskDetailsSuccess, onLoadTaskDetailsSuccess),
+  on(TasksActions.startMonitoringTask, onStartMonitoringTask),
+  on(TasksActions.stopMonitoringTask, onStopMonitoringTask),
 );
 export const tasksReducer = (state: TasksState | undefined, action: Action) => tasksReducerImpl(state, action);
