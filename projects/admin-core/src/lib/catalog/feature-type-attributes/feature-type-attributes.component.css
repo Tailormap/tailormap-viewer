@@ -1,4 +1,5 @@
 .attributes-wrapper {
+  --selected-items-count: 0;
   display: flex;
   padding: 20px 1px 1px 1px;
 }
@@ -64,4 +65,53 @@ mat-header-cell {
 
 .disabled-cell {
   background-color: var(--disabled-color);
+}
+
+.selected {
+  background-color: var(--primary-color-0_1);
+  color: var(--primary-color);
+}
+
+.hide-while-dragging {
+  visibility: hidden;
+  height: 0 !important;
+  min-height: 0 !important;
+  overflow: hidden;
+}
+
+::ng-deep .cdk-drag-preview.draggable-row.selected.multiple-selected {
+  overflow: visible;
+  visibility: visible;
+  height: auto;
+}
+
+::ng-deep .cdk-drag-preview.draggable-row.selected.multiple-selected mat-cell {
+  display: none;
+}
+
+::ng-deep .cdk-drag-preview.draggable-row.selected.multiple-selected::after {
+  content: var(--selected-items-count);
+  border-radius: 50%;
+  background: rgb(128,29,29);
+  background: radial-gradient(circle, rgba(128,29,29,1) 0%, rgba(255,74,74,1) 100%);
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  right: 30px;
+  bottom: -10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: white;
+  border: 1px solid white;
+  z-index: 5;
+}
+
+.hint {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 20px;
+  text-align: left;
+  padding: 0 16px;
 }
