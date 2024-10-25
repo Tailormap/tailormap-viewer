@@ -2,7 +2,7 @@
   <div class="toc-node-details-panel"
        #detailsPanel
        [style.height]="panelHeight$ | async">
-    <tm-panel-resize orientation="vertical" (positionChanged)="panelResized($event)"></tm-panel-resize>
+    <tm-panel-resize orientation="horizontal" (positionChanged)="panelResized($event)"></tm-panel-resize>
     <div class="toc-node-details-panel-header">
       <h2 i18n="@@core.toc.details-for">Details for {{node.layer?.title || node.name}}</h2>
       <button mat-icon-button

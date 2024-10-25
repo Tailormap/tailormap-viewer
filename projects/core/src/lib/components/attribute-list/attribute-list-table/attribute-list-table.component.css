@@ -202,15 +202,15 @@ mat-mdc-footer-cell {
   color: var(--primary-color);
 }
 
-.resizer ::ng-deep .resize-panel--horizontal {
+.resizer ::ng-deep .resize-panel--vertical {
   width: 10px;
 }
 
-.resizer ::ng-deep .resize-panel--horizontal mat-icon {
+.resizer ::ng-deep .resize-panel--vertical mat-icon {
   display: none;
 }
 
-.resizer ::ng-deep .resize-panel--horizontal .resize-handle {
+.resizer ::ng-deep .resize-panel--vertical .resize-handle {
   width: 1px;
   height: calc(100% - 16px);
   padding: 0 3px;
