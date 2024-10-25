@@ -199,7 +199,7 @@ export class FeatureTypeAttributesComponent implements OnChanges {
       && !this.catalogFeatureTypeReadOnly.has(attributeName);
   }
 
-  public toggleSelection(row: AttributeDescriptorModel, $event: MouseEvent, i: number) {
+  public toggleSelection(row: AttributeDescriptorModel, $event: MouseEvent) {
     const currentIndexes = this.selectedIndexes();
     const id = row.name;
     if ($event.metaKey || $event.ctrlKey) {
