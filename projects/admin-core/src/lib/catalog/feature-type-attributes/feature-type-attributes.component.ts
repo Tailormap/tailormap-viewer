@@ -1,8 +1,8 @@
 import {
-  Component, ChangeDetectionStrategy, Input, OnChanges, Output, EventEmitter, SimpleChanges, DestroyRef,
+  Component, ChangeDetectionStrategy, Input, OnChanges, Output, EventEmitter, SimpleChanges, DestroyRef, signal, computed,
 } from '@angular/core';
 import { AttributeDescriptorModel, FeatureTypeSettingsModel } from '@tailormap-admin/admin-api';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { ArrayHelper } from '@tailormap-viewer/shared';
 import { FormControl, FormGroup } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -70,6 +70,13 @@ export class FeatureTypeAttributesComponent implements OnChanges {
   public someChecked: Record<CheckableAttribute, boolean> = { hidden: false, readonly: false };
   public allChecked: Record<CheckableAttribute, boolean> = { hidden: false, readonly: false };
   public checkedAttributes: Record<CheckableAttribute, Set<string>> = { hidden: new Set<string>(), readonly: new Set<string>() };
+
+  public isDragging = signal(false);
+  public dragDropDisabled = signal(true);
+  public selectedIndexes = signal<Set<string>>(new Set());
+  public cssCountVariable = computed(() => {
+    return `--selected-items-count: "${this.selectedIndexes().size}"`;
+  });
 
   public dataAttributes: Array<AttributeDescriptorModel & { alias?: string }> = [];
   public geomAttributes: AttributeDescriptorModel[] = [];
@@ -146,10 +153,26 @@ export class FeatureTypeAttributesComponent implements OnChanges {
     }
   }
 
-  public dropTable($event: CdkDragDrop<AttributeDescriptorModel[], any>) {
+  public dropTable($event: CdkDragDrop<AttributeDescriptorModel[]>) {
     const attributes = [...this.dataAttributes];
-    moveItemInArray(attributes, $event.previousIndex, $event.currentIndex);
-    this.attributeOrderChanged.emit(attributes.map(a => a.name));
+    const draggedItem = attributes[$event.previousIndex].name;
+    const selected = this.selectedIndexes().size > 0 && this.selectedIndexes().has(draggedItem)
+      ? this.selectedIndexes()
+      : new Set([draggedItem]);
+    const selectedItems = attributes.filter(item => selected.has(item.name));
+    let dropIndex = $event.currentIndex;
+    if (selected.size > 1) {
+      const selectedArray = Array.from(selected);
+      selectedArray.splice(-1, 1);
+      const sum = selectedArray.reduce((s, att) => {
+        const idx = attributes.findIndex(a => a.name === att);
+        return s + (idx <= dropIndex ? 1 : 0);
+      }, 0);
+      dropIndex -= sum;
+    }
+    const updatedAttributes = attributes.filter(item => !selected.has(item.name));
+    updatedAttributes.splice(dropIndex, 0, ...selectedItems);
+    this.attributeOrderChanged.emit(updatedAttributes.map(a => a.name));
   }
 
   private changedSettings(changes: SimpleChanges, item: keyof FeatureTypeSettingsModel) {
@@ -174,6 +197,23 @@ export class FeatureTypeAttributesComponent implements OnChanges {
     return this.isAttributeEnabled('readonly', attributeName)
       && this.isAttributeEnabled('hidden', attributeName)
       && !this.catalogFeatureTypeReadOnly.has(attributeName);
+  }
+
+  public toggleSelection(row: AttributeDescriptorModel, $event: MouseEvent) {
+    const currentIndexes = this.selectedIndexes();
+    const id = row.name;
+    if ($event.metaKey || $event.ctrlKey) {
+      const updatedSet = new Set(currentIndexes);
+      if (currentIndexes.has(id)) {
+        updatedSet.delete(id);
+      } else {
+        updatedSet.add(id);
+      }
+      this.selectedIndexes.set(updatedSet);
+    } else {
+      this.selectedIndexes.set(currentIndexes.has(id) ? new Set() : new Set([id]));
+    }
+
   }
 
 }
