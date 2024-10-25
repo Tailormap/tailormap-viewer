@@ -2,7 +2,7 @@ import {
   Component, ChangeDetectionStrategy, Input, OnChanges, Output, EventEmitter, SimpleChanges, DestroyRef, signal, computed,
 } from '@angular/core';
 import { AttributeDescriptorModel, FeatureTypeSettingsModel } from '@tailormap-admin/admin-api';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { ArrayHelper } from '@tailormap-viewer/shared';
 import { FormControl, FormGroup } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
