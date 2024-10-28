@@ -6,7 +6,7 @@
     @if (infoValue) {
       <div class="info-value">{{ infoValue }}</div>
     } @else {
-      <div class="info-value"> No {{ infoType }} found</div>
+      <div class="info-value" i18n="@@admin-core.tasks.task.no-value"> No {{ infoType }} found</div>
     }
   </div>
 </ng-template>
@@ -16,23 +16,26 @@
   <div class="standard-information">
     <ng-container
       [ngTemplateOutlet]="infoString"
+      [ngTemplateOutletContext]="{infoType: 'Type', infoValue: (task$ | async)?.type }"/>
+
+    <ng-container
+      [ngTemplateOutlet]="infoString"
       [ngTemplateOutletContext]="{infoType: 'Description', infoValue: (task$ | async)?.description }"/>
 
     <ng-container
       [ngTemplateOutlet]="infoString"
       [ngTemplateOutletContext]="{infoType: 'Uuid', infoValue: (task$ | async)?.uuid }"/>
-
-    <ng-container
-      [ngTemplateOutlet]="infoString"
-      [ngTemplateOutletContext]="{infoType: 'Type', infoValue: (task$ | async)?.type }"/>
-
   </div>
 
   @if (taskDetails$ | async) {
     <div class="detailed-information">
       <ng-container
         [ngTemplateOutlet]="infoString"
-        [ngTemplateOutletContext]="{infoType: 'Status', infoValue: (taskDetails$ | async)?.status }"/>
+        [ngTemplateOutletContext]="{infoType: 'Cron expression', infoValue: (taskDetails$ | async)?.cronExpression }"/>
+
+      <ng-container
+        [ngTemplateOutlet]="infoString"
+        [ngTemplateOutletContext]="{infoType: 'Scheduling status', infoValue: (taskDetails$ | async)?.status }"/>
 
       <ng-container
         [ngTemplateOutlet]="infoString"
@@ -58,7 +61,7 @@
           @for (item of (taskDetails$ | async)?.jobData | keyvalue; track $index) {
             <ng-container
               [ngTemplateOutlet]="infoString"
-              [ngTemplateOutletContext]="{infoType: item.key, infoValue: item.value }"/>
+              [ngTemplateOutletContext]="{infoType: niceTitle(item.key), infoValue: convertToDateIfPossible(item.value) }"/>
           }
         </mat-expansion-panel>
       </div>
@@ -78,16 +81,22 @@
 
     </div>
   } @else {
-    <div class="row">
-      <tm-error-message [message]="'Could not find task'"></tm-error-message>
+    <div class="error-message">
+      <tm-error-message [message]="loadErrorMessage$ | async"></tm-error-message>
     </div>
   }
 
 
 </div>
 
+@if (deleteErrorMessage$ |async) {
+  <div class="error-message">
+    <tm-error-message [message]="deleteErrorMessage$ | async"></tm-error-message>
+  </div>
+}
+
 <div class="page-details-actions controls-buttons">
-  <button mat-flat-button color="primary" (click)="start()" i18n="@@admin-core.tasks.task.start">Start</button>
-  <button mat-flat-button (click)="stop()" i18n="@@admin-core.tasks.task.stop">Stop</button>
+<!--  <button mat-flat-button color="primary" (click)="start()" i18n="@@admin-core.tasks.task.start">Start</button>-->
+<!--  <button mat-flat-button (click)="stop()" i18n="@@admin-core.tasks.task.stop">Stop</button>-->
   <button mat-flat-button color="warn" (click)="delete()" i18n="@@admin-core.common.delete">Delete</button>
 </div>

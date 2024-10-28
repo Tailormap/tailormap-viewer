@@ -3,15 +3,17 @@ import { filter, map, Observable, of, take, tap } from 'rxjs';
 import { TaskDetailsModel, TaskModel } from '@tailormap-admin/admin-api';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { selectTask, selectTaskDetails } from '../state/tasks.selectors';
+import { selectDeleteTaskError, selectTask, selectTaskDetails, selectTaskDetailsLoadError } from '../state/tasks.selectors';
 import { TaskMonitoringService } from '../services/task-monitoring.service';
 import { deleteTask } from '../state/tasks.actions';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'tm-admin-task-details',
   templateUrl: './task-details.component.html',
   styleUrls: ['./task-details.component.css'],
+  providers: [DatePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TaskDetailsComponent implements OnInit, OnDestroy {
@@ -19,6 +21,13 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   public task$: Observable<TaskModel | null> = of(null);
   public uuid$: Observable<string | null> = of(null);
   public taskDetails$: Observable<TaskDetailsModel | undefined> = of(undefined);
+  public loadErrorMessage$: Observable<string | undefined> = of(undefined);
+  public deleteErrorMessage$: Observable<string | undefined> = of(undefined);
+
+  public jobDataNiceTitles = new Map([
+    [ 'lastExecutionFinished', 'Last time task was finished' ],
+    [ 'lastResult', 'Last result' ],
+  ]);
 
 
   constructor(
@@ -27,6 +36,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     private taskMonitoringService: TaskMonitoringService,
     private confirmDelete: ConfirmDialogService,
     private router: Router,
+    private datePipe: DatePipe,
   ) {
 
   }
@@ -36,6 +46,9 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     this.uuid$ = this.route.paramMap.pipe(
       map(params => params.get('taskId')),
     );
+
+    this.loadErrorMessage$ = this.store$.select(selectTaskDetailsLoadError);
+    this.deleteErrorMessage$ = this.store$.select(selectDeleteTaskError);
 
     this.uuid$.subscribe(
       uuid => {
@@ -52,8 +65,8 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
       task => {
         if (task) {
           this.confirmDelete.confirm$(
-            $localize `:@@admin-core.tasks.delete-task:Delete task ${task.description}`,
-            $localize `:@@admin-core.tasks.delete-task-message:Are you sure you want to delete task ${task.description}? This action cannot be undone.`,
+            $localize `:@@admin-core.tasks.delete-task:Delete task \'${task.description}\'`,
+            $localize `:@@admin-core.tasks.delete-task-message:Are you sure you want to delete task \'${task.description}\'? This action cannot be undone.`,
             true,
           )
             .pipe(
@@ -79,6 +92,20 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy(): void {
     this.taskMonitoringService.stopMonitoring();
+  }
+
+  public niceTitle(original: string): string {
+    if (this.jobDataNiceTitles.has(original)) {
+      return <string>this.jobDataNiceTitles.get(original);
+    }
+    return original;
+  }
+
+  public convertToDateIfPossible(original: string): string {
+    if (!isNaN(Date.parse(original)) && isNaN(Number(original))) {
+      return <string>this.datePipe.transform(original, 'medium');
+    }
+    return original;
   }
 
 }

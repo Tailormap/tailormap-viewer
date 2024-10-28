@@ -16,6 +16,7 @@ const onLoadTasksSuccess = (
   return {
     ...state,
     tasksLoadStatus: LoadingStateEnum.LOADED,
+    tasksLoadError: undefined,
     tasks,
   };
 };
@@ -74,6 +75,14 @@ const onDeleteTaskSuccess = (
   };
 };
 
+const onDeleteTaskFailed = (
+  state: TasksState,
+  payload: ReturnType<typeof TasksActions.deleteTaskFailed>,
+): TasksState => ({
+  ...state,
+  deleteTaskError: payload.error,
+});
+
 const tasksReducerImpl = createReducer<TasksState>(
   initialTasksState,
   on(TasksActions.loadTasksStart, onLoadTasksStart),
@@ -84,5 +93,6 @@ const tasksReducerImpl = createReducer<TasksState>(
   on(TasksActions.startMonitoringTask, onStartMonitoringTask),
   on(TasksActions.stopMonitoringTask, onStopMonitoringTask),
   on(TasksActions.deleteTaskSuccess, onDeleteTaskSuccess),
+  on(TasksActions.deleteTaskFailed, onDeleteTaskFailed),
 );
 export const tasksReducer = (state: TasksState | undefined, action: Action) => tasksReducerImpl(state, action);

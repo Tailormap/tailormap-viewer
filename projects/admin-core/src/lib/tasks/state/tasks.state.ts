@@ -12,6 +12,7 @@ export interface TasksState {
   taskDetailsLoadError?: string;
   taskDetails?: TaskDetailsModel;
   monitoring: boolean;
+  deleteTaskError?: string;
 }
 
 export const initialTasksState: TasksState = {

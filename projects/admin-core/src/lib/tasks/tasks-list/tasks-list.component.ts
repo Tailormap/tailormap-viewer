@@ -3,7 +3,7 @@ import { Observable, of } from 'rxjs';
 import { TaskModel } from '@tailormap-admin/admin-api';
 import { Store } from '@ngrx/store';
 import { loadTasks } from '../state/tasks.actions';
-import { selectTasks } from '../state/tasks.selectors';
+import { selectTasks, selectTasksLoadError } from '../state/tasks.selectors';
 
 @Component({
   selector: 'tm-admin-tasks-list',
@@ -14,6 +14,7 @@ import { selectTasks } from '../state/tasks.selectors';
 export class TasksListComponent implements OnInit {
 
   public tasks$: Observable<TaskModel[]> = of([]);
+  public errorMessage$: Observable<string | undefined> = of(undefined);
 
   constructor(
     private store$: Store,
@@ -22,6 +23,11 @@ export class TasksListComponent implements OnInit {
   public ngOnInit(): void {
     this.store$.dispatch(loadTasks());
     this.tasks$ = this.store$.select(selectTasks);
+    this.errorMessage$ = this.store$.select(selectTasksLoadError);
+  }
+
+  public onRetryClick(): void {
+    this.store$.dispatch(loadTasks());
   }
 
 }
