@@ -237,9 +237,11 @@ export class TailormapAdminApiV1MockService implements TailormapAdminApiV1Servic
   public getTasks$(): Observable<TaskModel[]> {
     return of([]);
   }
-
   public getTaskDetails$(): Observable<TaskDetailsModel> {
     return of(mockData.getTaskDetails());
+  }
+  public deleteTask$(): Observable<boolean> {
+    return of(true);
   }
 
 

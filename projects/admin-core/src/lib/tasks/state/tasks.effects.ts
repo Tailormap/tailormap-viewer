@@ -52,6 +52,26 @@ export class TasksEffects {
     );
   });
 
+  public deleteTask$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(TasksActions.deleteTask),
+      switchMap( _action => {
+        return this.adminApiService.deleteTask$(_action.taskUuid, _action.taskType)
+          .pipe(
+            catchError(() => {
+              return of({ error: $localize `:@@admin-core.tasks.error-deleting-task:Error while deleting task` });
+            }),
+            map(response => {
+              if (ApiResponseHelper.isErrorResponse(response)) {
+                return TasksActions.deleteTaskFailed({ error: response.error });
+              }
+              return TasksActions.deleteTaskSuccess({ taskUuid: _action.taskUuid });
+            }),
+          );
+      }),
+    );
+  });
+
   constructor(
     private actions$: Actions,
     private store$: Store,

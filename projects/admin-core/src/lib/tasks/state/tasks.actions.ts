@@ -27,7 +27,7 @@ export const loadTaskDetails = createAction(
 );
 
 export const loadTaskDetailsFailed = createAction(
-  `${tasksActionsPrefix}  Load Task Details Failed`,
+  `${tasksActionsPrefix} Load Task Details Failed`,
   props<{ error?: string }>(),
 );
 
@@ -44,3 +44,17 @@ export const stopMonitoringTask = createAction(
   `${tasksActionsPrefix} Stop Monitoring Task`,
 );
 
+export const deleteTask = createAction(
+  `${tasksActionsPrefix} Delete Task`,
+  props<{ taskUuid: string; taskType: string }>(),
+);
+
+export const deleteTaskFailed = createAction(
+  `${tasksActionsPrefix} Delete Task Failed`,
+  props<{ error?: string }>(),
+);
+
+export const deleteTaskSuccess = createAction(
+  `${tasksActionsPrefix} Delete Task Success`,
+  props<{ taskUuid: string }>(),
+);

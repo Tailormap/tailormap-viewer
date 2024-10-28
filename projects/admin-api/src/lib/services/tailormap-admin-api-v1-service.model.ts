@@ -69,4 +69,5 @@ export interface TailormapAdminApiV1ServiceModel {
   clearSearchIndex$(id: number): Observable<boolean>;
   getTasks$(): Observable<TaskModel[]>;
   getTaskDetails$(uuid: string, type: string): Observable<TaskDetailsModel>;
+  deleteTask$(uuid: string, type: string): Observable<boolean>;
 }
