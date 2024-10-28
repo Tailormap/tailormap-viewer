@@ -1053,6 +1053,10 @@
         <source>Tailormap Admin</source>
         <target>Tailormap Admin</target>
       </trans-unit>
+      <trans-unit id="admin-core.common.tasks-title" datatype="html">
+        <source>Tasks</source>
+        <target>Taken</target>
+      </trans-unit>
       <trans-unit id="admin-core.common.title" datatype="html">
         <source>Title</source>
         <target>Titel</target>
@@ -1365,6 +1369,10 @@
         <source>Single sign-on</source>
         <target>Single sign-on</target>
       </trans-unit>
+      <trans-unit id="admin-core.navigation.tasks" datatype="html">
+        <source>Tasks</source>
+        <target>Taken</target>
+      </trans-unit>
       <trans-unit id="admin-core.navigation.users" datatype="html">
         <source>Users</source>
         <target>Gebruikers</target>
@@ -1588,6 +1596,46 @@
       <trans-unit id="admin-core.settings.home" datatype="html">
         <source>Select settings from the left side</source>
         <target>Selecteer een instelling aan de linker kant</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.delete-task" datatype="html">
+        <source>Delete task <x id="PH" equiv-text="task.description"/></source>
+        <target>Verwijder taak <x id="PH" equiv-text="task.description"/></target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.delete-task-message" datatype="html">
+        <source>Are you sure you want to delete task <x id="PH" equiv-text="task.description"/>? This action cannot be undone.</source>
+        <target>Weet U zeker dat u de taak <x id="PH" equiv-text="task.description"/> wilt verwijderen? Dit kan niet ongedaan gemaakt worden.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.error-deleting-task" datatype="html">
+        <source>Error while deleting task</source>
+        <target>Fout bij het laden van de taak</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.error-loading-task-details" datatype="html">
+        <source>Error while loading task details</source>
+        <target>Fout bij het laden van de taak details</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.error-loading-tasks" datatype="html">
+        <source>Error while loading list of tasks</source>
+        <target>Fout bij het laden van de taken</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task.information" datatype="html">
+        <source>Task Information</source>
+        <target>Taak informatie</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task.no-value" datatype="html">
+        <source> No <x id="INTERPOLATION" equiv-text="{{ infoType }}"/> found</source>
+        <target> Geen <x id="INTERPOLATION" equiv-text="{{ infoType }}"/> gevonden</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task.start" datatype="html">
+        <source>Start</source>
+        <target>Start</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task.stop" datatype="html">
+        <source>Stop</source>
+        <target>Stop</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.tasks" datatype="html">
+        <source>Tasks</source>
+        <target>Taken</target>
       </trans-unit>
       <trans-unit id="admin-core.upload-select.delete-file" datatype="html">
         <source>Delete file?</source>

@@ -1054,6 +1054,10 @@
         <source>Tailormap Admin</source>
         <target>Tailormap-Verwaltung</target>
       </trans-unit>
+      <trans-unit id="admin-core.common.tasks-title" datatype="html">
+        <source>Tasks</source>
+        <target state="new">Tasks</target>
+      </trans-unit>
       <trans-unit id="admin-core.common.title" datatype="html">
         <source>Title</source>
         <target>Titel</target>
@@ -1366,6 +1370,10 @@
         <source>Single sign-on</source>
         <target>Einmalanmeldung</target>
       </trans-unit>
+      <trans-unit id="admin-core.navigation.tasks" datatype="html">
+        <source>Tasks</source>
+        <target state="new">Tasks</target>
+      </trans-unit>
       <trans-unit id="admin-core.navigation.users" datatype="html">
         <source>Users</source>
         <target>Benutzer</target>
@@ -1604,6 +1612,46 @@
       <trans-unit id="admin-core.settings.home" datatype="html">
         <source>Select settings from the left side</source>
         <target state="translated">Wählen Sie Einstellungen auf der linken Seite aus</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.delete-task" datatype="html">
+        <source>Delete task <x id="PH" equiv-text="task.description"/></source>
+        <target state="new">Delete task <x id="PH" equiv-text="task.description"/></target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.delete-task-message" datatype="html">
+        <source>Are you sure you want to delete task <x id="PH" equiv-text="task.description"/>? This action cannot be undone.</source>
+        <target state="new">Are you sure you want to delete task <x id="PH" equiv-text="task.description"/>? This action cannot be undone.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.error-deleting-task" datatype="html">
+        <source>Error while deleting task</source>
+        <target state="new">Error while deleting task</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.error-loading-task-details" datatype="html">
+        <source>Error while loading task details</source>
+        <target state="new">Error while loading task details</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.error-loading-tasks" datatype="html">
+        <source>Error while loading list of tasks</source>
+        <target state="new">Error while loading list of tasks</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task.information" datatype="html">
+        <source>Task Information</source>
+        <target state="new">Task Information</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task.no-value" datatype="html">
+        <source> No <x id="INTERPOLATION" equiv-text="{{ infoType }}"/> found</source>
+        <target state="new"> No <x id="INTERPOLATION" equiv-text="{{ infoType }}"/> found</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task.start" datatype="html">
+        <source>Start</source>
+        <target state="new">Start</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task.stop" datatype="html">
+        <source>Stop</source>
+        <target state="new">Stop</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.tasks" datatype="html">
+        <source>Tasks</source>
+        <target state="new">Tasks</target>
       </trans-unit>
       <trans-unit id="admin-core.upload-select.delete-file" datatype="html">
         <source>Delete file?</source>
