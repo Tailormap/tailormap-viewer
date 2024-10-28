@@ -86,6 +86,8 @@
 
 </div>
 
-<div class="controls-buttons">
+<div class="page-details-actions controls-buttons">
+  <button mat-flat-button color="primary" (click)="start()" i18n="@@admin-core.tasks.task.start">Start</button>
+  <button mat-flat-button (click)="stop()" i18n="@@admin-core.tasks.task.stop">Stop</button>
   <button mat-flat-button color="warn" (click)="delete()" i18n="@@admin-core.common.delete">Delete</button>
 </div>

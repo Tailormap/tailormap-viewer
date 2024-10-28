@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { combineLatest, map, BehaviorSubject } from 'rxjs';
+import { combineLatest, map, BehaviorSubject, take } from 'rxjs';
 import { selectTask } from '../state/tasks.selectors';
 import { loadTaskDetails, startMonitoringTask, stopMonitoringTask } from '../state/tasks.actions';
+import { TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +17,7 @@ export class TaskMonitoringService {
 
   constructor(
     private store$: Store,
+    private adminApiService: TailormapAdminApiV1Service,
   ) {
     combineLatest([
       this.uuid$,
@@ -23,7 +25,6 @@ export class TaskMonitoringService {
       this.type$,
     ]).subscribe(
       ([ uuid, monitoring, type ]) => {
-        console.log(uuid, monitoring, type);
         if (uuid && monitoring && type) {
           clearInterval(this.monitor);
           this.monitor = setInterval(
@@ -55,6 +56,30 @@ export class TaskMonitoringService {
   public stopMonitoring() {
     this.monitoring$.next(false);
     this.store$.dispatch(stopMonitoringTask());
+  }
+
+  public startTask() {
+    combineLatest([
+      this.uuid$.pipe(take(1)),
+      this.type$.pipe(take(1)),
+    ]).subscribe(
+      ([ uuid, type ]) => {
+        this.adminApiService.startTask$(uuid, type).subscribe();
+      },
+    );
+
+  }
+
+  public stopTask() {
+    combineLatest([
+      this.uuid$.pipe(take(1)),
+      this.type$.pipe(take(1)),
+    ]).subscribe(
+      ([ uuid, type ]) => {
+        this.adminApiService.stopTask$(uuid, type).subscribe();
+      },
+    );
+
   }
 
 }

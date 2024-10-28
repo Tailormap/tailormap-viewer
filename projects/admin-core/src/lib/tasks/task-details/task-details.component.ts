@@ -69,6 +69,14 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     );
   }
 
+  public start(): void {
+    this.taskMonitoringService.startTask();
+  }
+
+  public stop(): void {
+    this.taskMonitoringService.stopTask();
+  }
+
   public ngOnDestroy(): void {
     this.taskMonitoringService.stopMonitoring();
   }

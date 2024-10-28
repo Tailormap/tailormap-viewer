@@ -395,4 +395,22 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
     );
   }
 
+  public startTask$(uuid: string, type: string): Observable<boolean> {
+    return this.httpClient.put(`${TailormapAdminApiV1Service.BASE_URL}/tasks/${type}/${uuid}/start`, {}, {
+      observe: 'response',
+    }).pipe(
+      map(response => response.status === 202),
+      catchError(() => of(false)),
+    );
+  }
+
+  public stopTask$(uuid: string, type: string): Observable<boolean> {
+    return this.httpClient.put(`${TailormapAdminApiV1Service.BASE_URL}/tasks/${type}/${uuid}/stop`, {}, {
+      observe: 'response',
+    }).pipe(
+      map(response => response.status === 202),
+      catchError(() => of(false)),
+    );
+  }
+
 }
