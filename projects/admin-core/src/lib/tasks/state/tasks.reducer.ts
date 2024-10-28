@@ -62,6 +62,18 @@ const onStopMonitoringTask = (state: TasksState): TasksState => ({
   monitoring: false,
 });
 
+const onDeleteTaskSuccess = (
+  state: TasksState,
+  payload: ReturnType<typeof TasksActions.deleteTaskSuccess>,
+): TasksState => {
+  const uuid = payload.taskUuid;
+  return {
+    ...state,
+    tasks: state.tasks.filter(task => task.uuid !== uuid),
+    taskDetails: undefined,
+  };
+};
+
 const tasksReducerImpl = createReducer<TasksState>(
   initialTasksState,
   on(TasksActions.loadTasksStart, onLoadTasksStart),
@@ -71,5 +83,6 @@ const tasksReducerImpl = createReducer<TasksState>(
   on(TasksActions.loadTaskDetailsFailed, onLoadTaskDetailsFailed),
   on(TasksActions.startMonitoringTask, onStartMonitoringTask),
   on(TasksActions.stopMonitoringTask, onStopMonitoringTask),
+  on(TasksActions.deleteTaskSuccess, onDeleteTaskSuccess),
 );
 export const tasksReducer = (state: TasksState | undefined, action: Action) => tasksReducerImpl(state, action);

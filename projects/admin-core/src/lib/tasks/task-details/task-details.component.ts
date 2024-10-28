@@ -1,10 +1,12 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
-import { map, Observable, of } from 'rxjs';
+import { filter, map, Observable, of, take, tap } from 'rxjs';
 import { TaskDetailsModel, TaskModel } from '@tailormap-admin/admin-api';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectTask, selectTaskDetails } from '../state/tasks.selectors';
 import { TaskMonitoringService } from '../services/task-monitoring.service';
+import { deleteTask } from '../state/tasks.actions';
+import { ConfirmDialogService } from '@tailormap-viewer/shared';
 
 @Component({
   selector: 'tm-admin-task-details',
@@ -23,6 +25,8 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private store$: Store,
     private taskMonitoringService: TaskMonitoringService,
+    private confirmDelete: ConfirmDialogService,
+    private router: Router,
   ) {
 
   }
@@ -44,7 +48,25 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   }
 
   public delete(): void {
-    console.log("delete");
+    this.task$.subscribe(
+      task => {
+        if (task) {
+          this.confirmDelete.confirm$(
+            $localize `:@@admin-core.tasks.delete-task:Delete task ${task.description}`,
+            $localize `:@@admin-core.tasks.delete-task-message:Are you sure you want to delete task ${task.description}? This action cannot be undone.`,
+            true,
+          )
+            .pipe(
+              take(1),
+              filter(answer => answer),
+              tap(() => this.store$.dispatch(deleteTask({ taskUuid: task.uuid, taskType: task.type }))),
+            )
+            .subscribe(() => {
+              this.router.navigateByUrl('/admin/tasks');
+            });
+        }
+      },
+    );
   }
 
   public ngOnDestroy(): void {
