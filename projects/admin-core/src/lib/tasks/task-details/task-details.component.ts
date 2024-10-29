@@ -3,7 +3,7 @@ import { filter, map, Observable, of, take, tap } from 'rxjs';
 import { TaskDetailsModel, TaskModel } from '@tailormap-admin/admin-api';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { selectTask, selectTaskDetails } from '../state/tasks.selectors';
+import { selectDeleteTaskError, selectTask, selectTaskDetails, selectTaskDetailsLoadError } from '../state/tasks.selectors';
 import { TaskMonitoringService } from '../services/task-monitoring.service';
 import { deleteTask } from '../state/tasks.actions';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
@@ -19,7 +19,8 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   public task$: Observable<TaskModel | null> = of(null);
   public uuid$: Observable<string | null> = of(null);
   public taskDetails$: Observable<TaskDetailsModel | undefined> = of(undefined);
-  public errorMessage$: Observable<string | undefined> = of(undefined);
+  public loadErrorMessage$: Observable<string | undefined> = of(undefined);
+  public deleteErrorMessage$: Observable<string | undefined> = of(undefined);
 
 
   constructor(
@@ -38,6 +39,9 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
       map(params => params.get('taskId')),
     );
 
+    this.loadErrorMessage$ = this.store$.select(selectTaskDetailsLoadError);
+    this.deleteErrorMessage$ = this.store$.select(selectDeleteTaskError);
+
     this.uuid$.subscribe(
       uuid => {
         this.task$ = this.store$.select(selectTask(uuid));
@@ -53,8 +57,8 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
       task => {
         if (task) {
           this.confirmDelete.confirm$(
-            $localize `:@@admin-core.tasks.delete-task:Delete task ${task.description}`,
-            $localize `:@@admin-core.tasks.delete-task-message:Are you sure you want to delete task ${task.description}? This action cannot be undone.`,
+            $localize `:@@admin-core.tasks.delete-task:Delete task \'${task.description}\'`,
+            $localize `:@@admin-core.tasks.delete-task-message:Are you sure you want to delete task \'${task.description}\'? This action cannot be undone.`,
             true,
           )
             .pipe(

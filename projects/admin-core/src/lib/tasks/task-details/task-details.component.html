@@ -79,12 +79,18 @@
     </div>
   } @else {
     <div class="error-message">
-      <tm-error-message [message]="'Could not find task'"></tm-error-message>
+      <tm-error-message [message]="loadErrorMessage$ | async"></tm-error-message>
     </div>
   }
 
 
 </div>
+
+@if (deleteErrorMessage$ |async) {
+  <div class="error-message">
+    <tm-error-message [message]="deleteErrorMessage$ | async"></tm-error-message>
+  </div>
+}
 
 <div class="page-details-actions controls-buttons">
   <button mat-flat-button color="primary" (click)="start()" i18n="@@admin-core.tasks.task.start">Start</button>

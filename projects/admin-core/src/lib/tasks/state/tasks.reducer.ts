@@ -16,6 +16,7 @@ const onLoadTasksSuccess = (
   return {
     ...state,
     tasksLoadStatus: LoadingStateEnum.LOADED,
+    tasksLoadError: undefined,
     tasks,
   };
 };

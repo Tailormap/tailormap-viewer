@@ -1,5 +1,10 @@
 <h2 i18n="@@admin-core.tasks.tasks">Tasks</h2>
 
+@if (errorMessage$ | async) {
+  <tm-error-message [message]="errorMessage$ | async"></tm-error-message>
+  <button mat-raised-button color="primary" (click)="onRetryClick()" i18n="@@admin-core.common.retry">Retry</button>
+}
+
 <mat-selection-list>
   @for (task of tasks$ | async; track task.uuid) {
     <mat-list-item [routerLink]="['/admin/tasks/task', task.uuid]">
