@@ -19,6 +19,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   public task$: Observable<TaskModel | null> = of(null);
   public uuid$: Observable<string | null> = of(null);
   public taskDetails$: Observable<TaskDetailsModel | undefined> = of(undefined);
+  public errorMessage$: Observable<string | undefined> = of(undefined);
 
 
   constructor(
