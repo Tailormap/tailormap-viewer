@@ -84,7 +84,7 @@
     "@types/geojson": "^7946.0.14",
     "@types/jest": "^29.5.12",
     "@types/luxon": "^3.4.2",
-    "@types/node": "^20.12.12",
+    "@types/node": "^22.8.4",
     "@types/proj4": "^2.5.5",
     "@typescript-eslint/eslint-plugin": "^8.0.1",
     "@typescript-eslint/parser": "^8.0.1",
