@@ -1,8 +1,3 @@
-<div class="admin-page-wrapper">
-  <div class="admin-tree">
-    <tm-admin-tasks-list></tm-admin-tasks-list>
-  </div>
-  <div class="admin-content">
-    <router-outlet></router-outlet>
-  </div>
-</div>
+<tm-admin-admin-page-template [wrapContent]="true">
+  <tm-admin-tasks-list></tm-admin-tasks-list>
+</tm-admin-admin-page-template>
