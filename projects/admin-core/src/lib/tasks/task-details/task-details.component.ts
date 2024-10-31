@@ -22,6 +22,11 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   public loadErrorMessage$: Observable<string | undefined> = of(undefined);
   public deleteErrorMessage$: Observable<string | undefined> = of(undefined);
 
+  public jobDataNiceTitles = new Map([
+    ['lastExecutionFinished', 'Last time task was finished'],
+    ['lastResult', 'Last result'],
+  ]);
+
 
   constructor(
     private route: ActivatedRoute,
@@ -84,6 +89,14 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy(): void {
     this.taskMonitoringService.stopMonitoring();
+  }
+
+  public niceTitle(original: string): string {
+    if (this.jobDataNiceTitles.has(original)) {
+      return <string>this.jobDataNiceTitles.get(original);
+    } else {
+      return original;
+    }
   }
 
 }
