@@ -7,11 +7,13 @@ import { selectDeleteTaskError, selectTask, selectTaskDetails, selectTaskDetails
 import { TaskMonitoringService } from '../services/task-monitoring.service';
 import { deleteTask } from '../state/tasks.actions';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'tm-admin-task-details',
   templateUrl: './task-details.component.html',
   styleUrls: ['./task-details.component.css'],
+  providers: [DatePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TaskDetailsComponent implements OnInit, OnDestroy {
@@ -34,6 +36,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     private taskMonitoringService: TaskMonitoringService,
     private confirmDelete: ConfirmDialogService,
     private router: Router,
+    private datePipe: DatePipe,
   ) {
 
   }
@@ -94,9 +97,15 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   public niceTitle(original: string): string {
     if (this.jobDataNiceTitles.has(original)) {
       return <string>this.jobDataNiceTitles.get(original);
-    } else {
-      return original;
     }
+    return original;
+  }
+
+  public convertToDateIfPossible(original: string): string {
+    if (!isNaN(Date.parse(original)) && isNaN(Number(original))) {
+      return <string>this.datePipe.transform(original, 'medium');
+    }
+    return original;
   }
 
 }

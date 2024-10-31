@@ -44,8 +44,10 @@ export class TaskMonitoringService {
     this.monitoring$.next(true);
     this.store$.select(selectTask(uuid)).subscribe(
       task => {
-        this.type$.next(task.type);
-        this.store$.dispatch(loadTaskDetails({ taskUuid: uuid, taskType: task.type }));
+        if (task) {
+          this.type$.next(task.type);
+          this.store$.dispatch(loadTaskDetails({ taskUuid: uuid, taskType: task.type }));
+        }
       },
     );
     this.store$.dispatch(startMonitoringTask());

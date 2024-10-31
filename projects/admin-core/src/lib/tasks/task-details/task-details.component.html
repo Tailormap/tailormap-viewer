@@ -61,7 +61,7 @@
           @for (item of (taskDetails$ | async)?.jobData | keyvalue; track $index) {
             <ng-container
               [ngTemplateOutlet]="infoString"
-              [ngTemplateOutletContext]="{infoType: niceTitle(item.key), infoValue: item.value }"/>
+              [ngTemplateOutletContext]="{infoType: niceTitle(item.key), infoValue: convertToDateIfPossible(item.value) }"/>
           }
         </mat-expansion-panel>
       </div>
