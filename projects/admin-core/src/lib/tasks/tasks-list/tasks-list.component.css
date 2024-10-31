@@ -1,0 +1,9 @@
+.task-list-item ::ng-deep .mdc-list-item__primary-text {
+  white-space: wrap;
+  overflow-wrap: break-word;
+}
+
+.task-list ::ng-deep .mdc-list-item {
+  height: fit-content !important;
+  padding: 5px 16px;
+}

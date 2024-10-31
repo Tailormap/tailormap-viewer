@@ -23,8 +23,8 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   public deleteErrorMessage$: Observable<string | undefined> = of(undefined);
 
   public jobDataNiceTitles = new Map([
-    ['lastExecutionFinished', 'Last time task was finished'],
-    ['lastResult', 'Last result'],
+    [ 'lastExecutionFinished', 'Last time task was finished' ],
+    [ 'lastResult', 'Last result' ],
   ]);
 
 
