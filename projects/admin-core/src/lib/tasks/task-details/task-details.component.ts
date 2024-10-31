@@ -61,7 +61,8 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   }
 
   public delete(): void {
-    this.task$.subscribe(
+    this.task$.pipe(take(1))
+      .subscribe(
       task => {
         if (task) {
           this.confirmDelete.confirm$(
