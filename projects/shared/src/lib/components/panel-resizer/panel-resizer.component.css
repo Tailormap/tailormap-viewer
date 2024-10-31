@@ -1,31 +1,34 @@
 .resize-panel {
   --translate-pos: 0;
 
-  width: 100%;
-  height: 20px;
   position: absolute;
   display: flex;
   flex-flow: row nowrap;
   justify-content: center;
   align-items: center;
   z-index: 999;
-}
 
-.resize-panel--horizontal {
   width: 20px;
   height: 100%;
   top: 0;
 }
 
+.resize-panel--horizontal {
+  width: 100%;
+  height: 20px;
+  top: auto;
+}
+
 .resize-handle {
   width: 20px;
   height: 20px;
-  cursor: ns-resize;
+  cursor: ew-resize;
+  transform: rotate(90deg);
 }
 
 .resize-panel--horizontal .resize-handle {
-  cursor: ew-resize;
-  transform: rotate(90deg);
+  cursor: ns-resize;
+  transform: none;
 }
 
 mat-icon {
@@ -39,15 +42,15 @@ mat-icon {
   position: absolute;
   display: none;
   background-color: var(--primary-color);
-  height: 5px;
-  width: 100%;
-  transform: translateY(var(--translate-pos));
-}
-
-.resize-panel--horizontal .resize-indicator {
   width: 5px;
   height: 100%;
   transform: translateX(var(--translate-pos));
+}
+
+.resize-panel--horizontal .resize-indicator {
+  height: 5px;
+  width: 100%;
+  transform: translateY(var(--translate-pos));
 }
 
 .resize-panel--resizing .resize-indicator {

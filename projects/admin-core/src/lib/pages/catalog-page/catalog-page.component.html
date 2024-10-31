@@ -1,6 +1,3 @@
-<div class="admin-page-wrapper" [ngClass]="className$ | async">
-  <div class="admin-tree"><tm-admin-catalog-tree></tm-admin-catalog-tree></div>
-  <div class="admin-content">
-    <div class="admin-content-wrapper"><router-outlet></router-outlet></div>
-  </div>
-</div>
+<tm-admin-admin-page-template [pageClassName]="className$ | async" [wrapContent]="true">
+  <tm-admin-catalog-tree></tm-admin-catalog-tree>
+</tm-admin-admin-page-template>

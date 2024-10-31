@@ -287,6 +287,9 @@
       <trans-unit id="admin-core.catalog.attribute" datatype="html">
         <source>Attribute</source>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.attribute-reorder-hint" datatype="html">
+        <source>Use the three bars and the end of the row to re-order attributes. Hold Ctrl / Cmd (Mac) to select multiple rows to re-order together</source>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.attributes" datatype="html">
         <source>Attributes</source>
       </trans-unit>

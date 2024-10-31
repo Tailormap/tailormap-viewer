@@ -382,6 +382,10 @@
         <source>Attribute</source>
         <target>Attribute</target>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.attribute-reorder-hint" datatype="html">
+        <source>Use the three bars and the end of the row to re-order attributes. Hold Ctrl / Cmd (Mac) to select multiple rows to re-order together</source>
+        <target>Verwenden Sie die drei Balken am Ende der Zeile, um Attribute neu anzuordnen. Halten Sie Ctrl / Cmd (Mac) gedrückt, um mehrere Zeilen zusammen neu anzuordnen.</target>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.attributes" datatype="html">
         <source>Attributes</source>
         <target>Attribute</target>
