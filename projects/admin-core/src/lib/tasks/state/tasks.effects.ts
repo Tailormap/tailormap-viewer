@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { map, catchError, of, switchMap, tap } from 'rxjs';
+import { map, catchError, of, switchMap } from 'rxjs';
 import {
   ApiResponseHelper,
   TailormapAdminApiV1Service,
@@ -14,7 +14,6 @@ export class TasksEffects {
   public loadTasks$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(TasksActions.loadTasks),
-      tap(() => this.store$.dispatch(TasksActions.loadTasksStart())),
       switchMap( _action => {
         return this.adminApiService.getTasks$()
           .pipe(

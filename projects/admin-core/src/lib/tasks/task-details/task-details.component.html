@@ -35,7 +35,7 @@
 
       <ng-container
         [ngTemplateOutlet]="infoString"
-        [ngTemplateOutletContext]="{infoType: 'Scheduling status', infoValue: (taskDetails$ | async)?.status }"/>
+        [ngTemplateOutletContext]="{infoType: 'Scheduling state', infoValue: (taskDetails$ | async)?.status }"/>
 
       <ng-container
         [ngTemplateOutlet]="infoString"

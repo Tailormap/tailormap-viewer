@@ -5,4 +5,7 @@ export interface TaskModel {
   type: string;
   /** Description of the task. */
   description: string;
+
+  lastResult?: string;
+  state?: string;
 }

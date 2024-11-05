@@ -5,5 +5,23 @@
 
 .task-list ::ng-deep .mdc-list-item {
   height: fit-content !important;
-  padding: 5px 16px;
+  padding: 5px 0 5px 16px;
+}
+
+.list-icon {
+  width: 24px;
+  line-height: 24px;
+  height: 24px;
+}
+
+.task-list ::ng-deep .mdc-list-item .list-icon.failed {
+  color: var(--error-color);
+}
+
+.task-list ::ng-deep .mdc-list-item .list-icon.success {
+  color: green;
+}
+
+.mdc-list-item__end + .mdc-list-item__end {
+  margin-left: 0;
 }

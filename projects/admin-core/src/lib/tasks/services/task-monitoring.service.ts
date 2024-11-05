@@ -42,7 +42,8 @@ export class TaskMonitoringService {
   public startMonitoring(uuid: string) {
     this.uuid$.next(uuid);
     this.monitoring$.next(true);
-    this.store$.select(selectTask(uuid)).subscribe(
+    this.store$.select(selectTask(uuid)).pipe(take(1))
+      .subscribe(
       task => {
         if (task) {
           this.type$.next(task.type);

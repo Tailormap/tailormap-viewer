@@ -1618,12 +1618,12 @@
         <target state="translated">Wählen Sie Einstellungen auf der linken Seite aus</target>
       </trans-unit>
       <trans-unit id="admin-core.tasks.delete-task" datatype="html">
-        <source>Delete task <x id="PH" equiv-text="task.description"/></source>
-        <target state="new">Delete task <x id="PH" equiv-text="task.description"/></target>
+        <source>Delete task &apos;<x id="PH" equiv-text="task.description"/>&apos;</source>
+        <target state="new">Delete task &apos;<x id="PH" equiv-text="task.description"/>&apos;</target>
       </trans-unit>
       <trans-unit id="admin-core.tasks.delete-task-message" datatype="html">
-        <source>Are you sure you want to delete task <x id="PH" equiv-text="task.description"/>? This action cannot be undone.</source>
-        <target state="new">Are you sure you want to delete task <x id="PH" equiv-text="task.description"/>? This action cannot be undone.</target>
+        <source>Are you sure you want to delete task &apos;<x id="PH" equiv-text="task.description"/>&apos;? This action cannot be undone.</source>
+        <target state="new">Are you sure you want to delete task &apos;<x id="PH" equiv-text="task.description"/>&apos;? This action cannot be undone.</target>
       </trans-unit>
       <trans-unit id="admin-core.tasks.error-deleting-task" datatype="html">
         <source>Error while deleting task</source>
@@ -1637,6 +1637,18 @@
         <source>Error while loading list of tasks</source>
         <target state="new">Error while loading list of tasks</target>
       </trans-unit>
+      <trans-unit id="admin-core.tasks.last-execution-failed" datatype="html">
+        <source>last execution failed</source>
+        <target state="new">last execution failed</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.last-execution-successful" datatype="html">
+        <source>last execution succesful</source>
+        <target state="new">last execution succesful</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-running" datatype="html">
+        <source>task running</source>
+        <target state="new">task running</target>
+      </trans-unit>
       <trans-unit id="admin-core.tasks.task.information" datatype="html">
         <source>Task Information</source>
         <target state="new">Task Information</target>
@@ -1644,14 +1656,6 @@
       <trans-unit id="admin-core.tasks.task.no-value" datatype="html">
         <source> No <x id="INTERPOLATION" equiv-text="{{ infoType }}"/> found</source>
         <target state="new"> No <x id="INTERPOLATION" equiv-text="{{ infoType }}"/> found</target>
-      </trans-unit>
-      <trans-unit id="admin-core.tasks.task.start" datatype="html">
-        <source>Start</source>
-        <target state="new">Start</target>
-      </trans-unit>
-      <trans-unit id="admin-core.tasks.task.stop" datatype="html">
-        <source>Stop</source>
-        <target state="new">Stop</target>
       </trans-unit>
       <trans-unit id="admin-core.tasks.tasks" datatype="html">
         <source>Tasks</source>

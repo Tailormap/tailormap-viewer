@@ -1602,11 +1602,11 @@
         <target>Selecteer een instelling aan de linker kant</target>
       </trans-unit>
       <trans-unit id="admin-core.tasks.delete-task" datatype="html">
-        <source>Delete task <x id="PH" equiv-text="task.description"/></source>
+        <source>Delete task &apos;<x id="PH" equiv-text="task.description"/>&apos;</source>
         <target>Verwijder taak <x id="PH" equiv-text="task.description"/></target>
       </trans-unit>
       <trans-unit id="admin-core.tasks.delete-task-message" datatype="html">
-        <source>Are you sure you want to delete task <x id="PH" equiv-text="task.description"/>? This action cannot be undone.</source>
+        <source>Are you sure you want to delete task &apos;<x id="PH" equiv-text="task.description"/>&apos;? This action cannot be undone.</source>
         <target>Weet U zeker dat u de taak <x id="PH" equiv-text="task.description"/> wilt verwijderen? Dit kan niet ongedaan gemaakt worden.</target>
       </trans-unit>
       <trans-unit id="admin-core.tasks.error-deleting-task" datatype="html">
@@ -1621,6 +1621,18 @@
         <source>Error while loading list of tasks</source>
         <target>Fout bij het laden van de taken</target>
       </trans-unit>
+      <trans-unit id="admin-core.tasks.last-execution-failed" datatype="html">
+        <source>last execution failed</source>
+        <target>laatste uitvoering mislukt</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.last-execution-successful" datatype="html">
+        <source>last execution succesful</source>
+        <target>laatste uitvoering succesvol</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-running" datatype="html">
+        <source>task running</source>
+        <target>taak wordt uitgevoerd</target>
+      </trans-unit>
       <trans-unit id="admin-core.tasks.task.information" datatype="html">
         <source>Task Information</source>
         <target>Taak informatie</target>
@@ -1628,14 +1640,6 @@
       <trans-unit id="admin-core.tasks.task.no-value" datatype="html">
         <source> No <x id="INTERPOLATION" equiv-text="{{ infoType }}"/> found</source>
         <target> Geen <x id="INTERPOLATION" equiv-text="{{ infoType }}"/> gevonden</target>
-      </trans-unit>
-      <trans-unit id="admin-core.tasks.task.start" datatype="html">
-        <source>Start</source>
-        <target>Start</target>
-      </trans-unit>
-      <trans-unit id="admin-core.tasks.task.stop" datatype="html">
-        <source>Stop</source>
-        <target>Stop</target>
       </trans-unit>
       <trans-unit id="admin-core.tasks.tasks" datatype="html">
         <source>Tasks</source>

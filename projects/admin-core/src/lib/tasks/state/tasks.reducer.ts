@@ -3,11 +3,6 @@ import { Action, createReducer, on } from '@ngrx/store';
 import { initialTasksState, TasksState } from './tasks.state';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 
-const onLoadTasksStart = (state: TasksState): TasksState => ({
-  ...state,
-  tasks: [],
-});
-
 const onLoadTasksSuccess = (
   state: TasksState,
   payload: ReturnType<typeof TasksActions.loadTasksSuccess>,
@@ -85,7 +80,6 @@ const onDeleteTaskFailed = (
 
 const tasksReducerImpl = createReducer<TasksState>(
   initialTasksState,
-  on(TasksActions.loadTasksStart, onLoadTasksStart),
   on(TasksActions.loadTasksSuccess, onLoadTasksSuccess),
   on(TasksActions.loadTasksFailed, onLoadTasksFailed),
   on(TasksActions.loadTaskDetailsSuccess, onLoadTaskDetailsSuccess),
