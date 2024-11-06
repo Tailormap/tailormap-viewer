@@ -1,6 +1,8 @@
 import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { CoordinateHelper, MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
+import {
+  CoordinateHelper, MapClickToolConfigModel, MapClickToolModel, MapCursorHelper, MapService, ToolTypeEnum,
+} from '@tailormap-viewer/map';
 import { selectComponentsConfigForType } from '../../../state/core.selectors';
 import {
   BaseComponentTypeEnum, CoordinateLinkWindowConfigModel, CoordinateLinkWindowConfigUrlModel,
@@ -37,6 +39,9 @@ export class CoordinateLinkWindowComponent implements OnInit, OnDestroy {
     this.urls$ = config$.pipe(map(conf => conf?.urls || []));
     this.title$ = config$.pipe(map(conf => conf?.title || $localize `:@@core.coordinate-link-window.title:Coordinate Link Window`));
     this.toolActive$ = this.store$.select(isActiveToolbarTool(ToolbarComponentEnum.COORDINATE_LINK_WINDOW));
+    this.toolActive$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(active => MapCursorHelper.setCrosshairCursor(active));
   }
 
   public ngOnInit(): void {

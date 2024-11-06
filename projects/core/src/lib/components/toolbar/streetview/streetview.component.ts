@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { concatMap, Observable, Subject, takeUntil, tap } from 'rxjs';
 import {
-  CoordinateHelper, MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum,
+  CoordinateHelper, MapClickToolConfigModel, MapClickToolModel, MapCursorHelper, MapService, ToolTypeEnum,
 } from '@tailormap-viewer/map';
 import { Store } from '@ngrx/store';
 import { isActiveToolbarTool } from '../state/toolbar.selectors';
@@ -34,6 +34,9 @@ export class StreetviewComponent implements OnInit, OnDestroy {
       .pipe().subscribe(projectionCode => {
       this.mapCRS = projectionCode;
     });
+    this.toolActive$
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(active => MapCursorHelper.setCrosshairCursor(active));
   }
 
   public ngOnInit(): void {

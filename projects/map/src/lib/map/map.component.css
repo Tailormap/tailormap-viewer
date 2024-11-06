@@ -45,3 +45,8 @@
     font-size: 1.2em;
   }
 }
+
+.map-container--with-crosshair {
+  /* custom icon, default crosshair is a bit thin */
+  cursor: url("crosshair-cursor.png"), crosshair;
+}
