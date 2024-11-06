@@ -1,5 +1,5 @@
-import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
-import { filter, map, Observable, of, take, tap } from 'rxjs';
+import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, DestroyRef } from '@angular/core';
+import { distinctUntilChanged, filter, map, Observable, of, take, tap } from 'rxjs';
 import { TaskDetailsModel, TaskModel } from '@tailormap-admin/admin-api';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -8,6 +8,7 @@ import { TaskMonitoringService } from '../services/task-monitoring.service';
 import { deleteTask } from '../state/tasks.actions';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
 import { DatePipe } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'tm-admin-task-details',
@@ -24,10 +25,10 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   public loadErrorMessage$: Observable<string | undefined> = of(undefined);
   public deleteErrorMessage$: Observable<string | undefined> = of(undefined);
 
-  public jobDataNiceTitles = new Map([
-    [ 'lastExecutionFinished', 'Last time task was finished' ],
-    [ 'lastResult', 'Last result' ],
-  ]);
+  public jobDataNiceTitles: Record<string, string> = {
+    lastExecutionFinished: 'Last time task was finished',
+    lastResult: 'Last result',
+  };
 
 
   constructor(
@@ -37,6 +38,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     private confirmDelete: ConfirmDialogService,
     private router: Router,
     private datePipe: DatePipe,
+    private destroyRef: DestroyRef,
   ) {
 
   }
@@ -45,6 +47,8 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
 
     this.uuid$ = this.route.paramMap.pipe(
       map(params => params.get('taskId')),
+      distinctUntilChanged(),
+      takeUntilDestroyed(this.destroyRef),
     );
 
     this.loadErrorMessage$ = this.store$.select(selectTaskDetailsLoadError);
@@ -96,10 +100,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   }
 
   public niceTitle(original: string): string {
-    if (this.jobDataNiceTitles.has(original)) {
-      return <string>this.jobDataNiceTitles.get(original);
-    }
-    return original;
+    return this.jobDataNiceTitles[original] ?? original;
   }
 
   public convertToDateIfPossible(original: string): string {

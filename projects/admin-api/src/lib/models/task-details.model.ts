@@ -11,5 +11,5 @@ export interface TaskDetailsModel extends TaskModel {
   progress?: string;
   lastResult?: string;
   nextFireTimes?: Date[];
-  jobData?: Map<string, string>;
+  jobData?: Record<string, string>;
 }

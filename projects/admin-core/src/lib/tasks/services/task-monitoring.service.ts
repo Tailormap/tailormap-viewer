@@ -20,9 +20,9 @@ export class TaskMonitoringService {
     private adminApiService: TailormapAdminApiV1Service,
   ) {
     combineLatest([
-      this.uuid$,
-      this.monitoring$,
-      this.type$,
+      this.uuid$.asObservable(),
+      this.monitoring$.asObservable(),
+      this.type$.asObservable(),
     ]).subscribe(
       ([ uuid, monitoring, type ]) => {
         if (uuid && monitoring && type) {
@@ -61,15 +61,10 @@ export class TaskMonitoringService {
   }
 
   public startTask() {
-    combineLatest([
-      this.uuid$.pipe(take(1)),
-      this.type$.pipe(take(1)),
-    ]).subscribe(
-      ([ uuid, type ]) => {
-        this.adminApiService.startTask$(uuid, type).subscribe();
-      },
-    );
-
+    if (!this.uuid$.value || !this.type$.value) {
+      return;
+    }
+    this.adminApiService.startTask$(this.uuid$.value, this.type$.value).subscribe();
   }
 
   public stopTask() {

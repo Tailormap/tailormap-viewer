@@ -13,55 +13,59 @@
 
 <div class="information">
 
-  <div class="standard-information">
-    <ng-container
-      [ngTemplateOutlet]="infoString"
-      [ngTemplateOutletContext]="{infoType: 'Type', infoValue: (task$ | async)?.type }"/>
+  @if (task$ | async; as task) {
+    <div class="standard-information">
+      <ng-container
+        [ngTemplateOutlet]="infoString"
+        [ngTemplateOutletContext]="{infoType: 'Type', infoValue: task.type }"/>
 
-    <ng-container
-      [ngTemplateOutlet]="infoString"
-      [ngTemplateOutletContext]="{infoType: 'Description', infoValue: (task$ | async)?.description }"/>
+      <ng-container
+        [ngTemplateOutlet]="infoString"
+        [ngTemplateOutletContext]="{infoType: 'Description', infoValue: task.description }"/>
 
-    <ng-container
-      [ngTemplateOutlet]="infoString"
-      [ngTemplateOutletContext]="{infoType: 'Uuid', infoValue: (task$ | async)?.uuid }"/>
-  </div>
+      <ng-container
+        [ngTemplateOutlet]="infoString"
+        [ngTemplateOutletContext]="{infoType: 'Uuid', infoValue: task.uuid }"/>
+    </div>
+  }
 
-  @if (taskDetails$ | async) {
+  @if (taskDetails$ | async; as taskDetails) {
     <div class="detailed-information">
       <ng-container
         [ngTemplateOutlet]="infoString"
-        [ngTemplateOutletContext]="{infoType: 'Cron expression', infoValue: (taskDetails$ | async)?.cronExpression }"/>
+        [ngTemplateOutletContext]="{infoType: 'Cron expression', infoValue: taskDetails.cronExpression }"/>
 
       <ng-container
         [ngTemplateOutlet]="infoString"
-        [ngTemplateOutletContext]="{infoType: 'Scheduling state', infoValue: (taskDetails$ | async)?.status }"/>
+        [ngTemplateOutletContext]="{infoType: 'Scheduling state', infoValue: taskDetails.status }"/>
 
       <ng-container
         [ngTemplateOutlet]="infoString"
-        [ngTemplateOutletContext]="{infoType: 'Last result', infoValue: (taskDetails$ | async)?.lastResult }"/>
+        [ngTemplateOutletContext]="{infoType: 'Last result', infoValue: taskDetails.lastResult }"/>
 
       <ng-container
         [ngTemplateOutlet]="infoString"
-        [ngTemplateOutletContext]="{infoType: 'Progress', infoValue: (taskDetails$ | async)?.progress }"/>
+        [ngTemplateOutletContext]="{infoType: 'Progress', infoValue: taskDetails.progress }"/>
 
       <ng-container
         [ngTemplateOutlet]="infoString"
-        [ngTemplateOutletContext]="{infoType: 'Last time the task was started', infoValue: ((taskDetails$ | async)?.lastTime | date: 'medium') }"/>
+        [ngTemplateOutletContext]="{infoType: 'Last time the task was started', infoValue: (taskDetails.lastTime | date: 'medium') }"/>
 
       <ng-container
         [ngTemplateOutlet]="infoString"
-        [ngTemplateOutletContext]="{infoType: 'Start time', infoValue: ((taskDetails$ | async)?.startTime | date: 'medium') }"/>
+        [ngTemplateOutletContext]="{infoType: 'Start time', infoValue: (taskDetails.startTime | date: 'medium') }"/>
 
       <div class="job-data">
         <mat-expansion-panel>
           <mat-expansion-panel-header>
             <mat-panel-title>Additional job data</mat-panel-title>
           </mat-expansion-panel-header>
-          @for (item of (taskDetails$ | async)?.jobData | keyvalue; track $index) {
-            <ng-container
-              [ngTemplateOutlet]="infoString"
-              [ngTemplateOutletContext]="{infoType: niceTitle(item.key), infoValue: convertToDateIfPossible(item.value) }"/>
+          @if (taskDetails.jobData) {
+            @for (item of taskDetails.jobData | keyvalue; track $index) {
+              <ng-container
+                [ngTemplateOutlet]="infoString"
+                [ngTemplateOutletContext]="{infoType: niceTitle(item.key), infoValue: convertToDateIfPossible(item.value) }"/>
+            }
           }
         </mat-expansion-panel>
       </div>
@@ -71,7 +75,7 @@
           <mat-expansion-panel-header>
             <mat-panel-title>Scheduled fire times</mat-panel-title>
           </mat-expansion-panel-header>
-          @for (time of (taskDetails$ | async)?.nextFireTimes; track $index) {
+          @for (time of taskDetails.nextFireTimes; track $index) {
             <ng-container
               [ngTemplateOutlet]="infoString"
               [ngTemplateOutletContext]="{infoType: '', infoValue: time | date: 'medium' }"/>
