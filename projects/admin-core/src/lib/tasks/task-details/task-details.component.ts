@@ -25,7 +25,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   public loadErrorMessage$: Observable<string | undefined> = of(undefined);
   public deleteErrorMessage$: Observable<string | undefined> = of(undefined);
 
-  public jobDataNiceTitles: Record<string, string> = {
+  private jobDataNiceTitles: Record<string, string> = {
     lastExecutionFinished: 'Last time task was finished',
     lastResult: 'Last result',
   };

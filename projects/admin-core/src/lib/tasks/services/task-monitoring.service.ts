@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { combineLatest, BehaviorSubject, take, first } from 'rxjs';
+import { combineLatest, BehaviorSubject, first } from 'rxjs';
 import { selectTask } from '../state/tasks.selectors';
 import { loadTaskDetails, startMonitoringTask, stopMonitoringTask } from '../state/tasks.actions';
 import { TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
@@ -45,7 +45,6 @@ export class TaskMonitoringService {
     this.store$.select(selectTask(uuid)).pipe(first(task => task !== undefined))
       .subscribe(
       task => {
-        console.log(task);
         if (task) {
           this.type$.next(task.type);
           this.store$.dispatch(loadTaskDetails({ taskUuid: uuid, taskType: task.type }));
@@ -68,15 +67,10 @@ export class TaskMonitoringService {
   }
 
   public stopTask() {
-    combineLatest([
-      this.uuid$.pipe(take(1)),
-      this.type$.pipe(take(1)),
-    ]).subscribe(
-      ([ uuid, type ]) => {
-        this.adminApiService.stopTask$(uuid, type).subscribe();
-      },
-    );
-
+    if (!this.uuid$.value || !this.type$.value) {
+      return;
+    }
+    this.adminApiService.stopTask$(this.uuid$.value, this.type$.value).subscribe();
   }
 
 }
