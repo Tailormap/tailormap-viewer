@@ -1060,7 +1060,7 @@
       </trans-unit>
       <trans-unit id="admin-core.common.tasks-title" datatype="html">
         <source>Tasks</source>
-        <target state="new">Tasks</target>
+        <target>Aufgaben</target>
       </trans-unit>
       <trans-unit id="admin-core.common.title" datatype="html">
         <source>Title</source>
@@ -1376,7 +1376,7 @@
       </trans-unit>
       <trans-unit id="admin-core.navigation.tasks" datatype="html">
         <source>Tasks</source>
-        <target state="new">Tasks</target>
+        <target>Aufgaben</target>
       </trans-unit>
       <trans-unit id="admin-core.navigation.users" datatype="html">
         <source>Users</source>
@@ -1619,47 +1619,47 @@
       </trans-unit>
       <trans-unit id="admin-core.tasks.delete-task" datatype="html">
         <source>Delete task &apos;<x id="PH" equiv-text="task.description"/>&apos;</source>
-        <target state="new">Delete task &apos;<x id="PH" equiv-text="task.description"/>&apos;</target>
+        <target>Aufgabe &apos;<x id="PH" equiv-text="task.description"/>&apos; löschen</target>
       </trans-unit>
       <trans-unit id="admin-core.tasks.delete-task-message" datatype="html">
         <source>Are you sure you want to delete task &apos;<x id="PH" equiv-text="task.description"/>&apos;? This action cannot be undone.</source>
-        <target state="new">Are you sure you want to delete task &apos;<x id="PH" equiv-text="task.description"/>&apos;? This action cannot be undone.</target>
+        <target>Sind Sie sicher, dass Sie die Aufgabe &apos;<x id="PH" equiv-text="task.description"/>&apos; löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.</target>
       </trans-unit>
       <trans-unit id="admin-core.tasks.error-deleting-task" datatype="html">
         <source>Error while deleting task</source>
-        <target state="new">Error while deleting task</target>
+        <target>Fehler beim Löschen der Aufgabe</target>
       </trans-unit>
       <trans-unit id="admin-core.tasks.error-loading-task-details" datatype="html">
         <source>Error while loading task details</source>
-        <target state="new">Error while loading task details</target>
+        <target>Fehler beim Laden der Aufgabendetails</target>
       </trans-unit>
       <trans-unit id="admin-core.tasks.error-loading-tasks" datatype="html">
         <source>Error while loading list of tasks</source>
-        <target state="new">Error while loading list of tasks</target>
+        <target>Fehler beim Laden der Aufgabenliste</target>
       </trans-unit>
       <trans-unit id="admin-core.tasks.last-execution-failed" datatype="html">
         <source>last execution failed</source>
-        <target state="new">last execution failed</target>
+        <target>letzte Ausführung fehlgeschlagen</target>
       </trans-unit>
       <trans-unit id="admin-core.tasks.last-execution-successful" datatype="html">
-        <source>last execution succesful</source>
-        <target state="new">last execution succesful</target>
+        <source>last execution successful</source>
+        <target>letzte Ausführung erfolgreich</target>
       </trans-unit>
       <trans-unit id="admin-core.tasks.task-running" datatype="html">
         <source>task running</source>
-        <target state="new">task running</target>
+        <target>Aufgabe läuft</target>
       </trans-unit>
       <trans-unit id="admin-core.tasks.task.information" datatype="html">
         <source>Task Information</source>
-        <target state="new">Task Information</target>
+        <target>Aufgabeninformationen</target>
       </trans-unit>
       <trans-unit id="admin-core.tasks.task.no-value" datatype="html">
         <source> No <x id="INTERPOLATION" equiv-text="{{ infoType }}"/> found</source>
-        <target state="new"> No <x id="INTERPOLATION" equiv-text="{{ infoType }}"/> found</target>
+        <target> Kein(e) <x id="INTERPOLATION" equiv-text="{{ infoType }}"/> gefunden</target>
       </trans-unit>
       <trans-unit id="admin-core.tasks.tasks" datatype="html">
         <source>Tasks</source>
-        <target state="new">Tasks</target>
+        <target>Aufgaben</target>
       </trans-unit>
       <trans-unit id="admin-core.upload-select.delete-file" datatype="html">
         <source>Delete file?</source>
