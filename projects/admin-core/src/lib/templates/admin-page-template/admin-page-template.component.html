@@ -1,6 +1,8 @@
 <div class="admin-page-wrapper" [ngClass]="pageClassName">
   <div class="admin-tree" [style.width]="listWidthStyle()"><ng-content></ng-content></div>
-  <tm-panel-resize orientation="vertical" (positionChanged)="panelResized($event)"></tm-panel-resize>
+  <tm-panel-resize orientation="vertical"
+                   (positionChanged)="panelResized($event)"
+                   [visibleOnHover]="true"></tm-panel-resize>
   <div class="admin-content">
     @if (wrapContent) {
       <div class="admin-content-wrapper"><router-outlet></router-outlet></div>

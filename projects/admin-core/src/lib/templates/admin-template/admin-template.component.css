@@ -28,6 +28,7 @@
   justify-content: stretch;
   align-items: stretch;
   padding: 16px;
+  position: relative;
 }
 
 .content > ::ng-deep *:not(router-outlet) {
