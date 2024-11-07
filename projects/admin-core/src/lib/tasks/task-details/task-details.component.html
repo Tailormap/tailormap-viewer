@@ -46,7 +46,7 @@
           @if (taskDetails.jobData) {
             @for (item of taskDetails.jobData | keyvalue; track $index) {
 
-              <tm-admin-task-details-row [infoType]="niceTitle(item.key)" [infoValue]="convertToDateIfPossible(item.value)" />
+              <tm-admin-task-details-row [infoType]="item.key" [infoValue]="item.value" />
 
             }
           }

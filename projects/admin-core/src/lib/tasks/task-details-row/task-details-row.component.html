@@ -1,9 +1,15 @@
 <div class="row-wrapper">
-  <div class="label">{{ infoType }}</div>
+  <div class="label">{{ niceTitle(infoType) }}</div>
   @if (infoValue) {
-    <div class="info-value">{{ infoValue }}</div>
+    <div class="info-value">
+      @if (canConvertToDate(infoValue)) {
+        {{ infoValue | date: 'medium' }}
+      } @else {
+        {{ infoValue }}
+      }
+    </div>
   } @else {
-    <div class="info-value" i18n="@@admin-core.tasks.task.no-value"> No {{ infoType }} found</div>
+    <div class="info-value" i18n="@@admin-core.tasks.task.no-value"> No {{ niceTitle(infoType) }} found</div>
   }
 </div>
 

@@ -24,15 +24,12 @@ export class TaskDetailsRowComponent implements OnInit {
   public ngOnInit(): void {
   }
 
-  // public niceTitle(original: string): string {
-  //   return this.jobDataNiceTitles[original] ?? original;
-  // }
-  //
-  // public convertToDateIfPossible(original: string): string {
-  //   if (!isNaN(Date.parse(original)) && isNaN(Number(original))) {
-  //     return <string>this.datePipe.transform(original, 'medium');
-  //   }
-  //   return original;
-  // }
+  public niceTitle(original: string): string {
+    return this.jobDataNiceTitles[original] ?? original;
+  }
+
+  public canConvertToDate(original: string): boolean {
+    return !isNaN(Date.parse(original)) && isNaN(Number(original));
+  }
 
 }

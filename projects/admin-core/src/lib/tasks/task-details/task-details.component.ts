@@ -15,7 +15,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   selector: 'tm-admin-task-details',
   templateUrl: './task-details.component.html',
   styleUrls: ['./task-details.component.css'],
-  providers: [ DatePipe, TaskMonitoringService ],
+  providers: [TaskMonitoringService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TaskDetailsComponent implements OnInit, OnDestroy {
@@ -27,19 +27,12 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   public deleteErrorMessage$: Observable<string | undefined> = of(undefined);
   public taskDetailsLoadStatus$: Observable<LoadingStateEnum> = of(LoadingStateEnum.INITIAL);
 
-  private jobDataNiceTitles: Record<string, string> = {
-    lastExecutionFinished: 'Last time task was finished',
-    lastResult: 'Last result',
-  };
-
-
   constructor(
     private route: ActivatedRoute,
     private store$: Store,
     private taskMonitoringService: TaskMonitoringService,
     private confirmDelete: ConfirmDialogService,
     private router: Router,
-    private datePipe: DatePipe,
     private destroyRef: DestroyRef,
   ) {
 
@@ -100,17 +93,6 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy(): void {
     this.taskMonitoringService.stopMonitoring();
-  }
-
-  public niceTitle(original: string): string {
-    return this.jobDataNiceTitles[original] ?? original;
-  }
-
-  public convertToDateIfPossible(original: string): string {
-    if (!isNaN(Date.parse(original)) && isNaN(Number(original))) {
-      return <string>this.datePipe.transform(original, 'medium');
-    }
-    return original;
   }
 
   protected readonly loadingStateEnum = LoadingStateEnum;
