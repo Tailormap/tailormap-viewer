@@ -56,3 +56,27 @@ mat-icon {
 .resize-panel--resizing .resize-indicator {
   display: block;
 }
+
+.resize-panel--visible-on-hover .resize-handle {
+  opacity: 0;
+  width: 5px;
+  background-color: var(--border-color);
+  transform: none;
+  height: 100%;
+  transition: opacity 0.1s ease-in-out;
+  cursor: ew-resize;
+}
+
+.resize-panel--visible-on-hover .resize-handle mat-icon {
+  display: none;
+}
+
+.resize-panel--visible-on-hover:hover .resize-handle {
+  opacity: 1;
+}
+
+.resize-panel--horizontal.resize-panel--visible-on-hover .resize-handle {
+  height: 5px;
+  width: 100%;
+  cursor: ns-resize;
+}

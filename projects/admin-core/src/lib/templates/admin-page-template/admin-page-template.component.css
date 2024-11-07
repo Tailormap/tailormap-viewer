@@ -40,3 +40,7 @@
   flex-wrap: wrap;
   gap: 16px;
 }
+
+.admin-page-wrapper ::ng-deep .resize-panel--visible-on-hover .resize-handle {
+  margin-right: 6px;
+}
