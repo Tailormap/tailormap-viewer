@@ -11,12 +11,14 @@ import { tasksStateKey } from './state/tasks.state';
 import { tasksReducer } from './state/tasks.reducer';
 import { TasksEffects } from './state/tasks.effects';
 import { TaskDetailsComponent } from './task-details/task-details.component';
+import { TaskDetailsRowComponent } from './task-details-row/task-details-row.component';
 
 @NgModule({
   declarations: [
     TasksHomeComponent,
     TasksListComponent,
     TaskDetailsComponent,
+    TaskDetailsRowComponent,
   ],
   imports: [
     CommonModule,

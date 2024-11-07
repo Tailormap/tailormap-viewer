@@ -16,17 +16,11 @@
 
   @if (task$ | async; as task) {
     <div class="standard-information">
-      <ng-container
-        [ngTemplateOutlet]="infoString"
-        [ngTemplateOutletContext]="{infoType: 'Type', infoValue: task.type }"/>
 
-      <ng-container
-        [ngTemplateOutlet]="infoString"
-        [ngTemplateOutletContext]="{infoType: 'Description', infoValue: task.description }"/>
+      <tm-admin-task-details-row infoType="Type" [infoValue]="task.type" />
+      <tm-admin-task-details-row infoType="Description" [infoValue]="task.description" />
+      <tm-admin-task-details-row infoType="Uuid" [infoValue]="task.uuid" />
 
-      <ng-container
-        [ngTemplateOutlet]="infoString"
-        [ngTemplateOutletContext]="{infoType: 'Uuid', infoValue: task.uuid }"/>
     </div>
   }
 
@@ -36,29 +30,13 @@
 
   @if (taskDetails$ | async; as taskDetails) {
     <div class="detailed-information">
-      <ng-container
-        [ngTemplateOutlet]="infoString"
-        [ngTemplateOutletContext]="{infoType: 'Cron expression', infoValue: taskDetails.cronExpression }"/>
 
-      <ng-container
-        [ngTemplateOutlet]="infoString"
-        [ngTemplateOutletContext]="{infoType: 'Scheduling state', infoValue: taskDetails.status }"/>
-
-      <ng-container
-        [ngTemplateOutlet]="infoString"
-        [ngTemplateOutletContext]="{infoType: 'Last result', infoValue: taskDetails.lastResult }"/>
-
-      <ng-container
-        [ngTemplateOutlet]="infoString"
-        [ngTemplateOutletContext]="{infoType: 'Progress', infoValue: taskDetails.progress }"/>
-
-      <ng-container
-        [ngTemplateOutlet]="infoString"
-        [ngTemplateOutletContext]="{infoType: 'Last time the task was started', infoValue: (taskDetails.lastTime | date: 'medium') }"/>
-
-      <ng-container
-        [ngTemplateOutlet]="infoString"
-        [ngTemplateOutletContext]="{infoType: 'Start time', infoValue: (taskDetails.startTime | date: 'medium') }"/>
+      <tm-admin-task-details-row infoType="Cron expression" [infoValue]="taskDetails.cronExpression" />
+      <tm-admin-task-details-row infoType="Scheduling state" [infoValue]="taskDetails.status" />
+      <tm-admin-task-details-row infoType="Last result" [infoValue]="taskDetails.lastResult" />
+      <tm-admin-task-details-row infoType="Progress" [infoValue]="taskDetails.progress" />
+      <tm-admin-task-details-row infoType="Last time the task was started" [infoValue]="taskDetails.lastTime | date: 'medium'" />
+      <tm-admin-task-details-row infoType="Start time" [infoValue]="taskDetails.startTime | date: 'medium'" />
 
       <div class="job-data">
         <mat-expansion-panel>
@@ -67,9 +45,9 @@
           </mat-expansion-panel-header>
           @if (taskDetails.jobData) {
             @for (item of taskDetails.jobData | keyvalue; track $index) {
-              <ng-container
-                [ngTemplateOutlet]="infoString"
-                [ngTemplateOutletContext]="{infoType: niceTitle(item.key), infoValue: convertToDateIfPossible(item.value) }"/>
+
+              <tm-admin-task-details-row [infoType]="niceTitle(item.key)" [infoValue]="convertToDateIfPossible(item.value)" />
+
             }
           }
         </mat-expansion-panel>
@@ -81,9 +59,9 @@
             <mat-panel-title>Scheduled fire times</mat-panel-title>
           </mat-expansion-panel-header>
           @for (time of taskDetails.nextFireTimes; track $index) {
-            <ng-container
-              [ngTemplateOutlet]="infoString"
-              [ngTemplateOutletContext]="{infoType: '', infoValue: time | date: 'medium' }"/>
+
+            <tm-admin-task-details-row [infoType]="''" [infoValue]="time | date: 'medium'" />
+
           }
         </mat-expansion-panel>
       </div>
