@@ -1,10 +1,11 @@
 import { DestroyRef, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, first, interval } from 'rxjs';
+import { BehaviorSubject, catchError, first, interval, map, of } from 'rxjs';
 import { selectTask } from '../state/tasks.selectors';
-import { loadTaskDetails, startMonitoringTask, stopMonitoringTask } from '../state/tasks.actions';
-import { TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
+import { loadTaskDetails } from '../state/tasks.actions';
+import { ApiResponseHelper, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import * as TasksActions from '../state/tasks.actions';
 
 @Injectable()
 export class TaskMonitoringService {
@@ -40,12 +41,10 @@ export class TaskMonitoringService {
         }
       },
     );
-    this.store$.dispatch(startMonitoringTask());
   }
 
   public stopMonitoring() {
     this.monitoring$.next(false);
-    this.store$.dispatch(stopMonitoringTask());
   }
 
   public startTask() {
@@ -60,6 +59,21 @@ export class TaskMonitoringService {
       return;
     }
     this.adminApiService.stopTask$(this.uuid$.value, this.type$.value).subscribe();
+  }
+
+  public deleteTask(uuid: string, type: string ) {
+    this.adminApiService.deleteTask$(uuid, type)
+      .pipe(
+        catchError(() => {
+          return of({ error: $localize `:@@admin-core.tasks.error-deleting-task:Error while deleting task` });
+        }),
+        map(response => {
+          if (ApiResponseHelper.isErrorResponse(response)) {
+            return TasksActions.deleteTaskFailed({ error: response.error });
+          }
+          return TasksActions.deleteTaskSuccess({ taskUuid: this.uuid$.value });
+        }),
+      ).subscribe();
   }
 
 }

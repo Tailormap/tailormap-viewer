@@ -1,42 +1,49 @@
 <h2 i18n="@@admin-core.tasks.tasks">Tasks</h2>
 
+@if ((tasksLoadStatus$ | async) === loadingStateEnum.LOADING && (errorMessage$ | async) === undefined) {
+  <mat-spinner diameter="20" mode="indeterminate"></mat-spinner>
+}
+
 @if (errorMessage$ | async) {
   <tm-error-message [message]="errorMessage$ | async"></tm-error-message>
   <button mat-raised-button color="primary" (click)="onRetryClick()" i18n="@@admin-core.common.retry">Retry</button>
 }
 
-<mat-selection-list class="task-list">
-  @for (task of tasks$ | async; track task.uuid) {
-    <mat-list-item class="task-list-item"
-      [routerLink]="['/admin/tasks/task', task.uuid]">
-      <div>{{ task.description }}</div>
+@if ((tasksLoadStatus$ | async) === loadingStateEnum.LOADED) {
 
-      @if ( task.state === 'BLOCKED' ) {
-        <mat-icon class="list-icon"
-                  svgIcon="admin_task_running"
-                  tmTooltip="task running"
-                  i18n-tmTooltip="@@admin-core.tasks.task-running"
-                  matListItemMeta>
-        </mat-icon>
-      }
+  <mat-selection-list class="task-list">
+    @for (task of tasks$ | async; track task.uuid) {
+      <mat-list-item class="task-list-item"
+        [routerLink]="['/admin/tasks/task', task.uuid]">
+        <div>{{ task.description }}</div>
 
-      @if ( task.lastResult?.includes(' successfully')) {
-        <mat-icon class="list-icon success"
-                  svgIcon="admin_task_successful"
-                  tmTooltip="last execution succesful"
-                  i18n-tmTooltip="@@admin-core.tasks.last-execution-successful"
-                  matListItemMeta>
-        </mat-icon>
-      } @else if ( task.lastResult?.includes('unsuccessfully' ) || task.lastResult?.includes('failed' ) ) {
-        <mat-icon class="list-icon failed"
-                  svgIcon="admin_task_failed"
-                  tmTooltip="last execution failed"
-                  i18n-tmTooltip="@@admin-core.tasks.last-execution-failed"
-                  matListItemMeta>
-        </mat-icon>
-      }
+        @if ( task.state === 'BLOCKED' ) {
+          <mat-icon class="list-icon"
+                    svgIcon="admin_task_running"
+                    tmTooltip="task running"
+                    i18n-tmTooltip="@@admin-core.tasks.task-running"
+                    matListItemMeta>
+          </mat-icon>
+        }
 
-    </mat-list-item>
-  }
-</mat-selection-list>
+        @if ( task.lastResult?.includes(' successfully')) {
+          <mat-icon class="list-icon success"
+                    svgIcon="admin_task_successful"
+                    tmTooltip="last execution succesful"
+                    i18n-tmTooltip="@@admin-core.tasks.last-execution-successful"
+                    matListItemMeta>
+          </mat-icon>
+        } @else if ( task.lastResult?.includes('unsuccessfully' ) || task.lastResult?.includes('failed' ) ) {
+          <mat-icon class="list-icon failed"
+                    svgIcon="admin_task_failed"
+                    tmTooltip="last execution failed"
+                    i18n-tmTooltip="@@admin-core.tasks.last-execution-failed"
+                    matListItemMeta>
+          </mat-icon>
+        }
 
+      </mat-list-item>
+    }
+  </mat-selection-list>
+
+}

@@ -8,6 +8,8 @@ export const selectTaskDetails = createSelector(selectTasksState, state => state
 export const selectTasksLoadError = createSelector(selectTasksState, state => state.tasksLoadError);
 export const selectTaskDetailsLoadError = createSelector(selectTasksState, state => state.taskDetailsLoadError);
 export const selectDeleteTaskError = createSelector(selectTasksState, state => state.deleteTaskError);
+export const selectTasksLoadStatus = createSelector(selectTasksState, state => state.tasksLoadStatus);
+export const selectTaskDetailsLoadStatus = createSelector(selectTasksState, state => state.taskDetailsLoadStatus);
 
 export const selectTask = (taskUuid: string | null) => createSelector(
   selectTasks,

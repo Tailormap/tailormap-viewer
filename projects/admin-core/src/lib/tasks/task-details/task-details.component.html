@@ -11,6 +11,7 @@
   </div>
 </ng-template>
 
+
 <div class="information">
 
   @if (task$ | async; as task) {
@@ -27,6 +28,10 @@
         [ngTemplateOutlet]="infoString"
         [ngTemplateOutletContext]="{infoType: 'Uuid', infoValue: task.uuid }"/>
     </div>
+  }
+
+  @if ((taskDetailsLoadStatus$ | async) === loadingStateEnum.LOADING && (loadErrorMessage$ | async) === undefined) {
+    <mat-spinner diameter="20" mode="indeterminate"></mat-spinner>
   }
 
   @if (taskDetails$ | async; as taskDetails) {

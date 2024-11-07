@@ -4,13 +4,14 @@ import { createMockStore } from '@ngrx/store/testing';
 import { initialTasksState, TasksState, tasksStateKey } from '../state/tasks.state';
 import { getTasks } from '@tailormap-admin/admin-api';
 import { Store } from '@ngrx/store';
-import { SharedModule } from '@tailormap-viewer/shared';
+import { LoadingStateEnum, SharedModule } from '@tailormap-viewer/shared';
 
 const setup = async () => {
   const testTasks = getTasks();
   const testTasksState: TasksState = {
     ...initialTasksState,
     tasks: testTasks,
+    tasksLoadStatus: LoadingStateEnum.LOADED,
   };
   const mockStore = createMockStore({
     initialState: { [tasksStateKey]: testTasksState },

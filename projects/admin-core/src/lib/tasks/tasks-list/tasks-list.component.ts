@@ -1,10 +1,11 @@
-import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, DestroyRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, DestroyRef } from '@angular/core';
 import { interval, Observable, of } from 'rxjs';
 import { TaskModel } from '@tailormap-admin/admin-api';
 import { Store } from '@ngrx/store';
 import { loadTasks } from '../state/tasks.actions';
-import { selectTasks, selectTasksLoadError } from '../state/tasks.selectors';
+import { selectTasks, selectTasksLoadError, selectTasksLoadStatus } from '../state/tasks.selectors';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { LoadingStateEnum } from '@tailormap-viewer/shared';
 
 
 @Component({
@@ -13,11 +14,11 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   styleUrls: ['./tasks-list.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TasksListComponent implements OnInit, OnDestroy {
+export class TasksListComponent implements OnInit {
 
   public tasks$: Observable<TaskModel[]> = of([]);
   public errorMessage$: Observable<string | undefined> = of(undefined);
-  public updateTasksInterval?: ReturnType<typeof setInterval>;
+  public tasksLoadStatus$: Observable<LoadingStateEnum> = of(LoadingStateEnum.INITIAL);
 
   constructor(
     private store$: Store,
@@ -32,6 +33,7 @@ export class TasksListComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.store$.dispatch(loadTasks());
+    this.tasksLoadStatus$ = this.store$.select(selectTasksLoadStatus);
     this.tasks$ = this.store$.select(selectTasks);
     this.errorMessage$ = this.store$.select(selectTasksLoadError);
   }
@@ -40,8 +42,5 @@ export class TasksListComponent implements OnInit, OnDestroy {
     this.store$.dispatch(loadTasks());
   }
 
-  public ngOnDestroy(): void {
-    clearInterval(this.updateTasksInterval);
-  }
-
+  protected readonly loadingStateEnum = LoadingStateEnum;
 }

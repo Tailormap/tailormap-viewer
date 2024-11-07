@@ -3,6 +3,12 @@ import { Action, createReducer, on } from '@ngrx/store';
 import { initialTasksState, TasksState } from './tasks.state';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 
+const onLoadTasksStart = (state: TasksState): TasksState => ({
+  ...state,
+  tasksLoadStatus: LoadingStateEnum.LOADING,
+  tasks: [],
+});
+
 const onLoadTasksSuccess = (
   state: TasksState,
   payload: ReturnType<typeof TasksActions.loadTasksSuccess>,
@@ -26,6 +32,13 @@ const onLoadTasksFailed = (
   tasks: [],
 });
 
+const onLoadTaskDetailsStart = (state: TasksState): TasksState => ({
+  ...state,
+  taskDetailsLoadStatus: LoadingStateEnum.LOADING,
+  taskDetails: undefined,
+});
+
+
 const onLoadTaskDetailsSuccess = (
   state: TasksState,
   payload: ReturnType<typeof TasksActions.loadTaskDetailsSuccess>,
@@ -46,16 +59,6 @@ const onLoadTaskDetailsFailed = (
   taskDetailsLoadStatus: LoadingStateEnum.FAILED,
   taskDetailsLoadError: payload.error,
   taskDetails: undefined,
-});
-
-const onStartMonitoringTask = (state: TasksState): TasksState => ({
-  ...state,
-  monitoring: true,
-});
-
-const onStopMonitoringTask = (state: TasksState): TasksState => ({
-  ...state,
-  monitoring: false,
 });
 
 const onDeleteTaskSuccess = (
@@ -80,12 +83,12 @@ const onDeleteTaskFailed = (
 
 const tasksReducerImpl = createReducer<TasksState>(
   initialTasksState,
+  on(TasksActions.loadTasksStart, onLoadTasksStart),
   on(TasksActions.loadTasksSuccess, onLoadTasksSuccess),
   on(TasksActions.loadTasksFailed, onLoadTasksFailed),
+  on(TasksActions.loadTaskDetailsStart, onLoadTaskDetailsStart),
   on(TasksActions.loadTaskDetailsSuccess, onLoadTaskDetailsSuccess),
   on(TasksActions.loadTaskDetailsFailed, onLoadTaskDetailsFailed),
-  on(TasksActions.startMonitoringTask, onStartMonitoringTask),
-  on(TasksActions.stopMonitoringTask, onStopMonitoringTask),
   on(TasksActions.deleteTaskSuccess, onDeleteTaskSuccess),
   on(TasksActions.deleteTaskFailed, onDeleteTaskFailed),
 );

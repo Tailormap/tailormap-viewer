@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { map, catchError, of, switchMap } from 'rxjs';
-import {
-  ApiResponseHelper,
-  TailormapAdminApiV1Service,
-} from '@tailormap-admin/admin-api';
+import { catchError, map, of, switchMap, take, tap } from 'rxjs';
+import { ApiResponseHelper, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 import { Store } from '@ngrx/store';
 import * as TasksActions from './tasks.actions';
+import { selectTaskDetailsLoadStatus, selectTasksLoadStatus } from './tasks.selectors';
+import { LoadingStateEnum } from '@tailormap-viewer/shared';
+import { loadTaskDetailsStart, loadTasksStart } from './tasks.actions';
 
 @Injectable()
 export class TasksEffects {
@@ -14,6 +14,15 @@ export class TasksEffects {
   public loadTasks$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(TasksActions.loadTasks),
+      tap(() => {
+        this.store$.select(selectTasksLoadStatus).pipe(take(1)).subscribe(
+          (loadStatus) => {
+            if (loadStatus !== LoadingStateEnum.LOADED) {
+              this.store$.dispatch(loadTasksStart());
+            }
+          },
+        );
+      }),
       switchMap( _action => {
         return this.adminApiService.getTasks$()
           .pipe(
@@ -34,8 +43,17 @@ export class TasksEffects {
   public loadTaskDetails$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(TasksActions.loadTaskDetails),
-      switchMap( _action => {
-        return this.adminApiService.getTaskDetails$(_action.taskUuid, _action.taskType)
+      tap(() => {
+        this.store$.select(selectTaskDetailsLoadStatus).pipe(take(1)).subscribe(
+          (loadStatus) => {
+            if (loadStatus !== LoadingStateEnum.LOADED) {
+              this.store$.dispatch(loadTaskDetailsStart());
+            }
+          },
+        );
+      }),
+      switchMap( action => {
+        return this.adminApiService.getTaskDetails$(action.taskUuid, action.taskType)
           .pipe(
             catchError(() => {
               return of({ error: $localize `:@@admin-core.tasks.error-loading-task-details:Error while loading task details` });
@@ -45,26 +63,6 @@ export class TasksEffects {
                 return TasksActions.loadTaskDetailsFailed({ error: response.error });
               }
               return TasksActions.loadTaskDetailsSuccess({ taskDetails: response });
-            }),
-          );
-      }),
-    );
-  });
-
-  public deleteTask$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(TasksActions.deleteTask),
-      switchMap( _action => {
-        return this.adminApiService.deleteTask$(_action.taskUuid, _action.taskType)
-          .pipe(
-            catchError(() => {
-              return of({ error: $localize `:@@admin-core.tasks.error-deleting-task:Error while deleting task` });
-            }),
-            map(response => {
-              if (ApiResponseHelper.isErrorResponse(response)) {
-                return TasksActions.deleteTaskFailed({ error: response.error });
-              }
-              return TasksActions.deleteTaskSuccess({ taskUuid: _action.taskUuid });
             }),
           );
       }),

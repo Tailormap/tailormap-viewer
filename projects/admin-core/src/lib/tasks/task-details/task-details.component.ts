@@ -3,10 +3,11 @@ import { distinctUntilChanged, filter, map, Observable, of, take, tap } from 'rx
 import { TaskDetailsModel, TaskModel } from '@tailormap-admin/admin-api';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { selectDeleteTaskError, selectTask, selectTaskDetails, selectTaskDetailsLoadError } from '../state/tasks.selectors';
+import {
+  selectDeleteTaskError, selectTask, selectTaskDetails, selectTaskDetailsLoadError, selectTaskDetailsLoadStatus,
+} from '../state/tasks.selectors';
 import { TaskMonitoringService } from '../services/task-monitoring.service';
-import { deleteTask } from '../state/tasks.actions';
-import { ConfirmDialogService } from '@tailormap-viewer/shared';
+import { ConfirmDialogService, LoadingStateEnum } from '@tailormap-viewer/shared';
 import { DatePipe } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -24,6 +25,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   public taskDetails$: Observable<TaskDetailsModel | undefined> = of(undefined);
   public loadErrorMessage$: Observable<string | undefined> = of(undefined);
   public deleteErrorMessage$: Observable<string | undefined> = of(undefined);
+  public taskDetailsLoadStatus$: Observable<LoadingStateEnum> = of(LoadingStateEnum.INITIAL);
 
   private jobDataNiceTitles: Record<string, string> = {
     lastExecutionFinished: 'Last time task was finished',
@@ -53,6 +55,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
 
     this.loadErrorMessage$ = this.store$.select(selectTaskDetailsLoadError);
     this.deleteErrorMessage$ = this.store$.select(selectDeleteTaskError);
+    this.taskDetailsLoadStatus$ = this.store$.select(selectTaskDetailsLoadStatus);
 
     this.uuid$.subscribe(
       uuid => {
@@ -77,7 +80,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
             .pipe(
               take(1),
               filter(answer => answer),
-              tap(() => this.store$.dispatch(deleteTask({ taskUuid: task.uuid, taskType: task.type }))),
+              tap(() => this.taskMonitoringService.deleteTask(task.uuid, task.type)),
             )
             .subscribe(() => {
               this.router.navigateByUrl('/admin/tasks');
@@ -110,4 +113,5 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     return original;
   }
 
+  protected readonly loadingStateEnum = LoadingStateEnum;
 }

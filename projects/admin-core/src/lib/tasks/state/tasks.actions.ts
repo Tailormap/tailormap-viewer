@@ -7,6 +7,10 @@ export const loadTasks = createAction(
   `${tasksActionsPrefix} Load Tasks`,
 );
 
+export const loadTasksStart = createAction(
+  `${tasksActionsPrefix} Load Tasks Start`,
+);
+
 export const loadTasksSuccess = createAction(
   `${tasksActionsPrefix}  Load Tasks Success`,
   props<{ tasks: TaskModel[] }>(),
@@ -22,6 +26,10 @@ export const loadTaskDetails = createAction(
   props<{ taskUuid: string; taskType: string }>(),
 );
 
+export const loadTaskDetailsStart = createAction(
+  `${tasksActionsPrefix} Load Task Details Start`,
+);
+
 export const loadTaskDetailsFailed = createAction(
   `${tasksActionsPrefix} Load Task Details Failed`,
   props<{ error?: string }>(),
@@ -30,19 +38,6 @@ export const loadTaskDetailsFailed = createAction(
 export const loadTaskDetailsSuccess = createAction(
   `${tasksActionsPrefix} Load Task Details Success`,
   props<{ taskDetails: TaskDetailsModel }>(),
-);
-
-export const startMonitoringTask = createAction(
-  `${tasksActionsPrefix} Start Monitoring Task`,
-);
-
-export const stopMonitoringTask = createAction(
-  `${tasksActionsPrefix} Stop Monitoring Task`,
-);
-
-export const deleteTask = createAction(
-  `${tasksActionsPrefix} Delete Task`,
-  props<{ taskUuid: string; taskType: string }>(),
 );
 
 export const deleteTaskFailed = createAction(

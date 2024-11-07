@@ -11,7 +11,6 @@ export interface TasksState {
   taskDetailsLoadStatus: LoadingStateEnum;
   taskDetailsLoadError?: string;
   taskDetails?: TaskDetailsModel;
-  monitoring: boolean;
   deleteTaskError?: string;
 }
 
@@ -19,5 +18,4 @@ export const initialTasksState: TasksState = {
   tasksLoadStatus: LoadingStateEnum.INITIAL,
   tasks: [],
   taskDetailsLoadStatus: LoadingStateEnum.INITIAL,
-  monitoring: false,
 };
