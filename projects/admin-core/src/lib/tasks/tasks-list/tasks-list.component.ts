@@ -1,9 +1,10 @@
-import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, DestroyRef } from '@angular/core';
+import { interval, Observable, of } from 'rxjs';
 import { TaskModel } from '@tailormap-admin/admin-api';
 import { Store } from '@ngrx/store';
 import { loadTasks } from '../state/tasks.actions';
 import { selectTasks, selectTasksLoadError } from '../state/tasks.selectors';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 
 @Component({
@@ -20,10 +21,12 @@ export class TasksListComponent implements OnInit, OnDestroy {
 
   constructor(
     private store$: Store,
+    private destroyRef: DestroyRef,
   ) {
-    this.updateTasksInterval = setInterval(
-      () => this.store$.dispatch(loadTasks()),
-      5000,
+    interval(5000).pipe(takeUntilDestroyed(destroyRef)).subscribe(
+      () => {
+        this.store$.dispatch(loadTasks());
+      },
     );
   }
 

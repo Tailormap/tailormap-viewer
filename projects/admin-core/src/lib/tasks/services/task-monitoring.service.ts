@@ -1,42 +1,31 @@
-import { Injectable } from '@angular/core';
+import { DestroyRef, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { combineLatest, BehaviorSubject, first } from 'rxjs';
+import { BehaviorSubject, first, interval } from 'rxjs';
 import { selectTask } from '../state/tasks.selectors';
 import { loadTaskDetails, startMonitoringTask, stopMonitoringTask } from '../state/tasks.actions';
 import { TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class TaskMonitoringService {
 
   private uuid$ = new BehaviorSubject<string>('');
   private type$ = new BehaviorSubject<string> ('');
   private monitoring$ = new BehaviorSubject<boolean>(false);
-  private monitor?: ReturnType<typeof setInterval>;
 
   constructor(
     private store$: Store,
     private adminApiService: TailormapAdminApiV1Service,
+    private destroyRef: DestroyRef,
   ) {
-    combineLatest([
-      this.uuid$.asObservable(),
-      this.monitoring$.asObservable(),
-      this.type$.asObservable(),
-    ]).subscribe(
-      ([ uuid, monitoring, type ]) => {
-        if (uuid && monitoring && type) {
-          clearInterval(this.monitor);
-          this.monitor = setInterval(
-            () => this.store$.dispatch(loadTaskDetails({ taskUuid: uuid, taskType: type })),
-            1000,
-          );
-        } else {
-          clearInterval(this.monitor);
+    interval(1000).pipe(takeUntilDestroyed(destroyRef)).subscribe(
+      () => {
+        if (this.uuid$.value && this.type$.value && this.monitoring$) {
+          this.store$.dispatch(loadTaskDetails({ taskUuid: this.uuid$.value, taskType: this.type$.value }));
         }
-
       },
     );
+
   }
 
   public startMonitoring(uuid: string) {

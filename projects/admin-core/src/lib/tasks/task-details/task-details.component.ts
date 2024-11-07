@@ -14,7 +14,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   selector: 'tm-admin-task-details',
   templateUrl: './task-details.component.html',
   styleUrls: ['./task-details.component.css'],
-  providers: [DatePipe],
+  providers: [ DatePipe, TaskMonitoringService ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TaskDetailsComponent implements OnInit, OnDestroy {

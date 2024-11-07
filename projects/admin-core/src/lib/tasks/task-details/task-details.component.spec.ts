@@ -6,6 +6,8 @@ import { createMockStore } from '@ngrx/store/testing';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
 import { TaskMonitoringService } from '../services/task-monitoring.service';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 const setup = async () => {
   const testTasks = getTasks();
@@ -21,12 +23,16 @@ const setup = async () => {
   const taskService = {
     startMonitoring: jest.fn(),
     stopMonitoring: jest.fn(),
+    startTask: jest.fn(),
+    stopTask: jest.fn(),
   };
   await render(TaskDetailsComponent, {
     imports: [SharedModule],
     providers: [
       { provide: Store, useValue: mockStore },
       { provide: TaskMonitoringService, useValue: taskService },
+      provideHttpClient(),
+      provideHttpClientTesting(),
     ],
   });
   return mockStore;
