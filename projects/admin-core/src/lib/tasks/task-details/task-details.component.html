@@ -41,7 +41,7 @@
       <div class="job-data">
         <mat-expansion-panel>
           <mat-expansion-panel-header>
-            <mat-panel-title>Additional job data</mat-panel-title>
+            <mat-panel-title i18n="@@admin-core.tasks.task.additional-job-data">Additional job data</mat-panel-title>
           </mat-expansion-panel-header>
           @if (taskDetails.jobData) {
             @for (item of taskDetails.jobData | keyvalue; track $index) {
@@ -56,7 +56,7 @@
       <div class="schedule">
         <mat-expansion-panel>
           <mat-expansion-panel-header>
-            <mat-panel-title>Scheduled fire times</mat-panel-title>
+            <mat-panel-title i18n="@@admin-core.tasks.task.scheduled-fire-times">Scheduled fire times</mat-panel-title>
           </mat-expansion-panel-header>
           @for (time of taskDetails.nextFireTimes; track $index) {
 

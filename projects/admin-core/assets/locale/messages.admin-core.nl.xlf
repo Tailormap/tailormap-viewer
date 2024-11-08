@@ -1689,6 +1689,10 @@
         <source>task running</source>
         <target>taak wordt uitgevoerd</target>
       </trans-unit>
+      <trans-unit id="admin-core.tasks.task.additional-job-data" datatype="html">
+        <source>Additional job data</source>
+        <target>Aanvullende taak gegevens</target>
+      </trans-unit>
       <trans-unit id="admin-core.tasks.task.information" datatype="html">
         <source>Task Information</source>
         <target>Taak informatie</target>
@@ -1696,6 +1700,10 @@
       <trans-unit id="admin-core.tasks.task.no-value" datatype="html">
         <source> No <x id="INTERPOLATION" equiv-text="{{ niceTitle(infoType) }}"/> found</source>
         <target> Geen <x id="INTERPOLATION" equiv-text="{{ infoType }}"/> gevonden</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task.scheduled-fire-times" datatype="html">
+        <source>Scheduled fire times</source>
+        <target>Geplande uitvoermomenten</target>
       </trans-unit>
       <trans-unit id="admin-core.tasks.tasks" datatype="html">
         <source>Tasks</source>

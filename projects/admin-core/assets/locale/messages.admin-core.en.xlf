@@ -1241,11 +1241,17 @@
       <trans-unit id="admin-core.tasks.task-running" datatype="html">
         <source>task running</source>
       </trans-unit>
+      <trans-unit id="admin-core.tasks.task.additional-job-data" datatype="html">
+        <source>Additional job data</source>
+      </trans-unit>
       <trans-unit id="admin-core.tasks.task.information" datatype="html">
         <source>Task Information</source>
       </trans-unit>
       <trans-unit id="admin-core.tasks.task.no-value" datatype="html">
         <source> No <x id="INTERPOLATION" equiv-text="{{ niceTitle(infoType) }}"/> found</source>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task.scheduled-fire-times" datatype="html">
+        <source>Scheduled fire times</source>
       </trans-unit>
       <trans-unit id="admin-core.tasks.tasks" datatype="html">
         <source>Tasks</source>
