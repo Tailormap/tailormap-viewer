@@ -73,8 +73,10 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
               filter(answer => answer),
               switchMap(() => this.taskMonitoringService.deleteTask(task.uuid, task.type)),
             )
-            .subscribe(() => {
-              this.router.navigateByUrl('/admin/tasks');
+            .subscribe((response) => {
+              if (response) {
+                this.router.navigateByUrl('/admin/tasks');
+              }
             });
         }
       },
