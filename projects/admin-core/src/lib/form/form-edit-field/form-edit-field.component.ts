@@ -110,7 +110,7 @@ export class FormEditFieldComponent implements OnInit {
       allowFreeInput: form.allowValueListOnly === false,
     }, { emitEvent: false });
     const valueList = this.getValueListFormArray();
-    valueList.clear();
+    valueList.clear({ emitEvent: false });
     if (form.valueList) {
       (form.valueList || []).forEach(v => {
         const valueForm = new FormGroup({
@@ -131,7 +131,7 @@ export class FormEditFieldComponent implements OnInit {
       uniqueValuesAsOptions: false,
       allowFreeInput: false,
     }, { emitEvent: false });
-    this.getValueListFormArray().clear();
+    this.getValueListFormArray().clear({ emitEvent: false });
   }
 
   public getValueListFormArray() {

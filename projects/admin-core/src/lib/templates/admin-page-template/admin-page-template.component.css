@@ -1,42 +1,6 @@
-:host,
-.admin-page-wrapper {
+:host {
   flex: 1;
   display: flex;
   justify-content: stretch;
   align-items: stretch;
-}
-
-.admin-page-wrapper {
-  flex-direction: row;
-  max-height: var(--content-height);
-}
-
-.admin-tree {
-  width: 300px;
-  overflow: auto;
-}
-
-.admin-content {
-  flex: 1;
-  margin-left: 16px;
-  overflow: auto;
-}
-
-.admin-content-wrapper {
-  max-width: 500px;
-}
-
-::ng-deep .full-screen-settings .admin-content-wrapper {
-  max-width: none;
-}
-
-.admin-content ::ng-deep .page-details-title {
-  margin-bottom: 1em;
-}
-
-.admin-content ::ng-deep .page-details-actions {
-  margin: 1em 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
 }

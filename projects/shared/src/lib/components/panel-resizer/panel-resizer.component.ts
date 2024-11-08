@@ -16,6 +16,9 @@ export class PanelResizerComponent implements OnInit {
   @Input()
   public orientation: 'vertical' | 'horizontal' = 'horizontal';
 
+  @Input()
+  public visibleOnHover = false;
+
   @Output()
   public positionChanged: EventEmitter<number> = new EventEmitter<number>();
 

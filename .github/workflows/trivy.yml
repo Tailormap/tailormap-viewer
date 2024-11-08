@@ -25,7 +25,7 @@ jobs:
           docker buildx build --pull --build-arg VERSION=snapshot --build-arg BASE_HREF=/ -t ghcr.io/tailormap/tailormap:snapshot . --load
 
       - name: Trivy Cache
-        uses: yogeshlonkar/trivy-cache-action@v0.1.8
+        uses: yogeshlonkar/trivy-cache-action@v0.1.9
         with:
           gh-token: ${{ secrets.GITHUB_TOKEN }}
 

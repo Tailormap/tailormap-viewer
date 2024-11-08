@@ -17,7 +17,7 @@
             <mat-header-cell *matHeaderCellDef>
               <mat-checkbox (change)="toggleAllAttributes('hidden')" [checked]="allChecked['hidden']" [indeterminate]="someChecked['hidden']"></mat-checkbox>
             </mat-header-cell>
-            <mat-cell *matCellDef="let att">
+            <mat-cell *matCellDef="let att" [class.disabled-cell]="isReadonlyFieldDisabled(att.name)">
               <mat-checkbox (change)="toggleAttribute('hidden', att.name)" [checked]="isAttributeEnabled('hidden', att.name)"></mat-checkbox>
             </mat-cell>
           </ng-container>
@@ -35,15 +35,19 @@
           </ng-container>
           <ng-container matColumnDef="name">
             <mat-header-cell *matHeaderCellDef></mat-header-cell>
-            <mat-cell *matCellDef="let att"><div class="wrap-text" [tmTooltip]="att.name">{{att.name}}</div></mat-cell>
+            <mat-cell *matCellDef="let att" [class.disabled-cell]="isReadonlyFieldDisabled(att.name)">
+              <div class="wrap-text" [tmTooltip]="att.name">{{att.name}}</div>
+            </mat-cell>
           </ng-container>
           <ng-container matColumnDef="type">
             <mat-header-cell *matHeaderCellDef></mat-header-cell>
-            <mat-cell *matCellDef="let att"><div class="wrap-text" [tmTooltip]="att.type">{{att.type}}</div></mat-cell>
+            <mat-cell *matCellDef="let att" [class.disabled-cell]="isReadonlyFieldDisabled(att.name)">
+              <div class="wrap-text" [tmTooltip]="att.type">{{att.type}}</div>
+            </mat-cell>
           </ng-container>
           <ng-container matColumnDef="alias">
             <mat-header-cell *matHeaderCellDef></mat-header-cell>
-            <mat-cell *matCellDef="let att">
+            <mat-cell *matCellDef="let att" [class.disabled-cell]="isReadonlyFieldDisabled(att.name)">
               <mat-form-field>
                 <input matInput [formControlName]="att.name" />
               </mat-form-field>
@@ -51,7 +55,7 @@
           </ng-container>
           <ng-container matColumnDef="sort">
             <mat-header-cell *matHeaderCellDef></mat-header-cell>
-            <mat-cell *matCellDef="let att">
+            <mat-cell *matCellDef="let att" [class.disabled-cell]="isReadonlyFieldDisabled(att.name)">
               <mat-icon cdkDragHandle
                         (mousedown)="dragDropDisabled.set(false)"
                         (mouseup)="dragDropDisabled.set(true)"
