@@ -17,9 +17,9 @@
   @if (task$ | async; as task) {
     <div class="standard-information">
 
-      <tm-admin-task-details-row infoType="Type" [infoValue]="task.type" />
-      <tm-admin-task-details-row infoType="Description" [infoValue]="task.description" />
-      <tm-admin-task-details-row infoType="Uuid" [infoValue]="task.uuid" />
+      <tm-admin-task-details-row infoType="type" [infoValue]="task.type" />
+      <tm-admin-task-details-row infoType="description" [infoValue]="task.description" />
+      <tm-admin-task-details-row infoType="uuid" [infoValue]="task.uuid" />
 
     </div>
   }
@@ -31,12 +31,12 @@
   @if (taskDetails$ | async; as taskDetails) {
     <div class="detailed-information">
 
-      <tm-admin-task-details-row infoType="Cron expression" [infoValue]="taskDetails.cronExpression" />
-      <tm-admin-task-details-row infoType="Scheduling state" [infoValue]="taskDetails.status" />
-      <tm-admin-task-details-row infoType="Last result" [infoValue]="taskDetails.lastResult" />
-      <tm-admin-task-details-row infoType="Progress" [infoValue]="taskDetails.progress" />
-      <tm-admin-task-details-row infoType="Last time the task was started" [infoValue]="taskDetails.lastTime | date: 'medium'" />
-      <tm-admin-task-details-row infoType="Start time" [infoValue]="taskDetails.startTime | date: 'medium'" />
+      <tm-admin-task-details-row infoType="cronExpression" [infoValue]="taskDetails.cronExpression" />
+      <tm-admin-task-details-row infoType="scheduling_state" [infoValue]="taskDetails.status" />
+      <tm-admin-task-details-row infoType="lastResult" [infoValue]="taskDetails.lastResult" />
+      <tm-admin-task-details-row infoType="progress" [infoValue]="taskDetails.progress" />
+      <tm-admin-task-details-row infoType="lastTime" [infoValue]="taskDetails.lastTime | date: 'medium'" />
+      <tm-admin-task-details-row infoType="startTime" [infoValue]="taskDetails.startTime | date: 'medium'" />
 
       <div class="job-data">
         <mat-expansion-panel>

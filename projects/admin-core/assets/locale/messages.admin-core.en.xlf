@@ -1196,6 +1196,48 @@
       <trans-unit id="admin-core.tasks.last-execution-successful" datatype="html">
         <source>last execution succesful</source>
       </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.cron-expression" datatype="html">
+        <source>Cron expression</source>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.description" datatype="html">
+        <source>Description</source>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.executions" datatype="html">
+        <source>Executions</source>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.last-result" datatype="html">
+        <source>Last result</source>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.last-time" datatype="html">
+        <source>Last time the task was started</source>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.last-time-task-was-started" datatype="html">
+        <source>Last time task was finished</source>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.priority" datatype="html">
+        <source>Priority</source>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.progress" datatype="html">
+        <source>Progress</source>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.scheduling-state" datatype="html">
+        <source>Scheduling state</source>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.start-time" datatype="html">
+        <source>Start time</source>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.state" datatype="html">
+        <source>State</source>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.timezone" datatype="html">
+        <source>Timezone</source>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.type" datatype="html">
+        <source>Type</source>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.uuid" datatype="html">
+        <source>Uuid</source>
+      </trans-unit>
       <trans-unit id="admin-core.tasks.task-running" datatype="html">
         <source>task running</source>
       </trans-unit>
@@ -1203,7 +1245,7 @@
         <source>Task Information</source>
       </trans-unit>
       <trans-unit id="admin-core.tasks.task.no-value" datatype="html">
-        <source> No <x id="INTERPOLATION" equiv-text="{{ infoType }}"/> found</source>
+        <source> No <x id="INTERPOLATION" equiv-text="{{ niceTitle(infoType) }}"/> found</source>
       </trans-unit>
       <trans-unit id="admin-core.tasks.tasks" datatype="html">
         <source>Tasks</source>

@@ -1629,6 +1629,62 @@
         <source>last execution succesful</source>
         <target>laatste uitvoering succesvol</target>
       </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.cron-expression" datatype="html">
+        <source>Cron expression</source>
+        <target>Planning (Cron expression)</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.description" datatype="html">
+        <source>Description</source>
+        <target>Beschrijving</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.executions" datatype="html">
+        <source>Executions</source>
+        <target>Uitvoeringen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.last-result" datatype="html">
+        <source>Last result</source>
+        <target>Laatste resultaat</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.last-time" datatype="html">
+        <source>Last time the task was started</source>
+        <target>Laatste tijdstip dat de taak is gestart</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.last-time-task-was-started" datatype="html">
+        <source>Last time task was finished</source>
+        <target>Laatste tijdstip dat de taak is afgerond</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.priority" datatype="html">
+        <source>Priority</source>
+        <target>Prioriteit</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.progress" datatype="html">
+        <source>Progress</source>
+        <target>Voortgang</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.scheduling-state" datatype="html">
+        <source>Scheduling state</source>
+        <target>Planning staat</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.start-time" datatype="html">
+        <source>Start time</source>
+        <target>Start tijdstip</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.state" datatype="html">
+        <source>State</source>
+        <target>Staat</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.timezone" datatype="html">
+        <source>Timezone</source>
+        <target>Tijdzone</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.type" datatype="html">
+        <source>Type</source>
+        <target>Type</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.uuid" datatype="html">
+        <source>Uuid</source>
+        <target>Uuid</target>
+      </trans-unit>
       <trans-unit id="admin-core.tasks.task-running" datatype="html">
         <source>task running</source>
         <target>taak wordt uitgevoerd</target>
@@ -1638,7 +1694,7 @@
         <target>Taak informatie</target>
       </trans-unit>
       <trans-unit id="admin-core.tasks.task.no-value" datatype="html">
-        <source> No <x id="INTERPOLATION" equiv-text="{{ infoType }}"/> found</source>
+        <source> No <x id="INTERPOLATION" equiv-text="{{ niceTitle(infoType) }}"/> found</source>
         <target> Geen <x id="INTERPOLATION" equiv-text="{{ infoType }}"/> gevonden</target>
       </trans-unit>
       <trans-unit id="admin-core.tasks.tasks" datatype="html">

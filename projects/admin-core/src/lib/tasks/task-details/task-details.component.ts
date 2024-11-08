@@ -8,7 +8,6 @@ import {
 } from '../state/tasks.selectors';
 import { TaskMonitoringService } from '../services/task-monitoring.service';
 import { ConfirmDialogService, LoadingStateEnum } from '@tailormap-viewer/shared';
-import { DatePipe } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({

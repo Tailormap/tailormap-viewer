@@ -8,6 +8,7 @@ import { Store } from '@ngrx/store';
 import { TaskMonitoringService } from '../services/task-monitoring.service';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { TaskDetailsRowComponent } from '../task-details-row/task-details-row.component';
 
 const setup = async () => {
   const testTasks = getTasks();
@@ -28,6 +29,7 @@ const setup = async () => {
   };
   await render(TaskDetailsComponent, {
     imports: [SharedModule],
+    declarations: [TaskDetailsRowComponent],
     providers: [
       { provide: Store, useValue: mockStore },
       { provide: TaskMonitoringService, useValue: taskService },
