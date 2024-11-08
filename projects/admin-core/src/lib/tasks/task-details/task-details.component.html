@@ -1,17 +1,5 @@
 <h2 i18n="@@admin-core.tasks.task.information">Task Information</h2>
 
-<ng-template #infoString let-infoType="infoType" let-infoValue="infoValue">
-  <div class="row">
-    <div class="label">{{ infoType }}</div>
-    @if (infoValue) {
-      <div class="info-value">{{ infoValue }}</div>
-    } @else {
-      <div class="info-value" i18n="@@admin-core.tasks.task.no-value"> No {{ infoType }} found</div>
-    }
-  </div>
-</ng-template>
-
-
 <div class="information">
 
   @if (task$ | async; as task) {

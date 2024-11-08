@@ -2,10 +2,10 @@ import { DestroyRef, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { BehaviorSubject, catchError, first, interval, map, of } from 'rxjs';
 import { selectTask } from '../state/tasks.selectors';
-import { loadTaskDetails } from '../state/tasks.actions';
-import { ApiResponseHelper, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
+import { deleteTaskSuccess, loadTaskDetails } from '../state/tasks.actions';
+import { TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import * as TasksActions from '../state/tasks.actions';
+import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 
 @Injectable()
 export class TaskMonitoringService {
@@ -17,6 +17,7 @@ export class TaskMonitoringService {
   constructor(
     private store$: Store,
     private adminApiService: TailormapAdminApiV1Service,
+    private adminSnackbarService: AdminSnackbarService,
     private destroyRef: DestroyRef,
   ) {
     interval(1000).pipe(takeUntilDestroyed(destroyRef)).subscribe(
@@ -62,18 +63,20 @@ export class TaskMonitoringService {
   }
 
   public deleteTask(uuid: string, type: string ) {
-    this.adminApiService.deleteTask$(uuid, type)
+    return this.adminApiService.deleteTask$(uuid, type)
       .pipe(
         catchError(() => {
-          return of({ error: $localize `:@@admin-core.tasks.error-deleting-task:Error while deleting task` });
+          this.adminSnackbarService.showMessage($localize `:@@admin-core.tasks.error-deleting-task:Error while deleting task`);
+          return of(null);
         }),
         map(response => {
-          if (ApiResponseHelper.isErrorResponse(response)) {
-            return TasksActions.deleteTaskFailed({ error: response.error });
+          if (response) {
+            this.store$.dispatch(deleteTaskSuccess({ taskUuid: this.uuid$.value }));
+            return response;
           }
-          return TasksActions.deleteTaskSuccess({ taskUuid: this.uuid$.value });
+          return null;
         }),
-      ).subscribe();
+      );
   }
 
 }

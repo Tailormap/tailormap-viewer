@@ -1,10 +1,10 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, DestroyRef } from '@angular/core';
-import { distinctUntilChanged, filter, map, Observable, of, take, tap } from 'rxjs';
+import { distinctUntilChanged, filter, map, Observable, of, switchMap, take } from 'rxjs';
 import { TaskDetailsModel, TaskModel } from '@tailormap-admin/admin-api';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import {
-  selectDeleteTaskError, selectTask, selectTaskDetails, selectTaskDetailsLoadError, selectTaskDetailsLoadStatus,
+  selectTask, selectTaskDetails, selectTaskDetailsLoadError, selectTaskDetailsLoadStatus,
 } from '../state/tasks.selectors';
 import { TaskMonitoringService } from '../services/task-monitoring.service';
 import { ConfirmDialogService, LoadingStateEnum } from '@tailormap-viewer/shared';
@@ -46,7 +46,6 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     );
 
     this.loadErrorMessage$ = this.store$.select(selectTaskDetailsLoadError);
-    this.deleteErrorMessage$ = this.store$.select(selectDeleteTaskError);
     this.taskDetailsLoadStatus$ = this.store$.select(selectTaskDetailsLoadStatus);
 
     this.uuid$.subscribe(
@@ -72,7 +71,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
             .pipe(
               take(1),
               filter(answer => answer),
-              tap(() => this.taskMonitoringService.deleteTask(task.uuid, task.type)),
+              switchMap(() => this.taskMonitoringService.deleteTask(task.uuid, task.type)),
             )
             .subscribe(() => {
               this.router.navigateByUrl('/admin/tasks');

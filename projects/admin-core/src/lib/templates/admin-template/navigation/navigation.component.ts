@@ -79,6 +79,9 @@ export class NavigationComponent implements OnInit {
       icon: 'admin_application',
       requireAdmin: true,
     },
+  ];
+
+  public bottomButtons: ButtonProps[] =  [
     {
       label: $localize`:@@admin-core.navigation.tasks:Tasks`,
       matchExact: false,
@@ -86,9 +89,6 @@ export class NavigationComponent implements OnInit {
       icon: 'admin_tasks',
       requireAdmin: true,
     },
-  ];
-
-  public bottomButtons: ButtonProps[] =  [
     {
       label: $localize`:@@admin-core.navigation.logs:Logs`,
       matchExact: true,
