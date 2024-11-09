@@ -2,7 +2,7 @@ import {
   Component, ChangeDetectionStrategy, Input, OnChanges, Output, EventEmitter, SimpleChanges, DestroyRef, signal, computed,
 } from '@angular/core';
 import { AttributeDescriptorModel, FeatureTypeSettingsModel } from '@tailormap-admin/admin-api';
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, CdkDragStart } from '@angular/cdk/drag-drop';
 import { ArrayHelper } from '@tailormap-viewer/shared';
 import { FormControl, FormGroup } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -216,4 +216,14 @@ export class FeatureTypeAttributesComponent implements OnChanges {
 
   }
 
+  public dragStarted($event: CdkDragStart) {
+    const dragRowClass = 'draggable-row-' + $event.source.data.name;
+    const container = $event.source.dropContainer.element.nativeElement;
+    container.querySelectorAll('.selected').forEach(e => {
+      if (!e.classList.contains(dragRowClass)) {
+        e.classList.add('hide-while-dragging');
+      }
+    });
+    this.isDragging.set(true);
+  }
 }
