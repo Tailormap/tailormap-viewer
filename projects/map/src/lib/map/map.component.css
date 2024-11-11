@@ -45,3 +45,7 @@
     font-size: 1.2em;
   }
 }
+
+.map-container--with-crosshair {
+  cursor: crosshair;
+}

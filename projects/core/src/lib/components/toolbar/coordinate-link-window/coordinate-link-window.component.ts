@@ -1,6 +1,8 @@
 import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { CoordinateHelper, MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
+import {
+  CoordinateHelper, MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum,
+} from '@tailormap-viewer/map';
 import { selectComponentsConfigForType } from '../../../state/core.selectors';
 import {
   BaseComponentTypeEnum, CoordinateLinkWindowConfigModel, CoordinateLinkWindowConfigUrlModel,
