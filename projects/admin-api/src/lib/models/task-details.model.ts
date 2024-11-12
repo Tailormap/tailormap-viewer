@@ -12,4 +12,5 @@ export interface TaskDetailsModel extends TaskModel {
   lastResult?: string;
   nextFireTimes?: Date[];
   jobData?: Record<string, string>;
+  interruptable?: boolean;
 }

@@ -29,6 +29,7 @@ export class TaskDetailsRowComponent {
     progress: $localize `:@@admin-core.tasks.task-details.progress:Progress`,
     executions: $localize `:@@admin-core.tasks.task-details.executions:Executions`,
     priority: $localize `:@@admin-core.tasks.task-details.priority:Priority`,
+    interruptable: $localize `:@@admin-core.tasks.task-details.interruptable:Interruptable`,
   };
 
   constructor() { }
