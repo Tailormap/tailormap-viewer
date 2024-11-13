@@ -1058,6 +1058,10 @@
         <source>Tailormap Admin</source>
         <target>Tailormap-Verwaltung</target>
       </trans-unit>
+      <trans-unit id="admin-core.common.tasks-title" datatype="html">
+        <source>Tasks</source>
+        <target>Aufgaben</target>
+      </trans-unit>
       <trans-unit id="admin-core.common.title" datatype="html">
         <source>Title</source>
         <target>Titel</target>
@@ -1370,6 +1374,10 @@
         <source>Single sign-on</source>
         <target>Einmalanmeldung</target>
       </trans-unit>
+      <trans-unit id="admin-core.navigation.tasks" datatype="html">
+        <source>Tasks</source>
+        <target>Aufgaben</target>
+      </trans-unit>
       <trans-unit id="admin-core.navigation.users" datatype="html">
         <source>Users</source>
         <target>Benutzer</target>
@@ -1608,6 +1616,114 @@
       <trans-unit id="admin-core.settings.home" datatype="html">
         <source>Select settings from the left side</source>
         <target state="translated">Wählen Sie Einstellungen auf der linken Seite aus</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.delete-task" datatype="html">
+        <source>Delete task &apos;<x id="PH" equiv-text="task.description"/>&apos;</source>
+        <target>Aufgabe &apos;<x id="PH" equiv-text="task.description"/>&apos; löschen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.delete-task-message" datatype="html">
+        <source>Are you sure you want to delete task &apos;<x id="PH" equiv-text="task.description"/>&apos;? This action cannot be undone.</source>
+        <target>Sind Sie sicher, dass Sie die Aufgabe &apos;<x id="PH" equiv-text="task.description"/>&apos; löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.error-deleting-task" datatype="html">
+        <source>Error while deleting task</source>
+        <target>Fehler beim Löschen der Aufgabe</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.error-loading-task-details" datatype="html">
+        <source>Error while loading task details</source>
+        <target>Fehler beim Laden der Aufgabendetails</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.error-loading-tasks" datatype="html">
+        <source>Error while loading list of tasks</source>
+        <target>Fehler beim Laden der Aufgabenliste</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.last-execution-failed" datatype="html">
+        <source>last execution failed</source>
+        <target>letzte Ausführung fehlgeschlagen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.last-execution-successful" datatype="html">
+        <source>last execution succesful</source>
+        <target>letzte Ausführung erfolgreich</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.cron-expression" datatype="html">
+        <source>Cron expression</source>
+        <target>Planung (Cron expression)</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.description" datatype="html">
+        <source>Description</source>
+        <target>Beschreibung</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.executions" datatype="html">
+        <source>Executions</source>
+        <target>Ausführungen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.last-result" datatype="html">
+        <source>Last result</source>
+        <target>Letztes Ergebnis</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.last-time" datatype="html">
+        <source>Last time the task was started</source>
+        <target>Letzter Startzeitpunkt der Aufgabe</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.last-time-task-was-started" datatype="html">
+        <source>Last time task was finished</source>
+        <target>Letzter Abschlusszeitpunkt der Aufgabe</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.priority" datatype="html">
+        <source>Priority</source>
+        <target>Priorität</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.progress" datatype="html">
+        <source>Progress</source>
+        <target>Fortschritt</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.scheduling-state" datatype="html">
+        <source>Scheduling state</source>
+        <target>Planungsstatus</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.start-time" datatype="html">
+        <source>Start time</source>
+        <target>Startzeit</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.state" datatype="html">
+        <source>State</source>
+        <target>Status</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.timezone" datatype="html">
+        <source>Timezone</source>
+        <target>Zeitzone</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.type" datatype="html">
+        <source>Type</source>
+        <target>Typ</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.uuid" datatype="html">
+        <source>Uuid</source>
+        <target>Uuid</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-running" datatype="html">
+        <source>task running</source>
+        <target>Aufgabe läuft</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task.additional-job-data" datatype="html">
+        <source>Additional job data</source>
+        <target>Zusätzliche Auftragsdaten</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task.information" datatype="html">
+        <source>Task Information</source>
+        <target>Aufgabeninformationen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task.no-value" datatype="html">
+        <source> No <x id="INTERPOLATION" equiv-text="{{ niceTitle(infoType) }}"/> found</source>
+        <target> Kein(e) <x id="INTERPOLATION" equiv-text="{{ infoType }}"/> gefunden</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task.scheduled-fire-times" datatype="html">
+        <source>Scheduled fire times</source>
+        <target>Geplante Ausführungszeiten</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.tasks" datatype="html">
+        <source>Tasks</source>
+        <target>Aufgaben</target>
       </trans-unit>
       <trans-unit id="admin-core.upload-select.delete-file" datatype="html">
         <source>Delete file?</source>

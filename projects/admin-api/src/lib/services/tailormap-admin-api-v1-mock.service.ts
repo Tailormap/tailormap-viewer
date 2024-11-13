@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { delay, Observable, of } from 'rxjs';
+import { delay, map, Observable, of } from 'rxjs';
 import { TailormapAdminApiV1ServiceModel } from './tailormap-admin-api-v1-service.model';
 import * as mockData from '../mock-data/tailormap-admin-api.mock-data';
 import {
   CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel, ConfigModel,
   OIDCConfigurationModel, FeatureTypeModel, FormSummaryModel, FormModel, UploadModel, SearchIndexModel,
-  SearchIndexPingResponseModel,
+  SearchIndexPingResponseModel, TaskModel, TaskDetailsModel,
 } from '../models';
 
 @Injectable()
@@ -233,5 +233,16 @@ export class TailormapAdminApiV1MockService implements TailormapAdminApiV1Servic
   public clearSearchIndex$(): Observable<boolean> {
     return of(true);
   }
+
+  public getTasks$(): Observable<TaskModel[]> {
+    return of(mockData.getTasks());
+  }
+  public getTaskDetails$(): Observable<TaskDetailsModel> {
+    return of(mockData.getTaskDetails());
+  }
+  public deleteTask$(): Observable<boolean> {
+    return of(true);
+  }
+
 
 }

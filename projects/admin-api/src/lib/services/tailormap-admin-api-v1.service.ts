@@ -6,7 +6,7 @@ import {
   CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel, ConfigModel,
   OIDCConfigurationModel, FeatureTypeModel,
   GeoServiceSummaryWithLayersModel, FeatureSourceSummaryWithFeatureTypesModel, FormSummaryModel, FormModel, UploadModel, SearchIndexModel,
-  SearchIndexPingResponseModel,
+  SearchIndexPingResponseModel, TaskModel, TaskDetailsModel,
 } from '../models';
 import { CatalogModelHelper } from '../helpers/catalog-model.helper';
 import { ApiHelper, TailormapApiConstants } from '@tailormap-viewer/api';
@@ -378,5 +378,39 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
     );
   }
 
+  public getTasks$(): Observable<TaskModel[]> {
+    return this.httpClient.get<{ 'tasks': TaskModel[] }>(`${TailormapAdminApiV1Service.BASE_URL}/tasks`)
+      .pipe(map(response => response.tasks));
+  }
+
+  public getTaskDetails$(uuid: string, type: string): Observable<TaskDetailsModel> {
+    return this.httpClient.get<TaskDetailsModel>(`${TailormapAdminApiV1Service.BASE_URL}/tasks/${type}/${uuid}`);
+  }
+
+  public deleteTask$(uuid: string, type: string): Observable<boolean> {
+    return this.httpClient.delete<boolean>(`${TailormapAdminApiV1Service.BASE_URL}/tasks/${type}/${uuid}`, {
+      observe: 'response',
+    }).pipe(
+      map(response => response.status === 204),
+    );
+  }
+
+  public startTask$(uuid: string, type: string): Observable<boolean> {
+    return this.httpClient.put(`${TailormapAdminApiV1Service.BASE_URL}/tasks/${type}/${uuid}/start`, {}, {
+      observe: 'response',
+    }).pipe(
+      map(response => response.status === 202),
+      catchError(() => of(false)),
+    );
+  }
+
+  public stopTask$(uuid: string, type: string): Observable<boolean> {
+    return this.httpClient.put(`${TailormapAdminApiV1Service.BASE_URL}/tasks/${type}/${uuid}/stop`, {}, {
+      observe: 'response',
+    }).pipe(
+      map(response => response.status === 202),
+      catchError(() => of(false)),
+    );
+  }
 
 }
