@@ -88,6 +88,7 @@ export class NavigationComponent implements OnInit {
       link: [ '/admin', Routes.TASKS ],
       icon: 'admin_tasks',
       requireAdmin: true,
+      checkEnabled$: this.applicationFeatureSwitchService.isFeatureEnabled$(ApplicationFeature.TASKS),
     },
     {
       label: $localize`:@@admin-core.navigation.logs:Logs`,
