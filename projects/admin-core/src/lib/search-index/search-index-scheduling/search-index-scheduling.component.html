@@ -1,0 +1,19 @@
+<h2>Schedule</h2>
+
+@if (searchIndex?.schedule?.uuid; as uuid) {
+  <h2>Uuid</h2>
+  {{ uuid }}
+}
+
+<form [formGroup]="scheduleForm">
+  <mat-form-field>
+    <mat-label>Schedule</mat-label>
+    <mat-select formControlName="cronExpression">
+      @for (option of scheduleOptions; track $index) {
+        <mat-option [value]="option.cronExpression">
+          {{ option.viewValue }}
+        </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+</form>

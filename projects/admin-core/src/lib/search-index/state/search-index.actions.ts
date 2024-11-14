@@ -39,7 +39,7 @@ export const updateDraftSearchIndex = createAction(
   `${searchIndexActionsPrefix} Update Draft Search Index`,
   props<{
     id: number;
-    searchIndex: Partial<Pick<SearchIndexModel, 'name' | 'comment' | 'featureTypeId' | 'searchFieldsUsed' | 'searchDisplayFieldsUsed'>>;
+    searchIndex: Partial<Pick<SearchIndexModel, 'name' | 'comment' | 'featureTypeId' | 'searchFieldsUsed' | 'searchDisplayFieldsUsed' | 'schedule'>>;
   }>(),
 );
 
