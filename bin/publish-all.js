@@ -28,6 +28,7 @@ checkCleanGitRepo();
     }
   } catch (e) {
     console.log('Error occurred: ', e);
+    process.exit(1);
   }
 })();
 
