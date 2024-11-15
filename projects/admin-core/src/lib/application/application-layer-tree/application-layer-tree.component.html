@@ -4,4 +4,11 @@
                                         (renameSubFolder)="onRenameSubFolder($event)"
                                         (deleteNode)="onDeleteNode($event)"></tm-admin-application-layer-tree-node>
 </ng-template>
-<tm-tree [treeNodeTemplate]="treeNode" [getDropZones]="getDropZones()"></tm-tree>
+
+<div class="application-tree-wrapper">
+  <tm-admin-list-filter [formControl]="treeFilter"
+                        [filterTerm]="filterTerm"
+                        label="Filter application layers"
+                        i18n-label="@@admin-core.application.filter-tree"></tm-admin-list-filter>
+  <tm-tree [treeNodeTemplate]="treeNode" [getDropZones]="getDropZones()"></tm-tree>
+</div>

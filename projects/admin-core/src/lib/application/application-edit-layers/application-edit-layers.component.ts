@@ -3,6 +3,7 @@ import { Store } from '@ngrx/store';
 import { TreeModel, TreeNodePosition, TreeService } from '@tailormap-viewer/shared';
 import {
   isLoadingApplicationServices, selectAppLayerNodesForSelectedApplication, selectAppLayerTreeForSelectedApplication,
+  selectApplicationBaseLayerTreeFilterTerm, selectApplicationLayerTreeFilterTerm,
   selectBaseLayerNodesForSelectedApplication, selectBaseLayerTreeForSelectedApplication, selectDraftApplicationCrs,
 } from '../state/application.selectors';
 import {
@@ -10,7 +11,8 @@ import {
 } from 'rxjs';
 import { AppLayerSettingsModel, AppTreeLayerNodeModel, AppTreeLevelNodeModel, AppTreeNodeModel } from '@tailormap-admin/admin-api';
 import {
-  addApplicationTreeNodes, removeApplicationTreeNode, toggleApplicationNodeExpanded, updateApplicationNodeSettings,
+  addApplicationTreeNodes, removeApplicationTreeNode, setApplicationTreeFilterTerm, toggleApplicationNodeExpanded,
+  updateApplicationNodeSettings,
   updateApplicationTreeNode, updateApplicationTreeNodeVisibility, updateApplicationTreeOrder,
 } from '../state/application.actions';
 import { nanoid } from 'nanoid';
@@ -62,6 +64,8 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
   private selectedCatalogItemSubject = new BehaviorSubject<string | null>(null);
   public selectedCatalogItem$ = this.selectedCatalogItemSubject.asObservable();
 
+  public filterTerm$: Observable<string | undefined> = of('');
+
   constructor(
     private store$: Store,
     public applicationTreeService: TreeService<AppTreeNodeModel>,
@@ -71,6 +75,10 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
     this.treeNodes$ = this.applicationStateTree === 'baseLayer'
       ? this.store$.select(selectBaseLayerTreeForSelectedApplication)
       : this.store$.select(selectAppLayerTreeForSelectedApplication);
+
+    this.filterTerm$ = this.applicationStateTree === 'baseLayer'
+      ? this.store$.select(selectApplicationBaseLayerTreeFilterTerm)
+      : this.store$.select(selectApplicationLayerTreeFilterTerm);
 
     this.loadingServices$ = this.store$.select(isLoadingApplicationServices);
 
@@ -197,6 +205,10 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
 
   public nodeExpandedToggled(nodeId: string) {
     this.store$.dispatch(toggleApplicationNodeExpanded({ nodeId, tree: this.applicationStateTree }));
+  }
+
+  public filterChanged(filterTerm: string | null) {
+    this.store$.dispatch(setApplicationTreeFilterTerm({ filterTerm, tree: this.applicationStateTree }));
   }
 
 }

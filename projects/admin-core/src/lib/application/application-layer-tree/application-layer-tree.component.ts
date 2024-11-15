@@ -2,10 +2,11 @@ import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter
 import {
   DropZoneHelper, NodePositionChangedEventModel, TreeDragDropService, TreeModel, TreeNodePosition, TreeService,
 } from '@tailormap-viewer/shared';
-import { Observable, of, Subject, take, takeUntil } from 'rxjs';
+import { debounceTime, distinctUntilChanged, Observable, of, Subject, take, takeUntil } from 'rxjs';
 import { AppTreeNodeModel } from '@tailormap-admin/admin-api';
 import { MatDialog } from '@angular/material/dialog';
 import { ApplicationFolderNodeNameComponent } from './application-folder-node-name/application-folder-node-name.component';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'tm-admin-application-layer-tree',
@@ -20,6 +21,9 @@ export class ApplicationLayerTreeComponent implements OnInit, OnDestroy {
 
   @Input()
   public treeNodes$: Observable<TreeModel<AppTreeNodeModel>[]> = of([]);
+
+  @Input()
+  public filterTerm: string | null | undefined;
 
   @Output()
   public addSubFolder = new EventEmitter<{ nodeId: string; title: string }>();
@@ -39,6 +43,11 @@ export class ApplicationLayerTreeComponent implements OnInit, OnDestroy {
   @Output()
   public nodeExpandedToggled = new EventEmitter<string>();
 
+  @Output()
+  public filterChanged = new EventEmitter<string | null>();
+
+  public treeFilter = new FormControl('');
+
   constructor(
     private treeService: TreeService,
     private dialog: MatDialog,
@@ -53,6 +62,9 @@ export class ApplicationLayerTreeComponent implements OnInit, OnDestroy {
     this.treeService.nodeExpansionChangedSource$
       .pipe(takeUntil(this.destroyed))
       .subscribe((evt) => this.nodeExpandedToggled.emit(evt.node.id));
+    this.treeFilter.valueChanges
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(filterTerm => this.filterChanged.emit(filterTerm));
   }
 
   public ngOnInit(): void {

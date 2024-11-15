@@ -54,7 +54,7 @@ export class ApplicationCatalogTreeComponent implements OnInit {
     this.treeService.setSelectedNode(this.selectedLayerId$.pipe(map(l => l || '')));
 
     this.catalogFilter.valueChanges
-      .pipe(takeUntilDestroyed(this.destroyRef), distinctUntilChanged(), debounceTime(250))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(filterTerm => {
         this.store$.dispatch(setApplicationCatalogFilterTerm({ filterTerm }));
       });

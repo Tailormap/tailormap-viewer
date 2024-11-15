@@ -16,6 +16,8 @@ export interface ApplicationState {
   expandedBaseLayerNodes: string[];
   expandedAppLayerNodes: string[];
   applicationCatalogFilterTerm?: string;
+  applicationLayerTreeFilterTerm?: string;
+  applicationBaseLayerTreeFilterTerm?: string;
 }
 
 export const initialApplicationState: ApplicationState = {

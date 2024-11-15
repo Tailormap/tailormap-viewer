@@ -142,3 +142,7 @@ export const setApplicationCatalogFilterTerm = createAction(
   `${applicationActionsPrefix} Set Application Catalog Filter Term`,
   props<{ filterTerm?: string | null }>(),
 );
+export const setApplicationTreeFilterTerm = createAction(
+  `${applicationActionsPrefix} Set Application Tree Filter Term`,
+  props<{ filterTerm?: string | null; tree: 'layer' | 'baseLayer' }>(),
+);

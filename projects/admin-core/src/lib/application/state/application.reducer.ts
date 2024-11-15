@@ -366,6 +366,19 @@ const onSetApplicationCatalogFilterTerm = (
   applicationCatalogFilterTerm: payload.filterTerm || undefined,
 });
 
+const onSetApplicationTreeFilterTerm = (
+  state: ApplicationState,
+  payload: ReturnType<typeof ApplicationActions.setApplicationTreeFilterTerm>,
+): ApplicationState  => {
+  const filterKey: keyof ApplicationState = payload.tree === 'baseLayer'
+    ? 'applicationBaseLayerTreeFilterTerm'
+    : 'applicationLayerTreeFilterTerm';
+  return {
+    ...state,
+    [filterKey]: payload.filterTerm || undefined,
+  };
+};
+
 const applicationReducerImpl = createReducer<ApplicationState>(
   initialApplicationState,
   on(ApplicationActions.loadApplicationsStart, onLoadApplicationStart),
@@ -390,5 +403,6 @@ const applicationReducerImpl = createReducer<ApplicationState>(
   on(ApplicationActions.updateApplicationStylingConfig, onUpdateApplicationStylingConfig),
   on(ApplicationActions.toggleApplicationNodeExpanded, onToggleNodeExpanded),
   on(ApplicationActions.setApplicationCatalogFilterTerm, onSetApplicationCatalogFilterTerm),
+  on(ApplicationActions.setApplicationTreeFilterTerm, onSetApplicationTreeFilterTerm),
 );
 export const applicationReducer = (state: ApplicationState | undefined, action: Action) => applicationReducerImpl(state, action);

@@ -1,5 +1,18 @@
-tm-tree {
+:host,
+.application-tree-wrapper {
+  display: block;
   height: 100%;
+}
+
+.application-tree-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+tm-tree {
+  display: block;
+  flex: 1;
+  position: relative;
 }
 
 tm-tree ::ng-deep mat-tree {
