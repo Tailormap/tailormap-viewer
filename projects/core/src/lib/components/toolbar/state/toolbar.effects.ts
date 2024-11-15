@@ -71,7 +71,7 @@ export class ToolbarEffects {
       ofType(ToolbarActions.activateTool, ToolbarActions.deactivateTool),
       concatLatestFrom(() => this.store$.select(selectActiveTool)),
       tap(([ _action, tool ]) => {
-        const crosshairTools = [ ToolbarComponentEnum.COORDINATE_LINK_WINDOW, ToolbarComponentEnum.SELECT_COORDINATES, ToolbarComponentEnum.STREETVIEW];
+        const crosshairTools = [ ToolbarComponentEnum.COORDINATE_LINK_WINDOW, ToolbarComponentEnum.SELECT_COORDINATES, ToolbarComponentEnum.STREETVIEW ];
         MapCursorHelper.setCrosshairCursor(!!tool && crosshairTools.includes(tool));
       }),
     );
