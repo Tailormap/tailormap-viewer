@@ -85,7 +85,11 @@ const runCommand = (command, args, cwd) => {
       reject();
     });
     cmd.on('close', (code) => {
-      resolve();
+      if(code !== 0) {
+        reject('Exit code is not success');
+      } else {
+        resolve();
+      }
     });
   });
 };

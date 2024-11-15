@@ -86,6 +86,29 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: junit.xml
 
+  build_libraries:
+    name: "Build Angular libraries"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: 'Install'
+        run: npm install
+
+      - name: 'Build Angular libraries (release dry-run)'
+        run: npm run release-packages -- --dry-run --version=0.0.0
+
   # Upload event file so test results can be processed for the PR
   # https://github.com/EnricoMi/publish-unit-test-result-action#support-fork-repositories-and-dependabot-branches
   event_file:
@@ -126,7 +149,7 @@ jobs:
       SOURCE_MAP_AUTH: ${{ vars.SOURCE_MAP_AUTH }}
       MAP5_URL: ${{ vars.MAP5_URL }}
       BUILDX_NO_DEFAULT_ATTESTATIONS: 1
-    needs: [ lint, test ]
+    needs: [ lint, test, build_libraries ]
     steps:
       - uses: actions/checkout@v4
         with: # If tags aren't fetched the bin/post-build-localized.js script will leave fields in generated/version.json empty
