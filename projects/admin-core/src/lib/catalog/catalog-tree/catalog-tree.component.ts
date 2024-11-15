@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, NgZone, OnInit } from '@angular/core';
 import { DropZoneOptions, RouterHistoryService, TreeDragDropService, TreeService } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
-import { selectCatalogTree } from '../state/catalog.selectors';
-import { BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, filter } from 'rxjs';
+import { selectCatalogFilterTerm, selectCatalogTree } from '../state/catalog.selectors';
+import { BehaviorSubject, combineLatest, filter } from 'rxjs';
 import { CatalogTreeModel, CatalogTreeModelMetadataTypes } from '../models/catalog-tree.model';
 import { CatalogTreeHelper } from '../helpers/catalog-tree.helper';
 import { CatalogTreeModelTypeEnum } from '../models/catalog-tree-model-type.enum';
@@ -24,6 +24,7 @@ export class CatalogTreeComponent implements OnInit {
   private selectedNodeId = new BehaviorSubject<string>('');
 
   public catalogFilter = new FormControl('');
+  public catalogFilterValue$ = this.store$.select(selectCatalogFilterTerm);
 
   private scrollToItem = new BehaviorSubject<string | undefined>(undefined);
   public scrollToItem$ = this.scrollToItem.asObservable();
@@ -63,7 +64,7 @@ export class CatalogTreeComponent implements OnInit {
       });
 
     this.catalogFilter.valueChanges
-      .pipe(takeUntilDestroyed(this.destroyRef), distinctUntilChanged(), debounceTime(250))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(filterTerm => {
         // We had a filter, not anymore, scroll to selected item
         if (this.hasFilter && !filterTerm) {

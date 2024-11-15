@@ -5,19 +5,10 @@
 @if(featureType$ | async) {
   <h2>{{title}}</h2>
   <div class="form-group has-search flex">
-    <mat-form-field appearance="outline">
-      <mat-label i18n="@@admin-core.common.filter-attributes">Filter attributes</mat-label>
-      <input [formControl]="filter"
-             i18n-placeholder="@@admin-core.common.filter-dots"
-             matInput
-             placeholder="Filter..."
-             tmAutoFocus
-             type="text"
-      />
-      <button (click)="filter.setValue('')" *ngIf="filter.getRawValue()" aria-label="Clear" mat-icon-button matSuffix>
-        <mat-icon svgIcon="close"></mat-icon>
-      </button>
-    </mat-form-field>
+    <tm-admin-list-filter [formControl]="filter"
+                          [filterTerm]="filterTerm$ | async"
+                          label="Filter attributes"
+                          i18n-label="@@admin-core.common.filter-attributes"></tm-admin-list-filter>
     <mat-selection-list>
       <mat-list-item *ngFor="let attribute of attributes$ | async" (click)="attributeClicked(attribute)">
         <mat-checkbox [checked]="attribute.selected"></mat-checkbox>

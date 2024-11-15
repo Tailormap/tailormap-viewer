@@ -8,7 +8,7 @@ import { CatalogTreeModelTypeEnum } from '../../catalog/models/catalog-tree-mode
 import { CatalogTreeHelper } from '../../catalog/helpers/catalog-tree.helper';
 import { ExtendedGeoServiceLayerModel } from '../../catalog/models/extended-geo-service-layer.model';
 import { AppTreeNodeModel } from '@tailormap-admin/admin-api';
-import { selectServiceLayerTreeForApplication } from '../state/application.selectors';
+import { selectApplicationCatalogFilterTerm, selectServiceLayerTreeForApplication } from '../state/application.selectors';
 import { debounceTime, distinctUntilChanged, map, Observable, of } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl } from '@angular/forms';
@@ -40,6 +40,7 @@ export class ApplicationCatalogTreeComponent implements OnInit {
   public selectedLayerId$: Observable<string | null> = of(null);
 
   public catalogFilter = new FormControl('');
+  public catalogFilterTerm$ = this.store$.select(selectApplicationCatalogFilterTerm);
 
   constructor(
     private store$: Store,

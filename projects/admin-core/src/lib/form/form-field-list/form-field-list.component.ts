@@ -25,6 +25,8 @@ export class FormFieldListComponent implements OnInit {
   private attributeFilter = new BehaviorSubject<string | null>(null);
   public fields$: Observable<Array<FormFieldModel & { selected?: boolean }>> = of([]);
 
+  public filterTerm$ = this.attributeFilter.asObservable();
+
   constructor(
     private store$: Store,
     private destroyRef: DestroyRef,
