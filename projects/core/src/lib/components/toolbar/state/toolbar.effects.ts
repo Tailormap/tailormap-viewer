@@ -2,11 +2,11 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { concatLatestFrom } from '@ngrx/operators';
 import * as ToolbarActions from './toolbar.actions';
 import { map, of, switchMap, take, tap } from 'rxjs';
-import { MapCursorHelper, MapService } from '@tailormap-viewer/map';
+import { MapService } from '@tailormap-viewer/map';
 import { Store } from '@ngrx/store';
-import { isActiveToolbarTool, selectActiveTool, selectToolbarTool } from './toolbar.selectors';
+import { isActiveToolbarTool, selectToolbarTool } from './toolbar.selectors';
 import { Injectable } from '@angular/core';
-import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
+import { ToolbarService } from '../toolbar.service';
 
 @Injectable()
 export class ToolbarEffects {
@@ -69,11 +69,7 @@ export class ToolbarEffects {
   public setCrosshairCursorOnMap$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(ToolbarActions.activateTool, ToolbarActions.deactivateTool),
-      concatLatestFrom(() => this.store$.select(selectActiveTool)),
-      tap(([ _action, tool ]) => {
-        const crossHairTools = [ ToolbarComponentEnum.COORDINATE_LINK_WINDOW, ToolbarComponentEnum.SELECT_COORDINATES, ToolbarComponentEnum.STREETVIEW ];
-        MapCursorHelper.setCrosshairCursor(!!tool && crossHairTools.includes(tool));
-      }),
+      tap(() => this.toolbarService.setCrosshairCursorOnMap()),
     );
   }, { dispatch: false });
 
@@ -81,6 +77,7 @@ export class ToolbarEffects {
     private actions$: Actions,
     private store$: Store,
     private mapService: MapService,
+    private toolbarService: ToolbarService,
   ) {}
 
 }
