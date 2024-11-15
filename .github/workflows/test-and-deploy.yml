@@ -149,7 +149,7 @@ jobs:
       SOURCE_MAP_AUTH: ${{ vars.SOURCE_MAP_AUTH }}
       MAP5_URL: ${{ vars.MAP5_URL }}
       BUILDX_NO_DEFAULT_ATTESTATIONS: 1
-    needs: [ lint, test ]
+    needs: [ lint, test, build_libraries ]
     steps:
       - uses: actions/checkout@v4
         with: # If tags aren't fetched the bin/post-build-localized.js script will leave fields in generated/version.json empty
