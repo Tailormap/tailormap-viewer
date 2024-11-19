@@ -1479,7 +1479,7 @@
       </trans-unit>
       <trans-unit id="admin-core.search-index.delete-schedule-message" datatype="html">
         <source> Deleting the schedule of a search index can be done by deleting the task on the tasks page </source>
-        <target state="new"> Deleting the schedule of a search index can be done by deleting the task on the tasks page </target>
+        <target> De planning van de zoekindex kan verwijderd worden door de taak verwijderen op de taken pagina </target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.delete-search-index" datatype="html">
         <source>Delete search index <x id="PH" equiv-text="searchIndex.name"/></source>
@@ -1515,11 +1515,11 @@
       </trans-unit>
       <trans-unit id="admin-core.search-index.no-schedule" datatype="html">
         <source>There is no schedule for this search index yet.</source>
-        <target state="new">There is no schedule for this search index yet.</target>
+        <target>Er is nog geen planning voor deze zoekindex.</target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.priority" datatype="html">
         <source>Priority*</source>
-        <target state="new">Priority*</target>
+        <target>Prioriteit*</target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.reindex" datatype="html">
         <source>Re-index</source>
