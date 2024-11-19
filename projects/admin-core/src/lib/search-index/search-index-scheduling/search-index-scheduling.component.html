@@ -1,8 +1,10 @@
 <h2>Schedule</h2>
 
-@if (searchIndex?.schedule?.uuid; as uuid) {
-  <h2>Uuid</h2>
-  {{ uuid }}
+@if (taskSchedule?.uuid; as uuid) {
+  <div class="read-only-information">
+    <h2>Uuid</h2>
+    <div class="uuid">{{ uuid }}</div>
+  </div>
 }
 
 <form [formGroup]="scheduleForm">
@@ -15,5 +17,23 @@
         </mat-option>
       }
     </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label i18n="@@admin-core.common.description">Description</mat-label>
+    <input matInput
+           tmAutoFocus
+           placeholder="Description"
+           i18n-placeholder="@@admin-core.common.description"
+           formControlName="description"
+    />
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label i18n="@@admin-core.search-index.priority">Priority</mat-label>
+    <input matInput
+           tmAutoFocus
+           placeholder="Name"
+           i18n-placeholder="@@admin-core.search-index.priority"
+           formControlName="priority"
+    />
   </mat-form-field>
 </form>
