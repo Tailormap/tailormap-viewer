@@ -1477,6 +1477,10 @@
         <source>Create search index</source>
         <target>Zoekindex aanmaken</target>
       </trans-unit>
+      <trans-unit id="admin-core.search-index.delete-schedule-message" datatype="html">
+        <source> Deleting the schedule of a search index can be done by deleting the task on the tasks page </source>
+        <target state="new"> Deleting the schedule of a search index can be done by deleting the task on the tasks page </target>
+      </trans-unit>
       <trans-unit id="admin-core.search-index.delete-search-index" datatype="html">
         <source>Delete search index <x id="PH" equiv-text="searchIndex.name"/></source>
         <target>Zoekindex {$PH} verwijderen</target>
@@ -1508,6 +1512,14 @@
       <trans-unit id="admin-core.search-index.filter-search-indexes" datatype="html">
         <source>Filter search indexes</source>
         <target>Zoekindexen filteren</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.no-schedule" datatype="html">
+        <source>There is no schedule for this search index yet.</source>
+        <target state="new">There is no schedule for this search index yet.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.priority" datatype="html">
+        <source>Priority*</source>
+        <target state="new">Priority*</target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.reindex" datatype="html">
         <source>Re-index</source>

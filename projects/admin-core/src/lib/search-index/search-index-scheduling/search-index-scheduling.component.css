@@ -2,11 +2,17 @@
   margin-top: 16px;
 }
 
-.uuid {
-  margin-top: 8px;
+.label {
+  font-weight: bold;
+  padding-bottom: 3px;
+}
+
+.delete-schedule-message {
+  margin-top: 16px;
 }
 
 .read-only-information {
   margin-top: 16px;
+  margin-bottom: 16px;
 }
 

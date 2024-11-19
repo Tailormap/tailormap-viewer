@@ -16,6 +16,10 @@ export class FormHelper {
     return typeof value === 'number';
   }
 
+  public static isValidPositiveIntegerValue(value: number | undefined | null) {
+    return typeof value === 'number' && Number.isInteger(value) && value >= 0;
+  }
+
   public static getComparableValueBounds(param?: BoundsModel | null) {
     return param ? [ param.crs, param.minx, param.maxx, param.miny, param.maxy ].join('') : null;
   }

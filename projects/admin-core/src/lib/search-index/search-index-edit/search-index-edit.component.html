@@ -27,7 +27,8 @@
                                           (toggleAttribute)="toggleAttribute($event, searchIndex, 'searchDisplayFieldsUsed')"></tm-admin-search-index-attribute-list>
 
     <tm-admin-search-index-scheduling [searchIndex]="searchIndex"
-                                      (updateSchedule)="updateSchedule(searchIndex.id, $event)"></tm-admin-search-index-scheduling>
+                                      (updateSchedule)="updateSchedule(searchIndex.id, $event)"
+                                      (formChanged)="validFormChanged($event)"></tm-admin-search-index-scheduling>
   </div>
 
   <div class="page-details-actions">
