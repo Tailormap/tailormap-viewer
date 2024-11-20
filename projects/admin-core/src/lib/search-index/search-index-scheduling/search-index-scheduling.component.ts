@@ -41,8 +41,8 @@ export class SearchIndexSchedulingComponent implements OnInit {
   ) { }
 
   public scheduleForm = new FormGroup({
-    cronExpression: new FormControl(),
-    description: new FormControl(),
+    cronExpression: new FormControl('', { nonNullable: true }),
+    description: new FormControl('', { nonNullable: true }),
     priority: new FormControl<number | undefined>(undefined, { nonNullable: true }),
   });
 
@@ -83,34 +83,34 @@ export class SearchIndexSchedulingComponent implements OnInit {
   private initForm(schedule: TaskSchedule | undefined) {
     if (!schedule) {
       this.scheduleForm.patchValue({ cronExpression: '', description: '', priority: undefined }, { emitEvent: false });
-      this.scheduleForm.controls['description'].disable();
-      this.scheduleForm.controls['priority'].disable();
+      this.scheduleForm.controls['description'].disable({ emitEvent: false });
+      this.scheduleForm.controls['priority'].disable({ emitEvent: false });
     } else {
       this.scheduleForm.patchValue({
         cronExpression: schedule.cronExpression,
         description: schedule.description,
         priority: schedule.priority,
       }, { emitEvent: false });
-      this.scheduleForm.controls['description'].enable();
-      this.scheduleForm.controls['priority'].enable();
+      this.scheduleForm.controls['description'].enable({ emitEvent: false });
+      this.scheduleForm.controls['priority'].enable({ emitEvent: false });
     }
   }
 
   private isValidForm(): boolean {
     const values = this.scheduleForm.getRawValue();
     return FormHelper.isValidValue(values.description)
-      && FormHelper.isValidPositiveIntegerValue(values.priority)
+      && ( FormHelper.isValidPositiveIntegerValue(values.priority) || values.priority === null )
       && this.scheduleForm.dirty
       && this.scheduleForm.valid;
   }
 
   public onSelectionChanged(change: MatSelectChange) {
     if (change.value) {
-      this.scheduleForm.controls['description'].enable();
-      this.scheduleForm.controls['priority'].enable();
+      this.scheduleForm.controls['description'].enable({ emitEvent: false });
+      this.scheduleForm.controls['priority'].enable({ emitEvent: false });
     } else {
-      this.scheduleForm.controls['description'].disable();
-      this.scheduleForm.controls['priority'].disable();
+      this.scheduleForm.controls['description'].disable({ emitEvent: false });
+      this.scheduleForm.controls['priority'].disable({ emitEvent: false });
     }
   }
 

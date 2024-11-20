@@ -1518,8 +1518,12 @@
         <target>Er is nog geen planning voor deze zoekindex.</target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.priority" datatype="html">
-        <source>Priority*</source>
-        <target>Prioriteit*</target>
+        <source>Priority</source>
+        <target>Prioriteit</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.priority-hint" datatype="html">
+        <source>When multiple tasks are scheduled at the same time and they cannot be executed simultaneously, the task with the highest priority will be executed first.</source>
+        <target>Als er meerdere taken tegelijkertijd zijn gepland en deze niet tegelijkertijd kunnen worden uitgevoerd, wordt de taak met de hoogste prioriteit als eerste uitgevoerd.</target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.reindex" datatype="html">
         <source>Re-index</source>
@@ -1528,6 +1532,10 @@
       <trans-unit id="admin-core.search-index.reindex-error" datatype="html">
         <source>Error while re-indexing search index.</source>
         <target>Fout bij het herindexeren van de zoekindex.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.schedule" datatype="html">
+        <source>Schedule</source>
+        <target>Planning</target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.search-index-created" datatype="html">
         <source>Search index created</source>

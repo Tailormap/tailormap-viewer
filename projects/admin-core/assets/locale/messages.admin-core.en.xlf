@@ -1113,13 +1113,19 @@
         <source>There is no schedule for this search index yet.</source>
       </trans-unit>
       <trans-unit id="admin-core.search-index.priority" datatype="html">
-        <source>Priority*</source>
+        <source>Priority</source>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.priority-hint" datatype="html">
+        <source>When multiple tasks are scheduled at the same time and they cannot be executed simultaneously, the task with the highest priority will be executed first.</source>
       </trans-unit>
       <trans-unit id="admin-core.search-index.reindex" datatype="html">
         <source>Re-index</source>
       </trans-unit>
       <trans-unit id="admin-core.search-index.reindex-error" datatype="html">
         <source>Error while re-indexing search index.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.schedule" datatype="html">
+        <source>Schedule</source>
       </trans-unit>
       <trans-unit id="admin-core.search-index.search-index-created" datatype="html">
         <source>Search index created</source>

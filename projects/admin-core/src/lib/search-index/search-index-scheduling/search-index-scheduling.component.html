@@ -1,4 +1,4 @@
-<h2>Schedule</h2>
+<h2 i18n="@@admin-core.search-index.schedule">Schedule</h2>
 
 <div class="read-only-information">
   @if (taskSchedule?.uuid; as uuid) {
@@ -35,7 +35,7 @@
     />
   </mat-form-field>
   <mat-form-field>
-    <mat-label i18n="@@admin-core.search-index.priority">Priority*</mat-label>
+    <mat-label i18n="@@admin-core.search-index.priority">Priority</mat-label>
     <input matInput
            tmAutoFocus
            type="number"
@@ -44,4 +44,5 @@
            formControlName="priority"
     />
   </mat-form-field>
+  <div class="hint" i18n="@@admin-core.search-index.priority-hint">When multiple tasks are scheduled at the same time and they cannot be executed simultaneously, the task with the highest priority will be executed first.</div>
 </form>

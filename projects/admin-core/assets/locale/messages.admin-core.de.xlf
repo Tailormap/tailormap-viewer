@@ -1535,8 +1535,12 @@
         <target>Für diesen Suchindex gibt es noch keinen Zeitplan.</target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.priority" datatype="html">
-        <source>Priority*</source>
-        <target>Priorität*</target>
+        <source>Priority</source>
+        <target>Priorität</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.priority-hint" datatype="html">
+        <source>When multiple tasks are scheduled at the same time and they cannot be executed simultaneously, the task with the highest priority will be executed first.</source>
+        <target>Wenn mehrere Aufgaben gleichzeitig geplant sind und nicht gleichzeitig ausgeführt werden können, wird die Aufgabe mit der höchsten Priorität zuerst ausgeführt.</target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.reindex" datatype="html">
         <source>Re-index</source>
@@ -1545,6 +1549,10 @@
       <trans-unit id="admin-core.search-index.reindex-error" datatype="html">
         <source>Error while re-indexing search index.</source>
         <target>Fehler bei der Neuindexierung des Suchindex.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.schedule" datatype="html">
+        <source>Schedule</source>
+        <target>Zeitplan</target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.search-index-created" datatype="html">
         <source>Search index created</source>
