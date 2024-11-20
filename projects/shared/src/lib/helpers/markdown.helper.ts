@@ -36,7 +36,7 @@ export class MarkdownHelper {
     return MarkdownHelper.replaceWhitespaceInLinks(replacedTemplate);
   }
 
-  public static markdownEscape(str?: string | null): string {
+  public static markdownEscape(str?: string | number | boolean | null): string {
     // from https://github.com/mattcone/markdown-guide/blob/master/_basic-syntax/escaping-characters.md
     // \ 	backslash
     // ` 	backtick (see also escaping backticks in code)
@@ -52,8 +52,8 @@ export class MarkdownHelper {
     // . 	dot
     // ! 	exclamation mark
     // | 	pipe (see also escaping pipe in tables)
-    if (typeof str !== "string" || str === "") {
-      return "";
+    if (typeof str !== "string") {
+      return `${str}`;
     }
     return str.replace(MarkdownHelper.ESCAPE_REGEX, '\\$&');
   }

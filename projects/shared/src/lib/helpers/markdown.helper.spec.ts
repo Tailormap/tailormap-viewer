@@ -4,6 +4,8 @@ describe('MarkdownHelper', () => {
 
   test('escapes markdown', () => {
     expect(MarkdownHelper.markdownEscape('123')).toEqual('123');
+    expect(MarkdownHelper.markdownEscape(123)).toEqual('123');
+    expect(MarkdownHelper.markdownEscape(true)).toEqual('true');
     expect(MarkdownHelper.markdownEscape('* _123_')).toEqual('\\* \\_123\\_');
     expect(MarkdownHelper.markdownEscape('___ abc # test ## test2')).toEqual('\\_\\_\\_ abc \\# test \\#\\# test2');
   });
