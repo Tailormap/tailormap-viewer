@@ -7,7 +7,6 @@ import {
 } from '@tailormap-admin/admin-api';
 import { ApplicationModelHelper } from '../helpers/application-model.helper';
 import { ComponentModel } from '@tailormap-viewer/api';
-import { toggleApplicationNodeExpandedAll } from './application.actions';
 
 const getApplication = (application: ApplicationModel) => ({
   ...application,

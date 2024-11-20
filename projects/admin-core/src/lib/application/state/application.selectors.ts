@@ -104,17 +104,14 @@ export const selectBaseLayerTreeForSelectedApplication = createSelector(
   },
 );
 
-export const selectSomeExpandedBaseLayersForSelectedApplication = createSelector(
-  selectExpandedBaseLayerNodes,
+export const selectSomeExpandedAppLayerForSelectedApplication = createSelector(
+  selectExpandedAppLayerNodes,
   expanded => expanded.length !== 0,
 );
 
-export const selectSomeExpandedAppLayerForSelectedApplication = createSelector(
-  selectExpandedAppLayerNodes,
-  expanded => {
-    console.log(expanded);
-    return expanded.length !== 0;
-  },
+export const selectSomeExpandedBaseLayersForSelectedApplication = createSelector(
+  selectExpandedBaseLayerNodes,
+  expanded => expanded.length !== 0,
 );
 
 export const selectComponentsConfig = createSelector(selectDraftApplication, application => application?.components);

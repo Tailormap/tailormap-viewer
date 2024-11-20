@@ -9,7 +9,7 @@ import { CatalogTreeHelper } from '../../catalog/helpers/catalog-tree.helper';
 import { ExtendedGeoServiceLayerModel } from '../../catalog/models/extended-geo-service-layer.model';
 import { AppTreeNodeModel } from '@tailormap-admin/admin-api';
 import { selectApplicationCatalogFilterTerm, selectServiceLayerTreeForApplication } from '../state/application.selectors';
-import { debounceTime, distinctUntilChanged, map, Observable, of } from 'rxjs';
+import { map, Observable, of } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl } from '@angular/forms';
 import { setApplicationCatalogFilterTerm } from '../state/application.actions';
