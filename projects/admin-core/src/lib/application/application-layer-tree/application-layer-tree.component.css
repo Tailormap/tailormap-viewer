@@ -1,5 +1,32 @@
-tm-tree {
+:host,
+.application-tree-wrapper {
+  display: block;
   height: 100%;
+}
+
+.application-tree-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.tree-header-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+tm-admin-list-filter {
+  display: block;
+  flex: 1;
+}
+
+.tree-header-wrapper > button {
+  margin-left: 8px;
+}
+
+tm-tree {
+  display: block;
+  flex: 1;
+  position: relative;
 }
 
 tm-tree ::ng-deep mat-tree {

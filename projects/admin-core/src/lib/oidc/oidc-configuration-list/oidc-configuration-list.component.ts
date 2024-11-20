@@ -5,7 +5,8 @@ import { FormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { clearSelectedOIDCConfiguration, loadOIDCConfigurations, setOIDCConfigurationListFilter } from '../state/oidc-configuration.actions';
 import {
-  selectOIDCConfigurationList, selectOIDCConfigurationsLoadError, selectOIDCConfigurationsLoadStatus, selectSelectedOIDCConfigurationId,
+  selectOIDCConfigurationList, selectOIDCConfigurationListFilter, selectOIDCConfigurationsLoadError, selectOIDCConfigurationsLoadStatus,
+  selectSelectedOIDCConfigurationId,
 } from '../state/oidc-configuration.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 
@@ -18,6 +19,7 @@ import { LoadingStateEnum } from '@tailormap-viewer/shared';
 export class OIDCConfigurationListComponent implements OnInit, OnDestroy {
 
   public filter = new FormControl('');
+  public filterTerm$ = this.store$.select(selectOIDCConfigurationListFilter);
   public oidcConfigurations$: Observable<Array<OIDCConfigurationModel & { selected: boolean }>> = of([]);
   public oidcConfigurationsLoadStatus$: Observable<LoadingStateEnum> = of(LoadingStateEnum.INITIAL);
   public errorMessage$: Observable<string | undefined> = of(undefined);

@@ -138,7 +138,17 @@ export const toggleApplicationNodeExpanded = createAction(
   `${applicationActionsPrefix} Toggle Node Expanded`,
   props<{ nodeId: string; tree: 'layer' | 'baseLayer' }>(),
 );
+
+export const toggleApplicationNodeExpandedAll = createAction(
+  `${applicationActionsPrefix} Toggle Node Expanded All`,
+  props<{ expandCollapse: 'expand' | 'collapse'; tree: 'layer' | 'baseLayer' }>(),
+);
+
 export const setApplicationCatalogFilterTerm = createAction(
   `${applicationActionsPrefix} Set Application Catalog Filter Term`,
   props<{ filterTerm?: string | null }>(),
+);
+export const setApplicationTreeFilterTerm = createAction(
+  `${applicationActionsPrefix} Set Application Tree Filter Term`,
+  props<{ filterTerm?: string | null; tree: 'layer' | 'baseLayer' }>(),
 );

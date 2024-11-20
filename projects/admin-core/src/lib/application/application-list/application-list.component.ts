@@ -5,7 +5,8 @@ import { FormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { clearSelectedApplication, loadApplications, setApplicationListFilter } from '../state/application.actions';
 import {
-  selectApplicationList, selectApplicationsLoadError, selectApplicationsLoadStatus, selectSelectedApplicationId,
+  selectApplicationList, selectApplicationListFilter, selectApplicationsLoadError, selectApplicationsLoadStatus,
+  selectSelectedApplicationId,
 } from '../state/application.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { ConfigService } from '../../config/services/config.service';
@@ -26,6 +27,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
   public errorMessage$: Observable<string | undefined> = of(undefined);
 
   public viewerBaseUrl: string;
+  public filterTerm$ = this.store$.select(selectApplicationListFilter);
 
   private destroyed = new Subject();
 

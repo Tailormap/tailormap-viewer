@@ -4,7 +4,7 @@ import { ApplicationTreeHelper } from '../helpers/application-tree.helper';
 import {
   selectCatalog, selectFeatureTypes, selectGeoServiceLayers, selectGeoServices,
 } from '../../catalog/state/catalog.selectors';
-import { LoadingStateEnum } from '@tailormap-viewer/shared';
+import { FilterHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
 import { AppLayerSettingsModel, AppTreeNodeModel } from '@tailormap-admin/admin-api';
 import { BaseComponentConfigHelper } from '@tailormap-viewer/api';
 import { CatalogTreeModel } from '../../catalog/models/catalog-tree.model';
@@ -17,6 +17,8 @@ export const selectApplicationsLoadStatus = createSelector(selectApplicationStat
 export const selectApplicationsLoadError = createSelector(selectApplicationState, state => state.applicationsLoadError);
 export const selectApplicationListFilter = createSelector(selectApplicationState, state => state.applicationListFilter);
 export const selectApplicationCatalogFilterTerm = createSelector(selectApplicationState, state => state.applicationCatalogFilterTerm);
+export const selectApplicationLayerTreeFilterTerm = createSelector(selectApplicationState, state => state.applicationLayerTreeFilterTerm);
+export const selectApplicationBaseLayerTreeFilterTerm = createSelector(selectApplicationState, state => state.applicationBaseLayerTreeFilterTerm);
 export const selectDraftApplication = createSelector(selectApplicationState, state => state.draftApplication || null);
 export const selectSelectedApplicationId = createSelector(selectApplicationState, state => state.draftApplication?.id || null);
 export const selectApplicationServicesLoadStatus = createSelector(selectApplicationState, state => state.applicationServicesLoadStatus);
@@ -37,11 +39,11 @@ export const selectApplicationList = createSelector(
     if (!filter) {
       return applications;
     }
-    const filterRegexes: RegExp[] = filter.trim().split(' ').map(f => new RegExp(f, 'i'));
+    const filterTerms: string[] = FilterHelper.createFilterTerms(filter);
     return applications
       .filter(application => {
         const searchableContent = [ application.name, application.title ].join(' ');
-        return filterRegexes.every(f => f.test(searchableContent));
+        return FilterHelper.matchesFilterTerm(filterTerms, searchableContent);
       });
   },
 );
@@ -85,8 +87,9 @@ export const selectAppLayerTreeForSelectedApplication = createSelector(
   selectGeoServiceLayers,
   selectExpandedAppLayerNodes,
   selectSelectedApplicationLayerSettings,
-  (layerNodes, layers, expandedNodes: string[], layerSettings: Record<string, AppLayerSettingsModel>) => {
-    return ApplicationTreeHelper.layerTreeNodeToTree(layerNodes, layers, expandedNodes, layerSettings);
+  selectApplicationLayerTreeFilterTerm,
+  (layerNodes, layers, expandedNodes: string[], layerSettings: Record<string, AppLayerSettingsModel>, filterTerm?: string) => {
+    return ApplicationTreeHelper.layerTreeNodeToTree(layerNodes, layers, expandedNodes, layerSettings, false, filterTerm);
   },
 );
 
@@ -95,9 +98,20 @@ export const selectBaseLayerTreeForSelectedApplication = createSelector(
   selectGeoServiceLayers,
   selectExpandedBaseLayerNodes,
   selectSelectedApplicationLayerSettings,
-  (baseLayerNodes, layers, expandedNodes: string[], layerSettings: Record<string, AppLayerSettingsModel>) => {
-    return ApplicationTreeHelper.layerTreeNodeToTree(baseLayerNodes, layers, expandedNodes, layerSettings, true);
+  selectApplicationBaseLayerTreeFilterTerm,
+  (baseLayerNodes, layers, expandedNodes: string[], layerSettings: Record<string, AppLayerSettingsModel>, filterTerm?: string) => {
+    return ApplicationTreeHelper.layerTreeNodeToTree(baseLayerNodes, layers, expandedNodes, layerSettings, true, filterTerm);
   },
+);
+
+export const selectSomeExpandedAppLayerForSelectedApplication = createSelector(
+  selectExpandedAppLayerNodes,
+  expanded => expanded.length !== 0,
+);
+
+export const selectSomeExpandedBaseLayersForSelectedApplication = createSelector(
+  selectExpandedBaseLayerNodes,
+  expanded => expanded.length !== 0,
 );
 
 export const selectComponentsConfig = createSelector(selectDraftApplication, application => application?.components);

@@ -40,6 +40,8 @@ export class SearchIndexAttributeListComponent implements OnInit {
   public featureType$ = this.featureTypeSubject$.asObservable();
   public attributes$: Observable<Array<AttributeDescriptorModel & { selected: boolean }>> = of([]);
 
+  public filterTerm$ = this.attributeFilter.asObservable();
+
   constructor(
     private destroyRef: DestroyRef,
   ) {

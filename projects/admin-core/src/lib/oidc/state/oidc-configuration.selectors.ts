@@ -1,5 +1,6 @@
 import { OIDCConfigurationState, oidcConfigurationStateKey } from './oidc-configuration.state';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { FilterHelper } from '@tailormap-viewer/shared';
 
 const selectOIDCConfigurationState = createFeatureSelector<OIDCConfigurationState>(oidcConfigurationStateKey);
 
@@ -18,11 +19,11 @@ export const selectOIDCConfigurationList = createSelector(
     if (!filter) {
       return oidcConfigurations;
     }
-    const filterRegexes: RegExp[] = filter.trim().split(' ').map(f => new RegExp(f, 'i'));
+    const filterTerms: string[] = FilterHelper.createFilterTerms(filter);
     return oidcConfigurations
       .filter(oidcConfiguration => {
         const searchableContent = [oidcConfiguration.name].join(' ');
-        return filterRegexes.every(f => f.test(searchableContent));
+        return FilterHelper.matchesFilterTerm(filterTerms, searchableContent);
       });
   },
 );

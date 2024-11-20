@@ -8,3 +8,4 @@ export * from './admin-fields-renderer/admin-fields-renderer.component';
 export * from './select-upload/select-upload.module';
 export * from './select-upload/select-upload-dialog/select-upload-dialog.component';
 export * from './select-upload/select-upload-button/select-upload.component';
+export * from './list-filter/list-filter.component';

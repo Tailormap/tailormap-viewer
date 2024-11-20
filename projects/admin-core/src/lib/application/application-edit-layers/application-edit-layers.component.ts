@@ -3,14 +3,19 @@ import { Store } from '@ngrx/store';
 import { TreeModel, TreeNodePosition, TreeService } from '@tailormap-viewer/shared';
 import {
   isLoadingApplicationServices, selectAppLayerNodesForSelectedApplication, selectAppLayerTreeForSelectedApplication,
+  selectApplicationBaseLayerTreeFilterTerm, selectApplicationLayerTreeFilterTerm,
   selectBaseLayerNodesForSelectedApplication, selectBaseLayerTreeForSelectedApplication, selectDraftApplicationCrs,
+  selectSomeExpandedAppLayerForSelectedApplication,
+  selectSomeExpandedBaseLayersForSelectedApplication,
 } from '../state/application.selectors';
 import {
   BehaviorSubject, combineLatest, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, takeUntil,
 } from 'rxjs';
 import { AppLayerSettingsModel, AppTreeLayerNodeModel, AppTreeLevelNodeModel, AppTreeNodeModel } from '@tailormap-admin/admin-api';
 import {
-  addApplicationTreeNodes, removeApplicationTreeNode, toggleApplicationNodeExpanded, updateApplicationNodeSettings,
+  addApplicationTreeNodes, removeApplicationTreeNode, setApplicationTreeFilterTerm, toggleApplicationNodeExpanded,
+  toggleApplicationNodeExpandedAll,
+  updateApplicationNodeSettings,
   updateApplicationTreeNode, updateApplicationTreeNodeVisibility, updateApplicationTreeOrder,
 } from '../state/application.actions';
 import { nanoid } from 'nanoid';
@@ -54,6 +59,7 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
   public applicationStateTree: 'layer' | 'baseLayer' = 'layer';
 
   public treeNodes$: Observable<TreeModel<AppTreeNodeModel>[]> = of([]);
+  public someExpanded$: Observable<boolean> = of(false);
 
   public loadingServices$: Observable<boolean> = of(false);
   public catalogTreeOpened = true;
@@ -61,6 +67,8 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
 
   private selectedCatalogItemSubject = new BehaviorSubject<string | null>(null);
   public selectedCatalogItem$ = this.selectedCatalogItemSubject.asObservable();
+
+  public filterTerm$: Observable<string | undefined> = of('');
 
   constructor(
     private store$: Store,
@@ -71,6 +79,14 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
     this.treeNodes$ = this.applicationStateTree === 'baseLayer'
       ? this.store$.select(selectBaseLayerTreeForSelectedApplication)
       : this.store$.select(selectAppLayerTreeForSelectedApplication);
+
+    this.someExpanded$ = this.applicationStateTree === 'baseLayer'
+      ? this.store$.select(selectSomeExpandedBaseLayersForSelectedApplication)
+      : this.store$.select(selectSomeExpandedAppLayerForSelectedApplication);
+
+    this.filterTerm$ = this.applicationStateTree === 'baseLayer'
+      ? this.store$.select(selectApplicationBaseLayerTreeFilterTerm)
+      : this.store$.select(selectApplicationLayerTreeFilterTerm);
 
     this.loadingServices$ = this.store$.select(isLoadingApplicationServices);
 
@@ -195,8 +211,19 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
     }));
   }
 
-  public nodeExpandedToggled(nodeId: string) {
-    this.store$.dispatch(toggleApplicationNodeExpanded({ nodeId, tree: this.applicationStateTree }));
+  public nodeExpandedToggled($event: { nodeId?: string; expandCollapseAll?: 'expand' | 'collapse' }) {
+    if ($event.expandCollapseAll) {
+      this.store$.dispatch(toggleApplicationNodeExpandedAll({ expandCollapse: $event.expandCollapseAll, tree: this.applicationStateTree }));
+      return;
+    }
+    if (!$event.nodeId) {
+      return;
+    }
+    this.store$.dispatch(toggleApplicationNodeExpanded({ nodeId: $event.nodeId, tree: this.applicationStateTree }));
+  }
+
+  public filterChanged(filterTerm: string | null) {
+    this.store$.dispatch(setApplicationTreeFilterTerm({ filterTerm, tree: this.applicationStateTree }));
   }
 
 }
