@@ -178,6 +178,10 @@
         <source>Filter applications</source>
         <target>Anwendungen filtern</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filter-tree" datatype="html">
+        <source>Filter application layers</source>
+        <target>Anwendungsschichten filtern</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filtered-layers" datatype="html">
         <source>The catalog above shows only layers matching the application projection (<x id="INTERPOLATION" equiv-text="{{draftApplicationCrs$ | async}}"/>)</source>
         <target state="translated">Der obige Katalog enthält nur Layer, die die (<x id="INTERPOLATION" equiv-text="{{draftApplicationCrs$ | async}}"/>) Projektionsanwendung unterstützen</target>
@@ -866,6 +870,10 @@
         <source>Close</source>
         <target>Schließen</target>
       </trans-unit>
+      <trans-unit id="admin-core.common.collapse-all" datatype="html">
+        <source>Collapse all</source>
+        <target>Alle einklappen</target>
+      </trans-unit>
       <trans-unit id="admin-core.common.comment" datatype="html">
         <source>Comment</source>
         <target>Kommentar</target>
@@ -909,6 +917,10 @@
       <trans-unit id="admin-core.common.enabled" datatype="html">
         <source>Enabled</source>
         <target>Aktiviert</target>
+      </trans-unit>
+      <trans-unit id="admin-core.common.expand-all" datatype="html">
+        <source>Expand all</source>
+        <target>Alle ausklappen</target>
       </trans-unit>
       <trans-unit id="admin-core.common.feature-source" datatype="html">
         <source>Feature source and type</source>

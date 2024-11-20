@@ -134,6 +134,9 @@
       <trans-unit id="admin-core.application.filter-applications" datatype="html">
         <source>Filter applications</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.filter-tree" datatype="html">
+        <source>Filter application layers</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.filtered-layers" datatype="html">
         <source>The catalog above shows only layers matching the application projection (<x id="INTERPOLATION" equiv-text="{{draftApplicationCrs$ | async}}"/>)</source>
       </trans-unit>
@@ -650,6 +653,9 @@
       <trans-unit id="admin-core.common.close" datatype="html">
         <source>Close</source>
       </trans-unit>
+      <trans-unit id="admin-core.common.collapse-all" datatype="html">
+        <source>Collapse all</source>
+      </trans-unit>
       <trans-unit id="admin-core.common.comment" datatype="html">
         <source>Comment</source>
       </trans-unit>
@@ -679,6 +685,9 @@
       </trans-unit>
       <trans-unit id="admin-core.common.enabled" datatype="html">
         <source>Enabled</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.expand-all" datatype="html">
+        <source>Expand all</source>
       </trans-unit>
       <trans-unit id="admin-core.common.feature-source" datatype="html">
         <source>Feature source and type</source>
