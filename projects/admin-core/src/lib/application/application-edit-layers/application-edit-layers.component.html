@@ -20,6 +20,7 @@
     <div class="tree-title" i18n="@@admin-core.application.application">Application</div>
     <ng-template #applicationTree>
       <tm-admin-application-layer-tree [treeNodes$]="treeNodes$"
+                                       [someExpanded]="someExpanded$ | async"
                                        [filterTerm]="filterTerm$ | async"
                                        (filterChanged)="filterChanged($event)"
                                        (nodePositionChanged)="nodePositionChanged($event)"

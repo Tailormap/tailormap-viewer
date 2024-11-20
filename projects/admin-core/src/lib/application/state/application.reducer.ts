@@ -7,11 +7,16 @@ import {
 } from '@tailormap-admin/admin-api';
 import { ApplicationModelHelper } from '../helpers/application-model.helper';
 import { ComponentModel } from '@tailormap-viewer/api';
+import { toggleApplicationNodeExpandedAll } from './application.actions';
 
 const getApplication = (application: ApplicationModel) => ({
   ...application,
   id: `${application.id}`,
 });
+
+const getExpandableTreeNodes = (layerNodes: AppTreeNodeModel[] | undefined) => {
+  return (layerNodes || []).filter(ApplicationModelHelper.isLevelTreeNode).map(n => n.id);
+};
 
 const setDraftApplication = (state: ApplicationState, applicationId: string | null) => {
   const draftApplication = applicationId !== null
@@ -21,8 +26,8 @@ const setDraftApplication = (state: ApplicationState, applicationId: string | nu
     ...state,
     draftApplicationId: applicationId,
     draftApplication: draftApplication ? { ...draftApplication } : null,
-    expandedAppLayerNodes: draftApplication ? draftApplication.contentRoot?.layerNodes?.map(n => n.id) ?? [] : [],
-    expandedBaseLayerNodes: draftApplication ? draftApplication.contentRoot?.baseLayerNodes?.map(n => n.id) ?? [] : [],
+    expandedAppLayerNodes: draftApplication ? getExpandableTreeNodes(draftApplication.contentRoot?.layerNodes) : [],
+    expandedBaseLayerNodes: draftApplication ? getExpandableTreeNodes(draftApplication.contentRoot?.baseLayerNodes) : [],
     draftApplicationUpdated: false,
     draftApplicationValid: true,
   };
@@ -203,7 +208,7 @@ const onAddApplicationTreeNodes = (
 ): ApplicationState => {
   return updateApplicationTree(state, payload.tree, (application, tree) => {
     return ApplicationModelHelper.addNodesToApplicationTree(application, tree, payload);
-  }, false, payload.treeNodes.map(n => n.id));
+  }, false, getExpandableTreeNodes(payload.treeNodes));
 };
 
 const onAddApplicationRootNodes = (
@@ -212,7 +217,7 @@ const onAddApplicationRootNodes = (
 ): ApplicationState => {
   return updateApplicationTree(state, payload.tree, (application, tree) => {
     return ApplicationModelHelper.addNodesToApplicationTree(application, tree, payload);
-  }, true, payload.treeNodes.map(n => n.id));
+  }, true, getExpandableTreeNodes(payload.treeNodes));
 };
 
 const onUpdateApplicationTreeNode = (
@@ -358,6 +363,27 @@ const onToggleNodeExpanded = (
   };
 };
 
+const onToggleNodeExpandedAll = (
+  state: ApplicationState,
+  payload: ReturnType<typeof ApplicationActions.toggleApplicationNodeExpandedAll>,
+): ApplicationState => {
+  if (!state.draftApplication) {
+    return state;
+  }
+  const expandedNodesList: 'expandedAppLayerNodes' | 'expandedBaseLayerNodes' = payload.tree === 'baseLayer'
+    ? 'expandedBaseLayerNodes'
+    : 'expandedAppLayerNodes';
+  const tree: 'baseLayerNodes' | 'layerNodes' = payload.tree === 'baseLayer' ? 'baseLayerNodes' : 'layerNodes';
+  const contentRoot = ApplicationModelHelper.getApplicationContentRoot(state.draftApplication);
+  const updatedList = payload.expandCollapse === 'collapse'
+    ? []
+    : getExpandableTreeNodes(contentRoot[tree]);
+  return {
+    ...state,
+    [expandedNodesList]: updatedList,
+  };
+};
+
 const onSetApplicationCatalogFilterTerm = (
   state: ApplicationState,
   payload: ReturnType<typeof ApplicationActions.setApplicationCatalogFilterTerm>,
@@ -402,6 +428,7 @@ const applicationReducerImpl = createReducer<ApplicationState>(
   on(ApplicationActions.updateApplicationComponentConfig, onUpdateApplicationComponentConfig),
   on(ApplicationActions.updateApplicationStylingConfig, onUpdateApplicationStylingConfig),
   on(ApplicationActions.toggleApplicationNodeExpanded, onToggleNodeExpanded),
+  on(ApplicationActions.toggleApplicationNodeExpandedAll, onToggleNodeExpandedAll),
   on(ApplicationActions.setApplicationCatalogFilterTerm, onSetApplicationCatalogFilterTerm),
   on(ApplicationActions.setApplicationTreeFilterTerm, onSetApplicationTreeFilterTerm),
 );

@@ -6,9 +6,18 @@
 </ng-template>
 
 <div class="application-tree-wrapper">
-  <tm-admin-list-filter [formControl]="treeFilter"
-                        [filterTerm]="filterTerm"
-                        label="Filter application layers"
-                        i18n-label="@@admin-core.application.filter-tree"></tm-admin-list-filter>
+  <div class="tree-header-wrapper">
+    <tm-admin-list-filter [formControl]="treeFilter"
+                          [filterTerm]="filterTerm"
+                          label="Filter application layers"
+                          i18n-label="@@admin-core.application.filter-tree"></tm-admin-list-filter>
+    <button mat-flat-button (click)="expandCollapseAll(someExpanded)">
+      @if (someExpanded) {
+        <ng-container i18n="@@admin-core.common.collapse-all">Collapse all</ng-container>
+      } @else {
+        <ng-container i18n="@@admin-core.common.expand-all">Expand all</ng-container>
+      }
+    </button>
+  </div>
   <tm-tree [treeNodeTemplate]="treeNode" [getDropZones]="getDropZones()"></tm-tree>
 </div>
