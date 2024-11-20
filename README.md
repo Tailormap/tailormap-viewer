@@ -292,28 +292,15 @@ You can also add the argument `--build-arg API_VERSION=snapshot` to set the tag 
 
 ### Multi-arch build with Docker buildx
 
-Use the commands below to build and push the cross-platform Docker images to the GitHub container registry. See the Docker documentation for
-more information about [building multi-platform images](https://docs.docker.com/build/building/multi-platform/) and
-the [docker buildx build](https://docs.docker.com/engine/reference/commandline/buildx_build/)
-and  [docker buildx create](https://docs.docker.com/engine/reference/commandline/buildx_create/) commands.
+Use the commands below to build and push the Docker image to the GitHub container registry. See the Docker documentation for
+more information about the [docker buildx build](https://docs.docker.com/engine/reference/commandline/buildx_build/) command.
 
 ```shell
-# create a container for x-platform builds (only needed once)
-docker buildx create --use --name tailormap-builder --platform linux/arm64,linux/arm/v8
-
-# or activate an existing container
-docker buildx use tailormap-builder
-
-# install necessary QEMU platform architectures
-docker run --privileged --rm tonistiigi/binfmt --install all
 # set version of the docker image and base ref. This will also be the reported version of the application
 export VERSION=snapshot
 export BASE_HREF=/
 # for pushing to the GitHub container registry, you need to be logged in with docker login
 docker buildx build --pull --build-arg VERSION=${VERSION} --build-arg API_VERSION=${VERSION} --build-arg BASE_HREF=${BASE_HREF} \
-      --platform linux/amd64,linux/arm64 \
       -t ghcr.io/tailormap/tailormap:${VERSION} . \
       --push
-# leave the buildx context
-docker buildx use default
 ```
