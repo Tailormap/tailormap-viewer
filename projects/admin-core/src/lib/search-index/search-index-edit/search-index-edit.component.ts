@@ -161,7 +161,7 @@ export class SearchIndexEditComponent implements OnInit {
       );
   }
 
-  updateSchedule(id: number, $event: { searchIndex: Pick<SearchIndexModel, 'schedule'> }) {
+  public updateSchedule(id: number, $event: { searchIndex: Pick<SearchIndexModel, 'schedule'> }) {
     this.store$.dispatch(updateDraftSearchIndex({ id, searchIndex: $event.searchIndex }));
   }
 }
