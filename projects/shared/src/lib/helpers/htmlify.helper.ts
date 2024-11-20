@@ -8,9 +8,10 @@ export class HtmlifyHelper {
   // Matches everything that starts with http until the first space
   private static readonly URL_PART = 'https?:\\/\\/[^\\s\\r\\n]*';
   // Matches a Markdown URL: [LABEL](URL)
-  private static readonly MD_PART = '\\[[^\\]]+]\\(https?:\\/\\/[^) ]*\\)';
+  private static readonly MD_PART = '\\[(.*?(?:\\\\[()[\\]]|[^\\[\\]()])*?)\\]\\((.*?)\\)';
 
   private static readonly URL_REGEXP = new RegExp(`${HtmlifyHelper.MD_PART}|${HtmlifyHelper.URL_PART}`, 'ig');
+  private static readonly MD_URL_REGEXP = new RegExp(HtmlifyHelper.MD_PART, 'i');
   private static readonly IMG_REGEXP = /\.(jpg|jpeg|png|webp|svg|gif)/i;
   private static readonly VENDOR_SPECIFIC_IMAGE_REGEXP = /getimage\.ashx/i;
   private static readonly NEWLINE_REGEXP = /([^>\r\n]?)(\r\n|\n\r|\r|\n)/g;
@@ -27,10 +28,16 @@ export class HtmlifyHelper {
 
   private static linkReplacer(match: string): string {
     if (match[0] === '[') { // safe to do since this is already matched using Regex, only MD URL will start with [
-      const url = match.substring(match.indexOf('(') + 1, match.length - 1);
-      const name = match.substring(1, match.indexOf(']'));
-      return `<a href="${url}" target="_blank">${name}</a>`;
+      const mdUrlMatches = HtmlifyHelper.MD_URL_REGEXP.exec(match);
+      if (!mdUrlMatches || mdUrlMatches.length === 0) {
+        return HtmlifyHelper.getLink(match);
+      }
+      return `<a href="${mdUrlMatches[2]}" target="_blank">${mdUrlMatches[1]}</a>`;
     }
+    return HtmlifyHelper.getLink(match);
+  }
+
+  private static getLink(match: string) {
     if (HtmlifyHelper.IMG_REGEXP.test(match)
       || HtmlifyHelper.VENDOR_SPECIFIC_IMAGE_REGEXP.test(match)) {
       return `<a href="${match}" target="_blank"><img src="${match}" alt="${match}" /></a>`;
