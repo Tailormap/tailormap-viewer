@@ -1489,6 +1489,10 @@
         <source>Create search index</source>
         <target>Zoekindex aanmaken</target>
       </trans-unit>
+      <trans-unit id="admin-core.search-index.delete-schedule-message" datatype="html">
+        <source> Deleting the schedule of a search index can be done by deleting the task on the tasks page </source>
+        <target> De planning van de zoekindex kan verwijderd worden door de taak verwijderen op de taken pagina </target>
+      </trans-unit>
       <trans-unit id="admin-core.search-index.delete-search-index" datatype="html">
         <source>Delete search index <x id="PH" equiv-text="searchIndex.name"/></source>
         <target>Zoekindex {$PH} verwijderen</target>
@@ -1521,6 +1525,18 @@
         <source>Filter search indexes</source>
         <target>Zoekindexen filteren</target>
       </trans-unit>
+      <trans-unit id="admin-core.search-index.no-schedule" datatype="html">
+        <source>There is no schedule for this search index yet.</source>
+        <target>Er is nog geen planning voor deze zoekindex.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.priority" datatype="html">
+        <source>Priority</source>
+        <target>Prioriteit</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.priority-hint" datatype="html">
+        <source>When multiple tasks are scheduled at the same time and they cannot be executed simultaneously, the task with the highest priority will be executed first.</source>
+        <target>Als er meerdere taken tegelijkertijd zijn gepland en deze niet tegelijkertijd kunnen worden uitgevoerd, wordt de taak met de hoogste prioriteit als eerste uitgevoerd.</target>
+      </trans-unit>
       <trans-unit id="admin-core.search-index.reindex" datatype="html">
         <source>Re-index</source>
         <target>Herindexeren</target>
@@ -1528,6 +1544,30 @@
       <trans-unit id="admin-core.search-index.reindex-error" datatype="html">
         <source>Error while re-indexing search index.</source>
         <target>Fout bij het herindexeren van de zoekindex.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.schedule" datatype="html">
+        <source>Schedule</source>
+        <target>Planning</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.schedule.every-day" datatype="html">
+        <source>Every day at 18:00</source>
+        <target>Elke dag om 18:00</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.schedule.every-hour" datatype="html">
+        <source>Every hour</source>
+        <target>Elk uur</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.schedule.every-month" datatype="html">
+        <source>Every first day of the month at 18:00</source>
+        <target>Elke eerste dag van de maand om 18:00</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.schedule.every-week" datatype="html">
+        <source>Every week monday at 18:00</source>
+        <target>Elke week maandag om 18:00</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.schedule.no-schedule" datatype="html">
+        <source>No schedule</source>
+        <target>Geen planning</target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.search-index-created" datatype="html">
         <source>Search index created</source>

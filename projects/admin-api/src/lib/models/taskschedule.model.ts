@@ -1,6 +1,6 @@
 export interface TaskSchedule {
   /** The unique identifier of the task schedule. read-only. */
-  uuid: string | null;
+  uuid?: string | null;
   /** A valid (Quartz) cron expression. */
   cronExpression: string;
   /** Optional description of the scheduled task. */
