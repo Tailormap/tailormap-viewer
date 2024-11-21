@@ -102,7 +102,7 @@ export class SearchIndexSchedulingComponent implements OnInit {
   private isValidForm(): boolean {
     const values = this.scheduleForm.getRawValue();
     return FormHelper.isValidValue(values.description)
-      && ( FormHelper.isValidPositiveIntegerValue(values.priority) || values.priority === null )
+      && ( FormHelper.isValidPositiveIntegerValue(values.priority) || values.priority === null || values.priority === undefined )
       && this.scheduleForm.dirty
       && this.scheduleForm.valid;
   }
