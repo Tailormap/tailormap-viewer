@@ -32,5 +32,6 @@ github_checks:
 comment:
   layout: "reach, diff, flags, files"
   behavior: default
-  require_changes: true
-  after_n_builds: 3
+  require_changes: True
+  after_n_builds: 2
+  require_bundle_changes: True

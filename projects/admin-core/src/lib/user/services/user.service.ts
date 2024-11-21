@@ -1,8 +1,6 @@
 import { BehaviorSubject, catchError, filter, map, Observable, of, switchMap, tap } from 'rxjs';
 import { DestroyRef, Injectable } from '@angular/core';
-import {
-  TailormapAdminApiV1Service, UserModel,
-} from '@tailormap-admin/admin-api';
+import { TailormapAdminApiV1Service, UserModel } from '@tailormap-admin/admin-api';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 import { AdminSseService, EventType } from '../../shared/services/admin-sse.service';
 import { Store } from '@ngrx/store';
@@ -48,7 +46,7 @@ export class UserService {
     return this.store$.select(selectUsersLoadStatus)
       .pipe(
         tap(loadStatus => {
-          if (loadStatus === LoadingStateEnum.INITIAL) {
+          if (loadStatus === LoadingStateEnum.INITIAL || loadStatus === LoadingStateEnum.FAILED) {
             this.store$.dispatch(loadUsers());
           }
         }),

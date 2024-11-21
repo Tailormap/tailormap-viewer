@@ -9,6 +9,7 @@ import {
 import { TaskMonitoringService } from '../services/task-monitoring.service';
 import { ConfirmDialogService, LoadingStateEnum } from '@tailormap-viewer/shared';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { reloadSearchIndexes } from '../../search-index/state/search-index.actions';
 
 @Component({
   selector: 'tm-admin-task-details',
@@ -73,8 +74,13 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
               filter(answer => answer),
               switchMap(() => this.taskMonitoringService.deleteTask(task.uuid, task.type)),
             )
-            .subscribe(() => {
-              this.router.navigateByUrl('/admin/tasks');
+            .subscribe((response) => {
+              if (response) {
+                if (task.type === 'index') {
+                  this.store$.dispatch(reloadSearchIndexes());
+                }
+                this.router.navigateByUrl('/admin/tasks');
+              }
             });
         }
       },

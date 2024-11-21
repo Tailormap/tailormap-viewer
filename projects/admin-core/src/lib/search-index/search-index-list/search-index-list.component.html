@@ -7,20 +7,10 @@
   </ng-container>
   <div *ngIf="searchIndexesLoadStatus === 'LOADED'"
        class="form-group has-search">
-    <mat-form-field appearance="outline">
-      <mat-label i18n="@@admin-core.search-index.filter-search-indexes">Filter search indexes</mat-label>
-      <input [formControl]="filter"
-             i18n-placeholder="@@admin-core.common.filter-dots"
-             matInput
-             placeholder="Filter..."
-             tmAutoFocus
-             type="text"
-      />
-      <button (click)="filter.setValue('')" *ngIf="filter.getRawValue()" aria-label="Clear" mat-icon-button matSuffix>
-        <mat-icon svgIcon="close"></mat-icon>
-      </button>
-    </mat-form-field>
-
+    <tm-admin-list-filter [formControl]="filter"
+                          [filterTerm]="filterTerm$ | async"
+                          label="Filter search indexes"
+                          i18n-label="@@admin-core.search-index.filter-search-indexes"></tm-admin-list-filter>
     <mat-selection-list>
       @for (searchIndex of searchIndexes$ | async; track searchIndex.id) {
         <mat-list-item [class.selected]="searchIndex.selected"

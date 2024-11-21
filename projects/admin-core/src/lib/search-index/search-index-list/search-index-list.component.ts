@@ -6,7 +6,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { selectCatalogLoadStatus } from '../../catalog/state/catalog.selectors';
 import { loadCatalog } from '../../catalog/state/catalog.actions';
 import {
-  SearchIndexList, selectFilteredSearchIndexesList, selectSearchIndexesLoadError, selectSearchIndexesLoadStatus,
+  SearchIndexList, selectFilteredSearchIndexesList, selectSearchIndexesListFilter, selectSearchIndexesLoadError,
+  selectSearchIndexesLoadStatus,
 } from '../state/search-index.selectors';
 import { loadSearchIndexes, setSearchIndexListFilter } from '../state/search-index.actions';
 import { FormControl } from '@angular/forms';
@@ -23,6 +24,7 @@ export class SearchIndexListComponent implements OnInit {
   public searchIndexes$: Observable<SearchIndexList> = of([]);
   public searchIndexesLoadStatus$: Observable<LoadingStateEnum> = of(LoadingStateEnum.INITIAL);
   public errorMessage$: Observable<string | undefined> = of(undefined);
+  public filterTerm$ = this.store$.select(selectSearchIndexesListFilter);
 
   constructor(
     private store$: Store,

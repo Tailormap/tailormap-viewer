@@ -110,8 +110,10 @@ export class GeoServiceLayerDetailsComponent implements OnInit, OnDestroy {
         };
       },
     )
-      .subscribe(() => {
-        this.adminSnackbarService.showMessage($localize `:@@admin-core.catalog.layer-settings-updated:Layer settings updated`);
+      .subscribe(result => {
+        if (result) {
+          this.adminSnackbarService.showMessage($localize `:@@admin-core.catalog.layer-settings-updated:Layer settings updated`);
+        }
         this.savingSubject.next(false);
       });
   }

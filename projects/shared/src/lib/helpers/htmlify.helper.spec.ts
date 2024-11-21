@@ -45,12 +45,18 @@ describe('HtmlifyHelper', () => {
   });
 
   it('transforms MD-links into hyperlinks', async () => {
-    expect(HtmlifyHelper.htmlifyContents('Some text with some [link](https://www.test.nl) in it'))
-      .toEqual('Some text with some <a href="https://www.test.nl" target="_blank">link</a> in it');
-    expect(HtmlifyHelper.htmlifyContents('Some text with some [link description](https://www.test.nl) in it'))
-      .toEqual('Some text with some <a href="https://www.test.nl" target="_blank">link description</a> in it');
-    expect(HtmlifyHelper.htmlifyContents('Some text with some [link / description + 123](https://www.test.nl) in it'))
-      .toEqual('Some text with some <a href="https://www.test.nl" target="_blank">link / description + 123</a> in it');
+    expect(HtmlifyHelper.htmlifyContents('Some text with some [link](https://www.test1.nl) in it'))
+      .toEqual('Some text with some <a href="https://www.test1.nl" target="_blank">link</a> in it');
+    expect(HtmlifyHelper.htmlifyContents('Some text with some [link description](https://www.test2.nl) in it'))
+      .toEqual('Some text with some <a href="https://www.test2.nl" target="_blank">link description</a> in it');
+    expect(HtmlifyHelper.htmlifyContents('Some text with some [link / description + 123](https://www.test3.nl) in it'))
+      .toEqual('Some text with some <a href="https://www.test3.nl" target="_blank">link / description + 123</a> in it');
+    expect(HtmlifyHelper.htmlifyContents('Some text with some [link / description + (abc/234)](https://www.test4.nl) in it'))
+      .toEqual('Some text with some <a href="https://www.test4.nl" target="_blank">link / description + (abc/234)</a> in it');
+    expect(HtmlifyHelper.htmlifyContents('Some text with some [link / description + [mytag] asdfsadf](https://www.test5.nl) in it'))
+      .toEqual('Some text with some <a href="https://www.test5.nl" target="_blank">link / description + [mytag] asdfsadf</a> in it');
+    expect(HtmlifyHelper.htmlifyContents('Some text with two [link](https://www.test6.nl) and [link2](https://www.test7.nl) in it'))
+      .toEqual('Some text with two <a href="https://www.test6.nl" target="_blank">link</a> and <a href="https://www.test7.nl" target="_blank">link2</a> in it');
   });
 
   it('transforms multiple links with whitespace', async () => {

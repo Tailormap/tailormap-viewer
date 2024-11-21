@@ -6,6 +6,7 @@ import { Observable, of, Subject, take, takeUntil } from 'rxjs';
 import { AppTreeNodeModel } from '@tailormap-admin/admin-api';
 import { MatDialog } from '@angular/material/dialog';
 import { ApplicationFolderNodeNameComponent } from './application-folder-node-name/application-folder-node-name.component';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'tm-admin-application-layer-tree',
@@ -20,6 +21,12 @@ export class ApplicationLayerTreeComponent implements OnInit, OnDestroy {
 
   @Input()
   public treeNodes$: Observable<TreeModel<AppTreeNodeModel>[]> = of([]);
+
+  @Input()
+  public filterTerm: string | null | undefined;
+
+  @Input()
+  public someExpanded: boolean | null | undefined;
 
   @Output()
   public addSubFolder = new EventEmitter<{ nodeId: string; title: string }>();
@@ -37,7 +44,12 @@ export class ApplicationLayerTreeComponent implements OnInit, OnDestroy {
   public visibilityChanged = new EventEmitter<Array<{ nodeId: string; visible: boolean }>>();
 
   @Output()
-  public nodeExpandedToggled = new EventEmitter<string>();
+  public nodeExpandedToggled = new EventEmitter<{ nodeId?: string; expandCollapseAll?: 'expand' | 'collapse' }>();
+
+  @Output()
+  public filterChanged = new EventEmitter<string | null>();
+
+  public treeFilter = new FormControl('');
 
   constructor(
     private treeService: TreeService,
@@ -52,7 +64,10 @@ export class ApplicationLayerTreeComponent implements OnInit, OnDestroy {
       .subscribe((evt) => this.visibilityChanged.emit(evt.map((e) => ({ nodeId: e.id, visible: !!e.checked }))));
     this.treeService.nodeExpansionChangedSource$
       .pipe(takeUntil(this.destroyed))
-      .subscribe((evt) => this.nodeExpandedToggled.emit(evt.node.id));
+      .subscribe((evt) => this.nodeExpandedToggled.emit({ nodeId: evt.node.id }));
+    this.treeFilter.valueChanges
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(filterTerm => this.filterChanged.emit(filterTerm));
   }
 
   public ngOnInit(): void {
@@ -101,6 +116,10 @@ export class ApplicationLayerTreeComponent implements OnInit, OnDestroy {
 
   public getDropZones() {
     return DropZoneHelper.getDefaultDropZones(this.treeService);
+  }
+
+  public expandCollapseAll(someExpanded: boolean | undefined | null) {
+    this.nodeExpandedToggled.emit({ expandCollapseAll: someExpanded ? 'collapse' : 'expand' });
   }
 
 }

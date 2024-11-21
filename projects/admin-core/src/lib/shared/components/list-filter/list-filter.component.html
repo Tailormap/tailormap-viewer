@@ -1,0 +1,15 @@
+<mat-form-field appearance="outline">
+  <mat-label>{{label}}</mat-label>
+  <input [formControl]="filterControl"
+         i18n-placeholder="@@admin-core.common.filter-dots"
+         matInput
+         placeholder="Filter..."
+         tmAutoFocus
+         type="text"
+  />
+  @if (filterControl.getRawValue()) {
+    <button (click)="clearFilter()" aria-label="Clear" mat-icon-button matSuffix>
+      <mat-icon svgIcon="close"></mat-icon>
+    </button>
+  }
+</mat-form-field>

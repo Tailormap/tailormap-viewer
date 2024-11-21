@@ -8,11 +8,12 @@ import { GroupListComponent } from '../../user/group-list/group-list.component';
 import { provideMockStore } from '@ngrx/store/testing';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
 import { provideHttpClient } from '@angular/common/http';
+import { SharedAdminComponentsModule } from '../../shared/components/shared-admin-components.module';
 
 
 const setup = async () => {
   await render(GroupsPageComponent, {
-    imports: [ SharedModule, MatListModule, MatIconTestingModule ],
+    imports: [ SharedModule, MatListModule, MatIconTestingModule, SharedAdminComponentsModule ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     declarations: [GroupListComponent],
     providers: [ provideMockStore(), provideHttpClient(), AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser() ],

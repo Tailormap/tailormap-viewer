@@ -11,3 +11,6 @@ export * from './lib/config/services/config.service';
 export * from './lib/application/services/configuration-component-registry.service';
 export * from './lib/application/components/base-component-config/base-component-config.component';
 export * from './lib/shared/services/admin-field-registration.service';
+export * from './lib/shared/services/admin-snackbar.service';
+export * from './lib/shared/components';
+export * from './lib/helpers/form.helper';

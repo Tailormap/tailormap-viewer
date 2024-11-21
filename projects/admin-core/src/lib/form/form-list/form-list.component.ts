@@ -7,7 +7,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { loadForms, setFormListFilter } from '../state/form.actions';
 import {
   FormList,
-  selectFilteredFormsList, selectFormsLoadError, selectFormsLoadStatus,
+  selectFilteredFormsList, selectFormsListFilter, selectFormsLoadError, selectFormsLoadStatus,
 } from '../state/form.selectors';
 import { selectCatalogLoadStatus } from '../../catalog/state/catalog.selectors';
 import { loadCatalog } from '../../catalog/state/catalog.actions';
@@ -21,6 +21,7 @@ import { loadCatalog } from '../../catalog/state/catalog.actions';
 export class FormListComponent implements OnInit {
 
   public filter = new FormControl('');
+  public filterValue$ = this.store$.select(selectFormsListFilter);
   public forms$: Observable<FormList> = of([]);
   public formsLoadStatus$: Observable<LoadingStateEnum> = of(LoadingStateEnum.INITIAL);
   public errorMessage$: Observable<string | undefined> = of(undefined);

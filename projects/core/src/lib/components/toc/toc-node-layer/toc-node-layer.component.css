@@ -21,7 +21,7 @@
 
 .tree-node__label-content {
   white-space: wrap;
-  overflow-wrap: break-word;
+  overflow-wrap: anywhere;
 }
 
 .tree-node__label.modified {

@@ -7,20 +7,10 @@
   </ng-container>
   <div *ngIf="applicationsLoadStatus === 'LOADED'"
        class="form-group has-search">
-    <mat-form-field appearance="outline">
-      <mat-label i18n="@@admin-core.application.filter-applications">Filter applications</mat-label>
-      <input [formControl]="filter"
-             i18n-placeholder="@@admin-core.common.filter-dots"
-             matInput
-             placeholder="Filter..."
-             tmAutoFocus
-             type="text"
-      />
-      <button (click)="filter.setValue('')" *ngIf="filter.getRawValue()" aria-label="Clear" mat-icon-button matSuffix>
-        <mat-icon svgIcon="close"></mat-icon>
-      </button>
-    </mat-form-field>
-
+    <tm-admin-list-filter [formControl]="filter"
+                          [filterTerm]="filterTerm$ | async"
+                          label="Filter applications"
+                          i18n-label="@@admin-core.application.filter-applications"></tm-admin-list-filter>
     <mat-selection-list>
       <mat-list-item *ngFor="let application of applications$ | async"
                      [class.selected]="application.selected"
