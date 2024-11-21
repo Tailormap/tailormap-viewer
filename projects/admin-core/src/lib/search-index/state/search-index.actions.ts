@@ -7,6 +7,10 @@ export const loadSearchIndexes = createAction(
   `${searchIndexActionsPrefix} Load SearchIndexes`,
 );
 
+export const reloadSearchIndexes = createAction(
+  `${searchIndexActionsPrefix} Reload SearchIndexes`,
+);
+
 export const loadSearchIndexesStart = createAction(
   `${searchIndexActionsPrefix} Load SearchIndexes Start`,
 );

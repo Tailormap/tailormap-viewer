@@ -13,7 +13,7 @@ export class SearchIndexEffects {
 
   public loadSearchIndexes$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(SearchIndexActions.loadSearchIndexes),
+      ofType(SearchIndexActions.loadSearchIndexes, SearchIndexActions.reloadSearchIndexes),
       concatLatestFrom(() => this.store$.select(selectSearchIndexesLoadStatus)),
       filter(([ _action, loadStatus ]) => loadStatus !== LoadingStateEnum.LOADED && loadStatus !== LoadingStateEnum.LOADING),
       tap(() => this.store$.dispatch(SearchIndexActions.loadSearchIndexesStart())),
