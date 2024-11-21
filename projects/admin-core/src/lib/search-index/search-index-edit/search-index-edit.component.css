@@ -14,12 +14,19 @@
   flex: 1;
 }
 
+.schedule-wrapper {
+  min-width: 300px;
+  max-width: 500px;
+  flex: 1;
+  overflow: hidden;
+}
+
 .field-wrapper {
   display: flex;
   margin-top: 16px;
   flex: 1;
   overflow: hidden;
-  min-height: 450px;
+  min-height: 300px;
 }
 
 .field-wrapper > * + * {
@@ -42,4 +49,8 @@
 
 tm-admin-search-index-attribute-list {
   width: 250px;
+}
+
+.schedule-wrapper tm-admin-search-index-scheduling {
+  max-height: 100%;
 }

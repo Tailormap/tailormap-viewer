@@ -47,20 +47,20 @@ export class SearchIndexSchedulingComponent implements OnInit {
   });
 
   public ngOnInit(): void {
-    this.scheduleForm.valueChanges
+    const scheduleFormChanges$ = this.scheduleForm.valueChanges.pipe(
+      takeUntilDestroyed(this.destroyRef),
+      debounceTime(250),
+    );
+    scheduleFormChanges$
       .pipe(
-        takeUntilDestroyed(this.destroyRef),
-        debounceTime(250),
         map(() => this.isValidForm()),
         distinctUntilChanged(),
       )
       .subscribe(validFormChanged => {
         this.formChanged.emit(validFormChanged);
       });
-    this.scheduleForm.valueChanges
+    scheduleFormChanges$
       .pipe(
-        takeUntilDestroyed(this.destroyRef),
-        debounceTime(250),
         filter(() => this.isValidForm()),
       )
       .subscribe(value => {

@@ -2,6 +2,10 @@
   margin-top: 16px;
 }
 
+.schedule-title {
+  margin-bottom: 16px;
+}
+
 .label {
   font-weight: bold;
   padding-bottom: 3px;
@@ -12,7 +16,6 @@
 }
 
 .read-only-information {
-  margin-top: 16px;
   margin-bottom: 16px;
 }
 
@@ -23,5 +26,10 @@
   line-height: 20px;
   text-align: left;
   padding: 0 16px;
+}
+
+.schedule-form-wrapper {
+  max-height: calc(100% - 40px);
+  overflow: auto;
 }
 

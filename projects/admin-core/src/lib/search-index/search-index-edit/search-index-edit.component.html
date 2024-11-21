@@ -25,7 +25,7 @@
                                           [selected]="searchIndex.searchDisplayFieldsUsed"
                                           [loadingFeatureType]="loadingFeatureType()"
                                           (toggleAttribute)="toggleAttribute($event, searchIndex, 'searchDisplayFieldsUsed')"></tm-admin-search-index-attribute-list>
-    <div class="form-wrapper">
+    <div class="schedule-wrapper">
       <tm-admin-search-index-scheduling [searchIndex]="searchIndex"
                                         (updateSchedule)="updateSchedule(searchIndex.id, $event)"
                                         (formChanged)="validFormChanged($event)"></tm-admin-search-index-scheduling>

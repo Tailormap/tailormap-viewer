@@ -1,48 +1,51 @@
-<h2 i18n="@@admin-core.search-index.schedule">Schedule</h2>
+<h2 class="schedule-title" i18n="@@admin-core.search-index.schedule">Schedule</h2>
 
-<div class="read-only-information">
-  @if (taskSchedule?.uuid; as uuid) {
-    <div class="label">Uuid</div>
-    <div class="uuid">{{ uuid }}</div>
-    <div class="delete-schedule-message" i18n="@@admin-core.search-index.delete-schedule-message">
-      Deleting the schedule of a search index can be done by deleting the task on the tasks page
-    </div>
-  } @else {
-    <span class="no-schedule" i18n="@@admin-core.search-index.no-schedule">There is no schedule for this search index yet.</span>
-  }
+<div class="schedule-form-wrapper">
+  <div class="read-only-information">
+    @if (taskSchedule?.uuid; as uuid) {
+      <div class="label">Uuid</div>
+      <div class="uuid">{{ uuid }}</div>
+      <div class="delete-schedule-message" i18n="@@admin-core.search-index.delete-schedule-message">
+        Deleting the schedule of a search index can be done by deleting the task on the tasks page
+      </div>
+    } @else {
+      <span class="no-schedule" i18n="@@admin-core.search-index.no-schedule">There is no schedule for this search index yet.</span>
+    }
+  </div>
+
+  <form [formGroup]="scheduleForm">
+    <mat-form-field>
+      <mat-label>Schedule</mat-label>
+      <mat-select formControlName="cronExpression" (selectionChange)="onSelectionChanged($event)">
+        @for (option of scheduleOptions; track $index) {
+          <mat-option
+            [value]="option.cronExpression"
+            [disabled]="option.cronExpression === '' && taskSchedule?.uuid">
+            {{ option.viewValue }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label i18n="@@admin-core.common.description">Description*</mat-label>
+      <input matInput
+             tmAutoFocus
+             placeholder="Description"
+             i18n-placeholder="@@admin-core.common.description"
+             formControlName="description"
+      />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label i18n="@@admin-core.search-index.priority">Priority</mat-label>
+      <input matInput
+             tmAutoFocus
+             type="number"
+             min="0"
+             placeholder="5"
+             formControlName="priority"
+      />
+    </mat-form-field>
+    <div class="hint" i18n="@@admin-core.search-index.priority-hint">When multiple tasks are scheduled at the same time and they cannot be executed simultaneously, the task with the highest priority will be executed first.</div>
+  </form>
 </div>
 
-<form [formGroup]="scheduleForm">
-  <mat-form-field>
-    <mat-label>Schedule</mat-label>
-    <mat-select formControlName="cronExpression" (selectionChange)="onSelectionChanged($event)">
-      @for (option of scheduleOptions; track $index) {
-        <mat-option
-          [value]="option.cronExpression"
-          [disabled]="option.cronExpression === '' && taskSchedule?.uuid">
-            {{ option.viewValue }}
-        </mat-option>
-      }
-    </mat-select>
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label i18n="@@admin-core.common.description">Description*</mat-label>
-    <input matInput
-           tmAutoFocus
-           placeholder="Description"
-           i18n-placeholder="@@admin-core.common.description"
-           formControlName="description"
-    />
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label i18n="@@admin-core.search-index.priority">Priority</mat-label>
-    <input matInput
-           tmAutoFocus
-           type="number"
-           min="0"
-           placeholder="5"
-           formControlName="priority"
-    />
-  </mat-form-field>
-  <div class="hint" i18n="@@admin-core.search-index.priority-hint">When multiple tasks are scheduled at the same time and they cannot be executed simultaneously, the task with the highest priority will be executed first.</div>
-</form>
