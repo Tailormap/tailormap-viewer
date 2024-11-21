@@ -86,6 +86,9 @@ export class SearchIndexSchedulingComponent implements OnInit {
       this.scheduleForm.controls['description'].disable({ emitEvent: false });
       this.scheduleForm.controls['priority'].disable({ emitEvent: false });
     } else {
+      if (!this.scheduleOptions.some(option => option.cronExpression === schedule.cronExpression)) {
+        this.scheduleOptions.push({ cronExpression: schedule.cronExpression, viewValue: schedule.cronExpression });
+      }
       this.scheduleForm.patchValue({
         cronExpression: schedule.cronExpression,
         description: schedule.description,
