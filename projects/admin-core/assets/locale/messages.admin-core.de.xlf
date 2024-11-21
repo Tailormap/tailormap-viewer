@@ -1554,6 +1554,26 @@
         <source>Schedule</source>
         <target>Zeitplan</target>
       </trans-unit>
+      <trans-unit id="admin-core.search-index.schedule.every-day" datatype="html">
+        <source>Every day at 18:00</source>
+        <target>Jeden Tag um 18:00 Uhr</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.schedule.every-hour" datatype="html">
+        <source>Every hour</source>
+        <target>Stündlich</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.schedule.every-month" datatype="html">
+        <source>Every first day of the month at 18:00</source>
+        <target>Jeden ersten Tag im Monat um 18:00 Uhr</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.schedule.every-week" datatype="html">
+        <source>Every week monday at 18:00</source>
+        <target>Jede Woche Montag um 18:00 Uhr</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.schedule.no-schedule" datatype="html">
+        <source>No schedule</source>
+        <target>Kein Zeitplan</target>
+      </trans-unit>
       <trans-unit id="admin-core.search-index.search-index-created" datatype="html">
         <source>Search index created</source>
         <target>Suchindex erstellt</target>

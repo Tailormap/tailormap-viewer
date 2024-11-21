@@ -1127,6 +1127,21 @@
       <trans-unit id="admin-core.search-index.schedule" datatype="html">
         <source>Schedule</source>
       </trans-unit>
+      <trans-unit id="admin-core.search-index.schedule.every-day" datatype="html">
+        <source>Every day at 18:00</source>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.schedule.every-hour" datatype="html">
+        <source>Every hour</source>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.schedule.every-month" datatype="html">
+        <source>Every first day of the month at 18:00</source>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.schedule.every-week" datatype="html">
+        <source>Every week monday at 18:00</source>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.schedule.no-schedule" datatype="html">
+        <source>No schedule</source>
+      </trans-unit>
       <trans-unit id="admin-core.search-index.search-index-created" datatype="html">
         <source>Search index created</source>
       </trans-unit>
