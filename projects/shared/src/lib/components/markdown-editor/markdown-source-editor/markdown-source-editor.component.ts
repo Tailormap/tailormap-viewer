@@ -17,7 +17,7 @@ import { MarkdownEditorService } from '../markdown-editor.service';
   styleUrls: ['./markdown-source-editor.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [ ReactiveFormsModule, MatSelect, MatLabel, MatOption, MatFormField, MatInput, CdkTextareaAutosize ],
+  imports: [ ReactiveFormsModule, MatFormField, MatInput, CdkTextareaAutosize ],
 })
 export class MarkdownSourceEditorComponent implements OnInit {
 
@@ -48,7 +48,12 @@ export class MarkdownSourceEditorComponent implements OnInit {
       });
     this.mdEditorService.getContent$()
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(content => this.updatePreview(content));
+      .subscribe(content => {
+        if (this.editorControl.value !== content) {
+          this.editorControl.patchValue(content, { emitEvent: false });
+        }
+        this.updatePreview(content);
+      });
     this.mdEditorService.getInsertedVariables$()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(value => this.insertVariable(value));
