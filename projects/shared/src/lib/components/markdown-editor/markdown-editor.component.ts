@@ -24,8 +24,16 @@ const LOCALSTORAGE_EDITOR_KEY = 'tm-markdown-editor-pick';
 })
 export class MarkdownEditorComponent implements OnInit {
 
+  private _content: string | undefined;
+
   @Input()
-  public content: string | undefined;
+  public set content(content: string | undefined) {
+    this._content = content;
+    this.mdEditorService.contentChanged(this._content ?? '');
+  }
+  public get content() {
+    return this._content;
+  }
 
   @Input()
   public templatePicklistConfig: TemplatePicklistConfig | undefined;
