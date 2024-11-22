@@ -29,7 +29,7 @@ export class MarkdownEditorComponent implements OnInit {
   @Input()
   public set content(content: string | undefined) {
     this._content = content;
-    this.mdEditorService.contentChanged(this._content ?? '')
+    this.mdEditorService.contentChanged(this._content ?? '');
   }
   public get content() {
     return this._content;
