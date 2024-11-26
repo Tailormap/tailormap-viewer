@@ -1100,9 +1100,6 @@
       <trans-unit id="admin-core.search-index.delete-search-index-message" datatype="html">
         <source>Are you sure you want to delete search index <x id="PH" equiv-text="searchIndex.name"/>? This action cannot be undone.</source>
       </trans-unit>
-      <trans-unit id="admin-core.search-index.description" datatype="html">
-        <source>Description*</source>
-      </trans-unit>
       <trans-unit id="admin-core.search-index.edit-search-index" datatype="html">
         <source>Edit search index <x id="INTERPOLATION" equiv-text="{{searchIndex.name}}"/></source>
       </trans-unit>

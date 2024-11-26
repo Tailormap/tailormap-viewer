@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, Output, EventEmitter, DestroyRef, Input } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { SearchIndexModel, TaskSchedule } from '@tailormap-admin/admin-api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
@@ -42,7 +42,10 @@ export class SearchIndexSchedulingComponent implements OnInit {
 
   public scheduleForm = new FormGroup({
     cronExpression: new FormControl('', { nonNullable: true }),
-    description: new FormControl('', { nonNullable: true }),
+    description: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
     priority: new FormControl<number | undefined>(undefined, { nonNullable: true }),
   });
 
