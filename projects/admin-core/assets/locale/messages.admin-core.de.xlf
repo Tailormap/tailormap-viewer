@@ -1781,9 +1781,17 @@
         <source>Start</source>
         <target>Start</target>
       </trans-unit>
+      <trans-unit id="admin-core.tasks.task.start-if-not-running" datatype="html">
+        <source>Start the task if it is not already running</source>
+        <target>Starten Sie die Aufgabe, falls sie nicht bereits ausgeführt wird.</target>
+      </trans-unit>
       <trans-unit id="admin-core.tasks.task.stop" datatype="html">
         <source>Stop</source>
         <target>Stoppen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task.stop-if-running" datatype="html">
+        <source>Stop the task if it is running</source>
+        <target>Stoppen Sie die Aufgabe, wenn sie ausgeführt wird</target>
       </trans-unit>
       <trans-unit id="admin-core.tasks.tasks" datatype="html">
         <source>Tasks</source>
