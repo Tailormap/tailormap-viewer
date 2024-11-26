@@ -1502,6 +1502,10 @@
         <source>Are you sure you want to delete search index <x id="PH" equiv-text="searchIndex.name"/>? This action cannot be undone.</source>
         <target>Sind Sie sicher, dass Sie den Suchindex {$PH} löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.</target>
       </trans-unit>
+      <trans-unit id="admin-core.search-index.description" datatype="html">
+        <source>Description*</source>
+        <target>Beschreibung*</target>
+      </trans-unit>
       <trans-unit id="admin-core.search-index.edit-search-index" datatype="html">
         <source>Edit search index <x id="INTERPOLATION" equiv-text="{{searchIndex.name}}"/></source>
         <target>Suchindex {$INTERPOLATION} bearbeiten</target>
