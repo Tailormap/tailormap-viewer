@@ -1,9 +1,17 @@
-import { combineLatest, from } from 'rxjs';
+import { combineLatest, from, take } from 'rxjs';
 import type { Ctx } from '@milkdown/ctx';
 import type { BlockEditFeatureConfig } from '@milkdown/crepe/lib/types/feature/block-edit';
 import { TemplatePicklistConfig } from '../template-picklist.model';
 
 export class MilkdownHelper {
+
+  public static updateContent(ctx: Ctx, value: string) {
+    from(import('@milkdown/utils'))
+      .pipe(take(1))
+      .subscribe(utilsModule => {
+        utilsModule.replaceAll(value, true)(ctx);
+      });
+  }
 
   public static insertTextInEditor(ctx: Ctx, value: string) {
     combineLatest([

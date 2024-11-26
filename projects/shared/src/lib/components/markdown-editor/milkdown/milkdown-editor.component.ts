@@ -3,7 +3,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { TemplatePicklistConfig } from '../template-picklist.model';
-import { combineLatest, concatMap, from, lastValueFrom, Observable, take, tap } from 'rxjs';
+import { combineLatest, concatMap, distinctUntilChanged, from, lastValueFrom, Observable, take, tap } from 'rxjs';
 import type { Editor as MilkdownEditor } from '@milkdown/core';
 import type { ImageBlockFeatureConfig } from '@milkdown/crepe/src/feature/image-block';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
@@ -90,6 +90,13 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
     this.mdEditorService.getInsertedVariables$()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(value => this.insertVariable(value));
+    this.mdEditorService.getContent$()
+      .pipe(takeUntilDestroyed(this.destroyRef), distinctUntilChanged())
+      .subscribe(content => {
+        if (this.milkdownEditor) {
+          MilkdownHelper.updateContent(this.milkdownEditor.ctx, content || '');
+        }
+      });
   }
 
   public ngOnDestroy() {
