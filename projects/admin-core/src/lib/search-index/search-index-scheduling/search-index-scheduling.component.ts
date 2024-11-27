@@ -19,7 +19,7 @@ export class SearchIndexSchedulingComponent implements OnInit {
   @Input({ required: true })
   public set searchIndex(form: SearchIndexModel | null) {
     this.taskSchedule = form?.schedule;
-    this.initForm(form?.schedule);
+    this.initForm(form?.schedule, form?.name);
   }
 
   @Output()
@@ -83,20 +83,24 @@ export class SearchIndexSchedulingComponent implements OnInit {
       });
   }
 
-  private initForm(schedule: TaskSchedule | undefined) {
+  private initForm(schedule: TaskSchedule | undefined, searchIndexName?: string) {
+    let preFillDescription: string = 'Update ' + searchIndexName;
     if (!schedule) {
-      this.scheduleForm.patchValue({ cronExpression: '', description: '', priority: undefined }, { emitEvent: false });
+      this.scheduleForm.patchValue({ cronExpression: '', description: preFillDescription, priority: undefined }, { emitEvent: false });
       this.scheduleForm.controls['description'].disable({ emitEvent: false });
       this.scheduleForm.controls['priority'].disable({ emitEvent: false });
     } else {
       if (!this.scheduleOptions.some(option => option.cronExpression === schedule.cronExpression)) {
         this.scheduleOptions.push({ cronExpression: schedule.cronExpression, viewValue: schedule.cronExpression });
       }
+      if (schedule.description) {
+        preFillDescription = schedule.description;
+      }
       this.scheduleForm.patchValue({
         cronExpression: schedule.cronExpression,
-        description: schedule.description,
+        description: preFillDescription,
         priority: schedule.priority,
-      }, { emitEvent: false });
+      }, { emitEvent: true });
       this.scheduleForm.controls['description'].enable({ emitEvent: false });
       this.scheduleForm.controls['priority'].enable({ emitEvent: false });
     }
@@ -104,8 +108,7 @@ export class SearchIndexSchedulingComponent implements OnInit {
 
   private isValidForm(): boolean {
     const values = this.scheduleForm.getRawValue();
-    return FormHelper.isValidValue(values.description)
-      && ( FormHelper.isValidPositiveIntegerValue(values.priority) || values.priority === null || values.priority === undefined )
+    return ( FormHelper.isValidPositiveIntegerValue(values.priority) || values.priority === null || values.priority === undefined )
       && this.scheduleForm.dirty
       && this.scheduleForm.valid;
   }
