@@ -5,22 +5,33 @@ import { Injectable } from '@angular/core';
 export class MarkdownEditorService {
 
   private content = new BehaviorSubject('');
+  private updatedContent = new BehaviorSubject('');
+
   private insertedVariables = new Subject<string>();
 
   public insertVariable(value: string) {
     this.insertedVariables.next(value);
   }
 
-  public contentChanged(content: string) {
+  public resetContent(content: string) {
     this.content.next(content);
+    this.updatedContent.next(content);
+  }
+
+  public contentChanged(content: string) {
+    this.updatedContent.next(content);
   }
 
   public getCurrentContent() {
-    return this.content.value;
+    return this.updatedContent.value;
   }
 
   public getContent$() {
     return this.content.asObservable();
+  }
+
+  public getUpdatedContent$() {
+    return this.updatedContent.asObservable();
   }
 
   public getInsertedVariables$() {
