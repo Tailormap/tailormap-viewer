@@ -1151,6 +1151,9 @@
       <trans-unit id="admin-core.search-index.schedule.no-schedule" datatype="html">
         <source>No schedule</source>
       </trans-unit>
+      <trans-unit id="admin-core.search-index.schedule.prefill-description" datatype="html">
+        <source>Update <x id="PH" equiv-text="searchIndexName"/></source>
+      </trans-unit>
       <trans-unit id="admin-core.search-index.search-index-created" datatype="html">
         <source>Search index created</source>
       </trans-unit>

@@ -1586,6 +1586,10 @@
         <source>No schedule</source>
         <target>Kein Zeitplan</target>
       </trans-unit>
+      <trans-unit id="admin-core.search-index.schedule.prefill-description" datatype="html">
+        <source>Update <x id="PH" equiv-text="searchIndexName"/></source>
+        <target><x id="PH" equiv-text="searchIndexName"/> aktualisieren</target>
+      </trans-unit>
       <trans-unit id="admin-core.search-index.search-index-created" datatype="html">
         <source>Search index created</source>
         <target>Suchindex erstellt</target>

@@ -4,7 +4,6 @@ import { SearchIndexModel, TaskSchedule } from '@tailormap-admin/admin-api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
 import { FormHelper } from '../../helpers/form.helper';
-import { MatSelectChange } from '@angular/material/select';
 
 @Component({
   selector: 'tm-admin-search-index-scheduling',
@@ -84,25 +83,18 @@ export class SearchIndexSchedulingComponent implements OnInit {
   }
 
   private initForm(schedule: TaskSchedule | undefined, searchIndexName?: string) {
-    let preFillDescription: string = 'Update ' + searchIndexName;
+    const preFillDescription: string = $localize `:@@admin-core.search-index.schedule.prefill-description:Update ${searchIndexName}`;
     if (!schedule) {
       this.scheduleForm.patchValue({ cronExpression: '', description: preFillDescription, priority: undefined }, { emitEvent: false });
-      this.scheduleForm.controls['description'].disable({ emitEvent: false });
-      this.scheduleForm.controls['priority'].disable({ emitEvent: false });
     } else {
       if (!this.scheduleOptions.some(option => option.cronExpression === schedule.cronExpression)) {
         this.scheduleOptions.push({ cronExpression: schedule.cronExpression, viewValue: schedule.cronExpression });
       }
-      if (schedule.description) {
-        preFillDescription = schedule.description;
-      }
       this.scheduleForm.patchValue({
         cronExpression: schedule.cronExpression,
-        description: preFillDescription,
+        description: schedule.description || preFillDescription,
         priority: schedule.priority,
-      }, { emitEvent: true });
-      this.scheduleForm.controls['description'].enable({ emitEvent: false });
-      this.scheduleForm.controls['priority'].enable({ emitEvent: false });
+      }, { emitEvent: false });
     }
   }
 
@@ -111,16 +103,6 @@ export class SearchIndexSchedulingComponent implements OnInit {
     return ( FormHelper.isValidPositiveIntegerValue(values.priority) || values.priority === null || values.priority === undefined )
       && this.scheduleForm.dirty
       && this.scheduleForm.valid;
-  }
-
-  public onSelectionChanged(change: MatSelectChange) {
-    if (change.value) {
-      this.scheduleForm.controls['description'].enable({ emitEvent: false });
-      this.scheduleForm.controls['priority'].enable({ emitEvent: false });
-    } else {
-      this.scheduleForm.controls['description'].disable({ emitEvent: false });
-      this.scheduleForm.controls['priority'].disable({ emitEvent: false });
-    }
   }
 
 }
