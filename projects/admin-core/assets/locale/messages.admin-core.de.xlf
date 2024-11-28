@@ -1551,8 +1551,8 @@
         <target>Priorität</target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.priority-hint" datatype="html">
-        <source>When multiple tasks are scheduled at the same time and they cannot be executed simultaneously, the task with the highest priority will be executed first.</source>
-        <target>Wenn mehrere Aufgaben gleichzeitig geplant sind und nicht gleichzeitig ausgeführt werden können, wird die Aufgabe mit der höchsten Priorität zuerst ausgeführt.</target>
+        <source>When multiple tasks are scheduled at the same time and they cannot be executed simultaneously, the task with the highest priority will be executed first. If no value is provided for a new schedule, the default value of 5 is used. </source>
+        <target>Wenn mehrere Aufgaben gleichzeitig geplant sind und nicht gleichzeitig ausgeführt werden können, wird die Aufgabe mit der höchsten Priorität zuerst ausgeführt. Wenn für einen neuen Zeitplan kein Wert angegeben wird, wird der Standardwert 5 verwendet. </target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.reindex" datatype="html">
         <source>Re-index</source>

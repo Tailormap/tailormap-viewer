@@ -1125,7 +1125,7 @@
         <source>Priority</source>
       </trans-unit>
       <trans-unit id="admin-core.search-index.priority-hint" datatype="html">
-        <source>When multiple tasks are scheduled at the same time and they cannot be executed simultaneously, the task with the highest priority will be executed first.</source>
+        <source>When multiple tasks are scheduled at the same time and they cannot be executed simultaneously, the task with the highest priority will be executed first. If no value is provided for a new schedule, the default value of 5 is used. </source>
       </trans-unit>
       <trans-unit id="admin-core.search-index.reindex" datatype="html">
         <source>Re-index</source>
