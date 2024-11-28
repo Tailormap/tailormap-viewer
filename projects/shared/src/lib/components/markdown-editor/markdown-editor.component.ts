@@ -29,7 +29,7 @@ export class MarkdownEditorComponent implements OnInit {
   @Input()
   public set content(content: string | undefined) {
     this._content = content;
-    this.mdEditorService.contentChanged(this._content ?? '');
+    this.mdEditorService.resetContent(this._content ?? '');
   }
   public get content() {
     return this._content;
@@ -55,8 +55,8 @@ export class MarkdownEditorComponent implements OnInit {
   }
 
   public ngOnInit() {
-    this.mdEditorService.contentChanged(this.content ?? "");
-    this.mdEditorService.getContent$()
+    this.mdEditorService.resetContent(this.content ?? "");
+    this.mdEditorService.getUpdatedContent$()
       .pipe(skip(1), takeUntilDestroyed(this.destroyRef))
       .subscribe(content => {
         this.contentChanged.emit(content);
@@ -69,6 +69,7 @@ export class MarkdownEditorComponent implements OnInit {
 
   public toggleEditor(editor: 'milkdown' | 'source') {
     this.selectedEditor.set(editor);
+    this.mdEditorService.resetContent(this.mdEditorService.getCurrentContent());
     window.localStorage.setItem(LOCALSTORAGE_EDITOR_KEY, editor);
   }
 
