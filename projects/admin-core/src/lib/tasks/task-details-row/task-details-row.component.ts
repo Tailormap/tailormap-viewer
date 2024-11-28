@@ -16,9 +16,6 @@ export class TaskDetailsRowComponent {
   @Input()
   public infoValue: string | undefined | null = '';
 
-  @Input()
-  public canBeDate: boolean = false;
-
   private jobDataNiceTitles: Record<string, string> = {
     lastExecutionFinished: $localize `:@@admin-core.tasks.task-details.last-time-task-was-started:Last time task was finished`,
     lastResult: $localize `:@@admin-core.tasks.task-details.last-result:Last result`,
@@ -43,7 +40,7 @@ export class TaskDetailsRowComponent {
   }
 
   public canConvertToDate(original: string): boolean {
-    return this.canBeDate && !isNaN(Date.parse(original)) && TaskDetailsRowComponent.DATE_VALIDATOR_PATTERN.test(original.toString().substring(0, 10));
+    return TaskDetailsRowComponent.DATE_VALIDATOR_PATTERN.test(original.toString().substring(0, 10));
   }
 
 }
