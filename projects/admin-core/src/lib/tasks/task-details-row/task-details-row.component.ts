@@ -38,7 +38,7 @@ export class TaskDetailsRowComponent {
   }
 
   public canConvertToDate(original: string): boolean {
-    return !isNaN(Date.parse(original)) && isNaN(Number(original));
+    return !isNaN(Date.parse(original)) && isNaN(Number(original)) && (original.indexOf(' ') === null);
   }
 
 }
