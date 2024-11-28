@@ -8,11 +8,16 @@ import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 })
 export class TaskDetailsRowComponent {
 
+  private static DATE_VALIDATOR_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
+
   @Input()
   public infoType: string = '';
 
   @Input()
   public infoValue: string | undefined | null = '';
+
+  @Input()
+  public canBeDate: boolean = false;
 
   private jobDataNiceTitles: Record<string, string> = {
     lastExecutionFinished: $localize `:@@admin-core.tasks.task-details.last-time-task-was-started:Last time task was finished`,
@@ -38,7 +43,7 @@ export class TaskDetailsRowComponent {
   }
 
   public canConvertToDate(original: string): boolean {
-    return !isNaN(Date.parse(original)) && isNaN(Number(original)) && (original.indexOf(' ') === null);
+    return this.canBeDate && !isNaN(Date.parse(original)) && TaskDetailsRowComponent.DATE_VALIDATOR_PATTERN.test(original.toString().substring(0, 10));
   }
 
 }

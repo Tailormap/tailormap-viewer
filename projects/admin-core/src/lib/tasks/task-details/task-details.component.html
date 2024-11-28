@@ -23,8 +23,8 @@
       <tm-admin-task-details-row infoType="scheduling_state" [infoValue]="taskDetails.status" />
       <tm-admin-task-details-row infoType="lastResult" [infoValue]="taskDetails.lastResult" />
       <tm-admin-task-details-row infoType="progress" [infoValue]="taskDetails.progress" />
-      <tm-admin-task-details-row infoType="lastTime" [infoValue]="taskDetails.lastTime | date: 'medium'" />
-      <tm-admin-task-details-row infoType="startTime" [infoValue]="taskDetails.startTime | date: 'medium'" />
+      <tm-admin-task-details-row infoType="lastTime" [infoValue]="taskDetails.lastTime | date: 'medium'" [canBeDate]="true" />
+      <tm-admin-task-details-row infoType="startTime" [infoValue]="taskDetails.startTime | date: 'medium'" [canBeDate]="true" />
 
       <div class="job-data">
         <mat-expansion-panel>
@@ -34,7 +34,7 @@
           @if (taskDetails.jobData) {
             @for (item of taskDetails.jobData | keyvalue; track $index) {
 
-              <tm-admin-task-details-row [infoType]="item.key" [infoValue]="item.value" />
+              <tm-admin-task-details-row [infoType]="item.key" [infoValue]="item.value" [canBeDate]="true" />
 
             }
           }
