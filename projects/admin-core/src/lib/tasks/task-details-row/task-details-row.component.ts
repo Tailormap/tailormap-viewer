@@ -8,6 +8,8 @@ import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 })
 export class TaskDetailsRowComponent {
 
+  private static DATE_VALIDATOR_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
+
   @Input()
   public infoType: string = '';
 
@@ -38,7 +40,7 @@ export class TaskDetailsRowComponent {
   }
 
   public canConvertToDate(original: string): boolean {
-    return !isNaN(Date.parse(original)) && isNaN(Number(original));
+    return TaskDetailsRowComponent.DATE_VALIDATOR_PATTERN.test(original.toString().substring(0, 10));
   }
 
 }
