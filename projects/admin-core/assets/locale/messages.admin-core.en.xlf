@@ -1247,6 +1247,9 @@
       <trans-unit id="admin-core.tasks.task-details.executions" datatype="html">
         <source>Executions</source>
       </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.interruptable" datatype="html">
+        <source>Interruptable</source>
+      </trans-unit>
       <trans-unit id="admin-core.tasks.task-details.last-result" datatype="html">
         <source>Last result</source>
       </trans-unit>
@@ -1294,6 +1297,18 @@
       </trans-unit>
       <trans-unit id="admin-core.tasks.task.scheduled-fire-times" datatype="html">
         <source>Scheduled fire times</source>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task.start" datatype="html">
+        <source>Start</source>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task.start-if-not-running" datatype="html">
+        <source>Start the task if it is not already running</source>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task.stop" datatype="html">
+        <source>Stop</source>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task.stop-if-running" datatype="html">
+        <source>Stop the task if it is running</source>
       </trans-unit>
       <trans-unit id="admin-core.tasks.tasks" datatype="html">
         <source>Tasks</source>

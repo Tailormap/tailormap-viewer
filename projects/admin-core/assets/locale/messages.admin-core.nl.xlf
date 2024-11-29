@@ -1697,6 +1697,10 @@
         <source>Executions</source>
         <target>Uitvoeringen</target>
       </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.interruptable" datatype="html">
+        <source>Interruptable</source>
+        <target>Onderbreekbaar</target>
+      </trans-unit>
       <trans-unit id="admin-core.tasks.task-details.last-result" datatype="html">
         <source>Last result</source>
         <target>Laatste resultaat</target>
@@ -1760,6 +1764,22 @@
       <trans-unit id="admin-core.tasks.task.scheduled-fire-times" datatype="html">
         <source>Scheduled fire times</source>
         <target>Geplande uitvoermomenten</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task.start" datatype="html">
+        <source>Start</source>
+        <target>Start</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task.start-if-not-running" datatype="html">
+        <source>Start the task if it is not already running</source>
+        <target>Start de taak als deze nog niet loopt</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task.stop" datatype="html">
+        <source>Stop</source>
+        <target>Stop</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task.stop-if-running" datatype="html">
+        <source>Stop the task if it is running</source>
+        <target>Stop de taak als deze loopt</target>
       </trans-unit>
       <trans-unit id="admin-core.tasks.tasks" datatype="html">
         <source>Tasks</source>

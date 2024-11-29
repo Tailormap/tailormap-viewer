@@ -23,6 +23,7 @@
       <tm-admin-task-details-row infoType="scheduling_state" [infoValue]="taskDetails.status" />
       <tm-admin-task-details-row infoType="lastResult" [infoValue]="taskDetails.lastResult" />
       <tm-admin-task-details-row infoType="progress" [infoValue]="taskDetails.progress" />
+      <tm-admin-task-details-row infoType="interruptable" [infoValue]="taskDetails.interruptable?.toString()" />
       <tm-admin-task-details-row infoType="lastTime" [infoValue]="taskDetails.lastTime | date: 'medium'" />
       <tm-admin-task-details-row infoType="startTime" [infoValue]="taskDetails.startTime | date: 'medium'" />
 
@@ -71,7 +72,20 @@
 }
 
 <div class="page-details-actions controls-buttons">
-<!--  <button mat-flat-button color="primary" (click)="start()" i18n="@@admin-core.tasks.task.start">Start</button>-->
-<!--  <button mat-flat-button (click)="stop()" i18n="@@admin-core.tasks.task.stop">Stop</button>-->
+  <button mat-flat-button
+          color="primary"
+          (click)="start()"
+          i18n="@@admin-core.tasks.task.start"
+          [disabled]="(taskDetails$ | async)?.progress"
+          tmTooltip="Start the task if it is not already running"
+          i18n-tmTooltip="@@admin-core.tasks.task.start-if-not-running">Start</button>
+  @if ((taskDetails$ | async)?.interruptable) {
+    <button mat-flat-button
+            (click)="stop()"
+            i18n="@@admin-core.tasks.task.stop"
+            [disabled]="!(taskDetails$ | async)?.progress"
+            tmTooltip="Stop the task if it is running"
+            i18n-tmTooltip="@@admin-core.tasks.task.stop-if-running">Stop</button>
+  }
   <button mat-flat-button color="warn" (click)="delete()" i18n="@@admin-core.common.delete">Delete</button>
 </div>

@@ -1713,6 +1713,10 @@
         <source>Executions</source>
         <target>Ausführungen</target>
       </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.interruptable" datatype="html">
+        <source>Interruptable</source>
+        <target>unterbrechbar</target>
+      </trans-unit>
       <trans-unit id="admin-core.tasks.task-details.last-result" datatype="html">
         <source>Last result</source>
         <target>Letztes Ergebnis</target>
@@ -1776,6 +1780,22 @@
       <trans-unit id="admin-core.tasks.task.scheduled-fire-times" datatype="html">
         <source>Scheduled fire times</source>
         <target>Geplante Ausführungszeiten</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task.start" datatype="html">
+        <source>Start</source>
+        <target>Start</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task.start-if-not-running" datatype="html">
+        <source>Start the task if it is not already running</source>
+        <target>Starten Sie die Aufgabe, falls sie nicht bereits ausgeführt wird.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task.stop" datatype="html">
+        <source>Stop</source>
+        <target>Stoppen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task.stop-if-running" datatype="html">
+        <source>Stop the task if it is running</source>
+        <target>Stoppen Sie die Aufgabe, wenn sie ausgeführt wird</target>
       </trans-unit>
       <trans-unit id="admin-core.tasks.tasks" datatype="html">
         <source>Tasks</source>
