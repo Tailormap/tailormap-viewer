@@ -21,7 +21,7 @@
     </mat-form-field>
     <mat-form-field>
       <mat-label i18n="@@admin-core.application.projection">Projection</mat-label>
-      <mat-select formControlName="crs" placeholder="Projection" i18n-placeholder="@@admin-core.application.projection">
+      <mat-select formControlName="crs" (selectionChange)="onCrsSelectionChanged($event)" placeholder="Projection" i18n-placeholder="@@admin-core.application.projection">
         <mat-option *ngFor="let projection of projections" [value]="projection.code">
           {{ projection.label }}
         </mat-option>

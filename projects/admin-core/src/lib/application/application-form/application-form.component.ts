@@ -10,6 +10,7 @@ import { UpdateDraftApplicationModel } from '../models/update-draft-application.
 import { LanguageHelper } from '@tailormap-viewer/shared';
 import { selectApplications } from '../state/application.selectors';
 import { Store } from '@ngrx/store';
+import { MatSelectChange } from '@angular/material/select';
 
 @Component({
   selector: 'tm-admin-application-form',
@@ -176,6 +177,15 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
       && FormHelper.isValidValue(values.crs)
       && (this.nameFieldOnly || this.applicationForm.dirty)
       && this.applicationForm.valid;
+  }
+
+  public onCrsSelectionChanged(event: MatSelectChange) {
+    if (event.value === 'EPSG:3857') {
+      this.applicationForm.controls['enable3D'].enable({ emitEvent: false });
+    } else {
+      this.applicationForm.patchValue({ enable3D: false }, { emitEvent: true });
+      this.applicationForm.controls['enable3D'].disable({ emitEvent: false });
+    }
   }
 
 }
