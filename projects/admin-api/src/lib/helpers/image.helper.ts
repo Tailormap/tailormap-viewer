@@ -1,6 +1,27 @@
-import { Observable, Subject } from 'rxjs';
+import { map, Observable, of, Subject } from 'rxjs';
+
+export interface ImageResult {
+  error?: string;
+  image?: string;
+  fileName?: string;
+}
 
 export class ImageHelper {
+
+  public static readFileAsImage$(file: File, maxSize = 2, resizeSize = 600): Observable<ImageResult | null> {
+    const errorMsg = ImageHelper.checkSizeAndType(file, maxSize);
+    if (errorMsg.length > 0) {
+      return of({ error: errorMsg.join('. ') });
+    }
+    const fileName = file.name;
+    return ImageHelper.readUploadAsImage$(file, resizeSize)
+      .pipe(map(image => {
+        if (image !== null) {
+          return { image, fileName };
+        }
+        return {};
+      }));
+  }
 
   public static checkSizeAndType(file: File, maxSize = 2): string[] {
     const result = [];

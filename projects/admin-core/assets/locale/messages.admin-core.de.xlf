@@ -182,6 +182,10 @@
         <source>Filter applications</source>
         <target>Anwendungen filtern</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filter-tree" datatype="html">
+        <source>Filter application layers</source>
+        <target>Anwendungsschichten filtern</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filtered-layers" datatype="html">
         <source>The catalog above shows only layers matching the application projection (<x id="INTERPOLATION" equiv-text="{{draftApplicationCrs$ | async}}"/>)</source>
         <target state="translated">Der obige Katalog enthält nur Layer, die die (<x id="INTERPOLATION" equiv-text="{{draftApplicationCrs$ | async}}"/>) Projektionsanwendung unterstützen</target>
@@ -381,6 +385,14 @@
       <trans-unit id="admin-core.catalog.add-map-service" datatype="html">
         <source>Add map service</source>
         <target>Kartendienst hinzufügen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.attribute" datatype="html">
+        <source>Attribute</source>
+        <target>Attribute</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.attribute-reorder-hint" datatype="html">
+        <source>Use the three bars and the end of the row to re-order attributes. Hold Ctrl / Cmd (Mac) to select multiple rows to re-order together</source>
+        <target>Verwenden Sie die drei Balken am Ende der Zeile, um Attribute neu anzuordnen. Halten Sie Ctrl / Cmd (Mac) gedrückt, um mehrere Zeilen zusammen neu anzuordnen.</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.attributes" datatype="html">
         <source>Attributes</source>
@@ -862,6 +874,10 @@
         <source>Close</source>
         <target>Schließen</target>
       </trans-unit>
+      <trans-unit id="admin-core.common.collapse-all" datatype="html">
+        <source>Collapse all</source>
+        <target>Alle einklappen</target>
+      </trans-unit>
       <trans-unit id="admin-core.common.comment" datatype="html">
         <source>Comment</source>
         <target>Kommentar</target>
@@ -905,6 +921,10 @@
       <trans-unit id="admin-core.common.enabled" datatype="html">
         <source>Enabled</source>
         <target>Aktiviert</target>
+      </trans-unit>
+      <trans-unit id="admin-core.common.expand-all" datatype="html">
+        <source>Expand all</source>
+        <target>Alle ausklappen</target>
       </trans-unit>
       <trans-unit id="admin-core.common.feature-source" datatype="html">
         <source>Feature source and type</source>
@@ -1053,6 +1073,10 @@
       <trans-unit id="admin-core.common.tailormap-admin-title" datatype="html">
         <source>Tailormap Admin</source>
         <target>Tailormap-Verwaltung</target>
+      </trans-unit>
+      <trans-unit id="admin-core.common.tasks-title" datatype="html">
+        <source>Tasks</source>
+        <target>Aufgaben</target>
       </trans-unit>
       <trans-unit id="admin-core.common.title" datatype="html">
         <source>Title</source>
@@ -1366,6 +1390,10 @@
         <source>Single sign-on</source>
         <target>Einmalanmeldung</target>
       </trans-unit>
+      <trans-unit id="admin-core.navigation.tasks" datatype="html">
+        <source>Tasks</source>
+        <target>Aufgaben</target>
+      </trans-unit>
       <trans-unit id="admin-core.navigation.users" datatype="html">
         <source>Users</source>
         <target>Benutzer</target>
@@ -1466,6 +1494,10 @@
         <source>Create search index</source>
         <target>Suchindex erstellen</target>
       </trans-unit>
+      <trans-unit id="admin-core.search-index.delete-schedule-message" datatype="html">
+        <source> Deleting the schedule of a search index can be done by deleting the task on the tasks page </source>
+        <target> Der Zeitplan eines Suchindexes kann gelöscht werden, indem man die Aufgabe auf der Aufgabenseite löscht. </target>
+      </trans-unit>
       <trans-unit id="admin-core.search-index.delete-search-index" datatype="html">
         <source>Delete search index <x id="PH" equiv-text="searchIndex.name"/></source>
         <target>Suchindex {$PH} löschen</target>
@@ -1514,6 +1546,18 @@
         <source>Filter search indexes</source>
         <target>Suchindizes filtern</target>
       </trans-unit>
+      <trans-unit id="admin-core.search-index.no-schedule" datatype="html">
+        <source>There is no schedule for this search index yet.</source>
+        <target>Für diesen Suchindex gibt es noch keinen Zeitplan.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.priority" datatype="html">
+        <source>Priority</source>
+        <target>Priorität</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.priority-hint" datatype="html">
+        <source>When multiple tasks are scheduled at the same time and they cannot be executed simultaneously, the task with the highest priority will be executed first.</source>
+        <target>Wenn mehrere Aufgaben gleichzeitig geplant sind und nicht gleichzeitig ausgeführt werden können, wird die Aufgabe mit der höchsten Priorität zuerst ausgeführt.</target>
+      </trans-unit>
       <trans-unit id="admin-core.search-index.reindex" datatype="html">
         <source>Re-index</source>
         <target>Neuindexierung</target>
@@ -1521,6 +1565,30 @@
       <trans-unit id="admin-core.search-index.reindex-error" datatype="html">
         <source>Error while re-indexing search index.</source>
         <target>Fehler bei der Neuindexierung des Suchindex.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.schedule" datatype="html">
+        <source>Schedule</source>
+        <target>Zeitplan</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.schedule.every-day" datatype="html">
+        <source>Every day at 18:00</source>
+        <target>Jeden Tag um 18:00 Uhr</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.schedule.every-hour" datatype="html">
+        <source>Every hour</source>
+        <target>Stündlich</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.schedule.every-month" datatype="html">
+        <source>Every first day of the month at 18:00</source>
+        <target>Jeden ersten Tag im Monat um 18:00 Uhr</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.schedule.every-week" datatype="html">
+        <source>Every week monday at 18:00</source>
+        <target>Jede Woche Montag um 18:00 Uhr</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.schedule.no-schedule" datatype="html">
+        <source>No schedule</source>
+        <target>Kein Zeitplan</target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.search-index-created" datatype="html">
         <source>Search index created</source>
@@ -1548,6 +1616,14 @@
       </trans-unit>
       <trans-unit id="admin-core.search-index.selected-attributes-to-index" datatype="html">
         <source>Selected attributes used to index</source>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.unavailable" datatype="html">
+        <source>Search indexes are not available. This may be because Solr is not deployed or not operating correctly.</source>
+        <target>Suchindizes sind nicht verfügbar. Dies kann daran liegen, dass Solr nicht bereitgestellt ist oder nicht richtig funktioniert.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.unavailable.message" datatype="html">
+        <source>Error code <x id="INTERPOLATION" equiv-text="{{ pingResponse.code }}"/>, message: <x id="INTERPOLATION_1" equiv-text="{{ pingResponse.message }}"/></source>
+        <target>Fehlercode <x id="INTERPOLATION" equiv-text="{{ pingResponse.code }}"/>, meldung: <x id="INTERPOLATION_1" equiv-text="{{ pingResponse.message }}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.select-upload.file-in-use" datatype="html">
         <source>File is still in use</source>
@@ -1596,6 +1672,114 @@
       <trans-unit id="admin-core.settings.home" datatype="html">
         <source>Select settings from the left side</source>
         <target state="translated">Wählen Sie Einstellungen auf der linken Seite aus</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.delete-task" datatype="html">
+        <source>Delete task &apos;<x id="PH" equiv-text="task.description"/>&apos;</source>
+        <target>Aufgabe &apos;<x id="PH" equiv-text="task.description"/>&apos; löschen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.delete-task-message" datatype="html">
+        <source>Are you sure you want to delete task &apos;<x id="PH" equiv-text="task.description"/>&apos;? This action cannot be undone.</source>
+        <target>Sind Sie sicher, dass Sie die Aufgabe &apos;<x id="PH" equiv-text="task.description"/>&apos; löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.error-deleting-task" datatype="html">
+        <source>Error while deleting task</source>
+        <target>Fehler beim Löschen der Aufgabe</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.error-loading-task-details" datatype="html">
+        <source>Error while loading task details</source>
+        <target>Fehler beim Laden der Aufgabendetails</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.error-loading-tasks" datatype="html">
+        <source>Error while loading list of tasks</source>
+        <target>Fehler beim Laden der Aufgabenliste</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.last-execution-failed" datatype="html">
+        <source>last execution failed</source>
+        <target>letzte Ausführung fehlgeschlagen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.last-execution-successful" datatype="html">
+        <source>last execution succesful</source>
+        <target>letzte Ausführung erfolgreich</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.cron-expression" datatype="html">
+        <source>Cron expression</source>
+        <target>Planung (Cron expression)</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.description" datatype="html">
+        <source>Description</source>
+        <target>Beschreibung</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.executions" datatype="html">
+        <source>Executions</source>
+        <target>Ausführungen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.last-result" datatype="html">
+        <source>Last result</source>
+        <target>Letztes Ergebnis</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.last-time" datatype="html">
+        <source>Last time the task was started</source>
+        <target>Letzter Startzeitpunkt der Aufgabe</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.last-time-task-was-started" datatype="html">
+        <source>Last time task was finished</source>
+        <target>Letzter Abschlusszeitpunkt der Aufgabe</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.priority" datatype="html">
+        <source>Priority</source>
+        <target>Priorität</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.progress" datatype="html">
+        <source>Progress</source>
+        <target>Fortschritt</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.scheduling-state" datatype="html">
+        <source>Scheduling state</source>
+        <target>Planungsstatus</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.start-time" datatype="html">
+        <source>Start time</source>
+        <target>Startzeit</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.state" datatype="html">
+        <source>State</source>
+        <target>Status</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.timezone" datatype="html">
+        <source>Timezone</source>
+        <target>Zeitzone</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.type" datatype="html">
+        <source>Type</source>
+        <target>Typ</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.uuid" datatype="html">
+        <source>Uuid</source>
+        <target>Uuid</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-running" datatype="html">
+        <source>task running</source>
+        <target>Aufgabe läuft</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task.additional-job-data" datatype="html">
+        <source>Additional job data</source>
+        <target>Zusätzliche Auftragsdaten</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task.information" datatype="html">
+        <source>Task Information</source>
+        <target>Aufgabeninformationen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task.no-value" datatype="html">
+        <source> No <x id="INTERPOLATION" equiv-text="{{ niceTitle(infoType) }}"/> found</source>
+        <target> Kein(e) <x id="INTERPOLATION" equiv-text="{{ infoType }}"/> gefunden</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task.scheduled-fire-times" datatype="html">
+        <source>Scheduled fire times</source>
+        <target>Geplante Ausführungszeiten</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.tasks" datatype="html">
+        <source>Tasks</source>
+        <target>Aufgaben</target>
       </trans-unit>
       <trans-unit id="admin-core.upload-select.delete-file" datatype="html">
         <source>Delete file?</source>

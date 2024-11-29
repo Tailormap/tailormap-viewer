@@ -7,11 +7,7 @@ import { CatalogTreeHelper } from './catalog-tree.helper';
 import { CatalogItemKindEnum, GeoServiceProtocolEnum } from '@tailormap-admin/admin-api';
 import { CatalogExtendedModel } from '../models/catalog-extended.model';
 import { ExtendedCatalogModelHelper } from './extended-catalog-model.helper';
-
-interface NodeWithChildren {
-  id: string;
-  children: string[] | null;
-}
+import { FilterHelper } from '@tailormap-viewer/shared';
 
 interface FilteredItems {
   filteredCatalogNodes: ExtendedCatalogNodeModel[];
@@ -35,13 +31,13 @@ export class CatalogFilterHelper {
       return CatalogTreeHelper.catalogToTree(catalogNodes, services, serviceLayers, featureSources, featureTypes, featureTypes);
     }
     // Create regexes to filter
-    const filterRegexes = CatalogFilterHelper.createFilterRegexes(filterTerm);
+    const filterTerms = FilterHelper.createFilterTerms(filterTerm);
     const filteredItems = CatalogFilterHelper.getFilteredItems(catalogNodes, services, serviceLayers, featureSources, featureTypes, item => {
       if (ExtendedCatalogModelHelper.isGeoServiceLayerModel(item)) {
         const title = item.layerSettings?.title || item.title;
-        return CatalogFilterHelper.testRegexes(filterRegexes, title);
+        return FilterHelper.matchesFilterTerm(filterTerms, title);
       }
-      return CatalogFilterHelper.testRegexes(filterRegexes, item.title);
+      return FilterHelper.matchesFilterTerm(filterTerms, item.title);
     });
     return CatalogFilterHelper.createFilteredTree(filteredItems, featureTypes);
   }
@@ -80,7 +76,7 @@ export class CatalogFilterHelper {
       return false;
     });
     if (filterTerm && filteredItems) {
-      const filterRegexes = CatalogFilterHelper.createFilterRegexes(filterTerm);
+      const filterTerms = FilterHelper.createFilterTerms(filterTerm);
       const filteredItemsBySearchTerm = CatalogFilterHelper.getFilteredItems(
         filteredItems.filteredCatalogNodes,
         filteredItems.filteredServices,
@@ -90,9 +86,9 @@ export class CatalogFilterHelper {
         item => {
           if (ExtendedCatalogModelHelper.isGeoServiceLayerModel(item)) {
             const title = item.layerSettings?.title || item.title;
-            return CatalogFilterHelper.testRegexes(filterRegexes, title);
+            return FilterHelper.matchesFilterTerm(filterTerms, title);
           }
-          return CatalogFilterHelper.testRegexes(filterRegexes, item.title);
+          return FilterHelper.matchesFilterTerm(filterTerms, item.title);
         },
       );
       return CatalogFilterHelper.createFilteredTree(filteredItemsBySearchTerm, featureTypes);
@@ -142,10 +138,10 @@ export class CatalogFilterHelper {
     // Get list of catalog nodes including also parents of matching catalog nodes
     const filteredCatalogNodes = [
       root,
-      ...CatalogFilterHelper.getFilteredItemsAndParents(catalogNodes, filteredNodes),
+      ...FilterHelper.getFilteredItemsAndParents(catalogNodes, filteredNodes, node => node.children),
     ];
     // Get list layers including also the parents of matching layers
-    const filteredLayersAndParents = CatalogFilterHelper.getFilteredItemsAndParents(serviceLayers, filteredLayers);
+    const filteredLayersAndParents = FilterHelper.getFilteredItemsAndParents(serviceLayers, filteredLayers, node => node.children);
     // Return items
     return {
       filteredCatalogNodes,
@@ -178,45 +174,6 @@ export class CatalogFilterHelper {
       allFeatureTypes,
       treeSize <= 30 ? true : undefined,
     );
-  }
-
-  private static testRegexesOrEmpty(filterRegexes: RegExp[], text: string) {
-    if (filterRegexes.length === 0) {
-      return true;
-    }
-    return filterRegexes.every(f => f.test(text));
-  }
-
-  private static testRegexes(filterRegexes: RegExp[], text: string) {
-    return filterRegexes.every(f => f.test(text));
-  }
-
-  private static createFilterRegexes(filterTerm: string): RegExp[] {
-    return filterTerm.trim().split(' ').map(f => new RegExp(f, 'i'));
-  }
-
-  private static getFilteredItemsAndParents<T extends NodeWithChildren>(allItems: T[], filteredItems: T[]): T[] {
-    const filteredItemsSet = new Set(filteredItems.map(l => l.id));
-    const allItemsMap = new Map(allItems.map(l => [ l.id, l ]));
-    return allItems.filter(l => {
-      return filteredItemsSet.has(l.id) || CatalogFilterHelper.hasFilteredChildren(l, allItemsMap, filteredItemsSet);
-    });
-  }
-
-  private static hasFilteredChildren(node: NodeWithChildren, allNodes: Map<string, NodeWithChildren>, filteredNodes: Set<string>): boolean {
-    if (!node.children) {
-      return false;
-    }
-    return node.children.some(c => {
-      const child = allNodes.get(c);
-      if (child && filteredNodes.has(child.id)) {
-        return true;
-      }
-      if (child && child.children) {
-        return CatalogFilterHelper.hasFilteredChildren(child, allNodes, filteredNodes);
-      }
-      return false;
-    });
   }
 
 }

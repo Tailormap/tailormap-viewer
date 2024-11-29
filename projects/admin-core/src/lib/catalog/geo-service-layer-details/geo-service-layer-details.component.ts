@@ -7,7 +7,7 @@ import { GeoServiceService } from '../services/geo-service.service';
 import { LayerSettingsModel } from '@tailormap-admin/admin-api';
 import { GeoServiceLayerSettingsModel } from '../models/geo-service-layer-settings.model';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
-import { UploadCategoryEnum } from '../../shared/components/select-upload/models/upload-category.enum';
+import { UploadCategoryEnum } from '@tailormap-admin/admin-api';
 import { UPLOAD_REMOVE_SERVICE } from '../../shared/components/select-upload/models/upload-remove-service.injection-token';
 import { LegendImageRemoveService } from '../services/legend-image-remove.service';
 
@@ -110,8 +110,10 @@ export class GeoServiceLayerDetailsComponent implements OnInit, OnDestroy {
         };
       },
     )
-      .subscribe(() => {
-        this.adminSnackbarService.showMessage($localize `:@@admin-core.catalog.layer-settings-updated:Layer settings updated`);
+      .subscribe(result => {
+        if (result) {
+          this.adminSnackbarService.showMessage($localize `:@@admin-core.catalog.layer-settings-updated:Layer settings updated`);
+        }
         this.savingSubject.next(false);
       });
   }

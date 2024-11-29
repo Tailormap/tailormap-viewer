@@ -8,6 +8,7 @@ import { BoundsFieldComponent } from './bounds-field/bounds-field.component';
 import { AuthorizationEditComponent } from './authorization-edit/authorization-edit.component';
 import { AdminFieldsRendererComponent } from './admin-fields-renderer/admin-fields-renderer.component';
 import { SelectUploadModule } from './select-upload/select-upload.module';
+import { ListFilterComponent } from './list-filter/list-filter.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { SelectUploadModule } from './select-upload/select-upload.module';
     BoundsFieldComponent,
     AuthorizationEditComponent,
     AdminFieldsRendererComponent,
+    ListFilterComponent,
   ],
   imports: [
     CommonModule,
@@ -30,6 +32,7 @@ import { SelectUploadModule } from './select-upload/select-upload.module';
     AuthorizationEditComponent,
     AdminFieldsRendererComponent,
     SelectUploadModule,
+    ListFilterComponent,
   ],
 })
 export class SharedAdminComponentsModule {

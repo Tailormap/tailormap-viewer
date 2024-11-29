@@ -8,8 +8,16 @@
   padding-right: var(--toc-side-padding);
 }
 
+.toc-tree ::ng-deep .mat-tree-node {
+  height: fit-content;
+}
+
+.toc-tree ::ng-deep .tree-node-wrapper {
+  height: fit-content;
+}
+
 ::ng-deep .tree-node-wrapper {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 ::ng-deep .mat-tree {

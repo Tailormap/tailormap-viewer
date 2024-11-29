@@ -1,20 +1,11 @@
 <h2 i18n="@@admin-core.groups.groups">Groups</h2>
 <div class="grouplist-wrapper form-group has-search">
 
-  <mat-form-field appearance="outline" class="grouplist-filter">
-    <mat-label i18n="@@admin-core.groups.filter-groups">Filter groups</mat-label>
-    <input [formControl]="groupFilter"
-           i18n-placeholder="@@admin-core.common.filter-dots"
-           matInput
-           placeholder="Filter..."
-           tmAutoFocus
-           type="text"
-    />
-    <button (click)="groupFilter.setValue('')" *ngIf="groupFilter.getRawValue()" aria-label="Clear" mat-icon-button matSuffix>
-      <mat-icon svgIcon="close"></mat-icon>
-    </button>
-  </mat-form-field>
-
+  <tm-admin-list-filter class="grouplist-filter"
+                        [formControl]="groupFilter"
+                        [filterTerm]="filterString$ | async"
+                        label="Filter groups"
+                        i18n-label="@@admin-core.groups.filter-groups"></tm-admin-list-filter>
   <mat-selection-list class="grouplist">
     <mat-list-item *ngFor="let group of filteredGroups$ | async"
                    [class.selected]="group.selected"

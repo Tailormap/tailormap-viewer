@@ -1,3 +1,4 @@
+<div class="markdown-editor-header">
 @if (templatePicklistConfig) {
   <div class="select-wrapper">
     <mat-form-field>
@@ -10,12 +11,17 @@
     </mat-form-field>
   </div>
 }
-<p i18n="@@shared.markdown-editor.explanation"><a href="https://commonmark.org/help/" target="_blank">Markdown</a> is used for layout. On the left you can enter markdown text, on the right there is a preview how it will be rendered</p>
-<div class="markdown-wrap">
-  <div class="textarea-wrap">
-    <mat-form-field>
-      <textarea matInput [formControl]="editorControl" cdkTextareaAutosize cdkAutosizeMinRows="6" cdkAutosizeMaxRows="25" #editor></textarea>
-    </mat-form-field>
+  <div class="button-wrapper">
+    <mat-button-toggle-group [hideSingleSelectionIndicator]="true">
+      <mat-button-toggle [checked]="isMilkdownEditor()" (click)="toggleEditor('milkdown')" i18n="@@shared.markdown-editor.visual-editor">Visual editor</mat-button-toggle>
+      <mat-button-toggle [checked]="isSourceEditor()" (click)="toggleEditor('source')" i18n="@@shared.markdown-editor.source-editor">Source</mat-button-toggle>
+    </mat-button-toggle-group>
   </div>
-  <div class="markdown-preview" [innerHTML]="markdownPreview()"></div>
 </div>
+
+@if (isMilkdownEditor()) {
+  <tm-milkdown-editor [uploadService$]="uploadService$" [templatePicklistConfig]="templatePicklistConfig"></tm-milkdown-editor>
+}
+@if (isSourceEditor()) {
+  <tm-markdown-source-editor></tm-markdown-source-editor>
+}

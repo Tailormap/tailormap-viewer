@@ -1,15 +1,16 @@
 import {
-  ChangeDetectionStrategy, Component, DestroyRef, ElementRef, EventEmitter, Input, OnInit, Output, signal, ViewChild, ViewEncapsulation,
+  ChangeDetectionStrategy, Component, computed, DestroyRef, EventEmitter, Input, OnInit, Output, signal, ViewEncapsulation,
 } from '@angular/core';
 import { TemplatePicklistConfig } from './template-picklist.model';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatFormField, MatLabel, MatOption, MatSelect } from '@angular/material/select';
-import { MatInput } from '@angular/material/input';
-import { CdkTextareaAutosize } from '@angular/cdk/text-field';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { take } from 'rxjs';
-import { MarkdownHelper } from '../../helpers';
+import { MarkdownEditorService } from './markdown-editor.service';
+import { Observable, skip } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatButtonToggle, MatButtonToggleGroup } from '@angular/material/button-toggle';
+import { MilkdownEditorComponent } from './milkdown/milkdown-editor.component';
+import { MarkdownSourceEditorComponent } from './markdown-source-editor/markdown-source-editor.component';
+
+const LOCALSTORAGE_EDITOR_KEY = 'tm-markdown-editor-pick';
 
 @Component({
   selector: 'tm-markdown-editor',
@@ -18,62 +19,58 @@ import { MarkdownHelper } from '../../helpers';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   encapsulation: ViewEncapsulation.None,
-  imports: [ ReactiveFormsModule, MatSelect, MatLabel, MatOption, MatFormField, MatInput, CdkTextareaAutosize ],
+  imports: [ MilkdownEditorComponent, MarkdownSourceEditorComponent, MatFormField, MatLabel, MatSelect, MatOption, MatButtonToggleGroup, MatButtonToggle ],
+  providers: [MarkdownEditorService],
 })
 export class MarkdownEditorComponent implements OnInit {
 
-  @ViewChild('editor', { read: ElementRef, static: true })
-  public editorEl: ElementRef<HTMLTextAreaElement> | undefined;
-
-  public editorControl = new FormControl<string>('');
-  public markdownPreview = signal<SafeHtml | undefined>(undefined);
+  private _content: string | undefined;
 
   @Input()
-  public content: string | undefined;
+  public set content(content: string | undefined) {
+    this._content = content;
+    this.mdEditorService.resetContent(this._content ?? '');
+  }
+  public get content() {
+    return this._content;
+  }
 
   @Input()
   public templatePicklistConfig: TemplatePicklistConfig | undefined;
 
+  @Input()
+  public uploadService$?: (file: File) => Observable<{ error?: string; url?: string } | null>;
+
   @Output()
   public contentChanged = new EventEmitter<string>();
 
+  public selectedEditor = signal<'milkdown' | 'source'>(window.localStorage.getItem(LOCALSTORAGE_EDITOR_KEY) === 'source' ? 'source' : 'milkdown');
+  public isMilkdownEditor = computed(() => this.selectedEditor() === 'milkdown');
+  public isSourceEditor = computed(() => this.selectedEditor() === 'source');
+
   public constructor(
     private destroyRef: DestroyRef,
-    private sanitizer: DomSanitizer,
+    private mdEditorService: MarkdownEditorService,
   ) {
   }
 
   public ngOnInit() {
-    if (!this.editorEl) {
-      return;
-    }
-    this.editorControl.patchValue(this.content ?? '');
-    this.editorControl.valueChanges
-      .pipe(
-        takeUntilDestroyed(this.destroyRef),
-      )
+    this.mdEditorService.resetContent(this.content ?? "");
+    this.mdEditorService.getUpdatedContent$()
+      .pipe(skip(1), takeUntilDestroyed(this.destroyRef))
       .subscribe(content => {
-        if (typeof content === 'string') {
-          this.contentChanged.emit(content);
-        }
-        this.updatePreview(content);
+        this.contentChanged.emit(content);
       });
-    this.updatePreview(this.content);
   }
 
   public insertVariable(value: string) {
-    const el = this.editorEl?.nativeElement;
-    if (!el) {
-      return;
-    }
-    const [ start, end ] = [ el.selectionStart, el.selectionEnd ];
-    el.setRangeText(`{{${value}}}`, start, end, 'select');
+    this.mdEditorService.insertVariable(value);
   }
 
-  private updatePreview(content: string | null | undefined) {
-    MarkdownHelper.getSafeHtmlForMarkdown$(content || '', this.sanitizer)
-      .pipe(take(1))
-      .subscribe(html => this.markdownPreview.set(html));
+  public toggleEditor(editor: 'milkdown' | 'source') {
+    this.selectedEditor.set(editor);
+    this.mdEditorService.resetContent(this.mdEditorService.getCurrentContent());
+    window.localStorage.setItem(LOCALSTORAGE_EDITOR_KEY, editor);
   }
 
 }

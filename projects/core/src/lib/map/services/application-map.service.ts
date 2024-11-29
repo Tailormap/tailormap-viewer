@@ -6,7 +6,7 @@ import {
 import { combineLatest, concatMap, distinctUntilChanged, filter, forkJoin, map, Observable, of, Subject, take, takeUntil, tap } from 'rxjs';
 import { ServiceModel, ServiceProtocol } from '@tailormap-viewer/api';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { ArrayHelper } from '@tailormap-viewer/shared';
+import { ArrayHelper, HtmlifyHelper } from '@tailormap-viewer/shared';
 import { selectMapOptions, selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersWithServices, select3Dlayers } from '../state/map.selectors';
 import { ExtendedAppLayerModel } from '../models';
 import { selectCQLFilters } from '../../filter/state/filter.selectors';
@@ -134,7 +134,9 @@ export class ApplicationMapService implements OnDestroy {
       // We don't want a 'tainted canvas' for features such as printing. TM requires CORS-enabled or proxied services.
       crossOrigin: 'anonymous',
       opacity: extendedAppLayer.opacity,
-      attribution: extendedAppLayer.attribution,
+      attribution: typeof extendedAppLayer.attribution === 'string'
+        ? HtmlifyHelper.htmlifyContents(extendedAppLayer.attribution)
+        : extendedAppLayer.attribution,
       hiDpiDisabled: extendedAppLayer.hiDpiDisabled,
     };
     if (service.protocol === ServiceProtocol.WMTS) {

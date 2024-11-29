@@ -43,6 +43,7 @@
 
 .map-controls-left, .map-controls-right {
   pointer-events: none;
+  z-index: 3;
 }
 
 .map-controls-right>*, .map-controls-left>* {

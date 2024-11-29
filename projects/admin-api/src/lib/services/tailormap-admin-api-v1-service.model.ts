@@ -2,6 +2,7 @@ import { Observable } from 'rxjs';
 import {
   CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel, ConfigModel,
   OIDCConfigurationModel, FeatureTypeModel, UploadModel, FormSummaryModel, FormModel, SearchIndexModel,
+  SearchIndexPingResponseModel, TaskModel, TaskDetailsModel,
 } from '../models';
 
 export interface TailormapAdminApiV1ServiceModel {
@@ -59,10 +60,14 @@ export interface TailormapAdminApiV1ServiceModel {
   createUpload$(upload: Pick<UploadModel, 'content' | 'filename' | 'category' | 'mimeType'>): Observable<UploadModel>;
   deleteUpload$(uploadId: string): Observable<boolean>;
 
+  pingSearchIndexEngine$(): Observable<SearchIndexPingResponseModel>;
   getSearchIndexes$(): Observable<SearchIndexModel[]>;
   createSearchIndex$(params: { searchIndex: Omit<SearchIndexModel, 'id'> }): Observable<SearchIndexModel>;
   updateSearchIndex$(params: { id: number; searchIndex: Partial<SearchIndexModel> }): Observable<SearchIndexModel>;
   deleteSearchIndex$(id: number): Observable<boolean>;
   reindexSearchIndex$(id: number): Observable<boolean>;
   clearSearchIndex$(id: number): Observable<boolean>;
+  getTasks$(): Observable<TaskModel[]>;
+  getTaskDetails$(uuid: string, type: string): Observable<TaskDetailsModel>;
+  deleteTask$(uuid: string, type: string): Observable<boolean>;
 }

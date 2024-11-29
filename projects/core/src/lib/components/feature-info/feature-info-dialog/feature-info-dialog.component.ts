@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
   selectCurrentlySelectedFeature,
@@ -44,6 +44,8 @@ export class FeatureInfoDialogComponent {
 
   public isWideScreen = signal<boolean>(false);
   public expandedList = signal<boolean>(false);
+  public attributesCollapsed = signal<boolean>(false);
+  public toggleIcon = computed(() => this.attributesCollapsed() ? 'chevron_top' : 'chevron_bottom');
 
   constructor(
     private store$: Store,
@@ -115,6 +117,10 @@ export class FeatureInfoDialogComponent {
 
   public getLayerListItem(layer: FeatureInfoLayerModel): FeatureInfoLayerListItemModel {
     return { ...layer, selected: false, disabled: FeatureInfoHelper.isLayerDisabled(layer) };
+  }
+
+  public toggleAttributes() {
+    this.attributesCollapsed.set(!this.attributesCollapsed());
   }
 
 }

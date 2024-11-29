@@ -13,6 +13,7 @@ import { CatalogBaseTreeNodeComponent } from '../catalog-base-tree/catalog-base-
 import { CatalogExtendedTypeEnum } from '../models/catalog-extended.model';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
 import { provideHttpClient } from '@angular/common/http';
+import { SharedAdminComponentsModule } from '../../shared/components/shared-admin-components.module';
 
 const setup = async (state: Partial<CatalogState> = {}) => {
   const mockStore = createMockStore({
@@ -23,7 +24,7 @@ const setup = async (state: Partial<CatalogState> = {}) => {
   const mockDispatch = jest.fn();
   mockStore.dispatch = mockDispatch;
   await render(CatalogTreeComponent, {
-    imports: [ SharedModule, MatIconTestingModule ],
+    imports: [ SharedModule, MatIconTestingModule, SharedAdminComponentsModule ],
     declarations: [ CatalogTreeNodeComponent, CatalogBaseTreeComponent, CatalogBaseTreeNodeComponent ],
     providers: [
       { provide: Store, useValue: mockStore },

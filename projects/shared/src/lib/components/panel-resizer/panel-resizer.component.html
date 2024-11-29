@@ -1,5 +1,7 @@
 <div class="resize-panel"
      [class.resize-panel--horizontal]="orientation === 'horizontal'"
+     [class.resize-panel--vertical]="orientation === 'vertical'"
+     [class.resize-panel--visible-on-hover]="visibleOnHover"
      #resizer>
   <div class="resize-handle">
     <mat-icon svgIcon="resize"></mat-icon>

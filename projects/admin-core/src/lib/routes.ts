@@ -33,6 +33,9 @@ export class Routes {
   public static SEARCH_INDEXES_CREATE = 'create';
   public static SEARCH_INDEXES_DETAILS = 'search-index/:searchIndexId';
 
+  public static TASKS = 'tasks';
+  public static TASK_DETAILS = 'task/:taskId';
+
   public static SETTINGS = 'settings';
 
   public static LOGS = 'logs';

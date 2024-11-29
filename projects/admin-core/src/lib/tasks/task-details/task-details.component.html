@@ -1,0 +1,77 @@
+<h2 i18n="@@admin-core.tasks.task.information">Task Information</h2>
+
+<div class="information">
+
+  @if (task$ | async; as task) {
+    <div class="standard-information">
+
+      <tm-admin-task-details-row infoType="type" [infoValue]="task.type" />
+      <tm-admin-task-details-row infoType="description" [infoValue]="task.description" />
+      <tm-admin-task-details-row infoType="uuid" [infoValue]="task.uuid" />
+
+    </div>
+  }
+
+  @if ((taskDetailsLoadStatus$ | async) === loadingStateEnum.LOADING && (loadErrorMessage$ | async) === undefined) {
+    <mat-spinner diameter="20" mode="indeterminate"></mat-spinner>
+  }
+
+  @if (taskDetails$ | async; as taskDetails) {
+    <div class="detailed-information">
+
+      <tm-admin-task-details-row infoType="cronExpression" [infoValue]="taskDetails.cronExpression" />
+      <tm-admin-task-details-row infoType="scheduling_state" [infoValue]="taskDetails.status" />
+      <tm-admin-task-details-row infoType="lastResult" [infoValue]="taskDetails.lastResult" />
+      <tm-admin-task-details-row infoType="progress" [infoValue]="taskDetails.progress" />
+      <tm-admin-task-details-row infoType="lastTime" [infoValue]="taskDetails.lastTime | date: 'medium'" />
+      <tm-admin-task-details-row infoType="startTime" [infoValue]="taskDetails.startTime | date: 'medium'" />
+
+      <div class="job-data">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title i18n="@@admin-core.tasks.task.additional-job-data">Additional job data</mat-panel-title>
+          </mat-expansion-panel-header>
+          @if (taskDetails.jobData) {
+            @for (item of taskDetails.jobData | keyvalue; track $index) {
+
+              <tm-admin-task-details-row [infoType]="item.key" [infoValue]="item.value" />
+
+            }
+          }
+        </mat-expansion-panel>
+      </div>
+
+      <div class="schedule">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title i18n="@@admin-core.tasks.task.scheduled-fire-times">Scheduled fire times</mat-panel-title>
+          </mat-expansion-panel-header>
+          @for (time of taskDetails.nextFireTimes; track $index) {
+
+            <tm-admin-task-details-row [infoType]="''" [infoValue]="time | date: 'medium'" />
+
+          }
+        </mat-expansion-panel>
+      </div>
+
+    </div>
+  } @else {
+    <div class="error-message">
+      <tm-error-message [message]="loadErrorMessage$ | async"></tm-error-message>
+    </div>
+  }
+
+
+</div>
+
+@if (deleteErrorMessage$ |async) {
+  <div class="error-message">
+    <tm-error-message [message]="deleteErrorMessage$ | async"></tm-error-message>
+  </div>
+}
+
+<div class="page-details-actions controls-buttons">
+<!--  <button mat-flat-button color="primary" (click)="start()" i18n="@@admin-core.tasks.task.start">Start</button>-->
+<!--  <button mat-flat-button (click)="stop()" i18n="@@admin-core.tasks.task.stop">Stop</button>-->
+  <button mat-flat-button color="warn" (click)="delete()" i18n="@@admin-core.common.delete">Delete</button>
+</div>

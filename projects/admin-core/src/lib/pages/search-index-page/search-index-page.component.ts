@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoutePropertyHelper } from '../helpers/route-property.helper';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { SearchIndexPingResponseModel, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 
 @Component({
   selector: 'tm-admin-search-index-page',
@@ -14,13 +15,17 @@ export class SearchIndexPageComponent {
 
   public className$: Observable<string>;
 
+  public searchIndexPingResponse$: Observable<SearchIndexPingResponseModel>;
+
   constructor(
     route: ActivatedRoute,
     router: Router,
     destroyRef: DestroyRef,
+    adminApiService: TailormapAdminApiV1Service,
   ) {
     this.className$ = RoutePropertyHelper.getPropForRoute$(router, route, 'className')
       .pipe(takeUntilDestroyed(destroyRef));
+    this.searchIndexPingResponse$ = adminApiService.pingSearchIndexEngine$();
   }
 
 }

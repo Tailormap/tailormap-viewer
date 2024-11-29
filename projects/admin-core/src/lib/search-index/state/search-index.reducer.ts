@@ -51,6 +51,15 @@ const onLoadSearchIndexesFailed = (
   searchIndexes: [],
 });
 
+const onReloadSearchIndexes = (state: SearchIndexState): SearchIndexState => ({
+  ...state,
+  searchIndexesLoadStatus: LoadingStateEnum.INITIAL,
+  searchIndexesLoadError: undefined,
+  searchIndexes: [],
+  draftSearchIndexId: null,
+  draftSearchIndex: undefined,
+});
+
 const onSetSearchIndexListFilter = (
   state: SearchIndexState,
   payload: ReturnType<typeof SearchIndexActions.setSearchIndexListFilter>,
@@ -145,6 +154,7 @@ const searchIndexReducerImpl = createReducer<SearchIndexState>(
   on(SearchIndexActions.loadSearchIndexesStart, onLoadSearchIndexesStart),
   on(SearchIndexActions.loadSearchIndexesSuccess, onLoadSearchIndexesSuccess),
   on(SearchIndexActions.loadSearchIndexesFailed, onLoadSearchIndexesFailed),
+  on(SearchIndexActions.reloadSearchIndexes, onReloadSearchIndexes),
   on(SearchIndexActions.setSearchIndexListFilter, onSetSearchIndexListFilter),
   on(SearchIndexActions.clearSelectedSearchIndex, onClearSelectedSearchIndex),
   on(SearchIndexActions.setDraftSearchIndexId, onSetDraftSearchIndexId),

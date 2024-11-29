@@ -8,10 +8,11 @@ import { UserListComponent } from '../../user/user-list/user-list.component';
 import { provideMockStore } from '@ngrx/store/testing';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
 import { provideHttpClient } from '@angular/common/http';
+import { SharedAdminComponentsModule } from '../../shared/components/shared-admin-components.module';
 
 const setup = async () => {
   await render(UserAdminPageComponent, {
-    imports: [ SharedModule, MatListModule, MatIconTestingModule ],
+    imports: [ SharedModule, MatListModule, MatIconTestingModule, SharedAdminComponentsModule ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     declarations: [UserListComponent],
     providers: [ provideMockStore(), provideHttpClient(), AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser() ],

@@ -7,20 +7,10 @@
   </ng-container>
   <div *ngIf="oidcConfigurationsLoadStatus === 'LOADED'"
        class="form-group has-search">
-    <mat-form-field appearance="outline">
-      <mat-label i18n="@@admin-core.oidc.filter-identity-providers">Filter identity providers</mat-label>
-      <input [formControl]="filter"
-             i18n-placeholder="@@admin-core.common.filter-dots"
-             matInput
-             placeholder="Filter..."
-             tmAutoFocus
-             type="text"
-      />
-      <button (click)="filter.setValue('')" *ngIf="filter.getRawValue()" aria-label="Clear" mat-icon-button matSuffix>
-        <mat-icon svgIcon="close"></mat-icon>
-      </button>
-    </mat-form-field>
-
+    <tm-admin-list-filter [formControl]="filter"
+                          [filterTerm]="filterTerm$ | async"
+                          label="Filter identity providers"
+                          i18n-label="@@admin-core.oidc.filter-identity-providers"></tm-admin-list-filter>
     <mat-selection-list>
       <mat-list-item *ngFor="let oidcConfiguration of oidcConfigurations$ | async"
                      [class.selected]="oidcConfiguration.selected"

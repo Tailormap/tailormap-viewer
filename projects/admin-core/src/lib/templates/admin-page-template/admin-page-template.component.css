@@ -1,0 +1,6 @@
+:host {
+  flex: 1;
+  display: flex;
+  justify-content: stretch;
+  align-items: stretch;
+}

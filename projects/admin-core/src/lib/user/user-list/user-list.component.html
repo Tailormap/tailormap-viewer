@@ -1,20 +1,11 @@
 <h2 i18n="@@admin-core.users.users">Users</h2>
 <div class="userlist-wrapper form-group has-search">
 
-  <mat-form-field appearance="outline" class="userlist-filter">
-    <mat-label i18n="@@admin-core.users.filter-users">Filter users</mat-label>
-    <input [formControl]="userFilter"
-           i18n-placeholder="@@admin-core.common.filter-dots"
-           matInput
-           placeholder="Filter..."
-           tmAutoFocus
-           type="text"
-    />
-    <button (click)="userFilter.setValue('')" *ngIf="userFilter.getRawValue()" aria-label="Clear" mat-icon-button matSuffix>
-      <mat-icon svgIcon="close"></mat-icon>
-    </button>
-  </mat-form-field>
-
+  <tm-admin-list-filter class="userlist-filter"
+                        [formControl]="userFilter"
+                        [filterTerm]="filterString$ | async"
+                        label="Filter users"
+                        i18n-label="@@admin-core.users.filter-users"></tm-admin-list-filter>
   <mat-selection-list class="userlist">
     <mat-list-item *ngFor="let user of filteredUsers$ | async"
                    [class.selected]="user.selected"

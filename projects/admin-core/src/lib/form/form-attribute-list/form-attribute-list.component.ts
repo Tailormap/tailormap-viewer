@@ -31,6 +31,8 @@ export class FormAttributeListComponent implements OnInit {
   public featureType$ = this.featureTypeSubject$.asObservable();
   public attributes$: Observable<AttributeDescriptorModel[]> = of([]);
 
+  public filterTerm$ = this.attributeFilter.asObservable();
+
   constructor(
     private store$: Store,
     private destroyRef: DestroyRef,

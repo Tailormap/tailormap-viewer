@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { TailormapAdminApiV1ServiceModel } from './tailormap-admin-api-v1-service.model';
 import { catchError, map, Observable, of } from 'rxjs';
 import {
   CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel, ConfigModel,
   OIDCConfigurationModel, FeatureTypeModel,
   GeoServiceSummaryWithLayersModel, FeatureSourceSummaryWithFeatureTypesModel, FormSummaryModel, FormModel, UploadModel, SearchIndexModel,
+  SearchIndexPingResponseModel, TaskModel, TaskDetailsModel,
 } from '../models';
 import { CatalogModelHelper } from '../helpers/catalog-model.helper';
-import { TailormapApiConstants } from '@tailormap-viewer/api';
+import { ApiHelper, TailormapApiConstants } from '@tailormap-viewer/api';
 
 type GeoServiceListResponse = { _embedded: { ['geo-services']: GeoServiceSummaryWithLayersModel[] }};
 type FeatureSourceListResponse = { _embedded: { ['feature-sources']: FeatureSourceSummaryWithFeatureTypesModel[] }};
@@ -321,6 +322,19 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
     );
   }
 
+  public pingSearchIndexEngine$(): Observable<SearchIndexPingResponseModel> {
+    return this.httpClient.get<{ status: string }>(`${TailormapAdminApiV1Service.BASE_URL}/index/ping`).pipe(
+      map(response => ({ success: true, ...response })),
+      catchError((err: HttpErrorResponse) => {
+        if (err.status === 500 && ApiHelper.isApiErrorResponse(err.error)) {
+          return of({ success: false, ...err.error });
+        } else {
+          return of({ success: false, code: err.status, message: err.statusText });
+        }
+      }),
+    );
+  }
+
   public getSearchIndexes$(): Observable<SearchIndexModel[]> {
     return this.httpClient.get<{ _embedded: { 'search-indexes': SearchIndexModel[] }}>(`${TailormapAdminApiV1Service.BASE_URL}/search-indexes?size=1000`)
       .pipe(map(response => response._embedded['search-indexes']));
@@ -364,5 +378,39 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
     );
   }
 
+  public getTasks$(): Observable<TaskModel[]> {
+    return this.httpClient.get<{ 'tasks': TaskModel[] }>(`${TailormapAdminApiV1Service.BASE_URL}/tasks`)
+      .pipe(map(response => response.tasks));
+  }
+
+  public getTaskDetails$(uuid: string, type: string): Observable<TaskDetailsModel> {
+    return this.httpClient.get<TaskDetailsModel>(`${TailormapAdminApiV1Service.BASE_URL}/tasks/${type}/${uuid}`);
+  }
+
+  public deleteTask$(uuid: string, type: string): Observable<boolean> {
+    return this.httpClient.delete<boolean>(`${TailormapAdminApiV1Service.BASE_URL}/tasks/${type}/${uuid}`, {
+      observe: 'response',
+    }).pipe(
+      map(response => response.status === 204),
+    );
+  }
+
+  public startTask$(uuid: string, type: string): Observable<boolean> {
+    return this.httpClient.put(`${TailormapAdminApiV1Service.BASE_URL}/tasks/${type}/${uuid}/start`, {}, {
+      observe: 'response',
+    }).pipe(
+      map(response => response.status === 202),
+      catchError(() => of(false)),
+    );
+  }
+
+  public stopTask$(uuid: string, type: string): Observable<boolean> {
+    return this.httpClient.put(`${TailormapAdminApiV1Service.BASE_URL}/tasks/${type}/${uuid}/stop`, {}, {
+      observe: 'response',
+    }).pipe(
+      map(response => response.status === 202),
+      catchError(() => of(false)),
+    );
+  }
 
 }

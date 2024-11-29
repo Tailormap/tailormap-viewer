@@ -1,0 +1,30 @@
+:host {
+  padding: 0 20px 20px 20px;
+  display: block;
+}
+
+.information {
+  width: fit-content;
+  max-width: 500px;
+}
+
+.row {
+  margin-top: 16px;
+}
+
+.controls-buttons {
+  margin-top: 16px;
+}
+
+.label {
+  font-weight: bold;
+  padding-bottom: 3px;
+}
+
+.job-data {
+  margin-top: 16px;
+}
+
+.error-message {
+  margin-top: 16px;
+}

@@ -13,6 +13,7 @@ import { ConfigService } from '../../config/services/config.service';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { ENVIRONMENT_CONFIG } from '@tailormap-viewer/api';
 import { APP_BASE_HREF } from '@angular/common';
+import { SharedAdminComponentsModule } from '../../shared/components/shared-admin-components.module';
 
 const setup = async (
   loadStatus: LoadingStateEnum = LoadingStateEnum.INITIAL,
@@ -38,7 +39,7 @@ const setup = async (
   mockStore.dispatch = jest.fn();
   const configService = { getConfigValue$: jest.fn(() => of('app2')) };
   await render(ApplicationListComponent, {
-    imports: [ SharedModule, MatListModule, MatIconTestingModule ],
+    imports: [ SharedModule, MatListModule, MatIconTestingModule, SharedAdminComponentsModule ],
     providers: [
       { provide: Store, useValue: mockStore },
       { provide: ConfigService, useValue: configService },

@@ -2,7 +2,7 @@ import { TocState, tocStateKey } from './toc.state';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { selectLayersMap, selectLayerTree, selectOrderedLayerNodes } from '../../../map/state/map.selectors';
 import { LayerTreeNodeHelper } from '../../../map/helpers/layer-tree-node.helper';
-import { TreeModel } from '@tailormap-viewer/shared';
+import { FilterHelper, TreeModel } from '@tailormap-viewer/shared';
 
 const selectTocState = createFeatureSelector<TocState>(tocStateKey);
 
@@ -22,9 +22,9 @@ export const selectFilteredLayerTree = createSelector(
     if (!filterEnabled || !filterTerm) {
       return layerTree;
     }
-    const filterRegexes: RegExp[] = filterTerm.trim().split(' ').map(f => new RegExp(f, 'i'));
+    const filterTerms = FilterHelper.createFilterTerms(filterTerm);
     return layerTreeNodes
       .map(layerNode => LayerTreeNodeHelper.getTreeModelForLayerTreeNode(layerNode, layers))
-      .filter(layerNode => filterRegexes.every(f => f.test(layerNode.label)));
+      .filter(layerNode => FilterHelper.matchesFilterTerm(filterTerms, layerNode.label));
   },
 );

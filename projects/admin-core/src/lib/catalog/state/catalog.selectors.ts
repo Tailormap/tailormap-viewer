@@ -13,7 +13,7 @@ import { ExtendedGeoServiceAndLayerModel } from '../models/extended-geo-service-
 const selectCatalogState = createFeatureSelector<CatalogState>(catalogStateKey);
 
 export const selectCatalog = createSelector(selectCatalogState, state => state.catalog);
-export const selectFilterTerm = createSelector(selectCatalogState, state => state.filterTerm);
+export const selectCatalogFilterTerm = createSelector(selectCatalogState, state => state.filterTerm);
 export const selectGeoServices = createSelector(selectCatalogState, state => state.geoServices);
 export const selectGeoServiceLayers = createSelector(selectCatalogState, state => state.geoServiceLayers);
 export const selectFeatureSources = createSelector(selectCatalogState, state => state.featureSources);
@@ -133,7 +133,7 @@ export const selectCatalogTree = createSelector(
   selectGeoServiceLayers,
   selectFeatureSources,
   selectFeatureTypes,
-  selectFilterTerm,
+  selectCatalogFilterTerm,
   (catalog, services, layers, featureSources, featureTypes, filterTerm): CatalogTreeModel[] => {
     return CatalogFilterHelper.filterTreeByFilterTerm(catalog, services, layers, featureSources, featureTypes, filterTerm);
   },

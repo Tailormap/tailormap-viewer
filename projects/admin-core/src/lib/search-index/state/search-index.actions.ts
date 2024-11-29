@@ -7,6 +7,10 @@ export const loadSearchIndexes = createAction(
   `${searchIndexActionsPrefix} Load SearchIndexes`,
 );
 
+export const reloadSearchIndexes = createAction(
+  `${searchIndexActionsPrefix} Reload SearchIndexes`,
+);
+
 export const loadSearchIndexesStart = createAction(
   `${searchIndexActionsPrefix} Load SearchIndexes Start`,
 );
@@ -39,7 +43,7 @@ export const updateDraftSearchIndex = createAction(
   `${searchIndexActionsPrefix} Update Draft Search Index`,
   props<{
     id: number;
-    searchIndex: Partial<Pick<SearchIndexModel, 'name' | 'comment' | 'featureTypeId' | 'searchFieldsUsed' | 'searchDisplayFieldsUsed'>>;
+    searchIndex: Partial<Pick<SearchIndexModel, 'name' | 'comment' | 'featureTypeId' | 'searchFieldsUsed' | 'searchDisplayFieldsUsed' | 'schedule'>>;
   }>(),
 );
 

@@ -1,3 +1,4 @@
+<script src="feature-type-attributes.component.ts"></script>
 <div class="attributes-wrapper">
 
   <mat-card class="attributes-table">
@@ -7,13 +8,16 @@
         <mat-table
                [dataSource]="dataAttributes"
                cdkDropList
+               [cdkDropListDisabled]="dragDropDisabled()"
                [cdkDropListData]="dataAttributes"
+               (dragstart)="isDragging.set(true)"
+               (dragend)="isDragging.set(false)"
                (cdkDropListDropped)="dropTable($event)">
           <ng-container matColumnDef="enabled">
             <mat-header-cell *matHeaderCellDef>
               <mat-checkbox (change)="toggleAllAttributes('hidden')" [checked]="allChecked['hidden']" [indeterminate]="someChecked['hidden']"></mat-checkbox>
             </mat-header-cell>
-            <mat-cell *matCellDef="let att">
+            <mat-cell *matCellDef="let att" [class.disabled-cell]="isReadonlyFieldDisabled(att.name)">
               <mat-checkbox (change)="toggleAttribute('hidden', att.name)" [checked]="isAttributeEnabled('hidden', att.name)"></mat-checkbox>
             </mat-cell>
           </ng-container>
@@ -31,15 +35,19 @@
           </ng-container>
           <ng-container matColumnDef="name">
             <mat-header-cell *matHeaderCellDef></mat-header-cell>
-            <mat-cell *matCellDef="let att"><div class="wrap-text" [tmTooltip]="att.name">{{att.name}}</div></mat-cell>
+            <mat-cell *matCellDef="let att" [class.disabled-cell]="isReadonlyFieldDisabled(att.name)">
+              <div class="wrap-text" [tmTooltip]="att.name">{{att.name}}</div>
+            </mat-cell>
           </ng-container>
           <ng-container matColumnDef="type">
             <mat-header-cell *matHeaderCellDef></mat-header-cell>
-            <mat-cell *matCellDef="let att"><div class="wrap-text" [tmTooltip]="att.type">{{att.type}}</div></mat-cell>
+            <mat-cell *matCellDef="let att" [class.disabled-cell]="isReadonlyFieldDisabled(att.name)">
+              <div class="wrap-text" [tmTooltip]="att.type">{{att.type}}</div>
+            </mat-cell>
           </ng-container>
           <ng-container matColumnDef="alias">
             <mat-header-cell *matHeaderCellDef></mat-header-cell>
-            <mat-cell *matCellDef="let att">
+            <mat-cell *matCellDef="let att" [class.disabled-cell]="isReadonlyFieldDisabled(att.name)">
               <mat-form-field>
                 <input matInput [formControlName]="att.name" />
               </mat-form-field>
@@ -47,9 +55,13 @@
           </ng-container>
           <ng-container matColumnDef="sort">
             <mat-header-cell *matHeaderCellDef></mat-header-cell>
-            <mat-cell *matCellDef="let att"><mat-icon cdkDragHandle svgIcon="reorder"></mat-icon></mat-cell>
+            <mat-cell *matCellDef="let att" [class.disabled-cell]="isReadonlyFieldDisabled(att.name)">
+              <mat-icon cdkDragHandle
+                        (mousedown)="dragDropDisabled.set(false)"
+                        (mouseup)="dragDropDisabled.set(true)"
+                        svgIcon="reorder"></mat-icon>
+            </mat-cell>
           </ng-container>
-
           <ng-container matColumnDef="label-enabled">
             <mat-header-cell *matHeaderCellDef><div class="wrap-text" tmTooltip="Enabled" i18n-tmTooltip="@@admin-core.common.enabled" i18n="@@admin-core.common.enabled">Enabled</div></mat-header-cell>
           </ng-container>
@@ -71,9 +83,21 @@
 
           <mat-header-row *matHeaderRowDef="columnLabels"></mat-header-row>
           <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: columns;" cdkDrag [cdkDragData]="row"></mat-row>
+          <mat-row *matRowDef="let row; columns: columns"
+                   class="draggable-row"
+                   [class]="'draggable-row-' + row.name"
+                   [style]="cssCountVariable()"
+                   [class.hide-while-dragging]="isDragging() && selectedIndexes().has(row.name)"
+                   [class.multiple-selected]="selectedIndexes().size > 1"
+                   [class.selected]="selectedIndexes().has(row.name)"
+                   (click)="toggleSelection(row, $event)"
+                   cdkDrag
+                   (cdkDragStarted)="dragStarted($event)"
+                   (cdkDragEnded)="isDragging.set(false)"
+                   [cdkDragData]="row"></mat-row>
         </mat-table>
       </form>
+      <p class="hint" i18n="@@admin-core.catalog.attribute-reorder-hint">Use the three bars and the end of the row to re-order attributes. Hold Ctrl / Cmd (Mac) to select multiple rows to re-order together</p>
     </mat-card-content>
   </mat-card>
 

@@ -83,6 +83,14 @@ export class NavigationComponent implements OnInit {
 
   public bottomButtons: ButtonProps[] =  [
     {
+      label: $localize`:@@admin-core.navigation.tasks:Tasks`,
+      matchExact: false,
+      link: [ '/admin', Routes.TASKS ],
+      icon: 'admin_tasks',
+      requireAdmin: true,
+      checkEnabled$: this.applicationFeatureSwitchService.isFeatureEnabled$(ApplicationFeature.TASKS),
+    },
+    {
       label: $localize`:@@admin-core.navigation.logs:Logs`,
       matchExact: true,
       link: [ '/admin', Routes.LOGS ],

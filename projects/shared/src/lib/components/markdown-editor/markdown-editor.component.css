@@ -1,18 +1,16 @@
-.select-wrapper {
-  max-width: 300px;
-  margin-bottom: 16px;
-}
-
-.markdown-wrap {
+.markdown-editor-header {
   display: flex;
+  margin-bottom: 16px;
+  align-items: center;
 }
 
-.textarea-wrap,
-.markdown-preview {
-  flex: 1;
+.select-wrapper {
+  width: 300px;
+  max-width: 300px;
+  max-height: 550px;
+  overflow: auto;
 }
 
-.markdown-preview {
-  padding: 16px;
-  background-color: #f9f9f9;
+.select-wrapper + .button-wrapper {
+  margin-left: 16px;
 }
