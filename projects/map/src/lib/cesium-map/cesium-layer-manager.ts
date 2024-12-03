@@ -4,8 +4,9 @@ import { LayerTypesHelper } from '../helpers/layer-types.helper';
 import { NgZone } from '@angular/core';
 import type OLCesium from 'olcs';
 import { BehaviorSubject, filter, from, map, Observable, take } from 'rxjs';
-import type { Cesium3DTileset, Scene } from 'cesium';
+import { Cesium3DTileset, CesiumTerrainProvider, EllipsoidTerrainProvider, Scene } from 'cesium';
 import { ExternalLibsLoaderHelper } from '@tailormap-viewer/shared';
+import { LayerTypesEnum } from '../models/layer-types.enum';
 
 export class CesiumLayerManager {
 
@@ -36,17 +37,9 @@ export class CesiumLayerManager {
           });
           this.map3D.next(ol3d);
         });
-
-      // this.executeScene3DAction(scene3D => {
-      //   const OLCS_ION_TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2YjQ4MDkzYi02ZjJjLTQ5YTgtY' +
-      //     'jAyZC1lN2IxZGZlMDFlMDkiLCJpZCI6MTk3Mzk5LCJpYXQiOjE3MDg2Nzg4ODh9.DQT_DNkF7XS8vtMtIde2oeZsJoQTqm4K3qFahQ1-tR8';
-      //   Cesium.Ion.defaultAccessToken = OLCS_ION_TOKEN;
-      //   scene3D.setTerrain(
-      //     new Cesium.Terrain(
-      //       Cesium.CesiumTerrainProvider.fromIonAssetId(1),
-      //     ),
-      //   );
-      // });
+      this.executeScene3DAction(async scene3D => {
+        scene3D.globe.depthTestAgainstTerrain = true;
+      });
     });
   }
 
@@ -79,7 +72,7 @@ export class CesiumLayerManager {
   }
 
   public addLayers(layers: LayerModel[]){
-    this.ngZone.runOutsideAngular(() => {
+    // this.ngZone.runOutsideAngular(() => {
       layers.forEach(layer => {
         if (layer.visible) {
           this.addLayer(layer);
@@ -87,30 +80,42 @@ export class CesiumLayerManager {
           this.removeLayer(layer);
         }
       });
-    });
+    // });
   }
 
   private addLayer(layer: LayerModel) {
     this.executeScene3DAction(async scene3D => {
-      if (this.layers3D.has(layer.id)) {
-        const primitive = scene3D.primitives.get(this.layers3D.get(layer.id) ?? 0);
-        primitive.show = true;
-      } else {
-        this.create3DLayer(layer)?.then(cesiumLayer => {
-          if (cesiumLayer) {
-            scene3D.primitives.add(cesiumLayer, this.layers3D.size);
-            this.layers3D.set(layer.id, this.layers3D.size);
+      if (layer.layerType === LayerTypesEnum.QUANTIZEDMESH) {
+        this.createTerrainLayer(layer)?.then(terrainLayer => {
+          if (terrainLayer) {
+            scene3D.setTerrain(new Cesium.Terrain(terrainLayer));
           }
         });
+      } else {
+        if (this.layers3D.has(layer.id)) {
+          const primitive = scene3D.primitives.get(this.layers3D.get(layer.id) ?? 0);
+          primitive.show = true;
+        } else {
+          this.create3DLayer(layer)?.then(cesiumLayer => {
+            if (cesiumLayer) {
+              scene3D.primitives.add(cesiumLayer, this.layers3D.size);
+              this.layers3D.set(layer.id, this.layers3D.size);
+            }
+          });
+        }
       }
     });
   }
 
   private removeLayer(layer: LayerModel) {
     this.executeScene3DAction(async scene3D => {
-      if (this.layers3D.has(layer.id)) {
-        const primitive = scene3D.primitives.get(this.layers3D.get(layer.id) ?? 0);
-        primitive.show = false;
+      if (layer.layerType === LayerTypesEnum.QUANTIZEDMESH) {
+        scene3D.setTerrain(new Cesium.Terrain(new EllipsoidTerrainProvider()));
+      } else {
+        if (this.layers3D.has(layer.id)) {
+          const primitive = scene3D.primitives.get(this.layers3D.get(layer.id) ?? 0);
+          primitive.show = false;
+        }
       }
     });
   }
@@ -121,6 +126,14 @@ export class CesiumLayerManager {
     if (LayerTypesHelper.isTileset3DLayer(layer)) {
       const url = layer.url;
       return Cesium.Cesium3DTileset.fromUrl(url);
+    }
+    return null;
+  }
+
+  private createTerrainLayer(layer: LayerModel): Promise<CesiumTerrainProvider> | null {
+    if (LayerTypesHelper.isTerrainLayer(layer)) {
+      const url = layer.url;
+      return Cesium.CesiumTerrainProvider.fromUrl(url);
     }
     return null;
   }

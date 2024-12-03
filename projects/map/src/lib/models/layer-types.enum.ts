@@ -4,4 +4,5 @@ export enum LayerTypesEnum {
   WMS,
   WMTS,
   TILESET3D,
+  QUANTIZEDMESH,
 }

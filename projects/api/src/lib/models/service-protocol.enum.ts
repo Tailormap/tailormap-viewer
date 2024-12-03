@@ -3,4 +3,5 @@ export enum ServiceProtocol {
     WMTS = 'wmts',
     XYZ = 'xyz',
     TILESET3D = 'Tileset3D',
+    QUANTIZEDMESH = 'quantizedmesh',
 }

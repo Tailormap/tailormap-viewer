@@ -58,7 +58,7 @@ export class CatalogFilterHelper {
     const filteredItems = CatalogFilterHelper.getFilteredItems(catalogNodes, services, serviceLayers, [], featureTypes, item => {
       if (ExtendedCatalogModelHelper.isGeoServiceLayerModel(item)) {
         const service = allServicesMap.get(item.serviceId);
-        if (service && service.protocol === GeoServiceProtocolEnum.TILESET3D) {
+        if (service && (service.protocol === GeoServiceProtocolEnum.TILESET3D || service.protocol === GeoServiceProtocolEnum.QUANTIZEDMESH)) {
           return true;
         }
         //

@@ -184,6 +184,13 @@ export class ApplicationMapService implements OnDestroy {
       };
       return of(layer);
     }
+    if (service.protocol === ServiceProtocol.QUANTIZEDMESH) {
+      const layer: Tileset3DLayerModel = {
+        ...defaultLayerProps,
+        layerType: LayerTypesEnum.QUANTIZEDMESH,
+      };
+      return of(layer);
+    }
     return of(null);
   }
 

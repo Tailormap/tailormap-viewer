@@ -268,5 +268,7 @@ export const selectSearchableLayers = createSelector(
 
 export const select3Dlayers = createSelector(
   selectLayersWithServices,
-  layers => layers.filter(l => l.service?.protocol === ServiceProtocol.TILESET3D),
+  layers => layers.filter(
+    l => l.service?.protocol === ServiceProtocol.TILESET3D || l.service?.protocol === ServiceProtocol.QUANTIZEDMESH,
+  ),
 );
