@@ -41,6 +41,9 @@ import { LogsPageComponent } from './pages/logs-page/logs-page.component';
 import { TasksHomeComponent } from './tasks/tasks-home/tasks-home.component';
 import { TasksPageComponent } from './pages/tasks-page/tasks-page.component';
 import { TaskDetailsComponent } from './tasks/task-details/task-details.component';
+import {
+  ApplicationEditTerrainLayersComponent
+} from './application/application-edit-terrain-layers/application-edit-terrain-layers.component';
 
 export const adminRoutes: Routes = [
   {
@@ -109,6 +112,10 @@ export const adminRoutes: Routes = [
               {
                 path: AdminRoutes.APPLICATION_DETAILS_BASE_LAYERS,
                 component: ApplicationEditBaseLayersComponent,
+              },
+              {
+                path: AdminRoutes.APPLICATION_DETAILS_TERRAIN_LAYERS,
+                component: ApplicationEditTerrainLayersComponent,
               },
               {
                 path: AdminRoutes.APPLICATION_DETAILS_COMPONENTS,

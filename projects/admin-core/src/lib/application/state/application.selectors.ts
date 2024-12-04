@@ -82,6 +82,16 @@ export const selectBaseLayerNodesForSelectedApplication = createSelector(
   },
 );
 
+export const selectTerrainLayerNodesForSelectedApplication = createSelector(
+  selectDraftApplication,
+  (application): AppTreeNodeModel[] => {
+    if (!application?.contentRoot?.terrainNodes) {
+      return [];
+    }
+    return application.contentRoot.terrainNodes;
+  },
+);
+
 export const selectAppLayerTreeForSelectedApplication = createSelector(
   selectAppLayerNodesForSelectedApplication,
   selectGeoServiceLayers,

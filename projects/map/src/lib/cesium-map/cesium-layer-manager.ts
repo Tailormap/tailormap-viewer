@@ -72,7 +72,7 @@ export class CesiumLayerManager {
   }
 
   public addLayers(layers: LayerModel[]){
-    // this.ngZone.runOutsideAngular(() => {
+    this.ngZone.runOutsideAngular(() => {
       layers.forEach(layer => {
         if (layer.visible) {
           this.addLayer(layer);
@@ -80,7 +80,7 @@ export class CesiumLayerManager {
           this.removeLayer(layer);
         }
       });
-    // });
+    });
   }
 
   private addLayer(layer: LayerModel) {

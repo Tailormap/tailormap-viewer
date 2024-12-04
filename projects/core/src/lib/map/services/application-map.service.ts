@@ -74,6 +74,7 @@ export class ApplicationMapService implements OnDestroy {
       });
 
     if (this.store$.select(selectEnable3D)) {
+      this.mapService.make3D$();
       this.store$.select(select3Dlayers)
         .pipe(
           takeUntil(this.destroyed),

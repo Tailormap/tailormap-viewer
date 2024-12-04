@@ -22,6 +22,7 @@ export class Routes {
   public static APPLICATION_DETAILS = 'application/:applicationId';
   public static APPLICATION_DETAILS_LAYERS = 'layers';
   public static APPLICATION_DETAILS_BASE_LAYERS = 'base-layers';
+  public static APPLICATION_DETAILS_TERRAIN_LAYERS = 'terrain-layers';
   public static APPLICATION_DETAILS_COMPONENTS = 'components';
   public static APPLICATION_DETAILS_STYLING = 'styling';
 

@@ -283,7 +283,6 @@ export class MapService {
   }
 
   public switch3D$(){
-    this.make3D$();
     this.executeCLMAction(cesiumLayerManager => {
       cesiumLayerManager.switch3D$();
     });
