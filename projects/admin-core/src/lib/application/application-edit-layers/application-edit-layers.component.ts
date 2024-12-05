@@ -6,7 +6,7 @@ import {
   selectApplicationBaseLayerTreeFilterTerm, selectApplicationLayerTreeFilterTerm,
   selectBaseLayerNodesForSelectedApplication, selectBaseLayerTreeForSelectedApplication, selectDraftApplicationCrs,
   selectSomeExpandedAppLayerForSelectedApplication,
-  selectSomeExpandedBaseLayersForSelectedApplication,
+  selectSomeExpandedBaseLayersForSelectedApplication, selectTerrainLayerTreeForSelectedApplication,
 } from '../state/application.selectors';
 import {
   BehaviorSubject, combineLatest, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, takeUntil,
@@ -56,7 +56,7 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
   private destroyed = new Subject();
 
   @Input()
-  public applicationStateTree: 'layer' | 'baseLayer' = 'layer';
+  public applicationStateTree: 'layer' | 'baseLayer' | 'terrainLayer' = 'layer';
 
   public treeNodes$: Observable<TreeModel<AppTreeNodeModel>[]> = of([]);
   public someExpanded$: Observable<boolean> = of(false);
@@ -76,9 +76,9 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit(): void {
-    this.treeNodes$ = this.applicationStateTree === 'baseLayer'
-      ? this.store$.select(selectBaseLayerTreeForSelectedApplication)
-      : this.store$.select(selectAppLayerTreeForSelectedApplication);
+    this.treeNodes$ = this.applicationStateTree === 'layer' ? this.store$.select(selectAppLayerTreeForSelectedApplication)
+      : (this.applicationStateTree === 'baseLayer' ? this.store$.select(selectBaseLayerTreeForSelectedApplication)
+          : this.store$.select(selectTerrainLayerTreeForSelectedApplication));
 
     this.someExpanded$ = this.applicationStateTree === 'baseLayer'
       ? this.store$.select(selectSomeExpandedBaseLayersForSelectedApplication)

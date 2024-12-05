@@ -85,10 +85,10 @@ export const selectBaseLayerNodesForSelectedApplication = createSelector(
 export const selectTerrainLayerNodesForSelectedApplication = createSelector(
   selectDraftApplication,
   (application): AppTreeNodeModel[] => {
-    if (!application?.contentRoot?.terrainNodes) {
+    if (!application?.contentRoot?.terrainLayerNodes) {
       return [];
     }
-    return application.contentRoot.terrainNodes;
+    return application.contentRoot.terrainLayerNodes;
   },
 );
 
@@ -99,7 +99,7 @@ export const selectAppLayerTreeForSelectedApplication = createSelector(
   selectSelectedApplicationLayerSettings,
   selectApplicationLayerTreeFilterTerm,
   (layerNodes, layers, expandedNodes: string[], layerSettings: Record<string, AppLayerSettingsModel>, filterTerm?: string) => {
-    return ApplicationTreeHelper.layerTreeNodeToTree(layerNodes, layers, expandedNodes, layerSettings, false, filterTerm);
+    return ApplicationTreeHelper.layerTreeNodeToTree(layerNodes, layers, expandedNodes, layerSettings, 'layer', filterTerm);
   },
 );
 
@@ -110,7 +110,16 @@ export const selectBaseLayerTreeForSelectedApplication = createSelector(
   selectSelectedApplicationLayerSettings,
   selectApplicationBaseLayerTreeFilterTerm,
   (baseLayerNodes, layers, expandedNodes: string[], layerSettings: Record<string, AppLayerSettingsModel>, filterTerm?: string) => {
-    return ApplicationTreeHelper.layerTreeNodeToTree(baseLayerNodes, layers, expandedNodes, layerSettings, true, filterTerm);
+    return ApplicationTreeHelper.layerTreeNodeToTree(baseLayerNodes, layers, expandedNodes, layerSettings, 'baseLayer', filterTerm);
+  },
+);
+
+export const selectTerrainLayerTreeForSelectedApplication = createSelector(
+  selectTerrainLayerNodesForSelectedApplication,
+  selectGeoServiceLayers,
+  selectSelectedApplicationLayerSettings,
+  (terrainLayerNodes, layers, layerSettings: Record<string, AppLayerSettingsModel>) => {
+    return ApplicationTreeHelper.layerTreeNodeToTree(terrainLayerNodes, layers, ['root'], layerSettings, 'terrainLayer');
   },
 );
 

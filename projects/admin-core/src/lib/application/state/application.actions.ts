@@ -67,7 +67,7 @@ export const addApplicationTreeNodes = createAction(
   `${applicationActionsPrefix} Add Application Tree Nodes`,
   props<{
     treeNodes: AppTreeNodeModel[];
-    tree: 'layer' | 'baseLayer';
+    tree: 'layer' | 'baseLayer' | 'terrainLayer';
     parentId?: string;
     position?: TreeNodePosition;
     sibling?: string;
@@ -78,7 +78,7 @@ export const addApplicationRootNodes = createAction(
   `${applicationActionsPrefix} Add Application Root Nodes`,
   props<{
     treeNodes: AppTreeNodeModel[];
-    tree: 'layer' | 'baseLayer';
+    tree: 'layer' | 'baseLayer' | 'terrainLayer';
   }>(),
 );
 
@@ -86,7 +86,7 @@ export const updateApplicationTreeOrder = createAction(
   `${applicationActionsPrefix} Update Application Tree Order`,
   props<{
     nodeId: string;
-    tree: 'layer' | 'baseLayer';
+    tree: 'layer' | 'baseLayer' | 'terrainLayer';
     parentId?: string;
     position: TreeNodePosition;
     sibling?: string;
@@ -95,18 +95,18 @@ export const updateApplicationTreeOrder = createAction(
 
 export const updateApplicationTreeNode = createAction(
   `${applicationActionsPrefix} Update Application Tree Node`,
-  props<{ nodeId: string; updatedNode: Partial<AppTreeNodeModel>; tree: 'layer' | 'baseLayer' }>(),
+  props<{ nodeId: string; updatedNode: Partial<AppTreeNodeModel>; tree: 'layer' | 'baseLayer' | 'terrainLayer' }>(),
 );
 
 export const removeApplicationTreeNode = createAction(
   `${applicationActionsPrefix} Remove Application Tree Node`,
-  props<{ nodeId: string; parentId: string | null; tree: 'layer' | 'baseLayer' }>(),
+  props<{ nodeId: string; parentId: string | null; tree: 'layer' | 'baseLayer' | 'terrainLayer' }>(),
 );
 
 export const updateApplicationTreeNodeVisibility = createAction(
   `${applicationActionsPrefix} Update Application Tree Node Visibility`,
   props<{
-    tree: 'layer' | 'baseLayer';
+    tree: 'layer' | 'baseLayer' | 'terrainLayer';
     visibility: Array<{ nodeId: string; visible: boolean }>;
   }>(),
 );
@@ -136,12 +136,12 @@ export const updateApplicationStylingConfig = createAction(
 
 export const toggleApplicationNodeExpanded = createAction(
   `${applicationActionsPrefix} Toggle Node Expanded`,
-  props<{ nodeId: string; tree: 'layer' | 'baseLayer' }>(),
+  props<{ nodeId: string; tree: 'layer' | 'baseLayer' | 'terrainLayer' }>(),
 );
 
 export const toggleApplicationNodeExpandedAll = createAction(
   `${applicationActionsPrefix} Toggle Node Expanded All`,
-  props<{ expandCollapse: 'expand' | 'collapse'; tree: 'layer' | 'baseLayer' }>(),
+  props<{ expandCollapse: 'expand' | 'collapse'; tree: 'layer' | 'baseLayer' | 'terrainLayer' }>(),
 );
 
 export const setApplicationCatalogFilterTerm = createAction(
@@ -150,5 +150,5 @@ export const setApplicationCatalogFilterTerm = createAction(
 );
 export const setApplicationTreeFilterTerm = createAction(
   `${applicationActionsPrefix} Set Application Tree Filter Term`,
-  props<{ filterTerm?: string | null; tree: 'layer' | 'baseLayer' }>(),
+  props<{ filterTerm?: string | null; tree: 'layer' | 'baseLayer' | 'terrainLayer' }>(),
 );
