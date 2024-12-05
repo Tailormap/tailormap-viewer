@@ -1,6 +1,7 @@
 process.env.TZ = 'GMT';
 
 module.exports = {
+  setupFiles: ['jsdom-worker'],
   preset: 'jest-preset-angular',
   setupFilesAfterEnv: ['<rootDir>/../../setup-jest.ts'],
   "testRegex": "((\\.|/*.)(spec))\\.ts?$",
