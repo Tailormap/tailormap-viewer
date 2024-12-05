@@ -1607,8 +1607,8 @@
         <target>Suchindizes</target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.search-reindex-success" datatype="html">
-        <source>Re-indexing success</source>
-        <target>Erfolgreiche Neuindexierung</target>
+        <source>Re-indexing request queued</source>
+        <target>Neuindexierungsanforderung in Warteschlange</target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.selected-attributes-to-display" datatype="html">
         <source>Selected attributes used to display</source>

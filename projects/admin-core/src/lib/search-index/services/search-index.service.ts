@@ -113,7 +113,7 @@ export class SearchIndexService {
         }),
         map(success => {
           if (success) {
-            this.adminSnackbarService.showMessage($localize `:@@admin-core.search-index.search-reindex-success:Re-indexing success`);
+            this.adminSnackbarService.showMessage($localize `:@@admin-core.search-index.search-reindex-success:Re-indexing request queued`);
             return success;
           } else {
             this.adminSnackbarService.showMessage($localize `:@@admin-core.search-index.reindex-error:Error while re-indexing search index.`);
