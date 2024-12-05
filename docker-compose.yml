@@ -72,6 +72,14 @@ services:
       - solr
     environment:
       TZ: Europe/Amsterdam
+      # see https://solr.apache.org/guide/solr/latest/deployment-guide/taking-solr-to-production.html
+      # and https://solr.apache.org/guide/solr/latest/deployment-guide/jvm-settings.html
+      # for setting up a production-ready instance
+      # default is 512m
+      # SOLR_HEAP: 512m
+      SOLR_OPTS: '$SOLR_OPTS -Dsolr.environment=prod,label=Tailormap+Solr,color=#6236FF'
+      SOLR_DELETE_UNKNOWN_CORES: true
+    mem_swappiness: 0
     volumes:
       - solr-data:/var/solr
     depends_on:
@@ -102,6 +110,7 @@ services:
       PORT: 9854
       SCRAPE_INTERVAL: 15
       SOLR_URL: http://solr:8983/solr/
+      SOLR_HEAP: 128m
     command:
       # this script should be in the path for the current (solr) user
       - solr-exporter
