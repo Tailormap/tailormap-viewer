@@ -1167,7 +1167,7 @@
         <source>Search Indexes</source>
       </trans-unit>
       <trans-unit id="admin-core.search-index.search-reindex-success" datatype="html">
-        <source>Re-indexing success</source>
+        <source>Re-indexing request queued</source>
       </trans-unit>
       <trans-unit id="admin-core.search-index.selected-attributes-to-display" datatype="html">
         <source>Selected attributes used to display</source>
