@@ -23,4 +23,15 @@ updates:
     ignore:
       - dependency-name: node
         versions:
-          - '>= 21'
+          - '>= 23'
+
+  - package-ecosystem: docker
+    directory: '/ci/tailormap-embed-test/'
+    schedule:
+      interval: weekly
+      day: monday
+      time: '21:00'
+      timezone: 'Europe/Amsterdam'
+    target-branch: main
+    labels:
+      - infrastructure
