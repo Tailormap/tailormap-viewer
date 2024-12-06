@@ -7,6 +7,7 @@
       <div class="catalog-tree">
         <tm-admin-application-catalog-tree [applicationTreeService]="applicationTreeService"
                                            [selectedLayerId$]="selectedCatalogItem$"
+                                           [applicationStateTree]="applicationStateTree"
                                            (addLayer)="addLayer($event)"></tm-admin-application-catalog-tree>
       </div>
       <div class="tree-hint"
@@ -22,6 +23,7 @@
       <tm-admin-application-layer-tree [treeNodes$]="treeNodes$"
                                        [someExpanded]="someExpanded$ | async"
                                        [filterTerm]="filterTerm$ | async"
+                                       [applicationStateTree]="applicationStateTree"
                                        (filterChanged)="filterChanged($event)"
                                        (nodePositionChanged)="nodePositionChanged($event)"
                                        (visibilityChanged)="visibilityChanged($event)"

@@ -15,7 +15,7 @@
             (click)="removeNode($event, node.id)">
       <mat-icon svgIcon="close"></mat-icon>
     </button>
-    <button *ngIf="!isNonRoot()"
+    <button *ngIf="!isNonRoot() && applicationStateTree !== 'terrainLayer'"
             mat-icon-button
             matTooltip="Add sub folder"
             i18n-matTooltip="@@admin-core.application.add-sub-folder"

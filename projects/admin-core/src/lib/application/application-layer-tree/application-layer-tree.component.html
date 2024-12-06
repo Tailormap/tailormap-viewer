@@ -1,5 +1,6 @@
 <ng-template #treeNode let-node>
   <tm-admin-application-layer-tree-node [node]="node"
+                                        [applicationStateTree]="applicationStateTree"
                                         (addSubFolder)="onAddSubFolder($event)"
                                         (renameSubFolder)="onRenameSubFolder($event)"
                                         (deleteNode)="onDeleteNode($event)"></tm-admin-application-layer-tree-node>
@@ -7,17 +8,20 @@
 
 <div class="application-tree-wrapper">
   <div class="tree-header-wrapper">
-    <tm-admin-list-filter [formControl]="treeFilter"
-                          [filterTerm]="filterTerm"
-                          label="Filter application layers"
-                          i18n-label="@@admin-core.application.filter-tree"></tm-admin-list-filter>
-    <button mat-flat-button (click)="expandCollapseAll(someExpanded)">
-      @if (someExpanded) {
-        <ng-container i18n="@@admin-core.common.collapse-all">Collapse all</ng-container>
-      } @else {
-        <ng-container i18n="@@admin-core.common.expand-all">Expand all</ng-container>
-      }
-    </button>
+    @if (applicationStateTree !== 'terrainLayer') {
+      <tm-admin-list-filter [formControl]="treeFilter"
+                            [filterTerm]="filterTerm"
+                            label="Filter application layers"
+                            i18n-label="@@admin-core.application.filter-tree"></tm-admin-list-filter>
+      <button mat-flat-button (click)="expandCollapseAll(someExpanded)">
+        @if (someExpanded) {
+          <ng-container i18n="@@admin-core.common.collapse-all">Collapse all</ng-container>
+        } @else {
+          <ng-container i18n="@@admin-core.common.expand-all">Expand all</ng-container>
+        }
+      </button>
+    }
+
   </div>
   <tm-tree [treeNodeTemplate]="treeNode" [getDropZones]="getDropZones()"></tm-tree>
 </div>

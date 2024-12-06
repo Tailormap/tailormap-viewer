@@ -13,6 +13,9 @@ export class ApplicationLayerTreeNodeComponent {
   @Input()
   public node: TreeModel<AppTreeNodeModel> | null = null;
 
+  @Input()
+  public applicationStateTree: 'layer' | 'baseLayer' | 'terrainLayer' = 'layer';
+
   @Output()
   public addSubFolder = new EventEmitter<string>();
 

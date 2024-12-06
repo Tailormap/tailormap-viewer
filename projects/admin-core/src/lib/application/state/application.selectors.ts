@@ -1,11 +1,9 @@
 import { ApplicationState, applicationStateKey } from './application.state';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { ApplicationTreeHelper } from '../helpers/application-tree.helper';
-import {
-  selectCatalog, selectFeatureTypes, selectGeoServiceLayers, selectGeoServices,
-} from '../../catalog/state/catalog.selectors';
+import { selectCatalog, selectFeatureTypes, selectGeoServiceLayers, selectGeoServices } from '../../catalog/state/catalog.selectors';
 import { FilterHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
-import { AppLayerSettingsModel, AppTreeNodeModel } from '@tailormap-admin/admin-api';
+import { AppLayerSettingsModel, AppTreeNodeModel, GeoServiceProtocolEnum } from '@tailormap-admin/admin-api';
 import { BaseComponentConfigHelper } from '@tailormap-viewer/api';
 import { CatalogTreeModel } from '../../catalog/models/catalog-tree.model';
 import { CatalogFilterHelper } from '../../catalog/helpers/catalog-filter.helper';
@@ -172,6 +170,15 @@ export const selectServiceLayerTreeForApplication = createSelector(
   selectApplicationCatalogFilterTerm,
   (draftApplicationCrs, catalog, services, layers, featureTypes, filterTerm): CatalogTreeModel[] => {
     return CatalogFilterHelper.filterTreeByCrs(catalog, services, layers, featureTypes, draftApplicationCrs, filterTerm);
+});
+
+export const selectTerrainServiceLayerTreeForApplication = createSelector(
+  selectCatalog,
+  selectGeoServices,
+  selectGeoServiceLayers,
+  selectFeatureTypes,
+  (catalog, services, layers, featureTypes): CatalogTreeModel[] => {
+    return CatalogFilterHelper.filterTreeByProtocol(catalog, services, layers, featureTypes, GeoServiceProtocolEnum.QUANTIZEDMESH);
   });
 
 export const selectStylingConfig = createSelector(selectDraftApplication, application => application?.styling);

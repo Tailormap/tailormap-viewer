@@ -58,7 +58,7 @@ export class CatalogFilterHelper {
     const filteredItems = CatalogFilterHelper.getFilteredItems(catalogNodes, services, serviceLayers, [], featureTypes, item => {
       if (ExtendedCatalogModelHelper.isGeoServiceLayerModel(item)) {
         const service = allServicesMap.get(item.serviceId);
-        if (service && (service.protocol === GeoServiceProtocolEnum.TILESET3D || service.protocol === GeoServiceProtocolEnum.QUANTIZEDMESH)) {
+        if (service && (service.protocol === GeoServiceProtocolEnum.TILESET3D)) {
           return true;
         }
         //
@@ -93,6 +93,24 @@ export class CatalogFilterHelper {
       );
       return CatalogFilterHelper.createFilteredTree(filteredItemsBySearchTerm, featureTypes);
     }
+    return CatalogFilterHelper.createFilteredTree(filteredItems, featureTypes);
+  }
+
+  public static filterTreeByProtocol(
+    catalogNodes: ExtendedCatalogNodeModel[],
+    services: ExtendedGeoServiceModel[],
+    serviceLayers: ExtendedGeoServiceLayerModel[],
+    featureTypes: ExtendedFeatureTypeModel[],
+    protocol: GeoServiceProtocolEnum,
+  ) {
+    const allServicesMap = new Map(services.map(s => [ s.id, s ]));
+    const filteredItems = CatalogFilterHelper.getFilteredItems(catalogNodes, services, serviceLayers, [], featureTypes, item => {
+      if (ExtendedCatalogModelHelper.isGeoServiceLayerModel(item)) {
+        const service = allServicesMap.get(item.serviceId);
+        return !!(service && (service.protocol === protocol));
+      }
+      return false;
+    });
     return CatalogFilterHelper.createFilteredTree(filteredItems, featureTypes);
   }
 
