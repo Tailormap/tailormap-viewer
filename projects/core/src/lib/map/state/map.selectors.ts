@@ -17,6 +17,7 @@ export const selectBackgroundLayerTreeNodes = createSelector(selectMapState, sta
 export const selectSelectedBackgroundNodeId = createSelector(selectMapState, state => state.selectedBackgroundNode);
 export const selectLoadStatus = createSelector(selectMapState, state => state.loadStatus);
 export const selectLayerDetailsAll = createSelector(selectMapState, state => state.layerDetails);
+export const selectIn3DView = createSelector(selectMapState, state => state.in3DView);
 
 export const selectMapOptions = createSelector(
   selectMapSettings,
@@ -263,4 +264,11 @@ export const selectFullLayerDetails = (layerId: string) => createSelector(
 export const selectSearchableLayers = createSelector(
   selectOrderedVisibleLayersWithServices,
   layers => layers.filter(l => l.searchIndex !== null),
+);
+
+export const select3Dlayers = createSelector(
+  selectLayersWithServices,
+  layers => layers.filter(
+    l => l.service?.protocol === ServiceProtocol.TILESET3D || l.service?.protocol === ServiceProtocol.QUANTIZEDMESH,
+  ),
 );

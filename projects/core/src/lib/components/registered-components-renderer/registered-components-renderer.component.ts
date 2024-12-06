@@ -1,12 +1,15 @@
 import {
   Component, OnInit, ChangeDetectionStrategy, Input, ViewChild, ViewContainerRef, ChangeDetectorRef, DestroyRef,
 } from '@angular/core';
-import { ComponentModel } from '@tailormap-viewer/api';
+import { BaseComponentTypeEnum, ComponentModel } from '@tailormap-viewer/api';
 import { AreaType, ComponentRegistrationService } from '../../services/component-registration.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime } from 'rxjs';
 import { DynamicComponentsHelper } from '@tailormap-viewer/shared';
 import { ComponentConfigHelper } from '../../shared/helpers/component-config.helper';
+import { map, combineLatest } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { selectIn3DView } from '../../map/state/map.selectors';
 
 @Component({
   selector: 'tm-registered-components-renderer',
@@ -24,14 +27,36 @@ export class RegisteredComponentsRendererComponent implements OnInit {
   @ViewChild('componentsContainer', { read: ViewContainerRef, static: true })
   private componentsContainer: ViewContainerRef | null = null;
 
+  private disallowingComponents = [
+    BaseComponentTypeEnum.PRINT,
+    BaseComponentTypeEnum.DRAWING,
+    BaseComponentTypeEnum.COORDINATE_LINK_WINDOW,
+    BaseComponentTypeEnum.MEASURE,
+    BaseComponentTypeEnum.COORDINATE_PICKER,
+    BaseComponentTypeEnum.STREETVIEW,
+  ];
+
   constructor(
     private componentRegistrationService: ComponentRegistrationService,
     private cdr: ChangeDetectorRef,
     private destroyRef: DestroyRef,
+    private store$: Store,
   ) { }
 
   public ngOnInit(): void {
-    this.componentRegistrationService.getRegisteredComponents$(this.area)
+    combineLatest([
+      this.componentRegistrationService.getRegisteredComponents$(this.area),
+      this.store$.select(selectIn3DView),
+    ]).pipe(
+      map(([ components, in3D ]) => {
+        if (in3D) {
+          return components.filter(
+            component => !this.disallowingComponents.some(disallowingComponent => disallowingComponent === component.type),
+          );
+        }
+        return components;
+      }),
+    )
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         debounceTime(10),

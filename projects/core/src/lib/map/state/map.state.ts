@@ -21,6 +21,7 @@ export interface MapState {
   layerDetails: LayerDetailsModel[];
   selectedLayer?: string;
   selectedBackgroundNode?: string;
+  in3DView: boolean;
 }
 
 export const initialMapState: MapState = {
@@ -30,4 +31,5 @@ export const initialMapState: MapState = {
   layerDetails: [],
   baseLayerTreeNodes: [],
   layerTreeNodes: [],
+  in3DView: false,
 };
