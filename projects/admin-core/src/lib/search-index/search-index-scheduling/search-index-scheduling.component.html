@@ -16,7 +16,7 @@
   <form [formGroup]="scheduleForm">
     <mat-form-field>
       <mat-label>Schedule</mat-label>
-      <mat-select formControlName="cronExpression" (selectionChange)="onSelectionChanged($event)">
+      <mat-select formControlName="cronExpression">
         @for (option of scheduleOptions; track $index) {
           <mat-option
             [value]="option.cronExpression"
@@ -26,26 +26,39 @@
         }
       </mat-select>
     </mat-form-field>
-    <mat-form-field>
-      <mat-label i18n="@@admin-core.common.description">Description*</mat-label>
-      <input matInput
-             tmAutoFocus
-             placeholder="Description"
-             i18n-placeholder="@@admin-core.common.description"
-             formControlName="description"
-      />
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label i18n="@@admin-core.search-index.priority">Priority</mat-label>
-      <input matInput
-             tmAutoFocus
-             type="number"
-             min="0"
-             placeholder="5"
-             formControlName="priority"
-      />
-    </mat-form-field>
-    <div class="hint" i18n="@@admin-core.search-index.priority-hint">When multiple tasks are scheduled at the same time and they cannot be executed simultaneously, the task with the highest priority will be executed first.</div>
+    @if (scheduleForm.value.cronExpression) {
+      <mat-form-field>
+        <mat-label i18n="@@admin-core.common.description">Description</mat-label>
+        <input matInput
+               tmAutoFocus
+               placeholder="Description"
+               i18n-placeholder="@@admin-core.common.description"
+               formControlName="description"
+        />
+      </mat-form-field>
+      <div class="priority">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title i18n="@@admin-core.search-index.priority">Priority</mat-panel-title>
+          </mat-expansion-panel-header>
+          <p i18n="@@admin-core.search-index.priority-hint">When multiple tasks are scheduled at the same time and they cannot be
+            executed simultaneously, the task with the highest priority will be executed first.
+            If no value is provided for a new schedule, the default value of 5 is used. </p>
+          <mat-form-field>
+            <mat-label i18n="@@admin-core.search-index.priority">Priority</mat-label>
+            <input matInput
+                   tmAutoFocus
+                   type="number"
+                   min="0"
+                   placeholder="5"
+                   formControlName="priority"
+            />
+          </mat-form-field>
+        </mat-expansion-panel>
+      </div>
+
+    }
+
   </form>
 </div>
 

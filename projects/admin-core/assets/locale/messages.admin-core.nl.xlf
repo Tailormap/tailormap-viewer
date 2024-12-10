@@ -1538,8 +1538,8 @@
         <target>Prioriteit</target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.priority-hint" datatype="html">
-        <source>When multiple tasks are scheduled at the same time and they cannot be executed simultaneously, the task with the highest priority will be executed first.</source>
-        <target>Als er meerdere taken tegelijkertijd zijn gepland en deze niet tegelijkertijd kunnen worden uitgevoerd, wordt de taak met de hoogste prioriteit als eerste uitgevoerd.</target>
+        <source>When multiple tasks are scheduled at the same time and they cannot be executed simultaneously, the task with the highest priority will be executed first. If no value is provided for a new schedule, the default value of 5 is used. </source>
+        <target>Als er meerdere taken tegelijkertijd zijn gepland en deze niet tegelijkertijd kunnen worden uitgevoerd, wordt de taak met de hoogste prioriteit als eerste uitgevoerd. Als er geen waarde is ingevuld, wordt de standaard waarde van 5 gebruikt.</target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.reindex" datatype="html">
         <source>Re-index</source>
@@ -1573,6 +1573,10 @@
         <source>No schedule</source>
         <target>Geen planning</target>
       </trans-unit>
+      <trans-unit id="admin-core.search-index.schedule.prefill-description" datatype="html">
+        <source>Update <x id="PH" equiv-text="searchIndexName"/></source>
+        <target><x id="PH" equiv-text="searchIndexName"/> bijwerken</target>
+      </trans-unit>
       <trans-unit id="admin-core.search-index.search-index-created" datatype="html">
         <source>Search index created</source>
         <target>Zoekindex aangemaakt</target>
@@ -1590,8 +1594,8 @@
         <target>Zoekindexen</target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.search-reindex-success" datatype="html">
-        <source>Re-indexing success</source>
-        <target>Herindexeren gelukt</target>
+        <source>Re-indexing request queued</source>
+        <target>Herindelingsverzoek in wachtrij gezet</target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.selected-attributes-to-display" datatype="html">
         <source>Selected attributes used to display</source>
@@ -1697,6 +1701,10 @@
         <source>Executions</source>
         <target>Uitvoeringen</target>
       </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.interruptable" datatype="html">
+        <source>Interruptable</source>
+        <target>Onderbreekbaar</target>
+      </trans-unit>
       <trans-unit id="admin-core.tasks.task-details.last-result" datatype="html">
         <source>Last result</source>
         <target>Laatste resultaat</target>
@@ -1760,6 +1768,22 @@
       <trans-unit id="admin-core.tasks.task.scheduled-fire-times" datatype="html">
         <source>Scheduled fire times</source>
         <target>Geplande uitvoermomenten</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task.start" datatype="html">
+        <source>Start</source>
+        <target>Start</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task.start-if-not-running" datatype="html">
+        <source>Start the task if it is not already running</source>
+        <target>Start de taak als deze nog niet loopt</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task.stop" datatype="html">
+        <source>Stop</source>
+        <target>Stop</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task.stop-if-running" datatype="html">
+        <source>Stop the task if it is running</source>
+        <target>Stop de taak als deze loopt</target>
       </trans-unit>
       <trans-unit id="admin-core.tasks.tasks" datatype="html">
         <source>Tasks</source>

@@ -52,8 +52,12 @@ export class DialogService {
   }
 
   private updateStyle() {
-    const maxDialogLeftWidth = Math.max(...this.dialogs.map(d => d.left));
-    const maxDialogRightWidth = Math.max(...this.dialogs.map(d => d.right));
+    const maxDialogLeftWidth = this.dialogs.length === 0
+      ? 0
+      : Math.max(...this.dialogs.map(d => d.left));
+    const maxDialogRightWidth = this.dialogs.length === 0
+      ? 0
+      : Math.max(...this.dialogs.map(d => d.right));
     CssHelper.setCssVariableValue('--dialog-width-left', `${maxDialogLeftWidth}px`);
     CssHelper.setCssVariableValue('--dialog-width-right', `${maxDialogRightWidth}px`);
     document.body.classList.toggle('body--has-dialog-left', maxDialogLeftWidth > 0);

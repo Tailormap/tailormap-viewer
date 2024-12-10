@@ -33,7 +33,9 @@
                     i18n-tmTooltip="@@admin-core.tasks.last-execution-successful"
                     matListItemMeta>
           </mat-icon>
-        } @else if ( task.lastResult?.includes('unsuccessfully' ) || task.lastResult?.includes('failed' ) ) {
+        } @else if ( task.lastResult?.includes('unsuccessfully') ||
+                     task.lastResult?.includes('failed') ||
+                     task.lastResult?.includes('interrupted') ) {
           <mat-icon class="list-icon failed"
                     svgIcon="admin_task_failed"
                     tmTooltip="last execution failed"

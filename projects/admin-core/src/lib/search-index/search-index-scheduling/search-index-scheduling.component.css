@@ -33,3 +33,7 @@
   overflow: auto;
 }
 
+.priority {
+  margin-top: 16px;
+  margin-bottom: 3px;
+}

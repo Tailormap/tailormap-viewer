@@ -1555,8 +1555,8 @@
         <target>Priorität</target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.priority-hint" datatype="html">
-        <source>When multiple tasks are scheduled at the same time and they cannot be executed simultaneously, the task with the highest priority will be executed first.</source>
-        <target>Wenn mehrere Aufgaben gleichzeitig geplant sind und nicht gleichzeitig ausgeführt werden können, wird die Aufgabe mit der höchsten Priorität zuerst ausgeführt.</target>
+        <source>When multiple tasks are scheduled at the same time and they cannot be executed simultaneously, the task with the highest priority will be executed first. If no value is provided for a new schedule, the default value of 5 is used. </source>
+        <target>Wenn mehrere Aufgaben gleichzeitig geplant sind und nicht gleichzeitig ausgeführt werden können, wird die Aufgabe mit der höchsten Priorität zuerst ausgeführt. Wenn für einen neuen Zeitplan kein Wert angegeben wird, wird der Standardwert 5 verwendet. </target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.reindex" datatype="html">
         <source>Re-index</source>
@@ -1590,6 +1590,10 @@
         <source>No schedule</source>
         <target>Kein Zeitplan</target>
       </trans-unit>
+      <trans-unit id="admin-core.search-index.schedule.prefill-description" datatype="html">
+        <source>Update <x id="PH" equiv-text="searchIndexName"/></source>
+        <target><x id="PH" equiv-text="searchIndexName"/> aktualisieren</target>
+      </trans-unit>
       <trans-unit id="admin-core.search-index.search-index-created" datatype="html">
         <source>Search index created</source>
         <target>Suchindex erstellt</target>
@@ -1607,8 +1611,8 @@
         <target>Suchindizes</target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.search-reindex-success" datatype="html">
-        <source>Re-indexing success</source>
-        <target>Erfolgreiche Neuindexierung</target>
+        <source>Re-indexing request queued</source>
+        <target>Neuindexierungsanforderung in Warteschlange</target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.selected-attributes-to-display" datatype="html">
         <source>Selected attributes used to display</source>
@@ -1713,6 +1717,10 @@
         <source>Executions</source>
         <target>Ausführungen</target>
       </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.interruptable" datatype="html">
+        <source>Interruptable</source>
+        <target>unterbrechbar</target>
+      </trans-unit>
       <trans-unit id="admin-core.tasks.task-details.last-result" datatype="html">
         <source>Last result</source>
         <target>Letztes Ergebnis</target>
@@ -1776,6 +1784,22 @@
       <trans-unit id="admin-core.tasks.task.scheduled-fire-times" datatype="html">
         <source>Scheduled fire times</source>
         <target>Geplante Ausführungszeiten</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task.start" datatype="html">
+        <source>Start</source>
+        <target>Start</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task.start-if-not-running" datatype="html">
+        <source>Start the task if it is not already running</source>
+        <target>Starten Sie die Aufgabe, falls sie nicht bereits ausgeführt wird.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task.stop" datatype="html">
+        <source>Stop</source>
+        <target>Stoppen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task.stop-if-running" datatype="html">
+        <source>Stop the task if it is running</source>
+        <target>Stoppen Sie die Aufgabe, wenn sie ausgeführt wird</target>
       </trans-unit>
       <trans-unit id="admin-core.tasks.tasks" datatype="html">
         <source>Tasks</source>
