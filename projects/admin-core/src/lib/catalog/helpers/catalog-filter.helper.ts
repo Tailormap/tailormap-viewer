@@ -4,7 +4,7 @@ import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-lay
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
 import { CatalogTreeHelper } from './catalog-tree.helper';
-import { CatalogItemKindEnum } from '@tailormap-admin/admin-api';
+import { CatalogItemKindEnum, GeoServiceProtocolEnum } from '@tailormap-admin/admin-api';
 import { CatalogExtendedModel } from '../models/catalog-extended.model';
 import { ExtendedCatalogModelHelper } from './extended-catalog-model.helper';
 import { FilterHelper } from '@tailormap-viewer/shared';
@@ -54,8 +54,14 @@ export class CatalogFilterHelper {
       return CatalogTreeHelper.catalogToTree(catalogNodes, services, serviceLayers, [], [], featureTypes);
     }
     const allLayersMap = new Map(serviceLayers.map(l => [ l.id, l ]));
+    const allServicesMap = new Map(services.map(s => [ s.id, s ]));
     const filteredItems = CatalogFilterHelper.getFilteredItems(catalogNodes, services, serviceLayers, [], featureTypes, item => {
       if (ExtendedCatalogModelHelper.isGeoServiceLayerModel(item)) {
+        const service = allServicesMap.get(item.serviceId);
+        if (service && (service.protocol === GeoServiceProtocolEnum.TILESET3D)) {
+          return true;
+        }
+        //
         if (item.crs?.includes(crs)) {
           return true;
         }
@@ -87,6 +93,24 @@ export class CatalogFilterHelper {
       );
       return CatalogFilterHelper.createFilteredTree(filteredItemsBySearchTerm, featureTypes);
     }
+    return CatalogFilterHelper.createFilteredTree(filteredItems, featureTypes);
+  }
+
+  public static filterTreeByProtocol(
+    catalogNodes: ExtendedCatalogNodeModel[],
+    services: ExtendedGeoServiceModel[],
+    serviceLayers: ExtendedGeoServiceLayerModel[],
+    featureTypes: ExtendedFeatureTypeModel[],
+    protocol: GeoServiceProtocolEnum,
+  ) {
+    const allServicesMap = new Map(services.map(s => [ s.id, s ]));
+    const filteredItems = CatalogFilterHelper.getFilteredItems(catalogNodes, services, serviceLayers, [], featureTypes, item => {
+      if (ExtendedCatalogModelHelper.isGeoServiceLayerModel(item)) {
+        const service = allServicesMap.get(item.serviceId);
+        return !!(service && (service.protocol === protocol));
+      }
+      return false;
+    });
     return CatalogFilterHelper.createFilteredTree(filteredItems, featureTypes);
   }
 

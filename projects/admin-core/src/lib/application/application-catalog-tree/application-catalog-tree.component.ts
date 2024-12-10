@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, NgZone, DestroyRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, NgZone, OnInit, Output } from '@angular/core';
 import {
   DropZoneOptions, NodePositionChangedEventModel, TreeDragDropService, TreeModel, TreeNodePosition, TreeService,
 } from '@tailormap-viewer/shared';
@@ -8,7 +8,9 @@ import { CatalogTreeModelTypeEnum } from '../../catalog/models/catalog-tree-mode
 import { CatalogTreeHelper } from '../../catalog/helpers/catalog-tree.helper';
 import { ExtendedGeoServiceLayerModel } from '../../catalog/models/extended-geo-service-layer.model';
 import { AppTreeNodeModel } from '@tailormap-admin/admin-api';
-import { selectApplicationCatalogFilterTerm, selectServiceLayerTreeForApplication } from '../state/application.selectors';
+import {
+  selectApplicationCatalogFilterTerm, selectServiceLayerTreeForApplication, selectTerrainServiceLayerTreeForApplication,
+} from '../state/application.selectors';
 import { map, Observable, of } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl } from '@angular/forms';
@@ -39,6 +41,9 @@ export class ApplicationCatalogTreeComponent implements OnInit {
   @Input()
   public selectedLayerId$: Observable<string | null> = of(null);
 
+  @Input()
+  public applicationStateTree: 'layer' | 'baseLayer' | 'terrainLayer' = 'layer';
+
   public catalogFilter = new FormControl('');
   public catalogFilterTerm$ = this.store$.select(selectApplicationCatalogFilterTerm);
 
@@ -50,7 +55,11 @@ export class ApplicationCatalogTreeComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
-    this.treeService.setDataSource(this.store$.select(selectServiceLayerTreeForApplication));
+    if (this.applicationStateTree === 'terrainLayer') {
+      this.treeService.setDataSource(this.store$.select(selectTerrainServiceLayerTreeForApplication));
+    } else {
+      this.treeService.setDataSource(this.store$.select(selectServiceLayerTreeForApplication));
+    }
     this.treeService.setSelectedNode(this.selectedLayerId$.pipe(map(l => l || '')));
 
     this.catalogFilter.valueChanges
