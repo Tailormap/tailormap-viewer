@@ -15,6 +15,8 @@ export const selectMapSettings = createSelector(selectMapState, state => state.m
 export const selectLayerTreeNodes = createSelector(selectMapState, state => state.layerTreeNodes);
 export const selectBackgroundLayerTreeNodes = createSelector(selectMapState, state => state.baseLayerTreeNodes);
 export const selectSelectedBackgroundNodeId = createSelector(selectMapState, state => state.selectedBackgroundNode);
+export const selectTerrainLayerTreeNodes = createSelector(selectMapState, state => state.terrainLayerTreeNodes);
+export const selectSelectedTerrainNodeId = createSelector(selectMapState, state => state.selectedTerrainLayerNode);
 export const selectLoadStatus = createSelector(selectMapState, state => state.loadStatus);
 export const selectLayerDetailsAll = createSelector(selectMapState, state => state.layerDetails);
 export const selectIn3DView = createSelector(selectMapState, state => state.in3DView);
@@ -200,6 +202,37 @@ export const selectBackgroundNodesList = createSelector(
 
 export const selectInitiallySelectedBackgroundNodes = createSelector(
   selectBackgroundNodesListWithTitle,
+  selectLayersMap,
+  (layerTreeNodes, layers): LayerTreeNodeModel[] => LayerTreeNodeHelper.getSelectedTreeNodes(layerTreeNodes, layers),
+);
+
+export const selectTerrainNodesListWithTitle = createSelector(
+  selectTerrainLayerTreeNodes,
+  selectLayers,
+  (treeNodes: ExtendedLayerTreeNodeModel[], layers): ExtendedLayerTreeNodeModel[] => {
+    return treeNodes
+      .map(node => ({
+        ...node,
+        name: node.appLayerId ? layers.find(l => l.id === node.appLayerId)?.title || node.name : node.name,
+      }));
+  },
+);
+
+export const selectTerrainNodesList = createSelector(
+  selectTerrainNodesListWithTitle,
+  (treeNodes: ExtendedLayerTreeNodeModel[]): ExtendedLayerTreeNodeModel[] => {
+    const root = treeNodes.find(l => l.root);
+    if (!root) {
+      return [];
+    }
+    return (root.childrenIds || [])
+      .map(childId => TreeHelper.findNode(treeNodes, childId))
+      .filter((node: ExtendedLayerTreeNodeModel | undefined): node is ExtendedLayerTreeNodeModel => typeof node !== 'undefined');
+  },
+);
+
+export const selectInitiallySelectedTerrainNodes = createSelector(
+  selectTerrainNodesListWithTitle,
   selectLayersMap,
   (layerTreeNodes, layers): LayerTreeNodeModel[] => LayerTreeNodeHelper.getSelectedTreeNodes(layerTreeNodes, layers),
 );

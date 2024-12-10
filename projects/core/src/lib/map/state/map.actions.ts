@@ -56,6 +56,10 @@ export const setSelectedBackgroundNodeId = createAction(
   `${mapActionsPrefix} Set Selected Background Node ID`,
   props<{ id: string }>(),
 );
+export const setSelectedTerrainNodeId = createAction(
+  `${mapActionsPrefix} Set Selected Terrain Node ID`,
+  props<{ id: string }>(),
+);
 export const setLayerOpacity = createAction(
   `${mapActionsPrefix} Set Layer Opacity`,
   props<{ opacity: Array<{ id: string; opacity: number }> }>(),

@@ -9,6 +9,7 @@
           <tm-clicked-coordinates *ngIf="layoutService.isComponentEnabled(layoutConfig, componentTypes.COORDINATE_PICKER)"></tm-clicked-coordinates>
           <tm-streetview *ngIf="layoutService.isComponentEnabled(layoutConfig, componentTypes.STREETVIEW)"></tm-streetview>
           <tm-simple-search *ngIf="layoutService.isComponentEnabled(layoutConfig, componentTypes.SIMPLE_SEARCH)"></tm-simple-search>
+          <tm-terrain-layer-toggle *ngIf="layoutService.isComponentEnabled(layoutConfig, componentTypes.TERRAIN_LAYER_TOGGLE)"></tm-terrain-layer-toggle>
         </div>
         <div class="map-controls-right">
           <tm-background-layer-toggle *ngIf="layoutService.isComponentEnabled(layoutConfig, componentTypes.BACKGROUND_LAYER_TOGGLE)"></tm-background-layer-toggle>

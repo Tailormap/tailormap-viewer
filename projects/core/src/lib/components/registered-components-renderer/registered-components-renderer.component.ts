@@ -36,6 +36,10 @@ export class RegisteredComponentsRendererComponent implements OnInit {
     BaseComponentTypeEnum.STREETVIEW,
   ];
 
+  private componentsOnlyIn3D = [
+    BaseComponentTypeEnum.TERRAIN_LAYER_TOGGLE,
+  ];
+
   constructor(
     private componentRegistrationService: ComponentRegistrationService,
     private cdr: ChangeDetectorRef,
@@ -54,7 +58,9 @@ export class RegisteredComponentsRendererComponent implements OnInit {
             component => !this.disallowingComponents.some(disallowingComponent => disallowingComponent === component.type),
           );
         }
-        return components;
+        return components.filter(
+          component => !this.componentsOnlyIn3D.some(componentOnlyIn3D => componentOnlyIn3D === component.type),
+        );
       }),
     )
       .pipe(

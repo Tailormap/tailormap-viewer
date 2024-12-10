@@ -26,6 +26,10 @@ export class LayoutService {
     BaseComponentTypeEnum.STREETVIEW,
   ];
 
+  private componentsOnlyIn3D = [
+    BaseComponentTypeEnum.TERRAIN_LAYER_TOGGLE,
+  ];
+
   constructor(private store$: Store) {
     this.componentsConfig$ = combineLatest([
       store$.select(selectComponentsConfig),
@@ -40,6 +44,10 @@ export class LayoutService {
   public isComponentEnabled(layoutConfig: LayoutConfig, componentType: string) {
     if (layoutConfig.in3D) {
       if (this.disallowingComponents.some(disallowingComponent => disallowingComponent === componentType)) {
+        return false;
+      }
+    } else {
+      if (this.componentsOnlyIn3D.some(componentOnlyIn3D => componentOnlyIn3D === componentType)) {
         return false;
       }
     }

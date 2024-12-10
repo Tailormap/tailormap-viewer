@@ -184,6 +184,7 @@ export const getMapResponseData = (overrides?: Partial<MapResponseModel>): MapRe
     getAppLayerModel({ id: '2', hasAttributes: true, serviceId: 'bestuurlijkegebieden', layerName: 'gemeentegebied', title: 'Gemeentegebied' }),
     getAppLayerModel({ id: '3', hasAttributes: true, serviceId: 'bestuurlijkegebieden', layerName: 'provinciegebied', title: 'Provinciegebied' }),
   ],
+  terrainLayerTreeNodes: [],
   initialExtent: overrides?.initialExtent === null ? null : getBoundsModel(overrides?.initialExtent),
   services: [
     getServiceModel({

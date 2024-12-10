@@ -73,13 +73,20 @@ export class CesiumLayerManager {
 
   public addLayers(layers: LayerModel[]){
     this.ngZone.runOutsideAngular(() => {
+      let noTerrainLayersVisible: boolean = true;
       layers.forEach(layer => {
         if (layer.visible) {
           this.addLayer(layer);
+          if (layer.layerType === LayerTypesEnum.QUANTIZEDMESH) {
+            noTerrainLayersVisible = false;
+          }
         } else {
           this.removeLayer(layer);
         }
       });
+      if (noTerrainLayersVisible) {
+        this.setEllipsoidTerrain();
+      }
     });
   }
 
@@ -109,13 +116,9 @@ export class CesiumLayerManager {
 
   private removeLayer(layer: LayerModel) {
     this.executeScene3DAction(async scene3D => {
-      if (layer.layerType === LayerTypesEnum.QUANTIZEDMESH) {
-        scene3D.setTerrain(new Cesium.Terrain(new EllipsoidTerrainProvider()));
-      } else {
-        if (this.layers3D.has(layer.id)) {
-          const primitive = scene3D.primitives.get(this.layers3D.get(layer.id) ?? 0);
-          primitive.show = false;
-        }
+      if (this.layers3D.has(layer.id)) {
+        const primitive = scene3D.primitives.get(this.layers3D.get(layer.id) ?? 0);
+        primitive.show = false;
       }
     });
   }
@@ -136,6 +139,12 @@ export class CesiumLayerManager {
       return Cesium.CesiumTerrainProvider.fromUrl(url);
     }
     return null;
+  }
+
+  private setEllipsoidTerrain() {
+    this.executeScene3DAction(async scene3D => {
+      scene3D.setTerrain(new Cesium.Terrain(new EllipsoidTerrainProvider()));
+    });
   }
 
 }

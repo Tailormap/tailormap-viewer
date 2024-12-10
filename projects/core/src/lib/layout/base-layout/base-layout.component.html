@@ -30,6 +30,7 @@
           <tm-share-viewer *ngIf="layoutService.isComponentEnabled(layoutConfig, componentTypes.SHARE_VIEWER)"></tm-share-viewer>
           <tm-registered-components-renderer [config]="layoutConfig.config" area="map-controls-left"></tm-registered-components-renderer>
           <tm-switch3-d></tm-switch3-d>
+          <tm-terrain-layer-toggle *ngIf="layoutService.isComponentEnabled(layoutConfig, componentTypes.TERRAIN_LAYER_TOGGLE)"></tm-terrain-layer-toggle>
         </div>
         <div class="map-controls-right">
           <tm-background-layer-toggle *ngIf="layoutService.isComponentEnabled(layoutConfig, componentTypes.BACKGROUND_LAYER_TOGGLE)"></tm-background-layer-toggle>
