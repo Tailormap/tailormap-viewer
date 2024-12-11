@@ -101,6 +101,10 @@
         <source>Table of contents</source>
         <target>Beschikbare lagen</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.component-terrain-layer-toggle" datatype="html">
+        <source>Terrain Layer Toggle</source>
+        <target>Terrein Laag Schakelaar</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.components" datatype="html">
         <source>Components</source>
         <target>Componenten</target>
@@ -159,7 +163,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.enable-3D" datatype="html">
         <source>Enable 3D viewing</source>
-        <target state="new">3D-weergave inschakelen</target>
+        <target>3D-weergave inschakelen</target>
       </trans-unit>
       <trans-unit id="admin-core.application.error-creating-application" datatype="html">
         <source>Error while creating application.</source>
@@ -320,6 +324,14 @@
       <trans-unit id="admin-core.application.styling" datatype="html">
         <source>Styling</source>
         <target>Opmaak</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.terrain" datatype="html">
+        <source>Terrain</source>
+        <target>Terrein</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.terrain-layers" datatype="html">
+        <source>Terrain Layers</source>
+        <target>Terrein Lagen</target>
       </trans-unit>
       <trans-unit id="admin-core.authorizations.access" datatype="html">
         <source>Access</source>

@@ -913,6 +913,10 @@
         <source>Location</source>
         <target>Locatie</target>
       </trans-unit>
+      <trans-unit id="core.terrain-layer-toggle.ellipsoid" datatype="html">
+        <source>WGS84 Ellipsoid</source>
+        <target>WGS84 Ellipsoïde</target>
+      </trans-unit>
       <trans-unit id="core.toc.available-layers" datatype="html">
         <source>Available layers</source>
         <target>Beschikbare lagen</target>
@@ -1015,7 +1019,7 @@
       </trans-unit>
       <trans-unit id="core.toolbar.switch-3d" datatype="html">
         <source>Switch to 3D</source>
-        <target state="new">Activeer 3D</target>
+        <target>Activeer 3D</target>
       </trans-unit>
       <trans-unit id="core.toolbar.type-at-least" datatype="html">
         <source>Type at least <x id="INTERPOLATION" equiv-text="{{ minLength }}"/> characters to start searching</source>

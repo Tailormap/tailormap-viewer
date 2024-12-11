@@ -539,7 +539,7 @@
       </trans-unit>
       <trans-unit id="core.filter.draw-message-3D" datatype="html">
         <source>Switch to 2D to draw</source>
-        <target state="new">Switch to 2D to draw</target>
+        <target>Wechseln Sie zum Zeichnen zu 2D</target>
       </trans-unit>
       <trans-unit id="core.filter.ends-with" datatype="html">
         <source>ends with</source>
@@ -913,6 +913,10 @@
         <source>Location</source>
         <target>Ort</target>
       </trans-unit>
+      <trans-unit id="core.terrain-layer-toggle.ellipsoid" datatype="html">
+        <source>WGS84 Ellipsoid</source>
+        <target>WGS84 Ellipsoid</target>
+      </trans-unit>
       <trans-unit id="core.toc.available-layers" datatype="html">
         <source>Available layers</source>
         <target>Verfügbare Ebenen</target>
@@ -1015,7 +1019,7 @@
       </trans-unit>
       <trans-unit id="core.toolbar.switch-3d" datatype="html">
         <source>Switch to 3D</source>
-        <target state="new">Switch to 3D</target>
+        <target>Auf 3D umschalten</target>
       </trans-unit>
       <trans-unit id="core.toolbar.type-at-least" datatype="html">
         <source>Type at least <x id="INTERPOLATION" equiv-text="{{ minLength }}"/> characters to start searching</source>

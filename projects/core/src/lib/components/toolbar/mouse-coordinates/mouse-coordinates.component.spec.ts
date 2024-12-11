@@ -2,8 +2,6 @@ import { render, screen } from '@testing-library/angular';
 import { MouseCoordinatesComponent } from './mouse-coordinates.component';
 import { of } from 'rxjs';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
-import { provideMockStore } from '@ngrx/store/testing';
-import { selectIn3DView } from '../../../map/state/map.selectors';
 
 describe('MouseCoordinatesComponent', () => {
 
@@ -14,9 +12,6 @@ describe('MouseCoordinatesComponent', () => {
     await render(MouseCoordinatesComponent, {
       providers: [
         mapServiceMock.provider,
-        provideMockStore({
-          selectors: [{ selector: selectIn3DView, value: false }],
-        }),
       ],
     });
     expect(await screen.getByText('50'));

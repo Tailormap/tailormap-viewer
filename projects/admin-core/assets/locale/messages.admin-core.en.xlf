@@ -77,6 +77,9 @@
       <trans-unit id="admin-core.application.component-table-of-contents" datatype="html">
         <source>Table of contents</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.component-terrain-layer-toggle" datatype="html">
+        <source>Terrain Layer Toggle</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.components" datatype="html">
         <source>Components</source>
       </trans-unit>
@@ -241,6 +244,12 @@
       </trans-unit>
       <trans-unit id="admin-core.application.styling" datatype="html">
         <source>Styling</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.terrain" datatype="html">
+        <source>Terrain</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.terrain-layers" datatype="html">
+        <source>Terrain Layers</source>
       </trans-unit>
       <trans-unit id="admin-core.authorizations.access" datatype="html">
         <source>Access</source>

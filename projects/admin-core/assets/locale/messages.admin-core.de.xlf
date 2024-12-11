@@ -102,6 +102,10 @@
         <source>Table of contents</source>
         <target>Inhaltsverzeichnis</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.component-terrain-layer-toggle" datatype="html">
+        <source>Terrain Layer Toggle</source>
+        <target>Geländeebene Umschalter</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.components" datatype="html">
         <source>Components</source>
         <target>Komponenten</target>
@@ -160,7 +164,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.enable-3D" datatype="html">
         <source>Enable 3D viewing</source>
-        <target state="new">Enable 3D viewing</target>
+        <target>3D-Anzeige aktivieren</target>
       </trans-unit>
       <trans-unit id="admin-core.application.error-creating-application" datatype="html">
         <source>Error while creating application.</source>
@@ -321,6 +325,14 @@
       <trans-unit id="admin-core.application.styling" datatype="html">
         <source>Styling</source>
         <target>Stil</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.terrain" datatype="html">
+        <source>Terrain</source>
+        <target>Gelände</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.terrain-layers" datatype="html">
+        <source>Terrain Layers</source>
+        <target>Geländeebene</target>
       </trans-unit>
       <trans-unit id="admin-core.authorizations.access" datatype="html">
         <source>Access</source>
