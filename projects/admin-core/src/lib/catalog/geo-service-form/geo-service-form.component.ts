@@ -20,7 +20,13 @@ export class GeoServiceFormComponent implements OnInit {
   private destroyed = new Subject();
   private _geoService: GeoServiceModel | null = null;
 
-  public protocols: GeoServiceProtocolEnum[] = [ GeoServiceProtocolEnum.WMS, GeoServiceProtocolEnum.WMTS, GeoServiceProtocolEnum.XYZ ];
+  public protocols: GeoServiceProtocolEnum[] = [
+    GeoServiceProtocolEnum.WMS,
+    GeoServiceProtocolEnum.WMTS,
+    GeoServiceProtocolEnum.XYZ,
+    GeoServiceProtocolEnum.TILESET3D,
+    GeoServiceProtocolEnum.QUANTIZEDMESH,
+  ];
   private readonly XYZ_CRS_DEFAULT = 'EPSG:3857';
 
   @Input()

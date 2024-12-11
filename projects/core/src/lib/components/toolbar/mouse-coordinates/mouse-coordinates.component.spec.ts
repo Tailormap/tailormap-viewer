@@ -10,7 +10,9 @@ describe('MouseCoordinatesComponent', () => {
       () => ({ mouseMove$: of({ type: 'move', mapCoordinates: [ 50, 60 ] }) }),
     );
     await render(MouseCoordinatesComponent, {
-      providers: [mapServiceMock.provider],
+      providers: [
+        mapServiceMock.provider,
+      ],
     });
     expect(await screen.getByText('50'));
     expect(await screen.getByText('|'));
