@@ -32,13 +32,15 @@
                               [value]="node"></mat-radio-button>
           </ng-container>
           <ng-container *ngIf="hasChild(node)">
-            <button mat-icon-button
-                    class="size-18"
-                    *ngIf="hasChild(node)"
-                    (click)="toggleNodeExpansion($event, node)"
-                    [attr.aria-label]="(isExpanded(node) ? 'collapse ' : 'expand ') + node.label">
-              <mat-icon [svgIcon]="isExpanded(node) ? 'chevron_bottom' : 'chevron_right'"></mat-icon>
-            </button>
+            @if (!hideRootCollapseArrow || node.level !== 0) {
+              <button mat-icon-button
+                      class="size-18"
+                      *ngIf="hasChild(node)"
+                      (click)="toggleNodeExpansion($event, node)"
+                      [attr.aria-label]="(isExpanded(node) ? 'collapse ' : 'expand ') + node.label">
+                <mat-icon [svgIcon]="isExpanded(node) ? 'chevron_bottom' : 'chevron_right'"></mat-icon>
+              </button>
+            }
             <mat-checkbox *ngIf="node.checkbox && !useRadioInputs && hasChild(node)"
                           [disabled]="readOnlyMode"
                           [aria-label]="'toggle ' + node.label"

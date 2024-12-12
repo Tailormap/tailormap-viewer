@@ -20,6 +20,9 @@ export class TreeComponent implements OnInit, OnDestroy {
   public treeNodeTemplate?: TemplateRef<any>;
 
   @Input()
+  public hideRootCollapseArrow = false;
+
+  @Input()
   public getDropZones?: (defaultTarget: HTMLElement, node?: FlatTreeModel) => DropZoneOptions[];
 
   @Input()
