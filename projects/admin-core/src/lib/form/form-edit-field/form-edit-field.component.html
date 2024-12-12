@@ -36,6 +36,7 @@
                 <input matInput
                        tmAutoFocus
                        placeholder="Value"
+                       (keydown.enter)="stopEnter($event)"
                        i18n-placeholder="@@admin-core.form.value-list-value"
                        formControlName="value"
                 />
@@ -44,6 +45,7 @@
                 <mat-label i18n="@@admin-core.form.value-list-label">Label</mat-label>
                 <input matInput
                        placeholder="Label"
+                       (keydown.enter)="stopEnter($event, true, i)"
                        i18n-placeholder="@@admin-core.form.label-list-label"
                        formControlName="label"
                 />

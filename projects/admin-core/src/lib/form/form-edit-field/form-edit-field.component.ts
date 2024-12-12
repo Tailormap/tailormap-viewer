@@ -166,4 +166,12 @@ export class FormEditFieldComponent implements OnInit {
     this.store$.dispatch(draftFormRemoveField({ field: field.name }));
   }
 
+  public stopEnter($event: Event, addNewIfLast?: boolean, rowIdx?: number) {
+    $event.stopPropagation();
+    $event.preventDefault();
+    if (addNewIfLast && rowIdx === (this.getValueListFormArray().length - 1)) {
+      this.addValue();
+    }
+  }
+
 }
