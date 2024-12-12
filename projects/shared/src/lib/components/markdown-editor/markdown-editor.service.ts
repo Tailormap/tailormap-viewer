@@ -14,8 +14,12 @@ export class MarkdownEditorService {
   }
 
   public resetContent(content: string) {
-    this.content.next(content);
-    this.updatedContent.next(content);
+    if (this.content.value !== content) {
+      this.content.next(content);
+    }
+    if (this.updatedContent.value !== content) {
+      this.updatedContent.next(content);
+    }
   }
 
   public contentChanged(content: string) {
