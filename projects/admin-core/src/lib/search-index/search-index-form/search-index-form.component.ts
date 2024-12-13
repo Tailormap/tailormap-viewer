@@ -31,7 +31,7 @@ export class SearchIndexFormComponent implements OnInit {
   }
 
   @Output()
-  public updateSearchIndex = new EventEmitter<{ searchIndex: Pick<SearchIndexModel, 'name' | 'featureTypeId' | 'comment'> }>();
+  public updateSearchIndex = new EventEmitter<{ searchIndex: Pick<SearchIndexModel, 'name' | 'featureTypeId'> }>();
 
   @Output()
   public validFormChanged = new EventEmitter<boolean>();
@@ -78,10 +78,9 @@ export class SearchIndexFormComponent implements OnInit {
         }),
       )
       .subscribe(([ value, featureType ]) => {
-        const searchIndex: Pick<SearchIndexModel, 'name' | 'featureTypeId' | 'comment'> = {
+        const searchIndex: Pick<SearchIndexModel, 'name' | 'featureTypeId'> = {
           name: value.name || '',
           featureTypeId: featureType ? +featureType.originalId : -1,
-          comment: value.comment || '',
         };
         this.updateSearchIndex.emit({ searchIndex });
       });
@@ -115,7 +114,6 @@ export class SearchIndexFormComponent implements OnInit {
       .subscribe(featureType => {
         this.searchIndexForm.patchValue({
           name: form.name,
-          comment: form.comment,
           featureSourceId: featureType ? +featureType.featureSourceId : undefined,
           featureTypeName: featureType?.name,
         }, { emitEvent: false });
