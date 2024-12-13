@@ -34,21 +34,49 @@
 .attribution,
 .attribution.mat-mdc-option.mdc-list-item--disabled  ::ng-deep > .mdc-list-item__primary-text,
 .hint,
-.hint.mat-mdc-option.mdc-list-item--disabled  ::ng-deep > .mdc-list-item__primary-text,
-.section-label,
-.section-label.mat-mdc-option.mdc-list-item--disabled  ::ng-deep > .mdc-list-item__primary-text {
+.hint.mat-mdc-option.mdc-list-item--disabled  ::ng-deep > .mdc-list-item__primary-text {
   font-size: 11px;
   color: var(--disabled-text-color);
   opacity: 1;
 }
 
-.section-label {
+/*::ng-deep .search-panel--with-summary.mat-mdc-autocomplete-panel {*/
+/*  padding-top: 0;*/
+/*}*/
+
+.result-summary {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  outline: 8px solid #fff;
+}
+
+.result-summary ::ng-deep .mat-mdc-optgroup-label {
+  background-color: #fff;
+  min-height: 40px;
+}
+
+.result-summary ::ng-deep .mdc-list-item__primary-text {
   font-size: 11px;
+  display: flex;
+  gap: 16px;
+}
+
+.section-label {
+  --mat-optgroup-label-text-size: 13px;
+  color: var(--primary-color);
+  scroll-margin-top: 40px;
 }
 
 .attribution ::ng-deep a {
   display: inline-block;
   padding-left: 3px;
+}
+
+.result-summary ::ng-deep a {
+  display: block;
+  --mat-optgroup-label-text-size: 13px;
+  color: var(--primary-color);
 }
 
 @media screen and (max-width: 730px) {

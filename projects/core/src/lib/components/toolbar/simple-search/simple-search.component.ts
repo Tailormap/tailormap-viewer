@@ -8,8 +8,7 @@ import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.he
 import { FeatureHelper } from '@tailormap-viewer/map';
 import { FeatureModel } from '@tailormap-viewer/api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { SearchResultModel } from './models/search-result.model';
-import { SearchResultItemModel } from './models/search-result-item.model';
+import { SearchResultModel, SearchResultItemModel } from './models';
 
 type SearchStatusType = 'empty' | 'no_results' | 'searching' | 'belowMinLength' | 'complete';
 
@@ -111,4 +110,13 @@ export class SimpleSearchComponent implements OnInit {
       takeUntil(timer(5000))).subscribe();
   }
 
+  public scrollTo($event: MouseEvent, id: string) {
+    $event.stopPropagation();
+    $event.preventDefault();
+    const targetGroup = `search-group-${id}`;
+    const target = document.getElementById(targetGroup);
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
 }

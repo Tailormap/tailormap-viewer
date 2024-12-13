@@ -23,28 +23,42 @@
                [formControl]="searchControl"
                [matAutocomplete]="auto" />
         <mat-autocomplete autoActiveFirstOption
+                          class="search-panel"
                           #auto="matAutocomplete"
                           [displayWith]="displayLabel">
           @if (searchStatus$ | async; as searchStatus) {
-            <mat-option disabled
-                        class="hint"
-                        *ngIf="searchStatus === 'belowMinLength'"
-                        i18n="@@core.toolbar.type-at-least">Type at least {{ minLength }} characters to start searching</mat-option>
-            <mat-option disabled class="hint" *ngIf="searchStatus === 'no_results'" i18n="@@core.toolbar.no-results-found">No results found</mat-option>
-            <mat-option disabled class="hint" *ngIf="searchStatus === 'searching'">
-              <mat-spinner color="primary" mode="indeterminate" diameter="20"></mat-spinner>
-            </mat-option>
+            @if (searchStatus === 'belowMinLength') {
+              <mat-option disabled
+                          class="hint"
+                          i18n="@@core.toolbar.type-at-least">Type at least {{ minLength }} characters to start searching</mat-option>
+            }
+            @if (searchStatus === 'no_results') {
+              <mat-option disabled class="hint" i18n="@@core.toolbar.no-results-found">No results found</mat-option>
+            }
+            @if (searchStatus === 'searching') {
+              <mat-option disabled class="hint">
+                <mat-spinner color="primary" mode="indeterminate" diameter="20"></mat-spinner>
+              </mat-option>
+            }
           }
           @if (searchResults$ | async; as searchResults) {
+            @if (searchResults.length > 1) {
+              <mat-optgroup class="result-summary">
+                @for (searchResult of searchResults; track searchResult.id) {
+                  <a href="" (click)="scrollTo($event, searchResult.id)">{{ searchResult.name}} ({{searchResult.results.length}})</a>
+                }
+              </mat-optgroup>
+            }
             @for (searchResult of searchResults; track searchResult.id) {
               @if (searchResult && searchResult.results.length > 0) {
-                <mat-option class="section-label" disabled>{{searchResult.name}}</mat-option>
-                @for(option of searchResult.results; track option.id) {
-                  <mat-option [value]="option">{{option.label}}</mat-option>
-                }
-                @if (searchResult.attribution) {
-                  <mat-option class="attribution" disabled [innerHTML]="searchResult.attribution | htmlify"></mat-option>
-                }
+                <mat-optgroup class="section-label" [label]="searchResult.name" [id]="'search-group-' + searchResult.id">
+                  @for(option of searchResult.results; track option.id) {
+                    <mat-option [value]="option">{{option.label}}</mat-option>
+                  }
+                  @if (searchResult.attribution) {
+                    <mat-option class="attribution" disabled [innerHTML]="searchResult.attribution | htmlify"></mat-option>
+                  }
+                </mat-optgroup>
               }
             }
           }
