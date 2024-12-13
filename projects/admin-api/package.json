@@ -5,7 +5,7 @@
     "@angular/common": "^18.1.3",
     "@angular/core": "^18.1.3",
     "rxjs": "^7.8.1",
-    "@tailormap-viewer/api": "^11.4.3"
+    "@tailormap-viewer/api": "^11.4.4"
   },
   "dependencies": {
     "tslib": "^2.4.0"
