@@ -77,7 +77,7 @@ services:
       # for setting up a production-ready instance
       # default is 512m
       # SOLR_HEAP: 512m
-      SOLR_OPTS: '$SOLR_OPTS -Dsolr.environment=prod,label=Tailormap+Solr,color=#6236FF'
+      SOLR_OPTS: '${SOLR_OPTS:-} -Dsolr.environment=prod,label=Tailormap+Solr,color=#6236FF'
       SOLR_DELETE_UNKNOWN_CORES: true
     mem_swappiness: 0
     volumes:
