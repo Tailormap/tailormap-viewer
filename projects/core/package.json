@@ -20,7 +20,7 @@
     "@sentry/browser": "^8.33.1",
     "@stardazed/zlib": "^1.0.1",
     "@tailormap-viewer/shared": "^11.4.4",
-    "@tailormap-viewer/map": "^11.4.3",
+    "@tailormap-viewer/map": "^11.4.4",
     "@tailormap-viewer/api": "^11.4.4",
     "jspdf": "^2.5.1",
     "luxon": "^3.5.0",
