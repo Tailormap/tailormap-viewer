@@ -874,14 +874,6 @@
         <source>Collapse all</source>
         <target>Alle einklappen</target>
       </trans-unit>
-      <trans-unit id="admin-core.common.comment" datatype="html">
-        <source>Comment</source>
-        <target>Kommentar</target>
-      </trans-unit>
-      <trans-unit id="admin-core.common.comment" datatype="html">
-        <source>Comment</source>
-        <target>Kommentar</target>
-      </trans-unit>
       <trans-unit id="admin-core.common.comments" datatype="html">
         <source>Comments</source>
         <target>Kommentare</target>

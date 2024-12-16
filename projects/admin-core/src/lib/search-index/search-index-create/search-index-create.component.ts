@@ -13,7 +13,7 @@ import { SearchIndexService } from '../services/search-index.service';
 export class SearchIndexCreateComponent {
 
   public saveEnabled = signal(false);
-  private updatedSearch: Pick<SearchIndexModel, 'name' | 'featureTypeId' | 'comment'> | undefined;
+  private updatedSearch: Pick<SearchIndexModel, 'name' | 'featureTypeId'> | undefined;
 
   private savingSubject = new BehaviorSubject(false);
   public saving$ = this.savingSubject.asObservable();
@@ -28,7 +28,7 @@ export class SearchIndexCreateComponent {
     this.saveEnabled.set($event);
   }
 
-  public updateSearchIndex($event: { searchIndex: Pick<SearchIndexModel, 'name' | 'featureTypeId' | 'comment'> }) {
+  public updateSearchIndex($event: { searchIndex: Pick<SearchIndexModel, 'name' | 'featureTypeId'> }) {
     this.updatedSearch = $event.searchIndex;
   }
 
@@ -38,7 +38,6 @@ export class SearchIndexCreateComponent {
     }
     const searchIndexModel: Omit<SearchIndexModel, 'id'> = {
       name: this.updatedSearch.name,
-      comment: this.updatedSearch.comment,
       featureTypeId: this.updatedSearch.featureTypeId,
       searchFieldsUsed: [],
       searchDisplayFieldsUsed: [],
