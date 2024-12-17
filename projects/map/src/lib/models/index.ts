@@ -18,3 +18,4 @@ export * from './ol-map-style.type';
 export * from './map-tooltip.model';
 export * from './projection-codes.enum';
 export * from './map-unit.enum';
+export * from './selection3d.model';
