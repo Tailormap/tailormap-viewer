@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, signal } from '@angular/core';
+import { afterRender, ChangeDetectionStrategy, Component, DestroyRef, OnInit, signal } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { concatMap, Observable, of, startWith, Subject, tap, timer } from 'rxjs';
 import { SimpleSearchService } from './simple-search.service';
@@ -8,8 +8,7 @@ import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.he
 import { FeatureHelper } from '@tailormap-viewer/map';
 import { FeatureModel } from '@tailormap-viewer/api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { SearchResultModel } from './models/search-result.model';
-import { SearchResultItemModel } from './models/search-result-item.model';
+import { SearchResultModel, SearchResultItemModel } from './models';
 
 type SearchStatusType = 'empty' | 'no_results' | 'searching' | 'belowMinLength' | 'complete';
 
@@ -33,12 +32,20 @@ export class SimpleSearchComponent implements OnInit {
 
   private searchStatusSubject = new Subject<SearchStatusType>();
   public searchStatus$: Observable<SearchStatusType> = this.searchStatusSubject.asObservable();
+  private isPanelOpen: boolean = false;
 
   constructor(
     private searchService: SimpleSearchService,
     private mapService: MapService,
     private destroyRef: DestroyRef,
   ) {
+    afterRender(() => {
+      // This is a bit of a hack, since we cannot define a header or something like that for an Autocomplete component
+      // We manually move the search summary up to the panel itself, making the list scrollable, without the summary
+      if (this.isPanelOpen) {
+        this.moveSummeryUp();
+      }
+    });
   }
 
   public ngOnInit(): void {
@@ -109,6 +116,34 @@ export class SimpleSearchComponent implements OnInit {
         return this.mapService.renderFeatures$('search-result-highlight', of(feature), style, { zoomToFeature: true, updateWhileAnimating: true });
       }),
       takeUntil(timer(5000))).subscribe();
+  }
+
+  public scrollTo($event: MouseEvent, id: string) {
+    $event.stopPropagation();
+    $event.preventDefault();
+    const targetGroup = `search-group-${id}`;
+    const target = document.getElementById(targetGroup);
+    document.querySelector<HTMLInputElement>('.search-field')?.blur();
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  public panelOpen(isOpen: boolean) {
+    this.isPanelOpen = isOpen;
+    if (!isOpen) {
+      document.querySelector('.search-panel')?.parentElement?.classList.remove('simple-search-panel--with-summary');
+    }
+  }
+
+  private moveSummeryUp() {
+    const summary = document.querySelector('.result-summary');
+    const panel = document.querySelector('.search-panel');
+    if (!summary || !panel || summary.parentElement !== panel) {
+      return;
+    }
+    panel.parentElement?.classList.add('simple-search-panel--with-summary');
+    panel.parentElement?.insertBefore(summary, panel);
   }
 
 }
