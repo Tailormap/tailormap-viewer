@@ -40,10 +40,6 @@
   opacity: 1;
 }
 
-/*::ng-deep .search-panel--with-summary.mat-mdc-autocomplete-panel {*/
-/*  padding-top: 0;*/
-/*}*/
-
 ::ng-deep .simple-search-panel--with-summary {
   flex-direction: column;
 }
