@@ -44,39 +44,38 @@
 /*  padding-top: 0;*/
 /*}*/
 
+::ng-deep .simple-search-panel--with-summary {
+  flex-direction: column;
+}
+
 .result-summary {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  outline: 8px solid #fff;
+  display: none;
 }
 
-.result-summary ::ng-deep .mat-mdc-optgroup-label {
-  background-color: #fff;
-  min-height: 40px;
-}
-
-.result-summary ::ng-deep .mdc-list-item__primary-text {
-  font-size: 11px;
+::ng-deep .simple-search-panel--with-summary .result-summary {
   display: flex;
-  gap: 16px;
+  background-color: #fff;
+  padding: 16px;
+  font-size: 11px;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  z-index: 1;
+}
+
+.result-summary a {
+  display: block;
+  --mat-optgroup-label-text-size: 13px;
+  color: var(--primary-color);
 }
 
 .section-label {
   --mat-optgroup-label-text-size: 13px;
   color: var(--primary-color);
-  scroll-margin-top: 40px;
 }
 
 .attribution ::ng-deep a {
   display: inline-block;
   padding-left: 3px;
-}
-
-.result-summary ::ng-deep a {
-  display: block;
-  --mat-optgroup-label-text-size: 13px;
-  color: var(--primary-color);
 }
 
 @media screen and (max-width: 730px) {

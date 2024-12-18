@@ -19,13 +19,25 @@
                type="text"
                i18n-placeholder="@@core.toolbar.search-location"
                tmAutoFocus
+               class="search-field"
                placeholder="Search location"
                [formControl]="searchControl"
                [matAutocomplete]="auto" />
         <mat-autocomplete autoActiveFirstOption
                           class="search-panel"
+                          (opened)="panelOpen(true)"
+                          (closed)="panelOpen(false)"
                           #auto="matAutocomplete"
                           [displayWith]="displayLabel">
+          @if (searchResults$ | async; as searchResults) {
+            @if (searchResults.length > 1) {
+              <div class="result-summary">
+                @for (searchResult of searchResults; track searchResult.id) {
+                  <a href="" (pointerdown)="scrollTo($event, searchResult.id)" (click)="scrollTo($event, searchResult.id)">{{ searchResult.name}} ({{searchResult.results.length}})</a>
+                }
+              </div>
+            }
+          }
           @if (searchStatus$ | async; as searchStatus) {
             @if (searchStatus === 'belowMinLength') {
               <mat-option disabled
@@ -42,13 +54,6 @@
             }
           }
           @if (searchResults$ | async; as searchResults) {
-            @if (searchResults.length > 1) {
-              <mat-optgroup class="result-summary">
-                @for (searchResult of searchResults; track searchResult.id) {
-                  <a href="" (click)="scrollTo($event, searchResult.id)">{{ searchResult.name}} ({{searchResult.results.length}})</a>
-                }
-              </mat-optgroup>
-            }
             @for (searchResult of searchResults; track searchResult.id) {
               @if (searchResult && searchResult.results.length > 0) {
                 <mat-optgroup class="section-label" [label]="searchResult.name" [id]="'search-group-' + searchResult.id">
