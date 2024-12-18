@@ -656,9 +656,6 @@
       <trans-unit id="admin-core.common.collapse-all" datatype="html">
         <source>Collapse all</source>
       </trans-unit>
-      <trans-unit id="admin-core.common.comment" datatype="html">
-        <source>Comment</source>
-      </trans-unit>
       <trans-unit id="admin-core.common.comments" datatype="html">
         <source>Comments</source>
       </trans-unit>
