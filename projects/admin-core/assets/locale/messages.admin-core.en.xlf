@@ -71,6 +71,9 @@
       <trans-unit id="admin-core.application.component-share-viewer" datatype="html">
         <source>Share viewer</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.component-simple-search" datatype="html">
+        <source>Search</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.component-streetview-tool" datatype="html">
         <source>Streetview tool</source>
       </trans-unit>
@@ -826,6 +829,15 @@
       </trans-unit>
       <trans-unit id="admin-core.components.measure-line-title" datatype="html">
         <source>Measure distance title</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.simple-search-add-municipality" datatype="html">
+        <source>Add municipality</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.simple-search-municipality" datatype="html">
+        <source>Municipality</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.simple-search-title" datatype="html">
+        <source>Search title</source>
       </trans-unit>
       <trans-unit id="admin-core.feature-type-settings-updated" datatype="html">
         <source>Feature type settings updated</source>

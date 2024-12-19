@@ -1,0 +1,25 @@
+<tm-admin-base-component-config [type]="type"
+                                [label]="label"
+                                [config]="config"
+                                i18n-titleLabel="@@admin-core.components.simple-search-title"
+                                titleLabel="Search title">
+  <div [formGroup]="formGroup">
+    <h2>PDOK Location search settings</h2>
+    <h3>Municipality filter</h3>
+    @for(municipalityControl of municipalityList.controls; track municipalityControl; let i = $index) {
+      <div class="municipality-form-row">
+        <mat-form-field>
+          <mat-label i18n="@@admin-core.components.simple-search-municipality">Municipality</mat-label>
+          <input matInput type="text" [formControl]="municipalityControl" />
+        </mat-form-field>
+        <button mat-icon-button (click)="deleteMunicipality(i)">
+          <mat-icon svgIcon="trash_filled"></mat-icon>
+        </button>
+      </div>
+    }
+    <button class="add-m-button" mat-flat-button (click)="addMunicipality()">
+      <mat-icon svgIcon="plus"></mat-icon>
+      <span i18n="@@admin-core.components.simple-search-add-municipality">Add municipality</span>
+    </button>
+  </div>
+</tm-admin-base-component-config>
