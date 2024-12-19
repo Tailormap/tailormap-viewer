@@ -18,6 +18,7 @@
                type="text"
                tmAutoFocus
                class="search-field"
+               (keydown.enter)="search()"
                [placeholder]="label"
                [formControl]="searchControl"
                [matAutocomplete]="auto" />
@@ -40,7 +41,7 @@
             @if (searchStatus === 'belowMinLength') {
               <mat-option disabled
                           class="hint"
-                          i18n="@@core.toolbar.type-at-least">Type at least {{ minLength }} characters to start searching</mat-option>
+                          i18n="@@core.toolbar.type-at-least">Type at least {{ minLength }} characters to start searching or press &lt;Enter&gt;</mat-option>
             }
             @if (searchStatus === 'no_results') {
               <mat-option disabled class="hint" i18n="@@core.toolbar.no-results-found">No results found</mat-option>
