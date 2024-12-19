@@ -6,9 +6,11 @@ import { debounceTime, filter, takeUntil, withLatestFrom, switchMap } from 'rxjs
 import { MapService } from '@tailormap-viewer/map';
 import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.helper';
 import { FeatureHelper } from '@tailormap-viewer/map';
-import { FeatureModel } from '@tailormap-viewer/api';
+import { BaseComponentTypeEnum, FeatureModel, SimpleSearchConfigModel } from '@tailormap-viewer/api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SearchResultModel, SearchResultItemModel } from './models';
+import { selectComponentsConfigForType } from '../../../state/core.selectors';
+import { Store } from '@ngrx/store';
 
 type SearchStatusType = 'empty' | 'no_results' | 'searching' | 'belowMinLength' | 'complete';
 
@@ -33,8 +35,11 @@ export class SimpleSearchComponent implements OnInit {
   private searchStatusSubject = new Subject<SearchStatusType>();
   public searchStatus$: Observable<SearchStatusType> = this.searchStatusSubject.asObservable();
   private isPanelOpen: boolean = false;
+  private config: SimpleSearchConfigModel | undefined;
+  public label: string = $localize `:@@core.toolbar.search-location:Search location`;
 
   constructor(
+    private store$: Store,
     private searchService: SimpleSearchService,
     private mapService: MapService,
     private destroyRef: DestroyRef,
@@ -46,6 +51,14 @@ export class SimpleSearchComponent implements OnInit {
         this.moveSummeryUp();
       }
     });
+    this.store$.select(selectComponentsConfigForType<SimpleSearchConfigModel>(BaseComponentTypeEnum.SIMPLE_SEARCH))
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(config => {
+        this.config = config?.config;
+        if (this.config?.title) {
+          this.label = this.config.title;
+        }
+      });
   }
 
   public ngOnInit(): void {
@@ -69,7 +82,7 @@ export class SimpleSearchComponent implements OnInit {
       }),
       debounceTime(SimpleSearchComponent.SEARCH_DEBOUNCE_TIME),
       withLatestFrom(this.mapService.getProjectionCode$()),
-      concatMap(([ searchStr, projectionCode ]) => this.searchService.search$(projectionCode, searchStr)),
+      concatMap(([ searchStr, projectionCode ]) => this.searchService.search$(projectionCode, searchStr, this.config)),
     ).subscribe(searchResult => {
       this.searchResultsSubject.next(searchResult);
       this.searchStatusSubject.next(searchResult.every(r => r.results.length === 0) ? 'no_results' : 'complete');

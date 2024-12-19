@@ -3,10 +3,9 @@
      (keyup.escape)="toggle(true)">
 
   <button mat-flat-button
-          i18n-tmTooltip="@@core.toolbar.search-location"
           class="map-control-button"
           [class.toggle-button--active]="active()"
-          tmTooltip="Search location"
+          [tmTooltip]="label"
           (click)="toggle()">
     <mat-icon svgIcon="search"></mat-icon>
   </button>
@@ -14,13 +13,12 @@
   @if (active()) {
     <div class="simple-search-field-wrapper">
       <mat-form-field appearance="outline">
-        <mat-label i18n="@@core.toolbar.search-location">Search location</mat-label>
+        <mat-label>{{label}}</mat-label>
         <input matInput
                type="text"
-               i18n-placeholder="@@core.toolbar.search-location"
                tmAutoFocus
                class="search-field"
-               placeholder="Search location"
+               [placeholder]="label"
                [formControl]="searchControl"
                [matAutocomplete]="auto" />
         <mat-autocomplete autoActiveFirstOption
