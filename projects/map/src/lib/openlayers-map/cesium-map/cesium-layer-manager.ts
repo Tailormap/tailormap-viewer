@@ -1,23 +1,18 @@
 import { Map as OlMap } from 'ol';
-import { LayerModel } from '../models/layer.model';
-import { LayerTypesHelper } from '../helpers/layer-types.helper';
+import { LayerModel } from '../../models/layer.model';
+import { LayerTypesHelper } from '../../helpers/layer-types.helper';
 import { NgZone } from '@angular/core';
 import type OLCesium from 'olcs';
 import { BehaviorSubject, filter, from, map, Observable, take } from 'rxjs';
-import {
-  Cartesian3, Cartographic,
-  Cesium3DTileFeature, Cesium3DTileset, CesiumTerrainProvider, EllipsoidTerrainProvider, Scene, ScreenSpaceEventHandler,
-} from 'cesium';
+import { Cesium3DTileset, CesiumTerrainProvider, EllipsoidTerrainProvider, Scene } from 'cesium';
 import { ExternalLibsLoaderHelper } from '@tailormap-viewer/shared';
-import { LayerTypesEnum } from '../models/layer-types.enum';
-import { Selection3dModel } from '../models/selection3d.model';
+import { LayerTypesEnum } from '../../models/layer-types.enum';
 
 export class CesiumLayerManager {
 
   private map3D: BehaviorSubject<OLCesium | null> = new BehaviorSubject<OLCesium | null>(null);
   private layers3D: Map<string, number> = new Map<string, number>();
-  private cesiumEventHandler: ScreenSpaceEventHandler | undefined;
-  public selection3D: Selection3dModel | undefined;
+  // private cesiumEventManager: CesiumEventManager | undefined;
 
   constructor(
     private olMap: OlMap,
@@ -45,9 +40,9 @@ export class CesiumLayerManager {
         });
       this.executeScene3DAction(async scene3D => {
         scene3D.globe.depthTestAgainstTerrain = true;
-        this.cesiumEventHandler = new Cesium.ScreenSpaceEventHandler(scene3D.canvas);
+        // this.cesiumEventManager = new CesiumEventManager(scene3D);
+        // this.cesiumEventManager.initEvents();
       });
-      this.setClickEventHandler();
     });
   }
 
@@ -152,35 +147,6 @@ export class CesiumLayerManager {
   private setEllipsoidTerrain() {
     this.executeScene3DAction(async scene3D => {
       scene3D.setTerrain(new Cesium.Terrain(new EllipsoidTerrainProvider()));
-    });
-  }
-
-  private setClickEventHandler() {
-    this.executeScene3DAction(async scene3D => {
-      this.cesiumEventHandler?.setInputAction((movement: any) => {
-        const pickedFeature: Cesium3DTileFeature = scene3D.pick(movement.position);
-        const position: Cartesian3 = scene3D.pickPosition(movement.position);
-        const cartographicPosition: Cartographic = Cesium.Ellipsoid.WGS84.cartesianToCartographic(position);
-        const positionDegrees = {
-          latitude: Cesium.Math.toDegrees(cartographicPosition.latitude),
-          longitude: Cesium.Math.toDegrees(cartographicPosition.longitude),
-        };
-        if (!Cesium.defined(pickedFeature)) {
-          this.selection3D = { position: positionDegrees };
-        } else {
-          this.selection3D = {
-            featureId: pickedFeature.featureId,
-            featureProperties: [],
-            position: positionDegrees,
-          };
-          const propertyIds = pickedFeature.getPropertyIds();
-          for (const propertyId of propertyIds) {
-            this.selection3D.featureProperties?.push({ id: propertyId, value: pickedFeature.getProperty(propertyId) });
-          }
-        }
-        console.log('feature: ', this.selection3D);
-
-      }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
     });
   }
 

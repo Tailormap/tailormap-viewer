@@ -8,6 +8,8 @@ import { OpenLayersMousePositionTool } from './tools/open-layers-mouse-position-
 import { OpenLayersScaleBarTool } from './tools/open-layers-scale-bar-tool';
 import { OpenLayersSelectTool } from './tools/open-layers-select-tool';
 import { OpenLayersModifyTool } from "./tools/open-layers-modify-tool";
+import { Observable } from 'rxjs';
+import { CesiumLayerManager } from './cesium-map/cesium-layer-manager';
 
 export class OpenLayersToolManager implements ToolManagerModel {
 
@@ -19,7 +21,12 @@ export class OpenLayersToolManager implements ToolManagerModel {
 
   private switchedTool = false;
 
-  constructor(private olMap: OlMap, private ngZone: NgZone) {}
+  constructor(
+    private olMap: OlMap,
+    private ngZone: NgZone,
+    private map3D$: Observable<CesiumLayerManager | null>,
+    private in3D$: Observable<boolean>,
+  ) {}
 
   public destroy() {
     const toolIds = Array.from(this.tools.keys());
@@ -31,7 +38,7 @@ export class OpenLayersToolManager implements ToolManagerModel {
   public addTool<T extends ToolModel, C extends ToolConfigModel>(tool: C): T {
     const toolId = `${tool.type.toLowerCase()}-${++OpenLayersToolManager.toolIdCount}`;
     if (ToolTypeHelper.isMapClickTool(tool)) {
-      this.tools.set(toolId, new OpenLayersMapClickTool(toolId, tool));
+      this.tools.set(toolId, new OpenLayersMapClickTool(toolId, tool, this.map3D$, this.in3D$));
     }
     if (ToolTypeHelper.isDrawingTool(tool)) {
       this.tools.set(toolId, new OpenLayersDrawingTool(toolId, tool, this.olMap, this.ngZone));

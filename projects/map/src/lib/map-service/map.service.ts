@@ -1,7 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
 import { OpenLayersMap } from '../openlayers-map/openlayers-map';
-import { CesiumLayerManager } from '../cesium-map/cesium-layer-manager';
-import { BehaviorSubject, combineLatest, filter, finalize, map, Observable, take, tap } from 'rxjs';
+import { CesiumLayerManager } from '../openlayers-map/cesium-map/cesium-layer-manager';
+import { combineLatest, finalize, map, Observable, take, tap } from 'rxjs';
 import {
   LayerManagerModel, LayerModel, LayerTypesEnum, MapStyleModel, MapViewDetailsModel, MapViewerOptionsModel, OpenlayersExtent,
   ToolConfigModel, ToolModel,
@@ -42,15 +42,12 @@ export interface MapExportOptions {
 export class MapService {
 
   private readonly map: OpenLayersMap;
-  private map3D: BehaviorSubject<CesiumLayerManager | null> = new BehaviorSubject<CesiumLayerManager | null>(null);
-  private made3D: boolean;
 
   constructor(
     private ngZone: NgZone,
     private httpXsrfTokenExtractor: HttpXsrfTokenExtractor,
   ) {
     this.map = new OpenLayersMap(this.ngZone, this.httpXsrfTokenExtractor);
-    this.made3D = false;
   }
 
   public initMap(options: MapViewerOptionsModel, initialOptions?: { initialCenter?: [number, number]; initialZoom?: number }) {
@@ -260,32 +257,15 @@ export class MapService {
   }
 
   public getCesiumLayerManager$(): Observable<CesiumLayerManager> {
-    const isLayerManager = (item: CesiumLayerManager | null): item is CesiumLayerManager => item !== null;
-    return this.map3D.asObservable().pipe(filter(isLayerManager));
-  }
-
-  public executeCLMAction(fn: (cesiumLayerManager: CesiumLayerManager) => void) {
-    this.getCesiumLayerManager$()
-      .pipe(take(1))
-      .subscribe(cesiumLayerManager => fn(cesiumLayerManager));
+    return this.map.getCesiumLayerManager$();
   }
 
   public make3D$(){
-    if (!this.made3D) {
-      this.map.executeMapAction(olMap => {
-        this.map3D.next(new CesiumLayerManager(olMap, this.ngZone));
-      });
-      this.executeCLMAction(cesiumLayerManager => {
-        cesiumLayerManager.init();
-      });
-      this.made3D = true;
-    }
+    this.map.make3D$();
   }
 
   public switch3D$(){
-    this.executeCLMAction(cesiumLayerManager => {
-      cesiumLayerManager.switch3D$();
-    });
+    this.map.switch3D$();
   }
 
 }
