@@ -759,7 +759,7 @@
         <source>Embed URL</source>
       </trans-unit>
       <trans-unit id="core.toolbar.type-at-least" datatype="html">
-        <source>Type at least <x id="INTERPOLATION" equiv-text="{{ minLength }}"/> characters to start searching</source>
+        <source>Type at least <x id="INTERPOLATION" equiv-text="{{ minLength }}"/> characters to start searching or press &lt;Enter&gt;</source>
       </trans-unit>
       <trans-unit id="core.toolbar.zoom-in" datatype="html">
         <source>Zoom in</source>

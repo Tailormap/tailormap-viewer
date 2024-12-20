@@ -1,0 +1,35 @@
+<tm-admin-base-component-config [type]="type"
+                                [label]="label"
+                                [config]="config"
+                                i18n-titleLabel="@@admin-core.components.simple-search-title"
+                                titleLabel="Search title">
+  <div class="form-wrapper">
+    <h2 i18n="@@admin-core.components.simple-search-pdok-settings">PDOK Location search settings</h2>
+    <mat-expansion-panel [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title i18n="@@admin-core.components.simple-search-municipality-filter">Municipality filter</mat-panel-title>
+      </mat-expansion-panel-header>
+      <div class="selected-municipality">
+        @for(m of municipalities$ | async; track m.municipalityCode; let i = $index) {
+            <div class="label">{{m.municipality}}</div>
+            <div class="button-wrapper">
+              <button mat-icon-button (click)="deleteMunicipality(m.municipalityCode)">
+                <mat-icon svgIcon="trash_filled"></mat-icon>
+              </button>
+            </div>
+        }
+      </div>
+      <h2 i18n="@@admin-core.components.simple-search-add-municipality">Add municipality</h2>
+      <mat-form-field>
+        <mat-label i18n="@@admin-core.components.simple-search-municipality">Municipality</mat-label>
+        <input matInput type="text" [formControl]="municipalityControl" [matAutocomplete]="auto" />
+        <mat-autocomplete #auto="matAutocomplete"
+                          autoActiveFirstOption>
+          @for(option of filteredMunicipalityOptions$ | async; track option.municipalityCode) {
+            <mat-option [value]="option">{{option.municipality}}</mat-option>
+          }
+        </mat-autocomplete>
+      </mat-form-field>
+    </mat-expansion-panel>
+  </div>
+</tm-admin-base-component-config>

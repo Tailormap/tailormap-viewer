@@ -1,0 +1,24 @@
+h2,
+h3 {
+  margin: 16px 0 16px 8px;
+}
+
+.form-wrapper {
+  padding-left: 16px;
+}
+
+.selected-municipality {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 250px 40px;
+  margin-left: 8px;
+}
+
+.selected-municipality > div {
+  padding-bottom: 8px;
+  margin: 8px 0;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  min-height: 40px;
+  align-items: center;
+}

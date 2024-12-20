@@ -9,6 +9,8 @@ import userEvent from '@testing-library/user-event';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { SearchResultModel } from './models';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
+import { provideMockStore } from '@ngrx/store/testing';
+import { coreStateKey, initialCoreState } from '../../../state/core.state';
 
 const setup = async () => {
   const mockedSearchService = {
@@ -28,6 +30,14 @@ const setup = async () => {
     providers: [
       { provide: SimpleSearchService, useValue: mockedSearchService },
       mockedMapService.provider,
+      provideMockStore({ initialState: {
+        [coreStateKey]: {
+          ...initialCoreState,
+          viewer: {
+            components: [{ type: 'SIMPLE_SEARCH', config: { enabled: true, municipalities: ['Utrecht'] } }],
+          },
+        },
+      } }),
     ],
   });
   return {
@@ -47,7 +57,7 @@ describe('SimpleSearchComponent', () => {
     }, { timeout: 1100 });
     await userEvent.type(await screen.findByRole('combobox'), 'eet');
     await waitFor(() => {
-      expect(searchService.search$).toHaveBeenCalledWith('EPSG:28992', 'Street');
+      expect(searchService.search$).toHaveBeenCalledWith('EPSG:28992', 'Street', { enabled: true, municipalities: ['Utrecht'] });
       expect(screen.getByText('Test Searcher')).toBeInTheDocument();
       expect(screen.getByText('Better result')).toBeInTheDocument();
     }, { timeout: 1100 });
