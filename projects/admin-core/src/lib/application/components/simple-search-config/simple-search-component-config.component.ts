@@ -3,7 +3,7 @@ import { BaseComponentTypeEnum, SimpleSearchConfigModel } from '@tailormap-viewe
 import { FormControl } from '@angular/forms';
 import { ComponentConfigurationService } from '../../services/component-configuration.service';
 import { ConfigurationComponentModel } from '../configuration-component.model';
-import { BehaviorSubject, combineLatest, filter, Observable, startWith } from 'rxjs';
+import { BehaviorSubject, filter, Observable, startWith } from 'rxjs';
 import { MunicipalityHelper, MunicipalityModel } from '@tailormap-viewer/shared';
 import { map } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -42,27 +42,26 @@ export class SimpleSearchComponentConfigComponent implements ConfigurationCompon
     private componentConfigService: ComponentConfigurationService,
     private destroyRef: DestroyRef,
   ) {
-    this.filteredMunicipalityOptions$ = combineLatest([
-      this.municipalityControl.valueChanges.pipe(startWith(''), filter(str => typeof str === 'string')),
-      MunicipalityHelper.getDutchMunicipalities$(),
-    ]).pipe(
-      map(([ term, options ]) => {
-        const selected = new Set(this.municipalitiesSubject.value);
-        return options.filter(o => {
-          return !selected.has(o.municipalityCode) && o.municipality.toLowerCase().includes(term.toLowerCase());
-        });
-      }),
-    );
-    this.municipalities$ = combineLatest([
-      this.municipalitiesSubject.asObservable(),
-      MunicipalityHelper.getDutchMunicipalities$(),
-    ]).pipe(
-      map(([ municipalities, municipalityOptions ]) => {
-        return municipalities
-          .map(m => municipalityOptions.find(mo => mo.municipalityCode === m))
-          .filter(mo => !!mo);
-      }),
-    );
+    const municipalities = MunicipalityHelper.getDutchMunicipalities();
+    this.filteredMunicipalityOptions$ = this.municipalityControl.valueChanges
+      .pipe(
+        startWith(''),
+        filter(str => typeof str === 'string'),
+        map(term => {
+          const selected = new Set(this.municipalitiesSubject.value);
+          return municipalities.filter(o => {
+            return !selected.has(o.municipalityCode) && o.municipality.toLowerCase().includes(term.toLowerCase());
+          });
+        }),
+      );
+    this.municipalities$ = this.municipalitiesSubject.asObservable()
+      .pipe(
+        map(selectedMunicipalities => {
+          return selectedMunicipalities
+            .map(m => municipalities.find(mo => mo.municipalityCode === m))
+            .filter(mo => !!mo);
+        }),
+      );
     this.municipalityControl.valueChanges
       .pipe(
         takeUntilDestroyed(this.destroyRef),
