@@ -30,8 +30,27 @@
 }
 
 .section-title {
+  font-size: 16px;
   font-weight: 600;
   margin-bottom: 16px;
+}
+
+.login-form__sso {
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+}
+
+.login-form__sso button:focus {
+  box-shadow: 0 0 6px var(--primary-color);
+}
+
+.login-form__sso button + button {
+  margin-top: 16px;
+}
+
+label {
+  font-weight: normal;
 }
 
 .buttons {
@@ -47,18 +66,4 @@
 
 button mat-spinner {
   margin: 8px;
-}
-
-.login-form__sso {
-  display: flex;
-  flex-direction: column;
-  justify-content: stretch;
-}
-
-.login-form__sso button:focus {
-  box-shadow: 0 0 6px var(--primary-color);
-}
-
-.login-form__sso button + button {
-  margin-top: 16px;
 }
