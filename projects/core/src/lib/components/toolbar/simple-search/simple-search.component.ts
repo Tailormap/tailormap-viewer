@@ -84,7 +84,7 @@ export class SimpleSearchComponent implements OnInit {
     this.searchControl.valueChanges
       .pipe(
         takeUntilDestroyed(this.destroyRef),
-        filter((value): value is SearchResultItemModel => {
+        filter((value):  value is SearchResultItemModel => {
           return typeof value !== 'string' && !!value && !!(value as SearchResultItemModel).geometry;
         }),
       )

@@ -1,10 +1,12 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, Input } from '@angular/core';
 import { BaseComponentTypeEnum, SimpleSearchConfigModel } from '@tailormap-viewer/api';
-import { FormArray, FormControl, FormGroup } from '@angular/forms';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormControl } from '@angular/forms';
 import { ComponentConfigurationService } from '../../services/component-configuration.service';
 import { ConfigurationComponentModel } from '../configuration-component.model';
-import { debounceTime } from 'rxjs';
+import { BehaviorSubject, combineLatest, filter, Observable, startWith } from 'rxjs';
+import { MunicipalityHelper, MunicipalityModel } from '@tailormap-viewer/shared';
+import { map } from 'rxjs/operators';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'tm-admin-simple-search-config',
@@ -23,70 +25,65 @@ export class SimpleSearchComponentConfigComponent implements ConfigurationCompon
   @Input()
   public set config(config: SimpleSearchConfigModel | undefined) {
     this._config = config;
-    this.initForm(config);
+    this.municipalitiesSubject.next(config?.municipalities || []);
   }
   public get config() {
     return this._config;
   }
   private _config: SimpleSearchConfigModel | undefined;
 
-  public formGroup = new FormGroup({
-    municipalities: new FormArray<FormControl<string>>([]),
-  });
+  private municipalitiesSubject = new BehaviorSubject<string[]>([]);
+  public municipalities$: Observable<MunicipalityModel[]>;
+
+  public municipalityControl = new FormControl<string | MunicipalityModel>('', { nonNullable: true });
+  public filteredMunicipalityOptions$: Observable<MunicipalityModel[]>;
 
   constructor(
     private componentConfigService: ComponentConfigurationService,
     private destroyRef: DestroyRef,
   ) {
-    this.formGroup.valueChanges
-      .pipe(takeUntilDestroyed(this.destroyRef), debounceTime(250))
-      .subscribe(() => {
-        if (!this.formGroup.valid) {
-          return;
-        }
-        this.saveConfig();
+    this.filteredMunicipalityOptions$ = combineLatest([
+      this.municipalityControl.valueChanges.pipe(startWith(''), filter(str => typeof str === 'string')),
+      MunicipalityHelper.getDutchMunicipalities$(),
+    ]).pipe(
+      map(([ term, options ]) => {
+        const selected = new Set(this.municipalitiesSubject.value);
+        return options.filter(o => {
+          return !selected.has(o.municipalityCode) && o.municipality.toLowerCase().includes(term.toLowerCase());
+        });
+      }),
+    );
+    this.municipalities$ = combineLatest([
+      this.municipalitiesSubject.asObservable(),
+      MunicipalityHelper.getDutchMunicipalities$(),
+    ]).pipe(
+      map(([ municipalities, municipalityOptions ]) => {
+        return municipalities
+          .map(m => municipalityOptions.find(mo => mo.municipalityCode === m))
+          .filter(mo => !!mo);
+      }),
+    );
+    this.municipalityControl.valueChanges
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        filter(MunicipalityHelper.isMunicipalityModel),
+      )
+      .subscribe(value => {
+        this.addMunicipality(value.municipalityCode);
       });
   }
 
-  public get municipalityList() {
-    return this.formGroup.get('municipalities') as FormArray<FormControl<string>>;
+  public addMunicipality(code: string) {
+    this.saveConfig([ ...this.municipalitiesSubject.value, code ]);
+    this.municipalityControl.patchValue('', { emitEvent: false });
   }
 
-  public initForm(config: SimpleSearchConfigModel | undefined) {
-    const municipalities = config?.municipalities || [];
-    const formValues = this.municipalityList.controls.map(c => c.value);
-    if (formValues.length === municipalities.length && formValues.every((v, idx) => v === municipalities[idx])) {
-      if (this.municipalityList.length === 0) {
-        this.addMunicipality();
-      }
-      return;
-    }
-    const curValues = new Set((config?.municipalities || []));
-    const idxToRemove = this.municipalityList.controls
-      .filter(control => !curValues.has(control.value ?? ''))
-      .map((_group, idx) => idx);
-    idxToRemove.forEach(idx => this.municipalityList.removeAt(idx));
-    const newValues = (config?.municipalities || []).filter(v => {
-      return !this.municipalityList.controls.some(c => c.value === v);
-    });
-    newValues.forEach(municipality => {
-      this.municipalityList.push(new FormControl<string>(municipality, { nonNullable: true }), { emitEvent: false });
-    });
-    if (this.municipalityList.length === 0) {
-      this.addMunicipality();
-    }
+  public deleteMunicipality(code: string) {
+    this.saveConfig([...this.municipalitiesSubject.value].filter(m => m !== code));
   }
 
-  public addMunicipality() {
-    this.municipalityList.push(new FormControl<string>('', { nonNullable: true }), { emitEvent: false });
-  }
-
-  public deleteMunicipality(idx: number) {
-    this.municipalityList.removeAt(idx);
-  }
-
-  private saveConfig() {
-    this.componentConfigService.updateConfig<SimpleSearchConfigModel>(this.type, 'municipalities', this.formGroup.value.municipalities);
+  private saveConfig(municipalities: string[] = []) {
+    this.componentConfigService.updateConfig<SimpleSearchConfigModel>(this.type, 'municipalities', municipalities);
   }
 
 }

@@ -102,7 +102,7 @@ export class SimpleSearchService {
   private searchRd$(searchTerm: string, config: SimpleSearchConfigModel | undefined): Observable<SearchResultModel> {
     const filter = [];
     if (config && config.municipalities && config.municipalities.length > 0) {
-      filter.push(`gemeentenaam:(${config.municipalities.join(' OR ')})`);
+      filter.push(`gemeentecode:(${config.municipalities.join(' OR ')})`);
     }
     return this.httpClient.get<LocationServerResponseModel>(`https://api.pdok.nl/bzk/locatieserver/search/v3_1/suggest`, {
       params: {

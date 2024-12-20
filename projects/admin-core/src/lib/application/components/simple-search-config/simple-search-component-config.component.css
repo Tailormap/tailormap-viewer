@@ -3,19 +3,22 @@ h3 {
   margin: 16px 0 16px 8px;
 }
 
-.municipality-form-row {
-  display: flex;
+.form-wrapper {
+  padding-left: 16px;
+}
+
+.selected-municipality {
+  display: grid;
   align-items: center;
-  margin-top: 8px;
+  grid-template-columns: 250px 40px;
+  margin-left: 8px;
 }
 
-.municipality-form-row mat-form-field {
-  margin-top: 0;
-  margin-left: 8px;
-  width: 200px;
-}
-
-.add-m-button {
-  margin-top: 8px;
-  margin-left: 8px;
+.selected-municipality > div {
+  padding-bottom: 8px;
+  margin: 8px 0;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  min-height: 40px;
+  align-items: center;
 }
