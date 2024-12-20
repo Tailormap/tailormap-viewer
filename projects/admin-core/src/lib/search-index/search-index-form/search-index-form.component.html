@@ -8,6 +8,20 @@
            formControlName="name"
     />
   </mat-form-field>
+
+  @if (searchIndex?.summary) {
+    <div class="form-control">
+      <h3 i18n="@@admin-core.common.summary">Summary</h3>
+      @if (searchIndex?.summary?.total) {
+        <p i18n="@@admin-core.search-index.summary">Last indexing started at {{ searchIndex?.summary?.startedAt | date:'medium' }} and
+          took {{ searchIndex?.summary?.duration | number: '1.1-2' }} seconds,
+          skipped {{ searchIndex?.summary?.skippedCounter }} of {{ searchIndex?.summary?.total }} features.</p>
+      } @else if (searchIndex?.summary?.errorMessage) {
+        <p class="error-message">{{ searchIndex?.summary?.errorMessage }} </p>
+      }
+    </div>
+  }
+
   <div class="form-control">
     <strong i18n="@@admin-core.common.feature-source">Feature source and type</strong>
     <tm-admin-feature-type-selector [excludedFeatureSourceProtocols]="nonSearchableFeatureSourceProtocols"
