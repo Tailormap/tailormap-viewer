@@ -755,6 +755,9 @@
       <trans-unit id="admin-core.common.saved" datatype="html">
         <source>Saved</source>
       </trans-unit>
+      <trans-unit id="admin-core.common.summary" datatype="html">
+        <source>Summary</source>
+      </trans-unit>
       <trans-unit id="admin-core.common.search-indexes-title" datatype="html">
         <source>Search Indexes</source>
       </trans-unit>
@@ -1177,6 +1180,12 @@
       </trans-unit>
       <trans-unit id="admin-core.search-index.unavailable.message" datatype="html">
         <source>Error code <x id="INTERPOLATION" equiv-text="{{ pingResponse.code }}"/>, message: <x id="INTERPOLATION_1" equiv-text="{{ pingResponse.message }}"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.summary" datatype="html">
+        <source>Last indexing started at <x id="INTERPOLATION" equiv-text="{{ searchIndex.summary?.startedAt | date:'medium' }}"/> and took
+          <x id="INTERPOLATION_1" equiv-text="{{ searchIndex.summary?.duration | number: '1.1-2'}}"/> seconds, skipped
+          <x id="INTERPOLATION_2" equiv-text="{{ searchIndex.summary?.skippedCounter }}"/> of
+          <x id="INTERPOLATION_3" equiv-text="{{ searchIndex.summary?.total }}"/> features.</source>
       </trans-unit>
       <trans-unit id="admin-core.select-upload.file-in-use" datatype="html">
         <source>File is still in use</source>

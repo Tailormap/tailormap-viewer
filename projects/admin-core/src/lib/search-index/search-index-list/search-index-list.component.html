@@ -14,7 +14,8 @@
     <mat-selection-list>
       @for (searchIndex of searchIndexes$ | async; track searchIndex.id) {
         <mat-list-item [class.selected]="searchIndex.selected"
-                       [routerLink]="['/admin/search-indexes/search-index', searchIndex.id]">
+                       [routerLink]="['/admin/search-indexes/search-index', searchIndex.id]"
+                       matTooltip="{{ (searchIndex.summary?.total ?? 0) ? (searchIndex?.summary?.total + ' features') : null }}">
           <span class="detail">{{searchIndex.name}}</span>
           @if (searchIndex.featureType) {
             <span class="subtitle"> - {{searchIndex.featureType.name}}</span>
