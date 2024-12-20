@@ -1,5 +1,5 @@
 import { LocationStrategy } from '@angular/common';
-import { Component, ChangeDetectionStrategy, Output, EventEmitter, Input, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Output, EventEmitter, Input } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { BehaviorSubject, Observable, take } from 'rxjs';
 import { LoginConfigurationModel, UserResponseModel } from '@tailormap-viewer/api';
