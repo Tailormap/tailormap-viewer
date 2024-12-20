@@ -23,9 +23,15 @@
   height: 40px;
 }
 
+.login-form__sso,
 .login-form__body {
   padding: 14px 17px 24px 17px;
   border-bottom: 1px solid var(--border-color);
+}
+
+.section-title {
+  font-weight: 600;
+  margin-bottom: 16px;
 }
 
 .buttons {
@@ -41,4 +47,18 @@
 
 button mat-spinner {
   margin: 8px;
+}
+
+.login-form__sso {
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+}
+
+.login-form__sso button:focus {
+  box-shadow: 0 0 6px var(--primary-color);
+}
+
+.login-form__sso button + button {
+  margin-top: 16px;
 }
