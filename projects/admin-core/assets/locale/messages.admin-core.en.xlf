@@ -836,6 +836,12 @@
       <trans-unit id="admin-core.components.simple-search-municipality" datatype="html">
         <source>Municipality</source>
       </trans-unit>
+      <trans-unit id="admin-core.components.simple-search-municipality-filter" datatype="html">
+        <source>Municipality filter</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.simple-search-pdok-settings" datatype="html">
+        <source>PDOK Location search settings</source>
+      </trans-unit>
       <trans-unit id="admin-core.components.simple-search-title" datatype="html">
         <source>Search title</source>
       </trans-unit>

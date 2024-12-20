@@ -1135,16 +1135,24 @@
         <target>Titel für Streckenmessung</target>
       </trans-unit>
       <trans-unit id="admin-core.components.simple-search-add-municipality" datatype="html">
-          <source>Add municipality</source>
-          <target>Gemeinde hinzufügen</target>
+        <source>Add municipality</source>
+        <target>Gemeinde hinzufügen</target>
       </trans-unit>
       <trans-unit id="admin-core.components.simple-search-municipality" datatype="html">
-          <source>Municipality</source>
-          <target>Gemeinde</target>
+        <source>Municipality</source>
+        <target>Gemeinde</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.simple-search-municipality-filter" datatype="html">
+        <source>Municipality filter</source>
+        <target>Gemeinde filter</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.simple-search-pdok-settings" datatype="html">
+        <source>PDOK Location search settings</source>
+        <target>PDOK-Ortuche Suche Einstellungen</target>
       </trans-unit>
       <trans-unit id="admin-core.components.simple-search-title" datatype="html">
-          <source>Search title</source>
-          <target>Suchtitel</target>
+        <source>Search title</source>
+        <target>Suchtitel</target>
       </trans-unit>
       <trans-unit id="admin-core.feature-type-settings-updated" datatype="html">
         <source>Feature type settings updated</source>

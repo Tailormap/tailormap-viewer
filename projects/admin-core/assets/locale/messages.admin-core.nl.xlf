@@ -1141,6 +1141,14 @@
         <source>Municipality</source>
         <target>Gemeente</target>
       </trans-unit>
+      <trans-unit id="admin-core.components.simple-search-municipality-filter" datatype="html">
+        <source>Municipality filter</source>
+        <target>Gemeente filter</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.simple-search-pdok-settings" datatype="html">
+        <source>PDOK Location search settings</source>
+        <target>PDOK locatiezoeker instellingen</target>
+      </trans-unit>
       <trans-unit id="admin-core.components.simple-search-title" datatype="html">
         <source>Search title</source>
         <target>Zoeken titel</target>

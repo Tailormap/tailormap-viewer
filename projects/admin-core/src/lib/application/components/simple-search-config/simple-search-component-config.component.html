@@ -4,10 +4,10 @@
                                 i18n-titleLabel="@@admin-core.components.simple-search-title"
                                 titleLabel="Search title">
   <div class="form-wrapper">
-    <h2>PDOK Location search settings</h2>
+    <h2 i18n="@@admin-core.components.simple-search-pdok-settings">PDOK Location search settings</h2>
     <mat-expansion-panel [expanded]="true">
       <mat-expansion-panel-header>
-        <mat-panel-title i18n="@@admin-core.components.simple-search-municipality-filter" style="flex-grow: 1">Municipality filter</mat-panel-title>
+        <mat-panel-title i18n="@@admin-core.components.simple-search-municipality-filter">Municipality filter</mat-panel-title>
       </mat-expansion-panel-header>
       <div class="selected-municipality">
         @for(m of municipalities$ | async; track m.municipalityCode; let i = $index) {
@@ -19,7 +19,7 @@
             </div>
         }
       </div>
-      <h2>Add municipality</h2>
+      <h2 i18n="@@admin-core.components.simple-search-add-municipality">Add municipality</h2>
       <mat-form-field>
         <mat-label i18n="@@admin-core.components.simple-search-municipality">Municipality</mat-label>
         <input matInput type="text" [formControl]="municipalityControl" [matAutocomplete]="auto" />
