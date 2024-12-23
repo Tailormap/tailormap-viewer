@@ -94,6 +94,10 @@
         <source>Share viewer</source>
         <target>Viewer delen</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.component-simple-search" datatype="html">
+        <source>Search</source>
+        <target>Zoeken</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.component-streetview-tool" datatype="html">
         <source>Streetview tool</source>
         <target>Streetview</target>
@@ -1133,6 +1137,26 @@
       <trans-unit id="admin-core.components.measure-line-title" datatype="html">
         <source>Measure distance title</source>
         <target>Titel voor afstand meten</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.simple-search-add-municipality" datatype="html">
+        <source>Add municipality</source>
+        <target>Gemeente toevoegen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.simple-search-municipality" datatype="html">
+        <source>Municipality</source>
+        <target>Gemeente</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.simple-search-municipality-filter" datatype="html">
+        <source>Municipality filter</source>
+        <target>Gemeente filter</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.simple-search-pdok-settings" datatype="html">
+        <source>PDOK Location search settings</source>
+        <target>PDOK locatiezoeker instellingen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.simple-search-title" datatype="html">
+        <source>Search title</source>
+        <target>Zoeken titel</target>
       </trans-unit>
       <trans-unit id="admin-core.feature-type-settings-updated" datatype="html">
         <source>Feature type settings updated</source>

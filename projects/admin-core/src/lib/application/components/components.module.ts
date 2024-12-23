@@ -9,6 +9,7 @@ import { SharedModule } from '@tailormap-viewer/shared';
 import { MeasureComponentConfigComponent } from './measure-config/measure-component-config.component';
 import { CoordinateLinkWindowComponentConfigComponent } from './coordinate-link-window-config/coordinate-link-window-component-config.component';
 import { FeatureInfoComponentConfigComponent } from './feature-info-config/feature-info-component-config.component';
+import { SimpleSearchComponentConfigComponent } from './simple-search-config/simple-search-component-config.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { FeatureInfoComponentConfigComponent } from './feature-info-config/featu
     MeasureComponentConfigComponent,
     CoordinateLinkWindowComponentConfigComponent,
     FeatureInfoComponentConfigComponent,
+    SimpleSearchComponentConfigComponent,
   ],
   imports: [
     CommonModule,
@@ -47,5 +49,6 @@ export class ComponentsModule {
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.STREETVIEW, $localize `:@@admin-core.application.component-streetview-tool:Streetview tool`, BaseComponentConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.SHARE_VIEWER, $localize `:@@admin-core.application.component-share-viewer:Share viewer`, BaseComponentConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.COORDINATE_LINK_WINDOW, $localize `:@@admin-core.application.component-coordinate-link-window:Coordinate Link Window`, CoordinateLinkWindowComponentConfigComponent);
+    configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.SIMPLE_SEARCH, $localize `:@@admin-core.application.component-simple-search:Search`, SimpleSearchComponentConfigComponent);
   }
 }

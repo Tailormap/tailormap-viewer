@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { ProjectionCodesEnum } from '@tailormap-viewer/map';
 import { Store } from '@ngrx/store';
 import { SearchResultModel, NominatimResponseModel, LocationServerResponseModel, SearchResultItemModel } from './models';
-import { SearchResponseModel, TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel } from '@tailormap-viewer/api';
+import { SearchResponseModel, SimpleSearchConfigModel, TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel } from '@tailormap-viewer/api';
 import { ExtendedAppLayerModel } from '../../../map/models';
 import { selectViewerId } from '../../../state/core.selectors';
 import { take } from 'rxjs/operators';
@@ -24,7 +24,7 @@ export class SimpleSearchService {
     @Inject(TAILORMAP_API_V1_SERVICE) private api: TailormapApiV1ServiceModel,
   ) {}
 
-  public search$(projection: string, searchTerm: string): Observable<SearchResultModel[]> {
+  public search$(projection: string, searchTerm: string, config: SimpleSearchConfigModel | undefined): Observable<SearchResultModel[]> {
     return combineLatest([
       this.store$.select(selectViewerId),
       this.store$.select(selectSearchableLayers),
@@ -36,7 +36,7 @@ export class SimpleSearchService {
             return of([]);
           }
           const locationSearch$ = projection === ProjectionCodesEnum.RD
-            ? this.searchRd$(searchTerm)
+            ? this.searchRd$(searchTerm, config)
             : this.searchOSMNominatim$(searchTerm);
           const searches$: Array<Observable<SearchResultModel | null>> = [locationSearch$];
           searchableLayers.forEach(layer => {
@@ -99,12 +99,17 @@ export class SimpleSearchService {
     );
   }
 
-  private searchRd$(searchTerm: string): Observable<SearchResultModel> {
+  private searchRd$(searchTerm: string, config: SimpleSearchConfigModel | undefined): Observable<SearchResultModel> {
+    const filter = [];
+    if (config && config.municipalities && config.municipalities.length > 0) {
+      filter.push(`gemeentecode:(${config.municipalities.join(' OR ')})`);
+    }
     return this.httpClient.get<LocationServerResponseModel>(`https://api.pdok.nl/bzk/locatieserver/search/v3_1/suggest`, {
       params: {
         q: searchTerm,
         rows: SimpleSearchService.MAX_RESULTS.toString(),
         fl: 'weergavenaam,centroide_rd,geometrie_rd,id',
+        fq: filter,
       },
     }).pipe(
       catchError(() => of({ response: { docs: [] } })),
