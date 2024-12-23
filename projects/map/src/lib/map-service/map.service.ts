@@ -268,4 +268,7 @@ export class MapService {
     this.map.switch3D$();
   }
 
+  public getClick3DEvent$() {
+    return this.map.getClick3DEvent$();
+  }
 }

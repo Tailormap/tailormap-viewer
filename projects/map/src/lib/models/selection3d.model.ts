@@ -1,8 +1,12 @@
-import { Color as CesiumColor } from 'cesium';
+
+export interface FeatureInfo3DModel {
+  featureId: number;
+  layerId: string;
+  columnMetadata: [];
+  properties: {id: string, value: any}[];
+}
 
 export interface Selection3dModel {
   position: { x: number; y: number; z: number };
-  featureId?: number;
-  featureOriginalColor?: CesiumColor;
-  featureProperties?: { id: string; value: any }[];
+  featureInfo?: FeatureInfo3DModel;
 }

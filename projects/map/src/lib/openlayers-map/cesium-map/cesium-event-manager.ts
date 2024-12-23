@@ -2,12 +2,12 @@ import {
   Cartesian3, Cartographic, Cesium3DTileFeature, Color as CesiumColor, PostProcessStage, Scene,
 } from 'cesium';
 import { Selection3dModel } from '../../models/selection3d.model';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 
 export class CesiumEventManager {
 
-  public static onMap3DClick$(scene3D: Scene) {
+  public static onMap3DClick$(scene3D: Scene): Observable<Selection3dModel> {
     const cesiumEventHandler = new Cesium.ScreenSpaceEventHandler(scene3D.canvas);
     const silhouette = this.createSilhouette(CesiumColor.LIME, 0.01);
     scene3D.postProcessStages.add(Cesium.PostProcessStageLibrary.createSilhouetteStage([silhouette]));
@@ -28,13 +28,17 @@ export class CesiumEventManager {
       } else {
         silhouette.selected = [pickedFeature];
         const selection3D: Selection3dModel = {
-          featureId: pickedFeature.featureId,
-          featureProperties: [],
           position: position,
+          featureInfo: {
+            layerId: '',
+            columnMetadata: [],
+            featureId: pickedFeature.featureId,
+            properties: [],
+          },
         };
         const propertyIds = pickedFeature.getPropertyIds();
         for (const propertyId of propertyIds) {
-          selection3D.featureProperties?.push({ id: propertyId, value: pickedFeature.getProperty(propertyId) });
+          selection3D.featureInfo?.properties.push({ id: propertyId, value: pickedFeature.getProperty(propertyId) });
         }
         map3DClickEvent.next(selection3D);
       }

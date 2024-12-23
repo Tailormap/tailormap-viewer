@@ -43,7 +43,6 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
         concatMap(({ tool }) => tool?.mapClick$ || of(null)),
       )
       .subscribe(mapClick => {
-        console.log(mapClick);
         this.handleMapClick(mapClick);
       });
 
@@ -54,6 +53,7 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
     )
       .pipe(takeUntil(this.destroyed))
       .subscribe();
+
   }
 
   public ngOnDestroy() {
