@@ -1034,6 +1034,10 @@
         <source>Saved</source>
         <target>Gespeichert</target>
       </trans-unit>
+      <trans-unit id="admin-core.common.summary" datatype="html">
+        <source>Summary</source>
+        <target>Zusammenfassung</target>
+      </trans-unit>
       <trans-unit id="admin-core.common.search-indexes-title" datatype="html">
         <source>Search Indexes</source>
         <target>Suchindizes</target>
@@ -1640,6 +1644,16 @@
       <trans-unit id="admin-core.search-index.unavailable.message" datatype="html">
         <source>Error code <x id="INTERPOLATION" equiv-text="{{ pingResponse.code }}"/>, message: <x id="INTERPOLATION_1" equiv-text="{{ pingResponse.message }}"/></source>
         <target>Fehlercode <x id="INTERPOLATION" equiv-text="{{ pingResponse.code }}"/>, meldung: <x id="INTERPOLATION_1" equiv-text="{{ pingResponse.message }}"/></target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.summary" datatype="html">
+        <source>Last indexing started at <x id="INTERPOLATION" equiv-text="{{ searchIndex.summary?.startedAt | date:'medium' }}"/> and took
+          <x id="INTERPOLATION_1" equiv-text="{{ searchIndex.summary?.duration | number: '2.1-2'}}"/> seconds, skipped
+          <x id="INTERPOLATION_2" equiv-text="{{ searchIndex.summary?.skippedCounter }}"/> of
+          <x id="INTERPOLATION_3" equiv-text="{{ searchIndex.summary?.total }}"/> features.</source>
+        <target>Die letzte Indizierung begann um <x id="INTERPOLATION" equiv-text="{{ searchIndex.summary?.startedAt | date:'medium' }}"/> und dauerte
+          <x id="INTERPOLATION_1" equiv-text="{{ searchIndex.summary?.duration | number: '1.1-2'}}"/> Sekunden, es wurden
+          <x id="INTERPOLATION_2" equiv-text="{{ searchIndex.summary?.skippedCounter }}"/> von
+          <x id="INTERPOLATION_3" equiv-text="{{ searchIndex.summary?.total }}"/> Features übersprungen.</target>
       </trans-unit>
       <trans-unit id="admin-core.select-upload.file-in-use" datatype="html">
         <source>File is still in use</source>

@@ -61,9 +61,17 @@
         <source>Password</source>
         <target>Passwort</target>
       </trans-unit>
+      <trans-unit id="shared.login-form.sso-title" datatype="html">
+        <source>Login with your organisation</source>
+        <target>Melden Sie sich mit Ihrer Organisation an</target>
+      </trans-unit>
       <trans-unit id="shared.login-form.title" datatype="html">
         <source>Login</source>
         <target>Anmeldung</target>
+      </trans-unit>
+      <trans-unit id="shared.login-form.tm-title" datatype="html">
+        <source>Login with your Tailormap account</source>
+        <target>Melden Sie sich mit Ihrem Tailormap-Konto an</target>
       </trans-unit>
       <trans-unit id="shared.login-form.username" datatype="html">
         <source>Username</source>

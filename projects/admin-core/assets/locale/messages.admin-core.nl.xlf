@@ -1,4 +1,5 @@
-<?xml version="1.0"?><xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" target-language="nl" datatype="plaintext" original="ng2.template">
     <body>
       <trans-unit id="admin-core.application.add-application" datatype="html">
@@ -1033,6 +1034,10 @@
         <source>Saved</source>
         <target>Opgeslagen</target>
       </trans-unit>
+      <trans-unit id="admin-core.common.summary" datatype="html">
+        <source>Summary</source>
+        <target>Samenvatting</target>
+      </trans-unit>
       <trans-unit id="admin-core.common.search-indexes-title" datatype="html">
         <source>Search Indexes</source>
         <target>Zoekindexen</target>
@@ -1624,6 +1629,16 @@
       <trans-unit id="admin-core.search-index.unavailable.message" datatype="html">
         <source>Error code <x id="INTERPOLATION" equiv-text="{{ pingResponse.code }}"/>, message: <x id="INTERPOLATION_1" equiv-text="{{ pingResponse.message }}"/></source>
         <target>Foutcode <x id="INTERPOLATION" equiv-text="{{ pingResponse.code }}"/>, melding: <x id="INTERPOLATION_1" equiv-text="{{ pingResponse.message }}"/></target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.summary" datatype="html">
+        <source>Last indexing started at <x id="INTERPOLATION" equiv-text="{{ searchIndex.summary?.startedAt | date:'medium' }}"/> and took
+          <x id="INTERPOLATION_1" equiv-text="{{ searchIndex.summary?.duration | number: '2.1-2'}}"/> seconds, skipped
+          <x id="INTERPOLATION_2" equiv-text="{{ searchIndex.summary?.skippedCounter }}"/> of
+          <x id="INTERPOLATION_3" equiv-text="{{ searchIndex.summary?.total }}"/> features.</source>
+        <target>Laatste indexering gestart op <x id="INTERPOLATION" equiv-text="{{ searchIndex.summary?.startedAt | date:'medium' }}"/> en duurde
+          <x id="INTERPOLATION_1" equiv-text="{{ searchIndex.summary?.duration | number: '1.1-2'}}"/> seconden, er zijn
+          <x id="INTERPOLATION_2" equiv-text="{{ searchIndex.summary?.skippedCounter }}"/> objecten van
+          <x id="INTERPOLATION_3" equiv-text="{{ searchIndex.summary?.total }}"/> overgeslagen.</target>
       </trans-unit>
       <trans-unit id="admin-core.select-upload.file-in-use" datatype="html">
         <source>File is still in use</source>
