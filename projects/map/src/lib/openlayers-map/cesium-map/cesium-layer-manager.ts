@@ -12,7 +12,6 @@ export class CesiumLayerManager {
 
   private map3D: BehaviorSubject<OLCesium | null> = new BehaviorSubject<OLCesium | null>(null);
   private layers3D: Map<string, number> = new Map<string, number>();
-  // private cesiumEventManager: CesiumEventManager | undefined;
 
   constructor(
     private olMap: OlMap,
@@ -148,6 +147,15 @@ export class CesiumLayerManager {
     this.executeScene3DAction(async scene3D => {
       scene3D.setTerrain(new Cesium.Terrain(new EllipsoidTerrainProvider()));
     });
+  }
+
+  public getLayerId(index: number): string | null {
+    for (const [ key, val ] of this.layers3D.entries()) {
+      if (val === index) {
+        return key;
+      }
+    }
+    return null;
   }
 
 }

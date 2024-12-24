@@ -87,6 +87,19 @@ const onSetSelectedFeatureInfoLayer = (
   selectedLayerId: payload.layer,
 });
 
+const onAdd3DLayerToFeatureInfoLayers = (
+  state: FeatureInfoState,
+  payload: ReturnType<typeof FeatureInfoActions.add3DLayerToFeatureInfoLayers>,
+): FeatureInfoState => {
+  if (state.layers.some(layer => layer.id === payload.layer.id)) {
+    return state;
+  }
+  return {
+    ...state,
+    layers: [ ...state.layers, payload.layer ],
+  };
+};
+
 const selectNextFeature = (state: FeatureInfoState, direction: 'next' | 'previous'): FeatureInfoState => {
   if (!state.selectedLayerId) {
     return state;
@@ -127,6 +140,7 @@ const featureInfoReducerImpl = createReducer<FeatureInfoState>(
   on(FeatureInfoActions.expandCollapseFeatureInfoDialog, onExpandCollapseFeatureInfoDialog),
   on(FeatureInfoActions.expandCollapseFeatureInfoLayerList, onExpandCollapseFeatureInfoLayerList),
   on(FeatureInfoActions.setSelectedFeatureInfoLayer, onSetSelectedFeatureInfoLayer),
+  on(FeatureInfoActions.add3DLayerToFeatureInfoLayers, onAdd3DLayerToFeatureInfoLayers),
   on(FeatureInfoActions.showNextFeatureInfoFeature, onShowNextFeatureInfoFeature),
   on(FeatureInfoActions.showPreviousFeatureInfoFeature, onShowPreviousFeatureInfoFeature),
 );

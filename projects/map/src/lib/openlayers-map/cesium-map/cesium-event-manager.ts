@@ -1,8 +1,7 @@
-import {
-  Cartesian3, Cartographic, Cesium3DTileFeature, Color as CesiumColor, PostProcessStage, Scene,
-} from 'cesium';
+import { Cartesian3, Cartographic, Cesium3DTileFeature, Color as CesiumColor, PostProcessStage, Scene } from 'cesium';
 import { Selection3dModel } from '../../models/selection3d.model';
 import { Observable, Subject } from 'rxjs';
+import { AttributeType } from '@tailormap-viewer/api';
 
 
 export class CesiumEventManager {
@@ -26,6 +25,13 @@ export class CesiumEventManager {
         silhouette.selected = [];
         map3DClickEvent.next({ position: position });
       } else {
+        let primitiveIndex: number = -1;
+        for (let index = 0; index < scene3D.primitives.length; index++) {
+          if (pickedFeature.primitive === scene3D.primitives.get(index)) {
+            primitiveIndex = index;
+          }
+        }
+
         silhouette.selected = [pickedFeature];
         const selection3D: Selection3dModel = {
           position: position,
@@ -34,11 +40,13 @@ export class CesiumEventManager {
             columnMetadata: [],
             featureId: pickedFeature.featureId,
             properties: [],
+            primitiveIndex: primitiveIndex,
           },
         };
         const propertyIds = pickedFeature.getPropertyIds();
         for (const propertyId of propertyIds) {
           selection3D.featureInfo?.properties.push({ id: propertyId, value: pickedFeature.getProperty(propertyId) });
+          selection3D.featureInfo?.columnMetadata.push({ layerId: '', key: propertyId, type: AttributeType.STRING });
         }
         map3DClickEvent.next(selection3D);
       }

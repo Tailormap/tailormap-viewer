@@ -1,9 +1,11 @@
+import { AttributeType } from '@tailormap-viewer/api';
 
 export interface FeatureInfo3DModel {
   featureId: number;
   layerId: string;
-  columnMetadata: [];
-  properties: {id: string, value: any}[];
+  columnMetadata: { layerId: string; key: string; type: AttributeType }[];
+  properties: {id: string; value: any}[];
+  primitiveIndex: number;
 }
 
 export interface Selection3dModel {

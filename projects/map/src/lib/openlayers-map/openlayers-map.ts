@@ -26,6 +26,7 @@ import { Attribution } from 'ol/control';
 import { mouseOnly, platformModifierKeyOnly } from 'ol/events/condition';
 import { CesiumLayerManager } from './cesium-map/cesium-layer-manager';
 import { CesiumEventManager } from './cesium-map/cesium-event-manager';
+import { CesiumFeatureInfoHelper } from './helpers/cesium-feature-info.helper';
 
 export class OpenLayersMap implements MapViewerModel {
 
@@ -36,7 +37,8 @@ export class OpenLayersMap implements MapViewerModel {
   private map3D: BehaviorSubject<CesiumLayerManager | null> = new BehaviorSubject<CesiumLayerManager | null>(null);
   private made3D: boolean;
   private in3D: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  private click3DEvent$: Observable<Selection3dModel | null> = of(null);
+  private click3DEventSubject$: BehaviorSubject<Selection3dModel | null> = new BehaviorSubject<Selection3dModel | null>(null);
+  private click3DEvent$: Observable<Selection3dModel | null> = this.click3DEventSubject$.asObservable();
 
   private readonly resizeObserver: ResizeObserver;
   private initialExtent: OpenlayersExtent = [];
@@ -407,7 +409,18 @@ export class OpenLayersMap implements MapViewerModel {
       this.executeCLMAction(cesiumLayerManager => {
         cesiumLayerManager.init();
         cesiumLayerManager.executeScene3DAction(scene3D => {
-          this.click3DEvent$ = CesiumEventManager.onMap3DClick$(scene3D);
+          CesiumEventManager.onMap3DClick$(scene3D).subscribe(evt => {
+            if (evt.featureInfo) {
+              const layerId: string | null = cesiumLayerManager.getLayerId(evt.featureInfo?.primitiveIndex);
+              if (layerId) {
+                this.click3DEventSubject$.next(CesiumFeatureInfoHelper.addLayerIdToSelection3D(evt, layerId));
+              } else {
+                this.click3DEventSubject$.next(evt);
+              }
+            } else {
+              this.click3DEventSubject$.next(evt);
+            }
+          });
         });
       });
       this.made3D = true;
