@@ -22,6 +22,10 @@
     </div>
   }
 
+  @if (indexTaskProgress > 0) {
+    <mat-progress-bar mode="determinate" [value]="indexTaskProgress" color="primary"></mat-progress-bar>
+  }
+
   <div class="form-control">
     <strong i18n="@@admin-core.common.feature-source">Feature source and type</strong>
     <tm-admin-feature-type-selector [excludedFeatureSourceProtocols]="nonSearchableFeatureSourceProtocols"
