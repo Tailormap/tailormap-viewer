@@ -5,19 +5,35 @@ import { distinctUntilChanged, filter, Observable, Subject } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AuthenticatedUserService } from '@tailormap-viewer/api';
 
-export interface SSEEvent<T = any> {
+export interface SSEEvent {
+  details: object;
+  eventType: EventType;
+}
+
+export interface SSEEntityEvent<T = any> extends SSEEvent {
   details: {
     entityName: string;
     id: string;
     object: T;
   };
-  eventType: EventType;
+}
+
+export interface SSETaskProgressEvent extends SSEEvent {
+  details: {
+    type: string;
+    uuid: string;
+    progress?: number;
+    total?: number;
+    startedAt?: string;
+  };
+  eventType: EventType.TASK_PROGRESS;
 }
 
 export enum EventType {
   ENTITY_CREATED = 'entity-created',
   ENTITY_UPDATED = 'entity-updated',
   ENTITY_DELETED = 'entity-deleted',
+  TASK_PROGRESS = 'task-progress',
 }
 
 @Injectable({
@@ -37,10 +53,14 @@ export class AdminSseService implements OnDestroy {
     EventType.ENTITY_CREATED,
     EventType.ENTITY_UPDATED,
     EventType.ENTITY_DELETED,
+    EventType.TASK_PROGRESS,
   ]);
 
-  private events = new Subject<SSEEvent>();
-  private events$ = this.events.asObservable();
+  private entityEvents = new Subject<SSEEntityEvent>();
+  private entityEvents$ = this.entityEvents.asObservable();
+
+  private progressEvents = new Subject<SSETaskProgressEvent>();
+  private progressEvents$ = this.progressEvents.asObservable();
 
   constructor(
     private ngZone: NgZone,
@@ -64,10 +84,18 @@ export class AdminSseService implements OnDestroy {
     }
   }
 
-  public listenForEvents$<T>(entity: string): Observable<SSEEvent<T>> {
-    return this.events$.pipe(
+  public listenForEvents$<T>(entity: string): Observable<SSEEntityEvent<T>> {
+    return this.entityEvents$.pipe(
       filter(event => event.details.entityName === entity),
     );
+  }
+
+  public listenForSpecificProgressEvents$(uuid: string, type: string): Observable<SSETaskProgressEvent> {
+    return this.progressEvents$.pipe(filter(event => event.details.uuid === uuid && event.details.type === type));
+  }
+
+  public listenForAllProgressEvents$(): Observable<SSETaskProgressEvent> {
+    return this.progressEvents$.pipe();
   }
 
   private ensureConnection() {
@@ -82,8 +110,11 @@ export class AdminSseService implements OnDestroy {
         const evt: SSEEvent = JSON.parse(e.data);
         this.log('SSE event', evt);
         this.retryCount = 0;
-        if (this.supportedEvents.has(evt.eventType)) {
-          this.ngZone.run(() => this.events.next(evt));
+        if (evt.eventType===EventType.TASK_PROGRESS && this.supportedEvents.has(evt.eventType)) {
+          this.ngZone.run(() => this.progressEvents.next(evt as SSETaskProgressEvent));
+        }
+        else if (this.supportedEvents.has(evt.eventType)) {
+          this.ngZone.run(() => this.entityEvents.next( evt as SSEEntityEvent));
         }
       };
       eventSource.onerror = (_error) => {
@@ -109,5 +140,4 @@ export class AdminSseService implements OnDestroy {
       console.log(...args);
     }
   }
-
 }

@@ -21,7 +21,7 @@ import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model'
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-layer.model';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { AdminSseService, EventType, SSEEvent } from '../../shared/services/admin-sse.service';
+import { AdminSseService, EventType, SSEEntityEvent } from '../../shared/services/admin-sse.service';
 import { DebounceHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
 
 @Injectable({
@@ -112,7 +112,7 @@ export class FeatureSourceService {
     this.sseService.listenForEvents$<FeatureSourceModel>('TMFeatureSource')
       .pipe(
         takeUntilDestroyed(),
-        concatMap((event): Observable<SSEEvent<FeatureSourceModel>> => {
+        concatMap((event): Observable<SSEEntityEvent<FeatureSourceModel>> => {
           if (event.eventType === EventType.ENTITY_CREATED && event.details.object) {
             return this.getFeatureSourceForCreateEvent$(event);
           }
@@ -252,14 +252,14 @@ export class FeatureSourceService {
       );
   }
 
-  private getFeatureSourceForCreateEvent$(event: SSEEvent<FeatureSourceModel>): Observable<SSEEvent<FeatureSourceModel>> {
+  private getFeatureSourceForCreateEvent$(event: SSEEntityEvent<FeatureSourceModel>): Observable<SSEEntityEvent<FeatureSourceModel>> {
     // When the event for new FeatureSource created is sent through SSE, the feature types do not yet have an id assigned.
     // After this event is sent, we wait for 1 second and then fetch the feature source manually,
     // so we are sure the feature source and the feature types are properly persisted. See issue HTM-966.
     return timer(1000)
       .pipe(
         switchMap(()  => this.adminApiService.getFeatureSource$({ id: event.details.object.id })),
-        map((featureSource): SSEEvent<FeatureSourceModel> => ({
+        map((featureSource): SSEEntityEvent<FeatureSourceModel> => ({
           ...event,
           details: {
             ...event.details,
