@@ -29,7 +29,7 @@ export class TaskDetailsRowComponent {
     state: $localize `:@@admin-core.tasks.task-details.state:State`,
     scheduling_state: $localize `:@@admin-core.tasks.task-details.scheduling-state:Scheduling state`,
     progress: $localize `:@@admin-core.tasks.task-details.progress:Progress`,
-    executions: $localize `:@@admin-core.tasks.task-details.executions:Executions`,
+    executionCount: $localize `:@@admin-core.tasks.task-details.executions:Executions`,
     priority: $localize `:@@admin-core.tasks.task-details.priority:Priority`,
     interruptable: $localize `:@@admin-core.tasks.task-details.interruptable:Interruptable`,
   };
