@@ -1,13 +1,14 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, DestroyRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { FeatureSourceProtocolEnum, SearchIndexModel } from '@tailormap-admin/admin-api';
-import { debounceTime, filter, map, distinctUntilChanged, concatMap, forkJoin, of, take } from 'rxjs';
+import { concatMap, debounceTime, distinctUntilChanged, filter, forkJoin, map, of, take } from 'rxjs';
 import { FormHelper } from '../../helpers/form.helper';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TypesHelper } from '@tailormap-viewer/shared';
 import { selectFeatureTypeBySourceIdAndName } from '../../catalog/state/catalog.selectors';
 import { Store } from '@ngrx/store';
 import { FeatureSourceService } from '../../catalog/services/feature-source.service';
+import { AdminSseService } from '../../shared/services/admin-sse.service';
 
 @Component({
   selector: 'tm-admin-search-index-form',
@@ -21,10 +22,13 @@ export class SearchIndexFormComponent implements OnInit {
 
   public nonSearchableFeatureSourceProtocols: FeatureSourceProtocolEnum[] = [FeatureSourceProtocolEnum.WFS];
 
+  public indexTaskProgress: number = 0;
+
   @Input()
   public set searchIndex(form: SearchIndexModel | null) {
     this._searchIndex = form;
     this.initForm(form);
+    this.calculateProgress$(form);
   }
   public get searchIndex(): SearchIndexModel | null {
     return this._searchIndex;
@@ -40,6 +44,8 @@ export class SearchIndexFormComponent implements OnInit {
     private store$: Store,
     private featureSourceService: FeatureSourceService,
     private destroyRef: DestroyRef,
+    private sseService: AdminSseService,
+    private cdr: ChangeDetectorRef,
   ) {
   }
 
@@ -129,4 +135,18 @@ export class SearchIndexFormComponent implements OnInit {
       && this.searchIndexForm.valid;
   }
 
+  public calculateProgress$(searchIndex: SearchIndexModel | null): void {
+    this.indexTaskProgress = 0;
+    if (searchIndex?.schedule?.uuid) {
+      this.sseService.listenForSpecificProgressEvents$(searchIndex.schedule.uuid, 'index')
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(event => {
+          if (event.details.total && event.details.progress && event.details.total > 0 && event.details.progress > 0) {
+            // console.log(`Progress on index: ${searchIndex.name} is ${this.selectedTaskProgress}`);
+            this.indexTaskProgress = Math.round((event.details.progress / event.details.total) * 100);
+            this.cdr.detectChanges();
+          }
+        });
+    }
+  }
 }
