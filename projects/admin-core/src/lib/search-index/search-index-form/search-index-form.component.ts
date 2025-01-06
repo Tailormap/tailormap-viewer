@@ -29,6 +29,7 @@ export class SearchIndexFormComponent implements OnInit {
     this._searchIndex = form;
     this.initForm(form);
     this.calculateProgress$(form);
+    this.indexTaskProgress = 0;
   }
   public get searchIndex(): SearchIndexModel | null {
     return this._searchIndex;
@@ -136,17 +137,17 @@ export class SearchIndexFormComponent implements OnInit {
   }
 
   public calculateProgress$(searchIndex: SearchIndexModel | null): void {
-    this.indexTaskProgress = 0;
-    if (searchIndex?.schedule?.uuid) {
-      this.sseService.listenForSpecificProgressEvents$(searchIndex.schedule.uuid, 'index')
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe(event => {
+    this.sseService.listenForAllProgressEvents$()
+      .pipe(takeUntilDestroyed(this.destroyRef), filter(event => event.details.type === 'index' ))
+      .subscribe(event => {
+        // the 'indexId' key is defined in
+        // https://tailormap.github.io/tailormap-api/apidocs/org/tailormap/api/scheduling/IndexTask.html#INDEX_KEY
+        if (searchIndex?.id === event.details.taskData?.indexId) {
           if (event.details.total && event.details.progress && event.details.total > 0 && event.details.progress > 0) {
-            // console.log(`Progress on index: ${searchIndex.name} is ${this.selectedTaskProgress}`);
             this.indexTaskProgress = Math.round((event.details.progress / event.details.total) * 100);
-            this.cdr.detectChanges();
           }
-        });
-    }
+        }
+        this.cdr.detectChanges();
+      });
   }
 }
