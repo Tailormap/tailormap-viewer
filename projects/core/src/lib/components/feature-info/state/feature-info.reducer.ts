@@ -97,6 +97,7 @@ const onAdd3DLayerToFeatureInfoLayers = (
   return {
     ...state,
     layers: [ ...state.layers, payload.layer ],
+    selectedLayerId: payload.layer.id,
   };
 };
 
