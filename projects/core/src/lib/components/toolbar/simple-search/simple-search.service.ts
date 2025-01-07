@@ -55,7 +55,7 @@ export class SimpleSearchService {
     return this.api.search$({
       applicationId,
       layerId: layer.id,
-      query: `*${searchTerm}*`,
+      query: `(*${searchTerm}*)`,
     }).pipe(
       catchError(() => of({ documents: [], maxScore: 0, start: 0, total: 0 })),
       map<SearchResponseModel, SearchResultModel | null>(searchResponse => {
