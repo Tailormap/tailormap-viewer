@@ -25,6 +25,8 @@ export interface SSETaskProgressEvent extends SSEEvent {
     progress?: number;
     total?: number;
     startedAt?: string;
+    // we don't want to type this, as it will be different depending on the task type
+    taskData?: any;
   };
   eventType: EventType.TASK_PROGRESS;
 }
