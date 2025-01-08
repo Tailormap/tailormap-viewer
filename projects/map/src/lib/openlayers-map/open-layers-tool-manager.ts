@@ -8,7 +8,7 @@ import { OpenLayersMousePositionTool } from './tools/open-layers-mouse-position-
 import { OpenLayersScaleBarTool } from './tools/open-layers-scale-bar-tool';
 import { OpenLayersSelectTool } from './tools/open-layers-select-tool';
 import { OpenLayersModifyTool } from "./tools/open-layers-modify-tool";
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, takeUntil } from 'rxjs';
 import { CesiumLayerManager } from './cesium-map/cesium-layer-manager';
 import { CesiumEventManager } from './cesium-map/cesium-event-manager';
 import { CesiumFeatureInfoHelper } from './helpers/cesium-feature-info.helper';
@@ -27,26 +27,30 @@ export class OpenLayersToolManager implements ToolManagerModel {
   private click3DEventSubject$: BehaviorSubject<Selection3dModel | null> = new BehaviorSubject<Selection3dModel | null>(null);
   private click3DEvent$: Observable<Selection3dModel | null> = this.click3DEventSubject$.asObservable();
 
+  private readonly destroy$ = new Subject<void>();
+
   constructor(
     private olMap: OlMap,
     private ngZone: NgZone,
     private map3D$: Observable<CesiumLayerManager | null>,
     private in3D$: Observable<boolean>,
   ) {
-    map3D$.subscribe(cesiumLayerManager => {
+    map3D$.pipe(takeUntil(this.destroy$)).subscribe(cesiumLayerManager => {
       cesiumLayerManager?.executeScene3DAction(scene3D => {
-        CesiumEventManager.onMap3DClick$(scene3D, CssHelper.getCssVariableValue('--primary-color').trim()).subscribe(evt => {
-          if (evt.featureInfo) {
-            const layerId: string | null = cesiumLayerManager.getLayerId(evt.featureInfo?.primitiveIndex);
-            if (layerId) {
-              this.click3DEventSubject$.next(CesiumFeatureInfoHelper.addLayerIdToSelection3D(evt, layerId));
+        CesiumEventManager.onMap3DClick$(scene3D, CssHelper.getCssVariableValue('--primary-color').trim())
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(evt => {
+            if (evt.featureInfo) {
+              const layerId: string | null = cesiumLayerManager.getLayerId(evt.featureInfo?.primitiveIndex);
+              if (layerId) {
+                this.click3DEventSubject$.next(CesiumFeatureInfoHelper.addLayerIdToSelection3D(evt, layerId));
+              } else {
+                this.click3DEventSubject$.next(evt);
+              }
             } else {
               this.click3DEventSubject$.next(evt);
             }
-          } else {
-            this.click3DEventSubject$.next(evt);
-          }
-        });
+          });
       });
     });
   }
@@ -56,6 +60,7 @@ export class OpenLayersToolManager implements ToolManagerModel {
     this.autoEnabledTools = new Set();
     this.alwaysEnabledTools = new Set();
     toolIds.forEach(id => this.removeTool(id));
+    this.destroy$.next();
   }
 
   public addTool<T extends ToolModel, C extends ToolConfigModel>(tool: C): T {
