@@ -1,14 +1,14 @@
-import { Cartesian3, Cartographic, Cesium3DTileFeature, Color as CesiumColor, PostProcessStage, Scene } from 'cesium';
+import { Cartesian3, Cartographic, Cesium3DTileFeature, PostProcessStage, Scene } from 'cesium';
 import { Selection3dModel } from '../../models/selection3d.model';
 import { Observable, Subject } from 'rxjs';
 import { AttributeType } from '@tailormap-viewer/api';
-
+import { ColorHelper } from '@tailormap-viewer/shared';
 
 export class CesiumEventManager {
 
-  public static onMap3DClick$(scene3D: Scene): Observable<Selection3dModel> {
+  public static onMap3DClick$(scene3D: Scene, silhouetteColor: string): Observable<Selection3dModel> {
     const cesiumEventHandler = new Cesium.ScreenSpaceEventHandler(scene3D.canvas);
-    const silhouette = this.createSilhouette(CesiumColor.LIME, 0.01);
+    const silhouette = this.createSilhouette(silhouetteColor, 0.01);
     scene3D.postProcessStages.add(Cesium.PostProcessStageLibrary.createSilhouetteStage([silhouette]));
 
     const map3DClickEvent: Subject<Selection3dModel> = new Subject<Selection3dModel>();
@@ -56,9 +56,10 @@ export class CesiumEventManager {
     return map3DClickEvent.asObservable();
   }
 
-  private static createSilhouette(color: CesiumColor, length: number): PostProcessStage {
+  private static createSilhouette(color: string, length: number): PostProcessStage {
+    const rgbColor = ColorHelper.getRgbForColor(color);
     const silhouette: PostProcessStage = Cesium.PostProcessStageLibrary.createEdgeDetectionStage();
-    silhouette.uniforms.color = color;
+    silhouette.uniforms.color = new Cesium.Color(rgbColor.r / 255, rgbColor.g / 255, rgbColor.b / 255, 1);
     silhouette.uniforms.length = length;
     silhouette.selected = [];
     return silhouette;

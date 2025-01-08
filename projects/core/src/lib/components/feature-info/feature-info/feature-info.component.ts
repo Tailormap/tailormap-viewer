@@ -90,37 +90,39 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
   }
 
   private handleMap3DClick() {
-    this.mapService.getClick3DEvent$()
+    this.mapService.getToolManager$()
       .pipe(take(1))
-      .subscribe(map3DClick => {
-        if (map3DClick?.featureInfo) {
+      .subscribe(toolManager => toolManager.getClick3DEvent$().pipe(take(1))
+        .subscribe(map3DClick => {
+          if (map3DClick?.featureInfo) {
 
-          this.store$.select(selectLayer(map3DClick.featureInfo.layerId)).pipe(take(1)).subscribe(layer => {
-            if (layer) {
-              const featureInfoLayer: FeatureInfoLayerModel = { id: layer.id, title: layer.title, loading: LoadingStateEnum.LOADING };
-              this.store$.dispatch(add3DLayerToFeatureInfoLayers({ layer: featureInfoLayer }));
-            }
-          });
+            this.store$.select(selectLayer(map3DClick.featureInfo.layerId)).pipe(take(1)).subscribe(layer => {
+              if (layer) {
+                const featureInfoLayer: FeatureInfoLayerModel = { id: layer.id, title: layer.title, loading: LoadingStateEnum.LOADING };
+                this.store$.dispatch(add3DLayerToFeatureInfoLayers({ layer: featureInfoLayer }));
+              }
+            });
 
-          const feature: FeatureInfoFeatureModel = {
-            __fid: map3DClick.featureInfo.featureId.toString(),
-            attributes: map3DClick.featureInfo.properties.reduce(
-              (acc, { id, value }) => {
-                acc[id] = value;
-                return acc;
-              },
-              {} as FeatureModelAttributes,
-            ),
-            layerId: map3DClick.featureInfo.layerId,
-          };
-          const response: FeatureInfoResponseModel = {
-            features: [feature],
-            columnMetadata: map3DClick.featureInfo.columnMetadata,
-            layerId: map3DClick.featureInfo.layerId,
-          };
-          this.store$.dispatch(featureInfoLoaded({ featureInfo: response }));
-        }
-      });
+            const feature: FeatureInfoFeatureModel = {
+              __fid: map3DClick.featureInfo.featureId.toString(),
+              attributes: map3DClick.featureInfo.properties.reduce(
+                (acc, { id, value }) => {
+                  acc[id] = value;
+                  return acc;
+                },
+                {} as FeatureModelAttributes,
+              ),
+              layerId: map3DClick.featureInfo.layerId,
+            };
+            const response: FeatureInfoResponseModel = {
+              features: [feature],
+              columnMetadata: map3DClick.featureInfo.columnMetadata,
+              layerId: map3DClick.featureInfo.layerId,
+            };
+            this.store$.dispatch(featureInfoLoaded({ featureInfo: response }));
+          }
+        }),
+      );
   }
 
 }

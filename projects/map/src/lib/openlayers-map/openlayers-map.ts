@@ -4,7 +4,7 @@ import { Projection } from 'ol/proj';
 import { View } from 'ol';
 import { NgZone } from '@angular/core';
 import { defaults as defaultInteractions, DragPan, MouseWheelZoom } from 'ol/interaction';
-import { LayerManagerModel, MapViewDetailsModel, MapViewerModel, MapViewerOptionsModel, Selection3dModel } from '../models';
+import { LayerManagerModel, MapViewDetailsModel, MapViewerModel, MapViewerOptionsModel } from '../models';
 import { ProjectionsHelper } from '../helpers/projections.helper';
 import { OpenlayersExtent } from '../models/extent.type';
 import { OpenLayersLayerManager } from './open-layers-layer-manager';
@@ -25,8 +25,6 @@ import { OpenLayersMapImageExporter } from './openlayers-map-image-exporter';
 import { Attribution } from 'ol/control';
 import { mouseOnly, platformModifierKeyOnly } from 'ol/events/condition';
 import { CesiumLayerManager } from './cesium-map/cesium-layer-manager';
-import { CesiumEventManager } from './cesium-map/cesium-event-manager';
-import { CesiumFeatureInfoHelper } from './helpers/cesium-feature-info.helper';
 
 export class OpenLayersMap implements MapViewerModel {
 
@@ -37,8 +35,6 @@ export class OpenLayersMap implements MapViewerModel {
   private map3D: BehaviorSubject<CesiumLayerManager | null> = new BehaviorSubject<CesiumLayerManager | null>(null);
   private made3D: boolean;
   private in3D: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  private click3DEventSubject$: BehaviorSubject<Selection3dModel | null> = new BehaviorSubject<Selection3dModel | null>(null);
-  private click3DEvent$: Observable<Selection3dModel | null> = this.click3DEventSubject$.asObservable();
 
   private readonly resizeObserver: ResizeObserver;
   private initialExtent: OpenlayersExtent = [];
@@ -121,7 +117,7 @@ export class OpenLayersMap implements MapViewerModel {
 
     const layerManager = new OpenLayersLayerManager(olMap, this.ngZone, this.httpXsrfTokenExtractor);
     layerManager.init();
-    const toolManager = new OpenLayersToolManager(olMap, this.ngZone, this.click3DEvent$, this.in3D);
+    const toolManager = new OpenLayersToolManager(olMap, this.ngZone, this.map3D, this.in3D);
     OpenLayersEventManager.initEvents(olMap, this.ngZone);
 
     this.map.next(olMap);
@@ -408,20 +404,6 @@ export class OpenLayersMap implements MapViewerModel {
       });
       this.executeCLMAction(cesiumLayerManager => {
         cesiumLayerManager.init();
-        cesiumLayerManager.executeScene3DAction(scene3D => {
-          CesiumEventManager.onMap3DClick$(scene3D).subscribe(evt => {
-            if (evt.featureInfo) {
-              const layerId: string | null = cesiumLayerManager.getLayerId(evt.featureInfo?.primitiveIndex);
-              if (layerId) {
-                this.click3DEventSubject$.next(CesiumFeatureInfoHelper.addLayerIdToSelection3D(evt, layerId));
-              } else {
-                this.click3DEventSubject$.next(evt);
-              }
-            } else {
-              this.click3DEventSubject$.next(evt);
-            }
-          });
-        });
       });
       this.made3D = true;
     }
@@ -432,9 +414,5 @@ export class OpenLayersMap implements MapViewerModel {
       cesiumLayerManager.switch3D$();
     });
     this.in3D.next(!this.in3D.value);
-  }
-
-  public getClick3DEvent$() {
-    return this.click3DEvent$;
   }
 }
