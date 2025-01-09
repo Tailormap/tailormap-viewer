@@ -41,7 +41,18 @@ export class LoginFormComponent {
   public errorMessage$ = this.errorMessageSubject.asObservable();
 
   @Input()
-  public loginConfiguration: LoginConfigurationModel | null = null;
+  public set loginConfiguration(loginConfiguration: LoginConfigurationModel | null) {
+    this._loginConfiguration = loginConfiguration;
+    this.hasSSOButtons = (loginConfiguration?.ssoLinks || [])
+      .filter(l => l.showForViewer)
+      .length > 0;
+  }
+  public get loginConfiguration(): LoginConfigurationModel | null {
+    return this._loginConfiguration;
+  }
+  private _loginConfiguration: LoginConfigurationModel | null = null;
+
+  public hasSSOButtons: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,

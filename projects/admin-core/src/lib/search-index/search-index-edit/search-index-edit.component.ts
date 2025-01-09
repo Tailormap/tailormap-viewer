@@ -70,7 +70,7 @@ export class SearchIndexEditComponent implements OnInit {
     this.saveEnabled.set($event);
   }
 
-  public updateSearchIndex(id: number, $event: { searchIndex: Pick<SearchIndexModel, 'name' | 'featureTypeId' | 'comment'> }) {
+  public updateSearchIndex(id: number, $event: { searchIndex: Pick<SearchIndexModel, 'name' | 'featureTypeId'> }) {
     this.store$.dispatch(updateDraftSearchIndex({ id, searchIndex: $event.searchIndex }));
   }
 

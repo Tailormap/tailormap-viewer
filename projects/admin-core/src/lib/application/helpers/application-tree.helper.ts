@@ -96,7 +96,7 @@ export class ApplicationTreeHelper {
       checked: ApplicationModelHelper.isLayerTreeNode(node)
         ? node.visible
         : true, // must be boolean but for levels this is determined by the checked status of the layers inside
-      expanded: expandedNodes.includes(node.id),
+      expanded: expandedNodes.includes(node.id) || (ApplicationModelHelper.isLevelTreeNode(node) && node.root),
       expandable: ApplicationModelHelper.isLevelTreeNode(node),
     };
   }

@@ -1,4 +1,5 @@
-<?xml version="1.0"?><xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" target-language="nl" datatype="plaintext" original="ng2.template">
     <body>
       <trans-unit id="admin-core.application.add-application" datatype="html">
@@ -92,6 +93,10 @@
       <trans-unit id="admin-core.application.component-share-viewer" datatype="html">
         <source>Share viewer</source>
         <target>Viewer delen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.component-simple-search" datatype="html">
+        <source>Search</source>
+        <target>Zoeken</target>
       </trans-unit>
       <trans-unit id="admin-core.application.component-streetview-tool" datatype="html">
         <source>Streetview tool</source>
@@ -889,14 +894,6 @@
         <source>Collapse all</source>
         <target>Alles inklappen</target>
       </trans-unit>
-      <trans-unit id="admin-core.common.comment" datatype="html">
-        <source>Comment</source>
-        <target>Opmerking</target>
-      </trans-unit>
-      <trans-unit id="admin-core.common.comment" datatype="html">
-        <source>Comment</source>
-        <target>Opmerking</target>
-      </trans-unit>
       <trans-unit id="admin-core.common.comments" datatype="html">
         <source>Comments</source>
         <target>Opmerkingen</target>
@@ -1053,6 +1050,10 @@
         <source>Saved</source>
         <target>Opgeslagen</target>
       </trans-unit>
+      <trans-unit id="admin-core.common.summary" datatype="html">
+        <source>Summary</source>
+        <target>Samenvatting</target>
+      </trans-unit>
       <trans-unit id="admin-core.common.search-indexes-title" datatype="html">
         <source>Search Indexes</source>
         <target>Zoekindexen</target>
@@ -1152,6 +1153,26 @@
       <trans-unit id="admin-core.components.measure-line-title" datatype="html">
         <source>Measure distance title</source>
         <target>Titel voor afstand meten</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.simple-search-add-municipality" datatype="html">
+        <source>Add municipality</source>
+        <target>Gemeente toevoegen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.simple-search-municipality" datatype="html">
+        <source>Municipality</source>
+        <target>Gemeente</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.simple-search-municipality-filter" datatype="html">
+        <source>Municipality filter</source>
+        <target>Gemeente filter</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.simple-search-pdok-settings" datatype="html">
+        <source>PDOK Location search settings</source>
+        <target>PDOK locatiezoeker instellingen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.simple-search-title" datatype="html">
+        <source>Search title</source>
+        <target>Zoeken titel</target>
       </trans-unit>
       <trans-unit id="admin-core.feature-type-settings-updated" datatype="html">
         <source>Feature type settings updated</source>
@@ -1624,6 +1645,16 @@
       <trans-unit id="admin-core.search-index.unavailable.message" datatype="html">
         <source>Error code <x id="INTERPOLATION" equiv-text="{{ pingResponse.code }}"/>, message: <x id="INTERPOLATION_1" equiv-text="{{ pingResponse.message }}"/></source>
         <target>Foutcode <x id="INTERPOLATION" equiv-text="{{ pingResponse.code }}"/>, melding: <x id="INTERPOLATION_1" equiv-text="{{ pingResponse.message }}"/></target>
+      </trans-unit>
+      <trans-unit id="admin-core.search-index.summary" datatype="html">
+        <source>Last indexing started at <x id="INTERPOLATION" equiv-text="{{ searchIndex.summary?.startedAt | date:'medium' }}"/> and took
+          <x id="INTERPOLATION_1" equiv-text="{{ searchIndex.summary?.duration | number: '2.1-2'}}"/> seconds, skipped
+          <x id="INTERPOLATION_2" equiv-text="{{ searchIndex.summary?.skippedCounter }}"/> of
+          <x id="INTERPOLATION_3" equiv-text="{{ searchIndex.summary?.total }}"/> features.</source>
+        <target>Laatste indexering gestart op <x id="INTERPOLATION" equiv-text="{{ searchIndex.summary?.startedAt | date:'medium' }}"/> en duurde
+          <x id="INTERPOLATION_1" equiv-text="{{ searchIndex.summary?.duration | number: '1.1-2'}}"/> seconden, er zijn
+          <x id="INTERPOLATION_2" equiv-text="{{ searchIndex.summary?.skippedCounter }}"/> objecten van
+          <x id="INTERPOLATION_3" equiv-text="{{ searchIndex.summary?.total }}"/> overgeslagen.</target>
       </trans-unit>
       <trans-unit id="admin-core.select-upload.file-in-use" datatype="html">
         <source>File is still in use</source>

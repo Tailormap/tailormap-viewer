@@ -1,13 +1,14 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, DestroyRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { FeatureSourceProtocolEnum, SearchIndexModel } from '@tailormap-admin/admin-api';
-import { debounceTime, filter, map, distinctUntilChanged, concatMap, forkJoin, of, take } from 'rxjs';
+import { concatMap, debounceTime, distinctUntilChanged, filter, forkJoin, map, of, take } from 'rxjs';
 import { FormHelper } from '../../helpers/form.helper';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TypesHelper } from '@tailormap-viewer/shared';
 import { selectFeatureTypeBySourceIdAndName } from '../../catalog/state/catalog.selectors';
 import { Store } from '@ngrx/store';
 import { FeatureSourceService } from '../../catalog/services/feature-source.service';
+import { AdminSseService } from '../../shared/services/admin-sse.service';
 
 @Component({
   selector: 'tm-admin-search-index-form',
@@ -21,17 +22,21 @@ export class SearchIndexFormComponent implements OnInit {
 
   public nonSearchableFeatureSourceProtocols: FeatureSourceProtocolEnum[] = [FeatureSourceProtocolEnum.WFS];
 
+  public indexTaskProgress: number = 0;
+
   @Input()
   public set searchIndex(form: SearchIndexModel | null) {
     this._searchIndex = form;
     this.initForm(form);
+    this.calculateProgress$(form);
+    this.indexTaskProgress = 0;
   }
   public get searchIndex(): SearchIndexModel | null {
     return this._searchIndex;
   }
 
   @Output()
-  public updateSearchIndex = new EventEmitter<{ searchIndex: Pick<SearchIndexModel, 'name' | 'featureTypeId' | 'comment'> }>();
+  public updateSearchIndex = new EventEmitter<{ searchIndex: Pick<SearchIndexModel, 'name' | 'featureTypeId'> }>();
 
   @Output()
   public validFormChanged = new EventEmitter<boolean>();
@@ -40,6 +45,8 @@ export class SearchIndexFormComponent implements OnInit {
     private store$: Store,
     private featureSourceService: FeatureSourceService,
     private destroyRef: DestroyRef,
+    private sseService: AdminSseService,
+    private cdr: ChangeDetectorRef,
   ) {
   }
 
@@ -78,10 +85,9 @@ export class SearchIndexFormComponent implements OnInit {
         }),
       )
       .subscribe(([ value, featureType ]) => {
-        const searchIndex: Pick<SearchIndexModel, 'name' | 'featureTypeId' | 'comment'> = {
+        const searchIndex: Pick<SearchIndexModel, 'name' | 'featureTypeId'> = {
           name: value.name || '',
           featureTypeId: featureType ? +featureType.originalId : -1,
-          comment: value.comment || '',
         };
         this.updateSearchIndex.emit({ searchIndex });
       });
@@ -115,7 +121,6 @@ export class SearchIndexFormComponent implements OnInit {
       .subscribe(featureType => {
         this.searchIndexForm.patchValue({
           name: form.name,
-          comment: form.comment,
           featureSourceId: featureType ? +featureType.featureSourceId : undefined,
           featureTypeName: featureType?.name,
         }, { emitEvent: false });
@@ -131,4 +136,18 @@ export class SearchIndexFormComponent implements OnInit {
       && this.searchIndexForm.valid;
   }
 
+  public calculateProgress$(searchIndex: SearchIndexModel | null): void {
+    this.sseService.listenForAllProgressEvents$()
+      .pipe(takeUntilDestroyed(this.destroyRef), filter(event => event.details.type === 'index' ))
+      .subscribe(event => {
+        // the 'indexId' key is defined in
+        // https://tailormap.github.io/tailormap-api/apidocs/org/tailormap/api/scheduling/IndexTask.html#INDEX_KEY
+        if (searchIndex?.id === event.details.taskData?.indexId) {
+          if (event.details.total && event.details.progress && event.details.total > 0 && event.details.progress > 0) {
+            this.indexTaskProgress = Math.round((event.details.progress / event.details.total) * 100);
+          }
+        }
+        this.cdr.detectChanges();
+      });
+  }
 }

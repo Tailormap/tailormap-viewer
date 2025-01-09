@@ -34,16 +34,39 @@
 .attribution,
 .attribution.mat-mdc-option.mdc-list-item--disabled  ::ng-deep > .mdc-list-item__primary-text,
 .hint,
-.hint.mat-mdc-option.mdc-list-item--disabled  ::ng-deep > .mdc-list-item__primary-text,
-.section-label,
-.section-label.mat-mdc-option.mdc-list-item--disabled  ::ng-deep > .mdc-list-item__primary-text {
+.hint.mat-mdc-option.mdc-list-item--disabled  ::ng-deep > .mdc-list-item__primary-text {
   font-size: 11px;
   color: var(--disabled-text-color);
   opacity: 1;
 }
 
-.section-label {
+::ng-deep .simple-search-panel--with-summary {
+  flex-direction: column;
+}
+
+.result-summary {
+  display: none;
+}
+
+::ng-deep .simple-search-panel--with-summary .result-summary {
+  display: flex;
+  background-color: #fff;
+  padding: 16px;
   font-size: 11px;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  z-index: 1;
+}
+
+.result-summary a {
+  display: block;
+  --mat-optgroup-label-text-size: 13px;
+  color: var(--primary-color);
+}
+
+.section-label {
+  --mat-optgroup-label-text-size: 13px;
+  color: var(--primary-color);
 }
 
 .attribution ::ng-deep a {

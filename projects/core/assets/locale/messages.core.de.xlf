@@ -1022,8 +1022,8 @@
         <target>Auf 3D umschalten</target>
       </trans-unit>
       <trans-unit id="core.toolbar.type-at-least" datatype="html">
-        <source>Type at least <x id="INTERPOLATION" equiv-text="{{ minLength }}"/> characters to start searching</source>
-        <target>Geben Sie mindestens <x id="INTERPOLATION" equiv-text="{{ minLength }}"/> Zeichen ein, um mit der Suche zu beginnen</target>
+        <source>Type at least <x id="INTERPOLATION" equiv-text="{{ minLength }}"/> characters to start searching or press &lt;Enter&gt;</source>
+        <target>Geben Sie mindestens <x id="INTERPOLATION" equiv-text="{{ minLength }}"/> Zeichen ein, um mit der Suche zu beginnen oder drücken Sie &lt;Enter&gt;</target>
       </trans-unit>
       <trans-unit id="core.toolbar.zoom-in" datatype="html">
         <source>Zoom in</source>

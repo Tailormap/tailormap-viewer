@@ -36,6 +36,8 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
 
   private milkdownEditor: MilkdownEditor | undefined;
 
+  private currentContent: string | null | undefined;
+
   constructor(
     private snackBar: MatSnackBar,
     private destroyRef: DestroyRef,
@@ -77,6 +79,7 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
               const listener = ctx.get(listenerModule.listenerCtx);
               listener.markdownUpdated((_ctx, markdown, prevMarkdown) => {
                 if (markdown !== prevMarkdown) {
+                  this.currentContent = markdown;
                   this.mdEditorService.contentChanged(markdown);
                 }
               });
@@ -93,7 +96,7 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
     this.mdEditorService.getContent$()
       .pipe(takeUntilDestroyed(this.destroyRef), distinctUntilChanged())
       .subscribe(content => {
-        if (this.milkdownEditor) {
+        if (this.milkdownEditor && content !== this.currentContent) {
           MilkdownHelper.updateContent(this.milkdownEditor.ctx, content || '');
         }
       });

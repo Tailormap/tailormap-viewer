@@ -94,6 +94,10 @@
         <source>Share viewer</source>
         <target>Viewer teilen</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.component-simple-search" datatype="html">
+        <source>Search</source>
+        <target>Suchen</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.component-streetview-tool" datatype="html">
         <source>Streetview tool</source>
         <target>Streetview-Werkzeug</target>
@@ -890,14 +894,6 @@
         <source>Collapse all</source>
         <target>Alle einklappen</target>
       </trans-unit>
-      <trans-unit id="admin-core.common.comment" datatype="html">
-        <source>Comment</source>
-        <target>Kommentar</target>
-      </trans-unit>
-      <trans-unit id="admin-core.common.comment" datatype="html">
-        <source>Comment</source>
-        <target>Kommentar</target>
-      </trans-unit>
       <trans-unit id="admin-core.common.comments" datatype="html">
         <source>Comments</source>
         <target>Kommentare</target>
@@ -1054,6 +1050,10 @@
         <source>Saved</source>
         <target>Gespeichert</target>
       </trans-unit>
+      <trans-unit id="admin-core.common.summary" datatype="html">
+        <source>Summary</source>
+        <target>Zusammenfassung</target>
+      </trans-unit>
       <trans-unit id="admin-core.common.search-indexes-title" datatype="html">
         <source>Search Indexes</source>
         <target>Suchindizes</target>
@@ -1153,6 +1153,26 @@
       <trans-unit id="admin-core.components.measure-line-title" datatype="html">
         <source>Measure distance title</source>
         <target>Titel für Streckenmessung</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.simple-search-add-municipality" datatype="html">
+        <source>Add municipality</source>
+        <target>Gemeinde hinzufügen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.simple-search-municipality" datatype="html">
+        <source>Municipality</source>
+        <target>Gemeinde</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.simple-search-municipality-filter" datatype="html">
+        <source>Municipality filter</source>
+        <target>Gemeinde filter</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.simple-search-pdok-settings" datatype="html">
+        <source>PDOK Location search settings</source>
+        <target>PDOK-Ortuche Suche Einstellungen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.simple-search-title" datatype="html">
+        <source>Search title</source>
+        <target>Suchtitel</target>
       </trans-unit>
       <trans-unit id="admin-core.feature-type-settings-updated" datatype="html">
         <source>Feature type settings updated</source>
@@ -1641,6 +1661,16 @@
         <source>Error code <x id="INTERPOLATION" equiv-text="{{ pingResponse.code }}"/>, message: <x id="INTERPOLATION_1" equiv-text="{{ pingResponse.message }}"/></source>
         <target>Fehlercode <x id="INTERPOLATION" equiv-text="{{ pingResponse.code }}"/>, meldung: <x id="INTERPOLATION_1" equiv-text="{{ pingResponse.message }}"/></target>
       </trans-unit>
+      <trans-unit id="admin-core.search-index.summary" datatype="html">
+        <source>Last indexing started at <x id="INTERPOLATION" equiv-text="{{ searchIndex.summary?.startedAt | date:'medium' }}"/> and took
+          <x id="INTERPOLATION_1" equiv-text="{{ searchIndex.summary?.duration | number: '2.1-2'}}"/> seconds, skipped
+          <x id="INTERPOLATION_2" equiv-text="{{ searchIndex.summary?.skippedCounter }}"/> of
+          <x id="INTERPOLATION_3" equiv-text="{{ searchIndex.summary?.total }}"/> features.</source>
+        <target>Die letzte Indizierung begann um <x id="INTERPOLATION" equiv-text="{{ searchIndex.summary?.startedAt | date:'medium' }}"/> und dauerte
+          <x id="INTERPOLATION_1" equiv-text="{{ searchIndex.summary?.duration | number: '1.1-2'}}"/> Sekunden, es wurden
+          <x id="INTERPOLATION_2" equiv-text="{{ searchIndex.summary?.skippedCounter }}"/> von
+          <x id="INTERPOLATION_3" equiv-text="{{ searchIndex.summary?.total }}"/> Features übersprungen.</target>
+      </trans-unit>
       <trans-unit id="admin-core.select-upload.file-in-use" datatype="html">
         <source>File is still in use</source>
         <target>Datei wird noch verwendet</target>
@@ -1731,7 +1761,7 @@
       </trans-unit>
       <trans-unit id="admin-core.tasks.task-details.interruptable" datatype="html">
         <source>Interruptable</source>
-        <target>unterbrechbar</target>
+        <target>Unterbrechbar</target>
       </trans-unit>
       <trans-unit id="admin-core.tasks.task-details.last-result" datatype="html">
         <source>Last result</source>

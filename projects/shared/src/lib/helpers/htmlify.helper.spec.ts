@@ -49,6 +49,8 @@ describe('HtmlifyHelper', () => {
       .toEqual('Some text with some <a href="https://www.test1.nl" target="_blank">link</a> in it');
     expect(HtmlifyHelper.htmlifyContents('Some text with some [link description](https://www.test2.nl) in it'))
       .toEqual('Some text with some <a href="https://www.test2.nl" target="_blank">link description</a> in it');
+    expect(HtmlifyHelper.htmlifyContents('Allow single space between brackets [link description] (https://www.test2.nl) in it'))
+      .toEqual('Allow single space between brackets <a href="https://www.test2.nl" target="_blank">link description</a> in it');
     expect(HtmlifyHelper.htmlifyContents('Some text with some [link / description + 123](https://www.test3.nl) in it'))
       .toEqual('Some text with some <a href="https://www.test3.nl" target="_blank">link / description + 123</a> in it');
     expect(HtmlifyHelper.htmlifyContents('Some text with some [link / description + (abc/234)](https://www.test4.nl) in it'))

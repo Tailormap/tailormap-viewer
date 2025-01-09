@@ -8,7 +8,7 @@ export class HtmlifyHelper {
   // Matches everything that starts with http until the first space
   public static readonly URL_PART = 'https?:\\/\\/[^\\s\\r\\n]*';
   // Matches a Markdown URL: [LABEL](URL)
-  public static readonly MD_PART = '\\[(.*?(?:\\\\[()[\\]]|[^\\[\\]()])*?)\\]\\((.*?)\\)';
+  public static readonly MD_PART = '\\[(.*?(?:\\\\[()[\\]]|[^\\[\\]()])*?)\\][ ]?\\((.*?)\\)';
 
   public static readonly URL_REGEXP = new RegExp(`${HtmlifyHelper.MD_PART}|${HtmlifyHelper.URL_PART}`, 'ig');
   public static readonly MD_URL_REGEXP = new RegExp(HtmlifyHelper.MD_PART, 'i');
