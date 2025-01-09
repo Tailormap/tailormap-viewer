@@ -3,7 +3,9 @@ import { Store } from '@ngrx/store';
 import {
   LayerModel, LayerTypesEnum, MapService, OgcHelper, ServiceLayerModel, WMSLayerModel, WMTSLayerModel, XyzLayerModel, Tileset3DLayerModel,
 } from '@tailormap-viewer/map';
-import { combineLatest, concatMap, distinctUntilChanged, filter, forkJoin, map, Observable, of, Subject, take, takeUntil, tap } from 'rxjs';
+import {
+  combineLatest, concatMap, distinctUntilChanged, filter, first, forkJoin, map, Observable, of, Subject, take, takeUntil, tap,
+} from 'rxjs';
 import { ServiceModel, ServiceProtocol } from '@tailormap-viewer/api';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { ArrayHelper, HtmlifyHelper } from '@tailormap-viewer/shared';
@@ -73,17 +75,19 @@ export class ApplicationMapService implements OnDestroy {
         layerManager.setLayers(layers.filter(isValidLayer));
       });
 
-    if (this.store$.select(selectEnable3D)) {
-      this.mapService.make3D$();
-      this.store$.select(select3Dlayers)
-        .pipe(
-          takeUntil(this.destroyed),
-          concatMap(layers => this.get3DLayersAndLayerManager$(layers)),
-        )
-        .subscribe(([ layers, layerManager ]) => {
-          layerManager.addLayers(layers.filter(isValidLayer));
-        });
-    }
+    this.store$.select(selectEnable3D)
+      .pipe(first(enable3D => enable3D))
+      .subscribe(() =>  {
+        this.mapService.make3D$();
+        this.store$.select(select3Dlayers)
+          .pipe(
+            takeUntil(this.destroyed),
+            concatMap(layers => this.get3DLayersAndLayerManager$(layers)),
+          )
+          .subscribe(([ layers, layerManager ]) => {
+            layerManager.addLayers(layers.filter(isValidLayer));
+          });
+      });
   }
 
   public selectOrderedVisibleLayersWithFilters$() {

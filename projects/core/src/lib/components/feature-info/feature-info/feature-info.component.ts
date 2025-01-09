@@ -8,7 +8,9 @@ import { deregisterTool, registerTool } from '../../toolbar/state/toolbar.action
 import { ToolbarComponentEnum } from '../../toolbar/models/toolbar-component.enum';
 import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.helper';
 import { FeatureInfoService } from '../feature-info.service';
-import { selectLayer, selectVisibleLayersWithAttributes, selectVisibleWMSLayersWithoutAttributes } from '../../../map/state/map.selectors';
+import {
+  selectIn3DView, selectLayer, selectVisibleLayersWithAttributes, selectVisibleWMSLayersWithoutAttributes,
+} from '../../../map/state/map.selectors';
 import { take } from 'rxjs/operators';
 import { FeatureInfoResponseModel } from '../models/feature-info-response.model';
 import { FeatureInfoFeatureModel } from '../models/feature-info-feature.model';
@@ -81,7 +83,11 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
         }),
       )
       .subscribe(response => {
-        this.handleMap3DClick();
+        this.store$.select(selectIn3DView).pipe(take(1)).subscribe(in3DView => {
+          if (in3DView) {
+            this.handleMap3DClick();
+          }
+        });
         if (response === null) {
           return;
         }
