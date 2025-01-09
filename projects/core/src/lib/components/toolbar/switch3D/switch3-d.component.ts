@@ -26,9 +26,6 @@ export class Switch3DComponent implements OnDestroy {
     BaseComponentTypeEnum.DRAWING,
   ];
   private disAllowingTools = [
-    ToolbarComponentEnum.SELECT_COORDINATES,
-    ToolbarComponentEnum.COORDINATE_LINK_WINDOW,
-    ToolbarComponentEnum.STREETVIEW,
     ToolbarComponentEnum.MEASURE,
   ];
 

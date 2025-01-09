@@ -20,10 +20,9 @@ export class LayoutService {
   private disallowingComponents = [
     BaseComponentTypeEnum.PRINT,
     BaseComponentTypeEnum.DRAWING,
-    BaseComponentTypeEnum.COORDINATE_LINK_WINDOW,
     BaseComponentTypeEnum.MEASURE,
-    BaseComponentTypeEnum.COORDINATE_PICKER,
-    BaseComponentTypeEnum.STREETVIEW,
+    BaseComponentTypeEnum.MOUSE_COORDINATES,
+    BaseComponentTypeEnum.SCALE_BAR,
   ];
 
   private componentsOnlyIn3D = [
