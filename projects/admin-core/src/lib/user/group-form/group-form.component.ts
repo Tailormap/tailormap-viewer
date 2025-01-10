@@ -1,12 +1,11 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { debounceTime, map, Observable, of, Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, combineLatest, debounceTime, map, Observable, of, Subject, takeUntil } from 'rxjs';
 import { AdditionalPropertyModel, GroupModel, OIDCConfigurationModel } from '@tailormap-admin/admin-api';
 import { FormHelper } from '../../helpers/form.helper';
 import { AdminFieldLocation, AdminFieldModel, AdminFieldRegistrationService } from '../../shared/services/admin-field-registration.service';
 import { GroupService } from '../services/group.service';
 import { OIDCConfigurationService } from '../../oidc/services/oidc-configuration.service';
-import { withLatestFrom } from 'rxjs/operators';
 
 @Component({
   selector: 'tm-admin-group-form',
@@ -30,7 +29,7 @@ export class GroupFormComponent implements OnInit, OnDestroy {
   public registeredFields$: Observable<AdminFieldModel[]> = of([]);
 
   public groups$: Observable<GroupModel[]>;
-  public oidcConfigurations$: Observable<Array<OIDCConfigurationModel & { lastSeen: Date | null }>>;
+  public oidcConfigurations$: Observable<Array<OIDCConfigurationModel & { lastSeen: Date | null }>> = of([]);
 
   @Input()
   public set group(group: GroupModel | null) {
@@ -59,7 +58,7 @@ export class GroupFormComponent implements OnInit, OnDestroy {
 
   private destroyed = new Subject();
   private _group: GroupModel | null = null;
-  private groupSubject = new Subject<GroupModel | null>();
+  private groupSubject = new BehaviorSubject<GroupModel | null>(null);
   public additionalProperties: AdditionalPropertyModel[] = [];
 
   constructor(
@@ -68,30 +67,6 @@ export class GroupFormComponent implements OnInit, OnDestroy {
     private oidcConfigurationService: OIDCConfigurationService,
   ) {
     this.groups$ = this.groupDetailsService.getGroups$();
-
-    this.oidcConfigurations$ = this.groupSubject.pipe(
-      takeUntil(this.destroyed),
-      withLatestFrom(this.oidcConfigurationService.getOIDCConfigurations$())
-    ).pipe(
-      map(([group, oidcConfigurations]) => {
-        if (group == null) {
-          return [];
-        }
-        const oidcClientIdsProperty = group?.additionalProperties?.find(value => value.key === 'oidcClientIds');
-        const oidcClientIds = oidcClientIdsProperty && Array.isArray(oidcClientIdsProperty.value) ? oidcClientIdsProperty.value as string[] : [];
-        const oidcLastSeenProperty = group?.additionalProperties?.find(value => value.key === 'oidcLastSeen');
-        const oidcLastSeen = oidcLastSeenProperty && typeof oidcLastSeenProperty.value === 'object' ? oidcLastSeenProperty.value as { [key: string]: string } : {};
-
-        return oidcConfigurations.filter(oidcConfiguration => {
-          return oidcClientIds.includes(oidcConfiguration.clientId);
-        }).map(oidcConfiguration => {
-          return {
-            ...oidcConfiguration,
-            lastSeen: oidcLastSeen[oidcConfiguration.clientId] ? new Date(oidcLastSeen[oidcConfiguration.clientId]) : null,
-          };
-        });
-      }),
-    );
   }
 
   public ngOnInit(): void {
@@ -104,6 +79,31 @@ export class GroupFormComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.readForm();
       });
+
+    this.groupSubject.asObservable().pipe(takeUntil(this.destroyed)).subscribe(group => console.log('group set', group));
+
+    this.oidcConfigurations$ =
+      combineLatest([ this.groupSubject.asObservable(), this.oidcConfigurationService.getOIDCConfigurations$()]).pipe(
+        takeUntil(this.destroyed),
+        map(([group, oidcConfigurations]) => {
+          if (group == null) {
+            return [];
+          }
+          const oidcClientIdsProperty = group?.additionalProperties?.find(value => value.key === 'oidcClientIds');
+          const oidcClientIds = oidcClientIdsProperty && Array.isArray(oidcClientIdsProperty.value) ? oidcClientIdsProperty.value as string[] : [];
+          const oidcLastSeenProperty = group?.additionalProperties?.find(value => value.key === 'oidcLastSeen');
+          const oidcLastSeen = oidcLastSeenProperty && typeof oidcLastSeenProperty.value === 'object' ? oidcLastSeenProperty.value as { [key: string]: string } : {};
+
+          return oidcConfigurations.filter(oidcConfiguration => {
+            return oidcClientIds.includes(oidcConfiguration.clientId);
+          }).map(oidcConfiguration => {
+            return {
+              ...oidcConfiguration,
+              lastSeen: oidcLastSeen[oidcConfiguration.clientId] ? new Date(oidcLastSeen[oidcConfiguration.clientId]) : null,
+            };
+          });
+        }),
+      );
   }
 
   public ngOnDestroy(): void {
