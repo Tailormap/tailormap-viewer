@@ -26,6 +26,26 @@
       <textarea formControlName="notes" matInput type="text"></textarea>
     </mat-form-field>
     <mat-checkbox formControlName="systemGroup" i18n="@@admin-core.groups.system-group" labelPosition="before">System group</mat-checkbox>
+    <!--@if ((oidcConfigurations$ | async)?.length > 0) {-->
+      <p>This group was received from the following OIDC registrations:
+      <p>
+      <mat-table *ngIf="(oidcConfigurations$ | async) as oidcConfigurations" [dataSource]="oidcConfigurations" class="mat-elevation-z1">
+        <ng-container matColumnDef="name">
+          <mat-header-cell *matHeaderCellDef i18n="@@admin-core.common.name">Name</mat-header-cell>
+          <mat-cell *matCellDef="let oidcConfiguration">{{ oidcConfiguration.name ? oidcConfiguration.name : oidcConfiguration.clientId }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="lastSeen">
+          <mat-header-cell *matHeaderCellDef i18n="@@admin-core.common.last-seen">Last seen</mat-header-cell>
+          <mat-cell *matCellDef="let oidcConfiguration">{{ oidcConfiguration.lastSeen | date: 'medium' }}</mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="['name', 'lastSeen']"></mat-header-row>
+      @for(oidcConfiguration of oidcConfigurations$ | async; track oidcConfiguration.clientId) {
+        <mat-row *matRowDef="let row; columns: ['name', 'lastSeen'];"></mat-row>
+      }
+      </mat-table>
+    <!--}-->
     <tm-admin-fields-renderer [fields]="(registeredFields$ | async) || []" [data]="additionalProperties" (changed)="attributesChanged($event)"></tm-admin-fields-renderer>
   </div>
 </form>
