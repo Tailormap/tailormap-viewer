@@ -1514,6 +1514,10 @@
         <source>Issuer URL</source>
         <target>Issuer URL</target>
       </trans-unit>
+      <trans-unit id="admin-core.oidc.issuer-url-hint" datatype="html">
+        <source>URL of the OpenID Connect metadata document. For Microsoft Entra, use <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>https://login.microsoftonline.com/[tenant-guid]/v2.0/<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/>. The URL may optionally end with <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>.well-known/openid-configuration<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/></source>
+        <target>URL van het OpenID Connect metadata document. Voor Microsoft Entra, gebruik <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>https://login.microsoftonline.com/[tenant-guid]/v2.0/<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/>. De URL kan optioneel eindigen met <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>.well-known/openid-configuration<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/></target>
+      </trans-unit>
       <trans-unit id="admin-core.oidc.status" datatype="html">
         <source>Status</source>
         <target>Status</target>
