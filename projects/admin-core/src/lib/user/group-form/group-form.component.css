@@ -13,3 +13,7 @@ form {
   margin-left: 16px;
   max-width: 500px;
 }
+
+mat-header-cell {
+  font-weight: bold;
+}

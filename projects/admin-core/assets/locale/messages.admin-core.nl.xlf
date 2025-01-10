@@ -978,6 +978,10 @@
         <source>Label</source>
         <target>Label</target>
       </trans-unit>
+      <trans-unit id="admin-core.common.last-seen" datatype="html">
+        <source>Last seen</source>
+        <target>Laatst gezien</target>
+      </trans-unit>
       <trans-unit id="admin-core.common.login" datatype="html">
         <source>Login</source>
         <target>Inloggen</target>
@@ -1324,7 +1328,7 @@
       </trans-unit>
       <trans-unit id="admin-core.groups.alias-for-hint" datatype="html">
         <source>Members of this group will also be added to the group specified in &apos;Alias for group&apos; upon logging in. This is useful for mapping a single sign-on group to another group, such as &apos;admin&apos;. Note that nested aliases are not supported.</source>
-        <target>Leden van deze groep worden bij het inloggen ook toegevoegd aan de groep die is opgegeven in 'Alias voor groep'. Dit is handig voor het koppelen van een single sign-on groep aan een andere groep, zoals 'admin'. Merk op dat geneste aliassen niet worden ondersteund.</target>
+        <target>Leden van deze groep worden bij het inloggen ook toegevoegd aan de groep die is opgegeven in &apos;Alias voor groep&apos;. Dit is handig voor het koppelen van een single sign-on groep aan een andere groep, zoals &apos;admin&apos;. Merk op dat geneste aliassen niet worden ondersteund.</target>
       </trans-unit>
       <trans-unit id="admin-core.groups.delete-group-confirm" datatype="html">
         <source>Delete group <x id="PH" equiv-text="group.name"/></source>
@@ -1373,6 +1377,14 @@
       <trans-unit id="admin-core.groups.groups" datatype="html">
         <source>Groups</source>
         <target>Groepen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.groups.oidc-description" datatype="html">
+        <source>A role named <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/><x id="INTERPOLATION" equiv-text="{{group?.name}}"/><x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/> was received from the following OIDC registration<x id="INTERPOLATION_1" equiv-text="{{ oidcConfigurations.length &gt; 1 ? &apos;s&apos; : &apos;&apos;}}"/>. Users logged in via an OIDC registration with that role get the authorizations of this group.</source>
+        <target>Een rol genaamd <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/><x id="INTERPOLATION" equiv-text="{{group?.name}}"/><x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/> werd ontvangen van de volgende OIDC-registratie<x id="INTERPOLATION_1" equiv-text="{{ oidcConfigurations.length &gt; 1 ? &apos;s&apos; : &apos;&apos;}}"/>. Gebruikers die inloggen via een OIDC-registratie met die rol krijgen de autorisaties van deze groep.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.groups.oidc-header" datatype="html">
+        <source>OIDC registrations</source>
+        <target state="new">OIDC registraties</target>
       </trans-unit>
       <trans-unit id="admin-core.groups.system-group" datatype="html">
         <source>System group</source>

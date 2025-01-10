@@ -978,6 +978,10 @@
         <source>Label</source>
         <target>Bezeichnung</target>
       </trans-unit>
+      <trans-unit id="admin-core.common.last-seen" datatype="html">
+        <source>Last seen</source>
+        <target>Zuletzt gesehen</target>
+      </trans-unit>
       <trans-unit id="admin-core.common.login" datatype="html">
         <source>Login</source>
         <target>Anmelden</target>
@@ -1324,7 +1328,7 @@
       </trans-unit>
       <trans-unit id="admin-core.groups.alias-for-hint" datatype="html">
         <source>Members of this group will also be added to the group specified in &apos;Alias for group&apos; upon logging in. This is useful for mapping a single sign-on group to another group, such as &apos;admin&apos;. Note that nested aliases are not supported.</source>
-        <target>Mitglieder dieser Gruppe werden beim Einloggen auch der in 'Alias für Gruppe' angegebenen Gruppe hinzugefügt. Dies ist nützlich, um eine Single-Sign-On-Gruppe einer anderen Gruppe zuzuordnen, wie z.B. 'admin'. Beachten Sie, dass verschachtelte Aliase nicht unterstützt werden.</target>
+        <target>Mitglieder dieser Gruppe werden beim Einloggen auch der in &apos;Alias für Gruppe&apos; angegebenen Gruppe hinzugefügt. Dies ist nützlich, um eine Single-Sign-On-Gruppe einer anderen Gruppe zuzuordnen, wie z.B. &apos;admin&apos;. Beachten Sie, dass verschachtelte Aliase nicht unterstützt werden.</target>
       </trans-unit>
       <trans-unit id="admin-core.groups.delete-group-confirm" datatype="html">
         <source>Delete group <x id="PH" equiv-text="group.name"/></source>
@@ -1373,6 +1377,14 @@
       <trans-unit id="admin-core.groups.groups" datatype="html">
         <source>Groups</source>
         <target>Gruppen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.groups.oidc-description" datatype="html">
+        <source>A role named <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/><x id="INTERPOLATION" equiv-text="{{group?.name}}"/><x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/> was received from the following OIDC registration<x id="INTERPOLATION_1" equiv-text="{{ oidcConfigurations.length &gt; 1 ? &apos;s&apos; : &apos;&apos;}}"/>. Users logged in via an OIDC registration with that role get the authorizations of this group.</source>
+        <target>Eine Rolle mit dem Namen <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/><x id="INTERPOLATION" equiv-text="{{group?.name}}"/><x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/> wurde von der folgenden OIDC-Registrierung<x id="INTERPOLATION_1" equiv-text="{{ oidcConfigurations.length &gt; 1 ? &apos;en&apos; : &apos;&apos;}}"/> empfangen. Benutzer, die sich über eine OIDC-Registrierung mit dieser Rolle anmelden, erhalten die Berechtigungen dieser Gruppe.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.groups.oidc-header" datatype="html">
+        <source>OIDC registrations</source>
+        <target>OIDC-Registrierungen</target>
       </trans-unit>
       <trans-unit id="admin-core.groups.system-group" datatype="html">
         <source>System group</source>

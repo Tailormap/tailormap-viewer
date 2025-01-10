@@ -31,12 +31,17 @@
   @let oidcConfigurations = oidcConfigurations$ | async;
   @if (oidcConfigurations && oidcConfigurations.length > 0) {
     <div class="oidc-table">
-      <p>This group was received from the following OIDC registrations:
-      <p>
+      <h4 i18n="@@admin-core.groups.oidc-header">OIDC registrations</h4>
+      <p i18n="@@admin-core.groups.oidc-description">A role named <b>{{group?.name}}</b> was received from the following OIDC registration{{ oidcConfigurations.length > 1 ? 's' : ''}}. Users logged in via an OIDC registration with that role get the authorizations of this group.</p>
       <mat-table [dataSource]="oidcConfigurations" class="mat-elevation-z1">
         <ng-container matColumnDef="name">
           <mat-header-cell *matHeaderCellDef i18n="@@admin-core.common.name">Name</mat-header-cell>
-          <mat-cell *matCellDef="let oidcConfiguration">{{ oidcConfiguration.name ? oidcConfiguration.name : oidcConfiguration.clientId }}</mat-cell>
+          <mat-cell *matCellDef="let oidcConfiguration">
+            <a [routerLink]="'/admin/settings/oidc-configurations/oidc-configuration/' + oidcConfiguration.id">
+              {{ oidcConfiguration.name ? oidcConfiguration.name : oidcConfiguration.clientId }}
+           </a>
+          </mat-cell>
+
         </ng-container>
 
         <ng-container matColumnDef="lastSeen">
