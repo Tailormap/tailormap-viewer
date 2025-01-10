@@ -17,3 +17,7 @@ form {
 mat-header-cell {
   font-weight: bold;
 }
+
+.last-seen {
+  white-space: nowrap;
+}

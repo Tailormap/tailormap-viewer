@@ -46,13 +46,11 @@
 
         <ng-container matColumnDef="lastSeen">
           <mat-header-cell *matHeaderCellDef i18n="@@admin-core.common.last-seen">Last seen</mat-header-cell>
-          <mat-cell *matCellDef="let oidcConfiguration">{{ oidcConfiguration.lastSeen | date: 'medium' }}</mat-cell>
+          <mat-cell class="last-seen" *matCellDef="let oidcConfiguration">{{ oidcConfiguration.lastSeen | date: 'medium' }}</mat-cell>
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="['name', 'lastSeen']"></mat-header-row>
-        @for(oidcConfiguration of oidcConfigurations$ | async; track oidcConfiguration.clientId) {
-          <mat-row *matRowDef="let row; columns: ['name', 'lastSeen'];"></mat-row>
-        }
+        <mat-row *matRowDef="let row; columns: ['name', 'lastSeen'];"></mat-row>
       </mat-table>
    </div>
   }
