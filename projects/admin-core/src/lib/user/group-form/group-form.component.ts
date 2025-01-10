@@ -85,7 +85,7 @@ export class GroupFormComponent implements OnInit, OnDestroy {
     this.oidcConfigurations$ =
       combineLatest( [ this.groupSubject.asObservable(), this.oidcConfigurationService.getOIDCConfigurations$() ] ).pipe(
         takeUntil(this.destroyed),
-        map(([group, oidcConfigurations]) => {
+        map(([ group, oidcConfigurations ]) => {
           if (group == null) {
             return [];
           }
