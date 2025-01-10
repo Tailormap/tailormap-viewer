@@ -33,6 +33,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
     name: new FormControl<string>('', { nonNullable: false }),
     enabled: new FormControl<boolean>(true, { nonNullable: true }),
     validUntil: new FormControl<string>('', { nonNullable: false }),
+    notes: new FormControl<string>('', { nonNullable: false }),
     groups: new FormControl<string[]>([], { nonNullable: false }),
   }, {
     validators: [
@@ -54,6 +55,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
       enabled: user ? user.enabled : true,
       // HTML input expects 2023-10-27T01:22:00.000, it seems problematic to set a Date object
       validUntil: (user && user.validUntil) ? formatDate(user.validUntil, 'yyyy-MM-ddTHH:mm:ss', 'en') : null,
+      notes: user ? user.notes : null,
       groups: user ? user.groupNames : [],
     });
     const defaultPasswordValidator = [Validators.minLength(8)];
@@ -114,6 +116,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
       name: this.userForm.get('name')?.value || null,
       enabled: this.userForm.get('enabled')?.value || false,
       validUntil: validUntilFromFormValue ? new Date(validUntilFromFormValue) : null,
+      notes: this.userForm.get('notes')?.value || null,
       groups: this.userForm.get('groups')?.value || [],
     };
     const passwd = this.userForm.get('password')?.value || '';
