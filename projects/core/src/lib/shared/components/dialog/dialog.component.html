@@ -9,6 +9,7 @@
 
   <div class="dialog-header">
     <h1>{{dialogTitle || ''}}</h1>
+    <ng-content select=".header-buttons"></ng-content>
     <button *ngIf="allowFullscreen" mat-icon-button class="toggle-button" (click)="toggleFullscreen()">
       <mat-icon *ngIf="!fullscreen" svgIcon="fullscreen"></mat-icon>
       <mat-icon *ngIf="fullscreen" svgIcon="fullscreen_exit"></mat-icon>

@@ -64,7 +64,7 @@ describe('UserEditComponent', () => {
     });
     await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save');
     const { groupNames, ...user } = getUser({ username: 'user1', name: 'user 123', groupNames: [], additionalProperties: [] });
-    expect(userService.addOrUpdateUser$).toHaveBeenCalledWith(false, { ...user, groups: [] });
+    expect(userService.addOrUpdateUser$).toHaveBeenCalledWith(false, { ...user, notes: null, groups: [] });
   });
 
   test('should delete user', async () => {
