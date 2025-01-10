@@ -1,0 +1,15 @@
+
+form {
+  display: flex;
+}
+
+.form-container {
+  flex: 1;
+  max-width: 500px;
+}
+
+.oidc-table {
+  flex: 1;
+  margin-left: 16px;
+  max-width: 500px;
+}
