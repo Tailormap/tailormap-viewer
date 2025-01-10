@@ -1322,6 +1322,10 @@
         <source>Add group</source>
         <target>Groep toevoegen</target>
       </trans-unit>
+      <trans-unit id="admin-core.groups.alias" datatype="html">
+        <source>Alias</source>
+        <target>Alias</target>
+      </trans-unit>
       <trans-unit id="admin-core.groups.alias-for" datatype="html">
         <source>Alias for group</source>
         <target>Alias voor groep</target>
@@ -1493,6 +1497,14 @@
       <trans-unit id="admin-core.oidc.filter-identity-providers" datatype="html">
         <source>Filter identity providers</source>
         <target>Identiteitsproviders filteren</target>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.groups-description" datatype="html">
+        <source>When a user logins with this OIDC registration, roles received are mapped to groups which are automatically created if they don&apos;t yet exist. The user gets the authorizations of the group and also any aliased group. The following roles have been received from this registration.</source>
+        <target>Wanneer een gebruiker inlogt met deze OIDC-registratie, worden ontvangen rollen toegewezen aan groepen die automatisch worden aangemaakt, als ze nog niet bestaan. De gebruiker krijgt de autorisaties van de groep en ook van elke ge-aliaste groep. De volgende rollen zijn ontvangen van deze registratie.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.groups-header" datatype="html">
+        <source>OIDC roles mapped to groups</source>
+        <target>OIDC rollen toegewezen aan groepen</target>
       </trans-unit>
       <trans-unit id="admin-core.oidc.identity-providers" datatype="html">
         <source>Identity providers</source>

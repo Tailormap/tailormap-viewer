@@ -971,6 +971,9 @@
       <trans-unit id="admin-core.groups.add-group" datatype="html">
         <source>Add group</source>
       </trans-unit>
+      <trans-unit id="admin-core.groups.alias" datatype="html">
+        <source>Alias</source>
+      </trans-unit>
       <trans-unit id="admin-core.groups.alias-for" datatype="html">
         <source>Alias for group</source>
       </trans-unit>
@@ -1099,6 +1102,12 @@
       </trans-unit>
       <trans-unit id="admin-core.oidc.filter-identity-providers" datatype="html">
         <source>Filter identity providers</source>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.groups-description" datatype="html">
+        <source>When a user logins with this OIDC registration, roles received are mapped to groups which are automatically created if they don&apos;t yet exist. The user gets the authorizations of the group and also any aliased group. The following roles have been received from this registration.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.groups-header" datatype="html">
+        <source>OIDC roles mapped to groups</source>
       </trans-unit>
       <trans-unit id="admin-core.oidc.identity-providers" datatype="html">
         <source>Identity providers</source>

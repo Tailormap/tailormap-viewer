@@ -1,1 +1,23 @@
 
+.oidc-configuration-edit-content {
+  display: flex;
+}
+
+tm-admin-oidc-configuration-edit-settings {
+  flex: 1;
+  max-width: 500px;
+}
+
+.linked-groups {
+  flex: 1;
+  margin-left: 16px;
+  max-width: 600px;
+}
+
+mat-header-cell {
+  font-weight: bold;
+}
+
+.last-seen {
+  white-space: nowrap;
+}
