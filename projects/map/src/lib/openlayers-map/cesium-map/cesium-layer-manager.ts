@@ -105,9 +105,10 @@ export class CesiumLayerManager {
           const primitive = scene3D.primitives.get(this.layers3D.get(layer.id) ?? 0);
           primitive.show = true;
         } else {
-          this.create3DLayer(layer)?.then(cesiumLayer => {
-            if (cesiumLayer) {
-              scene3D.primitives.add(cesiumLayer, this.layers3D.size);
+          const tileset3DLayerPromise = this.create3DLayer(layer);
+          tileset3DLayerPromise.then(tileset3DLayer => {
+            if (tileset3DLayer) {
+              scene3D.primitives.add(tileset3DLayer, this.layers3D.size);
               this.layers3D.set(layer.id, this.layers3D.size);
             }
           });
@@ -125,12 +126,18 @@ export class CesiumLayerManager {
     });
   }
 
-  private create3DLayer(
+  private async create3DLayer(
     layer: LayerModel,
-  ): Promise<Cesium3DTileset> | null {
+  ): Promise<Cesium3DTileset | null> {
     if (LayerTypesHelper.isTileset3DLayer(layer)) {
       const url = layer.url;
-      return Cesium.Cesium3DTileset.fromUrl(url);
+      try {
+        const tileset: Promise<Cesium3DTileset> = await Cesium.Cesium3DTileset.fromUrl(url);
+        return tileset;
+      } catch (error) {
+        console.log(`Error while creating Cesium3DTileset: ${error}`);
+      }
+      return null;
     }
     return null;
   }

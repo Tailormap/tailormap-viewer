@@ -40,7 +40,7 @@
               <mat-icon [svgIcon]="isExpanded(node) ? 'chevron_bottom' : 'chevron_right'"></mat-icon>
             </button>
           }
-          @if (node.checkbox && !useRadioInputs) {
+          @if (node.checkbox && !useRadioInputs && !singleLayerChecked) {
             <mat-checkbox [disabled]="readOnlyMode"
                           [aria-label]="'toggle ' + node.label"
                           (click)="$event.stopPropagation()"

@@ -59,6 +59,9 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
   @Input()
   public applicationStateTree: 'layer' | 'baseLayer' | 'terrainLayer' = 'layer';
 
+  @Input()
+  public singleLayerChecked = false;
+
   public treeNodes$: Observable<TreeModel<AppTreeNodeModel>[]> = of([]);
   public someExpanded$: Observable<boolean> = of(false);
 
@@ -149,6 +152,9 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(([ backgroundNodes, layerNodes, terrainLayerNodes ]) => {
         const node = ApplicationModelHelper.newApplicationTreeLayerNode(layer, [ ...backgroundNodes, ...layerNodes, ...terrainLayerNodes ]);
+        if (this.singleLayerChecked) {
+          node.visible = false;
+        }
         this.addNode(node, $event.toParent || undefined, $event.position, $event.sibling);
       });
   }
