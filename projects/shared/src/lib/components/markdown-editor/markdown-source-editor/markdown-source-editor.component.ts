@@ -43,9 +43,7 @@ export class MarkdownSourceEditorComponent implements OnInit {
     this.editorControl.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(content => {
-        if (content) {
-          this.mdEditorService.contentChanged(content);
-        }
+        this.mdEditorService.contentChanged(content || '');
       });
     this.mdEditorService.getContent$()
       .pipe(takeUntilDestroyed(this.destroyRef))
