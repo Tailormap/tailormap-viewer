@@ -5,13 +5,13 @@ import { getGroup } from '@tailormap-admin/admin-api';
 import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
 import { GroupService } from '../services/group.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SharedImportsModule } from '@tailormap-viewer/shared';
+import { SharedImportsModule, SpinnerButtonComponent } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
 import { GroupFormComponent } from '../group-form/group-form.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { SharedAdminComponentsModule } from '../../shared/components/shared-admin-components.module';
-import { SpinnerButtonComponent } from '@tailormap-viewer/shared';
+import { OIDCConfigurationService } from '../../oidc/services/oidc-configuration.service';
 
 const setup = async (hasGroup?: boolean) => {
   const activeRoute = {
@@ -24,6 +24,9 @@ const setup = async (hasGroup?: boolean) => {
     deleteGroup$: jest.fn(() => of(true)),
     addOrUpdateGroup$: jest.fn(() => of(true)),
   };
+  const oidcConfigurationService = {
+    getOIDCConfigurations$: jest.fn(() => of([])),
+  };
   const router = {
     navigateByUrl: jest.fn(),
   };
@@ -34,6 +37,7 @@ const setup = async (hasGroup?: boolean) => {
       { provide: ActivatedRoute, useValue: activeRoute },
       { provide: GroupService, useValue: groupService },
       { provide: Router, useValue: router },
+      { provide: OIDCConfigurationService, useValue: oidcConfigurationService },
     ],
   });
   return { groupService, router };
