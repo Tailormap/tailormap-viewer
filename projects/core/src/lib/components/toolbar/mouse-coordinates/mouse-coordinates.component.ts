@@ -16,7 +16,7 @@ export class MouseCoordinatesComponent implements OnInit, OnDestroy {
 
   constructor(
     private mapService: MapService,
-  ) {}
+  ) { }
 
   public ngOnInit(): void {
     this.coordinates$ = this.mapService.createTool$<MousePositionToolModel, MousePositionToolConfigModel>({

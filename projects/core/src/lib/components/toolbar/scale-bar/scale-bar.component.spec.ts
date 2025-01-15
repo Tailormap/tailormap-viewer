@@ -1,8 +1,6 @@
 import { render, screen } from '@testing-library/angular';
 import { ScaleBarComponent } from './scale-bar.component';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
-import { provideMockStore } from '@ngrx/store/testing';
-import { selectIn3DView } from '../../../map/state/map.selectors';
 
 describe('ScaleBarComponent', () => {
 
@@ -14,12 +12,7 @@ describe('ScaleBarComponent', () => {
     };
     const mapServiceMock = getMapServiceMock(() => mockTool);
     await render(ScaleBarComponent, {
-      providers: [
-        mapServiceMock.provider,
-        provideMockStore({
-          selectors: [{ selector: selectIn3DView, value: false }],
-        }),
-      ],
+      providers: [mapServiceMock.provider],
     });
     expect(mapServiceMock.createTool$).toHaveBeenCalled();
     expect(mockTool.setTarget).toHaveBeenCalled();

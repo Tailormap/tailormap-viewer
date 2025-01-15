@@ -19,7 +19,7 @@ export class ScaleBarComponent implements OnInit, OnDestroy {
 
   constructor(
     private mapService: MapService,
-  ) {}
+  ) { }
 
   public ngOnInit(): void {
     this.mapService.createTool$<ScaleBarToolModel, ScaleBarToolConfigModel>({

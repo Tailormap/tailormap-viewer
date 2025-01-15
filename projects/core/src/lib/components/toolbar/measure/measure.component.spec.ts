@@ -12,7 +12,6 @@ import { Store } from '@ngrx/store';
 import { activateTool, deactivateTool, registerTool } from '../state/toolbar.actions';
 import { selectComponentsConfig } from '../../../state/core.selectors';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
-import { selectIn3DView } from '../../../map/state/map.selectors';
 
 const setup = async () => {
   const tooltipMock: any = {
@@ -34,7 +33,6 @@ const setup = async () => {
     selectors: [
       { selector: selectActiveTool, value: ToolbarComponentEnum.MEASURE },
       { selector: selectComponentsConfig, value: [] },
-      { selector: selectIn3DView, value: false },
     ],
   });
   const mockDispatch = jest.fn();
