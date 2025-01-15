@@ -3,7 +3,7 @@ ARG VERSION=snapshot
 ARG API_VERSION=snapshot
 
 # Note when updating this version also update the version in the workflow files
-FROM --platform=linux/amd64 node:22.12.0 AS builder
+FROM --platform=linux/amd64 node:22.13.0 AS builder
 
 ARG BASE_HREF=/
 

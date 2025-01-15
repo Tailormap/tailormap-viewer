@@ -49,6 +49,7 @@ describe('UserFormComponent', () => {
         validUntil: null,
         groups: [],
         password: 'secret-secret',
+        notes: null,
         additionalProperties: [],
       });
     });

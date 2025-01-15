@@ -983,6 +983,12 @@
       <trans-unit id="admin-core.groups.add-group" datatype="html">
         <source>Add group</source>
       </trans-unit>
+      <trans-unit id="admin-core.groups.alias-for" datatype="html">
+        <source>Alias for group</source>
+      </trans-unit>
+      <trans-unit id="admin-core.groups.alias-for-hint" datatype="html">
+        <source>Members of this group will also be added to the group specified in &apos;Alias for group&apos; upon logging in. This is useful for mapping a single sign-on group to another group, such as &apos;admin&apos;. Note that nested aliases are not supported.</source>
+      </trans-unit>
       <trans-unit id="admin-core.groups.delete-group-confirm" datatype="html">
         <source>Delete group <x id="PH" equiv-text="group.name"/></source>
       </trans-unit>
