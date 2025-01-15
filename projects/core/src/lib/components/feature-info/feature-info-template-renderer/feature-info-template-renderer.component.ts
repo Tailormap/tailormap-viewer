@@ -31,11 +31,11 @@ export class FeatureInfoTemplateRendererComponent implements OnChanges {
       this.rendererTemplate.set(null);
       return;
     }
-    const replacementMap = new Map<string, string>();
+    const replacementMap = new Map<string, string | null>();
     this.feature?.sortedAttributes.forEach(a => {
       const value = MarkdownHelper.markdownEscape(a.attributeValue);
       replacementMap.set(a.key, value);
-      replacementMap.set(MarkdownHelper.markdownEscape(a.key), value);
+      replacementMap.set(MarkdownHelper.markdownEscape(a.key) || '', value);
     });
     const replaced = MarkdownHelper.templateParser(this.template, replacementMap);
     MarkdownHelper.getSafeHtmlForMarkdown$(replaced ?? '', this.sanitizer)

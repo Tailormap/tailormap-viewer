@@ -8,7 +8,6 @@
     @defer {
       <tm-admin-feature-type-template [attributes]="featureType.attributes"
                                       [featureTypeSettings]="featureTypeSettings$ | async"
-                                      [template]="featureType.settings.template"
                                       (templateUpdated)="templateUpdated($event)"></tm-admin-feature-type-template>
     }
     <tm-admin-feature-type-attributes [attributes]="featureType.attributes"
