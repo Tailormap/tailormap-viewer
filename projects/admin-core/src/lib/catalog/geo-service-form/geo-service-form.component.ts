@@ -131,4 +131,15 @@ export class GeoServiceFormComponent implements OnInit {
       return $localize `:@@admin-core.catalog.not-set:Not set`;
     }
   }
+
+  public prettyName(protocol: GeoServiceProtocolEnum) {
+    switch (protocol) {
+      case GeoServiceProtocolEnum.TILESET3D:
+        return '3D Tileset';
+      case GeoServiceProtocolEnum.QUANTIZEDMESH:
+        return $localize `:@@admin-core.catalog.quantizedmesh:Quantized Mesh (Terrain model)`;
+      default:
+        return protocol;
+    }
+  }
 }

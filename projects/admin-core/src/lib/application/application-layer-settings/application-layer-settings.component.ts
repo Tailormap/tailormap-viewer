@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import {
-  AppLayerSettingsModel, AppTreeLayerNodeModel, FeatureTypeModel, FormModel, FormSummaryModel, SearchIndexModel,
+  AppLayerSettingsModel, AppTreeLayerNodeModel, FeatureTypeModel, FormModel, FormSummaryModel, GeoServiceProtocolEnum, SearchIndexModel,
 } from '@tailormap-admin/admin-api';
 import { Store } from '@ngrx/store';
 import { selectSelectedApplicationLayerSettings } from '../state/application.selectors';
@@ -53,6 +53,8 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
   public layerTitle = '';
   public searchIndexEnabled$: Observable<boolean>;
 
+  public isLayer3D = false;
+
   @Input()
   public set node(node: TreeModel<AppTreeLayerNodeModel> | null) {
     this._node = node;
@@ -68,6 +70,8 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     this._serviceLayer = serviceLayer;
     this.initFeatureSource(serviceLayer);
     this.setTitle();
+    this.isLayer3D = serviceLayer?.service.protocol === GeoServiceProtocolEnum.TILESET3D ||
+      serviceLayer?.service.protocol === GeoServiceProtocolEnum.QUANTIZEDMESH;
   }
   public get serviceLayer(): ExtendedGeoServiceAndLayerModel | null {
     return this._serviceLayer;
