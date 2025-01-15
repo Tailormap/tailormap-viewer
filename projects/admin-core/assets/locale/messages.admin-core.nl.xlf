@@ -730,6 +730,10 @@
         <source>Proxy enabled</source>
         <target>Proxy ingeschakeld</target>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.quantizedmesh" datatype="html">
+        <source>Quantized Mesh (Terrain model)</source>
+        <target>Quantized Mesh (Terrein model)</target>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.readonly-in-catalog" datatype="html">
         <source>This attribute is set to not editable in the catalog and cannot be changed here</source>
         <target>Dit attribuut is ingesteld als niet te bewerken in de catalogus en kan hier niet aangepast worden</target>
@@ -1050,10 +1054,6 @@
         <source>Saved</source>
         <target>Opgeslagen</target>
       </trans-unit>
-      <trans-unit id="admin-core.common.summary" datatype="html">
-        <source>Summary</source>
-        <target>Samenvatting</target>
-      </trans-unit>
       <trans-unit id="admin-core.common.search-indexes-title" datatype="html">
         <source>Search Indexes</source>
         <target>Zoekindexen</target>
@@ -1081,6 +1081,10 @@
       <trans-unit id="admin-core.common.sort" datatype="html">
         <source>Sort</source>
         <target>Sorteren</target>
+      </trans-unit>
+      <trans-unit id="admin-core.common.summary" datatype="html">
+        <source>Summary</source>
+        <target>Samenvatting</target>
       </trans-unit>
       <trans-unit id="admin-core.common.tailormap-admin-title" datatype="html">
         <source>Tailormap Admin</source>
@@ -1638,6 +1642,10 @@
         <source>Selected attributes used to index</source>
         <target>Geselecteerde attributen die worden geïndexeerd</target>
       </trans-unit>
+      <trans-unit id="admin-core.search-index.summary" datatype="html">
+        <source>Last indexing started at <x id="INTERPOLATION" equiv-text="{{ searchIndex?.summary?.startedAt | date:&apos;medium&apos; }}"/> and took <x id="INTERPOLATION_1" equiv-text="{{ searchIndex?.summary?.duration | number: &apos;1.1-2&apos; }}"/> seconds, skipped <x id="INTERPOLATION_2" equiv-text="{{ searchIndex?.summary?.skippedCounter }}"/> of <x id="INTERPOLATION_3" equiv-text="{{ searchIndex?.summary?.total }}"/> features.</source>
+        <target state="new">Laatste indexering gestart op <x id="INTERPOLATION" equiv-text="{{ searchIndex.summary?.startedAt | date:&apos;medium&apos; }}"/> en duurde <x id="INTERPOLATION_1" equiv-text="{{ searchIndex.summary?.duration | number: &apos;1.1-2&apos;}}"/> seconden, er zijn <x id="INTERPOLATION_2" equiv-text="{{ searchIndex.summary?.skippedCounter }}"/> objecten van <x id="INTERPOLATION_3" equiv-text="{{ searchIndex.summary?.total }}"/> overgeslagen.</target>
+      </trans-unit>
       <trans-unit id="admin-core.search-index.unavailable" datatype="html">
         <source>Search indexes are not available. This may be because Solr is not deployed or not operating correctly.</source>
         <target>Zoekindexen zijn niet beschikbaar. Dit kan zijn omdat Solr niet is gedeployed of niet correct functioneert.</target>
@@ -1645,16 +1653,6 @@
       <trans-unit id="admin-core.search-index.unavailable.message" datatype="html">
         <source>Error code <x id="INTERPOLATION" equiv-text="{{ pingResponse.code }}"/>, message: <x id="INTERPOLATION_1" equiv-text="{{ pingResponse.message }}"/></source>
         <target>Foutcode <x id="INTERPOLATION" equiv-text="{{ pingResponse.code }}"/>, melding: <x id="INTERPOLATION_1" equiv-text="{{ pingResponse.message }}"/></target>
-      </trans-unit>
-      <trans-unit id="admin-core.search-index.summary" datatype="html">
-        <source>Last indexing started at <x id="INTERPOLATION" equiv-text="{{ searchIndex.summary?.startedAt | date:'medium' }}"/> and took
-          <x id="INTERPOLATION_1" equiv-text="{{ searchIndex.summary?.duration | number: '2.1-2'}}"/> seconds, skipped
-          <x id="INTERPOLATION_2" equiv-text="{{ searchIndex.summary?.skippedCounter }}"/> of
-          <x id="INTERPOLATION_3" equiv-text="{{ searchIndex.summary?.total }}"/> features.</source>
-        <target>Laatste indexering gestart op <x id="INTERPOLATION" equiv-text="{{ searchIndex.summary?.startedAt | date:'medium' }}"/> en duurde
-          <x id="INTERPOLATION_1" equiv-text="{{ searchIndex.summary?.duration | number: '1.1-2'}}"/> seconden, er zijn
-          <x id="INTERPOLATION_2" equiv-text="{{ searchIndex.summary?.skippedCounter }}"/> objecten van
-          <x id="INTERPOLATION_3" equiv-text="{{ searchIndex.summary?.total }}"/> overgeslagen.</target>
       </trans-unit>
       <trans-unit id="admin-core.select-upload.file-in-use" datatype="html">
         <source>File is still in use</source>
