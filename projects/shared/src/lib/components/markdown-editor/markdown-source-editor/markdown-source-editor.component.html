@@ -5,5 +5,5 @@
       <textarea matInput [formControl]="editorControl" cdkTextareaAutosize cdkAutosizeMinRows="6" cdkAutosizeMaxRows="30" #editor></textarea>
     </mat-form-field>
   </div>
-  <div class="markdown-preview" [innerHTML]="markdownPreview()"></div>
+  <div class="markdown-preview" [innerHTML]="htmlPreview$ | async"></div>
 </div>
