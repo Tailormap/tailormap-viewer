@@ -3,6 +3,8 @@ import { RegisteredComponentsRendererComponent } from './registered-components-r
 import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { of } from 'rxjs';
 import { ComponentRegistrationService } from '../../services/component-registration.service';
+import { provideMockStore } from '@ngrx/store/testing';
+import { selectIn3DView } from '../../map/state/map.selectors';
 
 @Component({
   selector: 'tm-testing',
@@ -23,6 +25,7 @@ describe('RegisteredComponentsRendererComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [
         { provide: ComponentRegistrationService, useValue: mockedControlsService },
+        provideMockStore({ selectors: [{ selector: selectIn3DView, value: false }] }),
       ],
     });
     expect(await screen.findByText(/TESTING CONTROLS/)).toBeInTheDocument();

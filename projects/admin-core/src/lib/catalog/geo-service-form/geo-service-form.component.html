@@ -23,7 +23,7 @@
   </mat-form-field>
   <mat-form-field>
     <mat-select formControlName="protocol">
-      <mat-option *ngFor="let protocol of protocols" [value]="protocol">{{ protocol }}</mat-option>
+      <mat-option *ngFor="let protocol of protocols" [value]="protocol">{{ prettyName(protocol) }}</mat-option>
     </mat-select>
   </mat-form-field>
   <mat-form-field *ngIf="isXyz()">

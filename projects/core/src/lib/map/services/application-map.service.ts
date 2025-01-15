@@ -1,19 +1,22 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
-  LayerModel, LayerTypesEnum, MapService, OgcHelper, ServiceLayerModel, WMSLayerModel, WMTSLayerModel, XyzLayerModel,
+  LayerModel, LayerTypesEnum, MapService, OgcHelper, ServiceLayerModel, WMSLayerModel, WMTSLayerModel, XyzLayerModel, Tileset3DLayerModel,
 } from '@tailormap-viewer/map';
-import { combineLatest, concatMap, distinctUntilChanged, filter, forkJoin, map, Observable, of, Subject, take, takeUntil, tap } from 'rxjs';
+import {
+  combineLatest, concatMap, distinctUntilChanged, filter, first, forkJoin, map, Observable, of, Subject, take, takeUntil, tap,
+} from 'rxjs';
 import { ServiceModel, ServiceProtocol } from '@tailormap-viewer/api';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { ArrayHelper, HtmlifyHelper } from '@tailormap-viewer/shared';
-import { selectMapOptions, selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersWithServices } from '../state/map.selectors';
+import { selectMapOptions, selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersWithServices, select3Dlayers } from '../state/map.selectors';
 import { ExtendedAppLayerModel } from '../models';
 import { selectCQLFilters } from '../../filter/state/filter.selectors';
 import { withLatestFrom } from 'rxjs/operators';
 import { BookmarkService } from '../../services/bookmark/bookmark.service';
 import { MapBookmarkHelper } from '../../services/application-bookmark/bookmark.helper';
 import { ApplicationBookmarkFragments } from '../../services/application-bookmark/application-bookmark-fragments';
+import { selectEnable3D } from '../../state/core.selectors';
 import { ApplicationLayerRefreshService } from './application-layer-refresh.service';
 
 @Injectable({
@@ -71,6 +74,20 @@ export class ApplicationMapService implements OnDestroy {
       .subscribe(([ layers, layerManager ]) => {
         layerManager.setLayers(layers.filter(isValidLayer));
       });
+
+    this.store$.select(selectEnable3D)
+      .pipe(first(enable3D => enable3D))
+      .subscribe(() =>  {
+        this.mapService.make3D$();
+        this.store$.select(select3Dlayers)
+          .pipe(
+            takeUntil(this.destroyed),
+            concatMap(layers => this.get3DLayersAndLayerManager$(layers)),
+          )
+          .subscribe(([ layers, layerManager ]) => {
+            layerManager.addLayers(layers.filter(isValidLayer));
+          });
+      });
   }
 
   public selectOrderedVisibleLayersWithFilters$() {
@@ -90,6 +107,15 @@ export class ApplicationMapService implements OnDestroy {
     return forkJoin([
       layers$.length > 0 ? forkJoin(layers$) : of([]),
       this.mapService.getLayerManager$().pipe(take(1)),
+    ]);
+  }
+
+  private get3DLayersAndLayerManager$(serviceLayers: ExtendedAppLayerModel[]) {
+    const layers$ = serviceLayers
+      .map(layer => this.convertAppLayerToMapLayer$(layer));
+    return forkJoin([
+      layers$.length > 0 ? forkJoin(layers$) : of([]),
+      this.mapService.getCesiumLayerManager$().pipe(take(1)),
     ]);
   }
 
@@ -153,6 +179,20 @@ export class ApplicationMapService implements OnDestroy {
         maxZoom: extendedAppLayer.maxZoom,
         tileSize: extendedAppLayer.tileSize,
         tileGridExtent: extendedAppLayer.tileGridExtent,
+      };
+      return of(layer);
+    }
+    if (service.protocol === ServiceProtocol.TILESET3D) {
+      const layer: Tileset3DLayerModel = {
+        ...defaultLayerProps,
+        layerType: LayerTypesEnum.TILESET3D,
+      };
+      return of(layer);
+    }
+    if (service.protocol === ServiceProtocol.QUANTIZEDMESH) {
+      const layer: Tileset3DLayerModel = {
+        ...defaultLayerProps,
+        layerType: LayerTypesEnum.QUANTIZEDMESH,
       };
       return of(layer);
     }

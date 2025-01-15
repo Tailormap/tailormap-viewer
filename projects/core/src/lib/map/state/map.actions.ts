@@ -56,6 +56,10 @@ export const setSelectedBackgroundNodeId = createAction(
   `${mapActionsPrefix} Set Selected Background Node ID`,
   props<{ id: string }>(),
 );
+export const setSelectedTerrainNodeId = createAction(
+  `${mapActionsPrefix} Set Selected Terrain Node ID`,
+  props<{ id: string }>(),
+);
 export const setLayerOpacity = createAction(
   `${mapActionsPrefix} Set Layer Opacity`,
   props<{ opacity: Array<{ id: string; opacity: number }> }>(),
@@ -67,4 +71,7 @@ export const addLayerDetails = createAction(
 export const updateLayerTreeNodes = createAction(
   `${mapActionsPrefix} Update Layer Tree`,
   props<{ layerTreeNodes: ExtendedLayerTreeNodeModel[] }>(),
+);
+export const toggleIn3DView = createAction(
+  `${mapActionsPrefix} Toggle In3DView`,
 );

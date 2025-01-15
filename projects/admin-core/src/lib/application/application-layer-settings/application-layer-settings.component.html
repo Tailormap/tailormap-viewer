@@ -9,10 +9,12 @@
     <mat-label i18n="@@admin-core.common.title">Title</mat-label>
     <input matInput formControlName="title" />
   </mat-form-field>
-  <div class="form-field form-field__slider">
-    <strong i18n="@@admin-core.application.opacity">Opacity</strong>
-    <tm-slider formControlName="opacity"></tm-slider>
-  </div>
+  @if (!isLayer3D) {
+    <div class="form-field form-field__slider">
+      <strong i18n="@@admin-core.application.opacity">Opacity</strong>
+      <tm-slider formControlName="opacity"></tm-slider>
+    </div>
+  }
   <mat-form-field>
     <mat-label i18n="@@admin-core.common.attribution">Attribution</mat-label>
     <input matInput formControlName="attribution" />
@@ -27,57 +29,60 @@
               cdkAutosizeMinRows="4"
               cdkAutosizeMaxRows="10"></textarea>
   </mat-form-field>
-  <mat-form-field>
-    <mat-label i18n="@@admin-core.application.autoRefreshInSeconds">Auto refresh the layer (seconds)</mat-label>
-    <input type="number" matInput formControlName="autoRefreshInSeconds" />
-  </mat-form-field>
-  <div *ngIf="featureSourceAndType$ | async as featureSourceAndType" class="edit-layer-attributes">
-    <button *ngIf="featureSourceAndType.featureType?.hasAttributes"
-            mat-stroked-button
-            (click)="editAppLayerAttribute($event, featureSourceAndType)">
-      Edit attribute columns for application layer
-      <mat-icon svgIcon="edit_square" iconPositionEnd></mat-icon>
-    </button>
-  </div>
-  <span [tmTooltip]="editableTooltip$ | async">
+  @if (!isLayer3D) {
+    <mat-form-field>
+      <mat-label i18n="@@admin-core.application.autoRefreshInSeconds">Auto refresh the layer (seconds)</mat-label>
+      <input type="number" matInput formControlName="autoRefreshInSeconds" />
+    </mat-form-field>
+    <div *ngIf="featureSourceAndType$ | async as featureSourceAndType" class="edit-layer-attributes">
+      <button *ngIf="featureSourceAndType.featureType?.hasAttributes"
+              mat-stroked-button
+              (click)="editAppLayerAttribute($event, featureSourceAndType)">
+        Edit attribute columns for application layer
+        <mat-icon svgIcon="edit_square" iconPositionEnd></mat-icon>
+      </button>
+    </div>
+    <span [tmTooltip]="editableTooltip$ | async">
     <mat-checkbox formControlName="editable">
       <span i18n="@@admin-core.application.editable">Editable</span>
     </mat-checkbox>
-  </span>
-  @if (layerSettingsForm.get('editable')?.value) {
-    @if ((selectableForms$ | async)?.length) {
-      <mat-form-field>
-        <mat-label i18n="@@admin-core.application.select-form">Select (optional) form</mat-label>
-        <mat-select formControlName="formId">
-          <mat-option [value]="null" i18n="@@admin-core.application.no-form">No form</mat-option>
-          @for (form of (selectableForms$ | async); track form.id) {
-            <mat-option [value]="form.id">{{form.name}}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
+    </span>
+    @if (layerSettingsForm.get('editable')?.value) {
+      @if ((selectableForms$ | async)?.length) {
+        <mat-form-field>
+          <mat-label i18n="@@admin-core.application.select-form">Select (optional) form</mat-label>
+          <mat-select formControlName="formId">
+            <mat-option [value]="null" i18n="@@admin-core.application.no-form">No form</mat-option>
+            @for (form of (selectableForms$ | async); track form.id) {
+              <mat-option [value]="form.id">{{form.name}}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
 
-      @if (formWarningMessageData$ | async; as formWarningMessageData) {
-        <tm-admin-form-warning-message [featureType]="formWarningMessageData.featureType"
-                                       [applicationLayerSetting]="formWarningMessageData.layerSetting"
-                                       [form]="formWarningMessageData.form"></tm-admin-form-warning-message>
+        @if (formWarningMessageData$ | async; as formWarningMessageData) {
+          <tm-admin-form-warning-message [featureType]="formWarningMessageData.featureType"
+                                         [applicationLayerSetting]="formWarningMessageData.layerSetting"
+                                         [form]="formWarningMessageData.form"></tm-admin-form-warning-message>
+        }
+      } @else {
+        <div i18n="@@admin-core.application.no-forms-for-feature-type">There are no forms for this feature type</div>
       }
-    } @else {
-      <div i18n="@@admin-core.application.no-forms-for-feature-type">There are no forms for this feature type</div>
+    }
+    @if ((searchIndexEnabled$ | async)) {
+      @if ((selectableSearchIndexes$ | async)?.length) {
+        <mat-form-field>
+          <mat-label i18n="@@admin-core.application.select-search-index">Select search index</mat-label>
+          <mat-select formControlName="searchIndexId">
+            <mat-option [value]="null" i18n="@@admin-core.application.no-search-index">No search index</mat-option>
+            @for (searchIndex of (selectableSearchIndexes$ | async); track searchIndex.id) {
+              <mat-option [value]="searchIndex.id">{{ searchIndex.name }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      } @else {
+        <div i18n="@@admin-core.application.no-search-indexes-for-feature-type">There are no search indexes for this feature type</div>
+      }
     }
   }
-  @if (searchIndexEnabled$ | async) {
-    @if ((selectableSearchIndexes$ | async)?.length) {
-      <mat-form-field>
-        <mat-label i18n="@@admin-core.application.select-search-index">Select search index</mat-label>
-        <mat-select formControlName="searchIndexId">
-          <mat-option [value]="null" i18n="@@admin-core.application.no-search-index">No search index</mat-option>
-          @for (searchIndex of (selectableSearchIndexes$ | async); track searchIndex.id) {
-            <mat-option [value]="searchIndex.id">{{ searchIndex.name }}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
-    } @else {
-      <div i18n="@@admin-core.application.no-search-indexes-for-feature-type">There are no search indexes for this feature type</div>
-    }
-  }
+
 </form>
