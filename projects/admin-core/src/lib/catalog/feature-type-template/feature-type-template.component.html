@@ -3,10 +3,10 @@
     <mat-card-title i18n="@@admin-core.catalog.feature-type-template">Feature info template</mat-card-title>
     <mat-card-content>
       @defer {
-        <tm-markdown-editor [content]="templateContent()"
+        <tm-markdown-editor [content]="template?.template"
                             [uploadService$]="uploadImage$"
                             (contentChanged)="templateChanged($event)"
-                            [templatePicklistConfig]="templatePicklistConfig()"></tm-markdown-editor>
+                            [templatePicklistConfig]="templatePicklistConfig"></tm-markdown-editor>
       }
     </mat-card-content>
   </mat-card>
