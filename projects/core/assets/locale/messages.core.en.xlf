@@ -764,7 +764,10 @@
       <trans-unit id="core.toolbar.share-viewer-embed-url" datatype="html">
         <source>Embed URL</source>
       </trans-unit>
-      <trans-unit id="core.toolbar.switch-3d" datatype="html">
+      <trans-unit id="core.toolbar.switch-3d.tooltip2D" datatype="html">
+        <source>Switch to 2D</source>
+      </trans-unit>
+      <trans-unit id="core.toolbar.switch-3d.tooltip3D" datatype="html">
         <source>Switch to 3D</source>
       </trans-unit>
       <trans-unit id="core.toolbar.type-at-least" datatype="html">

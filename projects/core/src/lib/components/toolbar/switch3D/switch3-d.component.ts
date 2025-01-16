@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, OnDestroy, signal } from '@angular/core';
 import { map, Observable, Subject, combineLatest } from 'rxjs';
 import { MapService } from '@tailormap-viewer/map';
 import { Store } from '@ngrx/store';
@@ -8,6 +8,8 @@ import { MenubarService } from '../../menubar';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { selectActiveTool } from '../state/toolbar.selectors';
 import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
+import { selectIn3DView } from '../../../map/state/map.selectors';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 
 @Component({
@@ -21,6 +23,8 @@ export class Switch3DComponent implements OnDestroy {
   private destroyed = new Subject();
   public enable$: Observable<boolean>;
   public allowSwitch$: Observable<boolean>;
+  public tooltip = signal<string>($localize `:@@core.toolbar.switch-3d.tooltip3D:Switch to 3D`);
+
   private disallowingComponents = [
     BaseComponentTypeEnum.PRINT,
     BaseComponentTypeEnum.DRAWING,
@@ -33,6 +37,7 @@ export class Switch3DComponent implements OnDestroy {
     private store$: Store,
     private mapService: MapService,
     private menubarService: MenubarService,
+    private destroyRef: DestroyRef,
   ) {
     this.enable$ = this.store$.select(selectEnable3D);
     this.allowSwitch$ = combineLatest([
@@ -49,6 +54,15 @@ export class Switch3DComponent implements OnDestroy {
     ]).pipe(
       map(([ componentBoolean, toolBoolean ]) => componentBoolean && toolBoolean),
     );
+    this.store$.select(selectIn3DView)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(in3DView => {
+        if (in3DView) {
+          this.tooltip.set($localize `:@@core.toolbar.switch-3d.tooltip2D:Switch to 2D`);
+        } else {
+          this.tooltip.set($localize `:@@core.toolbar.switch-3d.tooltip3D:Switch to 3D`);
+        }
+      });
   }
 
   public ngOnDestroy() {
