@@ -17,6 +17,7 @@ import { ConfirmDialogService } from '@tailormap-viewer/shared';
   templateUrl: './catalog-node-details.component.html',
   styleUrls: ['./catalog-node-details.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class CatalogNodeDetailsComponent implements OnInit, OnDestroy {
 

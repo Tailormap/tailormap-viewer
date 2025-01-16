@@ -10,6 +10,7 @@ import { updatePage } from '../state/attribute-list.actions';
   selector: 'tm-attribute-list-paging-dialog',
   templateUrl: './attribute-list-paging-dialog.component.html',
   styleUrls: ['./attribute-list-paging-dialog.component.css'],
+  standalone: false,
 })
 export class AttributeListPagingDialogComponent implements OnDestroy {
 

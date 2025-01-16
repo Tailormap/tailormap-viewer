@@ -7,6 +7,7 @@ import { LegendImageModel } from '@tailormap-viewer/shared';
   templateUrl: './legend-layer.component.html',
   styleUrls: ['./legend-layer.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class LegendLayerComponent {
   @Input()

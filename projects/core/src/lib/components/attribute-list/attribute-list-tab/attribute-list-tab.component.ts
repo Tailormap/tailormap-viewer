@@ -9,6 +9,7 @@ import { take } from 'rxjs';
   templateUrl: './attribute-list-tab.component.html',
   styleUrls: ['./attribute-list-tab.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class AttributeListTabComponent {
 

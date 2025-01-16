@@ -17,7 +17,6 @@ const LOCALSTORAGE_EDITOR_KEY = 'tm-markdown-editor-pick';
   templateUrl: './markdown-editor.component.html',
   styleUrls: ['./markdown-editor.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   encapsulation: ViewEncapsulation.None,
   imports: [ MilkdownEditorComponent, MarkdownSourceEditorComponent, MatFormField, MatLabel, MatSelect, MatOption, MatButtonToggleGroup, MatButtonToggle ],
   providers: [MarkdownEditorService],

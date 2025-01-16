@@ -12,6 +12,7 @@ import { UpdateDraftApplicationModel } from '../models/update-draft-application.
   templateUrl: './application-edit-settings.component.html',
   styleUrls: ['./application-edit-settings.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class ApplicationEditSettingsComponent implements OnInit {
 

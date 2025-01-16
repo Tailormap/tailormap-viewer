@@ -7,6 +7,7 @@ import { Store } from '@ngrx/store';
   selector: 'tm-legend-menu-button',
   templateUrl: './legend-menu-button.component.html',
   styleUrls: ['./legend-menu-button.component.css'],
+  standalone: false,
 })
 export class LegendMenuButtonComponent {
   public componentType = BaseComponentTypeEnum.LEGEND;

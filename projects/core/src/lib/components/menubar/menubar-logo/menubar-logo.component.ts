@@ -9,6 +9,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
   templateUrl: './menubar-logo.component.html',
   styleUrls: ['./menubar-logo.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class MenubarLogoComponent implements OnInit {
 

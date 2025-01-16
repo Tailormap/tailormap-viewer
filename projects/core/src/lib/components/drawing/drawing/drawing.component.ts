@@ -19,6 +19,7 @@ import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
   templateUrl: './drawing.component.html',
   styleUrls: ['./drawing.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class DrawingComponent implements OnInit, OnDestroy {
 

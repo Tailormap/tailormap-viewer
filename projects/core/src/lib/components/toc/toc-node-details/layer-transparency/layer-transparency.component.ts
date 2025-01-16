@@ -9,6 +9,7 @@ import { setLayerOpacity } from '../../../../map/state/map.actions';
   templateUrl: './layer-transparency.component.html',
   styleUrls: ['./layer-transparency.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class LayerTransparencyComponent {
 

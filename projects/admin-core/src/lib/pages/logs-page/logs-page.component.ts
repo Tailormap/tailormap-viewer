@@ -8,6 +8,7 @@ import { TailormapApiConstants } from '@tailormap-viewer/api';
   templateUrl: './logs-page.component.html',
   styleUrls: ['./logs-page.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class LogsPageComponent implements OnInit {
   public log = signal('');

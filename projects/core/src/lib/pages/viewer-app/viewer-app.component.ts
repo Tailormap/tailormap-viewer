@@ -14,6 +14,7 @@ import { ApplicationBookmarkService } from '../../services/application-bookmark/
   templateUrl: './viewer-app.component.html',
   styleUrls: ['./viewer-app.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class ViewerAppComponent implements OnInit, OnDestroy {
 

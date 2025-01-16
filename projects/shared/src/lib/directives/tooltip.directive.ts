@@ -3,6 +3,7 @@ import { MatTooltip } from '@angular/material/tooltip';
 
 @Directive({
   selector: '[tmTooltip]',
+  standalone: false,
 })
 export class TooltipDirective extends MatTooltip {
 

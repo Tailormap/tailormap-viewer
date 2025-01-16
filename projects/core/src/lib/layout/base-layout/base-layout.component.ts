@@ -7,6 +7,7 @@ import { LayoutService } from '../layout.service';
   templateUrl: './base-layout.component.html',
   styleUrls: ['./base-layout.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class BaseLayoutComponent {
   public componentTypes = BaseComponentTypeEnum;

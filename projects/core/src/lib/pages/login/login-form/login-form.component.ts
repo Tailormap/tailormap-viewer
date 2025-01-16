@@ -9,6 +9,7 @@ import { LoginConfigurationModel, UserResponseModel } from '@tailormap-viewer/ap
   templateUrl: './login-form.component.html',
   styleUrls: ['./login-form.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class LoginFormComponent {
 

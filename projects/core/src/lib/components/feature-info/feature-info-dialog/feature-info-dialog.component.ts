@@ -25,6 +25,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   templateUrl: './feature-info-dialog.component.html',
   styleUrls: ['./feature-info-dialog.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class FeatureInfoDialogComponent {
 

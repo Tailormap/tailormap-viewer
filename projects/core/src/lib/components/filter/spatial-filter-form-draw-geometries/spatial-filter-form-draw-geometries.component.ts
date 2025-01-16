@@ -12,6 +12,7 @@ import { ApplicationStyleService } from '../../../services/application-style.ser
   templateUrl: './spatial-filter-form-draw-geometries.component.html',
   styleUrls: ['./spatial-filter-form-draw-geometries.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class SpatialFilterFormDrawGeometriesComponent {
 

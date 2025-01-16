@@ -19,6 +19,7 @@ import { ExtendedCatalogModelHelper } from '../../catalog/helpers/extended-catal
   templateUrl: './form-edit.component.html',
   styleUrls: ['./form-edit.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class FormEditComponent implements OnInit, OnDestroy {
 

@@ -10,6 +10,7 @@ import { ConfigurationComponentModel } from '../configuration-component.model';
   templateUrl: './measure-component-config.component.html',
   styleUrls: ['./measure-component-config.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class MeasureComponentConfigComponent implements ConfigurationComponentModel<MeasureComponentConfigModel> {
 

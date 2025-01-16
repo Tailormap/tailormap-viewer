@@ -8,6 +8,7 @@ import { selectComponentTitle } from '../../../state/core.selectors';
   templateUrl: './drawing-menu-button.component.html',
   styleUrls: ['./drawing-menu-button.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class DrawingMenuButtonComponent {
   public componentType = BaseComponentTypeEnum.DRAWING;

@@ -53,6 +53,7 @@ const CATEGORY_PROPS: Record<UploadCategoryEnum | string | 'defaultProps', Dialo
   templateUrl: './select-upload-dialog.component.html',
   styleUrls: ['./select-upload-dialog.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class SelectUploadDialogComponent implements OnInit {
 

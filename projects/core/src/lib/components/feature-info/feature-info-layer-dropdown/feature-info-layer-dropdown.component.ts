@@ -11,6 +11,7 @@ import { FeatureInfoLayerListItemModel } from '../models/feature-info-layer-list
   templateUrl: './feature-info-layer-dropdown.component.html',
   styleUrls: ['./feature-info-layer-dropdown.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class FeatureInfoLayerDropdownComponent {
 

@@ -11,6 +11,7 @@ import { Observable } from 'rxjs';
   templateUrl: './feature-type-template.component.html',
   styleUrls: ['./feature-type-template.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class FeatureTypeTemplateComponent implements OnInit {
 

@@ -15,6 +15,7 @@ export interface CatalogNodeFormDialogData {
   templateUrl: './catalog-node-form-dialog.component.html',
   styleUrls: ['./catalog-node-form-dialog.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class CatalogNodeFormDialogComponent {
 

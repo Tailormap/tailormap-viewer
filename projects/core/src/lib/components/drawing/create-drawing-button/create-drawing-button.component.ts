@@ -11,6 +11,7 @@ import { FeatureModel } from '@tailormap-viewer/api';
   templateUrl: './create-drawing-button.component.html',
   styleUrls: ['./create-drawing-button.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class CreateDrawingButtonComponent implements OnDestroy {
 

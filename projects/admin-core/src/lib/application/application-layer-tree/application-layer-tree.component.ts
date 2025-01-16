@@ -14,6 +14,7 @@ import { FormControl } from '@angular/forms';
   styleUrls: ['./application-layer-tree.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [TreeDragDropService],
+  standalone: false,
 })
 export class ApplicationLayerTreeComponent implements OnInit, OnDestroy {
 

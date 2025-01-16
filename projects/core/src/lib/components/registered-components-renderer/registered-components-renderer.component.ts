@@ -12,6 +12,7 @@ import { ComponentConfigHelper } from '../../shared/helpers/component-config.hel
   selector: 'tm-registered-components-renderer',
   templateUrl: './registered-components-renderer.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class RegisteredComponentsRendererComponent implements OnInit {
 

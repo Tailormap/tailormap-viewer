@@ -19,6 +19,7 @@ import { ClipboardHelper } from '@tailormap-viewer/shared';
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class BoundsFieldComponent implements OnInit, OnDestroy, ControlValueAccessor {
 

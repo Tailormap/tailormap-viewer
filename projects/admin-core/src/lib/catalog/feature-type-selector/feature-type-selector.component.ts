@@ -15,6 +15,7 @@ import { FeatureSourceProtocolEnum } from '@tailormap-admin/admin-api';
   templateUrl: './feature-type-selector.component.html',
   styleUrls: ['./feature-type-selector.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class FeatureTypeSelectorComponent implements OnInit, OnDestroy {
 

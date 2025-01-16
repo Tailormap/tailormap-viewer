@@ -16,6 +16,7 @@ import { AdminSnackbarService } from '../../shared/services/admin-snackbar.servi
   templateUrl: './oidc-configuration-edit.component.html',
   styleUrls: ['./oidc-configuration-edit.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class OIDCConfigurationEditComponent implements OnInit, OnDestroy {
 

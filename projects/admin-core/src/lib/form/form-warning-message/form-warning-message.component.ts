@@ -6,6 +6,7 @@ import { AppLayerSettingsModel, FeatureTypeModel, FormModel } from '@tailormap-a
   templateUrl: './form-warning-message.component.html',
   styleUrls: ['./form-warning-message.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class FormWarningMessageComponent implements OnChanges {
 

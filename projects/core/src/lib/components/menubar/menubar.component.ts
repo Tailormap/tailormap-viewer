@@ -5,6 +5,7 @@ import { ComponentModel } from '@tailormap-viewer/api';
   selector: 'tm-menubar',
   templateUrl: './menubar.component.html',
   styleUrls: ['./menubar.component.css'],
+  standalone: false,
 })
 export class MenubarComponent {
   @Input({ required: true })

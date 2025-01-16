@@ -10,6 +10,7 @@ import { FormHelper } from '../../helpers/form.helper';
   templateUrl: './search-index-scheduling.component.html',
   styleUrls: ['./search-index-scheduling.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class SearchIndexSchedulingComponent implements OnInit {
 

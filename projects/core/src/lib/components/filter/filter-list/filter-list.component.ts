@@ -9,6 +9,7 @@ import { ExtendedFilterGroupModel } from '../../../filter/models/extended-filter
   templateUrl: './filter-list.component.html',
   styleUrls: ['./filter-list.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class FilterListComponent implements OnInit {
 

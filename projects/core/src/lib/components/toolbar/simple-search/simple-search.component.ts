@@ -19,6 +19,7 @@ type SearchStatusType = 'empty' | 'no_results' | 'searching' | 'belowMinLength' 
   templateUrl: './simple-search.component.html',
   styleUrls: ['./simple-search.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class SimpleSearchComponent implements OnInit {
 

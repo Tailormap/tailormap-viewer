@@ -12,6 +12,7 @@ import { selectFeatureSourceByFeatureTypeId } from '../state/catalog.selectors';
   templateUrl: './feature-type-details.component.html',
   styleUrls: ['./feature-type-details.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class FeatureTypeDetailsComponent implements OnInit {
 

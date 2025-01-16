@@ -5,6 +5,7 @@ import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
   templateUrl: './task-details-row.component.html',
   styleUrls: ['./task-details-row.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class TaskDetailsRowComponent {
 

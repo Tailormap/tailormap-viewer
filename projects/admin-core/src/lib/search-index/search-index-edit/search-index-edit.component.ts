@@ -16,6 +16,7 @@ import { ExtendedFeatureTypeModel } from '../../catalog/models/extended-feature-
   templateUrl: './search-index-edit.component.html',
   styleUrls: ['./search-index-edit.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class SearchIndexEditComponent implements OnInit {
 

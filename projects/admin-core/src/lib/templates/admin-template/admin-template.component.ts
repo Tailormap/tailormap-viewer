@@ -13,6 +13,7 @@ let firstRun = true;
   templateUrl: './admin-template.component.html',
   styleUrls: ['./admin-template.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class AdminTemplateComponent {
 

@@ -8,6 +8,7 @@ import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layo
   templateUrl: './bottom-panel.component.html',
   styleUrls: ['./bottom-panel.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class BottomPanelComponent implements OnInit {
 

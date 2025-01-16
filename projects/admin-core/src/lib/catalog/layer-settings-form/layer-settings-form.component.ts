@@ -17,6 +17,7 @@ import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-lay
   templateUrl: './layer-settings-form.component.html',
   styleUrls: ['./layer-settings-form.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class LayerSettingsFormComponent implements OnInit {
 

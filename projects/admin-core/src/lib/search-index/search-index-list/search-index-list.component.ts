@@ -17,6 +17,7 @@ import { FormControl } from '@angular/forms';
   templateUrl: './search-index-list.component.html',
   styleUrls: ['./search-index-list.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class SearchIndexListComponent implements OnInit {
 

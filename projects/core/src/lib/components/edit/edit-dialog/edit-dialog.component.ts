@@ -29,6 +29,7 @@ import { EditMapToolService } from '../services/edit-map-tool.service';
   templateUrl: './edit-dialog.component.html',
   styleUrls: ['./edit-dialog.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class EditDialogComponent {
 

@@ -10,6 +10,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   templateUrl: './search-index-attribute-list.component.html',
   styleUrls: ['./search-index-attribute-list.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class SearchIndexAttributeListComponent implements OnInit {
 

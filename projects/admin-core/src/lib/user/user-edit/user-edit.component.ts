@@ -12,6 +12,7 @@ import { UserAddUpdateModel } from '../models/user-add-update.model';
   templateUrl: './user-edit.component.html',
   styleUrls: ['./user-edit.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class UserEditComponent implements OnInit, OnDestroy {
 

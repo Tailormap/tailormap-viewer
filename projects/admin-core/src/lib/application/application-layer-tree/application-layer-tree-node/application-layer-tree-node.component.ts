@@ -7,6 +7,7 @@ import { ApplicationTreeHelper } from '../../helpers/application-tree.helper';
   selector: 'tm-admin-application-layer-tree-node',
   templateUrl: './application-layer-tree-node.component.html',
   styleUrls: ['./application-layer-tree-node.component.css'],
+  standalone: false,
 })
 export class ApplicationLayerTreeNodeComponent {
 

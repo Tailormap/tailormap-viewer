@@ -33,6 +33,7 @@ interface OutputFilterData {
   selector: 'tm-attribute-filter',
   templateUrl: './attribute-filter.component.html',
   styleUrls: ['./attribute-filter.component.css'],
+  standalone: false,
 })
 export class AttributeFilterComponent implements OnInit, OnDestroy {
 

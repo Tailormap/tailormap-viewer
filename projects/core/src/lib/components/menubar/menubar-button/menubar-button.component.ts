@@ -7,6 +7,7 @@ import { MenubarService } from '../menubar.service';
   selector: 'tm-menubar-button',
   templateUrl: './menubar-button.component.html',
   styleUrls: ['./menubar-button.component.css'],
+  standalone: false,
 })
 export class MenubarButtonComponent implements OnInit {
 

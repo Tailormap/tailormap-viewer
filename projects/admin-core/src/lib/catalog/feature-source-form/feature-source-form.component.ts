@@ -13,6 +13,7 @@ import { FeatureSourceCreateModel } from '../models/feature-source-update.model'
   templateUrl: './feature-source-form.component.html',
   styleUrls: ['./feature-source-form.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class FeatureSourceFormComponent implements OnInit {
 

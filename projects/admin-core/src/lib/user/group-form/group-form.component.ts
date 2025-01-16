@@ -11,6 +11,7 @@ import { GroupService } from '../services/group.service';
   templateUrl: './group-form.component.html',
   styleUrls: ['./group-form.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class GroupFormComponent implements OnInit, OnDestroy {
 

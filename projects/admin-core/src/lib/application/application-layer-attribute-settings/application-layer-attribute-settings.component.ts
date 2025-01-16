@@ -18,6 +18,7 @@ interface ApplicationLayerAttributeSettingsResult {
   templateUrl: './application-layer-attribute-settings.component.html',
   styleUrls: ['./application-layer-attribute-settings.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class ApplicationLayerAttributeSettingsComponent {
 

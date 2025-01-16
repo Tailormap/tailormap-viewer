@@ -9,6 +9,7 @@ import { GroupService } from '../services/group.service';
   templateUrl: './group-list.component.html',
   styleUrls: ['./group-list.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class GroupListComponent {
 

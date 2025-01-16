@@ -9,6 +9,7 @@ import { AuthenticatedUserService } from '@tailormap-viewer/api';
   templateUrl: './share-viewer.component.html',
   styleUrls: ['./share-viewer.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class ShareViewerComponent {
 

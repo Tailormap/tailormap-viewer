@@ -16,7 +16,8 @@ import { reloadSearchIndexes } from '../../search-index/state/search-index.actio
   templateUrl: './task-details.component.html',
   styleUrls: ['./task-details.component.css'],
   providers: [TaskMonitoringService],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class TaskDetailsComponent implements OnInit, OnDestroy {
 

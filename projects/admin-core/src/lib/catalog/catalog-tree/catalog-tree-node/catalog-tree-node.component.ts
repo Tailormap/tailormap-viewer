@@ -7,6 +7,7 @@ import { CatalogTreeHelper } from '../../helpers/catalog-tree.helper';
   templateUrl: './catalog-tree-node.component.html',
   styleUrls: ['./catalog-tree-node.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class CatalogTreeNodeComponent {
 

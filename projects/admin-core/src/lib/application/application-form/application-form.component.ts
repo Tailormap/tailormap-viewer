@@ -16,6 +16,7 @@ import { Store } from '@ngrx/store';
   templateUrl: './application-form.component.html',
   styleUrls: ['./application-form.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class ApplicationFormComponent implements OnInit, OnDestroy {
 

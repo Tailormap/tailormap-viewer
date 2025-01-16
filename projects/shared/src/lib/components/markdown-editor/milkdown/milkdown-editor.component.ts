@@ -19,7 +19,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   templateUrl: './milkdown-editor.component.html',
   styleUrls: ['./milkdown-editor.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   encapsulation: ViewEncapsulation.None,
   imports: [MatSnackBarModule],
 })

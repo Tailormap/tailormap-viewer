@@ -39,6 +39,7 @@ const DEFAULT_PDF_OPTIONS: PrintPdfOptions = {
   templateUrl: './print.component.html',
   styleUrls: ['./print.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class PrintComponent implements OnInit, OnDestroy {
 

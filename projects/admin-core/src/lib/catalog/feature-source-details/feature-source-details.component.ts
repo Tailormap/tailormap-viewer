@@ -19,6 +19,7 @@ import { selectFeatureSourceById } from '../state/catalog.selectors';
   templateUrl: './feature-source-details.component.html',
   styleUrls: ['./feature-source-details.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class FeatureSourceDetailsComponent implements OnInit, OnDestroy {
 

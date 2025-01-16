@@ -22,6 +22,7 @@ import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
   selector: 'tm-attribute-list',
   templateUrl: './attribute-list.component.html',
   styleUrls: ['./attribute-list.component.css'],
+  standalone: false,
 })
 export class AttributeListComponent implements OnInit, OnDestroy {
 

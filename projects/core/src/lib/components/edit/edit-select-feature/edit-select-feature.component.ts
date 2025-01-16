@@ -12,6 +12,7 @@ import { setSelectedEditFeature } from "../state/edit.actions";
   templateUrl: './edit-select-feature.component.html',
   styleUrls: ['./edit-select-feature.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class EditSelectFeatureComponent implements OnInit {
 

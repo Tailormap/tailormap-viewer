@@ -13,6 +13,7 @@ import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
   selector: 'tm-tree',
   templateUrl: './tree.component.html',
   styleUrls: ['./tree.component.css'],
+  standalone: false,
 })
 export class TreeComponent implements OnInit, OnDestroy {
 

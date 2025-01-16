@@ -11,6 +11,7 @@ import { selectLayerWithService } from '../../../../map/state/map.selectors';
   templateUrl: './layer-details.component.html',
   styleUrls: ['./layer-details.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class LayerDetailsComponent {
 

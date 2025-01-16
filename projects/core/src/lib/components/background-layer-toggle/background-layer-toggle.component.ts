@@ -12,6 +12,7 @@ import { setSelectedBackgroundNodeId } from '../../map/state/map.actions';
   templateUrl: './background-layer-toggle.component.html',
   styleUrls: ['./background-layer-toggle.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class BackgroundLayerToggleComponent {
 

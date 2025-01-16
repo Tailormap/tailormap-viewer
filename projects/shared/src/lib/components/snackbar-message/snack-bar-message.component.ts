@@ -8,6 +8,7 @@ import { map, Observable, takeWhile, timer } from 'rxjs';
   templateUrl: './snack-bar-message.component.html',
   styleUrls: ['./snack-bar-message.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class SnackBarMessageComponent implements OnInit {
 

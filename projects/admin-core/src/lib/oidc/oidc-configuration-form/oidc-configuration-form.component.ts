@@ -9,6 +9,7 @@ import { FormHelper } from '../../helpers/form.helper';
   templateUrl: './oidc-configuration-form.component.html',
   styleUrls: ['./oidc-configuration-form.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class OIDCConfigurationFormComponent implements OnInit, OnDestroy {
 

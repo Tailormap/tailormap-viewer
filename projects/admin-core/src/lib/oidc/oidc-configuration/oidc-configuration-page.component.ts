@@ -7,6 +7,7 @@ import { distinctUntilChanged, map, Observable } from 'rxjs';
   templateUrl: './oidc-configuration-page.component.html',
   styleUrls: ['./oidc-configuration-page.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class OIDCConfigurationPageComponent {
 

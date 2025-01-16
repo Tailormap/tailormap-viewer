@@ -20,6 +20,7 @@ export interface GeoServiceLayerFormDialogData {
   templateUrl: './geo-service-layer-form-dialog.component.html',
   styleUrls: ['./geo-service-layer-form-dialog.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class GeoServiceLayerFormDialogComponent {
 

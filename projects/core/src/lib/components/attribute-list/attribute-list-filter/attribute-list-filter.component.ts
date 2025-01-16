@@ -28,6 +28,7 @@ interface FilterType {
   selector: 'tm-attribute-list-filter',
   templateUrl: './attribute-list-filter.component.html',
   styleUrls: ['./attribute-list-filter.component.css'],
+  standalone: false,
 })
 export class AttributeListFilterComponent implements OnInit {
 

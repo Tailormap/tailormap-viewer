@@ -7,6 +7,7 @@ import { UploadInUseItem } from '../models/upload-remove-service.model';
   templateUrl: './upload-in-use-dialog.component.html',
   styleUrls: ['./upload-in-use-dialog.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class UploadInUseDialogComponent {
 

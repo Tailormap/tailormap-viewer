@@ -11,6 +11,7 @@ import { UploadHelper } from '@tailormap-admin/admin-api';
   templateUrl: './select-upload.component.html',
   styleUrls: ['./select-upload.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class SelectUploadComponent {
 
