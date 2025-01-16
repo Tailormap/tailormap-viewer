@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { MapService } from '@tailormap-viewer/map';
-import { combineLatest, filter, map, skip, Subject, takeUntil } from 'rxjs';
+import { combineLatest, debounceTime, filter, map, skip, Subject, takeUntil } from 'rxjs';
 import { selectLoadStatus, selectLayers, selectLayerTreeNodes } from '../../map/state/map.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { BookmarkService } from '../bookmark/bookmark.service';
@@ -163,6 +163,7 @@ export class ApplicationBookmarkService implements OnDestroy {
   private getLocationBookmarkData$() {
     return combineLatest([ this.mapService.getMapViewDetails$(), this.mapService.getUnitsOfMeasure$() ])
       .pipe(
+        debounceTime(250),
         map(([ info, measure ]) => MapBookmarkHelper.fragmentFromLocationAndZoom(info, measure)),
         filter((fragment): fragment is string => fragment !== undefined),
       );
