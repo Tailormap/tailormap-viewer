@@ -40,11 +40,13 @@
       },
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser-esbuild",
+          "builder": "@angular/build:application",
           "options": {
-            "outputPath": "dist/app",
+            "outputPath": {
+              "browser": "",
+              "base": "dist/app"
+            },
             "index": "projects/app/src/index.html",
-            "main": "projects/app/src/main.ts",
             "polyfills": ["projects/app/src/polyfills.ts", "@angular/localize/init"],
             "assets": [
               {
@@ -89,7 +91,8 @@
               "fastpriorityqueue",
               "color-convert"
             ],
-            "i18nMissingTranslation": "error"
+            "i18nMissingTranslation": "error",
+            "browser": "projects/app/src/main.ts"
           },
           "configurations": {
             "nl": {
@@ -134,7 +137,7 @@
           "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
+          "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
               "buildTarget": "app:build:production"
@@ -188,7 +191,7 @@
       "prefix": "tm",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "builder": "@angular/build:ng-packagr",
           "options": {
             "project": "projects/core/ng-package.json",
             "tsConfig": "projects/core/tsconfig.lib.json"
@@ -221,7 +224,7 @@
       "prefix": "tm",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "builder": "@angular/build:ng-packagr",
           "options": {
             "project": "projects/api/ng-package.json",
             "tsConfig": "projects/api/tsconfig.lib.json"
@@ -254,7 +257,7 @@
       "prefix": "tm",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "builder": "@angular/build:ng-packagr",
           "options": {
             "project": "projects/shared/ng-package.json",
             "tsConfig": "projects/shared/tsconfig.lib.json"
@@ -287,7 +290,7 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "builder": "@angular/build:ng-packagr",
           "options": {
             "project": "projects/map/ng-package.json",
             "tsConfig": "projects/map/tsconfig.lib.json"
@@ -320,7 +323,7 @@
       "prefix": "tm-admin",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "builder": "@angular/build:ng-packagr",
           "options": {
             "project": "projects/admin-core/ng-package.json"
           },
@@ -352,7 +355,7 @@
       "prefix": "tm",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "builder": "@angular/build:ng-packagr",
           "options": {
             "project": "projects/admin-api/ng-package.json"
           },
