@@ -96,6 +96,7 @@ const onAdd3DLayerToFeatureInfoLayers = (
   }
   return {
     ...state,
+    dialogVisible: true,
     layers: [ ...state.layers, payload.layer ],
     selectedLayerId: payload.layer.id,
   };

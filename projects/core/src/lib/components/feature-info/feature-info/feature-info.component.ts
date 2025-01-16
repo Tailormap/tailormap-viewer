@@ -9,6 +9,7 @@ import { ToolbarComponentEnum } from '../../toolbar/models/toolbar-component.enu
 import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.helper';
 import { FeatureInfoService } from '../feature-info.service';
 import {
+  select3DTilesetLayers,
   selectIn3DView, selectLayer, selectVisibleLayersWithAttributes, selectVisibleWMSLayersWithoutAttributes,
 } from '../../../map/state/map.selectors';
 import { take } from 'rxjs/operators';
@@ -72,22 +73,29 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
     combineLatest([
       this.store$.select(selectVisibleLayersWithAttributes),
       this.store$.select(selectVisibleWMSLayersWithoutAttributes),
+      this.store$.select(select3DTilesetLayers),
+      this.store$.select(selectIn3DView),
     ])
       .pipe(
         take(1),
-        filter(([ layers, wmsLayers ]) => {
+        filter(([ layers, wmsLayers, tileset3DLayers, in3DView ]) => {
+          if (in3DView) {
+            return layers.length > 0 || wmsLayers.length > 0 || tileset3DLayers.length > 0;
+          }
           return layers.length > 0 || wmsLayers.length > 0;
         }),
         concatMap(() => {
           return this.featureInfoService.fetchFeatures$(evt.mapCoordinates, evt.mouseCoordinates);
         }),
+        tap(() => {
+          this.store$.select(selectIn3DView).pipe(take(1)).subscribe(in3DView => {
+            if (in3DView) {
+              this.handleMap3DClick();
+            }
+          });
+        }),
       )
       .subscribe(response => {
-        this.store$.select(selectIn3DView).pipe(take(1)).subscribe(in3DView => {
-          if (in3DView) {
-            this.handleMap3DClick();
-          }
-        });
         if (response === null) {
           return;
         }

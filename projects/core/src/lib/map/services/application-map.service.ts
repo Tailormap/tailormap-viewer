@@ -9,7 +9,7 @@ import {
 import { ServiceModel, ServiceProtocol } from '@tailormap-viewer/api';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { ArrayHelper, HtmlifyHelper } from '@tailormap-viewer/shared';
-import { selectMapOptions, selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersWithServices, select3Dlayers } from '../state/map.selectors';
+import { selectMapOptions, selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersWithServices, select3DLayers } from '../state/map.selectors';
 import { ExtendedAppLayerModel } from '../models';
 import { selectCQLFilters } from '../../filter/state/filter.selectors';
 import { withLatestFrom } from 'rxjs/operators';
@@ -79,7 +79,7 @@ export class ApplicationMapService implements OnDestroy {
       .pipe(first(enable3D => enable3D))
       .subscribe(() =>  {
         this.mapService.make3D$();
-        this.store$.select(select3Dlayers)
+        this.store$.select(select3DLayers)
           .pipe(
             takeUntil(this.destroyed),
             concatMap(layers => this.get3DLayersAndLayerManager$(layers)),
