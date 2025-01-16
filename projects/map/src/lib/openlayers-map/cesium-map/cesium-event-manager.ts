@@ -51,6 +51,8 @@ export class CesiumEventManager {
         map3DClickEvent.next(selection3D);
       }
 
+      scene3D.requestRender();
+
     }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
 
     return map3DClickEvent.asObservable();

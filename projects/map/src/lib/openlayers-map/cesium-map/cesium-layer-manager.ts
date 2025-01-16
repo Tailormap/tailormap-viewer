@@ -34,13 +34,18 @@ export class CesiumLayerManager {
         .subscribe(olCsModule => {
           const ol3d = new olCsModule.default({
             map: this.olMap,
+            sceneOptions: {
+              canvas: document.createElement('canvas'),
+              requestRenderMode: true,
+              maximumRenderTimeChange: Infinity,
+            },
           });
+          ol3d.setRefresh2DAfterCameraMoveEndOnly(true);
+          ol3d.setTargetFrameRate(60);
           this.map3D.next(ol3d);
         });
       this.executeScene3DAction(async scene3D => {
         scene3D.globe.depthTestAgainstTerrain = true;
-        // this.cesiumEventManager = new CesiumEventManager(scene3D);
-        // this.cesiumEventManager.initEvents();
       });
     });
   }
@@ -111,7 +116,7 @@ export class CesiumLayerManager {
               scene3D.primitives.add(tileset3DLayer, this.layers3D.size);
               this.layers3D.set(layer.id, this.layers3D.size);
             }
-          });
+          }).catch(error => { console.log(`Error while adding 3D layer: ${error}`); });
         }
       }
     });
@@ -132,7 +137,20 @@ export class CesiumLayerManager {
     if (LayerTypesHelper.isTileset3DLayer(layer)) {
       const url = layer.url;
       try {
-        const tileset: Promise<Cesium3DTileset> = await Cesium.Cesium3DTileset.fromUrl(url);
+        const tileset: Promise<Cesium3DTileset> = await Cesium.Cesium3DTileset.fromUrl(url, {
+          maximumScreenSpaceError: 16,
+          skipLevelOfDetail: true,
+          baseScreenSpaceError: 1024,
+          skipScreenSpaceErrorFactor: 16,
+          skipLevels: 1,
+          immediatelyLoadDesiredLevelOfDetail: false,
+          loadSiblings: false,
+          cullWithChildrenBounds: true,
+          dynamicScreenSpaceError: true,
+          dynamicScreenSpaceErrorDensity: 8.0e-4,
+          dynamicScreenSpaceErrorFactor: 96.0,
+          dynamicScreenSpaceErrorHeightFalloff: 1.0,
+        });
         return tileset;
       } catch (error) {
         console.log(`Error while creating Cesium3DTileset: ${error}`);
