@@ -1,5 +1,5 @@
 import {
-  ChangeDetectionStrategy, Component, DestroyRef, ElementRef, OnInit, signal, ViewChild,
+  ChangeDetectionStrategy, Component, DestroyRef, ElementRef, OnInit, ViewChild,
 } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -7,9 +7,10 @@ import { MatFormField } from '@angular/material/select';
 import { MatInput } from '@angular/material/input';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { take } from 'rxjs';
+import { concatMap, Observable, of } from 'rxjs';
 import { MarkdownHelper } from '../../../helpers';
 import { MarkdownEditorService } from '../markdown-editor.service';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'tm-markdown-source-editor',
@@ -17,7 +18,7 @@ import { MarkdownEditorService } from '../markdown-editor.service';
   styleUrls: ['./markdown-source-editor.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [ ReactiveFormsModule, MatFormField, MatInput, CdkTextareaAutosize ],
+  imports: [ ReactiveFormsModule, MatFormField, MatInput, CdkTextareaAutosize, AsyncPipe ],
 })
 export class MarkdownSourceEditorComponent implements OnInit {
 
@@ -25,7 +26,7 @@ export class MarkdownSourceEditorComponent implements OnInit {
   public editorEl: ElementRef<HTMLTextAreaElement> | undefined;
 
   public editorControl = new FormControl<string>('');
-  public markdownPreview = signal<SafeHtml | undefined>(undefined);
+  public htmlPreview$: Observable<SafeHtml | undefined> = of(undefined);
 
   public constructor(
     private destroyRef: DestroyRef,
@@ -42,9 +43,7 @@ export class MarkdownSourceEditorComponent implements OnInit {
     this.editorControl.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(content => {
-        if (content) {
-          this.mdEditorService.contentChanged(content);
-        }
+        this.mdEditorService.contentChanged(content || '');
       });
     this.mdEditorService.getContent$()
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -52,11 +51,13 @@ export class MarkdownSourceEditorComponent implements OnInit {
         if (this.editorControl.value !== content) {
           this.editorControl.patchValue(content, { emitEvent: false });
         }
-        this.updatePreview(content);
       });
     this.mdEditorService.getInsertedVariables$()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(value => this.insertVariable(value));
+    this.htmlPreview$ = this.mdEditorService.getUpdatedContent$().pipe(concatMap(content => {
+      return MarkdownHelper.getSafeHtmlForMarkdown$(content || '', this.sanitizer);
+    }));
   }
 
   public insertVariable(value: string) {
@@ -67,12 +68,6 @@ export class MarkdownSourceEditorComponent implements OnInit {
     const [ start, end ] = [ el.selectionStart, el.selectionEnd ];
     el.setRangeText(`{{${value}}}`, start, end, 'select');
     this.editorControl.patchValue(el.value);
-  }
-
-  private updatePreview(content: string | null | undefined) {
-    MarkdownHelper.getSafeHtmlForMarkdown$(content || '', this.sanitizer)
-      .pipe(take(1))
-      .subscribe(html => this.markdownPreview.set(html));
   }
 
 }
