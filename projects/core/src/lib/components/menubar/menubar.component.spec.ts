@@ -11,6 +11,7 @@ import { ComponentRegistrationService } from '../../services/component-registrat
 
 @Component({
   selector: 'tm-menu-button-test',
+  standalone: false,
   template: '<tm-menubar-button icon="test" [tooltip$]="tooltip$">Click me</tm-menubar-button>',
 })
 class TmTestingComponent {
