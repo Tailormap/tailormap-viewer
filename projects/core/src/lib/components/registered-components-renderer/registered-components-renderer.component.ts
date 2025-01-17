@@ -51,18 +51,16 @@ export class RegisteredComponentsRendererComponent implements OnInit {
       this.componentRegistrationService.getRegisteredComponents$(this.area),
       this.store$.select(selectIn3DView),
     ]).pipe(
-      map(([ components, in3D ]) => {
-        if (in3D) {
+        map(([ components, in3D ]) => {
+          if (in3D) {
+            return components.filter(
+              component => !this.disallowingComponents.some(disallowingComponent => disallowingComponent === component.type),
+            );
+          }
           return components.filter(
-            component => !this.disallowingComponents.some(disallowingComponent => disallowingComponent === component.type),
+            component => !this.componentsOnlyIn3D.some(componentOnlyIn3D => componentOnlyIn3D === component.type),
           );
-        }
-        return components.filter(
-          component => !this.componentsOnlyIn3D.some(componentOnlyIn3D => componentOnlyIn3D === component.type),
-        );
-      }),
-    )
-      .pipe(
+        }),
         takeUntilDestroyed(this.destroyRef),
         debounceTime(10),
       )

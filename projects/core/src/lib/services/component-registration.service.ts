@@ -13,6 +13,7 @@ export class ComponentRegistrationService {
   private componentRegistry: Record<AreaType, BehaviorSubject<RegisteredComponent[]>> = {};
 
   public registerComponent(area: AreaType, component: RegisteredComponent, singleton = true) {
+    console.log('area: ', area, 'registered components: ', this.registeredComponents[area]);
     if (!this.registeredComponents[area]) {
       this.registeredComponents[area] = [];
     }
@@ -23,11 +24,16 @@ export class ComponentRegistrationService {
         ...this.registeredComponents[area].slice(idx + 1),
       ];
     }
-    this.registeredComponents[area].push(component);
+    if (idx !== -1) {
+      this.registeredComponents[area].splice(idx, 0, component);
+    } else {
+      this.registeredComponents[area].push(component);
+    }
     if (!this.componentRegistry[area]) {
       this.componentRegistry[area] = new BehaviorSubject<RegisteredComponent[]>([]);
     }
     this.componentRegistry[area].next([...this.registeredComponents[area]]);
+    console.log('area: ', area, 'registered components: ', this.registeredComponents[area]);
   }
 
   public getRegisteredComponents$(area: AreaType): Observable<RegisteredComponent[]> {
