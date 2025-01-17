@@ -130,16 +130,21 @@ export class TreeComponent implements OnInit, OnDestroy {
       return;
     }
     if (this.singleLayerChecked) {
-      this.uncheckAllNodes();
+      this.uncheckAllOtherNodes(node);
     }
     this.toggleNodeChecked(node);
   }
 
-  private uncheckAllNodes(): void {
+  private uncheckAllOtherNodes(node: FlatTreeModel): void {
     this.treeService.getTreeDataSource$()
       .pipe(take(1))
       .subscribe(dataSource => {
-        const stateChange: FlatTreeModel[] = dataSource.map(node => ({ ...node, checked: false }));
+        const stateChange: FlatTreeModel[] = dataSource.map(dataSourceNode => {
+          if (dataSourceNode.id === node.id) {
+            return dataSourceNode;
+          }
+          return { ...dataSourceNode, checked: false };
+        });
         this.treeService.checkStateChanged(stateChange);
       });
   }

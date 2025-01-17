@@ -38,7 +38,12 @@ export class TerrainLayerToggleComponent {
       ])),
     );
     this.initiallyCheckedLabels$ = this.store$.select(selectInitiallySelectedTerrainNodes).pipe(
-      map(nodes => nodes.map(node => node.name).join(', ')),
+      map(nodes => {
+        if (nodes.length === 0) {
+          return $localize `:@@core.terrain-layer-toggle.ellipsoid:WGS84 Ellipsoid`;
+        }
+        return nodes.map(node => node.name).join(', ')
+      }),
     );
   }
 
