@@ -161,7 +161,7 @@ export const selectDraftApplicationCrs = createSelector(
   draftApplication => draftApplication?.crs,
 );
 
-export const selectServiceLayerTreeForApplication = createSelector(
+export const selectBaseServiceLayerTreeForApplication = createSelector(
   selectDraftApplicationCrs,
   selectCatalog,
   selectGeoServices,
@@ -179,6 +179,25 @@ export const selectTerrainServiceLayerTreeForApplication = createSelector(
   selectFeatureTypes,
   (catalog, services, layers, featureTypes): CatalogTreeModel[] => {
     return CatalogFilterHelper.filterTreeByProtocol(catalog, services, layers, featureTypes, GeoServiceProtocolEnum.QUANTIZEDMESH);
-  });
+  },
+);
+
+export const selectTileset3DServiceLayerTreeForApplication = createSelector(
+  selectCatalog,
+  selectGeoServices,
+  selectGeoServiceLayers,
+  selectFeatureTypes,
+  (catalog, services, layers, featureTypes): CatalogTreeModel[] => {
+    return CatalogFilterHelper.filterTreeByProtocol(catalog, services, layers, featureTypes, GeoServiceProtocolEnum.TILESET3D);
+  },
+);
+
+export const selectServiceLayerTreeForApplication = createSelector(
+  selectBaseServiceLayerTreeForApplication,
+  selectTileset3DServiceLayerTreeForApplication,
+  (layers2D, tileset3DLayers) => {
+    return layers2D.concat(tileset3DLayers);
+  },
+);
 
 export const selectStylingConfig = createSelector(selectDraftApplication, application => application?.styling);

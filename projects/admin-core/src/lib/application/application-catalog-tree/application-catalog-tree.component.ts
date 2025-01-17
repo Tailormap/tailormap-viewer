@@ -9,7 +9,8 @@ import { CatalogTreeHelper } from '../../catalog/helpers/catalog-tree.helper';
 import { ExtendedGeoServiceLayerModel } from '../../catalog/models/extended-geo-service-layer.model';
 import { AppTreeNodeModel } from '@tailormap-admin/admin-api';
 import {
-  selectApplicationCatalogFilterTerm, selectServiceLayerTreeForApplication, selectTerrainServiceLayerTreeForApplication,
+  selectApplicationCatalogFilterTerm, selectBaseServiceLayerTreeForApplication, selectServiceLayerTreeForApplication,
+  selectTerrainServiceLayerTreeForApplication,
 } from '../state/application.selectors';
 import { map, Observable, of } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -57,6 +58,8 @@ export class ApplicationCatalogTreeComponent implements OnInit {
   public ngOnInit(): void {
     if (this.applicationStateTree === 'terrainLayer') {
       this.treeService.setDataSource(this.store$.select(selectTerrainServiceLayerTreeForApplication));
+    } else if (this.applicationStateTree === 'baseLayer') {
+      this.treeService.setDataSource(this.store$.select(selectBaseServiceLayerTreeForApplication));
     } else {
       this.treeService.setDataSource(this.store$.select(selectServiceLayerTreeForApplication));
     }

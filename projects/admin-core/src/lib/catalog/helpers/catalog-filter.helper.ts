@@ -54,14 +54,8 @@ export class CatalogFilterHelper {
       return CatalogTreeHelper.catalogToTree(catalogNodes, services, serviceLayers, [], [], featureTypes);
     }
     const allLayersMap = new Map(serviceLayers.map(l => [ l.id, l ]));
-    const allServicesMap = new Map(services.map(s => [ s.id, s ]));
     const filteredItems = CatalogFilterHelper.getFilteredItems(catalogNodes, services, serviceLayers, [], featureTypes, item => {
       if (ExtendedCatalogModelHelper.isGeoServiceLayerModel(item)) {
-        const service = allServicesMap.get(item.serviceId);
-        if (service && (service.protocol === GeoServiceProtocolEnum.TILESET3D)) {
-          return true;
-        }
-        //
         if (item.crs?.includes(crs)) {
           return true;
         }
