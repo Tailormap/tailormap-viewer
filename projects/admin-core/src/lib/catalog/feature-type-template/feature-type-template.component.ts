@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, OnInit, signal } from '@angular/core';
 import {
   AttributeDescriptorModel, FeatureTypeSettingsModel, FeatureTypeTemplateModel, ImageUploadResult, TailormapAdminUploadService,
 } from '@tailormap-admin/admin-api';
@@ -14,19 +14,28 @@ import { Observable } from 'rxjs';
 })
 export class FeatureTypeTemplateComponent implements OnInit {
 
-  @Input()
-  public attributes: AttributeDescriptorModel[] = [];
+  private _attributes: AttributeDescriptorModel[] = [];
+  private _featureTypeSettings: FeatureTypeSettingsModel | null | undefined;
 
   @Input()
-  public template: FeatureTypeTemplateModel | null | undefined = null;
+  public set attributes(attributes: AttributeDescriptorModel[]) {
+    this._attributes = attributes;
+    this.updateAttributes();
+  }
 
   @Input()
-  public featureTypeSettings: FeatureTypeSettingsModel | null | undefined;
+  public set featureTypeSettings(featureTypeSettings: FeatureTypeSettingsModel | null | undefined) {
+    this._featureTypeSettings = featureTypeSettings;
+    this.templateContent.set(featureTypeSettings?.template?.template);
+    this.updateAttributes();
+  }
 
   @Output()
   public templateUpdated = new EventEmitter<FeatureTypeTemplateModel>();
 
-  public templatePicklistConfig: TemplatePicklistConfig | undefined;
+  public templatePicklistConfig = signal<TemplatePicklistConfig | undefined>(undefined);
+
+  public templateContent = signal<string | undefined>('');
 
   constructor(
     private uploadService: TailormapAdminUploadService,
@@ -38,21 +47,25 @@ export class FeatureTypeTemplateComponent implements OnInit {
   };
 
   public ngOnInit() {
-    const attributeLabels = new Map(Object.entries(this.featureTypeSettings?.attributeSettings || {})
+    this.updateAttributes();
+  }
+
+  private updateAttributes() {
+    const attributeLabels = new Map(Object.entries(this._featureTypeSettings?.attributeSettings || {})
       .map(([ key, setting ]) => [ key, setting.title || "" ]));
-    const hiddenAttributes = new Set(this.featureTypeSettings?.hideAttributes || []);
-    const sortedAttributes = [...this.attributes]
+    const hiddenAttributes = new Set(this._featureTypeSettings?.hideAttributes || []);
+    const sortedAttributes = [...this._attributes]
       .filter(a => !hiddenAttributes.has(a.name) && !AttributeTypeHelper.isGeometryType(a.type))
-      .sort(ArrayHelper.getArraySorter('name', this.featureTypeSettings?.attributeOrder || []));
+      .sort(ArrayHelper.getArraySorter('name', this._featureTypeSettings?.attributeOrder || []));
     const attributes = sortedAttributes.map(a => ({
       label: attributeLabels.get(a.name) || a.name,
       value: a.name,
     }));
-    this.templatePicklistConfig = {
+    this.templatePicklistConfig.set({
       label: $localize `:@@admin-core.catalog.insert-feature-type-attribute:Insert feature type attribute`,
       shortLabel: $localize `:@@admin-core.catalog.attribute:Attribute`,
       variables: attributes,
-    };
+    });
   }
 
   public templateChanged($event: string) {

@@ -3,6 +3,39 @@
 
   <div class="oidc-configuration-edit-content">
     <tm-admin-oidc-configuration-edit-settings></tm-admin-oidc-configuration-edit-settings>
+
+    @let groups = groups$ | async;
+    @if (groups && groups.length > 0) {
+      <div class="linked-groups">
+        <h4 i18n="@@admin-core.oidc.groups-header">OIDC roles mapped to groups</h4>
+        <p i18n="@@admin-core.oidc.groups-description">When a user logins with this OIDC registration, roles received are mapped to groups which are automatically created if they don't yet exist. The user gets the authorizations of the group and also any aliased group. The following roles have been received from this registration.</p>
+        <mat-table [dataSource]="groups" class="mat-elevation-z1">
+          <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef i18n="@@admin-core.common.name">Name</mat-header-cell>
+            <mat-cell *matCellDef="let group">
+              <a [routerLink]="'/admin/groups/group/' + group.name">{{ group.name}}</a>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="alias">
+            <mat-header-cell *matHeaderCellDef i18n="@@admin-core.groups.alias">Alias</mat-header-cell>
+            <mat-cell *matCellDef="let group">
+              @if (group.aliasForGroup) {
+                <a [routerLink]="'/admin/groups/group/' + group.aliasForGroup">{{ group.aliasForGroup}}</a>
+              }
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="lastSeen">
+            <mat-header-cell *matHeaderCellDef i18n="@@admin-core.common.last-seen">Last seen</mat-header-cell>
+            <mat-cell class="last-seen" *matCellDef="let group">{{ group.lastSeen | date: 'medium' }}</mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="['name', 'alias', 'lastSeen']"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: ['name', 'alias', 'lastSeen'];"></mat-row>
+        </mat-table>
+      </div>
+    }
   </div>
 
   <div class="page-details-actions oidcConfiguration-edit-buttons">
@@ -10,5 +43,6 @@
     <button mat-flat-button color="warn" (click)="delete(oidcConfiguration)" i18n="@@admin-core.common.delete">Delete</button>
     <button mat-flat-button routerLink="/admin/settings/oidc-configurations" i18n="@@admin-core.common.close">Close</button>
   </div>
+
 
 </ng-container>
