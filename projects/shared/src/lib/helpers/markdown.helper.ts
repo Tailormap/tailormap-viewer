@@ -19,7 +19,7 @@ export class MarkdownHelper {
       );
   }
 
-  public static templateParser(template: string, tokens: Map<string, string>) {
+  public static templateParser(template: string, tokens: Map<string, string | null>) {
     let startIdx = template.indexOf('{{');
     let replacedTemplate = template;
     while (startIdx >= 0) {
@@ -28,7 +28,7 @@ export class MarkdownHelper {
         const token = template.slice(startIdx + 2, endIdx);
         const value = tokens.get(token.trim());
         if (typeof value !== 'undefined') {
-          replacedTemplate = replacedTemplate.replace(`{{${token}}}`, value);
+          replacedTemplate = replacedTemplate.replace(`{{${token}}}`, value || '');
         }
       }
       startIdx = template.indexOf('{{', startIdx + 1);
@@ -36,7 +36,7 @@ export class MarkdownHelper {
     return MarkdownHelper.replaceWhitespaceInLinks(replacedTemplate);
   }
 
-  public static markdownEscape(str?: string | number | boolean | null): string {
+  public static markdownEscape(str?: string | number | boolean | null): string | null {
     // from https://github.com/mattcone/markdown-guide/blob/master/_basic-syntax/escaping-characters.md
     // \ 	backslash
     // ` 	backtick (see also escaping backticks in code)
@@ -52,6 +52,9 @@ export class MarkdownHelper {
     // . 	dot
     // ! 	exclamation mark
     // | 	pipe (see also escaping pipe in tables)
+    if (str === null) {
+      return null;
+    }
     if (typeof str !== "string") {
       return `${str}`;
     }
