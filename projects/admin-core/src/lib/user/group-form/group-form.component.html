@@ -1,5 +1,5 @@
 <form [formGroup]="groupForm" class="groupdetails-wrapper">
-  <div>
+  <div class="form-container">
     <mat-form-field>
       <mat-label i18n="@@admin-core.common.name">Name</mat-label>
       <input formControlName="name" matInput maxlength="255">
@@ -28,4 +28,30 @@
     <mat-checkbox formControlName="systemGroup" i18n="@@admin-core.groups.system-group" labelPosition="before">System group</mat-checkbox>
     <tm-admin-fields-renderer [fields]="(registeredFields$ | async) || []" [data]="additionalProperties" (changed)="attributesChanged($event)"></tm-admin-fields-renderer>
   </div>
+  @let oidcConfigurations = oidcConfigurations$ | async;
+  @if (oidcConfigurations && oidcConfigurations.length > 0) {
+    <div class="oidc-table">
+      <h4 i18n="@@admin-core.groups.oidc-header">OIDC registrations</h4>
+      <p i18n="@@admin-core.groups.oidc-description">A role named <b>{{group?.name}}</b> was received from the following OIDC registration{{ oidcConfigurations.length > 1 ? 's' : ''}}. Users logged in via an OIDC registration with that role get the authorizations of this group.</p>
+      <mat-table [dataSource]="oidcConfigurations" class="mat-elevation-z1">
+        <ng-container matColumnDef="name">
+          <mat-header-cell *matHeaderCellDef i18n="@@admin-core.common.name">Name</mat-header-cell>
+          <mat-cell *matCellDef="let oidcConfiguration">
+            <a [routerLink]="'/admin/settings/oidc-configurations/oidc-configuration/' + oidcConfiguration.id">
+              {{ oidcConfiguration.name ? oidcConfiguration.name : oidcConfiguration.clientId }}
+           </a>
+          </mat-cell>
+
+        </ng-container>
+
+        <ng-container matColumnDef="lastSeen">
+          <mat-header-cell *matHeaderCellDef i18n="@@admin-core.common.last-seen">Last seen</mat-header-cell>
+          <mat-cell class="last-seen" *matCellDef="let oidcConfiguration">{{ oidcConfiguration.lastSeen | date: 'medium' }}</mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="['name', 'lastSeen']"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: ['name', 'lastSeen'];"></mat-row>
+      </mat-table>
+   </div>
+  }
 </form>

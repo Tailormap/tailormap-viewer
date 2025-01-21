@@ -1,15 +1,16 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import {
-  BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, takeUntil,
+  BehaviorSubject, combineLatest, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, takeUntil,
 } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectOIDCConfigurationsLoadStatus, selectDraftOIDCConfiguration, selectDraftOIDCConfigurationUpdated } from '../state/oidc-configuration.selectors';
-import { OIDCConfigurationModel } from '@tailormap-admin/admin-api';
+import { GroupModel, OIDCConfigurationModel } from '@tailormap-admin/admin-api';
 import { clearSelectedOIDCConfiguration, setSelectedOIDCConfiguration } from '../state/oidc-configuration.actions';
 import { ConfirmDialogService, LoadingStateEnum } from '@tailormap-viewer/shared';
 import { OIDCConfigurationService } from '../services/oidc-configuration.service';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
+import { GroupService } from '../../user/services/group.service';
 
 @Component({
   selector: 'tm-admin-oidc-configuration-edit',
@@ -26,6 +27,8 @@ export class OIDCConfigurationEditComponent implements OnInit, OnDestroy {
   public oidcConfiguration$: Observable<OIDCConfigurationModel | null | undefined> = of(null);
   public draftOIDCConfigurationPristine$: Observable<boolean> = of(false);
 
+  public groups$: Observable<Array<GroupModel & { lastSeen: Date | null }>> = of([]);
+
   constructor(
     private route: ActivatedRoute,
     private store$: Store,
@@ -33,6 +36,7 @@ export class OIDCConfigurationEditComponent implements OnInit, OnDestroy {
     private confirmDelete: ConfirmDialogService,
     private router: Router,
     private adminSnackbarService: AdminSnackbarService,
+    private groupService: GroupService,
   ) {
   }
 
@@ -50,6 +54,31 @@ export class OIDCConfigurationEditComponent implements OnInit, OnDestroy {
     });
     this.oidcConfiguration$ = this.store$.select(selectDraftOIDCConfiguration);
     this.draftOIDCConfigurationPristine$ = this.store$.select(selectDraftOIDCConfigurationUpdated).pipe(map(updated => !updated));
+
+    this.groups$ =
+      combineLatest( [ this.oidcConfiguration$, this.groupService.getGroups$() ] ).pipe(
+        takeUntil(this.destroyed),
+        map(([ oidcConfiguration, groups ]) => {
+          if (oidcConfiguration == null) {
+            return [];
+          }
+
+          return groups.filter(group => {
+            const oidcClientIdsProperty = group?.additionalProperties?.find(value => value.key === 'oidcClientIds');
+            const oidcClientIds = oidcClientIdsProperty && Array.isArray(oidcClientIdsProperty.value) ? oidcClientIdsProperty.value as string[] : [];
+
+            return oidcClientIds.includes(oidcConfiguration.clientId);
+          }).map(group => {
+            const oidcLastSeenProperty = group?.additionalProperties?.find(value => value.key === 'oidcLastSeen');
+            const oidcLastSeen = oidcLastSeenProperty && typeof oidcLastSeenProperty.value === 'object' ? oidcLastSeenProperty.value as { [key: string]: string } : {};
+
+            return {
+              ...group,
+              lastSeen: oidcLastSeen[oidcConfiguration.clientId] ? new Date(oidcLastSeen[oidcConfiguration.clientId]) : null,
+            };
+          });
+        }),
+      );
   }
 
   public ngOnDestroy(): void {

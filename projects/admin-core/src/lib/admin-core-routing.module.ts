@@ -230,6 +230,7 @@ export const adminRoutes: Routes = [
           {
             path: AdminRoutes.GROUP_DETAILS,
             component: GroupEditComponent,
+            data: { className: 'full-screen-settings' },
           },
         ],
       },

@@ -1002,6 +1002,10 @@
         <source>Label</source>
         <target>Label</target>
       </trans-unit>
+      <trans-unit id="admin-core.common.last-seen" datatype="html">
+        <source>Last seen</source>
+        <target>Laatst gezien</target>
+      </trans-unit>
       <trans-unit id="admin-core.common.login" datatype="html">
         <source>Login</source>
         <target>Inloggen</target>
@@ -1342,6 +1346,10 @@
         <source>Add group</source>
         <target>Groep toevoegen</target>
       </trans-unit>
+      <trans-unit id="admin-core.groups.alias" datatype="html">
+        <source>Alias</source>
+        <target>Alias</target>
+      </trans-unit>
       <trans-unit id="admin-core.groups.alias-for" datatype="html">
         <source>Alias for group</source>
         <target>Alias voor groep</target>
@@ -1397,6 +1405,14 @@
       <trans-unit id="admin-core.groups.groups" datatype="html">
         <source>Groups</source>
         <target>Groepen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.groups.oidc-description" datatype="html">
+        <source>A role named <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/><x id="INTERPOLATION" equiv-text="{{group?.name}}"/><x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/> was received from the following OIDC registration<x id="INTERPOLATION_1" equiv-text="{{ oidcConfigurations.length &gt; 1 ? &apos;s&apos; : &apos;&apos;}}"/>. Users logged in via an OIDC registration with that role get the authorizations of this group.</source>
+        <target>Een rol genaamd <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/><x id="INTERPOLATION" equiv-text="{{group?.name}}"/><x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/> werd ontvangen van de volgende OIDC-registratie<x id="INTERPOLATION_1" equiv-text="{{ oidcConfigurations.length &gt; 1 ? &apos;s&apos; : &apos;&apos;}}"/>. Gebruikers die inloggen via een OIDC-registratie met die rol krijgen de autorisaties van deze groep.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.groups.oidc-header" datatype="html">
+        <source>OIDC registrations</source>
+        <target state="new">OIDC registraties</target>
       </trans-unit>
       <trans-unit id="admin-core.groups.system-group" datatype="html">
         <source>System group</source>
@@ -1506,6 +1522,14 @@
         <source>Filter identity providers</source>
         <target>Identiteitsproviders filteren</target>
       </trans-unit>
+      <trans-unit id="admin-core.oidc.groups-description" datatype="html">
+        <source>When a user logins with this OIDC registration, roles received are mapped to groups which are automatically created if they don&apos;t yet exist. The user gets the authorizations of the group and also any aliased group. The following roles have been received from this registration.</source>
+        <target>Wanneer een gebruiker inlogt met deze OIDC-registratie, worden ontvangen rollen toegewezen aan groepen die automatisch worden aangemaakt, als ze nog niet bestaan. De gebruiker krijgt de autorisaties van de groep en ook van elke ge-aliaste groep. De volgende rollen zijn ontvangen van deze registratie.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.groups-header" datatype="html">
+        <source>OIDC roles mapped to groups</source>
+        <target>OIDC rollen toegewezen aan groepen</target>
+      </trans-unit>
       <trans-unit id="admin-core.oidc.identity-providers" datatype="html">
         <source>Identity providers</source>
         <target>Identiteitsproviders</target>
@@ -1513,6 +1537,10 @@
       <trans-unit id="admin-core.oidc.issuer-url" datatype="html">
         <source>Issuer URL</source>
         <target>Issuer URL</target>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.issuer-url-hint" datatype="html">
+        <source>URL of the OpenID Connect metadata document. For Microsoft Entra, use <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>https://login.microsoftonline.com/[tenant-guid]/v2.0/<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/>. The URL may optionally end with <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>.well-known/openid-configuration<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/></source>
+        <target>URL van het OpenID Connect metadata document. Voor Microsoft Entra, gebruik <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>https://login.microsoftonline.com/[tenant-guid]/v2.0/<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/>. De URL kan optioneel eindigen met <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>.well-known/openid-configuration<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/></target>
       </trans-unit>
       <trans-unit id="admin-core.oidc.status" datatype="html">
         <source>Status</source>
