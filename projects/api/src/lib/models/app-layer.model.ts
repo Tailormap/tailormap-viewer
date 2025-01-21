@@ -27,6 +27,5 @@ export interface AppLayerModel {
   attribution?: string;
   description?: string;
   autoRefreshInSeconds?: number | null;
-  enableCollision?: boolean;
   searchIndex: LayerSearchIndexModel | null;
 }

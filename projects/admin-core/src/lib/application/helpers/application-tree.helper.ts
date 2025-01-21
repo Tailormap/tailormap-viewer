@@ -123,8 +123,8 @@ export class ApplicationTreeHelper {
     if (ApplicationModelHelper.isLevelTreeNode(node)) {
       return node.root
         ? (treeKey === 'layer' ? ApplicationService.ROOT_NODE_TITLE
-            : (treeKey === 'baseLayer' ? ApplicationService.ROOT_BASE_NODE_TITLE
-            : ApplicationService.ROOT_TERRAIN_NODE_TITLE))
+          : (treeKey === 'baseLayer' ? ApplicationService.ROOT_BASE_NODE_TITLE
+          : ApplicationService.ROOT_TERRAIN_NODE_TITLE))
         : node.title;
     }
     if (ApplicationModelHelper.isLayerTreeNode(node)) {

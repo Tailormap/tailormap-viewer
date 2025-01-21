@@ -351,6 +351,9 @@ const onToggleNodeExpanded = (
   state: ApplicationState,
   payload: ReturnType<typeof ApplicationActions.toggleApplicationNodeExpanded>,
 ): ApplicationState => {
+  if (payload.tree === 'terrainLayer') {
+    return state;
+  }
   const expandedNodesList: 'expandedAppLayerNodes' | 'expandedBaseLayerNodes' = payload.tree === 'baseLayer'
     ? 'expandedBaseLayerNodes'
     : 'expandedAppLayerNodes';
@@ -369,7 +372,7 @@ const onToggleNodeExpandedAll = (
   state: ApplicationState,
   payload: ReturnType<typeof ApplicationActions.toggleApplicationNodeExpandedAll>,
 ): ApplicationState => {
-  if (!state.draftApplication) {
+  if (!state.draftApplication || payload.tree === 'terrainLayer') {
     return state;
   }
   const expandedNodesList: 'expandedAppLayerNodes' | 'expandedBaseLayerNodes' = payload.tree === 'baseLayer'
@@ -398,6 +401,9 @@ const onSetApplicationTreeFilterTerm = (
   state: ApplicationState,
   payload: ReturnType<typeof ApplicationActions.setApplicationTreeFilterTerm>,
 ): ApplicationState  => {
+  if (payload.tree === 'terrainLayer') {
+    return state;
+  }
   const filterKey: keyof ApplicationState = payload.tree === 'baseLayer'
     ? 'applicationBaseLayerTreeFilterTerm'
     : 'applicationLayerTreeFilterTerm';

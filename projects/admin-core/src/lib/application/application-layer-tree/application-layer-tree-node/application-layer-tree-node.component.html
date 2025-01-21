@@ -8,26 +8,29 @@
     <span class="tree-node__label-content">{{node.label}}</span>
   </div>
   <div class="tree-node__actions">
-    <button *ngIf="isLayer()"
-            mat-icon-button
-            matTooltip="Remove layer from application"
-            i18n-matTooltip="@@admin-core.application.remove-layer"
-            (click)="removeNode($event, node.id)">
-      <mat-icon svgIcon="close"></mat-icon>
-    </button>
-    <button *ngIf="!isNonRoot() && applicationStateTree !== 'terrainLayer'"
-            mat-icon-button
-            matTooltip="Add sub folder"
-            i18n-matTooltip="@@admin-core.application.add-sub-folder"
-            (click)="addFolder($event, node.id)">
-      <mat-icon svgIcon="plus"></mat-icon>
-    </button>
-    <button *ngIf="isLevel() && isNonRoot()"
-            mat-icon-button
-            [matMenuTriggerFor]="menu"
-            aria-label="Tree node menu">
-      <mat-icon svgIcon="admin_more"></mat-icon>
-    </button>
+    @if (isLayer()) {
+      <button mat-icon-button
+              matTooltip="Remove layer from application"
+              i18n-matTooltip="@@admin-core.application.remove-layer"
+              (click)="removeNode($event, node.id)">
+        <mat-icon svgIcon="close"></mat-icon>
+      </button>
+    }
+    @if (!isNonRoot() && applicationStateTree !== 'terrainLayer') {
+      <button mat-icon-button
+              matTooltip="Add sub folder"
+              i18n-matTooltip="@@admin-core.application.add-sub-folder"
+              (click)="addFolder($event, node.id)">
+        <mat-icon svgIcon="plus"></mat-icon>
+      </button>
+    }
+    @if (isLevel() && isNonRoot()) {
+      <button mat-icon-button
+              [matMenuTriggerFor]="menu"
+              aria-label="Tree node menu">
+        <mat-icon svgIcon="admin_more"></mat-icon>
+      </button>
+    }
     <mat-menu #menu="matMenu">
       <button mat-menu-item
               (click)="addFolder($event, node.id)">

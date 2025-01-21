@@ -53,7 +53,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
   public layerTitle = '';
   public searchIndexEnabled$: Observable<boolean>;
 
-  public isLayer3D = false;
+  public layerIs3D = false;
 
   @Input()
   public set node(node: TreeModel<AppTreeLayerNodeModel> | null) {
@@ -70,7 +70,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     this._serviceLayer = serviceLayer;
     this.initFeatureSource(serviceLayer);
     this.setTitle();
-    this.isLayer3D = serviceLayer?.service.protocol === GeoServiceProtocolEnum.TILESET3D ||
+    this.layerIs3D = serviceLayer?.service.protocol === GeoServiceProtocolEnum.TILESET3D ||
       serviceLayer?.service.protocol === GeoServiceProtocolEnum.QUANTIZEDMESH;
   }
   public get serviceLayer(): ExtendedGeoServiceAndLayerModel | null {

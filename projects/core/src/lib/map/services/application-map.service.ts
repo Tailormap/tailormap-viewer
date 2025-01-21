@@ -2,6 +2,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
   LayerModel, LayerTypesEnum, MapService, OgcHelper, ServiceLayerModel, WMSLayerModel, WMTSLayerModel, XyzLayerModel, Tileset3DLayerModel,
+  TerrainLayerModel,
 } from '@tailormap-viewer/map';
 import {
   combineLatest, concatMap, distinctUntilChanged, filter, first, forkJoin, map, Observable, of, Subject, take, takeUntil, tap,
@@ -190,7 +191,7 @@ export class ApplicationMapService implements OnDestroy {
       return of(layer);
     }
     if (service.protocol === ServiceProtocol.QUANTIZEDMESH) {
-      const layer: Tileset3DLayerModel = {
+      const layer: TerrainLayerModel = {
         ...defaultLayerProps,
         layerType: LayerTypesEnum.QUANTIZEDMESH,
       };
