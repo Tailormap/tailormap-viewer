@@ -31,6 +31,9 @@ export class LegendService {
                 try {
                   const urlObject = new URL(url);
                   urlObject.searchParams.set('SCALE', mapResolution.scale.toString());
+                  if(this.mapService.getLocaleId() && layer.service?.serverType === 'geoserver') {
+                    urlObject.searchParams.set('LANGUAGE', this.mapService.getLocaleId());
+                  }
                   url = urlObject.toString();
                 } catch(_ignored) {
                   // Ignore errors
