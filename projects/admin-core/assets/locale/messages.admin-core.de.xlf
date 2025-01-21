@@ -170,6 +170,10 @@
         <source>Enable 3D viewing</source>
         <target>3D-Anzeige aktivieren</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.enable-3D-hint" datatype="html">
+        <source>3D viewing is available only for applications with projection EPSG:3857</source>
+        <target>3D-Ansicht ist nur für Anwendungen mit Projektion EPSG:3857 verfügbar</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.error-creating-application" datatype="html">
         <source>Error while creating application.</source>
         <target>Fehler beim Erstellen der Anwendung.</target>
@@ -1344,7 +1348,7 @@
       </trans-unit>
       <trans-unit id="admin-core.groups.alias-for-hint" datatype="html">
         <source>Members of this group will also be added to the group specified in &apos;Alias for group&apos; upon logging in. This is useful for mapping a single sign-on group to another group, such as &apos;admin&apos;. Note that nested aliases are not supported.</source>
-        <target>Mitglieder dieser Gruppe werden beim Einloggen auch der in 'Alias für Gruppe' angegebenen Gruppe hinzugefügt. Dies ist nützlich, um eine Single-Sign-On-Gruppe einer anderen Gruppe zuzuordnen, wie z.B. 'admin'. Beachten Sie, dass verschachtelte Aliase nicht unterstützt werden.</target>
+        <target>Mitglieder dieser Gruppe werden beim Einloggen auch der in &apos;Alias für Gruppe&apos; angegebenen Gruppe hinzugefügt. Dies ist nützlich, um eine Single-Sign-On-Gruppe einer anderen Gruppe zuzuordnen, wie z.B. &apos;admin&apos;. Beachten Sie, dass verschachtelte Aliase nicht unterstützt werden.</target>
       </trans-unit>
       <trans-unit id="admin-core.groups.delete-group-confirm" datatype="html">
         <source>Delete group <x id="PH" equiv-text="group.name"/></source>

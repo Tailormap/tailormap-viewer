@@ -80,17 +80,20 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit(): void {
-    this.treeNodes$ = this.applicationStateTree === 'layer' ? this.store$.select(selectAppLayerTreeForSelectedApplication)
+    this.treeNodes$ = this.applicationStateTree === 'layer'
+      ? this.store$.select(selectAppLayerTreeForSelectedApplication)
       : (this.applicationStateTree === 'baseLayer' ? this.store$.select(selectBaseLayerTreeForSelectedApplication)
           : this.store$.select(selectTerrainLayerTreeForSelectedApplication));
 
-    this.someExpanded$ = this.applicationStateTree === 'baseLayer'
-      ? this.store$.select(selectSomeExpandedBaseLayersForSelectedApplication)
-      : this.store$.select(selectSomeExpandedAppLayerForSelectedApplication);
+    this.someExpanded$ = this.applicationStateTree === 'layer'
+      ? this.store$.select(selectSomeExpandedAppLayerForSelectedApplication)
+      : (this.applicationStateTree === 'baseLayer' ? this.store$.select(selectSomeExpandedBaseLayersForSelectedApplication)
+        : of(false));
 
-    this.filterTerm$ = this.applicationStateTree === 'baseLayer'
-      ? this.store$.select(selectApplicationBaseLayerTreeFilterTerm)
-      : this.store$.select(selectApplicationLayerTreeFilterTerm);
+    this.filterTerm$ = this.applicationStateTree === 'layer'
+      ? this.store$.select(selectApplicationLayerTreeFilterTerm)
+      : (this.applicationStateTree === 'baseLayer' ? this.store$.select(selectApplicationBaseLayerTreeFilterTerm)
+        : of(''));
 
     this.loadingServices$ = this.store$.select(isLoadingApplicationServices);
 

@@ -1,11 +1,24 @@
 tm-admin-bounds-form-field,
-mat-slide-toggle,
 tm-admin-authorization-edit {
   margin-top: 16px;
   margin-bottom: 16px;
   display: block;
 }
 
+mat-slide-toggle {
+  margin-top: 16px;
+  display: block;
+}
+
 tm-admin-bounds-form-field {
   display: block;
+}
+
+.hint {
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  line-height: 20px;
+  text-align: left;
+  padding: 0 16px;
 }
