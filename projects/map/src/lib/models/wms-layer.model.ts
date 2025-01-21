@@ -7,4 +7,5 @@ export interface WMSLayerModel extends ServiceLayerModel {
   serverType: ServerType;
   tilingDisabled?: boolean;
   tilingGutter?: number;
+  language?: string;
 }

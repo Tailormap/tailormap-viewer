@@ -27,6 +27,7 @@ export interface LayerProperties {
   visible: boolean;
   name: string;
   filter?: string;
+  language?: string;
 }
 
 interface WmsServiceParamsModel {
@@ -36,6 +37,7 @@ interface WmsServiceParamsModel {
   TRANSPARENT: string;
   CQL_FILTER?: string;
   CACHE?: number;
+  LANGUAGE?: string;
 }
 
 const MAX_URL_LENGTH_BEFORE_POST = 4096;
@@ -318,6 +320,9 @@ export class OlLayerHelper {
     if (layer.filter && layer.serverType === TMServerType.GEOSERVER) {
       // TODO: implement filtering for other servers than geoserver (transform CQL to SLD for SLD_BODY param)
       params.CQL_FILTER = layer.filter;
+    }
+    if (layer.serverType === TMServerType.GEOSERVER && layer.language) {
+      params.LANGUAGE = layer.language;
     }
     if (addCacheBust) {
       params.CACHE = Date.now();
