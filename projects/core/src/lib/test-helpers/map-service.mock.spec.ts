@@ -41,7 +41,6 @@ export const getMapServiceMock = (
     zoomToInitialExtent: jest.fn(),
     getProjectionCode$: jest.fn(() => of(projectionCode || 'EPSG:4326')),
     getLayerManager$: jest.fn(() => of({ getLegendUrl: (layerId: string) => `layer-${layerId}-url-from-service` })),
-    getLocaleId: jest.fn(() => 'nl'),
     ...overrides,
   };
   return {

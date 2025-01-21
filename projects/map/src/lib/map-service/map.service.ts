@@ -1,4 +1,4 @@
-import { Inject, Injectable, LOCALE_ID, NgZone } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { OpenLayersMap } from '../openlayers-map/openlayers-map';
 import { combineLatest, finalize, map, Observable, take, tap } from 'rxjs';
 import {
@@ -45,7 +45,6 @@ export class MapService {
   constructor(
     private ngZone: NgZone,
     private httpXsrfTokenExtractor: HttpXsrfTokenExtractor,
-    @Inject(LOCALE_ID) private localeId: string,
   ) {
     this.map = new OpenLayersMap(this.ngZone, this.httpXsrfTokenExtractor);
   }
@@ -254,9 +253,5 @@ export class MapService {
 
   public setPadding(padding: number[]) {
     this.map.setPadding(padding);
-  }
-
-  public getLocaleId(): string {
-    return this.localeId;
   }
 }

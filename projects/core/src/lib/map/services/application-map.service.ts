@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Inject, Injectable, LOCALE_ID, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
   LayerModel, LayerTypesEnum, MapService, OgcHelper, ServiceLayerModel, WMSLayerModel, WMTSLayerModel, XyzLayerModel,
@@ -29,6 +29,7 @@ export class ApplicationMapService implements OnDestroy {
     private httpClient: HttpClient,
     private bookmarkService: BookmarkService,
     _applicationRefreshService: ApplicationLayerRefreshService,
+    @Inject(LOCALE_ID) private localeId: string,
   ) {
     const isValidLayer = (layer: LayerModel | null): layer is LayerModel => layer !== null;
     this.store$.select(selectMapOptions)
@@ -140,7 +141,7 @@ export class ApplicationMapService implements OnDestroy {
         tilingDisabled: extendedAppLayer.tilingDisabled,
         tilingGutter: extendedAppLayer.tilingGutter,
         filter: extendedAppLayer.filter,
-        language: service.serverType === ServerType.GEOSERVER ? this.mapService.getLocaleId() : undefined,
+        language: service.serverType === ServerType.GEOSERVER ? this.localeId : undefined,
       };
       return of(layer);
     }

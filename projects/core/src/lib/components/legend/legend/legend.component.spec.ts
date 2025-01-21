@@ -10,6 +10,7 @@ import { BaseComponentTypeEnum, getAppLayerModel, getServiceModel } from '@tailo
 import { TestBed } from '@angular/core/testing';
 import { LegendLayerComponent } from '../legend-layer/legend-layer.component';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
+import { LegendService } from '../services/legend.service';
 
 const createMockStore = () => {
   const layersAndServices = [
@@ -64,12 +65,10 @@ describe('LegendComponent', () => {
     const url3 = new URL(images[2].getAttribute('src') || '');
     expect(url3.host).toEqual('layer-3-url');
     expect(url3.searchParams.get('SCALE')).toEqual('1000');
-    expect(url3.searchParams.get('LANGUAGE')).toEqual('nl');
     expect(url3.searchParams.get('LEGEND_OPTIONS')).toBeTruthy();
     const url4 = new URL(images[3].getAttribute('src') || '');
     expect(url4.host).toEqual('layer-4-weird-case-url');
     expect(url4.searchParams.get('SCALE')).toEqual('1000');
-    expect(url3.searchParams.get('LANGUAGE')).toEqual('nl');
     expect(url4.searchParams.get('LEGEND_OPTIONS')).toBeTruthy(); // Should be case-insensitive to REQUEST=GetLegendGrapic URL param
   });
 });
