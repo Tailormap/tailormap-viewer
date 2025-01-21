@@ -254,5 +254,4 @@ export class MapService {
   public setPadding(padding: number[]) {
     this.map.setPadding(padding);
   }
-
 }
