@@ -131,5 +131,4 @@ export class GroupFormComponent implements OnInit, OnDestroy {
     this.readForm();
   }
 
-  protected readonly JSON = JSON;
 }
