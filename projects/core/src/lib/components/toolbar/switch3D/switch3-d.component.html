@@ -1,4 +1,4 @@
-@if ((enable$|async) && (allowSwitch$|async)){
+@if (enable() && (allowSwitch$ | async)){
   <div class="clicked-coordinates map-control-button-container">
     <button mat-flat-button
             class="map-control-button toggle-button"

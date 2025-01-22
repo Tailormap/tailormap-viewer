@@ -7,7 +7,6 @@ import userEvent from '@testing-library/user-event';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { provideMockStore } from '@ngrx/store/testing';
 import { coreStateKey, initialCoreState } from '../../../state/core.state';
-import { selectIn3DView } from '../../../map/state/map.selectors';
 
 describe('DrawingMenuButtonComponent', () => {
 
@@ -21,10 +20,7 @@ describe('DrawingMenuButtonComponent', () => {
       declarations: [MenubarButtonComponent],
       imports: [ SharedModule, MatIconTestingModule ],
       providers: [
-        provideMockStore({
-          initialState: { [coreStateKey]: initialCoreState },
-          selectors: [{ selector: selectIn3DView, value: false }],
-        }),
+        provideMockStore({ initialState: { [coreStateKey]: initialCoreState } }),
         { provide: MenubarService, useValue: menubarService },
       ],
     });

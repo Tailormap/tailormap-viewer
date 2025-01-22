@@ -7,7 +7,6 @@ import { of } from 'rxjs';
 import userEvent from '@testing-library/user-event';
 import { provideMockStore } from '@ngrx/store/testing';
 import { coreStateKey, initialCoreState } from '../../../state/core.state';
-import { selectIn3DView } from '../../../map/state/map.selectors';
 
 describe('PrintMenuButtonComponent', () => {
 
@@ -21,10 +20,7 @@ describe('PrintMenuButtonComponent', () => {
       declarations: [MenubarButtonComponent],
       imports: [ SharedModule, MatIconTestingModule ],
       providers: [
-        provideMockStore({
-          initialState: { [coreStateKey]: initialCoreState },
-          selectors: [{ selector: selectIn3DView, value: false }],
-        }),
+        provideMockStore({ initialState: { [coreStateKey]: initialCoreState } }),
         { provide: MenubarService, useValue: menubarService },
       ],
     });

@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, OnDestroy, signal } from '@angular/core';
-import { map, Observable, Subject, combineLatest } from 'rxjs';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, Signal } from '@angular/core';
+import { map, Observable, combineLatest } from 'rxjs';
 import { MapService } from '@tailormap-viewer/map';
 import { Store } from '@ngrx/store';
 import { selectEnable3D } from '../../../state/core.selectors';
@@ -18,12 +18,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   styleUrls: ['./switch3-d.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Switch3DComponent implements OnDestroy {
-
-  private destroyed = new Subject();
-  public enable$: Observable<boolean>;
-  public allowSwitch$: Observable<boolean>;
-  public tooltip = signal<string>($localize `:@@core.toolbar.switch-3d.tooltip3D:Switch to 3D`);
+export class Switch3DComponent {
 
   private disallowingComponents = [
     BaseComponentTypeEnum.PRINT,
@@ -33,13 +28,25 @@ export class Switch3DComponent implements OnDestroy {
     ToolbarComponentEnum.MEASURE,
   ];
 
+  public enable: Signal<boolean> = this.store$.selectSignal(selectEnable3D);
+  public allowSwitch$: Observable<boolean>;
+
+  public in3DView: Signal<boolean> = this.store$.selectSignal(selectIn3DView);
+  public tooltip: Signal<string> = computed(() => {
+    const in3DView= this.in3DView();
+    if (in3DView) {
+      return $localize `:@@core.toolbar.switch-3d.tooltip2D:Switch to 2D`;
+    } else {
+      return $localize `:@@core.toolbar.switch-3d.tooltip3D:Switch to 3D`;
+    }
+  });
+
   constructor(
     private store$: Store,
     private mapService: MapService,
     private menubarService: MenubarService,
     private destroyRef: DestroyRef,
   ) {
-    this.enable$ = this.store$.select(selectEnable3D);
     this.allowSwitch$ = combineLatest([
       this.menubarService.getActiveComponent$().pipe(
         map(
@@ -52,22 +59,9 @@ export class Switch3DComponent implements OnDestroy {
         ),
       ),
     ]).pipe(
+      takeUntilDestroyed(destroyRef),
       map(([ componentBoolean, toolBoolean ]) => componentBoolean && toolBoolean),
     );
-    this.store$.select(selectIn3DView)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(in3DView => {
-        if (in3DView) {
-          this.tooltip.set($localize `:@@core.toolbar.switch-3d.tooltip2D:Switch to 2D`);
-        } else {
-          this.tooltip.set($localize `:@@core.toolbar.switch-3d.tooltip3D:Switch to 3D`);
-        }
-      });
-  }
-
-  public ngOnDestroy() {
-    this.destroyed.next(null);
-    this.destroyed.complete();
   }
 
   public toggle() {
