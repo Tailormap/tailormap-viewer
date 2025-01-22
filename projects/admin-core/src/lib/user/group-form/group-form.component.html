@@ -23,7 +23,7 @@
     </mat-form-field>
     <mat-form-field>
       <mat-label i18n="@@admin-core.common.notes">Notes</mat-label>
-      <textarea formControlName="notes" matInput type="text"></textarea>
+      <textarea formControlName="notes" matInput type="text" maxLength="10000"></textarea>
     </mat-form-field>
     <mat-checkbox formControlName="systemGroup" i18n="@@admin-core.groups.system-group" labelPosition="before">System group</mat-checkbox>
     <tm-admin-fields-renderer [fields]="(registeredFields$ | async) || []" [data]="additionalProperties" (changed)="attributesChanged($event)"></tm-admin-fields-renderer>
