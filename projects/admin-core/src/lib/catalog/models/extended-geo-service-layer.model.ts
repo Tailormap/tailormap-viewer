@@ -1,4 +1,4 @@
-import { GeoServiceLayerModel, LayerSettingsModel } from '@tailormap-admin/admin-api';
+import { GeoServiceLayerModel, GeoServiceProtocolEnum, LayerSettingsModel } from '@tailormap-admin/admin-api';
 import { CatalogExtendedModel, CatalogExtendedTypeEnum } from './catalog-extended.model';
 
 export interface ExtendedGeoServiceLayerModel extends GeoServiceLayerModel, CatalogExtendedModel {
@@ -9,4 +9,5 @@ export interface ExtendedGeoServiceLayerModel extends GeoServiceLayerModel, Cata
   layerSettings?: LayerSettingsModel;
   expanded?: boolean;
   parentId?: string;
+  protocol?: GeoServiceProtocolEnum;
 }

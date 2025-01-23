@@ -3,7 +3,8 @@
      [class.level]="isLevel()">
   <div class="tree-node__label">
     <span class="tree-node__icon">
-      <mat-icon [attr.aria-label]="node.label" [svgIcon]="isLevel() ? 'folder_filled' : 'admin_catalog'"></mat-icon>
+      <mat-icon [attr.aria-label]="node.label" [svgIcon]="isLevel() ? 'folder_filled' :
+        (applicationStateTree === 'terrainLayer' ? 'admin_terrain' : 'admin_catalog')"></mat-icon>
     </span>
     <span class="tree-node__label-content">{{node.label}}</span>
   </div>

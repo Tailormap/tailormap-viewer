@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CatalogTreeModel } from '../../models/catalog-tree.model';
 import { CatalogTreeModelTypeEnum } from '../../models/catalog-tree-model-type.enum';
 import { CatalogTreeHelper } from '../../helpers/catalog-tree.helper';
+import { GeoServiceProtocolEnum } from '@tailormap-admin/admin-api';
 
 @Component({
   selector: 'tm-admin-catalog-base-tree-node',
@@ -53,6 +54,9 @@ export class CatalogBaseTreeNodeComponent {
     }
     if (CatalogTreeHelper.isFeatureSource(node)) {
       return node.metadata.protocol === 'WFS' ? 'admin_wfs' : 'admin_jdbc';
+    }
+    if (CatalogTreeHelper.isLayerNode(node) && node.metadata.protocol === GeoServiceProtocolEnum.QUANTIZEDMESH) {
+      return 'admin_terrain';
     }
     return CatalogBaseTreeNodeComponent.nodeIcon[node.type];
   }

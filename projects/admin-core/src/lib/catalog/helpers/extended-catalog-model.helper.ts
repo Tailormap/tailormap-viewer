@@ -1,6 +1,6 @@
 import {
   FeatureSourceModel, FeatureSourceSummaryWithFeatureTypesModel, FeatureTypeModel, FeatureTypeSummaryModel,
-  GeoServiceLayerModel, GeoServiceSummaryWithLayersModel, GeoServiceWithLayersModel, LayerSettingsModel,
+  GeoServiceLayerModel, GeoServiceProtocolEnum, GeoServiceSummaryWithLayersModel, GeoServiceWithLayersModel, LayerSettingsModel,
 } from '@tailormap-admin/admin-api';
 import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-layer.model';
@@ -49,6 +49,7 @@ export class ExtendedCatalogModelHelper {
     geoServiceId: string,
     catalogNodeId: string,
     layerSettings: Record<string, LayerSettingsModel> | undefined,
+    protocol: GeoServiceProtocolEnum,
   ): ExtendedGeoServiceLayerModel[] {
     return layers.map<ExtendedGeoServiceLayerModel>(layer => {
       const parent = ExtendedCatalogModelHelper.findLayerParent(`${layer.id}`, layers);
@@ -71,6 +72,7 @@ export class ExtendedCatalogModelHelper {
           : null,
         parentId: parent ? `${geoServiceId}_${parent.id}` : undefined,
         layerSettings: layerSettings?.[layer.name],
+        protocol: protocol,
       };
     });
   }
@@ -86,6 +88,7 @@ export class ExtendedCatalogModelHelper {
       serviceId,
       catalogNodeId,
       geoServiceWithLayers.settings?.layerSettings,
+      geoServiceWithLayers.protocol,
     );
     const service: ExtendedGeoServiceModel = {
       id: serviceId,
