@@ -110,11 +110,11 @@ export class CesiumLayerManager {
           const primitive = scene3D.primitives.get(this.layers3D.get(layer.id) ?? 0);
           primitive.show = true;
         } else {
+          this.layers3D.set(layer.id, scene3D.primitives.length);
           const tileset3DLayerPromise = this.create3DLayer(layer);
           tileset3DLayerPromise.then(tileset3DLayer => {
             if (tileset3DLayer) {
-              scene3D.primitives.add(tileset3DLayer, this.layers3D.size);
-              this.layers3D.set(layer.id, this.layers3D.size);
+              scene3D.primitives.add(tileset3DLayer);
             }
           }).catch(error => { console.log(`Error while adding 3D layer: ${error}`); });
         }
@@ -127,6 +127,7 @@ export class CesiumLayerManager {
       if (this.layers3D.has(layer.id)) {
         const primitive = scene3D.primitives.get(this.layers3D.get(layer.id) ?? 0);
         primitive.show = false;
+
       }
     });
   }
