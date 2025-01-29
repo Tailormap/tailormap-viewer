@@ -182,21 +182,21 @@ export const selectTerrainServiceLayerTreeForApplication = createSelector(
   },
 );
 
-export const selectTileset3DServiceLayerTreeForApplication = createSelector(
+export const selectTiles3DServiceLayerTreeForApplication = createSelector(
   selectCatalog,
   selectGeoServices,
   selectGeoServiceLayers,
   selectFeatureTypes,
   (catalog, services, layers, featureTypes): CatalogTreeModel[] => {
-    return CatalogFilterHelper.filterTreeByProtocol(catalog, services, layers, featureTypes, GeoServiceProtocolEnum.TILESET3D);
+    return CatalogFilterHelper.filterTreeByProtocol(catalog, services, layers, featureTypes, GeoServiceProtocolEnum.TILES3D);
   },
 );
 
 export const selectServiceLayerTreeForApplication = createSelector(
   selectBaseServiceLayerTreeForApplication,
-  selectTileset3DServiceLayerTreeForApplication,
-  (layers2D, tileset3DLayers) => {
-    return layers2D.concat(tileset3DLayers);
+  selectTiles3DServiceLayerTreeForApplication,
+  (layers2D, tiles3dLayers) => {
+    return layers2D.concat(tiles3dLayers);
   },
 );
 

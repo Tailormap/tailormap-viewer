@@ -111,10 +111,10 @@ export class CesiumLayerManager {
           primitive.show = true;
         } else {
           this.layers3D.set(layer.id, scene3D.primitives.length);
-          const tileset3DLayerPromise = this.create3DLayer(layer);
-          tileset3DLayerPromise.then(tileset3DLayer => {
-            if (tileset3DLayer) {
-              scene3D.primitives.add(tileset3DLayer);
+          const tiles3DLayerPromise = this.create3DLayer(layer);
+          tiles3DLayerPromise.then(tiles3dLayer => {
+            if (tiles3dLayer) {
+              scene3D.primitives.add(tiles3dLayer);
             }
           }).catch(error => { console.log(`Error while adding 3D layer: ${error}`); });
         }
@@ -135,10 +135,12 @@ export class CesiumLayerManager {
   private async create3DLayer(
     layer: LayerModel,
   ): Promise<Cesium3DTileset | null> {
-    if (LayerTypesHelper.isTileset3DLayer(layer)) {
-      const url = layer.url;
+    if (LayerTypesHelper.isTiles3DLayer(layer)) {
+      const resource = new Cesium.Resource({
+        url: layer.url,
+      });
       try {
-        const tileset: Promise<Cesium3DTileset> = await Cesium.Cesium3DTileset.fromUrl(url, {
+        const tileset: Promise<Cesium3DTileset> = await Cesium.Cesium3DTileset.fromUrl(resource, {
           maximumScreenSpaceError: 16,
           skipLevelOfDetail: true,
           baseScreenSpaceError: 1024,

@@ -70,7 +70,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     this._serviceLayer = serviceLayer;
     this.initFeatureSource(serviceLayer);
     this.setTitle();
-    this.layerIs3D = serviceLayer?.service.protocol === GeoServiceProtocolEnum.TILESET3D ||
+    this.layerIs3D = serviceLayer?.service.protocol === GeoServiceProtocolEnum.TILES3D ||
       serviceLayer?.service.protocol === GeoServiceProtocolEnum.QUANTIZEDMESH;
   }
   public get serviceLayer(): ExtendedGeoServiceAndLayerModel | null {

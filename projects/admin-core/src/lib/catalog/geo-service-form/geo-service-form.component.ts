@@ -24,7 +24,7 @@ export class GeoServiceFormComponent implements OnInit {
     GeoServiceProtocolEnum.WMS,
     GeoServiceProtocolEnum.WMTS,
     GeoServiceProtocolEnum.XYZ,
-    GeoServiceProtocolEnum.TILESET3D,
+    GeoServiceProtocolEnum.TILES3D,
     GeoServiceProtocolEnum.QUANTIZEDMESH,
   ];
   private readonly XYZ_CRS_DEFAULT = 'EPSG:3857';
@@ -134,8 +134,8 @@ export class GeoServiceFormComponent implements OnInit {
 
   public prettyName(protocol: GeoServiceProtocolEnum) {
     switch (protocol) {
-      case GeoServiceProtocolEnum.TILESET3D:
-        return '3D Tileset';
+      case GeoServiceProtocolEnum.TILES3D:
+        return '3D Tiles';
       case GeoServiceProtocolEnum.QUANTIZEDMESH:
         return $localize `:@@admin-core.catalog.quantizedmesh:Quantized Mesh (Terrain model)`;
       default:

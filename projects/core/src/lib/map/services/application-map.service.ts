@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
-  LayerModel, LayerTypesEnum, MapService, OgcHelper, ServiceLayerModel, WMSLayerModel, WMTSLayerModel, XyzLayerModel, Tileset3DLayerModel,
+  LayerModel, LayerTypesEnum, MapService, OgcHelper, ServiceLayerModel, WMSLayerModel, WMTSLayerModel, XyzLayerModel, Tiles3dLayerModel,
   TerrainLayerModel,
 } from '@tailormap-viewer/map';
 import {
@@ -183,10 +183,10 @@ export class ApplicationMapService implements OnDestroy {
       };
       return of(layer);
     }
-    if (service.protocol === ServiceProtocol.TILESET3D) {
-      const layer: Tileset3DLayerModel = {
+    if (service.protocol === ServiceProtocol.TILES3D) {
+      const layer: Tiles3dLayerModel = {
         ...defaultLayerProps,
-        layerType: LayerTypesEnum.TILESET3D,
+        layerType: LayerTypesEnum.TILES3D,
       };
       return of(layer);
     }

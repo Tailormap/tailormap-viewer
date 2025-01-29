@@ -302,13 +302,13 @@ export const selectSearchableLayers = createSelector(
 export const select3DLayers = createSelector(
   selectLayersWithServices,
   layers => layers.filter(
-    l => l.service?.protocol === ServiceProtocol.TILESET3D || l.service?.protocol === ServiceProtocol.QUANTIZEDMESH,
+    l => l.service?.protocol === ServiceProtocol.TILES3D || l.service?.protocol === ServiceProtocol.QUANTIZEDMESH,
   ),
 );
 
-export const select3DTilesetLayers = createSelector(
+export const select3dTilesLayers = createSelector(
   selectLayersWithServices,
   layers => layers.filter(
-    l => l.service?.protocol === ServiceProtocol.TILESET3D,
+    l => l.service?.protocol === ServiceProtocol.TILES3D,
   ),
 );

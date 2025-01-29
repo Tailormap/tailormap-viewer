@@ -9,7 +9,7 @@ import { ToolbarComponentEnum } from '../../toolbar/models/toolbar-component.enu
 import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.helper';
 import { FeatureInfoService } from '../feature-info.service';
 import {
-  select3DTilesetLayers,
+  select3dTilesLayers,
   selectIn3DView, selectLayer, selectVisibleLayersWithAttributes, selectVisibleWMSLayersWithoutAttributes,
 } from '../../../map/state/map.selectors';
 import { take } from 'rxjs/operators';
@@ -73,14 +73,14 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
     combineLatest([
       this.store$.select(selectVisibleLayersWithAttributes),
       this.store$.select(selectVisibleWMSLayersWithoutAttributes),
-      this.store$.select(select3DTilesetLayers),
+      this.store$.select(select3dTilesLayers),
       this.store$.select(selectIn3DView),
     ])
       .pipe(
         take(1),
-        filter(([ layers, wmsLayers, tileset3DLayers, in3DView ]) => {
+        filter(([ layers, wmsLayers, tiles3dLayers, in3DView ]) => {
           if (in3DView) {
-            return layers.length > 0 || wmsLayers.length > 0 || tileset3DLayers.length > 0;
+            return layers.length > 0 || wmsLayers.length > 0 || tiles3dLayers.length > 0;
           }
           return layers.length > 0 || wmsLayers.length > 0;
         }),

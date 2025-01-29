@@ -31,7 +31,7 @@ export class LayerSettingsFormComponent implements OnInit {
     this.isWMS = protocol === GeoServiceProtocolEnum.WMS;
     this.isWMTS = protocol === GeoServiceProtocolEnum.WMTS;
     this.isXYZ = protocol === GeoServiceProtocolEnum.XYZ;
-    this.isTILESET3D = protocol === GeoServiceProtocolEnum.TILESET3D;
+    this.isTILES3D = protocol === GeoServiceProtocolEnum.TILES3D;
     this.isQUANTIZEDMESH = protocol === GeoServiceProtocolEnum.QUANTIZEDMESH;
     this._protocol = protocol;
   }
@@ -90,7 +90,7 @@ export class LayerSettingsFormComponent implements OnInit {
   public isWMS = false;
   public isWMTS = false;
   public isXYZ = false;
-  public isTILESET3D = false;
+  public isTILES3D = false;
   public isQUANTIZEDMESH = false;
   public hiDpiModes = TileLayerHiDpiModeEnum;
 
