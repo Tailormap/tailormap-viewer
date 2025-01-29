@@ -1,7 +1,7 @@
 name: 'Test and deploy'
 
 env: # Keep this in sync with Dockerfile version
-  NODE_VERSION: "22.13.0"
+  NODE_VERSION: "22.13.1"
 
 concurrency:
   group: ${{ github.workflow }}-${{ ( github.ref == 'refs/heads/main' || github.ref == 'refs/heads/release' ) && format('ci-main-{0}', github.sha) || format('ci-main-{0}', github.ref) }}
@@ -152,7 +152,7 @@ jobs:
     needs: [ lint, test, build_libraries ]
     steps:
       - uses: actions/checkout@v4
-        with: # If tags aren't fetched the bin/post-build-localized.js script will leave fields in generated/version.json empty
+        with: # If tags aren't fetched the bin/post-build-version-info.js script will leave fields in generated/version.json empty
           # https://github.com/actions/checkout/issues/701
           fetch-depth: 0
 

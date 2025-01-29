@@ -65,7 +65,7 @@ export class MarkdownSourceEditorComponent implements OnInit {
       return;
     }
     const [ start, end ] = [ el.selectionStart, el.selectionEnd ];
-    el.setRangeText(`{{${value}}}`, start, end, 'select');
+    el.setRangeText(`{{${value}}}`, start, end, 'end');
     this.editorControl.patchValue(el.value);
   }
 

@@ -21,6 +21,7 @@
           class="split-button-menu-item"
           *ngFor="let option of optionsList"
           [tmTooltip]="option.label"
+          [matTooltipPosition]="'before'"
           (click)="selectOption(option.id)">
     <mat-icon svgIcon="check" *ngIf="option.id === selectedOptionId"></mat-icon>
     {{ option.label }}

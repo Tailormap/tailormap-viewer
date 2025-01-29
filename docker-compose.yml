@@ -67,7 +67,7 @@ services:
 
   solr:
     container_name: ${COMPOSE_PROJECT_NAME}-solr
-    image: ghcr.io/tailormap/solr:9.7.0
+    image: ghcr.io/tailormap/solr:9.8.0
     profiles:
       - solr
     environment:

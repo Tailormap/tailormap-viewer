@@ -34,7 +34,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
     name: new FormControl<string>('', { nonNullable: false }),
     enabled: new FormControl<boolean>(true, { nonNullable: true }),
     validUntil: new FormControl<string>('', { nonNullable: false }),
-    notes: new FormControl<string>('', { nonNullable: false }),
+    notes: new FormControl<string>('', { nonNullable: false, validators: [Validators.maxLength(10000)] }),
     groups: new FormControl<string[]>([], { nonNullable: false }),
   }, {
     validators: [

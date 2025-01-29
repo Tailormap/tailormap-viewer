@@ -978,6 +978,10 @@
         <source>Label</source>
         <target>Bezeichnung</target>
       </trans-unit>
+      <trans-unit id="admin-core.common.last-seen" datatype="html">
+        <source>Last seen</source>
+        <target>Zuletzt gesehen</target>
+      </trans-unit>
       <trans-unit id="admin-core.common.login" datatype="html">
         <source>Login</source>
         <target>Anmelden</target>
@@ -1318,13 +1322,17 @@
         <source>Add group</source>
         <target>Gruppe hinzufügen</target>
       </trans-unit>
+      <trans-unit id="admin-core.groups.alias" datatype="html">
+        <source>Alias</source>
+        <target>Alias</target>
+      </trans-unit>
       <trans-unit id="admin-core.groups.alias-for" datatype="html">
         <source>Alias for group</source>
         <target>Alias für Gruppe</target>
       </trans-unit>
       <trans-unit id="admin-core.groups.alias-for-hint" datatype="html">
-        <source>Members of this group will also be added to the group specified in &apos;Alias for group&apos; upon logging in. This is useful for mapping a single sign-on group to another group, such as &apos;admin&apos;. Note that nested aliases are not supported.</source>
-        <target>Mitglieder dieser Gruppe werden beim Einloggen auch der in 'Alias für Gruppe' angegebenen Gruppe hinzugefügt. Dies ist nützlich, um eine Single-Sign-On-Gruppe einer anderen Gruppe zuzuordnen, wie z.B. 'admin'. Beachten Sie, dass verschachtelte Aliase nicht unterstützt werden.</target>
+        <source>When logging in, group members will automatically be added to the group specified in &apos;Alias for group&apos;. This is useful for mapping a single sign-on group to another group, such as &apos;admin&apos;. Nested aliases are not supported.</source>
+        <target>Beim Anmelden werden Gruppenmitglieder automatisch der in &apos;Alias für Gruppe&apos; angegebenen Gruppe hinzugefügt. Dies ist nützlich, um eine Single-Sign-On-Gruppe einer anderen Gruppe zuzuordnen, z.B. &apos;admin&apos;. Verschachtelte Aliase werden nicht unterstützt.</target>
       </trans-unit>
       <trans-unit id="admin-core.groups.delete-group-confirm" datatype="html">
         <source>Delete group <x id="PH" equiv-text="group.name"/></source>
@@ -1373,6 +1381,14 @@
       <trans-unit id="admin-core.groups.groups" datatype="html">
         <source>Groups</source>
         <target>Gruppen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.groups.oidc-description" datatype="html">
+        <source>A role named <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/><x id="INTERPOLATION" equiv-text="{{group?.name}}"/><x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/> was received from the following OIDC registration<x id="INTERPOLATION_1" equiv-text="{{ oidcConfigurations.length &gt; 1 ? &apos;s&apos; : &apos;&apos;}}"/>. Users logged in via an OIDC registration with that role get the authorizations of this group.</source>
+        <target>Eine Rolle mit dem Namen <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/><x id="INTERPOLATION" equiv-text="{{group?.name}}"/><x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/> wurde von der folgenden OIDC-Registrierung<x id="INTERPOLATION_1" equiv-text="{{ oidcConfigurations.length &gt; 1 ? &apos;en&apos; : &apos;&apos;}}"/> empfangen. Benutzer, die sich über eine OIDC-Registrierung mit dieser Rolle anmelden, erhalten die Berechtigungen dieser Gruppe.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.groups.oidc-header" datatype="html">
+        <source>OIDC registrations</source>
+        <target>OIDC-Registrierungen</target>
       </trans-unit>
       <trans-unit id="admin-core.groups.system-group" datatype="html">
         <source>System group</source>
@@ -1482,6 +1498,14 @@
         <source>Filter identity providers</source>
         <target>Identitätsanbieter filtern</target>
       </trans-unit>
+      <trans-unit id="admin-core.oidc.groups-description" datatype="html">
+        <source>When a user logins with this OIDC registration, roles received are mapped to groups which are automatically created if they don&apos;t yet exist. The user gets the authorizations of the group and also any aliased group. The following roles have been received from this registration.</source>
+        <target>Wenn sich ein Benutzer mit dieser OIDC-Registrierung anmeldet, werden empfangene Rollen Gruppen zugeordnet, die automatisch erstellt werden, wenn sie noch nicht existieren. Der Benutzer erhält die Berechtigungen der Gruppe und auch jeder aliasierten Gruppe. Die folgenden Rollen wurden von dieser Registrierung empfangen.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.groups-header" datatype="html">
+        <source>OIDC roles mapped to groups</source>
+        <target>OIDC-Rollen Gruppen zugeordnet</target>
+      </trans-unit>
       <trans-unit id="admin-core.oidc.identity-providers" datatype="html">
         <source>Identity providers</source>
         <target>Identitätsanbieter</target>
@@ -1489,6 +1513,10 @@
       <trans-unit id="admin-core.oidc.issuer-url" datatype="html">
         <source>Issuer URL</source>
         <target>Aussteller-URL</target>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.issuer-url-hint" datatype="html">
+        <source>URL of the OpenID Connect metadata document. For Microsoft Entra, use <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>https://login.microsoftonline.com/[tenant-guid]/v2.0/<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/>. The URL may optionally end with <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>.well-known/openid-configuration<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/></source>
+        <target>URL des OpenID Connect-Metadatendokuments. Für Microsoft Entra verwenden Sie <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>https://login.microsoftonline.com/[tenant-guid]/v2.0/<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/>. Die URL kann optional mit <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>.well-known/openid-configuration<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> enden.</target>
       </trans-unit>
       <trans-unit id="admin-core.oidc.status" datatype="html">
         <source>Status</source>
