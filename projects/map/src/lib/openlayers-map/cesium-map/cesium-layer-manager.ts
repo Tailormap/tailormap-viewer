@@ -150,9 +150,9 @@ export class CesiumLayerManager {
           loadSiblings: false,
           cullWithChildrenBounds: true,
           dynamicScreenSpaceError: true,
-          dynamicScreenSpaceErrorDensity: 8.0e-4,
-          dynamicScreenSpaceErrorFactor: 96.0,
-          dynamicScreenSpaceErrorHeightFalloff: 1.0,
+          dynamicScreenSpaceErrorDensity: 6.0e-4,
+          dynamicScreenSpaceErrorFactor: 72.0,
+          dynamicScreenSpaceErrorHeightFalloff: 0.75,
         });
         return tileset;
       } catch (error) {
