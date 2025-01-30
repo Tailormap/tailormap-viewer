@@ -52,6 +52,8 @@ export class CesiumEventManager {
       }
 
       scene3D.requestRender();
+      setTimeout(() => {scene3D.requestRender();}, 300);
+
 
     }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
 

@@ -81,6 +81,11 @@ export class GeoServiceFormComponent implements OnInit {
     return this.geoServiceForm.get('protocol')?.value === GeoServiceProtocolEnum.XYZ;
   }
 
+  public is3D() {
+    return this.geoServiceForm.get('protocol')?.value === GeoServiceProtocolEnum.TILES3D
+      || this.geoServiceForm.get('protocol')?.value === GeoServiceProtocolEnum.QUANTIZEDMESH;
+  }
+
   public ngOnInit(): void {
     this.geoServiceForm.valueChanges
       .pipe(
