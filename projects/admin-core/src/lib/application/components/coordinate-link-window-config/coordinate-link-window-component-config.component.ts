@@ -21,6 +21,7 @@ type UrlFormType = FormGroup<{
   templateUrl: './coordinate-link-window-component-config.component.html',
   styleUrls: ['./coordinate-link-window-component-config.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class CoordinateLinkWindowComponentConfigComponent implements ConfigurationComponentModel<CoordinateLinkWindowConfigModel> {
 

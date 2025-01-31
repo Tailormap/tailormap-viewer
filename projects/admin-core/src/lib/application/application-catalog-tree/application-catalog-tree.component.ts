@@ -30,6 +30,7 @@ export interface AddLayerEvent {
   styleUrls: ['./application-catalog-tree.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [ TreeService, TreeDragDropService ],
+  standalone: false,
 })
 export class ApplicationCatalogTreeComponent implements OnInit {
 

@@ -12,6 +12,7 @@ interface NodeWithLayer extends LayerTreeNodeModel {
   templateUrl: './toc-node-details.component.html',
   styleUrls: ['./toc-node-details.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class TocNodeDetailsComponent implements OnInit {
 

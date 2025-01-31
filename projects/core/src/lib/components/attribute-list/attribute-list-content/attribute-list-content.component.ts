@@ -25,6 +25,7 @@ import { CssHelper } from '@tailormap-viewer/shared';
   templateUrl: './attribute-list-content.component.html',
   styleUrls: ['./attribute-list-content.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class AttributeListContentComponent implements OnInit {
 

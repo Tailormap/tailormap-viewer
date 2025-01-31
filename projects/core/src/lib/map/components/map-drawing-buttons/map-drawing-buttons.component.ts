@@ -13,6 +13,7 @@ import { ApplicationStyleService } from '../../../services/application-style.ser
   templateUrl: './map-drawing-buttons.component.html',
   styleUrls: ['./map-drawing-buttons.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
 

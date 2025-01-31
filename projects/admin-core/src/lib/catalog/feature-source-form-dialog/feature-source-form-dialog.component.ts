@@ -15,6 +15,7 @@ export interface FeatureSourceFormDialogData {
   templateUrl: './feature-source-form-dialog.component.html',
   styleUrls: ['./feature-source-form-dialog.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class FeatureSourceFormDialogComponent {
 

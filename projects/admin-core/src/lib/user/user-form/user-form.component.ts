@@ -14,6 +14,7 @@ import { AdminFieldLocation, AdminFieldModel, AdminFieldRegistrationService } fr
   templateUrl: './user-form.component.html',
   styleUrls: ['./user-form.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class UserFormComponent implements OnInit, OnDestroy {
 

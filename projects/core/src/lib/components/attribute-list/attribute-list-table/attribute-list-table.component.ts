@@ -11,6 +11,7 @@ const DEFAULT_COLUMN_WIDTH = 170;
   templateUrl: './attribute-list-table.component.html',
   styleUrls: ['./attribute-list-table.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class AttributeListTableComponent {
 

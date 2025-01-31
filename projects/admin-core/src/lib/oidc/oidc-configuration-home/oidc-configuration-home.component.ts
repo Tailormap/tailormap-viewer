@@ -5,6 +5,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
   templateUrl: './oidc-configuration-home.component.html',
   styleUrls: ['./oidc-configuration-home.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class OIDCConfigurationHomeComponent {
 }

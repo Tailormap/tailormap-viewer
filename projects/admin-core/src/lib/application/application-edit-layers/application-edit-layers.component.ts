@@ -34,6 +34,7 @@ import { CatalogTreeHelper } from '../../catalog/helpers/catalog-tree.helper';
   styleUrls: ['./application-edit-layers.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [TreeService],
+  standalone: false,
 })
 export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
 

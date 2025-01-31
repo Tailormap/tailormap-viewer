@@ -5,5 +5,6 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
   templateUrl: './settings-home-page.component.html',
   styleUrls: ['./settings-home-page.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class SettingsHomePageComponent {}

@@ -10,6 +10,7 @@ import { AdminSnackbarService } from '../../shared/services/admin-snackbar.servi
   templateUrl: './oidc-configuration-create.component.html',
   styleUrls: ['./oidc-configuration-create.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class OIDCConfigurationCreateComponent implements OnDestroy {
 

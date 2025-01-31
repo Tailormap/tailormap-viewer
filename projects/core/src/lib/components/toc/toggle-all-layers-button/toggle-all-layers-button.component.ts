@@ -9,6 +9,7 @@ import { toggleAllLayersVisibility } from '../../../map/state/map.actions';
   templateUrl: './toggle-all-layers-button.component.html',
   styleUrls: ['./toggle-all-layers-button.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class ToggleAllLayersButtonComponent implements OnInit {
 

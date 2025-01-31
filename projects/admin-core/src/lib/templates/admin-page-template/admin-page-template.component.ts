@@ -7,6 +7,7 @@ const LOCALSTORAGE_LIST_WIDTH_KEY = 'tm-admin-page-template-list-width';
   templateUrl: './admin-page-template.component.html',
   styleUrls: ['./admin-page-template.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class AdminPageTemplateComponent {
 

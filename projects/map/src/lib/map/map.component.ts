@@ -6,6 +6,7 @@ import { OverlayHelper } from '@tailormap-viewer/shared';
   selector: 'tm-map',
   templateUrl: 'map.component.html',
   styleUrl: 'map.component.css',
+  standalone: false,
 })
 export class MapComponent implements AfterViewInit, OnDestroy {
 

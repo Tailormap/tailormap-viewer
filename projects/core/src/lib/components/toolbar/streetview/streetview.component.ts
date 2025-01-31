@@ -16,6 +16,7 @@ import { FeatureModel } from '@tailormap-viewer/api';
   templateUrl: './streetview.component.html',
   styleUrls: ['./streetview.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class StreetviewComponent implements OnInit, OnDestroy {
   public toolActive$: Observable<boolean>;

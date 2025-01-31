@@ -22,6 +22,7 @@ type ServiceAndLayerFullName = ServiceAndLayer & { fullLayerName: string };
   templateUrl: './catalog-shortcut-buttons.component.html',
   styleUrls: ['./catalog-shortcut-buttons.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class CatalogShortcutButtonsComponent {
 

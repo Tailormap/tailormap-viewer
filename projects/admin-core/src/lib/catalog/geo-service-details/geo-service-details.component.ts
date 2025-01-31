@@ -19,6 +19,7 @@ import { FormHelper } from '../../helpers/form.helper';
   templateUrl: './geo-service-details.component.html',
   styleUrls: ['./geo-service-details.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class GeoServiceDetailsComponent implements OnInit, OnDestroy {
 

@@ -10,6 +10,7 @@ import { CatalogExtendedTypeEnum } from '../models/catalog-extended.model';
   templateUrl: './catalog-node-form.component.html',
   styleUrls: ['./catalog-node-form.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class CatalogNodeFormComponent implements OnInit, OnDestroy {
 

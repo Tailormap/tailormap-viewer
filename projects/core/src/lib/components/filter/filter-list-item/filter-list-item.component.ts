@@ -14,6 +14,7 @@ import { FilterTypeHelper } from '../../../filter/helpers/filter-type.helper';
   templateUrl: './filter-list-item.component.html',
   styleUrls: ['./filter-list-item.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class FilterListItemComponent {
 

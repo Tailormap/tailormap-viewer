@@ -7,6 +7,7 @@ import { selectComponentTitle } from '../../../state/core.selectors';
   selector: 'tm-toc-menu-button',
   templateUrl: './toc-menu-button.component.html',
   styleUrls: ['./toc-menu-button.component.css'],
+  standalone: false,
 })
 export class TocMenuButtonComponent {
   public componentType = BaseComponentTypeEnum.TOC;

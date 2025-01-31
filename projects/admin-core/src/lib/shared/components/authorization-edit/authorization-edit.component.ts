@@ -21,6 +21,7 @@ type ExtendedAuthorizationRuleGroup = ExtendedAuthorizationRuleGroupInner | { he
     multi: true,
     useExisting: AuthorizationEditComponent,
   }],
+  standalone: false,
 })
 export class AuthorizationEditComponent implements OnDestroy, ControlValueAccessor {
   private destroyed = new Subject();

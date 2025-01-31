@@ -18,6 +18,7 @@ import { FormControl } from '@angular/forms';
   styleUrls: ['./catalog-tree.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [ TreeService, TreeDragDropService ],
+  standalone: false,
 })
 export class CatalogTreeComponent implements OnInit {
 

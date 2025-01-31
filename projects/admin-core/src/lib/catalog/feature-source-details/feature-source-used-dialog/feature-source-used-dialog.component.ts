@@ -13,6 +13,7 @@ import { AdminSnackbarService } from '../../../shared/services/admin-snackbar.se
   templateUrl: './feature-source-used-dialog.component.html',
   styleUrls: ['./feature-source-used-dialog.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class FeatureSourceUsedDialogComponent {
 

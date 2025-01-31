@@ -14,6 +14,7 @@ import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
   templateUrl: './legend.component.html',
   styleUrls: ['./legend.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class LegendComponent implements OnInit {
 

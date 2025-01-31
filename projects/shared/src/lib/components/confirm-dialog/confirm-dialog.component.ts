@@ -14,6 +14,7 @@ export interface ConfirmDialogData {
   selector: 'tm-confirm-dialog',
   templateUrl: './confirm-dialog.component.html',
   styleUrls: ['./confirm-dialog.component.css'],
+  standalone: false,
 })
 export class ConfirmDialogComponent {
 

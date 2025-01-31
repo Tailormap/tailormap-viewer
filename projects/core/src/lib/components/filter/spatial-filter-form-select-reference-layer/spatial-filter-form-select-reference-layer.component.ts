@@ -12,6 +12,7 @@ import { SpatialFilterCrudService } from '../services/spatial-filter-crud.servic
   templateUrl: './spatial-filter-form-select-reference-layer.component.html',
   styleUrls: ['./spatial-filter-form-select-reference-layer.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class SpatialFilterFormSelectReferenceLayerComponent implements OnInit, OnDestroy {
 

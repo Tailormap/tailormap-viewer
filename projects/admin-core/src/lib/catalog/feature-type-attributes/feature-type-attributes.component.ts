@@ -21,6 +21,7 @@ const attributeExtraColumns = ['sort'];
   templateUrl: './feature-type-attributes.component.html',
   styleUrls: ['./feature-type-attributes.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class FeatureTypeAttributesComponent implements OnChanges {
 

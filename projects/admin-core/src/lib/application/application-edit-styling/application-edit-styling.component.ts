@@ -17,6 +17,7 @@ import { ApplicationImageRemoveService } from '../services/application-image-rem
   providers: [
     { provide: UPLOAD_REMOVE_SERVICE, useClass: ApplicationImageRemoveService },
   ],
+  standalone: false,
 })
 export class ApplicationEditStylingComponent {
 

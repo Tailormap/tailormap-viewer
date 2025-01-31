@@ -18,6 +18,7 @@ import { APP_BASE_HREF } from '@angular/common';
   templateUrl: './application-list.component.html',
   styleUrls: ['./application-list.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class ApplicationListComponent implements OnInit, OnDestroy {
 

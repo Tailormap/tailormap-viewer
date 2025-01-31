@@ -8,6 +8,7 @@ import { createFilter } from '../state/filter-component.actions';
   templateUrl: './create-filter-button.component.html',
   styleUrls: ['./create-filter-button.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class CreateFilterButtonComponent {
 

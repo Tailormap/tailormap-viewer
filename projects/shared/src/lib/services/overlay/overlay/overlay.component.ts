@@ -5,6 +5,7 @@ import { OverlayContent } from '../overlay-content';
 @Component({
   selector: 'tm-overlay',
   templateUrl: './overlay.component.html',
+  standalone: false,
 })
 export class OverlayComponent implements OnInit {
 

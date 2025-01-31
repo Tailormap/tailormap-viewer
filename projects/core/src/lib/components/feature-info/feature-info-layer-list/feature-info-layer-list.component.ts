@@ -9,6 +9,7 @@ import { FeatureInfoLayerListItemModel } from '../models/feature-info-layer-list
   templateUrl: './feature-info-layer-list.component.html',
   styleUrls: ['./feature-info-layer-list.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class FeatureInfoLayerListComponent {
   public layers$: Observable<FeatureInfoLayerListItemModel[]>;

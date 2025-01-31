@@ -17,6 +17,7 @@ import { MatSelectChange } from '@angular/material/select';
   templateUrl: './application-form.component.html',
   styleUrls: ['./application-form.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class ApplicationFormComponent implements OnInit, OnDestroy {
 

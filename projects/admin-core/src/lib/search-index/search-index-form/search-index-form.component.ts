@@ -15,6 +15,7 @@ import { AdminSseService } from '../../shared/services/admin-sse.service';
   templateUrl: './search-index-form.component.html',
   styleUrls: ['./search-index-form.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class SearchIndexFormComponent implements OnInit {
 

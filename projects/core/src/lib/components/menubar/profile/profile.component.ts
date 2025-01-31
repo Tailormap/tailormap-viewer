@@ -13,6 +13,7 @@ import { AuthenticatedUserService } from '@tailormap-viewer/api';
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class ProfileComponent implements OnDestroy {
 

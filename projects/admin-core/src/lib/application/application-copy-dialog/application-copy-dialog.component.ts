@@ -15,6 +15,7 @@ export interface ApplicationCopyDialogData {
   templateUrl: './application-copy-dialog.component.html',
   styleUrls: ['./application-copy-dialog.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class ApplicationCopyDialogComponent {
 

@@ -13,6 +13,7 @@ import { selectDraftFormAttributes } from '../state/form.selectors';
   templateUrl: './form-attribute-list.component.html',
   styleUrls: ['./form-attribute-list.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class FormAttributeListComponent implements OnInit {
 

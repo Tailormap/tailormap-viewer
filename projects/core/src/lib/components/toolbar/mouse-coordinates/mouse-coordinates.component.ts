@@ -7,6 +7,7 @@ import { concatMap, Observable, of, Subject, switchMap, takeUntil } from 'rxjs';
   templateUrl: './mouse-coordinates.component.html',
   styleUrls: ['./mouse-coordinates.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class MouseCoordinatesComponent implements OnInit, OnDestroy {
 

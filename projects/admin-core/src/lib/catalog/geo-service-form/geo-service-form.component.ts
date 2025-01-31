@@ -14,6 +14,7 @@ import { GroupService } from '../../user/services/group.service';
   templateUrl: './geo-service-form.component.html',
   styleUrls: ['./geo-service-form.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class GeoServiceFormComponent implements OnInit {
 

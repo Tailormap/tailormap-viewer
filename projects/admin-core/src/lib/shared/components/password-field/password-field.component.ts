@@ -14,6 +14,7 @@ import { nanoid } from 'nanoid';
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class PasswordFieldComponent implements ControlValueAccessor {
 

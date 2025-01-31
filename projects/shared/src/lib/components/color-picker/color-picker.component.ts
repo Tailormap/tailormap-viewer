@@ -62,6 +62,7 @@ const defaultColors: Array<string | undefined> = [
   selector: 'tm-color-picker',
   templateUrl: './color-picker.component.html',
   styleUrls: ['./color-picker.component.css'],
+  standalone: false,
 })
 export class ColorPickerComponent implements OnInit, OnDestroy {
 

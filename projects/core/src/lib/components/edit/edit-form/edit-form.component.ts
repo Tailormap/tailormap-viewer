@@ -18,6 +18,7 @@ interface EditFormInput {
   templateUrl: './edit-form.component.html',
   styleUrls: ['./edit-form.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class EditFormComponent implements OnDestroy {
 

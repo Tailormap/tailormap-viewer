@@ -23,6 +23,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class SelectFieldComponent implements OnInit, ControlValueAccessor {
 

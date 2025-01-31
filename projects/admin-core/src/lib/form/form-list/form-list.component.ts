@@ -17,6 +17,7 @@ import { loadCatalog } from '../../catalog/state/catalog.actions';
   templateUrl: './form-list.component.html',
   styleUrls: ['./form-list.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class FormListComponent implements OnInit {
 

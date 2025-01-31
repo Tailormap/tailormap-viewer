@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, Inject, InjectionToken, ModuleWithProviders, NgModule } from '@angular/core';
+import { InjectionToken, ModuleWithProviders, NgModule, inject, provideAppInitializer } from '@angular/core';
 import { LoginComponent, ViewerAppComponent } from './pages';
 import { MapModule } from '@tailormap-viewer/map';
 import { StoreModule } from '@ngrx/store';
@@ -46,7 +46,7 @@ const sentryTraceServiceFactory = async (router: Router) => {
 };
 const sentryProviders = SENTRY_DSN === '@SENTRY_DSN@' ? [] : [
   { provide: TRACE_SERVICE, useFactory: sentryTraceServiceFactory, deps: [Router] },
-  { provide: APP_INITIALIZER, useFactory: () => () => {/*do nothing*/}, deps: [TRACE_SERVICE], multi: true },
+  provideAppInitializer(() => { inject(TRACE_SERVICE); }),
 ];
 
 @NgModule({

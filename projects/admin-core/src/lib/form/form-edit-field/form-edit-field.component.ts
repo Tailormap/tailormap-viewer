@@ -17,6 +17,7 @@ type ValueListFormType = FormGroup<{ value: FormControl<string>; label: FormCont
   templateUrl: './form-edit-field.component.html',
   styleUrls: ['./form-edit-field.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class FormEditFieldComponent implements OnInit {
 

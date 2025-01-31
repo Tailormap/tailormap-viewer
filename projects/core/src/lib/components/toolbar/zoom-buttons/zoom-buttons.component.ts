@@ -7,6 +7,7 @@ import { Observable, of } from 'rxjs';
   templateUrl: './zoom-buttons.component.html',
   styleUrls: ['./zoom-buttons.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class ZoomButtonsComponent {
 

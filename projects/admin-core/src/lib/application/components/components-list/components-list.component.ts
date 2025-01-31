@@ -9,6 +9,7 @@ import { selectDisabledComponentsForSelectedApplication } from '../../state/appl
   templateUrl: './components-list.component.html',
   styleUrls: ['./components-list.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class ComponentsListComponent implements OnInit, OnDestroy {
 

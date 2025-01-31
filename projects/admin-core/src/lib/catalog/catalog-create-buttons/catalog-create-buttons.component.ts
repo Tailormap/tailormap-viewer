@@ -18,6 +18,7 @@ import { AdminSnackbarService } from '../../shared/services/admin-snackbar.servi
   templateUrl: './catalog-create-buttons.component.html',
   styleUrls: ['./catalog-create-buttons.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class CatalogCreateButtonsComponent implements OnInit, OnDestroy {
 

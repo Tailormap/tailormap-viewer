@@ -11,6 +11,7 @@ import { AdminSnackbarService } from '../../shared/services/admin-snackbar.servi
   templateUrl: './group-edit.component.html',
   styleUrls: ['./group-edit.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class GroupEditComponent implements OnInit, OnDestroy {
 

@@ -8,6 +8,7 @@ import { setAttributeListVisibility } from '../state/attribute-list.actions';
   selector: 'tm-attribute-list-button',
   templateUrl: './attribute-list-menu-button.component.html',
   styleUrls: ['./attribute-list-menu-button.component.css'],
+  standalone: false,
 })
 export class AttributeListMenuButtonComponent implements OnInit {
 

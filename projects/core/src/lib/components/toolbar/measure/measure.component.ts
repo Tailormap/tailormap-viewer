@@ -17,6 +17,7 @@ import { BaseComponentTypeEnum, MeasureComponentConfigModel } from '@tailormap-v
   templateUrl: './measure.component.html',
   styleUrls: ['./measure.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class MeasureComponent implements OnInit, OnDestroy {
 

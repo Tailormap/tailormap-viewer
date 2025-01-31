@@ -10,6 +10,7 @@ import { updateDraftOIDCConfiguration } from '../state/oidc-configuration.action
   templateUrl: './oidc-configuration-edit-settings.component.html',
   styleUrls: ['./oidc-configuration-edit-settings.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class OIDCConfigurationEditSettingsComponent implements OnInit {
 

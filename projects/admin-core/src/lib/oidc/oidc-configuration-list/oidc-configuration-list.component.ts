@@ -15,6 +15,7 @@ import { LoadingStateEnum } from '@tailormap-viewer/shared';
   templateUrl: './oidc-configuration-list.component.html',
   styleUrls: ['./oidc-configuration-list.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class OIDCConfigurationListComponent implements OnInit, OnDestroy {
 

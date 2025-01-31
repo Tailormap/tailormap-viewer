@@ -19,6 +19,7 @@ import { LegendImageRemoveService } from '../services/legend-image-remove.servic
   providers: [
     { provide: UPLOAD_REMOVE_SERVICE, useClass: LegendImageRemoveService },
   ],
+  standalone: false,
 })
 export class GeoServiceLayerDetailsComponent implements OnInit, OnDestroy {
 

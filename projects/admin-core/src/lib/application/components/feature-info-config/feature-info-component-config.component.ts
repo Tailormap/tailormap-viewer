@@ -13,6 +13,7 @@ import { debounceTime } from 'rxjs';
   templateUrl: './feature-info-component-config.component.html',
   styleUrls: ['./feature-info-component-config.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class FeatureInfoComponentConfigComponent implements ConfigurationComponentModel<FeatureInfoConfigModel> {
 

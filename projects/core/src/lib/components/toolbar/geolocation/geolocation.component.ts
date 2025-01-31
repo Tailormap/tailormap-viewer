@@ -10,6 +10,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   templateUrl: './geolocation.component.html',
   styleUrls: ['./geolocation.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class GeolocationComponent implements OnInit, OnDestroy {
   private destroyed = new Subject();

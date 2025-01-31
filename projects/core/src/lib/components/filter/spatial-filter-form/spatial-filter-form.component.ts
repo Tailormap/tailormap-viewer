@@ -22,6 +22,7 @@ import { FilterFeaturesService } from '../services/filter-features.service';
   templateUrl: './spatial-filter-form.component.html',
   styleUrls: ['./spatial-filter-form.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class SpatialFilterFormComponent implements OnInit, OnDestroy {
 
