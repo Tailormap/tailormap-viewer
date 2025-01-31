@@ -22,18 +22,22 @@
     <input matInput formControlName="attribution" />
   </mat-form-field>
   @if (!isLayerSpecific) {
-    <mat-slide-toggle formControlName="hiDpiEnabled" i18n="@@admin-core.catalog.hi-dpi-enabled">High-DPI enabled</mat-slide-toggle>
-    @if (isWMS) {
-      <mat-slide-toggle formControlName="tilingEnabled"  i18n="@@admin-core.catalog.use-tiling">Use tiling</mat-slide-toggle>
+    @if (isWMS || isWMTS || isXYZ) {
+      <mat-slide-toggle formControlName="hiDpiEnabled" i18n="@@admin-core.catalog.hi-dpi-enabled">High-DPI enabled</mat-slide-toggle>
+      @if (isWMS) {
+        <mat-slide-toggle formControlName="tilingEnabled"  i18n="@@admin-core.catalog.use-tiling">Use tiling</mat-slide-toggle>
+      }
     }
   } @else {
-    <div class="form-control">
-      <strong i18n="@@admin-core.catalog.connect-feature-source">Connected feature source and type</strong>
-      <tm-admin-feature-type-selector [featureSourceId]="layerSettingsForm.get('featureSourceId')?.value"
-                                      [featureTypeName]="layerSettingsForm.get('featureTypeName')?.value"
-                                      [layerName]="layerName"
-                                      (featureTypeSelected)="updateFeatureTypeSelection($event)"></tm-admin-feature-type-selector>
-    </div>
+    @if (isWMS || isWMTS || isXYZ) {
+      <div class="form-control">
+        <strong i18n="@@admin-core.catalog.connect-feature-source">Connected feature source and type</strong>
+        <tm-admin-feature-type-selector [featureSourceId]="layerSettingsForm.get('featureSourceId')?.value"
+                                        [featureTypeName]="layerSettingsForm.get('featureTypeName')?.value"
+                                        [layerName]="layerName"
+                                        (featureTypeSelected)="updateFeatureTypeSelection($event)"></tm-admin-feature-type-selector>
+      </div>
+    }
     @if (isXYZ) {
     <div class="form-control">
       <strong i18n="@@admin-core.catalog.xyz-tile-grid-options">XYZ tile grid options</strong>
@@ -60,10 +64,12 @@
       </div>
     </div>
     }
-    <div class="toggle-control">
-      <strong  i18n="@@admin-core.catalog.hi-dpi-settings">High-DPI settings</strong>
-      <tm-admin-tri-state-boolean formControlName="hiDpiEnabled"></tm-admin-tri-state-boolean>
-    </div>
+    @if (isWMS || isWMTS || isXYZ) {
+      <div class="toggle-control">
+        <strong  i18n="@@admin-core.catalog.hi-dpi-settings">High-DPI settings</strong>
+        <tm-admin-tri-state-boolean formControlName="hiDpiEnabled"></tm-admin-tri-state-boolean>
+      </div>
+    }
     @if (isWMTS) {
       <mat-form-field class="form-control">
         <mat-label i18n="@@admin-core.catalog.hi-dpi-mode">High-DPI mode</mat-label>

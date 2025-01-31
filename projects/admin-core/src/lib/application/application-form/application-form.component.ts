@@ -10,6 +10,7 @@ import { UpdateDraftApplicationModel } from '../models/update-draft-application.
 import { LanguageHelper } from '@tailormap-viewer/shared';
 import { selectApplications } from '../state/application.selectors';
 import { Store } from '@ngrx/store';
+import { MatSelectChange } from '@angular/material/select';
 
 @Component({
   selector: 'tm-admin-application-form',
@@ -65,6 +66,7 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
     }),
     defaultLanguage: new FormControl<string | null>(null),
     hideLoginButton: new FormControl<boolean | null>(null),
+    enable3D: new FormControl<boolean | null>(null),
     hideLanguageSwitcher: new FormControl<boolean | null>(null),
     initialExtent: new FormControl<BoundsModel | null>(null),
     maxExtent: new FormControl<BoundsModel | null>(null),
@@ -123,6 +125,7 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
         };
         const uiSettings: UiSettingsModel = {
           hideLoginButton: typeof value.hideLoginButton === 'boolean' ? value.hideLoginButton : false,
+          enable3D: typeof value.enable3D === 'boolean' ? value.enable3D : false,
         };
         this.updateApplication.emit({ application, i18nSettings, uiSettings });
       });
@@ -161,6 +164,9 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
       hideLoginButton: typeof application?.settings?.uiSettings?.hideLoginButton === "boolean"
         ? application.settings.uiSettings.hideLoginButton
         : null,
+      enable3D: typeof application?.settings?.uiSettings?.enable3D === "boolean"
+        ? application.settings.uiSettings.enable3D
+        : null,
       authorizationRules: application ? application.authorizationRules : [AUTHORIZATION_RULE_ANONYMOUS],
     }, { emitEvent: false });
   }
@@ -172,6 +178,15 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
       && FormHelper.isValidValue(values.crs)
       && (this.nameFieldOnly || this.applicationForm.dirty)
       && this.applicationForm.valid;
+  }
+
+  public onCrsSelectionChanged(event: MatSelectChange) {
+    if (event.value === 'EPSG:3857') {
+      this.applicationForm.controls['enable3D'].enable({ emitEvent: false });
+    } else {
+      this.applicationForm.patchValue({ enable3D: false }, { emitEvent: true });
+      this.applicationForm.controls['enable3D'].disable({ emitEvent: false });
+    }
   }
 
 }

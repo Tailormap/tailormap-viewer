@@ -52,6 +52,9 @@ export class TreeComponent implements OnInit, OnDestroy {
   @Input()
   public dragHandleSelector?: string;
 
+  @Input()
+  public singleLayerChecked = false;
+
   @ViewChild('treeElement', { static: false, read: CdkVirtualScrollViewport })
   private treeElement: CdkVirtualScrollViewport | undefined;
 
@@ -127,7 +130,24 @@ export class TreeComponent implements OnInit, OnDestroy {
     if (this.readOnlyMode) {
       return;
     }
+    if (this.singleLayerChecked) {
+      this.uncheckAllOtherNodes(node);
+    }
     this.toggleNodeChecked(node);
+  }
+
+  private uncheckAllOtherNodes(node: FlatTreeModel): void {
+    this.treeService.getTreeDataSource$()
+      .pipe(take(1))
+      .subscribe(dataSource => {
+        const stateChange: FlatTreeModel[] = dataSource.map(dataSourceNode => {
+          if (dataSourceNode.id === node.id) {
+            return dataSourceNode;
+          }
+          return { ...dataSourceNode, checked: false };
+        });
+        this.treeService.checkStateChanged(stateChange);
+      });
   }
 
   public setNodeSelected(node: FlatTreeModel) {

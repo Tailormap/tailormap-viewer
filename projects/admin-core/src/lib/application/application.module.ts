@@ -33,6 +33,7 @@ import {
 } from './application-layer-attribute-settings/application-layer-attribute-settings.component';
 import { FormModule } from "../form/form.module";
 import { ApplicationCopyDialogComponent } from './application-copy-dialog/application-copy-dialog.component';
+import { ApplicationEditTerrainLayersComponent } from './application-edit-terrain-layers/application-edit-terrain-layers.component';
 
 @NgModule({
   declarations: [
@@ -53,18 +54,19 @@ import { ApplicationCopyDialogComponent } from './application-copy-dialog/applic
     ApplicationLayerSettingsComponent,
     ApplicationLayerAttributeSettingsComponent,
     ApplicationCopyDialogComponent,
+    ApplicationEditTerrainLayersComponent,
   ],
-    imports: [
-        CommonModule,
-        SharedModule,
-        StoreModule.forFeature(applicationStateKey, applicationReducer),
-        EffectsModule.forFeature([ApplicationEffects]),
-        SharedAdminComponentsModule,
-        RouterOutlet,
-        CatalogModule,
-        ComponentsModule,
-        FormModule,
-    ],
+  imports: [
+    CommonModule,
+    SharedModule,
+    StoreModule.forFeature(applicationStateKey, applicationReducer),
+    EffectsModule.forFeature([ApplicationEffects]),
+    SharedAdminComponentsModule,
+    RouterOutlet,
+    CatalogModule,
+    ComponentsModule,
+    FormModule,
+  ],
     exports: [
         ApplicationListComponent,
     ],
