@@ -22,7 +22,7 @@ export class GroupFormComponent implements OnInit, OnDestroy {
     }),
     description: new FormControl<string>('', { nonNullable: false }),
     aliasForGroup: new FormControl<string>('', { nonNullable: false }),
-    notes: new FormControl<string>('', { nonNullable: false }),
+    notes: new FormControl<string>('', { nonNullable: false, validators: [Validators.maxLength(10000)] }),
     systemGroup: new FormControl<boolean>(false, { nonNullable: true }),
   });
 
@@ -131,5 +131,4 @@ export class GroupFormComponent implements OnInit, OnDestroy {
     this.readForm();
   }
 
-  protected readonly JSON = JSON;
 }

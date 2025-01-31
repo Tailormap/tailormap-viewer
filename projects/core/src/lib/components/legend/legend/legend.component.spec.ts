@@ -10,6 +10,7 @@ import { BaseComponentTypeEnum, getAppLayerModel, getServiceModel } from '@tailo
 import { TestBed } from '@angular/core/testing';
 import { LegendLayerComponent } from '../legend-layer/legend-layer.component';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
+import { LegendService } from '../services/legend.service';
 
 const createMockStore = () => {
   const layersAndServices = [

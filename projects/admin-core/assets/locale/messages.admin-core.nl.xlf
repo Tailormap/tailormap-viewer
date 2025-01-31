@@ -1355,8 +1355,8 @@
         <target>Alias voor groep</target>
       </trans-unit>
       <trans-unit id="admin-core.groups.alias-for-hint" datatype="html">
-        <source>Members of this group will also be added to the group specified in &apos;Alias for group&apos; upon logging in. This is useful for mapping a single sign-on group to another group, such as &apos;admin&apos;. Note that nested aliases are not supported.</source>
-        <target>Leden van deze groep worden bij het inloggen ook toegevoegd aan de groep die is opgegeven in &apos;Alias voor groep&apos;. Dit is handig voor het koppelen van een single sign-on groep aan een andere groep, zoals &apos;admin&apos;. Merk op dat geneste aliassen niet worden ondersteund.</target>
+        <source>When logging in, group members will automatically be added to the group specified in &apos;Alias for group&apos;. This is useful for mapping a single sign-on group to another group, such as &apos;admin&apos;. Nested aliases are not supported.</source>
+        <target>Bij inloggen worden groepsleden automatisch toegevoegd aan de groep in &apos;Alias voor groep&apos;. Dit is handig om een single sign-on groep te koppelen aan een andere Tailormap groep, zoals &apos;admin&apos;. Geneste aliassen worden niet ondersteund.</target>
       </trans-unit>
       <trans-unit id="admin-core.groups.delete-group-confirm" datatype="html">
         <source>Delete group <x id="PH" equiv-text="group.name"/></source>

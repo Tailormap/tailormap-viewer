@@ -1,7 +1,7 @@
 name: 'Test and deploy'
 
 env: # Keep this in sync with Dockerfile version
-  NODE_VERSION: "22.13.0"
+  NODE_VERSION: "22.13.1"
 
 concurrency:
   group: ${{ github.workflow }}-${{ ( github.ref == 'refs/heads/main' || github.ref == 'refs/heads/release' ) && format('ci-main-{0}', github.sha) || format('ci-main-{0}', github.ref) }}
@@ -152,7 +152,7 @@ jobs:
     needs: [ lint, test, build_libraries ]
     steps:
       - uses: actions/checkout@v4
-        with: # If tags aren't fetched the bin/post-build-localized.js script will leave fields in generated/version.json empty
+        with: # If tags aren't fetched the bin/post-build-version-info.js script will leave fields in generated/version.json empty
           # https://github.com/actions/checkout/issues/701
           fetch-depth: 0
 
@@ -173,7 +173,7 @@ jobs:
           echo "VERSION=pr-${PR}" >> $GITHUB_ENV
           echo "COMPOSE_PROJECT_NAME=tailormap-pr-${PR}" >> $GITHUB_ENV
           echo "COMPOSE_FILE=docker-compose.yml:docker-compose.traefik.yml:ci/docker-compose.pr.yml" >> $GITHUB_ENV
-          echo "BASE_HREF=/pull-request/${PR}/${GITHUB_REF_NAME_SLUG_URL}/" >> $GITHUB_ENV
+          echo "BASE_HREF=/pull-request/${PR}/${GITHUB_HEAD_REF_SLUG_URL}/" >> $GITHUB_ENV
           # also skip deploying any profiles, eg. solr
           echo "COMPOSE_PROFILES=" >> $GITHUB_ENV
 

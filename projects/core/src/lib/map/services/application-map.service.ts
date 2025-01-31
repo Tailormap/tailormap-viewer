@@ -1,13 +1,13 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Inject, Injectable, LOCALE_ID, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
   LayerModel, LayerTypesEnum, MapService, OgcHelper, ServiceLayerModel, WMSLayerModel, WMTSLayerModel, XyzLayerModel, Tiles3dLayerModel,
   TerrainLayerModel,
 } from '@tailormap-viewer/map';
+import { ServerType, ServiceModel, ServiceProtocol } from '@tailormap-viewer/api';
 import {
   combineLatest, concatMap, distinctUntilChanged, filter, first, forkJoin, map, Observable, of, Subject, take, takeUntil, tap,
 } from 'rxjs';
-import { ServiceModel, ServiceProtocol } from '@tailormap-viewer/api';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { ArrayHelper, HtmlifyHelper } from '@tailormap-viewer/shared';
 import { selectMapOptions, selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersWithServices, select3DLayers } from '../state/map.selectors';
@@ -33,6 +33,7 @@ export class ApplicationMapService implements OnDestroy {
     private httpClient: HttpClient,
     private bookmarkService: BookmarkService,
     _applicationRefreshService: ApplicationLayerRefreshService,
+    @Inject(LOCALE_ID) private localeId: string,
   ) {
     const isValidLayer = (layer: LayerModel | null): layer is LayerModel => layer !== null;
     this.store$.select(selectMapOptions)
@@ -167,6 +168,7 @@ export class ApplicationMapService implements OnDestroy {
         tilingDisabled: extendedAppLayer.tilingDisabled,
         tilingGutter: extendedAppLayer.tilingGutter,
         filter: extendedAppLayer.filter,
+        language: service.serverType === ServerType.GEOSERVER ? this.localeId : undefined,
       };
       return of(layer);
     }

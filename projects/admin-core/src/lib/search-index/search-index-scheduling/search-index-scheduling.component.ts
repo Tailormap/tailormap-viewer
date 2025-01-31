@@ -31,7 +31,7 @@ export class SearchIndexSchedulingComponent implements OnInit {
     { cronExpression: '', viewValue: $localize `:@@admin-core.search-index.schedule.no-schedule:No schedule` },
     { cronExpression: '0 0 0/1 1/1 * ? *', viewValue: $localize `:@@admin-core.search-index.schedule.every-hour:Every hour` },
     { cronExpression: '0 0 18 1/1 * ? *', viewValue: $localize `:@@admin-core.search-index.schedule.every-day:Every day at 18:00` },
-    { cronExpression: '0 0 18 * * 1 *', viewValue: $localize `:@@admin-core.search-index.schedule.every-week:Every week monday at 18:00` },
+    { cronExpression: '0 0 18 ? * MON *', viewValue: $localize `:@@admin-core.search-index.schedule.every-week:Every week Monday at 18:00` },
     { cronExpression: '0 0 18 1 * ? *', viewValue: $localize `:@@admin-core.search-index.schedule.every-month:Every first day of the month at 18:00` },
   ];
 

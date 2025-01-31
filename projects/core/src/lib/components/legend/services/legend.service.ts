@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, LOCALE_ID } from '@angular/core';
 import { catchError, combineLatest, concatMap, forkJoin, map, Observable, of, switchMap } from 'rxjs';
 import { MapService, MapViewDetailsModel, ScaleHelper } from '@tailormap-viewer/map';
 import { ExtendedAppLayerModel } from '../../../map/models';
@@ -13,6 +13,7 @@ export class LegendService {
 
   constructor(
     private mapService: MapService,
+    @Inject(LOCALE_ID) private localeId: string,
   ) {
   }
 
@@ -31,6 +32,9 @@ export class LegendService {
                 try {
                   const urlObject = new URL(url);
                   urlObject.searchParams.set('SCALE', mapResolution.scale.toString());
+                  if(this.localeId && layer.service?.serverType === 'geoserver') {
+                    urlObject.searchParams.set('LANGUAGE', this.localeId);
+                  }
                   url = urlObject.toString();
                 } catch(_ignored) {
                   // Ignore errors
