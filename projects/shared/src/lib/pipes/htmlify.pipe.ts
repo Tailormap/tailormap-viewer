@@ -4,6 +4,7 @@ import { HtmlifyHelper } from '../helpers/htmlify.helper';
 
 @Pipe({
   name: 'htmlify',
+  standalone: false,
 })
 export class HtmlifyPipe implements PipeTransform {
 

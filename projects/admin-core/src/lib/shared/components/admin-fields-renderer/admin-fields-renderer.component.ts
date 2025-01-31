@@ -9,6 +9,7 @@ import { AdditionalPropertyModel } from '@tailormap-admin/admin-api';
   templateUrl: './admin-fields-renderer.component.html',
   styleUrls: ['./admin-fields-renderer.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class AdminFieldsRendererComponent implements OnInit {
 

@@ -15,6 +15,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class ListFilterComponent implements OnInit, ControlValueAccessor {
 

@@ -12,6 +12,7 @@ import { selectCQLFilters } from '../../../filter/state/filter.selectors';
   templateUrl: './attribute-list-export-button.component.html',
   styleUrls: ['./attribute-list-export-button.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class AttributeListExportButtonComponent implements OnDestroy {
 

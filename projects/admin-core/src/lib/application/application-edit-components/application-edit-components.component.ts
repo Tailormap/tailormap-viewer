@@ -6,6 +6,7 @@ import { BehaviorSubject } from 'rxjs';
   templateUrl: './application-edit-components.component.html',
   styleUrls: ['./application-edit-components.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class ApplicationEditComponentsComponent {
 

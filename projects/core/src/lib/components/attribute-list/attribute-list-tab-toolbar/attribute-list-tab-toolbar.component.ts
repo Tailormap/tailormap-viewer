@@ -17,6 +17,7 @@ import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
   templateUrl: './attribute-list-tab-toolbar.component.html',
   styleUrls: ['./attribute-list-tab-toolbar.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
 

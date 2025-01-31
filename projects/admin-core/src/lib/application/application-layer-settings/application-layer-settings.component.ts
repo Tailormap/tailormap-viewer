@@ -36,6 +36,7 @@ type FeatureSourceAndType = {
   templateUrl: './application-layer-settings.component.html',
   styleUrls: ['./application-layer-settings.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
 

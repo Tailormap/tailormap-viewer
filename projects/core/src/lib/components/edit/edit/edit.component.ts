@@ -18,6 +18,7 @@ import { ToolbarComponentEnum } from '../../toolbar/models/toolbar-component.enu
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class EditComponent implements OnInit {
 

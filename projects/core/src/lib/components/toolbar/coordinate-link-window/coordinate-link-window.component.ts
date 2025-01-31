@@ -20,6 +20,7 @@ import { isActiveToolbarTool } from '../state/toolbar.selectors';
   templateUrl: './coordinate-link-window.component.html',
   styleUrls: ['./coordinate-link-window.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class CoordinateLinkWindowComponent implements OnInit, OnDestroy {
 

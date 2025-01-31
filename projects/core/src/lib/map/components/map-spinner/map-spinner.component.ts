@@ -7,6 +7,7 @@ import { MapService } from '@tailormap-viewer/map';
   templateUrl: './map-spinner.component.html',
   styleUrls: ['./map-spinner.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class MapSpinnerComponent implements OnInit {
 

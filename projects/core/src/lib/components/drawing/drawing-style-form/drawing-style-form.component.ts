@@ -14,6 +14,7 @@ import { ApplicationStyleService } from '../../../services/application-style.ser
   templateUrl: './drawing-style-form.component.html',
   styleUrls: ['./drawing-style-form.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class DrawingStyleFormComponent implements OnInit, OnDestroy {
 

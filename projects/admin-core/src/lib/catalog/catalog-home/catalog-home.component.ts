@@ -5,6 +5,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
   templateUrl: './catalog-home.component.html',
   styleUrls: ['./catalog-home.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class CatalogHomeComponent {
 }

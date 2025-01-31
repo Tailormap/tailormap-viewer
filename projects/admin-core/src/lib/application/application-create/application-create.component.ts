@@ -10,6 +10,7 @@ import { UpdateDraftApplicationModel } from '../models/update-draft-application.
   templateUrl: './application-create.component.html',
   styleUrls: ['./application-create.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class ApplicationCreateComponent implements OnDestroy {
 

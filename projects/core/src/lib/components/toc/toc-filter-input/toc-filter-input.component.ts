@@ -10,6 +10,7 @@ import { selectFilterTerm } from '../state/toc.selectors';
   templateUrl: './toc-filter-input.component.html',
   styleUrls: ['./toc-filter-input.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class TocFilterInputComponent implements OnInit, OnDestroy {
 

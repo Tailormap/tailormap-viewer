@@ -8,6 +8,7 @@ import { LanguageHelper } from './language.helper';
   templateUrl: './language-toggle.component.html',
   styleUrls: ['./language-toggle.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class LanguageToggleComponent {
 

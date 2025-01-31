@@ -5,6 +5,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
   templateUrl: './search-index-home.component.html',
   styleUrls: ['./search-index-home.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class SearchIndexHomeComponent {
 }

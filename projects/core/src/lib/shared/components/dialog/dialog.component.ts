@@ -26,6 +26,7 @@ const DEFAULT_WIDTH = 300;
       ],
     ),
   ],
+  standalone: false,
 })
 export class DialogComponent implements OnInit, OnChanges, OnDestroy {
 

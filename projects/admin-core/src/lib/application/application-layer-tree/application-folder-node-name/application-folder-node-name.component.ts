@@ -7,6 +7,7 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
   templateUrl: './application-folder-node-name.component.html',
   styleUrls: ['./application-folder-node-name.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class ApplicationFolderNodeNameComponent implements OnInit {
 

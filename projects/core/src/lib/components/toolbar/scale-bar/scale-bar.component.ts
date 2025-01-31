@@ -7,6 +7,7 @@ import { MapService, ScaleBarToolConfigModel, ScaleBarToolModel, ToolTypeEnum } 
   templateUrl: './scale-bar.component.html',
   styleUrls: ['./scale-bar.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class ScaleBarComponent implements OnInit, OnDestroy {
 

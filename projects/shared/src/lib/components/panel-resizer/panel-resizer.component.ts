@@ -7,6 +7,7 @@ import { CssHelper } from '../../helpers';
   selector: 'tm-panel-resize',
   templateUrl: './panel-resizer.component.html',
   styleUrls: ['./panel-resizer.component.css'],
+  standalone: false,
 })
 export class PanelResizerComponent implements OnInit {
 

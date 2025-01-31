@@ -8,6 +8,7 @@ import { Store } from '@ngrx/store';
   templateUrl: './print-menu-button.component.html',
   styleUrls: ['./print-menu-button.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class PrintMenuButtonComponent {
   public componentType = BaseComponentTypeEnum.PRINT;

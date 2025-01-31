@@ -17,7 +17,6 @@ import { AsyncPipe } from '@angular/common';
   templateUrl: './markdown-source-editor.component.html',
   styleUrls: ['./markdown-source-editor.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [ ReactiveFormsModule, MatFormField, MatInput, CdkTextareaAutosize, AsyncPipe ],
 })
 export class MarkdownSourceEditorComponent implements OnInit {

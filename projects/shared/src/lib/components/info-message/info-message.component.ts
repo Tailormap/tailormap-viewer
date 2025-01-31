@@ -5,6 +5,7 @@ import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
   templateUrl: './info-message.component.html',
   styleUrls: ['./info-message.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class InfoMessageComponent {
   @Input()

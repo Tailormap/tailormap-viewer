@@ -14,6 +14,7 @@ import { SnackBarMessageComponent } from '@tailormap-viewer/shared';
   templateUrl: './clicked-coordinates.component.html',
   styleUrls: ['./clicked-coordinates.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
 

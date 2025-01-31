@@ -7,6 +7,7 @@ import { LayoutService } from '../layout.service';
   templateUrl: './embedded-layout.component.html',
   styleUrls: [ '../base-layout/base-layout.component.css', './embedded-layout.component.css' ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class EmbeddedLayoutComponent {
   public componentTypes = BaseComponentTypeEnum;

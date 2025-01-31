@@ -21,6 +21,7 @@ import { MatDialog } from '@angular/material/dialog';
   templateUrl: './application-edit.component.html',
   styleUrls: ['./application-edit.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class ApplicationEditComponent implements OnInit, OnDestroy {
 

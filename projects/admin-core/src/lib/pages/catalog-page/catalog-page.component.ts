@@ -9,6 +9,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   templateUrl: './catalog-page.component.html',
   styleUrls: ['./catalog-page.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class CatalogPageComponent {
   public className$: Observable<string>;

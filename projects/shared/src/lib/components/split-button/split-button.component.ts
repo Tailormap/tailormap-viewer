@@ -6,6 +6,7 @@ import { SplitButtonOptionModel } from './split-button-option.model';
   templateUrl: './split-button.component.html',
   styleUrls: ['./split-button.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class SplitButtonComponent {
 

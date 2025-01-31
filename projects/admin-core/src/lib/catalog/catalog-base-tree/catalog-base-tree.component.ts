@@ -13,6 +13,7 @@ import { CatalogTreeHelper } from '../helpers/catalog-tree.helper';
   templateUrl: './catalog-base-tree.component.html',
   styleUrls: ['./catalog-base-tree.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class CatalogBaseTreeComponent implements OnDestroy {
 

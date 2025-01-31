@@ -11,6 +11,7 @@ import { SpatialFilterCrudService } from '../services/spatial-filter-crud.servic
   templateUrl: './spatial-filter-form-buffer.component.html',
   styleUrls: ['./spatial-filter-form-buffer.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class SpatialFilterFormBufferComponent implements OnInit, OnDestroy {
 

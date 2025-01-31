@@ -9,6 +9,7 @@ import { AttributeSettingsModel, FeatureTypeModel, FeatureTypeSettingsModel, Fea
   templateUrl: './feature-type-form.component.html',
   styleUrls: ['./feature-type-form.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class FeatureTypeFormComponent {
 

@@ -6,6 +6,7 @@ import { Observable, of } from 'rxjs';
   templateUrl: './spinner-button.component.html',
   styleUrls: ['./spinner-button.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class SpinnerButtonComponent {
 

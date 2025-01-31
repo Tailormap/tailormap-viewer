@@ -13,6 +13,7 @@ interface SubmenuLink {
   templateUrl: './settings-page.component.html',
   styleUrls: ['./settings-page.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class SettingsPageComponent implements OnInit {
 

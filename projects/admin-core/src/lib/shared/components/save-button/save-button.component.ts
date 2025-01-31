@@ -6,6 +6,7 @@ import { Observable, of } from 'rxjs';
   templateUrl: './save-button.component.html',
   styleUrls: ['./save-button.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class SaveButtonComponent {
 

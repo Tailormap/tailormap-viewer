@@ -22,6 +22,7 @@ interface ButtonProps {
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class NavigationComponent implements OnInit {
 

@@ -11,6 +11,7 @@ import { ExtendedCatalogModelHelper } from '../../helpers/extended-catalog-model
   templateUrl: './catalog-items-in-folder-dialog.component.html',
   styleUrls: ['./catalog-items-in-folder-dialog.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class CatalogItemsInFolderDialogComponent {
 

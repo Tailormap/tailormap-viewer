@@ -6,6 +6,7 @@ import { OverlayRef } from '../../services/overlay/overlay-ref';
   selector: 'tm-icon-picker',
   templateUrl: './icon-picker.component.html',
   styleUrls: ['./icon-picker.component.css'],
+  standalone: false,
 })
 export class IconPickerComponent {
 

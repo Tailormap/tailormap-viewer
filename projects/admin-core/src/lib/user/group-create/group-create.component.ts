@@ -10,6 +10,7 @@ import { AdminSnackbarService } from '../../shared/services/admin-snackbar.servi
   templateUrl: './group-create.component.html',
   styleUrls: ['./group-create.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class GroupCreateComponent implements OnDestroy {
 

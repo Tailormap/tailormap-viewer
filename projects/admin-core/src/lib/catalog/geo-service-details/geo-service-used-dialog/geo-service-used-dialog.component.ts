@@ -7,6 +7,7 @@ import { ApplicationModel, GeoServiceModel } from '@tailormap-admin/admin-api';
   templateUrl: './geo-service-used-dialog.component.html',
   styleUrls: ['./geo-service-used-dialog.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class GeoServiceUsedDialogComponent {
 

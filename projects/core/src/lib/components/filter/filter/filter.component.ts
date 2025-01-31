@@ -11,6 +11,7 @@ import { selectSpatialFormVisible } from '../state/filter-component.selectors';
   templateUrl: './filter.component.html',
   styleUrls: ['./filter.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class FilterComponent implements OnInit {
 

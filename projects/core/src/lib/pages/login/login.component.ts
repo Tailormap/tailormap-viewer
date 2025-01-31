@@ -13,6 +13,7 @@ import { MatDialog } from '@angular/material/dialog';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class LoginComponent implements OnInit {
 

@@ -10,6 +10,7 @@ import { UserAddUpdateModel } from '../models/user-add-update.model';
   templateUrl: './user-create.component.html',
   styleUrls: ['./user-create.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class UserCreateComponent implements OnDestroy {
 

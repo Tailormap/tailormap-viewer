@@ -5,6 +5,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
   templateUrl: './application-edit-base-layers.component.html',
   styleUrls: ['./application-edit-base-layers.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class ApplicationEditBaseLayersComponent {
 }

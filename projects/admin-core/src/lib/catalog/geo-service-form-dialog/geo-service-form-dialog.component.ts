@@ -15,6 +15,7 @@ export interface GeoServiceFormDialogData {
   templateUrl: './geo-service-form-dialog.component.html',
   styleUrls: ['./geo-service-form-dialog.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class GeoServiceFormDialogComponent {
 

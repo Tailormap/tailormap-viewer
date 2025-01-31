@@ -13,6 +13,7 @@ import { LoadingStateEnum } from '@tailormap-viewer/shared';
   templateUrl: './tasks-list.component.html',
   styleUrls: ['./tasks-list.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class TasksListComponent implements OnInit {
 

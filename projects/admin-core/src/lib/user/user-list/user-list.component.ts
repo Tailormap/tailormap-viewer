@@ -9,6 +9,7 @@ import { UserService } from '../services/user.service';
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class UserListComponent {
 

@@ -21,6 +21,7 @@ const FAILED_TO_LOAD_MESSAGE = $localize `:@@shared.legend-image.failed-loading-
   templateUrl: './legend-image.component.html',
   styleUrls: ['./legend-image.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class LegendImageComponent {
 

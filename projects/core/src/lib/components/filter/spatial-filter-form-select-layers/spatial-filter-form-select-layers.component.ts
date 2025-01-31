@@ -13,6 +13,7 @@ import { SpatialFilterCrudService } from '../services/spatial-filter-crud.servic
   templateUrl: './spatial-filter-form-select-layers.component.html',
   styleUrls: ['./spatial-filter-form-select-layers.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class SpatialFilterFormSelectLayersComponent implements OnInit, OnDestroy {
 

@@ -8,6 +8,7 @@ import { of } from 'rxjs';
 import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
+  standalone: false,
   template: '<tm-menubar-button (buttonClicked)="click()" icon="test" component="test" panelTitle="test title">Some button</tm-menubar-button>',
 })
 export class MenubarButtonWrapperComponent {

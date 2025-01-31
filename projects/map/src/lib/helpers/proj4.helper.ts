@@ -1,4 +1,4 @@
-import * as proj4 from 'proj4';
+import proj4 from 'proj4';
 
 export class Proj4Helper {
   // This hack is needed because the module import is different in node and browser environments

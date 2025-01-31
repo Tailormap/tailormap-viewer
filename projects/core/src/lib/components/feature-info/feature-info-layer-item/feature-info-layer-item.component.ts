@@ -9,6 +9,7 @@ import { FeatureInfoLayerListItemModel } from '../models/feature-info-layer-list
   templateUrl: './feature-info-layer-item.component.html',
   styleUrls: ['./feature-info-layer-item.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class FeatureInfoLayerItemComponent {
 

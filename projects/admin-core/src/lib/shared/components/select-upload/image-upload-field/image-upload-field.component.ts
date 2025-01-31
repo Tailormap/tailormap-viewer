@@ -6,6 +6,7 @@ import { ImageHelper } from '@tailormap-admin/admin-api';
   templateUrl: './image-upload-field.component.html',
   styleUrls: ['./image-upload-field.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class ImageUploadFieldComponent {
 

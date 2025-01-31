@@ -14,6 +14,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   templateUrl: './component-config-renderer.component.html',
   styleUrls: ['./component-config-renderer.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class ComponentConfigRendererComponent implements OnInit {
 

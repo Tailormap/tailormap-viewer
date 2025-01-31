@@ -12,6 +12,7 @@ import { OIDCConfigurationService } from '../../oidc/services/oidc-configuration
   templateUrl: './group-form.component.html',
   styleUrls: ['./group-form.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class GroupFormComponent implements OnInit, OnDestroy {
 

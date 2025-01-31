@@ -10,6 +10,7 @@ import { SearchIndexPingResponseModel, TailormapAdminApiV1Service } from '@tailo
   templateUrl: './search-index-page.component.html',
   styleUrls: ['./search-index-page.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class SearchIndexPageComponent {
 

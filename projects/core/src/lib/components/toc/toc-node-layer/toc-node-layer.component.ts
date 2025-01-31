@@ -7,6 +7,7 @@ import { ScaleHelper } from '@tailormap-viewer/map';
   selector: 'tm-toc-node-layer',
   templateUrl: './toc-node-layer.component.html',
   styleUrls: ['./toc-node-layer.component.css'],
+  standalone: false,
 })
 export class TocNodeLayerComponent {
 

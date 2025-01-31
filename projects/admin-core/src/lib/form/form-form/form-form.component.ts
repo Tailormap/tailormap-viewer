@@ -12,6 +12,7 @@ import { FormOptionsModel } from '@tailormap-viewer/api';
   templateUrl: './form-form.component.html',
   styleUrls: ['./form-form.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class FormFormComponent implements OnInit {
 

@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
   templateUrl: './error-message.component.html',
   styleUrls: ['./error-message.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class ErrorMessageComponent {
 

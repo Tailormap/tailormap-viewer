@@ -8,6 +8,7 @@ import { CssHelper } from '@tailormap-viewer/shared';
   templateUrl: './menubar-panel.component.html',
   styleUrls: ['./menubar-panel.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class MenubarPanelComponent implements OnDestroy {
 

@@ -12,6 +12,7 @@ import { ComponentConfigurationService } from '../../services/component-configur
   templateUrl: './base-component-config.component.html',
   styleUrls: ['./base-component-config.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class BaseComponentConfigComponent implements ConfigurationComponentModel {
 

@@ -16,6 +16,7 @@ import { take } from 'rxjs/operators';
   templateUrl: './feature-info.component.html',
   styleUrls: ['./feature-info.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class FeatureInfoComponent implements OnInit, OnDestroy {
 

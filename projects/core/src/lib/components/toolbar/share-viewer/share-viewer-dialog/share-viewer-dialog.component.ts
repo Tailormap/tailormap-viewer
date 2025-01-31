@@ -11,6 +11,7 @@ import { startWith } from 'rxjs';
   templateUrl: './share-viewer-dialog.component.html',
   styleUrls: ['./share-viewer-dialog.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class ShareViewerDialogComponent implements OnInit {
 
