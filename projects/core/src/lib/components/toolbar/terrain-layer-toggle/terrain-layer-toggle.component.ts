@@ -12,6 +12,7 @@ import { setSelectedTerrainNodeId } from '../../../map/state/map.actions';
   templateUrl: './terrain-layer-toggle.component.html',
   styleUrls: ['./terrain-layer-toggle.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class TerrainLayerToggleComponent {
 

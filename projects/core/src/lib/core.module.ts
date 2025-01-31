@@ -1,4 +1,4 @@
-import { InjectionToken, ModuleWithProviders, NgModule, inject, provideAppInitializer } from '@angular/core';
+import { InjectionToken, ModuleWithProviders, NgModule, inject, provideAppInitializer, Inject } from '@angular/core';
 import { LoginComponent, ViewerAppComponent } from './pages';
 import { MapModule } from '@tailormap-viewer/map';
 import { StoreModule } from '@ngrx/store';

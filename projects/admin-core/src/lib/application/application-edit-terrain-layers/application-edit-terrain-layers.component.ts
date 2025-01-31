@@ -5,6 +5,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
   templateUrl: './application-edit-terrain-layers.component.html',
   styleUrls: ['./application-edit-terrain-layers.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class ApplicationEditTerrainLayersComponent {
 }

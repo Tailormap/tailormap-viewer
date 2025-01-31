@@ -17,6 +17,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   templateUrl: './switch3-d.component.html',
   styleUrls: ['./switch3-d.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class Switch3DComponent {
 
