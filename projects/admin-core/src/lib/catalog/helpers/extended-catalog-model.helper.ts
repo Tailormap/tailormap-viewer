@@ -39,6 +39,8 @@ export class ExtendedCatalogModelHelper {
       type: CatalogExtendedTypeEnum.FEATURE_TYPE_TYPE,
       title: featureType.title,
       name: featureType.name,
+      defaultGeometryAttribute: featureType.defaultGeometryAttribute,
+      primaryKeyAttribute: featureType.primaryKeyAttribute,
       hasAttributes: (featureType.attributes || []).length > 0,
       writeable: featureType.writeable,
     };
@@ -123,6 +125,8 @@ export class ExtendedCatalogModelHelper {
       name: featureType.name,
       title: featureType.title,
       writeable: featureType.writeable,
+      defaultGeometryAttribute: featureType.defaultGeometryAttribute,
+      primaryKeyAttribute: featureType.primaryKeyAttribute,
       hasAttributes: featureType.hasAttributes,
       originalId: `${featureType.id}`,
       catalogNodeId: catalogNodeId || '',

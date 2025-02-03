@@ -5,4 +5,6 @@ export interface FeatureTypeSummaryModel {
   title: string;
   writeable?: boolean;
   hasAttributes: boolean;
+  defaultGeometryAttribute: null | string;
+  primaryKeyAttribute: null | string;
 }
