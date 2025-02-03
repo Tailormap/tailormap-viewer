@@ -806,6 +806,14 @@
         <source>High-DPI substitute URL template</source>
         <target>High-DPI-Ersatz-URL-Vorlage</target>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.feature-type-no-pk-warning" datatype="html">
+        <source>This feature type does not have a primary key.</source>
+        <target>Dieser Feature-Typ hat keinen Primärschlüssel.</target>
+      </trans-unit>
+      <trans-unit id=".feature-type-no-default-geom-warning" datatype="html">
+        <source>This feature type does not have a geometry attribute.</source>
+        <target>Dieser Feature-Typ hat kein Geometrieattribut.</target>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.technical-name" datatype="html">
         <source>Technical name: <x id="INTERPOLATION" equiv-text="{{ featureType.name }}"/></source>
         <target state="translated">Technischer Name: <x id="INTERPOLATION" equiv-text="{{ featureType.name }}"/></target>
