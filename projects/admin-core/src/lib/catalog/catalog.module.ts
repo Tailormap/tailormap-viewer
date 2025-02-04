@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MarkdownEditorComponent, SharedModule } from '@tailormap-viewer/shared';
+import { MarkdownEditorComponent, SharedDirectivesModule, SharedModule } from '@tailormap-viewer/shared';
 import { catalogReducer } from './state/catalog.reducer';
 import { catalogStateKey } from './state/catalog.state';
 import { StoreModule } from '@ngrx/store';
@@ -80,6 +80,7 @@ import { FeatureTypeTemplateComponent } from './feature-type-template/feature-ty
     EffectsModule.forFeature([CatalogEffects]),
     SharedAdminComponentsModule,
     MarkdownEditorComponent,
+    SharedDirectivesModule,
   ],
   exports: [
     CatalogTreeComponent,

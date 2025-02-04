@@ -10,8 +10,8 @@ export interface FeatureTypeModel {
   owner?: string;
   writeable?: boolean;
   info?: FeatureTypeInfoModel;
-  defaultGeometryAttribute?: string;
-  primaryKeyAttribute?: string;
+  defaultGeometryAttribute: null | string;
+  primaryKeyAttribute: null | string;
   attributes: AttributeDescriptorModel[];
   settings: FeatureTypeSettingsModel;
   defaultGeometryDescriptor?: AttributeDescriptorModel;

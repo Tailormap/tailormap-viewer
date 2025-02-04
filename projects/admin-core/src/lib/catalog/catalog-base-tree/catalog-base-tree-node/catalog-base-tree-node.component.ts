@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CatalogTreeModel } from '../../models/catalog-tree.model';
 import { CatalogTreeModelTypeEnum } from '../../models/catalog-tree-model-type.enum';
 import { CatalogTreeHelper } from '../../helpers/catalog-tree.helper';
+import { ExtendedFeatureTypeModel } from '../../models/extended-feature-type.model';
 
 @Component({
   selector: 'tm-admin-catalog-base-tree-node',
@@ -30,13 +31,27 @@ export class CatalogBaseTreeNodeComponent {
   };
 
   private _node: CatalogTreeModel | null = null;
-  public nodeSettings: { label: string; icon: string } = { label: '', icon: '' };
+  public nodeSettings: { label: string; icon: string; warningMsg: string } = { label: '', icon: '', warningMsg: '' };
 
   @Input()
   public set node(node: CatalogTreeModel | null) {
     this._node = node;
     this.nodeSettings.label = CatalogBaseTreeNodeComponent.nodeLabel[node?.type || 'unknown'] || '';
     this.nodeSettings.icon = CatalogBaseTreeNodeComponent.getNodeIcon(node);
+
+    if (node?.type && node.type === CatalogTreeModelTypeEnum.FEATURE_TYPE_TYPE && node.metadata ) {
+      const metadata: ExtendedFeatureTypeModel = node.metadata as ExtendedFeatureTypeModel;
+      this.nodeSettings.warningMsg = '';
+      if (metadata.defaultGeometryAttribute === null) {
+        this.nodeSettings.warningMsg += $localize `:@@admin-core.catalog.feature-type-no-default-geom-warning:This feature type does not have a geometry attribute.`;
+      }
+      if (metadata.featureSourceProtocol === 'WFS' && metadata.primaryKeyAttribute === null) {
+        if (this.nodeSettings.warningMsg.length > 0) {
+          this.nodeSettings.warningMsg += '\n';
+        }
+        this.nodeSettings.warningMsg += $localize `:@@admin-core.catalog.feature-type-no-pk-warning:This feature type does not have a primary key.`;
+      }
+    }
   }
   public get node(): CatalogTreeModel | null {
     return this._node;
@@ -57,5 +72,4 @@ export class CatalogBaseTreeNodeComponent {
     }
     return CatalogBaseTreeNodeComponent.nodeIcon[node.type];
   }
-
 }

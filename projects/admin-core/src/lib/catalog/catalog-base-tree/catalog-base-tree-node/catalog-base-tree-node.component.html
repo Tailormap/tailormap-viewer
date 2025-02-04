@@ -2,8 +2,20 @@
      class="tree-node"
      [routerLink]="link"
      [class.tree-node--selectable]="selectable">
-  <div class="tree-node__label">
-    <span class="tree-node__icon"><mat-icon [attr.aria-label]="nodeSettings.label" [svgIcon]="nodeSettings.icon"></mat-icon></span>
+  <div class="tree-node__label"
+       [tmTooltip]="nodeSettings.warningMsg"
+       [matTooltipPosition]="'before'">
+
+    <span class="tree-node__icon">
+      <mat-icon [attr.aria-label]="nodeSettings.label" [svgIcon]="nodeSettings.icon"></mat-icon>
+    </span>
     <span class="tree-node__label-content">{{node.label}}</span>
+
+    @if(nodeSettings.warningMsg.length > 0) {
+      <span class="tree-node__icon warning">
+        <mat-icon [attr.aria-label]="nodeSettings.warningMsg" svgIcon="admin_warning"></mat-icon>
+      </span>
+    }
+
   </div>
 </div>

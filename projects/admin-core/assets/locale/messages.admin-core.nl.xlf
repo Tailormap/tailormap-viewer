@@ -810,7 +810,7 @@
         <source>This feature type does not have a primary key.</source>
         <target>Dit feature type heeft geen primaire sleutel.</target>
       </trans-unit>
-      <trans-unit id=".feature-type-no-default-geom-warning" datatype="html">
+      <trans-unit id="admin-core.catalog.feature-type-no-default-geom-warning" datatype="html">
         <source>This feature type does not have a geometry attribute.</source>
         <target>Dit feature type heeft geen geometrie attribuut.</target>
       </trans-unit>
