@@ -6,4 +6,5 @@ export interface ExtendedFeatureTypeModel extends FeatureTypeSummaryModel, Catal
   catalogNodeId: string;
   originalId: string;
   featureSourceId: string;
+  featureSourceProtocol: string;
 }

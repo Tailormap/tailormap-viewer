@@ -105,7 +105,7 @@ export class ExtendedCatalogModelHelper {
   public static getExtendedFeatureSource(source: FeatureSourceSummaryWithFeatureTypesModel, catalogNodeId: string): [ ExtendedFeatureSourceModel, ExtendedFeatureTypeModel[] ] {
     const sourceId = `${source.id}`;
     const featureTypes: ExtendedFeatureTypeModel[] = source.featureTypes.map<ExtendedFeatureTypeModel>(ft => {
-      return ExtendedCatalogModelHelper.getExtendedFeatureType(ft, sourceId, catalogNodeId);
+      return ExtendedCatalogModelHelper.getExtendedFeatureType(ft, sourceId, source.protocol, catalogNodeId);
     });
     const featureSource: ExtendedFeatureSourceModel = {
       id: sourceId,
@@ -118,7 +118,10 @@ export class ExtendedCatalogModelHelper {
     return [ featureSource, featureTypes ];
   }
 
-  public static getExtendedFeatureType(featureType: FeatureTypeSummaryModel, featureSourceId: string, catalogNodeId?: string): ExtendedFeatureTypeModel {
+  public static getExtendedFeatureType(featureType: FeatureTypeSummaryModel,
+                                       featureSourceId: string,
+                                       featureSourceProtocol: string,
+                                       catalogNodeId?: string): ExtendedFeatureTypeModel {
     return {
       id: ExtendedCatalogModelHelper.getExtendedFeatureTypeId(featureType.id, featureSourceId),
       type: CatalogExtendedTypeEnum.FEATURE_TYPE_TYPE,
@@ -131,6 +134,7 @@ export class ExtendedCatalogModelHelper {
       originalId: `${featureType.id}`,
       catalogNodeId: catalogNodeId || '',
       featureSourceId,
+      featureSourceProtocol,
     };
   }
 
