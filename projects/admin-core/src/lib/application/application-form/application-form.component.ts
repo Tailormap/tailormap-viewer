@@ -10,7 +10,6 @@ import { UpdateDraftApplicationModel } from '../models/update-draft-application.
 import { LanguageHelper } from '@tailormap-viewer/shared';
 import { selectApplications } from '../state/application.selectors';
 import { Store } from '@ngrx/store';
-import { MatSelectChange } from '@angular/material/select';
 
 @Component({
   selector: 'tm-admin-application-form',
@@ -148,6 +147,7 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
   }
 
   private initForm(application: ApplicationModel | null) {
+    console.log("init form");
     this.applicationForm.patchValue({
       name: application ? application.name : '',
       title: application ? application.title : '',
@@ -169,6 +169,7 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
         : null,
       authorizationRules: application ? application.authorizationRules : [AUTHORIZATION_RULE_ANONYMOUS],
     }, { emitEvent: false });
+    this.onCrsSelectionChanged(application?.crs);
   }
 
   private isValidForm(): boolean {
@@ -180,8 +181,8 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
       && this.applicationForm.valid;
   }
 
-  public onCrsSelectionChanged(event: MatSelectChange) {
-    if (event.value === 'EPSG:3857') {
+  public onCrsSelectionChanged(crs: string | undefined) {
+    if (crs === 'EPSG:3857') {
       this.applicationForm.controls['enable3D'].enable({ emitEvent: false });
     } else {
       this.applicationForm.patchValue({ enable3D: false }, { emitEvent: true });
