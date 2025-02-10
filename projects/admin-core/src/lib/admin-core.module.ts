@@ -36,7 +36,7 @@ export class AdminCoreModule {
       icons: [
         'home', 'catalog', 'service', 'user', 'groups', 'feature_source', 'wfs', 'jdbc', 'form',
         'feature_type', 'application', 'more', 'link_new_window', 'default_application', 'search-index',
-        'logs', 'tasks', 'task_successful', 'task_failed', 'task_running', 'terrain',
+        'logs', 'tasks', 'task_successful', 'task_failed', 'task_running', 'warning', 'terrain'
       ],
     }];
     iconService.loadIconsToIconRegistry(matIconRegistry, domSanitizer, adminIcons);

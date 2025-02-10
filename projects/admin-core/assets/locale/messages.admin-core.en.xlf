@@ -623,6 +623,12 @@
       <trans-unit id="admin-core.catalog.substitute-layer-url-template" datatype="html">
         <source>High-DPI substitute URL template</source>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.feature-type-no-pk-warning" datatype="html">
+        <source>This feature type does not have a primary key.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.feature-type-no-default-geom-warning" datatype="html">
+        <source>This feature type does not have a geometry attribute.</source>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.technical-name" datatype="html">
         <source>Technical name: <x id="INTERPOLATION" equiv-text="{{ featureType.name }}"/></source>
       </trans-unit>

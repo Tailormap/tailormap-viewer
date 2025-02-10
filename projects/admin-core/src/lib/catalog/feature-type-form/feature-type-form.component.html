@@ -3,6 +3,17 @@
   <h2 *ngIf="dialogLayout" mat-dialog-title><ng-container *ngTemplateOutlet="title"></ng-container></h2>
   <h2 *ngIf="!dialogLayout" class="page-details-title"><ng-container *ngTemplateOutlet="title"></ng-container></h2>
 
+  @if (!featureType.primaryKeyAttribute) {
+    <tm-error-message [message]="'This feature type does not have a primary key.'"
+                      i18n-message="@@admin-core.catalog.feature-type-no-pk-warning" [friendlyError]="true">
+    </tm-error-message>
+  }
+  @if (!featureType.defaultGeometryAttribute) {
+    <tm-error-message [message]="'This feature type does not have a geometry attribute.'"
+                      i18n-message="@@admin-core.catalog.feature-type-no-default-geom-warning" [friendlyError]="true">
+    </tm-error-message>
+  }
+
   <ng-template #content>
     <div i18n="@@admin-core.catalog.technical-name">Technical name: {{ featureType.name }}</div>
     @defer {

@@ -8,10 +8,12 @@ import { CatalogTreeModel } from '../../models/catalog-tree.model';
 import { ExtendedGeoServiceModel } from '../../models/extended-geo-service.model';
 import { ExtendedGeoServiceLayerModel } from '../../models/extended-geo-service-layer.model';
 import { CatalogExtendedTypeEnum } from '../../models/catalog-extended.model';
+import { TooltipDirective } from '@tailormap-viewer/shared';
 
 const setup = async (node: CatalogTreeModel | null) => {
   await render(CatalogBaseTreeNodeComponent, {
     imports: [ MatIconModule, MatIconTestingModule ],
+    declarations: [ CatalogBaseTreeNodeComponent, TooltipDirective ],
     inputs: { node },
   });
 };
