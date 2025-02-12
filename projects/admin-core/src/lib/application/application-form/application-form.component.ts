@@ -180,13 +180,4 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
       && this.applicationForm.valid;
   }
 
-  public onCrsSelectionChanged(event: MatSelectChange) {
-    if (event.value === 'EPSG:3857') {
-      this.applicationForm.controls['enable3D'].enable({ emitEvent: false });
-    } else {
-      this.applicationForm.patchValue({ enable3D: false }, { emitEvent: true });
-      this.applicationForm.controls['enable3D'].disable({ emitEvent: false });
-    }
-  }
-
 }
