@@ -15,7 +15,7 @@ export class ApplicationModelHelper {
   }
 
   public static getApplicationContentRoot(application: ApplicationModel): AppContentModel {
-    return application.contentRoot || { layerNodes: [], baseLayerNodes: [] };
+    return application.contentRoot || { layerNodes: [], baseLayerNodes: [], terrainLayerNodes: [] };
   }
 
   public static newApplicationTreeLayerNode(

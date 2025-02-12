@@ -23,7 +23,11 @@ export class ComponentRegistrationService {
         ...this.registeredComponents[area].slice(idx + 1),
       ];
     }
-    this.registeredComponents[area].push(component);
+    if (idx !== -1) {
+      this.registeredComponents[area].splice(idx, 0, component);
+    } else {
+      this.registeredComponents[area].push(component);
+    }
     if (!this.componentRegistry[area]) {
       this.componentRegistry[area] = new BehaviorSubject<RegisteredComponent[]>([]);
     }
