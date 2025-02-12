@@ -19,3 +19,7 @@ export const updateViewerStyle = createAction(
   `${prefix} Update Viewer Style`,
   props<{ style: ViewerStylingModel }>(),
 );
+export const setComponentEnabled = createAction(
+  `${prefix} Set Component Enabled`,
+  props<{ componentType: string; enabled: boolean }>(),
+);
