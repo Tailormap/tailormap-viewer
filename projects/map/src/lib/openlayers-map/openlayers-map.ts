@@ -117,7 +117,7 @@ export class OpenLayersMap implements MapViewerModel {
 
     const layerManager = new OpenLayersLayerManager(olMap, this.ngZone, this.httpXsrfTokenExtractor);
     layerManager.init();
-    const toolManager = new OpenLayersToolManager(olMap, this.ngZone, this.map3D, this.in3D);
+    const toolManager = new OpenLayersToolManager(olMap, this.ngZone, this.in3D);
     OpenLayersEventManager.initEvents(olMap, this.ngZone);
 
     this.map.next(olMap);

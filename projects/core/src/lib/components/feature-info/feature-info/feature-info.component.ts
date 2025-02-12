@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
-import { MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
+import { FeatureInfo3DModel, MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
 import { combineLatest, concatMap, filter, of, Subject, takeUntil, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { add3DLayerToFeatureInfoLayers, featureInfoLoaded } from '../state/feature-info.actions';
@@ -70,7 +70,7 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
     this.store$.dispatch(deregisterTool({ tool: ToolbarComponentEnum.FEATURE_INFO }));
   }
 
-  private handleMapClick(evt: { mapCoordinates: [number, number]; mouseCoordinates: [number, number] }) {
+  private handleMapClick(evt: { mapCoordinates: [number, number]; mouseCoordinates: [number, number]; cesiumFeatureInfo?: FeatureInfo3DModel }) {
     combineLatest([
       this.store$.select(selectVisibleLayersWithAttributes),
       this.store$.select(selectVisibleWMSLayersWithoutAttributes),
@@ -91,7 +91,7 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
         tap(() => {
           this.store$.select(selectIn3DView).pipe(take(1)).subscribe(in3DView => {
             if (in3DView) {
-              this.handleMap3DClick();
+              this.handleMap3DClick(evt);
             }
           });
         }),
@@ -104,40 +104,43 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
       });
   }
 
-  private handleMap3DClick() {
-    this.mapService.getToolManager$()
-      .pipe(take(1))
-      .subscribe(toolManager => toolManager.getClick3DEvent$().pipe(take(1))
-        .subscribe(map3DClick => {
-          if (map3DClick?.featureInfo) {
+  private handleMap3DClick(evt: { mapCoordinates: [number, number]; mouseCoordinates: [number, number]; cesiumFeatureInfo?: FeatureInfo3DModel }) {
+    if (evt.cesiumFeatureInfo) {
 
-            this.store$.select(selectLayer(map3DClick.featureInfo.layerId)).pipe(take(1)).subscribe(layer => {
-              if (layer) {
-                const featureInfoLayer: FeatureInfoLayerModel = { id: layer.id, title: layer.title, loading: LoadingStateEnum.LOADING };
-                this.store$.dispatch(add3DLayerToFeatureInfoLayers({ layer: featureInfoLayer }));
-              }
-            });
+      let layerId: string | null = null;
+      this.mapService.getCesiumLayerManager$().pipe(take(1)).subscribe(cesiumLayerManager => {
+        if (evt.cesiumFeatureInfo) {
+          layerId = cesiumLayerManager.getLayerId(evt.cesiumFeatureInfo.primitiveIndex);
+        }
+      });
+      evt.cesiumFeatureInfo.layerId = layerId ?? '';
 
-            const feature: FeatureInfoFeatureModel = {
-              __fid: map3DClick.featureInfo.featureId.toString(),
-              attributes: map3DClick.featureInfo.properties.reduce(
-                (acc, { id, value }) => {
-                  acc[id] = value;
-                  return acc;
-                },
-                {} as FeatureModelAttributes,
-              ),
-              layerId: map3DClick.featureInfo.layerId,
-            };
-            const response: FeatureInfoResponseModel = {
-              features: [feature],
-              columnMetadata: map3DClick.featureInfo.columnMetadata,
-              layerId: map3DClick.featureInfo.layerId,
-            };
-            this.store$.dispatch(featureInfoLoaded({ featureInfo: response }));
-          }
-        }),
-      );
+      this.store$.select(selectLayer(evt.cesiumFeatureInfo.layerId)).pipe(take(1)).subscribe(layer => {
+        if (layer) {
+          const featureInfoLayer: FeatureInfoLayerModel = { id: layer.id, title: layer.title, loading: LoadingStateEnum.LOADING };
+          this.store$.dispatch(add3DLayerToFeatureInfoLayers({ layer: featureInfoLayer }));
+        }
+      });
+
+      const feature: FeatureInfoFeatureModel = {
+        __fid: evt.cesiumFeatureInfo.featureId.toString(),
+        attributes: evt.cesiumFeatureInfo.properties.reduce(
+          (acc, { id, value }) => {
+            acc[id] = value;
+            return acc;
+          },
+          {} as FeatureModelAttributes,
+        ),
+        layerId: evt.cesiumFeatureInfo.layerId,
+      };
+      const response: FeatureInfoResponseModel = {
+        features: [feature],
+        columnMetadata: evt.cesiumFeatureInfo.columnMetadata,
+        layerId: evt.cesiumFeatureInfo.layerId,
+      };
+      this.store$.dispatch(featureInfoLoaded({ featureInfo: response }));
+
+    }
   }
 
 }
