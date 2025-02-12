@@ -44,11 +44,34 @@ const onUpdateViewerStyle = (
   },
 });
 
+const onSetComponentEnabled = (
+  state: CoreState,
+  payload: ReturnType<typeof CoreActions.setComponentEnabled>,
+): CoreState => ({
+  ...state,
+  viewer: {
+    ...state.viewer,
+    components: (state.viewer?.components || []).map(c => {
+      if (c.type !== payload.componentType) {
+        return c;
+      }
+      return {
+        ...c,
+        config: {
+          ...c.config,
+          enabled: payload.enabled,
+        },
+      };
+    }),
+  },
+});
+
 const coreReducerImpl = createReducer<CoreState>(
   initialCoreState,
   on(CoreActions.loadViewer, onLoadViewer),
   on(CoreActions.loadViewerSuccess, onViewerLoadSuccess),
   on(CoreActions.loadViewerFailed, onViewerLoadFailed),
   on(CoreActions.updateViewerStyle, onUpdateViewerStyle),
+  on(CoreActions.setComponentEnabled, onSetComponentEnabled),
 );
 export const coreReducer = (state: CoreState | undefined, action: Action) => coreReducerImpl(state, action);
