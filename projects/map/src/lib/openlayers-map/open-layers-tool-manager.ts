@@ -24,35 +24,12 @@ export class OpenLayersToolManager implements ToolManagerModel {
 
   private switchedTool = false;
 
-  private click3DEventSubject$: BehaviorSubject<Selection3dModel | null> = new BehaviorSubject<Selection3dModel | null>(null);
-  private click3DEvent$: Observable<Selection3dModel | null> = this.click3DEventSubject$.asObservable();
-
   private readonly destroy$ = new Subject<void>();
 
   constructor(
     private olMap: OlMap,
     private ngZone: NgZone,
-    private map3D$: Observable<CesiumLayerManager | null>,
-    private in3D$: Observable<boolean>,
   ) {
-    map3D$.pipe(takeUntil(this.destroy$)).subscribe(cesiumLayerManager => {
-      cesiumLayerManager?.executeScene3DAction(scene3D => {
-        CesiumEventManager.onMap3DClick$(scene3D, CssHelper.getCssVariableValue('--primary-color').trim())
-          .pipe(takeUntil(this.destroy$))
-          .subscribe(evt => {
-            if (evt.featureInfo) {
-              const layerId: string | null = cesiumLayerManager.getLayerId(evt.featureInfo?.primitiveIndex);
-              if (layerId) {
-                this.click3DEventSubject$.next(CesiumFeatureInfoHelper.addLayerIdToSelection3D(evt, layerId));
-              } else {
-                this.click3DEventSubject$.next(evt);
-              }
-            } else {
-              this.click3DEventSubject$.next(evt);
-            }
-          });
-      });
-    });
   }
 
   public destroy() {
@@ -66,7 +43,7 @@ export class OpenLayersToolManager implements ToolManagerModel {
   public addTool<T extends ToolModel, C extends ToolConfigModel>(tool: C): T {
     const toolId = `${tool.type.toLowerCase()}-${++OpenLayersToolManager.toolIdCount}`;
     if (ToolTypeHelper.isMapClickTool(tool)) {
-      this.tools.set(toolId, new OpenLayersMapClickTool(toolId, tool, this.click3DEvent$, this.in3D$));
+      this.tools.set(toolId, new OpenLayersMapClickTool(toolId, tool));
     }
     if (ToolTypeHelper.isDrawingTool(tool)) {
       this.tools.set(toolId, new OpenLayersDrawingTool(toolId, tool, this.olMap, this.ngZone));
