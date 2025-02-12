@@ -47,24 +47,27 @@ const onUpdateViewerStyle = (
 const onSetComponentEnabled = (
   state: CoreState,
   payload: ReturnType<typeof CoreActions.setComponentEnabled>,
-): CoreState => ({
-  ...state,
-  viewer: {
-    ...state.viewer,
-    components: (state.viewer?.components || []).map(c => {
-      if (c.type !== payload.componentType) {
-        return c;
-      }
-      return {
-        ...c,
-        config: {
-          ...c.config,
-          enabled: payload.enabled,
-        },
-      };
-    }),
-  },
-});
+): CoreState => {
+  const components = (state.viewer?.components || []);
+  const cmpIdx = components.findIndex(c => c.type === payload.componentType);
+  const updatedComponents = cmpIdx === -1
+    ? [
+      ...components,
+      { type: payload.componentType, config: { enabled: payload.enabled } },
+    ]
+    : [
+      ...components.slice(0, cmpIdx),
+      { ...components[cmpIdx], config: { ...components[cmpIdx].config, enabled: payload.enabled } },
+      ...components.slice(cmpIdx + 1),
+    ];
+  return {
+    ...state,
+    viewer: {
+      ...state.viewer,
+      components: updatedComponents,
+    },
+  };
+};
 
 const coreReducerImpl = createReducer<CoreState>(
   initialCoreState,
