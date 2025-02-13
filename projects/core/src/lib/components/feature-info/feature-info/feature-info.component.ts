@@ -9,8 +9,7 @@ import { ToolbarComponentEnum } from '../../toolbar/models/toolbar-component.enu
 import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.helper';
 import { FeatureInfoService } from '../feature-info.service';
 import {
-  select3dTilesLayers,
-  selectIn3DView, selectLayer, selectVisibleLayersWithAttributes, selectVisibleWMSLayersWithoutAttributes,
+  select3dTilesLayers, selectIn3DView, selectLayer, selectVisibleLayersWithAttributes, selectVisibleWMSLayersWithoutAttributes,
 } from '../../../map/state/map.selectors';
 import { take } from 'rxjs/operators';
 import { FeatureInfoResponseModel } from '../models/feature-info-response.model';
@@ -90,8 +89,8 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
         }),
         tap(() => {
           this.store$.select(selectIn3DView).pipe(take(1)).subscribe(in3DView => {
-            if (in3DView) {
-              this.handleMap3DClick(evt);
+            if (in3DView && evt.cesiumFeatureInfo) {
+              this.store$.dispatch(featureInfoLoaded({ featureInfo: this.featureInfo3DToResponse(evt.cesiumFeatureInfo) }));
             }
           });
         }),
@@ -104,43 +103,40 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
       });
   }
 
-  private handleMap3DClick(evt: { mapCoordinates: [number, number]; mouseCoordinates: [number, number]; cesiumFeatureInfo?: FeatureInfo3DModel }) {
-    if (evt.cesiumFeatureInfo) {
+  private featureInfo3DToResponse(cesiumFeatureInfo: FeatureInfo3DModel): FeatureInfoResponseModel {
+    let layerId: string | null = null;
+    this.mapService.getCesiumLayerManager$().pipe(take(1)).subscribe(cesiumLayerManager => {
+      if (cesiumFeatureInfo) {
+        layerId = cesiumLayerManager.getLayerId(cesiumFeatureInfo.primitiveIndex);
+      }
+    });
+    cesiumFeatureInfo.layerId = layerId ?? '';
 
-      let layerId: string | null = null;
-      this.mapService.getCesiumLayerManager$().pipe(take(1)).subscribe(cesiumLayerManager => {
-        if (evt.cesiumFeatureInfo) {
-          layerId = cesiumLayerManager.getLayerId(evt.cesiumFeatureInfo.primitiveIndex);
-        }
-      });
-      evt.cesiumFeatureInfo.layerId = layerId ?? '';
+    this.store$.select(selectLayer(cesiumFeatureInfo.layerId)).pipe(take(1)).subscribe(layer => {
+      if (layer) {
+        const featureInfoLayer: FeatureInfoLayerModel = { id: layer.id, title: layer.title, loading: LoadingStateEnum.LOADING };
+        this.store$.dispatch(add3DLayerToFeatureInfoLayers({ layer: featureInfoLayer }));
+      }
+    });
 
-      this.store$.select(selectLayer(evt.cesiumFeatureInfo.layerId)).pipe(take(1)).subscribe(layer => {
-        if (layer) {
-          const featureInfoLayer: FeatureInfoLayerModel = { id: layer.id, title: layer.title, loading: LoadingStateEnum.LOADING };
-          this.store$.dispatch(add3DLayerToFeatureInfoLayers({ layer: featureInfoLayer }));
-        }
-      });
+    const feature: FeatureInfoFeatureModel = {
+      __fid: cesiumFeatureInfo.featureId.toString(),
+      attributes: cesiumFeatureInfo.properties.reduce(
+        (acc, { id, value }) => {
+          acc[id] = value;
+          return acc;
+        },
+        {} as FeatureModelAttributes,
+      ),
+      layerId: cesiumFeatureInfo.layerId,
+    };
 
-      const feature: FeatureInfoFeatureModel = {
-        __fid: evt.cesiumFeatureInfo.featureId.toString(),
-        attributes: evt.cesiumFeatureInfo.properties.reduce(
-          (acc, { id, value }) => {
-            acc[id] = value;
-            return acc;
-          },
-          {} as FeatureModelAttributes,
-        ),
-        layerId: evt.cesiumFeatureInfo.layerId,
-      };
-      const response: FeatureInfoResponseModel = {
+    return {
         features: [feature],
-        columnMetadata: evt.cesiumFeatureInfo.columnMetadata,
-        layerId: evt.cesiumFeatureInfo.layerId,
-      };
-      this.store$.dispatch(featureInfoLoaded({ featureInfo: response }));
+        columnMetadata: cesiumFeatureInfo.columnMetadata,
+        layerId: cesiumFeatureInfo.layerId,
+    };
 
-    }
   }
 
 }

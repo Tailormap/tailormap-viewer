@@ -22,7 +22,7 @@ export class CesiumEventManager {
 
       if (!Cesium.defined(pickedFeature)) {
         silhouette.selected = [];
-        CesiumEventManager.map3DClickEvent.next({ position: position });
+        CesiumEventManager.map3DClickEvent.next({ position: position, mouseCoordinates: movement.position });
       } else {
         let primitiveIndex: number = -1;
         for (let index = 0; index < scene3D.primitives.length; index++) {
@@ -34,6 +34,7 @@ export class CesiumEventManager {
         silhouette.selected = [pickedFeature];
         const selection3D: Selection3dModel = {
           position: position,
+          mouseCoordinates: movement.position,
           featureInfo: {
             layerId: '',
             columnMetadata: [],
