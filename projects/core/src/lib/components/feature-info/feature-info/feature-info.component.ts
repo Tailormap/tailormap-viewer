@@ -121,12 +121,12 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
 
     const feature: FeatureInfoFeatureModel = {
       __fid: cesiumFeatureInfo.featureId.toString(),
-      attributes: cesiumFeatureInfo.properties.reduce(
+      attributes: cesiumFeatureInfo.properties.reduce<FeatureModelAttributes>(
         (acc, { id, value }) => {
           acc[id] = value;
           return acc;
         },
-        {} as FeatureModelAttributes,
+        {},
       ),
       layerId: cesiumFeatureInfo.layerId,
     };

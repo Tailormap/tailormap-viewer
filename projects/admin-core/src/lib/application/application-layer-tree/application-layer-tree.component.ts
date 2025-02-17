@@ -33,7 +33,7 @@ export class ApplicationLayerTreeComponent implements OnInit, OnDestroy {
   public applicationStateTree: 'layer' | 'baseLayer' | 'terrainLayer' = 'layer';
 
   @Input()
-  public singleLayerChecked = false;
+  public useRadioInputs = false;
 
   @Output()
   public addSubFolder = new EventEmitter<{ nodeId: string; title: string }>();
