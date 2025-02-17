@@ -8,6 +8,7 @@ import { FormHelper } from '../../helpers/form.helper';
 import { GeoServiceCreateModel } from '../models/geo-service-update.model';
 import { StringHelper } from '@tailormap-viewer/shared';
 import { GroupService } from '../../user/services/group.service';
+import { GeoServiceHelper } from '../helpers/geo-service.helper';
 
 @Component({
   selector: 'tm-admin-geo-service-form',
@@ -83,8 +84,7 @@ export class GeoServiceFormComponent implements OnInit {
   }
 
   public is3D() {
-    return this.geoServiceForm.get('protocol')?.value === GeoServiceProtocolEnum.TILES3D
-      || this.geoServiceForm.get('protocol')?.value === GeoServiceProtocolEnum.QUANTIZEDMESH;
+    return GeoServiceHelper.is3dProtocol(this.geoServiceForm.get('protocol')!.value);
   }
 
   public ngOnInit(): void {

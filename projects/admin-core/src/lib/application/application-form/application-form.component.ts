@@ -147,7 +147,6 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
   }
 
   private initForm(application: ApplicationModel | null) {
-    console.log("init form");
     this.applicationForm.patchValue({
       name: application ? application.name : '',
       title: application ? application.title : '',

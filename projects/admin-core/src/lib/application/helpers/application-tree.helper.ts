@@ -121,11 +121,16 @@ export class ApplicationTreeHelper {
       ? layers.get(ApplicationTreeHelper.getLayerMapKey(node.layerName, node.serviceId))
       : null;
     if (ApplicationModelHelper.isLevelTreeNode(node)) {
-      return node.root
-        ? (treeKey === 'layer' ? ApplicationService.ROOT_NODE_TITLE
-          : (treeKey === 'baseLayer' ? ApplicationService.ROOT_BASE_NODE_TITLE
-          : ApplicationService.ROOT_TERRAIN_NODE_TITLE))
-        : node.title;
+      if (node.root) {
+        if (treeKey === 'layer') {
+          return ApplicationService.ROOT_NODE_TITLE;
+        } else if (treeKey === 'baseLayer') {
+          return ApplicationService.ROOT_BASE_NODE_TITLE;
+        } else {
+          return ApplicationService.ROOT_TERRAIN_NODE_TITLE;
+        }
+      }
+      return node.title;
     }
     if (ApplicationModelHelper.isLayerTreeNode(node)) {
       const layerSettingTitle = layerSettings?.[node.id]?.title;
