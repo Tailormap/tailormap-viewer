@@ -28,7 +28,7 @@ export class RegisteredComponentsRendererComponent implements OnInit {
   @ViewChild('componentsContainer', { read: ViewContainerRef, static: true })
   private componentsContainer: ViewContainerRef | null = null;
 
-  private disallowingComponents = [
+  private componentsNotIn3D = [
     BaseComponentTypeEnum.PRINT,
     BaseComponentTypeEnum.DRAWING,
     BaseComponentTypeEnum.MEASURE,
@@ -55,7 +55,7 @@ export class RegisteredComponentsRendererComponent implements OnInit {
         map(([ components, in3D ]) => {
           if (in3D) {
             return components.filter(
-              component => !this.disallowingComponents.some(disallowingComponent => disallowingComponent === component.type),
+              component => !this.componentsNotIn3D.some(componentNotIn3D => componentNotIn3D === component.type),
             );
           }
           return components.filter(
