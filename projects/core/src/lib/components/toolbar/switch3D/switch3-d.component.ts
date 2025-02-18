@@ -66,7 +66,7 @@ export class Switch3DComponent {
   }
 
   public toggle() {
-    this.mapService.switch3D$();
+    this.mapService.switch3D();
     this.store$.dispatch(toggleIn3DView());
   }
 

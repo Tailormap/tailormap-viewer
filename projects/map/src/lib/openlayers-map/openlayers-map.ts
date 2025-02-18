@@ -397,7 +397,7 @@ export class OpenLayersMap implements MapViewerModel {
       .subscribe(cesiumLayerManager => fn(cesiumLayerManager));
   }
 
-  public make3D$(){
+  public make3D(){
     if (!this.made3D) {
       this.executeMapAction(olMap => {
         this.map3D.next(new CesiumLayerManager(olMap, this.ngZone));
@@ -409,9 +409,9 @@ export class OpenLayersMap implements MapViewerModel {
     }
   }
 
-  public switch3D$(){
+  public switch3D(){
     this.executeCLMAction(cesiumLayerManager => {
-      cesiumLayerManager.switch3D$();
+      cesiumLayerManager.switch3D();
     });
     this.in3D.next(!this.in3D.value);
   }

@@ -260,11 +260,11 @@ export class MapService {
     return this.map.getCesiumLayerManager$();
   }
 
-  public make3D$(){
-    this.map.make3D$();
+  public make3D(){
+    this.map.make3D();
   }
 
-  public switch3D$(){
-    this.map.switch3D$();
+  public switch3D(){
+    this.map.switch3D();
   }
 }

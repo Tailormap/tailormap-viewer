@@ -195,7 +195,6 @@ export class TreeComponent implements OnInit, OnDestroy {
   }
 
   public handleRadioChange(node: FlatTreeModel, $event?: MouseEvent) {
-    console.log("radio change");
     $event?.stopPropagation();
     const checkChange: FlatTreeModel[] = [];
     if (this.checkedRadioNode) {

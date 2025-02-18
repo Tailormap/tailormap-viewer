@@ -71,7 +71,7 @@ export class CesiumLayerManager {
       });
   }
 
-  public switch3D$(){
+  public switch3D(){
     this.executeMap3DAction(olMap3D => {
       olMap3D.setEnabled(!olMap3D.getEnabled());
       if (!olMap3D.getEnabled()){
