@@ -21,11 +21,11 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 })
 export class Switch3DComponent {
 
-  private disallowingComponents = [
+  private componentsPreventingSwitching = [
     BaseComponentTypeEnum.PRINT,
     BaseComponentTypeEnum.DRAWING,
   ];
-  private disAllowingTools = [
+  private toolsPreventingSwitching = [
     ToolbarComponentEnum.MEASURE,
   ];
 
@@ -51,12 +51,12 @@ export class Switch3DComponent {
     this.allowSwitch$ = combineLatest([
       this.menubarService.getActiveComponent$().pipe(
         map(
-          component => !this.disallowingComponents.some(disallowingComponent => disallowingComponent === component?.componentId),
+          component => !this.componentsPreventingSwitching.some(disallowingComponent => disallowingComponent === component?.componentId),
         ),
       ),
       this.store$.select(selectActiveTool).pipe(
         map(
-          tool => !this.disAllowingTools.some(disallowingTool => disallowingTool === tool),
+          tool => !this.toolsPreventingSwitching.some(disallowingTool => disallowingTool === tool),
         ),
       ),
     ]).pipe(
