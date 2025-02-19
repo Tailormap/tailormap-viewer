@@ -80,7 +80,7 @@ export class ApplicationMapService implements OnDestroy {
     this.store$.select(selectEnable3D)
       .pipe(first(enable3D => enable3D))
       .subscribe(() =>  {
-        this.mapService.make3D$();
+        this.mapService.make3D();
         this.store$.select(select3DLayers)
           .pipe(
             takeUntil(this.destroyed),

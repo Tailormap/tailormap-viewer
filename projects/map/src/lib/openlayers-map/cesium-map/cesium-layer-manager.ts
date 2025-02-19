@@ -5,8 +5,9 @@ import { NgZone } from '@angular/core';
 import type OLCesium from 'olcs';
 import { BehaviorSubject, filter, from, map, Observable, take } from 'rxjs';
 import { Cesium3DTileset, CesiumTerrainProvider, EllipsoidTerrainProvider, Scene } from 'cesium';
-import { ExternalLibsLoaderHelper } from '@tailormap-viewer/shared';
+import { CssHelper, ExternalLibsLoaderHelper } from '@tailormap-viewer/shared';
 import { LayerTypesEnum } from '../../models/layer-types.enum';
+import { CesiumEventManager } from './cesium-event-manager';
 
 export class CesiumLayerManager {
 
@@ -46,6 +47,7 @@ export class CesiumLayerManager {
         });
       this.executeScene3DAction(async scene3D => {
         scene3D.globe.depthTestAgainstTerrain = true;
+        CesiumEventManager.initClickEvent(scene3D, CssHelper.getCssVariableValue('--primary-color').trim());
       });
     });
   }
@@ -69,7 +71,7 @@ export class CesiumLayerManager {
       });
   }
 
-  public switch3D$(){
+  public switch3D(){
     this.executeMap3DAction(olMap3D => {
       olMap3D.setEnabled(!olMap3D.getEnabled());
       if (!olMap3D.getEnabled()){

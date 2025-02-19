@@ -10,7 +10,6 @@ import { UpdateDraftApplicationModel } from '../models/update-draft-application.
 import { LanguageHelper } from '@tailormap-viewer/shared';
 import { selectApplications } from '../state/application.selectors';
 import { Store } from '@ngrx/store';
-import { MatSelectChange } from '@angular/material/select';
 
 @Component({
   selector: 'tm-admin-application-form',

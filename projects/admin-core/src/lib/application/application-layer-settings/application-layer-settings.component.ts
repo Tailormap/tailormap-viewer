@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import {
-  AppLayerSettingsModel, AppTreeLayerNodeModel, FeatureTypeModel, FormModel, FormSummaryModel, GeoServiceProtocolEnum, SearchIndexModel,
+  AppLayerSettingsModel, AppTreeLayerNodeModel, FeatureTypeModel, FormModel, FormSummaryModel, SearchIndexModel,
 } from '@tailormap-admin/admin-api';
 import { Store } from '@ngrx/store';
 import { selectSelectedApplicationLayerSettings } from '../state/application.selectors';
@@ -25,6 +25,7 @@ import { FormService } from '../../form/services/form.service';
 import { selectSearchIndexesForFeatureType, selectSearchIndexesLoadStatus } from '../../search-index/state/search-index.selectors';
 import { loadSearchIndexes } from '../../search-index/state/search-index.actions';
 import { ApplicationFeature, ApplicationFeatureSwitchService } from '@tailormap-viewer/api';
+import { GeoServiceHelper } from '../../catalog/helpers/geo-service.helper';
 
 type FeatureSourceAndType = {
   featureSource: ExtendedFeatureSourceModel;
@@ -71,8 +72,9 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     this._serviceLayer = serviceLayer;
     this.initFeatureSource(serviceLayer);
     this.setTitle();
-    this.layerIs3D = serviceLayer?.service.protocol === GeoServiceProtocolEnum.TILES3D ||
-      serviceLayer?.service.protocol === GeoServiceProtocolEnum.QUANTIZEDMESH;
+    if (serviceLayer?.service) {
+      this.layerIs3D = GeoServiceHelper.is3dProtocol(serviceLayer.service.protocol);
+    }
   }
   public get serviceLayer(): ExtendedGeoServiceAndLayerModel | null {
     return this._serviceLayer;

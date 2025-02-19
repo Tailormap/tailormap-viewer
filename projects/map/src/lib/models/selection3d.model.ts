@@ -10,5 +10,6 @@ export interface FeatureInfo3DModel {
 
 export interface Selection3dModel {
   position: { x: number; y: number; z: number };
+  mouseCoordinates: { x: number; y: number };
   featureInfo?: FeatureInfo3DModel;
 }

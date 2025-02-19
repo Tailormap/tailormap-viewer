@@ -1,7 +1,7 @@
-import { MapClickToolConfigModel, MapClickToolModel, MapClickEvent, Selection3dModel } from '../../models';
-import { Observable, Subject, takeUntil, combineLatest, startWith } from 'rxjs';
+import { MapClickToolConfigModel, MapClickToolModel, MapClickEvent } from '../../models';
+import { Observable, Subject, takeUntil, switchMap } from 'rxjs';
 import { OpenLayersEventManager } from '../open-layers-event-manager';
-import { withLatestFrom } from 'rxjs/operators';
+import { CesiumEventManager } from '../cesium-map/cesium-event-manager';
 
 export class OpenLayersMapClickTool implements MapClickToolModel {
 
@@ -10,7 +10,6 @@ export class OpenLayersMapClickTool implements MapClickToolModel {
   constructor(
     public id: string,
     private _toolConfig: MapClickToolConfigModel,
-    private click3DEvent$: Observable<Selection3dModel | null>,
     private in3D$: Observable<boolean>,
   ) {}
 
@@ -30,29 +29,23 @@ export class OpenLayersMapClickTool implements MapClickToolModel {
 
   public enable(): void {
     this.enabled = new Subject();
-    combineLatest([
-      OpenLayersEventManager.onMapClick$(),
-      this.click3DEvent$,
-    ])
-      .pipe(
-        takeUntil(this.enabled),
-        withLatestFrom(this.in3D$, this.mapClick$.pipe(startWith({ mapCoordinates: [ 0, 0 ], mouseCoordinates: [ 0, 0 ] }))),
-        )
-      .subscribe(([[ click2D, click3D ], in3D, latestMapClick ]) => {
-        if (click3D && in3D) {
-          if (latestMapClick.mapCoordinates[0] !== click3D.position.x || latestMapClick.mapCoordinates[1] !== click3D.position.y) {
-            this.mapClickSubject.next({
-              mapCoordinates: [ click3D.position.x, click3D.position.y ],
-              mouseCoordinates: [ click2D.pixel[0], click2D.pixel[1] ],
-            });
-          }
-        } else {
-          this.mapClickSubject.next({
-            mapCoordinates: [ click2D.coordinate[0], click2D.coordinate[1] ],
-            mouseCoordinates: [ click2D.pixel[0], click2D.pixel[1] ],
-          });
-        }
-      });
+    this.in3D$.pipe(
+      takeUntil(this.enabled),
+      switchMap(in3D => in3D ? CesiumEventManager.onMap3DClick$() : OpenLayersEventManager.onMapClick$()),
+    ).subscribe(click => {
+      if (click && 'position' in click) {
+        this.mapClickSubject.next({
+          mapCoordinates: [ click.position.x, click.position.y ],
+          mouseCoordinates: [ click.mouseCoordinates.x, click.mouseCoordinates.y ],
+          cesiumFeatureInfo: click.featureInfo,
+        });
+      } else {
+        this.mapClickSubject.next({
+          mapCoordinates: [ click.coordinate[0], click.coordinate[1] ],
+          mouseCoordinates: [ click.pixel[0], click.pixel[1] ],
+        });
+      }
+    });
     this.isActive = true;
   }
 

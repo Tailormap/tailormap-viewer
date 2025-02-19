@@ -53,4 +53,13 @@ export class ApplicationLayerTreeNodeComponent {
     const isRoot = ApplicationTreeHelper.isLevelTreeNode(this.node) && this.node.metadata?.root;
     return !isRoot;
   }
+
+  public getIcon() {
+    if (this.isLevel()) {
+      return 'folder_filled';
+    } else if (this.applicationStateTree === 'terrainLayer') {
+      return 'admin_terrain';
+    }
+    return 'admin_catalog';
+  }
 }
