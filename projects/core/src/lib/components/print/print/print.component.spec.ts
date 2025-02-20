@@ -19,6 +19,7 @@ describe('PrintComponent', () => {
       isComponentVisible$: jest.fn(() => of(true)),
       registerComponent: jest.fn(),
       getPanelWidth$: jest.fn(() => of(300)),
+      deregisterComponent: jest.fn(),
     };
     await render(PrintComponent, {
       imports: [
