@@ -34,6 +34,14 @@ export class ComponentRegistrationService {
     this.componentRegistry[area].next([...this.registeredComponents[area]]);
   }
 
+  public deregisterComponent(area: AreaType, componentType: string) {
+    if (!this.registeredComponents[area]) {
+      this.registeredComponents[area] = [];
+    }
+    this.registeredComponents[area] = this.registeredComponents[area].filter(c => c.type === componentType);
+    this.componentRegistry[area].next([...this.registeredComponents[area]]);
+  }
+
   public getRegisteredComponents$(area: AreaType): Observable<RegisteredComponent[]> {
     if (!this.componentRegistry[area]) {
       this.componentRegistry[area] = new BehaviorSubject<RegisteredComponent[]>([]);
