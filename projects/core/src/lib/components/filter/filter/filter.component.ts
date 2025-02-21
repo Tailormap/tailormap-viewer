@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject, OnDestroy } from '@angular/core';
 import { MenubarService } from '../../menubar';
 import { FilterMenuButtonComponent } from '../filter-menu-button/filter-menu-button.component';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
@@ -13,7 +13,7 @@ import { selectSpatialFormVisible } from '../state/filter-component.selectors';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
-export class FilterComponent implements OnInit {
+export class FilterComponent implements OnInit, OnDestroy {
 
   private store$ = inject(Store);
   private menubarService = inject(MenubarService);
@@ -27,6 +27,10 @@ export class FilterComponent implements OnInit {
 
   public ngOnInit() {
     this.menubarService.registerComponent({ type: BaseComponentTypeEnum.FILTER, component: FilterMenuButtonComponent });
+  }
+
+  public ngOnDestroy() {
+    this.menubarService.deregisterComponent(BaseComponentTypeEnum.FILTER);
   }
 
 }
