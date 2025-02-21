@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { LegendService } from '../services/legend.service';
 import { Observable, of, switchMap } from 'rxjs';
 import { MenubarService } from '../../menubar';
@@ -16,7 +16,7 @@ import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
-export class LegendComponent implements OnInit {
+export class LegendComponent implements OnInit, OnDestroy {
 
   public visible$: Observable<boolean>;
   public layers$: Observable<LegendInfoModel[]>;
@@ -41,4 +41,9 @@ export class LegendComponent implements OnInit {
   public ngOnInit() {
     this.menubarService.registerComponent({ type: BaseComponentTypeEnum.LEGEND, component: LegendMenuButtonComponent });
   }
+
+  public ngOnDestroy() {
+    this.menubarService.deregisterComponent(BaseComponentTypeEnum.LEGEND);
+  }
+
 }

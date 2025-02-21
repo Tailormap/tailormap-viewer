@@ -22,6 +22,7 @@ const setup = async (isComponentVisible = true, selectors: any[] = []) => {
   const menubarServiceMock = {
     isComponentVisible$: jest.fn(() => of(isComponentVisible)),
     registerComponent: jest.fn(),
+    deregisterComponent: jest.fn(),
   };
   const confirmServiceMock = {
     confirm$: jest.fn(() => of(true)),

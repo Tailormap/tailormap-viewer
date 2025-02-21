@@ -38,7 +38,12 @@ describe('LegendComponent', () => {
       providers: [
         getMapServiceMock().provider,
         createMockStore(),
-        { provide: MenubarService, useValue: { registerComponent: registerComponentFn, isComponentVisible$: () => of(false) } },
+        { provide: MenubarService, useValue: {
+            registerComponent: registerComponentFn,
+            isComponentVisible$: () => of(false),
+            deregisterComponent: jest.fn(),
+          },
+        },
       ],
     });
     expect(await screen.queryByText('Legend')).toBeNull();

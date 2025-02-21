@@ -95,6 +95,7 @@ export class TocComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
+    this.menubarService.deregisterComponent(BaseComponentTypeEnum.TOC);
     this.destroyed.next(null);
     this.destroyed.complete();
   }

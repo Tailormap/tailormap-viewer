@@ -25,6 +25,7 @@ import { FormService } from '../../form/services/form.service';
 import { selectSearchIndexesForFeatureType, selectSearchIndexesLoadStatus } from '../../search-index/state/search-index.selectors';
 import { loadSearchIndexes } from '../../search-index/state/search-index.actions';
 import { ApplicationFeature, ApplicationFeatureSwitchService } from '@tailormap-viewer/api';
+import { GeoServiceHelper } from '../../catalog/helpers/geo-service.helper';
 
 type FeatureSourceAndType = {
   featureSource: ExtendedFeatureSourceModel;
@@ -54,6 +55,8 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
   public layerTitle = '';
   public searchIndexEnabled$: Observable<boolean>;
 
+  public layerIs3D = false;
+
   @Input()
   public set node(node: TreeModel<AppTreeLayerNodeModel> | null) {
     this._node = node;
@@ -69,6 +72,9 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     this._serviceLayer = serviceLayer;
     this.initFeatureSource(serviceLayer);
     this.setTitle();
+    if (serviceLayer?.service) {
+      this.layerIs3D = GeoServiceHelper.is3dProtocol(serviceLayer.service.protocol);
+    }
   }
   public get serviceLayer(): ExtendedGeoServiceAndLayerModel | null {
     return this._serviceLayer;

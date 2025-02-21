@@ -41,7 +41,12 @@ const buildMockStore = (selectedLayer = '') => {
 };
 
 const getMenubarService = (visible: boolean, registerComponentFn: jest.Mock) => {
-  return { provide: MenubarService, useValue: { isComponentVisible$: () => of(visible), registerComponent: registerComponentFn } };
+  return { provide: MenubarService, useValue: {
+      isComponentVisible$: () => of(visible),
+      registerComponent: registerComponentFn,
+      deregisterComponent: jest.fn(),
+    },
+  };
 };
 
 const setup = async (visible: boolean, selectedLayer = '') => {

@@ -149,6 +149,7 @@ export class PrintComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
+    this.menubarService.deregisterComponent(BaseComponentTypeEnum.PRINT);
     this.printService.cancel();
     this.destroyed.next(null);
     this.destroyed.complete();
