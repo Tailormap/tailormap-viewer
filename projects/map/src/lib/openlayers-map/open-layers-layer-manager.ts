@@ -1,6 +1,7 @@
 import { Map as OlMap } from 'ol';
 import { Layer as BaseLayer, Vector as VectorLayer, Group as LayerGroup } from 'ol/layer';
 import { Vector as VectorSource, ImageWMS, WMTS, XYZ, TileWMS } from 'ol/source';
+import { get as getProjection } from 'ol/proj';
 import { LayerManagerModel, LayerTypes } from '../models';
 import { OlLayerHelper } from '../helpers/ol-layer.helper';
 import { LayerModel } from '../models/layer.model';
@@ -24,6 +25,9 @@ export class OpenLayersLayerManager implements LayerManagerModel {
 
   private prevBackgroundLayerIds: string[] = [];
   private prevLayerIdentifiers: string[] = [];
+
+  private substituteWebMercatorLayers: Map<string, BaseLayer> = new Map<string, BaseLayer>();
+  private layersWithoutWebMercator: string[] = [];
 
   constructor(private olMap: OlMap, private ngZone: NgZone, private httpXsrfTokenExtractor: HttpXsrfTokenExtractor) {}
 
@@ -338,6 +342,19 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     const vectorLayer = new VectorLayer({ source, visible: layer.visible, updateWhileAnimating, updateWhileInteracting: updateWhileAnimating });
     this.vectorLayers.set(layer.id, vectorLayer);
     return vectorLayer;
+  }
+
+  public createSubstituteWebMercatorLayers(layers: LayerModel[]) {
+    layers.forEach(layer => {
+      if (layer.webMercatorAvailable) {
+        const olLayer = OlLayerHelper.createLayer(layer, getProjection('EPSG:3857')!, this.ngZone, this.httpXsrfTokenExtractor);
+        if (olLayer) {
+          this.substituteWebMercatorLayers.set(layer.id, olLayer);
+        } else {
+          this.layersWithoutWebMercator.push(layer.id);
+        }
+      }
+    });
   }
 
 }

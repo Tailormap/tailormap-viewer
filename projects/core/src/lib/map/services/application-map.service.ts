@@ -75,6 +75,15 @@ export class ApplicationMapService implements OnDestroy {
       )
       .subscribe(([ layers, layerManager ]) => {
         layerManager.setLayers(layers.filter(isValidLayer));
+        combineLatest([
+          this.store$.select(selectEnable3D),
+          this.store$.select(selectMapOptions),
+        ]).pipe(take(1))
+          .subscribe(([ enable3D, mapOptions ]) => {
+          if (enable3D && mapOptions?.projection !== 'EPSG:3857') {
+            layerManager.createSubstituteWebMercatorLayers(layers.filter(isValidLayer));
+          }
+        });
       });
 
     this.store$.select(selectEnable3D)
@@ -156,6 +165,7 @@ export class ApplicationMapService implements OnDestroy {
             capabilities: capabilities || '',
             hiDpiMode: extendedAppLayer.hiDpiMode,
             hiDpiSubstituteLayer: extendedAppLayer.hiDpiSubstituteLayer,
+            webMercatorAvailable: extendedAppLayer.webMercatorAvailable,
           })),
         );
     }
@@ -169,6 +179,7 @@ export class ApplicationMapService implements OnDestroy {
         tilingGutter: extendedAppLayer.tilingGutter,
         filter: extendedAppLayer.filter,
         language: service.serverType === ServerType.GEOSERVER ? this.localeId : undefined,
+        webMercatorAvailable: extendedAppLayer.webMercatorAvailable,
       };
       return of(layer);
     }
@@ -182,6 +193,7 @@ export class ApplicationMapService implements OnDestroy {
         maxZoom: extendedAppLayer.maxZoom,
         tileSize: extendedAppLayer.tileSize,
         tileGridExtent: extendedAppLayer.tileGridExtent,
+        webMercatorAvailable: extendedAppLayer.webMercatorAvailable,
       };
       return of(layer);
     }

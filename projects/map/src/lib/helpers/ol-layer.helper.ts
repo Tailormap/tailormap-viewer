@@ -21,7 +21,7 @@ import { default as TileState } from 'ol/TileState';
 import { createForProjection, createXYZ, extentFromProjection } from 'ol/tilegrid';
 import { HttpXsrfTokenExtractor } from '@angular/common/http';
 import { default as TileGrid } from 'ol/tilegrid/TileGrid';
-import {get as getProjection} from 'ol/proj.js';
+import { get as getProjection } from 'ol/proj.js';
 
 export interface LayerProperties {
   id: string;

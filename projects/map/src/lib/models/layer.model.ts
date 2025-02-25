@@ -13,4 +13,5 @@ export interface LayerModel {
   wfsFeatureGeomName?: string;
   opacity?: number;
   attribution?: string;
+  webMercatorAvailable?: boolean;
 }
