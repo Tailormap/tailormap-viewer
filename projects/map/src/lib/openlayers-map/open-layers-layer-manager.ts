@@ -349,12 +349,28 @@ export class OpenLayersLayerManager implements LayerManagerModel {
       if (layer.webMercatorAvailable) {
         const olLayer = OlLayerHelper.createLayer(layer, getProjection('EPSG:3857')!, this.ngZone, this.httpXsrfTokenExtractor);
         if (olLayer) {
+          OlLayerHelper.setLayerProps(layer, olLayer);
           this.substituteWebMercatorLayers.set(layer.id, olLayer);
-        } else {
-          this.layersWithoutWebMercator.push(layer.id);
         }
+      } else {
+        this.layersWithoutWebMercator.push(layer.id);
       }
     });
+  }
+
+  public addSubstituteWebMercatorLayers() {
+    this.removeLayers([...this.substituteWebMercatorLayers.keys()]);
+    this.removeLayers(this.layersWithoutWebMercator);
+    console.log('web mercator layers: ', this.substituteWebMercatorLayers);
+    this.substituteWebMercatorLayers.forEach((olLayer) => {
+      this.addLayerToMap(olLayer);
+      olLayer.setZIndex(this.getZIndexForLayer());
+      this.moveDrawingLayersToTop();
+    });
+  }
+
+  public removeSubstituteWebMercatorLayers() {
+    this.removeLayers([...this.substituteWebMercatorLayers.keys()]);
   }
 
 }

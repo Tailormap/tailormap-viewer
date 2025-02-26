@@ -1,6 +1,6 @@
 /* eslint-disable rxjs/finnish */
 import { Map as OlMap } from 'ol';
-import { Projection } from 'ol/proj';
+import { Projection, get as getProjection } from 'ol/proj';
 import { View } from 'ol';
 import { NgZone } from '@angular/core';
 import { defaults as defaultInteractions, DragPan, MouseWheelZoom } from 'ol/interaction';
@@ -414,5 +414,15 @@ export class OpenLayersMap implements MapViewerModel {
       cesiumLayerManager.switch3D();
     });
     this.in3D.next(!this.in3D.value);
+    if (this.map.value?.getView().getProjection() === getProjection('EPSG:28992')) {
+      this.getLayerManager$().pipe(take(1)).subscribe(layerManager => {
+        if (this.in3D.value) {
+          layerManager.addSubstituteWebMercatorLayers();
+        } else {
+          layerManager.removeSubstituteWebMercatorLayers();
+        }
+      });
+    }
+
   }
 }

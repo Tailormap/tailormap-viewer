@@ -17,4 +17,6 @@ export interface LayerManagerModel {
   refreshLayer(layerId: string): void;
   getLegendUrl(layerId: string): string;
   createSubstituteWebMercatorLayers(layers: LayerModel[]): void;
+  addSubstituteWebMercatorLayers(): void;
+  removeSubstituteWebMercatorLayers(): void;
 }

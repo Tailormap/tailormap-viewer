@@ -66,6 +66,15 @@ export class ApplicationMapService implements OnDestroy {
       )
       .subscribe(([ layers, layerManager ]) => {
         layerManager.setBackgroundLayers(layers.filter(isValidLayer));
+        combineLatest([
+          this.store$.select(selectEnable3D),
+          this.store$.select(selectMapOptions),
+        ]).pipe(take(1))
+          .subscribe(([ enable3D, mapOptions ]) => {
+            if (enable3D && mapOptions?.projection !== 'EPSG:3857') {
+              layerManager.createSubstituteWebMercatorLayers(layers.filter(isValidLayer));
+            }
+          });
       });
 
     this.selectOrderedVisibleLayersWithFilters$()
