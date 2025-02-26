@@ -14,6 +14,31 @@
     </tm-error-message>
   }
 
+  <!-- Use @defer because the observable is only initialized after the featureType input is set -->
+  @defer {
+    @if(featureSource$ | async; as featureSource) {
+      @if(featureSource.protocol !== 'JDBC') {
+        <tm-error-message [message]="'This feature type is not editable because editing is only supported for JDBC feature sources.'"
+                          i18n-message="@@admin-core.catalog.feature-type-not-editable-warning-not-jdbc" [friendlyError]="true">
+        </tm-error-message>
+      } @else {
+        @if(featureType.writeable) {
+          @if (featureType.defaultGeometryAttribute) {
+            <tm-info-message i18n="@@admin-core.catalog.feature-type-editable-info">
+              This feature type appears to be editable. Editing may still fail if the database user does not have the required permissions
+              or because of other reasons such as triggers, etc.
+            </tm-info-message>
+          }
+        } @else {
+          <tm-error-message [showContent]="true" i18n="@@admin-core.catalog.feature-type-read-only-warning-jdbc" [friendlyError]="true">
+            This JDBC feature type is read-only because of a missing primary key, a composite primary key or an unknown column type.
+            Check the logs for warnings after refreshing the feature source for details.
+          </tm-error-message>
+        }
+      }
+    }
+  }
+
   <ng-template #content>
     <div i18n="@@admin-core.catalog.technical-name">Technical name: {{ featureType.name }}</div>
     @defer {

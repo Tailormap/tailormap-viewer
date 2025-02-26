@@ -1,8 +1,11 @@
 import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
-import { BehaviorSubject, map, Observable, of } from 'rxjs';
+import { BehaviorSubject, map, Observable, of, tap } from 'rxjs';
 import { FeatureSourceService } from '../services/feature-source.service';
 import { FeatureTypeUpdateModel } from '../models/feature-source-update.model';
 import { AttributeSettingsModel, FeatureTypeModel, FeatureTypeSettingsModel, FeatureTypeTemplateModel } from '@tailormap-admin/admin-api';
+import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
+import { Store } from '@ngrx/store';
+import { selectFeatureSourceByFeatureTypeIdOnly } from '../state/catalog.selectors';
 
 @Component({
   selector: 'tm-admin-feature-type-form',
@@ -41,8 +44,11 @@ export class FeatureTypeFormComponent {
 
   public featureTypeSettings$: Observable<FeatureTypeSettingsModel> = of({});
 
+  public featureSource$: Observable<ExtendedFeatureSourceModel | undefined> = of(undefined);
+
   constructor(
     private featureSourceService: FeatureSourceService,
+    private store$: Store,
   ) { }
 
   public initFeatureTypeSettings(featureType: FeatureTypeModel | null) {
@@ -53,6 +59,11 @@ export class FeatureTypeFormComponent {
       .pipe(map((updatedFeatureType): FeatureTypeSettingsModel => {
         return { ...(featureType?.settings || {}), ...(updatedFeatureType?.settings || {}) };
       }));
+    this.featureSource$ = featureType
+      ? this.store$.select(selectFeatureSourceByFeatureTypeIdOnly(featureType.id)).pipe(
+          tap(featureSource => console.log('Feature type', featureType, 'feature source', featureSource)),
+        )
+      : of(undefined);
   }
 
   public save(featureType: FeatureTypeModel) {
