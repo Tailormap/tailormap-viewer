@@ -36,7 +36,12 @@
           <ng-container matColumnDef="name">
             <mat-header-cell *matHeaderCellDef></mat-header-cell>
             <mat-cell *matCellDef="let att" [class.disabled-cell]="isReadonlyFieldDisabled(att.name)">
-              <div class="wrap-text" [tmTooltip]="att.name">{{att.name}}</div>
+              <div class="wrap-text" [tmTooltip]="att.name + (att.name === primaryKeyAttributeName ? ' (' + primaryKeyText + ')' : '')">
+                {{att.name}}
+                @if(att.name === primaryKeyAttributeName) {
+                  <mat-icon svgIcon="key" class="key-icon" style="transform: rotate(90deg); display: inline-block; vertical-align: middle"></mat-icon>
+                }
+              </div>
             </mat-cell>
           </ng-container>
           <ng-container matColumnDef="type">

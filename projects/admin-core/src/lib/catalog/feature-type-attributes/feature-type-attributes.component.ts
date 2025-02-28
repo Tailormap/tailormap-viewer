@@ -32,6 +32,9 @@ export class FeatureTypeAttributesComponent implements OnChanges {
   public attributes: AttributeDescriptorModel[] = [];
 
   @Input()
+  public primaryKeyAttributeName: string | null = null;
+
+  @Input()
   public featureTypeSettings: FeatureTypeSettingsModel | null = null;
 
   @Input()
@@ -51,6 +54,8 @@ export class FeatureTypeAttributesComponent implements OnChanges {
     return this._showFullSettings;
   }
   private _showFullSettings = false;
+
+  public primaryKeyText = $localize `:@@admin-core.catalog.primary-key:Primary key`;
 
   @Output()
   public attributeEnabledChanged = new EventEmitter<Array<{ attribute: string; checked: boolean }>>();
