@@ -4,6 +4,7 @@
   <p i18n="@@admin-core.application.edit-application-layer-attributes-hint2">It is advised to use the catalog for global attribute settings and only use these application layer settings in specific cases.</p>
   <tm-admin-feature-type-attributes [showFullSettings]="false"
                                     [attributes]="attributes"
+                                    [primaryKeyAttributeName]="featureType?.primaryKeyAttribute || null"
                                     [catalogFeatureTypeSettings]="catalogFeatureTypeSettings"
                                     (attributeEnabledChanged)="attributesEnabledChanged($event)"
                                     (attributeReadonlyChanged)="attributesReadonlyChanged($event)"
