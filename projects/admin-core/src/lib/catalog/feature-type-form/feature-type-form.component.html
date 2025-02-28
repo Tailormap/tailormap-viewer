@@ -47,6 +47,7 @@
                                       (templateUpdated)="templateUpdated($event)"></tm-admin-feature-type-template>
     }
     <tm-admin-feature-type-attributes [attributes]="featureType.attributes"
+                                      [primaryKeyAttributeName]="featureType.primaryKeyAttribute"
                                       [featureTypeSettings]="featureTypeSettings$ | async"
                                       [showFullSettings]="true"
                                       (attributeEnabledChanged)="attributeEnabledChanged(featureType.settings, $event)"
