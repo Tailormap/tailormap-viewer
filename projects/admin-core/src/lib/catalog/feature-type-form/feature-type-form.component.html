@@ -4,13 +4,13 @@
   <h2 *ngIf="!dialogLayout" class="page-details-title"><ng-container *ngTemplateOutlet="title"></ng-container></h2>
 
   @if (!featureType.primaryKeyAttribute) {
-    <tm-error-message [message]="'This feature type does not have a primary key.'"
-                      i18n-message="@@admin-core.catalog.feature-type-no-pk-warning" [friendlyError]="true">
+    <tm-error-message i18n="@@admin-core.catalog.feature-type-no-pk-warning" [showContent]="true" [friendlyError]="true">
+      This feature type does not have a primary key.
     </tm-error-message>
   }
   @if (!featureType.defaultGeometryAttribute) {
-    <tm-error-message [message]="'This feature type does not have a geometry attribute.'"
-                      i18n-message="@@admin-core.catalog.feature-type-no-default-geom-warning" [friendlyError]="true">
+    <tm-error-message i18n="@@admin-core.catalog.feature-type-no-default-geom-warning" [showContent]="true" [friendlyError]="true">
+      This feature type does not have a geometry attribute.
     </tm-error-message>
   }
 
@@ -18,8 +18,8 @@
   @defer {
     @if(featureSource$ | async; as featureSource) {
       @if(featureSource.protocol !== 'JDBC') {
-        <tm-error-message [message]="'This feature type is not editable because editing is only supported for JDBC feature sources.'"
-                          i18n-message="@@admin-core.catalog.feature-type-not-editable-warning-not-jdbc" [friendlyError]="true">
+        <tm-error-message i18n="@@admin-core.catalog.feature-type-not-editable-warning-not-jdbc" [showContent]="true" [friendlyError]="true">
+          This feature type is not editable because editing is only supported for JDBC feature sources.
         </tm-error-message>
       } @else {
         @if(featureType.writeable) {
@@ -30,7 +30,7 @@
             </tm-info-message>
           }
         } @else {
-          <tm-error-message [showContent]="true" i18n="@@admin-core.catalog.feature-type-read-only-warning-jdbc" [friendlyError]="true">
+          <tm-error-message i18n="@@admin-core.catalog.feature-type-read-only-warning-jdbc" [showContent]="true" [friendlyError]="true">
             This JDBC feature type is read-only because of a missing primary key, a composite primary key or an unknown column type.
             Check the logs for warnings after refreshing the feature source for details.
           </tm-error-message>
