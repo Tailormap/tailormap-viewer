@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
-import { BehaviorSubject, map, Observable, of, tap } from 'rxjs';
+import { BehaviorSubject, map, Observable, of } from 'rxjs';
 import { FeatureSourceService } from '../services/feature-source.service';
 import { FeatureTypeUpdateModel } from '../models/feature-source-update.model';
 import { AttributeSettingsModel, FeatureTypeModel, FeatureTypeSettingsModel, FeatureTypeTemplateModel } from '@tailormap-admin/admin-api';
@@ -60,9 +60,7 @@ export class FeatureTypeFormComponent {
         return { ...(featureType?.settings || {}), ...(updatedFeatureType?.settings || {}) };
       }));
     this.featureSource$ = featureType
-      ? this.store$.select(selectFeatureSourceByFeatureTypeIdOnly(featureType.id)).pipe(
-          tap(featureSource => console.log('Feature type', featureType, 'feature source', featureSource)),
-        )
+      ? this.store$.select(selectFeatureSourceByFeatureTypeIdOnly(featureType.id))
       : of(undefined);
   }
 
