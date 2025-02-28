@@ -1,8 +1,8 @@
 import { Map as OlMap } from 'ol';
-import { Layer as BaseLayer, Vector as VectorLayer, Group as LayerGroup } from 'ol/layer';
-import { Vector as VectorSource, ImageWMS, WMTS, XYZ, TileWMS } from 'ol/source';
+import { Group as LayerGroup, Layer as BaseLayer, Vector as VectorLayer } from 'ol/layer';
+import { ImageWMS, TileWMS, Vector as VectorSource, WMTS, XYZ } from 'ol/source';
 import { get as getProjection } from 'ol/proj';
-import { LayerManagerModel, LayerTypes } from '../models';
+import { LayerManagerModel, LayerTypes, LayerTypesEnum } from '../models';
 import { OlLayerHelper } from '../helpers/ol-layer.helper';
 import { LayerModel } from '../models/layer.model';
 import { VectorLayerModel } from '../models/vector-layer.model';
@@ -26,8 +26,16 @@ export class OpenLayersLayerManager implements LayerManagerModel {
   private prevBackgroundLayerIds: string[] = [];
   private prevLayerIdentifiers: string[] = [];
 
-  private substituteWebMercatorLayers: Map<string, BaseLayer> = new Map<string, BaseLayer>();
   private layersWithoutWebMercator: string[] = [];
+
+  private substituteLayers: Map<string, BaseLayer> = new Map<string, BaseLayer>();
+  private substituteBackgroundLayers: Map<string, BaseLayer> = new Map<string, BaseLayer>();
+
+  private substituteBackgroundLayerGroup = new LayerGroup();
+  private substituteBaseLayerGroup = new LayerGroup();
+
+  private prevSubstituteBackgroundLayerIds: string[] = [];
+  private prevSubstituteLayerIdentifiers: string[] = [];
 
   constructor(private olMap: OlMap, private ngZone: NgZone, private httpXsrfTokenExtractor: HttpXsrfTokenExtractor) {}
 
@@ -70,6 +78,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
 
   private removeBackgroundLayer(layerId: string) {
     this.removeLayerAndSource(layerId, this.backgroundLayerGroup, this.backgroundLayers);
+    this.removeLayerAndSource(layerId, this.substituteBackgroundLayerGroup, this.substituteBackgroundLayers);
   }
 
   private getZIndexForBackgroundLayer(zIndex?: number) {
@@ -186,10 +195,11 @@ export class OpenLayersLayerManager implements LayerManagerModel {
 
   public removeLayer(id: string) {
     this.removeLayerAndSource(id, this.baseLayerGroup, this.layers);
+    this.removeLayerAndSource(id, this.substituteBaseLayerGroup, this.substituteLayers);
   }
 
   public removeLayers(layerIds: string[]) {
-    layerIds.forEach(l => this.removeLayerAndSource(l, this.baseLayerGroup, this.layers));
+    layerIds.forEach(l => this.removeLayer(l));
   }
 
   public getLayer(layerId: string) {
@@ -208,6 +218,10 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     const layer = this.layers.get(layerId);
     if (layer) {
       layer.setVisible(visible);
+    }
+    const substituteLayer = this.substituteLayers.get(layerId);
+    if (substituteLayer) {
+      substituteLayer.setVisible(visible);
     }
   }
 
@@ -344,33 +358,44 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     return vectorLayer;
   }
 
-  public createSubstituteWebMercatorLayers(layers: LayerModel[]) {
+  public createSubstituteWebMercatorLayers(layers: LayerModel[], backgroundLayers: boolean) {
     layers.forEach(layer => {
-      if (layer.webMercatorAvailable) {
-        const olLayer = OlLayerHelper.createLayer(layer, getProjection('EPSG:3857')!, this.ngZone, this.httpXsrfTokenExtractor);
-        if (olLayer) {
-          OlLayerHelper.setLayerProps(layer, olLayer);
-          this.substituteWebMercatorLayers.set(layer.id, olLayer);
+      if (layer.webMercatorAvailable || layer.layerType === LayerTypesEnum.WMS) {
+        if (!LayerTypesHelper.isVectorLayer(layer)) {
+          const olLayer = OlLayerHelper.createLayer(layer, getProjection('EPSG:3857')!, this.ngZone, this.httpXsrfTokenExtractor);
+          if (olLayer) {
+            OlLayerHelper.setLayerProps(layer, olLayer);
+            if (backgroundLayers) {
+              const layerGroup = this.substituteBackgroundLayerGroup;
+              const baseLayers = layerGroup.getLayers();
+              baseLayers.push(olLayer);
+              layerGroup.setLayers(baseLayers);
+            } else {
+              const layerGroup = this.substituteBaseLayerGroup;
+              const baseLayers = layerGroup.getLayers();
+              baseLayers.push(olLayer);
+              layerGroup.setLayers(baseLayers);
+            }
+          }
         }
-      } else {
+      } else if (this.layersWithoutWebMercator.indexOf(layer.id) === -1) {
         this.layersWithoutWebMercator.push(layer.id);
       }
     });
   }
 
   public addSubstituteWebMercatorLayers() {
-    this.removeLayers([...this.substituteWebMercatorLayers.keys()]);
-    this.removeLayers(this.layersWithoutWebMercator);
-    console.log('web mercator layers: ', this.substituteWebMercatorLayers);
-    this.substituteWebMercatorLayers.forEach((olLayer) => {
-      this.addLayerToMap(olLayer);
-      olLayer.setZIndex(this.getZIndexForLayer());
-      this.moveDrawingLayersToTop();
-    });
+    this.olMap.removeLayer(this.backgroundLayerGroup);
+    this.olMap.removeLayer(this.baseLayerGroup);
+    this.olMap.addLayer(this.substituteBackgroundLayerGroup);
+    this.olMap.addLayer(this.substituteBaseLayerGroup);
   }
 
   public removeSubstituteWebMercatorLayers() {
-    this.removeLayers([...this.substituteWebMercatorLayers.keys()]);
+    this.olMap.removeLayer(this.substituteBackgroundLayerGroup);
+    this.olMap.removeLayer(this.substituteBaseLayerGroup);
+    this.olMap.addLayer(this.backgroundLayerGroup);
+    this.olMap.addLayer(this.baseLayerGroup);
   }
 
 }

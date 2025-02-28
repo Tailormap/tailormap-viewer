@@ -152,7 +152,6 @@ export class OlLayerHelper {
     options.attributions = layer.attribution ? [layer.attribution] : undefined;
 
     const source = new WMTS(options);
-    source.set('olcs_projection', getProjection('EPSG:3857'));
     return new TileLayer({
       visible: layer.visible,
       source,

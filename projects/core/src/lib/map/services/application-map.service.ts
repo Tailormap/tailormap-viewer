@@ -72,7 +72,7 @@ export class ApplicationMapService implements OnDestroy {
         ]).pipe(take(1))
           .subscribe(([ enable3D, mapOptions ]) => {
             if (enable3D && mapOptions?.projection !== 'EPSG:3857') {
-              layerManager.createSubstituteWebMercatorLayers(layers.filter(isValidLayer));
+              layerManager.createSubstituteWebMercatorLayers(layers.filter(isValidLayer), true);
             }
           });
       });
@@ -90,7 +90,7 @@ export class ApplicationMapService implements OnDestroy {
         ]).pipe(take(1))
           .subscribe(([ enable3D, mapOptions ]) => {
           if (enable3D && mapOptions?.projection !== 'EPSG:3857') {
-            layerManager.createSubstituteWebMercatorLayers(layers.filter(isValidLayer));
+            layerManager.createSubstituteWebMercatorLayers(layers.filter(isValidLayer), false);
           }
         });
       });
