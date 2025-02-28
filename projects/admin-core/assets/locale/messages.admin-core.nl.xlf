@@ -706,6 +706,10 @@
         <source>Port</source>
         <target>Poort</target>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.primary-key" datatype="html">
+        <source>Primary key</source>
+        <target>Primaire sleutel</target>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.protocol" datatype="html">
         <source>Protocol</source>
         <target>Protocol</target>
