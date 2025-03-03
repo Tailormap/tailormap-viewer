@@ -78,7 +78,6 @@ export class OpenLayersLayerManager implements LayerManagerModel {
 
   private removeBackgroundLayer(layerId: string) {
     this.removeLayerAndSource(layerId, this.backgroundLayerGroup, this.backgroundLayers);
-    this.removeLayerAndSource(layerId, this.substituteBackgroundLayerGroup, this.substituteBackgroundLayers);
   }
 
   private getZIndexForBackgroundLayer(zIndex?: number) {
@@ -195,7 +194,6 @@ export class OpenLayersLayerManager implements LayerManagerModel {
 
   public removeLayer(id: string) {
     this.removeLayerAndSource(id, this.baseLayerGroup, this.layers);
-    this.removeLayerAndSource(id, this.substituteBaseLayerGroup, this.substituteLayers);
   }
 
   public removeLayers(layerIds: string[]) {
@@ -336,11 +334,14 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     return;
   }
 
-  private createLayer(layer: LayerModel): LayerTypes {
+  private createLayer(layer: LayerModel, useWebMercator?: boolean): LayerTypes {
     if (LayerTypesHelper.isVectorLayer(layer)) {
       return this.createVectorLayer(layer);
     }
-    const olLayer = OlLayerHelper.createLayer(layer, this.olMap.getView().getProjection(), this.ngZone, this.httpXsrfTokenExtractor);
+    let olLayer = OlLayerHelper.createLayer(layer, this.olMap.getView().getProjection(), this.ngZone, this.httpXsrfTokenExtractor);
+    if (useWebMercator) {
+      olLayer = OlLayerHelper.createLayer(layer, getProjection('EPSG:3857')!, this.ngZone, this.httpXsrfTokenExtractor);
+    }
     if (!olLayer) {
       return null;
     }
@@ -358,30 +359,92 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     return vectorLayer;
   }
 
-  public createSubstituteWebMercatorLayers(layers: LayerModel[], backgroundLayers: boolean) {
-    layers.forEach(layer => {
-      if (layer.webMercatorAvailable || layer.layerType === LayerTypesEnum.WMS) {
-        if (!LayerTypesHelper.isVectorLayer(layer)) {
-          const olLayer = OlLayerHelper.createLayer(layer, getProjection('EPSG:3857')!, this.ngZone, this.httpXsrfTokenExtractor);
-          if (olLayer) {
-            OlLayerHelper.setLayerProps(layer, olLayer);
-            if (backgroundLayers) {
-              const layerGroup = this.substituteBackgroundLayerGroup;
-              const baseLayers = layerGroup.getLayers();
-              baseLayers.push(olLayer);
-              layerGroup.setLayers(baseLayers);
-            } else {
-              const layerGroup = this.substituteBaseLayerGroup;
-              const baseLayers = layerGroup.getLayers();
-              baseLayers.push(olLayer);
-              layerGroup.setLayers(baseLayers);
-            }
-          }
-        }
-      } else if (this.layersWithoutWebMercator.indexOf(layer.id) === -1) {
-        this.layersWithoutWebMercator.push(layer.id);
-      }
+  private addSubstituteBackgroundLayer(layer: LayerModel, zIndex?: number) {
+    const olLayer = this.createLayer(layer, true);
+    if (olLayer === null) {
+      return;
+    }
+    OlLayerHelper.setLayerProps(layer, olLayer);
+    this.substituteBackgroundLayers.set(layer.id, olLayer);
+    this.substituteBackgroundLayerGroup.getLayers().push(olLayer);
+    olLayer.setZIndex(this.getZIndexForBackgroundLayer(zIndex));
+  }
+
+  private removeSubstituteBackgroundLayer(layerId: string) {
+    this.removeLayerAndSource(layerId, this.substituteBackgroundLayerGroup, this.substituteBackgroundLayers);
+  }
+
+  private getZIndexForSubstituteBackgroundLayer(zIndex?: number) {
+    if (typeof zIndex === 'undefined' || zIndex === -1) {
+      zIndex = this.substituteBackgroundLayerGroup.getLayers().getLength();
+    }
+    return zIndex;
+  }
+
+
+  public addSubstituteLayer<LayerType extends LayerTypes>(layer: LayerModel, zIndex?: number): LayerType | null {
+    const olLayer = this.createLayer(layer, true);
+    if (olLayer === null) {
+      return null;
+    }
+    OlLayerHelper.setLayerProps(layer, olLayer);
+    this.addSubstituteLayerToMap(olLayer);
+    olLayer.setZIndex(this.getZIndexForSubstituteLayer(zIndex));
+    this.moveDrawingLayersToTop();
+    if (!LayerTypesHelper.isVectorLayer(layer)) {
+      this.substituteLayers.set(layer.id, olLayer);
+    }
+    return olLayer as LayerType;
+  }
+
+  private getZIndexForSubstituteLayer(zIndex?: number) {
+    if (typeof zIndex === 'undefined' || zIndex === -1) {
+      zIndex = this.getMaxSubstituteZIndex();
+    }
+    zIndex += this.substituteBackgroundLayerGroup.getLayers().getLength();
+    return zIndex;
+  }
+
+  public removeSubstituteLayer(id: string) {
+    this.removeLayerAndSource(id, this.substituteBaseLayerGroup, this.substituteLayers);
+  }
+
+  private getMaxSubstituteZIndex() {
+    let maxZIndex = 0;
+    this.substituteBaseLayerGroup.getLayers().forEach(layer => {
+      maxZIndex = Math.max(maxZIndex, layer.getZIndex() || 0);
     });
+    return maxZIndex;
+  }
+
+  private addSubstituteLayerToMap(layer: BaseLayer) {
+    if (!isOpenLayersVectorLayer(layer)) {
+      const layers = this.substituteBaseLayerGroup.getLayers();
+      layers.push(layer);
+      this.substituteBaseLayerGroup.setLayers(layers);
+    }
+  }
+
+  public createSubstituteWebMercatorLayers(layers: LayerModel[], backgroundLayers: boolean) {
+    if (backgroundLayers) {
+      this.prevSubstituteBackgroundLayerIds = this.updateLayers(
+        layers,
+        this.substituteBackgroundLayers,
+        this.prevSubstituteBackgroundLayerIds,
+        this.addSubstituteBackgroundLayer.bind(this),
+        this.removeSubstituteBackgroundLayer.bind(this),
+        this.getZIndexForSubstituteBackgroundLayer.bind(this),
+      );
+    } else {
+      this.prevSubstituteLayerIdentifiers = this.updateLayers(
+        layers,
+        this.substituteLayers,
+        this.prevSubstituteLayerIdentifiers,
+        this.addSubstituteLayer.bind(this),
+        this.removeSubstituteLayer.bind(this),
+        this.getZIndexForSubstituteLayer.bind(this),
+      );
+    }
   }
 
   public addSubstituteWebMercatorLayers() {
