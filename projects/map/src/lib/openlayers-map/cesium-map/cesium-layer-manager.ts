@@ -8,6 +8,7 @@ import { Cesium3DTileset, CesiumTerrainProvider, EllipsoidTerrainProvider, Scene
 import { CssHelper, ExternalLibsLoaderHelper } from '@tailormap-viewer/shared';
 import { LayerTypesEnum } from '../../models/layer-types.enum';
 import { CesiumEventManager } from './cesium-event-manager';
+import { Projection } from 'ol/proj';
 
 export class CesiumLayerManager {
 
@@ -17,6 +18,7 @@ export class CesiumLayerManager {
   constructor(
     private olMap: OlMap,
     private ngZone: NgZone,
+    private projection2D?: Projection,
   ) {
   }
 
@@ -47,7 +49,7 @@ export class CesiumLayerManager {
         });
       this.executeScene3DAction(async scene3D => {
         scene3D.globe.depthTestAgainstTerrain = true;
-        CesiumEventManager.initClickEvent(scene3D, CssHelper.getCssVariableValue('--primary-color').trim());
+        CesiumEventManager.initClickEvent(scene3D, CssHelper.getCssVariableValue('--primary-color').trim(), this.projection2D?.getCode());
       });
     });
   }

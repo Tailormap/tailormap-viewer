@@ -1,14 +1,15 @@
-import { Cartesian3, Cartographic, Cesium3DTileFeature, PostProcessStage, Scene } from 'cesium';
+import { Cartesian3, Cartographic, Cesium3DTileFeature, Math, PostProcessStage, Scene } from 'cesium';
 import { Selection3dModel } from '../../models/selection3d.model';
 import { Observable, Subject } from 'rxjs';
 import { AttributeType } from '@tailormap-viewer/api';
 import { ColorHelper } from '@tailormap-viewer/shared';
+import { CoordinateHelper } from '../../helpers/coordinate.helper';
 
 export class CesiumEventManager {
 
   private static map3DClickEvent: Subject<Selection3dModel> = new Subject<Selection3dModel>();
 
-  public static initClickEvent(scene3D: Scene, silhouetteColor: string) {
+  public static initClickEvent(scene3D: Scene, silhouetteColor: string, projection2D?: string) {
     const cesiumEventHandler = new Cesium.ScreenSpaceEventHandler(scene3D.canvas);
     const silhouette = this.createSilhouette(silhouetteColor, 0.01);
     scene3D.postProcessStages.add(Cesium.PostProcessStageLibrary.createSilhouetteStage([silhouette]));
@@ -18,7 +19,16 @@ export class CesiumEventManager {
       const positionEarthCentered: Cartesian3 = scene3D.pickPosition(movement.position);
       const cartographicPosition: Cartographic = Cesium.Ellipsoid.WGS84.cartesianToCartographic(positionEarthCentered);
       const projection = new Cesium.WebMercatorProjection;
-      const position = projection.project(cartographicPosition);
+      let position = projection.project(cartographicPosition);
+
+      if (projection2D) {
+        const coordinatesInProjection = CoordinateHelper.projectCoordinates(
+          [ cartographicPosition.longitude * 180 / Math.PI, cartographicPosition.latitude * 180 / Math.PI ],
+          "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees",
+          projection2D,
+        );
+        position = { x: coordinatesInProjection[0], y: coordinatesInProjection[1], z: position.z };
+      }
 
       if (!Cesium.defined(pickedFeature)) {
         silhouette.selected = [];

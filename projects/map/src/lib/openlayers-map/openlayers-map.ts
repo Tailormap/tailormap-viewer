@@ -400,7 +400,7 @@ export class OpenLayersMap implements MapViewerModel {
   public make3D(){
     if (!this.made3D) {
       this.executeMapAction(olMap => {
-        this.map3D.next(new CesiumLayerManager(olMap, this.ngZone));
+        this.map3D.next(new CesiumLayerManager(olMap, this.ngZone, this.map.getValue()?.getView().getProjection()));
       });
       this.executeCLMAction(cesiumLayerManager => {
         cesiumLayerManager.init();
