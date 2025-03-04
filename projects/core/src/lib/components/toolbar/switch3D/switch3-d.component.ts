@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, DestroyRef, Signal } from '@angular/core';
-import { map, Observable, combineLatest } from 'rxjs';
+import { map, Observable, combineLatest, take } from 'rxjs';
 import { MapService } from '@tailormap-viewer/map';
 import { Store } from '@ngrx/store';
 import { selectEnable3D } from '../../../state/core.selectors';
@@ -8,8 +8,10 @@ import { MenubarService } from '../../menubar';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { selectActiveTool } from '../state/toolbar.selectors';
 import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
-import { selectIn3DView } from '../../../map/state/map.selectors';
+import { selectIn3DView, selectLayersWithoutWebMercator } from '../../../map/state/map.selectors';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 
 
 @Component({
@@ -46,6 +48,7 @@ export class Switch3DComponent {
     private store$: Store,
     private mapService: MapService,
     private menubarService: MenubarService,
+    private snackBar: MatSnackBar,
     private destroyRef: DestroyRef,
   ) {
     this.allowSwitch$ = combineLatest([
@@ -68,6 +71,25 @@ export class Switch3DComponent {
   public toggle() {
     this.mapService.switch3D();
     this.store$.dispatch(toggleIn3DView());
+    if (this.in3DView()) {
+      this.store$.select(selectLayersWithoutWebMercator)
+        .pipe(take(1))
+        .subscribe(layers => {
+          if (layers && layers.length > 0) {
+            this.showSnackbarMessage($localize `:@@core.toolbar.switch-3d.layers-without-web-mercator:These layers are not visible in 3D: ${layers.join(', ')}`);
+          }
+        });
+    }
+  }
+
+  private showSnackbarMessage(msg: string) {
+    const config: SnackBarMessageOptionsModel = {
+      message: msg,
+      duration: 10000,
+      showDuration: true,
+      showCloseButton: true,
+    };
+    SnackBarMessageComponent.open$(this.snackBar, config).subscribe();
   }
 
 }

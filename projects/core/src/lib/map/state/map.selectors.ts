@@ -20,6 +20,7 @@ export const selectSelectedTerrainNodeId = createSelector(selectMapState, state 
 export const selectLoadStatus = createSelector(selectMapState, state => state.loadStatus);
 export const selectLayerDetailsAll = createSelector(selectMapState, state => state.layerDetails);
 export const selectIn3DView = createSelector(selectMapState, state => state.in3DView);
+export const selectLayersWithoutWebMercator = createSelector(selectMapState, state => state.layersWithoutWebMercator);
 
 export const selectMapOptions = createSelector(
   selectMapSettings,

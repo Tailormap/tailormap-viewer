@@ -2,7 +2,7 @@ import { Map as OlMap } from 'ol';
 import { Group as LayerGroup, Layer as BaseLayer, Vector as VectorLayer } from 'ol/layer';
 import { ImageWMS, TileWMS, Vector as VectorSource, WMTS, XYZ } from 'ol/source';
 import { get as getProjection } from 'ol/proj';
-import { LayerManagerModel, LayerTypes, LayerTypesEnum } from '../models';
+import { LayerManagerModel, LayerTypes } from '../models';
 import { OlLayerHelper } from '../helpers/ol-layer.helper';
 import { LayerModel } from '../models/layer.model';
 import { VectorLayerModel } from '../models/vector-layer.model';
@@ -25,8 +25,6 @@ export class OpenLayersLayerManager implements LayerManagerModel {
 
   private prevBackgroundLayerIds: string[] = [];
   private prevLayerIdentifiers: string[] = [];
-
-  private layersWithoutWebMercator: string[] = [];
 
   private substituteLayers: Map<string, BaseLayer> = new Map<string, BaseLayer>();
   private substituteBackgroundLayers: Map<string, BaseLayer> = new Map<string, BaseLayer>();
@@ -197,7 +195,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
   }
 
   public removeLayers(layerIds: string[]) {
-    layerIds.forEach(l => this.removeLayer(l));
+    layerIds.forEach(l => this.removeLayerAndSource(l, this.baseLayerGroup, this.layers));
   }
 
   public getLayer(layerId: string) {
@@ -360,6 +358,9 @@ export class OpenLayersLayerManager implements LayerManagerModel {
   }
 
   private addSubstituteBackgroundLayer(layer: LayerModel, zIndex?: number) {
+    if (!layer.webMercatorAvailable) {
+      return;
+    }
     const olLayer = this.createLayer(layer, true);
     if (olLayer === null) {
       return;
@@ -383,6 +384,9 @@ export class OpenLayersLayerManager implements LayerManagerModel {
 
 
   public addSubstituteLayer<LayerType extends LayerTypes>(layer: LayerModel, zIndex?: number): LayerType | null {
+    if (!layer.webMercatorAvailable) {
+      return null;
+    }
     const olLayer = this.createLayer(layer, true);
     if (olLayer === null) {
       return null;
@@ -425,26 +429,26 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     }
   }
 
-  public createSubstituteWebMercatorLayers(layers: LayerModel[], backgroundLayers: boolean) {
-    if (backgroundLayers) {
-      this.prevSubstituteBackgroundLayerIds = this.updateLayers(
-        layers,
-        this.substituteBackgroundLayers,
-        this.prevSubstituteBackgroundLayerIds,
-        this.addSubstituteBackgroundLayer.bind(this),
-        this.removeSubstituteBackgroundLayer.bind(this),
-        this.getZIndexForSubstituteBackgroundLayer.bind(this),
-      );
-    } else {
-      this.prevSubstituteLayerIdentifiers = this.updateLayers(
-        layers,
-        this.substituteLayers,
-        this.prevSubstituteLayerIdentifiers,
-        this.addSubstituteLayer.bind(this),
-        this.removeSubstituteLayer.bind(this),
-        this.getZIndexForSubstituteLayer.bind(this),
-      );
-    }
+  public setSubstituteWebMercatorLayers(layers: LayerModel[]) {
+    this.prevSubstituteLayerIdentifiers = this.updateLayers(
+      layers,
+      this.substituteLayers,
+      this.prevSubstituteLayerIdentifiers,
+      this.addSubstituteLayer.bind(this),
+      this.removeSubstituteLayer.bind(this),
+      this.getZIndexForSubstituteLayer.bind(this),
+    );
+  }
+
+  public setSubstituteWebMercatorBackgroundLayers(layers: LayerModel[]) {
+    this.prevSubstituteBackgroundLayerIds = this.updateLayers(
+      layers,
+      this.substituteBackgroundLayers,
+      this.prevSubstituteBackgroundLayerIds,
+      this.addSubstituteBackgroundLayer.bind(this),
+      this.removeSubstituteBackgroundLayer.bind(this),
+      this.getZIndexForSubstituteBackgroundLayer.bind(this),
+    );
   }
 
   public addSubstituteWebMercatorLayers() {

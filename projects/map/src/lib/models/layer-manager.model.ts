@@ -18,7 +18,8 @@ export interface LayerManagerModel {
   getLegendUrl(layerId: string): string;
   addSubstituteLayer<LayerType extends LayerTypes>(layer: LayerModel): LayerType | null;
   removeSubstituteLayer(id: string): void;
-  createSubstituteWebMercatorLayers(layers: LayerModel[], backgroundLayers: boolean): void;
+  setSubstituteWebMercatorLayers(layers: LayerModel[]): void;
+  setSubstituteWebMercatorBackgroundLayers(layers: LayerModel[]): void;
   addSubstituteWebMercatorLayers(): void;
   removeSubstituteWebMercatorLayers(): void;
 }

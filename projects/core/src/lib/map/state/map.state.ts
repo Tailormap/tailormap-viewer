@@ -24,6 +24,7 @@ export interface MapState {
   selectedBackgroundNode?: string;
   selectedTerrainLayerNode?: string;
   in3DView: boolean;
+  layersWithoutWebMercator?: string[];
 }
 
 export const initialMapState: MapState = {
