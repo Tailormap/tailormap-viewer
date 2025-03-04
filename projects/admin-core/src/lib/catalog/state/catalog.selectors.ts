@@ -85,9 +85,19 @@ export const selectFeatureSourceAndFeatureTypesById = (id: string) => createSele
   },
 );
 
-export const selectFeatureSourceByFeatureTypeId = (featureTypeId: string) => createSelector(
+// Note: the featureTypeId is a string, because it must have the featureSourceId prefixed to it separated by an underscore
+// as used in route
+export const selectFeatureSourceByFeatureTypeIdPrefixedWithFeatureSourceId = (featureTypeId: string) => createSelector(
   selectFeatureSources,
   featureSources => featureSources.find(f => (f.featureTypesIds || []).includes(featureTypeId)),
+);
+
+// This selector finds a feature source for a feature type by the feature type id only, without the feature source id prefix. This is
+// possible because feature type ids are unique across all feature sources.
+export const selectFeatureSourceByFeatureTypeIdOnly = (featureTypeId: string) => createSelector(
+  selectFeatureSources,
+  featureSources => featureSources.find(f => (f.featureTypesIds || [])
+    .some(featureTypeIdsPrefixedWithFeatureSourceId => featureTypeIdsPrefixedWithFeatureSourceId.split('_')[1] === featureTypeId)),
 );
 
 export const selectGeoServiceByLayerId = (layerId: string) => createSelector(

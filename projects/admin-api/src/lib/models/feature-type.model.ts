@@ -3,7 +3,7 @@ import { FeatureTypeInfoModel } from './feature-type-info.model';
 import { FeatureTypeSettingsModel } from './feature-type-settings.model';
 
 export interface FeatureTypeModel {
-  id: string;
+  id: string; // XXX should actually be number
   name: string;
   title: string;
   comment?: string;

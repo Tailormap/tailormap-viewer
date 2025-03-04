@@ -818,6 +818,18 @@
         <source>This feature type does not have a geometry attribute.</source>
         <target>Dit feature type heeft geen geometrie attribuut.</target>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.feature-type-editable-info" datatype="html">
+        <source>This feature type appears to be editable. Editing may still fail if the database user does not have the required permissions or because of other reasons such as triggers, etc.</source>
+        <target>Dit feature type lijkt bewerkbaar te zijn. Bewerken kan nog steeds mislukken als de databasegebruiker niet de vereiste rechten heeft of vanwege andere redenen zoals triggers, etc.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.feature-type-read-only-warning-jdbc" datatype="html">
+        <source>This JDBC feature type is read-only because of a missing primary key, a composite primary key or an unknown column type. Check the logs for warnings after refreshing the feature source for details.</source>
+        <target>Dit JDBC feature type is alleen-lezen vanwege een ontbrekende primaire sleutel, een samengestelde primaire sleutel of een onbekend kolomtype. Controleer de logs op waarschuwingen na het vernieuwen van de feature source voor details.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.feature-type-not-editable-warning-not-jdbc" datatype="html">
+        <source>This feature type is not editable because editing is only supported for JDBC feature sources.</source>
+        <target>Dit feature type is niet bewerkbaar omdat bewerken alleen wordt ondersteund voor JDBC feature sources.</target>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.technical-name" datatype="html">
         <source>Technical name: <x id="INTERPOLATION" equiv-text="{{ featureType.name }}"/></source>
         <target>Technische naam: <x id="INTERPOLATION" equiv-text="{{ featureType.name }}"/></target>

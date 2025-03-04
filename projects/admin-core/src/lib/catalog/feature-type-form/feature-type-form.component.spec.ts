@@ -9,6 +9,9 @@ import { FeatureTypeAttributesComponent } from '../feature-type-attributes/featu
 import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
 import { SpinnerButtonComponent } from '@tailormap-viewer/shared';
 import { CatalogExtendedTypeEnum } from '../models/catalog-extended.model';
+import { createMockStore } from '@ngrx/store/testing';
+import { catalogStateKey, initialCatalogState } from '../state/catalog.state';
+import { Store } from '@ngrx/store';
 
 const setup = async () => {
   const featureSourceService = { updateFeatureSource$: jest.fn(() => of({})) };
@@ -20,6 +23,9 @@ const setup = async () => {
     catalogNodeId: 'node-1',
     type: CatalogExtendedTypeEnum.FEATURE_TYPE_TYPE,
   };
+  const mockStore = createMockStore({
+    initialState: { [catalogStateKey]: { ...initialCatalogState } },
+  });
   await render(FeatureTypeFormComponent, {
     declarations: [ FeatureTypeAttributesComponent, SaveButtonComponent, SpinnerButtonComponent ],
     imports: [SharedModule],
@@ -28,6 +34,7 @@ const setup = async () => {
     },
     providers: [
       { provide: FeatureSourceService, useValue: featureSourceService },
+      { provide: Store, useValue: mockStore },
     ],
   });
   return { featureSourceService, featureTypeModel };
