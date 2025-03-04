@@ -39,6 +39,7 @@ describe('MapReducer', () => {
       crs,
       appLayers,
       baseLayerTreeNodes: [],
+      terrainLayerTreeNodes: [],
       maxExtent: null,
     });
     const updatedState = mapReducer(initialState, action);

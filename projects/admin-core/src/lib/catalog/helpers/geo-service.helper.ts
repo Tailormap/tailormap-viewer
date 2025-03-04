@@ -1,4 +1,4 @@
-import { FeatureTypeSummaryModel } from '@tailormap-admin/admin-api';
+import { FeatureTypeSummaryModel, GeoServiceProtocolEnum } from '@tailormap-admin/admin-api';
 
 export class GeoServiceHelper {
 
@@ -17,5 +17,9 @@ export class GeoServiceHelper {
       return layerName.substring(colonIndex + 1);
     }
     return layerName;
+  }
+
+  public static is3dProtocol(protocol: GeoServiceProtocolEnum): boolean {
+    return protocol === GeoServiceProtocolEnum.TILES3D || protocol === GeoServiceProtocolEnum.QUANTIZEDMESH;
   }
 }
