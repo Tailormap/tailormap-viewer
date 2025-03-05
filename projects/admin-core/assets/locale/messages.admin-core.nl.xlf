@@ -171,8 +171,8 @@
         <target>3D-weergave inschakelen</target>
       </trans-unit>
       <trans-unit id="admin-core.application.enable-3D-hint" datatype="html">
-        <source>3D viewing is available only for applications with projection EPSG:3857</source>
-        <target>3D weergave is alleen beschikbaar voor applicaties met projectie EPSG:3857</target>
+        <source>Only the layers that are available in EPSG:3857 are visible in 3D</source>
+        <target>Alleen de lagen die beschikbaar zijn in EPSG:3857 zijn zichtbaar in 3D</target>
       </trans-unit>
       <trans-unit id="admin-core.application.error-creating-application" datatype="html">
         <source>Error while creating application.</source>

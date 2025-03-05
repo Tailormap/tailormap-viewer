@@ -129,7 +129,7 @@
         <source>Enable 3D viewing</source>
       </trans-unit>
       <trans-unit id="admin-core.application.enable-3D-hint" datatype="html">
-        <source>3D viewing is available only for applications with projection EPSG:3857</source>
+        <source>Only the layers that are available in EPSG:3857 are visible in 3D</source>
       </trans-unit>
       <trans-unit id="admin-core.application.error-creating-application" datatype="html">
         <source>Error while creating application.</source>
