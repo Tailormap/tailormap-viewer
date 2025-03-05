@@ -2,4 +2,6 @@
                  [options]="backgroundLayers$ | async"
                  [emptyLabel]="initiallyCheckedLabels$ | async"
                  [selectedOption]="selectedBackgroundNodeId$ | async"
+                 [in3D]="in3D()"
+                 [layersWithoutWebMercator]="layersWithoutWebMercator()"
                  (optionSelected)="backgroundChanged($event)"></tm-split-button>

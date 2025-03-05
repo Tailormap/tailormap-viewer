@@ -2,7 +2,7 @@ import { Map as OlMap } from 'ol';
 import { Group as LayerGroup, Layer as BaseLayer, Vector as VectorLayer } from 'ol/layer';
 import { ImageWMS, TileWMS, Vector as VectorSource, WMTS, XYZ } from 'ol/source';
 import { get as getProjection } from 'ol/proj';
-import { LayerManagerModel, LayerTypes } from '../models';
+import { LayerManagerModel, LayerTypes, LayerTypesEnum } from '../models';
 import { OlLayerHelper } from '../helpers/ol-layer.helper';
 import { LayerModel } from '../models/layer.model';
 import { VectorLayerModel } from '../models/vector-layer.model';
@@ -358,7 +358,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
   }
 
   private addSubstituteBackgroundLayer(layer: LayerModel, zIndex?: number) {
-    if (!layer.webMercatorAvailable) {
+    if (!(layer.webMercatorAvailable || layer.layerType === LayerTypesEnum.WMS)) {
       return;
     }
     const olLayer = this.createLayer(layer, true);
@@ -384,7 +384,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
 
 
   public addSubstituteLayer<LayerType extends LayerTypes>(layer: LayerModel, zIndex?: number): LayerType | null {
-    if (!layer.webMercatorAvailable) {
+    if (!(layer.webMercatorAvailable || layer.layerType === LayerTypesEnum.WMS)) {
       return null;
     }
     const olLayer = this.createLayer(layer, true);
