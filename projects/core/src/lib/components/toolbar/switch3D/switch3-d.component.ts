@@ -82,7 +82,7 @@ export class Switch3DComponent {
                 .pipe(take(1))
                 .subscribe(layer => layerNames.push(layer?.title || ''));
             }
-            this.showSnackbarMessage($localize `:@@core.toolbar.switch-3d.layers-without-wm:The following are not visible in 3D: ${layerNames.join(', ')}`);
+            this.showSnackbarMessage($localize `:@@core.toolbar.switch-3d.layers-without-wm:The following layers are not visible in 3D: ${layerNames.join(', ')}`);
           }
         });
     }

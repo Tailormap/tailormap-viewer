@@ -1025,6 +1025,10 @@
         <source>Switch to 3D</source>
         <target>Schakel naar 3D</target>
       </trans-unit>
+      <trans-unit id="core.toolbar.switch-3d.layers-without-wm" datatype="html">
+        <source>The following layers are not visible in 3D: <x id="PH" equiv-text="layerNames.join(&apos;, &apos;)"/> </source>
+        <target>De volgende lagen zijn niet zichtbaar in 3D: <x id="PH" equiv-text="layerNames.join(&apos;, &apos;)"/> </target>
+      </trans-unit>
       <trans-unit id="core.toolbar.type-at-least" datatype="html">
         <source>Type at least <x id="INTERPOLATION" equiv-text="{{ minLength }}"/> characters to start searching or press &lt;Enter&gt;</source>
         <target>Typ ten minste <x id="INTERPOLATION" equiv-text="{{ minLength }}"/> tekens om te beginnen met zoeken of druk op &lt;Enter&gt;</target>
