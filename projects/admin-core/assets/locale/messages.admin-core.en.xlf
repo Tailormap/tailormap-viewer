@@ -545,6 +545,9 @@
       <trans-unit id="admin-core.catalog.port" datatype="html">
         <source>Port</source>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.primary-key" datatype="html">
+        <source>Primary key</source>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.protocol" datatype="html">
         <source>Protocol</source>
       </trans-unit>
