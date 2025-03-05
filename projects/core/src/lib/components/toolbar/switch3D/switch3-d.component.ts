@@ -8,7 +8,7 @@ import { MenubarService } from '../../menubar';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { selectActiveTool } from '../state/toolbar.selectors';
 import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
-import { selectIn3DView, selectLayersWithoutWebMercator } from '../../../map/state/map.selectors';
+import { selectIn3DView, selectLayer, selectLayersWithoutWebMercator } from '../../../map/state/map.selectors';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
@@ -76,7 +76,13 @@ export class Switch3DComponent {
         .pipe(take(1))
         .subscribe(layers => {
           if (layers && layers.length > 0) {
-            this.showSnackbarMessage($localize `:@@core.toolbar.switch-3d.layers-without-web-mercator:These layers are not visible in 3D: ${layers.join(', ')}`);
+            const layerNames: string[] = [];
+            for (const layerId of layers) {
+              this.store$.select(selectLayer(layerId))
+                .pipe(take(1))
+                .subscribe(layer => layerNames.push(layer?.title || ''));
+            }
+            this.showSnackbarMessage($localize `:@@core.toolbar.switch-3d.layers-without-wm:The following are not visible in 3D: ${layerNames.join(', ')}`);
           }
         });
     }

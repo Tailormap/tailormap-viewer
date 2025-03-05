@@ -27,7 +27,7 @@ const onLoadMapSuccess = (
   layerTreeNodes: payload.layerTreeNodes,
   terrainLayerTreeNodes: payload.terrainLayerTreeNodes.map(node => LayerTreeNodeHelper.getExtendedLayerTreeNode(node, false)),
   layersWithoutWebMercator: LayerModelHelper.filterLayersWithoutWebMercator(payload.appLayers, payload.services)
-    .map(layer => layer.title),
+    .map(layer => layer.id),
 });
 
 const onLoadMapFailed = (

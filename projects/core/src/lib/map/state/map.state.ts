@@ -24,7 +24,7 @@ export interface MapState {
   selectedBackgroundNode?: string;
   selectedTerrainLayerNode?: string;
   in3DView: boolean;
-  layersWithoutWebMercator?: string[];
+  layersWithoutWebMercator: string[];
 }
 
 export const initialMapState: MapState = {
@@ -36,4 +36,5 @@ export const initialMapState: MapState = {
   layerTreeNodes: [],
   terrainLayerTreeNodes: [],
   in3DView: false,
+  layersWithoutWebMercator: [],
 };
