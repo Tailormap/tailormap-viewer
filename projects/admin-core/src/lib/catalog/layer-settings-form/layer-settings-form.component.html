@@ -115,6 +115,12 @@
       </mat-form-field>
     }
   }
+  @if (isWMS || isWMTS || isXYZ) {
+    <div class="available-crs">
+      <strong class="available-crs-header">Available projections for this layer</strong>
+      <div class="available-crs-text">{{ crsText }}</div>
+    </div>
+  }
   <tm-admin-authorization-edit class="authorization-edit"
                                formControlName="authorizationRules"
                                *ngIf="isLeaf || layerSettingsForm.get('authorizationRules')?.value?.length"

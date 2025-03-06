@@ -8,6 +8,7 @@
                                     [serviceId]="geoServiceSettings.serviceId"
                                     [isLayerSpecific]="true"
                                     [isLeaf]="isLeaf$ | async"
+                                    [crs]="crs"
                                     (changed)="updateSettings($event)"></tm-admin-layer-settings-form>
     </div>
     <div class="legend-settings">

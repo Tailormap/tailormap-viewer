@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
-import { BehaviorSubject, distinctUntilChanged, map, Observable, of, Subject, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, map, Observable, of, Subject, switchMap, take, tap } from 'rxjs';
 import { selectGeoServiceAndLayerByLayerId, selectGeoServiceLayerSettingsByLayerId } from '../state/catalog.selectors';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -34,6 +34,8 @@ export class GeoServiceLayerDetailsComponent implements OnInit, OnDestroy {
   public legendImageId: string | null | undefined = null;
 
   public isLeaf$: Observable<boolean | null> = of(true);
+
+  public crs: string[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -72,6 +74,14 @@ export class GeoServiceLayerDetailsComponent implements OnInit, OnDestroy {
       }),
       map(info => info ? info.layer.children?.length === 0 : true),
     );
+
+    layerId$.pipe(take(1)).subscribe(layerId => {
+      if (layerId) {
+        this.store$.select(selectGeoServiceAndLayerByLayerId(layerId)).pipe(take(1)).subscribe(info => {
+          this.crs = info?.layer.crs || [];
+        })
+      }
+    });
   }
 
   public ngOnDestroy(): void {
