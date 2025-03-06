@@ -6,4 +6,5 @@ export interface ExtendedFeatureSourceModel extends FeatureSourceSummaryModel, C
   catalogNodeId: string;
   expanded?: boolean;
   featureTypesIds: string[];
+  featureTypeOriginalIds: string[];
 }

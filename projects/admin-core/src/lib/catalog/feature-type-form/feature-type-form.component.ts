@@ -5,7 +5,7 @@ import { FeatureTypeUpdateModel } from '../models/feature-source-update.model';
 import { AttributeSettingsModel, FeatureTypeModel, FeatureTypeSettingsModel, FeatureTypeTemplateModel } from '@tailormap-admin/admin-api';
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 import { Store } from '@ngrx/store';
-import { selectFeatureSourceByFeatureTypeIdOnly } from '../state/catalog.selectors';
+import { selectFeatureSourceByFeatureTypeOriginalId } from '../state/catalog.selectors';
 
 @Component({
   selector: 'tm-admin-feature-type-form',
@@ -60,7 +60,7 @@ export class FeatureTypeFormComponent {
         return { ...(featureType?.settings || {}), ...(updatedFeatureType?.settings || {}) };
       }));
     this.featureSource$ = featureType
-      ? this.store$.select(selectFeatureSourceByFeatureTypeIdOnly(featureType.id))
+      ? this.store$.select(selectFeatureSourceByFeatureTypeOriginalId(featureType.id))
       : of(undefined);
   }
 

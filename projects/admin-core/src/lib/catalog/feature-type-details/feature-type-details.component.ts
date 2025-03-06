@@ -5,7 +5,7 @@ import { FeatureTypeModel } from '@tailormap-admin/admin-api';
 import { FeatureSourceService } from '../services/feature-source.service';
 import { ExtendedCatalogModelHelper } from '../helpers/extended-catalog-model.helper';
 import { Store } from '@ngrx/store';
-import { selectFeatureSourceByFeatureTypeIdPrefixedWithFeatureSourceId } from '../state/catalog.selectors';
+import { selectFeatureSourceByFeatureTypeId } from '../state/catalog.selectors';
 
 @Component({
   selector: 'tm-admin-feature-type-details',
@@ -33,7 +33,7 @@ export class FeatureTypeDetailsComponent implements OnInit {
         if (typeof featureTypeId !== 'string') {
           return of(null);
         }
-        return this.store$.select(selectFeatureSourceByFeatureTypeIdPrefixedWithFeatureSourceId(featureTypeId))
+        return this.store$.select(selectFeatureSourceByFeatureTypeId(featureTypeId))
           .pipe(
             concatMap(featureSource => {
               if (!featureSource) {

@@ -114,6 +114,7 @@ export class ExtendedCatalogModelHelper {
       protocol: source.protocol,
       catalogNodeId,
       featureTypesIds: (featureTypes || []).map(ft => ft.id),
+      featureTypeOriginalIds: (featureTypes || []).map(ft => ft.originalId),
     };
     return [ featureSource, featureTypes ];
   }
