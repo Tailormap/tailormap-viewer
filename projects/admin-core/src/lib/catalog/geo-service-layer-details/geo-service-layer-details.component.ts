@@ -1,6 +1,8 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { BehaviorSubject, distinctUntilChanged, map, Observable, of, Subject, switchMap, take, tap } from 'rxjs';
-import { selectGeoServiceAndLayerByLayerId, selectGeoServiceLayerSettingsByLayerId } from '../state/catalog.selectors';
+import {
+  selectGeoServiceAndLayerByLayerId, selectGeoServiceLayersByGeoServiceId, selectGeoServiceLayerSettingsByLayerId,
+} from '../state/catalog.selectors';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { GeoServiceService } from '../services/geo-service.service';
@@ -10,6 +12,7 @@ import { AdminSnackbarService } from '../../shared/services/admin-snackbar.servi
 import { UploadCategoryEnum } from '@tailormap-admin/admin-api';
 import { UPLOAD_REMOVE_SERVICE } from '../../shared/components/select-upload/models/upload-remove-service.injection-token';
 import { LegendImageRemoveService } from '../services/legend-image-remove.service';
+import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-layer.model';
 
 @Component({
   selector: 'tm-admin-geo-service-layer-details',
@@ -35,7 +38,7 @@ export class GeoServiceLayerDetailsComponent implements OnInit, OnDestroy {
 
   public isLeaf$: Observable<boolean | null> = of(true);
 
-  public crs: string[] = [];
+  public crs$: Observable<string> = of('');
 
   constructor(
     private route: ActivatedRoute,
@@ -75,13 +78,32 @@ export class GeoServiceLayerDetailsComponent implements OnInit, OnDestroy {
       map(info => info ? info.layer.children?.length === 0 : true),
     );
 
-    layerId$.pipe(take(1)).subscribe(layerId => {
-      if (layerId) {
-        this.store$.select(selectGeoServiceAndLayerByLayerId(layerId)).pipe(take(1)).subscribe(info => {
-          this.crs = info?.layer.crs || [];
-        });
-      }
-    });
+    this.crs$ = layerId$.pipe(
+      switchMap(layerId => {
+        if (typeof layerId !== 'string') {
+          return of(null);
+        }
+        return this.store$.select(selectGeoServiceAndLayerByLayerId(layerId));
+      }),
+      map(serviceAndLayer => {
+        if (!serviceAndLayer) {
+          return '';
+        }
+        const crs: string[] = [];
+        const layersInService: ExtendedGeoServiceLayerModel[] = [];
+        this.store$.select(selectGeoServiceLayersByGeoServiceId(serviceAndLayer?.service.id))
+          .pipe(take(1))
+          .subscribe(layers => layersInService.push(...layers));
+        let layer: ExtendedGeoServiceLayerModel | undefined = serviceAndLayer?.layer;
+        while (layer) {
+          if (layer.crs) {
+            crs.push(...layer.crs);
+          }
+          layer = layersInService.find(l => l.id === layer?.parentId);
+        }
+        return [...new Set(crs)].join(', ');
+      }),
+    );
   }
 
   public ngOnDestroy(): void {

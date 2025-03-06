@@ -13,7 +13,7 @@ import { LoadingStateEnum, TreeModel } from '@tailormap-viewer/shared';
 import { ExtendedGeoServiceAndLayerModel } from '../../catalog/models/extended-geo-service-and-layer.model';
 import { MatDialog } from '@angular/material/dialog';
 import { ExtendedFeatureTypeModel } from '../../catalog/models/extended-feature-type.model';
-import { selectFeatureSourceAndFeatureTypesById } from '../../catalog/state/catalog.selectors';
+import { selectFeatureSourceAndFeatureTypesById, selectGeoServiceLayersByGeoServiceId } from '../../catalog/state/catalog.selectors';
 import {
   ApplicationLayerAttributeSettingsComponent,
 } from '../application-layer-attribute-settings/application-layer-attribute-settings.component';
@@ -26,6 +26,7 @@ import { selectSearchIndexesForFeatureType, selectSearchIndexesLoadStatus } from
 import { loadSearchIndexes } from '../../search-index/state/search-index.actions';
 import { ApplicationFeature, ApplicationFeatureSwitchService } from '@tailormap-viewer/api';
 import { GeoServiceHelper } from '../../catalog/helpers/geo-service.helper';
+import { ExtendedGeoServiceLayerModel } from '../../catalog/models/extended-geo-service-layer.model';
 
 type FeatureSourceAndType = {
   featureSource: ExtendedFeatureSourceModel;
@@ -74,9 +75,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     this._serviceLayer = serviceLayer;
     this.initFeatureSource(serviceLayer);
     this.setTitle();
-    if (serviceLayer?.layer.crs) {
-      this.crsText = serviceLayer.layer.crs.join(', ');
-    }
+    this.crsText = this.getCrsText(serviceLayer);
     if (serviceLayer?.service) {
       this.layerIs3D = GeoServiceHelper.is3dProtocol(serviceLayer.service.protocol);
     }
@@ -345,6 +344,25 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     } else {
       this.layerTitle = '';
     }
+  }
+
+  private getCrsText(serviceLayer: ExtendedGeoServiceAndLayerModel | null): string {
+    if (!serviceLayer) {
+      return '';
+    }
+    const crs: string[] = [];
+    const layersInService: ExtendedGeoServiceLayerModel[] = [];
+    this.store$.select(selectGeoServiceLayersByGeoServiceId(serviceLayer?.service.id))
+      .pipe(take(1))
+      .subscribe(layers => layersInService.push(...layers));
+    let layer: ExtendedGeoServiceLayerModel | undefined = serviceLayer?.layer;
+    while (layer) {
+      if (layer.crs) {
+        crs.push(...layer.crs);
+      }
+      layer = layersInService.find(l => l.id === layer?.parentId);
+    }
+    return [...new Set(crs)].join(', ');
   }
 
 }

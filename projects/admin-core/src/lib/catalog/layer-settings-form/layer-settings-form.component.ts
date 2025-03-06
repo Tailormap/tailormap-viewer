@@ -80,9 +80,7 @@ export class LayerSettingsFormComponent implements OnInit {
   public layerName: string | null | undefined;
 
   @Input()
-  public set crs(crsList: string[] | undefined) {
-    this.crsText = crsList?.join(', ');
-  }
+  public crs: string | null = null;
 
   @Output()
   public changed = new EventEmitter<LayerSettingsModel | null>();
@@ -92,8 +90,6 @@ export class LayerSettingsFormComponent implements OnInit {
   public geoServiceAuthorizations$: Observable<AuthorizationRuleGroup[]> = of([]);
   public layers$: Observable<ExtendedGeoServiceLayerModel[]> = of([]);
   public xyzProjection$: Observable<string> = of('');
-
-  public crsText: string | undefined;
 
   public isWMS = false;
   public isWMTS = false;
