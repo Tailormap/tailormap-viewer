@@ -38,9 +38,9 @@ export class CatalogBaseTreeNodeComponent {
     this._node = node;
     this.nodeSettings.label = CatalogBaseTreeNodeComponent.nodeLabel[node?.type || 'unknown'] || '';
     this.nodeSettings.icon = CatalogBaseTreeNodeComponent.getNodeIcon(node);
-    const warnings = [];
 
-    if (node?.type && node.type === CatalogTreeModelTypeEnum.FEATURE_TYPE_TYPE && node.metadata ) {
+    const warnings = [];
+    if (node?.type === CatalogTreeModelTypeEnum.FEATURE_TYPE_TYPE && node.metadata ) {
       const metadata: ExtendedFeatureTypeModel = node.metadata as ExtendedFeatureTypeModel;
 
       if (metadata.defaultGeometryAttribute === null) {
