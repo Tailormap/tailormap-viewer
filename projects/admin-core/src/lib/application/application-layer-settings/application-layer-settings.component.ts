@@ -309,9 +309,8 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
             return of(null);
           }
           return ApplicationLayerAttributeSettingsComponent.open(this.dialog, {
-            attributes: featureType.attributes,
+            featureType: featureType,
             appLayerSettings: this.layerSettings[nodeId] || {},
-            featureTypeSettings: featureType.settings,
           }).afterClosed();
         }),
         takeUntil(this.destroyed),

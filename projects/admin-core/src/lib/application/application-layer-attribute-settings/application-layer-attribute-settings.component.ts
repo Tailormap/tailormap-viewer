@@ -1,11 +1,10 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { AppLayerSettingsModel, AttributeDescriptorModel, FeatureTypeSettingsModel } from '@tailormap-admin/admin-api';
+import { AppLayerSettingsModel, AttributeDescriptorModel, FeatureTypeModel, FeatureTypeSettingsModel } from '@tailormap-admin/admin-api';
 
 interface ApplicationLayerAttributeSettingsData {
+  featureType: FeatureTypeModel;
   appLayerSettings: AppLayerSettingsModel;
-  featureTypeSettings: FeatureTypeSettingsModel;
-  attributes: AttributeDescriptorModel[];
 }
 
 interface ApplicationLayerAttributeSettingsResult {
@@ -28,15 +27,17 @@ export class ApplicationLayerAttributeSettingsComponent {
   public attributes: AttributeDescriptorModel[] = [];
   public settings: FeatureTypeSettingsModel | null = null;
   public catalogFeatureTypeSettings: FeatureTypeSettingsModel;
+  public featureType: FeatureTypeModel | null = null;
 
   constructor(
     private dialogRef: MatDialogRef<ApplicationLayerAttributeSettingsResult>,
     @Inject(MAT_DIALOG_DATA) private data: ApplicationLayerAttributeSettingsData,
   ) {
-    const hiddenAttributes = new Set(this.data.featureTypeSettings.hideAttributes || []);
-    this.catalogFeatureTypeSettings = this.data.featureTypeSettings;
-    this.attributes = this.data.attributes
+    const hiddenAttributes = new Set(this.data.featureType.settings.hideAttributes || []);
+    this.catalogFeatureTypeSettings = this.data.featureType.settings;
+    this.attributes = this.data.featureType.attributes
       .filter(a => !hiddenAttributes.has(a.name));
+    this.featureType = this.data.featureType;
     this.hideAttributes = this.data.appLayerSettings.hideAttributes || [];
     this.readOnlyAttributes = this.data.appLayerSettings.readOnlyAttributes || [];
     this.updateSettings();
@@ -91,7 +92,7 @@ export class ApplicationLayerAttributeSettingsComponent {
 
   private updateSettings() {
     this.settings = {
-      ...this.data.featureTypeSettings,
+      ...this.data.featureType.settings,
       hideAttributes: this.hideAttributes || [],
       readOnlyAttributes: this.readOnlyAttributes || [],
     };
