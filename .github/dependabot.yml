@@ -18,8 +18,11 @@ updates:
       time: '21:00'
       timezone: 'Europe/Amsterdam'
     target-branch: main
+    commit-message:
+      prefix: "🐳 "
     labels:
       - infrastructure
+      - docker-update
     ignore:
       - dependency-name: node
         versions:
@@ -33,5 +36,22 @@ updates:
       time: '21:00'
       timezone: 'Europe/Amsterdam'
     target-branch: main
+    commit-message:
+      prefix: "🐳 "
     labels:
+      - infrastructure
+      - docker-update
+
+  - package-ecosystem: "docker-compose"
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+      time: '21:00'
+      timezone: 'Europe/Amsterdam'
+    commit-message:
+      prefix: "⛓️‍💥 "
+    labels:
+      - breaking
+      - docker-update
       - infrastructure
