@@ -414,7 +414,7 @@ export class OpenLayersMap implements MapViewerModel {
       cesiumLayerManager.switch3D();
     });
     this.in3D.next(!this.in3D.value);
-    if (this.map.value?.getView().getProjection() === getProjection('EPSG:28992')) {
+    if (this.map.value?.getView().getProjection() !== getProjection('EPSG:3857')) {
       this.getLayerManager$().pipe(take(1)).subscribe(layerManager => {
         if (this.in3D.value) {
           layerManager.addSubstituteWebMercatorLayers();

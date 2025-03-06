@@ -4,7 +4,6 @@ import { Observable, Subject } from 'rxjs';
 import { AttributeType } from '@tailormap-viewer/api';
 import { ColorHelper } from '@tailormap-viewer/shared';
 import { CoordinateHelper } from '../../helpers/coordinate.helper';
-import { ProjectionsHelper } from '../../helpers/projections.helper';
 
 export class CesiumEventManager {
 
@@ -15,21 +14,19 @@ export class CesiumEventManager {
     const silhouette = this.createSilhouette(silhouetteColor, 0.01);
     scene3D.postProcessStages.add(Cesium.PostProcessStageLibrary.createSilhouetteStage([silhouette]));
 
-    ProjectionsHelper.initProjection('EPSG:4326', '+proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees +no_defs');
-
     cesiumEventHandler.setInputAction((movement: any) => {
       const pickedFeature: Cesium3DTileFeature = scene3D.pick(movement.position);
       const positionEarthCentered: Cartesian3 = scene3D.pickPosition(movement.position);
       const cartographicPosition: Cartographic = Cesium.Ellipsoid.WGS84.cartesianToCartographic(positionEarthCentered);
-      let position = { x: 0, y: 0, z: 0 };
+      let position: { x: number; y: number; z: number };
 
       if (projection2D) {
         const coordinatesInProjection = CoordinateHelper.projectCoordinates(
           [ cartographicPosition.longitude * 180 / Math.PI, cartographicPosition.latitude * 180 / Math.PI ],
-          'EPSG:4326',
+          '+proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees +no_defs',
           projection2D,
         );
-        position = { x: coordinatesInProjection[0], y: coordinatesInProjection[1], z: position.z };
+        position = { x: coordinatesInProjection[0], y: coordinatesInProjection[1], z: cartographicPosition.height };
       } else {
         const projection = new Cesium.WebMercatorProjection;
         position = projection.project(cartographicPosition);

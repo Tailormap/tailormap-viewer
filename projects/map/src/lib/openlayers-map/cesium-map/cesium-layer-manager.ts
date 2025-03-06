@@ -37,6 +37,7 @@ export class CesiumLayerManager {
         .subscribe(olCsModule => {
           const ol3d = new olCsModule.default({
             map: this.olMap,
+            // requestRenderMode and maximumRenderTimeChange are used to improve performance
             sceneOptions: {
               canvas: document.createElement('canvas'),
               requestRenderMode: true,
@@ -96,6 +97,7 @@ export class CesiumLayerManager {
         }
       });
       if (noTerrainLayersVisible) {
+        // set the terrain as WGS84 ellipsoid to remove terrain layers if none are set as visible
         this.setEllipsoidTerrain();
       }
     });
@@ -144,6 +146,7 @@ export class CesiumLayerManager {
         url: layer.url,
       });
       try {
+        // Create Cesium 3D Tileset with optimization options
         const tileset: Promise<Cesium3DTileset> = await Cesium.Cesium3DTileset.fromUrl(resource, {
           maximumScreenSpaceError: 16,
           skipLevelOfDetail: true,
