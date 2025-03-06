@@ -1,6 +1,7 @@
 import { MapClickToolConfigModel, MapClickToolModel, MapClickEvent } from '../../models';
 import { Observable, Subject, takeUntil, switchMap } from 'rxjs';
 import { OpenLayersEventManager } from '../open-layers-event-manager';
+import { OpenLayersHelper } from '../helpers/open-layers.helper';
 import { CesiumEventManager } from '../cesium-map/cesium-event-manager';
 
 export class OpenLayersMapClickTool implements MapClickToolModel {
@@ -38,11 +39,16 @@ export class OpenLayersMapClickTool implements MapClickToolModel {
           mapCoordinates: [ click.position.x, click.position.y ],
           mouseCoordinates: [ click.mouseCoordinates.x, click.mouseCoordinates.y ],
           cesiumFeatureInfo: click.featureInfo,
+          resolution: 0,
+          scale: 0,
         });
       } else {
+        const { scale, resolution } = OpenLayersHelper.getResolutionAndScale(click.map.getView());
         this.mapClickSubject.next({
           mapCoordinates: [ click.coordinate[0], click.coordinate[1] ],
           mouseCoordinates: [ click.pixel[0], click.pixel[1] ],
+          resolution,
+          scale,
         });
       }
     });

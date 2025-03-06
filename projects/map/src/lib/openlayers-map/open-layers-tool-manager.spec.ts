@@ -5,6 +5,21 @@ import { of } from 'rxjs';
 
 const mockNgZone = { run: (cb: () => void) => cb() } as any;
 
+export const getMapClickMock = () => {
+  return jest.fn(() => of({
+    coordinate: [ 1, 2 ],
+    pixel: [ 2, 3 ],
+    map: {
+      getView: () => ({
+        getResolution: () => 0.1,
+        getProjection: () => ({
+          getMetersPerUnit: () => 2,
+        }),
+      }),
+    },
+  }));
+};
+
 describe('OpenLayersToolManager', () => {
 
   test('creates a tool', () => {
@@ -17,7 +32,7 @@ describe('OpenLayersToolManager', () => {
 
   test('enables and disables a tool', done => {
     // @ts-expect-error overwriting this prop in test is allowed
-    OpenLayersEventManager.onMapClick$ = jest.fn(() => of({ coordinate: [ 1, 2 ], pixel: [ 2, 3 ] }));
+    OpenLayersEventManager.onMapClick$ = getMapClickMock();
     const tool = { type: ToolTypeEnum.MapClick };
     const manager = new OpenLayersToolManager({} as any, mockNgZone, of(false));
     const mapTool = manager.addTool(tool);
@@ -26,6 +41,8 @@ describe('OpenLayersToolManager', () => {
       expect(clickEvt).toEqual({
         mapCoordinates: [ 1, 2 ],
         mouseCoordinates: [ 2, 3 ],
+        resolution: 0.1,
+        scale: 714.2857142857143,
       });
       done();
     });
@@ -35,7 +52,7 @@ describe('OpenLayersToolManager', () => {
   });
 
   test('handles destroy', () => {
-    const onMapClickFn = jest.fn(() => of({ coordinate: [ 1, 2 ], pixel: [ 2, 3 ] }));
+    const onMapClickFn = getMapClickMock();
     // @ts-expect-error overwriting this prop in test is allowed
     OpenLayersEventManager.onMapClick$ = onMapClickFn;
     const tool = { type: ToolTypeEnum.MapClick };

@@ -24,6 +24,7 @@ import { ErrorResponseModel, FeatureModel } from '@tailormap-viewer/api';
 import { OpenLayersMapImageExporter } from './openlayers-map-image-exporter';
 import { Attribution } from 'ol/control';
 import { mouseOnly, platformModifierKeyOnly } from 'ol/events/condition';
+import { OpenLayersHelper } from './helpers/open-layers.helper';
 import { CesiumLayerManager } from './cesium-map/cesium-layer-manager';
 
 export class OpenLayersMap implements MapViewerModel {
@@ -286,15 +287,7 @@ export class OpenLayersMap implements MapViewerModel {
       .pipe(
         map(olMap => {
           const view = olMap.getView();
-
-          // From ImageWMS.getLegendUrl(), for conversion of resolution to scale
-          const mpu = view.getProjection()
-            ? view.getProjection().getMetersPerUnit()
-            : 1;
-          const pixelSize = 0.00028;
-          const resolution = view.getResolution() || 0;
-          const scale = (resolution * (mpu || 1)) / pixelSize;
-
+          const { scale, resolution } = OpenLayersHelper.getResolutionAndScale(view);
           return {
             zoomLevel: view.getZoom() || 0,
             minZoomLevel: view.getMinZoom() || 0,

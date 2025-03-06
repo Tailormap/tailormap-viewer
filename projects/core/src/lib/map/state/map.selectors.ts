@@ -129,7 +129,7 @@ export const selectVisibleWMSLayersWithoutAttributes = createSelector(
 
 export const selectFilterableLayers = createSelector(
   selectOrderedVisibleLayersWithServices,
-  layers => layers.filter(l => l.service?.serverType === ServerType.GEOSERVER),
+  layers => layers.filter(l => l.service?.serverType === ServerType.GEOSERVER && l.hasAttributes),
 );
 
 export const selectSomeLayersVisible = createSelector(
