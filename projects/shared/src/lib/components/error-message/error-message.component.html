@@ -1,5 +1,5 @@
 <div class="error-message"
-     *ngIf="message || showContent"
+     *ngIf="message || show"
      [class.error-message--friendly]="friendlyError">
   {{message || emptyText}}
   <ng-content></ng-content>
