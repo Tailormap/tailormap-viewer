@@ -698,6 +698,10 @@
         <source>Layer settings updated</source>
         <target>Einstellungen der Ebene aktualisiert</target>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.layer.crs" datatype="html">
+        <source>Available projections for this layer</source>
+        <target>Verfügbare Projektionen für diesen Ebene</target>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.max-zoom-level" datatype="html">
         <source>Maximum zoom level</source>
         <target>Maximales Zoomniveau</target>

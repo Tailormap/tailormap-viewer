@@ -524,6 +524,9 @@
       <trans-unit id="admin-core.catalog.layer-settings-updated" datatype="html">
         <source>Layer settings updated</source>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.layer.crs" datatype="html">
+        <source>Available projections for this layer</source>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.max-zoom-level" datatype="html">
         <source>Maximum zoom level</source>
       </trans-unit>
