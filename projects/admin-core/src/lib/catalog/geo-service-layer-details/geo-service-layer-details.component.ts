@@ -79,7 +79,7 @@ export class GeoServiceLayerDetailsComponent implements OnInit, OnDestroy {
       if (layerId) {
         this.store$.select(selectGeoServiceAndLayerByLayerId(layerId)).pipe(take(1)).subscribe(info => {
           this.crs = info?.layer.crs || [];
-        })
+        });
       }
     });
   }

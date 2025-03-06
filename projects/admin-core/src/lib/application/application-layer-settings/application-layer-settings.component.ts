@@ -57,6 +57,8 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
 
   public layerIs3D = false;
 
+  public crsText: string = '';
+
   @Input()
   public set node(node: TreeModel<AppTreeLayerNodeModel> | null) {
     this._node = node;
@@ -72,6 +74,9 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     this._serviceLayer = serviceLayer;
     this.initFeatureSource(serviceLayer);
     this.setTitle();
+    if (serviceLayer?.layer.crs) {
+      this.crsText = serviceLayer.layer.crs.join(', ');
+    }
     if (serviceLayer?.service) {
       this.layerIs3D = GeoServiceHelper.is3dProtocol(serviceLayer.service.protocol);
     }
