@@ -33,6 +33,8 @@ describe('OpenLayersMapClickTool', () => {
       expect(clickEvt).toEqual({
         mapCoordinates: [ 3, 4 ],
         mouseCoordinates: [ 2, 3 ],
+        resolution: 0,
+        scale: 0,
       });
       done();
     });
