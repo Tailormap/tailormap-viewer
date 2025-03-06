@@ -85,9 +85,17 @@ export const selectFeatureSourceAndFeatureTypesById = (id: string) => createSele
   },
 );
 
+// The featureTypeId used here is prefixed by the featureSourceId separated by an underscore as used in route
 export const selectFeatureSourceByFeatureTypeId = (featureTypeId: string) => createSelector(
   selectFeatureSources,
-  featureSources => featureSources.find(f => (f.featureTypesIds || []).includes(featureTypeId)),
+  featureSources => featureSources.find(f => f.featureTypesIds.includes(featureTypeId)),
+);
+
+// Select feature source for a feature type by the original feature type without the feature source id prefix. This is possible because
+// feature type ids are unique across all feature sources.
+export const selectFeatureSourceByFeatureTypeOriginalId = (featureTypeId: string) => createSelector(
+  selectFeatureSources,
+  featureSources => featureSources.find(f => f.featureTypeOriginalIds.includes(featureTypeId)),
 );
 
 export const selectGeoServiceByLayerId = (layerId: string) => createSelector(

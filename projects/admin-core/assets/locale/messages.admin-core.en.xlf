@@ -614,6 +614,15 @@
       <trans-unit id="admin-core.catalog.feature-type-no-default-geom-warning" datatype="html">
         <source>This feature type does not have a geometry attribute.</source>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.feature-type-editable-info" datatype="html">
+        <source>This feature type appears to be editable. Editing may still fail if the database user does not have the required permissions or because of other reasons such as triggers, etc.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.feature-type-read-only-warning-jdbc" datatype="html">
+        <source>This JDBC feature type is read-only because of a missing primary key, a composite primary key or an unknown column type. Check the logs for warnings after refreshing the feature source for details.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.feature-type-not-editable-warning-not-jdbc" datatype="html">
+        <source>This feature type is not editable because editing is only supported for JDBC feature sources.</source>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.technical-name" datatype="html">
         <source>Technical name: <x id="INTERPOLATION" equiv-text="{{ featureType.name }}"/></source>
       </trans-unit>

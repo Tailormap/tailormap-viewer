@@ -22,4 +22,6 @@ export class ErrorMessageComponent {
   @Input()
   public friendlyError: boolean | undefined;
 
+  @Input()
+  public show: boolean | undefined;
 }
