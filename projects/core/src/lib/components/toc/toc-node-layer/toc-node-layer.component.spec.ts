@@ -30,7 +30,7 @@ describe('TocNodeLayerComponent', () => {
     expect(await screen.findByText(appLayer.title)).toBeInTheDocument();
     expect((await screen.findByText(appLayer.title)).closest('.tree-node')).toBeInTheDocument();
     expect((await screen.findByText(appLayer.title)).closest('.level')).not.toBeInTheDocument();
-    expect((await screen.findByText(appLayer.title)).closest('.out-of-scale')).not.toBeInTheDocument();
+    expect((await screen.findByText(appLayer.title)).closest('.not-visible-on-map')).not.toBeInTheDocument();
   });
 
   test('renders level', async () => {
@@ -55,7 +55,7 @@ describe('TocNodeLayerComponent', () => {
       metadata: appLayer,
     };
     await setup(layer, 2000);
-    expect((await screen.findByText(appLayer.title)).closest('.out-of-scale')).toBeInTheDocument();
+    expect((await screen.findByText(appLayer.title)).closest('.not-visible-on-map')).toBeInTheDocument();
   });
 
 });

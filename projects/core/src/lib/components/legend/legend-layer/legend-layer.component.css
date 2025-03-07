@@ -5,7 +5,7 @@ strong {
   margin-bottom: 2px;
 }
 
-.out-of-scale {
+.not-visible-on-map {
   color: var(--disabled-text-color);
 }
 

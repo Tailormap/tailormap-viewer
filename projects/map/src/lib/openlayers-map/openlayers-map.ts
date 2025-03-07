@@ -1,6 +1,6 @@
 /* eslint-disable rxjs/finnish */
 import { Map as OlMap } from 'ol';
-import { Projection } from 'ol/proj';
+import { Projection, get as getProjection } from 'ol/proj';
 import { View } from 'ol';
 import { NgZone } from '@angular/core';
 import { defaults as defaultInteractions, DragPan, MouseWheelZoom } from 'ol/interaction';
@@ -25,12 +25,17 @@ import { OpenLayersMapImageExporter } from './openlayers-map-image-exporter';
 import { Attribution } from 'ol/control';
 import { mouseOnly, platformModifierKeyOnly } from 'ol/events/condition';
 import { OpenLayersHelper } from './helpers/open-layers.helper';
+import { CesiumLayerManager } from './cesium-map/cesium-layer-manager';
 
 export class OpenLayersMap implements MapViewerModel {
 
   private map: BehaviorSubject<OlMap | null> = new BehaviorSubject<OlMap | null>(null);
   private layerManager: BehaviorSubject<OpenLayersLayerManager | null> = new BehaviorSubject<OpenLayersLayerManager | null>(null);
   private toolManager: BehaviorSubject<ToolManagerModel | null> = new BehaviorSubject<ToolManagerModel | null>(null);
+
+  private map3D: BehaviorSubject<CesiumLayerManager | null> = new BehaviorSubject<CesiumLayerManager | null>(null);
+  private made3D: boolean;
+  private in3D: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   private readonly resizeObserver: ResizeObserver;
   private initialExtent: OpenlayersExtent = [];
@@ -42,6 +47,7 @@ export class OpenLayersMap implements MapViewerModel {
     private httpXsrfTokenExtractor: HttpXsrfTokenExtractor,
   ) {
     this.resizeObserver = new ResizeObserver(() => this.updateMapSize());
+    this.made3D = false;
   }
 
   public initMap(options: MapViewerOptionsModel, initialOptions?: { initialCenter?: [number, number]; initialZoom?: number }) {
@@ -102,8 +108,8 @@ export class OpenLayersMap implements MapViewerModel {
       this.toolManager.value.destroy();
     }
 
-    if (this.toolManager.value) {
-      this.toolManager.value.destroy();
+    if (this.layerManager.value) {
+      this.layerManager.value.destroy();
     }
 
     if (this.map.value) {
@@ -112,7 +118,7 @@ export class OpenLayersMap implements MapViewerModel {
 
     const layerManager = new OpenLayersLayerManager(olMap, this.ngZone, this.httpXsrfTokenExtractor);
     layerManager.init();
-    const toolManager = new OpenLayersToolManager(olMap, this.ngZone);
+    const toolManager = new OpenLayersToolManager(olMap, this.ngZone, this.in3D);
     OpenLayersEventManager.initEvents(olMap, this.ngZone);
 
     this.map.next(olMap);
@@ -371,5 +377,45 @@ export class OpenLayersMap implements MapViewerModel {
     this.executeMapAction(olMap => {
       olMap.updateSize();
     });
+  }
+
+  public getCesiumLayerManager$(): Observable<CesiumLayerManager> {
+    const isLayerManager = (item: CesiumLayerManager | null): item is CesiumLayerManager => item !== null;
+    return this.map3D.asObservable().pipe(filter(isLayerManager));
+  }
+
+  public executeCLMAction(fn: (cesiumLayerManager: CesiumLayerManager) => void) {
+    this.getCesiumLayerManager$()
+      .pipe(take(1))
+      .subscribe(cesiumLayerManager => fn(cesiumLayerManager));
+  }
+
+  public make3D(){
+    if (!this.made3D) {
+      this.executeMapAction(olMap => {
+        this.map3D.next(new CesiumLayerManager(olMap, this.ngZone, this.map.getValue()?.getView().getProjection()));
+      });
+      this.executeCLMAction(cesiumLayerManager => {
+        cesiumLayerManager.init();
+      });
+      this.made3D = true;
+    }
+  }
+
+  public switch3D(){
+    this.executeCLMAction(cesiumLayerManager => {
+      cesiumLayerManager.switch3D();
+    });
+    this.in3D.next(!this.in3D.value);
+    if (this.map.value?.getView().getProjection() !== getProjection('EPSG:3857')) {
+      this.getLayerManager$().pipe(take(1)).subscribe(layerManager => {
+        if (this.in3D.value) {
+          layerManager.addSubstituteWebMercatorLayers();
+        } else {
+          layerManager.removeSubstituteWebMercatorLayers();
+        }
+      });
+    }
+
   }
 }

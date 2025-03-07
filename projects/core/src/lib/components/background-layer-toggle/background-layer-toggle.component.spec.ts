@@ -3,7 +3,8 @@ import { BackgroundLayerToggleComponent } from './background-layer-toggle.compon
 import { SharedModule } from '@tailormap-viewer/shared';
 import { provideMockStore } from '@ngrx/store/testing';
 import {
-  selectBackgroundNodesList, selectInitiallySelectedBackgroundNodes, selectSelectedBackgroundNodeId,
+  selectBackgroundNodesList, selectIn3DView, selectInitiallySelectedBackgroundNodes, selectLayersWithoutWebMercator,
+  selectSelectedBackgroundNodeId,
 } from '../../map/state/map.selectors';
 import { getLayerTreeNode } from '@tailormap-viewer/api';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
@@ -14,6 +15,8 @@ const getMockedState = (initiallySelected = '') => {
       { selector: selectSelectedBackgroundNodeId, value: initiallySelected },
       { selector: selectBackgroundNodesList, value: [getLayerTreeNode({ id: '1', name: 'Backgrounds' })] },
       { selector: selectInitiallySelectedBackgroundNodes, value: [ getLayerTreeNode({ name: 'Test' }), getLayerTreeNode({ name: 'Test 2' }) ] },
+      { selector: selectIn3DView, value: false },
+      { selector: selectLayersWithoutWebMercator, value: [] },
     ],
   });
 };

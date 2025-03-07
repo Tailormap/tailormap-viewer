@@ -51,7 +51,7 @@ const updateApplication = (
 
 const updateApplicationTree = (
   state: ApplicationState,
-  treeKey: 'layer' | 'baseLayer',
+  treeKey: 'layer' | 'baseLayer' | 'terrainLayer',
   updateMethod: (application: ApplicationModel, tree: AppTreeNodeModel[]) => AppTreeNodeModel[],
   skipUpdatedFlag = false,
   expandNodes?: string[],
@@ -59,7 +59,10 @@ const updateApplicationTree = (
   if (!state.draftApplication) {
     return state;
   }
-  const tree: 'baseLayerNodes' | 'layerNodes' = treeKey === 'baseLayer' ? 'baseLayerNodes' : 'layerNodes';
+  const tree: 'layerNodes' | 'baseLayerNodes' | 'terrainLayerNodes' =
+    treeKey === 'layer' ? 'layerNodes'
+      : treeKey === 'baseLayer' ? 'baseLayerNodes'
+      : 'terrainLayerNodes';
   const contentRoot = ApplicationModelHelper.getApplicationContentRoot(state.draftApplication);
   const updatedContentRoot: AppContentModel = {
     ...contentRoot,
@@ -348,6 +351,9 @@ const onToggleNodeExpanded = (
   state: ApplicationState,
   payload: ReturnType<typeof ApplicationActions.toggleApplicationNodeExpanded>,
 ): ApplicationState => {
+  if (payload.tree === 'terrainLayer') {
+    return state;
+  }
   const expandedNodesList: 'expandedAppLayerNodes' | 'expandedBaseLayerNodes' = payload.tree === 'baseLayer'
     ? 'expandedBaseLayerNodes'
     : 'expandedAppLayerNodes';
@@ -366,7 +372,7 @@ const onToggleNodeExpandedAll = (
   state: ApplicationState,
   payload: ReturnType<typeof ApplicationActions.toggleApplicationNodeExpandedAll>,
 ): ApplicationState => {
-  if (!state.draftApplication) {
+  if (!state.draftApplication || payload.tree === 'terrainLayer') {
     return state;
   }
   const expandedNodesList: 'expandedAppLayerNodes' | 'expandedBaseLayerNodes' = payload.tree === 'baseLayer'
@@ -395,6 +401,9 @@ const onSetApplicationTreeFilterTerm = (
   state: ApplicationState,
   payload: ReturnType<typeof ApplicationActions.setApplicationTreeFilterTerm>,
 ): ApplicationState  => {
+  if (payload.tree === 'terrainLayer') {
+    return state;
+  }
   const filterKey: keyof ApplicationState = payload.tree === 'baseLayer'
     ? 'applicationBaseLayerTreeFilterTerm'
     : 'applicationLayerTreeFilterTerm';

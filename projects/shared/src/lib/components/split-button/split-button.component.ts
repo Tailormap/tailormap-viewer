@@ -39,6 +39,12 @@ export class SplitButtonComponent {
   @Input()
   public tooltip: string | undefined;
 
+  @Input()
+  public in3D: boolean = false;
+
+  @Input()
+  public layersWithoutWebMercator: string[] = [];
+
   public selectedOptionId: string | null = null;
   public selectedOptionObject: SplitButtonOptionModel | null = null;
   public optionsList: SplitButtonOptionModel[] = [];
@@ -71,6 +77,10 @@ export class SplitButtonComponent {
       return this.selectedOptionObject.label;
     }
     return this.emptyLabel || '';
+  }
+
+  public isLayerHiddenOnMap(option: SplitButtonOptionModel) {
+    return this.in3D && this.layersWithoutWebMercator.includes(option.id);
   }
 
 }

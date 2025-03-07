@@ -18,9 +18,13 @@ export interface MapState {
   layers: AppLayerWithInitialValuesModel[];
   baseLayerTreeNodes: ExtendedLayerTreeNodeModel[];
   layerTreeNodes: ExtendedLayerTreeNodeModel[];
+  terrainLayerTreeNodes: ExtendedLayerTreeNodeModel[];
   layerDetails: LayerDetailsModel[];
   selectedLayer?: string;
   selectedBackgroundNode?: string;
+  selectedTerrainLayerNode?: string;
+  in3DView: boolean;
+  layersWithoutWebMercator: string[];
 }
 
 export const initialMapState: MapState = {
@@ -30,4 +34,7 @@ export const initialMapState: MapState = {
   layerDetails: [],
   baseLayerTreeNodes: [],
   layerTreeNodes: [],
+  terrainLayerTreeNodes: [],
+  in3DView: false,
+  layersWithoutWebMercator: [],
 };
