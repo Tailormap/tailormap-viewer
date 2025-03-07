@@ -39,8 +39,6 @@ export class OpenLayersMapClickTool implements MapClickToolModel {
           mapCoordinates: [ click.position.x, click.position.y ],
           mouseCoordinates: [ click.mouseCoordinates.x, click.mouseCoordinates.y ],
           cesiumFeatureInfo: click.featureInfo,
-          resolution: 0,
-          scale: 0,
         });
       } else {
         const { scale, resolution } = OpenLayersHelper.getResolutionAndScale(click.map.getView());
