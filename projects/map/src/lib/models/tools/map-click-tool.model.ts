@@ -4,8 +4,8 @@ import { Observable } from 'rxjs';
 export interface MapClickEvent {
   mapCoordinates: [ number, number ];
   mouseCoordinates: [ number, number ];
-  resolution: number;
-  scale: number;
+  resolution?: number;
+  scale?: number;
 }
 
 export interface MapClickToolModel extends ToolModel {
