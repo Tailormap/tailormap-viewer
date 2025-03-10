@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { selectFilterableLayers } from '../../../map/state/map.selectors';
+import { selectFilterableLayers, selectIn3DView } from '../../../map/state/map.selectors';
 import { ExtendedAppLayerModel } from '../../../map/models';
 import { Observable, of, Subject, switchMap, takeUntil } from 'rxjs';
 import { MapService } from '@tailormap-viewer/map';
@@ -44,6 +44,7 @@ export class SpatialFilterFormComponent implements OnInit, OnDestroy {
   public hasSelectedLayersAndGeometry$: Observable<boolean> = of(false);
   public isLoadingReferenceGeometry$: Observable<boolean> = of(false);
   public currentGroupError$: Observable<string | undefined> = of(undefined);
+  public in3DView$: Observable<boolean> = of(false);
 
   constructor(
     private store$: Store,
@@ -60,6 +61,7 @@ export class SpatialFilterFormComponent implements OnInit, OnDestroy {
     this.hasSelectedLayersAndGeometry$ = this.store$.select(hasSelectedLayersAndGeometry);
     this.currentGroup$ = this.store$.select(selectSelectedFilterGroupId);
     this.currentGroupError$ = this.store$.select(selectSelectedFilterGroupError);
+    this.in3DView$ = this.store$.select(selectIn3DView);
     this.isLoadingReferenceGeometry$ = this.currentGroup$
       .pipe(
         filter(TypesHelper.isDefined),

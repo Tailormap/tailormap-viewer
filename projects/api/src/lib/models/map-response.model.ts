@@ -10,6 +10,7 @@ export interface MapResponseModel {
   services: ServiceModel[];
   baseLayerTreeNodes: LayerTreeNodeModel[];
   layerTreeNodes: LayerTreeNodeModel[];
+  terrainLayerTreeNodes: LayerTreeNodeModel[];
   appLayers: AppLayerModel[];
   crs: CoordinateReferenceSystemModel;
 }

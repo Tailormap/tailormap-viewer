@@ -5,4 +5,5 @@ export interface LayerTreeNodeModel {
   name: string;
   childrenIds: string[] | null;
   description?: string;
+  webMercatorAvailable?: boolean;
 }
