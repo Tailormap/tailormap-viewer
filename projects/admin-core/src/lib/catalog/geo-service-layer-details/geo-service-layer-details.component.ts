@@ -38,7 +38,7 @@ export class GeoServiceLayerDetailsComponent implements OnInit, OnDestroy {
 
   public isLeaf$: Observable<boolean | null> = of(true);
 
-  public crs$: Observable<string> = of('');
+  public crs$: Observable<string[] | null> = of(null);
 
   constructor(
     private route: ActivatedRoute,
@@ -85,23 +85,25 @@ export class GeoServiceLayerDetailsComponent implements OnInit, OnDestroy {
         }
         return this.store$.select(selectGeoServiceAndLayerByLayerId(layerId));
       }),
-      map(serviceAndLayer => {
+      switchMap(serviceAndLayer => {
         if (!serviceAndLayer) {
-          return '';
+          return of(null);
         }
-        const crs: string[] = [];
-        const layersInService: ExtendedGeoServiceLayerModel[] = [];
-        this.store$.select(selectGeoServiceLayersByGeoServiceId(serviceAndLayer?.service.id))
-          .pipe(take(1))
-          .subscribe(layers => layersInService.push(...layers));
-        let layer: ExtendedGeoServiceLayerModel | undefined = serviceAndLayer?.layer;
-        while (layer) {
-          if (layer.crs) {
-            crs.push(...layer.crs);
-          }
-          layer = layersInService.find(l => l.id === layer?.parentId);
-        }
-        return [...new Set(crs)].join(', ');
+        return this.store$.select(selectGeoServiceLayersByGeoServiceId(serviceAndLayer?.service.id))
+          .pipe(
+            take(1),
+            map(layersInService => {
+              const crs: string[] = [];
+              let layer: ExtendedGeoServiceLayerModel | undefined = serviceAndLayer?.layer;
+              while (layer) {
+                if (layer.crs) {
+                  crs.push(...layer.crs);
+                }
+                layer = layersInService.find(l => l.id === layer?.parentId);
+              }
+              return crs;
+            }),
+          )
       }),
     );
   }

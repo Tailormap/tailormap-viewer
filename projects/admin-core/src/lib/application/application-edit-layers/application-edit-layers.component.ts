@@ -81,21 +81,7 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit(): void {
-    this.treeNodes$ = this.applicationStateTree === 'layer'
-      ? this.store$.select(selectAppLayerTreeForSelectedApplication)
-      : (this.applicationStateTree === 'baseLayer' ? this.store$.select(selectBaseLayerTreeForSelectedApplication)
-          : this.store$.select(selectTerrainLayerTreeForSelectedApplication));
-
-    this.someExpanded$ = this.applicationStateTree === 'layer'
-      ? this.store$.select(selectSomeExpandedAppLayerForSelectedApplication)
-      : (this.applicationStateTree === 'baseLayer' ? this.store$.select(selectSomeExpandedBaseLayersForSelectedApplication)
-        : of(false));
-
-    this.filterTerm$ = this.applicationStateTree === 'layer'
-      ? this.store$.select(selectApplicationLayerTreeFilterTerm)
-      : (this.applicationStateTree === 'baseLayer' ? this.store$.select(selectApplicationBaseLayerTreeFilterTerm)
-        : of(''));
-
+    this.setDataSources();
     this.loadingServices$ = this.store$.select(isLoadingApplicationServices);
 
     this.applicationTreeService.setSelectedNode(this.selectedNode$
@@ -132,6 +118,22 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this.destroyed.next(null);
     this.destroyed.complete();
+  }
+
+  private setDataSources() {
+    if (this.applicationStateTree === 'layer') {
+      this.treeNodes$ = this.store$.select(selectAppLayerTreeForSelectedApplication);
+      this.someExpanded$ = this.store$.select(selectSomeExpandedAppLayerForSelectedApplication);
+      this.filterTerm$ = this.store$.select(selectApplicationLayerTreeFilterTerm);
+    } else if (this.applicationStateTree === 'baseLayer') {
+      this.treeNodes$ = this.store$.select(selectBaseLayerTreeForSelectedApplication);
+      this.someExpanded$ = this.store$.select(selectSomeExpandedBaseLayersForSelectedApplication);
+      this.filterTerm$ = this.store$.select(selectApplicationBaseLayerTreeFilterTerm);
+    } else {
+      this.treeNodes$ = this.store$.select(selectTerrainLayerTreeForSelectedApplication)
+      this.someExpanded$ = of(false);
+      this.filterTerm$ = of('');
+    }
   }
 
   public addSubFolder(params: { nodeId: string; title: string }) {

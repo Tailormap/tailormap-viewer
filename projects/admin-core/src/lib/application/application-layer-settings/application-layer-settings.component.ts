@@ -58,7 +58,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
 
   public layerIs3D = false;
 
-  public crsText: string = '';
+  public crsText$: Observable<string[] | null> = of(null);
 
   @Input()
   public set node(node: TreeModel<AppTreeLayerNodeModel> | null) {
@@ -75,7 +75,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     this._serviceLayer = serviceLayer;
     this.initFeatureSource(serviceLayer);
     this.setTitle();
-    this.crsText = this.getCrsText(serviceLayer);
+    this.crsText$ = this.getCrsText$(serviceLayer);
     if (serviceLayer?.service) {
       this.layerIs3D = GeoServiceHelper.is3dProtocol(serviceLayer.service.protocol);
     }
@@ -346,23 +346,25 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     }
   }
 
-  private getCrsText(serviceLayer: ExtendedGeoServiceAndLayerModel | null): string {
+  private getCrsText$(serviceLayer: ExtendedGeoServiceAndLayerModel | null): Observable<string[] | null> {
     if (!serviceLayer) {
-      return '';
+      return of(null);
     }
-    const crs: string[] = [];
-    const layersInService: ExtendedGeoServiceLayerModel[] = [];
-    this.store$.select(selectGeoServiceLayersByGeoServiceId(serviceLayer?.service.id))
-      .pipe(take(1))
-      .subscribe(layers => layersInService.push(...layers));
-    let layer: ExtendedGeoServiceLayerModel | undefined = serviceLayer?.layer;
-    while (layer) {
-      if (layer.crs) {
-        crs.push(...layer.crs);
-      }
-      layer = layersInService.find(l => l.id === layer?.parentId);
-    }
-    return [...new Set(crs)].join(', ');
+    return this.store$.select(selectGeoServiceLayersByGeoServiceId(serviceLayer?.service.id))
+      .pipe(
+        take(1),
+        map(layersInService => {
+          const crs: string[] = [];
+          let layer: ExtendedGeoServiceLayerModel | undefined = serviceLayer?.layer;
+          while (layer) {
+            if (layer.crs) {
+              crs.push(...layer.crs);
+            }
+            layer = layersInService.find(l => l.id === layer?.parentId);
+          }
+          return crs;
+        }),
+      )
   }
 
 }
