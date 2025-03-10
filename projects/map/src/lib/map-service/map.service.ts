@@ -267,4 +267,8 @@ export class MapService {
   public switch3D(){
     this.map.switch3D();
   }
+
+  public get3DLayerIdByIndex(index: number): string {
+    return this.map.get3DLayerIdByIndex(index);
+  }
 }

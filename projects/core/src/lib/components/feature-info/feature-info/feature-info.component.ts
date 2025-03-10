@@ -85,14 +85,7 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
           return layers.length > 0 || wmsLayers.length > 0;
         }),
         concatMap(() => {
-          return this.featureInfoService.fetchFeatures$(evt.mapCoordinates, evt.mouseCoordinates);
-        }),
-        tap(() => {
-          this.store$.select(selectIn3DView).pipe(take(1)).subscribe(in3DView => {
-            if (in3DView && evt.cesiumFeatureInfo) {
-              this.store$.dispatch(featureInfoLoaded({ featureInfo: this.featureInfo3DToResponse(evt.cesiumFeatureInfo) }));
-            }
-          });
+          return this.featureInfoService.fetchFeatures$(evt.mapCoordinates, evt.mouseCoordinates, evt.cesiumFeatureInfo);
         }),
       )
       .subscribe(response => {
@@ -101,42 +94,6 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
         }
         this.store$.dispatch(featureInfoLoaded({ featureInfo: response }));
       });
-  }
-
-  private featureInfo3DToResponse(cesiumFeatureInfo: FeatureInfo3DModel): FeatureInfoResponseModel {
-    let layerId: string | null = null;
-    this.mapService.getCesiumLayerManager$().pipe(take(1)).subscribe(cesiumLayerManager => {
-      if (cesiumFeatureInfo) {
-        layerId = cesiumLayerManager.getLayerId(cesiumFeatureInfo.primitiveIndex);
-      }
-    });
-    cesiumFeatureInfo.layerId = layerId ?? '';
-
-    this.store$.select(selectLayer(cesiumFeatureInfo.layerId)).pipe(take(1)).subscribe(layer => {
-      if (layer) {
-        const featureInfoLayer: FeatureInfoLayerModel = { id: layer.id, title: layer.title, loading: LoadingStateEnum.LOADING };
-        this.store$.dispatch(add3DLayerToFeatureInfoLayers({ layer: featureInfoLayer }));
-      }
-    });
-
-    const feature: FeatureInfoFeatureModel = {
-      __fid: cesiumFeatureInfo.featureId.toString(),
-      attributes: cesiumFeatureInfo.properties.reduce<FeatureModelAttributes>(
-        (acc, { id, value }) => {
-          acc[id] = value;
-          return acc;
-        },
-        {},
-      ),
-      layerId: cesiumFeatureInfo.layerId,
-    };
-
-    return {
-        features: [feature],
-        columnMetadata: cesiumFeatureInfo.columnMetadata,
-        layerId: cesiumFeatureInfo.layerId,
-    };
-
   }
 
 }

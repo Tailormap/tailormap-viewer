@@ -416,6 +416,9 @@ export class OpenLayersMap implements MapViewerModel {
         }
       });
     }
+  }
 
+  public get3DLayerIdByIndex(index: number): string {
+    return this.map3D.value?.getLayerId(index) || '';
   }
 }
