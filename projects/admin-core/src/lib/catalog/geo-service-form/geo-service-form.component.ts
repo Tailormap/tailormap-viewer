@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output
 import { debounceTime, Observable, Subject, takeUntil } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
 import {
+  AdminServerType,
   AUTHORIZATION_RULE_ANONYMOUS, AuthorizationRuleGroup, GeoServiceModel, GeoServiceProtocolEnum, GroupModel,
 } from '@tailormap-admin/admin-api';
 import { FormHelper } from '../../helpers/form.helper';
@@ -22,6 +23,7 @@ export class GeoServiceFormComponent implements OnInit {
   private _geoService: GeoServiceModel | null = null;
 
   public protocols: GeoServiceProtocolEnum[] = [ GeoServiceProtocolEnum.WMS, GeoServiceProtocolEnum.WMTS, GeoServiceProtocolEnum.XYZ ];
+  public serverTypes: AdminServerType[] = [ AdminServerType.AUTO, AdminServerType.GENERIC, AdminServerType.GEOSERVER, AdminServerType.MAPSERVER ];
   private readonly XYZ_CRS_DEFAULT = 'EPSG:3857';
 
   @Input()
@@ -31,6 +33,7 @@ export class GeoServiceFormComponent implements OnInit {
       protocol: geoService ? geoService.protocol : GeoServiceProtocolEnum.WMS,
       url: geoService ? geoService.url : '',
       xyzCrs: (geoService?.protocol === GeoServiceProtocolEnum.XYZ ? geoService.settings?.xyzCrs : null) || this.XYZ_CRS_DEFAULT,
+      serverType: geoService?.settings?.serverType || AdminServerType.AUTO,
       useProxy: geoService?.settings?.useProxy || false,
       username: geoService?.authentication?.username || '',
       password: geoService?.authentication?.password || '',
@@ -55,6 +58,7 @@ export class GeoServiceFormComponent implements OnInit {
     title: new FormControl('', { nonNullable: true }),
     protocol: new FormControl<GeoServiceProtocolEnum>(GeoServiceProtocolEnum.WMS, { nonNullable: true }),
     url: new FormControl('', { nonNullable: true }),
+    serverType: new FormControl<AdminServerType>(AdminServerType.AUTO, { nonNullable: true }),
     xyzCrs: new FormControl(''),
     useProxy: new FormControl(false, { nonNullable: true }),
     username: new FormControl(''),
@@ -76,6 +80,10 @@ export class GeoServiceFormComponent implements OnInit {
     return this.geoServiceForm.get('protocol')?.value === GeoServiceProtocolEnum.XYZ;
   }
 
+  public isWms() {
+    return this.geoServiceForm.get('protocol')?.value === GeoServiceProtocolEnum.WMS;
+  }
+
   public ngOnInit(): void {
     this.geoServiceForm.valueChanges
       .pipe(
@@ -95,6 +103,7 @@ export class GeoServiceFormComponent implements OnInit {
           settings: {
             useProxy: value.useProxy,
             xyzCrs: protocol === GeoServiceProtocolEnum.XYZ ? value.xyzCrs || this.XYZ_CRS_DEFAULT : null,
+            serverType: value.serverType,
           },
           authentication: !this.formHasAuthentication() ? null : {
             method: 'password',
@@ -124,6 +133,19 @@ export class GeoServiceFormComponent implements OnInit {
       return $localize `:@@admin-core.catalog.proxy-enabled:Proxy enabled`;
     } else {
       return $localize `:@@admin-core.catalog.not-set:Not set`;
+    }
+  }
+
+  public getServerTypeDescription(serverType: AdminServerType) {
+    switch(serverType) {
+      case AdminServerType.AUTO:
+        return $localize `:@@admin-core.catalog.server-type.auto:Auto-detect based on URL (/geoserver/ or /mapserv)`;
+      case AdminServerType.GENERIC:
+        return $localize `:@@admin-core.catalog.server-type.generic:Generic WMS`;
+      case AdminServerType.GEOSERVER:
+        return $localize `:@@admin-core.catalog.server-type.geoserver:GeoServer (ECQL filtering, HiDPI)`;
+      case AdminServerType.MAPSERVER:
+        return $localize `:@@admin-core.catalog.server-type.mapserver:MapServer (HiDPI)`;
     }
   }
 }

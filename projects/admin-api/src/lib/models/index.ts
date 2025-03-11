@@ -1,3 +1,4 @@
+export * from './admin-server-type.model';
 export * from './app-content.model';
 export * from './authorization-rules.model';
 export * from './app-layer-settings.model';

@@ -3,7 +3,7 @@ import { GeoServiceDetailsComponent } from './geo-service-details.component';
 import { of } from 'rxjs';
 import { createMockStore } from '@ngrx/store/testing';
 import { catalogStateKey, initialCatalogState } from '../state/catalog.state';
-import { TailormapAdminApiV1Service, getGeoService } from '@tailormap-admin/admin-api';
+import { TailormapAdminApiV1Service, getGeoService, AdminServerType } from '@tailormap-admin/admin-api';
 import { ActivatedRoute } from '@angular/router';
 import { GeoServiceService } from '../services/geo-service.service';
 import { Store } from '@ngrx/store';
@@ -71,12 +71,13 @@ describe('GeoServiceDetailsComponent', () => {
       url: geoServiceModel.url,
       protocol: geoServiceModel.protocol,
       authentication: null,
-      settings: { useProxy: false, xyzCrs: null },
+      settings: { useProxy: false, xyzCrs: null, serverType: AdminServerType.GEOSERVER },
     });
     expect(updateGeoServiceSettings).toHaveBeenNthCalledWith(1, {
       defaultLayerSettings: {},
       useProxy: false,
       xyzCrs: null,
+      serverType: AdminServerType.GEOSERVER,
     });
     expect(await screen.queryByText('Refresh service?')).not.toBeInTheDocument();
     TestSaveHelper.waitForButtonToBeDisabled('Save');
@@ -109,7 +110,7 @@ describe('GeoServiceDetailsComponent', () => {
       url: geoServiceModel.url + '?test=test',
       protocol: geoServiceModel.protocol,
       authentication: null,
-      settings: { useProxy: false, xyzCrs: null },
+      settings: { useProxy: false, xyzCrs: null, serverType: AdminServerType.GEOSERVER },
     });
     expect(await screen.queryByText('Refresh service?')).toBeInTheDocument();
     await userEvent.click(await screen.findByText('Yes'));

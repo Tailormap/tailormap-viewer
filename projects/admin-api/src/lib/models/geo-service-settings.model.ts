@@ -1,8 +1,8 @@
-import { ServerType } from '@tailormap-viewer/api';
 import { LayerSettingsModel } from './layer-settings.model';
+import { AdminServerType } from './admin-server-type.model';
 
 export interface GeoServiceSettingsModel {
-  serverType?: ServerType;
+  serverType?: AdminServerType;
   useProxy?: boolean;
   defaultLayerSettings?: LayerSettingsModel;
   layerSettings?: Record<string, LayerSettingsModel>;
