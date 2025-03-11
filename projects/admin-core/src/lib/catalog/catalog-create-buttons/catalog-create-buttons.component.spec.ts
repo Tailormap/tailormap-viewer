@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
 import { of } from 'rxjs';
 import { createGeoServiceMock } from '../helpers/mocks/geo-service.service.mock';
-import { TailormapAdminApiV1Service, getCatalogNode, AUTHORIZATION_RULE_ANONYMOUS } from '@tailormap-admin/admin-api';
+import { TailormapAdminApiV1Service, getCatalogNode, AUTHORIZATION_RULE_ANONYMOUS, AdminServerType } from '@tailormap-admin/admin-api';
 import { createMockStore } from '@ngrx/store/testing';
 import { catalogStateKey, initialCatalogState } from '../state/catalog.state';
 import { CatalogNodeFormDialogComponent } from '../catalog-node-form-dialog/catalog-node-form-dialog.component';
@@ -105,6 +105,7 @@ describe('CatalogCreateButtonsComponent', () => {
       settings: {
         useProxy: false,
         xyzCrs: null,
+        serverType: AdminServerType.AUTO,
       },
     }, '1');
   });

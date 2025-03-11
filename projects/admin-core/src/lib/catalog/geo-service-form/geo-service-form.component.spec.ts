@@ -6,7 +6,7 @@ import { SharedModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
+import { AdminServerType, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 import { provideMockStore } from '@ngrx/store/testing';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
@@ -34,7 +34,7 @@ describe('GeoServiceFormComponent', () => {
         url: 'http://localhost.test',
         protocol: 'wms',
         authentication: null,
-        settings: { useProxy: false, xyzCrs: null },
+        settings: { useProxy: false, xyzCrs: null, serverType: AdminServerType.AUTO },
       });
     });
     await userEvent.click(await screen.findByText('wms'));
@@ -47,7 +47,7 @@ describe('GeoServiceFormComponent', () => {
         url: 'http://localhost.test',
         protocol: 'wmts',
         authentication: null,
-        settings: { useProxy: false, xyzCrs: null },
+        settings: { useProxy: false, xyzCrs: null, serverType: AdminServerType.AUTO },
       });
     });
   });
