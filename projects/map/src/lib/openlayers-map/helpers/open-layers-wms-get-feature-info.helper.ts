@@ -37,6 +37,7 @@ export class OpenLayersWmsGetFeatureInfoHelper {
     const url = source.getFeatureInfoUrl(coordinates, resolution, projection, {
       INFO_FORMAT: 'application/json',
       QUERY_LAYERS: queryLayers,
+      FEATURE_COUNT: 10,
     });
     if (!url) {
       return of([]);
