@@ -7,7 +7,7 @@ import { SharedModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import {
-  selectIn3DView, selectLayers, selectLayersWithoutWebMercator, selectLayerTreeNodes, selectSelectedNode, selectSelectedNodeId,
+  selectIn3DView, selectLayers, selectLayersWithoutWebMercatorIds, selectLayerTreeNodes, selectSelectedNode, selectSelectedNodeId,
 } from '../../../map/state/map.selectors';
 import { setLayerVisibility, setSelectedLayerId } from '../../../map/state/map.actions';
 import { TocNodeLayerComponent } from '../toc-node-layer/toc-node-layer.component';
@@ -39,7 +39,7 @@ const buildMockStore = (selectedLayer = '') => {
       { selector: selectLayerTreeNodes, value: tree },
       { selector: selectSelectedNode, value: selectedLayer ? layers.find(layer => layer.id === selectedLayer) : null },
       { selector: selectIn3DView, value: false },
-      { selector: selectLayersWithoutWebMercator, value: [] },
+      { selector: selectLayersWithoutWebMercatorIds, value: [] },
     ],
   });
 };

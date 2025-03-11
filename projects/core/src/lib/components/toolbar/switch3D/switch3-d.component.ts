@@ -8,7 +8,9 @@ import { MenubarService } from '../../menubar';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { selectActiveTool } from '../state/toolbar.selectors';
 import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
-import { selectIn3DView, selectLayer, selectLayersWithoutWebMercator } from '../../../map/state/map.selectors';
+import {
+  selectIn3DView, selectLayersWithoutWebMercatorTitles,
+} from '../../../map/state/map.selectors';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
@@ -72,17 +74,11 @@ export class Switch3DComponent {
     this.mapService.switch3D();
     this.store$.dispatch(toggleIn3DView());
     if (this.in3DView()) {
-      this.store$.select(selectLayersWithoutWebMercator)
+      this.store$.select(selectLayersWithoutWebMercatorTitles)
         .pipe(take(1))
-        .subscribe(layers => {
-          if (layers && layers.length > 0) {
-            const layerNames: string[] = [];
-            for (const layerId of layers) {
-              this.store$.select(selectLayer(layerId))
-                .pipe(take(1))
-                .subscribe(layer => layerNames.push(layer?.title || ''));
-            }
-            this.showSnackbarMessage($localize `:@@core.toolbar.switch-3d.layers-without-wm:The following layers are not visible in 3D: ${layerNames.join(', ')}`);
+        .subscribe(layersTitles => {
+          if (layersTitles && layersTitles.length > 0) {
+            this.showSnackbarMessage($localize `:@@core.toolbar.switch-3d.layers-without-wm:The following layers are not visible in 3D: ${layersTitles.join(', ')}`);
           }
         });
     }

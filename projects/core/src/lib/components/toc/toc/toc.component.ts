@@ -12,7 +12,7 @@ import { AppLayerModel, BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { MapService } from '@tailormap-viewer/map';
 import { selectFilteredLayerTree, selectFilterEnabled } from '../state/toc.selectors';
 import { toggleFilterEnabled } from '../state/toc.actions';
-import { selectIn3DView, selectLayersWithoutWebMercator, selectSelectedNode, selectSelectedNodeId } from '../../../map/state/map.selectors';
+import { selectIn3DView, selectLayersWithoutWebMercatorIds, selectSelectedNode, selectSelectedNodeId } from '../../../map/state/map.selectors';
 import { moveLayerTreeNode, setLayerVisibility, setSelectedLayerId, toggleLevelExpansion } from '../../../map/state/map.actions';
 
 interface AppLayerTreeModel extends BaseTreeModel {
@@ -93,7 +93,7 @@ export class TocComponent implements OnInit, OnDestroy {
     this.menubarService.registerComponent({ type: BaseComponentTypeEnum.TOC, component: TocMenuButtonComponent });
 
     this.in3D = this.store$.selectSignal(selectIn3DView);
-    this.layersWithoutWebMercator = this.store$.selectSignal(selectLayersWithoutWebMercator);
+    this.layersWithoutWebMercator = this.store$.selectSignal(selectLayersWithoutWebMercatorIds);
   }
 
   public getDropZoneConfig() {

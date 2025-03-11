@@ -20,7 +20,6 @@ export const selectSelectedTerrainNodeId = createSelector(selectMapState, state 
 export const selectLoadStatus = createSelector(selectMapState, state => state.loadStatus);
 export const selectLayerDetailsAll = createSelector(selectMapState, state => state.layerDetails);
 export const selectIn3DView = createSelector(selectMapState, state => state.in3DView);
-export const selectLayersWithoutWebMercator = createSelector(selectMapState, state => state.layersWithoutWebMercator);
 
 export const selectMapOptions = createSelector(
   selectMapSettings,
@@ -312,4 +311,18 @@ export const select3dTilesLayers = createSelector(
   layers => layers.filter(
     l => l.service?.protocol === ServiceProtocol.TILES3D,
   ),
+);
+
+export const selectLayersWithoutWebMercatorIds = createSelector(
+  selectLayers,
+  selectServices,
+  (layers, services) => LayerModelHelper.filterLayersWithoutWebMercator(layers, services)
+      .map(layer => layer.id),
+);
+
+export const selectLayersWithoutWebMercatorTitles = createSelector(
+  selectLayers,
+  selectServices,
+  (layers, services) => LayerModelHelper.filterLayersWithoutWebMercator(layers, services)
+    .map(layer => layer.title),
 );

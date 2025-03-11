@@ -5,7 +5,7 @@ import {
 } from '@tailormap-viewer/api';
 import { of } from 'rxjs';
 import { selectViewerId } from '../../state/core.selectors';
-import { selectLayer, selectVisibleLayersWithAttributes, selectVisibleWMSLayersWithoutAttributes } from '../../map/state/map.selectors';
+import { selectVisibleLayersWithAttributes, selectVisibleWMSLayersWithoutAttributes } from '../../map/state/map.selectors';
 import { TestBed } from '@angular/core/testing';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { HttpClient, provideHttpClient, withXsrfConfiguration } from '@angular/common/http';
@@ -39,13 +39,7 @@ describe('FeatureInfoService', () => {
         FeatureInfoService,
         mapServiceMock.provider,
         provideMockStore({
-          initialState: {},
-          selectors: [
-            {
-              selector: selectLayer,
-              value: null,
-            },
-          ],
+          initialState: { map: { layers: [appLayer] } },
         }),
         { provide: TAILORMAP_API_V1_SERVICE, useValue: { getFeatures$ } },
       ],
