@@ -30,14 +30,6 @@
     <mat-label i18n="@@admin-core.catalog.enter-xyz-crs">CRS for this XYZ layer</mat-label>
     <input matInput type="text" formControlName="xyzCrs"/>
   </mat-form-field>
-  @if (isWms()) {
-    <mat-form-field>
-      <mat-label i18n="@@admin-core.catalog.server-type">Server type</mat-label>
-      <mat-select formControlName="serverType">
-        <mat-option *ngFor="let serverType of serverTypes" [value]="serverType">{{ getServerTypeDescription(serverType) }}</mat-option>
-      </mat-select>
-    </mat-form-field>
-  }
   <mat-expansion-panel *ngIf="!isXyz()">
     <mat-expansion-panel-header>
       <mat-panel-title i18n="@@admin-core.catalog.authentication-and-proxy" style="flex-grow: 1">Authentication and proxy</mat-panel-title>
@@ -57,6 +49,13 @@
     </mat-form-field>
     <tm-admin-password-field formControlName="password" label="Password" i18n-label="@@admin-core.common.password"></tm-admin-password-field>
   </mat-expansion-panel>
-
+  @if (isWms()) {
+    <mat-form-field>
+      <mat-label i18n="@@admin-core.catalog.server-type">Server type</mat-label>
+      <mat-select formControlName="serverType">
+        <mat-option *ngFor="let serverType of serverTypes" [value]="serverType">{{ getServerTypeDescription(serverType) }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  }
   <tm-admin-authorization-edit class="authorization-edit" formControlName="authorizationRules" [groups]="(groups$ | async) ?? []"></tm-admin-authorization-edit>
 </form>
