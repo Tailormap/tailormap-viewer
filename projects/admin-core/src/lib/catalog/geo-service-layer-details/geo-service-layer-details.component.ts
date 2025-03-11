@@ -103,7 +103,7 @@ export class GeoServiceLayerDetailsComponent implements OnInit, OnDestroy {
               }
               return crs;
             }),
-          )
+          );
       }),
     );
   }

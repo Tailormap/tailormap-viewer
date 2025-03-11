@@ -2,21 +2,16 @@ import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/
 import { FeatureInfo3DModel, MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
 import { combineLatest, concatMap, filter, of, Subject, takeUntil, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { add3DLayerToFeatureInfoLayers, featureInfoLoaded } from '../state/feature-info.actions';
+import { featureInfoLoaded } from '../state/feature-info.actions';
 import { selectCurrentlySelectedFeatureGeometry, selectLoadingFeatureInfo, selectMapCoordinates } from '../state/feature-info.selectors';
 import { deregisterTool, registerTool } from '../../toolbar/state/toolbar.actions';
 import { ToolbarComponentEnum } from '../../toolbar/models/toolbar-component.enum';
 import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.helper';
 import { FeatureInfoService } from '../feature-info.service';
 import {
-  select3dTilesLayers, selectIn3DView, selectLayer, selectVisibleLayersWithAttributes, selectVisibleWMSLayersWithoutAttributes,
+  select3dTilesLayers, selectIn3DView, selectVisibleLayersWithAttributes, selectVisibleWMSLayersWithoutAttributes,
 } from '../../../map/state/map.selectors';
 import { take } from 'rxjs/operators';
-import { FeatureInfoResponseModel } from '../models/feature-info-response.model';
-import { FeatureInfoFeatureModel } from '../models/feature-info-feature.model';
-import { FeatureInfoLayerModel } from '../models/feature-info-layer.model';
-import { LoadingStateEnum } from '@tailormap-viewer/shared';
-import { FeatureModelAttributes } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-feature-info',

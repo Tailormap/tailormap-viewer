@@ -364,7 +364,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
           }
           return crs;
         }),
-      )
+      );
   }
 
 }

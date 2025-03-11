@@ -66,7 +66,7 @@ export class FeatureInfoService {
             this.store$.dispatch(add3DLayerToFeatureInfoLayers({ layer: cesiumFeatureInfoLayer }));
           }
         }),
-        mergeMap(([ layers, wmsLayers, cesiumLayer, viewerId, mapViewDetails ]) => {
+        mergeMap(([ layers, wmsLayers, _cesiumLayer, viewerId, mapViewDetails ]) => {
           if (!viewerId) {
             return [];
           }

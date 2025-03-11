@@ -130,7 +130,7 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
       this.someExpanded$ = this.store$.select(selectSomeExpandedBaseLayersForSelectedApplication);
       this.filterTerm$ = this.store$.select(selectApplicationBaseLayerTreeFilterTerm);
     } else {
-      this.treeNodes$ = this.store$.select(selectTerrainLayerTreeForSelectedApplication)
+      this.treeNodes$ = this.store$.select(selectTerrainLayerTreeForSelectedApplication);
       this.someExpanded$ = of(false);
       this.filterTerm$ = of('');
     }
