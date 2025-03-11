@@ -1,5 +1,10 @@
 <ng-template #treeNode let-node>
-  <tm-toc-node-layer [node]="node" [scale]="scale" [in3D]="in3D()" [layersWithoutWebMercator]="layersWithoutWebMercator()"></tm-toc-node-layer>
+  <tm-toc-node-layer
+    [node]="node"
+    [scale]="scale"
+    [in3D]="in3D()"
+    [layersWithoutWebMercator]="layersWithoutWebMercator()"
+    [tiles3DLayerIds]="tiles3DLayerIds()"></tm-toc-node-layer>
 </ng-template>
 
 <div class="toc" *ngIf="visible$ | async">
