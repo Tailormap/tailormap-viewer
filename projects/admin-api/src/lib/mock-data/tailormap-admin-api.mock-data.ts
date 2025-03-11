@@ -1,11 +1,12 @@
 import {
+  AdminServerType,
   ApplicationModel,
   CatalogItemKindEnum, CatalogNodeModel, ConfigModel, FeatureSourceModel, FeatureSourceProtocolEnum, FeatureTypeModel,
   FeatureTypeSummaryModel, GeoServiceLayerModel,
   GeoServiceProtocolEnum, GeoServiceSummaryModel, GeoServiceWithLayersModel, GroupModel, ServiceCapsModel, TaskDetailsModel, TaskModel,
   UserModel,
 } from '../models';
-import { AttributeType, ServerType } from '@tailormap-viewer/api';
+import { AttributeType } from '@tailormap-viewer/api';
 import { AttributeDescriptorModel } from '../models/attribute-descriptor.model';
 
 export const getCatalogNode = (overrides?: Partial<CatalogNodeModel>): CatalogNodeModel => ({
@@ -89,7 +90,7 @@ export const getGeoService = (overrides?: Partial<GeoServiceWithLayersModel>): G
     getGeoServiceLayer({ id: '3', title: 'Landgebied', name: 'Landgebied' }),
   ],
   settings: {
-    serverType: ServerType.GEOSERVER,
+    serverType: AdminServerType.GEOSERVER,
     layerSettings: {},
     defaultLayerSettings: {},
   },
@@ -103,7 +104,7 @@ export const getGeoServiceSummary = (overrides?: Partial<GeoServiceSummaryModel>
   protocol: GeoServiceProtocolEnum.WMS,
   authorizationRules: [],
   settings: {
-    serverType: ServerType.GEOSERVER,
+    serverType: AdminServerType.GEOSERVER,
     layerSettings: {},
     defaultLayerSettings: {},
   },

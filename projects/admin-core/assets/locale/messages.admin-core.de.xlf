@@ -514,6 +514,26 @@
         <source>CRS for this XYZ layer</source>
         <target state="translated">Projektion für diese XYZ-Ebene</target>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.server-type" datatype="html">
+        <source>Server type</source>
+        <target>Servertyp</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.server-type.auto" datatype="html">
+        <source>Auto-detect based on URL (/geoserver/ or /mapserv)</source>
+        <target>Automatische Erkennung basierend auf URL (/geoserver/ oder /mapserv)</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.server-type.generic" datatype="html">
+        <source>Generic WMS only</source>
+        <target>Nur generisches WMS</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.server-type.geoserver" datatype="html">
+        <source>GeoServer (ECQL filtering, HiDPI)</source>
+        <target>GeoServer (ECQL-Filterung, HiDPI)</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.server-type.mapserver" datatype="html">
+        <source>MapServer (HiDPI)</source>
+        <target>MapServer (HiDPI)</target>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.error-creating-feature-source" datatype="html">
         <source>Error while creating feature source: <x id="PH" equiv-text="message"/></source>
         <target state="translated">Fehler beim Erstellen der Featurequelle: <x id="PH" equiv-text="message"/></target>
