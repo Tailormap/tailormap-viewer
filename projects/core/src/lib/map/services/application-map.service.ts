@@ -71,8 +71,7 @@ export class ApplicationMapService implements OnDestroy {
       .pipe(takeUntil(this.destroyed))
       .subscribe(([[ layers, layerManager ], in3DView, mapOptions ]) => {
         if (in3DView && mapOptions?.projection !== 'EPSG:3857') {
-          console.log("Setting background layers in 3D view");
-          layerManager.setBackgroundLayers(layers.filter(isValidLayer), 'EPSG:3857');
+          layerManager.setBackgroundLayers(layers.filter(isValidLayer).filter(layer => layer.webMercatorAvailable), 'EPSG:3857');
         } else {
           layerManager.setBackgroundLayers(layers.filter(isValidLayer), mapOptions?.projection);
         }
@@ -88,8 +87,7 @@ export class ApplicationMapService implements OnDestroy {
       .pipe(takeUntil(this.destroyed))
       .subscribe(([[ layers, layerManager ], in3DView, mapOptions ]) => {
         if (in3DView && mapOptions?.projection !== 'EPSG:3857') {
-          console.log("Setting background layers in 3D view");
-          layerManager.setLayers(layers.filter(isValidLayer), 'EPSG:3857');
+          layerManager.setLayers(layers.filter(isValidLayer).filter(layer => layer.webMercatorAvailable), 'EPSG:3857');
         } else {
           layerManager.setLayers(layers.filter(isValidLayer), mapOptions?.projection);
         }

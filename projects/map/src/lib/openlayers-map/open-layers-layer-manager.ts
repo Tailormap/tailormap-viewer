@@ -113,9 +113,6 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     } else if (ArrayHelper.arrayEquals(layerIdentifiers, prevLayerIdentifiers)) {
       return prevLayerIdentifiers;
     }
-    if (useProjection && useProjection === 'EPSG:3857') {
-      layers = layers.filter(layer => layer.webMercatorAvailable);
-    }
     const layerIds = layers.map(layer => layer.id);
     const layerIdSet = new Set(layerIds);
     const removableLayers: string[] = [];
