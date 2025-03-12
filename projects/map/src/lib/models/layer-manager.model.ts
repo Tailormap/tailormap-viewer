@@ -5,8 +5,8 @@ import { ImageWMS, WMTS, XYZ, TileWMS } from 'ol/source';
 export type LayerTypes = VectorLayer | TileLayer<TileWMS> | ImageLayer<ImageWMS> | TileLayer<XYZ> | TileLayer<WMTS> | null;
 
 export interface LayerManagerModel {
-  setBackgroundLayers(layers: LayerModel[]): void;
-  setLayers(layers: LayerModel[]): void;
+  setBackgroundLayers(layers: LayerModel[], useProjection?: string): void;
+  setLayers(layers: LayerModel[], useProjection?: string): void;
   addLayer<LayerType extends LayerTypes>(layer: LayerModel): LayerType | null;
   addLayers(layers: LayerModel[]): void;
   removeLayer(layerId: string): void;
@@ -16,10 +16,4 @@ export interface LayerManagerModel {
   setLayerOrder(layerIds: string[]): void;
   refreshLayer(layerId: string): void;
   getLegendUrl(layerId: string): string;
-  addSubstituteLayer<LayerType extends LayerTypes>(layer: LayerModel): LayerType | null;
-  removeSubstituteLayer(id: string): void;
-  setSubstituteWebMercatorLayers(layers: LayerModel[]): void;
-  setSubstituteWebMercatorBackgroundLayers(layers: LayerModel[]): void;
-  addSubstituteWebMercatorLayers(): void;
-  removeSubstituteWebMercatorLayers(): void;
 }

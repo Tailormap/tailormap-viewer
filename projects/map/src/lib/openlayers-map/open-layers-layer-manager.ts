@@ -1,7 +1,7 @@
 import { Map as OlMap } from 'ol';
 import { Group as LayerGroup, Layer as BaseLayer, Vector as VectorLayer } from 'ol/layer';
 import { ImageWMS, TileWMS, Vector as VectorSource, WMTS, XYZ } from 'ol/source';
-import { get as getProjection } from 'ol/proj';
+import { get as getProjection, Projection } from 'ol/proj';
 import { LayerManagerModel, LayerTypes } from '../models';
 import { OlLayerHelper } from '../helpers/ol-layer.helper';
 import { LayerModel } from '../models/layer.model';
@@ -26,17 +26,11 @@ export class OpenLayersLayerManager implements LayerManagerModel {
   private prevBackgroundLayerIds: string[] = [];
   private prevLayerIdentifiers: string[] = [];
 
-  // Substitute layers in web mercator projection for 3D when application is not in web mercator
-  private substituteLayers: Map<string, BaseLayer> = new Map<string, BaseLayer>();
-  private substituteBackgroundLayers: Map<string, BaseLayer> = new Map<string, BaseLayer>();
+  private currentMapProjection: Projection;
 
-  private substituteBackgroundLayerGroup = new LayerGroup();
-  private substituteBaseLayerGroup = new LayerGroup();
-
-  private prevSubstituteBackgroundLayerIds: string[] = [];
-  private prevSubstituteLayerIdentifiers: string[] = [];
-
-  constructor(private olMap: OlMap, private ngZone: NgZone, private httpXsrfTokenExtractor: HttpXsrfTokenExtractor) {}
+  constructor(private olMap: OlMap, private ngZone: NgZone, private httpXsrfTokenExtractor: HttpXsrfTokenExtractor) {
+    this.currentMapProjection = this.olMap.getView().getProjection();
+  }
 
   public init() {
     this.olMap.addLayer(this.backgroundLayerGroup);
@@ -53,7 +47,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     this.olMap.removeLayer(this.vectorLayerGroup);
   }
 
-  public setBackgroundLayers(layers: LayerModel[]) {
+  public setBackgroundLayers(layers: LayerModel[], useProjection?: string) {
     this.prevBackgroundLayerIds = this.updateLayers(
       layers,
       this.backgroundLayers,
@@ -61,11 +55,13 @@ export class OpenLayersLayerManager implements LayerManagerModel {
       this.addBackgroundLayer.bind(this),
       this.removeBackgroundLayer.bind(this),
       this.getZIndexForBackgroundLayer.bind(this),
+      this.backgroundLayerGroup,
+      useProjection,
     );
   }
 
-  private addBackgroundLayer(layer: LayerModel, zIndex?: number) {
-    const olLayer = this.createLayer(layer);
+  private addBackgroundLayer(layer: LayerModel, zIndex?: number, useProjection?: string) {
+    const olLayer = this.createLayer(layer, useProjection);
     if (olLayer === null) {
       return;
     }
@@ -86,7 +82,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     return zIndex;
   }
 
-  public setLayers(layers: LayerModel[]) {
+  public setLayers(layers: LayerModel[], useProjection?: string) {
     this.prevLayerIdentifiers = this.updateLayers(
       layers,
       this.layers,
@@ -94,6 +90,8 @@ export class OpenLayersLayerManager implements LayerManagerModel {
       this.addLayer.bind(this),
       this.removeLayer.bind(this),
       this.getZIndexForLayer.bind(this),
+      this.baseLayerGroup,
+      useProjection,
     );
   }
 
@@ -101,13 +99,22 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     layers: LayerModel[],
     currentLayerMap: Map<string, BaseLayer>,
     prevLayerIdentifiers: string[],
-    addLayer: (layer: LayerModel, zIndex: number) => void,
+    addLayer: (layer: LayerModel, zIndex: number, useProjection?: string) => void,
     removeLayer: (id: string) => void,
     getZIndexForLayer: (zIndex?: number) => number,
+    layerGroup: LayerGroup,
+    useProjection?: string,
   ) {
     const layerIdentifiers = this.createLayerIdentifiers(layers);
-    if (ArrayHelper.arrayEquals(layerIdentifiers, prevLayerIdentifiers)) {
+    if (useProjection && useProjection !== this.currentMapProjection.getCode()) {
+      layerGroup.getLayers().clear();
+      currentLayerMap.clear();
+      this.currentMapProjection = getProjection(useProjection)!;
+    } else if (ArrayHelper.arrayEquals(layerIdentifiers, prevLayerIdentifiers)) {
       return prevLayerIdentifiers;
+    }
+    if (useProjection && useProjection === 'EPSG:3857') {
+      layers = layers.filter(layer => layer.webMercatorAvailable);
     }
     const layerIds = layers.map(layer => layer.id);
     const layerIdSet = new Set(layerIds);
@@ -129,13 +136,13 @@ export class OpenLayersLayerManager implements LayerManagerModel {
           existingLayer.setZIndex(getZIndexForLayer(zIndex));
           return;
         }
-        addLayer(layer, zIndex);
+        addLayer(layer, zIndex, useProjection);
       });
     return layerIdentifiers;
   }
 
-  public addLayer<LayerType extends LayerTypes>(layer: LayerModel, zIndex?: number): LayerType | null {
-    const olLayer = this.createLayer(layer);
+  public addLayer<LayerType extends LayerTypes>(layer: LayerModel, zIndex?: number, useProjection?: string): LayerType | null {
+    const olLayer = this.createLayer(layer, useProjection);
     if (olLayer === null) {
       return null;
     }
@@ -215,10 +222,6 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     const layer = this.layers.get(layerId);
     if (layer) {
       layer.setVisible(visible);
-    }
-    const substituteLayer = this.substituteLayers.get(layerId);
-    if (substituteLayer) {
-      substituteLayer.setVisible(visible);
     }
   }
 
@@ -333,13 +336,13 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     return;
   }
 
-  private createLayer(layer: LayerModel, useWebMercator?: boolean): LayerTypes {
+  private createLayer(layer: LayerModel, useProjection?: string): LayerTypes {
     if (LayerTypesHelper.isVectorLayer(layer)) {
       return this.createVectorLayer(layer);
     }
     let olLayer = OlLayerHelper.createLayer(layer, this.olMap.getView().getProjection(), this.ngZone, this.httpXsrfTokenExtractor);
-    if (useWebMercator) {
-      olLayer = OlLayerHelper.createLayer(layer, getProjection('EPSG:3857')!, this.ngZone, this.httpXsrfTokenExtractor);
+    if (useProjection) {
+      olLayer = OlLayerHelper.createLayer(layer, getProjection(useProjection)!, this.ngZone, this.httpXsrfTokenExtractor);
     }
     if (!olLayer) {
       return null;
@@ -357,113 +360,4 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     this.vectorLayers.set(layer.id, vectorLayer);
     return vectorLayer;
   }
-
-  private addSubstituteBackgroundLayer(layer: LayerModel, zIndex?: number) {
-    if (!layer.webMercatorAvailable) {
-      return;
-    }
-    const olLayer = this.createLayer(layer, true);
-    if (olLayer === null) {
-      return;
-    }
-    OlLayerHelper.setLayerProps(layer, olLayer);
-    this.substituteBackgroundLayers.set(layer.id, olLayer);
-    this.substituteBackgroundLayerGroup.getLayers().push(olLayer);
-    olLayer.setZIndex(this.getZIndexForBackgroundLayer(zIndex));
-  }
-
-  private removeSubstituteBackgroundLayer(layerId: string) {
-    this.removeLayerAndSource(layerId, this.substituteBackgroundLayerGroup, this.substituteBackgroundLayers);
-  }
-
-  private getZIndexForSubstituteBackgroundLayer(zIndex?: number) {
-    if (typeof zIndex === 'undefined' || zIndex === -1) {
-      zIndex = this.substituteBackgroundLayerGroup.getLayers().getLength();
-    }
-    return zIndex;
-  }
-
-
-  public addSubstituteLayer<LayerType extends LayerTypes>(layer: LayerModel, zIndex?: number): LayerType | null {
-    if (!layer.webMercatorAvailable) {
-      return null;
-    }
-    const olLayer = this.createLayer(layer, true);
-    if (olLayer === null) {
-      return null;
-    }
-    OlLayerHelper.setLayerProps(layer, olLayer);
-    this.addSubstituteLayerToMap(olLayer);
-    olLayer.setZIndex(this.getZIndexForSubstituteLayer(zIndex));
-    this.moveDrawingLayersToTop();
-    if (!LayerTypesHelper.isVectorLayer(layer)) {
-      this.substituteLayers.set(layer.id, olLayer);
-    }
-    return olLayer as LayerType;
-  }
-
-  private getZIndexForSubstituteLayer(zIndex?: number) {
-    if (typeof zIndex === 'undefined' || zIndex === -1) {
-      zIndex = this.getMaxSubstituteZIndex();
-    }
-    zIndex += this.substituteBackgroundLayerGroup.getLayers().getLength();
-    return zIndex;
-  }
-
-  public removeSubstituteLayer(id: string) {
-    this.removeLayerAndSource(id, this.substituteBaseLayerGroup, this.substituteLayers);
-  }
-
-  private getMaxSubstituteZIndex() {
-    let maxZIndex = 0;
-    this.substituteBaseLayerGroup.getLayers().forEach(layer => {
-      maxZIndex = Math.max(maxZIndex, layer.getZIndex() || 0);
-    });
-    return maxZIndex;
-  }
-
-  private addSubstituteLayerToMap(layer: BaseLayer) {
-    if (!isOpenLayersVectorLayer(layer)) {
-      const layers = this.substituteBaseLayerGroup.getLayers();
-      layers.push(layer);
-      this.substituteBaseLayerGroup.setLayers(layers);
-    }
-  }
-
-  public setSubstituteWebMercatorLayers(layers: LayerModel[]) {
-    this.prevSubstituteLayerIdentifiers = this.updateLayers(
-      layers,
-      this.substituteLayers,
-      this.prevSubstituteLayerIdentifiers,
-      this.addSubstituteLayer.bind(this),
-      this.removeSubstituteLayer.bind(this),
-      this.getZIndexForSubstituteLayer.bind(this),
-    );
-  }
-
-  public setSubstituteWebMercatorBackgroundLayers(layers: LayerModel[]) {
-    this.prevSubstituteBackgroundLayerIds = this.updateLayers(
-      layers,
-      this.substituteBackgroundLayers,
-      this.prevSubstituteBackgroundLayerIds,
-      this.addSubstituteBackgroundLayer.bind(this),
-      this.removeSubstituteBackgroundLayer.bind(this),
-      this.getZIndexForSubstituteBackgroundLayer.bind(this),
-    );
-  }
-
-  public addSubstituteWebMercatorLayers() {
-    this.olMap.removeLayer(this.backgroundLayerGroup);
-    this.olMap.removeLayer(this.baseLayerGroup);
-    this.olMap.addLayer(this.substituteBackgroundLayerGroup);
-    this.olMap.addLayer(this.substituteBaseLayerGroup);
-  }
-
-  public removeSubstituteWebMercatorLayers() {
-    this.olMap.removeLayer(this.substituteBackgroundLayerGroup);
-    this.olMap.removeLayer(this.substituteBaseLayerGroup);
-    this.olMap.addLayer(this.backgroundLayerGroup);
-    this.olMap.addLayer(this.baseLayerGroup);
-  }
-
 }

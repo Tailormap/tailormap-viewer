@@ -10,7 +10,9 @@ import {
 } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { ArrayHelper, HtmlifyHelper } from '@tailormap-viewer/shared';
-import { selectMapOptions, selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersWithServices, select3DLayers } from '../state/map.selectors';
+import {
+  selectMapOptions, selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersWithServices, select3DLayers, selectIn3DView,
+} from '../state/map.selectors';
 import { ExtendedAppLayerModel } from '../models';
 import { selectCQLFilters } from '../../filter/state/filter.selectors';
 import { withLatestFrom } from 'rxjs/operators';
@@ -59,40 +61,38 @@ export class ApplicationMapService implements OnDestroy {
         this.mapService.initMap(mapOptions, initialOptions);
       });
 
-    this.store$.select(selectOrderedVisibleBackgroundLayers)
-      .pipe(
-        takeUntil(this.destroyed),
+    combineLatest([
+      this.store$.select(selectOrderedVisibleBackgroundLayers).pipe(
         concatMap(layers => this.getLayersAndLayerManager$(layers)),
-      )
-      .subscribe(([ layers, layerManager ]) => {
-        layerManager.setBackgroundLayers(layers.filter(isValidLayer));
-        combineLatest([
-          this.store$.select(selectEnable3D),
-          this.store$.select(selectMapOptions),
-        ]).pipe(take(1))
-          .subscribe(([ enable3D, mapOptions ]) => {
-            if (enable3D && mapOptions?.projection !== 'EPSG:3857') {
-              layerManager.setSubstituteWebMercatorBackgroundLayers(layers.filter(isValidLayer));
-            }
-          });
+      ),
+      this.store$.select(selectIn3DView),
+      this.store$.select(selectMapOptions),
+    ])
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(([[ layers, layerManager ], in3DView, mapOptions ]) => {
+        if (in3DView && mapOptions?.projection !== 'EPSG:3857') {
+          console.log("Setting background layers in 3D view");
+          layerManager.setBackgroundLayers(layers.filter(isValidLayer), 'EPSG:3857');
+        } else {
+          layerManager.setBackgroundLayers(layers.filter(isValidLayer), mapOptions?.projection);
+        }
       });
 
-    this.selectOrderedVisibleLayersWithFilters$()
-      .pipe(
-        takeUntil(this.destroyed),
+    combineLatest([
+      this.selectOrderedVisibleLayersWithFilters$().pipe(
         concatMap(layers => this.getLayersAndLayerManager$(layers)),
-      )
-      .subscribe(([ layers, layerManager ]) => {
-        layerManager.setLayers(layers.filter(isValidLayer));
-        combineLatest([
-          this.store$.select(selectEnable3D),
-          this.store$.select(selectMapOptions),
-        ]).pipe(take(1))
-          .subscribe(([ enable3D, mapOptions ]) => {
-          if (enable3D && mapOptions?.projection !== 'EPSG:3857') {
-            layerManager.setSubstituteWebMercatorLayers(layers.filter(isValidLayer));
-          }
-        });
+      ),
+      this.store$.select(selectIn3DView),
+      this.store$.select(selectMapOptions),
+    ])
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(([[ layers, layerManager ], in3DView, mapOptions ]) => {
+        if (in3DView && mapOptions?.projection !== 'EPSG:3857') {
+          console.log("Setting background layers in 3D view");
+          layerManager.setLayers(layers.filter(isValidLayer), 'EPSG:3857');
+        } else {
+          layerManager.setLayers(layers.filter(isValidLayer), mapOptions?.projection);
+        }
       });
 
     this.store$.select(selectEnable3D)
