@@ -10,7 +10,7 @@ import { LayerTypesEnum } from '../../models/layer-types.enum';
 import { CesiumEventManager } from './cesium-event-manager';
 import { Projection } from 'ol/proj';
 
-export class CesiumLayerManager {
+export class CesiumManager {
 
   private map3D: BehaviorSubject<OLCesium | null> = new BehaviorSubject<OLCesium | null>(null);
   private layers3D: Map<string, number> = new Map<string, number>();
@@ -50,7 +50,12 @@ export class CesiumLayerManager {
         });
       this.executeScene3DAction(async scene3D => {
         scene3D.globe.depthTestAgainstTerrain = true;
-        CesiumEventManager.initClickEvent(scene3D, CssHelper.getCssVariableValue('--primary-color').trim(), this.projection2D?.getCode());
+        CesiumEventManager.initClickEvent(
+          scene3D,
+          CssHelper.getCssVariableValue('--primary-color').trim(),
+          index => this.getLayerId(index),
+          this.projection2D?.getCode(),
+        );
       });
     });
   }

@@ -95,18 +95,18 @@ export class ApplicationMapService implements OnDestroy {
         }
       });
 
-    this.store$.select(selectEnable3D)
-      .pipe(first(enable3D => enable3D))
-      .subscribe(() =>  {
-        this.mapService.make3D();
-        this.store$.select(select3DLayers)
-          .pipe(
-            takeUntil(this.destroyed),
-            concatMap(layers => this.get3DLayersAndLayerManager$(layers)),
-          )
-          .subscribe(([ layers, layerManager ]) => {
-            layerManager.addLayers(layers.filter(isValidLayer));
-          });
+    combineLatest([
+      this.store$.select(selectEnable3D)
+        .pipe(
+          first(enable3D => enable3D),
+          tap(() => this.mapService.make3D()),
+        ),
+      this.store$.select(select3DLayers)
+        .pipe(concatMap(layers => this.get3DLayersAndLayerManager$(layers))),
+    ])
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(([ _enable3D, [ layers, layerManager ]]) => {
+        layerManager.addLayers(layers.filter(isValidLayer));
       });
   }
 

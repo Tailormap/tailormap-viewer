@@ -9,7 +9,12 @@ export class CesiumEventManager {
 
   private static map3DClickEvent: Subject<Selection3dModel> = new Subject<Selection3dModel>();
 
-  public static initClickEvent(scene3D: Scene, silhouetteColor: string, projection2D?: string) {
+  public static initClickEvent(
+    scene3D: Scene,
+    silhouetteColor: string,
+    getLayerId: (index: number) => string | null,
+    projection2D?: string,
+  ) {
     const cesiumEventHandler = new Cesium.ScreenSpaceEventHandler(scene3D.canvas);
     const silhouette = this.createSilhouette(silhouetteColor, 0.01);
     scene3D.postProcessStages.add(Cesium.PostProcessStageLibrary.createSilhouetteStage([silhouette]));
@@ -42,13 +47,14 @@ export class CesiumEventManager {
             primitiveIndex = index;
           }
         }
+        const layerId = getLayerId(primitiveIndex) || '';
 
         silhouette.selected = [pickedFeature];
         const selection3D: Selection3dModel = {
           position: position,
           mouseCoordinates: movement.position,
           featureInfo: {
-            layerId: '',
+            layerId: layerId,
             columnMetadata: [],
             featureId: pickedFeature.featureId,
             properties: [],
@@ -58,7 +64,7 @@ export class CesiumEventManager {
         const propertyIds = pickedFeature.getPropertyIds();
         for (const propertyId of propertyIds) {
           selection3D.featureInfo?.properties.push({ id: propertyId, value: pickedFeature.getProperty(propertyId) });
-          selection3D.featureInfo?.columnMetadata.push({ layerId: '', key: propertyId, type: AttributeType.STRING });
+          selection3D.featureInfo?.columnMetadata.push({ layerId: layerId, key: propertyId, type: AttributeType.STRING });
         }
         CesiumEventManager.map3DClickEvent.next(selection3D);
       }

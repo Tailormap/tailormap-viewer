@@ -40,9 +40,6 @@ export class FeatureInfoService {
     mouseCoordinates: [number, number],
     cesiumFeatureInfo?: FeatureInfo3DModel,
   ): Observable<FeatureInfoResponseModel | null> {
-    if (cesiumFeatureInfo) {
-      cesiumFeatureInfo.layerId = this.mapService.get3DLayerIdByIndex(cesiumFeatureInfo.primitiveIndex);
-    }
     return combineLatest([
       this.store$.select(selectVisibleLayersWithAttributes),
       this.store$.select(selectVisibleWMSLayersWithoutAttributes),
@@ -179,8 +176,6 @@ export class FeatureInfoService {
   }
 
   private featureInfo3DToResponse(cesiumFeatureInfo: FeatureInfo3DModel): FeatureInfoResponseModel {
-    cesiumFeatureInfo.layerId = this.mapService.get3DLayerIdByIndex(cesiumFeatureInfo.primitiveIndex);
-
     const feature: FeatureInfoFeatureModel = {
       __fid: cesiumFeatureInfo.featureId.toString(),
       attributes: cesiumFeatureInfo.properties.reduce<FeatureModelAttributes>(

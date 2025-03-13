@@ -25,7 +25,7 @@ import { OpenLayersMapImageExporter } from './openlayers-map-image-exporter';
 import { Attribution } from 'ol/control';
 import { mouseOnly, platformModifierKeyOnly } from 'ol/events/condition';
 import { OpenLayersHelper } from './helpers/open-layers.helper';
-import { CesiumLayerManager } from './cesium-map/cesium-layer-manager';
+import { CesiumManager } from './cesium-map/cesium-manager';
 
 export class OpenLayersMap implements MapViewerModel {
 
@@ -33,7 +33,7 @@ export class OpenLayersMap implements MapViewerModel {
   private layerManager: BehaviorSubject<OpenLayersLayerManager | null> = new BehaviorSubject<OpenLayersLayerManager | null>(null);
   private toolManager: BehaviorSubject<ToolManagerModel | null> = new BehaviorSubject<ToolManagerModel | null>(null);
 
-  private map3D: BehaviorSubject<CesiumLayerManager | null> = new BehaviorSubject<CesiumLayerManager | null>(null);
+  private map3D: BehaviorSubject<CesiumManager | null> = new BehaviorSubject<CesiumManager | null>(null);
   private made3D: boolean;
   private in3D: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
@@ -379,12 +379,12 @@ export class OpenLayersMap implements MapViewerModel {
     });
   }
 
-  public getCesiumLayerManager$(): Observable<CesiumLayerManager> {
-    const isLayerManager = (item: CesiumLayerManager | null): item is CesiumLayerManager => item !== null;
+  public getCesiumLayerManager$(): Observable<CesiumManager> {
+    const isLayerManager = (item: CesiumManager | null): item is CesiumManager => item !== null;
     return this.map3D.asObservable().pipe(filter(isLayerManager));
   }
 
-  public executeCLMAction(fn: (cesiumLayerManager: CesiumLayerManager) => void) {
+  public executeCLMAction(fn: (cesiumLayerManager: CesiumManager) => void) {
     this.getCesiumLayerManager$()
       .pipe(take(1))
       .subscribe(cesiumLayerManager => fn(cesiumLayerManager));
@@ -393,7 +393,7 @@ export class OpenLayersMap implements MapViewerModel {
   public make3D(){
     if (!this.made3D) {
       this.executeMapAction(olMap => {
-        this.map3D.next(new CesiumLayerManager(olMap, this.ngZone, this.map.getValue()?.getView().getProjection()));
+        this.map3D.next(new CesiumManager(olMap, this.ngZone, this.map.getValue()?.getView().getProjection()));
       });
       this.executeCLMAction(cesiumLayerManager => {
         cesiumLayerManager.init();

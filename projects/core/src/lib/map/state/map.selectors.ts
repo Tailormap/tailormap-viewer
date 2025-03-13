@@ -313,16 +313,18 @@ export const select3dTilesLayers = createSelector(
   ),
 );
 
-export const selectLayersWithoutWebMercatorIds = createSelector(
+const selectLayersWithoutWebMercator = createSelector(
   selectLayers,
   selectServices,
-  (layers, services) => LayerModelHelper.filterLayersWithoutWebMercator(layers, services)
-      .map(layer => layer.id),
+  (layers, services) => LayerModelHelper.filterLayersWithoutWebMercator(layers, services),
+);
+
+export const selectLayersWithoutWebMercatorIds = createSelector(
+  selectLayersWithoutWebMercator,
+  layers => layers.map(layer => layer.id),
 );
 
 export const selectLayersWithoutWebMercatorTitles = createSelector(
-  selectLayers,
-  selectServices,
-  (layers, services) => LayerModelHelper.filterLayersWithoutWebMercator(layers, services)
-    .map(layer => layer.title),
+  selectLayersWithoutWebMercator,
+  layers => layers.map(layer => layer.title),
 );

@@ -1,6 +1,6 @@
 import { Injectable, NgZone } from '@angular/core';
 import { OpenLayersMap } from '../openlayers-map/openlayers-map';
-import { CesiumLayerManager } from '../openlayers-map/cesium-map/cesium-layer-manager';
+import { CesiumManager } from '../openlayers-map/cesium-map/cesium-manager';
 import { combineLatest, finalize, map, Observable, take, tap } from 'rxjs';
 import {
   LayerManagerModel, LayerModel, LayerTypesEnum, MapStyleModel, MapViewDetailsModel, MapViewerOptionsModel, OpenlayersExtent,
@@ -256,7 +256,7 @@ export class MapService {
     this.map.setPadding(padding);
   }
 
-  public getCesiumLayerManager$(): Observable<CesiumLayerManager> {
+  public getCesiumLayerManager$(): Observable<CesiumManager> {
     return this.map.getCesiumLayerManager$();
   }
 
