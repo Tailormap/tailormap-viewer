@@ -3,7 +3,7 @@ import { GeoServiceFormDialogComponent } from './geo-service-form-dialog.compone
 import userEvent from '@testing-library/user-event';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { TailormapAdminApiV1Service, getGeoService, AUTHORIZATION_RULE_ANONYMOUS } from '@tailormap-admin/admin-api';
+import { TailormapAdminApiV1Service, getGeoService, AUTHORIZATION_RULE_ANONYMOUS, AdminServerType } from '@tailormap-admin/admin-api';
 import { of } from 'rxjs';
 import { GeoServiceFormComponent } from '../geo-service-form/geo-service-form.component';
 import { GeoServiceService } from '../services/geo-service.service';
@@ -68,6 +68,7 @@ describe('GeoServiceFormDialogComponent', () => {
       settings: {
         useProxy: false,
         xyzCrs: null,
+        serverType: AdminServerType.AUTO,
       },
     }, '1');
     expect(dialogRefMock.close).toHaveBeenCalled();
@@ -88,6 +89,7 @@ describe('GeoServiceFormDialogComponent', () => {
       settings: {
         useProxy: false,
         xyzCrs: null,
+        serverType: AdminServerType.GEOSERVER,
       },
     });
     expect(dialogRefMock.close).toHaveBeenCalled();

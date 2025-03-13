@@ -401,6 +401,21 @@
       <trans-unit id="admin-core.catalog.enter-xyz-crs" datatype="html">
         <source>CRS for this XYZ layer</source>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.server-type" datatype="html">
+        <source>Server type</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.server-type.auto" datatype="html">
+        <source>Auto-detect based on URL (/geoserver/ or /mapserv)</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.server-type.generic" datatype="html">
+        <source>Generic WMS only</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.server-type.geoserver" datatype="html">
+        <source>GeoServer (ECQL filtering, HiDPI)</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.server-type.mapserver" datatype="html">
+        <source>MapServer (HiDPI)</source>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.error-creating-feature-source" datatype="html">
         <source>Error while creating feature source: <x id="PH" equiv-text="message"/></source>
       </trans-unit>
