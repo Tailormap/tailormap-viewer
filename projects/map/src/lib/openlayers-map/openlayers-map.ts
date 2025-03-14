@@ -379,32 +379,32 @@ export class OpenLayersMap implements MapViewerModel {
     });
   }
 
-  public getCesiumLayerManager$(): Observable<CesiumManager> {
-    const isLayerManager = (item: CesiumManager | null): item is CesiumManager => item !== null;
-    return this.map3D.asObservable().pipe(filter(isLayerManager));
+  public getCesiumManager$(): Observable<CesiumManager> {
+    const isCesiumManager = (item: CesiumManager | null): item is CesiumManager => item !== null;
+    return this.map3D.asObservable().pipe(filter(isCesiumManager));
   }
 
-  public executeCLMAction(fn: (cesiumLayerManager: CesiumManager) => void) {
-    this.getCesiumLayerManager$()
+  public executeCesiumAction(fn: (cesiumManager: CesiumManager) => void) {
+    this.getCesiumManager$()
       .pipe(take(1))
-      .subscribe(cesiumLayerManager => fn(cesiumLayerManager));
+      .subscribe(cesiumManager => fn(cesiumManager));
   }
 
   public make3D(){
     if (!this.made3D) {
+      this.made3D = true;
       this.executeMapAction(olMap => {
         this.map3D.next(new CesiumManager(olMap, this.ngZone, this.map.getValue()?.getView().getProjection()));
       });
-      this.executeCLMAction(cesiumLayerManager => {
-        cesiumLayerManager.init();
+      this.executeCesiumAction(cesiumManager => {
+        cesiumManager.init();
       });
-      this.made3D = true;
     }
   }
 
   public switch3D(){
-    this.executeCLMAction(cesiumLayerManager => {
-      cesiumLayerManager.switch3D();
+    this.executeCesiumAction(cesiumManager => {
+      cesiumManager.switch3D();
     });
     this.in3D.next(!this.in3D.value);
   }
@@ -412,4 +412,5 @@ export class OpenLayersMap implements MapViewerModel {
   public get3DLayerIdByIndex(index: number): string {
     return this.map3D.value?.getLayerId(index) || '';
   }
+
 }

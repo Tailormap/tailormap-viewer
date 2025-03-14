@@ -257,7 +257,7 @@ export class MapService {
   }
 
   public getCesiumLayerManager$(): Observable<CesiumManager> {
-    return this.map.getCesiumLayerManager$();
+    return this.map.getCesiumManager$();
   }
 
   public make3D(){

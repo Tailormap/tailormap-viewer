@@ -2,7 +2,7 @@ import { Inject, Injectable, LOCALE_ID, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
   LayerModel, LayerTypesEnum, MapService, OgcHelper, ServiceLayerModel, WMSLayerModel, WMTSLayerModel, XyzLayerModel, Tiles3dLayerModel,
-  TerrainLayerModel,
+  TerrainLayerModel, PROJECTION_REQUIRED_FOR_3D,
 } from '@tailormap-viewer/map';
 import { ServerType, ServiceModel, ServiceProtocol } from '@tailormap-viewer/api';
 import {
@@ -70,8 +70,8 @@ export class ApplicationMapService implements OnDestroy {
     ])
       .pipe(takeUntil(this.destroyed))
       .subscribe(([[ layers, layerManager ], in3DView, mapOptions ]) => {
-        if (in3DView && mapOptions?.projection !== 'EPSG:3857') {
-          layerManager.setBackgroundLayers(layers.filter(isValidLayer).filter(layer => layer.webMercatorAvailable), 'EPSG:3857');
+        if (in3DView && mapOptions?.projection !== PROJECTION_REQUIRED_FOR_3D) {
+          layerManager.setBackgroundLayers(layers.filter(isValidLayer).filter(layer => layer.webMercatorAvailable), PROJECTION_REQUIRED_FOR_3D);
         } else {
           layerManager.setBackgroundLayers(layers.filter(isValidLayer), mapOptions?.projection);
         }
@@ -86,26 +86,25 @@ export class ApplicationMapService implements OnDestroy {
     ])
       .pipe(takeUntil(this.destroyed))
       .subscribe(([[ layers, layerManager ], in3DView, mapOptions ]) => {
-        if (in3DView && mapOptions?.projection !== 'EPSG:3857') {
+        if (in3DView && mapOptions?.projection !== PROJECTION_REQUIRED_FOR_3D) {
           layerManager.setLayers(layers.filter(isValidLayer).filter(
             layer => layer.webMercatorAvailable || layer.layerType === LayerTypesEnum.Vector,
-          ), 'EPSG:3857');
+          ), PROJECTION_REQUIRED_FOR_3D);
         } else {
           layerManager.setLayers(layers.filter(isValidLayer), mapOptions?.projection);
         }
       });
 
     combineLatest([
-      this.store$.select(selectEnable3D)
-        .pipe(
-          first(enable3D => enable3D),
-          tap(() => this.mapService.make3D()),
-        ),
+      this.store$.select(selectEnable3D),
       this.store$.select(select3DLayers)
         .pipe(concatMap(layers => this.get3DLayersAndLayerManager$(layers))),
     ])
       .pipe(takeUntil(this.destroyed))
-      .subscribe(([ _enable3D, [ layers, layerManager ]]) => {
+      .subscribe(([ enable3D, [ layers, layerManager ]]) => {
+        if (enable3D) {
+          this.mapService.make3D();
+        }
         layerManager.addLayers(layers.filter(isValidLayer));
       });
   }
