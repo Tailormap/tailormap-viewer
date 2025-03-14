@@ -1,9 +1,9 @@
 const { execSync } = require('child_process');
-const chalk = require('chalk');
+const { styleText} = require("node:util");
 
 try {
   execSync('cd projects/core/src/lib/services/application-bookmark && npx buf generate');
-  console.log(chalk.green('Generated protobuf typescript file for bookmark'));
+  console.log(styleText('green', 'Generated protobuf typescript file for bookmark'));
 } catch(e) {
-  console.log(chalk.red('Error generating protobuf typescript file for bookmark'), e);
+  console.log(styleText('red', 'Error generating protobuf typescript file for bookmark'), e);
 }
