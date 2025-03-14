@@ -26,3 +26,12 @@ mat-slide-toggle + mat-slide-toggle {
   font-weight: bold;
   margin-top: 16px;
 }
+
+.available-crs {
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+
+.available-crs-text {
+  margin-top: 8px;
+}

@@ -1,11 +1,9 @@
 import { ApplicationState, applicationStateKey } from './application.state';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { ApplicationTreeHelper } from '../helpers/application-tree.helper';
-import {
-  selectCatalog, selectFeatureTypes, selectGeoServiceLayers, selectGeoServices,
-} from '../../catalog/state/catalog.selectors';
+import { selectCatalog, selectFeatureTypes, selectGeoServiceLayers, selectGeoServices } from '../../catalog/state/catalog.selectors';
 import { FilterHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
-import { AppLayerSettingsModel, AppTreeNodeModel } from '@tailormap-admin/admin-api';
+import { AppLayerSettingsModel, AppTreeNodeModel, GeoServiceProtocolEnum } from '@tailormap-admin/admin-api';
 import { BaseComponentConfigHelper } from '@tailormap-viewer/api';
 import { CatalogTreeModel } from '../../catalog/models/catalog-tree.model';
 import { CatalogFilterHelper } from '../../catalog/helpers/catalog-filter.helper';
@@ -82,6 +80,16 @@ export const selectBaseLayerNodesForSelectedApplication = createSelector(
   },
 );
 
+export const selectTerrainLayerNodesForSelectedApplication = createSelector(
+  selectDraftApplication,
+  (application): AppTreeNodeModel[] => {
+    if (!application?.contentRoot?.terrainLayerNodes) {
+      return [];
+    }
+    return application.contentRoot.terrainLayerNodes;
+  },
+);
+
 export const selectAppLayerTreeForSelectedApplication = createSelector(
   selectAppLayerNodesForSelectedApplication,
   selectGeoServiceLayers,
@@ -89,7 +97,7 @@ export const selectAppLayerTreeForSelectedApplication = createSelector(
   selectSelectedApplicationLayerSettings,
   selectApplicationLayerTreeFilterTerm,
   (layerNodes, layers, expandedNodes: string[], layerSettings: Record<string, AppLayerSettingsModel>, filterTerm?: string) => {
-    return ApplicationTreeHelper.layerTreeNodeToTree(layerNodes, layers, expandedNodes, layerSettings, false, filterTerm);
+    return ApplicationTreeHelper.layerTreeNodeToTree(layerNodes, layers, expandedNodes, layerSettings, 'layer', filterTerm);
   },
 );
 
@@ -100,7 +108,16 @@ export const selectBaseLayerTreeForSelectedApplication = createSelector(
   selectSelectedApplicationLayerSettings,
   selectApplicationBaseLayerTreeFilterTerm,
   (baseLayerNodes, layers, expandedNodes: string[], layerSettings: Record<string, AppLayerSettingsModel>, filterTerm?: string) => {
-    return ApplicationTreeHelper.layerTreeNodeToTree(baseLayerNodes, layers, expandedNodes, layerSettings, true, filterTerm);
+    return ApplicationTreeHelper.layerTreeNodeToTree(baseLayerNodes, layers, expandedNodes, layerSettings, 'baseLayer', filterTerm);
+  },
+);
+
+export const selectTerrainLayerTreeForSelectedApplication = createSelector(
+  selectTerrainLayerNodesForSelectedApplication,
+  selectGeoServiceLayers,
+  selectSelectedApplicationLayerSettings,
+  (terrainLayerNodes, layers, layerSettings: Record<string, AppLayerSettingsModel>) => {
+    return ApplicationTreeHelper.layerTreeNodeToTree(terrainLayerNodes, layers, ['root'], layerSettings, 'terrainLayer');
   },
 );
 
@@ -144,7 +161,7 @@ export const selectDraftApplicationCrs = createSelector(
   draftApplication => draftApplication?.crs,
 );
 
-export const selectServiceLayerTreeForApplication = createSelector(
+export const selectBaseServiceLayerTreeForApplication = createSelector(
   selectDraftApplicationCrs,
   selectCatalog,
   selectGeoServices,
@@ -153,6 +170,34 @@ export const selectServiceLayerTreeForApplication = createSelector(
   selectApplicationCatalogFilterTerm,
   (draftApplicationCrs, catalog, services, layers, featureTypes, filterTerm): CatalogTreeModel[] => {
     return CatalogFilterHelper.filterTreeByCrs(catalog, services, layers, featureTypes, draftApplicationCrs, filterTerm);
-  });
+});
+
+export const selectTerrainServiceLayerTreeForApplication = createSelector(
+  selectCatalog,
+  selectGeoServices,
+  selectGeoServiceLayers,
+  selectFeatureTypes,
+  (catalog, services, layers, featureTypes): CatalogTreeModel[] => {
+    return CatalogFilterHelper.filterTreeByProtocol(catalog, services, layers, featureTypes, GeoServiceProtocolEnum.QUANTIZEDMESH);
+  },
+);
+
+export const selectTiles3DServiceLayerTreeForApplication = createSelector(
+  selectCatalog,
+  selectGeoServices,
+  selectGeoServiceLayers,
+  selectFeatureTypes,
+  (catalog, services, layers, featureTypes): CatalogTreeModel[] => {
+    return CatalogFilterHelper.filterTreeByProtocol(catalog, services, layers, featureTypes, GeoServiceProtocolEnum.TILES3D);
+  },
+);
+
+export const selectServiceLayerTreeForApplication = createSelector(
+  selectBaseServiceLayerTreeForApplication,
+  selectTiles3DServiceLayerTreeForApplication,
+  (layers2D, tiles3dLayers) => {
+    return layers2D.concat(tiles3dLayers);
+  },
+);
 
 export const selectStylingConfig = createSelector(selectDraftApplication, application => application?.styling);

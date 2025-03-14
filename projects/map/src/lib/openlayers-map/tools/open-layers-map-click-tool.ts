@@ -1,7 +1,8 @@
 import { MapClickToolConfigModel, MapClickToolModel, MapClickEvent } from '../../models';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, takeUntil, switchMap } from 'rxjs';
 import { OpenLayersEventManager } from '../open-layers-event-manager';
 import { OpenLayersHelper } from '../helpers/open-layers.helper';
+import { CesiumEventManager } from '../cesium-map/cesium-event-manager';
 
 export class OpenLayersMapClickTool implements MapClickToolModel {
 
@@ -10,6 +11,7 @@ export class OpenLayersMapClickTool implements MapClickToolModel {
   constructor(
     public id: string,
     private _toolConfig: MapClickToolConfigModel,
+    private in3D$: Observable<boolean>,
   ) {}
 
   private mapClickSubject: Subject<MapClickEvent> = new Subject<MapClickEvent>();
@@ -28,17 +30,26 @@ export class OpenLayersMapClickTool implements MapClickToolModel {
 
   public enable(): void {
     this.enabled = new Subject();
-    OpenLayersEventManager.onMapClick$()
-      .pipe(takeUntil(this.enabled))
-      .subscribe(evt => {
-        const { scale, resolution } = OpenLayersHelper.getResolutionAndScale(evt.map.getView());
+    this.in3D$.pipe(
+      takeUntil(this.enabled),
+      switchMap(in3D => in3D ? CesiumEventManager.onMap3DClick$() : OpenLayersEventManager.onMapClick$()),
+    ).subscribe(click => {
+      if (click && 'position' in click) {
         this.mapClickSubject.next({
-          mapCoordinates: [ evt.coordinate[0], evt.coordinate[1] ],
-          mouseCoordinates: [ evt.pixel[0], evt.pixel[1] ],
+          mapCoordinates: [ click.position.x, click.position.y ],
+          mouseCoordinates: [ click.mouseCoordinates.x, click.mouseCoordinates.y ],
+          cesiumFeatureInfo: click.featureInfo,
+        });
+      } else {
+        const { scale, resolution } = OpenLayersHelper.getResolutionAndScale(click.map.getView());
+        this.mapClickSubject.next({
+          mapCoordinates: [ click.coordinate[0], click.coordinate[1] ],
+          mouseCoordinates: [ click.pixel[0], click.pixel[1] ],
           resolution,
           scale,
         });
-      });
+      }
+    });
     this.isActive = true;
   }
 

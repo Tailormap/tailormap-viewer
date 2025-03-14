@@ -1,0 +1,1 @@
+export const PROJECTION_REQUIRED_FOR_3D = 'EPSG:3857';

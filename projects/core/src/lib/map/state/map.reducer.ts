@@ -25,6 +25,7 @@ const onLoadMapSuccess = (
   services: payload.services,
   baseLayerTreeNodes: payload.baseLayerTreeNodes.map(node => LayerTreeNodeHelper.getExtendedLayerTreeNode(node, false)),
   layerTreeNodes: payload.layerTreeNodes,
+  terrainLayerTreeNodes: payload.terrainLayerTreeNodes.map(node => LayerTreeNodeHelper.getExtendedLayerTreeNode(node, false)),
 });
 
 const onLoadMapFailed = (
@@ -175,6 +176,20 @@ const onSetSelectedBackgroundNodeId = (state: MapState, payload: ReturnType<type
   selectedBackgroundNode: payload.id,
 });
 
+const onSetSelectedTerrainNodeId = (state: MapState, payload: ReturnType<typeof MapActions.setSelectedTerrainNodeId>): MapState => ({
+  ...state,
+  layers: state.layers.map(layer => {
+    const parent = LayerTreeNodeHelper.getTopParent(state.terrainLayerTreeNodes, layer);
+    return {
+      ...layer,
+      visible: typeof parent === 'undefined'
+        ? layer.visible
+        : parent.id === payload.id,
+    };
+  }),
+  selectedTerrainLayerNode: payload.id,
+});
+
 const onSetLayerOpacity = (state: MapState, payload: ReturnType<typeof MapActions.setLayerOpacity>): MapState => ({
   ...state,
   layers: state.layers.map(layer => {
@@ -208,6 +223,11 @@ const onUpdateLayerTreeNodes = (
   layerTreeNodes: payload.layerTreeNodes,
 });
 
+const onToggleIn3DView = (state: MapState): MapState => ({
+  ...state,
+  in3DView: !state.in3DView,
+});
+
 const mapReducerImpl = createReducer<MapState>(
   initialMapState,
   on(MapActions.loadMap, onLoadMap),
@@ -223,8 +243,10 @@ const mapReducerImpl = createReducer<MapState>(
   on(MapActions.moveLayerTreeNode, onMoveLayerTreeNode),
   on(MapActions.setLayerTreeNodeChildren, onSetLayerTreeNodeChildren),
   on(MapActions.setSelectedBackgroundNodeId, onSetSelectedBackgroundNodeId),
+  on(MapActions.setSelectedTerrainNodeId, onSetSelectedTerrainNodeId),
   on(MapActions.setLayerOpacity, onSetLayerOpacity),
   on(MapActions.addLayerDetails, onAddLayerDetails),
   on(MapActions.updateLayerTreeNodes, onUpdateLayerTreeNodes),
+  on(MapActions.toggleIn3DView, onToggleIn3DView),
 );
 export const mapReducer = (state: MapState | undefined, action: Action) => mapReducerImpl(state, action);

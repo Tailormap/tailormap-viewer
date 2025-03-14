@@ -17,12 +17,23 @@ export class TocNodeLayerComponent {
   @Input()
   public scale: number | null = null;
 
+  @Input()
+  public in3D: boolean = false;
+
+  @Input()
+  public layersWithoutWebMercator: string[] = [];
+
+  @Input()
+  public tiles3DLayerIds: string[] = [];
+
   public isLevel() {
     return this.node?.type === 'level';
   }
 
-  public isLayerOutOfScale() {
-    return !ScaleHelper.isInScale(this.scale, this.node?.metadata?.minScale, this.node?.metadata?.maxScale);
+  public isLayerHiddenOnMap() {
+    return !ScaleHelper.isInScale(this.scale, this.node?.metadata?.minScale, this.node?.metadata?.maxScale)
+      || (this.in3D && this.layersWithoutWebMercator.includes(this.node?.id || ''))
+      || (!this.in3D && this.tiles3DLayerIds.includes(this.node?.id || ''));
   }
 
 }

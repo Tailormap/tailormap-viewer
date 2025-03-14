@@ -38,7 +38,9 @@ describe('FeatureInfoService', () => {
         provideHttpClientTesting(),
         FeatureInfoService,
         mapServiceMock.provider,
-        provideMockStore({ initialState: {} }),
+        provideMockStore({
+          initialState: { map: { layers: [appLayer] } },
+        }),
         { provide: TAILORMAP_API_V1_SERVICE, useValue: { getFeatures$ } },
       ],
     });

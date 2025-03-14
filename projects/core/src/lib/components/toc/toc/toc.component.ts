@@ -1,4 +1,4 @@
-import { Component, NgZone, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, computed, NgZone, OnDestroy, OnInit, Signal, signal } from '@angular/core';
 import { distinctUntilChanged, filter, Observable, of, Subject, takeUntil } from 'rxjs';
 import {
   BaseTreeModel, BrowserHelper, DropZoneHelper, NodePositionChangedEventModel, TreeDragDropService,
@@ -12,7 +12,9 @@ import { AppLayerModel, BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { MapService } from '@tailormap-viewer/map';
 import { selectFilteredLayerTree, selectFilterEnabled } from '../state/toc.selectors';
 import { toggleFilterEnabled } from '../state/toc.actions';
-import { selectSelectedNode, selectSelectedNodeId } from '../../../map/state/map.selectors';
+import {
+  select3dTilesLayers, selectIn3DView, selectLayersWithoutWebMercatorIds, selectSelectedNode, selectSelectedNodeId,
+} from '../../../map/state/map.selectors';
 import { moveLayerTreeNode, setLayerVisibility, setSelectedLayerId, toggleLevelExpansion } from '../../../map/state/map.actions';
 
 interface AppLayerTreeModel extends BaseTreeModel {
@@ -39,6 +41,10 @@ export class TocComponent implements OnInit, OnDestroy {
   public filterEnabled$ = this.store$.select(selectFilterEnabled);
   public isMobileDevice = BrowserHelper.isTouchDevice;
   public dragDropEnabled = !this.isMobileDevice;
+
+  public in3D: Signal<boolean> = signal(false);
+  public layersWithoutWebMercator: Signal<string[]> = signal([]);
+  public tiles3DLayerIds: Signal<string[]> = signal([]);
 
   constructor(
     private store$: Store,
@@ -88,6 +94,11 @@ export class TocComponent implements OnInit, OnDestroy {
       .subscribe((evt) => this.handleNodePositionChanged(evt));
 
     this.menubarService.registerComponent({ type: BaseComponentTypeEnum.TOC, component: TocMenuButtonComponent });
+
+    this.in3D = this.store$.selectSignal(selectIn3DView);
+    this.layersWithoutWebMercator = this.store$.selectSignal(selectLayersWithoutWebMercatorIds);
+    const tiles3DLayers = this.store$.selectSignal(select3dTilesLayers);
+    this.tiles3DLayerIds = computed(() => tiles3DLayers().map(l => l.id));
   }
 
   public getDropZoneConfig() {
@@ -95,6 +106,7 @@ export class TocComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
+    this.menubarService.deregisterComponent(BaseComponentTypeEnum.TOC);
     this.destroyed.next(null);
     this.destroyed.complete();
   }
