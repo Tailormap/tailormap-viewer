@@ -3,7 +3,7 @@ import {
   ArrowTypeEnum, DrawingFeatureModel, DrawingFeatureModelAttributes, DrawingFeatureStyleModel, LabelStyleEnum, MakerType, StrokeTypeEnum,
 } from '../models/drawing-feature.model';
 import { DrawingToolEvent, MapStyleModel } from '@tailormap-viewer/map';
-import { nanoid } from 'nanoid';
+import { v4 as uuidv4 } from 'uuid';
 import { ApplicationStyleService } from '../../../services/application-style.service';
 
 
@@ -43,7 +43,7 @@ export class DrawingHelper {
       style: DrawingHelper.getDefaultStyle(),
     };
     return {
-      __fid: nanoid(),
+      __fid: uuidv4(),
       geometry: drawingEvent.geometry,
       attributes,
     };
