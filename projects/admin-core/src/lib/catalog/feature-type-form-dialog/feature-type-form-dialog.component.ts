@@ -30,7 +30,7 @@ export class FeatureTypeFormDialogComponent {
     });
   }
 
-  public cancel() {
+  public cancelled() {
     this.dialogRef.close();
   }
 
