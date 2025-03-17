@@ -42,10 +42,7 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
-            "outputPath": {
-              "browser": "",
-              "base": "dist/app"
-            },
+            "outputPath": "dist/app",
             "index": "projects/app/src/index.html",
             "polyfills": ["projects/app/src/polyfills.ts", "@angular/localize/init"],
             "assets": [
@@ -89,7 +86,10 @@
               "color-name",
               "localforage",
               "fastpriorityqueue",
-              "color-convert"
+              "color-convert",
+              "lodash.debounce",
+              "lodash.throttle",
+              "extend"
             ],
             "i18nMissingTranslation": "error",
             "browser": "projects/app/src/main.ts"
@@ -161,7 +161,7 @@
           "builder": "ng-extract-i18n-merge:ng-extract-i18n-merge",
           "configurations": {},
           "options": {
-            "browserTarget": "app:build",
+            "buildTarget": "app:build",
             "format": "xlf",
             "outputPath": "locale",
             "sourceFile": "messages.en.xlf",
