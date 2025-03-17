@@ -1,9 +1,8 @@
-ARG BUILDPLATFORM=linux/amd64
 ARG VERSION=snapshot
 ARG API_VERSION=snapshot
 
 # Note when updating this version also update the version in the workflow files
-FROM --platform=linux/amd64 node:22.14.0 AS builder
+FROM node:22.14.0 AS builder
 
 ARG BASE_HREF=/
 
@@ -17,7 +16,7 @@ COPY . /app
 
 RUN npm run build -- --base-href=${BASE_HREF}
 
-FROM --platform=$BUILDPLATFORM ghcr.io/tailormap/tailormap-api:${API_VERSION}
+FROM ghcr.io/tailormap/tailormap-api:${API_VERSION}
 
 LABEL org.opencontainers.image.authors="info@b3partners.nl" \
       org.opencontainers.image.description="Tailormap" \
