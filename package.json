@@ -76,7 +76,7 @@
     "@bufbuild/protoc-gen-es": "^2.2.3",
     "@stylistic/eslint-plugin-ts": "^2.6.1",
     "@tailormap-viewer/schematics": "^0.0.17",
-    "@tailormap-viewer/tools": "^0.0.17",
+    "@tailormap-viewer/tools": "^0.0.16",
     "@testing-library/angular": "^17.3.6",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/user-event": "^14.6.1",
