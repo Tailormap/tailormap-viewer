@@ -1,6 +1,7 @@
 import { TileLayerHiDpiMode } from './layer-hi-dpi-mode.enum';
 import { BoundsModel } from './bounds.model';
 import { LayerSearchIndexModel } from './layer-search-index.model';
+import { HiddenLayerFunctionality } from './hidden-layer-functionality.model';
 
 export interface AppLayerModel {
   id: string;
@@ -28,4 +29,5 @@ export interface AppLayerModel {
   description?: string;
   autoRefreshInSeconds?: number | null;
   searchIndex: LayerSearchIndexModel | null;
+  hiddenFunctionality?: HiddenLayerFunctionality[] | null;
 }

@@ -5,8 +5,7 @@ import {
 import { Store } from '@ngrx/store';
 import { selectSelectedApplicationLayerSettings } from '../state/application.selectors';
 import {
-  BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, map, Observable, of, startWith, Subject, switchMap, take,
-  takeUntil,
+  BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, map, Observable, of, startWith, Subject, switchMap, take, takeUntil,
 } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
 import { LoadingStateEnum, TreeModel } from '@tailormap-viewer/shared';
@@ -24,7 +23,7 @@ import { loadForms } from '../../form/state/form.actions';
 import { FormService } from '../../form/services/form.service';
 import { selectSearchIndexesForFeatureType, selectSearchIndexesLoadStatus } from '../../search-index/state/search-index.selectors';
 import { loadSearchIndexes } from '../../search-index/state/search-index.actions';
-import { ApplicationFeature, ApplicationFeatureSwitchService } from '@tailormap-viewer/api';
+import { ApplicationFeature, ApplicationFeatureSwitchService, HiddenLayerFunctionality } from '@tailormap-viewer/api';
 
 type FeatureSourceAndType = {
   featureSource: ExtendedFeatureSourceModel;
@@ -98,6 +97,9 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     formId: new FormControl<number | null>(null),
     searchIndexId: new FormControl<number | null>(null),
     autoRefreshInSeconds: new FormControl<number | null>(null),
+    hideFeatureInfo: new FormControl<boolean>(false),
+    hideAttributeList: new FormControl<boolean>(false),
+    hideExport: new FormControl<boolean>(false),
   });
 
   public formWarningMessageData$: Observable<{ featureType: FeatureTypeModel; layerSetting: AppLayerSettingsModel; form: FormModel } | null> = of(null);
@@ -139,6 +141,11 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
           formId: value.formId ?? null,
           searchIndexId: value.searchIndexId ?? null,
           autoRefreshInSeconds: value.autoRefreshInSeconds ?? null,
+          hiddenFunctionality: [
+            ...(value.hideFeatureInfo ? [HiddenLayerFunctionality.featureInfo] : []),
+            ...(value.hideAttributeList ? [HiddenLayerFunctionality.attributeList] : []),
+            ...(value.hideExport ? [HiddenLayerFunctionality.export] : []),
+          ],
         };
         this.layerSettingsChange.emit({ nodeId: this.node.id, settings });
       });
@@ -257,6 +264,9 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
       formId: nodeSettings.formId || null,
       searchIndexId: nodeSettings.searchIndexId || null,
       autoRefreshInSeconds: nodeSettings.autoRefreshInSeconds || null,
+      hideFeatureInfo: nodeSettings.hiddenFunctionality?.includes(HiddenLayerFunctionality.featureInfo),
+      hideAttributeList: nodeSettings.hiddenFunctionality?.includes(HiddenLayerFunctionality.attributeList),
+      hideExport: nodeSettings.hiddenFunctionality?.includes(HiddenLayerFunctionality.export),
     }, { emitEvent: false });
   }
 
