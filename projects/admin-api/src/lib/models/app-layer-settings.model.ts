@@ -1,8 +1,4 @@
-export enum HideFunctionality {
-  objectInformation = 'object-information',
-  attributeList = 'attribute-list',
-  export = 'export',
-}
+import { HiddenLayerFunctionality } from '@tailormap-viewer/api';
 
 export interface AppLayerSettingsModel {
   title?: string;
@@ -15,5 +11,5 @@ export interface AppLayerSettingsModel {
   hideAttributes?: string[] | null;
   readOnlyAttributes?: string[] | null;
   autoRefreshInSeconds?: number | null;
-  hiddenFunctionality?: HideFunctionality[] | null;
+  hiddenFunctionality?: HiddenLayerFunctionality[] | null;
 }

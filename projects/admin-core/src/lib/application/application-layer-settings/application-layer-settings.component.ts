@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import {
-  AppLayerSettingsModel, AppTreeLayerNodeModel, FeatureTypeModel, FormModel, FormSummaryModel, HideFunctionality, SearchIndexModel,
+  AppLayerSettingsModel, AppTreeLayerNodeModel, FeatureTypeModel, FormModel, FormSummaryModel, SearchIndexModel,
 } from '@tailormap-admin/admin-api';
 import { Store } from '@ngrx/store';
 import { selectSelectedApplicationLayerSettings } from '../state/application.selectors';
@@ -23,7 +23,7 @@ import { loadForms } from '../../form/state/form.actions';
 import { FormService } from '../../form/services/form.service';
 import { selectSearchIndexesForFeatureType, selectSearchIndexesLoadStatus } from '../../search-index/state/search-index.selectors';
 import { loadSearchIndexes } from '../../search-index/state/search-index.actions';
-import { ApplicationFeature, ApplicationFeatureSwitchService } from '@tailormap-viewer/api';
+import { ApplicationFeature, ApplicationFeatureSwitchService, HiddenLayerFunctionality } from '@tailormap-viewer/api';
 
 type FeatureSourceAndType = {
   featureSource: ExtendedFeatureSourceModel;
@@ -97,7 +97,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     formId: new FormControl<number | null>(null),
     searchIndexId: new FormControl<number | null>(null),
     autoRefreshInSeconds: new FormControl<number | null>(null),
-    hideObjectInformation: new FormControl<boolean>(false),
+    hideFeatureInfo: new FormControl<boolean>(false),
     hideAttributeList: new FormControl<boolean>(false),
     hideExport: new FormControl<boolean>(false),
   });
@@ -142,9 +142,9 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
           searchIndexId: value.searchIndexId ?? null,
           autoRefreshInSeconds: value.autoRefreshInSeconds ?? null,
           hiddenFunctionality: [
-            ...(value.hideObjectInformation ? [HideFunctionality.objectInformation] : []),
-            ...(value.hideAttributeList ? [HideFunctionality.attributeList] : []),
-            ...(value.hideExport ? [HideFunctionality.export] : []),
+            ...(value.hideFeatureInfo ? [HiddenLayerFunctionality.featureInfo] : []),
+            ...(value.hideAttributeList ? [HiddenLayerFunctionality.attributeList] : []),
+            ...(value.hideExport ? [HiddenLayerFunctionality.export] : []),
           ],
         };
         this.layerSettingsChange.emit({ nodeId: this.node.id, settings });
@@ -255,7 +255,6 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
       return;
     }
     const nodeSettings = this.layerSettings[node.id] || {};
-    const hiddenFunctionality = nodeSettings.hiddenFunctionality || [];
     this.layerSettingsForm.patchValue({
       title: nodeSettings.title || null,
       opacity: nodeSettings.opacity || 100,
@@ -265,9 +264,9 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
       formId: nodeSettings.formId || null,
       searchIndexId: nodeSettings.searchIndexId || null,
       autoRefreshInSeconds: nodeSettings.autoRefreshInSeconds || null,
-      hideObjectInformation: hiddenFunctionality.includes(HideFunctionality.objectInformation),
-      hideAttributeList: hiddenFunctionality.includes(HideFunctionality.attributeList),
-      hideExport: hiddenFunctionality.includes(HideFunctionality.export),
+      hideFeatureInfo: nodeSettings.hiddenFunctionality?.includes(HiddenLayerFunctionality.featureInfo),
+      hideAttributeList: nodeSettings.hiddenFunctionality?.includes(HiddenLayerFunctionality.attributeList),
+      hideExport: nodeSettings.hiddenFunctionality?.includes(HiddenLayerFunctionality.export),
     }, { emitEvent: false });
   }
 
