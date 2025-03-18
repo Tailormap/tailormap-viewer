@@ -6,7 +6,7 @@ import {
   selectAttributeListVisible,
   selectCurrentlySelectedFeatureGeometry,
 } from '../state/attribute-list.selectors';
-import { map, Observable, of, Subject } from 'rxjs';
+import { filter, map, Observable, of, Subject } from 'rxjs';
 import {  takeUntil } from 'rxjs/operators';
 import { setAttributeListVisibility, setSelectedTab } from '../state/attribute-list.actions';
 import { MatTabChangeEvent } from '@angular/material/tabs';
@@ -16,7 +16,7 @@ import { AttributeListMenuButtonComponent } from '../attribute-list-menu-button/
 import { selectVisibleLayersWithAttributes } from '../../../map/state/map.selectors';
 import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.helper';
 import { MapService } from '@tailormap-viewer/map';
-import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
+import { BaseComponentTypeEnum, HiddenLayerFunctionality } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-attribute-list',
@@ -50,8 +50,10 @@ export class AttributeListComponent implements OnInit, OnDestroy {
     this.store$.select(selectAttributeListSelectedTab)
       .pipe(takeUntil(this.destroyed))
       .subscribe(selectedTab => this.selectedTab = selectedTab);
-    this.hasLayersWithAttributes$ = this.store$.select(selectVisibleLayersWithAttributes)
-      .pipe(map(layers => (layers || []).length > 0));
+    this.hasLayersWithAttributes$ = this.store$.select(selectVisibleLayersWithAttributes).pipe(
+      map(layers => layers.filter(l => !l.hiddenFunctionality?.includes(HiddenLayerFunctionality.attributeList))),
+      map(layers => (layers || []).length > 0),
+    );
   }
 
   public ngOnInit() {

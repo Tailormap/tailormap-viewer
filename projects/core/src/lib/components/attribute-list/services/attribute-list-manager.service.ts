@@ -8,7 +8,7 @@ import { AttributeListTabModel } from '../models/attribute-list-tab.model';
 import { nanoid } from 'nanoid';
 import { AttributeListDataModel } from '../models/attribute-list-data.model';
 import { selectVisibleLayersWithAttributes } from '../../../map/state/map.selectors';
-import { AppLayerModel } from '@tailormap-viewer/api';
+import { AppLayerModel, HiddenLayerFunctionality } from '@tailormap-viewer/api';
 import { DEFAULT_ATTRIBUTE_LIST_CONFIG } from '../models/attribute-list-config.model';
 
 interface TabFromLayerResult {
@@ -53,6 +53,7 @@ export class AttributeListManagerService implements OnDestroy {
         takeUntil(this.destroyed),
         filter(([ _layers, attributeListVisible ]) => attributeListVisible),
         map(([ layers, _attributeListVisible ]) => layers),
+        map(layers => layers.filter(l => !l.hiddenFunctionality?.includes(HiddenLayerFunctionality.attributeList))),
         withLatestFrom(this.store$.select(selectAttributeListTabs)),
         concatMap(([ layers, tabs ]) => {
           const closedTabs = this.getClosedTabs(layers, tabs);
