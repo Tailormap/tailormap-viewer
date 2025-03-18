@@ -32,17 +32,17 @@
     <input type="number" matInput formControlName="autoRefreshInSeconds" />
   </mat-form-field>
   <fieldset>
-    <legend>Hidden functionality for this layer</legend>
+    <legend i18n="@@admin-core.application.hiddenFunctionality">Hidden functionality for this layer</legend>
     <mat-checkbox formControlName="hideFeatureInfo">
-      <span>Do not show in object information</span>
+      <span i18n="@@admin-core.application.hiddenFunctionality.hideFeatureInfo">Do not show in object information</span>
     </mat-checkbox>
     <mat-checkbox formControlName="hideAttributeList">
-      <span>Do not show in attribute list</span>
+      <span i18n="@@admin-core.application.hiddenFunctionality.attributeList">Do not show in attribute list</span>
     </mat-checkbox>
     <mat-checkbox formControlName="hideExport">
-      <span>Do not show attribute list export button</span>
+      <span i18n="@@admin-core.application.hiddenFunctionality.export">Do not show export button in attribute list</span>
     </mat-checkbox>
-    <p>Note: these checkboxes only hide user interface controls. Data is still accessible via the API.</p>
+    <p i18n="@@admin-core.application.hiddenFunctionality.warning">Note: these checkboxes only hide user interface controls. Data is still accessible via the API.</p>
   </fieldset>
   <div *ngIf="featureSourceAndType$ | async as featureSourceAndType" class="edit-layer-attributes">
     <button *ngIf="featureSourceAndType.featureType?.hasAttributes"
