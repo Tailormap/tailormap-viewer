@@ -31,6 +31,19 @@
     <mat-label i18n="@@admin-core.application.autoRefreshInSeconds">Auto refresh the layer (seconds)</mat-label>
     <input type="number" matInput formControlName="autoRefreshInSeconds" />
   </mat-form-field>
+  <fieldset>
+    <legend>Hidden functionality for this layer</legend>
+    <mat-checkbox formControlName="hideObjectInformation">
+      <span>Do not show in object information</span>
+    </mat-checkbox>
+    <mat-checkbox formControlName="hideAttributeList">
+      <span>Do not show in attribute list</span>
+    </mat-checkbox>
+    <mat-checkbox formControlName="hideExport">
+      <span>Do not show attribute list export button</span>
+    </mat-checkbox>
+    <p>Note: these checkboxes only hide user interface controls. Data is still accessible via the API.</p>
+  </fieldset>
   <div *ngIf="featureSourceAndType$ | async as featureSourceAndType" class="edit-layer-attributes">
     <button *ngIf="featureSourceAndType.featureType?.hasAttributes"
             mat-stroked-button

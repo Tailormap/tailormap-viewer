@@ -1,12 +1,11 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import {
-  AppLayerSettingsModel, AppTreeLayerNodeModel, FeatureTypeModel, FormModel, FormSummaryModel, SearchIndexModel,
+  AppLayerSettingsModel, AppTreeLayerNodeModel, FeatureTypeModel, FormModel, FormSummaryModel, HideFunctionality, SearchIndexModel,
 } from '@tailormap-admin/admin-api';
 import { Store } from '@ngrx/store';
 import { selectSelectedApplicationLayerSettings } from '../state/application.selectors';
 import {
-  BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, map, Observable, of, startWith, Subject, switchMap, take,
-  takeUntil,
+  BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, map, Observable, of, startWith, Subject, switchMap, take, takeUntil,
 } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
 import { LoadingStateEnum, TreeModel } from '@tailormap-viewer/shared';
@@ -98,6 +97,9 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     formId: new FormControl<number | null>(null),
     searchIndexId: new FormControl<number | null>(null),
     autoRefreshInSeconds: new FormControl<number | null>(null),
+    hideObjectInformation: new FormControl<boolean>(false),
+    hideAttributeList: new FormControl<boolean>(false),
+    hideExport: new FormControl<boolean>(false),
   });
 
   public formWarningMessageData$: Observable<{ featureType: FeatureTypeModel; layerSetting: AppLayerSettingsModel; form: FormModel } | null> = of(null);
@@ -139,6 +141,11 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
           formId: value.formId ?? null,
           searchIndexId: value.searchIndexId ?? null,
           autoRefreshInSeconds: value.autoRefreshInSeconds ?? null,
+          hiddenFunctionality: [
+            ...(value.hideObjectInformation ? [HideFunctionality.objectInformation] : []),
+            ...(value.hideAttributeList ? [HideFunctionality.attributeList] : []),
+            ...(value.hideExport ? [HideFunctionality.export] : []),
+          ],
         };
         this.layerSettingsChange.emit({ nodeId: this.node.id, settings });
       });
@@ -248,6 +255,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
       return;
     }
     const nodeSettings = this.layerSettings[node.id] || {};
+    const hiddenFunctionality = nodeSettings.hiddenFunctionality || [];
     this.layerSettingsForm.patchValue({
       title: nodeSettings.title || null,
       opacity: nodeSettings.opacity || 100,
@@ -257,6 +265,9 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
       formId: nodeSettings.formId || null,
       searchIndexId: nodeSettings.searchIndexId || null,
       autoRefreshInSeconds: nodeSettings.autoRefreshInSeconds || null,
+      hideObjectInformation: hiddenFunctionality.includes(HideFunctionality.objectInformation),
+      hideAttributeList: hiddenFunctionality.includes(HideFunctionality.attributeList),
+      hideExport: hiddenFunctionality.includes(HideFunctionality.export),
     }, { emitEvent: false });
   }
 
