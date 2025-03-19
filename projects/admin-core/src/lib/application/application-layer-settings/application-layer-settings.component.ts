@@ -97,9 +97,9 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     formId: new FormControl<number | null>(null),
     searchIndexId: new FormControl<number | null>(null),
     autoRefreshInSeconds: new FormControl<number | null>(null),
-    hideFeatureInfo: new FormControl<boolean>(false),
-    hideAttributeList: new FormControl<boolean>(false),
-    hideExport: new FormControl<boolean>(false),
+    showFeatureInfo: new FormControl<boolean>(true),
+    showInAttributeList: new FormControl<boolean>(true),
+    showExport: new FormControl<boolean>(true),
   });
 
   public formWarningMessageData$: Observable<{ featureType: FeatureTypeModel; layerSetting: AppLayerSettingsModel; form: FormModel } | null> = of(null);
@@ -142,9 +142,9 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
           searchIndexId: value.searchIndexId ?? null,
           autoRefreshInSeconds: value.autoRefreshInSeconds ?? null,
           hiddenFunctionality: [
-            ...(value.hideFeatureInfo ? [HiddenLayerFunctionality.featureInfo] : []),
-            ...(value.hideAttributeList ? [HiddenLayerFunctionality.attributeList] : []),
-            ...(value.hideExport ? [HiddenLayerFunctionality.export] : []),
+            ...(value.showFeatureInfo ? [] : [HiddenLayerFunctionality.featureInfo]),
+            ...(value.showInAttributeList ? [] : [HiddenLayerFunctionality.attributeList]),
+            ...(value.showExport ? [] : [HiddenLayerFunctionality.export]),
           ],
         };
         this.layerSettingsChange.emit({ nodeId: this.node.id, settings });
@@ -264,9 +264,9 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
       formId: nodeSettings.formId || null,
       searchIndexId: nodeSettings.searchIndexId || null,
       autoRefreshInSeconds: nodeSettings.autoRefreshInSeconds || null,
-      hideFeatureInfo: nodeSettings.hiddenFunctionality?.includes(HiddenLayerFunctionality.featureInfo),
-      hideAttributeList: nodeSettings.hiddenFunctionality?.includes(HiddenLayerFunctionality.attributeList),
-      hideExport: nodeSettings.hiddenFunctionality?.includes(HiddenLayerFunctionality.export),
+      showFeatureInfo: !nodeSettings.hiddenFunctionality?.includes(HiddenLayerFunctionality.featureInfo),
+      showInAttributeList: !nodeSettings.hiddenFunctionality?.includes(HiddenLayerFunctionality.attributeList),
+      showExport: !nodeSettings.hiddenFunctionality?.includes(HiddenLayerFunctionality.export),
     }, { emitEvent: false });
   }
 

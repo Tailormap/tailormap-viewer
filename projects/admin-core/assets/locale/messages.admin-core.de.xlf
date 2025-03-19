@@ -194,26 +194,6 @@
         <source>Folder name</source>
         <target>Ordnername</target>
       </trans-unit>
-      <trans-unit id="admin-core.application.hiddenFunctionality" datatype="html">
-        <source>Hidden functionality for this layer</source>
-        <target>Versteckte Funktionalität für diese Ebene</target>
-      </trans-unit>
-      <trans-unit id="admin-core.application.hiddenFunctionality.attributeList" datatype="html">
-        <source>Do not show in attribute list</source>
-        <target>Nicht in Attributliste anzeigen</target>
-      </trans-unit>
-      <trans-unit id="admin-core.application.hiddenFunctionality.export" datatype="html">
-        <source>Do not show export button in attribute list</source>
-        <target>Export-Schaltfläche in Attributliste nicht anzeigen</target>
-      </trans-unit>
-      <trans-unit id="admin-core.application.hiddenFunctionality.hideFeatureInfo" datatype="html">
-        <source>Do not show in object information</source>
-        <target>Nicht in Objektinformationen anzeigen</target>
-      </trans-unit>
-      <trans-unit id="admin-core.application.hiddenFunctionality.warning" datatype="html">
-        <source>Note: these checkboxes only hide user interface controls. Data is still accessible via the API.</source>
-        <target>Hinweis: Diese Kontrollkästchen verbergen nur Benutzeroberflächensteuerungen. Daten sind weiterhin über die API zugänglich.</target>
-      </trans-unit>
       <trans-unit id="admin-core.application.hide-language-switcher" datatype="html">
         <source>Hide language switcher in viewer</source>
         <target>Sprachumschalter im Viewer ausblenden</target>
@@ -237,6 +217,26 @@
       <trans-unit id="admin-core.application.layer-settings-updated" datatype="html">
         <source>Layer settings updated</source>
         <target>Ebeneneinstellungen aktualisiert</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.layerFunctionality" datatype="html">
+        <source>Functionality shown for this layer</source>
+        <target>Funktionalität für diese Ebene angezeigt</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.layerFunctionality.attributeList" datatype="html">
+        <source>Show in attribute list</source>
+        <target>In Attributliste anzeigen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.layerFunctionality.export" datatype="html">
+        <source>Show export button in attribute list</source>
+        <target>Export-Schaltfläche in der Attributliste anzeigen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.layerFunctionality.showFeatureInfo" datatype="html">
+        <source>Show in object information</source>
+        <target>In Objektinformationen anzeigen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.layerFunctionality.warning" datatype="html">
+        <source>Note: unchecking these checkboxes only hides user interface controls. Data is still accessible via the API.</source>
+        <target state="new">Hinweis: Das Deaktivieren dieser Kontrollkästchen blendet nur die Benutzeroberflächensteuerungen aus. Daten sind weiterhin über die API zugänglich.</target>
       </trans-unit>
       <trans-unit id="admin-core.application.layers" datatype="html">
         <source>Layers</source>
