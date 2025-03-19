@@ -4,9 +4,7 @@
   <h2 *ngIf="!dialogLayout" class="page-details-title"><ng-container *ngTemplateOutlet="title"></ng-container></h2>
 
   @if (!featureType.defaultGeometryAttribute) {
-    <tm-error-message i18n="@@admin-core.catalog.feature-type-no-default-geom-warning" [show]="true" [friendlyError]="true">
-      This feature type does not have a geometry attribute.
-    </tm-error-message>
+    <tm-error-message i18n="@@admin-core.catalog.feature-type-no-default-geom-warning" [show]="true" [friendlyError]="true">This feature type does not have a geometry attribute.</tm-error-message>
   }
 
   @if(featureSource$ | async; as featureSource) {
@@ -16,9 +14,7 @@
       </tm-error-message>
     } @else {
       @if (!featureType.primaryKeyAttribute) {
-        <tm-error-message i18n="@@admin-core.catalog.feature-type-no-pk-warning" [show]="true" [friendlyError]="true">
-          This feature type does not have a primary key.
-        </tm-error-message>
+        <tm-error-message i18n="@@admin-core.catalog.feature-type-no-pk-warning" [show]="true" [friendlyError]="true">This feature type does not have a primary key.</tm-error-message>
       }
 
       @if(featureType.writeable) {

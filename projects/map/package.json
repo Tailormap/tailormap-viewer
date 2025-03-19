@@ -1,19 +1,19 @@
 {
   "name": "@tailormap-viewer/map",
-  "version": "11.4.5-3",
+  "version": "11.4.5-5",
   "publishConfig": {
     "registry": "https://repo.b3p.nl/nexus/repository/npm-public"
   },
   "peerDependencies": {
-    "@angular/common": "^19.1.0",
-    "@angular/core": "^19.1.0",
+    "@angular/common": "^19.2.2",
+    "@angular/core": "^19.2.2",
     "ol": "^10.4.0",
     "proj4": "^2.15.0",
     "html2canvas": "^1.4.1",
     "jsts": "^2.12.1",
-    "rxjs": "^7.8.1",
-    "@tailormap-viewer/shared": "^11.4.5-3",
-    "@tailormap-viewer/api": "^11.4.5-3"
+    "rxjs": "^7.8.2",
+    "@tailormap-viewer/shared": "^11.4.5-5",
+    "@tailormap-viewer/api": "^11.4.5-5"
   },
   "dependencies": {
     "tslib": "^2.4.0"

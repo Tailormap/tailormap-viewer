@@ -1,3 +1,5 @@
+import { HiddenLayerFunctionality } from '@tailormap-viewer/api';
+
 export interface AppLayerSettingsModel {
   title?: string;
   opacity?: number;
@@ -9,4 +11,5 @@ export interface AppLayerSettingsModel {
   hideAttributes?: string[] | null;
   readOnlyAttributes?: string[] | null;
   autoRefreshInSeconds?: number | null;
+  hiddenFunctionality?: HiddenLayerFunctionality[] | null;
 }

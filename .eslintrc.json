@@ -116,6 +116,7 @@
             "asyncArrow": "always"
           }
         ],
+        "@angular-eslint/prefer-standalone": "off",
         "object-curly-spacing": [
           "error",
           "always"

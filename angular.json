@@ -42,7 +42,9 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
-            "outputPath": "dist/app",
+            "outputPath": {
+              "base": "dist/app"
+            },
             "index": "projects/app/src/index.html",
             "polyfills": ["projects/app/src/polyfills.ts", "@angular/localize/init"],
             "assets": [
@@ -167,6 +169,7 @@
             "sourceFile": "messages.en.xlf",
             "verbose": false,
             "resetTranslationState": false,
+            "builderI18n": "@angular/build:extract-i18n",
             "sort": "idAsc",
             "targetFiles": [
               "messages.nl.xlf"

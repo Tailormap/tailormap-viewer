@@ -40,3 +40,4 @@ export * from './form-field-value-list-item.model';
 export * from './layer-search-index.model';
 export * from './search-response.model';
 export * from './search-document.model';
+export * from './hidden-layer-functionality.model';

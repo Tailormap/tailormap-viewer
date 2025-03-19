@@ -42,7 +42,27 @@
         <source>Auto refresh the layer (seconds)</source>
         <target>Laag automatisch verversen (in seconden)</target>
       </trans-unit>
-      <trans-unit id="admin-core.application.base-maps" datatype="html">
+      <trans-unit id="admin-core.application.hiddenFunctionality" datatype="html">
+        <source>Hidden functionality for this layer</source>
+        <target>Verborgen functionaliteit voor deze laag</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.hiddenFunctionality.hideFeatureInfo" datatype="html">
+        <source>Do not show in object information</source>
+        <target>Niet tonen in objectinformatie</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.hiddenFunctionality.attributeList" datatype="html">
+        <source>Do not show in attribute list</source>
+        <target>Niet tonen in attributenlijst</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.hiddenFunctionality.export" datatype="html">
+        <source>Do not show export button in attribute list</source>
+        <target>Niet tonen exportknop in attributenlijst</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.hiddenFunctionality.warning" datatype="html">
+        <source>Note: these checkboxes only hide user interface controls. Data is still accessible via the API.</source>
+        <target>Opmerking: deze selectievakjes verbergen alleen gebruikersinterface-elementen. Gegevens zijn nog steeds toegankelijk via de API.</target>
+      </trans-unit>
+     <trans-unit id="admin-core.application.base-maps" datatype="html">
         <source>Basemaps</source>
         <target>Basiskaarten</target>
       </trans-unit>
