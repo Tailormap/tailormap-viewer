@@ -49,7 +49,7 @@
     "@stardazed/zlib": "^1.0.1",
     "@tinyhttp/content-disposition": "^2.2.2",
     "html2canvas": "^1.4.1",
-    "jspdf": "^3.0.0",
+    "jspdf": "^3.0.1",
     "jsts": "^2.12.1",
     "luxon": "^3.5.0",
     "marked": "^15.0.7",
