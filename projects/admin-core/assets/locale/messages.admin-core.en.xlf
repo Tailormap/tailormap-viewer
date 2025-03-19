@@ -32,21 +32,6 @@
       <trans-unit id="admin-core.application.autoRefreshInSeconds" datatype="html">
         <source>Auto refresh the layer (seconds)</source>
       </trans-unit>
-      <trans-unit id="admin-core.application.hiddenFunctionality" datatype="html">
-        <source>Hidden functionality for this layer</source>
-      </trans-unit>
-      <trans-unit id="admin-core.application.hiddenFunctionality.hideFeatureInfo" datatype="html">
-        <source>Do not show in object information</source>
-      </trans-unit>
-      <trans-unit id="admin-core.application.hiddenFunctionality.attributeList" datatype="html">
-        <source>Do not show in attribute list</source>
-      </trans-unit>
-      <trans-unit id="admin-core.application.hiddenFunctionality.export" datatype="html">
-        <source>Do not show export button in attribute list</source>
-      </trans-unit>
-      <trans-unit id="admin-core.application.hiddenFunctionality.warning" datatype="html">
-        <source>Note: these checkboxes only hide user interface controls. Data is still accessible via the API.</source>
-      </trans-unit>
       <trans-unit id="admin-core.application.base-maps" datatype="html">
         <source>Basemaps</source>
       </trans-unit>
@@ -160,6 +145,21 @@
       </trans-unit>
       <trans-unit id="admin-core.application.folder-name" datatype="html">
         <source>Folder name</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.hiddenFunctionality" datatype="html">
+        <source>Hidden functionality for this layer</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.hiddenFunctionality.attributeList" datatype="html">
+        <source>Do not show in attribute list</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.hiddenFunctionality.export" datatype="html">
+        <source>Do not show export button in attribute list</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.hiddenFunctionality.hideFeatureInfo" datatype="html">
+        <source>Do not show in object information</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.hiddenFunctionality.warning" datatype="html">
+        <source>Note: these checkboxes only hide user interface controls. Data is still accessible via the API.</source>
       </trans-unit>
       <trans-unit id="admin-core.application.hide-language-switcher" datatype="html">
         <source>Hide language switcher in viewer</source>
@@ -401,21 +401,6 @@
       <trans-unit id="admin-core.catalog.enter-xyz-crs" datatype="html">
         <source>CRS for this XYZ layer</source>
       </trans-unit>
-      <trans-unit id="admin-core.catalog.server-type" datatype="html">
-        <source>Server type</source>
-      </trans-unit>
-      <trans-unit id="admin-core.catalog.server-type.auto" datatype="html">
-        <source>Auto-detect based on URL (/geoserver/ or /mapserv)</source>
-      </trans-unit>
-      <trans-unit id="admin-core.catalog.server-type.generic" datatype="html">
-        <source>Generic WMS only</source>
-      </trans-unit>
-      <trans-unit id="admin-core.catalog.server-type.geoserver" datatype="html">
-        <source>GeoServer (ECQL filtering, HiDPI)</source>
-      </trans-unit>
-      <trans-unit id="admin-core.catalog.server-type.mapserver" datatype="html">
-        <source>MapServer (HiDPI)</source>
-      </trans-unit>
       <trans-unit id="admin-core.catalog.error-creating-feature-source" datatype="html">
         <source>Error while creating feature source: <x id="PH" equiv-text="message"/></source>
       </trans-unit>
@@ -481,6 +466,21 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.feature-type-details" datatype="html">
         <source>Details for feature type <x id="INTERPOLATION" equiv-text="{{ featureType.title }}"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.feature-type-editable-info" datatype="html">
+        <source>This feature type appears to be editable. Editing may still fail if the database user does not have the required permissions or because of other reasons such as triggers, etc.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.feature-type-no-default-geom-warning" datatype="html">
+        <source>This feature type does not have a geometry attribute.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.feature-type-no-pk-warning" datatype="html">
+        <source>This feature type does not have a primary key.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.feature-type-not-editable-warning-not-jdbc" datatype="html">
+        <source>This feature type is not editable because editing is only supported for JDBC feature sources.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.feature-type-read-only-warning-jdbc" datatype="html">
+        <source>This JDBC feature type is read-only because of a missing primary key, a composite primary key or an unknown column type. Check the logs for warnings after refreshing the feature source for details.</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.feature-type-template" datatype="html">
         <source>Feature info template</source>
@@ -605,6 +605,21 @@
       <trans-unit id="admin-core.catalog.schema" datatype="html">
         <source>Schema</source>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.server-type" datatype="html">
+        <source>Server type</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.server-type.auto" datatype="html">
+        <source>Auto-detect based on URL (/geoserver/ or /mapserv)</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.server-type.generic" datatype="html">
+        <source>Generic WMS</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.server-type.geoserver" datatype="html">
+        <source>GeoServer (ECQL filtering, HiDPI)</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.server-type.mapserver" datatype="html">
+        <source>MapServer (HiDPI)</source>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.service" datatype="html">
         <source>Service</source>
       </trans-unit>
@@ -637,21 +652,6 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.substitute-layer-url-template" datatype="html">
         <source>High-DPI substitute URL template</source>
-      </trans-unit>
-      <trans-unit id="admin-core.catalog.feature-type-no-pk-warning" datatype="html">
-        <source>This feature type does not have a primary key.</source>
-      </trans-unit>
-      <trans-unit id="admin-core.catalog.feature-type-no-default-geom-warning" datatype="html">
-        <source>This feature type does not have a geometry attribute.</source>
-      </trans-unit>
-      <trans-unit id="admin-core.catalog.feature-type-editable-info" datatype="html">
-        <source>This feature type appears to be editable. Editing may still fail if the database user does not have the required permissions or because of other reasons such as triggers, etc.</source>
-      </trans-unit>
-      <trans-unit id="admin-core.catalog.feature-type-read-only-warning-jdbc" datatype="html">
-        <source>This JDBC feature type is read-only because of a missing primary key, a composite primary key or an unknown column type. Check the logs for warnings after refreshing the feature source for details.</source>
-      </trans-unit>
-      <trans-unit id="admin-core.catalog.feature-type-not-editable-warning-not-jdbc" datatype="html">
-        <source>This feature type is not editable because editing is only supported for JDBC feature sources.</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.technical-name" datatype="html">
         <source>Technical name: <x id="INTERPOLATION" equiv-text="{{ featureType.name }}"/></source>
@@ -1239,7 +1239,7 @@
         <source>Every first day of the month at 18:00</source>
       </trans-unit>
       <trans-unit id="admin-core.search-index.schedule.every-week" datatype="html">
-        <source>Every week monday at 18:00</source>
+        <source>Every week Monday at 18:00</source>
       </trans-unit>
       <trans-unit id="admin-core.search-index.schedule.no-schedule" datatype="html">
         <source>No schedule</source>
