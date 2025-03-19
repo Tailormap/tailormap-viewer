@@ -3,7 +3,7 @@ import {
   AppLayerSettingsModel, AppTreeLayerNodeModel, FeatureTypeModel, FormModel, FormSummaryModel, SearchIndexModel,
 } from '@tailormap-admin/admin-api';
 import { Store } from '@ngrx/store';
-import { selectSelectedApplicationLayerSettings } from '../state/application.selectors';
+import { selectDisabledComponentsForSelectedApplication, selectSelectedApplicationLayerSettings } from '../state/application.selectors';
 import {
   BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, map, Observable, of, startWith, Subject, switchMap, take, takeUntil,
 } from 'rxjs';
@@ -23,7 +23,9 @@ import { loadForms } from '../../form/state/form.actions';
 import { FormService } from '../../form/services/form.service';
 import { selectSearchIndexesForFeatureType, selectSearchIndexesLoadStatus } from '../../search-index/state/search-index.selectors';
 import { loadSearchIndexes } from '../../search-index/state/search-index.actions';
-import { ApplicationFeature, ApplicationFeatureSwitchService, HiddenLayerFunctionality } from '@tailormap-viewer/api';
+import {
+  ApplicationFeature, ApplicationFeatureSwitchService, BaseComponentTypeEnum, HiddenLayerFunctionality,
+} from '@tailormap-viewer/api';
 
 type FeatureSourceAndType = {
   featureSource: ExtendedFeatureSourceModel;
@@ -114,6 +116,17 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     this.searchIndexEnabled$ = this.applicationFeatureSwitchService.isFeatureEnabled$(ApplicationFeature.SEARCH_INDEX);
   }
 
+  private setFormFieldEnabled(field: string, enabled: boolean) {
+    const control = this.layerSettingsForm.get(field);
+    if(control) {
+      if (enabled) {
+        control.enable();
+      } else {
+        control.disable();
+      }
+    }
+  }
+
   public ngOnInit(): void {
     this.store$.select(selectSelectedApplicationLayerSettings)
       .pipe(takeUntil(this.destroyed))
@@ -121,6 +134,14 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
         this.layerSettings = layerSettings;
         this.layerSettingsSubject.next(layerSettings);
         this.initForm(this.node);
+      });
+
+    this.store$.select(selectDisabledComponentsForSelectedApplication)
+      .pipe(takeUntil(this.destroyed))
+      .subscribe((disabledComponents) => {
+        this.setFormFieldEnabled('showFeatureInfo', !disabledComponents.includes(BaseComponentTypeEnum.FEATURE_INFO));
+        this.setFormFieldEnabled('showInAttributeList', !disabledComponents.includes(BaseComponentTypeEnum.ATTRIBUTE_LIST));
+        this.setFormFieldEnabled('showExport', !disabledComponents.includes(BaseComponentTypeEnum.ATTRIBUTE_LIST));
       });
 
     this.layerSettingsForm.valueChanges
