@@ -1,6 +1,6 @@
 {
   "name": "@tailormap-admin/admin-api",
-  "version": "11.5.0-rc4",
+  "version": "11.5.0-rc5",
   "publishConfig": {
     "registry": "https://repo.b3p.nl/nexus/repository/npm-public"
   },
