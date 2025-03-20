@@ -1,6 +1,6 @@
 import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type.enum';
 import {
-  ArrowTypeEnum, DrawingFeatureModel, DrawingFeatureModelAttributes, DrawingFeatureStyleModel, LabelStyleEnum, MakerType, StrokeTypeEnum,
+  ArrowTypeEnum, DrawingFeatureModel, DrawingFeatureModelAttributes, DrawingFeatureStyleModel, LabelStyleEnum, MarkerType, StrokeTypeEnum,
 } from '../models/drawing-feature.model';
 import { DrawingToolEvent, MapStyleModel } from '@tailormap-viewer/map';
 import { v4 as uuidv4 } from 'uuid';
@@ -11,7 +11,7 @@ export class DrawingHelper {
 
   private static updatedDefaultStyle: Partial<DrawingFeatureStyleModel> = {};
 
-  public static getAvailableMarkers(): Array<{ value: MakerType; icon: string }> {
+  public static getAvailableMarkers(): Array<{ value: MarkerType; icon: string }> {
     return [
       { value: 'circle', icon: 'markers_circle' },
       { value: 'square', icon: 'markers_square' },
