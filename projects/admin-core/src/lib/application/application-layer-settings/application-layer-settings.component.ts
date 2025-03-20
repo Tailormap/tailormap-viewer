@@ -3,7 +3,7 @@ import {
   AppLayerSettingsModel, AppTreeLayerNodeModel, FeatureTypeModel, FormModel, FormSummaryModel, SearchIndexModel,
 } from '@tailormap-admin/admin-api';
 import { Store } from '@ngrx/store';
-import { selectSelectedApplicationLayerSettings } from '../state/application.selectors';
+import { selectDisabledComponentsForSelectedApplication, selectSelectedApplicationLayerSettings } from '../state/application.selectors';
 import {
   BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, map, Observable, of, startWith, Subject, switchMap, take, takeUntil,
 } from 'rxjs';
@@ -23,7 +23,9 @@ import { loadForms } from '../../form/state/form.actions';
 import { FormService } from '../../form/services/form.service';
 import { selectSearchIndexesForFeatureType, selectSearchIndexesLoadStatus } from '../../search-index/state/search-index.selectors';
 import { loadSearchIndexes } from '../../search-index/state/search-index.actions';
-import { ApplicationFeature, ApplicationFeatureSwitchService, HiddenLayerFunctionality } from '@tailormap-viewer/api';
+import {
+  ApplicationFeature, ApplicationFeatureSwitchService, BaseComponentTypeEnum, HiddenLayerFunctionality,
+} from '@tailormap-viewer/api';
 
 type FeatureSourceAndType = {
   featureSource: ExtendedFeatureSourceModel;
@@ -97,9 +99,9 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     formId: new FormControl<number | null>(null),
     searchIndexId: new FormControl<number | null>(null),
     autoRefreshInSeconds: new FormControl<number | null>(null),
-    hideFeatureInfo: new FormControl<boolean>(false),
-    hideAttributeList: new FormControl<boolean>(false),
-    hideExport: new FormControl<boolean>(false),
+    showFeatureInfo: new FormControl<boolean>(true),
+    showInAttributeList: new FormControl<boolean>(true),
+    showExport: new FormControl<boolean>(true),
   });
 
   public formWarningMessageData$: Observable<{ featureType: FeatureTypeModel; layerSetting: AppLayerSettingsModel; form: FormModel } | null> = of(null);
@@ -114,6 +116,29 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     this.searchIndexEnabled$ = this.applicationFeatureSwitchService.isFeatureEnabled$(ApplicationFeature.SEARCH_INDEX);
   }
 
+  private setFormFieldEnabled(field: string, enabled: boolean) {
+    const control = this.layerSettingsForm.get(field);
+    if(control) {
+      if (enabled) {
+        control.enable();
+      } else {
+        control.disable();
+      }
+    }
+  }
+
+  /**
+   * Get the value of a checkbox field, return the original value if it is disabled.
+   */
+  private getHiddenFunctionalityCheckboxValue(controlName: string, formValue: boolean, hiddenFunctionalityKey: HiddenLayerFunctionality): boolean {
+    if (this.layerSettingsForm.get(controlName)?.disabled) {
+      const nodeSettings = this.layerSettings[this.node?.id || -1] || {};
+      return !nodeSettings.hiddenFunctionality?.includes(hiddenFunctionalityKey);
+    } else {
+      return formValue;
+    }
+  }
+
   public ngOnInit(): void {
     this.store$.select(selectSelectedApplicationLayerSettings)
       .pipe(takeUntil(this.destroyed))
@@ -121,6 +146,14 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
         this.layerSettings = layerSettings;
         this.layerSettingsSubject.next(layerSettings);
         this.initForm(this.node);
+      });
+
+    this.store$.select(selectDisabledComponentsForSelectedApplication)
+      .pipe(takeUntil(this.destroyed))
+      .subscribe((disabledComponents) => {
+        this.setFormFieldEnabled('showFeatureInfo', !disabledComponents.includes(BaseComponentTypeEnum.FEATURE_INFO));
+        this.setFormFieldEnabled('showInAttributeList', !disabledComponents.includes(BaseComponentTypeEnum.ATTRIBUTE_LIST));
+        this.setFormFieldEnabled('showExport', !disabledComponents.includes(BaseComponentTypeEnum.ATTRIBUTE_LIST));
       });
 
     this.layerSettingsForm.valueChanges
@@ -132,6 +165,11 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
         if (!this.node) {
           return;
         }
+
+        const showFeatureInfo = this.getHiddenFunctionalityCheckboxValue('showFeatureInfo', !!value.showFeatureInfo, HiddenLayerFunctionality.featureInfo);
+        const showInAttributeList = this.getHiddenFunctionalityCheckboxValue('showInAttributeList', !!value.showInAttributeList, HiddenLayerFunctionality.attributeList);
+        const showExport = this.getHiddenFunctionalityCheckboxValue('showExport', !!value.showExport, HiddenLayerFunctionality.export);
+
         const settings = !value ? null : {
           title: value.title || undefined,
           opacity: value.opacity,
@@ -142,9 +180,9 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
           searchIndexId: value.searchIndexId ?? null,
           autoRefreshInSeconds: value.autoRefreshInSeconds ?? null,
           hiddenFunctionality: [
-            ...(value.hideFeatureInfo ? [HiddenLayerFunctionality.featureInfo] : []),
-            ...(value.hideAttributeList ? [HiddenLayerFunctionality.attributeList] : []),
-            ...(value.hideExport ? [HiddenLayerFunctionality.export] : []),
+            ...showFeatureInfo ? [] : [HiddenLayerFunctionality.featureInfo],
+            ...showInAttributeList ? [] : [HiddenLayerFunctionality.attributeList],
+            ...showExport ? [] : [HiddenLayerFunctionality.export],
           ],
         };
         this.layerSettingsChange.emit({ nodeId: this.node.id, settings });
@@ -264,9 +302,9 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
       formId: nodeSettings.formId || null,
       searchIndexId: nodeSettings.searchIndexId || null,
       autoRefreshInSeconds: nodeSettings.autoRefreshInSeconds || null,
-      hideFeatureInfo: nodeSettings.hiddenFunctionality?.includes(HiddenLayerFunctionality.featureInfo),
-      hideAttributeList: nodeSettings.hiddenFunctionality?.includes(HiddenLayerFunctionality.attributeList),
-      hideExport: nodeSettings.hiddenFunctionality?.includes(HiddenLayerFunctionality.export),
+      showFeatureInfo: !nodeSettings.hiddenFunctionality?.includes(HiddenLayerFunctionality.featureInfo),
+      showInAttributeList: !nodeSettings.hiddenFunctionality?.includes(HiddenLayerFunctionality.attributeList),
+      showExport: !nodeSettings.hiddenFunctionality?.includes(HiddenLayerFunctionality.export),
     }, { emitEvent: false });
   }
 

@@ -238,6 +238,26 @@
         <source>Layer settings updated</source>
         <target>Laaginstellingen bijgewerkt</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.layerFunctionality" datatype="html">
+        <source>Functionality shown for this layer</source>
+        <target>Functionaliteit getoond voor deze laag</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.layerFunctionality.attributeList" datatype="html">
+        <source>Show in attribute list</source>
+        <target>Toon in attributenlijst</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.layerFunctionality.export" datatype="html">
+        <source>Show export button in attribute list</source>
+        <target>Toon exportknop in attributenlijst</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.layerFunctionality.showFeatureInfo" datatype="html">
+        <source>Show in object information</source>
+        <target>Toon in objectinformatie</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.layerFunctionality.warning" datatype="html">
+        <source>Note: unchecking these checkboxes only hides user interface controls. Data is still accessible via the API.</source>
+        <target>Opmerking: deze selectievakjes verbergen alleen gebruikersinterface-elementen. Gegevens zijn nog steeds toegankelijk via de API.</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.layers" datatype="html">
         <source>Layers</source>
         <target>Lagen</target>

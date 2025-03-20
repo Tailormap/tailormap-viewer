@@ -17,3 +17,7 @@ tm-admin-form-warning-message {
   display: block;
   margin-top: 16px;
 }
+
+fieldset {
+  margin: 16px 0;
+}
