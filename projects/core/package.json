@@ -22,7 +22,7 @@
     "@sentry/angular": "^8.50.0",
     "@sentry/browser": "^8.50.0",
     "@stardazed/zlib": "^1.0.1",
-    "@tailormap-viewer/shared": "^11.4.5-6-RC1",
+    "@tailormap-viewer/shared": "^11.5.0-rc1",
     "@tailormap-viewer/map": "^11.4.5-6-RC1",
     "@tailormap-viewer/api": "^11.5.0-rc1",
     "jspdf": "^3.0.1",
