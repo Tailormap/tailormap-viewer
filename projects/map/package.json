@@ -13,7 +13,7 @@
     "jsts": "^2.12.1",
     "rxjs": "^7.8.2",
     "@tailormap-viewer/shared": "^11.5.0-rc4",
-    "@tailormap-viewer/api": "^11.5.0-rc4"
+    "@tailormap-viewer/api": "^11.5.0-rc5"
   },
   "dependencies": {
     "tslib": "^2.4.0"
