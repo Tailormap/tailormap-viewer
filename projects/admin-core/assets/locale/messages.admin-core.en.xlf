@@ -179,6 +179,21 @@
       <trans-unit id="admin-core.application.layer-settings-updated" datatype="html">
         <source>Layer settings updated</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.layerFunctionality" datatype="html">
+        <source>Functionality shown for this layer</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.layerFunctionality.attributeList" datatype="html">
+        <source>Show in attribute list</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.layerFunctionality.export" datatype="html">
+        <source>Show export button in attribute list</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.layerFunctionality.showFeatureInfo" datatype="html">
+        <source>Show in object information</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.layerFunctionality.warning" datatype="html">
+        <source>Note: unchecking these checkboxes only hides user interface controls. Data is still accessible via the API.</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.layers" datatype="html">
         <source>Layers</source>
       </trans-unit>
