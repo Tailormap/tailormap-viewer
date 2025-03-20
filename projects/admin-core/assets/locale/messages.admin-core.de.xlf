@@ -194,6 +194,26 @@
         <source>Folder name</source>
         <target>Ordnername</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.hiddenFunctionality" datatype="html">
+        <source>Hidden functionality for this layer</source>
+        <target>Versteckte Funktionalität für diese Ebene</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.hiddenFunctionality.attributeList" datatype="html">
+        <source>Do not show in attribute list</source>
+        <target>Nicht in Attributliste anzeigen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.hiddenFunctionality.export" datatype="html">
+        <source>Do not show export button in attribute list</source>
+        <target>Export-Schaltfläche in Attributliste nicht anzeigen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.hiddenFunctionality.hideFeatureInfo" datatype="html">
+        <source>Do not show in object information</source>
+        <target>Nicht in Objektinformationen anzeigen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.hiddenFunctionality.warning" datatype="html">
+        <source>Note: these checkboxes only hide user interface controls. Data is still accessible via the API.</source>
+        <target>Hinweis: Diese Kontrollkästchen verbergen nur Benutzeroberflächensteuerungen. Daten sind weiterhin über die API zugänglich.</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.hide-language-switcher" datatype="html">
         <source>Hide language switcher in viewer</source>
         <target>Sprachumschalter im Viewer ausblenden</target>
