@@ -20,7 +20,7 @@ export class FeatureHelper {
    * @param sourceProjection
    * @param mapProjection
    */
-  public static fromGeoJSON(geojsonGeometry: Object, sourceProjection?: string, mapProjection?: string): Geometry {
+  public static fromGeoJSON(geojsonGeometry: object, sourceProjection?: string, mapProjection?: string): Geometry {
     return  FeatureHelper.geoJsonFormatter.readGeometry(geojsonGeometry, {
       dataProjection: sourceProjection,
       featureProjection: mapProjection,
