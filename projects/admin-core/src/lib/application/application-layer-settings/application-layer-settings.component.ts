@@ -127,6 +127,18 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Get the value of a checkbox field, return the original value if it is disabled.
+   */
+  private getHiddenFunctionalityCheckboxValue(controlName: string, formValue: boolean, hiddenFunctionalityKey: HiddenLayerFunctionality): boolean {
+    if (this.layerSettingsForm.get(controlName)?.disabled) {
+      const nodeSettings = this.layerSettings[this.node?.id || -1] || {};
+      return !nodeSettings.hiddenFunctionality?.includes(hiddenFunctionalityKey);
+    } else {
+      return formValue;
+    }
+  }
+
   public ngOnInit(): void {
     this.store$.select(selectSelectedApplicationLayerSettings)
       .pipe(takeUntil(this.destroyed))
@@ -153,6 +165,11 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
         if (!this.node) {
           return;
         }
+
+        const showFeatureInfo = this.getHiddenFunctionalityCheckboxValue('showFeatureInfo', !!value.showFeatureInfo, HiddenLayerFunctionality.featureInfo);
+        const showInAttributeList = this.getHiddenFunctionalityCheckboxValue('showInAttributeList', !!value.showInAttributeList, HiddenLayerFunctionality.attributeList);
+        const showExport = this.getHiddenFunctionalityCheckboxValue('showExport', !!value.showExport, HiddenLayerFunctionality.export);
+
         const settings = !value ? null : {
           title: value.title || undefined,
           opacity: value.opacity,
@@ -163,9 +180,9 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
           searchIndexId: value.searchIndexId ?? null,
           autoRefreshInSeconds: value.autoRefreshInSeconds ?? null,
           hiddenFunctionality: [
-            ...(value.showFeatureInfo ? [] : [HiddenLayerFunctionality.featureInfo]),
-            ...(value.showInAttributeList ? [] : [HiddenLayerFunctionality.attributeList]),
-            ...(value.showExport ? [] : [HiddenLayerFunctionality.export]),
+            ...showFeatureInfo ? [] : [HiddenLayerFunctionality.featureInfo],
+            ...showInAttributeList ? [] : [HiddenLayerFunctionality.attributeList],
+            ...showExport ? [] : [HiddenLayerFunctionality.export],
           ],
         };
         this.layerSettingsChange.emit({ nodeId: this.node.id, settings });
