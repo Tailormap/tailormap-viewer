@@ -6,7 +6,7 @@ import {
 } from '@tailormap-viewer/map';
 import { ServerType, ServiceModel, ServiceProtocol } from '@tailormap-viewer/api';
 import {
-  combineLatest, concatMap, distinctUntilChanged, filter, first, forkJoin, map, Observable, of, Subject, take, takeUntil, tap,
+  combineLatest, concatMap, distinctUntilChanged, filter, forkJoin, map, Observable, of, Subject, take, takeUntil, tap,
 } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { ArrayHelper, HtmlifyHelper } from '@tailormap-viewer/shared';
