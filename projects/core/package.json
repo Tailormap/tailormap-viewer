@@ -29,7 +29,8 @@
     "luxon": "^3.5.0",
     "nanoid": "^5.1.4",
     "rxjs": "^7.8.2",
-    "svg2pdf.js": "^2.4.0"
+    "svg2pdf.js": "^2.4.0",
+    "uuid": "^11.1.0"
   },
   "dependencies": {
     "tslib": "^2.4.0"
