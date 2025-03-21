@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams, HttpXsrfTokenExtractor } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams, HttpStatusCode, HttpXsrfTokenExtractor } from '@angular/common/http';
 import { LoginConfigurationModel, UserResponseModel } from '../models';
 import { catchError, map, Observable, of, switchMap } from 'rxjs';
 import { TailormapSecurityApiV1ServiceModel } from './tailormap-security-api-v1.service.model';
 import { TailormapApiConstants } from './tailormap-api.constants';
+import { ExtendedUserResponseModel } from '../models/extended-user-response.model';
 
 @Injectable()
 export class TailormapSecurityApiV1Service implements TailormapSecurityApiV1ServiceModel {
@@ -20,12 +21,17 @@ export class TailormapSecurityApiV1Service implements TailormapSecurityApiV1Serv
     );
   }
 
-  public getUser$(): Observable<UserResponseModel> {
-    return this.httpClient.get<UserResponseModel>(
-      `${TailormapApiConstants.BASE_URL}/user`,
-    ).pipe(
-      catchError((): Observable<UserResponseModel> => of({ isAuthenticated: false, username: '', roles: [], properties: [], groupProperties: [] })),
-    );
+  public getUser$(): Observable<ExtendedUserResponseModel> {
+    const errorResponse: ExtendedUserResponseModel = { isAuthenticated: false, username: '', roles: [], properties: [], groupProperties: [], error: 'other' };
+    return this.httpClient.get<UserResponseModel>(`${TailormapApiConstants.BASE_URL}/user`)
+      .pipe(
+        catchError((e: HttpErrorResponse): Observable<ExtendedUserResponseModel> => {
+            if (e.status === HttpStatusCode.Unauthorized || e.status === HttpStatusCode.Forbidden) {
+              return of({ ...errorResponse, error: 'unauthorized' });
+            }
+            return of(errorResponse);
+        }),
+      );
   }
 
   public login$(username: string, password: string): Observable<UserResponseModel> {

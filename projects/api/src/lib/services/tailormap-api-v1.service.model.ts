@@ -5,15 +5,12 @@ import {
 import { Observable } from 'rxjs';
 import { FeaturesResponseModel } from '../models/features-response.model';
 import { UniqueValuesResponseModel } from '../models/unique-values-response.model';
-import { UserResponseModel } from '../models/user-response.model';
 import { LayerExportCapabilitiesModel } from '../models/layer-export-capabilities.model';
 import { HttpResponse, HttpStatusCode } from '@angular/common/http';
 
 export interface TailormapApiV1ServiceModel {
 
   getVersion$(): Observable<VersionResponseModel>;
-
-  getUser$(): Observable<UserResponseModel>;
 
   getViewer$(id?: string): Observable<ViewerResponseModel>;
 

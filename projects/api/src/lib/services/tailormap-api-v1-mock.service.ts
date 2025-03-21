@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {
-  ViewerResponseModel, LayerDetailsModel, MapResponseModel, UserResponseModel, VersionResponseModel, FeatureModel, ConfigResponseModel,
+  ViewerResponseModel, LayerDetailsModel, MapResponseModel, VersionResponseModel, FeatureModel, ConfigResponseModel,
   SearchResponseModel,
 } from '../models';
 import { delay, Observable, of } from 'rxjs';
@@ -10,7 +10,7 @@ import { UniqueValuesResponseModel } from '../models/unique-values-response.mode
 import {
   getViewerResponseData, getFeaturesResponseModel, getLayerDetailsModel, getMapResponseData,
   getUniqueValuesResponseModel,
-  getVersionResponseModel, getUserResponseModel, getLayerExportCapabilitiesModel, getFeatureModel, getConfigModel,
+  getVersionResponseModel, getLayerExportCapabilitiesModel, getFeatureModel, getConfigModel,
 } from '../mock-data';
 import { LayerExportCapabilitiesModel } from '../models/layer-export-capabilities.model';
 import { HttpResponse, HttpStatusCode } from '@angular/common/http';
@@ -20,10 +20,6 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
 
   public getVersion$(): Observable<VersionResponseModel> {
     return of(getVersionResponseModel());
-  }
-
-  public getUser$(): Observable<UserResponseModel> {
-    return of(getUserResponseModel());
   }
 
   public getViewer$(_id?: string): Observable<ViewerResponseModel> {
