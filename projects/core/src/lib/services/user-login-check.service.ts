@@ -33,7 +33,7 @@ export class UserLoginCheckService {
         if (!this.isAuthenticated && userDetails.isAuthenticated) {
           this.isAuthenticated = true;
         }
-        if (this.isAuthenticated && !userDetails.isAuthenticated && !this.confirmOpen) {
+        if (this.isAuthenticated && (!userDetails.isAuthenticated && userDetails.error === 'unauthorized') && !this.confirmOpen) {
           if (this.router.url.includes('/login')) {
             this.isAuthenticated = false;
             return;
