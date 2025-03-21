@@ -29,5 +29,6 @@ export interface AppLayerModel {
   description?: string;
   autoRefreshInSeconds?: number | null;
   searchIndex: LayerSearchIndexModel | null;
+  webMercatorAvailable?: boolean;
   hiddenFunctionality?: HiddenLayerFunctionality[] | null;
 }

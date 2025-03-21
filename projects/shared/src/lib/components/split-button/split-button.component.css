@@ -60,3 +60,7 @@ mat-button-toggle ::ng-deep .mat-button-toggle-label-content {
     display: block;
   }
 }
+
+.not-visible-on-map {
+  color: var(--disabled-text-color);
+}

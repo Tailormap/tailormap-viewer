@@ -62,11 +62,17 @@
                 "glob": "**/*",
                 "input": "projects/admin-core/assets/icons",
                 "output": "icons"
+              },
+              {
+                "glob": "**/*",
+                "input": "./node_modules/cesium/Build/Cesium",
+                "output": "cesium"
               }
             ],
             "styles": [
               "projects/core/assets/custom-theme.scss",
-              "projects/core/assets/tailormap-styles.css"
+              "projects/core/assets/tailormap-styles.css",
+              "./node_modules/cesium/Build/Cesium/Widgets/widgets.css"
             ],
             "scripts": [],
             "allowedCommonJsDependencies": [

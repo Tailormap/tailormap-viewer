@@ -80,6 +80,9 @@
       <trans-unit id="admin-core.application.component-table-of-contents" datatype="html">
         <source>Table of contents</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.component-terrain-layer-toggle" datatype="html">
+        <source>Terrain Layer Toggle</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.components" datatype="html">
         <source>Components</source>
       </trans-unit>
@@ -121,6 +124,12 @@
       </trans-unit>
       <trans-unit id="admin-core.application.editable" datatype="html">
         <source>Editable</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.enable-3D" datatype="html">
+        <source>Enable 3D viewing</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.enable-3D-hint" datatype="html">
+        <source>Only the layers that are available in EPSG:3857 are visible in 3D</source>
       </trans-unit>
       <trans-unit id="admin-core.application.error-creating-application" datatype="html">
         <source>Error while creating application.</source>
@@ -271,6 +280,12 @@
       </trans-unit>
       <trans-unit id="admin-core.application.styling" datatype="html">
         <source>Styling</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.terrain" datatype="html">
+        <source>Terrain</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.terrain-layers" datatype="html">
+        <source>Terrain Layers</source>
       </trans-unit>
       <trans-unit id="admin-core.authorizations.access" datatype="html">
         <source>Access</source>
@@ -554,6 +569,9 @@
       <trans-unit id="admin-core.catalog.layer-settings-updated" datatype="html">
         <source>Layer settings updated</source>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.layer.crs" datatype="html">
+        <source>Available projections for this layer</source>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.max-zoom-level" datatype="html">
         <source>Maximum zoom level</source>
       </trans-unit>
@@ -583,6 +601,9 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.proxy-enabled" datatype="html">
         <source>Proxy enabled</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.quantizedmesh" datatype="html">
+        <source>Quantized Mesh (Terrain model)</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.readonly-in-catalog" datatype="html">
         <source>This attribute is set to not editable in the catalog and cannot be changed here</source>

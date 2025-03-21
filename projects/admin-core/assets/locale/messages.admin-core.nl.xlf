@@ -106,6 +106,10 @@
         <source>Table of contents</source>
         <target>Beschikbare lagen</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.component-terrain-layer-toggle" datatype="html">
+        <source>Terrain Layer Toggle</source>
+        <target>Terrein Laag Schakelaar</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.components" datatype="html">
         <source>Components</source>
         <target>Componenten</target>
@@ -161,6 +165,14 @@
       <trans-unit id="admin-core.application.editable" datatype="html">
         <source>Editable</source>
         <target>Bewerkbaar</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.enable-3D" datatype="html">
+        <source>Enable 3D viewing</source>
+        <target>3D-weergave inschakelen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.enable-3D-hint" datatype="html">
+        <source>Only the layers that are available in EPSG:3857 are visible in 3D</source>
+        <target>Alleen de lagen die beschikbaar zijn in EPSG:3857 zijn zichtbaar in 3D</target>
       </trans-unit>
       <trans-unit id="admin-core.application.error-creating-application" datatype="html">
         <source>Error while creating application.</source>
@@ -361,6 +373,14 @@
       <trans-unit id="admin-core.application.styling" datatype="html">
         <source>Styling</source>
         <target>Opmaak</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.terrain" datatype="html">
+        <source>Terrain</source>
+        <target>Terrein</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.terrain-layers" datatype="html">
+        <source>Terrain Layers</source>
+        <target>Terrein Lagen</target>
       </trans-unit>
       <trans-unit id="admin-core.authorizations.access" datatype="html">
         <source>Access</source>
@@ -738,6 +758,10 @@
         <source>Layer settings updated</source>
         <target>Laaginstellingen bijgewerkt</target>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.layer.crs" datatype="html">
+        <source>Available projections for this layer</source>
+        <target>Beschikbare projecties voor deze laag</target>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.max-zoom-level" datatype="html">
         <source>Maximum zoom level</source>
         <target>Maximaal zoomniveau</target>
@@ -777,6 +801,10 @@
       <trans-unit id="admin-core.catalog.proxy-enabled" datatype="html">
         <source>Proxy enabled</source>
         <target>Proxy ingeschakeld</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.quantizedmesh" datatype="html">
+        <source>Quantized Mesh (Terrain model)</source>
+        <target>Quantized Mesh (Terrein model)</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.readonly-in-catalog" datatype="html">
         <source>This attribute is set to not editable in the catalog and cannot be changed here</source>

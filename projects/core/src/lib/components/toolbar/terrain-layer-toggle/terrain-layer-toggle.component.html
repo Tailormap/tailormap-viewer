@@ -1,0 +1,5 @@
+<tm-split-button small_screens_icon="layers_filled"
+                 [options]="terrainLayers$ | async"
+                 [emptyLabel]="initiallyCheckedLabels$ | async"
+                 [selectedOption]="selectedTerrainNodeId$ | async"
+                 (optionSelected)="terrainChanged($event)"></tm-split-button>

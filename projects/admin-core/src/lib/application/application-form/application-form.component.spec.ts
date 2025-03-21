@@ -68,6 +68,7 @@ describe('ApplicationFormComponent', () => {
           hideLanguageSwitcher: false,
         },
         uiSettings: {
+          enable3D: false,
           hideLoginButton: false,
         },
       });
@@ -79,7 +80,7 @@ describe('ApplicationFormComponent', () => {
     expect(await screen.findByPlaceholderText('Name')).toHaveValue(application.name);
     expect(await screen.findByPlaceholderText('Title')).toHaveValue(application.title);
     await userEvent.click(await screen.findByPlaceholderText('Projection'));
-    await userEvent.click(await screen.findByText('EPSG:3857', { exact: false }));
+    await userEvent.click(await screen.findByText('EPSG:3857 (WGS 84 / Pseudo-Mercator)', { exact: false }));
     await waitFor(() => {
       expect(onUpdate).toHaveBeenCalledWith({
         application: {
@@ -96,6 +97,7 @@ describe('ApplicationFormComponent', () => {
           hideLanguageSwitcher: false,
         },
         uiSettings: {
+          enable3D: false,
           hideLoginButton: false,
         },
       });

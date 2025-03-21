@@ -1,20 +1,21 @@
 import { inject, Injectable } from '@angular/core';
 import {
-  AttributeType, FeaturesResponseModel, TAILORMAP_API_V1_SERVICE, FeatureModel, ApiHelper, HiddenLayerFunctionality,
+  AttributeType, FeaturesResponseModel, TAILORMAP_API_V1_SERVICE, FeatureModel, ApiHelper, FeatureModelAttributes, HiddenLayerFunctionality,
 } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { selectViewerId } from '../../state/core.selectors';
 import { catchError, combineLatest, concatMap, forkJoin, map, mergeMap, Observable, of, take, tap } from 'rxjs';
 import { FeatureInfoResponseModel } from './models/feature-info-response.model';
 import {
-  selectEditableLayers, selectVisibleLayersWithAttributes, selectVisibleWMSLayersWithoutAttributes,
+  selectEditableLayers, selectLayer, selectVisibleLayersWithAttributes, selectVisibleWMSLayersWithoutAttributes,
 } from '../../map/state/map.selectors';
-import { MapService, MapViewDetailsModel } from '@tailormap-viewer/map';
+import { FeatureInfo3DModel, MapService, MapViewDetailsModel } from '@tailormap-viewer/map';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { FilterService } from '../../filter/services/filter.service';
 import { FeatureInfoLayerModel } from './models/feature-info-layer.model';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { loadFeatureInfo } from './state/feature-info.actions';
+import { FeatureInfoFeatureModel } from './models/feature-info-feature.model';
 
 @Injectable({
   providedIn: 'root',
@@ -34,17 +35,26 @@ export class FeatureInfoService {
   private apiService = inject(TAILORMAP_API_V1_SERVICE);
   private filterService = inject(FilterService);
 
-  public fetchFeatures$(mapCoordinates: [number, number], mouseCoordinates: [number, number]): Observable<FeatureInfoResponseModel | null> {
+  public fetchFeatures$(
+    mapCoordinates: [number, number],
+    mouseCoordinates: [number, number],
+    cesiumFeatureInfo?: FeatureInfo3DModel,
+  ): Observable<FeatureInfoResponseModel | null> {
     return combineLatest([
       this.store$.select(selectVisibleLayersWithAttributes),
       this.store$.select(selectVisibleWMSLayersWithoutAttributes),
+      cesiumFeatureInfo?.layerId ? this.store$.select(selectLayer(cesiumFeatureInfo.layerId)) : of(null),
       this.store$.select(selectViewerId),
       this.mapService.getMapViewDetails$(),
     ])
       .pipe(
         take(1),
-        tap(([ layers, wmsLayers ]) => {
-          const featureInfoLayers = [ ...layers, ...wmsLayers ]
+        tap(([ layers, wmsLayers, cesiumLayer ]) => {
+          const allLayers = [ ...layers, ...wmsLayers ];
+          if (cesiumLayer) {
+            allLayers.push(cesiumLayer);
+          }
+          const featureInfoLayers = allLayers
             .filter(l => !l.hiddenFunctionality?.includes(HiddenLayerFunctionality.featureInfo))
             .sort((l1, l2) => l1.title.localeCompare(l2.title))
             .map<FeatureInfoLayerModel>(l => ({
@@ -54,7 +64,7 @@ export class FeatureInfoService {
             }));
           this.store$.dispatch(loadFeatureInfo({ mapCoordinates, mouseCoordinates, layers: featureInfoLayers }));
         }),
-        mergeMap(([ layers, wmsLayers, viewerId, mapViewDetails ]) => {
+        mergeMap(([ layers, wmsLayers, _cesiumLayer, viewerId, mapViewDetails ]) => {
           if (!viewerId) {
             return [];
           }
@@ -62,6 +72,9 @@ export class FeatureInfoService {
             ...layers.map(l => this.getFeatureInfoFromApi$(l.id, mapCoordinates, viewerId, mapViewDetails)),
             ...wmsLayers.map(l => this.getWmsGetFeatureInfo$(l.id, mapCoordinates)),
           ];
+          if (cesiumFeatureInfo) {
+            requests$.push(of(this.featureInfo3DToResponse(cesiumFeatureInfo)));
+          }
           if (requests$.length === 0) {
             return [of(null)];
           }
@@ -161,5 +174,22 @@ export class FeatureInfoService {
       columnMetadata,
       layerId,
     };
+  }
+
+  private featureInfo3DToResponse(cesiumFeatureInfo: FeatureInfo3DModel): FeatureInfoResponseModel {
+    const feature: FeatureInfoFeatureModel = {
+      __fid: cesiumFeatureInfo.featureId.toString(),
+      attributes: cesiumFeatureInfo.properties.reduce<FeatureModelAttributes>(
+        (attributes, { id, value }) => ({ ...attributes, [id]: value }),
+        {},
+      ),
+      layerId: cesiumFeatureInfo.layerId,
+    };
+    return {
+      features: [feature],
+      columnMetadata: cesiumFeatureInfo.columnMetadata,
+      layerId: cesiumFeatureInfo.layerId,
+    };
+
   }
 }

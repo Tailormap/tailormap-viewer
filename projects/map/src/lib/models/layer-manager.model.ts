@@ -5,8 +5,8 @@ import { ImageWMS, WMTS, XYZ, TileWMS } from 'ol/source';
 export type LayerTypes = VectorLayer | TileLayer<TileWMS> | ImageLayer<ImageWMS> | TileLayer<XYZ> | TileLayer<WMTS> | null;
 
 export interface LayerManagerModel {
-  setBackgroundLayers(layers: LayerModel[]): void;
-  setLayers(layers: LayerModel[]): void;
+  setBackgroundLayers(layers: LayerModel[], useProjection?: string): void;
+  setLayers(layers: LayerModel[], useProjection?: string): void;
   addLayer<LayerType extends LayerTypes>(layer: LayerModel): LayerType | null;
   addLayers(layers: LayerModel[]): void;
   removeLayer(layerId: string): void;

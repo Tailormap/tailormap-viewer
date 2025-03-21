@@ -67,6 +67,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
+    this.menubarService.deregisterComponent(BaseComponentTypeEnum.DRAWING);
     this.destroyed.next(null);
     this.destroyed.complete();
   }

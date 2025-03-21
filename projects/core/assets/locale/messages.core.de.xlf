@@ -537,6 +537,10 @@
         <source>Draw filter geometry</source>
         <target>Filtergeometrie zeichnen</target>
       </trans-unit>
+      <trans-unit id="core.filter.draw-message-3D" datatype="html">
+        <source>Switch to 2D to draw</source>
+        <target>Wechseln Sie zum Zeichnen zu 2D</target>
+      </trans-unit>
       <trans-unit id="core.filter.ends-with" datatype="html">
         <source>ends with</source>
         <target>endet mit</target>
@@ -909,6 +913,10 @@
         <source>Location</source>
         <target>Ort</target>
       </trans-unit>
+      <trans-unit id="core.terrain-layer-toggle.ellipsoid" datatype="html">
+        <source>WGS84 Ellipsoid</source>
+        <target>WGS84 Ellipsoid</target>
+      </trans-unit>
       <trans-unit id="core.toc.available-layers" datatype="html">
         <source>Available layers</source>
         <target>Verfügbare Ebenen</target>
@@ -1008,6 +1016,18 @@
       <trans-unit id="core.toolbar.share-viewer-embed-url" datatype="html">
         <source>Embed URL</source>
         <target>URL einbetten</target>
+      </trans-unit>
+      <trans-unit id="core.toolbar.switch-3d.tooltip2D" datatype="html">
+        <source>Switch to 2D</source>
+        <target>auf 2D umschalten</target>
+      </trans-unit>
+      <trans-unit id="core.toolbar.switch-3d.tooltip3D" datatype="html">
+        <source>Switch to 3D</source>
+        <target>auf 3D umschalten</target>
+      </trans-unit>
+      <trans-unit id="core.toolbar.switch-3d.layers-without-wm" datatype="html">
+        <source>The following layers are not visible in 3D: <x id="PH" equiv-text="layerNames.join(&apos;, &apos;)"/> </source>
+        <target>Die folgenden Ebenen sind in 3D nicht sichtbar: <x id="PH" equiv-text="layerNames.join(&apos;, &apos;)"/> </target>
       </trans-unit>
       <trans-unit id="core.toolbar.type-at-least" datatype="html">
         <source>Type at least <x id="INTERPOLATION" equiv-text="{{ minLength }}"/> characters to start searching or press &lt;Enter&gt;</source>

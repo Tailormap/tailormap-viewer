@@ -1,8 +1,9 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Signal, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { map, Observable, combineLatest } from 'rxjs';
 import {
-  selectBackgroundNodesList, selectInitiallySelectedBackgroundNodes, selectSelectedBackgroundNodeId,
+  selectBackgroundNodesList, selectIn3DView, selectInitiallySelectedBackgroundNodes, selectLayersWithoutWebMercatorIds,
+  selectSelectedBackgroundNodeId,
 } from '../../map/state/map.selectors';
 import { SplitButtonOptionModel } from '@tailormap-viewer/shared';
 import { setSelectedBackgroundNodeId } from '../../map/state/map.actions';
@@ -21,6 +22,9 @@ export class BackgroundLayerToggleComponent {
   public initiallyCheckedLabels$: Observable<string>;
 
   private allowEmptyBackground = true;
+
+  public in3D: Signal<boolean> = signal(false);
+  public layersWithoutWebMercator: Signal<string[]> = signal([]);
 
   constructor(
     private store$: Store,
@@ -43,6 +47,8 @@ export class BackgroundLayerToggleComponent {
     this.initiallyCheckedLabels$ = this.store$.select(selectInitiallySelectedBackgroundNodes).pipe(
       map(nodes => nodes.map(node => node.name).join(', ')),
     );
+    this.in3D = this.store$.selectSignal(selectIn3DView);
+    this.layersWithoutWebMercator = this.store$.selectSignal(selectLayersWithoutWebMercatorIds);
   }
 
   public backgroundChanged(id: string) {

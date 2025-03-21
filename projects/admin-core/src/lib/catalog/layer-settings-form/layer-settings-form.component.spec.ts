@@ -4,7 +4,7 @@ import { SharedModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { TriStateBooleanComponent } from '../../shared/components/tri-state-boolean/tri-state-boolean.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
+import { GeoServiceProtocolEnum, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 import { of } from 'rxjs';
 import { provideMockStore } from '@ngrx/store/testing';
 import { AuthorizationEditComponent } from '../../shared/components/authorization-edit/authorization-edit.component';
@@ -28,7 +28,7 @@ describe('LayerSettingsFormComponent', () => {
         { provide: TailormapAdminApiV1Service, useValue: { getGroups$: jest.fn(() => of(null)) } },
         AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser(),
       ],
-      inputs: { isLayerSpecific: true },
+      inputs: { isLayerSpecific: true, protocol: GeoServiceProtocolEnum.WMTS },
       on: { changed: changedFn },
     });
     await userEvent.type(await screen.findByPlaceholderText('Title'), 'Some title');

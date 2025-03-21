@@ -18,6 +18,15 @@ tm-admin-form-warning-message {
   margin-top: 16px;
 }
 
+.available-crs {
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+
+.available-crs-text {
+  margin-top: 8px;
+}
+
 fieldset {
   margin: 16px 0;
 }

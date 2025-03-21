@@ -1,96 +1,111 @@
-<form [formGroup]="layerSettingsForm" *ngIf="node">
-  <div class="title" i18n="@@admin-core.common.settings-for">Settings for {{ layerTitle }}</div>
-  @if (serviceLayer) {
-    <tm-admin-catalog-shortcut-buttons [geoServiceId]="serviceLayer.service.id"
-                                       [geoServiceLayerId]="serviceLayer.layer.id"
-                                       [featureTypeId]="(featureSourceAndType$ | async)?.featureType?.id ?? null"></tm-admin-catalog-shortcut-buttons>
-  }
-  <mat-form-field>
-    <mat-label i18n="@@admin-core.common.title">Title</mat-label>
-    <input matInput formControlName="title" />
-  </mat-form-field>
-  <div class="form-field form-field__slider">
-    <strong i18n="@@admin-core.application.opacity">Opacity</strong>
-    <tm-slider formControlName="opacity"></tm-slider>
-  </div>
-  <mat-form-field>
-    <mat-label i18n="@@admin-core.common.attribution">Attribution</mat-label>
-    <input matInput formControlName="attribution" />
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label i18n="@@admin-core.common.description">Description</mat-label>
-    <textarea matInput
-              placeholder="Description"
-              i18n-placeholder="@@admin-core.common.description"
-              formControlName="description"
-              [cdkTextareaAutosize]="true"
-              cdkAutosizeMinRows="4"
-              cdkAutosizeMaxRows="10"></textarea>
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label i18n="@@admin-core.application.autoRefreshInSeconds">Auto refresh the layer (seconds)</mat-label>
-    <input type="number" matInput formControlName="autoRefreshInSeconds" />
-  </mat-form-field>
-  <fieldset>
-    <legend i18n="@@admin-core.application.layerFunctionality">Functionality shown for this layer</legend>
-    <mat-checkbox formControlName="showFeatureInfo">
-      <span i18n="@@admin-core.application.layerFunctionality.showFeatureInfo">Show in object information</span>
-    </mat-checkbox>
-    <mat-checkbox formControlName="showInAttributeList">
-      <span i18n="@@admin-core.application.layerFunctionality.attributeList">Show in attribute list</span>
-    </mat-checkbox>
-    <mat-checkbox formControlName="showExport">
-      <span i18n="@@admin-core.application.layerFunctionality.export">Show export button in attribute list</span>
-    </mat-checkbox>
-    <p i18n="@@admin-core.application.layerFunctionality.warning">Note: unchecking these checkboxes only hides user interface controls. Data is still accessible via the API.</p>
-  </fieldset>
-  <div *ngIf="featureSourceAndType$ | async as featureSourceAndType" class="edit-layer-attributes">
-    <button *ngIf="featureSourceAndType.featureType?.hasAttributes"
-            mat-stroked-button
-            (click)="editAppLayerAttribute($event, featureSourceAndType)">
-      Edit attribute columns for application layer
-      <mat-icon svgIcon="edit_square" iconPositionEnd></mat-icon>
-    </button>
-  </div>
-  <span [tmTooltip]="editableTooltip$ | async">
-    <mat-checkbox formControlName="editable">
-      <span i18n="@@admin-core.application.editable">Editable</span>
-    </mat-checkbox>
-  </span>
-  @if (layerSettingsForm.get('editable')?.value) {
-    @if ((selectableForms$ | async)?.length) {
+@if (node) {
+  <form [formGroup]="layerSettingsForm">
+    <div class="title" i18n="@@admin-core.common.settings-for">Settings for {{ layerTitle }}</div>
+    @if (serviceLayer) {
+      <tm-admin-catalog-shortcut-buttons [geoServiceId]="serviceLayer.service.id"
+                                         [geoServiceLayerId]="serviceLayer.layer.id"
+                                         [featureTypeId]="(featureSourceAndType$ | async)?.featureType?.id ?? null"></tm-admin-catalog-shortcut-buttons>
+    }
+    <mat-form-field>
+      <mat-label i18n="@@admin-core.common.title">Title</mat-label>
+      <input matInput formControlName="title" />
+    </mat-form-field>
+    @if (!layerIs3D) {
+      <div class="form-field form-field__slider">
+        <strong i18n="@@admin-core.application.opacity">Opacity</strong>
+        <tm-slider formControlName="opacity"></tm-slider>
+      </div>
+    }
+    <mat-form-field>
+      <mat-label i18n="@@admin-core.common.attribution">Attribution</mat-label>
+      <input matInput formControlName="attribution" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label i18n="@@admin-core.common.description">Description</mat-label>
+      <textarea matInput
+                placeholder="Description"
+                i18n-placeholder="@@admin-core.common.description"
+                formControlName="description"
+                [cdkTextareaAutosize]="true"
+                cdkAutosizeMinRows="4"
+                cdkAutosizeMaxRows="10"></textarea>
+    </mat-form-field>
+    @if (!layerIs3D) {
       <mat-form-field>
-        <mat-label i18n="@@admin-core.application.select-form">Select (optional) form</mat-label>
-        <mat-select formControlName="formId">
-          <mat-option [value]="null" i18n="@@admin-core.application.no-form">No form</mat-option>
-          @for (form of (selectableForms$ | async); track form.id) {
-            <mat-option [value]="form.id">{{form.name}}</mat-option>
-          }
-        </mat-select>
+        <mat-label i18n="@@admin-core.application.autoRefreshInSeconds">Auto refresh the layer (seconds)</mat-label>
+        <input type="number" matInput formControlName="autoRefreshInSeconds" />
       </mat-form-field>
-
-      @if (formWarningMessageData$ | async; as formWarningMessageData) {
-        <tm-admin-form-warning-message [featureType]="formWarningMessageData.featureType"
-                                       [applicationLayerSetting]="formWarningMessageData.layerSetting"
-                                       [form]="formWarningMessageData.form"></tm-admin-form-warning-message>
+      <fieldset>
+        <legend i18n="@@admin-core.application.layerFunctionality">Functionality shown for this layer</legend>
+        <mat-checkbox formControlName="showFeatureInfo">
+          <span i18n="@@admin-core.application.layerFunctionality.showFeatureInfo">Show in object information</span>
+        </mat-checkbox>
+        <mat-checkbox formControlName="showInAttributeList">
+          <span i18n="@@admin-core.application.layerFunctionality.attributeList">Show in attribute list</span>
+        </mat-checkbox>
+        <mat-checkbox formControlName="showExport">
+          <span i18n="@@admin-core.application.layerFunctionality.export">Show export button in attribute list</span>
+        </mat-checkbox>
+        <p i18n="@@admin-core.application.layerFunctionality.warning">Note: unchecking these checkboxes only hides user interface controls. Data is still accessible via the API.</p>
+      </fieldset>
+      @if (featureSourceAndType$ | async; as featureSourceAndType) {
+        @if (featureSourceAndType.featureType?.hasAttributes) {
+          <div class="edit-layer-attributes">
+            <button mat-stroked-button
+                    (click)="editAppLayerAttribute($event, featureSourceAndType)">
+              Edit attribute columns for application layer
+              <mat-icon svgIcon="edit_square" iconPositionEnd></mat-icon>
+            </button>
+          </div>
+        }
       }
-    } @else {
-      <div i18n="@@admin-core.application.no-forms-for-feature-type">There are no forms for this feature type</div>
-    }
-  }
-  @if (searchIndexEnabled$ | async) {
-    @if ((selectableSearchIndexes$ | async)?.length) {
-      <mat-form-field>
-        <mat-label i18n="@@admin-core.application.select-search-index">Select search index</mat-label>
-        <mat-select formControlName="searchIndexId">
-          <mat-option [value]="null" i18n="@@admin-core.application.no-search-index">No search index</mat-option>
-          @for (searchIndex of (selectableSearchIndexes$ | async); track searchIndex.id) {
-            <mat-option [value]="searchIndex.id">{{ searchIndex.name }}</mat-option>
+      <span [tmTooltip]="editableTooltip$ | async">
+        <mat-checkbox formControlName="editable">
+          <span i18n="@@admin-core.application.editable">Editable</span>
+        </mat-checkbox>
+      </span>
+      @if (layerSettingsForm.get('editable')?.value) {
+        @if ((selectableForms$ | async)?.length) {
+          <mat-form-field>
+            <mat-label i18n="@@admin-core.application.select-form">Select (optional) form</mat-label>
+            <mat-select formControlName="formId">
+              <mat-option [value]="null" i18n="@@admin-core.application.no-form">No form</mat-option>
+              @for (form of (selectableForms$ | async); track form.id) {
+                <mat-option [value]="form.id">{{form.name}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          @if (formWarningMessageData$ | async; as formWarningMessageData) {
+            <tm-admin-form-warning-message [featureType]="formWarningMessageData.featureType"
+                                           [applicationLayerSetting]="formWarningMessageData.layerSetting"
+                                           [form]="formWarningMessageData.form"></tm-admin-form-warning-message>
           }
-        </mat-select>
-      </mat-form-field>
-    } @else {
-      <div i18n="@@admin-core.application.no-search-indexes-for-feature-type">There are no search indexes for this feature type</div>
+        } @else {
+          <div i18n="@@admin-core.application.no-forms-for-feature-type">There are no forms for this feature type</div>
+        }
+      }
+      @if (crsText$ | async) {
+        <div class="available-crs">
+          <strong i18n="@@admin-core.catalog.layer.crs" class="available-crs-header">Available projections for this layer</strong>
+          <div class="available-crs-text">{{ (crsText$ | async)?.join(', ') }}</div>
+        </div>
+      }
+      @if ((searchIndexEnabled$ | async)) {
+        @if ((selectableSearchIndexes$ | async)?.length) {
+          <mat-form-field>
+            <mat-label i18n="@@admin-core.application.select-search-index">Select search index</mat-label>
+            <mat-select formControlName="searchIndexId">
+              <mat-option [value]="null" i18n="@@admin-core.application.no-search-index">No search index</mat-option>
+              @for (searchIndex of (selectableSearchIndexes$ | async); track searchIndex.id) {
+                <mat-option [value]="searchIndex.id">{{ searchIndex.name }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        } @else {
+          <div i18n="@@admin-core.application.no-search-indexes-for-feature-type">There are no search indexes for this feature type</div>
+        }
+      }
     }
-  }
-</form>
+  </form>
+}

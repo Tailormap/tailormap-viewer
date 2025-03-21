@@ -21,6 +21,8 @@ import { default as TileState } from 'ol/TileState';
 import { createForProjection, createXYZ, extentFromProjection } from 'ol/tilegrid';
 import { HttpXsrfTokenExtractor } from '@angular/common/http';
 import { default as TileGrid } from 'ol/tilegrid/TileGrid';
+import { get as getProjection } from 'ol/proj.js';
+import { PROJECTION_REQUIRED_FOR_3D } from '../models/3d-projection.const';
 
 export interface LayerProperties {
   id: string;
@@ -196,18 +198,20 @@ export class OlLayerHelper {
       }
     }
 
+    const source = new XYZ({
+      url,
+      maxZoom,
+      minZoom,
+      crossOrigin: layer.crossOrigin,
+      projection,
+      tileGrid,
+      tilePixelRatio,
+      attributions: layer.attribution ? [layer.attribution] : undefined,
+    });
+
     return new TileLayer({
       visible: layer.visible,
-      source: new XYZ({
-        url,
-        maxZoom,
-        minZoom,
-        crossOrigin: layer.crossOrigin,
-        projection,
-        tileGrid,
-        tilePixelRatio,
-        attributions: layer.attribution ? [layer.attribution] : undefined,
-      }),
+      source,
     });
   }
 
@@ -239,6 +243,7 @@ export class OlLayerHelper {
 
     if (layer.tilingDisabled) {
       const source = new ImageWMS(sourceOptions);
+      source.set('olcs_projection', getProjection(PROJECTION_REQUIRED_FOR_3D));
       return new ImageLayer({
         visible: layer.visible,
         source,

@@ -19,7 +19,7 @@ export class ApplicationTreeHelper {
     layers: ExtendedGeoServiceLayerModel[],
     expandedNodes: string[],
     layerSettings: Record<string, AppLayerSettingsModel> | null,
-    baseLayerTree?: boolean,
+    treeKey?: 'layer' | 'baseLayer' | 'terrainLayer',
     filterTerm?: string,
   ): TreeModel<AppTreeNodeModel>[] {
     const layersMap = ApplicationTreeHelper.getLayerMap(layers);
@@ -27,12 +27,12 @@ export class ApplicationTreeHelper {
     if (!root) {
       return [];
     }
-    const filteredLayerTreeNodes = ApplicationTreeHelper.getFilteredLayerTreeNodes(layerTreeNodes, root, layersMap, layerSettings, baseLayerTree, filterTerm);
+    const filteredLayerTreeNodes = ApplicationTreeHelper.getFilteredLayerTreeNodes(layerTreeNodes, root, layersMap, layerSettings, treeKey, filterTerm);
     const tree = TreeHelper.traverseTree<TreeModel<AppTreeNodeModel>, AppTreeNodeModel>(
       filteredLayerTreeNodes,
       root.id,
       (node, children) => ({
-        ...ApplicationTreeHelper.getTreeModelForLayerTreeNode(node, layersMap, expandedNodes, layerSettings, baseLayerTree),
+        ...ApplicationTreeHelper.getTreeModelForLayerTreeNode(node, layersMap, expandedNodes, layerSettings, treeKey),
         children,
       }),
       node => ApplicationModelHelper.isLevelTreeNode(node) ? node.childrenIds : [],
@@ -49,7 +49,7 @@ export class ApplicationTreeHelper {
     root: AppTreeNodeModel,
     layersMap: Map<string, ExtendedGeoServiceLayerModel>,
     layerSettings: Record<string, AppLayerSettingsModel> | null,
-    baseLayerTree?: boolean,
+    treeKey?: 'layer' | 'baseLayer' | 'terrainLayer',
     filterTerm?: string,
   ) {
     if (filterTerm) {
@@ -59,7 +59,7 @@ export class ApplicationTreeHelper {
         if (!ApplicationModelHelper.isLayerTreeNode(node)) {
           return false;
         }
-        const label = ApplicationTreeHelper.getTreeModelLabel(node, layersMap, layerSettings, baseLayerTree);
+        const label = ApplicationTreeHelper.getTreeModelLabel(node, layersMap, layerSettings, treeKey);
         return FilterHelper.matchesFilterTerm(filterTerms, label);
       });
       const filteredLayerIds = new Set(filteredLayers.map(n => n.id));
@@ -86,11 +86,11 @@ export class ApplicationTreeHelper {
     layers: Map<string, ExtendedGeoServiceLayerModel>,
     expandedNodes: string[],
     layerSettings: Record<string, AppLayerSettingsModel> | null,
-    baseLayerTree?: boolean,
+    treeKey?: 'layer' | 'baseLayer' | 'terrainLayer',
   ): TreeModel<AppTreeNodeModel> {
     return {
       id: node.id,
-      label: ApplicationTreeHelper.getTreeModelLabel(node, layers, layerSettings, baseLayerTree),
+      label: ApplicationTreeHelper.getTreeModelLabel(node, layers, layerSettings, treeKey),
       type: ApplicationModelHelper.isLayerTreeNode(node) ? 'layer' : 'level',
       metadata: node,
       checked: ApplicationModelHelper.isLayerTreeNode(node)
@@ -115,15 +115,22 @@ export class ApplicationTreeHelper {
     node: AppTreeNodeModel,
     layers: Map<string, ExtendedGeoServiceLayerModel>,
     layerSettings: Record<string, AppLayerSettingsModel> | null,
-    baseLayerTree?: boolean,
+    treeKey?: 'layer' | 'baseLayer' | 'terrainLayer',
   ) {
     const layer = ApplicationModelHelper.isLayerTreeNode(node)
       ? layers.get(ApplicationTreeHelper.getLayerMapKey(node.layerName, node.serviceId))
       : null;
     if (ApplicationModelHelper.isLevelTreeNode(node)) {
-      return node.root
-        ? (baseLayerTree ? ApplicationService.ROOT_BASE_NODE_TITLE : ApplicationService.ROOT_NODE_TITLE)
-        : node.title;
+      if (node.root) {
+        if (treeKey === 'layer') {
+          return ApplicationService.ROOT_NODE_TITLE;
+        } else if (treeKey === 'baseLayer') {
+          return ApplicationService.ROOT_BASE_NODE_TITLE;
+        } else {
+          return ApplicationService.ROOT_TERRAIN_NODE_TITLE;
+        }
+      }
+      return node.title;
     }
     if (ApplicationModelHelper.isLayerTreeNode(node)) {
       const layerSettingTitle = layerSettings?.[node.id]?.title;

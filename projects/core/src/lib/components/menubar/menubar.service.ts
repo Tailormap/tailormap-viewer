@@ -41,4 +41,8 @@ export class MenubarService {
     this.componentRegistrationService.registerComponent('menu', component);
   }
 
+  public deregisterComponent(type: string) {
+    this.componentRegistrationService.deregisterComponent('menu', type);
+  }
+
 }

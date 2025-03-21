@@ -6,7 +6,8 @@ import {
   selectApplicationBaseLayerTreeFilterTerm, selectApplicationLayerTreeFilterTerm,
   selectBaseLayerNodesForSelectedApplication, selectBaseLayerTreeForSelectedApplication, selectDraftApplicationCrs,
   selectSomeExpandedAppLayerForSelectedApplication,
-  selectSomeExpandedBaseLayersForSelectedApplication,
+  selectSomeExpandedBaseLayersForSelectedApplication, selectTerrainLayerNodesForSelectedApplication,
+  selectTerrainLayerTreeForSelectedApplication,
 } from '../state/application.selectors';
 import {
   BehaviorSubject, combineLatest, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, takeUntil,
@@ -57,7 +58,10 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
   private destroyed = new Subject();
 
   @Input()
-  public applicationStateTree: 'layer' | 'baseLayer' = 'layer';
+  public applicationStateTree: 'layer' | 'baseLayer' | 'terrainLayer' = 'layer';
+
+  @Input()
+  public useRadioInputs = false;
 
   public treeNodes$: Observable<TreeModel<AppTreeNodeModel>[]> = of([]);
   public someExpanded$: Observable<boolean> = of(false);
@@ -77,18 +81,7 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit(): void {
-    this.treeNodes$ = this.applicationStateTree === 'baseLayer'
-      ? this.store$.select(selectBaseLayerTreeForSelectedApplication)
-      : this.store$.select(selectAppLayerTreeForSelectedApplication);
-
-    this.someExpanded$ = this.applicationStateTree === 'baseLayer'
-      ? this.store$.select(selectSomeExpandedBaseLayersForSelectedApplication)
-      : this.store$.select(selectSomeExpandedAppLayerForSelectedApplication);
-
-    this.filterTerm$ = this.applicationStateTree === 'baseLayer'
-      ? this.store$.select(selectApplicationBaseLayerTreeFilterTerm)
-      : this.store$.select(selectApplicationLayerTreeFilterTerm);
-
+    this.setDataSources();
     this.loadingServices$ = this.store$.select(isLoadingApplicationServices);
 
     this.applicationTreeService.setSelectedNode(this.selectedNode$
@@ -127,6 +120,22 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
     this.destroyed.complete();
   }
 
+  private setDataSources() {
+    if (this.applicationStateTree === 'layer') {
+      this.treeNodes$ = this.store$.select(selectAppLayerTreeForSelectedApplication);
+      this.someExpanded$ = this.store$.select(selectSomeExpandedAppLayerForSelectedApplication);
+      this.filterTerm$ = this.store$.select(selectApplicationLayerTreeFilterTerm);
+    } else if (this.applicationStateTree === 'baseLayer') {
+      this.treeNodes$ = this.store$.select(selectBaseLayerTreeForSelectedApplication);
+      this.someExpanded$ = this.store$.select(selectSomeExpandedBaseLayersForSelectedApplication);
+      this.filterTerm$ = this.store$.select(selectApplicationBaseLayerTreeFilterTerm);
+    } else {
+      this.treeNodes$ = this.store$.select(selectTerrainLayerTreeForSelectedApplication);
+      this.someExpanded$ = of(false);
+      this.filterTerm$ = of('');
+    }
+  }
+
   public addSubFolder(params: { nodeId: string; title: string }) {
     const node: AppTreeLevelNodeModel = {
       id: nanoid(),
@@ -144,10 +153,14 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
     combineLatest([
         this.store$.select(selectBaseLayerNodesForSelectedApplication),
         this.store$.select(selectAppLayerNodesForSelectedApplication),
+        this.store$.select(selectTerrainLayerNodesForSelectedApplication),
     ])
       .pipe(take(1))
-      .subscribe(([ backgroundNodes, layerNodes ]) => {
-        const node = ApplicationModelHelper.newApplicationTreeLayerNode(layer, [ ...backgroundNodes, ...layerNodes ]);
+      .subscribe(([ backgroundNodes, layerNodes, terrainLayerNodes ]) => {
+        const node = ApplicationModelHelper.newApplicationTreeLayerNode(layer, [ ...backgroundNodes, ...layerNodes, ...terrainLayerNodes ]);
+        if (this.useRadioInputs) {
+          node.visible = false;
+        }
         this.addNode(node, $event.toParent || undefined, $event.position, $event.sibling);
       });
   }

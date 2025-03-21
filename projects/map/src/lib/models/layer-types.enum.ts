@@ -3,4 +3,6 @@ export enum LayerTypesEnum {
   XYZ,
   WMS,
   WMTS,
+  TILES3D,
+  QUANTIZEDMESH,
 }

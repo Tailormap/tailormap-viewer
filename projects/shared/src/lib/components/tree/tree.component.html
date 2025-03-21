@@ -27,8 +27,7 @@
             <mat-radio-button [disabled]="readOnlyMode"
                               [checked]="isChecked(node)"
                               [aria-label]="'toggle ' + node.label"
-                              (change)="handleRadioChange(node)"
-                              (click)="$event.stopPropagation()"
+                              (click)="handleRadioChange(node, $event)"
                               [value]="node"></mat-radio-button>
           }
         } @else {

@@ -17,6 +17,7 @@ import { ApplicationEditLayersComponent } from './application/application-edit-l
 import { ApplicationEditBaseLayersComponent } from './application/application-edit-base-layers/application-edit-base-layers.component';
 import { ApplicationEditComponentsComponent } from './application/application-edit-components/application-edit-components.component';
 import { ApplicationEditStylingComponent } from './application/application-edit-styling/application-edit-styling.component';
+import { ApplicationEditTerrainLayersComponent } from './application/application-edit-terrain-layers/application-edit-terrain-layers.component';
 import { SettingsPageComponent } from './pages/settings-page/settings-page.component';
 import { AdminHomePageComponent } from './pages/admin-home-page/admin-home-page.component';
 import { UserAdminPageComponent } from './pages/user-admin-page/user-admin-page.component';
@@ -109,6 +110,10 @@ export const adminRoutes: Routes = [
               {
                 path: AdminRoutes.APPLICATION_DETAILS_BASE_LAYERS,
                 component: ApplicationEditBaseLayersComponent,
+              },
+              {
+                path: AdminRoutes.APPLICATION_DETAILS_TERRAIN_LAYERS,
+                component: ApplicationEditTerrainLayersComponent,
               },
               {
                 path: AdminRoutes.APPLICATION_DETAILS_COMPONENTS,

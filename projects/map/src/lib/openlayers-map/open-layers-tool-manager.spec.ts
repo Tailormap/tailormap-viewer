@@ -25,7 +25,7 @@ describe('OpenLayersToolManager', () => {
   test('creates a tool', () => {
     const onClick = jest.fn();
     const tool = { type: ToolTypeEnum.MapClick, onClick };
-    const manager = new OpenLayersToolManager({} as any, mockNgZone);
+    const manager = new OpenLayersToolManager({} as any, mockNgZone, of(false));
     const mapTool = manager.addTool(tool);
     expect(mapTool?.id).toMatch(/mapclick-\d+/);
   });
@@ -34,7 +34,7 @@ describe('OpenLayersToolManager', () => {
     // @ts-expect-error overwriting this prop in test is allowed
     OpenLayersEventManager.onMapClick$ = getMapClickMock();
     const tool = { type: ToolTypeEnum.MapClick };
-    const manager = new OpenLayersToolManager({} as any, mockNgZone);
+    const manager = new OpenLayersToolManager({} as any, mockNgZone, of(false));
     const mapTool = manager.addTool(tool);
     expect(OpenLayersEventManager.onMapClick$).not.toHaveBeenCalled();
     manager.getTool<MapClickToolModel>(mapTool?.id || '')?.mapClick$.subscribe(clickEvt => {
@@ -56,7 +56,7 @@ describe('OpenLayersToolManager', () => {
     // @ts-expect-error overwriting this prop in test is allowed
     OpenLayersEventManager.onMapClick$ = onMapClickFn;
     const tool = { type: ToolTypeEnum.MapClick };
-    const manager = new OpenLayersToolManager({} as any, mockNgZone);
+    const manager = new OpenLayersToolManager({} as any, mockNgZone, of(false));
     const mapTool = manager.addTool(tool);
 
     manager.enableTool(mapTool?.id || '');

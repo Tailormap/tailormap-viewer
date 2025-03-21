@@ -20,4 +20,5 @@ export * from './filter.helper';
 export * from './markdown.helper';
 export * from './htmlify.helper';
 export * from './overlay.helper';
+export * from './external-libs-loader.helper';
 export * from './municipality.helper';

@@ -70,6 +70,7 @@ export class AttributeListComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
+    this.menubarService.deregisterComponent(BaseComponentTypeEnum.ATTRIBUTE_LIST);
     this.store$.dispatch(setAttributeListVisibility({ visible: false }));
     this.destroyed.next(null);
     this.destroyed.complete();

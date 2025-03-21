@@ -1,6 +1,6 @@
 @if (node) {
   <div class="tree-node"
-       [class.out-of-scale]="isLayerOutOfScale()"
+       [class.not-visible-on-map]="isLayerHiddenOnMap()"
        [class.level]="isLevel()">
     <div class="tree-node__label">
       <span class="tree-node__label-content">{{node.label}}</span>

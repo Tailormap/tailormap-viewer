@@ -4,7 +4,9 @@ import { LayerTypesEnum } from '../models/layer-types.enum';
 import { VectorLayerModel } from '../models/vector-layer.model';
 import { XyzLayerModel } from '../models/xyz-layer.model';
 import { WMTSLayerModel } from '../models/wmts-layer.model';
+import { Tiles3dLayerModel } from '../models/tiles3d-layer.model';
 import { ServiceLayerModel } from '../models/service-layer.model';
+import { TerrainLayerModel } from '../models/terrain-layer.model';
 
 export class LayerTypesHelper {
 
@@ -26,6 +28,14 @@ export class LayerTypesHelper {
 
   public static isWmtsLayer(layer: LayerModel): layer is WMTSLayerModel {
     return layer.layerType === LayerTypesEnum.WMTS;
+  }
+
+  public static isTiles3DLayer(layer: LayerModel): layer is Tiles3dLayerModel {
+    return layer.layerType === LayerTypesEnum.TILES3D;
+  }
+
+  public static isTerrainLayer(layer: LayerModel): layer is TerrainLayerModel {
+    return layer.layerType === LayerTypesEnum.QUANTIZEDMESH;
   }
 
 }

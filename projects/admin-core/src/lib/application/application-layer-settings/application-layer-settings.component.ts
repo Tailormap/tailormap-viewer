@@ -12,7 +12,7 @@ import { LoadingStateEnum, TreeModel } from '@tailormap-viewer/shared';
 import { ExtendedGeoServiceAndLayerModel } from '../../catalog/models/extended-geo-service-and-layer.model';
 import { MatDialog } from '@angular/material/dialog';
 import { ExtendedFeatureTypeModel } from '../../catalog/models/extended-feature-type.model';
-import { selectFeatureSourceAndFeatureTypesById } from '../../catalog/state/catalog.selectors';
+import { selectFeatureSourceAndFeatureTypesById, selectGeoServiceLayersByGeoServiceId } from '../../catalog/state/catalog.selectors';
 import {
   ApplicationLayerAttributeSettingsComponent,
 } from '../application-layer-attribute-settings/application-layer-attribute-settings.component';
@@ -26,6 +26,8 @@ import { loadSearchIndexes } from '../../search-index/state/search-index.actions
 import {
   ApplicationFeature, ApplicationFeatureSwitchService, BaseComponentTypeEnum, HiddenLayerFunctionality,
 } from '@tailormap-viewer/api';
+import { GeoServiceHelper } from '../../catalog/helpers/geo-service.helper';
+import { ExtendedGeoServiceLayerModel } from '../../catalog/models/extended-geo-service-layer.model';
 
 type FeatureSourceAndType = {
   featureSource: ExtendedFeatureSourceModel;
@@ -55,6 +57,10 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
   public layerTitle = '';
   public searchIndexEnabled$: Observable<boolean>;
 
+  public layerIs3D = false;
+
+  public crsText$: Observable<string[] | null> = of(null);
+
   @Input()
   public set node(node: TreeModel<AppTreeLayerNodeModel> | null) {
     this._node = node;
@@ -70,6 +76,10 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     this._serviceLayer = serviceLayer;
     this.initFeatureSource(serviceLayer);
     this.setTitle();
+    this.crsText$ = this.getCrsText$(serviceLayer);
+    if (serviceLayer?.service) {
+      this.layerIs3D = GeoServiceHelper.is3dProtocol(serviceLayer.service.protocol);
+    }
   }
   public get serviceLayer(): ExtendedGeoServiceAndLayerModel | null {
     return this._serviceLayer;
@@ -382,6 +392,27 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     } else {
       this.layerTitle = '';
     }
+  }
+
+  private getCrsText$(serviceLayer: ExtendedGeoServiceAndLayerModel | null): Observable<string[] | null> {
+    if (!serviceLayer) {
+      return of(null);
+    }
+    return this.store$.select(selectGeoServiceLayersByGeoServiceId(serviceLayer?.service.id))
+      .pipe(
+        take(1),
+        map(layersInService => {
+          const crs: string[] = [];
+          let layer: ExtendedGeoServiceLayerModel | undefined = serviceLayer?.layer;
+          while (layer) {
+            if (layer.crs) {
+              crs.push(...layer.crs);
+            }
+            layer = layersInService.find(l => l.id === layer?.parentId);
+          }
+          return crs;
+        }),
+      );
   }
 
 }

@@ -14,6 +14,9 @@ export class ApplicationLayerTreeNodeComponent {
   @Input()
   public node: TreeModel<AppTreeNodeModel> | null = null;
 
+  @Input()
+  public applicationStateTree: 'layer' | 'baseLayer' | 'terrainLayer' = 'layer';
+
   @Output()
   public addSubFolder = new EventEmitter<string>();
 
@@ -49,5 +52,14 @@ export class ApplicationLayerTreeNodeComponent {
   public isNonRoot() {
     const isRoot = ApplicationTreeHelper.isLevelTreeNode(this.node) && this.node.metadata?.root;
     return !isRoot;
+  }
+
+  public getIcon() {
+    if (this.isLevel()) {
+      return 'folder_filled';
+    } else if (this.applicationStateTree === 'terrainLayer') {
+      return 'admin_terrain';
+    }
+    return 'admin_catalog';
   }
 }

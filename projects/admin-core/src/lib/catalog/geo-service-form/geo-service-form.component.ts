@@ -9,6 +9,7 @@ import { FormHelper } from '../../helpers/form.helper';
 import { GeoServiceCreateModel } from '../models/geo-service-update.model';
 import { StringHelper } from '@tailormap-viewer/shared';
 import { GroupService } from '../../user/services/group.service';
+import { GeoServiceHelper } from '../helpers/geo-service.helper';
 
 @Component({
   selector: 'tm-admin-geo-service-form',
@@ -22,7 +23,13 @@ export class GeoServiceFormComponent implements OnInit {
   private destroyed = new Subject();
   private _geoService: GeoServiceModel | null = null;
 
-  public protocols: GeoServiceProtocolEnum[] = [ GeoServiceProtocolEnum.WMS, GeoServiceProtocolEnum.WMTS, GeoServiceProtocolEnum.XYZ ];
+  public protocols: GeoServiceProtocolEnum[] = [
+    GeoServiceProtocolEnum.WMS,
+    GeoServiceProtocolEnum.WMTS,
+    GeoServiceProtocolEnum.XYZ,
+    GeoServiceProtocolEnum.TILES3D,
+    GeoServiceProtocolEnum.QUANTIZEDMESH,
+  ];
   public serverTypes: AdminServerType[] = [ AdminServerType.AUTO, AdminServerType.GENERIC, AdminServerType.GEOSERVER, AdminServerType.MAPSERVER ];
   private readonly XYZ_CRS_DEFAULT = 'EPSG:3857';
 
@@ -82,6 +89,10 @@ export class GeoServiceFormComponent implements OnInit {
 
   public isWms() {
     return this.geoServiceForm.get('protocol')?.value === GeoServiceProtocolEnum.WMS;
+  }
+
+  public is3D() {
+    return GeoServiceHelper.is3dProtocol(this.geoServiceForm.get('protocol')!.value);
   }
 
   public ngOnInit(): void {
@@ -146,6 +157,17 @@ export class GeoServiceFormComponent implements OnInit {
         return $localize `:@@admin-core.catalog.server-type.geoserver:GeoServer (ECQL filtering, HiDPI)`;
       case AdminServerType.MAPSERVER:
         return $localize `:@@admin-core.catalog.server-type.mapserver:MapServer (HiDPI)`;
+    }
+  }
+
+  public prettyName(protocol: GeoServiceProtocolEnum) {
+    switch (protocol) {
+      case GeoServiceProtocolEnum.TILES3D:
+        return '3D Tiles';
+      case GeoServiceProtocolEnum.QUANTIZEDMESH:
+        return $localize `:@@admin-core.catalog.quantizedmesh:Quantized Mesh (Terrain model)`;
+      default:
+        return protocol;
     }
   }
 }

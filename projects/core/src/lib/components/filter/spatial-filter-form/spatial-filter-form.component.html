@@ -22,8 +22,12 @@
         </div>
 
         <div class="form-section">
-          <div i18n="@@core.filter.draw-filter-geometry" class="form-section-label">Draw filter geometry</div>
-          <tm-spatial-filter-form-draw-geometries [drawingLayerId]="drawingLayerId"></tm-spatial-filter-form-draw-geometries>
+          @if (( in3DView$ | async ) === false) {
+            <div i18n="@@core.filter.draw-filter-geometry" class="form-section-label">Draw filter geometry</div>
+            <tm-spatial-filter-form-draw-geometries [drawingLayerId]="drawingLayerId"></tm-spatial-filter-form-draw-geometries>
+          } @else {
+            <div i18n="@@core.filter.draw-message-3D" class="draw-message-3d">Switch to 2D to draw</div>
+          }
         </div>
 
         <div class="form-section">

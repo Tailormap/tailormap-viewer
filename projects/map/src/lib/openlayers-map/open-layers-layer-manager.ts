@@ -1,6 +1,7 @@
 import { Map as OlMap } from 'ol';
-import { Layer as BaseLayer, Vector as VectorLayer, Group as LayerGroup } from 'ol/layer';
-import { Vector as VectorSource, ImageWMS, WMTS, XYZ, TileWMS } from 'ol/source';
+import { Group as LayerGroup, Layer as BaseLayer, Vector as VectorLayer } from 'ol/layer';
+import { ImageWMS, TileWMS, Vector as VectorSource, WMTS, XYZ } from 'ol/source';
+import { get as getProjection, Projection } from 'ol/proj';
 import { LayerManagerModel, LayerTypes } from '../models';
 import { OlLayerHelper } from '../helpers/ol-layer.helper';
 import { LayerModel } from '../models/layer.model';
@@ -25,7 +26,11 @@ export class OpenLayersLayerManager implements LayerManagerModel {
   private prevBackgroundLayerIds: string[] = [];
   private prevLayerIdentifiers: string[] = [];
 
-  constructor(private olMap: OlMap, private ngZone: NgZone, private httpXsrfTokenExtractor: HttpXsrfTokenExtractor) {}
+  private currentMapProjection: Projection;
+
+  constructor(private olMap: OlMap, private ngZone: NgZone, private httpXsrfTokenExtractor: HttpXsrfTokenExtractor) {
+    this.currentMapProjection = this.olMap.getView().getProjection();
+  }
 
   public init() {
     this.olMap.addLayer(this.backgroundLayerGroup);
@@ -42,7 +47,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     this.olMap.removeLayer(this.vectorLayerGroup);
   }
 
-  public setBackgroundLayers(layers: LayerModel[]) {
+  public setBackgroundLayers(layers: LayerModel[], useProjection?: string) {
     this.prevBackgroundLayerIds = this.updateLayers(
       layers,
       this.backgroundLayers,
@@ -50,11 +55,13 @@ export class OpenLayersLayerManager implements LayerManagerModel {
       this.addBackgroundLayer.bind(this),
       this.removeBackgroundLayer.bind(this),
       this.getZIndexForBackgroundLayer.bind(this),
+      this.backgroundLayerGroup,
+      useProjection,
     );
   }
 
-  private addBackgroundLayer(layer: LayerModel, zIndex?: number) {
-    const olLayer = this.createLayer(layer);
+  private addBackgroundLayer(layer: LayerModel, zIndex?: number, useProjection?: string) {
+    const olLayer = this.createLayer(layer, useProjection);
     if (olLayer === null) {
       return;
     }
@@ -75,7 +82,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     return zIndex;
   }
 
-  public setLayers(layers: LayerModel[]) {
+  public setLayers(layers: LayerModel[], useProjection?: string) {
     this.prevLayerIdentifiers = this.updateLayers(
       layers,
       this.layers,
@@ -83,6 +90,8 @@ export class OpenLayersLayerManager implements LayerManagerModel {
       this.addLayer.bind(this),
       this.removeLayer.bind(this),
       this.getZIndexForLayer.bind(this),
+      this.baseLayerGroup,
+      useProjection,
     );
   }
 
@@ -90,12 +99,18 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     layers: LayerModel[],
     currentLayerMap: Map<string, BaseLayer>,
     prevLayerIdentifiers: string[],
-    addLayer: (layer: LayerModel, zIndex: number) => void,
+    addLayer: (layer: LayerModel, zIndex: number, useProjection?: string) => void,
     removeLayer: (id: string) => void,
     getZIndexForLayer: (zIndex?: number) => number,
+    layerGroup: LayerGroup,
+    useProjection?: string,
   ) {
     const layerIdentifiers = this.createLayerIdentifiers(layers);
-    if (ArrayHelper.arrayEquals(layerIdentifiers, prevLayerIdentifiers)) {
+    if (useProjection && useProjection !== this.currentMapProjection.getCode()) {
+      layerGroup.getLayers().clear();
+      currentLayerMap.clear();
+      this.currentMapProjection = getProjection(useProjection)!;
+    } else if (ArrayHelper.arrayEquals(layerIdentifiers, prevLayerIdentifiers)) {
       return prevLayerIdentifiers;
     }
     const layerIds = layers.map(layer => layer.id);
@@ -118,13 +133,13 @@ export class OpenLayersLayerManager implements LayerManagerModel {
           existingLayer.setZIndex(getZIndexForLayer(zIndex));
           return;
         }
-        addLayer(layer, zIndex);
+        addLayer(layer, zIndex, useProjection);
       });
     return layerIdentifiers;
   }
 
-  public addLayer<LayerType extends LayerTypes>(layer: LayerModel, zIndex?: number): LayerType | null {
-    const olLayer = this.createLayer(layer);
+  public addLayer<LayerType extends LayerTypes>(layer: LayerModel, zIndex?: number, useProjection?: string): LayerType | null {
+    const olLayer = this.createLayer(layer, useProjection);
     if (olLayer === null) {
       return null;
     }
@@ -318,11 +333,14 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     return;
   }
 
-  private createLayer(layer: LayerModel): LayerTypes {
+  private createLayer(layer: LayerModel, useProjection?: string): LayerTypes {
     if (LayerTypesHelper.isVectorLayer(layer)) {
       return this.createVectorLayer(layer);
     }
-    const olLayer = OlLayerHelper.createLayer(layer, this.olMap.getView().getProjection(), this.ngZone, this.httpXsrfTokenExtractor);
+    let olLayer = OlLayerHelper.createLayer(layer, this.olMap.getView().getProjection(), this.ngZone, this.httpXsrfTokenExtractor);
+    if (useProjection) {
+      olLayer = OlLayerHelper.createLayer(layer, getProjection(useProjection)!, this.ngZone, this.httpXsrfTokenExtractor);
+    }
     if (!olLayer) {
       return null;
     }
@@ -339,5 +357,4 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     this.vectorLayers.set(layer.id, vectorLayer);
     return vectorLayer;
   }
-
 }

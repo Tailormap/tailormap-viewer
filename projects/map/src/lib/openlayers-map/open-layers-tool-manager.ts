@@ -8,6 +8,7 @@ import { OpenLayersMousePositionTool } from './tools/open-layers-mouse-position-
 import { OpenLayersScaleBarTool } from './tools/open-layers-scale-bar-tool';
 import { OpenLayersSelectTool } from './tools/open-layers-select-tool';
 import { OpenLayersModifyTool } from "./tools/open-layers-modify-tool";
+import { Observable, Subject } from 'rxjs';
 
 export class OpenLayersToolManager implements ToolManagerModel {
 
@@ -19,19 +20,27 @@ export class OpenLayersToolManager implements ToolManagerModel {
 
   private switchedTool = false;
 
-  constructor(private olMap: OlMap, private ngZone: NgZone) {}
+  private readonly destroy$ = new Subject<void>();
+
+  constructor(
+    private olMap: OlMap,
+    private ngZone: NgZone,
+    private in3D$: Observable<boolean>,
+  ) {
+  }
 
   public destroy() {
     const toolIds = Array.from(this.tools.keys());
     this.autoEnabledTools = new Set();
     this.alwaysEnabledTools = new Set();
     toolIds.forEach(id => this.removeTool(id));
+    this.destroy$.next();
   }
 
   public addTool<T extends ToolModel, C extends ToolConfigModel>(tool: C): T {
     const toolId = `${tool.type.toLowerCase()}-${++OpenLayersToolManager.toolIdCount}`;
     if (ToolTypeHelper.isMapClickTool(tool)) {
-      this.tools.set(toolId, new OpenLayersMapClickTool(toolId, tool));
+      this.tools.set(toolId, new OpenLayersMapClickTool(toolId, tool, this.in3D$));
     }
     if (ToolTypeHelper.isDrawingTool(tool)) {
       this.tools.set(toolId, new OpenLayersDrawingTool(toolId, tool, this.olMap, this.ngZone));

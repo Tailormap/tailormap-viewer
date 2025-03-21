@@ -6,7 +6,10 @@ import { of } from 'rxjs';
 import { SharedModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { selectLayers, selectLayerTreeNodes, selectSelectedNode, selectSelectedNodeId } from '../../../map/state/map.selectors';
+import {
+  select3dTilesLayers,
+  selectIn3DView, selectLayers, selectLayersWithoutWebMercatorIds, selectLayerTreeNodes, selectSelectedNode, selectSelectedNodeId,
+} from '../../../map/state/map.selectors';
 import { setLayerVisibility, setSelectedLayerId } from '../../../map/state/map.actions';
 import { TocNodeLayerComponent } from '../toc-node-layer/toc-node-layer.component';
 import { ToggleAllLayersButtonComponent } from '../toggle-all-layers-button/toggle-all-layers-button.component';
@@ -36,12 +39,20 @@ const buildMockStore = (selectedLayer = '') => {
       { selector: selectLayers, value: layers },
       { selector: selectLayerTreeNodes, value: tree },
       { selector: selectSelectedNode, value: selectedLayer ? layers.find(layer => layer.id === selectedLayer) : null },
+      { selector: selectIn3DView, value: false },
+      { selector: selectLayersWithoutWebMercatorIds, value: [] },
+      { selector: select3dTilesLayers, value: [] },
     ],
   });
 };
 
 const getMenubarService = (visible: boolean, registerComponentFn: jest.Mock) => {
-  return { provide: MenubarService, useValue: { isComponentVisible$: () => of(visible), registerComponent: registerComponentFn } };
+  return { provide: MenubarService, useValue: {
+      isComponentVisible$: () => of(visible),
+      registerComponent: registerComponentFn,
+      deregisterComponent: jest.fn(),
+    },
+  };
 };
 
 const setup = async (visible: boolean, selectedLayer = '') => {

@@ -14,6 +14,7 @@ import { ScaleBarModule } from './scale-bar/scale-bar.module';
 import { SimpleSearchModule } from './simple-search';
 import { StreetviewModule } from './streetview/streetview.module';
 import { CoordinateLinkWindowModule } from './coordinate-link-window/coordinate-link-window.module';
+import { TerrainLayerToggleModule } from './terrain-layer-toggle/terrain-layer-toggle.module';
 
 @NgModule({
   declarations: [],
@@ -32,6 +33,7 @@ import { CoordinateLinkWindowModule } from './coordinate-link-window/coordinate-
     GeolocationModule,
     StreetviewModule,
     CoordinateLinkWindowModule,
+    TerrainLayerToggleModule,
   ],
 })
 export class ToolbarModule { }

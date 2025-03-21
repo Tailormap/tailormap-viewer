@@ -132,9 +132,6 @@ export class TreeComponent implements OnInit, OnDestroy {
 
   public setNodeSelected(node: FlatTreeModel) {
     this.treeService.selectionStateChanged(node);
-    if (this.useRadioInputs && !FlatTreeHelper.isExpandable(node)) {
-      this.handleRadioChange(node);
-    }
     if (this.expandOnGroupClick && FlatTreeHelper.isExpandable(node)) {
       this.treeService.toggleNodeExpanded(node);
     }
@@ -197,12 +194,14 @@ export class TreeComponent implements OnInit, OnDestroy {
     });
   }
 
-  public handleRadioChange(node: FlatTreeModel) {
+  public handleRadioChange(node: FlatTreeModel, $event: MouseEvent) {
+    $event.stopPropagation();
     const checkChange: FlatTreeModel[] = [];
     if (this.checkedRadioNode) {
       checkChange.push({ ...this.checkedRadioNode, checked: false });
     }
-    checkChange.push({ ...node, checked: true });
+    checkChange.push({ ...node, checked: !node.checked });
+
     this.treeService.checkStateChanged(checkChange);
     this.checkedRadioNode = node;
   }

@@ -23,6 +23,7 @@ export class ApplicationService implements OnDestroy {
 
   public static ROOT_NODE_TITLE = $localize `:@@admin-core.application.application-layers:Application layers`;
   public static ROOT_BASE_NODE_TITLE = $localize `:@@admin-core.application.base-maps:Basemaps`;
+  public static ROOT_TERRAIN_NODE_TITLE = $localize `:@@admin-core.application.terrain-layers:Terrain Layers`;
 
   private destroyed = new Subject<null>();
 
@@ -169,9 +170,12 @@ export class ApplicationService implements OnDestroy {
     if ((application.contentRoot?.baseLayerNodes || []).length === 0) {
       this.addNodeToTree('baseLayer', [this.createRootNode(ApplicationService.ROOT_BASE_NODE_TITLE)]);
     }
+    if ((application.contentRoot?.terrainLayerNodes || []).length === 0) {
+      this.addNodeToTree('terrainLayer', [this.createRootNode(ApplicationService.ROOT_TERRAIN_NODE_TITLE)]);
+    }
   }
 
-  private addNodeToTree(tree: 'layer' | 'baseLayer', nodes: AppTreeNodeModel[]) {
+  private addNodeToTree(tree: 'layer' | 'baseLayer' | 'terrainLayer', nodes: AppTreeNodeModel[]) {
     this.store$.dispatch(addApplicationRootNodes({ tree, treeNodes: nodes }));
   }
 

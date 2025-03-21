@@ -12,6 +12,7 @@ const setup = async (isVisible: boolean) => {
   const menubarServiceMock = {
     isComponentVisible$: jest.fn(() => of(isVisible)),
     registerComponent: jest.fn(),
+    deregisterComponent: jest.fn(),
   };
   await render(FilterComponent, {
     imports: [SharedImportsModule],
