@@ -19,11 +19,6 @@ export const setSelectedFeatureInfoLayer = createAction(
   props<{ layer: string }>(),
 );
 
-export const add3DLayerToFeatureInfoLayers = createAction(
-  `${featureInfoActionsPrefix} Add 3D Layer To Feature Info Layers`,
-  props<{ layer: FeatureInfoLayerModel }>(),
-);
-
 export const hideFeatureInfoDialog = createAction(`${featureInfoActionsPrefix} Hide Feature Info Dialog`);
 export const expandCollapseFeatureInfoDialog = createAction(`${featureInfoActionsPrefix} Expand/Collapse Feature Info Dialog`);
 export const expandCollapseFeatureInfoLayerList = createAction(`${featureInfoActionsPrefix} Expand/Collapse Feature Info Layer List`);

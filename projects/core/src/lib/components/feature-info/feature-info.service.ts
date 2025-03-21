@@ -14,7 +14,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { FilterService } from '../../filter/services/filter.service';
 import { FeatureInfoLayerModel } from './models/feature-info-layer.model';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
-import { add3DLayerToFeatureInfoLayers, loadFeatureInfo } from './state/feature-info.actions';
+import { loadFeatureInfo } from './state/feature-info.actions';
 import { FeatureInfoFeatureModel } from './models/feature-info-feature.model';
 
 @Injectable({
@@ -43,14 +43,18 @@ export class FeatureInfoService {
     return combineLatest([
       this.store$.select(selectVisibleLayersWithAttributes),
       this.store$.select(selectVisibleWMSLayersWithoutAttributes),
-      this.store$.select(selectLayer(cesiumFeatureInfo?.layerId || '')),
+      cesiumFeatureInfo?.layerId ? this.store$.select(selectLayer(cesiumFeatureInfo.layerId)) : of(null),
       this.store$.select(selectViewerId),
       this.mapService.getMapViewDetails$(),
     ])
       .pipe(
         take(1),
         tap(([ layers, wmsLayers, cesiumLayer ]) => {
-          const featureInfoLayers = [ ...layers, ...wmsLayers ]
+          const allLayers = [ ...layers, ...wmsLayers ];
+          if (cesiumLayer) {
+            allLayers.push(cesiumLayer);
+          }
+          const featureInfoLayers = allLayers
             .filter(l => !l.hiddenFunctionality?.includes(HiddenLayerFunctionality.featureInfo))
             .sort((l1, l2) => l1.title.localeCompare(l2.title))
             .map<FeatureInfoLayerModel>(l => ({
@@ -59,10 +63,6 @@ export class FeatureInfoService {
               loading: LoadingStateEnum.LOADING,
             }));
           this.store$.dispatch(loadFeatureInfo({ mapCoordinates, mouseCoordinates, layers: featureInfoLayers }));
-          if (cesiumLayer) {
-            const cesiumFeatureInfoLayer: FeatureInfoLayerModel = { id: cesiumLayer.id, title: cesiumLayer.title, loading: LoadingStateEnum.LOADING };
-            this.store$.dispatch(add3DLayerToFeatureInfoLayers({ layer: cesiumFeatureInfoLayer }));
-          }
         }),
         mergeMap(([ layers, wmsLayers, _cesiumLayer, viewerId, mapViewDetails ]) => {
           if (!viewerId) {
@@ -180,15 +180,11 @@ export class FeatureInfoService {
     const feature: FeatureInfoFeatureModel = {
       __fid: cesiumFeatureInfo.featureId.toString(),
       attributes: cesiumFeatureInfo.properties.reduce<FeatureModelAttributes>(
-        (acc, { id, value }) => {
-          acc[id] = value;
-          return acc;
-        },
+        (attributes, { id, value }) => ({ ...attributes, [id]: value }),
         {},
       ),
       layerId: cesiumFeatureInfo.layerId,
     };
-
     return {
       features: [feature],
       columnMetadata: cesiumFeatureInfo.columnMetadata,

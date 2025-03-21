@@ -18,7 +18,7 @@ export class LayoutService {
 
   public componentsConfig$: Observable<LayoutConfig>;
 
-  private disallowingComponents = [
+  private componentsNotIn3D = [
     BaseComponentTypeEnum.PRINT,
     BaseComponentTypeEnum.DRAWING,
     BaseComponentTypeEnum.MEASURE,
@@ -51,19 +51,18 @@ export class LayoutService {
 
   public isComponentEnabled$(componentType: string) {
     return this.componentsConfig$.pipe(
-      map(config => BaseComponentConfigHelper.isComponentEnabled(config, componentType)),
+      map(config => this.isComponentEnabled(config, componentType)),
     );
   }
 
   public isComponentEnabled(layoutConfig: LayoutConfig, componentType: string) {
-    if (layoutConfig.in3D) {
-      if (this.disallowingComponents.some(disallowingComponent => disallowingComponent === componentType)) {
-        return false;
-      }
-    } else {
-      if (this.componentsOnlyIn3D.some(componentOnlyIn3D => componentOnlyIn3D === componentType)) {
-        return false;
-      }
+    if (
+      // If in 3d, disable components not usable in 3d
+      (layoutConfig.in3D && this.componentsNotIn3D.some(disallowingComponent => disallowingComponent === componentType))
+      // If not in 3d, disable components only usable in 3d
+      || (!layoutConfig.in3D && this.componentsOnlyIn3D.some(componentOnlyIn3D => componentOnlyIn3D === componentType))
+    ) {
+      return false;
     }
     return BaseComponentConfigHelper.isComponentEnabled(layoutConfig.config, componentType);
   }
