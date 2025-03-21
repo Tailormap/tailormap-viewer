@@ -8,6 +8,8 @@
     "@angular/common": "^19.2.2",
     "@angular/core": "^19.2.2",
     "ol": "^10.4.0",
+    "cesium": "^1.116.0",
+    "olcs": "^2.22.1",
     "proj4": "^2.15.0",
     "html2canvas": "^1.4.1",
     "jsts": "^2.12.1",
