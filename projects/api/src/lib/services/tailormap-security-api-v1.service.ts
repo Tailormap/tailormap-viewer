@@ -22,14 +22,12 @@ export class TailormapSecurityApiV1Service implements TailormapSecurityApiV1Serv
   }
 
   public getUser$(): Observable<ExtendedUserResponseModel> {
-    const errorResponse: ExtendedUserResponseModel = { isAuthenticated: false, username: '', roles: [], properties: [], groupProperties: [], error: 'other' };
+    const errorResponse: ExtendedUserResponseModel = { isAuthenticated: false, username: '', roles: [], properties: [], groupProperties: [] };
     return this.httpClient.get<UserResponseModel>(`${TailormapApiConstants.BASE_URL}/user`)
       .pipe(
         catchError((e: HttpErrorResponse): Observable<ExtendedUserResponseModel> => {
-            if (e.status === HttpStatusCode.Unauthorized || e.status === HttpStatusCode.Forbidden) {
-              return of({ ...errorResponse, error: 'unauthorized' });
-            }
-            return of(errorResponse);
+          // isAuthenticated is false but actually we don't know. isHttpError means ignore result.
+          return of({ ...errorResponse, isHttpError: true });
         }),
       );
   }
