@@ -1,7 +1,7 @@
 import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
 import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type.enum';
 
-export type MakerType = 'circle' | 'square' | 'triangle' | 'diamond' | 'cross' | 'star' | 'arrow';
+export type MarkerType = 'circle' | 'square' | 'triangle' | 'diamond' | 'cross' | 'star' | 'arrow';
 
 export enum ArrowTypeEnum {
   NONE = 'none',
@@ -23,7 +23,7 @@ export enum LabelStyleEnum {
 }
 
 export interface DrawingFeatureStyleModel {
-  marker?: MakerType;
+  marker?: MarkerType;
   markerSize?: number;
   markerFillColor?: string;
   markerStrokeColor?: string;

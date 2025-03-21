@@ -1,6 +1,6 @@
 import { FeatureModelType } from '../models/feature-model.type';
 import { Feature } from 'ol';
-import { WKT } from 'ol/format';
+import { GeoJSON, WKT } from 'ol/format';
 import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
 import { Circle, Geometry } from 'ol/geom';
 import { fromCircle } from 'ol/geom/Polygon';
@@ -12,6 +12,20 @@ import { Projection } from 'ol/proj';
 export class FeatureHelper {
 
   private static wktFormatter = new WKT();
+  private static geoJsonFormatter = new GeoJSON();
+
+  /**
+   * Transforms a GeoJSON geometry object to an ol.Geometry object.
+   * @param geojsonGeometry The GeoJSON object to transform
+   * @param sourceProjection
+   * @param mapProjection
+   */
+  public static fromGeoJSON(geojsonGeometry: object, sourceProjection?: string, mapProjection?: string): Geometry {
+    return  FeatureHelper.geoJsonFormatter.readGeometry(geojsonGeometry, {
+      dataProjection: sourceProjection,
+      featureProjection: mapProjection,
+    });
+  }
 
   private static isFeatureModel(feature: FeatureModelType): feature is FeatureModel {
     return !!(feature as FeatureModel).__fid;

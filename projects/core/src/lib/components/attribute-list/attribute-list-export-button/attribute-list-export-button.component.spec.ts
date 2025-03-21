@@ -10,11 +10,13 @@ import userEvent from '@testing-library/user-event';
 import { SharedImportsModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { selectCQLFilters } from '../../../filter/state/filter.selectors';
+import { selectLayers } from '../../../map/state/map.selectors';
 
 const setup = async (layerId: string | null = null, supportedFormats: SupportedExportFormats[] = []) => {
   const store = provideMockStore({
     initialState: {},
     selectors: [
+      { selector: selectLayers, value: [{ id: '2', hiddenFunctionality: ['export'] }] },
       { selector: selectSelectedTabLayerId, value: layerId },
       { selector: selectSelectedTab, value: layerId ? { layerId, label: 'Some layer' } : null },
       { selector: selectCQLFilters, value: new Map() },
@@ -42,6 +44,11 @@ describe('AttributeListExportButtonComponent', () => {
 
   test('should render nothing with layer but without supported formats', async () => {
     await setup('1');
+    expect(screen.queryByRole('button')).not.toBeInTheDocument();
+  });
+
+  test('should render nothing with layer but with export functionality hidden', async () => {
+    await setup('2');
     expect(screen.queryByRole('button')).not.toBeInTheDocument();
   });
 

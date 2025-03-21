@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import {
-  AttributeType, FeaturesResponseModel, TAILORMAP_API_V1_SERVICE, FeatureModel, ApiHelper, FeatureModelAttributes,
+  AttributeType, FeaturesResponseModel, TAILORMAP_API_V1_SERVICE, FeatureModel, ApiHelper, FeatureModelAttributes, HiddenLayerFunctionality,
 } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { selectViewerId } from '../../state/core.selectors';
@@ -51,6 +51,7 @@ export class FeatureInfoService {
         take(1),
         tap(([ layers, wmsLayers, cesiumLayer ]) => {
           const featureInfoLayers = [ ...layers, ...wmsLayers ]
+            .filter(l => !l.hiddenFunctionality?.includes(HiddenLayerFunctionality.featureInfo))
             .sort((l1, l2) => l1.title.localeCompare(l2.title))
             .map<FeatureInfoLayerModel>(l => ({
               id: l.id,

@@ -4,35 +4,27 @@
   <h2 *ngIf="!dialogLayout" class="page-details-title"><ng-container *ngTemplateOutlet="title"></ng-container></h2>
 
   @if (!featureType.defaultGeometryAttribute) {
-    <tm-error-message i18n="@@admin-core.catalog.feature-type-no-default-geom-warning" [show]="true" [friendlyError]="true">
-      This feature type does not have a geometry attribute.
-    </tm-error-message>
+    <tm-error-message i18n="@@admin-core.catalog.feature-type-no-default-geom-warning" [show]="true" [friendlyError]="true">This feature type does not have a geometry attribute.</tm-error-message>
   }
 
   @if(featureSource$ | async; as featureSource) {
     @if (featureSource.protocol !== 'JDBC') {
-      <tm-error-message i18n="@@admin-core.catalog.feature-type-not-editable-warning-not-jdbc" [show]="true" [friendlyError]="true">
-        This feature type is not editable because editing is only supported for JDBC feature sources.
-      </tm-error-message>
+      <tm-error-message i18n="@@admin-core.catalog.feature-type-not-editable-warning-not-jdbc" [show]="true" [friendlyError]="true">This feature type is not editable because editing is only supported for JDBC feature sources.</tm-error-message>
     } @else {
       @if (!featureType.primaryKeyAttribute) {
-        <tm-error-message i18n="@@admin-core.catalog.feature-type-no-pk-warning" [show]="true" [friendlyError]="true">
-          This feature type does not have a primary key.
-        </tm-error-message>
+        <tm-error-message i18n="@@admin-core.catalog.feature-type-no-pk-warning" [show]="true" [friendlyError]="true">This feature type does not have a primary key.</tm-error-message>
       }
 
       @if(featureType.writeable) {
         @if (featureType.defaultGeometryAttribute) {
-          <tm-info-message i18n="@@admin-core.catalog.feature-type-editable-info">
-            This feature type appears to be editable. Editing may still fail if the database user does not have the required permissions
-            or because of other reasons such as triggers, etc.
-          </tm-info-message>
+          <tm-info-message i18n="@@admin-core.catalog.feature-type-editable-info">This feature type appears to be
+            editable. Editing may still fail if the database user does not have the required permissions or because of
+            other reasons such as triggers, etc.</tm-info-message>
         }
       } @else {
-        <tm-error-message i18n="@@admin-core.catalog.feature-type-read-only-warning-jdbc" [show]="true" [friendlyError]="true">
-          This JDBC feature type is read-only because of a missing primary key, a composite primary key or an unknown column type.
-          Check the logs for warnings after refreshing the feature source for details.
-        </tm-error-message>
+        <tm-error-message i18n="@@admin-core.catalog.feature-type-read-only-warning-jdbc" [show]="true" [friendlyError]="true">This
+          JDBC feature type is read-only because of a missing primary key, a composite primary key or an unknown column
+          type. Check the logs for warnings after refreshing the feature source for details.</tm-error-message>
       }
     }
   }

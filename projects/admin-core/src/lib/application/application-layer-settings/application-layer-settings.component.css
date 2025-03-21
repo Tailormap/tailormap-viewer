@@ -26,3 +26,7 @@ tm-admin-form-warning-message {
 .available-crs-text {
   margin-top: 8px;
 }
+
+fieldset {
+  margin: 16px 0;
+}

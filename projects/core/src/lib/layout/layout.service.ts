@@ -4,6 +4,7 @@ import { selectComponentsConfig } from '../state/core.selectors';
 import { Store } from '@ngrx/store';
 import { Injectable } from '@angular/core';
 import { selectIn3DView } from '../map/state/map.selectors';
+import { setComponentEnabled } from '../state/core.actions';
 
 export interface LayoutConfig {
   config: ComponentModel[];
@@ -37,6 +38,20 @@ export class LayoutService {
       map(([ components, in3DView ]) => {
         return { config: components, in3D: in3DView };
       }),
+    );
+  }
+
+  public enableComponent(componentType: string) {
+    this.store$.dispatch(setComponentEnabled({ componentType, enabled: true }));
+  }
+
+  public disableComponent(componentType: string) {
+    this.store$.dispatch(setComponentEnabled({ componentType, enabled: false }));
+  }
+
+  public isComponentEnabled$(componentType: string) {
+    return this.componentsConfig$.pipe(
+      map(config => BaseComponentConfigHelper.isComponentEnabled(config, componentType)),
     );
   }
 

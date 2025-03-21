@@ -1,11 +1,15 @@
 import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
-import { BehaviorSubject, concatMap, distinctUntilChanged, map, Observable, of, Subject, take, withLatestFrom, takeUntil } from 'rxjs';
+import {
+  BehaviorSubject, concatMap, distinctUntilChanged, map, Observable, of, Subject, take, withLatestFrom, takeUntil, combineLatest,
+} from 'rxjs';
 import { AttributeListExportService, SupportedExportFormats } from '../services/attribute-list-export.service';
 import { Store } from '@ngrx/store';
 import {
   selectColumnsForSelectedTab, selectSelectedTab, selectSelectedTabLayerId, selectSortForSelectedTab,
 } from '../state/attribute-list.selectors';
 import { selectCQLFilters } from '../../../filter/state/filter.selectors';
+import { selectLayers } from '../../../map/state/map.selectors';
+import { HiddenLayerFunctionality } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-attribute-list-export-button',
@@ -31,12 +35,19 @@ export class AttributeListExportButtonComponent implements OnDestroy {
     private store$: Store,
     private exportService: AttributeListExportService,
   ) {
-    this.store$.select(selectSelectedTabLayerId)
+    combineLatest([
+      this.store$.select(selectLayers),
+      this.store$.select(selectSelectedTabLayerId),
+    ])
       .pipe(
         takeUntil(this.destroyed),
         distinctUntilChanged(),
-        concatMap(layerId => {
+        concatMap(([ layers, layerId ]) => {
           if (layerId === null) {
+            return of([]);
+          }
+          const layer = layers.find(l => l.id === layerId);
+          if (layer?.hiddenFunctionality?.includes(HiddenLayerFunctionality.export)) {
             return of([]);
           }
           return this.exportService.getExportFormats$(layerId);

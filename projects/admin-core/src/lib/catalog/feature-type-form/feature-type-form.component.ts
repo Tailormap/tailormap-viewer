@@ -32,7 +32,7 @@ export class FeatureTypeFormComponent {
   public featureTypeUpdated = new EventEmitter<FeatureTypeModel | null>;
 
   @Output()
-  public cancel = new EventEmitter();
+  public cancelled = new EventEmitter();
 
   private _featureType: FeatureTypeModel | null = null;
 
@@ -91,7 +91,7 @@ export class FeatureTypeFormComponent {
   }
 
   public closeDialog() {
-    this.cancel.emit();
+    this.cancelled.emit();
   }
 
   public attributeEnabledChanged(
