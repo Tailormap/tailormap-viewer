@@ -20,7 +20,7 @@ export class CesiumEventManager {
     scene3D.postProcessStages.add(Cesium.PostProcessStageLibrary.createSilhouetteStage([silhouette]));
 
     cesiumEventHandler.setInputAction((movement: any) => {
-      const pickedFeature: Cesium3DTileFeature = scene3D.pick(movement.position);
+      const pickedFeature: Cesium3DTileFeature | unknown = scene3D.pick(movement.position);
       const positionEarthCentered: Cartesian3 = scene3D.pickPosition(movement.position);
       const cartographicPosition: Cartographic = Cesium.Ellipsoid.WGS84.cartesianToCartographic(positionEarthCentered);
       let position: { x: number; y: number; z: number };
@@ -36,8 +36,7 @@ export class CesiumEventManager {
         const projection = new Cesium.WebMercatorProjection;
         position = projection.project(cartographicPosition);
       }
-
-      if (!Cesium.defined(pickedFeature)) {
+      if (!CesiumEventManager.isCesium3DTileFeature(pickedFeature)) {
         silhouette.selected = [];
         CesiumEventManager.map3DClickEvent.next({ position: position, mouseCoordinates: movement.position });
       } else {
@@ -74,6 +73,10 @@ export class CesiumEventManager {
 
 
     }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+  }
+
+  private static isCesium3DTileFeature(feature: Cesium3DTileFeature | unknown): feature is Cesium3DTileFeature {
+    return Cesium.defined(feature) && feature instanceof Cesium.Cesium3DTileFeature;
   }
 
   public static onMap3DClick$(): Observable<Selection3dModel> {

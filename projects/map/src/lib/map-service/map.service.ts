@@ -256,7 +256,7 @@ export class MapService {
     this.map.setPadding(padding);
   }
 
-  public getCesiumLayerManager$(): Observable<CesiumManager> {
+  public getCesiumManager$(): Observable<CesiumManager> {
     return this.map.getCesiumManager$();
   }
 
@@ -268,7 +268,4 @@ export class MapService {
     this.map.switch3D();
   }
 
-  public get3DLayerIdByIndex(index: number): string {
-    return this.map.get3DLayerIdByIndex(index);
-  }
 }

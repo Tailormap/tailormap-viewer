@@ -95,16 +95,20 @@ export class ApplicationMapService implements OnDestroy {
         }
       });
 
-    combineLatest([
-      this.store$.select(selectEnable3D),
-      this.store$.select(select3DLayers)
-        .pipe(concatMap(layers => this.get3DLayersAndLayerManager$(layers))),
-    ])
+    this.store$.select(selectEnable3D)
       .pipe(takeUntil(this.destroyed))
-      .subscribe(([ enable3D, [ layers, layerManager ]]) => {
-        if (enable3D) {
+      .subscribe(enable3d => {
+        if (enable3d) {
           this.mapService.make3D();
         }
+      });
+
+    this.store$.select(select3DLayers)
+      .pipe(
+        takeUntil(this.destroyed),
+        concatMap(layers => this.get3DLayersAndLayerManager$(layers)),
+      )
+      .subscribe(([ layers, layerManager ]) => {
         layerManager.addLayers(layers.filter(isValidLayer));
       });
   }
@@ -134,7 +138,7 @@ export class ApplicationMapService implements OnDestroy {
       .map(layer => this.convertAppLayerToMapLayer$(layer));
     return forkJoin([
       layers$.length > 0 ? forkJoin(layers$) : of([]),
-      this.mapService.getCesiumLayerManager$().pipe(take(1)),
+      this.mapService.getCesiumManager$().pipe(take(1)),
     ]);
   }
 

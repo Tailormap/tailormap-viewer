@@ -409,8 +409,4 @@ export class OpenLayersMap implements MapViewerModel {
     this.in3D.next(!this.in3D.value);
   }
 
-  public get3DLayerIdByIndex(index: number): string {
-    return this.map3D.value?.getLayerId(index) || '';
-  }
-
 }
