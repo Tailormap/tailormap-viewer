@@ -33,7 +33,11 @@ export class UserLoginCheckService {
         if (!this.isAuthenticated && userDetails.isAuthenticated) {
           this.isAuthenticated = true;
         }
-        if (this.isAuthenticated && (!userDetails.isAuthenticated && userDetails.error === 'unauthorized') && !this.confirmOpen) {
+        if (userDetails.isHttpError) {
+          // offline, network change, etc. Not sure if actually logged out, may be a temporary failure: do not show popup
+          return;
+        }
+        if (this.isAuthenticated && !userDetails.isAuthenticated && !this.confirmOpen) {
           if (this.router.url.includes('/login')) {
             this.isAuthenticated = false;
             return;

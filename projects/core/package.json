@@ -1,6 +1,6 @@
 {
   "name": "@tailormap-viewer/core",
-  "version": "11.5.0-rc5",
+  "version": "11.5.0",
   "publishConfig": {
     "registry": "https://repo.b3p.nl/nexus/repository/npm-public"
   },
@@ -22,14 +22,15 @@
     "@sentry/angular": "^8.50.0",
     "@sentry/browser": "^8.50.0",
     "@stardazed/zlib": "^1.0.1",
-    "@tailormap-viewer/shared": "^11.5.0-rc5",
-    "@tailormap-viewer/map": "^11.5.0-rc5",
-    "@tailormap-viewer/api": "^11.5.0-rc5",
+    "@tailormap-viewer/shared": "^11.5.0",
+    "@tailormap-viewer/map": "^11.5.0",
+    "@tailormap-viewer/api": "^11.5.0",
     "jspdf": "^3.0.1",
     "luxon": "^3.5.0",
     "nanoid": "^5.1.4",
     "rxjs": "^7.8.2",
-    "svg2pdf.js": "^2.4.0"
+    "svg2pdf.js": "^2.4.0",
+    "uuid": "^11.1.0"
   },
   "dependencies": {
     "tslib": "^2.4.0"
