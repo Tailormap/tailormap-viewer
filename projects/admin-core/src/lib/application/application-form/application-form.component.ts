@@ -65,7 +65,7 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
     }),
     defaultLanguage: new FormControl<string | null>(null),
     hideLoginButton: new FormControl<boolean | null>(null),
-    enable3D: new FormControl<boolean | null>(null),
+    enable3d: new FormControl<boolean | null>(null),
     hideLanguageSwitcher: new FormControl<boolean | null>(null),
     initialExtent: new FormControl<BoundsModel | null>(null),
     maxExtent: new FormControl<BoundsModel | null>(null),
@@ -124,7 +124,7 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
         };
         const uiSettings: UiSettingsModel = {
           hideLoginButton: typeof value.hideLoginButton === 'boolean' ? value.hideLoginButton : false,
-          enable3D: typeof value.enable3D === 'boolean' ? value.enable3D : false,
+          enable3d: typeof value.enable3d === 'boolean' ? value.enable3d : false,
         };
         this.updateApplication.emit({ application, i18nSettings, uiSettings });
       });
@@ -163,8 +163,8 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
       hideLoginButton: typeof application?.settings?.uiSettings?.hideLoginButton === "boolean"
         ? application.settings.uiSettings.hideLoginButton
         : null,
-      enable3D: typeof application?.settings?.uiSettings?.enable3D === "boolean"
-        ? application.settings.uiSettings.enable3D
+      enable3d: typeof application?.settings?.uiSettings?.enable3d === "boolean"
+        ? application.settings.uiSettings.enable3d
         : null,
       authorizationRules: application ? application.authorizationRules : [AUTHORIZATION_RULE_ANONYMOUS],
     }, { emitEvent: false });

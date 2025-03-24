@@ -5,7 +5,7 @@ import { ComponentsModule } from '../components/components.module';
 import { MapModule } from '@tailormap-viewer/map';
 import { EmbeddedLayoutComponent } from './embedded-layout/embedded-layout.component';
 import { ShareViewerModule } from '../components/toolbar/share-viewer/share-viewer.module';
-import { Switch3DModule } from "../components/toolbar/switch3D/switch3-d.module";
+import { Switch3dModule } from "../components/toolbar/switch3d/switch3d.module";
 
 
 
@@ -19,7 +19,7 @@ import { Switch3DModule } from "../components/toolbar/switch3D/switch3-d.module"
     ComponentsModule,
     MapModule,
     ShareViewerModule,
-    Switch3DModule,
+    Switch3dModule,
   ],
   exports: [
     BaseLayoutComponent,

@@ -27,7 +27,7 @@ describe('OpenLayersMapClickTool', () => {
   test('handles 3D map click', done => {
     // @ts-expect-error overwriting this prop in test is allowed
     OpenLayersEventManager.onMapClick$ = jest.fn(() => of({ coordinate: [ 1, 2 ], pixel: [ 2, 3 ] }));
-    CesiumEventManager.onMap3DClick$ = jest.fn(() => of({ position: { x: 3, y: 4, z: 5 }, mouseCoordinates: { x: 2, y: 3 } }));
+    CesiumEventManager.onMap3dClick$ = jest.fn(() => of({ position: { x: 3, y: 4, z: 5 }, mouseCoordinates: { x: 2, y: 3 } }));
     const tool = new OpenLayersMapClickTool('tool-123', { type: ToolTypeEnum.MapClick }, of(true));
     tool.mapClick$.subscribe(clickEvt => {
       expect(clickEvt).toEqual({
@@ -37,7 +37,7 @@ describe('OpenLayersMapClickTool', () => {
       done();
     });
     tool.enable();
-    expect(CesiumEventManager.onMap3DClick$).toHaveBeenCalled();
+    expect(CesiumEventManager.onMap3dClick$).toHaveBeenCalled();
   });
 
 });

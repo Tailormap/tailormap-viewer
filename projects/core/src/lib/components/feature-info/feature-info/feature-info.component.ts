@@ -9,7 +9,7 @@ import { ToolbarComponentEnum } from '../../toolbar/models/toolbar-component.enu
 import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.helper';
 import { FeatureInfoService } from '../feature-info.service';
 import {
-  select3dTilesLayers, selectIn3DView, selectVisibleLayersWithAttributes, selectVisibleWMSLayersWithoutAttributes,
+  select3dTilesLayers, selectIn3dView, selectVisibleLayersWithAttributes, selectVisibleWMSLayersWithoutAttributes,
 } from '../../../map/state/map.selectors';
 import { take } from 'rxjs/operators';
 
@@ -69,7 +69,7 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
       this.store$.select(selectVisibleLayersWithAttributes),
       this.store$.select(selectVisibleWMSLayersWithoutAttributes),
       this.store$.select(select3dTilesLayers),
-      this.store$.select(selectIn3DView),
+      this.store$.select(selectIn3dView),
     ])
       .pipe(
         take(1),

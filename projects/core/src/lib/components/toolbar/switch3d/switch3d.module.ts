@@ -2,11 +2,11 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { ClipboardModule } from '@angular/cdk/clipboard';
-import { Switch3DComponent } from './switch3-d.component';
+import { Switch3dComponent } from './switch3d.component';
 
 @NgModule({
   declarations: [
-    Switch3DComponent,
+    Switch3dComponent,
   ],
   imports: [
     CommonModule,
@@ -14,8 +14,8 @@ import { Switch3DComponent } from './switch3-d.component';
     SharedModule,
   ],
   exports: [
-    Switch3DComponent,
+    Switch3dComponent,
   ],
 })
-export class Switch3DModule {
+export class Switch3dModule {
 }

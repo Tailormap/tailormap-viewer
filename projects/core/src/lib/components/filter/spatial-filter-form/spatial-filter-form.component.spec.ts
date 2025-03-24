@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/angular';
 import { SpatialFilterFormComponent } from './spatial-filter-form.component';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { selectFilterableLayers, selectIn3DView } from '../../../map/state/map.selectors';
+import { selectFilterableLayers, selectIn3dView } from '../../../map/state/map.selectors';
 import {
   hasSelectedLayersAndGeometry, selectSelectedFilterGroupError, selectSelectedFilterGroupId,
   selectSelectedLayersCount,
@@ -34,7 +34,7 @@ const setup = async (conf: {
       { selector: hasSelectedLayersAndGeometry, value: conf.selectedLayersAndGeometry || false },
       { selector: selectSelectedFilterGroupId, value: conf.selectedFilterGroup?.id || null },
       { selector: selectSelectedFilterGroupError, value: conf.selectedFilterGroup?.error || undefined },
-      { selector: selectIn3DView, value: false },
+      { selector: selectIn3dView, value: false },
     ],
   });
   const mapServiceMock = createMapServiceMock();

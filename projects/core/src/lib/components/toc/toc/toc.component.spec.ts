@@ -8,7 +8,7 @@ import userEvent from '@testing-library/user-event';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import {
   select3dTilesLayers,
-  selectIn3DView, selectLayers, selectLayersWithoutWebMercatorIds, selectLayerTreeNodes, selectSelectedNode, selectSelectedNodeId,
+  selectIn3dView, selectLayers, selectLayersWithoutWebMercatorIds, selectLayerTreeNodes, selectSelectedNode, selectSelectedNodeId,
 } from '../../../map/state/map.selectors';
 import { setLayerVisibility, setSelectedLayerId } from '../../../map/state/map.actions';
 import { TocNodeLayerComponent } from '../toc-node-layer/toc-node-layer.component';
@@ -39,7 +39,7 @@ const buildMockStore = (selectedLayer = '') => {
       { selector: selectLayers, value: layers },
       { selector: selectLayerTreeNodes, value: tree },
       { selector: selectSelectedNode, value: selectedLayer ? layers.find(layer => layer.id === selectedLayer) : null },
-      { selector: selectIn3DView, value: false },
+      { selector: selectIn3dView, value: false },
       { selector: selectLayersWithoutWebMercatorIds, value: [] },
       { selector: select3dTilesLayers, value: [] },
     ],

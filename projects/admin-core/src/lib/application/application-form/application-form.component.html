@@ -53,9 +53,9 @@
     <mat-slide-toggle formControlName="hideLanguageSwitcher"
                       i18n="@@admin-core.application.hide-language-switcher">Hide language switcher in viewer</mat-slide-toggle>
 
-    <mat-slide-toggle formControlName="enable3D"
+    <mat-slide-toggle formControlName="enable3d"
                     i18n="@@admin-core.application.enable-3D">Enable 3D viewing</mat-slide-toggle>
-    @if ( applicationForm.get('crs')?.value !== 'EPSG:3857' && applicationForm.get('enable3D')?.value ) {
+    @if ( applicationForm.get('crs')?.value !== 'EPSG:3857' && applicationForm.get('enable3d')?.value ) {
       <div class="hint" i18n="@@admin-core.application.enable-3D-hint">Only the layers that are available in EPSG:3857 are visible in 3D</div>
     }
 

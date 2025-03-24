@@ -50,6 +50,6 @@ export class ComponentsModule {
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.SHARE_VIEWER, $localize `:@@admin-core.application.component-share-viewer:Share viewer`, BaseComponentConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.COORDINATE_LINK_WINDOW, $localize `:@@admin-core.application.component-coordinate-link-window:Coordinate Link Window`, CoordinateLinkWindowComponentConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.SIMPLE_SEARCH, $localize `:@@admin-core.application.component-simple-search:Search`, SimpleSearchComponentConfigComponent);
-    configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.TERRAIN_LAYER_TOGGLE, $localize `:@@admin-core.application.component-terrain-layer-toggle:Terrain Layer Toggle`, BaseComponentConfigComponent);
+    configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.TERRAIN_LAYER_TOGGLE, $localize `:@@admin-core.application.component-terrain-layer-toggle:Terrain layer toggle`, BaseComponentConfigComponent);
   }
 }

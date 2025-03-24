@@ -13,7 +13,7 @@ import { MapService } from '@tailormap-viewer/map';
 import { selectFilteredLayerTree, selectFilterEnabled } from '../state/toc.selectors';
 import { toggleFilterEnabled } from '../state/toc.actions';
 import {
-  select3dTilesLayers, selectIn3DView, selectLayersWithoutWebMercatorIds, selectSelectedNode, selectSelectedNodeId,
+  select3dTilesLayers, selectIn3dView, selectLayersWithoutWebMercatorIds, selectSelectedNode, selectSelectedNodeId,
 } from '../../../map/state/map.selectors';
 import { moveLayerTreeNode, setLayerVisibility, setSelectedLayerId, toggleLevelExpansion } from '../../../map/state/map.actions';
 
@@ -95,7 +95,7 @@ export class TocComponent implements OnInit, OnDestroy {
 
     this.menubarService.registerComponent({ type: BaseComponentTypeEnum.TOC, component: TocMenuButtonComponent });
 
-    this.in3D = this.store$.selectSignal(selectIn3DView);
+    this.in3D = this.store$.selectSignal(selectIn3dView);
     this.layersWithoutWebMercator = this.store$.selectSignal(selectLayersWithoutWebMercatorIds);
     const tiles3DLayers = this.store$.selectSignal(select3dTilesLayers);
     this.tiles3DLayerIds = computed(() => tiles3DLayers().map(l => l.id));

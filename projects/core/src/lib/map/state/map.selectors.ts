@@ -19,7 +19,7 @@ export const selectTerrainLayerTreeNodes = createSelector(selectMapState, state 
 export const selectSelectedTerrainNodeId = createSelector(selectMapState, state => state.selectedTerrainLayerNode);
 export const selectLoadStatus = createSelector(selectMapState, state => state.loadStatus);
 export const selectLayerDetailsAll = createSelector(selectMapState, state => state.layerDetails);
-export const selectIn3DView = createSelector(selectMapState, state => state.in3DView);
+export const selectIn3dView = createSelector(selectMapState, state => state.in3dView);
 
 export const selectMapOptions = createSelector(
   selectMapSettings,

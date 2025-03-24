@@ -20,9 +20,9 @@ export const selectShowLoginButton = createSelector(
   viewerState => viewerState?.uiSettings?.hideLoginButton !== true,
 );
 
-export const selectEnable3D = createSelector(
+export const selectEnable3d = createSelector(
   selectViewerState,
-  viewerState => viewerState?.uiSettings?.enable3D === true,
+  viewerState => viewerState?.uiSettings?.enable3d === true,
 );
 
 export const selectComponentsConfig = createSelector(

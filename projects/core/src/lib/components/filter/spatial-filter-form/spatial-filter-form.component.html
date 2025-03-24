@@ -22,7 +22,7 @@
         </div>
 
         <div class="form-section">
-          @if (( in3DView$ | async ) === false) {
+          @if (( in3dView$ | async ) === false) {
             <div i18n="@@core.filter.draw-filter-geometry" class="form-section-label">Draw filter geometry</div>
             <tm-spatial-filter-form-draw-geometries [drawingLayerId]="drawingLayerId"></tm-spatial-filter-form-draw-geometries>
           } @else {

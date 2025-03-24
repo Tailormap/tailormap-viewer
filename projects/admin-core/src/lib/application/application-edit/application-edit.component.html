@@ -5,7 +5,7 @@
     <a routerLink="." routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" i18n="@@admin-core.application.settings">Settings</a>
     <a [routerLink]="routes.APPLICATION_DETAILS_LAYERS" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" i18n="@@admin-core.application.layers">Layers</a>
     <a [routerLink]="routes.APPLICATION_DETAILS_BASE_LAYERS" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" i18n="@@admin-core.application.base-maps">Basemaps</a>
-    @if ((application$ | async)?.settings?.uiSettings?.enable3D) {
+    @if ((application$ | async)?.settings?.uiSettings?.enable3d) {
       <a [routerLink]="routes.APPLICATION_DETAILS_TERRAIN_LAYERS" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" i18n="@@admin-core.application.terrain">Terrain</a>
     }
     <a [routerLink]="routes.APPLICATION_DETAILS_STYLING" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" i18n="@@admin-core.application.styling">Styling</a>

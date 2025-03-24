@@ -2,14 +2,14 @@ import { ChangeDetectionStrategy, Component, computed, DestroyRef, Signal } from
 import { map, Observable, combineLatest, take } from 'rxjs';
 import { MapService } from '@tailormap-viewer/map';
 import { Store } from '@ngrx/store';
-import { selectEnable3D } from '../../../state/core.selectors';
-import { toggleIn3DView } from '../../../map/state/map.actions';
+import { selectEnable3d } from '../../../state/core.selectors';
+import { toggleIn3dView } from '../../../map/state/map.actions';
 import { MenubarService } from '../../menubar';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { selectActiveTool } from '../state/toolbar.selectors';
 import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
 import {
-  selectIn3DView, selectLayersWithoutWebMercatorTitles,
+  selectIn3dView, selectLayersWithoutWebMercatorTitles,
 } from '../../../map/state/map.selectors';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -18,12 +18,12 @@ import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailorma
 
 @Component({
   selector: 'tm-switch3-d',
-  templateUrl: './switch3-d.component.html',
-  styleUrls: ['./switch3-d.component.css'],
+  templateUrl: './switch3d.component.html',
+  styleUrls: ['./switch3d.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
-export class Switch3DComponent {
+export class Switch3dComponent {
 
   private componentsPreventingSwitching = [
     BaseComponentTypeEnum.PRINT,
@@ -33,13 +33,13 @@ export class Switch3DComponent {
     ToolbarComponentEnum.MEASURE,
   ];
 
-  public enable: Signal<boolean> = this.store$.selectSignal(selectEnable3D);
+  public enable: Signal<boolean> = this.store$.selectSignal(selectEnable3d);
   public allowSwitch$: Observable<boolean>;
 
-  public in3DView: Signal<boolean> = this.store$.selectSignal(selectIn3DView);
+  public in3dView: Signal<boolean> = this.store$.selectSignal(selectIn3dView);
   public tooltip: Signal<string> = computed(() => {
-    const in3DView= this.in3DView();
-    if (in3DView) {
+    const in3dView= this.in3dView();
+    if (in3dView) {
       return $localize `:@@core.toolbar.switch-3d.tooltip2D:Switch to 2D`;
     } else {
       return $localize `:@@core.toolbar.switch-3d.tooltip3D:Switch to 3D`;
@@ -72,8 +72,8 @@ export class Switch3DComponent {
 
   public toggle() {
     this.mapService.switch3D();
-    this.store$.dispatch(toggleIn3DView());
-    if (this.in3DView()) {
+    this.store$.dispatch(toggleIn3dView());
+    if (this.in3dView()) {
       this.store$.select(selectLayersWithoutWebMercatorTitles)
         .pipe(take(1))
         .subscribe(layersTitles => {

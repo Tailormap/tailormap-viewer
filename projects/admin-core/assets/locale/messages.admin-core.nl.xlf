@@ -107,8 +107,8 @@
         <target>Beschikbare lagen</target>
       </trans-unit>
       <trans-unit id="admin-core.application.component-terrain-layer-toggle" datatype="html">
-        <source>Terrain Layer Toggle</source>
-        <target>Terrein Laag Schakelaar</target>
+        <source>Terrain layer toggle</source>
+        <target>Terreinlaagkiezer</target>
       </trans-unit>
       <trans-unit id="admin-core.application.components" datatype="html">
         <source>Components</source>
@@ -379,8 +379,8 @@
         <target>Terrein</target>
       </trans-unit>
       <trans-unit id="admin-core.application.terrain-layers" datatype="html">
-        <source>Terrain Layers</source>
-        <target>Terrein Lagen</target>
+        <source>Terrain layers</source>
+        <target>Terrein lagen</target>
       </trans-unit>
       <trans-unit id="admin-core.authorizations.access" datatype="html">
         <source>Access</source>
