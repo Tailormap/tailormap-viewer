@@ -91,7 +91,7 @@ export class GeoServiceFormComponent implements OnInit {
     return this.geoServiceForm.get('protocol')?.value === GeoServiceProtocolEnum.WMS;
   }
 
-  public is3D() {
+  public is3d() {
     return GeoServiceHelper.is3dProtocol(this.geoServiceForm.get('protocol')!.value);
   }
 

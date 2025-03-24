@@ -23,7 +23,7 @@ export class ApplicationService implements OnDestroy {
 
   public static ROOT_NODE_TITLE = $localize `:@@admin-core.application.application-layers:Application layers`;
   public static ROOT_BASE_NODE_TITLE = $localize `:@@admin-core.application.base-maps:Basemaps`;
-  public static ROOT_TERRAIN_NODE_TITLE = $localize `:@@admin-core.application.terrain-layers:Terrain Layers`;
+  public static ROOT_TERRAIN_NODE_TITLE = $localize `:@@admin-core.application.terrain-layers:Terrain layers`;
 
   private destroyed = new Subject<null>();
 

@@ -79,7 +79,7 @@ export class CesiumEventManager {
     return Cesium.defined(feature) && feature instanceof Cesium.Cesium3DTileFeature;
   }
 
-  public static onMap3DClick$(): Observable<Selection3dModel> {
+  public static onMap3dClick$(): Observable<Selection3dModel> {
     return CesiumEventManager.map3DClickEvent.asObservable();
   }
 

@@ -30,7 +30,7 @@ export class LayerTypesHelper {
     return layer.layerType === LayerTypesEnum.WMTS;
   }
 
-  public static isTiles3DLayer(layer: LayerModel): layer is Tiles3dLayerModel {
+  public static isTiles3dLayer(layer: LayerModel): layer is Tiles3dLayerModel {
     return layer.layerType === LayerTypesEnum.TILES3D;
   }
 

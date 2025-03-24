@@ -32,7 +32,7 @@ export class OpenLayersMapClickTool implements MapClickToolModel {
     this.enabled = new Subject();
     this.in3D$.pipe(
       takeUntil(this.enabled),
-      switchMap(in3D => in3D ? CesiumEventManager.onMap3DClick$() : OpenLayersEventManager.onMapClick$()),
+      switchMap(in3D => in3D ? CesiumEventManager.onMap3dClick$() : OpenLayersEventManager.onMapClick$()),
     ).subscribe(click => {
       if (click && 'position' in click) {
         this.mapClickSubject.next({

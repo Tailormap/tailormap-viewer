@@ -11,7 +11,7 @@ import {
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { ArrayHelper, HtmlifyHelper } from '@tailormap-viewer/shared';
 import {
-  selectMapOptions, selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersWithServices, select3DLayers, selectIn3DView,
+  selectMapOptions, selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersWithServices, select3DLayers, selectIn3dView,
 } from '../state/map.selectors';
 import { ExtendedAppLayerModel } from '../models';
 import { selectCQLFilters } from '../../filter/state/filter.selectors';
@@ -19,7 +19,7 @@ import { withLatestFrom } from 'rxjs/operators';
 import { BookmarkService } from '../../services/bookmark/bookmark.service';
 import { MapBookmarkHelper } from '../../services/application-bookmark/bookmark.helper';
 import { ApplicationBookmarkFragments } from '../../services/application-bookmark/application-bookmark-fragments';
-import { selectEnable3D } from '../../state/core.selectors';
+import { selectEnable3d } from '../../state/core.selectors';
 import { ApplicationLayerRefreshService } from './application-layer-refresh.service';
 
 @Injectable({
@@ -65,7 +65,7 @@ export class ApplicationMapService implements OnDestroy {
       this.store$.select(selectOrderedVisibleBackgroundLayers).pipe(
         concatMap(layers => this.getLayersAndLayerManager$(layers)),
       ),
-      this.store$.select(selectIn3DView),
+      this.store$.select(selectIn3dView),
       this.store$.select(selectMapOptions),
     ])
       .pipe(takeUntil(this.destroyed))
@@ -81,7 +81,7 @@ export class ApplicationMapService implements OnDestroy {
       this.selectOrderedVisibleLayersWithFilters$().pipe(
         concatMap(layers => this.getLayersAndLayerManager$(layers)),
       ),
-      this.store$.select(selectIn3DView),
+      this.store$.select(selectIn3dView),
       this.store$.select(selectMapOptions),
     ])
       .pipe(takeUntil(this.destroyed))
@@ -95,7 +95,7 @@ export class ApplicationMapService implements OnDestroy {
         }
       });
 
-    this.store$.select(selectEnable3D)
+    this.store$.select(selectEnable3d)
       .pipe(takeUntil(this.destroyed))
       .subscribe(enable3d => {
         if (enable3d) {

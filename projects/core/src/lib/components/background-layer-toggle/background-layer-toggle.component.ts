@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, Signal, signal } from '@angular/cor
 import { Store } from '@ngrx/store';
 import { map, Observable, combineLatest } from 'rxjs';
 import {
-  selectBackgroundNodesList, selectIn3DView, selectInitiallySelectedBackgroundNodes, selectLayersWithoutWebMercatorIds,
+  selectBackgroundNodesList, selectIn3dView, selectInitiallySelectedBackgroundNodes, selectLayersWithoutWebMercatorIds,
   selectSelectedBackgroundNodeId,
 } from '../../map/state/map.selectors';
 import { SplitButtonOptionModel } from '@tailormap-viewer/shared';
@@ -47,7 +47,7 @@ export class BackgroundLayerToggleComponent {
     this.initiallyCheckedLabels$ = this.store$.select(selectInitiallySelectedBackgroundNodes).pipe(
       map(nodes => nodes.map(node => node.name).join(', ')),
     );
-    this.in3D = this.store$.selectSignal(selectIn3DView);
+    this.in3D = this.store$.selectSignal(selectIn3dView);
     this.layersWithoutWebMercator = this.store$.selectSignal(selectLayersWithoutWebMercatorIds);
   }
 
