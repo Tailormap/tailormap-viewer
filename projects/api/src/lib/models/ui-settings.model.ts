@@ -1,4 +1,4 @@
 export interface UiSettingsModel {
   hideLoginButton?: boolean;
-  enable3d?: boolean;
+  enable3D?: boolean;
 }

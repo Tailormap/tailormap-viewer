@@ -22,7 +22,7 @@ export const selectShowLoginButton = createSelector(
 
 export const selectEnable3d = createSelector(
   selectViewerState,
-  viewerState => viewerState?.uiSettings?.enable3d === true,
+  viewerState => viewerState?.uiSettings?.enable3D === true,
 );
 
 export const selectComponentsConfig = createSelector(

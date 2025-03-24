@@ -380,7 +380,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.terrain-layers" datatype="html">
         <source>Terrain layers</source>
-        <target>Terrein lagen</target>
+        <target>Terreinlagen</target>
       </trans-unit>
       <trans-unit id="admin-core.authorizations.access" datatype="html">
         <source>Access</source>
