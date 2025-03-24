@@ -32,6 +32,7 @@ export interface MapPdfPrintOptions {
   filename?: string;
   autoPrint?: boolean;
   logo?: string | null;
+  bookmarkUrl?: string | null;
 }
 
 @Injectable({
@@ -125,6 +126,16 @@ export class MapPdfService {
       doc.setFontSize(this.defaultFontSize);
     }
     this.addDateTime(doc, options.size.width, options.size.height);
+
+    if(options.printOptions.bookmarkUrl){
+      doc.setFontSize(10)
+        .setTextColor('#0000FF') ;
+      doc.textWithLink($localize `:@@core.print.bookmark-text:Live bookmark`, x, options.size.height - 5, { url: options.printOptions.bookmarkUrl });
+      doc.setFontSize(this.defaultFontSize)
+        .setTextColor('#000000');
+
+      // TODO: Create and add QR code to the page
+    }
 
     if (options.printOptions.autoPrint) {
       doc.autoPrint();
