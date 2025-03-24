@@ -68,7 +68,7 @@ describe('ApplicationFormComponent', () => {
           hideLanguageSwitcher: false,
         },
         uiSettings: {
-          enable3D: false,
+          enable3d: false,
           hideLoginButton: false,
         },
       });
@@ -97,7 +97,7 @@ describe('ApplicationFormComponent', () => {
           hideLanguageSwitcher: false,
         },
         uiSettings: {
-          enable3D: false,
+          enable3d: false,
           hideLoginButton: false,
         },
       });
