@@ -404,7 +404,7 @@ export class OpenLayersMap implements MapViewerModel {
 
   public switch3D(){
     this.executeCesiumAction(cesiumManager => {
-      cesiumManager.switch3D();
+      cesiumManager.switch3d();
     });
     this.in3D.next(!this.in3D.value);
   }

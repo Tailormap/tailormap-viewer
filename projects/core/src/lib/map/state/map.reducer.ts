@@ -225,7 +225,7 @@ const onUpdateLayerTreeNodes = (
 
 const onToggleIn3DView = (state: MapState): MapState => ({
   ...state,
-  in3DView: !state.in3DView,
+  in3dView: !state.in3dView,
 });
 
 const mapReducerImpl = createReducer<MapState>(
@@ -247,6 +247,6 @@ const mapReducerImpl = createReducer<MapState>(
   on(MapActions.setLayerOpacity, onSetLayerOpacity),
   on(MapActions.addLayerDetails, onAddLayerDetails),
   on(MapActions.updateLayerTreeNodes, onUpdateLayerTreeNodes),
-  on(MapActions.toggleIn3DView, onToggleIn3DView),
+  on(MapActions.toggleIn3dView, onToggleIn3DView),
 );
 export const mapReducer = (state: MapState | undefined, action: Action) => mapReducerImpl(state, action);

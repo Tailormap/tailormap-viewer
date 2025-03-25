@@ -107,7 +107,7 @@
         <target>Inhaltsverzeichnis</target>
       </trans-unit>
       <trans-unit id="admin-core.application.component-terrain-layer-toggle" datatype="html">
-        <source>Terrain Layer Toggle</source>
+        <source>Terrain layer toggle</source>
         <target>Geländeebene Umschalter</target>
       </trans-unit>
       <trans-unit id="admin-core.application.components" datatype="html">
@@ -379,7 +379,7 @@
         <target>Gelände</target>
       </trans-unit>
       <trans-unit id="admin-core.application.terrain-layers" datatype="html">
-        <source>Terrain Layers</source>
+        <source>Terrain layers</source>
         <target>Geländeebene</target>
       </trans-unit>
       <trans-unit id="admin-core.authorizations.access" datatype="html">

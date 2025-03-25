@@ -81,7 +81,7 @@
         <source>Table of contents</source>
       </trans-unit>
       <trans-unit id="admin-core.application.component-terrain-layer-toggle" datatype="html">
-        <source>Terrain Layer Toggle</source>
+        <source>Terrain layer toggle</source>
       </trans-unit>
       <trans-unit id="admin-core.application.components" datatype="html">
         <source>Components</source>
@@ -285,7 +285,7 @@
         <source>Terrain</source>
       </trans-unit>
       <trans-unit id="admin-core.application.terrain-layers" datatype="html">
-        <source>Terrain Layers</source>
+        <source>Terrain layers</source>
       </trans-unit>
       <trans-unit id="admin-core.authorizations.access" datatype="html">
         <source>Access</source>

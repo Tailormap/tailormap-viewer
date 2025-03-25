@@ -12,8 +12,8 @@ import { Projection } from 'ol/proj';
 
 export class CesiumManager {
 
-  private map3D: BehaviorSubject<OLCesium | null> = new BehaviorSubject<OLCesium | null>(null);
-  private layers3D: Map<string, number> = new Map<string, number>();
+  private map3d: BehaviorSubject<OLCesium | null> = new BehaviorSubject<OLCesium | null>(null);
+  private layers3d: Map<string, number> = new Map<string, number>();
 
   constructor(
     private olMap: OlMap,
@@ -46,12 +46,12 @@ export class CesiumManager {
           });
           ol3d.setRefresh2DAfterCameraMoveEndOnly(true);
           ol3d.setTargetFrameRate(60);
-          this.map3D.next(ol3d);
+          this.map3d.next(ol3d);
         });
-      this.executeScene3DAction(async scene3D => {
-        scene3D.globe.depthTestAgainstTerrain = true;
+      this.executeScene3dAction(async scene3d => {
+        scene3d.globe.depthTestAgainstTerrain = true;
         CesiumEventManager.initClickEvent(
-          scene3D,
+          scene3d,
           CssHelper.getCssVariableValue('--primary-color').trim(),
           index => this.getLayerId(index),
           this.projection2D?.getCode(),
@@ -60,29 +60,29 @@ export class CesiumManager {
     });
   }
 
-  public getMap3D$(): Observable<OLCesium> {
-    const isNotNullMap3D = (item: OLCesium | null): item is OLCesium => item !== null;
-    return this.map3D.asObservable().pipe(filter(isNotNullMap3D));
+  public getMap3d$(): Observable<OLCesium> {
+    const isNotNullMap3d = (item: OLCesium | null): item is OLCesium => item !== null;
+    return this.map3d.asObservable().pipe(filter(isNotNullMap3d));
   }
 
-  public executeMap3DAction(fn: (olMap3D: OLCesium) => void) {
-    this.getMap3D$()
+  public executeMap3dAction(fn: (olMap3d: OLCesium) => void) {
+    this.getMap3d$()
       .pipe(take(1))
-      .subscribe(olMap3D => this.ngZone.runOutsideAngular(() => fn(olMap3D)));
+      .subscribe(olMap3d => this.ngZone.runOutsideAngular(() => fn(olMap3d)));
   }
 
-  public executeScene3DAction(fn: (scene3D: Scene) => void) {
-    this.getMap3D$()
+  public executeScene3dAction(fn: (scene3D: Scene) => void) {
+    this.getMap3d$()
       .pipe(take(1), map(map3d => map3d.getCesiumScene()))
-      .subscribe(scene3D => {
-        this.ngZone.runOutsideAngular(() => fn(scene3D));
+      .subscribe(scene3d => {
+        this.ngZone.runOutsideAngular(() => fn(scene3d));
       });
   }
 
-  public switch3D(){
-    this.executeMap3DAction(olMap3D => {
-      olMap3D.setEnabled(!olMap3D.getEnabled());
-      if (!olMap3D.getEnabled()){
+  public switch3d(){
+    this.executeMap3dAction(olMap3d => {
+      olMap3d.setEnabled(!olMap3d.getEnabled());
+      if (!olMap3d.getEnabled()){
         this.olMap.getView().setRotation(0);
       }
     });
@@ -109,25 +109,25 @@ export class CesiumManager {
   }
 
   private addLayer(layer: LayerModel) {
-    this.executeScene3DAction(async scene3D => {
+    this.executeScene3dAction(async scene3d => {
       if (layer.layerType === LayerTypesEnum.QUANTIZEDMESH) {
         this.createTerrainLayer(layer)?.then(terrainLayer => {
           if (terrainLayer) {
-            scene3D.setTerrain(new Cesium.Terrain(terrainLayer));
+            scene3d.setTerrain(new Cesium.Terrain(terrainLayer));
           }
         });
       } else {
-        if (this.layers3D.has(layer.id)) {
-          const primitive = scene3D.primitives.get(this.layers3D.get(layer.id) ?? 0);
+        if (this.layers3d.has(layer.id)) {
+          const primitive = scene3d.primitives.get(this.layers3d.get(layer.id) ?? 0);
           primitive.show = true;
         } else {
           const tiles3DLayerPromise = this.create3DLayer(layer);
           tiles3DLayerPromise.then(tiles3dLayer => {
             if (tiles3dLayer) {
-              scene3D.primitives.add(tiles3dLayer);
-              for (let i = 0; i < scene3D.primitives.length; i++) {
-                if (tiles3dLayer === scene3D.primitives.get(i)) {
-                  this.layers3D.set(layer.id, i);
+              scene3d.primitives.add(tiles3dLayer);
+              for (let i = 0; i < scene3d.primitives.length; i++) {
+                if (tiles3dLayer === scene3d.primitives.get(i)) {
+                  this.layers3d.set(layer.id, i);
                 }
               }
             }
@@ -138,19 +138,19 @@ export class CesiumManager {
   }
 
   private removeLayer(layer: LayerModel) {
-    this.executeScene3DAction(async scene3D => {
-      if (this.layers3D.has(layer.id)) {
-        const primitive = scene3D.primitives.get(this.layers3D.get(layer.id) ?? 0);
+    this.executeScene3dAction(async scene3d => {
+      if (this.layers3d.has(layer.id)) {
+        const primitive = scene3d.primitives.get(this.layers3d.get(layer.id) ?? 0);
         primitive.show = false;
 
       }
     });
   }
 
-  private async create3DLayer(
+  private async create3dLayer(
     layer: LayerModel,
   ): Promise<Cesium3DTileset | null> {
-    if (LayerTypesHelper.isTiles3DLayer(layer)) {
+    if (LayerTypesHelper.isTiles3dLayer(layer)) {
       const resource = new Cesium.Resource({
         url: layer.url,
       });
@@ -188,13 +188,13 @@ export class CesiumManager {
   }
 
   private setEllipsoidTerrain() {
-    this.executeScene3DAction(async scene3D => {
-      scene3D.setTerrain(new Cesium.Terrain(new EllipsoidTerrainProvider()));
+    this.executeScene3dAction(async scene3d => {
+      scene3d.setTerrain(new Cesium.Terrain(new EllipsoidTerrainProvider()));
     });
   }
 
   public getLayerId(index: number): string | null {
-    for (const [ key, val ] of this.layers3D.entries()) {
+    for (const [ key, val ] of this.layers3d.entries()) {
       if (val === index) {
         return key;
       }

@@ -9,7 +9,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RegisteredComponentsRendererComponent } from '../registered-components-renderer/registered-components-renderer.component';
 import { ComponentRegistrationService } from '../../services/component-registration.service';
 import { provideMockStore } from '@ngrx/store/testing';
-import { selectIn3DView } from '../../map/state/map.selectors';
+import { selectIn3dView } from '../../map/state/map.selectors';
 
 @Component({
   selector: 'tm-menu-button-test',
@@ -43,7 +43,7 @@ describe('MenubarComponent', () => {
       ],
       providers: [
         { provide: ComponentRegistrationService, useValue: mockedControlsService },
-        provideMockStore({ selectors: [{ selector: selectIn3DView, value: false }] }),
+        provideMockStore({ selectors: [{ selector: selectIn3dView, value: false }] }),
       ],
     });
     expect(await screen.findByText(/Click me/)).toBeInTheDocument();
