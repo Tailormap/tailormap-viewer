@@ -121,7 +121,7 @@ export class CesiumManager {
           const primitive = scene3d.primitives.get(this.layers3d.get(layer.id) ?? 0);
           primitive.show = true;
         } else {
-          const tiles3DLayerPromise = this.create3DLayer(layer);
+          const tiles3DLayerPromise = this.create3dLayer(layer);
           tiles3DLayerPromise.then(tiles3dLayer => {
             if (tiles3dLayer) {
               scene3d.primitives.add(tiles3dLayer);
@@ -130,6 +130,7 @@ export class CesiumManager {
                   this.layers3d.set(layer.id, i);
                 }
               }
+              console.log('layers3d: ', this.layers3d);
             }
           }).catch(error => { console.log(`Error while adding 3D layer: ${error}`); });
         }
