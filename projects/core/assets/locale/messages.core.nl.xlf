@@ -863,12 +863,12 @@
         <target>Automatisch dialoogvenster voor afdrukken openen</target>
       </trans-unit>
       <trans-unit id="core.print.add-bookmark" datatype="html">
-        <source>Add bookmark link to print</source>
-        <target>Voeg bookmark toe aan afdruk</target>
+        <source>Add bookmark to document</source>
+        <target>Voeg bookmark toe aan document</target>
       </trans-unit>
       <trans-unit id="core.print.bookmark-text" datatype="html">
-        <source>Live bookmark</source>
-        <target>Live bladwijzer</target>
+        <source>Bookmark</source>
+        <target>Bladwijzer</target>
       </trans-unit>
       <trans-unit id="core.print.pdf-document" datatype="html">
         <source>PDF document</source>

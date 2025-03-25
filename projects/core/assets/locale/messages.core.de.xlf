@@ -863,12 +863,12 @@
         <target>Druckdialog automatisch öffnen</target>
       </trans-unit>
       <trans-unit id="core.print.add-bookmark" datatype="html">
-        <source>Add bookmark link to print</source>
-        <target>Lesezeichen-Link zum Drucken hinzufügen</target>
+        <source>Add bookmark to document</source>
+        <target>Lesezeichen zum Dokument hinzufügen</target>
       </trans-unit>
       <trans-unit id="core.print.bookmark-text" datatype="html">
-        <source>Live bookmark</source>
-        <target>Live-Lesezeichen</target>
+        <source>Bookmark</source>
+        <target>Lesezeichen</target>
       </trans-unit>
       <trans-unit id="core.print.pdf-document" datatype="html">
         <source>PDF document</source>

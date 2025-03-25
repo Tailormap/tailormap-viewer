@@ -32,7 +32,7 @@ const DEFAULT_PDF_OPTIONS: PrintPdfOptions = {
   dpi: 300,
   autoPrint: false,
   legendLayer: '',
-  showBookmark: true,
+  showBookmark: false,
 };
 
 @Component({

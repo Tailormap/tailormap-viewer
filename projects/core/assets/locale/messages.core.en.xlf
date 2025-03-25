@@ -648,10 +648,10 @@
         <source>Automatically open print dialog</source>
       </trans-unit>
       <trans-unit id="core.print.add-bookmark" datatype="html">
-        <source>Add bookmark link to print</source>
+        <source>Add bookmark to document</source>
       </trans-unit>
       <trans-unit id="core.print.bookmark-text" datatype="html">
-        <source>Live bookmark</source>
+        <source>Bookmark</source>
       </trans-unit>
       <trans-unit id="core.print.pdf-document" datatype="html">
         <source>PDF document</source>

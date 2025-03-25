@@ -1,4 +1,5 @@
-import { Observable, Subject } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
+import { Byte, Charset, Encoder } from '@nuintun/qrcode';
 
 export class ImageHelper {
   public static imageUrlToPng$(imageUrl: string): Observable<{ imageData: string; width: number; height: number }> {
@@ -33,5 +34,27 @@ export class ImageHelper {
       img.setAttribute('src', imageUrl);
     }
     return subject.asObservable();
+  }
+
+  public static string2Base64QRcode$(asciiData: string, foreground: string, background: string): Observable<{
+    imageData: string;
+    widthPx: number;
+    heightPx: number;
+  }> {
+    const encoder = new Encoder({
+      level: 'M', version: 'Auto', hints: { fnc1: ['GS1'] },
+    });
+    const qrcode = encoder.encode(new Byte(asciiData, Charset.ASCII));
+
+    return of({
+      imageData: qrcode.toDataURL(1, {
+        margin: 1, foreground: this.hex2rgb(foreground), background: this.hex2rgb(background),
+      }), widthPx: qrcode.size, heightPx: qrcode.size,
+    });
+  }
+
+  private static hex2rgb(hex: string): [R: number, G: number, B: number] {
+    const value = parseInt(hex.slice(1, 7), 16);
+    return [ (value >> 16) & 0xff, (value >> 8) & 0xff, value & 0xff ];
   }
 }

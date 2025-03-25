@@ -126,17 +126,6 @@ export class MapPdfService {
       doc.setFontSize(this.defaultFontSize);
     }
     this.addDateTime(doc, options.size.width, options.size.height);
-
-    if(options.printOptions.bookmarkUrl){
-      doc.setFontSize(10)
-        .setTextColor('#0000FF') ;
-      doc.textWithLink($localize `:@@core.print.bookmark-text:Live bookmark`, x, options.size.height - 5, { url: options.printOptions.bookmarkUrl });
-      doc.setFontSize(this.defaultFontSize)
-        .setTextColor('#000000');
-
-      // TODO: Create and add QR code to the page
-    }
-
     if (options.printOptions.autoPrint) {
       doc.autoPrint();
     }
@@ -159,6 +148,7 @@ export class MapPdfService {
         return this.addSvg2PDF$(doc, this.iconService.getUrlForIcon('logo'), { x: options.size.width - 30, y, width: 20, height: 20 });
       }),
       concatMap(() => this.addSvg2PDF$(doc, this.iconService.getUrlForIcon('north_arrow'), { x, y: y + 2, width: 20, height: 20 })),
+      concatMap(() => this.addBookmark2PDF$(doc, options.printOptions.bookmarkUrl, x, y, options.size)),
       map(() => doc.output('dataurlstring', { filename: options.printOptions.filename || $localize `:@@core.print.default-pdf-filename:map.pdf` })),
     );
   }
@@ -216,6 +206,44 @@ export class MapPdfService {
       .pipe(take(1), map(img => {
         return doc.addImage(img.imageData, 'PNG', x, y, 20, 20, '', 'FAST');
       }));
+  }
+
+  private addBookmark2PDF$(doc: jsPDF, bookmarkUrl: string | null | undefined, x: number, y: number, size: Size): Observable<jsPDF> {
+    if (!bookmarkUrl) {
+      return of(doc);
+    }
+
+    const foreground = '#0000FF';
+    const background = '#FFFFFF';
+    const restoreTextCol = doc.getTextColor();
+    const restoreFillCol = doc.getFillColor();
+    const restoreDrawCol = doc.getDrawColor();
+
+    return ImageHelper.string2Base64QRcode$(bookmarkUrl, foreground, background).pipe(take(1), map(imgData => {
+      const bookmarkText = $localize`:@@core.print.bookmark-text:Bookmark`;
+      const bookmarkTextFontSize = 8;
+      const bookmarkTextWidthInMM = (doc.getStringUnitWidth(bookmarkText) * bookmarkTextFontSize) / (72 / 25.6);
+      const boxMargin = .3;
+      const bookmarkTextBoxHeightInMM = 3;
+      const imgHeightMM = Math.max(imgData.heightPx * 25.4 / 72, bookmarkTextWidthInMM + boxMargin);
+      const imgWidthMM = Math.max(imgData.widthPx * 25.4 / 72, bookmarkTextWidthInMM + boxMargin);
+
+      // setup for left bottom corner above the scalebar
+      const top = size.height - imgHeightMM - this.defaultMargin - 15;
+      const left = this.defaultMargin + 2 * boxMargin;
+
+      doc.setFontSize(bookmarkTextFontSize).setTextColor(foreground).setFillColor(background).setDrawColor(foreground);
+
+      const boxWidth = imgWidthMM + 2 * boxMargin;
+      doc.rect(left - boxMargin, top - bookmarkTextBoxHeightInMM - boxMargin, boxWidth, imgHeightMM + bookmarkTextBoxHeightInMM + 2 * boxMargin, 'FD');
+      doc.link(left - boxMargin, top - bookmarkTextBoxHeightInMM - boxMargin, boxWidth, imgHeightMM + bookmarkTextBoxHeightInMM + 2 * boxMargin, { url: bookmarkUrl });
+
+      const textAlignOffset = Math.max((boxWidth - bookmarkTextWidthInMM) / 2, boxMargin) + left;
+      doc.textWithLink(bookmarkText, textAlignOffset, top - boxMargin, { url: bookmarkUrl });
+      doc.addImage(imgData.imageData, 'gif', left, top, imgWidthMM, imgHeightMM);
+      // reset and return
+      return doc.setFontSize(this.defaultFontSize).setTextColor(restoreTextCol).setFillColor(restoreFillCol).setDrawColor(restoreDrawCol);
+    }));
   }
 
   private addMapImage$(options: {
