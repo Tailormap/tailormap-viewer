@@ -128,9 +128,9 @@ export class CesiumManager {
               for (let i = 0; i < scene3d.primitives.length; i++) {
                 if (tiles3dLayer === scene3d.primitives.get(i)) {
                   this.layers3d.set(layer.id, i);
+                  break;
                 }
               }
-              console.log('layers3d: ', this.layers3d);
             }
           }).catch(error => { console.log(`Error while adding 3D layer: ${error}`); });
         }
