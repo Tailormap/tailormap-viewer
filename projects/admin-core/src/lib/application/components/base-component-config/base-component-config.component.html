@@ -7,8 +7,11 @@
     <div class="row">
       <mat-form-field>
         <mat-label>
-          <ng-container *ngIf="!titleLabel" i18n="@@admin-core.common.title">Title</ng-container>
-          <ng-container *ngIf="titleLabel">{{titleLabel}}</ng-container>
+          @if (titleLabel) {
+            {{titleLabel}}
+          } @else {
+            <ng-container i18n="@@admin-core.common.title">Title</ng-container>
+          }
         </mat-label>
         <input matInput type="text" formControlName="title" />
       </mat-form-field>
