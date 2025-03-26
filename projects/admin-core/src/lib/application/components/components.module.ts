@@ -13,7 +13,6 @@ import { SimpleSearchComponentConfigComponent } from './simple-search-config/sim
 
 @NgModule({
   declarations: [
-    BaseComponentConfigComponent,
     ComponentConfigRendererComponent,
     ComponentsListComponent,
     MeasureComponentConfigComponent,
@@ -24,11 +23,11 @@ import { SimpleSearchComponentConfigComponent } from './simple-search-config/sim
   imports: [
     CommonModule,
     SharedModule,
+    BaseComponentConfigComponent,
   ],
   exports: [
     ComponentsListComponent,
     ComponentConfigRendererComponent,
-    BaseComponentConfigComponent,
   ],
 })
 export class ComponentsModule {

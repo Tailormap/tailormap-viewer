@@ -2,17 +2,28 @@ import { Component, ChangeDetectionStrategy, Input, DestroyRef } from '@angular/
 import {
   BaseComponentConfigHelper, BaseComponentTypeEnum, ComponentBaseConfigModel, MeasureComponentConfigModel,
 } from '@tailormap-viewer/api';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ConfigurationComponentModel } from '../configuration-component.model';
 import { ComponentConfigurationService } from '../../services/component-configuration.service';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatFormField } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatLabel } from '@angular/material/select';
 
 @Component({
   selector: 'tm-admin-base-component-config',
   templateUrl: './base-component-config.component.html',
   styleUrls: ['./base-component-config.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+  standalone: true,
+  imports: [
+    ReactiveFormsModule,
+    MatCheckbox,
+    MatFormField,
+    MatInput,
+    MatLabel,
+  ],
 })
 export class BaseComponentConfigComponent implements ConfigurationComponentModel {
 
