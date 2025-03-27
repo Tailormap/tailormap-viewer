@@ -32,6 +32,7 @@ const DEFAULT_PDF_OPTIONS: PrintPdfOptions = {
   dpi: 300,
   autoPrint: false,
   legendLayer: '',
+  showBookmark: false,
 };
 
 @Component({
@@ -65,6 +66,7 @@ export class PrintComponent implements OnInit, OnDestroy {
     paperSize: new FormControl<'a4' | 'a3'>(DEFAULT_PDF_OPTIONS.paperSize, { nonNullable: true }),
     dpi: [ DEFAULT_PDF_OPTIONS.dpi, Validators.required ],
     autoPrint: DEFAULT_PDF_OPTIONS.autoPrint,
+    showBookmark: DEFAULT_PDF_OPTIONS.showBookmark,
     legendLayer: DEFAULT_PDF_OPTIONS.legendLayer,
   });
 
@@ -139,6 +141,7 @@ export class PrintComponent implements OnInit, OnDestroy {
         footer: this.exportPdfForm.value.footer || DEFAULT_PDF_OPTIONS.footer,
         paperSize: this.exportPdfForm.value.paperSize || DEFAULT_PDF_OPTIONS.paperSize,
         autoPrint: this.exportPdfForm.value.autoPrint || DEFAULT_PDF_OPTIONS.autoPrint,
+        showBookmark: this.exportPdfForm.value.showBookmark || DEFAULT_PDF_OPTIONS.showBookmark,
         legendLayer: this.exportPdfForm.value.legendLayer || DEFAULT_PDF_OPTIONS.legendLayer,
         dpi: this.exportPdfForm.value.dpi || DEFAULT_PDF_OPTIONS.dpi,
         includeDrawing: this.includeDrawing.value ?? undefined,

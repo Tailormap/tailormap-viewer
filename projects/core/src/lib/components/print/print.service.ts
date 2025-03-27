@@ -1,4 +1,4 @@
-import { Inject, Injectable, LOCALE_ID, OnDestroy } from '@angular/core';
+import {  Inject, Injectable, LOCALE_ID, OnDestroy } from '@angular/core';
 import { ExtentHelper, LayerModel, MapService, OlLayerFilter, OpenlayersExtent } from '@tailormap-viewer/map';
 import {
   catchError, combineLatest, concatMap, forkJoin, map, Observable, of, pipe, Subject, take, takeUntil, UnaryFunction,
@@ -33,6 +33,7 @@ export interface PrintPdfOptions extends PrintOptions {
   paperSize: 'a4' | 'a3';
   autoPrint: boolean;
   legendLayer: string;
+  showBookmark: boolean;
 }
 
 export interface PrintImageOptions extends PrintOptions {
@@ -108,6 +109,7 @@ export class PrintService implements OnDestroy {
             autoPrint: options.autoPrint,
             filename,
             logo,
+            bookmarkUrl: options.showBookmark ? `${window.location}` : null,
           };
           return this.mapPdfService.create$({
             printOptions,
