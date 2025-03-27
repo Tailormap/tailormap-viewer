@@ -647,6 +647,12 @@
       <trans-unit id="core.print.open-print-dialog" datatype="html">
         <source>Automatically open print dialog</source>
       </trans-unit>
+      <trans-unit id="core.print.add-bookmark" datatype="html">
+        <source>Add bookmark to document</source>
+      </trans-unit>
+      <trans-unit id="core.print.bookmark-text" datatype="html">
+        <source>Bookmark</source>
+      </trans-unit>
       <trans-unit id="core.print.pdf-document" datatype="html">
         <source>PDF document</source>
       </trans-unit>
