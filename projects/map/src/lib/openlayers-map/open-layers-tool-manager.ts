@@ -8,7 +8,7 @@ import { OpenLayersMousePositionTool } from './tools/open-layers-mouse-position-
 import { OpenLayersScaleBarTool } from './tools/open-layers-scale-bar-tool';
 import { OpenLayersSelectTool } from './tools/open-layers-select-tool';
 import { OpenLayersModifyTool } from "./tools/open-layers-modify-tool";
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 
 export class OpenLayersToolManager implements ToolManagerModel {
 
@@ -25,7 +25,6 @@ export class OpenLayersToolManager implements ToolManagerModel {
   constructor(
     private olMap: OlMap,
     private ngZone: NgZone,
-    private in3D$: Observable<boolean>,
   ) {
   }
 
@@ -40,7 +39,7 @@ export class OpenLayersToolManager implements ToolManagerModel {
   public addTool<T extends ToolModel, C extends ToolConfigModel>(tool: C): T {
     const toolId = `${tool.type.toLowerCase()}-${++OpenLayersToolManager.toolIdCount}`;
     if (ToolTypeHelper.isMapClickTool(tool)) {
-      this.tools.set(toolId, new OpenLayersMapClickTool(toolId, tool, this.in3D$));
+      this.tools.set(toolId, new OpenLayersMapClickTool(toolId, tool));
     }
     if (ToolTypeHelper.isDrawingTool(tool)) {
       this.tools.set(toolId, new OpenLayersDrawingTool(toolId, tool, this.olMap, this.ngZone));

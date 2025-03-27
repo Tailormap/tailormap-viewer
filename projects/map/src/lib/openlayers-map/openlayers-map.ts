@@ -116,10 +116,12 @@ export class OpenLayersMap implements MapViewerModel {
       this.map.value.dispose();
     }
 
+    OpenLayersEventManager.destroy();
+
     const layerManager = new OpenLayersLayerManager(olMap, this.ngZone, this.httpXsrfTokenExtractor);
     layerManager.init();
-    const toolManager = new OpenLayersToolManager(olMap, this.ngZone, this.in3D);
-    OpenLayersEventManager.initEvents(olMap, this.ngZone);
+    const toolManager = new OpenLayersToolManager(olMap, this.ngZone);
+    OpenLayersEventManager.initEvents(olMap, this.ngZone, this.in3D);
 
     this.map.next(olMap);
     this.layerManager.next(layerManager);
