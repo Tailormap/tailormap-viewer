@@ -23,34 +23,34 @@ export class OpenLayersEventManager {
   private static mapClickEvent: EventManagerEvent<MapBrowserEvent<MouseEvent>> = { stream: new Subject<MapBrowserEvent<MouseEvent>>() };
   private static mouseMoveEvent: EventManagerEvent<MapBrowserEvent<MouseEvent>> = { stream: new Subject<MapBrowserEvent<MouseEvent>>() };
   private static changeViewEvent: EventManagerEvent<ObjectEvent> = { stream: new Subject<ObjectEvent>() };
-  private static in3D = false;
+  private static in3d = false;
   private static destroyed = new Subject();
 
   public static initEvents(
     olMap: OlMap,
     ngZone: NgZone,
-    in3D$: Observable<boolean>,
+    in3d$: Observable<boolean>,
   ) {
     OpenLayersEventManager.destroyed = new Subject();
     OpenLayersEventManager.registerEvent(olMap, ngZone, 'moveend', OpenLayersEventManager.mapMoveEndEvent);
     OpenLayersEventManager.registerEvent(olMap, ngZone, 'singleclick', OpenLayersEventManager.mapClickEvent);
     OpenLayersEventManager.registerEvent(olMap, ngZone, 'pointermove', OpenLayersEventManager.mouseMoveEvent);
     OpenLayersEventManager.registerEvent(olMap, ngZone, 'change:view', OpenLayersEventManager.changeViewEvent);
-    in3D$
+    in3d$
       .pipe(takeUntil(OpenLayersEventManager.destroyed))
-      .subscribe(in3D => OpenLayersEventManager.in3D = in3D);
+      .subscribe(in3d => OpenLayersEventManager.in3d = in3d);
   }
 
   public static destroy() {
     OpenLayersEventManager.destroyed.next(true);
     OpenLayersEventManager.destroyed.complete();
-    OpenLayersEventManager.deRegisterEvent(OpenLayersEventManager.mapMoveEndEvent);
-    OpenLayersEventManager.deRegisterEvent(OpenLayersEventManager.mapClickEvent);
-    OpenLayersEventManager.deRegisterEvent(OpenLayersEventManager.mouseMoveEvent);
-    OpenLayersEventManager.deRegisterEvent(OpenLayersEventManager.changeViewEvent);
+    OpenLayersEventManager.deregisterEvent(OpenLayersEventManager.mapMoveEndEvent);
+    OpenLayersEventManager.deregisterEvent(OpenLayersEventManager.mapClickEvent);
+    OpenLayersEventManager.deregisterEvent(OpenLayersEventManager.mouseMoveEvent);
+    OpenLayersEventManager.deregisterEvent(OpenLayersEventManager.changeViewEvent);
   }
 
-  private static deRegisterEvent<EventType extends BaseEvent>(event: EventManagerEvent<EventType>) {
+  private static deregisterEvent<EventType extends BaseEvent>(event: EventManagerEvent<EventType>) {
     if (event.eventKey) {
       unByKey(event.eventKey);
     }
@@ -62,7 +62,7 @@ export class OpenLayersEventManager {
     evtKey: OlEventType,
     event: EventManagerEvent<EventType>,
   ) {
-    OpenLayersEventManager.deRegisterEvent(event);
+    OpenLayersEventManager.deregisterEvent(event);
     event.eventKey = olMap.on(
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore - for some weird reason TS won't recognize the type of evtKey and sees it as string
@@ -77,7 +77,7 @@ export class OpenLayersEventManager {
 
   public static onMapClick$(): Observable<MapBrowserEvent<MouseEvent>> {
     return OpenLayersEventManager.mapClickEvent.stream.asObservable()
-      .pipe(filter(() => !OpenLayersEventManager.in3D));
+      .pipe(filter(() => !OpenLayersEventManager.in3d));
   }
 
   public static onMouseMove$(): Observable<MapBrowserEvent<MouseEvent>> {

@@ -261,11 +261,11 @@ export class MapService {
   }
 
   public make3D(){
-    this.map.make3D();
+    this.map.make3d();
   }
 
   public switch3D(){
-    this.map.switch3D();
+    this.map.switch3d();
   }
 
 }
