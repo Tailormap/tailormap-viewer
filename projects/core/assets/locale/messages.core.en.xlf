@@ -737,6 +737,9 @@
       <trans-unit id="core.toolbar.coordinate-picker-copy" datatype="html">
         <source>Copy</source>
       </trans-unit>
+      <trans-unit id="core.toolbar.coordinate-picker-zoomTo" datatype="html">
+        <source>Zoom To</source>
+      </trans-unit>
       <trans-unit id="core.toolbar.coordinate-picker-failed-copy" datatype="html">
         <source>Failed to copy to clipboard</source>
       </trans-unit>

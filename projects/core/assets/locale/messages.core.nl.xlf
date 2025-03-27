@@ -982,6 +982,10 @@
         <source>Copy</source>
         <target>Kopiëren</target>
       </trans-unit>
+      <trans-unit id="core.toolbar.coordinate-picker-zoomTo" datatype="html">
+        <source>Zoom To</source>
+        <target>Zoom naar</target>
+      </trans-unit>
       <trans-unit id="core.toolbar.coordinate-picker-failed-copy" datatype="html">
         <source>Failed to copy to clipboard</source>
         <target>Kopiëren naar klembord mislukt</target>

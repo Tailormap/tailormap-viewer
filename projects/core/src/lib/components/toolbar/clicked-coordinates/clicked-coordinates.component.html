@@ -1,10 +1,44 @@
-<div class="clicked-coordinates map-control-button-container">
-  <button mat-flat-button
+<div [class.simple-search-container--is-active]="toolActive$ | async"
+     class="clicked-coordinates-container map-control-button-container">
+
+  <button (click)="toggle()"
+          [class.toggle-button--active]="toolActive$ | async"
           class="map-control-button toggle-button"
           i18n-tmTooltip="@@core.toolbar.coordinate-picker"
-          tmTooltip="Coordinate picker"
-          [class.toggle-button--active]="toolActive$ | async"
-          (click)="toggle()">
+          mat-flat-button
+          tmTooltip="Coordinate picker">
     <mat-icon svgIcon="tools_push_pin"></mat-icon>
   </button>
+
+  @if (toolActive$ | async) {
+    <div class="clicked-coordinates-field-wrapper">
+
+      <div class="clicked-coordinates-inputs">
+        <form [formGroup]="coordinatesForm">
+          <mat-form-field appearance="outline" color="primary">
+            <mat-label>X</mat-label>
+            <input matInput type="number" formControlName="xControl" class="coordinate"/>
+          </mat-form-field>
+          <mat-form-field appearance="outline" color="primary">
+            <mat-label>Y</mat-label>
+            <input matInput type="number" formControlName="yControl" class="coordinate"/>
+          </mat-form-field>
+        </form>
+      </div>
+
+      <tm-error-message *ngIf="coordinatesForm.dirty && coordinatesForm.invalid"
+                        [message]="'TODO Your input is invalid for the current application bounds'"
+                        [friendlyError]="true"></tm-error-message>
+
+      <div class="clicked-coordinates-buttons">
+        <button mat-flat-button color="primary" (click)="goTo()" [disabled]="coordinatesForm.invalid"
+                i18n="@@core.toolbar.coordinate-picker-zoomTo">Zoom To
+        </button>
+        <button mat-flat-button color="primary" (click)="copy()" [disabled]="coordinatesForm.invalid"
+                i18n="@@core.toolbar.coordinate-picker-copy">Copy
+        </button>
+      </div>
+    </div>
+  }
+
 </div>
