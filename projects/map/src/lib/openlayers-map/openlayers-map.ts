@@ -33,9 +33,9 @@ export class OpenLayersMap implements MapViewerModel {
   private layerManager: BehaviorSubject<OpenLayersLayerManager | null> = new BehaviorSubject<OpenLayersLayerManager | null>(null);
   private toolManager: BehaviorSubject<ToolManagerModel | null> = new BehaviorSubject<ToolManagerModel | null>(null);
 
-  private map3D: BehaviorSubject<CesiumManager | null> = new BehaviorSubject<CesiumManager | null>(null);
-  private made3D: boolean;
-  private in3D: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private map3d: BehaviorSubject<CesiumManager | null> = new BehaviorSubject<CesiumManager | null>(null);
+  private made3d: boolean;
+  private in3d: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   private readonly resizeObserver: ResizeObserver;
   private initialExtent: OpenlayersExtent = [];
@@ -47,7 +47,7 @@ export class OpenLayersMap implements MapViewerModel {
     private httpXsrfTokenExtractor: HttpXsrfTokenExtractor,
   ) {
     this.resizeObserver = new ResizeObserver(() => this.updateMapSize());
-    this.made3D = false;
+    this.made3d = false;
   }
 
   public initMap(options: MapViewerOptionsModel, initialOptions?: { initialCenter?: [number, number]; initialZoom?: number }) {
@@ -116,10 +116,12 @@ export class OpenLayersMap implements MapViewerModel {
       this.map.value.dispose();
     }
 
+    OpenLayersEventManager.destroy();
+
     const layerManager = new OpenLayersLayerManager(olMap, this.ngZone, this.httpXsrfTokenExtractor);
     layerManager.init();
-    const toolManager = new OpenLayersToolManager(olMap, this.ngZone, this.in3D);
-    OpenLayersEventManager.initEvents(olMap, this.ngZone);
+    const toolManager = new OpenLayersToolManager(olMap, this.ngZone);
+    OpenLayersEventManager.initEvents(olMap, this.ngZone, this.in3d);
 
     this.map.next(olMap);
     this.layerManager.next(layerManager);
@@ -381,7 +383,7 @@ export class OpenLayersMap implements MapViewerModel {
 
   public getCesiumManager$(): Observable<CesiumManager> {
     const isCesiumManager = (item: CesiumManager | null): item is CesiumManager => item !== null;
-    return this.map3D.asObservable().pipe(filter(isCesiumManager));
+    return this.map3d.asObservable().pipe(filter(isCesiumManager));
   }
 
   public executeCesiumAction(fn: (cesiumManager: CesiumManager) => void) {
@@ -390,11 +392,11 @@ export class OpenLayersMap implements MapViewerModel {
       .subscribe(cesiumManager => fn(cesiumManager));
   }
 
-  public make3D(){
-    if (!this.made3D) {
-      this.made3D = true;
+  public make3d(){
+    if (!this.made3d) {
+      this.made3d = true;
       this.executeMapAction(olMap => {
-        this.map3D.next(new CesiumManager(olMap, this.ngZone, this.map.getValue()?.getView().getProjection()));
+        this.map3d.next(new CesiumManager(olMap, this.ngZone, this.map.getValue()?.getView().getProjection()));
       });
       this.executeCesiumAction(cesiumManager => {
         cesiumManager.init();
@@ -402,11 +404,11 @@ export class OpenLayersMap implements MapViewerModel {
     }
   }
 
-  public switch3D(){
+  public switch3d(){
     this.executeCesiumAction(cesiumManager => {
       cesiumManager.switch3d();
     });
-    this.in3D.next(!this.in3D.value);
+    this.in3d.next(!this.in3d.value);
   }
 
 }

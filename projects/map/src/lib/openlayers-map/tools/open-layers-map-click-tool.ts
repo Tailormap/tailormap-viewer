@@ -1,5 +1,5 @@
 import { MapClickToolConfigModel, MapClickToolModel, MapClickEvent } from '../../models';
-import { Observable, Subject, takeUntil, switchMap } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { OpenLayersEventManager } from '../open-layers-event-manager';
 import { OpenLayersHelper } from '../helpers/open-layers.helper';
 import { CesiumEventManager } from '../cesium-map/cesium-event-manager';
@@ -11,7 +11,6 @@ export class OpenLayersMapClickTool implements MapClickToolModel {
   constructor(
     public id: string,
     private _toolConfig: MapClickToolConfigModel,
-    private in3D$: Observable<boolean>,
   ) {}
 
   private mapClickSubject: Subject<MapClickEvent> = new Subject<MapClickEvent>();
@@ -30,17 +29,18 @@ export class OpenLayersMapClickTool implements MapClickToolModel {
 
   public enable(): void {
     this.enabled = new Subject();
-    this.in3D$.pipe(
-      takeUntil(this.enabled),
-      switchMap(in3D => in3D ? CesiumEventManager.onMap3dClick$() : OpenLayersEventManager.onMapClick$()),
-    ).subscribe(click => {
-      if (click && 'position' in click) {
+    CesiumEventManager.onMap3dClick$()
+      .pipe(takeUntil(this.enabled))
+      .subscribe(evt => {
         this.mapClickSubject.next({
-          mapCoordinates: [ click.position.x, click.position.y ],
-          mouseCoordinates: [ click.mouseCoordinates.x, click.mouseCoordinates.y ],
-          cesiumFeatureInfo: click.featureInfo,
+          mapCoordinates: [ evt.position.x, evt.position.y ],
+          mouseCoordinates: [ evt.mouseCoordinates.x, evt.mouseCoordinates.y ],
+          cesiumFeatureInfo: evt.featureInfo,
         });
-      } else {
+      });
+    OpenLayersEventManager.onMapClick$()
+      .pipe(takeUntil(this.enabled))
+      .subscribe(click => {
         const { scale, resolution } = OpenLayersHelper.getResolutionAndScale(click.map.getView());
         this.mapClickSubject.next({
           mapCoordinates: [ click.coordinate[0], click.coordinate[1] ],
@@ -48,8 +48,7 @@ export class OpenLayersMapClickTool implements MapClickToolModel {
           resolution,
           scale,
         });
-      }
-    });
+      });
     this.isActive = true;
   }
 
