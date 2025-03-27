@@ -1,13 +1,12 @@
 import { Map as OlMap } from 'ol';
 import { NgZone } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, takeUntil, combineLatest, filter } from 'rxjs';
+import { Observable, Subject, takeUntil, filter } from 'rxjs';
 import { default as MapEvent } from 'ol/MapEvent';
 import { default as BaseEvent } from 'ol/events/Event';
 import { EventsKey } from 'ol/events';
 import { unByKey } from 'ol/Observable';
 import { MapBrowserEvent } from 'ol';
 import { ObjectEvent } from 'ol/Object';
-import { withLatestFrom } from 'rxjs/operators';
 
 type OlEventType = 'change' | 'error' | 'click' | 'dblclick' | 'pointermove' | 'singleclick' | 'pointerdrag'
   | 'movestart' | 'moveend' | 'propertychange' | 'change:layergroup' | 'change:size' | 'change:target' | 'change:view'
@@ -24,7 +23,7 @@ export class OpenLayersEventManager {
   private static mapClickEvent: EventManagerEvent<MapBrowserEvent<MouseEvent>> = { stream: new Subject<MapBrowserEvent<MouseEvent>>() };
   private static mouseMoveEvent: EventManagerEvent<MapBrowserEvent<MouseEvent>> = { stream: new Subject<MapBrowserEvent<MouseEvent>>() };
   private static changeViewEvent: EventManagerEvent<ObjectEvent> = { stream: new Subject<ObjectEvent>() };
-  private static in3D$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  private static in3D = false;
   private static destroyed = new Subject();
 
   public static initEvents(
@@ -39,7 +38,7 @@ export class OpenLayersEventManager {
     OpenLayersEventManager.registerEvent(olMap, ngZone, 'change:view', OpenLayersEventManager.changeViewEvent);
     in3D$
       .pipe(takeUntil(OpenLayersEventManager.destroyed))
-      .subscribe(in3D => OpenLayersEventManager.in3D$.next(in3D));
+      .subscribe(in3D => OpenLayersEventManager.in3D = in3D);
   }
 
   public static destroy() {
@@ -78,7 +77,7 @@ export class OpenLayersEventManager {
 
   public static onMapClick$(): Observable<MapBrowserEvent<MouseEvent>> {
     return OpenLayersEventManager.mapClickEvent.stream.asObservable()
-      .pipe(filter(() => !OpenLayersEventManager.in3D$.value));
+      .pipe(filter(() => !OpenLayersEventManager.in3D));
   }
 
   public static onMouseMove$(): Observable<MapBrowserEvent<MouseEvent>> {
