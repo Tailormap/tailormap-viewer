@@ -5,14 +5,13 @@
 .clicked-coordinates-container--is-active {
   padding: 5px 6px 5px 0;
   width: 500px;
-  height: 70px;
   max-width: var(--max-control-width);
+  background-color: #fff;
 }
 
 .clicked-coordinates-field-wrapper {
   display: flex;
   flex-direction: column;
-  background-color: #fff;
 }
 
 .clicked-coordinates-inputs {
@@ -20,17 +19,14 @@
   flex-direction: row;
   flex-wrap: nowrap;
   gap: 10px;
-}
-
-.clicked-coordinates coordinate {
-
+  align-items: flex-end;
 }
 
 .clicked-coordinates-buttons {
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   margin-top: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 2px;
   gap: 10px;
 }
 
