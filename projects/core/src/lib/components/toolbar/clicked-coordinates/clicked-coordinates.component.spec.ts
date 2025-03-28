@@ -1,6 +1,5 @@
 import { render, screen } from '@testing-library/angular';
 import { ClickedCoordinatesComponent } from './clicked-coordinates.component';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { provideMockStore } from '@ngrx/store/testing';
 import { isActiveToolbarTool } from '../state/toolbar.selectors';
@@ -17,7 +16,6 @@ describe('ClickedCoordinatesComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       imports: [ SharedModule, MatIconTestingModule ],
       providers: [
-        { provide: MatSnackBar, useValue: { dismiss: jest.fn() } },
         mapServiceMock.provider,
         provideMockStore({
           selectors: [

@@ -1,4 +1,34 @@
-.clicked-coordinates button {
+.clicked-coordinates-container button {
   border-radius: 3px;
 }
+
+.clicked-coordinates-container--is-active {
+  padding: 5px 6px 5px 0;
+  width: 500px;
+  max-width: var(--max-control-width);
+  background-color: #fff;
+}
+
+.clicked-coordinates-field-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.clicked-coordinates-inputs {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 10px;
+  align-items: flex-end;
+}
+
+.clicked-coordinates-buttons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+  margin-bottom: 2px;
+  gap: 10px;
+}
+
+
 
