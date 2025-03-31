@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
-import { concatMap, map, Observable, of, Subject, takeUntil, tap } from 'rxjs';
+import { concatMap, map, Observable, of, Subject, take, takeUntil, tap } from 'rxjs';
 import { MapClickEvent, MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Store } from '@ngrx/store';
@@ -144,9 +144,11 @@ export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
     if(mapClick && mapClick.mapCoordinates) {
       this.pushLocationFeature(mapClick.mapCoordinates);
       this.mapService.getRoundedCoordinates$(mapClick.mapCoordinates)
-        .pipe(map(coordinates => {
-          this.coordinatesForm.patchValue({ x: parseFloat(coordinates[0]), y: parseFloat(coordinates[1]) });
-        })).subscribe();
+        .pipe(
+          take(1),
+          map(coordinates => {
+            this.coordinatesForm.patchValue({ x: parseFloat(coordinates[0]), y: parseFloat(coordinates[1]) });
+          })).subscribe();
     }
   }
 
@@ -162,7 +164,7 @@ export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
 export function validateCoordinates(): ValidatorFn {
   return (form: AbstractControl): ValidationErrors | null => {
     const values = form.getRawValue();
-    return values.x && values.y &&
+    return values.x !== null && values.y !== null &&
       values.x >= values.minx && values.x <= values.maxx &&
       values.y >= values.miny && values.y <= values.maxy ? null : { invalidCoordinates: true };
   };
