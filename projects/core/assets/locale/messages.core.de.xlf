@@ -998,18 +998,6 @@
         <source>Your input is invalid for the current application bounds</source>
         <target>Ihre Eingabe ist für die aktuellen Anwendungsgrenzen ungültig</target>
       </trans-unit>
-      <trans-unit id="core.toolbar.coordinate-picker-failed-copy" datatype="html">
-        <source>Failed to copy to clipboard</source>
-        <target>Kopieren in die Zwischenablage fehlgeschlagen</target>
-      </trans-unit>
-      <trans-unit id="core.toolbar.coordinate-picker-selected-coordinates" datatype="html">
-        <source>Selected coordinates: <x id="PH" equiv-text="coordinates"/></source>
-        <target>Ausgewählte Koordinaten: <x id="PH" equiv-text="coordinates"/></target>
-      </trans-unit>
-      <trans-unit id="core.toolbar.coordinate-picker-success" datatype="html">
-        <source>Success</source>
-        <target>Erfolg</target>
-      </trans-unit>
       <trans-unit id="core.toolbar.measure-area" datatype="html">
         <source>Measure area</source>
         <target>Fläche messen</target>

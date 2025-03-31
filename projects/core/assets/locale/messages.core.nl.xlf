@@ -998,18 +998,6 @@
         <source>Your input is invalid for the current application bounds</source>
         <target>Uw invoer is ongeldig voor de huidige toepassingsgrenzen</target>
       </trans-unit>
-      <trans-unit id="core.toolbar.coordinate-picker-failed-copy" datatype="html">
-        <source>Failed to copy to clipboard</source>
-        <target>Kopiëren naar klembord mislukt</target>
-      </trans-unit>
-      <trans-unit id="core.toolbar.coordinate-picker-selected-coordinates" datatype="html">
-        <source>Selected coordinates: <x id="PH" equiv-text="coordinates"/></source>
-        <target>Geselecteerde coördinaten: <x id="PH" equiv-text="coordinates"/></target>
-      </trans-unit>
-      <trans-unit id="core.toolbar.coordinate-picker-success" datatype="html">
-        <source>Success</source>
-        <target>Succes</target>
-      </trans-unit>
       <trans-unit id="core.toolbar.measure-area" datatype="html">
         <source>Measure area</source>
         <target>Oppervlakte meten</target>

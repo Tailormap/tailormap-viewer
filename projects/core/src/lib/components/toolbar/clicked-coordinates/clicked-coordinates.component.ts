@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
-import { concatMap, map, Observable, Subject, switchMap, takeUntil, tap } from 'rxjs';
-import { MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
+import { concatMap, map, Observable, of, Subject, takeUntil, tap } from 'rxjs';
+import { MapClickEvent, MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Store } from '@ngrx/store';
 import { isActiveToolbarTool } from '../state/toolbar.selectors';
@@ -9,7 +9,7 @@ import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { FeatureModel } from '@tailormap-viewer/api';
 import { ApplicationStyleService } from '../../../services/application-style.service';
-import { selectMapSettings } from '@tailormap-viewer/core';
+import { selectMapSettings } from '../../../map/state/map.selectors';
 
 
 @Component({
@@ -39,34 +39,50 @@ export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
 
   constructor(private store$: Store, private mapService: MapService, private clipboard: Clipboard) {
     this.toolActive$ = this.store$.select(isActiveToolbarTool(ToolbarComponentEnum.SELECT_COORDINATES));
-
     this.toolActive$.pipe(takeUntil(this.destroyed)).subscribe(isActive => {
       if (!isActive) {
-        this.coordinatesForm.reset();
+        //only reset the input fields, not the hidden fields
+        this.coordinatesForm.patchValue({ x: null, y:  null }, { emitEvent: false });
         this.clickLocationSubject.next([]);
-        // TODO this doesn't seem to work, after deactivating and reactivating we can no longer draw the click location
-        //  remove the layer when the tool is deactivated?
-        // this.mapService.getLayerManager$().pipe(takeUntil(this.destroyed)).subscribe(layerManager => {
-        //   layerManager.removeLayer('tm-clicked-coordinates-layer');
-        // })
       }
     });
 
+    this.store$.select(selectMapSettings).pipe(
+      takeUntil(this.destroyed),
+      map(settings => {
+        if (settings?.crs?.bounds && settings?.maxExtent) {
+          this.crs = settings?.crs?.code;
+          const bounds = settings?.crs?.bounds;
+          const maxExtent = settings?.maxExtent;
+          return [
+             Math.min(bounds.minx, maxExtent.minx),
+             Math.min(bounds.miny, maxExtent.miny),
+             Math.max(bounds.maxx, maxExtent.maxx),
+             Math.max(bounds.maxy, maxExtent.maxy),
+          ];
+        } else {
+          return [];
+        }
+      })).subscribe(bounds => {
+        if(bounds.length > 0) {
+          this.coordinatesForm.patchValue({
+            minx: bounds[0], miny: bounds[1], maxx: bounds[2], maxy: bounds[3],
+          }, { emitEvent: false });
+        }
+    });
   }
 
   public ngOnInit(): void {
     this.mapService.createTool$<MapClickToolModel, MapClickToolConfigModel>({
       type: ToolTypeEnum.MapClick,
     })
-      .pipe(takeUntil(this.destroyed), tap(({ tool }) => {
-        this.store$.dispatch(registerTool({ tool: { id: ToolbarComponentEnum.SELECT_COORDINATES, mapToolId: tool.id } }));
-      }), concatMap(({ tool }) => tool.mapClick$), switchMap(mapClick => {
-        this.pushLocation(mapClick.mapCoordinates);
-        return this.mapService.getRoundedCoordinates$(mapClick.mapCoordinates)
-          .pipe(map(coordinates => {
-            this.coordinatesForm.patchValue({ x: parseFloat(coordinates[0]), y: parseFloat(coordinates[1]) });
-          }));
-      })).subscribe();
+      .pipe(
+        takeUntil(this.destroyed),
+        tap(({ tool }) => {
+          this.store$.dispatch(registerTool({ tool: { id: ToolbarComponentEnum.SELECT_COORDINATES, mapToolId: tool.id } }));
+        }),
+        concatMap(({ tool }) => tool?.mapClick$ || of(null)),
+      ).subscribe(mapClick => this.handleMapClick(mapClick));
 
     this.mapService.renderFeatures$('tm-clicked-coordinates-layer', this.clickLocationSubject$, f => {
       const primaryColor = ApplicationStyleService.getPrimaryColor();
@@ -90,25 +106,10 @@ export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
           pointRotation: 45,
           pointFillColor: 'transparent',
           pointStrokeColor: primaryColor,
-          pointStrokeWidth: 1,
+          pointStrokeWidth: 2,
         };
       }
     }).pipe(takeUntil(this.destroyed)).subscribe();
-
-    this.store$.select(selectMapSettings).pipe(takeUntil(this.destroyed), map(settings => {
-      if (settings?.crs?.bounds && settings?.maxExtent) {
-        const bounds = settings?.crs?.bounds;
-        const maxExtent = settings?.maxExtent;
-        this.crs = settings?.crs?.code;
-
-        this.coordinatesForm.patchValue({
-          minx: Math.min(bounds.minx, maxExtent.minx),
-          miny: Math.min(bounds.miny, maxExtent.miny),
-          maxx: Math.max(bounds.maxx, maxExtent.maxx),
-          maxy: Math.max(bounds.maxy, maxExtent.maxy),
-        }, { emitEvent: false });
-      }
-    })).subscribe();
   }
 
   public ngOnDestroy() {
@@ -133,13 +134,23 @@ export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
       const x = this.coordinatesForm.getRawValue().x;
       const y = this.coordinatesForm.getRawValue().y;
       if (x != null && y != null) {
-        this.pushLocation([ x, y ]);
+        this.pushLocationFeature([ x, y ]);
         this.mapService.zoomTo(`POINT(${x} ${y})`, this.crs);
       }
     }
   }
 
-  private pushLocation(coordinates: number[]) {
+  private handleMapClick(mapClick: MapClickEvent) {
+    if(mapClick && mapClick.mapCoordinates) {
+      this.pushLocationFeature(mapClick.mapCoordinates);
+      this.mapService.getRoundedCoordinates$(mapClick.mapCoordinates)
+        .pipe(map(coordinates => {
+          this.coordinatesForm.patchValue({ x: parseFloat(coordinates[0]), y: parseFloat(coordinates[1]) });
+        })).subscribe();
+    }
+  }
+
+  private pushLocationFeature(coordinates: number[]) {
     this.clickLocationSubject.next([{
       __fid: 'clicked-coordinates-point', geometry: `POINT(${coordinates[0]} ${coordinates[1]})`, attributes: {},
     }, {
