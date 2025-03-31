@@ -9,6 +9,7 @@ import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { FeatureModel } from '@tailormap-viewer/api';
 import { ApplicationStyleService } from '../../../services/application-style.service';
+import { selectMapSettings } from '@tailormap-viewer/core';
 
 
 @Component({
@@ -21,13 +22,20 @@ import { ApplicationStyleService } from '../../../services/application-style.ser
 export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
 
   public toolActive$: Observable<boolean>;
+
   public coordinatesForm = new FormGroup({
-    xControl: new FormControl<number | null>(null), yControl: new FormControl<number | null>(null),
+    x: new FormControl<number | null>(null),
+    y: new FormControl<number | null>(null),
+    minx: new FormControl<number | null>(null),
+    miny: new FormControl<number | null>(null),
+    maxx: new FormControl<number | null>(null),
+    maxy: new FormControl<number | null>(null),
   }, { validators: validateCoordinates() });
 
   private destroyed = new Subject();
   private clickLocationSubject = new Subject<FeatureModel[]>();
   private clickLocationSubject$ = this.clickLocationSubject.asObservable();
+  private crs:string = '';
 
   constructor(private store$: Store, private mapService: MapService, private clipboard: Clipboard) {
     this.toolActive$ = this.store$.select(isActiveToolbarTool(ToolbarComponentEnum.SELECT_COORDINATES));
@@ -35,7 +43,6 @@ export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
     this.toolActive$.pipe(takeUntil(this.destroyed)).subscribe(isActive => {
       if (!isActive) {
         this.coordinatesForm.reset();
-        // TODO maybe not needed
         this.clickLocationSubject.next([]);
         // TODO this doesn't seem to work, after deactivating and reactivating we can no longer draw the click location
         //  remove the layer when the tool is deactivated?
@@ -57,8 +64,7 @@ export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
         this.pushLocation(mapClick.mapCoordinates);
         return this.mapService.getRoundedCoordinates$(mapClick.mapCoordinates)
           .pipe(map(coordinates => {
-            this.coordinatesForm.get('xControl')?.setValue(Number.parseFloat(coordinates[0]));
-            this.coordinatesForm.get('yControl')?.setValue(Number.parseFloat(coordinates[1]));
+            this.coordinatesForm.patchValue({ x: parseFloat(coordinates[0]), y: parseFloat(coordinates[1]) });
           }));
       })).subscribe();
 
@@ -89,7 +95,20 @@ export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
       }
     }).pipe(takeUntil(this.destroyed)).subscribe();
 
+    this.store$.select(selectMapSettings).pipe(takeUntil(this.destroyed), map(settings => {
+      if (settings?.crs?.bounds && settings?.maxExtent) {
+        const bounds = settings?.crs?.bounds;
+        const maxExtent = settings?.maxExtent;
+        this.crs = settings?.crs?.code;
 
+        this.coordinatesForm.patchValue({
+          minx: Math.min(bounds.minx, maxExtent.minx),
+          miny: Math.min(bounds.miny, maxExtent.miny),
+          maxx: Math.max(bounds.maxx, maxExtent.maxx),
+          maxy: Math.max(bounds.maxy, maxExtent.maxy),
+        }, { emitEvent: false });
+      }
+    })).subscribe();
   }
 
   public ngOnDestroy() {
@@ -105,17 +124,18 @@ export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
 
   public copy() {
     if (this.coordinatesForm.valid) {
-      this.clipboard.copy(`${this.coordinatesForm.get('xControl')?.value}, ${this.coordinatesForm.get('yControl')?.value}`);
+      this.clipboard.copy(`${this.coordinatesForm.get('x')?.value}, ${this.coordinatesForm.get('y')?.value}`);
     }
   }
 
   public goTo() {
     if (this.coordinatesForm.valid) {
-      // we can safely cast the values to number since the form is valid
-      const x = this.coordinatesForm.get('xControl')?.value as number;
-      const y = this.coordinatesForm.get('yControl')?.value as number;
-      this.pushLocation([ x, y ]);
-      this.mapService.setCenterAndZoom([ x, y ], 15);
+      const x = this.coordinatesForm.getRawValue().x;
+      const y = this.coordinatesForm.getRawValue().y;
+      if (x != null && y != null) {
+        this.pushLocation([ x, y ]);
+        this.mapService.zoomTo(`POINT(${x} ${y})`, this.crs);
+      }
     }
   }
 
@@ -130,14 +150,9 @@ export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
 
 export function validateCoordinates(): ValidatorFn {
   return (form: AbstractControl): ValidationErrors | null => {
-    const xValue: number = form.get('xControl')?.value;
-    const yValue: number = form.get('yControl')?.value;
-
-    // TODO: get the bounds from the CRS and application max extent and check if the coordinates are within those bounds
-    const isValid = xValue && yValue && xValue > 0 && yValue > 0 ? null : { invalidCoordinates: true };
-
-    console.log('TODO form validation, values', xValue, yValue, 'is valid?', isValid);
-
-    return isValid;
+    const values = form.getRawValue();
+    return values.x && values.y &&
+      values.x >= values.minx && values.x <= values.maxx &&
+      values.y >= values.miny && values.y <= values.maxy ? null : { invalidCoordinates: true };
   };
 }
