@@ -55,10 +55,11 @@ export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
           const bounds = settings?.crs?.bounds;
           const maxExtent = settings?.maxExtent;
           return [
-             Math.min(bounds.minx, maxExtent.minx),
-             Math.min(bounds.miny, maxExtent.miny),
-             Math.max(bounds.maxx, maxExtent.maxx),
-             Math.max(bounds.maxy, maxExtent.maxy),
+             // get the smallest bounds of both extents
+             Math.max(bounds.minx, maxExtent.minx),
+             Math.max(bounds.miny, maxExtent.miny),
+             Math.min(bounds.maxx, maxExtent.maxx),
+             Math.min(bounds.maxy, maxExtent.maxy),
           ];
         } else {
           return [];
