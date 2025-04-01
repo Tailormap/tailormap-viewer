@@ -4,7 +4,7 @@ import { LayerTypesHelper } from '../../helpers/layer-types.helper';
 import { NgZone } from '@angular/core';
 import type OLCesium from 'olcs';
 import { BehaviorSubject, filter, from, map, Observable, take } from 'rxjs';
-import { Cesium3DTileset, CesiumTerrainProvider, EllipsoidTerrainProvider, Scene } from 'cesium';
+import { Cesium3DTileset, CesiumTerrainProvider, DefaultProxy, EllipsoidTerrainProvider, Scene } from 'cesium';
 import { CssHelper, ExternalLibsLoaderHelper } from '@tailormap-viewer/shared';
 import { LayerTypesEnum } from '../../models/layer-types.enum';
 import { CesiumEventManager } from './cesium-event-manager';
@@ -147,8 +147,11 @@ export class CesiumManager {
     layer: LayerModel,
   ): Promise<Cesium3DTileset | null> {
     if (LayerTypesHelper.isTiles3dLayer(layer)) {
+      console.log("layer url 3d: ", layer.url);
       const resource = new Cesium.Resource({
-        url: layer.url,
+        url: '/url=',
+        proxy: new Cesium.DefaultProxy(layer.url),
+        parseUrl: true,
       });
       try {
         // Create Cesium 3D Tileset with optimization options

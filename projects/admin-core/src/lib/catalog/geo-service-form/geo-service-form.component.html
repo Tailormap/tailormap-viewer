@@ -34,8 +34,8 @@
       <input matInput type="text" formControlName="xyzCrs"/>
     </mat-form-field>
   }
-  @if (!isXyz() && !is3d()) {
-    <mat-expansion-panel *ngIf="!isXyz()">
+  @if (!isXyz() && !isQuantizedMesh()) {
+    <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title i18n="@@admin-core.catalog.authentication-and-proxy" style="flex-grow: 1">Authentication and proxy</mat-panel-title>
         <mat-panel-description style="flex-grow: 1">{{ getAuthDescription() }}</mat-panel-description>
