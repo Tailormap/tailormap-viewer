@@ -2,5 +2,6 @@
 <tm-map-drawing-buttons [drawingLayerId]="drawingLayerId"
                         [selectionStyle]="selectionStyle"
                         (drawingAdded)="onDrawingAdded($event)"
+                        (featureModified)="onFeatureModified($event)"
                         (activeToolChanged)="onActiveToolChanged($event)"
                         (featureSelected)="onFeatureSelected($event)"></tm-map-drawing-buttons>

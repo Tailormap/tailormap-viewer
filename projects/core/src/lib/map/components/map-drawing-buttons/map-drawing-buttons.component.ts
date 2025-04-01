@@ -1,7 +1,9 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Subject, switchMap, take, takeUntil, tap } from 'rxjs';
 import {
-  DrawingToolConfigModel, DrawingToolEvent, DrawingToolModel, DrawingType, MapService, MapStyleModel, SelectToolConfigModel,
+  DrawingToolConfigModel, DrawingToolEvent, DrawingToolModel, DrawingType, MapService, MapStyleModel, ModifyToolConfigModel,
+  ModifyToolModel,
+  SelectToolConfigModel,
   SelectToolModel, ToolTypeEnum,
 } from '@tailormap-viewer/map';
 import { DrawingFeatureTypeEnum } from '../../models/drawing-feature-type.enum';
@@ -43,6 +45,9 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
   public drawingAdded: EventEmitter<DrawingToolEvent> = new EventEmitter<DrawingToolEvent>();
 
   @Output()
+  public featureModified = new EventEmitter<{ fid: string; geometry: string }>();
+
+  @Output()
   public featureRemoved: EventEmitter<string> = new EventEmitter<string>();
 
   @Output()
@@ -57,6 +62,7 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
   private tool: DrawingToolModel | null = null;
   public activeTool: DrawingFeatureTypeEnum | null = null;
   private selectTool: SelectToolModel | null = null;
+  private modifyTool: ModifyToolModel | null = null;
 
   public selectedFeatureId: string | null = null;
 
@@ -102,11 +108,49 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
         switchMap(({ tool }) => tool.selectedFeatures$),
       )
       .subscribe(selectedFeatures => {
-        const selectedFeature = selectedFeatures && selectedFeatures.length > 0 && selectedFeatures[0] ? selectedFeatures[0].__fid : null;
-        this.selectedFeatureId = selectedFeature;
+        const selectedFeature = selectedFeatures && selectedFeatures.length > 0 && selectedFeatures[0] ? selectedFeatures[0] : null;
+        this.selectedFeatureId = selectedFeature?.__fid || null;
+        if (selectedFeature) {
+          this.mapService.getToolManager$().pipe(take(1)).subscribe(manager => {
+            if (!this.tool || !this.selectTool || !this.modifyTool) {
+              return;
+            }
+            manager.enableTool(this.modifyTool.id, false, { geometry: selectedFeature.geometry });
+            console.log('Enabled modify tool for feature:', selectedFeature);
+          });
+        }
         this.cdr.detectChanges();
-        this.featureSelected.emit(selectedFeature);
+        this.featureSelected.emit(this.selectedFeatureId);
       });
+
+    const style: MapStyleModel = {
+      styleKey: 'edit-geometry-style',
+      zIndex: 100,
+      pointType: 'circle',
+      pointStrokeColor: ApplicationStyleService.getPrimaryColor(),
+      strokeColor: ApplicationStyleService.getPrimaryColor(),
+      strokeWidth: 5,
+      pointFillColor: 'transparent',
+      fillColor: ApplicationStyleService.getPrimaryColor(),
+      fillOpacity: 10,
+    };
+
+    this.mapService.createTool$<ModifyToolModel, ModifyToolConfigModel>({
+      type: ToolTypeEnum.Modify,
+      style,
+    }).pipe(
+      takeUntil(this.destroyed),
+      tap(({ tool }) => {
+        this.modifyTool = tool;
+      }),
+      switchMap(({ tool }) => tool.featureModified$),
+    ).subscribe(modifiedGeometry => {
+      if (!this.selectedFeatureId) {
+        return;
+      }
+      console.log(`Modified geometry for ${this.selectedFeatureId}:`, modifiedGeometry);
+      this.featureModified.emit({ fid: this.selectedFeatureId, geometry: modifiedGeometry });
+    });
   }
 
   public ngOnDestroy() {
@@ -140,18 +184,23 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
   private toggleTool(type: DrawingType, drawingFeatureType: DrawingFeatureTypeEnum) {
     this.activeToolChanged.emit(this.activeTool === drawingFeatureType ? null : drawingFeatureType);
     this.mapService.getToolManager$().pipe(take(1)).subscribe(manager => {
-      if (!this.tool || !this.selectTool) {
+      if (!this.tool || !this.selectTool || !this.modifyTool) {
         return;
       }
       if (this.activeTool === drawingFeatureType) {
         this.activeTool = null;
         manager.disableTool(this.tool.id, true);
         manager.enableTool(this.selectTool.id, true);
+        // manager.disableTool(this.selectTool.id, true);
+        // manager.enableTool(this.modifyTool.id, false, { geometry: null });
+        // console.log('Enabled modify tool');
         return;
       }
       this.activeTool = drawingFeatureType;
       manager.enableTool(this.tool.id, true, { type });
       manager.disableTool(this.selectTool.id, true);
+      manager.disableTool(this.modifyTool.id, true);
+      // console.log('Disabled select and modify tools');
     });
   }
 
