@@ -8,6 +8,7 @@ import { MapSizeHelper } from '../helpers/map-size.helper';
 import { MapUnitEnum } from '../models/map-unit.enum';
 import { GeometryTypeHelper } from './geometry-type.helper';
 import { Projection } from 'ol/proj';
+import { GeoJSONGeometry } from 'ol/format/GeoJSON';
 
 export class FeatureHelper {
 
@@ -21,7 +22,20 @@ export class FeatureHelper {
    * @param mapProjection
    */
   public static fromGeoJSON(geojsonGeometry: object, sourceProjection?: string, mapProjection?: string): Geometry {
-    return  FeatureHelper.geoJsonFormatter.readGeometry(geojsonGeometry, {
+    return FeatureHelper.geoJsonFormatter.readGeometry(geojsonGeometry, {
+      dataProjection: sourceProjection,
+      featureProjection: mapProjection,
+    });
+  }
+
+  /**
+   * Transforms an ol.Geometry to a GeoJSON geometry object.
+   * @param olGeometry The ol.Geometry object to transform
+   * @param sourceProjection
+   * @param mapProjection
+   */
+  public static toGeoJSON(olGeometry: Geometry, sourceProjection?: string, mapProjection?: string): GeoJSONGeometry {
+    return FeatureHelper.geoJsonFormatter.writeGeometryObject(olGeometry, {
       dataProjection: sourceProjection,
       featureProjection: mapProjection,
     });
