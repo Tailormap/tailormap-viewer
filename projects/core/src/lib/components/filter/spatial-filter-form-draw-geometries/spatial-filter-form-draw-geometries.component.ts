@@ -53,7 +53,6 @@ export class SpatialFilterFormDrawGeometriesComponent {
   }
 
   public onFeatureSelected(feature: FeatureModel | null) {
-    console.log('SpatialFilterFormDrawGeometriesComponent.onFeatureSelected', feature);
     this.featureSelected.emit(feature?.__fid);
     this.selectedFeatureForModifyTool = feature;
   }

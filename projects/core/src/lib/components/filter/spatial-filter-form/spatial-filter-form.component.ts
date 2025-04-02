@@ -76,7 +76,6 @@ export class SpatialFilterFormComponent implements OnInit, OnDestroy {
         this.selectedFeatureId.asObservable(),
         this.filterFeaturesService.getFilterFeatures$(),
       ]).pipe(map(([ selectedFeatureId, features ] ) => {
-        console.log('rendering features, selected feature id', selectedFeatureId);
         if (selectedFeatureId) {
           return features.filter(feature => feature.__fid !== selectedFeatureId);
         }
@@ -112,7 +111,6 @@ export class SpatialFilterFormComponent implements OnInit, OnDestroy {
   }
 
   public onFeatureSelected(id: string | null) {
-    console.log('set selected feature id for filtering', id);
     this.selectedFeatureId.next(id);
   }
 }
