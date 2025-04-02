@@ -35,3 +35,17 @@ export const selectDrawingFeaturesIncludingSelected = createSelector(
     });
   });
 
+export const selectDrawingFeaturesExcludingSelected = createSelector(
+  selectDrawingFeatures,
+  selectSelectedDrawingFeatureId,
+  (features, selectedFeatureId): DrawingFeatureModel[] => {
+    return features.filter(feature => feature.__fid !== selectedFeatureId).map((feature, idx) => {
+      return {
+        ...feature,
+        attributes: {
+          ...feature.attributes,
+          zIndex: idx + 1,
+        },
+      };
+    });
+  });
