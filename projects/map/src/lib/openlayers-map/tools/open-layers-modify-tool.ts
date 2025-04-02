@@ -12,6 +12,7 @@ import { NgZone } from "@angular/core";
 import { Vector as VectorLayer } from 'ol/layer';
 import { Vector as VectorSource } from 'ol/source';
 import { MapStyleHelper } from "../../helpers/map-style.helper";
+import { MapStyleModel } from '../../models';
 
 export class OpenLayersModifyTool implements ModifyToolModel {
 
@@ -57,7 +58,7 @@ export class OpenLayersModifyTool implements ModifyToolModel {
     }
     this.listeners = [];
     this.isActive = true;
-    const { layer, source } = this.getLayer(args.geometry);
+    const { layer, source } = this.getLayer(args.geometry, args.style);
     this.translateInteraction = new Translate({ layers: [layer] });
     this.listeners.push(this.translateInteraction.on('translateend', e => this.eventHandler(e)));
     this.modifyInteraction = new Modify({ source });
@@ -65,11 +66,11 @@ export class OpenLayersModifyTool implements ModifyToolModel {
     this.olMap.getInteractions().extend([ this.translateInteraction, this.modifyInteraction ]);
   }
 
-  private getLayer(geometry: string) {
+  private getLayer(geometry: string, styleModel?: MapStyleModel) {
     if (!this.editLayer || !this.source) {
       this.source = new VectorSource();
       this.editLayer = new VectorLayer({
-        style: this.getStyle(),
+        style: MapStyleHelper.getStyle(styleModel) || this.getStyle(),
         zIndex: this.olMap.getAllLayers().length + 9999,
         source: this.source,
       });
