@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, Input, OnDestroy, inject } from '@angular/core';
 import { DrawingToolEvent, MapStyleModel } from '@tailormap-viewer/map';
-import { addFeature, setSelectedDrawingStyle, setSelectedFeature, updateDrawingFeatureGeometry } from '../state/drawing.actions';
+import { addFeature, setSelectedDrawingStyle, setSelectedFeature, updateSelectedDrawingFeatureGeometry } from '../state/drawing.actions';
 import { DrawingHelper } from '../helpers/drawing.helper';
 import { Store } from '@ngrx/store';
 import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type.enum';
@@ -63,10 +63,6 @@ export class CreateDrawingButtonComponent implements OnDestroy {
   }
 
   public onFeatureGeometryModified(geometry: string) {
-    this.selectedFeature$.pipe(take(1)).subscribe(selectedFeature => {
-      if(selectedFeature) {
-        this.store$.dispatch(updateDrawingFeatureGeometry({ fid: selectedFeature.__fid, geometry }));
-      }
-    });
+    this.store$.dispatch(updateSelectedDrawingFeatureGeometry({ geometry }));
   }
 }

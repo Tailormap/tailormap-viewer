@@ -46,11 +46,11 @@ const onUpdateDrawingFeatureStyle = (
   };
 };
 
-const onUpdateDrawingFeatureGeometry = (
+const onUpdateSelectedDrawingFeatureGeometry = (
   state: DrawingState,
-  payload: ReturnType<typeof DrawingActions.updateDrawingFeatureGeometry>,
+  payload: ReturnType<typeof DrawingActions.updateSelectedDrawingFeatureGeometry>,
 ): DrawingState => {
-  const idx = state.features.findIndex(f => f.__fid === payload.fid);
+  const idx = state.features.findIndex(f => f.__fid === state.selectedFeature);
   if (idx === -1) {
     return state;
   }
@@ -105,7 +105,7 @@ const drawingReducerImpl = createReducer<DrawingState>(
   on(DrawingActions.addFeature, onAddFeature),
   on(DrawingActions.setSelectedFeature, onSetSelectedFeature),
   on(DrawingActions.updateDrawingFeatureStyle, onUpdateDrawingFeatureStyle),
-  on(DrawingActions.updateDrawingFeatureGeometry, onUpdateDrawingFeatureGeometry),
+  on(DrawingActions.updateSelectedDrawingFeatureGeometry, onUpdateSelectedDrawingFeatureGeometry),
   on(DrawingActions.removeDrawingFeature, onRemoveDrawingFeature),
   on(DrawingActions.removeAllDrawingFeatures, onRemoveAllDrawingFeatures),
   on(DrawingActions.setSelectedDrawingStyle, onSetSelectedDrawingStyle),

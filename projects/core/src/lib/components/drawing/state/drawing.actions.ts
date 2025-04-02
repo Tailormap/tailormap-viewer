@@ -23,9 +23,9 @@ export const updateDrawingFeatureStyle = createAction(
   props<{ fid: string; style: Partial<DrawingFeatureStyleModel> }>(),
 );
 
-export const updateDrawingFeatureGeometry = createAction(
-  `${drawingActionsPrefix} Update Feature Geometry`,
-  props<{ fid: string; geometry: string }>(),
+export const updateSelectedDrawingFeatureGeometry = createAction(
+  `${drawingActionsPrefix} Update Selected Feature Geometry`,
+  props<{ geometry: string }>(),
 );
 
 export const removeDrawingFeature = createAction(
