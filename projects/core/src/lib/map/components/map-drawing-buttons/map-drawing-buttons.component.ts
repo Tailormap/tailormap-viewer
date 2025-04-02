@@ -141,8 +141,6 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
         this.featureSelected.emit(selectedFeature);
       });
 
-    // OpenLayersModifyTool doesn't support style function so can't use DrawingHelper.applyDrawingStyle() to draw feature double
-    // in modify tool, must use fixed style for now
     const style: MapStyleModel = {
       styleKey: 'edit-geometry-style',
       zIndex: 100,
