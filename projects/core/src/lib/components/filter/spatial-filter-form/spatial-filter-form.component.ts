@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/
 import { Store } from '@ngrx/store';
 import { selectFilterableLayers, selectIn3dView } from '../../../map/state/map.selectors';
 import { ExtendedAppLayerModel } from '../../../map/models';
-import { Observable, of, Subject, switchMap, takeUntil } from 'rxjs';
+import { BehaviorSubject, combineLatest, map, Observable, of, Subject, switchMap, takeUntil } from 'rxjs';
 import { MapService } from '@tailormap-viewer/map';
 import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.helper';
 import {
@@ -39,6 +39,8 @@ export class SpatialFilterFormComponent implements OnInit, OnDestroy {
   public drawingLayerId = 'filter-drawing-layer';
   public availableLayers$: Observable<ExtendedAppLayerModel[]> = of([]);
 
+  private selectedFeatureId = new BehaviorSubject<string | null>(null);
+
   public currentGroup$: Observable<string | undefined> = of(undefined);
   public selectedLayersCount$: Observable<number> = of(0);
   public hasSelectedLayersAndGeometry$: Observable<boolean> = of(false);
@@ -70,7 +72,16 @@ export class SpatialFilterFormComponent implements OnInit, OnDestroy {
 
     this.mapService.renderFeatures$<FeatureModelAttributes>(
       this.drawingLayerId,
-      this.filterFeaturesService.getFilterFeatures$(),
+      combineLatest([
+        this.selectedFeatureId.asObservable(),
+        this.filterFeaturesService.getFilterFeatures$(),
+      ]).pipe(map(([ selectedFeatureId, features ] ) => {
+        console.log('rendering features, selected feature id', selectedFeatureId);
+        if (selectedFeatureId) {
+          return features.filter(feature => feature.__fid !== selectedFeatureId);
+        }
+        return features;
+      })),
       this.DEFAULT_STYLE,
     ).pipe(takeUntil(this.destroyed)).subscribe();
   }
@@ -100,4 +111,8 @@ export class SpatialFilterFormComponent implements OnInit, OnDestroy {
       });
   }
 
+  public onFeatureSelected(id: string | null) {
+    console.log('set selected feature id for filtering', id);
+    this.selectedFeatureId.next(id);
+  }
 }

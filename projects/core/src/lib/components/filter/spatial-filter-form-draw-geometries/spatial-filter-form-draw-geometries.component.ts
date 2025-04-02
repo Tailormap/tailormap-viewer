@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, inject, Output, EventEmitter } from '@angular/core';
 import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type.enum';
 import { FeatureModel } from '@tailormap-viewer/api';
 import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.helper';
@@ -21,6 +21,11 @@ export class SpatialFilterFormDrawGeometriesComponent {
   @Input()
   public drawingLayerId = '';
 
+  @Output()
+  public featureSelected = new EventEmitter<string | null>();
+
+  public selectedFeatureForModifyTool: FeatureModel | null = null;
+
   public selectedStyle = (feature: FeatureModel) => FeatureStylingHelper.getDefaultHighlightStyle('filter-selected-style', {
     pointType: undefined,
     fillColor: ApplicationStyleService.getPrimaryColor(),
@@ -37,11 +42,25 @@ export class SpatialFilterFormDrawGeometriesComponent {
   ];
 
   public drawingAdded($event: DrawingToolEvent) {
-    this.filterCrudService.addGeometry({ id: nanoid(), geometry: $event.geometry });
+    const feature = { id: nanoid(), geometry: $event.geometry };
+    this.filterCrudService.addGeometry(feature);
   }
 
-  public featureRemoved($event: string) {
-    this.filterCrudService.removeGeometry($event);
+  public featureRemoved($event: FeatureModel) {
+    this.filterCrudService.removeGeometry($event.__fid);
+    this.featureSelected.emit(null);
+    this.selectedFeatureForModifyTool = null;
   }
 
+  public onFeatureSelected(feature: FeatureModel | null) {
+    console.log('SpatialFilterFormDrawGeometriesComponent.onFeatureSelected', feature);
+    this.featureSelected.emit(feature?.__fid);
+    this.selectedFeatureForModifyTool = feature;
+  }
+
+  public onFeatureGeometryModified(geometry: string) {
+    if (this.selectedFeatureForModifyTool) {
+      this.filterCrudService.updateGeometry(this.selectedFeatureForModifyTool.__fid, geometry);
+    }
+  }
 }
