@@ -37,10 +37,7 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
 
     this.withToolManager(manager => {
       if (this._selectedFeature) {
-        // If the modify tool is already active, we need to disable it first otherwise the ModifyEnableToolArguments are not applied
-        // TODO: add argument to enableTool() to force enabling?
-        manager.disableTool(this.modifyTool?.id || '', true);
-        manager.enableTool(this.modifyTool?.id || '', false, { feature: this._selectedFeature, style: this.selectionStyle });
+        manager.enableTool(this.modifyTool?.id || '', false, { feature: this._selectedFeature, style: this.selectionStyle }, true);
       } else {
         manager.disableTool(this.modifyTool?.id || '', true);
       }

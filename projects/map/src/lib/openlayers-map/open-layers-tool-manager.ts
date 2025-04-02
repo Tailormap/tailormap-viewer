@@ -92,12 +92,13 @@ export class OpenLayersToolManager implements ToolManagerModel {
     toolId: string,
     disableOtherTools?: boolean,
     enableArgs?: any,
+    forceEnableIfActivated?: boolean,
   ): ToolManagerModel {
     if (disableOtherTools) {
       this.disableAllTools();
     }
     const tool = this.tools.get(toolId);
-    if (tool && !tool.isActive) {
+    if (tool && (!tool.isActive || forceEnableIfActivated)) {
       tool.enable(enableArgs);
       this.switchedTool = true;
       window.setTimeout(() => this.switchedTool = false, 0);
