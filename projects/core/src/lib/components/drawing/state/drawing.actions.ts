@@ -9,6 +9,11 @@ export const addFeature = createAction(
   props<{ feature: DrawingFeatureModel; selectFeature?: boolean }>(),
 );
 
+export const addFeatures = createAction(
+  `${drawingActionsPrefix} Add Features`,
+  props<{ features: DrawingFeatureModel[] }>(),
+);
+
 export const removeAllFeatures = createAction(
   `${drawingActionsPrefix} Remove All Features`,
 );
