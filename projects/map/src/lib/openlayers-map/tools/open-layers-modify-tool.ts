@@ -12,6 +12,8 @@ import { NgZone } from "@angular/core";
 import { Vector as VectorLayer } from 'ol/layer';
 import { Vector as VectorSource } from 'ol/source';
 import { MapStyleHelper } from "../../helpers/map-style.helper";
+import { MapStyleModel } from '../../models';
+import { FeatureModel } from '@tailormap-viewer/api';
 
 export class OpenLayersModifyTool implements ModifyToolModel {
 
@@ -52,12 +54,12 @@ export class OpenLayersModifyTool implements ModifyToolModel {
 
   public enable(args: ModifyEnableToolArguments): void {
     this.stopModify();
-    if (!args || !args.geometry) {
+    if (!args || !args.feature) {
       return;
     }
     this.listeners = [];
     this.isActive = true;
-    const { layer, source } = this.getLayer(args.geometry);
+    const { layer, source } = this.getLayer(args.feature, args.style);
     this.translateInteraction = new Translate({ layers: [layer] });
     this.listeners.push(this.translateInteraction.on('translateend', e => this.eventHandler(e)));
     this.modifyInteraction = new Modify({ source });
@@ -65,26 +67,29 @@ export class OpenLayersModifyTool implements ModifyToolModel {
     this.olMap.getInteractions().extend([ this.translateInteraction, this.modifyInteraction ]);
   }
 
-  private getLayer(geometry: string) {
+  private getLayer(feature: FeatureModel, styleModel?: Partial<MapStyleModel> | ((feature: FeatureModel) => MapStyleModel)) {
     if (!this.editLayer || !this.source) {
       this.source = new VectorSource();
       this.editLayer = new VectorLayer({
-        style: this.getStyle(),
         zIndex: this.olMap.getAllLayers().length + 9999,
         source: this.source,
       });
       this.olMap.addLayer(this.editLayer);
     }
-    this.source.getFeatures().forEach(feature => {
-      this.source?.removeFeature(feature);
+    this.editLayer.setStyle(this.getStyle(styleModel));
+    this.source.getFeatures().forEach(f => {
+      this.source?.removeFeature(f);
     });
-    FeatureHelper.getFeatures(geometry).forEach(feature => {
-      this.source?.addFeature(feature);
+    FeatureHelper.getFeatures(feature).forEach(f => {
+      this.source?.addFeature(f);
     });
     return { layer: this.editLayer, source: this.source };
   }
 
-  private getStyle() {
+  private getStyle(style?: Partial<MapStyleModel> | ((feature: FeatureModel) => MapStyleModel)) {
+    if (typeof style === 'function') {
+      return MapStyleHelper.getStyle(style);
+    }
     return MapStyleHelper.getStyle({
       styleKey: 'edit-tool-style',
       zIndex: 9999,
@@ -93,7 +98,7 @@ export class OpenLayersModifyTool implements ModifyToolModel {
       pointType: 'circle',
       pointStrokeColor: 'rgba(0, 0, 0, 0.7)',
       pointFillColor: 'rgba(255, 255, 255, 0.5)',
-      ...(this.toolConfig.style || {}),
+      ...(style || this.toolConfig.style),
     });
   }
 

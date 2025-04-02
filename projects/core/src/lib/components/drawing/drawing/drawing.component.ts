@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { MapService } from '@tailormap-viewer/map';
 import { combineLatest, filter, Observable, of, Subject, take, takeUntil } from 'rxjs';
 import {
-  selectDrawingFeaturesIncludingSelected, selectSelectedDrawingStyle, selectSelectedDrawingFeature, selectHasDrawingFeatures,
+  selectDrawingFeaturesExcludingSelected, selectSelectedDrawingStyle, selectSelectedDrawingFeature, selectHasDrawingFeatures,
 } from '../state/drawing.selectors';
 import { DrawingHelper } from '../helpers/drawing.helper';
 import { MenubarService } from '../../menubar';
@@ -45,7 +45,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
 
     this.mapService.renderFeatures$<DrawingFeatureModelAttributes>(
       this.drawingLayerId,
-      this.store$.select(selectDrawingFeaturesIncludingSelected),
+      this.store$.select(selectDrawingFeaturesExcludingSelected),
       DrawingHelper.applyDrawingStyle,
     ).pipe(takeUntil(this.destroyed)).subscribe();
 

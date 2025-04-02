@@ -36,6 +36,13 @@ export class SpatialFilterCrudService {
     );
   }
 
+  public updateGeometry(id: string, geometry: string) {
+    this.updateSelectedGroup(group => of({
+      ...group,
+      filters: group.filters.map(f => ({ ...f, geometries: f.geometries.map(g => g.id === id ? { ...g, geometry } : g) })),
+    }));
+  }
+
   public removeGeometry(id: string) {
     this.updateSelectedGroup(group => of({
       ...group,
@@ -203,5 +210,4 @@ export class SpatialFilterCrudService {
       source: 'SPATIAL_FILTER_FORM',
     };
   }
-
 }
