@@ -10,7 +10,7 @@ import { DrawingFeatureTypeEnum } from '../../models/drawing-feature-type.enum';
 import { FeatureModel } from '@tailormap-viewer/api';
 import { ApplicationStyleService } from '../../../services/application-style.service';
 import { Store } from '@ngrx/store';
-import { selectSelectedDrawingFeature } from '../../../components/drawing/state/drawing.selectors';
+import { selectSelectedDrawingFeature } from '../../../components/drawing/state';
 
 @Component({
   selector: 'tm-map-drawing-buttons',
@@ -78,10 +78,10 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
       this.selectedFeatureId = selectedFeature?.__fid || null;
       this.withToolManager(manager => {
         if (selectedFeature) {
-          manager.disableTool(this.modifyTool?.id || ''); // Should not be necessary, but OpenLayersModifyTool doesn't update its vector layer otherwise
-          manager.enableTool(this.modifyTool?.id || '', false, { geometry: selectedFeature.geometry });
+          manager.disableTool(this.modifyTool?.id || '', true); // Should not be necessary, but OpenLayersModifyTool doesn't update its vector layer otherwise
+          manager.enableTool(this.modifyTool?.id || '', false, { geometry: selectedFeature.geometry, style: selectedFeature.attributes.style });
         } else {
-          manager.disableTool(this.modifyTool?.id || '');
+          manager.disableTool(this.modifyTool?.id || '', true);
         }
       });
     });
@@ -199,21 +199,23 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
   }
 
   private toggleTool(type: DrawingType, drawingFeatureType: DrawingFeatureTypeEnum) {
-    this.activeToolChanged.emit(this.activeTool === drawingFeatureType ? null : drawingFeatureType);
     this.withToolManager(manager => {
       if (!this.tool || !this.selectTool || !this.modifyTool) {
         return;
       }
       if (this.activeTool === drawingFeatureType) {
+        // Toggle to not drawing
         this.activeTool = null;
         manager.disableTool(this.tool.id, true);
         manager.enableTool(this.selectTool.id, true);
-        return;
+      } else {
+        // Enable drawing
+        this.activeTool = drawingFeatureType;
+        manager.enableTool(this.tool.id, true, { type });
+        manager.disableTool(this.selectTool.id, true);
+        manager.disableTool(this.modifyTool.id, true);
       }
-      this.activeTool = drawingFeatureType;
-      manager.enableTool(this.tool.id, true, { type });
-      manager.disableTool(this.selectTool.id, true);
-      manager.disableTool(this.modifyTool.id, true);
+      this.activeToolChanged.emit(this.activeTool);
     });
   }
 
