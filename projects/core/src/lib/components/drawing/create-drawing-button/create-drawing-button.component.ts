@@ -5,6 +5,8 @@ import { DrawingHelper } from '../helpers/drawing.helper';
 import { Store } from '@ngrx/store';
 import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type.enum';
 import { FeatureModel } from '@tailormap-viewer/api';
+import { selectSelectedDrawingFeature } from '../state';
+import { map, take } from 'rxjs';
 
 @Component({
   selector: 'tm-create-drawing-button',
@@ -22,6 +24,20 @@ export class CreateDrawingButtonComponent implements OnDestroy {
   private activeTool: DrawingFeatureTypeEnum | null = null;
 
   private store$ = inject(Store);
+
+  public selectedFeature$ = this.store$.select(selectSelectedDrawingFeature).pipe(
+    map(feature => {
+        if (!feature) {
+          return null;
+        }
+        return {
+          ...feature,
+          attributes: {
+            ...feature?.attributes,
+            selected: true,
+          },
+        };
+    }));
 
   public ngOnDestroy() {
     this.store$.dispatch(setSelectedFeature({ fid: null }));
@@ -42,11 +58,15 @@ export class CreateDrawingButtonComponent implements OnDestroy {
     this.store$.dispatch(setSelectedDrawingStyle({ drawingType: $event }));
   }
 
-  public onFeatureSelected($event: string | null) {
-    this.store$.dispatch(setSelectedFeature({ fid: $event || null }));
+  public onFeatureSelected(feature: FeatureModel | null) {
+    this.store$.dispatch(setSelectedFeature({ fid: feature?.__fid || null }));
   }
 
-  public onFeatureModified($event: { fid: string; geometry: string }) {
-    this.store$.dispatch(updateDrawingFeatureGeometry($event));
+  public onFeatureGeometryModified(geometry: string) {
+    this.selectedFeature$.pipe(take(1)).subscribe(selectedFeature => {
+      if(selectedFeature) {
+        this.store$.dispatch(updateDrawingFeatureGeometry({ fid: selectedFeature.__fid, geometry }));
+      }
+    });
   }
 }

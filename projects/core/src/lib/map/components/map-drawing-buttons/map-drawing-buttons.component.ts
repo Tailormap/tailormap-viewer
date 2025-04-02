@@ -9,8 +9,6 @@ import {
 import { DrawingFeatureTypeEnum } from '../../models/drawing-feature-type.enum';
 import { FeatureModel } from '@tailormap-viewer/api';
 import { ApplicationStyleService } from '../../../services/application-style.service';
-import { Store } from '@ngrx/store';
-import { selectSelectedDrawingFeature } from '../../../components/drawing/state';
 
 @Component({
   selector: 'tm-map-drawing-buttons',
@@ -31,6 +29,27 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
   @Input()
   public drawingLayerId = '';
 
+  private _selectedFeature: FeatureModel | null = null;
+
+  @Input()
+  public set selectedFeature(value: FeatureModel | null) {
+    this._selectedFeature = value;
+
+    this.withToolManager(manager => {
+      if (this._selectedFeature) {
+        // If the modify tool is already active, we need to disable it first otherwise the ModifyEnableToolArguments are not applied
+        // TODO: add argument to enableTool() to force enabling?
+        manager.disableTool(this.modifyTool?.id || '', true);
+        manager.enableTool(this.modifyTool?.id || '', false, { feature: this._selectedFeature, style: this.selectionStyle });
+      } else {
+        manager.disableTool(this.modifyTool?.id || '', true);
+      }
+    });
+  }
+  public get selectedFeature(): FeatureModel | null {
+    return this._selectedFeature;
+  }
+
   @Input()
   public selectionStyle: Partial<MapStyleModel> | ((feature: FeatureModel) => MapStyleModel) | undefined = undefined;
 
@@ -47,13 +66,13 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
   public drawingAdded: EventEmitter<DrawingToolEvent> = new EventEmitter<DrawingToolEvent>();
 
   @Output()
-  public featureModified = new EventEmitter<{ fid: string; geometry: string }>();
+  public featureGeometryModified: EventEmitter<string> = new EventEmitter<string>();
 
   @Output()
-  public featureRemoved: EventEmitter<string> = new EventEmitter<string>();
+  public featureRemoved: EventEmitter<FeatureModel> = new EventEmitter<FeatureModel>();
 
   @Output()
-  public featureSelected: EventEmitter<string | null> = new EventEmitter<string | null>();
+  public featureSelected: EventEmitter<FeatureModel | null> = new EventEmitter<FeatureModel | null>();
 
   @Output()
   public activeToolChanged: EventEmitter<DrawingFeatureTypeEnum | null> = new EventEmitter<DrawingFeatureTypeEnum | null>();
@@ -66,25 +85,10 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
   private selectTool: SelectToolModel | null = null;
   private modifyTool: ModifyToolModel | null = null;
 
-  public selectedFeatureId: string | null = null;
-
   constructor(
     private mapService: MapService,
     private cdr: ChangeDetectorRef,
-    private store$: Store,
   ) {
-    // Usage of Store maybe not the best idea, use @Input instead?
-    this.store$.select(selectSelectedDrawingFeature).pipe(takeUntil(this.destroyed)).subscribe(selectedFeature => {
-      this.selectedFeatureId = selectedFeature?.__fid || null;
-      this.withToolManager(manager => {
-        if (selectedFeature) {
-          manager.disableTool(this.modifyTool?.id || '', true); // Should not be necessary, but OpenLayersModifyTool doesn't update its vector layer otherwise
-          manager.enableTool(this.modifyTool?.id || '', false, { geometry: selectedFeature.geometry, style: selectedFeature.attributes.style });
-        } else {
-          manager.disableTool(this.modifyTool?.id || '', true);
-        }
-      });
-    });
   }
 
   private withToolManager(
@@ -134,7 +138,7 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
       .subscribe(selectedFeatures => {
         const selectedFeature = selectedFeatures && selectedFeatures.length > 0 && selectedFeatures[0] ? selectedFeatures[0] : null;
         this.cdr.detectChanges();
-        this.featureSelected.emit(selectedFeature?.__fid);
+        this.featureSelected.emit(selectedFeature);
       });
 
     // OpenLayersModifyTool doesn't support style function so can't use DrawingHelper.applyDrawingStyle() to draw feature double
@@ -148,7 +152,7 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
       strokeType: 'dash',
       strokeWidth: 2,
       pointFillColor: 'transparent',
-      fillColor: ApplicationStyleService.getPrimaryColor(), // Must specify color other wise no hand cursor
+      fillColor: ApplicationStyleService.getPrimaryColor(), // Must specify color otherwise no hand cursor
       fillOpacity: 0,
     };
 
@@ -162,11 +166,7 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
       }),
       switchMap(({ tool }) => tool.featureModified$),
     ).subscribe(modifiedGeometry => {
-      if (!this.selectedFeatureId) {
-        return;
-      }
-      console.log(`Modified geometry for ${this.selectedFeatureId}:`, modifiedGeometry);
-      this.featureModified.emit({ fid: this.selectedFeatureId, geometry: modifiedGeometry });
+      this.featureGeometryModified.emit(modifiedGeometry);
     });
   }
 
@@ -214,17 +214,16 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
         manager.enableTool(this.tool.id, true, { type });
         manager.disableTool(this.selectTool.id, true);
         manager.disableTool(this.modifyTool.id, true);
+        this.featureSelected.emit(null);
       }
       this.activeToolChanged.emit(this.activeTool);
     });
   }
 
   public removeSelectedFeature() {
-    if (!this.selectedFeatureId) {
+    if (!this._selectedFeature) {
       return;
     }
-    this.featureRemoved.emit(this.selectedFeatureId);
-    this.selectedFeatureId = null;
+    this.featureRemoved.emit(this._selectedFeature);
   }
-
 }
