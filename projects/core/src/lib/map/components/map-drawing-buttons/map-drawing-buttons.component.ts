@@ -1,8 +1,10 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Subject, switchMap, take, takeUntil, tap } from 'rxjs';
 import {
-  DrawingToolConfigModel, DrawingToolEvent, DrawingToolModel, DrawingType, MapService, MapStyleModel, SelectToolConfigModel,
-  SelectToolModel, ToolTypeEnum,
+  DrawingToolConfigModel, DrawingToolEvent, DrawingToolModel, DrawingType, MapService, MapStyleModel, ModifyToolConfigModel,
+  ModifyToolModel,
+  SelectToolConfigModel,
+  SelectToolModel, ToolManagerModel, ToolTypeEnum,
 } from '@tailormap-viewer/map';
 import { DrawingFeatureTypeEnum } from '../../models/drawing-feature-type.enum';
 import { FeatureModel } from '@tailormap-viewer/api';
@@ -27,6 +29,24 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
   @Input()
   public drawingLayerId = '';
 
+  private _selectedFeature: FeatureModel | null = null;
+
+  @Input()
+  public set selectedFeature(value: FeatureModel | null) {
+    this._selectedFeature = value;
+
+    this.withToolManager(manager => {
+      if (this._selectedFeature) {
+        manager.enableTool(this.modifyTool?.id || '', false, { feature: this._selectedFeature, style: this.selectionStyle }, true);
+      } else {
+        manager.disableTool(this.modifyTool?.id || '', true);
+      }
+    });
+  }
+  public get selectedFeature(): FeatureModel | null {
+    return this._selectedFeature;
+  }
+
   @Input()
   public selectionStyle: Partial<MapStyleModel> | ((feature: FeatureModel) => MapStyleModel) | undefined = undefined;
 
@@ -43,10 +63,13 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
   public drawingAdded: EventEmitter<DrawingToolEvent> = new EventEmitter<DrawingToolEvent>();
 
   @Output()
-  public featureRemoved: EventEmitter<string> = new EventEmitter<string>();
+  public featureGeometryModified: EventEmitter<string> = new EventEmitter<string>();
 
   @Output()
-  public featureSelected: EventEmitter<string | null> = new EventEmitter<string | null>();
+  public featureRemoved: EventEmitter<FeatureModel> = new EventEmitter<FeatureModel>();
+
+  @Output()
+  public featureSelected: EventEmitter<FeatureModel | null> = new EventEmitter<FeatureModel | null>();
 
   @Output()
   public activeToolChanged: EventEmitter<DrawingFeatureTypeEnum | null> = new EventEmitter<DrawingFeatureTypeEnum | null>();
@@ -57,13 +80,21 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
   private tool: DrawingToolModel | null = null;
   public activeTool: DrawingFeatureTypeEnum | null = null;
   private selectTool: SelectToolModel | null = null;
-
-  public selectedFeatureId: string | null = null;
+  private modifyTool: ModifyToolModel | null = null;
 
   constructor(
     private mapService: MapService,
     private cdr: ChangeDetectorRef,
-  ) { }
+  ) {
+  }
+
+  private withToolManager(
+    callback: (manager: ToolManagerModel) => void,
+  ) {
+    this.mapService.getToolManager$().pipe(take(1)).subscribe(manager => {
+      callback(manager);
+    });
+  }
 
   public ngOnInit(): void {
     this.mapService.createTool$<DrawingToolModel, DrawingToolConfigModel>({
@@ -102,11 +133,36 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
         switchMap(({ tool }) => tool.selectedFeatures$),
       )
       .subscribe(selectedFeatures => {
-        const selectedFeature = selectedFeatures && selectedFeatures.length > 0 && selectedFeatures[0] ? selectedFeatures[0].__fid : null;
-        this.selectedFeatureId = selectedFeature;
+        const selectedFeature = selectedFeatures && selectedFeatures.length > 0 && selectedFeatures[0] ? selectedFeatures[0] : null;
         this.cdr.detectChanges();
         this.featureSelected.emit(selectedFeature);
       });
+
+    const style: MapStyleModel = {
+      styleKey: 'edit-geometry-style',
+      zIndex: 100,
+      pointType: 'circle',
+      pointStrokeColor: ApplicationStyleService.getPrimaryColor(),
+      strokeColor: ApplicationStyleService.getPrimaryColor(),
+      strokeType: 'dash',
+      strokeWidth: 2,
+      pointFillColor: 'transparent',
+      fillColor: ApplicationStyleService.getPrimaryColor(), // Must specify color otherwise no hand cursor
+      fillOpacity: 0,
+    };
+
+    this.mapService.createTool$<ModifyToolModel, ModifyToolConfigModel>({
+      type: ToolTypeEnum.Modify,
+      style,
+    }).pipe(
+      takeUntil(this.destroyed),
+      tap(({ tool }) => {
+        this.modifyTool = tool;
+      }),
+      switchMap(({ tool }) => tool.featureModified$),
+    ).subscribe(modifiedGeometry => {
+      this.featureGeometryModified.emit(modifiedGeometry);
+    });
   }
 
   public ngOnDestroy() {
@@ -138,29 +194,31 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
   }
 
   private toggleTool(type: DrawingType, drawingFeatureType: DrawingFeatureTypeEnum) {
-    this.activeToolChanged.emit(this.activeTool === drawingFeatureType ? null : drawingFeatureType);
-    this.mapService.getToolManager$().pipe(take(1)).subscribe(manager => {
-      if (!this.tool || !this.selectTool) {
+    this.withToolManager(manager => {
+      if (!this.tool || !this.selectTool || !this.modifyTool) {
         return;
       }
       if (this.activeTool === drawingFeatureType) {
+        // Toggle to not drawing
         this.activeTool = null;
         manager.disableTool(this.tool.id, true);
         manager.enableTool(this.selectTool.id, true);
-        return;
+      } else {
+        // Enable drawing
+        this.activeTool = drawingFeatureType;
+        manager.enableTool(this.tool.id, true, { type });
+        manager.disableTool(this.selectTool.id, true);
+        manager.disableTool(this.modifyTool.id, true);
+        this.featureSelected.emit(null);
       }
-      this.activeTool = drawingFeatureType;
-      manager.enableTool(this.tool.id, true, { type });
-      manager.disableTool(this.selectTool.id, true);
+      this.activeToolChanged.emit(this.activeTool);
     });
   }
 
   public removeSelectedFeature() {
-    if (!this.selectedFeatureId) {
+    if (!this._selectedFeature) {
       return;
     }
-    this.featureRemoved.emit(this.selectedFeatureId);
-    this.selectedFeatureId = null;
+    this.featureRemoved.emit(this._selectedFeature);
   }
-
 }

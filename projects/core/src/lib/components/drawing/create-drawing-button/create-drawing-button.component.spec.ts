@@ -6,6 +6,7 @@ import { SharedModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { MapDrawingButtonsComponent } from '../../../map/components/map-drawing-buttons/map-drawing-buttons.component';
 import { createMapServiceMock } from '../../../map/components/map-drawing-buttons/map-drawing-buttons.component.spec';
+import { of } from 'rxjs';
 
 describe('CreateDrawingButtonComponent', () => {
 
@@ -16,12 +17,12 @@ describe('CreateDrawingButtonComponent', () => {
       imports: [ SharedModule, MatIconTestingModule ],
       declarations: [MapDrawingButtonsComponent],
       providers: [
-        { provide: Store, useValue: { dispatch: mockDispatch } },
+        { provide: Store, useValue: { dispatch: mockDispatch, select: () => of(null) } },
         mapServiceMock.provider,
       ],
     });
 
-    expect(mapServiceMock.createTool$).toHaveBeenCalledTimes(2);
+    expect(mapServiceMock.createTool$).toHaveBeenCalledTimes(3);
     expect(mapServiceMock.toolManager.enableTool).toHaveBeenCalledWith('select-1', true);
 
     mapServiceMock.toolManager.enableTool.mockClear();
