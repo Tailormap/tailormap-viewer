@@ -20,6 +20,11 @@
   flex-wrap: nowrap;
   gap: 10px;
   align-items: flex-end;
+  padding-top: 6px
+}
+
+.clicked-coordinates-inputs mat-form-field + mat-form-field {
+  margin-top: 0;
 }
 
 .clicked-coordinates-buttons {
@@ -28,6 +33,10 @@
   margin-top: 10px;
   margin-bottom: 2px;
   gap: 10px;
+}
+
+.clicked-coordinates-buttons button {
+  border-radius: 0;
 }
 
 
