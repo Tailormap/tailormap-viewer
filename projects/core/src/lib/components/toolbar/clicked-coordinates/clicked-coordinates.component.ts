@@ -1,13 +1,16 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
-import { concatMap, map, Observable, Subject, switchMap, takeUntil, tap } from 'rxjs';
-import { MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { concatMap, map, Observable, of, Subject, take, takeUntil, tap } from 'rxjs';
+import { MapClickEvent, MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Store } from '@ngrx/store';
 import { isActiveToolbarTool } from '../state/toolbar.selectors';
 import { deregisterTool, registerTool, toggleTool } from '../state/toolbar.actions';
 import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
-import { SnackBarMessageComponent } from '@tailormap-viewer/shared';
+import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { FeatureModel } from '@tailormap-viewer/api';
+import { ApplicationStyleService } from '../../../services/application-style.service';
+import { selectMapSettings } from '../../../map/state/map.selectors';
+
 
 @Component({
   selector: 'tm-clicked-coordinates',
@@ -19,20 +22,54 @@ import { SnackBarMessageComponent } from '@tailormap-viewer/shared';
 export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
 
   public toolActive$: Observable<boolean>;
-  private destroyed = new Subject();
 
-  constructor(
-    private store$: Store,
-    private mapService: MapService,
-    private snackBar: MatSnackBar,
-    private clipboard: Clipboard,
-  ) {
+  public coordinatesForm = new FormGroup({
+    x: new FormControl<number | null>(null),
+    y: new FormControl<number | null>(null),
+    minx: new FormControl<number | null>(null),
+    miny: new FormControl<number | null>(null),
+    maxx: new FormControl<number | null>(null),
+    maxy: new FormControl<number | null>(null),
+  }, { validators: validateCoordinates() });
+
+  private destroyed = new Subject();
+  private clickLocationSubject = new Subject<FeatureModel[]>();
+  private clickLocationSubject$ = this.clickLocationSubject.asObservable();
+  private crs:string = '';
+
+  constructor(private store$: Store, private mapService: MapService, private clipboard: Clipboard) {
     this.toolActive$ = this.store$.select(isActiveToolbarTool(ToolbarComponentEnum.SELECT_COORDINATES));
-    this.toolActive$.pipe(
-      takeUntil(this.destroyed)).subscribe(isActive => {
+    this.toolActive$.pipe(takeUntil(this.destroyed)).subscribe(isActive => {
       if (!isActive) {
-        this.snackBar.dismiss();
+        //only reset the input fields, not the hidden fields
+        this.coordinatesForm.patchValue({ x: null, y:  null }, { emitEvent: false });
+        this.clickLocationSubject.next([]);
       }
+    });
+
+    this.store$.select(selectMapSettings).pipe(
+      takeUntil(this.destroyed),
+      map(settings => {
+        if (settings?.crs?.bounds && settings?.maxExtent) {
+          this.crs = settings?.crs?.code;
+          const bounds = settings?.crs?.bounds;
+          const maxExtent = settings?.maxExtent;
+          return [
+             // get the smallest bounds of both extents
+             Math.max(bounds.minx, maxExtent.minx),
+             Math.max(bounds.miny, maxExtent.miny),
+             Math.min(bounds.maxx, maxExtent.maxx),
+             Math.min(bounds.maxy, maxExtent.maxy),
+          ];
+        } else {
+          return [];
+        }
+      })).subscribe(bounds => {
+        if(bounds.length > 0) {
+          this.coordinatesForm.patchValue({
+            minx: bounds[0], miny: bounds[1], maxx: bounds[2], maxy: bounds[3],
+          }, { emitEvent: false });
+        }
     });
   }
 
@@ -45,50 +82,91 @@ export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
         tap(({ tool }) => {
           this.store$.dispatch(registerTool({ tool: { id: ToolbarComponentEnum.SELECT_COORDINATES, mapToolId: tool.id } }));
         }),
-        concatMap(({ tool }) => tool.mapClick$),
-        switchMap(mapClick => {
-          this.snackBar.dismiss();
-          return this.mapService.getRoundedCoordinates$(mapClick.mapCoordinates)
-            .pipe(map(coordinates => coordinates.join(', ')));
-        }),
-        concatMap(coordinates => {
-          const coordinatesMsg = $localize `:@@core.toolbar.coordinate-picker-selected-coordinates:Selected coordinates: ${coordinates}`;
-          return SnackBarMessageComponent.open$(this.snackBar, {
-            message: coordinatesMsg,
-            showCloseButton: true,
-            closeButtonText: $localize `:@@core.toolbar.coordinate-picker-copy:Copy`,
-          }).pipe(
-            map((dismiss) => {
-              if (dismiss.dismissedByAction) {
-                return this.clipboard.copy(coordinates)
-                  ? $localize `:@@core.toolbar.coordinate-picker-success:Success`
-                  : $localize `:@@core.toolbar.coordinate-picker-failed-copy:Failed to copy to clipboard`;
-              }
-              return '';
-            }),
-          );
-        }),
-      ).subscribe(
-      succesMsg => {
-        if (succesMsg) {
-          SnackBarMessageComponent.open$(this.snackBar, {
-            message: succesMsg,
-            showCloseButton: true,
-            duration: 5000,
-          });
-        }
-      },
-    );
+        concatMap(({ tool }) => tool?.mapClick$ || of(null)),
+      ).subscribe(mapClick => this.handleMapClick(mapClick));
+
+    this.mapService.renderFeatures$('tm-clicked-coordinates-layer', this.clickLocationSubject$, f => {
+      const primaryColor = ApplicationStyleService.getPrimaryColor();
+      // draw a circle with a box inside
+      if (f.__fid === 'clicked-coordinates-point') {
+        return {
+          styleKey: 'tm-clicked-coordinates',
+          zIndex: 2000,
+          pointType: 'circle',
+          pointSize: 15,
+          pointFillColor: 'transparent',
+          pointStrokeColor: primaryColor,
+          pointStrokeWidth: 3,
+        };
+      } else {
+        return {
+          styleKey: 'tm-clicked-coordinates-2',
+          zIndex: 1999,
+          pointType: 'square',
+          pointSize: 5,
+          pointRotation: 45,
+          pointFillColor: 'transparent',
+          pointStrokeColor: primaryColor,
+          pointStrokeWidth: 2,
+        };
+      }
+    }).pipe(takeUntil(this.destroyed)).subscribe();
   }
 
   public ngOnDestroy() {
+    this.clickLocationSubject.complete();
     this.destroyed.next(null);
     this.destroyed.complete();
-    this.snackBar.dismiss();
     this.store$.dispatch(deregisterTool({ tool: ToolbarComponentEnum.SELECT_COORDINATES }));
   }
 
   public toggle() {
     this.store$.dispatch(toggleTool({ tool: ToolbarComponentEnum.SELECT_COORDINATES }));
   }
+
+  public copy() {
+    if (this.coordinatesForm.valid) {
+      this.clipboard.copy(`${this.coordinatesForm.get('x')?.value}, ${this.coordinatesForm.get('y')?.value}`);
+    }
+  }
+
+  public goTo() {
+    if (this.coordinatesForm.valid) {
+      const x = this.coordinatesForm.getRawValue().x;
+      const y = this.coordinatesForm.getRawValue().y;
+      if (x != null && y != null) {
+        this.pushLocationFeature([ x, y ]);
+        this.mapService.zoomTo(`POINT(${x} ${y})`, this.crs);
+      }
+    }
+  }
+
+  private handleMapClick(mapClick: MapClickEvent) {
+    if(mapClick && mapClick.mapCoordinates) {
+      this.pushLocationFeature(mapClick.mapCoordinates);
+      this.mapService.getRoundedCoordinates$(mapClick.mapCoordinates)
+        .pipe(
+          take(1),
+          map(coordinates => {
+            this.coordinatesForm.patchValue({ x: parseFloat(coordinates[0]), y: parseFloat(coordinates[1]) });
+          })).subscribe();
+    }
+  }
+
+  private pushLocationFeature(coordinates: number[]) {
+    this.clickLocationSubject.next([{
+      __fid: 'clicked-coordinates-point', geometry: `POINT(${coordinates[0]} ${coordinates[1]})`, attributes: {},
+    }, {
+      __fid: 'clicked-coordinates-point-2', geometry: `POINT(${coordinates[0]} ${coordinates[1]})`, attributes: {},
+    }]);
+  }
+}
+
+export function validateCoordinates(): ValidatorFn {
+  return (form: AbstractControl): ValidationErrors | null => {
+    const values = form.getRawValue();
+    return values.x !== null && values.y !== null &&
+      values.x >= values.minx && values.x <= values.maxx &&
+      values.y >= values.miny && values.y <= values.maxy ? null : { invalidCoordinates: true };
+  };
 }
