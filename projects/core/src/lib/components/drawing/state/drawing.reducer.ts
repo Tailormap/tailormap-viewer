@@ -11,6 +11,14 @@ const onAddFeature = (
   selectedFeature: payload.selectFeature ? payload.feature.__fid : state.selectedFeature,
 });
 
+const onAddFeatures = (
+  state: DrawingState,
+  payload: ReturnType<typeof DrawingActions.addFeatures>,
+): DrawingState => ({
+  ...state,
+  features: [ ...state.features, ...payload.features ],
+});
+
 const onSetSelectedFeature = (
   state: DrawingState,
   payload: ReturnType<typeof DrawingActions.setSelectedFeature>,
@@ -103,6 +111,7 @@ const onSetSelectedDrawingStyle = (
 const drawingReducerImpl = createReducer<DrawingState>(
   initialDrawingState,
   on(DrawingActions.addFeature, onAddFeature),
+  on(DrawingActions.addFeatures, onAddFeatures),
   on(DrawingActions.setSelectedFeature, onSetSelectedFeature),
   on(DrawingActions.updateDrawingFeatureStyle, onUpdateDrawingFeatureStyle),
   on(DrawingActions.updateSelectedDrawingFeatureGeometry, onUpdateSelectedDrawingFeatureGeometry),
