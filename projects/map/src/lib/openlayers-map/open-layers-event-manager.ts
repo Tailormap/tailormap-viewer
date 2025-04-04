@@ -20,8 +20,8 @@ interface EventManagerEvent<EventType extends BaseEvent = BaseEvent> {
 export class OpenLayersEventManager {
 
   private static mapMoveEndEvent: EventManagerEvent<MapEvent> = { stream: new Subject<MapEvent>() };
-  private static mapClickEvent: EventManagerEvent<MapBrowserEvent<MouseEvent>> = { stream: new Subject<MapBrowserEvent<MouseEvent>>() };
-  private static mouseMoveEvent: EventManagerEvent<MapBrowserEvent<MouseEvent>> = { stream: new Subject<MapBrowserEvent<MouseEvent>>() };
+  private static mapClickEvent: EventManagerEvent<MapBrowserEvent<PointerEvent>> = { stream: new Subject<MapBrowserEvent<PointerEvent>>() };
+  private static mouseMoveEvent: EventManagerEvent<MapBrowserEvent<PointerEvent>> = { stream: new Subject<MapBrowserEvent<PointerEvent>>() };
   private static changeViewEvent: EventManagerEvent<ObjectEvent> = { stream: new Subject<ObjectEvent>() };
   private static in3d = false;
   private static destroyed = new Subject();
@@ -75,12 +75,12 @@ export class OpenLayersEventManager {
     return OpenLayersEventManager.mapMoveEndEvent.stream.asObservable();
   }
 
-  public static onMapClick$(): Observable<MapBrowserEvent<MouseEvent>> {
+  public static onMapClick$(): Observable<MapBrowserEvent<PointerEvent>> {
     return OpenLayersEventManager.mapClickEvent.stream.asObservable()
       .pipe(filter(() => !OpenLayersEventManager.in3d));
   }
 
-  public static onMouseMove$(): Observable<MapBrowserEvent<MouseEvent>> {
+  public static onMouseMove$(): Observable<MapBrowserEvent<PointerEvent>> {
     return OpenLayersEventManager.mouseMoveEvent.stream.asObservable();
   }
 
