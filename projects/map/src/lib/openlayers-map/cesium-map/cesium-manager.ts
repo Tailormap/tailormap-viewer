@@ -9,6 +9,7 @@ import { CssHelper, ExternalLibsLoaderHelper } from '@tailormap-viewer/shared';
 import { LayerTypesEnum } from '../../models/layer-types.enum';
 import { CesiumEventManager } from './cesium-event-manager';
 import { Projection } from 'ol/proj';
+import { ServiceProtocol } from '@tailormap-viewer/api';
 
 export class CesiumManager {
 
@@ -147,12 +148,16 @@ export class CesiumManager {
     layer: LayerModel,
   ): Promise<Cesium3DTileset | null> {
     if (LayerTypesHelper.isTiles3dLayer(layer)) {
-      console.log("layer url 3d: ", layer.url);
-      const resource = new Cesium.Resource({
-        url: '/url=',
-        proxy: new Cesium.DefaultProxy(layer.url),
-        parseUrl: true,
+      let resource = new Cesium.Resource({
+        url: layer.url,
       });
+      if (layer.url.includes(`/proxy/${ServiceProtocol.TILES3D}`)) {
+        resource = new Cesium.Resource({
+          url: '',
+          proxy: new DefaultProxy(layer.url),
+          parseUrl: true,
+        });
+      }
       try {
         // Create Cesium 3D Tileset with optimization options
         const tileset: Promise<Cesium3DTileset> = await Cesium.Cesium3DTileset.fromUrl(resource, {
