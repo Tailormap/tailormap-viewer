@@ -164,7 +164,10 @@ export class GeoServiceFormComponent implements OnInit {
     }
   }
 
-  public prettyName(protocol: GeoServiceProtocolEnum) {
+  public prettyName(protocol: GeoServiceProtocolEnum | undefined) {
+    if (!protocol) {
+      return '';
+    }
     switch (protocol) {
       case GeoServiceProtocolEnum.TILES3D:
         return '3D Tiles';

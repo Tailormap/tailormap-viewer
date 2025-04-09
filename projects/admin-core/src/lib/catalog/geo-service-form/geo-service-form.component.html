@@ -41,12 +41,12 @@
         <mat-panel-description style="flex-grow: 1">{{ getAuthDescription() }}</mat-panel-description>
       </mat-expansion-panel-header>
       <p i18n="@@admin-core.catalog.layer-authentication-hint">Enter account details below if the service requires HTTP Basic authentication. Enable reverse proxying to allow a layer which
-        requires authentication to be used in a viewer by having Tailormap do the WMS requests for the end user without sending the
+        requires authentication to be used in a viewer by having Tailormap do the {{ prettyName(geoServiceForm.get('protocol')?.value) }} requests for the end user without sending the
         credentials to the users' browser.</p>
       <p i18n="@@admin-core.catalog.cors-layer-hint">Reverse proxying without authentication can be used to bypass missing CORS headers but check with the server administrator if
         it's allowed and whether CORS can be enabled so proxying isn't necessary.</p>
       <mat-checkbox formControlName="useProxy" labelPosition="after">
-        <ng-container i18n="@@admin-core.catalog.reverse-proxy">Reverse proxy WMS requests for viewers</ng-container>
+        <ng-container i18n="@@admin-core.catalog.reverse-proxy">Reverse proxy {{ prettyName(geoServiceForm.get('protocol')?.value) }} requests for viewers</ng-container>
       </mat-checkbox>
       <mat-form-field>
         <mat-label i18n="@@admin-core.common.username">Username</mat-label>

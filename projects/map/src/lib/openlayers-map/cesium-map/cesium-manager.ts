@@ -4,12 +4,11 @@ import { LayerTypesHelper } from '../../helpers/layer-types.helper';
 import { NgZone } from '@angular/core';
 import type OLCesium from 'olcs';
 import { BehaviorSubject, filter, from, map, Observable, take } from 'rxjs';
-import { Cesium3DTileset, CesiumTerrainProvider, DefaultProxy, EllipsoidTerrainProvider, Scene } from 'cesium';
+import { Cesium3DTileset, CesiumTerrainProvider, EllipsoidTerrainProvider, Scene } from 'cesium';
 import { CssHelper, ExternalLibsLoaderHelper } from '@tailormap-viewer/shared';
 import { LayerTypesEnum } from '../../models/layer-types.enum';
 import { CesiumEventManager } from './cesium-event-manager';
 import { Projection } from 'ol/proj';
-import { ServiceProtocol } from '@tailormap-viewer/api';
 
 export class CesiumManager {
 
@@ -148,16 +147,9 @@ export class CesiumManager {
     layer: LayerModel,
   ): Promise<Cesium3DTileset | null> {
     if (LayerTypesHelper.isTiles3dLayer(layer)) {
-      let resource = new Cesium.Resource({
+      const resource = new Cesium.Resource({
         url: layer.url,
       });
-      if (layer.url.includes(`/proxy/${ServiceProtocol.TILES3D}`)) {
-        resource = new Cesium.Resource({
-          url: '',
-          proxy: new DefaultProxy(layer.url),
-          parseUrl: true,
-        });
-      }
       try {
         // Create Cesium 3D Tileset with optimization options
         const tileset: Promise<Cesium3DTileset> = await Cesium.Cesium3DTileset.fromUrl(resource, {

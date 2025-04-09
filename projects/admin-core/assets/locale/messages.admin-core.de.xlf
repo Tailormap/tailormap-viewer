@@ -206,26 +206,6 @@
         <source>Folder name</source>
         <target>Ordnername</target>
       </trans-unit>
-      <trans-unit id="admin-core.application.hiddenFunctionality" datatype="html">
-        <source>Hidden functionality for this layer</source>
-        <target>Versteckte Funktionalität für diese Ebene</target>
-      </trans-unit>
-      <trans-unit id="admin-core.application.hiddenFunctionality.attributeList" datatype="html">
-        <source>Do not show in attribute list</source>
-        <target>Nicht in Attributliste anzeigen</target>
-      </trans-unit>
-      <trans-unit id="admin-core.application.hiddenFunctionality.export" datatype="html">
-        <source>Do not show export button in attribute list</source>
-        <target>Export-Schaltfläche in Attributliste nicht anzeigen</target>
-      </trans-unit>
-      <trans-unit id="admin-core.application.hiddenFunctionality.hideFeatureInfo" datatype="html">
-        <source>Do not show in object information</source>
-        <target>Nicht in Objektinformationen anzeigen</target>
-      </trans-unit>
-      <trans-unit id="admin-core.application.hiddenFunctionality.warning" datatype="html">
-        <source>Note: these checkboxes only hide user interface controls. Data is still accessible via the API.</source>
-        <target>Hinweis: Diese Kontrollkästchen verbergen nur Benutzeroberflächensteuerungen. Daten sind weiterhin über die API zugänglich.</target>
-      </trans-unit>
       <trans-unit id="admin-core.application.hide-language-switcher" datatype="html">
         <source>Hide language switcher in viewer</source>
         <target>Sprachumschalter im Viewer ausblenden</target>
@@ -747,8 +727,8 @@
         <target>Ebene</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.layer-authentication-hint" datatype="html">
-        <source>Enter account details below if the service requires HTTP Basic authentication. Enable reverse proxying to allow a layer which requires authentication to be used in a viewer by having Tailormap do the WMS requests for the end user without sending the credentials to the users&apos; browser.</source>
-        <target>Wenn der Service eine HTTP-Basisauthentifizierung erfordert, geben Sie unten die Kontodaten ein. Aktivieren Sie Reverse-Proxying, um eine Ebene, die eine Authentifizierung erfordert, in einem Viewer zu verwenden, indem Tailormap die WMS-Anfragen für den Endbenutzer durchführt, ohne die Anmeldeinformationen an den Browser des Benutzers zu senden. </target>
+        <source>Enter account details below if the service requires HTTP Basic authentication. Enable reverse proxying to allow a layer which requires authentication to be used in a viewer by having Tailormap do the <x id="INTERPOLATION" equiv-text="{{ geoService?.protocol }}"/> requests for the end user without sending the credentials to the users&apos; browser.</source>
+        <target state="new">Wenn der Service eine HTTP-Basisauthentifizierung erfordert, geben Sie unten die Kontodaten ein. Aktivieren Sie Reverse-Proxying, um eine Ebene, die eine Authentifizierung erfordert, in einem Viewer zu verwenden, indem Tailormap die Anfragen für den Endbenutzer durchführt, ohne die Anmeldeinformationen an den Browser des Benutzers zu senden. </target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.layer-name" datatype="html">
         <source>Layer name</source>
@@ -847,8 +827,8 @@
         <target>Entfernen Sie bitte zuerst die Ebenen dieses Services aus den Anwendungen</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.reverse-proxy" datatype="html">
-        <source>Reverse proxy WMS requests for viewers</source>
-        <target>Reverse-Proxy WMS-Anfragen für Viewer</target>
+        <source>Reverse proxy <x id="INTERPOLATION" equiv-text="{{ geoService?.protocol }}"/> requests for viewers</source>
+        <target>Reverse-Proxy <x id="INTERPOLATION" equiv-text="{{ geoService?.protocol }}"/>-Anfragen für Viewer</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.schema" datatype="html">
         <source>Schema</source>
