@@ -112,7 +112,6 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
       this.source?.removeFeature(feature);
     });
     if (this.interaction) {
-      console.log('stop modify transform');
       this.olMap.removeInteraction(this.interaction);
       this.interaction.dispose();
       this.interaction = null;
