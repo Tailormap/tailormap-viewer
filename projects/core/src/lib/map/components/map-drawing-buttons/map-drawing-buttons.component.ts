@@ -3,7 +3,6 @@ import { Subject, switchMap, take, takeUntil, tap } from 'rxjs';
 import {
   DrawingToolConfigModel, DrawingToolEvent, DrawingToolModel, DrawingType, ExtTransformToolConfigModel, ExtTransformToolModel, MapService,
   MapStyleModel,
-  ModifyToolModel,
   SelectToolConfigModel,
   SelectToolModel, ToolManagerModel, ToolTypeEnum,
 } from '@tailormap-viewer/map';
