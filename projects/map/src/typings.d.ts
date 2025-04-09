@@ -66,12 +66,12 @@ declare module 'ol-ext/interaction/Transform' {
       style?: any;
       pointRadius?: number | Array<number> | ((feature: Feature) => number | number[]);
     });
-    public setMap(map: OlMap): void;
+    public setMap(map: OlMap | null): void;
     public setActive(b: boolean): void;
     public setDefaultStyle(options: { stroke: Style; fill: Style; pointStroke: Style; pointFill: Style }): void;
     public setStyle(style: 'default' | 'translate' | 'rotate' | 'rotate0' | 'scale' | 'scale1' |
       'scale2' | 'scale3' | 'scalev' |'scaleh1' | 'scalev2', olstyle: Style | Array<Style>): void;
-    public select(feature: Feature, add: boolean): void;
+    public select(feature: Feature | null, add?: boolean): void;
     public setSelection(features: Collection<Feature>): void;
     public getCenter(): Coordinate | undefined;
     public setCenter(center: Coordinate): void;

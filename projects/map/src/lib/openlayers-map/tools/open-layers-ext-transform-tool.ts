@@ -109,6 +109,9 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
   private stopModify() {
     unByKey(this.listeners);
     if (this.interaction) {
+      console.log('stop modify transform');
+      this.interaction.select(null);
+      this.interaction.setActive(false);
       this.olMap.removeInteraction(this.interaction);
       this.interaction.dispose();
       this.interaction = null;
@@ -125,5 +128,4 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
       this.geometryChangedSubject.next(FeatureHelper.getWKT(geom, this.olMap.getView().getProjection()));
     });
   }
-
 }

@@ -38,9 +38,11 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
 
     this.withToolManager(manager => {
       if (this._selectedFeature) {
-        manager.enableTool(this.modifyTool?.id || '', false, { feature: this._selectedFeature, style: this.selectionStyle }, true);
+        console.log('feature selected, enabling transform tool');
+        manager.enableTool(this.extTransformTool?.id || '', false, { feature: this._selectedFeature, style: this.selectionStyle }, true);
       } else {
-        manager.disableTool(this.modifyTool?.id || '', true);
+        console.log('no selected feature, disabling transform tool');
+        manager.disableTool(this.extTransformTool?.id || '', true);
       }
     });
   }
@@ -81,7 +83,7 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
   private tool: DrawingToolModel | null = null;
   public activeTool: DrawingFeatureTypeEnum | null = null;
   private selectTool: SelectToolModel | null = null;
-  private modifyTool: ModifyToolModel | null = null;
+  private extTransformTool: ExtTransformToolModel | null = null;
 
   constructor(
     private mapService: MapService,
@@ -158,7 +160,7 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
     }).pipe(
       takeUntil(this.destroyed),
       tap(({ tool }) => {
-        this.modifyTool = tool;
+        this.extTransformTool = tool;
       }),
       switchMap(({ tool }) => tool.featureModified$),
     ).subscribe(modifiedGeometry => {
@@ -196,7 +198,7 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
 
   private toggleTool(type: DrawingType, drawingFeatureType: DrawingFeatureTypeEnum) {
     this.withToolManager(manager => {
-      if (!this.tool || !this.selectTool || !this.modifyTool) {
+      if (!this.tool || !this.selectTool || !this.extTransformTool) {
         return;
       }
       if (this.activeTool === drawingFeatureType) {
@@ -209,7 +211,7 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
         this.activeTool = drawingFeatureType;
         manager.enableTool(this.tool.id, true, { type });
         manager.disableTool(this.selectTool.id, true);
-        manager.disableTool(this.modifyTool.id, true);
+        manager.disableTool(this.extTransformTool.id, true);
         this.featureSelected.emit(null);
       }
       this.activeToolChanged.emit(this.activeTool);
