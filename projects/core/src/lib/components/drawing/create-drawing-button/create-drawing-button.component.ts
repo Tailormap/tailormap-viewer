@@ -25,19 +25,7 @@ export class CreateDrawingButtonComponent implements OnDestroy {
 
   private store$ = inject(Store);
 
-  public selectedFeature$ = this.store$.select(selectSelectedDrawingFeature).pipe(
-    map(feature => {
-        if (!feature) {
-          return null;
-        }
-        return {
-          ...feature,
-          attributes: {
-            ...feature?.attributes,
-            selected: true,
-          },
-        };
-    }));
+  public selectedFeature$ = this.store$.select(selectSelectedDrawingFeature);
 
   public ngOnDestroy() {
     this.store$.dispatch(setSelectedFeature({ fid: null }));
