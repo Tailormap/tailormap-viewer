@@ -1,7 +1,8 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Subject, switchMap, take, takeUntil, tap } from 'rxjs';
 import {
-  DrawingToolConfigModel, DrawingToolEvent, DrawingToolModel, DrawingType, MapService, MapStyleModel, ModifyToolConfigModel,
+  DrawingToolConfigModel, DrawingToolEvent, DrawingToolModel, DrawingType, ExtTransformToolConfigModel, ExtTransformToolModel, MapService,
+  MapStyleModel,
   ModifyToolModel,
   SelectToolConfigModel,
   SelectToolModel, ToolManagerModel, ToolTypeEnum,
@@ -151,8 +152,8 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
       fillOpacity: 0,
     };
 
-    this.mapService.createTool$<ModifyToolModel, ModifyToolConfigModel>({
-      type: ToolTypeEnum.Modify,
+    this.mapService.createTool$<ExtTransformToolModel, ExtTransformToolConfigModel>({
+      type: ToolTypeEnum.ExtTransform,
       style,
     }).pipe(
       takeUntil(this.destroyed),
