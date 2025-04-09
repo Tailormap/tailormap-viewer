@@ -6,7 +6,6 @@ import { Store } from '@ngrx/store';
 import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type.enum';
 import { FeatureModel } from '@tailormap-viewer/api';
 import { selectSelectedDrawingFeature } from '../state';
-import { map } from 'rxjs';
 
 @Component({
   selector: 'tm-create-drawing-button',
