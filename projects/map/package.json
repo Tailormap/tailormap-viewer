@@ -14,7 +14,7 @@
     "html2canvas": "^1.4.1",
     "jsts": "^2.12.1",
     "rxjs": "^7.8.2",
-    "@tailormap-viewer/shared": "^12.0.0-rc.5",
+    "@tailormap-viewer/shared": "^12.0.0-rc.6",
     "@tailormap-viewer/api": "^12.0.0-rc.6"
   },
   "dependencies": {
