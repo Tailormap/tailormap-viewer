@@ -108,10 +108,11 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
 
   private stopModify() {
     unByKey(this.listeners);
+    this.source?.getFeatures().forEach(feature => {
+      this.source?.removeFeature(feature);
+    });
     if (this.interaction) {
       console.log('stop modify transform');
-      this.interaction.select(null);
-      this.interaction.setActive(false);
       this.olMap.removeInteraction(this.interaction);
       this.interaction.dispose();
       this.interaction = null;

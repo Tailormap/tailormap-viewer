@@ -38,10 +38,8 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
 
     this.withToolManager(manager => {
       if (this._selectedFeature) {
-        console.log('feature selected, enabling transform tool');
         manager.enableTool(this.extTransformTool?.id || '', false, { feature: this._selectedFeature, style: this.selectionStyle }, true);
       } else {
-        console.log('no selected feature, disabling transform tool');
         manager.disableTool(this.extTransformTool?.id || '', true);
       }
     });
