@@ -3,6 +3,7 @@ import { FeatureHelper } from './feature.helper';
 import { MapUnitEnum } from '../models/map-unit.enum';
 import { Projection } from 'ol/proj';
 import { ProjectionsHelper } from './projections.helper';
+import { Feature } from 'geojson';
 
 const projection = {
   getUnits: () => MapUnitEnum.m,
@@ -32,6 +33,55 @@ describe('FeatureTypesHelper', () => {
 
   test('checks getWKT() for non-standard but not linearized circle with maximum number of decimals for meter units of measure', () => {
     expect(FeatureHelper.getWKT(new Circle([ 1.3496582958, 3.12345 ], 3.12345), projection, false)).toBe('CIRCLE(1.35 3.12 3.12)');
+  });
+
+  test('checks toGeoJSON() for a circle', () => {
+    const olCircle = new Circle([ 1, 2 ], 3);
+    const geoJSON: Feature = FeatureHelper.toGeoJSON(olCircle);
+    expect(geoJSON.type).toBe('Feature');
+    expect(geoJSON.geometry.type).toBe('Point');
+    if ('coordinates' in geoJSON.geometry) {
+      expect(geoJSON.geometry.coordinates.length).toBe(2);
+      expect(geoJSON.geometry.coordinates[0]).toBe(1);
+    }
+    expect(geoJSON.properties).toBeDefined();
+    expect(geoJSON.properties?.['radius']).toBeDefined();
+    expect(geoJSON.properties?.['radius']).toBe(3);
+  });
+
+  test('checks toGeoJSON() with fromWKT() for a WKT circle', () => {
+    const olCircle = FeatureHelper.fromWKT('CIRCLE(2 2 3)');
+    const geoJSON: Feature = FeatureHelper.toGeoJSON(olCircle);
+    expect(geoJSON.type).toBe('Feature');
+    expect(geoJSON.geometry.type).toBe('Point');
+    if ('coordinates' in geoJSON.geometry) {
+      expect(geoJSON.geometry.coordinates.length).toBe(2);
+      expect(geoJSON.geometry.coordinates[0]).toBe(2);
+    } else {
+      fail('Expected coordinates to be defined');
+    }
+    expect(geoJSON.properties).toBeDefined();
+    expect(geoJSON.properties?.['radius']).toBeDefined();
+    expect(geoJSON.properties?.['radius']).toBe(3);
+  });
+
+  test('checks fromGeoJSON() for a circle', () => {
+    //        A circle feature looks like this:
+    // { "type": "Feature",
+    //   "geometry": {
+    //     "type": "Point",  "coordinates": [ 132300, 458629 ]
+    //   },
+    //   "properties": { "radius": 3 }
+    // }
+    const geoJSONGeom: object = {
+      type: 'Point', coordinates: [ 1, 2 ],
+    };
+    const olCircle = FeatureHelper.fromGeoJSON(geoJSONGeom, 3);
+    expect(olCircle).toBeInstanceOf(Circle);
+    if (olCircle instanceof Circle) {
+      expect(olCircle.getCenter()).toEqual([ 1, 2 ]);
+      expect(olCircle.getRadius()).toBe(3);
+    }
   });
 
   test('checks transformGeometry point from EPSG:4326 to EPSG:3857', () => {

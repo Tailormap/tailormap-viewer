@@ -11,6 +11,14 @@ const onAddFeature = (
   selectedFeature: payload.selectFeature ? payload.feature.__fid : state.selectedFeature,
 });
 
+const onAddFeatures = (
+  state: DrawingState,
+  payload: ReturnType<typeof DrawingActions.addFeatures>,
+): DrawingState => ({
+  ...state,
+  features: [ ...state.features, ...payload.features ],
+});
+
 const onSetSelectedFeature = (
   state: DrawingState,
   payload: ReturnType<typeof DrawingActions.setSelectedFeature>,
@@ -40,6 +48,27 @@ const onUpdateDrawingFeatureStyle = (
             ...payload.style,
           },
         },
+      },
+      ...state.features.slice(idx + 1),
+    ],
+  };
+};
+
+const onUpdateSelectedDrawingFeatureGeometry = (
+  state: DrawingState,
+  payload: ReturnType<typeof DrawingActions.updateSelectedDrawingFeatureGeometry>,
+): DrawingState => {
+  const idx = state.features.findIndex(f => f.__fid === state.selectedFeature);
+  if (idx === -1) {
+    return state;
+  }
+  return {
+    ...state,
+    features: [
+      ...state.features.slice(0, idx),
+      {
+        ...state.features[idx],
+        geometry: payload.geometry,
       },
       ...state.features.slice(idx + 1),
     ],
@@ -82,8 +111,10 @@ const onSetSelectedDrawingStyle = (
 const drawingReducerImpl = createReducer<DrawingState>(
   initialDrawingState,
   on(DrawingActions.addFeature, onAddFeature),
+  on(DrawingActions.addFeatures, onAddFeatures),
   on(DrawingActions.setSelectedFeature, onSetSelectedFeature),
   on(DrawingActions.updateDrawingFeatureStyle, onUpdateDrawingFeatureStyle),
+  on(DrawingActions.updateSelectedDrawingFeatureGeometry, onUpdateSelectedDrawingFeatureGeometry),
   on(DrawingActions.removeDrawingFeature, onRemoveDrawingFeature),
   on(DrawingActions.removeAllDrawingFeatures, onRemoveAllDrawingFeatures),
   on(DrawingActions.setSelectedDrawingStyle, onSetSelectedDrawingStyle),

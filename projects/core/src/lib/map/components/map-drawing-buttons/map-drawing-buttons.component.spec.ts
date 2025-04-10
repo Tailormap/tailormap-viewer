@@ -11,11 +11,18 @@ import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
 export const createMapServiceMock = () => {
   const drawingSubject = new BehaviorSubject<{ type: string; geometry?: string }>({ type: 'start' });
   const selectedFeaturesSubject = new Subject();
-  const mapServiceMock = getMapServiceMock(
-    type => type === ToolTypeEnum.Draw
-      ? { id: 'draw-1', drawing$: drawingSubject.asObservable() }
-      : { id: 'select-1', selectedFeatures$: selectedFeaturesSubject.asObservable() },
-  );
+  const mapServiceMock = getMapServiceMock(type => {
+      switch (type) {
+        case ToolTypeEnum.Draw:
+          return { id: 'draw-1', drawing$: drawingSubject.asObservable() };
+        case ToolTypeEnum.Select:
+          return { id: 'select-1', selectedFeatures$: selectedFeaturesSubject.asObservable() };
+        case ToolTypeEnum.Modify:
+          return { id: 'modify-1', featureModified$: new Subject().asObservable() };
+        default:
+          return {};
+      }
+  });
   return {
     provider: mapServiceMock.provider,
     addDrawingEvent: (event: { type: string; geometry?: string }) => drawingSubject.next(event),

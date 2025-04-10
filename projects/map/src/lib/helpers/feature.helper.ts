@@ -2,12 +2,13 @@ import { FeatureModelType } from '../models/feature-model.type';
 import { Feature } from 'ol';
 import { GeoJSON, WKT } from 'ol/format';
 import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
-import { Circle, Geometry } from 'ol/geom';
+import { Circle, Geometry, Point } from 'ol/geom';
 import { fromCircle } from 'ol/geom/Polygon';
 import { MapSizeHelper } from '../helpers/map-size.helper';
 import { MapUnitEnum } from '../models/map-unit.enum';
 import { GeometryTypeHelper } from './geometry-type.helper';
 import { Projection } from 'ol/proj';
+import { Feature as GeoJSONFeature } from 'geojson';
 
 export class FeatureHelper {
 
@@ -15,15 +16,47 @@ export class FeatureHelper {
   private static geoJsonFormatter = new GeoJSON();
 
   /**
-   * Transforms a GeoJSON geometry object to an ol.Geometry object.
+   * Transforms a GeoJSON geometry object to an ol.Geometry object; when the geometry is a point and a radius is given a circle is created.
    * @param geojsonGeometry The GeoJSON object to transform
+   * @param radius The radius of the circle in case of a point
    * @param sourceProjection
    * @param mapProjection
    */
-  public static fromGeoJSON(geojsonGeometry: object, sourceProjection?: string, mapProjection?: string): Geometry {
-    return  FeatureHelper.geoJsonFormatter.readGeometry(geojsonGeometry, {
-      dataProjection: sourceProjection,
-      featureProjection: mapProjection,
+  public static fromGeoJSON(geojsonGeometry: object, radius?: number, sourceProjection?: string, mapProjection?: string): Geometry {
+    if (/* geojsonGeometry['type'] === 'Point'  && */ radius) {
+      const point = FeatureHelper.geoJsonFormatter.readGeometry(geojsonGeometry, {
+        dataProjection: sourceProjection, featureProjection: mapProjection,
+      }) as Point;
+      return new Circle(point.getCoordinates(), radius);
+    }
+
+    return FeatureHelper.geoJsonFormatter.readGeometry(geojsonGeometry, {
+      dataProjection: sourceProjection, featureProjection: mapProjection,
+    });
+  }
+
+  /**
+   * Transforms an ol.Geometry to a GeoJSON feature.
+   * @param olGeometry The ol.Geometry object to transform
+   * @param sourceProjection
+   * @param mapProjection
+   */
+  public static toGeoJSON(olGeometry: Geometry, sourceProjection?: string, mapProjection?: string): GeoJSONFeature {
+    if (olGeometry.getType() === 'Circle') {
+      const circle = olGeometry as Circle;
+      const feature = new Feature(new Point(circle.getCenter()));
+      const geoJsonPoint = FeatureHelper.geoJsonFormatter.writeFeatureObject(feature, {
+        dataProjection: sourceProjection, featureProjection: mapProjection,
+      });
+      if (!geoJsonPoint.properties) {
+        geoJsonPoint.properties = {};
+      }
+      geoJsonPoint.properties['radius'] = circle.getRadius();
+      return geoJsonPoint;
+    }
+    const feature = new Feature(olGeometry);
+    return FeatureHelper.geoJsonFormatter.writeFeatureObject(feature, {
+      dataProjection: sourceProjection, featureProjection: mapProjection,
     });
   }
 

@@ -1,10 +1,11 @@
 import { ToolModel } from './tool.model';
 import { Observable } from 'rxjs';
 import { MapStyleModel } from "../map-style.model";
+import { FeatureModel } from '@tailormap-viewer/api';
 
 export interface ModifyEnableToolArguments {
-  geometry: string;
-  style?: MapStyleModel;
+  feature: FeatureModel;
+  style?: Partial<MapStyleModel> | ((feature: FeatureModel) => MapStyleModel);
 }
 
 export interface ModifyToolModel extends ToolModel {

@@ -2,6 +2,9 @@
                         [drawingLayerId]="drawingLayerId"
                         [drawSingleShape]="true"
                         [allowRemoveSelectedFeature]="true"
+                        [selectedFeature]="selectedFeatureForModifyTool"
                         [selectionStyle]="selectedStyle"
                         (drawingAdded)="drawingAdded($event)"
+                        (featureSelected)="onFeatureSelected($event)"
+                        (featureGeometryModified)="onFeatureGeometryModified($event)"
                         (featureRemoved)="featureRemoved($event)"></tm-map-drawing-buttons>
