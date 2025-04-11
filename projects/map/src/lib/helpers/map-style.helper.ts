@@ -44,13 +44,13 @@ export class MapStyleHelper {
         if (!featureModel) {
           return MapStyleHelper.DEFAULT_STYLE;
         }
-        return MapStyleHelper.mapStyleModelToOlStyle(styleConfig(featureModel), feature, 20 * resolution);
+        return MapStyleHelper.mapStyleModelToOlStyle(styleConfig(featureModel), feature);
       };
     }
     return MapStyleHelper.mapStyleModelToOlStyle(styleConfig);
   }
 
-  private static mapStyleModelToOlStyle(styleConfig: MapStyleModel, feature?: Feature<Geometry>, resolution?: number) {
+  private static mapStyleModelToOlStyle(styleConfig: MapStyleModel, feature?: Feature<Geometry>) {
     const baseStyle = new Style();
     const stroke = MapStyleHelper.createStroke(styleConfig);
     if (stroke) {

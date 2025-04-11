@@ -195,7 +195,7 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
 
   private toggleTool(type: DrawingType, drawingFeatureType: DrawingFeatureTypeEnum) {
     this.withToolManager(manager => {
-      if (!this.tool || !this.selectTool || !this.extTransformTool) {
+      if (!this.tool || !this.selectTool) {
         return;
       }
       if (this.activeTool === drawingFeatureType) {
@@ -205,7 +205,9 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
         this.activeTool = drawingFeatureType;
         manager.enableTool(this.tool.id, true, { type });
         manager.disableTool(this.selectTool.id, true);
-        manager.disableTool(this.extTransformTool.id, true);
+        if (this.extTransformTool) {
+          manager.disableTool(this.extTransformTool.id, true);
+        }
         this.featureSelected.emit(null);
         this.activeToolChanged.emit(this.activeTool);
       }
@@ -222,7 +224,7 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
       }
       this.activeTool = null;
       manager.disableTool(this.tool.id, true);
-      manager.enableTool(this.selectTool.id, true);
+      manager.enableTool(this.selectTool.id, disableOtherTools);
       this.activeToolChanged.emit(this.activeTool);
     });
   }
