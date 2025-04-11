@@ -27,6 +27,11 @@
   margin-top: 0;
 }
 
+.clicked-coordinates-inputs input[number] {
+  /*see https://stackoverflow.com/questions/58462641/define-the-size-for-input-type-number*/
+  width: 12.5em;
+}
+
 .clicked-coordinates-buttons {
   display: flex;
   justify-content: flex-end;
