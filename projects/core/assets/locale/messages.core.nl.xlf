@@ -1032,7 +1032,7 @@
       </trans-unit>
       <trans-unit id="core.toolbar.switch-3d.layers-without-wm" datatype="html">
         <source>The following layers are not visible in 3D: <x id="PH" equiv-text="layersTitles.join(&apos;, &apos;)"/></source>
-        <target state="new">De volgende lagen zijn niet zichtbaar in 3D: <x id="PH" equiv-text="layerNames.join(&apos;, &apos;)"/> </target>
+        <target>De volgende lagen zijn niet zichtbaar in 3D: <x id="PH" equiv-text="layerNames.join(&apos;, &apos;)"/> </target>
       </trans-unit>
       <trans-unit id="core.toolbar.switch-3d.tooltip2D" datatype="html">
         <source>Switch to 2D</source>

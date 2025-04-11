@@ -248,7 +248,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.layerFunctionality.warning" datatype="html">
         <source>Note: unchecking these checkboxes only hides user interface controls. Data is still accessible via the API.</source>
-        <target state="new">Hinweis: Das Deaktivieren dieser Kontrollkästchen blendet nur die Benutzeroberflächensteuerungen aus. Daten sind weiterhin über die API zugänglich.</target>
+        <target>Hinweis: Das Deaktivieren dieser Kontrollkästchen blendet nur die Benutzeroberflächensteuerungen aus. Daten sind weiterhin über die API zugänglich.</target>
       </trans-unit>
       <trans-unit id="admin-core.application.layers" datatype="html">
         <source>Layers</source>
@@ -728,7 +728,7 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.layer-authentication-hint" datatype="html">
         <source>Enter account details below if the service requires HTTP Basic authentication. Enable reverse proxying to allow a layer which requires authentication to be used in a viewer by having Tailormap do the <x id="INTERPOLATION" equiv-text="{{ geoService?.protocol }}"/> requests for the end user without sending the credentials to the users&apos; browser.</source>
-        <target state="new">Wenn der Service eine HTTP-Basisauthentifizierung erfordert, geben Sie unten die Kontodaten ein. Aktivieren Sie Reverse-Proxying, um eine Ebene, die eine Authentifizierung erfordert, in einem Viewer zu verwenden, indem Tailormap die Anfragen für den Endbenutzer durchführt, ohne die Anmeldeinformationen an den Browser des Benutzers zu senden. </target>
+        <target>Wenn der Service eine HTTP-Basisauthentifizierung erfordert, geben Sie unten die Kontodaten ein. Aktivieren Sie Reverse-Proxying, um eine Ebene, die eine Authentifizierung erfordert, in einem Viewer zu verwenden, indem Tailormap die <x id="INTERPOLATION" equiv-text="{{ geoService?.protocol }}"/> Anfragen für den Endbenutzer durchführt, ohne die Anmeldeinformationen an den Browser des Benutzers zu senden. </target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.layer-name" datatype="html">
         <source>Layer name</source>
