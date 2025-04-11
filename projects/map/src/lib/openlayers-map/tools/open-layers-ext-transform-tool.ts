@@ -13,11 +13,14 @@ import { ExtTransformToolConfigModel } from '../../models/tools/ext-transform-to
 import OlExtTransform from 'ol-ext/interaction/Transform';
 import { FeatureHelper } from '../../helpers/feature.helper';
 import { Feature } from 'ol';
+import { Stroke } from 'ol/style';
+import { Modify } from 'ol/interaction';
 export class OpenLayersExtTransformTool implements ExtTransformToolModel {
 
   private listeners: EventsKey[] = [];
   private destroyed = new Subject();
   private interaction: OlExtTransform | null = null;
+  private modifyInteraction: Modify | null = null;
 
   private geometryChangedSubject: Subject<string> = new Subject<string>();
   public featureModified$ = this.geometryChangedSubject.asObservable();
@@ -56,18 +59,12 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
     }
     this.listeners = [];
     this.isActive = true;
-    const { layer } = this.getLayer(args.feature, args.style);
-    this.interaction = new OlExtTransform({
-      layers: [layer],
-      selection: false,
-      buffer: 4,
-      //features: new Collection(FeatureHelper.getFeatures(args.feature), { unique: true }),
-    });
-    this.listeners.push(this.interaction.on([ 'rotateend', 'translateend', 'scaleend' ], e => this.eventHandler(e)));
-    this.olMap.getInteractions().push(this.interaction);
-    if (this.source) {
-      this.interaction.setActive(true);
-      this.interaction.select(this.source.getFeatures()[0], true);
+    const { layer, source } = this.getLayer(args.feature, args.style);
+    if (args.mode === 'transform_translate') {
+      this.enableTransformTranslate(layer, source);
+    }
+    if (args.mode === 'vertices') {
+      this.enableVertices(source);
     }
   }
 
@@ -119,8 +116,8 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
     this.listeners = [];
   }
 
-  private eventHandler(event: { feature?: Feature }) {
-    const geom = event.feature?.getGeometry();
+  private eventHandler(feature?: Feature) {
+    const geom = feature?.getGeometry();
     if (!geom) {
       return;
     }
@@ -128,4 +125,28 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
       this.geometryChangedSubject.next(FeatureHelper.getWKT(geom, this.olMap.getView().getProjection()));
     });
   }
+
+  private enableTransformTranslate(layer: VectorLayer, source: VectorSource) {
+    this.interaction = new OlExtTransform({
+      layers: [layer],
+      selection: false,
+      buffer: 4,
+      style: {
+        'default': new Stroke({
+          color: [ 255, 0, 0, 1 ], width: 2, lineDash: [ 4, 4 ],
+        }),
+      },
+    });
+    this.listeners.push(this.interaction.on([ 'rotateend', 'translateend', 'scaleend' ], e => this.eventHandler(e.feature)));
+    this.olMap.getInteractions().push(this.interaction);
+    this.interaction.setActive(true);
+    this.interaction.select(source.getFeatures()[0], true);
+  }
+
+  private enableVertices(source: VectorSource) {
+    this.modifyInteraction = new Modify({ source });
+    this.listeners.push(this.modifyInteraction.on('modifyend', e => this.eventHandler(e.features.item(0))));
+    this.olMap.getInteractions().extend([this.modifyInteraction]);
+  }
+
 }

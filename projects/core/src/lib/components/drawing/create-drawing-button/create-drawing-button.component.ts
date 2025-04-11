@@ -6,6 +6,7 @@ import { Store } from '@ngrx/store';
 import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type.enum';
 import { FeatureModel } from '@tailormap-viewer/api';
 import { selectSelectedDrawingFeature } from '../state';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'tm-create-drawing-button',
@@ -24,7 +25,19 @@ export class CreateDrawingButtonComponent implements OnDestroy {
 
   private store$ = inject(Store);
 
-  public selectedFeature$ = this.store$.select(selectSelectedDrawingFeature);
+  public selectedFeature$ = this.store$.select(selectSelectedDrawingFeature).pipe(
+    map(feature => {
+      if (!feature) {
+        return null;
+      }
+      return {
+        ...feature,
+        attributes: {
+          ...feature?.attributes,
+          selected: true,
+        },
+      };
+    }));
 
   public ngOnDestroy() {
     this.store$.dispatch(setSelectedFeature({ fid: null }));

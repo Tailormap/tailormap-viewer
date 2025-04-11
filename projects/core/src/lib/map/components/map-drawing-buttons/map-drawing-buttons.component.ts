@@ -1,7 +1,8 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Subject, switchMap, take, takeUntil, tap } from 'rxjs';
 import {
-  DrawingToolConfigModel, DrawingToolEvent, DrawingToolModel, DrawingType, ExtTransformToolConfigModel, ExtTransformToolModel, MapService,
+  DrawingToolConfigModel, DrawingToolEvent, DrawingToolModel, DrawingType, ExtTransformEnableToolArguments, ExtTransformToolConfigModel,
+  ExtTransformToolModel, MapService,
   MapStyleModel,
   SelectToolConfigModel,
   SelectToolModel, ToolManagerModel, ToolTypeEnum,
@@ -34,14 +35,7 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
   @Input()
   public set selectedFeature(value: FeatureModel | null) {
     this._selectedFeature = value;
-
-    this.withToolManager(manager => {
-      if (this._selectedFeature) {
-        manager.enableTool(this.extTransformTool?.id || '', false, { feature: this._selectedFeature, style: this.selectionStyle }, true);
-      } else {
-        manager.disableTool(this.extTransformTool?.id || '', true);
-      }
-    });
+    this.enableModifyTool();
   }
   public get selectedFeature(): FeatureModel | null {
     return this._selectedFeature;
@@ -55,6 +49,9 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
 
   @Input()
   public allowRemoveSelectedFeature = false;
+
+  @Input()
+  public allowModify = false;
 
   @Input()
   public allowedShapes: DrawingFeatureTypeEnum[] | undefined = undefined;
@@ -81,6 +78,7 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
   public activeTool: DrawingFeatureTypeEnum | null = null;
   private selectTool: SelectToolModel | null = null;
   private extTransformTool: ExtTransformToolModel | null = null;
+  private modifyMode: 'transform_translate' | 'vertices' | 'none' = 'transform_translate';
 
   constructor(
     private mapService: MapService,
@@ -151,18 +149,20 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
       fillOpacity: 0,
     };
 
-    this.mapService.createTool$<ExtTransformToolModel, ExtTransformToolConfigModel>({
-      type: ToolTypeEnum.ExtTransform,
-      style,
-    }).pipe(
-      takeUntil(this.destroyed),
-      tap(({ tool }) => {
-        this.extTransformTool = tool;
-      }),
-      switchMap(({ tool }) => tool.featureModified$),
-    ).subscribe(modifiedGeometry => {
-      this.featureGeometryModified.emit(modifiedGeometry);
-    });
+    if (this.allowModify) {
+      this.mapService.createTool$<ExtTransformToolModel, ExtTransformToolConfigModel>({
+        type: ToolTypeEnum.ExtTransform,
+        style,
+      }).pipe(
+        takeUntil(this.destroyed),
+        tap(({ tool }) => {
+          this.extTransformTool = tool;
+        }),
+        switchMap(({ tool }) => tool.featureModified$),
+      ).subscribe(modifiedGeometry => {
+        this.featureGeometryModified.emit(modifiedGeometry);
+      });
+    }
   }
 
   public ngOnDestroy() {
@@ -199,10 +199,7 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
         return;
       }
       if (this.activeTool === drawingFeatureType) {
-        // Toggle to not drawing
-        this.activeTool = null;
-        manager.disableTool(this.tool.id, true);
-        manager.enableTool(this.selectTool.id, true);
+        this.disableDrawing();
       } else {
         // Enable drawing
         this.activeTool = drawingFeatureType;
@@ -210,7 +207,22 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
         manager.disableTool(this.selectTool.id, true);
         manager.disableTool(this.extTransformTool.id, true);
         this.featureSelected.emit(null);
+        this.activeToolChanged.emit(this.activeTool);
       }
+    });
+  }
+
+  private disableDrawing(disableOtherTools = true) {
+    if (this.activeTool === null) {
+      return;
+    }
+    this.withToolManager(manager => {
+      if (!this.tool || !this.selectTool) {
+        return;
+      }
+      this.activeTool = null;
+      manager.disableTool(this.tool.id, true);
+      manager.enableTool(this.selectTool.id, true);
       this.activeToolChanged.emit(this.activeTool);
     });
   }
@@ -221,4 +233,36 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
     }
     this.featureRemoved.emit(this._selectedFeature);
   }
+
+  private enableModifyTool() {
+    if (!this.allowModify) {
+      return;
+    }
+    // this.disableDrawing();
+    this.withToolManager(manager => {
+      if (this._selectedFeature && this.modifyMode !== 'none') {
+        const enableArgs: ExtTransformEnableToolArguments = {
+          feature: this._selectedFeature,
+          style: this.selectionStyle,
+          mode: this.modifyMode,
+        };
+        manager.enableTool(this.extTransformTool?.id || '', false, enableArgs, true);
+      } else {
+        manager.disableTool(this.extTransformTool?.id || '', true);
+      }
+    });
+  }
+
+  public toggleTranslateMode() {
+    this.modifyMode = 'transform_translate';
+    this.disableDrawing(false);
+    this.enableModifyTool();
+  }
+
+  public toggleVerticesMode() {
+    this.modifyMode = 'vertices';
+    this.disableDrawing(false);
+    this.enableModifyTool();
+  }
+
 }

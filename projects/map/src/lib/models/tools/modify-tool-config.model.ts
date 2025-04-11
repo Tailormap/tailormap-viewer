@@ -1,3 +1,4 @@
+
 import { ToolConfigModel } from './tool-config.model';
 import { ToolTypeEnum } from './tool-type.enum';
 import { MapStyleModel } from '../map-style.model';

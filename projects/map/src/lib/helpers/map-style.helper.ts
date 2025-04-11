@@ -76,10 +76,7 @@ export class MapStyleHelper {
       styles.push(...MapStyleHelper.createLabelStyle(styleConfig, feature));
     }
     if (styleConfig.isSelected && (!styleConfig.pointType || (!!styleConfig.pointType && !styleConfig.label)) && typeof feature !== 'undefined') {
-      styles.push(...MapStyleHelper.createOutlinedSelectionRectangle(feature, 1.3 * (resolution || 0)));
-    }
-    if (styleConfig.isSelected && (!styleConfig.pointType || (!!styleConfig.pointType && !styleConfig.label)) && typeof feature !== 'undefined') {
-      styles.push(...MapStyleHelper.createOutlinedSelectionRectangle(feature, 1.3 * (resolution || 0)));
+      styles.push(...MapStyleHelper.createOutlinedSelectionRectangle(feature, 4));
     }
     if (typeof styleConfig.buffer !== 'undefined' && styleConfig.buffer && typeof feature !== 'undefined') {
       styles.push(...MapStyleHelper.createBuffer(styleConfig.buffer, styleConfig));
@@ -291,7 +288,7 @@ export class MapStyleHelper {
     outer.setStroke(MapStyleHelper.getSelectionStroke(true));
     inner.setStroke(MapStyleHelper.getSelectionStroke(false));
     return [
-      outer,
+      // outer,
       inner,
     ];
   }
@@ -321,11 +318,13 @@ export class MapStyleHelper {
   }
 
   private static getSelectionStroke(outer = false) {
+    if (outer) {
+      return new Stroke({
+        color: [ 255, 255, 0, 1 ], width: 3, lineDash: [ 4, 4 ],
+      });
+    }
     return new Stroke({
-      color: outer ? '#fff' : '#333',
-      lineCap: 'square',
-      lineDash: [ 4, 10 ],
-      width: outer ? 5 : 2.5,
+      color: [ 255, 0, 0, 1 ], width: 2, lineDash: [ 4, 4 ],
     });
   }
 
