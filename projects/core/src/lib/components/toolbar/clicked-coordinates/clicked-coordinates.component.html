@@ -14,11 +14,11 @@
     <div class="clicked-coordinates-field-wrapper">
 
       <form [formGroup]="coordinatesForm" class="clicked-coordinates-inputs">
-        <mat-form-field appearance="outline" color="primary">
+        <mat-form-field appearance="outline" color="primary" [style.width.em]="12.5">
           <mat-label i18n="@@core.toolbar.coordinate-picker-x">X-coordinate</mat-label>
           <input matInput type="number" formControlName="x"/>
         </mat-form-field>
-        <mat-form-field appearance="outline" color="primary">
+        <mat-form-field appearance="outline" color="primary" [style.width.em]="12.5">
           <mat-label i18n="@@core.toolbar.coordinate-picker-y">Y-coordinate</mat-label>
           <input matInput type="number" formControlName="y"/>
         </mat-form-field>
@@ -26,6 +26,26 @@
         <input [hidden]="true" formControlName="maxx" type="number"/>
         <input [hidden]="true" formControlName="miny" type="number"/>
         <input [hidden]="true" formControlName="maxy" type="number"/>
+
+        <div class="clicked-coordinates-buttons">
+          <button mat-flat-button
+                  (click)="copy()"
+                  [disabled]="coordinatesForm.invalid"
+                  i18n-tmTooltip="@@core.toolbar.coordinate-picker-copy"
+                  tmTooltip="Copy"
+                  class="map-control-button toggle-button--active">
+            <mat-icon svgIcon="copy_outline"></mat-icon>
+          </button>
+
+          <button mat-flat-button
+                  (click)="goTo()"
+                  [disabled]="coordinatesForm.invalid"
+                  i18n-tmTooltip="@@core.toolbar.coordinate-picker-zoomTo"
+                  tmTooltip="Zoom To"
+                  class="map-control-button toggle-button--active">
+            <mat-icon svgIcon="location_searching"></mat-icon>
+          </button>
+        </div>
       </form>
 
       <tm-error-message *ngIf="coordinatesForm.dirty && coordinatesForm.invalid"
@@ -33,14 +53,14 @@
                         [message]="'Your input is invalid for the current application bounds'"
                         [friendlyError]="true"></tm-error-message>
 
-      <div class="clicked-coordinates-buttons">
-        <button mat-flat-button color="primary" (click)="copy()" [disabled]="coordinatesForm.invalid"
-                i18n="@@core.toolbar.coordinate-picker-copy">Copy
-        </button>
-        <button mat-flat-button color="primary" (click)="goTo()" [disabled]="coordinatesForm.invalid"
-                i18n="@@core.toolbar.coordinate-picker-zoomTo">Zoom To
-        </button>
-      </div>
+      <!--      <div class="clicked-coordinates-buttons">-->
+      <!--        <button mat-flat-button color="primary" (click)="copy()" [disabled]="coordinatesForm.invalid"-->
+      <!--                i18n="@@core.toolbar.coordinate-picker-copy">Copy-->
+      <!--        </button>-->
+      <!--        <button mat-flat-button color="primary" (click)="goTo()" [disabled]="coordinatesForm.invalid"-->
+      <!--                i18n="@@core.toolbar.coordinate-picker-zoomTo">Zoom To-->
+      <!--        </button>-->
+      <!--      </div>-->
 
     </div>
   }
