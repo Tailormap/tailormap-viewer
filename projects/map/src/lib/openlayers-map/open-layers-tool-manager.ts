@@ -9,6 +9,7 @@ import { OpenLayersScaleBarTool } from './tools/open-layers-scale-bar-tool';
 import { OpenLayersSelectTool } from './tools/open-layers-select-tool';
 import { OpenLayersModifyTool } from "./tools/open-layers-modify-tool";
 import { Subject } from 'rxjs';
+import { OpenLayersExtTransformTool } from './tools/open-layers-ext-transform-tool';
 
 export class OpenLayersToolManager implements ToolManagerModel {
 
@@ -55,6 +56,9 @@ export class OpenLayersToolManager implements ToolManagerModel {
     }
     if (ToolTypeHelper.isModifyTool(tool)) {
       this.tools.set(toolId, new OpenLayersModifyTool(toolId, tool, this.olMap, this.ngZone));
+    }
+    if (ToolTypeHelper.isExtTransformTool(tool)) {
+      this.tools.set(toolId, new OpenLayersExtTransformTool(toolId, tool, this.olMap, this.ngZone));
     }
     if (tool.alwaysEnabled) {
       this.alwaysEnabledTools.add(toolId);

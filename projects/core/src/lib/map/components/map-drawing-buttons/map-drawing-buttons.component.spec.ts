@@ -19,6 +19,8 @@ export const createMapServiceMock = () => {
           return { id: 'select-1', selectedFeatures$: selectedFeaturesSubject.asObservable() };
         case ToolTypeEnum.Modify:
           return { id: 'modify-1', featureModified$: new Subject().asObservable() };
+        case ToolTypeEnum.ExtTransform:
+          return { id: 'ext-transform-1', featureModified$: new Subject().asObservable() };
         default:
           return {};
       }

@@ -5,4 +5,5 @@ export enum ToolTypeEnum {
   ScaleBar = 'ScaleBar',
   Select = 'Select',
   Modify = 'Modify',
+  ExtTransform = 'ExtTransform',
 }

@@ -2,6 +2,7 @@
 <tm-map-drawing-buttons [drawingLayerId]="drawingLayerId"
                         [selectedFeature]="selectedFeature$ | async"
                         [selectionStyle]="selectionStyle"
+                        [allowModify]="true"
                         (drawingAdded)="onDrawingAdded($event)"
                         (featureGeometryModified)="onFeatureGeometryModified($event)"
                         (activeToolChanged)="onActiveToolChanged($event)"
