@@ -596,8 +596,14 @@
       <trans-unit id="core.print.a4" datatype="html">
         <source>A4</source>
       </trans-unit>
+      <trans-unit id="core.print.add-bookmark" datatype="html">
+        <source>Add bookmark to document</source>
+      </trans-unit>
       <trans-unit id="core.print.add-legend-for-layer" datatype="html">
         <source>Add legend for layer</source>
+      </trans-unit>
+      <trans-unit id="core.print.bookmark-text" datatype="html">
+        <source>Bookmark</source>
       </trans-unit>
       <trans-unit id="core.print.created-on" datatype="html">
         <source>Created on</source>
@@ -652,12 +658,6 @@
       </trans-unit>
       <trans-unit id="core.print.open-print-dialog" datatype="html">
         <source>Automatically open print dialog</source>
-      </trans-unit>
-      <trans-unit id="core.print.add-bookmark" datatype="html">
-        <source>Add bookmark to document</source>
-      </trans-unit>
-      <trans-unit id="core.print.bookmark-text" datatype="html">
-        <source>Bookmark</source>
       </trans-unit>
       <trans-unit id="core.print.pdf-document" datatype="html">
         <source>PDF document</source>
@@ -779,14 +779,14 @@
       <trans-unit id="core.toolbar.share-viewer-embed-url" datatype="html">
         <source>Embed URL</source>
       </trans-unit>
+      <trans-unit id="core.toolbar.switch-3d.layers-without-wm" datatype="html">
+        <source>The following layers are not visible in 3D: <x id="PH" equiv-text="layersTitles.join(&apos;, &apos;)"/></source>
+      </trans-unit>
       <trans-unit id="core.toolbar.switch-3d.tooltip2D" datatype="html">
         <source>Switch to 2D</source>
       </trans-unit>
       <trans-unit id="core.toolbar.switch-3d.tooltip3D" datatype="html">
         <source>Switch to 3D</source>
-      </trans-unit>
-      <trans-unit id="core.toolbar.switch-3d.layers-without-wm" datatype="html">
-        <source>The following layers are not visible in 3D: <x id="PH" equiv-text="layerNames.join(&apos;, &apos;)"/> </source>
       </trans-unit>
       <trans-unit id="core.toolbar.type-at-least" datatype="html">
         <source>Type at least <x id="INTERPOLATION" equiv-text="{{ minLength }}"/> characters to start searching or press &lt;Enter&gt;</source>

@@ -794,9 +794,17 @@
         <source>A4</source>
         <target>A4</target>
       </trans-unit>
+      <trans-unit id="core.print.add-bookmark" datatype="html">
+        <source>Add bookmark to document</source>
+        <target>Lesezeichen zum Dokument hinzufügen</target>
+      </trans-unit>
       <trans-unit id="core.print.add-legend-for-layer" datatype="html">
         <source>Add legend for layer</source>
         <target>Legende für Layer hinzufügen</target>
+      </trans-unit>
+      <trans-unit id="core.print.bookmark-text" datatype="html">
+        <source>Bookmark</source>
+        <target>Lesezeichen</target>
       </trans-unit>
       <trans-unit id="core.print.created-on" datatype="html">
         <source>Created on</source>
@@ -869,14 +877,6 @@
       <trans-unit id="core.print.open-print-dialog" datatype="html">
         <source>Automatically open print dialog</source>
         <target>Druckdialog automatisch öffnen</target>
-      </trans-unit>
-      <trans-unit id="core.print.add-bookmark" datatype="html">
-        <source>Add bookmark to document</source>
-        <target>Lesezeichen zum Dokument hinzufügen</target>
-      </trans-unit>
-      <trans-unit id="core.print.bookmark-text" datatype="html">
-        <source>Bookmark</source>
-        <target>Lesezeichen</target>
       </trans-unit>
       <trans-unit id="core.print.pdf-document" datatype="html">
         <source>PDF document</source>
@@ -1038,6 +1038,10 @@
         <source>Embed URL</source>
         <target>URL einbetten</target>
       </trans-unit>
+      <trans-unit id="core.toolbar.switch-3d.layers-without-wm" datatype="html">
+        <source>The following layers are not visible in 3D: <x id="PH" equiv-text="layersTitles.join(&apos;, &apos;)"/></source>
+        <target>Die folgenden Ebenen sind in 3D nicht sichtbar: <x id="PH" equiv-text="layerNames.join(&apos;, &apos;)"/> </target>
+      </trans-unit>
       <trans-unit id="core.toolbar.switch-3d.tooltip2D" datatype="html">
         <source>Switch to 2D</source>
         <target>auf 2D umschalten</target>
@@ -1045,10 +1049,6 @@
       <trans-unit id="core.toolbar.switch-3d.tooltip3D" datatype="html">
         <source>Switch to 3D</source>
         <target>auf 3D umschalten</target>
-      </trans-unit>
-      <trans-unit id="core.toolbar.switch-3d.layers-without-wm" datatype="html">
-        <source>The following layers are not visible in 3D: <x id="PH" equiv-text="layerNames.join(&apos;, &apos;)"/> </source>
-        <target>Die folgenden Ebenen sind in 3D nicht sichtbar: <x id="PH" equiv-text="layerNames.join(&apos;, &apos;)"/> </target>
       </trans-unit>
       <trans-unit id="core.toolbar.type-at-least" datatype="html">
         <source>Type at least <x id="INTERPOLATION" equiv-text="{{ minLength }}"/> characters to start searching or press &lt;Enter&gt;</source>

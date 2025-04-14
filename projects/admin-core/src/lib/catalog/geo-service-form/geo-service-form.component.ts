@@ -91,6 +91,10 @@ export class GeoServiceFormComponent implements OnInit {
     return this.geoServiceForm.get('protocol')?.value === GeoServiceProtocolEnum.WMS;
   }
 
+  public isQuantizedMesh() {
+    return this.geoServiceForm.get('protocol')?.value === GeoServiceProtocolEnum.QUANTIZEDMESH;
+  }
+
   public is3d() {
     return GeoServiceHelper.is3dProtocol(this.geoServiceForm.get('protocol')!.value);
   }
@@ -160,7 +164,10 @@ export class GeoServiceFormComponent implements OnInit {
     }
   }
 
-  public prettyName(protocol: GeoServiceProtocolEnum) {
+  public prettyName(protocol: GeoServiceProtocolEnum | undefined) {
+    if (!protocol) {
+      return '';
+    }
     switch (protocol) {
       case GeoServiceProtocolEnum.TILES3D:
         return '3D Tiles';
