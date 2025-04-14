@@ -60,11 +60,20 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
     this.listeners = [];
     this.isActive = true;
     const { layer, source } = this.getLayer(args.feature, args.style);
-    if (args.mode === 'transform_translate') {
-      this.enableTransformTranslate(layer, source);
-    }
-    if (args.mode === 'vertices') {
+
+    // Not the nicest way to check geometry type, but args.feature.attributes.type is not accessible here in a typed way
+    const isPoint = args.feature.geometry?.startsWith('POINT(');
+
+    if (isPoint) {
+      // The vertices interaction works the best with point geometries
       this.enableVertices(source);
+    } else {
+      if (args.mode === 'transform_translate') {
+        this.enableTransformTranslate(layer, source);
+      }
+      if (args.mode === 'vertices') {
+        this.enableVertices(source);
+      }
     }
   }
 
