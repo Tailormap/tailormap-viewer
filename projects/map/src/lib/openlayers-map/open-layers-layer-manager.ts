@@ -26,10 +26,12 @@ export class OpenLayersLayerManager implements LayerManagerModel {
   private prevBackgroundLayerIds: string[] = [];
   private prevLayerIdentifiers: string[] = [];
 
-  private currentMapProjection: Projection;
+  private currentBackgroundLayerProjection: Projection;
+  private currentLayerProjection: Projection;
 
   constructor(private olMap: OlMap, private ngZone: NgZone, private httpXsrfTokenExtractor: HttpXsrfTokenExtractor) {
-    this.currentMapProjection = this.olMap.getView().getProjection();
+    this.currentBackgroundLayerProjection = this.olMap.getView().getProjection();
+    this.currentLayerProjection = this.olMap.getView().getProjection();
   }
 
   public init() {
@@ -105,11 +107,17 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     layerGroup: LayerGroup,
     useProjection?: string,
   ) {
+    const layerGroupProjection = layerGroup === this.backgroundLayerGroup ? this.currentBackgroundLayerProjection : this.currentLayerProjection;
     const layerIdentifiers = this.createLayerIdentifiers(layers);
-    if (useProjection && useProjection !== this.currentMapProjection.getCode()) {
+    if (useProjection && useProjection !== layerGroupProjection.getCode()) {
       layerGroup.getLayers().clear();
       currentLayerMap.clear();
-      this.currentMapProjection = getProjection(useProjection)!;
+      if (layerGroup === this.backgroundLayerGroup) {
+        this.currentBackgroundLayerProjection = getProjection(useProjection)!;
+      } else {
+        this.currentLayerProjection = getProjection(useProjection)!;
+      }
+
     } else if (ArrayHelper.arrayEquals(layerIdentifiers, prevLayerIdentifiers)) {
       return prevLayerIdentifiers;
     }
@@ -337,10 +345,8 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     if (LayerTypesHelper.isVectorLayer(layer)) {
       return this.createVectorLayer(layer);
     }
-    let olLayer = OlLayerHelper.createLayer(layer, this.olMap.getView().getProjection(), this.ngZone, this.httpXsrfTokenExtractor);
-    if (useProjection) {
-      olLayer = OlLayerHelper.createLayer(layer, getProjection(useProjection)!, this.ngZone, this.httpXsrfTokenExtractor);
-    }
+    const projection: Projection = useProjection ? getProjection(useProjection)! : this.olMap.getView().getProjection();
+    let olLayer = OlLayerHelper.createLayer(layer, projection, this.ngZone, this.httpXsrfTokenExtractor);
     if (!olLayer) {
       return null;
     }
