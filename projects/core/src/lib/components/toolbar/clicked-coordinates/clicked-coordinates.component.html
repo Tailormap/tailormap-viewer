@@ -1,5 +1,6 @@
 <div [class.clicked-coordinates-container--is-active]="toolActive$ | async"
-     class="clicked-coordinates-container map-control-button-container">
+     class="clicked-coordinates-container map-control-button-container"
+     (keyup.escape)="toggle()">
 
   <button (click)="toggle()"
           [class.toggle-button--active]="toolActive$ | async"
@@ -43,7 +44,7 @@
                   i18n-tmTooltip="@@core.toolbar.coordinate-picker-zoomTo"
                   tmTooltip="Zoom To"
                   class="map-control-button toggle-button--active">
-            <mat-icon svgIcon="location_searching"></mat-icon>
+            <mat-icon svgIcon="show_position"></mat-icon>
           </button>
         </div>
       </form>
@@ -52,16 +53,6 @@
                         i18n="@@core.toolbar.coordinate-picker-invalid-input"
                         [message]="'Your input is invalid for the current application bounds'"
                         [friendlyError]="true"></tm-error-message>
-
-      <!--      <div class="clicked-coordinates-buttons">-->
-      <!--        <button mat-flat-button color="primary" (click)="copy()" [disabled]="coordinatesForm.invalid"-->
-      <!--                i18n="@@core.toolbar.coordinate-picker-copy">Copy-->
-      <!--        </button>-->
-      <!--        <button mat-flat-button color="primary" (click)="goTo()" [disabled]="coordinatesForm.invalid"-->
-      <!--                i18n="@@core.toolbar.coordinate-picker-zoomTo">Zoom To-->
-      <!--        </button>-->
-      <!--      </div>-->
-
     </div>
   }
 
