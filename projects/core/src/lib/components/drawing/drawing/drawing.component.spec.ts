@@ -11,7 +11,7 @@ import { DrawingFeatureModel } from '../models/drawing-feature.model';
 import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type.enum';
 import { DrawingHelper } from '../helpers/drawing.helper';
 import { DrawingStyleFormComponent } from '../drawing-style-form/drawing-style-form.component';
-import { ConfirmDialogService, SharedImportsModule } from '@tailormap-viewer/shared';
+import { ConfirmDialogService, SharedDirectivesModule, SharedImportsModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { TestBed } from '@angular/core/testing';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
@@ -28,7 +28,7 @@ const setup = async (isComponentVisible = true, selectors: any[] = []) => {
     confirm$: jest.fn(() => of(true)),
   };
   const { container } = await render(DrawingComponent, {
-    imports: [ SharedImportsModule, MatIconTestingModule ],
+    imports: [ SharedImportsModule, SharedDirectivesModule, MatIconTestingModule ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     declarations: [DrawingStyleFormComponent],
     providers: [
@@ -72,13 +72,13 @@ describe('DrawingComponent', () => {
 
     expect(await screen.getByText(/Fill color/)).toBeInTheDocument();
 
-    await userEvent.click(await screen.getByText('Delete selected drawing object'));
+    await userEvent.click(await screen.getByLabelText('Delete selected drawing object'));
     expect(confirmServiceMock.confirm$).toHaveBeenCalled();
     expect(mockDispatch).toHaveBeenCalledWith({ type: '[Drawing] Remove Drawing Feature', fid: '1' });
 
     mockDispatch.mockClear();
     confirmServiceMock.confirm$.mockClear();
-    await userEvent.click(await screen.getByText('Delete complete drawing'));
+    await userEvent.click(await screen.getByLabelText('Delete complete drawing'));
     expect(confirmServiceMock.confirm$).toHaveBeenCalled();
     expect(mockDispatch).toHaveBeenCalledWith({ type: '[Drawing] Remove All Drawing Features' });
   });
