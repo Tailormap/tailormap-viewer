@@ -1,12 +1,16 @@
-.clicked-coordinates-container button {
-  border-radius: 3px;
+.clicked-coordinates-container {
+  transition: all 0.2s ease-in-out;
 }
 
 .clicked-coordinates-container--is-active {
   padding: 5px 6px 5px 0;
-  width: 500px;
+  width: calc(3 * var(--map-control-size) + 3 * 10px + 2 * 12.5em);
   max-width: var(--max-control-width);
   background-color: #fff;
+}
+
+.clicked-coordinates-container button {
+  border-radius: 3px;
 }
 
 .clicked-coordinates-field-wrapper {
@@ -20,7 +24,6 @@
   flex-wrap: nowrap;
   gap: 10px;
   align-items: flex-end;
-  padding-top: 6px
 }
 
 .clicked-coordinates-inputs mat-form-field + mat-form-field {
@@ -29,14 +32,13 @@
 
 .clicked-coordinates-buttons {
   display: flex;
-  justify-content: flex-end;
-  margin-top: 10px;
-  margin-bottom: 2px;
-  gap: 10px;
+  flex-direction: column;
+  align-items: center;
 }
 
 .clicked-coordinates-buttons button {
-  border-radius: 0;
+  width: calc(var(--map-control-size) - 10px);
+  height: calc(var(--map-control-size) - 10px);
 }
 
 

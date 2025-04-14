@@ -35,7 +35,7 @@ export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
   private destroyed = new Subject();
   private clickLocationSubject = new Subject<FeatureModel[]>();
   private clickLocationSubject$ = this.clickLocationSubject.asObservable();
-  private crs:string = '';
+  private crs: string = '';
 
   constructor(private store$: Store, private mapService: MapService, private clipboard: Clipboard) {
     this.toolActive$ = this.store$.select(isActiveToolbarTool(ToolbarComponentEnum.SELECT_COORDINATES));
@@ -142,14 +142,12 @@ export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
   }
 
   private handleMapClick(mapClick: MapClickEvent) {
-    if(mapClick && mapClick.mapCoordinates) {
+    if (mapClick && mapClick.mapCoordinates) {
       this.pushLocationFeature(mapClick.mapCoordinates);
       this.mapService.getRoundedCoordinates$(mapClick.mapCoordinates)
-        .pipe(
-          take(1),
-          map(coordinates => {
-            this.coordinatesForm.patchValue({ x: parseFloat(coordinates[0]), y: parseFloat(coordinates[1]) });
-          })).subscribe();
+        .pipe(take(1), map(coordinates => {
+          this.coordinatesForm.patchValue({ x: parseFloat(coordinates[0]), y: parseFloat(coordinates[1]) });
+        })).subscribe();
     }
   }
 
