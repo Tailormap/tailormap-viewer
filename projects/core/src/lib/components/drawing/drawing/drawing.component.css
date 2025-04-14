@@ -8,16 +8,22 @@
   overflow: auto;
 }
 
-.remove-buttons {
-  padding-top: 16px;
-  margin-top: 16px;
+.horizontal-line {
   border-top: 1px solid var(--border-color);
+  margin: 8px 0;
 }
 
-.remove-buttons button {
+.drawing-button-list .mat-mdc-outlined-button {
+  min-width: 40px;
+  padding: 0 8px;
   border-radius: 3px;
+  margin: 8px 8px 0 0;
 }
 
-.remove-buttons button + button {
-  margin-top: 16px;
+.drawing-button-list .mat-mdc-outlined-button mat-icon {
+  margin: 0;
+}
+
+.drawing-button-list .mat-mdc-outlined-button:last-of-type {
+  margin-right: 0;
 }
