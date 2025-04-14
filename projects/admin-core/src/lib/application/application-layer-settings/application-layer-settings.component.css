@@ -30,3 +30,7 @@ tm-admin-form-warning-message {
 fieldset {
   margin: 16px 0;
 }
+
+fieldset.layer-functionality mat-checkbox {
+ display: block;
+}
