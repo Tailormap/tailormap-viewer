@@ -36,7 +36,7 @@ export class MapStyleHelper {
       return MapStyleHelper.DEFAULT_STYLE;
     }
     if (typeof styleConfig === 'function') {
-      return (feature: Feature<Geometry> | RenderFeature, resolution: number) => {
+      return (feature: Feature<Geometry> | RenderFeature, _resolution: number) => {
         if (feature instanceof RenderFeature) {
           return MapStyleHelper.DEFAULT_STYLE;
         }
