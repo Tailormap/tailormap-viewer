@@ -29,9 +29,7 @@ export class LayerDetailsComponent {
   public set layerId(layerId: string | null) {
     this._layerId = layerId;
     this.updateLegend();
-    if (layerId && this.tiles3DLayerIds.includes(layerId)) {
-      this.tiles3DLayer = true;
-    }
+    this.tiles3DLayer = !!(layerId && this.tiles3DLayerIds.includes(layerId));
   }
   public get layerId(): string | null {
     return this._layerId;
