@@ -278,6 +278,10 @@
         <source>Drawing</source>
         <target>Zeichnen</target>
       </trans-unit>
+      <trans-unit id="core.drawing.duplicate-selected-drawing-object" datatype="html">
+        <source>Duplicate selected drawing object</source>
+        <target>Ausgewähltes Zeichenobjekt duplizieren</target>
+      </trans-unit>
       <trans-unit id="core.drawing.fill" datatype="html">
         <source>Fill</source>
         <target>Füllen</target>
@@ -986,6 +990,10 @@
         <source>Coordinate picker</source>
         <target>Koordinatenauswahl</target>
       </trans-unit>
+      <trans-unit id="core.toolbar.coordinate-picker-copy" datatype="html">
+        <source>Copy</source>
+        <target>Kopieren</target>
+      </trans-unit>
       <trans-unit id="core.toolbar.coordinate-picker-x" datatype="html">
         <source>X-coordinate</source>
         <target>X-Koordinate</target>
@@ -994,17 +1002,9 @@
         <source>Y-coordinate</source>
         <target>Y-Koordinate</target>
       </trans-unit>
-      <trans-unit id="core.toolbar.coordinate-picker-copy" datatype="html">
-        <source>Copy</source>
-        <target>Kopieren</target>
-      </trans-unit>
       <trans-unit id="core.toolbar.coordinate-picker-zoomTo" datatype="html">
         <source>Zoom To</source>
         <target>Hierhin zoomen</target>
-      </trans-unit>
-      <trans-unit id="core.toolbar.coordinate-picker-invalid-input" datatype="html">
-        <source>Your input is invalid for the current application bounds</source>
-        <target>Ihre Eingabe ist für die aktuellen Anwendungsgrenzen ungültig</target>
       </trans-unit>
       <trans-unit id="core.toolbar.measure-area" datatype="html">
         <source>Measure area</source>

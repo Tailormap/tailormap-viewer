@@ -278,6 +278,10 @@
         <source>Drawing</source>
         <target>Tekenen</target>
       </trans-unit>
+      <trans-unit id="core.drawing.duplicate-selected-drawing-object" datatype="html">
+        <source>Duplicate selected drawing object</source>
+        <target>Geselecteerd object kopiëren</target>
+      </trans-unit>
       <trans-unit id="core.drawing.fill" datatype="html">
         <source>Fill</source>
         <target>Vullen</target>
@@ -986,6 +990,10 @@
         <source>Coordinate picker</source>
         <target>Coördinaten selecteren</target>
       </trans-unit>
+      <trans-unit id="core.toolbar.coordinate-picker-copy" datatype="html">
+        <source>Copy</source>
+        <target>Kopiëren</target>
+      </trans-unit>
       <trans-unit id="core.toolbar.coordinate-picker-x" datatype="html">
         <source>X-coordinate</source>
         <target>X-coördinaat</target>
@@ -994,17 +1002,9 @@
         <source>Y-coordinate</source>
         <target>Y-coördinaat</target>
       </trans-unit>
-      <trans-unit id="core.toolbar.coordinate-picker-copy" datatype="html">
-        <source>Copy</source>
-        <target>Kopiëren</target>
-      </trans-unit>
       <trans-unit id="core.toolbar.coordinate-picker-zoomTo" datatype="html">
         <source>Zoom To</source>
         <target>Zoom naar</target>
-      </trans-unit>
-      <trans-unit id="core.toolbar.coordinate-picker-invalid-input" datatype="html">
-        <source>Your input is invalid for the current application bounds</source>
-        <target>Uw invoer is ongeldig voor de huidige toepassingsgrenzen</target>
       </trans-unit>
       <trans-unit id="core.toolbar.measure-area" datatype="html">
         <source>Measure area</source>

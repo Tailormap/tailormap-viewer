@@ -2,9 +2,11 @@ import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type
 import {
   ArrowTypeEnum, DrawingFeatureModel, DrawingFeatureModelAttributes, DrawingFeatureStyleModel, LabelStyleEnum, MarkerType, StrokeTypeEnum,
 } from '../models/drawing-feature.model';
-import { DrawingToolEvent, MapStyleModel } from '@tailormap-viewer/map';
+import { DrawingToolEvent, FeatureHelper, MapStyleModel, MapUnitEnum } from '@tailormap-viewer/map';
 import { v4 as uuidv4 } from 'uuid';
 import { ApplicationStyleService } from '../../../services/application-style.service';
+import { Projection } from 'ol/proj';
+import { Geometry } from 'ol/geom';
 
 
 export class DrawingHelper {
@@ -46,6 +48,27 @@ export class DrawingHelper {
       __fid: uuidv4(),
       geometry: drawingEvent.geometry,
       attributes,
+    };
+  }
+
+  public static getDuplicateFeature(feature: DrawingFeatureModel, geometryFn?: (geometry: Geometry) => void): DrawingFeatureModel {
+    if (!feature.geometry) {
+      throw "Cannot duplicate feature without geometry";
+    }
+    const geometry = FeatureHelper.fromWKT(feature.geometry);
+    if(geometryFn) {
+      geometryFn(geometry);
+    }
+
+    // XXX same problem as in ActiveDrawingService.initActiveDrawing()
+    const projection: Projection = { getUnits: () => MapUnitEnum.m, getCode: () => "" } as Projection;
+    return {
+      __fid: uuidv4(),
+      geometry: FeatureHelper.getWKT(geometry, projection),
+      attributes: {
+        ...feature.attributes,
+        label: feature.attributes.style.label ? feature.attributes.style.label + ' (copy)' : null,
+      },
     };
   }
 

@@ -13,6 +13,12 @@
                     tmTooltip="Delete selected drawing object">
               <mat-icon svgIcon="trash_filled"></mat-icon>
             </button>
+            <button mat-stroked-button
+                    (click)="duplicateSelectedFeature()"
+                    i18n-tmTooltip="@@core.drawing.duplicate-selected-drawing-object"
+                    tmTooltip="Duplicate selected drawing object">
+              <mat-icon svgIcon="copy_outline"></mat-icon>
+            </button>
           }
           <button mat-stroked-button
                   (click)="removeAllFeatures()"

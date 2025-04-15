@@ -209,6 +209,9 @@
       <trans-unit id="core.drawing.drawing" datatype="html">
         <source>Drawing</source>
       </trans-unit>
+      <trans-unit id="core.drawing.duplicate-selected-drawing-object" datatype="html">
+        <source>Duplicate selected drawing object</source>
+      </trans-unit>
       <trans-unit id="core.drawing.fill" datatype="html">
         <source>Fill</source>
       </trans-unit>
@@ -740,20 +743,17 @@
       <trans-unit id="core.toolbar.coordinate-picker" datatype="html">
         <source>Coordinate picker</source>
       </trans-unit>
+      <trans-unit id="core.toolbar.coordinate-picker-copy" datatype="html">
+        <source>Copy</source>
+      </trans-unit>
       <trans-unit id="core.toolbar.coordinate-picker-x" datatype="html">
         <source>X-coordinate</source>
       </trans-unit>
       <trans-unit id="core.toolbar.coordinate-picker-y" datatype="html">
         <source>Y-coordinate</source>
       </trans-unit>
-      <trans-unit id="core.toolbar.coordinate-picker-copy" datatype="html">
-        <source>Copy</source>
-      </trans-unit>
       <trans-unit id="core.toolbar.coordinate-picker-zoomTo" datatype="html">
         <source>Zoom To</source>
-      </trans-unit>
-      <trans-unit id="core.toolbar.coordinate-picker-invalid-input" datatype="html">
-        <source>Your input is invalid for the current application bounds</source>
       </trans-unit>
       <trans-unit id="core.toolbar.measure-area" datatype="html">
         <source>Measure area</source>
