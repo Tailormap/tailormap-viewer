@@ -78,7 +78,7 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
   public activeTool: DrawingFeatureTypeEnum | null = null;
   private selectTool: SelectToolModel | null = null;
   private extTransformTool: ExtTransformToolModel | null = null;
-  private modifyMode: 'transform_translate' | 'vertices' | 'none' = 'transform_translate';
+  public modifyMode: 'transform_translate' | 'vertices' | 'none' = 'transform_translate';
 
   constructor(
     private mapService: MapService,

@@ -81,12 +81,14 @@
 </div>
 @if (allowModify) {
   <div class="icon-button-list">
-    <button i18n-tmTooltip="@@core.draw.modify-move-feature"
+    <button [class.button--active]="modifyMode === 'transform_translate'"
+            i18n-tmTooltip="@@core.draw.modify-move-feature"
             tmTooltip="Modify size and/or move selected feature"
             mat-stroked-button
             color="primary"
             (click)="toggleTranslateMode()"><mat-icon svgIcon="tools_modify_translate"></mat-icon></button>
-    <button i18n-tmTooltip="@@core.draw.change-selected-feature"
+    <button  [class.button--active]="modifyMode === 'vertices'"
+             i18n-tmTooltip="@@core.draw.change-selected-feature"
             tmTooltip="Change the shape of selected feature"
             mat-stroked-button
             color="primary"
