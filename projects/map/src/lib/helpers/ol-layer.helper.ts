@@ -261,7 +261,7 @@ export class OlLayerHelper {
         tileLoadFunction,
         tileGrid,
       });
-      source.set('olcs_projection', getProjection(PROJECTION_REQUIRED_FOR_3D));
+      source.set('olcs_tileLoadFunction', tileLoadFunction);
       return new TileLayer({
         visible: layer.visible,
         source,
