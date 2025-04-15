@@ -206,26 +206,6 @@
         <source>Folder name</source>
         <target>Mapnaam</target>
       </trans-unit>
-      <trans-unit id="admin-core.application.hiddenFunctionality" datatype="html">
-        <source>Hidden functionality for this layer</source>
-        <target>Verborgen functionaliteit voor deze laag</target>
-      </trans-unit>
-      <trans-unit id="admin-core.application.hiddenFunctionality.attributeList" datatype="html">
-        <source>Do not show in attribute list</source>
-        <target>Niet tonen in attributenlijst</target>
-      </trans-unit>
-      <trans-unit id="admin-core.application.hiddenFunctionality.export" datatype="html">
-        <source>Do not show export button in attribute list</source>
-        <target>Niet tonen exportknop in attributenlijst</target>
-      </trans-unit>
-      <trans-unit id="admin-core.application.hiddenFunctionality.hideFeatureInfo" datatype="html">
-        <source>Do not show in object information</source>
-        <target>Niet tonen in objectinformatie</target>
-      </trans-unit>
-      <trans-unit id="admin-core.application.hiddenFunctionality.warning" datatype="html">
-        <source>Note: these checkboxes only hide user interface controls. Data is still accessible via the API.</source>
-        <target>Opmerking: deze selectievakjes verbergen alleen gebruikersinterface-elementen. Gegevens zijn nog steeds toegankelijk via de API.</target>
-      </trans-unit>
       <trans-unit id="admin-core.application.hide-language-switcher" datatype="html">
         <source>Hide language switcher in viewer</source>
         <target>Verberg taalkeuzemenu in viewer</target>
@@ -747,8 +727,8 @@
         <target>Laag</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.layer-authentication-hint" datatype="html">
-        <source>Enter account details below if the service requires HTTP Basic authentication. Enable reverse proxying to allow a layer which requires authentication to be used in a viewer by having Tailormap do the WMS requests for the end user without sending the credentials to the users&apos; browser.</source>
-        <target>Voer hieronder accountgegevens in als de service HTTP Basic-authenticatie vereist. Schakel reverse proxying in om een laag die authenticatie vereist te kunnen gebruiken in een viewer door Tailormap de WMS-verzoeken voor de eindgebruiker te laten doen zonder de inloggegevens naar de gebruikers&apos; browser te sturen.</target>
+        <source>Enter account details below if the service requires HTTP Basic authentication. Enable reverse proxying to allow a layer which requires authentication to be used in a viewer by having Tailormap do the <x id="INTERPOLATION" equiv-text="{{ geoService?.protocol }}"/> requests for the end user without sending the credentials to the users&apos; browser.</source>
+        <target>Voer hieronder accountgegevens in als de service HTTP Basic-authenticatie vereist. Schakel reverse proxying in om een laag die authenticatie vereist te kunnen gebruiken in een viewer door Tailormap de <x id="INTERPOLATION" equiv-text="{{ geoService?.protocol }}"/>-verzoeken voor de eindgebruiker te laten doen zonder de inloggegevens naar de gebruikers&apos; browser te sturen.</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.layer-name" datatype="html">
         <source>Layer name</source>
@@ -847,8 +827,8 @@
         <target>Verwijder eerst de lagen van deze service uit de applicaties</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.reverse-proxy" datatype="html">
-        <source>Reverse proxy WMS requests for viewers</source>
-        <target>Reverse proxy WMS-verzoeken voor viewers</target>
+        <source>Reverse proxy <x id="INTERPOLATION" equiv-text="{{ geoService?.protocol }}"/> requests for viewers</source>
+        <target>Reverse proxy <x id="INTERPOLATION" equiv-text="{{ geoService?.protocol }}"/>-verzoeken voor viewers</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.schema" datatype="html">
         <source>Schema</source>
