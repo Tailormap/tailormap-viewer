@@ -20,11 +20,18 @@ export class LayerDetailsComponent {
   private store$ = inject(Store);
 
   private _layerId: string | null = null;
+  public tiles3DLayer: boolean = false;
+
+  @Input()
+  public tiles3DLayerIds: string[] = [];
 
   @Input()
   public set layerId(layerId: string | null) {
     this._layerId = layerId;
     this.updateLegend();
+    if (layerId && this.tiles3DLayerIds.includes(layerId)) {
+      this.tiles3DLayer = true;
+    }
   }
   public get layerId(): string | null {
     return this._layerId;

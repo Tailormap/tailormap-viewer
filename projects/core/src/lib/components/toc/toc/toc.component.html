@@ -42,7 +42,10 @@
            [getDropZones]="getDropZoneConfig()"></tm-tree>
   @if (infoTreeNode$ | async; as infoTreeNode) {
     @if (infoVisible()) {
-      <tm-toc-node-details [node]="infoTreeNode" (closeDetails)="layerInfoClosed()"></tm-toc-node-details>
+      <tm-toc-node-details
+        [node]="infoTreeNode"
+        (closeDetails)="layerInfoClosed()"
+        [tiles3DLayerIds]="tiles3DLayerIds"></tm-toc-node-details>
     }
   }
 </div>
