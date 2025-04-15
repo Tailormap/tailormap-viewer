@@ -200,6 +200,7 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
       }
       if (this.activeTool === drawingFeatureType) {
         this.disableDrawing();
+        this.enableModifyTool();
       } else {
         // Enable drawing
         this.activeTool = drawingFeatureType;
