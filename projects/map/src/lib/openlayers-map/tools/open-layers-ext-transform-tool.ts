@@ -15,6 +15,8 @@ import { FeatureHelper } from '../../helpers/feature.helper';
 import { Feature } from 'ol';
 import { Stroke } from 'ol/style';
 import { Modify } from 'ol/interaction';
+import { GeometryTypeHelper } from '../../helpers/geometry-type.helper';
+
 export class OpenLayersExtTransformTool implements ExtTransformToolModel {
 
   private listeners: EventsKey[] = [];
@@ -61,8 +63,7 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
     this.isActive = true;
     const { layer, source } = this.getLayer(args.feature, args.style);
 
-    const isPoint = source.getFeatures()[0].getGeometry()?.getType() === "Point";
-
+    const isPoint = GeometryTypeHelper.isPointGeometry(source.getFeatures()[0].getGeometry());
     if (isPoint) {
       // The vertices interaction works the best with point geometries
       this.enableVertices(source);
