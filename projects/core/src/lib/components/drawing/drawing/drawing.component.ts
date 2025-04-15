@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { MapService } from '@tailormap-viewer/map';
+import { FeatureHelper, MapService } from '@tailormap-viewer/map';
 import { combineLatest, filter, Observable, of, Subject, take, takeUntil } from 'rxjs';
 import {
   selectDrawingFeaturesExcludingSelected, selectSelectedDrawingStyle, selectSelectedDrawingFeature, selectHasDrawingFeatures,
@@ -103,9 +103,8 @@ export class DrawingComponent implements OnInit, OnDestroy {
       if (!this.selectedFeature || !this.selectedFeature.geometry) {
         return;
       }
-      const feature = DrawingHelper.getDuplicateFeature(this.selectedFeature, geometry => {
-        geometry.translate(mapViewDetails.resolution * 10, mapViewDetails.resolution * -10);
-      });
+      const feature = DrawingHelper.getDuplicateFeature(this.selectedFeature);
+      feature.geometry = FeatureHelper.translateGeometryForDuplication(this.selectedFeature.geometry, mapViewDetails.resolution * 10, mapViewDetails.resolution * -10);
       this.store$.dispatch(addFeature({
         feature,
         selectFeature: true,
