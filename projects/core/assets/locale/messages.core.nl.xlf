@@ -358,6 +358,10 @@
         <source>Thickness</source>
         <target>Dikte</target>
       </trans-unit>
+      <trans-unit id="core.drawing.zoom-to-entire-drawing" datatype="html">
+        <source>Zoom to show entire drawing</source>
+        <target>Zoom naar gehele tekening</target>
+      </trans-unit>
       <trans-unit id="core.edit.add-new-feature" datatype="html">
         <source>Add new feature</source>
         <target>Nieuw object toevoegen</target>

@@ -269,6 +269,9 @@
       <trans-unit id="core.drawing.thickness" datatype="html">
         <source>Thickness</source>
       </trans-unit>
+      <trans-unit id="core.drawing.zoom-to-entire-drawing" datatype="html">
+        <source>Zoom to show entire drawing</source>
+      </trans-unit>
       <trans-unit id="core.edit.add-new-feature" datatype="html">
         <source>Add new feature</source>
       </trans-unit>
