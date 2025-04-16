@@ -29,7 +29,7 @@ describe('CreateDrawingButtonComponent', () => {
     mapServiceMock.toolManager.disableTool.mockClear();
 
     const buttons = await screen.getAllByRole('button');
-    expect(buttons.length).toEqual(11);
+    expect(buttons.length).toEqual(9);
     await userEvent.click(await screen.getByLabelText('Draw point'));
     expect(mapServiceMock.toolManager.enableTool).toHaveBeenCalledWith('draw-1', true, { type: 'point' });
     expect(mapServiceMock.toolManager.disableTool).toHaveBeenCalledWith('select-1', true);
