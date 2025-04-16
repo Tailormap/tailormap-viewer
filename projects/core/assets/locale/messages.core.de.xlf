@@ -358,6 +358,10 @@
         <source>Thickness</source>
         <target>Stärke</target>
       </trans-unit>
+      <trans-unit id="core.drawing.zoom-to-entire-drawing" datatype="html">
+        <source>Zoom to show entire drawing</source>
+        <target>Zoom, um die gesamte Zeichnung anzuzeigen</target>
+      </trans-unit>
       <trans-unit id="core.edit.add-new-feature" datatype="html">
         <source>Add new feature</source>
         <target>Neues Feature hinzufügen</target>
