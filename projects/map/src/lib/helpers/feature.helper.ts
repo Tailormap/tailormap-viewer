@@ -176,4 +176,10 @@ export class FeatureHelper {
     return FeatureHelper.wktFormatter.writeGeometry(geom);
   }
 
+  public static translateGeometryForDuplication(wktGeom: string, deltaX: number, deltaY: number): string {
+    const geom = FeatureHelper.fromWKT(wktGeom);
+    geom.translate(deltaX, deltaY);
+    // XXX getWKT() only needs units, not the entire projection
+    return FeatureHelper.getWKT(geom, { getUnits: () => (MapUnitEnum.m) } as Projection);
+  }
 }

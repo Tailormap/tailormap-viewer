@@ -5,6 +5,7 @@ import { ArrayHelper, TreeHelper, TreeModel } from '@tailormap-viewer/shared';
 import { LayerTreeNodeHelper } from '../helpers/layer-tree-node.helper';
 import { ExtendedAppLayerModel, ExtendedLayerTreeNodeModel, AppLayerWithInitialValuesModel } from '../models';
 import { LayerModelHelper } from '../helpers/layer-model.helper';
+import { LayerTreeNodeWithLayerModel } from '../models/layer-tree-node-with-layer.model';
 
 const selectMapState = createFeatureSelector<MapState>(mapStateKey);
 
@@ -231,6 +232,18 @@ export const selectTerrainNodesList = createSelector(
   },
 );
 
+export const select3dTilesLayers = createSelector(
+  selectLayersWithServices,
+  layers => layers.filter(
+    l => l.service?.protocol === ServiceProtocol.TILES3D,
+  ),
+);
+
+export const select3dTilesLayersIds = createSelector(
+  select3dTilesLayers,
+  layers => new Set(layers.map(l => l.id)),
+);
+
 export const selectInitiallySelectedTerrainNodes = createSelector(
   selectTerrainNodesListWithTitle,
   selectLayersMap,
@@ -241,13 +254,14 @@ export const selectSelectedNode = createSelector(
   selectSelectedLayerId,
   selectLayerTreeNodes,
   selectLayers,
-  (selectedLayerId, treeNodes, layers): LayerTreeNodeModel & { layer?: AppLayerModel } | null => {
+  select3dTilesLayersIds,
+  (selectedLayerId, treeNodes, layers, tiles3dLayersIds): LayerTreeNodeWithLayerModel | null => {
     if (!selectedLayerId) {
       return null;
     }
     const layerTreeNode = treeNodes.find(node => !!node.appLayerId && node.appLayerId === selectedLayerId);
     const layer = layerTreeNode && layerTreeNode.appLayerId ? layers.find(l => l.id === layerTreeNode.appLayerId) : undefined;
-    return layerTreeNode ? { ...layerTreeNode, layer } : null;
+    return layerTreeNode ? { ...layerTreeNode, layer, is3dLayer: tiles3dLayersIds.has(layerTreeNode.appLayerId ?? '') } : null;
   });
 
 export const selectSelectedNodeId = createSelector(
@@ -303,13 +317,6 @@ export const select3DLayers = createSelector(
   selectLayersWithServices,
   layers => layers.filter(
     l => l.service?.protocol === ServiceProtocol.TILES3D || l.service?.protocol === ServiceProtocol.QUANTIZEDMESH,
-  ),
-);
-
-export const select3dTilesLayers = createSelector(
-  selectLayersWithServices,
-  layers => layers.filter(
-    l => l.service?.protocol === ServiceProtocol.TILES3D,
   ),
 );
 

@@ -105,7 +105,6 @@ const onSetSelectedDrawingStyle = (
 ): DrawingState => ({
   ...state,
   selectedDrawingStyle: payload.drawingType,
-  selectedFeature: null,
 });
 
 const drawingReducerImpl = createReducer<DrawingState>(

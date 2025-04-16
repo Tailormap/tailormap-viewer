@@ -174,6 +174,10 @@
         <source>Coordinate Link Window</source>
         <target>Coordinate Link Window</target>
       </trans-unit>
+      <trans-unit id="core.draw.change-selected-feature" datatype="html">
+        <source>Change the shape of selected feature</source>
+        <target>Verander de vorm van het geselecteerde object</target>
+      </trans-unit>
       <trans-unit id="core.draw.delete-selected-feature" datatype="html">
         <source>Delete selected feature</source>
         <target>Verwijder geselecteerd object</target>
@@ -213,6 +217,10 @@
       <trans-unit id="core.draw.draw-star" datatype="html">
         <source>Draw star</source>
         <target>Ster tekenen</target>
+      </trans-unit>
+      <trans-unit id="core.draw.modify-move-feature" datatype="html">
+        <source>Modify size and/or move selected feature</source>
+        <target>Pas de grootte aan en/of verplaats het geselecteerde object</target>
       </trans-unit>
       <trans-unit id="core.drawing.arrow" datatype="html">
         <source>Arrow</source>
@@ -269,6 +277,10 @@
       <trans-unit id="core.drawing.drawing" datatype="html">
         <source>Drawing</source>
         <target>Tekenen</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.duplicate-selected-drawing-object" datatype="html">
+        <source>Duplicate selected drawing object</source>
+        <target>Geselecteerd object kopiëren</target>
       </trans-unit>
       <trans-unit id="core.drawing.fill" datatype="html">
         <source>Fill</source>
@@ -345,6 +357,10 @@
       <trans-unit id="core.drawing.thickness" datatype="html">
         <source>Thickness</source>
         <target>Dikte</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.zoom-to-entire-drawing" datatype="html">
+        <source>Zoom to show entire drawing</source>
+        <target>Zoom naar gehele tekening</target>
       </trans-unit>
       <trans-unit id="core.edit.add-new-feature" datatype="html">
         <source>Add new feature</source>
@@ -978,6 +994,10 @@
         <source>Coordinate picker</source>
         <target>Coördinaten selecteren</target>
       </trans-unit>
+      <trans-unit id="core.toolbar.coordinate-picker-copy" datatype="html">
+        <source>Copy</source>
+        <target>Kopiëren</target>
+      </trans-unit>
       <trans-unit id="core.toolbar.coordinate-picker-x" datatype="html">
         <source>X-coordinate</source>
         <target>X-coördinaat</target>
@@ -986,17 +1006,9 @@
         <source>Y-coordinate</source>
         <target>Y-coördinaat</target>
       </trans-unit>
-      <trans-unit id="core.toolbar.coordinate-picker-copy" datatype="html">
-        <source>Copy</source>
-        <target>Kopiëren</target>
-      </trans-unit>
       <trans-unit id="core.toolbar.coordinate-picker-zoomTo" datatype="html">
         <source>Zoom To</source>
         <target>Zoom naar</target>
-      </trans-unit>
-      <trans-unit id="core.toolbar.coordinate-picker-invalid-input" datatype="html">
-        <source>Your input is invalid for the current application bounds</source>
-        <target>Uw invoer is ongeldig voor de huidige toepassingsgrenzen</target>
       </trans-unit>
       <trans-unit id="core.toolbar.measure-area" datatype="html">
         <source>Measure area</source>

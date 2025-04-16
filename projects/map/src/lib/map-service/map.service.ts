@@ -156,6 +156,13 @@ export class MapService {
       );
   }
 
+  public zoomToFeatures(features: FeatureModelType | Array<FeatureModelType>) {
+    this.map.getProjection$().pipe(take(1)).subscribe(projection => {
+      const featureModels = FeatureHelper.getFeatures(features, projection.getCode());
+      this.map.zoomToFeatures(featureModels);
+    });
+  }
+
   private getBoolean(bool?: boolean | (() => boolean)) {
     return typeof bool === 'boolean'
       ? bool

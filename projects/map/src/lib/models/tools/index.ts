@@ -13,3 +13,6 @@ export * from './select-tool.model';
 export * from './select-tool-config.model';
 export * from './modify-tool.model';
 export * from './modify-tool-config.model';
+export * from './ext-transform-tool.model';
+export * from './ext-transform-tool-config.model';
+

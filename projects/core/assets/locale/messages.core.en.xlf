@@ -131,6 +131,9 @@
       <trans-unit id="core.coordinate-link-window.title" datatype="html">
         <source>Coordinate Link Window</source>
       </trans-unit>
+      <trans-unit id="core.draw.change-selected-feature" datatype="html">
+        <source>Change the shape of selected feature</source>
+      </trans-unit>
       <trans-unit id="core.draw.delete-selected-feature" datatype="html">
         <source>Delete selected feature</source>
       </trans-unit>
@@ -160,6 +163,9 @@
       </trans-unit>
       <trans-unit id="core.draw.draw-star" datatype="html">
         <source>Draw star</source>
+      </trans-unit>
+      <trans-unit id="core.draw.modify-move-feature" datatype="html">
+        <source>Modify size and/or move selected feature</source>
       </trans-unit>
       <trans-unit id="core.drawing.arrow" datatype="html">
         <source>Arrow</source>
@@ -202,6 +208,9 @@
       </trans-unit>
       <trans-unit id="core.drawing.drawing" datatype="html">
         <source>Drawing</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.duplicate-selected-drawing-object" datatype="html">
+        <source>Duplicate selected drawing object</source>
       </trans-unit>
       <trans-unit id="core.drawing.fill" datatype="html">
         <source>Fill</source>
@@ -259,6 +268,9 @@
       </trans-unit>
       <trans-unit id="core.drawing.thickness" datatype="html">
         <source>Thickness</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.zoom-to-entire-drawing" datatype="html">
+        <source>Zoom to show entire drawing</source>
       </trans-unit>
       <trans-unit id="core.edit.add-new-feature" datatype="html">
         <source>Add new feature</source>
@@ -734,20 +746,17 @@
       <trans-unit id="core.toolbar.coordinate-picker" datatype="html">
         <source>Coordinate picker</source>
       </trans-unit>
+      <trans-unit id="core.toolbar.coordinate-picker-copy" datatype="html">
+        <source>Copy</source>
+      </trans-unit>
       <trans-unit id="core.toolbar.coordinate-picker-x" datatype="html">
         <source>X-coordinate</source>
       </trans-unit>
       <trans-unit id="core.toolbar.coordinate-picker-y" datatype="html">
         <source>Y-coordinate</source>
       </trans-unit>
-      <trans-unit id="core.toolbar.coordinate-picker-copy" datatype="html">
-        <source>Copy</source>
-      </trans-unit>
       <trans-unit id="core.toolbar.coordinate-picker-zoomTo" datatype="html">
         <source>Zoom To</source>
-      </trans-unit>
-      <trans-unit id="core.toolbar.coordinate-picker-invalid-input" datatype="html">
-        <source>Your input is invalid for the current application bounds</source>
       </trans-unit>
       <trans-unit id="core.toolbar.measure-area" datatype="html">
         <source>Measure area</source>

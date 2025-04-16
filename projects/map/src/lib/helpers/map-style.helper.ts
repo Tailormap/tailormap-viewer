@@ -44,7 +44,7 @@ export class MapStyleHelper {
         if (!featureModel) {
           return MapStyleHelper.DEFAULT_STYLE;
         }
-        return MapStyleHelper.mapStyleModelToOlStyle(styleConfig(featureModel), feature, 20 * resolution);
+        return MapStyleHelper.mapStyleModelToOlStyle(styleConfig(featureModel), feature, resolution);
       };
     }
     return MapStyleHelper.mapStyleModelToOlStyle(styleConfig);
@@ -76,10 +76,7 @@ export class MapStyleHelper {
       styles.push(...MapStyleHelper.createLabelStyle(styleConfig, feature));
     }
     if (styleConfig.isSelected && (!styleConfig.pointType || (!!styleConfig.pointType && !styleConfig.label)) && typeof feature !== 'undefined') {
-      styles.push(...MapStyleHelper.createOutlinedSelectionRectangle(feature, 1.3 * (resolution || 0)));
-    }
-    if (styleConfig.isSelected && (!styleConfig.pointType || (!!styleConfig.pointType && !styleConfig.label)) && typeof feature !== 'undefined') {
-      styles.push(...MapStyleHelper.createOutlinedSelectionRectangle(feature, 1.3 * (resolution || 0)));
+      styles.push(...MapStyleHelper.createOutlinedSelectionRectangle(feature, resolution));
     }
     if (typeof styleConfig.buffer !== 'undefined' && styleConfig.buffer && typeof feature !== 'undefined') {
       styles.push(...MapStyleHelper.createBuffer(styleConfig.buffer, styleConfig));
@@ -154,18 +151,12 @@ export class MapStyleHelper {
           : undefined,
         offsetY,
         scale,
-        backgroundStroke: showSelectionRectangle ? MapStyleHelper.getSelectionStroke(false) : undefined,
+        backgroundStroke: showSelectionRectangle ? MapStyleHelper.getSelectionStroke() : undefined,
         padding: showSelectionRectangle
           ? [ paddingTop, DEFAULT_SELECTION_PADDING, DEFAULT_SELECTION_PADDING, DEFAULT_SELECTION_PADDING ]
           : undefined,
       }),
     });
-    if (showSelectionRectangle) {
-      const outerSelectionRectangle = baseLabelStyle.clone();
-      outerSelectionRectangle.setZIndex(styleConfig.zIndex - 1);
-      outerSelectionRectangle.getText()?.setBackgroundStroke(MapStyleHelper.getSelectionStroke(true));
-      return [ baseLabelStyle, outerSelectionRectangle ];
-    }
     return [baseLabelStyle];
   }
 
@@ -282,18 +273,18 @@ export class MapStyleHelper {
     return Math.max(0, (opacity || 100) - (hasBuffer ? MapStyleHelper.BUFFER_OPACITY_DECREASE : 0));
   }
 
-  private static createOutlinedSelectionRectangle(feature: Feature<Geometry>, buffer: number, translate?: number[]): Style[] {
-    const outer: Style | null = MapStyleHelper.createSelectionRectangle(feature, buffer, translate);
-    if (!outer) {
+  private static createOutlinedSelectionRectangle(feature: Feature<Geometry>, resolution?: number, translate?: number[]): Style[] {
+    const buffer = MapStyleHelper.getSelectionRectangleBuffer(resolution);
+    const rect: Style | null = MapStyleHelper.createSelectionRectangle(feature, buffer, translate);
+    if (!rect) {
       return [];
     }
-    const inner = outer.clone();
-    outer.setStroke(MapStyleHelper.getSelectionStroke(true));
-    inner.setStroke(MapStyleHelper.getSelectionStroke(false));
-    return [
-      outer,
-      inner,
-    ];
+    rect.setStroke(MapStyleHelper.getSelectionStroke());
+    return [rect];
+  }
+
+  public static getSelectionRectangleBuffer(resolution?: number) {
+    return typeof resolution !== "undefined" ? 10 * resolution : 4;
   }
 
   private static createSelectionRectangle(feature: Feature<Geometry>, buffer: number, translate?: number[]) {
@@ -320,12 +311,9 @@ export class MapStyleHelper {
     });
   }
 
-  private static getSelectionStroke(outer = false) {
+  private static getSelectionStroke() {
     return new Stroke({
-      color: outer ? '#fff' : '#333',
-      lineCap: 'square',
-      lineDash: [ 4, 10 ],
-      width: outer ? 5 : 2.5,
+      color: [ 255, 0, 0, 1 ], width: 2, lineDash: [ 4, 4 ],
     });
   }
 

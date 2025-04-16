@@ -26,13 +26,11 @@ export class SpatialFilterFormDrawGeometriesComponent {
 
   public selectedFeatureForModifyTool: FeatureModel | null = null;
 
-  public selectedStyle = (feature: FeatureModel) => FeatureStylingHelper.getDefaultHighlightStyle('filter-selected-style', {
+  public selectedStyle = FeatureStylingHelper.getDefaultHighlightStyle('filter-selected-style', {
     pointType: undefined,
     fillColor: ApplicationStyleService.getPrimaryColor(),
     fillOpacity: 30,
     strokeWidth: 2,
-    isSelected: true,
-    buffer: feature.attributes?.buffer,
   });
 
   public allowedGeometryTypes: DrawingFeatureTypeEnum[] = [
