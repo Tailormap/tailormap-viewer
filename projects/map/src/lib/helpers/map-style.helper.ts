@@ -151,18 +151,12 @@ export class MapStyleHelper {
           : undefined,
         offsetY,
         scale,
-        backgroundStroke: showSelectionRectangle ? MapStyleHelper.getSelectionStroke(false) : undefined,
+        backgroundStroke: showSelectionRectangle ? MapStyleHelper.getSelectionStroke() : undefined,
         padding: showSelectionRectangle
           ? [ paddingTop, DEFAULT_SELECTION_PADDING, DEFAULT_SELECTION_PADDING, DEFAULT_SELECTION_PADDING ]
           : undefined,
       }),
     });
-    if (showSelectionRectangle) {
-      const outerSelectionRectangle = baseLabelStyle.clone();
-      outerSelectionRectangle.setZIndex(styleConfig.zIndex - 1);
-      outerSelectionRectangle.getText()?.setBackgroundStroke(MapStyleHelper.getSelectionStroke(true));
-      return [ baseLabelStyle, outerSelectionRectangle ];
-    }
     return [baseLabelStyle];
   }
 
@@ -280,17 +274,12 @@ export class MapStyleHelper {
   }
 
   private static createOutlinedSelectionRectangle(feature: Feature<Geometry>, buffer: number, translate?: number[]): Style[] {
-    const outer: Style | null = MapStyleHelper.createSelectionRectangle(feature, buffer, translate);
-    if (!outer) {
+    const rect: Style | null = MapStyleHelper.createSelectionRectangle(feature, buffer, translate);
+    if (!rect) {
       return [];
     }
-    const inner = outer.clone();
-    outer.setStroke(MapStyleHelper.getSelectionStroke(true));
-    inner.setStroke(MapStyleHelper.getSelectionStroke(false));
-    return [
-      // outer,
-      inner,
-    ];
+    rect.setStroke(MapStyleHelper.getSelectionStroke());
+    return [rect];
   }
 
   private static createSelectionRectangle(feature: Feature<Geometry>, buffer: number, translate?: number[]) {
@@ -317,12 +306,7 @@ export class MapStyleHelper {
     });
   }
 
-  private static getSelectionStroke(outer = false) {
-    if (outer) {
-      return new Stroke({
-        color: [ 255, 255, 0, 1 ], width: 3, lineDash: [ 4, 4 ],
-      });
-    }
+  private static getSelectionStroke() {
     return new Stroke({
       color: [ 255, 0, 0, 1 ], width: 2, lineDash: [ 4, 4 ],
     });
