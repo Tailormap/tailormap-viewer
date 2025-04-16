@@ -241,7 +241,6 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
     if (!this.allowModify) {
       return;
     }
-    // this.disableDrawing();
     this.withToolManager(manager => {
       if (this._selectedFeature && this.modifyMode !== 'none') {
         const enableArgs: ExtTransformEnableToolArguments = {

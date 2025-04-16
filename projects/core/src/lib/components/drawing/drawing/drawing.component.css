@@ -27,3 +27,8 @@
 .drawing-button-list .mat-mdc-outlined-button:last-of-type {
   margin-right: 0;
 }
+
+.mat-mdc-outlined-button > .mat-icon.zoom_max {
+  width: 22px;
+  height: 22px;
+}

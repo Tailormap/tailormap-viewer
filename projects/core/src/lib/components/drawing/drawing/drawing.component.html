@@ -27,6 +27,12 @@
                   tmTooltip="Delete complete drawing">
             <mat-icon svgIcon="close"></mat-icon>
           </button>
+          <button mat-stroked-button
+                  (click)="zoomToEntireDrawing()"
+                  i18n-tmTooltip="@@core.drawing.zoom-to-entire-drawing"
+                  tmTooltip="Zoom to show entire drawing">
+            <mat-icon class="zoom_max" svgIcon="zoom_max"></mat-icon>
+          </button>
         </div>
       </div>
     }

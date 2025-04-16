@@ -4,6 +4,7 @@ import { FeatureHelper, MapService } from '@tailormap-viewer/map';
 import { combineLatest, filter, Observable, of, Subject, take, takeUntil } from 'rxjs';
 import {
   selectDrawingFeaturesExcludingSelected, selectSelectedDrawingStyle, selectSelectedDrawingFeature, selectHasDrawingFeatures,
+  selectDrawingFeatures,
 } from '../state/drawing.selectors';
 import { DrawingHelper } from '../helpers/drawing.helper';
 import { MenubarService } from '../../menubar';
@@ -124,4 +125,9 @@ export class DrawingComponent implements OnInit, OnDestroy {
       });
   }
 
+  public zoomToEntireDrawing() {
+    this.store$.select(selectDrawingFeatures).pipe(take(1)).subscribe(features => {
+      this.mapService.zoomToFeatures(features);
+    });
+  }
 }
