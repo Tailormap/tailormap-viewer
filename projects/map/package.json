@@ -7,8 +7,9 @@
   "peerDependencies": {
     "@angular/common": "^19.2.2",
     "@angular/core": "^19.2.2",
-    "ol": "^10.5.0",
     "cesium": "^1.116.0",
+    "ol": "^10.5.0",
+    "ol-ext": "^4.0.30",
     "olcs": "^2.22.1",
     "proj4": "^2.15.0",
     "html2canvas": "^1.4.1",
