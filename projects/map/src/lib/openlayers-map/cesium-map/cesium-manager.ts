@@ -5,7 +5,7 @@ import { NgZone } from '@angular/core';
 import type OLCesium from 'olcs';
 import { BehaviorSubject, filter, from, map, Observable, take } from 'rxjs';
 import { Cesium3DTileset, CesiumTerrainProvider, EllipsoidTerrainProvider, Scene } from 'cesium';
-import { CssHelper, ExternalLibsLoaderHelper } from '@tailormap-viewer/shared';
+import { ArrayHelper, CssHelper, ExternalLibsLoaderHelper } from '@tailormap-viewer/shared';
 import { LayerTypesEnum } from '../../models/layer-types.enum';
 import { CesiumEventManager } from './cesium-event-manager';
 import { Projection } from 'ol/proj';
@@ -17,6 +17,8 @@ export class CesiumManager {
   private map3d: BehaviorSubject<OLCesium | null> = new BehaviorSubject<OLCesium | null>(null);
   private layers3d: Map<string, number> = new Map<string, number>();
   private currentTerrainLayerId: string = CesiumManager.ELLIPSOID_TERRAIN_ID;
+  private prevLayerIdentifiers: string[] = [];
+
 
   constructor(
     private olMap: OlMap,
@@ -92,6 +94,11 @@ export class CesiumManager {
   }
 
   public addLayers(layers: LayerModel[]) {
+    const layerIdentifiers: string[] = this.createLayerIdentifiers(layers);
+    if (ArrayHelper.arrayEquals(layerIdentifiers, this.prevLayerIdentifiers)) {
+      return;
+    }
+    this.prevLayerIdentifiers = layerIdentifiers;
     this.ngZone.runOutsideAngular(() => {
       let noTerrainLayersVisible: boolean = true;
       layers.forEach(layer => {
@@ -108,6 +115,9 @@ export class CesiumManager {
         // set the terrain as WGS84 ellipsoid to remove terrain layers if none are set as visible
         this.setEllipsoidTerrain();
       }
+      this.executeScene3dAction(async scene3d => {
+        scene3d.requestRender();
+      });
     });
   }
 
@@ -208,6 +218,13 @@ export class CesiumManager {
       }
     }
     return null;
+  }
+
+  private createLayerIdentifiers(layers: LayerModel[]): string[] {
+    return layers.map(layer => {
+      const visible: string = layer.visible.toString();
+      return layer.id + visible;
+    });
   }
 
 }
