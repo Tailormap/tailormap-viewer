@@ -1,4 +1,4 @@
-import { Subject } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { Map as OlMap } from 'ol';
 import { EventsKey } from 'ol/events';
 import { unByKey } from 'ol/Observable';
@@ -16,6 +16,7 @@ import { Feature } from 'ol';
 import { Stroke } from 'ol/style';
 import { Modify } from 'ol/interaction';
 import { GeometryTypeHelper } from '../../helpers/geometry-type.helper';
+import { OpenLayersEventManager } from '../open-layers-event-manager';
 
 export class OpenLayersExtTransformTool implements ExtTransformToolModel {
 
@@ -56,25 +57,29 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
 
   public enable(args: ExtTransformEnableToolArguments): void {
     this.stopModify();
+    this.destroyed = new Subject();
     if (!args || !args.feature) {
       return;
     }
     this.listeners = [];
     this.isActive = true;
     const { layer, source } = this.getLayer(args.feature, args.style);
-
     const isPoint = GeometryTypeHelper.isPointGeometry(source.getFeatures()[0].getGeometry());
-    if (isPoint) {
-      // The vertices interaction works the best with point geometries
-      this.enableVertices(source);
-    } else {
-      if (args.mode === 'transform_translate') {
-        this.enableTransformTranslate(layer, source);
-      }
-      if (args.mode === 'vertices') {
-        this.enableVertices(source);
-      }
+    // The vertices interaction works the best with point geometries
+    const mode = isPoint ? 'vertices' : args.mode;
+    if (mode === 'transform_translate') {
+      this.enableTransformTranslate(layer, source);
     }
+    if (mode === 'vertices') {
+      this.enableVertices(source);
+    }
+    OpenLayersEventManager.onMapMove$()
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(() => {
+        if (this.interaction) {
+          this.interaction.set('buffer', this.getBuffer());
+        }
+      });
   }
 
   private getLayer(feature: FeatureModel, styleModel?: Partial<MapStyleModel> | ((feature: FeatureModel) => MapStyleModel)) {
@@ -139,7 +144,7 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
     this.interaction = new OlExtTransform({
       layers: [layer],
       selection: false,
-      buffer: 4,
+      buffer: this.getBuffer(),
       style: {
         'default': new Stroke({
           color: [ 255, 0, 0, 1 ], width: 2, lineDash: [ 4, 4 ],
@@ -158,4 +163,7 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
     this.olMap.getInteractions().extend([this.modifyInteraction]);
   }
 
+  private getBuffer() {
+    return MapStyleHelper.getSelectionRectangleBuffer(this.olMap.getView().getResolution());
+  }
 }

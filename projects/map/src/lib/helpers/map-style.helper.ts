@@ -36,7 +36,7 @@ export class MapStyleHelper {
       return MapStyleHelper.DEFAULT_STYLE;
     }
     if (typeof styleConfig === 'function') {
-      return (feature: Feature<Geometry> | RenderFeature, _resolution: number) => {
+      return (feature: Feature<Geometry> | RenderFeature, resolution: number) => {
         if (feature instanceof RenderFeature) {
           return MapStyleHelper.DEFAULT_STYLE;
         }
@@ -44,13 +44,13 @@ export class MapStyleHelper {
         if (!featureModel) {
           return MapStyleHelper.DEFAULT_STYLE;
         }
-        return MapStyleHelper.mapStyleModelToOlStyle(styleConfig(featureModel), feature);
+        return MapStyleHelper.mapStyleModelToOlStyle(styleConfig(featureModel), feature, resolution);
       };
     }
     return MapStyleHelper.mapStyleModelToOlStyle(styleConfig);
   }
 
-  private static mapStyleModelToOlStyle(styleConfig: MapStyleModel, feature?: Feature<Geometry>) {
+  private static mapStyleModelToOlStyle(styleConfig: MapStyleModel, feature?: Feature<Geometry>, resolution?: number) {
     const baseStyle = new Style();
     const stroke = MapStyleHelper.createStroke(styleConfig);
     if (stroke) {
@@ -76,7 +76,7 @@ export class MapStyleHelper {
       styles.push(...MapStyleHelper.createLabelStyle(styleConfig, feature));
     }
     if (styleConfig.isSelected && (!styleConfig.pointType || (!!styleConfig.pointType && !styleConfig.label)) && typeof feature !== 'undefined') {
-      styles.push(...MapStyleHelper.createOutlinedSelectionRectangle(feature, 4));
+      styles.push(...MapStyleHelper.createOutlinedSelectionRectangle(feature, resolution));
     }
     if (typeof styleConfig.buffer !== 'undefined' && styleConfig.buffer && typeof feature !== 'undefined') {
       styles.push(...MapStyleHelper.createBuffer(styleConfig.buffer, styleConfig));
@@ -273,13 +273,18 @@ export class MapStyleHelper {
     return Math.max(0, (opacity || 100) - (hasBuffer ? MapStyleHelper.BUFFER_OPACITY_DECREASE : 0));
   }
 
-  private static createOutlinedSelectionRectangle(feature: Feature<Geometry>, buffer: number, translate?: number[]): Style[] {
+  private static createOutlinedSelectionRectangle(feature: Feature<Geometry>, resolution?: number, translate?: number[]): Style[] {
+    const buffer = MapStyleHelper.getSelectionRectangleBuffer(resolution);
     const rect: Style | null = MapStyleHelper.createSelectionRectangle(feature, buffer, translate);
     if (!rect) {
       return [];
     }
     rect.setStroke(MapStyleHelper.getSelectionStroke());
     return [rect];
+  }
+
+  public static getSelectionRectangleBuffer(resolution?: number) {
+    return typeof resolution !== "undefined" ? 10 * resolution : 4;
   }
 
   private static createSelectionRectangle(feature: Feature<Geometry>, buffer: number, translate?: number[]) {
