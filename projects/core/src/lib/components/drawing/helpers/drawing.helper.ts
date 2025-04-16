@@ -6,7 +6,6 @@ import { DrawingToolEvent, MapStyleModel } from '@tailormap-viewer/map';
 import { v4 as uuidv4 } from 'uuid';
 import { ApplicationStyleService } from '../../../services/application-style.service';
 
-
 export class DrawingHelper {
 
   private static updatedDefaultStyle: Partial<DrawingFeatureStyleModel> = {};
@@ -46,6 +45,16 @@ export class DrawingHelper {
       __fid: uuidv4(),
       geometry: drawingEvent.geometry,
       attributes,
+    };
+  }
+
+  public static getDuplicateFeature(feature: DrawingFeatureModel): DrawingFeatureModel {
+    return {
+      __fid: uuidv4(),
+      geometry: feature.geometry,
+      attributes: {
+        ...feature.attributes,
+      },
     };
   }
 

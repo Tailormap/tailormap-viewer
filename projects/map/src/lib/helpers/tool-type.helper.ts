@@ -6,7 +6,7 @@ import {
   MousePositionToolConfigModel,
   ScaleBarToolConfigModel,
   SelectToolConfigModel,
-  ModifyToolConfigModel,
+  ModifyToolConfigModel, ExtTransformToolConfigModel,
 } from '../models';
 
 export class ToolTypeHelper {
@@ -35,4 +35,7 @@ export class ToolTypeHelper {
     return tool.type === ToolTypeEnum.Modify;
   }
 
+  public static isExtTransformTool(tool: ToolConfigModel): tool is ExtTransformToolConfigModel {
+    return tool.type === ToolTypeEnum.ExtTransform;
+  }
 }

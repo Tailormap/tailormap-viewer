@@ -3,10 +3,6 @@
   flex-wrap: wrap;
 }
 
-.icon-button-list + .icon-button-list {
-  margin-top: 8px;
-}
-
 .icon-button-list .mat-mdc-outlined-button {
   min-width: 40px;
   padding: 0 8px;

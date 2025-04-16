@@ -1,15 +1,16 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { MapService } from '@tailormap-viewer/map';
+import { FeatureHelper, MapService } from '@tailormap-viewer/map';
 import { combineLatest, filter, Observable, of, Subject, take, takeUntil } from 'rxjs';
 import {
   selectDrawingFeaturesExcludingSelected, selectSelectedDrawingStyle, selectSelectedDrawingFeature, selectHasDrawingFeatures,
+  selectDrawingFeatures,
 } from '../state/drawing.selectors';
 import { DrawingHelper } from '../helpers/drawing.helper';
 import { MenubarService } from '../../menubar';
 import { DrawingMenuButtonComponent } from '../drawing-menu-button/drawing-menu-button.component';
 import { DrawingFeatureModel, DrawingFeatureModelAttributes, DrawingFeatureStyleModel } from '../models/drawing-feature.model';
-import { removeAllDrawingFeatures, removeDrawingFeature, updateDrawingFeatureStyle } from '../state/drawing.actions';
+import { addFeature, removeAllDrawingFeatures, removeDrawingFeature, updateDrawingFeatureStyle } from '../state/drawing.actions';
 import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type.enum';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
@@ -98,6 +99,20 @@ export class DrawingComponent implements OnInit, OnDestroy {
       });
   }
 
+  public duplicateSelectedFeature() {
+    this.mapService.getMapViewDetails$().pipe(take(1)).subscribe(mapViewDetails => {
+      if (!this.selectedFeature || !this.selectedFeature.geometry) {
+        return;
+      }
+      const feature = DrawingHelper.getDuplicateFeature(this.selectedFeature);
+      feature.geometry = FeatureHelper.translateGeometryForDuplication(this.selectedFeature.geometry, mapViewDetails.resolution * 10, mapViewDetails.resolution * -10);
+      this.store$.dispatch(addFeature({
+        feature,
+        selectFeature: true,
+      }));
+    });
+  }
+
   public removeAllFeatures() {
     this.confirmService.confirm$(
       $localize `:@@core.drawing.delete-drawing-confirm:Delete complete drawing`,
@@ -110,4 +125,9 @@ export class DrawingComponent implements OnInit, OnDestroy {
       });
   }
 
+  public zoomToEntireDrawing() {
+    this.store$.select(selectDrawingFeatures).pipe(take(1)).subscribe(features => {
+      this.mapService.zoomToFeatures(features);
+    });
+  }
 }

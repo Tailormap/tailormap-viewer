@@ -1,18 +1,46 @@
-<div class="drawing-form" *ngIf="active$ | async">
-  <tm-create-drawing-button [drawingLayerId]="drawingLayerId"></tm-create-drawing-button>
-  <tm-drawing-style-form *ngIf="selectedDrawingStyle"
-                         [type]="selectedDrawingStyle"
-                         [style]="style"
-                         (styleUpdated)="featureStyleUpdates($event)"></tm-drawing-style-form>
-  <div class="remove-buttons" *ngIf="hasFeatures$ | async">
-    <button *ngIf="selectedFeature"
-            mat-stroked-button
-            (click)="removeSelectedFeature()"
-            color="warn"
-            i18n="@@core.drawing.delete-selected-drawing-object">Delete selected drawing object</button>
-    <button mat-stroked-button
-            (click)="removeAllFeatures()"
-            color="warn"
-            i18n="@@core.drawing.delete-drawing">Delete complete drawing</button>
+@if(active$ | async) {
+  <div class="drawing-form">
+    <tm-create-drawing-button [drawingLayerId]="drawingLayerId"></tm-create-drawing-button>
+    @if(hasFeatures$ | async) {
+      <div class="horizontal-line"></div>
+      <div class="drawing-button-list">
+        <div class="remove-buttons">
+          @if(selectedFeature) {
+            <button mat-stroked-button
+                    (click)="removeSelectedFeature()"
+                    color="warn"
+                    i18n-tmTooltip="@@core.drawing.delete-selected-drawing-object"
+                    tmTooltip="Delete selected drawing object">
+              <mat-icon svgIcon="trash_filled"></mat-icon>
+            </button>
+            <button mat-stroked-button
+                    (click)="duplicateSelectedFeature()"
+                    i18n-tmTooltip="@@core.drawing.duplicate-selected-drawing-object"
+                    tmTooltip="Duplicate selected drawing object">
+              <mat-icon svgIcon="copy_outline"></mat-icon>
+            </button>
+          }
+          <button mat-stroked-button
+                  (click)="removeAllFeatures()"
+                  color="warn"
+                  i18n-tmTooltip="@@core.drawing.delete-drawing"
+                  tmTooltip="Delete complete drawing">
+            <mat-icon svgIcon="close"></mat-icon>
+          </button>
+          <button mat-stroked-button
+                  (click)="zoomToEntireDrawing()"
+                  i18n-tmTooltip="@@core.drawing.zoom-to-entire-drawing"
+                  tmTooltip="Zoom to show entire drawing">
+            <mat-icon class="zoom_max" svgIcon="zoom_max"></mat-icon>
+          </button>
+        </div>
+      </div>
+    }
+    @if (selectedDrawingStyle) {
+      <tm-drawing-style-form
+                             [type]="selectedDrawingStyle"
+                             [style]="style"
+                             (styleUpdated)="featureStyleUpdates($event)"></tm-drawing-style-form>
+    }
   </div>
-</div>
+}
