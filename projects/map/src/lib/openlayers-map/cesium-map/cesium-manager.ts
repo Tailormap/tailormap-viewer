@@ -94,7 +94,7 @@ export class CesiumManager {
   }
 
   public addLayers(layers: LayerModel[]) {
-    const layerIdentifiers: string[] = this.createLayerIdentifiers(layers);
+    const layerIdentifiers: string[] = layers.map(layer => `${layer.id}_${layer.visible}`);
     if (ArrayHelper.arrayEquals(layerIdentifiers, this.prevLayerIdentifiers)) {
       return;
     }
@@ -218,13 +218,6 @@ export class CesiumManager {
       }
     }
     return null;
-  }
-
-  private createLayerIdentifiers(layers: LayerModel[]): string[] {
-    return layers.map(layer => {
-      const visible: string = layer.visible.toString();
-      return layer.id + visible;
-    });
   }
 
 }
