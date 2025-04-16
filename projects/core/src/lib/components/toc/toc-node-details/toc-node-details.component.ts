@@ -1,11 +1,9 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, ViewChild, ElementRef,
+} from '@angular/core';
 import { BrowserHelper } from '@tailormap-viewer/shared';
 import { BehaviorSubject, map } from 'rxjs';
-import { AppLayerModel, LayerTreeNodeModel } from '@tailormap-viewer/api';
-
-interface NodeWithLayer extends LayerTreeNodeModel {
-  layer?: AppLayerModel;
-}
+import { LayerTreeNodeWithLayerModel } from '../../../map/models/layer-tree-node-with-layer.model';
 
 @Component({
   selector: 'tm-toc-node-details',
@@ -17,7 +15,7 @@ interface NodeWithLayer extends LayerTreeNodeModel {
 export class TocNodeDetailsComponent implements OnInit {
 
   @Input()
-  public node: NodeWithLayer | null | undefined = null;
+  public node: LayerTreeNodeWithLayerModel | null | undefined = null;
 
   @Output()
   public closeDetails = new EventEmitter<void>();

@@ -1,6 +1,8 @@
-<div class="toc-node-details-panel-section">
-  <tm-layer-transparency [layer]="layerId"></tm-layer-transparency>
-</div>
+@if (!is3dLayer) {
+  <div class="toc-node-details-panel-section">
+    <tm-layer-transparency [layer]="layerId"></tm-layer-transparency>
+  </div>
+}
 <div *ngIf="legendInfo$ | async as legendInfo"
      class="toc-node-details-panel-section layer-legend">
   <h3 i18n="@@core.toc.legend">Legend</h3>

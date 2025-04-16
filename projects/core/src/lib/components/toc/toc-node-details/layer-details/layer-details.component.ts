@@ -22,6 +22,9 @@ export class LayerDetailsComponent {
   private _layerId: string | null = null;
 
   @Input()
+  public is3dLayer = false;
+
+  @Input()
   public set layerId(layerId: string | null) {
     this._layerId = layerId;
     this.updateLegend();
