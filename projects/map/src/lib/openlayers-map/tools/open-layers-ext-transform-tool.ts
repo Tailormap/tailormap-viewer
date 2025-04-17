@@ -65,14 +65,10 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
     this.isActive = true;
     const { layer, source } = this.getLayer(args.feature, args.style);
     const isPoint = GeometryTypeHelper.isPointGeometry(source.getFeatures()[0].getGeometry());
-    // The vertices interaction works the best with point geometries
-    const mode = isPoint ? 'vertices' : args.mode;
-    if (mode === 'transform_translate') {
+    if (!isPoint) {
       this.enableTransformTranslate(layer, source);
     }
-    if (mode === 'vertices') {
-      this.enableVertices(source);
-    }
+    this.enableVertices(source);
     OpenLayersEventManager.onMapMove$()
       .pipe(takeUntil(this.destroyed))
       .subscribe(() => {

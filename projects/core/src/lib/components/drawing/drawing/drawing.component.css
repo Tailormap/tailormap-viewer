@@ -32,3 +32,16 @@
   width: 22px;
   height: 22px;
 }
+
+.split-buttons {
+  display: flex;
+}
+
+.split-buttons > div {
+  flex: 1;
+}
+
+.drawing_buttons {
+  display: flex;
+  justify-content: flex-end;
+}

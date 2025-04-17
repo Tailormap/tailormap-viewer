@@ -174,10 +174,6 @@
         <source>Coordinate Link Window</source>
         <target>Coordinate Link Window</target>
       </trans-unit>
-      <trans-unit id="core.draw.change-selected-feature" datatype="html">
-        <source>Change the shape of selected feature</source>
-        <target>Verander de vorm van het geselecteerde object</target>
-      </trans-unit>
       <trans-unit id="core.draw.delete-selected-feature" datatype="html">
         <source>Delete selected feature</source>
         <target>Verwijder geselecteerd object</target>
@@ -218,9 +214,9 @@
         <source>Draw star</source>
         <target>Ster tekenen</target>
       </trans-unit>
-      <trans-unit id="core.draw.modify-move-feature" datatype="html">
-        <source>Modify size and/or move selected feature</source>
-        <target>Pas de grootte aan en/of verplaats het geselecteerde object</target>
+      <trans-unit id="core.draw.select-modify-move-feature" datatype="html">
+        <source>Select, modify size and/or move feature</source>
+        <target>Object selecteren, grootte aanpassen en/of verplaatsen</target>
       </trans-unit>
       <trans-unit id="core.drawing.arrow" datatype="html">
         <source>Arrow</source>

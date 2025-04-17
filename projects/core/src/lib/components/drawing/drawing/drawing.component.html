@@ -3,29 +3,31 @@
     <tm-create-drawing-button [drawingLayerId]="drawingLayerId"></tm-create-drawing-button>
     @if(hasFeatures$ | async) {
       <div class="horizontal-line"></div>
-      <div class="drawing-button-list">
-        <div class="remove-buttons">
+      <div class="drawing-button-list split-buttons">
+        <div class="selected_feature_buttons">
           @if(selectedFeature) {
             <button mat-stroked-button
                     (click)="removeSelectedFeature()"
                     color="warn"
                     i18n-tmTooltip="@@core.drawing.delete-selected-drawing-object"
                     tmTooltip="Delete selected drawing object">
-              <mat-icon svgIcon="trash_filled"></mat-icon>
+              <mat-icon svgIcon="remove"></mat-icon>
             </button>
             <button mat-stroked-button
                     (click)="duplicateSelectedFeature()"
                     i18n-tmTooltip="@@core.drawing.duplicate-selected-drawing-object"
                     tmTooltip="Duplicate selected drawing object">
-              <mat-icon svgIcon="copy_outline"></mat-icon>
+              <mat-icon svgIcon="copy"></mat-icon>
             </button>
           }
+        </div>
+        <div class="drawing_buttons">
           <button mat-stroked-button
                   (click)="removeAllFeatures()"
                   color="warn"
                   i18n-tmTooltip="@@core.drawing.delete-drawing"
                   tmTooltip="Delete complete drawing">
-            <mat-icon svgIcon="close"></mat-icon>
+            <mat-icon svgIcon="remove_all"></mat-icon>
           </button>
           <button mat-stroked-button
                   (click)="zoomToEntireDrawing()"
