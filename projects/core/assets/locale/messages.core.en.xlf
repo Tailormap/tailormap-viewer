@@ -131,9 +131,6 @@
       <trans-unit id="core.coordinate-link-window.title" datatype="html">
         <source>Coordinate Link Window</source>
       </trans-unit>
-      <trans-unit id="core.draw.change-selected-feature" datatype="html">
-        <source>Change the shape of selected feature</source>
-      </trans-unit>
       <trans-unit id="core.draw.delete-selected-feature" datatype="html">
         <source>Delete selected feature</source>
       </trans-unit>
@@ -164,8 +161,8 @@
       <trans-unit id="core.draw.draw-star" datatype="html">
         <source>Draw star</source>
       </trans-unit>
-      <trans-unit id="core.draw.modify-move-feature" datatype="html">
-        <source>Modify size and/or move selected feature</source>
+      <trans-unit id="core.draw.select-modify-move-feature" datatype="html">
+        <source>Select, modify size and/or move feature</source>
       </trans-unit>
       <trans-unit id="core.drawing.arrow" datatype="html">
         <source>Arrow</source>

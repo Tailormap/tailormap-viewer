@@ -79,19 +79,13 @@
           (click)="removeSelectedFeature()"><mat-icon svgIcon="trash_filled"></mat-icon></button>
   }
 </div>
-@if (allowModify && selectedFeature) {
+@if (allowModify) {
   <div class="icon-button-list">
-    <button [class.button--active]="modifyMode === 'transform_translate'"
-            i18n-tmTooltip="@@core.draw.modify-move-feature"
-            tmTooltip="Modify size and/or move selected feature"
+    <button [class.button--active]="!activeTool"
+            i18n-tmTooltip="@@core.draw.select-modify-move-feature"
+            tmTooltip="Select, modify size and/or move feature"
             mat-stroked-button
             color="primary"
-            (click)="toggleTranslateMode()"><mat-icon svgIcon="tools_modify_translate"></mat-icon></button>
-    <button  [class.button--active]="modifyMode === 'vertices'"
-             i18n-tmTooltip="@@core.draw.change-selected-feature"
-            tmTooltip="Change the shape of selected feature"
-            mat-stroked-button
-            color="primary"
-            (click)="toggleVerticesMode()"><mat-icon svgIcon="tools_vertices"></mat-icon></button>
+            (click)="enableSelectAndModify()"><mat-icon svgIcon="tools_cursor"></mat-icon></button>
   </div>
 }

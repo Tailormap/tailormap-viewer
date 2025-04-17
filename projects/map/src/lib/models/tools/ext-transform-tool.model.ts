@@ -5,7 +5,6 @@ import { FeatureModel } from '@tailormap-viewer/api';
 
 export interface ExtTransformEnableToolArguments {
   feature: FeatureModel;
-  mode: 'transform_translate' | 'vertices';
   style?: Partial<MapStyleModel> | ((feature: FeatureModel) => MapStyleModel);
 }
 

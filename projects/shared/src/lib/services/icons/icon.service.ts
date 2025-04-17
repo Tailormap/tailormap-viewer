@@ -12,9 +12,9 @@ type IconDefinition = string | { folder: string; icons: string[] };
 export class IconService {
 
   public icons: IconDefinition[] = [
-    'draw_polygon', 'draw_line', 'draw_point', 'split', 'new_object', 'merge', 'error',
+    'draw_polygon', 'draw_line', 'draw_point', 'split', 'new_object', 'merge', 'error', 'remove_all', 'remove',
     'drag', 'resize', 'chevron_bottom', 'chevron_left', 'chevron_right', 'chevron_top',
-    'close', 'minimize', 'drop_down', 'drop_top', 'search', 'copy_filled', 'copy_outline',
+    'close', 'minimize', 'drop_down', 'drop_top', 'search', 'copy',
     'expand_close', 'expand_open', 'table_filled', 'selection_outline', 'selection_filled',
     'trash_filled', 'table_outline', 'logo', 'layers_filled', 'zoom_max', 'coordinates',
     'folder_filled', 'folder_outline', 'filter_filled', 'filter_outline', 'user', 'login', 'plus', 'minus',
@@ -27,7 +27,7 @@ export class IconService {
       icons: [
         'cursor', 'measure_area', 'measure_length', 'position', 'push_pin', 'measure_length_outline', 'measure_area_outline',
         'draw_point', 'draw_line', 'draw_polygon', 'draw_circle', 'draw_label', 'draw_ellipse', 'draw_rectangle', 'draw_square', 'draw_star',
-        'streetview', 'share', '3d', 'vertices', 'modify_translate',
+        'streetview', 'share', '3d',
       ],
     },
     { folder: 'style', icons: [ 'bold', 'italic' ] },

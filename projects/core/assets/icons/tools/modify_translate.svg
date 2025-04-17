@@ -1,4 +1,0 @@
-<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" stroke-miterlimit="1.5">
-  <path d="M16.7 16.7v12.1-12.1h12.1-12.1L39 39 16.7 16.7ZM31.4 56.3l9.2 9.2-9.2-9.2 9.2-9.2-9.2 9.2h18.3-18.3ZM77.2 56.3 68 47.1l9.2 9.2-9.2 9.2 9.2-9.2H59h18.3ZM54.3 79.2l9.2-9.2-9.2 9.2-9.2-9.2 9.2 9.2V61v18.3ZM54.3 33.4l-9.2 9.2 9.2-9.2 9.2 9.2-9.2-9.2v18.3-18.3Z" fill="none" stroke="currentColor" stroke-width="4.2"/>
-  <path d="M83.3 17.7v64.6c0 .6-.4 1-1 1H17.7a1 1 0 0 1-1-1V17.7c0-.6.4-1 1-1h64.6c.6 0 1 .4 1 1Z" fill="none" stroke="currentColor" stroke-width="4.2" stroke-linejoin="miter" stroke-dasharray="4.2 4.2"/>
-</svg>

@@ -31,10 +31,12 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
   public drawingLayerId = '';
 
   private _selectedFeature: FeatureModel | null = null;
+  public isSelectedFeaturePointGeometry = false;
 
   @Input()
   public set selectedFeature(value: FeatureModel | null) {
     this._selectedFeature = value;
+    this.isSelectedFeaturePointGeometry = value?.geometry?.trim().startsWith('POINT') ?? false;
     this.enableModifyTool();
   }
   public get selectedFeature(): FeatureModel | null {
@@ -78,7 +80,6 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
   public activeTool: DrawingFeatureTypeEnum | null = null;
   private selectTool: SelectToolModel | null = null;
   private extTransformTool: ExtTransformToolModel | null = null;
-  public modifyMode: 'transform_translate' | 'vertices' | 'none' = 'transform_translate';
 
   constructor(
     private mapService: MapService,
@@ -242,11 +243,10 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
       return;
     }
     this.withToolManager(manager => {
-      if (this._selectedFeature && this.modifyMode !== 'none') {
+      if (this._selectedFeature) {
         const enableArgs: ExtTransformEnableToolArguments = {
           feature: this._selectedFeature,
           style: this.selectionStyle,
-          mode: this.modifyMode,
         };
         manager.enableTool(this.extTransformTool?.id || '', false, enableArgs, true);
       } else {
@@ -255,14 +255,7 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
     });
   }
 
-  public toggleTranslateMode() {
-    this.modifyMode = 'transform_translate';
-    this.disableDrawing(false);
-    this.enableModifyTool();
-  }
-
-  public toggleVerticesMode() {
-    this.modifyMode = 'vertices';
+  public enableSelectAndModify() {
     this.disableDrawing(false);
     this.enableModifyTool();
   }
