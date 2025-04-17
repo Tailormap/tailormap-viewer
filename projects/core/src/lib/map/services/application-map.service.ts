@@ -6,7 +6,7 @@ import {
 } from '@tailormap-viewer/map';
 import { ServerType, ServiceModel, ServiceProtocol } from '@tailormap-viewer/api';
 import {
-  combineLatest, concatMap, distinctUntilChanged, filter, forkJoin, map, Observable, of, Subject, take, takeUntil, tap,
+  combineLatest, concatMap, distinctUntilChanged, filter, first, forkJoin, map, Observable, of, Subject, switchMap, take, takeUntil, tap,
 } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { ArrayHelper, HtmlifyHelper } from '@tailormap-viewer/shared';
@@ -19,7 +19,6 @@ import { withLatestFrom } from 'rxjs/operators';
 import { BookmarkService } from '../../services/bookmark/bookmark.service';
 import { MapBookmarkHelper } from '../../services/application-bookmark/bookmark.helper';
 import { ApplicationBookmarkFragments } from '../../services/application-bookmark/application-bookmark-fragments';
-import { selectEnable3d } from '../../state/core.selectors';
 import { ApplicationLayerRefreshService } from './application-layer-refresh.service';
 
 @Injectable({
@@ -95,16 +94,16 @@ export class ApplicationMapService implements OnDestroy {
         }
       });
 
-    this.store$.select(selectEnable3d)
-      .pipe(takeUntil(this.destroyed))
-      .subscribe(enable3d => {
-        if (enable3d) {
-          this.mapService.make3D();
-        }
+    this.store$.select(selectIn3dView)
+      .pipe(first(in3d => in3d))
+      .subscribe(() => {
+        this.mapService.make3D();
       });
 
-    this.store$.select(select3DLayers)
+    this.store$.select(selectIn3dView)
       .pipe(
+        first(in3d => in3d),
+        switchMap(() => this.store$.select(select3DLayers)),
         takeUntil(this.destroyed),
         concatMap(layers => this.get3DLayersAndLayerManager$(layers)),
       )
