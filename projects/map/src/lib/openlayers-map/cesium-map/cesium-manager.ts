@@ -5,15 +5,20 @@ import { NgZone } from '@angular/core';
 import type OLCesium from 'olcs';
 import { BehaviorSubject, filter, from, map, Observable, take } from 'rxjs';
 import { Cesium3DTileset, CesiumTerrainProvider, EllipsoidTerrainProvider, Scene } from 'cesium';
-import { CssHelper, ExternalLibsLoaderHelper } from '@tailormap-viewer/shared';
+import { ArrayHelper, CssHelper, ExternalLibsLoaderHelper } from '@tailormap-viewer/shared';
 import { LayerTypesEnum } from '../../models/layer-types.enum';
 import { CesiumEventManager } from './cesium-event-manager';
 import { Projection } from 'ol/proj';
 
 export class CesiumManager {
 
+  private static ELLIPSOID_TERRAIN_ID = "ellipsoid";
+
   private map3d: BehaviorSubject<OLCesium | null> = new BehaviorSubject<OLCesium | null>(null);
   private layers3d: Map<string, number> = new Map<string, number>();
+  private currentTerrainLayerId: string = CesiumManager.ELLIPSOID_TERRAIN_ID;
+  private prevLayerIdentifiers: string[] = [];
+
 
   constructor(
     private olMap: OlMap,
@@ -88,7 +93,12 @@ export class CesiumManager {
     });
   }
 
-  public addLayers(layers: LayerModel[]){
+  public addLayers(layers: LayerModel[]) {
+    const layerIdentifiers: string[] = layers.map(layer => `${layer.id}_${layer.visible}`);
+    if (ArrayHelper.arrayEquals(layerIdentifiers, this.prevLayerIdentifiers)) {
+      return;
+    }
+    this.prevLayerIdentifiers = layerIdentifiers;
     this.ngZone.runOutsideAngular(() => {
       let noTerrainLayersVisible: boolean = true;
       layers.forEach(layer => {
@@ -101,21 +111,27 @@ export class CesiumManager {
           this.removeLayer(layer);
         }
       });
-      if (noTerrainLayersVisible) {
+      if (noTerrainLayersVisible && this.currentTerrainLayerId !== CesiumManager.ELLIPSOID_TERRAIN_ID) {
         // set the terrain as WGS84 ellipsoid to remove terrain layers if none are set as visible
         this.setEllipsoidTerrain();
       }
+      this.executeScene3dAction(async scene3d => {
+        scene3d.requestRender();
+      });
     });
   }
 
   private addLayer(layer: LayerModel) {
     this.executeScene3dAction(async scene3d => {
       if (layer.layerType === LayerTypesEnum.QUANTIZEDMESH) {
-        this.createTerrainLayer(layer)?.then(terrainLayer => {
-          if (terrainLayer) {
-            scene3d.setTerrain(new Cesium.Terrain(terrainLayer));
-          }
-        });
+        if (this.currentTerrainLayerId !== layer.id) {
+          this.createTerrainLayer(layer)?.then(terrainLayer => {
+            if (terrainLayer) {
+              scene3d.setTerrain(new Cesium.Terrain(terrainLayer));
+              this.currentTerrainLayerId = layer.id;
+            }
+          });
+        }
       } else {
         if (this.layers3d.has(layer.id)) {
           const primitive = scene3d.primitives.get(this.layers3d.get(layer.id) ?? 0);
@@ -192,6 +208,7 @@ export class CesiumManager {
     this.executeScene3dAction(async scene3d => {
       scene3d.setTerrain(new Cesium.Terrain(new EllipsoidTerrainProvider()));
     });
+    this.currentTerrainLayerId = CesiumManager.ELLIPSOID_TERRAIN_ID;
   }
 
   public getLayerId(index: number): string | null {
