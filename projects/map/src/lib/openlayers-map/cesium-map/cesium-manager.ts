@@ -96,6 +96,9 @@ export class CesiumManager {
   public addLayers(layers: LayerModel[]) {
     const layerIdentifiers: string[] = layers.map(layer => `${layer.id}_${layer.visible}`);
     if (ArrayHelper.arrayEquals(layerIdentifiers, this.prevLayerIdentifiers)) {
+      this.executeScene3dAction(async scene3d => {
+        scene3d.requestRender();
+      });
       return;
     }
     this.prevLayerIdentifiers = layerIdentifiers;
