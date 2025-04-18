@@ -96,6 +96,9 @@ export class CesiumManager {
   public addLayers(layers: LayerModel[]) {
     const layerIdentifiers: string[] = layers.map(layer => `${layer.id}_${layer.visible}`);
     if (ArrayHelper.arrayEquals(layerIdentifiers, this.prevLayerIdentifiers)) {
+      this.executeScene3dAction(scene3d => {
+        scene3d.requestRender();
+      });
       return;
     }
     this.prevLayerIdentifiers = layerIdentifiers;
@@ -115,7 +118,7 @@ export class CesiumManager {
         // set the terrain as WGS84 ellipsoid to remove terrain layers if none are set as visible
         this.setEllipsoidTerrain();
       }
-      this.executeScene3dAction(async scene3d => {
+      this.executeScene3dAction(scene3d => {
         scene3d.requestRender();
       });
     });
