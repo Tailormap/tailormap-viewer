@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { FilterTypeEnum } from '../../../filter/models/filter-type.enum';
+import { FilterTypeEnum } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { createFilter } from '../state/filter-component.actions';
 

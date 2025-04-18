@@ -4,7 +4,7 @@ import { FormBuilder } from '@angular/forms';
 import { debounceTime, take, takeUntil, tap } from 'rxjs/operators';
 import { DateTime } from 'luxon';
 import { AttributeType } from '@tailormap-viewer/api';
-import { FilterConditionEnum } from '../models/filter-condition.enum';
+import { FilterConditionEnum } from '@tailormap-viewer/api';
 import { FilterConditionModel } from '../models/filter-condition.model';
 import { AttributeFilterHelper } from '../helpers/attribute-filter.helper';
 

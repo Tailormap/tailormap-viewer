@@ -1,4 +1,4 @@
-import { FilterTypeEnum } from '../../../filter/models/filter-type.enum';
+import { FilterTypeEnum } from '@tailormap-viewer/api';
 
 export const filterComponentStateKey = 'filterComponent';
 

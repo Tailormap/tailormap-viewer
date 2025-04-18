@@ -2,8 +2,8 @@ import { ComponentModel } from './component.model';
 import { ViewerStylingModel } from './viewer-styling.model';
 import { I18nSettingsModel } from './i18n-settings.model';
 import { UiSettingsModel } from './ui-settings.model';
-import { FilterGroupModel } from '../../../../core/src/lib/filter/models/filter-group.model';
-import { AttributeFilterModel } from '../../../../core/src/lib/filter/models/attribute-filter.model';
+import { FilterGroupModel } from './filter-group.model';
+import { AttributeFilterModel } from './attribute-filter.model';
 
 export interface ViewerResponseModel {
   id: string;
