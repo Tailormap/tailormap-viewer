@@ -1,10 +1,10 @@
-import { FilterGroupModel } from '../models/filter-group.model';
-import { AttributeFilterModel } from '../models/attribute-filter.model';
-import { FilterConditionEnum } from '../models/filter-condition.enum';
+import { FilterGroupModel } from '@tailormap-viewer/api';
+import { AttributeFilterModel } from '@tailormap-viewer/api';
+import { FilterConditionEnum } from '@tailormap-viewer/api';
 import { AttributeType } from '@tailormap-viewer/api';
 import { TypesHelper } from '@tailormap-viewer/shared';
 import { FilterTypeHelper } from './filter-type.helper';
-import { BaseFilterModel } from '../models/base-filter.model';
+import { BaseFilterModel } from '@tailormap-viewer/api';
 import { CqlSpatialFilterHelper } from './cql-spatial-filter.helper';
 
 export class CqlFilterHelper {

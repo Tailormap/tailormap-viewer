@@ -4,11 +4,11 @@ import { CqlFilterHelper } from '../helpers/cql-filter.helper';
 import { selectLayersWithServices } from '../../map/state/map.selectors';
 import { ExtendedFilterGroupModel } from '../models/extended-filter-group.model';
 import { TypesHelper } from '@tailormap-viewer/shared';
-import { FilterTypeEnum } from '../models/filter-type.enum';
-import { BaseFilterModel } from '../models/base-filter.model';
-import { FilterGroupModel } from '../models/filter-group.model';
+import { FilterTypeEnum } from '@tailormap-viewer/api';
+import { BaseFilterModel } from '@tailormap-viewer/api';
+import { FilterGroupModel } from '@tailormap-viewer/api';
 import { FilterTypeHelper } from '../helpers/filter-type.helper';
-import { SpatialFilterModel } from '../models/spatial-filter.model';
+import { SpatialFilterModel } from '@tailormap-viewer/api';
 
 const selectFilterState = createFeatureSelector<FilterState>(filterStateKey);
 

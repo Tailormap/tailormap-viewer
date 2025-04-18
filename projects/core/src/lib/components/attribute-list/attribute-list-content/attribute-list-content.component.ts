@@ -11,11 +11,10 @@ import {
 } from '../state/attribute-list.selectors';
 import { loadData, updateRowSelected, updateSort } from '../state/attribute-list.actions';
 import { AttributeListStateService } from '../services/attribute-list-state.service';
-import { BaseComponentTypeEnum, AttributeType } from '@tailormap-viewer/api';
+import { BaseComponentTypeEnum, AttributeType, AttributeFilterModel } from '@tailormap-viewer/api';
 import { SimpleAttributeFilterService } from '../../../filter/services/simple-attribute-filter.service';
 import { AttributeListFilterComponent, FilterDialogData } from '../attribute-list-filter/attribute-list-filter.component';
 import { MatDialog } from '@angular/material/dialog';
-import { AttributeFilterModel } from '../../../filter/models/attribute-filter.model';
 import { selectViewerId } from '../../../state/core.selectors';
 import { CqlFilterHelper } from '../../../filter/helpers/cql-filter.helper';
 import { CssHelper } from '@tailormap-viewer/shared';

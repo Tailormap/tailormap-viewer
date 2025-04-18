@@ -1,4 +1,4 @@
-import { AttributeType } from '@tailormap-viewer/api';
+import { AttributeType } from './attribute-type.enum';
 import { FilterConditionEnum } from './filter-condition.enum';
 import { FilterTypeEnum } from './filter-type.enum';
 import { BaseFilterModel } from './base-filter.model';
