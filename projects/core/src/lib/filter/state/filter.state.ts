@@ -1,4 +1,4 @@
-import { FilterGroupModel } from '../models/filter-group.model';
+import { FilterGroupModel } from '@tailormap-viewer/api';
 
 export const filterStateKey = 'filter';
 

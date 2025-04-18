@@ -1,7 +1,7 @@
-import { FilterConditionEnum } from '../models/filter-condition.enum';
+import { FilterConditionEnum } from '@tailormap-viewer/api';
 import { AttributeType } from '@tailormap-viewer/api';
 import { FilterConditionModel } from '../models/filter-condition.model';
-import { AttributeFilterModel } from '../models/attribute-filter.model';
+import { AttributeFilterModel } from '@tailormap-viewer/api';
 
 export class AttributeFilterHelper {
 

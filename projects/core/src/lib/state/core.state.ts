@@ -1,6 +1,6 @@
 import { ViewerStylingModel, ComponentModel, I18nSettingsModel, UiSettingsModel } from '@tailormap-viewer/api';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
-import { FilterGroupModel } from '../filter/models/filter-group.model';
+import { FilterGroupModel } from '@tailormap-viewer/api';
 
 export const coreStateKey = 'core';
 

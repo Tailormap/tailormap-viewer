@@ -1,11 +1,11 @@
-import { FilterGroupModel } from '../models/filter-group.model';
+import { FilterGroupModel } from '@tailormap-viewer/api';
 import { AttributeType } from '@tailormap-viewer/api';
-import { FilterConditionEnum } from '../models/filter-condition.enum';
+import { FilterConditionEnum } from '@tailormap-viewer/api';
 import { CqlFilterHelper } from './cql-filter.helper';
-import { AttributeFilterModel } from '../models/attribute-filter.model';
-import { FilterTypeEnum } from '../models/filter-type.enum';
+import { AttributeFilterModel } from '@tailormap-viewer/api';
+import { FilterTypeEnum } from '@tailormap-viewer/api';
 import { getFilterGroup } from './attribute-filter.helper.spec';
-import { SpatialFilterModel } from '../models/spatial-filter.model';
+import { SpatialFilterModel } from '@tailormap-viewer/api';
 
 export const getSpatialFilterGroup = (geoms: string[], columns?: Array<{ layerId: string; column: string[] }>, buffer?: number) => {
   const group = getFilterGroup<SpatialFilterModel>([{

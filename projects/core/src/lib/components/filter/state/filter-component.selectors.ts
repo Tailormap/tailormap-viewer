@@ -1,9 +1,8 @@
 import { FilterComponentState, filterComponentStateKey } from './filter-component.state';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { selectFilterGroups } from '../../../filter/state/filter.selectors';
-import { FilterTypeEnum } from '../../../filter/models/filter-type.enum';
+import { FilterTypeEnum, SpatialFilterGeometry } from '@tailormap-viewer/api';
 import { FilterTypeHelper } from '../../../filter/helpers/filter-type.helper';
-import { SpatialFilterGeometry } from '../../../filter/models/spatial-filter.model';
 import { selectVisibleLayersWithAttributes } from '../../../map/state/map.selectors';
 
 const selectFilterComponentState = createFeatureSelector<FilterComponentState>(filterComponentStateKey);

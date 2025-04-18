@@ -1,13 +1,11 @@
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { AttributeFilterModel } from '../models/attribute-filter.model';
 import * as FilterActions from '../state/filter.actions';
 import { selectEnabledFilterGroups, selectFilterGroupForType } from '../state/filter.selectors';
 import { map, Observable, take } from 'rxjs';
 import { nanoid } from 'nanoid';
 import { FilterTypeHelper } from '../helpers/filter-type.helper';
-import { FilterTypeEnum } from '../models/filter-type.enum';
-import { FilterGroupModel } from '../models/filter-group.model';
+import {  AttributeFilterModel, FilterTypeEnum, FilterGroupModel } from '@tailormap-viewer/api';
 
 @Injectable({
   providedIn: 'root',

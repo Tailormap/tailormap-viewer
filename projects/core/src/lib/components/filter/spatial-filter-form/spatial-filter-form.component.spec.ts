@@ -13,7 +13,7 @@ import { AppLayerModel, getAppLayerModel } from '@tailormap-viewer/api';
 import userEvent from '@testing-library/user-event';
 import { createMapServiceMock } from '../../../map/components/map-drawing-buttons/map-drawing-buttons.component.spec';
 import { TestBed } from '@angular/core/testing';
-import { FilterGroupModel } from '../../../filter/models/filter-group.model';
+import { FilterGroupModel } from '@tailormap-viewer/api';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { closeForm } from '../state/filter-component.actions';
 import { of } from 'rxjs';

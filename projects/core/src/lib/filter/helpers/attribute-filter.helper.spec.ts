@@ -1,10 +1,6 @@
-import { FilterGroupModel } from '../models/filter-group.model';
-import { FilterTypeEnum } from '../models/filter-type.enum';
-import { AttributeType } from '@tailormap-viewer/api';
-import { FilterConditionEnum } from '../models/filter-condition.enum';
+import { AttributeType, FilterGroupModel, FilterTypeEnum, BaseFilterModel, AttributeFilterModel } from '@tailormap-viewer/api';
+import { FilterConditionEnum } from '@tailormap-viewer/api';
 import { AttributeFilterHelper } from './attribute-filter.helper';
-import { BaseFilterModel } from '../models/base-filter.model';
-import { AttributeFilterModel } from '../models/attribute-filter.model';
 
 export const getFilterGroup = <T extends BaseFilterModel = AttributeFilterModel>(
   filters?: T[],

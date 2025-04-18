@@ -1,7 +1,7 @@
 import * as FilterComponentActions from './filter-component.actions';
 import { FilterComponentState, initialFilterComponentState } from './filter-component.state';
 import { filterComponentReducer } from './filter-component.reducer';
-import { FilterTypeEnum } from '../../../filter/models/filter-type.enum';
+import { FilterTypeEnum } from '@tailormap-viewer/api';
 
 describe('FilterComponentReducer', () => {
 

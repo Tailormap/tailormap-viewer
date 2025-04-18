@@ -2,7 +2,7 @@ import { AttributeFilterComponent } from './attribute-filter.component';
 import { render, screen, waitFor } from '@testing-library/angular';
 import { AttributeType } from '@tailormap-viewer/api';
 import userEvent from '@testing-library/user-event';
-import { FilterConditionEnum } from '../models/filter-condition.enum';
+import { FilterConditionEnum } from '@tailormap-viewer/api';
 import { MatSelectModule } from '@angular/material/select';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
