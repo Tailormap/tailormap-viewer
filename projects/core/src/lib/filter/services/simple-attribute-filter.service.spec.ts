@@ -1,13 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { SimpleAttributeFilterService } from './simple-attribute-filter.service';
 import { AttributeType } from '@tailormap-viewer/api';
-import { FilterConditionEnum } from '../models/filter-condition.enum';
+import { FilterConditionEnum, AttributeFilterModel, FilterTypeEnum } from '@tailormap-viewer/api';
 import { filterStateKey } from '../state/filter.state';
 import { selectFilterGroups } from '../state/filter.selectors';
 import { Store, StoreModule } from '@ngrx/store';
 import { filterReducer } from '../state/filter.reducer';
-import { AttributeFilterModel } from '../models/attribute-filter.model';
-import { FilterTypeEnum } from '../models/filter-type.enum';
 
 let idCount = 0;
 jest.mock('nanoid', () => ({

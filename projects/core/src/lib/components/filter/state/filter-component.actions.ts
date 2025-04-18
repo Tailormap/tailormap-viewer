@@ -1,7 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { FilterTypeEnum } from '../../../filter/models/filter-type.enum';
-import { SpatialFilterModel } from '../../../filter/models/spatial-filter.model';
-import { FilterGroupModel } from '../../../filter/models/filter-group.model';
+import { FilterTypeEnum, SpatialFilterModel, FilterGroupModel } from '@tailormap-viewer/api';
 
 const filterComponentActionsPrefix = '[FilterComponent]';
 

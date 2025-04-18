@@ -1,4 +1,4 @@
-import { SpatialFilterModel } from '../models/spatial-filter.model';
+import { SpatialFilterModel } from '@tailormap-viewer/api';
 
 export class CqlSpatialFilterHelper {
 

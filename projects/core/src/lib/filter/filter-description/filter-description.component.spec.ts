@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/angular';
 import { FilterDescriptionComponent } from './filter-description.component';
 import { getAppLayerModel } from '@tailormap-viewer/api';
-import { AttributeFilterModel } from '../models/attribute-filter.model';
+import { AttributeFilterModel } from '@tailormap-viewer/api';
 import { ExtendedFilterGroupModel } from '../models/extended-filter-group.model';
 import { getFilterGroup } from '../helpers/attribute-filter.helper.spec';
 

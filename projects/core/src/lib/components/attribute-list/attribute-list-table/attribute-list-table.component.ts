@@ -2,7 +2,7 @@ import { Component, Input, ChangeDetectionStrategy, EventEmitter, Output } from 
 import { AttributeListRowModel } from '../models/attribute-list-row.model';
 import { AttributeListColumnModel } from '../models/attribute-list-column.model';
 import { AttributeType } from '@tailormap-viewer/api';
-import { AttributeFilterModel } from '../../../filter/models/attribute-filter.model';
+import { AttributeFilterModel } from '@tailormap-viewer/api';
 
 const DEFAULT_COLUMN_WIDTH = 170;
 

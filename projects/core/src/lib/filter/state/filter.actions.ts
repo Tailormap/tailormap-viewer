@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
-import { FilterGroupModel } from '../models/filter-group.model';
-import { AttributeFilterModel } from '../models/attribute-filter.model';
+import { FilterGroupModel } from '@tailormap-viewer/api';
+import { AttributeFilterModel } from '@tailormap-viewer/api';
 
 const filterActionsPrefix = '[Filter]';
 

@@ -1,5 +1,4 @@
-import { AttributeType } from '@tailormap-viewer/api';
-import { FilterConditionEnum } from './filter-condition.enum';
+import { AttributeType, FilterConditionEnum } from '@tailormap-viewer/api';
 
 export interface FilterConditionModel {
   condition: FilterConditionEnum;

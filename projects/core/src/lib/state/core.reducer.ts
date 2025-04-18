@@ -19,6 +19,7 @@ const onViewerLoadSuccess = (
     title: payload.viewer.title,
     i18nSettings: payload.viewer.i18nSettings,
     uiSettings: payload.viewer.uiSettings,
+    filterGroups: payload.viewer.filterGroups,
     styling: payload.viewer.styling,
     components: payload.viewer.components,
   },
@@ -78,3 +79,4 @@ const coreReducerImpl = createReducer<CoreState>(
   on(CoreActions.setComponentEnabled, onSetComponentEnabled),
 );
 export const coreReducer = (state: CoreState | undefined, action: Action) => coreReducerImpl(state, action);
+

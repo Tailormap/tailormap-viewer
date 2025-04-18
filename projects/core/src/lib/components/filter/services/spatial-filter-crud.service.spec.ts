@@ -10,8 +10,7 @@ import { getSpatialFilterGroup } from '../../../filter/helpers/cql-filter.helper
 import { setSelectedFilterGroup, setSelectedLayers } from '../state/filter-component.actions';
 import { addFilterGroup, updateFilterGroup } from '../../../filter/state/filter.actions';
 import { waitFor } from '@testing-library/angular';
-import { FilterGroupModel } from '../../../filter/models/filter-group.model';
-import { SpatialFilterModel } from '../../../filter/models/spatial-filter.model';
+import { SpatialFilterModel, FilterGroupModel } from '@tailormap-viewer/api';
 
 let idCount = 0;
 jest.mock('nanoid', () => ({
