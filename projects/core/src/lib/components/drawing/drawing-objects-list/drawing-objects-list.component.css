@@ -1,0 +1,11 @@
+.objects-list {
+  margin-top: 16px;
+  border: 1px solid var(--border-color);
+  padding: 16px;
+  border-radius: 3px;
+}
+
+.objects-list .selected {
+  background-color: var(--primary-color);
+  color: var(--background-color);
+}

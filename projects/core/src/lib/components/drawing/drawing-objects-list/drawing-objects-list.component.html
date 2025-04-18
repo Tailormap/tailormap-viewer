@@ -1,0 +1,9 @@
+
+<div class="objects-list">
+@for (feature of this.features$ | async; track feature.__fid; let index = $index) {
+  <div (click)="selectFeature(feature.__fid)" [class.selected]="feature.__fid === (selectedFeature$ | async)?.__fid">
+    {{index}} - {{ feature.__fid }}
+  </div>
+}
+
+</div>
