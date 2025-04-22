@@ -1,7 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { AppLayerSettingsModel, ApplicationModel, AppTreeNodeModel } from '@tailormap-admin/admin-api';
 import { TreeNodePosition } from '@tailormap-viewer/shared';
-import { ComponentBaseConfigModel, ViewerStylingModel } from '@tailormap-viewer/api';
+import { AttributeFilterModel, ComponentBaseConfigModel, FilterGroupModel, ViewerStylingModel } from '@tailormap-viewer/api';
 import { UpdateDraftApplicationModel } from '../models/update-draft-application.model';
 
 const applicationActionsPrefix = '[Admin/Application]';
@@ -132,6 +132,11 @@ export const updateApplicationComponentConfig = createAction(
 export const updateApplicationStylingConfig = createAction(
   `${applicationActionsPrefix} Update styling config`,
   props<{ styling: ViewerStylingModel }>(),
+);
+
+export const updateApplicationFiltersConfig = createAction(
+  `${applicationActionsPrefix} Update Filter Groups`,
+  props<{ filterGroups: FilterGroupModel<AttributeFilterModel>[] }>(),
 );
 
 export const toggleApplicationNodeExpanded = createAction(
