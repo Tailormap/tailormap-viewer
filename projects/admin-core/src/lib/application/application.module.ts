@@ -34,6 +34,7 @@ import {
 import { FormModule } from "../form/form.module";
 import { ApplicationCopyDialogComponent } from './application-copy-dialog/application-copy-dialog.component';
 import { ApplicationEditTerrainLayersComponent } from './application-edit-terrain-layers/application-edit-terrain-layers.component';
+import { ApplicationEditFiltersComponent } from './application-edit-filters/application-edit-filters.component';
 
 @NgModule({
   declarations: [
@@ -55,6 +56,7 @@ import { ApplicationEditTerrainLayersComponent } from './application-edit-terrai
     ApplicationLayerAttributeSettingsComponent,
     ApplicationCopyDialogComponent,
     ApplicationEditTerrainLayersComponent,
+    ApplicationEditFiltersComponent,
   ],
   imports: [
     CommonModule,

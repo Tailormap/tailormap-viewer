@@ -25,6 +25,7 @@ export class Routes {
   public static APPLICATION_DETAILS_TERRAIN_LAYERS = 'terrain-layers';
   public static APPLICATION_DETAILS_COMPONENTS = 'components';
   public static APPLICATION_DETAILS_STYLING = 'styling';
+  public static APPLICATION_DETAILS_FILTERS = 'filters';
 
   public static FORMS = 'forms';
   public static FORMS_CREATE = 'create';
