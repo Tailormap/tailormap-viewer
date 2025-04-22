@@ -3,7 +3,7 @@ import { CreateFilterButtonComponent } from './create-filter-button.component';
 import { Store } from '@ngrx/store';
 import userEvent from '@testing-library/user-event';
 import { createFilter } from '../state/filter-component.actions';
-import { FilterTypeEnum } from '../../../filter/models/filter-type.enum';
+import { FilterTypeEnum } from '@tailormap-viewer/api';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 

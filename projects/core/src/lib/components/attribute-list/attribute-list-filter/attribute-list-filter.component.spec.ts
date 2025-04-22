@@ -2,12 +2,11 @@ import { render, screen } from '@testing-library/angular';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AttributeListFilterComponent, FilterDialogData } from './attribute-list-filter.component';
 import { SimpleAttributeFilterService } from '../../../filter/services/simple-attribute-filter.service';
-import { AttributeType, UniqueValuesService } from '@tailormap-viewer/api';
+import { AttributeType, UniqueValuesService, FilterTypeEnum } from '@tailormap-viewer/api';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { AttributeFilterComponent } from '../../../filter/attribute-filter/attribute-filter.component';
 import userEvent from '@testing-library/user-event';
 import { of } from 'rxjs';
-import { FilterTypeEnum } from '../../../filter/models/filter-type.enum';
 
 describe('AttributeListFilterComponent', () => {
 

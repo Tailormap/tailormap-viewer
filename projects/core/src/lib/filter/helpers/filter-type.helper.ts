@@ -1,8 +1,8 @@
-import { BaseFilterModel } from '../models/base-filter.model';
-import { AttributeFilterModel } from '../models/attribute-filter.model';
-import { FilterTypeEnum } from '../models/filter-type.enum';
-import { SpatialFilterModel } from '../models/spatial-filter.model';
-import { FilterGroupModel } from '../models/filter-group.model';
+import { BaseFilterModel } from '@tailormap-viewer/api';
+import { AttributeFilterModel } from '@tailormap-viewer/api';
+import { FilterTypeEnum } from '@tailormap-viewer/api';
+import { SpatialFilterModel } from '@tailormap-viewer/api';
+import { FilterGroupModel } from '@tailormap-viewer/api';
 
 export class FilterTypeHelper {
 

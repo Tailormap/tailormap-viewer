@@ -1,9 +1,6 @@
 import { inject, Injectable } from '@angular/core';
-import { DescribeAppLayerService, LayerDetailsModel } from '@tailormap-viewer/api';
-import { SpatialFilterGeometry, SpatialFilterModel } from '../../../filter/models/spatial-filter.model';
-import { FilterGroupModel } from '../../../filter/models/filter-group.model';
+import { DescribeAppLayerService, LayerDetailsModel, SpatialFilterGeometry, FilterTypeEnum, SpatialFilterModel, FilterGroupModel } from '@tailormap-viewer/api';
 import { nanoid } from 'nanoid';
-import { FilterTypeEnum } from '../../../filter/models/filter-type.enum';
 import { concatMap, forkJoin, map, Observable, take, combineLatest, filter, of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectViewerId } from '../../../state/core.selectors';
