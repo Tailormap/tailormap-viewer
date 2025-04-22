@@ -23,14 +23,35 @@ tm-admin-form-warning-message {
   margin-bottom: 8px;
 }
 
-.available-crs-text {
-  margin-top: 8px;
-}
-
 fieldset {
   margin: 16px 0;
 }
 
 fieldset.layer-functionality mat-checkbox {
  display: block;
+}
+
+.available-crs-list .list-icon {
+  width: 20px;
+  line-height: 16px;
+  height: 20px;
+}
+
+.available-crs-list ::ng-deep .mdc-list-item .list-icon.unavailable {
+  color: var(--error-color);
+}
+
+.available-crs-list ::ng-deep .mdc-list-item .list-icon.available {
+  color: green;
+}
+
+.crs-list-item ::ng-deep .mdc-list-item__primary-text {
+  font-size: 14px;
+  white-space: wrap;
+  overflow-wrap: break-word;
+}
+
+.available-crs-list ::ng-deep .mdc-list-item {
+  height: fit-content !important;
+  padding: 5px 0 5px 16px;
 }

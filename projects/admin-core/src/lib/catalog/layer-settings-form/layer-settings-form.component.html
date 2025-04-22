@@ -115,10 +115,27 @@
       </mat-form-field>
     }
   }
-  @if ( (isWMS || isWMTS || isXYZ) && crs ) {
+  @if ( (isWMS || isWMTS || isXYZ) && projectionAvailability ) {
     <div class="available-crs">
       <strong i18n="@@admin-core.catalog.layer.crs" class="available-crs-header">Available projections for this layer</strong>
-      <div class="available-crs-text">{{ crs.join(', ') }}</div>
+      <mat-list class="available-crs-list">
+        @for (projection of projectionAvailability; track projection) {
+          <mat-list-item class="crs-list-item">
+            <div class="available-crs-label">{{ projection.label }}</div>
+            @if (projection.available) {
+              <mat-icon class="list-icon available"
+                        svgIcon="check"
+                        matListItemMeta>
+              </mat-icon>
+            } @else {
+              <mat-icon class="list-icon unavailable"
+                        svgIcon="admin_unavailable"
+                        matListItemMeta>
+              </mat-icon>
+            }
+          </mat-list-item>
+        }
+      </mat-list>
     </div>
   }
   <tm-admin-authorization-edit class="authorization-edit"

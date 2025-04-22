@@ -5,7 +5,8 @@ import {
 import { Store } from '@ngrx/store';
 import { selectDisabledComponentsForSelectedApplication, selectSelectedApplicationLayerSettings } from '../state/application.selectors';
 import {
-  BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, map, Observable, of, startWith, Subject, switchMap, take, takeUntil,
+  BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, map, Observable, of, startWith, Subject, switchMap, take,
+  takeUntil,
 } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
 import { LoadingStateEnum, TreeModel } from '@tailormap-viewer/shared';
@@ -27,7 +28,7 @@ import {
   ApplicationFeature, ApplicationFeatureSwitchService, BaseComponentTypeEnum, HiddenLayerFunctionality,
 } from '@tailormap-viewer/api';
 import { GeoServiceHelper } from '../../catalog/helpers/geo-service.helper';
-import { ExtendedGeoServiceLayerModel } from '../../catalog/models/extended-geo-service-layer.model';
+import { AdminProjectionsHelper } from '../helpers/admin-projections-helper';
 
 type FeatureSourceAndType = {
   featureSource: ExtendedFeatureSourceModel;
@@ -59,7 +60,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
 
   public layerIs3D = false;
 
-  public crsText$: Observable<string[] | null> = of(null);
+  public projectionAvailability$: Observable<{label: string; available: boolean}[] | null> = of(null);
 
   @Input()
   public set node(node: TreeModel<AppTreeLayerNodeModel> | null) {
@@ -76,7 +77,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     this._serviceLayer = serviceLayer;
     this.initFeatureSource(serviceLayer);
     this.setTitle();
-    this.crsText$ = this.getCrsText$(serviceLayer);
+    this.projectionAvailability$ = this.getProjectionAvailability$(serviceLayer);
     if (serviceLayer?.service) {
       this.layerIs3D = GeoServiceHelper.is3dProtocol(serviceLayer.service.protocol);
     }
@@ -394,23 +395,15 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     }
   }
 
-  private getCrsText$(serviceLayer: ExtendedGeoServiceAndLayerModel | null): Observable<string[] | null> {
+  private getProjectionAvailability$(serviceLayer: ExtendedGeoServiceAndLayerModel | null): Observable<{label: string; available: boolean}[] | null> {
     if (!serviceLayer) {
       return of(null);
     }
-    return this.store$.select(selectGeoServiceLayersByGeoServiceId(serviceLayer?.service.id))
+    return this.store$.select(selectGeoServiceLayersByGeoServiceId(serviceLayer.service.id))
       .pipe(
         take(1),
         map(layersInService => {
-          const crs: string[] = [];
-          let layer: ExtendedGeoServiceLayerModel | undefined = serviceLayer?.layer;
-          while (layer) {
-            if (layer.crs) {
-              crs.push(...layer.crs);
-            }
-            layer = layersInService.find(l => l.id === layer?.parentId);
-          }
-          return crs;
+          return AdminProjectionsHelper.getProjectionAvailabilityForServiceLayer(serviceLayer.layer, layersInService);
         }),
       );
   }

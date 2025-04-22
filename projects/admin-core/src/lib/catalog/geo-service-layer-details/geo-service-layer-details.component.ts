@@ -12,7 +12,7 @@ import { AdminSnackbarService } from '../../shared/services/admin-snackbar.servi
 import { UploadCategoryEnum } from '@tailormap-admin/admin-api';
 import { UPLOAD_REMOVE_SERVICE } from '../../shared/components/select-upload/models/upload-remove-service.injection-token';
 import { LegendImageRemoveService } from '../services/legend-image-remove.service';
-import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-layer.model';
+import { AdminProjectionsHelper } from '../../application/helpers/admin-projections-helper';
 
 @Component({
   selector: 'tm-admin-geo-service-layer-details',
@@ -38,7 +38,7 @@ export class GeoServiceLayerDetailsComponent implements OnInit, OnDestroy {
 
   public isLeaf$: Observable<boolean | null> = of(true);
 
-  public crs$: Observable<string[] | null> = of(null);
+  public projectionAvailability$: Observable<{label: string; available: boolean}[] | null> = of(null);
 
   constructor(
     private route: ActivatedRoute,
@@ -78,7 +78,7 @@ export class GeoServiceLayerDetailsComponent implements OnInit, OnDestroy {
       map(info => info ? info.layer.children?.length === 0 : true),
     );
 
-    this.crs$ = layerId$.pipe(
+    this.projectionAvailability$ = layerId$.pipe(
       switchMap(layerId => {
         if (typeof layerId !== 'string') {
           return of(null);
@@ -89,19 +89,11 @@ export class GeoServiceLayerDetailsComponent implements OnInit, OnDestroy {
         if (!serviceAndLayer) {
           return of(null);
         }
-        return this.store$.select(selectGeoServiceLayersByGeoServiceId(serviceAndLayer?.service.id))
+        return this.store$.select(selectGeoServiceLayersByGeoServiceId(serviceAndLayer.service.id))
           .pipe(
             take(1),
             map(layersInService => {
-              const crs: string[] = [];
-              let layer: ExtendedGeoServiceLayerModel | undefined = serviceAndLayer?.layer;
-              while (layer) {
-                if (layer.crs) {
-                  crs.push(...layer.crs);
-                }
-                layer = layersInService.find(l => l.id === layer?.parentId);
-              }
-              return crs;
+              return AdminProjectionsHelper.getProjectionAvailabilityForServiceLayer(serviceAndLayer.layer, layersInService);
             }),
           );
       }),

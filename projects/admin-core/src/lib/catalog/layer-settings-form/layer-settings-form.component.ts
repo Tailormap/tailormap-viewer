@@ -80,7 +80,7 @@ export class LayerSettingsFormComponent implements OnInit {
   public layerName: string | null | undefined;
 
   @Input()
-  public crs: string[] | null = null;
+  public projectionAvailability: {label: string; available: boolean}[] | null = null;
 
   @Output()
   public changed = new EventEmitter<LayerSettingsModel | null>();

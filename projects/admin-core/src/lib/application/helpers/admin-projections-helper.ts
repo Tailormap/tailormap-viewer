@@ -1,4 +1,5 @@
 import { BoundsModel } from '@tailormap-viewer/api';
+import { ExtendedGeoServiceLayerModel } from '../../catalog/models/extended-geo-service-layer.model';
 
 export interface AdminProjection {
   code: string;
@@ -34,5 +35,27 @@ export class AdminProjectionsHelper {
 
   public static find(projectionCode: string) {
     return this.projections.find(p => p.code == projectionCode);
+  }
+
+  public static getProjectionAvailabilityForServiceLayer(
+    layer: ExtendedGeoServiceLayerModel | undefined,
+    layersInService: ExtendedGeoServiceLayerModel[],
+  ): {label: string; available: boolean}[] {
+    const crs: string[] = [];
+    while (layer) {
+      if (layer.crs) {
+        crs.push(...layer.crs);
+      }
+      layer = layersInService.find(l => l.id === layer?.parentId);
+    }
+    const projectionAvailability: {label: string; available: boolean}[] = [];
+    for (const adminProjection of AdminProjectionsHelper.projections) {
+      if (crs.includes(adminProjection.code)) {
+        projectionAvailability.push({ label: adminProjection.label, available: true });
+      } else {
+        projectionAvailability.push({ label: adminProjection.label, available: false });
+      }
+    }
+    return projectionAvailability;
   }
 }
