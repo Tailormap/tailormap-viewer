@@ -11,6 +11,20 @@ import { DrawingFeatureTypeEnum } from '../../models/drawing-feature-type.enum';
 import { FeatureModel } from '@tailormap-viewer/api';
 import { ApplicationStyleService } from '../../../services/application-style.service';
 
+export interface ButtonIcons {
+  drawPoint: string;
+  drawLine: string;
+  drawPolygon: string;
+  drawSquare: string;
+  drawRectangle: string;
+  drawCircle: string;
+  drawEllipse: string;
+  drawStar: string;
+  drawLabel: string;
+  remove: string;
+  selectModify: string;
+}
+
 @Component({
   selector: 'tm-map-drawing-buttons',
   templateUrl: './map-drawing-buttons.component.html',
@@ -26,6 +40,21 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
     pointFillColor: 'transparent',
     pointStrokeColor: ApplicationStyleService.getPrimaryColor(),
   });
+
+  private static defaultIcons: ButtonIcons = {
+    drawPoint: 'tools_draw_point',
+    drawLine: 'tools_draw_line',
+    drawPolygon: 'tools_draw_polygon',
+    drawSquare: 'tools_draw_square',
+    drawRectangle: 'tools_draw_rectangle',
+    drawCircle: 'tools_draw_circle',
+    drawEllipse: 'tools_draw_ellipse',
+    drawStar: 'tools_draw_star',
+    drawLabel: 'tools_draw_label',
+    remove: 'remove',
+    selectModify: 'tools_cursor',
+  };
+  private _buttonIcons = MapDrawingButtonsComponent.defaultIcons;
 
   @Input()
   public drawingLayerId = '';
@@ -54,6 +83,17 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
 
   @Input()
   public allowModify = false;
+
+  @Input()
+  public set buttonIcons(buttonIcons: Partial<ButtonIcons>) {
+    this._buttonIcons = {
+      ...MapDrawingButtonsComponent.defaultIcons,
+      ...buttonIcons,
+    };
+  }
+  public get buttonIcons(): ButtonIcons {
+    return this._buttonIcons;
+  }
 
   @Input()
   public allowedShapes: DrawingFeatureTypeEnum[] | undefined = undefined;

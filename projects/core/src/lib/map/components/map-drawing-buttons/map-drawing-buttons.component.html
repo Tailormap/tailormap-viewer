@@ -5,7 +5,7 @@
           tmTooltip="Draw point"
           mat-stroked-button
           color="primary"
-          (click)="draw(drawingTypes.POINT)"><mat-icon svgIcon="tools_draw_point"></mat-icon></button>
+          (click)="draw(drawingTypes.POINT)"><mat-icon [svgIcon]="buttonIcons.drawPoint"></mat-icon></button>
   }
   @if (isAllowedShape(drawingTypes.LINE)) {
     <button [class.button--active]="activeTool === 'LINE'"
@@ -13,7 +13,7 @@
           tmTooltip="Draw line"
           mat-stroked-button
           color="primary"
-          (click)="draw(drawingTypes.LINE)"><mat-icon svgIcon="tools_draw_line"></mat-icon></button>
+          (click)="draw(drawingTypes.LINE)"><mat-icon [svgIcon]="buttonIcons.drawLine"></mat-icon></button>
   }
   @if (isAllowedShape(drawingTypes.POLYGON)) {
     <button [class.button--active]="activeTool === 'POLYGON'"
@@ -21,7 +21,7 @@
           tmTooltip="Draw polygon"
           mat-stroked-button
           color="primary"
-          (click)="draw(drawingTypes.POLYGON)"><mat-icon svgIcon="tools_draw_polygon"></mat-icon></button>
+          (click)="draw(drawingTypes.POLYGON)"><mat-icon [svgIcon]="buttonIcons.drawPolygon"></mat-icon></button>
   }
   @if (isAllowedShape(drawingTypes.SQUARE)) {
     <button [class.button--active]="activeTool === 'SQUARE'"
@@ -29,7 +29,7 @@
           tmTooltip="Draw square"
           mat-stroked-button
           color="primary"
-          (click)="draw(drawingTypes.SQUARE)"><mat-icon svgIcon="tools_draw_square"></mat-icon></button>
+          (click)="draw(drawingTypes.SQUARE)"><mat-icon [svgIcon]="buttonIcons.drawSquare"></mat-icon></button>
   }
   @if (isAllowedShape(drawingTypes.RECTANGLE)) {
     <button [class.button--active]="activeTool === 'RECTANGLE'"
@@ -37,7 +37,7 @@
           tmTooltip="Draw rectangle"
           mat-stroked-button
           color="primary"
-          (click)="draw(drawingTypes.RECTANGLE)"><mat-icon svgIcon="tools_draw_rectangle"></mat-icon></button>
+          (click)="draw(drawingTypes.RECTANGLE)"><mat-icon [svgIcon]="buttonIcons.drawRectangle"></mat-icon></button>
   }
   @if (isAllowedShape(drawingTypes.CIRCLE)) {
     <button [class.button--active]="activeTool === 'CIRCLE'"
@@ -45,7 +45,7 @@
           tmTooltip="Draw circle"
           mat-stroked-button
           color="primary"
-          (click)="draw(drawingTypes.CIRCLE)"><mat-icon svgIcon="tools_draw_circle"></mat-icon></button>
+          (click)="draw(drawingTypes.CIRCLE)"><mat-icon [svgIcon]="buttonIcons.drawCircle"></mat-icon></button>
   }
   @if (isAllowedShape(drawingTypes.ELLIPSE)) {
     <button [class.button--active]="activeTool === 'ELLIPSE'"
@@ -53,7 +53,7 @@
           tmTooltip="Draw ellipse"
           mat-stroked-button
           color="primary"
-          (click)="draw(drawingTypes.ELLIPSE)"><mat-icon svgIcon="tools_draw_ellipse"></mat-icon></button>
+          (click)="draw(drawingTypes.ELLIPSE)"><mat-icon [svgIcon]="buttonIcons.drawEllipse"></mat-icon></button>
   }
   @if (isAllowedShape(drawingTypes.STAR)) {
     <button [class.button--active]="activeTool === 'STAR'"
@@ -61,7 +61,7 @@
           tmTooltip="Draw star"
           mat-stroked-button
           color="primary"
-          (click)="draw(drawingTypes.STAR)"><mat-icon svgIcon="tools_draw_star"></mat-icon></button>
+          (click)="draw(drawingTypes.STAR)"><mat-icon [svgIcon]="buttonIcons.drawStar"></mat-icon></button>
   }
   @if (isAllowedShape(drawingTypes.LABEL)) {
     <button [class.button--active]="activeTool === 'LABEL'"
@@ -69,14 +69,14 @@
           tmTooltip="Draw label"
           mat-stroked-button
           color="primary"
-          (click)="draw(drawingTypes.LABEL)"><mat-icon svgIcon="tools_draw_label"></mat-icon></button>
+          (click)="draw(drawingTypes.LABEL)"><mat-icon [svgIcon]="buttonIcons.drawLabel"></mat-icon></button>
   }
   @if (allowRemoveSelectedFeature && selectedFeature) {
     <button i18n-tmTooltip="@@core.draw.delete-selected-feature"
           tmTooltip="Delete selected feature"
           mat-stroked-button
           color="warn"
-          (click)="removeSelectedFeature()"><mat-icon svgIcon="remove"></mat-icon></button>
+          (click)="removeSelectedFeature()"><mat-icon [svgIcon]="buttonIcons.remove"></mat-icon></button>
   }
 </div>
 @if (allowModify) {
@@ -86,6 +86,6 @@
             tmTooltip="Select, modify size and/or move feature"
             mat-stroked-button
             color="primary"
-            (click)="enableSelectAndModify()"><mat-icon svgIcon="tools_cursor"></mat-icon></button>
+            (click)="enableSelectAndModify()"><mat-icon [svgIcon]="buttonIcons.selectModify"></mat-icon></button>
   </div>
 }
