@@ -242,6 +242,9 @@
       <trans-unit id="core.drawing.line-thickness" datatype="html">
         <source>Line thickness</source>
       </trans-unit>
+      <trans-unit id="core.drawing.objects-list" datatype="html">
+        <source>Objects</source>
+      </trans-unit>
       <trans-unit id="core.drawing.opacity" datatype="html">
         <source>Opacity</source>
       </trans-unit>

@@ -322,6 +322,10 @@
         <source>Line thickness</source>
         <target>Dicke der Linie</target>
       </trans-unit>
+      <trans-unit id="core.drawing.objects-list" datatype="html">
+        <source>Objects</source>
+        <target state="new">Objects</target>
+      </trans-unit>
       <trans-unit id="core.drawing.opacity" datatype="html">
         <source>Opacity</source>
         <target>Deckkraft</target>

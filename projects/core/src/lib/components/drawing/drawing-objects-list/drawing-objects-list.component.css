@@ -5,7 +5,23 @@
   border-radius: 3px;
 }
 
+.section-label {
+  --mat-optgroup-label-text-size: 13px;
+}
+
+.objects-list div {
+  border: 2px solid transparent;
+}
+
 .objects-list .selected {
-  background-color: var(--primary-color);
-  color: var(--background-color);
+  border: 2px solid var(--primary-color);
+}
+
+.mat-icon {
+  width: 30px;
+  height: 30px;
+  font-size: 30px;
+  line-height: 32px;
+  vertical-align: middle;
+  margin: 0px 8px 0 8px;
 }

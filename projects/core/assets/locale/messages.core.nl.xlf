@@ -322,6 +322,10 @@
         <source>Line thickness</source>
         <target>Lijndikte</target>
       </trans-unit>
+      <trans-unit id="core.drawing.objects-list" datatype="html">
+        <source>Objects</source>
+        <target>Objecten</target>
+      </trans-unit>
       <trans-unit id="core.drawing.opacity" datatype="html">
         <source>Opacity</source>
         <target>Ondoorzichtigheid</target>

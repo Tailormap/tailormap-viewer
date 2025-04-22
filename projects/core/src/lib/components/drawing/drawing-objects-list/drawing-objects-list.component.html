@@ -1,9 +1,16 @@
 
-<div class="objects-list">
-@for (feature of this.features$ | async; track feature.__fid; let index = $index) {
-  <div (click)="selectFeature(feature.__fid)" [class.selected]="feature.__fid === (selectedFeature$ | async)?.__fid">
-    {{index}} - {{ feature.__fid }}
+@let features$ = this.features$ | async;
+@if(features$ && features$.length > 0 ) {
+
+  <div class="objects-list">
+    <h2 class="section-label" i18n="@@core.drawing.objects-list">Objects</h2>
+
+    @for (feature of this.features$ | async; track feature.__fid; let index = $index) {
+      <div (click)="selectFeature(feature.__fid)" [class.selected]="feature.__fid === (selectedFeature$ | async)?.__fid">
+        <mat-icon><tm-drawing-feature-image [feature]="feature"></tm-drawing-feature-image></mat-icon>
+        #{{index+1}}
+      </div>
+    }
+
   </div>
 }
-
-</div>

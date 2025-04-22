@@ -11,6 +11,7 @@ import { CreateDrawingButtonComponent } from './create-drawing-button/create-dra
 import { DrawingStyleFormComponent } from './drawing-style-form/drawing-style-form.component';
 import { ApplicationMapModule } from '../../map/application-map.module';
 import { DrawingObjectsListComponent } from './drawing-objects-list/drawing-objects-list.component';
+import { DrawingFeatureImageComponent } from './drawing-feature-image/drawing-feature-image.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { DrawingObjectsListComponent } from './drawing-objects-list/drawing-obje
     CreateDrawingButtonComponent,
     DrawingObjectsListComponent,
     DrawingStyleFormComponent,
+    DrawingFeatureImageComponent,
   ],
     imports: [
         CommonModule,
