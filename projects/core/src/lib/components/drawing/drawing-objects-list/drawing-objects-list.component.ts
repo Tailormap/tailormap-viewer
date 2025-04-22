@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component, Input, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { DrawingFeatureModel, selectDrawingFeatures, selectSelectedDrawingFeature, setSelectedFeature } from '@tailormap-viewer/core';
+import { selectDrawingFeatures, selectSelectedDrawingFeature, setSelectedFeature } from '../state';
 import { Observable, Subject, takeUntil } from 'rxjs';
+import { DrawingFeatureModel } from '../models/drawing-feature.model';
 
 @Component({
   selector: 'tm-drawing-objects-list',

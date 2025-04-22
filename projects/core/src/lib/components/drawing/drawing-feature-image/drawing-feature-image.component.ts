@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ColorHelper } from '@tailormap-viewer/shared';
 import { DrawingFeatureModel, DrawingFeatureStyleModel, StrokeTypeEnum } from '../models/drawing-feature.model';
-import { DrawingFeatureTypeEnum } from '@tailormap-viewer/core';
+import { DrawingFeatureTypeEnum } from '../../../map/models';
 
 @Component({
   selector: 'tm-drawing-feature-image',
