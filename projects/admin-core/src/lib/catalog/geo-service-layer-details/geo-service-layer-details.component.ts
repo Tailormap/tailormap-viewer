@@ -12,7 +12,7 @@ import { AdminSnackbarService } from '../../shared/services/admin-snackbar.servi
 import { UploadCategoryEnum } from '@tailormap-admin/admin-api';
 import { UPLOAD_REMOVE_SERVICE } from '../../shared/components/select-upload/models/upload-remove-service.injection-token';
 import { LegendImageRemoveService } from '../services/legend-image-remove.service';
-import { AdminProjectionsHelper } from '../../application/helpers/admin-projections-helper';
+import { AdminProjectionsHelper, ProjectionAvailability } from '../../application/helpers/admin-projections-helper';
 
 @Component({
   selector: 'tm-admin-geo-service-layer-details',
@@ -38,7 +38,7 @@ export class GeoServiceLayerDetailsComponent implements OnInit, OnDestroy {
 
   public isLeaf$: Observable<boolean | null> = of(true);
 
-  public projectionAvailability$: Observable<{label: string; available: boolean}[] | null> = of(null);
+  public projectionAvailability$: Observable<ProjectionAvailability[] | null> = of(null);
 
   constructor(
     private route: ActivatedRoute,

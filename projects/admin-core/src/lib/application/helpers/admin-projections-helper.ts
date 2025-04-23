@@ -6,6 +6,12 @@ export interface AdminProjection {
   label: string;
   bounds: BoundsModel;
 }
+
+export interface ProjectionAvailability {
+  label: string;
+  available: boolean;
+}
+
 export class AdminProjectionsHelper {
 
   // TODO: replace hardcoded list with projections list from API backend from GeoTools EPSG store
@@ -40,7 +46,7 @@ export class AdminProjectionsHelper {
   public static getProjectionAvailabilityForServiceLayer(
     layer: ExtendedGeoServiceLayerModel | undefined,
     layersInService: ExtendedGeoServiceLayerModel[],
-  ): {label: string; available: boolean}[] {
+  ): ProjectionAvailability[] {
     const crs: string[] = [];
     while (layer) {
       if (layer.crs) {
@@ -48,14 +54,9 @@ export class AdminProjectionsHelper {
       }
       layer = layersInService.find(l => l.id === layer?.parentId);
     }
-    const projectionAvailability: {label: string; available: boolean}[] = [];
-    for (const adminProjection of AdminProjectionsHelper.projections) {
-      if (crs.includes(adminProjection.code)) {
-        projectionAvailability.push({ label: adminProjection.label, available: true });
-      } else {
-        projectionAvailability.push({ label: adminProjection.label, available: false });
-      }
-    }
-    return projectionAvailability;
+    return AdminProjectionsHelper.projections.map(adminProjection => ({
+      label: adminProjection.label,
+      available: crs.includes(adminProjection.code),
+    }));
   }
 }

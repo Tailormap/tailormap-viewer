@@ -43,7 +43,7 @@ const setup = async () => {
   await render(GeoServiceLayerDetailsComponent, {
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     declarations: [ LayerSettingsFormComponent, TriStateBooleanComponent, AuthorizationEditComponent ],
-    imports: [SharedModule, MatIconTestingModule],
+    imports: [ SharedModule, MatIconTestingModule ],
     providers: [
       { provide: ActivatedRoute, useValue: activeRoute },
       { provide: GeoServiceService, useValue: geoServiceService },

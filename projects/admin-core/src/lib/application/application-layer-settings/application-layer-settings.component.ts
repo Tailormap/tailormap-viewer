@@ -28,7 +28,7 @@ import {
   ApplicationFeature, ApplicationFeatureSwitchService, BaseComponentTypeEnum, HiddenLayerFunctionality,
 } from '@tailormap-viewer/api';
 import { GeoServiceHelper } from '../../catalog/helpers/geo-service.helper';
-import { AdminProjectionsHelper } from '../helpers/admin-projections-helper';
+import { AdminProjectionsHelper, ProjectionAvailability } from '../helpers/admin-projections-helper';
 
 type FeatureSourceAndType = {
   featureSource: ExtendedFeatureSourceModel;
@@ -60,7 +60,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
 
   public layerIs3D = false;
 
-  public projectionAvailability$: Observable<{label: string; available: boolean}[] | null> = of(null);
+  public projectionAvailability$: Observable<ProjectionAvailability[] | null> = of(null);
 
   @Input()
   public set node(node: TreeModel<AppTreeLayerNodeModel> | null) {
@@ -395,7 +395,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     }
   }
 
-  private getProjectionAvailability$(serviceLayer: ExtendedGeoServiceAndLayerModel | null): Observable<{label: string; available: boolean}[] | null> {
+  private getProjectionAvailability$(serviceLayer: ExtendedGeoServiceAndLayerModel | null): Observable<ProjectionAvailability[] | null> {
     if (!serviceLayer) {
       return of(null);
     }

@@ -40,6 +40,7 @@ import { FeatureTypeFormComponent } from './feature-type-form/feature-type-form.
 import { FeatureTypeFormDialogComponent } from './feature-type-form-dialog/feature-type-form-dialog.component';
 import { CatalogShortcutButtonsComponent } from './catalog-shortcut-buttons/catalog-shortcut-buttons.component';
 import { FeatureTypeTemplateComponent } from './feature-type-template/feature-type-template.component';
+import { ProjectionAvailabilityComponent } from './projection-availability/projection-availability.component';
 
 
 @NgModule({
@@ -72,6 +73,7 @@ import { FeatureTypeTemplateComponent } from './feature-type-template/feature-ty
     FeatureTypeAttributesComponent,
     CatalogShortcutButtonsComponent,
     FeatureTypeTemplateComponent,
+    ProjectionAvailabilityComponent,
   ],
   imports: [
     CommonModule,
@@ -89,6 +91,7 @@ import { FeatureTypeTemplateComponent } from './feature-type-template/feature-ty
     FeatureTypeAttributesComponent,
     FeatureTypeSelectorComponent,
     CatalogShortcutButtonsComponent,
+    ProjectionAvailabilityComponent,
   ],
 })
 export class CatalogModule {
