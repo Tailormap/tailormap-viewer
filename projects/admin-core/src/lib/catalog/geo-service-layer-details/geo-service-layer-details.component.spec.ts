@@ -14,6 +14,7 @@ import { TriStateBooleanComponent } from '../../shared/components/tri-state-bool
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { AuthorizationEditComponent } from '../../shared/components/authorization-edit/authorization-edit.component';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
+import { MatIconTestingModule } from '@angular/material/icon/testing';
 
 const setup = async () => {
   const activeRoute = {
@@ -42,7 +43,7 @@ const setup = async () => {
   await render(GeoServiceLayerDetailsComponent, {
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     declarations: [ LayerSettingsFormComponent, TriStateBooleanComponent, AuthorizationEditComponent ],
-    imports: [SharedModule],
+    imports: [ SharedModule, MatIconTestingModule ],
     providers: [
       { provide: ActivatedRoute, useValue: activeRoute },
       { provide: GeoServiceService, useValue: geoServiceService },
