@@ -14,7 +14,7 @@
 
 .available-crs-list ::ng-deep .mdc-list-item {
   height: fit-content !important;
-  padding: 5px 0 5px 16px;
+  padding: 0 0 5px 16px;
 }
 
 .available-crs-list .list-icon {

@@ -4,6 +4,7 @@ mat-slide-toggle {
 
 .form-control,
 .toggle-control,
+.available-crs,
 mat-slide-toggle + mat-slide-toggle {
   margin-top: 16px;
 }
@@ -25,9 +26,4 @@ mat-slide-toggle + mat-slide-toggle {
 .bounds-control ::ng-deep .label {
   font-weight: bold;
   margin-top: 16px;
-}
-
-.available-crs {
-  margin-top: 16px;
-  margin-bottom: 8px;
 }

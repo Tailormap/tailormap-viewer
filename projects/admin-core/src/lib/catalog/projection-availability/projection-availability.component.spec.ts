@@ -16,6 +16,9 @@ describe('ProjectionAvailabilityComponent', () => {
       },
     });
     expect(screen.getByText('EPSG:28992 (Amersfoort / RD New)')).toBeInTheDocument();
+    expect(screen.getByText('EPSG:3857 (WGS 84 / Pseudo-Mercator)')).toBeInTheDocument();
+    expect(screen.getByText('EPSG:28992 (Amersfoort / RD New)').closest('mat-list-item')?.querySelector('.list-icon.unavailable')).toBeInTheDocument();
+    expect(screen.getByText('EPSG:3857 (WGS 84 / Pseudo-Mercator)').closest('mat-list-item')?.querySelector('.list-icon.available')).toBeInTheDocument();
   });
 
 });
