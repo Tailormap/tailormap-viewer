@@ -50,6 +50,7 @@ export class CesiumManager {
               canvas: document.createElement('canvas'),
               requestRenderMode: true,
               maximumRenderTimeChange: Infinity,
+              creditContainer: document.createElement('dummyContainer'),
             },
           });
           ol3d.setRefresh2DAfterCameraMoveEndOnly(true);
