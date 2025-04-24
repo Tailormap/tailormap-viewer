@@ -26,6 +26,7 @@ export class DrawingObjectsListComponent implements  OnDestroy {
   ) {
     this.features$ = this.store$.select(selectDrawingFeatures).pipe(takeUntil(this.destroyed));
     this.selectedFeature$ = this.store$.select(selectSelectedDrawingFeature).pipe(takeUntil(this.destroyed));
+    // TODO: scroll to selected feature -- ViewportScroller or scrollIntoView() don't work somehow
   }
 
   public ngOnDestroy() {

@@ -14,6 +14,11 @@ mat-expansion-panel-header mat-panel-description {
   flex-grow: 2;
 }
 
+::ng-deep mat-expansion-panel.objects-list .mat-expansion-panel-body {
+  max-height: 15em;
+  overflow-y: scroll;
+}
+
 .objects-list div {
   border: 2px solid transparent;
   white-space: nowrap;
