@@ -12,7 +12,6 @@ import { DrawingStyleFormComponent } from './drawing-style-form/drawing-style-fo
 import { ApplicationMapModule } from '../../map/application-map.module';
 import { DrawingObjectsListComponent } from './drawing-objects-list/drawing-objects-list.component';
 import { DrawingFeatureImageComponent } from './drawing-feature-image/drawing-feature-image.component';
-import {SharedAdminComponentsModule} from "@tailormap-admin/admin-core";
 
 @NgModule({
   declarations: [
@@ -29,7 +28,6 @@ import {SharedAdminComponentsModule} from "@tailormap-admin/admin-core";
     MenubarModule,
     StoreModule.forFeature(drawingStateKey, drawingReducer),
     ApplicationMapModule,
-    SharedAdminComponentsModule,
   ],
   exports: [
     DrawingComponent,
