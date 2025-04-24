@@ -1,16 +1,24 @@
 .objects-list {
   margin-top: 16px;
-  border: 1px solid var(--border-color);
-  padding: 16px;
-  border-radius: 3px;
 }
 
 .section-label {
   --mat-optgroup-label-text-size: 13px;
 }
 
+mat-expansion-panel-header mat-panel-title {
+  flex-grow: 8;
+}
+
+mat-expansion-panel-header mat-panel-description {
+  flex-grow: 2;
+}
+
 .objects-list div {
   border: 2px solid transparent;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .objects-list .selected {
