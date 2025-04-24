@@ -115,10 +115,9 @@
       </mat-form-field>
     }
   }
-  @if ( (isWMS || isWMTS || isXYZ) && crs ) {
+  @if ( (isWMS || isWMTS || isXYZ) && (projectionAvailability$ | async); as projectionAvailability) {
     <div class="available-crs">
-      <strong i18n="@@admin-core.catalog.layer.crs" class="available-crs-header">Available projections for this layer</strong>
-      <div class="available-crs-text">{{ crs.join(', ') }}</div>
+      <tm-admin-projection-availability [projectionAvailability]="projectionAvailability"></tm-admin-projection-availability>
     </div>
   }
   <tm-admin-authorization-edit class="authorization-edit"

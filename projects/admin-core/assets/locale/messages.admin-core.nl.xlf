@@ -114,6 +114,9 @@
         <source>Components</source>
         <target>Componenten</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filters" datatype="html">
+        <source>Filters</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.copy-application" datatype="html">
         <source>Copy application <x id="INTERPOLATION" equiv-text="{{data.application.title}}"/></source>
         <target>Kopieer applicatie <x id="INTERPOLATION" equiv-text="{{data.application.title}}"/></target>

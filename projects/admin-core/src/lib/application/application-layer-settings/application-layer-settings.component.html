@@ -85,10 +85,9 @@
           <div i18n="@@admin-core.application.no-forms-for-feature-type">There are no forms for this feature type</div>
         }
       }
-      @if (crsText$ | async) {
+      @if (projectionAvailability$ | async; as projectionAvailability) {
         <div class="available-crs">
-          <strong i18n="@@admin-core.catalog.layer.crs" class="available-crs-header">Available projections for this layer</strong>
-          <div class="available-crs-text">{{ (crsText$ | async)?.join(', ') }}</div>
+          <tm-admin-projection-availability [projectionAvailability]="projectionAvailability"></tm-admin-projection-availability>
         </div>
       }
       @if ((searchIndexEnabled$ | async)) {

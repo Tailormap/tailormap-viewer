@@ -11,6 +11,7 @@ import { Store } from '@ngrx/store';
 import { selectGeoServiceById, selectGeoServiceLayersByGeoServiceId } from '../state/catalog.selectors';
 import { BoundsModel, TileLayerHiDpiModeEnum } from '@tailormap-viewer/api';
 import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-layer.model';
+import { ProjectionAvailability } from '../../application/helpers/admin-projections-helper';
 
 @Component({
   selector: 'tm-admin-layer-settings-form',
@@ -80,7 +81,7 @@ export class LayerSettingsFormComponent implements OnInit {
   public layerName: string | null | undefined;
 
   @Input()
-  public crs: string[] | null = null;
+  public projectionAvailability$: Observable<ProjectionAvailability[] | null> = of(null);
 
   @Output()
   public changed = new EventEmitter<LayerSettingsModel | null>();

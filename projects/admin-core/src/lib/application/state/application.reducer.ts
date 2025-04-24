@@ -347,6 +347,19 @@ const onUpdateApplicationStylingConfig = (state: ApplicationState, payload: Retu
   });
 };
 
+const onUpdateApplicationFiltersConfig = (
+  state: ApplicationState,
+  payload: ReturnType<typeof ApplicationActions.updateApplicationFiltersConfig>,
+): ApplicationState => {
+  return updateApplication(state, application => ({
+    settings: {
+      ...application.settings,
+      layerSettings: application.settings?.layerSettings || {}, // Ensure layerSettings is defined
+      filterGroups: payload.filterGroups,
+    },
+  }));
+};
+
 const onToggleNodeExpanded = (
   state: ApplicationState,
   payload: ReturnType<typeof ApplicationActions.toggleApplicationNodeExpanded>,
@@ -435,6 +448,7 @@ const applicationReducerImpl = createReducer<ApplicationState>(
   on(ApplicationActions.updateApplicationNodeSettings, onUpdateApplicationNodeSettings),
   on(ApplicationActions.updateApplicationComponentConfig, onUpdateApplicationComponentConfig),
   on(ApplicationActions.updateApplicationStylingConfig, onUpdateApplicationStylingConfig),
+  on(ApplicationActions.updateApplicationFiltersConfig, onUpdateApplicationFiltersConfig),
   on(ApplicationActions.toggleApplicationNodeExpanded, onToggleNodeExpanded),
   on(ApplicationActions.toggleApplicationNodeExpandedAll, onToggleNodeExpandedAll),
   on(ApplicationActions.setApplicationCatalogFilterTerm, onSetApplicationCatalogFilterTerm),

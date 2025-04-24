@@ -201,3 +201,5 @@ export const selectServiceLayerTreeForApplication = createSelector(
 );
 
 export const selectStylingConfig = createSelector(selectDraftApplication, application => application?.styling);
+
+export const selectFilterGroups = createSelector(selectDraftApplication, application => application?.settings?.filterGroups || []);
