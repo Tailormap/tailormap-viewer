@@ -45,7 +45,7 @@ describe('DrawingComponent', () => {
 
   test('renders and registers', async () => {
     const { container, mapServiceMock, menubarServiceMock } = await setup();
-    expect(container.querySelector('tm-create-drawing-button')).not.toBeNull();
+    expect(container.querySelector('tm-map-drawing-buttons')).not.toBeNull();
     expect(mapServiceMock.mapService.renderFeatures$).toHaveBeenCalled();
     expect(menubarServiceMock.isComponentVisible$).toHaveBeenCalled();
     expect(menubarServiceMock.registerComponent).toHaveBeenCalled();
@@ -53,7 +53,7 @@ describe('DrawingComponent', () => {
 
   test('should not render contents if component is not active', async () => {
     const { container, mapServiceMock, menubarServiceMock } = await setup(false);
-    expect(container.querySelector('tm-create-drawing-button')).toBeNull();
+    expect(container.querySelector('tm-map-drawing-buttons')).toBeNull();
     expect(mapServiceMock.mapService.renderFeatures$).toHaveBeenCalled();
     expect(menubarServiceMock.isComponentVisible$).toHaveBeenCalled();
     expect(menubarServiceMock.registerComponent).toHaveBeenCalled();
