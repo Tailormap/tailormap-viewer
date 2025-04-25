@@ -61,6 +61,6 @@ mat-button-toggle ::ng-deep .mat-button-toggle-label-content {
   }
 }
 
-.not-visible-on-map {
-  color: var(--disabled-text-color);
+.not-visible-in-3d {
+  text-decoration: line-through;
 }

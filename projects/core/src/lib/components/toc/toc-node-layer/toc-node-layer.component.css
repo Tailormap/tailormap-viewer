@@ -2,13 +2,6 @@
   flex: 1;
 }
 
-.mat-icon {
-  width: 18px;
-  height: 18px;
-  font-size: 18px;
-  line-height: 18px;
-}
-
 .tree-node {
   padding: 5px 0;
 }
@@ -33,17 +26,16 @@
   opacity: 0.7;
 }
 
-.tree-node__label .mat-icon {
-  margin-right: 5px;
-  vertical-align: top;
-}
-
-.icon {
-  position: relative;
-  display: inline-block;
-  vertical-align: middle;
-}
-
 .not-visible-on-map {
   color: var(--disabled-text-color);
+}
+
+.not-visible-in-3d {
+  text-decoration: line-through;
+}
+
+.layer-3d-icon {
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
 }
