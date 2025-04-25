@@ -7,7 +7,6 @@ import { MenubarModule } from '../menubar';
 import { StoreModule } from '@ngrx/store';
 import { drawingStateKey } from './state/drawing.state';
 import { drawingReducer } from './state/drawing.reducer';
-import { CreateDrawingButtonComponent } from './create-drawing-button/create-drawing-button.component';
 import { DrawingStyleFormComponent } from './drawing-style-form/drawing-style-form.component';
 import { ApplicationMapModule } from '../../map/application-map.module';
 import { DrawingObjectsListComponent } from './drawing-objects-list/drawing-objects-list.component';
@@ -17,7 +16,6 @@ import { DrawingFeatureImageComponent } from './drawing-feature-image/drawing-fe
   declarations: [
     DrawingComponent,
     DrawingMenuButtonComponent,
-    CreateDrawingButtonComponent,
     DrawingObjectsListComponent,
     DrawingStyleFormComponent,
     DrawingFeatureImageComponent,

@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { FeatureHelper, MapService } from '@tailormap-viewer/map';
-import { combineLatest, filter, Observable, of, Subject, take, takeUntil } from 'rxjs';
+import { DrawingToolEvent, FeatureHelper, MapService, MapStyleModel } from '@tailormap-viewer/map';
+import { combineLatest, filter, map, Observable, of, Subject, take, takeUntil, tap } from 'rxjs';
 import {
   selectDrawingFeaturesExcludingSelected, selectSelectedDrawingStyle, selectSelectedDrawingFeature, selectHasDrawingFeatures,
   selectDrawingFeatures,
@@ -10,10 +10,14 @@ import { DrawingHelper } from '../helpers/drawing.helper';
 import { MenubarService } from '../../menubar';
 import { DrawingMenuButtonComponent } from '../drawing-menu-button/drawing-menu-button.component';
 import { DrawingFeatureModel, DrawingFeatureModelAttributes, DrawingFeatureStyleModel } from '../models/drawing-feature.model';
-import { addFeature, removeAllDrawingFeatures, removeDrawingFeature, updateDrawingFeatureStyle } from '../state/drawing.actions';
+import {
+  addFeature, removeAllDrawingFeatures, removeDrawingFeature, setSelectedDrawingStyle, setSelectedFeature, updateDrawingFeatureStyle,
+  updateSelectedDrawingFeatureGeometry,
+} from '../state/drawing.actions';
 import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type.enum';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
-import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
+import { BaseComponentTypeEnum, FeatureModel } from '@tailormap-viewer/api';
+import { MapDrawingButtonsComponent } from '../../../map/components/map-drawing-buttons/map-drawing-buttons.component';
 
 @Component({
   selector: 'tm-drawing',
@@ -32,6 +36,24 @@ export class DrawingComponent implements OnInit, OnDestroy {
   public selectedDrawingStyle: DrawingFeatureTypeEnum | null = null;
   public hasFeatures$: Observable<boolean> = of(false);
 
+  public activeTool: DrawingFeatureTypeEnum | null = null;
+
+  public selectedFeature$ = this.store$.select(selectSelectedDrawingFeature).pipe(
+    map(feature => {
+      if (!feature) {
+        return null;
+      }
+      return {
+        ...feature,
+        attributes: {
+          ...feature?.attributes,
+          selected: true,
+        },
+      };
+    }));
+
+  public selectionStyle = DrawingHelper.applyDrawingStyle as ((feature: FeatureModel) => MapStyleModel);
+
   constructor(
     private store$: Store,
     private mapService: MapService,
@@ -41,7 +63,14 @@ export class DrawingComponent implements OnInit, OnDestroy {
   ) { }
 
   public ngOnInit() {
-    this.active$ = this.menubarService.isComponentVisible$(BaseComponentTypeEnum.DRAWING);
+    this.active$ = this.menubarService.isComponentVisible$(BaseComponentTypeEnum.DRAWING).pipe(
+      tap(visible => {
+        if (!visible) {
+          this.store$.dispatch(setSelectedFeature({ fid: null }));
+          this.activeTool = null;
+        }
+      }),
+    );
     this.hasFeatures$ = this.store$.select(selectHasDrawingFeatures);
 
     this.mapService.renderFeatures$<DrawingFeatureModelAttributes>(
@@ -73,14 +102,34 @@ export class DrawingComponent implements OnInit, OnDestroy {
     this.destroyed.complete();
   }
 
-  public featureStyleUpdates(style: DrawingFeatureStyleModel) {
-    if (this.selectedFeature) {
-      this.store$.dispatch(updateDrawingFeatureStyle({ fid: this.selectedFeature.__fid, style }));
+  public onDrawingAdded($event: DrawingToolEvent) {
+    if (!this.activeTool) {
+      return;
     }
-    DrawingHelper.updateDefaultStyle({
-      ...style,
-      label: '',
-    });
+    this.store$.dispatch(addFeature({
+      feature: DrawingHelper.getFeature(this.activeTool, $event),
+      selectFeature: true,
+    }));
+  }
+
+  public onActiveToolChanged($event: DrawingFeatureTypeEnum | null) {
+    this.activeTool = $event;
+    this.store$.dispatch(setSelectedDrawingStyle({ drawingType: $event }));
+  }
+
+  public onFeatureSelected(feature: FeatureModel | null) {
+    this.store$.dispatch(setSelectedFeature({ fid: feature?.__fid || null }));
+  }
+
+  public onFeatureGeometryModified(geometry: string) {
+    this.store$.dispatch(updateSelectedDrawingFeatureGeometry({ geometry }));
+  }
+
+
+  @ViewChild(MapDrawingButtonsComponent) private mapDrawingButtonsComponent: MapDrawingButtonsComponent | undefined;
+
+  public enableSelectAndModify() {
+    this.mapDrawingButtonsComponent?.enableSelectAndModify();
   }
 
   public removeSelectedFeature() {
@@ -128,6 +177,16 @@ export class DrawingComponent implements OnInit, OnDestroy {
   public zoomToEntireDrawing() {
     this.store$.select(selectDrawingFeatures).pipe(take(1)).subscribe(features => {
       this.mapService.zoomToFeatures(features);
+    });
+  }
+
+  public featureStyleUpdates(style: DrawingFeatureStyleModel) {
+    if (this.selectedFeature) {
+      this.store$.dispatch(updateDrawingFeatureStyle({ fid: this.selectedFeature.__fid, style }));
+    }
+    DrawingHelper.updateDefaultStyle({
+      ...style,
+      label: '',
     });
   }
 }

@@ -17,7 +17,7 @@
   min-width: 40px;
   padding: 0 8px;
   border-radius: 3px;
-  margin: 8px 8px 0 0;
+  margin: 4px 4px 0 0;
 }
 
 .drawing-button-list .mat-mdc-outlined-button mat-icon {
@@ -39,6 +39,10 @@
 
 .split-buttons > div {
   flex: 1;
+}
+
+.split-buttons .selected_feature_buttons {
+  flex: 2;
 }
 
 .drawing_buttons {

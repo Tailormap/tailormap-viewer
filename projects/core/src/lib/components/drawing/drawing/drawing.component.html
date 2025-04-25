@@ -1,26 +1,43 @@
 @if(active$ | async) {
   <div class="drawing-form">
-    <tm-create-drawing-button [drawingLayerId]="drawingLayerId"></tm-create-drawing-button>
-    @if(hasFeatures$ | async) {
-      <div class="horizontal-line"></div>
-      <div class="drawing-button-list split-buttons">
-        <div class="selected_feature_buttons">
-          @if(selectedFeature) {
-            <button mat-stroked-button
-                    (click)="removeSelectedFeature()"
-                    color="warn"
-                    i18n-tmTooltip="@@core.drawing.delete-selected-drawing-object"
-                    tmTooltip="Delete selected drawing object">
-              <mat-icon svgIcon="remove"></mat-icon>
-            </button>
-            <button mat-stroked-button
-                    (click)="duplicateSelectedFeature()"
-                    i18n-tmTooltip="@@core.drawing.duplicate-selected-drawing-object"
-                    tmTooltip="Duplicate selected drawing object">
-              <mat-icon svgIcon="copy"></mat-icon>
-            </button>
-          }
-        </div>
+    <p class="label" i18n="@@core.drawing.draw-shape">Draw shape</p>
+    <tm-map-drawing-buttons [drawingLayerId]="drawingLayerId"
+                            [selectedFeature]="selectedFeature$ | async"
+                            [selectionStyle]="selectionStyle"
+                            [allowModify]="true"
+                            [showSelectButton]="false"
+                            (drawingAdded)="onDrawingAdded($event)"
+                            (featureGeometryModified)="onFeatureGeometryModified($event)"
+                            (activeToolChanged)="onActiveToolChanged($event)"
+                            (featureSelected)="onFeatureSelected($event)"></tm-map-drawing-buttons>
+
+
+    <div class="horizontal-line"></div>
+    <div class="drawing-button-list split-buttons">
+      <div class="selected_feature_buttons">
+        <button [class.button--active]="!activeTool"
+                i18n-tmTooltip="@@core.draw.select-modify-move-feature"
+                tmTooltip="Select, modify size and/or move feature"
+                mat-stroked-button
+                color="primary"
+                (click)="enableSelectAndModify()"><mat-icon svgIcon="tools_cursor"></mat-icon></button>
+        @if(selectedFeature) {
+          <button mat-stroked-button
+                  (click)="removeSelectedFeature()"
+                  color="warn"
+                  i18n-tmTooltip="@@core.drawing.delete-selected-drawing-object"
+                  tmTooltip="Delete selected drawing object">
+            <mat-icon svgIcon="remove"></mat-icon>
+          </button>
+          <button mat-stroked-button
+                  (click)="duplicateSelectedFeature()"
+                  i18n-tmTooltip="@@core.drawing.duplicate-selected-drawing-object"
+                  tmTooltip="Duplicate selected drawing object">
+            <mat-icon svgIcon="copy"></mat-icon>
+          </button>
+        }
+      </div>
+      @if(hasFeatures$ | async) {
         <div class="drawing_buttons">
           <button mat-stroked-button
                   (click)="removeAllFeatures()"
@@ -36,8 +53,9 @@
             <mat-icon class="zoom_max" svgIcon="zoom_max"></mat-icon>
           </button>
         </div>
-      </div>
-    }
+      }
+    </div>
+
     <tm-drawing-objects-list [drawingLayerId]="drawingLayerId"></tm-drawing-objects-list>
     @if (selectedDrawingStyle) {
       <tm-drawing-style-form

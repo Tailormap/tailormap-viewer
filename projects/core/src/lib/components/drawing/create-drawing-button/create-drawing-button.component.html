@@ -1,9 +1,0 @@
-<p class="label" i18n="@@core.drawing.select-shape">Select shape</p>
-<tm-map-drawing-buttons [drawingLayerId]="drawingLayerId"
-                        [selectedFeature]="selectedFeature$ | async"
-                        [selectionStyle]="selectionStyle"
-                        [allowModify]="true"
-                        (drawingAdded)="onDrawingAdded($event)"
-                        (featureGeometryModified)="onFeatureGeometryModified($event)"
-                        (activeToolChanged)="onActiveToolChanged($event)"
-                        (featureSelected)="onFeatureSelected($event)"></tm-map-drawing-buttons>

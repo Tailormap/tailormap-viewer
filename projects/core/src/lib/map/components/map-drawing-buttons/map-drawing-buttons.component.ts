@@ -56,6 +56,9 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
   public allowModify = false;
 
   @Input()
+  public showSelectButton = true;
+
+  @Input()
   public allowedShapes: DrawingFeatureTypeEnum[] | undefined = undefined;
 
   @Output()
