@@ -942,6 +942,10 @@
         <source>WGS84 Ellipsoid</source>
         <target>WGS84 Ellipsoid</target>
       </trans-unit>
+      <trans-unit id="core.toc.3d-layer" datatype="html">
+        <source>Switch to 3D to see this layer</source>
+        <target>Wechseln Sie zu 3D, um diese Ebene anzuzeigen</target>
+      </trans-unit>
       <trans-unit id="core.toc.available-layers" datatype="html">
         <source>Available layers</source>
         <target>Verfügbare Ebenen</target>
