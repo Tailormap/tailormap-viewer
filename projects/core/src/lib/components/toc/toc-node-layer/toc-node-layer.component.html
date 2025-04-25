@@ -1,9 +1,18 @@
 @if (node) {
   <div class="tree-node"
        [class.not-visible-on-map]="isLayerHiddenOnMap()"
+       [class.not-visible-in-3d]="isLayerHiddenIn3d()"
        [class.level]="isLevel()">
     <div class="tree-node__label">
       <span class="tree-node__label-content">{{node.label}}</span>
     </div>
+    @if (isLayerHiddenIn2d()) {
+      <mat-icon class="layer-3d-icon"
+                svgIcon="tools_3d"
+                tmTooltip="Switch to 3D to see this layer"
+                i18n-tmTooltip="@@core.toc.3d-layer"
+                matListItemMeta>
+      </mat-icon>
+    }
   </div>
 }

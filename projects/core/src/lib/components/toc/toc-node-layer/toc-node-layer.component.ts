@@ -31,9 +31,15 @@ export class TocNodeLayerComponent {
   }
 
   public isLayerHiddenOnMap() {
-    return !ScaleHelper.isInScale(this.scale, this.node?.metadata?.minScale, this.node?.metadata?.maxScale)
-      || (this.in3D && this.layersWithoutWebMercator.includes(this.node?.id || ''))
-      || (!this.in3D && this.tiles3DLayerIds.includes(this.node?.id || ''));
+    return !ScaleHelper.isInScale(this.scale, this.node?.metadata?.minScale, this.node?.metadata?.maxScale) || this.isLayerHiddenIn2d();
+  }
+
+  public isLayerHiddenIn2d() {
+    return !this.in3D && this.tiles3DLayerIds.includes(this.node?.id || '');
+  }
+
+  public isLayerHiddenIn3d() {
+    return this.in3D && this.layersWithoutWebMercator.includes(this.node?.id || '');
   }
 
 }
