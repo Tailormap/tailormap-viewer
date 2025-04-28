@@ -3,10 +3,11 @@ import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { ApplicationTreeHelper } from '../helpers/application-tree.helper';
 import { selectCatalog, selectFeatureTypes, selectGeoServiceLayers, selectGeoServices } from '../../catalog/state/catalog.selectors';
 import { FilterHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
-import { AppLayerSettingsModel, AppTreeNodeModel, GeoServiceProtocolEnum } from '@tailormap-admin/admin-api';
+import { AdminServerType, AppLayerSettingsModel, AppTreeNodeModel, GeoServiceProtocolEnum } from '@tailormap-admin/admin-api';
 import { BaseComponentConfigHelper } from '@tailormap-viewer/api';
 import { CatalogTreeModel } from '../../catalog/models/catalog-tree.model';
 import { CatalogFilterHelper } from '../../catalog/helpers/catalog-filter.helper';
+import { ApplicationModelHelper } from '../helpers/application-model.helper';
 
 const selectApplicationState = createFeatureSelector<ApplicationState>(applicationStateKey);
 
@@ -203,3 +204,23 @@ export const selectServiceLayerTreeForApplication = createSelector(
 export const selectStylingConfig = createSelector(selectDraftApplication, application => application?.styling);
 
 export const selectFilterGroups = createSelector(selectDraftApplication, application => application?.settings?.filterGroups || []);
+
+export const selectFilterableLayersForApplication = createSelector(
+  selectAppLayerNodesForSelectedApplication,
+  selectGeoServices,
+  selectGeoServiceLayers,
+  (appLayers, geoServices, geoServiceLayers) => {
+    return appLayers.filter(layer => ApplicationModelHelper.isLayerTreeNode(layer))
+      .map(layerNode => geoServiceLayers.find(geoServiceLayer => {
+        const nodeName = ApplicationTreeHelper.getLayerMapKey(layerNode.layerName, layerNode.serviceId);
+        const serviceLayerName = ApplicationTreeHelper.getLayerMapKey(geoServiceLayer.name, geoServiceLayer.serviceId);
+        return nodeName === serviceLayerName;
+      }))
+      .filter(geoServiceLayer => !!geoServiceLayer)
+      .filter(geoServiceLayer => {
+        const geoService = geoServices.find(service => service.id === geoServiceLayer?.serviceId);
+        return geoService?.settings?.serverType === AdminServerType.GEOSERVER
+          // || (geoService?.settings?.serverType === AdminServerType.AUTO); // && geoService.url?.includes('/geoserver/'));
+      });
+  }
+);
