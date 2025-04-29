@@ -34,8 +34,13 @@ import {
 import { FormModule } from "../form/form.module";
 import { ApplicationCopyDialogComponent } from './application-copy-dialog/application-copy-dialog.component';
 import { ApplicationEditTerrainLayersComponent } from './application-edit-terrain-layers/application-edit-terrain-layers.component';
-import { ApplicationEditFiltersComponent } from './application-edit-filters/application-edit-filters.component';
+import { ApplicationEditFiltersComponent } from './application-edit-filters/application-edit-filters/application-edit-filters.component';
 import { ApplicationFilterableLayersListComponent } from './application-edit-filters/application-filterable-layers-list/application-filterable-layers-list.component';
+import { ApplicationFiltersListComponent } from './application-edit-filters/application-filters-list/application-filters-list.component';
+import { ApplicationEditFilterFormComponent } from './application-edit-filters/application-edit-filter-form/application-edit-filter-form.component';
+import { ApplicationEditFiltersHomeComponent } from './application-edit-filters/application-edit-filters-home/application-edit-filters-home.component';
+import { ApplicationEditFilterComponent } from './application-edit-filters/application-edit-filter/application-edit-filter.component';
+import { ApplicationCreateFilterComponent } from './application-edit-filters/application-create-filter/application-create-filter.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +64,11 @@ import { ApplicationFilterableLayersListComponent } from './application-edit-fil
     ApplicationEditTerrainLayersComponent,
     ApplicationEditFiltersComponent,
     ApplicationFilterableLayersListComponent,
+    ApplicationFiltersListComponent,
+    ApplicationEditFilterFormComponent,
+    ApplicationEditFiltersHomeComponent,
+    ApplicationEditFilterComponent,
+    ApplicationCreateFilterComponent,
   ],
   imports: [
     CommonModule,

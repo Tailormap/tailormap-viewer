@@ -1,0 +1,5 @@
+@if (filter$ | async; as filter) {
+  <strong>Edit {{ filter.id }} </strong>
+  <tm-admin-application-edit-filter-form [filter]="filter"></tm-admin-application-edit-filter-form>
+}
+

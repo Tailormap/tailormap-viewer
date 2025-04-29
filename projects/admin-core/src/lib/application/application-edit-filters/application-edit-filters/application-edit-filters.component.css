@@ -1,0 +1,11 @@
+.edit-filters {
+  display: flex;
+}
+
+.edit-filter-form {
+  flex: 1;
+}
+
+.filters-list {
+  min-width: 100px;
+}

@@ -1,0 +1,20 @@
+<!--<h3>filterGroups json</h3>-->
+<!--<p>Unsupported POC for editing preset simple filters. Add or edit the proper JSON below.</p>-->
+<!--<mat-form-field>-->
+<!--  <mat-label>filterGroups</mat-label>-->
+<!--  <mat-hint align="end"><strong>Use CTRL+ENTER to submit the filter json, there is no validation on the input</strong></mat-hint>-->
+<!--  <textarea #content-->
+<!--            (keyup.control.enter)="onFilterGroupsSaveManual(content.value)"-->
+<!--            cdkAutosizeMinRows="10"-->
+<!--            cdkTextareaAutosize-->
+<!--            matInput-->
+<!--  >{{ filterGroups() | json }}</textarea>-->
+<!--</mat-form-field>-->
+
+<div class="edit-filters">
+  <div class="filters-list">
+    <tm-admin-application-filters-list></tm-admin-application-filters-list>
+  </div>
+  <router-outlet></router-outlet>
+</div>
+

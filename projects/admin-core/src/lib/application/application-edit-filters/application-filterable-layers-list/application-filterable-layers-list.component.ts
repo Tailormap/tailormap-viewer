@@ -1,5 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, ChangeDetectionStrategy, Signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectFilterableLayersForApplication } from '../../state/application.selectors';
 import { ExtendedGeoServiceLayerModel } from '../../../catalog/models/extended-geo-service-layer.model';
@@ -13,10 +12,8 @@ import { ExtendedGeoServiceLayerModel } from '../../../catalog/models/extended-g
 })
 export class ApplicationFilterableLayersListComponent {
 
-  public filterableLayers$: Observable<ExtendedGeoServiceLayerModel[]>;
+  public filterableLayers: Signal<ExtendedGeoServiceLayerModel[]> = this.store$.selectSignal(selectFilterableLayersForApplication);
 
-  constructor(private store$: Store) {
-    this.filterableLayers$ = this.store$.select(selectFilterableLayersForApplication);
-  }
+  constructor(private store$: Store) {}
 
 }

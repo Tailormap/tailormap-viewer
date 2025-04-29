@@ -1,5 +1,6 @@
+<strong>Filterable layers</strong>
 <mat-list>
-  @for (layer of filterableLayers$ | async; track layer.id) {
+  @for (layer of filterableLayers(); track layer.id) {
     <mat-list-item>
       <div>{{ layer.title }}</div>
     </mat-list-item>

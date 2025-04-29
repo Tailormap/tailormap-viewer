@@ -1,0 +1,8 @@
+<strong>Filters</strong>
+<mat-selection-list>
+  @for (filter of filters(); track filter) {
+    <mat-list-item [routerLink]="'/admin/applications/application/' + applicationId() + '/filters/filter/' + filter.id">
+      <div>{{ filter.id }}</div>
+    </mat-list-item>
+  }
+</mat-selection-list>
