@@ -1,5 +1,6 @@
 <div class="filter-form-text">Form to make filter</div>
 <div class="filterable-layers">
-  <tm-admin-filterable-layers-list></tm-admin-filterable-layers-list>
+  <tm-admin-filterable-layers-list (selectLayer)="setSelectedLayer($event)"></tm-admin-filterable-layers-list>
 </div>
+<div>Selected layer: {{ selectedLayer()?.name }}</div>
 

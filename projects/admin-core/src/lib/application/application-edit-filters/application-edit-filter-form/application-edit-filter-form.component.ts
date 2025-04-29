@@ -1,5 +1,6 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, WritableSignal, signal } from '@angular/core';
 import { AttributeFilterModel } from '@tailormap-viewer/api';
+import { ExtendedGeoServiceLayerModel } from '../../../catalog/models/extended-geo-service-layer.model';
 
 @Component({
   selector: 'tm-admin-application-edit-filter-form',
@@ -13,6 +14,11 @@ export class ApplicationEditFilterFormComponent {
   @Input()
   public filter: AttributeFilterModel | null = null;
 
+  public selectedLayer: WritableSignal<ExtendedGeoServiceLayerModel | null> = signal(null);
+
   constructor() { }
 
+  setSelectedLayer($event: ExtendedGeoServiceLayerModel) {
+    this.selectedLayer.set($event);
+  }
 }

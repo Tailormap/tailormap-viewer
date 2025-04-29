@@ -1,8 +1,8 @@
 <strong>Filterable layers</strong>
-<mat-list>
+<mat-selection-list>
   @for (layer of filterableLayers(); track layer.id) {
-    <mat-list-item>
+    <mat-list-item (click)="setSelectedLayer(layer)">
       <div>{{ layer.title }}</div>
     </mat-list-item>
   }
-</mat-list>
+</mat-selection-list>

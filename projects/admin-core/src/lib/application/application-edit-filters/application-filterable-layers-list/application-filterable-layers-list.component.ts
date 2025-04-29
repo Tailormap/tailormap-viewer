@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Signal, EventEmitter, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectFilterableLayersForApplication } from '../../state/application.selectors';
 import { ExtendedGeoServiceLayerModel } from '../../../catalog/models/extended-geo-service-layer.model';
@@ -14,6 +14,12 @@ export class ApplicationFilterableLayersListComponent {
 
   public filterableLayers: Signal<ExtendedGeoServiceLayerModel[]> = this.store$.selectSignal(selectFilterableLayersForApplication);
 
+  @Output()
+  public selectLayer = new EventEmitter<ExtendedGeoServiceLayerModel>();
+
   constructor(private store$: Store) {}
 
+  public setSelectedLayer(layer: ExtendedGeoServiceLayerModel) {
+    this.selectLayer.emit(layer);
+  }
 }
