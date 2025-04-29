@@ -10,7 +10,7 @@ import { drawingReducer } from './state/drawing.reducer';
 import { DrawingStyleFormComponent } from './drawing-style-form/drawing-style-form.component';
 import { ApplicationMapModule } from '../../map/application-map.module';
 import { DrawingObjectsListComponent } from './drawing-objects-list/drawing-objects-list.component';
-import { DrawingFeatureImageComponent } from './drawing-feature-image/drawing-feature-image.component';
+import { DrawingFeatureIconComponent } from './drawing-feature-image/drawing-feature-icon.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +18,7 @@ import { DrawingFeatureImageComponent } from './drawing-feature-image/drawing-fe
     DrawingMenuButtonComponent,
     DrawingObjectsListComponent,
     DrawingStyleFormComponent,
-    DrawingFeatureImageComponent,
+    DrawingFeatureIconComponent,
   ],
   imports: [
     CommonModule,

@@ -9,7 +9,7 @@
     </mat-expansion-panel-header>
     @for (feature of this.features$ | async; track feature.__fid; let index = $index) {
       <div (click)="selectFeature(feature.__fid)" [class.selected]="feature.__fid === (selectedFeature$ | async)?.__fid">
-        <mat-icon><tm-drawing-feature-image [feature]="feature"></tm-drawing-feature-image></mat-icon>
+        <tm-drawing-feature-icon [feature]="feature"></tm-drawing-feature-icon>
         #{{index+1}} {{ feature.attributes.style.label }}
       </div>
     }
