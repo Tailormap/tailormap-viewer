@@ -10,7 +10,7 @@
     @for (feature of this.features$ | async; track feature.__fid; let index = $index) {
       <div (click)="selectFeature(feature.__fid)" [class.selected]="feature.__fid === (selectedFeature$ | async)?.__fid">
         <tm-drawing-feature-icon [feature]="feature"></tm-drawing-feature-icon>
-        #{{index+1}} {{ feature.attributes.style.label }}
+        #{{index+1}} {{ stripMacros(feature.attributes.style.label) }}
       </div>
     }
   </mat-expansion-panel>

@@ -37,4 +37,8 @@ export class DrawingObjectsListComponent implements  OnDestroy {
   public selectFeature(fid: string) {
     this.store$.dispatch(setSelectedFeature({ fid }));
   }
+
+  public stripMacros(label: string | undefined) {
+    return (label || '').replace(/\[[A-Z]+]/g, '');
+  }
 }
