@@ -9,4 +9,5 @@ export interface GeoServiceSummaryModel {
   protocol: GeoServiceProtocolEnum;
   settings?: GeoServiceSettingsModel;
   authorizationRules: AuthorizationRuleGroup[];
+  url?: string;
 }

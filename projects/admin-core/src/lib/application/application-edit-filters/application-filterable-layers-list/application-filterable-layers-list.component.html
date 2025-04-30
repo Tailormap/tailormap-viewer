@@ -2,7 +2,7 @@
 <mat-selection-list>
   @for (layer of filterableLayers(); track layer.id) {
     <mat-list-item (click)="setSelectedLayer(layer)">
-      <div>{{ layer.title }}</div>
+      <div>{{ layer.layerSettings?.title || layer?.title }}</div>
     </mat-list-item>
   }
 </mat-selection-list>

@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, Input } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, Input, Output, EventEmitter } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, map, Observable, of } from 'rxjs';
 import { AttributeDescriptorModel, FeatureTypeModel } from '@tailormap-admin/admin-api';
@@ -24,6 +24,12 @@ export class FormAttributeListComponent implements OnInit {
   public set featureType(featureType: FeatureTypeModel | null) {
     this.featureTypeSubject$.next(featureType);
   }
+
+  @Input()
+  public usingInApplicationFilter: boolean = false;
+
+  @Output()
+  public selectAttribute = new EventEmitter<AttributeDescriptorModel>();
 
   public filter = new FormControl('');
 
@@ -57,7 +63,8 @@ export class FormAttributeListComponent implements OnInit {
             return [];
           }
           const selectedAttributesSet = new Set(selectedAttributes);
-          const attributes = (featureType?.attributes || []).filter(a => !selectedAttributesSet.has(a.name));
+          const attributes = this.usingInApplicationFilter ? featureType?.attributes
+            : (featureType?.attributes || []).filter(a => !selectedAttributesSet.has(a.name));
           if (filterStr) {
             return FilterHelper.filterByTerm(attributes, filterStr, a => a.name);
           }
@@ -67,7 +74,11 @@ export class FormAttributeListComponent implements OnInit {
   }
 
   public addAttribute(attribute: AttributeDescriptorModel) {
-    this.store$.dispatch(draftFormAddField({ name: attribute.name }));
+    if (this.usingInApplicationFilter) {
+      this.selectAttribute.emit(attribute);
+    } else {
+      this.store$.dispatch(draftFormAddField({ name: attribute.name }));
+    }
   }
 
 }
