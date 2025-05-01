@@ -1,2 +1,9 @@
 <strong>New filter</strong>
-<tm-admin-application-edit-filter-form></tm-admin-application-edit-filter-form>
+<tm-admin-application-edit-filter-form
+  (updateFilter)="updateFilter($event)"
+  (validFormChanged)="validFormChanged($event)"></tm-admin-application-edit-filter-form>
+
+<div class="page-details-actions">
+  <tm-admin-save-button label="Create" i18n-label="@@admin-core.common.create" (save)="save()"></tm-admin-save-button>
+  <button mat-flat-button [routerLink]="'/admin/applications/application/' + applicationId() + '/filters'" i18n="@@admin-core.common.cancel">Cancel</button>
+</div>

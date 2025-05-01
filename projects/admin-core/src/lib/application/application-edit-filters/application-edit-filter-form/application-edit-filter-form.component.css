@@ -1,3 +1,8 @@
-.filterable-layers {
+.layers-and-attributes {
+  display: flex;
   margin-top: 16px;
+  flex: 1;
+  overflow: hidden;
+  min-height: 300px;
+  max-height: 450px;
 }

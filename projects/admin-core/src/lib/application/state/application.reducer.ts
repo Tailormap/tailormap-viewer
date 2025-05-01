@@ -360,6 +360,42 @@ const onUpdateApplicationFiltersConfig = (
   }));
 };
 
+const onCreateApplicationFilterGroup = (
+  state: ApplicationState,
+  payload: ReturnType<typeof ApplicationActions.createApplicationFilterGroup>,
+): ApplicationState => {
+  return updateApplication(state, application => ({
+    settings: {
+      ...application.settings,
+      layerSettings: application.settings?.layerSettings || {}, // Ensure layerSettings is defined
+      filterGroups: [ ...application.settings?.filterGroups ?? [], payload.filterGroup ],
+    },
+  }));
+};
+
+const onDeleteApplicationFilterGroup = (
+  state: ApplicationState,
+  payload: ReturnType<typeof ApplicationActions.deleteApplicationFilterGroup>,
+): ApplicationState => {
+  return updateApplication(state, application => {
+    const filterGroups = application.settings?.filterGroups?.filter(filterGroup => {
+      for (const filter of filterGroup.filters) {
+        if (filter.id === payload.filterId) {
+          return false;
+        }
+      }
+      return true;
+    }) || [];
+      return {
+        settings: {
+          ...application.settings,
+          layerSettings: application.settings?.layerSettings || {}, // Ensure layerSettings is defined
+          filterGroups: filterGroups,
+        },
+      };
+    });
+};
+
 const onToggleNodeExpanded = (
   state: ApplicationState,
   payload: ReturnType<typeof ApplicationActions.toggleApplicationNodeExpanded>,
@@ -449,6 +485,8 @@ const applicationReducerImpl = createReducer<ApplicationState>(
   on(ApplicationActions.updateApplicationComponentConfig, onUpdateApplicationComponentConfig),
   on(ApplicationActions.updateApplicationStylingConfig, onUpdateApplicationStylingConfig),
   on(ApplicationActions.updateApplicationFiltersConfig, onUpdateApplicationFiltersConfig),
+  on(ApplicationActions.createApplicationFilterGroup, onCreateApplicationFilterGroup),
+  on(ApplicationActions.deleteApplicationFilterGroup, onDeleteApplicationFilterGroup),
   on(ApplicationActions.toggleApplicationNodeExpanded, onToggleNodeExpanded),
   on(ApplicationActions.toggleApplicationNodeExpandedAll, onToggleNodeExpandedAll),
   on(ApplicationActions.setApplicationCatalogFilterTerm, onSetApplicationCatalogFilterTerm),

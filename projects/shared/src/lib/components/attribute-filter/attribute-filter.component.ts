@@ -5,8 +5,8 @@ import { debounceTime, take, takeUntil, tap } from 'rxjs/operators';
 import { DateTime } from 'luxon';
 import { AttributeType } from '@tailormap-viewer/api';
 import { FilterConditionEnum } from '@tailormap-viewer/api';
-import { FilterConditionModel } from '../models/filter-condition.model';
-import { AttributeFilterHelper } from '../helpers/attribute-filter.helper';
+import { FilterConditionModel } from '../../../../../core/src/lib/filter/models/filter-condition.model';
+import { AttributeFilterHelper } from '../../../../../core/src/lib/filter/helpers/attribute-filter.helper';
 
 interface InputFilterData {
   condition?: FilterConditionEnum;

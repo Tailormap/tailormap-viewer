@@ -12,14 +12,18 @@ import { ExtendedGeoServiceLayerModel } from '../../../catalog/models/extended-g
 })
 export class ApplicationFilterableLayersListComponent {
 
-  public filterableLayers: Signal<ExtendedGeoServiceLayerModel[]> = this.store$.selectSignal(selectFilterableLayersForApplication);
+  public filterableLayers: Signal<{geoServiceLayer: ExtendedGeoServiceLayerModel | undefined; appLayerId: string }[]> =
+    this.store$.selectSignal(selectFilterableLayersForApplication);
 
   @Output()
-  public selectLayer = new EventEmitter<ExtendedGeoServiceLayerModel>();
+  public selectLayer = new EventEmitter<{geoServiceLayer: ExtendedGeoServiceLayerModel | undefined; appLayerId: string }>();
 
   constructor(private store$: Store) {}
 
-  public setSelectedLayer(layer: ExtendedGeoServiceLayerModel) {
+  public setSelectedLayer(layer: {geoServiceLayer: ExtendedGeoServiceLayerModel | undefined; appLayerId: string }) {
+    if (!layer) {
+      return;
+    }
     this.selectLayer.emit(layer);
   }
 }

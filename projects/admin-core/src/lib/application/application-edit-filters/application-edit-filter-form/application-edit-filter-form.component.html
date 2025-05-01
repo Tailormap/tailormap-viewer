@@ -1,39 +1,24 @@
 <div class="filter-form-text">Form to make filter</div>
 <form [formGroup]="filterForm">
-  <div class="filterable-layers">
+
+  <div class="layers-and-attributes">
     <tm-admin-filterable-layers-list
       (selectLayer)="setSelectedLayer($event)"></tm-admin-filterable-layers-list>
-  </div>
-  <div>Selected layer: {{ selectedLayer()?.layerSettings?.title || selectedLayer()?.title }}</div>
 
-  <div class="feature-types">
     <tm-admin-form-attribute-list [featureType]="featureType$ | async"
                                   [loadingFeatureType]="loadingFeatureType$ | async"
                                   [usingInApplicationFilter]="true"
                                   (selectAttribute)="setSelectedAttribute($event)"></tm-admin-form-attribute-list>
   </div>
+
+  <div>Selected layer: {{ selectedLayer()?.layerSettings?.title || selectedLayer()?.title }}</div>
+
   <div>Selected attribute: {{ selectedAttribute()?.name }}</div>
 
-  <mat-form-field>
-    <mat-label>Operator</mat-label>
-    <mat-select formControlName="condition">
-      @for (condition of conditionOptions; track condition) {
-        <mat-option [value]="condition">
-          {{ condition }}
-        </mat-option>
-      }
-    </mat-select>
-  </mat-form-field>
+  @if (selectedAttribute()){
+    <tm-attribute-filter [attributeType]="selectedAttribute()!.type" (filterChanged)="setFilterValues($event)"></tm-attribute-filter>
+  }
 
-  <mat-form-field>
-    <mat-label i18n="@@admin-core.application.filters.value">Value</mat-label>
-    <input matInput
-           tmAutoFocus
-           placeholder="Value"
-           i18n-placeholder="@@admin-core.application.filters.value"
-           formControlName="value"
-    />
-  </mat-form-field>
 
 </form>
 

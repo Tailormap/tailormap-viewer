@@ -139,6 +139,16 @@ export const updateApplicationFiltersConfig = createAction(
   props<{ filterGroups: FilterGroupModel<AttributeFilterModel>[] }>(),
 );
 
+export const createApplicationFilterGroup = createAction(
+  `${applicationActionsPrefix} Create Filter Group`,
+  props<{ filterGroup: FilterGroupModel<AttributeFilterModel> }>(),
+);
+
+export const deleteApplicationFilterGroup = createAction(
+  `${applicationActionsPrefix} Delete Filter Group`,
+  props<{ filterId: string }>(),
+);
+
 export const toggleApplicationNodeExpanded = createAction(
   `${applicationActionsPrefix} Toggle Node Expanded`,
   props<{ nodeId: string; tree: 'layer' | 'baseLayer' | 'terrainLayer' }>(),
