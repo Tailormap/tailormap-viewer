@@ -30,12 +30,4 @@ export class ApplicationEditFiltersComponent {
       });
   }
 
-  // public onFilterGroupsSaveManual(jsonString: string) {
-  //   try {
-  //     const filterGroups = JSON.parse(jsonString) as FilterGroupModel<AttributeFilterModel>[];
-  //     this.store$.dispatch(updateApplicationFiltersConfig({ filterGroups }));
-  //   } catch (e) {
-  //     console.error('Invalid JSON string', e);
-  //   }
-  // }
 }

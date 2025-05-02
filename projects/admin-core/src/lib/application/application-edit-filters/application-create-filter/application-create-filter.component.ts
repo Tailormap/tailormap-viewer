@@ -3,6 +3,7 @@ import { AttributeFilterModel, FilterGroupModel } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { createApplicationFilterGroup } from '../../state/application.actions';
 import { selectSelectedApplicationId } from '../../state/application.selectors';
+import { nanoid } from 'nanoid';
 
 @Component({
   selector: 'tm-admin-application-create-filter',
@@ -25,6 +26,7 @@ export class ApplicationCreateFilterComponent {
     if (!this.filterGroup) {
       return;
     }
+    this.filterGroup.id = nanoid();
     this.store$.dispatch(createApplicationFilterGroup({ filterGroup: this.filterGroup }));
   }
 

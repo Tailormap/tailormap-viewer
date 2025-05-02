@@ -1,8 +1,8 @@
-<div class="filter-form-text">Form to make filter</div>
 <form [formGroup]="filterForm">
 
   <div class="layers-and-attributes">
     <tm-admin-filterable-layers-list
+      [layersForExistingFilter]="appLayerIds$ | async"
       (selectLayer)="setSelectedLayer($event)"></tm-admin-filterable-layers-list>
 
     <tm-admin-form-attribute-list [featureType]="featureType$ | async"
@@ -11,12 +11,17 @@
                                   (selectAttribute)="setSelectedAttribute($event)"></tm-admin-form-attribute-list>
   </div>
 
-  <div>Selected layer: {{ selectedLayer()?.layerSettings?.title || selectedLayer()?.title }}</div>
-
-  <div>Selected attribute: {{ selectedAttribute()?.name }}</div>
-
   @if (selectedAttribute()){
-    <tm-attribute-filter [attributeType]="selectedAttribute()!.type" (filterChanged)="setFilterValues($event)"></tm-attribute-filter>
+    <div class="attribute-filter-info">
+      <strong>Filter for attribute '{{ selectedAttribute()?.name }}' on layer '{{ selectedLayer()?.layerSettings?.title || selectedLayer()?.title }}'</strong>
+    </div>
+
+    <div class="attribute-filter-values">
+      <tm-attribute-filter
+        [attributeType]="selectedAttribute()!.type"
+        [filter]="_filterData"
+        (filterChanged)="setFilterValues($event)"></tm-attribute-filter>
+    </div>
   }
 
 

@@ -1,11 +1,14 @@
 @if (filter$ | async; as filter) {
   <strong>Edit {{ filter.id }} </strong>
-  <tm-admin-application-edit-filter-form [filter]="filter"></tm-admin-application-edit-filter-form>
+  <tm-admin-application-edit-filter-form
+    [filter]="filter"
+    (updateFilter)="updateFilter($event)"
+    (validFormChanged)="validFormChanged($event)"></tm-admin-application-edit-filter-form>
 
   <div class="page-details-actions application-edit-buttons">
-<!--    <tm-admin-save-button [saving$]="saving$" [disabled]="(canSave$ | async) === false" (save)="save()"></tm-admin-save-button>-->
+    <tm-admin-save-button (save)="save()"></tm-admin-save-button>
     <button mat-flat-button color="warn" (click)="delete(filter)" i18n="@@admin-core.common.delete">Delete</button>
-    <button mat-flat-button routerLink="/admin/forms" i18n="@@admin-core.common.close">Close</button>
+    <button mat-flat-button [routerLink]="'/admin/applications/application/' + applicationId() + '/filters'" i18n="@@admin-core.common.close">Close</button>
   </div>
 }
 
