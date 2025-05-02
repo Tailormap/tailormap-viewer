@@ -8,9 +8,15 @@
       <mat-panel-description>{{ features$.length }}</mat-panel-description>
     </mat-expansion-panel-header>
     @for (feature of this.features$ | async; track feature.__fid; let index = $index) {
-      <div (click)="selectFeature(feature.__fid)" [class.selected]="feature.__fid === (selectedFeature$ | async)?.__fid">
+      <div (click)="selectFeature(feature.__fid)" (dblclick)="selectFeatureAndEditLabel(feature.__fid)" [class.selected]="feature.__fid === (selectedFeature$ | async)?.__fid">
         <tm-drawing-feature-icon [feature]="feature"></tm-drawing-feature-icon>
-        #{{index+1}} {{ stripMacros(feature.attributes.style.label) }}
+        #{{index+1}}
+        @if(editingLabelForFeatureFid === feature.__fid) {
+          <input #editLabel style="display: block; width: 180px" type="text" [ngModel]="feature.attributes.style.label"  (keyup.enter)="updateLabel()" />
+        } @else {
+          <span class="label">{{ stripMacros(feature.attributes.style.label) }}</span>
+        }
+
       </div>
     }
   </mat-expansion-panel>

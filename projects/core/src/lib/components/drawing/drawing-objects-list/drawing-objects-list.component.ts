@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, Input, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, Input, OnDestroy, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { selectDrawingFeatures, selectSelectedDrawingFeature, setSelectedFeature } from '../state';
+import { selectDrawingFeatures, selectSelectedDrawingFeature, setSelectedFeature, updateDrawingFeatureStyle } from '../state';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { DrawingFeatureModel } from '../models/drawing-feature.model';
 
@@ -11,7 +11,7 @@ import { DrawingFeatureModel } from '../models/drawing-feature.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
-export class DrawingObjectsListComponent implements  OnDestroy {
+export class DrawingObjectsListComponent implements OnDestroy {
   private destroyed = new Subject();
 
   @Input()
@@ -20,6 +20,7 @@ export class DrawingObjectsListComponent implements  OnDestroy {
   public features$: Observable<DrawingFeatureModel[]>;
 
   public selectedFeature$: Observable<DrawingFeatureModel | null>;
+  public editingLabelForFeatureFid: string | null = null;
 
   constructor(
     private store$: Store,
@@ -40,5 +41,23 @@ export class DrawingObjectsListComponent implements  OnDestroy {
 
   public stripMacros(label: string | undefined) {
     return (label || '').replace(/\[[A-Z]+]/g, '');
+  }
+
+  @ViewChild('editLabel') private editLabel: ElementRef | null = null;
+
+  public selectFeatureAndEditLabel(fid: string) {
+    this.store$.dispatch(setSelectedFeature({ fid }));
+    this.editingLabelForFeatureFid = fid;
+    setTimeout(() => {
+      this.editLabel?.nativeElement.focus();
+    });
+  }
+
+  public updateLabel() {
+    if (!this.editingLabelForFeatureFid || !this.editLabel) {
+      return;
+    }
+    this.store$.dispatch(updateDrawingFeatureStyle({ fid: this.editingLabelForFeatureFid, style: { label: this.editLabel.nativeElement.value } }));
+    this.editingLabelForFeatureFid = null;
   }
 }
