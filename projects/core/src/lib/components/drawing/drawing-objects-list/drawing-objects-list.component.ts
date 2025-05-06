@@ -60,4 +60,8 @@ export class DrawingObjectsListComponent implements OnDestroy {
     this.store$.dispatch(updateDrawingFeatureStyle({ fid: this.editingLabelForFeatureFid, style: { label: this.editLabel.nativeElement.value } }));
     this.editingLabelForFeatureFid = null;
   }
+
+  public cancelLabelEdit() {
+    this.editingLabelForFeatureFid = null;
+  }
 }

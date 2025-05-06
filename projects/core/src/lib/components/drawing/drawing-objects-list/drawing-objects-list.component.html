@@ -16,7 +16,7 @@
         <div class="counter">#{{index+1}}</div>
         <div class="label">
           @if(editingLabelForFeatureFid === feature.__fid) {
-            <input #editLabel style="display: block; width: 180px" type="text" [ngModel]="feature.attributes.style.label"  (keyup.enter)="updateLabel()" />
+            <input #editLabel [ngModel]="feature.attributes.style.label" (keyup.escape)="cancelLabelEdit()"  (keyup.enter)="updateLabel()" (blur)="updateLabel()"/>
           } @else {
             <div>{{ stripMacros(feature.attributes.style.label) }}</div>
           }
