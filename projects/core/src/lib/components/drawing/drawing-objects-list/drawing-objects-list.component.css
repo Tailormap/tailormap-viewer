@@ -34,3 +34,14 @@ mat-expansion-panel-header mat-panel-description {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+div.label > input {
+  border: 0;
+  font-family: var(--mat-expansion-container-text-font);
+  font-size: var(--mat-expansion-container-text-size);
+  line-height: var(--mat-expansion-container-text-line-height);
+}
+
+div.label > input:focus {
+  outline: none;
+}
