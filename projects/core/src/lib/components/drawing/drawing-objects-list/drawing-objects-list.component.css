@@ -21,11 +21,16 @@ mat-expansion-panel-header mat-panel-description {
 
 .objects-list div {
   border: 2px solid transparent;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  display: flex;
 }
 
 .objects-list .selected {
   border: 2px solid var(--primary-color);
+}
+
+.objects-list div > div.label {
+  flex-grow: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
