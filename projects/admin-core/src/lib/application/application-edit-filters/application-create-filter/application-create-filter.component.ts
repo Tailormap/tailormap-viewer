@@ -2,8 +2,9 @@ import { Component, ChangeDetectionStrategy, Signal } from '@angular/core';
 import { AttributeFilterModel, FilterGroupModel } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { createApplicationFilterGroup } from '../../state/application.actions';
-import { selectSelectedApplicationId } from '../../state/application.selectors';
+import { selectFilterableLayersForApplication, selectSelectedApplicationId } from '../../state/application.selectors';
 import { nanoid } from 'nanoid';
+import { GeoServiceLayerInApplicationModel } from '../../models/geo-service-layer-in-application.model';
 
 @Component({
   selector: 'tm-admin-application-create-filter',
@@ -19,6 +20,7 @@ export class ApplicationCreateFilterComponent {
   public formValid: boolean = true;
 
   public applicationId: Signal<string | null | undefined> = this.store$.selectSignal(selectSelectedApplicationId);
+  public filterableLayers: Signal<GeoServiceLayerInApplicationModel[]> = this.store$.selectSignal(selectFilterableLayersForApplication);
 
   constructor(private store$: Store) { }
 

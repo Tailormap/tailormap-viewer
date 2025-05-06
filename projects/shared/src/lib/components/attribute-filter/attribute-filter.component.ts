@@ -7,27 +7,7 @@ import { AttributeType } from '@tailormap-viewer/api';
 import { FilterConditionEnum } from '@tailormap-viewer/api';
 import { FilterConditionModel } from '../../../../../core/src/lib/filter/models/filter-condition.model';
 import { AttributeFilterHelper } from '../../../../../core/src/lib/filter/helpers/attribute-filter.helper';
-
-interface InputFilterData {
-  condition?: FilterConditionEnum;
-  value?: Array<string | DateTime>;
-  caseSensitive?: boolean;
-  invertCondition?: boolean;
-}
-
-interface FilterData {
-  condition?: FilterConditionEnum | string;
-  value?: string[];
-  caseSensitive?: boolean;
-  invertCondition?: boolean;
-}
-
-interface OutputFilterData {
-  condition: FilterConditionEnum;
-  value: string[];
-  caseSensitive?: boolean;
-  invertCondition?: boolean;
-}
+import { FilterData, InputFilterData, OutputFilterData } from '../../models/attribute-filter-data.model';
 
 @Component({
   selector: 'tm-attribute-filter',

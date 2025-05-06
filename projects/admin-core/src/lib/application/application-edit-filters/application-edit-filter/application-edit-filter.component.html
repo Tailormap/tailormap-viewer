@@ -1,6 +1,7 @@
-@if (filter$ | async; as filter) {
-  <strong>Edit {{ filter.id }} </strong>
+@if (updateAttributeFilter$ | async; as filter) {
+  <strong>Edit {{ filter.filterId }} </strong>
   <tm-admin-application-edit-filter-form
+    [filterableLayers]="filterableLayers()"
     [filter]="filter"
     (updateFilter)="updateFilter($event)"
     (validFormChanged)="validFormChanged($event)"></tm-admin-application-edit-filter-form>

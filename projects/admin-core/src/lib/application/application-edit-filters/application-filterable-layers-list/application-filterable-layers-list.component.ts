@@ -1,7 +1,5 @@
-import { Component, ChangeDetectionStrategy, Signal, EventEmitter, Output, Input } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { selectFilterableLayersForApplication } from '../../state/application.selectors';
-import { ExtendedGeoServiceLayerModel } from '../../../catalog/models/extended-geo-service-layer.model';
+import { Component, ChangeDetectionStrategy, EventEmitter, Output, Input } from '@angular/core';
+import { GeoServiceLayerInApplicationModel } from '../../models/geo-service-layer-in-application.model';
 
 @Component({
   selector: 'tm-admin-filterable-layers-list',
@@ -12,29 +10,15 @@ import { ExtendedGeoServiceLayerModel } from '../../../catalog/models/extended-g
 })
 export class ApplicationFilterableLayersListComponent {
 
-  public filterableLayers: Signal<{geoServiceLayer: ExtendedGeoServiceLayerModel | undefined; appLayerId: string }[]> =
-    this.store$.selectSignal(selectFilterableLayersForApplication);
-
   @Input()
-  public set layersForExistingFilter(appLayerIds: string[] | null) {
-    console.log(appLayerIds);
-    if (!appLayerIds) {
-      return;
-    }
-    const selectedLayerForExistingFilter = this.filterableLayers().find(filterableLayer => {
-      return filterableLayer.appLayerId === appLayerIds[0];
-    });
-    if (selectedLayerForExistingFilter) {
-      this.setSelectedLayer(selectedLayerForExistingFilter);
-    }
-  }
+  public filterableLayers: GeoServiceLayerInApplicationModel[] = [];
 
   @Output()
-  public selectLayer = new EventEmitter<{ geoServiceLayer: ExtendedGeoServiceLayerModel | undefined; appLayerId: string }>();
+  public selectLayer = new EventEmitter<GeoServiceLayerInApplicationModel>();
 
-  constructor(private store$: Store) { }
+  constructor() { }
 
-  public setSelectedLayer(layer: { geoServiceLayer: ExtendedGeoServiceLayerModel | undefined; appLayerId: string }) {
+  public setSelectedLayer(layer: GeoServiceLayerInApplicationModel) {
     if (!layer) {
       return;
     }

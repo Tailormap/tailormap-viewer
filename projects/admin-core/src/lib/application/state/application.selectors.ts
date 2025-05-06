@@ -8,6 +8,7 @@ import { BaseComponentConfigHelper } from '@tailormap-viewer/api';
 import { CatalogTreeModel } from '../../catalog/models/catalog-tree.model';
 import { CatalogFilterHelper } from '../../catalog/helpers/catalog-filter.helper';
 import { ApplicationModelHelper } from '../helpers/application-model.helper';
+import { GeoServiceLayerInApplicationModel } from '../models/geo-service-layer-in-application.model';
 
 const selectApplicationState = createFeatureSelector<ApplicationState>(applicationStateKey);
 
@@ -210,7 +211,7 @@ export const selectFilterableLayersForApplication = createSelector(
   selectGeoServiceLayers,
   selectGeoServices,
   selectFeatureTypes,
-  (appLayersNodes, geoServiceLayers, geoServices, featureTypes) => {
+  (appLayersNodes, geoServiceLayers, geoServices, featureTypes): GeoServiceLayerInApplicationModel[] => {
     const geoServiceLayerMap = ApplicationTreeHelper.getLayerMap(geoServiceLayers);
     return appLayersNodes
       .filter(layer => ApplicationModelHelper.isLayerTreeNode(layer))
@@ -218,11 +219,16 @@ export const selectFilterableLayersForApplication = createSelector(
         geoServiceLayer: geoServiceLayerMap.get(ApplicationTreeHelper.getLayerMapKey(layerNode.layerName, layerNode.serviceId)),
         appLayerId: layerNode.id,
       }))
+      .filter(geoServiceLayerInApplication => geoServiceLayerInApplication.geoServiceLayer !== undefined)
+      .map(geoServiceLayerInApplication => ({
+        geoServiceLayer: geoServiceLayerInApplication.geoServiceLayer!,
+        appLayerId: geoServiceLayerInApplication.appLayerId,
+      }))
       .filter(({ geoServiceLayer, appLayerId: _appLayerId }) => {
-        const geoService = geoServices.find(service => service.id === geoServiceLayer?.serviceId);
+        const geoService = geoServices.find(service => service.id === geoServiceLayer.serviceId);
         const isGeoServer = geoService?.settings?.serverType === AdminServerType.GEOSERVER
           || ((geoService?.settings?.serverType === AdminServerType.AUTO && geoService.url?.includes('/geoserver/')) ?? false);
-        if (!geoServiceLayer?.layerSettings?.featureType) {
+        if (!geoServiceLayer.layerSettings?.featureType) {
           return false;
         }
         const featureTypeOfLayer = featureTypes.find(featureType => {

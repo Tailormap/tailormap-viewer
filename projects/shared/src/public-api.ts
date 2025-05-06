@@ -14,3 +14,4 @@ export * from './lib/types';
 export * from './lib/shared.module';
 export * from './lib/shared-imports.module';
 export * from './lib/models/registered-component.model';
+export * from './lib/models/attribute-filter-data.model';

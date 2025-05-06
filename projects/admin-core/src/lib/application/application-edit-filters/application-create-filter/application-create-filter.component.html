@@ -1,5 +1,6 @@
 <strong>New filter</strong>
 <tm-admin-application-edit-filter-form
+  [filterableLayers]="filterableLayers()"
   [filter]="null"
   (updateFilter)="updateFilter($event)"
   (validFormChanged)="validFormChanged($event)"></tm-admin-application-edit-filter-form>

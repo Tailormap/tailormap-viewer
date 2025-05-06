@@ -2,7 +2,7 @@
 
   <div class="layers-and-attributes">
     <tm-admin-filterable-layers-list
-      [layersForExistingFilter]="appLayerIds$ | async"
+      [filterableLayers]="filterableLayers"
       (selectLayer)="setSelectedLayer($event)"></tm-admin-filterable-layers-list>
 
     <tm-admin-form-attribute-list [featureType]="featureType$ | async"
@@ -11,14 +11,16 @@
                                   (selectAttribute)="setSelectedAttribute($event)"></tm-admin-form-attribute-list>
   </div>
 
-  @if (selectedAttribute()){
+  @if (filterForm.get('attribute')?.value && filterForm.get('attributeType')?.value){
     <div class="attribute-filter-info">
-      <strong>Filter for attribute '{{ selectedAttribute()?.name }}' on layer '{{ selectedLayer()?.layerSettings?.title || selectedLayer()?.title }}'</strong>
+      <strong>Filter for attribute '{{ filterForm.get('attribute')!.value }}' on layer '
+        {{ filterForm.get('layer')?.value?.geoServiceLayer?.layerSettings?.title
+        || filterForm.get('layer')?.value?.geoServiceLayer?.title }}'</strong>
     </div>
 
     <div class="attribute-filter-values">
       <tm-attribute-filter
-        [attributeType]="selectedAttribute()!.type"
+        [attributeType]="filterForm.get('attributeType')!.value!"
         [filter]="_filterData"
         (filterChanged)="setFilterValues($event)"></tm-attribute-filter>
     </div>
