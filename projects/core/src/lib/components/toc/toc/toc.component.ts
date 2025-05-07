@@ -1,5 +1,5 @@
 import { Component, computed, NgZone, OnDestroy, OnInit, Signal, signal } from '@angular/core';
-import { distinctUntilChanged, filter, Observable, of, Subject, takeUntil } from 'rxjs';
+import { filter, Observable, of, Subject, takeUntil } from 'rxjs';
 import {
   BaseTreeModel, BrowserHelper, DropZoneHelper, NodePositionChangedEventModel, TreeDragDropService,
   TreeService,
