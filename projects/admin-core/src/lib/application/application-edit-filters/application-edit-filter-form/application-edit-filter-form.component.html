@@ -1,23 +1,25 @@
 <form [formGroup]="filterForm">
 
-  <div class="layers-and-attributes">
-    <tm-admin-filterable-layers-list
-      [filterableLayers]="filterableLayers"
-      (selectLayer)="setSelectedLayer($event)"></tm-admin-filterable-layers-list>
-
-    <tm-admin-form-attribute-list [featureType]="featureType$ | async"
-                                  [loadingFeatureType]="loadingFeatureType$ | async"
-                                  [usingInApplicationFilter]="true"
-                                  (selectAttribute)="setSelectedAttribute($event)"></tm-admin-form-attribute-list>
+  <div class="attribute-filter-info">
+    @if (!filterForm.get('layer')?.value) {
+      <div>Select a layer to filter</div>
+    } @else {
+      Filter for attribute '{{ filterForm.get('attribute')?.value }}' on layer
+        '{{ filterForm.get('layer')?.value?.geoServiceLayer?.layerSettings?.title
+    || filterForm.get('layer')?.value?.geoServiceLayer?.title }}'
+    }
   </div>
 
-  @if (filterForm.get('attribute')?.value && filterForm.get('attributeType')?.value){
-    <div class="attribute-filter-info">
-      <strong>Filter for attribute '{{ filterForm.get('attribute')!.value }}' on layer '
-        {{ filterForm.get('layer')?.value?.geoServiceLayer?.layerSettings?.title
-        || filterForm.get('layer')?.value?.geoServiceLayer?.title }}'</strong>
+  @if(newFilter) {
+    <div class="layers-and-attributes">
+      <tm-admin-form-attribute-list [featureType]="featureType$ | async"
+                                    [loadingFeatureType]="loadingFeatureType$ | async"
+                                    [usingInApplicationFilter]="true"
+                                    (selectAttribute)="setSelectedAttribute($event)"></tm-admin-form-attribute-list>
     </div>
+  }
 
+  @if (filterForm.get('attribute')?.value && filterForm.get('attributeType')?.value){
     <div class="attribute-filter-values">
       <tm-attribute-filter
         [attributeType]="filterForm.get('attributeType')!.value!"

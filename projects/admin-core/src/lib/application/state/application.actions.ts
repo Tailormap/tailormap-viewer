@@ -149,6 +149,16 @@ export const deleteApplicationFilterGroup = createAction(
   props<{ filterId: string }>(),
 );
 
+export const setApplicationSelectedFilterLayerId = createAction(
+  `${applicationActionsPrefix} Set Application Selected Filter Layer Id`,
+  props<{ filterLayerId?: string }>(),
+);
+
+export const setApplicationSelectedFilterId = createAction(
+  `${applicationActionsPrefix} Set Application Selected Filter Id`,
+  props<{ filterId?: string }>(),
+);
+
 export const toggleApplicationNodeExpanded = createAction(
   `${applicationActionsPrefix} Toggle Node Expanded`,
   props<{ nodeId: string; tree: 'layer' | 'baseLayer' | 'terrainLayer' }>(),
@@ -163,6 +173,7 @@ export const setApplicationCatalogFilterTerm = createAction(
   `${applicationActionsPrefix} Set Application Catalog Filter Term`,
   props<{ filterTerm?: string | null }>(),
 );
+
 export const setApplicationTreeFilterTerm = createAction(
   `${applicationActionsPrefix} Set Application Tree Filter Term`,
   props<{ filterTerm?: string | null; tree: 'layer' | 'baseLayer' | 'terrainLayer' }>(),

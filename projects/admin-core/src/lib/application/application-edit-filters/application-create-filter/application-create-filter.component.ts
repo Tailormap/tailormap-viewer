@@ -1,10 +1,13 @@
-import { Component, ChangeDetectionStrategy, Signal } from '@angular/core';
-import { AttributeFilterModel, FilterGroupModel } from '@tailormap-viewer/api';
+import { Component, ChangeDetectionStrategy, Signal, computed } from '@angular/core';
+import { AttributeFilterModel, FilterGroupModel, FilterTypeEnum } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { createApplicationFilterGroup } from '../../state/application.actions';
-import { selectFilterableLayersForApplication, selectSelectedApplicationId } from '../../state/application.selectors';
+import {
+  selectApplicationSelectedFilterLayerId, selectFilterableLayersForApplication, selectSelectedApplicationId,
+} from '../../state/application.selectors';
 import { nanoid } from 'nanoid';
 import { GeoServiceLayerInApplicationModel } from '../../models/geo-service-layer-in-application.model';
+import { UpdateAttributeFilterModel } from '../../models/update-attribute-filter.model';
 
 @Component({
   selector: 'tm-admin-application-create-filter',
@@ -21,6 +24,25 @@ export class ApplicationCreateFilterComponent {
 
   public applicationId: Signal<string | null | undefined> = this.store$.selectSignal(selectSelectedApplicationId);
   public filterableLayers: Signal<GeoServiceLayerInApplicationModel[]> = this.store$.selectSignal(selectFilterableLayersForApplication);
+  public selectedLayerId: Signal<string | undefined> = this.store$.selectSignal(selectApplicationSelectedFilterLayerId);
+
+  public newFilter: Signal<UpdateAttributeFilterModel | null> = computed(() => {
+    const selectedLayerId = this.selectedLayerId();
+    if (!selectedLayerId) {
+      return null;
+    }
+    return {
+      filterGroup: {
+        id: nanoid(),
+        source: "PRESET",
+        layerIds: [selectedLayerId ?? ''],
+        type: FilterTypeEnum.ATTRIBUTE,
+        filters: [],
+        operator: 'AND',
+      },
+      filterId: nanoid(),
+    };
+  });
 
   constructor(private store$: Store) { }
 

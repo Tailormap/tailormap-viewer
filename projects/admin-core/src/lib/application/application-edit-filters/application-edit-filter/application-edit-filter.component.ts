@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, DestroyRef, Signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, DestroyRef, Signal, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { filter, map, Observable, switchMap, take } from 'rxjs';
 import { Store } from '@ngrx/store';
@@ -7,10 +7,13 @@ import { AttributeFilterModel, FilterGroupModel } from '@tailormap-viewer/api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
 import { AdminSnackbarService } from '../../../shared/services/admin-snackbar.service';
-import { deleteApplicationFilterGroup, updateApplicationFiltersConfig } from '../../state/application.actions';
+import {
+  deleteApplicationFilterGroup, setApplicationSelectedFilterId, setApplicationSelectedFilterLayerId, updateApplicationFiltersConfig,
+} from '../../state/application.actions';
 import { tap } from 'rxjs/operators';
 import { UpdateAttributeFilterModel } from '../../models/update-attribute-filter.model';
 import { GeoServiceLayerInApplicationModel } from '../../models/geo-service-layer-in-application.model';
+import { $localize } from '@angular/localize/init';
 
 @Component({
   selector: 'tm-admin-application-edit-filter',
@@ -19,7 +22,7 @@ import { GeoServiceLayerInApplicationModel } from '../../models/geo-service-laye
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
-export class ApplicationEditFilterComponent {
+export class ApplicationEditFilterComponent implements OnDestroy {
 
   public updateAttributeFilter$: Observable<UpdateAttributeFilterModel | null>;
 
@@ -45,6 +48,8 @@ export class ApplicationEditFilterComponent {
           for (const filterGroup of filterGroups) {
             const attributeFilter = filterGroup.filters.find(filterInGroup => filterInGroup.id === filterId);
             if (attributeFilter) {
+              this.store$.dispatch(setApplicationSelectedFilterLayerId({ filterLayerId: filterGroup.layerIds[0] }));
+              this.store$.dispatch(setApplicationSelectedFilterId({ filterId: filterId }));
               return {
                 filterGroup: filterGroup,
                 filterId: attributeFilter.id,
@@ -100,5 +105,9 @@ export class ApplicationEditFilterComponent {
       console.log("filter groups: ", newFilterGroups);
     });
 
+  }
+
+  public ngOnDestroy(): void {
+    this.store$.dispatch(setApplicationSelectedFilterId({ filterId: undefined }));
   }
 }

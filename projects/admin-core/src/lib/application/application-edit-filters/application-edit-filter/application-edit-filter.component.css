@@ -1,0 +1,12 @@
+.application-edit-filter {
+  border: 1px solid var(--border-color);
+  padding: 10px;
+}
+
+.edit-filter-content {
+  border-top: 1px solid var(--border-color);
+}
+
+.edit-filter-header {
+  padding-bottom: 8px;
+}

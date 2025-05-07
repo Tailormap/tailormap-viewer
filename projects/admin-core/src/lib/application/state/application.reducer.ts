@@ -396,6 +396,26 @@ const onDeleteApplicationFilterGroup = (
     });
 };
 
+const onSetApplicationSelectedFilterLayerId = (
+  state: ApplicationState,
+  payload: ReturnType<typeof ApplicationActions.setApplicationSelectedFilterLayerId>,
+): ApplicationState => {
+  return {
+    ...state,
+    applicationSelectedFilterLayerId: payload.filterLayerId,
+  };
+};
+
+const onSetApplicationSelectedFilterId = (
+  state: ApplicationState,
+  payload: ReturnType<typeof ApplicationActions.setApplicationSelectedFilterId>,
+): ApplicationState => {
+  return {
+    ...state,
+    applicationSelectedFilterId: payload.filterId,
+  };
+};
+
 const onToggleNodeExpanded = (
   state: ApplicationState,
   payload: ReturnType<typeof ApplicationActions.toggleApplicationNodeExpanded>,
@@ -487,6 +507,8 @@ const applicationReducerImpl = createReducer<ApplicationState>(
   on(ApplicationActions.updateApplicationFiltersConfig, onUpdateApplicationFiltersConfig),
   on(ApplicationActions.createApplicationFilterGroup, onCreateApplicationFilterGroup),
   on(ApplicationActions.deleteApplicationFilterGroup, onDeleteApplicationFilterGroup),
+  on(ApplicationActions.setApplicationSelectedFilterLayerId, onSetApplicationSelectedFilterLayerId),
+  on(ApplicationActions.setApplicationSelectedFilterId, onSetApplicationSelectedFilterId),
   on(ApplicationActions.toggleApplicationNodeExpanded, onToggleNodeExpanded),
   on(ApplicationActions.toggleApplicationNodeExpandedAll, onToggleNodeExpandedAll),
   on(ApplicationActions.setApplicationCatalogFilterTerm, onSetApplicationCatalogFilterTerm),

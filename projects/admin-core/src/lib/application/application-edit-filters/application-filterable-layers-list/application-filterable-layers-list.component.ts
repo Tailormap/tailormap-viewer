@@ -1,5 +1,10 @@
-import { Component, ChangeDetectionStrategy, EventEmitter, Output, Input } from '@angular/core';
+import {
+  Component, ChangeDetectionStrategy, EventEmitter, Output, Signal, computed, OnDestroy,
+} from '@angular/core';
 import { GeoServiceLayerInApplicationModel } from '../../models/geo-service-layer-in-application.model';
+import { Store } from '@ngrx/store';
+import { selectApplicationSelectedFilterLayerId, selectFilterableLayersForApplication } from '../../state/application.selectors';
+import { setApplicationSelectedFilterLayerId } from '../../state/application.actions';
 
 @Component({
   selector: 'tm-admin-filterable-layers-list',
@@ -8,21 +13,36 @@ import { GeoServiceLayerInApplicationModel } from '../../models/geo-service-laye
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
-export class ApplicationFilterableLayersListComponent {
+export class ApplicationFilterableLayersListComponent implements OnDestroy {
 
-  @Input()
-  public filterableLayers: GeoServiceLayerInApplicationModel[] = [];
+  public filterableLayers: Signal<GeoServiceLayerInApplicationModel[]> = this.store$.selectSignal(selectFilterableLayersForApplication);
+  public selectedLayerId: Signal<string | undefined> = this.store$.selectSignal(selectApplicationSelectedFilterLayerId);
+  public filterableLayersWithSelected = computed(() => {
+    const filterableLayers = this.filterableLayers();
+    const selectedLayerId = this.selectedLayerId();
+    return filterableLayers.map(layer => {
+      return {
+        ...layer,
+        isSelected: layer.appLayerId === selectedLayerId,
+      };
+    });
+  });
 
   @Output()
   public selectLayer = new EventEmitter<GeoServiceLayerInApplicationModel>();
 
-  constructor() { }
+  constructor(private store$: Store) { }
 
   public setSelectedLayer(layer: GeoServiceLayerInApplicationModel) {
     if (!layer) {
       return;
     }
+    this.store$.dispatch(setApplicationSelectedFilterLayerId({ filterLayerId: layer.appLayerId }));
     this.selectLayer.emit(layer);
+  }
+
+  public ngOnDestroy(): void {
+    this.store$.dispatch(setApplicationSelectedFilterLayerId({ filterLayerId: undefined }));
   }
 
 }

@@ -29,13 +29,15 @@ export class ApplicationEditFilterFormComponent implements OnInit {
   };
 
   @Input()
+  public newFilter: boolean = false;
+
+  @Input()
   public filterableLayers: GeoServiceLayerInApplicationModel[] = [];
 
   @Input()
   public set filter(updateAttributeFilter: UpdateAttributeFilterModel | null) {
     this.filterGroupId = updateAttributeFilter?.filterGroup.id;
     const appLayerIds = updateAttributeFilter?.filterGroup.layerIds;
-    console.log("filterable layers: ", this.filterableLayers);
     const filterLayer = this.filterableLayers.find(layer => layer.appLayerId === appLayerIds?.[0]);
     if (filterLayer) {
       this.setSelectedLayer(filterLayer);
@@ -123,7 +125,6 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     if (!attributeFilter) {
       this.filterForm.patchValue({
         id: nanoid(),
-        layer: null,
         attribute: '',
         condition: null,
         value: [],

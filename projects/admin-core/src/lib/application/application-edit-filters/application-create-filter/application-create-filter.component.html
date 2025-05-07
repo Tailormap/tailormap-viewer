@@ -1,11 +1,18 @@
-<strong>New filter</strong>
-<tm-admin-application-edit-filter-form
-  [filterableLayers]="filterableLayers()"
-  [filter]="null"
-  (updateFilter)="updateFilter($event)"
-  (validFormChanged)="validFormChanged($event)"></tm-admin-application-edit-filter-form>
+<div class="application-create-filter">
+  <div class="create-filter-header">
+    <strong>Create new filter</strong>
+  </div>
+  <div class="create-filter-content">
+    <tm-admin-application-edit-filter-form
+      [filterableLayers]="filterableLayers()"
+      [filter]="newFilter()"
+      [newFilter]="true"
+      (updateFilter)="updateFilter($event)"
+      (validFormChanged)="validFormChanged($event)"></tm-admin-application-edit-filter-form>
 
-<div class="page-details-actions">
-  <tm-admin-save-button label="Create" i18n-label="@@admin-core.common.create" (save)="save()"></tm-admin-save-button>
-  <button mat-flat-button [routerLink]="'/admin/applications/application/' + applicationId() + '/filters'" i18n="@@admin-core.common.cancel">Cancel</button>
+    <div class="page-details-actions">
+      <tm-admin-save-button label="Create" i18n-label="@@admin-core.common.create" (save)="save()"></tm-admin-save-button>
+      <button mat-flat-button [routerLink]="'/admin/applications/application/' + applicationId() + '/filters'" i18n="@@admin-core.common.cancel">Cancel</button>
+    </div>
+  </div>
 </div>

@@ -7,5 +7,10 @@
 }
 
 .filters-list {
+  margin-left: 10px;
   min-width: 100px;
+}
+
+.filterable-layers-list {
+  margin-right: 10px;
 }
