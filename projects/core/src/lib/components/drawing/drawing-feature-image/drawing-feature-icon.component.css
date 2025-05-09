@@ -6,3 +6,8 @@
   vertical-align: middle;
   margin: 0 8px 0 8px;
 }
+
+ .mat-icon ::ng-deep svg > g {
+  stroke: var(--stroke);
+  fill: var(--fill);
+}

@@ -1,3 +1,5 @@
 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-  <path stroke="var(--stroke)" fill="var(--fill)"  d="M15 9.059h6.02v6H15V21H9v-5.941H3.02v-6H9V3h6v6.059Z"/>
+  <g>
+    <path d="M15 9.059h6.02v6H15V21H9v-5.941H3.02v-6H9V3h6v6.059Z"/>
+  </g>
 </svg>
