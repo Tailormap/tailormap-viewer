@@ -72,10 +72,10 @@ export class DrawingFeatureIconComponent {
       return '0';
     }
     if (style.strokeType === StrokeTypeEnum.DASH) {
-      return [ Math.max(0, style.strokeWidth) + 4, Math.max(6, style.strokeWidth) + 6 ];
+      return [ Math.max(0, style.strokeWidth) + 4, Math.max(6, style.strokeWidth) + 6 ].join(' ');
     }
     if (style.strokeType === StrokeTypeEnum.DOT) {
-      return [ 1, Math.max(4, style.strokeWidth) + 4 ];
+      return [ 1, Math.max(4, style.strokeWidth) + 4 ].join(' ');
     }
     return '0';
   }
