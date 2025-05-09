@@ -10,5 +10,7 @@ export interface ExtTransformEnableToolArguments {
 
 export interface ExtTransformToolModel extends ToolModel {
   enable(enableArgs: ExtTransformEnableToolArguments): void;
+  enableTranslate(): void;
+  disableTranslate(): void;
   featureModified$: Observable<string>;
 }
