@@ -13,7 +13,6 @@ import {
 import { tap } from 'rxjs/operators';
 import { UpdateAttributeFilterModel } from '../../models/update-attribute-filter.model';
 import { GeoServiceLayerInApplicationModel } from '../../models/geo-service-layer-in-application.model';
-import { $localize } from '@angular/localize/init';
 
 @Component({
   selector: 'tm-admin-application-edit-filter',

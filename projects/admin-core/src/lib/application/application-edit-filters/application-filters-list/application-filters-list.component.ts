@@ -38,7 +38,7 @@ export class ApplicationFiltersListComponent implements OnDestroy {
   constructor(private store$: Store) {}
 
   public ngOnDestroy(): void {
-    this.store$.dispatch(setApplicationSelectedFilterId({ filterId: undefined }))
+    this.store$.dispatch(setApplicationSelectedFilterId({ filterId: undefined }));
   }
 
 }
