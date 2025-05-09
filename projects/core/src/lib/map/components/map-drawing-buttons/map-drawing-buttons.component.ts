@@ -110,7 +110,11 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
         switchMap(({ tool }) => tool.drawing$),
       )
       .subscribe(drawEvent => {
+        if (drawEvent && drawEvent.type === 'start') {
+          this.extTransformTool?.disableTranslate();
+        }
         if (drawEvent && drawEvent.type === 'end' && this.activeTool) {
+          this.extTransformTool?.enableTranslate();
           this.drawingAdded.emit(drawEvent);
           if (this.drawSingleShape) {
             const activeTool = this.activeTool;
