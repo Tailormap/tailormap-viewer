@@ -123,7 +123,7 @@ describe('MapReducer', () => {
 
   test('handles MapActions.setSelectedLayerId', () => {
     const initialState: MapState = { ...initialMapState };
-    const action = MapActions.setSelectedLayerId({ layerId: '1' });
+    const action = MapActions.toggleSelectedLayerId({ layerId: '1' });
     const updatedState = mapReducer(initialState, action);
     expect(updatedState.selectedLayer).toEqual('1');
   });
