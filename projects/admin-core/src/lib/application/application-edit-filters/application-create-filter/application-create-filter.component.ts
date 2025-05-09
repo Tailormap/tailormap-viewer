@@ -32,6 +32,7 @@ export class ApplicationCreateFilterComponent {
   public newFilter: Signal<UpdateAttributeFilterModel | null> = computed(() => {
     const selectedLayerId = this.selectedLayerId();
     const newFilterId = this.newFilterId();
+    const filterableLayers = this.filterableLayers();
     if (!selectedLayerId) {
       return null;
     }
@@ -45,6 +46,7 @@ export class ApplicationCreateFilterComponent {
         operator: 'AND',
       },
       filterId: newFilterId,
+      filterableLayers: filterableLayers,
     };
   });
 

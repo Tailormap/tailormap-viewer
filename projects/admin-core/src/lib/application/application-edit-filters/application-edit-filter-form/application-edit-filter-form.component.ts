@@ -45,15 +45,15 @@ export class ApplicationEditFilterFormComponent implements OnInit {
   public newFilter: boolean = false;
 
   @Input()
-  public filterableLayers: GeoServiceLayerInApplicationModel[] = [];
-
-  @Input()
   public set filter(updateAttributeFilter: UpdateAttributeFilterModel | null) {
     this.filterGroupId = updateAttributeFilter?.filterGroup.id;
     const appLayerIds = updateAttributeFilter?.filterGroup.layerIds;
-    const filterLayer = this.filterableLayers.find(layer => layer.appLayerId === appLayerIds?.[0]);
-    if (filterLayer) {
-      this.setSelectedLayer(filterLayer);
+    let filterLayer = undefined;
+    if (updateAttributeFilter?.filterableLayers) {
+      filterLayer = updateAttributeFilter.filterableLayers.find(layer => layer.appLayerId === appLayerIds?.[0]);
+      if (filterLayer) {
+        this.setSelectedLayer(filterLayer);
+      }
     }
     const attributeFilter = updateAttributeFilter?.filterGroup.filters.find(filterInGroup =>
       filterInGroup.id === updateAttributeFilter?.filterId);

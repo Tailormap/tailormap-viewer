@@ -59,6 +59,19 @@ export class ApplicationEditFilterComponent implements OnDestroy {
           return null;
         }),
       )),
+      switchMap(result =>
+        this.store$.select(selectFilterableLayersForApplication).pipe(
+          map(filterableLayers => {
+            if (!result) {
+              return null;
+            }
+            return {
+              ...result,
+              filterableLayers,
+            };
+          }),
+        ),
+      ),
     );
   }
 
