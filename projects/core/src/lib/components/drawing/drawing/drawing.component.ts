@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { DrawingToolEvent, FeatureHelper, MapService, MapStyleModel } from '@tailormap-viewer/map';
-import { combineLatest, filter, map, Observable, of, Subject, take, takeUntil, tap } from 'rxjs';
+import { combineLatest, filter, Observable, of, Subject, take, takeUntil, tap } from 'rxjs';
 import {
   selectDrawingFeaturesExcludingSelected, selectSelectedDrawingStyle, selectSelectedDrawingFeature, selectHasDrawingFeatures,
   selectDrawingFeatures,
