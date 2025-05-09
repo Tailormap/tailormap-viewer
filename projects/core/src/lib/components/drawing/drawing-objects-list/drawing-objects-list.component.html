@@ -2,7 +2,7 @@
 @let features = features$ | async;
 @if(features && features.length > 0 ) {
 
-  <mat-expansion-panel class="objects-list" [expanded]="true">
+  <mat-expansion-panel class="objects-list" [expanded]="false">
     <mat-expansion-panel-header>
       <mat-panel-title i18n="@@core.drawing.objects-list">Objects</mat-panel-title>
       <mat-panel-description>{{ features.length }}</mat-panel-description>
