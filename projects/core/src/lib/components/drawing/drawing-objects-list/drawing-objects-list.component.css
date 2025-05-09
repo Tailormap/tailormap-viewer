@@ -1,0 +1,57 @@
+.objects-list {
+  margin-top: 16px;
+}
+
+.section-label {
+  --mat-optgroup-label-text-size: 13px;
+}
+
+mat-expansion-panel-header mat-panel-title {
+  flex-grow: 8;
+}
+
+mat-expansion-panel-header mat-panel-description {
+  flex-grow: 2;
+}
+
+.objects-list ::ng-deep  .mat-expansion-panel-body {
+  max-height: 15em;
+  overflow-y: scroll;
+}
+
+.row {
+  border: 2px solid transparent;
+  display: flex;
+  align-items: center;
+  padding-right: 6px;
+}
+
+.selected {
+  border: 2px solid var(--primary-color);
+}
+
+.row .label {
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.row .counter {
+  padding-right: 8px;
+}
+
+.label input {
+  border: 0;
+  font-family: var(--mat-expansion-container-text-font);
+  font-size: var(--mat-expansion-container-text-size);
+  line-height: var(--mat-expansion-container-text-line-height);
+}
+
+.label input:focus {
+  outline: none;
+}
+
+.label div {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}

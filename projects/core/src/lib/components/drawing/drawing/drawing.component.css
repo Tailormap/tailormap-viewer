@@ -8,23 +8,32 @@
   overflow: auto;
 }
 
+.label {
+  margin-bottom: 0;
+}
+
 .horizontal-line {
   border-top: 1px solid var(--border-color);
   margin: 8px 0;
 }
 
-.drawing-button-list .mat-mdc-outlined-button {
+.icon-button-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.icon-button-list .mat-mdc-outlined-button {
   min-width: 40px;
   padding: 0 8px;
   border-radius: 3px;
   margin: 8px 8px 0 0;
 }
 
-.drawing-button-list .mat-mdc-outlined-button mat-icon {
+.icon-button-list .mat-mdc-outlined-button mat-icon {
   margin: 0;
 }
 
-.drawing-button-list .mat-mdc-outlined-button:last-of-type {
+.icon-button-list .mat-mdc-outlined-button:last-of-type {
   margin-right: 0;
 }
 
@@ -39,6 +48,10 @@
 
 .split-buttons > div {
   flex: 1;
+}
+
+.split-buttons .selected_feature_buttons {
+  flex: 2;
 }
 
 .drawing_buttons {

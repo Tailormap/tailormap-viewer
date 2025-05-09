@@ -322,6 +322,10 @@
         <source>Line thickness</source>
         <target>Dicke der Linie</target>
       </trans-unit>
+      <trans-unit id="core.drawing.objects-list" datatype="html">
+        <source>Objects</source>
+        <target state="new">Objects</target>
+      </trans-unit>
       <trans-unit id="core.drawing.opacity" datatype="html">
         <source>Opacity</source>
         <target>Deckkraft</target>
@@ -330,9 +334,9 @@
         <source>Rotation</source>
         <target>Drehung</target>
       </trans-unit>
-      <trans-unit id="core.drawing.select-shape" datatype="html">
-        <source>Select shape</source>
-        <target>Form auswählen</target>
+      <trans-unit id="core.drawing.draw-shape" datatype="html">
+        <source>Draw shape</source>
+        <target>Draw shape</target>
       </trans-unit>
       <trans-unit id="core.drawing.size" datatype="html">
         <source>Size</source>

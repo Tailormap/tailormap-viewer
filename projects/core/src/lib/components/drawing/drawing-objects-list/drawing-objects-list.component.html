@@ -1,0 +1,33 @@
+
+@let features = features$ | async;
+@if(features && features.length > 0 ) {
+
+  <mat-expansion-panel class="objects-list" [expanded]="false">
+    <mat-expansion-panel-header>
+      <mat-panel-title i18n="@@core.drawing.objects-list">Objects</mat-panel-title>
+      <mat-panel-description>{{ features.length }}</mat-panel-description>
+    </mat-expansion-panel-header>
+    @for (feature of features; track feature.__fid; let index = $index) {
+      <div class="row"
+           (click)="selectFeature(feature.__fid)"
+           (dblclick)="selectFeatureAndEditLabel(feature.__fid)"
+           [class.selected]="feature.selected">
+        <div class="icon">
+          <tm-drawing-feature-icon [feature]="feature"></tm-drawing-feature-icon>
+        </div>
+        <div class="counter">#{{index+1}}</div>
+        <div class="label">
+          @if(editingLabelForFeatureFid === feature.__fid) {
+            <input #editLabel
+                   [value]="feature.attributes.style.label"
+                   (keyup.escape)="cancelLabelEdit()"
+                   (keyup.enter)="updateLabel()"
+                   (blur)="updateLabel()"/>
+          } @else {
+            <div>{{ stripMacros(feature.attributes.style.label) }}</div>
+          }
+        </div>
+      </div>
+    }
+  </mat-expansion-panel>
+}

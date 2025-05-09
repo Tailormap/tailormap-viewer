@@ -1,8 +1,19 @@
 .settings-section {
-  margin-top: 16px;
-  border: 1px solid var(--border-color);
-  padding: 16px;
-  border-radius: 3px;
+  margin-top: 8px;
+}
+
+mat-expansion-panel-header mat-panel-title {
+  flex-grow: 1;
+}
+
+mat-expansion-panel-header mat-panel-description {
+  flex-grow: 3;
+}
+
+mat-panel-description {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .settings-section label {

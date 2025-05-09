@@ -7,260 +7,273 @@
 
 <div class="styling-form">
 
-  <div class="point-settings settings-section" *ngIf="showPointSettings()">
+  @if(showPointSettings()) {
+    <mat-expansion-panel class="point-settings settings-section" [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title i18n="@@core.drawing.symbol">Symbol</mat-panel-title>
+      </mat-expansion-panel-header>
 
-    <h2 class="section-label" i18n="@@core.drawing.symbol">Symbol</h2>
-
-    <div class="form-field form-field__columns">
-      <label i18n="@@core.drawing.symbol">Symbol</label>
-      <tm-icon-picker [icons]="getMarkers()"
-                      [selectedIcon]="getSelectedMarker()"
-                      [iconColor]="iconColor"
-                      (iconChange)="changeMarker($event)"></tm-icon-picker>
-    </div>
-
-    <div class="form-field form-field__columns">
-      <label i18n="@@core.drawing.fill-color">Fill color</label>
-      <tm-color-picker [color]="style.markerFillColor"
-                       (colorChange)="changeMarkerFill($event)"></tm-color-picker>
-    </div>
-
-    <div class="form-field form-field__columns">
-      <label i18n="@@core.drawing.line-color">Line color</label>
-      <tm-color-picker [color]="style.markerStrokeColor"
-                       (colorChange)="changeMarkerStroke($event)"></tm-color-picker>
-    </div>
-
-    <div class="form-field form-field__columns">
-      <label i18n="@@core.drawing.line-thickness">Line thickness</label>
-      <span>{{style.markerStrokeWidth}}px</span>
-    </div>
-
-    <div class="form-field form-field__slider">
-      <tm-slider [max]="10"
-                 [min]="1"
-                 [step]="1"
-                 (valueChange)="changeMarkerStrokeWidth($event)"
-                 [value]="style.markerStrokeWidth">
-      </tm-slider>
-    </div>
-
-    <div class="form-field form-field__columns">
-      <label i18n="@@core.drawing.size">Size</label>
-      <span>{{style.markerSize}}px</span>
-    </div>
-
-    <div class="form-field form-field__slider">
-      <tm-slider [max]="20"
-                 [min]="1"
-                 [step]="1"
-                 (valueChange)="changeMarkerSize($event)"
-                 [value]="style.markerSize">
-      </tm-slider>
-    </div>
-
-    <div class="form-field form-field__columns">
-      <label i18n="@@core.drawing.rotation">Rotation</label>
-      <span>{{style.markerRotation}}&deg;</span>
-    </div>
-
-    <div class="form-field form-field__slider">
-      <tm-slider [max]="360"
-                 [min]="0"
-                 [step]="1"
-                 (valueChange)="changeMarkerRotation($event)"
-                 [value]="style.markerRotation">
-      </tm-slider>
-    </div>
-
-  </div>
-
-  <div class="label-settings settings-section" *ngIf="showLabelSettings()">
-
-    <h2 class="section-label" i18n="@@core.drawing.label">Label</h2>
-
-    <mat-form-field appearance="outline" color="primary">
-      <mat-label i18n="@@core.drawing.label">Label</mat-label>
-      <input matInput *ngIf="!isLabelType()" i18n-placeholder="@@core.drawing.label" placeholder="Label" [formControl]="labelControl">
-      <textarea matInput *ngIf="isLabelType()" i18n-placeholder="@@core.drawing.label" placeholder="Label" [formControl]="labelControl"></textarea>
-      <div matSuffix>
-        <button *ngIf="showInsertCoordinates()"
-                mat-icon-button
-                tmTooltip="Insert coordinates as label"
-                i18n-tmTooltip="@@core.drawing.insert-coordinates-label"
-                (click)="insertCoordinates()">
-          <mat-icon svgIcon="coordinates"></mat-icon>
-        </button>
-        <button *ngIf="showInsertLength()"
-                mat-icon-button
-                tmTooltip="Insert length as label"
-                i18n-tmTooltip="@@core.drawing.insert-length-label"
-                (click)="insertLength()">
-          <mat-icon svgIcon="tools_measure_length_outline"></mat-icon>
-        </button>
-        <button *ngIf="showInsertArea()"
-                mat-icon-button
-                tmTooltip="Insert area as label"
-                i18n-tmTooltip="@@core.drawing.insert-area-label"
-                (click)="insertArea()">
-          <mat-icon svgIcon="tools_measure_area_outline"></mat-icon>
-        </button>
+      <div class="form-field form-field__columns">
+        <label i18n="@@core.drawing.symbol">Symbol</label>
+        <tm-icon-picker [icons]="getMarkers()"
+                        [selectedIcon]="getSelectedMarker()"
+                        [iconColor]="iconColor"
+                        (iconChange)="changeMarker($event)"></tm-icon-picker>
       </div>
-    </mat-form-field>
 
-    <div class="form-field form-field__columns form-field__buttons">
-      <label i18n="@@core.drawing.format">Format</label>
-      <mat-button-toggle-group multiple="true">
-        <mat-button-toggle (click)="toggleStyle(labelStyleValues.bold)"
-                           [checked]="hasLabelStyle(labelStyleValues.bold)">
-          <mat-icon svgIcon="style_bold"></mat-icon>
-        </mat-button-toggle>
-        <mat-button-toggle (click)="toggleStyle(labelStyleValues.italic)"
-                           [checked]="hasLabelStyle(labelStyleValues.italic)">
-          <mat-icon svgIcon="style_italic"></mat-icon>
-        </mat-button-toggle>
-      </mat-button-toggle-group>
-    </div>
+      <div class="form-field form-field__columns">
+        <label i18n="@@core.drawing.fill-color">Fill color</label>
+        <tm-color-picker [color]="style.markerFillColor"
+                         (colorChange)="changeMarkerFill($event)"></tm-color-picker>
+      </div>
 
-    <div class="form-field form-field__columns">
-      <label i18n="@@core.drawing.size">Size</label>
-      <span>{{style.labelSize}}px</span>
-    </div>
+      <div class="form-field form-field__columns">
+        <label i18n="@@core.drawing.line-color">Line color</label>
+        <tm-color-picker [color]="style.markerStrokeColor"
+                         (colorChange)="changeMarkerStroke($event)"></tm-color-picker>
+      </div>
 
-    <div class="form-field form-field__slider">
-      <tm-slider [max]="30"
-                 [min]="1"
-                 [step]="1"
-                 (valueChange)="changeLabelSize($event)"
-                 [value]="style.labelSize">
-      </tm-slider>
-    </div>
+      <div class="form-field form-field__columns">
+        <label i18n="@@core.drawing.line-thickness">Line thickness</label>
+        <span>{{style.markerStrokeWidth}}px</span>
+      </div>
 
-    <div class="form-field form-field__columns">
-      <label i18n="@@core.drawing.color">Color</label>
-      <tm-color-picker [color]="style.labelColor"
-                       (colorChange)="changeLabelColor($event)"></tm-color-picker>
-    </div>
+      <div class="form-field form-field__slider">
+        <tm-slider [max]="10"
+                   [min]="1"
+                   [step]="1"
+                   (valueChange)="changeMarkerStrokeWidth($event)"
+                   [value]="style.markerStrokeWidth">
+        </tm-slider>
+      </div>
 
-    <div class="form-field form-field__columns">
-      <label i18n="@@core.drawing.halo">Halo</label>
-      <tm-color-picker [color]="style.labelOutlineColor"
-                       [allowEmptyColor]="true"
-                       (colorChange)="changeLabelOutlineColor($event)"></tm-color-picker>
-    </div>
+      <div class="form-field form-field__columns">
+        <label i18n="@@core.drawing.size">Size</label>
+        <span>{{style.markerSize}}px</span>
+      </div>
 
-    <div class="form-field form-field__columns">
-      <label i18n="@@core.drawing.rotation">Rotation</label>
-      <span>{{style.labelRotation}}&deg;</span>
-    </div>
+      <div class="form-field form-field__slider">
+        <tm-slider [max]="20"
+                   [min]="1"
+                   [step]="1"
+                   (valueChange)="changeMarkerSize($event)"
+                   [value]="style.markerSize">
+        </tm-slider>
+      </div>
 
-    <div class="form-field form-field__slider">
-      <tm-slider [max]="360"
-                 [min]="0"
-                 [step]="1"
-                 (valueChange)="changeLabelRotation($event)"
-                 [value]="style.labelRotation">
-      </tm-slider>
-    </div>
+      <div class="form-field form-field__columns">
+        <label i18n="@@core.drawing.rotation">Rotation</label>
+        <span>{{style.markerRotation}}&deg;</span>
+      </div>
 
-  </div>
+      <div class="form-field form-field__slider">
+        <tm-slider [max]="360"
+                   [min]="0"
+                   [step]="1"
+                   (valueChange)="changeMarkerRotation($event)"
+                   [value]="style.markerRotation">
+        </tm-slider>
+      </div>
+    </mat-expansion-panel>
+  }
 
-  <div class="line-settings settings-section" *ngIf="showLineSettings()">
+  @if (showLabelSettings()) {
+    <mat-expansion-panel class="label-settings settings-section" [expanded]="false">
+      <mat-expansion-panel-header>
+        <mat-panel-title i18n="@@core.drawing.label">Label</mat-panel-title>
+        <mat-panel-description>{{ labelControl.value }}</mat-panel-description>
+      </mat-expansion-panel-header>
 
-    <h2 class="section-label" i18n="@@core.drawing.line">Line</h2>
+      <mat-form-field appearance="outline" color="primary">
+        <mat-label i18n="@@core.drawing.label">Label</mat-label>
+        @if (!isLabelType()) {
+          <input matInput i18n-placeholder="@@core.drawing.label" placeholder="Label" [formControl]="labelControl">
+        } @else {
+          <textarea matInput i18n-placeholder="@@core.drawing.label" placeholder="Label" [formControl]="labelControl"></textarea>
+        }
+        <div matSuffix>
+          @if (showInsertCoordinates()) {
+            <button mat-icon-button
+                    tmTooltip="Insert coordinates as label"
+                    i18n-tmTooltip="@@core.drawing.insert-coordinates-label"
+                    (click)="insertCoordinates()">
+              <mat-icon svgIcon="coordinates"></mat-icon>
+            </button>
+          }
+          @if (showInsertLength()) {
+            <button mat-icon-button
+                    tmTooltip="Insert length as label"
+                    i18n-tmTooltip="@@core.drawing.insert-length-label"
+                    (click)="insertLength()">
+              <mat-icon svgIcon="tools_measure_length_outline"></mat-icon>
+            </button>
+          }
+          @if (showInsertArea()) {
+            <button mat-icon-button
+                    tmTooltip="Insert area as label"
+                    i18n-tmTooltip="@@core.drawing.insert-area-label"
+                    (click)="insertArea()">
+              <mat-icon svgIcon="tools_measure_area_outline"></mat-icon>
+            </button>
+          }
+        </div>
+      </mat-form-field>
 
-    <div class="form-field form-field__columns">
-      <label i18n="@@core.drawing.color">Color</label>
-      <tm-color-picker [color]="style.strokeColor"
-                       (colorChange)="changeStrokeColor($event)"></tm-color-picker>
-    </div>
+      <div class="form-field form-field__columns form-field__buttons">
+        <label i18n="@@core.drawing.format">Format</label>
+        <mat-button-toggle-group multiple="true">
+          <mat-button-toggle (click)="toggleStyle(labelStyleValues.bold)"
+                             [checked]="hasLabelStyle(labelStyleValues.bold)">
+            <mat-icon svgIcon="style_bold"></mat-icon>
+          </mat-button-toggle>
+          <mat-button-toggle (click)="toggleStyle(labelStyleValues.italic)"
+                             [checked]="hasLabelStyle(labelStyleValues.italic)">
+            <mat-icon svgIcon="style_italic"></mat-icon>
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
 
-    <div class="form-field form-field__columns">
-      <label i18n="@@core.drawing.thickness">Thickness</label>
-      <span>{{style.strokeWidth}}px</span>
-    </div>
+      <div class="form-field form-field__columns">
+        <label i18n="@@core.drawing.size">Size</label>
+        <span>{{style.labelSize}}px</span>
+      </div>
 
-    <div class="form-field form-field__slider">
-      <tm-slider [max]="20"
-                 [min]="1"
-                 [step]="1"
-                 (valueChange)="changeStrokeWidth($event)"
-                 [value]="style.strokeWidth">
-      </tm-slider>
-    </div>
+      <div class="form-field form-field__slider">
+        <tm-slider [max]="30"
+                   [min]="1"
+                   [step]="1"
+                   (valueChange)="changeLabelSize($event)"
+                   [value]="style.labelSize">
+        </tm-slider>
+      </div>
 
-    <div class="form-field form-field__columns">
-      <label i18n="@@core.drawing.opacity">Opacity</label>
-      <span>{{style.strokeOpacity}}%</span>
-    </div>
+      <div class="form-field form-field__columns">
+        <label i18n="@@core.drawing.color">Color</label>
+        <tm-color-picker [color]="style.labelColor"
+                         (colorChange)="changeLabelColor($event)"></tm-color-picker>
+      </div>
 
-    <div class="form-field form-field__slider">
-      <tm-slider [max]="100"
-                 [min]="0"
-                 [step]="1"
-                 [displayWith]="formatThumb"
-                 (valueChange)="changeStrokeOpacity($event)"
-                 [value]="style.strokeOpacity">
-      </tm-slider>
-    </div>
+      <div class="form-field form-field__columns">
+        <label i18n="@@core.drawing.halo">Halo</label>
+        <tm-color-picker [color]="style.labelOutlineColor"
+                         [allowEmptyColor]="true"
+                         (colorChange)="changeLabelOutlineColor($event)"></tm-color-picker>
+      </div>
 
-    <mat-form-field appearance="outline" color="primary">
-      <mat-label i18n="@@core.drawing.stroke-type">Stroke type</mat-label>
-      <mat-select [formControl]="strokeTypeControl"
-                  panelClass="select-line-style"
-                  class="select-line-style">
-        <mat-select-trigger>
-          <ng-container *ngTemplateOutlet="strokeTypeImage; context: { $implicit: style.strokeType }"></ng-container>
-        </mat-select-trigger>
-        <mat-option *ngFor="let strokeTypeValue of strokeTypeValues" [value]="strokeTypeValue">
-          <ng-container *ngTemplateOutlet="strokeTypeImage; context: { $implicit: strokeTypeValue }"></ng-container>
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+      <div class="form-field form-field__columns">
+        <label i18n="@@core.drawing.rotation">Rotation</label>
+        <span>{{style.labelRotation}}&deg;</span>
+      </div>
 
-    <mat-form-field appearance="outline" color="primary" *ngIf="showArrowSetting()">
-      <label i18n="@@core.drawing.arrow">Arrow</label>
-      <mat-select [formControl]="arrowTypeControl">
-        <mat-option *ngFor="let arrowTypeValue of arrowTypeValues"
-                    [value]="arrowTypeValue.value">
-          {{arrowTypeValue.label}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+      <div class="form-field form-field__slider">
+        <tm-slider [max]="360"
+                   [min]="0"
+                   [step]="1"
+                   (valueChange)="changeLabelRotation($event)"
+                   [value]="style.labelRotation">
+        </tm-slider>
+      </div>
+    </mat-expansion-panel>
+  }
 
-  </div>
+  @if (showLineSettings()) {
+    <mat-expansion-panel class="line-settings settings-section" [expanded]="true">
+      <mat-expansion-panel-header i18n="@@core.drawing.line">Line</mat-expansion-panel-header>
 
-  <div class="polygon-settings settings-section" *ngIf="showPolygonSettings()">
+      <div class="form-field form-field__columns">
+        <label i18n="@@core.drawing.color">Color</label>
+        <tm-color-picker [color]="style.strokeColor"
+                         (colorChange)="changeStrokeColor($event)"></tm-color-picker>
+      </div>
 
-    <h2 class="section-label" i18n="@@core.drawing.fill">Fill</h2>
+      <div class="form-field form-field__columns">
+        <label i18n="@@core.drawing.thickness">Thickness</label>
+        <span>{{style.strokeWidth}}px</span>
+      </div>
 
-    <div class="form-field form-field__columns">
-      <label i18n="@@core.drawing.color">Color</label>
-      <tm-color-picker [color]="style.fillColor"
-                       (colorChange)="changeFillColor($event)"></tm-color-picker>
-    </div>
+      <div class="form-field form-field__slider">
+        <tm-slider [max]="20"
+                   [min]="1"
+                   [step]="1"
+                   (valueChange)="changeStrokeWidth($event)"
+                   [value]="style.strokeWidth">
+        </tm-slider>
+      </div>
 
-    <div class="form-field form-field__columns form-field__columns--right-aligned checkbox-field">
-      <mat-checkbox i18n="@@core.drawing.striped-fill"
-                    [checked]="style.stripedFill ?? false"
-                    (change)="changeStripedFill($event)">Striped fill</mat-checkbox>
-    </div>
+      <div class="form-field form-field__columns">
+        <label i18n="@@core.drawing.opacity">Opacity</label>
+        <span>{{style.strokeOpacity}}%</span>
+      </div>
 
-    <div class="form-field form-field__columns">
-      <label i18n="@@core.drawing.opacity">Opacity</label>
-      <span>{{style.fillOpacity}}%</span>
-    </div>
+      <div class="form-field form-field__slider">
+        <tm-slider [max]="100"
+                   [min]="0"
+                   [step]="1"
+                   [displayWith]="formatThumb"
+                   (valueChange)="changeStrokeOpacity($event)"
+                   [value]="style.strokeOpacity">
+        </tm-slider>
+      </div>
 
-    <div class="form-field form-field__slider">
-      <tm-slider [max]="100"
-                 [min]="0"
-                 [step]="1"
-                 [displayWith]="formatThumb"
-                 [value]="style.fillOpacity"
-                 (valueChange)="changeFillOpacity($event)">
-      </tm-slider>
-    </div>
+      <mat-form-field appearance="outline" color="primary">
+        <mat-label i18n="@@core.drawing.stroke-type">Stroke type</mat-label>
+        <mat-select [formControl]="strokeTypeControl"
+                    panelClass="select-line-style"
+                    class="select-line-style">
+          <mat-select-trigger>
+            <ng-container *ngTemplateOutlet="strokeTypeImage; context: { $implicit: style.strokeType }"></ng-container>
+          </mat-select-trigger>
+          <mat-option *ngFor="let strokeTypeValue of strokeTypeValues" [value]="strokeTypeValue">
+            <ng-container *ngTemplateOutlet="strokeTypeImage; context: { $implicit: strokeTypeValue }"></ng-container>
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
-  </div>
+      <mat-form-field appearance="outline" color="primary" *ngIf="showArrowSetting()">
+        <label i18n="@@core.drawing.arrow">Arrow</label>
+        <mat-select [formControl]="arrowTypeControl">
+          @for (arrowTypeValue of arrowTypeValues; track arrowTypeValue.value) {
+            <mat-option [value]="arrowTypeValue.value">
+              {{arrowTypeValue.label}}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </mat-expansion-panel>
+  }
+
+  @if (showPolygonSettings()) {
+    <mat-expansion-panel class="polygon-settings settings-section" [expanded]="true">
+      <mat-expansion-panel-header i18n="@@core.drawing.fill">Fill</mat-expansion-panel-header>
+
+      <div class="form-field form-field__columns">
+        <label i18n="@@core.drawing.color">Color</label>
+        <tm-color-picker [color]="style.fillColor"
+                         (colorChange)="changeFillColor($event)"></tm-color-picker>
+      </div>
+
+      <div class="form-field form-field__columns form-field__columns--right-aligned checkbox-field">
+        <mat-checkbox i18n="@@core.drawing.striped-fill"
+                      [checked]="style.stripedFill ?? false"
+                      (change)="changeStripedFill($event)">Striped fill</mat-checkbox>
+      </div>
+
+      <div class="form-field form-field__columns">
+        <label i18n="@@core.drawing.opacity">Opacity</label>
+        <span>{{style.fillOpacity}}%</span>
+      </div>
+
+      <div class="form-field form-field__slider">
+        <tm-slider [max]="100"
+                   [min]="0"
+                   [step]="1"
+                   [displayWith]="formatThumb"
+                   [value]="style.fillOpacity"
+                   (valueChange)="changeFillOpacity($event)">
+        </tm-slider>
+      </div>
+
+    </mat-expansion-panel>
+  }
 
 </div>
