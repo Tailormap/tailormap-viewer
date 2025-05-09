@@ -3,11 +3,25 @@
   <div class="attribute-filter-info">
     @if (!filterForm.get('layer')?.value) {
       <div>Select a layer to filter</div>
+    } @else if (!filterForm.get('attribute')?.value) {
+      Filter on layer '{{ filterForm.get('layer')?.value?.geoServiceLayer?.layerSettings?.title
+    || filterForm.get('layer')?.value?.geoServiceLayer?.title }}'
     } @else {
       Filter for attribute '{{ filterForm.get('attribute')?.value }}' on layer
         '{{ filterForm.get('layer')?.value?.geoServiceLayer?.layerSettings?.title
     || filterForm.get('layer')?.value?.geoServiceLayer?.title }}'
     }
+  </div>
+
+  <div class="filter-tool">
+    <mat-form-field>
+      <mat-label>Tool</mat-label>
+      <mat-select formControlName="tool" placeholder="Tool">
+        @for (tool of filterToolOptions; track tool) {
+          <mat-option [value]="tool.value">{{ tool.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
   </div>
 
   @if(newFilter) {
@@ -19,14 +33,25 @@
     </div>
   }
 
-  @if (filterForm.get('attribute')?.value && filterForm.get('attributeType')?.value){
-    <div class="attribute-filter-values">
-      <tm-attribute-filter
-        [attributeType]="filterForm.get('attributeType')!.value!"
-        [filter]="_filterData"
-        (filterChanged)="setFilterValues($event)"></tm-attribute-filter>
-    </div>
+  @if (filterForm.get('attribute')?.value && filterForm.get('attributeType')?.value) {
+    @if (filterForm.get('tool')?.value === "PRESET_STATIC") {
+      <div class="attribute-filter-values">
+        <tm-attribute-filter
+          [attributeType]="filterForm.get('attributeType')!.value!"
+          [filter]="_filterData"
+          (filterChanged)="setFilterValues($event)"></tm-attribute-filter>
+      </div>
+    } @else if (filterForm.get('tool')?.value === "CHECKBOX") {
+      <div class="checkbox-filter-form">
+<!--        <tm-admin-checkbox-filter-form></tm-admin-checkbox-filter-form>-->
+      </div>
+    } @else if (filterForm.get('tool')?.value === "SLIDER") {
+      <div class="slider-filter-form">
+<!--        <tm-admin-slider-filter-form></tm-admin-slider-filter-form>-->
+      </div>
+    }
   }
+
 
 
 </form>

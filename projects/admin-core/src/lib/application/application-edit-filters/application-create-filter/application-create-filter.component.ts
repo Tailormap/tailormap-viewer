@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Signal, computed } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Signal, computed, signal } from '@angular/core';
 import { AttributeFilterModel, FilterGroupModel, FilterTypeEnum } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { createApplicationFilterGroup } from '../../state/application.actions';
@@ -20,11 +20,11 @@ export class ApplicationCreateFilterComponent {
 
   private filterGroup: FilterGroupModel<AttributeFilterModel> | null = null;
 
-  public formValid: boolean = true;
-
   public applicationId: Signal<string | null | undefined> = this.store$.selectSignal(selectSelectedApplicationId);
   public filterableLayers: Signal<GeoServiceLayerInApplicationModel[]> = this.store$.selectSignal(selectFilterableLayersForApplication);
   public selectedLayerId: Signal<string | undefined> = this.store$.selectSignal(selectApplicationSelectedFilterLayerId);
+
+  public saveEnabled = signal(false);
 
   public newFilter: Signal<UpdateAttributeFilterModel | null> = computed(() => {
     const selectedLayerId = this.selectedLayerId();
@@ -58,7 +58,7 @@ export class ApplicationCreateFilterComponent {
     this.filterGroup = $event;
   }
 
-  public validFormChanged($event: boolean) {
-    this.formValid = $event;
+  public validFormChanged() {
+    this.saveEnabled.set(true);
   }
 }

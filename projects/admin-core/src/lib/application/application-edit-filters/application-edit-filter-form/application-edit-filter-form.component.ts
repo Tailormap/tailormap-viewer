@@ -9,6 +9,7 @@ import { nanoid } from 'nanoid';
 import { UpdateAttributeFilterModel } from '../../models/update-attribute-filter.model';
 import { InputFilterData, OutputFilterData } from '@tailormap-viewer/shared';
 import { GeoServiceLayerInApplicationModel } from '../../models/geo-service-layer-in-application.model';
+import { FilterToolEnum } from '../../models/filter-tool.enum';
 
 @Component({
   selector: 'tm-admin-application-edit-filter-form',
@@ -27,6 +28,17 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     caseSensitive: undefined,
     invertCondition: undefined,
   };
+
+  public filterToolOptions = [{
+    label: 'Preset',
+    value: FilterToolEnum.PRESET_STATIC,
+  }, {
+    label: 'Checkbox',
+    value: FilterToolEnum.CHECKBOX,
+  }, {
+    label: 'Slider',
+    value: FilterToolEnum.SLIDER,
+  }];
 
   @Input()
   public newFilter: boolean = false;
@@ -50,7 +62,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
       caseSensitive: attributeFilter?.caseSensitive,
       invertCondition: attributeFilter?.invertCondition,
     };
-    this.initForm(attributeFilter);
+    this.initForm(attributeFilter, filterLayer);
   }
 
   private featureTypeSubject$ = new BehaviorSubject<FeatureTypeModel | null>(null);
@@ -73,6 +85,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
   public filterForm = new FormGroup({
     id: new FormControl(''),
     layer: new FormControl<GeoServiceLayerInApplicationModel | null>(null),
+    tool: new FormControl<string>("PRESET_STATIC"),
     attribute: new FormControl(''),
     attributeType: new FormControl<AttributeType | null>(null),
     condition: new FormControl<FilterConditionEnum | null>(null),
@@ -121,10 +134,11 @@ export class ApplicationEditFilterFormComponent implements OnInit {
       });
   }
 
-  private initForm(attributeFilter?: AttributeFilterModel) {
+  private initForm(attributeFilter?: AttributeFilterModel, layer?: GeoServiceLayerInApplicationModel) {
     if (!attributeFilter) {
       this.filterForm.patchValue({
         id: nanoid(),
+        layer: layer ?? null,
         attribute: '',
         condition: null,
         value: [],
@@ -134,6 +148,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     } else {
       this.filterForm.patchValue({
         id: attributeFilter.id,
+        layer: layer ?? null,
         attribute: attributeFilter.attribute,
         attributeType: attributeFilter.attributeType,
         condition: attributeFilter.condition,
@@ -149,12 +164,6 @@ export class ApplicationEditFilterFormComponent implements OnInit {
   }
 
   public setSelectedLayer($event: GeoServiceLayerInApplicationModel) {
-    this.filterForm.patchValue({
-      layer: $event,
-      attribute: '',
-      attributeType: null,
-    }, { emitEvent: true });
-
     this.loadingFeatureTypeSubject$.next(true);
     if ($event.geoServiceLayer?.layerSettings?.featureType) {
       this.featureSourceService.loadFeatureType$(
@@ -186,4 +195,5 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     }, { emitEvent: true });
   }
 
+  protected readonly FilterToolEnum = FilterToolEnum;
 }

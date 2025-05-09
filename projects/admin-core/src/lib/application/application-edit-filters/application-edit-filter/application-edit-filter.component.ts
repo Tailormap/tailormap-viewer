@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, DestroyRef, Signal, OnDestroy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, DestroyRef, Signal, OnDestroy, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { filter, map, Observable, switchMap, take } from 'rxjs';
 import { Store } from '@ngrx/store';
@@ -26,11 +26,12 @@ export class ApplicationEditFilterComponent implements OnDestroy {
 
   public updateAttributeFilter$: Observable<UpdateAttributeFilterModel | null>;
 
-  public formValid: boolean = true;
   private filterGroup: FilterGroupModel<AttributeFilterModel> | null = null;
 
   public applicationId: Signal<string | null | undefined> = this.store$.selectSignal(selectSelectedApplicationId);
   public filterableLayers: Signal<GeoServiceLayerInApplicationModel[]> = this.store$.selectSignal(selectFilterableLayersForApplication);
+
+  public saveEnabled = signal(false);
 
   constructor(
     private route: ActivatedRoute,
@@ -83,8 +84,8 @@ export class ApplicationEditFilterComponent implements OnDestroy {
     this.filterGroup = $event;
   }
 
-  public validFormChanged($event: boolean) {
-    this.formValid = $event;
+  public validFormChanged() {
+    this.saveEnabled.set(true);
   }
 
   public save() {
