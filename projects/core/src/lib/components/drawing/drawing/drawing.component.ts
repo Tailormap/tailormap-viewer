@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { DrawingToolEvent, FeatureHelper, MapService, MapStyleModel } from '@tailormap-viewer/map';
 import { combineLatest, filter, map, Observable, of, Subject, take, takeUntil, tap } from 'rxjs';
@@ -17,7 +17,7 @@ import {
 import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type.enum';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
 import { BaseComponentTypeEnum, FeatureModel } from '@tailormap-viewer/api';
-import { MapDrawingButtonsComponent } from '../../../map/components/map-drawing-buttons/map-drawing-buttons.component';
+import { DrawingService } from '../../../map/services/drawing.service';
 
 @Component({
   selector: 'tm-drawing',
@@ -25,6 +25,9 @@ import { MapDrawingButtonsComponent } from '../../../map/components/map-drawing-
   styleUrls: ['./drawing.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
+  providers: [
+    DrawingService,
+  ],
 })
 export class DrawingComponent implements OnInit, OnDestroy {
 
@@ -36,21 +39,8 @@ export class DrawingComponent implements OnInit, OnDestroy {
   public selectedDrawingStyle: DrawingFeatureTypeEnum | null = null;
   public hasFeatures$: Observable<boolean> = of(false);
 
+  public drawingTypes = DrawingFeatureTypeEnum;
   public activeTool: DrawingFeatureTypeEnum | null = null;
-
-  public selectedFeature$ = this.store$.select(selectSelectedDrawingFeature).pipe(
-    map(feature => {
-      if (!feature) {
-        return null;
-      }
-      return {
-        ...feature,
-        attributes: {
-          ...feature?.attributes,
-          selected: true,
-        },
-      };
-    }));
 
   public selectionStyle = DrawingHelper.applyDrawingStyle as ((feature: FeatureModel) => MapStyleModel);
 
@@ -59,6 +49,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
     private mapService: MapService,
     private menubarService: MenubarService,
     private confirmService: ConfirmDialogService,
+    private drawingService: DrawingService,
     private cdr: ChangeDetectorRef,
   ) { }
 
@@ -94,12 +85,42 @@ export class DrawingComponent implements OnInit, OnDestroy {
       });
 
     this.menubarService.registerComponent({ type: BaseComponentTypeEnum.DRAWING, component: DrawingMenuButtonComponent });
+    this.drawingService.createDrawingTools({
+      drawingLayerId: this.drawingLayerId,
+      selectionStyle: this.selectionStyle,
+    });
+    this.store$.select(selectSelectedDrawingFeature)
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(selectedFeature => {
+        this.drawingService.setSelectedFeature(selectedFeature);
+      });
+    this.drawingService.drawingAdded$
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(e => this.onDrawingAdded(e));
+    this.drawingService.featureGeometryModified$
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(geom => this.onFeatureGeometryModified(geom));
+    this.drawingService.activeToolChanged$
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(tool => this.onActiveToolChanged(tool));
+    this.drawingService.featureSelected$
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(feature => this.onFeatureSelected(feature));
   }
 
   public ngOnDestroy() {
+    this.store$.dispatch(setSelectedFeature({ fid: null }));
     this.menubarService.deregisterComponent(BaseComponentTypeEnum.DRAWING);
     this.destroyed.next(null);
     this.destroyed.complete();
+  }
+
+  public draw(type: DrawingFeatureTypeEnum) {
+    this.drawingService.draw(type);
+  }
+
+  public enableSelectAndModify() {
+    this.drawingService.enableSelectAndModify();
   }
 
   public onDrawingAdded($event: DrawingToolEvent) {
@@ -123,13 +144,6 @@ export class DrawingComponent implements OnInit, OnDestroy {
 
   public onFeatureGeometryModified(geometry: string) {
     this.store$.dispatch(updateSelectedDrawingFeatureGeometry({ geometry }));
-  }
-
-
-  @ViewChild(MapDrawingButtonsComponent) private mapDrawingButtonsComponent: MapDrawingButtonsComponent | undefined;
-
-  public enableSelectAndModify() {
-    this.mapDrawingButtonsComponent?.enableSelectAndModify();
   }
 
   public removeSelectedFeature() {

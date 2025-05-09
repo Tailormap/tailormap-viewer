@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Input, OnDestroy, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectDrawingFeatures, selectSelectedDrawingFeature, setSelectedFeature, updateDrawingFeatureStyle } from '../state';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { combineLatest, map, Observable } from 'rxjs';
 import { DrawingFeatureModel } from '../models/drawing-feature.model';
 
 @Component({
@@ -11,28 +11,26 @@ import { DrawingFeatureModel } from '../models/drawing-feature.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
-export class DrawingObjectsListComponent implements OnDestroy {
-  private destroyed = new Subject();
+export class DrawingObjectsListComponent {
 
   @Input()
   public drawingLayerId = '';
 
-  public features$: Observable<DrawingFeatureModel[]>;
+  @ViewChild('editLabel')
+  private editLabel: ElementRef | null = null;
 
-  public selectedFeature$: Observable<DrawingFeatureModel | null>;
+  public features$: Observable<Array<DrawingFeatureModel & { selected: boolean }>> = combineLatest([
+    this.store$.select(selectDrawingFeatures),
+    this.store$.select(selectSelectedDrawingFeature),
+  ]).pipe(map(([ features, selectedFeature ]) => {
+    return features.map(f => ({ ...f, selected: f.__fid === selectedFeature?.__fid }));
+  }));
   public editingLabelForFeatureFid: string | null = null;
 
   constructor(
     private store$: Store,
   ) {
-    this.features$ = this.store$.select(selectDrawingFeatures).pipe(takeUntil(this.destroyed));
-    this.selectedFeature$ = this.store$.select(selectSelectedDrawingFeature).pipe(takeUntil(this.destroyed));
     // TODO: scroll to selected feature -- ViewportScroller or scrollIntoView() don't work somehow
-  }
-
-  public ngOnDestroy() {
-    this.destroyed.next(null);
-    this.destroyed.complete();
   }
 
   public selectFeature(fid: string) {
@@ -43,14 +41,12 @@ export class DrawingObjectsListComponent implements OnDestroy {
     return (label || '').replace(/\[[A-Z]+]/g, '');
   }
 
-  @ViewChild('editLabel') private editLabel: ElementRef | null = null;
-
   public selectFeatureAndEditLabel(fid: string) {
-    this.store$.dispatch(setSelectedFeature({ fid }));
+    this.selectFeature(fid);
     this.editingLabelForFeatureFid = fid;
     setTimeout(() => {
       this.editLabel?.nativeElement.focus();
-    });
+    }, 0);
   }
 
   public updateLabel() {

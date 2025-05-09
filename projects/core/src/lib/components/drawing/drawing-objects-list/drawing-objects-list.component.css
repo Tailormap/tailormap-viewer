@@ -14,34 +14,44 @@ mat-expansion-panel-header mat-panel-description {
   flex-grow: 2;
 }
 
-::ng-deep mat-expansion-panel.objects-list .mat-expansion-panel-body {
+.objects-list ::ng-deep  .mat-expansion-panel-body {
   max-height: 15em;
   overflow-y: scroll;
 }
 
-.objects-list div {
+.row {
   border: 2px solid transparent;
   display: flex;
+  align-items: center;
+  padding-right: 6px;
 }
 
-.objects-list .selected {
+.selected {
   border: 2px solid var(--primary-color);
 }
 
-.objects-list div > div.label {
+.row .label {
   flex-grow: 1;
-  white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
 }
 
-div.label > input {
+.row .counter {
+  padding-right: 8px;
+}
+
+.label input {
   border: 0;
   font-family: var(--mat-expansion-container-text-font);
   font-size: var(--mat-expansion-container-text-size);
   line-height: var(--mat-expansion-container-text-line-height);
 }
 
-div.label > input:focus {
+.label input:focus {
   outline: none;
+}
+
+.label div {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }

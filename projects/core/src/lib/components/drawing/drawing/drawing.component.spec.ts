@@ -15,10 +15,10 @@ import { ConfirmDialogService, SharedDirectivesModule, SharedImportsModule } fro
 import userEvent from '@testing-library/user-event';
 import { TestBed } from '@angular/core/testing';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
+import { createMapServiceMock } from '../../../map/components/map-drawing-buttons/map-drawing-buttons.component.spec';
 
 const setup = async (isComponentVisible = true, selectors: any[] = []) => {
-  const mapServiceMock = getMapServiceMock();
+  const mapServiceMock = createMapServiceMock();
   const menubarServiceMock = {
     isComponentVisible$: jest.fn(() => of(isComponentVisible)),
     registerComponent: jest.fn(),
@@ -44,16 +44,16 @@ const setup = async (isComponentVisible = true, selectors: any[] = []) => {
 describe('DrawingComponent', () => {
 
   test('renders and registers', async () => {
-    const { container, mapServiceMock, menubarServiceMock } = await setup();
-    expect(container.querySelector('tm-map-drawing-buttons')).not.toBeNull();
+    const { mapServiceMock, menubarServiceMock } = await setup();
+    expect(screen.queryByLabelText('Draw point')).not.toBeNull();
     expect(mapServiceMock.mapService.renderFeatures$).toHaveBeenCalled();
     expect(menubarServiceMock.isComponentVisible$).toHaveBeenCalled();
     expect(menubarServiceMock.registerComponent).toHaveBeenCalled();
   });
 
   test('should not render contents if component is not active', async () => {
-    const { container, mapServiceMock, menubarServiceMock } = await setup(false);
-    expect(container.querySelector('tm-map-drawing-buttons')).toBeNull();
+    const { mapServiceMock, menubarServiceMock } = await setup(false);
+    expect(screen.queryByLabelText('Draw point')).toBeNull();
     expect(mapServiceMock.mapService.renderFeatures$).toHaveBeenCalled();
     expect(menubarServiceMock.isComponentVisible$).toHaveBeenCalled();
     expect(menubarServiceMock.registerComponent).toHaveBeenCalled();
