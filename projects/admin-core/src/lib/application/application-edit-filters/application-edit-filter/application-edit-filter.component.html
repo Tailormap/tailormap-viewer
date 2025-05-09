@@ -8,12 +8,15 @@
         [filterableLayers]="filterableLayers()"
         [filter]="filter"
         (updateFilter)="updateFilter($event)"
-        (validFormChanged)="validFormChanged()"></tm-admin-application-edit-filter-form>
+        (validFormChanged)="validFormChanged($event)"></tm-admin-application-edit-filter-form>
 
       <div class="page-details-actions application-edit-buttons">
         <tm-admin-save-button [disabled]="!saveEnabled()" (save)="save()"></tm-admin-save-button>
-        <button mat-flat-button color="warn" (click)="delete(filter)" i18n="@@admin-core.common.delete">Delete</button>
-        <button mat-flat-button [routerLink]="'/admin/applications/application/' + applicationId() + '/filters'" i18n="@@admin-core.common.close">Close</button>
+        <button mat-flat-button color="warn"
+                (click)="delete(filter)"
+                [routerLink]="'/admin/applications/application/' + applicationId() + '/filters'" i18n="@@admin-core.common.delete">Delete</button>
+        <button mat-flat-button
+                [routerLink]="'/admin/applications/application/' + applicationId() + '/filters'" i18n="@@admin-core.common.close">Close</button>
       </div>
     </div>
   </div>

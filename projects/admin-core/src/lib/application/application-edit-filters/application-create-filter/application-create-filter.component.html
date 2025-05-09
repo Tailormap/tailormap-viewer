@@ -8,7 +8,7 @@
       [filter]="newFilter()"
       [newFilter]="true"
       (updateFilter)="updateFilter($event)"
-      (validFormChanged)="validFormChanged()"></tm-admin-application-edit-filter-form>
+      (validFormChanged)="validFormChanged($event)"></tm-admin-application-edit-filter-form>
 
     <div class="page-details-actions">
       <tm-admin-save-button label="Create" i18n-label="@@admin-core.common.create" [disabled]="!saveEnabled()" (save)="save()"></tm-admin-save-button>

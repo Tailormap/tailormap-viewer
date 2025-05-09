@@ -10,6 +10,7 @@ import { UpdateAttributeFilterModel } from '../../models/update-attribute-filter
 import { InputFilterData, OutputFilterData } from '@tailormap-viewer/shared';
 import { GeoServiceLayerInApplicationModel } from '../../models/geo-service-layer-in-application.model';
 import { FilterToolEnum } from '../../models/filter-tool.enum';
+import { FormHelper } from '../../../helpers/form.helper';
 
 @Component({
   selector: 'tm-admin-application-edit-filter-form',
@@ -103,6 +104,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
         distinctUntilChanged(),
       )
       .subscribe(value => {
+        console.log("validFormChanged", value);
         this.validFormChanged.emit(value);
       });
     this.filterForm.valueChanges
@@ -160,7 +162,22 @@ export class ApplicationEditFilterFormComponent implements OnInit {
   }
 
   private isValidForm(): boolean {
-    return true;
+    const formValues = this.filterForm.getRawValue();
+    const filterValues = formValues.value;
+    let validFilterValues = true;
+    if (filterValues) {
+      for (const filterValue of filterValues) {
+        if (!FormHelper.isValidValue(filterValue)) {
+          validFilterValues = false;
+        }
+      }
+    }
+    return FormHelper.isValidValue(formValues.id)
+      && FormHelper.isValidValue(formValues.attribute)
+      && formValues.attributeType !== null
+      && formValues.condition !== null
+      && validFilterValues
+      && this.filterForm.dirty;
   }
 
   public setSelectedLayer($event: GeoServiceLayerInApplicationModel) {
@@ -184,6 +201,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
       attribute: $event.name,
       attributeType: $event.type,
     }, { emitEvent: true });
+    this.filterForm.markAsDirty();
   }
 
   public setFilterValues($event: OutputFilterData) {
@@ -193,7 +211,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
       caseSensitive: $event.caseSensitive,
       invertCondition: $event.invertCondition,
     }, { emitEvent: true });
+    this.filterForm.markAsDirty();
   }
 
-  protected readonly FilterToolEnum = FilterToolEnum;
 }

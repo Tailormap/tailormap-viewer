@@ -83,8 +83,8 @@ export class ApplicationEditFilterComponent implements OnDestroy {
     this.filterGroup = $event;
   }
 
-  public validFormChanged() {
-    this.saveEnabled.set(true);
+  public validFormChanged($event: boolean) {
+    this.saveEnabled.set($event);
   }
 
   public save() {
@@ -102,7 +102,6 @@ export class ApplicationEditFilterComponent implements OnDestroy {
       }
       newFilterGroups.push(this.filterGroup);
       this.store$.dispatch(updateApplicationFiltersConfig({ filterGroups: newFilterGroups }));
-      console.log("filter groups: ", newFilterGroups);
     });
 
   }

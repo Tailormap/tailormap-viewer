@@ -28,8 +28,10 @@ export class ApplicationCreateFilterComponent {
 
   public saveEnabled = signal(false);
 
+  private newFilterId = signal<string>(nanoid());
   public newFilter: Signal<UpdateAttributeFilterModel | null> = computed(() => {
     const selectedLayerId = this.selectedLayerId();
+    const newFilterId = this.newFilterId();
     if (!selectedLayerId) {
       return null;
     }
@@ -42,7 +44,7 @@ export class ApplicationCreateFilterComponent {
         filters: [],
         operator: 'AND',
       },
-      filterId: nanoid(),
+      filterId: newFilterId,
     };
   });
 
@@ -52,15 +54,19 @@ export class ApplicationCreateFilterComponent {
     if (!this.filterGroup) {
       return;
     }
-    this.filterGroup.id = nanoid();
     this.store$.dispatch(createApplicationFilterGroup({ filterGroup: this.filterGroup }));
+    this.setUpNewFilter();
   }
 
   public updateFilter($event: FilterGroupModel<AttributeFilterModel>) {
     this.filterGroup = $event;
   }
 
-  public validFormChanged() {
-    this.saveEnabled.set(true);
+  public validFormChanged($event: boolean) {
+    this.saveEnabled.set($event);
+  }
+
+  private setUpNewFilter() {
+    this.newFilterId.set(nanoid());
   }
 }
