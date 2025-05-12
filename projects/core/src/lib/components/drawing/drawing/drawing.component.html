@@ -2,7 +2,7 @@
   <div class="drawing-form">
     <p class="label" i18n="@@core.drawing.draw-shape">Draw shape</p>
     <div class="icon-button-list">
-      <button [class.button--active]="activeTool === 'POINT'"
+      <button [class.button--active]="activeTool === 'POINT' && rectangleSize === null"
               i18n-tmTooltip="@@core.draw.draw-point"
               tmTooltip="Draw point"
               mat-stroked-button
@@ -34,7 +34,7 @@
               (click)="draw(drawingTypes.SQUARE)">
         <mat-icon svgIcon="tools_draw_square"></mat-icon>
       </button>
-      <button [class.button--active]="activeTool === 'RECTANGLE'"
+      <button [class.button--active]="activeTool === 'RECTANGLE' || rectangleSize != null"
               i18n-tmTooltip="@@core.draw.draw-rectangle"
               tmTooltip="Draw rectangle"
               mat-stroked-button
@@ -120,6 +120,27 @@
         </div>
       }
     </div>
+
+    @if(activeTool === 'RECTANGLE' || this.rectangleSize != null) {
+      <button [class.button--active]="rectangleSize?.label === '1x1'"
+              style="min-width: 40px; padding: 0 8px; border-radius: 3px; margin: 8px 8px 0 0;"
+              tmTooltip="Draw rectangle 1m by 1m"
+              mat-stroked-button
+              color="primary"
+              (click)="selectRectangleSize(1, 1)">1x1</button>
+      <button [class.button--active]="rectangleSize?.label === '2x2'"
+              style="min-width: 40px; padding: 0 8px; border-radius: 3px; margin: 8px 8px 0 0;"
+              tmTooltip="Draw rectangle 2m by 2m"
+              mat-stroked-button
+              color="primary"
+              (click)="selectRectangleSize(2, 2)">2x2</button>
+      <button [class.button--active]="rectangleSize?.label === '5x5'"
+              style="min-width: 40px; padding: 0 8px; border-radius: 3px; margin: 8px 8px 0 0;"
+              tmTooltip="Draw rectangle 5m by 5m"
+              mat-stroked-button
+              color="primary"
+              (click)="selectRectangleSize(5, 5)">5x5</button>
+    }
 
     <tm-drawing-objects-list [drawingLayerId]="drawingLayerId"></tm-drawing-objects-list>
     @if (selectedDrawingStyle) {
