@@ -2,13 +2,14 @@ import { FeatureModelType } from '../models/feature-model.type';
 import { Feature } from 'ol';
 import { GeoJSON, WKT } from 'ol/format';
 import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
-import { Circle, Geometry, Point } from 'ol/geom';
-import { fromCircle } from 'ol/geom/Polygon';
+import { Circle, Geometry, Point, Polygon } from 'ol/geom';
+import { fromCircle, fromExtent } from 'ol/geom/Polygon';
 import { MapSizeHelper } from '../helpers/map-size.helper';
 import { MapUnitEnum } from '../models/map-unit.enum';
 import { GeometryTypeHelper } from './geometry-type.helper';
 import { Projection } from 'ol/proj';
 import { Feature as GeoJSONFeature } from 'geojson';
+import { WriteOptions } from 'ol/format/Feature';
 
 export class FeatureHelper {
 
@@ -114,15 +115,18 @@ export class FeatureHelper {
     return null;
   }
 
-  public static getWKT(geometry: Geometry, projection: Projection, linearizeCircle = false) {
-    const units = projection.getUnits();
-    const decimals = MapSizeHelper.getCoordinatePrecision(units ? units.toLowerCase() as MapUnitEnum: MapUnitEnum.m);
+  public static getWKT(geometry: Geometry, projection?: Projection, linearizeCircle?: boolean): string {
+    const writeOptions: WriteOptions = {};
+    if (projection) {
+      const units = projection.getUnits();
+      writeOptions.decimals = MapSizeHelper.getCoordinatePrecision(units ? units.toLowerCase() as MapUnitEnum : MapUnitEnum.m);
+    }
 
     if (GeometryTypeHelper.isCircleGeometry(geometry) && !linearizeCircle) {
-      return FeatureHelper.writeCircleWKT(geometry, decimals);
+      return FeatureHelper.writeCircleWKT(geometry, writeOptions.decimals);
     }
     const geom = GeometryTypeHelper.isCircleGeometry(geometry) ? fromCircle(geometry) : geometry;
-    return FeatureHelper.wktFormatter.writeGeometry(geom, { decimals });
+    return FeatureHelper.wktFormatter.writeGeometry(geom, writeOptions);
   }
 
   private static writeCircleWKT(circle: Circle, decimals?: number): string {
@@ -181,5 +185,18 @@ export class FeatureHelper {
     geom.translate(deltaX, deltaY);
     // XXX getWKT() only needs units, not the entire projection
     return FeatureHelper.getWKT(geom, { getUnits: () => (MapUnitEnum.m) } as Projection);
+  }
+
+  public static createRectangleAtPoint(point: Geometry, width: number, height: number): Polygon | null {
+    if (!(point instanceof Point)) {
+      return null;
+    }
+    const coords = point.getFlatCoordinates();
+    return fromExtent([
+      coords[0] - width / 2,
+      coords[1] - height / 2,
+      coords[0] + width / 2,
+      coords[1] + height / 2,
+    ]);
   }
 }
