@@ -28,9 +28,8 @@ export class ApplicationEditFilterComponent implements OnDestroy {
   private filterGroup: FilterGroupModel<AttributeFilterModel> | null = null;
 
   public applicationId: Signal<string | null | undefined> = this.store$.selectSignal(selectSelectedApplicationId);
-  public filterableLayers: Signal<GeoServiceLayerInApplicationModel[]> = this.store$.selectSignal(selectFilterableLayersForApplication);
-
   public saveEnabled = signal(false);
+  public saving = signal(false);
 
   constructor(
     private route: ActivatedRoute,
@@ -45,31 +44,24 @@ export class ApplicationEditFilterComponent implements OnDestroy {
       map(params => params['filterId']),
       switchMap(filterId => this.store$.select(selectFilterGroups).pipe(
         map(filterGroups => {
-          for (const filterGroup of filterGroups) {
-            const attributeFilter = filterGroup.filters.find(filterInGroup => filterInGroup.id === filterId);
-            if (attributeFilter) {
-              this.store$.dispatch(setApplicationSelectedFilterLayerId({ filterLayerId: filterGroup.layerIds[0] }));
-              this.store$.dispatch(setApplicationSelectedFilterId({ filterId: filterId }));
-              return {
-                filterGroup: filterGroup,
-                filterId: attributeFilter.id,
-              };
-            }
+          const filterGroup = filterGroups.find(group =>
+            group.filters.some(attributeFilter => attributeFilter.id === filterId)
+          );
+          if (!filterGroup) {
+            return null;
           }
-          return null;
+          const attributeFilter = filterGroup.filters.find(attributeFilter => attributeFilter.id === filterId);
+          this.store$.dispatch(setApplicationSelectedFilterLayerId({ filterLayerId: filterGroup.layerIds[0] }));
+          this.store$.dispatch(setApplicationSelectedFilterId({ filterId }));
+          return {
+            filterGroup,
+            filterId: attributeFilter?.id ?? '',
+          };
         }),
       )),
       switchMap(result =>
         this.store$.select(selectFilterableLayersForApplication).pipe(
-          map(filterableLayers => {
-            if (!result) {
-              return null;
-            }
-            return {
-              ...result,
-              filterableLayers,
-            };
-          }),
+          map(filterableLayers => result ? { ...result, filterableLayers } : null),
         ),
       ),
     );

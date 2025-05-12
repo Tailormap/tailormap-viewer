@@ -1,10 +1,13 @@
 .layers-and-attributes {
   display: flex;
   margin-top: 16px;
-  flex: 1;
   overflow: hidden;
-  min-height: 300px;
+  min-height: 100px;
   max-height: 450px;
+}
+
+tm-admin-application-filter-attribute-list {
+  width: 400px;
 }
 
 .attribute-filter-info {

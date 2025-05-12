@@ -1,21 +1,18 @@
-import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, Input } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, DestroyRef } from '@angular/core';
+import { AttributeDescriptorModel, FeatureTypeModel } from '@tailormap-admin/admin-api';
 import { FormControl } from '@angular/forms';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, map, Observable, of } from 'rxjs';
-import { AttributeDescriptorModel, FeatureTypeModel } from '@tailormap-admin/admin-api';
-import { FilterHelper } from '@tailormap-viewer/shared';
-import { Store } from '@ngrx/store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { draftFormAddField } from '../state/form.actions';
-import { selectDraftFormAttributes } from '../state/form.selectors';
+import { FilterHelper } from '@tailormap-viewer/shared';
 
 @Component({
-  selector: 'tm-admin-form-attribute-list',
-  templateUrl: './form-attribute-list.component.html',
-  styleUrls: ['./form-attribute-list.component.css'],
+  selector: 'tm-admin-application-filter-attribute-list',
+  templateUrl: './application-filter-attribute-list.component.html',
+  styleUrls: ['./application-filter-attribute-list.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
-export class FormAttributeListComponent implements OnInit {
+export class ApplicationFilterAttributeListComponent implements OnInit {
 
   @Input({ required: true })
   public loadingFeatureType: boolean | null = false;
@@ -25,17 +22,20 @@ export class FormAttributeListComponent implements OnInit {
     this.featureTypeSubject$.next(featureType);
   }
 
+  @Output()
+  public selectAttribute = new EventEmitter<AttributeDescriptorModel>();
+
   public filter = new FormControl('');
 
   private attributeFilter = new BehaviorSubject<string | null>(null);
   private featureTypeSubject$ = new BehaviorSubject<FeatureTypeModel | null>(null);
+  private selectedSubject$ = new BehaviorSubject<string>('');
   public featureType$ = this.featureTypeSubject$.asObservable();
-  public attributes$: Observable<AttributeDescriptorModel[]> = of([]);
+  public attributes$: Observable<Array<AttributeDescriptorModel & { selected: boolean }>> = of([]);
 
   public filterTerm$ = this.attributeFilter.asObservable();
 
   constructor(
-    private store$: Store,
     private destroyRef: DestroyRef,
   ) {
   }
@@ -48,16 +48,18 @@ export class FormAttributeListComponent implements OnInit {
       });
     this.attributes$ = combineLatest([
       this.featureTypeSubject$.asObservable(),
-      this.store$.select(selectDraftFormAttributes),
+      this.selectedSubject$.asObservable(),
       this.attributeFilter.asObservable().pipe(distinctUntilChanged()),
     ])
       .pipe(
-        map(([ featureType, selectedAttributes, filterStr ]) => {
+        map(([ featureType, selectedAttribute, filterStr ]) => {
           if (!featureType) {
             return [];
           }
-          const selectedAttributesSet = new Set(selectedAttributes);
-          const attributes = (featureType?.attributes || []).filter(a => !selectedAttributesSet.has(a.name));
+          const attributes = featureType.attributes.map(att => ({
+            ...att,
+            selected: selectedAttribute === att.name,
+          }));
           if (filterStr) {
             return FilterHelper.filterByTerm(attributes, filterStr, a => a.name);
           }
@@ -66,8 +68,9 @@ export class FormAttributeListComponent implements OnInit {
       );
   }
 
-  public addAttribute(attribute: AttributeDescriptorModel) {
-    this.store$.dispatch(draftFormAddField({ name: attribute.name }));
+  public attributeClicked(attribute: AttributeDescriptorModel) {
+    this.selectAttribute.emit(attribute);
+    this.selectedSubject$.next(attribute.name);
   }
 
 }

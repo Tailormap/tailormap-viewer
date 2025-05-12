@@ -26,10 +26,9 @@
 
   @if(newFilter) {
     <div class="layers-and-attributes">
-      <tm-admin-form-attribute-list [featureType]="featureType$ | async"
+      <tm-admin-application-filter-attribute-list [featureType]="featureType$ | async"
                                     [loadingFeatureType]="loadingFeatureType$ | async"
-                                    [usingInApplicationFilter]="true"
-                                    (selectAttribute)="setSelectedAttribute($event)"></tm-admin-form-attribute-list>
+                                    (selectAttribute)="setSelectedAttribute($event)"></tm-admin-application-filter-attribute-list>
     </div>
   }
 

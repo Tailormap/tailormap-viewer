@@ -1,18 +1,22 @@
-@if (selectedLayer(); as selectedLayer) {
-  <strong>Filters for {{ selectedLayer.geoServiceLayer.layerSettings?.title || selectedLayer.geoServiceLayer.title }}</strong>
-} @else {
-  <strong>All filters</strong>
-}
-
-<mat-selection-list>
-  @for (filter of filters(); track filter) {
-    <mat-list-item
-      [routerLink]="'/admin/applications/application/' + applicationId() + '/filters/filter/' + filter.filter.id"
-      [class.selected]="filter.selected">
-      <div>{{ filter.filter.attribute + " " + filter.filter.condition }}</div>
-    </mat-list-item>
+<div class="filters-list-title">
+  @if (selectedLayer(); as selectedLayer) {
+    <strong>Filters for {{ selectedLayer.geoServiceLayer.layerSettings?.title || selectedLayer.geoServiceLayer.title }}</strong>
+  } @else {
+    <strong>All filters</strong>
   }
-</mat-selection-list>
+</div>
+
+<div class="filter-list">
+  <mat-selection-list>
+    @for (filter of filters(); track filter) {
+      <mat-list-item
+        [routerLink]="'/admin/applications/application/' + applicationId() + '/filters/filter/' + filter.filter.id"
+        [class.selected]="filter.selected">
+        <div class="filter-label">{{ filter.filter.attribute + " " + filter.filter.condition }}</div>
+      </mat-list-item>
+    }
+  </mat-selection-list>
+</div>
 
 <div class="new-filter-button">
   <button color="primary" mat-flat-button [routerLink]="'/admin/applications/application/' + applicationId() + '/filters/create'">

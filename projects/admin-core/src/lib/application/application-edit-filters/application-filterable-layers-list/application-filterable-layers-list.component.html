@@ -3,7 +3,7 @@
     <mat-list-item
       [class.selected]="layer.isSelected"
       (click)="setSelectedLayer(layer)">
-      <div>{{ layer.geoServiceLayer.layerSettings?.title || layer.geoServiceLayer.title }}</div>
+      <div class="filterable-layer-label">{{ layer.geoServiceLayer.layerSettings?.title || layer.geoServiceLayer.title }}</div>
     </mat-list-item>
   }
 </mat-selection-list>

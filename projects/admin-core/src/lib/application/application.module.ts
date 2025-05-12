@@ -41,6 +41,7 @@ import { ApplicationEditFilterFormComponent } from './application-edit-filters/a
 import { ApplicationEditFiltersHomeComponent } from './application-edit-filters/application-edit-filters-home/application-edit-filters-home.component';
 import { ApplicationEditFilterComponent } from './application-edit-filters/application-edit-filter/application-edit-filter.component';
 import { ApplicationCreateFilterComponent } from './application-edit-filters/application-create-filter/application-create-filter.component';
+import { ApplicationFilterAttributeListComponent } from './application-edit-filters/application-filter-attribute-list/application-filter-attribute-list.component';
 
 @NgModule({
   declarations: [
@@ -69,6 +70,7 @@ import { ApplicationCreateFilterComponent } from './application-edit-filters/app
     ApplicationEditFiltersHomeComponent,
     ApplicationEditFilterComponent,
     ApplicationCreateFilterComponent,
+    ApplicationFilterAttributeListComponent,
   ],
   imports: [
     CommonModule,

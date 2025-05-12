@@ -13,4 +13,5 @@
 
 .filterable-layers-list {
   margin-right: 10px;
+  max-width: 300px;
 }
