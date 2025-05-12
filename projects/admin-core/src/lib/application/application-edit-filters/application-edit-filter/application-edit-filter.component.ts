@@ -12,7 +12,6 @@ import {
 } from '../../state/application.actions';
 import { tap } from 'rxjs/operators';
 import { UpdateAttributeFilterModel } from '../../models/update-attribute-filter.model';
-import { GeoServiceLayerInApplicationModel } from '../../models/geo-service-layer-in-application.model';
 
 @Component({
   selector: 'tm-admin-application-edit-filter',
@@ -29,7 +28,6 @@ export class ApplicationEditFilterComponent implements OnDestroy {
 
   public applicationId: Signal<string | null | undefined> = this.store$.selectSignal(selectSelectedApplicationId);
   public saveEnabled = signal(false);
-  public saving = signal(false);
 
   constructor(
     private route: ActivatedRoute,
@@ -45,12 +43,12 @@ export class ApplicationEditFilterComponent implements OnDestroy {
       switchMap(filterId => this.store$.select(selectFilterGroups).pipe(
         map(filterGroups => {
           const filterGroup = filterGroups.find(group =>
-            group.filters.some(attributeFilter => attributeFilter.id === filterId)
+            group.filters.some(attributeFilter => attributeFilter.id === filterId),
           );
           if (!filterGroup) {
             return null;
           }
-          const attributeFilter = filterGroup.filters.find(attributeFilter => attributeFilter.id === filterId);
+          const attributeFilter = filterGroup.filters.find(filterInGroup => filterInGroup.id === filterId);
           this.store$.dispatch(setApplicationSelectedFilterLayerId({ filterLayerId: filterGroup.layerIds[0] }));
           this.store$.dispatch(setApplicationSelectedFilterId({ filterId }));
           return {
