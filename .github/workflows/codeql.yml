@@ -28,6 +28,8 @@ jobs:
         include:
         - language: javascript-typescript
           build-mode: none
+        - language: actions
+          build-mode: none
 
     steps:
       - uses: actions/checkout@v4
