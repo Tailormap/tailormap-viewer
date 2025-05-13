@@ -1,14 +1,16 @@
 <div [formGroup]="attributeFilterForm">
 
-  <mat-form-field appearance="outline">
-    <mat-label i18n="@@core.filter.condition">Condition</mat-label>
-    <mat-select i18n-aria-label="@@core.filter.select-condition"
-                aria-label="Select condition"
-                formControlName="condition"
-                panelClass="attribute-filter-condition-list-panel">
-      <mat-option *ngFor="let attr of filteredConditions" [value]="attr.condition">{{attr.label}}</mat-option>
-    </mat-select>
-  </mat-form-field>
+  @if (!onlyUniqueValuesCondition) {
+    <mat-form-field appearance="outline">
+      <mat-label i18n="@@core.filter.condition">Condition</mat-label>
+      <mat-select i18n-aria-label="@@core.filter.select-condition"
+                  aria-label="Select condition"
+                  formControlName="condition"
+                  panelClass="attribute-filter-condition-list-panel">
+        <mat-option *ngFor="let attr of filteredConditions" [value]="attr.condition">{{attr.label}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  }
 
   <mat-form-field appearance="outline" *ngIf="showValueInput()">
     <mat-label>

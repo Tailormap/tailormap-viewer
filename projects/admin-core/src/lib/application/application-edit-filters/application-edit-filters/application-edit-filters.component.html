@@ -1,13 +1,13 @@
 <div class="edit-filters">
   <div class="filterable-layers-list">
     <strong>Filterable layers</strong>
-    <tm-admin-filterable-layers-list (selectLayer)="setSelectedLayer($event)"></tm-admin-filterable-layers-list>
+    <tm-admin-filterable-layers-list></tm-admin-filterable-layers-list>
   </div>
 
   <router-outlet></router-outlet>
 
   <div class="filters-list">
-    <tm-admin-application-filters-list [selectedLayer]="selectedLayer"></tm-admin-application-filters-list>
+    <tm-admin-application-filters-list></tm-admin-application-filters-list>
   </div>
 </div>
 

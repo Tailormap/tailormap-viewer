@@ -14,7 +14,7 @@
   </div>
 
   <div class="filter-tool">
-    <mat-form-field>
+    <mat-form-field appearance="outline">
       <mat-label>Tool</mat-label>
       <mat-select formControlName="tool" placeholder="Tool">
         @for (tool of filterToolOptions; track tool) {
@@ -38,18 +38,20 @@
         <tm-attribute-filter
           [attributeType]="filterForm.get('attributeType')!.value!"
           [filter]="_filterData"
+          [uniqueValues$]="uniqueValues$"
           (filterChanged)="setFilterValues($event)"></tm-attribute-filter>
       </div>
     } @else if (filterForm.get('tool')?.value === "CHECKBOX") {
       <div class="checkbox-filter-form">
-        <tm-admin-application-checkbox-filter-form></tm-admin-application-checkbox-filter-form>
+        <tm-admin-application-checkbox-filter-form
+          [attributeType]="filterForm.get('attributeType')!.value!"
+          [uniqueValues$]="uniqueValues$"></tm-admin-application-checkbox-filter-form>
       </div>
     } @else if (filterForm.get('tool')?.value === "SLIDER") {
       <div class="slider-filter-form">
-        <tm-admin-application-slider-filter-form></tm-admin-application-slider-filter-form>
+        <tm-admin-application-slider-filter-form
+          [attributeType]="filterForm.get('attributeType')!.value!"></tm-admin-application-slider-filter-form>
       </div>
     }
   }
 </form>
-
-

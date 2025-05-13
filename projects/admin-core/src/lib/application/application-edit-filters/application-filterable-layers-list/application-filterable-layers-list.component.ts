@@ -1,5 +1,5 @@
 import {
-  Component, ChangeDetectionStrategy, EventEmitter, Output, Signal, computed, OnDestroy,
+  Component, ChangeDetectionStrategy, Signal, computed, OnDestroy,
 } from '@angular/core';
 import { GeoServiceLayerInApplicationModel } from '../../models/geo-service-layer-in-application.model';
 import { Store } from '@ngrx/store';
@@ -28,9 +28,6 @@ export class ApplicationFilterableLayersListComponent implements OnDestroy {
     });
   });
 
-  @Output()
-  public selectLayer = new EventEmitter<GeoServiceLayerInApplicationModel>();
-
   constructor(private store$: Store) { }
 
   public setSelectedLayer(layer: GeoServiceLayerInApplicationModel) {
@@ -38,7 +35,6 @@ export class ApplicationFilterableLayersListComponent implements OnDestroy {
       return;
     }
     this.store$.dispatch(setApplicationSelectedFilterLayerId({ filterLayerId: layer.appLayerId }));
-    this.selectLayer.emit(layer);
   }
 
   public ngOnDestroy(): void {

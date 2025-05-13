@@ -1,9 +1,11 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { AttributeFilterModel, AttributeType, FilterConditionEnum, FilterGroupModel, FilterTypeEnum } from '@tailormap-viewer/api';
+import {
+  AttributeFilterModel, AttributeType, FilterConditionEnum, FilterGroupModel, FilterTypeEnum, UniqueValuesService,
+} from '@tailormap-viewer/api';
 import { AttributeDescriptorModel, FeatureTypeModel } from '@tailormap-admin/admin-api';
 import { FormControl, FormGroup } from '@angular/forms';
 import { FeatureSourceService } from '../../../catalog/services/feature-source.service';
-import { BehaviorSubject, debounceTime, distinctUntilChanged, filter, map, take } from 'rxjs';
+import { BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, filter, map, Observable, of, switchMap, take } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { nanoid } from 'nanoid';
 import { UpdateAttributeFilterModel } from '../../models/update-attribute-filter.model';
@@ -11,6 +13,10 @@ import { InputFilterData, OutputFilterData } from '@tailormap-viewer/shared';
 import { GeoServiceLayerInApplicationModel } from '../../models/geo-service-layer-in-application.model';
 import { FilterToolEnum } from '../../models/filter-tool.enum';
 import { FormHelper } from '../../../helpers/form.helper';
+import {
+  selectApplicationSelectedFilterLayerId, selectSelectedApplicationName,
+} from '../../state/application.selectors';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'tm-admin-application-edit-filter-form',
@@ -40,6 +46,10 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     label: 'Slider',
     value: FilterToolEnum.SLIDER,
   }];
+
+  public applicationName$: Observable<string | null | undefined> = of(null);
+  public selectedFilterLayerId$: Observable<string | null | undefined> = of(null);
+  public uniqueValues$: Observable<string[]> | null = null;
 
   @Input()
   public newFilter: boolean = false;
@@ -81,7 +91,12 @@ export class ApplicationEditFilterFormComponent implements OnInit {
   constructor(
     private featureSourceService: FeatureSourceService,
     private destroyRef: DestroyRef,
-  ) { }
+    private store$: Store,
+    private uniqueValuesService: UniqueValuesService,
+  ) {
+    this.applicationName$ = this.store$.select(selectSelectedApplicationName);
+    this.selectedFilterLayerId$ = this.store$.select(selectApplicationSelectedFilterLayerId);
+  }
 
   public filterForm = new FormGroup({
     id: new FormControl(''),
@@ -104,7 +119,6 @@ export class ApplicationEditFilterFormComponent implements OnInit {
         distinctUntilChanged(),
       )
       .subscribe(value => {
-        console.log("validFormChanged", value);
         this.validFormChanged.emit(value);
       });
     this.filterForm.valueChanges
@@ -148,6 +162,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
         invertCondition: false,
       }, { emitEvent: false });
     } else {
+      this.setUniqueValues(attributeFilter.attribute);
       this.filterForm.patchValue({
         id: attributeFilter.id,
         layer: layer ?? null,
@@ -202,6 +217,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
       attributeType: $event.type,
     }, { emitEvent: true });
     this.filterForm.markAsDirty();
+    this.setUniqueValues($event.name);
   }
 
   public setFilterValues($event: OutputFilterData) {
@@ -212,6 +228,26 @@ export class ApplicationEditFilterFormComponent implements OnInit {
       invertCondition: $event.invertCondition,
     }, { emitEvent: true });
     this.filterForm.markAsDirty();
+  }
+
+  public setUniqueValues(attributeName: string) {
+    this.uniqueValues$ = combineLatest([
+      this.store$.select(selectSelectedApplicationName),
+      this.store$.select(selectApplicationSelectedFilterLayerId),
+    ]).pipe(
+      take(1),
+      switchMap(([ applicationName, selectedLayer ]) => {
+        return this.uniqueValuesService.getUniqueValues$({
+          attribute: attributeName,
+          layerId: selectedLayer ?? '',
+          applicationId: `app/${applicationName}`,
+        }).pipe(
+          map(response => {
+            return response.values.map(v => `${v}`) || [];
+          }),
+        );
+      }),
+    );
   }
 
 }

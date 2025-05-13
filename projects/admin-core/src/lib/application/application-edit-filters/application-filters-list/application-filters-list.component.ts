@@ -1,6 +1,9 @@
-import { Component, ChangeDetectionStrategy, Signal, computed, input, InputSignal, OnDestroy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Signal, computed, OnDestroy } from '@angular/core';
 import { AttributeFilterModel, FilterGroupModel } from '@tailormap-viewer/api';
-import { selectApplicationSelectedFilterId, selectFilterGroups, selectSelectedApplicationId } from '../../state/application.selectors';
+import {
+  selectApplicationSelectedFilterId, selectApplicationSelectedFilterLayerId, selectFilterableLayersForApplication, selectFilterGroups,
+  selectSelectedApplicationId,
+} from '../../state/application.selectors';
 import { Store } from '@ngrx/store';
 import { GeoServiceLayerInApplicationModel } from '../../models/geo-service-layer-in-application.model';
 import { setApplicationSelectedFilterId } from '../../state/application.actions';
@@ -15,10 +18,21 @@ import { setApplicationSelectedFilterId } from '../../state/application.actions'
 export class ApplicationFiltersListComponent implements OnDestroy {
 
 
-  public selectedLayer: InputSignal<GeoServiceLayerInApplicationModel | undefined> = input<GeoServiceLayerInApplicationModel>();
+  // public selectedLayer: InputSignal<GeoServiceLayerInApplicationModel | undefined> = input<GeoServiceLayerInApplicationModel>();
+  public selectedLayerId: Signal<string | undefined> = this.store$.selectSignal(selectApplicationSelectedFilterLayerId);
+  public filterableLayers: Signal<GeoServiceLayerInApplicationModel[]> = this.store$.selectSignal(selectFilterableLayersForApplication);
   public applicationId: Signal<string | null | undefined> = this.store$.selectSignal(selectSelectedApplicationId);
   public filterGroups: Signal<FilterGroupModel<AttributeFilterModel>[]> = this.store$.selectSignal(selectFilterGroups);
   public selectedFilterId: Signal<string | undefined> = this.store$.selectSignal(selectApplicationSelectedFilterId);
+
+  public selectedLayer: Signal<GeoServiceLayerInApplicationModel | undefined> = computed(() => {
+    const selectedLayerId = this.selectedLayerId();
+    const filterableLayers = this.filterableLayers();
+    if (!selectedLayerId) {
+      return undefined;
+    }
+    return filterableLayers.find(layer => layer.appLayerId === selectedLayerId);
+  });
 
   public filters = computed(() => {
     let filterGroups = this.filterGroups();

@@ -1,3 +1,28 @@
 <form [formGroup]="sliderFilterForm">
 
+  <mat-form-field appearance="outline">
+    <mat-label i18n="@@core.filter.condition">Condition</mat-label>
+    <mat-select i18n-aria-label="@@core.filter.select-condition"
+                aria-label="Select condition"
+                formControlName="condition"
+                panelClass="attribute-filter-condition-list-panel">
+      <mat-option *ngFor="let attr of filterConditions()" [value]="attr.condition">{{attr.label}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Initial Value</mat-label>
+    <input type="number" matInput formControlName="initialValue" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Minimum Value</mat-label>
+    <input type="number" matInput formControlName="minimumValue" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Maximum Value</mat-label>
+    <input type="number" matInput formControlName="maximumValue" />
+  </mat-form-field>
+
 </form>

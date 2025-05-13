@@ -1,6 +1,6 @@
 import { FilterConditionEnum } from '@tailormap-viewer/api';
 import { AttributeType } from '@tailormap-viewer/api';
-import { FilterConditionModel } from '../models/filter-condition.model';
+import { FilterConditionModel } from '../../../../core/src/lib/filter/models/filter-condition.model';
 import { AttributeFilterModel } from '@tailormap-viewer/api';
 
 export class AttributeFilterHelper {

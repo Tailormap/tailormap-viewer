@@ -4,7 +4,7 @@ import { map, Observable } from 'rxjs';
 import { BaseComponentTypeEnum, AttributeType, UniqueValuesService } from '@tailormap-viewer/api';
 import { FilterConditionEnum, FilterTypeEnum, AttributeFilterModel } from '@tailormap-viewer/api';
 import { SimpleAttributeFilterService } from '../../../filter/services/simple-attribute-filter.service';
-import { AttributeFilterHelper } from '../../../filter/helpers/attribute-filter.helper';
+import { AttributeFilterHelper } from '@tailormap-viewer/shared';
 
 export interface FilterDialogData {
   columnName: string;

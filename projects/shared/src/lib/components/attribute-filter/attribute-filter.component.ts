@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
 import { FormBuilder } from '@angular/forms';
 import { debounceTime, take, takeUntil, tap } from 'rxjs/operators';
@@ -6,7 +6,7 @@ import { DateTime } from 'luxon';
 import { AttributeType } from '@tailormap-viewer/api';
 import { FilterConditionEnum } from '@tailormap-viewer/api';
 import { FilterConditionModel } from '../../../../../core/src/lib/filter/models/filter-condition.model';
-import { AttributeFilterHelper } from '../../../../../core/src/lib/filter/helpers/attribute-filter.helper';
+import { AttributeFilterHelper } from '../../helpers/attribute-filter.helper';
 import { FilterData, InputFilterData, OutputFilterData } from '../../models/attribute-filter-data.model';
 
 @Component({
@@ -73,6 +73,9 @@ export class AttributeFilterComponent implements OnInit, OnDestroy {
     }
   }
 
+  @Input()
+  public onlyUniqueValuesCondition = false;
+
   @Output()
   public filterChanged: EventEmitter<OutputFilterData> = new EventEmitter<OutputFilterData>();
 
@@ -108,7 +111,10 @@ export class AttributeFilterComponent implements OnInit, OnDestroy {
   private formValues: FilterData = {};
   public trackByIndex = (idx: number) => idx;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private changeDetectorRef: ChangeDetectorRef,
+  ) {}
 
   public ngOnInit(): void {
     this.attributeFilterForm.valueChanges
@@ -177,6 +183,7 @@ export class AttributeFilterComponent implements OnInit, OnDestroy {
       this.uniqueValuesLoaded = true;
       this.allUniqueValuesSelected = this.getAllUniqueValuesSelected();
       this.someUniqueValuesSelected = this.getSomeUniqueValuesSelected();
+      this.changeDetectorRef.markForCheck();
     });
   }
 

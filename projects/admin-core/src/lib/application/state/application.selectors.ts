@@ -28,6 +28,7 @@ export const selectExpandedBaseLayerNodes = createSelector(selectApplicationStat
 export const selectExpandedAppLayerNodes = createSelector(selectApplicationState, state => state.expandedAppLayerNodes);
 export const selectApplicationSelectedFilterLayerId = createSelector(selectApplicationState, state => state.applicationSelectedFilterLayerId);
 export const selectApplicationSelectedFilterId = createSelector(selectApplicationState, state => state.applicationSelectedFilterId);
+export const selectSelectedApplicationName = createSelector(selectApplicationState, state => state.draftApplication?.name);
 
 export const isLoadingApplicationServices = createSelector(
   selectApplicationServicesLoadStatus,

@@ -6,7 +6,6 @@ import { AttributeFilterModel, FilterGroupModel } from '@tailormap-viewer/api';
 import { selectCatalogLoadStatus } from '../../../catalog/state/catalog.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { loadCatalog } from '../../../catalog/state/catalog.actions';
-import { GeoServiceLayerInApplicationModel } from '../../models/geo-service-layer-in-application.model';
 
 @Component({
   selector: 'tm-admin-application-edit-filters',
@@ -18,8 +17,6 @@ import { GeoServiceLayerInApplicationModel } from '../../models/geo-service-laye
 export class ApplicationEditFiltersComponent {
 
   public filterGroups: Signal<FilterGroupModel<AttributeFilterModel>[]> = this.store$.selectSignal(selectFilterGroups);
-
-  public selectedLayer?: GeoServiceLayerInApplicationModel;
 
   constructor(
     private store$: Store,
@@ -33,7 +30,4 @@ export class ApplicationEditFiltersComponent {
       });
   }
 
-  public setSelectedLayer($event: GeoServiceLayerInApplicationModel) {
-    this.selectedLayer = $event;
-  }
 }

@@ -4,7 +4,7 @@ import { FilterConditionEnum } from '@tailormap-viewer/api';
 import { CqlFilterHelper } from './cql-filter.helper';
 import { AttributeFilterModel } from '@tailormap-viewer/api';
 import { FilterTypeEnum } from '@tailormap-viewer/api';
-import { getFilterGroup } from './attribute-filter.helper.spec';
+import { getFilterGroup } from '../../../../../shared/src/lib/helpers/attribute-filter.helper.spec';
 import { SpatialFilterModel } from '@tailormap-viewer/api';
 
 export const getSpatialFilterGroup = (geoms: string[], columns?: Array<{ layerId: string; column: string[] }>, buffer?: number) => {
