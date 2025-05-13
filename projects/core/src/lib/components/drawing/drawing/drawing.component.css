@@ -58,3 +58,10 @@
   display: flex;
   justify-content: flex-end;
 }
+
+.rectangle-size-buttons button {
+  min-width: 40px;
+  padding: 0 8px;
+  border-radius: 3px;
+  margin: 8px 8px 0 0;
+}

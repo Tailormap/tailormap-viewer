@@ -270,6 +270,26 @@
         <source>Delete selected drawing object</source>
         <target>Ausgewähltes Zeichenobjekt löschen</target>
       </trans-unit>
+      <trans-unit id="core.drawing.draw-rectangle-1x1" datatype="html">
+        <source>Draw rectangle 1m by 1m</source>
+        <target state="new">Draw rectangle 1m by 1m</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.draw-rectangle-2x2" datatype="html">
+        <source>Draw rectangle 2m by 2m</source>
+        <target state="new">Draw rectangle 2m by 2m</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.draw-rectangle-5x5" datatype="html">
+        <source>Draw rectangle 5m by 5m</source>
+        <target state="new">Draw rectangle 5m by 5m</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.draw-rectangle-custom-size" datatype="html">
+        <source>Draw rectangle with custom size</source>
+        <target state="new">Draw rectangle with custom size</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.draw-shape" datatype="html">
+        <source>Draw shape</source>
+        <target>Draw shape</target>
+      </trans-unit>
       <trans-unit id="core.drawing.drawing" datatype="html">
         <source>Drawing</source>
         <target>Zeichnen</target>
@@ -330,13 +350,21 @@
         <source>Opacity</source>
         <target>Deckkraft</target>
       </trans-unit>
+      <trans-unit id="core.drawing.rectangle-custom-title" datatype="html">
+        <source>Custom rectangle size</source>
+        <target state="new">Custom rectangle size</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.rectangle-height" datatype="html">
+        <source>Height</source>
+        <target state="new">Height</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.rectangle-width" datatype="html">
+        <source>Width</source>
+        <target state="new">Width</target>
+      </trans-unit>
       <trans-unit id="core.drawing.rotation" datatype="html">
         <source>Rotation</source>
         <target>Drehung</target>
-      </trans-unit>
-      <trans-unit id="core.drawing.draw-shape" datatype="html">
-        <source>Draw shape</source>
-        <target>Draw shape</target>
       </trans-unit>
       <trans-unit id="core.drawing.size" datatype="html">
         <source>Size</source>

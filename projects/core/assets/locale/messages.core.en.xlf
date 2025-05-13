@@ -203,6 +203,21 @@
       <trans-unit id="core.drawing.delete-selected-drawing-object" datatype="html">
         <source>Delete selected drawing object</source>
       </trans-unit>
+      <trans-unit id="core.drawing.draw-rectangle-1x1" datatype="html">
+        <source>Draw rectangle 1m by 1m</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.draw-rectangle-2x2" datatype="html">
+        <source>Draw rectangle 2m by 2m</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.draw-rectangle-5x5" datatype="html">
+        <source>Draw rectangle 5m by 5m</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.draw-rectangle-custom-size" datatype="html">
+        <source>Draw rectangle with custom size</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.draw-shape" datatype="html">
+        <source>Draw shape</source>
+      </trans-unit>
       <trans-unit id="core.drawing.drawing" datatype="html">
         <source>Drawing</source>
       </trans-unit>
@@ -248,11 +263,17 @@
       <trans-unit id="core.drawing.opacity" datatype="html">
         <source>Opacity</source>
       </trans-unit>
+      <trans-unit id="core.drawing.rectangle-custom-title" datatype="html">
+        <source>Custom rectangle size</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.rectangle-height" datatype="html">
+        <source>Height</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.rectangle-width" datatype="html">
+        <source>Width</source>
+      </trans-unit>
       <trans-unit id="core.drawing.rotation" datatype="html">
         <source>Rotation</source>
-      </trans-unit>
-      <trans-unit id="core.drawing.draw-shape" datatype="html">
-        <source>Draw shape</source>
       </trans-unit>
       <trans-unit id="core.drawing.size" datatype="html">
         <source>Size</source>
