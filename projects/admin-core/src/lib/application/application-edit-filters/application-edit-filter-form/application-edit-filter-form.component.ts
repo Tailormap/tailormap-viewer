@@ -11,7 +11,6 @@ import { nanoid } from 'nanoid';
 import { UpdateAttributeFilterModel } from '../../models/update-attribute-filter.model';
 import { InputFilterData, OutputFilterData } from '@tailormap-viewer/shared';
 import { GeoServiceLayerInApplicationModel } from '../../models/geo-service-layer-in-application.model';
-import { FilterToolEnum } from '../../models/filter-tool.enum';
 import { FormHelper } from '../../../helpers/form.helper';
 import { selectApplicationSelectedFilterLayerId, selectSelectedApplicationName } from '../../state/application.selectors';
 import { Store } from '@ngrx/store';
@@ -27,26 +26,12 @@ export class ApplicationEditFilterFormComponent implements OnInit {
 
   private filterGroupId?: string;
 
-  public _filterData: InputFilterData = {
+  public filterData: InputFilterData = {
     condition: undefined,
     value: undefined,
     caseSensitive: undefined,
     invertCondition: undefined,
   };
-
-  public filterToolOptions = [{
-    label: 'Preset',
-    value: FilterToolEnum.PRESET_STATIC,
-  }, {
-    label: 'Checkbox',
-    value: FilterToolEnum.CHECKBOX,
-  }, {
-    label: 'Slider',
-    value: FilterToolEnum.SLIDER,
-  }, {
-    label: 'Boolean',
-    value: FilterToolEnum.BOOLEAN,
-  }];
 
   public applicationName$: Observable<string | null | undefined> = of(null);
   public selectedFilterLayerId$: Observable<string | null | undefined> = of(null);
@@ -68,7 +53,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     }
     const attributeFilter = updateAttributeFilter?.filterGroup.filters.find(filterInGroup =>
       filterInGroup.id === updateAttributeFilter?.filterId);
-    this._filterData = {
+    this.filterData = {
       condition: attributeFilter?.condition,
       value: attributeFilter?.value,
       caseSensitive: attributeFilter?.caseSensitive,

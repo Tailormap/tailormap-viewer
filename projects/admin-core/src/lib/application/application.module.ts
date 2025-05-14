@@ -42,8 +42,6 @@ import { ApplicationEditFiltersHomeComponent } from './application-edit-filters/
 import { ApplicationEditFilterComponent } from './application-edit-filters/application-edit-filter/application-edit-filter.component';
 import { ApplicationCreateFilterComponent } from './application-edit-filters/application-create-filter/application-create-filter.component';
 import { ApplicationFilterAttributeListComponent } from './application-edit-filters/application-filter-attribute-list/application-filter-attribute-list.component';
-import { ApplicationCheckboxFilterFormComponent } from './application-edit-filters/application-checkbox-filter-form/application-checkbox-filter-form.component';
-import { ApplicationSliderFilterFormComponent } from './application-edit-filters/application-slider-filter-form/application-slider-filter-form.component';
 
 @NgModule({
   declarations: [
@@ -73,8 +71,6 @@ import { ApplicationSliderFilterFormComponent } from './application-edit-filters
     ApplicationEditFilterComponent,
     ApplicationCreateFilterComponent,
     ApplicationFilterAttributeListComponent,
-    ApplicationCheckboxFilterFormComponent,
-    ApplicationSliderFilterFormComponent,
   ],
   imports: [
     CommonModule,
