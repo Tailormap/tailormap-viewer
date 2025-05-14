@@ -26,6 +26,7 @@ export const createMapServiceMock = () => {
       }
   });
   return {
+    mapService: mapServiceMock.mapService,
     provider: mapServiceMock.provider,
     addDrawingEvent: (event: { type: string; geometry?: string }) => drawingSubject.next(event),
     toolManager: mapServiceMock.toolManager,

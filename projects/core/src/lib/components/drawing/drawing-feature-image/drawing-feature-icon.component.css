@@ -1,0 +1,13 @@
+.mat-icon {
+  width: 30px;
+  height: 30px;
+  font-size: 30px;
+  line-height: 32px;
+  vertical-align: middle;
+  margin: 0 8px 0 8px;
+}
+
+ .mat-icon ::ng-deep svg > g {
+  stroke: var(--stroke);
+  fill: var(--fill);
+}
