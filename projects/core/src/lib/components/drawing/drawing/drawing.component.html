@@ -2,7 +2,7 @@
   <div class="drawing-form">
     <p class="label" i18n="@@core.drawing.draw-shape">Draw shape</p>
     <div class="icon-button-list">
-      <button [class.button--active]="activeSpecificTool === 'POINT'"
+      <button [class.button--active]="activeTool === 'POINT'"
               i18n-tmTooltip="@@core.draw.draw-point"
               tmTooltip="Draw point"
               mat-stroked-button
@@ -10,7 +10,7 @@
               (click)="draw(drawingTypes.POINT)">
         <mat-icon svgIcon="tools_draw_point"></mat-icon>
       </button>
-      <button [class.button--active]="activeSpecificTool === 'LINE'"
+      <button [class.button--active]="activeTool === 'LINE'"
               i18n-tmTooltip="@@core.draw.draw-line"
               tmTooltip="Draw line"
               mat-stroked-button
@@ -18,7 +18,7 @@
               (click)="draw(drawingTypes.LINE)">
         <mat-icon svgIcon="tools_draw_line"></mat-icon>
       </button>
-      <button [class.button--active]="activeSpecificTool === 'POLYGON'"
+      <button [class.button--active]="activeTool === 'POLYGON'"
               i18n-tmTooltip="@@core.draw.draw-polygon"
               tmTooltip="Draw polygon"
               mat-stroked-button
@@ -26,7 +26,7 @@
               (click)="draw(drawingTypes.POLYGON)">
         <mat-icon svgIcon="tools_draw_polygon"></mat-icon>
       </button>
-      <button [class.button--active]="activeSpecificTool === 'SQUARE'"
+      <button [class.button--active]="activeTool === 'SQUARE'"
               i18n-tmTooltip="@@core.draw.draw-square"
               tmTooltip="Draw square"
               mat-stroked-button
@@ -34,15 +34,15 @@
               (click)="draw(drawingTypes.SQUARE)">
         <mat-icon svgIcon="tools_draw_square"></mat-icon>
       </button>
-      <button [class.button--active]="activeSpecificTool === 'RECTANGLE' || activeSpecificTool === 'CUSTOM_RECTANGLE'"
+      <button [class.button--active]="activeTool === 'RECTANGLE' || activeTool === 'RECTANGLE_SPECIFIED_SIZE'"
               i18n-tmTooltip="@@core.draw.draw-rectangle"
               tmTooltip="Draw rectangle"
               mat-stroked-button
               color="primary"
-              (click)="drawCustomSizedRectangle()">
+              (click)="drawRectangle()">
         <mat-icon svgIcon="tools_draw_rectangle"></mat-icon>
       </button>
-      <button [class.button--active]="activeSpecificTool === 'CIRCLE' || activeSpecificTool === 'CUSTOM_CIRCLE'"
+      <button [class.button--active]="activeTool === 'CIRCLE' || activeTool === 'CIRCLE_SPECIFIED_RADIUS'"
               i18n-tmTooltip="@@core.draw.draw-circle"
               tmTooltip="Draw circle"
               mat-stroked-button
@@ -50,7 +50,7 @@
               (click)="drawCircle()">
         <mat-icon svgIcon="tools_draw_circle"></mat-icon>
       </button>
-      <button [class.button--active]="activeSpecificTool === 'ELLIPSE'"
+      <button [class.button--active]="activeTool === 'ELLIPSE'"
               i18n-tmTooltip="@@core.draw.draw-ellipse"
               tmTooltip="Draw ellipse"
               mat-stroked-button
@@ -76,7 +76,7 @@
       </button>
     </div>
 
-    @if(activeSpecificTool === 'RECTANGLE' || activeSpecificTool === 'CUSTOM_RECTANGLE') {
+    @if(activeTool === 'RECTANGLE' || activeTool === 'RECTANGLE_SPECIFIED_SIZE') {
       <div class="rectangle-size-inputs">
         <mat-form-field appearance="outline" class="rectangle-size-input__width">
           <mat-label i18n="@@core.drawing.rectangle-width">Width</mat-label>
@@ -96,7 +96,7 @@
       </div>
     }
 
-    @if (activeSpecificTool === 'CIRCLE' || activeSpecificTool === 'CUSTOM_CIRCLE') {
+    @if (activeTool === 'CIRCLE' || activeTool === 'CIRCLE_SPECIFIED_RADIUS') {
       <mat-form-field appearance="outline" class="circle-input__radius">
         <mat-label i18n="@@core.drawing.circle-radius">Circle radius</mat-label>
         <input matInput

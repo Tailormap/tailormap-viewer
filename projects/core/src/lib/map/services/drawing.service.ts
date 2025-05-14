@@ -212,8 +212,10 @@ export class DrawingService {
       [DrawingFeatureTypeEnum.LINE]: 'line',
       [DrawingFeatureTypeEnum.POLYGON]: 'area',
       [DrawingFeatureTypeEnum.CIRCLE]: 'circle',
+      [DrawingFeatureTypeEnum.CIRCLE_SPECIFIED_RADIUS]: 'point',
       [DrawingFeatureTypeEnum.SQUARE]: 'square',
       [DrawingFeatureTypeEnum.RECTANGLE]: 'rectangle',
+      [DrawingFeatureTypeEnum.RECTANGLE_SPECIFIED_SIZE]: 'point',
       [DrawingFeatureTypeEnum.ELLIPSE]: 'ellipse',
       [DrawingFeatureTypeEnum.STAR]: 'star',
     };
