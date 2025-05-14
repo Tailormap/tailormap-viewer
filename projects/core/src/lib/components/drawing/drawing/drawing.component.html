@@ -92,7 +92,7 @@
                  [(ngModel)]="customRectangleHeight"
                  min="1">
         </mat-form-field>
-        <button mat-icon-button class="clear-button" (click)="clearRectangleSize()"><mat-icon svgIcon="close"></mat-icon></button>
+        <button mat-icon-button (click)="clearRectangleSize()"><mat-icon svgIcon="close"></mat-icon></button>
       </div>
     }
 
@@ -103,7 +103,7 @@
                type="number"
                [(ngModel)]="customCircleRadius"
                min="1">
-        <button mat-icon-button matSuffix class="clear-button" (click)="clearCircleRadius()"><mat-icon svgIcon="close"></mat-icon></button>
+        <button mat-icon-button matSuffix (click)="clearCircleRadius()"><mat-icon svgIcon="close"></mat-icon></button>
       </mat-form-field>
     }
 
