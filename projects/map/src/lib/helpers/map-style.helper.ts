@@ -83,6 +83,9 @@ export class MapStyleHelper {
     if (typeof styleConfig.buffer !== 'undefined' && styleConfig.buffer && typeof feature !== 'undefined') {
       styles.push(...MapStyleHelper.createBuffer(styleConfig.buffer, styleConfig));
     }
+    if (feature && (styleConfig.showSegmentSize || styleConfig.showTotalSize)) {
+      styles.push(...MeasureStyleHelper.addMeasures(feature, styleConfig.showTotalSize, styleConfig.showSegmentSize));
+    }
     return styles;
   }
 

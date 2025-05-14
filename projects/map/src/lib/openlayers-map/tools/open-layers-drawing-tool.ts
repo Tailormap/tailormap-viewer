@@ -15,8 +15,20 @@ import { FeatureHelper } from '../../helpers/feature.helper';
 import { GeometryTypeHelper } from '../../helpers/geometry-type.helper';
 import { MapSizeHelper } from '../../helpers/map-size.helper';
 import { DrawingHelper } from '../../helpers/drawing.helper';
+import { MapStyleModel, OlMapStyleType } from '../../models';
+import { StyleFunction } from 'ol/style/Style';
+import RenderFeature from 'ol/render/Feature';
 
 export class OpenLayersDrawingTool implements DrawingToolModel {
+
+  private static DEFAULT_DRAWING_STYLE: MapStyleModel = {
+    zIndex: 9999,
+    strokeColor: 'rgba(0, 0, 0, 0.3)',
+    strokeWidth: 2,
+    pointType: 'circle',
+    pointStrokeColor: 'rgba(0, 0, 0, 0.7)',
+    pointFillColor: 'rgba(255, 255, 255, 0.5)',
+  };
 
   private destroyed = new Subject();
   private drawInteraction: Draw | null = null;
@@ -88,7 +100,7 @@ export class OpenLayersDrawingTool implements DrawingToolModel {
     const drawingType = args.type || this.toolConfig.drawingType || 'point';
     this.drawInteraction = new Draw({
       type: OpenLayersDrawingTool.getDrawingType(drawingType),
-      style: this.getMeasureDrawingStyle(),
+      style: this.getDrawingStyle(drawingType),
       geometryFunction: OpenLayersDrawingTool.getGeometryFunction(drawingType),
     });
     this.olMap.addInteraction(this.drawInteraction);
@@ -109,17 +121,27 @@ export class OpenLayersDrawingTool implements DrawingToolModel {
     this.listeners = [];
   }
 
-  private getMeasureDrawingStyle() {
-    return MapStyleHelper.getStyle({
+  private getDrawingStyle(drawingType: DrawingType): OlMapStyleType {
+    const styleConfig: MapStyleModel = {
       styleKey: 'drawing-tool-style',
-      zIndex: 9999,
-      strokeColor: 'rgba(0, 0, 0, 0.3)',
-      strokeWidth: 2,
-      pointType: 'circle',
-      pointStrokeColor: 'rgba(0, 0, 0, 0.7)',
-      pointFillColor: 'rgba(255, 255, 255, 0.5)',
+      ...OpenLayersDrawingTool.DEFAULT_DRAWING_STYLE,
       ...(this.toolConfig.style || {}),
-    });
+    };
+    return feature => {
+      if (feature instanceof RenderFeature) {
+        return MapStyleHelper.mapStyleModelToOlStyle(styleConfig);
+      }
+      // OL drawing interaction draws different features while drawing. So if the user draws a polygon,
+      // OL also draws a point (cursor) and a line (current segment). We don't want (optional) measurements
+      // on these temporary features, so we check whether the current feature is the same type as the one
+      // the user intents to draw.
+      const isSameAsDrawingType = feature.getGeometry()?.getType() === OpenLayersDrawingTool.getDrawingType(drawingType);
+      return MapStyleHelper.mapStyleModelToOlStyle({
+        ...styleConfig,
+        showTotalSize: isSameAsDrawingType ? styleConfig.showTotalSize : false,
+        showSegmentSize: isSameAsDrawingType ? styleConfig.showSegmentSize : false,
+      }, feature);
+    };
   }
 
   private drawStarted(e: DrawEvent) {

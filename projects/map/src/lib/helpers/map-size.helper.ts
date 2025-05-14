@@ -46,9 +46,9 @@ export class MapSizeHelper {
       return '';
     }
     if (size > 100000) {
-      return (Math.round(size / 1000000 * 100) / 100) + ' ' + 'km';
+      return (Math.round(size / 1000000 * 100) / 100) + ' ' + 'km\xB2';
     } else {
-      return (Math.round(size * 100) / 100) + ' ' + 'm';
+      return (Math.round(size * 100) / 100) + ' ' + 'm\xB2';
     }
   }
 
