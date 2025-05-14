@@ -34,7 +34,7 @@
               (click)="draw(drawingTypes.SQUARE)">
         <mat-icon svgIcon="tools_draw_square"></mat-icon>
       </button>
-      <button [class.button--active]="activeTool === 'RECTANGLE' || rectangleSize != null"
+      <button [class.button--active]="activeTool === 'RECTANGLE' || rectangleSize !== null"
               i18n-tmTooltip="@@core.draw.draw-rectangle"
               tmTooltip="Draw rectangle"
               mat-stroked-button
