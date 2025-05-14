@@ -121,6 +121,21 @@ export class DrawingService {
     });
   }
 
+  public disableDrawingTools() {
+    this.withToolManager(manager => {
+      if (this.drawingTool) {
+        manager.disableTool(this.drawingTool.id);
+      }
+      if (this.selectTool) {
+        manager.disableTool(this.selectTool.id);
+      }
+      if (this.extTransformTool) {
+        manager.disableTool(this.extTransformTool.id, true);
+      }
+      this.activeTool = null;
+    });
+  }
+
   public toggle(type: DrawingFeatureTypeEnum) {
     this.toggleTool(DrawingService.drawingFeatureTypeToDrawingType(type), type);
   }
@@ -165,9 +180,6 @@ export class DrawingService {
   }
 
   private disableDrawing(disableOtherTools = true) {
-    if (this.activeTool === null) {
-      return;
-    }
     this.withToolManager(manager => {
       if (!this.drawingTool || !this.selectTool) {
         return;

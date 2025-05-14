@@ -69,6 +69,9 @@ export class DrawingComponent implements OnInit, OnDestroy {
           this.store$.dispatch(setSelectedFeature({ fid: null }));
           this.activeTool = null;
           this.activeSpecificTool = null;
+          this.drawingService.disableDrawingTools();
+        } else {
+          this.enableSelectAndModify();
         }
       }),
     );
@@ -127,7 +130,9 @@ export class DrawingComponent implements OnInit, OnDestroy {
 
   public draw(type: DrawingFeatureTypeEnum) {
     this.activeSpecificTool = type;
-    this.drawingService.toggle(type);
+    if (this.activeTool !== type) {
+      this.drawingService.toggle(type);
+    }
   }
 
   public enableSelectAndModify() {
