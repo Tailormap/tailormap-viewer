@@ -20,12 +20,13 @@ export const createMapServiceMock = () => {
         case ToolTypeEnum.Modify:
           return { id: 'modify-1', featureModified$: new Subject().asObservable() };
         case ToolTypeEnum.ExtTransform:
-          return { id: 'ext-transform-1', featureModified$: new Subject().asObservable() };
+          return { id: 'ext-transform-1', featureModified$: new Subject().asObservable(), disableTranslate: jest.fn(), enableTranslate: jest.fn() };
         default:
           return {};
       }
   });
   return {
+    mapService: mapServiceMock.mapService,
     provider: mapServiceMock.provider,
     addDrawingEvent: (event: { type: string; geometry?: string }) => drawingSubject.next(event),
     toolManager: mapServiceMock.toolManager,

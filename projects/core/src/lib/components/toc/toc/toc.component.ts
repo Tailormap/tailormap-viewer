@@ -1,5 +1,5 @@
 import { Component, computed, NgZone, OnDestroy, OnInit, Signal, signal } from '@angular/core';
-import { distinctUntilChanged, filter, Observable, of, Subject, takeUntil } from 'rxjs';
+import { filter, Observable, of, Subject, takeUntil } from 'rxjs';
 import {
   BaseTreeModel, BrowserHelper, DropZoneHelper, NodePositionChangedEventModel, TreeDragDropService,
   TreeService,
@@ -15,7 +15,7 @@ import { toggleFilterEnabled } from '../state/toc.actions';
 import {
   select3dTilesLayers, selectIn3dView, selectLayersWithoutWebMercatorIds, selectSelectedNode, selectSelectedNodeId,
 } from '../../../map/state/map.selectors';
-import { moveLayerTreeNode, setLayerVisibility, setSelectedLayerId, toggleLevelExpansion } from '../../../map/state/map.actions';
+import { moveLayerTreeNode, setLayerVisibility, toggleSelectedLayerId, toggleLevelExpansion } from '../../../map/state/map.actions';
 
 interface AppLayerTreeModel extends BaseTreeModel {
   metadata: AppLayerModel;
@@ -83,10 +83,9 @@ export class TocComponent implements OnInit, OnDestroy {
         filter(isAppLayerTreeModel),
         map(node => node.metadata.id),
         tap(() => this.infoVisible.set(true)),
-        distinctUntilChanged(),
       )
       .subscribe(layerId => {
-        this.store$.dispatch(setSelectedLayerId({ layerId }));
+        this.store$.dispatch(toggleSelectedLayerId({ layerId }));
       });
 
     this.treeService.nodePositionChangedSource$

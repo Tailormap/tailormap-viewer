@@ -70,9 +70,9 @@ const onToggleAllLayersVisibility = (state: MapState): MapState => {
   };
 };
 
-const onSetSelectedLayerId = (state: MapState, payload: ReturnType<typeof MapActions.setSelectedLayerId>): MapState => ({
+const onToggleSelectedLayerId = (state: MapState, payload: ReturnType<typeof MapActions.toggleSelectedLayerId>): MapState => ({
   ...state,
-  selectedLayer: payload.layerId,
+  selectedLayer: state.selectedLayer === payload.layerId ? undefined : payload.layerId,
 });
 
 const onToggleLevelExpansion = (state: MapState, payload: ReturnType<typeof MapActions.toggleLevelExpansion>): MapState => {
@@ -236,7 +236,7 @@ const mapReducerImpl = createReducer<MapState>(
   on(MapActions.setLayerVisibility, onSetLayerVisibility),
   on(MapActions.toggleAllLayersVisibility, onToggleAllLayersVisibility),
   on(MapActions.toggleLevelExpansion, onToggleLevelExpansion),
-  on(MapActions.setSelectedLayerId, onSetSelectedLayerId),
+  on(MapActions.toggleSelectedLayerId, onToggleSelectedLayerId),
   on(MapActions.addServices, onAddServices),
   on(MapActions.addAppLayers, onAddAppLayers),
   on(MapActions.addLayerTreeNodes, onAddLayerTreeNodes),

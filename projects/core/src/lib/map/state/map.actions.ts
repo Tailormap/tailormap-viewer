@@ -28,8 +28,8 @@ export const toggleLevelExpansion = createAction(
   `${mapActionsPrefix} Toggle Level Expansion`,
   props<{ id: string; isBaseLayerTree?: boolean }>(),
 );
-export const setSelectedLayerId = createAction(
-  `${mapActionsPrefix} Set Selected Layer ID`,
+export const toggleSelectedLayerId = createAction(
+  `${mapActionsPrefix} Toggle Selected Layer ID`,
   props<{ layerId: string }>(),
 );
 export const addServices = createAction(

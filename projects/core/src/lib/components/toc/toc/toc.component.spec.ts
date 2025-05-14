@@ -10,7 +10,7 @@ import {
   select3dTilesLayers,
   selectIn3dView, selectLayers, selectLayersWithoutWebMercatorIds, selectLayerTreeNodes, selectSelectedNode, selectSelectedNodeId,
 } from '../../../map/state/map.selectors';
-import { setLayerVisibility, setSelectedLayerId } from '../../../map/state/map.actions';
+import { setLayerVisibility, toggleSelectedLayerId } from '../../../map/state/map.actions';
 import { TocNodeLayerComponent } from '../toc-node-layer/toc-node-layer.component';
 import { ToggleAllLayersButtonComponent } from '../toggle-all-layers-button/toggle-all-layers-button.component';
 import { getAppLayerModel, getLayerTreeNode } from '@tailormap-viewer/api';
@@ -101,7 +101,7 @@ describe('TocComponent', () => {
     const { mockStore, mockDispatch } = await setup(true, '1');
     expect((await screen.findByText('Disaster map')).closest('.mat-tree-node')).toHaveClass('tree-node--selected');
     await userEvent.click(await screen.findByText('Some other map'));
-    expect(mockDispatch).toHaveBeenCalledWith({ type: setSelectedLayerId.type, layerId: '2' });
+    expect(mockDispatch).toHaveBeenCalledWith({ type: toggleSelectedLayerId.type, layerId: '2' });
     mockStore.overrideSelector(selectSelectedNodeId, '2');
     mockStore.refreshState();
     await waitFor(() => {

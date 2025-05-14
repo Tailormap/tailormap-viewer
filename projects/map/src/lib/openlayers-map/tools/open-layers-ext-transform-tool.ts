@@ -13,10 +13,17 @@ import { ExtTransformToolConfigModel } from '../../models/tools/ext-transform-to
 import OlExtTransform from 'ol-ext/interaction/Transform';
 import { FeatureHelper } from '../../helpers/feature.helper';
 import { Feature } from 'ol';
-import { Stroke } from 'ol/style';
+import { Icon, Style } from 'ol/style';
 import { Modify } from 'ol/interaction';
 import { GeometryTypeHelper } from '../../helpers/geometry-type.helper';
 import { OpenLayersEventManager } from '../open-layers-event-manager';
+
+const rotateIcon = 'data:image/svg+xml;base64,' + btoa(
+  '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">' +
+  '<path d="M0 0h24v24H0z" fill="rgba(255, 255, 255, 0.01)"/>' +
+  // eslint-disable-next-line max-len
+  '<path d="M7.1 8.5 5.7 7.1A8 8 0 0 0 4.1 11h2a6 6 0 0 1 1-2.5zm-1 4.5H4a8 8 0 0 0 1.6 3.9L7 15.5a6 6 0 0 1-1-2.5zm1 5.3A8 8 0 0 0 11 20v-2a6 6 0 0 1-2.5-1l-1.4 1.4zM13 4.1V1L8.4 5.5 13 10V6a6 6 0 0 1 0 12v2a8 8 0 0 0 0-16z" fill="rgb(255, 0, 0)" />' +
+  '</svg>');
 
 export class OpenLayersExtTransformTool implements ExtTransformToolModel {
 
@@ -66,7 +73,7 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
     const { layer, source } = this.getLayer(args.feature, args.style);
     const isPoint = GeometryTypeHelper.isPointGeometry(source.getFeatures()[0].getGeometry());
     if (!isPoint) {
-      this.enableTransformTranslate(layer, source);
+      this.enableTransformInteraction(layer, source);
     }
     this.enableVertices(source);
     OpenLayersEventManager.onMapMove$()
@@ -76,6 +83,15 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
           this.interaction.set('buffer', this.getBuffer());
         }
       });
+  }
+
+  public enableTranslate() {
+    this.interaction?.setActive(true);
+    this.setRotateStyle();
+  }
+
+  public disableTranslate() {
+    this.interaction?.setActive(false);
   }
 
   private getLayer(feature: FeatureModel, styleModel?: Partial<MapStyleModel> | ((feature: FeatureModel) => MapStyleModel)) {
@@ -136,21 +152,21 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
     });
   }
 
-  private enableTransformTranslate(layer: VectorLayer, source: VectorSource) {
+  private enableTransformInteraction(layer: VectorLayer, source: VectorSource) {
     this.interaction = new OlExtTransform({
       layers: [layer],
       selection: false,
+      translate: true,
+      // translateFeature: true,
+      translateBBox: true,
       buffer: this.getBuffer(),
-      style: {
-        'default': new Stroke({
-          color: [ 255, 0, 0, 1 ], width: 2, lineDash: [ 4, 4 ],
-        }),
-      },
     });
+    this.interaction.set('translate', true);
     this.listeners.push(this.interaction.on([ 'rotateend', 'translateend', 'scaleend' ], e => this.eventHandler(e.feature)));
     this.olMap.getInteractions().push(this.interaction);
     this.interaction.setActive(true);
     this.interaction.select(source.getFeatures()[0], true);
+    this.setRotateStyle();
   }
 
   private enableVertices(source: VectorSource) {
@@ -162,4 +178,18 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
   private getBuffer() {
     return MapStyleHelper.getSelectionRectangleBuffer(this.olMap.getView().getResolution());
   }
+
+  private setRotateStyle() {
+    const rotateIconStyle = new Icon({
+      src: rotateIcon,
+      anchor: [ 0, 0 ],
+      size: [ 24, 24 ],
+      offset: [ -2, -2 ],
+    });
+    const rotateStyle = [new Style({ image: rotateIconStyle })];
+    this.interaction?.setStyle('rotate', rotateStyle);
+    this.interaction?.setStyle('rotate0', rotateStyle);
+    this.interaction?.set('rotate', true);
+  }
+
 }

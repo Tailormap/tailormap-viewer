@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { FeatureHelper, MapService } from '@tailormap-viewer/map';
-import { combineLatest, filter, Observable, of, Subject, take, takeUntil } from 'rxjs';
+import { DrawingToolEvent, FeatureHelper, MapService, MapStyleModel } from '@tailormap-viewer/map';
+import { combineLatest, filter, Observable, of, Subject, take, takeUntil, tap } from 'rxjs';
 import {
   selectDrawingFeaturesExcludingSelected, selectSelectedDrawingStyle, selectSelectedDrawingFeature, selectHasDrawingFeatures,
   selectDrawingFeatures,
@@ -10,10 +10,14 @@ import { DrawingHelper } from '../helpers/drawing.helper';
 import { MenubarService } from '../../menubar';
 import { DrawingMenuButtonComponent } from '../drawing-menu-button/drawing-menu-button.component';
 import { DrawingFeatureModel, DrawingFeatureModelAttributes, DrawingFeatureStyleModel } from '../models/drawing-feature.model';
-import { addFeature, removeAllDrawingFeatures, removeDrawingFeature, updateDrawingFeatureStyle } from '../state/drawing.actions';
+import {
+  addFeature, removeAllDrawingFeatures, removeDrawingFeature, setSelectedDrawingStyle, setSelectedFeature, updateDrawingFeatureStyle,
+  updateSelectedDrawingFeatureGeometry,
+} from '../state/drawing.actions';
 import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type.enum';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
-import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
+import { BaseComponentTypeEnum, FeatureModel } from '@tailormap-viewer/api';
+import { DrawingService } from '../../../map/services/drawing.service';
 
 @Component({
   selector: 'tm-drawing',
@@ -21,6 +25,9 @@ import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
   styleUrls: ['./drawing.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
+  providers: [
+    DrawingService,
+  ],
 })
 export class DrawingComponent implements OnInit, OnDestroy {
 
@@ -32,16 +39,29 @@ export class DrawingComponent implements OnInit, OnDestroy {
   public selectedDrawingStyle: DrawingFeatureTypeEnum | null = null;
   public hasFeatures$: Observable<boolean> = of(false);
 
+  public drawingTypes = DrawingFeatureTypeEnum;
+  public activeTool: DrawingFeatureTypeEnum | null = null;
+
+  public selectionStyle = DrawingHelper.applyDrawingStyle as ((feature: FeatureModel) => MapStyleModel);
+
   constructor(
     private store$: Store,
     private mapService: MapService,
     private menubarService: MenubarService,
     private confirmService: ConfirmDialogService,
+    private drawingService: DrawingService,
     private cdr: ChangeDetectorRef,
   ) { }
 
   public ngOnInit() {
-    this.active$ = this.menubarService.isComponentVisible$(BaseComponentTypeEnum.DRAWING);
+    this.active$ = this.menubarService.isComponentVisible$(BaseComponentTypeEnum.DRAWING).pipe(
+      tap(visible => {
+        if (!visible) {
+          this.store$.dispatch(setSelectedFeature({ fid: null }));
+          this.activeTool = null;
+        }
+      }),
+    );
     this.hasFeatures$ = this.store$.select(selectHasDrawingFeatures);
 
     this.mapService.renderFeatures$<DrawingFeatureModelAttributes>(
@@ -65,22 +85,65 @@ export class DrawingComponent implements OnInit, OnDestroy {
       });
 
     this.menubarService.registerComponent({ type: BaseComponentTypeEnum.DRAWING, component: DrawingMenuButtonComponent });
+    this.drawingService.createDrawingTools({
+      drawingLayerId: this.drawingLayerId,
+      selectionStyle: this.selectionStyle,
+    });
+    this.store$.select(selectSelectedDrawingFeature)
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(selectedFeature => {
+        this.drawingService.setSelectedFeature(selectedFeature);
+      });
+    this.drawingService.drawingAdded$
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(e => this.onDrawingAdded(e));
+    this.drawingService.featureGeometryModified$
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(geom => this.onFeatureGeometryModified(geom));
+    this.drawingService.activeToolChanged$
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(tool => this.onActiveToolChanged(tool));
+    this.drawingService.featureSelected$
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(feature => this.onFeatureSelected(feature));
   }
 
   public ngOnDestroy() {
+    this.store$.dispatch(setSelectedFeature({ fid: null }));
     this.menubarService.deregisterComponent(BaseComponentTypeEnum.DRAWING);
     this.destroyed.next(null);
     this.destroyed.complete();
   }
 
-  public featureStyleUpdates(style: DrawingFeatureStyleModel) {
-    if (this.selectedFeature) {
-      this.store$.dispatch(updateDrawingFeatureStyle({ fid: this.selectedFeature.__fid, style }));
+  public draw(type: DrawingFeatureTypeEnum) {
+    this.drawingService.draw(type);
+  }
+
+  public enableSelectAndModify() {
+    this.drawingService.enableSelectAndModify();
+  }
+
+  public onDrawingAdded($event: DrawingToolEvent) {
+    if (!this.activeTool) {
+      return;
     }
-    DrawingHelper.updateDefaultStyle({
-      ...style,
-      label: '',
-    });
+    this.store$.dispatch(addFeature({
+      feature: DrawingHelper.getFeature(this.activeTool, $event),
+      selectFeature: true,
+    }));
+  }
+
+  public onActiveToolChanged($event: DrawingFeatureTypeEnum | null) {
+    this.activeTool = $event;
+    this.store$.dispatch(setSelectedDrawingStyle({ drawingType: $event }));
+  }
+
+  public onFeatureSelected(feature: FeatureModel | null) {
+    this.store$.dispatch(setSelectedFeature({ fid: feature?.__fid || null }));
+  }
+
+  public onFeatureGeometryModified(geometry: string) {
+    this.store$.dispatch(updateSelectedDrawingFeatureGeometry({ geometry }));
   }
 
   public removeSelectedFeature() {
@@ -128,6 +191,16 @@ export class DrawingComponent implements OnInit, OnDestroy {
   public zoomToEntireDrawing() {
     this.store$.select(selectDrawingFeatures).pipe(take(1)).subscribe(features => {
       this.mapService.zoomToFeatures(features);
+    });
+  }
+
+  public featureStyleUpdates(style: DrawingFeatureStyleModel) {
+    if (this.selectedFeature) {
+      this.store$.dispatch(updateDrawingFeatureStyle({ fid: this.selectedFeature.__fid, style }));
+    }
+    DrawingHelper.updateDefaultStyle({
+      ...style,
+      label: '',
     });
   }
 }

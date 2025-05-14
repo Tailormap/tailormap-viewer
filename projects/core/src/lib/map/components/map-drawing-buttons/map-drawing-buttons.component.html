@@ -79,7 +79,7 @@
           (click)="removeSelectedFeature()"><mat-icon svgIcon="remove"></mat-icon></button>
   }
 </div>
-@if (allowModify) {
+@if (allowModify && showSelectButton) {
   <div class="icon-button-list">
     <button [class.button--active]="!activeTool"
             i18n-tmTooltip="@@core.draw.select-modify-move-feature"

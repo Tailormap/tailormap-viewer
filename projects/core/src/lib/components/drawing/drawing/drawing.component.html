@@ -1,33 +1,115 @@
-@if(active$ | async) {
+@if (active$ | async) {
   <div class="drawing-form">
-    <tm-create-drawing-button [drawingLayerId]="drawingLayerId"></tm-create-drawing-button>
-    @if(hasFeatures$ | async) {
-      <div class="horizontal-line"></div>
-      <div class="drawing-button-list split-buttons">
-        <div class="selected_feature_buttons">
-          @if(selectedFeature) {
-            <button mat-stroked-button
-                    (click)="removeSelectedFeature()"
-                    color="warn"
-                    i18n-tmTooltip="@@core.drawing.delete-selected-drawing-object"
-                    tmTooltip="Delete selected drawing object">
-              <mat-icon svgIcon="remove"></mat-icon>
-            </button>
-            <button mat-stroked-button
-                    (click)="duplicateSelectedFeature()"
-                    i18n-tmTooltip="@@core.drawing.duplicate-selected-drawing-object"
-                    tmTooltip="Duplicate selected drawing object">
-              <mat-icon svgIcon="copy"></mat-icon>
-            </button>
-          }
-        </div>
+    <p class="label" i18n="@@core.drawing.draw-shape">Draw shape</p>
+    <div class="icon-button-list">
+      <button [class.button--active]="activeTool === 'POINT'"
+              i18n-tmTooltip="@@core.draw.draw-point"
+              tmTooltip="Draw point"
+              mat-stroked-button
+              color="primary"
+              (click)="draw(drawingTypes.POINT)">
+        <mat-icon svgIcon="tools_draw_point"></mat-icon>
+      </button>
+      <button [class.button--active]="activeTool === 'LINE'"
+              i18n-tmTooltip="@@core.draw.draw-line"
+              tmTooltip="Draw line"
+              mat-stroked-button
+              color="primary"
+              (click)="draw(drawingTypes.LINE)">
+        <mat-icon svgIcon="tools_draw_line"></mat-icon>
+      </button>
+      <button [class.button--active]="activeTool === 'POLYGON'"
+              i18n-tmTooltip="@@core.draw.draw-polygon"
+              tmTooltip="Draw polygon"
+              mat-stroked-button
+              color="primary"
+              (click)="draw(drawingTypes.POLYGON)">
+        <mat-icon svgIcon="tools_draw_polygon"></mat-icon>
+      </button>
+      <button [class.button--active]="activeTool === 'SQUARE'"
+              i18n-tmTooltip="@@core.draw.draw-square"
+              tmTooltip="Draw square"
+              mat-stroked-button
+              color="primary"
+              (click)="draw(drawingTypes.SQUARE)">
+        <mat-icon svgIcon="tools_draw_square"></mat-icon>
+      </button>
+      <button [class.button--active]="activeTool === 'RECTANGLE'"
+              i18n-tmTooltip="@@core.draw.draw-rectangle"
+              tmTooltip="Draw rectangle"
+              mat-stroked-button
+              color="primary"
+              (click)="draw(drawingTypes.RECTANGLE)">
+        <mat-icon svgIcon="tools_draw_rectangle"></mat-icon>
+      </button>
+      <button [class.button--active]="activeTool === 'CIRCLE'"
+              i18n-tmTooltip="@@core.draw.draw-circle"
+              tmTooltip="Draw circle"
+              mat-stroked-button
+              color="primary"
+              (click)="draw(drawingTypes.CIRCLE)">
+        <mat-icon svgIcon="tools_draw_circle"></mat-icon>
+      </button>
+      <button [class.button--active]="activeTool === 'ELLIPSE'"
+              i18n-tmTooltip="@@core.draw.draw-ellipse"
+              tmTooltip="Draw ellipse"
+              mat-stroked-button
+              color="primary"
+              (click)="draw(drawingTypes.ELLIPSE)">
+        <mat-icon svgIcon="tools_draw_ellipse"></mat-icon>
+      </button>
+      <button [class.button--active]="activeTool === 'STAR'"
+              i18n-tmTooltip="@@core.draw.draw-star"
+              tmTooltip="Draw star"
+              mat-stroked-button
+              color="primary"
+              (click)="draw(drawingTypes.STAR)">
+        <mat-icon svgIcon="tools_draw_star"></mat-icon>
+      </button>
+      <button [class.button--active]="activeTool === 'LABEL'"
+              i18n-tmTooltip="@@core.draw.draw-label"
+              tmTooltip="Draw label"
+              mat-stroked-button
+              color="primary"
+              (click)="draw(drawingTypes.LABEL)">
+        <mat-icon svgIcon="tools_draw_label"></mat-icon>
+      </button>
+    </div>
+    <div class="horizontal-line"></div>
+    <div class="icon-button-list split-buttons">
+      <div class="selected_feature_buttons">
+        <button [class.button--active]="!activeTool"
+                i18n-tmTooltip="@@core.draw.select-modify-move-feature"
+                tmTooltip="Select, modify size and/or move feature"
+                mat-stroked-button
+                color="primary"
+                (click)="enableSelectAndModify()">
+          <mat-icon svgIcon="tools_cursor"></mat-icon>
+        </button>
+        @if (selectedFeature) {
+          <button mat-stroked-button
+                  (click)="removeSelectedFeature()"
+                  color="warn"
+                  i18n-tmTooltip="@@core.drawing.delete-selected-drawing-object"
+                  tmTooltip="Delete selected drawing object">
+            <mat-icon svgIcon="remove"></mat-icon>
+          </button>
+          <button mat-stroked-button
+                  (click)="duplicateSelectedFeature()"
+                  i18n-tmTooltip="@@core.drawing.duplicate-selected-drawing-object"
+                  tmTooltip="Duplicate selected drawing object">
+            <mat-icon svgIcon="copy"></mat-icon>
+          </button>
+        }
+      </div>
+      @if (hasFeatures$ | async) {
         <div class="drawing_buttons">
           <button mat-stroked-button
                   (click)="removeAllFeatures()"
                   color="warn"
                   i18n-tmTooltip="@@core.drawing.delete-drawing"
                   tmTooltip="Delete complete drawing">
-            <mat-icon svgIcon="remove_all"></mat-icon>
+            <mat-icon svgIcon="close"></mat-icon>
           </button>
           <button mat-stroked-button
                   (click)="zoomToEntireDrawing()"
@@ -36,13 +118,15 @@
             <mat-icon class="zoom_max" svgIcon="zoom_max"></mat-icon>
           </button>
         </div>
-      </div>
-    }
+      }
+    </div>
+
+    <tm-drawing-objects-list [drawingLayerId]="drawingLayerId"></tm-drawing-objects-list>
     @if (selectedDrawingStyle) {
       <tm-drawing-style-form
-                             [type]="selectedDrawingStyle"
-                             [style]="style"
-                             (styleUpdated)="featureStyleUpdates($event)"></tm-drawing-style-form>
+        [type]="selectedDrawingStyle"
+        [style]="style"
+        (styleUpdated)="featureStyleUpdates($event)"></tm-drawing-style-form>
     }
   </div>
 }

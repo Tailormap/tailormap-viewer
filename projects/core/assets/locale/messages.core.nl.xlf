@@ -322,6 +322,10 @@
         <source>Line thickness</source>
         <target>Lijndikte</target>
       </trans-unit>
+      <trans-unit id="core.drawing.objects-list" datatype="html">
+        <source>Objects</source>
+        <target>Objecten</target>
+      </trans-unit>
       <trans-unit id="core.drawing.opacity" datatype="html">
         <source>Opacity</source>
         <target>Ondoorzichtigheid</target>
@@ -330,9 +334,9 @@
         <source>Rotation</source>
         <target>Rotatie</target>
       </trans-unit>
-      <trans-unit id="core.drawing.select-shape" datatype="html">
-        <source>Select shape</source>
-        <target>Vorm selecteren</target>
+      <trans-unit id="core.drawing.draw-shape" datatype="html">
+        <source>Draw shape</source>
+        <target>Vorm tekenen</target>
       </trans-unit>
       <trans-unit id="core.drawing.size" datatype="html">
         <source>Size</source>
