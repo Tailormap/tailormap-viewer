@@ -13,9 +13,7 @@ import { InputFilterData, OutputFilterData } from '@tailormap-viewer/shared';
 import { GeoServiceLayerInApplicationModel } from '../../models/geo-service-layer-in-application.model';
 import { FilterToolEnum } from '../../models/filter-tool.enum';
 import { FormHelper } from '../../../helpers/form.helper';
-import {
-  selectApplicationSelectedFilterLayerId, selectSelectedApplicationName,
-} from '../../state/application.selectors';
+import { selectApplicationSelectedFilterLayerId, selectSelectedApplicationName } from '../../state/application.selectors';
 import { Store } from '@ngrx/store';
 
 @Component({
@@ -45,6 +43,9 @@ export class ApplicationEditFilterFormComponent implements OnInit {
   }, {
     label: 'Slider',
     value: FilterToolEnum.SLIDER,
+  }, {
+    label: 'Boolean',
+    value: FilterToolEnum.BOOLEAN,
   }];
 
   public applicationName$: Observable<string | null | undefined> = of(null);
@@ -180,13 +181,14 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     const formValues = this.filterForm.getRawValue();
     const filterValues = formValues.value;
     let validFilterValues = true;
-    if (filterValues) {
+    if (filterValues && formValues.attributeType !== AttributeType.BOOLEAN) {
       for (const filterValue of filterValues) {
         if (!FormHelper.isValidValue(filterValue)) {
           validFilterValues = false;
         }
       }
     }
+    console.log("validFilterValues: ", validFilterValues);
     return FormHelper.isValidValue(formValues.id)
       && FormHelper.isValidValue(formValues.attribute)
       && formValues.attributeType !== null

@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, Signal, computed, OnDestroy } from '@angular/core';
-import { AttributeFilterModel, FilterGroupModel } from '@tailormap-viewer/api';
+import { AttributeFilterModel, FilterConditionEnum, FilterGroupModel } from '@tailormap-viewer/api';
 import {
   selectApplicationSelectedFilterId, selectApplicationSelectedFilterLayerId, selectFilterableLayersForApplication, selectFilterGroups,
   selectSelectedApplicationId,
@@ -7,6 +7,7 @@ import {
 import { Store } from '@ngrx/store';
 import { GeoServiceLayerInApplicationModel } from '../../models/geo-service-layer-in-application.model';
 import { setApplicationSelectedFilterId } from '../../state/application.actions';
+import { AttributeFilterHelper } from '@tailormap-viewer/shared';
 
 @Component({
   selector: 'tm-admin-application-filters-list',
@@ -17,8 +18,6 @@ import { setApplicationSelectedFilterId } from '../../state/application.actions'
 })
 export class ApplicationFiltersListComponent implements OnDestroy {
 
-
-  // public selectedLayer: InputSignal<GeoServiceLayerInApplicationModel | undefined> = input<GeoServiceLayerInApplicationModel>();
   public selectedLayerId: Signal<string | undefined> = this.store$.selectSignal(selectApplicationSelectedFilterLayerId);
   public filterableLayers: Signal<GeoServiceLayerInApplicationModel[]> = this.store$.selectSignal(selectFilterableLayersForApplication);
   public applicationId: Signal<string | null | undefined> = this.store$.selectSignal(selectSelectedApplicationId);
@@ -53,6 +52,10 @@ export class ApplicationFiltersListComponent implements OnDestroy {
 
   public ngOnDestroy(): void {
     this.store$.dispatch(setApplicationSelectedFilterId({ filterId: undefined }));
+  }
+
+  public getConditionLabel(condition: FilterConditionEnum): string {
+    return AttributeFilterHelper.getConditionTypes(true).find(c => c.condition === condition)?.label || '';
   }
 
 }
