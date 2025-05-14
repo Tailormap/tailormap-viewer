@@ -146,6 +146,12 @@ export class DrawingComponent implements OnInit, OnDestroy {
         feature.geometry = rectangle;
       }
     }
+    if (this.activeSpecificTool === CustomSizedDrawingToolEnum.CUSTOM_CIRCLE && this.customCircleRadius != null && feature.geometry) {
+      const circle = FeatureHelper.createCircleAtPoint(feature.geometry, this.customCircleRadius);
+      if (circle) {
+        feature.geometry = circle;
+      }
+    }
     this.store$.dispatch(addFeature({
       feature,
       selectFeature: true,
@@ -242,5 +248,30 @@ export class DrawingComponent implements OnInit, OnDestroy {
     if (this.activeTool !== DrawingFeatureTypeEnum.POINT) {
       this.drawingService.draw(DrawingFeatureTypeEnum.POINT);
     }
+  }
+
+  private _customCircleRadius: number | null = null;
+  public get customCircleRadius(): number | null {
+    return this._customCircleRadius;
+  }
+  public set customCircleRadius(value: number | null) {
+    this._customCircleRadius = value;
+    if (this._customCircleRadius !== null) {
+      this.activeSpecificTool = CustomSizedDrawingToolEnum.CUSTOM_CIRCLE;
+      if (this.activeTool !== DrawingFeatureTypeEnum.POINT) {
+        this.drawingService.draw(DrawingFeatureTypeEnum.POINT);
+      }
+    } else {
+      this.activeSpecificTool = DrawingFeatureTypeEnum.CIRCLE;
+      this.drawingService.draw(DrawingFeatureTypeEnum.CIRCLE);
+    }
+  }
+
+  public clearCircleRadius() {
+    this.customCircleRadius = null;
+  }
+
+  public drawCircle() {
+    this.customCircleRadius = this._customCircleRadius;
   }
 }

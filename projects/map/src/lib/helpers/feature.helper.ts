@@ -199,4 +199,13 @@ export class FeatureHelper {
       coords[1] + height / 2,
     ]));
   }
+
+  public static createCircleAtPoint(pointWkt: string, radius: number) {
+    const point = FeatureHelper.fromWKT(pointWkt);
+    if (!(point instanceof Point)) {
+      return null;
+    }
+    const circle = new Circle(point.getCoordinates(), radius);
+    return FeatureHelper.getWKT(circle);
+  }
 }

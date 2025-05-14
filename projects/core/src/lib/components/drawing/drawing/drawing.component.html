@@ -47,7 +47,7 @@
               tmTooltip="Draw circle"
               mat-stroked-button
               color="primary"
-              (click)="draw(drawingTypes.CIRCLE)">
+              (click)="drawCircle()">
         <mat-icon svgIcon="tools_draw_circle"></mat-icon>
       </button>
       <button [class.button--active]="activeSpecificTool === 'ELLIPSE'"
@@ -75,6 +75,18 @@
         <mat-icon svgIcon="tools_draw_label"></mat-icon>
       </button>
     </div>
+
+    @if (activeSpecificTool === 'CIRCLE' || activeSpecificTool === 'CUSTOM_CIRCLE') {
+      <mat-form-field appearance="outline" class="circle-input__radius">
+        <mat-label i18n="@@core.drawing.circle-radius">Circle radius</mat-label>
+        <input matInput
+               type="number"
+               [(ngModel)]="customCircleRadius"
+               min="1">
+        <button mat-icon-button matSuffix class="clear-button" tmTooltip="Datum veld leegmaken" (click)="clearCircleRadius()"><mat-icon svgIcon="close"></mat-icon></button>
+      </mat-form-field>
+    }
+
     <div class="horizontal-line"></div>
     <div class="icon-button-list split-buttons">
       <div class="selected_feature_buttons">
