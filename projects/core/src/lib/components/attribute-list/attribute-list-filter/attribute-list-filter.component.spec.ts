@@ -4,7 +4,7 @@ import { AttributeListFilterComponent, FilterDialogData } from './attribute-list
 import { SimpleAttributeFilterService } from '../../../filter/services/simple-attribute-filter.service';
 import { AttributeType, UniqueValuesService, FilterTypeEnum } from '@tailormap-viewer/api';
 import { SharedModule } from '@tailormap-viewer/shared';
-import { AttributeFilterComponent } from '../../../../../../shared/src/lib/components/attribute-filter/attribute-filter.component';
+import { AttributeFilterComponent } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { of } from 'rxjs';
 
