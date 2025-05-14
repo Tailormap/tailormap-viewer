@@ -5,7 +5,7 @@ import {
 import { AttributeDescriptorModel, FeatureTypeModel } from '@tailormap-admin/admin-api';
 import { FormControl, FormGroup } from '@angular/forms';
 import { FeatureSourceService } from '../../../catalog/services/feature-source.service';
-import { BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, filter, map, Observable, of, switchMap, take } from 'rxjs';
+import { BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, filter, map, Observable, switchMap, take } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { nanoid } from 'nanoid';
 import { UpdateAttributeFilterModel } from '../../models/update-attribute-filter.model';
@@ -33,8 +33,6 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     invertCondition: undefined,
   };
 
-  public applicationName$: Observable<string | null | undefined> = of(null);
-  public selectedFilterLayerId$: Observable<string | null | undefined> = of(null);
   public uniqueValues$: Observable<string[]> | null = null;
 
   @Input()
@@ -79,10 +77,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     private destroyRef: DestroyRef,
     private store$: Store,
     private uniqueValuesService: UniqueValuesService,
-  ) {
-    this.applicationName$ = this.store$.select(selectSelectedApplicationName);
-    this.selectedFilterLayerId$ = this.store$.select(selectApplicationSelectedFilterLayerId);
-  }
+  ) { }
 
   public filterForm = new FormGroup({
     id: new FormControl(''),
@@ -173,7 +168,6 @@ export class ApplicationEditFilterFormComponent implements OnInit {
         }
       }
     }
-    console.log("validFilterValues: ", validFilterValues);
     return FormHelper.isValidValue(formValues.id)
       && FormHelper.isValidValue(formValues.attribute)
       && formValues.attributeType !== null
