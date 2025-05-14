@@ -3,7 +3,7 @@ import { FilterDescriptionComponent } from './filter-description.component';
 import { getAppLayerModel } from '@tailormap-viewer/api';
 import { AttributeFilterModel } from '@tailormap-viewer/api';
 import { ExtendedFilterGroupModel } from '../models/extended-filter-group.model';
-import { getFilterGroup } from '@tailormap-viewer/shared';
+import { getFilterGroup } from '../../../../../shared/src/lib/helpers/attribute-filter.helper.spec';
 
 describe('FilterDescriptionComponent', () => {
 

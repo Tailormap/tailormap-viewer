@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/angular';
 import { FilterListComponent } from './filter-list.component';
 import { provideMockStore } from '@ngrx/store/testing';
 import { SharedImportsModule } from '@tailormap-viewer/shared';
-import { getFilterGroup } from '@tailormap-viewer/shared';
+import { getFilterGroup } from '../../../../../../shared/src/lib/helpers/attribute-filter.helper.spec';
 import { getAppLayerModel } from '@tailormap-viewer/api';
 import { FilterListItemComponent } from '../filter-list-item/filter-list-item.component';
 import { selectFilterGroupsWithLayers } from '../../../filter/state/filter.selectors';
