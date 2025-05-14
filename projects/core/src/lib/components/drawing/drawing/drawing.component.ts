@@ -19,6 +19,13 @@ import { ConfirmDialogService } from '@tailormap-viewer/shared';
 import { BaseComponentTypeEnum, FeatureModel } from '@tailormap-viewer/api';
 import { DrawingService } from '../../../map/services/drawing.service';
 
+enum CustomSizedDrawingToolEnum {
+  CUSTOM_RECTANGLE = 'CUSTOM_RECTANGLE',
+  CUSTOM_CIRCLE = 'CUSTOM_CIRCLE',
+}
+
+type SpecificDrawingFeatureTypeEnum = DrawingFeatureTypeEnum | CustomSizedDrawingToolEnum;
+
 @Component({
   selector: 'tm-drawing',
   templateUrl: './drawing.component.html',
@@ -42,6 +49,8 @@ export class DrawingComponent implements OnInit, OnDestroy {
   public drawingTypes = DrawingFeatureTypeEnum;
   public activeTool: DrawingFeatureTypeEnum | null = null;
 
+  public activeSpecificTool: SpecificDrawingFeatureTypeEnum | null = null;
+
   public selectionStyle = DrawingHelper.applyDrawingStyle as ((feature: FeatureModel) => MapStyleModel);
 
   constructor(
@@ -59,6 +68,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
         if (!visible) {
           this.store$.dispatch(setSelectedFeature({ fid: null }));
           this.activeTool = null;
+          this.activeSpecificTool = null;
         }
       }),
     );
@@ -116,11 +126,12 @@ export class DrawingComponent implements OnInit, OnDestroy {
   }
 
   public draw(type: DrawingFeatureTypeEnum) {
-    this.rectangleSize = null;
+    this.activeSpecificTool = type;
     this.drawingService.draw(type);
   }
 
   public enableSelectAndModify() {
+    this.activeSpecificTool = null;
     this.drawingService.enableSelectAndModify();
   }
 
@@ -129,12 +140,11 @@ export class DrawingComponent implements OnInit, OnDestroy {
       return;
     }
     const feature = DrawingHelper.getFeature(this.activeTool, $event);
-    if (this.rectangleSize != null && feature.geometry) {
+    if (this.activeSpecificTool == CustomSizedDrawingToolEnum.CUSTOM_RECTANGLE && this.rectangleSize != null && feature.geometry) {
       const rectangle = FeatureHelper.createRectangleAtPoint(feature.geometry, this.rectangleSize.width, this.rectangleSize.height);
       if (rectangle) {
         feature.geometry = rectangle;
       }
-      this.draw(DrawingFeatureTypeEnum.RECTANGLE);
     }
     this.store$.dispatch(addFeature({
       feature,
@@ -217,6 +227,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
 
   public selectRectangleSize(width: number, height: number) {
     this.rectangleSize = { width, height, label: width + 'x' + height };
+    this.activeSpecificTool = CustomSizedDrawingToolEnum.CUSTOM_RECTANGLE;
     if (this.activeTool !== DrawingFeatureTypeEnum.POINT) {
       this.drawingService.draw(DrawingFeatureTypeEnum.POINT);
     }
@@ -227,6 +238,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
 
   public drawCustomSizedRectangle() {
     this.rectangleSize = { width: this.customRectangleWidth, height: this.customRectangleHeight, label: 'custom' };
+    this.activeSpecificTool = CustomSizedDrawingToolEnum.CUSTOM_RECTANGLE;
     if (this.activeTool !== DrawingFeatureTypeEnum.POINT) {
       this.drawingService.draw(DrawingFeatureTypeEnum.POINT);
     }
