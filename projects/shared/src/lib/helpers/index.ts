@@ -23,3 +23,4 @@ export * from './overlay.helper';
 export * from './external-libs-loader.helper';
 export * from './municipality.helper';
 export * from './attribute-filter.helper';
+export * from './attribute-filter.helper.spec';

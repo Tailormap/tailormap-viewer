@@ -45,7 +45,6 @@ import { FormWarningMessageComponent } from './form-warning-message/form-warning
     FormEditComponent,
     FormCreateComponent,
     FormWarningMessageComponent,
-    FormAttributeListComponent,
   ],
 })
 export class FormModule {
