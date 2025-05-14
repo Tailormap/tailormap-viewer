@@ -3,8 +3,8 @@ import { Store } from '@ngrx/store';
 import { DrawingToolEvent, FeatureHelper, MapService, MapStyleModel } from '@tailormap-viewer/map';
 import { combineLatest, filter, Observable, of, Subject, take, takeUntil, tap } from 'rxjs';
 import {
-  selectDrawingFeaturesExcludingSelected, selectSelectedDrawingStyle, selectSelectedDrawingFeature, selectHasDrawingFeatures,
-  selectDrawingFeatures,
+  selectDrawingFeatures, selectDrawingFeaturesExcludingSelected, selectHasDrawingFeatures, selectSelectedDrawingFeature,
+  selectSelectedDrawingStyle,
 } from '../state/drawing.selectors';
 import { DrawingHelper } from '../helpers/drawing.helper';
 import { MenubarService } from '../../menubar';
@@ -127,7 +127,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
 
   public draw(type: DrawingFeatureTypeEnum) {
     this.activeSpecificTool = type;
-    this.drawingService.draw(type);
+    this.drawingService.toggle(type);
   }
 
   public enableSelectAndModify() {
@@ -140,8 +140,8 @@ export class DrawingComponent implements OnInit, OnDestroy {
       return;
     }
     const feature = DrawingHelper.getFeature(this.activeTool, $event);
-    if (this.activeSpecificTool == CustomSizedDrawingToolEnum.CUSTOM_RECTANGLE && this.rectangleSize != null && feature.geometry) {
-      const rectangle = FeatureHelper.createRectangleAtPoint(feature.geometry, this.rectangleSize.width, this.rectangleSize.height);
+    if (this.activeSpecificTool == CustomSizedDrawingToolEnum.CUSTOM_RECTANGLE && this.customRectangleWidth != null && this.customRectangleHeight != null && feature.geometry) {
+      const rectangle = FeatureHelper.createRectangleAtPoint(feature.geometry, this.customRectangleWidth, this.customRectangleHeight);
       if (rectangle) {
         feature.geometry = rectangle;
       }
@@ -229,25 +229,41 @@ export class DrawingComponent implements OnInit, OnDestroy {
     });
   }
 
-  public rectangleSize: { width: number; height: number; label?: string } | null = null;
+  private _customRectangleWidth: number | null = null;
+  public get customRectangleWidth(): number | null {
+    return this._customRectangleWidth;
+  }
+  public set customRectangleWidth(value: number | null) {
+    this._customRectangleWidth = value;
+    this.drawCustomSizedRectangle();
+  }
 
-  public selectRectangleSize(width: number, height: number) {
-    this.rectangleSize = { width, height, label: width + 'x' + height };
-    this.activeSpecificTool = CustomSizedDrawingToolEnum.CUSTOM_RECTANGLE;
-    if (this.activeTool !== DrawingFeatureTypeEnum.POINT) {
-      this.drawingService.draw(DrawingFeatureTypeEnum.POINT);
+  private _customRectangleHeight: number | null = null;
+  public get customRectangleHeight(): number | null {
+    return this._customRectangleHeight;
+  }
+  public set customRectangleHeight(value: number | null) {
+    this._customRectangleHeight = value;
+    this.drawCustomSizedRectangle();
+  }
+
+  public drawCustomSizedRectangle() {
+    if (this.customRectangleWidth !== null && this.customRectangleHeight !== null) {
+      this.activeSpecificTool = CustomSizedDrawingToolEnum.CUSTOM_RECTANGLE;
+      if (this.activeTool !== DrawingFeatureTypeEnum.POINT) {
+        this.drawingService.toggle(DrawingFeatureTypeEnum.POINT);
+      }
+    } else {
+      this.activeSpecificTool = DrawingFeatureTypeEnum.RECTANGLE;
+      if (this.activeTool !== DrawingFeatureTypeEnum.RECTANGLE) {
+        this.drawingService.toggle(DrawingFeatureTypeEnum.RECTANGLE);
+      }
     }
   }
 
-  public customRectangleWidth = 10;
-  public customRectangleHeight = 10;
-
-  public drawCustomSizedRectangle() {
-    this.rectangleSize = { width: this.customRectangleWidth, height: this.customRectangleHeight, label: 'custom' };
-    this.activeSpecificTool = CustomSizedDrawingToolEnum.CUSTOM_RECTANGLE;
-    if (this.activeTool !== DrawingFeatureTypeEnum.POINT) {
-      this.drawingService.draw(DrawingFeatureTypeEnum.POINT);
-    }
+  public clearRectangleSize() {
+    this.customRectangleWidth = null;
+    this.customRectangleHeight = null;
   }
 
   private _customCircleRadius: number | null = null;
@@ -259,11 +275,13 @@ export class DrawingComponent implements OnInit, OnDestroy {
     if (this._customCircleRadius !== null) {
       this.activeSpecificTool = CustomSizedDrawingToolEnum.CUSTOM_CIRCLE;
       if (this.activeTool !== DrawingFeatureTypeEnum.POINT) {
-        this.drawingService.draw(DrawingFeatureTypeEnum.POINT);
+        this.drawingService.toggle(DrawingFeatureTypeEnum.POINT);
       }
     } else {
       this.activeSpecificTool = DrawingFeatureTypeEnum.CIRCLE;
-      this.drawingService.draw(DrawingFeatureTypeEnum.CIRCLE);
+      if(this.activeTool !== DrawingFeatureTypeEnum.CIRCLE) {
+        this.drawingService.toggle(DrawingFeatureTypeEnum.CIRCLE);
+      }
     }
   }
 

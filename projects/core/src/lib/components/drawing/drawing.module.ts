@@ -11,7 +11,6 @@ import { DrawingStyleFormComponent } from './drawing-style-form/drawing-style-fo
 import { ApplicationMapModule } from '../../map/application-map.module';
 import { DrawingObjectsListComponent } from './drawing-objects-list/drawing-objects-list.component';
 import { DrawingFeatureIconComponent } from './drawing-feature-image/drawing-feature-icon.component';
-import { MatGridList, MatGridTile } from '@angular/material/grid-list';
 
 @NgModule({
   declarations: [
@@ -27,8 +26,6 @@ import { MatGridList, MatGridTile } from '@angular/material/grid-list';
     MenubarModule,
     StoreModule.forFeature(drawingStateKey, drawingReducer),
     ApplicationMapModule,
-    MatGridList,
-    MatGridTile,
   ],
   exports: [
     DrawingComponent,

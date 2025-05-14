@@ -39,7 +39,7 @@
               tmTooltip="Draw rectangle"
               mat-stroked-button
               color="primary"
-              (click)="draw(drawingTypes.RECTANGLE)">
+              (click)="drawCustomSizedRectangle()">
         <mat-icon svgIcon="tools_draw_rectangle"></mat-icon>
       </button>
       <button [class.button--active]="activeSpecificTool === 'CIRCLE' || activeSpecificTool === 'CUSTOM_CIRCLE'"
@@ -76,6 +76,26 @@
       </button>
     </div>
 
+    @if(activeSpecificTool === 'RECTANGLE' || activeSpecificTool === 'CUSTOM_RECTANGLE') {
+      <div class="rectangle-size-inputs">
+        <mat-form-field appearance="outline" class="rectangle-size-input__width">
+          <mat-label i18n="@@core.drawing.rectangle-width">Width</mat-label>
+          <input matInput
+                 type="number"
+                 [(ngModel)]="customRectangleWidth"
+                 min="1">
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="rectangle-size-input__height">
+          <mat-label i18n="@@core.drawing.rectangle-height">Height</mat-label>
+          <input matInput
+                 type="number"
+                 [(ngModel)]="customRectangleHeight"
+                 min="1">
+        </mat-form-field>
+        <button mat-icon-button class="clear-button" (click)="clearRectangleSize()"><mat-icon svgIcon="close"></mat-icon></button>
+      </div>
+    }
+
     @if (activeSpecificTool === 'CIRCLE' || activeSpecificTool === 'CUSTOM_CIRCLE') {
       <mat-form-field appearance="outline" class="circle-input__radius">
         <mat-label i18n="@@core.drawing.circle-radius">Circle radius</mat-label>
@@ -83,7 +103,7 @@
                type="number"
                [(ngModel)]="customCircleRadius"
                min="1">
-        <button mat-icon-button matSuffix class="clear-button" tmTooltip="Datum veld leegmaken" (click)="clearCircleRadius()"><mat-icon svgIcon="close"></mat-icon></button>
+        <button mat-icon-button matSuffix class="clear-button" (click)="clearCircleRadius()"><mat-icon svgIcon="close"></mat-icon></button>
       </mat-form-field>
     }
 
@@ -132,67 +152,6 @@
         </div>
       }
     </div>
-
-    @if(activeSpecificTool === 'RECTANGLE' || activeSpecificTool === 'CUSTOM_RECTANGLE') {
-      <div class="rectangle-size-buttons">
-        <!-- Hardcoded for now, could be made dynamic -->
-        <button [class.button--active]="activeSpecificTool === 'CUSTOM_RECTANGLE' && rectangleSize?.label === '1x1'"
-                i18n-tmTooltip="@@core.drawing.draw-rectangle-1x1"
-                tmTooltip="Draw rectangle 1m by 1m"
-                mat-stroked-button
-                color="primary"
-                (click)="selectRectangleSize(1, 1)">1x1</button>
-        <button [class.button--active]="activeSpecificTool === 'CUSTOM_RECTANGLE' && rectangleSize?.label === '2x2'"
-                i18n-tmTooltip="@@core.drawing.draw-rectangle-2x2"
-                tmTooltip="Draw rectangle 2m by 2m"
-                mat-stroked-button
-                color="primary"
-                (click)="selectRectangleSize(2, 2)">2x2</button>
-        <button [class.button--active]="activeSpecificTool === 'CUSTOM_RECTANGLE' && rectangleSize?.label === '5x5'"
-                i18n-tmTooltip="@@core.drawing.draw-rectangle-5x5"
-                tmTooltip="Draw rectangle 5m by 5m"
-                mat-stroked-button
-                color="primary"
-                (click)="selectRectangleSize(5, 5)">5x5</button>
-
-        <button [class.button--active]="activeSpecificTool === 'CUSTOM_RECTANGLE' && rectangleSize?.label === 'custom'"
-                i18n-tmTooltip="@@core.drawing.draw-rectangle-custom-size"
-                tmTooltip="Draw rectangle with custom size"
-                mat-stroked-button
-                color="primary"
-                (click)="drawCustomSizedRectangle()">Custom</button>
-      </div>
-
-      @if(activeSpecificTool === 'CUSTOM_RECTANGLE' && rectangleSize?.label === 'custom') {
-        <mat-expansion-panel class="rectangle-size-input" [expanded]="true">
-          <mat-expansion-panel-header>
-            <mat-panel-title i18n="@@core.drawing.rectangle-custom-title">Custom rectangle size</mat-panel-title>
-          </mat-expansion-panel-header>
-          <mat-grid-list cols="2" rowHeight="60px" gutterSize="4px">
-            <mat-grid-tile>
-              <mat-form-field appearance="outline" class="rectangle-size-input__width">
-                <mat-label i18n="@@core.drawing.rectangle-width">Width</mat-label>
-                <input matInput
-                       type="number"
-                       [(ngModel)]="customRectangleWidth"
-                       (ngModelChange)="drawCustomSizedRectangle()"
-                       min="1">
-              </mat-form-field>
-            </mat-grid-tile>
-            <mat-grid-tile>
-              <mat-form-field appearance="outline" class="rectangle-size-input__height">
-                <mat-label i18n="@@core.drawing.rectangle-height">Height</mat-label>
-                <input matInput
-                       type="number"
-                       [(ngModel)]="customRectangleHeight"
-                       (ngModelChange)="drawCustomSizedRectangle()"
-                       min="1">
-              </mat-form-field>
-            </mat-grid-tile>
-          </mat-grid-list>
-        </mat-expansion-panel>
-      }
-    }
 
     <tm-drawing-objects-list [drawingLayerId]="drawingLayerId"></tm-drawing-objects-list>
     @if (selectedDrawingStyle) {

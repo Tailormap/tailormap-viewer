@@ -12,6 +12,23 @@
   margin-bottom: 0;
 }
 
+.circle-input__radius {
+  margin: 8px 0;
+}
+
+.rectangle-size-inputs {
+  display: flex;
+  margin: 8px 0;
+}
+
+.rectangle-size-inputs mat-form-field {
+  margin: 0 2px;
+}
+
+.rectangle-size-inputs button {
+  margin: auto;
+}
+
 .horizontal-line {
   border-top: 1px solid var(--border-color);
   margin: 8px 0;
@@ -57,11 +74,4 @@
 .drawing_buttons {
   display: flex;
   justify-content: flex-end;
-}
-
-.rectangle-size-buttons button {
-  min-width: 40px;
-  padding: 0 8px;
-  border-radius: 3px;
-  margin: 8px 8px 0 0;
 }
