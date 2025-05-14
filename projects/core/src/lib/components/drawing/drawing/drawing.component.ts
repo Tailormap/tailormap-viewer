@@ -130,7 +130,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
     }
     const feature = DrawingHelper.getFeature(this.activeTool, $event);
     if (this.rectangleSize != null && feature.geometry) {
-      const rectangle = this.createRectangleWktAtPoint(feature.geometry, this.rectangleSize.width, this.rectangleSize.height);
+      const rectangle = FeatureHelper.createRectangleAtPoint(feature.geometry, this.rectangleSize.width, this.rectangleSize.height);
       if (rectangle) {
         feature.geometry = rectangle;
       }
@@ -220,12 +220,6 @@ export class DrawingComponent implements OnInit, OnDestroy {
     if (this.activeTool !== DrawingFeatureTypeEnum.POINT) {
       this.drawingService.draw(DrawingFeatureTypeEnum.POINT);
     }
-  }
-
-  private createRectangleWktAtPoint(pointWkt: string, width: number, height: number): string | null {
-    const point = FeatureHelper.fromWKT(pointWkt);
-    const rectangle = FeatureHelper.createRectangleAtPoint(point, width, height);
-    return rectangle ? FeatureHelper.getWKT(rectangle) : null;
   }
 
   public customRectangleWidth = 10;

@@ -2,7 +2,7 @@ import { FeatureModelType } from '../models/feature-model.type';
 import { Feature } from 'ol';
 import { GeoJSON, WKT } from 'ol/format';
 import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
-import { Circle, Geometry, Point, Polygon } from 'ol/geom';
+import { Circle, Geometry, Point } from 'ol/geom';
 import { fromCircle, fromExtent } from 'ol/geom/Polygon';
 import { MapSizeHelper } from '../helpers/map-size.helper';
 import { MapUnitEnum } from '../models/map-unit.enum';
@@ -109,7 +109,7 @@ export class FeatureHelper {
       return {
         __fid: feature.get('__fid'),
         attributes: feature.get('attributes'),
-        geometry: !projection ? undefined : FeatureHelper.getWKT(geom, projection),
+        geometry: FeatureHelper.getWKT(geom, projection),
       };
     }
     return null;
@@ -183,20 +183,20 @@ export class FeatureHelper {
   public static translateGeometryForDuplication(wktGeom: string, deltaX: number, deltaY: number): string {
     const geom = FeatureHelper.fromWKT(wktGeom);
     geom.translate(deltaX, deltaY);
-    // XXX getWKT() only needs units, not the entire projection
-    return FeatureHelper.getWKT(geom, { getUnits: () => (MapUnitEnum.m) } as Projection);
+    return FeatureHelper.getWKT(geom);
   }
 
-  public static createRectangleAtPoint(point: Geometry, width: number, height: number): Polygon | null {
+  public static createRectangleAtPoint(pointWkt: string, width: number, height: number): string | null {
+    const point = FeatureHelper.fromWKT(pointWkt);
     if (!(point instanceof Point)) {
       return null;
     }
     const coords = point.getFlatCoordinates();
-    return fromExtent([
+    return FeatureHelper.getWKT(fromExtent([
       coords[0] - width / 2,
       coords[1] - height / 2,
       coords[0] + width / 2,
       coords[1] + height / 2,
-    ]);
+    ]));
   }
 }
