@@ -121,7 +121,7 @@ export class DrawingService {
     });
   }
 
-  public draw(type: DrawingFeatureTypeEnum) {
+  public toggle(type: DrawingFeatureTypeEnum) {
     this.toggleTool(DrawingService.drawingFeatureTypeToDrawingType(type), type);
   }
 
