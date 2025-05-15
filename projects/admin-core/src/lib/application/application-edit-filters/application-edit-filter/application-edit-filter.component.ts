@@ -8,7 +8,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AttributeFilterHelper, ConfirmDialogService } from '@tailormap-viewer/shared';
 import { AdminSnackbarService } from '../../../shared/services/admin-snackbar.service';
 import {
-  deleteApplicationFilterGroup, setApplicationSelectedFilterId, setApplicationSelectedFilterLayerId, updateApplicationFiltersConfig,
+  deleteApplicationAttributeFilter, setApplicationSelectedFilterId, setApplicationSelectedFilterLayerId, updateApplicationFiltersConfig,
 } from '../../state/application.actions';
 import { tap } from 'rxjs/operators';
 import { UpdateAttributeFilterModel } from '../../models/update-attribute-filter.model';
@@ -68,13 +68,14 @@ export class ApplicationEditFilterComponent implements OnDestroy {
   public delete(attributeFilter: UpdateAttributeFilterModel) {
     this.confirmDelete.confirm$(
       $localize `:@@admin-core.applications.filters.delete-filter:Delete filter ${this.getAttributeFilterLabel(attributeFilter)}`,
-      $localize `:@@admin-core.applications.filters.delete-filter-message:Are you sure you want to delete filter ${this.getAttributeFilterLabel(attributeFilter)}? This action cannot be undone.`,
+      $localize `:@@admin-core.applications.filters.delete-filter-message:
+        Are you sure you want to delete filter ${this.getAttributeFilterLabel(attributeFilter)}? This action cannot be undone.`,
       true,
     )
       .pipe(
         take(1),
         filter(answer => answer),
-        tap(() => this.store$.dispatch(deleteApplicationFilterGroup({ filterId: attributeFilter.filterId }))),
+        tap(() => this.store$.dispatch(deleteApplicationAttributeFilter({ filterId: attributeFilter.filterId }))),
       )
       .subscribe(() => {
         this.adminSnackbarService.showMessage($localize `:@@admin-core.applications.filters.filter-removed:Filter ${this.getAttributeFilterLabel(attributeFilter)} removed`);

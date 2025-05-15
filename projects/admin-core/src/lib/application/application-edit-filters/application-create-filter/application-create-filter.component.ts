@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, Signal, computed, signal } from '@angular/core';
 import { AttributeFilterModel, FilterGroupModel, FilterTypeEnum } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
-import { createApplicationFilterGroup } from '../../state/application.actions';
+import { createApplicationAttributeFilter } from '../../state/application.actions';
 import {
   selectApplicationSelectedFilterLayerId, selectFilterableLayersForApplication, selectSelectedApplicationId,
 } from '../../state/application.selectors';
@@ -56,7 +56,7 @@ export class ApplicationCreateFilterComponent {
     if (!this.filterGroup) {
       return;
     }
-    this.store$.dispatch(createApplicationFilterGroup({ filterGroup: this.filterGroup }));
+    this.store$.dispatch(createApplicationAttributeFilter({ filterGroup: this.filterGroup }));
     this.setUpNewFilter();
   }
 

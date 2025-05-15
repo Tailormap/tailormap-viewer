@@ -6,7 +6,7 @@ import {
   AppContentModel, ApplicationModel, AppTreeLayerNodeModel, AppTreeNodeModel,
 } from '@tailormap-admin/admin-api';
 import { ApplicationModelHelper } from '../helpers/application-model.helper';
-import { ComponentModel } from '@tailormap-viewer/api';
+import { AttributeFilterModel, ComponentModel, FilterGroupModel } from '@tailormap-viewer/api';
 
 const getApplication = (application: ApplicationModel) => ({
   ...application,
@@ -362,7 +362,7 @@ const onUpdateApplicationFiltersConfig = (
 
 const onCreateApplicationFilterGroup = (
   state: ApplicationState,
-  payload: ReturnType<typeof ApplicationActions.createApplicationFilterGroup>,
+  payload: ReturnType<typeof ApplicationActions.createApplicationAttributeFilter>,
 ): ApplicationState => {
   return updateApplication(state, application => ({
     settings: {
@@ -375,24 +375,23 @@ const onCreateApplicationFilterGroup = (
 
 const onDeleteApplicationFilterGroup = (
   state: ApplicationState,
-  payload: ReturnType<typeof ApplicationActions.deleteApplicationFilterGroup>,
+  payload: ReturnType<typeof ApplicationActions.deleteApplicationAttributeFilter>,
 ): ApplicationState => {
   return updateApplication(state, application => {
-    const filterGroups = application.settings?.filterGroups?.filter(filterGroup => {
-      for (const filter of filterGroup.filters) {
-        if (filter.id === payload.filterId) {
-          return false;
-        }
+    const filterGroups: FilterGroupModel<AttributeFilterModel>[] = application.settings?.filterGroups?.map(filterGroup => {
+      const updatedFilters = filterGroup.filters.filter(filter => filter.id !== payload.filterId);
+      if (updatedFilters.length === 0) {
+        return null;
       }
-      return true;
-    }) || [];
-      return {
-        settings: {
-          ...application.settings,
-          layerSettings: application.settings?.layerSettings || {}, // Ensure layerSettings is defined
-          filterGroups: filterGroups,
-        },
-      };
+      return { ...filterGroup, filters: updatedFilters };
+    }).filter(filterGroup => filterGroup !== null) as FilterGroupModel<AttributeFilterModel>[];
+    return {
+      settings: {
+        ...application.settings,
+        layerSettings: application.settings?.layerSettings || {}, // Ensure layerSettings is defined
+        filterGroups: filterGroups,
+      },
+    };
     });
 };
 
@@ -505,8 +504,8 @@ const applicationReducerImpl = createReducer<ApplicationState>(
   on(ApplicationActions.updateApplicationComponentConfig, onUpdateApplicationComponentConfig),
   on(ApplicationActions.updateApplicationStylingConfig, onUpdateApplicationStylingConfig),
   on(ApplicationActions.updateApplicationFiltersConfig, onUpdateApplicationFiltersConfig),
-  on(ApplicationActions.createApplicationFilterGroup, onCreateApplicationFilterGroup),
-  on(ApplicationActions.deleteApplicationFilterGroup, onDeleteApplicationFilterGroup),
+  on(ApplicationActions.createApplicationAttributeFilter, onCreateApplicationFilterGroup),
+  on(ApplicationActions.deleteApplicationAttributeFilter, onDeleteApplicationFilterGroup),
   on(ApplicationActions.setApplicationSelectedFilterLayerId, onSetApplicationSelectedFilterLayerId),
   on(ApplicationActions.setApplicationSelectedFilterId, onSetApplicationSelectedFilterId),
   on(ApplicationActions.toggleApplicationNodeExpanded, onToggleNodeExpanded),

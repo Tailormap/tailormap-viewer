@@ -139,13 +139,13 @@ export const updateApplicationFiltersConfig = createAction(
   props<{ filterGroups: FilterGroupModel<AttributeFilterModel>[] }>(),
 );
 
-export const createApplicationFilterGroup = createAction(
+export const createApplicationAttributeFilter = createAction(
   `${applicationActionsPrefix} Create Filter Group`,
   props<{ filterGroup: FilterGroupModel<AttributeFilterModel> }>(),
 );
 
-export const deleteApplicationFilterGroup = createAction(
-  `${applicationActionsPrefix} Delete Filter Group`,
+export const deleteApplicationAttributeFilter = createAction(
+  `${applicationActionsPrefix} Delete Filter`,
   props<{ filterId: string }>(),
 );
 
