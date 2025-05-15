@@ -1,10 +1,10 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { DrawingToolEvent, FeatureHelper, MapService, MapStyleModel } from '@tailormap-viewer/map';
 import { combineLatest, filter, Observable, of, Subject, take, takeUntil, tap } from 'rxjs';
 import {
-  selectDrawingFeaturesExcludingSelected, selectSelectedDrawingStyle, selectSelectedDrawingFeature, selectHasDrawingFeatures,
-  selectDrawingFeatures,
+  selectDrawingFeatures, selectDrawingFeaturesExcludingSelected, selectHasDrawingFeatures, selectSelectedDrawingFeature,
+  selectSelectedDrawingStyle,
 } from '../state/drawing.selectors';
 import { DrawingHelper } from '../helpers/drawing.helper';
 import { MenubarService } from '../../menubar';
@@ -18,6 +18,7 @@ import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
 import { BaseComponentTypeEnum, FeatureModel } from '@tailormap-viewer/api';
 import { DrawingService } from '../../../map/services/drawing.service';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 
 @Component({
   selector: 'tm-drawing',
@@ -43,6 +44,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
   public activeTool: DrawingFeatureTypeEnum | null = null;
 
   public selectionStyle = DrawingHelper.applyDrawingStyle as ((feature: FeatureModel) => MapStyleModel);
+  public showMeasures = signal<boolean>(false);
 
   constructor(
     private store$: Store,
@@ -116,7 +118,24 @@ export class DrawingComponent implements OnInit, OnDestroy {
   }
 
   public draw(type: DrawingFeatureTypeEnum) {
-    this.drawingService.draw(type);
+    this.drawingService.draw(type, this.showMeasures());
+  }
+
+  public showSizeCheckbox() {
+    return this.activeTool === DrawingFeatureTypeEnum.CIRCLE
+      || this.activeTool === DrawingFeatureTypeEnum.SQUARE
+      || this.activeTool === DrawingFeatureTypeEnum.ELLIPSE
+      || this.activeTool === DrawingFeatureTypeEnum.POLYGON
+      || this.activeTool === DrawingFeatureTypeEnum.RECTANGLE
+      || this.activeTool === DrawingFeatureTypeEnum.LINE
+      || this.activeTool === DrawingFeatureTypeEnum.STAR;
+  }
+
+  public toggleMeasuring($event: MatCheckboxChange) {
+    this.showMeasures.set($event.checked);
+    if (this.activeTool) {
+      this.drawingService.draw(this.activeTool, $event.checked, true);
+    }
   }
 
   public enableSelectAndModify() {
@@ -203,4 +222,5 @@ export class DrawingComponent implements OnInit, OnDestroy {
       label: '',
     });
   }
+
 }

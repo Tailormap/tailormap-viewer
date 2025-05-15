@@ -56,7 +56,6 @@ export class DrawingService {
     this.selectionStyle = opts.selectionStyle;
     this.mapService.createTool$<DrawingToolModel, DrawingToolConfigModel>({
       type: ToolTypeEnum.Draw,
-      computeSize: false,
       style: DrawingService.getDefaultStyle(),
     })
       .pipe(
@@ -121,8 +120,8 @@ export class DrawingService {
     });
   }
 
-  public draw(type: DrawingFeatureTypeEnum) {
-    this.toggleTool(DrawingService.drawingFeatureTypeToDrawingType(type), type);
+  public draw(type: DrawingFeatureTypeEnum, showMeasures?: boolean, forceEnableDrawing?: boolean) {
+    this.toggleTool(DrawingService.drawingFeatureTypeToDrawingType(type), type, showMeasures, forceEnableDrawing);
   }
 
   public setSelectedFeature(feature: FeatureModel | null) {
@@ -142,18 +141,19 @@ export class DrawingService {
     });
   }
 
-  private toggleTool(type: DrawingType, drawingFeatureType: DrawingFeatureTypeEnum) {
+  private toggleTool(type: DrawingType, drawingFeatureType: DrawingFeatureTypeEnum, showMeasures?: boolean, forceEnableDrawing?: boolean) {
     this.withToolManager(manager => {
       if (!this.drawingTool || !this.selectTool) {
         return;
       }
-      if (this.activeTool === drawingFeatureType) {
+      if (this.activeTool === drawingFeatureType && !forceEnableDrawing) {
         this.disableDrawing();
         this.enableModifyTool();
       } else {
         // Enable drawing
         this.activeTool = drawingFeatureType;
-        manager.enableTool(this.drawingTool.id, true, { type });
+        const style: MapStyleModel = showMeasures ? { showTotalSize: true, showSegmentSize: true } : {};
+        manager.enableTool(this.drawingTool.id, true, { type, style }, forceEnableDrawing);
         manager.disableTool(this.selectTool.id, true);
         if (this.extTransformTool) {
           manager.disableTool(this.extTransformTool.id, true);

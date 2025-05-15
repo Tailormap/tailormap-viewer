@@ -100,7 +100,7 @@
               <mat-icon svgIcon="coordinates"></mat-icon>
             </button>
           }
-          @if (showInsertLength()) {
+          @if (isLineType()) {
             <button mat-icon-button
                     tmTooltip="Insert length as label"
                     i18n-tmTooltip="@@core.drawing.insert-length-label"
@@ -239,6 +239,18 @@
           }
         </mat-select>
       </mat-form-field>
+      @if (isLineType()) {
+        <div class="form-field form-field__columns form-field__columns--right-aligned checkbox-field">
+          <mat-checkbox i18n="@@core.drawing.show-length-along-line"
+                        [checked]="style.showSegmentSize ?? false"
+                        (change)="toggleSegmentSize($event)">Show length along line</mat-checkbox>
+        </div>
+        <div class="form-field form-field__columns form-field__columns--right-aligned checkbox-field">
+          <mat-checkbox i18n="@@core.drawing.show-total-line-length"
+                        [checked]="style.showTotalSize ?? false"
+                        (change)="toggleTotalSize($event)">Show total length of the line</mat-checkbox>
+        </div>
+      }
     </mat-expansion-panel>
   }
 
@@ -271,6 +283,17 @@
                    [value]="style.fillOpacity"
                    (valueChange)="changeFillOpacity($event)">
         </tm-slider>
+      </div>
+
+      <div class="form-field form-field__columns form-field__columns--right-aligned checkbox-field">
+        <mat-checkbox i18n="@@core.drawing.show-side-length"
+                      [checked]="style.showSegmentSize ?? false"
+                      (change)="toggleSegmentSize($event)">Show length along sides</mat-checkbox>
+      </div>
+      <div class="form-field form-field__columns form-field__columns--right-aligned checkbox-field">
+        <mat-checkbox i18n="@@core.drawing.show-area-size"
+                      [checked]="style.showTotalSize ?? false"
+                      (change)="toggleTotalSize($event)">Show area size</mat-checkbox>
       </div>
 
     </mat-expansion-panel>

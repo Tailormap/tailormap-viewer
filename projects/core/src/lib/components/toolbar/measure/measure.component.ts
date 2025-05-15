@@ -64,7 +64,6 @@ export class MeasureComponent implements OnInit, OnDestroy {
 
     this.mapService.createTool$<DrawingToolModel, DrawingToolConfigModel>({
       type: ToolTypeEnum.Draw,
-      computeSize: true,
       style: {
         strokeColor: ApplicationStyleService.getPrimaryColor(),
         pointFillColor: 'transparent',

@@ -39,10 +39,7 @@ export class MeasureStyleHelper {
     if (showTotalSize) {
       let point: Point | undefined;
       if (geometry instanceof Polygon) {
-        const coordinates = geometry.getCoordinates()[0];
-        if (coordinates.length > 2) {
-          point = new Point(coordinates[coordinates.length - 2]);
-        }
+        point = geometry.getInteriorPoint();
       } else if (geometry instanceof LineString) {
         point = new Point(geometry.getLastCoordinate());
       } else if (geometry instanceof Circle) {

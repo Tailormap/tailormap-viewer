@@ -1,10 +1,11 @@
-import { MapSizeHelper, MapStyleModel } from '@tailormap-viewer/map';
+import { MapStyleModel } from '../../models';
 import { Feature } from 'ol';
 import { Geometry } from 'ol/geom';
 import { UnitsHelper } from './units.helper';
 import { Fill, Stroke, Style, Text } from 'ol/style';
 import { GeometryTypeHelper } from '../geometry-type.helper';
 import { SelectionStyleHelper } from './selection-style.helper';
+import { MapSizeHelper } from '../map-size.helper';
 
 export class LabelStyleHelper {
 

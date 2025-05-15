@@ -9,14 +9,13 @@ import { NgZone } from '@angular/core';
 import { EventsKey } from 'ol/events';
 import { unByKey } from 'ol/Observable';
 import { Geometry } from 'ol/geom';
+import { Type as GeometryType } from 'ol/geom/Geometry';
 import { default as BaseEvent } from 'ol/events/Event';
 import { getCenter } from 'ol/extent';
 import { FeatureHelper } from '../../helpers/feature.helper';
 import { GeometryTypeHelper } from '../../helpers/geometry-type.helper';
-import { MapSizeHelper } from '../../helpers/map-size.helper';
 import { DrawingHelper } from '../../helpers/drawing.helper';
 import { MapStyleModel, OlMapStyleType } from '../../models';
-import { StyleFunction } from 'ol/style/Style';
 import RenderFeature from 'ol/render/Feature';
 
 export class OpenLayersDrawingTool implements DrawingToolModel {
@@ -100,7 +99,7 @@ export class OpenLayersDrawingTool implements DrawingToolModel {
     const drawingType = args.type || this.toolConfig.drawingType || 'point';
     this.drawInteraction = new Draw({
       type: OpenLayersDrawingTool.getDrawingType(drawingType),
-      style: this.getDrawingStyle(drawingType),
+      style: this.getDrawingStyle(drawingType, args.style),
       geometryFunction: OpenLayersDrawingTool.getGeometryFunction(drawingType),
     });
     this.olMap.addInteraction(this.drawInteraction);
@@ -121,11 +120,12 @@ export class OpenLayersDrawingTool implements DrawingToolModel {
     this.listeners = [];
   }
 
-  private getDrawingStyle(drawingType: DrawingType): OlMapStyleType {
+  private getDrawingStyle(drawingType: DrawingType, style?: MapStyleModel): OlMapStyleType {
     const styleConfig: MapStyleModel = {
       styleKey: 'drawing-tool-style',
       ...OpenLayersDrawingTool.DEFAULT_DRAWING_STYLE,
       ...(this.toolConfig.style || {}),
+      ...(style || {}),
     };
     return feature => {
       if (feature instanceof RenderFeature) {
@@ -135,13 +135,26 @@ export class OpenLayersDrawingTool implements DrawingToolModel {
       // OL also draws a point (cursor) and a line (current segment). We don't want (optional) measurements
       // on these temporary features, so we check whether the current feature is the same type as the one
       // the user intents to draw.
-      const isSameAsDrawingType = feature.getGeometry()?.getType() === OpenLayersDrawingTool.getDrawingType(drawingType);
+      const isSameAsDrawingType = OpenLayersDrawingTool.isExpectedGeometryType(drawingType, feature.getGeometry()?.getType());
       return MapStyleHelper.mapStyleModelToOlStyle({
         ...styleConfig,
         showTotalSize: isSameAsDrawingType ? styleConfig.showTotalSize : false,
         showSegmentSize: isSameAsDrawingType ? styleConfig.showSegmentSize : false,
       }, feature);
     };
+  }
+
+  private static isExpectedGeometryType(drawingType: DrawingType, geometryType?: GeometryType): boolean {
+    if (drawingType === 'line') {
+      return geometryType === 'LineString';
+    }
+    if (drawingType === 'area' || drawingType === 'ellipse' || drawingType === 'square' || drawingType === 'rectangle' || drawingType === 'star') {
+      return geometryType === 'Polygon';
+    }
+    if (drawingType === 'circle') {
+      return geometryType === 'Circle';
+    }
+    return false;
   }
 
   private drawStarted(e: DrawEvent) {
@@ -173,7 +186,6 @@ export class OpenLayersDrawingTool implements DrawingToolModel {
       lastCoordinate,
       centerCoordinate: getCenter(geometry.getExtent()),
       radius: GeometryTypeHelper.isCircleGeometry(geometry) ? geometry.getRadius() : undefined,
-      size: this.toolConfig.computeSize ? MapSizeHelper.getSize(geometry) : 0,
       type,
     };
   }
