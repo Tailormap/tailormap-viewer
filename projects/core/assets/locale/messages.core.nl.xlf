@@ -270,6 +270,10 @@
         <source>Delete selected drawing object</source>
         <target>Verwijder geselecteerd tekenobject</target>
       </trans-unit>
+      <trans-unit id="core.drawing.draw-shape" datatype="html">
+        <source>Draw shape</source>
+        <target>Vorm tekenen</target>
+      </trans-unit>
       <trans-unit id="core.drawing.drawing" datatype="html">
         <source>Drawing</source>
         <target>Tekenen</target>
@@ -334,9 +338,25 @@
         <source>Rotation</source>
         <target>Rotatie</target>
       </trans-unit>
-      <trans-unit id="core.drawing.draw-shape" datatype="html">
-        <source>Draw shape</source>
-        <target>Vorm tekenen</target>
+      <trans-unit id="core.drawing.show-area-size" datatype="html">
+        <source>Show area size</source>
+        <target>Oppervlakte tonen</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.show-length-along-line" datatype="html">
+        <source>Show length along line</source>
+        <target>Lengte langs lijn tonen</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.show-side-length" datatype="html">
+        <source>Show length along sides</source>
+        <target>Lengte langs zijden tonen</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.show-sizes-while-drawing" datatype="html">
+        <source>Show sizes while drawing</source>
+        <target>Grootte tonen tijdens tekenen</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.show-total-line-length" datatype="html">
+        <source>Show total length of the line</source>
+        <target>Totale lengte van de lijn tonen</target>
       </trans-unit>
       <trans-unit id="core.drawing.size" datatype="html">
         <source>Size</source>
