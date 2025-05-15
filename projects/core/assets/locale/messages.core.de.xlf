@@ -270,6 +270,10 @@
         <source>Delete selected drawing object</source>
         <target>Ausgewähltes Zeichenobjekt löschen</target>
       </trans-unit>
+      <trans-unit id="core.drawing.draw-shape" datatype="html">
+        <source>Draw shape</source>
+        <target>Draw shape</target>
+      </trans-unit>
       <trans-unit id="core.drawing.drawing" datatype="html">
         <source>Drawing</source>
         <target>Zeichnen</target>
@@ -333,10 +337,6 @@
       <trans-unit id="core.drawing.rotation" datatype="html">
         <source>Rotation</source>
         <target>Drehung</target>
-      </trans-unit>
-      <trans-unit id="core.drawing.draw-shape" datatype="html">
-        <source>Draw shape</source>
-        <target>Draw shape</target>
       </trans-unit>
       <trans-unit id="core.drawing.size" datatype="html">
         <source>Size</source>

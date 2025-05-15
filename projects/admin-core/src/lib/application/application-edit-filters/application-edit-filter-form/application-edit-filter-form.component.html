@@ -2,14 +2,18 @@
 
   <div class="attribute-filter-info">
     @if (!filterForm.get('layer')?.value) {
-      <div>Select a layer to filter</div>
+      <div i18n="@@admin-core.application.filters.select-layer">Select a layer to filter</div>
     } @else if (!filterForm.get('attribute')?.value) {
-      Filter on layer '{{ filterForm.get('layer')?.value?.geoServiceLayer?.layerSettings?.title
-    || filterForm.get('layer')?.value?.geoServiceLayer?.title }}'
+      <div i18n="@@admin-core.application.filters.filter-on-layer">
+        Filter on layer '{{ filterForm.get('layer')?.value?.geoServiceLayer?.layerSettings?.title
+      || filterForm.get('layer')?.value?.geoServiceLayer?.title }}'
+      </div>
     } @else {
-      Filter for attribute '{{ filterForm.get('attribute')?.value }}' on layer
+      <div i18n="@@admin-core.application.filters.filter-on--attribute-layer">
+        Filter for attribute '{{ filterForm.get('attribute')?.value }}' on layer
         '{{ filterForm.get('layer')?.value?.geoServiceLayer?.layerSettings?.title
-    || filterForm.get('layer')?.value?.geoServiceLayer?.title }}'
+      || filterForm.get('layer')?.value?.geoServiceLayer?.title }}'
+      </div>
     }
   </div>
 

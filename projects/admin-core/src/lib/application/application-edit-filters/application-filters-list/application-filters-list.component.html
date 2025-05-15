@@ -1,8 +1,10 @@
 <div class="filters-list-title">
   @if (selectedLayer(); as selectedLayer) {
-    <strong>Filters for {{ selectedLayer.geoServiceLayer.layerSettings?.title || selectedLayer.geoServiceLayer.title }}</strong>
+    <strong i18n="@@admin-core.application.filters.filters-for">
+      Filters for {{ selectedLayer.geoServiceLayer.layerSettings?.title || selectedLayer.geoServiceLayer.title }}
+    </strong>
   } @else {
-    <strong>All filters</strong>
+    <strong i18n="@@admin-core.application.filters.all-filters">All filters</strong>
   }
 </div>
 

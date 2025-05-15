@@ -270,6 +270,10 @@
         <source>Delete selected drawing object</source>
         <target>Verwijder geselecteerd tekenobject</target>
       </trans-unit>
+      <trans-unit id="core.drawing.draw-shape" datatype="html">
+        <source>Draw shape</source>
+        <target>Vorm tekenen</target>
+      </trans-unit>
       <trans-unit id="core.drawing.drawing" datatype="html">
         <source>Drawing</source>
         <target>Tekenen</target>
@@ -333,10 +337,6 @@
       <trans-unit id="core.drawing.rotation" datatype="html">
         <source>Rotation</source>
         <target>Rotatie</target>
-      </trans-unit>
-      <trans-unit id="core.drawing.draw-shape" datatype="html">
-        <source>Draw shape</source>
-        <target>Vorm tekenen</target>
       </trans-unit>
       <trans-unit id="core.drawing.size" datatype="html">
         <source>Size</source>
