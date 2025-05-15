@@ -83,7 +83,7 @@ export class IconStyleHelper {
     const svgStrokeWidth = 1 + (props.strokeWidth / 10);
     const icon = [
       `<svg width="10" height="10" viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg">`,
-      ...props.svgContent,
+      props.svgContent,
       '</svg>',
     ].join('');
     return new Icon({

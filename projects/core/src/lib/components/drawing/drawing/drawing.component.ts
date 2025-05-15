@@ -46,6 +46,16 @@ export class DrawingComponent implements OnInit, OnDestroy {
   public selectionStyle = DrawingHelper.applyDrawingStyle as ((feature: FeatureModel) => MapStyleModel);
   public showMeasures = signal<boolean>(false);
 
+  private static toolsWithMeasure = new Set([
+    DrawingFeatureTypeEnum.CIRCLE,
+    DrawingFeatureTypeEnum.SQUARE,
+    DrawingFeatureTypeEnum.ELLIPSE,
+    DrawingFeatureTypeEnum.POLYGON,
+    DrawingFeatureTypeEnum.RECTANGLE,
+    DrawingFeatureTypeEnum.LINE,
+    DrawingFeatureTypeEnum.STAR,
+  ]);
+
   constructor(
     private store$: Store,
     private mapService: MapService,
@@ -122,13 +132,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
   }
 
   public showSizeCheckbox() {
-    return this.activeTool === DrawingFeatureTypeEnum.CIRCLE
-      || this.activeTool === DrawingFeatureTypeEnum.SQUARE
-      || this.activeTool === DrawingFeatureTypeEnum.ELLIPSE
-      || this.activeTool === DrawingFeatureTypeEnum.POLYGON
-      || this.activeTool === DrawingFeatureTypeEnum.RECTANGLE
-      || this.activeTool === DrawingFeatureTypeEnum.LINE
-      || this.activeTool === DrawingFeatureTypeEnum.STAR;
+    return this.activeTool !== null && DrawingComponent.toolsWithMeasure.has(this.activeTool);
   }
 
   public toggleMeasuring($event: MatCheckboxChange) {

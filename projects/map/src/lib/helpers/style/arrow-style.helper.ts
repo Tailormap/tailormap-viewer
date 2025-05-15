@@ -79,7 +79,6 @@ export class ArrowStyleHelper {
       geometry: new Point(args.pointCoordinates || args.arrowEnd),
       image: new RegularShape({
         fill: new Fill({ color: args.strokeStyle.getColor() }),
-        // stroke: outlineStroke,
         points: 3,
         radius: Math.max(1, args.strokeStyle.getWidth() || 1) + 5,
         angle: Math.PI / 2,
