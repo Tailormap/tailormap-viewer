@@ -203,6 +203,9 @@
       <trans-unit id="core.drawing.delete-selected-drawing-object" datatype="html">
         <source>Delete selected drawing object</source>
       </trans-unit>
+      <trans-unit id="core.drawing.draw-shape" datatype="html">
+        <source>Draw shape</source>
+      </trans-unit>
       <trans-unit id="core.drawing.drawing" datatype="html">
         <source>Drawing</source>
       </trans-unit>
@@ -251,8 +254,20 @@
       <trans-unit id="core.drawing.rotation" datatype="html">
         <source>Rotation</source>
       </trans-unit>
-      <trans-unit id="core.drawing.draw-shape" datatype="html">
-        <source>Draw shape</source>
+      <trans-unit id="core.drawing.show-area-size" datatype="html">
+        <source>Show area size</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.show-length-along-line" datatype="html">
+        <source>Show length along line</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.show-side-length" datatype="html">
+        <source>Show length along sides</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.show-sizes-while-drawing" datatype="html">
+        <source>Show sizes while drawing</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.show-total-line-length" datatype="html">
+        <source>Show total length of the line</source>
       </trans-unit>
       <trans-unit id="core.drawing.size" datatype="html">
         <source>Size</source>

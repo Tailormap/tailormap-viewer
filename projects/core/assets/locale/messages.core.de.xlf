@@ -270,6 +270,10 @@
         <source>Delete selected drawing object</source>
         <target>Ausgewähltes Zeichenobjekt löschen</target>
       </trans-unit>
+      <trans-unit id="core.drawing.draw-shape" datatype="html">
+        <source>Draw shape</source>
+        <target>Form zeichnen</target>
+      </trans-unit>
       <trans-unit id="core.drawing.drawing" datatype="html">
         <source>Drawing</source>
         <target>Zeichnen</target>
@@ -324,7 +328,7 @@
       </trans-unit>
       <trans-unit id="core.drawing.objects-list" datatype="html">
         <source>Objects</source>
-        <target state="new">Objects</target>
+        <target>Objects</target>
       </trans-unit>
       <trans-unit id="core.drawing.opacity" datatype="html">
         <source>Opacity</source>
@@ -334,9 +338,25 @@
         <source>Rotation</source>
         <target>Drehung</target>
       </trans-unit>
-      <trans-unit id="core.drawing.draw-shape" datatype="html">
-        <source>Draw shape</source>
-        <target>Draw shape</target>
+      <trans-unit id="core.drawing.show-area-size" datatype="html">
+        <source>Show area size</source>
+        <target>Flächengröße anzeigen</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.show-length-along-line" datatype="html">
+        <source>Show length along line</source>
+        <target>Länge entlang der Linie anzeigen</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.show-side-length" datatype="html">
+        <source>Show length along sides</source>
+        <target>Länge entlang der Seiten anzeigen</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.show-sizes-while-drawing" datatype="html">
+        <source>Show sizes while drawing</source>
+        <target>Größen während des Zeichnens anzeigen</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.show-total-line-length" datatype="html">
+        <source>Show total length of the line</source>
+        <target>Gesamtlänge der Linie anzeigen</target>
       </trans-unit>
       <trans-unit id="core.drawing.size" datatype="html">
         <source>Size</source>

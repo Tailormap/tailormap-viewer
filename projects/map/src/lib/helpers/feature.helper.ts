@@ -9,6 +9,8 @@ import { MapUnitEnum } from '../models/map-unit.enum';
 import { GeometryTypeHelper } from './geometry-type.helper';
 import { Projection } from 'ol/proj';
 import { Feature as GeoJSONFeature } from 'geojson';
+import { nanoid } from 'nanoid';
+import { WriteOptions } from 'ol/format/Feature';
 
 export class FeatureHelper {
 
@@ -104,25 +106,28 @@ export class FeatureHelper {
     projection?: Projection,
   ): FeatureModel<T> | null {
     const geom = feature.getGeometry();
-    if (geom && feature.get('__fid') && feature.get('attributes')) {
+    if (geom) {
       return {
-        __fid: feature.get('__fid'),
-        attributes: feature.get('attributes'),
-        geometry: !projection ? undefined : FeatureHelper.getWKT(geom, projection),
+        __fid: feature.get('__fid') || feature.getId() || nanoid(),
+        attributes: feature.get('attributes') || {},
+        geometry: FeatureHelper.getWKT(geom, projection),
       };
     }
     return null;
   }
 
-  public static getWKT(geometry: Geometry, projection: Projection, linearizeCircle = false) {
-    const units = projection.getUnits();
-    const decimals = MapSizeHelper.getCoordinatePrecision(units ? units.toLowerCase() as MapUnitEnum: MapUnitEnum.m);
+  public static getWKT(geometry: Geometry, projection?: Projection, linearizeCircle?: boolean): string {
+    const writeOptions: WriteOptions = {};
+    if (projection) {
+      const units = projection.getUnits();
+      writeOptions.decimals = MapSizeHelper.getCoordinatePrecision(units ? units.toLowerCase() as MapUnitEnum : MapUnitEnum.m);
+    }
 
     if (GeometryTypeHelper.isCircleGeometry(geometry) && !linearizeCircle) {
-      return FeatureHelper.writeCircleWKT(geometry, decimals);
+      return FeatureHelper.writeCircleWKT(geometry, writeOptions.decimals);
     }
     const geom = GeometryTypeHelper.isCircleGeometry(geometry) ? fromCircle(geometry) : geometry;
-    return FeatureHelper.wktFormatter.writeGeometry(geom, { decimals });
+    return FeatureHelper.wktFormatter.writeGeometry(geom, writeOptions);
   }
 
   private static writeCircleWKT(circle: Circle, decimals?: number): string {

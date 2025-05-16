@@ -6,7 +6,6 @@ export type DrawingType = 'point' | 'line' | 'area' | 'circle' | 'ellipse' | 'sq
 
 export interface DrawingToolConfigModel extends ToolConfigModel {
   type: ToolTypeEnum.Draw;
-  computeSize?: boolean;
   drawingType?: DrawingType;
   style?: Partial<MapStyleModel>;
 }

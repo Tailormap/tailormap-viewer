@@ -1,9 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import {
-  DrawingToolConfigModel, DrawingToolModel, MapService, MapSizeHelper, MapTooltipModel, ToolTypeEnum,
-} from '@tailormap-viewer/map';
+import { DrawingToolConfigModel, DrawingToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
 import { map, Observable, Subject, switchMap, takeUntil, tap } from 'rxjs';
-import { HtmlHelper } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
 import { activateTool, deactivateTool, deregisterTool, registerTool } from '../state/toolbar.actions';
 import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
@@ -24,7 +21,6 @@ export class MeasureComponent implements OnInit, OnDestroy {
   private destroyed = new Subject();
   public toolActive: 'length' | 'area' | null = null;
   private featureGeom = new Subject<string>();
-  private tooltip: MapTooltipModel | null = null;
 
   private defaultLengthTooltip = $localize `:@@core.toolbar.measure-length:Measure distance`;
   private defaultAreaTooltip = $localize `:@@core.toolbar.measure-area:Measure area`;
@@ -53,29 +49,26 @@ export class MeasureComponent implements OnInit, OnDestroy {
         if (activeTool === ToolbarComponentEnum.MEASURE) {
           return;
         }
-        this.hideTooltipAndGeom();
+        this.hideGeometry();
         this.toolActive = null;
         this.cdr.detectChanges();
       });
-
-    this.mapService.createTooltip$()
-      .pipe(takeUntil(this.destroyed))
-      .subscribe(tooltip => this.tooltip = tooltip);
 
     this.mapService.renderFeatures$('measurement-layer', this.featureGeom.asObservable(), {
       styleKey: 'measurement-style',
       zIndex: 9999,
       strokeColor: ApplicationStyleService.getPrimaryColor(),
       strokeWidth: 3,
+      showTotalSize: true,
     }, { updateWhileAnimating: true }).pipe(takeUntil(this.destroyed)).subscribe();
 
     this.mapService.createTool$<DrawingToolModel, DrawingToolConfigModel>({
       type: ToolTypeEnum.Draw,
-      computeSize: true,
       style: {
         strokeColor: ApplicationStyleService.getPrimaryColor(),
         pointFillColor: 'transparent',
         pointStrokeColor: ApplicationStyleService.getPrimaryColor(),
+        showTotalSize: true,
       },
     })
       .pipe(
@@ -87,12 +80,10 @@ export class MeasureComponent implements OnInit, OnDestroy {
       )
       .subscribe(drawEvent => {
         if (!drawEvent || drawEvent.type === 'start') {
-          this.hideTooltipAndGeom();
+          this.hideGeometry();
           return;
         }
-        this.updateTooltip(this.tooltip, drawEvent.lastCoordinate, drawEvent.size);
         if (drawEvent.type === 'end') {
-          this.tooltip?.freeze();
           this.featureGeom.next(drawEvent.geometry);
         }
       });
@@ -106,47 +97,19 @@ export class MeasureComponent implements OnInit, OnDestroy {
 
   public measure(type: 'length' | 'area') {
     if (this.toolActive === type) {
-      this.hideTooltipAndGeom();
+      this.hideGeometry();
       this.store$.dispatch(deactivateTool({ tool: ToolbarComponentEnum.MEASURE }));
       return;
     }
     this.toolActive = type;
-    this.hideTooltipAndGeom();
+    this.hideGeometry();
     this.store$.dispatch(activateTool({ tool: ToolbarComponentEnum.MEASURE, enableArguments: {
       type: type === 'area' ? 'area' : 'line',
     } }));
   }
 
-  private hideTooltipAndGeom() {
+  private hideGeometry() {
     this.featureGeom.next('');
-    this.tooltip?.hide();
-  }
-
-  private updateTooltip(tooltip: MapTooltipModel | null, coordinates: number[], size?: number) {
-    const content = this.formatSize(size);
-    if (!content) {
-      return;
-    }
-    tooltip?.show().setContent(content).move(coordinates);
-  }
-
-  private formatSize(size?: number) {
-    if (!size) {
-      return '';
-    }
-    if (this.toolActive === 'length') {
-      return MapSizeHelper.getFormattedLength(size);
-    }
-    if (this.toolActive === 'area') {
-      return HtmlHelper.createElement({
-        nodeName: 'div',
-        children: [
-          { nodeName: 'span', textContent: MapSizeHelper.getFormattedArea(size) },
-          { nodeName: 'sup', textContent: '2' },
-        ],
-      });
-    }
-    return '';
   }
 
 }

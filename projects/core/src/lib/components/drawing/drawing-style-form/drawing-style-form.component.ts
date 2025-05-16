@@ -103,7 +103,7 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
     return this.showPointSettings();
   }
 
-  public showInsertLength() {
+  public isLineType() {
     return this.type === DrawingFeatureTypeEnum.LINE;
   }
 
@@ -181,6 +181,14 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
 
   public changeStripedFill($event: MatCheckboxChange) {
     this.change('stripedFill', $event.checked);
+  }
+
+  public toggleSegmentSize($event: MatCheckboxChange) {
+    this.change('showSegmentSize', $event.checked);
+  }
+
+  public toggleTotalSize($event: MatCheckboxChange) {
+    this.change('showTotalSize', $event.checked);
   }
 
   public insertCoordinates() {

@@ -43,6 +43,8 @@ export interface DrawingFeatureStyleModel {
   labelStyle?: LabelStyleEnum[];
   labelRotation?: number;
   labelOutlineColor?: string;
+  showTotalSize?: boolean;
+  showSegmentSize?: boolean;
 }
 
 export interface DrawingFeatureModelAttributes extends FeatureModelAttributes {
