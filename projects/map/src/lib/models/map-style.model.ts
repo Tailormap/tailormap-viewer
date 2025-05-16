@@ -1,8 +1,8 @@
 export type MapStylePointType = 'label' | 'square' | 'triangle' | 'star' | 'cross' | 'circle' | 'arrow' | 'diamond' | 'view_orientation';
 
 export interface MapStyleModel {
-  styleKey: string;
-  zIndex: number;
+  styleKey?: string;
+  zIndex?: number;
   pointType?: MapStylePointType;
   pointFillColor?: string;
   pointStrokeColor?: string;
@@ -25,4 +25,6 @@ export interface MapStyleModel {
   labelRotation?: number;
   labelOutlineColor?: string;
   buffer?: string;
+  showTotalSize?: boolean;
+  showSegmentSize?: boolean;
 }

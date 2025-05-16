@@ -101,7 +101,6 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this.mapService.createTool$<DrawingToolModel, DrawingToolConfigModel>({
       type: ToolTypeEnum.Draw,
-      computeSize: false,
       style: MapDrawingButtonsComponent.getDefaultStyle(),
     })
       .pipe(

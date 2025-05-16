@@ -30,10 +30,15 @@ mat-panel-description {
 
 .checkbox-field {
   padding-bottom: 6px;
+  margin-right: -8px;
 }
 
 .checkbox-field ::ng-deep label {
   font-weight: normal;
+}
+
+.checkbox-field + .checkbox-field {
+  margin-top: -8px;
 }
 
 ::ng-deep .select-line-style .mdc-list-item__primary-text {
@@ -46,4 +51,17 @@ mat-panel-description {
   margin-bottom: -7px;
   max-height: 23px;
   stroke: var(--primary-color);
+}
+
+mat-expansion-panel ::ng-deep .mat-expansion-panel-body {
+  padding: 0 16px 16px 16px;
+}
+
+mat-expansion-panel-header.mat-expansion-panel-header {
+  --mat-expansion-header-text-weight: bold;
+  padding: 0 16px;
+}
+
+mat-panel-description {
+  font-weight: normal;
 }
