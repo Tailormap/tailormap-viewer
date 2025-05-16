@@ -222,12 +222,10 @@ export const selectFilterableLayersForApplication = createSelector(
         geoServiceLayer: geoServiceLayerMap.get(ApplicationTreeHelper.getLayerMapKey(layerNode.layerName, layerNode.serviceId)),
         appLayerId: layerNode.id,
       }))
-      .filter(geoServiceLayerInApplication => geoServiceLayerInApplication.geoServiceLayer !== undefined)
-      .map(geoServiceLayerInApplication => ({
-        geoServiceLayer: geoServiceLayerInApplication.geoServiceLayer!,
-        appLayerId: geoServiceLayerInApplication.appLayerId,
-      }))
       .filter(({ geoServiceLayer, appLayerId: _appLayerId }) => {
+        if (!geoServiceLayer) {
+          return false;
+        }
         const geoService = geoServices.find(service => service.id === geoServiceLayer.serviceId);
         const isGeoServer = geoService?.settings?.serverType === AdminServerType.GEOSERVER
           || ((geoService?.settings?.serverType === AdminServerType.AUTO && geoService.url?.includes('/geoserver/')) ?? false);
@@ -239,6 +237,10 @@ export const selectFilterableLayersForApplication = createSelector(
             && featureType.name === geoServiceLayer.layerSettings!.featureType!.featureTypeName;
         });
         return !!featureTypeOfLayer && isGeoServer;
-      });
+      })
+      .map(geoServiceLayerInApplication => ({
+        geoServiceLayer: geoServiceLayerInApplication.geoServiceLayer!,
+        appLayerId: geoServiceLayerInApplication.appLayerId,
+      }));
   },
 );
