@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { DrawingToolEvent, FeatureHelper, MapService, MapStyleModel } from '@tailormap-viewer/map';
 import { combineLatest, filter, Observable, of, Subject, take, takeUntil, tap } from 'rxjs';
@@ -18,6 +18,7 @@ import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
 import { BaseComponentTypeEnum, FeatureModel } from '@tailormap-viewer/api';
 import { DrawingService } from '../../../map/services/drawing.service';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 
 @Component({
   selector: 'tm-drawing',
@@ -43,6 +44,17 @@ export class DrawingComponent implements OnInit, OnDestroy {
   public activeTool: DrawingFeatureTypeEnum | null = null;
 
   public selectionStyle = DrawingHelper.applyDrawingStyle as ((feature: FeatureModel) => MapStyleModel);
+  public showMeasures = signal<boolean>(false);
+
+  private static toolsWithMeasure = new Set([
+    DrawingFeatureTypeEnum.CIRCLE,
+    DrawingFeatureTypeEnum.SQUARE,
+    DrawingFeatureTypeEnum.ELLIPSE,
+    DrawingFeatureTypeEnum.POLYGON,
+    DrawingFeatureTypeEnum.RECTANGLE,
+    DrawingFeatureTypeEnum.LINE,
+    DrawingFeatureTypeEnum.STAR,
+  ]);
 
   constructor(
     private store$: Store,
@@ -120,7 +132,18 @@ export class DrawingComponent implements OnInit, OnDestroy {
 
   public draw(type: DrawingFeatureTypeEnum) {
     if (this.activeTool !== type) {
-      this.drawingService.toggle(type);
+      this.drawingService.toggle(type, this.showMeasures());
+    }
+  }
+
+  public showSizeCheckbox() {
+    return this.activeTool !== null && DrawingComponent.toolsWithMeasure.has(this.activeTool);
+  }
+
+  public toggleMeasuring($event: MatCheckboxChange) {
+    this.showMeasures.set($event.checked);
+    if (this.activeTool) {
+      this.drawingService.toggle(this.activeTool, $event.checked, true);
     }
   }
 

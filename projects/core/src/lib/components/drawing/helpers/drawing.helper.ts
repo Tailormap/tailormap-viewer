@@ -121,6 +121,8 @@ export class DrawingHelper {
       }),
       labelRotation: style.labelRotation,
       labelOutlineColor: style.labelOutlineColor,
+      showSegmentSize: style.showSegmentSize,
+      showTotalSize: style.showTotalSize,
     };
   }
 

@@ -74,6 +74,11 @@
               (click)="draw(drawingTypes.LABEL)">
         <mat-icon svgIcon="tools_draw_label"></mat-icon>
       </button>
+      @if (showSizeCheckbox()) {
+        <mat-checkbox i18n="@@core.drawing.show-sizes-while-drawing"
+                      [checked]="showMeasures()"
+                      (change)="toggleMeasuring($event)">Show sizes while drawing</mat-checkbox>
+      }
     </div>
 
     @if(activeTool === 'RECTANGLE' || activeTool === 'RECTANGLE_SPECIFIED_SIZE') {

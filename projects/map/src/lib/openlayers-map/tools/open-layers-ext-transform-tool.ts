@@ -17,6 +17,7 @@ import { Icon, Style } from 'ol/style';
 import { Modify } from 'ol/interaction';
 import { GeometryTypeHelper } from '../../helpers/geometry-type.helper';
 import { OpenLayersEventManager } from '../open-layers-event-manager';
+import { SelectionStyleHelper } from '../../helpers/style/selection-style.helper';
 
 const rotateIcon = 'data:image/svg+xml;base64,' + btoa(
   '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">' +
@@ -176,7 +177,7 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
   }
 
   private getBuffer() {
-    return MapStyleHelper.getSelectionRectangleBuffer(this.olMap.getView().getResolution());
+    return SelectionStyleHelper.getSelectionRectangleBuffer(this.olMap.getView().getResolution());
   }
 
   private setRotateStyle() {

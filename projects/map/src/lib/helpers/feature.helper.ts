@@ -9,6 +9,7 @@ import { MapUnitEnum } from '../models/map-unit.enum';
 import { GeometryTypeHelper } from './geometry-type.helper';
 import { Projection } from 'ol/proj';
 import { Feature as GeoJSONFeature } from 'geojson';
+import { nanoid } from 'nanoid';
 import { WriteOptions } from 'ol/format/Feature';
 
 export class FeatureHelper {
@@ -105,10 +106,10 @@ export class FeatureHelper {
     projection?: Projection,
   ): FeatureModel<T> | null {
     const geom = feature.getGeometry();
-    if (geom && feature.get('__fid') && feature.get('attributes')) {
+    if (geom) {
       return {
-        __fid: feature.get('__fid'),
-        attributes: feature.get('attributes'),
+        __fid: feature.get('__fid') || feature.getId() || nanoid(),
+        attributes: feature.get('attributes') || {},
         geometry: FeatureHelper.getWKT(geom, projection),
       };
     }
