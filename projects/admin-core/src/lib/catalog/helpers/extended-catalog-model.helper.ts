@@ -101,7 +101,7 @@ export class ExtendedCatalogModelHelper {
       authorizationRules: geoServiceWithLayers.authorizationRules,
       catalogNodeId,
       layerIds: serviceLayers.map(layer => layer.id),
-      url: geoServiceWithLayers.url,
+      resolvedServerType: geoServiceWithLayers.resolvedServerType,
     };
     return [ service, serviceLayers ];
   }

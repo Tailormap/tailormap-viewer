@@ -228,7 +228,7 @@ export const selectFilterableLayersForApplication = createSelector(
         }
         const geoService = geoServices.find(service => service.id === geoServiceLayer.serviceId);
         const isGeoServer = geoService?.settings?.serverType === AdminServerType.GEOSERVER
-          || ((geoService?.settings?.serverType === AdminServerType.AUTO && geoService.url?.includes('/geoserver/')) ?? false);
+          || ((geoService?.settings?.serverType === AdminServerType.AUTO && geoService.resolvedServerType === AdminServerType.GEOSERVER));
         if (!geoServiceLayer.layerSettings?.featureType) {
           return false;
         }
