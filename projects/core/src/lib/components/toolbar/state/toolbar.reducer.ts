@@ -1,7 +1,6 @@
 import * as ToolbarActions from './toolbar.actions';
 import { Action, createReducer, on } from '@ngrx/store';
 import { ToolbarState, initialToolbarState } from './toolbar.state';
-import { deactivateToolButtonOnly } from './toolbar.actions';
 import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
 
 const onRegisterTool = (

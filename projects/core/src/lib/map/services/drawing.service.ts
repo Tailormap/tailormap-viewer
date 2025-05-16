@@ -6,7 +6,7 @@ import {
   SelectToolConfigModel, SelectToolModel, ToolManagerModel,
   ToolTypeEnum,
 } from '@tailormap-viewer/map';
-import { filter, Subject, switchMap, take, tap } from 'rxjs';
+import { Subject, switchMap, take, tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DrawingFeatureTypeEnum } from '../models/drawing-feature-type.enum';
 import { FeatureModel } from '@tailormap-viewer/api';
