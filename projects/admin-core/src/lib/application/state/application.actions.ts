@@ -140,7 +140,7 @@ export const updateApplicationFiltersConfig = createAction(
 );
 
 export const createApplicationAttributeFilter = createAction(
-  `${applicationActionsPrefix} Create Filter Group`,
+  `${applicationActionsPrefix} Create Filter`,
   props<{ filterGroup: FilterGroupModel<AttributeFilterModel> }>(),
 );
 

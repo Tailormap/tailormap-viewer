@@ -364,16 +364,34 @@ const onCreateApplicationFilterGroup = (
   state: ApplicationState,
   payload: ReturnType<typeof ApplicationActions.createApplicationAttributeFilter>,
 ): ApplicationState => {
-  return updateApplication(state, application => ({
-    settings: {
-      ...application.settings,
-      layerSettings: application.settings?.layerSettings || {}, // Ensure layerSettings is defined
-      filterGroups: [ ...application.settings?.filterGroups ?? [], payload.filterGroup ],
-    },
-  }));
+  return updateApplication(state, application => {
+    let addedToExistingGroup = false;
+    const newFilterGroups = application.settings?.filterGroups?.map(filterGroup => {
+      if (payload.filterGroup.layerIds.every(layerId => filterGroup.layerIds.includes(layerId))
+        && payload.filterGroup.layerIds.length === filterGroup.layerIds.length) {
+        addedToExistingGroup = true;
+        const newFilters = [ ...filterGroup.filters, ...payload.filterGroup.filters ];
+        return {
+          ...filterGroup,
+          filters: newFilters,
+        };
+      }
+      return filterGroup;
+    });
+    if (!addedToExistingGroup) {
+      newFilterGroups?.push(payload.filterGroup);
+    }
+    return {
+      settings: {
+        ...application.settings,
+        layerSettings: application.settings?.layerSettings || {}, // Ensure layerSettings is defined
+        filterGroups: newFilterGroups,
+      },
+    };
+  });
 };
 
-const onDeleteApplicationFilterGroup = (
+const onDeleteApplicationAttributeFilter = (
   state: ApplicationState,
   payload: ReturnType<typeof ApplicationActions.deleteApplicationAttributeFilter>,
 ): ApplicationState => {
@@ -505,7 +523,7 @@ const applicationReducerImpl = createReducer<ApplicationState>(
   on(ApplicationActions.updateApplicationStylingConfig, onUpdateApplicationStylingConfig),
   on(ApplicationActions.updateApplicationFiltersConfig, onUpdateApplicationFiltersConfig),
   on(ApplicationActions.createApplicationAttributeFilter, onCreateApplicationFilterGroup),
-  on(ApplicationActions.deleteApplicationAttributeFilter, onDeleteApplicationFilterGroup),
+  on(ApplicationActions.deleteApplicationAttributeFilter, onDeleteApplicationAttributeFilter),
   on(ApplicationActions.setApplicationSelectedFilterLayerId, onSetApplicationSelectedFilterLayerId),
   on(ApplicationActions.setApplicationSelectedFilterId, onSetApplicationSelectedFilterId),
   on(ApplicationActions.toggleApplicationNodeExpanded, onToggleNodeExpanded),
