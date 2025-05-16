@@ -1,6 +1,8 @@
 import * as ToolbarActions from './toolbar.actions';
 import { Action, createReducer, on } from '@ngrx/store';
 import { ToolbarState, initialToolbarState } from './toolbar.state';
+import { deactivateToolButtonOnly } from './toolbar.actions';
+import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
 
 const onRegisterTool = (
   state: ToolbarState,
@@ -51,7 +53,7 @@ const onActivateTool = (
 
 const onDeactivateTool = (
   state: ToolbarState,
-  payload: ReturnType<typeof ToolbarActions.deactivateTool>,
+  payload: { tool: ToolbarComponentEnum },
 ): ToolbarState => ({
   ...state,
   activeTool: state.activeTool === payload.tool ? null : state.activeTool,
@@ -63,5 +65,6 @@ const toolbarReducerImpl = createReducer<ToolbarState>(
   on(ToolbarActions.deregisterTool, onDeregisterTool),
   on(ToolbarActions.activateTool, onActivateTool),
   on(ToolbarActions.deactivateTool, onDeactivateTool),
+  on(ToolbarActions.deactivateToolButtonOnly, onDeactivateTool),
 );
 export const toolbarReducer = (state: ToolbarState | undefined, action: Action) => toolbarReducerImpl(state, action);
