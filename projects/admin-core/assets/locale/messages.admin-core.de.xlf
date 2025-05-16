@@ -1002,6 +1002,14 @@
         <source>Disabled</source>
         <target>Deaktiviert</target>
       </trans-unit>
+      <trans-unit id="admin-core.form.autoFillUser" datatype="html">
+        <source>Autofill Username</source>
+        <target>Autofill Benutzername</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.autoFillDate" datatype="html">
+        <source>Autofill Date/Time</source>
+        <target>Autofill Datum/Uhrzeit</target>
+      </trans-unit>
       <trans-unit id="admin-core.common.email" datatype="html">
         <source>Email</source>
         <target>E-Mail</target>

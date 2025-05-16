@@ -12,6 +12,8 @@ export interface FormFieldModel {
   allowValueListOnly?: boolean;
   disabled?: boolean;
   required?: boolean;
+  autoFillUser?: boolean;
+  autoFillDate?: boolean;
   placeholder?: string;
   hint?: string;
 }
