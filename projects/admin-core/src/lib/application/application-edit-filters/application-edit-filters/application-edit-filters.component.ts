@@ -1,8 +1,6 @@
-import { ChangeDetectionStrategy, Component, Signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { selectFilterGroups } from '../../state/application.selectors';
 import { take } from 'rxjs';
-import { AttributeFilterModel, FilterGroupModel } from '@tailormap-viewer/api';
 import { selectCatalogLoadStatus } from '../../../catalog/state/catalog.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { loadCatalog } from '../../../catalog/state/catalog.actions';
@@ -15,8 +13,6 @@ import { loadCatalog } from '../../../catalog/state/catalog.actions';
   standalone: false,
 })
 export class ApplicationEditFiltersComponent {
-
-  public filterGroups: Signal<FilterGroupModel<AttributeFilterModel>[]> = this.store$.selectSignal(selectFilterGroups);
 
   constructor(
     private store$: Store,

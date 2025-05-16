@@ -40,12 +40,12 @@ export class ApplicationFiltersListComponent implements OnDestroy {
     if (selectedLayer) {
       filterGroups = filterGroups.filter(group => group.layerIds.includes(selectedLayer.appLayerId));
     }
-    return filterGroups.reduce((acc, group) => {
+    return filterGroups.reduce<{ filter: AttributeFilterModel; selected: boolean }[]>((acc, group) => {
       return acc.concat(group.filters.map(filter => ({
         filter,
         selected: filter.id === selectedFilterId,
       })));
-    }, [] as { filter: AttributeFilterModel; selected: boolean }[]);
+    }, []);
   });
 
   constructor(private store$: Store) {}
