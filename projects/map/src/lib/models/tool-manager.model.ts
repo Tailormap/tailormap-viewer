@@ -10,4 +10,5 @@ export interface ToolManagerModel {
   disableTool(toolId: string, preventAutoEnableTools?: boolean): ToolManagerModel;
   removeTool(toolId: string): ToolManagerModel;
   destroy(): void;
+  getToolsDisabled$(): Observable<{ disabledTools: string[]; enabledTools: string[] }>;
 }

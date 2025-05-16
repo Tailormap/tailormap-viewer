@@ -8,7 +8,7 @@ import { OpenLayersMousePositionTool } from './tools/open-layers-mouse-position-
 import { OpenLayersScaleBarTool } from './tools/open-layers-scale-bar-tool';
 import { OpenLayersSelectTool } from './tools/open-layers-select-tool';
 import { OpenLayersModifyTool } from "./tools/open-layers-modify-tool";
-import { Subject } from 'rxjs';
+import { map, Observable, Subject } from 'rxjs';
 import { OpenLayersExtTransformTool } from './tools/open-layers-ext-transform-tool';
 
 export class OpenLayersToolManager implements ToolManagerModel {
@@ -21,7 +21,7 @@ export class OpenLayersToolManager implements ToolManagerModel {
 
   private switchedTool = false;
 
-  private readonly destroy$ = new Subject<void>();
+  public toolsDisabled = new Subject<string[]>();
 
   constructor(
     private olMap: OlMap,
@@ -34,7 +34,7 @@ export class OpenLayersToolManager implements ToolManagerModel {
     this.autoEnabledTools = new Set();
     this.alwaysEnabledTools = new Set();
     toolIds.forEach(id => this.removeTool(id));
-    this.destroy$.next();
+    this.toolsDisabled.complete();
   }
 
   public addTool<T extends ToolModel, C extends ToolConfigModel>(tool: C): T {
@@ -89,7 +89,16 @@ export class OpenLayersToolManager implements ToolManagerModel {
     if (!preventAutoEnableTools && !this.switchedTool) {
       this.enableAutoEnabledTools();
     }
+    this.toolsDisabled.next([toolId]);
     return this;
+  }
+
+  public getToolsDisabled$(): Observable<{ disabledTools: string[]; enabledTools: string[] }> {
+    return this.toolsDisabled.asObservable()
+      .pipe(map(disabledTools => ({
+        disabledTools,
+        enabledTools: Array.from(this.tools.values()).filter(t => t.isActive).map(t => t.id),
+      })));
   }
 
   public enableTool(
@@ -120,11 +129,14 @@ export class OpenLayersToolManager implements ToolManagerModel {
   }
 
   private disableAllTools() {
+    const disabledTools: string[] = [];
     this.tools.forEach((tool) => {
       if (tool.isActive && !this.alwaysEnabledTools.has(tool.id)) {
         tool.disable();
+        disabledTools.push(tool.id);
       }
     });
+    this.toolsDisabled.next(disabledTools);
   }
 
   private enableAutoEnabledTools() {

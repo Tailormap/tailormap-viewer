@@ -15,7 +15,7 @@ import { ApplicationStyleService } from '../../services/application-style.servic
 @Injectable()
 export class DrawingService {
 
-  private activeTool: DrawingFeatureTypeEnum | null = null;
+  private activeDrawingTool: DrawingFeatureTypeEnum | null = null;
   private drawingTool: DrawingToolModel | null = null;
   private selectTool: SelectToolModel | null = null;
   private extTransformTool: ExtTransformToolModel | null = null;
@@ -46,6 +46,22 @@ export class DrawingService {
     private mapService: MapService,
     private destroyRef: DestroyRef,
   ) {
+    this.mapService.getToolManager$()
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        switchMap(toolManager => toolManager.getToolsDisabled$()),
+      )
+      .subscribe(({ disabledTools }) => {
+        if (this.drawingTool && this.activeDrawingTool !== null && disabledTools.includes(this.drawingTool.id)) {
+          // Drawing tool is disabled while drawing (probably because of other tool activation)
+          this.featureSelected.next(null);
+          this.enableSelectAndModify();
+        }
+        if (this.extTransformTool && this.selectedFeature !== null && disabledTools.includes(this.extTransformTool.id)) {
+          // Transform tool is disabled while we have a selected feature, unselect feature to keep it visible
+          this.featureSelected.next(null);
+        }
+      });
   }
 
   public createDrawingTools(opts: {
@@ -64,10 +80,10 @@ export class DrawingService {
         switchMap(({ tool }) => tool.drawing$),
       )
       .subscribe(drawEvent => {
-        if (drawEvent && drawEvent.type === 'end' && this.activeTool) {
+        if (drawEvent && drawEvent.type === 'end' && this.activeDrawingTool) {
           this.drawingAdded.next(drawEvent);
           if (opts.drawSingleShape) {
-            const activeTool = this.activeTool;
+            const activeTool = this.activeDrawingTool;
             setTimeout(() => {
               this.toggleTool(DrawingService.drawingFeatureTypeToDrawingType(activeTool), activeTool);
             }, 100);
@@ -120,7 +136,22 @@ export class DrawingService {
     });
   }
 
-  public draw(type: DrawingFeatureTypeEnum, showMeasures?: boolean, forceEnableDrawing?: boolean) {
+  public disableDrawingTools() {
+    this.withToolManager(manager => {
+      if (this.drawingTool) {
+        manager.disableTool(this.drawingTool.id);
+      }
+      if (this.selectTool) {
+        manager.disableTool(this.selectTool.id);
+      }
+      if (this.extTransformTool) {
+        manager.disableTool(this.extTransformTool.id, true);
+      }
+      this.activeDrawingTool = null;
+    });
+  }
+
+  public toggle(type: DrawingFeatureTypeEnum, showMeasures?: boolean, forceEnableDrawing?: boolean) {
     this.toggleTool(DrawingService.drawingFeatureTypeToDrawingType(type), type, showMeasures, forceEnableDrawing);
   }
 
@@ -146,12 +177,12 @@ export class DrawingService {
       if (!this.drawingTool || !this.selectTool) {
         return;
       }
-      if (this.activeTool === drawingFeatureType && !forceEnableDrawing) {
+      if (this.activeDrawingTool === drawingFeatureType && !forceEnableDrawing) {
         this.disableDrawing();
         this.enableModifyTool();
       } else {
         // Enable drawing
-        this.activeTool = drawingFeatureType;
+        this.activeDrawingTool = drawingFeatureType;
         const style: MapStyleModel = showMeasures ? { showTotalSize: true, showSegmentSize: true } : {};
         manager.enableTool(this.drawingTool.id, true, { type, style }, forceEnableDrawing);
         manager.disableTool(this.selectTool.id, true);
@@ -159,23 +190,20 @@ export class DrawingService {
           manager.disableTool(this.extTransformTool.id, true);
         }
         this.featureSelected.next(null);
-        this.activeToolChanged.next(this.activeTool);
+        this.activeToolChanged.next(this.activeDrawingTool);
       }
     });
   }
 
   private disableDrawing(disableOtherTools = true) {
-    if (this.activeTool === null) {
-      return;
-    }
     this.withToolManager(manager => {
       if (!this.drawingTool || !this.selectTool) {
         return;
       }
-      this.activeTool = null;
+      this.activeDrawingTool = null;
       manager.disableTool(this.drawingTool.id, true);
       manager.enableTool(this.selectTool.id, disableOtherTools);
-      this.activeToolChanged.next(this.activeTool);
+      this.activeToolChanged.next(this.activeDrawingTool);
     });
   }
 
@@ -200,8 +228,10 @@ export class DrawingService {
       [DrawingFeatureTypeEnum.LINE]: 'line',
       [DrawingFeatureTypeEnum.POLYGON]: 'area',
       [DrawingFeatureTypeEnum.CIRCLE]: 'circle',
+      [DrawingFeatureTypeEnum.CIRCLE_SPECIFIED_RADIUS]: 'point',
       [DrawingFeatureTypeEnum.SQUARE]: 'square',
       [DrawingFeatureTypeEnum.RECTANGLE]: 'rectangle',
+      [DrawingFeatureTypeEnum.RECTANGLE_SPECIFIED_SIZE]: 'point',
       [DrawingFeatureTypeEnum.ELLIPSE]: 'ellipse',
       [DrawingFeatureTypeEnum.STAR]: 'star',
     };

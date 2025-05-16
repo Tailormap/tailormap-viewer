@@ -1,13 +1,14 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { DrawingToolConfigModel, DrawingToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
-import { map, Observable, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import { map, Observable, Subject, switchMap, takeUntil, take, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { activateTool, deactivateTool, deregisterTool, registerTool } from '../state/toolbar.actions';
 import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
-import { selectActiveTool } from '../state/toolbar.selectors';
+import { selectActiveTool, selectToolbarTool } from '../state/toolbar.selectors';
 import { ApplicationStyleService } from '../../../services/application-style.service';
 import { selectComponentsConfigForType } from '../../../state/core.selectors';
 import { BaseComponentTypeEnum, MeasureComponentConfigModel } from '@tailormap-viewer/api';
+import { withLatestFrom } from 'rxjs/operators';
 
 @Component({
   selector: 'tm-measure',
@@ -101,11 +102,25 @@ export class MeasureComponent implements OnInit, OnDestroy {
       this.store$.dispatch(deactivateTool({ tool: ToolbarComponentEnum.MEASURE }));
       return;
     }
+    const enableArguments = { type: type === 'area' ? 'area' : 'line' };
+    if (this.toolActive === null) {
+      // Activate tool
+      this.store$.dispatch(activateTool({ tool: ToolbarComponentEnum.MEASURE, enableArguments }));
+    } else {
+      // Toggle between line and area
+      this.mapService.getToolManager$()
+        .pipe(
+          take(1),
+          withLatestFrom(this.store$.select(selectToolbarTool(ToolbarComponentEnum.MEASURE))),
+        )
+        .subscribe(([ toolManager, tool ]) => {
+          if (tool?.mapToolId) {
+            toolManager.enableTool(tool.mapToolId, false, enableArguments, true);
+          }
+        });
+    }
     this.toolActive = type;
     this.hideGeometry();
-    this.store$.dispatch(activateTool({ tool: ToolbarComponentEnum.MEASURE, enableArguments: {
-      type: type === 'area' ? 'area' : 'line',
-    } }));
   }
 
   private hideGeometry() {
