@@ -17,6 +17,17 @@
     }
   </div>
 
+  <div class="filter-tool">
+    <mat-form-field appearance="outline">
+      <mat-label>Tool</mat-label>
+      <mat-select formControlName="tool" placeholder="Tool">
+        @for (tool of filterToolOptions; track tool) {
+          <mat-option [value]="tool.value">{{ tool.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+
   @if(newFilter) {
     <div class="layers-and-attributes">
       <tm-admin-application-filter-attribute-list [featureType]="featureType$ | async"
@@ -33,6 +44,13 @@
           [filter]="filterData"
           [uniqueValues$]="uniqueValues$"
           (filterChanged)="setFilterValues($event)"></tm-attribute-filter>
+      </div>
+    } @else if (filterForm.get('tool')?.value === "SLIDER") {
+      <div class="slider-filter-form">
+        <tm-admin-application-slider-filter-form
+          [attributeType]="filterForm.get('attributeType')!.value!"
+          [sliderFilter]="filterForm.get('editFilterConfiguration')?.value ?? null"
+          (updateSliderFilter)="setEditFilterConfiguration($event)"></tm-admin-application-slider-filter-form>
       </div>
     }
   }

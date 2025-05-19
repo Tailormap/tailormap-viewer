@@ -18,6 +18,7 @@ tm-admin-application-filter-attribute-list {
   margin-top: 16px;
 }
 
-.attribute-filter-values {
+.attribute-filter-values,
+.slider-filter-form {
   margin-top: 16px;
 }

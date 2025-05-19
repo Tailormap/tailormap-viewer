@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
-  AttributeFilterModel, AttributeType, FilterConditionEnum, FilterGroupModel, FilterTypeEnum, UniqueValuesService,
+  AttributeFilterModel, AttributeType, CheckboxFilterModel, FilterConditionEnum, FilterGroupModel, FilterTypeEnum, SliderFilterModel,
+  UniqueValuesService,
 } from '@tailormap-viewer/api';
 import { AttributeDescriptorModel, FeatureTypeModel } from '@tailormap-admin/admin-api';
 import { FormControl, FormGroup } from '@angular/forms';
@@ -14,6 +15,7 @@ import { GeoServiceLayerInApplicationModel } from '../../models/geo-service-laye
 import { FormHelper } from '../../../helpers/form.helper';
 import { selectApplicationSelectedFilterLayerId, selectSelectedApplicationName } from '../../state/application.selectors';
 import { Store } from '@ngrx/store';
+import { FilterToolEnum } from '../../../../../../api/src/lib/models/filter-tool.enum';
 
 @Component({
   selector: 'tm-admin-application-edit-filter-form',
@@ -32,6 +34,20 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     caseSensitive: undefined,
     invertCondition: undefined,
   };
+
+  public filterToolOptions = [{
+    label: 'Preset',
+    value: FilterToolEnum.PRESET_STATIC,
+  }, {
+    label: 'Checkbox',
+    value: FilterToolEnum.CHECKBOX,
+  }, {
+    label: 'Slider',
+    value: FilterToolEnum.SLIDER,
+  }, {
+    label: 'Boolean',
+    value: FilterToolEnum.BOOLEAN,
+  }];
 
   public uniqueValues$: Observable<string[]> | null = null;
 
@@ -89,6 +105,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     value: new FormControl<string[]>([]),
     caseSensitive: new FormControl(false),
     invertCondition: new FormControl(false),
+    editFilterConfiguration: new FormControl<SliderFilterModel | CheckboxFilterModel | null>(null),
   });
 
   public ngOnInit(): void {
@@ -118,6 +135,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
           caseSensitive: value.caseSensitive ?? false,
           value: value.value ?? [],
           type: FilterTypeEnum.ATTRIBUTE,
+          editConfiguration: value.editFilterConfiguration ?? undefined,
         };
         const filterGroup: FilterGroupModel<AttributeFilterModel> = {
           id: this.filterGroupId ?? nanoid(),
@@ -147,12 +165,14 @@ export class ApplicationEditFilterFormComponent implements OnInit {
       this.filterForm.patchValue({
         id: attributeFilter.id,
         layer: layer ?? null,
+        tool: attributeFilter.editConfiguration?.filterTool ?? FilterToolEnum.PRESET_STATIC,
         attribute: attributeFilter.attribute,
         attributeType: attributeFilter.attributeType,
         condition: attributeFilter.condition,
         value: attributeFilter.value,
         caseSensitive: attributeFilter.caseSensitive,
         invertCondition: attributeFilter.invertCondition,
+        editFilterConfiguration: attributeFilter.editConfiguration,
       }, { emitEvent: false });
     }
   }
@@ -231,4 +251,11 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     );
   }
 
+  public setEditFilterConfiguration($event: SliderFilterModel | CheckboxFilterModel) {
+    this.filterForm.patchValue({
+      condition: $event.condition,
+      editFilterConfiguration: $event,
+    }, { emitEvent: true });
+    this.filterForm.markAsDirty();
+  }
 }
