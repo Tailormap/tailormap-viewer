@@ -29,6 +29,8 @@ export class ApplicationSliderFilterFormComponent implements OnInit {
         initialValue: configuration.initialValue,
         minimumValue: configuration.minimumValue,
         maximumValue: configuration.maximumValue,
+        initialLowerValue: configuration.initialLowerValue,
+        initialUpperValue: configuration.initialUpperValue,
       }, { emitEvent: false });
     }
 
@@ -44,6 +46,8 @@ export class ApplicationSliderFilterFormComponent implements OnInit {
     initialValue: new FormControl<number | null>(null),
     minimumValue: new FormControl<number | null>(null),
     maximumValue: new FormControl<number | null>(null),
+    initialLowerValue: new FormControl<number | null>(null),
+    initialUpperValue: new FormControl<number | null>(null),
   });
 
   public ngOnInit(): void {
@@ -57,9 +61,11 @@ export class ApplicationSliderFilterFormComponent implements OnInit {
         this.updateSliderFilter.emit({
           filterTool: FilterToolEnum.SLIDER,
           condition: value.condition ?? FilterConditionEnum.NULL_KEY,
-          initialValue: value.initialValue ?? 0,
+          initialValue: value.initialValue ?? undefined,
           minimumValue: value.minimumValue ?? 0,
           maximumValue: value.maximumValue ?? 0,
+          initialLowerValue: value.initialLowerValue ?? undefined,
+          initialUpperValue: value.initialUpperValue ?? undefined,
         });
       });
   }
@@ -67,9 +73,14 @@ export class ApplicationSliderFilterFormComponent implements OnInit {
   private isValidSliderForm(): boolean {
     const formValues = this.sliderFilterForm.getRawValue();
     return !!formValues.condition
-      && FormHelper.isValidNumberValue(formValues.initialValue)
+      && FormHelper.isValidNumberValue(formValues.initialValue) ||
+        (FormHelper.isValidNumberValue(formValues.initialLowerValue) && FormHelper.isValidNumberValue(formValues.initialUpperValue))
       && FormHelper.isValidNumberValue(formValues.minimumValue)
       && FormHelper.isValidNumberValue(formValues.maximumValue);
+  }
+
+  public isBetweenCondition(): boolean {
+    return this.sliderFilterForm.get('condition')?.value === FilterConditionEnum.NUMBER_BETWEEN_KEY;
   }
 
 }

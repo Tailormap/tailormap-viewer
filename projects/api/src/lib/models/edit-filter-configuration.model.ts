@@ -4,9 +4,11 @@ import { FilterConditionEnum } from './filter-condition.enum';
 export interface SliderFilterModel {
   filterTool: FilterToolEnum.SLIDER;
   condition: FilterConditionEnum;
-  initialValue: number;
+  initialValue?: number;
   minimumValue: number;
   maximumValue: number;
+  initialLowerValue?: number;
+  initialUpperValue?: number;
 }
 
 export interface CheckboxFilterModel {
