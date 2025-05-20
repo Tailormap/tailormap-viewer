@@ -1,7 +1,7 @@
 name: 'Test and deploy'
 
 env: # Keep this in sync with Dockerfile version
-  NODE_VERSION: "22.15.0"
+  NODE_VERSION: "22.15.1"
 
 concurrency:
   group: ${{ github.workflow }}-${{ ( github.ref == 'refs/heads/main' || github.ref == 'refs/heads/release' ) && format('ci-main-{0}', github.sha) || format('ci-main-{0}', github.ref) }}
