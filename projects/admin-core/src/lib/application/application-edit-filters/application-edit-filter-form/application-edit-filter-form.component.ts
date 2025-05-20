@@ -126,6 +126,8 @@ export class ApplicationEditFilterFormComponent implements OnInit {
         filter(() => this.isValidForm()),
       )
       .subscribe(value => {
+        const editFilterConfiguration = value.editFilterConfiguration
+          ? { ...value.editFilterConfiguration, condition: undefined } : undefined;
         const attributeFilter: AttributeFilterModel = {
           id: value.id ?? nanoid(),
           attribute: value.attribute ?? '',
@@ -135,7 +137,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
           caseSensitive: value.caseSensitive ?? false,
           value: value.value ?? [],
           type: FilterTypeEnum.ATTRIBUTE,
-          editConfiguration: value.editFilterConfiguration ?? undefined,
+          editConfiguration: editFilterConfiguration ?? undefined,
         };
         const filterGroup: FilterGroupModel<AttributeFilterModel> = {
           id: this.filterGroupId ?? nanoid(),
@@ -159,8 +161,11 @@ export class ApplicationEditFilterFormComponent implements OnInit {
         value: [],
         caseSensitive: false,
         invertCondition: false,
+        editFilterConfiguration: null,
       }, { emitEvent: false });
     } else {
+      const editFilterConfiguration = attributeFilter.editConfiguration
+        ? { ...attributeFilter.editConfiguration, condition: attributeFilter.condition } : undefined;
       this.setUniqueValues(attributeFilter.attribute);
       this.filterForm.patchValue({
         id: attributeFilter.id,
@@ -172,7 +177,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
         value: attributeFilter.value,
         caseSensitive: attributeFilter.caseSensitive,
         invertCondition: attributeFilter.invertCondition,
-        editFilterConfiguration: attributeFilter.editConfiguration,
+        editFilterConfiguration: editFilterConfiguration,
       }, { emitEvent: false });
     }
   }

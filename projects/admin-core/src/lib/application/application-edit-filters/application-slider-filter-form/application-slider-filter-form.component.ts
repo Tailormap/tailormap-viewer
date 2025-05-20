@@ -73,8 +73,8 @@ export class ApplicationSliderFilterFormComponent implements OnInit {
   private isValidSliderForm(): boolean {
     const formValues = this.sliderFilterForm.getRawValue();
     return !!formValues.condition
-      && FormHelper.isValidNumberValue(formValues.initialValue) ||
-        (FormHelper.isValidNumberValue(formValues.initialLowerValue) && FormHelper.isValidNumberValue(formValues.initialUpperValue))
+      && (FormHelper.isValidNumberValue(formValues.initialValue) ||
+        (FormHelper.isValidNumberValue(formValues.initialLowerValue) && FormHelper.isValidNumberValue(formValues.initialUpperValue)))
       && FormHelper.isValidNumberValue(formValues.minimumValue)
       && FormHelper.isValidNumberValue(formValues.maximumValue);
   }
