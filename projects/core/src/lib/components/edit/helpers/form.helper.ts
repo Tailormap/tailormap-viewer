@@ -7,7 +7,7 @@ export class FormHelper {
   private static DATE_VALIDATOR_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
   private static INTEGER_VALIDATOR_PATTERN = /^-?[0-9]+$/;
 
-  public static createForm(fields: ViewerEditFormFieldModel[]) {
+  public static createForm(fields: ViewerEditFormFieldModel[], currentUsername?: string) {
     const form = new FormGroup({});
     fields.forEach(field => {
       const validators: ValidatorFn[] = [];
@@ -29,6 +29,16 @@ export class FormHelper {
         validators,
         nonNullable: field.required,
       });
+      if (field.autoFillUser && currentUsername) {
+        control.setValue(currentUsername);
+      }
+      if (field.autoFillDate) {
+        if (field.type === 'date') {
+          control.setValue(DateTime.now().toISODate());
+        } else if (field.type === 'timestamp') {
+          control.setValue(DateTime.now().toISO());
+        }
+      }
       if (field.disabled) {
         control.disable();
       } else {
