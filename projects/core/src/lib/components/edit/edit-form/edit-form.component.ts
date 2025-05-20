@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { FormHelper } from '../helpers/form.helper';
 import { FormControl, FormGroup } from '@angular/forms';
-import { debounceTime, map, merge, Subscription } from 'rxjs';
-import { ColumnMetadataModel, FeatureModel, LayerDetailsModel } from '@tailormap-viewer/api';
+import { debounceTime, map, merge, Observable, Subscription, take } from 'rxjs';
+import { AuthenticatedUserService, ColumnMetadataModel, FeatureModel, LayerDetailsModel, SecurityModel } from '@tailormap-viewer/api';
 import { EditModelHelper } from '../helpers/edit-model.helper';
 import { ViewerEditFormFieldModel } from '../models/viewer-edit-form-field.model';
 
@@ -26,6 +26,7 @@ export class EditFormComponent implements OnDestroy {
 
   private currentFormSubscription: Subscription | undefined;
   public formConfig: ViewerEditFormFieldModel[] = [];
+  public userDetails$: Observable<SecurityModel | null>;
 
   @Input({ required: true })
   public set feature(feature: EditFormInput | undefined) {
@@ -49,7 +50,9 @@ export class EditFormComponent implements OnDestroy {
 
   constructor(
     private cdr: ChangeDetectorRef,
+    private authenticatedUserService: AuthenticatedUserService,
   ) {
+    this.userDetails$ = this.authenticatedUserService.getUserDetails$();
   }
 
   public ngOnDestroy() {
@@ -71,7 +74,12 @@ export class EditFormComponent implements OnDestroy {
       this.feature.columnMetadata,
       this.feature.isNewFeature ?? false,
     );
-    this.form = FormHelper.createForm(this.formConfig);
+
+    this.userDetails$.pipe(take(1)).subscribe(userDetails => {
+      const username = userDetails?.username ?? '';
+      this.form = FormHelper.createForm(this.formConfig, username);
+    });
+
     const changes$ = Object.keys(this.form.controls)
       .map(key => {
         const control = this.form.get(key);
