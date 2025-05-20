@@ -36,20 +36,21 @@ export class ApplicationEditFilterFormComponent implements OnInit {
   };
 
   public filterToolOptions = [{
-    label: 'Preset',
+    label: $localize`:@@admin-core.application.filters.preset:Preset`,
     value: FilterToolEnum.PRESET_STATIC,
   }, {
-    label: 'Checkbox',
+    label: $localize`:@@admin-core.application.filters.checkbox:Checkbox`,
     value: FilterToolEnum.CHECKBOX,
   }, {
-    label: 'Slider',
+    label: $localize`:@@admin-core.application.filters.slider:Slider`,
     value: FilterToolEnum.SLIDER,
   }, {
-    label: 'Boolean',
+    label: $localize`:@@admin-core.application.filters.boolean:Boolean`,
     value: FilterToolEnum.BOOLEAN,
   }];
 
-  public uniqueValues$: Observable<string[]> | null = null;
+  public uniqueValues$: Observable<(string | number | boolean)[]> | null = null;
+  public uniqueValuesStrings$: Observable<string[]> | null = null;
 
   @Input()
   public newFilter: boolean = false;
@@ -249,10 +250,13 @@ export class ApplicationEditFilterFormComponent implements OnInit {
           applicationId: `app/${applicationName}`,
         }).pipe(
           map(response => {
-            return response.values.map(v => `${v}`) || [];
+            return response.values || [];
           }),
         );
       }),
+    );
+    this.uniqueValuesStrings$ = this.uniqueValues$.pipe(
+      map(values => values.map(value => `${value}`)),
     );
   }
 

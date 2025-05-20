@@ -6,34 +6,50 @@
                 aria-label="Select condition"
                 formControlName="condition"
                 panelClass="attribute-filter-condition-list-panel">
-      <mat-option *ngFor="let attr of filterConditions()" [value]="attr.condition">{{attr.label}}</mat-option>
+      <mat-option *ngFor="let attr of filterConditions()" [value]="attr.condition">{{ attr.label }}</mat-option>
     </mat-select>
   </mat-form-field>
 
   @if (isBetweenCondition()) {
+    <div class="between-range-header">
+      <strong i18n="@@admin-core.application.filters.slider.initial-range">Initial range</strong>
+      <button i18n="@@admin-core.application.filters.slider.use-attribute-range"
+              mat-stroked-button
+              color="accent"
+              (click)="setBetweenRangeToAttributeRange()">Use attribute range</button>
+    </div>
+
     <mat-form-field appearance="outline">
-      <mat-label>Initial Lower Value</mat-label>
+      <mat-label i18n="@@admin-core.application.filters.slider.initial-lower-value">Initial Lower Value</mat-label>
       <input type="number" matInput formControlName="initialLowerValue" />
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Initial Upper Value</mat-label>
+      <mat-label i18n="@@admin-core.application.filters.slider.initial-upper-value">Initial Upper Value</mat-label>
       <input type="number" matInput formControlName="initialUpperValue" />
     </mat-form-field>
   } @else {
     <mat-form-field appearance="outline">
-      <mat-label>Initial Value</mat-label>
+      <mat-label i18n="@@admin-core.application.filters.slider.initial-value">Initial Value</mat-label>
       <input type="number" matInput formControlName="initialValue" />
     </mat-form-field>
   }
 
+  <div class="range-header">
+    <strong i18n="@@admin-core.application.filters.slider.range">Slider range</strong>
+    <button i18n="@@admin-core.application.filters.slider.use-attribute-range"
+            mat-stroked-button
+            color="accent"
+            (click)="setRangeToAttributeRange()">Use attribute range</button>
+  </div>
+
   <mat-form-field appearance="outline">
-    <mat-label>Minimum Value</mat-label>
+    <mat-label i18n="@@admin-core.application.filters.slider.minimum-value">Minimum Value</mat-label>
     <input type="number" matInput formControlName="minimumValue" />
   </mat-form-field>
 
   <mat-form-field appearance="outline">
-    <mat-label>Maximum Value</mat-label>
+    <mat-label i18n="@@admin-core.application.filters.slider.maximum-value">Maximum Value</mat-label>
     <input type="number" matInput formControlName="maximumValue" />
   </mat-form-field>
 

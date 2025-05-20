@@ -21,6 +21,9 @@ export class ApplicationSliderFilterFormComponent implements OnInit {
     return AttributeFilterHelper.getConditionTypes().filter(c => c.attributeType.length === 0 || c.attributeType.includes(attributeType));
   });
 
+  private minimumUniqueValue: number | null = null;
+  private maximumUniqueValue: number | null = null;
+
   @Input()
   public set sliderFilter(configuration: SliderFilterModel | CheckboxFilterModel | null) {
     if (configuration && configuration.filterTool === FilterToolEnum.SLIDER) {
@@ -33,7 +36,15 @@ export class ApplicationSliderFilterFormComponent implements OnInit {
         initialUpperValue: configuration.initialUpperValue,
       }, { emitEvent: false });
     }
+  }
 
+  @Input()
+  public set uniqueValues(uniqueValues: (string | number | boolean)[] | null) {
+    const uniqueValuesNumbers = uniqueValues?.filter(v => typeof v === 'number');
+    if (uniqueValuesNumbers && uniqueValuesNumbers.length > 0) {
+      this.minimumUniqueValue = Math.min(...uniqueValuesNumbers);
+      this.maximumUniqueValue = Math.max(...uniqueValuesNumbers);
+    }
   }
 
   @Output()
@@ -81,6 +92,25 @@ export class ApplicationSliderFilterFormComponent implements OnInit {
 
   public isBetweenCondition(): boolean {
     return this.sliderFilterForm.get('condition')?.value === FilterConditionEnum.NUMBER_BETWEEN_KEY;
+  }
+
+  public setRangeToAttributeRange(): void {
+    if (this.minimumUniqueValue !== null && this.maximumUniqueValue !== null) {
+      this.sliderFilterForm.patchValue({
+        minimumValue: this.minimumUniqueValue,
+        maximumValue: this.maximumUniqueValue,
+      }, { emitEvent: true });
+    }
+  }
+
+  public setBetweenRangeToAttributeRange(): void {
+    if (this.minimumUniqueValue !== null && this.maximumUniqueValue !== null) {
+      this.sliderFilterForm.patchValue({
+        initialLowerValue: this.minimumUniqueValue,
+        initialUpperValue: this.maximumUniqueValue,
+      }, { emitEvent: true });
+      this.sliderFilterForm.markAsDirty();
+    }
   }
 
 }
