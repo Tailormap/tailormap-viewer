@@ -235,7 +235,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.filters.filter-on-layer" datatype="html">
         <source>filter on layer &apos;<x id="PH" equiv-text="layerTitle"/>&apos;</source>
-        <target> filter op laag &apos;<x id="INTERPOLATION" equiv-text="{{ filterForm.get(&apos;layer&apos;)?.value?.geoServiceLayer?.layerSettings?.title || filterForm.get(&apos;layer&apos;)?.value?.geoServiceLayer?.title }}"/>&apos; </target>
+        <target> filter op laag &apos;<x id="PH" equiv-text="layerTitle"/>&apos;</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.filterable-layers" datatype="html">
         <source>Filterable layers</source>
