@@ -15,7 +15,7 @@ import { GeoServiceLayerInApplicationModel } from '../../models/geo-service-laye
 import { FormHelper } from '../../../helpers/form.helper';
 import { selectApplicationSelectedFilterLayerId, selectSelectedApplicationName } from '../../state/application.selectors';
 import { Store } from '@ngrx/store';
-import { FilterToolEnum } from '../../../../../../api/src/lib/models/filter-tool.enum';
+import { FilterToolEnum } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-admin-application-edit-filter-form',
