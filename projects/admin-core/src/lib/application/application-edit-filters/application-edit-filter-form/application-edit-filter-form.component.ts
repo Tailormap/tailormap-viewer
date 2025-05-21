@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
-  AttributeFilterModel, AttributeType, CheckboxFilterModel, FilterConditionEnum, FilterGroupModel, FilterTypeEnum, SliderFilterModel,
-  UniqueValuesService,
+  AttributeFilterModel, AttributeType, CheckboxFilterModel, FilterConditionEnum, FilterGroupModel, FilterTypeEnum,
+  UniqueValuesService, UpdateSliderFilterModel,
 } from '@tailormap-viewer/api';
 import { AttributeDescriptorModel, FeatureTypeModel } from '@tailormap-admin/admin-api';
 import { FormControl, FormGroup } from '@angular/forms';
@@ -106,7 +106,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     value: new FormControl<string[]>([]),
     caseSensitive: new FormControl(false),
     invertCondition: new FormControl(false),
-    editFilterConfiguration: new FormControl<SliderFilterModel | CheckboxFilterModel | null>(null),
+    editFilterConfiguration: new FormControl<UpdateSliderFilterModel | CheckboxFilterModel | null>(null),
   });
 
   public ngOnInit(): void {
@@ -260,7 +260,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     );
   }
 
-  public setEditFilterConfiguration($event: SliderFilterModel | CheckboxFilterModel) {
+  public setEditFilterConfiguration($event: UpdateSliderFilterModel | CheckboxFilterModel) {
     this.filterForm.patchValue({
       condition: $event.condition,
       editFilterConfiguration: $event,

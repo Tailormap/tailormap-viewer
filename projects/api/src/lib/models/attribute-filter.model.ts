@@ -2,7 +2,8 @@ import { AttributeType } from './attribute-type.enum';
 import { FilterConditionEnum } from './filter-condition.enum';
 import { FilterTypeEnum } from './filter-type.enum';
 import { BaseFilterModel } from './base-filter.model';
-import { CheckboxFilterModel, SliderFilterModel } from './edit-filter-configuration.model';
+import { SliderFilterModel } from './slider-filter.model';
+import { CheckboxFilterModel } from './checkbox-filter.model';
 
 export interface AttributeFilterModel extends BaseFilterModel {
   attribute: string;

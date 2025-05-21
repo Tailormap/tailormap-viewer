@@ -48,4 +48,5 @@ export * from './base-filter.model';
 export * from './attribute-filter.model';
 export * from './spatial-filter.model';
 export * from './filter-tool.enum';
-export * from './edit-filter-configuration.model';
+export * from './slider-filter.model';
+export * from './checkbox-filter.model';
