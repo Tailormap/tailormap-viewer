@@ -47,6 +47,8 @@ export class DrawingComponent implements OnInit, OnDestroy {
   public selectionStyle = DrawingHelper.applyDrawingStyle as ((feature: FeatureModel) => MapStyleModel);
   public showMeasures = signal<boolean>(false);
 
+  public mapUnits$ = this.mapService.getUnitsOfMeasure$();
+
   private static toolsWithMeasure = new Set([
     DrawingFeatureTypeEnum.CIRCLE,
     DrawingFeatureTypeEnum.SQUARE,

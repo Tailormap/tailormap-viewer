@@ -243,8 +243,8 @@
         <target>Auf jedem Segment</target>
       </trans-unit>
       <trans-unit id="core.drawing.circle-radius" datatype="html">
-        <source>Circle radius</source>
-        <target>Kreisradius</target>
+        <source>Circle radius (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</source>
+        <target>Kreisradius (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</target>
       </trans-unit>
       <trans-unit id="core.drawing.color" datatype="html">
         <source>Color</source>
@@ -339,12 +339,12 @@
         <target>Deckkraft</target>
       </trans-unit>
       <trans-unit id="core.drawing.rectangle-height" datatype="html">
-        <source>Height</source>
-        <target>Höhe</target>
+        <source>Height (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</source>
+        <target>Höhe (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</target>
       </trans-unit>
       <trans-unit id="core.drawing.rectangle-width" datatype="html">
-        <source>Width</source>
-        <target>Breite</target>
+        <source>Width (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</source>
+        <target>Breite (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</target>
       </trans-unit>
       <trans-unit id="core.drawing.rotation" datatype="html">
         <source>Rotation</source>

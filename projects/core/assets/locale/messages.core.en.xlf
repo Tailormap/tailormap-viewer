@@ -183,7 +183,7 @@
         <source>On every segment</source>
       </trans-unit>
       <trans-unit id="core.drawing.circle-radius" datatype="html">
-        <source>Circle radius</source>
+        <source>Circle radius (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</source>
       </trans-unit>
       <trans-unit id="core.drawing.color" datatype="html">
         <source>Color</source>
@@ -255,10 +255,10 @@
         <source>Opacity</source>
       </trans-unit>
       <trans-unit id="core.drawing.rectangle-height" datatype="html">
-        <source>Height</source>
+        <source>Height (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</source>
       </trans-unit>
       <trans-unit id="core.drawing.rectangle-width" datatype="html">
-        <source>Width</source>
+        <source>Width (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</source>
       </trans-unit>
       <trans-unit id="core.drawing.rotation" datatype="html">
         <source>Rotation</source>

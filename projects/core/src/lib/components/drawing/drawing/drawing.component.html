@@ -84,7 +84,7 @@
     @if(activeTool === 'RECTANGLE' || activeTool === 'RECTANGLE_SPECIFIED_SIZE') {
       <div class="rectangle-size-inputs">
         <mat-form-field appearance="outline" class="rectangle-size-input__width">
-          <mat-label i18n="@@core.drawing.rectangle-width">Width</mat-label>
+          <mat-label i18n="@@core.drawing.rectangle-width">Width ({{mapUnits$ | async}})</mat-label>
           <input matInput
                  type="number"
                  [(ngModel)]="customRectangleWidth"
@@ -92,7 +92,7 @@
                  [max]="SIZE_MIN">
         </mat-form-field>
         <mat-form-field appearance="outline" class="rectangle-size-input__height">
-          <mat-label i18n="@@core.drawing.rectangle-height">Height</mat-label>
+          <mat-label i18n="@@core.drawing.rectangle-height">Height ({{mapUnits$ | async}})</mat-label>
           <input matInput
                  type="number"
                  [(ngModel)]="customRectangleHeight"
@@ -105,7 +105,7 @@
 
     @if (activeTool === 'CIRCLE' || activeTool === 'CIRCLE_SPECIFIED_RADIUS') {
       <mat-form-field appearance="outline" class="circle-input__radius">
-        <mat-label i18n="@@core.drawing.circle-radius">Circle radius</mat-label>
+        <mat-label i18n="@@core.drawing.circle-radius">Circle radius ({{mapUnits$ | async}})</mat-label>
         <input matInput
                type="number"
                [(ngModel)]="customCircleRadius"
