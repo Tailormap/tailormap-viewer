@@ -88,16 +88,16 @@
           <input matInput
                  type="number"
                  [(ngModel)]="customRectangleWidth"
-                 min="1"
-                 max="10000">
+                 [min]="SIZE_MAX"
+                 [max]="SIZE_MIN">
         </mat-form-field>
         <mat-form-field appearance="outline" class="rectangle-size-input__height">
           <mat-label i18n="@@core.drawing.rectangle-height">Height</mat-label>
           <input matInput
                  type="number"
                  [(ngModel)]="customRectangleHeight"
-                 min="1"
-                 max="10000">
+                 [min]="SIZE_MAX"
+                 [max]="SIZE_MIN">
         </mat-form-field>
         <button mat-icon-button (click)="clearRectangleSize()"><mat-icon svgIcon="close"></mat-icon></button>
       </div>
@@ -109,8 +109,8 @@
         <input matInput
                type="number"
                [(ngModel)]="customCircleRadius"
-               min="1"
-               max="10000">
+               [min]="SIZE_MAX"
+               [max]="SIZE_MIN">
         <button mat-icon-button matSuffix (click)="clearCircleRadius()"><mat-icon svgIcon="close"></mat-icon></button>
       </mat-form-field>
     }

@@ -249,6 +249,9 @@ export class DrawingComponent implements OnInit, OnDestroy {
     }
   }
 
+  public SIZE_MIN = 10000;
+  public SIZE_MAX = 1;
+
   private _customRectangleWidth: number | null = null;
   public get customRectangleWidth(): number | null {
     return this._customRectangleWidth;
@@ -268,7 +271,8 @@ export class DrawingComponent implements OnInit, OnDestroy {
   }
 
   public drawRectangle() {
-    if (this.customRectangleWidth !== null && this.customRectangleHeight !== null) {
+    if (this.customRectangleWidth !== null && this.customRectangleWidth >= this.SIZE_MAX && this.customRectangleWidth <= this.SIZE_MIN
+      && this.customRectangleHeight !== null && this.customRectangleHeight >= this.SIZE_MAX && this.customRectangleHeight <= this.SIZE_MIN) {
       if (this.activeTool !== DrawingFeatureTypeEnum.RECTANGLE_SPECIFIED_SIZE) {
         this.drawingService.toggle(DrawingFeatureTypeEnum.RECTANGLE_SPECIFIED_SIZE);
       }
@@ -290,7 +294,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
   }
   public set customCircleRadius(value: number | null) {
     this._customCircleRadius = value;
-    if (this._customCircleRadius !== null) {
+    if (this._customCircleRadius !== null && this._customCircleRadius >= this.SIZE_MAX && this._customCircleRadius <= this.SIZE_MIN) {
       if (this.activeTool !== DrawingFeatureTypeEnum.CIRCLE_SPECIFIED_RADIUS) {
         this.drawingService.toggle(DrawingFeatureTypeEnum.CIRCLE_SPECIFIED_RADIUS);
       }
