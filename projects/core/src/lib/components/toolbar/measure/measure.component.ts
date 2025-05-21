@@ -1,14 +1,13 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { DrawingToolConfigModel, DrawingToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
-import { map, Observable, Subject, switchMap, takeUntil, take, tap } from 'rxjs';
+import { map, Observable, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { activateTool, deactivateTool, deregisterTool, registerTool } from '../state/toolbar.actions';
 import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
-import { selectActiveTool, selectToolbarTool } from '../state/toolbar.selectors';
+import { selectActiveTool } from '../state/toolbar.selectors';
 import { ApplicationStyleService } from '../../../services/application-style.service';
 import { selectComponentsConfigForType } from '../../../state/core.selectors';
 import { BaseComponentTypeEnum, MeasureComponentConfigModel } from '@tailormap-viewer/api';
-import { withLatestFrom } from 'rxjs/operators';
 
 @Component({
   selector: 'tm-measure',
