@@ -42,6 +42,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
 
   public drawingTypes = DrawingFeatureTypeEnum;
   public activeTool: DrawingFeatureTypeEnum | null = null;
+  public selectToolActive$ = this.drawingService.selectToolActive$;
 
   public selectionStyle = DrawingHelper.applyDrawingStyle as ((feature: FeatureModel) => MapStyleModel);
   public showMeasures = signal<boolean>(false);
@@ -73,6 +74,10 @@ export class DrawingComponent implements OnInit, OnDestroy {
           this.activeTool = null;
           this.drawingService.disableDrawingTools();
         } else {
+          this.drawingService.createDrawingTools({
+            drawingLayerId: this.drawingLayerId,
+            selectionStyle: this.selectionStyle,
+          });
           this.enableSelectAndModify();
         }
       }),
@@ -100,10 +105,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
       });
 
     this.menubarService.registerComponent({ type: BaseComponentTypeEnum.DRAWING, component: DrawingMenuButtonComponent });
-    this.drawingService.createDrawingTools({
-      drawingLayerId: this.drawingLayerId,
-      selectionStyle: this.selectionStyle,
-    });
+
     this.store$.select(selectSelectedDrawingFeature)
       .pipe(takeUntil(this.destroyed))
       .subscribe(selectedFeature => {
@@ -236,13 +238,15 @@ export class DrawingComponent implements OnInit, OnDestroy {
   }
 
   public featureStyleUpdates(style: DrawingFeatureStyleModel) {
-    if (this.selectedFeature) {
-      this.store$.dispatch(updateDrawingFeatureStyle({ fid: this.selectedFeature.__fid, style }));
-    }
     DrawingHelper.updateDefaultStyle({
       ...style,
       label: '',
     });
+    if (this.selectedFeature) {
+      this.store$.dispatch(updateDrawingFeatureStyle({ fid: this.selectedFeature.__fid, style }));
+    } else {
+      this.style = DrawingHelper.getDefaultStyle();
+    }
   }
 
   private _customRectangleWidth: number | null = null;
@@ -270,7 +274,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
       }
     } else {
       if (this.activeTool !== DrawingFeatureTypeEnum.RECTANGLE) {
-        this.drawingService.toggle(DrawingFeatureTypeEnum.RECTANGLE);
+        this.drawingService.toggle(DrawingFeatureTypeEnum.RECTANGLE, this.showMeasures());
       }
     }
   }
@@ -292,7 +296,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
       }
     } else {
       if(this.activeTool !== DrawingFeatureTypeEnum.CIRCLE) {
-        this.drawingService.toggle(DrawingFeatureTypeEnum.CIRCLE);
+        this.drawingService.toggle(DrawingFeatureTypeEnum.CIRCLE, this.showMeasures());
       }
     }
   }

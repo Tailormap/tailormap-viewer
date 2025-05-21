@@ -118,7 +118,7 @@
     <div class="horizontal-line"></div>
     <div class="icon-button-list split-buttons">
       <div class="selected_feature_buttons">
-        <button [class.button--active]="!activeTool"
+        <button [class.button--active]="selectToolActive$ | async"
                 i18n-tmTooltip="@@core.draw.select-modify-move-feature"
                 tmTooltip="Select, modify size and/or move feature"
                 mat-stroked-button
