@@ -260,6 +260,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
   }
 
   public setEditFilterConfiguration($event: UpdateSliderFilterModel | CheckboxFilterModel) {
+    console.log("setEditFilterConfiguration: ", $event);
     this.filterForm.patchValue({
       condition: $event.condition,
       editFilterConfiguration: $event,
