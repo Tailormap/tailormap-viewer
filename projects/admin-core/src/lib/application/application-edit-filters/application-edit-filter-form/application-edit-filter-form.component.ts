@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
   AttributeFilterModel, AttributeType, CheckboxFilterModel, FilterConditionEnum, FilterGroupModel, FilterTypeEnum,
-  UniqueValuesService, UpdateSliderFilterModel,
+  UniqueValuesService, UpdateSliderFilterModel, FilterToolEnum,
 } from '@tailormap-viewer/api';
 import { AttributeDescriptorModel, FeatureTypeModel } from '@tailormap-admin/admin-api';
 import { FormControl, FormGroup } from '@angular/forms';
@@ -15,7 +15,6 @@ import { GeoServiceLayerInApplicationModel } from '../../models/geo-service-laye
 import { FormHelper } from '../../../helpers/form.helper';
 import { selectApplicationSelectedFilterLayerId, selectSelectedApplicationName } from '../../state/application.selectors';
 import { Store } from '@ngrx/store';
-import { FilterToolEnum } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-admin-application-edit-filter-form',
