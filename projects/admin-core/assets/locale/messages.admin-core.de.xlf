@@ -230,12 +230,12 @@
         <source>Edit existing filter</source>
         <target>Bestehenden Filter bearbeiten</target>
       </trans-unit>
-      <trans-unit id="admin-core.application.filters.filter-on--attribute-layer" datatype="html">
-        <source> Filter for attribute &apos;<x id="INTERPOLATION" equiv-text="{{ filterForm.get(&apos;attribute&apos;)?.value }}"/>&apos; on layer &apos;<x id="INTERPOLATION_1" equiv-text="{{ filterForm.get(&apos;layer&apos;)?.value?.geoServiceLayer?.layerSettings?.title || filterForm.get(&apos;layer&apos;)?.value?.geoServiceLayer?.title }}"/>&apos; </source>
-        <target> Filter für Attribut &apos;<x id="INTERPOLATION" equiv-text="{{ filterForm.get(&apos;attribute&apos;)?.value }}"/>&apos; in Ebene &apos;<x id="INTERPOLATION_1" equiv-text="{{ filterForm.get(&apos;layer&apos;)?.value?.geoServiceLayer?.layerSettings?.title || filterForm.get(&apos;layer&apos;)?.value?.geoServiceLayer?.title }}"/>&apos; </target>
+      <trans-unit id="admin-core.application.filters.filter-on-attribute-layer" datatype="html">
+        <source>filter for attribute &apos;<x id="PH" equiv-text="attribute"/>&apos; on layer &apos;<x id="PH_1" equiv-text="layerTitle"/>&apos;</source>
+        <target>Filter für Attribut &apos;<x id="PH" equiv-text="attribute"/>&apos; in Ebene &apos;<x id="PH_1" equiv-text="layerTitle"/>&apos;</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.filter-on-layer" datatype="html">
-        <source> Filter on layer &apos;<x id="INTERPOLATION" equiv-text="{{ filterForm.get(&apos;layer&apos;)?.value?.geoServiceLayer?.layerSettings?.title || filterForm.get(&apos;layer&apos;)?.value?.geoServiceLayer?.title }}"/>&apos; </source>
+        <source>filter on layer &apos;<x id="PH" equiv-text="layerTitle"/>&apos;</source>
         <target> Filter in Ebene &apos;<x id="INTERPOLATION" equiv-text="{{ filterForm.get(&apos;layer&apos;)?.value?.geoServiceLayer?.layerSettings?.title || filterForm.get(&apos;layer&apos;)?.value?.geoServiceLayer?.title }}"/>&apos; </target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.filterable-layers" datatype="html">
@@ -1102,14 +1102,6 @@
         <source>Disabled</source>
         <target>Deaktiviert</target>
       </trans-unit>
-      <trans-unit id="admin-core.form.autoFillUser" datatype="html">
-        <source>Autofill Username</source>
-        <target>Autofill Benutzername</target>
-      </trans-unit>
-      <trans-unit id="admin-core.form.autoFillDate" datatype="html">
-        <source>Autofill Date/Time</source>
-        <target>Autofill Datum/Uhrzeit</target>
-      </trans-unit>
       <trans-unit id="admin-core.common.email" datatype="html">
         <source>Email</source>
         <target>E-Mail</target>
@@ -1381,6 +1373,14 @@
       <trans-unit id="admin-core.form.allow-free-input" datatype="html">
         <source>Allow the user to enter custom input</source>
         <target>Dem Benutzer erlauben, benutzerdefinierte Eingaben zu machen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.autoFillDate" datatype="html">
+        <source>Autofill Date/Time</source>
+        <target>Autofill Datum/Uhrzeit</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.autoFillUser" datatype="html">
+        <source>Autofill Username</source>
+        <target>Autofill Benutzername</target>
       </trans-unit>
       <trans-unit id="admin-core.form.create-form" datatype="html">
         <source>Create form</source>

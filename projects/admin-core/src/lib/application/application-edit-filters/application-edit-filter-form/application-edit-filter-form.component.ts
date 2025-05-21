@@ -266,4 +266,21 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     }, { emitEvent: true });
     this.filterForm.markAsDirty();
   }
+
+  public getAttributeFilterInfo(): string {
+    const layer = this.filterForm.get('layer')?.value;
+    const attribute = this.filterForm.get('attribute')?.value;
+    const tool = this.filterForm.get('tool')?.value;
+    const toolLabel = this.filterToolOptions.find(option => option.value === tool)?.label;
+    if (!layer) {
+      return $localize`:@@admin-core.application.filters.select-layer:Select a layer to filter`;
+    } else if (!attribute) {
+      const layerTitle = layer.geoServiceLayer?.layerSettings?.title || layer.geoServiceLayer?.title;
+      return `${toolLabel} ` + $localize`:@@admin-core.application.filters.filter-on-layer:filter on layer '${layerTitle}'`;
+    } else {
+      const layerTitle = layer.geoServiceLayer?.layerSettings?.title || layer.geoServiceLayer?.title;
+      return `${toolLabel} ` + $localize`:@@admin-core.application.filters.filter-on-attribute-layer:filter for attribute '${attribute}' on layer '${layerTitle}'`;
+    }
+  }
+
 }

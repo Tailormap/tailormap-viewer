@@ -173,11 +173,11 @@
       <trans-unit id="admin-core.application.filters.edit-existing-filter" datatype="html">
         <source>Edit existing filter</source>
       </trans-unit>
-      <trans-unit id="admin-core.application.filters.filter-on--attribute-layer" datatype="html">
-        <source> Filter for attribute &apos;<x id="INTERPOLATION" equiv-text="{{ filterForm.get(&apos;attribute&apos;)?.value }}"/>&apos; on layer &apos;<x id="INTERPOLATION_1" equiv-text="{{ filterForm.get(&apos;layer&apos;)?.value?.geoServiceLayer?.layerSettings?.title || filterForm.get(&apos;layer&apos;)?.value?.geoServiceLayer?.title }}"/>&apos; </source>
+      <trans-unit id="admin-core.application.filters.filter-on-attribute-layer" datatype="html">
+        <source>filter for attribute &apos;<x id="PH" equiv-text="attribute"/>&apos; on layer &apos;<x id="PH_1" equiv-text="layerTitle"/>&apos;</source>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.filter-on-layer" datatype="html">
-        <source> Filter on layer &apos;<x id="INTERPOLATION" equiv-text="{{ filterForm.get(&apos;layer&apos;)?.value?.geoServiceLayer?.layerSettings?.title || filterForm.get(&apos;layer&apos;)?.value?.geoServiceLayer?.title }}"/>&apos; </source>
+        <source>filter on layer &apos;<x id="PH" equiv-text="layerTitle"/>&apos;</source>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.filterable-layers" datatype="html">
         <source>Filterable layers</source>
@@ -827,12 +827,6 @@
       <trans-unit id="admin-core.common.disabled" datatype="html">
         <source>Disabled</source>
       </trans-unit>
-      <trans-unit id="admin-core.form.autoFillUser" datatype="html">
-        <source>Autofill Username</source>
-      </trans-unit>
-      <trans-unit id="admin-core.form.autoFillDate" datatype="html">
-        <source>Autofill Date/Time</source>
-      </trans-unit>
       <trans-unit id="admin-core.common.email" datatype="html">
         <source>Email</source>
       </trans-unit>
@@ -1015,6 +1009,12 @@
       </trans-unit>
       <trans-unit id="admin-core.form.allow-free-input" datatype="html">
         <source>Allow the user to enter custom input</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.autoFillDate" datatype="html">
+        <source>Autofill Date/Time</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.autoFillUser" datatype="html">
+        <source>Autofill Username</source>
       </trans-unit>
       <trans-unit id="admin-core.form.create-form" datatype="html">
         <source>Create form</source>

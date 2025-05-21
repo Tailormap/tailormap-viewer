@@ -229,13 +229,13 @@
         <source>Edit existing filter</source>
         <target>Bestaand filter bewerken</target>
       </trans-unit>
-      <trans-unit id="admin-core.application.filters.filter-on--attribute-layer" datatype="html">
-        <source> Filter for attribute &apos;<x id="INTERPOLATION" equiv-text="{{ filterForm.get(&apos;attribute&apos;)?.value }}"/>&apos; on layer &apos;<x id="INTERPOLATION_1" equiv-text="{{ filterForm.get(&apos;layer&apos;)?.value?.geoServiceLayer?.layerSettings?.title || filterForm.get(&apos;layer&apos;)?.value?.geoServiceLayer?.title }}"/>&apos; </source>
-        <target> Filter op attribuut &apos;<x id="INTERPOLATION" equiv-text="{{ filterForm.get(&apos;attribute&apos;)?.value }}"/>&apos; op laag &apos;<x id="INTERPOLATION_1" equiv-text="{{ filterForm.get(&apos;layer&apos;)?.value?.geoServiceLayer?.layerSettings?.title || filterForm.get(&apos;layer&apos;)?.value?.geoServiceLayer?.title }}"/>&apos; </target>
+      <trans-unit id="admin-core.application.filters.filter-on-attribute-layer" datatype="html">
+        <source>filter for attribute &apos;<x id="PH" equiv-text="attribute"/>&apos; on layer &apos;<x id="PH_1" equiv-text="layerTitle"/>&apos;</source>
+        <target>filter voor attribuut &apos;<x id="PH" equiv-text="attribute"/>&apos; op laag &apos;<x id="PH_1" equiv-text="layerTitle"/>&apos;</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.filter-on-layer" datatype="html">
-        <source> Filter on layer &apos;<x id="INTERPOLATION" equiv-text="{{ filterForm.get(&apos;layer&apos;)?.value?.geoServiceLayer?.layerSettings?.title || filterForm.get(&apos;layer&apos;)?.value?.geoServiceLayer?.title }}"/>&apos; </source>
-        <target> Filter op laag &apos;<x id="INTERPOLATION" equiv-text="{{ filterForm.get(&apos;layer&apos;)?.value?.geoServiceLayer?.layerSettings?.title || filterForm.get(&apos;layer&apos;)?.value?.geoServiceLayer?.title }}"/>&apos; </target>
+        <source>filter on layer &apos;<x id="PH" equiv-text="layerTitle"/>&apos;</source>
+        <target> filter op laag &apos;<x id="INTERPOLATION" equiv-text="{{ filterForm.get(&apos;layer&apos;)?.value?.geoServiceLayer?.layerSettings?.title || filterForm.get(&apos;layer&apos;)?.value?.geoServiceLayer?.title }}"/>&apos; </target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.filterable-layers" datatype="html">
         <source>Filterable layers</source>
@@ -1101,14 +1101,6 @@
         <source>Disabled</source>
         <target>Uitgeschakeld</target>
       </trans-unit>
-      <trans-unit id="admin-core.form.autoFillUser" datatype="html">
-        <source>Autofill Username</source>
-        <target>Gebruikersnaam Invullen</target>
-      </trans-unit>
-      <trans-unit id="admin-core.form.autoFillDate" datatype="html">
-        <source>Autofill Date/Time</source>
-        <target>Datum/Tijd Invullen</target>
-      </trans-unit>
       <trans-unit id="admin-core.common.email" datatype="html">
         <source>Email</source>
         <target>E-mail</target>
@@ -1380,6 +1372,14 @@
       <trans-unit id="admin-core.form.allow-free-input" datatype="html">
         <source>Allow the user to enter custom input</source>
         <target>Laat de gebruiker ook eigen tekst invullen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.autoFillDate" datatype="html">
+        <source>Autofill Date/Time</source>
+        <target>Datum/Tijd Invullen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.autoFillUser" datatype="html">
+        <source>Autofill Username</source>
+        <target>Gebruikersnaam Invullen</target>
       </trans-unit>
       <trans-unit id="admin-core.form.create-form" datatype="html">
         <source>Create form</source>
