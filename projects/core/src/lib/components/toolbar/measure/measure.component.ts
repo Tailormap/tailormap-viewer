@@ -103,22 +103,7 @@ export class MeasureComponent implements OnInit, OnDestroy {
       return;
     }
     const enableArguments = { type: type === 'area' ? 'area' : 'line' };
-    if (this.toolActive === null) {
-      // Activate tool
-      this.store$.dispatch(activateTool({ tool: ToolbarComponentEnum.MEASURE, enableArguments }));
-    } else {
-      // Toggle between line and area
-      this.mapService.getToolManager$()
-        .pipe(
-          take(1),
-          withLatestFrom(this.store$.select(selectToolbarTool(ToolbarComponentEnum.MEASURE))),
-        )
-        .subscribe(([ toolManager, tool ]) => {
-          if (tool?.mapToolId) {
-            toolManager.enableTool(tool.mapToolId, false, enableArguments, true);
-          }
-        });
-    }
+    this.store$.dispatch(activateTool({ tool: ToolbarComponentEnum.MEASURE, enableArguments }));
     this.toolActive = type;
     this.hideGeometry();
   }

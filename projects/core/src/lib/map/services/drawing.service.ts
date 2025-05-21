@@ -6,7 +6,7 @@ import {
   SelectToolConfigModel, SelectToolModel, ToolManagerModel,
   ToolTypeEnum,
 } from '@tailormap-viewer/map';
-import { Subject, switchMap, take, tap } from 'rxjs';
+import { BehaviorSubject, Subject, switchMap, take, tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DrawingFeatureTypeEnum } from '../models/drawing-feature-type.enum';
 import { FeatureModel } from '@tailormap-viewer/api';
@@ -24,11 +24,13 @@ export class DrawingService {
   private featureSelected = new Subject<FeatureModel | null>();
   private featureGeometryModified = new Subject<string>();
   private activeToolChanged = new Subject<DrawingFeatureTypeEnum | null>();
+  private selectToolActive = new BehaviorSubject<boolean>(false);
 
   public drawingAdded$ = this.drawingAdded.asObservable();
   public featureSelected$ = this.featureSelected.asObservable();
   public featureGeometryModified$ = this.featureGeometryModified.asObservable();
   public activeToolChanged$ = this.activeToolChanged.asObservable();
+  public selectToolActive$ = this.selectToolActive.asObservable();
 
   private selectedFeature: FeatureModel | null = null;
   public isSelectedFeaturePointGeometry = false;
@@ -51,15 +53,18 @@ export class DrawingService {
         takeUntilDestroyed(this.destroyRef),
         switchMap(toolManager => toolManager.getToolsDisabled$()),
       )
-      .subscribe(({ disabledTools }) => {
+      .subscribe(({ disabledTools, enabledTools }) => {
         if (this.drawingTool && this.activeDrawingTool !== null && disabledTools.includes(this.drawingTool.id)) {
           // Drawing tool is disabled while drawing (probably because of other tool activation)
           this.featureSelected.next(null);
-          this.enableSelectAndModify();
+          this.enableSelectAndModify(false);
         }
         if (this.extTransformTool && this.selectedFeature !== null && disabledTools.includes(this.extTransformTool.id)) {
           // Transform tool is disabled while we have a selected feature, unselect feature to keep it visible
           this.featureSelected.next(null);
+        }
+        if (this.selectTool) {
+          this.selectToolActive.next(enabledTools.includes(this.selectTool.id));
         }
       });
   }
@@ -69,6 +74,9 @@ export class DrawingService {
     drawSingleShape?: boolean;
     selectionStyle?: Partial<MapStyleModel> | ((feature: FeatureModel) => MapStyleModel);
   }) {
+    if (this.drawingTool) {
+      return;
+    }
     this.selectionStyle = opts.selectionStyle;
     this.mapService.createTool$<DrawingToolModel, DrawingToolConfigModel>({
       type: ToolTypeEnum.Draw,
@@ -161,8 +169,8 @@ export class DrawingService {
     this.enableModifyTool();
   }
 
-  public enableSelectAndModify() {
-    this.disableDrawing(false);
+  public enableSelectAndModify(disableOtherTools: boolean = true) {
+    this.disableDrawing(disableOtherTools);
     this.enableModifyTool();
   }
 
@@ -184,7 +192,7 @@ export class DrawingService {
         // Enable drawing
         this.activeDrawingTool = drawingFeatureType;
         const style: MapStyleModel = showMeasures ? { showTotalSize: true, showSegmentSize: true } : {};
-        manager.enableTool(this.drawingTool.id, true, { type, style }, forceEnableDrawing);
+        manager.enableTool(this.drawingTool.id, true, { type, style }, true);
         manager.disableTool(this.selectTool.id, true);
         if (this.extTransformTool) {
           manager.disableTool(this.extTransformTool.id, true);
@@ -208,6 +216,9 @@ export class DrawingService {
   }
 
   private enableModifyTool() {
+    if (!this.extTransformTool) {
+      return;
+    }
     this.withToolManager(manager => {
       if (this.selectedFeature) {
         const enableArgs: ExtTransformEnableToolArguments = {

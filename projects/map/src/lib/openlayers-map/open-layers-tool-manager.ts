@@ -10,6 +10,7 @@ import { OpenLayersSelectTool } from './tools/open-layers-select-tool';
 import { OpenLayersModifyTool } from "./tools/open-layers-modify-tool";
 import { map, Observable, Subject } from 'rxjs';
 import { OpenLayersExtTransformTool } from './tools/open-layers-ext-transform-tool';
+import { debounceTime } from 'rxjs/operators';
 
 export class OpenLayersToolManager implements ToolManagerModel {
 
@@ -21,7 +22,7 @@ export class OpenLayersToolManager implements ToolManagerModel {
 
   private switchedTool = false;
 
-  public toolsDisabled = new Subject<string[]>();
+  public toolsDisabled = new Subject();
 
   constructor(
     private olMap: OlMap,
@@ -89,14 +90,16 @@ export class OpenLayersToolManager implements ToolManagerModel {
     if (!preventAutoEnableTools && !this.switchedTool) {
       this.enableAutoEnabledTools();
     }
-    this.toolsDisabled.next([toolId]);
+    this.toolsDisabled.next(null);
     return this;
   }
 
   public getToolsDisabled$(): Observable<{ disabledTools: string[]; enabledTools: string[] }> {
     return this.toolsDisabled.asObservable()
-      .pipe(map(disabledTools => ({
-        disabledTools,
+      .pipe(
+        debounceTime(10),
+        map(() => ({
+        disabledTools: Array.from(this.tools.values()).filter(t => !t.isActive).map(t => t.id),
         enabledTools: Array.from(this.tools.values()).filter(t => t.isActive).map(t => t.id),
       })));
   }
@@ -129,14 +132,12 @@ export class OpenLayersToolManager implements ToolManagerModel {
   }
 
   private disableAllTools() {
-    const disabledTools: string[] = [];
     this.tools.forEach((tool) => {
       if (tool.isActive && !this.alwaysEnabledTools.has(tool.id)) {
         tool.disable();
-        disabledTools.push(tool.id);
       }
     });
-    this.toolsDisabled.next(disabledTools);
+    this.toolsDisabled.next(null);
   }
 
   private enableAutoEnabledTools() {
@@ -145,5 +146,4 @@ export class OpenLayersToolManager implements ToolManagerModel {
     }
     this.autoEnabledTools.forEach(tool => this.enableTool(tool));
   }
-
 }

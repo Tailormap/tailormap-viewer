@@ -97,22 +97,16 @@ export class OpenLayersDrawingTool implements DrawingToolModel {
     this.listeners = [];
     this.isActive = true;
     const drawingType = args.type || this.toolConfig.drawingType || 'point';
-    if (this.isActive && this.drawInteraction) {
-      this.drawInteraction.set('type', OpenLayersDrawingTool.getDrawingType(drawingType));
-      this.drawInteraction.set('style', this.getDrawingStyle(drawingType, args.style));
-      this.drawInteraction.set('geometryFunction', OpenLayersDrawingTool.getGeometryFunction(drawingType));
-    } else {
-      this.drawInteraction = new Draw({
-        type: OpenLayersDrawingTool.getDrawingType(drawingType),
-        style: this.getDrawingStyle(drawingType, args.style),
-        geometryFunction: OpenLayersDrawingTool.getGeometryFunction(drawingType),
-      });
-      this.olMap.addInteraction(this.drawInteraction);
-      this.listeners.push(this.drawInteraction.on('drawstart', (e: DrawEvent) => this.drawStarted(e)));
-      this.listeners.push(this.drawInteraction.on('drawend', (e: DrawEvent) => {
-        this.ngZone.run(() => this.drawEndSubject.next(this.getEvent(e.feature.getGeometry(), 'end')));
-      }));
-    }
+    this.drawInteraction = new Draw({
+      type: OpenLayersDrawingTool.getDrawingType(drawingType),
+      style: this.getDrawingStyle(drawingType, args.style),
+      geometryFunction: OpenLayersDrawingTool.getGeometryFunction(drawingType),
+    });
+    this.olMap.addInteraction(this.drawInteraction);
+    this.listeners.push(this.drawInteraction.on('drawstart', (e: DrawEvent) => this.drawStarted(e)));
+    this.listeners.push(this.drawInteraction.on('drawend', (e: DrawEvent) => {
+      this.ngZone.run(() => this.drawEndSubject.next(this.getEvent(e.feature.getGeometry(), 'end')));
+    }));
   }
 
   private stopDrawing() {
