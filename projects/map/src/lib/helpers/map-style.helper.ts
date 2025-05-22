@@ -118,7 +118,7 @@ export class MapStyleHelper {
 
   private static createBuffer(buffer: string, config: MapStyleModel) {
     const bufferStyle = new Style({
-      geometry: MapStyleHelper.wktParser.readGeometry(buffer),
+      geometry: FeatureHelper.fromWKT(buffer),
     });
     const fill = MapStyleHelper.createFill(config, UnitsHelper.getOpacity(config.fillOpacity, true));
     if (fill) {
