@@ -19,7 +19,7 @@ import { SpatialFilterFormBufferComponent } from './spatial-filter-form-buffer/s
 import {
   SpatialFilterFormSelectReferenceLayerComponent,
 } from './spatial-filter-form-select-reference-layer/spatial-filter-form-select-reference-layer.component';
-import { EditAttributeFilterComponent } from './edit-attribute-filter/edit-attribute-filter.component';
+import { EditAttributeFiltersComponent } from './edit-attribute-filters/edit-attribute-filters.component';
 import { SliderFilterComponent } from './slider-filter/slider-filter.component';
 
 
@@ -36,7 +36,7 @@ import { SliderFilterComponent } from './slider-filter/slider-filter.component';
     SpatialFilterFormDrawGeometriesComponent,
     SpatialFilterFormBufferComponent,
     SpatialFilterFormSelectReferenceLayerComponent,
-    EditAttributeFilterComponent,
+    EditAttributeFiltersComponent,
     SliderFilterComponent,
   ],
   imports: [

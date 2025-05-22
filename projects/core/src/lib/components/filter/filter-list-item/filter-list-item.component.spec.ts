@@ -12,7 +12,7 @@ describe('FilterListItemComponent', () => {
   test('should render list with filters', async () => {
     const filterGroup = { ...getFilterGroup(), layers: [getAppLayerModel({ title: 'The layer' })] };
     await render(FilterListItemComponent, {
-      inputs: { filter: filterGroup },
+      inputs: { filterGroup: filterGroup },
       declarations: [FilterDescriptionComponent],
       providers: [provideMockStore()],
       imports: [ SharedImportsModule, MatIconTestingModule ],

@@ -14,6 +14,11 @@ export class SliderFilterComponent {
   public maxValue: number = 100;
   public stepValue: number = 1;
   public initialValue: number = 0;
+  public initialLowerValue?: number;
+  public initialUpperValue?: number;
+
+  private lowerValue: number = 0;
+  private upperValue: number = 100;
 
   @Input()
   public set sliderFilterConfiguration(config: SliderFilterModel) {
@@ -21,15 +26,32 @@ export class SliderFilterComponent {
     this.maxValue = config.maximumValue;
     this.initialValue = config.initialValue || config.minimumValue;
     this.stepValue = (config.maximumValue - config.minimumValue) / 100;
+    this.initialLowerValue = config.initialLowerValue;
+    this.initialUpperValue = config.initialUpperValue;
+    this.lowerValue = config.initialLowerValue || config.minimumValue;
+    this.upperValue = config.initialUpperValue || config.maximumValue;
   }
 
   @Output()
   public valueChange = new EventEmitter<number>();
 
+  @Output()
+  public betweenValuesChange = new EventEmitter<{lower: number; upper: number}>();
+
   constructor() { }
 
   public changeValue(value: number) {
     this.valueChange.emit(value);
+  }
+
+  public changeLowerValue(value: number) {
+    this.lowerValue = value;
+    this.betweenValuesChange.emit({ lower: this.lowerValue, upper: this.upperValue });
+  }
+
+  public changeUpperValue(value: number) {
+    this.upperValue = value;
+    this.betweenValuesChange.emit({ lower: this.lowerValue, upper: this.upperValue });
   }
 
 }

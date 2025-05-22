@@ -1,7 +1,18 @@
-<mat-slider [max]="max"
-            [min]="min"
-            [step]="step"
-            [discrete]="true"
-            [displayWith]="displayWith">
-  <input matSliderThumb [value]="value" (valueChange)="onValueChange($event)">
-</mat-slider>
+@if (betweenValues) {
+  <mat-slider [max]="max"
+              [min]="min"
+              [step]="step"
+              [discrete]="true"
+              [displayWith]="displayWith">
+    <input matSliderStartThumb [value]="betweenValues.lower" (valueChange)="onLowerValueChange($event)">
+    <input matSliderEndThumb [value]="betweenValues.upper" (valueChange)="onUpperValueChange($event)">
+  </mat-slider>
+} @else {
+  <mat-slider [max]="max"
+              [min]="min"
+              [step]="step"
+              [discrete]="true"
+              [displayWith]="displayWith">
+    <input matSliderThumb [value]="value" (valueChange)="onValueChange($event)">
+  </mat-slider>
+}

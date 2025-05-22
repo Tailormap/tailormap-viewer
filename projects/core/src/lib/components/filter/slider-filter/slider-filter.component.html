@@ -1,6 +1,18 @@
-<tm-slider
-  [min]="minValue"
-  [max]="maxValue"
-  [step]="stepValue"
-  [value]="initialValue"
-  (valueChange)="changeValue($event)"></tm-slider>
+<div class="form-field form-field__slider">
+  @if (initialLowerValue && initialUpperValue) {
+    <tm-slider
+      [min]="minValue"
+      [max]="maxValue"
+      [step]="stepValue"
+      [betweenValues]="{lower: initialLowerValue, upper: initialUpperValue}"
+      (lowerValueChange)="changeLowerValue($event)"
+      (upperValueChange)="changeUpperValue($event)"></tm-slider>
+  } @else {
+    <tm-slider
+      [min]="minValue"
+      [max]="maxValue"
+      [step]="stepValue"
+      [value]="initialValue"
+      (valueChange)="changeValue($event)"></tm-slider>
+  }
+</div>

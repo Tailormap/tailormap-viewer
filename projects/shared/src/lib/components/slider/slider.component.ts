@@ -32,8 +32,17 @@ export class SliderComponent implements ControlValueAccessor {
   @Input()
   public value: number | undefined | null;
 
+  @Input()
+  public betweenValues: {lower: number; upper: number} | null = null;
+
   @Output()
   public valueChange = new EventEmitter<number>();
+
+  @Output()
+  public lowerValueChange = new EventEmitter<number>();
+
+  @Output()
+  public upperValueChange = new EventEmitter<number>();
 
   public disabled = false;
   private onChange: any | null = null;
@@ -64,6 +73,24 @@ export class SliderComponent implements ControlValueAccessor {
   public onValueChange(value: number) {
     this.ngZone.run(() => {
       this.valueChange.emit(value);
+      if (this.onChange) {
+        this.onChange(value);
+      }
+    });
+  }
+
+  public onLowerValueChange(value: number) {
+    this.ngZone.run(() => {
+      this.lowerValueChange.emit(value);
+      if (this.onChange) {
+        this.onChange(value);
+      }
+    });
+  }
+
+  public onUpperValueChange(value: number) {
+    this.ngZone.run(() => {
+      this.upperValueChange.emit(value);
       if (this.onChange) {
         this.onChange(value);
       }

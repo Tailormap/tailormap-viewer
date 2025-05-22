@@ -1,9 +1,0 @@
-@for (filter of editableFilters(); track filter.id) {
-  <div class="editable-filter-title">
-    {{ filter.attribute + filter.condition }}
-  </div>
-  @if (getSliderFilterConfiguration(filter); as sliderFilterConfig) {
-    <tm-slider-filter [sliderFilterConfiguration]="sliderFilterConfig" (valueChange)="updateSliderFilterValue($event, filter)"></tm-slider-filter>
-  }
-
-}

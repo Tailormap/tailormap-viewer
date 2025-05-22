@@ -8,7 +8,9 @@
     <tm-filter-description [filterGroup]="filter"></tm-filter-description>
   </mat-card-content>
   @if (editableFilters.length > 0) {
-    <tm-edit-attribute-filter [editableFilters]="editableFilters" [filterGroupId]="filter.id"></tm-edit-attribute-filter>
+    <div class="edit-attribute-filters">
+      <tm-edit-attribute-filter [editableFilters]="editableFilters" [filterGroupId]="filter.id"></tm-edit-attribute-filter>
+    </div>
   }
   <mat-card-actions align="end">
     <mat-checkbox [checked]="!filter.disabled"

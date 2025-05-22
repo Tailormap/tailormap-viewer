@@ -260,9 +260,15 @@ export class ApplicationEditFilterFormComponent implements OnInit {
   }
 
   public setEditFilterConfiguration($event: UpdateSliderFilterModel | CheckboxFilterModel) {
-    console.log("setEditFilterConfiguration: ", $event);
+    let value: string[] = [];
+    if ($event.filterTool === FilterToolEnum.SLIDER) {
+      value = $event.initialValue
+        ? [$event.initialValue.toString()]
+        : [ $event.initialLowerValue?.toString() ?? '', $event.initialUpperValue?.toString() ?? '' ];
+    }
     this.filterForm.patchValue({
       condition: $event.condition,
+      value: value,
       editFilterConfiguration: $event,
     }, { emitEvent: true });
     this.filterForm.markAsDirty();
