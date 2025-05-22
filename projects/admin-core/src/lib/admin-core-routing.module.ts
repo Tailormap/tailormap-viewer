@@ -17,7 +17,7 @@ import { ApplicationEditLayersComponent } from './application/application-edit-l
 import { ApplicationEditBaseLayersComponent } from './application/application-edit-base-layers/application-edit-base-layers.component';
 import { ApplicationEditComponentsComponent } from './application/application-edit-components/application-edit-components.component';
 import { ApplicationEditStylingComponent } from './application/application-edit-styling/application-edit-styling.component';
-import { ApplicationEditFiltersComponent } from './application/application-edit-filters/application-edit-filters.component';
+import { ApplicationEditFiltersComponent } from './application/application-edit-filters/application-edit-filters/application-edit-filters.component';
 import { ApplicationEditTerrainLayersComponent } from './application/application-edit-terrain-layers/application-edit-terrain-layers.component';
 import { SettingsPageComponent } from './pages/settings-page/settings-page.component';
 import { AdminHomePageComponent } from './pages/admin-home-page/admin-home-page.component';
@@ -43,6 +43,14 @@ import { LogsPageComponent } from './pages/logs-page/logs-page.component';
 import { TasksHomeComponent } from './tasks/tasks-home/tasks-home.component';
 import { TasksPageComponent } from './pages/tasks-page/tasks-page.component';
 import { TaskDetailsComponent } from './tasks/task-details/task-details.component';
+import { ApplicationEditFiltersHomeComponent,
+} from './application/application-edit-filters/application-edit-filters-home/application-edit-filters-home.component';
+import {
+  ApplicationCreateFilterComponent,
+} from './application/application-edit-filters/application-create-filter/application-create-filter.component';
+import {
+  ApplicationEditFilterComponent,
+} from './application/application-edit-filters/application-edit-filter/application-edit-filter.component';
 
 export const adminRoutes: Routes = [
   {
@@ -127,6 +135,20 @@ export const adminRoutes: Routes = [
               {
                 path: AdminRoutes.APPLICATION_DETAILS_FILTERS,
                 component: ApplicationEditFiltersComponent,
+                children: [
+                  {
+                    path: '',
+                    component: ApplicationEditFiltersHomeComponent,
+                  },
+                  {
+                    path: AdminRoutes.APPLICATION_DETAILS_FILTERS_CREATE,
+                    component: ApplicationCreateFilterComponent,
+                  },
+                  {
+                    path: AdminRoutes.APPLICATION_DETAILS_FILTERS_EDIT,
+                    component: ApplicationEditFilterComponent,
+                  },
+                ],
               },
             ],
           },
