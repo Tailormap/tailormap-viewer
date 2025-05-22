@@ -12,6 +12,23 @@
   margin-bottom: 0;
 }
 
+.circle-input__radius {
+  margin: 8px 0;
+}
+
+.rectangle-size-inputs {
+  display: flex;
+  margin: 8px 0;
+}
+
+.rectangle-size-inputs mat-form-field {
+  margin: 0 2px;
+}
+
+.rectangle-size-inputs button {
+  margin: auto;
+}
+
 .horizontal-line {
   border-top: 1px solid var(--border-color);
   margin: 8px 0;

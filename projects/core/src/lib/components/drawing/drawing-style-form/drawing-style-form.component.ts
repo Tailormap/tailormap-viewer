@@ -117,8 +117,10 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
 
   public showPolygonSettings(): boolean {
     return this.type === DrawingFeatureTypeEnum.CIRCLE
+      || this.type === DrawingFeatureTypeEnum.CIRCLE_SPECIFIED_RADIUS
       || this.type === DrawingFeatureTypeEnum.POLYGON
       || this.type === DrawingFeatureTypeEnum.RECTANGLE
+      || this.type === DrawingFeatureTypeEnum.RECTANGLE_SPECIFIED_SIZE
       || this.type === DrawingFeatureTypeEnum.SQUARE
       || this.type === DrawingFeatureTypeEnum.STAR
       || this.type === DrawingFeatureTypeEnum.ELLIPSE;
