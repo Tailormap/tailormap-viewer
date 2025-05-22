@@ -1,11 +1,11 @@
 import { MapStyleModel, OlMapStyleType } from '../models';
 import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
 import { Feature } from 'ol';
-import { Geometry } from 'ol/geom';
+import { Geometry, LineString, MultiPoint, Polygon } from 'ol/geom';
 import { default as RenderFeature } from 'ol/render/Feature';
 import { FeatureHelper } from './feature.helper';
 import { ColorHelper, StyleHelper } from '@tailormap-viewer/shared';
-import { Style, Fill, Stroke } from 'ol/style';
+import { Style, Fill, Stroke, Circle } from 'ol/style';
 import { WKT } from 'ol/format';
 import { FillStyleHelper } from './style/fill-style.helper';
 import { ArrowStyleHelper } from './style/arrow-style.helper';
@@ -86,6 +86,9 @@ export class MapStyleHelper {
     if (feature && (styleConfig.showSegmentSize || styleConfig.showTotalSize)) {
       styles.push(...MeasureStyleHelper.addMeasures(feature, styleConfig.showTotalSize, styleConfig.showSegmentSize));
     }
+    if (styleConfig.showVertices) {
+      styles.push(MapStyleHelper.getVertices(styleConfig.strokeColor || MapStyleHelper.DEFAULT_COLOR, styleConfig.strokeWidth ?? 1));
+    }
     return styles;
   }
 
@@ -129,6 +132,24 @@ export class MapStyleHelper {
       bufferStyle.setStroke(stroke);
     }
     return [bufferStyle];
+  }
+
+  private static getVertices(color: string, strokeWidth: number) {
+    return new Style({
+      image: new Circle({
+        radius: strokeWidth + 2,
+        stroke: new Stroke({ color, width: 2 }),
+        fill: new Fill({ color: 'white' }),
+      }),
+      geometry: function (feature) {
+        const featureGeom = feature.getGeometry();
+        if (featureGeom && (featureGeom instanceof Polygon || featureGeom instanceof LineString)) {
+          const coordinates = featureGeom.getCoordinates()[0];
+          return new MultiPoint(coordinates);
+        }
+        return undefined;
+      },
+    });
   }
 
 }

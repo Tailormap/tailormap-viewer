@@ -27,4 +27,5 @@ export interface MapStyleModel {
   buffer?: string;
   showTotalSize?: boolean;
   showSegmentSize?: boolean;
+  showVertices?: boolean;
 }
