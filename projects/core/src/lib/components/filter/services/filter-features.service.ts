@@ -34,19 +34,26 @@ export class FilterFeaturesService {
             .pipe(
               map(([ geometries, buffer ]) => {
                 return geometries.map<FeatureModel>(geom => {
-                  let bufferGeom = geom.geometry;
-                  let geomBuffer = buffer;
-                  if (bufferGeom.startsWith('CIRCLE(')) {
-                    const g = geom.geometry.substring(7, geom.geometry.length - 1);
-                    const [ x, y, radius ] = g.split(/\s+/);
-                    geomBuffer = parseFloat(radius) + (buffer || 0);
-                    bufferGeom = `POINT(${x} ${y})`;
-                  }
-                  return {
+                  const feature = {
                     __fid: geom.id,
                     geometry: geom.geometry,
-                    attributes: { buffer: geomBuffer ? bufferHelper(bufferGeom, geomBuffer) : undefined,
-                    },
+                    attributes: { buffer: undefined },
+                  };
+                  if(!buffer) {
+                    return feature;
+                  }
+                  let bufferGeom: string;
+                  if (geom.geometry.startsWith('CIRCLE(')) {
+                    const g = geom.geometry.substring(7, geom.geometry.length - 1);
+                    const [ x, y, radius ] = g.split(/\s+/);
+                    const newRadius = parseFloat(radius) + (buffer || 0);
+                    bufferGeom = `CIRCLE(${x} ${y} ${newRadius})`;
+                  } else {
+                    bufferGeom = bufferHelper(geom.geometry, buffer);
+                  }
+                  return {
+                    ...feature,
+                    attributes: { buffer: bufferGeom },
                   };
                 });
               }),
