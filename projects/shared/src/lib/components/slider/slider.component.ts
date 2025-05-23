@@ -107,8 +107,11 @@ export class SliderComponent implements ControlValueAccessor {
   public labelsOverlap(): boolean {
     const dist = this.upperValue - this.lowerValue;
     const maxDist = this.max - this.min;
-    console.log("bool", dist < maxDist / 10);
-    return dist < (maxDist / 2.5);
+    const lowerLabelLength = this.displayWith(this.lowerValue).length;
+    const upperLabelLength = this.displayWith(this.upperValue).length;
+    const avgLabelLength = (lowerLabelLength + upperLabelLength) / 2;
+    const overlapThreshold = maxDist / (2 + avgLabelLength / 8);
+    return dist < overlapThreshold;
   }
 
 }

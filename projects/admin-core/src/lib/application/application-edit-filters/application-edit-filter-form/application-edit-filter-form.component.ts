@@ -26,6 +26,7 @@ import { Store } from '@ngrx/store';
 export class ApplicationEditFilterFormComponent implements OnInit {
 
   private filterGroupId?: string;
+  private otherFilters: AttributeFilterModel[] = [];
 
   public filterData: InputFilterData = {
     condition: undefined,
@@ -67,6 +68,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     }
     const attributeFilter = updateAttributeFilter?.filterGroup.filters.find(filterInGroup =>
       filterInGroup.id === updateAttributeFilter?.filterId);
+    this.otherFilters = updateAttributeFilter?.filterGroup.filters.filter(filterInGroup => filterInGroup.id !== updateAttributeFilter?.filterId) ?? [];
     this.filterData = {
       condition: attributeFilter?.condition,
       value: attributeFilter?.value,
@@ -144,7 +146,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
           source: "PRESET",
           layerIds: [value.layer?.appLayerId ?? ''],
           type: FilterTypeEnum.ATTRIBUTE,
-          filters: [attributeFilter],
+          filters: [ ...this.otherFilters, attributeFilter ],
           operator: 'AND',
         };
         this.updateFilter.emit(filterGroup);
