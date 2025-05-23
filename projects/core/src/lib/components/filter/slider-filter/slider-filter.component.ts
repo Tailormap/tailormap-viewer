@@ -44,14 +44,8 @@ export class SliderFilterComponent {
     this.valueChange.emit(value);
   }
 
-  public changeLowerValue(value: number) {
-    this.lowerValue = value;
-    this.betweenValuesChange.emit({ lower: this.lowerValue, upper: this.upperValue });
-  }
-
-  public changeUpperValue(value: number) {
-    this.upperValue = value;
-    this.betweenValuesChange.emit({ lower: this.lowerValue, upper: this.upperValue });
+  public changeBetweenValues($event: {lower: number; upper: number}) {
+    this.betweenValuesChange.emit($event);
   }
 
 }

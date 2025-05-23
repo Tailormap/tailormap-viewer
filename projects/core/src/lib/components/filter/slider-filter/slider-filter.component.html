@@ -5,8 +5,7 @@
       [max]="maxValue"
       [step]="stepValue"
       [betweenValues]="{lower: initialLowerValue, upper: initialUpperValue}"
-      (lowerValueChange)="changeLowerValue($event)"
-      (upperValueChange)="changeUpperValue($event)"></tm-slider>
+      (betweenValuesChange)="changeBetweenValues($event)"></tm-slider>
   } @else {
     <tm-slider
       [min]="minValue"

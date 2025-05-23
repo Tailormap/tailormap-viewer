@@ -33,20 +33,25 @@ export class SliderComponent implements ControlValueAccessor {
   public value: number | undefined | null;
 
   @Input()
-  public betweenValues: {lower: number; upper: number} | null = null;
+  public set betweenValues(betweenValues: {lower: number; upper: number} | null) {
+    if (betweenValues) {
+      this.lowerValue = betweenValues.lower;
+      this.upperValue = betweenValues.upper;
+    }
+  }
 
   @Output()
   public valueChange = new EventEmitter<number>();
 
   @Output()
-  public lowerValueChange = new EventEmitter<number>();
-
-  @Output()
-  public upperValueChange = new EventEmitter<number>();
+  public betweenValuesChange = new EventEmitter<{lower: number; upper: number}>();
 
   public disabled = false;
   private onChange: any | null = null;
   private onTouched: any | null = null;
+
+  public lowerValue: number = 0;
+  public upperValue: number = 100;
 
   constructor(
     private ngZone: NgZone,
@@ -81,7 +86,8 @@ export class SliderComponent implements ControlValueAccessor {
 
   public onLowerValueChange(value: number) {
     this.ngZone.run(() => {
-      this.lowerValueChange.emit(value);
+      this.lowerValue = value;
+      this.betweenValuesChange.emit({ lower: this.lowerValue, upper: this.upperValue });
       if (this.onChange) {
         this.onChange(value);
       }
@@ -90,11 +96,19 @@ export class SliderComponent implements ControlValueAccessor {
 
   public onUpperValueChange(value: number) {
     this.ngZone.run(() => {
-      this.upperValueChange.emit(value);
+      this.upperValue = value;
+      this.betweenValuesChange.emit({ lower: this.lowerValue, upper: this.upperValue });
       if (this.onChange) {
         this.onChange(value);
       }
     });
+  }
+
+  public labelsOverlap(): boolean {
+    const dist = this.upperValue - this.lowerValue;
+    const maxDist = this.max - this.min;
+    console.log("bool", dist < maxDist / 10);
+    return dist < (maxDist / 2.5);
   }
 
 }

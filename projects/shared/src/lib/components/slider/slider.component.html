@@ -1,11 +1,12 @@
-@if (betweenValues) {
+@if (upperValue && lowerValue) {
   <mat-slider [max]="max"
               [min]="min"
               [step]="step"
               [discrete]="true"
-              [displayWith]="displayWith">
-    <input matSliderStartThumb [value]="betweenValues.lower" (valueChange)="onLowerValueChange($event)">
-    <input matSliderEndThumb [value]="betweenValues.upper" (valueChange)="onUpperValueChange($event)">
+              [displayWith]="displayWith"
+              [class.label-down]="labelsOverlap()">
+    <input matSliderStartThumb [value]="lowerValue" (valueChange)="onLowerValueChange($event)">
+    <input matSliderEndThumb [value]="upperValue" (valueChange)="onUpperValueChange($event)">
   </mat-slider>
 } @else {
   <mat-slider [max]="max"
