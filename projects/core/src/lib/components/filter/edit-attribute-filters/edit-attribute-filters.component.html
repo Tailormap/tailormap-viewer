@@ -2,7 +2,7 @@
   <mat-expansion-panel-header i18n="@@core.filter.edit-filters">Edit filters</mat-expansion-panel-header>
   @for (filter of editableFilters(); track filter.id) {
     <div class="editable-filter-title">
-      {{ filter.attribute + filter.condition }}
+      {{ filter.attribute + " " + getConditionLabel(filter.condition) }}
     </div>
     @if (getSliderFilterConfiguration(filter); as sliderFilterConfig) {
       <tm-slider-filter [sliderFilterConfiguration]="sliderFilterConfig"
