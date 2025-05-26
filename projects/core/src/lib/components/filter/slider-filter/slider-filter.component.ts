@@ -33,8 +33,6 @@ export class SliderFilterComponent {
   @Output()
   public betweenValuesChange = new EventEmitter<{lower: number; upper: number}>();
 
-  constructor() { }
-
   public changeValue(value: number) {
     this.valueChange.emit(value);
   }
