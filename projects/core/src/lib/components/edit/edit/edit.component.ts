@@ -6,12 +6,13 @@ import { setEditActive, setEditCreateNewFeatureActive, setSelectedEditLayer } fr
 import { FormControl } from '@angular/forms';
 import { selectEditableLayers } from '../../../map/state/map.selectors';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { withLatestFrom } from 'rxjs/operators';
+import { filter, switchMap, withLatestFrom } from 'rxjs/operators';
 import { hideFeatureInfoDialog } from '../../feature-info/state/feature-info.actions';
 import { ApplicationLayerService } from '../../../map/services/application-layer.service';
-import { AttributeType, AuthenticatedUserService } from '@tailormap-viewer/api';
+import { AttributeType, AuthenticatedUserService, DescribeAppLayerService, GeometryType } from '@tailormap-viewer/api';
 import { activateTool } from '../../toolbar/state/toolbar.actions';
 import { ToolbarComponentEnum } from '../../toolbar/models/toolbar-component.enum';
+import { selectViewerId } from '../../../state/core.selectors';
 
 @Component({
   selector: 'tm-edit',
@@ -25,6 +26,7 @@ export class EditComponent implements OnInit {
   public active$ = this.store$.select(selectEditActive);
   public editableLayers$ = this.store$.select(selectEditableLayers);
   public layer = new FormControl();
+  public editGeometryType:GeometryType|null = null;
 
   private defaultTooltip = $localize `:@@core.edit.edit-feature-tooltip:Edit feature`;
   private notLoggedInTooltip = $localize `:@@core.edit.require-login-tooltip:You must be logged in to edit.`;
@@ -38,6 +40,7 @@ export class EditComponent implements OnInit {
     private destroyRef: DestroyRef,
     private applicationLayerService: ApplicationLayerService,
     private authenticatedUserService: AuthenticatedUserService,
+    private describeAppLayerService: DescribeAppLayerService,
   ) { }
 
   public ngOnInit(): void {
@@ -48,8 +51,26 @@ export class EditComponent implements OnInit {
       });
     this.layer.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(layer => {
-        this.store$.dispatch(setSelectedEditLayer({ layer }));
+      .subscribe(layerId => {
+        this.store$.dispatch(setSelectedEditLayer({ layer: layerId }));
+        if (!layerId) {
+          this.editGeometryType = null;
+          return;
+        }
+        this.store$.select(selectViewerId)
+          .pipe(
+            take(1),
+            filter(applicationId => applicationId !== null),
+            switchMap(applicationId =>
+              // get the (cached) layer details to obtain geometry type
+              // Alternatively, we could use this.applicationLayerService.getLayerDetails$(this.layer.value) instead
+              this.describeAppLayerService.getDescribeAppLayer$(applicationId as string, layerId)
+                .pipe(take(1)),
+            ),
+          )
+          .subscribe(layerDetails => {
+            this.editGeometryType = layerDetails.geometryType;
+          });
       });
     combineLatest([
       this.active$,
