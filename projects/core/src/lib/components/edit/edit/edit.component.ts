@@ -50,27 +50,21 @@ export class EditComponent implements OnInit {
         this.layer.setValue(layer, { emitEvent: false });
       });
     this.layer.valueChanges
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(layerId => {
+      .pipe(takeUntilDestroyed(this.destroyRef), switchMap(layerId => {
         this.store$.dispatch(setSelectedEditLayer({ layer: layerId }));
         if (!layerId) {
           this.editGeometryType = null;
-          return;
+          return [];
         }
-        this.store$.select(selectViewerId)
-          .pipe(
-            take(1),
-            filter(applicationId => applicationId !== null),
-            switchMap(applicationId =>
-              // get the (cached) layer details to obtain geometry type
-              // Alternatively, we could use this.applicationLayerService.getLayerDetails$(this.layer.value) instead
-              this.describeAppLayerService.getDescribeAppLayer$(applicationId as string, layerId)
-                .pipe(take(1)),
-            ),
-          )
-          .subscribe(layerDetails => {
-            this.editGeometryType = layerDetails.geometryType;
-          });
+        return this.store$.select(selectViewerId).pipe(
+          take(1),
+          filter(applicationId => applicationId !== null),
+          // get the (cached) layer details to obtain geometry type
+          // Alternatively, we could use this.applicationLayerService.getLayerDetails$(this.layer.value)
+          switchMap(applicationId => this.describeAppLayerService.getDescribeAppLayer$(applicationId as string, layerId).pipe(take(1))));
+      }))
+      .subscribe(layerDetails => {
+        this.editGeometryType = layerDetails.geometryType;
       });
     combineLatest([
       this.active$,
