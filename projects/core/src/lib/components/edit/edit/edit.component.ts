@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, OnInit } from '@angular/core';
 import { selectEditActive, selectSelectedEditLayer } from '../state/edit.selectors';
 import { Store } from '@ngrx/store';
-import { combineLatest, take } from 'rxjs';
+import { combineLatest, EMPTY, take } from 'rxjs';
 import { setEditActive, setEditCreateNewFeatureActive, setSelectedEditLayer } from '../state/edit.actions';
 import { FormControl } from '@angular/forms';
 import { selectEditableLayers } from '../../../map/state/map.selectors';
@@ -54,7 +54,7 @@ export class EditComponent implements OnInit {
         this.store$.dispatch(setSelectedEditLayer({ layer: layerId }));
         if (!layerId) {
           this.editGeometryType = null;
-          return [];
+          return EMPTY;
         }
         return this.store$.select(selectViewerId).pipe(
           take(1),
