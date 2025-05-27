@@ -22,7 +22,7 @@ export const changeAttributeListTabs = createAction(
 
 export const loadData = createAction(
   `${attributeListActionsPrefix} Load Data`,
-  props<{ tabId: string }>(),
+  props<{ tabId: string; resetPageIndex?: boolean }>(),
 );
 
 export const loadDataSuccess = createAction(

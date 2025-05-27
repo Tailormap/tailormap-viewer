@@ -3,6 +3,7 @@ import { Action, createReducer, on } from '@ngrx/store';
 import { AttributeListState, initialAttributeListState } from './attribute-list.state';
 import { AttributeListStateHelper } from './attribute-list-state.helper';
 import { StateHelper } from '@tailormap-viewer/shared';
+import { AttributeListDataModel } from '../models/attribute-list-data.model';
 
 const onSetAttributeListVisibility = (
   state: AttributeListState,
@@ -67,6 +68,11 @@ const onLoadData = (
     state.tabs,
     payload.tabId,
     tab => ({ ...tab, loadingData: true, loadingError: undefined }),
+  ),
+  data: !payload.resetPageIndex ? state.data : StateHelper.updateArrayItemInState<AttributeListDataModel>(
+    state.data,
+    t => t.tabId === payload.tabId,
+    d => ({ ...d, pageIndex: 1 }),
   ),
 });
 
