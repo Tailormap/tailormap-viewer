@@ -1,7 +1,13 @@
 import { FilterToolEnum } from './filter-tool.enum';
-import { FilterConditionEnum } from './filter-condition.enum';
+
+export interface AttributeValueSettings {
+  value: string;
+  initiallySelected: boolean;
+  selectable: boolean;
+  alias?: string;
+}
 
 export interface CheckboxFilterModel {
+  attributeValuesSettings: AttributeValueSettings[];
   filterTool: FilterToolEnum.CHECKBOX;
-  condition?: FilterConditionEnum;
 }

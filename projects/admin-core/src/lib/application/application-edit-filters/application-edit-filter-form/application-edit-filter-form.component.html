@@ -40,6 +40,16 @@
           [uniqueValues]="uniqueValues$ | async"
           (updateSliderFilter)="setEditFilterConfiguration($event)"></tm-admin-application-slider-filter-form>
       </div>
+    } @else if (filterForm.get('tool')?.value === "CHECKBOX") {
+      @if (filterForm.get('editFilterConfiguration')?.value) {
+        <tm-admin-application-checkbox-filter-form
+          [checkboxFilterSettings]="filterForm.get('editFilterConfiguration')?.value ?? null"
+          (updateCheckboxFilter)="setEditFilterConfiguration($event)"></tm-admin-application-checkbox-filter-form>
+      } @else {
+        <tm-admin-application-checkbox-filter-form
+          [uniqueValues]="uniqueValuesStrings$ | async"
+          (updateCheckboxFilter)="setEditFilterConfiguration($event)"></tm-admin-application-checkbox-filter-form>
+      }
     }
   }
 </form>

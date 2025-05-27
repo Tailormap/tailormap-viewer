@@ -267,9 +267,16 @@ export class ApplicationEditFilterFormComponent implements OnInit {
       value = $event.initialValue
         ? [$event.initialValue.toString()]
         : [ $event.initialLowerValue?.toString() ?? '', $event.initialUpperValue?.toString() ?? '' ];
+    } else if ($event.filterTool === FilterToolEnum.CHECKBOX) {
+      value = $event.attributeValuesSettings
+        .filter(setting => setting.initiallySelected)
+        .map(setting => setting.value);
     }
+    const condition = $event.filterTool === FilterToolEnum.CHECKBOX
+      ? FilterConditionEnum.UNIQUE_VALUES_KEY
+      : $event.condition;
     this.filterForm.patchValue({
-      condition: $event.condition,
+      condition: condition,
       value: value,
       editFilterConfiguration: $event,
     }, { emitEvent: true });
