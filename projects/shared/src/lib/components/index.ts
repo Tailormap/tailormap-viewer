@@ -17,3 +17,4 @@ export * from './legend-image/legend-image.component';
 export * from './legend-image/legend.helper';
 export * from './spinner-button/spinner-button.component';
 export * from './markdown-editor';
+export * from './attribute-filter/attribute-filter.component';

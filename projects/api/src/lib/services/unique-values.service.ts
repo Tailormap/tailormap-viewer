@@ -3,7 +3,7 @@ import { TAILORMAP_API_V1_SERVICE } from '../services';
 import { UniqueValuesResponseModel } from '../models/unique-values-response.model';
 import { catchError, Observable, of, tap } from 'rxjs';
 
-interface UniqueValueParams {
+export interface UniqueValueParams {
   applicationId: string;
   layerId: string;
   attribute: string;
