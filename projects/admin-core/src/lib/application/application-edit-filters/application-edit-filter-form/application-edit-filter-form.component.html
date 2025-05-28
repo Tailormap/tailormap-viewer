@@ -41,9 +41,9 @@
           (updateSliderFilter)="setEditFilterConfiguration($event)"></tm-admin-application-slider-filter-form>
       </div>
     } @else if (filterForm.get('tool')?.value === "CHECKBOX") {
-      @if (filterForm.get('editFilterConfiguration')?.value) {
+      @if (!newFilter && filterForm.get('editFilterConfiguration')?.value) {
         <tm-admin-application-checkbox-filter-form
-          [checkboxFilterSettings]="filterForm.get('editFilterConfiguration')?.value ?? null"
+          [checkboxFilterSettings]="editFilterConfiguration ?? null"
           (updateCheckboxFilter)="setEditFilterConfiguration($event)"></tm-admin-application-checkbox-filter-form>
       } @else {
         <tm-admin-application-checkbox-filter-form

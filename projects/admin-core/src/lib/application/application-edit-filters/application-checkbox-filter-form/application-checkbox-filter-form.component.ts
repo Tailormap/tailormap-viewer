@@ -15,6 +15,8 @@ export class ApplicationCheckboxFilterFormComponent {
   public attributeValuesSettings: AttributeValueSettings[] = [];
   public columnLabels = [ 'value', 'initially-selected', 'selectable', 'alias' ];
 
+  private checkboxFilter: CheckboxFilterModel = { attributeValuesSettings: [], filterTool: FilterToolEnum.CHECKBOX };
+
   public aliasForm: FormGroup = new FormGroup({});
 
   @Input()
@@ -26,6 +28,7 @@ export class ApplicationCheckboxFilterFormComponent {
         this.aliasForm.addControl(value, new FormControl<string>(''));
       });
     }
+    this.checkboxFilter.attributeValuesSettings = this.attributeValuesSettings;
   }
 
   @Input()
@@ -37,6 +40,7 @@ export class ApplicationCheckboxFilterFormComponent {
         this.aliasForm.addControl(setting.value, new FormControl<string>(setting.alias || ''), { emitEvent: false });
       });
     }
+    this.checkboxFilter.attributeValuesSettings = this.attributeValuesSettings;
   }
 
   @Output()
@@ -55,13 +59,10 @@ export class ApplicationCheckboxFilterFormComponent {
   }
 
   public changeBooleanSetting(value: string, setting: 'initiallySelected' | 'selectable', checked: boolean) {
-    const attributeValueSetting = this.attributeValuesSettings.find((s) => s.value === value);
-    if (attributeValueSetting) {
-      attributeValueSetting[setting] = checked;
-      this.updateCheckboxFilter.emit({
-        filterTool: FilterToolEnum.CHECKBOX,
-        attributeValuesSettings: this.attributeValuesSettings,
-      });
+    const attributeValueSettings = this.checkboxFilter.attributeValuesSettings.find((s) => s.value === value);
+    if (attributeValueSettings) {
+      attributeValueSettings[setting] = checked;
+      this.updateCheckboxFilter.emit(this.checkboxFilter);
     }
   }
 
@@ -69,13 +70,12 @@ export class ApplicationCheckboxFilterFormComponent {
     if (!alias) {
       return;
     }
-    const attributeValueSetting = this.attributeValuesSettings.find((s) => s.value === value);
-    if (attributeValueSetting) {
-      attributeValueSetting.alias = alias;
-      this.updateCheckboxFilter.emit({
-        filterTool: FilterToolEnum.CHECKBOX,
-        attributeValuesSettings: this.attributeValuesSettings,
-      });
+    const attributeValueSettings = this.checkboxFilter.attributeValuesSettings.find((s) => s.value === value);
+    if (attributeValueSettings) {
+      const newAttributeValueSettings = { ...attributeValueSettings, alias: alias };
+      this.checkboxFilter.attributeValuesSettings = this.checkboxFilter.attributeValuesSettings.map(oldAttributeValueSettings =>
+        oldAttributeValueSettings.value === value ? newAttributeValueSettings : oldAttributeValueSettings);
+      this.updateCheckboxFilter.emit(this.checkboxFilter);
     }
   }
 

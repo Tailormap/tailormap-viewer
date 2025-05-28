@@ -149,6 +149,18 @@
       <trans-unit id="admin-core.application.filter-tree" datatype="html">
         <source>Filter application layers</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.filter.alias" datatype="html">
+        <source>Alias</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filter.initially-selected" datatype="html">
+        <source>Initially selected</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filter.selectable" datatype="html">
+        <source>Selectable</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filter.unique-value" datatype="html">
+        <source>Value</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.filtered-layers" datatype="html">
         <source>The catalog above shows only layers matching the application projection (<x id="INTERPOLATION" equiv-text="{{draftApplicationCrs$ | async}}"/>)</source>
       </trans-unit>
