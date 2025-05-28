@@ -1,5 +1,5 @@
-import { Component, ChangeDetectionStrategy, Signal, computed, OnDestroy } from '@angular/core';
-import { AttributeFilterModel, FilterConditionEnum, FilterGroupModel } from '@tailormap-viewer/api';
+import { ChangeDetectionStrategy, Component, computed, OnDestroy, Signal } from '@angular/core';
+import { AttributeFilterModel, FilterGroupModel, FilterToolEnum } from '@tailormap-viewer/api';
 import {
   selectApplicationSelectedFilterId, selectApplicationSelectedFilterLayerId, selectFilterableLayersForApplication, selectFilterGroups,
   selectSelectedApplicationId,
@@ -54,8 +54,18 @@ export class ApplicationFiltersListComponent implements OnDestroy {
     this.store$.dispatch(setApplicationSelectedFilterId({ filterId: undefined }));
   }
 
-  public getConditionLabel(condition: FilterConditionEnum): string {
-    return AttributeFilterHelper.getConditionTypes(true).find(c => c.condition === condition)?.label || '';
+  public getFilterLabel(attributeFilter: AttributeFilterModel): string {
+    if (attributeFilter.editConfiguration) {
+      const filterTool = attributeFilter.editConfiguration.filterTool;
+      if (filterTool === FilterToolEnum.SLIDER) {
+        return $localize`:@@admin-core.application.filters.slider:Slider`;
+      } else if (filterTool === FilterToolEnum.CHECKBOX) {
+        return $localize`:@@admin-core.application.filters.checkbox:Checkbox`;
+      } else if (filterTool === FilterToolEnum.BOOLEAN) {
+        return $localize`:@@admin-core.application.filters.boolean:Boolean`;
+      }
+    }
+    return AttributeFilterHelper.getConditionTypes(true).find(c => c.condition === attributeFilter.condition)?.label || '';
   }
 
 }
