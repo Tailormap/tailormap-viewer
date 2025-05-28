@@ -56,7 +56,7 @@ export class FeatureInfoComponentConfigComponent implements ConfigurationCompone
   }
 
   private saveConfig() {
-    this.componentConfigService.updateConfig<FeatureInfoConfigModel>(this.type, 'defaultShowDropdown', this.formGroup.value.defaultShowDropdown);
+    this.componentConfigService.updateConfigForKey<FeatureInfoConfigModel>(this.type, 'defaultShowDropdown', this.formGroup.value.defaultShowDropdown);
   }
 
 }

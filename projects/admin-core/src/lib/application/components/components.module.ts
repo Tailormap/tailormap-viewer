@@ -10,6 +10,8 @@ import { MeasureComponentConfigComponent } from './measure-config/measure-compon
 import { CoordinateLinkWindowComponentConfigComponent } from './coordinate-link-window-config/coordinate-link-window-component-config.component';
 import { FeatureInfoComponentConfigComponent } from './feature-info-config/feature-info-component-config.component';
 import { SimpleSearchComponentConfigComponent } from './simple-search-config/simple-search-component-config.component';
+import { HeaderComponentConfigComponent } from './header-config/header-component-config.component';
+import { SelectUploadModule } from '@tailormap-admin/admin-core';
 
 @NgModule({
   declarations: [
@@ -19,11 +21,13 @@ import { SimpleSearchComponentConfigComponent } from './simple-search-config/sim
     CoordinateLinkWindowComponentConfigComponent,
     FeatureInfoComponentConfigComponent,
     SimpleSearchComponentConfigComponent,
+    HeaderComponentConfigComponent,
   ],
   imports: [
     CommonModule,
     SharedModule,
     BaseComponentConfigComponent,
+    SelectUploadModule,
   ],
   exports: [
     ComponentsListComponent,
@@ -50,5 +54,6 @@ export class ComponentsModule {
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.COORDINATE_LINK_WINDOW, $localize `:@@admin-core.application.component-coordinate-link-window:Coordinate Link Window`, CoordinateLinkWindowComponentConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.SIMPLE_SEARCH, $localize `:@@admin-core.application.component-simple-search:Search`, SimpleSearchComponentConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.TERRAIN_LAYER_TOGGLE, $localize `:@@admin-core.application.component-terrain-layer-toggle:Terrain layer toggle`, BaseComponentConfigComponent);
+    configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.HEADER, $localize `:@@admin-core.application.component-header:Header`, HeaderComponentConfigComponent);
   }
 }

@@ -1,0 +1,37 @@
+@let cnf = config()?.config;
+@if (cnf) {
+  <div class="header-container" #headerContainer>
+    @if (cnf.logoFileId) {
+        <img [src]="getUrl(cnf.logoFileId)" (load)="calculateVisibleMenuItems()" alt="Logo" class="header-logo-image" />
+    }
+    <h1 class="header-title">{{cnf.title}}</h1>
+    @if (cnf.menuItems) {
+      <div class="header-menu" #headerMenu>
+        @for (item of visibleMenuItems(); track $index) {
+          <a [href]="item.url" class="header-menu-item" target="_blank" rel="noopener noreferrer">
+            {{item.label}}
+          </a>
+        }
+        @if (overflowMenuItems().length > 0) {
+          <button mat-icon-button [matMenuTriggerFor]="overflowMenu" class="overflow-menu-button">
+            <mat-icon svgIcon="menu"></mat-icon>
+          </button>
+          <mat-menu #overflowMenu="matMenu">
+            @for (item of overflowMenuItems(); track $index) {
+              <a class="dropdown-menu-item" mat-menu-item [href]="item.url" target="_blank" rel="noopener noreferrer">
+                {{item.label}}
+              </a>
+            }
+          </mat-menu>
+        }
+      </div>
+
+      <!-- Hidden measurement container with proper scoped styles -->
+      <div class="header-menu measurement-container" #measurementContainer>
+        @for (item of config()?.config?.menuItems || []; track $index) {
+          <a class="header-menu-item">{{item.label}}</a>
+        }
+      </div>
+    }
+  </div>
+}

@@ -75,7 +75,7 @@ export class BaseComponentConfigComponent implements ConfigurationComponentModel
   }
 
   private updateConfig(key: keyof ComponentBaseConfigModel, value: string | number | boolean | undefined | null) {
-    this.componentConfigService.updateConfig<MeasureComponentConfigModel>(this.type, key, value);
+    this.componentConfigService.updateConfigForKey<MeasureComponentConfigModel>(this.type, key, value);
   }
 
 }
