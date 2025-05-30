@@ -21,6 +21,7 @@ import {
 } from './spatial-filter-form-select-reference-layer/spatial-filter-form-select-reference-layer.component';
 import { EditAttributeFiltersComponent } from './edit-attribute-filters/edit-attribute-filters.component';
 import { SliderFilterComponent } from './slider-filter/slider-filter.component';
+import { CheckboxFilterComponent } from './checkbox-filter/checkbox-filter.component';
 
 
 
@@ -38,6 +39,7 @@ import { SliderFilterComponent } from './slider-filter/slider-filter.component';
     SpatialFilterFormSelectReferenceLayerComponent,
     EditAttributeFiltersComponent,
     SliderFilterComponent,
+    CheckboxFilterComponent,
   ],
   imports: [
     CommonModule,

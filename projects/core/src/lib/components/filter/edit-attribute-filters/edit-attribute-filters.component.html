@@ -1,13 +1,21 @@
 <mat-expansion-panel class="edit-filter-expansion-panel">
   <mat-expansion-panel-header i18n="@@core.filter.edit-filters">Edit filters</mat-expansion-panel-header>
   @for (filter of editableFilters(); track filter.id) {
-    <div class="editable-filter-title">
-      {{ filter.attribute + " " + getConditionLabel(filter.condition) }}
+    <div class="edit-attribute-filter">
+      @if (getSliderFilterConfiguration(filter); as sliderFilterConfig) {
+        <div class="editable-filter-title">
+          {{ filter.attribute + " " + getConditionLabel(filter.condition) }}
+        </div>
+        <tm-slider-filter [sliderFilterConfiguration]="sliderFilterConfig"
+                          (valueChange)="updateSliderFilterValue($event, filter)"
+                          (betweenValuesChange)="updateBetweenSliderFilterValues($event, filter)"></tm-slider-filter>
+      }
+      @if (getCheckboxFilterConfiguration(filter); as checkboxFilterConfig) {
+        <tm-checkbox-filter
+          [label]="filter.attribute + ' ' + getConditionLabel(filter.condition)"
+          [checkboxFilterConfiguration]="checkboxFilterConfig"
+          (valueChecked)="updateCheckboxFilterValue($event.value, $event.checked, filter)"></tm-checkbox-filter>
+      }
     </div>
-    @if (getSliderFilterConfiguration(filter); as sliderFilterConfig) {
-      <tm-slider-filter [sliderFilterConfiguration]="sliderFilterConfig"
-                        (valueChange)="updateSliderFilterValue($event, filter)"
-                        (betweenValuesChange)="updateBetweenSliderFilterValues($event, filter)"></tm-slider-filter>
-    }
   }
 </mat-expansion-panel>
