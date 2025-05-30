@@ -61,7 +61,11 @@ export class ApplicationCheckboxFilterFormComponent {
   public changeBooleanSetting(value: string, setting: 'initiallySelected' | 'selectable', checked: boolean) {
     const attributeValueSettings = this.checkboxFilter.attributeValuesSettings.find((s) => s.value === value);
     if (attributeValueSettings) {
-      attributeValueSettings[setting] = checked;
+      const newAttributeValueSettings = setting === 'initiallySelected'
+        ? { ...attributeValueSettings, initiallySelected: checked }
+        : { ...attributeValueSettings, selectable: checked };
+      this.checkboxFilter.attributeValuesSettings = this.checkboxFilter.attributeValuesSettings.map(oldAttributeValueSettings =>
+        oldAttributeValueSettings.value === value ? newAttributeValueSettings : oldAttributeValueSettings);
       this.updateCheckboxFilter.emit(this.checkboxFilter);
     }
   }
