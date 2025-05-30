@@ -443,6 +443,9 @@
       <trans-unit id="core.filter.draw-message-3D" datatype="html">
         <source>Switch to 2D to draw</source>
       </trans-unit>
+      <trans-unit id="core.filter.edit-filters" datatype="html">
+        <source>Edit filters</source>
+      </trans-unit>
       <trans-unit id="core.filter.ends-with" datatype="html">
         <source>ends with</source>
       </trans-unit>

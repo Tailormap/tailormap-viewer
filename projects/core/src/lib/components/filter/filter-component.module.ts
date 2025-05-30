@@ -19,6 +19,9 @@ import { SpatialFilterFormBufferComponent } from './spatial-filter-form-buffer/s
 import {
   SpatialFilterFormSelectReferenceLayerComponent,
 } from './spatial-filter-form-select-reference-layer/spatial-filter-form-select-reference-layer.component';
+import { EditAttributeFiltersComponent } from './edit-attribute-filters/edit-attribute-filters.component';
+import { SliderFilterComponent } from './slider-filter/slider-filter.component';
+import { CheckboxFilterComponent } from './checkbox-filter/checkbox-filter.component';
 
 
 
@@ -34,6 +37,9 @@ import {
     SpatialFilterFormDrawGeometriesComponent,
     SpatialFilterFormBufferComponent,
     SpatialFilterFormSelectReferenceLayerComponent,
+    EditAttributeFiltersComponent,
+    SliderFilterComponent,
+    CheckboxFilterComponent,
   ],
   imports: [
     CommonModule,

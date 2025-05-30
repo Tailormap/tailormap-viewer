@@ -1,0 +1,4 @@
+.filter-label {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
