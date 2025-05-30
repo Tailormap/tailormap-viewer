@@ -1,0 +1,8 @@
+.label-down ::ng-deep .mdc-slider__thumb[ng-reflect-thumb-position="2"] .mdc-slider__value-indicator {
+  rotate: 180deg;
+  translate: 0 40px;
+}
+
+.label-down ::ng-deep .mdc-slider__thumb[ng-reflect-thumb-position="2"] .mdc-slider__value-indicator-text {
+  rotate: 180deg;
+}
