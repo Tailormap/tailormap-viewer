@@ -1,11 +1,13 @@
 <mat-expansion-panel class="checkbox-expansion-panel mat-elevation-z0">
   <mat-expansion-panel-header>{{ label }}</mat-expansion-panel-header>
-  @for (value of checkboxFilterConfiguration?.attributeValuesSettings; track value) {
-    @if (value.selectable) {
-      <div class="checkbox-value">
-        <mat-checkbox [checked]="value.initiallySelected" (change)="checkValue(value.value, $event.checked)"></mat-checkbox>
-        <div class="checkbox-value-label">{{ value.alias || value.value }}</div>
-      </div>
+  <div class="checkbox-values-list">
+    @for (value of checkboxFilterConfiguration?.attributeValuesSettings; track value) {
+      @if (value.selectable) {
+        <div class="checkbox-value">
+          <mat-checkbox [checked]="value.initiallySelected" (change)="checkValue(value.value, $event.checked)"></mat-checkbox>
+          <span class="checkbox-value-label">{{ value.alias || value.value }}</span>
+        </div>
+      }
     }
-  }
+  </div>
 </mat-expansion-panel>

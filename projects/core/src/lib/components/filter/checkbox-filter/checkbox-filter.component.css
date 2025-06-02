@@ -1,3 +1,15 @@
+.checkbox-values-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.checkbox-value {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
 .checkbox-value-label {
-  display: inline-block;
+  height: min-content;
 }
