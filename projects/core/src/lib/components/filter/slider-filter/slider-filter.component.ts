@@ -14,8 +14,8 @@ export class SliderFilterComponent {
   public maxValue: number = 100;
   public stepValue: number = 1;
   public initialValue: number = 0;
-  public initialLowerValue?: number;
-  public initialUpperValue?: number;
+  public initialLowerValue: number | null = null;
+  public initialUpperValue: number | null = null;
 
   @Input()
   public set sliderFilterConfiguration(config: SliderFilterModel) {
@@ -23,8 +23,8 @@ export class SliderFilterComponent {
     this.maxValue = config.maximumValue;
     this.initialValue = config.initialValue || config.minimumValue;
     this.stepValue = (config.maximumValue - config.minimumValue) / 50;
-    this.initialLowerValue = config.initialLowerValue;
-    this.initialUpperValue = config.initialUpperValue;
+    this.initialLowerValue = config.initialLowerValue ?? null;
+    this.initialUpperValue = config.initialUpperValue ?? null;
   }
 
   @Output()

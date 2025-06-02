@@ -50,8 +50,8 @@ export class SliderComponent implements ControlValueAccessor {
   private onChange: any | null = null;
   private onTouched: any | null = null;
 
-  public lowerValue: number = 0;
-  public upperValue: number = 100;
+  public lowerValue: number | null = null;
+  public upperValue: number | null = null;
 
   constructor(
     private ngZone: NgZone,
@@ -87,7 +87,7 @@ export class SliderComponent implements ControlValueAccessor {
   public onLowerValueChange(value: number) {
     this.ngZone.run(() => {
       this.lowerValue = value;
-      this.betweenValuesChange.emit({ lower: this.lowerValue, upper: this.upperValue });
+      this.betweenValuesChange.emit({ lower: this.lowerValue, upper: this.upperValue ?? 0 });
       if (this.onChange) {
         this.onChange(value);
       }
@@ -97,7 +97,7 @@ export class SliderComponent implements ControlValueAccessor {
   public onUpperValueChange(value: number) {
     this.ngZone.run(() => {
       this.upperValue = value;
-      this.betweenValuesChange.emit({ lower: this.lowerValue, upper: this.upperValue });
+      this.betweenValuesChange.emit({ lower: this.lowerValue ?? 0, upper: this.upperValue });
       if (this.onChange) {
         this.onChange(value);
       }
@@ -105,6 +105,9 @@ export class SliderComponent implements ControlValueAccessor {
   }
 
   public labelsOverlap(): boolean {
+    if (this.lowerValue === null || this.upperValue === null) {
+      return false;
+    }
     const sliderWidthPx = 194;
     const valueRange = this.max - this.min;
     const distValue = this.upperValue - this.lowerValue;

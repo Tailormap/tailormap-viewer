@@ -1,5 +1,5 @@
 <div class="form-field form-field__slider">
-  @if (initialLowerValue && initialUpperValue) {
+  @if (initialLowerValue !== null && initialUpperValue !== null) {
     <tm-slider
       [min]="minValue"
       [max]="maxValue"
