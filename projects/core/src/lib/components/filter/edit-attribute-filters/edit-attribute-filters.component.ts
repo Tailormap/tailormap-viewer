@@ -19,11 +19,27 @@ export class EditAttributeFiltersComponent {
   constructor(private store$: Store) { }
 
   public getSliderFilterConfiguration(filter: AttributeFilterModel): SliderFilterModel | null {
-    return filter.editConfiguration?.filterTool === FilterToolEnum.SLIDER ? filter.editConfiguration : null;
+    const editConfiguration = filter.editConfiguration?.filterTool === FilterToolEnum.SLIDER ? { ...filter.editConfiguration } : null;
+    if (editConfiguration && editConfiguration.initialValue !== null) {
+      editConfiguration.initialValue = Number(filter.value[0]);
+    } else if (editConfiguration && editConfiguration.initialLowerValue !== null && editConfiguration.initialUpperValue !== null) {
+      editConfiguration.initialLowerValue = Number(filter.value[0]);
+      editConfiguration.initialUpperValue = Number(filter.value[1]);
+    }
+    return editConfiguration;
   }
 
   public getCheckboxFilterConfiguration(filter: AttributeFilterModel): CheckboxFilterModel | null {
-    return filter.editConfiguration?.filterTool === FilterToolEnum.CHECKBOX ? filter.editConfiguration : null;
+    const editConfiguration = filter.editConfiguration?.filterTool === FilterToolEnum.CHECKBOX ? { ...filter.editConfiguration }: null;
+    if (editConfiguration) {
+      editConfiguration.attributeValuesSettings = editConfiguration.attributeValuesSettings.map(valueSettings => {
+        return {
+          ...valueSettings,
+          initiallySelected: filter.value.includes(valueSettings.value),
+        };
+      });
+    }
+    return editConfiguration;
   }
 
   public updateSliderFilterValue($event: number, filter: AttributeFilterModel) {
