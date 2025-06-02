@@ -3,6 +3,16 @@
   margin-right: 8px;
 }
 
-.edit-attribute-filter {
+.edit-attribute-filters {
   margin-bottom: 8px;
+}
+
+.editable-checkbox-filter {
+  padding-top: 8px;
+  border-top: 1px solid var(--border-color);
+}
+
+.editable-slider-filter-title {
+  padding-top: 8px;
+  border-top: 1px solid var(--border-color);
 }
