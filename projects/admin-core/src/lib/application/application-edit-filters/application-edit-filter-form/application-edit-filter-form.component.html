@@ -19,9 +19,11 @@
     </div>
 
     <div class="layers-and-attributes">
-      <tm-admin-application-filter-attribute-list [featureType]="featureType$ | async"
-                                    [loadingFeatureType]="loadingFeatureType$ | async"
-                                    (selectAttribute)="setSelectedAttribute($event)"></tm-admin-application-filter-attribute-list>
+      <tm-admin-application-filter-attribute-list
+        [featureType]="featureType$ | async"
+        [loadingFeatureType]="loadingFeatureType$ | async"
+        [filterTool]="filterForm.get('tool')?.value ?? null"
+        (selectAttribute)="setSelectedAttribute($event)"></tm-admin-application-filter-attribute-list>
     </div>
   }
 
