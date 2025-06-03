@@ -102,7 +102,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
   public filterForm = new FormGroup({
     id: new FormControl(''),
     layer: new FormControl<GeoServiceLayerInApplicationModel | null>(null),
-    tool: new FormControl<string>("PRESET_STATIC"),
+    tool: new FormControl<FilterToolEnum>(FilterToolEnum.PRESET_STATIC),
     attribute: new FormControl(''),
     attributeType: new FormControl<AttributeType | null>(null),
     condition: new FormControl<FilterConditionEnum | null>(null),
@@ -299,6 +299,18 @@ export class ApplicationEditFilterFormComponent implements OnInit {
       const layerTitle = layer.geoServiceLayer?.layerSettings?.title || layer.geoServiceLayer?.title;
       return `${toolLabel} ` + $localize`:@@admin-core.application.filters.filter-on-attribute-layer:filter for attribute '${attribute}' on layer '${layerTitle}'`;
     }
+  }
+
+  public resetFormOnToolChange() {
+    this.filterForm.patchValue({
+      attribute: '',
+      attributeType: null,
+      condition: null,
+      value: [],
+      caseSensitive: false,
+      invertCondition: false,
+      editFilterConfiguration: null,
+    }, { emitEvent: false });
   }
 
 }
