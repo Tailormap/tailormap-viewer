@@ -4,22 +4,24 @@
     {{ getAttributeFilterInfo() }}
   </div>
 
-  <div class="filter-tool">
-    <mat-form-field appearance="outline">
-      <mat-label i18n="@@admin-core.application.filters.tool">Tool</mat-label>
-      <mat-select formControlName="tool" placeholder="Tool">
-        @for (tool of filterToolOptions; track tool) {
-          <mat-option [value]="tool.value">{{ tool.label }}</mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
-  </div>
+  @if (newFilter) {
+    <div class="filter-tool">
+      <mat-form-field appearance="outline">
+        <mat-label i18n="@@admin-core.application.filters.tool">Tool</mat-label>
+        <mat-select formControlName="tool" placeholder="Tool">
+          @for (tool of filterToolOptions; track tool) {
+            <mat-option [value]="tool.value">{{ tool.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
 
-  @if(newFilter) {
     <div class="layers-and-attributes">
-      <tm-admin-application-filter-attribute-list [featureType]="featureType$ | async"
-                                    [loadingFeatureType]="loadingFeatureType$ | async"
-                                    (selectAttribute)="setSelectedAttribute($event)"></tm-admin-application-filter-attribute-list>
+      <tm-admin-application-filter-attribute-list
+        [featureType]="featureType$ | async"
+        [loadingFeatureType]="loadingFeatureType$ | async"
+        [filterTool]="filterForm.get('tool')?.value ?? null"
+        (selectAttribute)="setSelectedAttribute($event)"></tm-admin-application-filter-attribute-list>
     </div>
   }
 

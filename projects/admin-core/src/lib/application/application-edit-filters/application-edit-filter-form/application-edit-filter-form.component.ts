@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
-  AttributeFilterModel, AttributeType, CheckboxFilterModel, FilterConditionEnum, FilterGroupModel, FilterTypeEnum,
-  UniqueValuesService, UpdateSliderFilterModel, FilterToolEnum,
+  AttributeFilterModel, AttributeType, CheckboxFilterModel, FilterConditionEnum, FilterGroupModel, FilterToolEnum, FilterTypeEnum,
+  UniqueValuesService, UpdateSliderFilterModel,
 } from '@tailormap-viewer/api';
 import { AttributeDescriptorModel, FeatureTypeModel } from '@tailormap-admin/admin-api';
 import { FormControl, FormGroup } from '@angular/forms';
@@ -98,7 +98,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
   public filterForm = new FormGroup({
     id: new FormControl(''),
     layer: new FormControl<GeoServiceLayerInApplicationModel | null>(null),
-    tool: new FormControl<string>("PRESET_STATIC"),
+    tool: new FormControl<FilterToolEnum>(FilterToolEnum.PRESET_STATIC),
     attribute: new FormControl(''),
     attributeType: new FormControl<AttributeType | null>(null),
     condition: new FormControl<FilterConditionEnum | null>(null),
