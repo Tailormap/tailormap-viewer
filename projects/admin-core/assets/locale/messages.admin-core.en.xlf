@@ -59,6 +59,9 @@
       <trans-unit id="admin-core.application.component-filter" datatype="html">
         <source>Filter</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.component-header" datatype="html">
+        <source>Header</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.component-legend" datatype="html">
         <source>Legend</source>
       </trans-unit>
@@ -85,10 +88,6 @@
       </trans-unit>
       <trans-unit id="admin-core.application.components" datatype="html">
         <source>Components</source>
-      </trans-unit>
-      <trans-unit id="admin-core.application.filters" datatype="html">
-        <source>Filters</source>
-        <target>Filter</target>
       </trans-unit>
       <trans-unit id="admin-core.application.copy-application" datatype="html">
         <source>Copy application <x id="INTERPOLATION" equiv-text="{{data.application.title}}"/></source>
@@ -155,6 +154,9 @@
       </trans-unit>
       <trans-unit id="admin-core.application.filtered-layers" datatype="html">
         <source>The catalog above shows only layers matching the application projection (<x id="INTERPOLATION" equiv-text="{{draftApplicationCrs$ | async}}"/>)</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters" datatype="html">
+        <source>Filters</source>
       </trans-unit>
       <trans-unit id="admin-core.application.folder-name" datatype="html">
         <source>Folder name</source>
@@ -550,7 +552,7 @@
         <source>Layer</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.layer-authentication-hint" datatype="html">
-        <source>Enter account details below if the service requires HTTP Basic authentication. Enable reverse proxying to allow a layer which requires authentication to be used in a viewer by having Tailormap do the <x id="INTERPOLATION" equiv-text="{{ geoService?.protocol }}"/> requests for the end user without sending the credentials to the users&apos; browser.</source>
+        <source>Enter account details below if the service requires HTTP Basic authentication. Enable reverse proxying to allow a layer which requires authentication to be used in a viewer by having Tailormap do the <x id="INTERPOLATION" equiv-text="{{ prettyName(geoServiceForm.get(&apos;protocol&apos;)?.value) }}"/> requests for the end user without sending the credentials to the users&apos; browser.</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.layer-name" datatype="html">
         <source>Layer name</source>
@@ -625,7 +627,7 @@
         <source>Please remove the layers from this service from the applications first</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.reverse-proxy" datatype="html">
-        <source>Reverse proxy <x id="INTERPOLATION" equiv-text="{{ geoService?.protocol }}"/> requests for viewers</source>
+        <source>Reverse proxy <x id="INTERPOLATION" equiv-text="{{ prettyName(geoServiceForm.get(&apos;protocol&apos;)?.value) }}"/> requests for viewers</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.schema" datatype="html">
         <source>Schema</source>
@@ -752,12 +754,6 @@
       </trans-unit>
       <trans-unit id="admin-core.common.disabled" datatype="html">
         <source>Disabled</source>
-      </trans-unit>
-      <trans-unit id="admin-core.form.autoFillUser" datatype="html">
-        <source>Autofill Username</source>
-      </trans-unit>
-      <trans-unit id="admin-core.form.autoFillDate" datatype="html">
-        <source>Autofill Date/Time</source>
       </trans-unit>
       <trans-unit id="admin-core.common.email" datatype="html">
         <source>Email</source>
@@ -909,6 +905,33 @@
       <trans-unit id="admin-core.components.feature-info-title" datatype="html">
         <source>Feature info</source>
       </trans-unit>
+      <trans-unit id="admin-core.components.header-add-menu-item" datatype="html">
+        <source>Add Menu Item</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-advanced-settings" datatype="html">
+        <source>Advanced settings</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-background-color" datatype="html">
+        <source>Background Color</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-css" datatype="html">
+        <source>Extra CSS</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-height" datatype="html">
+        <source>Header Height</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-layout-settings" datatype="html">
+        <source>Layout settings</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-logo" datatype="html">
+        <source>Logo</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-menu-items" datatype="html">
+        <source>Menu Items</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-text-color" datatype="html">
+        <source>Text Color</source>
+      </trans-unit>
       <trans-unit id="admin-core.components.measure-area-title" datatype="html">
         <source>Measure area title</source>
       </trans-unit>
@@ -941,6 +964,12 @@
       </trans-unit>
       <trans-unit id="admin-core.form.allow-free-input" datatype="html">
         <source>Allow the user to enter custom input</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.autoFillDate" datatype="html">
+        <source>Autofill Date/Time</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.autoFillUser" datatype="html">
+        <source>Autofill Username</source>
       </trans-unit>
       <trans-unit id="admin-core.form.create-form" datatype="html">
         <source>Create form</source>

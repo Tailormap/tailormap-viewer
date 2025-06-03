@@ -78,6 +78,10 @@
         <source>Filter</source>
         <target>Filter</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.component-header" datatype="html">
+        <source>Header</source>
+        <target>Header</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.component-legend" datatype="html">
         <source>Legend</source>
         <target>Legenda</target>
@@ -113,9 +117,6 @@
       <trans-unit id="admin-core.application.components" datatype="html">
         <source>Components</source>
         <target>Componenten</target>
-      </trans-unit>
-      <trans-unit id="admin-core.application.filters" datatype="html">
-        <source>Filters</source>
       </trans-unit>
       <trans-unit id="admin-core.application.copy-application" datatype="html">
         <source>Copy application <x id="INTERPOLATION" equiv-text="{{data.application.title}}"/></source>
@@ -204,6 +205,10 @@
       <trans-unit id="admin-core.application.filtered-layers" datatype="html">
         <source>The catalog above shows only layers matching the application projection (<x id="INTERPOLATION" equiv-text="{{draftApplicationCrs$ | async}}"/>)</source>
         <target>De catalogus hierboven bevat alleen lagen die de applicatie projectie (<x id="INTERPOLATION" equiv-text="{{draftApplicationCrs$ | async}}"/>) ondersteunen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters" datatype="html">
+        <source>Filters</source>
+        <target>Filters</target>
       </trans-unit>
       <trans-unit id="admin-core.application.folder-name" datatype="html">
         <source>Folder name</source>
@@ -730,7 +735,7 @@
         <target>Laag</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.layer-authentication-hint" datatype="html">
-        <source>Enter account details below if the service requires HTTP Basic authentication. Enable reverse proxying to allow a layer which requires authentication to be used in a viewer by having Tailormap do the <x id="INTERPOLATION" equiv-text="{{ geoService?.protocol }}"/> requests for the end user without sending the credentials to the users&apos; browser.</source>
+        <source>Enter account details below if the service requires HTTP Basic authentication. Enable reverse proxying to allow a layer which requires authentication to be used in a viewer by having Tailormap do the <x id="INTERPOLATION" equiv-text="{{ prettyName(geoServiceForm.get(&apos;protocol&apos;)?.value) }}"/> requests for the end user without sending the credentials to the users&apos; browser.</source>
         <target>Voer hieronder accountgegevens in als de service HTTP Basic-authenticatie vereist. Schakel reverse proxying in om een laag die authenticatie vereist te kunnen gebruiken in een viewer door Tailormap de <x id="INTERPOLATION" equiv-text="{{ geoService?.protocol }}"/>-verzoeken voor de eindgebruiker te laten doen zonder de inloggegevens naar de gebruikers&apos; browser te sturen.</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.layer-name" datatype="html">
@@ -830,7 +835,7 @@
         <target>Verwijder eerst de lagen van deze service uit de applicaties</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.reverse-proxy" datatype="html">
-        <source>Reverse proxy <x id="INTERPOLATION" equiv-text="{{ geoService?.protocol }}"/> requests for viewers</source>
+        <source>Reverse proxy <x id="INTERPOLATION" equiv-text="{{ prettyName(geoServiceForm.get(&apos;protocol&apos;)?.value) }}"/> requests for viewers</source>
         <target>Reverse proxy <x id="INTERPOLATION" equiv-text="{{ geoService?.protocol }}"/>-verzoeken voor viewers</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.schema" datatype="html">
@@ -1000,14 +1005,6 @@
       <trans-unit id="admin-core.common.disabled" datatype="html">
         <source>Disabled</source>
         <target>Uitgeschakeld</target>
-      </trans-unit>
-      <trans-unit id="admin-core.form.autoFillUser" datatype="html">
-        <source>Autofill Username</source>
-        <target>Gebruikersnaam Invullen</target>
-      </trans-unit>
-      <trans-unit id="admin-core.form.autoFillDate" datatype="html">
-        <source>Autofill Date/Time</source>
-        <target>Datum/Tijd Invullen</target>
       </trans-unit>
       <trans-unit id="admin-core.common.email" datatype="html">
         <source>Email</source>
@@ -1237,6 +1234,42 @@
         <source>Feature info</source>
         <target>Objectinformatie</target>
       </trans-unit>
+      <trans-unit id="admin-core.components.header-add-menu-item" datatype="html">
+        <source>Add Menu Item</source>
+        <target>Menu item toevoegen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-advanced-settings" datatype="html">
+        <source>Advanced settings</source>
+        <target>Geavanceerde instellingen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-background-color" datatype="html">
+        <source>Background Color</source>
+        <target>Achtergrondkleur</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-css" datatype="html">
+        <source>Extra CSS</source>
+        <target>Extra CSS</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-height" datatype="html">
+        <source>Header Height</source>
+        <target>Headerhoogte</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-layout-settings" datatype="html">
+        <source>Layout settings</source>
+        <target>Lay-out instellingen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-logo" datatype="html">
+        <source>Logo</source>
+        <target>Logo</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-menu-items" datatype="html">
+        <source>Menu Items</source>
+        <target>Menu items</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-text-color" datatype="html">
+        <source>Text Color</source>
+        <target>Tekstkleur</target>
+      </trans-unit>
       <trans-unit id="admin-core.components.measure-area-title" datatype="html">
         <source>Measure area title</source>
         <target>Titel voor oppervlakte meten</target>
@@ -1280,6 +1313,14 @@
       <trans-unit id="admin-core.form.allow-free-input" datatype="html">
         <source>Allow the user to enter custom input</source>
         <target>Laat de gebruiker ook eigen tekst invullen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.autoFillDate" datatype="html">
+        <source>Autofill Date/Time</source>
+        <target>Datum/Tijd Invullen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.autoFillUser" datatype="html">
+        <source>Autofill Username</source>
+        <target>Gebruikersnaam Invullen</target>
       </trans-unit>
       <trans-unit id="admin-core.form.create-form" datatype="html">
         <source>Create form</source>
