@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { map, of, take } from 'rxjs';
+import { map, take } from 'rxjs';
 import { UploadInUseItem, UploadRemoveServiceModel } from '../../../shared/components';
 import { Routes } from '../../../routes';
 import { ApplicationService } from '../../services/application.service';

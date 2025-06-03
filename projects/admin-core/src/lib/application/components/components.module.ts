@@ -11,7 +11,7 @@ import { CoordinateLinkWindowComponentConfigComponent } from './coordinate-link-
 import { FeatureInfoComponentConfigComponent } from './feature-info-config/feature-info-component-config.component';
 import { SimpleSearchComponentConfigComponent } from './simple-search-config/simple-search-component-config.component';
 import { HeaderComponentConfigComponent } from './header-config/header-component-config.component';
-import { SelectUploadModule } from '@tailormap-admin/admin-core';
+import { SelectUploadModule } from '../../shared/components/select-upload/select-upload.module';
 
 @NgModule({
   declarations: [
