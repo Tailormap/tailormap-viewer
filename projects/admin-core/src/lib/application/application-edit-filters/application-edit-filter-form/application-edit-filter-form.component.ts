@@ -283,4 +283,16 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     }
   }
 
+  public resetFormOnToolChange() {
+    this.filterForm.patchValue({
+      attribute: '',
+      attributeType: null,
+      condition: null,
+      value: [],
+      caseSensitive: false,
+      invertCondition: false,
+      editFilterConfiguration: null,
+    }, { emitEvent: false });
+  }
+
 }

@@ -27,6 +27,7 @@ export class ApplicationFilterAttributeListComponent implements OnInit {
   public set filterTool(filterTool: FilterToolEnum | null) {
     if (filterTool) {
       this.filterToolSubject$.next(filterTool);
+      this.selectedSubject$.next('');
     }
   }
 
