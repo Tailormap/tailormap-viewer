@@ -13,3 +13,7 @@
 .checkbox-value-label {
   height: min-content;
 }
+
+.checkbox-expansion-panel mat-expansion-panel-header {
+  padding-left: 0;
+}
