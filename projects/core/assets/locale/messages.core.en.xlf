@@ -575,6 +575,9 @@
       <trans-unit id="core.filter.select-reference-layer" datatype="html">
         <source>Select reference layer</source>
       </trans-unit>
+      <trans-unit id="core.filter.slider-and" datatype="html">
+        <source> and </source>
+      </trans-unit>
       <trans-unit id="core.filter.smaller-than" datatype="html">
         <source>Smaller than</source>
       </trans-unit>

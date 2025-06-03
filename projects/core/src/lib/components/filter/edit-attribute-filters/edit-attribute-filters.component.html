@@ -5,7 +5,7 @@
       @if (getSliderFilterConfiguration(filter); as sliderFilterConfig) {
         <div class="edit-filter-wrapper">
           <div class="editable-slider-filter-title">
-            {{ filter.attribute + " " + getConditionLabel(filter.condition) }}
+            {{ getSliderFilterLabel(filter) }}
           </div>
           <div class="editable-slider-filter-content">
             <tm-slider-filter
