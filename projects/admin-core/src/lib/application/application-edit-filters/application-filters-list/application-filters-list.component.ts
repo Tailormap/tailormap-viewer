@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, OnDestroy, Signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, OnDestroy, signal, Signal } from '@angular/core';
 import { AttributeFilterModel, FilterGroupModel, FilterToolEnum } from '@tailormap-viewer/api';
 import {
   selectApplicationSelectedFilterId, selectApplicationSelectedFilterLayerId, selectFilterableLayersForApplication, selectFilterGroups,
@@ -6,8 +6,9 @@ import {
 } from '../../state/application.selectors';
 import { Store } from '@ngrx/store';
 import { GeoServiceLayerInApplicationModel } from '../../models/geo-service-layer-in-application.model';
-import { setApplicationSelectedFilterId } from '../../state/application.actions';
+import { setApplicationSelectedFilterId, updateApplicationFiltersConfig } from '../../state/application.actions';
 import { AttributeFilterHelper } from '@tailormap-viewer/shared';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'tm-admin-application-filters-list',
@@ -23,6 +24,8 @@ export class ApplicationFiltersListComponent implements OnDestroy {
   public applicationId: Signal<string | null | undefined> = this.store$.selectSignal(selectSelectedApplicationId);
   public filterGroups: Signal<FilterGroupModel<AttributeFilterModel>[]> = this.store$.selectSignal(selectFilterGroups);
   public selectedFilterId: Signal<string | undefined> = this.store$.selectSignal(selectApplicationSelectedFilterId);
+
+  public isDragging = signal<boolean>(false);
 
   public selectedLayer: Signal<GeoServiceLayerInApplicationModel | undefined> = computed(() => {
     const selectedLayerId = this.selectedLayerId();
@@ -66,6 +69,29 @@ export class ApplicationFiltersListComponent implements OnDestroy {
       }
     }
     return AttributeFilterHelper.getConditionTypes(true).find(c => c.condition === attributeFilter.condition)?.label || '';
+  }
+
+  public drop(event: CdkDragDrop<string[]>) {
+    if (event.previousIndex === event.currentIndex) {
+      return;
+    }
+    const filters = this.filters().map(filter => filter.filter);
+    const movedFilterId = filters[event.previousIndex].id;
+    moveItemInArray(filters, event.previousIndex, event.currentIndex);
+    const filterGroup = this.filterGroups().find(group =>
+      group.filters.some(filter => filter.id === movedFilterId));
+    const filterGroupFilterIds = filterGroup?.filters.map(filter => filter.id) || [];
+    const filtersInGroup = filters.filter(filter => filterGroupFilterIds.includes(filter.id));
+    const newFilterGroups: FilterGroupModel<AttributeFilterModel>[] = this.filterGroups().map(group => {
+      if (group.id === filterGroup?.id) {
+        return {
+          ...group,
+          filters: filtersInGroup,
+        };
+      }
+      return group;
+    });
+    this.store$.dispatch(updateApplicationFiltersConfig({ filterGroups: newFilterGroups }));
   }
 
 }
