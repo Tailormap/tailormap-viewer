@@ -1,7 +1,5 @@
-import { ChangeDetectionStrategy, Component, computed, OnDestroy, signal, Signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, signal, Signal } from '@angular/core';
 import { AttributeFilterModel, FilterGroupModel, FilterToolEnum } from '@tailormap-viewer/api';
-import { Component, ChangeDetectionStrategy, Signal, OnDestroy } from '@angular/core';
-import { AttributeFilterModel, FilterConditionEnum, FilterGroupModel } from '@tailormap-viewer/api';
 import {
   selectFilterGroups, selectFiltersForApplication, selectSelectedApplicationId, selectSelectedLayerForApplication,
 } from '../../state/application.selectors';
@@ -24,6 +22,8 @@ export class ApplicationFiltersListComponent implements OnDestroy {
   public filterGroups: Signal<FilterGroupModel<AttributeFilterModel>[]> = this.store$.selectSignal(selectFilterGroups);
   public selectedLayer: Signal<GeoServiceLayerInApplicationModel | undefined> = this.store$.selectSignal(selectSelectedLayerForApplication);
   public filters: Signal<{filter: AttributeFilterModel; selected: boolean}[]> = this.store$.selectSignal(selectFiltersForApplication);
+
+  public isDragging = signal<boolean>(false);
 
   constructor(private store$: Store) {}
 
