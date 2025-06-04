@@ -360,32 +360,37 @@ const onUpdateApplicationFiltersConfig = (
   }));
 };
 
-const onCreateApplicationFilterGroup = (
+const onCreateApplicationAttributeFilter = (
   state: ApplicationState,
   payload: ReturnType<typeof ApplicationActions.createApplicationAttributeFilter>,
 ): ApplicationState => {
   return updateApplication(state, application => {
-    let addedToExistingGroup = false;
-    const newFilterGroups = application.settings?.filterGroups?.map(filterGroup => {
-      if (payload.filterGroup.layerIds.every(layerId => filterGroup.layerIds.includes(layerId))
-        && payload.filterGroup.layerIds.length === filterGroup.layerIds.length) {
-        addedToExistingGroup = true;
-        const newFilters = [ ...filterGroup.filters, ...payload.filterGroup.filters ];
-        return {
-          ...filterGroup,
-          filters: newFilters,
-        };
-      }
-      return filterGroup;
-    });
-    if (!addedToExistingGroup) {
-      newFilterGroups?.push(payload.filterGroup);
+    const filterGroupIdx = application.settings?.filterGroups?.findIndex(filterGroup =>
+      payload.filterGroup.layerIds.length === filterGroup.layerIds.length
+      && payload.filterGroup.layerIds.every(layerId => filterGroup.layerIds.includes(layerId)));
+    if (filterGroupIdx === undefined || filterGroupIdx === -1) {
+      return {
+        settings: {
+          ...application.settings,
+          layerSettings: application.settings?.layerSettings || {}, // Ensure layerSettings is defined
+          filterGroups: [ ...application.settings?.filterGroups ?? [], payload.filterGroup ],
+        },
+      };
     }
+    const filterGroups = application.settings?.filterGroups || [];
+    const updatedFilterGroup = {
+      ...filterGroups[filterGroupIdx],
+      filters: [ ...filterGroups[filterGroupIdx].filters, ...payload.filterGroup.filters ],
+    };
     return {
       settings: {
         ...application.settings,
         layerSettings: application.settings?.layerSettings || {}, // Ensure layerSettings is defined
-        filterGroups: newFilterGroups,
+        filterGroups: [
+          ...filterGroups.slice(0, filterGroupIdx),
+          updatedFilterGroup,
+          ...filterGroups.slice(filterGroupIdx + 1),
+        ],
       },
     };
   });
@@ -522,7 +527,7 @@ const applicationReducerImpl = createReducer<ApplicationState>(
   on(ApplicationActions.updateApplicationComponentConfig, onUpdateApplicationComponentConfig),
   on(ApplicationActions.updateApplicationStylingConfig, onUpdateApplicationStylingConfig),
   on(ApplicationActions.updateApplicationFiltersConfig, onUpdateApplicationFiltersConfig),
-  on(ApplicationActions.createApplicationAttributeFilter, onCreateApplicationFilterGroup),
+  on(ApplicationActions.createApplicationAttributeFilter, onCreateApplicationAttributeFilter),
   on(ApplicationActions.deleteApplicationAttributeFilter, onDeleteApplicationAttributeFilter),
   on(ApplicationActions.setApplicationSelectedFilterLayerId, onSetApplicationSelectedFilterLayerId),
   on(ApplicationActions.setApplicationSelectedFilterId, onSetApplicationSelectedFilterId),

@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component, computed, OnDestroy, signal, Signal } from '@angular/core';
 import { AttributeFilterModel, FilterGroupModel, FilterToolEnum } from '@tailormap-viewer/api';
+import { Component, ChangeDetectionStrategy, Signal, OnDestroy } from '@angular/core';
+import { AttributeFilterModel, FilterConditionEnum, FilterGroupModel } from '@tailormap-viewer/api';
 import {
-  selectApplicationSelectedFilterId, selectApplicationSelectedFilterLayerId, selectFilterableLayersForApplication, selectFilterGroups,
-  selectSelectedApplicationId,
+  selectFilterGroups, selectFiltersForApplication, selectSelectedApplicationId, selectSelectedLayerForApplication,
 } from '../../state/application.selectors';
 import { Store } from '@ngrx/store';
 import { GeoServiceLayerInApplicationModel } from '../../models/geo-service-layer-in-application.model';
@@ -19,37 +20,10 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 })
 export class ApplicationFiltersListComponent implements OnDestroy {
 
-  public selectedLayerId: Signal<string | undefined> = this.store$.selectSignal(selectApplicationSelectedFilterLayerId);
-  public filterableLayers: Signal<GeoServiceLayerInApplicationModel[]> = this.store$.selectSignal(selectFilterableLayersForApplication);
   public applicationId: Signal<string | null | undefined> = this.store$.selectSignal(selectSelectedApplicationId);
   public filterGroups: Signal<FilterGroupModel<AttributeFilterModel>[]> = this.store$.selectSignal(selectFilterGroups);
-  public selectedFilterId: Signal<string | undefined> = this.store$.selectSignal(selectApplicationSelectedFilterId);
-
-  public isDragging = signal<boolean>(false);
-
-  public selectedLayer: Signal<GeoServiceLayerInApplicationModel | undefined> = computed(() => {
-    const selectedLayerId = this.selectedLayerId();
-    const filterableLayers = this.filterableLayers();
-    if (!selectedLayerId) {
-      return undefined;
-    }
-    return filterableLayers.find(layer => layer.appLayerId === selectedLayerId);
-  });
-
-  public filters = computed(() => {
-    let filterGroups = this.filterGroups();
-    const selectedLayer = this.selectedLayer();
-    const selectedFilterId = this.selectedFilterId();
-    if (selectedLayer) {
-      filterGroups = filterGroups.filter(group => group.layerIds.includes(selectedLayer.appLayerId));
-    }
-    return filterGroups.reduce<{ filter: AttributeFilterModel; selected: boolean }[]>((acc, group) => {
-      return acc.concat(group.filters.map(filter => ({
-        filter,
-        selected: filter.id === selectedFilterId,
-      })));
-    }, []);
-  });
+  public selectedLayer: Signal<GeoServiceLayerInApplicationModel | undefined> = this.store$.selectSignal(selectSelectedLayerForApplication);
+  public filters: Signal<{filter: AttributeFilterModel; selected: boolean}[]> = this.store$.selectSignal(selectFiltersForApplication);
 
   constructor(private store$: Store) {}
 
