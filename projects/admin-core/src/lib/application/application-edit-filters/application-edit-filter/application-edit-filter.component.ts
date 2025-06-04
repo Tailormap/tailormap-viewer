@@ -91,7 +91,7 @@ export class ApplicationEditFilterComponent implements OnDestroy {
     this.saveEnabled.set($event);
   }
 
-  public save() {
+  public save(attributeFilter: UpdateAttributeFilterModel) {
     this.store$.select(selectFilterGroups).pipe(
       take(1),
     ).subscribe(filterGroups => {
@@ -106,6 +106,7 @@ export class ApplicationEditFilterComponent implements OnDestroy {
       }
       newFilterGroups.push(this.filterGroup);
       this.store$.dispatch(updateApplicationFiltersConfig({ filterGroups: newFilterGroups }));
+      this.adminSnackbarService.showMessage($localize `:@@admin-core.applications.filters.filter-updated:Filter ${this.getAttributeFilterLabel(attributeFilter)} updated`);
     });
 
   }
