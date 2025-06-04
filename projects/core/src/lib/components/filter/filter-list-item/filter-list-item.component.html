@@ -21,8 +21,10 @@
             color="primary"
             *ngIf="isSpatialFilter(filter.type)"
             (click)="editFilter(filter)"><mat-icon svgIcon="edit"></mat-icon></button>
-    <button mat-icon-button
-            color="warn"
-            (click)="removeFilter(filter.id)"><mat-icon svgIcon="remove"></mat-icon></button>
+    @if (!(filter.source === "PRESET")) {
+      <button mat-icon-button
+              color="warn"
+              (click)="removeFilter(filter.id)"><mat-icon svgIcon="remove"></mat-icon></button>
+    }
   </mat-card-actions>
 </mat-card>
