@@ -836,7 +836,7 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.reverse-proxy" datatype="html">
         <source>Reverse proxy <x id="INTERPOLATION" equiv-text="{{ prettyName(geoServiceForm.get(&apos;protocol&apos;)?.value) }}"/> requests for viewers</source>
-        <target state="new">Reverse-Proxy <x id="INTERPOLATION" equiv-text="{{ geoService?.protocol }}"/>-Anfragen für Viewer</target>
+        <target>Reverse-Proxy <x id="INTERPOLATION" equiv-text="{{ geoService?.protocol }}"/>-Anfragen für Viewer</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.schema" datatype="html">
         <source>Schema</source>
