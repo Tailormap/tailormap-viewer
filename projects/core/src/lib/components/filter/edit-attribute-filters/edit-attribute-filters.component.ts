@@ -85,7 +85,7 @@ export class EditAttributeFiltersComponent {
   }
 
   public getSliderFilterLabel(filter: AttributeFilterModel): string {
-    return `${filter.attribute} ${this.getConditionLabel(filter.condition)} ${filter.value.join($localize `:@@core.filter.slider-and: and `)}`;
+    return `${filter.attribute} ${filter.condition} ${filter.value.join($localize `:@@core.filter.slider-and: and `)}`;
   }
 
 }

@@ -1,4 +1,4 @@
-<mat-expansion-panel class="checkbox-expansion-panel mat-elevation-z0">
+<mat-expansion-panel class="checkbox-expansion-panel mat-elevation-z0" [expanded]="true">
   <mat-expansion-panel-header>{{ label }}</mat-expansion-panel-header>
   <div class="checkbox-values-list">
     @for (value of checkboxFilterConfiguration?.attributeValuesSettings; track value) {

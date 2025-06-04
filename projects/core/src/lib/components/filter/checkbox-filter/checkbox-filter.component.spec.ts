@@ -1,7 +1,6 @@
 import { render, screen } from '@testing-library/angular';
 import { CheckboxFilterComponent } from './checkbox-filter.component';
 import { CheckboxFilterModel, FilterToolEnum } from '@tailormap-viewer/api';
-import userEvent from '@testing-library/user-event';
 import { SharedImportsModule } from '@tailormap-viewer/shared';
 
 describe('CheckboxFilterComponent', () => {
@@ -29,7 +28,6 @@ describe('CheckboxFilterComponent', () => {
       imports: [SharedImportsModule],
       inputs: { label, checkboxFilterConfiguration } });
     expect(screen.getByText('label1'));
-    await userEvent.click(screen.getByText('label1'));
     expect(screen.getByText('Alias1')).toBeInTheDocument();
     expect(screen.getByText('Alias2')).toBeInTheDocument();
   });

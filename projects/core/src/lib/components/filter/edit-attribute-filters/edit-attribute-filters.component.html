@@ -19,7 +19,7 @@
         <div class="edit-filter-wrapper">
           <div class="editable-checkbox-filter">
             <tm-checkbox-filter
-              [label]="filter.attribute + ' ' + getConditionLabel(filter.condition)"
+              [label]="filter.attribute"
               [checkboxFilterConfiguration]="checkboxFilterConfig"
               (valueChecked)="updateCheckboxFilterValue($event.value, $event.checked, filter)"></tm-checkbox-filter>
           </div>
