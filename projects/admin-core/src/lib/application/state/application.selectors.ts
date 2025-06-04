@@ -4,7 +4,7 @@ import { ApplicationTreeHelper } from '../helpers/application-tree.helper';
 import { selectCatalog, selectFeatureTypes, selectGeoServiceLayers, selectGeoServices } from '../../catalog/state/catalog.selectors';
 import { FilterHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
 import { AdminServerType, AppLayerSettingsModel, AppTreeNodeModel, GeoServiceProtocolEnum } from '@tailormap-admin/admin-api';
-import { BaseComponentConfigHelper } from '@tailormap-viewer/api';
+import { AttributeFilterModel, BaseComponentConfigHelper } from '@tailormap-viewer/api';
 import { CatalogTreeModel } from '../../catalog/models/catalog-tree.model';
 import { CatalogFilterHelper } from '../../catalog/helpers/catalog-filter.helper';
 import { ApplicationModelHelper } from '../helpers/application-model.helper';
@@ -222,25 +222,50 @@ export const selectFilterableLayersForApplication = createSelector(
         geoServiceLayer: geoServiceLayerMap.get(ApplicationTreeHelper.getLayerMapKey(layerNode.layerName, layerNode.serviceId)),
         appLayerId: layerNode.id,
       }))
-      .filter(({ geoServiceLayer, appLayerId: _appLayerId }) => {
+      .filter(({ geoServiceLayer }) => {
         if (!geoServiceLayer) {
           return false;
         }
         const geoService = geoServices.find(service => service.id === geoServiceLayer.serviceId);
         const isGeoServer = geoService?.settings?.serverType === AdminServerType.GEOSERVER
-          || ((geoService?.settings?.serverType === AdminServerType.AUTO && geoService.resolvedServerType === AdminServerType.GEOSERVER));
-        if (!geoServiceLayer.layerSettings?.featureType) {
+          || (geoService?.settings?.serverType === AdminServerType.AUTO && geoService.resolvedServerType === AdminServerType.GEOSERVER);
+        if (!isGeoServer || !geoServiceLayer.layerSettings?.featureType) {
           return false;
         }
         const featureTypeOfLayer = featureTypes.find(featureType => {
           return featureType.featureSourceId === geoServiceLayer.layerSettings!.featureType!.featureSourceId.toString()
             && featureType.name === geoServiceLayer.layerSettings!.featureType!.featureTypeName;
         });
-        return !!featureTypeOfLayer && isGeoServer;
+        return !!featureTypeOfLayer;
       })
       .map(geoServiceLayerInApplication => ({
         geoServiceLayer: geoServiceLayerInApplication.geoServiceLayer!,
         appLayerId: geoServiceLayerInApplication.appLayerId,
       }));
+  },
+);
+
+export const selectSelectedLayerForApplication = createSelector(
+  selectApplicationSelectedFilterLayerId,
+  selectFilterableLayersForApplication,
+  (selectedLayerId, filterableLayers) => {
+    return filterableLayers.find(layer => layer.appLayerId === selectedLayerId);
+  },
+);
+
+export const selectFiltersForApplication = createSelector(
+  selectFilterGroups,
+  selectSelectedLayerForApplication,
+  selectApplicationSelectedFilterId,
+  (filterGroups, selectedLayer, selectedFilterId) => {
+    if (selectedLayer) {
+      filterGroups = filterGroups.filter(group => group.layerIds.includes(selectedLayer.appLayerId));
+    }
+    return filterGroups.reduce<{ filter: AttributeFilterModel; selected: boolean }[]>((acc, group) => {
+      return acc.concat(group.filters.map(filter => ({
+        filter,
+        selected: filter.id === selectedFilterId,
+      })));
+    }, []);
   },
 );

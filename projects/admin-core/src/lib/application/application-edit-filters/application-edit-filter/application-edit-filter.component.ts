@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, DestroyRef, Signal, OnDestroy, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { filter, map, Observable, switchMap, take } from 'rxjs';
+import { combineLatest, filter, map, Observable, take } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectFilterableLayersForApplication, selectFilterGroups, selectSelectedApplicationId } from '../../state/application.selectors';
 import { AttributeFilterModel, FilterGroupModel } from '@tailormap-viewer/api';
@@ -10,7 +10,6 @@ import { AdminSnackbarService } from '../../../shared/services/admin-snackbar.se
 import {
   deleteApplicationAttributeFilter, setApplicationSelectedFilterId, setApplicationSelectedFilterLayerId, updateApplicationFiltersConfig,
 } from '../../state/application.actions';
-import { tap } from 'rxjs/operators';
 import { UpdateAttributeFilterModel } from '../../models/update-attribute-filter.model';
 
 @Component({
@@ -37,11 +36,16 @@ export class ApplicationEditFilterComponent implements OnDestroy {
     private adminSnackbarService: AdminSnackbarService,
     private router: Router,
   ) {
-    this.updateAttributeFilter$ = this.route.params.pipe(
-      takeUntilDestroyed(this.destroyRef),
-      map(params => params['filterId']),
-      switchMap(filterId => this.store$.select(selectFilterGroups).pipe(
-        map(filterGroups => {
+    this.updateAttributeFilter$ = combineLatest([
+      this.route.params.pipe(
+        map(params => params['filterId']),
+      ),
+      this.store$.select(selectFilterGroups),
+      this.store$.select(selectFilterableLayersForApplication),
+    ])
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        map(([ filterId, filterGroups, filterableLayers ]) => {
           const filterGroup = filterGroups.find(group =>
             group.filters.some(attributeFilter => attributeFilter.id === filterId),
           );
@@ -49,20 +53,20 @@ export class ApplicationEditFilterComponent implements OnDestroy {
             return null;
           }
           const attributeFilter = filterGroup.filters.find(filterInGroup => filterInGroup.id === filterId);
-          this.store$.dispatch(setApplicationSelectedFilterLayerId({ filterLayerId: filterGroup.layerIds[0] }));
-          this.store$.dispatch(setApplicationSelectedFilterId({ filterId }));
           return {
             filterGroup,
             filterId: attributeFilter?.id ?? '',
+            filterableLayers,
           };
         }),
-      )),
-      switchMap(result =>
-        this.store$.select(selectFilterableLayersForApplication).pipe(
-          map(filterableLayers => result ? { ...result, filterableLayers } : null),
-        ),
-      ),
-    );
+      );
+
+    this.updateAttributeFilter$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(updateAttributeFilter => {
+        this.store$.dispatch(setApplicationSelectedFilterLayerId({ filterLayerId: updateAttributeFilter?.filterGroup.layerIds[0] }));
+        this.store$.dispatch(setApplicationSelectedFilterId({ filterId: updateAttributeFilter?.filterId }));
+      });
   }
 
   public delete(attributeFilter: UpdateAttributeFilterModel) {
@@ -75,9 +79,9 @@ export class ApplicationEditFilterComponent implements OnDestroy {
       .pipe(
         take(1),
         filter(answer => answer),
-        tap(() => this.store$.dispatch(deleteApplicationAttributeFilter({ filterId: attributeFilter.filterId }))),
       )
       .subscribe(() => {
+        this.store$.dispatch(deleteApplicationAttributeFilter({ filterId: attributeFilter.filterId }));
         this.adminSnackbarService.showMessage($localize `:@@admin-core.applications.filters.filter-removed:Filter ${this.getAttributeFilterLabel(attributeFilter)} removed`);
         this.router.navigateByUrl('/admin/applications/application/' + this.applicationId() + '/filters');
       });
@@ -91,7 +95,7 @@ export class ApplicationEditFilterComponent implements OnDestroy {
     this.saveEnabled.set($event);
   }
 
-  public save() {
+  public save(attributeFilter: UpdateAttributeFilterModel) {
     this.store$.select(selectFilterGroups).pipe(
       take(1),
     ).subscribe(filterGroups => {
@@ -106,6 +110,7 @@ export class ApplicationEditFilterComponent implements OnDestroy {
       }
       newFilterGroups.push(this.filterGroup);
       this.store$.dispatch(updateApplicationFiltersConfig({ filterGroups: newFilterGroups }));
+      this.adminSnackbarService.showMessage($localize `:@@admin-core.applications.filters.filter-updated:Filter ${this.getAttributeFilterLabel(attributeFilter)} updated`);
     });
 
   }

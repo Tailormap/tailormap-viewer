@@ -481,6 +481,10 @@
         <source>Filter <x id="PH" equiv-text="this.getAttributeFilterLabel(attributeFilter)"/> removed</source>
         <target>Filter <x id="PH" equiv-text="this.getAttributeFilterLabel(attributeFilter)"/> verwijderd</target>
       </trans-unit>
+      <trans-unit id="admin-core.applications.filters.filter-updated" datatype="html">
+        <source>Filter <x id="PH" equiv-text="this.getAttributeFilterLabel(attributeFilter)"/> updated</source>
+        <target state="new">Filter <x id="PH" equiv-text="this.getAttributeFilterLabel(attributeFilter)"/> bijgewerkt</target>
+      </trans-unit>
       <trans-unit id="admin-core.authorizations.access" datatype="html">
         <source>Access</source>
         <target>Toegang</target>

@@ -362,6 +362,9 @@
       <trans-unit id="admin-core.applications.filters.filter-removed" datatype="html">
         <source>Filter <x id="PH" equiv-text="this.getAttributeFilterLabel(attributeFilter)"/> removed</source>
       </trans-unit>
+      <trans-unit id="admin-core.applications.filters.filter-updated" datatype="html">
+        <source>Filter <x id="PH" equiv-text="this.getAttributeFilterLabel(attributeFilter)"/> updated</source>
+      </trans-unit>
       <trans-unit id="admin-core.authorizations.access" datatype="html">
         <source>Access</source>
       </trans-unit>
