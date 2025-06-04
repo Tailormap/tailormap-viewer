@@ -1,7 +1,5 @@
 import { Component, ChangeDetectionStrategy, Input, DestroyRef } from '@angular/core';
-import {
-  BaseComponentConfigHelper, BaseComponentTypeEnum, ComponentBaseConfigModel, MeasureComponentConfigModel,
-} from '@tailormap-viewer/api';
+import { BaseComponentConfigHelper, BaseComponentTypeEnum, ComponentBaseConfigModel } from '@tailormap-viewer/api';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ConfigurationComponentModel } from '../configuration-component.model';
